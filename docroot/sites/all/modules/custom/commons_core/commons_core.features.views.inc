@@ -3591,8 +3591,8 @@ function _commons_core_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Most Active Users');
-  $handler->override_option('footer', '<a href="/userpoints">View All Users</a>');
-  $handler->override_option('footer_format', '1');
+  $handler->override_option('footer', '<?php print l(\'View All Users\', \'userpoints\'); ?>');
+  $handler->override_option('footer_format', '3');
   $handler->override_option('footer_empty', 0);
   $handler->override_option('empty', 'No users have received any points yet.');
   $handler->override_option('empty_format', '1');

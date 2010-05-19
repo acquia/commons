@@ -539,4 +539,7 @@ function drupal_commons_cleanup() {
   foreach ($cache_tables as $table) {
     cache_clear_all('*', $table, TRUE);
   }
+  
+  // Say hello to watchdog!
+  watchdog('commons', t('Welcome to Drupal Commons from Acquia!'));
 }
