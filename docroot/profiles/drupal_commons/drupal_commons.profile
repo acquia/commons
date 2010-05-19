@@ -524,9 +524,19 @@ function drupal_commons_cleanup() {
   // Rebuild node access database - required after OG installation
   node_access_rebuild();
   
+  // Rebuild node types
+  node_types_rebuild();
+  
   // Rebuild the menu
   menu_rebuild();
   
   // Clear drupal message queue for non-warning/errors
   drupal_get_messages('status', TRUE);
+
+  // Clear out caches
+  $core = array('cache', 'cache_block', 'cache_filter', 'cache_page');
+  $cache_tables = array_merge(module_invoke_all('flush_caches'), $core);
+  foreach ($cache_tables as $table) {
+    cache_clear_all('*', $table, TRUE);
+  }
 }
