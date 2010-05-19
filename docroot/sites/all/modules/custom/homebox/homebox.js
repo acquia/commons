@@ -22,6 +22,7 @@ Drupal.behaviors.homebox = function(context) {
         Drupal.homebox.equalizeColumnsHeights($columns);
       }
     });
+    
     // Add tools links
     $boxes = $homebox.find('.homebox-portlet');
     $boxes.find('.portlet-config').each(function() {
@@ -32,8 +33,19 @@ Drupal.behaviors.homebox = function(context) {
     $boxes.find('.portlet-header').prepend('<span class="portlet-icon portlet-minus"></span>')
         .prepend('<span class="portlet-icon portlet-close"></span>')
         .end();
+        
     // Remove close tool for unclosable blocks
     $homebox.find('.homebox-unclosable span.portlet-close').remove();
+    
+    // Add maximize link to every portlet
+    $boxes.find('.portlet-header .portlet-close').after('<span class="portlet-icon portlet-maximize"></span>');
+    
+    // Attach click event to maximize icon
+    $boxes.find('.portlet-header .portlet-maximize').click(function() {
+      Drupal.homebox.maximizeBox(this);
+      Drupal.homebox.equalizeColumnsHeights($columns);
+    });  
+    
     // Attach click event on minus
     $boxes.find('.portlet-header .portlet-minus').click(function() {
       $(this).toggleClass("portlet-minus");
@@ -41,6 +53,7 @@ Drupal.behaviors.homebox = function(context) {
       $(this).parents(".homebox-portlet:first").find(".portlet-content").toggle();
       Drupal.homebox.equalizeColumnsHeights($columns);
     });
+    
     // Attach click event on minus
     $boxes.find('.portlet-header .portlet-minus').each(function() {
       if (!$(this).parents(".homebox-portlet:first").find(".portlet-content").is(':visible')) {
@@ -49,10 +62,12 @@ Drupal.behaviors.homebox = function(context) {
         Drupal.homebox.equalizeColumnsHeights($columns);
       };
     });
+    
     // Attach click event on settings icon
     $boxes.find('.portlet-header .portlet-settings').click(function() {
       $(this).parents(".homebox-portlet:first").find(".portlet-config").toggle();
     });
+    
     // Attach click event on close
     $boxes.find('.portlet-header .portlet-close').click(function() {
       $(this).parents(".homebox-portlet:first").hide();
@@ -61,6 +76,7 @@ Drupal.behaviors.homebox = function(context) {
       $('#homebox_toggle_' + dom_id).attr('checked', false);
       Drupal.homebox.equalizeColumnsHeights($columns);
     });
+    
     // Add click behaviour to checkboxes that enable/disable blocks
     $togglers = $homebox.find('#homebox-settings input.homebox_toggle_box');
     $togglers.click(function() {
@@ -73,6 +89,7 @@ Drupal.behaviors.homebox = function(context) {
       };
       Drupal.homebox.equalizeColumnsHeights($columns);
     });
+    
     // Add click behaviour to color buttons
     $boxes.find('.homebox-color-selector').click(function() {
       color = $(this).css('background-color');
@@ -86,19 +103,23 @@ Drupal.behaviors.homebox = function(context) {
       $(this).parents(".homebox-portlet:first").attr('class', classes);
       $(this).parents(".homebox-portlet:first").addClass("homebox-color-" + Drupal.homebox.convertRgbToHex(color).replace("#", ''));
     });
+    
     // Edit content link
     $('#homebox-add').click(function() {
       $('#homebox-settings').slideToggle();
     });
+    
     // Save settings link
     $('#homebox-save a').click(function() {
       Drupal.homebox.saveBoxes();
     });
+    
     // Restore to defaults link
     $('#homebox-restore a').click(function() {
       Drupal.homebox.restoreBoxes();
     });
     
+    // Equalize column heights after AJAX calls
     $homebox.ajaxStop(function(){
       Drupal.homebox.equalizeColumnsHeights($columns);
     });
@@ -141,6 +162,70 @@ Drupal.homebox.restoreBoxes = function() {
     }
   });
 };  
+
+Drupal.homebox.maximizeBox = function(icon) {
+  // References to active portlet and its homebox
+  var portlet = $(icon).parents('.homebox-portlet');
+  var homebox = $(icon).parents('#homebox');
+
+  // Only fire this action if this widget isnt being dragged
+  if (!$(portlet).hasClass('ui-sortable-helper')) {
+    // Check if we're maximizing or minimizing the portlet
+    if ($(portlet).hasClass('portlet-maximized')) {
+      // Minimizing portlet
+         
+      // Move this portlet to its original place (remembered with placeholder)
+      $(portlet).insertBefore($(homebox).find('.homebox-maximized-placeholder'))
+        .toggleClass('portlet-maximized');
+          
+      // Remove placeholder
+      $(homebox).find('.homebox-maximized-placeholder').remove();
+        
+      // Show columns again
+      $(homebox).find('.homebox-column').show();
+         
+      // Show close icon again
+      $(portlet).find('.portlet-close').show();
+      
+      // Change region wrapper class
+      $('.homebox-maximized').parents('.homebox-column-wrapper-maximized')
+       .attr('class', 'homebox-column-wrapper'); 
+       
+      // Show the save button
+      $('#homebox-save a').show();
+      $('#homebox-save span').html('');
+    }
+    else {
+      // Maximizing portlet
+         
+      // Add a place for maximized content (if not available, yet)
+      if ($(homebox).find('.homebox-maximized').length == 0) {         
+        $(homebox).find('.homebox-column:first').before('<div class=\'homebox-maximized\'></div>');
+      }
+         
+      // Add the portlet to maximized content place and create a placeholder 
+      // (for minimizing back to its place)
+      $(portlet)
+        .before('<div class=\'homebox-maximized-placeholder\'></div>')
+        .appendTo($(icon).parents('#homebox').find('.homebox-maximized'))
+        .toggleClass('portlet-maximized');
+           
+      // Hide columns - only show maximized content place (including maximized widget)
+      $(homebox).find('.homebox-column').hide();
+
+      // Hide close icon (you wont be able to return if you close the widget)
+      $(portlet).find('.portlet-close').hide();  
+      
+      // Change region wrapper class
+      $('.homebox-maximized').parents('.homebox-column-wrapper')
+       .attr('class', 'homebox-column-wrapper-maximized');
+      
+      // Hide the save button
+      $('#homebox-save a').hide();
+      $('#homebox-save span').html('Minimize to save');
+    }     
+  }
+}
 
 Drupal.homebox.saveBoxes = function() {
   var color = new String();
@@ -194,7 +279,7 @@ Drupal.homebox.saveBoxes = function() {
   
   // Replace save link with message
   $('#homebox-save a').hide();
-  $('#homebox-save span').show();
+  $('#homebox-save span').html('Saving settings...');
   
   $.ajax({
     url: Drupal.settings.basePath + '?q=homebox/js/save',
@@ -205,7 +290,7 @@ Drupal.homebox.saveBoxes = function() {
     success: function() {
       // Replace message with save link
       $('#homebox-save a').show();
-      $('#homebox-save span').hide();
+      $('#homebox-save span').html('');
     },
     error: function() {
       $('#homebox-save').html('<span style="color:red;">Save failed. Please refresh page.</span>');

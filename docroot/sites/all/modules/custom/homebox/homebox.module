@@ -23,7 +23,7 @@ define('HOMEBOX_DEFAULT_REGIONS', 3);
 function homebox_menu() {
   $items = array();
 
-  // User pages
+  // Created Home Box pages
   $pages = homebox_pages();
   if (is_array($pages) && count($pages) > 0) {
     foreach ($pages as $page) {
@@ -31,7 +31,8 @@ function homebox_menu() {
         'title' => $page->settings['title'],
         'page callback' => 'homebox_build',
         'page arguments' => array($page),
-        'access arguments' => array('access homebox ' . $page->name),
+        'access callback' => '_homebox_user_access_view_homebox',
+        'access arguments' => array($page),
         'type' => $page->settings['menu'] ? MENU_NORMAL_ITEM : MENU_CALLBACK,
       );
     }
@@ -139,15 +140,7 @@ function homebox_help($path, $arg) {
  * Implementation of hook_perm().
  */
 function homebox_perm() {
-  $permissions = array('administer homebox');
-
-  if ($pages = homebox_pages()) {
-    foreach ($pages as $page) {
-      $permissions[] = "access homebox " . $page->name;
-    }
-    return $permissions;
-  }
-  return NULL;
+  return array('administer homebox');
 }
 
 /**
@@ -794,7 +787,7 @@ function _homebox_get_css_classes_for_block($block) {
 function homebox_pages() {
   $pages = array();
   
-  // Fetch all available pages
+  // Fetch all available pages from database
   $result = db_query("SELECT * FROM {homebox_pages} ORDER BY name");
 
   while ($page = db_fetch_object($result)) {
@@ -876,12 +869,54 @@ function _homebox_user_access_save_homebox() {
   
   // Only authenticated users can save
   if ($user->uid) {
-    // Get current page name
-    $name = filter_xss(trim($_POST['name'])); // Page existance is checked in callback
-    // Check access
-    return user_access('access homebox ' . $name);  
+    // Get current page
+    $page = homebox_get_page(filter_xss(trim($_POST['name'])));
+    // Make sure the page exists
+    if ($page) {
+      // Check access
+      return _homebox_user_access_view_homebox($page);
+    }
+    else {
+      return FALSE;
+    }
   }  
   else {
     return FALSE;
+  }
+}
+
+/**
+ * Helper function to check if the current user can view
+ * a given homebox page
+ *
+ * @param $page
+ *   A page object
+ */
+function _homebox_user_access_view_homebox($page) {
+  global $user;
+  
+  // Admin is always allowed
+  if (user_access('administer site configuration') || user_access('administer homebox')) {
+    return TRUE;
+  }
+  // If not admin, and page is disabled, no access
+  elseif (!$page->settings['enabled']) {
+    return FALSE; 
+  }
+  // Check page object for role restrictions
+  elseif ($page->settings['roles']) {
+    // Iterate each role to look for a match
+    foreach ($page->settings['roles'] as $role) {
+      if (array_search($role, $user->roles)) {
+        return TRUE; 
+      }
+    }
+    
+    // No matches on restricted role
+    return FALSE;
+  }
+  else {
+    // If here, no access
+    return FALSE; 
   }
 }

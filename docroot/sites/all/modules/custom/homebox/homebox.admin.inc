@@ -19,53 +19,76 @@ function homebox_admin_page() {
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
     );
-    
-    $form['page']['name'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Machine Name'),
-      '#required' => TRUE,
-      '#size' => 32,
-      '#maxlength' => 64,
-      '#description' => t('The machine readable name of this page. It must be unique, and it must contain only alphanumeric characters and underscores. Once created, you will not be able to change this value!'),
-    );
   }
-  else {
-    $form['page']['name'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Machine Name'),
-      '#required' => TRUE,
-      '#value' => $page->name,
-      '#size' => 32,
-      '#maxlength' => 64,
-      '#disabled' => TRUE,
-      '#description' => t('The machine readable name of this page. It must be unique, and it must contain only alphanumeric characters and underscores. Once created, you will not be able to change this value!'),
-    );
+  
+  $form['page']['name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Machine Name'),
+    '#required' => TRUE,
+    '#size' => 32,
+    '#maxlength' => 64,
+    '#description' => t('The machine readable name of this page. It must be unique, and it must contain only alphanumeric characters and underscores. Once created, you will not be able to change this value!'),
+  );
+  
+  if($page) {
+    $form['page']['name']['#value'] = $page->name;
+    $form['page']['name']['#disabled'] = TRUE;
+  }
+  
+  $form['page']['options'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Home Box Options'),
+    '#collapsible' => TRUE,
+  );
+  
+  if(!$page) {
+    $form['page']['options']['#collapsed'] = TRUE;
   }
 
-  $form['page']['title'] = array(
+  $form['page']['options']['title'] = array(
     '#type' => 'textfield',
     '#title' => t('Title'),
     '#size' => 32,
-    '#required' => TRUE,
     '#default_value' => $page->settings['title'],
     '#maxlength' => 64,
     '#prefix' => theme('advanced_help_topic', 'homebox', 'new-page'),
     '#description' => t('The title of the page that will be created.'),
   );
-  $form['page']['path'] = array(
+  
+  $form['page']['options']['path'] = array(
     '#type' => 'textfield',
     '#title' => t('Path'),
     '#size' => 32,
-    '#required' => TRUE,
     '#default_value' => $page->settings['path'],
     '#maxlength' => 255,
     '#description' => t('Optionally specify an alternative URL by which this page can be accessed. For example, type "dashboard" when creating a Dashboard page. Use a relative path and don\'t add a trailing slash or the URL alias won\'t work.'),
   );
-  $form['page']['menu'] = array(
+  
+  $form['page']['options']['menu'] = array(
     '#type' => 'checkbox',
     '#title' => t('Create a Menu Entry'),
     '#description' => t('If checked, a menu entry will be created for this page.'),
-    '#default_value' => $page->settings['menu'],
+    '#default_value' => $page ? $page->settings['menu'] : 1,
+  );
+  
+  $form['page']['options']['enabled'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable the Page'),
+    '#description' => t('If unchecked, only users with the <i>administer homebox</i> permission will be able to view this page.'),
+    '#default_value' => $page ? $page->settings['enabled'] : 1,
+  );
+  
+  $result = db_query('SELECT rid, name FROM {role} ORDER BY name');
+  $role_options = array();
+  while ($role = db_fetch_object($result)) {
+    $role_options[$role->name] = $role->name;
+  }
+  $form['page']['options']['roles'] = array(
+    '#type' => 'checkboxes',
+    '#title' => t('Allow only certain roles to access the page'),
+    '#default_value' => $page ? $page->settings['roles'] : $role_options,
+    '#options' => $role_options,
+    '#description' => t('Select which roles can view the page.'),
   );
   
   if ($page) {
@@ -96,6 +119,7 @@ function homebox_admin_page() {
       '#type' => 'submit',
       '#value' => t('Add page'),
     );
+    
     $form['#submit'][] = 'homebox_admin_page_submit';
     $form['#validate'][] = 'homebox_admin_page_validate';
   }
@@ -134,46 +158,25 @@ function homebox_admin_page_validate($form, &$form_state) {
   // Filter title
   $form_state['values']['title'] = filter_xss($form_state['values']['title']);
   
-  // Make sure a title is left over
-  if(!$form_state['values']['title']) {
-    form_set_error('title', t('You must enter a valid page title!')); 
+  // If no imported settings, force needed values
+  if (!$form_state['values']['import']) {
+    // Make sure a title is present
+    if(!$form_state['values']['title']) {
+      form_set_error('title', t('You must enter a page title.')); 
+    }
+    
+    if(!$form_state['values']['path']) {
+      form_set_error('path', t('You must enter a path.')); 
+    }
   }
   
   // Check machine name
   if ($form_state['values']['name'] && $form_state['values']['op'] == t('Add page')) {
-    // Ensure name fits the rules:
-    if (preg_match('/[^a-z0-9_]/', $form_state['values']['name'])) {
-      form_set_error('name', t('Machine name must be lowercase alphanumeric or underscores only.'));
-    }
-    else {
-      // Check for name dupes
-      if (db_result(db_query("SELECT COUNT(*) FROM {homebox_pages} WHERE name = '%s'", $form_state['values']['name']))) {
-        form_set_error('name', t('The page name %name already exists. Please choose another page name.', array('%name' => $form_state['values']['name'])));
-      }
-    }
+    homebox_admin_check_name($form_state['values']['name'], 'name');
   }
   
-  // Ensure path fits the rules:
-  if (preg_match('/[^-a-z0-9_\/]/', $form_state['values']['path'])) {
-    form_set_error('path', t('Path must be lowercase alphanumeric, underscores, dashes, or forward-slashes only.'));
-  }
-  
-  // Check path for preceeding or trailing forward slashes
-  if (substr($form_state['values']['path'], 0, 1) == '/' || 
-    substr($form_state['values']['path'], strlen($form_state['values']['path']) - 1, 1) == '/') {
-      form_set_error('path', t('Path cannot begin or end with a slash.'));
-  }
-  
-  // Check path against existing paths
-  if (!$form_state['values']['op'] == t('Delete page')) {
-    $paths = db_query("SELECT path FROM {menu_router}");
-    while($path = db_fetch_object($paths)) {
-      if ($path->path == $form_state['values']['path']) {
-        form_set_error('path', t('The chosen path is already in use.'));
-        break;
-      }
-    }
-  }
+  // Check path
+  homebox_admin_check_path($form_state['values']['path'], 'path');
   
   // Import settings, if available
   if ($form_state['values']['import']) {
@@ -182,23 +185,38 @@ function homebox_admin_page_validate($form, &$form_state) {
     eval($form_state['values']['import']);
     ob_end_clean();
   
-    // Check if settings were valid
+    // Check if settings are a valid object
     if (!is_object($homebox)) {
       form_set_error('import', t('Invalid import data provided.')); 
     }
     else {
-      // Check that at least one block was provided
-      if (!count($homebox->settings['blocks'])) {
-        form_set_error('import', t('At least one block must be provided in the import.'));
+      // Check individual settings
+      foreach ($homebox->settings as $key => $value) {
+        switch($key) {
+          case 'menu':
+          case 'enabled':
+          case 'regions':
+          case 'cache':
+          case 'color':
+            // Check that the previous are numeric values
+            if(!is_numeric($value)) {
+              form_set_error('import', t('Invalid import data provided.')); 
+            }
+            break;
+          case 'path':
+            homebox_admin_check_path($value, 'import');
+            break;
+          case 'blocks':
+            // Check that at least one block was provided
+            if (!count($homebox->settings['blocks'])) {
+              form_set_error('import', t('At least one block must be provided in the import.'));
+            }
+            break;
+        }
       }
-      else {
-        // Add provided settings to the import object
-        $homebox->settings['path'] = $form_state['values']['path'];
-        $homebox->settings['menu'] = $form_state['values']['menu'];
-        $homebox->settings['title'] = $form_state['values']['title'];
-        // Add object back to the form
-        $form_state['values']['import'] = $homebox;
-      }
+      
+      // Add object back to the form
+      $form_state['values']['import'] = $homebox;
     }
   }
 }
@@ -212,16 +230,23 @@ function homebox_admin_page_submit($form, &$form_state) {
     $page->settings['title'] = $form_state['values']['title'];
     $page->settings['path'] = $form_state['values']['path'];
     $page->settings['menu'] = $form_state['values']['menu'];
+    $page->settings['enabled'] = (int) $form_state['values']['enabled'];
+    $page->settings['roles'] = array();
+    
+    foreach ($form_state['values']['roles'] as $role) {
+      if ($role) {
+        $page->settings['roles'][] = $role;
+      }
+    }
     
     // Save settings
     homebox_save_page($page);
     
-    drupal_set_message(t('Changes have been saved to !page_title.', array('!path_title' => $form_state['values']['title'])));
+    drupal_set_message(t('Changes have been saved'));
   }
   else if ($form_state['values']['op'] == t('Delete page')) {
     // Delete the page
     homebox_delete_page($form_state['values']['name']);
-
     drupal_set_message(t('The page has been deleted.'));
   }
   else if ($form_state['values']['op'] == t('Add page')) {
@@ -239,6 +264,7 @@ function homebox_admin_page_submit($form, &$form_state) {
         'title' => $form_state['values']['title'],
         'path' => $form_state['values']['path'],
         'menu' => $form_state['values']['menu'],
+        'enabled' => (int) $form_state['values']['enabled'],
         'regions' => HOMEBOX_DEFAULT_REGIONS,
         'cache' => 0,
         'color' => 0,
@@ -256,6 +282,80 @@ function homebox_admin_page_submit($form, &$form_state) {
   $form_state['redirect'] = 'admin/build/homebox';
   menu_rebuild();
   return;
+}
+
+/**
+ * Validation helper function for page name
+ * 
+ * @param $name
+ *   The name to be tested for the page
+ * @param $element
+ *   Optional, the form element identifier to throw form errors
+ * @return
+ *   TRUE if name is valid to use, otherwise, FALSE.
+ */
+function homebox_admin_check_name($name, $element = NULL) {
+  // Ensure name fits the rules:
+  if (preg_match('/[^a-z0-9_]/', $name)) {
+    if ($element) {
+      form_set_error($element, t('Machine name must be lowercase alphanumeric or underscores only.'));
+    }
+    return FALSE;
+  }
+  
+  // Check for name dupes
+  if (db_result(db_query("SELECT COUNT(*) FROM {homebox_pages} WHERE name = '%s'", $name))) {
+    if ($element) {
+      form_set_error($element, t('The page name %name already exists. Please choose another page name.', array('%name' => $name)));
+    }
+    return FALSE;
+  }
+  
+  return TRUE;
+}
+
+/**
+ * Validation helper function for page path
+ * 
+ * @param $path
+ *   The path to be tested for the page
+ * @param $element
+ *   Optional, the form element identifier to throw form errors
+ * @return
+ *   TRUE if path is valid to use, otherwise, FALSE.
+ */
+function homebox_admin_check_path($path, $element = NULL) {
+  // Ensure path fits the rules:
+  if (preg_match('/[^-a-z0-9_\/]/', $path)) {
+    if ($element) {
+      form_set_error($element, t('Path must be lowercase alphanumeric, underscores, dashes, or forward-slashes only.'));
+    }
+    return FALSE;
+  }
+  
+  // Check path for preceeding or trailing forward slashes
+  if (substr($path, 0, 1) == '/' || 
+    substr($path, strlen($path) - 1, 1) == '/') {
+    if ($element) {
+      form_set_error($element, t('Path cannot begin or end with a slash.'));
+    }
+    return FALSE;
+  }
+  
+  // Check path against existing paths
+  if (!$form_state['values']['op'] == t('Delete page')) {
+    $paths = db_query("SELECT path FROM {menu_router}");
+    while ($path = db_fetch_object($paths)) {
+      if ($path->path == $path) {
+        if ($element) {
+          form_set_error($element, t('The chosen path is already in use.'));
+        } 
+        return FALSE;
+      }
+    }
+  } 
+  
+  return TRUE; 
 }
 
 /**
@@ -453,9 +553,13 @@ function homebox_admin_display_form_submit($form, &$form_state) {
   // Save the page
   homebox_save_page($page);
   
-  //@todo
-  // We remove blocks from the homebox_users table that are no longer in the homebox_default table
-  //$result = db_query("DELETE FROM {homebox_users} WHERE pid = %d AND bid NOT IN (SELECT bid FROM {homebox_default})", $pid);
+  /*
+   * There is no reason to remove the blocks from user settings that
+   * were removed here. Blocks that aren't in the page will be stripped
+   * from the user settings upon rendering. Once the user saves, the
+   * settings will be updated.
+   */
+   
   menu_rebuild();
   drupal_set_message(t('Layout settings have been updated for !page_title.', array('!page_title' => $page->settings['title'])));
 }

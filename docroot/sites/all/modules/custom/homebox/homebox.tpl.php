@@ -22,7 +22,7 @@
       <li class="homebox-config-link">
         <span id="homebox-save">
           <a href="#"><?php print t('Save settings') ?></a>
-          <span><?php print t('Saving settings...'); ?></span>
+          <span><?php //print t('Saving settings...'); ?></span>
         </span>
       </li>
     <?php endif; ?>

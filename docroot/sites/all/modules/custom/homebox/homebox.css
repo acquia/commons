@@ -22,7 +22,9 @@
 #homebox .homebox-column-wrapper {
   float: left;
 }
-
+#homebox .homebox-column-wrapper-maximized {
+  width: 100%;
+}
 #homebox.column-count-1 .homebox-column-wrapper {
   width: 100%;
 }
@@ -79,6 +81,9 @@
 #homebox div.view-header {
   text-align: right;
 }
+#homebox .portlet-maximized {
+  clear: both;
+}
 
 /*
 ** Icons
@@ -100,6 +105,12 @@
 }
 .portlet-close {
   background: url(images/close.gif);
+}
+.portlet-maximize {
+  background: url(images/maximize.gif);
+}
+.portlet-maximized .portlet-maximize {
+  background: url(images/minimize.gif);
 }
 
 /*
@@ -172,5 +183,6 @@ li.homebox-config-link {
   background: #FFF;
 }
 
-/* Misc */
+/* Misc 
 #homebox-save span { display:none; }
+*/
