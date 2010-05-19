@@ -428,12 +428,18 @@ function drupal_commons_config_views() {
   
 // Configure theme
 function drupal_commons_config_theme() {
-  // Set the new theme
-  //@todo: This still isn't setting the theme as 'enabled'?
-  system_theme_data();
+  // Disable garland
   db_query("UPDATE {system} SET status = 0 WHERE type = 'theme' and name = '%s'", 'garland');
+  
+  // Enable Commons theme
   db_query("UPDATE {system} SET status = 1 WHERE type = 'theme' and name = '%s'", DRUPAL_COMMONS_THEME);
+  
+  // Set Commons theme as the default
   variable_set('theme_default', DRUPAL_COMMONS_THEME);
+  
+  // Refresh registry
+  list_themes(TRUE);
+  drupal_rebuild_theme_registry();
 }
 
 // Configure default images
@@ -521,10 +527,6 @@ function drupal_commons_cleanup() {
   // Rebuild the menu
   menu_rebuild();
   
-  // Clear drupal message queue
-  // @todo: Keep this? Removes confusing messages, but might be needed.
-  drupal_get_messages(NULL, TRUE);
-  
-  // Flush all caches
-  drupal_flush_all_caches();
+  // Clear drupal message queue for non-warning/errors
+  drupal_get_messages('status', TRUE);
 }
