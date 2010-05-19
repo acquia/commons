@@ -1,0 +1,241 @@
+/**
+ * $Id: starter.css,v 1.1.2.20 2010/03/23 03:29:25 jmburnz Exp $ 
+ * adaptivethemes.com 
+ *
+ * @file starter.css
+ * Default styles for getting started. Unset this in the info file 
+ * if you want a style-free starter theme.
+ */
+body {
+font-family:Verdana, Geneva, "DejaVu Sans", sans-serif;
+margin:0;
+padding:0;
+}
+
+/* Global focus style for links. */
+a:active,a:focus {
+border:0;
+color:#C00000;
+}
+
+/* Skip navigtation */
+#skip-nav {
+text-align:left;
+float:left;
+width:160px;
+}
+
+/* Markup free clearing. NOTE: you may need to remove this if using dynamic menus. */
+#leaderboard,
+#secondary-content,
+#content-top,
+#content-aside,
+#content-bottom
+#tertiary-content,
+#footer,
+#footer-region {
+overflow:hidden;
+zoom:1;
+}
+
+/* User menu */
+#user-menu {
+float:right;
+width:760px;
+}
+
+#user-menu ul {
+float:right;
+margin:0;
+}
+
+#user-menu ul li {
+display:inline;
+float:left;
+margin:0 0 0 1em;
+padding:0;
+}
+
+/* Header, Branding, Search box */
+#header {
+clear:both;
+}
+
+#branding {
+float:left;
+width:300px;
+}
+
+#search-box {
+float:right;
+width:300px;
+}
+
+#header-region {
+float:left;
+width:320px;
+}
+
+.logo-site-name span {
+display:block;
+}
+
+#site-name {
+font-size:2em;
+font-weight:700;
+line-height:1.5;
+}
+
+#search-theme-form {
+float:right;
+margin:1.5em 0;
+}
+
+/* Breadcrumb, Mission */
+#breadcrumb {
+padding-bottom:1em;
+}
+
+#mission {
+font-weight:700;
+margin:.3em 0 1.5em;
+}
+
+#menu-bar, #primary, #secondary {
+clear:both;
+}
+
+/* Primary and Secondary menus. */
+.primary-links,.secondary-links {
+margin:0;
+padding:0;
+}
+
+.primary-links li,.secondary-links li {
+display:inline;
+float:left;
+list-style:none;
+margin:0;
+padding:0;
+}
+
+.primary-links li a,.secondary-links li a {
+display:block;
+white-space:nowrap;
+padding:0 0.5em;
+}
+
+.article ul.links li {
+padding:0 1em 0 0;
+}
+
+.taxonomy {
+margin:0 0 1em;
+}
+
+.taxonomy li {
+display:inline;
+list-style:none;
+}
+
+.vocab-name {
+font-size:1em;
+font-weight:700;
+}
+
+/* Comments. */
+.indented {
+margin-left:60px;
+}
+
+.comment-title .new {
+color:#FF8000;
+}
+
+.comment ul.links {
+display:block;
+text-align:right;
+padding:0 1em 0 0;
+}
+
+/* Generic classes. */
+.submitted {
+margin:.375em 0 0.75em;
+}
+
+.submitted em {
+font-style:normal;
+}
+
+/* Blocks. */
+.block {
+margin:0 0 20px;
+}
+
+.block-inner {
+padding:0 0 10px;
+}
+
+.block ul li {
+margin:0 0 0 0.5em;
+}
+
+.block .item-list ul  {
+margin-left:1em;
+}
+
+#block-locale-0 ul {
+margin:0 0 0 1.5em;
+padding:0;
+}
+
+#block-locale-0 ul li {
+padding:.35em 0 0;
+}
+
+#block-node-0 .feed-icon img {
+padding:10px 0;
+}
+
+#search-block-form {
+margin:0;
+}
+
+/* Regions. */
+#menu-region .superfish-menu-hide-title {
+height:0;
+overflow:hidden;
+position:absolute;
+}
+
+#content-aside {
+background:#FFF;
+float:right;
+padding-left:10px;
+width:240px;
+}
+
+/* Footer, Feed icons. */
+.feed-icon img {
+padding:0 10px;
+}
+
+h1.logo-site-name,#block-user-3 .item-list h3 {
+font-size:1em;
+}
+
+.article,.comment {
+margin:0 0 1.5em;
+}
+
+.article-title a:link,.article-title a:visited,.article-title a:active,.comment-title a:link,.comment-title a:visited,.comment-title a:active {
+text-decoration:none;
+}
+
+.article-title a:hover,.article-title a:focus,.comment-title a:hover,.comment-title a:focus {
+text-decoration:underline;
+}
+
+.article ul.links,.item-list ul.pager li {
+margin:0;
+}

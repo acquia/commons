@@ -1,0 +1,171 @@
+; $Id: adaptivetheme_admin.info,v 1.1.2.27 2010/03/23 04:53:54 jmburnz Exp $
+
+
+;----------// Theme Information
+
+  name        = AT Admin
+  description = Clean, usable Administration theme with five color options.
+  core        = 6.x
+  engine      = phptemplate
+  screenshot  = screenshot.png
+  base theme  = adaptivetheme
+
+
+;----------// Stylesheets
+
+  stylesheets[all][] = css/core/at-admin.css
+
+
+;----------// Skinr Styles
+
+  ; The following require the Skinr module, http://drupal.org/project/skinr
+  ; Adaptivetheme provides native support for Skinr classes.
+
+  skinr[options][inherit_skins] = true
+
+
+;----------// Regions
+
+  regions[header]            = Header Region
+  regions[secondary_content] = Secondary Content
+  regions[content_top]       = Content Top
+  regions[content]           = Main Content
+  regions[content_bottom]    = Content Bottom
+  regions[tertiary_content]  = Tertiary Content
+  regions[left]              = Sidebar First
+  regions[right]             = Sidebar Last
+  regions[footer]            = Footer
+
+
+;----------// Theme Setting Defaults
+
+  settings[skip_navigation_display]           = 'hide'
+
+  settings[breadcrumb_display]                = 'yes'
+  settings[breadcrumb_separator]              = ' &#8594; '
+  settings[breadcrumb_home]                   = 0
+  settings[breadcrumb_trailing]               = 0
+  settings[breadcrumb_title]                  = 0
+
+  settings[display_search_form_label]         = 0
+
+  settings[search_snippet]                    = 1
+  settings[search_info_type]                  = 1
+  settings[search_info_user]                  = 1
+  settings[search_info_date]                  = 1
+  settings[search_info_comment]               = 1
+  settings[search_info_upload]                = 1
+  settings[search_info_separator]             = ' - '
+  
+  settings[primary_links_tree]                = 0
+  settings[secondary_links_tree]              = 0
+
+  settings[mission_statement_pages]           = 'home'
+
+  settings[taxonomy_settings_enabled]         = 0
+  settings[taxonomy_display_default]          = 'only'
+  settings[taxonomy_format_default]           = 'vocab'
+  settings[taxonomy_delimiter_default]        = ', '
+  settings[taxonomy_enable_content_type]      = 0
+
+  settings[submitted_by_settings_enabled]     = 0
+  settings[submitted_by_author_default]       = 1
+  settings[submitted_by_date_default]         = 1
+  settings[submitted_by_enable_content_type]  = 0
+
+  settings[display_links_settings_enabled]    = 0
+  settings[display_links_default]             = 'all'
+  settings[display_links_enable_content_type] = 0
+
+  settings[rebuild_registry]                  = 0
+  settings[show_theme_info]                   = 0
+
+  settings[cleanup_classes_section]           = 0
+  settings[cleanup_classes_front]             = 0
+  settings[cleanup_classes_user_status]       = 0
+  settings[cleanup_classes_normal_path]       = 0
+  settings[cleanup_classes_node_type]         = 0
+  settings[cleanup_classes_add_edit_delete]   = 0
+  settings[cleanup_classes_language]          = 0
+
+  settings[cleanup_article_id]                = 0
+  settings[cleanup_article_classes_promote]   = 0
+  settings[cleanup_article_classes_sticky]    = 0
+  settings[cleanup_article_classes_teaser]    = 0
+  settings[cleanup_article_classes_preview]   = 0
+  settings[cleanup_article_classes_type]      = 0
+  settings[cleanup_article_classes_language]  = 0
+
+  settings[cleanup_comment_anonymous]         = 0
+  settings[cleanup_comment_article_author]    = 0
+  settings[cleanup_comment_by_viewer]         = 0
+  settings[cleanup_comment_new]               = 0
+  settings[cleanup_comment_zebra]             = 0
+  settings[cleanup_comment_wrapper_type]      = 0
+
+  settings[cleanup_block_block_module_delta]  = 1
+  settings[cleanup_block_classes_module]      = 0
+  settings[cleanup_block_classes_zebra]       = 0
+  settings[cleanup_block_classes_region]      = 0
+  settings[cleanup_block_classes_count]       = 0
+
+  settings[cleanup_menu_menu_class]           = 1
+  settings[cleanup_menu_leaf_class]           = 1
+  settings[cleanup_menu_first_last_classes]   = 1
+  settings[cleanup_menu_active_classes]       = 1
+  settings[cleanup_menu_title_class]          = 0
+
+  settings[cleanup_links_type_class]          = 1
+  settings[cleanup_links_active_classes]      = 1
+  settings[cleanup_links_first_last_classes]  = 0
+
+  settings[cleanup_item_list_zebra]           = 0
+  settings[cleanup_item_list_first_last]      = 0
+  
+  settings[cleanup_views_css_name]            = 0
+  settings[cleanup_views_view_name]           = 0
+  settings[cleanup_views_display_id]          = 0
+  settings[cleanup_views_dom_id]              = 0
+  
+  settings[cleanup_views_unformatted]         = 0
+  settings[cleanup_views_item_list]           = 0
+  
+  settings[cleanup_fields_type]               = 0
+  settings[cleanup_fields_name]               = 0
+  settings[cleanup_fields_zebra]              = 0
+  
+  settings[cleanup_headings_title_class]      = 1
+  settings[cleanup_headings_namespaced_class] = 1
+
+  settings[links_add_span_elements]           = 0
+
+  settings[at_user_menu]                      = 1
+  settings[block_edit_links]                  = 1
+  settings[at_admin_hide_help]                = 0
+
+  settings[layout_method]                     = '0'
+  settings[layout_width]                      = '1260px'
+  settings[layout_sidebar_first_width]        = '240'
+  settings[layout_sidebar_last_width]         = '240'
+  settings[layout_enable_settings]            = 'on'
+  settings[layout_enable_width]               = 'on'
+  settings[layout_enable_sidebars]            = 'on'
+  settings[layout_enable_method]              = 'on'
+
+  settings[equal_heights_sidebars]            = 0
+  settings[equal_heights_blocks]              = 0
+  settings[equal_heights_gpanels]             = 0
+  settings[horizontal_login_block]            = 0
+
+  settings[horizontal_login_block_overlabel]  = 0
+  settings[horizontal_login_block_enable]     = 'on'
+
+  settings[color_schemes]                     = 'onyx.css'
+  settings[color_enable_schemes]              = 'on'
+
+; Information added by drupal.org packaging script on 2010-03-27
+version = "6.x-2.2"
+core = "6.x"
+project = "adaptivetheme"
+datestamp = "1269667828"
+
