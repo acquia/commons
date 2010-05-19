@@ -1901,7 +1901,7 @@ function _commons_core_default_page_manager_handlers() {
   $display->layout_settings = array();
   $display->panel_settings = array();
   $display->cache = array();
-  $display->title = '';
+  $display->title = '%node:title';
   $display->content = array();
   $display->panels = array();
     $pane = new stdClass;
