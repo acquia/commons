@@ -1,0 +1,132 @@
+<?php
+// $Id: filefield_meta.install,v 1.8 2009/05/22 21:14:52 quicksketch Exp $
+/**
+ * @file
+ * FileField Meta: Add Video Support to File Field.
+ */
+
+/**
+ * Implementation of hook_install().
+ */
+function filefield_meta_install() {
+  drupal_install_schema('filefield_meta');
+}
+
+function filefield_meta_uninstall() {
+  drupal_uninstall_schema('filefield_meta');
+}
+
+/**
+ * Implementation of hook_schema().
+ */
+function filefield_meta_schema() {
+  $schema = array();
+  // The primary field/index.
+  $schema['filefield_meta'] = array(
+    'description' => 'The table for meta data about filefield files.',
+    'fields' => array(
+      'fid' => array(
+        'description' => 'The file id.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'width' => array(
+        'description' => 'Width of a video or image file in pixels.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'height' => array(
+        'description' => 'Height of a video or image file in pixels.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'duration' => array(
+        'description' => 'The duration of audio or video files, in seconds.',
+        'type' => 'float',
+        'size' => 'normal',
+        'not null' => FALSE,
+      ),
+      'audio_format' => array(
+        'description' => 'The audio format.',
+        'type' => 'varchar',
+        'length' => 10,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'audio_sample_rate' => array(
+        'description' => 'The sample rate of the audio.',
+        'type' => 'int',
+        'size' => 'medium',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'audio_channel_mode' => array(
+        'description' => 'The number of channels in the audio, by name (stereo or mono).',
+        'type' => 'varchar',
+        'length' => 10,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'audio_bitrate' => array(
+        'description' => 'The audio bitrate.',
+        'type' => 'float',
+        'size' => 'medium',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'audio_bitrate_mode' => array(
+        'description' => 'The kind of audio bitrate, such as VBR. Usually empty.',
+        'type' => 'varchar',
+        'length' => 4,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'primary key' => array('fid'),
+  );
+
+  return $schema;
+}
+
+function filefield_meta_update_1() {
+  $ret = array();
+  db_add_field($ret, 'filefield_meta', 'audio_format', array(
+    'description' => 'The audio format.',
+    'type' => 'varchar',
+    'length' => 10,
+    'not null' => TRUE,
+    'default' => '',
+  ));
+  db_add_field($ret, 'filefield_meta', 'audio_sample_rate', array(
+    'description' => 'The sample rate of the audio.',
+    'type' => 'int',
+    'size' => 'medium',
+    'not null' => TRUE,
+    'default' => 0,
+  ));
+  db_add_field($ret, 'filefield_meta', 'audio_channel_mode', array(
+    'description' => 'The number of channels in the audio, by name.',
+    'type' => 'varchar',
+    'length' => 10,
+    'not null' => TRUE,
+    'default' => '',
+  ));
+  db_add_field($ret, 'filefield_meta', 'audio_bitrate', array(
+    'description' => 'The audio bitrate.',
+    'type' => 'float',
+    'size' => 'medium',
+    'not null' => TRUE,
+    'default' => 0,
+  ));
+  db_add_field($ret, 'filefield_meta', 'audio_bitrate_mode', array(
+    'description' => 'The kind of audio bitrate.',
+    'type' => 'varchar',
+    'length' => 4,
+    'not null' => TRUE,
+    'default' => '',
+  ));
+  return $ret;
+}

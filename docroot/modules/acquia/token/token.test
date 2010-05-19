@@ -1,0 +1,82 @@
+<?php
+
+// $Id: token.test,v 1.1.2.1 2009/05/31 15:52:35 greggles Exp $
+
+/**
+ * @file
+ * Tests for the token and token_actions modules.
+ *
+ */
+
+class TokenTestCase extends DrupalWebTestCase {
+  /**
+   * Implementation of getInfo().
+   */
+  public static function getInfo() {
+    return array(
+      'name' => t('Token and token action tests'),
+      'description' => t('Test some of the token actions and tokens.'),
+      'group' => t('Token'),
+    );
+  }
+
+  /**
+   * Implementation of setUp().
+   */
+  function setUp() {
+    parent::setUp('token', 'token_actions', 'trigger');
+
+  }
+
+  /**
+   * Test various behaviors for anonymous users.
+   */
+  function testTokenActionsFunctionalTest() {
+    // Create a user with permission to view the actions administration pages.
+    $user = $this->drupalCreateUser(array('administer actions', 'administer site configuration', 'administer users'));
+    $this->drupalLogin($user);
+
+    // Set the site name to something more exciting than Drupal / simpletest@example.com.
+    $settings = array();
+    $site_name = $this->randomName();
+    $site_mail = $this->randomName() .'@example.com';
+    $settings['site_name'] = $site_name;
+    $settings['site_mail'] = $site_mail;
+
+    $this->drupalPost('admin/settings/site-information', $settings, t('Save configuration'));
+    $this->assertText('saved', 'Site settings saved.');
+
+    // Create an action to display to users
+    $action = array();
+    $action['action'] = md5('token_actions_message_action');
+    $this->drupalPost('admin/settings/actions', $action, t('Create'));
+
+    // Configure the action to use a handful of tokens.
+    $action = array();
+    $action_description = $this->randomName();
+    $action['actions_description'] = $action_description;
+    $action['message'] = 'Hello simpletest | [user-name] | [user-id] | [user-mail] | [site-name] | [site-mail]';
+    $this->drupalPost('admin/settings/actions/configure/'. md5('token_actions_message_action'), $action, t('Save'));
+
+    // Trigger the action when a user is created.
+    $trigger = array();
+    $trigger['aid'] = md5('1'); //TODO don't hardcode the 1.
+    // TODO this should be assigned to a specific aid like aid_4, but that's not possible b/c actions creates non-unique form names.
+    // so instead we use "aid" which is the "after a user is created" trigger.
+    $this->drupalPost('admin/build/trigger/user', $trigger, t('Assign'));
+    // TODOXXX confirm each post gets saved.
+
+    // Create a user to trigger the action.
+    $edit = array();
+    $edit['name']   = $this->randomName();
+    $edit['mail']   = $edit['name'] .'@example.com';
+    $pass = user_password();
+    $edit['pass[pass1]']   = $pass;
+    $edit['pass[pass2]']   = $pass;
+
+    $this->drupalPost('admin/user/user/create', $edit, t('Create new account'));
+    $this->assertText('Hello simpletest | '. $user->name  .' | '. $user->uid .' | '. $user->mail .' | '. $site_name .' | '. $site_mail, 'Tokenized message displays');
+
+  }
+
+}

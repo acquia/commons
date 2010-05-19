@@ -1,0 +1,29 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * Webform module component tests.
+ */
+
+include_once(dirname(__FILE__) .'/webform.test');
+
+class WebformComponentsTestCase extends WebformTestCase {
+  /**
+   * Implementation of getInfo().
+   */
+  function getInfo() {
+    return array(
+      'name' => t('Webform components'),
+      'description' => t('Add and remove components from a webform.'),
+      'group' => t('Webform'),
+    );
+  }
+
+  /**
+   * Implementation of setUp().
+   */
+  function setUp() {
+    parent::setUp();
+  }
+}

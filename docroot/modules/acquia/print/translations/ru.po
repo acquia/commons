@@ -1,0 +1,953 @@
+# $Id: ru.po,v 1.1.2.14 2009/05/13 12:58:18 jcnventura Exp $
+#
+# Russian translation of Drupal (print)
+# Copyright 2007 Vlad Savitsky <vs@solti.com.ua>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ru\n"
+"POT-Creation-Date: 2009-05-13 03:12+0200\n"
+"PO-Revision-Date: 2009-05-13 12:46+0100\n"
+"Last-Translator: Joao Ventura <jcnventura@drupal.org>\n"
+"Language-Team: russian <ru@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: print.admin.inc:20
+msgid "Common Settings"
+msgstr ""
+
+#: print.admin.inc:25
+msgid "Stylesheet URL"
+msgstr "URL каскадной таблицы стилей"
+
+#: print.admin.inc:29
+msgid "The URL to your custom print cascading stylesheet, if any. When none is specified, the default module CSS file is used."
+msgstr "URL на вашу таблицу стилей для печати, если она есть. Если ничего не задано, используется встроенный CSS-файл модуля."
+
+#: print.admin.inc:30
+msgid "Macros: %b (base path: \"%base\"), %t (path to theme: \"%theme\")"
+msgstr ""
+
+#: print.admin.inc:35
+msgid "Printer-friendly URLs list"
+msgstr "Список URL страниц для печати"
+
+#: print.admin.inc:37
+msgid "If set, a list of the destination URLs for the page links will be displayed at the bottom of the page."
+msgstr "Если установлено, список URL-адресов назначения для ссылок страницы будет показан внизу страницы."
+
+#: print.admin.inc:38
+msgid "Note that you can enable/disable the URL list for each content type individually from the !url."
+msgstr ""
+
+#: print.admin.inc:38
+msgid "Content Types page"
+msgstr ""
+
+#: print.admin.inc:43
+msgid "Include comments in printer-friendly version"
+msgstr "Включить комментарии в версию для печати"
+
+#: print.admin.inc:45
+msgid "When this option is active, user comments are also included in the printer-friendly version. Requires the comment module."
+msgstr "Когда этот параметр установлен, комментарии пользователей также включаются в версию для печати. Модуль Comment должен быть установлен."
+
+#: print.admin.inc:50
+msgid "New window method"
+msgstr ""
+
+#: print.admin.inc:51
+msgid "Use HTML target (does not validate as XHTML Strict)"
+msgstr "Использовать HTML-назначение (target) - не пройдёт валидацию как XHTML Strict."
+
+#: print.admin.inc:51
+msgid "Use Javascript (requires browser support)"
+msgstr "Использовать Javascript (требует поддержки браузера)"
+
+#: print.admin.inc:53
+msgid "Choose the method used to open pages in a new window/tab."
+msgstr ""
+
+#: print.admin.inc:58
+msgid "Logo options"
+msgstr ""
+
+#: print.admin.inc:65
+msgid "Logo type"
+msgstr ""
+
+#: print.admin.inc:66;97
+msgid "None (Disabled)"
+msgstr ""
+
+#: print.admin.inc:66
+msgid "Current theme's logo"
+msgstr ""
+
+#: print.admin.inc:66;97;104
+msgid "User-specified"
+msgstr ""
+
+#: print.admin.inc:68
+msgid "Select the type of logo to display on the printer-friendly version. In case of a user-specified location, insert the path or URL below."
+msgstr ""
+
+#: print.admin.inc:73
+msgid "Logo URL"
+msgstr "URL логотипа"
+
+#: print.admin.inc:81
+msgid "Upload logo"
+msgstr ""
+
+#: print.admin.inc:84
+msgid "If you don't have direct file access to the server, use this field to upload your logo."
+msgstr ""
+
+#: print.admin.inc:89
+msgid "Footer options"
+msgstr ""
+
+#: print.admin.inc:96
+msgid "Footer type"
+msgstr ""
+
+#: print.admin.inc:97
+msgid "Site's footer"
+msgstr ""
+
+#: print.admin.inc:99
+msgid "Select the type of footer to display on the printer-friendly version. In case of a user-specified footer, insert it below."
+msgstr ""
+
+#: print.admin.inc:112;341
+#: print.pages.inc:270
+msgid "Source URL"
+msgstr "Источник"
+
+#: print.admin.inc:119
+msgid "Display source URL"
+msgstr "Показать URL источника"
+
+#: print.admin.inc:121
+msgid "When this option is selected, the URL for the original page will be displayed at the bottom of the printer-friendly version."
+msgstr "Когда этот параметр выбран, то URL страницы-оригинала будет показан внизу страницы для печати."
+
+#: print.admin.inc:126
+msgid "Add current time/date to the source URL"
+msgstr "Добавить текущую дату/время к URL источника"
+
+#: print.admin.inc:128
+msgid "Display the current date and time in the Source URL line."
+msgstr "Показывает текущую дату и время в строке URL источника."
+
+#: print.admin.inc:133
+msgid "Force use of node ID in source URL"
+msgstr "Форсировать использование ID документа в URL источника"
+
+#: print.admin.inc:135
+msgid "Drupal will attempt to use the page's defined alias in case there is one. To force the use of the fixed URL, activate this option."
+msgstr "Друпал будет стараться использовать определённый синоним страниц в случае, если он один. Чтобы форсировать использование фиксированных URL - включите этот параметр."
+
+#: print.admin.inc:171
+msgid "Web page options"
+msgstr ""
+
+#: print.admin.inc:176
+msgid "Printer-friendly page link"
+msgstr "Ссылка на страницу для печати"
+
+#: print.admin.inc:178
+#: print_mail/print_mail.admin.inc:27
+#: print_pdf/print_pdf.admin.inc:39
+msgid "Links area"
+msgstr ""
+
+#: print.admin.inc:178
+#: print_mail/print_mail.admin.inc:27
+#: print_pdf/print_pdf.admin.inc:39
+msgid "Content corner"
+msgstr ""
+
+#: print.admin.inc:179
+msgid "Choose the location of the link(s) to the printer-friendly page. The Links area is usually below the node content, whereas the Content corner is placed in the upper-right corner of the node content. Unselect all options to disable the link. Even if the link is disabled, you can still view the print version of a node by going to !path/nid where nid is the numeric id of the node."
+msgstr ""
+
+#: print.admin.inc:184
+#: print_mail/print_mail.admin.inc:33
+#: print_pdf/print_pdf.admin.inc:45
+msgid "Advanced link options"
+msgstr ""
+
+#: print.admin.inc:191
+#: print_mail/print_mail.admin.inc:40
+#: print_pdf/print_pdf.admin.inc:52
+msgid "Link style"
+msgstr ""
+
+#: print.admin.inc:193
+#: print_mail/print_mail.admin.inc:42
+#: print_pdf/print_pdf.admin.inc:54
+msgid "Text only"
+msgstr ""
+
+#: print.admin.inc:193
+#: print_mail/print_mail.admin.inc:42
+#: print_pdf/print_pdf.admin.inc:54
+msgid "Icon only"
+msgstr ""
+
+#: print.admin.inc:193
+#: print_mail/print_mail.admin.inc:42
+#: print_pdf/print_pdf.admin.inc:54
+msgid "Icon and Text"
+msgstr ""
+
+#: print.admin.inc:194
+#: print_mail/print_mail.admin.inc:43
+#: print_pdf/print_pdf.admin.inc:55
+msgid "Select the visual style of the link."
+msgstr ""
+
+#: print.admin.inc:199
+#: print_mail/print_mail.admin.inc:48
+#: print_pdf/print_pdf.admin.inc:60
+msgid "Use URL alias instead of node ID"
+msgstr ""
+
+#: print.admin.inc:201
+#: print_mail/print_mail.admin.inc:50
+#: print_pdf/print_pdf.admin.inc:62
+msgid "Enabling this will create the link using the URL alias instead of the node ID."
+msgstr ""
+
+#: print.admin.inc:206
+#: print_mail/print_mail.admin.inc:55
+#: print_pdf/print_pdf.admin.inc:67
+msgid "Link class"
+msgstr ""
+
+#: print.admin.inc:210
+#: print_mail/print_mail.admin.inc:59
+#: print_pdf/print_pdf.admin.inc:71
+msgid "This can be used by themers to change the link style or by jQuery modules to open in a new window (e.g. greybox or thickbox). Multiple classes can be specified, separated by spaces."
+msgstr ""
+
+#: print.admin.inc:215
+#: print_mail/print_mail.admin.inc:64
+#: print_pdf/print_pdf.admin.inc:76
+msgid "Link visibility"
+msgstr ""
+
+#: print.admin.inc:217;242
+#: print_mail/print_mail.admin.inc:66;91
+#: print_pdf/print_pdf.admin.inc:78;103
+msgid "Show on every page except the listed pages."
+msgstr ""
+
+#: print.admin.inc:217;242
+#: print_mail/print_mail.admin.inc:66;91
+#: print_pdf/print_pdf.admin.inc:78;103
+msgid "Show on only the listed pages."
+msgstr ""
+
+#: print.admin.inc:224;250
+#: print_mail/print_mail.admin.inc:73;99
+#: print_pdf/print_pdf.admin.inc:85;111
+msgid "Enter one page per line as Drupal paths. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page."
+msgstr ""
+
+#: print.admin.inc:234;258
+#: print_mail/print_mail.admin.inc:83;107
+#: print_pdf/print_pdf.admin.inc:95;119
+msgid "Show if the following PHP code returns <code>TRUE</code> (PHP-mode, experts only)."
+msgstr ""
+
+#: print.admin.inc:235;259
+#: print_mail/print_mail.admin.inc:84;108
+#: print_pdf/print_pdf.admin.inc:96;120
+msgid "If the PHP-mode is chosen, enter PHP code between %php. Note that executing incorrect PHP-code can break your Drupal site."
+msgstr ""
+
+#: print.admin.inc:240
+#: print_mail/print_mail.admin.inc:89
+#: print_pdf/print_pdf.admin.inc:101
+msgid "Show link in system (non-content) pages"
+msgstr "Показать ссылку на системных страницах"
+
+#: print.admin.inc:249
+msgid "Setting this option will add a printer-friendly version page link on pages created by Drupal or the enabled modules."
+msgstr "Установка этого параметра добавит ссылку на страницу для печати на страницы, созданные Друпал или установленными модулями."
+
+#: print.admin.inc:264
+#: print_mail/print_mail.admin.inc:113
+#: print_pdf/print_pdf.admin.inc:125
+msgid "Link in book hierarchy nodes"
+msgstr ""
+
+#: print.admin.inc:266
+msgid "Book module link not modified"
+msgstr ""
+
+#: print.admin.inc:266
+#: print_mail/print_mail.admin.inc:115
+#: print_pdf/print_pdf.admin.inc:127
+msgid "Current page and sub-pages"
+msgstr ""
+
+#: print.admin.inc:266
+#: print_mail/print_mail.admin.inc:115
+#: print_pdf/print_pdf.admin.inc:127
+msgid "Current page only"
+msgstr ""
+
+#: print.admin.inc:271
+msgid "Open the printer-friendly version in a new window"
+msgstr "Открывать Версию для печати в новом окне"
+
+#: print.admin.inc:273
+msgid "Setting this option will make the printer-friendly version open in a new window/tab."
+msgstr "Установка этого параметра заставит страницу для печати открываться в новом окне/вкладке."
+
+#: print.admin.inc:278
+msgid "Send to printer"
+msgstr "Распечатать"
+
+#: print.admin.inc:280
+msgid "Automatically calls the browser's print function when the printer-friendly version is displayed."
+msgstr "Автоматически вызывает функцию печати браузера, когда страница для печати отображается."
+
+#: print.admin.inc:285
+msgid "Robots META tags"
+msgstr "Robots META-ярлыки"
+
+#: print.admin.inc:292
+msgid "Add noindex"
+msgstr "Добавить запрет индексирования (noindex)"
+
+#: print.admin.inc:294
+msgid "Instruct robots to not index printer-friendly pages. Recommended for good search engine karma."
+msgstr "Говорит роботам не индексировать страницы для печати. Рекомендуется для улучшения поисковой репутации."
+
+#: print.admin.inc:299
+msgid "Add nofollow"
+msgstr "Добавить не следовать по ссылкам (nofollow)"
+
+#: print.admin.inc:301
+msgid "Instruct robots to not follow outgoing links on printer-friendly pages."
+msgstr "Говорит роботам не следовать по внешним ссылкам страниц для печати."
+
+#: print.admin.inc:306
+msgid "Add noarchive"
+msgstr "Добавить не архивировать (noarchive)"
+
+#: print.admin.inc:308
+msgid "Non-standard tag to instruct search engines to not show a \"Cached\" link for your printer-friendly pages. Recognized by Googlebot."
+msgstr "Не стандартный ярлык, который говорит поисковым системам не показывать ссылку \"Сохранено в кеше\" для ваших страниц для печати. Узнаётся роботом Googlebot."
+
+#: print.admin.inc:320;361
+#: print_mail/print_mail.admin.inc:158
+#: print_pdf/print_pdf.admin.inc:280
+msgid "Saving these strings will disable their translation via Drupal's language system. Use the reset button to return them to the original state."
+msgstr ""
+
+#: print.admin.inc:324;365
+#: print.module:103;126
+#: print_mail/print_mail.admin.inc:162
+#: print_mail/print_mail.module:71
+#: print_pdf/print_pdf.admin.inc:284
+#: print_pdf/print_pdf.module:96
+msgid "Text strings"
+msgstr ""
+
+#: print.admin.inc:329
+#: print.pages.inc:246
+#, fuzzy
+msgid "Published on %site_name"
+msgstr "Опубликовано %site_name"
+
+#: print.admin.inc:333
+#: print.pages.inc:281
+#, fuzzy
+msgid "By %author"
+msgstr "Автор %author"
+
+#: print.admin.inc:337
+#: print.pages.inc:285
+#, fuzzy
+msgid "Created %date"
+msgstr "Создано %date"
+
+#: print.admin.inc:345
+#: print.pages.inc:266
+#, fuzzy
+msgid "retrieved on %date"
+msgstr "получено %date"
+
+#: print.admin.inc:349
+#: print.pages.inc:322
+#, fuzzy
+msgid "Links"
+msgstr "Ссылки"
+
+#: print.admin.inc:370
+#: print_mail/print_mail.admin.inc:167
+#: print_pdf/print_pdf.admin.inc:289
+msgid "Link text"
+msgstr ""
+
+#: print.admin.inc:371
+#: print.module:343;551
+msgid "Printer-friendly version"
+msgstr "Страница для печати"
+
+#: print.admin.inc:372
+msgid "Text used in the link to the printer-friendly version."
+msgstr ""
+
+#: print.pages.inc:282
+msgid "Anonymous"
+msgstr "Анонимный"
+
+#: print.pages.inc:602
+msgid "Post new comment"
+msgstr ""
+
+#: print.module:144;335;379;85
+#: print.info:0
+#: print_mail/print_mail.info:0
+#: print_pdf/print_pdf.info:0
+msgid "Printer, e-mail and PDF versions"
+msgstr ""
+
+#: print.module:145;174
+msgid "Most printed"
+msgstr ""
+
+#: print.module:348
+#: print_mail/print_mail.module:232
+#: print_pdf/print_pdf.module:280
+msgid "Show link"
+msgstr ""
+
+#: print.module:352
+#: print_mail/print_mail.module:236
+#: print_pdf/print_pdf.module:284
+msgid "Show link in individual comments"
+msgstr ""
+
+#: print.module:356
+#: print_mail/print_mail.module:240
+#: print_pdf/print_pdf.module:288
+msgid "Show Printer-friendly URLs list"
+msgstr ""
+
+#: print.module:369
+msgid "The settings below only apply in case the corresponding type-specific setting is also enabled (except for the \"Show link in individual comments\")."
+msgstr ""
+
+#: print.module:380
+msgid "Print module form."
+msgstr ""
+
+#: print.module:554
+msgid "Display a printer-friendly version of this page."
+msgstr "Показать страницу для печати для этой страницы."
+
+#: print.module:57
+msgid "access print"
+msgstr "доступ к печати"
+
+#: print.module:57
+msgid "administer print"
+msgstr "управление печатью"
+
+#: print.module:57
+msgid "node-specific print configuration"
+msgstr ""
+
+#: print.module:57
+msgid "use PHP for link visibility"
+msgstr ""
+
+#: print.module:78
+msgid "Printer-friendly"
+msgstr "Страница для печати"
+
+#: print.module:86
+#: print.info:0
+msgid "Adds a printer-friendly version link to content and administrative pages."
+msgstr ""
+
+#: print.module:93
+msgid "Web page"
+msgstr ""
+
+#: print.module:98;121
+#: print_mail/print_mail.module:66
+#: print_pdf/print_pdf.module:91
+msgid "Options"
+msgstr ""
+
+#: print.module:112
+msgid "Settings"
+msgstr ""
+
+#: (duplicate) print.install:16
+msgid "Printer-friendly Page settings are available under !link"
+msgstr ""
+
+#: (duplicate) print.install:17
+msgid "Administer > Site configuration > Printer-friendly Pages"
+msgstr ""
+
+#: print.info:0
+msgid "Printer-friendly pages (core)"
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:20
+msgid "Send by e-mail options"
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:25
+msgid "Send by e-mail link"
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:28
+msgid "Choose the location of the link(s) to the send by e-mail page. The Links area is usually below the node content, whereas the Content corner is placed in the upper-right corner of the node content. Unselect all options to disable the link. Even if the link is disabled, you can still send a node by e-mail by going to !path/nid where nid is the numeric id of the node."
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:98
+msgid "Setting this option will add a send by e-mail link on pages created by Drupal or the enabled modules."
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:115
+#: print_pdf/print_pdf.admin.inc:127
+msgid "No link"
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:120
+msgid "Hourly threshold"
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:123
+msgid "The maximum number of e-mails a user can send per hour."
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:128
+#: print_mail/print_mail.inc:95
+msgid "Send only the teaser"
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:130
+msgid "If selected, the default choice will be to send only the node's teaser instead of the full content."
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:135
+msgid "Enable teaser/full mode choice"
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:137
+msgid "If checked, the user will be able to choose between sending the full content or only the teaser at send time."
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:143
+msgid "Send e-mails using Job Queue"
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:145
+msgid "Selecting this option, e-mail delivery will be performed by the Job Queue module during each cron run. Leaving this unselected, the e-mail will be sent immediately, but the site will take slightly longer to reply to the user."
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:168
+#: print_mail/print_mail.module:262;321
+msgid "Send to friend"
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:169
+msgid "Text used in the link to the send by-email form."
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:174
+msgid "Message Subject"
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:175
+#: print_mail/print_mail.inc:129
+msgid "!user has sent you a message from !site"
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:176
+msgid "e-mail subject line. The sender's name will appear in place of !user in the subject. The web site name will be inserted in place of !site. The page title replaces !title."
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:180
+msgid "Message Preamble"
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:181
+#: print_mail/print_mail.inc:245
+msgid "Message from sender"
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:182
+msgid "e-mail message preamble. The sender will be able to add their own message after this."
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:186
+msgid "Message Content"
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:188
+msgid "Set the default contents of the message."
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:192
+msgid "Thank You Message"
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:193
+#: print_mail/print_mail.inc:300
+msgid "Thank you for spreading the word about !site."
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:194
+msgid "This message will be displayed after the user successfully submits the form."
+msgstr ""
+
+#: print_mail/print_mail.inc:27
+msgid "You cannot send more than %number messages per hour. Please try again later."
+msgstr ""
+
+#: print_mail/print_mail.inc:61
+msgid "Your e-mail"
+msgstr ""
+
+#: print_mail/print_mail.inc:66
+msgid "Your name"
+msgstr ""
+
+#: print_mail/print_mail.inc:71
+msgid "Send to"
+msgstr ""
+
+#: print_mail/print_mail.inc:74
+msgid "Enter multiple addresses separated by commas and/or different lines."
+msgstr ""
+
+#: print_mail/print_mail.inc:78
+msgid "Subject"
+msgstr ""
+
+#: print_mail/print_mail.inc:83
+msgid "Page to be sent"
+msgstr ""
+
+#: print_mail/print_mail.inc:84
+msgid "View page"
+msgstr ""
+
+#: print_mail/print_mail.inc:88
+msgid "Your message"
+msgstr ""
+
+#: print_mail/print_mail.inc:106
+msgid "Send e-mail"
+msgstr ""
+
+#: print_mail/print_mail.inc:110
+msgid "Clear form"
+msgstr ""
+
+#: print_mail/print_mail.inc:115
+msgid "Cancel"
+msgstr ""
+
+#: print_mail/print_mail.inc:126
+msgid "Someone"
+msgstr ""
+
+#: print_mail/print_mail.inc:128
+msgid "an interesting site"
+msgstr ""
+
+#: print_mail/print_mail.inc:203
+msgid "You cannot send more than %number messages per hour. Please reduce the number of recipients."
+msgstr ""
+
+#: print_mail/print_mail.inc:215
+msgid "You must enter a subject."
+msgstr ""
+
+#: print_mail/print_mail.inc:219
+msgid "You must enter a message."
+msgstr ""
+
+#: print_mail/print_mail.inc:282
+msgid "print_mail: From %from"
+msgstr ""
+
+#: print_mail/print_mail.inc:299
+msgid "us"
+msgstr ""
+
+#: print_mail/print_mail.inc:298
+msgid "print_mail"
+msgstr ""
+
+#: print_mail/print_mail.inc:298
+msgid "%name [%from] sent %page to [%to]"
+msgstr ""
+
+#: print_mail/print_mail.module:89;99
+msgid "Most emailed"
+msgstr ""
+
+#: print_mail/print_mail.module:227
+#: print_mail/print_mail.info:0
+msgid "Send by e-mail"
+msgstr ""
+
+#: print_mail/print_mail.module:324
+msgid "Send this page by e-mail."
+msgstr ""
+
+#: print_mail/print_mail.module:49
+msgid "Send page by e-mail"
+msgstr ""
+
+#: print_mail/print_mail.module:57
+msgid "e-mail"
+msgstr ""
+
+#: print_mail/print_mail.info:0
+msgid "Provides the capability to send the web page by e-mail"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:24
+msgid "PDF options"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:29
+msgid "PDF generation tool"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:32
+msgid "This option selects the PDF generation tool being used by this module to create the PDF version."
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:37
+msgid "PDF version link"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:40
+msgid "Choose the location of the link(s) to the PDF version. The Links area is usually below the node content, whereas the Content corner is placed in the upper-right corner of the node content. Unselect all options to disable the link. Even if the link is disabled, you can still view the PDF version of a node by going to !path/nid where nid is the numeric id of the node."
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:110
+msgid "Setting this option will add a PDF version page link on pages created by Drupal or the enabled modules."
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:132
+msgid "Open PDF in"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:133
+msgid "Same browser window"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:133
+msgid "New browser window"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:133
+msgid "Save dialog"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:135
+msgid "Select the desired method for opening the PDF in the user's browser."
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:140
+msgid "Paper size"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:157
+msgid "Choose the paper size of the generated PDF."
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:162
+msgid "Page orientation"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:163
+msgid "Portrait"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:163
+msgid "Landscape"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:165
+msgid "Choose the page orientation of the generated PDF."
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:169
+msgid "Font Family"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:173
+msgid "(TCPDF only) Set the font family to be used. Examples: %examples."
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:174
+msgid "CAUTION: TCPDF embeds the complete font in the generated PDF. If you're not using Unicode, then helvetica or times are safe choices that will keep the PDF small. Unicode fonts can increase the size of the PDF to the 1MB region."
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:178
+msgid "Font Size"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:182
+msgid "(TCPDF only) Set the font size to be used for normal text. This is the base value for the scaling applied to other text styles."
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:186
+msgid "wkhtmltopdf options"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:188
+msgid "(wkhtmltopdf only) Set any additional options to be passed to the wkhtmltopdf executable."
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:192
+msgid "Xvfb options"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:194
+msgid "(wkhtmltopdf only) Set any additional options to be passed to the Xvfb executable."
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:200
+msgid "PDF File Name"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:202
+msgid "If left empty the generated filename defaults to the node's path. Tokens may be used to build the filename (see following list). The .pdf extension will be appended automatically."
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:206
+msgid "Replacement Patterns"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:227
+msgid "No PDF generation tool found! Please dowload a supported PHP PDF generation tool. Check this module's INSTALL.txt for more details."
+msgstr ""
+
+#: (duplicate) print_pdf/print_pdf.admin.inc:239
+#: print_pdf/print_pdf.module:153
+msgid "No PDF tool selected"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:242
+msgid "Font size must be at least 1."
+msgstr ""
+
+#: (duplicate) print_pdf/print_pdf.admin.inc:290
+#: print_pdf/print_pdf.module:275;360;152
+#: print_pdf/print_pdf.info:0
+msgid "PDF version"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:291
+msgid "Text used in the link to the PDF version."
+msgstr ""
+
+#: print_pdf/print_pdf.pages.inc:515
+msgid "Page !n of !total"
+msgstr ""
+
+#: print_pdf/print_pdf.module:114;124
+msgid "Most PDFd"
+msgstr ""
+
+#: print_pdf/print_pdf.module:363
+msgid "Display a PDF version of this page."
+msgstr ""
+
+#: (duplicate) print_pdf/print_pdf.module:154
+msgid "Please configure it in the <a href=\"@url\">PDF settings page</a>."
+msgstr ""
+
+#: print_pdf/print_pdf.module:75
+msgid "Printer-friendly PDF"
+msgstr ""
+
+#: print_pdf/print_pdf.module:82
+msgid "PDF"
+msgstr ""
+
+#: print_pdf/print_pdf.info:0
+msgid "Adds the capability to export pages as PDF."
+msgstr ""
+
+#~ msgid "print"
+#~ msgstr "печать"
+#~ msgid "Printer-friendly pages"
+#~ msgstr "Страницы для печати"
+#~ msgid "Take control of the book module printer-friendly link"
+#~ msgstr ""
+#~ "Перехватить управление ссылкой на страницу для печати модуля Book (Книга)"
+#~ msgid ""
+#~ "Activate this to have the printer-friendly link in book nodes handled by "
+#~ "this module. Requires the (core) book module."
+#~ msgstr ""
+#~ "Активируйте, если вам нужно иметь ссылку на страницу для печати в "
+#~ "документах модуля Book (Книга). Модуль ядра Book (Книга) должен быть "
+#~ "установлен."
+#~ msgid "Show printer-friendly version link"
+#~ msgstr "Показать ссылку на страницу для печати"
+#~ msgid ""
+#~ "Displays the link to a printer-friendly version of the content. Further "
+#~ "configuration is available on the !settings."
+#~ msgstr ""
+#~ "Показывает ссылку на страницу для печати материала. Дальнейшая настройка "
+#~ "возможна на !settings."
+#~ msgid "settings page"
+#~ msgstr "страница настройки"
+#~ msgid ""
+#~ "Displays the link to a printer-friendly version of the comment. Further "
+#~ "configuration is available on the !settings."
+#~ msgstr ""
+#~ "Показывает ссылку на страницу для печати комментариев. Дальнейшая "
+#~ "настройка возможна на !settings."
+
+#, fuzzy
+#~ msgid "Printer-friendly Pages"
+#~ msgstr "Страницы для печати"
+#~ msgid "Disabled"
+#~ msgstr "Отключено"
+
+#, fuzzy
+#~ msgid "Use Greybox Redux (requires the greybox module)"
+#~ msgstr "Использовать Greybox Redux (нужен модуль greybox)"
+
+#, fuzzy
+#~ msgid "Use Thickbox (requires the thickbox module)"
+#~ msgstr "Использовать Thickbox (нужен модуль thickbox)"
+#~ msgid "Add nocache"
+#~ msgstr "Добавить запрет кеширования (nocache)"
+#~ msgid ""
+#~ "Non-standard tag to instruct search engines to not show a \"Cached\" link "
+#~ "for your printer-friendly pages"
+#~ msgstr ""
+#~ "Не стандартный ярлык, который говорит поисковым системам не показывать "
+#~ "ссылку \"Сохранено в кеше\" для ваших страниц для печати."
+#~ msgid "By"
+#~ msgstr "Автор"
+#~ msgid "Enabled"
+#~ msgstr "Включено"
+

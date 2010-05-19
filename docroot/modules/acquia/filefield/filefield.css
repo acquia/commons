@@ -1,0 +1,105 @@
+/* $Id: filefield.css,v 1.21 2009/04/08 20:04:52 quicksketch Exp $ */
+
+/**
+ * Overall styles
+ */
+
+
+/**
+ * Formatter styles
+ */
+
+.filefield-icon {
+  float: left; /* RTL */
+  margin-right: 0.4em; /* RTL */
+}
+
+/* End formatter styles. */
+
+/**
+ * General widget form styles (applicable to all widgets).
+ */
+.filefield-element {
+  margin: 1em 0;
+  white-space: normal;
+}
+
+.filefield-element .widget-preview {
+  float: left; /* RTL */
+  padding-right: 10px; /* RTL */
+  border-right: 1px solid #CCC; /* RTL */
+  margin-right: 10px; /* RTL */
+  max-width: 30%;
+}
+
+.filefield-element .widget-edit {
+  float: left; /* RTL */
+  max-width: 70%;
+}
+
+.filefield-element .filefield-preview {
+  width: 16em;
+  overflow: hidden;
+}
+
+.filefield-element .widget-edit .form-item {
+  margin: 0 0 1em 0;
+}
+
+.filefield-element input.form-submit,
+.filefield-element input.form-file {
+  margin: 0;
+}
+
+.filefield-element input.progress-disabled {
+  float: none;
+  display: inline;
+}
+
+.filefield-element div.ahah-progress,
+.filefield-element div.throbber {
+  display: inline;
+  float: none;
+  padding: 1px 13px 2px 3px; /* RTL */
+}
+
+.filefield-element div.ahah-progress-bar {
+  display: none;
+  margin-top: 4px;
+  width: 28em;
+  padding: 0;
+}
+
+.filefield-element div.ahah-progress-bar div.bar {
+  margin: 0;
+}
+
+/* End general widget form styles. */
+
+/**
+ * Generic file edit widget styles. Not applicable to other widgets that
+ * might hook into filefield (say, a widget with an image preview).
+ */
+
+.filefield-generic-edit .filefield-icon {
+  float: left; /* RTL */
+  margin-right: 0.7em; /* RTL */
+  margin-top: 0.3em;
+}
+
+.filefield-generic-edit-description {
+  margin-right: 6em; /* RTL */
+}
+
+/* The text field is made unnecessarily long by node.css - shorten it. */
+.filefield-generic-edit .form-text {
+  width: 99%;
+}
+
+.filefield-generic-edit .description {
+  white-space: normal;
+  margin-bottom: 0;
+  overflow: auto; /* Indent on line wraps, don't float around the icon. */
+}
+
+/* End widget form styles. */

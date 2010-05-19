@@ -1,0 +1,325 @@
+# $Id: ja.po,v 1.1.2.2 2008/04/07 10:30:46 imagine Exp $
+# -----------------------------------------------------------------------------
+# Japanese translation of Drupal (modules-lightbox2)
+#
+# Copyright (c) 2006-2008  Drupal Japan  ( http://drupal.jp/ )  /
+#                          Takafumi      ( jp.drupal@imagine **reverse order**)
+#
+# Generated from file:
+#  lightbox2.module,v 1.16.2.16.2.63 2008/03/06 15:13:09 snpower
+#  lightbox2.info,v 1.1.6.2 2007/09/16 13:49:01 snpower
+#
+# -----------------------------------------------------------------------------
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2008-04-05 14:45+0900\n"
+"Last-Translator: Takafumi <jp.drupal@imagine **reverse order**>\n"
+"Language-Team: Drupal Japan\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#: lightbox2.module:25 lightbox2.info:0
+msgid "Enables Lightbox V2 for Drupal"
+msgstr "Lightbox2 V2をDrupalで利用できるようにします。"
+
+#: lightbox2.module:27
+msgid "<h3>Overview</h3>\n      <p align=\"justify\">Lightbox JS V2 is a simple, unobtrusive script used to overlay images on the current page. It's a snap to setup and works on all modern browsers. The module comes with a Lightbox2 Lite option which does not use the JQuery libraries; it is therefore less likely to conflict with anything else.</p>\n      <p align=\"justify\">Places images above your current page, not within. This frees you from the constraints of the layout, particularly column widths. Keeps users on the same page. Clicking to view an image and then having to click the back button to return to your site is bad for continuity (and no fun!).</p>\n<h3>Features</h3>\nThe version 2 module has several benefits over the plain Lightbox module.  Note, not all of these features are available when the \"Lightbox2 Lite\" option is enabled.\n<ul>\n<li>Image Sets: group related images and navigate through them with ease - ideal for your image galleries.</li>\n<li>Visual Effects: fancy pre-loader and transition when you click on the image.</li>\n<li>Zoom Capability: larger images are reduced in size so they fit snugly inside the browser window.  A zoom button can then be clicked on to see it in its original size.</li>\n<li>Automatic Image Detection: configurable automatic re-formatting of\nimage thumbnails, so there is no need to add 'rel=\"lightbox\"' to each\nimage link on your site.  <a\nhref=\"http://drupal.org/project/image\">Image</a>, <a\nhref=\"http://drupal.org/project/inline\">Inline</a>, <a\nhref=\"http://drupal.org/project/flickr\">Flickr</a>, <a\nhref=\"http://drupal.org/project/img_assist\">Image Assist</a> and <a\nhref=\"http://drupal.org/project/imagefield\">CCK Imagefield</a> modules are all\nsupported.  It's also possible to configure a custom list of image classes\nwhich should trigger the lightbox functionality.</li>\n<li><a href=\"http://drupal.org/project/imagecache\">Imagecache</a> Support: adds a Lightbox2 field formatter for <a href=\"http://drupal.org/project/imagefield\">CCK imagefields</a> for your custom <a href=\"http://drupal.org/project/views\">views</a>.</li>\n<li>Image Node Link: a link to the image node can be provided within the lightbox itself.</li>\n<li>Page Exclusion Capability: exclude certain pages on your site from having the lightbox2 functionality.</li>\n<li>Gallery 2 Support: support for Gallery 2 images via the <a href=\"http://drupal.org/project/gallery\">Gallery</a> module (beta).</li>\n</ul>\n      <p align=\"justify\"><h3>Usage</h3></p>\n      <p>Add rel=&quot;lightbox&quot; attribute to any link tag to activate the lightbox. For example: </p>\n      <p>&lt;a href=&quot;image-1.jpg&quot; rel=&quot;lightbox&quot; title=&quot;my caption&quot;&gt;image #1&lt;/a&gt;</p>\n      <p>Optional: Use the title attribute if you want to show a caption.</p>\n   <p>If you have a set of related images that you would like to group, follow\n   step one but additionally include a group name between square brackets in the\n   rel attribute. For example:</p><p>&lt;a href=\"images/image-1.jpg\"\n   rel=\"lightbox[roadtrip]\"&gt;image #1&lt;/a&gt;<br />\n&lt;a href=\"images/image-2.jpg\" rel=\"lightbox[roadtrip]\"&gt;image\n#2&lt;/a&gt;<br />\n&lt;a href=\"images/image-3.jpg\" rel=\"lightbox[roadtrip]\"&gt;image\n#3&lt;/a&gt;<br /></p>\n<p>No limits to the number of image sets per page or how many images are allowed\nin each set. Go nuts!</p>"
+msgstr "<h3>概観</h3>\n      <p align=\"justify\">Lightbox JS V2は現在のページにイメージをオーバーレイするために使われる、単純で地味なスクリプトです。 それはセットアップが簡単で、すべての最新式のブラウザで動作します。 モジュールにはJQueryライブラリを使用しないLightbox2 Liteオプションが備えられ、これを使用することで他のものとコンフリクトしにくくなります。</p>\n      <p align=\"justify\">イメージは現在のページ内ではなく、ページの上に置かれます。 これはレイアウト、特にカラム幅の制約から解放します。 同じページにユーザを留めます。 イメージを見るためにクリックし、その後「戻る」ボタンをクリックしてサイトに戻るのは流れが良くありません。</p>\n<h3>機能</h3>\nバージョン2モジュールは、普通のLightboxモジュールよりいくつかの利点があります。 ただし、\"Lightbox2 Lite\"オプションを有効にした場合、これらすべての機能が利用できるとは限りませんので注意してください。\n<ul>\n<li>イメージセット： 関連するイメージをまとめ、それらを通じてナビゲートします － イメージギャラリーに最適です。</li>\n<li>視覚効果： イメージをクリックした際のプリローダーと移り変わりがしゃれています。</li>\n<li>ズーム機能： 大きなイメージは縮小され、ブラウザウィンドウ内にキッチリ収まります。 その後、オリジナルサイズで見るためにズームボタンをクリックできます。</li>\n<li>イメージ自動検出： イメージサムネイルの設定可能な自動再書式化により、サイトの各イメージリンクに 'rel=\"lightbox\"' を加える必要がありません。 <a\nhref=\"http://drupal.org/project/image\">Image</a>、<a\nhref=\"http://drupal.org/project/inline\">Inline</a>、<a\nhref=\"http://drupal.org/project/flickr\">Flickr</a>、<a\nhref=\"http://drupal.org/project/img_assist\">Image Assist</a>、<a\nhref=\"http://drupal.org/project/imagefield\">CCK Imagefield</a> モジュールのすべてをサポートします。 また、lightboxの機能性のトリガとするべき、イメージクラスのカスタムリストを設定することができます。</li>\n<li><a href=\"http://drupal.org/project/imagecache\">Imagecache</a> 対応： カスタム<a href=\"http://drupal.org/project/views\">views</a>用の<a href=\"http://drupal.org/project/imagefield\">CCK imagefields</a>用にLightbox2フィールドフォーマッタを加えます。</li>\n<li>Imageノードリンク： lightbox内にImageノードへのリンクを提供することができます。</li>\n<li>ページ除外機能： サイトの特定ページではlightbox2の機能性を除外することができます。</li>\n<li>Gallery 2 対応：  <a href=\"http://drupal.org/project/gallery\">Gallery</a>モジュールによるGallery 2 イメージをサポートします。</li>\n</ul>\n      <p align=\"justify\"><h3>使い方</h3></p>\n      <p>lightboxを作動させるには、任意のリンクタグに rel=&quot;lightbox&quot; 属性を加えてください。<br />例:</p>\n      <p>&lt;a href=&quot;image-1.jpg&quot; rel=&quot;lightbox&quot; title=&quot;my caption&quot;&gt;image #1&lt;/a&gt;</p>\n      <p>オプション： キャプションを表示したい場合は title 属性を使用してください。</p>\n   <p>グループ化したい関連するイメージのセットがある場合、rel 属性に [] で囲んだグループ名を含めてください。<br />例：</p><p>&lt;a href=\"images/image-1.jpg\"\n   rel=\"lightbox[roadtrip]\"&gt;image #1&lt;/a&gt;<br />\n&lt;a href=\"images/image-2.jpg\" rel=\"lightbox[roadtrip]\"&gt;image\n#2&lt;/a&gt;<br />\n&lt;a href=\"images/image-3.jpg\" rel=\"lightbox[roadtrip]\"&gt;image\n#3&lt;/a&gt;<br /></p>\n<p>ページごとのイメージセット数や、各セット内のイメージ数に制限はありません。</p>"
+
+#: lightbox2.module:147
+msgid "View Image Details"
+msgstr "イメージの詳細を表示"
+
+#: lightbox2.module:147
+msgid "Image !current of !total"
+msgstr "イメージ  !current / !total"
+
+#: lightbox2.module:154
+msgid "Lightbox2 Lite"
+msgstr "Lightbox2 Lite"
+
+#: lightbox2.module:162
+msgid "Use Lightbox2 Lite"
+msgstr "Lightbox2 Liteを使用する"
+
+#: lightbox2.module:163
+msgid "Checking this box will enable Lightbox2 Lite and will disable all of the automatic image node URL re-formatting features.  It also disables all grouping features."
+msgstr "Lightbox2 Liteを使用するかどうかを指定してください。 ここにチェックを入れるとLightbox2 Liteが有効となり、自動イメージノードURL再書式化機能とグループ化機能はすべて無効となります。"
+
+#: lightbox2.module:171
+msgid "Use Alternative Layout"
+msgstr "代替レイアウトを使用する"
+
+#: lightbox2.module:172
+msgid "Enabling this option alters the layout of the lightbox elements.  This doesn't apply when using Lightbox Lite."
+msgstr "lightbox要素のレイアウトを変更するかどうかを指定してください。 Lightbox Lite使用時には適用されません。"
+
+#: lightbox2.module:179
+msgid "Force visibility of navigation links"
+msgstr "強制的にナビゲーションリンクを表示"
+
+#: lightbox2.module:180
+msgid "When viewing grouped images, the navigational links to the next and previous images are only displayed when you hover over the image.  Checking this box forces these links to be displayed all the time."
+msgstr "グループ化された画像を表示する際、常にナビゲーションリンクを表示するかどうかを指定してください。 ここにチェックを入れると、通常は画像にマウスカーソルを重ねた際にのみ表示される前後へのリンクを、強制的に表示します。"
+
+#: lightbox2.module:188
+msgid "Image Count Text"
+msgstr "イメージカウントテキスト"
+
+#: lightbox2.module:189
+msgid "This text is used to display the image count underneath the image in the lightbox when image grouping is enabled.  Use !current as a placeholder for the number of the current image and !total for the total number of images in the group.  For example, \"Image !current of !total\"."
+msgstr "イメージ数の表示に使用するテキストを入力してください。 これはイメージがグループ化されているとき、lightboxのイメージの下にイメージの総数と現在何番目であるかを表示するのに使われます。 プレースホルダとして、現在のイメージ番号用に !current、グループのイメージ総数用に !total が使用できます。 例： !total中!current番目のイメージ"
+
+#: lightbox2.module:196
+msgid "Disable Zoom Feature"
+msgstr "ズーム機能を無効にする"
+
+#: lightbox2.module:197
+msgid "By default, when the image being displayed in the lightbox is larger than the browser window, it is resized to fit within the window and a zoom button is provided for users who wish to view the image in its original size.  Checking this box will disable this feature and all images will be displayed without any resizing."
+msgstr "ズーム機能を無効にするかどうかを指定してください。 デフォルトでは、ブラウザウィンドウより大きなイメージがlightboxで表示される際、ウィンドウに収まるようにリサイズされ、オリジナルイメージが表示できるズームボタンが提供されます。 ここにチェックを入れると、この機能が無効となり、すべてのイメージはリサイズされずに表示されます。"
+
+#: lightbox2.module:204
+msgid "Disable LightBox for these urls"
+msgstr "Lightboxを無効にするURL"
+
+#: lightbox2.module:205
+msgid "List the urls where the lightbox should be disabled, e.g. \\\"node/add/page\\\".  Use &lt;front&gt; to match the front page.  Put each url on a separate line. You can use the % character as a wildcard."
+msgstr "lightboxを無効にするURLのリストを行単位で入力してください。 フロントページの指定には &lt;front&gt; を使用してください。 % はワイルドカードとして使用できます。 例： node/add/page"
+
+#: lightbox2.module:213
+msgid "Advanced settings"
+msgstr "拡張設定"
+
+#: lightbox2.module:225
+msgid "Overlay Opacity"
+msgstr "オーバーレイの不透明度"
+
+#: lightbox2.module:227
+msgid "The overlay opacity setting determines how visible or\ntransparent the background page is behind the lightbox.  The opacity value can\nrange from 0.0 to 1.0 where 0.0 is 100% transparent and 1.0 is 100% opaque."
+msgstr "lightboxの背景ページの不透明度を指定してください。 不透明度の値は 0.0 ～ 1.0 の範囲で指定でき、0.0 が100%透明、1.0 が100%不透明となります。"
+
+#: lightbox2.module:238
+msgid "Location of Javscript"
+msgstr "Javscriptの位置"
+
+#: lightbox2.module:239
+msgid "Header"
+msgstr "ヘッダ"
+
+#: lightbox2.module:239
+msgid "Footer"
+msgstr "フッタ"
+
+#: lightbox2.module:240
+msgid "By default, the lightbox javascript files are loaded in the HTML header.  However, for sites using SWFObject to load their Flash content, the footer setting is recommended to prevent \"Operation Aborted\" errors in IE.  If using the footer setting, please note that not all themes correctly implement the footer region and may require a small change."
+msgstr "HTML内でjavascriptが読み込まれる位置を指定してください。 デフォルトでは、lightboxのjavascriptファイルはHTMLヘッダで読み込まれます。 しかし、Flashコンテンツを読み込むためにサイトで SWFObject を使用している場合、IEの \"Operation Aborted\" エラーを防ぐためにフッタに設定することを推奨します。 フッタに設定する場合、すべてのテーマがフッタ領域を正しく実装しているとは限らず、若干の変更が必要になるかもしれないことに注意してください。"
+
+#: lightbox2.module:265
+msgid "These options allow automatic URL re-formatting of Image Nodes.  This removes the need for you to add 'rel=\"lightbox\"' to each image node link throughout your site.  You can select which image sizes will trigger the lightbox and configure a list of image CSS classes which should also have their URLs automatically re-formatted.  This feature is not available when using Lightbox2 Lite."
+msgstr "これらのオプションは、Imageノードの自動的なURLの再書式化を可能にします。 これはサイト全体の各Imageノードリンクに 'rel=\"lightbox\"' を加える必要性をなくします。 どのイメージサイズをlightboxのトリガとするかを選択し、URLを自動再書式化するべきイメージCSSクラスのリストを設定することができます。 Lightbox2 Liteを使用している場合は、この機能は利用できません。"
+
+#: lightbox2.module:272
+msgid "Image node settings"
+msgstr "Imageノードの設定"
+
+#: lightbox2.module:280
+msgid "Enable for Image Nodes"
+msgstr "Imageノードで有効にする"
+
+#: lightbox2.module:281
+msgid "Checking this box will enable automatic URL formatting for Image Nodes."
+msgstr "ここにチェックを入れると、イメージノード用に自動的なURLの書式化を行います。"
+
+#: lightbox2.module:296
+msgid "Lightbox image display size"
+msgstr "Lightboxイメージの表示サイズ"
+
+#: lightbox2.module:299
+msgid "Select which image size will be loaded in the lightbox.  This only applies to images uploaded with the Image module."
+msgstr "lightboxに読み込まれるイメージサイズを指定してください。 これはImageモジュールでアップロードされたイメージにのみ適用されます。"
+
+#: lightbox2.module:305
+msgid "Image trigger size"
+msgstr "イメージのトリガサイズ"
+
+#: lightbox2.module:307;499
+msgid "Thumbnail"
+msgstr "サムネイル"
+
+#: lightbox2.module:308
+msgid "Select which image size, when clicked on, will automatically trigger the lightbox.  This only applies to images uploaded with the Image module."
+msgstr "クリックしたときにlightboxのトリガとなる、イメージサイズを指定してください。 これはImageモジュールでアップロードされたイメージにのみ適用されます。"
+
+#: lightbox2.module:316
+msgid "Disable Lightbox for Gallery Lists"
+msgstr "ギャラリーリストでLightboxを無効にする"
+
+#: lightbox2.module:317
+msgid "Checking this box will disable the lightbox for images in gallery lists.  This means it is possible to open a gallery by clicking on the teaser image, but the lightbox will still appear when viewing images within the gallery.  This only applies to image galleries created with the \"image gallery\" module."
+msgstr "ギャラリーリストのイメージでlightboxを無効にするかどうかを指定してください。 ここにチェックを入れると無効となり、ティーザーのイメージをクリックしてギャラリーを開くことが可能になります。 ただし、ギャラリー内のイメージを表示する際にはlightboxが現れます。 これはimage galleryモジュールで作られたイメージギャラリーにのみ適用されます。"
+
+#: lightbox2.module:324
+msgid "Enable for Flickr images"
+msgstr "Flickrイメージで有効にする"
+
+#: lightbox2.module:325
+msgid "Checking this box will enable automatic URL formatting for Flickr images."
+msgstr "ここにチェックを入れると、Flickrイメージで自動的なURLの再書式化が有効となります。"
+
+#: lightbox2.module:332
+msgid "Enable for Inline images"
+msgstr "Inlineイメージで有効にする"
+
+#: lightbox2.module:333
+msgid "Checking this box will enable automatic URL formatting for images displayed by the Inline module."
+msgstr "ここにチェックを入れると、Inlineモジュールによるイメージ表示で自動的なURLの再書式化が有効となります。"
+
+#: lightbox2.module:340
+msgid "Enable for Image Assist custom size images"
+msgstr "Image Assistのカスタムサイズイメージで有効にする"
+
+#: lightbox2.module:341
+msgid "Checking this box will enable automatic URL formatting for custom size images displayed by the Image Assist module."
+msgstr "ここにチェックを入れると、Image Assistモジュールによるカスタムサイズのイメージ表示で自動的なURLの再書式化が有効となります。"
+
+#: lightbox2.module:348
+msgid "Custom image trigger classes"
+msgstr "カスタムイメージトリガclass"
+
+#: lightbox2.module:349
+msgid "List the image classes which should trigger the lightbox when clicked on.  Put each class on a separate line."
+msgstr "クリックした際にlightboxのトリガとするべき、イメージクラスのリストを行単位で入力してください。"
+
+#: lightbox2.module:356
+msgid "Text for Image Page Link"
+msgstr "イメージページリンク用テキスト"
+
+#: lightbox2.module:357
+msgid "This is the text that will appear as the link to the image page underneath the image in the lightbox"
+msgstr "イメージページへのリンクに使用するテキストを入力してください。 これはlightboxでイメージの下に表示されます。"
+
+#: lightbox2.module:364
+msgid "Open Image Page in New Window"
+msgstr "イメージページを新しいウィンドウで開く"
+
+#: lightbox2.module:365
+msgid "This controls whether the link to the image page underneath the image is opened in a new window or the current window."
+msgstr "イメージページを新しいウィンドウで開くかどうかを指定してください。 チェックを入れない場合、イメージページは現在のページで開かれます。"
+
+#: lightbox2.module:373
+msgid "Enable Grouping"
+msgstr "グループ化を有効にする"
+
+#: lightbox2.module:374
+msgid "Checking this box will enable automatic grouping of images on a page. Useful for image galleries."
+msgstr "イメージの自動グループ化を有効にするかどうかを指定してください。 チェックを入れると1ページにイメージがまとめられ、イメージギャラリーに役立ちます。"
+
+#: lightbox2.module:382
+msgid "Disable Lightbox for Acidfree Gallery Lists"
+msgstr "Acidfree GalleryリストでLightboxを無効にする"
+
+#: lightbox2.module:383
+msgid "Checking this box will disable the lightbox for images in gallery lists.  This means it is possible to open a gallery by clicking on the teaser image, but the lightbox will still appear when viewing images within the gallery.  This only applies to image galleries created with the \"acidfree\" module."
+msgstr "ギャラリーリストのイメージでlightboxを無効にするかどうかを指定してください。 ここにチェックを入れると無効となり、ティーザーのイメージをクリックしてギャラリーを開くことが可能になります。 ただし、ギャラリー内のイメージを表示する際にはlightboxが現れます。 これはacidfreeモジュールで作られたイメージギャラリーにのみ適用されます。"
+
+#: lightbox2.module:393
+msgid "Imagefield settings"
+msgstr "Imagefieldの設定"
+
+#: lightbox2.module:401
+msgid "Group Imagefields by Node Id"
+msgstr "ノードIDでImagefieldsをグループ化する"
+
+#: lightbox2.module:402
+msgid "By default, imagefields in views are grouped by the field name they appear in the view in.  Enabling this option allows them to be grouped by field name and node id (where available)."
+msgstr "デフォルトでは、viewsのimagefieldsはviewに現れるフィールド名でグループ化されます。 ここにチェックを入れると、フィールド名とノードID（利用可能な場合）によってグループ化されます。"
+
+#: lightbox2.module:418;450
+msgid "Image links with 'rel=\"lightbox\"' in the &lt;a&gt; tag will appear in a Lightbox when clicked on."
+msgstr "&lt;a&gt; タグに 'rel=\"lightbox\"' があるイメージリンクをクリックしたとき、Lightboxで表示されます"
+
+#: lightbox2.module:421
+msgid "To add a lightbox to your images, add rel=\"lightbox\" attribute to any link tag to activate the lightbox. For example:"
+msgstr "イメージにlightboxを加えるには、lightboxを有効にするために任意のリンクタグに rel=\"lightbox\" 属性を加えてください。<br />例："
+
+#: lightbox2.module:422
+msgid "<code>&lt;a href=\"image-1.jpg\" rel=\"lightbox\" title=\"my caption\"&gt;image #1&lt;/a&gt;</code>"
+msgstr "<code>&lt;a href=\"image-1.jpg\" rel=\"lightbox\" title=\"my caption\"&gt;image #1&lt;/a&gt;</code>"
+
+#: lightbox2.module:423
+msgid "The title attribute in the link tag is optional. The addition of this attribute enables the display of a caption with the image displayed in the lightbox."
+msgstr "リンクタグの title 属性は任意です。 この属性を付加することで、lightboxに表示されたイメージでキャプションが表示できるようになります。"
+
+#: lightbox2.module:424
+msgid "If you have a set of related images that you would like to group, then you will need to include a group name between square brackets in the rel attribute. For example:"
+msgstr "グループ化したい関連するイメージのセットがある場合、rel 属性に [] で囲んだグループ名を含める必要があります。<br />例："
+
+#: lightbox2.module:425
+msgid "<code>&lt;a href=\"image-1.jpg\" rel=\"lightbox[roadtrip]\"&gt;image #1&lt;/a&gt;<br /> &lt;a href=\"image-2.jpg\" rel=\"lightbox[roadtrip]\"&gt;image #2&lt;/a&gt;<br /> &lt;a href=\"image-3.jpg\" rel=\"lightbox[roadtrip]\"&gt;image #3&lt;/a&gt;<br /> </code>"
+msgstr "<code>&lt;a href=\"image-1.jpg\" rel=\"lightbox[roadtrip]\"&gt;image #1&lt;/a&gt;<br /> &lt;a href=\"image-2.jpg\" rel=\"lightbox[roadtrip]\"&gt;image #2&lt;/a&gt;<br /> &lt;a href=\"image-3.jpg\" rel=\"lightbox[roadtrip]\"&gt;image #3&lt;/a&gt;<br /> </code>"
+
+#: lightbox2.module:426
+msgid "There are no limits to the number of image sets per page or how many images are allowed in each set."
+msgstr "ページごとのイメージセット数や、各セット内のイメージ数に制限はありません。"
+
+#: lightbox2.module:427
+msgid "If you wish to turn the caption into a link, format your caption in the following way:"
+msgstr "キャプションをリンクに変えたい場合は、次の方法でキャプションを書式化してください："
+
+#: lightbox2.module:428
+msgid "<code>&lt;a href=\"image-1.jpg\" rel=\"lightbox\" title='&lt;a href=\"http://www.yourlink.com\"&gt;View Image Details&lt;/a&gt;'&gt;image #1&lt;/a&gt;</code>"
+msgstr "<code>&lt;a href=\"image-1.jpg\" rel=\"lightbox\" title='&lt;a href=\"http://www.example.com\"&gt;イメージの詳細を表示&lt;/a&gt;'&gt;image #1&lt;/a&gt;</code>"
+
+#: lightbox2.module:433
+msgid "Image links from G2 are formatted for use with Lightbox.V2"
+msgstr "G2の画像リンクがLightbox.V2を使用するように書式化されます。"
+
+#: lightbox2.module:443
+msgid "Lightbox filter"
+msgstr "Lightboxフィルタ"
+
+#: lightbox2.module:443
+msgid "Lightbox G2 filter"
+msgstr "Lightbox G2フィルタ"
+
+#: lightbox2.module:447
+msgid "Turns g2_filter links into Lightbox.V2 appropriate links"
+msgstr "g2_filterのリンクをLightbox.V2に適したリンクに変えます"
+
+#: lightbox2.module:541
+msgid "press !x to close"
+msgstr "!x を押すと閉じます"
+
+#: lightbox2.module:73
+msgid "administer lightbox2"
+msgstr "Lightbox2の管理"
+
+#: lightbox2.module:91 lightbox2.info:0
+msgid "Lightbox2"
+msgstr "Lightbox2"
+
+#: lightbox2.module:92;99
+msgid "Allows the user to configure the lightbox2 settings"
+msgstr "Lightbox2の設定を行います。"
+
+#: lightbox2.module:98
+msgid "General"
+msgstr "全般"
+
+#: lightbox2.module:108
+msgid "Automatic image handling"
+msgstr "自動イメージ処理"
+
+#: lightbox2.module:109
+msgid "Allows the user to configure the lightbox2 automatic image handling settings"
+msgstr "lightbox2の自動イメージ処理の設定を行います"
+
+#: lightbox2.module:0
+msgid "lightbox2"
+msgstr "lightbox2"
+
+#: lightbox2.info:0
+msgid "Javascript tools"
+msgstr "Javascriptツール"

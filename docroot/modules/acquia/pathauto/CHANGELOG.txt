@@ -1,0 +1,177 @@
+
+***DRUPAL-5 only***
+2007-05-16
+  Forum aliases are now handled separately.  Forum vocabularies will not get 
+    a regular taxonomy/term/[tid] alias and the pattern input is not available.
+
+  Added a "Delete all aliases" function.  See tabs at admin/build/path.
+
+  Bulk updates claim that they only impact non-aliased objects but really affect
+    everything (depending on update action).  Changed the queries so that now
+    pathauto will only impact items which are not aliased.  To get a clean slate 
+
+2007-04-01
+  Major update to use the token module.  The pattern set is now _much_ richer.  
+    Certain patterns have changed as noted below:
+      Node patterns: 
+      	[user] => [author-name]
+      	[uid]  => [author-uid]
+      	[cat] => [term]  (only for node patterns!!!)
+      	[catalias] => Nothing - so far this is not supported
+
+2006-03-19
+  Removed _pathauto_page capability which wasn't used by many sites
+    nor by any contrib modules.  If your site or module used this
+    consider creating a separate contributed module.  This also 
+    requires removing the index alias function.  See the Pathauto section
+    of the handbook for ideas on how to replace this functionality using views:
+    http://drupal.org/handbook/modules/pathauto and more specificially the 
+    Pathauto Pattern Recipes: http://drupal.org/node/124462
+
+2006-11-11
+  .inc files are now hardcoded instead of being dynamically included
+  	Note: may break your site if you use additional .inc files
+  New Defaults:
+  	Use - (dash) as the separator by default
+  	Limit aliases and components to 100 characters
+  	Make "Create new alias, replacing the old one." the default update action
+
+2006-10-12
+  Allow users to specify a list of words to strip out of the url
+
+***DRUPAL-4-7 only***
+2006-01-02
+  More changes to support 4.7:
+    Removed array2object() calls, replaced with (object) casts.
+    Support for Drupal string API.
+    Remove %u for uids.
+
+2005-10-30
+  Initial port for Drupal 4.7:
+    Replaced node_list() with node_get_types().
+    Removed theme('page'...) call.
+    Implemented new forms API.
+  
+***DRUPAL-4-6 only***
+2005-10-26
+  Fix bug with tracker bulk update, introduced with "support stripping
+  slashes in individual components".
+ 
+2005-10-22
+  Fixed bug where taxonomy info is sometimes ignored.
+
+2005-10-2
+  Fix bug with book paths not translating spaces to separators.
+  
+2005-9-26
+  Fix bug with taxonomy bulk update, introduced with "support stripping
+  slashes in individual components".
+  
+2005-9-18
+  Added a maximum alias component length setting.
+  Make enabling of feed aliases specific to the content type.
+
+2005-9-12
+  Support for extensions from modules which extend node/taxonomy.
+  Support stripping slashes in individual components.
+  Support for incorporating menu paths into node patterns.
+  Added a maximum alias length setting.
+  Some improvement in transliteration of unicode characters.
+  Corrected HTML for placeholder documentation.
+  Corrected description in node form.
+  
+2005-8-20
+  Fixed bug in paging of index pages.
+  
+2005-7-25
+  Also exlude "blog" and "admin" as alises.
+  Un-implement blog_pathauto_page() - leave the default blog behavior.
+
+2005-7-24
+  Implemented blog_pathauto_page().
+  Don't create menu items for unimplemented foo_pathauto_page()
+    callbacks.
+  No longer treat hyphens as alphanumerics (i.e., replace them with
+    separators).
+  Don't allow "user" as an alias.
+  
+2005-7-6
+  Fixed bug - [bookpath] having no effect during bulk update.
+  
+2005-7-4
+  Added verbose option, to display alias change/create actions.
+  Fixed problem with timed-out bulk updates "sticking" and trying to
+    execute on all subsequent visits to the settings page.
+  Switched to using vocabulary IDs instead of names in pattern vars.
+  Added support for forum aliasing to pathauto_taxonomy.inc.
+  Put API documentation into separate file.
+  Added support for tracker URLs (user/[uid]/track), code contributed
+    by Matt England.
+  Fixed problem with existing aliases being deleted when there's no
+    pattern.
+2005-6-26
+  Index aliases now only generated for nodes - bulk update creation
+  for other content types was broken.
+
+2005-6-25
+  Implemented generation of index aliases.
+  [bookpath] placeholder added.
+  Fix issue with taxonomy aliases using depth parameters not being
+  used in the outgoing direction.
+2005-6-6
+  Fix bug with empty separator
+
+***DRUPAL-4-5 only***
+2005-5-23
+  drupal_get_path replaced with module_get_path
+
+***DRUPAL-4-5, DRUPAL-4-6 releases***
+2005-5-15
+  Fixed bug in user/blog bulk updates - need to ignore user 0.
+  
+2005-5-14
+  Fixed bug when creating users if blog module is enabled - missing 
+  argument.
+
+2005-5-9
+  Fixed bug in updating already-aliased content - "replace" option
+  didn't work correctly.
+
+2005-5-7
+  Added depth parameter of '0' to taxonomy URLs, so feed URLs are
+  generated correctly.
+  Added 'supportsfeeds' to the settings hook, enabling implementors
+  to indicate that feed aliases may be automatically generated for
+  that content type.
+  Restored automatic feed generation (had been disabled in the
+  refactoring).
+  Added option to control behavior when updating already-aliased
+  content.
+  Added version tracking (based on webform's version tracking). Will
+  automatically fix up variable names that changed after the 2005-4-23
+  release.
+
+2005-4-30
+  Refactoring of pathauto. Instead of building support for various
+  content types directly into pathauto.module, we now use a modular
+  design which allows support for different content types to be added
+  without touching pathauto itself.
+
+2005-4-23
+  Support for user and blog aliases.
+  Conversion of accents and ligatures to ASCII equivalents.
+2005-4-10
+  Support for node-specific patterns
+2005-4-8
+  Bulk update bugs fixed.
+2005-4-2
+  [type] and [book] placeholders added.
+2005-3-26
+  Support for feed aliases added.
+2005-2-21
+  Fixed bug when taxonomy module was not enabled.
+2005-2-15
+  Initial merger of Mike Ryan's autopath with Tommy Sundstrom's 
+  path_automatic.
+
+$Id: CHANGELOG.txt,v 1.26 2007/10/28 21:06:13 greggles Exp $

@@ -1,0 +1,86 @@
+<?php
+// $Id: googleanalytics_basic.test,v 1.2.2.7 2008/12/12 13:22:30 hass Exp $
+
+/**
+ * @file
+ * Test file for Google Analytics module.
+ */
+class GoogleAnalyticsBasicTest extends DrupalWebTestCase {
+
+  function getInfo() {
+    return array(
+      'name' => t('Google Analytics basic tests'),
+      'description' => t('Test basic Google Analytics module functionality.'),
+      'group' => 'Google Analytics',
+    );
+  }
+
+  function setUp() {
+    parent::setUp('googleanalytics');
+
+    $permissions = array('administer google analytics');
+
+    // User to set up google_analytics.
+    $user = $this->drupalCreateUser($permissions);
+    $this->drupalLogin($user);
+  }
+
+  function testGoogleAnalytics() {
+    // Check for setting page's presence.
+    $this->drupalGet('admin/settings/googleanalytics');
+    $this->assertRaw(t('Google Analytics account number'), '[testGoogleAnalytics]: Settings page displayed.');
+
+    // Check for account code validation.
+    $edit['googleanalytics_account'] = $this->randomName(2);
+    $this->drupalPost('admin/settings/googleanalytics', $edit, 'Save configuration');
+    $this->assertRaw(t('A valid Google Analytics account number is case sensitive and formatted like UA-xxxxxx-x.'), '[testGoogleAnalytics]: Invalid account number validated.');
+  }
+
+  function testGoogleAnalyticsTracking() {
+    // Set visibility to hide tracking code on admin page only,
+    // track authenticated users.
+    variable_set('googleanalytics_visibility', 0);
+    variable_set('googleanalytics_pages', 'admin*');
+    variable_set('googleanalytics_roles', array(DRUPAL_AUTHENTICATED_RID => DRUPAL_AUTHENTICATED_RID));
+    $ua_code = 'UA-123456-7';
+    variable_set('googleanalytics_account', $ua_code);
+
+    // Check tracking code visibility.
+    $this->drupalGet('');
+    $this->assertRaw($ua_code, '[testGoogleAnalyticsTracking]: Tracking code is displayed for authenticated users.');
+
+    /* Sample JS code as added to page:
+    <script type="text/javascript" src="/sites/all/modules/google_analytics/googleanalytics.js?w"></script>
+    <script type="text/javascript">var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));</script>
+    <script type="text/javascript">var pageTracker = _gat._getTracker("UA-123456-7");pageTracker._trackPageview();</script>
+    */
+
+    // Test whether tracking code uses latest JS.
+    variable_set('googleanalytics_cache', 0);
+    $this->drupalGet('');
+    $this->assertRaw('google-analytics.com/ga.js', '[testGoogleAnalyticsTracking]: Latest tracking code used.');
+
+    // Test whether tracking code is not included on pages to omit.
+    $this->drupalGet('admin');
+    $this->assertNoRaw($ua_code, '[testGoogleAnalyticsTracking]: Tracking code is not displayed on admin page.');
+    $this->drupalGet('admin/settings/googleanalytics');
+    // Checking for tracking code URI here, as $ua_code is displayed in the form.
+    $this->assertNoRaw('google-analytics.com/ga.js', '[testGoogleAnalyticsTracking]: Tracking code is not displayed on admin subpage.');
+
+    // Test whether tracking code display is properly flipped.
+    variable_set('googleanalytics_visibility', 1);
+    $this->drupalGet('admin');
+    $this->assertRaw($ua_code, '[testGoogleAnalyticsTracking]: Tracking code is displayed on admin page.');
+    $this->drupalGet('admin/settings/googleanalytics');
+    // Checking for tracking code URI here, as $ua_code is displayed in the form.
+    $this->assertRaw('google-analytics.com/ga.js', '[testGoogleAnalyticsTracking]: Tracking code is displayed on admin subpage.');
+    $this->drupalGet('');
+    $this->assertNoRaw($ua_code, '[testGoogleAnalyticsTracking]: Tracking code is not displayed on front page.');
+
+    // Test whether tracking code is not display for anonymous.
+    $this->drupalGet('logout');
+    $this->drupalGet('');
+    $this->assertNoRaw($ua_code, '[testGoogleAnalyticsTracking]: Tracking code is not displayed for anonymous.');
+  }
+
+}
