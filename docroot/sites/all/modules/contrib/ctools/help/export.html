@@ -1,0 +1,269 @@
+<!-- $Id: export.html,v 1.1.2.2 2010/01/11 23:58:38 merlinofchaos Exp $ -->
+Exportable objects are objects that can live either in the database or in code, or in both. If they live in both, then the object in code is considered to be "overridden", meaning that the version in code is ignored in favor of the version in the database.
+
+The main benefit to this is that you can move objects that are intended to be structure or feature-related into code, thus removing them entirely from the database. This is a very important part of the deployment path, since in an ideal world, the database is primarily user generated content, whereas site structure and site features should be in code. However, many many features in Drupal rely on objects being in the database and provide UIs to create them.
+
+Using this system, you can give your objects dual life. They can be created in the UI, exported into code and put in revision control. Views and Panels both use this system heavily. Plus, any object that properly implements this system can be utilized by the Features module to be used as part of a bundle of objects that can be turned into feature modules.
+
+Typically, exportable objects have two identifiers. One identifier is a simple serial used for database identification. It is a primary key in the database and can be used locally. It also has a name which is an easy way to uniquely identify it. This makes it much less likely that importing and exporting these objects across systems will have collisions. They still can, of course, but with good name selection, these problems can be worked around.
+
+<h3>Making your objects exportable</h3>
+To make your objects exportable, you do have to do a medium amount of work.
+<ol>
+<li>Create a chunk of code in your object's schema definition in the .install file to introduce the object to CTools' export system.</li>
+<li>Create a load function for your object that utilizes ctools_export_load_object().</li>
+<li>Create a save function for your object that utilizes drupal_write_record() or any method you desire.</li>
+<li>Create an import and export mechanism from the UI.</li>
+</ol>
+<h3>The export section of the schema file</h3>
+Exportable objects are created by adding definition to the schema in an 'export' section. For example:
+<pre>
+function mymodule_schema() {
+  $schema['mymodule_myobj'] = array(
+    'description' => t('Table storing myobj definitions.'),
+    'export' => array(
+      'key' => 'name',
+      'identifier' => 'obj', // Exports will be as $myobj
+      'default hook' => 'default_mymodule_myobj',  // Function hook name.
+      'api' => array(
+        'owner' => 'mymodule',
+        'api' => 'default_mymodule_myobjs',  // Base name for api include files.
+        'minimum_version' => 1,
+        'current_version' => 1,
+      ),
+    ),
+    'fields' => array(
+      'name' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'description' => 'Unique ID for this object. Used to identify it programmatically.',
+      ),
+      'oid' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Primary ID field for the table. Not used for anything except internal lookups.',
+        'no export' => TRUE, // Do not export database-only keys.
+      ),
+    // ......
+    'primary key' => array('oid'),
+    'unique keys' => array(
+      'name' => array('name'),
+    ),
+  );
+  return $schema;
+}
+</pre>
+
+<dl>
+<dt>key</dt>
+<dd>This is the primary key of the exportable object and should be a string as names are more portable across systems. It is possible to use numbers here, but be aware that export collisions are very likely. Defaults to 'name'.</dd>
+
+<dt>object</dt>
+<dd>The class the object should be created ass. Defaults as stdClass.</dd>
+
+<dt>can disable</dt>
+<dd>Control whether or not the exportable objects can be disabled. All this does is cause the 'disabled' field on the object to always be set appropriately, and a variable is kept to record the state. Changes made to this state must be handled by the owner of the object. Defaults to TRUE.</dd>
+
+<dt>status</dt>
+<dd>Exportable objects can be enabled or disabled, and this status is stored in a variable. This defines what variable that is. Defaults to: 'default_' . $table.</dd>
+
+<dt>default hook</dt>
+<dd>What hook to invoke to find exportable objects that are currently defined. These will all be gathered into a giant array. Defaults to 'default_' . $table.</dd>
+
+<dt>identifier</dt>
+<dd>When exporting the object, the identifier is the variable that the exported object will be placed in. Defaults to $table.</dd>
+
+<dt>bulk export'</dt>
+<dd>Declares whether or not the exportable will be available for bulk exporting. (Bulk export UI is currently left to be handled by contrib, though the core hooks are present so this can be done.).</dd>
+
+<dt>export callback</dt>
+<dd>The callback to use for bulk exporting. Defaults to $module . '_export_' . $table. This function will receive the $myobject and $indent as arguments.</dd>
+
+<dt>list callback</dt>
+<dd>Bulk export callback to provide a list of exportable objects to be chosen for bulk exporting. Defaults to $module . '_' . $table . '_list'.</dd>
+
+<dt>to hook code callback</dt>
+<dd>Function used to generate an export for the bulk export process. This is only necessary if the export is more complicated than simply listing the fields. Defaults to $module . '_' . $table . '_to_hook_code'.</dt>
+</dl>
+
+In addition, each field can contain the following:
+<dl>
+<dt>no export</dt>
+<dd>Set to TRUE to prevent that field from being exported.</dd>
+
+<dt>export callback</dt>
+<dd>A function to override the export behavior. It will receive ($myobject, $field, $value, $indent) as arguments. By default, fields are exported through ctools_var_export().</dd>
+</dl>
+
+<h3>The load function</h3>
+Typically, there will be two load functions. A 'single' load, to load just one object, and an 'all' load, to load all of the objects for use in administrating the objects or utilizing the objects when you need all of them. Using ctools_export_load_object() you can easily do both, as well as quite a bit in between. This example shows loading just one object:
+
+<pre>
+/**
+* Load a single myobj.
+*/
+function mymodule_myobj_load($name) {
+  ctools_include('export');
+  $result = ctools_export_load_object('mymodule_myobjs', 'names', array($name));
+  if (isset($result[$name])) {
+    return $result[$name];
+  }
+}
+</pre>
+
+<h3>The save function</h3>
+The export mechanism does not actually provide a method to save an object. This is okay, because in the simple case, drupal_write_record() does the job well. In the more complex cases, it would not work for you anyway.
+
+<pre>
+/**
+* Load a single myobj.
+*/
+function mymodule_myobj_save(&$myobj) {
+  $update = (isset($myobj->oid) && is_numeric($myobj->oid)) ? array('oid') : array();
+  drupal_write_record('myobj', $myobj, $update);
+}
+</pre>
+
+<h3>Export from the UI</h3>
+In your hook_menu() you should define a path where users can export your object object. In our example below, this is 'admin/build/mymodule/%/export' where the % matches our myobj's unique identifier. This identifier will be passed to a form called mymodule_export_myobj.
+<pre>
+/**
+* Implementation of hook_menu().
+*/
+function mymodule_menu() {
+  $items['admin/build/mymodule/%/export'] = array(
+    'title' => 'Export',
+    'page callback' => 'mymodule_export_myobj',
+    'page arguments' => array(3),
+    'access arguments' => array('mymodule export permission'),
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
+* Export a myobj and display it in a form.
+*/
+function mymodule_export_myobj(&$form_state, $oid) {
+  $myobj = mymodule_myobj_load($oid);
+  drupal_set_title(check_plain($myobj->description));
+  $code = mymodule_myobj_export($myobj);
+  return drupal_get_form('ctools_export_form', $code, $check_plain($myobj->description));
+}
+</pre>
+
+The mymodule_export_myobj() form function calls two functions, mymodule_myobj_load() to fetch the object in the desired format, and mymodule_myobj_export() to generate the exportable.
+
+<pre>
+/**
+* Load a single myobj.
+*/
+function mymodule_myobj_load($oid) {
+  ctools_include('export');
+  $result = ctools_export_load_object('mymodule_myobjs', 'names', array($oid));
+  if (isset($result[$oid])) {
+    return $result[$oid];
+  }
+}
+
+/**
+* Export a myobj.
+*
+* By declaring this function in the schema, anyone can easily export a myobj
+* just by knowing that myobj exists.
+*/
+function mymodule_myobj_export($myobj, $indent = '') {
+  ctools_include('export');
+  $output = ctools_export_object('mymodule_myobjs', $myobj, $indent);
+  return $output;
+}
+</pre>
+
+<h3>Import from the UI</h3>
+Please note: Importing objects means you let the user run PHP code. Do not give this permission to untrusted users.
+
+Much like with exporting, you'll need a menu entry to handle the import:
+
+<pre>
+/**
+* Implementation of hook_menu().
+*/
+function mymodule_menu() {
+  $items['admin/build/mymodule/import'] = array(
+    'title' => 'Import',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('mymodule_export_myobj'),
+    'access arguments' => array('mymodule import permission'),
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+</pre>
+
+In this case, the page callback is a form, where the user can paste the exported code. We can provide an optional name field to change the name of the object while importing. This can be used as a poor man's clone. The method used here can also be used to very easily clone objects without going through the export/import process manually.
+
+<pre>
+/**
+ * Form from page callback to import a myobj
+ */
+function mymodule_export_myobj(&$form, &$form_state) {
+  $form['name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Myobj name'),
+    '#description' => t('Enter the name of the new myobj. This is optional and is not necessary if you do not wish to rename the object.'),
+  );
+
+  $form['object'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Paste variant code here'),
+    '#rows' => 15,
+  );
+}
+
+/**
+ * Make sure that an import actually provides a handler.
+ */
+function mymodule_export_myobj_validate($form, &$form_state) {
+  // First, run the PHP and turn the input code into an object.
+  ob_start();
+  eval($form_state['values']['object']);
+  ob_end_clean();
+
+  // The object should appear as $myobj. This was the "identifier" set in the export section of the schema.
+  if (empty($myobj)) {
+    $errors = ob_get_contents();
+    if (empty($errors)) {
+      $errors = t('No myobj found.');
+    }
+
+    form_error($form['object'], t('Unable to get a myobj from the import. Errors reported: @errors', array('@errors' => $errors)));
+  }
+
+  $form_state['obj'] = obj;
+}
+
+/**
+ * Save the imported object.
+ */
+function page_manager_handler_import_submit($form, &$form_state) {
+  $myobj = $form_state['obj'];
+
+  if (!empty($form_state['values']['name'])) {
+    $myobj->name = $form_state['values']['name'];
+  }
+
+  mymodule_myobj_save($myobj);
+  $form_state['redirect'] = 'admin/build/mymodule/' . $myobj->name . '/edit';
+}
+</pre>
+
+<h3>Enabling and Disabling exported objects</h3>
+
+This section still needs to be written.
+
+<h3>Putting exported objects into code</h3>
+
+This section still needs to be written.

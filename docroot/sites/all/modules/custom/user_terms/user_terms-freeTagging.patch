@@ -1,0 +1,141 @@
+--- user_terms.module	2010-03-19 18:23:33.000000000 -0400
++++ user_termsNew.module	2010-04-28 09:24:21.000000000 -0400
+@@ -244,39 +244,72 @@ function user_terms_form_profile($edit, 
+       foreach ($vids as $vid)  {
+         // Use taxonomy module's form element builder function.
+         $vocabulary = taxonomy_vocabulary_load($vid);
+-
+-        $default_terms = array();
+-        if (isset($account->user_terms)) {
+-          foreach ($account->user_terms as $term) {
+-            // Free tagging has no default terms and also no vid after preview.
+-            if (isset($term['vid']) && $term['vid'] == $vid) {
+-              $default_terms[$term['tid']] = $term;
++        
++        if ($vocabulary->tags) {
++          // Free tagging requires certain content permissions for autocomplete to work
++          if (!user_access('access content')) {
++            return;
++          }
++          
++          $default_terms = array();
++          if (isset($account->user_terms)) {
++            foreach ($account->user_terms as $term) {
++              if (isset($term['vid']) && $term['vid'] == $vid) {
++                $default_terms[] = $term['name'];
++              }
+             }
+           }
++                    
++          if ($vocabulary->help) {
++            $help = filter_xss_admin($vocabulary->help);
++          }
++          else {
++            $help = t('A comma-separated list of terms describing this content. Example: funny, bungee jumping, "Company, Inc.".');
++          }
++   
++          $form['user_terms']['user_terms_' . $vocabulary->vid] = array('#type' => 'textfield',
++            '#title' => $vocabulary->name,
++            '#description' => $help,
++            '#default_value' => $default_terms ? implode(', ', $default_terms) : '',
++            '#autocomplete_path' => 'taxonomy/autocomplete/'. $vocabulary->vid,
++            '#weight' => $vocabulary->weight,
++            '#maxlength' => 1024,
++          );
++          
++          // Indicate that we're using free tags
++          $form['user_terms']['user_terms_tags_' . $vocabulary->vid] = array(
++            '#type'=> 'hidden',
++            '#value' => TRUE,
++          );
+         }
+-        $form['user_terms']['user_terms_' . $vid]  = taxonomy_form($vid, array_keys($default_terms), NULL, 'taxonomy');
+-        $form['user_terms']['user_terms_' . $vid]['#weight'] = $vocabulary->weight;
+-        $form['user_terms']['user_terms_' . $vid]['#required'] = $vocabulary->required;
+-        // Tag vocabularies don't have their 'multiple' properly explicitly set,
+-        // so taxonomy_form() doesn't make the form element multiple-select.
+-        if ($vocabulary->tags) {
+-          $form['user_terms']['user_terms_' . $vid]['#multiple'] = TRUE;
++        else {
++          $default_terms = array();
++          if (isset($account->user_terms)) {
++            foreach ($account->user_terms as $term) {
++              if (isset($term['vid']) && $term['vid'] == $vid) {
++                $default_terms[$term['tid']] = $term;
++              }
++            }
++          }
++          
++          $form['user_terms']['user_terms_' . $vid]  = taxonomy_form($vid, array_keys($default_terms), NULL, 'taxonomy');
++          $form['user_terms']['user_terms_' . $vid]['#weight'] = $vocabulary->weight;
++          $form['user_terms']['user_terms_' . $vid]['#required'] = $vocabulary->required;
+         }
+       }
++    }
+ 
+-      // Set a hidden value on the form so that we can check in user_terms_save_profile()
+-      // that we've actually come from the account edit form.
+-      $form['user_terms_vids'] = array(
+-        '#type' => 'value', 
+-        '#value' => $vids,
+-      );
++    // Set a hidden value on the form so that we can check in user_terms_save_profile()
++    // that we've actually come from the account edit form.
++    $form['user_terms_vids'] = array(
++      '#type' => 'value', 
++      '#value' => $vids,
++    );
+ 
+-      return $form;
+-    }
++    return $form;
+   }
+ }
+ 
+-
+ /**
+  * Save a user's profile or register a new account.
+  *
+@@ -297,12 +330,38 @@ function user_terms_save_profile(&$edit,
+   // Merge all terms into one array
+   $user_terms = array();
+   foreach ($vids as $vid) {
+-    // Depending on the type of field widget, this may be an array or a string.
+-    if (is_array($edit['user_terms_' . $vid])) {
+-      $user_terms = array_merge($user_terms, (array)$edit['user_terms_' . $vid]);
++    // Free tags come in a string without tids
++    if ($edit['user_terms_tags_' . $vid]) {
++      $input_tags = drupal_explode_tags($edit['user_terms_' . $vid]);
++      
++      foreach ($input_tags as $input_tag) {
++        // See if the term exists in the chosen vocabulary
++        // and return the tid; otherwise, add a new record.
++        $possibilities = taxonomy_get_term_by_name($input_tag);
++        $input_tag_tid = NULL; // tid match, if any.
++        foreach ($possibilities as $possibility) {
++          if ($possibility->vid == $vid) {
++            $input_tag_tid = $possibility->tid;
++          }
++        }
++
++        if (!$input_tag_tid) {
++          $t = array('vid' => $vid, 'name' => $input_tag);
++          $status = taxonomy_save_term($t);
++          $input_tag_tid = $t['tid'];
++        }
++        
++        $user_terms[] = $input_tag_tid;
++      }
+     }
+     else {
+-      $user_terms[] = $edit['user_terms_' . $vid];
++      // Depending on the type of field widget, this may be an array or a string.
++      if (is_array($edit['user_terms_' . $vid])) {
++        $user_terms = array_merge($user_terms, (array)$edit['user_terms_' . $vid]);
++      }
++      else {
++        $user_terms[] = $edit['user_terms_' . $vid];
++      }
+     }
+     $edit['user_terms_' . $vid] = NULL;
+   }

@@ -1,0 +1,176 @@
+/* $Id: homebox.css,v 1.1.2.2 2010/04/30 09:13:31 jchatard Exp $ */
+
+/*
+** Administrative interface
+*/
+#homebox-admin-display-form {}
+#homebox-admin-display-form .roles {
+  font-size: 86%;
+}
+#homebox {}
+
+/*
+** Columns/regions
+*/
+
+#homebox .homebox-column {
+  margin: 3px;
+  padding: 5px;
+  background: url(images/stripe.png);
+}
+
+#homebox .homebox-column-wrapper {
+  float: left;
+}
+
+#homebox.column-count-1 .homebox-column-wrapper {
+  width: 100%;
+}
+#homebox.column-count-2 .homebox-column-wrapper {
+  width: 50%;
+}
+#homebox.column-count-3 .homebox-column-wrapper {
+  width: 33%;
+}
+#homebox.column-count-4 .homebox-column-wrapper {
+  width: 25%;
+}
+/*
+** Portlets/boxes
+*/
+#homebox .homebox-portlet {
+  margin: 5px 0;
+  padding: 0;
+  border: 3px solid #eee;
+  background-color: white;
+}
+#homebox .homebox-portlet .homebox-portlet-inner {
+  border: 1px solid #c0c0c0;
+  overflow: hidden;
+}
+#homebox .portlet-content {
+  padding: 4px;
+}
+#homebox .homebox-portlet-collapsed .portlet-content {
+  display: none;
+}
+#homebox .homebox-portlet .portlet-header {
+  margin: 0;
+  padding: 2px 4px;
+  border-bottom: 1px solid #ddd;
+  background: #e4f0f8; /* matches garland */
+  color: #494949;
+  min-height: 18px;
+  font-size: 1em;
+}
+#homebox .homebox-draggable .portlet-header:hover {
+  cursor: move;
+}
+#homebox .homebox-portlet .portlet-config {
+  display: none;
+  border-bottom: 1px solid #ddd;
+}
+#homebox .homebox-portlet div.views-exposed-widgets {
+  padding: 0 7px;
+}
+#homebox .homebox-portlet div.views-exposed-widgets div.views-exposed-widget {
+  /* clear: both; */
+}
+#homebox div.view-header {
+  text-align: right;
+}
+
+/*
+** Icons
+*/
+.portlet-icon {
+  float: right;
+  height: 16px;
+  width: 16px;
+  cursor: pointer;
+}
+.portlet-settings {
+  background: url(images/settings.gif);
+}
+.portlet-plus {
+  background: url(images/plus.gif);
+}
+.portlet-minus {
+  background: url(images/minus.gif);
+}
+.portlet-close {
+  background: url(images/close.gif);
+}
+
+/*
+** Closed box/portlet class
+*/
+.homebox-portlet-closed {
+  display: none;
+}
+
+/*
+** Placeholder
+*/
+#homebox .homebox-placeholder {
+  visibility: visible !important;
+  margin: 5px 0;
+  padding: 0;
+  background: #FFFFDD;
+}
+#homebox .homebox-placeholder * {
+  visibility: hidden;
+}
+
+/*
+** Colors
+*/
+div.homebox-colors {
+  float: right;
+  margin: 2px;
+}
+.homebox-color-selector {
+  display: block;
+  float: left;
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  margin: 1px;
+  border: 1px solid #999;
+}
+
+/*
+** Hidding classes for Add content
+*/
+.homebox-settings-hidden {
+  display: none;
+  overflow: hidden;
+}
+
+/* Page configure UI */
+#homebox-settings {
+  margin: 0 12px 6px 3px;
+  padding: 3px;
+  background: url(images/stripe.png) repeat;
+}
+#homebox-settings li {
+  display: inline-block;
+  border: 1px solid #DDD;
+  margin: 2px;
+  padding: 3px 6px;
+  background: #FFF;
+}
+ul.homebox-config-links {
+  margin: 0 0 6px;
+}
+li.homebox-config-link {
+  list-style: none;
+  display: inline-block;
+  margin: 0 3px 0 0;
+  padding: 5px;
+  border: 1px solid #ddd;
+  background: #FFF;
+}
+
+/* Misc */
+#homebox-save span { display:none; }

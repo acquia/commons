@@ -1,0 +1,348 @@
+<?php
+// $Id: user_relationships_api.module,v 1.1.2.21 2009/11/07 21:24:54 alexk Exp $
+
+/**
+ * @file
+ * User Relationships API. Module shell.
+ * @see user_relationships_api.api.inc
+ * @author Jeff Smick (creator)
+ * @author Alex Karshakevich (maintainer) http://drupal.org/user/183217
+ */
+
+define('UR_OK', 0x0);
+define('UR_BANNED', 0x1);
+
+// Pre Loading files that will be required in this module
+foreach (array('api', 'actions', 'socnet') as $file) {
+  module_load_include("inc", "user_relationships_api", "user_relationships_api.{$file}");
+}
+if (module_exists('privatemsg')) {
+  module_load_include('inc', 'user_relationships_api', 'user_relationships_api.privatemsg');
+}
+
+
+/**
+ *  Invoke hook_user_relationships() or hook_user_relationships_type()
+ *  Just a helper that allows us to pass the relationship or relationship_type
+ *  object by reference
+ */
+function _user_relationships_invoke($type, &$relationship, $is_type = FALSE) {
+  $hook = 'user_relationships'. ($is_type ? '_type' : '');
+  module_invoke_all($hook, $type, $relationship);
+}
+
+
+/**
+ * Helper function to generate the main and count queries from a list of parameters and options
+ */
+function _user_relationships_generate_query($param = array(), $options = array()) {
+  extract($options, EXTR_SKIP);
+
+  $twoway_reverse_clause = FALSE;//#479486
+  // Turn the conditions into a query.
+  foreach ($param as $key => $value) {
+    if (!isset($value)) {
+      continue;
+    }
+
+    $operator = _user_relationship_process_query_argument($key, $value);
+
+    switch ($key) {
+    case 'between':
+      $between_cond = "((ur.requester_id {$operator[0]} AND ur.requestee_id {$operator[1]}) OR (";
+      //#479486 do not include reverse records of two-way relationships by default
+      if (!isset($include_twoway_reverse)) {
+        $between_cond .= '(ur.approved <> 1 OR urt.is_oneway <> 0) AND ';
+        $twoway_reverse_clause = TRUE;
+      }
+      $between_cond .= "ur.requestee_id {$operator[0]} AND ur.requester_id {$operator[1]}))";
+      $cond[] = $between_cond;
+      $arguments[] = $value[0];
+      $arguments[] = $value[1];
+      $arguments[] = $value[0];
+      $arguments[] = $value[1];
+      break;
+
+    case 'user':
+      //#479486 when showing all user's relationships, do not include reverse records of two-way relationships
+      if (!isset($include_twoway_reverse)) {
+        $cond[] = "(ur.requester_id {$operator} OR ((ur.approved <> 1 OR urt.is_oneway <> 0) AND ur.requestee_id {$operator}))";
+        $twoway_reverse_clause = TRUE;
+      }
+      else {
+        $cond[] = "(ur.requester_id {$operator} OR ur.requestee_id {$operator})";
+      }
+      $arguments[] = $value;
+      $arguments[] = $value;
+      break;
+    
+    case 'requester_id':
+    case 'requestee_id':
+      $twoway_reverse_clause = TRUE;//#479486 these columns automatically should exclude duplicates
+
+    default:
+      $types_cols = array('name', 'plural_name', 'is_oneway', 'is_reciprocal', 'requires_approval', 'expires_val');
+      $cond[] = "%s.%s {$operator}";
+      $arguments[] = !in_array($key, $types_cols) ? 'ur' : 'urt';
+      $arguments[] = $key;
+      //#358669 support having multiple values for a single column - the query already has IN(...) placeholders
+      if (!is_array($value)) {
+        $arguments[] = $value;
+      }
+      else {
+        $arguments = array_merge($arguments, $value);
+      }
+    }
+  }
+  
+  //#479486 add a general clause that removed reverse direction from two-way relationship results, unless it's been addressed above
+  if (!$twoway_reverse_clause && !isset($include_twoway_reverse)) {
+    $cond[] = '(urt.is_oneway <> 0 OR ur.approved <> 1 OR ur.requester_id < ur.requestee_id)';
+    $twoway_reverse_clause = TRUE;
+  }
+
+  $selects = array('DISTINCT ur.rid', 'ur.*', 'urt.*');
+  $joins = array('INNER JOIN {user_relationship_types} urt USING ( rtid )');
+
+  // We wont need anything after this point for the count SQL
+  $count_joins = implode(' ', $joins);
+
+  if (isset($include_user_info) && $include_user_info) {
+    $selects = array_merge($selects, array(
+      'requesters.name AS requester_name',
+      'requestees.name AS requestee_name',
+      'requesters.mail AS requester_mail',
+      'requestees.mail AS requestee_mail',
+      'requesters.data AS requester_data',
+      'requestees.data AS requestee_data',
+      'requesters.picture AS requester_picture',
+      'requestees.picture AS requestee_picture',
+    ));
+
+    $joins = array_merge($joins, array(
+      'INNER JOIN {users} requesters ON ur.requester_id = requesters.uid',
+      'INNER JOIN {users} requestees ON ur.requestee_id = requestees.uid'
+    ));
+  }
+
+  $selects = implode(',', $selects);
+  $joins = implode(' ', $joins);
+
+  $cond = $cond ? 'WHERE '. implode(' AND ', $cond) : '';
+
+  $extra = array();
+  if (!empty($order)) {
+    $extra[] = "ORDER BY {$order}";
+  }
+  if (!empty($limit)) {
+    $extra[] = "LIMIT {$limit}";
+  }
+  $extra = is_array($extra) ? implode(' ', $extra) : $extra;
+
+  return array(
+    //331692 remove improper GROUP BY rid for Postgre
+    'query'     => "SELECT {$selects} FROM {user_relationships} ur {$joins} {$cond} {$extra}",
+    'count'     => "SELECT COUNT(DISTINCT rid) AS count FROM {user_relationships} ur {$count_joins} {$cond}",
+    'arguments' => $arguments,
+  );
+}
+
+
+/**
+ * Helper function to process the various argument types allowed
+ */
+function _user_relationship_process_query_argument($key, &$value) {
+  if ($key == 'between') {
+    return array(
+      _user_relationship_process_query_argument(NULL, $value[0]),
+      _user_relationship_process_query_argument(NULL, $value[1]),
+    );
+  }
+
+  if (is_array($value)) {
+    if (count($value) == 1) {
+      $value = array_shift($value);
+      return _user_relationship_process_query_argument($key, $value);
+    }
+    else {
+      $type = is_numeric(current($value)) ? 'int' : 'varchar';
+      return 'IN ('. db_placeholders($value, $type) .')';
+    }
+  }
+  elseif (is_numeric($value) || is_bool($value)) {
+    $value = (int)$value;
+    return '= %d';
+  }
+  elseif (is_float($value)) {
+    return '= %f';
+  }
+  elseif (preg_match('/([<>=]{1,2})\s*(.+)/', $value, $matches)) {
+    $marker = "'%s'";
+    $value = $matches[3];
+
+    if (is_numeric($value)) {
+      $marker = '%d';
+      $value = (int)$value;
+    }
+
+    return "{$matches[1]} {$marker}";
+  }
+  else {
+    return "= '%s'";
+  }
+}
+
+
+/**
+ * hook_perm()
+ */
+function user_relationships_api_perm() {
+  return array('can have relationships');
+}
+
+
+/**
+ * hook_cron()
+ */
+function user_relationships_api_cron() {
+  $now = time();
+
+  // only expire relationships once a day
+  $last_cron = variable_get('user_relationships_last_expire', 0);
+  if ($now < $last_cron + 86400) {
+    return FALSE;
+  }
+
+  $result = db_query(
+    " SELECT ur.rid
+      FROM {user_relationships} ur
+        INNER JOIN {user_relationship_types} urt ON ur.rtid = urt.rtid
+      WHERE ur.approved = 0
+        AND urt.expires_val > 0
+        AND ur.updated_at < (%d - (urt.expires_val * 86400))
+      GROUP BY ur.rid", $now
+  );
+
+  $expired_requests = array();
+  while ($request = db_fetch_object($result)) {
+    $expired_requests[$request->rid] = $request;
+  }
+
+  if ($expired_requests) {
+    db_query('DELETE FROM {user_relationships} WHERE rid IN ('. db_placeholders($expired_requests) .')', $expired_requests);
+    _user_relationships_invoke('delete', $expired_requests);
+  }
+
+  // remember when we last expired relationships
+  variable_set('user_relationships_last_expire', $now);
+  return TRUE;
+}
+
+
+/**
+ * hook_user()
+ */
+function user_relationships_api_user($type, &$edit, &$account, $category = NULL) {
+  if ($type == 'delete') {
+    db_query("DELETE FROM {user_relationships} WHERE requester_id = %d OR requestee_id = %d", $account->uid, $account->uid);
+  }
+}
+
+/**
+ * Wrapper function for tt() if i18nstrings enabled.
+ */
+function ur_tt($name, $string, $langcode = NULL, $update = FALSE) {
+  if (module_exists('i18nstrings')) {
+    return tt($name, $string, $langcode, $update);
+  } 
+  else {
+    return $string;
+  }
+}
+
+/**
+ * Implementation of hook_user_relationships().
+ * or
+ * Implementation of hook_trigger_name().
+ */
+function user_relationships_api_user_relationships($op, &$relationship) {
+  if ($op != 'approve' && $op != 'request') {
+    return;
+  }
+  if (module_exists('trigger')) {
+    $aids = _trigger_get_hook_aids('user_relationships_api', $op);
+  
+    $context = array(
+      'hook' => 'user_relationships_api',
+      'op' => $op,
+      'requester' => $relationship->requester_id,
+      'requestee' => $relationship->requestee_id,
+      'relationship' => $relationship,
+    );
+    actions_do(array_keys($aids), $relationship, $context);
+  }
+}
+
+/**
+ * Implementation of hook_activity_info().
+ */
+function user_relationships_api_activity_info() {
+  $info = new stdClass();
+  $info->api = 2;
+  $info->name = 'user_relationships_api';
+  $info->object_type = 'user_relationships_api';
+  $info->objects = array('Requester' => 'requester', 'Requestee' => 'requestee', 'Relationship' => 'relationship');
+  $info->hooks = array('user_relationships_api' => array('approve', 'request'));
+  foreach (user_relationships_types_load() as $type_obj) {
+    $info->realms["user_relationships_" . $type_obj->rtid] = $type_obj->plural_name;
+  }
+  return $info;
+}
+
+/**
+* Implementation of hook_token_list().
+*/
+function user_relationships_api_token_list($type = 'all') {
+  if ($type == 'requester') {
+    $tokens['user_relationships_api'] = array(
+      'requester' => t('The user who issued the connection request.'),
+    );
+  }
+  elseif ($type = 'relationship') {
+    $tokens['user_relationships_api'] = array(     
+      'requestee' => t('The user who approved the connnection request.'),
+      'relationship-name' => t('The relationship name (singular form)'),
+    );
+  }
+  return $tokens;
+}
+
+/**
+* Implementation of hook_token_values().
+*/
+function user_relationships_api_token_values($type, $data = NULL, $options = array()) {
+  if ($type == 'requester') {
+    $r = $data;
+    $token_values = array(
+      'requester' => theme('username', user_load(array('uid' => $r))),
+    );
+  }
+  elseif ($type == 'requestee') {
+    $r = $data;
+    $token_values = array(
+      'requestee' => theme('username', user_load(array('uid' => $r))),
+    );
+  }
+  elseif ($type == 'relationship') {
+    $r = $data;
+    $r_type = user_relationships_type_load($r->rtid);
+   
+    $token_values = array(
+      'requestee' => theme('username', user_load(array('uid' => $r->requestee_id))),
+      'requester' => theme('username', user_load(array('uid' => $r->requester_id))),
+      'relationship-name' => theme('placeholder', $r_type->name),
+    );
+  }
+ 
+  return $token_values;
+}

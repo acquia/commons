@@ -1,0 +1,51 @@
+<?php
+// $Id: context_ui.test,v 1.4.4.1 2009/07/24 01:06:00 yhahn Exp $
+
+/**
+ * Functional Test for Context UI
+ *
+ * TODO Test if menu and blocks respond.
+ */
+
+class ContextUiTestCase extends DrupalWebTestCase {
+
+  function getInfo() {
+    return array(
+      'name' => t('Context UI functional tests'),
+      'description' => t('Create and save a context.') ,
+      'group' => t('Context UI'),
+    );
+  }
+
+  function setUp() {
+    parent::setUp('context', 'context_ui');
+
+    // Create and login user
+    $admin_user = $this->drupalCreateUser(array('administer site configuration', 'administer blocks', 'access content', 'create page content'));
+    $this->drupalLogin($admin_user);
+  }
+
+  function tearDown() {
+    parent::tearDown();
+  }
+
+  function testCreateContext() {
+    // Create context
+    $context = new stdClass();
+    $context->namespace = strtolower($this->randomName(15));
+    $context->attribute = strtolower($this->randomName(15));
+    $context->value = strtolower($this->randomName(15));
+    $this->context = $context;
+
+    $edit = array(
+      'namespace' => $context->namespace,
+      'attribute' => $context->attribute,
+      'value' => $context->value,
+      'items[node][page]' => 'page',
+      'items[menu]' => 'node/add/page',
+    );
+    $this->drupalPost('admin/build/context/add', $edit, 'Save');
+    $this->assertRaw(t('The context %title was saved successfully.', array('%title' =>  $edit['value'])), 'Context saved.');
+
+  }
+}

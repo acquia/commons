@@ -1,0 +1,407 @@
+<?php
+// $Id: user_relationship_blocks.module,v 1.1.2.14 2009/10/25 16:46:20 alexk Exp $
+/**
+ * @file
+ * User Relationship Blocks implementation
+ * @author Jeff Smick (creator)
+ * @author Alex Karshakevich (maintainer) http://drupal.org/user/183217
+ */
+
+/**
+ * Constants
+ */
+define('UR_BLOCK_ALL_TYPES',  'all');
+
+define('UR_BLOCK_SEPARATOR',  '-');
+
+define('UR_BLOCK_MY',   'my');
+define('UR_BLOCK_USER', 'user');
+
+
+/**
+ * User Relationship Type hook
+ *
+ * This ensures our settings table is always up to date
+ */
+function user_relationship_blocks_user_relationships_type($op, &$rtype) {
+  switch ($op) {
+  case 'insert':
+    _user_relationship_blocks_insert_defaults();
+    break;
+
+  case 'delete':
+    db_query("DELETE FROM {user_relationship_blocks} WHERE bid LIKE '%%%s%%'", UR_BLOCK_SEPARATOR . $rtype->rtid);
+    break;
+  }
+}
+
+
+
+/**
+ * Implementation for hook_block
+ */
+function user_relationship_blocks_block($op = 'list', $bid = '', $edit = array()) {
+  if ($op != 'list') {
+    list($block, $rtid, $extra) = explode(UR_BLOCK_SEPARATOR, $bid);
+  }
+
+  switch ($op) {
+    case 'list':      return _user_relationship_blocks_list();
+    case 'configure': return _user_relationship_blocks_form($block, $rtid, $extra, $bid);
+    case 'save':      return _user_relationship_blocks_settings(NULL, $edit);
+    case 'view':      return _user_relationship_blocks_view($block, $rtid, $extra, $bid);
+  }
+}
+
+
+/**
+ * Implementation for hook_theme
+ */
+function user_relationship_blocks_theme() {
+  return array(
+    'user_relationship_block_subject' => array(
+      'arguments' => array('account' => NULL, 'rtid' => NULL, 'extra' => NULL)
+    ),
+
+    'user_relationships_block' => array(
+      'arguments' => array('account' => NULL, 'settings' => NULL, 'extra' => NULL),
+      'path'      => drupal_get_path('module', 'user_relationship_blocks') .'/templates',
+      'template'  => 'user_relationships-block',
+    ),
+    'user_relationships_pending_block' => array(
+      'arguments' => array('account' => NULL, 'settings' => NULL),
+      'path'      => drupal_get_path('module', 'user_relationship_blocks') .'/templates',
+      'template'  => 'user_relationships-pending_block',
+    ),
+    'user_relationships_actions_block' => array(
+      'arguments' => array('account' => NULL, 'settings' => NULL) ,
+      'path'      => drupal_get_path('module', 'user_relationship_blocks') .'/templates',
+      'template'  => 'user_relationships-actions_block',
+    ),
+  );
+}
+
+
+/**
+ * Theme function to generate the title of a block
+ */
+function theme_user_relationship_block_subject($bid, $account, $rtid, $extra) {
+  if ($bid == 'pending') {
+    return t('Relationship requests');
+  }
+  else if ($bid == 'actions') {
+    return t('Relationship actions');
+  }
+  //one-way relationships need special wording depending on the direction
+  //this implies that we're showing a single relationship, no need to check for UR_BLOCK_ALL_TYPES
+  else if ($extra == 'you_to_them') {
+    global $user;
+    $rtype = user_relationships_type_load($rtid);
+    if ($account->uid == $user->uid) {
+      return t('I am a @rel_name of', array('@rel_name' => ur_tt("user_relationships:rtid:$rtid:name", $rtype->name), '@rel_plural_name' => $rtype->plural_name));
+    }
+    else {
+      return t('@username is a @rel_name of', array('@username' => $account->name, '@rel_name' => ur_tt("user_relationships:rtid:$rtid:name", $rtype->name), '@rel_plural_name' => $rtype->plural_name));
+    }
+  }
+  else {
+    global $user;
+    $user_name = ($account->uid == $user->uid) ? 'My' : t("@username's", array('@username' => $account->name));
+    if ($rtid == UR_BLOCK_ALL_TYPES) {
+      $output = ($account->uid == $user->uid) ? t('My relationships') : t("@username's relationships", array('@username' => $account->name));
+    }
+    else {
+      $rtype = user_relationships_type_load($rtid);
+      $output = ($account->uid == $user->uid) 
+                ? t('My @relationships', array('@relationships' => ur_tt("user_relationships:rtid:$rtid:plural_name", $rtype->plural_name))) 
+                : t("@username's @relationships", array('@username' => $account->name, '@relationships' => ur_tt("user_relationships:rtid:$rtid:plural_name", $rtype->plural_name)));
+    }
+    return $output;
+  }
+}
+
+
+
+/*****************************
+ *
+ * "Private" helper methods
+ *
+ *****************************/
+
+
+/**
+ * helper function user_relationship_blocks_block delegates to when $op == 'configure'
+ */
+function _user_relationship_blocks_form($block, $rtid, $extra, $bid) {
+  // No form needed for the pending block so don't even bother
+  if ($block == 'pending') { 
+    return;
+  }
+
+  // need this file. it has the validator in it
+  include_once(drupal_get_path('module', 'user_relationships_ui') .'/user_relationships_ui.admin_actions.inc');
+  //current block settings
+  $settings = _user_relationship_blocks_settings($bid);
+  
+  if ($block != 'actions') {
+    if ($rtid == UR_BLOCK_ALL_TYPES) {
+      $relationship_name = t('All');
+    }
+    else {
+      $type = user_relationships_type_load($rtid);
+      $relationship_name = ur_tt("user_relationships:rtid:$rtid:name", $type->name);
+    }
+
+    $form['size'] = array(
+      '#type'           => 'textfield',
+      '#size'           => 4,
+      '#weight'         => 1,
+      '#required'       => TRUE,
+      '#title'          => t('Number of relationships to display in block'),
+      '#description'    => t('Enter the maximum number of relationships to display in this block.'),
+      '#default_value'  => $settings->size,
+      '#validate'       => array('user_relationships_ui_setting_validation' => array(array(
+        'is_positive' => array('size' => t('Number of relationships to display must be an integer greater than 0.'))
+      )))
+    );
+
+    $user_identifier = ($block == UR_BLOCK_MY) ? t('currently logged in user') : t('author whose node is being viewed');
+    $msg = t("NOTE: This block displays @relationship_name relationships of the @user_identifier.", array('@relationship_name' => ur_tt("user_relationships:rtid:$rtid:name", $relationship_name), '@user_identifier' => $user_identifier));
+
+    if ($extra) {
+      $relation = $extra == 'you_to_them' ? t('requester') : t('requestee');
+      $msg .= "\n". t("Because this relationship is one-way this block will show relationships where the @user_identifier is the @relation", array('@user_identifier' => $user_identifier, '@relation' => $relation));
+    }
+
+    $sort_var = "{$var}_sort";
+    $form['sort'] = array(
+      '#type'     => 'radios',
+      '#title'    => t('Which relationships should be displayed'),
+      '#options'  => array(
+        'newest' => t('Newest'),
+        'oldest' => t('Oldest'),
+        'random' => t('Random'),
+      ),
+      '#default_value' => $settings->sort,
+      '#required'      => TRUE,
+      '#weight'        => 3,
+      '#suffix'        => $msg,
+    );
+  }
+
+  $form['bid'] = array(
+    '#type'   => 'hidden',
+    '#value'  => $bid,
+  );
+  $form['get_account'] = array(
+    '#type'           => 'textarea',
+    '#size'           => 4,
+    '#weight'         => 1,
+//    '#required'       => TRUE,
+    '#title'          => t('Return uid of the target user'),
+    '#description'    => t("(EXPERT ONLY) Enter a php snippet, surrounded by %php_snippet, which returns a numeric user id you want to work on. By default, for user pages, it is the user being viewed. For nodes or blogs, it is the node author. Clear the field to restore this default.", array('%php_snippet' => '<?php ?>')),
+    '#default_value'  => $settings->get_account,
+  );
+
+  return $form;
+}
+
+
+/**
+ * helper function user_relationship_blocks_block delegates to when $op == 'view'
+ */
+function _user_relationship_blocks_view($block_type, $rtid, $extra, $bid) {
+  global $user;
+  $is_my_block = ($block_type == UR_BLOCK_MY || $block_type == 'pending');
+  if ($is_my_block && !$user->uid) {
+    return;
+  }
+
+  $settings = _user_relationship_blocks_settings($bid);
+  $settings->rtid = $rtid;
+  $settings->block_type = $block_type;
+
+  // determine which user's relationships to display
+  if ($is_my_block && $user->uid) {
+    $account =& $user;
+  }
+  else if ($uid = drupal_eval($settings->get_account)) {
+    $account = user_load($uid);
+  }
+
+  if ($account) {
+    $add_to_string = in_array($block_type, array('pending', 'actions')) ? "_{$block_type}" : '';
+    return array(
+      'subject' => theme('user_relationship_block_subject', $bid, $account, $rtid, $extra),
+      'content' => theme("user_relationships{$add_to_string}_block", $account, $settings, $extra),
+    );
+  }
+}
+
+
+/**
+ *  Default get_account php
+ *  This will retrieve the author of the node being viewed or the user being viewed
+ */
+function _user_relationship_blocks_find_user_php() {
+  return <<<PHP
+<?php
+  if (arg(0) == 'node' && is_numeric(arg(1))) {
+    \$node = node_load(arg(1));
+    return \$node->uid;
+  }
+  else if ((arg(0) == 'user' || arg(0) == 'blog') && is_numeric(arg(1))) {
+    return arg(1);
+  }
+?>
+PHP;
+}
+
+
+/**
+ * helper function user_relationship_blocks_block delegates to when $op == 'list'
+ */
+function _user_relationship_blocks_list() {
+  $my   = UR_BLOCK_MY . UR_BLOCK_SEPARATOR;
+  $usr  = UR_BLOCK_USER . UR_BLOCK_SEPARATOR;
+  // return list of all blocks defined by the module
+  $blocks = array(
+    $my . UR_BLOCK_ALL_TYPES  => array('info' => t('My Relationships: All relationships'), 'cache' => BLOCK_NO_CACHE),
+    $usr . UR_BLOCK_ALL_TYPES => array('info' => t('User Relationships: All relationships'), 'cache' => BLOCK_NO_CACHE),
+    'pending' => array('info' => t('My Pending Relationships'), 'cache' => BLOCK_NO_CACHE),
+    'actions' => array('info' => t('User Relationships: Actions'), 'cache' => BLOCK_NO_CACHE),
+  );
+
+  $types = user_relationships_types_load();
+  foreach ($types as $type) {
+    $my_delta   = "{$my}{$type->rtid}";
+    $usr_delta  = "{$usr}{$type->rtid}";
+
+    $extras = array('' => '');
+
+    if ($type->is_oneway) {
+      $extras = array(
+        //add a little explanation about one-way relationships
+        UR_BLOCK_SEPARATOR .'you_to_them' => t('(You to Them, backward direction)'),
+        UR_BLOCK_SEPARATOR .'them_to_you' => t('(Them to You, normal direction)'),
+      );
+    }
+
+    foreach ($extras as $token => $extra) {
+      $block_types = array(
+        "{$my_delta}{$token}"   => t('My Relationships: @type @extra', array('@type' => $type->plural_name, '@extra' => $extra)),
+        "{$usr_delta}{$token}"  => t('User Relationships: @type @extra', array('@type' => $type->plural_name, '@extra' => $extra)),
+      );
+      foreach ($block_types as $bid => $title) {
+        $blocks[$bid] = array(
+          'info' => $title,
+          'cache' => BLOCK_NO_CACHE,
+        );
+      }
+    }
+  }
+
+  return $blocks;
+}
+
+
+/**
+ * Push or pull the settings from the database
+ */
+function _user_relationship_blocks_settings($bid = NULL, $new_settings = NULL) {
+  static $settings = array();
+
+  if (isset($new_settings)) {
+    //can't find a better spot for this. If get_account php snippet is cleared by user, revert to default value
+    if (!$new_settings['get_account']) {
+      $new_settings['get_account'] = _user_relationship_blocks_find_user_php();
+    }
+    drupal_write_record('user_relationship_blocks', $new_settings, 'bid');
+
+    $settings[$key] = (object)$new_settings;
+  }
+  else if ($bid && !$settings[$bid]) {
+    $settings[$bid] = db_fetch_object(db_query("SELECT * FROM {user_relationship_blocks} WHERE bid = '%s'", $bid));
+  }
+  else {
+    $results = db_query("SELECT * FROM {user_relationship_blocks}");
+    while ($setting = db_fetch_object($results)) {
+      $settings[$setting->bid] = $setting;
+    }
+  }
+
+  return $bid ? $settings[$bid] : $settings;
+}
+
+
+/**
+ * Update the table with default values
+ * This makes sure it's not writing over user defined settings
+ */
+function _user_relationship_blocks_insert_defaults() {
+  $current_bids = array_keys(_user_relationship_blocks_settings());
+  $all_bids     = _user_relationship_blocks_list();
+  foreach ($all_bids as $bid => $block) {
+    if (!in_array($bid, $current_bids)) {
+      db_query(
+        "INSERT INTO {user_relationship_blocks} (bid, size, sort, get_account) VALUES ('%s', %d, '%s', '%s')",
+        $bid, 10, 'newest', _user_relationship_blocks_find_user_php()
+      );
+    }
+  }
+}
+
+/**
+ * Template pre processor for the main block view
+ */
+function template_preprocess_user_relationships_block(&$variables) {
+  $user     =& $variables['user'];
+  $account  =& $variables['account'];
+  $settings =& $variables['settings'];
+  $extra    =& $variables['extra'];
+
+  $query_opts = array('include_user_info' => TRUE);
+
+  // select the appropriate set of relationships based on admin's configuration settings
+  switch ($settings->sort) {
+    case 'newest': $query_opts['order'] = 'updated_at DESC'; break;
+    case 'oldest': $query_opts['order'] = 'updated_at ASC'; break;
+    case 'random': $query_opts['order'] = 'RAND()'; break;
+  }
+
+  $query_opts['limit'] = $settings->size;
+  
+  $key = $extra ? ($extra == 'you_to_them' ? 'requester_id' : 'requestee_id') : 'user';
+  $args = array($key => $account->uid, 'approved' => TRUE);
+
+  if ($settings->rtid != UR_BLOCK_ALL_TYPES) {
+    $args['rtid'] = $settings->rtid;
+  }
+
+  $variables['relationships'] = user_relationships_load($args, $query_opts);
+}
+
+
+/**
+ * Template pre processor for the pending relationships block
+ */
+function template_preprocess_user_relationships_pending_block(&$variables) {
+  $account =& $variables['account'];
+
+  $variables['relationships'] = user_relationships_load(array('user' => $account->uid, 'approved' => FALSE), array('include_user_info' => TRUE));
+}
+
+
+/**
+ * Template pre processor for the relationship actions block
+ */
+function template_preprocess_user_relationships_actions_block(&$variables) {
+  $user     =& $variables['user'];
+  $account  =& $variables['account'];
+
+  if ($user != $account) {
+    $variables['current_relationships'] = _user_relationships_ui_between($user, $account);
+  }
+
+  $variables['actions'] = _user_relationships_ui_actions_between($user, $account);
+}

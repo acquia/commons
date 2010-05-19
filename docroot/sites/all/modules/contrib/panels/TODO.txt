@@ -1,0 +1,132 @@
+# $Id: TODO.txt,v 1.3 2008/07/15 23:59:36 merlinofchaos Exp $
+
+PLEASE NOTE THAT THIS FILE CONTAINS VERY OUTDATED INFORMATION, KEPT ONLY FOR HISTORICAL PURPOSES.
+
+For the current plans related to Panels2, you should consult the groups.drupal.org Panels group:
+
+http://groups.drupal.org/panels
+
+Here's a rough sketch of the work plan shortly prior to the 5.x-2.0-beta4 release:
+
+5.x-beta3 ==> beta4 ==> beta5 ==> RC1 ==> RCs... ==> 5.x RELEASE!! ==> 5.x-2.1
+                                   |
+                               6.x port ==> 6.x RCs... ==> 6.x RELEASE!! ==> 6.x-2.1
+                                                             |
+                                                           6.x-3.x-ALPHA ==> (FUTURE OF PANELS)
+
+==========================================================
+
+TODO:
+
+X = DONE
+o = TODO
+- = Skipped/postponed
+
+ajax/js
+    o remove panels_hidden, use only javascript
+    o Remove 'panels_set' and use the broken up drupal_get_form functions
+      rather than drupal_get_form for our multi-step stuff.
+    X Add permission checking to all the ajax functions
+    o Break up panels_ajax into separate entry areas [mostly done]
+    o ensure complete degradability
+    X Make sure the icons on the 'change layout' page are clickable
+    X Loading animation for panels-modal
+    X Make the titlebar outside of the overflow in the modal
+    o Change show/hide to use AJAX. 
+    X Write my own drag & drop
+
+modules
+    X panels node
+    X mini-panel
+    o panels-profile
+    o panels-dashboard-compat (upgrade all the old dashboard installs)
+
+panels common
+    o update settings to use categories like the 'add content' popup now does.
+    o Clean up and better document this code
+
+panels page
+    X panels page 'default' panels
+    X allow panel-page to use $arg/$node/$node-type/$user substitution like Views
+    X allow panel-page to get a context; allow modules to provide this context.
+    X allow panel-page to do menu item & tab like Views.
+    X provide 'edit' tab for panels pages
+    X allow setting to not display blocks
+    o Clone panels page
+
+mini panels
+    X Allow mini panels to require an argument (and thus be just panel content)
+
+content types
+    - Allow creating new custom blocks.
+    X Get all 'block' settings into blocks.
+    X Remove all calls to the 'admin' callback
+    X Make panels_get_content_type() like using for layout
+    X Translate views to new content format
+    X Translate node to new content format
+    X Translate custom to new content format
+    X Allow content types to be aware of panel context.
+    X Allow content types to include or exclude themselves based upon context.
+    X Figure out a way for blocks to easily have per-block icons
+    X sort blocks in content type list
+    X sort views in content type list
+    X add weight so custom and node will float up
+    X make forms fit a bit better
+    X Allow display to have 'arguments' that can be passed on to Views
+      more fluidly
+    X give views.inc setting to NOT use arguments.
+    X unify title overriding.
+    X node_content type 
+    X taxonomy term types
+    o user types
+    o views context sensitive conversions
+
+layouts
+    X Allow each layout to have settings
+    X Create a flexible layout where you can quickly create arbitrary layouts
+    X Fix the div div problem in all layouts
+
+icons
+    X Change configure icon
+    X Change remove pane icon
+    X Find add content icon
+    X Create icons for content types
+
+Flexible layout
+    o Allow fixed width sidebars
+    o Use a slider to control widths
+
+Styles:
+    o Convert DND to a style
+    X Rounded corners style
+
+Arguments:
+    X taxonomy argument
+    X user argument
+
+panels API
+    X Provide method to directly edit/configure an individual content block if viewer has permissions
+    X Provide method to control pane visibility. Make sure this is controllable from the admin so that not all users can get to it.
+    X Change add content to be per panel
+    X Make Cancel actually cancel
+    X Wrap calls to existing callbacks
+    X Make a function to simply get the IDs of all content-types
+    X Allow panels_edit_display to restrict available content to a preprepared list
+    X Use cache instead of putting everything in $_SESSION
+    X create panels_render_display() (or panels_display_render)
+    X Allow API to accept context
+    X Allow API to accept content
+    X Allow API to accept arguments
+
+General:
+    o CSS class/id name cleanup and unification.
+    o Make sure core blocks that require context are labelled as such.
+
+Documentation
+    o Creating new panel modules that use the API
+    o Creating new content types
+    o Creating new layouts
+    o Creating new styles
+    o Creating new arguments
+    o Themeing panels
+    o Doing interesting things with Panels

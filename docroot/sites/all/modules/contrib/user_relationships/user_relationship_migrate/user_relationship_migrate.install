@@ -1,0 +1,21 @@
+<?php
+// $Id: user_relationship_migrate.install,v 1.1.2.1 2009/07/08 09:17:05 alexk Exp $
+
+/**
+ * @file
+ * User Relationships Migration installation functions
+ */
+
+/**
+ * Implementation of hook_install()
+ */
+function user_relationship_migrate_install() {
+}
+
+
+/**
+ * Implementation of hook_uninstall()
+ */
+function user_relationship_migrate_uninstall() {
+  variable_del('user_relationship_migrate_last_run');
+}

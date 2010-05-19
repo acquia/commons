@@ -1,0 +1,43 @@
+API.txt: $Id: API.txt,v 1.5.2.10 2010/01/11 23:55:21 merlinofchaos Exp $
+
+This file contains a log of changes to the API.
+
+API version 1.3.2:
+  Introduce 'export callback' to individual fields in export.inc
+
+API version 1.3.1:
+  #649144 by neclimdul: Expand ctools_include() to work for other modules.
+
+API version 1.3:
+  Introduce ctools_jump_menu().
+  Change plugins to no longer need magic function. Can now use $plugin = array(...) instead.
+
+API version 1.2:
+  Introduce ctools_set_variable_token().
+  Introduce ctools_set_callback_token().
+  Introduce cleanstring tool. See cleanstring.inc
+  Introduce page_manager_get_current_page().
+  Introduce ctools_ajax_command_redirect().
+  Introduce ctools_ajax_command_reload().
+  Introduce ctools_ajax_command_submit().
+  Introduce ctools_static().
+  Introduce ctools_modal_command_loading().
+
+API version 1.1.1:
+  Introduce ctools_plugin_get_class() and ctools_plugin_load_class()
+  Introduce ctools_ajax_command_attr().
+  Introduce ctools_set_page_token().
+
+API version 1.1.0:
+  delegator module destroyed, replaced by page manager. All 'task' and 'task_handler' plugins 
+  now owned by page_manager. Update plugin hooks accordingly. The filename for defaults
+  for pages and handlers should now be MODULE.pages_default.inc
+
+  The task_type plugin has been removed.
+
+  Task handlers no longer have a separate UI. While task handlers can still 
+  be separated from pages for other purposes, they will probably need
+  to implement their own UI to do it.
+
+API version 1.0:
+  Initial CTools API version.

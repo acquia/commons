@@ -1,0 +1,171 @@
+Current API VERSION: 1.3.2. See API.txt for more information.
+
+ctools 6.x-1.3 (2010-Feb-01)
+==============
+Added support for context keyword substitutions on override paths in content panes provided by views_content.
+#612850: Fix crash bug with panes referencing deleted/missing views.
+#595442: Fix AJAX problems with mod_security enabled.
+Introduce a "jump menu" tool which can be used to provide jump menus with a select.
+Change plugins to no longer need magic function. Can now use $plugin = array(...) instead.
+#652236 by alevine: Preserve pre-existing class when adding ajax functionality to form widgets.
+#657474: Allows clean exporting for task handlers set to be the homepage. 
+#588246 by brynbellomy: Add "context exists" access plugin.
+#618194 by brynbellomy: Add "string length" access plugin.
+#618204 by brynbellomy: Add "string comparison" access plugin.
+#621444 by hefox: contact pages should only show up if contact module is active.
+#649144 by neclimdul: Expand ctools_include() to work for other modules. Move API version to 1.3.1
+#646944 by DamienMcKenna: Fix wrong variable name in page_manager_enable_page().
+Allow "admin path" to be empty for tasks to support Panels Everywhere.
+Introduce 'export callback' to individual fields in export.inc. Add some documentation to export.html -- much of it borrowed from stella!
+#686826 by dagmar: Improve AJAX error notifications.
+#625696 by dmmckenna: Bulk exporter did not define empty array at beginning in code it creates for you.
+#651852 by coreyp_1: Add caching to content subtypes to save some queries. This means developers will need to clear caches when changing content type code.
+#630982 by Roi Danton: Dependent javascript failed to work properly if radios being depended on had no value at all.
+#661332 by yhahn: Allow export.inc to export stdClass objects by exporting them as an array and casting them to an object.
+#654218 by Roi Danton: Improve documentation of dependent.inc to talk about annoyances with checkboxes, radios and fieldsets.
+#538092: Add converters to the node edit form context so node fields can be available.
+#484340: Support for token module in the context keywords.
+#662242: Page Manager was not removing menu items when pages were deleted due to caching.
+#639548: export.inc cache was not properly respected when loading individual items, leading to multiple redundant queries.
+#573646: Attempt to make sure page manager does not try to respond to menu/theme hooks when CTools is not enabled.
+#544438: Extend user context to allow selection of user, including "logged in user".
+#604976: Prevent Page Manager from throwing errors when no modules that provide variants are available.
+Add 'Update and save' button to reduce the number of needed steps to do basic content editing.
+#693742: Sanitize block admin output (to Panels drag & drop for example) to get rid of script tags.
+
+ctools 6.x-1.2 (2009-Oct-21)
+==============
+#605990 by johnskulski: Prevent Views PHP error if display was removed.
+#605968 by johnskulski: Show more information in the collapsible for Views Panes.
+#609024: Fix improper validation of views introduced in #547686.
+
+ctools 6.x-1.1 (2009-Oct-15)
+==============
+
+Fix problem with ctools_set_page_token()
+Add a couple of support functions for ctools_set_page_token that are meant to be used by themes.
+#563916 by Damien Tournoud: ajax before() operation not using behaviors correctly.
+#553112: dependent.js failed to set proper initial state if inside an already hidden element.
+#569508 by markus_petrux: Update user_profile content type.
+#558942 by Roi Danton: In wizard.inc, be sure to check cancel path if return path is not set, as noted in documentation.
+#568578 by Roger Lopez: Add client side redirect AJAX command.
+#561788 by sirkitree: Add client side reload AJAX command.
+#566256 by mikl: HTML safe converter for string context.
+#558856 by sdboyer: Allow Views Panes to mark contexts optional.
+#558902 by Roi Danton: Better documentation of how to handle the back button with wizard.inc.
+#565808 by sirkitree: Replace /nojs/g instead of just "/nojs/" with ajax, allowing nojs to be the last item in a URL.
+#564522 by Roger Lopez: Prevent accidental inclusion of .info files in plugins.
+#558918: Collapsible can be set to remember state between page loads. Allow collapsible handle and content to be separated and not have to be divs.
+#545208: Page cache needs to be cleared when page manager pages are saved.
+#577542 by EclipseGC: Add footer message as a page element.
+#581670: Fix autocomplete in the modal so that using it does not submit the form.
+#580342: Fix Page Manager variant import, which did not work at all.
+#589342: Introduce page_manager_get_current_page() to get information about the current page manager page.
+#564492: by Roger Lopez: Change default class includes from .inc files to .class.php files so they don't get read as plugins.
+#590654 by fenstrat: Add submit form as a possible AJAX operation.
+#534034 by DamienMcKenna: Add access rule for term ID selection.
+#531522 by alex_b: Introduce ctools_static() modelled after static object handling in D7.
+#541428 by viz8: User name as a context argument.
+#592692 by johnskulski: use theme_links instead of theme('links') for dropdown because we do not actually want a theme to change this output.
+#547686: Allow view panes to better respect the default pager settings.
+#424548: Add a warning about overridng pager settings with Views AJAX.
+#555802: Add an administrative title to custom content panes to make them easier to manage.
+#556870: Node edit settings form context autocomplete was not working correctly.
+#491884 by ayalon: Provide blank substitutions for optional contexts that do not appear.
+#599136 by alex_b: Fix incorrect references to object unique name in export.inc.
+Allow the string argument to accept the entire path tail.
+#578410: Search path override, plus search form and search result content types.
+#567778: Allow override of contact and user contact pages.
+Allow override of blog and user blog pages.
+Allow override of poll page.
+#596450 by Scott Reynolds: Provide an ajax command response to reset the modal to the 'loading' state.
+#554678: Do not allow % or ! by itself as part of a path, as that breaks arguments.
+#599428: Enable and Disable variant buttons led to "Operation trail does not exist."
+Show a LOCK icon on the page list when pages are locked for editing either by the current user or another user.
+
+ctools 6.x-1.0 (2009-Aug-19)
+==============
+
+#534570: Fix _ and - not recognized in for context keywords.
+#535744 by Senpai: Rename "post" to "node" in various nid selectors.
+Make sure that tasks that will not override existing overrides refuse to enable and provide an error message saying why.
+#540750 by manuee: User picture was not available despite having a .inc file.
+#537184 by stephthegeek: CSS tweaks to fix heights on operations.
+#471024: Stop preventing exposed-view-in-block blocks from showing up as content panes.
+#483170: Link paths in page list if they have sensible destinations.
+#406284: Allow items with the user uid argument to be used as a normal menu item.
+#534504: Selection rules were not being saved when set up via during variant add.
+#528392 by markus_petrux: Explicit NOT NULL settings in schema during install.
+#348323 by neclimdul: Allow plugins to have classes and auto build parent chains.
+#478542 by nickl: Add "attr" command to ajax framework.
+#495240 by mikl: Blob handling for pgsql.
+#531936: Cache handling on contexts was spotty and could cause random errors.
+#545540 by Roger López: Add 5 page elements as available panes for using Panels as your primary page layout: breadcrumb, page title, messages, tabs and help box.
+#537776 by rfay: CTools Plugin Example module to help guide people in making plugins.
+#552020: Show the administrative description on page manager edit forms.
+#549380 by Nick Lewis: DX improvements to the multistep wizard.
+
+ctools 6.x-1.0-rc1
+==================
+
+#510968: Arguments needed to be recalulculated when path changed in page task.
+#522454 by stella: export.inc not properly using the 'key' instead of 'name' everywhere.
+#132557: Allow alter hook for rendered data: hook_ctools_render_alter()
+#520128: Context object may not be available when loading page cache.
+#498066 by mikl: Fix class names in advanced help.
+#504286 by Darren Oh: Set proper primary key on ctools_object_cache
+#514432 by markus_petrux: Various node fields available as a pane.
+#451928 by populist: Fix file upload from modals.
+#522836 by andrewlevine: Add form_clean_id() to ctools_rebuild_form() to prevent extraneous -1s from appearing.
+#518254: Accidentally inverted truth value on compare users.
+#464252 by andrewlevine: Helper to make onchange AJAX requests for select boxes.
+#490672 by dereine: Title overrides not working for system block using custom block.
+#520402: Disabled some concept code for later use that apparently conflicts with admin_menu.
+#523712: Fix call-time pass by reference typo.
+#477334 by dkruglyak: Remove forced lowercase on CSS processing.
+#484340: Allow keyword substitution in custom content.
+#458300: Option to inherit panel path on views panes not being properly honored.
+#493620: Add a PHP Code option to access control.
+#516222: Use "DELETE FROM" instead of "TRUNCATE" which is not supported by SQLite.
+#444456: Add Node: Node type as a context converter for substitutions and views arguments.
+#516504: Make sure optional contexts are truly and completely optional.
+#528022 by tha_sun: Change wording of "Add variant" to "Create variant" to avoid confusion with the "Add variant" tab.
+#528066: Required context (used by Mini Panels) accidentally had "weight" when not needed.
+
+ctools 6.x-1.0-beta4
+==================
+#451078: Fix silly typo preventing contexts from getting to views. Again.
+#457376: Text fields need array defaults. This only broke in pgsql.
+Add a hook to allow other modules to cooperate a bit more easily with node page overriding.
+#472222: Prevent modules providing invalid user data from causing warnings in profile content.
+#478438 by nickl: Allow passing items to the data() element.
+#480252 Fix some PHP notices.
+#447064 by nickl: Improve requirements message when css cache directory cannot be created.
+#481928: Needed indexes on delegator handlers and pages tables.
+#484284 by crea: Add a node links content type to print just a node's links.
+#485486 by nrambeck: term view override was not setting breadcrumb like taxonomy/term is supposed to.
+#498000: Allow .info files to create data for plugins.
+Fix a bug in plugins.inc where if two modules create a plugin of the same
+name, they would accidentally share data.
+#512048: by tom_o_t: Path fallback override callback had bad logic.
+
+IMPORTANT:
+Removed the delegator module entirely. There is now a page_manager module in 
+its place, with a vastly improved workflow and user interface. Activating it 
+should automatically update your data to the new module. However, PLEASE 
+PLEASE PLEASE back up your data before using it. Just enough changed to make
+this a bit of a concern.
+
+#514468 by hippich: Fix typos in content.menu.inc related to db_rewrite_sql() use.
+#508292 by rfay: Add user comparison access plugin.
+API version bumped to 1.1.0 to reflect the death of delegator.
+by sdboyer: Bulk Export module created to replace Panels bulk export.
+
+ctools 6.x-1.0-beta3
+==================
+#459716: content.theme.inc missing typo caused PHP error.
+#455732 by dereine: Restore code to pull the title from the blocks table for block types.
+#451928 by josh_k: Allow file uploads in the modal.
+#447920: Ensure there is a context selector for the "terms" argument and context converters so it can be used with Views.
+#458300: Panels not using proper method to override the path for the view.
+Add edit tabs to pages. Up API version to 1.0.1

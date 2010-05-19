@@ -1,0 +1,207 @@
+<?php
+// $Id: user_relationship_mailer.module,v 1.1.2.10 2009/07/12 17:20:27 alexk Exp $
+/**
+ * @file User Relationships Mailer module. Handles email notifications when relationships are added or removed
+ */
+module_load_include('inc', 'user_relationship_mailer', 'user_relationship_mailer_defaults');
+
+/**
+ * Sends mail to the appropriate user
+ *
+ * @param $op
+ *    string of action to take [request|delete|cancel|approve|disapprove|remove]
+ *
+ * @param $relationship
+ *    object of the relationship
+ *
+ */
+function user_relationship_mailer_send_email($op, $relationship) {
+  if (!variable_get("user_relationship_mailer_send_{$op}", TRUE)) {
+    return;
+  }
+
+  $relationship->requester = $requester = user_load($relationship->requester_id);
+  $relationship->requestee = $requestee = user_load($relationship->requestee_id);
+
+  $send_to_requestee = isset($requestee->user_relationship_mailer_send_mail) ? $requestee->user_relationship_mailer_send_mail : TRUE;
+  $send_to_requester = isset($requester->user_relationship_mailer_send_mail) ? $requester->user_relationship_mailer_send_mail : TRUE;
+
+  $send_to = array();
+  switch ($op) {
+  case 'request':
+    if ($relationship->approved == TRUE) {
+      $op = 'pre_approved';
+    }
+  case 'cancel':
+    $send_email = $send_to_requestee;
+    $send_to[] = 'requestee';
+    break;
+
+  case 'approve':
+  case 'disapprove':
+    $send_email = $send_to_requester;
+    $send_to[] = 'requester';
+    break;
+
+  case 'remove':
+    $send_email = $send_to_requestee && $send_to_requester;
+    $send_to[] = 'requester';
+    if (!$relationship->is_oneway) {
+      $send_to[] = 'requestee';
+    }
+    break;
+
+  default:
+    return;
+  }
+
+  if (variable_get('user_relationship_mailer_send_mail', FALSE) ? $send_email : variable_get("user_relationship_mailer_send_{$op}", TRUE)) {
+
+    $replacements = user_relationship_mailer_replacements($relationship);
+
+    foreach ($send_to as $target) {
+      $target = $$target;
+      //include recipient-specific data here, for example, remove email needs these
+      $replacements['@profile_uid'] = $target->uid;
+      $replacements['@target_name'] = $target->name;
+
+      drupal_mail(
+        'user_relationship_mailer',
+        $op,
+        $target->mail,
+        user_preferred_language($target),
+        $replacements,
+        NULL,
+        TRUE
+      );
+    }
+  }
+}
+
+
+/**
+ * hook_mail()
+ */
+function user_relationship_mailer_mail($op, &$message, $replacements) {
+  $defaults_function = "user_relationship_mailer_{$op}_default";
+  $defaults = $defaults_function();
+
+  $message['subject'] = t(variable_get("user_relationship_mailer_{$op}_subject", $defaults['subject']), $replacements);
+  $message['body']    = t(variable_get("user_relationship_mailer_{$op}_message", $defaults['message']), $replacements);
+}
+
+
+/**
+ * hook_user_relationships()
+ */
+function user_relationship_mailer_user_relationships($op, &$relationship) {
+  switch ($op) {
+    //request|delete|cancel|approve|disapprove|remove|pre_approved
+    case 'request':
+    case 'post-save':
+    case 'delete':
+    case 'remove':
+    case 'approve':
+    case 'disapprove':
+    case 'cancel':
+    case 'pre_approved':
+      user_relationship_mailer_send_email($op, $relationship);
+      break;
+  }
+}
+
+/**
+ * hook_form_alter()
+ */
+function user_relationship_mailer_form_alter(&$form, &$form_state, $form_id) {
+  switch ($form_id) {
+  case 'user_relationships_ui_settings':
+    global $user;
+    //take a sample relationship type
+    $relationship = user_relationships_types_load();
+    $relationship = array_pop($relationship);
+
+    $form['mail'] = array(
+      '#type'   => 'fieldset',
+      '#title'  => t('Email Options'),
+      '#weight' => -9,
+    );
+      $form['mail']['user_relationship_mailer_send_mail'] = array(
+        '#type'           => 'checkbox',
+        '#title'          => t('Allow users to turn off relationship messages'),
+        '#default_value'  => variable_get('user_relationship_mailer_send_mail', FALSE),
+        '#description'    => t('If you check this, users will have a new setting on their account edit page.'),
+      );
+
+      global $_user_relationship_mailer_ops;
+      
+      //compose a list of possible replacement keys for email templates
+      $replacement_keys = array_keys(user_relationship_mailer_replacements($relationship));
+      //these two are added per-receipient in user_relationship_mailer_send_email()
+      $replacement_keys[] = '@profile_uid';
+      $replacement_keys[] = '@target_name';
+      $macro_replacements = array('%macros' => implode(', ', $replacement_keys));
+
+      $translations = _user_relationship_mailer_ops_translations();
+      foreach ($_user_relationship_mailer_ops as $op) {
+        $defaults_function = "user_relationship_mailer_{$op}_default";
+        $defaults = $defaults_function();
+        
+        $op_translated = isset($translations[$op]) ? $translations[$op] : t(ucfirst(str_replace('_', '-', $op)));
+        $send_op_translated = isset($translations['send_'. $op]) ? $translations['send_'. $op] : t('Send @op messages', array('@op' => $op_translated));
+        $replacement_translations = t('Replacement strings are: %macros', $macro_replacements);
+
+        $form['mail'][$op] = array(
+          '#type'         => 'fieldset',
+          '#title'        => $op_translated,
+          '#collapsible'  => TRUE,
+          '#collapsed'    => TRUE
+        );
+        $form['mail'][$op]["user_relationship_mailer_send_{$op}"] = array(
+          '#type'           => 'checkbox',
+          '#title'          => $send_op_translated,
+          '#default_value'  => variable_get("user_relationship_mailer_send_{$op}", TRUE),
+        );
+        $form['mail'][$op]["user_relationship_mailer_{$op}_subject"] = array(
+          '#type'           => 'textfield',
+          '#title'          => t('Email subject'),
+          '#default_value'  => variable_get("user_relationship_mailer_{$op}_subject", $defaults['subject']),
+        );
+        $form['mail'][$op]["user_relationship_mailer_{$op}_message"] = array(
+          '#type'           => 'textarea',
+          '#title'          => t('Email message'),
+          '#default_value'  => variable_get("user_relationship_mailer_{$op}_message", $defaults['message']),
+          '#description'    => $replacement_translations,
+        );
+      }
+    break;
+  }
+}
+
+/**
+ * hook_user()
+ */
+function user_relationship_mailer_user($type, &$edit, &$account, $category = NULL) {
+  switch ($type) {
+  case 'form':
+    $form = array();
+    if (($category == 'account')
+      && variable_get('user_relationship_mailer_send_mail', FALSE)
+      && user_access('maintain own relationships', $account)
+    ) {
+      $form['user_relationship_mailer_settings'] = array(
+        '#type'   => 'fieldset',
+        '#title'  => t('Relationship email settings'),
+        '#weight' => 5
+      );
+        $form['user_relationship_mailer_settings']['user_relationship_mailer_send_mail'] = array(
+          '#type'           => 'checkbox',
+          '#title'          => t('Receive relationship email notifications'),
+          '#options'        => $options,
+          '#default_value'  => isset($edit['user_relationship_mailer_send_mail']) ? $edit['user_relationship_mailer_send_mail'] : TRUE,
+          '#description'    => t("Check this if you'd like to receive relationship related email notifications")
+        );
+    }
+    return $form;
+  }
+}

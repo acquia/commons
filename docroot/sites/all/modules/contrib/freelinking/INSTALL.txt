@@ -1,0 +1,21 @@
+# freelinking.module Installation Instructions
+
+1. Copy the freelinking/ directory into your Drupal installation's
+   modules/ directory.
+
+2. Enable the freelinking module in admin/modules.
+
+3. (optional) Set configuration options how you want them in
+   admin/settings/freelinking
+
+4. Enable the freelinking filter in one of your input formats in
+   admin/settings/filters. This filter should play well with other
+   filters, but it might need to be last in the chain so that links
+   aren't overwritten.
+
+5. Set permissions in admin/user/permissions#module-freelinking. Users
+   need the "access freelinking list" permission to follow freelinks.
+
+---
+freelinking.module by ea.Farris <eafarris@gmail.com>
+$Id: INSTALL.txt,v 1.3.6.1 2009/01/21 18:43:46 eafarris Exp $

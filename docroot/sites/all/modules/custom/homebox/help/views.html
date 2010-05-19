@@ -1,0 +1,46 @@
+<!-- $Id: views.html,v 1.1.2.2 2009/06/04 12:11:54 jchatard Exp $ -->
+Home box takes all its power when used with <a href="http://drupal.org/project/views">Views 2</a>. Views 2 allows to create dynamic views (say lists) of your content that user can play with: filters, pagination, etc. all this Ajax enabled.
+
+<div class="help-box">
+  <strong><a href="#summary">You can jump to the summary</a></strong>, if you have already read this topic.
+</div>
+
+In order to get a really interactive Home box page, there are a few things to set in your View. As an example, we will use a simple view that lists published content.
+<br />
+First, let's take a look at what we want.
+
+<a href="path:images/views-pagination.png"><img src="path:images/views-pagination.png" width="339" /></a>
+
+<a href="path:images/views-exposed-filter.png"><img src="path:images/views-exposed-filter.png" width="339" /></a>
+
+In our View, the first thing we need is a <strong>block</strong> display.
+<br />
+Then in the general settings be sure to have the following settings enabled or set (click image to enlarge).
+
+<a href="path:images/views-basic-settings.png"><img src="path:images/views-basic-settings.png" width="339" /></a>
+
+Now you can as usually set other properties (style, fields, etc.).
+<br />
+We now need to add exposed filters. So add <strong>Node type</strong> in filters section. Be sure to click <strong>Expose</strong> button. Like in the following screenshot.
+
+<a href="path:images/views-expose-button.png"><img src="path:images/views-expose-button.png" width="339" /></a>
+
+Don't forget to set the following properties in your exposed filter setting pane.
+
+<a href="path:images/views-expose-config.png"><img src="path:images/views-expose-config.png" width="339" /></a>
+
+With all this, you should have a full featured Ajax block available for your Home box.
+<br />
+<a name="summary"></a>
+<h3>Summary</h3>
+So you need to check that your view:
+<ul>
+  <li>has a <strong>title</strong></li>
+  <li>is <strong>Ajax</strong> enabled</li>
+  <li>has <strong>a pager</strong></li>
+  <li>has <strong>exposed form in block</strong> set to YES</li>
+  <li>has an <strong>empty text</strong> value</li>
+  <li>has an <strong>admin name</strong> (not mandatory, but better for you)</li>
+  <li><strong>exposes</strong> some filters</li>
+  <li>your filters have <strong>remember</strong> checkbox checked</li>
+</ul>

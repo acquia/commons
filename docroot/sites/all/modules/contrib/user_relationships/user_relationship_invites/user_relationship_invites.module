@@ -1,0 +1,121 @@
+<?php
+// $Id: user_relationship_invites.module,v 1.1.2.3 2009/06/28 21:51:34 alexk Exp $
+
+/**
+ * Drupal Module: User Relationship Invites
+ *
+ * @author Jeff Smick <sprsquish [at] gmail [dot] com>
+ * @author Jeff Warrington <jeff [at] qoolio [dot] org (Drupal 6 port)>
+ * @file
+ *   Automatically create a relationship between inviter and invitee
+ */
+
+/**
+ * Public API to grab the basic invite info
+ *
+ * @param $code
+ *    string of the invite code
+ *
+ * @return
+ *    object with the invite data including the inviter user object and relationship_type object
+*/
+function user_relationship_invites_get_invite($code) {
+  if ($invite = db_fetch_object(db_query("SELECT * FROM {user_relationship_invites} WHERE invite_code = '%s'", $code))) {
+    $invite->inviter = user_load(array('uid' => $invite->inviter_uid));
+    $invite->relationship_type = user_relationships_type_load($invite->rtid);
+  }
+
+  return $invite;
+}
+
+/**
+ * Implementation of hook_form_alter().
+*/
+function user_relationship_invites_form_alter(&$form, $form_state, $form_id) {
+  if (!(module_exists('invite') && module_exists('user_relationships_api') && module_exists('user_relationships_ui'))) {
+    return;
+  }
+
+  if ($form_id == 'invite_form') {
+    global $user;
+
+    $new_user = drupal_anonymous_user();
+    module_load_include('inc', 'user_relationships_ui', 'user_relationships_ui.forms');
+    $form += user_relationships_ui_request_form($user->uid, $new_user->uid, $form_state['values']);
+    $form['rtid']['#weight'] = 0;
+    $form['#validate'][] = 'user_relationship_invites_invite_form_validate';
+  }
+}
+
+/**
+ * Custom form validation handler for the 'invite_form' form from Invite module
+ * This custom handler acts to store the User Relationships relationship type ID
+ * so that it can be used in the hook_invite implementation as it is not otherwise available.
+ */
+function user_relationship_invites_invite_form_validate($form, &$form_state) {
+  global $user;
+  $user->rtid = $form_state['values']['rtid'];
+}
+
+/**
+ * Implementation of hook_invite().
+*/
+function user_relationship_invites_invite($op, &$args) {
+  switch ($op) {
+    case 'invite':
+      db_query("INSERT INTO {user_relationship_invites} (inviter_uid, rtid, invite_code) VALUES (%d, %d, '%s')", $args['inviter']->uid, $args['inviter']->rtid, $args['code']);
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_user().
+*/
+function user_relationship_invites_user($op, &$edit, &$account, $category = NULL) {
+  if (!(module_exists('invite') && module_exists('user_relationships_api'))) {
+    return;
+  }
+
+  switch ($op) {
+    case 'register':
+      if (($code = $_SESSION[INVITE_SESSION]) && ($invite = user_relationship_invites_get_invite($code)) && $invite->relationship_type) {
+        $form = array();
+        $inviter = $invite->inviter;
+        $relationship_type = $invite->relationship_type;
+
+        // approval is required so ask for it
+        if (!$relationship_type->is_oneway || $relationship_type->requires_approval) {
+          $form['relationship_invite_approve'] = array(
+            '#type' => 'radios',
+            '#title' => t('Please confirm the %relationship_name request from !name', array('!name' => theme('username', $inviter), '%relationship_name' => $relationship_type->name)),
+            '#default_value' => (isset($edit['relationship_invite_approve']) ? $edit['relationship_invite_approve'] : 'approve'),
+            '#options' => array('approve' => t('Yes'), 'disapprove' => t('No'))
+          );
+        }
+        // otherwise force an approval
+        else {
+          $form['relationship_invite_approve'] = array('#type' => 'value', '#value' => 'approve');
+        }
+
+        $form['invite_code'] = array('#type' => 'value', '#value' => $code);
+        $form['relationship_invite_requester'] = array('#type' => 'value', '#value' => $inviter);
+        $form['relationship_type'] = array('#type' => 'value', '#value' => $relationship_type);
+        return $form;
+      }
+      break;
+
+    case 'insert':
+      if (isset($edit['relationship_invite_approve'])) {
+        db_query("DELETE FROM {user_relationship_invites} WHERE invite_code = '%s'", $edit['invite_code']);
+        
+        if ($edit['relationship_invite_approve'] == 'approve') {
+          user_relationships_request_relationship($edit['relationship_invite_requester'], $account, $edit['relationship_type'], TRUE);
+        }
+        $edit['invite_code'] = NULL;
+        $edit['relationship_invite_approve'] = NULL;
+        $edit['relationship_invite_requester'] = NULL;
+        $edit['relationship_type'] = NULL;
+      }
+      break;
+  }
+}

@@ -1,0 +1,110 @@
+<?php
+// $Id: ajax_load.module,v 1.5 2009/03/31 01:34:25 markuspetrux Exp $
+
+/**
+ * @file
+ * Enable loading of Javascript and CSS data with AJAX loads.
+ */
+
+/**
+ * Implementation of hook_menu().
+ */
+function ajax_load_init() {
+  // Add on every page because we can't know in advance if an AJAX method
+  // will be called.
+  drupal_add_js(drupal_get_path('module', 'ajax_load') .'/ajax_load.js');
+}
+
+/**
+ * Implementation of hook_ajax_data_alter().
+ */
+function ajax_load_ajax_data_alter(&$data) {
+  $extra = ajax_data_get_data();
+  $array = FALSE;
+  // Detect whether the data being altered is an array.
+  if (is_array($data)) {
+    $data = (object) $data;
+    $array = TRUE;
+  }
+  $data->scripts = $extra['scripts'];
+  $data->css = $extra['css'];
+  if (!isset($data->__callbacks)) {
+    $data->__callbacks = array();
+  }
+  // Set the AjaxLoad custom event as a callback.
+  $data->__callbacks[] = 'Drupal.AjaxLoad.loadFiles';
+  // Cast back to an array if necessary.
+  if ($array) {
+    $data = (array) $data;
+  }
+}
+
+/**
+ * Return an array of data representing the scripts and CSS files on a page.
+ */
+function ajax_data_get_data() {
+  $return = array();
+  $return['scripts'] = array();
+  foreach (array('header', 'footer') as $scope) {
+    $javascript = drupal_add_js(NULL, NULL, $scope);
+    foreach ($javascript as $type => $data) {
+      if (!$data) {
+        unset($javascript[$type]);
+      }
+      elseif ($type == 'setting') {
+        $javascript[$type] = call_user_func_array('array_merge_recursive', $data);
+      }
+    }
+    $return['scripts'] = array_merge_recursive($return['scripts'], $javascript);
+  }
+  $return['css'] = drupal_add_css();
+
+  // Allow the color.module alter the CSS array as if it was processed from
+  // a regular page request. See phptemplate_preprocess_page() in garland.
+  if (module_exists('color')) {
+    init_theme();
+    _color_page_alter($return);
+  }
+
+  // Deal with jQuery Update module, if exists.
+  if (module_exists('jquery_update')) {
+    ajax_load_jquery_update_preprocess($return);
+  }
+
+  return $return;
+}
+
+/**
+ * Replace Drupal core's jquery.js with the new one from jQuery Update module.
+ *
+ * @see jquery_update_preprocess_page()
+ */
+function ajax_load_jquery_update_preprocess(&$variables) {
+  // Only do this for pages that have JavaScript on them.
+  if (!empty($variables['scripts'])) {
+  
+    // Perform the logic if either jQuery Update's jquery.js is newer than
+    // core's, or if we're using a different compression type.
+    if (variable_get('jquery_update_replace', TRUE) ||
+        variable_get('jquery_update_compression_type', 'pack') != 'pack') {
+
+      // Replace jquery.js first.
+      $new_jquery = array(jquery_update_jquery_path() => $variables['scripts']['core']['misc/jquery.js']);
+      $variables['scripts']['core'] = array_merge($new_jquery, $variables['scripts']['core']);
+      unset($variables['scripts']['core']['misc/jquery.js']);
+
+      // Loop through each of the required replacements.
+      foreach (jquery_update_get_replacements() as $type => $replacements) {
+        foreach ($replacements as $find => $replace) {
+          // If the file to replace is loaded on this page...
+          if (isset($variables['scripts'][$type][$find])) {
+            // Create a new entry for the replacement file, and unset the original one.
+            $replace = JQUERY_UPDATE_REPLACE_PATH . '/' . $replace;
+            $variables['scripts'][$type][$replace] = $variables['scripts'][$type][$find];
+            unset($variables['scripts'][$type][$find]);
+          }
+        }
+      } 
+    }
+  }
+}

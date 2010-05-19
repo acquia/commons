@@ -1,0 +1,46 @@
+<!-- $Id: views.html,v 1.1.2.1 2009/06/04 12:11:54 jchatard Exp $ -->
+Home box prend toute son ampleur lorsqu'il est utilisé avec <a href="http://drupal.org/project/views">Views 2</a>. Views 2 vous permet de créer des vues dynamiques (des listes principalement) de votre contenu. Ces vues peuvent être manipulées par les utilisateurs avec : des filtres, un système de pagination, etc. tout ceci en Ajax.
+
+<div class="help-box">
+  <strong><a href="#summary">Vous pouvez consulter directement le résumé</a></strong> si vous avez déjà lu cette section.
+</div>
+
+Afin d'avoir une page home box réellement interactive, il y a un certain nombre de paramètres à configurer dans votre vue. Dans cet exemple, nous allons utiliser une vue qui liste du contenu publié.
+<br />
+Tout d'abord, jetons un oeil à ce que nous voulons obtenir.
+
+<a href="path:images/views-pagination.png"><img src="path:images/views-pagination.png" width="339" /></a>
+
+<a href="path:images/views-exposed-filter.png"><img src="path:images/views-exposed-filter.png" width="339" /></a>
+
+Dans notre vue, la première dont nous avons besoin est affichage en <strong>bloc</strong>.
+<br />
+Dans les paramètres généraux assurez-vous que les options suivantes sont configurées.
+
+<a href="path:images/views-basic-settings.png"><img src="path:images/views-basic-settings.png" width="339" /></a>
+
+Vous pouvez comme à votre habitude configurer les autres options (style, champs, etc.).
+<br />
+Nous avons maintenant besoin d'exposer nos filtres. Ajoutons <strong>Type de noeud</strong> dans la section filtres. Assurez-vous de cliquez sur le bouton <strong>Exposer</strong>, comme dans la capture ci-dessous.
+
+<a href="path:images/views-expose-button.png"><img src="path:images/views-expose-button.png" width="339" /></a>
+
+N'oubliez pas les paramètres suivants dans les propriétés de votre filtre exposé.
+
+<a href="path:images/views-expose-config.png"><img src="path:images/views-expose-config.png" width="339" /></a>
+
+Avec tout ceci en place, vous obtenez un bloc entièrement en Ajax que vous pouvez utiliser dans l'une de vos Home box.
+<br />
+<a name="summary"></a>
+<h3>Résumé</h3>
+Vous devez vérifier que votre vue :
+<ul>
+  <li>a un <strong>titre</strong></li>
+  <li>utilise <strong>Ajax</strong></li>
+  <li>a <strong>une pagination</strong></li>
+  <li>a <strong>ses blocs de filtres exposé dans des blocs</strong> (OUI)</li>
+  <li>a une valeur de <strong>Texte vide</strong></li>
+  <li>a un <strong>nom d'administration</strong> (ce n'est pas obligatoire, mais plus pratique)</li>
+  <li><strong>expose</strong> quelques filtres</li>
+  <li>que vous filtres aient l'option <strong>mémoriser (remember)</strong> cochée</li>
+</ul>

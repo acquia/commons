@@ -1,0 +1,45 @@
+<?php
+// $Id: context_og.module
+
+/**
+ * Implementation of hook_context_conditions().
+ */
+function context_og_context_conditions() {
+  $items = array();
+  
+  $items['og'] = array(
+    '#title' => t('Organic Groups'),
+    '#description' => t('Set this context when in a group context.'),
+    '#options' => array('1' => t('True')),
+    '#type' => 'checkboxes',
+  );
+  
+  return $items;
+}
+
+/*
+ * Implementation of hook_views_post_render()
+ * 
+ * Detect group context after a view is built
+ * This is needed because views using group arguments won't
+ * trigger group context in hook_init()
+ */
+function context_og_views_post_render($view, $args) {
+  context_og_set_context();
+}
+
+/*
+ * Implemenation of hook_init()
+ * 
+ * Detect group context on all page views
+ */
+function context_og_init() {
+  context_og_set_context();
+}
+
+// Set group context in context if available
+function context_og_set_context() {
+  if (og_get_group_context()) {
+    context_set_by_condition('og', TRUE); 
+  }
+}

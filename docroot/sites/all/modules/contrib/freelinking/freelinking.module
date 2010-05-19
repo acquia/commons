@@ -1,0 +1,603 @@
+<?php
+/* freelinking.module -- implements CamelCase and [[free links]] filter for Drupal
+   ea. Farris <eafarris@gmail.com>
+   portions based on code from crw: http://ninjafish.org/project/wiki
+
+   Drupal freelinking project: http://www.drupal.org/project/freelinking
+
+   $Id: freelinking.module,v 1.32.2.19 2010/04/06 06:54:26 grayside Exp $
+*/
+
+function freelinking_menu() {
+  $items['freelinking'] = array(
+    'title' => 'Freelinks',
+    'description' => 'A list of freelinks used on this site',
+    'page callback' => 'freelinking_page',
+    'access arguments' => array('access freelinking list'),
+  );
+  $items['admin/settings/freelinking'] = array(
+    'title' => 'Freelinking settings',
+    'description' => 'Configure wiki-style freelinking settings for node content',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('freelinking_settings'),
+    'access arguments' => array('administer freelinking'),
+  );
+  return $items;
+} // endfunction freelinking_menu
+
+function freelinking_perm() {
+  return array('administer freelinking', 'access freelinking list');
+}
+
+function freelinking_theme($existing, $type, $theme, $path) {
+  return array(
+    'freelinking_page_form' => array(
+      'arguments' => array(
+        'form' => NULL,
+      ),
+    ),
+  );
+} // endfunction freelinking_theme
+
+function freelinking_page($thetitle = NULL) {
+  if (isset($_POST['operation']) && $_POST['operation'] == 'delete' && isset($_POST['links'])) {
+    return drupal_get_form('freelinking_multiple_delete_confirm', $_POST['links']);
+  }
+  elseif (isset($_POST['operation']) && $_POST['operation'] == 'delete-all') {
+    return drupal_get_form('freelinking_delete_all_confirm');
+  }
+
+  if ($thetitle) { // find the matching title
+    $freelink = _freelinking_make_link($thetitle);
+    drupal_goto($freelink['path'], isset($freelink['options']['query']) ? $freelink['options']['query'] : '');
+  }
+  else { // no title was passed -- show a list of wikiwords and status
+    return drupal_get_form('freelinking_page_form');
+  }
+} // endfunction freelinking_page
+
+function freelinking_page_form() {
+    $form['options'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Update options'),
+      '#prefix' => '<div class="container-inline">',
+      '#suffix' => '</div>',
+      '#access' => user_access('administer freelinking'),
+    );
+    $options = array(
+      'delete' => t('Delete'),
+      'delete-all' => t('Delete All'),
+    );
+    $form['options']['operation'] = array(
+      '#type' => 'select',
+      '#options' => $options,
+      '#default_value' => 'delete',
+      '#access' => user_access('administer freelinking'),
+    );
+    $form['options']['submit'] = array(
+      '#type' => 'submit',
+      '#value' => t('Update'),
+      '#access' => user_access('administer freelinking'),
+    );
+
+    $header = array(
+      array(
+        'data' => theme('table_select_header_cell'),
+        '#access' => user_access('administer freelinking'),
+      ),
+      array(
+        'data' => t('Phrase'),
+        'field' => 'phrase',
+        'sort' => 'asc',
+      ),
+      array(
+        'data' => t('Target'),
+        'field' => 'phrase',
+      ),
+    );
+  $query = 'SELECT hash, phrase, path FROM {freelinking}' . tablesort_sql($header);
+  $result = pager_query($query, 50);
+  while ($freelink = db_fetch_object($result)) { // looping through pairs
+    $hash = $freelink->hash;
+    $links[$hash] = '';
+    $form['phrase'][$hash] = array(
+      '#value' => urldecode($freelink->phrase),
+    );
+
+    $fltargetnid = _freelinking_exists($freelink->phrase);
+    $freelink = _freelinking_make_link($freelink->phrase);
+    if ($fltargetnid) { // node exists
+      $link = l(t('see this content'), drupal_get_path_alias('node/' . $fltargetnid));
+    }
+    else { // no content found, show create link
+      $link = l(t('create this content'), $freelink['path'], array('attributes' => array('class' => 'freelinking fl-create')));
+    }
+    $form['target'][$hash] = array(
+      '#value' => $link,
+    );
+  } // endwhile looping through links
+  
+    $form['links'] = array(
+      '#type' => 'checkboxes',
+      '#options' => $links,
+      '#access' => user_access('administer freelinking'),
+    );
+
+  $form['pager'] = array(
+    '#value' => theme('pager', NULL, 50, 0),
+  );
+
+  return $form;
+} // endfunction freelinking_page_form
+
+function theme_freelinking_page_form($form) {
+  if (isset($form['options']) && is_array($form['options'])) {
+    $output .= drupal_render($form['options']);
+    $header = array(
+      theme('table_select_header_cell'),
+      array(
+        'data' => t('Phrase'),
+        'field' => 'phrase',
+        'sort' => 'asc',
+      ),
+      array(
+        'data' => t('Target'),
+        'field' => 'path',
+      ),
+    );
+  }
+
+  if (isset($form['phrase']) && is_array($form['phrase'])) {
+    foreach (element_children($form['phrase']) as $key) {
+      $row = array();
+      if (isset($form['links'][$key])) {
+        $row[] = drupal_render($form['links'][$key]);
+      }
+      $row[] = drupal_render($form['phrase'][$key]);
+      $row[] = drupal_render($form['target'][$key]);
+      $rows[] = $row;
+    }
+  } else {
+    $rows[] = array(
+      array(
+        'data' => t('No freelinks available.'),
+        'colspan' => user_access('administer freelinking') ? '3' : '2',
+      ),
+    );
+  } // endif else no freelinks
+
+  $output .= theme('table', $header, $rows);
+  if ($form['pager']['#value']) {
+    $output .= drupal_render($form['pager']);
+  }
+
+  $output .= drupal_render($form);
+
+  return $output;
+} // endfunction theme_freelinking_page_form
+
+function freelinking_block($op = 'list', $delta = 0) {
+  switch ($op) {
+    case 'list':
+      $blocks[0]['info'] = t('Freelink targets that need to be created');
+      $blocks[0]['cache'] = BLOCK_NO_CACHE;
+      return $blocks;
+      break;
+    case 'configure':
+      $form['freelinking_block_options'] = array(
+        '#type' => 'fieldset',
+        '#title' => t('Freelinking Block Options')
+      );
+      for ($i = 5; $i <=30; $i=$i+5) {
+        $options[$i] = $i;
+      }
+      $form['freelinking_block_options']['freelinking_blocknum'] = array(
+        '#title' => t('Number of non-existing link phrases to show'),
+        '#type' => 'select',
+        '#options' => $options,
+        '#default_value' => variable_get('freelinking_blocknum', '10'),
+        '#description' => t('Number of phrases to show in the block.')
+      );
+      return $form;
+      break;
+      
+    case 'view':
+      switch ($delta) {
+        case 0:
+          $query = 'SELECT * FROM {freelinking} WHERE path LIKE "node/add%" ORDER BY RAND()';
+          $result = db_query($query);
+          $i = 0;
+          $content = '';
+          while ($freelink = db_fetch_object($result)) {
+            if ($i == variable_get('freelinking_blocknum', 10)) { // we're done
+              break;
+            }
+            $items[] = l(urldecode($freelink->phrase), $freelink->path, array(), $freelink->args);
+            $i++;
+          } // endwhile looping through flpairs
+          $block['subject'] = t('Create This Content');
+          $block['content'] = theme('item_list', $items);
+          return $block;
+        default:
+          break;
+      } // endswitch $delta
+    default:
+      break;
+  } // endswitch $op
+} // endfunction freelinking_block
+
+function freelinking_settings() {
+  $notfoundoptions = array(
+    'create only' => t('Only try to create content'),
+    'no access search' => t('Search for content if user can\'t create'),
+    'always search' => t('Always search for content'),
+  );
+  $form["freelinking_nodetype"] = array(
+    '#title' => t('Default for new content'),
+    '#type' => 'select',
+    '#options' => node_get_types('names'),
+    '#default_value' => variable_get("freelinking_nodetype", 'story'),
+    '#description' => t('Type of content that the freelinking filter will create when clicking on a freelink without a target.')
+  );
+  $form['freelinking_notfound'] = array(
+    '#title' => t('What to do if content not found'),
+    '#type' => 'select',
+    '#options' => $notfoundoptions,
+    '#default_value' => variable_get('freelinking_notfound', 'no access search'),
+    '#description' => t('What to do when clicking on a freelink without a target. Choose to always attempt to create the content, search if the user doesn\'t have permission to create (the default), or to always search. NOTE: search functions require search.module to be activated.'),
+  );
+
+  $form["freelinking_restriction"] = array(
+    '#title' => t('Restrict free links to this content type'),
+    '#type' => 'select',
+    '#multiple' => 'true',
+    '#options' => array_merge(array('none' => t('No restrictions')), node_get_types('names')),
+    '#default_value' => variable_get("freelinking_restriction", array('none')),
+    '#description' => t('If desired, you can restrict the freelinking title search to just content of these types. Note that if this does not include as the "Default for new content," above, new freelinked content cannot be found.')
+  );
+  $form["freelinking_camelcase"] = array(
+    '#title' => t('Allow CamelCase linking'),
+    '#type' => 'checkbox',
+    '#default_value' => variable_get("freelinking_camelcase", 0),
+    '#description' => t('If desired, you can enable CamelCase linking'),
+  );
+  $form["freelinking_onceonly"] = array(
+    '#title' => t('Only link first occurance'),
+    '#type'  => 'checkbox',
+    '#default_value' => variable_get("freelinking_onceonly", 0) == 1 ? TRUE : FALSE,
+    '#description' => t('If desired you can only turn the first occurance of a freelink into a link. This can improve the appearance of content that includes a lot of the same CamelCase words.')
+  );
+
+  return system_settings_form($form);
+}
+
+function freelinking_filter($op, $delta = 0, $format = -1, $text = '') {
+  switch ($op) {
+    case 'list':
+      return (array(0 => t('freelinking filter')));
+      break;
+
+    case 'name':
+      return t('freelinking filter');
+      break;
+    
+    case 'description':
+      return t('Enables freelinking between nodes with CamelCase or delimiters like [[ and ]].');
+      break;
+
+    case 'process':
+      return _freelinking_do_filtering($text, FALSE);
+      break;
+
+    case 'prepare':
+      return $text;
+      break;
+
+  } // endswitch $op
+} // endfunction freelinking_filter
+
+function freelinking_nodeapi(&$node, $op, $teaser = NULL, $page = NULL) {
+  switch ($op) {
+    case 'update':
+      _freelinking_do_filtering($node->body, TRUE);
+      break;
+    case 'insert':
+      _freelinking_do_filtering($node->body, TRUE);
+      break;
+    case 'update index':
+      $filters = filter_list_format($node->format);
+      if (isset($filters['freelinking/0'])) {
+        global $base_path;
+        $text = freelinking_filter('process', 0, -1, $node->body);
+        if (preg_match_all(',<a href="'. $base_path .'freelinking/([^"]*)" class="freelinking">,i', $text, $matches)) {
+          foreach ($matches[1] as $thetitle) {
+            if ($nid = _freelinking_exists($thetitle)) {
+              $output .= '<a href="'. $base_path .'node/'. $nid .'">'. urldecode($thetitle) .'</a>';
+            }
+          }
+          return $output;
+        }
+      }
+      break;
+  } // endswitch $op
+} // endfunction freelinking_nodeapi
+
+function freelinking_filter_tips($delta, $format, $long = FALSE) {
+  if ($long) {
+    $output  = t('Content in [[double square brackets]] will be linked to existing content with that title, or a page to create that content. ');
+    $output .= t('Links can contain an optional bar, "|". Content on the left of the bar is the target; to the right, the link shown. ');
+    $output .= t('Links to pages outside this site are allowed. They must start with one of the following: "http", "https", "ftp", or "mailto", and can exist either by themselves, or on the left of the bar. ');
+    $output .= t('Examples: ');
+    $ouptut .= '<ul>';
+    $output .= '<li>' . t('[[simple link]] - will go to the content titled "simple link" or a page to create that content.') . '</li>';
+    $output .= '<li>' . t('[[this is the target|this is the source]] - will present "this is the source" as a link to "this is the target", or a page to create that content.') . '</li>';
+    $output .= '<li>' . t('[[http://www.example.com|this is the source]] - will present "this is the source" as a link to http://www.example.com.') . '</li>';
+    $output .= '<li>' . t('[[http://www.example.com]] - will present "http://www.example.com" as a link to http://www.example.com.') . '</li>';
+    $output .= '</ul>';
+    if (variable_get('freelinking_camelcase', TRUE)) {
+      $output .= t('Content consisting of two or more capitalized words run together (aka "CamelCase") will be linked to existing content with that title, or a page to create that content.');
+    }
+  }
+  else { // short tips displayed in-line
+    $output  = t('Link to content with [[some text]], where "some text" is the title of existing content or the title of a new piece of content to create. You can also link text to a different title by using [[link to this title|show this text]]. ');
+    $output .= t('Link to outside URLs with [[http://www.example.com|some text]], or even [[http://www.example.com]]. ');
+    if (variable_get('freelinking_camelcase', TRUE)) {
+      $output .= t('Link to existing or new content with CamelCaseWords.');
+    }
+  }
+  return $output;
+}
+
+function freelinking_form_alter(&$form, $form_state, $form_id) {
+  if (isset($form['type'])) {
+    $type = $form['type']['#value'];
+    if (variable_get('freelinking_nodetype', 'story') == $type && isset($_GET['edit'])) { // on the right node type, with GET data
+      $form['title']['#default_value'] = urldecode($_GET['edit']['title']); // prepopulate the title field
+    } // endif node type and data
+  } //  on a node creation form
+} // endfunction freelinking_form_alter
+    
+function freelinking_page_form_validate($form_id, &$form_state) {
+  // check that no values submitted results in clean error
+  if(!$form_values['links']) {
+    $form_values['links'] = array(NULL);
+  }
+  $links = array_filter($form_values['links']);
+  if (count($links) == 0) {
+    form_set_error('form', t('No items selected'));
+  }
+} // endfunction freelinking_page_form_validate
+
+function freelinking_page_form_submit($form_id, &$form_state) {
+  // !!! May be possible to call this w/o the right privileges. More research is needed.
+  $op = $form_state['values']['operation'];
+
+  // Filter out unchecked links
+  $links = array_filter($form_state['values']['links']);
+
+/*
+ * perhaps perform other operations besides delete (which requires a confirm form, from hook_page()
+ * maybe this would be better done w/ a multistep form, which would allow for more complex operations
+ *
+ * for now, don't do anything, and let hook_page() confirm the delete
+ */
+
+} // endfunction freelinking_page_form_submit
+
+function freelinking_multiple_delete_confirm($links = array()) {
+  $form['links'] = array(
+    '#prefix' => '<ul>',
+    '#suffix' => '</ul>',
+    '#tree' => TRUE,
+  );
+  // array_filter() returns only elements that are TRUE
+  foreach ($links['post']['links'] as $hash => $value) {
+    $phrase = db_result(db_query('SELECT phrase FROM {freelinking} WHERE hash = "%s"', $hash));
+    $form['links'][$hash] = array(
+      '#type' => 'hidden',
+      '#value' => $hash,
+      '#prefix' => '<li>',
+      '#suffix' => check_plain($phrase),
+    );
+  } //endforeach looping through $links
+  $form['operation'] = array(
+    '#type' => 'hidden',
+    '#value' => 'delete',
+  );
+
+
+  return confirm_form($form,
+    t('Are you sure you want to delete these items?'),
+    'freelinking',
+    t('This action cannot be undone.'),
+    t('Delete all'),
+    t('Cancel')
+  );
+} // endfunction freelinking_mutliple_delete_confirm
+
+function freelinking_multiple_delete_confirm_submit($form_id, &$form_state) {
+  if ($form_state['values']['confirm']) {
+    foreach ($form_state['values']['links'] as $hash => $phrase) {
+      _freelinking_delete($hash);
+    } // endforeach looping through $freelinks
+  } // endif confirm
+  drupal_set_message(t('The freelinks have been deleted.'));
+  return 'freelinking';
+} // endfunction freelinking_multiple_delete_confirm_submit
+
+function freelinking_delete_all_confirm() {
+  $form['operation'] = array(
+    '#type' => 'hidden',
+    '#value' => 'delete-all',
+  );
+  return confirm_form($form,
+    t('Are you sure you want to delete <strong>all</strong> freelinks?'),
+    'freelinking',
+    t('This action cannot be undone.'),
+    t('Delete all'),
+    t('Cancel')
+  );
+} // endfunction freelinking_delete_all_confirm
+
+function freelinking_delete_all_confirm_submit($form_id, &$form_state) {
+  if ($form_state['values']['confirm']) {
+    _freelinking_delete_all();
+    drupal_set_message(t('<strong>All</strong> freelinks have been deleted.'));
+  }
+  return 'freelinking';
+} // endfunction freelinking_delete_all_confirm_submit
+
+/* 
+ * PRIVATE FUNCTIONS BELOW
+ *
+ * Please do not use these functions outside of freelinking.module, as they are
+ * subject to change without notice.
+ *
+*/
+
+function _freelinking_do_filtering($text, $store = FALSE) {
+  $allowcamelcase = variable_get("freelinking_camelcase", TRUE);
+  $freelinkingregexp = '/(?<![!\\\\])(\[\[.+]])/Uu'; // this finds [[links like this]], un-greedily and utf-8
+  preg_match_all($freelinkingregexp, $text, $flmatches, PREG_PATTERN_ORDER);
+  if ($allowcamelcase) {
+     $camelcaseregexp = '/\b(?<!\[\[)([[:upper:]][[:lower:]]+){2,}(?!\]\])\b/'; // this gets us close, but is not perfect. Example: ThisIsACamelCaseWord won't match (two caps in a row)
+     preg_match_all($camelcaseregexp, $text, $ccmatches);
+     $wikiwords = array_merge($ccmatches[0], $flmatches[1]);
+  }
+  else {
+     $wikiwords = $flmatches[1];
+  }
+  foreach (array_unique($wikiwords) as $wikiword) {
+    if (substr($wikiword, 0, 2) == '[[') { // if it's a freelink, the expressions are different
+      $phrase = substr($wikiword, 2, -2);
+      $freelink = $phrase;
+      $barpos = strpos($phrase, '|');
+      $pattern = '/\[\[' . preg_quote($phrase,'/') . ']]/';
+      if ($barpos) {
+         $freelink = substr($freelink, 0, $barpos);
+         $phrase = substr($phrase, $barpos + 1);
+      }
+      if (preg_match('/^(http|mailto|ftp):/', $freelink)) {
+         $replacement = '<a class="freelinking external" href="' . $freelink . '">' . $phrase . '</a>';
+         $store = FALSE;
+      }
+      else {
+        $replacement = l(html_entity_decode($phrase), 'freelinking/' . $freelink, array('attributes' => array('class' => 'freelinking')));
+      }
+    }
+
+    else if ($allowcamelcase) { // it's a CamelCase, expressions are a bit simpler
+      $pattern = '/(?<!\/)\b' . $wikiword . '\b(?![^<]*>)/';
+      $phrase = $wikiword; // consistency for the db
+      $freelink = $wikiword; // also for the db
+      $replacement = l($wikiword, 'freelinking/' . urlencode($wikiword), array('attributes' => array('class' => 'freelinking')));
+    }
+    $text = preg_replace($pattern, $replacement, $text, variable_get("freelinking_onceonly", 0) ? 1 : -1);
+    
+    if ($store) {
+      _freelinking_store($freelink, $replacement);
+    }
+  } // foreach wikiword
+
+  // strip out comment syntax (!)
+  $text = preg_replace('/[!\\\\](\[\[.+]])/Uu', '$1', $text);
+  return $text;
+} // endfunction _freelinking_do_filtering
+
+function _freelinking_store($phrase, $path, $args=NULL) { // store freelinking pair in the db
+  $hash = md5($phrase . $path . $args);
+  $query = "SELECT hash FROM {freelinking} WHERE phrase = '%s'";
+  $result = db_query($query, $phrase); 
+  $num_rows = FALSE;
+  while ($dbobj = db_fetch_object($result)) {
+    $num_rows = TRUE;
+    $dbhash = $dbobj;
+  }
+  if ( !$num_rows) { // not in the db
+    $query = "INSERT INTO {freelinking} (hash, phrase, path, args) VALUES ('%s', '%s', '%s', '%s')";
+    $result = db_query($query, $hash, $phrase, $path, $args);
+  } // endif row not found in table
+  else { // in the db, but does it match?
+    if ($dbhash->hash != $hash) { // hashes don't match, replace db entry with new values
+      $query = "UPDATE {freelinking} SET hash = '%s', path = '%s', args = '%s' WHERE phrase = '%s'";
+      $result = db_query($query, $hash, $path, $args, $phrase);
+    } // endif hashes don't match
+  } // endifelse row found
+} // endfunction _freelinking_store
+
+function _freelinking_delete($hash) {
+  $query = "DELETE FROM {freelinking} WHERE hash = '%s'";
+  $result = db_query($query, $hash);
+   // do something with result?
+}
+
+function _freelinking_delete_all() {
+  db_query('DELETE FROM {freelinking}');
+}
+
+function _freelinking_exists($thetitle) { // helper function for freelinking_page
+  global $language;
+  // looks through the db for nodes matching $title. Returns the nid if such a node exists, otherwise, returns 0
+  $title = urldecode($thetitle);
+  $query = "SELECT nid FROM {node} WHERE title = '%s'";
+  if (module_exists('locale')) {
+    $query .= " AND (language = '$language->language' OR language = '')";
+  }
+  $noderestrict = variable_get('freelinking_restriction', array('none'));
+  if (is_array($noderestrict) && !in_array('none', $noderestrict)) { // need to add the where clause
+    foreach ($noderestrict as $restrictedtype)  {
+      $clauseparts[] = 'type = \'' . $restrictedtype . '\'';
+    }
+    $restrictions = implode(' OR ', $clauseparts);
+    $query .= " AND (" . $restrictions . ')';
+  }
+  $result = db_query($query, $title);
+// FIXME ***
+  while ($node = db_fetch_object($result)) { // only one, I hope... what if there's more than one?
+    $nid = $node->nid;
+  }
+  return (empty($nid) ? 0 : $nid);
+}
+
+function _freelinking_make_link($thetitle) { // helper function for freelinking_page
+  global $user;
+  $freelink = array('options' => array()); // ensure that 'options' is an array
+  
+  // Returns a link to a node named $thetitle if found, or a link to new content otherwise.
+  $nid = _freelinking_exists($thetitle); 
+  if ($nid) { // the node exists, set the path to go there
+    $freelink['path'] = 'node/' . $nid;
+  }
+  else { // node doesn't exist, set path to create it
+    switch (variable_get('freelinking_notfound', 'no access search')) {
+      case 'create only':
+        $freelink['path'] = 'node/add/' . variable_get('freelinking_nodetype', 'story');
+        $freelink['path'] = str_replace('_', '-', $freelink['path']);
+        $freelink['options'] = array(
+          'query' => 'edit[title]=' . str_replace('&', '%26', $thetitle),
+        );
+        break;
+      case 'no access search':
+        if (node_access('create', variable_get('freelinking_nodetype', 'story'))) {
+          $freelink['path'] = 'node/add/' . variable_get('freelinking_nodetype', 'story');
+          $freelink['path'] = str_replace('_', '-', $freelink['path']);
+          $freelink['options'] = array(
+            'query' => 'edit[title]=' . $thetitle,
+          );
+        }
+        else {
+          $freelink['path'] = 'search/node/' . $thetitle;
+        }
+        break;
+      case 'always search':
+        $freelink['path'] = 'search/node/' . $thetitle;
+        break;
+    } // endswitch notfound options
+    return $freelink;
+  }
+
+  _freelinking_store($thetitle, $freelink['path'], isset($freelink['args']) ? $freelink['args'] : '');
+  return $freelink;
+} // endfunction _freelinking_make_link
+
+// vim: tw=300 nowrap syn=php

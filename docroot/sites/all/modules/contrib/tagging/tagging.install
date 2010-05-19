@@ -1,0 +1,20 @@
+<?PHP
+// $Id: tagging.install,v 1.12.2.2 2010/03/18 08:50:23 eugenmayer Exp $
+/**
+ * @file
+ * Installation/updates for tagging
+ */
+ 
+ /** 
+ * Implementation of hook_install(). 
+ */
+function tagging_install() {
+  db_query("UPDATE {system} SET weight = 10 WHERE name = 'tagging'");
+}
+
+/** 
+ * Implementation of hook_uninstall(). 
+ */
+function tagging_uninstall(){
+  db_query("DELETE from {variable} WHERE name LIKE 'tagging_inject_%'");
+}

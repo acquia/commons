@@ -1,0 +1,45 @@
+// $Id: CHANGELOG.txt,v 1.4 2010/01/15 17:10:31 markuspetrux Exp $
+
+6.x-1.3
+=======
+
+Features:
+- Added CHANGELOG.txt.
+- Use package = User interface for module .info file.
+- Make javaScript compatible with other libraries than jQuery. See:
+  http://drupal.org/update/modules/6/7#javascript_compatibility
+- Use push method to manage externalScripts array.
+
+Bugfixes:
+- #580516 by Cristhian - Behaviors attached twice.
+
+
+6.x-1.2
+=======
+
+Features:
+- #389148 by deadmonk, markus_petrux - Tracking loaded javascripts and support for jquery_update.
+- #361165 by markus_petrux - Add support for Garland with custom colors.
+
+
+6.x-1.1
+=======
+
+Features:
+- #338271 by nedjo - Allow other modules to opt out of settings handling.
+- #348131 by nedjo - User $.each to iterate. Update css tag used. Enable multiple simultaneous script loading tasks.
+- #348338 by nedjo - Added example module for ajax_load.
+
+Bugfixes:
+- #338149 by nedjo - Support arrays as well as objects in AJAX data returns.
+- #338270 by nedjo - Fix error in reading in settings.
+- #338272 by nedjo - Support loading inline scripts.
+- #338272 by nedjo - Ensure external scripts are loaded before evaluating inline scripts.
+- #348131 by nedjo - Initialize loadPending counter. Fix error in inline script handling.
+- #348395 by nedjo - Don't evaluate inline scripts with document.write.
+
+
+6.x-1.0
+=======
+
+- Initial stable release.

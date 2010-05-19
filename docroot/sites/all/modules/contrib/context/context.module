@@ -1,0 +1,680 @@
+<?php
+// $Id: context.module,v 1.6.2.6.2.9 2010/04/21 15:01:22 darthsteven Exp $
+
+require('context.core.inc');
+
+define('CONTEXT_GET', 0);
+define('CONTEXT_SET', 1);
+define('CONTEXT_ISSET', 2);
+define('CONTEXT_CLEAR', 3);
+
+define('CONTEXT_STORAGE_DEFAULT', 0);
+define('CONTEXT_STORAGE_OVERRIDDEN', 1);
+define('CONTEXT_STORAGE_NORMAL', 2);
+
+define('CONTEXT_STATUS_DISABLED', 0);
+define('CONTEXT_STATUS_ENABLED', 1);
+
+/**
+ * Master context function. Avoid calling this directly -- use one of the helper functions below.
+ *
+ * @param $op
+ *   The operation to perform - handled by the context helper functions. Use them.
+ * @param $namespace
+ *   A string to be used as the namespace for the context information.
+ * @param $attribute
+ *   Usually a string to be used as a key to set/retrieve context information. An array can
+ *   also be used when setting context to establish an entire context namespace at once.
+ *   (At some point objects may also be accepted, but currently functionaliy isn't complete.)
+ * @param $value
+ *   A value to set for the provided key. If omitted the value will be set to true.
+ *
+ * @return
+ *   Either the requested value, or false if the operation fails.
+ */
+function context_context($op = CONTEXT_GET, $namespace = NULL, $attribute = NULL, $value = NULL) {
+  static $context;
+  $context = !$context ? array() : $context;
+  switch ($op) {
+    case CONTEXT_GET:
+      // return entire context
+      if (!$namespace) {
+        return $context;
+      }
+      // return entire space if set
+      else if (isset($context[(string) $namespace])) {
+        // return val of key from space
+        if (is_array($context[(string) $namespace]) && isset($context[(string) $namespace][(string) $attribute])) {
+          return $context[(string) $namespace][(string) $attribute];
+        }
+        elseif (!$attribute) {
+          return $context[(string) $namespace];
+        }
+      }
+      break;
+    case CONTEXT_SET:
+      // bail if invalid space is specified or context is already set
+      if (is_string($namespace) || is_int($namespace)) {
+        // initialize namespace if no key is specified
+        if (!$attribute) {
+          $context[(string) $namespace] = array();
+          return TRUE;
+        }
+        // set to true if key is a usable identifier. otherwise, allow a key or object to be inserted
+        if (!$value) {
+          if (is_string($attribute) || is_int($attribute)) {
+            $context[(string) $namespace][(string) $attribute] = TRUE;
+            return TRUE;
+          }
+          elseif (is_array($attribute) || is_object($attribute)) {
+            $context[(string) $namespace] = $attribute;
+            return TRUE;
+          }
+        }
+        // set value if key is valid
+        if ((is_string($attribute) || is_int($attribute)) && $value) {
+          $context[$namespace][$attribute] = $value;
+          return TRUE;
+        }
+      }
+      break;
+    case CONTEXT_ISSET:
+      // return entire context
+      if (!$namespace) return FALSE;
+      if (!$attribute) {
+        // return entire space if set
+        return isset($context[$namespace]);
+      }
+      // return val of key from space
+      return isset($context[$namespace][$attribute]);
+    case CONTEXT_CLEAR:
+      $context = array();
+      return TRUE;
+  }
+  return FALSE;
+}
+
+/**
+ * Sets a context by namespace + attribute.
+ */
+function context_set($namespace, $attribute = NULL, $value = NULL) {
+  return context_context(CONTEXT_SET, $namespace, $attribute, $value);
+}
+
+/**
+ * Retrieves a context by namespace + (optional) attribute.
+ */
+function context_get($namespace = NULL, $attribute = NULL) {
+  return context_context(CONTEXT_GET, $namespace, $attribute, NULL);
+}
+
+/**
+ * Returns a boolean for whether a context namespace + attribute have been set.
+ */
+function context_isset($namespace = NULL, $attribute = NULL) {
+  return context_context(CONTEXT_ISSET, $namespace, $attribute, NULL);
+}
+
+/**
+ * Deprecated context_exists() function. Retained for backwards
+ * compatibility -- please use context_isset() instead.
+ */
+function context_exists($namespace = NULL, $attribute = NULL) {
+  return context_context(CONTEXT_ISSET, $namespace, $attribute, NULL);
+}
+
+/**
+ * Clears static context array() -- meant only for testing
+ */
+function context_clear() {
+  return context_context(CONTEXT_CLEAR);
+}
+
+/**
+ * Implemented hooks ==================================================
+ */
+
+/**
+ * Implementation of hook_init().
+ */
+function context_init() {
+  // In general it is advisable to avoid using context_set_by_condition() at
+  // this stage of the Drupal page load as it caches the condition map.
+  $current_path = drupal_get_path_alias($_GET['q']);
+  foreach (context_enabled_contexts() as $identifier => $context) {
+    // context integration against paths
+    if (!empty($context->path) && is_array($context->path)) {
+      $paths = implode("\n", $context->path);
+      $path_match = drupal_match_path($current_path, $paths);
+      if ($current_path != $_GET['q']) {
+        $path_match = $path_match || drupal_match_path($_GET['q'], $paths);
+      }
+      if ($path_match) {
+        context_set($context->namespace, $context->attribute, $context->value);
+      }
+    }
+    // context integration for sitewide context
+    if (!empty($context->sitewide)) {
+      context_set($context->namespace, $context->attribute, $context->value);
+    }
+  }
+}
+
+/**
+ * Implementation of hook_flush_caches().
+ */
+function context_flush_caches() {
+  context_invalidate_cache();
+  return array();
+}
+
+/**
+ * L'CRUD FUNCTIONS ===================================================
+ */
+
+/**
+ * Context loader.
+ *
+ * @param $context
+ *   The parameters to use for loading this context. Can be an integer
+ *   cid or partial context object.
+ *
+ * @return
+ *   Returns a fully-loaded context definition.
+ */
+function context_load_context($context, $reset = FALSE) {
+  static $cache = array();
+  // Argument is a cid
+  if (is_numeric($context)) {
+    $cid = $context;
+    if (!isset($cache[$cid])) {
+      $context = db_fetch_object(db_query("SELECT * FROM {context} WHERE cid = %d", $cid));
+    }
+    else {
+      return $cache[$cid];
+    }
+  }
+  // Context object has an associated cid
+  else if (is_object($context) && isset($context->cid)) {
+    $context = db_fetch_object(db_query("SELECT * FROM {context} WHERE cid = %d", $context->cid));
+  }
+  // Context object has no cid -- we'll try to load by ns/attr/val
+  else if (is_object($context) && $context->namespace && $context->attribute && $context->value) {
+    $args = array($context->namespace, $context->attribute, $context->value);
+    $context = db_fetch_object(db_query("SELECT * FROM {context} WHERE namespace = '%s' AND attribute = '%s' AND value = '%s'", $args));
+  }
+
+  // Unserialize and populate associations
+  if (!empty($context->data)) {
+    $context = context_unpack_context($context);
+    $cache[$context->cid] = $context;
+    return $context;
+  }
+
+  return FALSE;
+}
+
+/**
+ * Inserts or updates a context object into the database.
+ * @TODO: should probably return the new cid on success -- make sure
+ * this doesn't break any checks elsewhere.
+ *
+ * @param $context
+ *   The context object to be inserted.
+ *
+ * @return
+ *   Returns true on success, false on failure.
+ */
+function context_save_context($context) {
+  // Insert or update the core context definition
+  if (!isset($context->cid)) {
+    $existing = context_load_context($context, TRUE);
+    if ($existing && $existing->cid) {
+      return FALSE;
+    }
+    else {
+      $packed = context_pack_context($context);
+      drupal_write_record('context', $packed);
+    }
+  }
+  else {
+    // Ensure that when saving a context an existing one isn't overwritten:
+    $context_to_load = drupal_clone($context);
+    unset($context_to_load->cid);
+    $context_to_load = context_load_context($context_to_load, TRUE);
+    if ($context_to_load->cid && $context_to_load->cid != $context->cid) {
+      // We loaded a context, and it wasn't ours, abort!
+      return FALSE;
+    }
+    else {
+      $packed = context_pack_context($context);
+      drupal_write_record('context', $packed, 'cid');
+    }
+
+  }
+
+  // Invalidate context cache
+  cache_clear_all('context', 'cache');
+  return TRUE;
+}
+
+/**
+ * Deletes an existing context.
+ *
+ * @param $context
+ *   The context object to be deleted. The $context->cid property is
+ *   necessary for this operation.
+ *
+ * @return
+ *   Returns true on success, false on failure.
+ */
+function context_delete_context($context) {
+  if ($context = context_load_context($context, TRUE)) {
+    db_query("DELETE FROM {context} WHERE cid = %d", $context->cid);
+
+    // Invalidate context cache
+    cache_clear_all('context', 'cache');
+
+    return TRUE;
+  }
+  return FALSE;
+}
+
+/**
+ * Helper function to pack a context object to be stored in the database.
+ */
+function context_pack_context($context) {
+  $packed = new stdClass();
+  $packed->cid = $context->cid;
+  $packed->namespace = $context->namespace;
+  $packed->attribute = $context->attribute;
+  $packed->value = $context->value;
+
+  $serialized = drupal_clone($context);
+
+  // Clear out non-condition/reaction attributes
+  unset($serialized->cid, $serialized->namespace, $serialized->attribute, $serialized->value, $serialized->type, $serialized->status);
+
+  // Serialize associations as data array
+  $serialized = (array) $serialized;
+  $packed->data = serialize($serialized);
+
+  return $packed;
+}
+
+/**
+ * Helper function to unpack a context object that has been retrieved from the database.
+ * @TODO: Remove this once ->conditions and ->reactions issue has been resolved.
+ */
+function context_unpack_context($context) {
+  if (!empty($context->data)) {
+    $data = unserialize($context->data);
+    foreach ($data as $k => $v) {
+      $context->{$k} = $v;
+    }
+    unset($context->data);
+  }
+  return $context;
+}
+
+/**
+ * API FUNCTIONS ======================================================
+ */
+
+/**
+ * Provides an array of all contexts provided by modules and in the database.
+ *
+ * @param $reset
+ *   Boolean to clear the static cached array of contexts.
+ *
+ * @return
+ *   An array of context objects.
+ */
+function context_contexts($reset = FALSE) {
+  static $contexts;
+  if (!$contexts || $reset) {
+    $contexts = array();
+    foreach (module_implements('context_default_contexts') as $module) {
+      $function = $module .'_context_default_contexts';
+      $c = call_user_func($function);
+      if (!empty($c)) {
+        foreach ($c as $context) {
+          $context = (object) $context;
+          $context->type = CONTEXT_STORAGE_DEFAULT;
+          $identifier = "{$context->namespace}-{$context->attribute}-{$context->value}";
+          $contexts[$identifier] = $context;
+        }
+      }
+    }
+    // Allow other modules to alter contexts
+    drupal_alter('context_default_contexts', $contexts);
+
+    // Collect normal & overridden contexts
+    $result = db_query("SELECT * FROM {context} ORDER BY namespace ASC, attribute ASC, value ASC");
+    while ($context = db_fetch_object($result)) {
+      $context = context_unpack_context($context);
+      $key = "{$context->namespace}-{$context->attribute}-{$context->value}";
+      if (isset($contexts[$key])) {
+        $contexts[$key] = $context;
+        $contexts[$key]->type = CONTEXT_STORAGE_OVERRIDDEN;
+      }
+      else {
+        $contexts[$key] = $context;
+        $contexts[$key]->type = CONTEXT_STORAGE_NORMAL;
+      }
+    }
+
+    // Mark the status of each context
+    foreach ($contexts as $key => $context) {
+      $contexts[$key]->status = context_status($context);
+    }
+  }
+  return $contexts;
+}
+
+/**
+ * Wrapper around cache_get() to make it easier for context to pull different
+ * datastores from a single cache row.
+ */
+function context_cache_get($key, $reset = FALSE) {
+  static $cache;
+  if (!isset($cache) || $reset) {
+    $cache = cache_get('context', 'cache');
+    $cache = $cache ? $cache->data : array();
+  }
+  return !empty($cache[$key]) ? $cache[$key] : FALSE;
+}
+
+/**
+ * Wrapper around cache_set() to make it easier for context to write different
+ * datastores to a single cache row.
+ */
+function context_cache_set($key, $value) {
+  $cache = cache_get('context', 'cache');
+  $cache = $cache ? $cache->data : array();
+  $cache[$key] = $value;
+  cache_set('context', $cache);
+}
+
+/**
+ * Retrieves all enabled contexts from the cache.
+ */
+function context_enabled_contexts($namespace = NULL, $reset = FALSE) {
+  static $enabled;
+  static $namespaces;
+  if (!isset($enabled) || $reset) {
+    $enabled = array();
+    $cache = context_cache_get('enabled');
+    if ($cache && !$reset) {
+      $enabled = $cache;
+    }
+    else {
+      $contexts = context_contexts(TRUE);
+
+      foreach ($contexts as $context) {
+        if (context_status($context) == CONTEXT_STATUS_ENABLED) {
+          $identifier = "{$context->namespace}-{$context->attribute}-{$context->value}";
+          $enabled[$identifier] = $context;
+        }
+      }
+
+      // Set the cache
+      context_cache_set('enabled', $enabled);
+    }
+    foreach ($enabled as $identifier => $context) {
+      if (!isset($namespaces[$context->namespace])) {
+        $namespaces[$context->namespace] = array();
+      }
+      $namespaces[$context->namespace][$identifier] = $context;
+    }
+  }
+
+  if (!empty($namespace)) {
+    return !empty($namespaces[$namespace]) ? $namespaces[$namespace] : array();
+  }
+  return $enabled;
+}
+
+/**
+ * Loads any active contexts with associated reactions. This should be run
+ * at a late stage of the page load to ensure that relevant contexts have been set.
+ */
+function context_active_contexts($reset = FALSE) {
+  static $contexts;
+  if (!isset($contexts) || $reset) {
+    $contexts = array();
+    $cache = context_enabled_contexts();
+    foreach ($cache as $context) {
+      if (context_get($context->namespace, $context->attribute) == $context->value) {
+        $identifier = "{$context->namespace}-{$context->attribute}-{$context->value}";
+        $contexts[$identifier] = $context;
+      }
+    }
+    drupal_alter('context_active_contexts', $contexts);
+  }
+  return $contexts;
+}
+
+/**
+ * Loads an associative array of conditions => context identifiers to allow
+ * contexts to be set by different conditions. Called by context_set_by_condition().
+ */
+function context_condition_map($reset = FALSE) {
+  static $condition_map;
+  if (!isset($condition_map) || $reset) {
+    $cache = context_cache_get('condition_map');
+    if ($cache && !$reset) {
+      $condition_map = $cache;
+    }
+    else {
+      $enabled = context_enabled_contexts();
+      foreach (array_keys(context_conditions()) as $condition) {
+        $condition_map[$condition] = array();
+        foreach ($enabled as $identifier => $context) {
+          if (!empty($context->{$condition})) {
+            if (is_array($context->{$condition})) {
+              foreach ($context->{$condition} as $value) {
+                if (!isset($condition_map[$condition][$value])) {
+                  $condition_map[$condition][$value] = array();
+                }
+                $condition_map[$condition][$value][] = $identifier;
+              }
+            }
+            else if (is_string($context->{$condition})) {
+              $value = $context->{$condition};
+              if (!isset($condition_map[$condition][$value])) {
+                $condition_map[$condition][$value] = array();
+              }
+              $condition_map[$condition][$value][] = $identifier;
+            }
+          }
+        }
+      }
+      context_cache_set('condition_map', $condition_map);
+    }
+  }
+  return $condition_map;
+}
+
+/**
+ * Builds an array of values based on the current active contexts and group
+ * by conditions/reactions.
+ *
+ * @param $type
+ *   The condition or reaction type to pull values for.
+ * @param $reset
+ *   Boolean value for resetting the static cache.
+ *
+ * @return
+ *   Returns a keyed array of reactions and values.
+ */
+function context_active_values($type = NULL, $reset = FALSE) {
+  static $value_map;
+  if (!isset($value_map) || $reset) {
+    $value_map = array();
+
+    $keys = array_keys(context_reactions() + context_conditions());
+    $keys[] = 'block';
+
+    foreach ($keys as $key) {
+      foreach (context_active_contexts() as $identifier => $context) {
+        if (!empty($context->{$key})) {
+          if (!isset($value_map[$key])) {
+            $value_map[$key] = array();
+          }
+          if (is_array($context->{$key})) {
+            $value_map[$key] = array_merge($value_map[$key], $context->{$key});
+          }
+          else {
+            $value_map[$key][] = $context->{$key};
+          }
+        }
+      }
+    }
+  }
+  if (!empty($type)) {
+    return !empty($value_map[$type]) ? $value_map[$type] : array();
+  }
+  return $value_map;
+}
+
+/**
+ * Returns status for whether a given context definition is enabled.
+ */
+function context_status($context) {
+  $status = variable_get('context_status', array());
+  $identifier = "{$context->namespace}-{$context->attribute}-{$context->value}";
+  if (isset($status[$identifier]) && !$status[$identifier]) {
+    return CONTEXT_STATUS_DISABLED;
+  }
+  return CONTEXT_STATUS_ENABLED;
+}
+
+/**
+ * Invalidates all context caches().
+ */
+function context_invalidate_cache() {
+  cache_clear_all('context', 'cache');
+}
+
+/**
+ * Invokes hook_context_conditions() to provide an array of conditions that may be associated with a context.
+ */
+function context_conditions($reset = FALSE) {
+  static $conditions;
+  if (!isset($conditions) || $reset) {
+    $cache = context_cache_get('conditions');
+    if ($cache && !$reset) {
+      $conditions = $cache;
+    }
+    else {
+      $conditions = module_invoke_all('context_conditions');
+      context_cache_set('conditions', $conditions);
+    }
+  }
+  return $conditions;
+}
+
+/**
+ * Invokes hook_context_reactions() to provide an array of reactions that may be associated with a context.
+ */
+function context_reactions($reset = FALSE) {
+  static $reactions;
+  if (!isset($reactions) || $reset) {
+    $cache = context_cache_get('reactions');
+    if ($cache && !$reset) {
+      $reactions = $cache;
+    }
+    else {
+      $reactions = module_invoke_all('context_reactions');
+      context_cache_set('reactions', $reactions);
+    }
+  }
+  return $reactions;
+}
+
+/**
+ * Sets a namespace-attribute-value context that has been associated with the provided condition.
+ *
+ * @param $type
+ *   The condition type to be matched.
+ * @param $id
+ *   A value to match against.
+ * @param $force
+ *   Boolean param to force the setting of a context value even if a value for
+ *   the found namespace/attribute is already set. Defaults to FALSE.
+ *
+ * @return
+ *   True if one or more contexts were set. False if no items/contexts matched.
+ */
+function context_set_by_condition($type, $id, $force = FALSE) {
+  $map = context_condition_map();
+  $set = FALSE;
+  if (!empty($map[$type]) && !empty($map[$type][$id])) {
+    $contexts = context_enabled_contexts();
+
+    $identifiers = $map[$type][$id];
+    foreach ($identifiers as $identifier) {
+      $context = !empty($contexts[$identifier]) ? $contexts[$identifier] : FALSE;
+
+      if ($context) {
+        // If this context already has a value, don't alter it.
+        if (!context_isset($context->namespace, $context->attribute) || $force) {
+          context_set($context->namespace, $context->attribute, $context->value);
+          $set = TRUE;
+        }
+      }
+    }
+  }
+  return $set;
+}
+
+/**
+ * Recursive helper function to determine whether an array and its
+ * children are entirely empty.
+ */
+function context_empty($element) {
+  $empty = TRUE;
+  if (is_array($element)) {
+    foreach ($element as $child) {
+      $empty = $empty && context_empty($child);
+    }
+  }
+  else {
+    $empty = $empty && empty($element);
+  }
+  return $empty;
+}
+
+/**
+ * Export a variable.
+ */
+function context_var_export($var, $prefix = '', $multiple = TRUE) {
+  if (is_array($var)) {
+    if (empty($var)) {
+      $output = 'array()';
+    }
+    else {
+      $output = "array(\n";
+      foreach ($var as $key => $value) {
+        $output .= "  '$key' => ". context_var_export($value, $prefix . ($multiple? '' : '  ')) .",\n";
+      }
+      $output .= ')';
+    }
+  }
+  else if (is_bool($var)) {
+    $output = $var ? 'TRUE' : 'FALSE';
+  }
+  else if (is_object($var)) {
+    $output = '(object)' . context_var_export((array)$var, '  ', FALSE);
+  }
+  else {
+    $output = var_export($var, TRUE);
+  }
+
+  if ($prefix) {
+    $output = str_replace("\n", "\n$prefix", $output);
+  }
+
+  return $output;
+}

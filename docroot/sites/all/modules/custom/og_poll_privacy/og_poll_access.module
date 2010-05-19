@@ -1,0 +1,22 @@
+<?php
+// $Id: og_poll_access.module
+
+//Prevent non-group members from voting on group polls
+function og_poll_access_form_poll_view_voting_alter(&$form, &$form_state) {
+  //Determine current group, if any
+  $group = og_get_group_context();
+
+  //Only act if inside a group
+  if ($group) {
+    //Act if current user is not a group member
+    if (!og_is_group_member($group->nid)) {
+      unset($form['vote']);
+      
+      //Let user know why they can't vote
+      $form['denied_message'] = array(
+        '#type' => 'item',
+        '#value' => t('You must be a member of the group') . ' ' . l($group->title, 'node/' . $group->nid) . ' ' . t('to vote on this poll.'),
+      );
+    }
+  }
+}

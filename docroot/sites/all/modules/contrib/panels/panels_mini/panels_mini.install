@@ -1,0 +1,120 @@
+<?php
+// $Id: panels_mini.install,v 1.4.4.4 2009/07/12 18:10:43 merlinofchaos Exp $
+
+/**
+ * Implementation of hook_schema().
+ */
+function panels_mini_schema() {
+  // This should always point to our 'current' schema. This makes it relatively easy
+  // to keep a record of schema as we make changes to it.
+  return panels_mini_schema_1();
+}
+
+/**
+ * Schema version 1 for Panels in D6.
+ */
+function panels_mini_schema_1() {
+  $schema = array();
+
+  $schema['panels_mini'] = array(
+    'export' => array(
+      'identifier' => 'mini',
+      'export callback' => 'panels_mini_export',
+      'api' => array(
+        'owner' => 'panels_mini',
+        'api' => 'panels_default',
+        'minimum_version' => 1,
+        'current_version' => 1,
+      ),
+    ),
+    'fields' => array(
+      'pid' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'no export' => TRUE,
+      ),
+      'name' => array(
+        'type' => 'varchar',
+        'length' => '255',
+      ),
+      'category' => array(
+        'type' => 'varchar',
+        'length' => '64',
+      ),
+      'did' => array(
+        'type' => 'int',
+        'no export' => TRUE,
+      ),
+      'title' => array(
+        'type' => 'varchar',
+        'length' => '128',
+      ),
+      'requiredcontexts' => array(
+        'type' => 'text',
+        'size' => 'big',
+        'serialize' => TRUE,
+        'object default' => array(),
+      ),
+      'contexts' => array(
+        'type' => 'text',
+        'size' => 'big',
+        'serialize' => TRUE,
+        'object default' => array(),
+      ),
+      'relationships' => array(
+        'type' => 'text',
+        'size' => 'big',
+        'serialize' => TRUE,
+        'object default' => array(),
+      ),
+    ),
+    'primary key' => array('pid'),
+    'unique keys' => array(
+      'name' => array('name'),
+    ),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implementation of hook_install().
+ */
+function panels_mini_install() {
+  drupal_install_schema('panels_mini');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function panels_mini_uninstall() {
+  $result = db_query("SELECT * FROM {panels_mini} ORDER BY title");
+  $panels_exists = db_table_exists('panels_display');
+  while ($panel_mini = db_fetch_object($result)) {
+    // Delete all associated displays.
+    if (!function_exists('panels_delete_display')) {
+      require_once drupal_get_path('module', 'panels') .'/panels.module';
+    }
+    if ($panels_exists) {
+      panels_delete_display($panel_mini->did);
+    }
+
+    // Delete all configured blocks.
+    db_query("DELETE FROM {blocks} WHERE module = 'panels_mini' AND delta = %d", $panel_mini->pid);
+  }
+
+  // Finally, delete all mini panels.
+  drupal_uninstall_schema('panels_mini');
+}
+
+/**
+ * Update all blocks to use 'name' as delta, not 'pid'.
+ */
+function panels_mini_update_6300() {
+  $ret = array();
+  $result = db_query("SELECT name, pid from {panels_mini}");
+  while ($mini = db_fetch_object($result)) {
+    db_query("UPDATE {blocks} SET delta = '%s' WHERE module = 'panels_mini' AND delta = %d", $mini->name, $mini->pid);
+  }
+  return $ret;
+}

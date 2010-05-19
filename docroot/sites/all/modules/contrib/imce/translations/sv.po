@@ -1,0 +1,694 @@
+# $Id: sv.po,v 1.1.2.4 2009/03/20 05:08:55 seals Exp $
+#
+# Generated from files:
+#  imce.module,v 1.23.2.5 2008/07/19 13:21:02 ufku
+#  imce.info,v 1.6 2008/02/27 18:03:46 ufku
+#  admin.inc,v 1.5.2.5 2008/06/10 08:39:09 ufku
+#  page.inc,v 1.10.2.13 2008/07/19 13:27:27 ufku
+#  js.inc,v 1.6.2.1 2008/05/04 15:29:15 ufku
+#  imce-content.tpl.php,v 1.8.2.4 2008/06/23 22:18:27 ufku
+#  imce.js,v 1.15.2.9 2008/07/13 11:34:49 ufku
+#  subdir.inc,v 1.3 2008/02/29 16:57:12 ufku
+#  imce_set_app.js,v 1.3.2.3 2008/07/13 11:23:51 ufku
+#  imce_set_inline.js,v 1.3.2.2 2008/06/17 16:24:01 ufku
+#  imce-page.tpl.php,v 1.8.2.2 2008/04/21 18:36:22 ufku
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: IMCE 6.x\n"
+"POT-Creation-Date: 2009-03-20 05:57+0100\n"
+"PO-Revision-Date: 2009-03-20 05:59+0100\n"
+"Last-Translator: Magnus Gunnarsson <seals@passagen.se>\n"
+"Language-Team: drupalsverige.se\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Poedit-Language: Swedish\n"
+"X-Poedit-Country: SWEDEN\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: imce.module:131
+msgid "Insert !image or !link."
+msgstr "Sätt in !image eller !link."
+
+#: imce.module:131
+msgid "image"
+msgstr "bild"
+
+#: imce.module:131
+msgid "link"
+msgstr "länk"
+
+#: imce.module:11;45
+msgid "File browser"
+msgstr "Filhanterare"
+
+#: imce.module:18
+#: imce.info:0
+msgid "IMCE"
+msgstr "IMCE"
+
+#: imce.module:19
+msgid "Control how your image/file browser works."
+msgstr "Kontrollerar hur din bild/filhanterare fungerar."
+
+#: imce.module:25
+msgid "Settings"
+msgstr "Inställningar"
+
+#: imce.module:29
+msgid "Directory creation tool"
+msgstr "Verktyg för att skapa kataloger"
+
+#: imce.module:38
+#: inc/admin.inc:24
+msgid "Add new profile"
+msgstr "Lägg till ny profil"
+
+#: imce.module:0
+#: inc/page.inc:252
+msgid "imce"
+msgstr "imce"
+
+#: imce.info:0
+msgid "An image/file uploader and browser supporting personal directories and user quota."
+msgstr "En bild/filuppladdare och en filhanterare som stöder personliga kataloger och användarkvoter."
+
+#: inc/admin.inc:14;186
+msgid "Profile name"
+msgstr "Namn på profilen"
+
+#: inc/admin.inc:14
+msgid "Operations"
+msgstr "Funktioner"
+
+#: inc/admin.inc:19
+msgid "Edit"
+msgstr "Redigera"
+
+#: inc/admin.inc:20;316;470
+#: inc/js.inc:42
+#: inc/page.inc:153;192
+msgid "Delete"
+msgstr "Radera"
+
+#: inc/admin.inc:26
+msgid "Configuration profiles"
+msgstr "Inställningar för profiler"
+
+#: inc/admin.inc:50
+msgid "Common settings"
+msgstr "Gemensamma inställningar"
+
+#: inc/admin.inc:56
+msgid "Enable inline image/file insertion into plain textareas"
+msgstr "Aktivera insättning av bilder/filer i rena textfält"
+
+#: inc/admin.inc:59
+msgid "If you don't use any WYSIWYG editor, this feature will allow you to add your images or files as <strong>html code into any plain textarea</strong>. Enter <strong>comma separated textarea IDs</strong> under which you want to enable a link to IMCE. Hint: ID of Body fields in most node types is edit-body."
+msgstr "Om du inte använder en redigerare av typen WYSIWYG kommer denna funktion att låta dig lägga till bilder eller filer som <strong>HTML-kod i vilket rent textfält som helst</strong>. Ange <strong>kommaseparerade ID:n för textfält</strong> där du vill aktivera en länk till IMCE. Fingervisning: ID för fältens body är i de flesta typer av noder \"edit-body\"."
+
+#: inc/admin.inc:63
+msgid "Absolute URLs"
+msgstr "Absoluta sökvägar"
+
+#: inc/admin.inc:65
+msgid "Check if you want IMCE to return absolute file URLs."
+msgstr "Kryssa i om du vill att IMCE skall återge filernas absoluta sökvägar."
+
+#: inc/admin.inc:69
+msgid "Default behaviour for existing files during file uploads"
+msgstr "Förvalt beteende för existerande filer under tiden som uppladning av filer sker"
+
+#: inc/admin.inc:72
+msgid "Keep the existing file renaming the new one"
+msgstr "Behåll den existerande filen och byt namn på den nya"
+
+#: inc/admin.inc:73
+msgid "Keep the existing file rejecting the new one"
+msgstr "Behåll den existerande filen och tillåt inte den nya."
+
+#: inc/admin.inc:74
+msgid "Replace the existing file with the new one"
+msgstr "Ersätt den existerande filen med den nya."
+
+#: inc/admin.inc:79
+msgid "Default method for creating thumbnails"
+msgstr "Standarmetod för att skapa miniatyrbilder"
+
+#: inc/admin.inc:82
+msgid "Scale the image with respect to the thumbnail dimensions."
+msgstr "Skala om bild med hänsyn tagen till miniatyrbildens mått."
+
+#: inc/admin.inc:83
+msgid "First scale then crop the image to fit the thumbnail dimensions."
+msgstr "Skala först om och sen beskär bilden för att passa miniatyrbildens mått."
+
+#: inc/admin.inc:87;257
+msgid "Save configuration"
+msgstr "Spara inställningar"
+
+#: inc/admin.inc:98
+msgid "User role"
+msgstr "Roll"
+
+#: inc/admin.inc:98
+msgid "Assigned profile"
+msgstr "Tilldelade profiler"
+
+#: inc/admin.inc:100
+msgid "user #1"
+msgstr "Användare #1"
+
+#: inc/admin.inc:104
+msgid "Weight"
+msgstr "Vikt"
+
+#: inc/admin.inc:106
+msgid "n/a"
+msgstr "inte tillgänglig"
+
+#: inc/admin.inc:107
+msgid "For users who have <strong>multiple roles</strong>, <strong>weight</strong> property will determine the assigned profile. Lighter roles that are placed upper will take the precedence. So, an administrator role should be placed over other roles by having a smaller weight, ie. -10."
+msgstr "För användare som har <strong>flera roller</strong> kommer egenskapen <strong>vikt</strong> att avgöra vilken profil som tilldelas. Lättare roller som är placerade överst kommer att ha företräde. Så en administratörsroll skall placeras över andra roller genom att ha en liten vikt, till exempel -10."
+
+#: inc/admin.inc:118
+msgid "Role-profile assignments"
+msgstr "Tilldelning av profiler till roller"
+
+#: inc/admin.inc:120
+msgid "Assign profiles to user roles."
+msgstr "Tilldela profilerna till rollerna."
+
+#: inc/admin.inc:139
+msgid "Changes have been saved."
+msgstr "Ändringar har sparats."
+
+#: inc/admin.inc:175
+msgid "Settings were imported from the profile %name"
+msgstr "Inställningarna importerades från profilen %name"
+
+#: inc/admin.inc:188
+msgid "Give a name to this profile."
+msgstr "Ange ett namn på denna profil."
+
+#: inc/admin.inc:197
+#: tpl/imce-content.tpl.php:44
+msgid "Maximum file size per upload"
+msgstr "Maximal filstorlek per uppladdning"
+
+#: inc/admin.inc:199;206
+msgid "Set to 0 to use the maximum value avaliable."
+msgstr "Ange 0 för att använda maximala värdet som är tillgängligt."
+
+#: inc/admin.inc:199
+msgid "Your PHP settings limit the maximum file size per upload to %size."
+msgstr "Dina inställningar i PHP begränsar den maximala filstorleken per uppladdning till %size."
+
+#: inc/admin.inc:200;207;214
+msgid "MB"
+msgstr "MB"
+
+#: inc/admin.inc:204
+msgid "Directory quota"
+msgstr "Kvot för katalogen"
+
+#: inc/admin.inc:206
+msgid "Define the upload quota per directory. Total user quota is proportional to the number of directories that the user has upload access to."
+msgstr "Ange uppladdningskvoten för varje katalog. Total användarkvot är proportionell mot antalet kataloger som användaren har uppladdningsrättigheter till."
+
+#: inc/admin.inc:211
+msgid "Total user quota"
+msgstr "Total användarkvot"
+
+#: inc/admin.inc:213
+msgid "You can force total user quota to be a value independent of directory quota. <strong>This quota is calculated using the files table in the database, so that it will not include the files uploaded via FTP or by previous versions of IMCE(4.7.x and 5.x)</strong>. You can either use both quotations together or safely ignore this by setting the value to 0."
+msgstr "Du kan tvinga totala användarkvoten att vara ett värde som är oberoende av katalogskvoten. <strong>Denna kvot räknas ut genom att använda filtabellen i databasen, så att det inte inkluderar filer uppladdade via FTP eller av föregående versioner av IMCE (4.7.x och 5.x)</strong>. Du kan antingen använda båda kvoterna tillsammans eller utan problem ignorera detta genom att ange värdet till 0."
+
+#: inc/admin.inc:218
+#: tpl/imce-content.tpl.php:45
+msgid "Permitted file extensions"
+msgstr "Tillåtna filändelser"
+
+#: inc/admin.inc:221
+msgid "Extensions that users in this role can upload. Separate extensions with a space and do not include the leading dot."
+msgstr "Filändelser som användaren med denna roll kan ladda upp. Separera ändelserna med ett mellanslag och inkludera inte den inledande punkten."
+
+#: inc/admin.inc:221
+msgid "Set to * to remove the restriction."
+msgstr "Ange * för att ta bort restriktionerna."
+
+#: inc/admin.inc:225
+#: tpl/imce-content.tpl.php:46
+msgid "Maximum image resolution"
+msgstr "Maximal bildupplösning"
+
+#: inc/admin.inc:227
+msgid "The maximum allowed image size (e.g. 640x480). Set to 0 for no restriction. If an <a href=\"!image-toolkit-link\">image toolkit</a> is installed, files exceeding this value will be scaled down to fit."
+msgstr "Den maximalt tillåtna bildstorleken (till exempel 640x480). Ange 0 för att inte ha någon begränsning. Om ett <a href=\"!image-toolkit-link\">bildverktyg</a> är installerat kommer filer som överstiger detta värde att minskas ner så att de ryms inom gränsen."
+
+#: inc/admin.inc:228
+msgid "WIDTHxHEIGHT"
+msgstr "BREDDxHÖJD"
+
+#: inc/admin.inc:232
+#: tpl/imce-content.tpl.php:47
+msgid "Maximum number of files per operation"
+msgstr "Maximalt antal filer per hantering"
+
+#: inc/admin.inc:234
+msgid "You can allow users to select multiple files for operations such as delete, resize, etc. Entire batch file operation is executed in a single drupal load, which may be good. However there will be an increase in script execution time, cpu load and memory consumption possibly exceeding the limits of your server, which is really bad. For unlimited number of file handling, set this to 0."
+msgstr "Du kan tillåta användare att hantera flera filer samtidigt, såsom vid radering, förminskning och så vidare. Hela satsvisa bearbetningen exekveras i en enstaka laddning genom Drupal, vilket kan vara bra. Däremot kommer scriptet att ta längre tid att exekveras. CPU-belastning och minneskonsumtion kan möjligtvis överskrida serverns begränsningar, vilket är riktigt dåligt. Ange detta till 0 för att kunna hantera oändligt antal filer."
+
+#: inc/admin.inc:269
+msgid "The changes have been saved."
+msgstr "Ändringarna har sparats."
+
+#: inc/admin.inc:269
+msgid "Profile has been added."
+msgstr "Profilen har lagts till."
+
+#: inc/admin.inc:296
+msgid "Including subdirectories"
+msgstr "Inkludera underkataloger"
+
+#: inc/admin.inc:301
+msgid "Browse"
+msgstr "Bläddra"
+
+#: inc/admin.inc:306
+#: inc/js.inc:21
+#: inc/page.inc:113
+#: js/imce.js:0
+msgid "Upload"
+msgstr "Ladda upp"
+
+#: inc/admin.inc:311;417
+#: inc/page.inc:145;175
+msgid "Thumbnails"
+msgstr "Miniatyrbilder"
+
+#: inc/admin.inc:321
+#: inc/js.inc:52
+#: inc/page.inc:161;217
+msgid "Resize"
+msgstr "Förminska"
+
+#: inc/admin.inc:350
+#: inc/subdir.inc:13
+msgid "Directory path"
+msgstr "Sökväg till katalog"
+
+#: inc/admin.inc:352
+msgid "Directories"
+msgstr "Kataloger"
+
+#: inc/admin.inc:354
+msgid ""
+"Define directories that users of this profile can access.\n"
+"<ul>\n"
+"\t<li>Use alphanumeric characters as directory paths.</li>\n"
+"\t<li>To specify file system root, just enter <strong>.</strong>(dot) character.</li>\n"
+"\t<li>Use <strong>%uid</strong> as a placeholder for user ID. Ex: <em>users/user%uid</em> creates directories such as <em>users/user1</em>, <em>users/user42</em>, etc.</li>\n"
+"  <li>To remove a directory from the list, leave the directory path blank.</li>\n"
+"  <li>If you want more flexibility in directory paths you can execute php to return a directory path.<br />\n"
+"  For php execution your directory path must start with <strong>php:</strong> and the rest must be a valid php code that is expected to return the actual directory path. <br />Ex: <strong>php: return 'users/'.$user->name;</strong> defines <strong>users/USER-NAME</strong> as the directory path.<br />\n"
+"  A multi-level directory example <strong>php: return date('Y', $user->created).'/'.date('m', $user->created).'/'.$user->uid;</strong> defines <strong>MEMBERSHIP-YEAR/MONTH/USER-ID</strong> as the directory path, resulting in self-categorized user directories based on membership date.<br />\n"
+"  Note that you should use the $user variable instead of $GLOBALS['user'] since they are not always the same object.</li>\n"
+"</ul>\n"
+"<p>Note that thumbnails permission does not affect thumbnail creation on upload. See thumbnails decription below.</p>\n"
+"<p>If you need more fields, just fill all and save, and you will get two more on the next page.</p>"
+msgstr ""
+"Definiera kataloger som användare kan komma åt genom denna profil.\n"
+"<ul>\n"
+"\t<li>Använd alfanumeriska tecken som sökväg för katalogerna.</li>\n"
+"\t<li>För att ange systemets rot, ange helt enkelt <strong>.</strong> (punkt).</li>\n"
+"\t<li>Använd <strong>%uid</strong> som hållare för användarens ID. Till exempel: <em>users/user%uid</em> skapar kataloger såsom <em>users/users1</em>, <em>users/user42</em>, etcetera.</li>\n"
+"  <li>För att ta bort en katalog från listan, lämna sökvägen till katalogen tom.</li>\n"
+"  <li>Om du vill ha lite mer flexibilitet i sökvägarna till katalogerna kan du använda dig av PHP för att återge en sökväg.<br />\n"
+"  För att kunna köra PHP måste din katalogs sökväg börja med <strong>php:</strong> och resterande måste vara en giltig PHP-kod som förväntas återge den aktuella sökvägen till katalogen.<br /> Till exempel: <strong>php: return 'users/'.$user->name;</strong> ger <strong>users/USER-NAME</strong> som sökväg.<br />\n"
+" Ett exempel på en katalog med flera nivåer <strong>php: return date('Y', $user->created).'/'.date('m', $user->created).'/'.$user->uid;</strong> ger <strong>MEMBERSHIP-YEAR/MONTH/USER-ID</strong> som sökväg till katalogen, vilket resulterar i självkategoriserade kataloger baserade på \"medlem sedan datum\".<br />\n"
+"  Observera att du skall använda variabeln $user istället för $GLOBALS['user'] eftersom de inte alltid är samma objekt.</li>\n"
+"</ul>\n"
+"<p>Observera att rättigheterna för miniatyrbilder inte påverkar skapandet av miniatyrbilder vid uppladdning. Se notering om detta nedan.</p>"
+
+#: inc/admin.inc:405
+msgid "Name"
+msgstr "Namn"
+
+#: inc/admin.inc:405
+msgid "Dimensions"
+msgstr "Mått"
+
+#: inc/admin.inc:405
+msgid "Prefix"
+msgstr "Prefix"
+
+#: inc/admin.inc:405
+msgid "Suffix"
+msgstr "Suffix"
+
+#: inc/admin.inc:419
+msgid ""
+"You may create a list of thumbnail options that users can choose from.\n"
+"<ul>\n"
+"  <li>Use alphanumeric characters as thumbnail names.</li>\n"
+"  <li>Specify dimensions as <strong>WidthxHeight</strong>.</li>\n"
+"  <li>Prefix and suffix are strings that are added to original file name to create the thumbnail name.</li>\n"
+"  <li>An example thumbnail: Name = <strong>Small</strong>, Dimensions = <strong>80x80</strong>, Prefix = <strong>small_</strong></li>\n"
+"</ul>\n"
+"<p>Note that users will always be able to create thumbnails on file upload no matter what the thumbnail permission is. To disable thumbnail creation on file upload you should not define any thumbnails here.</p>\n"
+"<p>If you need more fields, just fill all and save, and you will get two more on the next page.</p>"
+msgstr ""
+"Du kan skapa en lista av alternativ för miniatyrbilder som användarna kan välja från.\n"
+"<ul>\n"
+"  <li>Använd alfanumeriska tecken som namn för miniatyrbilderna.</li>\n"
+"  <li>Ange måtten som <strong>BreddxHöjd</strong>.</li>\n"
+"  <li>Prefix och suffix är strängar som läggs till det ursprungliga filnamet då namnen för miniatyrbilderna skapas.</li>\n"
+"  <li>Ett exempel på miniatyrbildsnamn: Namn = <strong>Liten</strong>, Mått = <strong>80x80</strong>, Prefix = <strong>liten_</strong></li>\n"
+"</ul>\n"
+"<p>Observera att användare kommer alltid att kunna skapa miniatyrbilder vid filuppladdning oavsett vad rättigheterna för miniatyrbilderna är. För att avaktivera skapandet av miniatyrbilder vid filuppladdning skall du inte definiera några miniatyrbilder här.</p>\n"
+"<p>Om du behöver fler fält är det bara att fylla alla och spara så skapas två nya på nästa sida.</p>"
+
+#: inc/admin.inc:466
+msgid "Are you sure you want to delete the profile %name?"
+msgstr "Är du säker på att du vill radera profilen %name?"
+
+#: inc/admin.inc:471
+msgid "Cancel"
+msgstr "Ångra"
+
+#: inc/admin.inc:482
+msgid "Profile has been deleted."
+msgstr "Profilen har raderats."
+
+#: inc/admin.inc:490
+msgid "none"
+msgstr "inget"
+
+#: inc/admin.inc:511
+msgid "Import settings from other profiles"
+msgstr "Importera inställningar från andra profiler"
+
+#: inc/admin.inc:580
+msgid "Duplicate directory paths are not allowed."
+msgstr "Dubbla sökvägar för kataloger är inte tillåtet."
+
+#: inc/admin.inc:584
+msgid "%dirname is not accepted as a proper directory name."
+msgstr "%dirname accepteras inte som ett giltigt katalognamn."
+
+#: inc/js.inc:32
+#: inc/page.inc:120;180
+msgid "Create thumbnails"
+msgstr "Skapa miniatyrbilder"
+
+#: inc/page.inc:107
+msgid "File"
+msgstr "Fil"
+
+#: inc/page.inc:124
+msgid "Upload file"
+msgstr "Ladda upp fil"
+
+#: inc/page.inc:137
+msgid "Selected files"
+msgstr "Valda filer"
+
+#: inc/page.inc:204
+msgid "Width x Height"
+msgstr "Bredd x Höjd"
+
+#: inc/page.inc:223
+msgid "Create a new image"
+msgstr "Skapa en ny bild"
+
+#: inc/page.inc:237
+#: js/imce.js:0
+msgid "Please select a file."
+msgstr "Var vänlig välj en fil."
+
+#: inc/page.inc:245
+#: js/imce.js:0
+msgid "You are not allowed to operate on more than %num files."
+msgstr "Du har inte tillåtelse att hantera mer än %num filer i taget."
+
+#: inc/page.inc:252
+msgid "directory (%dir)"
+msgstr "katalog (%dir)"
+
+#: inc/page.inc:253
+msgid "An illegal choice has been detected. Please contact the site administrator."
+msgstr "Ett ogiltigt val har upptäckts. Var vänlig kontakta webbplatsadministratören."
+
+#: inc/page.inc:281
+msgid "The file is renamed to %filename."
+msgstr "Filen är omdöpt till %filename."
+
+#: inc/page.inc:294
+msgid "%filename is uploaded."
+msgstr "%filename är uppladdad."
+
+#: inc/page.inc:308
+msgid "Upload failed."
+msgstr "Uppladdning misslyckades."
+
+#: inc/page.inc:332
+msgid "File deletion successful: %files."
+msgstr "Radering av filer lyckades: %files."
+
+#: inc/page.inc:349
+#: js/imce.js:0
+msgid "Please specify dimensions within the allowed range that is from 1x1 to @dimensions."
+msgstr "Var vänlig ange mått inom det tillåtna området som är från 1x1 till @dimensions."
+
+#: inc/page.inc:349
+#: js/imce.js:0
+#: tpl/imce-content.tpl.php:44;46;47
+msgid "unlimited"
+msgstr "oändlig"
+
+#: inc/page.inc:356
+msgid "File resizing successful: %files."
+msgstr "Förminskning av filer lyckades: %files."
+
+#: inc/page.inc:403
+msgid "Thumbnail creation (%thumbnames) successful for %filename."
+msgstr "Skapande av miniatyrbild (%thumbnames) lyckades för %filename."
+
+#: inc/page.inc:436
+#: js/imce.js:0
+msgid "%filename is not an image."
+msgstr "%filename är inte en bild."
+
+#: inc/page.inc:441
+msgid "Scaling up is not allowed."
+msgstr "Uppskalning är inte tillåten."
+
+#: inc/page.inc:456
+msgid "%filename(%dimensions) already exists."
+msgstr "%filename(%dimensions) finns redan."
+
+#: inc/page.inc:473
+msgid "%filename cannot be resized to %dimensions"
+msgstr "%filename kan inte förminskas till %dimensions"
+
+#: inc/page.inc:486
+msgid "The selected file %file could not be copied."
+msgstr "Den valda filen %file kunde inte kopieras."
+
+#: inc/page.inc:566
+msgid "File browser is set to reject the upload of existing files."
+msgstr "Filhanteraren är satt till att vägra uppladdning av nuvarande filer."
+
+#: inc/page.inc:580
+#: js/imce.js:0
+msgid "Only files with the following extensions are allowed: %files-allowed."
+msgstr "Endast filer med följande filändelser tillåts: %files-allowed."
+
+#: inc/page.inc:594
+msgid "The file is %filesize exceeding the maximum file size of %maxsize."
+msgstr "Filen är %filesize och överstiger den maximala filstorleken %maxsize."
+
+#: inc/page.inc:606
+msgid "%filename is %filesize which would exceed your %quota_type. You are currently using %size of %quota."
+msgstr "%filename är %filesize vilket skulle överskrida din %quota_type. Du använder för närvarande %size av %quota."
+
+#: inc/page.inc:677
+msgid "Unable to get a working directory for the file browser!"
+msgstr "Kunde inte hitta en fungerande katalog för filhanteraren!"
+
+#: inc/page.inc:683
+msgid "There is no valid directory specified for the file browser!"
+msgstr "Det finns ingen giltig katalog specificerad för filhanteraren!"
+
+#: inc/page.inc:686
+msgid "You don't have access to any configuration profile to use the file browser!"
+msgstr "Du har inte tillgång till någon inställningsprofil för att använda filhanteraren!"
+
+#: inc/page.inc:968
+msgid "Directory root"
+msgstr "Katalogrot"
+
+#: inc/page.inc:252
+msgid "Illegal choice %choice in !name element."
+msgstr "Ogiltigt val (%choice) i elementet !name."
+
+#: inc/subdir.inc:10
+msgid "<p>Here you can create subdirectories for your users. Multiple directory creation is possible at a time with the <strong>*</strong> character. For example, specifying <strong>user*/foo</strong> will create <strong>foo</strong> named directories under each directory starting with <strong>user</strong>. */foo*/bar will create bar named directories under directories starting with foo in each directory of file system path.</p>"
+msgstr "<p>Här kan du skapa underkataloger för dina användare. Flera kataloger kan skapas samtidigt genom jokertecknet <strong>*</strong>. Till exempel, genom att specificera <strong>user*/foo</strong> skapas den namngivna katalogen <strong>foo</strong> under varje katalog som börjar med <strong>user</strong>. <strong>*/foo*/bar</strong> skapar en katalog som heter <strong>bar</strong> under varje katalog som börjar med <strong>foo</strong> i filsystemets sökväg.</p>"
+
+#: inc/subdir.inc:19
+msgid "Create"
+msgstr "Skapa"
+
+#: inc/subdir.inc:46
+msgid "Specified path must be under file sytem path."
+msgstr "Specificerad sökväg måste återfinnas under filsystemets sökväg."
+
+#: inc/subdir.inc:64
+msgid "No matching subdirectories found."
+msgstr "Inga matchande underkataloger funna."
+
+#: js/imce.js:0
+msgid "Directory %dir is loaded."
+msgstr "Katalogen %dir är laddad."
+
+#: js/imce.js:0
+msgid "Directory %dir is empty."
+msgstr "Katalogen %dir är tom."
+
+#: js/imce.js:0
+msgid "File browsing is disabled in directory %dir."
+msgstr "Filhantering är avaktiverad i katalogen %dir."
+
+#: js/imce.js:0
+msgid "You can't perform this operation."
+msgstr "Du kan inte genomföra denna handling."
+
+#: js/imce.js:0
+msgid "Do you want to refresh the current directory?"
+msgstr "Vill du uppdatera visningen av nuvarande katalog?"
+
+#: js/imce.js:0
+msgid "Uploading %filename..."
+msgstr "Laddar upp %filename..."
+
+#: js/imce.js:0
+msgid "Delete selected files?"
+msgstr "Avmarkera valda filer?"
+
+#: js/imce.js:0
+msgid "Please select a thumbnail."
+msgstr "Var vänlig välj en miniatyrbild."
+
+#: js/imce.js:0
+msgid "Please select a single file."
+msgstr "Var vänlig välj en fil."
+
+#: js/imce.js:0
+msgid "You must select at least %num files."
+msgstr "Du måste välja åtminstone %num filer."
+
+#: js/imce_set_app.js:0
+#: js/imce_set_inline.js:0
+msgid "Send to @app"
+msgstr "Skicka till @app"
+
+#: js/imce_set_inline.js:0
+msgid "textarea"
+msgstr "textområde"
+
+#: tpl/imce-content.tpl.php:24
+msgid "You should use a javascript-enabled browser in order to experince a much more user-friendly interface."
+msgstr "Du måste använda en webbläsare som stöder JavaScript för att kunna använda ett mycket mer användarvänligt gränssnitt."
+
+#: tpl/imce-content.tpl.php:29
+msgid "Help"
+msgstr "Hjälp"
+
+#: tpl/imce-content.tpl.php:31
+msgid "Tips"
+msgstr "Tips"
+
+#: tpl/imce-content.tpl.php:33
+msgid "Select a file by clicking the corresponding row in the file list."
+msgstr "Välj en fil genom att klicka på tillhörande rad i fillistan."
+
+#: tpl/imce-content.tpl.php:34
+msgid "Ctrl+click to add files to the selection or to remove files from the selection."
+msgstr "CTRL+klicka för att lägga till eller ta bort filer från urvalet."
+
+#: tpl/imce-content.tpl.php:35
+msgid "Shift+click to create a range selection. Click to start the range and shift+click to end it."
+msgstr "Skift+klicka för att skapa ett urval. Klicka på första alternativet och Skift+klicka på sista alternativet för att göra ett urval."
+
+#: tpl/imce-content.tpl.php:36
+msgid "Sort the files by clicking a column header of the file list."
+msgstr "Sortera filerna genom att klicka på rubriken för en kolumn av fillistan."
+
+#: tpl/imce-content.tpl.php:37
+msgid "Resize the work-spaces by dragging the horizontal or vertical resize-bars."
+msgstr "Gör om storleken på arbetsytan genom att dra i den horisontella eller vertikala kanten."
+
+#: tpl/imce-content.tpl.php:38
+msgid "Keyboard shortcuts for file list: up, down, left, home, end, ctrl+A."
+msgstr "Snabbtangenter för filvisning: upp, ned, vänster, hem, nederst, CTRL+A."
+
+#: tpl/imce-content.tpl.php:39
+msgid "Keyboard shortcuts for selected files: enter/insert, delete, R(esize), T(humbnails), U(pload)."
+msgstr "Snabbtangenter för valda filer: enter/insert, radera, R(radera), T(miniatyrbilder), U(ladda upp)."
+
+#: tpl/imce-content.tpl.php:40
+msgid "Keyboard shortcuts for directory list: up, down, left, right, home, end."
+msgstr "Snabbtangenter för katalogvisning: upp, ned, vänster, höger, hem, nederst."
+
+#: tpl/imce-content.tpl.php:42
+msgid "Limitations"
+msgstr "Begränsningar"
+
+#: tpl/imce-content.tpl.php:45
+msgid "all"
+msgstr "alla"
+
+#: tpl/imce-content.tpl.php:62
+msgid "Navigation"
+msgstr "Navigering"
+
+#: tpl/imce-content.tpl.php:72
+msgid "File name"
+msgstr "Filnamn"
+
+#: tpl/imce-content.tpl.php:73
+msgid "Size"
+msgstr "Storlek"
+
+#: tpl/imce-content.tpl.php:74
+msgid "Width"
+msgstr "Bredd"
+
+#: tpl/imce-content.tpl.php:75
+msgid "Height"
+msgstr "Höjd"
+
+#: tpl/imce-content.tpl.php:76
+msgid "Date"
+msgstr "Datum"
+
+#: tpl/imce-content.tpl.php:84
+msgid "!num files using !dirsize of !quota"
+msgstr "!num filer som använder !dirsize av !quota"
+
+#: tpl/imce-content.tpl.php:87
+msgid "unlimited quota"
+msgstr "oändlig kvot"
+
+#: tpl/imce-content.tpl.php:105
+msgid "Clear log"
+msgstr "Rensa logg"
+
+#: tpl/imce-page.tpl.php:7
+msgid "File Browser"
+msgstr "Filhanterare"
+

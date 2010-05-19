@@ -1,0 +1,15 @@
+<?php
+function tagging_opencalais_suggest_tagging_suggestions($vid, $node) {
+  $suggestions = array();
+  $result = calais_api_analyze_xml($node->title,$node->body,$node->created);
+  foreach($result as $categorie) {
+    if($categorie->type == 'URL') {
+      continue;
+    }
+
+    foreach($categorie->terms as $term) {
+        $suggestions[] = array('#name' => $term->name, '#weight' => $term->relevance);
+    }
+  }
+  return $suggestions;
+}

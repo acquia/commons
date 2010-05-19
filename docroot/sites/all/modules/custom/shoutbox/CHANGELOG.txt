@@ -1,0 +1,68 @@
+15 JULY 2008:
+-------------
+* Updated to Drupal 6.x
+* Added input filter support
+* Added history/archive support
+* Removed voting
+* Improved moderation support. 
+
+
+07 May 2007:
+--------------
+* Added auto refresh of shouts. 
+* Added support for db prefix.
+
+
+08 April 2007:
+--------------
+* Updating changelog for Drupal 5.x
+* Misc bug fixes and features
+
+31 Jan 2006:
+------------
+* Updated for Drupal 4.7
+* Remove all non-essential features for sake of simplicity.  This 
+  includes the archived shouts listing and display of the shoutbox outside 
+  of an iframe.  If anyone needs these features, please help port them over 
+  from the 4.6 version.
+
+
+12 Oct 2005:
+------------
+* Added translation template (shoutbox.pot)
+
+
+9 Sep 2005:
+-----------
+* Moved the links array (for the edit/delete/promote/demote icons) to the
+  theme_shoutbox_links() function so that a user can override them with a theme.
+
+
+5 July 2005:
+------------
+
+* Added PostgreSQL support
+
+
+7 June 2005:
+------------
+
+* Misc bug fixes and one database change.
+* The 'vote' colunn of the 'shoutbox_moderation' table should not be unsigned like it was:
+  ALTER TABLE `drupal_shoutbox_moderation` CHANGE `vote` `vote` TINYINT(3)  DEFAULT "0"
+
+
+6 June 2005:
+------------
+
+* Auto refresh option when viewing shoutbox in an iframe
+* Archived shouts listing (access permission required)
+* Fixed shout modified/change date display
+* Fixed some shout moderation bugs
+* Code tidy up
+
+
+13 Sep 2004:
+------------
+
+Initial release.

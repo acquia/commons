@@ -1,0 +1,49 @@
+<?php
+// $Id: user_relationship_invites.install,v 1.1.2.1 2009/03/10 18:40:53 jaydub Exp $
+
+/**
+ * Implementation of hook_install().
+ */
+function user_relationship_invites_schema() {
+  $schema['user_relationship_invites'] = array(
+    'fields' => array(
+      'inviter_uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'rtid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'invite_code' => array(
+        'type' => 'varchar',
+        'length' => 64,
+        'not null' => TRUE,
+        'default' => ''
+      ),
+    ),
+    'indexes' => array(
+      'invite_code' => array('invite_code'),
+    ),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implementation of hook_install().
+ */
+function user_relationship_invites_install() {
+  drupal_install_schema('user_relationship_invites');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function user_relationship_invites_uninstall() {
+  drupal_uninstall_schema('user_relationship_invites');
+}
