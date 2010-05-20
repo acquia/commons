@@ -277,10 +277,18 @@ function drupal_commons_config_menu() {
 
 // Configure input filters
 function drupal_commons_config_filter() {
-  // Force filter format IDs
+  // Force filter format and filter IDs
+  $filtered_html_id = db_result(db_query("SELECT format FROM {filter_formats} WHERE name = 'Filtered HTML'"));
+  db_query("UPDATE {filters} SET format = %d WHERE format = %d", 1, $filtered_html_id);
   db_query("UPDATE {filter_formats} SET format = 1 WHERE name = 'Filtered HTML'");
-  db_query("UPDATE {filter_formats} SET format = 2 WHERE name = 'Full HTML'");
-  db_query("UPDATE {filter_formats} SET format = 3 WHERE name = 'PHP code'");
+  
+  $full_html_id = db_result(db_query("SELECT format FROM {filter_formats} WHERE name = 'Full HTML'"));
+  db_query("UPDATE {filters} SET format = %d WHERE format = %d", 1, $full_html_id);
+  db_query("UPDATE {filter_formats} SET format = 1 WHERE name = 'Full HTML'");
+  
+  $php_code_id = db_result(db_query("SELECT format FROM {filter_formats} WHERE name = 'PHP code'"));
+  db_query("UPDATE {filters} SET format = %d WHERE format = %d", 1, $php_code_id);
+  db_query("UPDATE {filter_formats} SET format = 1 WHERE name = 'PHP code'");
   
   // Set allowed HTML tags for Filter HTML format
   variable_set('allowed_html_1', '<a> <img> <em> <p> <strong> <cite> <code> <ul> <ol> <li> <dl> <dt> <dd>');
