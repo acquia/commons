@@ -1,5 +1,5 @@
 <?php
-// $Id: ajax.inc,v 1.14.2.2 2009/12/07 18:57:44 merlinofchaos Exp $
+// $Id: ajax.inc,v 1.14.2.6 2010/04/14 21:04:02 merlinofchaos Exp $
 
 /**
  * @file
@@ -281,9 +281,9 @@ function ctools_ajax_command_changed($selector, $star = '') {
 }
 
 /**
- * Create a changed command for the AJAX responder.
+ * Create a css command for the AJAX responder.
  *
- * This will mark an item as 'changed'.
+ * This will directly add CSS to the page.
  *
  * @param $selector
  *   The CSS selector. This can be any selector jquery uses in $().
@@ -301,6 +301,22 @@ function ctools_ajax_command_css($selector, $argument) {
 /**
  * Create a settings command for the AJAX responder.
  *
+ * This will add CSS files to the output. Files that have already
+ * been processed will not be processed again.
+ *
+ * @param $argument
+ *   An array of CSS files.
+ */
+function ctools_ajax_command_css_files($argument) {
+  return array(
+    'command' => 'css_files',
+    'argument' => $argument,
+  );
+}
+
+/**
+ * Create a settings command for the AJAX responder.
+ *
  * This will extend Drupal.settings with the given array.
  *
  * @param $argument
@@ -309,6 +325,22 @@ function ctools_ajax_command_css($selector, $argument) {
 function ctools_ajax_command_settings($argument) {
   return array(
     'command' => 'settings',
+    'argument' => $argument,
+  );
+}
+
+/**
+ * Create a settings command for the AJAX responder.
+ *
+ * This will add javascript files to the output. Files that have already
+ * been processed will not be processed again.
+ *
+ * @param $argument
+ *   An array of javascript files.
+ */
+function ctools_ajax_command_scripts($argument) {
+  return array(
+    'command' => 'scripts',
     'argument' => $argument,
   );
 }
@@ -415,6 +447,94 @@ function ctools_ajax_command_submit($selector) {
  * to the AJAX requester.
  */
 function ctools_ajax_render($commands = array()) {
+  // Automatically extract any 'settings' added via drupal_add_js() and make
+  // them the first command.
+  $query_string = '?'. substr(variable_get('css_js_query_string', '0'), 0, 1);
+
+  $scripts = drupal_add_js(NULL, NULL);
+  $cached_scripts = array();
+  if (!empty($_POST['page_id'])) {
+    $cache = cache_get($_POST['page_id'], 'cache');
+    if (!empty($cache->data)) {
+      $cached_scripts = $cache->data;
+    }
+  }
+
+  // Get replacements that are going to be made by contrib modules and take
+  // them into account so we don't double-load scripts.
+  $replacements = module_invoke_all('js_replacements');
+
+  foreach ($scripts as $type => $data) {
+    switch ($type) {
+      case 'setting':
+        $settings = $data;
+        break;
+      case 'inline':
+      case 'theme':
+        // Presently we ignore inline javascript.
+        // Theme JS is already added and because of admin themes, this could add
+        // improper JS to the page.
+        break;
+      default:
+        // If JS preprocessing is off, we still need to output the scripts.
+        // Additionally, go through any remaining scripts if JS preprocessing is on and output the non-cached ones.
+        foreach ($data as $path => $info) {
+          if (!isset($cached_scripts['js'][$path])) {
+            // If the script is being replaced, take that replacment into account.
+            $final_path = isset($replacements[$type][$path]) ? $replacements[$type][$path] : $path;
+            $js_files[] = base_path() . $final_path . ($info['cache'] ? $query_string : '?' . time());
+          }
+        }
+    }
+  }
+
+  $css = drupal_add_css();
+  foreach ($css as $media => $types) {
+    // If CSS preprocessing is off, we still need to output the styles.
+    // Additionally, go through any remaining styles if CSS preprocessing is on and output the non-cached ones.
+    foreach ($types as $type => $files) {
+      if ($type == 'module') {
+        // Setup theme overrides for module styles.
+        $theme_styles = array();
+        foreach (array_keys($css[$media]['theme']) as $theme_style) {
+          $theme_styles[] = basename($theme_style);
+        }
+      }
+      // The theme stuff should already be added and because of admin themes,
+      // this could cause different CSS to be added.
+      if ($type != 'theme') {
+        foreach ($types[$type] as $file => $preprocess) {
+          // If the theme supplies its own style using the name of the module style, skip its inclusion.
+          // This includes any RTL styles associated with its main LTR counterpart.
+          if ($type == 'module' && in_array(str_replace('-rtl.css', '.css', basename($file)), $theme_styles)) {
+            // Unset the file to prevent its inclusion when CSS aggregation is enabled.
+            unset($types[$type][$file]);
+            continue;
+          }
+          // Only include the stylesheet if it exists.
+          if (file_exists($file) && !isset($cached_scripts['css'][$file])) {
+            $css_files[] = array(
+              'file' => base_path() . $file . $query_string,
+              'media' => $media,
+            );
+          }
+        }
+      }
+    }
+  }
+
+  if (!empty($settings)) {
+    array_unshift($commands, ctools_ajax_command_settings(call_user_func_array('array_merge_recursive', $settings)));
+  }
+
+  if (!empty($js_files)) {
+    array_unshift($commands, ctools_ajax_command_scripts($js_files));
+  }
+
+  if (!empty($css_files)) {
+    array_unshift($commands, ctools_ajax_command_css_files($css_files));
+  }
+
   if (!empty($_REQUEST['ctools_multipart'])) {
     // We don't use drupal_json here because the header is not true. We're not really
     // returning JSON, strictly-speaking, but rather JSON content wrapped in a <textarea>

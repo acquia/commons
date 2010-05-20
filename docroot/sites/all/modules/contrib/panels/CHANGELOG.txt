@@ -1,3 +1,22 @@
+Panels 6.x-dev
+==============
+
+
+Panels 6.x-3.4 (2010-May-19)
+==============
+Introduced Panels Stylizer.
+Removed superfluous function, panels_sanitize_display().
+#655268: Fix a problem retrieving cached content created by #634746.
+Removed the old and crufty panels_print_layout().
+#745808 by Robbert: use number_format() in flexible width calculations to ensure locale settings cannot bork generated CSS.
+Stopped wasting cycles trying to render a mini panel in a block when we know the mini panel doesn't exist.
+#765978 by joshk: Added watchdoggery and a hook to panels_display_save().
+#746568 by mgriego: Disable block caching for mini panels.
+#798954 by dixon: Pass $form_state to style plugins' validate and submit callbacks.
+#779012 by c960657: implement the callback for a single content_type subtype in panels_mini to improve performance with  large numbers of mini panels.
+#763584 by neclimdul: Add a link to the block configuration page for mini-panels that takes the user to edit that mini- panel.
+Security updates: protect the importer with the 'use PHP for block visibility' permission.
+
 Panels 6.x-3.3 (2010-Feb-01)
 ==============
 
@@ -12,6 +31,7 @@ Panels 6.x-3.3 (2010-Feb-01)
 #683162: Convert all plugins to use new $plugin = array() format. This is less brittle than the specially named hook.
 #543898: Fix notice error when a layout has no regions.
 #647706: Mini panel names can only be 32 characters, but the form failed to restrict the limit.
+Introduce the Panels stylizer module which builds on the CTools stylizer base to create user definable, recolorable styles.
 
 Panels 6.x-3.2 (2009-Oct-21)
 ==============

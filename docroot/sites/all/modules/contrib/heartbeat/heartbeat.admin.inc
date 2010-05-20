@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeat.admin.inc,v 1.1.2.15.2.20.2.46 2010/04/16 14:52:53 stalski Exp $
+// $Id: heartbeat.admin.inc,v 1.1.2.15.2.20.2.47 2010/05/18 20:00:48 stalski Exp $
 
 /**
  * @file
@@ -15,7 +15,7 @@
 function heartbeat_activity_admin() {
   $edit = $_POST;
 
-  if (isset($edit['operation']) && ($edit['operation'] == 'delete') && isset($edit['heartbeat-messages']) && $edit['heartbeat-messages']) {
+  if (isset($edit['operation']) && ($edit['operation'] == 'delete') && isset($edit['heartbeat-activity']) && $edit['heartbeat-activity']) {
     return drupal_get_form('heartbeat_messages_multiple_delete_confirm');
   }
   else {
@@ -45,13 +45,13 @@ function heartbeat_messages_admin_overview() {
   // load the comments that we want to display
   $form['header'] = array('#type' => 'value', '#value' => array(
     theme('table_select_header_cell'),
-    array('data' => t('Subject'), 'field' => 'subject'),
+    array('data' => t('Activity message'), 'field' => 'message'),
     array('data' => t('Author'), 'field' => 'name'),
     array('data' => t('Language'), 'field' => 'language'),
     array('data' => t('Time'), 'field' => 'timestamp', 'sort' => 'desc'),
     array('data' => t('Operations'))
   ));
-  $result = pager_query('SELECT DISTINCT ha.message AS \'subject\', ha.uaid, ha.timestamp, ha.language, u.name AS registered_name, u.uid FROM {heartbeat_activity} ha LEFT JOIN {users} u ON u.uid = ha.uid '. tablesort_sql($form['header']['#value']), 50, 0, NULL);
+  $result = pager_query('SELECT DISTINCT ha.message AS \'message\', ha.uaid, ha.timestamp, ha.language, u.name AS registered_name, u.uid FROM {heartbeat_activity} ha LEFT JOIN {users} u ON u.uid = ha.uid '. tablesort_sql($form['header']['#value']), 50, 0, NULL);
 
   // build a table listing the appropriate comments
   $destination = drupal_get_destination();
@@ -59,14 +59,15 @@ function heartbeat_messages_admin_overview() {
   while ($message = db_fetch_object($result)) {
     $rows[$message->uaid] = '';
     $message->name = $message->uid ? $message->registered_name : $anon;
-    $title = strip_tags($message->subject);
-    $form['subject'][$message->uaid] = array('#value' => l($title, 'heartbeat/message/'. $message->uaid, array('attributes' => array('title' => truncate_utf8($title, 128)), 'fragment' => 'heartbeat-message-'. $message->uaid)));
+    $title = strip_tags($message->message);
+    $form['message'][$message->uaid] = array('#value' => l($title, 'heartbeat/message/'. $message->uaid, array('attributes' => array('title' => truncate_utf8($title, 128)), 'fragment' => 'heartbeat-message-'. $message->uaid)));
     $form['username'][$message->uaid] = array('#value' => theme('username', $message));
     $form['timestamp'][$message->uaid] = array('#value' => format_date($message->timestamp, 'small'));
     $form['language'][$message->uaid] = array('#value' => $message->language);
     $form['operations'][$message->uaid] = array('#value' => l(t('view'), 'heartbeat/message/'. $message->uaid. '', array('query' => $destination)));
+    $form['operations'][$message->uaid]['#value'] .= ' - ' . l(t('delete'), 'heartbeat/delete/'. $message->uaid. '', array('query' => $destination));
   }
-  $form['heartbeat-messages'] = array('#type' => 'checkboxes', '#options' => isset($rows) ? $rows: array());
+  $form['heartbeat-activity'] = array('#type' => 'checkboxes', '#options' => isset($rows) ? $rows: array());
   $form['pager'] = array('#value' => theme('pager', NULL, 50, 0));
   return $form;
 }
@@ -77,8 +78,8 @@ function heartbeat_messages_admin_overview() {
  * We can't execute any 'Update options' if no messages were selected.
  */
 function heartbeat_messages_admin_overview_validate($form, &$form_state) {
-  $form_state['values']['heartbeat-messages'] = array_diff($form_state['values']['heartbeat-messages'], array(0));
-  if (count($form_state['values']['heartbeat-messages']) == 0) {
+  $form_state['values']['heartbeat-activity'] = array_diff($form_state['values']['heartbeat-activity'], array(0));
+  if (count($form_state['values']['heartbeat-activity']) == 0) {
     form_set_error('', t('Please select one or more messages to perform the update on.'));
     drupal_goto('admin/content/heartbeat');
   }
@@ -95,7 +96,7 @@ function heartbeat_messages_admin_overview_submit($form, &$form_state) {
   if ($form_state['values']['operation'] == 'delete') {
     // extract the appropriate database query operation
     $query = "DELETE FROM {heartbeat_activity} WHERE uaid = %d";
-    foreach ($form_state['values']['heartbeat-messages'] as $uaid => $value) {
+    foreach ($form_state['values']['heartbeat-activity'] as $uaid => $value) {
       if ($value) {
 
         $activity = heartbeat_load_message_instance($uaid);
@@ -105,7 +106,7 @@ function heartbeat_messages_admin_overview_submit($form, &$form_state) {
         // Allow modules to respond to the updating of a comment.
         module_invoke_all('heartbeat_activity_delete', $activity);
         // Add an entry to the watchdog log.
-        watchdog('content', 'Heartbeat: updated %subject.', array('%subject' => $activity->message), WATCHDOG_NOTICE, l(t('view'), 'heartbeat/message/'. $activity->uaid, array('fragment' => 'heartbeat-message-'. $activity->uaid)));
+        watchdog('content', 'Heartbeat: updated %message.', array('%message' => $activity->message), WATCHDOG_NOTICE, l(t('view'), 'heartbeat/message/'. $activity->uaid, array('fragment' => 'heartbeat-message-'. $activity->uaid)));
       }
     }
 
@@ -123,11 +124,11 @@ function heartbeat_messages_admin_overview_submit($form, &$form_state) {
  */
 function theme_heartbeat_messages_admin_overview($form) {
   $output = drupal_render($form['options']);
-  if (isset($form['subject']) && is_array($form['subject'])) {
-    foreach (element_children($form['subject']) as $key) {
+  if (isset($form['message']) && is_array($form['message'])) {
+    foreach (element_children($form['message']) as $key) {
       $row = array();
-      $row[] = drupal_render($form['heartbeat-messages'][$key]);
-      $row[] = drupal_render($form['subject'][$key]);
+      $row[] = drupal_render($form['heartbeat-activity'][$key]);
+      $row[] = drupal_render($form['message'][$key]);
       $row[] = drupal_render($form['username'][$key]);
       $row[] = drupal_render($form['language'][$key]);
       $row[] = drupal_render($form['timestamp'][$key]);
@@ -163,12 +164,12 @@ function theme_heartbeat_messages_admin_overview($form) {
 function heartbeat_messages_multiple_delete_confirm(&$form_state) {
   $edit = $form_state['post'];
 
-  $form['heartbeat-messages'] = array('#prefix' => '<ul>', '#suffix' => '</ul>', '#tree' => TRUE);
+  $form['heartbeat-activity'] = array('#prefix' => '<ul>', '#suffix' => '</ul>', '#tree' => TRUE);
   // array_filter() returns only elements with actual values
   $counter = 0;
-  foreach (array_filter($edit['heartbeat-messages']) as $uaid => $value) {
+  foreach (array_filter($edit['heartbeat-activity']) as $uaid => $value) {
     $activity = heartbeat_load_message_instance($uaid);
-    $form['heartbeat-messages'][$uaid] = array('#type' => 'hidden', '#value' => $uaid, '#prefix' => '<li>', '#suffix' => check_plain(strip_tags($activity->message)) .'</li>');
+    $form['heartbeat-activity'][$uaid] = array('#type' => 'hidden', '#value' => $uaid, '#prefix' => '<li>', '#suffix' => check_plain(strip_tags($activity->message)) .'</li>');
     $counter++;
   }
   $form['operation'] = array('#type' => 'hidden', '#value' => 'delete');
@@ -193,8 +194,13 @@ function heartbeat_messages_multiple_delete_confirm(&$form_state) {
 function heartbeat_messages_multiple_delete_confirm_submit($form, &$form_state) {
 
   if ($form_state['values']['confirm']) {
-    foreach ($form_state['values']['heartbeat-messages'] as $uaid => $value) {
+
+    foreach ($form_state['values']['heartbeat-activity'] as $uaid => $value) {
+
       db_query("DELETE FROM {heartbeat_activity} WHERE uaid = %d", $uaid);
+
+      // Delete their attachments as well.
+      module_invoke_all('heartbeat_delete', $uaid);
     }
 
     drupal_set_message(t('The messages have been deleted.'));
@@ -247,7 +253,7 @@ function heartbeat_admin_settings() {
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
   );
-  $allowed_tags = array('h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'span', 'em', 'strong', 'ul', 'li', 'p', 'div', 'img', 'object', 'param', 'embed', 'blockquote', 'script', 'style');
+  $allowed_tags = array('h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'span', 'em', 'strong', 'ul', 'li', 'p', 'div', 'img', 'blockquote');
   $form['hb_fields'] ['heartbeat_allowed_tags'] = array(
     '#title' => t('Filter the messages with for these tags only'),
     '#type' => 'textfield',
@@ -543,8 +549,9 @@ function heartbeat_activity_stream_configure(& $form_state, $access_type) {
       20 => t('Every 20 seconds'),
       30 => t('Every 30 seconds'),
       45 => t('Every 45 seconds'),
-      60 => t('Every minute')
-      // Jabber push will be an option here
+      60 => t('Every minute'),
+      // XMPP/Jabber push instead of pulling the messages
+      //100 => t('Use XMPP to push messages')
     ),
     '#title' => t('Poll every x seconds for newer messages to prepend the stream.'),
     '#default_value' => isset($access_type['poll_messages']) ? $access_type['poll_messages'] : 0,
@@ -1329,6 +1336,7 @@ function heartbeat_activity_ahah($element) {
       'settings' => call_user_func_array('array_merge_recursive', $javascript['setting']),
     ));
   }
+  exit;
 }
 
 /**

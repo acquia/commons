@@ -1,5 +1,5 @@
 <?php
-// $Id: panels_node.module,v 1.5.2.16 2010/01/13 00:16:29 merlinofchaos Exp $
+// $Id: panels_node.module,v 1.5.2.17 2010/05/06 01:02:13 sdboyer Exp $
 
 
 /**
@@ -46,7 +46,6 @@ function panels_node_menu() {
   );
 
   $items['node/%node/panel_layout'] = array(
-    'path' => $base . 'layout',
     'title' => 'Panel layout',
     'page callback' => 'panels_node_edit_layout',
     'weight' => 2,

@@ -1,5 +1,5 @@
 <?php
-// $Id: panels_mini.admin.inc,v 1.6.2.10 2010/01/15 23:18:40 merlinofchaos Exp $
+// $Id: panels_mini.admin.inc,v 1.6.2.11 2010/05/20 01:49:14 sdboyer Exp $
 
 /**
  * @file
@@ -37,6 +37,8 @@ function _panels_mini_menu() {
   $items['admin/build/panel-mini/import'] = array(
     'title' => 'Import',
     'page callback' => 'panels_mini_import_mini',
+    'access callback' => 'ctools_access_multiperm',
+    'access arguments' => array('create mini panels', 'use PHP for block visibility'),
     'type' => MENU_LOCAL_TASK,
   ) + $base;
   $items['admin/build/panel-mini/settings'] = array(

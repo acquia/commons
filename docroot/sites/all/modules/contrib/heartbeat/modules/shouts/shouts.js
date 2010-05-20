@@ -19,7 +19,7 @@ Drupal.heartbeat.Shouts.shout = function(element, callback_url) {
   Drupal.heartbeat.Shouts.button = $(element);
   
   // Throw in the throbber
-  Drupal.heartbeat.wait($('.heartbeat-messages-throbber'));
+  Drupal.heartbeat.wait($('.heartbeat-messages-throbber'), '.shouts-form-wrapper');
   Drupal.heartbeat.Shouts.button.attr("disabled", "disabled");
   
   var field = $(element).parents('form').find('.shout-message:first');

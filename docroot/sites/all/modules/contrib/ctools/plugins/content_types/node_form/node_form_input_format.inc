@@ -1,5 +1,5 @@
 <?php
-// $Id: node_form_input_format.inc,v 1.1.2.1 2010/01/29 20:18:25 merlinofchaos Exp $
+// $Id: node_form_input_format.inc,v 1.1.2.2 2010/04/14 21:02:12 merlinofchaos Exp $
 
 /**
  * Plugins are described by creating a $plugin array which will be used
@@ -22,7 +22,7 @@ function ctools_node_form_input_format_content_type_render($subtype, $conf, $pan
   $block->delta = 'format-options';
 
   if (isset($context->form)) {
-    if (!empty($context->form->form_id) && !empty($context->form['body_filter']['format'])) {
+    if (!empty($context->form['form_id']) && !empty($context->form['body_filter']['format'])) {
       // remove the fieldset
       unset($context->form['body_filter']['format']['#type']);
       $block->content = drupal_render($context->form['body_filter']['format']);

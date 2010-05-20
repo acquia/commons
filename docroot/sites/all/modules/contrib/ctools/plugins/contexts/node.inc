@@ -1,5 +1,5 @@
 <?php
-// $Id: node.inc,v 1.11.2.4 2010/01/29 22:46:05 merlinofchaos Exp $
+// $Id: node.inc,v 1.11.2.5 2010/05/20 01:43:03 sdboyer Exp $
 
 /**
  * @file
@@ -138,7 +138,8 @@ function ctools_context_node_settings_form_validate($form, &$form_values, &$form
     $node = db_fetch_object(db_query(db_rewrite_sql("SELECT n.nid FROM {node} n WHERE LOWER(n.title) = LOWER('%s')"), $nid));
   }
 
-  if (!$node) {
+  // Do not allow unpublished nodes to be selected by unprivileged users
+  if (!$node || (empty($node->status) && !(user_access('administer nodes')))) {
     form_error($form['node'], t('Invalid node selected.'));
   }
   else {

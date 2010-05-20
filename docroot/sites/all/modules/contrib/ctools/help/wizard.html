@@ -1,4 +1,4 @@
-<!-- $Id: wizard.html,v 1.5 2009/09/09 18:28:59 merlinofchaos Exp $ -->
+<!-- $Id: wizard.html,v 1.5.2.1 2010/04/14 20:45:32 merlinofchaos Exp $ -->
 Form wizards, or multi-step forms, are a process by which the user goes through or can use an arbitrary number of different forms to create a single object or perform a single task. Traditionally the multi-step form is difficult in Drupal because there is no easy place to put data in between forms. No longer! The form wizard tool allows a single entry point to easily set up a wizard of multiple forms, provide callbacks  to handle data storage and updates between forms and when forms are completed. This tool pairs well with the <a href="&topic:ctools/object-cache&">object cache</a> tool for storage.
 
 <h3>The form info array</h3>
@@ -253,3 +253,36 @@ function wizardid_step2_form_submit($form, &$form_state) {
 </pre>
 
 The data is stored in the <em>my data</em> object on submitting. If the user goes back to this step the cached <em>my data</em> is used as the default form value. The function <em>my_module_get_cache()</em> is like the cache functions explained above.
+
+<h3>Required fields, cancel and back buttons</h3>
+If you have required fields in your forms, the back and cancel buttons will not work as expected since validation of the form will fail. You can add the following code to the top of your form validation to avoid this problem :
+<pre>
+/**
+ * Validation handler for step2 form
+ */
+function wizardid_step2_form_validate(&$form, &$form_state) {
+  // if the clicked button is anything but the normal flow
+  if ($form_state['clicked_button']['#next'] != $form_state['next']) {
+    drupal_get_messages('error');
+    form_set_error(NULL, '', TRUE);
+    return;
+  }
+  // you form validation goes here
+  // ...
+}
+</pre>
+
+<h3>Wizard for anonymous users</h3>
+If you are creating a wizard which is be used by anonymous users, you might run into some issues with drupal's caching for anonymous users. You can circumvent this by using hook_init and telling drupal to not cache your wizard pages :
+<pre>
+/**
+ * Implementation of hook init
+ */
+function mymodule_init() {
+  // if the path leads to the wizard
+  if (drupal_match_path($_GET['q'], 'path/to/your/wizard/*')) {
+    // set cache to false
+    $GLOBALS['conf']['cache'] = FALSE;   
+  }
+}
+</pre>

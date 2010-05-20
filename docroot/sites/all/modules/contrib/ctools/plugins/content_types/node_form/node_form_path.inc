@@ -1,5 +1,5 @@
 <?php
-// $Id: node_form_path.inc,v 1.1.2.1 2010/01/29 20:18:25 merlinofchaos Exp $
+// $Id: node_form_path.inc,v 1.1.2.2 2010/04/14 21:02:12 merlinofchaos Exp $
 
 if (module_exists('path')) {
   /**
@@ -24,7 +24,7 @@ function ctools_node_form_path_content_type_render($subtype, $conf, $panel_args,
   $block->delta = 'url-path-options';
 
   if (isset($context->form)) {
-    if (!empty($context->form->form_id) && !empty($context->form['path']['#access'])) {
+    if (!empty($context->form['form_id']) && !empty($context->form['path']['#access'])) {
       // remove the fieldset
       unset($context->form['path']['#type']);
       $context->form['path']['path']['#size'] /= 2;

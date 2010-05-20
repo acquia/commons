@@ -1,5 +1,5 @@
 <?php
-// $Id: display-render.inc,v 1.5.2.15 2009/10/28 16:55:34 merlinofchaos Exp $
+// $Id: display-render.inc,v 1.5.2.17 2010/03/16 17:58:33 sdboyer Exp $
 
 /**
  * @file
@@ -22,9 +22,6 @@ function _panels_render_display(&$display) {
     return NULL;
   }
 
-  // TODO: This may not be necessary now. Check this.
-  panels_sanitize_display($display);
-
   $output = '';
 
   // Let modules act just prior to render.
@@ -41,24 +38,6 @@ function _panels_render_display(&$display) {
     $output .= $function($display);
   }
   return $output;
-}
-
-/**
- * For external use: Given a layout ID and a $content array, return the
- * panel display. The content array is filled in based upon the content
- * available in the layout. If it's a two column with a content
- * array defined like array('left' => t('Left side'), 'right' =>
- * t('Right side')), then the $content array should be array('left' =>
- * $output_left, 'right' => $output_right)
- * @render
- */
-function _panels_print_layout($id, $content) {
-  $layout = panels_get_layout($id);
-  if (!$layout) {
-    return;
-  }
-
-  return panels_render_layout($layout, $content);
 }
 
 /**

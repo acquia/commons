@@ -1,4 +1,4 @@
-<!-- $Id: export.html,v 1.1.2.2 2010/01/11 23:58:38 merlinofchaos Exp $ -->
+<!-- $Id: export.html,v 1.1.2.3 2010/04/14 20:30:09 merlinofchaos Exp $ -->
 Exportable objects are objects that can live either in the database or in code, or in both. If they live in both, then the object in code is considered to be "overridden", meaning that the version in code is ignored in favor of the version in the database.
 
 The main benefit to this is that you can move objects that are intended to be structure or feature-related into code, thus removing them entirely from the database. This is a very important part of the deployment path, since in an ideal world, the database is primarily user generated content, whereas site structure and site features should be in code. However, many many features in Drupal rely on objects being in the database and provide UIs to create them.
@@ -74,7 +74,7 @@ function mymodule_schema() {
 <dt>identifier</dt>
 <dd>When exporting the object, the identifier is the variable that the exported object will be placed in. Defaults to $table.</dd>
 
-<dt>bulk export'</dt>
+<dt>bulk export</dt>
 <dd>Declares whether or not the exportable will be available for bulk exporting. (Bulk export UI is currently left to be handled by contrib, though the core hooks are present so this can be done.).</dd>
 
 <dt>export callback</dt>
@@ -94,6 +94,39 @@ In addition, each field can contain the following:
 
 <dt>export callback</dt>
 <dd>A function to override the export behavior. It will receive ($myobject, $field, $value, $indent) as arguments. By default, fields are exported through ctools_var_export().</dd>
+</dl>
+
+<h3>Reserved keys on exportable objects</h3>
+
+Exportable objects have several reserved keys that are used by the CTools export API. Each key can be found at <code>$myobj-&gt;{$key}</code> on an object loaded through <code>ctools_export_load_object()</code>. Implementing modules should not use these keys as they will be overwritten by the CTools export API.
+<dl>
+<dt>api_version</dt>
+<dd>The API version that this object implements.</dd>
+
+<dt>disabled</dt>
+<dd>A boolean for whether the object is disabled.</dd>
+
+<dt>export_module</dt>
+<dd>For objects that live in code, the module which provides the default object.</dd>
+
+<dt>export_type</dt>
+<dd>A bitmask representation of an object current storage. You can use this bitmask in combination with the <code>EXPORT_IN_CODE</code> and <code>EXPORT_IN_DATABASE</code> constants to test for an object's storage in your code.
+</dd>
+
+<dt>in_code_only</dt>
+<dd>A boolean for whether the object lives only in code.</dd>
+
+<dt>table</dt>
+<dd>The schema API table that this object belongs to.</dd>
+
+<dt>type</dt>
+<dd>A string representing the storage type of this object. Can be one of the following:
+<ul>
+<li><em>Normal</em> is an object that lives only in the database.</li>
+<li><em>Overridden</em> is an object that lives in the database and is overriding the exported configuration of a corresponding object in code.</li>
+<li><em>Default</em> is an object that lives only in code.</li>
+</ul>
+</dd>
 </dl>
 
 <h3>The load function</h3>
@@ -262,7 +295,36 @@ function page_manager_handler_import_submit($form, &$form_state) {
 
 <h3>Enabling and Disabling exported objects</h3>
 
-This section still needs to be written.
+Exportable objects can be enabled or disabled. By default, the status of exported objects are stored in a variable defined in the export section of your <code>hook_schema()</code>. The variable is an array with object primary keys and their corresponding status as a boolean, where <code>TRUE</code> means <em>disabled</em> and <code>FALSE</code> means <em>enabled</em>. For the following status variable:
+<pre>
+array(
+  'apples' => TRUE,
+  'bananas' => TRUE,
+  'oranges' => FALSE,
+);
+</pre>
+
+The <code>apples</code> and <code>bananas</code> objects are disabled while <code>oranges</code> is enabled. This convention ensures that objects are enabled by default until they have an entry in the status variable that says otherwise.
+
+You can enable or disable objects using the CTools export API:
+<pre>
+// Disable an object by name
+$object_name = 'oranges';
+ctools_include('export');
+ctools_export_set_status('myobj', 'oranges');
+
+// Enable an object by name
+ctools_export_set_status('myobj', 'oranges', FALSE);
+
+// Disable a loaded object
+$object = mymodule_myobj_load('apples');
+ctools_export_set_object_status($object);
+
+// Enable a loaded object
+ctools_export_set_object_status($object, FALSE);
+</pre>
+
+An object's status will be set by <code>ctools_export_load_object()</code> at <code>$myobj-&gt;disabled</code>. Note that the actual meaning of the <code>$myobj-&gt;disabled</code> flag is delegated to the implementing module. It is your responsibility to include/exclude disabled objects from appearing on administrative forms, being editable, and exhibiting their general behavior.
 
 <h3>Putting exported objects into code</h3>
 

@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeatactivity.inc,v 1.1.2.1.2.36 2010/04/15 00:38:21 stalski Exp $
+// $Id: heartbeatactivity.inc,v 1.1.2.1.2.37 2010/05/18 20:00:48 stalski Exp $
 
 /**
  * @file
@@ -168,7 +168,7 @@ class HeartbeatActivity {
 
     // Limit the number of displayed (grouped) messages by message
     // or left as default global configuration
-    if (isset($this->template->concat_args['group_num_max'])) {
+    if (!empty($this->template->concat_args['group_num_max'])) {
       $max_items_to_group = $this->template->concat_args['group_num_max'];
     }
 

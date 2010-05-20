@@ -1,5 +1,5 @@
 <?php
-// $Id: hrules.rules.inc,v 1.1.2.10 2010/04/05 23:18:42 stalski Exp $
+// $Id: hrules.rules.inc,v 1.1.2.11 2010/05/18 20:00:48 stalski Exp $
 
 /**
  * @file
@@ -84,7 +84,7 @@ function hrules_rules_action_info() {
 
     // Base action to execute as default user activity logs
     'heartbeat_rules_default_action' => array(
-      'label' => t('Logs user activity for single users'),
+      'label' => t('Logs default activity'),
       'eval input' => array(
         'uid_param',
         'uid_target_param',
@@ -93,20 +93,20 @@ function hrules_rules_action_info() {
         'message_id_param',
         'variables_param'
       ),
-      'help' => 'Create a relation between a user and others when handling content(node or comment).',
+      'help' => 'Create a relation between a user and something else(node, user, comment, etc ...).',
       'module' => 'heartbeat',
     ),
 
     // Simplified action to execute user-to-user activity logs
     'heartbeat_rules_users_action' => array(
-      'label' => t('Logs default user activity between users'),
+      'label' => t('Logs activity to indicate a relation between users'),
       'eval input' => array(
         'uid_param',
         'uid_target_param',
         'message_id_param',
         'variables_param'
       ),
-      'help' => 'Create a relation between a user and another user.',
+      'help' => 'Create a relation between a user and another user. This is only helpfull for relationships like friends, collegues, ... but not when a user only addresses his content to another user.',
       'module' => 'heartbeat',
     ),
   );

@@ -1,5 +1,5 @@
 <?php
-// $Id: token.inc,v 1.1.2.1 2010/01/29 22:46:05 merlinofchaos Exp $
+// $Id: token.inc,v 1.1.2.2 2010/02/23 21:00:59 merlinofchaos Exp $
 
 /**
  * @file
@@ -41,7 +41,8 @@ function ctools_context_token_convert_list() {
  */
 function ctools_context_token_convert($context, $token) {
   $values = token_get_values();
-  if ($key = array_search($token, $values->tokens)) {
+  $key = array_search($token, $values->tokens);
+  if ($key !== FALSE) {
     return $values->values[$key];
   }
 }

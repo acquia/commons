@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeat.install,v 1.1.2.6.2.10.2.25 2010/04/16 22:45:02 stalski Exp $
+// $Id: heartbeat.install,v 1.1.2.6.2.10.2.26 2010/05/18 20:00:48 stalski Exp $
 
 /**
  * @file
@@ -25,7 +25,7 @@ function heartbeat_install() {
 
   variable_set('heartbeat_activity_grouping_seconds', 7200);
   variable_set('heartbeat_activity_grouping_how_many', 5);
-  $allowed_tags = array('h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'span', 'em', 'strong', 'ul', 'li', 'p', 'div', 'img', 'object', 'param', 'embed', 'blockquote', 'script', 'style');
+  $allowed_tags = array('h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'span', 'em', 'strong', 'ul', 'li', 'p', 'div', 'img', 'blockquote');
   variable_set('heartbeat_allowed_tags', implode(',', $allowed_tags));
   variable_set('heartbeat_activity_log_cron_delete', 2678400);
   variable_set('heartbeat_access_types', array());
@@ -443,3 +443,22 @@ function heartbeat_update_402() {
   return $ret;
 }
 
+/**
+ * Update to version 4.6.9
+ *
+ * @return sql statements array
+ */
+function heartbeat_update_403() {
+
+  $tags = array();
+  $old_tags = explode(',', variable_get('heartbeat_allowed_tags', ''));
+  foreach ($old_tags as $tag) {
+    if (!in_array($tag, array('script', 'style', 'embed', 'object', 'param'))) {
+      $tags[] = $tag;
+    }
+  }
+
+  variable_set('heartbeat_allowed_tags', implode(',', $tags));
+
+  return array();
+}

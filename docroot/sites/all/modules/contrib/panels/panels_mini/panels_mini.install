@@ -1,5 +1,5 @@
 <?php
-// $Id: panels_mini.install,v 1.4.4.4 2009/07/12 18:10:43 merlinofchaos Exp $
+// $Id: panels_mini.install,v 1.4.4.5 2010/05/13 06:19:08 sdboyer Exp $
 
 /**
  * Implementation of hook_schema().
@@ -116,5 +116,14 @@ function panels_mini_update_6300() {
   while ($mini = db_fetch_object($result)) {
     db_query("UPDATE {blocks} SET delta = '%s' WHERE module = 'panels_mini' AND delta = %d", $mini->name, $mini->pid);
   }
+  return $ret;
+}
+
+/**
+ * Update all panel mini blocks to not use block caching.
+ */
+function panels_mini_update_6301() {
+  $ret = array();
+  $ret[] = update_sql("UPDATE {blocks} SET cache = -1 WHERE module = 'panels_mini'");
   return $ret;
 }

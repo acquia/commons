@@ -1,5 +1,5 @@
 <?php
-// $Id: panels_mini.inc,v 1.1.2.4 2009/07/13 19:51:23 merlinofchaos Exp $
+// $Id: panels_mini.inc,v 1.1.2.5 2010/05/17 19:27:01 sdboyer Exp $
 
 /**
  * @file
@@ -18,7 +18,16 @@
 function panels_mini_panels_mini_ctools_content_types() {
   return array(
     'title' => t('Mini panels'),
+    'content type' => 'panels_mini_panels_mini_content_type_content_type',
   );
+}
+
+/**
+ * Return each available mini panel available as a subtype.
+ */
+function panels_mini_panels_mini_content_type_content_type($subtype_id, $plugin) {
+  $mini = panels_mini_load($subtype_id);
+  return _panels_mini_panels_mini_content_type_content_type($mini);
 }
 
 /**
@@ -27,29 +36,40 @@ function panels_mini_panels_mini_ctools_content_types() {
 function panels_mini_panels_mini_content_type_content_types($plugin) {
   $types = array();
   foreach (panels_mini_load_all() as $mini) {
-    if (!empty($mini->disabled)) {
-      continue;
-    }
-
-    $types[$mini->name] = array(
-      'title' => filter_xss_admin($mini->title),
-      // For now mini panels will just use the contrib block icon.
-      'icon' => 'icon_mini_panel.png',
-      'description' => filter_xss_admin($mini->title),
-      'category' => !empty($mini->category) ? filter_xss_admin($mini->category) : t('Mini panel'),
-    );
-    if (!empty($mini->requiredcontexts)) {
-      $types[$mini->name]['required context'] = array();
-      foreach ($mini->requiredcontexts as $context) {
-        $info = ctools_get_context($context['name']);
-        // TODO: allow an optional setting
-        $types[$mini->name]['required context'][] = new ctools_context_required($context['identifier'], $info['context name']);
-      }
+    $type = _panels_mini_panels_mini_content_type_content_type($mini);
+    if ($type) {
+      $types[$mini->name] = $type;
     }
   }
   return $types;
 }
 
+/**
+ * Return an info array describing a single mini panel.
+ */
+function _panels_mini_panels_mini_content_type_content_type($mini) {
+  if (!empty($mini->disabled)) {
+    return;
+  }
+
+  $title = filter_xss_admin($mini->title);
+  $type = array(
+    'title' => $title,
+    // For now mini panels will just use the contrib block icon.
+    'icon' => 'icon_mini_panel.png',
+    'description' => $title,
+    'category' => !empty($mini->category) ? $mini->category : t('Mini panel'),
+  );
+  if (!empty($mini->requiredcontexts)) {
+    $type['required context'] = array();
+    foreach ($mini->requiredcontexts as $context) {
+      $info = ctools_get_context($context['name']);
+      // TODO: allow an optional setting
+      $type['required context'][] = new ctools_context_required($context['identifier'], $info['context name']);
+    }
+  }
+  return $type;
+}
 
 /**
  * Render a mini panel called from a panels display.

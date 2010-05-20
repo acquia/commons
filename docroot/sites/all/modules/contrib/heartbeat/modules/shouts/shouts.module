@@ -1,5 +1,5 @@
 <?php
-// $Id: shouts.module,v 1.1.2.2.2.20 2010/04/10 13:12:03 stalski Exp $
+// $Id: shouts.module,v 1.1.2.2.2.21 2010/05/18 20:00:48 stalski Exp $
 // by Zuuperman and Stalski - Menhir - www.menhir.be
 
 /**
@@ -53,6 +53,9 @@ function shouts_block($op = 'list', $delta = 0, $edit = array()) {
     );
     return $form;
   }
+  elseif ($op == 'save') {
+    variable_set('show_latest_shout', $edit['show_latest_shout']);
+  }
 }
 
 /**
@@ -82,8 +85,15 @@ function shouts_user($op, &$edit, &$account, $category = NULL) {
     case 'view':
       $latest_shout = get_latest_shout($account->uid);
       if (!empty($latest_shout->message)) {
-        $account->content['latest_shout'] = array(
-          '#value' => theme('shoutform_message', $latest_shout->message, false, false, $latest_shout->time)
+        $account->content['shouts'] = array(
+          '#type' => 'user_profile_category',
+          '#title' => t('Lastest shout'),
+          '#attributes' => array('class' => 'shouts-profile'),
+          '#weight' => 1,
+          'latest_shout' => array(
+            '#type' => 'user_profile_item',
+            '#value' => theme('shoutform_message', $latest_shout->message, false, false, $latest_shout->time)
+          )
         );
       }
       break;
@@ -183,12 +193,13 @@ function theme_shoutform_message($latest_shout, $update, $time = '') {
     $shout_time = '<span class="shout_ago">'. $date .' '. $ago. '</span>';
   }
 
-  $latest_shout = '<div class="latest_shout">'. $latest_shout. '</div>';
+  $latest_shout = '<div class="latest_shout">'. $latest_shout .'</div>';
 
   $output = '<div class="inner">'. $latest_shout . $shout_time . '</div>';
   if (!$update) {
     $output = '<div id="shout-wrapper">'. $output .'</div>';
   }
+
   return $output;
 }
 
@@ -224,7 +235,7 @@ function shouts_shout_form($form_state = array(), $show_latest_shout = TRUE) {
     }
 
     $form['submit'] = array(
-      '#prefix' => '<span class="heartbeat-more-messages-wrapper">',
+      '#prefix' => '<span class="shouts-form-wrapper">',
       '#suffix' => '<span class="heartbeat-messages-throbber">&nbsp;</span></span>',
       '#type' => 'submit',
       '#value' => t('Shout'),
@@ -253,6 +264,7 @@ function shouts_shout_form_submit($form = array(), &$form_state = array()) {
 
   if (!user_access('make shout') || empty($message)) {
     drupal_json(array('status' => FALSE, 'data' => t('No message recorded')));
+    exit;
   }
 
   $success = db_query("INSERT INTO {shouts} (uid, message, time) VALUES (%d, '%s', '%s')", $uid, $message, date('Y-m-d H:i:s'));
@@ -268,6 +280,7 @@ function shouts_shout_form_submit($form = array(), &$form_state = array()) {
 
     if ($ahah) {
       drupal_json(array('status' => TRUE, 'data' => theme('shoutform_message', $message, true, true, date('Y-m-d H:i:s'))));
+      exit;
     }
     else {
       drupal_set_message(t('Shout has been posted.'));
@@ -277,6 +290,7 @@ function shouts_shout_form_submit($form = array(), &$form_state = array()) {
 
   if ($ahah) {
     drupal_json(array('status' => TRUE, 'data' => 'error'));
+    exit;
   }
   else {
     drupal_set_message(t('Error while posting shout.'));
@@ -300,6 +314,7 @@ function shout_load($shout_id) {
  */
 function get_latest_shout($uid) {
   $shout = db_fetch_object(db_query_range('SELECT message, cleared, time FROM {shouts} WHERE uid = %d ORDER BY time DESC', $uid, 0, 1));
+  $shout->message = filter_xss($shout->message);
   return $shout;
 }
 
@@ -321,5 +336,5 @@ function clear_shout() {
   } else {
     drupal_json(array('status' => FALSE, 'data' => theme_shoutform_message(t('Error while clearing shout.'), false, true)));
   }
-
+  exit;
 }

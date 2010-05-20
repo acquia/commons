@@ -1,4 +1,4 @@
-<!-- $Id: plugins-creating.html,v 1.9 2009/06/22 02:27:19 merlinofchaos Exp $ -->
+<!-- $Id: plugins-creating.html,v 1.9.2.1 2010/04/09 22:27:31 merlinofchaos Exp $ -->
 There are two primary pieces to using plugins. The first is getting the data, and the second is using the data.
 
 <h3>Getting the data</h3>
@@ -69,6 +69,8 @@ The following information can be specified:
 <dd>If set to TRUE, then the plugin will look for a .info file instead of a .inc. Internally, this will look exactly the same, though obviously a .info file cannot contain functions. This can be good for styles that may not need to contain code.</dd>
 <dt>extension</dt>
 <dd>Can be used to change the extension on a file. By default the extension will be "inc", though it will default to "info" if "info files" is set to true. Do not include the dot in the extension if changing it, that will be added automatically.</dd>
+<dt>use hooks</dt>
+<dd>Use to enable support for plugin definition hooks instead of plugin definition files.</dd>
 </dl>
 
 In addition, there is a 'module', 'type' and 'hook' settings; these are for internal use of the plugin system and you should not change these.
@@ -145,7 +147,7 @@ Or like this:
   ),
 </pre>
 
-An example, for 'plugin_example' type 
+An example, for 'plugin_example' type
 
 <pre>
 $plugin = array(

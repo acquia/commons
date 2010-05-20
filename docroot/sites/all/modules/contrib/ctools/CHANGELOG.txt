@@ -1,4 +1,59 @@
-Current API VERSION: 1.3.2. See API.txt for more information.
+Current API VERSION: 1.4. See API.txt for more information.
+
+ctools 6.x-dev
+==============
+
+
+ctools 6.x-1.4 (2010-May-19)
+==============
+#686764: Update page tokens to use actual page rendering mechanism rather than the tokens which causes them to appear as having content even when empty.
+Retool the page elements to render last and not use the token method.
+Allow themes to provide default pages so that Panels Everywhere enabled themes can provide layout variants for the site template.
+Initial inclusion of the stylizer plugin to create user customizable styles from pre-configured base styles.
+#708154: Update and Save would leave forms in an older state, causing some forms to lose data (particularly the Panels content form).
+#467948 by hefox: Allow the vocabulary context to be used by the vocabulary selector access plugin.
+#686052 by Scott Reynolds: Allow for cache warming. (See API.txt)
+#686726 by ayalon: Access plugin to mimic the block path configuration item.
+#484340 by catch: Fix bug in token integration.
+#709754 by yhahn: Add export_module flag to all default objects so that we can tell where they came from.
+#709840 by thsutton: Improper test of AND when displaying access summaries.
+#709874 by thsutton: Fix improper test in context exists.
+#707826 by marcvangend: Add a relationship to get multiple terms from a node.
+#711922 by jonskulski: Do not print empty H1 tag if no title in page_title content.
+#703040 by neclimudul: Harden plugin loading against accidental variable overwriting.
+#710490 by thsutton: Fix use of error_get_last() which only appears in PHP 5.2.
+#716288 by alex_b: Clear more caches when clearing static caches for install/deployment purposes.
+#715118 by neclimdul: Add abstract hints to the classes in plugins.inc.
+#723296 by andrewlevine: Generalize more of CTools helpers so they can be used for non-CTools files.
+#726320 by gordon: Allow the CTools wizard to have query strings in the wizard path.
+#711664 by meclimdul: Make the 'hook' version of plugins now optional and improve code around it.
+#745468 by alevine and Scott Reynolds: Make ajax better able to know what .js/.css was already on the page.
+#722246: Search tabs not quite right, particularly with retaining keywords across tabs. This mostly fixes.
+#709754 followup by yhahn: Improved documentation for export.inc
+#565808 by cha0s, zroger and davereid: Backport nojs handling from D7.
+#704132 by killes: Allow access/selection rule based on whether taxonomy term has a parent.
+#747588 by mikeker: Add taxonomy description to context tokens.
+#741588 by Jody Lynn: add db_rewrite_sql() to comments pane query to match core.
+#531366 by mikeker: Move token substitutions to prior to filtering in custom content type. This could have some effects on existing installs.
+#718028 by redben: Improved documentation for wizard.inc
+#750004 by jhedstrom: Comment pane ignores node comment display setting.
+#752960 by mgriego: Redirect destination on 'delete' in admin links could be wrong.
+#754234 by killes: Node form content types not showing up due to logic error.
+#754594 by lavamind: Add a "book children" content type.
+Ensure imagefilter() exists before use, as it may not depending on how PHP was built.
+#798526 by jasonn1234: expand server-side control over modal js settings to include background opacity and color.
+#742832 by c960657: cache file system scans in ctools_plugin_load_includes().
+#758750 by mgriego, snufkin: Fix extra whitespace being added to exported scalars.
+#789598 by c960657: Pass block titles through check_plain().
+#780734 by c960657: Clean up node_comment_form plugin's form_comment_form_alter() implementation.
+Fix user_view task to use variable instead of value on hook invocation to avoid warnings on PHP5.3
+#771132: Move object cache system over to ctools_static() and introduce static var resets when locks are cleared.
+#762996 by jonskulski: Allow views_content panes to selectively show/hide their view's fields.
+#789524 by c960657: Implement "content type" hook on block content_type plugin.
+#782070: Relationship form submits were being passed an invalid part of $form_state.
+#767952 by aosodoev: Fix ctools_css_assemble() burping on multiple selectors by switching in str_replace() for preg_replace().
+#489256 by dww: Add a content_type plugin for outputting taxonomy terms from a node context.
+Assorted XSS, XSRF, and information disclosure security fixes.
 
 ctools 6.x-1.3 (2010-Feb-01)
 ==============

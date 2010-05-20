@@ -1,5 +1,5 @@
 <?php
-// $Id: node_form_attachments.inc,v 1.1.2.1 2010/01/29 20:18:25 merlinofchaos Exp $
+// $Id: node_form_attachments.inc,v 1.1.2.2 2010/04/14 21:02:12 merlinofchaos Exp $
 
 if (module_exists('upload')) {
   /**
@@ -24,7 +24,7 @@ function ctools_node_form_attachments_content_type_render($subtype, $conf, $pane
   $block->delta = 'url-path-options';
 
   if (isset($context->form)) {
-    if (!empty($context->form->form_id) && !empty($context->form['attachments']['#access'])) {
+    if (!empty($context->form['form_id']) && !empty($context->form['attachments']['#access'])) {
       // remove the fieldset
       unset($context->form['attachments']['#type']);
       $block->content = drupal_render($context->form['attachments']);

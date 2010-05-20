@@ -1,5 +1,5 @@
 <?php
-// $Id: search.inc,v 1.1.2.1 2009/10/12 21:35:54 merlinofchaos Exp $
+// $Id: search.inc,v 1.1.2.2 2010/04/14 20:14:29 merlinofchaos Exp $
 
 /**
  * @file
@@ -45,19 +45,53 @@ function page_manager_search_page_manager_tasks() {
 /**
  * Callback defined by page_manager_search_page_manager_tasks().
  *
- * Alter the node view input so that node view comes to us rather than the
- * normal node view process.
+ * Alter the search tabs to work with page manager. The search flow is
+ * quite odd, and tracing through the code takes hours to realize
+ * that the tab you click on does not normally actually handle
+ * the search. This tries to account for that.
+ *
+ * Note to module authors: This tends to work a lot better with modules
+ * that override their own search pages if their _alter runs *before*
+ * this one.
  */
 function page_manager_search_menu_alter(&$items, $task) {
+  // We are creating two sets of tabs. One set is for searching without
+  // keywords. A second set is for searching *with* keywords. This
+  // is necessary because search/node/% and search/node need to be
+  // different due to the way the search menu items function.
+
+  // Go through each search module item.
   foreach (module_implements('search') as $name) {
+    // Do not bother with search menu items that should not have search tabs.
+    if (!module_invoke($name, 'search', 'name')) {
+      continue;
+    }
+
+    // Put these items under the default search tab which is node.
+    $items["search/$name/%menu_tail"]['tab_parent'] = "search/node/%menu_tail";
+    $items["search/$name/%menu_tail"]['tab_root'] = "search/node/%menu_tail";
+
+    // Even if a search page is not implemented, we need to add an extra
+    // entry anyway, for two reasons.
+    //
+    // 1) The 'search' menu entry actually handles all entries by default
+    // and that is going to be bad if the node search is overridden and
+    // 2) We need to have dual entries to make sure that the tabs are right.
     if (variable_get('page_manager_search_disabled_' . $name, TRUE)) {
       $items["search/$name"] = $items["search/$name/%menu_tail"];
-      // Since we may well be overriding the top level 'search' function
-      // create a 'search/%name' that goes directly where it is supposed
-      // to go.
+
+      // Put these items under the real search tab.
+      $items["search/$name"]['tab_parent'] = 'search';
+      $items["search/$name"]['tab_root'] = 'search';
+
       if ($name == 'node') {
         $items["search/$name"]['type'] = MENU_DEFAULT_LOCAL_TASK;
+        // The default tab should always be left weighted. Because of the way
+        // menu sorts, this item tends to float around if not weighted.
+        $items["search/$name"]['weight'] = -10;
+        $items["search/$name/%menu_tail"]['weight'] = -10;
       }
+
       continue;
     }
 
@@ -74,10 +108,19 @@ function page_manager_search_menu_alter(&$items, $task) {
       $items["search/$name"] = $items["search/$name/%menu_tail"];
       $items["search/$name/%menu_tail"]['page arguments'] = array(1, 2);
 
+      // Put these items under the real search tab.
+      $items["search/$name"]['tab_parent'] = 'search';
+      $items["search/$name"]['tab_root'] = 'search';
+
       // Content search is the default search link, so we have to override
       // the default task as well.
       if ($name == 'node') {
         $items["search/$name"]['type'] = MENU_DEFAULT_LOCAL_TASK;
+        // The default tab should always be left weighted. Because of the way
+        // menu sorts, this item tends to float around if not weighted.
+        $items["search/$name"]['weight'] = -10;
+        $items["search/$name/%menu_tail"]['weight'] = -10;
+
         $items["search"]['page callback'] = 'page_manager_search_page';
         $items["search"]['page arguments'] = array('node');
         $items["search"]['file path'] = $task['path'];
@@ -187,7 +230,9 @@ function page_manager_search_enable($cache, $status) {
  */
 function page_manager_search_subtasks($task) {
   foreach (module_implements('search') as $name) {
-    $return[$name] = page_manager_search_build_subtask($task, $name);
+    if(module_invoke($name, 'search', 'name')) {
+      $return[$name] = page_manager_search_build_subtask($task, $name);
+    }
   }
 
   return $return;

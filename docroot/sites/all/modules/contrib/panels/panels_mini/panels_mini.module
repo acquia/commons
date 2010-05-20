@@ -1,5 +1,5 @@
 <?php
-// $Id: panels_mini.module,v 1.5.2.17 2009/10/21 20:51:49 merlinofchaos Exp $
+// $Id: panels_mini.module,v 1.5.2.20 2010/05/17 20:12:30 sdboyer Exp $
 
 /**
  * @file panels_mini.module
@@ -49,6 +49,7 @@ function panels_mini_block($op = 'list', $delta = 0, $edit = array()) {
       if (empty($mini->disabled) && empty($mini->requiredcontext)) {
         $blocks[$panel_mini->name] = array(
           'info' => t('Mini panel: "@title"', array('@title' => $panel_mini->title)),
+          'cache' => BLOCK_NO_CACHE,
         );
       }
     }
@@ -61,10 +62,15 @@ function panels_mini_block($op = 'list', $delta = 0, $edit = array()) {
     if (!empty($viewing[$delta])) {
       return;
     }
-    ctools_include('context');
-
     $viewing[$delta] = TRUE;
+
     $panel_mini = panels_mini_load($delta);
+    if (empty($panel_mini)) {
+      // Bail out early if the specified mini panel doesn't exist.
+      return;
+    }
+
+    ctools_include('context');
     $panel_mini->context = $panel_mini->display->context = ctools_context_load_contexts($panel_mini);
     $panel_mini->display->css_id = panels_mini_get_id($panel_mini->name);
 
@@ -79,6 +85,13 @@ function panels_mini_block($op = 'list', $delta = 0, $edit = array()) {
 
     unset($viewing[$delta]);
     return $block;
+  }
+  elseif ($op = 'configure') {
+    return array(
+      'admin-shortcut' => array(
+        '#value' => l(t('Manage this mini-panel'), 'admin/build/panel-mini/' . $delta . '/edit-general')
+      ),
+    );
   }
 }
 

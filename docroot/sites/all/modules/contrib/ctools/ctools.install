@@ -1,5 +1,5 @@
 <?php
-// $Id: ctools.install,v 1.12 2009/08/16 21:59:42 merlinofchaos Exp $
+// $Id: ctools.install,v 1.12.2.1 2010/02/23 23:03:16 merlinofchaos Exp $
 
 /**
  * @file
@@ -8,7 +8,7 @@
 
 /**
  * Use requirements to ensure that the CTools CSS cache directory can be
- * created.
+ * created and that the PHP version requirement is met.
  */
 function ctools_requirements($phase) {
   $requirements = array();
@@ -31,6 +31,13 @@ function ctools_requirements($phase) {
       $requirements['ctools_css_cache']['description'] = t('The CTools CSS cache directory, %path could not be created due to a misconfigured files directory. Please ensure that the files directory is correctly configured and that the webserver has permission to create directories.', array('%path' => $path));
       $requirements['ctools_css_cache']['severity'] = REQUIREMENT_ERROR;
       $requirements['ctools_css_cache']['value'] = t('Unable to create');
+    }
+
+    if (!function_exists('error_get_last')) {
+	  $requirements['ctools_php_52']['title'] = t('CTools PHP requirements');
+      $requirements['ctools_php_52']['description'] = t('CTools requires certain features only available in PHP 5.2.0 or higher.');
+      $requirements['ctools_php_52']['severity'] = REQUIREMENT_WARNING;
+      $requirements['ctools_php_52']['value'] = t('PHP !version', array('!version' => phpversion()));
     }
   }
 

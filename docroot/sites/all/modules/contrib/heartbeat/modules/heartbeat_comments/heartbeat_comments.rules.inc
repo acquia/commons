@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeat_comments.rules.inc,v 1.1.2.2 2010/02/21 12:31:33 stalski Exp $
+// $Id: heartbeat_comments.rules.inc,v 1.1.2.3 2010/05/18 20:00:48 stalski Exp $
 
 /**
  * @file
@@ -18,6 +18,7 @@ function heartbeat_comments_rules_event_info() {
       'arguments' => array(
         'user' => array('type' => 'user', 'label' => t('User who reacts on the acivity.')),
         'heartbeat_comment' => array('type' => 'heartbeat_comment', 'label' => t('Comment that has been posted.')),
+        'author' => array('type' => 'user', 'label' => t('User who is the original author of the activity.')),
       ),
       'redirect' => TRUE,
     ),

@@ -1,5 +1,5 @@
 <?php
-// $Id: context-admin.inc,v 1.9.2.1 2009/10/06 18:08:23 merlinofchaos Exp $
+// $Id: context-admin.inc,v 1.9.2.2 2010/05/18 17:44:49 sdboyer Exp $
 
 /**
  * @file includes/common-context.inc
@@ -792,7 +792,7 @@ function ctools_edit_relationship_form_submit($form, &$form_state) {
   $relationship = $form_state['info'];
 
   if (isset($relationship['settings form submit']) && function_exists($relationship['settings form submit'])) {
-    $relationship['settings form submit']($form, $form_state['values']['relationship_settings'], $form_state);
+    $relationship['settings form submit']($form, $form_state['values']['relationship']['relationship_settings'], $form_state);
   }
 
   $form_state['ref'][$form_state['position']] = $form_state['values']['relationship'];

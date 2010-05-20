@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeat.pages.inc,v 1.1.2.14 2010/04/06 22:33:52 stalski Exp $
+// $Id: heartbeat.pages.inc,v 1.1.2.15 2010/05/18 20:00:48 stalski Exp $
 
 /**
  * @file
@@ -30,12 +30,17 @@ function heartbeat_messages_page($access_type, $offset_time = 0, $account = NULL
     $output .= heartbeat_stream_prev_link($access_type);
   }
 
+  // For block updates by ajax displayed on the user
+  // profile page, we want to show the account requested.
+  if (!$page && is_numeric($account) && $account > 0 && variable_get('heartbeat_show_user_profile_messages_'. $access_type, 0)) {
+    $account = heartbeat_user_load($account);
+  }
+
   // Message streams for each access type
   $context = heartbeat_stream_view($access_type, $page, $offset_time, $ajax, $account);
 
   if (!isset($context)) {
-    $data = t('No messages found.');
-    return $ajax ? drupal_json(array('status' => TRUE, 'data' => $data)) : $data;
+    return $ajax ? drupal_json(array('status' => TRUE, 'data' => t('No messages found.'))) : t('No messages found.');
   }
 
   // Get the messages

@@ -1,5 +1,5 @@
 <?php
-// $Id: views_panes.inc,v 1.14.2.6 2010/01/22 23:40:48 sdboyer Exp $
+// $Id: views_panes.inc,v 1.14.2.8 2010/05/18 09:31:31 sdboyer Exp $
 
 /**
  * @file
@@ -146,6 +146,7 @@ function views_content_views_panes_content_type_render($subtype, $conf, $panel_a
     return;
   }
 
+  $view->display_handler->set_pane_conf($conf);
 
   $args = array();
   $arguments = $view->display_handler->get_option('arguments');
@@ -221,13 +222,16 @@ function views_content_views_panes_content_type_render($subtype, $conf, $panel_a
   }
 
   // more link
-  if (($allow['more_link'] && !empty($conf['more_link'])) ||
-      (!$allow['more_link'] && $view->display_handler->get_option('more_link'))) {
-    $block->more = array('href' => $view->get_url());
-    $view->display_handler->set_option('use_more', FALSE);
-    // make sure the view runs the count query so we know whether or not the more link
-    // applies.
-    $view->get_total_rows = TRUE;
+  if ($allow['more_link']) {
+    if (empty($conf['more_link'])) {
+      $view->display_handler->set_option('use_more', FALSE);
+    }
+    else {
+      $view->display_handler->set_option('use_more', TRUE);
+      // make sure the view runs the count query so we know whether or not the
+      // more link applies.
+      $view->get_total_rows = TRUE;
+    }
   }
 
   if ($allow['use_pager']) {
@@ -243,6 +247,19 @@ function views_content_views_panes_content_type_render($subtype, $conf, $panel_a
   }
   if ($allow['offset']) {
     $view->display_handler->set_option('offset', $conf['offset']);
+  }
+
+  $view->init_style();
+  if ($allow['fields_override'] && $view->style_plugin->uses_fields()) {
+    $fields = $view->get_items('field');
+    if ($conf['fields_override']) {
+      foreach ($conf['fields_override'] as $field => $display) {
+        if ($conf['fields_override'][$field] == 0) {
+          $fields[$field]['exclude'] = 1;
+          $view->set_item($view->current_display, 'field', $field, $fields[$field]);
+        }
+      }
+    }
   }
 
   $stored_feeds = drupal_add_feed();
@@ -302,6 +319,7 @@ function views_content_views_panes_content_type_edit_form(&$form, &$form_state) 
     $conf['offset'] = $view->display_handler->get_option('offset');
     $conf['path_override'] = FALSE;
     $conf['path'] = $view->get_path();
+    $conf['fields_override'] = $view->display_handler->get_option('fields_override');
   }
 
   $form['arguments']['#tree'] = TRUE;
@@ -315,20 +333,21 @@ function views_content_views_panes_content_type_edit_form(&$form, &$form_state) 
       );
     }
   }
-    if ($allow['link_to_view'] ) {
-      $form['link_to_view'] = array(
-        '#type' => 'checkbox',
-        '#default_value' => isset($conf['link_to_view']) ? $conf['link_to_view'] : $view->display_handler->get_option('link_to_view'),
-        '#title' => t('Link title to page'),
-      );
-    }
-    if ($allow['more_link']) {
-      $form['more_link'] = array(
-        '#type' => 'checkbox',
-        '#default_value' => isset($conf['more_link']) ? $conf['more_link'] : $view->display_handler->get_option('more_link'),
-        '#title' => t('Provide a "more" link.'),
-      );
-    }
+  if ($allow['link_to_view'] ) {
+    $form['link_to_view'] = array(
+      '#type' => 'checkbox',
+      '#default_value' => isset($conf['link_to_view']) ? $conf['link_to_view'] : $view->display_handler->get_option('link_to_view'),
+      '#title' => t('Link title to page'),
+    );
+  }
+  if ($allow['more_link']) {
+    $form['more_link'] = array(
+      '#type' => 'checkbox',
+      '#default_value' => isset($conf['more_link']) ? $conf['more_link'] : $view->display_handler->get_option('use_more'),
+      '#description' => t('The text of this link will be "@more". This setting can only be modified on the View configuration.', array('@more' => $view->display_handler->use_more_text())),
+      '#title' => t('Provide a "more" link.'),
+    );
+  }
 
   if (!empty($allow['feed_icons'])) {
     $form['feed_icons'] = array(
@@ -336,6 +355,28 @@ function views_content_views_panes_content_type_edit_form(&$form, &$form_state) 
       '#default_value' => !empty($conf['feed_icons']),
       '#title' => t('Display feed icons'),
     );
+  }
+
+  $view->init_style();
+  if ($allow['fields_override'] && $view->style_plugin->uses_fields()) {
+    $form['fields_override'] = array(
+      '#type' => 'fieldset',
+      '#title' => 'Fields to display',
+      '#collapsible' => TRUE,
+      '#tree' => TRUE,
+    );
+    foreach ($view->display_handler->get_handlers('field') as $field => $handler) {
+      $title = $handler->ui_name();
+      if ($handler->options['label']) {
+        $title .= ' ('. $handler->options['label'] .')';
+      }
+
+      $form['fields_override'][$field] = array(
+        '#type' => 'checkbox',
+        '#title' => $title,
+        '#default_value' => isset($conf['fields_override'][$field]) ? $conf['fields_override'][$field] : TRUE,
+      );
+    }
   }
 
   ctools_include('dependent');
@@ -420,7 +461,7 @@ function views_content_views_panes_content_type_edit_form(&$form, &$form_state) 
 function views_content_views_panes_content_type_edit_form_submit(&$form, &$form_state) {
   // Copy everything from our defaults.
   $keys = array('link_to_view', 'more_link', 'feed_icons', 'use_pager',
-    'pager_id', 'items_per_page', 'offset', 'path_override', 'path', 'arguments');
+    'pager_id', 'items_per_page', 'offset', 'path_override', 'path', 'arguments', 'fields_override');
 
   foreach ($keys as $key) {
     if (isset($form_state['values'][$key])) {

@@ -5,15 +5,19 @@
 }
 
 .hds-region-left {
-  clear: left;
+  display: inline;
   float: left;
 }
 
-.hds-region-middle {
-  clear: none;
+.hds-region-middle-wrapper {
+  display: inline;
+  float: left;
+  width: 100%;
+  margin-right: -100%;
 }
 
 .hds-region-right {
+  display: inline;
   float: right;
 }
 
@@ -33,20 +37,18 @@
 
 /* middle region */
 
-.hds-no-sidebars {
+.hds-no-sidebars .hds-region-middle {
 }
 
-.hds-sidebar-left {
+.hds-sidebar-left .hds-region-middle {
   margin-left: 25%;
-  overflow: hidden;
 }
 
-.hds-sidebar-right {
+.hds-sidebar-right .hds-region-middle {
   margin-right: 25%;
-  overflow: hidden;
 }
 
-.hds-two-sidebars {
+.hds-two-sidebars .hds-region-middle {
   margin-left: 25%;
   margin-right: 25%;
 }

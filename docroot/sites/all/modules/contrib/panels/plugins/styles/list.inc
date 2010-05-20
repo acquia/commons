@@ -1,5 +1,5 @@
 <?php
-// $Id: list.inc,v 1.1.2.2 2010/01/13 06:25:15 merlinofchaos Exp $
+// $Id: list.inc,v 1.1.2.3 2010/05/17 17:50:15 sdboyer Exp $
 
 
 /**
@@ -13,7 +13,6 @@ $plugin = array(
   'description' => t('Presents the panes in the form of an HTML list.'),
   'render panel' => 'panels_list_style_render_panel',
   'settings form' => 'panels_list_style_settings_form',
-  'settings validate' => 'panels_list_style_settings_validate',
 );
 
 /**

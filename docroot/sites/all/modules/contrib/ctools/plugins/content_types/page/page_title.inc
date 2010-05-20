@@ -1,5 +1,5 @@
 <?php
-// $Id: page_title.inc,v 1.1.2.1 2010/01/29 20:18:25 merlinofchaos Exp $
+// $Id: page_title.inc,v 1.1.2.3 2010/02/23 22:14:43 merlinofchaos Exp $
 
 /**
  * @file
@@ -17,6 +17,7 @@ $plugin = array(
   'icon' => 'icon_page.png',
   'description' => t('Add the page title as content.'),
   'category' => t('Page elements'),
+  'render last' => TRUE,
 );
 
 /**
@@ -25,11 +26,15 @@ $plugin = array(
  * Outputs the page title of the current page.
  */
 function ctools_page_title_content_type_render($subtype, $conf, $panel_args) {
-  $token = '<!-- ctools-page-title -->';
-  ctools_set_page_token($token, 'variable', 'title');
 
   $block = new stdClass();
-  $block->content = '<h1>'. $token .'</h1>';
+
+  $title = drupal_get_title();
+  if ($title) { 
+    // TODO: This should have a setting or something for the markup.
+    $block->content = '<h1>'. $title .'</h1>';
+  }
 
   return $block;
+
 }

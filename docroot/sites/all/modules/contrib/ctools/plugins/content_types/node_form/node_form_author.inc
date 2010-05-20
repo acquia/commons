@@ -1,5 +1,5 @@
 <?php
-// $Id: node_form_author.inc,v 1.1.2.1 2010/01/29 20:18:25 merlinofchaos Exp $
+// $Id: node_form_author.inc,v 1.1.2.2 2010/04/14 21:02:12 merlinofchaos Exp $
 
 /**
  * Plugins are described by creating a $plugin array which will be used
@@ -22,7 +22,7 @@ function ctools_node_form_author_content_type_render($subtype, $conf, $panel_arg
   $block->delta = 'author-options';
 
   if (isset($context->form)) {
-    if (!empty($context->form->form_id) && !empty($context->form['author']['#access'])) {
+    if (!empty($context->form['form_id']) && !empty($context->form['author']['#access'])) {
       // remove the fieldset
       unset($context->form['author']['#type']);
       $context->form['author']['name']['#size'] /= 2;

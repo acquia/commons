@@ -1,5 +1,5 @@
 <?php
-// $Id: object-cache.inc,v 1.8.2.1 2009/10/15 18:32:23 merlinofchaos Exp $
+// $Id: object-cache.inc,v 1.8.2.2 2010/05/18 07:18:26 sdboyer Exp $
 
 /**
  * @file
@@ -28,7 +28,7 @@
  *   The data that was cached.
  */
 function ctools_object_cache_get($obj, $name, $skip_cache = FALSE) {
-  static $cache = array();
+  $cache = &ctools_static(__FUNCTION__, array());
   $key = "$obj:$name";
   if ($skip_cache) {
     unset($cache[$key]);
@@ -70,6 +70,9 @@ function ctools_object_cache_set($obj, $name, $cache) {
  */
 function ctools_object_cache_clear($obj, $name) {
   db_query("DELETE FROM {ctools_object_cache} WHERE sid = '%s' AND obj = '%s' AND name = '%s'", session_id(), $obj, $name);
+  // Ensure the static cache is emptied of this obj:name set.
+  $cache = &ctools_static('ctools_object_cache_get', array());
+  unset($cache["$obj:$name"]);
 }
 
 
@@ -133,6 +136,9 @@ function ctools_object_cache_test_objects($obj, $names) {
  */
 function ctools_object_cache_clear_all($obj, $name) {
   db_query("DELETE FROM {ctools_object_cache} WHERE obj = '%s' AND name = '%s'", $obj, $name);
+  // Ensure the static cache is emptied of this obj:name set.
+  $cache = &ctools_static('ctools_object_cache_get', array());
+  unset($cache["$obj:$name"]);
 }
 
 /**

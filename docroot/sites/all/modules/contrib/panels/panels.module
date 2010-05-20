@@ -1,5 +1,5 @@
 <?php
-// $Id: panels.module,v 1.28.2.49 2010/02/01 23:05:27 merlinofchaos Exp $
+// $Id: panels.module,v 1.28.2.54 2010/05/13 01:35:01 sdboyer Exp $
 
 /**
  * @file panels.module
@@ -7,7 +7,7 @@
  * Core functionality for the Panels engine.
  */
 
-define('PANELS_REQUIRED_CTOOLS_API', '1.3.2');
+define('PANELS_REQUIRED_CTOOLS_API', '1.4');
 
 define('PANELS_TITLE_FIXED', 0); // Hide title use to be true/false. So false remains old behavior.
 define('PANELS_TITLE_NONE', 1); // And true meant no title.
@@ -243,6 +243,7 @@ function panels_menu() {
       }
     }
   }
+
 
   return $items;
 }
@@ -517,36 +518,6 @@ class panels_display {
  */
 
 /**
- * Clean up a display object and add some required information, if missing.
- *
- * Currently a display object needs 'args', 'incoming content', 'context'
- * and a 'css_id'.
- *
- * @param &$display
- *   The display object to be sanitized.
- * @return
- *   The sanitized display object.
- */
-function panels_sanitize_display(&$display) {
-  return;
-  if (!isset($display->args)) {
-    $display->args = array();
-  }
-
-  if (!isset($display->incoming_content)) {
-    $display->incoming_content = NULL;
-  }
-
-  if (!isset($display->context)) {
-    $display->context = array();
-  }
-
-  if (!isset($display->css_id)) {
-    $display->css_id = NULL;
-  }
-}
-
-/**
  * Creates a new display, setting the ID to our magic new id.
  */
 function panels_new_display() {
@@ -726,6 +697,19 @@ function panels_save_display(&$display) {
   // Clear any cached content for this display.
   panels_clear_cached_content($display);
 
+  // Allow other modules to take action when a display is saved.
+  module_invoke_all('panels_display_save', $display);
+
+  // Log the change to watchdog, using the same style as node.module
+  $watchdog_args = array('%did' => $display->did);
+  if (!empty($display->title)) {
+    $watchdog_args['%title'] = $display->title;
+    watchdog('content', 'Panels: saved display "%title" with display id %did', $watchdog_args, WATCHDOG_NOTICE);
+  }
+  else {
+    watchdog('content', 'Panels: saved display with id %did', $watchdog_args, WATCHDOG_NOTICE);
+  }
+
   // to be nice, even tho we have a reference.
   return $display;
 }
@@ -853,20 +837,6 @@ function theme_panels_render_display_form($form) {
   $form['#children'] = _panels_render_display($form['#display']);
   drupal_render($form);
   return theme('form', $form);
-}
-
-/**
- * For external use: Given a layout ID and a $content array, return the
- * panel display. The content array is filled in based upon the content
- * available in the layout. If it's a two column with a content
- * array defined like array('left' => t('Left side'), 'right' =>
- * t('Right side')), then the $content array should be array('left' =>
- * $output_left, 'right' => $output_right)
- * @render
- */
-function panels_print_layout($id, $content) {
-  panels_load_include('plugins');
-  return _panels_print_layout($id, $content);
 }
 
 // @layout

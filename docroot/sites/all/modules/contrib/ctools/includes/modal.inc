@@ -1,5 +1,5 @@
 <?php
-// $Id: modal.inc,v 1.7.2.1 2009/10/13 20:06:36 merlinofchaos Exp $
+// $Id: modal.inc,v 1.7.2.2 2010/05/17 23:38:38 sdboyer Exp $
 
 /**
  * @file
@@ -52,6 +52,8 @@ function ctools_modal_add_js() {
     'closeText' => t('Close Window'),
     'closeImage' => theme('image', ctools_image_path('icon-close-window.png'), t('Close window'), t('Close window')),
     'throbber' => theme('image', ctools_image_path('throbber.gif'), t('Loading...'), t('Loading')),
+    'backDropOpacity' => '.55',
+    'backDropColor' => '#fff'
   ));
 
   drupal_add_js($settings, 'setting');

@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeat.module,v 1.1.2.26.2.46.2.68 2010/04/18 18:39:09 stalski Exp $
+// $Id: heartbeat.module,v 1.1.2.26.2.46.2.69 2010/05/18 20:00:48 stalski Exp $
 // by Stalski (Jochen Stals) - Menhir - www.menhir.be
 
 
@@ -187,6 +187,22 @@ function heartbeat_menu() {
     }
   }
 
+  // Build content administration
+  $items['admin/content/heartbeat'] = array(
+    'title' => 'administer heartbeat activity',
+    'description' => 'Administer heartbeat activity',
+    'weight' => -5,
+    'page callback' => 'heartbeat_activity_admin',
+    'access arguments' => array('delete heartbeat activity logs'),
+    'file' => 'heartbeat.admin.inc',
+  );
+  $items['admin/content/heartbeat/activity'] = array(
+    'title' => 'List activity messages',
+    'description' => 'Overview activity messages',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -5,
+  );
+
   // Build menu
   $items['admin/build/heartbeat'] = array(
     'title' => 'Heartbeat',
@@ -363,6 +379,9 @@ function heartbeat_theme() {
     'heartbeat_stream_overview' => array(
       'arguments' => array('form' => NULL),
     ),
+    'heartbeat_messages_admin_overview' => array(
+      'arguments' => array('form' => NULL),
+    ),
   );
 }
 
@@ -373,11 +392,10 @@ function heartbeat_user($type, $edit, &$account, $category = NULL) {
 
   switch ($type) {
     case 'load':
-      global $user;
       $account->heartbeat_relations = heartbeat_get_related_uids($account->uid);
-      //if ($account->uid == $user->uid) {
-        //$user->heartbeat_relations = $account->heartbeat_relations;
-      //}
+      break;
+    case 'delete':
+      db_query("DELETE FROM {heartbeat_activity} WHERE uid = %d OR uid_target = %d ", $account->uid, $account->uid);
       break;
     case 'view':
       break;
@@ -505,6 +523,14 @@ function heartbeat_form_alter($form, $form_state, $form_id) {
     heartbeat_messages_rebuild();
   }
 
+}
+
+/**
+ * Implementation of hook_features_api().
+ */
+function heartbeat_features_api() {
+  require_once('heartbeat.features.inc');
+  return _heartbeat_features_api();
 }
 
 /**
@@ -1160,12 +1186,17 @@ function heartbeat_log($data, $args = array()) {
 
   // Relational message of heartbeat messages
   $row = heartbeat_message_load($data['message_id'], 'message_id');
+
   $template = new HeartbeatMessageTemplate($row->hid, $row->message_id, $row->message, $row->message_concat, $row->concat_args);
   $data = $data + (array)$row;
 
   $heartbeatactivity = new HeartbeatActivity($data, $template);
 
-  return $heartbeatactivity->save($args);
+  $saved = $heartbeatactivity->save($args);
+
+  module_invoke_all('heartbeat_activity_log', $heartbeatactivity, $args);
+
+  return $saved;
 }
 
 /**
@@ -1514,6 +1545,9 @@ function heartbeat_stream_view($access_type, $page = FALSE, $offset = 0, $ajax =
     $heartbeatAccess = new $accesstype($stream, $page, $account);
 
     // Set the js variable to poll for newer messages
+    if ($heartbeatAccess->stream->poll_messages == 100) {
+      // Use XMPP to serve the activity
+    }
     drupal_add_js(array('heartbeatPollNewerMessages' => $heartbeatAccess->stream->poll_messages), 'setting');
 
     $heartbeatAccess->setOffsetSql($offset);
@@ -1589,6 +1623,11 @@ function heartbeat_stream_more_link($heartbeatAccess, $offset_time, $page = TRUE
   else {
 
     $path .= '/' . $offset_time;
+
+    // Add a fourth paramter to indicate that where on a profile page.
+    if (arg(0) == 'user' && is_numeric(arg(1)) && variable_get('heartbeat_show_user_profile_messages_' . $heartbeatAccess->getStream()->name, 0)) {
+      $path .= '/' . arg(1);
+    }
 
     if ($ajax_pager) {
       $attributes['attributes']['onclick'] = 'javascript:Drupal.heartbeat.getOlderMessages(this, ' . (int)$page . '); return false;';

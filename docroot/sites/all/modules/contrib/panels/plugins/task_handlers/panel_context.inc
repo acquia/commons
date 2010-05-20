@@ -1,5 +1,5 @@
 <?php
-// $Id: panel_context.inc,v 1.1.2.43 2010/02/01 22:36:31 merlinofchaos Exp $
+// $Id: panel_context.inc,v 1.1.2.44 2010/05/17 20:25:37 sdboyer Exp $
 
 /**
  * @file
@@ -229,9 +229,6 @@ function &panels_panel_context_get_display(&$handler) {
 
 /**
  * Check selection rules and, if passed, render the contexts.
- *
- * We must first check to ensure the node is of a type we're allowed
- * to render. If not, decline to render it by returning NULL.
  */
 function panels_panel_context_render($handler, $base_contexts, $args, $test = TRUE) {
   // Go through arguments and see if they match.

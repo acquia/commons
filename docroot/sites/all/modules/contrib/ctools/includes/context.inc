@@ -1,5 +1,5 @@
 <?php
-// $Id: context.inc,v 1.33.2.5 2009/10/27 22:46:00 merlinofchaos Exp $
+// $Id: context.inc,v 1.33.2.6 2010/02/23 21:07:19 merlinofchaos Exp $
 
 /**
  * @file
@@ -1344,7 +1344,7 @@ function ctools_access_group_summary($access, $contexts) {
     $descriptions[] = ctools_access_summary($plugin, $contexts, $test);
   }
 
-  $separator = $access['logic'] == 'AND' ? t(', and ') : t(', or ');
+  $separator = $access['logic'] == 'and' ? t(', and ') : t(', or ');
   return implode($separator, $descriptions);
 }
 

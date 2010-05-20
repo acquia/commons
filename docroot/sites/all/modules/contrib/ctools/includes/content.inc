@@ -1,5 +1,5 @@
 <?php
-// $Id: content.inc,v 1.12.2.4 2010/01/29 19:26:13 merlinofchaos Exp $
+// $Id: content.inc,v 1.12.2.5 2010/05/04 00:43:30 sdboyer Exp $
 
 /**
  * @file
@@ -508,7 +508,7 @@ function ctools_content_configure_form_defaults_submit(&$form, &$form_state) {
  *
  * The $form_info and $form_state need to be preconfigured with data you'll need
  * such as whether or not you're using ajax, or the modal. $form_info will need
- * your next/submit callbacks so that you can cache your data appropriate.
+ * your next/submit callbacks so that you can cache your data appropriately.
  *
  * @return
  *   If this function returns false, no form exists.

@@ -1,5 +1,5 @@
 <?php
-// $Id: node_content.inc,v 1.4.2.1 2010/01/29 20:18:25 merlinofchaos Exp $
+// $Id: node_content.inc,v 1.4.2.2 2010/04/14 20:54:10 merlinofchaos Exp $
 
 /**
  * Plugins are described by creating a $plugin array which will be used
@@ -60,8 +60,10 @@ function ctools_node_content_content_type_render($subtype, $conf, $panel_args, $
       'title' => t('Edit node'),
       'alt' => t("Edit this node"),
       'href' => "node/$node->nid/edit",
-      'query' => drupal_get_destination(),
     );
+    if (isset($_REQUEST['destination'])) {
+      $block->admin_links['update']['query'] = drupal_get_destination();
+    }
   }
 
   if (!empty($conf['link']) && $node) {

@@ -1,5 +1,5 @@
 <?php
-// $Id: ctools.module,v 1.27.2.8 2010/02/01 23:04:13 merlinofchaos Exp $
+// $Id: ctools.module,v 1.27.2.16 2010/05/20 01:43:03 sdboyer Exp $
 
 /**
  * @file
@@ -10,7 +10,7 @@
  * must be implemented in the module file.
  */
 
-define('CTOOLS_API_VERSION', '1.3.2');
+define('CTOOLS_API_VERSION', '1.4');
 
 /**
  * Test the CTools API version.
@@ -112,24 +112,66 @@ function ctools_include($file, $module = 'ctools', $dir = 'includes') {
 }
 
 /**
- * Provide the proper path to a CTools image
+ * Provide the proper path to an image as necessary.
+ *
+ * This helper function is used by ctools but can also be used in other
+ * modules in the same way as explained in the comments of ctools_include.
+ *
+ * @param $image
+ *   The base file name (with extension)  of the image to be included.
+ * @param $module
+ *   Optional module containing the include.
+ * @param $dir
+ *   Optional subdirectory containing the include file.
  */
-function ctools_image_path($image) {
-  return drupal_get_path('module', 'ctools') . '/images/' . $image;
+function ctools_image_path($image, $module = 'ctools', $dir = 'images') {
+  return drupal_get_path('module', $module) . "/$dir/" . $image;
 }
 
 /**
- * Include views .css files.
+ * Include css files as necessary.
+ *
+ * This helper function is used by ctools but can also be used in other
+ * modules in the same way as explained in the comments of ctools_include.
+ *
+ * @param $file
+ *   The base file name to be included.
+ * @param $module
+ *   Optional module containing the include.
+ * @param $dir
+ *   Optional subdirectory containing the include file.
  */
-function ctools_add_css($file) {
-  drupal_add_css(drupal_get_path('module', 'ctools') . "/css/$file.css");
+function ctools_add_css($file, $module = 'ctools', $dir = 'css') {
+  drupal_add_css(drupal_get_path('module', $module) . "/$dir/$file.css");
 }
 
 /**
- * Include views .js files.
+ * Include js files as necessary.
+ *
+ * This helper function is used by ctools but can also be used in other
+ * modules in the same way as explained in the comments of ctools_include.
+ *
+ * @param $file
+ *   The base file name to be included.
+ * @param $module
+ *   Optional module containing the include.
+ * @param $dir
+ *   Optional subdirectory containing the include file.
  */
-function ctools_add_js($file) {
-  drupal_add_js(drupal_get_path('module', 'ctools') . "/js/$file.js");
+function ctools_add_js($file, $module = 'ctools', $dir = 'js') {
+  drupal_add_js(drupal_get_path('module', $module) . "/$dir/$file.js");
+}
+
+/**
+ * Simple function to add a page id to Drupal.settings.CTools.
+ */
+function ctools_add_page_id() {
+  static $page_id = NULL;
+  if (!isset($page_id)) {
+    $page_id = 'page-' . md5(mt_rand());
+    drupal_add_js(array('CTools' => array('pageId' => $page_id)), 'setting');
+  }
+  return $page_id;
 }
 
 /**
@@ -142,13 +184,17 @@ function ctools_init() {
     ini_set('display_errors', 0);
     register_shutdown_function('ctools_shutdown_handler');
   }
+  else {
+    // Add a setting into the JS that identifies this page.
+    ctools_add_page_id();
+  }
 }
 
 /**
  * Shutdown handler used during ajax operations to help catch fatal errors.
  */
 function ctools_shutdown_handler() {
-  if ($error = error_get_last()){
+  if (function_exists('error_get_last') AND ($error = error_get_last())){
     switch($error['type']){
       case E_ERROR:
       case E_CORE_ERROR:
@@ -325,6 +371,29 @@ function ctools_ctools_plugin_directory($module, $plugin) {
 }
 
 /**
+ * Implementation of hook_js_replacements().
+ * This is a hook that is not a standard yet. We hope jquery_update and others
+ * will expose this hook to inform modules which scripts they are modifying
+ * in the theme layer.
+ * The return format is $scripts[$type][$old_path] = $new_path.
+ */
+function ctools_js_replacements() {
+  $replacements = array();
+  // Until jquery_update is released with its own replacement hook, we will
+  // take those replacements into account here.
+  if (module_exists('jquery_update')) {
+    $replacements = array_merge_recursive($replacements, jquery_update_get_replacements());
+    foreach ($replacements as $type => $type_replacements) {
+      foreach ($type_replacements as $old_path => $new_filename) {
+        $replacements[$type][$old_path] = JQUERY_UPDATE_REPLACE_PATH . "/$new_filename";
+      }
+    }
+    $replacements['core']['misc/jquery.js'] = jquery_update_jquery_path();
+  }
+  return $replacements;
+}
+
+/**
  * Get a list of roles in the system.
  */
 function ctools_get_roles() {
@@ -378,6 +447,31 @@ function ctools_access_menu($access) {
 
   ctools_include('context');
   return ctools_access($access, $contexts);
+}
+
+/**
+ * Determine if the current user has access via checks to multiple different
+ * permissions.
+ *
+ * This function is a thin wrapper around user_access that allows multiple
+ * permissions to be easily designated for use on, for example, a menu callback.
+ *
+ * @param ...
+ *   An indexed array of zero or more permission strings to be checked by
+ *   user_access().
+ *
+ * @return
+ *   Iff all checks pass will this function return TRUE. If an invalid argument
+ *   is passed (e.g., not a string), this function errs on the safe said and
+ *   returns FALSE.
+ */
+function ctools_access_multiperm() {
+  foreach (func_get_args() as $arg) {
+    if (!is_string($arg) || !user_access($arg)) {
+      return FALSE;
+    }
+  }
+  return TRUE;
 }
 
 /**
@@ -496,6 +590,57 @@ function ctools_preprocess_page(&$variables) {
     }
     $variables['content'] = strtr($variables['content'], $tokens);
   }
+
+  // Go through all the JS files being added to the page and catalog them.
+  $js_files = array();
+  foreach (drupal_add_js() as $type => $data) {
+    if ($type != 'inline' && $type != 'setting') {
+      foreach ($data as $path => $info) {
+        $js_files[$path] = TRUE;
+      }
+    }
+  }
+
+  // Go through all CSS files that are being added to the page and catalog them.
+  $css_files = array();
+  $css = drupal_add_css();
+  foreach ($css as $media => $types) {
+    // If CSS preprocessing is off, we still need to output the styles.
+    // Additionally, go through any remaining styles if CSS preprocessing is on and output the non-cached ones.
+    foreach ($types as $type => $files) {
+      if ($type == 'module') {
+        // Setup theme overrides for module styles.
+        $theme_styles = array();
+        foreach (array_keys($css[$media]['theme']) as $theme_style) {
+          $theme_styles[] = basename($theme_style);
+        }
+      }
+      foreach ($types[$type] as $file => $preprocess) {
+        // If the theme supplies its own style using the name of the module style, skip its inclusion.
+        // This includes any RTL styles associated with its main LTR counterpart.
+        if ($type == 'module' && in_array(str_replace('-rtl.css', '.css', basename($file)), $theme_styles)) {
+          // Unset the file to prevent its inclusion when CSS aggregation is enabled.
+          unset($types[$type][$file]);
+          continue;
+        }
+        // Only include the stylesheet if it exists.
+        if (file_exists($file)) {
+          $css_files[$file] = TRUE;
+        }
+      }
+    }
+  }
+
+  // Cache the cataloged JS and CSS so they can be found by an ajax request.
+  $page_id = ctools_add_page_id();
+  $expire = CACHE_TEMPORARY;
+
+  // If the page cache is enabled, respect its cache lifetime.
+  // @TODO: do this for only user_is_anonymous()?
+  if (variable_get('cache', CACHE_DISABLED) != CACHE_DISABLED) {
+    $expire = variable_get('cache_lifetime', 0);
+  }
+  cache_set($page_id, array('js' => $js_files, 'css' => $css_files), 'cache', $expire);
 }
 
 /**
@@ -564,4 +709,54 @@ function ctools_forms() {
   );
 
   return $forms;
+}
+
+/**
+ * Check to see that a directory exists.
+ *
+ * This is an exact copy of core's, but without the stupid drupal_set_message
+ * because we need this to be silent.
+ */
+function ctools_file_check_directory(&$directory, $mode = 0, $form_item = NULL) {
+  $directory = rtrim($directory, '/\\');
+
+  // Check if directory exists.
+  if (!is_dir($directory)) {
+    if (($mode & FILE_CREATE_DIRECTORY) && @mkdir($directory)) {
+      @chmod($directory, 0775); // Necessary for non-webserver users.
+    }
+    else {
+      if ($form_item) {
+        form_set_error($form_item, t('The directory %directory does not exist.', array('%directory' => $directory)));
+      }
+      return FALSE;
+    }
+  }
+
+  // Check to see if the directory is writable.
+  if (!is_writable($directory)) {
+    if (($mode & FILE_MODIFY_PERMISSIONS) && @chmod($directory, 0775)) {
+      drupal_set_message(t('The permissions of directory %directory have been changed to make it writable.', array('%directory' => $directory)));
+    }
+    else {
+      form_set_error($form_item, t('The directory %directory is not writable', array('%directory' => $directory)));
+      watchdog('file system', 'The directory %directory is not writable, because it does not have the correct permissions set.', array('%directory' => $directory), WATCHDOG_ERROR);
+      return FALSE;
+    }
+  }
+
+  if ((file_directory_path() == $directory || file_directory_temp() == $directory) && !is_file("$directory/.htaccess")) {
+    $htaccess_lines = "SetHandler Drupal_Security_Do_Not_Remove_See_SA_2006_006\nOptions None\nOptions +FollowSymLinks";
+    if (($fp = fopen("$directory/.htaccess", 'w')) && fputs($fp, $htaccess_lines)) {
+      fclose($fp);
+      chmod($directory .'/.htaccess', 0664);
+    }
+    else {
+      $variables = array('%directory' => $directory, '!htaccess' => '<br />'. nl2br(check_plain($htaccess_lines)));
+      form_set_error($form_item, t("Security warning: Couldn't write .htaccess file. Please create a .htaccess file in your %directory directory which contains the following lines: <code>!htaccess</code>", $variables));
+      watchdog('security', "Security warning: Couldn't write .htaccess file. Please create a .htaccess file in your %directory directory which contains the following lines: <code>!htaccess</code>", $variables, WATCHDOG_ERROR);
+    }
+  }
+
+  return TRUE;
 }

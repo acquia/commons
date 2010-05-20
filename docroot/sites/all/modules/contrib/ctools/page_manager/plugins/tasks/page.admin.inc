@@ -1,5 +1,5 @@
 <?php
-// $Id: page.admin.inc,v 1.18.2.6 2010/02/01 20:25:00 merlinofchaos Exp $
+// $Id: page.admin.inc,v 1.18.2.7 2010/05/20 01:43:03 sdboyer Exp $
 
 /**
  * @file
@@ -37,6 +37,10 @@ function page_manager_page_menu(&$items, $task) {
     'page arguments' => array('page_manager_page_import_subtask', 'page'),
     'type' => MENU_LOCAL_TASK,
   ) + $base;
+  if ($access_callback == 'user_access') {
+    $items['admin/build/pages/import']['access callback'] = 'ctools_access_multiperm';
+    $items['admin/build/pages/import']['access arguments'][] = 'use PHP for block visibility';
+  }
 
   // AJAX callbacks for argument modal.
   $items['admin/build/pages/argument'] = array(

@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeat_views.views.inc,v 1.1.2.2.2.13 2010/04/07 20:54:20 stalski Exp $
+// $Id: heartbeat_views.views.inc,v 1.1.2.2.2.14 2010/04/26 20:54:21 stalski Exp $
 
 /**
  * @file
@@ -104,6 +104,10 @@ function heartbeat_views_data() {
         ),
         'filter' => array(
           'handler' => 'views_handler_filter_string',
+        ),
+        'field' => array(
+          'handler' => 'views_handler_field_markup',
+          'format' => FILTER_FORMAT_DEFAULT,
         ),
       ),
       'uid_current' => array(

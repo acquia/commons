@@ -1,5 +1,5 @@
 <?php
-// $Id: node_form_menu.inc,v 1.1.2.1 2010/01/29 20:18:25 merlinofchaos Exp $
+// $Id: node_form_menu.inc,v 1.1.2.2 2010/04/14 21:02:12 merlinofchaos Exp $
 
 if (module_exists('menu')) {
   /**
@@ -24,7 +24,7 @@ function ctools_node_form_menu_content_type_render($subtype, $conf, $panel_args,
   $block->delta = 'menu-options';
 
   if (isset($context->form)) {
-    if (!empty($context->form->form_id) && !empty($context->form['menu']['#access'])) {
+    if (!empty($context->form['form_id']) && !empty($context->form['menu']['#access'])) {
       // remove the fieldset
       unset($context->form['menu']['#type']);
       $context->form['menu']['link_title']['#size'] /= 2;

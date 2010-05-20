@@ -5,6 +5,8 @@ Drupal.heartbeat = Drupal.heartbeat || {};
 
 Drupal.heartbeat.comments = Drupal.heartbeat.comments || {};
 
+Drupal.heartbeat.comments.button = null;
+
 /**
  * Attach behaviours to the message streams
  */
@@ -15,6 +17,11 @@ Drupal.behaviors.heartbeat_comments = function (context) {
 }
 
 Drupal.heartbeat.comments.submit = function(element) {
+    
+  // Throw in the throbber
+  Drupal.heartbeat.comments.button = $(element);
+  Drupal.heartbeat.wait(Drupal.heartbeat.comments.button, '.heartbeat-comments-wrapper');
+  Drupal.heartbeat.comments.button.attr("disabled", "disabled");
   
   var formElement = $(element).parents('form');
   
@@ -23,7 +30,8 @@ Drupal.heartbeat.comments.submit = function(element) {
     message: formElement.find('.heartbeat-message-comment').val(), 
     uaid: formElement.find('.heartbeat-message-uaid').val(), 
     nid: formElement.find('.heartbeat-message-nid').val(), 
-    node_comment: formElement.find('.heartbeat-message-node-comment').val()
+    node_comment: formElement.find('.heartbeat-message-node-comment').val(),
+    first_comment: !$('#heartbeat-comments-list-' + formElement.find('.heartbeat-message-uaid').val()).length
   };
   $.post(url, args, Drupal.heartbeat.comments.submitted,'json');
   
@@ -31,27 +39,30 @@ Drupal.heartbeat.comments.submit = function(element) {
 }
 
 Drupal.heartbeat.comments.submitted = function(data) {
+
   if (data.id != undefined) {
     
     if (!$('#heartbeat-comments-list-' + data.id).length) {
-      var html = '<ul class="summary" id="heartbeat-comments-list-' + data.id + '"></ul>';
       if (Drupal.settings.heartbeat_comments_position == 'up') {
-        $('#heartbeat-comments-wrapper-' + data.id).append(html);
+        $('#heartbeat-comments-wrapper-' + data.id).append(data.data);
       }
       else {
-        $('#heartbeat-comments-wrapper-' + data.id).prepend(html);
+        $('#heartbeat-comments-wrapper-' + data.id).prepend(data.data);
       }
     }
-    
-    if (Drupal.settings.heartbeat_comments_order == 'oldest_on_top') {
-      $('#heartbeat-comments-list-' + data.id).append(data.data);
-    }
-    else {
-      $('#heartbeat-comments-list-' + data.id).prepend(data.data);
-    }
-    
-    $('#heartbeat-comments-list-' + data.id).parents('.heartbeat-comments').find('.heartbeat-message-comment').val('');
-    
+    else {    
+      if (Drupal.settings.heartbeat_comments_order == 'oldest_on_top') {
+        $('#heartbeat-comments-list-' + data.id).append(data.data);
+      }
+      else {
+        $('#heartbeat-comments-list-' + data.id).prepend(data.data);
+      }
+      
+      $('#heartbeat-comments-list-' + data.id).parents('.heartbeat-comments').find('.heartbeat-message-comment').val('');
+    } 
     //Drupal.attachBehaviors($('.heartbeat-stream'));
+    
+    Drupal.heartbeat.doneWaiting();
+    Drupal.heartbeat.comments.button.removeAttr("disabled");
   }
 }

@@ -40,9 +40,9 @@ function heartbeat_comments_admin_overview() {
   // load the comments that we want to display
   $form['header'] = array('#type' => 'value', '#value' => array(
     theme('table_select_header_cell'),
-    array('data' => t('Message'), 'field' => 'subject'),
+    array('data' => t('Comment'), 'field' => 'subject'),
     array('data' => t('Author'), 'field' => 'name'),
-    array('data' => t('Posted in'), 'field' => 'heartbeat_title'),
+    array('data' => t('Reacted on'), 'field' => 'heartbeat_title'),
     array('data' => t('Time'), 'field' => 'timestamp', 'sort' => 'desc')
   ));
   $result = pager_query('SELECT c.hcid, c.uid, c.uaid, c.message AS \'subject\', c.cleared, c.time, ha.message AS \'heartbeat_title\', u.name AS registered_name, u.uid  FROM {heartbeat_comments} c LEFT JOIN {heartbeat_activity} ha ON ha.uaid = c.uaid LEFT JOIN {users} u ON u.uid = c.uid '. tablesort_sql($form['header']['#value']), 50, 0, NULL);

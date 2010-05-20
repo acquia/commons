@@ -1,5 +1,5 @@
 <?php
-// $Id: views_content_plugin_display_panel_pane.inc,v 1.3 2009/09/09 18:25:03 merlinofchaos Exp $
+// $Id: views_content_plugin_display_panel_pane.inc,v 1.3.2.2 2010/05/18 09:31:31 sdboyer Exp $
 
 /**
  * The plugin that handles a panel_pane.
@@ -10,6 +10,7 @@ class views_content_plugin_display_panel_pane extends views_plugin_display {
    * this variable so that other modules can create alternate pane displays.
    */
   var $panel_pane_display = TRUE;
+  var $has_pane_conf = NULL;
 
   function option_definition() {
     $options = parent::option_definition();
@@ -33,6 +34,7 @@ class views_content_plugin_display_panel_pane extends views_plugin_display {
         'path_override'   => array('default' => FALSE),
         'title_override'  => array('default' => FALSE),
         'exposed_form'    => array('default' => FALSE),
+        'fields_override' => array('default' => FALSE),
        ),
     );
 
@@ -41,6 +43,15 @@ class views_content_plugin_display_panel_pane extends views_plugin_display {
     $options['inherit_panels_path'] = array('default' => 0);
 
     return $options;
+  }
+
+  function has_pane_conf() {
+    return isset($this->has_pane_conf);
+  }
+
+  function set_pane_conf($conf = array()) {
+    $this->set_option('pane_conf', $conf);
+    $this->has_pane_conf = TRUE;
   }
 
   /**
@@ -153,6 +164,7 @@ class views_content_plugin_display_panel_pane extends views_plugin_display {
           'path_override' => t('Path override'),
           'title_override' => t('Title override'),
 //          'exposed_form' => t('Use exposed widgets form as pane configuration'),
+          'fields_override' => t('Fields override'),
         );
 
         $allow = array_filter($this->get_option('allow'));
@@ -354,6 +366,22 @@ class views_content_plugin_display_panel_pane extends views_plugin_display {
     }
 
     return $output;
+  }
+
+  function use_more() {
+    $allow = $this->get_option('allow');
+    if (!$allow['more_link'] || !$this->has_pane_conf()) {
+      return parent::use_more();
+    }
+    $conf = $this->get_option('pane_conf');
+    return (bool) $conf['more_link'];
+  }
+
+  function get_path() {
+    if (empty($this->view->override_path)) {
+      return parent::get_path();
+    }
+    return $this->view->override_path;
   }
 }
 

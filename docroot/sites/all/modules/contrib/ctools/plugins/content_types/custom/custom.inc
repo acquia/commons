@@ -1,5 +1,5 @@
 <?php
-// $Id: custom.inc,v 1.9.2.3 2010/01/29 20:18:25 merlinofchaos Exp $
+// $Id: custom.inc,v 1.9.2.4 2010/04/14 20:44:21 merlinofchaos Exp $
 
 /**
  * @file
@@ -41,12 +41,14 @@ function ctools_custom_content_type_render($subtype, $conf, $args, $contexts) {
   $block          = new stdClass();
   $block->subtype = ++$delta;
   $block->title   = filter_xss_admin($conf['title']);
-  $block->content = check_markup($conf['body'], $conf['format'], FALSE);
 
   // Add keyword substitutions if we were configured to do so.
+  $content = $conf['body'];
   if (!empty($contexts) && !empty($conf['substitute'])) {
-    $block->content = ctools_context_keyword_substitute($block->content, array(), $contexts);
+    $content = ctools_context_keyword_substitute($content, array(), $contexts);
   }
+
+  $block->content = check_markup($content, $conf['format'], FALSE);
   return $block;
 }
 

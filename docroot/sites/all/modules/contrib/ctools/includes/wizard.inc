@@ -1,5 +1,5 @@
 <?php
-// $Id: wizard.inc,v 1.12.2.1 2010/02/01 21:11:15 merlinofchaos Exp $
+// $Id: wizard.inc,v 1.12.2.4 2010/04/09 22:15:55 merlinofchaos Exp $
 
 /**
  * @file
@@ -87,13 +87,16 @@ function ctools_wizard_multistep_form($form_info, $step, &$form_state) {
   // This tells ctools_build_form to apply our wrapper to the form. It
   // will give it buttons and the like.
   $form_state['wrapper callback'] = 'ctools_wizard_wrapper';
-  $form_state['re_render'] = FALSE;
+  if (!isset($form_state['rerender'])) {
+    $form_state['rerender'] = FALSE;
+  }
+
   $form_state['no_redirect'] = TRUE;
 
   ctools_include('form');
   $output = ctools_build_form($info['form id'], $form_state);
 
-  if (empty($form_state['executed'])) {
+  if (empty($form_state['executed']) || !empty($form_state['rerender'])) {
     if (!empty($form_state['ajax render'])) {
       // Any include files should already be included by this point:
       return $form_state['ajax render']($form_state, $output);
@@ -110,7 +113,8 @@ function ctools_wizard_multistep_form($form_info, $step, &$form_state) {
       $form_state['commands'] = ctools_modal_form_render($form_state, $output);
     }
   }
-  else  {
+
+  if (!empty($form_state['executed'])) {
     // We use the plugins get_function format because it's powerful and
     // not limited to just functions.
     ctools_include('plugins');
@@ -124,7 +128,7 @@ function ctools_wizard_multistep_form($form_info, $step, &$form_state) {
       }
 
       // If the modal is in use, some special code for it:
-      if (!empty($form_state['modal'])) {
+      if (!empty($form_state['modal']) && empty($form_state['modal return'])) {
         if ($type != 'next') {
           // Automatically dismiss the modal if we're not going to another form.
           ctools_include('modal');
@@ -312,7 +316,21 @@ function ctools_wizard_wrapper(&$form, &$form_state) {
   }
 
   if (!empty($form_state['ajax'])) {
-    $form['#action'] = url(ctools_wizard_get_path($form_state['form_info'], $form_state['step']));
+    $params = ctools_wizard_get_path($form_state['form_info'], $form_state['step']);
+    if (count($params) > 1) {
+      $url = array_shift($params);
+      $options = array();
+      
+      $keys = array(0 => 'query', 1 => 'fragment');
+      foreach ($params as $key => $value) {
+        if (isset($keys[$key]) && isset($value)) {
+          $options[$keys[$key]] = $value;
+        }
+      }
+      
+      $params = array($url, $options);
+    }
+    $form['#action'] =  call_user_func_array('url', $params);
   }
 
   if (isset($info['wrapper']) && function_exists($info['wrapper'])) {
@@ -358,7 +376,15 @@ function ctools_wizard_submit(&$form, &$form_state) {
  * Create a path from the form info and a given step.
  */
 function ctools_wizard_get_path($form_info, $step) {
-  return str_replace('%step', $step, $form_info['path']);
+  if (is_array($form_info['path'])) {
+    foreach ($form_info['path'] as $id => $part) {
+      $form_info['path'][$id] = str_replace('%step', $step, $form_info['path'][$id]);
+    }    
+    return $form_info['path'];
+  }
+  else {
+    return array(str_replace('%step', $step, $form_info['path']));
+  }
 }
 
 /**

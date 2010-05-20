@@ -9,11 +9,11 @@ Drupal.heartbeat.moreLink = null;
  * wait().
  *   Function that shows throbber while waiting a response.
  */
-Drupal.heartbeat.wait = function(element) {
+Drupal.heartbeat.wait = function(element, parentSelector) {
 
   // We wait for a server response and show a throbber 
   // by adding the class heartbeat-messages-waiting.
-  Drupal.heartbeat.moreLink = $(element).parents('.heartbeat-more-messages-wrapper');
+  Drupal.heartbeat.moreLink = $(element).parents(parentSelector);
   // Disable double-clicking.
   if (Drupal.heartbeat.moreLink.is('.heartbeat-messages-waiting')) {      
     return false;
@@ -36,9 +36,8 @@ Drupal.heartbeat.doneWaiting = function() {
  *   Fetch older messages with ajax.
  */
 Drupal.heartbeat.getOlderMessages = function(element, page) {
-  Drupal.heartbeat.wait(element);
+  Drupal.heartbeat.wait(element, '.heartbeat-more-messages-wrapper');
   $.post(element.href, {block: page ? 0 : 1, ajax: 1}, Drupal.heartbeat.appendMessages);
-  
 }
 
 /**

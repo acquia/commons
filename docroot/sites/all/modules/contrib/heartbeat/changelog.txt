@@ -6,6 +6,39 @@
 #############################################################################
 
 ---------------------------------------------------------------
+# @date 10/05/2010 For release DRUPAL-6--4-9
+---------------------------------------------------------------
+- Security Update!
+  When shouts are displayed, the content is now sanitized with filter_xss
+  to filter the user input.
+  Actions:
+    - Upgraded heartbeat.install so the default allowed tags are more secure.
+    There is a left-over img attack but the code where this filtering is done,
+    is managed by a higher level permission. Before heartbeat messages,
+    heartbeat comments (and shouts) were sanitized with this tags match. It is 
+    only needed and handy for the per UI manipulatable heartbeat messages. This 
+    means that heartbeat comments and shouts will follow the normal filter_xss 
+    approach within standard drupal.
+    - Added the filter_xss for shouts module when fetching the shouts from database
+    - Tipped by David Rothstein, I moved the filter_xss for heartbeat_messages to a 
+    earlier point so it's not theme-overriable (thus possibly leading to XSS attack)
+- Change to hds_regions.css following the DS releases.
+- Added basic features integration.
+- Fixed a couple of issues from the d.o queue.
+- Refactored the comment rules integration so it can take the original author as well.
+- Added update hook for this install.
+  
+---------------------------------------------------------------
+# @date 19/04/2010 For release DRUPAL-6--4-8
+---------------------------------------------------------------
+- bugfixes and feature request from issuequeue.
+
+---------------------------------------------------------------
+# @date 17/05/2010 For release DRUPAL-6--4-7
+---------------------------------------------------------------
+- bugfixes and feature request from issuequeue.
+
+---------------------------------------------------------------
 # @date 14/04/2010 For release DRUPAL-6--4-6
 ---------------------------------------------------------------
 - moved connectedheartbeat to friendlist_activity module where it 

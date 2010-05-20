@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeat_comments.module,v 1.1.2.17 2010/04/19 19:10:49 stalski Exp $
+// $Id: heartbeat_comments.module,v 1.1.2.18 2010/05/18 20:00:48 stalski Exp $
 
 /**
  * @file
@@ -105,6 +105,16 @@ function heartbeat_comments_heartbeat_load(&$messages, HeartbeatAccess $stream) 
 
     }
   }
+}
+
+/**
+ * Implementation of hook_heartbeat_delete().
+ *   Delete the attached comments to a heartbeat activity object.
+ * @param $message
+ *   HeartbeatActivity ID
+ */
+function heartbeat_comments_heartbeat_delete($uaid) {
+  db_query("DELETE FROM {heartbeat_comments} WHERE uaid = %d", $uaid);
 }
 
 /**
@@ -238,6 +248,8 @@ function heartbeat_comments_form($form_state = array(), $uaid = 0, $node_comment
     $form['submit'] = array(
       '#type' => 'submit',
       '#value' => t('Submit'),
+      '#prefix' => '<span class="heartbeat-comments-wrapper">',
+      '#suffix' => '<span class="heartbeat-messages-throbber">&nbsp;</span></span>',
       '#attributes' => array(
         'class' => 'heartbeat-comment-submit'
       ),
@@ -296,9 +308,11 @@ function heartbeat_comments_form_submit($form = array(), &$form_state = array())
   $uaid = ($ahah ? $_POST['uaid'] : (isset($form_state['values']['uaid']) ? $form_state['values']['uaid'] : $form_state['clicked_button']['#post']['uaid']));
   $nid = ($ahah ? $_POST['nid'] : (isset($form_state['values']['nid']) ? $form_state['values']['nid']: 0));
   $node_comment = $nid > 0 && ($ahah ? $_POST['node_comment'] : $form_state['values']['node_comment']);
+  $first_comment = ($ahah ? $_POST['first_comment'] : $form_state['values']['first_comment']);
 
   if (!user_access('add heartbeat comment') || empty($message)) {
     drupal_json(array('status' => FALSE, 'data' => t('No message recorded')));
+    exit;
   }
 
   $saved = NULL;
@@ -327,18 +341,23 @@ function heartbeat_comments_form_submit($form = array(), &$form_state = array())
     }
   }
 
+  $authorid = db_result(db_query("SELECT uid FROM {heartbeat_activity} WHERE uaid = %d", $uaid));
+  $author = user_load($authorid);
+
   // Let rules know there has been a shout event
   if (module_exists('rules')) {
-    rules_invoke_event('heartbeat_comment_post', $user, $saved);
+    rules_invoke_event('heartbeat_comment_post', $user, $saved, $author);
   }
 
   if ($ahah) {
     if (isset($saved)) {
-      drupal_json(array('status' => TRUE, 'data' => theme('heartbeat_comment', $saved, $node_comment), 'id' => $uaid));
+      $content = $first_comment ? theme('heartbeat_comments', array($saved), $uaid, $node_comment) : theme('heartbeat_comment', $saved, $node_comment);
+      drupal_json(array('status' => TRUE, 'data' => $content, 'id' => $uaid));
     }
     else {
       drupal_json(array('status' => TRUE, 'data' => 'error'));
     }
+    exit;
   }
   else {
     if ($saved) {
@@ -411,7 +430,6 @@ function theme_heartbeat_comment($comment, $node_comment = FALSE, $last = FALSE)
 
   $output .= '<div class="heartbeat-teaser">';
   $output .= l($account->name, 'user/' . $comment->uid) . ' ';
-  $comment->comment = filter_xss($comment->comment);
   $output .= $comment->comment;
   $output .= '</div>';
 
@@ -443,6 +461,8 @@ function heartbeat_get_message_reactions($uaid) {
     FROM {heartbeat_comments} s INNER JOIN {users} u ON s.uid = u.uid
     WHERE uaid = %d ORDER BY time DESC", $tuaid, 0, HEARTBEAT_REACTIONS_PER_PAGE + 1);
   while ($comment = db_fetch_object($result)) {
+    // Sanitize the comment messages.
+    $comment->comment = filter_xss($comment->comment);
     $reactions[] = $comment;
   }
 
@@ -477,6 +497,8 @@ function heartbeat_get_node_comments($node, $cid = 0) {
 
       if ($comment = db_fetch_object($result)) {
         $comment->name = $comment->uid ? $comment->registered_name : $comment->name;
+        // Sanitize the comment messages.
+        $comment->comment = check_markup($comment->comment, $comment->format, FALSE);
         $comments[] = $comment;
       }
     }
@@ -506,6 +528,8 @@ function heartbeat_get_node_comments($node, $cid = 0) {
       //drupal_add_css(drupal_get_path('module', 'comment') .'/comment.css');
       while ($comment = db_fetch_object($result)) {
         $comment = drupal_unpack($comment);
+        // Sanitize the comment messages.
+        $comment->comment = check_markup($comment->comment, $comment->format, FALSE);
         $comment->name = $comment->uid ? $comment->registered_name : $comment->name;
         $comment->depth = count(explode('.', $comment->thread)) - 1;
         $comments[]  = $comment;

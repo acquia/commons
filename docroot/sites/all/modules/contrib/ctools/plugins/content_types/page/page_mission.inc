@@ -1,5 +1,5 @@
 <?php
-// $Id: page_mission.inc,v 1.1.2.1 2010/01/29 20:18:25 merlinofchaos Exp $
+// $Id: page_mission.inc,v 1.1.2.2 2010/02/02 21:49:21 merlinofchaos Exp $
 
 /**
  * @file
@@ -17,6 +17,7 @@ $plugin = array(
   'icon' => 'icon_page.png',
   'description' => t('Add the site mission statement as content.'),
   'category' => t('Page elements'),
+  'render last' => TRUE,
 );
 
 /**
@@ -25,11 +26,8 @@ $plugin = array(
  * Outputs the mission statement for the site.
  */
 function ctools_page_mission_content_type_render($subtype, $conf, $panel_args) {
-  $token = '<!-- ctools-page-mission -->';
-  ctools_set_page_token($token, 'variable', 'mission');
-
   $block = new stdClass();
-  $block->content = $token;
+  $block->content = filter_xss_admin(theme_get_setting('mission'));
 
   return $block;
 }
