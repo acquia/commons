@@ -277,17 +277,18 @@ function drupal_commons_config_menu() {
 
 // Configure input filters
 function drupal_commons_config_filter() {
+  // Force filter format IDs
+  db_query("UPDATE {filter_formats} SET format = 1 WHERE name = 'Filtered HTML'");
+  db_query("UPDATE {filter_formats} SET format = 2 WHERE name = 'Full HTML'");
+  db_query("UPDATE {filter_formats} SET format = 3 WHERE name = 'PHP code'");
+  
   // Set allowed HTML tags for Filter HTML format
   variable_set('allowed_html_1', '<a> <img> <em> <p> <strong> <cite> <code> <ul> <ol> <li> <dl> <dt> <dd>');
   
-  // Fetch format IDs
-  $filtered_html = db_result(db_query("SELECT format FROM {filter_formats} WHERE name = '%s'", 'Filtered HTML'));
-  $full_html = db_result(db_query("SELECT format FROM {filter_formats} WHERE name = '%s'", 'Full HTML'));
-
   // Add wiki-style freelinking to both default formats
   $sql = "INSERT INTO {filters} (format, module, delta, weight) VALUES (%d, '%s', %d, %d)";
-  db_query($sql, $filtered_html, 'freelinking', 0, 10);  // Filtered HTML
-  db_query($sql, $full_html, 'freelinking', 0, 10);  // Full HTML
+  db_query($sql, 1, 'freelinking', 0, 10);  // Filtered HTML
+  db_query($sql, 2, 'freelinking', 0, 10);  // Full HTML
 }
 
 // Configure wysiwyg
@@ -295,21 +296,17 @@ function drupal_commons_config_wysiwyg() {
   // Load external file containing editor settings
   include_once('drupal_commons_editor.inc'); 
   
-  // Fetch format IDs
-  $filtered_html = db_result(db_query("SELECT format FROM {filter_formats} WHERE name = '%s'", 'Filtered HTML'));
-  $full_html = db_result(db_query("SELECT format FROM {filter_formats} WHERE name = '%s'", 'Full HTML'));
-  
   // Build SQL statement
   $sql = "INSERT INTO {wysiwyg} (format, editor, settings) VALUES (%d, '%s', '%s')";
   
   // Insert the settings
-  db_query($sql, $filtered_html, DRUPAL_COMMONS_EDITOR, serialize(drupal_commons_editor_settings('Filtered HTML')));
+  db_query($sql, 1, DRUPAL_COMMONS_EDITOR, serialize(drupal_commons_editor_settings('Filtered HTML')));
   
   // Build settings for filtered html array
   $settings = array();
   
   // Insert the settings
-  db_query($sql, $full_html, DRUPAL_COMMONS_EDITOR, serialize(drupal_commons_editor_settings('Full HTML')));
+  db_query($sql, 2, DRUPAL_COMMONS_EDITOR, serialize(drupal_commons_editor_settings('Full HTML')));
 }
 
 // Configure user_relationships
@@ -507,6 +504,8 @@ function drupal_commons_config_images() {
     $group_image, 
     file_directory_path() . '/imagecache/group_images_thumb/imagefield_default_images/default-group.png'
   );
+  
+  //todo: Below is NOT overriding Features!
   
   // Simulate that we've uploaded the group image
   db_query("INSERT INTO {files} (uid, filename, filepath, filemime, filesize, status, timestamp)
