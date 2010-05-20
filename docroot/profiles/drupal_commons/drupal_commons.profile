@@ -97,11 +97,8 @@ function drupal_commons_profile_modules() {
     // Strongarm
     'strongarm', 
     
-    // Features (modules)
-    'features', 'features_hb', 
-    
-    // Features (features)
-    'commons_core',
+    // Features
+    'features', 'commons_core',
   );
 
   return $modules;

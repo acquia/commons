@@ -28,21 +28,21 @@ function commons_core_ctools_plugin_api() {
 }
 
 /**
- * Implementation of hook_heartbeat_message_info().
- */
-function commons_core_heartbeat_message_info() {
-  module_load_include('inc', 'commons_core', 'commons_core.features.features_hb');
-  $args = func_get_args();
-  return call_user_func_array('_commons_core_heartbeat_message_info', $args);
-}
-
-/**
  * Implementation of hook_fieldgroup_default_groups().
  */
 function commons_core_fieldgroup_default_groups() {
   module_load_include('inc', 'commons_core', 'commons_core.defaults');
   $args = func_get_args();
   return call_user_func_array('_commons_core_fieldgroup_default_groups', $args);
+}
+
+/**
+ * Implementation of hook_heartbeat_message_info().
+ */
+function commons_core_heartbeat_message_info() {
+  module_load_include('inc', 'commons_core', 'commons_core.features.heartbeat');
+  $args = func_get_args();
+  return call_user_func_array('_commons_core_heartbeat_message_info', $args);
 }
 
 /**
