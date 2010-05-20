@@ -5,7 +5,7 @@
  *  Return settings for WYSIWYG editors
  * 
  * @param $format
- *   The numeric format ID
+ *   The format name
  * @return
  *   An array of editor settings
  */
@@ -13,7 +13,7 @@ function drupal_commons_editor_settings($format) {
   $settings = '';
   
   switch($format) {
-    case 2:
+    case 'Full HTML':
       $settings = array(
         'default' => 1,
         'user_choose' => 0,
@@ -82,7 +82,7 @@ function drupal_commons_editor_settings($format) {
       );
       break;
       
-    case 1:
+    case 'Filtered HTML':
     default:
       $settings = array(
         'default' => 1,

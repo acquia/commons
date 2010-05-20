@@ -3026,6 +3026,7 @@ function _commons_core_views_default_views() {
     'path_override' => FALSE,
     'title_override' => FALSE,
     'exposed_form' => FALSE,
+    'fields_override' => FALSE,
   ));
   $handler->override_option('argument_input', array());
   $handler->override_option('link_to_view', 0);
@@ -3191,6 +3192,7 @@ function _commons_core_views_default_views() {
     'path_override' => FALSE,
     'title_override' => FALSE,
     'exposed_form' => FALSE,
+    'fields_override' => FALSE,
   ));
   $handler->override_option('argument_input', array());
   $handler->override_option('link_to_view', 0);
@@ -3442,6 +3444,7 @@ function _commons_core_views_default_views() {
     'path_override' => FALSE,
     'title_override' => FALSE,
     'exposed_form' => FALSE,
+    'fields_override' => FALSE,
   ));
   $handler->override_option('argument_input', array());
   $handler->override_option('link_to_view', 0);
@@ -3591,7 +3594,7 @@ function _commons_core_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Most Active Users');
-  $handler->override_option('footer', '<?php print l(\'View All Users\', \'userpoints\'); ?>');
+  $handler->override_option('footer', '<?php print l(t(\'View all users\'), \'userpoints\'); ?>');
   $handler->override_option('footer_format', '3');
   $handler->override_option('footer_empty', 0);
   $handler->override_option('empty', 'No users have received any points yet.');
@@ -5062,6 +5065,16 @@ function _commons_core_views_default_views() {
     ),
   ));
   $handler->override_option('sorts', array(
+    'score' => array(
+      'order' => 'DESC',
+      'id' => 'score',
+      'table' => 'search_index',
+      'field' => 'score',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
     'last_updated' => array(
       'order' => 'DESC',
       'granularity' => 'second',
@@ -5069,6 +5082,70 @@ function _commons_core_views_default_views() {
       'table' => 'node_comment_statistics',
       'field' => 'last_updated',
       'relationship' => 'none',
+    ),
+  ));
+  $handler->override_option('arguments', array(
+    'group_nid' => array(
+      'default_action' => 'ignore',
+      'style_plugin' => 'default_summary',
+      'style_options' => array(),
+      'wildcard' => 'all',
+      'wildcard_substitution' => 'All',
+      'title' => '',
+      'breadcrumb' => '',
+      'default_argument_type' => 'fixed',
+      'default_argument' => '',
+      'validate_type' => 'og_group_types',
+      'validate_fail' => 'not found',
+      'break_phrase' => 0,
+      'not' => 0,
+      'id' => 'group_nid',
+      'table' => 'og_ancestry',
+      'field' => 'group_nid',
+      'validate_user_argument_type' => 'uid',
+      'validate_user_roles' => array(
+        '2' => 0,
+        '3' => 0,
+      ),
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+      'default_options_div_prefix' => '',
+      'default_argument_fixed' => '',
+      'default_argument_user' => 0,
+      'default_argument_php' => '',
+      'validate_argument_node_type' => array(
+        'blog' => 0,
+        'poll' => 0,
+        'discussion' => 0,
+        'document' => 0,
+        'event' => 0,
+        'group' => 0,
+        'notice' => 0,
+        'page' => 0,
+        'wiki' => 0,
+      ),
+      'validate_argument_node_access' => 0,
+      'validate_argument_nid_type' => 'nid',
+      'validate_argument_vocabulary' => array(
+        '2' => 0,
+        '1' => 0,
+      ),
+      'validate_argument_type' => 'tid',
+      'validate_argument_transform' => 0,
+      'validate_user_restrict_roles' => 0,
+      'validate_argument_node_flag_name' => '*relationship*',
+      'validate_argument_node_flag_test' => 'flaggable',
+      'validate_argument_node_flag_id_type' => 'id',
+      'validate_argument_user_flag_name' => '*relationship*',
+      'validate_argument_user_flag_test' => 'flaggable',
+      'validate_argument_user_flag_id_type' => 'id',
+      'validate_argument_is_member' => 'OG_VIEWS_DO_NOT_VALIDATE_MEMBERSHIP',
+      'validate_argument_group_node_type' => array(
+        'group' => 0,
+      ),
+      'validate_argument_php' => '',
     ),
   ));
   $handler->override_option('filters', array(
@@ -5173,6 +5250,7 @@ function _commons_core_views_default_views() {
         'discussion' => 'discussion',
         'document' => 'document',
         'event' => 'event',
+        'page' => 'page',
         'wiki' => 'wiki',
       ),
       'group' => '0',
@@ -5185,11 +5263,14 @@ function _commons_core_views_default_views() {
         'optional' => 1,
         'single' => 1,
         'remember' => 0,
-        'reduce' => 0,
+        'reduce' => 1,
       ),
       'id' => 'type',
       'table' => 'node',
       'field' => 'type',
+      'override' => array(
+        'button' => 'Override',
+      ),
       'relationship' => 'none',
     ),
   ));
@@ -5254,9 +5335,36 @@ function _commons_core_views_default_views() {
     ),
     'default' => '-1',
   ));
-  $handler = $view->new_display('block', 'Block', 'block_1');
-  $handler->override_option('block_description', 'Recent Group Activity');
-  $handler->override_option('block_caching', -1);
+  $handler = $view->new_display('panel_pane', 'Content pane', 'panel_pane_1');
+  $handler->override_option('pane_title', '');
+  $handler->override_option('pane_description', '');
+  $handler->override_option('pane_category', array(
+    'name' => 'View panes',
+    'weight' => 0,
+  ));
+  $handler->override_option('allow', array(
+    'use_pager' => FALSE,
+    'items_per_page' => FALSE,
+    'offset' => FALSE,
+    'link_to_view' => FALSE,
+    'more_link' => FALSE,
+    'path_override' => FALSE,
+    'title_override' => FALSE,
+    'exposed_form' => FALSE,
+    'fields_override' => FALSE,
+  ));
+  $handler->override_option('argument_input', array(
+    'group_nid' => array(
+      'type' => 'panel',
+      'context' => 'user.log-since',
+      'context_optional' => 0,
+      'panel' => '0',
+      'fixed' => '',
+      'label' => 'Organic groups: Groups',
+    ),
+  ));
+  $handler->override_option('link_to_view', 0);
+  $handler->override_option('inherit_panels_path', 0);
 
   $views[$view->name] = $view;
 
@@ -14080,8 +14188,8 @@ if(user_access(\'create notice content\')) {
         'max_length' => '',
         'word_boundary' => 1,
         'ellipsis' => 1,
-        'html' => 0,
         'strip_tags' => 0,
+        'html' => 0,
       ),
       'empty' => '',
       'hide_empty' => 0,
@@ -14094,9 +14202,6 @@ if(user_access(\'create notice content\')) {
       'table' => 'users',
       'field' => 'name',
       'relationship' => 'none',
-      'override' => array(
-        'button' => 'Override',
-      ),
     ),
     'value' => array(
       'label' => '',
@@ -14243,7 +14348,6 @@ if(user_access(\'create notice content\')) {
       'picture' => 'picture',
       'name' => 'name',
       'value' => 'value',
-      'nothing_1' => 'nothing_1',
       'nothing' => 'nothing',
     ),
     'separator' => '',

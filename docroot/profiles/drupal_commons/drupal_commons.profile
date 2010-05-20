@@ -4,6 +4,9 @@
 // Define the name of the free-tagging vocabulary
 define('DRUPAL_COMMONS_TAG_NAME', 'Tags');
 
+// Define the forced ID of the free-tagging vocabulary
+define('DRUPAL_COMMONS_TAG_ID', 2);
+
 // Define the name of the user menu dropdown item
 define('DRUPAL_COMMONS_USER_MENU_DROPDOWN', 'My Stuff');
 
@@ -194,7 +197,6 @@ function drupal_commons_config_vocabulary() {
   taxonomy_save_vocabulary($vocab);
   
   // Add free-tagging vocabulary for content
-  // IMPORTANT that this is inserted second for ID = 2
   $vocab = array(
     'name' => t(DRUPAL_COMMONS_TAG_NAME),
     'description' => t('Free-tagging vocabulary for all content items'),
@@ -207,15 +209,22 @@ function drupal_commons_config_vocabulary() {
   );
   taxonomy_save_vocabulary($vocab); 
   
+  // Force free-tagging vocabulary to a certain ID
+  // This is needed for bundled views to work
+  db_query("UPDATE {vocabulary} SET vid = %d WHERE name = '%s'",
+    DRUPAL_COMMONS_TAG_ID,
+    DRUPAL_COMMONS_TAG_NAME
+  );
+  
   // Link free-tagging vocabulary to node types
   $sql = "INSERT INTO {vocabulary_node_types} (vid, type) VALUES (%d, '%s')";
-  db_query($sql, $vocab['vid'], 'blog');
-  db_query($sql, $vocab['vid'], 'discussion');
-  db_query($sql, $vocab['vid'], 'document');
-  db_query($sql, $vocab['vid'], 'event');
-  db_query($sql, $vocab['vid'], 'group');
-  db_query($sql, $vocab['vid'], 'poll');
-  db_query($sql, $vocab['vid'], 'wiki'); 
+  db_query($sql, DRUPAL_COMMONS_TAG_ID, 'blog');
+  db_query($sql, DRUPAL_COMMONS_TAG_ID, 'discussion');
+  db_query($sql, DRUPAL_COMMONS_TAG_ID, 'document');
+  db_query($sql, DRUPAL_COMMONS_TAG_ID, 'event');
+  db_query($sql, DRUPAL_COMMONS_TAG_ID, 'group');
+  db_query($sql, DRUPAL_COMMONS_TAG_ID, 'poll');
+  db_query($sql, DRUPAL_COMMONS_TAG_ID, 'wiki'); 
 }
 
 // Add custom profile fields
@@ -232,15 +241,18 @@ function drupal_commons_config_profile() {
 
 // Configure flag
 function drupal_commons_config_flag() {
+  // Fetch bookmark flag ID
+  $flag_id = db_result(db_query("SELECT fid FROM {flags} WHERE name = '%s'", 'bookmarks'));
+  
   // Enable default bookmark flag to work on content types
   $sql = "INSERT INTO {flag_types} (fid, type) VALUES (%d, '%s')";
   db_query("DELETE FROM {flag_types}");
-  db_query($sql, 1, 'blog');
-  db_query($sql, 1, 'discussion');
-  db_query($sql, 1, 'document');
-  db_query($sql, 1, 'event');
-  db_query($sql, 1, 'poll');
-  db_query($sql, 1, 'wiki');
+  db_query($sql, $flag_id, 'blog');
+  db_query($sql, $flag_id, 'discussion');
+  db_query($sql, $flag_id, 'document');
+  db_query($sql, $flag_id, 'event');
+  db_query($sql, $flag_id, 'poll');
+  db_query($sql, $flag_id, 'wiki');
 }
 
 // Configure menu
@@ -271,10 +283,14 @@ function drupal_commons_config_filter() {
   // Set allowed HTML tags for Filter HTML format
   variable_set('allowed_html_1', '<a> <img> <em> <p> <strong> <cite> <code> <ul> <ol> <li> <dl> <dt> <dd>');
   
+  // Fetch format IDs
+  $filtered_html = db_result(db_query("SELECT format FROM {filter_formats} WHERE name = '%s'", 'Filtered HTML'));
+  $full_html = db_result(db_query("SELECT format FROM {filter_formats} WHERE name = '%s'", 'Full HTML'));
+
   // Add wiki-style freelinking to both default formats
   $sql = "INSERT INTO {filters} (format, module, delta, weight) VALUES (%d, '%s', %d, %d)";
-  db_query($sql, 1, 'freelinking', 0, 10);  // Filtered HTML
-  db_query($sql, 2, 'freelinking', 0, 10);  // Full HTML
+  db_query($sql, $filtered_html, 'freelinking', 0, 10);  // Filtered HTML
+  db_query($sql, $full_html, 'freelinking', 0, 10);  // Full HTML
 }
 
 // Configure wysiwyg
@@ -282,17 +298,21 @@ function drupal_commons_config_wysiwyg() {
   // Load external file containing editor settings
   include_once('drupal_commons_editor.inc'); 
   
+  // Fetch format IDs
+  $filtered_html = db_result(db_query("SELECT format FROM {filter_formats} WHERE name = '%s'", 'Filtered HTML'));
+  $full_html = db_result(db_query("SELECT format FROM {filter_formats} WHERE name = '%s'", 'Full HTML'));
+  
   // Build SQL statement
   $sql = "INSERT INTO {wysiwyg} (format, editor, settings) VALUES (%d, '%s', '%s')";
   
   // Insert the settings
-  db_query($sql, 1, DRUPAL_COMMONS_EDITOR, serialize(drupal_commons_editor_settings(1)));
+  db_query($sql, $filtered_html, DRUPAL_COMMONS_EDITOR, serialize(drupal_commons_editor_settings('Filtered HTML')));
   
   // Build settings for filtered html array
   $settings = array();
   
   // Insert the settings
-  db_query($sql, 2, DRUPAL_COMMONS_EDITOR, serialize(drupal_commons_editor_settings(2)));
+  db_query($sql, $full_html, DRUPAL_COMMONS_EDITOR, serialize(drupal_commons_editor_settings('Full HTML')));
 }
 
 // Configure user_relationships
@@ -409,7 +429,7 @@ function drupal_commons_config_perms() {
 // Configure views
 function drupal_commons_config_views() {
   /*
-   *  Disable unneeded views to avoid confusion
+   * Disable unneeded views to avoid confusion
    * This is helpful because we've overridden many OG views
    */
   
@@ -487,11 +507,37 @@ function drupal_commons_config_images() {
     file_directory_path() . '/imagecache/group_images_thumb/imagefield_default_images/default-group.png'
   );
   
+  // Simulate that we've uploaded the group image
+  db_query("INSERT INTO {files} (uid, filename, filepath, filemime, filesize, status, timestamp)
+    VALUES (%d, '%s', '%s', '%s', %d, %d, %d)",
+    1,
+    'default-group.png',
+    file_directory_path() . '/imagecache/group_images/imagefield_default_images/default-group.png',
+    'image/png',
+    filesize($group_image),
+    1,
+    time()
+  );
+  
+  // Now fetch the file
+  $file = db_fetch_object(db_query("SELECT * from {files} WHERE filename = '%s'", 'default-group.png'));
+  
   // Fetch group image CCK field settings to alter
   $settings = db_result(db_query("SELECT widget_settings FROM {content_node_field_instance} WHERE field_name = 'field_group_image'"));
   $settings = unserialize($settings);
-  $settings['default_image']['filepath'] = file_directory_path() . '/imagecache/group_images/imagefield_default_images/default-group.png';
-  $settings['default_image']['destination'] = file_directory_path() . '/imagecache/group_images/imagefield_default_images/default-group.png';
+  $settings['default_image'] = array(
+    'filename' => $file->filename,
+    'filepath' => $file->filepath,
+    'filemime' => $file->filemime,
+    'source' => 'default_image_upload',
+    'destination' => $file->filepath,
+    'filesize' => $file->filesize,
+    'uid' => $file->uid,
+    'status' => $file->status,
+    'timestamp' => $file->timestamp,
+    'fid' => $file->fid
+  );
+  $settings['use_default_image'] = 1;
   
   // Put the altered settings back
   db_query("UPDATE {content_node_field_instance} SET widget_settings = '%s' WHERE field_name = 'field_group_image'", serialize($settings));
@@ -540,6 +586,6 @@ function drupal_commons_cleanup() {
     cache_clear_all('*', $table, TRUE);
   }
   
-  // Say hello to watchdog!
+  // Say hello to the dog!
   watchdog('commons', t('Welcome to Drupal Commons from Acquia!'));
 }
