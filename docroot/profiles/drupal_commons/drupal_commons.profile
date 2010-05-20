@@ -381,6 +381,10 @@ function drupal_commons_config_ctools() {
 
 // Configure roles
 function drupal_commons_config_roles() {
+  // Make sure default roles are set right (just in case)
+  db_query("UPDATE {role} SET rid = 1 WHERE name = 'anonymous user'");
+  db_query("UPDATE {role} SET rid = 2 WHERE name = 'authenticated user'");
+  
   // Add the "Community Manager" role
   db_query("INSERT INTO {role} (name) VALUES ('%s')", t(DRUPAL_COMMONS_MANAGER_ROLE));
 }
