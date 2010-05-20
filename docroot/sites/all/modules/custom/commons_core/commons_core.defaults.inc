@@ -1168,7 +1168,7 @@ function _commons_core_context_default_contexts() {
       'user_1' => array(
         'module' => 'user',
         'delta' => '1',
-        'weight' => 41,
+        'weight' => 80,
         'region' => 'right',
         'status' => '0',
         'label' => 'Navigation',
