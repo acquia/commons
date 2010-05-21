@@ -178,9 +178,11 @@ function commons_field_access($op, $field, $account = NULL, $node = NULL) {
   }
 }
 
-//  Force anonymous users to a login page
+/*
+ * Implementation of hook_init()
+ */
 function commons_init() {
-  // Check settings first
+  //  Force anonymous users to a login page
   if (variable_get('commons_force_login', 0)) {
     global $user;
   
@@ -193,6 +195,16 @@ function commons_init() {
         drupal_goto('user');
       }
     }
+  }
+  
+  // We've overridden /og with a custom view, so redirect
+  if (arg(0) == 'og' && !arg(1)) {
+    drupal_goto('groups');
+  }
+  
+  // We've overridden /og/my with a custom view, so redirect
+  if (arg(0) == 'og' && arg(1) == 'my') {
+    drupal_goto('groups/my');
   }
   
   // Notify group admins of any pending requests on group home page

@@ -6,6 +6,73 @@
 function _commons_core_content_default_fields() {
   $fields = array();
 
+  // Exported field: field_content_images
+  $fields[] = array(
+    'field_name' => 'field_content_images',
+    'type_name' => 'blog',
+    'display_settings' => array(
+      'weight' => '34',
+      'parent' => 'group_images',
+      'label' => array(
+        'format' => 'hidden',
+      ),
+      'teaser' => array(
+        'format' => 'content_image_primary_linked',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'content_image_primary_default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'image_plain',
+        'exclude' => 0,
+      ),
+      '2' => array(
+        'format' => 'image_plain',
+        'exclude' => 0,
+      ),
+      '3' => array(
+        'format' => 'image_plain',
+        'exclude' => 0,
+      ),
+      'token' => array(
+        'format' => 'image_plain',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'filefield',
+    'required' => '0',
+    'multiple' => '1',
+    'module' => 'filefield',
+    'active' => '1',
+    'list_field' => '0',
+    'list_default' => 1,
+    'description_field' => '0',
+    'widget' => array(
+      'file_extensions' => 'png gif jpg jpeg',
+      'file_path' => '',
+      'progress_indicator' => 'bar',
+      'max_filesize_per_file' => '',
+      'max_filesize_per_node' => '',
+      'max_resolution' => '0',
+      'min_resolution' => '0',
+      'alt' => '',
+      'custom_alt' => 0,
+      'title' => '',
+      'custom_title' => 0,
+      'title_type' => 'textfield',
+      'default_image' => NULL,
+      'use_default_image' => 0,
+      'label' => 'Add Images',
+      'weight' => '34',
+      'description' => '',
+      'type' => 'imagefield_widget',
+      'module' => 'imagefield',
+    ),
+  );
+
   // Exported field: field_featured_content
   $fields[] = array(
     'field_name' => 'field_featured_content',
@@ -121,6 +188,73 @@ Sticky',
       'description' => 'If you\'re a <strong>group owner</strong> you have the option to check this to make the content item "Sticky". Sticky items remain at the top of content lists so users can see them more easily. If this post is not a group post, this will be ignored.',
       'type' => 'optionwidgets_onoff',
       'module' => 'optionwidgets',
+    ),
+  );
+
+  // Exported field: field_content_images
+  $fields[] = array(
+    'field_name' => 'field_content_images',
+    'type_name' => 'discussion',
+    'display_settings' => array(
+      'weight' => '35',
+      'parent' => 'group_images',
+      'label' => array(
+        'format' => 'hidden',
+      ),
+      'teaser' => array(
+        'format' => 'content_image_primary_linked',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'content_image_primary_default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'image_plain',
+        'exclude' => 0,
+      ),
+      '2' => array(
+        'format' => 'image_plain',
+        'exclude' => 0,
+      ),
+      '3' => array(
+        'format' => 'image_plain',
+        'exclude' => 0,
+      ),
+      'token' => array(
+        'format' => 'image_plain',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'filefield',
+    'required' => '0',
+    'multiple' => '1',
+    'module' => 'filefield',
+    'active' => '1',
+    'list_field' => '0',
+    'list_default' => 1,
+    'description_field' => '0',
+    'widget' => array(
+      'file_extensions' => 'png gif jpg jpeg',
+      'file_path' => '',
+      'progress_indicator' => 'bar',
+      'max_filesize_per_file' => '',
+      'max_filesize_per_node' => '',
+      'max_resolution' => '0',
+      'min_resolution' => '0',
+      'alt' => '',
+      'custom_alt' => 0,
+      'title' => '',
+      'custom_title' => 0,
+      'title_type' => 'textfield',
+      'default_image' => NULL,
+      'use_default_image' => 0,
+      'label' => 'Add Images',
+      'weight' => '35',
+      'description' => '',
+      'type' => 'imagefield_widget',
+      'module' => 'imagefield',
     ),
   );
 
@@ -403,6 +537,73 @@ Sticky',
       'description' => 'If you\'re a <strong>group owner</strong> you have the option to check this to make the content item "Sticky". Sticky items remain at the top of content lists so users can see them more easily. If this post is not a group post, this will be ignored.',
       'type' => 'optionwidgets_onoff',
       'module' => 'optionwidgets',
+    ),
+  );
+
+  // Exported field: field_content_images
+  $fields[] = array(
+    'field_name' => 'field_content_images',
+    'type_name' => 'event',
+    'display_settings' => array(
+      'weight' => '35',
+      'parent' => 'group_images',
+      'label' => array(
+        'format' => 'hidden',
+      ),
+      'teaser' => array(
+        'format' => 'content_image_primary_linked',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'content_image_primary_default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'image_plain',
+        'exclude' => 0,
+      ),
+      '2' => array(
+        'format' => 'image_plain',
+        'exclude' => 0,
+      ),
+      '3' => array(
+        'format' => 'image_plain',
+        'exclude' => 0,
+      ),
+      'token' => array(
+        'format' => 'image_plain',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'filefield',
+    'required' => '0',
+    'multiple' => '1',
+    'module' => 'filefield',
+    'active' => '1',
+    'list_field' => '0',
+    'list_default' => 1,
+    'description_field' => '0',
+    'widget' => array(
+      'file_extensions' => 'png gif jpg jpeg',
+      'file_path' => '',
+      'progress_indicator' => 'bar',
+      'max_filesize_per_file' => '',
+      'max_filesize_per_node' => '',
+      'max_resolution' => '0',
+      'min_resolution' => '0',
+      'alt' => '',
+      'custom_alt' => 0,
+      'title' => '',
+      'custom_title' => 0,
+      'title_type' => 'textfield',
+      'default_image' => NULL,
+      'use_default_image' => 0,
+      'label' => 'Add Images',
+      'weight' => '35',
+      'description' => '',
+      'type' => 'imagefield_widget',
+      'module' => 'imagefield',
     ),
   );
 
@@ -748,10 +949,10 @@ Featured',
       'title_type' => 'textfield',
       'default_image' => array(
         'filename' => 'default-group.png',
-        'filepath' => file_directory_path() . '/imagefield_default_images/default-group.png',
+        'filepath' => file_directory_path() . '/imagecache/group_images/imagefield_default_images/default-group.png',
         'filemime' => 'image/png',
         'source' => 'default_image_upload',
-        'destination' => file_directory_path() . '/imagefield_default_images/default-group.png',
+        'destination' => file_directory_path() . '/imagecache/group_images/imagefield_default_images/default-group.png',
         'filesize' => 3968,
         'uid' => '1',
         'status' => 1,
@@ -832,6 +1033,140 @@ Featured',
     ),
   );
 
+  // Exported field: field_content_images
+  $fields[] = array(
+    'field_name' => 'field_content_images',
+    'type_name' => 'notice',
+    'display_settings' => array(
+      'weight' => '35',
+      'parent' => 'group_images',
+      'label' => array(
+        'format' => 'hidden',
+      ),
+      'teaser' => array(
+        'format' => 'content_image_primary_linked',
+        'exclude' => 1,
+      ),
+      'full' => array(
+        'format' => 'content_image_primary_default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'image_plain',
+        'exclude' => 0,
+      ),
+      '2' => array(
+        'format' => 'image_plain',
+        'exclude' => 0,
+      ),
+      '3' => array(
+        'format' => 'image_plain',
+        'exclude' => 0,
+      ),
+      'token' => array(
+        'format' => 'image_plain',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'filefield',
+    'required' => '0',
+    'multiple' => '1',
+    'module' => 'filefield',
+    'active' => '1',
+    'list_field' => '0',
+    'list_default' => 1,
+    'description_field' => '0',
+    'widget' => array(
+      'file_extensions' => 'png gif jpg jpeg',
+      'file_path' => '',
+      'progress_indicator' => 'bar',
+      'max_filesize_per_file' => '',
+      'max_filesize_per_node' => '',
+      'max_resolution' => '0',
+      'min_resolution' => '0',
+      'alt' => '',
+      'custom_alt' => 0,
+      'title' => '',
+      'custom_title' => 0,
+      'title_type' => 'textfield',
+      'default_image' => NULL,
+      'use_default_image' => 0,
+      'label' => 'Add Images',
+      'weight' => '35',
+      'description' => '',
+      'type' => 'imagefield_widget',
+      'module' => 'imagefield',
+    ),
+  );
+
+  // Exported field: field_content_images
+  $fields[] = array(
+    'field_name' => 'field_content_images',
+    'type_name' => 'poll',
+    'display_settings' => array(
+      'weight' => '11',
+      'parent' => 'group_images',
+      'label' => array(
+        'format' => 'hidden',
+      ),
+      'teaser' => array(
+        'format' => 'content_image_primary_linked',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'content_image_primary_default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'image_plain',
+        'exclude' => 0,
+      ),
+      '2' => array(
+        'format' => 'image_plain',
+        'exclude' => 0,
+      ),
+      '3' => array(
+        'format' => 'image_plain',
+        'exclude' => 0,
+      ),
+      'token' => array(
+        'format' => 'image_plain',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'filefield',
+    'required' => '0',
+    'multiple' => '1',
+    'module' => 'filefield',
+    'active' => '1',
+    'list_field' => '0',
+    'list_default' => 1,
+    'description_field' => '0',
+    'widget' => array(
+      'file_extensions' => 'png gif jpg jpeg',
+      'file_path' => '',
+      'progress_indicator' => 'bar',
+      'max_filesize_per_file' => '',
+      'max_filesize_per_node' => '',
+      'max_resolution' => '0',
+      'min_resolution' => '0',
+      'alt' => '',
+      'custom_alt' => 0,
+      'title' => '',
+      'custom_title' => 0,
+      'title_type' => 'textfield',
+      'default_image' => NULL,
+      'use_default_image' => 0,
+      'label' => 'Add Images',
+      'weight' => '11',
+      'description' => '',
+      'type' => 'imagefield_widget',
+      'module' => 'imagefield',
+    ),
+  );
+
   // Exported field: field_featured_content
   $fields[] = array(
     'field_name' => 'field_featured_content',
@@ -886,6 +1221,73 @@ Featured',
       'description' => 'Marking a content item of featured will show the content item in the main \'Featured Content\' section.',
       'type' => 'optionwidgets_onoff',
       'module' => 'optionwidgets',
+    ),
+  );
+
+  // Exported field: field_content_images
+  $fields[] = array(
+    'field_name' => 'field_content_images',
+    'type_name' => 'wiki',
+    'display_settings' => array(
+      'weight' => '35',
+      'parent' => 'group_images',
+      'label' => array(
+        'format' => 'hidden',
+      ),
+      'teaser' => array(
+        'format' => 'content_image_primary_linked',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'content_image_primary_default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'image_plain',
+        'exclude' => 0,
+      ),
+      '2' => array(
+        'format' => 'image_plain',
+        'exclude' => 0,
+      ),
+      '3' => array(
+        'format' => 'image_plain',
+        'exclude' => 0,
+      ),
+      'token' => array(
+        'format' => 'image_plain',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'filefield',
+    'required' => '0',
+    'multiple' => '1',
+    'module' => 'filefield',
+    'active' => '1',
+    'list_field' => '0',
+    'list_default' => 1,
+    'description_field' => '0',
+    'widget' => array(
+      'file_extensions' => 'png gif jpg jpeg',
+      'file_path' => '',
+      'progress_indicator' => 'bar',
+      'max_filesize_per_file' => '',
+      'max_filesize_per_node' => '',
+      'max_resolution' => '0',
+      'min_resolution' => '0',
+      'alt' => '',
+      'custom_alt' => 0,
+      'title' => '',
+      'custom_title' => 0,
+      'title_type' => 'textfield',
+      'default_image' => NULL,
+      'use_default_image' => 0,
+      'label' => 'Add Images',
+      'weight' => '35',
+      'description' => '',
+      'type' => 'imagefield_widget',
+      'module' => 'imagefield',
     ),
   );
 
@@ -1009,6 +1411,7 @@ Sticky',
 
   // Translatables
   array(
+    t('Add Images'),
     t('Date'),
     t('Featured Content'),
     t('Featured Group'),
@@ -1168,7 +1571,7 @@ function _commons_core_context_default_contexts() {
       'user_1' => array(
         'module' => 'user',
         'delta' => '1',
-        'weight' => 80,
+        'weight' => 90,
         'region' => 'right',
         'status' => '0',
         'label' => 'Navigation',
@@ -1371,6 +1774,53 @@ function _commons_core_ctools_plugin_api() {
 function _commons_core_fieldgroup_default_groups() {
   $groups = array();
 
+  // Exported group: group_images
+  $groups[] = array(
+    'group_type' => 'standard',
+    'type_name' => 'blog',
+    'group_name' => 'group_images',
+    'label' => 'Images',
+    'settings' => array(
+      'form' => array(
+        'style' => 'fieldset',
+        'description' => '',
+      ),
+      'display' => array(
+        'weight' => '-2',
+        'label' => 'above',
+        'teaser' => array(
+          'format' => 'fieldset',
+          'exclude' => 1,
+        ),
+        'full' => array(
+          'format' => 'fieldset',
+          'exclude' => 1,
+        ),
+        'description' => '',
+        '4' => array(
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        '2' => array(
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        '3' => array(
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        'token' => array(
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+      ),
+    ),
+    'weight' => '-2',
+    'fields' => array(
+      '0' => 'field_content_images',
+    ),
+  );
+
   // Exported group: group_promote_content
   $groups[] = array(
     'group_type' => 'standard',
@@ -1383,7 +1833,7 @@ function _commons_core_fieldgroup_default_groups() {
         'description' => '',
       ),
       'display' => array(
-        'weight' => '0',
+        'weight' => '1',
         'label' => 'above',
         'teaser' => array(
           'format' => 'fieldset',
@@ -1412,10 +1862,57 @@ function _commons_core_fieldgroup_default_groups() {
         ),
       ),
     ),
-    'weight' => '0',
+    'weight' => '1',
     'fields' => array(
       '0' => 'field_group_sticky',
       '1' => 'field_featured_content',
+    ),
+  );
+
+  // Exported group: group_images
+  $groups[] = array(
+    'group_type' => 'standard',
+    'type_name' => 'discussion',
+    'group_name' => 'group_images',
+    'label' => 'Images',
+    'settings' => array(
+      'form' => array(
+        'style' => 'fieldset',
+        'description' => '',
+      ),
+      'display' => array(
+        'weight' => '-2',
+        'label' => 'above',
+        'teaser' => array(
+          'format' => 'fieldset',
+          'exclude' => 1,
+        ),
+        'full' => array(
+          'format' => 'fieldset',
+          'exclude' => 1,
+        ),
+        'description' => '',
+        '4' => array(
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        '2' => array(
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        '3' => array(
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        'token' => array(
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+      ),
+    ),
+    'weight' => '-2',
+    'fields' => array(
+      '0' => 'field_content_images',
     ),
   );
 
@@ -1431,7 +1928,7 @@ function _commons_core_fieldgroup_default_groups() {
         'description' => '',
       ),
       'display' => array(
-        'weight' => '0',
+        'weight' => '1',
         'label' => 'above',
         'teaser' => array(
           'format' => 'fieldset',
@@ -1460,7 +1957,7 @@ function _commons_core_fieldgroup_default_groups() {
         ),
       ),
     ),
-    'weight' => '0',
+    'weight' => '1',
     'fields' => array(
       '0' => 'field_group_sticky',
       '1' => 'field_featured_content',
@@ -1551,6 +2048,53 @@ function _commons_core_fieldgroup_default_groups() {
     ),
   );
 
+  // Exported group: group_images
+  $groups[] = array(
+    'group_type' => 'standard',
+    'type_name' => 'event',
+    'group_name' => 'group_images',
+    'label' => 'Images',
+    'settings' => array(
+      'form' => array(
+        'style' => 'fieldset',
+        'description' => '',
+      ),
+      'display' => array(
+        'weight' => '-1',
+        'label' => 'above',
+        'teaser' => array(
+          'format' => 'fieldset',
+          'exclude' => 1,
+        ),
+        'full' => array(
+          'format' => 'fieldset',
+          'exclude' => 1,
+        ),
+        'description' => '',
+        '4' => array(
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        '2' => array(
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        '3' => array(
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        'token' => array(
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+      ),
+    ),
+    'weight' => '-1',
+    'fields' => array(
+      '0' => 'field_content_images',
+    ),
+  );
+
   // Exported group: group_promote_content
   $groups[] = array(
     'group_type' => 'standard',
@@ -1563,7 +2107,7 @@ function _commons_core_fieldgroup_default_groups() {
         'description' => '',
       ),
       'display' => array(
-        'weight' => '1',
+        'weight' => '2',
         'label' => 'above',
         'teaser' => array(
           'format' => 'fieldset',
@@ -1592,7 +2136,7 @@ function _commons_core_fieldgroup_default_groups() {
         ),
       ),
     ),
-    'weight' => '1',
+    'weight' => '2',
     'fields' => array(
       '0' => 'field_group_sticky',
       '1' => 'field_featured_content',
@@ -1690,12 +2234,59 @@ function _commons_core_fieldgroup_default_groups() {
     ),
   );
 
-  // Exported group: group_promote_content
+  // Exported group: group_images
+  $groups[] = array(
+    'group_type' => 'standard',
+    'type_name' => 'notice',
+    'group_name' => 'group_images',
+    'label' => 'Images',
+    'settings' => array(
+      'form' => array(
+        'style' => 'fieldset',
+        'description' => '',
+      ),
+      'display' => array(
+        'weight' => '-3',
+        'label' => 'above',
+        'teaser' => array(
+          'format' => 'fieldset',
+          'exclude' => 1,
+        ),
+        'full' => array(
+          'format' => 'fieldset',
+          'exclude' => 1,
+        ),
+        'description' => '',
+        '4' => array(
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        '2' => array(
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        '3' => array(
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        'token' => array(
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+      ),
+    ),
+    'weight' => '-3',
+    'fields' => array(
+      '0' => 'field_content_images',
+    ),
+  );
+
+  // Exported group: group_images
   $groups[] = array(
     'group_type' => 'standard',
     'type_name' => 'poll',
-    'group_name' => 'group_promote_content',
-    'label' => 'Promote Content',
+    'group_name' => 'group_images',
+    'label' => 'Images',
     'settings' => array(
       'form' => array(
         'style' => 'fieldset',
@@ -1705,12 +2296,12 @@ function _commons_core_fieldgroup_default_groups() {
         'weight' => '-1',
         'label' => 'above',
         'teaser' => array(
-          'format' => 'fieldset_collapsed',
+          'format' => 'fieldset',
           'exclude' => 1,
         ),
         'full' => array(
-          'format' => 'fieldset_collapsed',
-          'exclude' => 0,
+          'format' => 'fieldset',
+          'exclude' => 1,
         ),
         'description' => '',
         '4' => array(
@@ -1733,14 +2324,14 @@ function _commons_core_fieldgroup_default_groups() {
     ),
     'weight' => '-1',
     'fields' => array(
-      '0' => 'field_featured_content',
+      '0' => 'field_content_images',
     ),
   );
 
   // Exported group: group_promote_content
   $groups[] = array(
     'group_type' => 'standard',
-    'type_name' => 'wiki',
+    'type_name' => 'poll',
     'group_name' => 'group_promote_content',
     'label' => 'Promote Content',
     'settings' => array(
@@ -1752,7 +2343,7 @@ function _commons_core_fieldgroup_default_groups() {
         'weight' => '0',
         'label' => 'above',
         'teaser' => array(
-          'format' => 'fieldset',
+          'format' => 'fieldset_collapsed',
           'exclude' => 1,
         ),
         'full' => array(
@@ -1780,6 +2371,100 @@ function _commons_core_fieldgroup_default_groups() {
     ),
     'weight' => '0',
     'fields' => array(
+      '0' => 'field_featured_content',
+    ),
+  );
+
+  // Exported group: group_images
+  $groups[] = array(
+    'group_type' => 'standard',
+    'type_name' => 'wiki',
+    'group_name' => 'group_images',
+    'label' => 'Images',
+    'settings' => array(
+      'form' => array(
+        'style' => 'fieldset',
+        'description' => '',
+      ),
+      'display' => array(
+        'weight' => '-2',
+        'label' => 'above',
+        'teaser' => array(
+          'format' => 'fieldset',
+          'exclude' => 1,
+        ),
+        'full' => array(
+          'format' => 'fieldset',
+          'exclude' => 1,
+        ),
+        'description' => '',
+        '4' => array(
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        '2' => array(
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        '3' => array(
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        'token' => array(
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+      ),
+    ),
+    'weight' => '-2',
+    'fields' => array(
+      '0' => 'field_content_images',
+    ),
+  );
+
+  // Exported group: group_promote_content
+  $groups[] = array(
+    'group_type' => 'standard',
+    'type_name' => 'wiki',
+    'group_name' => 'group_promote_content',
+    'label' => 'Promote Content',
+    'settings' => array(
+      'form' => array(
+        'style' => 'fieldset',
+        'description' => '',
+      ),
+      'display' => array(
+        'weight' => '1',
+        'label' => 'above',
+        'teaser' => array(
+          'format' => 'fieldset',
+          'exclude' => 1,
+        ),
+        'full' => array(
+          'format' => 'fieldset_collapsed',
+          'exclude' => 0,
+        ),
+        'description' => '',
+        '4' => array(
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        '2' => array(
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        '3' => array(
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        'token' => array(
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+      ),
+    ),
+    'weight' => '1',
+    'fields' => array(
       '0' => 'field_group_sticky',
       '1' => 'field_featured_content',
     ),
@@ -1789,6 +2474,7 @@ function _commons_core_fieldgroup_default_groups() {
   array(
     t('Event Details'),
     t('Group Attributes'),
+    t('Images'),
     t('Promote Content'),
     t('Promote Group'),
   );
@@ -1801,6 +2487,34 @@ function _commons_core_fieldgroup_default_groups() {
  */
 function _commons_core_imagecache_default_presets() {
   $items = array(
+    'content_image_primary' => array(
+      'presetname' => 'content_image_primary',
+      'actions' => array(
+        '0' => array(
+          'weight' => '0',
+          'module' => 'imagecache',
+          'action' => 'imagecache_scale_and_crop',
+          'data' => array(
+            'width' => '200',
+            'height' => '200',
+          ),
+        ),
+      ),
+    ),
+    'content_image_secondary' => array(
+      'presetname' => 'content_image_secondary',
+      'actions' => array(
+        '0' => array(
+          'weight' => '0',
+          'module' => 'imagecache',
+          'action' => 'imagecache_scale_and_crop',
+          'data' => array(
+            'width' => '75',
+            'height' => '75',
+          ),
+        ),
+      ),
+    ),
     'group_images' => array(
       'presetname' => 'group_images',
       'actions' => array(
@@ -3683,13 +4397,14 @@ function _commons_core_strongarm() {
   $strongarm->name = 'content_extra_weights_blog';
   $strongarm->value = array(
     'title' => '-5',
-    'body_field' => '-2',
-    'revision_information' => '2',
-    'comment_settings' => '3',
+    'body_field' => '-1',
+    'revision_information' => '3',
+    'comment_settings' => '4',
     'menu' => '-4',
     'taxonomy' => '-3',
-    'flag' => '1',
-    'og_nodeapi' => '-1',
+    'path' => '5',
+    'flag' => '2',
+    'og_nodeapi' => '0',
   );
 
   $export['content_extra_weights_blog'] = $strongarm;
@@ -3699,13 +4414,14 @@ function _commons_core_strongarm() {
   $strongarm->name = 'content_extra_weights_discussion';
   $strongarm->value = array(
     'title' => '-5',
-    'body_field' => '-2',
-    'revision_information' => '2',
-    'comment_settings' => '3',
+    'body_field' => '-1',
+    'revision_information' => '3',
+    'comment_settings' => '4',
     'menu' => '-4',
     'taxonomy' => '-3',
-    'flag' => '1',
-    'og_nodeapi' => '-1',
+    'path' => '5',
+    'flag' => '2',
+    'og_nodeapi' => '0',
   );
 
   $export['content_extra_weights_discussion'] = $strongarm;
@@ -3731,13 +4447,14 @@ function _commons_core_strongarm() {
   $strongarm->name = 'content_extra_weights_event';
   $strongarm->value = array(
     'title' => '-5',
-    'body_field' => '-1',
-    'revision_information' => '3',
-    'comment_settings' => '4',
+    'body_field' => '0',
+    'revision_information' => '4',
+    'comment_settings' => '5',
     'menu' => '-4',
     'taxonomy' => '-3',
-    'flag' => '2',
-    'og_nodeapi' => '0',
+    'path' => '6',
+    'flag' => '3',
+    'og_nodeapi' => '1',
   );
 
   $export['content_extra_weights_event'] = $strongarm;
@@ -3764,6 +4481,20 @@ function _commons_core_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'content_extra_weights_notice';
+  $strongarm->value = array(
+    'title' => '-5',
+    'body_field' => '-2',
+    'revision_information' => '-1',
+    'comment_settings' => '1',
+    'menu' => '-4',
+    'path' => '0',
+  );
+
+  $export['content_extra_weights_notice'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'content_extra_weights_poll';
   $strongarm->value = array(
     'title' => '-5',
@@ -3785,13 +4516,14 @@ function _commons_core_strongarm() {
   $strongarm->name = 'content_extra_weights_wiki';
   $strongarm->value = array(
     'title' => '-5',
-    'body_field' => '-2',
-    'revision_information' => '2',
-    'comment_settings' => '3',
+    'body_field' => '-1',
+    'revision_information' => '3',
+    'comment_settings' => '4',
     'menu' => '-4',
     'taxonomy' => '-3',
-    'flag' => '1',
-    'og_nodeapi' => '-1',
+    'path' => '5',
+    'flag' => '2',
+    'og_nodeapi' => '0',
   );
 
   $export['content_extra_weights_wiki'] = $strongarm;

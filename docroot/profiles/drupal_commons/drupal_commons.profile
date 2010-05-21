@@ -16,6 +16,9 @@ define('DRUPAL_COMMONS_EDITOR', 'ckeditor');
 // Define the "community manager" role name
 define('DRUPAL_COMMONS_MANAGER_ROLE', 'community manager');
 
+// Define the "content manager" role name
+define('DRUPAL_COMMONS_CONTENT_ROLE', 'content manager');
+
 // Define the default theme
 define('DRUPAL_COMMONS_THEME', 'linden');
 
@@ -79,7 +82,7 @@ function drupal_commons_profile_modules() {
     'token', 'rules', 'rules_admin',
     
     // Editor
-    'wysiwyg', 'imce', 'imce_wysiwyg',
+    'wysiwyg', 'better_formats',
     
     // Shoutbox
     'shoutbox', 'shoutbox_group',
@@ -154,14 +157,14 @@ function drupal_commons_profile_tasks(&$task, $url) {
   drupal_commons_config_profile();
   drupal_commons_config_flag();
   drupal_commons_config_menu();
+  drupal_commons_config_roles();
+  drupal_commons_config_perms();
   drupal_commons_config_filter();
   drupal_commons_config_wysiwyg();
   drupal_commons_config_ur();
   drupal_commons_config_heartbeat();
   drupal_commons_config_pathauto();
   drupal_commons_config_ctools();
-  drupal_commons_config_roles();
-  drupal_commons_config_perms();
   drupal_commons_config_views();
   drupal_commons_config_theme();
   drupal_commons_config_images();
@@ -231,7 +234,7 @@ function drupal_commons_config_profile() {
   db_query($sql, t('Name'), 'profile_name', t('Enter your full name.'), t('Personal Information'), 'textfield', -10, 0, 1, 2, 0);
   db_query($sql, t('Job Title'), 'profile_job', t('What is your job title?'), t('Work Information'), 'textfield', 0, 0, 1, 2, 0);
   db_query($sql, t('My Interests'), 'profile_interests', t('What are your interests, hobbies, etc?'), t('Personal Information'), 'textarea', -8, 0, 0, 2, 0);
-  db_query($sql, t('Organization'), 'profile_organization', t('Which organization or department are you a part of?'), t('Work Information'), 'textfield', 0, 0, 0, 2, 0);
+  db_query($sql, t('Organization'), 'profile_organization', t('Which organization or department are you a part of?'), t('Work Information'), 'textfield', 0, 0, 1, 2, 0);
   db_query($sql, t('Location'), 'profile_location', t('Where are you located?'), t('Personal Information'), 'textfield', -9, 0, 0, 2, 0);
   db_query($sql, t('About Me'), 'profile_aboutme', t('Explain a little about yourself.'), t('Personal Information'), 'textarea', 0, 0, 0, 2, 0);  
 }
@@ -277,18 +280,41 @@ function drupal_commons_config_menu() {
 
 // Configure input filters
 function drupal_commons_config_filter() {
-  // Force filter format and filter IDs
+  /*
+   * Force filter format and filter IDs
+   * Necessary because Drupal doesn't use machine names for everything
+   */
+  // Filtered HTML
   db_query("UPDATE {filters} f INNER JOIN {filter_formats} ff ON f.format = ff.format SET f.format = 1 WHERE ff.name = 'Filtered HTML'");
   db_query("UPDATE {filter_formats} SET format = 1 WHERE name = 'Filtered HTML'");
   
+  // Full HTML
   db_query("UPDATE {filters} f INNER JOIN {filter_formats} ff ON f.format = ff.format SET f.format = 2 WHERE ff.name = 'Full HTML'");
   db_query("UPDATE {filter_formats} SET format = 2 WHERE name = 'Full HTML'");
   
+  // PHP code
   db_query("UPDATE {filters} f INNER JOIN {filter_formats} ff ON f.format = ff.format SET f.format = 3 WHERE ff.name = 'PHP code'");
   db_query("UPDATE {filter_formats} SET format = 3 WHERE name = 'PHP code'");
   
+  // Let community and content manager role use Full HTML
+  db_query("UPDATE {filter_formats} SET roles = ',3,4,' WHERE name = 'Full HTML'");
+  
+  // Set Full HTML as default format for community and content manager roles
+  db_query("INSERT INTO {better_formats_defaults} (rid, type, format, type_weight, weight)
+    VALUES (3, 'node', 2, 1, 0)");
+  db_query("INSERT INTO {better_formats_defaults} (rid, type, format, type_weight, weight)
+    VALUES (3, 'comment', 2, 1, 0)");
+  db_query("INSERT INTO {better_formats_defaults} (rid, type, format, type_weight, weight)
+    VALUES (3, 'block', 2, 1, 25)");
+  db_query("INSERT INTO {better_formats_defaults} (rid, type, format, type_weight, weight)
+    VALUES (4, 'node', 2, 1, 0)");
+  db_query("INSERT INTO {better_formats_defaults} (rid, type, format, type_weight, weight)
+    VALUES (4, 'comment', 2, 1, 0)");
+  db_query("INSERT INTO {better_formats_defaults} (rid, type, format, type_weight, weight)
+    VALUES (4, 'block', 2, 1, 25)");
+  
   // Set allowed HTML tags for Filter HTML format
-  variable_set('allowed_html_1', '<a> <img> <em> <p> <strong> <cite> <code> <ul> <ol> <li> <dl> <dt> <dd>');
+  variable_set('allowed_html_1', '<a> <img> <em> <p> <strong> <cite> <sub> <sup> <span> <blockquote> <code> <ul> <ol> <li> <dl> <dt> <dd> <pre> <address> <h2> <h3> <h4> <h5> <h6>');
   
   // Add wiki-style freelinking to both default formats
   $sql = "INSERT INTO {filters} (format, module, delta, weight) VALUES (%d, '%s', %d, %d)";
@@ -361,8 +387,6 @@ function drupal_commons_config_ctools() {
   if ($function = ctools_plugin_get_function($page->subtask, 'enable callback')) {
     $result = $function($page, FALSE);
 
-    // We want to re-cache this if it's changed so that status is properly
-    // updated on the changed form.
     if (!empty($page->changed)) {
       page_manager_set_page_cache($page);
     }
@@ -373,8 +397,6 @@ function drupal_commons_config_ctools() {
   if ($function = ctools_plugin_get_function($page->subtask, 'enable callback')) {
     $result = $function($page, FALSE);
 
-    // We want to re-cache this if it's changed so that status is properly
-    // updated on the changed form.
     if (!empty($page->changed)) {
       page_manager_set_page_cache($page);
     }
@@ -388,7 +410,10 @@ function drupal_commons_config_roles() {
   db_query("UPDATE {role} SET rid = 2 WHERE name = 'authenticated user'");
   
   // Add the "Community Manager" role
-  db_query("INSERT INTO {role} (name) VALUES ('%s')", t(DRUPAL_COMMONS_MANAGER_ROLE));
+  db_query("INSERT INTO {role} (rid, name) VALUES (3, '%s')", t(DRUPAL_COMMONS_MANAGER_ROLE));
+  
+  // Add the "Content Manager" role
+  db_query("INSERT INTO {role} (rid, name) VALUES (4, '%s')", t(DRUPAL_COMMONS_CONTENT_ROLE));
 }
 
 // Configure permissions
