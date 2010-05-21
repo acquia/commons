@@ -278,16 +278,13 @@ function drupal_commons_config_menu() {
 // Configure input filters
 function drupal_commons_config_filter() {
   // Force filter format and filter IDs
-  $filtered_html_id = db_result(db_query("SELECT format FROM {filter_formats} WHERE name = 'Filtered HTML'"));
-  db_query("UPDATE {filters} SET format = %d WHERE format = %d", 1, $filtered_html_id);
+  db_query("UPDATE {filters} f INNER JOIN {filter_formats} ff ON f.format = ff.format SET f.format = 1 WHERE ff.name = 'Filtered HTML'");
   db_query("UPDATE {filter_formats} SET format = 1 WHERE name = 'Filtered HTML'");
   
-  $full_html_id = db_result(db_query("SELECT format FROM {filter_formats} WHERE name = 'Full HTML'"));
-  db_query("UPDATE {filters} SET format = %d WHERE format = %d", 2, $full_html_id);
+  db_query("UPDATE {filters} f INNER JOIN {filter_formats} ff ON f.format = ff.format SET f.format = 2 WHERE ff.name = 'Full HTML'");
   db_query("UPDATE {filter_formats} SET format = 2 WHERE name = 'Full HTML'");
   
-  $php_code_id = db_result(db_query("SELECT format FROM {filter_formats} WHERE name = 'PHP code'"));
-  db_query("UPDATE {filters} SET format = %d WHERE format = %d", 3, $php_code_id);
+  db_query("UPDATE {filters} f INNER JOIN {filter_formats} ff ON f.format = ff.format SET f.format = 3 WHERE ff.name = 'PHP code'");
   db_query("UPDATE {filter_formats} SET format = 3 WHERE name = 'PHP code'");
   
   // Set allowed HTML tags for Filter HTML format
@@ -513,8 +510,6 @@ function drupal_commons_config_images() {
     file_directory_path() . '/imagecache/group_images_thumb/imagefield_default_images/default-group.png'
   );
   
-  //todo: Below is NOT overriding Features!
-  
   // Simulate that we've uploaded the group image
   db_query("INSERT INTO {files} (uid, filename, filepath, filemime, filesize, status, timestamp)
     VALUES (%d, '%s', '%s', '%s', %d, %d, %d)",
@@ -526,29 +521,6 @@ function drupal_commons_config_images() {
     1,
     time()
   );
-  
-  // Now fetch the file
-  $file = db_fetch_object(db_query("SELECT * from {files} WHERE filename = '%s'", 'default-group.png'));
-  
-  // Fetch group image CCK field settings to alter
-  $settings = db_result(db_query("SELECT widget_settings FROM {content_node_field_instance} WHERE field_name = 'field_group_image'"));
-  $settings = unserialize($settings);
-  $settings['default_image'] = array(
-    'filename' => $file->filename,
-    'filepath' => $file->filepath,
-    'filemime' => $file->filemime,
-    'source' => 'default_image_upload',
-    'destination' => $file->filepath,
-    'filesize' => $file->filesize,
-    'uid' => $file->uid,
-    'status' => $file->status,
-    'timestamp' => $file->timestamp,
-    'fid' => $file->fid
-  );
-  $settings['use_default_image'] = 1;
-  
-  // Put the altered settings back
-  db_query("UPDATE {content_node_field_instance} SET widget_settings = '%s' WHERE field_name = 'field_group_image'", serialize($settings));
 }
 
 // Configure variables. These should be set but not forced by Strongarm/Features
