@@ -957,7 +957,7 @@ Featured',
         'uid' => '1',
         'status' => 1,
         'timestamp' => 1274378352,
-        'fid' => '1',
+        'fid' => '2',
       ),
       'use_default_image' => 1,
       'label' => 'Image',
@@ -1571,7 +1571,7 @@ function _commons_core_context_default_contexts() {
       'user_1' => array(
         'module' => 'user',
         'delta' => '1',
-        'weight' => 90,
+        'weight' => 100s,
         'region' => 'right',
         'status' => '0',
         'label' => 'Navigation',
@@ -1789,12 +1789,12 @@ function _commons_core_fieldgroup_default_groups() {
         'weight' => '-2',
         'label' => 'above',
         'teaser' => array(
-          'format' => 'fieldset',
-          'exclude' => 1,
+          'format' => 'no_style',
+          'exclude' => 0,
         ),
         'full' => array(
-          'format' => 'fieldset',
-          'exclude' => 1,
+          'format' => 'no_style',
+          'exclude' => 0,
         ),
         'description' => '',
         '4' => array(
@@ -1884,12 +1884,12 @@ function _commons_core_fieldgroup_default_groups() {
         'weight' => '-2',
         'label' => 'above',
         'teaser' => array(
-          'format' => 'fieldset',
-          'exclude' => 1,
+          'format' => 'no_style',
+          'exclude' => 0,
         ),
         'full' => array(
-          'format' => 'fieldset',
-          'exclude' => 1,
+          'format' => 'no_style',
+          'exclude' => 0,
         ),
         'description' => '',
         '4' => array(
@@ -2063,12 +2063,12 @@ function _commons_core_fieldgroup_default_groups() {
         'weight' => '-1',
         'label' => 'above',
         'teaser' => array(
-          'format' => 'fieldset',
-          'exclude' => 1,
+          'format' => 'no_style',
+          'exclude' => 0,
         ),
         'full' => array(
-          'format' => 'fieldset',
-          'exclude' => 1,
+          'format' => 'no_style',
+          'exclude' => 0,
         ),
         'description' => '',
         '4' => array(
@@ -2249,12 +2249,12 @@ function _commons_core_fieldgroup_default_groups() {
         'weight' => '-3',
         'label' => 'above',
         'teaser' => array(
-          'format' => 'fieldset',
-          'exclude' => 1,
+          'format' => 'no_style',
+          'exclude' => 0,
         ),
         'full' => array(
-          'format' => 'fieldset',
-          'exclude' => 1,
+          'format' => 'no_style',
+          'exclude' => 0,
         ),
         'description' => '',
         '4' => array(
@@ -2296,12 +2296,12 @@ function _commons_core_fieldgroup_default_groups() {
         'weight' => '-1',
         'label' => 'above',
         'teaser' => array(
-          'format' => 'fieldset',
-          'exclude' => 1,
+          'format' => 'no_style',
+          'exclude' => 0,
         ),
         'full' => array(
-          'format' => 'fieldset',
-          'exclude' => 1,
+          'format' => 'no_style',
+          'exclude' => 0,
         ),
         'description' => '',
         '4' => array(
@@ -2390,12 +2390,12 @@ function _commons_core_fieldgroup_default_groups() {
         'weight' => '-2',
         'label' => 'above',
         'teaser' => array(
-          'format' => 'fieldset',
-          'exclude' => 1,
+          'format' => 'no_style',
+          'exclude' => 0,
         ),
         'full' => array(
-          'format' => 'fieldset',
-          'exclude' => 1,
+          'format' => 'no_style',
+          'exclude' => 0,
         ),
         'description' => '',
         '4' => array(
