@@ -4394,6 +4394,13 @@ function _commons_core_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'comment_group';
+  $strongarm->value = '0';
+
+  $export['comment_group'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'content_extra_weights_blog';
   $strongarm->value = array(
     'title' => '-5',
