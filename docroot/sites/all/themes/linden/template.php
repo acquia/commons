@@ -114,7 +114,7 @@ function linden_shoutbox_post($shout, $links = array(), $alter_row_color=TRUE) {
       $linkattributes = $link['linkattributes'];
       $link_html = '<img src="'. $link['img'] .'"  width="'. $link['img_width'] .'" height="'. $link['img_height'] .'" alt="'. $link['title'] .'" class="shoutbox-imglink">';
       $link_url = 'shoutbox/'. $shout->shout_id .'/'. $link['action'];
-      $img_links = l($link_html, $link_url, array('html' => TRUE)) . $img_links;
+      $img_links = l($link_html, $link_url, array('html' => TRUE, 'query' => array('destination' => drupal_get_path_alias($_GET['q'])))) . $img_links;
     }
   }
   
