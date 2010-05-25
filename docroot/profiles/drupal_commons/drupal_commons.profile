@@ -271,7 +271,7 @@ function drupal_commons_config_menu() {
   $parent = array('menu_name' => 'primary-links', 'weight' => 3, 'link_path' => 'dashboard', 'link_title' => t(DRUPAL_COMMONS_COMMUNITY_MENU_DROPDOWN), 'expanded' => 1);
   menu_link_save($parent);
   
-  // Childs of "My Stuff" menu
+  // Childs of "Community" menu
   $links = array();
   $links[] = array('menu_name' => 'primary-links', 'weight' => 0, 'link_path' => 'groups', 'link_title' => t('Groups'), 'plid' => $parent['mlid']);
   $links[] = array('menu_name' => 'primary-links', 'weight' => 1, 'link_path' => 'content/blogs', 'link_title' => t('Blog Posts'), 'plid' => $parent['mlid']);
