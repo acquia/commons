@@ -1,0 +1,8 @@
+<?php
+
+function commons_uninstall() {
+  // Remove variables
+  variable_del('commons_force_login');
+  variable_del('commons_redirect_login_home');
+  variable_del('commons_manager_role');
+}
