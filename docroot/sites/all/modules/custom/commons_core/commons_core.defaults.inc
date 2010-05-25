@@ -2493,10 +2493,11 @@ function _commons_core_imagecache_default_presets() {
         '0' => array(
           'weight' => '0',
           'module' => 'imagecache',
-          'action' => 'imagecache_scale_and_crop',
+          'action' => 'imagecache_scale',
           'data' => array(
-            'width' => '200',
-            'height' => '200',
+            'width' => '250',
+            'height' => '250',
+            'upscale' => 0,
           ),
         ),
       ),
@@ -2507,10 +2508,11 @@ function _commons_core_imagecache_default_presets() {
         '0' => array(
           'weight' => '0',
           'module' => 'imagecache',
-          'action' => 'imagecache_scale_and_crop',
+          'action' => 'imagecache_scale',
           'data' => array(
-            'width' => '75',
-            'height' => '75',
+            'width' => '150',
+            'height' => '150',
+            'upscale' => 0,
           ),
         ),
       ),
