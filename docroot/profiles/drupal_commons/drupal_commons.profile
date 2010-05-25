@@ -10,8 +10,14 @@ define('DRUPAL_COMMONS_TAG_ID', 2);
 // Define the name of the user menu dropdown item
 define('DRUPAL_COMMONS_USER_MENU_DROPDOWN', 'My Stuff');
 
+// Define the name of the community menu dropdown item
+define('DRUPAL_COMMONS_COMMUNITY_MENU_DROPDOWN', 'Community');
+
 // Define the default WYSIWYG editor
 define('DRUPAL_COMMONS_EDITOR', 'ckeditor');
+
+// Define the allowed filtered html tags
+define('DRUPAL_COMMONS_FILTERED_HTML', '<a> <img> <em> <p> <strong> <cite> <sub> <sup> <span> <blockquote> <code> <ul> <ol> <li> <dl> <dt> <dd> <pre> <address> <h2> <h3> <h4> <h5> <h6>');
 
 // Define the "community manager" role name
 define('DRUPAL_COMMONS_MANAGER_ROLE', 'community manager');
@@ -260,8 +266,27 @@ function drupal_commons_config_menu() {
   /*
    * Create additional primary menu items
    */
+  
+  // Create "Community" drop down first, so we can fetch the mlid
+  $parent = array('menu_name' => 'primary-links', 'weight' => 3, 'link_path' => 'dashboard', 'link_title' => t(DRUPAL_COMMONS_COMMUNITY_MENU_DROPDOWN), 'expanded' => 1);
+  menu_link_save($parent);
+  
+  // Childs of "My Stuff" menu
+  $links = array();
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 0, 'link_path' => 'groups', 'link_title' => t('Groups'), 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 1, 'link_path' => 'content/blogs', 'link_title' => t('Blog Posts'), 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 2, 'link_path' => 'content/documents', 'link_title' => t('Documents'), 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 3, 'link_path' => 'content/discussions', 'link_title' => t('Discussions'), 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 4, 'link_path' => 'content/wikis', 'link_title' => t('Wikis'), 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 5, 'link_path' => 'content/calendar', 'link_title' => t('Calendar'), 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 5, 'link_path' => 'users', 'link_title' => t('Members'), 'plid' => $parent['mlid']);
+  
+  foreach ($links as $link) {
+    menu_link_save($link);
+  } 
+  
   // Create "My Stuff" drop down first, so we can fetch the mlid
-  $parent = array('menu_name' => 'primary-links', 'weight' => 15, 'link_path' => 'user', 'link_title' => t(DRUPAL_COMMONS_USER_MENU_DROPDOWN));
+  $parent = array('menu_name' => 'primary-links', 'weight' => 5, 'link_path' => 'user', 'link_title' => t(DRUPAL_COMMONS_USER_MENU_DROPDOWN), 'expanded' => 1);
   menu_link_save($parent);
   
   // Childs of "My Stuff" menu
@@ -314,7 +339,7 @@ function drupal_commons_config_filter() {
     VALUES (4, 'block', 2, 1, 25)");
   
   // Set allowed HTML tags for Filter HTML format
-  variable_set('allowed_html_1', '<a> <img> <em> <p> <strong> <cite> <sub> <sup> <span> <blockquote> <code> <ul> <ol> <li> <dl> <dt> <dd> <pre> <address> <h2> <h3> <h4> <h5> <h6>');
+  variable_set('allowed_html_1', DRUPAL_COMMONS_FILTERED_HTML);
   
   // Add wiki-style freelinking to both default formats
   $sql = "INSERT INTO {filters} (format, module, delta, weight) VALUES (%d, '%s', %d, %d)";

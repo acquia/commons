@@ -692,7 +692,7 @@ function _commons_core_views_default_views() {
   $handler = $view->new_display('page', 'Page', 'page_1');
   $handler->override_option('path', 'content/blogs');
   $handler->override_option('menu', array(
-    'type' => 'normal',
+    'type' => 'none',
     'title' => 'Blog Posts',
     'description' => 'View all of the blog posts',
     'weight' => '6',
@@ -975,7 +975,7 @@ function _commons_core_views_default_views() {
   $handler = $view->new_display('calendar', 'Calendar page', 'calendar_1');
   $handler->override_option('path', 'content/calendar');
   $handler->override_option('menu', array(
-    'type' => 'normal',
+    'type' => 'none',
     'title' => 'Calendar',
     'description' => 'View all events on a calendar',
     'weight' => '7',
@@ -1730,7 +1730,7 @@ function _commons_core_views_default_views() {
   $handler = $view->new_display('page', 'Page', 'page_1');
   $handler->override_option('path', 'content/discussions');
   $handler->override_option('menu', array(
-    'type' => 'normal',
+    'type' => 'none',
     'title' => 'Discussions',
     'description' => 'View all site discussions',
     'weight' => '3',
@@ -2336,7 +2336,7 @@ function _commons_core_views_default_views() {
   $handler = $view->new_display('page', 'Page', 'page_1');
   $handler->override_option('path', 'content/documents');
   $handler->override_option('menu', array(
-    'type' => 'normal',
+    'type' => 'none',
     'title' => 'Documents',
     'description' => 'View all documents',
     'weight' => '4',
@@ -2901,7 +2901,7 @@ function _commons_core_views_default_views() {
   $handler = $view->new_display('page', 'Page', 'page_1');
   $handler->override_option('path', 'content/wikis');
   $handler->override_option('menu', array(
-    'type' => 'normal',
+    'type' => 'none',
     'title' => 'Wikis',
     'description' => 'View all wiki posts',
     'weight' => '5',
@@ -4396,11 +4396,11 @@ function _commons_core_views_default_views() {
   $handler = $view->new_display('page', 'Page', 'page_1');
   $handler->override_option('path', 'groups');
   $handler->override_option('menu', array(
-    'type' => 'normal',
-    'title' => 'Groups',
-    'description' => 'View all available groups',
-    'weight' => '2',
-    'name' => 'primary-links',
+    'type' => 'none',
+    'title' => '',
+    'description' => '',
+    'weight' => 0,
+    'name' => 'navigation',
   ));
   $handler->override_option('tab_options', array(
     'type' => 'none',
@@ -14113,7 +14113,7 @@ if(user_access(\'create notice content\')) {
   $handler = $view->new_display('page', 'Page', 'page_1');
   $handler->override_option('path', 'users');
   $handler->override_option('menu', array(
-    'type' => 'normal',
+    'type' => 'none',
     'title' => 'Members',
     'description' => 'View all of the members on the site',
     'weight' => '8',

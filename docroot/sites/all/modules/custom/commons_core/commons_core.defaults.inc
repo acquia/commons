@@ -957,7 +957,7 @@ Featured',
         'uid' => '1',
         'status' => 1,
         'timestamp' => 1274378352,
-        'fid' => '2',
+        'fid' => '1',
       ),
       'use_default_image' => 1,
       'label' => 'Image',
@@ -1571,7 +1571,7 @@ function _commons_core_context_default_contexts() {
       'user_1' => array(
         'module' => 'user',
         'delta' => '1',
-        'weight' => 100,
+        'weight' => 90,
         'region' => 'right',
         'status' => '0',
         'label' => 'Navigation',
@@ -4387,17 +4387,108 @@ function _commons_core_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'comment_controls_discussion';
-  $strongarm->value = '0';
+  $strongarm->name = 'comment_default_order_blog';
+  $strongarm->value = '2';
 
-  $export['comment_controls_discussion'] = $strongarm;
+  $export['comment_default_order_blog'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_default_order_discussion';
+  $strongarm->value = '2';
+
+  $export['comment_default_order_discussion'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_default_order_document';
+  $strongarm->value = '2';
+
+  $export['comment_default_order_document'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_default_order_event';
+  $strongarm->value = '2';
+
+  $export['comment_default_order_event'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_default_order_notice';
+  $strongarm->value = '2';
+
+  $export['comment_default_order_notice'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_default_order_poll';
+  $strongarm->value = '2';
+
+  $export['comment_default_order_poll'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_default_order_wiki';
+  $strongarm->value = '2';
+
+  $export['comment_default_order_wiki'] = $strongarm;
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'comment_group';
-  $strongarm->value = '0';
+  $strongarm->value = '2';
 
   $export['comment_group'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_preview_blog';
+  $strongarm->value = '0';
+
+  $export['comment_preview_blog'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_preview_discussion';
+  $strongarm->value = '0';
+
+  $export['comment_preview_discussion'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_preview_document';
+  $strongarm->value = '0';
+
+  $export['comment_preview_document'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_preview_event';
+  $strongarm->value = '0';
+
+  $export['comment_preview_event'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_preview_notice';
+  $strongarm->value = '0';
+
+  $export['comment_preview_notice'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_preview_poll';
+  $strongarm->value = '0';
+
+  $export['comment_preview_poll'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_preview_wiki';
+  $strongarm->value = '0';
+
+  $export['comment_preview_wiki'] = $strongarm;
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
@@ -5264,7 +5355,31 @@ function _commons_core_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'theme_settings';
   $strongarm->value = array(
-    'toggle_node_info_page' => FALSE,
+    'toggle_logo' => 1,
+    'toggle_name' => 1,
+    'toggle_slogan' => 0,
+    'toggle_mission' => 1,
+    'toggle_node_user_picture' => 0,
+    'toggle_comment_user_picture' => 0,
+    'toggle_search' => 1,
+    'toggle_favicon' => 1,
+    'toggle_primary_links' => 1,
+    'toggle_secondary_links' => 1,
+    'toggle_node_info_blog' => 1,
+    'toggle_node_info_discussion' => 1,
+    'toggle_node_info_document' => 1,
+    'toggle_node_info_event' => 0,
+    'toggle_node_info_group' => 1,
+    'toggle_node_info_notice' => 0,
+    'toggle_node_info_page' => 0,
+    'toggle_node_info_poll' => 1,
+    'toggle_node_info_wiki' => 1,
+    'default_logo' => 1,
+    'logo_path' => '',
+    'logo_upload' => '',
+    'default_favicon' => 1,
+    'favicon_path' => '',
+    'favicon_upload' => '',
   );
 
   $export['theme_settings'] = $strongarm;
