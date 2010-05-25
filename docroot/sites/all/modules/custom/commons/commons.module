@@ -36,6 +36,13 @@ function commons_admin_settings() {
     '#description' => t('If checked, anonymous users will be redirected from all pages to a log in page.'),
   );
   
+  $form['general_settings']['commons_redirect_login_home'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Redirect to Home Page After Login'),
+    '#default_value' => variable_get('commons_redirect_login_home', 1),
+    '#description' => t('If checked, users will be redirected to home page after logging in.'),
+  );
+  
   $form['general_settings']['commons_manager_role'] = array(
     '#type' => 'textfield',
     '#title' => t('Community Manager Role'),
@@ -274,6 +281,17 @@ function commons_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
       }
       
       break;
+  }
+}
+
+/*
+ * Implementation of hook_user()
+ */
+function commons_user($op, &$edit, &$account, $category = NULL) {
+  if ($op == 'login') {
+    if (variable_get('commons_redirect_login_home', 1)) {
+      drupal_goto('<front>');
+    }
   }
 }
 
