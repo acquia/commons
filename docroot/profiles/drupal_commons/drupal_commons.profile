@@ -591,6 +591,9 @@ function drupal_commons_config_vars() {
   // Force anonymous users to login
   variable_set('commons_force_login', 1);
   
+  // Redirect login to the home page
+  variable_set('commons_redirect_login_home', 1);
+  
   // Show large amount of tags on tag cloud page
   variable_set('tagadelic_page_amount', 500);
 }

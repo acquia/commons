@@ -1,0 +1,75 @@
+<html>
+<body>
+      <p>
+        When rendering text on an image, 
+        enter PHP code that will <b>return</b> your dynamic text. Do not use &lt;?php  ?&gt; tags. 
+        <br />EG 
+        <br /><code>return format_date(time());</code>  
+        <br /><code>return $file_data->description ? $file_data->description : $node->teaser;</code>
+      </p>
+      <p>Note that executing incorrect PHP-code can break your Drupal site.</p>
+
+      <h4>Available data objects</h4>
+      <p>Many different types of data derived from the image <em>may</em> be available as php values:</p>
+      <dl>
+      <dt><code>$node</code></dt>
+      <dd>A handle on the owning node object, if any.
+        <br/><code>return $node->title;</code>
+        <br/><code>return format_date($node->created);</code>
+      </dd>
+      <dt><code>$image</code></dt>
+      <dd>A handle on the internal imageeapi technical image object.
+        <br/><code>return $image->source;</code>
+        <br/><code>return basename($image->source);</code>
+        <br/><code>return $image->info["filesize"];</code>
+      </dd>
+      <dt><code>$file_metadata</code></dt>
+      <dd>A collection of metadata that <em>may</em> have been deduced from other sources or context. Values inside <code>$file_data</code> is namespaced, structured and attributed, so can be complex to read.
+        <br/><code>drupal_set_message('&lt;pre>'. print_r($file_metadata,1). '&lt;/pre>'); return "";</code>
+      </dd>
+      <dt><code>$file_data</code></dt>
+      <dd>A simplified list of metadata values that <em>may</em> have been deduced from other sources. This is a flattened, simplified version of <code>$file_data</code> with no namespaces and all-lowercase attribute names.
+        <small><code>$file_metadata->Iptc4xmpCore:Scene['pjmt:0'] = "exterior view";</code> becomes <code>$file_data->scene = "exterior view"</code></small>
+        <br/><code>return $file_attributes->description</code> 
+        <br/><code>return $file_attributes->copyright</code> 
+      </dd>
+
+      <h4>Where the data comes from</h4>
+      <p>
+        If it's an <b>image.module image</b> then a <b><code>$node</code></b> object with its values 
+        <em>may</em> be available.
+      </p>
+
+      <p>
+        If it's an image that has been attached to a node using <b>CCK filefield imagefield</b>
+        (or just filefield)
+        then as well as the parent <b><code>$node</code></b> object,
+        the <b><code>$file_data</code></b> object that may contain a file description 
+        (or other meta supplied by cck) from that file field.
+        <br/><code>return $file_data->description;</code>
+        <br/>
+        <small>So far that seems to be the only available 'data' provided by filefield, 
+        but you can investigate the node structure using devel.module or print_r() 
+        to see what else this array actually contains</small>.
+      </p>
+      <p>
+        If it's a file that's just been <b>attached using upload.module</b>,
+        a <b><code>$file_data</code></b> object may also have a description.
+        <br/><code>return $file_data->description;</code>
+      </p>
+      <p>
+        If the image path is detected as belonging to more than one node, just the
+        data for the first one found is returned. 
+      </p>
+
+      <p>
+        If you have <b>meta_inspector</b> available, then many more (namespaced)
+        metadata fields may be available on the <b><code>$file_metadata</code></b> 
+        and <b><code>$file_data</code></b> object. 
+        Note that they will often be structured arrays.
+        <br /><code>$attname = "dc:creator"; return @reset($file_metadata->$attname);</code>
+        <br /><small>See the documentation for the meta suite and <code>HOOK_metadata_from_file()</code> 
+        for more about this data structure.</small>.
+      </p>
+</body>
+</html>
