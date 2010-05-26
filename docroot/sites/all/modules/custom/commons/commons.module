@@ -189,6 +189,10 @@ function commons_field_access($op, $field, $account = NULL, $node = NULL) {
  * Implementation of hook_init()
  */
 function commons_init() {
+  if (php_sapi_name() == 'cli') {
+    return;
+  }
+
   //  Force anonymous users to a login page
   if (variable_get('commons_force_login', 0)) {
     global $user;
