@@ -1,5 +1,5 @@
 <?php
-// $Id: features.export.inc,v 1.1.2.47 2010/02/02 16:21:34 yhahn Exp $
+// $Id: features.export.inc,v 1.1.2.49 2010/05/25 21:51:30 yhahn Exp $
 
 /**
  * @param $items
@@ -298,9 +298,9 @@ function features_detect_overrides($module) {
 /**
  * Gets the available default hooks keyed by components.
  */
-function features_get_default_hooks() {
+function features_get_default_hooks($component = NULL, $reset = FALSE) {
   static $hooks;
-  if (!isset($hooks)) {
+  if (!isset($hooks) || $reset) {
     $hooks = array();
     features_include();
     foreach (module_implements('features_api') as $module) {
@@ -311,6 +311,9 @@ function features_get_default_hooks() {
         }
       }
     }
+  }
+  if (isset($component)) {
+    return isset($hooks[$component]) ? $hooks[$component] : FALSE;
   }
   return $hooks;
 }
@@ -429,6 +432,8 @@ function features_tar_create($files) {
       $tar .= pack("a512", $item);
     }
   }
+  $tar .= pack("a1024","");
+
   if (function_exists('gzencode')) {
     $tar = gzencode($tar);
   }
@@ -581,12 +586,10 @@ function features_get_normal($module_name, $component, $reset = FALSE) {
   }
   if (!isset($cache[$module_name][$component])) {
     features_include();
-    $default_hooks = features_get_default_hooks();
-
     $module = features_get_features($module_name);
-    $export = $module->info;
-    if ($module && isset($module->info['features'][$component]) && features_hook($component, 'features_export_render') && $default_hook = $default_hooks[$component]) {
-      $code = features_invoke($component, 'features_export_render', $module_name, $module->info['features'][$component], $export);
+    $default_hook = features_get_default_hooks($component);
+    if ($module && $default_hook && isset($module->info['features'][$component]) && features_hook($component, 'features_export_render')) {
+      $code = features_invoke($component, 'features_export_render', $module_name, $module->info['features'][$component]);
       $cache[$module_name][$component] = isset($code[$default_hook]) ? eval($code[$default_hook]) : FALSE;
     }
 
@@ -607,9 +610,9 @@ function features_get_default($module_name, $component, $reset = FALSE) {
   }
   if (!isset($cache[$module_name][$component])) {
     features_include();
-    $default_hooks = features_get_default_hooks();
-    if (isset($default_hooks[$component]) && module_hook($module_name, $default_hooks[$component])) {
-      $cache[$module_name][$component] = module_invoke($module_name, $default_hooks[$component]);
+    $default_hook = features_get_default_hooks($component);
+    if ($default_hook && module_hook($module_name, $default_hook)) {
+      $cache[$module_name][$component] = module_invoke($module_name, $default_hook);
     }
     else {
       $cache[$module_name][$component] = FALSE;

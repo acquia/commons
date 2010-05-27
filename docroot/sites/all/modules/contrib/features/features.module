@@ -1,5 +1,5 @@
 <?php
-// $Id: features.module,v 1.1.2.63 2010/02/07 05:04:43 yhahn Exp $
+// $Id: features.module,v 1.1.2.64 2010/05/25 04:20:54 yhahn Exp $
 
 /**
  * @file
@@ -269,32 +269,37 @@ function features_perm() {
  * Load includes for any modules that implement the features API and
  * load includes for those provided by features.
  */
-function features_include() {
-  // Check for implementing modules and make necessary inclusions.
-  foreach (module_implements('features_api') as $module) {
-    $info = module_invoke($module, 'features_api');
-    foreach ($info as $component) {
-      if (isset($component['file'])) {
-        require_once $component['file'];
+function features_include($reset = FALSE) {
+  static $once;
+  if (!isset($once) || $reset) {
+    $once = TRUE;
+
+    // Check for implementing modules and make necessary inclusions.
+    foreach (module_implements('features_api') as $module) {
+      $info = module_invoke($module, 'features_api');
+      foreach ($info as $component) {
+        if (isset($component['file'])) {
+          require_once $component['file'];
+        }
       }
     }
-  }
 
-  // Always load the menu module include to be able to deal with menu items.
-  module_load_include('inc', 'features', "includes/features.menu");
+    // Always load the menu module include to be able to deal with menu items.
+    module_load_include('inc', 'features', "includes/features.menu");
 
-  // Features provides integration on behalf of these modules.
-  // Note that ctools is placed last because it implements hooks "dynamically" for other modules.
-  $modules = array('block', 'content', 'context', 'fieldgroup', 'filter', 'imagecache', 'node', 'user', 'views', 'ctools');
+    // Features provides integration on behalf of these modules.
+    // Note that ctools is placed last because it implements hooks "dynamically" for other modules.
+    $modules = array('block', 'content', 'context', 'fieldgroup', 'filter', 'imagecache', 'node', 'user', 'views', 'ctools');
 
-  foreach (array_filter($modules, 'module_exists') as $module) {
-    if (!module_hook($module, 'features_api')) {
-      module_load_include('inc', 'features', "includes/features.$module");
+    foreach (array_filter($modules, 'module_exists') as $module) {
+      if (!module_hook($module, 'features_api')) {
+        module_load_include('inc', 'features', "includes/features.$module");
+      }
     }
-  }
 
-  // Clear static cache, since we've now included new implementers.
-  module_implements('features_api', FALSE, TRUE);
+    // Clear static cache, since we've now included new implementers.
+    module_implements('features_api', FALSE, TRUE);
+  }
 }
 
 /**

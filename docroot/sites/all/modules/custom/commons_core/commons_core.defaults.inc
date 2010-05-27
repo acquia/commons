@@ -1528,12 +1528,14 @@ function _commons_core_context_default_contexts() {
     'description' => 'Site-wide content pages',
     'path' => array(
       'content/*' => 'content/*',
+      'featured' => 'featured',
+      'notices' => 'notices',
     ),
     'block' => array(
       'views_tag_cloud-block_1' => array(
         'module' => 'views',
         'delta' => 'tag_cloud-block_1',
-        'weight' => 42,
+        'weight' => 43,
         'region' => 'right',
         'status' => '0',
         'label' => 'Popular Tags',
@@ -1542,7 +1544,7 @@ function _commons_core_context_default_contexts() {
       'views_most_active_users-block_1' => array(
         'module' => 'views',
         'delta' => 'most_active_users-block_1',
-        'weight' => 43,
+        'weight' => 44,
         'region' => 'right',
         'status' => '0',
         'label' => 'Most Active Users',
@@ -1586,13 +1588,13 @@ function _commons_core_context_default_contexts() {
         'label' => 'New Groups (custom)',
         'type' => 'context_ui',
       ),
-      'user_relationship_blocks_user-1' => array(
+      'user_relationship_blocks_my-1' => array(
         'module' => 'user_relationship_blocks',
-        'delta' => 'user-1',
+        'delta' => 'my-1',
         'weight' => -42,
         'region' => 'left',
         'status' => '0',
-        'label' => 'User Relationships: Friends ',
+        'label' => 'My Relationships: Friends ',
         'type' => 'context_ui',
       ),
       'views_most_active_users-block_1' => array(
@@ -1850,10 +1852,7 @@ function _commons_core_ctools_plugin_api() {
   if ($module == "page_manager" && $api == "pages_default") {
     return array("version" => 1);
   }
-  else if ($module == "page_manager" && $api == "pages_default") {
-    return array("version" => 1);
-  }
-  else if ($module == "strongarm" && $api == "strongarm") {
+  elseif ($module == "strongarm" && $api == "strongarm") {
     return array("version" => 1);
   }
 }
@@ -3716,14 +3715,24 @@ function _commons_core_rules_defaults() {
         '#actions' => array(
           '0' => array(
             '#weight' => 0,
-            '#type' => 'action',
+            '#info' => array(
+              'label' => 'Logs default user activity between users',
+              'eval input' => array(
+                '0' => 'uid_param',
+                '1' => 'uid_target_param',
+                '2' => 'message_id_param',
+                '3' => 'variables_param',
+              ),
+              'module' => 'heartbeat',
+            ),
+            '#name' => 'heartbeat_rules_users_action',
             '#settings' => array(
               'uid_param' => '[requester:uid]',
               'uid_target_param' => '[requestee:uid]',
               'nid_param' => 0,
               'nid_target_param' => 0,
               'message_id_param' => 'heartbeat_become_friends',
-              'variables_param' => '@user1=|=[requester::user-name-url]-|-@relation_type=|=[relationship:relationship-name]s-|-@user2=|=[requestee:user-name-url]-|-',
+              'variables_param' => '@user1=|=[requester:user-name-url]-|-@relation_type=|=[relationship:relationship-name]s-|-@user2=|=[requestee:user-name-url]',
               '#eval input' => array(
                 'token_rules_input_evaluator' => array(
                   'uid_param' => array(
@@ -3740,17 +3749,7 @@ function _commons_core_rules_defaults() {
                 ),
               ),
             ),
-            '#name' => 'heartbeat_rules_users_action',
-            '#info' => array(
-              'label' => 'Logs default user activity between users',
-              'eval input' => array(
-                '0' => 'uid_param',
-                '1' => 'uid_target_param',
-                '2' => 'message_id_param',
-                '3' => 'variables_param',
-              ),
-              'module' => 'heartbeat',
-            ),
+            '#type' => 'action',
           ),
         ),
         '#version' => 6003,
@@ -3770,14 +3769,24 @@ function _commons_core_rules_defaults() {
         '#actions' => array(
           '0' => array(
             '#weight' => 0,
-            '#type' => 'action',
+            '#info' => array(
+              'label' => 'Logs default user activity between users',
+              'eval input' => array(
+                '0' => 'uid_param',
+                '1' => 'uid_target_param',
+                '2' => 'message_id_param',
+                '3' => 'variables_param',
+              ),
+              'module' => 'heartbeat',
+            ),
+            '#name' => 'heartbeat_rules_users_action',
             '#settings' => array(
               'uid_param' => '[requester:uid]',
               'uid_target_param' => '[requestee:uid]',
               'nid_param' => 0,
               'nid_target_param' => 0,
               'message_id_param' => 'heartbeat_friend_removed',
-              'variables_param' => '@userA=|=[requester:user-name-url]-|-@userB=|=[requestee:user-name-url]-|-@relationship_type=|=[relationship-name]s-|-',
+              'variables_param' => '@userA=|=[requester:user-name-url]-|-@userB=|=[requestee:user-name-url]-|-@relationship_type=|=[relationship:relationship-name]s',
               '#eval input' => array(
                 'token_rules_input_evaluator' => array(
                   'uid_param' => array(
@@ -3789,21 +3798,12 @@ function _commons_core_rules_defaults() {
                   'variables_param' => array(
                     '0' => 'requester',
                     '1' => 'requestee',
+                    '2' => 'relationship',
                   ),
                 ),
               ),
             ),
-            '#name' => 'heartbeat_rules_users_action',
-            '#info' => array(
-              'label' => 'Logs default user activity between users',
-              'eval input' => array(
-                '0' => 'uid_param',
-                '1' => 'uid_target_param',
-                '2' => 'message_id_param',
-                '3' => 'variables_param',
-              ),
-              'module' => 'heartbeat',
-            ),
+            '#type' => 'action',
           ),
         ),
         '#version' => 6003,

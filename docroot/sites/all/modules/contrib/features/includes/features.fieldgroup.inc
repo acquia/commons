@@ -1,5 +1,5 @@
 <?php
-// $Id: features.fieldgroup.inc,v 1.1.2.2 2010/02/07 06:58:07 yhahn Exp $
+// $Id: features.fieldgroup.inc,v 1.1.2.3 2010/02/27 00:23:39 yhahn Exp $
 
 /**
  * Implementation of hook_features_api().
@@ -48,7 +48,7 @@ function fieldgroup_features_export($data, &$export, $module_name = '') {
       $split = explode('-', $instance);
       $type_name = $split[0];
       $group_name = $split[1];
-      $groups = fieldgroup_groups($type_name);
+      $groups = fieldgroup_groups($type_name, FALSE, TRUE);
 
       if (isset($groups[$group_name]) && $group = $groups[$group_name]) {
         $export['features']['fieldgroup'][$instance] = $instance;
@@ -113,7 +113,7 @@ function fieldgroup_features_rebuild($module) {
     foreach ($groups as $group) {
       $type_name = $group['type_name'];
       $group_name = $group['group_name'];
-      $groups = fieldgroup_groups($type_name);
+      $groups = fieldgroup_groups($type_name, FALSE, TRUE);
 
       if (isset($groups[$group_name])) {
         $existing_group = $groups[$group_name];

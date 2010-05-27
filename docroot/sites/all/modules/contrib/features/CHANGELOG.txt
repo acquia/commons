@@ -1,4 +1,29 @@
-// $Id: CHANGELOG.txt,v 1.1.2.6 2010/02/07 07:42:46 yhahn Exp $
+// $Id: CHANGELOG.txt,v 1.1.2.8 2010/05/25 22:43:25 jmiccolis Exp $
+
+features DRUPAL-6--1-BETA7
+--------------------------
+- #778250: Fix for php 5.3 issue with CTools.
+- Added static cache to ensure features_include() runs only once.
+- #522794 by Skorpjon, kenorb: Fixes for tar archive creation.
+- #686240 by David Stosik: Ensure field settings are properly captured accross
+  instances.
+- Add the drush features-update-all command and switch to using
+  drush_invoke_backend() to ensure processes have a better memory footprint.
+- Standardize CTools API identifier to fully support non-exportables CTools
+  APIs.
+- Ensure dependencies added by CTools do not create circular dependencies.
+- #798104 by Steven Merrill: Add drush features-revert-all command.
+- #673234 by joshk: Use elseif instead of else if to comply with coding
+  standards.
+- Support additional CTools plugin APIs that are non-exportable based.
+- #722460 by scor: Use 'drupal dependencies' flag in hook_drush_command() to
+  ensure features is enabled.
+- #727110 by adixon: Respect drush --root option.
+- #726700: Context 3.x dependency & component detection.
+- #709608: CTools: don't re-export objects that already exist in code. Depends
+  on #709754.
+- Disable features before installing on submit.
+- #725132 by q0rban: Fix for fieldgroup duplicate entries.
 
 features DRUPAL-6--1-BETA6
 --------------------------

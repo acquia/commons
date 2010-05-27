@@ -252,7 +252,7 @@ function _commons_core_heartbeat_message_info() {
   array (
     '@userA' => '[requester:user-name-url]',
     '@userB' => '[requestee:user-name-url]',
-    '@relationship_type' => '[relationship-name]s',
+    '@relationship_type' => '[relationship:relationship-name]s',
   ),
 );
 

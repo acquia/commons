@@ -1,23 +1,48 @@
 <?php
-// $Id: features.context.inc,v 1.1.2.11 2009/11/18 04:36:36 yhahn Exp $
+// $Id: features.context.inc,v 1.1.2.12 2010/03/06 06:15:09 yhahn Exp $
+
+/**
+ * Determine context major branch version.
+ */
+function context_features_get_version() {
+  if (function_exists('context_ctools_plugin_api')) {
+    $api = context_ctools_plugin_api('context', 'plugins');
+    return $api['version'];
+  }
+  return 2;
+}
 
 /**
  * Implementation of hook_features_api().
  */
 function context_features_api() {
-  return array(
-    'context' => array(
-      'name' => t('Contexts'),
-      'feature_source' => TRUE,
-      'default_hook' => 'context_default_contexts',
-    ),
+  $api = array('context' => array());
+  // 3.x
+  if (context_features_get_version() === 3) {
+    $api['context'] = array(
+      'api' => 'context',
+      'current_version' => 3,
+      'module' => 'context',
+    );
+  }
+  // 2.x
+  $api['context'] += array(
+    'name' => 'Contexts',
+    'feature_source' => TRUE,
+    'default_hook' => 'context_default_contexts'
   );
+  return $api;
 }
 
 /**
  * Implementation of hook_features_export_options();
  */
 function context_features_export_options() {
+  // 3.x
+  if (context_features_get_version() === 3) {
+    return ctools_component_features_export_options('context');
+  }
+  // 2.x
   $contexts = context_enabled_contexts();
   $options = array();
   foreach ($contexts as $identifier => $context) {
@@ -30,6 +55,47 @@ function context_features_export_options() {
  * Implementation of hook_features_export().
  */
 function context_features_export($data, &$export, $module_name = '') {
+  // 3.x
+  if (context_features_get_version() === 3) {
+    ctools_component_features_export('context', $data, $export, $module_name);
+
+    $pipe = array();
+    $contexts = context_load();
+    foreach ($data as $identifier) {
+      if (isset($contexts[$identifier])) {
+        $context = $contexts[$identifier];
+        // Conditions.
+        // Currently only node, menu and views conditions are supported.
+        // @TODO: Should this be delegated to a method on the plugin?
+        foreach (array('node', 'menu', 'views') as $key) {
+          if (!empty($context->conditions{$key}['values'])) {
+            foreach ($context->conditions{$key}['values'] as $item) {
+              // Special pipe for views
+              if ($key === 'views') {
+                $split = explode(':', $item);
+                $view_name = array_shift($split);
+                $pipe[$key][$view_name] = $view_name;
+              }
+              else {
+                $pipe[$key][$item] = $item;
+              }
+            }
+          }
+        }
+        // Reactions.
+        if (!empty($context->reactions['block']['blocks'])) {
+          foreach ($context->reactions['block']['blocks'] as $block) {
+            $block = (array) $block;
+            $bid = "{$block['module']}-{$block['delta']}";
+            $pipe['block'][$bid] = $bid;
+          }
+        }
+      }
+    }
+    return $pipe;
+  }
+
+  // 2.x
   $export['dependencies']['context'] = 'context';
 
   // Collect a context to module map
@@ -97,9 +163,14 @@ function context_features_export($data, &$export, $module_name = '') {
 }
 
 /**
- * Implementation of hook_features_export_render()
+ * Implementation of hook_features_export_render().
  */
-function context_features_export_render($module = 'foo', $data) {
+function context_features_export_render($module, $data) {
+  // 3.x
+  if (context_features_get_version() === 3) {
+    return ctools_component_features_export_render('context', $module, $data);
+  }
+  // 2.x
   $code = array();
   $code[] = '  $items = array();';
   $code[] = '';
@@ -140,8 +211,14 @@ function context_features_export_render($module = 'foo', $data) {
  * name of module to revert content for
  */
 function context_features_revert($module = NULL) {
-  // Get default context from feature
-  if (module_hook($module, 'context_default_contexts')){
+  // 3.x
+  if (context_features_get_version() === 3) {
+    $return = ctools_component_features_revert('context', $module);
+    context_invalidate_cache();
+    return $return;
+  }
+  // 2.x
+  if (module_hook($module, 'context_default_contexts')) {
     $default_contexts = module_invoke($module, 'context_default_contexts');
 
     // Delete overridden contexts

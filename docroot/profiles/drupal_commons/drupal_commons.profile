@@ -17,7 +17,7 @@ define('DRUPAL_COMMONS_COMMUNITY_MENU_DROPDOWN', 'Community');
 define('DRUPAL_COMMONS_EDITOR', 'ckeditor');
 
 // Define the allowed filtered html tags
-define('DRUPAL_COMMONS_FILTERED_HTML', '<a> <img> <em> <p> <strong> <cite> <sub> <sup> <span> <blockquote> <code> <ul> <ol> <li> <dl> <dt> <dd> <pre> <address> <h2> <h3> <h4> <h5> <h6>');
+define('DRUPAL_COMMONS_FILTERED_HTML', '<a> <img> <br> <em> <p> <strong> <cite> <sub> <sup> <span> <blockquote> <code> <ul> <ol> <li> <dl> <dt> <dd> <pre> <address> <h2> <h3> <h4> <h5> <h6>');
 
 // Define the "community manager" role name
 define('DRUPAL_COMMONS_MANAGER_ROLE', 'community manager');
@@ -337,6 +337,19 @@ function drupal_commons_config_filter() {
     VALUES (4, 'comment', 2, 1, 0)");
   db_query("INSERT INTO {better_formats_defaults} (rid, type, format, type_weight, weight)
     VALUES (4, 'block', 2, 1, 25)");
+    
+  // Create a "links-only" filter format that Shoutbox will use
+  db_query("INSERT INTO {filter_formats} (format, name, cache) VALUES (4, 'Links Only', 1)");
+  
+  // Add filters to the format
+  db_query("INSERT INTO {filters} (format, module, delta, weight) VALUES (4, 'filter', 0, -10)");
+  db_query("INSERT INTO {filters} (format, module, delta, weight) VALUES (4, 'filter', 2, -9)");
+  
+  // Adjust settings for the filter
+  variable_set('filter_url_length_4', 60);
+  variable_set('filter_html_4', 1);
+  variable_set('filter_html_help_4', 0);
+  variable_set('allowed_html_4', '');
   
   // Set allowed HTML tags for Filter HTML format
   variable_set('allowed_html_1', DRUPAL_COMMONS_FILTERED_HTML);
@@ -368,11 +381,19 @@ function drupal_commons_config_wysiwyg() {
 // Configure user_relationships
 function drupal_commons_config_ur() {
   // Add initial relationship type 'Friend'
-  db_query("INSERT INTO {user_relationship_types} (name, plural_name, is_oneway, is_reciprocal, requires_approval, expires_val) 
-    VALUES ('%s', '%s', %d, %d, %d, %d)", 
-    t(DRUPAL_COMMONS_RELATIONSHIP_SINGULAR), 
-    t(DRUPAL_COMMONS_RELATIONSHIP_PLURAL), 
-    0, 0, 1, 0);
+  $rel = new stdClass;
+  $rel->name = t(DRUPAL_COMMONS_RELATIONSHIP_SINGULAR);
+  $rel->plural_name = t(DRUPAL_COMMONS_RELATIONSHIP_PLURAL);
+  $rel->requires_approval = 1;
+  $rel->expires_val = 0;
+  $rel->is_oneway = 0;
+  $rel->is_reciprocal = 0; 
+  
+  // Save relationship
+  drupal_write_record('user_relationship_types', $rel);
+
+  // Alert other modules about the new relationship
+  _user_relationships_invoke('insert', $rel, TRUE);
 }
 
 // Configure heartbeat
@@ -590,6 +611,11 @@ function drupal_commons_config_vars() {
   variable_set('userpoints_post_group', DRUPAL_COMMONS_POINTS_NODE);
   variable_set('userpoints_post_wiki', DRUPAL_COMMONS_POINTS_NODE);
   variable_set('userpoints_post_comment', DRUPAL_COMMONS_POINTS_COMMENT);
+  
+  // Some Shoutbox tweaks
+  variable_set('shoutbox_filter_format', 4);
+  variable_set('shoutbox_escape_html', 0);
+  variable_set('shoutbox_expire', 120);
   
   // Force anonymous users to login
   variable_set('commons_force_login', 1);

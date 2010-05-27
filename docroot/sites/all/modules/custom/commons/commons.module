@@ -193,6 +193,10 @@ function commons_init() {
     return;
   }
 
+  if (str_replace(base_path(), '', $_SERVER['SCRIPT_NAME']) == 'cron.php') {
+    return; 
+  }
+
   //  Force anonymous users to a login page
   if (variable_get('commons_force_login', 0)) {
     global $user;
