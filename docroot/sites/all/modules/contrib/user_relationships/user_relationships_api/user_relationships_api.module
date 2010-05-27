@@ -335,7 +335,7 @@ function user_relationships_api_token_values($type, $data = NULL, $options = arr
   }
   elseif ($type == 'relationship') {
     $r = $data;
-    $r_type = user_relationships_type_load($r->rtid);
+    $r_type = user_relationships_type_load(array('rtid' => $r->rtid));
    
     $token_values = array(
       'requestee' => theme('username', user_load(array('uid' => $r->requestee_id))),

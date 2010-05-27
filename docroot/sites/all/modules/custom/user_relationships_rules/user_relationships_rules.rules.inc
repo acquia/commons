@@ -180,7 +180,7 @@ function user_relationships_rules_action_delete_relationship($settings) {
   $relationship = $relationships[$relationship_rid[0]];
   
   // voila...
-  user_relationships_delete_relationship(&$relationship, &$deleted_by, $op = 'remove');
+  user_relationships_delete_relationship($relationship, $deleted_by, $op = 'remove');
 }
 
 /**

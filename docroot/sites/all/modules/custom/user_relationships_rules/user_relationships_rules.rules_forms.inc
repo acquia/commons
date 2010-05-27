@@ -57,7 +57,6 @@ function user_relationships_rules_action_delete_relationship_form($settings, &$f
     '#title' => t('Requester'),
     '#default_value' => $settings['requester'],
     '#description' => t('User ID of requester. Insert token here for dynamic action.'),
-    // '#default_value' => $settings['requester'],
   );
   $form['settings']['requestee'] = array(
     '#type' => 'textfield',
