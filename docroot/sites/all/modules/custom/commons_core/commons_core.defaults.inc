@@ -3059,8 +3059,8 @@ function _commons_core_default_page_manager_pages() {
     $pane->configuration = array(
       'admin_title' => 'Usage instructions',
       'title' => 'Jumpstart your community!',
-      'body' => '<a href="/groups">View</a>, or <a href="/node/add/groups">create</a> new <strong>Groups</strong> to start creating your community!',
-      'format' => '1',
+      'body' => '<?php print l(\'View\', \'groups\'); ?>, or <?php print l(\'create\', \'node/add/group\'); ?> new <strong>Groups</strong> to start creating your community!',
+      'format' => '3',
       'substitute' => TRUE,
     );
     $pane->cache = array();
