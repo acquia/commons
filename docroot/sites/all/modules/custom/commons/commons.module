@@ -27,6 +27,7 @@ function commons_admin_settings() {
     '#type' => 'fieldset',
     '#title' => t('General Settings'),
     '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
   );
   
   $form['general_settings']['commons_force_login'] = array(
@@ -51,6 +52,20 @@ function commons_admin_settings() {
     '#description' => t('The name of the role given to community managers.'),
   );
   
+  $form['group_settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Group Settings'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  );
+  
+  $form['group_settings']['commons_hide_shoutbox_link'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Remove Shoutbox Link'),
+    '#default_value' => variable_get('commons_hide_shoutbox_link', 1),
+    '#description' => t('If checked, the Shout Box link will be removed from the Group Details menu.'),
+  );
+  
   return system_settings_form($form); 
 }
 
@@ -73,6 +88,13 @@ function commons_set_node_tab_title($node) {
   }
   else {
     return t('View');
+  }
+}
+
+// Optionally remove Shoutbox link from Group Menu
+function commons_og_links_alter(&$links, &$node) {
+  if (variable_get('commons_hide_shoutbox_link', 1)) {
+    unset($links['shoutbox']);
   }
 }
 
@@ -189,12 +211,10 @@ function commons_field_access($op, $field, $account = NULL, $node = NULL) {
  * Implementation of hook_init()
  */
 function commons_init() {
-  if (php_sapi_name() == 'cli') {
+  if ((php_sapi_name() == 'cli') ||
+    (str_replace(base_path(), '', $_SERVER['SCRIPT_NAME']) == 'cron.php') ||
+    ($_GET['q'] == 'install.php')) {
     return;
-  }
-
-  if (str_replace(base_path(), '', $_SERVER['SCRIPT_NAME']) == 'cron.php') {
-    return; 
   }
 
   //  Force anonymous users to a login page
@@ -205,7 +225,7 @@ function commons_init() {
     if (!$user->uid) {
       //  Avoid endless redirect and allow for user registration/creation/login
       //  Checking arg(1) for numeric value prevents /user/# path
-      if ((arg(0) != 'user' || is_numeric(arg(1))) && $_GET['q'] != 'install.php') {
+      if (arg(0) != 'user' || is_numeric(arg(1))) {
         // Redirect to home
         drupal_goto('user');
       }
