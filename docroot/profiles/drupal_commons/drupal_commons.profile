@@ -616,7 +616,8 @@ function drupal_commons_config_vars() {
   variable_set('shoutbox_filter_format', 4);
   variable_set('shoutbox_escape_html', 0);
   variable_set('shoutbox_expire', 120);
-  variable_get('shoutbox_showamount_block', 8);
+  variable_set('shoutbox_showamount_block', 8);
+  variable_set('shoutbox_profile_name', 'profile_name');
   
   // Force anonymous users to login
   variable_set('commons_force_login', 1);

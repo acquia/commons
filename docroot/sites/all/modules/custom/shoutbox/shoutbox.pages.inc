@@ -1,5 +1,5 @@
 <?php
-// $Id: shoutbox.pages.inc,v 1.1.2.4 2008/07/29 09:05:21 disterics Exp $
+// $Id: shoutbox.pages.inc,v 1.2.2.1 2010/05/22 14:16:08 mikestefff Exp $
 
 /**
  * @file

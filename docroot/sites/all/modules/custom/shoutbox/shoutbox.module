@@ -1,5 +1,5 @@
 <?php
-//$Id: shoutbox.module,v 1.25.2.18 2008/08/01 07:21:25 disterics Exp $
+//$Id: shoutbox.module,v 1.31.2.4 2010/06/01 01:01:46 mikestefff Exp $
 
 /*
  * @file
@@ -271,6 +271,38 @@ function shoutbox_page_view() {
   return $output;
 }
 
+/*
+ * Generate a linked user name for displaying on a shout post
+ * 
+ * @param $shout
+ *   A shout object
+ * @return
+ *   A user name which links to the user profile
+ */
+function shoutbox_get_user_link($shout) {
+  $link = '';
+  
+  if ($shout->uid > 0) {
+    // See if we can use a custom profile field for the name
+    if ($field = variable_get('shoutbox_profile_name', 0)) {
+      $name = db_result(db_query("
+        SELECT v.value FROM {profile_values} v INNER JOIN {profile_fields} f ON v.fid = f.fid
+        WHERE f.name = '%s' AND v.uid = %d",
+        $field, $shout->uid));
+      
+      $shout->nick = $name ? $name : $shout->nick;
+    }
+    
+    $link = l($shout->nick, 'user/' . $shout->uid);
+  }
+  else {
+    //Anonymous
+    $link = $shout->nick;  
+  } 
+  
+  return $link;
+}
+
 
 //THEMES.
 
@@ -368,13 +400,7 @@ function theme_shoutbox_post($shout, $links = array(), $alter_row_color=TRUE) {
   }
   
   //Generate user name with link
-  if ($shout->uid > 0) {
-    $user_name = l($shout->nick, 'user/' . $shout->uid);
-  }
-  else {
-    //Anonymous
-    $user_name = $shout->nick;  
-  }
+  $user_name = shoutbox_get_user_link($shout);
 
   //Generate title attribute
   $title = t('Posted ' . format_date($shout->created, 'custom', 'm/d/y') . ' at ' . format_date($shout->created, 'custom', 'h:ia') . ' by ' . $shout->nick);
@@ -488,6 +514,30 @@ function shoutbox_admin_settings() {
     '#default_value' => variable_get('shoutbox_ascending', 1),
     '#description' => t('When checked, new shouts will appear on the top instead of the bottom.'),
   );
+  
+  // Generate choices for profile fields
+  if (module_exists('profile')) {
+    $choices = array();
+    $fields = db_query("SELECT name FROM {profile_fields} ORDER BY name ASC");
+    while ($field = db_fetch_object($fields)) {
+      $choices[$field->name] = $field->name;
+    }
+  
+    $form['display_settings']['shoutbox_profile_name'] = array(
+      '#type' => 'select',
+      '#title' => t('Use Profile Field for User Name'),
+      '#options' => array(0 => '- None -') + $choices,
+      '#default_value' => variable_get('shoutbox_profile_name', 0),
+      '#description' => t('Select an existing custom profile field to use as the user name.'),
+    );
+  }
+  else {
+    $form['display_settings']['shoutbox_profile_name'] = array(
+      '#type' => 'item',
+      '#title' => t('Use Profile Field for User Name'),
+      '#description' => t('Enable the profile module to allow for Shoutbox to use user\'s full name.'),
+    );
+  }
 
   $form['shoutbox_filter_format'] = _shoutbox_filter_form();
   $form['shoutbox_filter_format']['#collapsed'] = FALSE;
@@ -554,19 +604,19 @@ function shoutbox_admin_settings_validate($form, &$form_state) {
     form_set_error('shoutbox_max_length', t('Shoutbox length must be at least 1 character'));
   }
   
-  if(!is_numeric($form_state['values']['shoutbox_refresh'])) {
+  if (!is_numeric($form_state['values']['shoutbox_refresh'])) {
     form_set_error('shoutbox_refresh', t('Refresh setting must be a numeric value'));
   }
   
-  if(!is_numeric($form_state['values']['shoutbox_anonymous_timeout'])) {
+  if (!is_numeric($form_state['values']['shoutbox_anonymous_timeout'])) {
     form_set_error('shoutbox_anonymous_timeout', t('Anonymous timeout setting must be a numeric value'));
   }
   
-  if(!is_numeric($form_state['values']['shoutbox_registered_timeout'])) {
+  if (!is_numeric($form_state['values']['shoutbox_registered_timeout'])) {
     form_set_error('shoutbox_registered_timeout', t('Registered timeout setting must be a numeric value'));
   }
   
-  if(!is_numeric($form_state['values']['shoutbox_expire'])) {
+  if (!is_numeric($form_state['values']['shoutbox_expire'])) {
     form_set_error('shoutbox_expire', t('Expiration setting must be a numeric value'));
   }
 }
@@ -677,7 +727,7 @@ function shoutbox_delete_form(&$form_state, $shout) {
     '#type' => 'value',
     '#value' => $shout->shout_id,
   );
-  $form = confirm_form($form, t('Are you sure you want to delete this shout?'), '');
+  $form = confirm_form($form, t('Are you sure you want to delete this shout?'), '' );
   return $form;
 }
 

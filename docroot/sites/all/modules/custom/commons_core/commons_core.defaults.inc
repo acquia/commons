@@ -2594,22 +2594,11 @@ function _commons_core_imagecache_default_presets() {
         '0' => array(
           'weight' => '-10',
           'module' => 'imagecache',
-          'action' => 'imagecache_scale',
+          'action' => 'imagecache_scale_and_crop',
           'data' => array(
-            'width' => '',
+            'width' => '75',
             'height' => '75',
             'upscale' => 0,
-          ),
-        ),
-        '1' => array(
-          'weight' => '-9',
-          'module' => 'imagecache',
-          'action' => 'imagecache_crop',
-          'data' => array(
-            'width' => '350',
-            'height' => '75',
-            'xoffset' => 'left',
-            'yoffset' => '',
           ),
         ),
       ),
@@ -2620,22 +2609,11 @@ function _commons_core_imagecache_default_presets() {
         '0' => array(
           'weight' => '-9',
           'module' => 'imagecache',
-          'action' => 'imagecache_scale',
-          'data' => array(
-            'width' => '',
-            'height' => '24',
-            'upscale' => 0,
-          ),
-        ),
-        '1' => array(
-          'weight' => '-8',
-          'module' => 'imagecache',
-          'action' => 'imagecache_crop',
+          'action' => 'imagecache_scale_and_crop',
           'data' => array(
             'width' => '24',
             'height' => '24',
-            'xoffset' => 'left',
-            'yoffset' => '',
+            'upscale' => 0,
           ),
         ),
       ),

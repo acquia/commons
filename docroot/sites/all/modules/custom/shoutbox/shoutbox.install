@@ -1,5 +1,5 @@
 <?php
-// $Id: shoutbox.install,v 1.4.2.2 2008/07/29 09:05:21 disterics Exp $
+// $Id: shoutbox.install,v 1.4.4.2 2010/06/01 01:01:46 mikestefff Exp $
 
 /**
  * @file
@@ -53,6 +53,7 @@ function shoutbox_uninstall() {
   variable_del('shoutbox_showamount_block');
   variable_del('shoutbox_showamount_page');
   variable_del('shoutbox_escape_html');
+  variable_del('shoutbox_profile_name');
 }
 
 /**
