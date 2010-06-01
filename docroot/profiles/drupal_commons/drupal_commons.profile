@@ -114,7 +114,7 @@ function drupal_commons_profile_modules() {
     'strongarm', 
     
     // Features
-    'features', 'commons_core',
+    'features', 'commons_core', 'commons_notifications',
   );
 
   return $modules;
