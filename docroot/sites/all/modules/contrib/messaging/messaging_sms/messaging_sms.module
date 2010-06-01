@@ -1,0 +1,70 @@
+<?php
+/**
+ * @file
+ * SMS Messsaging using SMS Framework. Messaging method plug-in
+ */
+
+/**
+ * Implementation of hook_messaging
+ */
+function messaging_sms_messaging($op = 'info') {
+  switch($op) {
+    case 'send methods':
+      $info['sms'] = array(
+        'title' => 'SMS Framework',
+        'name' => t('SMS'),
+        'group' => 'sms', // Class of send method
+        'type' => MESSAGING_TYPE_SEND,
+        'glue' => ' ',
+        'description' => t('Send SMS using SMS Framework.'),
+        'render callback' => 'messaging_sms_render',
+        'send callback' => 'messaging_sms_send_msg',
+        'destination callback' => 'messaging_sms_user_destination',
+      );
+      return $info;  
+  }
+}
+
+/**
+ * Message Render callback
+ */
+function messaging_sms_render($message, $info) {
+  // We need to apply filtering first or run through the render function
+  $message = messaging_message_render($message, $info);
+  // Now we do some clean up in the body that may contain new lines, replace them with spaces
+  if ($message->body) {
+    $message->body = messaging_text_clean($message->body, ' ');
+  }
+  return $message;
+}
+
+/**
+ * Map user account to SMS destination (phone number)
+ */
+function messaging_sms_user_destination($account, $message) {
+  // Check for active mobile infomation. Simply return it so that the send
+  // callback has a destination array and access everything.
+  if (!empty($account->sms_user) && $account->sms_user[0]['status'] == 2 && !empty($account->sms_user[0]['number'])) {
+    return $account->sms_user[0]['number'];
+  }
+}
+
+/**
+ * Send SMS message using the default gateway
+ * 
+ * This is just a wrapper for sms_send()
+ * 
+ * @param $destination
+ *   Mobile phone number
+ */
+function messaging_sms_send_msg($destination, $message, $params = array()) {
+  $text = messaging_text_build($message, ' ');
+  return sms_send($destination, $text, $params);
+}
+ 
+/**
+ * Implementation of hook_disable()
+ */
+function messaging_sms_disable() {
+  messaging_method_disable('sms');
+}

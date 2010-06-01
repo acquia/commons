@@ -1,0 +1,179 @@
+<?php
+// $Id: messaging_twitter.module,v 1.1.2.5 2009/04/02 10:23:06 jareyero Exp $
+/**
+ * @file
+ * Messaging Twitter sending method
+ * 
+ * Developed by Will White
+ * 
+ * Development Seed, http://www.developmentseed.org
+ */
+
+/**
+ * Implementation of hook_messaging
+ */
+function messaging_twitter_messaging($op = 'info') {
+  switch($op) {
+    case 'send methods':
+      $info['twitter_dm'] = array(
+        'title' => t('Twitter Direct Message'),
+        'name' => t('Twitter Direct Message'),
+        'group' => 'twitter',
+        'type' => MESSAGING_TYPE_SEND,
+        'glue' => ' ',
+        'description' => t("Send as a Twitter direct message."),
+        'send callback' => 'messaging_twitter_send_dm',
+        'destination callback' => 'messaging_twitter_user_destination',
+        'system accounts' => TRUE, // Supports multiple sending accounts
+        'account type' => 'twitter', // The type of system account to use
+      );
+      $info['twitter_at'] = array(
+        'title' => t('Twitter @ Message'),
+        'name' => t('Twitter @ Message'),
+        'group' => 'twitter',
+        'type' => MESSAGING_TYPE_SEND,
+        'glue' => ' ',
+        'description' => t("Send as a Twitter @ message."),
+        'send callback' => 'messaging_twitter_send_at',
+        'destination callback' => 'messaging_twitter_user_destination',
+        'system accounts' => TRUE, // Supports multiple sending accounts
+        'account type' => 'twitter', // The type of system account to use
+      );
+      return $info;  
+  }
+}
+
+/**
+ * Map user account to twitter screen name
+ */
+function messaging_twitter_user_destination($account) {
+  static $cache = array();
+   
+  if (!array_key_exists($account->uid, $cache)) {
+    _messaging_twitter_include();  
+    $twitter_accounts = twitter_get_user_accounts($account->uid);
+    if (is_array($twitter_accounts) && !empty($twitter_accounts)) {
+      reset($twitter_accounts);
+      $first = current($twitter_accounts);
+      $cache[$account->uid] = $first['screen_name'];
+    } else {
+      $cache[$account->uid] = NULL;
+    }
+  }   
+  return $cache[$account->uid];
+}
+
+/**
+ * Send a direct message to Twitter user
+ */
+function messaging_twitter_send_dm($destination, $message, $params = array()) {
+  _messaging_twitter_include();
+
+  $url = 'http://twitter.com/direct_messages/new.xml';
+  $site_username = variable_get('messaging_twitter_username', '');
+  $site_password = variable_get('messaging_twitter_password', '');
+  $headers = array('Authorization' => 'Basic '. base64_encode($site_username .':'. $site_password),
+                   'Content-type' => 'application/x-www-form-urlencoded');
+  $data = 'text=' . urlencode($message->body) . '&user=' . $destination;
+
+  $result = drupal_http_request($url, $headers, 'POST', $data);
+}
+
+/**
+ * Send a direct message to Twitter user
+ */
+function messaging_twitter_send_at($destination, $message, $params = array()) {
+  _messaging_twitter_include();
+
+  $url = 'http://twitter.com/statuses/update.xml';
+  $site_username = variable_get('messaging_twitter_username', '');
+  $site_password = variable_get('messaging_twitter_password', '');
+  
+  $body = '@' . $destination . ' ' . $message->body;
+  $headers = array('Authorization' => 'Basic '. base64_encode($site_username .':'. $site_password),
+                   'Content-type' => 'application/x-www-form-urlencoded');
+  $data = 'status=' . urlencode($body);
+
+  $result = drupal_http_request($url, $headers, 'POST', $data);
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function messaging_twitter_menu() {
+  $items = array();
+  
+  $items['admin/messaging/settings/method/twitter'] = array(
+    'title' => 'Twitter',
+    'description' => 'Configure the Twitter ID information for the site.',
+    'page callback' => 'messaging_twitter_admin',
+    'access arguments' => array('administer messaging'),
+    'type' => MENU_LOCAL_TASK,   
+  );
+
+  return $items;
+}
+
+/**
+ * Admin settings
+ */
+function messaging_twitter_admin() {
+  _messaging_twitter_include();
+  $output = '';
+  $username = variable_get('messaging_twitter_username', '');
+  $password = variable_get('messaging_twitter_password', '');
+  if ($username && $password) {
+    $account = twitter_fetch_account_info($username, $password);
+    $output .= theme('image', $account['profile_image_url'], '', '', array(), FALSE);
+    $output .= $account['name'];
+  }
+  $output .= drupal_get_form('messaging_twitter_admin_form');
+  return $output;
+}
+
+/**
+ * Admin settings form
+ */
+function messaging_twitter_admin_form() {
+  $form = array();
+  
+  $form['messaging_twitter_username'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Username'),
+    '#default_value' => variable_get('messaging_twitter_username', ''),
+    '#size' => 40,
+    '#maxlength' => 255,
+    '#required' => TRUE,
+  );
+  $form['messaging_twitter_password'] = array(
+    '#type' => 'password',
+    '#title' => t('Password'),
+    '#default_value' => variable_get('messaging_twitter_password', ''),
+    '#size' => 30,
+    '#maxlength' => 64,
+    '#required' => TRUE,
+  );
+  
+  return system_settings_form($form);
+}
+
+/**
+ * Validate admin settings
+ */
+function messaging_twitter_admin_form_validate($form, &$form_state) {
+  _messaging_twitter_include();
+  if (!twitter_authenticate($form_state['values']['messaging_twitter_username'], $form_state['values']['messaging_twitter_password'])) {
+    form_set_error('name', t('Twitter authentication failed. Please check your username and password.'));
+  }
+}
+
+/**
+ * Load twitter inc only once
+ */
+function _messaging_twitter_include() {
+  static $include = FALSE;
+  if (!$include) {
+    module_load_include('inc', 'twitter');
+    $include = TRUE;
+  }
+}

@@ -1,0 +1,116 @@
+<?php
+// $Id: notifications_autosubscribe.module,v 1.2.2.3.2.5.2.1 2009/04/19 11:02:20 jareyero Exp $
+/**
+ * @file
+ *   Notifications Autosubscribe module.
+ * 
+ * Allows users to automatically subscribe to threads they create or comment on. This module depends on
+ * and needs to run before notifications_content module (weight = 100) for it to work properly.
+ */
+
+/**
+ * Implementation of hook_nodeapi()
+ */
+function notifications_autosubscribe_nodeapi(&$node, $op, $arg = 0) {
+  global $user;
+  
+  if ($user->uid && $op == 'insert' && $node->uid == $user->uid) {
+    notifications_autosubscribe($user, 'thread', 'node', 'nid', $node->nid);
+  }
+}
+
+/**
+ * Implementation of hook_comment().
+ */
+function notifications_autosubscribe_comment($comment, $op) {
+  global $user;
+  
+  // $comment can be an object or an array.
+  $comment = (object)$comment;
+
+  if ($user->uid && $op == 'insert' && $comment->uid == $user->uid) {
+    notifications_autosubscribe($user, 'thread', 'node', 'nid', $comment->nid); 
+  }
+}
+
+/**
+ * Subscribes users to content they post, if not already subscribed
+ *
+ * @param $account
+ *   User account to subscribe
+ * @param $type
+ *   Subscription type
+ * @param $event type
+ *   Event type
+ * @param $field
+ *   String, field that subscription depends on. ie 'nid'.
+ * @param $value
+ *   Int, value of $field that triggers subscription.
+ *
+ */
+function notifications_autosubscribe($account, $type, $event_type, $field, $value) {
+  // if user has auto subscribe enabled and he's not already subscribed
+  if (notifications_user_setting('auto', $account) && !notifications_user_get_subscriptions($account->uid, $event_type, $field, $value)) {
+    $subscription = array(
+      'uid' => $account->uid,
+      'type' => $type,
+      'event_type' => $event_type,
+      'fields' => array($field => $value),
+    );
+    notifications_save_subscription($subscription);    
+  }
+}
+
+/**
+ * Implementation of hook_form_alter()
+ *
+ * Adds autosubscribe checkbox to user edit form.
+ */
+function notifications_autosubscribe_form_alter(&$form, $form_state, $form_id) {
+  switch ($form_id) {
+    case 'user_edit':
+    case 'user_profile_form':
+      if (isset($form['messaging'])) {
+        $form['messaging']['notifications_auto'] = array(
+          '#type'          => 'checkbox',
+          '#title'         => t('Autosubscribe'),
+          '#default_value' => notifications_user_setting('auto', $form['_account']['#value']),
+          '#description'   => t('Checking this box allows you to automatically subscribe to any thread you create or post a comment to.'),
+        );
+      }
+      break;
+    case 'notifications_content_settings_form':
+      $form['autosubscribe'] = array('#type' => 'fieldset', '#title' => t('Autosubscribe'), '#weight' => -10);
+      $form['autosubscribe']['notifications_default_auto'] = array(
+        '#type'          => 'checkbox',
+        '#title'         => t('Set all users to "autosubscribe" by default'),
+        '#default_value' => variable_get('notifications_default_auto', 0),
+        '#description'   => t("If checked the option will be 'enabled' by default for user account settings. This won't change existing settings for users who have already defined it."),
+      );
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_notifications_node_form_alter
+ * 
+ * Replace normal 'thread' subscription by autosubscribe option
+ */
+function notifications_autosubscribe_notifications_node_form_alter(&$form) {
+  global $user;
+
+  if (!empty($form['subscriptions']['params']) && notifications_user_setting('auto', $form['subscriptions']['account']['#value'])) {
+    foreach ($form['subscriptions']['params']['#value'] as $index => $current) {
+      if ($current['type'] == 'thread' && empty($current->sid)) {
+        $form['subscriptions']['autosubscribe'] = array(
+          '#type' => 'checkbox',
+          '#default_value' => 1,
+          '#disabled' => TRUE,
+          '#title' => $form['subscriptions']['options']['#options'][$index],
+          '#description' => t('You are currently set to receive notifications for replies to content which you create. To change this default, uncheck the autosubscribe option in your user account settings.'),
+        );
+        unset($form['subscriptions']['options']['#options'][$index]);
+      }
+    }
+  }
+}

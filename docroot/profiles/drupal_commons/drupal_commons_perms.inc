@@ -569,6 +569,22 @@ function drupal_commons_import_permissions() {
       '0' => 'authenticated user',
     ),
   );
+  
+  // Permission: maintain own subscriptions
+  $permissions[] = array(
+    'name' => 'maintain own subscriptions',
+    'roles' => array(
+      '0' => 'authenticated user',
+    ),
+  );
+
+  // Permission: manage own subscriptions
+  $permissions[] = array(
+    'name' => 'manage own subscriptions',
+    'roles' => array(
+      '0' => 'authenticated user',
+    ),
+  );
 
   // Permission: moderate shoutbox
   $permissions[] = array(
@@ -629,6 +645,38 @@ function drupal_commons_import_permissions() {
   // Permission: search content
   $permissions[] = array(
     'name' => 'search content',
+    'roles' => array(
+      '0' => 'authenticated user',
+    ),
+  );
+  
+  // Permission: skip notifications
+  $permissions[] = array(
+    'name' => 'skip notifications',
+    'roles' => array(
+      '0' => 'authenticated user',
+    ),
+  );
+
+  // Permission: subscribe to author
+  $permissions[] = array(
+    'name' => 'subscribe to author',
+    'roles' => array(
+      '0' => 'authenticated user',
+    ),
+  );
+
+  // Permission: subscribe to content
+  $permissions[] = array(
+    'name' => 'subscribe to content',
+    'roles' => array(
+      '0' => 'authenticated user',
+    ),
+  );
+
+  // Permission: subscribe to content type
+  $permissions[] = array(
+    'name' => 'subscribe to content type',
     'roles' => array(
       '0' => 'authenticated user',
     ),

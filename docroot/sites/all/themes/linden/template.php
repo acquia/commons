@@ -119,13 +119,7 @@ function linden_shoutbox_post($shout, $links = array(), $alter_row_color=TRUE) {
   }
   
   //Generate user name with link
-  if ($shout->uid > 0) {
-    $user_name = l($shout->nick, 'user/' . $shout->uid);
-  }
-  else {
-    //Anonymous
-    $user_name = $shout->nick;  
-  }
+  $user_name = shoutbox_get_user_link($shout);
 
   //Generate title attribute
   $title = t('Posted ' . format_date($shout->created, 'custom', 'm/d/y') . ' at ' . format_date($shout->created, 'custom', 'h:ia') . ' by ' . $shout->nick);

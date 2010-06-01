@@ -1,0 +1,69 @@
+<?php
+// $Id: messaging_mail.module,v 1.2.2.4.2.8 2009/04/01 11:54:50 jareyero Exp $
+/**
+ * @file
+ * Simple mail using Drupal API. Messaging method plug-in
+ * 
+ * This is also the reference implementation of sending method plug-ins
+ */
+
+// Include messaging mail library
+require_once drupal_get_path('module', 'messaging') . '/messaging.mail.inc';
+
+/**
+ * Implementation of hook_messaging()
+ * 
+ * Currently the only operation supported is 'send methods' that will retrieve and array
+ * with information fo the sending methods provided by this module.
+ * 
+ * @param $op
+ *   Type of information to retrieve.
+ * @return mixed
+ *   Depending on $op   
+ */
+function messaging_mail_messaging($op, $type = NULL) {
+  switch($op) {
+    case 'send methods':
+      $info['mail'] = array(
+        'title' => 'Drupal mail',
+        'name' => t('Mail'), // Name for display
+        'group' => 'mail', // Class of sending method
+        'destination' => 'mail', // Account property to use as destination
+        'type' => MESSAGING_TYPE_SEND,  // Method type: push || pull
+        'glue' => "\n", // Glue for message body lines
+        'footer' => "\n--",  // Separator for message footer
+        'description' => t('Send e-mails using the default Drupal mail library.'),
+        'send callback' => 'messaging_mail_send_msg', // Sending callback
+        'system accounts' => TRUE, // Supports multiple sending accounts
+        'account type' => 'mail', // The type of system account to use
+      );
+      return $info;  
+  }
+}
+
+/**
+ * Send mail message to user account
+ * 
+ * This is a callback function that will be invoked from messaging delivery methods
+ * 
+ * @see messaging_message_send()
+ * @see drupal_mail()
+ * 
+ * @param $destination
+ *   Single email address
+ * @param $message
+ *   Message array
+ * @param $params
+ *   Optional parameters for this method type
+ */
+function messaging_mail_send_msg($destination, $message, $params = array()) {
+  $mail = messaging_mail_prepare($destination, $message, $params);
+  return drupal_mail_send($mail);
+}
+
+/**
+ * Implementation of hook_disable()
+ */
+function messaging_mail_disable() {
+  messaging_method_disable('mail');
+}

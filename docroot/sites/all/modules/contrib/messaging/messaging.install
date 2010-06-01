@@ -1,0 +1,299 @@
+<?php
+// $Id: messaging.install,v 1.2.2.4.2.13.2.2 2009/11/11 18:07:24 jareyero Exp $
+
+/**
+* Implementation of hook_schema().
+*/
+function messaging_schema() {
+  $schema['messaging_store'] = array(
+    'description' => 'Stores queued messages to be sent or sent messages as logs.',
+    'fields' => array(
+      'mqid'    => array(      
+        'type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE,
+        'description' => 'Unique message id.',
+      ),
+      'uid'    => array(
+        'type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0,
+        'description' => 'The {user}.uid for destination if it is a unique destination.',        
+      ),
+      'sender' => array(
+        'type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0,
+        'description' => 'The {user}.uid who sent the message if any.',     
+      ),
+      'method' => array(
+        'type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => '',
+        'description' => 'Messaging send method key.',
+      ),
+      'destination' => array(
+        'type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => '',
+        'description' => 'Destination identifier, it may be an email address.',
+      ),
+      'subject' => array(
+        'type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => '',
+        'description' => 'Message subject, single text line.',
+      ),
+      'body' => array(
+        'type' => 'text', 'not null' => TRUE, 'size' => 'big',
+        'description' => 'Message body, multiple text line.',
+      ),
+      'params' => array(
+        'type' => 'text', 'not null' => TRUE, 'size' => 'big', 'serialize' => TRUE,
+        'description' => 'Additional serialized parameters.',
+      ),
+      'created' => array(
+        'type' => 'int', 'not null' => TRUE, 'default' => 0,
+        'description' => 'Unix timestamp, when the message was created/stored.',
+      ),
+      'sent' => array(
+        'type' => 'int', 'not null' => TRUE, 'default' => 0,
+        'description' => 'Unix timestamp, when the message was sent.',
+      ),  
+      'cron' => array(
+        'type' => 'int', 'not null' => TRUE, 'default' => 0, 'size' => 'tiny',
+        'description' => 'Will be 1 if row marked for processing on cron.',
+      ),
+      'queue' => array(
+        'type' => 'int', 'not null' => TRUE, 'default' => 0, 'size' => 'tiny',
+        'description' => 'Will be 1 if this is a queued message.',
+      ),
+      'log' => array(
+        'type' => 'int', 'not null' => TRUE, 'default' => 0, 'size' => 'tiny',
+        'description' => 'Will be 1 if this is a message log.',
+      ),
+    ),    
+    'primary key' => array('mqid'),
+    'indexes' => array(
+      'cron' => array('cron'),
+      'queue' => array('queue'),
+      'log' => array('log'),
+    ),
+  );
+ 
+  /*
+  $schema['messaging_user'] = array(
+    'description' => 'User variables for messaging',
+    'fields' => array(
+      'uid'    => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'name' => array('type' => 'varchar', 'length' => 50, 'not null' => TRUE, 'default' => ''),
+      'value'    => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'text' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => ''),
+    ),
+    'primary key' => array('uid', 'name')
+  );
+  */
+  $schema['messaging_message_parts'] = array(
+    'description' => 'Templates for message composition.',
+    'fields' => array(
+      'type'    => array(
+        'type' => 'varchar', 'length' => 100, 'not null' => TRUE, 'default' => '',
+        'description' => 'Message group key.',
+      ),
+      'method'    => array(
+        'type' => 'varchar', 'length' => 50, 'not null' => TRUE, 'default' => '',
+        'description' => 'Messaging send method.',
+      ),
+      'msgkey' => array(
+        'type' => 'varchar', 'length' => 100, 'not null' => TRUE, 'default' => '',
+        'description' => 'Message part key, should be unique within a group (header, footer,..).',
+      ),
+      'module' => array(
+        'type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => '',
+        'description' => 'Module that owns this template.',
+      ),
+      'message' => array(
+        'type' => 'text', 'not null' => TRUE, 'size' => 'big',
+        'description' => 'Message template, multiline text with tokens for replacement.',
+      ),
+    ),
+    'indexes' => array(
+      'type'    => array('type'),
+      'method' => array('method'),
+      'msgkey' => array('msgkey'),
+    ),
+  );
+
+  return $schema;
+}
+
+/**
+* Implementation of hook_install().
+*/
+function messaging_install() {
+  // Create tables.
+  drupal_install_schema('messaging');
+  // Create default plain text filter
+  _messaging_install_create_filter();
+}
+
+/**
+ * Create a default plain text filter, just to have some reasonable default to get started
+ */
+function _messaging_install_create_filter() {
+  // Create default filter, plain text
+  db_query("INSERT INTO {filter_formats} (name, cache) VALUES('%s', 0)", t('Messaging plain text'));
+  $format = db_last_insert_id('filter_formats', 'format');
+  db_query("INSERT INTO {filters} (format, module, delta, weight) VALUES (%d, 'messaging', 1, 0)", $format);
+  db_query("INSERT INTO {filters} (format, module, delta, weight) VALUES (%d, 'filter', 1, -1)", $format);
+  variable_set('messaging_default_filter', $format);
+  drupal_set_message(t("A new Input format has been created: %name", array('%name' => t('Messaging plain text'))));
+}
+
+/**
+* Implementation of hook_uninstall().
+*/
+function messaging_uninstall() {
+  // Remove tables.
+  drupal_uninstall_schema('messaging');
+  // Remove the default filter, plain text added in install
+  if ($format = variable_get('messaging_default_filter', 0)) {
+    db_query('DELETE FROM {filters} WHERE format = %d', $format);
+    db_query('DELETE FROM {filter_formats} WHERE format = %d', $format);
+  }
+  // Remove variables
+  variable_del('messaging_debug');
+  variable_del('messaging_default_filter');
+  variable_del('messaging_default_method');
+  variable_del('messaging_log');
+  variable_del('messaging_process_limit');
+  db_query("DELETE FROM {variable} WHERE name LIKE 'messaging_method_%'");
+}
+
+/**
+ * Disable a sending method and return an alternative one
+ */
+function messaging_update_method_disable($method, $replace) {
+  // Check that we are not getting rid of the default method
+  if ($method == messaging_method_default()) {
+    variable_set('messaging_default_method', $replace);   
+  }
+  messaging_update_method_update($method, $replace);
+  
+  return $replace;
+}
+
+/**
+ * Find a suitable replacement for a sending method
+ */
+function messaging_update_method_replace($method) {
+  // Find an alternative one within the same group, i.e. 'mail'
+  if ($method_group = messaging_method_info($method, 'group')) {
+    foreach (messaging_method_info(NULL, 'group') as $index => $group) {
+      if ($group == $method_group && $method != $index) {
+        $replace = $index;
+        break;
+      }
+    }
+  }
+  // If still not replacement, go for the default
+  if (empty($replace)) {
+    if ($method == messaging_method_default()) {
+      $info = messaging_method_info();
+      unset($info[$method]);
+      $replace = key($info);
+    } else {
+      $replace = messaging_method_default();
+    }    
+  }
+  return $replace;
+}
+
+/**
+ * Udate sending method, change for a new one
+ */
+function messaging_update_method_update($old, $new) {
+  // Replace some variables
+  if ($old ==  variable_get('messaging_default_method', NULL)) {
+    variable_set('messaging_default_method', $new);
+  }
+  module_invoke_all('messaging', 'method update', $old, $new);
+}
+
+/**
+ * Update method settings
+ */
+function messaging_update_1() {
+  $ret = array();
+  if ($settings = variable_get('messaging_methods', array())) {
+    foreach ($settings as $key => $info){
+      $info['subject_filter'] = $info['filter'];
+      variable_set('messaging_method_'. $key, $info);
+      $ret[] = array();
+    }    
+    drupal_set_message('Your messaging methods have been updated. Please review the messaging settings.');
+  }
+  return $ret;
+}
+
+/**
+ * Create queue storage
+ */
+function messaging_update_2() {
+  $ret = array();
+  drupal_install_schema('messaging_store');
+  return $ret; 
+}
+
+/**
+ * Updates for Drupal 6 version
+ */
+function messaging_update_6001() {
+  $ret = array();
+  _messaging_install_create_filter();
+  return $ret;
+}
+
+/**
+ * Update sending methods names
+ */
+function messaging_update_6002() {
+  $ret = array();
+  module_load_all();
+  if (module_exists('messaging_phpmailer')) {
+    $replace['html_mail'] = 'phpmailer';
+  }
+  if (module_exists('messaging_mime_mail') && !module_exists('messaging_mail')) {
+    $replace['mail'] = 'mimemail'; 
+  }
+  if (!empty($replace)) {
+    foreach ($replace as $old => $new) {
+      if ($settings = variable_get('messaging_method_'. $old, NULL)) {
+        variable_set('messaging_method_' . $new, $settings);
+        variable_del('messaging_method_' . $old);
+      }
+      messaging_update_method_update($old, $new);
+      $ret[] = array('success' => TRUE, 'query' => "Replaced sending method $old by $new");
+    }
+    drupal_set_message('Please, check all your messaging settings for sending methods.');
+  }
+  return $ret;
+}
+
+/**
+ * Update schema field
+ */
+function messaging_update_6003() {
+  $ret = array();
+  db_change_field($ret, 'messaging_store', 'params', 'params', array('type' => 'text', 'not null' => TRUE, 'size' => 'big', 'serialize' => TRUE));
+  return $ret;
+}
+
+/**
+ * update messaging store to add in indexes
+ */
+function messaging_update_6004() {
+  $ret = array();
+  db_add_index($ret, 'messaging_store', 'cron', array('cron'));
+  db_add_index($ret, 'messaging_store', 'queue', array('queue'));
+  db_add_index($ret, 'messaging_store', 'log', array('log'));  
+  return $ret;
+}
+
+/**
+ * Clean up message logs that were not properly cleaned before
+ */
+function messaging_update_6005() {
+  $ret = array();
+  $ret[] = update_sql('UPDATE {messaging_store} SET log = 1 WHERE log > 1');
+  $ret[] = update_sql('DELETE FROM {messaging_store} WHERE log = 1 AND queue = 0 AND sent < %d', time() - variable_get('messaging_log', 0));
+  return $ret;
+}

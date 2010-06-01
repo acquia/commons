@@ -1,0 +1,56 @@
+<?php
+/**
+ * @file
+ * Simple mail using Drupal API. Messaging method plug-in
+ * 
+ * @ TO DO Review filtering
+ */
+
+/**
+ * Implementation of hook_messaging
+ */
+function messaging_privatemsg_messaging($op) {
+  switch($op) {
+    case 'send methods':
+      $info['privatemsg'] = array(
+        'title' => 'Privatemsg',
+        'name' => t('Private message'),
+        'group' => 'web',
+        'type' => MESSAGING_TYPE_SEND,
+        'access' => 'read privatemsg',
+        'glue' => "\n",
+        'description' => t('Send messages through Privatemsg'),
+        'send callback' => 'messaging_privatemsg_send_msg', // Sending callback
+        'destination' => 'uid',
+      );
+      return $info;  
+  }
+}
+
+/**
+ * Send mail message to user accounts
+ * 
+ * Privatemsg API documentation on http://drupal.org/node/369399
+ * 
+ * @param $destination
+ *   User account or user id
+ */
+function messaging_privatemsg_send_msg($destination, $message) {
+  // Prepare the privatemsg parameters
+  $recipients = is_object($destination) ? array($destination) : array(messaging_load_user($destination));
+  if (!empty($message->sender_account)) {
+    $sender = $message->sender_account;
+  } elseif (!empty($message->sender)) {
+    $sender = messaging_load_user($message->sender);
+  } 
+  // this could be broken by minor changes to privatemsg_new_thread, which has an API different from its implementation at present
+  $ret = privatemsg_new_thread($recipients, $message->subject, $message->body, array('author' => $sender));
+  return $ret['success'];
+}
+
+/**
+ * Implementation of hook_disable()
+ */
+function messaging_privatemsg_disable() {
+  messaging_method_disable('privatemsg');
+}

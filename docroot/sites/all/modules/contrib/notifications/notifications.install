@@ -1,0 +1,376 @@
+<?php
+// $Id: notifications.install,v 1.4.2.5.2.6.2.2 2009/04/20 12:51:09 jareyero Exp $
+
+/**
+ * Implementation of hook_schema()
+ */
+function notifications_schema() {
+  $schema['notifications'] = array(
+    'description' => 'The base table for subscriptions',
+    'fields' => array(
+      'sid' => array(
+        'description' => 'Unique Subscription id',    
+        'type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE, 'disp-width' => '10'
+      ),
+      'uid' => array(
+        'description' => 'User id this subscription belongs to.',
+        'type' => 'int', 'not null' => TRUE, 'disp-width' => '11'
+      ),
+      'type' => array(
+        'description' => 'Subscription type, will depend on subscription modules enabled.',
+        'type' => 'varchar', 'length' => '255', 'not null' => FALSE
+      ),
+      'event_type' => array(
+        'description' => 'Type of event that triggers this subscription.',
+        'type' => 'varchar', 'length' => '255', 'not null' => FALSE
+      ),
+      'conditions' => array(
+        'description' => 'Number of conditions this subscription has, for query convenience.',
+        'type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'disp-width' => '10'
+      ),
+      'send_interval' => array(
+        'description' => 'Sending interval for notifications of this subscription.',
+        'type' => 'int', 'not null' => FALSE, 'disp-width' => '11'
+      ),
+      'send_method' => array(
+        'description' => 'Sending method key, see Messaging module.',
+        'type' => 'varchar', 'length' => '255', 'not null' => TRUE
+      ),
+      'cron' => array(
+        'description' => '1 if this subscription will generate notifications to be processed on cron.',
+        'type' => 'int', 'unsigned' => TRUE, 'size' => 'tiny', 'not null' => TRUE, 'default' => 0, 'disp-width' => '3'
+      ),
+      'module' => array(
+        'description' => 'Alternate module name to handle notifications from this subscription',
+        'type' => 'varchar', 'length' => '255', 'not null' => FALSE
+      ),
+      'status' => array(
+        'description' => 'Subscription status: 0 = blocked, 1 = active, 2 = inactive',
+        'type' => 'int', 'not null' => TRUE, 'default' => 1, 'disp-width' => '11'
+      ),
+      'destination' => array(
+        'description' => 'Alternate destination field for anonymous subscriptions, may be an email',
+        'type' => 'varchar', 'length' => '255', 'not null' => FALSE
+      ),
+    ),
+    'primary key' => array('sid'),
+  );
+  $schema['notifications_fields'] = array(
+    'description' => 'Conditions for subscriptions, there may be none or many for each subscription.',
+    'fields' => array(
+      'sid' => array(
+        'description' => 'The {notifications}.sid, subscription this condition belongs to.',
+        'type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'disp-width' => '10'
+      ),
+      'field' => array(
+        'description' => 'The field type for this condition, will depend on subscription type and defined fields.',
+        'type' => 'varchar', 'length' => '255', 'not null' => TRUE
+      ),
+      'value' => array(
+        'description' => 'Matching value for the field, just for string values',
+        'type' => 'varchar', 'length' => '255', 'not null' => TRUE
+      ),
+      'intval' => array(
+        'description' => 'Matching value for the field, just for integer values',
+        'type' => 'int', 'not null' => TRUE, 'default' => 0, 'disp-width' => '11'
+      ),
+    ),
+    'primary key' => array('sid', 'field'),
+  );
+  $schema['notifications_event'] = array(
+    'description' => 'Storage table for event parameters.',
+    'fields' => array(
+      'eid' => array(
+        'description' => 'Unique event id',
+        'type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE, 'disp-width' => '11',
+      ),
+      'module' => array(
+        'description' => 'Module producing the event',
+        'type' => 'varchar', 'length' => '255', 'not null' => FALSE
+      ),
+      'type' => array(
+        'description' => 'Event type: node, feed, etc..',
+        'type' => 'varchar', 'length' => '255', 'not null' => FALSE
+      ),
+      'action' => array(
+        'description' => 'Event action: insert, update, etc.',
+        'type' => 'varchar', 'length' => '255', 'not null' => FALSE),
+      'oid' => array(
+        'description' => 'Object id of the primary object for the event. I.e. for node events it will be nid',
+        'type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0, 'disp-width' => '11'
+      ),
+      'language' => array(
+        'description' => 'Language, currently unused.',
+        'type' => 'varchar', 'length' => '255', 'not null' => FALSE
+      ),
+      'uid' => array(
+        'description' => 'Id of the user causing the event.',
+        'type' => 'int', 'not null' => FALSE, 'disp-width' => '11'
+      ),
+      'params' => array(
+        'description' => 'Serialized event parameters.',
+        'type' => 'text', 'not null' => FALSE, 'serialize' => TRUE,
+      ),
+      'created' => array(
+        'description' => 'Unix timestamp, when it was created.',
+        'type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0, 'disp-width' => '11'
+      ),
+      'counter' => array(
+        'description' => 'Keeps a count of the notifications queued for this event.',
+        'type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0, 'disp-width' => '11'
+      ),
+    ),
+    'primary key' => array('eid'),
+  );
+
+  $schema['notifications_queue'] = array(
+    'description' => 'Table to store notifications produced by subscriptions, to be processed on cron.',
+    'fields' => array(
+      'sqid' => array(
+        'description' => 'Unique row id',
+        'type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE, 'disp-width' => '10',
+      ),
+      'eid' => array(
+        'description' => 'The {notifications_event}.eid of the Event producing this notification.',
+        'type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0, 'disp-width' => '11',
+      ),
+      'sid' => array(
+        'description' => 'The {notifications}.sid of the Subscription producing this notification.',
+        'type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0, 'disp-width' => '11',
+      ),
+      'uid' => array(
+        'description' => 'The {user}.uid of the user this notification is for.',
+        'type' => 'int', 'not null' => FALSE, 'disp-width' => '11',
+      ),
+      'language' => array(
+        'description' => 'Language, currently unused.',
+        'type' => 'varchar', 'length' => '255', 'not null' => FALSE,
+      ),
+      'type' => array(
+        'description' => 'The {notifications}.type of the Subscription producing this notification.',
+        'type' => 'varchar', 'length' => '255', 'not null' => FALSE,
+      ),
+      'send_interval' => array(
+        'description' => 'Send interval for digesting notifications.',
+        'type' => 'int', 'not null' => FALSE, 'disp-width' => '11',
+      ),
+      'send_method' => array(
+        'description' => 'Messaging send method',
+        'type' => 'varchar', 'length' => '255', 'not null' => FALSE,
+      ),
+      'sent' => array(
+        'description' => 'Unix timestamp, when this notification was actually sent for rows kept as logs.',
+        'type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0, 'disp-width' => '10',
+      ),
+      'created' => array(
+        'description' => 'Unix timestamp, when this notification was created.',
+        'type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0, 'disp-width' => '10',
+      ),
+      'cron' => array(
+        'description' => 'Will be 1 for rows to be processed on cron.',
+        'type' => 'int', 'unsigned' => TRUE, 'size' => 'tiny', 'not null' => TRUE, 'default' => 0, 'disp-width' => '3'
+      ),
+      'conditions' => array(
+        'description' => 'The {notifications}.conditions counter, just for query convenience.',
+        'type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0, 'disp-width' => '10',
+      ),
+      'module' => array(
+        'description' => 'Optional module to process this notification.',
+        'type' => 'varchar', 'length' => '255', 'not null' => FALSE,
+      ),
+      'destination' => array(
+        'description' => 'Optional destination for anonymous subscriptions.',
+        'type' => 'varchar', 'length' => '255', 'not null' => FALSE,
+      ),
+    ),
+    'primary key' => array('sqid'),
+  );
+
+  $schema['notifications_sent'] = array(
+    'description' => 'Keeps track of when the last notification was sent for a user, method, interval.',
+    'fields' => array(
+      'uid' => array(
+        'description' => 'The {user}.uid this row belongs to.',
+        'type' => 'int', 'not null' => TRUE, 'default' => 0, 'disp-width' => '11'
+      ),
+      'send_interval' => array(
+        'description' => 'The Notifications send interval.',
+        'type' => 'int', 'not null' => TRUE, 'default' => 0, 'disp-width' => '10'
+      ),
+      'send_method' => array(
+        'description' => 'The Messaging sending method.',
+        'type' => 'varchar', 'length' => '50', 'not null' => TRUE
+      ),
+      'sent' => array(
+        'description' => 'Unix timestamp, when the last notification was sent.',
+        'type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0, 'disp-width' => '10'
+      ),
+    ),
+    'primary key' => array('uid', 'send_interval', 'send_method'),
+  );
+  return $schema;  
+}
+
+/**
+ * Implementation of hook_install().
+ */
+function notifications_install() {
+  drupal_install_schema('notifications');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function notifications_uninstall() {
+  drupal_uninstall_schema('notifications');
+  foreach (array('events', 'send_intervals', 'sender', 'sendself', 'send_immediate') as $name) {
+    variable_del("notifications_$name");
+  }
+}
+
+/**
+ * Update: Add cron flag for processing
+ */
+function notifications_update_1() {
+  $ret = array();
+  // Add field
+  $ret[] = update_sql("ALTER TABLE {notifications} ADD COLUMN `cron` TINYINT UNSIGNED NOT NULL DEFAULT 0");
+  $ret[] = update_sql("ALTER TABLE {notifications_queue} ADD COLUMN `cron` TINYINT UNSIGNED NOT NULL DEFAULT 0");  
+  // Populate field, this is new so all stored rows till now should be intended for cron processing
+  $ret[] = update_sql("UPDATE {notifications} SET cron = 1");
+  $ret[] = update_sql("UPDATE {notifications_queue} SET cron = 1");
+  return $ret;
+}
+
+/**
+ * Update:
+ * - Remove unused table and fields
+ * - Add conditions field for mysql4 compatibility
+ * - Updated variable name
+ */
+function notifications_update_2() {
+  $ret = array();
+  $ret[] = update_sql("DROP TABLE {notifications_user}");
+  $ret[] = update_sql("ALTER TABLE {notifications_queue} DROP COLUMN `name`;");
+  $ret[] = update_sql("ALTER TABLE {notifications_queue} DROP COLUMN `field`;");
+  $ret[] = update_sql("ALTER TABLE {notifications_queue} DROP COLUMN `value`;");
+  $ret[] = update_sql("ALTER TABLE {notifications_queue} DROP COLUMN `author`;");
+  $ret[] = update_sql("ALTER TABLE {notifications_queue} ADD COLUMN `conditions` INTEGER UNSIGNED NOT NULL DEFAULT 0 AFTER `cron`");
+  variable_set('notifications_default_auto', variable_get('notifications_autoset', 0));
+  variable_del('notifications_autoset');
+  return $ret;
+}
+
+/**
+ * - Added status and module fields
+ */
+function notifications_update_3() {
+  $ret[] = update_sql("ALTER TABLE {notifications} ADD COLUMN `module` VARCHAR(255) AFTER `cron`;");
+  $ret[] = update_sql("ALTER TABLE {notifications} ADD COLUMN `status` INT  NOT NULL DEFAULT 1 AFTER `module`;");
+  $ret[] = update_sql("ALTER TABLE {notifications_queue} ADD COLUMN `module` VARCHAR(255);");
+  // Set default module to 'notifications'
+  $ret[] = update_sql("UPDATE {notifications} SET module = 'notifications'");
+  $ret[] = update_sql("UPDATE {notifications_queue} SET module = 'notifications'");
+  return $ret;
+}
+
+/**
+ * Change module weight
+ */
+function notifications_update_4() {
+  $ret[] = update_sql("UPDATE {system} SET weight = 100 WHERE name = 'notifications_content' AND type = 'module'");
+  return $ret;
+}
+
+/**
+ * Update content type and taxonomy options
+ */
+function notifications_update_5() {
+  $ret = array();
+  // Content types
+  if ($omitted = variable_get('notifications_omitted_content_types', array())) {
+    $allowed = array();
+    $types = node_get_types();
+    foreach ($types as $type => $info) {
+      if (!isset($omitted[$type])) {
+        $allowed[$type] = $type;
+      }
+    }
+    variable_set('notifications_content_types', $allowed);
+  }
+  // Vocabularies
+  if ($omitted = variable_get('notifications_omitted_taxa', array())) {
+    $vocabularies = taxonomy_get_vocabularies();
+    foreach ($omitted as $vid) {
+      unset($vocabularies[$vid]);
+    }
+    variable_set('notifications_tags_vocabularies', array_combine(array_keys($vocabularies), array_keys($vocabularies)));
+  }
+  return $ret;
+}
+
+/**
+ * Update ui display options from plaintext to array
+ */
+function notifications_update_6() {
+  $ret = array();
+  foreach (node_get_types() as $type => $info) {
+    $option = variable_get('notifications_node_ui_'. $type, 0);
+    if ($option && !is_array($option)) {
+      variable_set('notifications_node_ui_'. $type, array($option));
+    }
+  }
+  return $ret;
+}
+
+/**
+ * Multiple fixes
+ */
+function notifications_update_6001() {
+  $ret = array();
+  // Fixed typo with variable name
+  variable_set('notifications_send_immediate', variable_get('notifications_send_inmediate', 0));
+  variable_del('notifications_send_inmediate');
+  return $ret;  
+}
+
+/**
+ * Add some fields
+ */
+function notifications_update_6002() {
+  $ret = array();
+  db_add_field($ret, 'notifications_event', 'counter', array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0, 'disp-width' => '11'));
+  db_add_field($ret, 'notifications', 'destination', array('type' => 'varchar', 'length' => '255', 'not null' => FALSE));
+  db_add_field($ret, 'notifications_queue', 'destination', array('type' => 'varchar', 'length' => '255', 'not null' => FALSE));  
+  // Update event counter, this may take a while
+  $ret[] = update_sql("UPDATE {notifications_event} e SET counter = (SELECT COUNT(*) FROM {notifications_queue} q WHERE q.eid = e.eid)");
+  return $ret;
+}
+
+/**
+ * Add integer value to fields table
+ */
+function notifications_update_6003() {
+  $ret = array();
+  db_add_field($ret, 'notifications_fields', 'intval', array('type' => 'int', 'not null' => TRUE, 'default' => 0, 'disp-width' => '11'));
+  // Populate intval, this should depend on db type. Is there any way that works for all?
+  // For both, CAST produces an error when it is no integer that's why the regexp...
+  switch ($GLOBALS['db_type']) {
+    case 'mysql':
+    case 'mysqli':
+      $ret[] = update_sql('UPDATE {notifications_fields} SET intval = CAST(value AS UNSIGNED) WHERE value REGEXP \'^-?[0-9]+$\'');
+      break;
+    case 'pgsql':
+      $ret[] = update_sql('UPDATE {notifications_fields} SET intval = CAST(value AS INTEGER) WHERE value SIMILAR TO \'^-?[0-9]+$\'');
+      break;
+  }
+  return $ret;
+}
+
+/**
+ * Just rebuild schema
+ */
+function notifications_update_6004() {
+  drupal_get_schema(NULL, TRUE);
+  return array();
+}

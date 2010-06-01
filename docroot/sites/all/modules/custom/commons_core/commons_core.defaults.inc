@@ -1786,25 +1786,25 @@ function _commons_core_context_default_contexts() {
       'commons_0' => array(
         'module' => 'commons',
         'delta' => '0',
-        'weight' => -45,
+        'weight' => 45,
         'region' => 'right',
         'status' => '0',
         'label' => 'User Statistics',
         'type' => 'context_ui',
       ),
-      'user_3' => array(
-        'module' => 'user',
-        'delta' => '3',
-        'weight' => -44,
+      'views_users_online-block_1' => array(
+        'module' => 'views',
+        'delta' => 'users_online-block_1',
+        'weight' => 46,
         'region' => 'right',
         'status' => '0',
-        'label' => 'Who\'s online',
+        'label' => 'Who\'s Online? (Custom)',
         'type' => 'context_ui',
       ),
       'views_most_active_users-block_1' => array(
         'module' => 'views',
         'delta' => 'most_active_users-block_1',
-        'weight' => -43,
+        'weight' => 47,
         'region' => 'right',
         'status' => '0',
         'label' => 'Most Active Users',
@@ -1813,7 +1813,7 @@ function _commons_core_context_default_contexts() {
       'views_newest_users-block_1' => array(
         'module' => 'views',
         'delta' => 'newest_users-block_1',
-        'weight' => -42,
+        'weight' => 48,
         'region' => 'right',
         'status' => '0',
         'label' => 'Newest Users',
@@ -2592,13 +2592,12 @@ function _commons_core_imagecache_default_presets() {
       'presetname' => 'group_images',
       'actions' => array(
         '0' => array(
-          'weight' => '-10',
+          'weight' => '0',
           'module' => 'imagecache',
           'action' => 'imagecache_scale_and_crop',
           'data' => array(
             'width' => '75',
             'height' => '75',
-            'upscale' => 0,
           ),
         ),
       ),
@@ -2607,13 +2606,12 @@ function _commons_core_imagecache_default_presets() {
       'presetname' => 'group_images_thumb',
       'actions' => array(
         '0' => array(
-          'weight' => '-9',
+          'weight' => '0',
           'module' => 'imagecache',
           'action' => 'imagecache_scale_and_crop',
           'data' => array(
             'width' => '24',
             'height' => '24',
-            'upscale' => 0,
           ),
         ),
       ),
@@ -4620,7 +4618,7 @@ function _commons_core_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'comment_group';
-  $strongarm->value = '2';
+  $strongarm->value = '0';
 
   $export['comment_group'] = $strongarm;
   $strongarm = new stdClass;
@@ -5002,6 +5000,20 @@ function _commons_core_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'messaging_default_filter';
+  $strongarm->value = '4';
+
+  $export['messaging_default_filter'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'messaging_default_method';
+  $strongarm->value = 'mail';
+
+  $export['messaging_default_method'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'node_options_blog';
   $strongarm->value = array(
     '0' => 'status',
@@ -5098,6 +5110,99 @@ function _commons_core_strongarm() {
   );
 
   $export['node_options_wiki'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'notifications_content_per_type';
+  $strongarm->value = '1';
+
+  $export['notifications_content_per_type'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'notifications_content_type';
+  $strongarm->value = array(
+    'thread' => 'thread',
+    'nodetype' => 'nodetype',
+    'author' => 'author',
+    'typeauthor' => 0,
+  );
+
+  $export['notifications_content_type'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'notifications_content_type_group';
+  $strongarm->value = array();
+
+  $export['notifications_content_type_group'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'notifications_default_auto';
+  $strongarm->value = 0;
+
+  $export['notifications_default_auto'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'notifications_node_ui_group';
+  $strongarm->value = array();
+
+  $export['notifications_node_ui_group'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'notifications_ui_account_options';
+  $strongarm->value = array(
+    'links' => 'links',
+    'block' => 'block',
+  );
+
+  $export['notifications_ui_account_options'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'notifications_ui_node';
+  $strongarm->value = array(
+    'form' => 'form',
+    'comment' => 'comment',
+    'links' => 'links',
+    'teaserlinks' => 'teaserlinks',
+    'block' => 'block',
+    'subform' => 0,
+  );
+
+  $export['notifications_ui_node'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'notifications_ui_per_type';
+  $strongarm->value = '0';
+
+  $export['notifications_ui_per_type'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'notifications_ui_types';
+  $strongarm->value = array(
+    'thread' => 'thread',
+    'nodetype' => 'nodetype',
+    'author' => 'author',
+    'typeauthor' => 0,
+  );
+
+  $export['notifications_ui_types'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'notifications_ui_user';
+  $strongarm->value = array(
+    'page' => 'page',
+    'create' => 'create',
+  );
+
+  $export['notifications_ui_user'] = $strongarm;
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;

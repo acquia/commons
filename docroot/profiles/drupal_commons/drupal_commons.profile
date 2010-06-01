@@ -93,6 +93,13 @@ function drupal_commons_profile_modules() {
     // Shoutbox
     'shoutbox', 'shoutbox_group',
     
+    // Messaging
+    'messaging', 'messaging_mail', 'messaging_simple',
+    
+    // Notifications
+    'notifications', 'notifications_autosubscribe', 'notifications_content',
+    'notifications_ui', 'notifications_views',
+    
     // Misc
     'userpoints', 'userpoints_nc', 'wikitools', 'admin_menu', 'ajax_load', 'editablefields', 
     'calendar', 'jcalendar', 'diff', 'freelinking', 'flag', 'pathauto', 'jquery_ui', 'insert',
@@ -237,7 +244,7 @@ function drupal_commons_config_vocabulary() {
 function drupal_commons_config_profile() {
   // Add custom profile fields
   $sql = "INSERT INTO {profile_fields} (title, name, explanation, category, type, weight, required, register, visibility, autocomplete) VALUES ('%s', '%s', '%s', '%s', '%s', %d, %d, %d, %d, %d)";
-  db_query($sql, t('Name'), 'profile_name', t('Enter your full name.'), t('Personal Information'), 'textfield', -10, 0, 1, 2, 0);
+  db_query($sql, t('Name'), 'profile_name', t('Enter your full name.'), t('Personal Information'), 'textfield', -10, 1, 1, 2, 0);
   db_query($sql, t('Job Title'), 'profile_job', t('What is your job title?'), t('Work Information'), 'textfield', 0, 0, 1, 2, 0);
   db_query($sql, t('My Interests'), 'profile_interests', t('What are your interests, hobbies, etc?'), t('Personal Information'), 'textarea', -8, 0, 0, 2, 0);
   db_query($sql, t('Organization'), 'profile_organization', t('Which organization or department are you a part of?'), t('Work Information'), 'textfield', 0, 0, 1, 2, 0);
@@ -321,6 +328,10 @@ function drupal_commons_config_filter() {
   db_query("UPDATE {filters} f INNER JOIN {filter_formats} ff ON f.format = ff.format SET f.format = 3 WHERE ff.name = 'PHP code'");
   db_query("UPDATE {filter_formats} SET format = 3 WHERE name = 'PHP code'");
   
+  // Messaging
+  db_query("UPDATE {filters} f INNER JOIN {filter_formats} ff ON f.format = ff.format SET f.format = 4 WHERE ff.name = 'Messaging plain text'");
+  db_query("UPDATE {filter_formats} SET format = 4 WHERE name = 'Messaging plain text'");
+  
   // Let community and content manager role use Full HTML
   db_query("UPDATE {filter_formats} SET roles = ',3,4,' WHERE name = 'Full HTML'");
   
@@ -339,17 +350,17 @@ function drupal_commons_config_filter() {
     VALUES (4, 'block', 2, 1, 25)");
     
   // Create a "links-only" filter format that Shoutbox will use
-  db_query("INSERT INTO {filter_formats} (format, name, cache) VALUES (4, 'Links Only', 1)");
+  db_query("INSERT INTO {filter_formats} (format, name, cache) VALUES (5, 'Links Only', 1)");
   
   // Add filters to the format
-  db_query("INSERT INTO {filters} (format, module, delta, weight) VALUES (4, 'filter', 0, -10)");
-  db_query("INSERT INTO {filters} (format, module, delta, weight) VALUES (4, 'filter', 2, -9)");
+  db_query("INSERT INTO {filters} (format, module, delta, weight) VALUES (5, 'filter', 0, -10)");
+  db_query("INSERT INTO {filters} (format, module, delta, weight) VALUES (5, 'filter', 2, -9)");
   
   // Adjust settings for the filter
-  variable_set('filter_url_length_4', 60);
-  variable_set('filter_html_4', 1);
-  variable_set('filter_html_help_4', 0);
-  variable_set('allowed_html_4', '');
+  variable_set('filter_url_length_5', 60);
+  variable_set('filter_html_5', 1);
+  variable_set('filter_html_help_5', 0);
+  variable_set('allowed_html_5', '');
   
   // Set allowed HTML tags for Filter HTML format
   variable_set('allowed_html_1', DRUPAL_COMMONS_FILTERED_HTML);
@@ -613,7 +624,7 @@ function drupal_commons_config_vars() {
   variable_set('userpoints_post_comment', DRUPAL_COMMONS_POINTS_COMMENT);
   
   // Some Shoutbox tweaks
-  variable_set('shoutbox_filter_format', 4);
+  variable_set('shoutbox_filter_format', 5);
   variable_set('shoutbox_escape_html', 0);
   variable_set('shoutbox_expire', 120);
   variable_set('shoutbox_showamount_block', 8);

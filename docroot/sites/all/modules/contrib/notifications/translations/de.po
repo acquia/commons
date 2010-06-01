@@ -1,0 +1,1087 @@
+# $Id: de.po,v 1.1.2.2 2008/11/03 10:54:01 hass Exp $
+#
+# LANGUAGE translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  notifications.admin.inc,v 1.5.2.6.2.5 2008/06/16 16:52:03 jareyero
+#  notifications.module,v 1.6.2.9.2.10 2008/07/30 17:23:35 jareyero
+#  notifications_ui.module,v 1.3.2.8.2.4 2008/06/16 16:52:03 jareyero
+#  notifications_content.module,v 1.4.2.9.2.5 2008/07/30 17:23:35 jareyero
+#  notifications_tags.module,v 1.1.2.5.2.3 2008/06/16 16:18:39 jareyero
+#  notifications.cron.inc,v 1.6.2.6.2.4 2008/07/30 17:23:35 jareyero
+#  notifications_lite.module,v 1.1.4.2 2008/04/29 10:03:06 jareyero
+#  notifications_mail2web/notifications_mail2web.module: n/a
+#  notifications.info,v 1.1.4.1 2008/04/13 18:02:39 jareyero
+#  notifications_autosubscribe.info,v 1.2.2.1 2008/04/13 10:33:04 jareyero
+#  notifications_content.info,v 1.1.4.1 2008/04/13 18:02:39 jareyero
+#  notifications_feed.info,v 1.1 2008/01/26 12:57:38 jareyero
+#  notifications_lite.info,v 1.1.4.2 2008/04/29 10:03:06 jareyero
+#  notifications_mail2web.info,v 1.1.4.2 2008/05/03 16:52:05 jareyero
+#  notifications_tags.info,v 1.1.4.1 2008/06/16 16:18:39 jareyero
+#  notifications_ui.info,v 1.1.4.1 2008/04/13 18:02:39 jareyero
+#  notifications_autosubscribe.module,v 1.2.2.3.2.1 2008/07/30 17:23:35 jareyero
+#  notifications_feed.module,v 1.2.2.4 2008/04/13 10:33:05 jareyero
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Drupal Notifications V6\n"
+"POT-Creation-Date: 2008-09-21 17:14+0200\n"
+"PO-Revision-Date: 2008-11-03 11:44+0100\n"
+"Last-Translator: Alexander Haß\n"
+"Language-Team: Frank Tartler <frank.tartler@googlemail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: notifications.admin.inc:10
+msgid "General settings"
+msgstr "Allgemeine Einstellungen"
+
+#: notifications.admin.inc:15
+msgid "Notify poster of own posts"
+msgstr "Den Ersteller eines Beitrags über eigene Beiträge benachrichtigen"
+
+#: notifications.admin.inc:17
+msgid "Notifies a node poster about their own posts.  Useful principally during testing.  Default is OFF."
+msgstr "Benachrichtigt den Ersteller eines Beitrags über seine eigenen Beiträge. Grundsätzlich nützlich zum Testen. Standard ist AUS."
+
+#: notifications.admin.inc:20
+msgid "Immediate sending"
+msgstr "Sofortiges Senden"
+
+#: notifications.admin.inc:23
+msgid "Do not queue notifications for immediate sending. This will produce more timely notifications for sites with a small number of users."
+msgstr "Benachrichtigungen nicht in eine Wartschlange geben sondern sofort senden. Dies führt zu zeitnäheren Benachrichtigungen bei Websites mit wenigen Benutzern."
+
+#: notifications.admin.inc:26
+msgid "Notifications Sender"
+msgstr "Benachrichtigungs-Absender"
+
+#: notifications.admin.inc:29
+msgid "No one (All notifications will appear as coming from the web site)"
+msgstr "Keiner (alle Benachrichtigungen erscheinen als ob sie von der Website kommen)"
+
+#: notifications.admin.inc:30
+msgid "User name, site data (Only the user name will be used)"
+msgstr "Benutzername, Website-Daten (nur der Benutzername wird verwendet)"
+
+#: notifications.admin.inc:31
+msgid "Full user data (User name and available user information)"
+msgstr "Vollständige Benutzerdaten (Benutzername und verfügbare Informationen)"
+
+#: notifications.admin.inc:34
+msgid "Use the site information as the sender for notification messages or use account data from the user causing the event. WARNING: Selecting the last option (Full user data) may undisclose private information to subscribers like the user e-mail address."
+msgstr "Es können Website-Informationen als Sender der Benachrichtigungs-Nachricht verwendet werden oder Benutzerdaten des Benutzers, der ein Ereignis verursacht hat: WARNUNG: Das Auswählen der letzten Option kann dazu führen, dass Abonnenten an private Informationen wie die E-Mail-Adresse gelangen."
+
+#: notifications.admin.inc:39
+msgid "Default settings"
+msgstr "Standard-Einstellungen"
+
+#: notifications.admin.inc:43
+#: notifications.module:174
+msgid "Default send interval"
+msgstr "Standard-Sendeintervall"
+
+#: notifications.admin.inc:52
+msgid "Limits for queue processing"
+msgstr "Grenzwerte für das Abarbeiten der Warteschlange"
+
+#: notifications.admin.inc:54
+msgid "These are the limits for each cron run on queue processing. The process will stop when it first meets any of them. Set to 0 for no limit."
+msgstr "Dies sind Grenzwerte für jeden Cron-Lauf mit Abarbeitung der Warteschlange. Der Prozess endet, wenn er einen davon erreicht. Auf 0 einstellen für keinen Grenzwert."
+
+#: notifications.admin.inc:57
+msgid "Number of rows"
+msgstr "Anzahl Zeilen"
+
+#: notifications.admin.inc:63
+msgid "Number of messages sent"
+msgstr "Anzahl gesendeter Nachrichten"
+
+#: notifications.admin.inc:69
+msgid "Time (seconds)"
+msgstr "Zeit (Sekunden)"
+
+#: notifications.admin.inc:75
+msgid "Time (% of cron time)"
+msgstr "Zeit (% der Cron-Zeit)"
+
+#: notifications.admin.inc:79
+msgid "Maximum percentage of cron time the process may use."
+msgstr "Maximaler Prozentsatz der Cron-Zeit, die dieser Prozess verbrauchen darf."
+
+#: notifications.admin.inc:90
+msgid "Minutes"
+msgstr "Minuten"
+
+#: notifications.admin.inc:91
+msgid "Hours"
+msgstr "Stunden"
+
+#: notifications.admin.inc:92
+msgid "Days"
+msgstr "Tage"
+
+#: notifications.admin.inc:96
+msgid "Send intervals"
+msgstr "Sendeintervalle"
+
+#: notifications.admin.inc:99
+msgid "To delete an interval, set the time unit and the name empty."
+msgstr "Um ein Intervall zu löschen muss die Zeiteinheit gesetzt und der Name leer gelassen werden."
+
+#: notifications.admin.inc:140
+#: notifications_ui/notifications_ui.module:178
+msgid "Update"
+msgstr "Aktualisieren"
+
+#: notifications.admin.inc:141;151
+msgid "Reset to defaults"
+msgstr "Auf Standardwerte setzen"
+
+#: notifications.admin.inc:165
+msgid "The time intervals for your subscriptions have been updated"
+msgstr "Die Zeitintervalle in denen Abonnements aktualisiert wurden"
+
+#: notifications.admin.inc:173
+msgid "Time"
+msgstr "Zeit"
+
+#: notifications.admin.inc:173
+msgid "Display name"
+msgstr "Anzeigename"
+
+#: notifications.admin.inc:198
+msgid "Enabled events"
+msgstr "Aktivierte Ereignisse"
+
+#: notifications.admin.inc:201
+msgid "Check the events for which notifications should be triggered."
+msgstr "Ereignisse ankreuzen, für die Benachrichtigungen generiert werden sollen."
+
+#: notifications.admin.inc:214
+msgid "You need to enable some plug-ins to provide notifications events."
+msgstr "Es müssen einige Plug-Ins aktiviert werden, um Benachrichtigungsereignisse bereitzustellen."
+
+#: notifications.admin.inc:256;283
+#: notifications_content/notifications_content.module:477
+msgid "Type"
+msgstr "Typ"
+
+#: notifications.admin.inc:256;283;304
+#, fuzzy
+msgid "Number"
+msgstr "Anzahl"
+
+#: notifications.admin.inc:272
+msgid "No existing or allowed subscriptions"
+msgstr "Keine existierenden oder erlaubten Abonnements"
+
+#: notifications.admin.inc:291;312
+msgid "Total: %number"
+msgstr "Insgesamt: %number"
+
+#: notifications.admin.inc:292
+msgid "Current subscriptions"
+msgstr "Aktuelle Abonnements"
+
+#: notifications.admin.inc:304;440
+#: notifications.module:1114
+#: notifications_content/notifications_content.module:533
+#: notifications_tags/notifications_tags.module:157
+msgid "Send interval"
+msgstr "Sendeintervall"
+
+#: notifications.admin.inc:313
+msgid "Messages in queue"
+msgstr "Nachrichten in der Warteschlange"
+
+#: notifications.admin.inc:328
+msgid "Output"
+msgstr "Ausgabe"
+
+#: notifications.admin.inc:334
+msgid "The queue has been reset."
+msgstr "Die Warteschlange wurde zurückgesetzt."
+
+#: notifications.admin.inc:340
+msgid "Run queue process"
+msgstr "Warteschlangen-Prozess starten"
+
+#: notifications.admin.inc:341
+msgid "Process immediate sending"
+msgstr "Sofortiges Senden beginnen"
+
+#: notifications.admin.inc:342
+msgid "Reset queue. Delete all notifications."
+msgstr "Warteschlange zurücksetzen. Alle Benachrichtigungen löschen."
+
+#: notifications.admin.inc:344
+msgid "Operations"
+msgstr "Operationen"
+
+#: notifications.admin.inc:401;466
+msgid "Your subscription was activated."
+msgstr "Ihr Abonnement wurde aktiviert."
+
+#: notifications.admin.inc:406
+msgid "Confirm your subscription"
+msgstr "Bestätigen Sie Ihr Abonnement"
+
+#: notifications.admin.inc:411
+msgid "Subscription type or parameters not allowed"
+msgstr "Abonnement-Typ oder -Parameter nicht erlaubt"
+
+#: notifications.admin.inc:433;527
+msgid "!type subscription to"
+msgstr ""
+
+#: notifications.admin.inc:447
+#: notifications.module:1116
+#: notifications_content/notifications_content.module:533
+#: notifications_tags/notifications_tags.module:159
+msgid "Send method"
+msgstr "Sende-Methode"
+
+#: notifications.admin.inc:453;464
+msgid "Subscribe"
+msgstr "Abonnieren"
+
+#: notifications.admin.inc:454;468;532;546
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: notifications.admin.inc:469
+msgid "Your subscription was cancelled"
+msgstr "Ihr Abonnement wurde abgebrochen"
+
+#: notifications.admin.inc:503;544
+msgid "Your subscription has been removed."
+msgstr "Ihr Abonnement wurde entfernt."
+
+#: notifications.admin.inc:506;531;542
+msgid "Unsubscribe"
+msgstr "Abbestellen"
+
+#: notifications.cron.inc:148
+#: notifications.module:0
+msgid "notifications"
+msgstr "Benachrichtigungen"
+
+#: notifications.cron.inc:148
+msgid "Reached processing limit on queue processing: %name = %value"
+msgstr "Grenze für das Abarbeiten der Warteschlange erreicht: %name = %value"
+
+#: notifications.module:170
+msgid "Messaging and Notifications settings"
+msgstr "Einstellungen für Nachrichen und Benachrichtigungen"
+
+#: notifications.module:178
+msgid "Default send interval for subscriptions."
+msgstr "Standard-Sendeintervall für Benachrichtigungen."
+
+#: notifications.module:709
+msgid "Notifications event"
+msgstr "Benachrichtigungs-Ereignis"
+
+#: notifications.module:713
+msgid "Notifications digest"
+msgstr "Benachrichtigungs-Zusammenfassung"
+
+#: notifications.module:722
+msgid "Subject for event notifications"
+msgstr "Betreff für Ereignis-Benachrichtigungen"
+
+#: notifications.module:723
+msgid "Header for event notifications"
+msgstr "Kopfzeile für Ereignis-Benachrichtigungen"
+
+#: notifications.module:724
+msgid "Content for event notifications"
+msgstr "Inhalt für Ereignis-Benachrichtigungen"
+
+#: notifications.module:725
+msgid "Footer for event notifications"
+msgstr "Fußzeile für Ereignis-Benachrichtigungen"
+
+#: notifications.module:729
+msgid "Subject for digested notifications"
+msgstr "Betreff für zusammengefasste Benachrichtigungen"
+
+#: notifications.module:730
+msgid "Header for digested notifications"
+msgstr "Kopfzeile für "
+
+#: notifications.module:731
+msgid "Line for digested events"
+msgstr "Linie für zusammengefasste Ereignisse"
+
+#: notifications.module:732
+msgid "Footer for digested notifications"
+msgstr "Fußzeile für zusammengefasste Benachrichtigungen"
+
+#: notifications.module:741
+msgid "Event notification for [user] from [site-name]"
+msgstr "Ereignis-Benachrichtigung für [user] von [site-name]"
+
+#: notifications.module:742
+msgid "Greetings [user],"
+msgstr "Guten Tag [user],"
+
+#: notifications.module:743
+msgid "A item to which you are subscribed has been updated"
+msgstr "Ein Element, das Sie abonniert haben, wurde aktualisiert"
+
+#: notifications.module:745;758
+#: notifications_lite/notifications_lite.module:177
+msgid "This is an automatic message from [site-name]"
+msgstr "Dies ist eine automatische Nachricht von [site-name]"
+
+#: notifications.module:746;759
+#: notifications_lite/notifications_lite.module:178
+msgid "To manage your subscriptions, browse to [subscriptions-manage]"
+msgstr "Zur Verwaltung der Abonnements kann [subscriptions-manage] aufgerufen werden"
+
+#: notifications.module:747
+msgid "You can unsubscribe at [unsubscribe-url]"
+msgstr "Dieses Abonnement kann abbestellt werden unter [unsubscribe-url]"
+
+#: notifications.module:754
+msgid "[site-name] subscription update for [user]"
+msgstr "[site-name] Aktualisierung des Abonnements für [user]"
+
+#: notifications.module:755
+msgid ""
+"Greetings, [user].\n"
+"\n"
+"These are your messages"
+msgstr ""
+"Guten Tag, [user].\n"
+"\n"
+"Dies sind Ihre Nachrichten"
+
+#: notifications.module:756
+msgid ""
+"A [type] has been updated: [title]\n"
+"\n"
+"[event_list]"
+msgstr ""
+"Inhalt vom Typ [type] wurde aktualisiert: [title]\n"
+"\n"
+"[event_list]"
+
+#: notifications.module:809
+msgid "The url for the current user to manage subscriptions."
+msgstr "Die URL für den aktuellen Benutzer zum Verwalten der Abonnements."
+
+#: notifications.module:812
+msgid "The url for disabling a specific subscription."
+msgstr "Die URL zum Deaktivieren eines bestimmten Abonnements."
+
+#: notifications.module:815
+msgid "List of events for message digests"
+msgstr "Liste von Ereignissen für Nachrichten-Zusammenfassungen"
+
+#: notifications.module:816
+msgid "Detailed information for event"
+msgstr "Detaillierte Informationen zum Ereignis"
+
+#: notifications.module:981
+msgid "Never"
+msgstr "Nie"
+
+#: notifications.module:982
+msgid "Immediately"
+msgstr "Sofort"
+
+#: notifications.module:983
+msgid "Every hour"
+msgstr "Jede Stunde"
+
+#: notifications.module:984
+msgid "Twice a day"
+msgstr "Zweimal täglich"
+
+#: notifications.module:985
+msgid "Daily"
+msgstr "Täglich"
+
+#: notifications.module:986
+msgid "Weekly"
+msgstr "Wöchentlich"
+
+#: notifications.module:1158
+#: notifications_content/notifications_content.module:559
+#: notifications_tags/notifications_tags.module:209
+msgid "Save"
+msgstr "Speichern"
+
+#: notifications.module:148
+msgid "administer notifications"
+msgstr "Benachrichtigungen verwalten"
+
+#: notifications.module:148
+msgid "maintain own subscriptions"
+msgstr "eigene Benachrichtigungen pflegen"
+
+#: notifications.module:28
+msgid "Messaging & Notifications"
+msgstr "Nachrichten & Benachrichtigungen"
+
+#: notifications.module:30
+msgid "Administer and configure messaging and notifications"
+msgstr "Nachrichten und Benachrichtigungen verwalten und konfigurieren"
+
+#: notifications.module:36
+msgid "Notifications Status"
+msgstr "Benachrichtigungs-Status"
+
+#: notifications.module:37
+msgid "Manage users notifications."
+msgstr "Benutzer-Benachrichtigungen verwalten."
+
+#: notifications.module:43;117
+msgid "Overview"
+msgstr "Übersicht"
+
+#: notifications.module:44
+msgid "Subscriptions overview."
+msgstr "Abonnement-Übersicht."
+
+#: notifications.module:50
+msgid "Queue"
+msgstr "Warteschlange"
+
+#: notifications.module:51
+msgid "Subscriptions queue."
+msgstr "Abonnement-Warteschlange."
+
+#: notifications.module:60
+msgid "Notifications Settings"
+msgstr "Benachrichtigungs-Einstellungen"
+
+#: notifications.module:61
+msgid "Site settings for user notifications."
+msgstr "Website-Einstellungen für Benutzer-Benachrichtigungen"
+
+#: notifications.module:68
+msgid "General"
+msgstr "Allgemein"
+
+#: notifications.module:74
+msgid "Intervals"
+msgstr "Intervalle"
+
+#: notifications.module:82
+msgid "Events"
+msgstr "Ereignisse"
+
+#: notifications.module:108
+#: notifications.info:0;0
+#: notifications_autosubscribe/notifications_autosubscribe.info:0
+#: notifications_content/notifications_content.info:0
+#: notifications_feed/notifications_feed.info:0
+#: notifications_lite/notifications_lite.info:0
+#: notifications_tags/notifications_tags.info:0
+#: notifications_ui/notifications_ui.info:0
+msgid "Notifications"
+msgstr "Benachrichtigungen"
+
+#: notifications.info:0
+msgid "The basic notifications framework"
+msgstr "Das grundlegende Benachrichtigungs-Rahmenwerk"
+
+#: notifications_autosubscribe/notifications_autosubscribe.module:47
+msgid "Autosubscribe"
+msgstr "Automatisch abonnieren"
+
+#: notifications_autosubscribe/notifications_autosubscribe.module:49
+msgid "Checking this box allows you to automatically subscribe to any thread you create or post a comment to."
+msgstr "Das Aktivieren dieses Ankreuzkästchens ermöglicht es, automatische Benachrichtigungen über selbsterstellte Diskussionen oder Kommentaren dazu zu abonnieren."
+
+#: notifications_autosubscribe/notifications_autosubscribe.module:56
+msgid "Set all users to \"autosubscribe\" by default"
+msgstr "Alle Benutzer standardmäßig auf „Automatisch abonnieren“ setzen"
+
+#: notifications_autosubscribe/notifications_autosubscribe.module:58
+msgid "Sets each users \"autosubscribe\" profile option."
+msgstr "Stellt bei jedem Benutzer die Profil-Option „Automatisch abonnieren“ ein."
+
+#: notifications_autosubscribe/notifications_autosubscribe.module:93
+msgid "You are currently set to receive notifications for replies to content which you create. To change this default, uncheck the autosubscribe option in your user account settings."
+msgstr "Momentan ist eingestellt, dass Sie Benachrichtigungen über Reaktionen auf Inhalt erhalten, den Sie erstellen. Die Option „Automatisch abonnieren“ in den Einstellungen Ihres Kontos kann dekativiert werden, um diesen Standard zu ändern."
+
+#: notifications_autosubscribe/notifications_autosubscribe.module:0
+msgid "notifications_autosubscribe"
+msgstr ""
+
+#: notifications_autosubscribe/notifications_autosubscribe.info:0
+msgid "Notifications Autosubscribe"
+msgstr "Automatische Abonnements von Benachrichtigungen"
+
+#: notifications_autosubscribe/notifications_autosubscribe.info:0
+msgid "Provides automatic notifications."
+msgstr "Stellt automatische Benachrichtigungen bereit."
+
+#: notifications_content/notifications_content.module:44;131;508
+msgid "Author"
+msgstr "Autor"
+
+#: notifications_content/notifications_content.module:77
+msgid "Content type subscriptions"
+msgstr "Inhaltstyp-Abonnements"
+
+#: notifications_content/notifications_content.module:84
+msgid "Allowed content types"
+msgstr "Erlaubte Inhaltstypen"
+
+#: notifications_content/notifications_content.module:87
+msgid "Select content types which should be <em>allowed</em> for subscriptions to content type."
+msgstr "Auswahl der Inhaltstypen die für Benachrichtigungen nach Inhaltstype <em>erlaubt</em> sein sollen."
+
+#: notifications_content/notifications_content.module:102;268
+#: notifications_feed/notifications_feed.module:157
+msgid "Content"
+msgstr "Inhalt"
+
+#: notifications_content/notifications_content.module:104
+msgid "Content type: %type"
+msgstr "Inhaltstyp: %type"
+
+#: notifications_content/notifications_content.module:107
+msgid "Author: %name"
+msgstr "Autor: %name"
+
+#: notifications_content/notifications_content.module:110
+msgid "Thread: %title"
+msgstr "Diskussion: %title"
+
+#: notifications_content/notifications_content.module:117;26
+msgid "Thread"
+msgstr "Diskussion"
+
+#: notifications_content/notifications_content.module:124;35
+msgid "Content type"
+msgstr "Inhaltstyp"
+
+#: notifications_content/notifications_content.module:172
+msgid "New content of type [type-name] has been submitted"
+msgstr "Neuer Inhalt vom Typ [type-name] wurde gespeichert."
+
+#: notifications_content/notifications_content.module:173
+msgid "[type-name] [title] by [author-name]"
+msgstr "[type-name] [title] von [author-name]"
+
+#: notifications_content/notifications_content.module:175
+#, fuzzy
+msgid "Node creation"
+msgstr "Benachrichtigungen"
+
+#: notifications_content/notifications_content.module:184;192
+msgid "[type-name]: [title]"
+msgstr "[type-name]: [title]"
+
+#: notifications_content/notifications_content.module:185
+msgid "The [node-type] has been updated"
+msgstr "[node-type] wurde aktualisiert"
+
+#: notifications_content/notifications_content.module:187
+msgid "Node update"
+msgstr "Beitragsaktualisierung"
+
+#: notifications_content/notifications_content.module:193
+msgid "New comment by [comment-author-name]: [comment-title]"
+msgstr "Neuer Kommentar von [comment-author-name]: [comment-title]"
+
+#: notifications_content/notifications_content.module:195
+msgid "Node comment"
+msgstr ""
+
+#: notifications_content/notifications_content.module:234
+msgid "The header and footer will be taken from Notification events"
+msgstr "Kopf- und Fußzeile werden von Benachrichtigungsereignissen übernommen."
+
+#: notifications_content/notifications_content.module:238
+msgid "Notifications for node events"
+msgstr "Benachrichtigungen für Beitrags-Ereignisse"
+
+#: notifications_content/notifications_content.module:243
+msgid "Notifications for node creation"
+msgstr "Benachrichtigung beim Erstellen von Beiträgen"
+
+#: notifications_content/notifications_content.module:248
+msgid "Notifications for node updates"
+msgstr "Benachrichtigungen beim Aktualisieren von Beiträgen"
+
+#: notifications_content/notifications_content.module:253
+msgid "Notifications for node comments"
+msgstr "Benachrichtigungen für Kommentare zu Beiträgen"
+
+#: notifications_content/notifications_content.module:267
+#: notifications_feed/notifications_feed.module:156
+msgid "Subject"
+msgstr "Betreff"
+
+#: notifications_content/notifications_content.module:280
+msgid "Update for [type-name]: [title]"
+msgstr "Aktualisierung für [type-name]: [title]"
+
+#: notifications_content/notifications_content.module:283;291
+msgid "Read more [node-url]"
+msgstr "[node-url] weiterlesen"
+
+#: notifications_content/notifications_content.module:288
+msgid "New [type-name]: [title]"
+msgstr "[type-name] ist neu: [title]"
+
+#: notifications_content/notifications_content.module:296
+msgid "Comment for [type-name]: [title]"
+msgstr "Kommentar zu [type-name]: [title]"
+
+#: notifications_content/notifications_content.module:298
+msgid "Comment by [comment-author-name]: [comment-title]"
+msgstr "Kommentar von [comment-author-name]: [comment-title]"
+
+#: notifications_content/notifications_content.module:300
+msgid "Read more [comment-url]"
+msgstr "[comment-url] weiterlesen"
+
+#: notifications_content/notifications_content.module:325
+msgid "This post"
+msgstr "Dieser Beitrag"
+
+#: notifications_content/notifications_content.module:331
+msgid "Posts of type %type"
+msgstr "Beiträge vom Typ %type"
+
+#: notifications_content/notifications_content.module:337
+msgid "Posts by %name"
+msgstr "Beiträge von %name"
+
+#: notifications_content/notifications_content.module:448
+msgid "You are not currently subscribed to any active threads"
+msgstr "Sie haben momentan keine aktiven Diskussionen abonniert"
+
+#: notifications_content/notifications_content.module:451
+msgid "You are currently subscribed to the following threads:"
+msgstr "Sie haben momentan folgende aktiven Diskussionen abonniert:"
+
+#: notifications_content/notifications_content.module:453
+msgid "Title"
+msgstr "Titel"
+
+#: notifications_content/notifications_content.module:473
+msgid "There are no active content types."
+msgstr "Es gibt keine aktiven Inhaltstypen."
+
+#: notifications_content/notifications_content.module:497
+msgid "There are no active author subscriptions."
+msgstr "Es gibt keine aktiven Abonnements nach Autor."
+
+#: notifications_content/notifications_content.module:599
+#: notifications_ui/notifications_ui.module:203
+msgid "Your subscriptions have been updated."
+msgstr "Ihre Abonnements wurden aktualisiert."
+
+#: notifications_content/notifications_content.module:637
+msgid "The node teaser."
+msgstr "Der Anrisstext des Beitrags."
+
+#: notifications_content/notifications_content.module:638
+msgid "The node body."
+msgstr "Der Textkörper des Beitrags."
+
+#: notifications_content/notifications_content.module:639
+msgid "The node view url for read more links."
+msgstr ""
+
+#: notifications_content/notifications_content.module:640
+msgid "Unfiltered node teaser. WARNING - raw user input."
+msgstr "Ungefilterter Anrisstext des Beitrags. WARNUNG - reine Eingabe des Benutzers."
+
+#: notifications_content/notifications_content.module:641
+msgid "Unfiltered node body. WARNING - raw user input."
+msgstr "Ungefilterter Textkörper des Beitrags. WARNUNG - reiner Eingabe des Benutzers."
+
+#: notifications_content/notifications_content.module:644
+msgid "The comment view url."
+msgstr "URL zum Anzeigen des Kommentars"
+
+#: notifications_content/notifications_content.module:645
+msgid "The comment reply url."
+msgstr "URL zum Beantworten des Kommentars"
+
+#: notifications_content/notifications_content.module:67
+msgid "subscribe to content"
+msgstr "Inhalt abonnieren"
+
+#: notifications_content/notifications_content.module:67
+msgid "subscribe to content type"
+msgstr "Inhaltstyp abonnieren"
+
+#: notifications_content/notifications_content.module:67
+msgid "subscribe to author"
+msgstr "Autor abonnieren"
+
+#: notifications_content/notifications_content.module:16
+msgid "Content Subscriptions"
+msgstr "Inhalts-Abonnements"
+
+#: notifications_content/notifications_content.module:0
+msgid "notifications_content"
+msgstr ""
+
+#: notifications_content/notifications_content.info:0
+msgid "Content Notifications"
+msgstr "Inhalts-Benachrichtigungen"
+
+#: notifications_content/notifications_content.info:0
+msgid "Allows users to subscribe to content related events."
+msgstr "Ermöglicht Benutzern, inhaltsbezogene Ereignisse zu abonnieren."
+
+#: notifications_feed/notifications_feed.module:41
+msgid "Feeds"
+msgstr "Newsfeeds"
+
+#: notifications_feed/notifications_feed.module:68
+msgid "Feed: %name"
+msgstr "Newsfeed: %name"
+
+#: notifications_feed/notifications_feed.module:75;288
+msgid "Feed"
+msgstr "Newsfeed"
+
+#: notifications_feed/notifications_feed.module:118
+msgid "To items in this feed"
+msgstr "Elemente in diesem Newsfeed"
+
+#: notifications_feed/notifications_feed.module:146
+msgid "Notifications for feed events"
+msgstr "Benachrichtigungen für Newsfeed-Ereignisse"
+
+#: notifications_feed/notifications_feed.module:168
+msgid "Feed updated: [title]"
+msgstr "Newsfeed aktualisiert: [title]"
+
+#: notifications_feed/notifications_feed.module:170
+msgid "Some feed items have been updated:"
+msgstr "Einige Newsfeed-Elemente wurden aktualisiert:"
+
+#: notifications_feed/notifications_feed.module:172
+msgid "Read more [feed-url]"
+msgstr "[feed-url] weiterlesen"
+
+#: notifications_feed/notifications_feed.module:221
+msgid "The feed name"
+msgstr "Der Name des Newsfeeds"
+
+#: notifications_feed/notifications_feed.module:222
+msgid "The feed teaser."
+msgstr "Der Anrisstext des Newsfeeds"
+
+#: notifications_feed/notifications_feed.module:223
+msgid "The URL for the feed"
+msgstr "Die URL für diesen Newsfeed"
+
+#: notifications_feed/notifications_feed.module:224
+msgid "The list of refreshed (new and updated) items."
+msgstr "Die Liste erneuerter (neuer und aktualisierter) Elemente."
+
+#: notifications_feed/notifications_feed.module:225
+msgid "The list of updated feed items."
+msgstr "Die Liste aktualisierter Newsfeed-Elemente."
+
+#: notifications_feed/notifications_feed.module:226
+msgid "The list of new feed items"
+msgstr "Die Liste neuer Newsfeed-Elemente"
+
+#: notifications_feed/notifications_feed.module:247
+msgid "New: !title"
+msgstr "Neu: !title"
+
+#: notifications_feed/notifications_feed.module:250
+msgid "Updated: !title"
+msgstr "Aktualisiert: !title"
+
+#: notifications_feed/notifications_feed.module:252
+msgid "no updated items"
+msgstr "keine aktualisierten Elemente"
+
+#: notifications_feed/notifications_feed.module:253
+msgid "no new items"
+msgstr "keine neuen Elemente"
+
+#: notifications_feed/notifications_feed.module:284
+msgid "There are no active feed subscriptions."
+msgstr "Es gibt keine aktiven Newsfeed-Abonnements"
+
+#: notifications_feed/notifications_feed.module:55
+msgid "subscribe to feeds"
+msgstr "Newsfeeds abonnieren"
+
+#: notifications_feed/notifications_feed.module:0
+msgid "notifications_feed"
+msgstr ""
+
+#: notifications_feed/notifications_feed.info:0
+msgid "FeedAPI Subscriptions"
+msgstr "Newsfeed-API-Abonnements"
+
+#: notifications_feed/notifications_feed.info:0
+msgid "Allows users to subscribe to feeds and be notified when they are updated"
+msgstr "Ermöglicht Benutzern, Newsfeeds zu abonnieren und bei Aktualisierungen benachrichtigt zu werden"
+
+#: notifications_lite/notifications_lite.module:153
+msgid "Simple notifications"
+msgstr "Einfache Benachrichtigungen"
+
+#: notifications_lite/notifications_lite.module:154
+msgid "The subject and main body will be provided by the event itself"
+msgstr "Der Betreff und der Haupt-Textkörper werden vom Ereignis selbst übernommen"
+
+#: notifications_lite/notifications_lite.module:163
+msgid "Header"
+msgstr "Kopfzeile"
+
+#: notifications_lite/notifications_lite.module:164
+msgid "Footer"
+msgstr "Fußzeile"
+
+#: notifications_lite/notifications_lite.module:175
+msgid "Greetings, [user]."
+msgstr "Guten Tag, [user]."
+
+#: notifications_lite/notifications_lite.module:0
+msgid "notifications_lite"
+msgstr ""
+
+#: notifications_lite/notifications_lite.info:0
+msgid "Notifications Lite"
+msgstr ""
+
+#: notifications_lite/notifications_lite.info:0
+msgid "Extra Simple Notifications API. Enable only when required by other modules."
+msgstr "Besonders einfaches Benachrichtigungs-API. Nur aktivieren, wenn es von anderen Modulen benötigt wird."
+
+#: notifications_tags/notifications_tags.module:16;48
+#, fuzzy
+msgid "Tags"
+msgstr "Tags"
+
+#: notifications_tags/notifications_tags.module:41
+msgid "Term: %name"
+msgstr "Begriff: %name"
+
+#: notifications_tags/notifications_tags.module:100
+#, fuzzy
+msgid "Tag subscriptions"
+msgstr "Tag-Abonnements"
+
+#: notifications_tags/notifications_tags.module:106
+msgid "Allowed vocabularies"
+msgstr "Erlaubte Vokabulare"
+
+#: notifications_tags/notifications_tags.module:109
+msgid "Select vocabularies to which subscriptions should be <em>allowed</em>."
+msgstr "Auswahl der Vokabulare für die Benachrichtigungen <em>erlaubt</em> sein sollen."
+
+#: notifications_tags/notifications_tags.module:157
+msgid "Term"
+msgstr "Begriff"
+
+#: notifications_tags/notifications_tags.module:28
+msgid "subscribe to taxonomy terms"
+msgstr "Taxonomie-Begriffe abonnieren"
+
+#: notifications_tags/notifications_tags.module:0
+msgid "notifications_tags"
+msgstr "notifications_tags"
+
+#: notifications_tags/notifications_tags.info:0
+msgid "Taxonomy Notifications"
+msgstr "Taxonomie-Benachrichtigungen"
+
+#: notifications_tags/notifications_tags.info:0
+msgid "Allows users to subscribe to taxonomy terms."
+msgstr "Ermöglicht Benutzern, Taxonomiebegriffe zu abonnieren"
+
+#: notifications_ui/notifications_ui.module:14
+msgid "These are UI settings only. They will be combined with other settings and permissions to determine which subscription options will be finally available for each page."
+msgstr "Dies sind nur Einstellungen der Benutzeroberfläche. Sie werden mit anderen Einstellungen und Berechtigungen verknüpft, um festzulegen, welche Abonnements-Optionen letztlich für jede Seite verfügbar sind."
+
+#: notifications_ui/notifications_ui.module:16
+msgid "To enable different subscription options for each content type visit the !content-type-settings"
+msgstr "Um unterschiedliche Abonnements-Optionen für jeden Inhaltstyp festzulegen, muss !content-type-settings aufgerufen werden"
+
+#: notifications_ui/notifications_ui.module:16
+msgid "content types settings page"
+msgstr "Seite mit Inhaltstyp-Einstellungen"
+
+#: notifications_ui/notifications_ui.module:71
+msgid "Enabled subscription types"
+msgstr "Aktivierte Abonnements-Typen"
+
+#: notifications_ui/notifications_ui.module:74
+msgid "Check the subscription types the UI module should show."
+msgstr "Die Benachrichtigungstypen müssen angekreuzt werden, die das Benutzeroberflächen-Modul anzeigen soll."
+
+#: notifications_ui/notifications_ui.module:78
+msgid "Show subscribe link with teaser"
+msgstr "Abonnieren-Link mit Anrisstext anzeigen"
+
+#: notifications_ui/notifications_ui.module:80
+msgid "Uncheck to show links only in full node view. This will work only for content types that have subscription links enabled."
+msgstr "Deaktivieren, um Links nur bei vollständiger Anzeige des Beitrags zu zeigen. Dies funktioniert nur für Inhaltstypen, die Abonnement-Links aktiviert haben."
+
+#: notifications_ui/notifications_ui.module:96
+msgid "Subscriptions UI"
+msgstr "Abonnements-Benutzeroberfläche"
+
+#: notifications_ui/notifications_ui.module:99
+msgid "Enable different display options for subscriptions to this content type"
+msgstr "Verschiedene Anzeigeoptionen für Abonnements dieses Inhaltstyp aktivieren"
+
+#: notifications_ui/notifications_ui.module:160
+msgid "Subscriptions (%number)"
+msgstr "Abonnements (%number)"
+
+#: notifications_ui/notifications_ui.module:220
+msgid "Unsubscribe from: !name"
+msgstr "!name abbestellen"
+
+#: notifications_ui/notifications_ui.module:225
+msgid "Subscribe to: !name"
+msgstr "!name abonnieren"
+
+#: notifications_ui/notifications_ui.module:303;310
+msgid "Subscriptions"
+msgstr "Abonnements"
+
+#: notifications_ui/notifications_ui.module:352
+msgid "Display in node form"
+msgstr "Als Beitrag anzeigen"
+
+#: notifications_ui/notifications_ui.module:353
+msgid "Display in comment form"
+msgstr "Als Kommentar anzeigen"
+
+#: notifications_ui/notifications_ui.module:354
+msgid "Display as node links"
+msgstr "Als Beitragslinks anzeigen"
+
+#: notifications_ui/notifications_ui.module:355
+msgid "Display in block"
+msgstr "Im Block anzeigen"
+
+#: notifications_ui/notifications_ui.module:27
+msgid "User Interface"
+msgstr "Benutzeroberfläche"
+
+#: notifications_ui/notifications_ui.module:28
+msgid "Enables site settings for user subscriptions."
+msgstr "Aktiviert Website-Einstellungen für Benutzer-Abonnements."
+
+#: notifications_ui/notifications_ui.module:0
+msgid "notifications_ui"
+msgstr "notifications_ui"
+
+#: notifications_ui/notifications_ui.info:0
+msgid "Notifications UI"
+msgstr "Benachrichtigungs-Benutzeroberfläche"
+
+#: notifications_ui/notifications_ui.info:0
+msgid "Provides an UI to notifications"
+msgstr "Stellt eine Benutzeroberfläche für Benachrichtigungen bereit"
+
+#~ msgid "Configure automatic mail responses."
+#~ msgstr "Automatische E-Mail-Antworten konfigurieren."
+#~ msgid ""
+#~ "E-mail account to be used for incoming e-mail. It needs to be set up "
+#~ "using Mailhandler. It will be set as Reply-To for outgoing e-mail "
+#~ "notifications."
+#~ msgstr ""
+#~ "E-Mail-Konto, das für eingehende E-Mails verwendet wird. Es muss mittels "
+#~ "des Mailhandlers eingerichtet werden. Es wird als Antwortadresse für "
+#~ "ausgehende E-Mail-Benachrichtigungen verwendet."
+#~ msgid "Expiration time"
+#~ msgstr "Verfallszeit"
+#~ msgid ""
+#~ "Time after which the signature of outgoing e-mails expires and responses "
+#~ "won't be accepted anymore."
+#~ msgstr ""
+#~ "Zeit nach der die Signatur ausgehender E-Mail abläuft und Antworten nicht "
+#~ "mehr akzeptiert werden."
+#~ msgid "Reply text"
+#~ msgstr "Antwort-Text"
+#~ msgid ""
+#~ "Text to separate reply from the rest of the e-mail. Leave blank for not "
+#~ "using this feature."
+#~ msgstr ""
+#~ "Text um eine Antwort vom Rest der E-Mail zu trennen. Kann leer gelassen "
+#~ "werden, wenn diese Funktion nicht verwendet werden soll."
+#~ msgid ""
+#~ "If this box is checked, a reply will be sent for wrong emails with some "
+#~ "information about the cause of rejection."
+#~ msgstr ""
+#~ "Wenn dieses Akreuzkästchen aktiviert ist, wird für falsche E-Mails eine "
+#~ "Antwort mit Informationen über den Grund der Zurückweisung gesendet."
+#~ msgid "There was a problem with your email to !site (@subject)"
+#~ msgstr "Es gab ein Problem mit Ihrer Nachricht an !site (@subject)"
+#~ msgid ""
+#~ "The email you sent to @to was rejected because there was a validation "
+#~ "error."
+#~ msgstr ""
+#~ "Die an @to gesendete Nachricht wurde zurückgewiesen, da ein Fehler bei "
+#~ "der Überprüfung aufgetreten ist."
+#~ msgid ""
+#~ "The email you sent to @to was rejected because it was sent after the "
+#~ "allowed response time for the original email."
+#~ msgstr ""
+#~ "Die an @to gesendete Nachricht wurde zurückgewiesen, da sie nach dem "
+#~ "erlaubten Antwortzeitraum der ursprünglichen E-Mail gesendet wurde."
+#~ msgid ""
+#~ "The email you sent to @to was rejected because we couldn't authenticate "
+#~ "it."
+#~ msgstr ""
+#~ "Die an @to gesendete Nachricht wurde zurückgewiesen, da sie nicht "
+#~ "authentifiziert werden konnte."
+#~ msgid "In order for emails to be accepted by !site:"
+#~ msgstr "Damit E-Mails von der Website !site akzeptiert werden:"
+#~ msgid "- They must be sent in reply to a valid notification email."
+#~ msgstr ""
+#~ "- müssen sie als Antwort auf eine gültige Benachrichtigungs-E-Mail "
+#~ "gesendet werden."
+#~ msgid ""
+#~ "- The reply must be done from the same email address the notification was "
+#~ "sent to."
+#~ msgstr ""
+#~ "- muss die Antwort von der E-Mail-Adresse stammen, an die die "
+#~ "Benachrichtigung gesendet wurde."
+#~ msgid ""
+#~ "- You can only reply within the time allotted by the system which is "
+#~ "@expiration"
+#~ msgstr ""
+#~ "- Es kann nur innerhalb der vom System zugewiesenen Zeit, die @expiration "
+#~ "beträgt, geantwortet werden."
+#~ msgid "You may post comments directly by visiting !node-url"
+#~ msgstr "Sie können direkt Kommentare durch Aufruf von !node-url erstellen "
+#~ msgid "Received an email without signed parameters from @from: @subject"
+#~ msgstr "E-Mail ohne signierte Parameter empfangen von @from: @subject"
+#~ msgid "Received an email with a expired signature from @from: @subject"
+#~ msgstr ""
+#~ "E-Mail mit einer abgelaufenen Signatur empfangen von @from: @subject"
+#~ msgid "Received an e-mail without a valid user id from @from: @subject"
+#~ msgstr "E-Mail ohne gültige Benutzer-ID empfangen von @from: @subject"
+#~ msgid "Received an email with no parameters from @from: @subject"
+#~ msgstr "E-Mail ohne Parameter empfangen von @from: @subject"
+#~ msgid "notifications_mail2web"
+#~ msgstr "notifications_mail2web"
+#~ msgid "Gateway module for responding to posts via mail"
+#~ msgstr "Gateway-Modul zum Antworten per E-Mail auf Beiträge"
+#~ msgid "This is an automatic message from [site-name])"
+#~ msgstr "Dies ist eine automatische Nachricht von [site-name])"
+
