@@ -1,0 +1,9 @@
+<?php
+// $Id: collabnet.install
+function collabnet_install(){
+}
+
+function collabnet_uninstall() {
+  variable_del('collabnet_settings');
+  variable_del('collabnet_test_settings');
+}
