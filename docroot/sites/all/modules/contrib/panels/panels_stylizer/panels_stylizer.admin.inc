@@ -1,5 +1,5 @@
 <?php
-// $Id: panels_stylizer.admin.inc,v 1.1.2.2 2010/02/17 01:49:23 merlinofchaos Exp $
+// $Id: panels_stylizer.admin.inc,v 1.1.2.3 2010/05/20 09:05:37 sdboyer Exp $
 
 /**
  * @file
@@ -852,7 +852,7 @@ function panels_stylizer_edit_pane_style_form_submit(&$form, &$form_state) {
     $type = $form_state['owner info']['type'] == 'region' ? 'panel' : 'pane';
     $pid = $form_state['owner info']['pid'];
 
-    panels_load_include('display-edit');
+    ctools_include('display-edit', 'panels');
     panels_ajax_style_settings($type, $cache, $pid);
   }
 

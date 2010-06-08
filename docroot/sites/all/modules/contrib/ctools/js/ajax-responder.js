@@ -1,4 +1,4 @@
-// $Id: ajax-responder.js,v 1.18.2.11 2010/04/14 20:33:11 merlinofchaos Exp $
+// $Id: ajax-responder.js,v 1.18.2.12 2010/05/26 16:42:44 merlinofchaos Exp $
 /**
  * @file
  *
@@ -14,12 +14,7 @@
   Drupal.CTools.AJAX.css = {};
 
   Drupal.CTools.AJAX.getPageId = function() {
-    var page_id = '';
-    if (Drupal.settings.CTools && Drupal.settings.CTools.pageId) {
-      page_id = Drupal.settings.CTools.pageId;
-    }
-
-    return page_id;
+    return Drupal.CTools.pageId;
   }
 
   /**
@@ -477,5 +472,16 @@
        .addClass('ctools-use-ajax-processed')
        .change(Drupal.CTools.AJAX.changeAJAX);
   };
+
+  /**
+   * Use the ready() method to copy the page ID out of settings, because the
+   * the settings can get overwritten and the page ID can get lost.
+   */
+  $(function () {
+    Drupal.CTools.pageId = '';
+    if (Drupal.settings.CTools && Drupal.settings.CTools.pageId) {
+      Drupal.CTools.pageId = Drupal.settings.CTools.pageId;
+    }
+  });
 
 })(jQuery);

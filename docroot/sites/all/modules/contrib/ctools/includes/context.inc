@@ -1,5 +1,5 @@
 <?php
-// $Id: context.inc,v 1.33.2.6 2010/02/23 21:07:19 merlinofchaos Exp $
+// $Id: context.inc,v 1.33.2.7 2010/05/26 17:22:54 merlinofchaos Exp $
 
 /**
  * @file
@@ -1141,8 +1141,10 @@ function ctools_context_load_contexts($object, $placeholders = TRUE, $contexts =
  */
 function ctools_context_get_form($contexts) {
   if (!empty($contexts)) {
-    foreach ($contexts as $context) {
-      if (!empty($context->form_id)) {
+    foreach ($contexts as $id => $context) {
+      // if a form shows its id as being a 'required context' that means the
+      // the context is external to this display and does not count.
+      if (!empty($context->form_id) && substr($id, 0, 15) != 'requiredcontext') {
         return $context;
       }
     }

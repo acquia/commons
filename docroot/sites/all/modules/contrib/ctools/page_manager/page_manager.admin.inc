@@ -1,5 +1,5 @@
 <?php
-// $Id: page_manager.admin.inc,v 1.27.2.10 2010/05/20 01:43:03 sdboyer Exp $
+// $Id: page_manager.admin.inc,v 1.27.2.11 2010/05/26 17:26:47 merlinofchaos Exp $
 
 /**
  * @file
@@ -623,6 +623,7 @@ function page_manager_get_operations($page, $operations = NULL) {
     );
   }
 
+  drupal_alter('page_manager_operations', $result, $page);
   return $result;
 }
 
@@ -733,6 +734,8 @@ function page_manager_get_handler_operations(&$page) {
         ),
       );
     }
+
+    drupal_alter('page_manager_variant_operations', $operations[$id], $handler);
   }
   if (empty($operations)) {
     $operations['empty'] = array(

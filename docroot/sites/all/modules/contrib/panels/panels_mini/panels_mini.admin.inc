@@ -1,5 +1,5 @@
 <?php
-// $Id: panels_mini.admin.inc,v 1.6.2.11 2010/05/20 01:49:14 sdboyer Exp $
+// $Id: panels_mini.admin.inc,v 1.6.2.12 2010/05/20 09:05:37 sdboyer Exp $
 
 /**
  * @file
@@ -128,7 +128,7 @@ function _panels_mini_menu() {
  * Settings for mini panels.
  */
 function panels_mini_settings() {
-  panels_load_include('common');
+  ctools_include('common', 'panels');
   return drupal_get_form('panels_common_settings', 'panels_mini');
 }
 
@@ -136,7 +136,7 @@ function panels_mini_settings() {
  * Provide a list of mini panels, with links to edit or delete them.
  */
 function panels_mini_list_page() {
-  panels_load_include('plugins');
+  ctools_include('plugins', 'panels');
   $layouts = panels_get_layouts();
   $items = array();
   $sorts = array();
@@ -337,8 +337,8 @@ function panels_mini_import_form_submit($form, &$form_state) {
  * Handle the add mini panel page.
  */
 function panels_mini_add_page($layout = NULL) {
-  panels_load_include('plugins');
-  panels_load_include('common');
+  ctools_include('plugins', 'panels');
+  ctools_include('common', 'panels');
   $layouts = panels_common_get_allowed_layouts('panels_mini');
   $output = '';
 
@@ -386,8 +386,8 @@ function panels_mini_edit($panel_mini) {
  * Form to edit the settings of a mini panel.
  */
 function panels_mini_edit_form(&$form_state, $panel_mini) {
-  panels_load_include('common');
-  panels_load_include('plugins');
+  ctools_include('common', 'panels');
+  ctools_include('plugins', 'panels');
   drupal_add_css(panels_get_path('css/panels_admin.css'));
 
   $form['pid'] = array(
@@ -566,7 +566,7 @@ function panels_mini_edit_context($panel_mini, $next = NULL) {
  */
 function panels_mini_context_form(&$form_state, $panel_mini, $next = NULL) {
   drupal_add_css(panels_get_path('css/panels_admin.css'));
-  panels_load_include('plugins');
+  ctools_include('plugins', 'panels');
   $layout = panels_get_layout($panel_mini->display->layout);
 
   $form['panel_mini'] = array(
@@ -642,7 +642,7 @@ function panels_mini_edit_content($panel_mini) {
   // Collect a list of contexts required by the arguments on this page.
   $panel_mini->display->context = $contexts = ctools_context_load_contexts($panel_mini);
 
-  panels_load_include('common');
+  ctools_include('common', 'panels');
   $content_types = panels_common_get_allowed_types('panels_mini', $contexts);
 
   $output = panels_edit($panel_mini->display, NULL, $content_types);

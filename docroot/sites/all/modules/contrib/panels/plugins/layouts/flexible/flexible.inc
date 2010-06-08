@@ -1,5 +1,5 @@
 <?php
-// $Id: flexible.inc,v 1.1.2.19 2010/05/13 00:40:01 sdboyer Exp $
+// $Id: flexible.inc,v 1.1.2.20 2010/05/20 09:05:37 sdboyer Exp $
 
 /**
  * Implementation of hook_panels_layouts()
@@ -732,7 +732,7 @@ function panels_ajax_flexible_edit_settings($cache, $id) {
   if (empty($output)) {
     // If the width type changed then other nearby items will have
     // to have their widths adjusted.
-    panels_load_include('display-edit');
+    ctools_include('display-edit', 'panels');
     panels_edit_cache_set($cache);
     $output = array();
     // If the item is a region, replace the title.
@@ -920,7 +920,7 @@ function panels_ajax_flexible_edit_add($cache, $id, $location = 'left') {
   if (empty($output)) {
     // If the width type changed then other nearby items will have
     // to have their widths adjusted.
-    panels_load_include('display-edit');
+    ctools_include('display-edit', 'panels');
     panels_edit_cache_set($cache);
     $output = array();
 
@@ -937,7 +937,7 @@ function panels_ajax_flexible_edit_add($cache, $id, $location = 'left') {
 
     $content = '';
     if ($item['type'] == 'region') {
-      panels_load_include('display-edit');
+      ctools_include('display-edit', 'panels');
       $panel_buttons = panels_edit_panel_get_links($cache->display, $form_state['key']);
 
       $content = panels_render_region_dnd('', $form_state['key'], $item['title'], $panel_buttons);
@@ -1232,7 +1232,7 @@ function panels_ajax_flexible_edit_remove($cache, $id) {
   unset($settings['items'][$id]);
 
   // Save our new state.
-  panels_load_include('display-edit');
+  ctools_include('display-edit', 'panels');
   panels_edit_cache_set($cache);
   $class = 'panels-flexible-' . $item['type'] . '-' . $cache->display->did . '-' . $id;
   $output = array();
@@ -1305,7 +1305,7 @@ function panels_ajax_flexible_edit_resize($cache) {
   }
 
   // Save our new state.
-  panels_load_include('display-edit');
+  ctools_include('display-edit', 'panels');
   panels_edit_cache_set($cache);
 
   ctools_ajax_render(array('ok'));

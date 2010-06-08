@@ -1,5 +1,5 @@
 <?php
-// $Id: context-task-handler.inc,v 1.23.2.3 2010/01/20 17:08:03 sdboyer Exp $
+// $Id: context-task-handler.inc,v 1.23.2.5 2010/05/27 21:25:06 sdboyer Exp $
 
 /**
  * @file
@@ -44,7 +44,7 @@ function ctools_context_handler_render($task, $subtask, $contexts, $args, $page 
   foreach ($handlers as $handler) {
     if ($function = page_manager_get_renderer($handler)) {
       if ($info = $function($handler, $contexts, $args)) {
-        drupal_alter('ctools_render', $info, $page, $args, $contexts, $task, $subtask);
+        drupal_alter('ctools_render', $info, $page, $args, $contexts, $task, $subtask, $handler);
         // If we don't own the page, let the caller deal with rendering.
         if (!$page) {
           return $info;
@@ -359,9 +359,6 @@ function ctools_context_handler_edit_context(&$form, &$form_state) {
     '#value' => theme('ctools_context_list', $cache, t('Summary of contexts')),
   );
 
-  // @todo -- this CSS is actually dependent upon the plugins which means
-  // the plugins need to be able to add it.
-  drupal_add_css(panels_get_path('css/panels_admin.css'));
   $form_state['context_object'] = &$cache;
 }
 

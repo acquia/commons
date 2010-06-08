@@ -1,6 +1,11 @@
-API.txt: $Id: API.txt,v 1.5.2.15 2010/04/09 22:27:31 merlinofchaos Exp $
+API.txt: $Id: API.txt,v 1.5.2.16 2010/05/26 17:26:47 merlinofchaos Exp $
 
 This file contains a log of changes to the API.
+API version 1.5
+  Add two new alter hooks: page_manager_operations_alter and 
+      page_manager_variant_operations_alter to allow modules to add tabs
+      to any page manager page.
+
 API version 1.4:
   Allow themes to provide APIs which includes default pages of all types.
   Intorduce ctools_css_add_css() to allow private file systems to have generated CSS.

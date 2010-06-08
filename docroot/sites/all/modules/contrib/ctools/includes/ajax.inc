@@ -1,5 +1,5 @@
 <?php
-// $Id: ajax.inc,v 1.14.2.6 2010/04/14 21:04:02 merlinofchaos Exp $
+// $Id: ajax.inc,v 1.14.2.7 2010/05/26 17:26:47 merlinofchaos Exp $
 
 /**
  * @file
@@ -453,6 +453,7 @@ function ctools_ajax_render($commands = array()) {
 
   $scripts = drupal_add_js(NULL, NULL);
   $cached_scripts = array();
+
   if (!empty($_POST['page_id'])) {
     $cache = cache_get($_POST['page_id'], 'cache');
     if (!empty($cache->data)) {

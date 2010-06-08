@@ -1,5 +1,5 @@
 <?php
-// $Id: panels_node.module,v 1.5.2.17 2010/05/06 01:02:13 sdboyer Exp $
+// $Id: panels_node.module,v 1.5.2.18 2010/05/20 09:05:37 sdboyer Exp $
 
 
 /**
@@ -117,8 +117,8 @@ function panels_node_access($op, $node, $account) {
 function panels_node_add() {
   $output = '';
 
-  panels_load_include('plugins');
-  panels_load_include('common');
+  ctools_include('plugins', 'panels');
+  ctools_include('common', 'panels');
 
   $layouts = panels_common_get_allowed_layouts('panels_node');
 
@@ -144,7 +144,7 @@ function panels_node_form(&$node, &$param) {
       return drupal_goto('node/add/panel/choose-layout', $opts);
     }
 
-    panels_load_include('plugins');
+    ctools_include('plugins', 'panels');
     $layout = panels_get_layout($panel_layout);
     if (empty($layout)) {
       return drupal_not_found();
@@ -267,7 +267,7 @@ function panels_node_view($node, $teaser = FALSE, $page = FALSE) {
   }
 
   $rendering[$node->nid] = TRUE;
-  panels_load_include('plugins');
+  ctools_include('plugins', 'panels');
   if ($teaser) {
     // Do the standard view for teaser.
     $node = node_prepare($node, $teaser);
@@ -300,7 +300,7 @@ function panels_node_view($node, $teaser = FALSE, $page = FALSE) {
  * Settings for panel nodes.
  */
 function panels_node_settings() {
-  panels_load_include('common');
+  ctools_include('common', 'panels');
   return drupal_get_form('panels_common_settings', 'panels_node');
 }
 
@@ -311,7 +311,7 @@ function panels_node_settings() {
  * Pass through to the panels layout editor.
  */
 function panels_node_edit_layout($node) {
-//  panels_load_include('plugins');
+//  ctools_include('plugins', 'panels');
   ctools_include('context');
   $display = panels_load_display($node->panels_node['did']);
   $display->context = panels_node_get_context($node);
@@ -322,11 +322,11 @@ function panels_node_edit_layout($node) {
  * Pass through to the panels content editor.
  */
 function panels_node_edit_content($node) {
-//  panels_load_include('plugins');
+//  ctools_include('plugins', 'panels');
   ctools_include('context');
   $display = panels_load_display($node->panels_node['did']);
   $display->context = panels_node_get_context($node);
-  panels_load_include('common');
+  ctools_include('common', 'panels');
   $content_types = panels_common_get_allowed_types('panels_node', $display->context);
 
   // Print this with theme('page') so that blocks are disabled while editing a display.

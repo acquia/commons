@@ -3,6 +3,19 @@ Current API VERSION: 1.4. See API.txt for more information.
 ctools 6.x-dev
 ==============
 
+ctools 6.x-1.6 (2010-June-1)
+==============
+(No changes - 1.5 release was improperly tagged)
+
+ctools 6.x-1.5 (2010-May-28)
+==============
+#804198: CTools AJAX framework did not work properly with javascript aggregation.
+Handle forms passing through required contexts properly.
+Add operation alter tooks to let modules add items to Page Manager pages.
+Partial rollback of #711664 - central-hook-based plugin definition no longer defaults to FALSE, as this caused widespread unexpected behavior in modules using ctools plugins.
+#708926: Remove dependency-busting call to panels_get_path().
+Do not allow Views Content Pane displays to be selected by the legacy Views content connector; based on #791960.
+#737434 by nealeyoung: Make the node_updated content_type plugin actually do what it advertises and output last change time.
 
 ctools 6.x-1.4 (2010-May-19)
 ==============

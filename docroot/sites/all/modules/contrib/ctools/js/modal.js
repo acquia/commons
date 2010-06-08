@@ -1,4 +1,4 @@
-// $Id: modal.js,v 1.17.2.9 2010/05/17 23:38:38 sdboyer Exp $
+// $Id: modal.js,v 1.17.2.10 2010/05/26 16:42:44 merlinofchaos Exp $
 /**
  * @file
  *
@@ -151,7 +151,7 @@
       var ajaxOptions = {
         type: 'POST',
         url: url,
-        data: { 'js': 1, 'ctools_ajax': 1 },
+        data: { 'js': 1, 'ctools_ajax': 1, 'page_id': Drupal.CTools.AJAX.getPageId() },
         global: true,
         success: Drupal.CTools.AJAX.respond,
         error: function(xhr) {

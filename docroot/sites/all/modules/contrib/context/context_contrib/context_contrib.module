@@ -1,5 +1,5 @@
 <?php
-// $Id: context_contrib.module,v 1.1.2.2.2.11 2010/04/29 16:54:54 darthsteven Exp $
+// $Id: context_contrib.module,v 1.1.2.2.2.12 2010/05/21 14:53:42 darthsteven Exp $
 
 /**
  * Implementation of hook_context_conditions().
@@ -38,7 +38,7 @@ function context_contrib_context_conditions() {
     foreach (content_fields() as $field) {
       if ($options = content_allowed_values($field)) {
         $items[$field['field_name']] = array(
-          '#title' => $field['widget']['label'],
+          '#title' => t('CCK Field: @field_label', array('@field_label' => $field['widget']['label'])),
           '#type' => 'checkboxes',
           '#options' => $options,
           '#description' => filter_xss_admin($field['widget']['description']),
