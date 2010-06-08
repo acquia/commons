@@ -3264,7 +3264,20 @@ function _commons_core_default_page_manager_pages() {
   $page->admin_title = 'User Dashboard';
   $page->admin_description = '';
   $page->path = 'dashboard';
-  $page->access = array();
+  $page->access = array(
+    'plugins' => array(
+      '0' => array(
+        'name' => 'role',
+        'settings' => array(
+          'rids' => array(
+            '0' => 2,
+          ),
+        ),
+        'context' => 'logged-in-user',
+      ),
+    ),
+    'logic' => 'and',
+  );
   $page->menu = array(
     'type' => 'normal',
     'title' => 'Dashboard',
