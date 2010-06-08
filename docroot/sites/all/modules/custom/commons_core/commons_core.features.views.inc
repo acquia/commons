@@ -3877,7 +3877,7 @@ function _commons_core_views_default_views() {
       'label' => '',
       'alter' => array(
         'alter_text' => 1,
-        'text' => '<i>[[type]]</i>',
+        'text' => '<i>([type])</i>',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
@@ -3890,13 +3890,14 @@ function _commons_core_views_default_views() {
         'max_length' => '',
         'word_boundary' => 1,
         'ellipsis' => 1,
-        'strip_tags' => 0,
         'html' => 0,
+        'strip_tags' => 0,
       ),
       'empty' => '',
       'hide_empty' => 0,
       'empty_zero' => 0,
       'link_to_node' => 0,
+      'machine_name' => 0,
       'exclude' => 0,
       'id' => 'type',
       'table' => 'node',
@@ -3906,8 +3907,39 @@ function _commons_core_views_default_views() {
       ),
       'relationship' => 'none',
     ),
+    'nothing' => array(
+      'label' => '',
+      'alter' => array(
+        'text' => 'in ',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'exclude' => 0,
+      'id' => 'nothing',
+      'table' => 'views',
+      'field' => 'nothing',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
     'group_nid' => array(
-      'label' => 'Group',
+      'label' => '',
       'alter' => array(
         'alter_text' => FALSE,
         'text' => '',
@@ -4070,7 +4102,10 @@ function _commons_core_views_default_views() {
   $handler->override_option('style_plugin', 'list');
   $handler->override_option('row_options', array(
     'inline' => array(
+      'title' => 'title',
       'type' => 'type',
+      'nothing' => 'nothing',
+      'group_nid' => 'group_nid',
       'changed' => 'changed',
     ),
     'separator' => '',
@@ -6267,7 +6302,7 @@ function _commons_core_views_default_views() {
       'empty_zero' => 0,
       'link_to_node' => 0,
       'label_type' => 'none',
-      'format' => 'group_images_linked',
+      'format' => 'group_images_thumb_linked',
       'multiple' => array(
         'group' => TRUE,
         'multiple_number' => '',
@@ -7159,7 +7194,7 @@ function _commons_core_views_default_views() {
       'empty_zero' => 0,
       'link_to_node' => 0,
       'label_type' => 'none',
-      'format' => 'group_images_linked',
+      'format' => 'group_images_thumb_linked',
       'multiple' => array(
         'group' => TRUE,
         'multiple_number' => '',
@@ -11693,6 +11728,14 @@ else {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Upcoming Group Events');
+  $handler->override_option('footer', '<?php
+  $group = og_get_group_context();
+  if ($group->nid) {
+    print l(\'View events on calendar\', \'node/\' . $group->nid . \'/content/calendar\');
+  }
+?>');
+  $handler->override_option('footer_format', '3');
+  $handler->override_option('footer_empty', 0);
   $handler->override_option('empty', 'There are no upcoming events.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('items_per_page', 5);
@@ -14665,6 +14708,72 @@ if(user_access(\'create notice content\')) {
       'field' => 'name',
       'relationship' => 'none',
     ),
+    'value' => array(
+      'label' => 'Name',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'link_to_user' => 0,
+      'exclude' => 0,
+      'id' => 'value',
+      'table' => 'profile_values_profile_name',
+      'field' => 'value',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'value_1' => array(
+      'label' => '',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'link_to_user' => 0,
+      'exclude' => 0,
+      'id' => 'value_1',
+      'table' => 'profile_values_profile_last_name',
+      'field' => 'value',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
     'access' => array(
       'label' => 'Last access',
       'alter' => array(
@@ -14729,11 +14838,14 @@ if(user_access(\'create notice content\')) {
     ),
   ));
   $handler->override_option('sorts', array(
-    'name' => array(
+    'value' => array(
       'order' => 'ASC',
-      'id' => 'name',
-      'table' => 'users',
-      'field' => 'name',
+      'id' => 'value',
+      'table' => 'profile_values_profile_last_name',
+      'field' => 'value',
+      'override' => array(
+        'button' => 'Override',
+      ),
       'relationship' => 'none',
     ),
   ));
@@ -14906,6 +15018,14 @@ if(user_access(\'create notice content\')) {
     'columns' => '4',
     'alignment' => 'horizontal',
   ));
+  $handler->override_option('row_options', array(
+    'inline' => array(
+      'value' => 'value',
+      'value_1' => 'value_1',
+    ),
+    'separator' => '',
+    'hide_empty' => 0,
+  ));
   $handler = $view->new_display('page', 'Page', 'page_1');
   $handler->override_option('path', 'users');
   $handler->override_option('menu', array(
@@ -15002,8 +15122,8 @@ if(user_access(\'create notice content\')) {
     'value' => array(
       'label' => '',
       'alter' => array(
-        'alter_text' => 1,
-        'text' => ' <i>([value])</i>',
+        'alter_text' => 0,
+        'text' => '',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
@@ -15020,17 +15140,81 @@ if(user_access(\'create notice content\')) {
         'strip_tags' => 0,
       ),
       'empty' => '',
-      'hide_empty' => 1,
+      'hide_empty' => 0,
       'empty_zero' => 0,
       'link_to_user' => 0,
-      'exclude' => 0,
+      'exclude' => 1,
       'id' => 'value',
       'table' => 'profile_values_profile_name',
       'field' => 'value',
-      'relationship' => 'none',
       'override' => array(
         'button' => 'Override',
       ),
+      'relationship' => 'none',
+    ),
+    'value_1' => array(
+      'label' => '',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'link_to_user' => 0,
+      'exclude' => 1,
+      'id' => 'value_1',
+      'table' => 'profile_values_profile_last_name',
+      'field' => 'value',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'nothing_1' => array(
+      'label' => '',
+      'alter' => array(
+        'text' => ' (<i>[value] [value_1]</i>)',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'exclude' => 0,
+      'id' => 'nothing_1',
+      'table' => 'views',
+      'field' => 'nothing',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
     ),
     'nothing' => array(
       'label' => '',
@@ -15144,6 +15328,8 @@ if(user_access(\'create notice content\')) {
       'picture' => 'picture',
       'name' => 'name',
       'value' => 'value',
+      'value_1' => 'value_1',
+      'nothing_1' => 'nothing_1',
       'nothing' => 'nothing',
     ),
     'separator' => '',

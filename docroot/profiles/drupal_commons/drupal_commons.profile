@@ -73,6 +73,7 @@ function drupal_commons_profile_modules() {
      
     // ImageAPI
     'imageapi', 'imagecache', 'imageapi_gd',  'imagecache_profiles', 'imagecache_ui',
+    'imagecache_canvasactions',
     
     // Organic Groups
     'og', 'og_access', 'og_aggregator', 'og_statistics', 'og_views', 'context_og',
@@ -244,12 +245,17 @@ function drupal_commons_config_vocabulary() {
 function drupal_commons_config_profile() {
   // Add custom profile fields
   $sql = "INSERT INTO {profile_fields} (title, name, explanation, category, type, weight, required, register, visibility, autocomplete) VALUES ('%s', '%s', '%s', '%s', '%s', %d, %d, %d, %d, %d)";
-  db_query($sql, t('Name'), 'profile_name', t('Enter your full name.'), t('Personal Information'), 'textfield', -10, 1, 1, 2, 0);
-  db_query($sql, t('Job Title'), 'profile_job', t('What is your job title?'), t('Work Information'), 'textfield', 0, 0, 1, 2, 0);
-  db_query($sql, t('My Interests'), 'profile_interests', t('What are your interests, hobbies, etc?'), t('Personal Information'), 'textarea', -8, 0, 0, 2, 0);
-  db_query($sql, t('Organization'), 'profile_organization', t('Which organization or department are you a part of?'), t('Work Information'), 'textfield', 0, 0, 1, 2, 0);
-  db_query($sql, t('Location'), 'profile_location', t('Where are you located?'), t('Personal Information'), 'textfield', -9, 0, 0, 2, 0);
-  db_query($sql, t('About Me'), 'profile_aboutme', t('Explain a little about yourself.'), t('Personal Information'), 'textarea', 0, 0, 0, 2, 0);  
+  
+  // Personal Information
+  db_query($sql, t('First Name'), 'profile_name', t('Enter your first name.'), t('Personal Information'), 'textfield', -10, 1, 1, 2, 0);
+  db_query($sql, t('Last Name'), 'profile_last_name', t('Enter your last name.'), t('Personal Information'), 'textfield', -9, 1, 1, 2, 0);
+  db_query($sql, t('Location'), 'profile_location', t('Where are you located?'), t('Personal Information'), 'textfield', -8, 0, 0, 2, 0);
+  db_query($sql, t('My Interests'), 'profile_interests', t('What are your interests, hobbies, etc?'), t('Personal Information'), 'textarea', -7, 0, 0, 2, 0);
+  db_query($sql, t('About Me'), 'profile_aboutme', t('Explain a little about yourself.'), t('Personal Information'), 'textarea', -6, 0, 0, 2, 0); 
+  
+  // Work Information
+  db_query($sql, t('Job Title'), 'profile_job', t('What is your job title?'), t('Work Information'), 'textfield', -10, 0, 1, 2, 0);
+  db_query($sql, t('Organization'), 'profile_organization', t('Which organization or department are you a part of?'), t('Work Information'), 'textfield', -9, 0, 1, 2, 0);
 }
 
 // Configure flag
@@ -628,7 +634,6 @@ function drupal_commons_config_vars() {
   variable_set('shoutbox_escape_html', 0);
   variable_set('shoutbox_expire', 120);
   variable_set('shoutbox_showamount_block', 8);
-  variable_set('shoutbox_profile_name', 'profile_name');
   
   // Force anonymous users to login
   variable_set('commons_force_login', 1);

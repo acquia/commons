@@ -2594,10 +2594,34 @@ function _commons_core_imagecache_default_presets() {
         '0' => array(
           'weight' => '0',
           'module' => 'imagecache',
-          'action' => 'imagecache_scale_and_crop',
+          'action' => 'imagecache_scale',
           'data' => array(
-            'width' => '75',
+            'width' => '',
             'height' => '75',
+            'upscale' => 0,
+          ),
+        ),
+        '1' => array(
+          'weight' => '0',
+          'module' => 'imagecache_canvasactions',
+          'action' => 'canvasactions_definecanvas',
+          'data' => array(
+            'RGB' => array(
+              'HEX' => '',
+            ),
+            'under' => 1,
+            'exact' => array(
+              'width' => '250',
+              'height' => '75',
+              'xpos' => 'left',
+              'ypos' => 'center',
+            ),
+            'relative' => array(
+              'leftdiff' => '',
+              'rightdiff' => '',
+              'topdiff' => '',
+              'bottomdiff' => '',
+            ),
           ),
         ),
       ),
@@ -2608,10 +2632,34 @@ function _commons_core_imagecache_default_presets() {
         '0' => array(
           'weight' => '0',
           'module' => 'imagecache',
-          'action' => 'imagecache_scale_and_crop',
+          'action' => 'imagecache_scale',
           'data' => array(
-            'width' => '24',
+            'width' => '',
             'height' => '24',
+            'upscale' => 0,
+          ),
+        ),
+        '1' => array(
+          'weight' => '0',
+          'module' => 'imagecache_canvasactions',
+          'action' => 'canvasactions_definecanvas',
+          'data' => array(
+            'RGB' => array(
+              'HEX' => '',
+            ),
+            'under' => 1,
+            'exact' => array(
+              'width' => '24',
+              'height' => '24',
+              'xpos' => 'left',
+              'ypos' => 'center',
+            ),
+            'relative' => array(
+              'leftdiff' => '',
+              'rightdiff' => '',
+              'topdiff' => '',
+              'bottomdiff' => '',
+            ),
           ),
         ),
       ),
