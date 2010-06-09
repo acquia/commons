@@ -198,11 +198,11 @@ function quant_generate_time_multi($items, $field, $group, $days) {
   $dates = array();
   $data = array();
   // The date() format to use. We compare by month if there are more than 96 days.
-  $format = ($days > 96) ? QUANT_DATE_MONTH_FORMAT : QUANT_DATE_DAY_FORMAT;
+  $format = ($days > 75) ? QUANT_DATE_MONTH_FORMAT : QUANT_DATE_DAY_FORMAT;
   // Whether or not to jump by day or month
-  $period = ($days > 96) ? 2629743 : 86400;
+  $period = ($days > 75) ? 2629743 : 86400;
   // Possibly convert days to months
-  $days = ($days > 96) ? ($days / 30) : $days;
+  $days = ($days > 75) ? ($days / 30) : $days;
   
   // Place the items into an array for initial grouping by $group
   // For example: $data['page'] = array('May 10', 'May 18');
