@@ -1,5 +1,5 @@
 <?php
-// $Id: shoutbox_group.module
+//  $Id: shoutbox_group.module,v 1.1.2.4 2010/06/01 01:01:46 mikestefff Exp $
 
 /*
  * Implementation of hook_perm().
@@ -54,31 +54,31 @@ function shoutbox_group_admin_settings() {
   return system_settings_form($form);
 }
 
-//Generate dedicated shoutbox page for group
+// Generate dedicated shoutbox page for group
 function shoutbox_group_page($group_id) {
-  //View permissions checked in shoutbox_group_shoutbox_get_shouts()
-  //Post permissions check in shoutbox_group_form_shoutbox_add_form_alter()
+  // View permissions checked in shoutbox_group_shoutbox_get_shouts()
+  // Post permissions check in shoutbox_group_form_shoutbox_add_form_alter()
   
-  //Check dynamic URL input
+  // Check dynamic URL input
   if (!is_numeric($group_id)) {
     return t('Invalid argument supplied.');  
   }
   
-  //Check that we're in a real group
+  // Check that we're in a real group
   if (!shoutbox_group_get_group()) {
     return t('The group does not exist');  
   }
   
-  //Load the group
+  // Load the group
   $group = node_load($group_id);
   
-  //Tell OG this is a group-specific page
+  // Tell OG this is a group-specific page
   og_set_group_context($group, TRUE);
   
-  //Set the page title with group name
+  // Set the page title with group name
   drupal_set_title(t('Shout Box') . ' <i>(' . l($group->title, 'node/' . $group->nid) . ')</i>');
   
-  //Return normal shoutbox page
+  // Return normal shoutbox page
   return shoutbox_page_view();
 }
 
@@ -91,7 +91,7 @@ function shoutbox_group_page($group_id) {
  *     The state of the shout submission form
  */
 function shoutbox_group_shoutbox_shout_added($shout, $form_state) {
-  //Determine if the shout was added to a group
+  // Determine if the shout was added to a group
   if ($group_id = $form_state['values']['group_id']) {
     db_query("INSERT INTO {shoutbox_groups} (shout_id, nid) VALUES (%d, %d)", $shout->shout_id, $group_id);
   }
@@ -103,18 +103,18 @@ function shoutbox_group_shoutbox_shout_added($shout, $form_state) {
  * Add the group ID to the shout form (if one)
  */
 function shoutbox_group_form_shoutbox_add_form_alter(&$form, &$form_state) {
-  //Check that shoutbox is being used with a group
+  // Check that shoutbox is being used with a group
   if ($group_id = shoutbox_group_get_group()) {
-    //If user is not a group member, or lacks permissions, remove the ability to shout
+    // If user is not a group member, or lacks permissions, remove the ability to shout
     if (!shoutbox_group_group_access('post', $group_id)) {
       $form = array(
         '#type' => 'item',
         '#value' => t('Only group members may post here.'),
       );
     }
-    //If user is a group member, append the group ID to the form
+    // If user is a group member, append the group ID to the form
     else {
-      //Append the current group ID to form
+      // Append the current group ID to form
       $form['group_id'] = array(
         '#type' => 'hidden',
         '#value' => $group_id,
@@ -134,7 +134,7 @@ function shoutbox_group_form_shoutbox_add_form_alter(&$form, &$form_state) {
  *     Database query with shouts. FALSE is view access denied.
  */
 function shoutbox_group_shoutbox_get_shouts($show_amount, $pager) {
-  //Check to see if a group is being viewed
+  // Check to see if a group is being viewed
   if ($group_id = shoutbox_group_get_group()) {
     
     /*
@@ -143,21 +143,21 @@ function shoutbox_group_shoutbox_get_shouts($show_amount, $pager) {
      * -Shouts on pages are checked from hook_menu()
      */
     
-    //A group is being viewed, display only group shouts
+    // A group is being viewed, display only group shouts
     $sql = "SELECT s.* FROM {shoutbox} s INNER JOIN {shoutbox_groups} g ON s.shout_id = g.shout_id WHERE g.nid = " . $group_id . " ORDER BY s.created DESC";
   }
-  //A group is not being viewed
+  // A group is not being viewed
   else {
-    //If group shouts should be mixed with general shouts, then simply return nothing
+    // If group shouts should be mixed with general shouts, then simply return nothing
     if (!variable_get('shoutbox_group_general_separate', 1)) {
       return;
     }
     
-    //A group is not being viewed, display only non-group shouts
+    // A group is not being viewed, display only non-group shouts
     $sql = "SELECT s.* FROM {shoutbox} s LEFT JOIN {shoutbox_groups} g ON s.shout_id = g.shout_id WHERE g.shout_id IS NULL ORDER BY s.created DESC";  
   }
   
-  //Return shouts according to $pager
+  // Return shouts according to $pager
   if (!$pager) {
     return db_query_range($sql, 0, $show_amount);
   }
@@ -176,14 +176,14 @@ function shoutbox_group_shoutbox_delete_shout($shout_id) {
   db_query("DELETE FROM {shoutbox_groups} WHERE shout_id = %d", $shout_id);  
 }
 
-//Generate link path for shoutbox block footer
+// Generate link path for shoutbox block footer
 function shoutbox_group_shoutbox_page_path_alter(&$page_path) {
   if ($group_id = shoutbox_group_get_group()) {
     $page_path = 'shoutbox/group/' . $group_id;  
   }
 }
 
-//Add a shoutbox link to OG menu block
+// Add a shoutbox link to OG menu block
 function shoutbox_group_og_create_links($node) {
   return array('shoutbox' => l(t('Shout Box'), 'shoutbox/group/' . $node->nid));
 }
@@ -201,18 +201,18 @@ function shoutbox_group_shoutbox_refresh_path_alter(&$refresh_path) {
   }
 }
 
-//Javascript callback to handle auto-update shouts (see above _alter)
+// Javascript callback to handle auto-update shouts (see above _alter)
 function shoutbox_group_js_view($group_id) {
-  //Check dynamic URL input
+  // Check dynamic URL input
   if (!is_numeric($group_id)) {
     print t('Invalid argument supplied.');
     exit;
   }
   
-  //Reset the group context
+  // Reset the group context
   og_set_group_context(node_load($group_id));
 
-  //Fetch items as usual
+  // Fetch items as usual
   shoutbox_js_view();
 }
 
@@ -223,13 +223,13 @@ function shoutbox_group_js_view($group_id) {
  *     The group ID currently in context. Return 0 if there is no group.
  */
 function shoutbox_group_get_group() {
-  //First check og context for block view
+  // First check og context for block view
   if ($group = og_get_group_context()) {
     return $group->nid;  
   }
-  //Then check to see if it's a shoutbox group page (should already be set as context)
+  // Then check to see if it's a shoutbox group page (should already be set as context)
   elseif (arg(0) == 'shoutbox' && arg(1) == 'group' && is_numeric(arg(2))) {
-    //Check that arg(2) is a real group (already cleared as numeric value)
+    // Check that arg(2) is a real group (already cleared as numeric value)
     if ($group_id = db_result(db_query("SELECT nid FROM {og} WHERE nid = %d", arg(2)))) {
       return $group_id;  
     }
@@ -255,18 +255,18 @@ function shoutbox_group_get_group() {
  *     Whether or not the user has access to the given group operation
  */
 function shoutbox_group_group_access($op, $group_id, $uid = NULL) {
-  //If high access, just return
+  // If high access, just return
   if (user_access('administer shoutbox_group')) {
     return TRUE;  
   }
   
-  //Check the operation specified
-  switch($op) {
+  // Check the operation specified
+  switch ($op) {
     case 'view':    
-      //Load the group node
+      // Load the group node
       $group = node_load($group_id);
       
-      //Load the user object
+      // Load the user object
       if (!$uid) {
         global $user;
       }
@@ -274,22 +274,22 @@ function shoutbox_group_group_access($op, $group_id, $uid = NULL) {
         $user = user_load(array('uid' => $uid));  
       }
     
-      //Determine node view access
+      // Determine node view access
       return node_access('view', $group, $user);
   
     case 'post':
-      //First check higher access
+      // First check higher access
       if (user_access('post shouts in all groups')) {
         return TRUE;
       }
     
-      //Determine user id
+      // Determine user id
       if (!$uid) {
         global $user;
         $uid = $user->uid;
       }
     
-      //Determine group membership
+      // Determine group membership
       return og_is_group_member($group_id, TRUE, $uid);
   
     default:
@@ -303,16 +303,16 @@ function shoutbox_group_group_access($op, $group_id, $uid = NULL) {
  * If a group is deleted, group shouts and references must be purged!
  */
 function shoutbox_group_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
-  switch($op) {
+  switch ($op) {
     case 'delete':
-      //If the node acts as a group
+      // If the node acts as a group
       if (og_is_group_type($node->type)) {
-        //Gather shout ID's
+        // Gather shout ID's
         $shouts = db_query("SELECT shout_id FROM {shoutbox_groups} WHERE nid = %d", $node->nid);
         
-        //Delete all of the shouts
-        while($shout = db_fetch_object($shouts)) {
-          //Hook thrown in shoutbox_delete_shout() will delete group reference as well
+        // Delete all of the shouts
+        while ($shout = db_fetch_object($shouts)) {
+          // Hook thrown in shoutbox_delete_shout() will delete group reference as well
           shoutbox_delete_shout($shout->shout_id);  
         }
       }

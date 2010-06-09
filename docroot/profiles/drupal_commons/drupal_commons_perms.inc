@@ -62,7 +62,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'administer comments',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -70,7 +70,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'administer og_aggregator',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -134,7 +134,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'create notice content',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -158,7 +158,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'delete any blog entry',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -166,7 +166,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'delete any discussion content',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -174,7 +174,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'delete any document content',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -182,7 +182,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'delete any event content',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -190,7 +190,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'delete any group content',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -198,7 +198,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'delete any notice content',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -206,7 +206,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'delete any page content',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -214,7 +214,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'delete any poll content',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -222,7 +222,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'delete any wiki content',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -230,7 +230,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'delete heartbeat activity logs',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -278,7 +278,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'delete own heartbeat activity logs',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -286,7 +286,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'delete own notice content',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -310,7 +310,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'delete own shouts',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -334,7 +334,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'edit any blog entry',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -342,7 +342,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'edit any discussion content',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -350,7 +350,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'edit any document content',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -358,7 +358,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'edit any event content',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -366,7 +366,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'edit any group content',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -374,7 +374,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'edit any notice content',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -382,7 +382,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'edit any page content',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -390,7 +390,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'edit any poll content',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -398,7 +398,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'edit any wiki content',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -414,7 +414,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'edit field_featured_content',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -422,7 +422,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'edit field_featured_group',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -558,7 +558,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'maintain own activity',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -590,7 +590,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'moderate shoutbox',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -622,7 +622,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'post shouts in all groups',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -689,6 +689,14 @@ function drupal_commons_import_permissions() {
       '0' => 'authenticated user',
     ),
   );
+  
+  // Permission: view analytics page
+  $permissions[] = array(
+    'name' => 'view analytics',
+    'roles' => array(
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
+    ),
+  );
 
   // Permission: view field_date
   $permissions[] = array(
@@ -703,7 +711,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'view field_featured_content',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 
@@ -711,7 +719,7 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'view field_featured_group',
     'roles' => array(
-      '0' => 'community manager',
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
 

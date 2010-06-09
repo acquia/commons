@@ -108,6 +108,9 @@ function drupal_commons_profile_modules() {
     // Heartbeat
     'heartbeat', 'heartbeat_views', 'hrules', 'friendlist_activity', 'flag_heartbeat', 'og_activity',
     
+    // Analytics
+    'chart', 'quant',
+    
     // Commons
     'commons',
     
@@ -292,7 +295,8 @@ function drupal_commons_config_menu() {
   $links[] = array('menu_name' => 'primary-links', 'weight' => 3, 'link_path' => 'content/discussions', 'link_title' => t('Discussions'), 'plid' => $parent['mlid']);
   $links[] = array('menu_name' => 'primary-links', 'weight' => 4, 'link_path' => 'content/wikis', 'link_title' => t('Wikis'), 'plid' => $parent['mlid']);
   $links[] = array('menu_name' => 'primary-links', 'weight' => 5, 'link_path' => 'content/calendar', 'link_title' => t('Calendar'), 'plid' => $parent['mlid']);
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 5, 'link_path' => 'users', 'link_title' => t('Members'), 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 6, 'link_path' => 'users', 'link_title' => t('Members'), 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 7, 'link_path' => 'analytics', 'link_title' => t('Site Analytics'), 'plid' => $parent['mlid']);
   
   foreach ($links as $link) {
     menu_link_save($link);

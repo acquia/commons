@@ -3046,6 +3046,27 @@ function _commons_core_default_page_manager_pages() {
     $pane = new stdClass;
     $pane->pid = 'new-3';
     $pane->panel = 'left';
+    $pane->type = 'custom';
+    $pane->subtype = 'custom';
+    $pane->shown = TRUE;
+    $pane->access = array();
+    $pane->configuration = array(
+      'admin_title' => 'Usage instructions',
+      'title' => 'Jumpstart Your Community!',
+      'body' => '<?php print l(\'View\', \'groups\'); ?>, or <?php print l(\'create\', \'node/add/group\'); ?> new <strong>Groups</strong> to start creating your community!',
+      'format' => '3',
+      'substitute' => TRUE,
+    );
+    $pane->cache = array();
+    $pane->style = array();
+    $pane->css = array();
+    $pane->extras = array();
+    $pane->position = 0;
+    $display->content['new-3'] = $pane;
+    $display->panels['left'][0] = 'new-3';
+    $pane = new stdClass;
+    $pane->pid = 'new-4';
+    $pane->panel = 'left';
     $pane->type = 'views';
     $pane->subtype = 'recent_notices';
     $pane->shown = TRUE;
@@ -3063,29 +3084,8 @@ function _commons_core_default_page_manager_pages() {
       'args' => '',
       'url' => '',
       'display' => 'block_1',
-      'override_title' => 1,
-      'override_title_text' => 'Latest notices',
-    );
-    $pane->cache = array();
-    $pane->style = array();
-    $pane->css = array();
-    $pane->extras = array();
-    $pane->position = 0;
-    $display->content['new-3'] = $pane;
-    $display->panels['left'][0] = 'new-3';
-    $pane = new stdClass;
-    $pane->pid = 'new-4';
-    $pane->panel = 'left';
-    $pane->type = 'custom';
-    $pane->subtype = 'custom';
-    $pane->shown = TRUE;
-    $pane->access = array();
-    $pane->configuration = array(
-      'admin_title' => 'Usage instructions',
-      'title' => 'Jumpstart your community!',
-      'body' => '<?php print l(\'View\', \'groups\'); ?>, or <?php print l(\'create\', \'node/add/group\'); ?> new <strong>Groups</strong> to start creating your community!',
-      'format' => '3',
-      'substitute' => TRUE,
+      'override_title' => 0,
+      'override_title_text' => '',
     );
     $pane->cache = array();
     $pane->style = array();
@@ -3120,8 +3120,8 @@ function _commons_core_default_page_manager_pages() {
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array(
-      'override_title' => 1,
-      'override_title_text' => 'The water cooler',
+      'override_title' => 0,
+      'override_title_text' => '',
     );
     $pane->cache = array();
     $pane->style = array();
@@ -3151,7 +3151,7 @@ function _commons_core_default_page_manager_pages() {
       'url' => '',
       'display' => 'block_2',
       'override_title' => 1,
-      'override_title_text' => 'Newest community groups',
+      'override_title_text' => 'Newest Community Groups',
     );
     $pane->cache = array();
     $pane->style = array();
@@ -3181,7 +3181,7 @@ function _commons_core_default_page_manager_pages() {
       'url' => '',
       'display' => 'block_1',
       'override_title' => 1,
-      'override_title_text' => 'Most active groups',
+      'override_title_text' => 'Most Active Groups',
     );
     $pane->cache = array();
     $pane->style = array();
@@ -3210,8 +3210,8 @@ function _commons_core_default_page_manager_pages() {
       'args' => '',
       'url' => '',
       'display' => 'block_1',
-      'override_title' => 1,
-      'override_title_text' => 'Newest users',
+      'override_title' => 0,
+      'override_title_text' => '',
     );
     $pane->cache = array();
     $pane->style = array();
@@ -3240,8 +3240,8 @@ function _commons_core_default_page_manager_pages() {
       'args' => '',
       'url' => '',
       'display' => 'block_1',
-      'override_title' => 1,
-      'override_title_text' => 'Most active users',
+      'override_title' => 0,
+      'override_title_text' => '',
     );
     $pane->cache = array();
     $pane->style = array();

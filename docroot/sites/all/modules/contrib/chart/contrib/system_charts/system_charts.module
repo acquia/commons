@@ -1,0 +1,365 @@
+<?php
+
+/**
+* @file 
+* Core drupal system charting.
+* @author Tj Holowaychuk <http://www.350designs.com/>
+* @package Chart
+*/
+ 
+/* -----------------------------------------------------------------
+
+  Hook Implementations
+
+------------------------------------------------------------------ */
+
+/**
+* Implementation of hook_perm();
+*/
+function system_charts_perm(){
+  return array('administer system charts', 'access system charts');
+}
+  
+/**
+* Implementation of hook_menu().
+*/  
+function system_charts_menu() {
+  $items = array();
+  
+  $items['admin/reports/charts'] = array(
+      'title' => 'System Charts',
+      'page callback' => 'system_charts',
+      'page arguments' => array('nodes'),
+      'access arguments' => array('access system charts'),
+    ); 
+  $items['admin/reports/charts/nodes'] = array(
+      'title' => 'Nodes',
+      'page callback' => 'system_charts',
+      'page arguments' => array('nodes'),
+      'access arguments' => array('access system charts'),
+      'type' => MENU_DEFAULT_LOCAL_TASK, 
+    );
+  $items['admin/reports/charts/users'] = array(
+      'title' => 'Users',
+      'page callback' => 'system_charts',
+      'page arguments' => array('users'),
+      'access arguments' => array('access system charts'),
+      'type' => MENU_LOCAL_TASK, 
+    );  
+  $items['admin/reports/charts/watchdog'] = array(
+      'title' => 'Watchdog',
+      'page callback' => 'system_charts',
+      'page arguments' => array('watchdog'),
+      'access arguments' => array('access system charts'),
+      'type' => MENU_LOCAL_TASK, 
+    );
+
+  return $items;
+}
+
+/**
+* Implementation of hook_chart_color_schemes();
+*/
+function system_charts_chart_color_schemes(&$colors) {
+  $colors['watchdog_severity'] = array(
+      'Error'   => 'a00000',
+      'Warning' => 'e06000',
+      'Notice'  => 'f0c040', 
+    );   
+}
+
+/* -----------------------------------------------------------------
+
+  General Functionality
+
+------------------------------------------------------------------ */
+
+/**     
+* Page callback.
+*/
+function system_charts($page = 'nodes') {
+  return '<div id="system-charts">' . system_charts_display($page) . '</div><!-- END #system-charts -->';
+}                                                
+                                                 
+/**
+* Display charts and content in context to the current page.
+* 
+* @return string
+*   markup, chart images.
+*/
+function system_charts_display($page = 'nodes') { 
+  $output = '';
+  
+  switch($page){
+    case 'users': 
+      $output .= system_charts_build('users_per_role'); 
+      $output .= system_charts_build('user_status');
+      break;
+                                
+    case 'nodes':
+      $output .= system_charts_build('node_counts');
+      $output .= system_charts_build('node_counts_published');
+      $output .= system_charts_build('node_counts_unpublished');
+      $output .= system_charts_build('node_activity');
+      break;
+      
+    case 'watchdog':
+      $output .= system_charts_build('watchdog_counts');
+      $output .= system_charts_build('watchdog_severity');
+      break;
+  }
+           
+  return $output;
+}
+
+/**
+* Gather data and build a chart API structure.
+* 
+* @return array
+*   chart API structure.
+*/
+function system_charts_build($type) {
+  $chart = array();                                      
+  $now   = (isset($_GET['year']) && isset($_GET['month'])) ? mktime(0, 0, 0, $_GET['month'], 30, $_GET['year']) : time();
+  
+  switch($type) {
+    case 'node_counts':
+    case 'node_counts_published':
+    case 'node_counts_unpublished':
+    case 'node_counts_today':  
+      switch($type){
+        case 'node_counts':
+          $title = t('Total');
+          break;
+          
+        case 'node_counts_published':
+          $title = t('Published'); 
+          $sql_where = " WHERE status = '1' ";
+          break;
+          
+        case 'node_counts_unpublished':
+          $title = t('Unpublished');
+          $sql_where = " WHERE status = '0' ";
+          break;  
+      }
+              
+      $results = db_query("
+          SELECT COUNT(*) as count, type 
+          FROM {node}
+          " . $sql_where . " 
+          GROUP BY type
+          ORDER BY type 
+        ", $sql_args);
+        
+      while ($result = db_fetch_array($results)){
+        $chart['#data'][]        = $result['count'];
+        $chart['#labels'][]      = $result['type'].': '.$result['count'];
+        $chart['#data_colors'][] = chart_unique_color($result['type']);
+      }                     
+      
+      $chart['#chart_id'] = $type;
+      $chart['#title']    = chart_title($title);
+      $chart['#type']     = CHART_TYPE_PIE;
+      $chart['#size']     = chart_size(600, 350); 
+      break;
+      
+    case 'node_activity':
+      $results = db_query("
+          SELECT type, created 
+          FROM {node}  
+          WHERE created  < %d AND created > %d
+          ORDER BY created                     
+        ", $now, mktime(0, 0, 0, date('m', $now), 1, date('Y', $now)));         
+                      
+      $max    = array();
+      $counts = array();
+      $types  = array();
+      
+      while ($result = db_fetch_array($results)){ 
+        $day = ltrim(date('d', $result['created']), '0');
+        $types[$result['type']] = $result['type']; 
+        $counts[$day][$result['type']]++;
+        $max[$result['type']]++; 
+      }                                  
+                 
+      // Generate data and labels
+      if (count($counts) && count($types)){
+        for($i = 0; $i <= date('d', $now); $i++){
+          $chart['#labels'][] = $i;
+          
+          foreach($types AS $type){
+            if ($counts[$i][$type]){
+              $chart['#data'][$type][] = $counts[$i][$type];   
+            }
+            else{
+              $chart['#data'][$type][] = '0';
+            }
+          }
+        }
+      }          
+                                        
+      // Data colors, legends, line styles, and labels
+      if (count($types)){
+        foreach($types AS $type){
+          $chart['#data_colors'][] = chart_unique_color($type);
+          $chart['#legends'][]     = $type; 
+          $chart['#line_styles'][] = chart_line_style(2);
+        }
+      }  
+      
+      $max = count($max) ? max($max) : 0;                  
+                              
+      $chart['#chart_id']   = 'node_activity';                                                                         
+      $chart['#title']      = chart_title(t('Node Activity for !date', array('!date' => date('F Y', $now))));                   
+      $chart['#type']       = CHART_TYPE_LINE;                                                                         
+      $chart['#size']       = chart_size(620, 250);                                                                    
+      $chart['#grid_lines'] = chart_grid_lines(25, 9.5, 1, 3);                                                        
+      $chart['#mixed_axis_labels'][CHART_AXIS_Y_LEFT][0][] = chart_mixed_axis_range_label(0, $max);  
+      $chart['#adjust_resolution'] = TRUE;                                                                     
+      break;
+      
+    case 'watchdog_counts':                 
+      $results = db_query("       
+          SELECT COUNT(*) as count, type 
+          FROM {watchdog} 
+          GROUP BY type 
+          ORDER BY type
+        ");                     
+        
+      while ($result = db_fetch_array($results)){
+        $chart['#data'][]        = $result['count'];
+        $chart['#labels'][]      = $result['type'] . ': ' . $result['count'];     
+        $chart['#data_colors'][] = chart_unique_color($result['type']);
+      }  
+       
+      $chart['#chart_id'] = 'watchdog_counts';
+      $chart['#title']    = chart_title(t('Watchdog Messages'));
+      $chart['#type']     = CHART_TYPE_PIE;
+      $chart['#size']     = chart_size(600, 350);
+      break;
+      
+  case 'watchdog_severity':
+      $results = db_query("
+          SELECT COUNT(*) as count, severity 
+          FROM {watchdog} 
+          GROUP BY severity 
+          ORDER BY severity
+        ");                     
+        
+      while ($result = db_fetch_array($results)){
+        $severity_label          = _system_charts_watchdog_severity_label($result['severity']);
+        $chart['#data'][]        = $result['count'];  
+        $chart['#labels'][]      = $severity_label . ': ' . $result['count'];  
+        $chart['#data_colors'][] = chart_unique_color($severity_label, 'watchdog_severity');
+      }  
+       
+      $chart['#chart_id'] = 'watchdog_severity';
+      $chart['#title']    = chart_title(t('Message Severity'));
+      $chart['#type']     = CHART_TYPE_PIE;
+      $chart['#size']     = chart_size(600, 350);
+    break;
+    
+    case 'users_per_role':
+      $results = db_query("
+          SELECT COUNT(*) as count, r.* 
+          FROM {users_roles} ur 
+          LEFT JOIN {users} u ON ur.uid = u.uid 
+          LEFT JOIN {role} r ON r.rid = ur.rid
+          GROUP BY r.rid
+          ORDER BY r.name
+        ");                     
+        
+      while ($result = db_fetch_array($results)){  
+        $chart['#data'][]        = $result['count'];  
+        $chart['#labels'][]      = $result['name'] . ': ' . $result['count'];
+        $chart['#data_colors'][] = chart_unique_color('role_' . $result['name']);
+      }  
+       
+      $chart['#chart_id'] = 'users_per_role';
+      $chart['#title']    = chart_title('Users Per Role');
+      $chart['#type']     = CHART_TYPE_PIE;
+      $chart['#size']     = chart_size(600, 350);
+      break;
+      
+    case 'user_status':
+      $results = db_query("
+          SELECT COUNT(*) as count, status 
+          FROM {users} 
+          WHERE uid != 0
+          GROUP BY status
+          ORDER BY status
+        ");                     
+        
+      while ($result = db_fetch_array($results)){  
+        $chart['#data'][]        = $result['count'];  
+        $chart['#labels'][]      = _system_charts_user_status_label($result['status']) . ': ' . $result['count'];
+        $chart['#data_colors'][] = chart_unique_color('status_' . $result['status']);
+      }  
+       
+      $chart['#chart_id'] = 'user_status';
+      $chart['#title']    = chart_title('User Status');
+      $chart['#type']     = CHART_TYPE_PIE;
+      $chart['#size']     = chart_size(600, 350);
+      break;
+  }
+          
+  return chart_render($chart);  
+}
+
+/**
+* Get available report page information.
+* 
+* @return array
+*   report information.
+*/
+function system_charts_get_page_info() {
+  return array(
+      'nodes' => array(
+          '#title'       => t('Nodes'),
+          '#type'        => 'nodes',
+          '#description' => t('Various node data reports.'),
+        ),  
+      'users' => array(
+          '#title'       => t('Users'),
+          '#type'        => 'users',
+          '#description' => t('User access and information reporting.'),
+        ),  
+      'watchdog' => array(
+          '#title'       => t('Watchdog'),
+          '#type'        => 'watchdog',
+          '#description' => t('Log charts.'),
+        ),  
+    ); 
+}
+
+/* -----------------------------------------------------------------
+
+  Helpers
+
+------------------------------------------------------------------ */
+
+/**
+* Return the watchdog severity label
+*/
+function _system_charts_watchdog_severity_label($severity) {
+  switch($severity){
+    case WATCHDOG_NOTICE:
+      return t('Notice');
+      break;
+      
+    case WATCHDOG_WARNING:
+      return t('Warning');
+      break;
+      
+    case WATCHDOG_ERROR:
+      return t('Error');
+      break;
+  }
+}
+
+/**
+* Return user status label
+*/
+function _system_charts_user_status_label($status) {
+  return $status ? t('Active') : t('Blocked') ;
+}

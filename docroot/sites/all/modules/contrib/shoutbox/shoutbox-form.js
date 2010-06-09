@@ -1,4 +1,4 @@
-// $Id: shoutbox-form.js,v 1.9.2.3 2008/07/11 10:16:59 disterics Exp $
+// $Id: shoutbox-form.js,v 1.11.2.1 2010/05/22 14:16:08 mikestefff Exp $
 
  if (typeof(Drupal) == "undefined" || !Drupal.shoutbox) {    
     Drupal.shoutbox = {};

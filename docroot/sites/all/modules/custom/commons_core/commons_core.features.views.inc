@@ -6146,7 +6146,7 @@ function _commons_core_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Featured groups');
+  $handler->override_option('title', 'Featured Groups');
   $handler->override_option('empty', 'There are no featured groups.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
@@ -6803,7 +6803,7 @@ function _commons_core_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Recent members');
+  $handler->override_option('title', 'Recent Members');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_pager', '1');
   $handler->override_option('style_plugin', 'table');
@@ -6901,7 +6901,7 @@ function _commons_core_views_default_views() {
       ),
     ),
   ));
-  $handler->override_option('title', 'Group admins');
+  $handler->override_option('title', 'Group Admins');
   $handler->override_option('block_description', 'Group admins');
   $handler->override_option('block_caching', -1);
   $handler = $view->new_display('block', 'Block Admins, Members', 'block_1');
@@ -7016,7 +7016,7 @@ function _commons_core_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Most active groups');
+  $handler->override_option('title', 'Most Active Groups');
   $handler->override_option('empty', 'There are no groups.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_more', 1);
@@ -7506,7 +7506,7 @@ function _commons_core_views_default_views() {
   $handler->override_option('path', 'groups/active');
   $handler->override_option('menu', array(
     'type' => 'tab',
-    'title' => 'Most active',
+    'title' => 'Most Active',
     'description' => 'The most active groups',
     'weight' => '13',
     'name' => 'navigation',
@@ -7837,7 +7837,7 @@ function _commons_core_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'My groups');
+  $handler->override_option('title', 'My Groups');
   $handler->override_option('empty', 'Not a member of any groups.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('items_per_page', 30);
@@ -7909,7 +7909,7 @@ function _commons_core_views_default_views() {
   $handler->override_option('path', 'groups/my');
   $handler->override_option('menu', array(
     'type' => 'tab',
-    'title' => 'My groups',
+    'title' => 'My Groups',
     'description' => 'The groups that I belong to',
     'weight' => '1',
     'name' => 'navigation',
@@ -15409,10 +15409,43 @@ if(user_access(\'create notice content\')) {
       'empty' => '',
       'hide_empty' => 0,
       'empty_zero' => 0,
-      'link_to_user' => 1,
+      'link_to_user' => 0,
       'exclude' => 0,
       'id' => 'value',
       'table' => 'profile_values_profile_name',
+      'field' => 'value',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'value_1' => array(
+      'label' => '',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'link_to_user' => 0,
+      'exclude' => 0,
+      'id' => 'value_1',
+      'table' => 'profile_values_profile_last_name',
       'field' => 'value',
       'override' => array(
         'button' => 'Override',
@@ -15493,6 +15526,14 @@ if(user_access(\'create notice content\')) {
     'grouping' => '',
     'columns' => '3',
     'alignment' => 'horizontal',
+  ));
+  $handler->override_option('row_options', array(
+    'inline' => array(
+      'value' => 'value',
+      'value_1' => 'value_1',
+    ),
+    'separator' => '',
+    'hide_empty' => 0,
   ));
   $handler = $view->new_display('block', 'Block', 'block_1');
   $handler->override_option('block_description', 'Who\'s Online? (Custom)');
