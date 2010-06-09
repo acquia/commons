@@ -692,7 +692,7 @@ function drupal_commons_import_permissions() {
   
   // Permission: view analytics page
   $permissions[] = array(
-    'name' => 'view analytics',
+    'name' => 'view analytics page',
     'roles' => array(
       '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
