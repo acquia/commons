@@ -6,17 +6,17 @@
  * Provide quant objects to be rendered as charts
  * 
  * Quant object items:
- *  id = A unique ID (Ex: 'comment_creation')
- *  label = The title of the chart
- *  labelsum = Whether or not to display the sum of items in the title (Boolean)
- *  table = Which database to query from
- *  field = The database field that stores the timestamp
- *  query = Specify a complete DB query to use to fetch the items 
- *   (Optional; Use %d to indicate timestamp. This overrides field and table)
- *  dataType = Specify the type of data we're dealing with (Options: single, multiple, count)
- *  group = The database field to group items on. (Optional; Only needed if dataType == multiple)
- *  count = Which database field to count (Optional; Only needed if dataType == count)
- *  chartType = Which type of chart to use (Options: line, bar, pie)
+ *  id          A unique ID (Ex: 'comment_creation')
+ *  label       The title of the chart
+ *  labelsum    Whether or not to display the sum of items in the title (Boolean)
+ *  table       Which database to query from
+ *  field       The database field that stores the timestamp
+ *  query       Specify a complete DB query to use to fetch the items 
+ *                 (Optional; Use %d to indicate timestamp. This overrides field and table)
+ *  dataType    Specify the type of data we're dealing with (Options: single, multiple, count)
+ *  group       The database field to group items on. (Optional; Only needed if dataType= multiple)
+ *  count       Which database field to count (Optional; Only needed if dataType= count)
+ *  chartType   Which type of chart to use (Options: line, bar, pie)
  * 
  * @return
  *   An array of quant objects
