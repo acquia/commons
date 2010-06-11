@@ -1,0 +1,17 @@
+<?php
+// $Id$
+
+/**
+ * @file skinr.install
+ * Contains install, update, and uninstall functions for Skinr.
+ */
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function skinr_uninstall() {
+  $result = db_query("SELECT name FROM {variable} WHERE name LIKE 'skinr_%'");
+  while ($variable = db_fetch_object($result)) {
+    variable_del($variable->name);
+  }
+}
