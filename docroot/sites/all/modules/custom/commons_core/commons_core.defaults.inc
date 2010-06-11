@@ -2596,9 +2596,9 @@ function _commons_core_imagecache_default_presets() {
           'module' => 'imagecache',
           'action' => 'imagecache_scale',
           'data' => array(
-            'width' => '',
-            'height' => '75',
-            'upscale' => 0,
+            'width' => '380',
+            'height' => '',
+            'upscale' => 1,
           ),
         ),
         '1' => array(
@@ -2611,10 +2611,10 @@ function _commons_core_imagecache_default_presets() {
             ),
             'under' => 1,
             'exact' => array(
-              'width' => '250',
-              'height' => '75',
+              'width' => '380',
+              'height' => '90',
               'xpos' => 'left',
-              'ypos' => 'center',
+              'ypos' => 'top',
             ),
             'relative' => array(
               'leftdiff' => '',
@@ -2664,6 +2664,20 @@ function _commons_core_imagecache_default_presets() {
         ),
       ),
     ),
+    'member_list_image' => array(
+      'presetname' => 'member_list_image',
+      'actions' => array(
+        '0' => array(
+          'weight' => '0',
+          'module' => 'imagecache',
+          'action' => 'imagecache_scale_and_crop',
+          'data' => array(
+            'width' => '90',
+            'height' => '90',
+          ),
+        ),
+      ),
+    ),
     'profile_pictures' => array(
       'presetname' => 'profile_pictures',
       'actions' => array(
@@ -2686,8 +2700,8 @@ function _commons_core_imagecache_default_presets() {
           'module' => 'imagecache',
           'action' => 'imagecache_scale_and_crop',
           'data' => array(
-            'width' => '24',
-            'height' => '24',
+            'width' => '30',
+            'height' => '30',
           ),
         ),
       ),
@@ -2763,7 +2777,7 @@ function _commons_core_default_page_manager_handlers() {
     $pane->access = array();
     $pane->configuration = array(
       'override_title' => 1,
-      'override_title_text' => 'Recent Group Activity',
+      'override_title_text' => 'Recent group activity',
     );
     $pane->cache = array();
     $pane->style = array();
@@ -3052,8 +3066,8 @@ function _commons_core_default_page_manager_pages() {
     $pane->access = array();
     $pane->configuration = array(
       'admin_title' => 'Usage instructions',
-      'title' => 'Jumpstart Your Community!',
-      'body' => '<?php print l(\'View\', \'groups\'); ?>, or <?php print l(\'create\', \'node/add/group\'); ?> new <strong>Groups</strong> to start creating your community!',
+      'title' => 'Jumpstart your community!',
+      'body' => '<?php print l(\'View\', \'groups\'); ?>, or <?php print l(\'create\', \'node/add/group\'); ?> new <strong>groups</strong> to start creating your community!',
       'format' => '3',
       'substitute' => TRUE,
     );
@@ -3151,7 +3165,7 @@ function _commons_core_default_page_manager_pages() {
       'url' => '',
       'display' => 'block_2',
       'override_title' => 1,
-      'override_title_text' => 'Newest Community Groups',
+      'override_title_text' => 'Newest community groups',
     );
     $pane->cache = array();
     $pane->style = array();
@@ -3181,7 +3195,7 @@ function _commons_core_default_page_manager_pages() {
       'url' => '',
       'display' => 'block_1',
       'override_title' => 1,
-      'override_title_text' => 'Most Active Groups',
+      'override_title_text' => 'Most active groups',
     );
     $pane->cache = array();
     $pane->style = array();
@@ -3409,7 +3423,7 @@ function _commons_core_default_page_manager_pages() {
     $pane->access = array();
     $pane->configuration = array(
       'override_title' => 1,
-      'override_title_text' => 'Recent Activity',
+      'override_title_text' => 'Recent activity',
     );
     $pane->cache = array();
     $pane->style = array();
@@ -5290,6 +5304,13 @@ function _commons_core_strongarm() {
   $strongarm->value = 'notice/[title-raw]';
 
   $export['pathauto_node_notice_pattern'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_node_page_pattern';
+  $strongarm->value = 'page/[title-raw]';
+
+  $export['pathauto_node_page_pattern'] = $strongarm;
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;

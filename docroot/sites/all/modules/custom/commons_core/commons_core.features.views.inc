@@ -634,8 +634,8 @@ function _commons_core_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Blog Posts');
-  $handler->override_option('header', '<div class="addnew"><?php print l(\'Add a New Blog Post\', \'node/add/blog\'); ?></div>');
+  $handler->override_option('title', 'Blog posts');
+  $handler->override_option('header', '<div class="addnew"><?php print l(\'Add a new blog post\', \'node/add/blog\'); ?></div>');
   $handler->override_option('header_format', '3');
   $handler->override_option('header_empty', 1);
   $handler->override_option('empty', 'No blog posts have been added yet.');
@@ -966,7 +966,7 @@ function _commons_core_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Calendar');
-  $handler->override_option('header', '<div class="addnew"><?php print l(\'Add a New Event\', \'node/add/event\'); ?></div>');
+  $handler->override_option('header', '<div class="addnew"><?php print l(\'Add a new event\', \'node/add/event\'); ?></div>');
   $handler->override_option('header_format', '3');
   $handler->override_option('header_empty', 1);
   $handler->override_option('items_per_page', 0);
@@ -1664,7 +1664,7 @@ function _commons_core_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Discussions');
-  $handler->override_option('header', '<div class="addnew"><?php print l(\'Add a New Discussion\', \'node/add/discussion\'); ?></div>');
+  $handler->override_option('header', '<div class="addnew"><?php print l(\'Add a new discussion\', \'node/add/discussion\'); ?></div>');
   $handler->override_option('header_format', '3');
   $handler->override_option('header_empty', 1);
   $handler->override_option('empty', 'No discussions have been added yet.');
@@ -2270,7 +2270,7 @@ function _commons_core_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Documents');
-  $handler->override_option('header', '<div class="addnew"><?php print l(\'Add a New Document\', \'node/add/document\'); ?></div>');
+  $handler->override_option('header', '<div class="addnew"><?php print l(\'Add a new document\', \'node/add/document\'); ?></div>');
   $handler->override_option('header_format', '3');
   $handler->override_option('header_empty', 1);
   $handler->override_option('empty', 'No wikis have been added yet.');
@@ -2834,8 +2834,8 @@ function _commons_core_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Wiki Posts');
-  $handler->override_option('header', '<div class="addnew"><?php print l(\'Add a New Wiki\', \'node/add/wiki\'); ?></div>');
+  $handler->override_option('title', 'Wiki posts');
+  $handler->override_option('header', '<div class="addnew"><?php print l(\'Add a new wiki\', \'node/add/wiki\'); ?></div>');
   $handler->override_option('header_format', '3');
   $handler->override_option('header_empty', 1);
   $handler->override_option('empty', 'No wikis have been added yet.');
@@ -3341,7 +3341,7 @@ function _commons_core_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Newest Users');
+  $handler->override_option('title', 'Newest users');
   $handler->override_option('footer_format', '1');
   $handler->override_option('footer_empty', 0);
   $handler->override_option('empty_format', '1');
@@ -3349,7 +3349,7 @@ function _commons_core_views_default_views() {
   $handler->override_option('distinct', 1);
   $handler->override_option('style_plugin', 'table');
   $handler = $view->new_display('block', 'Block', 'block_1');
-  $handler->override_option('block_description', 'Newest Users (Home)');
+  $handler->override_option('block_description', 'Newest users (Home)');
   $handler->override_option('block_caching', -1);
 
   $views[$view->name] = $view;
@@ -3593,7 +3593,7 @@ function _commons_core_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Most Active Users');
+  $handler->override_option('title', 'Most active users');
   $handler->override_option('footer', '<?php print l(t(\'View all users\'), \'userpoints\'); ?>');
   $handler->override_option('footer_format', '3');
   $handler->override_option('footer_empty', 0);
@@ -3603,7 +3603,7 @@ function _commons_core_views_default_views() {
   $handler->override_option('distinct', 1);
   $handler->override_option('style_plugin', 'table');
   $handler = $view->new_display('block', 'Block', 'block_1');
-  $handler->override_option('block_description', 'Most Active Users');
+  $handler->override_option('block_description', 'Most active users');
   $handler->override_option('block_caching', -1);
 
   $views[$view->name] = $view;
@@ -3795,7 +3795,7 @@ function _commons_core_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'My Recent Items');
+  $handler->override_option('title', 'My recent items');
   $handler->override_option('empty', 'You haven\'t created any items yet.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
@@ -3813,7 +3813,7 @@ function _commons_core_views_default_views() {
     'hide_empty' => 0,
   ));
   $handler = $view->new_display('block', 'Block', 'block_1');
-  $handler->override_option('block_description', 'My Recent Items');
+  $handler->override_option('block_description', 'My recent items');
   $handler->override_option('block_caching', -1);
 
   $views[$view->name] = $view;
@@ -4091,7 +4091,7 @@ function _commons_core_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'My Unread Items');
+  $handler->override_option('title', 'My unread items');
   $handler->override_option('empty', 'You have no unread items');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
@@ -4112,7 +4112,7 @@ function _commons_core_views_default_views() {
     'hide_empty' => 0,
   ));
   $handler = $view->new_display('block', 'Block', 'block_1');
-  $handler->override_option('block_description', 'My Unread Items');
+  $handler->override_option('block_description', 'My unread items');
   $handler->override_option('block_caching', -1);
 
   $views[$view->name] = $view;
@@ -4227,7 +4227,7 @@ function _commons_core_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Newest Users');
+  $handler->override_option('title', 'Newest users');
   $handler->override_option('footer_format', '1');
   $handler->override_option('footer_empty', 0);
   $handler->override_option('empty_format', '1');
@@ -4235,7 +4235,7 @@ function _commons_core_views_default_views() {
   $handler->override_option('distinct', 1);
   $handler->override_option('style_plugin', 'table');
   $handler = $view->new_display('block', 'Block', 'block_1');
-  $handler->override_option('block_description', 'Newest Users');
+  $handler->override_option('block_description', 'Newest users');
   $handler->override_option('block_caching', -1);
 
   $views[$view->name] = $view;
@@ -4565,7 +4565,7 @@ function _commons_core_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Groups');
-  $handler->override_option('header', '<div class="addnew"><?php print l(\'Add a New Group\', \'node/add/group\'); ?></div>');
+  $handler->override_option('header', '<div class="addnew"><?php print l(\'Add a new group\', \'node/add/group\'); ?></div>');
   $handler->override_option('header_format', '3');
   $handler->override_option('header_empty', 1);
   $handler->override_option('empty', 'There are currently no groups');
@@ -4794,7 +4794,7 @@ function _commons_core_views_default_views() {
       'style_options' => array(),
       'wildcard' => 'all',
       'wildcard_substitution' => 'All',
-      'title' => '%1 - Event Calendar',
+      'title' => '%1 - Event calendar',
       'breadcrumb' => '',
       'default_argument_type' => 'fixed',
       'default_argument' => '',
@@ -4846,6 +4846,9 @@ function _commons_core_views_default_views() {
         'group' => 0,
       ),
       'validate_argument_php' => '',
+      'override' => array(
+        'button' => 'Override',
+      ),
     ),
     'date_argument' => array(
       'default_action' => 'default',
@@ -4998,7 +5001,7 @@ function _commons_core_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Calendar');
-  $handler->override_option('header', '<div class="addnew"<?php print l(\'Add a New Event\', \'node/add/event\', array(\'query\' => \'gids[]=\' . arg(1))); ?></div>');
+  $handler->override_option('header', '<div class="addnew"<?php print l(\'Add a new event\', \'node/add/event\', array(\'query\' => \'gids[]=\' . arg(1))); ?></div>');
   $handler->override_option('header_format', '3');
   $handler->override_option('header_empty', 1);
   $handler->override_option('items_per_page', 0);
@@ -5581,7 +5584,7 @@ function _commons_core_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Recent Group Content');
+  $handler->override_option('title', 'Recent group content');
   $handler->override_option('empty', 'No content has been submitted to this group in.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
@@ -5933,7 +5936,7 @@ function _commons_core_views_default_views() {
       'relationship' => 'none',
     ),
     'post_count_new' => array(
-      'label' => 'New Posts',
+      'label' => 'New posts',
       'alter' => array(
         'alter_text' => 0,
         'text' => '',
@@ -5949,8 +5952,8 @@ function _commons_core_views_default_views() {
         'max_length' => '',
         'word_boundary' => 1,
         'ellipsis' => 1,
-        'strip_tags' => 0,
         'html' => 0,
+        'strip_tags' => 0,
       ),
       'empty' => '0',
       'hide_empty' => 0,
@@ -5971,12 +5974,12 @@ function _commons_core_views_default_views() {
       'relationship' => 'none',
     ),
   ));
-  $handler->override_option('title', 'My Groups');
+  $handler->override_option('title', 'My groups');
   $handler->override_option('empty', 'You haven\'t joined any groups yet.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_pager', 'mini');
   $handler->override_option('pager_element', 2);
-  $handler->override_option('block_description', 'My Groups (custom)');
+  $handler->override_option('block_description', 'My groups (custom)');
   $handler->override_option('block_caching', -1);
   $handler = $view->new_display('block', 'New Groups', 'block_2');
   $handler->override_option('sorts', array(
@@ -6022,12 +6025,12 @@ function _commons_core_views_default_views() {
       'relationship' => 'none',
     ),
   ));
-  $handler->override_option('title', 'New Groups');
+  $handler->override_option('title', 'New groups');
   $handler->override_option('empty', 'No groups have been created yet.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_pager', 'mini');
   $handler->override_option('pager_element', 3);
-  $handler->override_option('block_description', 'New Groups (custom)');
+  $handler->override_option('block_description', 'New groups (custom)');
   $handler->override_option('block_caching', -1);
 
   $views[$view->name] = $view;
@@ -6146,7 +6149,7 @@ function _commons_core_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Featured Groups');
+  $handler->override_option('title', 'Featured groups');
   $handler->override_option('empty', 'There are no featured groups.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
@@ -6273,7 +6276,7 @@ function _commons_core_views_default_views() {
   $handler->override_option('items_per_page', 5);
   $handler->override_option('use_pager', 'mini');
   $handler->override_option('pager_element', 7);
-  $handler->override_option('block_description', 'Featured Groups');
+  $handler->override_option('block_description', 'Featured groups');
   $handler->override_option('block_caching', -1);
   $handler = $view->new_display('page', 'Page', 'page_1');
   $handler->override_option('fields', array(
@@ -6803,7 +6806,7 @@ function _commons_core_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Recent Members');
+  $handler->override_option('title', 'Recent members');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_pager', '1');
   $handler->override_option('style_plugin', 'table');
@@ -6901,7 +6904,7 @@ function _commons_core_views_default_views() {
       ),
     ),
   ));
-  $handler->override_option('title', 'Group Admins');
+  $handler->override_option('title', 'Group admins');
   $handler->override_option('block_description', 'Group admins');
   $handler->override_option('block_caching', -1);
   $handler = $view->new_display('block', 'Block Admins, Members', 'block_1');
@@ -7016,7 +7019,7 @@ function _commons_core_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Most Active Groups');
+  $handler->override_option('title', 'Most active groups');
   $handler->override_option('empty', 'There are no groups.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_more', 1);
@@ -7165,7 +7168,7 @@ function _commons_core_views_default_views() {
     ),
   ));
   $handler->override_option('items_per_page', 5);
-  $handler->override_option('block_description', 'Most Active Groups');
+  $handler->override_option('block_description', 'Most active groups');
   $handler->override_option('block_caching', -1);
   $handler = $view->new_display('page', 'Page', 'page_1');
   $handler->override_option('fields', array(
@@ -7506,7 +7509,7 @@ function _commons_core_views_default_views() {
   $handler->override_option('path', 'groups/active');
   $handler->override_option('menu', array(
     'type' => 'tab',
-    'title' => 'Most Active',
+    'title' => 'Most active',
     'description' => 'The most active groups',
     'weight' => '13',
     'name' => 'navigation',
@@ -7837,7 +7840,7 @@ function _commons_core_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'My Groups');
+  $handler->override_option('title', 'My groups');
   $handler->override_option('empty', 'Not a member of any groups.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('items_per_page', 30);
@@ -7902,14 +7905,14 @@ function _commons_core_views_default_views() {
     'hide_empty' => 0,
   ));
   $handler = $view->new_display('page', 'Page', 'page');
-  $handler->override_option('header', '<div class="addnew"><?php print l(\'Add a New Group\', \'node/add/group\'); ?></div>');
+  $handler->override_option('header', '<div class="addnew"><?php print l(\'Add a new group\', \'node/add/group\'); ?></div>');
   $handler->override_option('header_format', '3');
   $handler->override_option('header_empty', 1);
   $handler->override_option('use_ajax', TRUE);
   $handler->override_option('path', 'groups/my');
   $handler->override_option('menu', array(
     'type' => 'tab',
-    'title' => 'My Groups',
+    'title' => 'My groups',
     'description' => 'The groups that I belong to',
     'weight' => '1',
     'name' => 'navigation',
@@ -8917,7 +8920,7 @@ else {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Latest Group Poll');
+  $handler->override_option('title', 'Latest group poll');
   $handler->override_option('footer', '<?php
  $group = og_get_group_context();
  if($group) {
@@ -8940,7 +8943,7 @@ else {
     'comments' => 0,
   ));
   $handler = $view->new_display('block', 'Block', 'block_1');
-  $handler->override_option('block_description', 'Latest Group Poll');
+  $handler->override_option('block_description', 'Latest group poll');
   $handler->override_option('block_caching', -1);
 
   $views[$view->name] = $view;
@@ -9287,7 +9290,7 @@ else {
       'style_options' => array(),
       'wildcard' => 'all',
       'wildcard_substitution' => 'All',
-      'title' => '%1 - Blog Posts',
+      'title' => '%1 - Blog posts',
       'breadcrumb' => '',
       'default_argument_type' => 'fixed',
       'default_argument' => '',
@@ -9472,11 +9475,11 @@ else {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Blog Posts');
+  $handler->override_option('title', 'Blog posts');
   $handler->override_option('header', '<div class="addnew">
 <?php 
 if (og_is_group_member(arg(1))) {
-  print l(\'Add a New Blog Post\', \'node/add/blog\', array(\'query\' => \'gids[]=\' . arg(1))); 
+  print l(\'Add a new blog post\', \'node/add/blog\', array(\'query\' => \'gids[]=\' . arg(1))); 
 }
 else {
   print t(\'You must be a member of this group to add items.\');
@@ -9540,7 +9543,7 @@ else {
   $handler->override_option('path', 'node/%/content/blogs');
   $handler->override_option('menu', array(
     'type' => 'tab',
-    'title' => 'Blog Posts',
+    'title' => 'Blog posts',
     'description' => 'View the group blog posts',
     'weight' => '7',
     'name' => 'navigation',
@@ -10089,7 +10092,7 @@ else {
   $handler->override_option('header', '<div class="addnew">
 <?php 
 if (og_is_group_member(arg(1))) {
-  print l(\'Add a New Discussion\', \'node/add/discussion\', array(\'query\' => \'gids[]=\' . arg(1))); 
+  print l(\'Add a new discussion\', \'node/add/discussion\', array(\'query\' => \'gids[]=\' . arg(1))); 
 }
 else {
   print t(\'You must be a member of this group to add items.\');
@@ -10740,7 +10743,7 @@ else {
   $handler->override_option('header', '<div class="addnew">
 <?php 
 if (og_is_group_member(arg(1))) {
-  print l(\'Add a New Document\', \'node/add/document\', array(\'query\' => \'gids[]=\' . arg(1))); 
+  print l(\'Add a new document\', \'node/add/document\', array(\'query\' => \'gids[]=\' . arg(1))); 
 }
 else {
   print t(\'You must be a member of this group to add items.\');
@@ -11350,7 +11353,7 @@ else {
   $handler->override_option('header', '<div class="addnew">
 <?php 
 if (og_is_group_member(arg(1))) {
-  print l(\'Add a New Wiki\', \'node/add/wiki\', array(\'query\' => \'gids[]=\' . arg(1))); 
+  print l(\'Add a new wiki\', \'node/add/wiki\', array(\'query\' => \'gids[]=\' . arg(1))); 
 }
 else {
   print t(\'You must be a member of this group to add items.\');
@@ -11504,7 +11507,7 @@ else {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Popular Group Tags');
+  $handler->override_option('title', 'Popular group tags');
   $handler->override_option('empty', 'No tags have been created yet.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('items_per_page', 20);
@@ -11516,7 +11519,7 @@ else {
     'vocab' => '',
   ));
   $handler = $view->new_display('block', 'Block', 'block_1');
-  $handler->override_option('block_description', 'Group Content Tag Cloud');
+  $handler->override_option('block_description', 'Group content tag cloud');
   $handler->override_option('block_caching', -1);
 
   $views[$view->name] = $view;
@@ -11727,7 +11730,7 @@ else {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Upcoming Group Events');
+  $handler->override_option('title', 'Upcoming group events');
   $handler->override_option('footer', '<?php
   $group = og_get_group_context();
   if ($group->nid) {
@@ -11745,7 +11748,7 @@ else {
     'type' => 'ul',
   ));
   $handler = $view->new_display('block', 'Block', 'block_1');
-  $handler->override_option('block_description', 'Upcoming Events (Group)');
+  $handler->override_option('block_description', 'Upcoming events (Group)');
   $handler->override_option('block_caching', -1);
 
   $views[$view->name] = $view;
@@ -12164,7 +12167,7 @@ else {
       'expose' => array(
         'operator' => '',
         'identifier' => 'uid_1',
-        'label' => 'My Groups',
+        'label' => 'My groups',
         'optional' => 1,
         'remember' => 0,
       ),
@@ -12180,7 +12183,7 @@ else {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Recent Content');
+  $handler->override_option('title', 'Recent content');
   $handler->override_option('empty', 'No content has been added.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
@@ -13599,8 +13602,8 @@ else {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Latest Featured Content');
-  $handler->override_option('empty', 'No items have been marked featured in your groups yet.');
+  $handler->override_option('title', 'Latest featured content');
+  $handler->override_option('empty', 'No items have been marked featured in yet.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
   $handler->override_option('items_per_page', 5);
@@ -13623,7 +13626,7 @@ else {
   $handler = $view->new_display('block', 'Block with teasers', 'block_2');
   $handler->override_option('use_pager', 'mini');
   $handler->override_option('pager_element', 1);
-  $handler->override_option('block_description', 'Recent Featured Stream (My Groups)');
+  $handler->override_option('block_description', 'Recent featured stream (My Groups)');
   $handler->override_option('block_caching', -1);
 
   $views[$view->name] = $view;
@@ -13819,10 +13822,10 @@ else {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Latest Notices');
+  $handler->override_option('title', 'Latest notices');
   $handler->override_option('header', '<?php
 if(user_access(\'create notice content\')) {
-  print \'<div class="addnew">\' . l(\'Add a Notice\', \'node/add/notice\') . \'</div>\';
+  print \'<div class="addnew">\' . l(\'Add a notice\', \'node/add/notice\') . \'</div>\';
 }
 ?>');
   $handler->override_option('header_format', '3');
@@ -13939,7 +13942,7 @@ if(user_access(\'create notice content\')) {
     'separator' => '',
     'hide_empty' => 0,
   ));
-  $handler->override_option('block_description', 'Recent Notices');
+  $handler->override_option('block_description', 'Recent notices');
   $handler->override_option('block_caching', -1);
   $handler = $view->new_display('page', 'Page', 'page_1');
   $handler->override_option('fields', array(
@@ -14195,7 +14198,7 @@ if(user_access(\'create notice content\')) {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Popular Tags');
+  $handler->override_option('title', 'Popular tags');
   $handler->override_option('footer', '<div style="padding-top:8px;"><?php print l(t(\'View more\'), \'tagadelic\'); ?></div>');
   $handler->override_option('footer_format', '3');
   $handler->override_option('footer_empty', 0);
@@ -14210,7 +14213,7 @@ if(user_access(\'create notice content\')) {
     'vocab' => '',
   ));
   $handler = $view->new_display('block', 'Block', 'block_1');
-  $handler->override_option('block_description', 'Popular Tags');
+  $handler->override_option('block_description', 'Popular tags');
   $handler->override_option('block_caching', -1);
 
   $views[$view->name] = $view;
@@ -14403,7 +14406,7 @@ if(user_access(\'create notice content\')) {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Upcoming Events');
+  $handler->override_option('title', 'Upcoming events');
   $handler->override_option('footer', '<div style="padding-top:8px;"><?php print l(t(\'View events on calendar\'), \'content/calendar\'); ?></div>');
   $handler->override_option('footer_format', '3');
   $handler->override_option('footer_empty', 0);
@@ -14419,7 +14422,7 @@ if(user_access(\'create notice content\')) {
     'type' => 'ul',
   ));
   $handler = $view->new_display('block', 'Block', 'block_1');
-  $handler->override_option('block_description', 'Upcoming Events (Global)');
+  $handler->override_option('block_description', 'Upcoming events (Global)');
   $handler->override_option('block_caching', -1);
   $handler = $view->new_display('block', 'Block', 'block_2');
   $handler->override_option('relationships', array(
@@ -14528,8 +14531,8 @@ if(user_access(\'create notice content\')) {
       'relationship' => 'none',
     ),
   ));
-  $handler->override_option('title', 'Events in My Groups');
-  $handler->override_option('block_description', 'Upcoming Events (My Groups)');
+  $handler->override_option('title', 'Events in my groups');
+  $handler->override_option('block_description', 'Upcoming events (My Groups)');
   $handler->override_option('block_caching', -1);
   $handler = $view->new_display('block', 'Block', 'block_3');
   $handler->override_option('filters', array(
@@ -14628,8 +14631,8 @@ if(user_access(\'create notice content\')) {
       'reduce_duplicates' => 0,
     ),
   ));
-  $handler->override_option('title', 'Featured Events');
-  $handler->override_option('block_description', 'Featured Events');
+  $handler->override_option('title', 'Featured events');
+  $handler->override_option('block_description', 'Featured events');
   $handler->override_option('block_caching', -1);
 
   $views[$view->name] = $view;
@@ -14873,7 +14876,7 @@ if(user_access(\'create notice content\')) {
         'use_operator' => 0,
         'operator' => 'uid_op',
         'identifier' => 'uid',
-        'label' => 'User Name',
+        'label' => 'User name',
         'optional' => 1,
         'remember' => 0,
         'reduce' => 0,
@@ -14895,13 +14898,35 @@ if(user_access(\'create notice content\')) {
         'use_operator' => 0,
         'operator' => 'value_2_op',
         'identifier' => 'value_2',
-        'label' => 'Name',
+        'label' => 'First name',
         'optional' => 1,
         'remember' => 0,
       ),
       'case' => 0,
       'id' => 'value_2',
       'table' => 'profile_values_profile_name',
+      'field' => 'value',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'value_4' => array(
+      'operator' => 'contains',
+      'value' => '',
+      'group' => '0',
+      'exposed' => TRUE,
+      'expose' => array(
+        'use_operator' => 0,
+        'operator' => 'value_4_op',
+        'identifier' => 'value_4',
+        'label' => 'Last name',
+        'optional' => 1,
+        'remember' => 0,
+      ),
+      'case' => 0,
+      'id' => 'value_4',
+      'table' => 'profile_values_profile_last_name',
       'field' => 'value',
       'override' => array(
         'button' => 'Override',
@@ -14917,7 +14942,7 @@ if(user_access(\'create notice content\')) {
         'use_operator' => 0,
         'operator' => 'value_op',
         'identifier' => 'job_title',
-        'label' => 'Job Title',
+        'label' => 'Job title',
         'optional' => 1,
         'remember' => 0,
       ),
@@ -15008,7 +15033,7 @@ if(user_access(\'create notice content\')) {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Browse Users');
+  $handler->override_option('title', 'Browse users');
   $handler->override_option('use_ajax', TRUE);
   $handler->override_option('items_per_page', 16);
   $handler->override_option('use_pager', '1');
@@ -15513,7 +15538,7 @@ if(user_access(\'create notice content\')) {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Who\'s Online?');
+  $handler->override_option('title', 'Who\'s online?');
   $handler->override_option('empty', 'There are currently no online users');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
@@ -15536,7 +15561,7 @@ if(user_access(\'create notice content\')) {
     'hide_empty' => 0,
   ));
   $handler = $view->new_display('block', 'Block', 'block_1');
-  $handler->override_option('block_description', 'Who\'s Online? (Custom)');
+  $handler->override_option('block_description', 'Who\'s online? (Custom)');
   $handler->override_option('block_caching', -1);
 
   $views[$view->name] = $view;

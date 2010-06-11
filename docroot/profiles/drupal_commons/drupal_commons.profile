@@ -8,7 +8,7 @@ define('DRUPAL_COMMONS_TAG_NAME', 'Tags');
 define('DRUPAL_COMMONS_TAG_ID', 2);
 
 // Define the name of the user menu dropdown item
-define('DRUPAL_COMMONS_USER_MENU_DROPDOWN', 'My Stuff');
+define('DRUPAL_COMMONS_USER_MENU_DROPDOWN', 'My stuff');
 
 // Define the name of the community menu dropdown item
 define('DRUPAL_COMMONS_COMMUNITY_MENU_DROPDOWN', 'Community');
@@ -17,7 +17,11 @@ define('DRUPAL_COMMONS_COMMUNITY_MENU_DROPDOWN', 'Community');
 define('DRUPAL_COMMONS_EDITOR', 'ckeditor');
 
 // Define the allowed filtered html tags
-define('DRUPAL_COMMONS_FILTERED_HTML', '<a> <img> <br> <em> <p> <strong> <cite> <sub> <sup> <span> <blockquote> <code> <ul> <ol> <li> <dl> <dt> <dd> <pre> <address> <h2> <h3> <h4> <h5> <h6>');
+define('DRUPAL_COMMONS_FILTERED_HTML', 
+  '<a> <img> <br> <em> <p> <strong> <cite> <sub> <sup> <span> 
+  <blockquote> <code> <ul> <ol> <li> <dl> <dt> <dd> <pre> 
+  <address> <h2> <h3> <h4> <h5> <h6>'
+);
 
 // Define the "community manager" role name
 define('DRUPAL_COMMONS_MANAGER_ROLE', 'community manager');
@@ -71,7 +75,7 @@ function drupal_commons_profile_modules() {
     // Date
     'date_api', 'date_timezone', 'date',  'date_popup', 'date_tools',
      
-    // ImageAPI
+    // ImageAPI + ImageCache
     'imageapi', 'imagecache', 'imageapi_gd',  'imagecache_profiles', 'imagecache_ui',
     'imagecache_canvasactions',
     
@@ -110,6 +114,9 @@ function drupal_commons_profile_modules() {
     
     // Analytics
     'chart', 'quant',
+    
+    // Theme
+    //'skinr',
     
     // Commons
     'commons',
@@ -235,6 +242,7 @@ function drupal_commons_config_vocabulary() {
   
   // Link free-tagging vocabulary to node types
   $sql = "INSERT INTO {vocabulary_node_types} (vid, type) VALUES (%d, '%s')";
+  db_query($sql, DRUPAL_COMMONS_TAG_ID, 'page');
   db_query($sql, DRUPAL_COMMONS_TAG_ID, 'blog');
   db_query($sql, DRUPAL_COMMONS_TAG_ID, 'discussion');
   db_query($sql, DRUPAL_COMMONS_TAG_ID, 'document');
@@ -250,15 +258,15 @@ function drupal_commons_config_profile() {
   $sql = "INSERT INTO {profile_fields} (title, name, explanation, category, type, weight, required, register, visibility, autocomplete) VALUES ('%s', '%s', '%s', '%s', '%s', %d, %d, %d, %d, %d)";
   
   // Personal Information
-  db_query($sql, t('First Name'), 'profile_name', t('Enter your first name.'), t('Personal Information'), 'textfield', -10, 1, 1, 2, 0);
-  db_query($sql, t('Last Name'), 'profile_last_name', t('Enter your last name.'), t('Personal Information'), 'textfield', -9, 1, 1, 2, 0);
-  db_query($sql, t('Location'), 'profile_location', t('Where are you located?'), t('Personal Information'), 'textfield', -8, 0, 0, 2, 0);
-  db_query($sql, t('My Interests'), 'profile_interests', t('What are your interests, hobbies, etc?'), t('Personal Information'), 'textarea', -7, 0, 0, 2, 0);
-  db_query($sql, t('About Me'), 'profile_aboutme', t('Explain a little about yourself.'), t('Personal Information'), 'textarea', -6, 0, 0, 2, 0); 
+  db_query($sql, t('First name'), 'profile_name', t('Enter your first name.'), t('Personal information'), 'textfield', -10, 1, 1, 2, 0);
+  db_query($sql, t('Last name'), 'profile_last_name', t('Enter your last name.'), t('Personal information'), 'textfield', -9, 1, 1, 2, 0);
+  db_query($sql, t('Location'), 'profile_location', t('Where are you located?'), t('Personal information'), 'textfield', -8, 0, 0, 2, 0);
+  db_query($sql, t('My interests'), 'profile_interests', t('What are your interests, hobbies, etc?'), t('Personal information'), 'textarea', -7, 0, 0, 2, 0);
+  db_query($sql, t('About me'), 'profile_aboutme', t('Explain a little about yourself.'), t('Personal information'), 'textarea', -6, 0, 0, 2, 0); 
   
   // Work Information
-  db_query($sql, t('Job Title'), 'profile_job', t('What is your job title?'), t('Work Information'), 'textfield', -10, 0, 1, 2, 0);
-  db_query($sql, t('Organization'), 'profile_organization', t('Which organization or department are you a part of?'), t('Work Information'), 'textfield', -9, 0, 1, 2, 0);
+  db_query($sql, t('Job title'), 'profile_job', t('What is your job title?'), t('Work information'), 'textfield', -10, 0, 1, 2, 0);
+  db_query($sql, t('Organization'), 'profile_organization', t('Which organization or department are you a part of?'), t('Work information'), 'textfield', -9, 0, 1, 2, 0);
 }
 
 // Configure flag
@@ -290,13 +298,13 @@ function drupal_commons_config_menu() {
   // Childs of "Community" menu
   $links = array();
   $links[] = array('menu_name' => 'primary-links', 'weight' => 0, 'link_path' => 'groups', 'link_title' => t('Groups'), 'plid' => $parent['mlid']);
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 1, 'link_path' => 'content/blogs', 'link_title' => t('Blog Posts'), 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 1, 'link_path' => 'content/blogs', 'link_title' => t('Blog posts'), 'plid' => $parent['mlid']);
   $links[] = array('menu_name' => 'primary-links', 'weight' => 2, 'link_path' => 'content/documents', 'link_title' => t('Documents'), 'plid' => $parent['mlid']);
   $links[] = array('menu_name' => 'primary-links', 'weight' => 3, 'link_path' => 'content/discussions', 'link_title' => t('Discussions'), 'plid' => $parent['mlid']);
   $links[] = array('menu_name' => 'primary-links', 'weight' => 4, 'link_path' => 'content/wikis', 'link_title' => t('Wikis'), 'plid' => $parent['mlid']);
   $links[] = array('menu_name' => 'primary-links', 'weight' => 5, 'link_path' => 'content/calendar', 'link_title' => t('Calendar'), 'plid' => $parent['mlid']);
   $links[] = array('menu_name' => 'primary-links', 'weight' => 6, 'link_path' => 'users', 'link_title' => t('Members'), 'plid' => $parent['mlid']);
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 7, 'link_path' => 'analytics', 'link_title' => t('Site Analytics'), 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 7, 'link_path' => 'analytics', 'link_title' => t('Site analytics'), 'plid' => $parent['mlid']);
   
   foreach ($links as $link) {
     menu_link_save($link);
@@ -308,12 +316,12 @@ function drupal_commons_config_menu() {
   
   // Childs of "My Stuff" menu
   $links = array();
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 0, 'link_path' => 'user', 'link_title' => t('My Profile'), 'plid' => $parent['mlid']);
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 1, 'link_path' => 'og/my', 'link_title' => t('My Groups'), 'plid' => $parent['mlid']);
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 2, 'link_path' => 'group', 'link_title' => t('My Unread'), 'plid' => $parent['mlid']);
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 3, 'link_path' => 'bookmarks', 'link_title' => t('My Bookmarks'), 'plid' => $parent['mlid']);
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 4, 'link_path' => 'relationships', 'link_title' => t('My Friends'), 'plid' => $parent['mlid']);
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 5, 'link_path' => 'myuserpoints', 'link_title' => t('My Points'), 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 0, 'link_path' => 'user', 'link_title' => t('My profile'), 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 1, 'link_path' => 'og/my', 'link_title' => t('My groups'), 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 2, 'link_path' => 'group', 'link_title' => t('My unread'), 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 3, 'link_path' => 'bookmarks', 'link_title' => t('My bookmarks'), 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 4, 'link_path' => 'relationships', 'link_title' => t('My friends'), 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 5, 'link_path' => 'myuserpoints', 'link_title' => t('My points'), 'plid' => $parent['mlid']);
   
   foreach ($links as $link) {
     menu_link_save($link);
@@ -624,6 +632,7 @@ function drupal_commons_config_vars() {
   variable_set('site_frontpage', DRUPAL_COMMONS_FRONTPAGE);
   
   // Set a default point amount so userpoints works out-of-the-box
+  variable_set('userpoints_post_page', DRUPAL_COMMONS_POINTS_NODE);
   variable_set('userpoints_post_blog', DRUPAL_COMMONS_POINTS_NODE);
   variable_set('userpoints_post_poll', DRUPAL_COMMONS_POINTS_NODE);
   variable_set('userpoints_post_discussion', DRUPAL_COMMONS_POINTS_NODE);

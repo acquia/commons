@@ -138,6 +138,14 @@ function drupal_commons_import_permissions() {
     ),
   );
 
+  // Permission: create page content
+  $permissions[] = array(
+    'name' => 'create page content',
+    'roles' => array(
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
+    ),
+  );
+
   // Permission: create poll content
   $permissions[] = array(
     'name' => 'create poll content',
