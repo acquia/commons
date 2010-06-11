@@ -29,7 +29,7 @@ function quant_quants() {
     // Group Creation
     $quant = new stdClass;
     $quant->id = 'group_creation';
-    $quant->label = t('Group Creation');
+    $quant->label = t('Group creation');
     $quant->labelsum = TRUE; // Show the total amount of items in the chart title
     $quant->query = "SELECT n.created FROM {og} g INNER JOIN {node} n 
       ON g.nid = n.nid WHERE n.created >= %d 
@@ -43,7 +43,7 @@ function quant_quants() {
     // Group Joins
     $quant = new stdClass;
     $quant->id = 'group_joins';
-    $quant->label = t('Group Joins');
+    $quant->label = t('Group joins');
     $quant->labelsum = TRUE;
     $quant->table = 'og_uid'; // The table to grab items from
     $quant->field = 'created'; // Which table field holds the timestamp
@@ -55,7 +55,7 @@ function quant_quants() {
   // Content Creation
   $quant = new stdClass;
   $quant->id = 'content_creation';
-  $quant->label = t('Content Creation');
+  $quant->label = t('Content creation');
   $quant->labelsum = TRUE;
   $quant->table = 'node';
   $quant->field = 'created';
@@ -68,7 +68,7 @@ function quant_quants() {
   if (module_exists('comment')) {
     $quant = new stdClass;
     $quant->id = 'comment_creation';
-    $quant->label = t('Comment Creation');
+    $quant->label = t('Comment creation');
     $quant->labelsum = TRUE;
     $quant->table = 'comments';
     $quant->field = 'timestamp';
@@ -80,7 +80,7 @@ function quant_quants() {
   // Content Creation by Type
   $quant = new stdClass;
   $quant->id = 'node_creation_by_type';
-  $quant->label = t('Content Creation by Type');
+  $quant->label = t('Content creation by type');
   $quant->labelsum = TRUE;
   $quant->table = 'node';
   $quant->field = 'created';
@@ -93,7 +93,7 @@ function quant_quants() {
   // Aggregate Content Creation by Type
   $quant = new stdClass;
   $quant->id = 'node_creation_aggregate_by_type';
-  $quant->label = t('Aggregate Content Creation');
+  $quant->label = t('Aggregate content creation');
   $quant->labelsum = TRUE;
   $quant->table = 'node';
   $quant->field = 'created';
@@ -105,7 +105,7 @@ function quant_quants() {
   // User Creation
   $quant = new stdClass;
   $quant->id = 'user_creation';
-  $quant->label = t('User Creation');
+  $quant->label = t('User creation');
   $quant->labelsum = TRUE;
   $quant->table = 'users';
   $quant->field = 'created';
@@ -117,7 +117,7 @@ function quant_quants() {
   if (module_exists('shoutbox')) {
     $quant = new stdClass;
     $quant->id = 'user_shouts';
-    $quant->label = t('User Shouts');
+    $quant->label = t('User shouts');
     $quant->labelsum = TRUE;
     $quant->table = 'shoutbox';
     $quant->field = 'created';
@@ -130,7 +130,7 @@ function quant_quants() {
   if (module_exists('userpoints')) {
     $quant = new stdClass;
     $quant->id = 'user_points';
-    $quant->label = t('User Point Transactions');
+    $quant->label = t('User point transactions');
     $quant->labelsum = TRUE;
     $quant->table = 'userpoints_txn';
     $quant->field = 'time_stamp';
