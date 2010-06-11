@@ -134,7 +134,7 @@ function quant_process($quant, $period) {
 function quant_db_time($quant, $period) {
   // Generate if a query wasn't supplied
   if (!$quant->query) {
-    $query = "SELECT $quant->field FROM {$quant->table} 
+    $query = "SELECT $quant->field FROM {{$quant->table}}
       WHERE $quant->field >= %d 
       ORDER BY $quant->field DESC";
   }
@@ -160,7 +160,7 @@ function quant_db_count($quant, $period) {
   // Generate if a query wasn't supplied
   if (!$quant->query) {
     $query = "SELECT COUNT($quant->count), $quant->count 
-      FROM {$quant->table} 
+      FROM {{$quant->table}}
       WHERE $quant->field >= %d 
       GROUP BY $quant->count";
   }
