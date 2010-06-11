@@ -33,7 +33,7 @@
         </div>
         <div class="profile-info-box profile-name">
             <label>Name:</label>
-            <span><?php print ($account->profile_name ? $account->profile_name . ' ' $account->profile_last_name : '<em>Real name not provided</em>'); ?></span>
+            <span><?php print ($account->profile_name ? $account->profile_name . ' ' . $account->profile_last_name : '<em>Real name not provided</em>'); ?></span>
         </div>
         <div class="profile-info-box profile-job">
             <label>Job Title:</label>
