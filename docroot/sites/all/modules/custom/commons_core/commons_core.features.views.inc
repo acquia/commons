@@ -8726,7 +8726,7 @@ else {
       'style_options' => array(),
       'wildcard' => 'all',
       'wildcard_substitution' => 'All',
-      'title' => '%1\'s Groups',
+      'title' => '%1\'s groups',
       'breadcrumb' => '',
       'default_argument_type' => 'user',
       'default_argument' => '',
@@ -8741,6 +8741,7 @@ else {
       'validate_user_roles' => array(
         '2' => 0,
         '3' => 0,
+        '4' => 0,
       ),
       'relationship' => 'none',
       'default_options_div_prefix' => '',
@@ -8778,6 +8779,9 @@ else {
         'group' => 0,
       ),
       'validate_argument_php' => '',
+      'override' => array(
+        'button' => 'Override',
+      ),
     ),
   ));
   $handler->override_option('filters', array(
@@ -8822,7 +8826,7 @@ else {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'My Groups');
+  $handler->override_option('title', 'My groups');
   $handler->override_option('empty', 'The user has not joined any groups yet.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);

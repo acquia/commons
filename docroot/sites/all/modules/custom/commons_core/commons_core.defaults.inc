@@ -501,6 +501,11 @@ Featured',
       'progress_indicator' => 'bar',
       'max_filesize_per_file' => '',
       'max_filesize_per_node' => '',
+      'insert' => NULL,
+      'insert_styles' => NULL,
+      'insert_default' => NULL,
+      'insert_class' => NULL,
+      'insert_width' => NULL,
       'label' => 'Files',
       'weight' => '-2',
       'description' => '',
@@ -1005,6 +1010,11 @@ Featured',
         'fid' => '1',
       ),
       'use_default_image' => 1,
+      'insert' => NULL,
+      'insert_styles' => NULL,
+      'insert_default' => NULL,
+      'insert_class' => NULL,
+      'insert_width' => NULL,
       'label' => 'Image',
       'weight' => '5',
       'description' => 'Specify an image to act as the group icon or avatar.',
@@ -2889,7 +2899,7 @@ function _commons_core_default_page_manager_handlers() {
     $pane->access = array();
     $pane->configuration = array(
       'override_title' => 1,
-      'override_title_text' => 'Recent Activity',
+      'override_title_text' => 'Recent activity',
     );
     $pane->cache = array();
     $pane->style = array();
@@ -3481,6 +3491,30 @@ function _commons_core_rules_defaults() {
             ),
             '#weight' => 0,
           ),
+          '1' => array(
+            '#weight' => 0,
+            '#info' => array(
+              'label' => 'Content has type page',
+              'label callback' => FALSE,
+              'arguments' => array(
+                'node' => array(
+                  'type' => 'node',
+                  'label' => 'Content',
+                ),
+              ),
+              'module' => 'Node',
+            ),
+            '#name' => 'rules_condition_content_is_type',
+            '#settings' => array(
+              'type' => array(
+                'page' => 'page',
+              ),
+              '#argument map' => array(
+                'node' => 'node',
+              ),
+            ),
+            '#type' => 'condition',
+          ),
         ),
         '#actions' => array(
           '0' => array(
@@ -3490,7 +3524,7 @@ function _commons_core_rules_defaults() {
               'uid_param' => '[author:uid]',
               'uid_target_param' => '0',
               'nid_param' => '[node:nid]',
-              'nid_target_param' => '[node:og-id]',
+              'nid_target_param' => '',
               'message_id_param' => 'heartbeat_add_node',
               'variables_param' => '@username=|=[author:user-name-url]-|-@node_type=|=[node:type]-|-@node_title=|=[node:title-link]-|-@types=|=pages-|-',
               '#eval input' => array(
@@ -3504,9 +3538,6 @@ function _commons_core_rules_defaults() {
                   'variables_param' => array(
                     '0' => 'node',
                     '1' => 'author',
-                  ),
-                  'nid_target_param' => array(
-                    '0' => 'node',
                   ),
                 ),
               ),
@@ -3531,20 +3562,19 @@ function _commons_core_rules_defaults() {
       ),
       'commons_core_2' => array(
         '#type' => 'rule',
-        '#set' => 'event_og_become_co_admin',
+        '#set' => 'event_comment_publish',
+        '#label' => 'Heartbeat: When a user adds a comment',
+        '#active' => 0,
+        '#weight' => '0',
         '#categories' => array(
-          '0' => 'og_activity',
-          '1' => 'heartbeat',
+          '0' => 'heartbeat',
           'commons_core' => 'commons_core',
         ),
-        '#label' => 'User becomes co-admin of a group',
-        '#active' => 1,
-        '#weight' => '0',
         '#status' => 'default',
         '#conditions' => array(),
         '#actions' => array(
           '0' => array(
-            '#weight' => 1,
+            '#weight' => 0,
             '#info' => array(
               'label' => 'Logs user activity for single users',
               'eval input' => array(
@@ -3559,26 +3589,27 @@ function _commons_core_rules_defaults() {
             ),
             '#name' => 'heartbeat_rules_default_action',
             '#settings' => array(
-              'uid_param' => '[user:uid]',
-              'uid_target_param' => '0',
+              'uid_param' => '[comment_author:uid]',
+              'uid_target_param' => '[node_author:uid]',
               'nid_param' => '[node:nid]',
-              'nid_target_param' => '[node:og-id]',
-              'message_id_param' => 'og_become_co_admin',
-              'variables_param' => '@user=|=[user:user-name-url]-|-@group=|=[node:title-link]-|-',
+              'nid_target_param' => '0',
+              'message_id_param' => 'heartbeat_add_comment',
+              'variables_param' => '@username=|=[comment_author:user-name-url]-|-@title=|=[node:title-link]-|-@comment=|=[comment:comment-body-raw]-|-',
               '#eval input' => array(
                 'token_rules_input_evaluator' => array(
                   'uid_param' => array(
-                    '0' => 'user',
+                    '0' => 'comment_author',
+                  ),
+                  'uid_target_param' => array(
+                    '0' => 'node_author',
                   ),
                   'nid_param' => array(
                     '0' => 'node',
                   ),
-                  'nid_target_param' => array(
-                    '0' => 'node',
-                  ),
                   'variables_param' => array(
-                    '0' => 'node',
-                    '1' => 'user',
+                    '0' => 'comment',
+                    '1' => 'comment_author',
+                    '2' => 'node',
                   ),
                 ),
               ),
@@ -4631,6 +4662,65 @@ function _commons_core_rules_defaults() {
         ),
         '#version' => 6003,
       ),
+      'commons_core_20' => array(
+        '#type' => 'rule',
+        '#set' => 'event_og_become_co_admin',
+        '#categories' => array(
+          '0' => 'og_activity',
+          '1' => 'heartbeat',
+          'commons_core' => 'commons_core',
+        ),
+        '#label' => 'User becomes co-admin of a group',
+        '#active' => 0,
+        '#weight' => '0',
+        '#status' => 'default',
+        '#conditions' => array(),
+        '#actions' => array(
+          '0' => array(
+            '#weight' => 1,
+            '#info' => array(
+              'label' => 'Logs user activity for single users',
+              'eval input' => array(
+                '0' => 'uid_param',
+                '1' => 'uid_target_param',
+                '2' => 'nid_param',
+                '3' => 'nid_target_param',
+                '4' => 'message_id_param',
+                '5' => 'variables_param',
+              ),
+              'module' => 'heartbeat',
+            ),
+            '#name' => 'heartbeat_rules_default_action',
+            '#settings' => array(
+              'uid_param' => '[user:uid]',
+              'uid_target_param' => '0',
+              'nid_param' => '[node:nid]',
+              'nid_target_param' => '[node:og-id]',
+              'message_id_param' => 'og_become_co_admin',
+              'variables_param' => '@username=|=[user:user-name-url]-|-@group=|=[node:title-link]-|-',
+              '#eval input' => array(
+                'token_rules_input_evaluator' => array(
+                  'uid_param' => array(
+                    '0' => 'user',
+                  ),
+                  'nid_param' => array(
+                    '0' => 'node',
+                  ),
+                  'nid_target_param' => array(
+                    '0' => 'node',
+                  ),
+                  'variables_param' => array(
+                    '0' => 'node',
+                    '1' => 'user',
+                  ),
+                ),
+              ),
+            ),
+            '#type' => 'action',
+          ),
+        ),
+        '#version' => 6003,
+      ),
     ),
   );
 }
@@ -4967,6 +5057,28 @@ function _commons_core_strongarm() {
       ),
       'poll_messages' => 0,
     ),
+    'singleheartbeat' => array(
+      'name' => 'Single activity',
+      'class' => 'SingleHeartbeat',
+      'path' => 'includes/singleheartbeat.inc',
+      'module' => 'heartbeat',
+      'access' => TRUE,
+      'status' => 'default',
+      'messages_denied' => array(),
+      'display_filters' => 0,
+      'display_block_filters' => 0,
+      'filters' => array(),
+      'filters_cumul' => 0,
+      'settings' => array(
+        'block_items_max' => 10,
+        'block_show_pager' => 2,
+        'page_items_max' => 15,
+        'page_show_pager' => 1,
+        'page_pager_ajax' => 1,
+        'num_load_max' => 30,
+      ),
+      'poll_messages' => 0,
+    ),
     'connectedheartbeat' => array(
       'name' => 'Heartbeat relational activity',
       'class' => 'ConnectedHeartbeat',
@@ -5017,28 +5129,6 @@ function _commons_core_strongarm() {
       'path' => 'groupsactivity.inc',
       'module' => 'og_activity',
       'access' => NULL,
-      'status' => 'default',
-      'messages_denied' => array(),
-      'display_filters' => 0,
-      'display_block_filters' => 0,
-      'filters' => array(),
-      'filters_cumul' => 0,
-      'settings' => array(
-        'block_items_max' => 10,
-        'block_show_pager' => 2,
-        'page_items_max' => 15,
-        'page_show_pager' => 1,
-        'page_pager_ajax' => 1,
-        'num_load_max' => 30,
-      ),
-      'poll_messages' => 0,
-    ),
-    'singleheartbeat' => array(
-      'name' => 'Single activity',
-      'class' => 'SingleHeartbeat',
-      'path' => 'includes/singleheartbeat.inc',
-      'module' => 'heartbeat',
-      'access' => TRUE,
       'status' => 'default',
       'messages_denied' => array(),
       'display_filters' => 0,
@@ -5308,7 +5398,7 @@ function _commons_core_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'pathauto_node_page_pattern';
-  $strongarm->value = 'page/[title-raw]';
+  $strongarm->value = '';
 
   $export['pathauto_node_page_pattern'] = $strongarm;
   $strongarm = new stdClass;
