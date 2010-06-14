@@ -114,7 +114,7 @@ function heartbeat_features_revert($module = NULL) {
     $heartbeats = module_invoke($module, 'heartbeat_message_info');
 
     foreach ($heartbeats as $heartbeat) {
-      heartbeat_messages_revert($heartbeat);
+      heartbeat_messages_revert($heartbeat['message_id']);
     }
   }
 }
