@@ -106,6 +106,9 @@ function heartbeat_features_export_render($module = 'foo', $data) {
  * Implementation of hook_features_revert().
  */
 function heartbeat_features_revert($module = NULL) {
+  // Load heartbeat.admin.inc
+  require_once(drupal_get_path('module', 'heartbeat') . '/heartbeat.admin.inc');
+  
   // Get default heartbeats from feature
   if (module_hook($module, 'heartbeat_message_info')) {
     $heartbeats = module_invoke($module, 'heartbeat_message_info');
