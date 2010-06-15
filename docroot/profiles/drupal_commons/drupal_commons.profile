@@ -618,7 +618,7 @@ function drupal_commons_config_images() {
     VALUES (%d, '%s', '%s', '%s', %d, %d, %d)",
     1,
     'default-group.png',
-    file_directory_path() . '/imagecache/group_images/imagefield_default_images/default-group.png',
+    file_directory_path() . '/default-group.png',
     'image/png',
     filesize($group_image),
     1,
