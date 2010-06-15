@@ -2607,8 +2607,8 @@ function _commons_core_imagecache_default_presets() {
           'action' => 'imagecache_scale',
           'data' => array(
             'width' => '380',
-            'height' => '',
-            'upscale' => 1,
+            'height' => '90',
+            'upscale' => 0,
           ),
         ),
         '1' => array(
@@ -2644,9 +2644,9 @@ function _commons_core_imagecache_default_presets() {
           'module' => 'imagecache',
           'action' => 'imagecache_scale',
           'data' => array(
-            'width' => '',
+            'width' => '24',
             'height' => '24',
-            'upscale' => 0,
+            'upscale' => 1,
           ),
         ),
         '1' => array(
