@@ -30,7 +30,7 @@ define('DRUPAL_COMMONS_MANAGER_ROLE', 'community manager');
 define('DRUPAL_COMMONS_CONTENT_ROLE', 'content manager');
 
 // Define the default theme
-define('DRUPAL_COMMONS_THEME', 'linden');
+define('DRUPAL_COMMONS_THEME', 'acquia_commons');
 
 // Define the default frontpage
 define('DRUPAL_COMMONS_FRONTPAGE', 'home');
@@ -116,7 +116,7 @@ function drupal_commons_profile_modules() {
     'chart', 'quant',
     
     // Theme
-    //'skinr',
+    'skinr',
     
     // Commons
     'commons',
@@ -556,6 +556,9 @@ function drupal_commons_config_views() {
 function drupal_commons_config_theme() {
   // Disable garland
   db_query("UPDATE {system} SET status = 0 WHERE type = 'theme' and name = '%s'", 'garland');
+  
+  // Enable Fusion
+  db_query("UPDATE {system} SET status = 1 WHERE type = 'theme' and name = '%s'", 'fusion_core');
   
   // Enable Commons theme
   db_query("UPDATE {system} SET status = 1 WHERE type = 'theme' and name = '%s'", DRUPAL_COMMONS_THEME);

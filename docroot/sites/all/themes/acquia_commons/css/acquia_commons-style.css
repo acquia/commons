@@ -1,0 +1,1813 @@
+/* $Id: acquia_commons-style.css 7525 2010-06-16 15:19:54Z sheena $ */
+
+/* Basic Typography & Colors-------------------------------------------------------------- */
+
+/* Add general site styling here for typography and background */
+
+body {
+  font-size: 75%;
+
+
+/*also set in fusion_starter.info: settings[base-font-size] = font-size-12 */
+}
+
+/* Default link styles - separate a:visited for a different visited link style */
+
+a, 
+a:link,
+a:visited {
+  color: #6497c2;
+}
+
+/* Hover/active link styles. Don't forget :focus for accessibility */
+
+a:hover,
+a:focus,
+a:active {
+  color: #333;
+}
+
+h1 {
+  font-size: 2em;
+  font-weight: normal;
+  margin: 18px 0;
+}
+
+h2 {
+  font-size: 1.4em;
+  font-weight: bold;
+  margin: 18px 0;
+}
+
+h3 {
+  border-bottom: 1px solid #666;
+  font-weight: normal;
+  margin: 18px 0;
+}
+
+.date-heading h3 {
+  border-bottom: none;
+}
+
+h4 {
+  color: #6497c2;
+}
+
+/* Specific Typography-------------------------------------------------------------- */
+
+#site-name {
+  font-size: 300%;
+  line-height: 150%;
+}
+
+.footer-message {
+  font-size: 90%;
+}
+
+/* HTML Elements-------------------------------------------------------------- */
+
+body {
+  
+}
+
+/* Site Info-------------------------------------------------------------- */
+
+.header-site-info {
+  float: left;
+  width: auto;
+}
+
+/* Wrapper around logo, site name, and slogan */
+
+.header-site-info span {
+  display: block;
+}
+
+/* Add float here to put logo and site name side by side, also add margins as  needed */
+
+#logo {
+  float: left;
+  margin: 0 12px 0 0;
+  width: auto;
+}
+
+/* Link and hover styles for site name */
+
+#site-name {
+  margin-top: 14px;
+}
+
+#site-name a:link,
+#site-name a:visited,
+#site-name a:hover,
+#site-name a:active {
+  margin: 0;
+}
+
+/* Typography for site slogan */
+
+#slogan {
+  
+}
+
+/* Regions  Classes (.region-name) should always be used instead of IDs (#region-name) so  that Skinr styles can override them with a class later-------------------------------------------------------------- */
+
+/* All Regions-------------------------------------------------------------- */
+
+/* By default this wrapper is set to 100% width and centered -- override here to  narrow wrapper or align left or right */
+
+.page {
+  
+}
+
+/* The 0 values here remove padding and spacing at the bottom of the page.  Remove to add a gap at the very bottom of the page */
+
+.page-inner {
+  border: 0;
+  margin-bottom: 0;
+  padding: 10px 0 0 0;
+}
+
+/* Header Regions-------------------------------------------------------------- */
+
+/* Header Top region to the bottom of Header region */
+
+/* For full-width header background, add background image/color here */
+
+.header-group-wrapper {
+  
+}
+
+.header-group {
+  
+}
+
+/* Header Top region which sits above the header */
+
+/* Works well with inline login or inline menu block style */
+
+.header-top-wrapper {
+  
+}
+
+.header-top {
+  
+}
+
+/* Header Region which floats to the right of the site info */
+
+.header-region-inner {
+  
+}
+
+.header-region {
+  float: right;
+  margin-bottom: 0px;
+  padding-top: 12px;
+  width: auto;
+}
+
+/* Nav Group which sits below the header and site inf */
+
+.nav-group {
+  margin-bottom: 18px;
+  overflow: visible;
+}
+
+.nav-group-inner {
+  background-color: #888;
+  color: #fff;
+  overflow: visible;
+}
+
+/* Primary Menu   TODO: add default colours/-------------------------------------------------------------- */
+
+/* Add general styles for primary menu here, such as typography, borders, floats,  or spacing above/below */
+
+.primary-menu {
+  float: left;
+  margin: 0;
+  width: auto;
+}
+
+/* styles for Superfish primary menu */
+
+.primary-menu-inner ul.sf-menu {
+  
+}
+
+/* Link style for top level menu items, add padding here */
+
+.primary-menu-inner ul.sf-menu a,
+.primary-menu-inner ul.sf-menu a:visited {
+  background-color: transparent;
+  border-right: 1px solid #888;
+  color: #fff;
+  font-size: 1.2em;
+  font-weight: normal;
+  line-height: 1.4em;
+  padding: 6px 12px;
+}
+
+.primary-menu-inner ul.sf-menu a:hover,
+.primary-menu-inner ul.sf-menu a:active,
+.primary-menu-inner ul.sf-menu a:focus,
+.primary-menu-inner ul.sf-menu li.active-trail > a,
+.primary-menu-inner ul.sf-menu li.sfHover > a {
+  background-color: #ddd;
+  color: #464646;
+}
+
+/* These are the top level menu items, add border-right here for separators */
+
+.primary-menu-inner ul.sf-menu li {
+  
+}
+
+/* Add border-right: 0;
+ here to remove separator on last menu item */
+
+.primary-menu-inner ul.sf-menu li.last {
+  
+}
+
+/* Style for container of dropdown, add background or border */
+
+.primary-menu-inner ul.sf-menu ul {
+  background-color: #dcdcdc;
+}
+
+/* Style for individual dropdown menu items, add border-bottom for separators */
+
+.primary-menu-inner ul.sf-menu li li {
+  background-color: transparent;
+  font-size: .9em;
+}
+
+.primary-menu-inner ul.sf-menu li li a,
+.primary-menu-inner ul.sf-menu li li a:link,
+.primary-menu-inner ul.sf-menu li li a:visited {
+  border-bottom: 1px solid #bbb;
+  border-right: none;
+  color: #464646;
+  padding: 4px 8px 4px 18px;
+}
+
+.primary-menu-inner ul.sf-menu li li.first a {
+  border-top: 1px solid #bbb;
+}
+
+.primary-menu-inner ul.sf-menu li li a:hover,
+.primary-menu-inner ul.sf-menu li li.active-trail > a,
+.primary-menu-inner ul.sf-menu li li.sfHover > a {
+  background-color: #ccc;
+}
+
+.primary-menu-inner ul.sf-menu li li.last {
+  
+}
+
+.primary-menu-inner ul.sf-menu li li li {
+  
+}
+
+/* Style for hover of dropdown menu items (add background-color here) */
+
+.primary-menu-inner ul.sf-menu li ul li:hover,
+.primary-menu-inner ul.sf-menu li ul li.sfHover {
+  
+}
+
+/* Secondary menu-------------------------------------------------------------- */
+
+/* This menu usually appears in the header as a set of simple text links */
+
+.secondary-menu {
+  
+}
+
+/* Set general style for menu here -- background, alignment, etc. */
+
+.secondary-menu-inner ul.links {
+  
+}
+
+/* Add a border-right here for a separator */
+
+.secondary-menu-inner ul.links li {
+  
+}
+
+/* Add border-right: 0;
+ here to remove right separator on last menu item */
+
+.secondary-menu-inner ul.links li.last {
+  
+}
+
+/* Styles for links */
+
+.secondary-menu-inner ul.links li a:link,
+.secondary-menu-inner ul.links li a:visited {
+  padding: 3px;
+}
+
+.secondary-menu-inner ul.links li a:hover,
+.secondary-menu-inner ul.links li a:focus,
+.secondary-menu-inner ul.links li a.active {
+  
+}
+
+/* Header - Search-------------------------------------------------------------- */
+
+.search-box {
+  float: right;
+  margin: 0;
+  min-width: 220px;
+  padding: 6px 0;
+  width: auto;
+}
+
+.search-box-inner {
+  
+}
+
+.search-box-inner form#search-theme-form {
+  
+}
+
+.search-box-inner input#edit-search-theme-form-header {
+  background-color: #ccc;
+  border: 1px solid #6d6d6d;
+  display: block;
+  float: left;
+  font-size: 11px;
+  height: 14px;
+  line-height: 14px;
+  margin: 0;
+  min-width: 120px;
+  padding: 2px 4px;
+}
+
+.search-box-inner input#search_header {
+  background-color: #3a3a3a;
+  border: 1px solid #3a3a3a;
+  color: #fff;
+  display: block;
+  float: left;
+  font-family: Baskerville, georgia, serif;
+  font-size: 11px;
+  height: 20px;
+  line-height: 16px;
+  margin: 0;
+  padding: 2px 6px;
+  text-transform: uppercase;
+}
+
+/*  Preface Regions-------------------------------------------------------------- */
+
+/* The Preface Top region sits between the header and the Main Area (columns, sidebars, and main content).  The Preface Bottom region is inside the Main Area. */
+
+.preface-top-wrapper {
+  
+}
+
+.preface-top {
+  
+}
+
+.preface-top-inner {
+  
+}
+
+.preface-bottom {
+  
+}
+
+.preface-bottom-inner {
+  
+}
+
+/*  Main Area (content + sidebars + preface bottom + postscript top)-------------------------------------------------------------- */
+
+.main-wrapper {
+  
+}
+
+/* Sidebar Regions-------------------------------------------------------------- */
+
+/* Sidebar widths can be controlled through theme settings */
+
+.sidebar-first {
+  
+}
+
+.sidebar-last {
+  
+}
+
+/* Content Regions-------------------------------------------------------------- */
+
+.content-top {
+  
+}
+
+.content {
+  
+}
+
+.content-inner {
+  
+}
+
+.content-bottom {
+  
+}
+
+/* This region only appears on full node pages. It's useful for ads or other  content between the body of the node and its comments */
+
+.node-bottom {
+  
+}
+
+/*  Postscript & Footer Regions-------------------------------------------------------------- */
+
+.postscript-top {
+  
+}
+
+.postscript-top-inner {
+  
+}
+
+.postscript-bottom-wrapper {
+  
+}
+
+.postscript-bottom {
+  
+}
+
+.postscript-bottom-inner {
+  
+}
+
+.footer-wrapper {
+  background-color: #777;
+  color: #fff;
+  padding: 10px 0;
+}
+
+.footer {
+  
+}
+
+.footer-inner {
+  
+}
+
+.footer-message-wrapper {
+  
+}
+
+.footer-message {
+  
+}
+
+.footer-message-inner {
+  
+}
+
+.footer-message-text {
+  
+}
+
+/* Page titles/-------------------------------------------------------------- */
+
+/* Page and full node titles */
+
+h1.title {
+  color: #6091bf;
+  font-size: 2em;
+  font-weight: normal;
+  line-height: 1.2em;
+  margin: 28px 0;
+}
+
+/* Default node styles/-------------------------------------------------------------- */
+
+/* Change unpublished and preview colors for dark background themes */
+
+.node-unpublished {
+  background-color: #fff4f4;
+}
+
+.preview .node {
+  background-color: #ffffea;
+}
+
+/* Typography for node titles */
+
+h2.title {
+  
+}
+
+/* Colors and styles for linked node titles, ie. teaser listing at /node */
+
+h2.title a:link,
+h2.title a:visited {
+  
+}
+
+h2.title a:hover,
+h2.title a:focus,
+h2.title a:active {
+  
+}
+
+/* Separators and padding for node teasers */
+
+.teaser {
+  
+}
+
+/* Author/date info */
+
+.meta {
+  
+}
+
+.submitted {
+  
+}
+
+/* Links for nodes (taxonomy, commenting, read more, etc) */
+
+.node ul.links li {
+  border-right: 1px solid #ccc;
+  display: inline;
+  margin-right: 2px;
+  padding-right: 4px;
+}
+
+.node ul.links li.last {
+  border-right: none;
+}
+
+/* Only more/read more links */
+
+div.node .read-more a,
+div.node .more-link a {
+  
+}
+
+/* Drupal Messages/-------------------------------------------------------------- */
+
+/* General style for all errors/messages (border, padding, etc.) */
+
+div.content-help div.help {
+  margin-bottom: 0;
+}
+
+div.help p:first-child {
+  margin-top: 0;
+}
+
+div.help p:last-child {
+  margin-bottom: 0;
+}
+
+/* Status messages: green */
+
+div.content-messages-inner div.status {
+  border-width: 1px;
+}
+
+/* Warning messages: yellow */
+
+div.content-messages-inner div.warning {
+  border-width: 1px;
+}
+
+/* Error messages: red */
+
+div.content-messages-inner div.error {
+  background-color: #feebe5;
+  border: 1px solid #fe231a;
+  color: #cf1a12;
+}
+
+/* Help messages: blue */
+
+div.content-help-inner div.help {
+  background-color: #daebfd;
+  border: 1px solid #6497c2;
+}
+
+/* Error that appears when a required form field is not filled out */
+
+.form-item input.error,
+.form-item textarea.error,
+.form-item select.error {
+  border: 1px solid #aa1144;
+}
+
+/* "New" text and required form field asterisk (default = red) */
+
+.marker,
+.form-required {
+  color: #aa1144;
+}
+
+/* Default block title styles/-------------------------------------------------------------- */
+
+h2.block-title {
+  
+}
+
+/* Breadcrumbs-------------------------------------------------------------- */
+
+.breadcrumbs {
+  background-color: #fff;
+  border-bottom: 1px solid #dedede;
+  color: #333;
+  margin: 0;
+  padding: 4px 0 4px 12px;
+}
+
+.breadcrumb {
+  padding: 0;
+}
+
+.breadcrumbs a:link,
+.breadcrumbs a:visited {
+  font-size: 1em;
+  line-height: 1.2em;
+  margin: 0;
+  padding: 0;
+}
+
+/* Tab Menus   TODO: tab styles?/-------------------------------------------------------------- */
+
+#content-tabs {
+  background-color: transparent;
+  float: none;
+  margin: 0 0 22px;
+  padding: 0;
+}
+
+#content-tabs-inner {
+  margin: 0;
+}
+
+#content-tabs ul.primary,
+#content-tabs ul.secondary {
+  border-bottom: 2px solid #cbcbcb;
+  clear: both;
+  float: left;
+
+
+/* LTR */
+  margin: 0;
+  padding: 0 10px 0 0;
+  width: 100%;
+}
+
+#content-tabs ul.secondary {
+  border-bottom: 1px solid #555;
+  margin-top: 10px;
+  text-transform: lowercase;
+}
+
+#content-tabs ul.primary li,
+#content-tabs ul.secondary li {
+  border-style: none;
+  display: inline;
+  float: left;
+
+
+/* LTR */
+  font-size: .9em;
+  font-weight: normal;
+  list-style: none;
+  margin: 0 0px;
+  padding: 0;
+}
+
+#content-tabs ul.primary li a:link,
+#content-tabs ul.primary li a:visited {
+  -moz-border-radius: 4px;
+  -moz-border-top-left-radius: 4px;
+  -moz-border-top-right-radius: 4px;
+  -webkit-border-top-left-radius: 4px;
+  -webkit-border-top-right-radius: 4px;
+  background-color: #cbcbcb;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border: 1px solid #cbcbcb;
+  color: #000;
+  cursor: pointer;
+  float: left;
+
+
+/* LTR */
+  margin: 0 2px -3px 0;
+  padding: 2px 6px 5px 6px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+#content-tabs ul.primary li.first a:link,
+#content-tabs ul.primary li.first a:visited {
+  margin-left: 0;
+}
+
+#content-tabs ul.secondary li a:link,
+#content-tabs ul.secondary li a:visited {
+  background-color: transparent;
+  border: none;
+  color: #000;
+  float: left;
+
+
+/* LTR */
+  font-weight: bold;
+  margin: 0;
+  padding: 0 0 6px 0;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+#content-tabs ul.secondary li a:link,
+#content-tabs ul.secondary li a:visited {
+  color: #555;
+}
+
+#content-tabs ul.primary li a.active:link,
+#content-tabs ul.primary li a.active:visited {
+  background-color: #fff;
+  border-bottom: 0px;
+}
+
+#content-tabs ul.secondary li a.active:link,
+#content-tabs ul.secondary li a.active:visited {
+  border-bottom: 4px solid #555;
+  color: #777;
+  padding-bottom: 2px;
+}
+
+#content-tabs ul.primary li a:hover,
+#content-tabs ul.primary li a:focus {
+  background-color: #888;
+}
+
+#content-tabs ul.secondary li a:hover,
+#content-tabs ul.secondary li a:focus {
+  border-bottom: 4px solid #777;
+  color: #777;
+  padding-bottom: 2px;
+}
+
+/* Pagers-------------------------------------------------------------- */
+
+ul.pager {
+  
+}
+
+ul.pager li {
+  
+}
+
+ul.pager a,
+ul.pager li.pager-current {
+  border-color: #333;
+}
+
+ul.pager li.pager-current {
+  background-color: #777;
+  color: #fff;
+}
+
+ul.pager a:hover,
+ul.pager a:active,
+ul.pager a:focus {
+  background-color: #777;
+  border-color: #333;
+  color: #fff;
+}
+
+/* Forms/-------------------------------------------------------------- */
+
+/* Typography and backgrounds for all form buttons */
+
+form input.form-submit,
+form input.form-submit {
+  background-color: #5788c2;
+  border: 1px solid #868686;
+  color: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: normal;
+  height: 24px;
+  line-height: 24px;
+  margin: 2px;
+  padding: 0 8px;
+}
+
+/* Hover style for form buttons */
+
+form input.form-submit:hover,
+form input.form-submit.hover,
+form input.form-submit:focus {
+  
+}
+
+/* Typography, background, borders, padding for form fields */
+
+.form-item input,
+.form-item textarea {
+  background: #fff url(../images/input-bg.png) no-repeat 0 0;
+  border: 1px solid #868686;
+  font-size: 14px;
+  line-height: 1em;
+  padding: 2px 8px;
+}
+
+.form-item select {
+  
+}
+
+/* Remove backgrounds and border on radios and checkboxes */
+
+.form-item .form-radio,
+.form-item .form-checkbox {
+  background: none;
+  border: none !important;
+}
+
+/* Fieldset wrapper around groups of form elements -- add border here */
+
+fieldset {
+  
+}
+
+/* Typography and spacing for legend of fieldsets */
+
+fieldset legend {
+  
+}
+
+/* Link style for legend of fieldsets */
+
+fieldset legend,
+legend.collapse-processed,
+legend.collapse-processed a:link,
+legend.collapse-processed a:visited {
+  
+}
+
+/* Custom icons on (open) collapsible fieldsets */
+
+html.js fieldset.collapsible legend a:link,
+html.js fieldset.collapsible legend a:visited {
+  
+}
+
+/* Custom icons on (closed) collapsible fieldsets */
+
+html.js fieldset.collapsed legend a:link,
+html.js fieldset.collapsed legend a:visited {
+  
+}
+
+/* Tables-------------------------------------------------------------- */
+
+table {
+  
+}
+
+/* Body of tables */
+
+tbody {
+  border-top: 1px solid #ccc;
+}
+
+/* Header of tables */
+
+thead th,
+th {
+  border-bottom: 1px solid #ccc;
+}
+
+tbody th {
+  border-bottom: 1px solid #ccc;
+}
+
+/* Alternating row background styles */
+
+tr.even,
+tr.even td {
+  background-color: #fff;
+}
+
+tr.odd,
+tr.odd td {
+  background-color: #fff;
+}
+
+td.active {
+  
+}
+
+tr.drag td,
+tr.drag-previous td {
+  color: #000;
+}
+
+/* Maintenance Page/-------------------------------------------------------------- */
+
+/* Maintenance page tpl file in Fusion Core has simplified layout, but you can  also add specific styles, such as a background, just for your offline page */
+
+.in-maintenance {
+  
+}
+
+/*--------------------------------------------------------------*/
+
+/* Module styles/-------------------------------------------------------------- */
+
+/* Book/-------------------------------------------------------------- */
+
+.book-navigation .menu {
+  border-top: 1px solid #ccc;
+}
+
+.book-navigation .page-links {
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+}
+
+/* Comments/-------------------------------------------------------------- */
+
+/* Style for each individual comment */
+
+div.comment {
+  
+}
+
+/* Subject (title) of each comment */
+
+div.comment h3.title {
+  
+}
+
+/* comment info */
+
+.comment .comment-info {
+  background: transparent url(../images/shoutbox-bubble.png) no-repeat right 8px;
+  float: left;
+  position: relative;
+  width: 90px;
+  z-index: 10;
+}
+
+.comment .comment-info .submitted span {
+  display: block;
+  width: auto;
+}
+
+.comment .comment-content {
+  border: 1px solid #d6d6d6;
+  margin-left: 89px;
+  padding: 10px;
+  -moz-box-shadow: 1px 1px 3px #ddd;
+  -webkit-box-shadow: 1px 1px 3px #ddd;
+  box-shadow: 1px 1px 3px #ddd;
+  position: relative;
+  z-index: 1;
+}
+
+div.comments div.indented {
+  margin-left: 80px;
+}
+
+/* Links (edit, reply, delete) for each comment */
+
+div.comment div.links a,
+div.comment ul.links a {
+  
+}
+
+/* A special highlight style for a comment by the author of the node */
+
+.comments div.comment-by-author .comment-info img {
+  border: 2px solid #6497c2;
+}
+
+/* Comment signatures */
+
+.signature {
+  border-top: 1px solid #d6ddb9;
+}
+
+/* User avatars in comments */
+
+.comment-wrapper .picture img {
+  
+}
+
+/* Forum/-------------------------------------------------------------- */
+
+#forum .description {
+  
+}
+
+.forum-topic-navigation {
+  border-bottom: 1px solid #888;
+  border-top: 1px solid #888;
+}
+
+/* Poll/-------------------------------------------------------------- */
+
+div.poll div.bar {
+  background-color: #ddd;
+}
+
+div.poll div.bar div.foreground {
+  background-color: #999;
+}
+
+/* Profiles/-------------------------------------------------------------- */
+
+.profile .picture {
+  float: left;
+  margin: 0 20px 0 0;
+  width: 140px;
+}
+
+/* Styles for sub-headings on user profiles */
+
+.profile dt {
+  width: auto;
+}
+
+div.profile h3,
+div.profile dl {
+  margin-left: 160px;
+}
+
+div.profile h3 {
+  background-color: #eaeaea;
+  border: 1px solid #d8d8d8;
+  padding: 2px 6px;
+}
+
+/* Ubercart - catalog/-------------------------------------------------------------- */
+
+/* Horizontal list of subcategories in catalog */
+
+ul.uc-categories {
+  
+}
+
+.uc-categories li a {
+  font-weight: bold;
+  padding: 0 5px 0 3px;
+}
+
+/* Product and category names */
+
+.catalog-grid-title a:link,
+.catalog-grid-title a:visited,
+.category a:link,
+.category a:visited {
+  
+}
+
+.catalog-grid-title a:hover,
+.catalog-grid-title a:focus,
+.category a:hover,
+.category a:focus {
+  
+}
+
+/* Sell price in Ubercart catalog */
+
+.category-grid-products .catalog-grid-sell-price {
+  
+}
+
+/* Ubercart - add to cart buttons/-------------------------------------------------------------- */
+
+/* Add to cart buttons */
+
+input.node-add-to-cart,
+input.list-add-to-cart {
+  
+}
+
+/* Hover and focus styles, with .hover class added for IE6 support */
+
+input.node-add-to-cart:hover,
+input.node-add-to-cart.hover,
+input.node-add-to-cart:focus,
+input.list-add-to-cart:hover,
+input.list-add-to-cart.hover,
+input.list-add-to-cart:focus {
+  
+}
+
+/* Ubercart - product nodes/-------------------------------------------------------------- */
+
+#field-group {
+  
+}
+
+#price-group {
+  
+}
+
+/* Product images */
+
+.product-image a img {
+  
+}
+
+.product-image a:hover img,
+.product-image a:focus img {
+  
+}
+
+/* Display price on full product nodes */
+
+.full-node .product-group .uc-price-display {
+  
+}
+
+/* Product attributes on full nodes */
+
+.full-node .product-group .attributes {
+  
+}
+
+/* Ubercart - general / checkout/-------------------------------------------------------------- */
+
+/* For optional "Powered by Ubercart" footer message */
+
+#store-footer {
+  
+}
+
+#store-footer a:link,
+#store-footer a:visited {
+  
+}
+
+/* View cart/Checkout links in Ubercart cart block */
+
+.cart-block-summary-links ul.links li a {
+  
+}
+
+.cart-block-summary-links ul.links li.cart-block-checkout a:link,
+.cart-block-summary-links ul.links li.cart-block-checkout a:visited {
+  
+}
+
+/* Key checkout process buttons: Checkout, Continue, and Submit Order */
+
+#uc-cart-view-form #edit-checkout,
+#uc-cart-checkout-form #edit-continue,
+#uc-cart-checkout-review-form #edit-submit {
+  
+}
+
+/* Table on final order review page */
+
+.order-review-table {
+  
+}
+
+#cart-form-products table th {
+  border-bottom: 3px solid #dec2c3;
+}
+
+/* Block/Pane Styles */
+
+.panel-panel .block {
+  float: none;
+}
+
+.panel-panel .block-shoutbox {
+  float: none;
+}
+
+.panel-panel .block .inner,
+.panel-pane .inner {
+  border-top: 4px solid #ddd;
+}
+
+.panel-panel .block,
+.panel-pane {
+  margin-bottom: 18px;
+}
+
+.panel-panel .block h2.pane-title.panel-pane h2.pane-title {
+  font-weight: normal;
+  margin: 6px 0px;
+}
+
+.sidebar-last .block h2.block-title,
+.sidebar-first .block h2.block-title {
+  background: #efefef;
+  color: #000;
+  font-weight: normal;
+  line-height: 1.2em;
+  margin: 0px;
+  padding: 3px 8px;
+}
+
+.sidebar-last .block h2.block-title a,
+.sidebar-first .block h2.block-title a {
+  color: #000;
+}
+
+.sidebar-last .block .inner,
+.sidebar-first .block .inner {
+  border: 1px solid #dedede;
+}
+
+.sidebar-first .block .content,
+.sidebar-last .block .content {
+  padding: 10px;
+}
+
+/* Search Results/-------------------------------------------------------------- */
+
+dl.search-results .search-result {
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+}
+
+dl.search-results .search-result dt.title {
+  font-size: 1.2em;
+  margin-bottom: 4px;
+}
+
+dl.search-results .search-result dd {
+  margin-bottom: 0;
+}
+
+dl.search-results .search-result p.search-info {
+  margin-bottom: 0;
+}
+
+/* Skinr/-------------------------------------------------------------- */
+
+/* List Styles */
+
+.block .inner ul li,
+.block .inner ol li {
+  margin-bottom: 2px;
+}
+
+/*Decorative Bullet*/
+
+.commons-list-decorative-bullets .content ul {
+  margin-left: 0;
+}
+
+.commons-list-decorative-bullets .content ul li {
+  background: transparent url(../images/gray-arrow-right.png) no-repeat 0 4px;
+  list-style-image: none;
+  list-style: none;
+  margin: 0 0 8px 0;
+  padding: 0 0 0 22px;
+  text-indent: 0;
+}
+
+/* Color Styles */
+
+/* Gray & Light Blue */
+
+.commons-colors-grayblue a {
+  color: #6698c9;
+}
+
+panels-pane.commons-colors-grayblue .inner {
+  border-color: #ddd;
+}
+
+.commons-list-decorative-bullets.commons-colors-grayblue .content ul li {
+  background: transparent url(../images/gray-arrow-right.png) no-repeat 0 4px;
+}
+
+/* Orange & Dark Blue */
+
+.commons-colors-orangeblue a {
+  color: #3d489d;
+}
+
+panels-pane.commons-colors-orangeblue .inner {
+  border-color: #ee9753;
+}
+
+.sidebar-last .block.commons-colors-orangeblue .inner,
+.sidebar-first .block.commons-colors-orangeblue .inner {
+  border-color: #ee9753;
+}
+
+.sidebar-last .block.commons-colors-orangeblue  h2.block-title,
+.sidebar-first .block.commons-colors-orangeblue  h2.block-title {
+  background-color: #fec688;
+}
+
+.commons-list-decorative-bullets.commons-colors-orangeblue .content ul li {
+  background: transparent url(../images/orange-arrow-right.png) no-repeat 0 4px;
+}
+
+/* Dark Blue & Light Blue */
+
+.commons-colors-blueblue a {
+  color: #6698c9;
+}
+
+.panels-pane.commons-colors-blueblue .inner {
+  border-color: #3d489d;
+}
+
+.sidebar-last .block.commons-colors-blueblue .inner,
+.sidebar-first .block.commons-colors-blueblue .inner {
+  border-color: #23295c;
+}
+
+.sidebar-last .block.commons-colors-blueblue.commons-block-title-background h2.block-title,
+.sidebar-last .block.commons-colors-blueblue.commons-block-title-background h2.block-title a,
+.sidebar-first .block.commons-colors-blueblue.commons-block-title-background h2.block-title,
+.sidebar-first .block.commons-colors-blueblue.commons-block-title-background h2.block-title a {
+  background-color: #3d489d;
+  color: #fff;
+}
+
+.commons-list-decorative-bullets.commons-colors-blueblue .content ul li {
+  background: transparent url(../images/dkblue-arrow-right.png) no-repeat 0 4px;
+}
+
+/* Drupal Commons * Styling for Drupal Commons specific elements/-------------------------------------------------------------- */
+
+/*Shoutbox module*/
+
+.shoutbox-add-form {
+  margin: 0 0 10px 0;
+}
+
+.shoutbox-add-form:after,
+.shoutbox-admin-links:after,
+.shoutbox-msg:after {
+  clear: both;
+  content: ".";
+  display: block;
+  height: 0;
+  visibility: hidden;
+}
+
+.shoutbox-add-form input.form-text {
+  float: left;
+  font-size: 12px;
+  height: 18px;
+  line-height: 18px;
+  margin: 0;
+  padding: 2px 2%;
+  width: 79%;
+}
+
+.shoutbox-add-form input.form-submit {
+  float: left;
+  font-size: 12px;
+  height: 24px;
+  line-height: 18px;
+  margin: 0;
+  max-width: 90px;
+  padding: 2px 2%;
+  width: 14%;
+}
+
+.shoutbox-admin-links {
+  background-color: #f7f7f9;
+  border: 1px solid #d6d6d6;
+  margin-right: 4px;
+  margin-top: 0px;
+  padding: 2px 4px;
+  position: absolute;
+  right: 0;
+  z-index: 10;
+}
+
+.shoutbox-admin-links {
+  display: none;
+}
+
+.shoutbox-msg:hover .shoutbox-admin-links {
+  display: block;
+}
+
+.shoutbox-admin-links a {
+  cursor: pointer;
+}
+
+#shoutbox-posts .shoutbox-msg {
+  border: none;
+  clear: both;
+}
+
+.shoutbox-msg .shoutbox-post-info {
+  background: transparent url(../images/shoutbox-bubble.png) no-repeat right 10px;
+  display: block;
+  float: left;
+  padding-right: 22px;
+  position: relative;
+  width: 64px;
+  z-index: 10;
+}
+
+.shoutbox-msg .shoutbox-post-info span {
+  display: block;
+}
+
+.shoutbox-msg .shoutbox-post-info span.shoutbox-msg-time {
+  color: #000;
+  font-family: Arial Helvetica, sans-serif;
+  font-size: 9px;
+  font-style: normal;
+  line-height: 1em;
+  padding: 0px;
+}
+
+.shoutbox-msg .shout-message {
+  -moz-box-shadow: 1px 1px 3px #ddd;
+  -webkit-box-shadow: 1px 1px 3px #ddd;
+  border: 1px solid #d6d6d6;
+  box-shadow: 1px 1px 3px #ddd;
+  display: block;
+  margin-left: 84px;
+  padding: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.shoutbox-all-shouts {
+  font-size: 1em;
+  font-weight: bold;
+  margin: 8px 0 0 0;
+  text-align: right;
+}
+
+/* Group Info */
+
+.group-attributes.fieldgroup .content {
+  padding: 0;
+}
+
+.group-attributes .field-field-group-image img.imagecache-group_images {
+  float: none;
+  height: auto;
+  text-align: left;
+  width: 100%;
+}
+
+.og-mission p:first-child {
+  font-weight: bold;
+}
+
+/* Calendars */
+
+.calendar-calendar div.date-nav {
+  background: transparent;
+  border: none;
+  margin: 0 0 10px 0;
+}
+
+.calendar-calendar div.date-nav div.date-prev {
+  text-align: right;
+}
+
+.calendar-calendar div.date-nav div.date-next {
+  text-align: left;
+}
+
+.calendar-calendar .month-view table {
+  background: transparent;
+  border: none;
+}
+
+/* views pagers */
+
+.view .item-list ul.pager {
+  margin-top: 10px;
+}
+
+/*views exposed widget*/
+
+.views-exposed-widgets {
+  background-color: #f8f8f8;
+  margin-bottom: 18px;
+  margin: 18px 0;
+  padding: 6px;
+}
+
+.views-exposed-widget label {
+  display: block;
+  padding: 2px 6px;
+}
+
+.views-exposed-widget .form-item,
+.views-exposed-widget .views-widget {
+  margin: 0;
+}
+
+.views-exposed-widget .form-item input {
+  width: 90%;
+;
+}
+
+/* views calendar widgets */
+
+.view-content-global-calendar .views-exposed-widget {
+  display: block;
+  float: left;
+  margin: 0 2% 0 0;
+  padding: 0;
+  width: 23%;
+}
+
+.view-content-global-calendar .views-exposed-widget input,
+.view-content-global-calendar .views-exposed-widget select {
+  width: 90%;
+}
+
+.view-content-global-calendar .views-exposed-widget input.form-submit {
+  width: 60%;
+}
+
+/* global content views */
+
+.view-content-global-blogs .views-exposed-widget,
+.view-content-global-documents .views-exposed-widget,
+.view-content-global-discussions .views-exposed-widget,
+.view-content-global-wikis .views-exposed-widget {
+  margin-right: 1%;
+  width: 17%;
+}
+
+.view-content-global-blogs .views-exposed-widget input,
+.view-content-global-blogs .views-exposed-widget select..view-content-global-documents .views-exposed-widget input,
+.view-content-global-documents .views-exposed-widget select,
+.view-content-global-discussions .views-exposed-widget input,
+.view-content-global-discussions .views-exposed-widget select,
+.view-content-global-wikis .views-exposed-widget input,
+.view-content-global-wikis .views-exposed-widget select {
+  width: 90%;
+}
+
+/*user directory view*/
+
+.view-user-directory .views-exposed-widget {
+  display: block;
+  float: left;
+  margin: 0 1% 0 0;
+  padding: 0;
+  width: 13%;
+}
+
+.view-user-directory .views-exposed-widget input.form-submit {
+  width: 80%;
+}
+
+/*OG content tracker view */
+
+.view-og-content-tracker .views-exposed-widget {
+  margin-right: 2%;
+  padding: 0;
+  width: 18%;
+}
+
+.view-og-content-tracker .views-exposed-widget select {
+  width: 100%;
+}
+
+.view-og-content-tracker .views-exposed-widget input.form-submit {
+  width: 80%;
+}
+
+.view-og-content-tracker table tr td.views-field-type span.node-type {
+  display: block;
+  height: 18px;
+  text-indent: -9999px;
+  width: 18px;
+}
+
+.view-og-content-tracker table tr td.views-field-type span.blog {
+  background: transparent url(../images/icons/blog-node.png) no-repeat center center;
+}
+
+.view-og-content-tracker table tr td.views-field-type span.event {
+  background: transparent url(../images/icons/event-node.png) no-repeat center center;
+}
+
+.view-og-content-tracker table tr td.views-field-type span.wiki {
+  background: transparent url(../images/icons/wiki-node.png) no-repeat center center;
+}
+
+.view-og-content-tracker table tr td.views-field-type span.document {
+  background: transparent url(../images/icons/document-node.png) no-repeat center center;
+}
+
+.view-og-content-tracker table tr td.views-field-type span.discussion {
+  background: transparent url(../images/icons/forum-node.png) no-repeat center center;
+}
+
+.view-og-content-tracker table tr td.views-field-type span.poll {
+  background: transparent url(../images/icons/poll-node.png) no-repeat center center;
+}
+
+.view-og-content-tracker table tr td.views-field-name {
+  padding-right: 10px;
+  text-align: right;
+}
+
+/* global blog posts view*/
+
+.view-content-global-blogs span.title,
+.view-content-global-documents span.title,
+.view-content-global-discussions span.title,
+.view-content-global-wikis span.title {
+  padding-right: 10px;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.view-content-global-blogs span.title,
+.view-content-global-blogs span.posted-date,
+.view-content-global-discussions span.title,
+.view-content-global-discussions span.posted-date,
+.view-content-global-wikis span.title,
+.view-content-global-wikis span.posted-date {
+  white-space: nowrap;
+}
+
+.view-content-global-blogs span.replies,
+.view-content-global-blogs span.tags,
+.view-content-global-blogs span.updated-date,
+.view-content-global-documents span.replies,
+.view-content-global-documents span.tags,
+.view-content-global-documents span.updated-date,
+.view-content-global-discussions span.replies,
+.view-content-global-discussions span.tags,
+.view-content-global-discussions span.updated-date,
+.view-content-global-wikis span.replies,
+.view-content-global-wikis span.tags,
+.view-content-global-wikis span.updated-date {
+  display: block;
+  font-size: 11px;
+}
+
+.view-content-global-blogs span.updated-date,
+.view-content-global-documents span.updated-date,
+.view-content-global-discussions span.updated-date,
+.view-content-global-wikis span.updated-date {
+  font-style: italic;
+}
+
+.view-content-global-documents .views-field-field-file-fid .filefield-file,
+.view-content-global-documents .views-field-field-file-fid .filefield-file a {
+  margin-right: 10px;
+  white-space: nowrap;
+}
+
+/* User Meta - logout/account links in header w/ profile pic */
+
+.view-user-meta {
+  float: right;
+  width: 180px;
+}
+
+.view-user-meta .views-field-name span {
+  display: block;
+  font-size: 1.1em;
+  font-style: italic;
+  line-height: 1.2em;
+  text-align: right;
+}
+
+.view-user-meta .views-field-name span.username a {
+  color: #69c;
+  font-weight: bold;
+}
+
+.view-user-meta .views-field-name span.full-name {
+  font-size: .9em;
+  font-style: normal;
+}
+
+.view-user-meta .views-field-picture {
+  float: right;
+  margin: 0 0 2px 12px;
+}
+
+.view-user-meta .views-field-nothing,
+.view-user-meta .views-field-nothing-1 {
+  float: right;
+  margin-bottom: 2px;
+  margin-top: 2px;
+  padding: 0;
+}
+
+.view-user-meta .views-field-nothing a,
+.view-user-meta .views-field-nothing-1 a {
+  font-size: 11px;
+  line-height: 13px;
+  padding: 0;
+}
+
+.view-user-meta .views-field-nothing {
+  border-left: 1px solid #666;
+  clear: both;
+  margin-left: 8px;
+  padding-left: 8px;
+}
+
+.view-user-meta .views-field-name {
+  font-size: .9em;
+  line-height: 1em;
+}
+
+.view-user-meta .views-field-name a {
+  color: #333;
+}
+
+.view-user-meta .views-field-nothing {
+  margin-right: 6px;
+  padding-right: 6px;
+}
+
+.view-user-meta .views-field-points {
+  clear: both;
+  text-align: right;
+}
+
+.view-user-meta .views-row span.views-field-picture {
+  display: block;
+  float: right;
+}
+
+/* Heartbeat Module */
+
+.heartbeat-message-block .beat-item .heartbeat-buttons {
+  display: none;
+}
+
+.heartbeat-message-block .beat-item:hover .heartbeat-buttons {
+  background-color: #eee;
+  display: block;
+  position: absolute;
+}
+
+.heartbeat-message-block .beat-item:after {
+  clear: both;
+  content: ".";
+  display: block;
+  height: 0;
+  visibility: hidden;
+}
+
+.heartbeat-message-block .beat-item .beat-item-info {
+  float: left;
+  padding-right: 10px;
+  width: 50px;
+}
+
+.heartbeat-message-block .beat-item .beat-item-info a {
+  color: #000;
+  font-family: Arial Helvetica, sans-serif;
+  font-size: 9px;
+  font-style: normal;
+  line-height: 1em;
+}
+
+.heartbeat-message-block .beat-item .beat-item-info img {
+  display: block;
+}
+
+.heartbeat-older-messages {
+  font-size: 1em;
+  font-weight: bold;
+  margin: 0;
+  text-align: right;
+}
+
+div.beat-item blockquote {
+  background-position: 0 -16px;
+  margin: 0 0 0 0px;
+  padding: 0 0 0 32px;
+}
