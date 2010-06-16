@@ -798,6 +798,24 @@ function drupal_commons_import_permissions() {
       '0' => 'authenticated user',
     ),
   );
+  
+  // Permission: view imagecache content_image_primary
+  $permissions[] = array(
+    'name' => 'view imagecache content_image_primary',
+    'roles' => array(
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
+    ),
+  );
+  
+  // Permission: view imagecache content_image_secondary
+  $permissions[] = array(
+    'name' => 'view imagecache content_image_secondary',
+    'roles' => array(
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
+    ),
+  );
 
   // Permission: view imagecache group_images
   $permissions[] = array(
@@ -811,6 +829,15 @@ function drupal_commons_import_permissions() {
   // Permission: view imagecache group_images_thumb
   $permissions[] = array(
     'name' => 'view imagecache group_images_thumb',
+    'roles' => array(
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
+    ),
+  );
+  
+  // Permission: view imagecache member_list_image
+  $permissions[] = array(
+    'name' => 'view imagecache member_list_image',
     'roles' => array(
       '0' => 'anonymous user',
       '1' => 'authenticated user',
