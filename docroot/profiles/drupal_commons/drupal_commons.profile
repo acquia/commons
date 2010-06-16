@@ -292,7 +292,7 @@ function drupal_commons_config_menu() {
    */
   
   // Create "Community" drop down first, so we can fetch the mlid
-  $parent = array('menu_name' => 'primary-links', 'weight' => 3, 'link_path' => 'dashboard', 'link_title' => t(DRUPAL_COMMONS_COMMUNITY_MENU_DROPDOWN), 'expanded' => 1);
+  $parent = array('menu_name' => 'primary-links', 'weight' => 3, 'link_path' => 'groups', 'link_title' => t(DRUPAL_COMMONS_COMMUNITY_MENU_DROPDOWN), 'expanded' => 1);
   menu_link_save($parent);
   
   // Childs of "Community" menu

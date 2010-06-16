@@ -409,6 +409,14 @@ function drupal_commons_import_permissions() {
       '0' => DRUPAL_COMMONS_MANAGER_ROLE,
     ),
   );
+  
+  // Permission: edit field_content_images
+  $permissions[] = array(
+    'name' => 'edit field_content_images',
+    'roles' => array(
+      '0' => 'authenticated user',
+    ),
+  );
 
   // Permission: edit field_date
   $permissions[] = array(
@@ -703,6 +711,14 @@ function drupal_commons_import_permissions() {
     'name' => 'view analytics page',
     'roles' => array(
       '0' => DRUPAL_COMMONS_MANAGER_ROLE,
+    ),
+  );
+  
+  // Permission: view field_content_images
+  $permissions[] = array(
+    'name' => 'view field_content_images',
+    'roles' => array(
+      '0' => 'authenticated user',
     ),
   );
 
