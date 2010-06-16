@@ -107,6 +107,10 @@ function commons_block($op = 'list', $delta = 0, $edit = array()) {
       'info' => t('User statistics'),
       'cache' => BLOCK_CACHE_GLOBAL,
     );
+    $blocks[1] = array(
+      'info' => t('Jumpstart your community!'),
+      'cache' => BLOCK_CACHE_GLOBAL,
+    );
 
     return $blocks;
   }
@@ -117,7 +121,11 @@ function commons_block($op = 'list', $delta = 0, $edit = array()) {
           'subject' => t('User statistics'),
           'content' => _commons_user_stats_block()
         );
-        
+      case 1:
+        $block = array(
+          'subject' => t('Jumpstart your community!'),
+          'content' => _commons_jumpstart_community_block()
+        );
         break;
     }
     return $block;
@@ -137,6 +145,11 @@ function _commons_user_stats_block() {
   $data[] = t('%members', array('%members' => format_plural($total, '1 recently joined member', '@count recently joined members')));
   
   return theme('commons_user_stats_block', $data);
+}
+
+// Display "jumpstart" block
+function _commons_jumpstart_community_block() {
+  return l('View', 'groups') . ', or ' . l('create', 'node/add/group') . ' new <strong>groups</strong> to start creating your community!';
 }
 
 /*
