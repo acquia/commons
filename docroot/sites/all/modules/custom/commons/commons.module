@@ -377,24 +377,6 @@ function commons_form_tagging_admin_settings_alter(&$form, &$form_state) {
   );
 }
 
-// POPUPS
-
-function commons_popups() {
-  return array(
-    '*' => array(
-      // Group subscribe links
-      'a[href^=/og/subscribe/]',
-    ),
-    'node/*/aggregator' => array(
-      // Add an RSS feed
-      'a[href*=aggregator/add]',
-    ),
-    'og/manage/*' => array(
-      'a[href^=/og/unsubscribe/]',
-    ),
-  );
-}
-
 // THEME
 
 /*
