@@ -640,7 +640,7 @@ function _commons_core_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Blog Posts');
-  $handler->override_option('header', '<div class="addnew"><?php print l(\'Add a New Blog Post\', \'node/add/blog\'); ?></div>');
+  $handler->override_option('header', '<div class="addnew"><?php print l(t(\'Add a new blog post\'), \'node/add/blog\'); ?></div>');
   $handler->override_option('header_format', '3');
   $handler->override_option('header_empty', 1);
   $handler->override_option('empty', 'No blog posts have been added yet.');
@@ -980,7 +980,7 @@ function _commons_core_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Calendar');
-  $handler->override_option('header', '<div class="addnew"><?php print l(\'Add a new event\', \'node/add/event\'); ?></div>');
+  $handler->override_option('header', '<div class="addnew"><?php print l(t(\'Add a new event\'), \'node/add/event\'); ?></div>');
   $handler->override_option('header_format', '3');
   $handler->override_option('header_empty', 1);
   $handler->override_option('items_per_page', 0);
@@ -1683,7 +1683,7 @@ function _commons_core_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Discussions');
-  $handler->override_option('header', '<div class="addnew"><?php print l(\'Add a New Discussion\', \'node/add/discussion\'); ?></div>');
+  $handler->override_option('header', '<div class="addnew"><?php print l(t(\'Add a new discussion\'), \'node/add/discussion\'); ?></div>');
   $handler->override_option('header_format', '3');
   $handler->override_option('header_empty', 1);
   $handler->override_option('empty', 'No discussions have been added yet.');
@@ -2296,7 +2296,7 @@ function _commons_core_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Documents');
-  $handler->override_option('header', '<div class="addnew"><?php print l(\'Add a New Document\', \'node/add/document\'); ?></div>');
+  $handler->override_option('header', '<div class="addnew"><?php print l(t(\'Add a new document\'), \'node/add/document\'); ?></div>');
   $handler->override_option('header_format', '3');
   $handler->override_option('header_empty', 1);
   $handler->override_option('empty', 'No wikis have been added yet.');
@@ -2870,7 +2870,7 @@ function _commons_core_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Wiki Posts');
-  $handler->override_option('header', '<div class="addnew"><?php print l(\'Add a New Wiki\', \'node/add/wiki\'); ?></div>');
+  $handler->override_option('header', '<div class="addnew"><?php print l(t(\'Add a new wiki\'), \'node/add/wiki\'); ?></div>');
   $handler->override_option('header_format', '3');
   $handler->override_option('header_empty', 1);
   $handler->override_option('empty', 'No wikis have been added yet.');
@@ -4065,7 +4065,7 @@ function _commons_core_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Groups');
-  $handler->override_option('header', '<div class="addnew"><?php print l(\'Add a new group\', \'node/add/group\'); ?></div>');
+  $handler->override_option('header', '<div class="addnew"><?php print l(t(\'Add a new group\'), \'node/add/group\'); ?></div>');
   $handler->override_option('header_format', '3');
   $handler->override_option('header_empty', 1);
   $handler->override_option('empty', 'There are currently no groups');
@@ -4501,7 +4501,7 @@ function _commons_core_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Calendar');
-  $handler->override_option('header', '<div class="addnew"<?php print l(\'Add a new event\', \'node/add/event\', array(\'query\' => \'gids[]=\' . arg(1))); ?></div>');
+  $handler->override_option('header', '<div class="addnew"<?php print l(t(\'Add a new event\'), \'node/add/event\', array(\'query\' => \'gids[]=\' . arg(1))); ?></div>');
   $handler->override_option('header_format', '3');
   $handler->override_option('header_empty', 1);
   $handler->override_option('items_per_page', 0);
@@ -7490,7 +7490,7 @@ function _commons_core_views_default_views() {
     'hide_empty' => 0,
   ));
   $handler = $view->new_display('page', 'Page', 'page');
-  $handler->override_option('header', '<div class="addnew"><?php print l(\'Add a new group\', \'node/add/group\'); ?></div>');
+  $handler->override_option('header', '<div class="addnew"><?php print l(t(\'Add a new group\'), \'node/add/group\'); ?></div>');
   $handler->override_option('header_format', '3');
   $handler->override_option('header_empty', 1);
   $handler->override_option('use_ajax', TRUE);
@@ -8074,7 +8074,7 @@ function _commons_core_views_default_views() {
   $handler->override_option('header', '<div class="addnew">
 <?php 
 if (og_is_group_member(arg(1))) {
-  print l(\'Add a New Poll\', \'node/add/poll\', array(\'query\' => \'gids[]=\' . arg(1))); 
+  print l(t(\'Add a new poll\'), \'node/add/poll\', array(\'query\' => \'gids[]=\' . arg(1))); 
 }
 else {
   print t(\'You must be a member of this group to add items.\');
@@ -9068,7 +9068,7 @@ else {
   $handler->override_option('header', '<div class="addnew">
 <?php 
 if (og_is_group_member(arg(1))) {
-  print l(\'Add a new blog post\', \'node/add/blog\', array(\'query\' => \'gids[]=\' . arg(1))); 
+  print l(t(\'Add a new blog post\'), \'node/add/blog\', array(\'query\' => \'gids[]=\' . arg(1))); 
 }
 else {
   print t(\'You must be a member of this group to add items.\');
@@ -9681,7 +9681,7 @@ else {
   $handler->override_option('header', '<div class="addnew">
 <?php 
 if (og_is_group_member(arg(1))) {
-  print l(\'Add a new discussion\', \'node/add/discussion\', array(\'query\' => \'gids[]=\' . arg(1))); 
+  print l(t(\'Add a new discussion\'), \'node/add/discussion\', array(\'query\' => \'gids[]=\' . arg(1))); 
 }
 else {
   print t(\'You must be a member of this group to add items.\');
@@ -10332,7 +10332,7 @@ else {
   $handler->override_option('header', '<div class="addnew">
 <?php 
 if (og_is_group_member(arg(1))) {
-  print l(\'Add a new document\', \'node/add/document\', array(\'query\' => \'gids[]=\' . arg(1))); 
+  print l(t(\'Add a new document\'), \'node/add/document\', array(\'query\' => \'gids[]=\' . arg(1))); 
 }
 else {
   print t(\'You must be a member of this group to add items.\');
@@ -10942,7 +10942,7 @@ else {
   $handler->override_option('header', '<div class="addnew">
 <?php 
 if (og_is_group_member(arg(1))) {
-  print l(\'Add a new wiki\', \'node/add/wiki\', array(\'query\' => \'gids[]=\' . arg(1))); 
+  print l(t(\'Add a new wiki\'), \'node/add/wiki\', array(\'query\' => \'gids[]=\' . arg(1))); 
 }
 else {
   print t(\'You must be a member of this group to add items.\');
@@ -11323,7 +11323,7 @@ else {
   $handler->override_option('footer', '<?php
   $group = og_get_group_context();
   if ($group->nid) {
-    print l(\'View events on calendar\', \'node/\' . $group->nid . \'/content/calendar\');
+    print l(t(\'View events on calendar\'), \'node/\' . $group->nid . \'/content/calendar\');
   }
 ?>');
   $handler->override_option('footer_format', '3');
@@ -13414,7 +13414,7 @@ else {
   $handler->override_option('title', 'Latest notices');
   $handler->override_option('header', '<?php
 if(user_access(\'create notice content\')) {
-  print \'<div class="addnew">\' . l(\'Add a notice\', \'node/add/notice\') . \'</div>\';
+  print \'<div class="addnew">\' . l(t(\'Add a notice\'), \'node/add/notice\') . \'</div>\';
 }
 ?>');
   $handler->override_option('header_format', '3');
