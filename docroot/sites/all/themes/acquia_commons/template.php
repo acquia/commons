@@ -1,5 +1,15 @@
 <?php
-// $Id: template.php 7525 2010-06-16 15:19:54Z sheena $
+// $Id: template.php 7533 2010-06-16 22:40:49Z sheena $
+
+/**
+ *  theme_breadcrumb()
+ */
+
+function acquia_commons_breadcrumb($breadcrumb) {
+  if (!empty($breadcrumb)) {
+    return '<div class="breadcrumb">'. implode(' > ', $breadcrumb) .'</div>';
+  }
+}
 
 /**
  * Comment preprocessing
@@ -26,6 +36,21 @@ function acquia_commons_preprocess_comment(&$vars) {
   $submitted_by = '<span class="comment-name">'.  theme('username', $vars['comment']) .'</span>';
   $submitted_by .= '<span class="comment-date">'.  time_ago($vars['comment']->timestamp).' '.t('ago').'</span>';     // Format date as small, medium, or large
   $vars['submitted'] = $submitted_by;
+}
+
+/**
+*  Profile preprocessing
+**/
+
+function acquia_commons_preprocess_user_profile_item(&$vars) {
+ 
+ //separate userpoints value from the edit links
+ if($vars['title'] == 'Points') { 
+ $userpoints = explode(' - ', $vars['value']);
+  $vars['value'] = '<span class="points">'.$userpoints[0].'</span><span    class="edit-links">'.$userpoints[1].'</span>';
+  unset($vars['title']);
+  }
+  
 }
 
 /**

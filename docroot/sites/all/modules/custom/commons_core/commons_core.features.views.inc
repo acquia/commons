@@ -13787,8 +13787,8 @@ if(user_access(\'create notice content\')) {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Popular tags');
-  $handler->override_option('footer', '<div style="padding-top:8px;"><?php print l(t(\'View more\'), \'tagadelic\'); ?></div>');
+  $handler->override_option('title', 'Popular Tags');
+  $handler->override_option('footer', '<div><?php print l(t(\'View more\'), \'tagadelic\'); ?></div>');
   $handler->override_option('footer_format', '3');
   $handler->override_option('footer_empty', 0);
   $handler->override_option('empty', 'No tags have been added yet.');
@@ -13802,12 +13802,13 @@ if(user_access(\'create notice content\')) {
     'vocab' => '',
   ));
   $handler = $view->new_display('block', 'Block', 'block_1');
-  $handler->override_option('block_description', 'Popular tags');
+  $handler->override_option('block_description', 'Popular Tags');
   $handler->override_option('block_caching', -1);
 
   $views[$view->name] = $view;
-
+  
   // Exported view: upcoming_events
+  
   $view = new view;
   $view->name = 'upcoming_events';
   $view->description = 'Upcoming events';
@@ -13995,8 +13996,8 @@ if(user_access(\'create notice content\')) {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Upcoming events');
-  $handler->override_option('footer', '<div style="padding-top:8px;"><?php print l(t(\'View events on calendar\'), \'content/calendar\'); ?></div>');
+  $handler->override_option('title', 'Upcoming Events');
+  $handler->override_option('footer', '<div><?php print l(t(\'View events on calendar\'), \'content/calendar\'); ?></div>');
   $handler->override_option('footer_format', '3');
   $handler->override_option('footer_empty', 0);
   $handler->override_option('empty', 'There are no upcoming events.');
@@ -14011,7 +14012,7 @@ if(user_access(\'create notice content\')) {
     'type' => 'ul',
   ));
   $handler = $view->new_display('block', 'Block', 'block_1');
-  $handler->override_option('block_description', 'Upcoming events (Global)');
+  $handler->override_option('block_description', 'Upcoming Events (Global)');
   $handler->override_option('block_caching', -1);
   $handler = $view->new_display('block', 'Block', 'block_2');
   $handler->override_option('relationships', array(
@@ -14120,8 +14121,8 @@ if(user_access(\'create notice content\')) {
       'relationship' => 'none',
     ),
   ));
-  $handler->override_option('title', 'Events in my groups');
-  $handler->override_option('block_description', 'Upcoming events (My Groups)');
+  $handler->override_option('title', 'Events in My Groups');
+  $handler->override_option('block_description', 'Upcoming Events (My Groups)');
   $handler->override_option('block_caching', -1);
   $handler = $view->new_display('block', 'Block', 'block_3');
   $handler->override_option('filters', array(
@@ -14220,10 +14221,10 @@ if(user_access(\'create notice content\')) {
       'reduce_duplicates' => 0,
     ),
   ));
-  $handler->override_option('title', 'Featured events');
-  $handler->override_option('block_description', 'Featured events');
+  $handler->override_option('title', 'Featured Events');
+  $handler->override_option('block_description', 'Featured Events');
   $handler->override_option('block_caching', -1);
-
+  
   $views[$view->name] = $view;
 
   // Exported view: user_directory

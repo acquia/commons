@@ -1,22 +1,22 @@
-/* $Id: acquia_commons-style.css 7525 2010-06-16 15:19:54Z sheena $ */
+/* $Id: acquia_commons-style.css 7534 2010-06-16 22:41:31Z sheena $ */
 
 /* Basic Typography & Colors-------------------------------------------------------------- */
 
 /* Add general site styling here for typography and background */
 
 body {
-  font-size: 75%;
+  color: #1f1f1f;  
+  font-family: Georgia, Baskerville, serif;
+  font-size: 75%; /*also set in fusion_starter.info: settings[base-font-size] = font-size-12 */
 
-
-/*also set in fusion_starter.info: settings[base-font-size] = font-size-12 */
 }
 
 /* Default link styles - separate a:visited for a different visited link style */
 
-a, 
+a,
 a:link,
 a:visited {
-  color: #6497c2;
+  color: #669acc;
 }
 
 /* Hover/active link styles. Don't forget :focus for accessibility */
@@ -30,7 +30,7 @@ a:active {
 h1 {
   font-size: 2em;
   font-weight: normal;
-  margin: 18px 0;
+  margin: .5em 0;
 }
 
 h2 {
@@ -50,7 +50,7 @@ h3 {
 }
 
 h4 {
-  color: #6497c2;
+  color: #619ed4;
 }
 
 /* Specific Typography-------------------------------------------------------------- */
@@ -62,6 +62,32 @@ h4 {
 
 .footer-message {
   font-size: 90%;
+}
+
+/*content lists*/
+
+.node .inner ul,
+.panel-pane .inner ul,
+.block .inner ul {
+  ;
+  margin-left: 0;
+}
+
+.node .inner ul li,
+.panel-pane .inner ul li,
+.block .content ul li {
+  background: transparent url(../images/gray-arrow-right.png) no-repeat 0 4px;
+  list-style-image: none;
+  list-style: none;
+  margin: 0 0 8px 0;
+  padding: 0 0 0 22px;
+  text-indent: 0;
+}
+
+.node .inner ul li a,
+.panel-pane .inner ul li a,
+.block .content ul li a {
+  color: #565656;
 }
 
 /* HTML Elements-------------------------------------------------------------- */
@@ -178,6 +204,7 @@ body {
   background-color: #888;
   color: #fff;
   overflow: visible;
+  padding: 0px;
 }
 
 /* Primary Menu   TODO: add default colours/-------------------------------------------------------------- */
@@ -194,6 +221,10 @@ body {
 
 .primary-menu-inner ul.sf-menu {
   
+}
+
+.primary-menu-inner ul.sf-menu li {
+  margin-bottom: 0px;
 }
 
 /* Link style for top level menu items, add padding here */
@@ -324,7 +355,7 @@ body {
   float: right;
   margin: 0;
   min-width: 220px;
-  padding: 6px 0;
+  padding: 5px 0 4px 0;
   width: auto;
 }
 
@@ -337,27 +368,29 @@ body {
 }
 
 .search-box-inner input#edit-search-theme-form-header {
-  background-color: #ccc;
-  border: 1px solid #6d6d6d;
+  background: #ccc url(../images/inner-shadow.png) no-repeat 0 0;
+  border-right: 0px;
+  border: 1px inset #a9a9a9;
   display: block;
   float: left;
   font-size: 11px;
-  height: 14px;
+  height: 16px;
   line-height: 14px;
   margin: 0;
-  min-width: 120px;
+  min-width: 130px;
   padding: 2px 4px;
 }
 
 .search-box-inner input#search_header {
-  background-color: #3a3a3a;
+  letter-spacing: .1em;
+  background: #3a3a3a url(../images/search-submit.png) repeat-x 0 0;
   border: 1px solid #3a3a3a;
-  color: #fff;
+  color: #ddd;
   display: block;
   float: left;
   font-family: Baskerville, georgia, serif;
   font-size: 11px;
-  height: 20px;
+  height: 22px;
   line-height: 16px;
   margin: 0;
   padding: 2px 6px;
@@ -491,7 +524,7 @@ h1.title {
   font-size: 2em;
   font-weight: normal;
   line-height: 1.2em;
-  margin: 28px 0;
+  margin: 0 0 1em 0;
 }
 
 /* Default node styles/-------------------------------------------------------------- */
@@ -601,7 +634,7 @@ div.content-messages-inner div.error {
 
 div.content-help-inner div.help {
   background-color: #daebfd;
-  border: 1px solid #6497c2;
+  border: 1px solid #619ed4;
 }
 
 /* Error that appears when a required form field is not filled out */
@@ -617,6 +650,7 @@ div.content-help-inner div.help {
 .marker,
 .form-required {
   color: #aa1144;
+  padding-left: .5em;
 }
 
 /* Default block title styles/-------------------------------------------------------------- */
@@ -632,19 +666,24 @@ h2.block-title {
   border-bottom: 1px solid #dedede;
   color: #333;
   margin: 0;
-  padding: 4px 0 4px 12px;
+  padding: 4px 0 4px 0px;
 }
 
 .breadcrumb {
   padding: 0;
 }
 
+.breadcrumbs.block .breadcrumbs-inner {
+  margin: 0;
+}
+
 .breadcrumbs a:link,
 .breadcrumbs a:visited {
-  font-size: 1em;
-  line-height: 1.2em;
+  font-size: 1.1em;
+  font-style: italic;
+  line-height: 1.4em;
   margin: 0;
-  padding: 0;
+  padding: 0 2px;
 }
 
 /* Tab Menus   TODO: tab styles?/-------------------------------------------------------------- */
@@ -662,7 +701,7 @@ h2.block-title {
 
 #content-tabs ul.primary,
 #content-tabs ul.secondary {
-  border-bottom: 2px solid #cbcbcb;
+  border-bottom: 2px solid #d1d1d1;
   clear: both;
   float: left;
 
@@ -674,7 +713,7 @@ h2.block-title {
 }
 
 #content-tabs ul.secondary {
-  border-bottom: 1px solid #555;
+  border-bottom: 1px solid #d1d1d1;
   margin-top: 10px;
   text-transform: lowercase;
 }
@@ -684,7 +723,7 @@ h2.block-title {
   border-style: none;
   display: inline;
   float: left;
-
+ 
 
 /* LTR */
   font-size: .9em;
@@ -694,24 +733,27 @@ h2.block-title {
   padding: 0;
 }
 
+#content-tabs ul.secondary li {
+  margin: 0 8px;
+}
+
 #content-tabs ul.primary li a:link,
 #content-tabs ul.primary li a:visited {
-  -moz-border-radius: 4px;
-  -moz-border-top-left-radius: 4px;
-  -moz-border-top-right-radius: 4px;
+  -moz-border-radius-topleft: 4px;
+  -moz-border-radius-topright: 4px;
   -webkit-border-top-left-radius: 4px;
   -webkit-border-top-right-radius: 4px;
-  background-color: #cbcbcb;
+  background-color: #d1d1d1;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
-  border: 1px solid #cbcbcb;
-  color: #000;
+  border: 1px solid #d1d1d1;
+  color: #323232;
   cursor: pointer;
   float: left;
-
+ 
 
 /* LTR */
-  margin: 0 2px -3px 0;
+  margin: 0 2px -2px 0;
   padding: 2px 6px 5px 6px;
   text-decoration: none;
   white-space: nowrap;
@@ -726,7 +768,7 @@ h2.block-title {
 #content-tabs ul.secondary li a:visited {
   background-color: transparent;
   border: none;
-  color: #000;
+  color: #323232;
   float: left;
 
 
@@ -746,7 +788,7 @@ h2.block-title {
 #content-tabs ul.primary li a.active:link,
 #content-tabs ul.primary li a.active:visited {
   background-color: #fff;
-  border-bottom: 0px;
+  border-bottom: 1px solid #fff;
 }
 
 #content-tabs ul.secondary li a.active:link,
@@ -774,8 +816,13 @@ ul.pager {
   
 }
 
-ul.pager li {
-  
+.content ul.pager li {
+  background-image: none;
+  line-height: 1.8em;
+  margin: 0;
+  padding: 2px 4px;
+  text-indent: 0;
+;
 }
 
 ul.pager a,
@@ -802,7 +849,7 @@ ul.pager a:focus {
 
 form input.form-submit,
 form input.form-submit {
-  background-color: #5788c2;
+  background-color: #6699cc;
   border: 1px solid #868686;
   color: #fff;
   font-family: inherit;
@@ -826,8 +873,8 @@ form input.form-submit:focus {
 
 .form-item input,
 .form-item textarea {
-  background: #fff url(../images/input-bg.png) no-repeat 0 0;
-  border: 1px solid #868686;
+  background: #fff url(../images/inner-shadow.png) no-repeat 0 0;
+  border: 1px inset #969696;
   font-size: 14px;
   line-height: 1em;
   padding: 2px 8px;
@@ -921,7 +968,7 @@ td.active {
 
 tr.drag td,
 tr.drag-previous td {
-  color: #000;
+  color: #323232;
 }
 
 /* Maintenance Page/-------------------------------------------------------------- */
@@ -977,12 +1024,12 @@ div.comment h3.title {
 }
 
 .comment .comment-content {
-  border: 1px solid #d6d6d6;
-  margin-left: 89px;
-  padding: 10px;
   -moz-box-shadow: 1px 1px 3px #ddd;
   -webkit-box-shadow: 1px 1px 3px #ddd;
+  border: 1px solid #d6d6d6;
   box-shadow: 1px 1px 3px #ddd;
+  margin-left: 89px;
+  padding: 10px;
   position: relative;
   z-index: 1;
 }
@@ -1001,7 +1048,7 @@ div.comment ul.links a {
 /* A special highlight style for a comment by the author of the node */
 
 .comments div.comment-by-author .comment-info img {
-  border: 2px solid #6497c2;
+  border: 2px solid #619ed4;
 }
 
 /* Comment signatures */
@@ -1040,25 +1087,99 @@ div.poll div.bar div.foreground {
 /* Profiles/-------------------------------------------------------------- */
 
 .profile .picture {
+  background-color: #efefef;
+  border-bottom: none;
+  border: 1px solid #dcdcdc;
+  float: none;
+  margin: 0;
+  padding: 10px 0 6px 0;
+  text-align: center;
+}
+
+.profile .picture img {
+  border: 1px solid #fff;
+  height: auto;
+  max-width: 90%;
+}
+
+.profile .column-left {
+  width: 30%;
   float: left;
-  margin: 0 20px 0 0;
-  width: 140px;
+  margin: 0 2% 0 0;
+}
+
+.profile .column-right {
+  float: left;
+  width: 68%;
+}
+
+/* User points styles */
+
+.profile .userpoints h3 {
+  border: none;
+  float: left;
+  margin: 0px;
+  width: auto;
+}
+
+.profile .userpoints {
+  background-color: #669acc;
+  border: 1px solid #517aa1;
+  color: #fff;
+  margin: 0 0 .6em 0;
+  padding: 4px 8px;
+;
+}
+
+.profile .userpoints dd {
+  float: left;
+  margin: 0;
+  padding: 0;
+  width: auto;
+}
+
+.profile .userpoints:after {
+  height: 0;
+  clear: both;
+  content: ".";
+  display: block;
+  visibility: hidden;
+}
+
+.profile .userpoints .points {
+  display: block;
+  float: left;
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-left: 8px;
+  width: auto;
+}
+
+.profile .userpoints .edit-links {
+  display: none;
+}
+
+.profile .userpoints:hover .edit-links {
+  clear: both;
+  display: block;
+  margin-top: 1.6em;
+  position: absolute;
+}
+
+.profile .userpoints .edit-links a {
+  text-decoration: underline;
 }
 
 /* Styles for sub-headings on user profiles */
 
-.profile dt {
+.profile .column-right dt {
   width: auto;
 }
 
-div.profile h3,
-div.profile dl {
-  margin-left: 160px;
-}
-
-div.profile h3 {
+.profile .column-right h3 {
   background-color: #eaeaea;
   border: 1px solid #d8d8d8;
+  margin-top: 0;
   padding: 2px 6px;
 }
 
@@ -1207,9 +1328,13 @@ input.list-add-to-cart:focus {
   border-top: 4px solid #ddd;
 }
 
+.panel-panel .inner .inner {
+  border-top: none;
+}
+
 .panel-panel .block,
 .panel-pane {
-  margin-bottom: 18px;
+  margin-bottom: 28px;
 }
 
 .panel-panel .block h2.pane-title.panel-pane h2.pane-title {
@@ -1220,7 +1345,7 @@ input.list-add-to-cart:focus {
 .sidebar-last .block h2.block-title,
 .sidebar-first .block h2.block-title {
   background: #efefef;
-  color: #000;
+  color: #323232;
   font-weight: normal;
   line-height: 1.2em;
   margin: 0px;
@@ -1229,7 +1354,7 @@ input.list-add-to-cart:focus {
 
 .sidebar-last .block h2.block-title a,
 .sidebar-first .block h2.block-title a {
-  color: #000;
+  color: #323232;
 }
 
 .sidebar-last .block .inner,
@@ -1267,23 +1392,24 @@ dl.search-results .search-result p.search-info {
 
 /* List Styles */
 
-.block .inner ul li,
-.block .inner ol li {
+.block .content ul li,
+.block .content ol li {
   margin-bottom: 2px;
 }
 
 /*Decorative Bullet*/
 
-.commons-list-decorative-bullets .content ul {
-  margin-left: 0;
+.commons-list-circle-bullets .content ul {
+  margin-left: 18px;
 }
 
-.commons-list-decorative-bullets .content ul li {
-  background: transparent url(../images/gray-arrow-right.png) no-repeat 0 4px;
+.commons-list-circle-bullets .content ul li {
+  background: none;
+  color: #656565;
   list-style-image: none;
-  list-style: none;
+  list-style: disc;
   margin: 0 0 8px 0;
-  padding: 0 0 0 22px;
+  padding: 0 0 0 0;
   text-indent: 0;
 }
 
@@ -1299,12 +1425,17 @@ panels-pane.commons-colors-grayblue .inner {
   border-color: #ddd;
 }
 
-.commons-list-decorative-bullets.commons-colors-grayblue .content ul li {
+.commons-colors-grayblue .content ul li {
   background: transparent url(../images/gray-arrow-right.png) no-repeat 0 4px;
+}
+
+.commons-list-cirlce-bullets.commons-colors-grayblue .content ul li {
+  color: #656565;
 }
 
 /* Orange & Dark Blue */
 
+.commons-list-circle-bullets.commons-colors-orangeblue .content ul li a,
 .commons-colors-orangeblue a {
   color: #3d489d;
 }
@@ -1323,12 +1454,19 @@ panels-pane.commons-colors-orangeblue .inner {
   background-color: #fec688;
 }
 
-.commons-list-decorative-bullets.commons-colors-orangeblue .content ul li {
+.commons-colors-orangeblue .content ul li {
   background: transparent url(../images/orange-arrow-right.png) no-repeat 0 4px;
+}
+
+.commons-list-circle-bullets.commons-colors-orangeblue .content ul li {
+  background-image: none;
+  color: #ee9753;
+;
 }
 
 /* Dark Blue & Light Blue */
 
+.commons-list-circle-bullets.commons-colors-blueblue .content ul li a,
 .commons-colors-blueblue a {
   color: #6698c9;
 }
@@ -1342,16 +1480,21 @@ panels-pane.commons-colors-orangeblue .inner {
   border-color: #23295c;
 }
 
-.sidebar-last .block.commons-colors-blueblue.commons-block-title-background h2.block-title,
-.sidebar-last .block.commons-colors-blueblue.commons-block-title-background h2.block-title a,
-.sidebar-first .block.commons-colors-blueblue.commons-block-title-background h2.block-title,
-.sidebar-first .block.commons-colors-blueblue.commons-block-title-background h2.block-title a {
+.sidebar-last .block.commons-colors-blueblue h2.block-title,
+.sidebar-last .block.commons-colors-blueblue h2.block-title a,
+.sidebar-first .block.commons-colors-blueblue h2.block-title,
+.sidebar-first .block.commons-colors-blueblue h2.block-title a {
   background-color: #3d489d;
   color: #fff;
 }
 
-.commons-list-decorative-bullets.commons-colors-blueblue .content ul li {
+.commons-colors-blueblue .content ul li {
   background: transparent url(../images/dkblue-arrow-right.png) no-repeat 0 4px;
+}
+
+.commons-list-circle-bullets.commons-colors-blueblue .content ul li {
+  background-image: none;
+  color: #23295c;
 }
 
 /* Drupal Commons * Styling for Drupal Commons specific elements/-------------------------------------------------------------- */
@@ -1379,7 +1522,7 @@ panels-pane.commons-colors-orangeblue .inner {
   line-height: 18px;
   margin: 0;
   padding: 2px 2%;
-  width: 79%;
+  width: 64%;
 }
 
 .shoutbox-add-form input.form-submit {
@@ -1388,9 +1531,9 @@ panels-pane.commons-colors-orangeblue .inner {
   height: 24px;
   line-height: 18px;
   margin: 0;
-  max-width: 90px;
+  min-width: 60px;
   padding: 2px 2%;
-  width: 14%;
+  width: 30%;
 }
 
 .shoutbox-admin-links {
@@ -1436,7 +1579,7 @@ panels-pane.commons-colors-orangeblue .inner {
 }
 
 .shoutbox-msg .shoutbox-post-info span.shoutbox-msg-time {
-  color: #000;
+  color: #323232;
   font-family: Arial Helvetica, sans-serif;
   font-size: 9px;
   font-style: normal;
@@ -1444,7 +1587,8 @@ panels-pane.commons-colors-orangeblue .inner {
   padding: 0px;
 }
 
-.shoutbox-msg .shout-message {
+.shoutbox-msg .shout-message,
+div.shoutbox-even {
   -moz-box-shadow: 1px 1px 3px #ddd;
   -webkit-box-shadow: 1px 1px 3px #ddd;
   border: 1px solid #d6d6d6;
@@ -1456,10 +1600,17 @@ panels-pane.commons-colors-orangeblue .inner {
   z-index: 1;
 }
 
+div.shoutbox-even {
+  ;
+	margin: 0 4px 18px 0;
+  padding: 2px 4px;
+}
+
 .shoutbox-all-shouts {
+  border-top: 1px solid #ccc;
   font-size: 1em;
   font-weight: bold;
-  margin: 8px 0 0 0;
+  margin: 0px 0 0 0;
   text-align: right;
 }
 
@@ -1505,6 +1656,22 @@ panels-pane.commons-colors-orangeblue .inner {
 
 .view .item-list ul.pager {
   margin-top: 10px;
+}
+
+/*views more links and view footers*/
+
+.view div.more-link,
+.view .view-footer {
+  border-top: 1px solid #ccc;
+  font-weight: bold;
+  margin-top: 0px;
+  padding: 0px;
+  text-align: right;
+}
+
+.view-footer div {
+  margin: 0px;
+  padding: 0px;
 }
 
 /*views exposed widget*/
@@ -1642,9 +1809,9 @@ panels-pane.commons-colors-orangeblue .inner {
 .view-content-global-documents span.title,
 .view-content-global-discussions span.title,
 .view-content-global-wikis span.title {
-  padding-right: 10px;
   font-size: 1.2em;
   font-weight: bold;
+  padding-right: 10px;
 }
 
 .view-content-global-blogs span.title,
@@ -1683,6 +1850,16 @@ panels-pane.commons-colors-orangeblue .inner {
 .view-content-global-documents .views-field-field-file-fid .filefield-file a {
   margin-right: 10px;
   white-space: nowrap;
+}
+
+/* recent notices view */
+
+.view-recent-notices .view-header {
+  position: absolute;
+  right: 0;
+  text-align: right;
+  top: 18px;
+  width: 80px;
 }
 
 /* User Meta - logout/account links in header w/ profile pic */
@@ -1761,6 +1938,22 @@ panels-pane.commons-colors-orangeblue .inner {
   float: right;
 }
 
+/* Dashboard Views*/
+
+.view-most-active-users td.views-field-name,
+.view-home-newest-users td.views-field-name,
+.view-og-most-active td.views-field-field-title,
+.view-og-dashboard-groups td.views-field-title {
+  width: 60%;
+}
+
+.view-most-active-users td.views-field-picture,
+.view-home-newest-users td.views-field-picture,
+.view-og-most-active td.views-field-field-group-image-fid,
+.view-og-dashboard-groups td.views-field-field-group-image-fid {
+  width: 28px;
+}
+
 /* Heartbeat Module */
 
 .heartbeat-message-block .beat-item .heartbeat-buttons {
@@ -1788,7 +1981,7 @@ panels-pane.commons-colors-orangeblue .inner {
 }
 
 .heartbeat-message-block .beat-item .beat-item-info a {
-  color: #000;
+  color: #323232;
   font-family: Arial Helvetica, sans-serif;
   font-size: 9px;
   font-style: normal;

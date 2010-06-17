@@ -2897,7 +2897,7 @@ function _commons_core_default_page_manager_handlers() {
     'relationships' => array(),
   );
   $display = new panels_display;
-  $display->layout = 'onecol';
+  $display->layout = 'twocol_70_30';
   $display->layout_settings = array();
   $display->panel_settings = array();
   $display->cache = array();
@@ -2906,7 +2906,7 @@ function _commons_core_default_page_manager_handlers() {
   $display->panels = array();
     $pane = new stdClass;
     $pane->pid = 'new-1';
-    $pane->panel = 'middle';
+    $pane->panel = 'left';
     $pane->type = 'user_profile';
     $pane->subtype = 'user_profile';
     $pane->shown = TRUE;
@@ -2922,10 +2922,10 @@ function _commons_core_default_page_manager_handlers() {
     $pane->extras = array();
     $pane->position = 0;
     $display->content['new-1'] = $pane;
-    $display->panels['middle'][0] = 'new-1';
+    $display->panels['left'][0] = 'new-1';
     $pane = new stdClass;
     $pane->pid = 'new-2';
-    $pane->panel = 'middle';
+    $pane->panel = 'right';
     $pane->type = 'block';
     $pane->subtype = 'heartbeat-privateheartbeat';
     $pane->shown = TRUE;
@@ -2938,9 +2938,9 @@ function _commons_core_default_page_manager_handlers() {
     $pane->style = array();
     $pane->css = array();
     $pane->extras = array();
-    $pane->position = 1;
+    $pane->position = 0;
     $display->content['new-2'] = $pane;
-    $display->panels['middle'][1] = 'new-2';
+    $display->panels['right'][0] = 'new-2';
   $display->hide_title = PANELS_TITLE_FIXED;
   $display->title_pane = 'new-1';
   $handler->conf['display'] = $display;
