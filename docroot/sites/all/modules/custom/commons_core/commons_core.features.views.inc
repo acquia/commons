@@ -623,7 +623,7 @@ function _commons_core_views_default_views() {
       'expose' => array(
         'operator' => '',
         'identifier' => 'uid_1',
-        'label' => 'My Groups',
+        'label' => 'My groups',
         'optional' => 1,
         'remember' => 0,
       ),
@@ -958,7 +958,7 @@ function _commons_core_views_default_views() {
       'expose' => array(
         'operator' => '',
         'identifier' => 'uid_1',
-        'label' => 'My Groups',
+        'label' => 'My groups',
         'optional' => 1,
         'remember' => 0,
       ),
@@ -1666,7 +1666,7 @@ function _commons_core_views_default_views() {
       'expose' => array(
         'operator' => '',
         'identifier' => 'uid_1',
-        'label' => 'My Groups',
+        'label' => 'My groups',
         'optional' => 1,
         'remember' => 0,
       ),
@@ -2279,7 +2279,7 @@ function _commons_core_views_default_views() {
       'expose' => array(
         'operator' => '',
         'identifier' => 'uid_1',
-        'label' => 'My Groups',
+        'label' => 'My groups',
         'optional' => 1,
         'remember' => 0,
       ),
@@ -2853,7 +2853,7 @@ function _commons_core_views_default_views() {
       'expose' => array(
         'operator' => '',
         'identifier' => 'uid_1',
-        'label' => 'My Groups',
+        'label' => 'My groups',
         'optional' => 1,
         'remember' => 0,
       ),
@@ -5450,7 +5450,7 @@ function _commons_core_views_default_views() {
     ),
     'default' => 'post_count_new',
   ));
-  $handler = $view->new_display('block', 'My Groups', 'block_1');
+  $handler = $view->new_display('block', 'My groups', 'block_1');
   $handler->override_option('fields', array(
     'field_group_image_fid' => array(
       'label' => '',
@@ -13215,7 +13215,7 @@ else {
   $handler = $view->new_display('block', 'Block with teasers', 'block_2');
   $handler->override_option('use_pager', 'mini');
   $handler->override_option('pager_element', 1);
-  $handler->override_option('block_description', 'Recent featured stream (My Groups)');
+  $handler->override_option('block_description', 'Recent featured stream (My groups)');
   $handler->override_option('block_caching', -1);
 
   $views[$view->name] = $view;
@@ -14122,7 +14122,7 @@ if(user_access(\'create notice content\')) {
     ),
   ));
   $handler->override_option('title', 'Events in my groups');
-  $handler->override_option('block_description', 'Upcoming Events (My Groups)');
+  $handler->override_option('block_description', 'Upcoming Events (My groups)');
   $handler->override_option('block_caching', -1);
   $handler = $view->new_display('block', 'Block', 'block_3');
   $handler->override_option('filters', array(
@@ -14365,7 +14365,7 @@ if(user_access(\'create notice content\')) {
       'relationship' => 'none',
     ),
     'value_1' => array(
-      'label' => 'Job Title',
+      'label' => 'Job title',
       'alter' => array(
         'alter_text' => 0,
         'text' => '',
@@ -14559,7 +14559,7 @@ if(user_access(\'create notice content\')) {
         'use_operator' => 0,
         'operator' => 'uid_op',
         'identifier' => 'uid',
-        'label' => 'User Name',
+        'label' => 'Username',
         'optional' => 1,
         'remember' => 0,
         'reduce' => 0,
@@ -14603,7 +14603,7 @@ if(user_access(\'create notice content\')) {
         'use_operator' => 0,
         'operator' => 'value_op',
         'identifier' => 'job_title',
-        'label' => 'Job Title',
+        'label' => 'Job title',
         'optional' => 1,
         'remember' => 0,
       ),
