@@ -202,7 +202,7 @@ function drupal_commons_build_directories() {
   
   foreach ($dirs as $dir) {
     $dir = file_directory_path() . '/' . $dir;
-    file_check_directory(&$dir, TRUE);
+    file_check_directory($dir, TRUE);
   }
 }
 
@@ -575,11 +575,11 @@ function drupal_commons_config_theme() {
 function drupal_commons_config_images() {
   // Copy default user image to files directory
   $user_image = 'profiles/drupal_commons/images/default-user.png';
-  file_copy(&$user_image, 0, FILE_EXISTS_REPLACE); // Defaults to files directory
+  file_copy($user_image, 0, FILE_EXISTS_REPLACE); // Defaults to files directory
   
   // Copy default group image to files directory
   $group_image = 'profiles/drupal_commons/images/default-group.png';
-  file_copy(&$group_image, 0, FILE_EXISTS_REPLACE); // Defaults to files directory
+  file_copy($group_image, 0, FILE_EXISTS_REPLACE); // Defaults to files directory
   
   // Process default user image through ImageCache
   $preset = imagecache_preset_by_name('profile_pictures');
