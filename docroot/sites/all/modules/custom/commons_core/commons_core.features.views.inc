@@ -129,7 +129,7 @@ function _commons_core_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Recent Blog Posts');
+  $handler->override_option('title', 'Recent blog posts');
   $handler->override_option('empty', 'No blog posts have been made yet.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
@@ -639,7 +639,7 @@ function _commons_core_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Blog Posts');
+  $handler->override_option('title', 'Blog posts');
   $handler->override_option('header', '<div class="addnew"><?php print l(t(\'Add a new blog post\'), \'node/add/blog\'); ?></div>');
   $handler->override_option('header_format', '3');
   $handler->override_option('header_empty', 1);
@@ -5169,7 +5169,7 @@ function _commons_core_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Recent Group Content');
+  $handler->override_option('title', 'Recent group content');
   $handler->override_option('empty', 'No content has been submitted to this group in.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
@@ -12209,7 +12209,7 @@ else {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Latest Featured Content');
+  $handler->override_option('title', 'Latest featured content');
   $handler->override_option('empty', 'No notices have been created yet.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
@@ -13787,7 +13787,7 @@ if(user_access(\'create notice content\')) {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Popular Tags');
+  $handler->override_option('title', 'Popular tags');
   $handler->override_option('footer', '<div><?php print l(t(\'View more\'), \'tagadelic\'); ?></div>');
   $handler->override_option('footer_format', '3');
   $handler->override_option('footer_empty', 0);
@@ -13996,7 +13996,7 @@ if(user_access(\'create notice content\')) {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Upcoming Events');
+  $handler->override_option('title', 'Upcoming events');
   $handler->override_option('footer', '<div><?php print l(t(\'View events on calendar\'), \'content/calendar\'); ?></div>');
   $handler->override_option('footer_format', '3');
   $handler->override_option('footer_empty', 0);
@@ -14121,7 +14121,7 @@ if(user_access(\'create notice content\')) {
       'relationship' => 'none',
     ),
   ));
-  $handler->override_option('title', 'Events in My Groups');
+  $handler->override_option('title', 'Events in my groups');
   $handler->override_option('block_description', 'Upcoming Events (My Groups)');
   $handler->override_option('block_caching', -1);
   $handler = $view->new_display('block', 'Block', 'block_3');
@@ -14221,7 +14221,7 @@ if(user_access(\'create notice content\')) {
       'reduce_duplicates' => 0,
     ),
   ));
-  $handler->override_option('title', 'Featured Events');
+  $handler->override_option('title', 'Featured events');
   $handler->override_option('block_description', 'Featured Events');
   $handler->override_option('block_caching', -1);
   
@@ -14694,7 +14694,7 @@ if(user_access(\'create notice content\')) {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Browse Users');
+  $handler->override_option('title', 'Browse users');
   $handler->override_option('use_ajax', TRUE);
   $handler->override_option('items_per_page', 16);
   $handler->override_option('use_pager', '1');
