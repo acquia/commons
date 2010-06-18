@@ -22,7 +22,7 @@ function shoutbox_group_menu() {
       'description' => 'Configure shoutbox behavior for OG interaction.',
     ),
     'shoutbox/group/%' => array(
-      'title' => 'Shout Box',
+      'title' => 'Shout box',
       'page callback' => 'shoutbox_group_page',
       'page arguments' => array(2),
       'access callback' => 'shoutbox_group_group_access',
@@ -30,7 +30,7 @@ function shoutbox_group_menu() {
       'description' => 'A dedicated shoutbox page for group shouts.',
     ),
     'shoutbox/group/%/js/view' => array(
-      'title' => 'Shout Box',
+      'title' => 'Shout box',
       'page callback' => 'shoutbox_group_js_view',
       'page arguments' => array(2),
       'access callback' => 'shoutbox_group_group_access',
@@ -76,7 +76,7 @@ function shoutbox_group_page($group_id) {
   og_set_group_context($group, TRUE);
   
   // Set the page title with group name
-  drupal_set_title(t('Shout Box') . ' <i>(' . l($group->title, 'node/' . $group->nid) . ')</i>');
+  drupal_set_title(t('Shout box') . ' <i>(' . l($group->title, 'node/' . $group->nid) . ')</i>');
   
   // Return normal shoutbox page
   return shoutbox_page_view();
@@ -185,7 +185,7 @@ function shoutbox_group_shoutbox_page_path_alter(&$page_path) {
 
 // Add a shoutbox link to OG menu block
 function shoutbox_group_og_create_links($node) {
-  return array('shoutbox' => l(t('Shout Box'), 'shoutbox/group/' . $node->nid));
+  return array('shoutbox' => l(t('Shout box'), 'shoutbox/group/' . $node->nid));
 }
 
 /*

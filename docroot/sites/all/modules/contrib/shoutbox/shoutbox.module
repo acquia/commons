@@ -31,7 +31,7 @@ function shoutbox_menu() {
   $items = array();
 
   $items['shoutbox'] = array(
-    'title' => 'Shout Box',
+    'title' => 'Shout box',
     'page callback' => 'shoutbox_page_view',
     'access arguments' => array('view shouts'),
     'type' => MENU_CALLBACK,
@@ -133,7 +133,7 @@ function shoutbox_block($op = 'list', $delta = 0, $edit = array()) {
               //Load externals
               theme('shoutbox_external_files');
               //Load block data
-              $block["subject"] = t("Shout Box");
+              $block["subject"] = t("Shout box");
               $block["content"] = _shoutbox_block_view();
             }
           }
@@ -235,7 +235,7 @@ function shoutbox_js_config($shown_amount) {
     'refreshDelay' => (1000 * variable_get('shoutbox_refresh', 0)),
     'ascending' => variable_get('shoutbox_ascending', TRUE),
     'shownAmount' => $shown_amount,
-    'defaultMsg' => t('Enter Message'),
+    'defaultMsg' => t('Enter message'),
     'maxLength' => variable_get('shoutbox_max_length', 255),
     'refreshPath' => url($refresh_path),
   );
@@ -456,7 +456,7 @@ function theme_shoutbox_post_forbidden() {
  *     Path to the shout page
  */
 function theme_shoutbox_block_page_link($page_path) {
-  return '<div class="shoutbox-all-shouts">' . l(t('All Shouts'), $page_path) . '</div>';
+  return '<div class="shoutbox-all-shouts">' . l(t('All shouts'), $page_path) . '</div>';
 }
 
 /*
@@ -900,7 +900,7 @@ function shoutbox_add_form_validate($form, &$form_state) {
     form_set_error('message', t('You must enter a message.'));  
   }
   //Default message
-  elseif ($form_state['values']['message'] == t('Enter Message'))  {
+  elseif ($form_state['values']['message'] == t('Enter message'))  {
     form_set_error('message', t('Default values are not acceptable'));
   }
   //Message too long
