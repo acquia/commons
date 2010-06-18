@@ -1,5 +1,5 @@
 <?php
-// $Id: filefield_meta.install,v 1.8 2009/05/22 21:14:52 quicksketch Exp $
+// $Id: filefield_meta.install,v 1.10 2010/06/17 19:37:17 pwolanin Exp $
 /**
  * @file
  * FileField Meta: Add Video Support to File Field.
@@ -84,6 +84,11 @@ function filefield_meta_schema() {
         'not null' => TRUE,
         'default' => '',
       ),
+      'tags' => array(
+        'description' => 'ID3 tags such as artist, album, and genre.',
+        'type' => 'text',
+        'serialize' => TRUE,
+      ),
     ),
     'primary key' => array('fid'),
   );
@@ -128,5 +133,42 @@ function filefield_meta_update_1() {
     'not null' => TRUE,
     'default' => '',
   ));
+  return $ret;
+}
+
+/**
+ * Add the tags column.
+ */
+function filefield_meta_update_6100(&$context) {
+  $ret = array();
+
+  // Set up our update and add the tags column.
+  if (!isset($context['sandbox']['progress'])) {
+    $context['sandbox']['progress'] = 0;
+    $context['sandbox']['total'] = db_result(db_query("SELECT COUNT(*) FROM {files} f INNER JOIN {filefield_meta} fm ON f.fid = fm.fid WHERE fm.audio_format <> ''"));
+    $context['sandbox']['current_fid'] = 0;
+    if (!db_column_exists('filefield_meta', 'tags')) {
+      db_add_field($ret, 'filefield_meta', 'tags', array('type' => 'text'));
+    }
+    // We are done if there are none to update.
+    if ($context['sandbox']['total'] == 0) {
+      return $ret;
+    }
+  }
+
+  // Select and process 200 files at a time.
+  $limit = 200;
+  $result = db_query_range("SELECT f.* FROM {files} f INNER JOIN {filefield_meta} fm ON f.fid = fm.fid WHERE f.fid > %d AND fm.audio_format <> '' ORDER BY f.fid ASC", $context['sandbox']['current_fid'], 0, $limit);
+
+  // Loop through each file and read in its ID3 tags if applicable.
+  while ($file = db_fetch_object($result)) {
+    filefield_meta_file_update($file);
+    $context['sandbox']['current_fid'] = $file->fid;
+    $context['sandbox']['progress']++;
+  }
+
+  // Update our progress indicator.
+  $ret['#finished'] = $context['sandbox']['progress'] / $context['sandbox']['total'];
+
   return $ret;
 }

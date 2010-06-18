@@ -1,0 +1,64 @@
+/* $Id: vertical_tabs.garland.css,v 1.1.2.4 2009/11/28 22:10:17 davereid Exp $ */
+
+/**
+ * @file
+ *   Color module support for Vertical Tabs. Do not change the contents of this
+ *   file! This file is automatically copied to the files directory when the
+ *   theme settings are changed for Garland. It is not compatible with other
+ *   color-module enhanced themes.
+ */
+
+.vertical-tab-button .summary {
+  font-size: 0.92em;
+  color: #898989;
+}
+
+/* Keep the background position at 0 for vertical tabs. */
+*:first-child+html fieldset.vertical-tabs-pane {
+  background-position: 0 0;
+}
+
+/**
+ * Vertical tabs.
+ */
+div.vertical-tabs {
+  margin-right: 5%;
+  border-color: #d9eaf5;
+}
+
+div.vertical-tabs .vertical-tabs-panes fieldset.vertical-tabs-pane {
+  padding: 0.5em 1em;
+}
+
+div.vertical-tabs ul.vertical-tabs-list {
+  border-color: #d9eaf5;
+}
+
+div.vertical-tabs ul.vertical-tabs-list li {
+  background-color: #edf5fa;
+  border-color: #d9eaf5;
+}
+
+div.vertical-tabs ul.vertical-tabs-list li strong {
+  font-weight: normal;
+}
+
+div.vertical-tabs ul.vertical-tabs-list li.selected strong {
+  font-weight: bold;
+}
+
+div.vertical-tabs ul.vertical-tabs-list li.selected small {
+  color: #898989;
+}
+
+div.vertical-tabs ul.vertical-tabs-list li.selected {
+  background: #fff repeat-x 0 0;
+}
+
+div.vertical-tabs ul.vertical-tabs-list li.selected.first {
+  background-image: url(gradient-inner.png);
+}
+
+div.vertical-tabs ul.vertical-tabs-list li.selected a strong {
+  color: #494949;
+}

@@ -1,5 +1,5 @@
 <?php
-// $Id: acquia_spi.module,v 1.2 2008/12/30 17:05:34 pwolanin Exp $
+// $Id: acquia_spi.module,v 1.2.2.2 2010/06/17 03:17:46 pwolanin Exp $
 
 /**
  * @file
@@ -32,7 +32,7 @@ function acquia_spi_cron() {
   $interval = variable_get('acquia_spi_cron_interval', 8*60*60);
   $now = time();
   if ($now - $last > $interval) {
-    acquia_spi_send();
+    acquia_spi_send_profile_info();
     variable_set('acquia_spi_cron_last', $now);
   }
 }
@@ -49,13 +49,13 @@ function acquia_spi_form_acquia_agent_settings_form_alter(&$form) {
  */
 function acquia_spi_agent_settings_submit($form, &$form_state) {
   // Send information as soon as the key/identifier pair is submitted.
-  acquia_spi_send();
+  acquia_spi_send_profile_info();
 }
 
 /**
  * Send site profile information to Acquia Network via XML-RPC.
  */
-function acquia_spi_send() {
+function acquia_spi_send_profile_info() {
   // Do nothing unless we have credentials.
   if (acquia_agent_has_credentials()) {
     $spi = acquia_spi_get();
@@ -135,7 +135,7 @@ function acquia_spi_get_platform() {
 function acquia_spi_get_modules() {
   $modules = module_rebuild_cache();
   $result = array();
-  $keys_to_send = array('name', 'version', 'package', 'core');
+  $keys_to_send = array('name', 'version', 'package', 'core', 'project');
   foreach ($modules as $filename => $file) {
     $info = array();
     $info['status'] = $file->status;

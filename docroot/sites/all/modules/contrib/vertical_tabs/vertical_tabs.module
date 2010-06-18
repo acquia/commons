@@ -1,0 +1,540 @@
+<?php
+
+/**
+ * @file
+ * Provides vertical tabs capability for fieldsets in forms.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function vertical_tabs_menu() {
+  $items['admin/settings/vertical-tabs'] = array(
+    'title' => t('Vertical Tabs'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('vertical_tabs_settings_form'),
+    'access arguments' => array('administer site configuration'),
+    'file' => 'vertical_tabs.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function vertical_tabs_theme() {
+  return array(
+    'vertical_tabs' => array(
+      'arguments' => array('element' => NULL),
+    ),
+  );
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function vertical_tabs_form_alter(&$form, $form_state, $form_id) {
+  // Add the support and default groupings for core forms.
+  vertical_tabs_add_core_support($form, $form_id);
+
+  $config = vertical_tabs_get_config($form_id);
+
+  // Skip programmed or excluded forms.
+  if (!empty($form['#programmed']) || $config === FALSE) {
+    vertical_tabs_remove_vertical_tabs($form);
+  }
+  elseif ($config) {
+    // Merge in the vertical tabs settings in case they already existed.
+    $form += array('#vertical_tabs' => array());
+    if (is_array($config)) {
+      $form['#vertical_tabs'] += $config;
+    }
+    $form['#pre_render'][] = 'vertical_tabs_form_pre_render';
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function vertical_tabs_form_node_type_form_alter(&$form, $form_state) {
+  if (empty($form['#programmed']) && $form['#node_type']->type && variable_get('vertical_tabs_node_type_settings', 0)) {
+    module_load_include('inc', 'vertical_tabs', 'vertical_tabs.admin');
+    vertical_tabs_add_node_type_options($form, $form['#node_type']->type);
+  }
+}
+
+/**
+ * Add core module fieldset support.
+ *
+ * @param $form
+ *   The form array, passed by reference.
+ * @param $fomr_id
+ *   The ID of the form.
+ */
+function vertical_tabs_add_core_support(&$form, $form_id) {
+  $fieldsets = array();
+  $group = '';
+
+  if (isset($form['type']) && isset($form['#node']) && $form['type']['#value'] .'_node_form' == $form_id) {
+    $fieldsets['revision_information'] = 'node';
+    $fieldsets['author'] = 'node';
+    $fieldsets['options'] = 'node';
+    $fieldsets['book'] = 'book';
+    $fieldsets['menu'] = 'menu';
+    $fieldsets['comment_settings'] = 'comment';
+    $fieldsets['attachments'] = 'upload';
+    $fieldsets['path'] = 'path';
+    $fieldsets['taxonomy'] = 'taxonomy';
+    $group = 'additional_settings';
+  }
+  elseif ($form_id == 'node_type_form') {
+    $fieldsets['submission'] = 'content_types';
+    $fieldsets['workflow'] = 'content_types';
+    $fieldsets['comment'] = 'comment';
+    $group = 'additional_settings';
+  }
+  elseif ($form_id == 'block_admin_configure' || strpos($form_id, 'block_add_block_form') !== FALSE) {
+    $fieldsets['user_vis_settings'] = 'block';
+    $fieldsets['role_vis_settings'] = 'block';
+    $fieldsets['page_vis_settings'] = 'block';
+    $group = 'visibility_settings';
+  }
+
+  foreach ($fieldsets as $key => $module) {
+    if (isset($form[$key])) {
+      $form[$key] += array('#group' => $group, '#attached' => array());
+      $file = drupal_get_path('module', 'vertical_tabs') . '/core/' . $module . '.js';
+      if (is_file($file)) {
+        $form[$key]['#attached'] += array('js' => array());
+        $form[$key]['#attached']['js'] += array('vertical-tabs' => $file);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Add our color-handling submit handler to the color settings form.
+ */
+function vertical_tabs_form_system_theme_settings_alter(&$form, $form_state) {
+  // Add our color-handling submit handler to the color settings form.
+  if (isset($form['color']) && function_exists('gd_info')) {
+    $form['#submit'][] = 'vertical_tabs_system_theme_settings_submit';
+  }
+}
+
+/**
+ * Submit handler for the theme settings page.
+ */
+function vertical_tabs_system_theme_settings_submit($form, &$form_state) {
+  $theme = $form_state['values']['theme'];
+  $info = $form_state['values']['info'];
+
+  // Resolve palette
+  $palette = $form_state['values']['palette'];
+  if ($form_state['values']['scheme'] != '') {
+    $scheme = explode(',', $form_state['values']['scheme']);
+    foreach ($palette as $k => $color) {
+      $palette[$k] = array_shift($scheme);
+    }
+  }
+
+  vertical_tabs_generate_stylesheet($theme, $info, $palette);
+}
+
+/**
+ * Color module support for Garland and Vertical Tabs.
+ *
+ * Most of this function is direct copy/paste from color_scheme_form_submit().
+ */
+function vertical_tabs_generate_stylesheet($theme, $info, $palette) {
+  // Current CSS files.
+  $css = variable_get('color_'. $theme .'_stylesheets', array());
+  $files = variable_get('color_'. $theme .'_files', array());
+
+  // Template file.
+  $file = 'vertical_tabs.garland.css';
+
+  // Prepare target locations for generated files.
+  $paths['color'] = file_directory_path() .'/color';
+  $paths['source'] = drupal_get_path('module', 'vertical_tabs') .'/garland/';
+  $paths['files'] = $paths['map'] = array();
+
+  if (count($css)) {
+    $paths['id'] = preg_replace('/^.*?('. $theme .'-[a-zA-Z0-9]+).*?$/', '$1', $css[0]);
+    $paths['target'] = $paths['color'] .'/'. $paths['id'] .'/';
+
+    $style = drupal_load_stylesheet($paths['source'] . $file, FALSE);
+
+    // Rewrite stylesheet with new colors.
+    $style = _color_rewrite_stylesheet($theme, $info, $paths, $palette, $style);
+    $base_file = basename($file);
+    $css[] = $paths['target'] . $base_file;
+    $files[] = $paths['target'] . $base_file;
+    _color_save_stylesheet($paths['target'] . $base_file, $style, $paths);
+
+    // Update the list of files.
+    variable_set('color_'. $theme .'_stylesheets', $css);
+    variable_set('color_'. $theme .'_files', $files);
+  }
+}
+
+/**
+ * Implements hook_node_type().
+ */
+function vertical_tabs_node_type($op, $info) {
+  if ($op == 'update' && !empty($info->old_type) && $info->old_type != $info->type) {
+    vertical_tabs_rename_config($info->type . '_node_form', $info->old_type . '_node_form');
+  }
+  elseif ($op == 'delete') {
+    vertical_tabs_delete_config($info->type . '_node_form');
+  }
+}
+
+/**
+ * Implements hook_fieldgroup_form().
+ *
+ * Apply group value to CCK fieldsets with the 'vertical tab' form display.
+ */
+function vertical_tabs_fieldgroup_form(&$form, $form_state, $form_id, $group) {
+  if (in_array($group['settings']['form']['style'], array('fieldset_vertical_tab'))) {
+    $form[$group['group_name']]['#group'] = 'additional_settings';
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Adds a 'vertical tab' form option on CCK fieldset settings.
+ */
+function vertical_tabs_form_fieldgroup_group_edit_form_alter(&$form, $form_state) {
+  $form['settings']['form']['style']['#options']['fieldset_vertical_tab'] = t('vertical tab');
+}
+
+function vertical_tabs_get_config($form_id = NULL) {
+  static $config;
+
+  if (!isset($config)) {
+    $config = array();
+    $config += variable_get('vertical_tabs_forms', array());
+    $config += vertical_tabs_get_default_config();
+  }
+
+  if (isset($form_id)) {
+    return isset($config[$form_id]) ? $config[$form_id] : NULL;
+  }
+  else {
+    return $config;
+  }
+}
+
+/**
+ * Get the default supported forms.
+ */
+function vertical_tabs_get_default_config() {
+  $forms = array();
+  $node_types = array_keys(node_get_types('names'));
+  foreach ($node_types as $node_type) {
+    $forms[$node_type . '_node_form'] = TRUE;
+  }
+  $forms['node_type_form'] = TRUE;
+  $forms['block_admin_configure'] = TRUE;
+  $forms['block_add_block_form'] = TRUE;
+  return $forms;
+}
+
+function vertical_tabs_save_config($form_id, $fieldsets) {
+  $config = variable_get('vertical_tabs_forms', array());
+  $config[$form_id] = $fieldsets;
+  variable_set('vertical_tabs_forms', $config);
+}
+
+function vertical_tabs_rename_config($old_form_id, $new_form_id) {
+  $config = variable_get('vertical_tabs_forms', array());
+  if (isset($config[$form_id])) {
+    $config[$new_form_id] = $config[$old_form_id];
+    unset($config[$old_form_id]);
+    variable_set('vertical_tabs_forms', $config);
+  }
+}
+
+function vertical_tabs_delete_config($form_id) {
+  $config = variable_get('vertical_tabs_forms', array());
+  unset($config[$form_id]);
+  variable_set('vertical_tabs_forms', $config);
+}
+
+/**
+ * Get all the fieldset elements from a form.
+ */
+function vertical_tabs_get_form_elements(&$form) {
+  $elements = array();
+  foreach (element_children($form) as $key) {
+    if (!isset($form[$key]['#type'])) {
+      // Ignore non-type elements.
+      continue;
+    }
+    elseif (!in_array($form[$key]['#type'], array('fieldset'))) {
+      // Ignore non-fieldset elements.
+      continue;
+    }
+    elseif (isset($form[$key]['#access']) && !$form[$key]['#access']) {
+      // Ignore elements the user cannot access.
+      continue;
+    }
+
+    $elements[$key] = &$form[$key];
+  }
+  return $elements;
+}
+
+/**
+ * Form pre-render callback; add vertical tabs to the form.
+ */
+function vertical_tabs_form_pre_render($form) {
+  if (!isset($form['#vertical_tabs']) || !is_array($form['#vertical_tabs'])) {
+    $form['#vertical_tabs'] = array();
+  }
+  vertical_tabs_add_vertical_tabs($form, $form['#vertical_tabs']);
+  return $form;
+}
+
+/**
+ * Add a vertical tab form element to a form.
+ *
+ * @param $form
+ *   A form array to be altered.
+ * @param $config
+ *   An array of fieldsets to use in the vertical tabs. If no array is provided,
+ *   all the fieldsets in the $form array will be used.
+ * @return
+ *   TRUE if the vertical tabs were added to the form, otherwise FALSE.
+ */
+function vertical_tabs_add_vertical_tabs(&$form, $config = array()) {
+  global $theme;
+
+  $settings = array();
+  $weight = $delta = 0;
+
+  // Iterate through the form's fieldset elements.
+  $elements = vertical_tabs_get_form_elements($form);
+  foreach (array_keys($elements) as $key) {
+    $element = &$elements[$key];
+    $element += array('#group' => variable_get('vertical_tabs_default', 1));
+
+    // If there is a specific config set, override the default group setting.
+    if (isset($config[$key]) && (bool) $config[$key] != (bool) $element['#group']) {
+      $element['#group'] = $config[$key];
+    }
+
+    // Skip any non-grouped elements.
+    if (empty($element['#group'])) {
+      continue;
+    }
+
+    // Process the element.
+    vertical_tabs_process_element($element, $key);
+    vertical_tabs_process_attached($element);
+
+    $settings[$key] = array(
+      'name' => $element['#title'],
+      'weight' => isset($element['#weight']) ? $element['#weight'] : 0,
+      'callback' => isset($element['#summary_callback']) ? $element['#summary_callback'] : $key,
+      'args' => isset($element['#summary_arguments']) ? $element['#summary_arguments'] : array(),
+    );
+
+    // Track the maximum weight for the vertical tabs element.
+    $weight = max($weight, $settings[$key]['weight']);
+
+    $settings[$key]['weight'] += 0.001 * $delta++;
+  }
+
+  // The JavaScript and CSS specific for this form.
+  if (count($settings) >= variable_get('vertical_tabs_minimum', 1)) {
+    $js = $css = array();
+
+    // Add theme-specific CSS.
+    if (isset($theme)) {
+      $theme_stylesheets = variable_get('color_' . $theme . '_stylesheets', array());
+      if (!$theme_stylesheets || !module_exists('color')) {
+        // The theme-specific CSS will be only included by drupal_get_css() if
+        // it exists so we do not need to check file_exists() here.
+        $css[] = drupal_get_path('module', 'vertical_tabs') . '/' . $theme . '/vertical_tabs.' . $theme . '.css';
+      }
+      else {
+        foreach ($theme_stylesheets as $path) {
+          if (strpos($path, 'vertical_tabs.' . $theme . '.css') !== FALSE) {
+            $css[] = $path;
+          }
+        }
+      }
+    }
+
+    // User sort orders by the "weight" key.
+    uasort($settings, '_user_sort');
+
+    $form['vertical_tabs'] = array(
+      '#type' => 'markup',
+      '#value' => '',
+      '#theme' => 'vertical_tabs',
+      '#attributes' => array('class' => 'vertical-tabs clear-block'),
+      '#weight' => $weight,
+      '#attached' => array(
+        'js' => $js,
+        'css' => $css,
+      ),
+    );
+    $form['vertical_tabs']['#attached']['js'][] = array('data' => array('verticalTabs' => $settings), 'type' => 'setting');
+
+    // Resort the form since we've added a new element after it's been sorted.
+    uasort($form, 'element_sort');
+
+    return TRUE;
+  }
+}
+
+/**
+ * Process an element for vertical tabs.
+ */
+function vertical_tabs_process_element(&$element, $key) {
+  // Merge defaults.
+  $element += array('#attributes' => array());
+  $element['#attributes'] += array('class' => '');
+
+  // Add a class to identify the fieldset.
+  $element['#attributes']['class'] .= ' vertical-tabs-fieldset vertical-tabs-' . $key;
+
+  return $element;
+}
+
+function vertical_tabs_process_attached($element) {
+  $element += array('#attached' => array());
+  $element['#attached'] += array('js' => array(), 'css' => array());
+
+  // Add any attached vertical tabs JavaScript.
+  // Copied from form_process_attached() in Drupal 7.
+  foreach (array('js', 'css') as $type) {
+    foreach ($element['#attached'][$type] as $data => $options) {
+      // If the value is not an array, it's a filename and passed as first
+      // (and only) argument.
+      if (!is_array($options)) {
+        $data = $options;
+        $options = array();
+      }
+      // In some cases, the first parameter ($data) is an array. Arrays can't be
+      // passed as keys in PHP, so we have to get $data from the value array.
+      if (is_numeric($data)) {
+        $data = $options['data'];
+        unset($options['data']);
+      }
+
+      $options += array('type' => 'module');
+      if ($type == 'js') {
+        drupal_add_js($data, $options['type']);
+      }
+      else {
+        drupal_add_css($data, $options['type']);
+      }
+    }
+  }
+}
+
+/**
+ * Remove vertical tabs elements and processing from a form.
+ */
+function vertical_tabs_remove_vertical_tabs(&$form) {
+  unset($form['#vertical_tabs']);
+  if (isset($form['vertical_tabs']['#vertical_tabs_settings'])) {
+    unset($form['vertical_tabs']);
+  }
+  if (isset($form['#pre_render'])) {
+    $form['#pre_render'] = array_diff($form['#pre_render'], array('vertical_tabs_form_pre_render'));
+  }
+}
+
+/**
+ * After build function to add vertical tabs JS and CSS to the form.
+ */
+function theme_vertical_tabs($element) {
+  static $added = FALSE;
+
+  if (!$added) {
+    drupal_add_js(drupal_get_path('module', 'vertical_tabs') . '/vertical_tabs.js');
+    drupal_add_css(drupal_get_path('module', 'vertical_tabs') . '/vertical_tabs.css');
+    $added = TRUE;
+  }
+  vertical_tabs_process_attached($element);
+
+  return '<div class="'. $element['#attributes']['class'] .'">&nbsp;</div>';
+}
+
+/**
+ * Implements hook_form_controller_info().
+ */
+function vertical_tabs_form_info() {
+  $alterations['vertical_tabs_form'] = array(
+    'title' => t('Vertical tabs'),
+    'description' => t('Enables fieldsets to be collapsed into a vertical tab display.'),
+    'form callback' => 'vertical_tabs_form_configure',
+  );
+  return $alterations;
+}
+
+function vertical_tabs_form_configure(&$complete_form, $form_id, $context) {
+  if ($elements = vertical_tabs_get_form_elements($context['form'])) {
+    // Fetch the configuration.
+    $config = vertical_tabs_get_config($form_id);
+
+    // Check if this form is currently vertical tabified.
+    $is_form_tabified = isset($context['form']['vertical_tabs']) || (isset($context['form']['#pre_render']) && in_array('vertical_tabs_form_pre_render', $context['form']['#pre_render']));
+
+    $form['status'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Vertical tabify this form.'),
+      '#default_value' => isset($config) ? $config !== FALSE : $is_form_tabified,
+    );
+
+    // Merge default values and correct non-key-matching values.
+    // @todo Keep settings for non-accessible fieldsets set by more priviledged users?
+    $defaults = is_array($config) ? $config : array();
+    $options = array();
+    foreach ($elements as $key => $element) {
+      $options[$key] = $element['#title'];
+      if (!isset($defaults[$key]) && !empty($element['#group'])) {
+        $defaults[$key] = $key;
+      }
+    }
+
+    $form['fieldsets'] = array(
+      '#type' => 'checkboxes',
+      '#title' => t('Include the following elements in the vertical tabs'),
+      '#options' => $options,
+      '#default_value' => $defaults,
+    );
+
+    if (module_exists('ctools')) {
+      ctools_include('dependent');
+      $form['fieldsets'] += array(
+        '#process' => array('expand_checkboxes', 'ctools_dependent_process'),
+        '#dependency' => array('edit-vertical-tabs-form-status' => array(TRUE)),
+        '#prefix' => '<div><div id="edit-vertical-tabs-form-fieldsets-wrapper">',
+        '#suffix' => '</div></div>',
+      );
+    }
+
+    $complete_form['#submit'][] = 'vertical_tabs_form_configure_submit';
+    return $form;
+  }
+}
+
+function vertical_tabs_form_configure_submit($form, &$form_state) {
+  $form_id = $form_state['form']['form_id'];
+  if ($form_state['values']['vertical_tabs_form']['status']) {
+    vertical_tabs_save_config($form_id, $form_state['values']['vertical_tabs_form']['fieldsets']);
+  }
+  else {
+    vertical_tabs_save_config($form_id, FALSE);
+  }
+}

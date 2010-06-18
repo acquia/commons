@@ -1,5 +1,5 @@
 <?php
-// $Id: features.context.inc,v 1.1.2.12 2010/03/06 06:15:09 yhahn Exp $
+// $Id: features.context.inc,v 1.1.2.13 2010/06/01 03:43:27 yhahn Exp $
 
 /**
  * Determine context major branch version.
@@ -57,9 +57,8 @@ function context_features_export_options() {
 function context_features_export($data, &$export, $module_name = '') {
   // 3.x
   if (context_features_get_version() === 3) {
-    ctools_component_features_export('context', $data, $export, $module_name);
+    $pipe = ctools_component_features_export('context', $data, $export, $module_name);
 
-    $pipe = array();
     $contexts = context_load();
     foreach ($data as $identifier) {
       if (isset($contexts[$identifier])) {

@@ -1,17 +1,215 @@
 <?php
-
-// $Id: token.test,v 1.1.2.1 2009/05/31 15:52:35 greggles Exp $
+// $Id: token.test,v 1.1.2.5 2010/03/25 20:18:50 davereid Exp $
 
 /**
  * @file
  * Tests for the token and token_actions modules.
- *
  */
 
+/**
+ * Helper test class with some added functions for testing.
+ */
+class TokenTestHelper extends DrupalWebTestCase {
+  function setUp() {
+    // Call parent::setUp() allowing test cases to pass further modules.
+    $modules = func_get_args();
+    $modules = array_merge(array('token'), $modules);
+    call_user_func_array(array('parent', 'setUp'), $modules);
+  }
+
+  function assertToken($type, $object, $token, $expected, array $options = array()) {
+    $this->assertTokens($type, $object, array($token => $expected), $options);
+  }
+
+  function assertTokens($type, $object, array $tokens, array $options = array()) {
+    $values = token_get_values($type, $object, TRUE, $options);
+    $values = array_combine($values->tokens, $values->values);
+    foreach ($tokens as $token => $expected) {
+      $this->assertIdentical($values[$token], $expected, t("Token value for [@token] was '!actual', expected value '!expected'.", array('@token' => $token, '!actual' => $values[$token], '!expected' => $expected)));
+    }
+  }
+}
+
+class TokenNodeTestCase extends TokenTestHelper {
+  public static function getInfo() {
+    return array(
+      'name' => 'Node token tests',
+      'description' => 'Test the node tokens.',
+      'group' => 'Token',
+    );
+  }
+
+  function testNodeTokens() {
+    $created = gmmktime(0, 0, 0, 11, 19, 1978);
+    $changed = gmmktime(0, 0, 0, 7, 4, 1984);
+    $node = $this->drupalCreateNode(array(
+      'type' => 'page',
+      'language' => 'und',
+      'created' => $created,
+    ));
+    $node->changed = $changed;
+
+    $tokens = array(
+      'nid' => $node->nid,
+      'type' => 'page',
+      'type-name' => 'Page',
+      'language' => 'und',
+      'yyyy' => '1978',
+      'yy' => '78',
+      'month' => 'November',
+      'mon' => 'Nov',
+      'mm' => '11',
+      'm' => '11',
+      'ww' => '46',
+      'date' => '7',
+      'day' => 'Sunday',
+      'ddd' => 'Sun',
+      'dd' => '19',
+      'd' => '19',
+      'raw' => 280281600,
+      'mod-yyyy' => '1984',
+      'mod-yy' => '84',
+      'mod-month' => 'July',
+      'mod-mon' => 'Jul',
+      'mod-mm' => '07',
+      'mod-m' => '7',
+      'mod-ww' => '27',
+      'mod-date' => '3',
+      'mod-day' => 'Wednesday',
+      'mod-ddd' => 'Wed',
+      'mod-dd' => '04',
+      'mod-d' => '4',
+      'mod-raw' => 457747200,
+    );
+    $this->assertTokens('node', $node, $tokens);
+  }
+}
+
+class TokenCommentTestCase extends TokenTestHelper {
+  protected $node;
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Comment token tests',
+      'description' => 'Test the comment tokens.',
+      'group' => 'Token',
+    );
+  }
+
+  function setUp() {
+    parent::setUp('comment');
+    $this->node = $this->drupalCreateNode(array('comment' => 2));
+  }
+
+  function loadComment($cid) {
+    return db_fetch_object(db_query('SELECT c.cid, c.pid, c.nid, c.subject, c.comment, c.format, c.timestamp, c.name, c.mail, c.homepage, u.uid, u.name AS registered_name, u.signature, u.signature_format, u.picture, u.data, c.status FROM {comments} c INNER JOIN {users} u ON c.uid = u.uid WHERE c.cid = %d', $cid));
+  }
+
+  function createComment(array $comment) {
+    $comment += array(
+      'cid' => 0,
+      'nid' => $this->node->nid,
+      'pid' => 0,
+      'uid' => 0,
+      'subject' => $this->randomName(),
+      'comment' => $this->randomName(64),
+      'format' => 1,
+      'timestamp' => gmmktime(0, 0, 0, 7, 4, 1984),
+      'status' => COMMENT_PUBLISHED,
+    );
+
+    $cid = comment_save($comment);
+    return $this->loadComment($cid);
+  }
+
+  function testCommentTokens() {
+    $comment = $this->createComment(array(
+      'timestamp' => gmmktime(0, 0, 0, 7, 4, 1984),
+    ));
+
+    $tokens = array(
+      'comment-cid' => $comment->cid,
+      'comment-nid' => $this->node->nid,
+      'comment-yyyy' => '1984',
+      'comment-yy' => '84',
+      'comment-month' => 'July',
+      'comment-mon' => 'Jul',
+      'comment-mm' => '07',
+      'comment-m' => '7',
+      'comment-ww' => '27',
+      'comment-date' => '3',
+      'comment-day' => 'Wednesday',
+      'comment-ddd' => 'Wed',
+      'comment-dd' => '04',
+      'comment-d' => '4',
+      'comment-raw' => '457747200',
+    );
+    $this->assertTokens('comment', $comment, $tokens);
+
+  }
+}
+
+class TokenTaxonomyTestCase extends TokenTestHelper {
+  protected $vocabulary;
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Taxonomy token tests',
+      'description' => 'Test the taxonomy tokens.',
+      'group' => 'Token',
+    );
+  }
+
+  function setUp() {
+    parent::setUp('taxonomy');
+    // Reset the static taxonomy.module caches.
+    taxonomy_vocabulary_load(0, TRUE);
+    taxonomy_get_term(0, TRUE);
+  }
+
+  function addVocabulary(array $vocabulary = array()) {
+    $vocabulary += array(
+      'name' => drupal_strtolower($this->randomName(5)),
+      'nodes' => array('story' => 'story'),
+    );
+    taxonomy_save_vocabulary($vocabulary);
+    return (object) $vocabulary;
+  }
+
+  function addTerm(stdClass $vocabulary, array $term = array()) {
+    $term += array(
+      'name' => drupal_strtolower($this->randomName(5)),
+      'vid' => $vocabulary->vid,
+    );
+    taxonomy_save_term($term);
+    return (object) $term;
+  }
+
+  function testTaxonomyTokens() {
+    $vocabulary = $this->addVocabulary(array(
+      'name' => '<blink>Vocab Name</blink>',
+      'description' => '<blink>Vocab Description</blink>',
+    ));
+    $term = $this->addTerm($vocabulary, array(
+      'name' => '<blink>Term Name</blink>',
+      'description' => '<blink>Term Description</blink>',
+    ));
+
+    $tokens = array(
+      'tid' => $term->tid,
+      'cat' => check_plain($term->name),
+      'cat-raw' => $term->name,
+      'cat-description' => 'Term Description',
+      'vid' => $vocabulary->vid,
+      'vocab' => check_plain($vocabulary->name),
+      'vocab-raw' => $vocabulary->name,
+      'vocab-description' => 'Vocab Description',
+    );
+    $this->assertTokens('taxonomy', $term, $tokens);
+  }
+}
+
 class TokenTestCase extends DrupalWebTestCase {
-  /**
-   * Implementation of getInfo().
-   */
   public static function getInfo() {
     return array(
       'name' => t('Token and token action tests'),
@@ -20,12 +218,8 @@ class TokenTestCase extends DrupalWebTestCase {
     );
   }
 
-  /**
-   * Implementation of setUp().
-   */
   function setUp() {
     parent::setUp('token', 'token_actions', 'trigger');
-
   }
 
   /**

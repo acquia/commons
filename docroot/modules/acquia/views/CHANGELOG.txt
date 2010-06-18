@@ -1,5 +1,19 @@
 CHANGELOG for Views 2 for Drupal 6
-Views 2.10
+Views 2.11 (Jun 16, 2010)
+  Bug fixes:
+    o #770006 by macdee: Taxonomy term default plugin mysteriously broken.
+    o #767146 by bangpound: Validation not passed down into row style plugin.
+    o #513396 by yhager and jcisio: Views trim was not multibyte safe.
+    o #550420 by blauerberg: Views RSS did not properly pass readmore flag from node to RSS item.
+    o #781296 by dereine: Node: Type "link to its node" option broken.
+    o #769010 by andrea.gariboldi: Overuse of query substitutions fails on some databases.
+    o #607418: Fix queries broken with "ambiguous nid" due to uncommon relationships.
+    o #768162: Revert inadvertant change to grid style behavior.
+    o #815392 by killes and dereine: Incorrect construction of $account caused accidental non-permanent change to $user->roles.
+    o #723454 by dereine: Upgrade from 5.0 could cause blocks for views with long names to lose configuration.
+    o SA-CONTRIB-2010-067: Fix CSRF and XSS vulnerabilities.
+
+Views 2.10 (Apr 08, 2010)
   Bug fixes:
     o #765760 by crea: New setting for raw node type had wrong default.
     o #682888 by jcmarco: With zen and zen subthemes, the new $classes array could fail for row styles.

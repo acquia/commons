@@ -1,5 +1,5 @@
 <?php
-// $Id: token_taxonomy.inc,v 1.3.4.3 2008/06/28 15:10:22 greggles Exp $
+// $Id: token_taxonomy.inc,v 1.3.4.5 2010/06/05 16:45:58 davereid Exp $
 
 /**
  * @file
@@ -25,12 +25,14 @@ function taxonomy_token_values($type, $object = NULL, $options = array()) {
       $vid = $category->vid;
       $vocabulary = taxonomy_vocabulary_load($vid);
 
+      $values['tid'] = $category->tid;
+      $values['cat'] = check_plain($category->name);
+      $values['cat-raw'] = $category->name;
+      $values['cat-description'] = filter_xss($category->description);
       $values['vid'] = $vid;
       $values['vocab'] = check_plain($vocabulary->name);
-      $values['cat'] = check_plain($category->name);
-      $values['tid'] = $category->tid;
       $values['vocab-raw'] = $vocabulary->name;
-      $values['cat-raw'] = $category->name;
+      $values['vocab-description'] = filter_xss($vocabulary->description);
 
       break;
   }
@@ -42,12 +44,14 @@ function taxonomy_token_values($type, $object = NULL, $options = array()) {
  */
 function taxonomy_token_list($type = 'all') {
   if ($type == 'taxonomy' || $type == 'all') {
+    $tokens['taxonomy']['tid'] = t('The id number of the category.');
+    $tokens['taxonomy']['cat'] = t('The name of the category.');
+    $tokens['taxonomy']['cat-raw'] = t('The unfiltered name of the category.');
+    $tokens['taxonomy']['cat-description'] = t('The optional description of the taxonomy term.');
     $tokens['taxonomy']['vid'] = t("The id number of the category's parent vocabulary.");
     $tokens['taxonomy']['vocab'] = t("The vocabulary that the page's first category belongs to.");
-    $tokens['taxonomy']['cat'] = t('The name of the category.');
-    $tokens['taxonomy']['tid'] = t('The id number of the category.');
-    $tokens['taxonomy']['vocab-raw'] = t("The unfiltered vocabulary that the page's first category belongs to. WARNING - raw user input.");
-    $tokens['taxonomy']['cat-raw'] = t('The unfiltered name of the category. WARNING - raw user input.');
+    $tokens['taxonomy']['vocab-raw'] = t("The unfiltered vocabulary that the page's first category belongs to.");
+    $tokens['taxonomy']['vocab-description'] = t('The optional description of the taxonomy vocabulary.');
 
     return $tokens;
   }

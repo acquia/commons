@@ -1,5 +1,5 @@
 <?php
-// $Id: token_user.inc,v 1.3.4.2 2008/06/28 15:10:22 greggles Exp $
+// $Id: token_user.inc,v 1.3.4.7 2010/06/05 16:45:58 davereid Exp $
 
 /**
  * @file
@@ -29,15 +29,20 @@ function user_token_values($type, $object = NULL, $options = array()) {
         $account = user_load(array('uid' => $user->uid));
       }
 
-      $values['user']           = $account->uid ? check_plain($account->name) : variable_get('anonymous', 'Anonymous');
-      $values['user-raw']           = $account->uid ? $account->name : variable_get('anonymous', 'Anonymous');
+      // Adjust for the anonymous user name.
+      if (!$account->uid && !$account->name) {
+        $account->name = variable_get('anonymous', 'Anonymous');
+      }
+
+      $values['user']           = check_plain($account->name);
+      $values['user-raw']       = $account->name;
       $values['uid']            = $account->uid;
       $values['mail']           = $account->uid ? $account->mail : '';
-      $values['reg-date']       = $account->uid ? format_date($account->created, 'short') : '';
-      $values['reg-since']      = $account->uid ? format_interval($account->created) : '';
-      $values['log-date']       = $account->uid ? format_date($account->access, 'short') : '';
-      $values['log-since']      = $account->uid ? format_interval($account->access) : '';
-      $values['date-in-tz']     = $account->uid ? format_date(time(), 'short', '', $account->timezone) : '';
+      $values['reg-date']       = $account->uid ? format_date($account->created, 'small') : '';
+      $values['reg-since']      = $account->uid ? format_interval(time() - $account->created) : '';
+      $values['log-date']       = $account->uid ? format_date($account->access, 'small') : '';
+      $values['log-since']      = $account->uid ? format_interval(time() - $account->access) : '';
+      $values['date-in-tz']     = $account->uid ? format_date(time(), 'small', '', $account->timezone) : '';
       $values['account-url']    = $account->uid ? url("user/$account->uid") : '';
       $values['account-edit']   = $account->uid ? url("user/$account->uid/edit") : '';
 
@@ -52,15 +57,15 @@ function user_token_values($type, $object = NULL, $options = array()) {
 function user_token_list($type = 'all') {
   if ($type == 'user' || $type == 'all') {
     $tokens['user']['user']           = t("User's name");
-    $tokens['user']['user-raw']           = t("User's unfiltered name. WARNING - raw user input.");
+    $tokens['user']['user-raw']       = t("User's unfiltered name.");
 
     $tokens['user']['uid']            = t("User's ID");
     $tokens['user']['mail']           = t("User's email address");
 
     $tokens['user']['reg-date']       = t("User's registration date");
-    $tokens['user']['reg-since']      = t("Days since the user registered");
+    $tokens['user']['reg-since']      = t("User's registration date in 'time-since' format. (40 years 2 months)");
     $tokens['user']['log-date']       = t("User's last login date");
-    $tokens['user']['log-since']      = t("Days since the user's last login");
+    $tokens['user']['log-since']      = t("User's last login date in 'time-since' format. (40 years 2 months)");
     $tokens['user']['date-in-tz']     = t("The current date in the user's timezone");
     $tokens['user']['account-url']    = t("The URL of the user's profile page.");
     $tokens['user']['account-edit']   = t("The URL the user's account editing page.");

@@ -1,12 +1,12 @@
 <?php
-// $Id: acquia_search.module 5221 2010-04-09 00:49:21Z buildbot $
+// $Id: acquia_search.module 5257 2010-06-10 04:36:20Z buildbot $
 
 /**
  * @file
  *   Integration between Acquia Drupal and Acquia's hosted solr search service.
  */
 
-define('ACQUIA_SEARCH_VERSION', "6.x-1.5193");
+define('ACQUIA_SEARCH_VERSION', "6.x-1.5256");
 
 /**
  * Implementation of hook_enable().
@@ -82,6 +82,14 @@ function acquia_search_form_apachesolr_settings_alter(&$form, $form_state) {
     $form['apachesolr_path']['#type'] = 'value';
     $form['apachesolr_failure']['#title'] = t("If your site cannot connect to the Acquia Search network service");
     $form['#submit'][] = 'acquia_search_settings_submit';
+    $form['advanced']['acquia_search_edismax_default'] = array(
+      '#type' => 'radios',
+      '#title' => t('Allow advanced syntax for all searches'),
+      '#default_value' => variable_get('acquia_search_edismax_default', 0),
+      '#options' => array(0 => t('Disabled'), 1 => t('Enabled')),
+      '#description' => t('If enabled, all Acquia Search keyword searches may use advanced <a href="@url">Lucene syntax</a> such as wildcard searches, fuzzy searches, proximity searches, boolean operators and more via the Extended Dismax parser.', array('@url' => 'http://lucene.apache.org/java/2_9_1/queryparsersyntax.html')),
+      '#weight' => 10,
+    );
   }
 }
 
@@ -116,6 +124,25 @@ function acquia_search_search_box_form_submit($form, &$form_state) {
     $keys = str_replace('+', '%2B', $keys);
   }
   $form_state['redirect'] = 'search/apachesolr_search/'. trim($keys);
+}
+
+/**
+ * Implementation of hook_apachesolr_modify_query().
+ *
+ * Possibly alters the query type ('qt') param to edismax.
+ */
+function acquia_search_apachesolr_modify_query($query, &$params, $caller) {
+  // @todo - does it make sense to check $caller too?
+  if (isset($params['qt'])) {
+    // This is a 'mlt' query or something else custom.
+    return;
+  }
+  // Set the qt to edismax if we have keywords, and we always use it, or are
+  // using a wildcard (* or ?).
+  $keys = $query->get_query_basic();
+  if ($keys && (variable_get('acquia_search_edismax_default', 0) || preg_match('/\S+[*?]/', $keys))) {
+    $params['qt'] = 'edismax';
+  }
 }
 
 /**

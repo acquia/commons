@@ -1,5 +1,5 @@
 <?php
-// $Id: filefield.install,v 1.38 2010/04/24 01:51:43 quicksketch Exp $
+// $Id: filefield.install,v 1.39 2010/05/08 04:25:37 quicksketch Exp $
 /**
  * @file
  * FileField: Defines a CCK file field type.
@@ -216,7 +216,7 @@ function filefield_update_6100() {
         $field['description_field'] = $field['show_description'];
       }
       _content_field_write($field);
-      $ret[] = array('success' => TRUE, 'query' => t('The File field %field has been updated with new settings.', array('%field' => $field['field_name'])));
+      $ret[] = array('success' => TRUE, 'query' => t('The file field %field has been updated with new settings.', array('%field' => $field['field_name'])));
     }
   }
 

@@ -1,5 +1,5 @@
 <?php
-// $Id: field_file.inc,v 1.35 2010/04/29 01:37:05 quicksketch Exp $
+// $Id: field_file.inc,v 1.36 2010/05/07 22:32:36 quicksketch Exp $
 
 /**
  * @file
@@ -85,7 +85,7 @@ function field_file_save_upload($source, $validators = array(), $dest = FALSE) {
     return 0;
   }
   if (!@chmod($file->filepath, 0664)) {
-    watchdog('filefield', 'Could not set permissons on destination file: %file', array('%file' => $file->filepath));
+    watchdog('filefield', 'Could not set permissions on destination file: %file', array('%file' => $file->filepath));
   }
 
   // Let modules add additional properties to the yet barebone file object.

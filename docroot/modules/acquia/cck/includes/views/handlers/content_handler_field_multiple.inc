@@ -1,5 +1,5 @@
 <?php
-// $Id: content_handler_field_multiple.inc,v 1.1.2.22 2009/07/22 20:45:17 markuspetrux Exp $
+// $Id: content_handler_field_multiple.inc,v 1.1.2.23 2010/01/25 23:13:40 markuspetrux Exp $
 
 /**
  * @file
@@ -36,14 +36,19 @@ class content_handler_field_multiple extends content_handler_field {
     }
   }
 
-  function options(&$options) {
-    parent::options($options);
+  function option_definition() {
+    $options = parent::option_definition();
+
     $options['multiple'] = array(
-      'group' => TRUE,
-      'multiple_number' => '',
-      'multiple_from' => '',
-      'multiple_reversed' => FALSE,
+      'contains' => array(
+        'group' => array('default' => TRUE),
+        'multiple_number' => array('default' => ''),
+        'multiple_from' => array('default' => ''),
+        'multiple_reversed' => array('default' => FALSE),
+      ),
     );
+
+    return $options;
   }
 
   /**

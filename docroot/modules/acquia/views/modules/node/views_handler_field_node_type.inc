@@ -1,5 +1,5 @@
 <?php
-// $Id: views_handler_field_node_type.inc,v 1.2.2.2 2010/04/08 17:24:42 merlinofchaos Exp $
+// $Id: views_handler_field_node_type.inc,v 1.2.2.3 2010/04/29 18:33:39 merlinofchaos Exp $
 
 /**
  * Field handler to translate a node type into its readable form.
@@ -37,7 +37,7 @@ class views_handler_field_node_type extends views_handler_field_node {
   }
 
   function render($values) {
-    return $this->render_name($values->{$this->field_alias}, $values);
+    return $this->render_link($this->render_name($values->{$this->field_alias}, $values), $values);
   }
 }
 

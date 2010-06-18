@@ -1,5 +1,5 @@
 <?php
-// $Id: link.install,v 1.5.4.1 2009/07/04 19:07:42 jcfiala Exp $
+// $Id: link.install,v 1.5.4.2 2010/02/22 03:28:00 jcfiala Exp $
 
 /**
  * @file
@@ -88,6 +88,46 @@ function link_update_6001() {
     foreach ($db_info['columns'] as $column) {
       db_change_field($ret, $db_info['table'], $column['column'], $column['column'], $column);
       $ret[] = update_sql("UPDATE {". $db_info['table'] ."} SET ". $column['column'] ." = NULL WHERE ". $column['column'] ." = '' OR ". $column['column'] ." = 'N;'");
+    }
+  }
+  
+  // Let CCK re-associate link fields with Link module and activate the fields.
+  content_associate_fields('link');
+  
+  return $ret;
+}
+
+/**
+ * 6.x-2.7 had code that mistakenly wrote 'a:3:{s:6:"target";s:7:"default";s:5:"class";s:0:"";s:3:"rel";s:0:"";}'
+ * to the attributes field, when it should have written NULL.
+ *
+ * This fixes that.  Ticket #626932.
+ */
+function link_update_6002() {
+  $ret = array();
+  
+  // Build a list of fields that need updating.
+  $update_fields = array();
+  foreach (content_types_install() as $type_name => $fields) {
+    foreach ($fields as $field) {
+      if ($field['type'] == 'link') {
+        // We only process a given field once.
+        $update_fields[$field['field_name']] = $field;
+      }
+    }
+  }
+  
+  // Update each field's storage to match the current definition.
+  foreach ($update_fields as $field) {
+    $db_info = content_database_info($field);
+    foreach ($db_info['columns'] as $column) {
+      //db_change_field($ret, $db_info['table'], $column['column'], $column['column'], $column);
+      if (preg_match('/_attributes$/', $column['column'])) {
+        //we can't use update_sql, because it doesn't handle serialized data.
+        $sql = "UPDATE {". $db_info['table'] ."} SET ". $column['column'] ." = NULL WHERE ". $column['column'] ." = '%s'";
+        $result = db_query($sql, 'a:3:{s:6:"target";s:7:"default";s:5:"class";s:0:"";s:3:"rel";s:0:"";}');
+        $ret[] = array('success' => $result !== FALSE, 'query' => check_plain($sql));
+      }
     }
   }
   

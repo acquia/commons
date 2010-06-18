@@ -1672,22 +1672,22 @@ function _commons_core_context_default_contexts() {
       '0' => 1,
     ),
     'block' => array(
-      'og_views_0' => array(
-        'module' => 'og_views',
+      'og_0' => array(
+        'module' => 'og',
         'delta' => '0',
         'weight' => 43,
         'region' => 'sidebar_last',
         'status' => '0',
-        'label' => 'Group search',
+        'label' => 'Group details',
         'type' => 'context_ui',
       ),
-      'og_0' => array(
-        'module' => 'og',
+      'og_views_0' => array(
+        'module' => 'og_views',
         'delta' => '0',
         'weight' => 44,
         'region' => 'sidebar_last',
         'status' => '0',
-        'label' => 'Group details',
+        'label' => 'Group search',
         'type' => 'context_ui',
       ),
       'views_og_upcoming_events-block_1' => array(

@@ -1,12 +1,19 @@
-//$Id: CHANGELOG.txt,v 1.1.6.389 2009/12/04 18:23:30 markuspetrux Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.397 2010/06/09 13:22:28 karens Exp $
 
 CCK 6.x-2.x
 ===========
 
+Features:
+- #692822 by Dave Reid, add authoring info and publishing options to CCK extra fields.
+- #670344 by dagmar: Make CCK compatible with both, views 2 and views 3.
+
 Bugfixes:
+- #470470 by neilnz, use iLIKE for postgres selects.
+- #769592 by vkareh, add default values to nodeapi.
+- #714762 by Robbert, make diff module integration PHP5 compliant.
+- Add db_rewrite_sql() check to nodereference formatters.
 - #625768 CCK 6.x-2.6, got fatal error on update.php while running userreference_update_6002().
 - #649106 by thekevinday: Fix content_copy_form_alter(), where $form_state argument is not passed by reference.
-
 
 CCK 6.x-2.6
 ===========

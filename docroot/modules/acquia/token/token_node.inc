@@ -1,5 +1,5 @@
 <?php
-// $Id: token_node.inc,v 1.5.4.14 2009/05/14 16:09:15 greggles Exp $
+// $Id: token_node.inc,v 1.5.4.22 2010/06/05 16:45:58 davereid Exp $
 
 /**
  * @file
@@ -24,47 +24,38 @@ function node_token_values($type, $object = NULL, $options = array()) {
       $node = $object;
       $account = db_fetch_object(db_query("SELECT name, mail FROM {users} WHERE uid = %d", $node->uid));
 
-      $values['nid']              = $node->nid;
-      $values['type']             = $node->type;
-      $values['type-name']        = node_get_types('name', $node->type);
-      $values['language']         = filter_xss_admin($node->language);
-      $values['title']            = check_plain($node->title);
-      $values['title-raw']        = $node->title;
-      $values['author-uid']       = $node->uid;
-      $values['author-name']      = check_plain($account->name);
-      $values['author-name-raw']  = $account->name;
-      $values['author-mail']      = check_plain($account->mail);
-      $values['author-mail-raw']  = $account->mail;
+      // Adjust for the anonymous user name.
+      if (!$node->uid && !$account->name) {
+        $account->name = variable_get('anonymous', t('Anonymous'));
+      }
+
+      $values['nid']                = $node->nid;
+      $values['type']               = $node->type;
+      $values['type-name']          = node_get_types('name', $node->type);
+      $values['language']           = filter_xss_admin($node->language);
+      $values['title']              = check_plain($node->title);
+      $values['title-raw']          = $node->title;
+      $values['author-uid']         = $node->uid;
+      $values['author-name']        = check_plain($account->name);
+      $values['author-name-raw']    = $account->name;
+      $values['author-mail']        = check_plain($account->mail);
+      $values['author-mail-raw']    = $account->mail;
+
+      if (module_exists('comment')) {
+        $values['node_comment_count'] = isset($node->comment_count) ? $node->comment_count : 0;
+        $values['unread_comment_count'] = comment_num_new($node->nid);
+      }
+      else {
+        $values['node_comment_count'] = 0;
+        $values['unread_comment_count'] = 0;
+      }
+
       if (isset($node->created)) {
-        $date = (int)$node->created;
-        $values['yyyy']           = date('Y', $date);
-        $values['yy']             = date('y', $date);
-        $values['month']          = date('F', $date);
-        $values['mon']            = date('M', $date);
-        $values['mm']             = date('m', $date);
-        $values['m']              = date('n', $date);
-        $values['ww']             = date('W', $date);
-        $values['date']           = date('N', $date);
-        $values['day']            = date('l', $date);
-        $values['ddd']            = date('D', $date);
-        $values['dd']             = date('d', $date);
-        $values['d']              = date('j', $date);
+        $values += token_get_date_token_values($node->created);
       }
 
       if (isset($node->changed)) {
-        $date = (int)$node->changed;
-        $values['mod-yyyy']       = date('Y', $date);
-        $values['mod-yy']         = date('y', $date);
-        $values['mod-month']      = date('F', $date);
-        $values['mod-mon']        = date('M', $date);
-        $values['mod-mm']         = date('m', $date);
-        $values['mod-m']          = date('n', $date);
-        $values['mod-ww']         = date('W', $date);
-        $values['mod-date']       = date('N', $date);
-        $values['mod-day']        = date('l', $date);
-        $values['mod-ddd']        = date('D', $date);
-        $values['mod-dd']         = date('d', $date);
-        $values['mod-d']          = date('j', $date);
+        $values += token_get_date_token_values($node->changed, 'mod-');
       }
 
       // Try to get the menu data.
@@ -99,12 +90,12 @@ function node_token_values($type, $object = NULL, $options = array()) {
       }
 
       // And now taxonomy, which is a bit more work. This code is adapted from
-      // pathauto's handling code; it's intended for compatability with it.
+      // pathauto's handling code; it's intended for compatibility with it.
       if (module_exists('taxonomy') && !empty($node->taxonomy) && is_array($node->taxonomy)) {
         foreach ($node->taxonomy as $term) {
           $original_term = $term;
           if ((object)$term) {
-            // With freetagging it's somewhat hard to get the tid, vid, name values
+            // With free-tagging it's somewhat hard to get the tid, vid, name values
             // Rather than duplicating taxonomy.module code here you should make sure your calling module
             // has a weight of at least 1 which will run after taxonomy has saved the data which allows us to
             // pull it out of the db here.
@@ -113,7 +104,7 @@ function node_token_values($type, $object = NULL, $options = array()) {
               if (!$vid) {
                 continue;
               }
-              $term = db_fetch_object(db_query_range("SELECT t.tid, t.name FROM {term_data} t INNER JOIN {term_node} r ON r.tid = t.tid WHERE t.vid = %d AND r.vid = %d ORDER BY weight", $vid, $object->vid, 0, 1));
+              $term = db_fetch_object(db_query_range("SELECT t.tid, t.name FROM {term_data} t INNER JOIN {term_node} r ON r.tid = t.tid WHERE t.vid = %d AND r.vid = %d ORDER BY t.weight", $vid, $object->vid, 0, 1));
               $term->vid = $vid;
             }
 
@@ -175,45 +166,35 @@ function node_token_list($type = 'all') {
     $tokens['node']['type-name']       = t('Node type (user-friendly version)');
     $tokens['node']['language']        = t('Node language');
     $tokens['node']['title']           = t('Node title');
-    $tokens['node']['title-raw']       = t('Unfiltered node title. WARNING - raw user input.');
+    $tokens['node']['title-raw']       = t('Unfiltered node title.');
 
     $tokens['node']['author-uid']      = t("Node author's user id");
     $tokens['node']['author-name']     = t("Node author's user name");
-    $tokens['node']['author-name-raw'] = t("Node author's user name. WARNING - raw user input.");
+    $tokens['node']['author-name-raw'] = t("Node author's user name.");
     $tokens['node']['author-mail']     = t("Node author's e-mail.");
-    $tokens['node']['author-mail-raw'] = t("Node author's e-mail. WARNING - raw user input.");
-
+    $tokens['node']['author-mail-raw'] = t("Node author's e-mail.");
+    $tokens['node']['node_comment_count'] = t("The number of comments on a node.");
+    $tokens['node']['unread_comment_count'] = t("The number of new comments on a node.");
 
     $tokens['node']['term']            = t("Name of top taxonomy term");
-    $tokens['node']['term-raw']        = t("Unfiltered name of top taxonomy term. WARNING - raw user input.");
+    $tokens['node']['term-raw']        = t("Unfiltered name of top taxonomy term.");
     $tokens['node']['term-id']         = t("ID of top taxonomy term");
     $tokens['node']['vocab']           = t("Name of top term's vocabulary");
-    $tokens['node']['vocab-raw']       = t("Unfiltered name of top term's vocabulary. WARNING - raw user input.");
+    $tokens['node']['vocab-raw']       = t("Unfiltered name of top term's vocabulary.");
     $tokens['node']['vocab-id']        = t("ID of top term's vocabulary");
 
     // Temporarily disabled -- see notes in node_token_values.
     // $tokens['node']['catpath']        = t("Full taxonomy tree for the topmost term");
 
-    $tokens['node']['yyyy']            = t("Node creation year (four digit)");
-    $tokens['node']['yy']              = t("Node creation year (two digit)");
-    $tokens['node']['month']           = t("Node creation month (full word)");
-    $tokens['node']['mon']             = t("Node creation month (abbreviated)");
-    $tokens['node']['mm']              = t("Node creation month (two digit, zero padded)");
-    $tokens['node']['m']               = t("Node creation month (one or two digit)");
-    $tokens['node']['ww']              = t("Node creation week (two digit)");
-    $tokens['node']['date']            = t("Node creation date (day of month)");
-    $tokens['node']['day']             = t("Node creation day (full word)");
-    $tokens['node']['ddd']             = t("Node creation day (abbreviation)");
-    $tokens['node']['dd']              = t("Node creation day (two digit, zero-padded)");
-    $tokens['node']['d']               = t("Node creation day (one or two digit)");
+    $tokens['node'] += token_get_date_token_info(t('Node creation'));
     $tokens['node']['mod-????']        = t('All tokens for node creation dates can also be used with with the "mod-" prefix; doing so will use the modification date rather than the creation date.');
 
     $tokens['node']['menu']                = t("The name of the menu the node belongs to.");
-    $tokens['node']['menu-raw']            = t("The name of the menu the node belongs to. WARNING - raw user input.");
+    $tokens['node']['menu-raw']            = t("The name of the menu the node belongs to.");
     $tokens['node']['menupath']            = t("The menu path (as reflected in the breadcrumb), not including Home or [menu]. Separated by /.");
-    $tokens['node']['menupath-raw']        = t("The unfiltered menu path (as reflected in the breadcrumb), not including Home or [menu]. Separated by /. WARNING - raw user input.");
+    $tokens['node']['menupath-raw']        = t("The unfiltered menu path (as reflected in the breadcrumb), not including Home or [menu]. Separated by /.");
     $tokens['node']['menu-link-title']     = t("The text used in the menu as link text for this item.");
-    $tokens['node']['menu-link-title-raw'] = t("The unfiltered text used in the menu as link text for this item. WARNING - raw user input.");
+    $tokens['node']['menu-link-title-raw'] = t("The unfiltered text used in the menu as link text for this item.");
 
     return $tokens;
   }
@@ -303,8 +284,8 @@ function book_token_list($type) {
     $list['book']['book_id']        = t("The id of the node's book parent.");
     $list['book']['bookpath']       = t("The titles of all parents in the node's book hierarchy.");
 
-    $list['book']['book-raw']       = t("The unfiltered title of the node's book parent. WARNING - raw user input.");
-    $list['book']['bookpath-raw']   = t("The unfiltered titles of all parents in the node's book hierarchy. WARNING - raw user input.");
+    $list['book']['book-raw']       = t("The unfiltered title of the node's book parent.");
+    $list['book']['bookpath-raw']   = t("The unfiltered titles of all parents in the node's book hierarchy.");
 
     return $list;
   }

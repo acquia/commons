@@ -1,5 +1,5 @@
 <?php
-// $Id: token.module,v 1.7.4.12 2009/06/01 16:15:32 greggles Exp $
+// $Id: token.module,v 1.7.4.21 2010/06/05 16:45:58 davereid Exp $
 
 /**
  * @file
@@ -12,45 +12,33 @@
  * @ingroup token
  */
 
-function token_theme() {
-  return array(
-    'token_help' => array(
-      'arguments' => array('type' => 'all', 'prefix' => '[', 'suffix' => ']')
-    ),
-  );
+/**
+ * Implements hook_help().
+ */
+function token_help($path, $arg) {
+  if ($path == 'admin/help#token') {
+    $output = '<dl>';
+    $output .= '<dt>' . t('List of the currently available tokens on this site') . '</dt>';
+    $output .= '<dd>' . theme('token_tree', 'all', TRUE, TRUE) . '</dd>';
+    $output .= '</dl>';
+    return $output;
+  }
 }
 
 /**
- * For a given context, builds a formatted list of tokens and descriptions
- * of their replacement values.
- *
- * @param types
- *    The token types to display documentation for. Can be either a single
- *    string or an array of token types. Defaults to 'all'.
- * @param prefix
- *    The prefix your module will use when parsing tokens. Defaults to '['
- * @param suffix
- *    The suffix your module will use when parsing tokens. Defaults to ']'
- * @return An HTML table containing the formatting docs.
+ * Implements hook_theme().
  */
-function theme_token_help($types = 'all', $prefix = '[', $suffix = ']') {
-  token_include();
-  $full_list = token_get_list($types);
-
-  $headers = array(t('Token'), t('Replacement value'));
-  $rows = array();
-  foreach ($full_list as $key => $category) {
-    $rows[] = array(array('data' => drupal_ucfirst($key) .' '. t('tokens'), 'class' => 'region', 'colspan' => 2));
-    foreach ($category as $token => $description) {
-      $row = array();
-      $row[] = $prefix . $token . $suffix;
-      $row[] = $description;
-      $rows[] = $row;
-    }
-  }
-
-  $output = theme('table', $headers, $rows, array('class' => 'description'));
-  return $output;
+function token_theme() {
+  return array(
+    'token_help' => array(
+      'arguments' => array('type' => 'all', 'prefix' => '[', 'suffix' => ']'),
+      'file' => 'token.pages.inc',
+    ),
+    'token_tree' => array(
+      'arguments' => array('token_types' => array(), 'global_types' => TRUE , 'click_insert' => TRUE, 'recursion_limit' => 4),
+      'file' => 'token.pages.inc',
+    ),
+  );
 }
 
 /**
@@ -60,14 +48,14 @@ function theme_token_help($types = 'all', $prefix = '[', $suffix = ']') {
  *   A flag indicating the class of substitution tokens to use. If an
  *   object is passed in the second param, 'type' should contain the
  *   object's type. For example, 'node', 'comment', or 'user'. If your
- *   implemention of the hook inserts globally applicable tokens that
+ *   implementation of the hook inserts globally applicable tokens that
  *   do not depend on a particular object, it should only return values
  *   when $type is 'global'.
  * @param object
  *   Optionally, the object to use for building substitution values.
  *   A node, comment, user, etc.
  * @return
- *   A keyed array containing the substitution tokens and the substition
+ *   A keyed array containing the substitution tokens and the substitution
  *   values for the passed-in type and object.
  */
 function token_token_values($type, $object = NULL) {
@@ -86,23 +74,11 @@ function token_token_values($type, $object = NULL) {
       $values['site-mission'] = filter_xss_admin(variable_get('site_mission', ''));
       $values['site-mail']    = variable_get('site_mail', '');
       $time = time(); $tz = variable_get('date_default_timezone', 0);
-      $values['site-date']       = format_date($time, 'short',   '', $tz);
-      // Date parts, similar to dates in node_token.inc#node_token_values().
-      $values['site-date-yyyy']  = format_date($time, 'custom', 'Y', $tz);
-      $values['site-date-yy']    = format_date($time, 'custom', 'y', $tz);
-      $values['site-date-month'] = format_date($time, 'custom', 'F', $tz);
-      $values['site-date-mon']   = format_date($time, 'custom', 'M', $tz);
-      $values['site-date-mm']    = format_date($time, 'custom', 'm', $tz);
-      $values['site-date-m']     = format_date($time, 'custom', 'n', $tz);
-      $values['site-date-ww']    = format_date($time, 'custom', 'W', $tz);
-      $values['site-date-date']  = format_date($time, 'custom', 'N', $tz);
-      $values['site-date-day']   = format_date($time, 'custom', 'l', $tz);
-      $values['site-date-ddd']   = format_date($time, 'custom', 'D', $tz);
-      $values['site-date-dd']    = format_date($time, 'custom', 'd', $tz);
-      $values['site-date-d']     = format_date($time, 'custom', 'j', $tz);
+      $values['site-date']    = format_date($time, 'small', '', $tz);
+      $values += token_get_date_token_values($time, 'site-date-');
       // The page number may or may not be present. If it is, it may be comma separated values in which case grab the first.
       $page = isset($_GET['page']) ? $_GET['page'] : '';
-      $values['page-number']     = 1 + (int)(($p = strpos($page, ',')) ? substr($page, 0, $p) : $page);
+      $values['page-number']  = 1 + (int)(($p = strpos($page, ',')) ? substr($page, 0, $p) : $page);
       break;
   }
   return $values;
@@ -126,49 +102,36 @@ function token_token_list($type = 'all') {
   $tokens['global']['user-name']    = t('The name of the currently logged in user.');
   $tokens['global']['user-id']      = t('The user ID of the currently logged in user.');
   $tokens['global']['user-mail']    = t('The email address of the currently logged in user.');
-  $tokens['global']['site-url']     = t('The url of the current Drupal website.');
+  $tokens['global']['site-url']     = t('The URL of the current Drupal website.');
   $tokens['global']['site-name']    = t('The name of the current Drupal website.');
   $tokens['global']['site-slogan']  = t('The slogan of the current Drupal website.');
   $tokens['global']['site-mission'] = t('The mission of the current Drupal website.');
   $tokens['global']['site-mail']    = t('The contact email address for the current Drupal website.');
   $tokens['global']['site-date']    = t("The current date on the site's server.");
-  // Date parts, similar to dates in node_token.inc#node_token_values().
-  $tokens['global']['site-date-yyyy']  = t('The current year (four digit)');
-  $tokens['global']['site-date-yy']    = t('The current year (two digit)');
-  $tokens['global']['site-date-month'] = t('The current month (full word)');
-  $tokens['global']['site-date-mon']   = t('The current month (abbreviated)');
-  $tokens['global']['site-date-mm']    = t('The current month (two digit, zero padded)');
-  $tokens['global']['site-date-m']     = t('The current month (one or two digit)');
-  $tokens['global']['site-date-ww']    = t('The current week (two digit)');
-  $tokens['global']['site-date-date']  = t('The current date (day of month)');
-  $tokens['global']['site-date-day']   = t('The current day (full word)');
-  $tokens['global']['site-date-ddd']   = t('The current day of week (abbreviation)');
-  $tokens['global']['site-date-dd']    = t('The current day (two digit, zero-padded)');
-  $tokens['global']['site-date-d']     = t('The current day (one or two digit)');
-  $tokens['global']['page-number']     = t('The current page number for paged lists');
+  $tokens['global'] += token_get_date_token_info(t('The current'), 'site-date-');
   return $tokens;
 }
 
 /**
  * General function to include the files that token relies on for the real work.
- *
  */
 function token_include() {
-  $path = drupal_get_path('module', 'token');
-  require_once("$path/token_node.inc");
-  require_once("$path/token_user.inc");
-  if (module_exists('taxonomy')) {
-    require_once("$path/token_taxonomy.inc");
-  }
-  if (module_exists('comment')) {
-    require_once("$path/token_comment.inc");
-  }
+  static $run = FALSE;
 
+  if (!$run) {
+    $run = TRUE;
+    $modules_enabled = array_keys(module_list());
+    $modules = array('node', 'user', 'taxonomy', 'comment');
+    $modules = array_intersect($modules, $modules_enabled);
+    foreach ($modules as $module) {
+      module_load_include('inc', 'token', "token_$module");
+    }
+  }
 }
 
 /**
  * Return the value of $original, with all instances of placeholder
- * tokens replaced by their proper values. To replace mutliple types
+ * tokens replaced by their proper values. To replace multiple types
  * at once see token_replace_multiple().
  *
  * @param original
@@ -189,18 +152,24 @@ function token_include() {
  * @param trailing
  *    Character(s) to append to the token key before searching for
  *    matches. Defaults to a close-bracket.
+ * @param flush
+ *    A flag indicating whether or not to flush the token cache.
+ *    Useful for processes that need to slog through huge numbers
+ *    of tokens in a single execution cycle. Flushing it will
+ *    keep them from burning through memory.
+ *    The default is FALSE.
  * @return The modified version of $original, with all substitutions
  *   made.
  */
-function token_replace($original, $type = 'global', $object = NULL, $leading = '[', $trailing = ']', $options = array()) {
-  $full = token_get_values($type, $object, FALSE, $options);
+function token_replace($original, $type = 'global', $object = NULL, $leading = '[', $trailing = ']', $options = array(), $flush = FALSE) {
+  $full = token_get_values($type, $object, $flush, $options);
   return _token_replace_tokens($original, $full->tokens, $full->values, $leading, $trailing);
 }
 
 /**
  * Return the value of $original, with all instances of placeholder
  * tokens replaced by their proper values. Contrary to token_replace(),
- * this function supports replacing mutiple types.
+ * this function supports replacing multiple types.
  *
  * @param original
  *  A string, or an array of strings, to perform token substitutions
@@ -218,14 +187,20 @@ function token_replace($original, $type = 'global', $object = NULL, $leading = '
  * @param trailing
  *    Character(s) to append to the token key before searching for
  *    matches. Defaults to a close-bracket.
+ * @param flush
+ *    A flag indicating whether or not to flush the token cache.
+ *    Useful for processes that need to slog through huge numbers
+ *    of tokens in a single execution cycle. Flushing it will
+ *    keep them from burning through memory.
+ *    The default is FALSE.
  * @return The modified version of $original, with all substitutions
  *   made.
  */
-function token_replace_multiple($original, $types = array('global' => NULL), $leading = '[', $trailing = ']', $options = array()) {
+function token_replace_multiple($original, $types = array('global' => NULL), $leading = '[', $trailing = ']', $options = array(), $flush = FALSE) {
   $full = new stdClass();
   $full->tokens = $full->values = array();
   foreach ($types as $type => $object) {
-    $temp = token_get_values($type, $object, FALSE, $options);
+    $temp = token_get_values($type, $object, $flush, $options);
     $full->tokens = array_merge($full->tokens, $temp->tokens);
     $full->values = array_merge($full->values, $temp->values);
   }
@@ -251,8 +226,14 @@ function _token_replace_tokens($original, $tokens, $values, $leading, $trailing)
  * @param object
  *   Optionally, the object to use for building substitution values.
  *   A node, comment, user, etc.
+ * @param flush
+ *   A flag indicating whether or not to flush the token cache.
+ *   Useful for processes that need to slog through huge numbers
+ *   of tokens in a single execution cycle. Flushing it will
+ *   keep them from burning through memory.
+ *   The default is FALSE.
  * @return
- *   A keyed array containing the substitution tokens and the substition
+ *   A keyed array containing the substitution tokens and the substitution
  *   values for the passed-in type and object.
  */
 function token_get_values($type = 'global', $object = NULL, $flush = FALSE, $options = array()) {
@@ -289,7 +270,7 @@ function token_get_values($type = 'global', $object = NULL, $flush = FALSE, $opt
   token_include();
 
   $id = _token_get_id($type, $object);
-  if (isset($tokens[$type][$id])) {
+  if ($id && isset($tokens[$type][$id])) {
     $tmp_tokens = $tokens[$type][$id];
   }
   else {
@@ -343,6 +324,10 @@ function token_get_list($types = 'all') {
       if (is_array($result)) {
         foreach ($result as $category => $tokens) {
           foreach ($tokens as $token => $title) {
+            // Automatically append a raw token warning.
+            if (substr($token, -4) === '-raw' && strpos($title, t('raw user input')) === FALSE && strpos($title, '1269441371') === FALSE) {
+              $title .= ' <em>' . t('Warning: Token value contains raw user input.') . '</em>';
+            }
             $return[$category][$token] = $title;
           }
         }
@@ -358,7 +343,7 @@ function token_get_list($types = 'all') {
  * percent symbols etc.
  *
  * @param tokens
- *    The array of tokens keys with no delimiting chacaters
+ *    The array of tokens keys with no delimiting characters
  * @param leading
  *    Character(s) to prepend to the token key before searching for
  *    matches. Defaults to an open-bracket.
@@ -385,12 +370,73 @@ function _token_get_id($type = 'global', $object = NULL) {
   }
   switch ($type) {
     case 'node':
-      return $object->nid;
+      return isset($object->nid) ? $object->nid : 0;
     case 'comment':
-      return $object->cid;
+      return isset($object->cid) ? $object->cid : 0;
     case 'user':
-      return $object->uid;
+      return isset($object->uid) ? $object->uid : 0;
     default:
       return crc32(serialize($object));
   }
+}
+
+/**
+ * Build a list of common date tokens for use in hook_token_list().
+ *
+ * @param $description
+ */
+function token_get_date_token_info($description, $token_prefix = '') {
+  $tokens[$token_prefix . 'yyyy']   = t("!description year (four digit)", array('!description' => $description));
+  $tokens[$token_prefix . 'yy']     = t("!description year (two digit)", array('!description' => $description));
+  $tokens[$token_prefix . 'month']  = t("!description month (full word)", array('!description' => $description));
+  $tokens[$token_prefix . 'mon']    = t("!description month (abbreviated)", array('!description' => $description));
+  $tokens[$token_prefix . 'mm']     = t("!description month (two digits with leading zeros)", array('!description' => $description));
+  $tokens[$token_prefix . 'm']      = t("!description month (one or two digits without leading zeros)", array('!description' => $description));
+  $tokens[$token_prefix . 'ww']     = t("!description week (two digits with leading zeros)", array('!description' => $description));
+  if (version_compare(PHP_VERSION, '5.1.0', '>=')) {
+    $tokens[$token_prefix . 'date'] = t("!description date (numeric representation of the day of the week)", array('!description' => $description));
+  }
+  $tokens[$token_prefix . 'day']    = t("!description day (full word)", array('!description' => $description));
+  $tokens[$token_prefix . 'ddd']    = t("!description day (abbreviation)", array('!description' => $description));
+  $tokens[$token_prefix . 'dd']     = t("!description day (two digits with leading zeros)", array('!description' => $description));
+  $tokens[$token_prefix . 'd']      = t("!description day (one or two digits without leading zeros)", array('!description' => $description));
+  $tokens[$token_prefix . 'raw']    = t("!description in UNIX timestamp format (1269441371)", array('!description' => $description));
+  return $tokens;
+}
+
+/**
+ * Build a list of common date tokens for use in hook_token_values().
+ *
+ * @param $description
+ */
+function token_get_date_token_values($timestamp, $token_prefix = '') {
+  $tokens = array();
+  $timezone = variable_get('date_default_timezone', 0);
+
+  $formats = array(
+    'yyyy' => 'Y',
+    'yy' => 'y',
+    'month' => 'F',
+    'mon' => 'M',
+    'mm' => 'm',
+    'm' => 'n',
+    'ww' => 'W',
+    //'date' => 'N', // Provided later since it is PHP 5.1 only.
+    'day' => 'l',
+    'ddd' => 'D',
+    'dd' => 'd',
+    'd' => 'j',
+  );
+  foreach ($formats as $token => $format) {
+    $tokens[$token_prefix . $token] = format_date($timestamp, 'custom', $format, $timezone);
+  }
+
+  $tokens[$token_prefix . 'raw'] = $timestamp;
+
+  $timestamp += $timezone;
+  if (version_compare(PHP_VERSION, '5.1.0', '>=')) {
+    $tokens[$token_prefix . 'date'] = gmdate('N', $timestamp);
+  }
+
+  return $tokens;
 }

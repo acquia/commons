@@ -1,5 +1,5 @@
 <?php
-// $Id: content.module,v 1.301.2.118 2009/08/30 14:16:55 markuspetrux Exp $
+// $Id: content.module,v 1.301.2.119 2010/06/09 01:34:35 karens Exp $
 /**
  * @file
  * Allows administrators to associate custom fields to content types.
@@ -2470,6 +2470,16 @@ function content_content_extra_fields($type_name) {
     'description' => t('Node module form.'),
     'weight' => 20
   );
+  $extra['author'] = array(
+    'label' => t('Authoring information'),
+    'description' => t('Node module form.'),
+    'weight' => 20,
+  );
+  $extra['options'] = array(
+    'label' => t('Publishing options'),
+    'description' => t('Node module form.'),
+    'weight' => 25,
+   );
   if (module_exists('comment')) {
     $extra['comment_settings'] = array(
       'label' => t('Comment settings'),

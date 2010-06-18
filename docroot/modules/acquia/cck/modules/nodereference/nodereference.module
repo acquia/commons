@@ -1,5 +1,5 @@
 <?php
-// $Id: nodereference.module,v 1.138.2.60 2009/08/26 17:29:58 markuspetrux Exp $
+// $Id: nodereference.module,v 1.138.2.67 2010/06/15 11:24:55 karens Exp $
 
 /**
  * @file
@@ -14,7 +14,8 @@ function nodereference_menu() {
   $items['nodereference/autocomplete'] = array(
     'title' => 'Nodereference autocomplete',
     'page callback' => 'nodereference_autocomplete',
-    'access arguments' => array('access content'),
+    'access callback' => 'nodereference_autocomplete_access',
+    'access arguments' => array(2), 
     'type' => MENU_CALLBACK
   );
   return $items;
@@ -181,6 +182,8 @@ function nodereference_field_settings($op, $field) {
  * Implementation of hook_field().
  */
 function nodereference_field($op, &$node, $field, &$items, $teaser, $page) {
+  static $sanitized_nodes = array(); 
+  
   switch ($op) {
     // When preparing a translation, load any translations of existing references.
     case 'prepare translation':
@@ -231,6 +234,43 @@ function nodereference_field($op, &$node, $field, &$items, $teaser, $page) {
         }
       }
       return $items;
+
+    case 'sanitize':
+      // We can't just check the node is 'referenceable', because Views-mode
+      // could rely on 'current user' (at edit time).
+
+      // Extract nids to check.
+      $ids = array();
+      foreach ($items as $delta => $item) {
+        if (is_array($item)) {
+          // Default to 'non accessible'.
+          $items[$delta]['safe'] = array();
+          if (!empty($item['nid']) && is_numeric($item['nid'])) {
+            $ids[] = $item['nid'];
+          }
+        }
+      }
+      if ($ids) {
+        // Load information about nids that we haven't already loaded during
+        // this page request.
+        $missing_ids = array_diff($ids, array_keys($sanitized_nodes));
+        if (!empty($missing_ids)) {
+          $where = array('n.nid in ('. db_placeholders($missing_ids) . ')');
+          if (!user_access('administer nodes')) {
+            $where[] = 'n.status = 1';
+          }
+          $result = db_query(db_rewrite_sql('SELECT n.nid, n.title, n.status FROM {node} n WHERE '. implode(' AND ', $where)), $missing_ids);
+          while ($row = db_fetch_array($result)) {
+            $sanitized_nodes[$row['nid']] = $row;
+          }
+        }
+        foreach ($items as $delta => $item) {
+          if (is_array($item) && !empty($item['nid']) && isset($sanitized_nodes[$item['nid']])) {
+            $items[$delta]['safe'] = $sanitized_nodes[$item['nid']];
+          }
+        }
+      }
+      return $items;    
   }
 }
 
@@ -277,9 +317,12 @@ function nodereference_field_formatter_info() {
  */
 function theme_nodereference_formatter_default($element) {
   $output = '';
-  if (!empty($element['#item']['nid']) && is_numeric($element['#item']['nid']) && ($title = _nodereference_titles($element['#item']['nid']))) {
-    $output = l($title, 'node/'. $element['#item']['nid']);
-  }
+  if (!empty($element['#item']['safe']['nid'])) {
+    $output = l($element['#item']['safe']['title'], 'node/'. $element['#item']['safe']['nid']);
+    if (!$element['#item']['safe']['status']) {
+      $output = '<span class="node-unpublished"> '. t('(Unpublished)') ." $output</span>";
+    }
+  }  
   return $output;
 }
 
@@ -288,8 +331,11 @@ function theme_nodereference_formatter_default($element) {
  */
 function theme_nodereference_formatter_plain($element) {
   $output = '';
-  if (!empty($element['#item']['nid']) && is_numeric($element['#item']['nid']) && ($title = _nodereference_titles($element['#item']['nid']))) {
-    $output = check_plain($title);
+  if (!empty($element['#item']['safe']['nid'])) {
+    $output = check_plain($element['#item']['safe']['title']);
+    if (!$element['#item']['safe']['status']) {
+      $output = '<span class="node-unpublished"> '. t('(Unpublished)') ." $output</span>";
+    }
   }
   return $output;
 }
@@ -300,7 +346,8 @@ function theme_nodereference_formatter_plain($element) {
 function theme_nodereference_formatter_full_teaser($element) {
   static $recursion_queue = array();
   $output = '';
-  if (!empty($element['#item']['nid']) && is_numeric($element['#item']['nid'])) {
+  if (!empty($element['#item']['safe']['nid'])) {
+    $nid = $element['#item']['safe']['nid'];
     $node = $element['#node'];
     $field = content_fields($element['#field_name'], $element['#type_name']);
     // If no 'referencing node' is set, we are starting a new 'reference thread'
@@ -308,16 +355,15 @@ function theme_nodereference_formatter_full_teaser($element) {
       $recursion_queue = array();
     }
     $recursion_queue[] = $node->nid;
-    if (in_array($element['#item']['nid'], $recursion_queue)) {
+    if (in_array($nid, $recursion_queue)) {
       // Prevent infinite recursion caused by reference cycles:
       // if the node has already been rendered earlier in this 'thread',
       // we fall back to 'default' (node title) formatter.
       return theme('nodereference_formatter_default', $element);
     }
-    if ($referenced_node = node_load($element['#item']['nid'])) {
+    if ($referenced_node = node_load($nid)) {
       $referenced_node->referencing_node = $node;
       $referenced_node->referencing_field = $field;
-      _nodereference_titles($element['#item']['nid'], $referenced_node->title);
       $output = node_view($referenced_node, $element['#formatter'] == 'teaser');
     }
   }
@@ -332,7 +378,7 @@ function theme_nodereference_formatter_full_teaser($element) {
 function _nodereference_titles($nid, $known_title = NULL) {
   static $titles = array();
   if (!isset($titles[$nid])) {
-    $title = $known_title ? $known_title : db_result(db_query("SELECT title FROM {node} WHERE nid=%d", $nid));
+    $title = $known_title ? $known_title : db_result(db_query(db_rewrite_sql("SELECT n.title FROM {node} n WHERE n.nid=%d"), $nid));
     $titles[$nid] = $title ? $title : '';
   }
   return $titles[$nid];
@@ -719,6 +765,7 @@ function nodereference_allowed_values($field) {
   foreach ($references as $key => $value) {
     $options[$key] = $value['rendered'];
   }
+
   return $options;
 }
 
@@ -878,12 +925,13 @@ function _nodereference_potential_references_standard($field, $string = '', $mat
   }
 
   if ($string !== '') {
-    $match_operators = array(
-      'contains' => "LIKE '%%%s%%'",
+    $like = $GLOBALS["db_type"] == 'pgsql' ? "ILIKE" : "LIKE";
+    $match_clauses = array(
+      'contains' => "$like '%%%s%%'",
       'equals' => "= '%s'",
-      'starts_with' => "LIKE '%s%%'",
+      'starts_with' => "$like '%s%%'",
     );
-    $where[] = 'n.title '. (isset($match_operators[$match]) ? $match_operators[$match] : $match_operators['contains']);
+    $where[] = 'n.title '. (isset($match_clauses[$match]) ? $match_clauses[$match] : $match_clauses['contains']);
     $args[] = $string;
   }
   elseif ($ids) {
@@ -903,6 +951,16 @@ function _nodereference_potential_references_standard($field, $string = '', $mat
   }
 
   return $references;
+}
+
+ /**
+ * Check access to the menu callback of the autocomplete widget.
+ * 
+ * Check for both 'edit' and 'view' access in the unlikely event
+ * a user has edit but not view access.
+ */
+function nodereference_autocomplete_access($field_name) {
+  return user_access('access content') && ($field = content_fields($field_name)) && content_access('view', $field) && content_access('edit', $field);
 }
 
 /**

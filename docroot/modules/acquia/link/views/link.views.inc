@@ -1,5 +1,5 @@
 <?php
-// $Id: link.views.inc,v 1.1.4.2 2009/07/04 19:07:42 jcfiala Exp $
+// $Id: link.views.inc,v 1.1.4.3 2010/06/14 15:59:35 jcfiala Exp $
 /**
  * @file
  * Contains functions handling views integration.
@@ -58,7 +58,7 @@ function link_views_content_field_data($field) {
     ),
     'filter' => array(
       'field' => $db_info['columns']['title']['column'],
-      'title' => t('@label title', array('@label' => t($field_types[$field['type']]['label']))),
+      'title' => t('@label title', array('@label' => t($field_types[$field['type']]['label']))) .': '. t($field['widget']['label']),
       'tablename' => $db_info['table'],
       'handler' => 'content_handler_filter_string',
       'additional fields' => array(),
@@ -75,14 +75,13 @@ function link_views_content_field_data($field) {
   );
 
   // Build out additional Views filter for the link "protocol" pseudo field.
-  // TODO: Add a protocol argument.
   $data[$table_alias][$field['field_name'] .'_protocol'] = array(
     'group' => t('Content'),
     'title' => t('@label protocol', array('@label' => t($field_types[$field['type']]['label']))) .': '. t($field['widget']['label']) .' ('. $field['field_name'] .')',
     'help' =>  $data[$table_alias][$field['field_name'] .'_url']['help'],
     'filter' => array(
       'field' => $db_info['columns']['url']['column'],
-      'title' => t('@label protocol', array('@label' => t($field_types[$field['type']]['label']))),
+      'title' => t('@label protocol', array('@label' => t($field_types[$field['type']]['label']))) .': '. t($field['widget']['label']),
       'tablename' => $db_info['table'],
       'handler' => 'link_views_handler_filter_protocol',
       'additional fields' => array(),
@@ -92,7 +91,6 @@ function link_views_content_field_data($field) {
   );
 
   // Build out additional Views argument for the link "target" pseudo field.
-  // TODO: Add a target filter.
   $data[$table_alias][$field['field_name'] .'_target'] = array(
     'group' => t('Content'),
     'title' => t('@label target', array('@label' => t($field_types[$field['type']]['label']))) .': '. t($field['widget']['label']) .' ('. $field['field_name'] .')',

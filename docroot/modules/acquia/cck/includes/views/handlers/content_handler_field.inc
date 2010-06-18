@@ -1,5 +1,5 @@
 <?php
-// $Id: content_handler_field.inc,v 1.1.2.17 2009/07/22 20:46:55 markuspetrux Exp $
+// $Id: content_handler_field.inc,v 1.1.2.18 2010/01/25 23:13:40 markuspetrux Exp $
 
 /**
  * @file
@@ -31,14 +31,16 @@ class content_handler_field extends views_handler_field_node {
     $this->additional_fields['vid'] = array('table' => 'node', 'field' => 'vid');
   }
 
-  function options(&$options) {
-    parent::options($options);
+  function option_definition() {
+    $options = parent::option_definition();
     $field = $this->content_field;
 
     // Override views_handler_field_node's default label
-    $options['label'] = '';
-    $options['label_type'] = 'widget';
-    $options['format'] = 'default';
+    $options['label'] = array('default' => '', 'translatable' => TRUE);
+    $options['label_type'] = array('default' => 'widget');
+    $options['format'] = array('default' => 'default');
+
+    return $options;
   }
 
   /**

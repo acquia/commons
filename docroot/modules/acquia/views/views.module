@@ -1,5 +1,5 @@
 <?php
-// $Id: views.module,v 1.341.2.11 2010/04/07 23:40:35 merlinofchaos Exp $
+// $Id: views.module,v 1.341.2.12 2010/04/29 18:26:04 merlinofchaos Exp $
 /**
  * @file
  * Primarily Drupal hooks and global API functions to manipulate views.
@@ -1316,8 +1316,17 @@ function views_microtime() {
 function views_trim_text($alter, $value) {
   if (drupal_strlen($value) > $alter['max_length']) {
     $value = drupal_substr($value, 0, $alter['max_length']);
+    // TODO: replace this with cleanstring of ctools
     if (!empty($alter['word_boundary'])) {
-      if (preg_match("/(.*)\b.+/us", $value, $matches)) {
+      $regex = "(.*)\b.+";
+      if (function_exists('mb_ereg')) {
+        mb_regex_encoding('UTF-8');
+        $found = mb_ereg($regex, $value, $matches);
+      }
+      else {
+        $found = preg_match("/$regex/us", $value, $matches);
+      }
+      if ($found) {
         $value = $matches[1];
       }
     }

@@ -1,5 +1,5 @@
 <?php
-// $Id: views.install,v 1.50.2.3 2010/04/08 21:20:16 merlinofchaos Exp $
+// $Id: views.install,v 1.50.2.4 2010/06/16 20:37:29 merlinofchaos Exp $
 /**
  * @file views.install
  * Contains install and update functions for Views.
@@ -276,7 +276,14 @@ function views_update_6001() {
     $new = strtr($block->delta, '$', '-');
     $ret[] = update_sql("UPDATE {blocks} SET delta = '" . db_escape_string($new) . "' WHERE module = 'views' AND delta = '" . db_escape_string($block->delta) . "'");
   }
-  $ret[] = update_sql("UPDATE {blocks} SET delta = CONCAT(delta, '-block_1') WHERE module = 'views'");
+  $result = db_query("SELECT * FROM {blocks} WHERE module = 'views'");
+  while ($block = db_fetch_object($result)) {
+    $new = $block->delta .= '-block_1';
+    if (strlen($new) >= 32) {
+      $new = md5($new);
+    }
+    update_sql($ret, "UPDATE {blocks} SET delta = '$new' WHERE bid = $block->bid");
+  }
 
   return $ret;
 }

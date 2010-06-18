@@ -1,5 +1,5 @@
 <?php
-// $Id: acquia_agent.module,v 1.17.2.1 2009/06/21 15:13:45 pwolanin Exp $
+// $Id: acquia_agent.module,v 1.17.2.3 2010/06/17 03:16:19 pwolanin Exp $
 
 /**
  * @file
@@ -75,7 +75,7 @@ function acquia_agent_check_subscription($params = array()) {
     variable_del('acquia_subscription_data');
   }
   else {
-    // There is an indentifier and key, so attempt comunication.
+    // There is an identifier and key, so attempt communication.
 
     // Include version number information.
     acquia_agent_load_versions();
@@ -213,7 +213,9 @@ function acquia_agent_menu_alter(&$items) {
  */
 function acquia_agent_refresh_status() {
   // Refresh subscription information, so we are sure about our update status.
-  module_invoke('acquia_spi', 'send');
+  if (module_exists('acquia_spi')) {
+    acquia_spi_send_profile_info();
+  }
   // We send a heartbeat here so that all of our status information gets
   // updated locally via the return data.
   acquia_agent_check_subscription();
@@ -226,7 +228,9 @@ function acquia_agent_refresh_status() {
  */
 function acquia_agent_manual_status() {
   // Refresh subscription information, so we are sure about our update status.
-  module_invoke('acquia_spi', 'send');
+  if (module_exists('acquia_spi')) {
+    acquia_spi_send_profile_info();
+  }
   // We send a heartbeat here so that all of our status information gets
   // updated locally via the return data.
   acquia_agent_check_subscription();

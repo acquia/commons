@@ -1,5 +1,5 @@
 <?php
-// $Id: fieldgroup.module,v 1.79.2.51 2009/08/14 12:17:49 markuspetrux Exp $
+// $Id: fieldgroup.module,v 1.79.2.52 2010/06/09 02:10:01 karens Exp $
 
 /**
  * @file
@@ -538,7 +538,7 @@ function fieldgroup_field_remove_form_submit($form, &$form_state) {
 /**
  * Implementation of hook_nodeapi().
  */
-function fieldgroup_nodeapi(&$node, $op, $teaser, $page) {
+function fieldgroup_nodeapi(&$node, $op, $teaser = NULL, $page = NULL) {
   switch ($op) {
     case 'view':
       // Prevent against invalid 'nodes' built by broken 3rd party code.

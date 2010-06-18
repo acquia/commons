@@ -1,5 +1,5 @@
 <?php
-// $Id: link.crud.test,v 1.1.4.2 2009/07/04 19:07:42 jcfiala Exp $
+// $Id: link.crud.test,v 1.1.4.4 2010/01/28 03:18:30 jcfiala Exp $
 
 /**
  * @file
@@ -20,7 +20,7 @@ class LinkContentCrudTest extends ContentCrudTestCase {
   }
   
   function setUp() {
-    parent::setUp('link', 'views');
+    parent::setUp('link'); 
     $this->loginWithPermissions();
   }
   
@@ -33,11 +33,11 @@ class LinkContentCrudTest extends ContentCrudTestCase {
     
     $field = $this->createField(array('type' => 'link', 'widget_type' => 'link'), 0);
     
-    $this->assertEqual(1, 1, print_r($this->content_types, TRUE));
-    $this->assertEqual(1, 1, print_r($field, TRUE));
+    //$this->pass(print_r($this->content_types, TRUE));
+    //$this->pass(print_r($field, TRUE));
     
     $table_schema = drupal_get_schema();
-    $this->assertEqual(1, 1, print_r(array_keys($table_schema), TRUE));
+    //$this->pass(print_r(array_keys($table_schema), TRUE));
     // Check the schema - the values should be in the per-type table.
     $this->assertSchemaMatchesTables(array(
       'per_type' => array(
@@ -45,4 +45,5 @@ class LinkContentCrudTest extends ContentCrudTestCase {
       ),
     ));
   }
+  
 }

@@ -1,5 +1,5 @@
 <?php
-// $Id: token_actions.module,v 1.4.2.8 2009/03/24 14:20:52 greggles Exp $
+// $Id: token_actions.module,v 1.4.2.9 2010/03/25 17:49:43 davereid Exp $
 
 /**
  * @file
@@ -226,7 +226,7 @@ function token_actions_goto_action($object, $context) {
 
 /**
  * Load, into the context, the common objects user and node so we can use their
- * tokens. Somtimes Trigger, or Actions, load them for us, but sometimes not.
+ * tokens. Sometimes Trigger, or Actions, load them for us, but sometimes not.
  */
 function token_normalize_context(&$context) {
   $context['global'] = NULL;
@@ -237,4 +237,3 @@ function token_normalize_context(&$context) {
     $context['node'] = node_load($context['comment']->nid);
   }
 }
-

@@ -1,5 +1,5 @@
 <?php
-// $Id: userreference.module,v 1.106.2.47 2009/09/23 00:07:32 markuspetrux Exp $
+// $Id: userreference.module,v 1.106.2.51 2010/06/10 16:17:06 markuspetrux Exp $
 
 /**
  * @file
@@ -630,6 +630,7 @@ function userreference_allowed_values($field) {
   foreach ($references as $key => $value) {
     $options[$key] = $value['rendered'];
   }
+
   return $options;
 }
 
@@ -776,12 +777,13 @@ function _userreference_potential_references_standard($field, $string = '', $mat
   $join = array();
 
   if ($string !== '') {
-    $match_operators = array(
-      'contains' => "LIKE '%%%s%%'",
+    $like = $GLOBALS["db_type"] == 'pgsql' ? "ILIKE" : "LIKE";
+    $match_clauses = array(
+      'contains' => "$like '%%%s%%'",
       'equals' => "= '%s'",
-      'starts_with' => "LIKE '%s%%'",
+      'starts_with' => "$like '%s%%'",
     );
-    $where[] = 'u.name '. (isset($match_operators[$match]) ? $match_operators[$match] : $match_operators['contains']);
+    $where[] = 'u.name '. (isset($match_clauses[$match]) ? $match_clauses[$match] : $match_clauses['contains']);
     $args[] = $string;
   }
   elseif ($ids) {

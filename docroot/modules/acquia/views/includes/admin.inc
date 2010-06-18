@@ -1,5 +1,5 @@
 <?php
-// $Id: admin.inc,v 1.161.2.11 2010/04/07 21:04:15 merlinofchaos Exp $
+// $Id: admin.inc,v 1.161.2.12 2010/06/17 02:45:36 merlinofchaos Exp $
 /**
  * @file admin.inc
  * Provides the Views' administrative interface.
@@ -49,6 +49,9 @@ function template_preprocess_views_ui_list_views(&$vars) {
   $sorts = array();
 
   $views = views_get_all_views();
+
+  $token_enable = drupal_get_token('views-enable');
+  $token_disable = drupal_get_token('views-disable');
 
   // Respond to a reset command by clearing session and doing a drupal goto
   // back to the base URL.
@@ -116,10 +119,10 @@ function template_preprocess_views_ui_list_views(&$vars) {
     }
     else {
       if (empty($view->disabled)) {
-        $item->ops[] = l(t('Disable'), "admin/build/views/disable/$view->name", array('query' => drupal_get_destination()));
+        $item->ops[] = l(t('Disable'), "admin/build/views/disable/$view->name", array('query' => drupal_get_destination() . '&token=' . $token_disable));
       }
       else {
-        $item->ops[] = l(t('Enable'), "admin/build/views/enable/$view->name", array('query' => drupal_get_destination()));
+        $item->ops[] = l(t('Enable'), "admin/build/views/enable/$view->name", array('query' => drupal_get_destination() . '&token=' . $token_enable));
       }
     }
 
@@ -2667,24 +2670,34 @@ function views_ui_item_css($item) {
  * Page callback for the Views enable page.
  */
 function views_ui_enable_page($view) {
-  $views_status = variable_get('views_defaults', array());
-  $views_status[$view->name] = FALSE; // false is enabled
-  variable_set('views_defaults', $views_status);
-  views_invalidate_cache();
-  menu_rebuild();
-  drupal_goto('admin/build/views');
+  if (isset($_GET['token']) && drupal_valid_token($_GET['token'], 'views-enable')) {
+    $views_status = variable_get('views_defaults', array());
+    $views_status[$view->name] = FALSE; // false is enabled
+    variable_set('views_defaults', $views_status);
+    views_invalidate_cache();
+    menu_rebuild();
+    drupal_goto('admin/build/views');
+  }
+  else {
+    return drupal_access_denied();
+  }
 }
 
 /**
  * Page callback for the Views enable page
  */
 function views_ui_disable_page($view) {
-  $views_status = variable_get('views_defaults', array());
-  $views_status[$view->name] = TRUE; // True is disabled
-  variable_set('views_defaults', $views_status);
-  views_invalidate_cache();
-  menu_rebuild();
-  drupal_goto('admin/build/views');
+  if (isset($_GET['token']) && drupal_valid_token($_GET['token'], 'views-disable')) {
+    $views_status = variable_get('views_defaults', array());
+    $views_status[$view->name] = TRUE; // True is disabled
+    variable_set('views_defaults', $views_status);
+    views_invalidate_cache();
+    menu_rebuild();
+    drupal_goto('admin/build/views');
+  }
+  else {
+    return drupal_access_denied();
+  }
 }
 
 /**
