@@ -5907,7 +5907,7 @@ function _commons_core_views_default_views() {
       'relationship' => 'none',
     ),
     'title' => array(
-      'label' => 'Group Name',
+      'label' => 'Group',
       'alter' => array(
         'alter_text' => 0,
         'text' => '',
@@ -6799,7 +6799,7 @@ function _commons_core_views_default_views() {
       'relationship' => 'none',
     ),
     'title' => array(
-      'label' => 'Group Name',
+      'label' => 'Group',
       'alter' => array(
         'alter_text' => 0,
         'text' => '',
