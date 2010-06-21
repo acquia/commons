@@ -1,14 +1,14 @@
-/* $Id: acquia_commons-style.css 7534 2010-06-16 22:41:31Z sheena $ */
+/* $Id: acquia_commons-style.css 7573 2010-06-21 15:40:52Z sheena $ */
 
 /* Basic Typography & Colors-------------------------------------------------------------- */
 
 /* Add general site styling here for typography and background */
 
 body {
-  color: #1f1f1f;  
   font-family: Georgia, Baskerville, serif;
-  font-size: 75%; /*also set in fusion_starter.info: settings[base-font-size] = font-size-12 */
-
+  color: #1f1f1f;
+  font-size: 75%;
+/*also set in fusion_starter.info: settings[base-font-size] = font-size-12 */
 }
 
 /* Default link styles - separate a:visited for a different visited link style */
@@ -28,7 +28,7 @@ a:active {
 }
 
 h1 {
-  font-size: 2em;
+  font-size: 3em;
   font-weight: normal;
   margin: .5em 0;
 }
@@ -69,7 +69,6 @@ h4 {
 .node .inner ul,
 .panel-pane .inner ul,
 .block .inner ul {
-  ;
   margin-left: 0;
 }
 
@@ -115,6 +114,10 @@ body {
   float: left;
   margin: 0 12px 0 0;
   width: auto;
+}
+
+#logo a {
+  display: block;
 }
 
 /* Link and hover styles for site name */
@@ -195,13 +198,16 @@ body {
 
 /* Nav Group which sits below the header and site inf */
 
+.nav-group-wrapper {
+  background-color: #888;
+}
+
 .nav-group {
-  margin-bottom: 18px;
+  margin-bottom: 0px;
   overflow: visible;
 }
 
 .nav-group-inner {
-  background-color: #888;
   color: #fff;
   overflow: visible;
   padding: 0px;
@@ -215,6 +221,10 @@ body {
   float: left;
   margin: 0;
   width: auto;
+}
+
+#primary-menu-inner {
+  margin-left: 0;
 }
 
 /* styles for Superfish primary menu */
@@ -382,7 +392,6 @@ body {
 }
 
 .search-box-inner input#search_header {
-  letter-spacing: .1em;
   background: #3a3a3a url(../images/search-submit.png) repeat-x 0 0;
   border: 1px solid #3a3a3a;
   color: #ddd;
@@ -391,6 +400,7 @@ body {
   font-family: Baskerville, georgia, serif;
   font-size: 11px;
   height: 22px;
+  letter-spacing: .1em;
   line-height: 16px;
   margin: 0;
   padding: 2px 6px;
@@ -424,7 +434,7 @@ body {
 /*  Main Area (content + sidebars + preface bottom + postscript top)-------------------------------------------------------------- */
 
 .main-wrapper {
-  
+  margin-top: 18px;
 }
 
 /* Sidebar Regions-------------------------------------------------------------- */
@@ -521,7 +531,7 @@ body {
 
 h1.title {
   color: #6091bf;
-  font-size: 2em;
+  font-size: 3em;
   font-weight: normal;
   line-height: 1.2em;
   margin: 0 0 1em 0;
@@ -577,10 +587,11 @@ h2.title a:active {
 /* Links for nodes (taxonomy, commenting, read more, etc) */
 
 .node ul.links li {
+  background-image: none;
+  padding: 0 4px 0 0;
   border-right: 1px solid #ccc;
   display: inline;
-  margin-right: 2px;
-  padding-right: 4px;
+  margin: 0 2px 0 0;
 }
 
 .node ul.links li.last {
@@ -637,6 +648,25 @@ div.content-help-inner div.help {
   border: 1px solid #619ed4;
 }
 
+#content-messages,
+div.content-messages div.error,
+div.content-help-inner div.help,
+div.content-messages div.error p,
+div.content-help-inner div.help p,
+div.content-messages div.status,
+div.content-help-inner div.warning,
+div.content-messages div.status p,
+div.content-help-inner div.warning p {
+  margin: 0px;
+}
+
+div.content-messages div.error,
+div.content-help-inner div.help,
+div.content-messages div.status,
+div.content-help-inner div.warning {
+  padding: 4px 8px;
+}
+
 /* Error that appears when a required form field is not filled out */
 
 .form-item input.error,
@@ -659,18 +689,40 @@ h2.block-title {
   
 }
 
+/* Override block edit gear icon */
+
+.block .fusion-block-config,
+.block .fusion-block-edit {
+  background: url(../images/gear.png) center center no-repeat;
+;
+}
+
+.block .fusion-edit a {
+  background-color: transparent;
+  border: none;
+}
+
+.block .fusion-edit a:hover {
+  background-color: transparent;
+  text-decoration: none;
+;
+}
+
 /* Breadcrumbs-------------------------------------------------------------- */
+
+.breadcrumbs-wrapper {
+  
+}
 
 .breadcrumbs {
   background-color: #fff;
   border-bottom: 1px solid #dedede;
   color: #333;
-  margin: 0;
-  padding: 4px 0 4px 0px;
+  margin: 0 auto;
 }
 
 .breadcrumb {
-  padding: 0;
+  padding: 4px 0 4px 12px;
 }
 
 .breadcrumbs.block .breadcrumbs-inner {
@@ -754,7 +806,7 @@ h2.block-title {
 
 /* LTR */
   margin: 0 2px -2px 0;
-  padding: 2px 6px 5px 6px;
+  padding: 4px 6px 4px 6px;
   text-decoration: none;
   white-space: nowrap;
 }
@@ -770,7 +822,7 @@ h2.block-title {
   border: none;
   color: #323232;
   float: left;
-
+ 
 
 /* LTR */
   font-weight: bold;
@@ -848,7 +900,7 @@ ul.pager a:focus {
 /* Typography and backgrounds for all form buttons */
 
 form input.form-submit,
-form input.form-submit {
+.views-exposed-form .views-exposed-widget input.form-submit {
   background-color: #6699cc;
   border: 1px solid #868686;
   color: #fff;
@@ -856,9 +908,13 @@ form input.form-submit {
   font-size: 14px;
   font-weight: normal;
   height: 24px;
-  line-height: 24px;
+  line-height: 22px;
   margin: 2px;
   padding: 0 8px;
+}
+
+.views-exposed-form .views-exposed-widget input.form-submit {
+  margin-top: 18px;
 }
 
 /* Hover style for form buttons */
@@ -960,6 +1016,21 @@ tr.even td {
 tr.odd,
 tr.odd td {
   background-color: #fff;
+}
+
+tr.views-row-last,
+tr.views-row-last td,
+tr.last,
+tr.last td {
+  border-bottom: none;
+}
+
+tr.views-row-first.views-row-last,
+tr.views-row-first.views-row-last td,
+tr.first.last,
+tr.first.last td {
+
+ border-bottom: 1px solid #ccc;
 }
 
 td.active {
@@ -1103,9 +1174,9 @@ div.poll div.bar div.foreground {
 }
 
 .profile .column-left {
-  width: 30%;
   float: left;
   margin: 0 2% 0 0;
+  width: 30%;
 }
 
 .profile .column-right {
@@ -1139,10 +1210,10 @@ div.poll div.bar div.foreground {
 }
 
 .profile .userpoints:after {
-  height: 0;
   clear: both;
   content: ".";
   display: block;
+  height: 0;
   visibility: hidden;
 }
 
@@ -1323,13 +1394,14 @@ input.list-add-to-cart:focus {
   float: none;
 }
 
-.panel-panel .block .inner,
-.panel-pane .inner {
+.panel-panel .block .inner h2.pane-title,
+.panel-pane .inner h2.pane-title,
+.panel-panel .block .inner h2.block-title,
+.panel-pane .inner h2.block-title,
+.panel-panel .pane-node-content .node {
   border-top: 4px solid #ddd;
-}
-
-.panel-panel .inner .inner {
-  border-top: none;
+  margin-top: 0;
+  padding-top: 18px;
 }
 
 .panel-panel .block,
@@ -1521,8 +1593,12 @@ panels-pane.commons-colors-orangeblue .inner {
   height: 18px;
   line-height: 18px;
   margin: 0;
-  padding: 2px 2%;
-  width: 64%;
+  padding: 2px 2px;
+  width: 74%;
+}
+
+.page-home .shoutbox-add-form input.form-text {
+  width: 56%;
 }
 
 .shoutbox-add-form input.form-submit {
@@ -1530,10 +1606,15 @@ panels-pane.commons-colors-orangeblue .inner {
   font-size: 12px;
   height: 24px;
   line-height: 18px;
+  margin-left: 10px;
   margin: 0;
-  min-width: 60px;
-  padding: 2px 2%;
-  width: 30%;
+  padding: 2px 10px;
+  width: 80px;
+;
+}
+
+.page-home .shoutbox-add-form input.form-submit {
+  width: 60px;
 }
 
 .shoutbox-admin-links {
@@ -1601,8 +1682,8 @@ div.shoutbox-even {
 }
 
 div.shoutbox-even {
-  ;
-	margin: 0 4px 18px 0;
+  margin: 0 4px 18px 0;
+
   padding: 2px 4px;
 }
 
@@ -1652,17 +1733,70 @@ div.shoutbox-even {
   border: none;
 }
 
+.block .view-og-calendar {
+  border: 2px solid #ececec;
+}
+
+.block .view-og-calendar .date-heading h3 {
+  font-weight: bold;
+}
+
+.block .calendar-calendar .month-view table tr th {
+  background-color: #fff;
+  border-bottom: 2px solid #ececec;
+  border: none;
+}
+
+.block .calendar-calendar .month-view table tr td {
+  border-bottom: 2px solid #ececec;
+  border-right: 2px solid #ececec;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  padding: 2px 0;
+  text-align: center;
+}
+
+.block .calendar-calendar .month-view table tr:last-child td {
+  border-bottom: none;
+}
+
+.block .calendar-calendar .month-view table tr td.sun {
+  border-right: none;
+}
+
+.block .calendar-calendar .month-view table tr td a {
+  color: #666;
+  font-weight: bold;
+}
+
+.block .calendar-calendar .month-view table tr td.today {
+  background-color: #6599ca;
+}
+
+.block .calendar-calendar .month-view table tr td.today,
+.block .calendar-calendar .month-view table tr td.today  a {
+  color: #fff;
+}
+
 /* views pagers */
 
 .view .item-list ul.pager {
   margin-top: 10px;
 }
 
+/*views admin links */
+
+.views-admin-links {
+  right: 0px;
+}
+
 /*views more links and view footers*/
 
 .view div.more-link,
-.view .view-footer {
+.view .view-footer,
+.heartbeat-more-messages-wrapper {
   border-top: 1px solid #ccc;
+  display: block;
   font-weight: bold;
   margin-top: 0px;
   padding: 0px;
@@ -1674,13 +1808,78 @@ div.shoutbox-even {
   padding: 0px;
 }
 
+/* add new views headers */
+
+.view-header .addnew a {
+  background-color: #69c;
+  border: 1px solid #868686;
+  color: #fff;
+  display: block;
+  font-size: 1.1em;
+  padding: 2px 8px;
+  text-align: center;
+  width: 130px;
+}
+
+.view-header .addnew a:hover {
+  cursor: pointer;
+}
+
 /*views exposed widget*/
 
-.views-exposed-widgets {
+fieldset.views-exposed-form {
   background-color: #f8f8f8;
-  margin-bottom: 18px;
-  margin: 18px 0;
-  padding: 6px;
+  border: 1px solid #ccc;
+  padding: 0px;
+}
+
+html.js fieldset.views-exposed-form {
+  margin: 18px 0px;
+}
+
+html.js fieldset.views-exposed-form.collapsed {
+  background-color: transparent;
+}
+
+fieldset.views-exposed-form legend {
+  margin-left: 18px;
+}
+
+.views-exposed-widgets {
+  float: left;
+  margin: 2px 0px 8px 8px;
+  max-width: 82%;
+  width: auto;
+}
+
+.views-exposed-form .views-exposed-widget {
+  display: block;
+  float: left;
+  margin-right: 4%;
+  padding: 0;
+}
+
+.views-exposed-form .views-exposed-widget:last-child {
+  margin-right: 0px;
+;
+}
+
+.views-exposed-widget input,
+.views-exposed-widget select {
+  width: 90%;
+}
+
+.views-exposed-wrapper .views-exposed-widget.views-exposed-submit {
+  float: left;
+  margin-right: 8px;
+  max-width: 14%;
+  width: auto;
+}
+
+.views-exposed-wrapper .views-exposed-widget.views-exposed-submit .form-submit {
+  margin-top: 22px;
+  max-width: 100%;
+  width: 60px;
 }
 
 .views-exposed-widget label {
@@ -1695,26 +1894,19 @@ div.shoutbox-even {
 
 .views-exposed-widget .form-item input {
   width: 90%;
-;
+}
+
+/* Groups list */
+
+.view-og-all .views-exposed-widget {
+  width: 40%;
 }
 
 /* views calendar widgets */
 
 .view-content-global-calendar .views-exposed-widget {
-  display: block;
-  float: left;
-  margin: 0 2% 0 0;
-  padding: 0;
-  width: 23%;
-}
 
-.view-content-global-calendar .views-exposed-widget input,
-.view-content-global-calendar .views-exposed-widget select {
-  width: 90%;
-}
-
-.view-content-global-calendar .views-exposed-widget input.form-submit {
-  width: 60%;
+  width: 28%;
 }
 
 /* global content views */
@@ -1723,48 +1915,30 @@ div.shoutbox-even {
 .view-content-global-documents .views-exposed-widget,
 .view-content-global-discussions .views-exposed-widget,
 .view-content-global-wikis .views-exposed-widget {
-  margin-right: 1%;
-  width: 17%;
+  width: 22%;
 }
 
-.view-content-global-blogs .views-exposed-widget input,
-.view-content-global-blogs .views-exposed-widget select..view-content-global-documents .views-exposed-widget input,
-.view-content-global-documents .views-exposed-widget select,
-.view-content-global-discussions .views-exposed-widget input,
-.view-content-global-discussions .views-exposed-widget select,
-.view-content-global-wikis .views-exposed-widget input,
-.view-content-global-wikis .views-exposed-widget select {
-  width: 90%;
+/* Group content views*/
+
+.view-og-tab-documents .views-exposed-widget,
+.view-og-tab-discussions .views-exposed-widget,
+.view-og-tab-wikis .views-exposed-widget,
+.view-og-calendar .views-exposed-widget,
+.view-og-tab-blogs .views-exposed-widget {
+  width: 30%;
 }
 
 /*user directory view*/
 
 .view-user-directory .views-exposed-widget {
-  display: block;
-  float: left;
-  margin: 0 1% 0 0;
-  padding: 0;
   width: 13%;
-}
-
-.view-user-directory .views-exposed-widget input.form-submit {
-  width: 80%;
 }
 
 /*OG content tracker view */
 
 .view-og-content-tracker .views-exposed-widget {
-  margin-right: 2%;
-  padding: 0;
-  width: 18%;
-}
-
-.view-og-content-tracker .views-exposed-widget select {
-  width: 100%;
-}
-
-.view-og-content-tracker .views-exposed-widget input.form-submit {
-  width: 80%;
+  width: 22%;
+;
 }
 
 .view-og-content-tracker table tr td.views-field-type span.node-type {
@@ -1854,12 +2028,34 @@ div.shoutbox-even {
 
 /* recent notices view */
 
-.view-recent-notices .view-header {
+.block .view-recent-notices .view-header,
+.block .view-og-calendar .view-header {
   position: absolute;
-  right: 0;
+  right: 10px;
   text-align: right;
-  top: 18px;
-  width: 80px;
+  top: 3px;
+  width: 90px;
+}
+
+.panel-pane .view-og-calendar .view-header .addnew,
+.panel-pane .view-recent-notices .view-header .addnew {
+  position: absolute;
+  right: 0px;
+  text-align: right;
+  top: 19px;
+  width: 90px;
+}
+
+.panel-pane .view-og-calendar .view-header .addnew a,
+.panel-pane .view-recent-notices .view-header .addnew a,
+.panel-pane .view-header .addnew a {
+  background-color: transparent;
+  border: none;
+  color: #69c;
+  font-size: 1em;
+  padding: 0px;
+  text-align: right;
+  width: auto;
 }
 
 /* User Meta - logout/account links in header w/ profile pic */
@@ -1902,6 +2098,7 @@ div.shoutbox-even {
 
 .view-user-meta .views-field-nothing a,
 .view-user-meta .views-field-nothing-1 a {
+  color: #333;
   font-size: 11px;
   line-height: 13px;
   padding: 0;
@@ -1951,6 +2148,7 @@ div.shoutbox-even {
 .view-home-newest-users td.views-field-picture,
 .view-og-most-active td.views-field-field-group-image-fid,
 .view-og-dashboard-groups td.views-field-field-group-image-fid {
+  padding-left: 0px;
   width: 28px;
 }
 

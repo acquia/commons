@@ -73,11 +73,10 @@
           <div id="nav-group-inner" class="nav-group-inner inner clearfix">
    <?php print theme('grid_block', $primary_links_tree, 'primary-menu'); ?>
 <?php print theme('grid_block', $search_box, 'search-box'); ?>
-    <?php print theme('grid_block', $breadcrumb, 'breadcrumbs'); ?>
-          </div><!-- /nav-group-inner -->
+        </div><!-- /nav-group-inner -->
         </div><!-- /nav-group -->
       </div><!-- /nav-group-wrapper -->
-   
+       <?php print theme('grid_row', $breadcrumb, 'breadcrumbs', 'full-width', $grid_width); ?>  
 
       <!-- preface-top row: width = grid_width -->
       <?php print theme('grid_row', $preface_top, 'preface-top', 'full-width', $grid_width); ?>
