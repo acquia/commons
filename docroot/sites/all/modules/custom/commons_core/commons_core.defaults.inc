@@ -2229,7 +2229,7 @@ function _commons_core_fieldgroup_default_groups() {
     'group_type' => 'standard',
     'type_name' => 'group',
     'group_name' => 'group_attributes',
-    'label' => 'Group Attributes',
+    'label' => 'Group attributes',
     'settings' => array(
       'form' => array(
         'style' => 'fieldset',
@@ -2554,7 +2554,7 @@ function _commons_core_fieldgroup_default_groups() {
   // Translatables
   array(
     t('Event Details'),
-    t('Group Attributes'),
+    t('Group attributes'),
     t('Images'),
     t('Promote content'),
     t('Promote group'),
