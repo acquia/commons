@@ -1072,6 +1072,7 @@ Featured',
     'title' => 'optional',
     'title_value' => '',
     'enable_tokens' => '',
+    'validate_url' => '',
     'widget' => array(
       'default_value' => array(
         '0' => array(
@@ -2261,7 +2262,7 @@ function _commons_core_fieldgroup_default_groups() {
         ),
       ),
     ),
-    'weight' => '-2',
+    'weight' => '-4',
     'fields' => array(
       '0' => 'field_group_image',
       '1' => 'field_grouplink',
@@ -2724,6 +2725,7 @@ function _commons_core_imagecache_default_presets() {
  * Helper to implementation of hook_default_page_manager_handlers().
  */
 function _commons_core_default_page_manager_handlers() {
+  $export = array();
   $handler = new stdClass;
   $handler->disabled = FALSE; /* Edit this to true to make a default handler disabled initially */
   $handler->api_version = 1;
@@ -4751,6 +4753,65 @@ function _commons_core_rules_defaults() {
         ),
         '#version' => 6003,
       ),
+      'commons_core_21' => array(
+        '#type' => 'rule',
+        '#set' => 'event_og_become_co_admin',
+        '#categories' => array(
+          '0' => 'og_activity',
+          '1' => 'heartbeat',
+          'commons_core' => 'commons_core',
+        ),
+        '#label' => 'User becomes co-admin of a group',
+        '#active' => 0,
+        '#weight' => '0',
+        '#status' => 'default',
+        '#conditions' => array(),
+        '#actions' => array(
+          '0' => array(
+            '#weight' => 1,
+            '#info' => array(
+              'label' => 'Logs user activity for single users',
+              'eval input' => array(
+                '0' => 'uid_param',
+                '1' => 'uid_target_param',
+                '2' => 'nid_param',
+                '3' => 'nid_target_param',
+                '4' => 'message_id_param',
+                '5' => 'variables_param',
+              ),
+              'module' => 'heartbeat',
+            ),
+            '#name' => 'heartbeat_rules_default_action',
+            '#settings' => array(
+              'uid_param' => '[user:uid]',
+              'uid_target_param' => '0',
+              'nid_param' => '[node:nid]',
+              'nid_target_param' => '[node:og-id]',
+              'message_id_param' => 'og_become_co_admin',
+              'variables_param' => '@username=|=[user:user-name-url]-|-@group=|=[node:title-link]-|-',
+              '#eval input' => array(
+                'token_rules_input_evaluator' => array(
+                  'uid_param' => array(
+                    '0' => 'user',
+                  ),
+                  'nid_param' => array(
+                    '0' => 'node',
+                  ),
+                  'nid_target_param' => array(
+                    '0' => 'node',
+                  ),
+                  'variables_param' => array(
+                    '0' => 'node',
+                    '1' => 'user',
+                  ),
+                ),
+              ),
+            ),
+            '#type' => 'action',
+          ),
+        ),
+        '#version' => 6003,
+      ),
     ),
   );
 }
@@ -4939,13 +5000,15 @@ function _commons_core_strongarm() {
   $strongarm->value = array(
     'title' => '-5',
     'body_field' => '-1',
-    'revision_information' => '7',
-    'comment_settings' => '8',
-    'menu' => '6',
-    'taxonomy' => '-3',
-    'path' => '9',
-    'og_description' => '-4',
-    'og_selective' => '5',
+    'revision_information' => '6',
+    'author' => '9',
+    'options' => '10',
+    'comment_settings' => '7',
+    'menu' => '5',
+    'taxonomy' => '-2',
+    'path' => '8',
+    'og_description' => '-3',
+    'og_selective' => '4',
     'og_register' => '0',
     'og_directory' => '1',
     'og_private' => '2',

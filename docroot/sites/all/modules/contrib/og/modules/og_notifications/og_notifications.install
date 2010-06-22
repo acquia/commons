@@ -10,6 +10,11 @@ function og_notifications_install() {
   if (variable_get('og_notifications_update_required', FALSE)) {
     og_notifications_og_upgrade();
   }
+  
+  // Register with notifications
+  $types = variable_get('notifications_ui_types', array());
+  $types['grouptype'] = 'grouptype';
+  variable_set('notifications_ui_types', $types);
 
   drupal_set_message(t('Organic groups notifications module installation script complete.'));
 }
@@ -101,6 +106,11 @@ function og_notifications_uninstall() {
 
   variable_del('og_notifications_autosubscribe');
   variable_del('og_notifications_content_types');
+  
+  // Unregister with notifications
+  $types = variable_get('notifications_ui_types', array());
+  unset($types['grouptype']);
+  variable_set('notifications_ui_types', $types);
 
   // @TODO: Clear any queued messages in notifications?
   drupal_set_message(t('Organic groups notifications module uninstallation script complete.'));
