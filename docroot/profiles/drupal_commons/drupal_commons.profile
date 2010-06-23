@@ -686,3 +686,22 @@ function drupal_commons_cleanup() {
   // Say hello to the dog!
   watchdog('commons', t('Welcome to Drupal Commons from Acquia!'));
 }
+
+/**
+ * Alter the install profile configuration form and provide timezone location options.
+ */
+function system_form_install_configure_form_alter(&$form, $form_state) {
+  // Taken from Open Atrium
+  if (function_exists('date_timezone_names') && function_exists('date_timezone_update_site')) {
+    $form['server_settings']['date_default_timezone']['#access'] = FALSE;
+    $form['server_settings']['#element_validate'] = array('date_timezone_update_site');
+    $form['server_settings']['date_default_timezone_name'] = array(
+      '#type' => 'select',
+      '#title' => t('Default time zone'),
+      '#default_value' => NULL,
+      '#options' => date_timezone_names(FALSE, TRUE),
+      '#description' => t('Select the default site time zone. If in doubt, choose the timezone that is closest to your location which has the same rules for daylight saving time.'),
+      '#required' => TRUE,
+    );
+  }
+}
