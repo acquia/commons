@@ -1,5 +1,5 @@
 <?php
-// $Id: template.php 7533 2010-06-16 22:40:49Z sheena $
+// $Id: template.php 7594 2010-06-23 20:42:37Z sheena $
 
 /**
  *  theme_breadcrumb()
@@ -133,5 +133,68 @@ $no = floor($no); if($no <> 1) $pds[$v] .='s'; $x=sprintf("%d %s ",$no,$pds[$v])
 if(($rcs == 1)&&($v >= 1)&&(($cur_tm-$_tm) > 0)) $x .= time_ago($_tm);
 return $x;
 
+}
+
+
+function acquia_commons_item_list($items = array(), $title = NULL, $type = 'ul', $attributes = NULL) {
+  $output = '<div class="item-list">';
+  if (isset($title)) {
+    $output .= '<h3>'. $title .'</h3>';
+  }
+
+  if (!empty($items)) {
+    $output .= "<$type". drupal_attributes($attributes) .'>';
+    $num_items = count($items);
+    $c = $num_items;
+    foreach ($items as $i => $item) {
+    $c--;
+      $attributes = array();
+      $children = array();
+      if (is_array($item)) {
+        foreach ($item as $key => $value) {
+          if ($key == 'data') {
+            $data = $value;
+          }
+          elseif ($key == 'children') {
+            $children = $value;
+          }
+          else {
+            $attributes[$key] = $value;
+          }
+        }
+      }
+      else {
+         $data = $item;
+      }
+      if(!is_numeric($i)){
+      if (count($children) > 0) {
+        $data .= theme_item_list($children, NULL, $type, $attributes); // Render nested list
+      }
+      if ($c == $num_items - 1) {
+        $attributes['class'] = empty($attributes['class']) ? 'first' : ($attributes['class'] .' first');
+      }
+      if ($c == 0) {
+        $attributes['class'] = empty($attributes['class']) ? 'last' : ($attributes['class'] .' last');
+      }
+      $attributes['class'] = $attributes['class'].' ' . ($c % 2 ? 'even' : 'odd');
+      $output .= '<li'. drupal_attributes($attributes) .'>'. $data ."</li>\n";
+      } else {
+      if (count($children) > 0) {
+        $data .= theme_item_list($children, NULL, $type, $attributes); // Render nested list
+      }
+      if ($i == 0) {
+        $attributes['class'] = empty($attributes['class']) ? 'first' : ($attributes['class'] .' first');
+      }
+      if ($i == $num_items - 1) {
+        $attributes['class'] = empty($attributes['class']) ? 'last' : ($attributes['class'] .' last');
+      }
+      $attributes['class'] = $attributes['class'].' ' . ($i % 2 ? 'even' : 'odd');
+      $output .= '<li'. drupal_attributes($attributes) .'>'. $data ."</li>\n";
+    }
+    }
+    $output .= "</$type>";
+  }
+  $output .= '</div>';
+  return $output;
 }
 

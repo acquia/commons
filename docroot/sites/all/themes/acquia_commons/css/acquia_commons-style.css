@@ -1,14 +1,4 @@
-/* @override 
-	http://localhost:9016/sites/all/themes/gsa_acquia_commons/css/gsa-acquia-commons-style.css?r
-	http://localhost:9016/sites/all/themes/gsa_acquia_commons/css/gsa-acquia-commons-style.css?Y
-	http://localhost:9016/sites/all/themes/gsa_acquia_commons/css/gsa-acquia-commons-style.css?y
-	http://localhost:9016/sites/all/themes/gsa_acquia_commons/css/gsa-acquia-commons-style.css?Z
-	http://localhost:9016/sites/all/themes/gsa_acquia_commons/css/gsa-acquia-commons-style.css?L
-	http://localhost:9016/sites/all/themes/gsa_acquia_commons/css/gsa-acquia-commons-style.css?A
-	http://devtest.commonsdemo.acquia-sites.com/sites/all/themes/acquia_commons/css/acquia_commons-style.css?z
-	http://localhost:9016/sites/all/themes/acquia_commons/css/acquia_commons-style.css?A
-*/
-/* $Id: acquia_commons-style.css 7582 2010-06-22 22:33:37Z sheena $ */
+/* $Id: acquia_commons-style.css 7594 2010-06-23 20:42:37Z sheena $ */
 
 /* Basic Typography & Colors-------------------------------------------------------------- */
 
@@ -17,10 +7,7 @@
 body {
   color: #1f1f1f;
   font-family: Georgia, Baskerville, serif;
-  font-size: 75%;
-/
-
-*also set in fusion_starter.info: settings[base-font-size] = font-size-12 */
+  font-size: 75%; /*also set in fusion_starter.info: settings[base-font-size] = font-size-12 */
 }
 
 /* Default link styles - separate a:visited for a different visited link style */
@@ -99,9 +86,9 @@ blockquote p:last-child {
   text-indent: 0;
 }
 
-.node .inner ul li a,
-.panel-pane .inner ul li a,
-.block .content ul li a {
+.node .inner ul li > a,
+.panel-pane .inner ul li > a,
+.block .content ul li > a {
   color: #565656;
 }
 
@@ -147,8 +134,8 @@ body {
 
 #site-name-wrapper {
   float: left;
-  width: auto;
   vertical-align: middle;
+  width: auto;
 }
 
 #site-name a:link,
@@ -460,6 +447,7 @@ body {
 
 .main-wrapper {
   margin-top: 18px;
+  min-height: 400px;
 }
 
 /* Sidebar Regions-------------------------------------------------------------- */
@@ -481,10 +469,6 @@ body {
 }
 
 .content {
-  
-}
-
-.content-inner {
   
 }
 
@@ -632,7 +616,9 @@ h2.title a:active {
 /* Links for nodes (taxonomy, commenting, read more, etc) */
 
 ul.links li,
-.node ul.links li {
+.node .inner ul.links li,
+.block .content ul.links li,
+.panel-pane .inner ul.links li {
   background-image: none;
   border-right: 1px solid #ccc;
   display: inline;
@@ -646,6 +632,44 @@ ul.links li,
 
 .node ul.links li.last {
   border-right: none;
+}
+
+/* menu list links */
+
+.node .inner ul.menu li,
+.block .content ul.menu li,
+.panel-pane .inner ul.menu li,
+.commons-colors-blueblue.node .inner ul.menu li,
+.commons-colors-blueblue.block .content ul.menu li,
+.commons-colors-blueblue.panel-pane .inner ul.menu li,
+.commons-colors-orangeblue.node .inner ul.menu li,
+.commons-colors-orangeblue.block .content ul.menu li,
+.commons-colors-orangeblue.panel-pane .inner ul.menu li {
+  background-image: none;
+  padding: 0;
+}
+
+.node .inner ul.menu li li,
+.block .content ul.menu li li,
+.panel-pane .inner ul.menu li li,
+.commons-colors-blueblue.node .inner ul.menu li li,
+.commons-colors-blueblue.block .content ul.menu li li,
+.commons-colors-blueblue.panel-pane .inner ul.menu li li,
+.commons-colors-orangeblue.node .inner ul.menu li li,
+.commons-colors-orangeblue.block .content ul.menu li li,
+.commons-colors-orangeblue.panel-pane .inner ul.menu li li {
+  padding-left: 22px;
+}
+
+.node .inner ul.menu li a,
+.block .content ul.menu li a,
+.panel-pane .inner ul.menu li aa {
+  background: transparent url(../images/gray-arrow-right.png) no-repeat 0 1px;
+  list-style-image: none;
+  list-style: none;
+  margin: 0 0 8px 0;
+  padding: 0 0 0 22px;
+  text-indent: 0;
 }
 
 /* Only more/read more links */
@@ -804,10 +828,12 @@ h2.block-title {
 #content-tabs ul.secondary {
   border-bottom: 2px solid #d1d1d1;
   clear: both;
-  float: left;
+  float: left
 
+;
+  /*
 
-/* LTR */
+LTR */
   margin: 0;
   padding: 0 10px 0 0;
   width: 100%;
@@ -823,10 +849,12 @@ h2.block-title {
 #content-tabs ul.secondary li {
   border-style: none;
   display: inline;
-  float: left;
- 
+  float: left
 
-/* LTR */
+;
+  /* 
+
+LTR */
   font-size: .9em;
   font-weight: normal;
   list-style: none;
@@ -850,10 +878,7 @@ h2.block-title {
   border: 1px solid #d1d1d1;
   color: #323232;
   cursor: pointer;
-  float: left;
- 
-
-/* LTR */
+  float: left;  /* LTR */
   margin: 0 2px -2px 0;
   padding: 4px 6px 4px 6px;
   text-decoration: none;
@@ -870,10 +895,7 @@ h2.block-title {
   background-color: transparent;
   border: none;
   color: #323232;
-  float: left;
- 
-
-/* LTR */
+  float: left; /* LTR */
   font-weight: bold;
   margin: 0;
   padding: 0 0 6px 0;
@@ -1000,7 +1022,6 @@ form input.form-submit:focus {
 
 fieldset {
   overflow: hidden;
-;
 }
 
 /* Typography and spacing for legend of fieldsets */
@@ -1137,6 +1158,10 @@ div.comment h3.title {
   z-index: 10;
 }
 
+.comment .comment-info span.new {
+  color: #aa1144;
+}
+
 .comment .comment-info .submitted span {
   display: block;
   width: auto;
@@ -1247,7 +1272,6 @@ div.poll div.bar div.foreground {
   color: #fff;
   margin: 0 0 .6em 0;
   padding: 4px 8px;
-;
 }
 
 .profile .userpoints dd {
@@ -1574,6 +1598,12 @@ panels-pane.commons-colors-orangeblue .inner {
   background-color: #fec688;
 }
 
+.commons-colors-orangeblue.node .inner ul.menu li a,
+.commons-colors-orangeblue.block .content ul.menu li a,
+.commons-colors-orangeblue.panel-pane .inner ul.menu li a {
+  background: transparent url(../images/orange-arrow-right.png) no-repeat 0 1px;
+}
+
 .commons-colors-orangeblue .content ul li {
   background: transparent url(../images/orange-arrow-right.png) no-repeat 0 4px;
 }
@@ -1581,7 +1611,6 @@ panels-pane.commons-colors-orangeblue .inner {
 .commons-list-circle-bullets.commons-colors-orangeblue .content ul li {
   background-image: none;
   color: #ee9753;
-;
 }
 
 /* Dark Blue & Light Blue */
@@ -1608,7 +1637,13 @@ panels-pane.commons-colors-orangeblue .inner {
   color: #fff;
 }
 
-.commons-colors-blueblue .content ul li {
+.commons-colors-blueblue.node .inner ul.menu li a,
+.commons-colors-blueblue.block .content ul.menu li a,
+.commons-colors-blueblue.panel-pane .inner ul.menu li a {
+  background: transparent url(../images/dkblue-arrow-right.png) no-repeat 0 1px;
+}
+
+.commons-colors-blueblue.content ul li {
   background: transparent url(../images/dkblue-arrow-right.png) no-repeat 0 4px;
 }
 
@@ -1881,6 +1916,12 @@ div.shoutbox-even {
   background-color: #fcfcfc;
 }
 
+.block .content-content .view-content-global-calendar .month-view td.today.has-events a.popup,
+.block .content-content .view-content-global-calendar .month-view td.today.has-events div.view-field,
+.block .content-content .view-content-global-calendar .month-view td.today.has-events div.calendar {
+  background-color: transparent;
+}
+
 .block .content-content .view-og-calendar .month-view td.future.has-events .view-item div,
 .block .content-content .view-content-global-calendar .month-view td.future.has-events .view-item div {
   background-color: transparent;
@@ -2036,10 +2077,10 @@ html.js fieldset.views-exposed-form.collapsed {
 }
 
 #autocomplete ul li {
+  border-bottom: 1px solid #eee;
   font-family: Arial, helvetica, sans-serif;
   font-size: 12px;
   line-height: 1.6em;
-  border-bottom: 1px solid #eee;
   margin: 0;
   padding: 2px 4px 2px 4px;
 }
@@ -2075,10 +2116,10 @@ html.js fieldset.views-exposed-form.collapsed {
 }
 
 #views-exposed-form-og-search-default .views-exposed-widgets {
-  margin: 0px;
-  padding: 0;
   float: left;
   margin-right: 2%;
+  margin: 0px;
+  padding: 0;
   width: 60%;
 }
 
@@ -2259,30 +2300,12 @@ html.js fieldset.views-exposed-form.collapsed {
 
 /* recent notices view */
 
-.block .view-recent-notices .view-header .addnew,
-.block .view-og-calendar .view-header .addnew {
+.view-id-recent_notices view-display-id-block_1 .view-header .addnew,
+.view-display-id-calendar_block_1 .view-header .addnew {
   position: absolute;
   right: 10px;
   text-align: right;
-  top: 3px;
-  width: 90px;
-}
-
-.block .content-content .view-recent-notices .view-header .addnew,
-.block .content-content .view-og-calendar .view-header .addnew {
-  position: absolute;
-  right: 0px;
-  text-align: right;
-  top: 76px;
-  width: auto;
-}
-
-.panel-pane .view-og-calendar .view-header .addnew,
-.panel-pane .view-recent-notices .view-header .addnew {
-  position: absolute;
-  right: 0px;
-  text-align: right;
-  top: 19px;
+  top: 22px;
   width: 90px;
 }
 
@@ -2410,7 +2433,7 @@ html.js fieldset.views-exposed-form.collapsed {
   display: block;
   height: 0;
   visibility: hidden;
-} 
+}
 
 .heartbeat-message-block .beat-item .beat-item-info {
   float: left;
@@ -2438,7 +2461,7 @@ html.js fieldset.views-exposed-form.collapsed {
 }
 
 div.beat-item blockquote {
+  background-image: none;
   font-style: italic;
   padding: 0;
-  background-image: none;
 }
