@@ -3490,104 +3490,131 @@ function _commons_core_default_page_manager_pages() {
 function _commons_core_rules_defaults() {
   return array(
     'rules' => array(
-      'commons_core_1' => array(
+      'commons_core_1' => 
+      array (
         '#type' => 'rule',
         '#set' => 'event_node_insert',
         '#label' => 'Heartbeat: when user adds a page, log user activity',
         '#active' => 1,
         '#weight' => '0',
-        '#categories' => array(
-          '0' => 'heartbeat',
+        '#categories' => 
+        array (
+          0 => 'heartbeat',
           'commons_core' => 'commons_core',
         ),
-        '#status' => 'default',
-        '#conditions' => array(
-          '0' => array(
-            '#type' => 'condition',
-            '#settings' => array(
-              '#argument map' => array(
-                'node' => 'node',
+        '#status' => 'altered',
+        '#conditions' => 
+        array (
+          0 => 
+          array (
+            '#weight' => 0,
+            '#info' => 
+            array (
+              'label' => 'page is published',
+              'label callback' => false,
+              'arguments' => 
+              array (
+                'node' => 
+                array (
+                  'type' => 'node',
+                  'label' => 'Content',
+                ),
               ),
+              'module' => 'Node',
             ),
             '#name' => 'rules_condition_content_is_published',
-            '#info' => array(
-              'label' => 'page is published',
-              'label callback' => FALSE,
-              'arguments' => array(
-                'node' => array(
-                  'type' => 'node',
-                  'label' => 'Content',
-                ),
-              ),
-              'module' => 'Node',
-            ),
-            '#weight' => 0,
-          ),
-          '1' => array(
-            '#weight' => 0,
-            '#info' => array(
-              'label' => 'Content has type page',
-              'label callback' => FALSE,
-              'arguments' => array(
-                'node' => array(
-                  'type' => 'node',
-                  'label' => 'Content',
-                ),
-              ),
-              'module' => 'Node',
-            ),
-            '#name' => 'rules_condition_content_is_type',
-            '#settings' => array(
-              'type' => array(
-                'page' => 'page',
-              ),
-              '#argument map' => array(
+            '#settings' => 
+            array (
+              '#argument map' => 
+              array (
                 'node' => 'node',
               ),
             ),
             '#type' => 'condition',
           ),
-        ),
-        '#actions' => array(
-          '0' => array(
+          1 => 
+          array (
+            '#negate' => 1,
             '#weight' => 0,
-            '#type' => 'action',
-            '#settings' => array(
+            '#type' => 'condition',
+            '#settings' => 
+            array (
+              'type' => 
+              array (
+                'page' => 'page',
+              ),
+              '#argument map' => 
+              array (
+                'node' => 'node',
+              ),
+            ),
+            '#name' => 'rules_condition_content_is_type',
+            '#info' => 
+            array (
+              'label' => 'Content not type page',
+              'label callback' => false,
+              'arguments' => 
+              array (
+                'node' => 
+                array (
+                  'type' => 'node',
+                  'label' => 'Content',
+                ),
+              ),
+              'module' => 'Node',
+            ),
+          ),
+        ),
+        '#actions' => 
+        array (
+          0 => 
+          array (
+            '#info' => 
+            array (
+              'label' => 'Logs activity for single users adding a page',
+              'label callback' => false,
+              'eval input' => 
+              array (
+                0 => 'uid_param',
+                1 => 'uid_target_param',
+                2 => 'nid_param',
+                3 => 'nid_target_param',
+                4 => 'message_id_param',
+                5 => 'variables_param',
+              ),
+              'module' => 'heartbeat',
+            ),
+            '#name' => 'heartbeat_rules_default_action',
+            '#settings' => 
+            array (
               'uid_param' => '[author:uid]',
               'uid_target_param' => '0',
               'nid_param' => '[node:nid]',
               'nid_target_param' => '',
               'message_id_param' => 'heartbeat_add_node',
               'variables_param' => '@username=|=[author:user-name-url]-|-@node_type=|=[node:type-name]-|-@node_title=|=[node:title-link]-|-@types=|=pages-|-',
-              '#eval input' => array(
-                'token_rules_input_evaluator' => array(
-                  'uid_param' => array(
-                    '0' => 'author',
+              '#eval input' => 
+              array (
+                'token_rules_input_evaluator' => 
+                array (
+                  'uid_param' => 
+                  array (
+                    0 => 'author',
                   ),
-                  'nid_param' => array(
-                    '0' => 'node',
+                  'nid_param' => 
+                  array (
+                    0 => 'node',
                   ),
-                  'variables_param' => array(
-                    '0' => 'node',
-                    '1' => 'author',
+                  'variables_param' => 
+                  array (
+                    0 => 'node',
+                    1 => 'author',
                   ),
                 ),
               ),
             ),
-            '#name' => 'heartbeat_rules_default_action',
-            '#info' => array(
-              'label' => 'Logs activity for single users adding a page',
-              'label callback' => FALSE,
-              'eval input' => array(
-                '0' => 'uid_param',
-                '1' => 'uid_target_param',
-                '2' => 'nid_param',
-                '3' => 'nid_target_param',
-                '4' => 'message_id_param',
-                '5' => 'variables_param',
-              ),
-              'module' => 'heartbeat',
-            ),
+            '#type' => 'action',
+            '#weight' => 0,
           ),
         ),
         '#version' => 6003,
@@ -4694,120 +4721,76 @@ function _commons_core_rules_defaults() {
         ),
         '#version' => 6003,
       ),
-      'commons_core_20' => array(
+      'commons_core_20' => 
+      array (
         '#type' => 'rule',
         '#set' => 'event_og_become_co_admin',
-        '#categories' => array(
-          '0' => 'og_activity',
-          '1' => 'heartbeat',
+        '#categories' => 
+        array (
+          0 => 'og_activity',
+          1 => 'heartbeat',
           'commons_core' => 'commons_core',
         ),
         '#label' => 'User becomes co-admin of a group',
-        '#active' => 0,
+        '#active' => 1,
         '#weight' => '0',
-        '#status' => 'default',
-        '#conditions' => array(),
-        '#actions' => array(
-          '0' => array(
-            '#weight' => 1,
-            '#info' => array(
-              'label' => 'Logs user activity for single users',
-              'eval input' => array(
-                '0' => 'uid_param',
-                '1' => 'uid_target_param',
-                '2' => 'nid_param',
-                '3' => 'nid_target_param',
-                '4' => 'message_id_param',
-                '5' => 'variables_param',
-              ),
-              'module' => 'heartbeat',
-            ),
-            '#name' => 'heartbeat_rules_default_action',
-            '#settings' => array(
+        '#status' => 'altered',
+        '#conditions' => 
+        array (
+        ),
+        '#actions' => 
+        array (
+          0 => 
+          array (
+            '#type' => 'action',
+            '#settings' => 
+            array (
               'uid_param' => '[user:uid]',
               'uid_target_param' => '0',
               'nid_param' => '[node:nid]',
               'nid_target_param' => '[node:og-id]',
               'message_id_param' => 'og_become_co_admin',
-              'variables_param' => '@username=|=[user:user-name-url]-|-@group=|=[node:title-link]-|-',
-              '#eval input' => array(
-                'token_rules_input_evaluator' => array(
-                  'uid_param' => array(
-                    '0' => 'user',
+              'variables_param' => '@user=|=[user:user-name-url]-|-@group=|=[node:title-link]-|-',
+              '#eval input' => 
+              array (
+                'token_rules_input_evaluator' => 
+                array (
+                  'uid_param' => 
+                  array (
+                    0 => 'user',
                   ),
-                  'nid_param' => array(
-                    '0' => 'node',
+                  'nid_param' => 
+                  array (
+                    0 => 'node',
                   ),
-                  'nid_target_param' => array(
-                    '0' => 'node',
+                  'nid_target_param' => 
+                  array (
+                    0 => 'node',
                   ),
-                  'variables_param' => array(
-                    '0' => 'node',
-                    '1' => 'user',
+                  'variables_param' => 
+                  array (
+                    0 => 'node',
+                    1 => 'user',
                   ),
                 ),
               ),
             ),
-            '#type' => 'action',
-          ),
-        ),
-        '#version' => 6003,
-      ),
-      'commons_core_21' => array(
-        '#type' => 'rule',
-        '#set' => 'event_og_become_co_admin',
-        '#categories' => array(
-          '0' => 'og_activity',
-          '1' => 'heartbeat',
-          'commons_core' => 'commons_core',
-        ),
-        '#label' => 'User becomes co-admin of a group',
-        '#active' => 0,
-        '#weight' => '0',
-        '#status' => 'default',
-        '#conditions' => array(),
-        '#actions' => array(
-          '0' => array(
-            '#weight' => 1,
-            '#info' => array(
+            '#name' => 'heartbeat_rules_default_action',
+            '#info' => 
+            array (
               'label' => 'Logs user activity for single users',
-              'eval input' => array(
-                '0' => 'uid_param',
-                '1' => 'uid_target_param',
-                '2' => 'nid_param',
-                '3' => 'nid_target_param',
-                '4' => 'message_id_param',
-                '5' => 'variables_param',
+              'eval input' => 
+              array (
+                0 => 'uid_param',
+                1 => 'uid_target_param',
+                2 => 'nid_param',
+                3 => 'nid_target_param',
+                4 => 'message_id_param',
+                5 => 'variables_param',
               ),
               'module' => 'heartbeat',
             ),
-            '#name' => 'heartbeat_rules_default_action',
-            '#settings' => array(
-              'uid_param' => '[user:uid]',
-              'uid_target_param' => '0',
-              'nid_param' => '[node:nid]',
-              'nid_target_param' => '[node:og-id]',
-              'message_id_param' => 'og_become_co_admin',
-              'variables_param' => '@username=|=[user:user-name-url]-|-@group=|=[node:title-link]-|-',
-              '#eval input' => array(
-                'token_rules_input_evaluator' => array(
-                  'uid_param' => array(
-                    '0' => 'user',
-                  ),
-                  'nid_param' => array(
-                    '0' => 'node',
-                  ),
-                  'nid_target_param' => array(
-                    '0' => 'node',
-                  ),
-                  'variables_param' => array(
-                    '0' => 'node',
-                    '1' => 'user',
-                  ),
-                ),
-              ),
-            ),
-            '#type' => 'action',
+            '#weight' => 1,
           ),
         ),
         '#version' => 6003,
@@ -5491,7 +5474,7 @@ function _commons_core_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'pathauto_node_page_pattern';
-  $strongarm->value = '';
+  $strongarm->value = 'page/[title]';
 
   $export['pathauto_node_page_pattern'] = $strongarm;
   $strongarm = new stdClass;
