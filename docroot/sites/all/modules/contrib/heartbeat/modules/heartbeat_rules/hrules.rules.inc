@@ -204,7 +204,7 @@ function heartbeat_rules_default_action_form($settings, &$form, $form_state) {
       colons are in the tokens as well.
       <br /><strong>Synthax</strong><pre>
 @username=[author:user-name-url]
-@node_type=[node:type]
+@node_type=[node:type-name]
 @node_title=[node:title-link]
 @types=pages</pre>'),
   );

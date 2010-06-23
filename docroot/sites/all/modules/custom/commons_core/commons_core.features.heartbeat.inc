@@ -95,7 +95,7 @@ function _commons_core_heartbeat_message_info() {
   'variables' => 
   array (
     '@username' => '[flagging_user:user-name-url]',
-    '@type' => '[node:type]',
+    '@type' => '[node:type-name]',
     '@node_title' => '[node:title-link]',
   ),
 );
@@ -187,7 +187,7 @@ function _commons_core_heartbeat_message_info() {
   'variables' => 
   array (
     '@user_name' => '[user:user-name-url]',
-    '@type' => '[node:type]',
+    '@type' => '[node:type-name]',
     '@node_title' => '[node:title]',
   ),
 );

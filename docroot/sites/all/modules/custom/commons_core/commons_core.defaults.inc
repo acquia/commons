@@ -3558,7 +3558,7 @@ function _commons_core_rules_defaults() {
               'nid_param' => '[node:nid]',
               'nid_target_param' => '',
               'message_id_param' => 'heartbeat_add_node',
-              'variables_param' => '@username=|=[author:user-name-url]-|-@node_type=|=[node:type]-|-@node_title=|=[node:title-link]-|-@types=|=pages-|-',
+              'variables_param' => '@username=|=[author:user-name-url]-|-@node_type=|=[node:type-name]-|-@node_title=|=[node:title-link]-|-@types=|=pages-|-',
               '#eval input' => array(
                 'token_rules_input_evaluator' => array(
                   'uid_param' => array(
@@ -3781,7 +3781,7 @@ function _commons_core_rules_defaults() {
               'nid_param' => '[node:nid]',
               'nid_target_param' => '[node:og-id]',
               'message_id_param' => 'heartbeat_delete_content',
-              'variables_param' => '@user_name=|=[user:user-name-url]-|-@type=|=[node:type]-|-@node_title=|=[node:title]-|-',
+              'variables_param' => '@user_name=|=[user:user-name-url]-|-@type=|=[node:type-name]-|-@node_title=|=[node:title]-|-',
               '#eval input' => array(
                 'token_rules_input_evaluator' => array(
                   'uid_param' => array(
@@ -4088,7 +4088,7 @@ function _commons_core_rules_defaults() {
               'nid_param' => '[node:nid]',
               'nid_target_param' => '[node:nid]',
               'message_id_param' => 'heartbeat_edit_node',
-              'variables_param' => '@username=|=[user:user-name-url]-|-@node_type=|=[node:type]-|-@node_title=|=[node:title-link]-|-',
+              'variables_param' => '@username=|=[user:user-name-url]-|-@node_type=|=[node:type-name]-|-@node_title=|=[node:title-link]-|-',
               '#eval input' => array(
                 'token_rules_input_evaluator' => array(
                   'uid_param' => array(
@@ -4189,7 +4189,7 @@ function _commons_core_rules_defaults() {
               'nid_param' => '[node:nid]',
               'nid_target_param' => '[node:og-id]',
               'message_id_param' => 'heartbeat_edit_node',
-              'variables_param' => '@username=|=[user:user-name-url]-|-@node_type=|=[node:type]-|-@node_title=|=[node:title-link]-|-',
+              'variables_param' => '@username=|=[user:user-name-url]-|-@node_type=|=[node:type-name]-|-@node_title=|=[node:title-link]-|-',
               '#eval input' => array(
                 'token_rules_input_evaluator' => array(
                   'uid_param' => array(
@@ -4611,7 +4611,7 @@ function _commons_core_rules_defaults() {
               'nid_param' => '[node:nid]',
               'nid_target_param' => '',
               'message_id_param' => 'heartbeat_flag_content',
-              'variables_param' => '@username=|=[flagging_user:user-name-url]-|-@type=|=[node:type]-|-@node_title=|=[node:title-link]-|-',
+              'variables_param' => '@username=|=[flagging_user:user-name-url]-|-@type=|=[node:type-name]-|-@node_title=|=[node:title-link]-|-',
               '#eval input' => array(
                 'token_rules_input_evaluator' => array(
                   'uid_param' => array(
