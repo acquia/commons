@@ -156,6 +156,13 @@
         <div id="footer-message" class="footer-message row <?php print $grid_width; ?>">
           <div id="footer-message-inner" class="footer-message-inner inner clearfix">
             <?php print theme('grid_block', $footer_message, 'footer-message-text'); ?>
+            <div id="acquia-footer-message">
+            <?php global $theme_path; global $base_url;?>
+            <a href="http://acquia.com/drupalcommons" title="Powered by Drupal Commons"><img src="<?php print($base_url.'/'.$theme_path); ?>/images/commons_footer_logo.png" title="Powered by Drupal Commons" alt="Drupal Commons by Acquia" /></a>
+            </div><!-- /acquia-footer-message-->
+                        <div id="fusion-footer-message">Theme by 
+            <a href="http://www.topnotchthemes.com" title="Drupal Themes by TopNotchThemes">TopNotchThemes</a>, powered by <a href="http://fusiondrupalthemes.com" title="Premium Drupal themes powered by Fusion">Fusion</a>.
+                </div><!-- /fusion-footer-message-->
           </div><!-- /footer-message-inner -->
         </div><!-- /footer-message -->
       </div><!-- /footer-message-wrapper -->

@@ -15,13 +15,6 @@
  * @ingroup views_templates
  */
 ?>
-<?php 
-//add collapsible fieldset js if it is not already included
-global $BASE_URL;
-drupal_add_js($BASE_URL.'misc/drupal.js');
-drupal_add_js($BASE_URL.'misc/collapse.js');
-?>
-
 <?php if (!empty($q)): ?>
   <?php
     // This ensures that, if clean URLs are off, the 'q' is added first so that
@@ -29,8 +22,6 @@ drupal_add_js($BASE_URL.'misc/collapse.js');
     print $q;
   ?>
 <?php endif; ?>
-<fieldset class="views-exposed-form collapsible collapsed">
-<legend><?php print(t("Filter")); ?></legend>
   <div class="views-exposed-wrapper clear-block">
   <div class="views-exposed-widgets clear-block">
     <?php foreach($widgets as $id => $widget): ?>
@@ -55,4 +46,3 @@ drupal_add_js($BASE_URL.'misc/collapse.js');
       <?php print $button ?>
     </div>
   </div>
-</fieldset>

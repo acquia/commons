@@ -1,14 +1,26 @@
-/* $Id: acquia_commons-style.css 7573 2010-06-21 15:40:52Z sheena $ */
+/* @override 
+	http://localhost:9016/sites/all/themes/gsa_acquia_commons/css/gsa-acquia-commons-style.css?r
+	http://localhost:9016/sites/all/themes/gsa_acquia_commons/css/gsa-acquia-commons-style.css?Y
+	http://localhost:9016/sites/all/themes/gsa_acquia_commons/css/gsa-acquia-commons-style.css?y
+	http://localhost:9016/sites/all/themes/gsa_acquia_commons/css/gsa-acquia-commons-style.css?Z
+	http://localhost:9016/sites/all/themes/gsa_acquia_commons/css/gsa-acquia-commons-style.css?L
+	http://localhost:9016/sites/all/themes/gsa_acquia_commons/css/gsa-acquia-commons-style.css?A
+	http://devtest.commonsdemo.acquia-sites.com/sites/all/themes/acquia_commons/css/acquia_commons-style.css?z
+	http://localhost:9016/sites/all/themes/acquia_commons/css/acquia_commons-style.css?A
+*/
+/* $Id: acquia_commons-style.css 7582 2010-06-22 22:33:37Z sheena $ */
 
 /* Basic Typography & Colors-------------------------------------------------------------- */
 
 /* Add general site styling here for typography and background */
 
 body {
-  font-family: Georgia, Baskerville, serif;
   color: #1f1f1f;
+  font-family: Georgia, Baskerville, serif;
   font-size: 75%;
-/*also set in fusion_starter.info: settings[base-font-size] = font-size-12 */
+/
+
+*also set in fusion_starter.info: settings[base-font-size] = font-size-12 */
 }
 
 /* Default link styles - separate a:visited for a different visited link style */
@@ -30,6 +42,7 @@ a:active {
 h1 {
   font-size: 3em;
   font-weight: normal;
+  line-height: 1.1em;
   margin: .5em 0;
 }
 
@@ -53,12 +66,15 @@ h4 {
   color: #619ed4;
 }
 
-/* Specific Typography-------------------------------------------------------------- */
-
-#site-name {
-  font-size: 300%;
-  line-height: 150%;
+blockquote p:first-child {
+  margin-top: 0;
 }
+
+blockquote p:last-child {
+  margin-bottom: 0px;
+}
+
+/* Specific Typography-------------------------------------------------------------- */
 
 .footer-message {
   font-size: 90%;
@@ -113,6 +129,7 @@ body {
 #logo {
   float: left;
   margin: 0 12px 0 0;
+  vertical-align: middle;
   width: auto;
 }
 
@@ -123,7 +140,15 @@ body {
 /* Link and hover styles for site name */
 
 #site-name {
-  margin-top: 14px;
+  font-size: 300%;
+  line-height: 150%;
+  margin-top: 20px;
+}
+
+#site-name-wrapper {
+  float: left;
+  width: auto;
+  vertical-align: middle;
 }
 
 #site-name a:link,
@@ -510,7 +535,13 @@ body {
 }
 
 .footer-message-wrapper {
-  
+  background-color: #777;
+  color: #fff;
+  padding: 10px 0;
+}
+
+.footer-message-wrapper a {
+  color: #bad9ff;
 }
 
 .footer-message {
@@ -525,6 +556,20 @@ body {
   
 }
 
+.footer-message #acquia-footer-message {
+  float: left;
+  width: 49%;
+}
+
+.footer-message #fusion-footer-message {
+  float: right;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 1.1em;
+  padding: 10px 0;
+  text-align: right;
+  width: 49%;
+}
+
 /* Page titles/-------------------------------------------------------------- */
 
 /* Page and full node titles */
@@ -534,7 +579,7 @@ h1.title {
   font-size: 3em;
   font-weight: normal;
   line-height: 1.2em;
-  margin: 0 0 1em 0;
+  margin: 0 0 .6em 0;
 }
 
 /* Default node styles/-------------------------------------------------------------- */
@@ -586,12 +631,17 @@ h2.title a:active {
 
 /* Links for nodes (taxonomy, commenting, read more, etc) */
 
+ul.links li,
 .node ul.links li {
   background-image: none;
-  padding: 0 4px 0 0;
   border-right: 1px solid #ccc;
   display: inline;
-  margin: 0 2px 0 0;
+  margin: 0;
+  padding: 0 6px 0 6px;
+}
+
+.node ul.links li.flag-bookmarks {
+  padding-right: 0px;
 }
 
 .node ul.links li.last {
@@ -711,12 +761,11 @@ h2.block-title {
 /* Breadcrumbs-------------------------------------------------------------- */
 
 .breadcrumbs-wrapper {
-  
+  border-bottom: 1px solid #dedede;
 }
 
 .breadcrumbs {
   background-color: #fff;
-  border-bottom: 1px solid #dedede;
   color: #333;
   margin: 0 auto;
 }
@@ -874,7 +923,6 @@ ul.pager {
   margin: 0;
   padding: 2px 4px;
   text-indent: 0;
-;
 }
 
 ul.pager a,
@@ -887,9 +935,9 @@ ul.pager li.pager-current {
   color: #fff;
 }
 
-ul.pager a:hover,
-ul.pager a:active,
-ul.pager a:focus {
+ul.pager li a:hover,
+ul.pager li a:active,
+ul.pager li a:focus {
   background-color: #777;
   border-color: #333;
   color: #fff;
@@ -933,7 +981,7 @@ form input.form-submit:focus {
   border: 1px inset #969696;
   font-size: 14px;
   line-height: 1em;
-  padding: 2px 8px;
+  padding: 2px 4px;
 }
 
 .form-item select {
@@ -951,7 +999,8 @@ form input.form-submit:focus {
 /* Fieldset wrapper around groups of form elements -- add border here */
 
 fieldset {
-  
+  overflow: hidden;
+;
 }
 
 /* Typography and spacing for legend of fieldsets */
@@ -1029,8 +1078,7 @@ tr.views-row-first.views-row-last,
 tr.views-row-first.views-row-last td,
 tr.first.last,
 tr.first.last td {
-
- border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
 }
 
 td.active {
@@ -1610,11 +1658,14 @@ panels-pane.commons-colors-orangeblue .inner {
   margin: 0;
   padding: 2px 10px;
   width: 80px;
-;
 }
 
 .page-home .shoutbox-add-form input.form-submit {
   width: 60px;
+}
+
+#shoutbox-body {
+  overflow: visible;
 }
 
 .shoutbox-admin-links {
@@ -1683,7 +1734,6 @@ div.shoutbox-even {
 
 div.shoutbox-even {
   margin: 0 4px 18px 0;
-
   padding: 2px 4px;
 }
 
@@ -1733,6 +1783,8 @@ div.shoutbox-even {
   border: none;
 }
 
+/* block calendar */
+
 .block .view-og-calendar {
   border: 2px solid #ececec;
 }
@@ -1778,10 +1830,128 @@ div.shoutbox-even {
   color: #fff;
 }
 
+/* page calendar */
+
+.block .content-content .view-og-calendar,
+.block .content-content .view-content-global-calendar {
+  border: none;
+}
+
+.block .content-content .view-og-calendar .calendar-calendar .month-view table,
+.block .content-content .view-content-global-calendar .calendar-calendar .month-view table {
+  border: 2px solid #ececec;
+}
+
+.block .content-content .view-og-calendar .month-view .inner,
+.block .content-content .view-og-calendar .month-view .calendar-empty,
+.block .content-content .view-content-global-calendar .month-view .inner,
+.block .content-content .view-content-global-calendar .month-view .calendar-empty {
+  background-color: transparent;
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+.block .content-content .view-og-calendar .month-view td,
+.block .content-content .view-content-global-calendar .month-view td {
+  border-collapse: collapse;
+  margin: 0;
+  padding: 0;
+}
+
+.block .content-content .view-og-calendar .month-view td.empty,
+.block .content-content .view-content-global-calendar .month-view td.empty {
+  background-color: #ececec;
+}
+
+.block .content-content .view-og-calendar .month-view .month.day,
+.block .content-content .view-content-global-calendar .month-view .month.day {
+  border: 1px solid #ececec;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.block .content-content .view-og-calendar .month-view td.today .month.day a,
+.block .content-content .view-content-global-calendar .month-view td.today .month.day a {
+  color: #666;
+}
+
+.block .content-content .view-og-calendar .month-view td.future.has-events,
+.block .content-content .view-content-global-calendar .month-view td.future.has-events {
+  background-color: #fcfcfc;
+}
+
+.block .content-content .view-og-calendar .month-view td.future.has-events .view-item div,
+.block .content-content .view-content-global-calendar .month-view td.future.has-events .view-item div {
+  background-color: transparent;
+}
+
+.block .content-content .view-og-calendar .month-view td.future.has-events .view-item .view-data-node-title a,
+.block .content-content .view-content-global-calendar .month-view td.future.has-events .view-item .view-data-node-title a {
+  background: transparent;
+  color: #69c;
+  font-size: 1.2em;
+}
+
+.view-og-calendar .calendar-calendar ul.links,
+.view-content-global-calendar .calendar-calendar ul.links {
+  text-align: center;
+}
+
+.view-og-calendar .calendar-calendar ul.links li,
+.view-content-global-calendar .calendar-calendar ul.links li {
+  border-right: 1px solid #ececec;
+  font-size: 1.14em;
+  margin: 0px 4px 0 0;
+  padding: 0px 8px 0 0;
+}
+
+.view-og-calendar .calendar-calendar ul.links li:last-child,
+.view-content-global-calendar .calendar-calendar ul.links li:last-child {
+  border-right: none;
+}
+
+div#calpopup #popup-close {
+  padding-top: 8px;
+}
+
+div#calpopup #popup-close img#popup-close-img {
+  position: relative;
+  z-index: 30;
+}
+
+div#calpopup-body {
+  margin-top: 0px;
+  padding: 0;
+  position: relative;
+  z-index: 20;
+}
+
+#calpopup-body .node h2 {
+  margin-bottom: 10px;
+  margin-top: 0px;
+}
+
+#calpopup-body .node fieldset {
+  background-color: #fcfcfc;
+  border: 1px solid #ccc;
+}
+
+#calpopup-body div#nodelink {
+  border-top: 1px solid #ccc;
+  margin: 0;
+}
+
 /* views pagers */
 
 .view .item-list ul.pager {
   margin-top: 10px;
+}
+
+/* views grids*/
+
+table.views-view-grid td {
+  vertical-align: top;
 }
 
 /*views admin links */
@@ -1797,9 +1967,10 @@ div.shoutbox-even {
 .heartbeat-more-messages-wrapper {
   border-top: 1px solid #ccc;
   display: block;
-  font-weight: bold;
-  margin-top: 0px;
-  padding: 0px;
+  font-size: 11px;
+  font-weight: normal;
+  margin: 6px 0 0 0;
+  padding: 2px 0 0 0;
   text-align: right;
 }
 
@@ -1810,27 +1981,27 @@ div.shoutbox-even {
 
 /* add new views headers */
 
-.view-header .addnew a {
-  background-color: #69c;
-  border: 1px solid #868686;
-  color: #fff;
-  display: block;
-  font-size: 1.1em;
-  padding: 2px 8px;
-  text-align: center;
-  width: 130px;
-}
-
-.view-header .addnew a:hover {
-  cursor: pointer;
-}
-
 /*views exposed widget*/
 
 fieldset.views-exposed-form {
   background-color: #f8f8f8;
   border: 1px solid #ccc;
+  clear: both;
+  overflow: visible;
   padding: 0px;
+;
+}
+
+fieldset.views-exposed-form:after {
+  clear: both;
+  content: ".";
+  display: block;
+  height: 0;
+  visibility: hidden;
+}
+
+html.js fieldset.collapsible .fieldset-wrapper {
+  overflow: visible;
 }
 
 html.js fieldset.views-exposed-form {
@@ -1839,10 +2010,6 @@ html.js fieldset.views-exposed-form {
 
 html.js fieldset.views-exposed-form.collapsed {
   background-color: transparent;
-}
-
-fieldset.views-exposed-form legend {
-  margin-left: 18px;
 }
 
 .views-exposed-widgets {
@@ -1861,12 +2028,24 @@ fieldset.views-exposed-form legend {
 
 .views-exposed-form .views-exposed-widget:last-child {
   margin-right: 0px;
-;
 }
 
 .views-exposed-widget input,
 .views-exposed-widget select {
   width: 90%;
+}
+
+#autocomplete ul li {
+  font-family: Arial, helvetica, sans-serif;
+  font-size: 12px;
+  line-height: 1.6em;
+  border-bottom: 1px solid #eee;
+  margin: 0;
+  padding: 2px 4px 2px 4px;
+}
+
+#autocomplete ul li:last-child {
+  border-bottom: none;
 }
 
 .views-exposed-wrapper .views-exposed-widget.views-exposed-submit {
@@ -1880,6 +2059,27 @@ fieldset.views-exposed-form legend {
   margin-top: 22px;
   max-width: 100%;
   width: 60px;
+}
+
+#views-exposed-form-og-search-default .views-exposed-widget.views-exposed-submit {
+  max-width: none;
+  width: 90px;
+}
+
+#views-exposed-form-og-search-default .views-exposed-widget.views-exposed-submit .form-submit {
+  float: left;
+  margin: 0;
+  padding: 0px;
+  text-align: center;
+  width: 100%;
+}
+
+#views-exposed-form-og-search-default .views-exposed-widgets {
+  margin: 0px;
+  padding: 0;
+  float: left;
+  margin-right: 2%;
+  width: 60%;
 }
 
 .views-exposed-widget label {
@@ -1905,7 +2105,6 @@ fieldset.views-exposed-form legend {
 /* views calendar widgets */
 
 .view-content-global-calendar .views-exposed-widget {
-
   width: 28%;
 }
 
@@ -1916,6 +2115,10 @@ fieldset.views-exposed-form legend {
 .view-content-global-discussions .views-exposed-widget,
 .view-content-global-wikis .views-exposed-widget {
   width: 22%;
+}
+
+.view-recent-content-all .views-exposed-widget {
+  width: 16%;
 }
 
 /* Group content views*/
@@ -1938,9 +2141,9 @@ fieldset.views-exposed-form legend {
 
 .view-og-content-tracker .views-exposed-widget {
   width: 22%;
-;
 }
 
+.view-recent-content-all table tr td.views-field-type span.node-type,
 .view-og-content-tracker table tr td.views-field-type span.node-type {
   display: block;
   height: 18px;
@@ -1948,33 +2151,61 @@ fieldset.views-exposed-form legend {
   width: 18px;
 }
 
-.view-og-content-tracker table tr td.views-field-type span.blog {
+.view-og-content-tracker table tr td.views-field-type span.blog,
+.view-recent-content-all table tr td.views-field-type span.blog {
   background: transparent url(../images/icons/blog-node.png) no-repeat center center;
 }
 
+.view-recent-content-all table tr td.views-field-type span.event,
 .view-og-content-tracker table tr td.views-field-type span.event {
   background: transparent url(../images/icons/event-node.png) no-repeat center center;
 }
 
+.view-recent-content-all table tr td.views-field-type span.wiki,
 .view-og-content-tracker table tr td.views-field-type span.wiki {
   background: transparent url(../images/icons/wiki-node.png) no-repeat center center;
 }
 
+.view-recent-content-all table tr td.views-field-type span.document,
 .view-og-content-tracker table tr td.views-field-type span.document {
   background: transparent url(../images/icons/document-node.png) no-repeat center center;
 }
 
+.view-recent-content-all table tr td.views-field-type span.discussion,
 .view-og-content-tracker table tr td.views-field-type span.discussion {
   background: transparent url(../images/icons/forum-node.png) no-repeat center center;
 }
 
+.view-recent-content-all table tr td.views-field-type span.poll,
 .view-og-content-tracker table tr td.views-field-type span.poll {
   background: transparent url(../images/icons/poll-node.png) no-repeat center center;
 }
 
+.view-recent-content-all table tr td.views-field-type span.group,
+.view-og-content-tracker table tr td.views-field-type span.group {
+  background: transparent url(../images/icons/group-node.png) no-repeat center center;
+}
+
+.view-recent-content-all table tr td.views-field-type span.notice,
+.view-og-content-tracker table tr td.views-field-type span.notice {
+  background: transparent url(../images/icons/notice-node.png) no-repeat center center;
+}
+
+.view-recent-content-all table tr td.views-field-title a,
+.view-og-content-tracker table tr td.views-field-title a {
+  white-space: normal;
+}
+
+.view-recent-content-all table tr th.views-field-group-nid,
+.view-recent-content-all table tr td.views-field-group-nid {
+  max-width: 140px;
+}
+
+.view-recent-content-all table tr td.views-field-name,
 .view-og-content-tracker table tr td.views-field-name {
   padding-right: 10px;
   text-align: right;
+  white-space: nowrap;
 }
 
 /* global blog posts view*/
@@ -2028,13 +2259,22 @@ fieldset.views-exposed-form legend {
 
 /* recent notices view */
 
-.block .view-recent-notices .view-header,
-.block .view-og-calendar .view-header {
+.block .view-recent-notices .view-header .addnew,
+.block .view-og-calendar .view-header .addnew {
   position: absolute;
   right: 10px;
   text-align: right;
   top: 3px;
   width: 90px;
+}
+
+.block .content-content .view-recent-notices .view-header .addnew,
+.block .content-content .view-og-calendar .view-header .addnew {
+  position: absolute;
+  right: 0px;
+  text-align: right;
+  top: 76px;
+  width: auto;
 }
 
 .panel-pane .view-og-calendar .view-header .addnew,
@@ -2170,7 +2410,7 @@ fieldset.views-exposed-form legend {
   display: block;
   height: 0;
   visibility: hidden;
-}
+} 
 
 .heartbeat-message-block .beat-item .beat-item-info {
   float: left;
@@ -2198,7 +2438,7 @@ fieldset.views-exposed-form legend {
 }
 
 div.beat-item blockquote {
-  background-position: 0 -16px;
-  margin: 0 0 0 0px;
-  padding: 0 0 0 32px;
+  font-style: italic;
+  padding: 0;
+  background-image: none;
 }
