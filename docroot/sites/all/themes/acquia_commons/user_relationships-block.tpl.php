@@ -46,10 +46,10 @@ else {
   }
 
   if ($account->uid == $user->uid) {
-    print t('You have no @rels', array('@rels' => $rtype_name));
+    print t('You haven\'t added any @rels yet', array('@rels' => $rtype_name));
   }
   else {
-    print t('!name has no @rels', array('!name' => theme('username', $account), '@rels' => $rtype_name));
+    print t('!name hasn\'t added any @rels yet', array('!name' => theme('username', $account), '@rels' => $rtype_name));
   }
 }
 

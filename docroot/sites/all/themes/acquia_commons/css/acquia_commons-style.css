@@ -1,4 +1,4 @@
-/* $Id: acquia_commons-style.css 7594 2010-06-23 20:42:37Z sheena $ */
+/* $Id: acquia_commons-style.css 7601 2010-06-24 19:21:11Z sheena $ */
 
 /* Basic Typography & Colors-------------------------------------------------------------- */
 
@@ -12,7 +12,7 @@ body {
 
 /* Default link styles - separate a:visited for a different visited link style */
 
-a,
+a, 
 a:link,
 a:visited {
   color: #669acc;
@@ -1279,6 +1279,7 @@ div.poll div.bar div.foreground {
   margin: 0;
   padding: 0;
   width: auto;
+  display: block;
 }
 
 .profile .userpoints:after {
@@ -1317,6 +1318,7 @@ div.poll div.bar div.foreground {
 
 .profile .column-right dt {
   width: auto;
+  padding: 0;
 }
 
 .profile .column-right h3 {
@@ -1325,6 +1327,11 @@ div.poll div.bar div.foreground {
   margin-top: 0;
   padding: 2px 6px;
 }
+
+.profile dd .item-list li{
+	background-image: none;
+}
+
 
 /* Ubercart - catalog/-------------------------------------------------------------- */
 
@@ -2107,12 +2114,22 @@ html.js fieldset.views-exposed-form.collapsed {
   width: 90px;
 }
 
-#views-exposed-form-og-search-default .views-exposed-widget.views-exposed-submit .form-submit {
+#views-exposed-form-og-search-default .views-exposed-widget.views-exposed-submit .form-submit,
+#views-exposed-form-og-search-page-1 .views-exposed-widget.views-exposed-submit .form-submit {
   float: left;
   margin: 0;
   padding: 0px;
   text-align: center;
   width: 100%;
+}
+
+#views-exposed-form-og-search-page-1 .views-exposed-widget.views-exposed-submit {
+  width: 100px;	
+}
+
+#views-exposed-form-og-search-page-1 .views-exposed-widgets{
+	width: 60%;
+  margin-right: 0px;
 }
 
 #views-exposed-form-og-search-default .views-exposed-widgets {

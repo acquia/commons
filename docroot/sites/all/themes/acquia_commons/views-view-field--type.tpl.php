@@ -21,4 +21,4 @@
   */
 ?>
 
-<span class="node-type <?php print $row->node_type;?>" title="<?php print $row->node_type;?>"><?php print $output; ?></span>
+<span class="node-type <?php print $row->node_type;?>" title="<?php print node_get_types('name', $row->node_type);?>"><?php print $output; ?></span>
