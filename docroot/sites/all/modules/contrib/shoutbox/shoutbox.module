@@ -1,5 +1,5 @@
 <?php
-//$Id: shoutbox.module,v 1.31.2.4 2010/06/01 01:01:46 mikestefff Exp $
+//$Id: shoutbox.module,v 1.31.2.8 2010/06/28 20:23:26 mikestefff Exp $
 
 /*
  * @file
@@ -194,8 +194,8 @@ function shoutbox_delete_shout($shout_id) {
  * Prints out shouts only.
  */
 function shoutbox_js_view() {
-  if (arg(0) == 'shoutbox') {
-    $show_amount = variable_get('shoutbox_showamount_page', '30');
+  if ($_GET['shouts'] && is_numeric($_GET['shouts'])) {
+    $show_amount = $_GET['shouts'];
   }
   else {
     $show_amount = variable_get('shoutbox_showamount_block', '10');
@@ -525,7 +525,7 @@ function shoutbox_admin_settings() {
   
     $form['display_settings']['shoutbox_profile_name'] = array(
       '#type' => 'select',
-      '#title' => t('Use Profile Field for User Name'),
+      '#title' => t('Use profile field for user name'),
       '#options' => array(0 => '- None -') + $choices,
       '#default_value' => variable_get('shoutbox_profile_name', 0),
       '#description' => t('Select an existing custom profile field to use as the user name.'),
@@ -534,7 +534,7 @@ function shoutbox_admin_settings() {
   else {
     $form['display_settings']['shoutbox_profile_name'] = array(
       '#type' => 'item',
-      '#title' => t('Use Profile Field for User Name'),
+      '#title' => t('Use profile field for user name'),
       '#description' => t('Enable the profile module to allow for Shoutbox to use user\'s full name.'),
     );
   }

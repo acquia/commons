@@ -1,4 +1,4 @@
-// $Id: shoutbox-form.js,v 1.11.2.1 2010/05/22 14:16:08 mikestefff Exp $
+// $Id: shoutbox-form.js,v 1.11.2.3 2010/06/28 20:23:26 mikestefff Exp $
 
  if (typeof(Drupal) == "undefined" || !Drupal.shoutbox) {    
   Drupal.shoutbox = {};
@@ -6,7 +6,6 @@
 
 /*
  * Submit shout with javascript.
- *
  */
 Drupal.shoutbox.attachShoutAddForm = function () {
   // initial color to use for first post
@@ -58,7 +57,6 @@ Drupal.shoutbox.success = function (responseText) {
 /**
   * Attach focus handling code to the form
   * fields 
-  *
   */ 
 Drupal.shoutbox.attachForm = function() {
   $('input#edit-message').val(Drupal.settings.shoutbox.defaultMsg);
@@ -85,7 +83,7 @@ Drupal.shoutbox.startTimer = function(delay) {
  * Reloads all shouts from the server.
  */
 Drupal.shoutbox.loadShouts = function() {
-	$("#shoutbox-posts").load(Drupal.settings.shoutbox.refreshPath);
+	$("#shoutbox-posts").load(Drupal.settings.shoutbox.refreshPath + '?shouts=' + Drupal.settings.shoutbox.showAmount);
 }
 
 /**
