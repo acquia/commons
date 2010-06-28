@@ -121,6 +121,7 @@ function commons_block($op = 'list', $delta = 0, $edit = array()) {
           'subject' => t('User statistics'),
           'content' => _commons_user_stats_block()
         );
+        break;
       case 1:
         $block = array(
           'subject' => t('Jumpstart your community!'),
