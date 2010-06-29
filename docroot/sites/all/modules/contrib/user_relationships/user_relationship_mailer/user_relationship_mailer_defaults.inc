@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationship_mailer_defaults.inc,v 1.1.2.9 2009/11/08 17:32:35 alexk Exp $
+// $Id: user_relationship_mailer_defaults.inc,v 1.1.2.10 2010/01/03 19:46:49 alexk Exp $
 /**
  * @file User Relationships Mailer implementation. Contains all default strings and action definitions
  */
@@ -35,7 +35,7 @@ function user_relationship_mailer_replacements(&$relationship) {
   $requester = $relationship->requester;
   $requestee = $relationship->requestee;
   //load relationship type, if necessary
-  if (!$relationship->relationship_type) {
+  if (!isset($relationship->relationship_type)) {
     $relationship->relationship_type = user_relationships_type_load($relationship->rtid);
   }
   $replacements = array(
@@ -67,7 +67,8 @@ function user_relationship_mailer_replacements(&$relationship) {
   }
 
   //'remove' action needs a few more variables for the template
-  if ($deleted_by = $relationship->deleted_by) {
+  if (isset($relationship->deleted_by)) {
+    $deleted_by = $relationship->deleted_by;
     $replacements['@deleted_by_name'] = $deleted_by->name;
     $replacements['@deleted_by_link'] = url("user/{$deleted_by->uid}", array('absolute' => TRUE));
     $replacements['@deleted_by_uid']  = $deleted_by->uid;

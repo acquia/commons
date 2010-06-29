@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationship_service.inc,v 1.1.2.1 2009/07/06 10:24:44 alexk Exp $
+// $Id: user_relationship_service.inc,v 1.1.2.3 2010/05/14 07:47:40 alexk Exp $
 /**
  * @author Drupal 6 port by Darren Ferguson <http://drupal.org/user/70179>
  * @author Written by scottgifford http://drupal.org/user/245699
@@ -38,9 +38,7 @@ function user_relationship_service_approve($version, $rid) {
     if ($rel->requestee_id != $user->uid) {
       throw new Exception("Access denied");
     }
-    $updated = $rel;
-    $updated->approved = TRUE;
-    user_relationships_update_relationship($rel, $updated, 'approved');
+    user_relationships_save_relationship($rel, 'approve');
     return $rel;
   } catch (Exception $ex) {
     return services_error(t('Error approving relationship: @msg', array('@msg' => $ex->getMessage())));

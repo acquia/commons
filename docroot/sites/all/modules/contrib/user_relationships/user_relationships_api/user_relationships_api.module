@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationships_api.module,v 1.1.2.21 2009/11/07 21:24:54 alexk Exp $
+// $Id: user_relationships_api.module,v 1.1.2.24 2010/02/23 22:45:38 alexk Exp $
 
 /**
  * @file
@@ -28,7 +28,10 @@ if (module_exists('privatemsg')) {
  */
 function _user_relationships_invoke($type, &$relationship, $is_type = FALSE) {
   $hook = 'user_relationships'. ($is_type ? '_type' : '');
-  module_invoke_all($hook, $type, $relationship);
+  foreach (module_implements($hook) as $module) {
+    $function = $module .'_'. $hook;
+    $function($type, $relationship);
+  }
 }
 
 
@@ -225,10 +228,10 @@ function user_relationships_api_cron() {
 
   $expired_requests = array();
   while ($request = db_fetch_object($result)) {
-    $expired_requests[$request->rid] = $request;
+    $expired_requests[] = $request->rid;
   }
 
-  if ($expired_requests) {
+  if (count($expired_requests)) {
     db_query('DELETE FROM {user_relationships} WHERE rid IN ('. db_placeholders($expired_requests) .')', $expired_requests);
     _user_relationships_invoke('delete', $expired_requests);
   }
@@ -334,9 +337,25 @@ function user_relationships_api_token_values($type, $data = NULL, $options = arr
     );
   }
   elseif ($type == 'relationship') {
-    $r = $data;
-    $r_type = user_relationships_type_load(array('rtid' => $r->rtid));
-   
+    if (is_array($data)) {
+      foreach ($data as $object) {
+        if (is_object($object)) {
+          $r = $object;
+          break;
+        }
+      }
+    }
+    else {
+      $r = $data; 
+    }
+    
+    $r_type = user_relationships_type_load((int) $r->rtid);
+    
+    drupal_set_message("data: " . print_r($data, 1));
+    drupal_set_message("data r: " . print_r($data, 1));
+    drupal_set_message("r: " . print_r($r, 1));
+    drupal_set_message("rtype: " . print_r($r_type, 1));
+
     $token_values = array(
       'requestee' => theme('username', user_load(array('uid' => $r->requestee_id))),
       'requester' => theme('username', user_load(array('uid' => $r->requester_id))),
@@ -344,5 +363,5 @@ function user_relationships_api_token_values($type, $data = NULL, $options = arr
     );
   }
  
-  return $token_values;
+  return isset($token_values) ? $token_values : NULL;
 }

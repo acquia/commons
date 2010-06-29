@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationships_ui.theme.inc,v 1.1.2.9 2009/10/15 15:23:26 aufumy Exp $
+// $Id: user_relationships_ui.theme.inc,v 1.1.2.11 2010/02/23 22:45:38 alexk Exp $
 
 /**
  * @file
@@ -16,7 +16,7 @@ function theme_user_relationships_approval_status($approved) {
 /**
  * Create relationship link
  */
-function theme_user_relationships_request_relationship_link(&$relate_to) {
+function theme_user_relationships_request_relationship_link($relate_to) {
   return l(
     t('Create a relationship with %name', array('%name' => $relate_to->name)),
     "relationship/{$relate_to->uid}/request",
@@ -30,7 +30,7 @@ function theme_user_relationships_request_relationship_link(&$relate_to) {
 /**
  * Create a direct relationship link
  */
-function theme_user_relationships_request_relationship_direct_link(&$relate_to, &$relationship_type) {
+function theme_user_relationships_request_relationship_direct_link($relate_to, $relationship_type) {
   //safety, revert to  a generic link
   if (!isset($relationship_type)) {
     return theme('user_relationships_request_relationship_link', $relate_to);
@@ -99,7 +99,7 @@ function theme_user_relationships_pending_request_cancel_link($uid, $rid) {
     t('Cancel'),
     "user/{$uid}/relationships/requested/{$rid}/cancel",
     array(
-      'title' => array('title' => t('Disapprove')),
+      'title' => array('title' => t('Cancel')),
       'query' => drupal_get_destination(),
       'attributes' => array('class' => 'user_relationships_popup_link'),
     )

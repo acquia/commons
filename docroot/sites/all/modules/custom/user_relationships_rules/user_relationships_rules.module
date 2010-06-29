@@ -12,7 +12,8 @@ function user_relationships_rules_user_relationships($op, &$relationship) {
 		case 'cancel':
     case 'delete':
     case 'remove':
-      rules_invoke_event('user_relationships_' . $op, user_load($relationship->requester_id), user_load($relationship->requestee_id), user_relationships_load(array('rid' => $relationship->rid)));
-			break;
+      //rules_invoke_event('user_relationships_' . $op, user_load($relationship->requester_id), user_load($relationship->requestee_id), user_relationships_load(array('rid' => $relationship->rid)));
+			rules_invoke_event('user_relationships_' . $op, user_load($relationship->requester_id), user_load($relationship->requestee_id), $relationship);
+      break;
 	}
 }

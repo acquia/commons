@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationship_blocks.module,v 1.1.2.14 2009/10/25 16:46:20 alexk Exp $
+// $Id: user_relationship_blocks.module,v 1.1.2.15 2010/01/03 12:12:44 alexk Exp $
 /**
  * @file
  * User Relationship Blocks implementation
@@ -42,7 +42,12 @@ function user_relationship_blocks_user_relationships_type($op, &$rtype) {
  */
 function user_relationship_blocks_block($op = 'list', $bid = '', $edit = array()) {
   if ($op != 'list') {
-    list($block, $rtid, $extra) = explode(UR_BLOCK_SEPARATOR, $bid);
+    //pad array with nulls before calling list() to avoid php notices
+    $exploded = explode(UR_BLOCK_SEPARATOR, $bid);
+    while (count($exploded) < 3) {
+      $exploded[] = NULL;
+    }
+    list($block, $rtid, $extra) = $exploded;
   }
 
   switch ($op) {
@@ -229,7 +234,7 @@ function _user_relationship_blocks_view($block_type, $rtid, $extra, $bid) {
     $account = user_load($uid);
   }
 
-  if ($account) {
+  if (isset($account)) {
     $add_to_string = in_array($block_type, array('pending', 'actions')) ? "_{$block_type}" : '';
     return array(
       'subject' => theme('user_relationship_block_subject', $bid, $account, $rtid, $extra),
@@ -320,7 +325,7 @@ function _user_relationship_blocks_settings($bid = NULL, $new_settings = NULL) {
 
     $settings[$key] = (object)$new_settings;
   }
-  else if ($bid && !$settings[$bid]) {
+  else if ($bid && (!isset($settings[$bid]) || !$settings[$bid])) {
     $settings[$bid] = db_fetch_object(db_query("SELECT * FROM {user_relationship_blocks} WHERE bid = '%s'", $bid));
   }
   else {

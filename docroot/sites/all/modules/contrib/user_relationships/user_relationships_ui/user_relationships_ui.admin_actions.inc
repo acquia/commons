@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationships_ui.admin_actions.inc,v 1.1.2.14 2009/11/08 12:27:31 alexk Exp $
+// $Id: user_relationships_ui.admin_actions.inc,v 1.1.2.15 2010/05/13 19:15:57 alexk Exp $
 /**
  * @file
  * User Relationships admin submit handlers
@@ -102,6 +102,19 @@ function user_relationships_ui_type_edit_submit($form, &$form_state) {
       if ($rid == $selected) {
         $role_record->rid = $selected;
         drupal_write_record('user_relationship_type_roles', $role_record);
+      }
+    }
+  }
+
+  //save role receive permissions for this rtype
+  db_query('DELETE FROM {user_relationship_type_roles_receive} WHERE rtid = %d', $relationship_type->rtid);
+  if ($form_state['values']['roles_receive']) {
+    $role_receive_record = new StdClass;
+    $role_receive_record->rtid = $relationship_type->rtid;
+    foreach ($form_state['values']['roles_receive'] as $rid => $selected) {
+      if ($rid == $selected) {
+        $role_receive_record->rid = $selected;
+        drupal_write_record('user_relationship_type_roles_receive', $role_receive_record);
       }
     }
   }

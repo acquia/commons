@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationships_ui.module,v 1.1.2.32 2009/11/07 21:24:54 alexk Exp $
+// $Id: user_relationships_ui.module,v 1.1.2.38 2010/05/13 19:15:57 alexk Exp $
 /**
  * @file
  * UI components of user_relationships
@@ -31,23 +31,23 @@ function user_relationships_ui_get_message($key, $relationship = NULL, $replacem
   $msg = variable_get("user_relationships_ui_msg_{$key}", NULL);
 
   if ($relationship) {
-    if (!$relationship->requester) { 
+    if (!isset($relationship->requester)) { 
       $relationship->requester = user_load($relationship->requester_id); 
     }
-    if (!$relationship->requestee) {
+    if (!isset($relationship->requestee)) {
       $relationship->requestee = user_load($relationship->requestee_id);
     }
-    if (!($relationship->name || $relationship->type)) {
+    if (!(isset($relationship->name) || isset($relationship->type))) {
       $relationship->type = user_relationships_type_load($relationship->rtid);
     }
 
     $replaceables = array(
       '!requester'                => theme('username', $relationship->requester),
       '!requestee'                => theme('username', $relationship->requestee),
-      '%relationship_name'        => $relationship->name 
+      '%relationship_name'        => isset($relationship->name) 
                                      ? ur_tt("user_relationships:rtid:$relationship->rtid:name", $relationship->name) 
                                      : ur_tt("user_relationships:rtid:$relationship->rtid:name", $relationship->type->name),
-      '%relationship_plural_name' => $relationship->plural_name 
+      '%relationship_plural_name' => isset($relationship->plural_name) 
                                      ? ur_tt("user_relationships:rtid:$relationship->rtid:plural_name", $relationship->plural_name) 
                                      : ur_tt("user_relationships:rtid:$relationship->rtid:plural_name", $relationship->type->plural_name),
     );
@@ -160,7 +160,7 @@ function _user_relationships_ui_set_notifications(&$account) {
   }
 
   $notifications = drupal_get_messages('status', FALSE);
-  $notifications = $notifications['status'] ? $notifications['status'] : array();
+  $notifications = isset($notifications['status']) ? $notifications['status'] : array();
 
   $relationships = user_relationships_load(array('requestee_id' => $account->uid, 'approved' => FALSE));
   foreach ($relationships as $relationship) {
@@ -197,7 +197,7 @@ function _user_relationships_ui_between(&$viewer, &$viewed) {
 
   $relationships = user_relationships_load(array('between' => array($viewer->uid, $viewed->uid)));
   foreach ($relationships as $relationship) {
-    if ($relationship->approved && !$list[$relationship->rid]) {
+    if ($relationship->approved && !isset($list[$relationship->rid])) {
       $list[$relationship->rid] = t('%relationship_name (!remove_link)', array(
         '%relationship_name'  => ur_tt("user_relationships:rtid:$relationship->rtid:name", $relationship->name) . ($relationship->is_oneway ? ($relationship->requester_id == $viewer->uid ? t(' (You to Them)') : t(' (Them to You)')) : NULL),
         '!remove_link'        => theme('user_relationships_remove_link', $viewer->uid, $relationship->rid)
@@ -257,7 +257,7 @@ function _user_relationships_ui_actions_between(&$viewer, &$viewed) {
       //draw a single link, or one for each relationship type
       foreach ($all_relationships as $rtid => $relationship) {
         //check this type can be requested
-        if (!user_relationships_api_can_request($viewer, $relationship)) {
+        if (!user_relationships_api_can_request($viewer, $relationship) || !user_relationships_api_can_receive($viewed, $relationship)) {
           continue;
         }
         $list[] = theme('user_relationships_request_relationship_direct_link', $viewed, $relationship);
@@ -312,11 +312,16 @@ function _user_relationships_ui_get_requestable_rtypes($requester, $requestee) {
   $relationships = array();
   foreach ($relationship_types as $rtype) {
     //exclude already established relationships
-    if ($current_relationships[$rtype->rtid]) {
+    $relationship = $current_relationships[$rtype->rtid];
+    if (is_array($relationship) && count($relationship)) {
+      $relationship = $relationship[0];
+    }
+    //skip two-way relationships, one-way non-reciprocal relationships, or reciprocal where this direction already exists
+    if (isset($current_relationships[$rtype->rtid]) && (!$rtype->is_oneway || !$rtype->is_reciprocal || $relationship->requester_id == $requester->uid)) {
       continue;
     }
     //exclude types that are not allowed
-    if (!user_relationships_api_can_request($requester, $rtype)) {
+    if (!user_relationships_api_can_request($requester, $rtype) || !user_relationships_api_can_receive($requestee, $rtype)) {
       continue;
     }
     $relationships[$rtype->rtid] = ur_tt("user_relationships:rtid:$rtype->rtid:name", $rtype->name);
@@ -823,12 +828,12 @@ function template_preprocess_user_relationships(&$variables) {
   }
 
   if ($account->uid == $user->uid) {
-    $msg = $relationship_type 
+    $msg = isset($relationship_type) 
            ? t("My %relationships", array('%relationships' => $relationship_type->plural_name ? ur_tt("user_relationships:rtid:$relationship_type->rtid:plural_name", $relationship_type->plural_name) : ur_tt("user_relationships:rtid:$relationship_type->rtid:name", $relationship_type->name))) 
            : t("All my relationships");
   }
   else {
-    $msg = $relationship_type 
+    $msg = isset($relationship_type) 
            ? t("%username's %relationships", array('%username' => $account->name, '%relationships' => $relationship_type->plural_name ? ur_tt("user_relationships:rtid:$relationship_type->rtid:plural_name", $relationship_type->plural_name) : ur_tt("user_relationships:rtid:$relationship_type->rtid:name", $relationship_type->name))) 
            : t("All %username's relationships", array('%username' => $account->name));
   }

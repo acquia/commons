@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationships_pending_requests.tpl.php,v 1.1.2.8 2009/10/15 15:23:26 aufumy Exp $
+// $Id: user_relationships_pending_requests.tpl.php,v 1.1.2.9 2010/01/03 20:17:43 alexk Exp $
 /**
  * @file
  * Page to manage sent and received relationship requests
@@ -13,7 +13,7 @@
   );
 
   foreach ($sections as $column => $section) {
-    if (!$$section) { continue; }
+    if (!isset($$section)) { continue; }
     $rows = array();
 
     $rows[] = array(

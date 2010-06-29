@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationships_api.api.inc,v 1.1.2.17 2009/11/08 17:32:35 alexk Exp $
+// $Id: user_relationships_api.api.inc,v 1.1.2.18 2010/05/13 19:15:57 alexk Exp $
 
 /**
  * @file
@@ -83,6 +83,14 @@ function user_relationships_types_load($reset = NULL) {
       $rtype = $relationship_types_list[$mapping->rtid];
       // //roles is an associative array {role id} => {role id}
       $rtype->roles[$mapping->rid] = $mapping->rid;//] = $mapping->name;
+    }
+    
+    //load role receive permissions for all types
+    $results = db_query('SELECT rtid, rid FROM {user_relationship_type_roles_receive} ORDER BY rtid, rid');
+    while ($mapping = db_fetch_object($results)) {
+      $rtype = $relationship_types_list[$mapping->rtid];
+      // //roles is an associative array {role id} => {role id}
+      $rtype->roles_receive[$mapping->rid] = $mapping->rid;//] = $mapping->name;
     }
   }
 
@@ -179,6 +187,13 @@ function user_relationships_request_relationship($requester, $requestee = NULL, 
   //check requester is allowed to create this rtype
   if (!user_relationships_api_can_request($requester, $type)) {
     watchdog('user_relationships_api', 'User %user has no suitable roles to request a %rtype relationship', array('%user' => $requester->name, '%rtype' => $type->name), WATCHDOG_WARNING);
+    //it would be good to return a reason why save is denied, but it's the API portion, it does not expose anything user-visible
+    return FALSE;
+  }
+  
+  //check requestee is allowed to receive this rtype
+  if (!user_relationships_api_can_receive($requestee, $type)) {
+    watchdog('user_relationships_api', 'User %user has no suitable roles to receive a %rtype relationship', array('%user' => $requestee->name, '%rtype' => $type->name), WATCHDOG_WARNING);
     //it would be good to return a reason why save is denied, but it's the API portion, it does not expose anything user-visible
     return FALSE;
   }
@@ -436,6 +451,37 @@ function user_relationships_api_can_request($requester, $relationship_type) {
   //check user has at least one required role
   foreach ($relationship_type->roles as $role_id) {
     if ($requester->roles[$role_id]) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Check whether a user is allowed to receive a certain relationship type
+ *
+ * @param $requestee requesting user object or uid
+ * @param $relationship_type loaded relationship type object or rtid
+ * @return TRUE iff receiver is allowed to request this type of relationship
+ */
+function user_relationships_api_can_receive($requestee, $relationship_type) {
+  //validate arguments
+  if (is_numeric($relationship_type)) {
+    $relationship_type = user_relationships_type_load($relationship_type);
+  }
+  if (is_numeric($requestee)) {
+    $requestee = user_load($requestee);
+  }
+  if (!is_object($requestee) || !is_object($relationship_type)) {
+    return FALSE;
+  }
+  //if no roles have been set to receive the relationship, any user can receive it
+  if (!isset($relationship_type->roles_receive) || !count($relationship_type->roles_receive)) {
+    return TRUE;
+  }
+  //check user has at least one required role
+  foreach ($relationship_type->roles_receive as $role_id) {
+    if ($requestee->roles[$role_id]) {
       return TRUE;
     }
   }

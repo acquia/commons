@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationships_ui.admin.inc,v 1.1.2.20 2009/11/07 21:24:54 alexk Exp $
+// $Id: user_relationships_ui.admin.inc,v 1.1.2.23 2010/05/13 19:15:57 alexk Exp $
 
 /**
  * @file
@@ -54,11 +54,11 @@ function user_relationships_ui_settings() {
       $form['privatemsg'] = array(
         '#type'   => 'fieldset',
         '#title'  => t('Private messages'),
+        '#description'    => t('Allow Privatemsg to work only between related users. Note that this setting does not affect the site\'s admin user.'),
       );
       $form['privatemsg']['user_relationships_restrict_privatemsg'] = array(
         '#type'           => 'radios',
         '#title'          => t('Restrict Private Messaging to only related users'),
-        '#description'    => t('Allow Privatemsg to work only between related users'),
         '#default_value'  => variable_get('user_relationships_restrict_privatemsg', 'all'),
         '#options' => array(
           'all' => t('Allow sending messages to all users'),
@@ -71,6 +71,16 @@ function user_relationships_ui_settings() {
         '#title'          => t('Suggest only relationships in To: field'),
         '#description'    => t("Show only user's relationships when autocompleting the To: field."),
         '#default_value'  => variable_get('user_relationships_privatemsg_autocomplete_alter', 0),
+      );
+      $form['privatemsg']['roles'] = array(
+        '#title' => t('Role exclusions'),
+        '#type' => 'fieldset',
+        '#description' => t('You may choose which roles are allowed to send message to all users, even if it is otherwise restricted.'),
+        'user_relationships_privatemsg_role_exclusions' => array(
+          '#type' => 'checkboxes',
+          '#options' => user_roles(TRUE),
+          '#default_value' => variable_get('user_relationships_privatemsg_role_exclusions', array()),
+        ),
       );
   }
   $form['positioning'] = array(
@@ -198,7 +208,17 @@ function user_relationships_ui_type_edit(&$form_state, $relationship_type = NULL
     'roles' => array(
       '#type' => 'checkboxes',
       '#options' => user_roles(TRUE),
-      '#default_value' => is_array($relationship_type->roles) ? $relationship_type->roles : array(),
+      '#default_value' => isset($relationship_type->roles) ? $relationship_type->roles : array(),
+    ),
+  );
+  $form['roles_receive'] = array(
+    '#title' => t('Role receive access'),
+    '#type' => 'fieldset',
+    '#description' => t('You may choose which roles are allowed to receive this relationship. If none are selected, all roles are allowed to receive the relationship.'),
+    'roles_receive' => array(
+      '#type' => 'checkboxes',
+      '#options' => user_roles(TRUE),
+      '#default_value' => is_array($relationship_type->roles_receive) ? $relationship_type->roles_receive : array(),
     ),
   );
   $form['rtid'] = array(

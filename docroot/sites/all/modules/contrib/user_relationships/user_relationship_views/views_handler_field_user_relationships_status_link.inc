@@ -1,5 +1,5 @@
 <?php
-// $Id: views_handler_field_user_relationships_status_link.inc,v 1.1.2.1 2009/11/07 21:47:04 alexk Exp $
+// $Id: views_handler_field_user_relationships_status_link.inc,v 1.1.2.2 2010/01/02 12:42:01 alexk Exp $
 
 /**
  * @file
@@ -30,26 +30,26 @@ class views_handler_field_user_relationships_status_link extends views_handler_f
     }
 
     //Requests for me to add or remove.
-    if ($values->user_relationships_requestee_id === $user->uid) {
+    if ($values->{$this->aliases['requestee_id']} === $user->uid) {
       //Remove the request.
-      if ($values->user_relationships_approved) {
-        return theme('user_relationships_remove_link', $values->user_relationships_requestee_id, $values->rid) ;
+      if ($values->{$this->aliases['approved']}) {
+        return theme('user_relationships_remove_link', $values->{$this->aliases['requestee_id']}, $values->{$this->aliases['rid']}) ;
       }
       //Accept or decline the request.
       else {
         return
-        theme('user_relationships_pending_request_approve_link', $values->user_relationships_requestee_id, $values->rid) .
+        theme('user_relationships_pending_request_approve_link', $values->{$this->aliases['requestee_id']}, $values->{$this->aliases['rid']}) .
         ' | '.
-        theme('user_relationships_pending_request_disapprove_link', $values->user_relationships_requestee_id, $values->rid) ;
+        theme('user_relationships_pending_request_disapprove_link', $values->{$this->aliases['requestee_id']}, $values->{$this->aliases['rid']}) ;
       }
     }
     //Requests by me.
-    if ($values->user_relationships_requester_id === $user->uid) {
-      if ($values->user_relationships_approved) {
-        return theme('user_relationships_remove_link', $values->user_relationships_requester_id, $values->rid) ;
+    if ($values->{$this->aliases['requester_id']} === $user->uid) {
+      if ($values->{$this->aliases['approved']}) {
+        return theme('user_relationships_remove_link', $values->{$this->aliases['requester_id']}, $values->{$this->aliases['rid']}) ;
       }
       else {
-        return theme('user_relationships_pending_request_cancel_link', $values->user_relationships_requester_id, $values->rid) ;
+        return theme('user_relationships_pending_request_cancel_link', $values->{$this->aliases['requester_id']}, $values->{$this->aliases['rid']}) ;
       }
     }
   }

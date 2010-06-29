@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationship_elaborations.module,v 1.1.2.10 2009/11/08 17:32:35 alexk Exp $
+// $Id: user_relationship_elaborations.module,v 1.1.2.13 2010/05/14 08:28:03 alexk Exp $
 
 /**
  * @file
@@ -57,7 +57,7 @@ function user_relationships_get_elaboration($rid) {
  */
 function user_relationship_elaborations_user_relationships($op, &$relationships) {
   if (!is_array($relationships)) {
-    if (!$relationships->rid) {
+    if (!isset($relationships->rid)) {
       return;
     }
     if (in_array($op, array('cancel', 'delete', 'remove', 'disapprove'))) {
@@ -110,7 +110,7 @@ function _user_relationship_elaborations_walk_recursive($action, &$relationships
           $data[$relationship->rid] = $relationship->rid;
         }
       }
-      elseif ($data[$relationship->rid]) {
+      elseif (isset($data[$relationship->rid]) && $data[$relationship->rid]) {
         $relationship->elaboration = $data[$relationship->rid];
       }
     }
@@ -125,7 +125,7 @@ function user_relationship_elaborations_preprocess_user_relationships(&$variable
   if (!variable_get('user_relationships_elaborations_api_only', FALSE)) {
     user_relationship_elaborations_user_relationships('load', $variables['relationships']);
     foreach ($variables['relationships'] as $rid => $relationship) {
-      $variables['relationships'][$rid]->extra_for_display .= check_plain($variables['relationships'][$rid]->elaboration);
+      $variables['relationships'][$rid]->extra_for_display .= isset($variables['relationships'][$rid]->elaboration) ? check_plain($variables['relationships'][$rid]->elaboration) : '';
     }
   }
 }

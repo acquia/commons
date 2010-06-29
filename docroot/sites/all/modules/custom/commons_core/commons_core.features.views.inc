@@ -3396,7 +3396,7 @@ function _commons_core_views_default_views() {
   $handler = $view->new_display('block', 'Block', 'block_1');
   $handler->override_option('block_description', 'My recent items');
   $handler->override_option('block_caching', -1);
-  
+
   $views[$view->name] = $view;
 
   // Exported view: my_unread_items
@@ -5359,7 +5359,7 @@ function _commons_core_views_default_views() {
   ));
   $handler->override_option('link_to_view', 0);
   $handler->override_option('inherit_panels_path', 0);
-  
+
   $views[$view->name] = $view;
 
   // Exported view: og_dashboard_groups
@@ -13923,9 +13923,8 @@ if(user_access(\'create notice content\')) {
   $handler->override_option('block_caching', -1);
 
   $views[$view->name] = $view;
-  
+
   // Exported view: upcoming_events
-  
   $view = new view;
   $view->name = 'upcoming_events';
   $view->description = 'Upcoming events';
@@ -14341,7 +14340,7 @@ if(user_access(\'create notice content\')) {
   $handler->override_option('title', 'Featured events');
   $handler->override_option('block_description', 'Featured Events');
   $handler->override_option('block_caching', -1);
-  
+
   $views[$view->name] = $view;
 
   // Exported view: user_directory
@@ -14698,13 +14697,35 @@ if(user_access(\'create notice content\')) {
         'use_operator' => 0,
         'operator' => 'value_2_op',
         'identifier' => 'value_2',
-        'label' => 'Name',
+        'label' => 'First name',
         'optional' => 1,
         'remember' => 0,
       ),
       'case' => 0,
       'id' => 'value_2',
       'table' => 'profile_values_profile_name',
+      'field' => 'value',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'value_4' => array(
+      'operator' => 'contains',
+      'value' => '',
+      'group' => '0',
+      'exposed' => TRUE,
+      'expose' => array(
+        'use_operator' => 0,
+        'operator' => 'value_4_op',
+        'identifier' => 'value_4',
+        'label' => 'Last name',
+        'optional' => 1,
+        'remember' => 0,
+      ),
+      'case' => 0,
+      'id' => 'value_4',
+      'table' => 'profile_values_profile_last_name',
       'field' => 'value',
       'override' => array(
         'button' => 'Override',

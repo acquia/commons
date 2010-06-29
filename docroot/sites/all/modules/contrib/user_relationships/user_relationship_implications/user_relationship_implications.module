@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationship_implications.module,v 1.1.2.9 2009/07/06 13:13:58 alexk Exp $
+// $Id: user_relationship_implications.module,v 1.1.2.10 2010/02/23 22:45:38 alexk Exp $
 
 /**
  * Drupal Module: User Relationship Implications
@@ -93,7 +93,7 @@ function user_relationship_implications_form_user_relationships_ui_type_edit_alt
   }
 }
 
-function theme_user_relationship_implications_form_table(&$form) {
+function theme_user_relationship_implications_form_table($form) {
   $headers = array(t('Relationship Type'), t('Strict'), t('Reverse'));
   $rows = array();
 

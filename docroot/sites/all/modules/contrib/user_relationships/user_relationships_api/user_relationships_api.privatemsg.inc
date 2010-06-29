@@ -1,30 +1,24 @@
 <?php
-// $Id: user_relationships_api.privatemsg.inc,v 1.1.2.6 2009/10/24 22:39:07 alexk Exp $
+// $Id: user_relationships_api.privatemsg.inc,v 1.1.2.7 2010/05/13 17:51:45 alexk Exp $
 /**
  * @file Integration with Privatemsg module
  * @author mansspams http://drupal.org/user/293179
  * @author alex.k http://drupal.org/user/183217
  */
+
 /**
  * Fills new Privatemsg autocomplete To: field with friends only.
- *
  */
 function user_relationships_api_privatemsg_sql_autocomplete_alter(&$fragments, $search, $names) {
-  //#522078 killswitch for autocomplete
-  if (!variable_get('user_relationships_privatemsg_autocomplete_alter', 0)) {
+  global $user;
+  // Check if $author needs to be restricted.
+  if (!user_relationships_api_privatemsg_restrict($user)) {
     return;
   }
-
-  global $user;
-  
-  static $uniqueprefix = 0;
-  
-  $fragments['inner_join'][] = "INNER JOIN {user_relationships} ur_$uniqueprefix ON u.uid = ur_$uniqueprefix.requestee_id";
-  $fragments['where'][] = "ur_$uniqueprefix.approved = 1";
-  $fragments['where'][] = "ur_$uniqueprefix.requester_id = %d";
+  $fragments['inner_join'][] = "INNER JOIN {user_relationships} ur ON u.uid = ur.requestee_id";
+  $fragments['where'][] = "ur.approved = 1";
+  $fragments['where'][] = "ur.requester_id = %d";
   $fragments['query_args']['where'][] = $user->uid;
-  
-  $uniqueprefix++;
 }
 
 
@@ -33,10 +27,11 @@ function user_relationships_api_privatemsg_sql_autocomplete_alter(&$fragments, $
  * @see hook_privatemsg_block_message()
  */
 function user_relationships_api_privatemsg_block_message($author, $recipients) {
-  //#522078 admin killswitch
-  if (variable_get('user_relationships_restrict_privatemsg', 'all') == 'all') {
+  // Check if $author needs to be restricted.
+  if (!user_relationships_api_privatemsg_restrict($author)) {
     return;
   }
+
   $blocked = array();
   foreach ($recipients as $recipient) {
     //block if user is only receiving pm's from his relationships, and author is not one of them
@@ -53,4 +48,22 @@ function user_relationships_api_privatemsg_block_message($author, $recipients) {
     }
   }
   return $blocked;
+}
+
+function user_relationships_api_privatemsg_restrict($author) {
+    //#522078 admin killswitch, always ignore this for user 1.
+  if (variable_get('user_relationships_restrict_privatemsg', 'all') == 'all' || $author->uid == 1) {
+    return FALSE;
+  }
+
+  $exlude_roles = array_filter(variable_get('user_relationships_privatemsg_role_exclusions', array()));
+  // First, make sure that we have a user object with roles, and then check if
+  // the users does have any of the exluded roles.
+  if (!empty($author->roles) || $author = user_load($author->uid)) {
+    $is_excluded = array_intersect(array_keys($author->roles), $exlude_roles);
+    if (!empty($is_excluded)) {
+      return FALSE;
+    }
+  }
+  return TRUE;
 }

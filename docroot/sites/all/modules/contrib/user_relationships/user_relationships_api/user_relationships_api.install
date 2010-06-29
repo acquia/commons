@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationships_api.install,v 1.1.2.9 2009/11/07 21:24:54 alexk Exp $
+// $Id: user_relationships_api.install,v 1.1.2.10 2010/05/13 19:15:57 alexk Exp $
 
 /**
  * @file
@@ -47,6 +47,17 @@ function user_relationships_api_schema() {
   );
 
   $schema['user_relationship_type_roles'] = array(
+    'fields' => array(
+      'rtid'              => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'rid'              => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+    ),
+    'primary key' => array('rtid', 'rid'),
+    'indexes' => array(
+      'rtid' => array('rtid'),
+    )
+  );
+
+  $schema['user_relationship_type_roles_receive'] = array(
     'fields' => array(
       'rtid'              => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
       'rid'              => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
@@ -110,5 +121,17 @@ function user_relationships_api_update_6102() {
   foreach ($new_fields as $field => $spec) {
     db_add_field($ret, 'user_relationship_types', $field, $spec);
   }
+  return $ret;
+}
+
+/**
+ * Implementation of hook_update_N().
+ * Update 6103 adds the {user_relationship_type_roles_receive} table
+ */
+function user_relationships_api_update_6103() {
+  $ret = array();
+  $schema = drupal_get_schema_unprocessed('user_relationships_api');
+  _drupal_initialize_schema('user_relationships_api', $schema);
+  db_create_table($ret, 'user_relationship_type_roles_receive', $schema['user_relationship_type_roles_receive']);
   return $ret;
 }

@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationships_api.activity.inc,v 1.1.2.1 2009/11/07 19:17:26 alexk Exp $
+// $Id: user_relationships_api.activity.inc,v 1.1.2.2 2010/01/03 23:03:54 alexk Exp $
 
 /**
  * @file:
@@ -20,7 +20,7 @@ function user_relationships_api_activity_grants($activity) {
 /**
  * hook_activity_access_grants().
  */
-function user_relationships_api_activity_access_grants($account, $object, $type) {
+function user_relationships_api_activity_access_grants($account, $object = NULL, $type = NULL) {
   // load up all the users relationships
   $params = array(
     'user' => $account->uid
