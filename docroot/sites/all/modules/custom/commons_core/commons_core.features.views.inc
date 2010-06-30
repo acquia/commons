@@ -4582,7 +4582,7 @@ function _commons_core_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Calendar');
-  $handler->override_option('header', '<div class="addnew"<?php print l(t(\'Add a new event\'), \'node/add/event\', array(\'query\' => \'gids[]=\' . arg(1))); ?></div>');
+  $handler->override_option('header', '<div class="addnew"><?php print l(t(\'Add a new event\'), \'node/add/event\', array(\'query\' => \'gids[]=\' . arg(1))); ?></div>');
   $handler->override_option('header_format', '3');
   $handler->override_option('header_empty', 1);
   $handler->override_option('items_per_page', 0);
