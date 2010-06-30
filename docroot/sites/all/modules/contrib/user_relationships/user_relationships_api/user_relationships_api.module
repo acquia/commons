@@ -350,11 +350,6 @@ function user_relationships_api_token_values($type, $data = NULL, $options = arr
     }
     
     $r_type = user_relationships_type_load((int) $r->rtid);
-    
-    drupal_set_message("data: " . print_r($data, 1));
-    drupal_set_message("data r: " . print_r($data, 1));
-    drupal_set_message("r: " . print_r($r, 1));
-    drupal_set_message("rtype: " . print_r($r_type, 1));
 
     $token_values = array(
       'requestee' => theme('username', user_load(array('uid' => $r->requestee_id))),
