@@ -42,10 +42,10 @@ define('DRUPAL_COMMONS_POINTS_NODE', 5);
 define('DRUPAL_COMMONS_POINTS_COMMENT', 2);
 
 // Define the singular name of the user relationship
-define('DRUPAL_COMMONS_RELATIONSHIP_SINGULAR', 'Friend');
+define('DRUPAL_COMMONS_RELATIONSHIP_SINGULAR', 'friend');
 
 // Define the plural name of the user relationship
-define('DRUPAL_COMMONS_RELATIONSHIP_PLURAL', 'Friends');
+define('DRUPAL_COMMONS_RELATIONSHIP_PLURAL', 'friends');
 
 /**
  * Return an array of the modules to be enabled when this profile is installed.
