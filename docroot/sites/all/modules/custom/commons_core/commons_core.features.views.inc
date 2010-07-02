@@ -13530,10 +13530,10 @@ else {
   ));
   $handler->override_option('title', 'Latest notices');
   $handler->override_option('header', '<?php
-if(user_access(\'create notice content\')) {
-  print \'<div class="addnew">\' . l(t(\'Add a notice\'), \'node/add/notice\') . \'</div>\';
-}
-?>');
+  if(user_access(\'create notice content\')) {
+    print \'<div class="addnew">\' . l(t(\'Add a notice\'), \'node/add/notice\') . \'</div>\';
+  }
+  ?>');
   $handler->override_option('header_format', '3');
   $handler->override_option('header_empty', 1);
   $handler->override_option('empty', 'No notices have been created yet.');
@@ -13614,32 +13614,7 @@ if(user_access(\'create notice content\')) {
   ));
   $handler->override_option('use_pager', 'mini');
   $handler->override_option('pager_element', 5);
-  $handler->override_option('style_plugin', 'table');
-  $handler->override_option('style_options', array(
-    'grouping' => '',
-    'override' => 1,
-    'sticky' => 0,
-    'order' => 'asc',
-    'columns' => array(
-      'title' => 'title',
-      'timestamp' => 'title',
-      'created' => 'title',
-    ),
-    'info' => array(
-      'title' => array(
-        'sortable' => 0,
-        'separator' => '',
-      ),
-      'timestamp' => array(
-        'separator' => '',
-      ),
-      'created' => array(
-        'sortable' => 0,
-        'separator' => '',
-      ),
-    ),
-    'default' => '-1',
-  ));
+  $handler->override_option('style_options', array());
   $handler->override_option('row_options', array(
     'inline' => array(
       'title' => 'title',
