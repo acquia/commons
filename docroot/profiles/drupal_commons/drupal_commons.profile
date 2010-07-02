@@ -660,6 +660,10 @@ function drupal_commons_config_vars() {
   
   // Show large amount of tags on tag cloud page
   variable_set('tagadelic_page_amount', 500);
+  
+  // Preprocess JS and CSS files
+  variable_set('preprocess_css', 1);
+  variable_set('preprocess_js', 1);
 }
 
 // Various actions needed to clean up after the installation
@@ -682,6 +686,10 @@ function drupal_commons_cleanup() {
   foreach ($cache_tables as $table) {
     cache_clear_all('*', $table, TRUE);
   }
+  
+  // Clear out JS and CSS caches
+  drupal_clear_css_cache();
+  drupal_clear_js_cache();
   
   // Say hello to the dog!
   watchdog('commons', t('Welcome to Drupal Commons from Acquia!'));
