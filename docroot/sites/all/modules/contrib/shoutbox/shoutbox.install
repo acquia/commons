@@ -1,5 +1,5 @@
 <?php
-// $Id: shoutbox.install,v 1.4.4.2 2010/06/01 01:01:46 mikestefff Exp $
+// $Id: shoutbox.install,v 1.4.4.3 2010/07/02 22:14:00 mikestefff Exp $
 
 /**
  * @file
@@ -78,6 +78,16 @@ function shoutbox_update_5200() {
     default:
       break;
   }
+  return $items;
+}
+
+/*
+ * Update to 2.0
+ */
+function shoutbox_update_6200() {
+  $items = array();
+  $items[] = update_sql("ALTER TABLE {shoutbox} DROP url");
+  $items[] = update_sql("ALTER TABLE {shoutbox} MODIFY nick varchar(60)");
   return $items;
 }
 
