@@ -143,7 +143,7 @@ function theme_tagging_tags_list($tags, $vid) {
       }
       // TODO: use # here...but out of any reason it gets encoded to %23 in html
       // using trim here, as mostly the old tagging system was "one, two, three"..
-      $term = "<div class='tagging-tag'>".trim($term)."</div>";
+      $term = "<div class='tagging-tag'>".trim(check_plain($term))."</div>";
       $link = l($term, '', array('html' => true, 'attributes' => array('title' => t('Remove tag'))));
       $cur_tags .= $link;
     }
@@ -161,7 +161,7 @@ function theme_tagging_suggestions_list($suggestions, $vid) {
         continue;
       }
       // TODO: Use # here...but out of any reason it gets encoded to %23 in html.
-      $term = "<div id='tagging-$vid' class='tagging-suggest-tag'>".trim($term['#name'])."</div>";
+      $term = "<div id='tagging-$vid' class='tagging-suggest-tag'>".trim(check_plain($term['#name']))."</div>";
       $link = l($term, '', array('html' => true, 'attributes' => array('title' => t('Add tag'))));
       $suggested_tags .= $link;
     }
