@@ -161,6 +161,15 @@ function commons_form_alter(&$form, &$form_state, $form_id) {
   if (strstr($form_id, 'node_form')) {
     // Remove default "Promoted to Front Page" option
     unset($form['options']['promote']);
+  
+    // Check if this is a group type
+    if (module_exists('og')) {
+      if (og_is_group_type(str_replace('_node_form', '', $form_id))) {
+        // Make user's aware of the max length
+        $maxlength = $form['og_description']['#maxlength'];
+        $form['og_description']['#description'] = $form['og_description']['#description'] . ' (' . t('!maxlength characters allowed', array('!maxlength' => $maxlength)) . ')'; 
+      }
+    }
   }
 }
 
