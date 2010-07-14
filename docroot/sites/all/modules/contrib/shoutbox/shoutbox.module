@@ -1,5 +1,5 @@
 <?php
-//$Id: shoutbox.module,v 1.31.2.8 2010/06/28 20:23:26 mikestefff Exp $
+//$Id: shoutbox.module,v 1.31.2.9 2010/07/14 17:49:39 mikestefff Exp $
 
 /*
  * @file
@@ -701,6 +701,7 @@ function shoutbox_edit_form(&$form_state, $shout) {
       '#title' => t('Shout'),
       '#default_value' => $shout->shout,
       '#cols' => 13,
+      '#required' => TRUE,
       '#rows' => 7,
     );
 
@@ -895,6 +896,9 @@ function shoutbox_unpublish_form_submit($form, &$form_state) {
  *   Form values.
  */
 function shoutbox_add_form_validate($form, &$form_state) {
+  // Remove trailing whitespace
+  $form_state['values']['message'] = trim($form_state['values']['message']);
+  
   //Empty message
   if (!$form_state['values']['message']) {
     form_set_error('message', t('You must enter a message.'));  

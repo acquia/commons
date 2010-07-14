@@ -1,5 +1,5 @@
 <?php
-// $Id: commons.module
+// $Id$
 
 /*
  * Implementation of hook_menu()
@@ -225,9 +225,10 @@ function commons_field_access($op, $field, $account = NULL, $node = NULL) {
  * Implementation of hook_init()
  */
 function commons_init() {
+  // Exit if coming from the command-line (needed for drush)
+  // or if we're not calling index.php (so cron.php, xmlrpc.php, etc, works)
   if ((php_sapi_name() == 'cli') ||
-    (str_replace(base_path(), '', $_SERVER['SCRIPT_NAME']) == 'cron.php') ||
-    ($_GET['q'] == 'install.php')) {
+    (str_replace(base_path(), '', $_SERVER['SCRIPT_NAME']) != 'index.php')) {
     return;
   }
 
