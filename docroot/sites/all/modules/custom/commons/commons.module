@@ -73,6 +73,13 @@ function commons_admin_settings() {
     '#description' => t('If checked, only group members will be able to vote on polls that are part of a given group.'),
   );
   
+  $form['group_settings']['commons_group_prevent_open_commenting'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Restrict commenting to group members'),
+    '#default_value' => variable_get('commons_group_prevent_open_commenting', 0),
+    '#description' => t('If checked, only group members will be able to comment on nodes that are part of a given group.'),
+  );
+  
   return system_settings_form($form); 
 }
 
@@ -184,26 +191,88 @@ function commons_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'poll_view_voting') {
     // Check the variable
     if (variable_get('commons_group_prevent_open_voting', 0)) { 
-      // Make sure OG is enabled
-      if (module_exists('og')) {
-        //Determine current group, if any
-        $group = og_get_group_context();
-
-        //Only act if inside a group
-        if ($group) {
-          //Act if current user is not a group member
-          if (!og_is_group_member($group->nid)) {
-            unset($form['vote']);
-      
-            //Let user know why they can't vote
-            $form['denied_message'] = array(
-              '#type' => 'item',
-              '#value' => t('You must be a member of the group') . ' ' . l($group->title, 'node/' . $group->nid) . ' ' . t('to vote on this poll.'),
-            );
-          }
-        } 
+      // Extract the poll node itself
+      $poll = $form['#node'];
+        
+      commons_group_restrict_form($poll, $form, t('vote'), array('vote'));
+    }
+  }
+  
+  // Optionally restrict commenting only to members of the group that
+  // the node is in
+  if ($form_id == 'comment_form') {
+    // Check the variable
+    if (variable_get('commons_group_prevent_open_commenting', 0)) { 
+      // Determine the node
+      // The node ID is either located at node/id or comment/reply/id
+      $node = (arg(0) == 'node') ? node_load(arg(1)) : node_load(arg(2));  
+        
+      // Make sure the node loaded correctly
+      if ($node) {
+        commons_group_restrict_form($node, $form, t('comment'));
       }
     }
+  }
+}
+
+/*
+ * Alter a form based on the current user's group membership status
+ * 
+ * If the current user is not a member of any of the given group(s)
+ * associated with the $node, then remove $elements from the form
+ * 
+ * @param $node
+ *   The group post node
+ * @param $form
+ *   The form to alter, passed in as reference
+ * @param $action
+ *   A string representing the action that is being prevented (Eg, comment)
+ * @param $elements
+ *   The form element identified to remove. If omitted, the entire form will be
+ *   removed
+ */
+function commons_group_restrict_form($node, &$form, $action, $elements = array()) {
+  // Make sure OG is enabled  
+  if (!module_exists('og')) {
+    return; 
+  }
+  
+  //Determine which groups the poll belongs to
+  $groups = og_get_node_groups($node);
+        
+  // Only act if this poll is part of a group
+  if (count($groups)) {
+    $access = FALSE;
+          
+    // Iterate through the groups, checking for membership
+    foreach ($groups as $id => $name) {
+      if (og_is_group_member($id)) {
+        // Indicate that the user is a member of at least one group
+        $access = TRUE;
+        break; 
+      }
+    }
+        
+    // If the user isn't a member of any of the groups, they can't
+    // vote on this poll
+    if (!$access) {
+      // Unset the specified elements
+      if (empty($elements)) {
+        // If non specified, remove the whole form
+        $form = '';
+      }
+      else {
+        foreach ($elements as $element) {
+          unset($form[$element]);
+        }
+      }
+      
+      //Let user know why they can't act
+      $form['denied_message'] = array(
+        '#type' => 'item',
+        '#value' => t('You must be a member of the group to !action', array('!action' => $action)),
+      );
+    } 
   }
 }
 

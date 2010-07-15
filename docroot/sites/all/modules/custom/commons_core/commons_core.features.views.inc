@@ -4019,7 +4019,7 @@ function _commons_core_views_default_views() {
       'id' => 'subscribe',
       'table' => 'og',
       'field' => 'subscribe',
-      'label' => 'Join Link',
+      'label' => 'Join link',
       'relationship' => 'none',
     ),
   ));
