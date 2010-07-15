@@ -6500,7 +6500,7 @@ function _commons_core_views_default_views() {
   ));
   $handler->override_option('title', 'Recent members');
   $handler->override_option('empty_format', '1');
-  $handler->override_option('use_pager', '1');
+  $handler->override_option('use_pager', 'mini');
   $handler->override_option('style_plugin', 'table');
   $handler->override_option('style_options', array(
     'grouping' => '',
@@ -13231,6 +13231,42 @@ else {
       'table' => 'node_revisions',
       'field' => 'teaser',
       'relationship' => 'none',
+      'override' => array(
+        'button' => 'Override',
+      ),
+    ),
+    'view_node' => array(
+      'label' => '',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'text' => 'Continue reading',
+      'exclude' => 0,
+      'id' => 'view_node',
+      'table' => 'node',
+      'field' => 'view_node',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
     ),
   ));
   $handler->override_option('sorts', array(
@@ -13332,7 +13368,7 @@ else {
   $handler = $view->new_display('block', 'Block with teasers', 'block_2');
   $handler->override_option('use_pager', 'mini');
   $handler->override_option('pager_element', 1);
-  $handler->override_option('block_description', 'Recent featured stream (My groups)');
+  $handler->override_option('block_description', 'Recent featured stream (My Groups)');
   $handler->override_option('block_caching', -1);
 
   $views[$view->name] = $view;
@@ -14948,7 +14984,7 @@ else {
     'nothing_1' => array(
       'label' => '',
       'alter' => array(
-        'text' => 'My Account',
+        'text' => 'My account',
         'make_link' => 1,
         'path' => 'user',
         'link_class' => '',
@@ -15023,7 +15059,7 @@ else {
     'hide_empty' => 0,
   ));
   $handler = $view->new_display('block', 'Block', 'block_1');
-  $handler->override_option('block_description', 'User Meta Info');
+  $handler->override_option('block_description', 'User meta info');
   $handler->override_option('block_caching', -1);
 
   $views[$view->name] = $view;

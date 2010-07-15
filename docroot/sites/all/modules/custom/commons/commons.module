@@ -266,6 +266,11 @@ function commons_init() {
     drupal_goto('groups/my');
   }
   
+  // Redirect core /profile which lists users to our new list of users
+  if (arg(0) == 'profile' && !arg(1)) {
+    drupal_goto('users');
+  }
+  
   // Notify group admins of any pending requests on group home page
   if(arg(0) == 'node' && is_numeric(arg(1)) && !arg(2)) {
     // Load the current user

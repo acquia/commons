@@ -16,7 +16,7 @@ function drupal_commons_editor_settings($format) {
     case 'Full HTML':
       $settings = array(
         'default' => 1,
-        'user_choose' => 0,
+        'user_choose' => 1,
         'show_toggle' => 1,
         'theme' => 'advanced',
         'language' => 'en',
@@ -76,7 +76,7 @@ function drupal_commons_editor_settings($format) {
     default:
       $settings = array(
         'default' => 1,
-        'user_choose' => 0,
+        'user_choose' => 1,
         'show_toggle' => 1,
         'theme' => 'advanced',
         'language' => 'en',

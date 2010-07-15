@@ -496,16 +496,27 @@ Featured',
     'list_default' => 1,
     'description_field' => '1',
     'widget' => array(
-      'file_extensions' => '',
+      'file_extensions' => 'jpg jpeg gif png doc docx txt xls xlsx pdf ppt pps odt ods odp tar gz tgz zip',
       'file_path' => '',
       'progress_indicator' => 'bar',
       'max_filesize_per_file' => '',
       'max_filesize_per_node' => '',
-      'insert' => NULL,
-      'insert_styles' => NULL,
-      'insert_default' => NULL,
-      'insert_class' => NULL,
-      'insert_width' => NULL,
+      'insert' => 0,
+      'insert_styles' => array(
+        'auto' => 0,
+        'link' => 0,
+        'image' => 0,
+        'imagecache_profile_pictures' => 0,
+        'imagecache_content_image_secondary' => 0,
+        'imagecache_group_images' => 0,
+        'imagecache_user_picture_meta' => 0,
+        'imagecache_group_images_thumb' => 0,
+        'imagecache_content_image_primary' => 0,
+        'imagecache_member_list_image' => 0,
+      ),
+      'insert_default' => 'auto',
+      'insert_class' => '',
+      'insert_width' => '',
       'label' => 'Files',
       'weight' => '-2',
       'description' => '',
@@ -1656,10 +1667,19 @@ function _commons_core_context_default_contexts() {
       'views_user_meta-block_1' => array(
         'module' => 'views',
         'delta' => 'user_meta-block_1',
-        'weight' => 43,
+        'weight' => 37,
         'region' => 'header',
         'status' => '0',
-        'label' => 'User Meta Info',
+        'label' => 'User meta info',
+        'type' => 'context_ui',
+      ),
+      'user_0' => array(
+        'module' => 'user',
+        'delta' => '0',
+        'weight' => 38,
+        'region' => 'header',
+        'status' => '0',
+        'label' => 'User login',
         'type' => 'context_ui',
       ),
     ),
@@ -2099,7 +2119,7 @@ function _commons_core_fieldgroup_default_groups() {
     'group_type' => 'standard',
     'type_name' => 'event',
     'group_name' => 'group_event_details',
-    'label' => 'Event Details',
+    'label' => 'Event details',
     'settings' => array(
       'form' => array(
         'style' => 'fieldset',
@@ -2554,7 +2574,7 @@ function _commons_core_fieldgroup_default_groups() {
 
   // Translatables
   array(
-    t('Event Details'),
+    t('Event details'),
     t('Group attributes'),
     t('Images'),
     t('Promote content'),
@@ -4759,6 +4779,65 @@ function _commons_core_rules_defaults() {
         '#version' => 6003,
       ),
       'commons_core_21' => array(
+        '#type' => 'rule',
+        '#set' => 'event_og_become_co_admin',
+        '#categories' => array(
+          '0' => 'og_activity',
+          '1' => 'heartbeat',
+          'commons_core' => 'commons_core',
+        ),
+        '#label' => 'User becomes co-admin of a group',
+        '#active' => 0,
+        '#weight' => '0',
+        '#status' => 'default',
+        '#conditions' => array(),
+        '#actions' => array(
+          '0' => array(
+            '#weight' => 1,
+            '#info' => array(
+              'label' => 'Logs user activity for single users',
+              'eval input' => array(
+                '0' => 'uid_param',
+                '1' => 'uid_target_param',
+                '2' => 'nid_param',
+                '3' => 'nid_target_param',
+                '4' => 'message_id_param',
+                '5' => 'variables_param',
+              ),
+              'module' => 'heartbeat',
+            ),
+            '#name' => 'heartbeat_rules_default_action',
+            '#settings' => array(
+              'uid_param' => '[user:uid]',
+              'uid_target_param' => '0',
+              'nid_param' => '[node:nid]',
+              'nid_target_param' => '[node:og-id]',
+              'message_id_param' => 'og_become_co_admin',
+              'variables_param' => '@username=|=[user:user-name-url]-|-@group=|=[node:title-link]-|-',
+              '#eval input' => array(
+                'token_rules_input_evaluator' => array(
+                  'uid_param' => array(
+                    '0' => 'user',
+                  ),
+                  'nid_param' => array(
+                    '0' => 'node',
+                  ),
+                  'nid_target_param' => array(
+                    '0' => 'node',
+                  ),
+                  'variables_param' => array(
+                    '0' => 'node',
+                    '1' => 'user',
+                  ),
+                ),
+              ),
+            ),
+            '#type' => 'action',
+          ),
+        ),
+        '#version' => 6003,
+      ),
+      'commons_core_22' => array(
         '#type' => 'rule',
         '#set' => 'event_og_become_co_admin',
         '#categories' => array(

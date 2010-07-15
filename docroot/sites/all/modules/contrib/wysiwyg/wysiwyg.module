@@ -620,8 +620,20 @@ function wysiwyg_profile_load_all() {
 function wysiwyg_user($type, &$edit, &$user, $category = NULL) {
   if ($type == 'form' && $category == 'account') {
     // @todo http://drupal.org/node/322433
-    $profile = new stdClass;
-    if (isset($profile->settings['user_choose']) && $profile->settings['user_choose']) {
+    $profiles = wysiwyg_profile_load_all();
+    $user_formats = filter_formats();
+    $options = array();
+    $options_default = array();
+    foreach ($profiles as $format => $profile) {
+      // Only show formats a user has access to use that allow user_choose.
+      if (isset($profile->settings['user_choose']) && $profile->settings['user_choose'] && array_key_exists($format, $user_formats)) {
+        $options[$format] = $user_formats[$format]->name;
+        if (wysiwyg_user_get_status($profile)) {
+          $options_default[] = $format;
+        }
+      }
+    }
+    if (count($options)) {
       $form['wysiwyg'] = array(
         '#type' => 'fieldset',
         '#title' => t('Wysiwyg Editor settings'),
@@ -630,11 +642,11 @@ function wysiwyg_user($type, &$edit, &$user, $category = NULL) {
         '#collapsed' => TRUE,
       );
       $form['wysiwyg']['wysiwyg_status'] = array(
-        '#type' => 'checkbox',
+        '#type' => 'checkboxes',
         '#title' => t('Enable editor by default'),
-        '#default_value' => isset($user->wysiwyg_status) ? $user->wysiwyg_status : (isset($profile->settings['default']) ? $profile->settings['default'] : FALSE),
-        '#return_value' => 1,
-        '#description' => t('If enabled, rich-text editing is enabled by default in textarea fields.'),
+        '#default_value' => $options_default,
+        '#options' => $options,
+        '#description' => t('For each of the input formats, select whether or not rich-text editing is enabled by default in textarea fields.'),
       );
       return array('wysiwyg' => $form);
     }
@@ -647,8 +659,8 @@ function wysiwyg_user($type, &$edit, &$user, $category = NULL) {
 function wysiwyg_user_get_status($profile) {
   global $user;
 
-  if (!empty($profile->settings['user_choose']) && isset($user->wysiwyg_status)) {
-    $status = $user->wysiwyg_status;
+  if (!empty($profile->settings['user_choose']) && isset($user->wysiwyg_status[$profile->format])) {
+    $status = $user->wysiwyg_status[$profile->format];
   }
   else {
     $status = isset($profile->settings['default']) ? $profile->settings['default'] : TRUE;

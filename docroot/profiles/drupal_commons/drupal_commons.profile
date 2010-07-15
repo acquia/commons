@@ -108,7 +108,7 @@ function drupal_commons_profile_modules() {
     // Misc
     'userpoints', 'userpoints_nc', 'wikitools', 'admin_menu', 'ajax_load', 'editablefields', 
     'calendar', 'jcalendar', 'diff', 'freelinking', 'flag', 'pathauto', 'jquery_ui', 'insert',
-    'vertical_tabs',
+    'vertical_tabs', 'transliteration',
     
     // Heartbeat
     'heartbeat', 'heartbeat_views', 'hrules', 'friendlist_activity', 'flag_heartbeat', 'og_activity',
@@ -356,17 +356,17 @@ function drupal_commons_config_filter() {
   
   // Set Full HTML as default format for community and content manager roles
   db_query("INSERT INTO {better_formats_defaults} (rid, type, format, type_weight, weight)
-    VALUES (3, 'node', 2, 1, 0)");
+    VALUES (3, 'node', 2, 1, -4)");
   db_query("INSERT INTO {better_formats_defaults} (rid, type, format, type_weight, weight)
-    VALUES (3, 'comment', 2, 1, 0)");
+    VALUES (3, 'comment', 2, 1, -4)");
   db_query("INSERT INTO {better_formats_defaults} (rid, type, format, type_weight, weight)
-    VALUES (3, 'block', 2, 1, 25)");
+    VALUES (3, 'block', 2, 1, -4)");
   db_query("INSERT INTO {better_formats_defaults} (rid, type, format, type_weight, weight)
-    VALUES (4, 'node', 2, 1, 0)");
+    VALUES (4, 'node', 2, 1, -6)");
   db_query("INSERT INTO {better_formats_defaults} (rid, type, format, type_weight, weight)
-    VALUES (4, 'comment', 2, 1, 0)");
+    VALUES (4, 'comment', 2, 1, -6)");
   db_query("INSERT INTO {better_formats_defaults} (rid, type, format, type_weight, weight)
-    VALUES (4, 'block', 2, 1, 25)");
+    VALUES (4, 'block', 2, 1, -6)");
     
   // Create a "links-only" filter format that Shoutbox will use
   db_query("INSERT INTO {filter_formats} (format, name, cache) VALUES (5, 'Links Only', 1)");
