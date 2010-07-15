@@ -1,4 +1,4 @@
-// $Id: script.js,v 1.1.2.4 2010/02/14 06:44:15 sociotech Exp $
+// $Id: script.js,v 1.1.2.6 2010/07/03 03:00:39 sociotech Exp $
 
 Drupal.behaviors.fusionEqualheights = function (context) {
   if (jQuery().equalHeights) {
@@ -29,6 +29,11 @@ Drupal.behaviors.fusionIE6fixes = function (context) {
         $(this).removeClass('hover');
     });
     $('#primary-menu ul.sf-menu li.expanded').hover(function() {
+      $(this).addClass('hover');
+      }, function() {
+        $(this).removeClass('hover');
+    });
+    $('.sf-menu li').hover(function() {
       $(this).addClass('hover');
       }, function() {
         $(this).removeClass('hover');
@@ -98,5 +103,53 @@ Drupal.behaviors.fusionGridMaskToggle = function (context) {
         $(this).toggleClass('grid-on');
         $('body').toggleClass('grid-mask');
       });
+  }
+};
+
+Drupal.behaviors.fusionPanelsShowEdit = function (context) {
+  // Sets parent row and block elements to have "overflow: visible" if editing Panel page
+  if ($("#panels-edit-display-form").size() > 0 || $("#page-manager-edit").size() > 0) {
+    $("#panels-edit-display-form").parents('.row, .block').css("overflow", "visible");
+    $("#page-manager-edit").parents('.row, .block').css("overflow", "visible");
+  }
+};
+
+Drupal.behaviors.fusionScreenshotpreview = function (context) {
+  // Displays Skinr previews
+  if ($('span.preview-icon').size() > 0) {
+    // configure distance of preview from the cursor
+    var xOffset = 20;
+    var yOffset = 0;
+  
+    $('span.preview-icon').hover(function(e){
+      var img_class = this.id;
+      var caption = $(this).parent().text();
+      // add preview markup
+      $('body').append('<div id="screenshot">' +
+                       '<div class="screenshot-preview ' + img_class + '" alt="preview"></div>' + 
+                       '<div class="screenshot-caption">' + caption + '</div>' +
+                       '</div>');
+      $("#screenshot").hide();  // hide preview until dimensions are set
+      $("#screenshot").css("left", (e.pageX + xOffset) + "px").css("top", (e.pageY + yOffset) + "px");  // set initial preview position
+      // load image in order to set preview dimensions
+      var img = new Image();
+      img.onload = function() {
+        var caption_height = parseFloat($("#screenshot .screenshot-caption").css("height"));
+        $("#screenshot").css("height", img.height + caption_height);
+        $("#screenshot").css("width", img.width);
+        $("#screenshot ." + img_class).css("height", img.height);
+        $("#screenshot ." + img_class).css("width", img.width);
+        $("#screenshot .screenshot-caption").css("width", img.width - 10);
+        $("#screenshot").fadeIn("fast");  // now show preview
+      }
+      img.src = $("." + img_class).css("background-image").replace(/^url|[\(\)\"]/g, '');
+    },
+    function(){
+      $("#screenshot").remove();
+    });
+    // adjust preview position with cursor movement
+    $("span.preview-icon").mousemove(function(e){
+      $("#screenshot").css("left", (e.pageX + xOffset) + "px").css("top", (e.pageY + yOffset) + "px");
+    });
   }
 };

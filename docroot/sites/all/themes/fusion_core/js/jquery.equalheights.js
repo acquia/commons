@@ -1,4 +1,4 @@
-// $Id: jquery.equalheights.js,v 1.1.2.1 2010/02/14 06:44:15 sociotech Exp $
+// $Id: jquery.equalheights.js,v 1.1.2.2 2010/07/03 03:00:39 sociotech Exp $
 
 /**
  * Equal Heights Plugin
@@ -19,7 +19,7 @@
  * 
  */
 
-(function($) {
+;(function($) {
 	$.fn.equalHeights = function(minHeight, maxHeight) {
 		tallest = (minHeight) ? minHeight : 0;
 		this.each(function() {

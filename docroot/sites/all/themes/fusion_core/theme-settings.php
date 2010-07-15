@@ -1,5 +1,5 @@
 <?php
-// $Id: theme-settings.php,v 1.1.2.5 2010/01/11 00:08:12 sociotech Exp $
+// $Id: theme-settings.php,v 1.1.2.6 2010/04/08 07:02:59 sociotech Exp $
 
 /**
  * Theme setting defaults
@@ -63,7 +63,7 @@ function fusion_core_initialize_theme_settings($theme_name) {
 
     // Combine default theme settings from .info file & theme-settings.php
     $theme_data = list_themes();   // get theme data for all themes
-    $info_theme_settings = ($theme_name) ? $theme_data[$theme_name]->info['settings'] : array();
+    $info_theme_settings = ($theme_name && isset($theme_data[$theme_name]->info['settings'])) ? $theme_data[$theme_name]->info['settings'] : array();
     $defaults = array_merge(fusion_core_default_theme_settings(), $info_theme_settings);
 
     // Set combined default & saved theme settings
@@ -91,7 +91,7 @@ function phptemplate_settings($saved_settings) {
 
   // Combine default theme settings from .info file & theme-settings.php
   $theme_data = list_themes();   // get data for all themes
-  $info_theme_settings = ($theme_name) ? $theme_data[$theme_name]->info['settings'] : array();
+  $info_theme_settings = ($theme_name && isset($theme_data[$theme_name]->info['settings'])) ? $theme_data[$theme_name]->info['settings'] : array();
   $defaults = array_merge(fusion_core_default_theme_settings(), $info_theme_settings);
 
   // Combine default and saved theme settings
@@ -126,9 +126,11 @@ function phptemplate_settings($saved_settings) {
   // Grid type
   // Generate grid type options
   $grid_options = array();
-  foreach ($info_theme_settings['theme_grid_options'] as $grid_option) {
-    $grid_type = (substr($grid_option, 7) == 'fluid') ? t('fluid grid') : t('fixed grid') . ' [' . substr($grid_option, 7) . 'px]';
-    $grid_options[$grid_option] = substr($grid_option, 4, 2) . t(' column ') . $grid_type;
+  if (isset($info_theme_settings['theme_grid_options'])) {
+    foreach ($info_theme_settings['theme_grid_options'] as $grid_option) {
+      $grid_type = (substr($grid_option, 7) == 'fluid') ? t('fluid grid') : t('fixed grid') . ' [' . substr($grid_option, 7) . 'px]';
+      $grid_options[$grid_option] = (int)substr($grid_option, 4, 2) . t(' column ') . $grid_type;
+    }
   }
   $form['tnt_container']['general_settings']['theme_grid_config']['theme_grid'] = array(
     '#type'          => 'radios',

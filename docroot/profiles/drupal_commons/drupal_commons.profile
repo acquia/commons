@@ -413,7 +413,7 @@ function drupal_commons_config_password() {
   );
   
   // Attach the policy to the authenticated user role
-  db_query("INSERT INTO {password_policy} (rid, pid) VALUES (2, 1)");
+  db_query("INSERT INTO {password_policy_role} (rid, pid) VALUES (2, 1)");
   
   // Make the restrictions visible when changing your password
   variable_set('password_policy_show_restrictions', 1);

@@ -1,6 +1,24 @@
 <?php
-// $Id: maintenance-page.tpl.php,v 1.1.2.3 2010/02/14 06:44:15 sociotech Exp $
-?>
+// $Id: maintenance-page.tpl.php,v 1.1.2.4 2010/04/08 07:02:59 sociotech Exp $
+?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="<?php print $language->language; ?>" xml:lang="<?php print $language->language; ?>">
+<head>
+  <title><?php print $head_title; ?></title>
+  <?php print $head; ?>
+  <?php print $styles; ?>
+  <?php print $setting_styles; ?>
+  <!--[if IE 8]>
+  <?php print $ie8_styles; ?>
+  <![endif]-->
+  <!--[if IE 7]>
+  <?php print $ie7_styles; ?>
+  <![endif]-->
+  <!--[if lte IE 6]>
+  <?php print $ie6_styles; ?>
+  <![endif]-->
+  <?php print $local_styles; ?>
+  <?php print $scripts; ?>
+</head>
 
 <body id="<?php print $body_id; ?>" class="<?php print $body_classes; ?>">
   <div id="page" class="page">
@@ -41,7 +59,6 @@
             <div id="content-region" class="content-region row nested">
               <div id="content-region-inner" class="content-region-inner inner">
                 <a name="main-content" id="main-content"></a>
-                <?php print theme('grid_block', $tabs, 'content-tabs'); ?>
                 <div id="content-inner" class="content-inner block">
                   <div id="content-inner-inner" class="content-inner-inner inner">
                     <?php if ($title): ?>

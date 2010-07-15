@@ -1,12 +1,21 @@
 <?php
-// $Id: views-view--page.tpl.php,v 1.1.2.2 2009/12/02 00:47:46 sociotech Exp $
+// $Id: views-view--page.tpl.php,v 1.1.2.3 2010/07/02 22:11:04 sociotech Exp $
 
 /**
  * @file views-view.tpl.php
  * Main view template
  *
  * Variables available:
+ * - $classes_array: An array of classes determined in
+ *   template_preprocess_views_view(). Default classes are:
+ *     .view
+ *     .view-[css_name]
+ *     .view-id-[view_name]
+ *     .view-display-id-[display_name]
+ *     .view-dom-id-[dom_id]
+ * - $classes: A string version of $classes_array for use in the class attribute
  * - $css_name: A css-safe version of the view name.
+ * - $css_class: The user-specified classes names, if any
  * - $header: The view header
  * - $footer: The view footer
  * - $rows: The results of the view query, if any
@@ -22,10 +31,10 @@
  */
 
 /**
- * $skinr variable and <div class="inner content"> classes added for Fusion theming
+ * $skinr variable and <div class="inner content"> added for Fusion theming
  */
 ?>
-<div id="view-id-<?php print $name; ?>-<?php print $display_id; ?>" class="view view-<?php print $css_name; ?> view-id-<?php print $name; ?> view-display-id-<?php print $display_id; ?> view-dom-id-<?php print $dom_id; ?> <?php print $skinr; ?>">
+<div id="view-id-<?php print $name; ?>-<?php print $display_id; ?>" class="<?php print $classes; ?> <?php print $skinr; ?>">
   <?php if ($admin_links): ?>
     <div class="views-admin-links views-hide">
       <?php print $admin_links; ?>

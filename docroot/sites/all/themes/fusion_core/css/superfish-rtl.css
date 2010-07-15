@@ -1,3 +1,4 @@
+/* $Id: superfish-rtl.css,v 1.1.2.2 2010/04/08 07:02:59 sociotech Exp $ */
 
 /* Right-to-left styles for Superfish menus
 /------------------------------------------------------------------- */
@@ -74,4 +75,32 @@ li.sfHover > a > .sf-sub-indicator {
   -moz-border-radius-topleft: 17px;
   -webkit-border-top-left-radius: 17px;
   -webkit-border-bottom-right-radius: 17px;
+}
+
+/*styles for vertical menus in a sidebar on the right side of the page, to ensure that sub-menus drop into the page and don't get cut off*/
+
+.sidebars-split .sidebar-first .sf-vertical ul,
+.sidebars-both-first .sidebar-first .sf-vertical ul,
+.sidebars-both-first .sidebar-last .sf-vertical ul{
+  width: 10em;
+}
+
+.sidebars-split .sidebar-first .sf-vertical li, 
+.sidebars-split .sidebar-first .sf-vertical li li,
+.sidebars-both-first .sidebar-first .sf-vertical li, 
+.sidebars-both-first .sidebar-first .sf-vertical li li,
+.sidebars-both-first .sidebar-last .sf-vertical li, 
+.sidebars-both-first .sidebar-last .sf-vertical li li{
+  text-align: right;
+}
+
+.sidebars-split .sidebar-first .sf-vertical li:hover ul,
+.sidebars-split .sidebar-first .sf-vertical li.sfHover ul,
+.sidebars-both-first .sidebar-first .sf-vertical li:hover ul,
+.sidebars-both-first .sidebar-first .sf-vertical li.sfHover ul,
+.sidebars-both-first .sidebar-last .sf-vertical li:hover ul,
+.sidebars-both-first .sidebar-last .sf-vertical li.sfHover ul{
+  left: auto; 
+  right: 10em; /* match ul width*/
+  top: 0;
 }

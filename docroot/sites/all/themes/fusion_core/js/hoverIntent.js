@@ -1,6 +1,6 @@
-// $Id: hoverIntent.js,v 1.1 2009/08/19 04:28:07 sociotech Exp $
+// $Id: hoverIntent.js,v 1.1.2.1 2010/07/03 03:00:39 sociotech Exp $
 
-(function($){
+;(function($){
 	/* hoverIntent by Brian Cherne */
 	$.fn.hoverIntent = function(f,g) {
 		// default configuration options

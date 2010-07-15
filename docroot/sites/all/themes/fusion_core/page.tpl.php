@@ -1,5 +1,5 @@
 <?php
-// $Id: page.tpl.php,v 1.1.2.4 2010/01/11 00:08:12 sociotech Exp $
+// $Id: page.tpl.php,v 1.1.2.5 2010/04/08 07:02:59 sociotech Exp $
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="<?php print $language->language; ?>" xml:lang="<?php print $language->language; ?>">
 
@@ -46,11 +46,15 @@
                   <a href="<?php print check_url($front_page); ?>" title="<?php print t('Home'); ?>"><img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" /></a>
                 </div>
                 <?php endif; ?>
-                <?php if ($site_name): ?>
-                <span id="site-name"><a href="<?php print check_url($front_page); ?>" title="<?php print t('Home'); ?>"><?php print $site_name; ?></a></span>
-                <?php endif; ?>
-                <?php if ($site_slogan): ?>
-                <span id="slogan"><?php print $site_slogan; ?></span>
+                <?php if ($site_name || $site_slogan): ?>
+                <div id="site-name-wrapper" class="clearfix">
+                  <?php if ($site_name): ?>
+                  <span id="site-name"><a href="<?php print check_url($front_page); ?>" title="<?php print t('Home'); ?>"><?php print $site_name; ?></a></span>
+                  <?php endif; ?>
+                  <?php if ($site_slogan): ?>
+                  <span id="slogan"><?php print $site_slogan; ?></span>
+                  <?php endif; ?>
+                </div><!-- /site-name-wrapper -->
                 <?php endif; ?>
               </div><!-- /header-site-info-inner -->
             </div><!-- /header-site-info -->

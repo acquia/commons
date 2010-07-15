@@ -1,6 +1,6 @@
-// $Id: jquery.overlabel.js,v 1.1.2.1 2010/02/14 06:44:15 sociotech Exp $
+// $Id: jquery.overlabel.js,v 1.1.2.2 2010/07/03 03:00:39 sociotech Exp $
 
-(function($) {
+;(function($) {
     // plugin definition
     $.fn.overlabel = function(options) {
         // build main options before element iteration

@@ -1,4 +1,4 @@
-/* $Id: grid12-fluid.css,v 1.1.2.1 2009/12/02 00:47:46 sociotech Exp $ */
+/* $Id: grid12-fluid.css,v 1.1.2.3 2010/06/17 07:54:57 sociotech Exp $ */
 
 /* Layout - 16 column grid, fluid width, 20px gutters
 -------------------------------------------------------------- */
@@ -36,12 +36,6 @@
   margin-right: 10px;
 }
 
-/* full width blocks in sidebars */
-#page .sidebar-first .block,
-#page .sidebar-last .block {
-  width: 100%;
-}
-
 /* page min width */
 body,
 div.full-width {
@@ -60,10 +54,10 @@ div.full-width {
 }
 
 /* theme setting: set fluid grid width on top-level full-width elements */
-.fluid-100 .full-width .grid12-16 {width: 100%;}
-.fluid-95 .full-width .grid12-16 {width: 95%;}
-.fluid-90 .full-width .grid12-16 {width: 90%;}
-.fluid-85 .full-width .grid12-16 {width: 85%;}
+.fluid-100 .full-width .grid12-12 {width: 100%;}
+.fluid-95 .full-width .grid12-12 {width: 95%;}
+.fluid-90 .full-width .grid12-12 {width: 90%;}
+.fluid-85 .full-width .grid12-12 {width: 85%;}
 
 /* now reset all nested full-width elements back to 100% */
-#page .grid12-16 .grid12-16 {width: 100%;}
+#page .grid12-12 .grid12-12 {width: 100%;}

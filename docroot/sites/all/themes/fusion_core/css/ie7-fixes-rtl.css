@@ -1,4 +1,4 @@
-/* $Id: ie7-fixes-rtl.css,v 1.1.2.1 2009/12/02 00:47:46 sociotech Exp $ */
+/* $Id: ie7-fixes-rtl.css,v 1.1.2.2 2010/05/13 02:01:36 sociotech Exp $ */
 
 /* IE7 RTL fixes
 -------------------------------------------------------------- */
@@ -42,4 +42,18 @@
 /* ordered list margin fix */
 .block ol {
   margin-right: 2em;
+}
+
+/* broken content menu layout fix */
+#content-tabs .content-tabs-inner {
+  overflow: hidden;
+}
+
+#content-tabs .content-tabs-inner ul.tabs {
+  width: 100%;
+}
+
+/* primary superfish menu fix */
+.sf-menu {
+  float: none;
 }

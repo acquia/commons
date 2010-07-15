@@ -1,4 +1,4 @@
-/* $Id: style.css,v 1.1.2.7 2010/02/14 06:44:15 sociotech Exp $ */
+/* $Id: style.css,v 1.1.2.11 2010/07/02 22:11:04 sociotech Exp $ */
 
 /* Margin, Padding, Border Resets
 -------------------------------------------------------------- */
@@ -169,6 +169,8 @@ tr.drag-previous td {
   display: block;
   font-size: 0;
   height: 0;
+  line-height: 0;
+  overflow: auto;
   visibility: hidden;
 }
 
@@ -181,7 +183,10 @@ tr.drag-previous td {
   margin: 0 auto;
 }
 
-.row {
+/* fix layout/background display on floated elements */
+.row,
+.nested,
+.block {
   overflow: hidden;
 }
 
@@ -194,7 +199,6 @@ div.full-width {
 .nested {
   float: left; /* LTR */
   margin: 0;
-  overflow: hidden;
   width: 100%;
 }
 
@@ -274,6 +278,10 @@ div.superfish {
 -------------------------------------------------------------- */
 #header-site-info {
   width: auto;
+}
+
+#site-name-wrapper {
+  float: left;   /* LTR */
 }
 
 #site-name,
@@ -1006,7 +1014,6 @@ html.js .fusion-horiz-login#block-user-0 #user-login-form div#edit-openid-identi
 .block {
   float: left; /* LTR */
   margin-bottom: 1.5em;
-  overflow: hidden;
   width: 100%;
 }
 
@@ -1276,18 +1283,34 @@ div.messages em {
   list-style-position: inside;
 }
 
+
 /* Welcome Page
 /-------------------------------------------------------------- */
 #first-time p {
   clear: both;
 }
 
+
 /* Maintenance Page
 /-------------------------------------------------------------- */
 /* let site name & slogan drop under logo */
-.in-maintenance #logo {
+.in-maintenance .page #logo {
   float: none;
 }
+
+/* default margins for logo and site name */
+.in-maintenance .page .header-site-info {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+/* default padding with no db */
+.db-offline .page .header-group-inner,
+.db-offline .page .main-inner {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
 
 /* Poll
 /-------------------------------------------------------------- */
@@ -1360,7 +1383,6 @@ div.view div.views-admin-links ul.links li a:hover,
 div.view div.views-admin-links ul.links li a:focus {
   text-decoration: underline;
 }
-
 
 
 /* Ubercart
@@ -1485,6 +1507,13 @@ div.view div.views-admin-links ul.links li a:focus {
 /-------------------------------------------------------------- */
 .quicktabs .block {
   float: none;   /* keep content in div */
+}
+
+
+/* Views admin links
+/-------------------------------------------------------------- */
+.block div.view div.views-admin-links {
+  margin-top: 0;
 }
 
 

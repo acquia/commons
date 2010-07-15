@@ -1,4 +1,4 @@
-/* $Id: ie6-fixes.css,v 1.1.2.7 2010/02/14 06:44:15 sociotech Exp $ */
+/* $Id: ie6-fixes.css,v 1.1.2.10 2010/07/02 22:11:04 sociotech Exp $ */
 
 /* IE6 fixes
 -------------------------------------------------------------- */
@@ -110,6 +110,7 @@ form fieldset legend {
   z-index: 20;
 }
 
+
 /* Skinr styles
 -------------------------------------------------------------- */
 /* fix for inline-block centering */
@@ -120,6 +121,12 @@ form fieldset legend {
 .fusion-center-content .inner ul.menu {
   display: inline;
 }
+
+/* Superfish: all menus */
+.sf-menu li.hover {
+  z-index: 100;
+}
+
 
 /* User login block
 -------------------------------------------------------------- */
@@ -168,6 +175,11 @@ ul.sf-menu li {
 /* prevent displaced menu items */
 .primary-menu-inner {
   width: 100%;
+}
+
+/* prevent menu items stacking */
+ul.sf-menu li a {
+  float: left;
 }
 
 
