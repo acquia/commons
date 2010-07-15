@@ -1,4 +1,9 @@
 <?php
+// $Id: tagging_extractor_suggest.module,v 1.1.2.2 2010/07/14 14:27:52 eugenmayer Exp $
+
+// Author: Eugen Mayer (http://kontextwork.de)
+// Copyright 2010
+
 function tagging_extractor_suggest_tagging_suggestions($vid, $node) {
   $suggestions = array();
   $terms = extractor_extract($node->body);

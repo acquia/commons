@@ -1,4 +1,9 @@
 <?php
+// $Id: tagging_opencalais_suggest.module,v 1.1.2.3 2010/07/14 14:27:52 eugenmayer Exp $
+
+// Author: Eugen Mayer (http://kontextwork.de)
+// Copyright 2010
+
 function tagging_opencalais_suggest_tagging_suggestions($vid, $node) {
   $suggestions = array();
   $result = calais_api_analyze_xml($node->title,$node->body,$node->created);
