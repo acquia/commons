@@ -395,7 +395,7 @@ function drupal_commons_config_filter() {
 function drupal_commons_config_password() {
   // Add a password policy
   $policy = array(
-    'alphanumeric' = 7,   // Contain at least 7 alphanumeric chars
+    'alphanumeric' => 7,   // Contain at least 7 alphanumeric chars
     'username' => 1,      // Must not equal the username
     'length' => 7,        // Must be longer than 7 chars
     'punctuation' => 1,   // Punctuation is required
