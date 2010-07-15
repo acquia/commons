@@ -25,28 +25,28 @@ function commons_admin_settings() {
   
   $form['general_settings'] = array(
     '#type' => 'fieldset',
-    '#title' => t('General Settings'),
+    '#title' => t('General settings'),
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
   );
   
   $form['general_settings']['commons_force_login'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Force Users to Login'),
+    '#title' => t('Force users to login'),
     '#default_value' => variable_get('commons_force_login', 0),
     '#description' => t('If checked, anonymous users will be redirected from all pages to a log in page.'),
   );
   
   $form['general_settings']['commons_redirect_login_home'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Redirect to Home Page After Login'),
+    '#title' => t('Redirect to home page after login'),
     '#default_value' => variable_get('commons_redirect_login_home', 0),
     '#description' => t('If checked, users will be redirected to home page after logging in.'),
   );
   
   $form['general_settings']['commons_manager_role'] = array(
     '#type' => 'textfield',
-    '#title' => t('Community Manager Role'),
+    '#title' => t('Community manager role'),
     '#required' => TRUE,
     '#default_value' => variable_get('commons_manager_role', 'community manager'),
     '#description' => t('The name of the role given to community managers.'),
@@ -54,16 +54,23 @@ function commons_admin_settings() {
   
   $form['group_settings'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Group Settings'),
+    '#title' => t('Group settings'),
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
   );
   
   $form['group_settings']['commons_hide_shoutbox_link'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Remove Shoutbox Link'),
+    '#title' => t('Remove Shoutbox link'),
     '#default_value' => variable_get('commons_hide_shoutbox_link', 1),
-    '#description' => t('If checked, the Shout Box link will be removed from the Group Details menu.'),
+    '#description' => t('If checked, the Shout Box link will be removed from the Group details menu.'),
+  );
+  
+  $form['group_settings']['commons_group_prevent_open_voting'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Restrict voting to group members'),
+    '#default_value' => variable_get('commons_group_prevent_open_voting', 0),
+    '#description' => t('If checked, only group members will be able to vote on polls that are part of a given group.'),
   );
   
   return system_settings_form($form); 
@@ -168,6 +175,33 @@ function commons_form_alter(&$form, &$form_state, $form_id) {
         // Make user's aware of the max length
         $maxlength = $form['og_description']['#maxlength'];
         $form['og_description']['#description'] = $form['og_description']['#description'] . ' (' . t('!maxlength characters allowed', array('!maxlength' => $maxlength)) . ')'; 
+      }
+    }
+  }
+  
+  // Optionally restrict voting only to members of the group that
+  // the poll is in
+  if ($form_id == 'poll_view_voting') {
+    // Check the variable
+    if (variable_get('commons_group_prevent_open_voting', 0)) { 
+      // Make sure OG is enabled
+      if (module_exists('og')) {
+        //Determine current group, if any
+        $group = og_get_group_context();
+
+        //Only act if inside a group
+        if ($group) {
+          //Act if current user is not a group member
+          if (!og_is_group_member($group->nid)) {
+            unset($form['vote']);
+      
+            //Let user know why they can't vote
+            $form['denied_message'] = array(
+              '#type' => 'item',
+              '#value' => t('You must be a member of the group') . ' ' . l($group->title, 'node/' . $group->nid) . ' ' . t('to vote on this poll.'),
+            );
+          }
+        } 
       }
     }
   }
