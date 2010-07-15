@@ -108,7 +108,7 @@ function drupal_commons_profile_modules() {
     // Misc
     'userpoints', 'userpoints_nc', 'wikitools', 'admin_menu', 'ajax_load', 'editablefields', 
     'calendar', 'jcalendar', 'diff', 'freelinking', 'flag', 'pathauto', 'jquery_ui', 'insert',
-    'vertical_tabs', 'transliteration',
+    'vertical_tabs', 'transliteration', 'password_policy',
     
     // Heartbeat
     'heartbeat', 'heartbeat_views', 'hrules', 'friendlist_activity', 'flag_heartbeat', 'og_activity',
@@ -185,6 +185,7 @@ function drupal_commons_profile_tasks(&$task, $url) {
   drupal_commons_config_roles();
   drupal_commons_config_perms();
   drupal_commons_config_filter();
+  drupal_commons_config_password();
   drupal_commons_config_wysiwyg();
   drupal_commons_config_ur();
   drupal_commons_config_heartbeat();
@@ -388,6 +389,26 @@ function drupal_commons_config_filter() {
   $sql = "INSERT INTO {filters} (format, module, delta, weight) VALUES (%d, '%s', %d, %d)";
   db_query($sql, 1, 'freelinking', 0, 10);  // Filtered HTML
   db_query($sql, 2, 'freelinking', 0, 10);  // Full HTML
+}
+
+// Configure password policy
+function drupal_commons_config_password() {
+  // Add a password policy
+  $policy = array(
+    'alphanumeric' = 7,   // Contain at least 7 alphanumeric chars
+    'username' => 1,      // Must not equal the username
+    'length' => 7,        // Must be longer than 7 chars
+    'punctuation' => 1,   // Punctuation is required
+  );
+  
+  db_query("INSERT INTO {password_policy} (name, description, enabled, policy, created)
+    VALUES ('%s', '%s', %d, '%s', %d)",
+    t('Constraints'),
+    t('Default list of password constraints'),
+    1,
+    serialize($policy),
+    time()
+  );
 }
 
 // Configure wysiwyg
