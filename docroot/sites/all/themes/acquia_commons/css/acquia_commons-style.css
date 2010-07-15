@@ -1,4 +1,9 @@
-/* $Id: acquia_commons-style.css 7601 2010-06-24 19:21:11Z sheena $ */
+/* @override 
+	http://localhost:9016/sites/all/themes/acquia_commons/css/acquia_commons-style.css
+	http://commons.acquia.com/sites/all/themes/acquia_commons/css/acquia_commons-style.css?d
+*/
+
+/* $Id: acquia_commons-style.css 7710 2010-07-15 20:37:04Z sheena $ */
 
 /* Basic Typography & Colors-------------------------------------------------------------- */
 
@@ -233,6 +238,8 @@ body {
   float: left;
   margin: 0;
   width: auto;
+  position: relative;
+  z-index: 20;
 }
 
 #primary-menu-inner {
@@ -288,6 +295,7 @@ body {
 
 .primary-menu-inner ul.sf-menu ul {
   background-color: #dcdcdc;
+  z-index: 20;
 }
 
 /* Style for individual dropdown menu items, add border-bottom for separators */
@@ -1022,6 +1030,13 @@ form input.form-submit:focus {
 
 fieldset {
   overflow: hidden;
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+ 
+}
+
+html.js fieldset.collapsed {
+  background-color: transparent;
 }
 
 /* Typography and spacing for legend of fieldsets */
@@ -1158,6 +1173,15 @@ div.comment h3.title {
   z-index: 10;
 }
 
+.comment-info ul.links li {
+	font-size: 10px;
+	padding: 0 2px 0 0;
+}
+
+.comment-info ul.links li.last {
+	border: none;
+}
+
 .comment .comment-info span.new {
   color: #aa1144;
 }
@@ -1178,8 +1202,13 @@ div.comment h3.title {
   z-index: 1;
 }
 
+/*fix for comment title being cut off */
+.comments > a[id] {
+  position: absolute;
+}
+
 div.comments div.indented {
-  margin-left: 80px;
+  margin-left: 20px;
 }
 
 /* Links (edit, reply, delete) for each comment */
@@ -1465,6 +1494,38 @@ input.list-add-to-cart:focus {
 
 /* Block/Pane Styles */
 
+/*General panel layout overrides*/
+
+.panels-flexible-region-inside {
+	padding-left: 2%;
+	padding-right: 2%;
+}
+
+.panels-flexible-region-inside-last {
+	padding-right: 0;
+}
+
+.panels-flexible-region-inside-first {
+	padding-left: 0;
+}
+.panels-flexible-column-new-main,
+.panels-flexible-row {
+	width: 100%;
+	margin: 0 auto;
+}
+
+.panels-flexible-region-new-right{
+	width: 25%;
+}
+
+.panels-flexible-region-new-left {
+	width: 25%;
+}
+
+.panels-flexible-region-new-center {
+	width: 50%;
+}
+
 .panel-panel .block {
   float: none;
 }
@@ -1538,8 +1599,22 @@ dl.search-results .search-result dd {
 dl.search-results .search-result p.search-info {
   margin-bottom: 0;
 }
-
+ 
 /* Skinr/-------------------------------------------------------------- */
+
+/* horizontal login*/
+
+.fusion-horiz-login input.form-submit{
+	font-size: 12px;
+	line-height: 14px;
+	height: 20px;
+}
+
+.fusion-horiz-login .item-list ul li {
+	background-image: none;
+	padding-left: 0;
+	line-height: 1.1em;
+}
 
 /* List Styles */
 
@@ -1548,6 +1623,17 @@ dl.search-results .search-result p.search-info {
   margin-bottom: 2px;
 }
 
+.view .view-content .item-list li.views-row {
+	margin-bottom: 10px;
+
+}
+.view .view-content .item-list li.views-row:after{
+	 clear: both;
+  content: ".";
+  display: block;
+  height: 0;
+  visibility: hidden;
+}
 /*Decorative Bullet*/
 
 .commons-list-circle-bullets .content ul {
@@ -1742,14 +1828,23 @@ panels-pane.commons-colors-orangeblue .inner {
   background: transparent url(../images/shoutbox-bubble.png) no-repeat right 10px;
   display: block;
   float: left;
-  padding-right: 22px;
+  padding-right: 28px;
   position: relative;
-  width: 64px;
+  width: 82px;
   z-index: 10;
+  min-height: 28px;
+  text-align: right;
 }
 
 .shoutbox-msg .shoutbox-post-info span {
   display: block;
+  width: 82px;
+  overflow: hidden;
+  line-height: 1.1em;
+}
+
+.shoutbox-msg .shoutbox-post-info span a{
+	line-height: 1.1em;
 }
 
 .shoutbox-msg .shoutbox-post-info span.shoutbox-msg-time {
@@ -1768,10 +1863,22 @@ div.shoutbox-even {
   border: 1px solid #d6d6d6;
   box-shadow: 1px 1px 3px #ddd;
   display: block;
-  margin-left: 84px;
+  margin-left: 108px;
+  min-height: 18px;
   padding: 10px;
-  position: relative;
   z-index: 1;
+}
+
+.shoutbox-msg.shoutbox-unpublished .shoutbox-post-info {
+  background: transparent url(../images/shoutbox-bubble-unpublished.png) no-repeat right 10px;
+  }
+
+.shoutbox-msg.shoutbox-unpublished{
+	background-color: transparent;
+}
+.shoutbox-msg.shoutbox-unpublished .shout-message {
+	border: 1px solid #c90707;
+	color: #666;
 }
 
 div.shoutbox-even {

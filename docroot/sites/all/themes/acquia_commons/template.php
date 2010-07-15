@@ -1,5 +1,5 @@
 <?php
-// $Id: template.php 7594 2010-06-23 20:42:37Z sheena $
+// $Id: template.php 7710 2010-07-15 20:37:04Z sheena $
 
 /**
  *  theme_breadcrumb()
@@ -109,9 +109,10 @@ function acquia_commons_shoutbox_post($shout, $links = array(), $alter_row_color
    $shout_author =  user_load($array = array(uid => $shout->uid,));
 
       if($shout_author->picture != ''){
+      $shout_author->picture =  variable_get('user_picture_default', '');
+      }
      $author_picture = theme_imagecache('user_picture_meta', $shout_author->picture, $shout_author->name, $shout_author->name);
-     }
-  
+   
   return "<div class=\" $shout_classes \" title=\"$title\"><div class=\"shoutbox-admin-links\">$img_links</div><div class=\"shoutbox-post-info\">".$author_picture."<span class=\"shoutbox-user-name $user_class\">$user_name</span><span class=\"shoutbox-msg-time\">" . $post_time_ago . " ".t('ago')."</span></div><div class=\"shout-message\"> $shout->shout</div></div>\n";
 }
 
@@ -198,3 +199,8 @@ function acquia_commons_item_list($items = array(), $title = NULL, $type = 'ul',
   return $output;
 }
 
+function acquia_commons_preprocess_block ($variables) {
+  $variables['template_files'][] = 'block-'.$variables['block']->region.'-'.$variables['block']->module;
+    $variables['template_files'][] = 'block-'.$variables['block']->region.'-'.$variables['block']->module.'-'.$variables['block']->delta;
+  
+}

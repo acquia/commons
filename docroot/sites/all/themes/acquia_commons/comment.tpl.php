@@ -1,5 +1,5 @@
 <?php
-// $Id: comment.tpl.php 7510 2010-06-15 19:09:36Z sheena $
+// $Id: comment.tpl.php 7710 2010-07-15 20:37:04Z sheena $
 ?>
 
 <div class="comment <?php print $comment_classes;?> clear-block">
@@ -8,8 +8,12 @@
   <a id="new"></a>
   <span class="new"><?php print $new ?></span>
   <?php endif; ?>
-  <?php if ($comment->picture):
- print(theme_imagecache('user_picture_meta', $comment->picture, $name, $name)); endif;?>
+  <?php if (!$comment->picture):
+  $comment->picture =  variable_get('user_picture_default', '');
+  endif;
+$picture = theme_imagecache('user_picture_meta', $comment->picture, $name, $name);
+  print('<a href="'.$BASE_URL.'/user/'.$comment->uid.'" >'.$picture.'</a>');
+ ?>
     <div class="submitted">
     <?php print $submitted ?>
   </div>
