@@ -393,7 +393,7 @@ function drupal_commons_config_filter() {
 
 // Configure password policy
 function drupal_commons_config_password() {
-  // Add a password policy
+  // Create a password policy
   $policy = array(
     'alphanumeric' => 7,   // Contain at least 7 alphanumeric chars
     'username' => 1,      // Must not equal the username
@@ -401,14 +401,22 @@ function drupal_commons_config_password() {
     'punctuation' => 1,   // Punctuation is required
   );
   
-  db_query("INSERT INTO {password_policy} (name, description, enabled, policy, created)
-    VALUES ('%s', '%s', %d, '%s', %d)",
+  // Add the password policy
+  db_query("INSERT INTO {password_policy} (pid, name, description, enabled, policy, created)
+    VALUES (%d, '%s', '%s', %d, '%s', %d)",
+    1,
     t('Constraints'),
     t('Default list of password constraints'),
     1,
     serialize($policy),
     time()
   );
+  
+  // Attach the policy to the authenticated user role
+  db_query("INSERT INTO {password_policy} (rid, pid) VALUES (2, 1)");
+  
+  // Make the restrictions visible when changing your password
+  variable_set('password_policy_show_restrictions', 1);
 }
 
 // Configure wysiwyg
