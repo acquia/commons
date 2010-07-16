@@ -1,8 +1,14 @@
-// $Id: shoutbox-form.js,v 1.11.2.3 2010/06/28 20:23:26 mikestefff Exp $
+// $Id: shoutbox-form.js,v 1.11.2.4 2010/07/16 00:36:48 mikestefff Exp $
 
- if (typeof(Drupal) == "undefined" || !Drupal.shoutbox) {    
-  Drupal.shoutbox = {};
- }
+Drupal.shoutbox = {}
+Drupal.behaviors.shoutbox = function(context) {
+	  Drupal.settings.shoutbox.color = Drupal.settings.shoutbox.shownAmount;
+	  Drupal.shoutbox.attachForm();
+	  Drupal.shoutbox.attachShoutAddForm();
+	  if ( Drupal.settings.shoutbox.refreshDelay > 0) {
+	    Drupal.shoutbox.startTimer(Drupal.settings.shoutbox.refreshDelay);
+	  }	
+};
 
 /*
  * Submit shout with javascript.
@@ -118,14 +124,3 @@ Drupal.shoutbox.validate = function (formData, jqForm, options) {
   $('#shoutbox-throbber').show();
   return true;	
 }
-	
-if (Drupal.jsEnabled) {
-  $(document).ready(function() {
-	  Drupal.settings.shoutbox.color = Drupal.settings.shoutbox.shownAmount;
-	  Drupal.shoutbox.attachForm();
-	  Drupal.shoutbox.attachShoutAddForm();
-	  if ( Drupal.settings.shoutbox.refreshDelay > 0) {
-	    Drupal.shoutbox.startTimer(Drupal.settings.shoutbox.refreshDelay);
-	  }	
-  });
-};

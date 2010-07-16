@@ -200,7 +200,7 @@ function drupal_commons_profile_tasks(&$task, $url) {
 
 // Create necessary directories
 function drupal_commons_build_directories() {
-  $dirs = array('ctools', 'ctools/css', 'pictures', 'imagecache');
+  $dirs = array('ctools', 'ctools/css', 'pictures', 'imagecache', 'css', 'js');
   
   foreach ($dirs as $dir) {
     $dir = file_directory_path() . '/' . $dir;
