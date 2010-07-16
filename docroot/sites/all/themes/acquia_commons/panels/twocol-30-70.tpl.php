@@ -1,5 +1,5 @@
 <?php
-// $Id: twocol_30_70.tpl.php 7713 2010-07-16 15:26:08Z sheena $
+// $Id: twocol-30-70.tpl.php 7714 2010-07-16 15:45:46Z sheena $
 /**
  * @file
  * Template for a 2 column panel layout.
