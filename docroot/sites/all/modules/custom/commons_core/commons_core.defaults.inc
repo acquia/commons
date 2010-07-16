@@ -1010,10 +1010,10 @@ Featured',
       'title_type' => 'textfield',
       'default_image' => array(
         'filename' => 'default-group.png',
-        'filepath' => 'sites/default/files/default-group.png',
+        'filepath' => file_directory_path() . '/default-group.png',
         'filemime' => 'image/png',
         'source' => 'default_image_upload',
-        'destination' => 'sites/default/files/default-group.png',
+        'destination' => file_directory_path() . '/default-group.png',
         'filesize' => 3968,
         'uid' => '1',
         'status' => 1,
@@ -5062,6 +5062,65 @@ function _commons_core_rules_defaults() {
         '#version' => 6003,
       ),
       'commons_core_25' => array(
+        '#type' => 'rule',
+        '#set' => 'event_og_become_co_admin',
+        '#categories' => array(
+          '0' => 'og_activity',
+          '1' => 'heartbeat',
+          'commons_core' => 'commons_core',
+        ),
+        '#label' => 'User becomes co-admin of a group',
+        '#active' => 0,
+        '#weight' => '0',
+        '#status' => 'default',
+        '#conditions' => array(),
+        '#actions' => array(
+          '0' => array(
+            '#weight' => 1,
+            '#info' => array(
+              'label' => 'Logs user activity for single users',
+              'eval input' => array(
+                '0' => 'uid_param',
+                '1' => 'uid_target_param',
+                '2' => 'nid_param',
+                '3' => 'nid_target_param',
+                '4' => 'message_id_param',
+                '5' => 'variables_param',
+              ),
+              'module' => 'heartbeat',
+            ),
+            '#name' => 'heartbeat_rules_default_action',
+            '#settings' => array(
+              'uid_param' => '[user:uid]',
+              'uid_target_param' => '0',
+              'nid_param' => '[node:nid]',
+              'nid_target_param' => '[node:og-id]',
+              'message_id_param' => 'og_become_co_admin',
+              'variables_param' => '@username=|=[user:user-name-url]-|-@group=|=[node:title-link]-|-',
+              '#eval input' => array(
+                'token_rules_input_evaluator' => array(
+                  'uid_param' => array(
+                    '0' => 'user',
+                  ),
+                  'nid_param' => array(
+                    '0' => 'node',
+                  ),
+                  'nid_target_param' => array(
+                    '0' => 'node',
+                  ),
+                  'variables_param' => array(
+                    '0' => 'node',
+                    '1' => 'user',
+                  ),
+                ),
+              ),
+            ),
+            '#type' => 'action',
+          ),
+        ),
+        '#version' => 6003,
+      ),
+      'commons_core_26' => array(
         '#type' => 'rule',
         '#set' => 'event_og_become_co_admin',
         '#categories' => array(

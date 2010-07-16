@@ -13345,6 +13345,9 @@ else {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Latest featured content');
+  $handler->override_option('footer', '<?php print l(t(\'View all featured content\'), \'featured\'); ?>');
+  $handler->override_option('footer_format', '3');
+  $handler->override_option('footer_empty', 0);
   $handler->override_option('empty', 'No items have been marked featured in yet.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
