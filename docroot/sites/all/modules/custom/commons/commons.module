@@ -44,6 +44,21 @@ function commons_admin_settings() {
     '#description' => t('If checked, users will be redirected to home page after logging in.'),
   );
   
+  $form['general_settings']['commons_recent_join_interval'] = array(
+    '#type' => 'select',
+    '#title' => t('Recent joins time-frame'),
+    '#default_value' => variable_get('commons_recent_join_interval', '3 months'),
+    '#options' => array(
+      '3 days' => '3 days',
+      '1 week' => '1 weeks',
+      '2 weeks' => '2 weeks',
+      '1 month' => '1 month',
+      '3 months' => '3 months',
+      '6 months' => '6 months',
+    ),
+    '#description' => t('The !user_directory contains a block that indicates the amount of recently joined members. Select the time-frame to be used to calculate this value.', array('!user_directory' => l(t('user directory'), 'users'))),
+  );
+  
   $form['general_settings']['commons_manager_role'] = array(
     '#type' => 'textfield',
     '#title' => t('Community manager role'),
@@ -162,8 +177,8 @@ function _commons_user_stats_block() {
   $total = db_result(db_query("SELECT COUNT(uid) FROM {users} WHERE status = 1"));
   $data[] = t('%members', array('%members' => format_plural($total, '1 user', '@count users')));
   
-  // Determine recently joined users (within 90 days)
-  $total = db_result(db_query("SELECT COUNT(uid) FROM {users} WHERE status = 1 AND created > %d", strtotime('-90 days', time())));
+  // Determine recently joined users
+  $total = db_result(db_query("SELECT COUNT(uid) FROM {users} WHERE status = 1 AND created > %d", strtotime('-' . variable_get('commons_recent_join_interval', '3 months'), time())));
   $data[] = t('%members', array('%members' => format_plural($total, '1 recently joined member', '@count recently joined members')));
   
   return theme('commons_user_stats_block', $data);
@@ -171,7 +186,7 @@ function _commons_user_stats_block() {
 
 // Display "jumpstart" block
 function _commons_jumpstart_community_block() {
-  return l('View', 'groups') . ', or ' . l('create', 'node/add/group') . ' new <strong>groups</strong> to start creating your community!';
+  return t('!view, or !create new <strong>groups</strong> to start creating your community!', array('!view' => l(t('View'), 'groups'), '!create' => l(t('create'), 'node/add/group')));
 }
 
 /*
