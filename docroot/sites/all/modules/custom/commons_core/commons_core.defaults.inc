@@ -1689,14 +1689,14 @@ function _commons_core_context_default_contexts() {
     'attribute' => 'group',
     'value' => 'group',
     'description' => 'Show on group context',
-    'og' => array(
-      '0' => 1,
+    'og_group_type' => array(
+      '0' => 'group',
     ),
     'block' => array(
       'og_0' => array(
         'module' => 'og',
         'delta' => '0',
-        'weight' => 43,
+        'weight' => 37,
         'region' => 'sidebar_last',
         'status' => '0',
         'label' => 'Group details',
@@ -1705,7 +1705,7 @@ function _commons_core_context_default_contexts() {
       'og_views_0' => array(
         'module' => 'og_views',
         'delta' => '0',
-        'weight' => 44,
+        'weight' => 38,
         'region' => 'sidebar_last',
         'status' => '0',
         'label' => 'Group search',
@@ -1714,16 +1714,16 @@ function _commons_core_context_default_contexts() {
       'views_og_upcoming_events-block_1' => array(
         'module' => 'views',
         'delta' => 'og_upcoming_events-block_1',
-        'weight' => 45,
+        'weight' => 39,
         'region' => 'sidebar_last',
         'status' => '0',
-        'label' => 'Upcoming Events (Group)',
+        'label' => 'Upcoming events (Group)',
         'type' => 'context_ui',
       ),
       'views_og_members_custom_block-block_1' => array(
         'module' => 'views',
         'delta' => 'og_members_custom_block-block_1',
-        'weight' => 46,
+        'weight' => 40,
         'region' => 'sidebar_last',
         'status' => '0',
         'label' => 'Group members',
@@ -1732,7 +1732,7 @@ function _commons_core_context_default_contexts() {
       'og_aggregator_0' => array(
         'module' => 'og_aggregator',
         'delta' => '0',
-        'weight' => 47,
+        'weight' => 41,
         'region' => 'sidebar_last',
         'status' => '0',
         'label' => 'Group aggregator',
@@ -1741,25 +1741,25 @@ function _commons_core_context_default_contexts() {
       'views_og_recent_poll-block_1' => array(
         'module' => 'views',
         'delta' => 'og_recent_poll-block_1',
-        'weight' => 48,
+        'weight' => 42,
         'region' => 'sidebar_last',
         'status' => '0',
-        'label' => 'Latest Group Poll',
+        'label' => 'Latest group poll',
         'type' => 'context_ui',
       ),
       'views_og_tag_cloud-block_1' => array(
         'module' => 'views',
         'delta' => 'og_tag_cloud-block_1',
-        'weight' => 49,
+        'weight' => 43,
         'region' => 'sidebar_last',
         'status' => '0',
-        'label' => 'Group Content Tag Cloud',
+        'label' => 'Group content tag cloud',
         'type' => 'context_ui',
       ),
       'views_og_members_custom_block-block' => array(
         'module' => 'views',
         'delta' => 'og_members_custom_block-block',
-        'weight' => 50,
+        'weight' => 44,
         'region' => 'sidebar_last',
         'status' => '0',
         'label' => 'Group admins',
@@ -5002,6 +5002,65 @@ function _commons_core_rules_defaults() {
         ),
         '#version' => 6003,
       ),
+      'commons_core_24' => array(
+        '#type' => 'rule',
+        '#set' => 'event_og_become_co_admin',
+        '#categories' => array(
+          '0' => 'og_activity',
+          '1' => 'heartbeat',
+          'commons_core' => 'commons_core',
+        ),
+        '#label' => 'User becomes co-admin of a group',
+        '#active' => 0,
+        '#weight' => '0',
+        '#status' => 'default',
+        '#conditions' => array(),
+        '#actions' => array(
+          '0' => array(
+            '#weight' => 1,
+            '#info' => array(
+              'label' => 'Logs user activity for single users',
+              'eval input' => array(
+                '0' => 'uid_param',
+                '1' => 'uid_target_param',
+                '2' => 'nid_param',
+                '3' => 'nid_target_param',
+                '4' => 'message_id_param',
+                '5' => 'variables_param',
+              ),
+              'module' => 'heartbeat',
+            ),
+            '#name' => 'heartbeat_rules_default_action',
+            '#settings' => array(
+              'uid_param' => '[user:uid]',
+              'uid_target_param' => '0',
+              'nid_param' => '[node:nid]',
+              'nid_target_param' => '[node:og-id]',
+              'message_id_param' => 'og_become_co_admin',
+              'variables_param' => '@username=|=[user:user-name-url]-|-@group=|=[node:title-link]-|-',
+              '#eval input' => array(
+                'token_rules_input_evaluator' => array(
+                  'uid_param' => array(
+                    '0' => 'user',
+                  ),
+                  'nid_param' => array(
+                    '0' => 'node',
+                  ),
+                  'nid_target_param' => array(
+                    '0' => 'node',
+                  ),
+                  'variables_param' => array(
+                    '0' => 'node',
+                    '1' => 'user',
+                  ),
+                ),
+              ),
+            ),
+            '#type' => 'action',
+          ),
+        ),
+        '#version' => 6003,
+      ),
     ),
   );
 }
@@ -5910,6 +5969,7 @@ function _commons_core_strongarm() {
       'group_images' => 0,
     ),
     'group_node_form' => array(
+      'group_attributes' => 'group_attributes',
       'menu' => 'menu',
       'group_promote_content' => 'group_promote_content',
       'themes' => 'themes',
@@ -5918,7 +5978,6 @@ function _commons_core_strongarm() {
       'options' => 'options',
       'comment_settings' => 'comment_settings',
       'path' => 'path',
-      'group_attributes' => 0,
     ),
     'notice_node_form' => array(
       'menu' => 'menu',
