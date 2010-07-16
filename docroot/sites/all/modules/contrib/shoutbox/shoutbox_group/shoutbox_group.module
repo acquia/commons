@@ -78,6 +78,15 @@ function shoutbox_group_page($group_id) {
   // Set the page title with group name
   drupal_set_title(t('Shout box') . ' <i>(' . l($group->title, 'node/' . $group->nid) . ')</i>');
   
+  // Set the breadcrumb
+  drupal_set_breadcrumb(array(
+      l(t('Home'), '<front>'),
+      l(t('Groups'), 'og'),
+      l($group->title, 'node/' . $group->nid),
+      t('Shoutbox')
+    )
+  );
+  
   // Return normal shoutbox page
   return shoutbox_page_view();
 }
