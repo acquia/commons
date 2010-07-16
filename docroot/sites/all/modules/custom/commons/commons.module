@@ -463,12 +463,12 @@ function commons_init() {
   }
   
   // Notify group admins of any pending requests on group home page
-  if(arg(0) == 'node' && is_numeric(arg(1)) && !arg(2)) {
+  if (arg(0) == 'node' && is_numeric(arg(1)) && !arg(2)) {
     // Load the current user
     global $user;
     
     // Check to see if user is logged in
-    if($user->uid) {
+    if ($user->uid) {
       // Load the current node
       $node = node_load(arg(1));
       // Determine if this is a group
@@ -480,7 +480,7 @@ function commons_init() {
             SELECT COUNT(uid) FROM {og_uid} 
             WHERE nid = %d AND is_active = 0", $node->nid));
             
-          if($count) {
+          if ($count) {
             drupal_set_message(t('There are currently !count pending membership requests. Click !here to view them.', array('!count' => $count, '!here' => l('here', 'og/users/' . $node->nid))));
           }
         }
