@@ -487,6 +487,88 @@ function commons_init() {
       }
     }
   }
+  
+  // Set the breadcrumbs
+  commons_set_breadcrumb($_GET['q']);
+}
+
+/*
+ * Dynamically set the breadcrumbs
+ * 
+ * Commons ships with a large amount of panels, views,
+ * and dynamic content. This result in missing or incorrect
+ * breadcrumbs.
+ * 
+ * @param $path
+ *   The requested path (Eg, node/2)
+ */
+function commons_set_breadcrumb($path) {
+  $breadcrumb = array();
+  
+  // Break the path into pieces
+  $path = explode('/', $path);
+  
+  switch ($path[0]) {
+    case 'content':
+      if ($path[1]) {
+        $breadcrumb[] = l(t('Community'), 'groups'); 
+      }
+      break;
+    
+    case 'notices':
+    case 'featured':
+    case 'userpoints':
+    case 'users':
+      $breadcrumb[] = l(t('Community'), 'groups');
+      break;
+      
+    case 'groups':
+      if ($path[1]) {
+        $breadcrumb[] = l(t('Groups'), 'groups'); 
+      }
+      break;
+      
+    case 'group':
+    case 'bookmarks':
+    case 'relationships':
+    case 'myuserpoints':
+      $breadcrumb[] = l(t('My account'), 'user');
+      break;
+      
+    case 'node':
+      if (is_numeric($path[1])) {
+        switch ($path[2]) {
+          case 'content':
+          case 'aggregator':
+            $group = node_load($path[1]);
+            $breadcrumb[] = l(t('Groups'), 'groups');
+            $breadcrumb[] = l($group->title, 'node/' . $group->nid);
+            break;
+        }
+      }
+      break;
+      
+    case 'og':
+      if (is_numeric($path[2])) {
+        switch ($path[1]) {
+          case 'users':
+          case 'search':
+            $group = node_load($path[2]);
+            $breadcrumb[] = l(t('Groups'), 'groups');
+            $breadcrumb[] = l($group->title, 'node/' . $group->nid); 
+        }
+      }
+      break;
+  }
+  
+  // Check if we've added any breadcrumbs
+  if (!empty($breadcrumb)) {
+    // If so, add a frontpage link to the beginning
+    array_unshift($breadcrumb, l(t('Home'), '<front>'));
+    
+    // And set them
+    drupal_set_breadcrumb($breadcrumb);
+  }
 }
 
 /*
