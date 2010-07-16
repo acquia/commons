@@ -6,7 +6,7 @@
  */
 function acquia_commons_twocol_30_70_panels_layouts() {
   $items['twocol_30_70'] = array(
-    'title' => t('Two column 30/70'),
+    'title' => t('Acquia Commons - Two column 30/70'),
     'icon' => 'twocol_30_70.png',
     'theme' => 'twocol_30_70',
     'theme arguments' => array('id', 'content'),
