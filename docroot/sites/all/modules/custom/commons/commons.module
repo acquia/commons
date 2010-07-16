@@ -50,7 +50,7 @@ function commons_admin_settings() {
     '#default_value' => variable_get('commons_recent_join_interval', '3 months'),
     '#options' => array(
       '3 days' => '3 days',
-      '1 week' => '1 weeks',
+      '1 week' => '1 week',
       '2 weeks' => '2 weeks',
       '1 month' => '1 month',
       '3 months' => '3 months',
@@ -74,6 +74,13 @@ function commons_admin_settings() {
     '#collapsed' => FALSE,
   );
   
+  $form['group_settings']['commons_group_tab_title'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Group homepage tab'),
+    '#default_value' => variable_get('commons_group_tab_title', 'Home'),
+    '#description' => t('Specify what the group homepage tab title should be. If left empty, the tab title will be <i>View</i>.'),
+  );
+  
   $form['group_settings']['commons_hide_shoutbox_link'] = array(
     '#type' => 'checkbox',
     '#title' => t('Remove Shoutbox link'),
@@ -85,7 +92,7 @@ function commons_admin_settings() {
     '#type' => 'checkbox',
     '#title' => t('Alert users when added to a selective group'),
     '#default_value' => variable_get('commons_email_selective_group', 1),
-    '#description' => t('If checked, an email alert will be sent to users that are added to selective groups by group managers. Selective groups are groups that are marked as either invite-only or closed.'),
+    '#description' => t('If checked, an email alert will be sent to users that are added to groups that are marked as either invite-only or closed.'),
   );
   
   $form['group_settings']['commons_group_prevent_open_voting'] = array(
@@ -119,12 +126,13 @@ function commons_menu_alter(&$items) {
 
 // Callback for group node tab titles
 function commons_set_node_tab_title($node) {
-  if (og_is_group_type($node->type)) {
-    return t('Home');
+  if ($title = variable_get('commons_group_tab_title', 'Home')) {
+    if (og_is_group_type($node->type)) {
+      return $title;
+    }
   }
-  else {
-    return t('View');
-  }
+  
+  return t('View');
 }
 
 // Optionally remove Shoutbox link from Group Menu

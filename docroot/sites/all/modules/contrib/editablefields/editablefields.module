@@ -1,5 +1,5 @@
 <?php
-// $Id: editablefields.module,v 1.3.2.17.2.12 2010/03/26 11:35:22 janvandiepen Exp $
+// $Id: editablefields.module,v 1.3.2.17.2.10 2010/01/18 08:48:10 markfoodyburton Exp $
 
 /**
  * @file
@@ -84,8 +84,7 @@ function theme_editablefields_formatter_editable($element) {
 
   $field_name = $element['#field_name'];
   $field = content_fields($field_name);
-//  $node = $element['#node'];
-  $node = node_load($element['#node']->nid);
+  $node = $element['#node'];
   $delta = $element['#item']['#delta'];
 
   if (content_handle('widget', 'multiple values', $field) == CONTENT_HANDLE_CORE) {
@@ -313,8 +312,7 @@ function editablefields_submit() {
       }
 
       $field = content_fields($field_name);
-      // the matrix field identifies itself as being multivalue, but in fact, it is not.
-      if ((content_handle('widget', 'multiple values', $field) == CONTENT_HANDLE_CORE) && ($field['type'] != matrix)) {
+      if (content_handle('widget', 'multiple values', $field) == CONTENT_HANDLE_CORE) {
         if ($node->{$field_name}[$delta] != $form_state['values'][$field_name][0]) {
           $node->{$field_name}[$delta] = $form_state['values'][$field_name][0];
           node_save($node);
