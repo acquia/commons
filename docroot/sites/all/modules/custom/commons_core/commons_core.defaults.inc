@@ -1010,10 +1010,10 @@ Featured',
       'title_type' => 'textfield',
       'default_image' => array(
         'filename' => 'default-group.png',
-        'filepath' => file_directory_path() . '/default-group.png',
+        'filepath' => 'sites/default/files/default-group.png',
         'filemime' => 'image/png',
         'source' => 'default_image_upload',
-        'destination' => file_directory_path() . '/default-group.png',
+        'destination' => 'sites/default/files/default-group.png',
         'filesize' => 3968,
         'uid' => '1',
         'status' => 1,
@@ -1964,7 +1964,7 @@ function _commons_core_fieldgroup_default_groups() {
         ),
       ),
     ),
-    'weight' => '1',
+    'weight' => '0',
     'fields' => array(
       '0' => 'field_group_sticky',
       '1' => 'field_featured_content',
@@ -2059,7 +2059,7 @@ function _commons_core_fieldgroup_default_groups() {
         ),
       ),
     ),
-    'weight' => '1',
+    'weight' => '0',
     'fields' => array(
       '0' => 'field_group_sticky',
       '1' => 'field_featured_content',
@@ -2107,7 +2107,7 @@ function _commons_core_fieldgroup_default_groups() {
         ),
       ),
     ),
-    'weight' => '2',
+    'weight' => '0',
     'fields' => array(
       '0' => 'field_group_sticky',
       '1' => 'field_featured_content',
@@ -2284,7 +2284,7 @@ function _commons_core_fieldgroup_default_groups() {
         ),
       ),
     ),
-    'weight' => '2',
+    'weight' => '1',
     'fields' => array(
       '0' => 'field_group_sticky',
       '1' => 'field_featured_content',
@@ -2328,7 +2328,7 @@ function _commons_core_fieldgroup_default_groups() {
         ),
       ),
     ),
-    'weight' => '-4',
+    'weight' => '3',
     'fields' => array(
       '0' => 'field_group_image',
       '1' => 'field_grouplink',
@@ -2376,7 +2376,7 @@ function _commons_core_fieldgroup_default_groups() {
         ),
       ),
     ),
-    'weight' => '3',
+    'weight' => '4',
     'fields' => array(
       '0' => 'field_featured_group',
     ),
@@ -2611,7 +2611,7 @@ function _commons_core_fieldgroup_default_groups() {
         ),
       ),
     ),
-    'weight' => '1',
+    'weight' => '0',
     'fields' => array(
       '0' => 'field_group_sticky',
       '1' => 'field_featured_content',
@@ -3010,7 +3010,7 @@ function _commons_core_default_page_manager_handlers() {
     $pane->position = 0;
     $display->content['new-2'] = $pane;
     $display->panels['right'][0] = 'new-2';
-  $display->hide_title = PANELS_TITLE_FIXED;
+  $display->hide_title = PANELS_TITLE_NONE;
   $display->title_pane = 'new-1';
   $handler->conf['display'] = $display;
 
@@ -5061,6 +5061,65 @@ function _commons_core_rules_defaults() {
         ),
         '#version' => 6003,
       ),
+      'commons_core_25' => array(
+        '#type' => 'rule',
+        '#set' => 'event_og_become_co_admin',
+        '#categories' => array(
+          '0' => 'og_activity',
+          '1' => 'heartbeat',
+          'commons_core' => 'commons_core',
+        ),
+        '#label' => 'User becomes co-admin of a group',
+        '#active' => 0,
+        '#weight' => '0',
+        '#status' => 'default',
+        '#conditions' => array(),
+        '#actions' => array(
+          '0' => array(
+            '#weight' => 1,
+            '#info' => array(
+              'label' => 'Logs user activity for single users',
+              'eval input' => array(
+                '0' => 'uid_param',
+                '1' => 'uid_target_param',
+                '2' => 'nid_param',
+                '3' => 'nid_target_param',
+                '4' => 'message_id_param',
+                '5' => 'variables_param',
+              ),
+              'module' => 'heartbeat',
+            ),
+            '#name' => 'heartbeat_rules_default_action',
+            '#settings' => array(
+              'uid_param' => '[user:uid]',
+              'uid_target_param' => '0',
+              'nid_param' => '[node:nid]',
+              'nid_target_param' => '[node:og-id]',
+              'message_id_param' => 'og_become_co_admin',
+              'variables_param' => '@username=|=[user:user-name-url]-|-@group=|=[node:title-link]-|-',
+              '#eval input' => array(
+                'token_rules_input_evaluator' => array(
+                  'uid_param' => array(
+                    '0' => 'user',
+                  ),
+                  'nid_param' => array(
+                    '0' => 'node',
+                  ),
+                  'nid_target_param' => array(
+                    '0' => 'node',
+                  ),
+                  'variables_param' => array(
+                    '0' => 'node',
+                    '1' => 'user',
+                  ),
+                ),
+              ),
+            ),
+            '#type' => 'action',
+          ),
+        ),
+        '#version' => 6003,
+      ),
     ),
   );
 }
@@ -5181,14 +5240,16 @@ function _commons_core_strongarm() {
   $strongarm->name = 'content_extra_weights_blog';
   $strongarm->value = array(
     'title' => '-5',
-    'body_field' => '-1',
-    'revision_information' => '3',
+    'body_field' => '-3',
+    'revision_information' => '2',
+    'author' => '6',
+    'options' => '7',
     'comment_settings' => '4',
-    'menu' => '-4',
-    'taxonomy' => '-3',
+    'menu' => '3',
+    'taxonomy' => '-4',
     'path' => '5',
-    'flag' => '2',
-    'og_nodeapi' => '0',
+    'flag' => '1',
+    'og_nodeapi' => '-1',
   );
 
   $export['content_extra_weights_blog'] = $strongarm;
@@ -5198,14 +5259,16 @@ function _commons_core_strongarm() {
   $strongarm->name = 'content_extra_weights_discussion';
   $strongarm->value = array(
     'title' => '-5',
-    'body_field' => '-1',
-    'revision_information' => '3',
+    'body_field' => '-3',
+    'revision_information' => '2',
+    'author' => '6',
+    'options' => '7',
     'comment_settings' => '4',
-    'menu' => '-4',
-    'taxonomy' => '-3',
+    'menu' => '3',
+    'taxonomy' => '-4',
     'path' => '5',
-    'flag' => '2',
-    'og_nodeapi' => '0',
+    'flag' => '1',
+    'og_nodeapi' => '-1',
   );
 
   $export['content_extra_weights_discussion'] = $strongarm;
@@ -5215,16 +5278,16 @@ function _commons_core_strongarm() {
   $strongarm->name = 'content_extra_weights_document';
   $strongarm->value = array(
     'title' => '-5',
-    'body_field' => '0',
-    'revision_information' => '4',
-    'author' => '6',
-    'options' => '7',
-    'comment_settings' => '5',
-    'menu' => '-4',
-    'taxonomy' => '-3',
-    'path' => '8',
-    'flag' => '3',
-    'og_nodeapi' => '1',
+    'body_field' => '-3',
+    'revision_information' => '2',
+    'author' => '5',
+    'options' => '6',
+    'comment_settings' => '4',
+    'menu' => '3',
+    'taxonomy' => '-4',
+    'path' => '7',
+    'flag' => '1',
+    'og_nodeapi' => '-1',
   );
 
   $export['content_extra_weights_document'] = $strongarm;
@@ -5234,14 +5297,16 @@ function _commons_core_strongarm() {
   $strongarm->name = 'content_extra_weights_event';
   $strongarm->value = array(
     'title' => '-5',
-    'body_field' => '0',
-    'revision_information' => '4',
+    'body_field' => '-3',
+    'revision_information' => '3',
+    'author' => '7',
+    'options' => '8',
     'comment_settings' => '5',
-    'menu' => '-4',
-    'taxonomy' => '-3',
+    'menu' => '4',
+    'taxonomy' => '-4',
     'path' => '6',
-    'flag' => '3',
-    'og_nodeapi' => '1',
+    'flag' => '2',
+    'og_nodeapi' => '0',
   );
 
   $export['content_extra_weights_event'] = $strongarm;
@@ -5251,19 +5316,19 @@ function _commons_core_strongarm() {
   $strongarm->name = 'content_extra_weights_group';
   $strongarm->value = array(
     'title' => '-5',
-    'body_field' => '-1',
+    'body_field' => '-2',
     'revision_information' => '6',
     'author' => '9',
     'options' => '10',
     'comment_settings' => '7',
     'menu' => '5',
-    'taxonomy' => '-2',
+    'taxonomy' => '-3',
     'path' => '8',
-    'og_description' => '-3',
-    'og_selective' => '4',
-    'og_register' => '0',
-    'og_directory' => '1',
-    'og_private' => '2',
+    'og_description' => '-4',
+    'og_selective' => '2',
+    'og_register' => '-1',
+    'og_directory' => '0',
+    'og_private' => '1',
   );
 
   $export['content_extra_weights_group'] = $strongarm;
@@ -5287,13 +5352,15 @@ function _commons_core_strongarm() {
   $strongarm->name = 'content_extra_weights_poll';
   $strongarm->value = array(
     'title' => '-5',
-    'revision_information' => '4',
+    'revision_information' => '3',
+    'author' => '7',
+    'options' => '8',
     'comment_settings' => '5',
-    'menu' => '3',
-    'taxonomy' => '-2',
+    'menu' => '4',
+    'taxonomy' => '-4',
     'path' => '6',
-    'choice_wrapper' => '-4',
-    'settings' => '-3',
+    'choice_wrapper' => '-3',
+    'settings' => '-2',
     'flag' => '2',
     'og_nodeapi' => '1',
   );
@@ -5305,14 +5372,16 @@ function _commons_core_strongarm() {
   $strongarm->name = 'content_extra_weights_wiki';
   $strongarm->value = array(
     'title' => '-5',
-    'body_field' => '-1',
-    'revision_information' => '3',
+    'body_field' => '-3',
+    'revision_information' => '2',
+    'author' => '6',
+    'options' => '7',
     'comment_settings' => '4',
-    'menu' => '-4',
-    'taxonomy' => '-3',
+    'menu' => '3',
+    'taxonomy' => '-4',
     'path' => '5',
-    'flag' => '2',
-    'og_nodeapi' => '0',
+    'flag' => '1',
+    'og_nodeapi' => '-1',
   );
 
   $export['content_extra_weights_wiki'] = $strongarm;
@@ -5907,123 +5976,6 @@ function _commons_core_strongarm() {
   );
 
   $export['user_terms_vocabs'] = $strongarm;
-  $strongarm = new stdClass;
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'vertical_tabs_default';
-  $strongarm->value = 1;
-
-  $export['vertical_tabs_default'] = $strongarm;
-  $strongarm = new stdClass;
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'vertical_tabs_forms';
-  $strongarm->value = array(
-    'blog_node_form' => array(
-      'menu' => 'menu',
-      'flag' => 'flag',
-      'notifications' => 'notifications',
-      'group_promote_content' => 'group_promote_content',
-      'revision_information' => 'revision_information',
-      'author' => 'author',
-      'options' => 'options',
-      'comment_settings' => 'comment_settings',
-      'path' => 'path',
-      'group_images' => 0,
-    ),
-    'discussion_node_form' => array(
-      'menu' => 'menu',
-      'flag' => 'flag',
-      'notifications' => 'notifications',
-      'group_promote_content' => 'group_promote_content',
-      'revision_information' => 'revision_information',
-      'author' => 'author',
-      'options' => 'options',
-      'comment_settings' => 'comment_settings',
-      'path' => 'path',
-      'group_images' => 0,
-    ),
-    'document_node_form' => array(
-      'menu' => 'menu',
-      'notifications' => 'notifications',
-      'flag' => 'flag',
-      'group_promote_content' => 'group_promote_content',
-      'author' => 'author',
-      'revision_information' => 'revision_information',
-      'options' => 'options',
-      'comment_settings' => 'comment_settings',
-      'path' => 'path',
-      'group_upload' => 0,
-    ),
-    'event_node_form' => array(
-      'menu' => 'menu',
-      'flag' => 'flag',
-      'notifications' => 'notifications',
-      'group_promote_content' => 'group_promote_content',
-      'revision_information' => 'revision_information',
-      'author' => 'author',
-      'options' => 'options',
-      'comment_settings' => 'comment_settings',
-      'path' => 'path',
-      'group_event_details' => 0,
-      'group_images' => 0,
-    ),
-    'group_node_form' => array(
-      'group_attributes' => 'group_attributes',
-      'menu' => 'menu',
-      'group_promote_content' => 'group_promote_content',
-      'themes' => 'themes',
-      'author' => 'author',
-      'revision_information' => 'revision_information',
-      'options' => 'options',
-      'comment_settings' => 'comment_settings',
-      'path' => 'path',
-    ),
-    'notice_node_form' => array(
-      'menu' => 'menu',
-      'notifications' => 'notifications',
-      'revision_information' => 'revision_information',
-      'author' => 'author',
-      'options' => 'options',
-      'comment_settings' => 'comment_settings',
-      'path' => 'path',
-      'group_images' => 0,
-    ),
-    'poll_node_form' => array(
-      'menu' => 'menu',
-      'group_promote_content' => 'group_promote_content',
-      'flag' => 'flag',
-      'notifications' => 'notifications',
-      'revision_information' => 'revision_information',
-      'author' => 'author',
-      'options' => 'options',
-      'comment_settings' => 'comment_settings',
-      'path' => 'path',
-      'settings' => 0,
-      'group_images' => 0,
-    ),
-    'wiki_node_form' => array(
-      'menu' => 'menu',
-      'flag' => 'flag',
-      'notifications' => 'notifications',
-      'group_promote_content' => 'group_promote_content',
-      'revision_information' => 'revision_information',
-      'author' => 'author',
-      'options' => 'options',
-      'comment_settings' => 'comment_settings',
-      'path' => 'path',
-      'group_images' => 0,
-    ),
-  );
-
-  $export['vertical_tabs_forms'] = $strongarm;
-  $strongarm = new stdClass;
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'vertical_tabs_node_type_settings';
-  $strongarm->value = 1;
-
-  $export['vertical_tabs_node_type_settings'] = $strongarm;
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
