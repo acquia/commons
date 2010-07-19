@@ -1,5 +1,5 @@
 <?php
-// $Id: tagging.module,v 1.14.2.4 2010/07/14 14:27:52 eugenmayer Exp $
+// $Id: tagging.module,v 1.14.2.5 2010/07/18 10:11:01 eugenmayer Exp $
 
 // Author: Eugen Mayer (http://kontextwork.de)
 // Copyright 2010
@@ -110,10 +110,11 @@ function theme_tagging_widget($element) {
   if($element['#description'] == '') {
     $element['#description'] = t("Type and press enter to add the tag");
   }  
-  $element['#field_prefix'] = '<div class="taggin-widget-input-wrapper clearfix">';
-  $element['#field_suffix'] = theme('tagging_widget_button', $vid).$old_input.'</div>';
+  $element['#field_suffix'] = theme('tagging_widget_button', $vid).$old_input;
   $output .= theme('tagging_tags_list',split(',',$element['#value']),$vid)
-            .theme('textfield', $element)
+            .'<div class="taggin-widget-input-wrapper clearfix">'
+               .theme('textfield', $element)
+            .'</div>'
             .theme('tagging_suggestions_list', $element['#suggestions'], $vid);
   $fieldset['#value'] = $output;
   $output = theme('fieldset',$fieldset);

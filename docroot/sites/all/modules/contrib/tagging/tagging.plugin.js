@@ -1,4 +1,4 @@
-// $Id: tagging.plugin.js,v 1.12.2.4 2010/07/14 14:27:52 eugenmayer Exp $
+// $Id: tagging.plugin.js,v 1.12.2.5 2010/07/18 10:11:01 eugenmayer Exp $
 /**
  * @author Eugen Mayer (http://kontextwork.de)
  * @Copyright 2010 KontextWork
@@ -146,14 +146,8 @@
       * use the selected item and add it to the tag-list.
       */
       function check_enter(event) {
-        charCode = 0;
-        if ($.browser.mozilla) {
-          charCode = event.charCode;
-        }
-        else {
-          charCode = event.keyCode
-        }
-        if (charCode == 13) {
+        var key = event.which;
+        if (key == 13) {
           $('#autocomplete').each(function() {
             this.owner.hidePopup();
           });
