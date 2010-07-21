@@ -5276,7 +5276,7 @@ function _commons_core_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Recent Group Content');
+  $handler->override_option('title', 'Recent group content');
   $handler->override_option('empty', 'No content has been submitted to this group in.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
