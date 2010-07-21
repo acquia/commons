@@ -440,19 +440,25 @@ function drupal_commons_config_wysiwyg() {
 // Configure user_relationships
 function drupal_commons_config_ur() {
   // Add initial relationship type 'Friend'
-  $rel = new stdClass;
-  $rel->name = t(DRUPAL_COMMONS_RELATIONSHIP_SINGULAR);
-  $rel->plural_name = t(DRUPAL_COMMONS_RELATIONSHIP_PLURAL);
-  $rel->requires_approval = 1;
-  $rel->expires_val = 0;
-  $rel->is_oneway = 0;
-  $rel->is_reciprocal = 0; 
+  $relationship = new stdClass;
+  $relationship->name = t(DRUPAL_COMMONS_RELATIONSHIP_SINGULAR);
+  $relationship->plural_name = t(DRUPAL_COMMONS_RELATIONSHIP_PLURAL);
+  $relationship->requires_approval = 1;
+  $relationship->expires_val = 0;
+  $relationship->is_oneway = 0;
+  $relationship->is_reciprocal = 0; 
+  $is_type = TRUE;
+  $type = 'insert';
   
   // Save relationship
-  drupal_write_record('user_relationship_types', $rel);
+  drupal_write_record('user_relationship_types', $relationship);
 
   // Alert other modules about the new relationship
-  _user_relationships_invoke('insert', $rel, TRUE);
+  $hook = 'user_relationships'. ($is_type ? '_type' : '');
+  foreach (module_implements($hook) as $module) {
+    $function = $module .'_'. $hook;
+    $function($type, $relationship);
+  }
 }
 
 // Configure heartbeat
