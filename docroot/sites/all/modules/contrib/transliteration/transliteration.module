@@ -1,53 +1,145 @@
 <?php
-// $Id: transliteration.module,v 1.2.4.2 2009/06/07 19:05:50 smk Exp $
+// $Id: transliteration.module,v 1.5.2.7 2010/03/15 06:42:43 smk Exp $
 
 /**
  * @file
- * Provides transliteration for UTF-8 text input and sanitzes file names.
+ * Converts non-latin text to US-ASCII and sanitizes file names.
  *
- * Uses data from the Text::Unidecode Perl library.
- * @see http://search.cpan.org/~sburke/Text-Unidecode-0.04/lib/Text/Unidecode.pm
+ * @author Stefan M. Kudwien (http://drupal.org/user/48898)
  */
 
 /**
- * Transliterate UTF-8 input to plain ASCII.
- *
- * This function loads the required include file and returns the result of the
- * main function, transliteration_process().
- *
- * @param string $input
- *   UTF-8 text input.
- * @param string $unknown
- *   Replacement for unknown characters and illegal UTF-8 sequences.
- * @param string $langcode
- *   Optional ISO 639 language code used to import language specific
- *   replacements. See data/x00.php for an example. Defaults to the
- *   current display language.
- *
- * @return string
- *   Plain ASCII output.
- * @see transliteration_process()
+ * Implements hook_menu().
  */
-function transliteration_get($input, $unknown = '?', $langcode = NULL) {
-  require_once (drupal_get_path('module', 'transliteration') . '/transliteration.inc');
-  return transliteration_process($input, $unknown, $langcode);
+function transliteration_menu() {
+  $items['admin/settings/file-system/settings'] = array(
+    'title' => 'Settings',
+    'file path' => drupal_get_path('module', 'system'),
+    'weight' => -10,
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+  $items['admin/settings/file-system/transliteration'] = array(
+    'title' => 'Transliteration',
+    'description' => 'Convert existing file names to US-ASCII.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('transliteration_retroactive'),
+    'access arguments' => array('administer site configuration'),
+    'file' => 'transliteration.admin.inc',
+    'weight' => 10,
+    'type' => MENU_LOCAL_TASK,
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Add transliteration settings to the file system configuration form.
+ */
+function transliteration_form_system_file_system_settings_alter(&$form, &$form_state) {
+  $form['transliteration'] = array(
+    '#type' => 'item',
+    '#title' => t('Transliteration'),
+    '#value' => '',
+  );
+  $form['transliteration']['transliteration_file_uploads'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Transliterate file names during upload.'),
+    '#description' => t('Enable to convert file names to US-ASCII character set for cross-platform compatibility.'),
+    '#default_value' => variable_get('transliteration_file_uploads', TRUE),
+  );
+  $form['transliteration']['transliteration_file_lowercase'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Lowercase transliterated file names.'),
+    '#default_value' => variable_get('transliteration_file_lowercase', TRUE),
+    '#description' => t('This is a recommended setting to prevent issues with case-insensitive file systems. It has no effect if transliteration has been disabled.'),
+  );
+  $form['buttons']['#weight'] = 1;
+}
+
+/**
+ * Transliterate and sanitize a file name.
+ *
+ * The resulting file name has white space replaced with underscores, consists
+ * of only US-ASCII characters, and is converted to lowercase (if configured).
+ *
+ * @param $filename
+ *   A file name.
+ * @param $source_langcode
+ *   Optional ISO 639 language code that denotes the language of the input and
+ *   is used to apply language-specific variations. If the source language is
+ *   not known at the time of transliteration, it is recommended to set this
+ *   argument to the site default language to produce consistent results.
+ *   Otherwise the current display language will be used.
+ * @return
+ *   Sanitized file name.
+ *
+ * @see language_default()
+ */
+function transliteration_clean_filename($filename, $source_langcode = NULL) {
+  $filename = transliteration_get($filename, '', $source_langcode);
+  // Replace whitespace.
+  $filename = str_replace(' ', '_', $filename);
+  // Remove remaining unsafe characters.
+  $filename = preg_replace('![^0-9A-Za-z_.-]!', '', $filename);
+  // Force lowercase to prevent issues on case-insensitive file systems.
+  if (variable_get('transliteration_file_lowercase', TRUE)) {
+    $filename = strtolower($filename);
+  }
+  return $filename;
+}
+
+/**
+ * Transliterate text.
+ *
+ * Takes an input string in any language and character set, and tries to
+ * represent it in US-ASCII characters by conveying, in Roman letters, the
+ * pronunciation expressed by the text in some other writing system.
+ *
+ * @param $text
+ *   UTF-8 encoded text input.
+ * @param $unknown
+ *   Replacement string for characters that do not have a suitable ASCII
+ *   equivalent.
+ * @param $source_langcode
+ *   Optional ISO 639 language code that denotes the language of the input and
+ *   is used to apply language-specific variations. If the source language is
+ *   not known at the time of transliteration, it is recommended to set this
+ *   argument to the site default language to produce consistent results.
+ *   Otherwise the current display language will be used.
+ * @return
+ *   Transliterated text.
+ *
+ * @see language_default()
+ */
+function transliteration_get($text, $unknown = '?', $source_langcode = NULL) {
+  static $loaded = FALSE;
+  if (!$loaded) {
+    module_load_include('inc', 'transliteration');
+    $loaded = TRUE;
+  }
+  return transliteration_process($text, $unknown, $source_langcode);
 }
 
 /**
  * Implementation of hook_init().
  *
- * Transliterate and clean the names of files currently being uploaded.
+ * Sanitize file names during upload.
  */
 function transliteration_init() {
-  if (!empty($_FILES['files'])) {
-    require_once (drupal_get_path('module', 'transliteration') . '/transliteration.inc');
-
+  if (!empty($_FILES['files']) && variable_get('transliteration_file_uploads', TRUE)) {
+    // Figure out language, which is available in $_POST['language'] for node
+    // forms.
     $langcode = NULL;
     if (!empty($_POST['language'])) {
       $languages = language_list();
-      $langcode = isset($languages[$_POST['language']]) ? $_POST['language'] : NULL;
+      if (isset($languages[$_POST['language']])) {
+        $langcode = $_POST['language'];
+      }
     }
     foreach ($_FILES['files']['name'] as $field => $filename) {
+      // Keep a copy of the unaltered file name.
+      $_FILES['files']['orig_name'][$field] = $filename;
       $_FILES['files']['name'][$field] = transliteration_clean_filename($filename, $langcode);
     }
   }

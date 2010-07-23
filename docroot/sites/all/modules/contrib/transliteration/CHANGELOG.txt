@@ -1,6 +1,24 @@
-// $Id: CHANGELOG.txt,v 1.4.2.9 2009/06/09 18:44:16 smk Exp $
+// $Id: CHANGELOG.txt,v 1.11.2.5 2010/03/15 06:41:30 smk Exp $
 
-Transliteration 6.x-2.x, xxxx-xx-xx
+Transliteration 6.x-3.x, xxxx-xx-xx
+-----------------------------------
+by smk-ka: More accurate detection of file names requiring retroactive
+  transliteration. Removed support for MS SQL due to missing regexp support.
+by smk-ka: Added admin UI for settings and retroactive file name
+  transliteration.
+by smk-ka: New developer-friendly transliteration data file layout.
+by smk-ka: Lowered memory footprint of replacement function.
+#487550 by viadimezzo: Added sz ligature transliteration to German.
+#494234 by yngens: Added Kyrgyz transliteration.
+#586816 by smk-ka: Keep a copy of the unaltered file name in
+  $_FILES['files'][$name]['orig_name'].
+by smk-ka: Moved transliteration_clean_filename() to main module.
+by smk-ka: Reverted the behavior of transliteration_clean_filename() to only
+  accept file names without a path.
+by smk-ka: Updated documentation.
+
+
+Transliteration 6.x-2.1, 2009-06-09
 -----------------------------------
 #199660 by smk-ka: Added a constant to disallow converting pre-existing
   filenames by default.

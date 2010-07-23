@@ -1,21 +1,21 @@
 <?php
-// $Id: xfb.php,v 1.1.8.1 2008/06/12 20:34:32 smk Exp $
+// $Id: xfb.php,v 1.3 2009/06/09 19:07:06 smk Exp $
 
-return array(
-  'en' => array('ff', 'fi', 'fl', 'ffi', 'ffl', 'st', 'st', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-    NULL, NULL, NULL, 'mn', 'me', 'mi', 'vn', 'mkh', NULL, NULL, NULL, NULL, NULL, 'yi', '', 'ay',
-    '`', '', 'd', 'h', 'k', 'l', 'm', 'm', 't', '+', 'sh', 's', 'sh', 's', 'a', 'a',
-    '', 'b', 'g', 'd', 'h', 'v', 'z', NULL, 't', 'y', 'k', 'k', 'l', NULL, 'l', NULL,
-    'n', 'n', NULL, 'p', 'p', NULL, 'ts', 'ts', 'r', 'sh', 't', 'vo', 'b', 'k', 'p', 'l',
-    '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-    '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-    '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-    '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-    '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-    '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-    '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-    NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-    NULL, NULL, NULL, '', '', '', '', '', '', '', '', '', '', '', '', '',
-    '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-    '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''),
+$base = array(
+  0x00 => 'ff', 'fi', 'fl', 'ffi', 'ffl', 'st', 'st', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+  0x10 => NULL, NULL, NULL, 'mn', 'me', 'mi', 'vn', 'mkh', NULL, NULL, NULL, NULL, NULL, 'yi', '', 'ay',
+  0x20 => '`', '', 'd', 'h', 'k', 'l', 'm', 'm', 't', '+', 'sh', 's', 'sh', 's', 'a', 'a',
+  0x30 => '', 'b', 'g', 'd', 'h', 'v', 'z', NULL, 't', 'y', 'k', 'k', 'l', NULL, 'l', NULL,
+  0x40 => 'n', 'n', NULL, 'p', 'p', NULL, 'ts', 'ts', 'r', 'sh', 't', 'vo', 'b', 'k', 'p', 'l',
+  0x50 => '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+  0x60 => '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+  0x70 => '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+  0x80 => '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+  0x90 => '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+  0xA0 => '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+  0xB0 => '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+  0xC0 => NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+  0xD0 => NULL, NULL, NULL, '', '', '', '', '', '', '', '', '', '', '', '', '',
+  0xE0 => '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+  0xF0 => '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
 );

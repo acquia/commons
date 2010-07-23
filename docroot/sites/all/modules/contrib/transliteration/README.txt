@@ -1,10 +1,9 @@
-﻿/* $Id: README.txt,v 1.4.4.2 2009/06/09 18:44:16 smk Exp $ */
+﻿/* $Id: README.txt,v 1.9.2.3 2010/03/15 06:37:58 smk Exp $ */
 
 -- SUMMARY --
 
-The purpose of this module is to provide a central transliteration service for
-other Drupal modules, as well as sanitizing file names while uploading files
-to Drupal.
+Provides a central transliteration service to other Drupal modules, and
+sanitizes file names while uploading.
 
 For a full description visit the project page:
   http://drupal.org/project/transliteration
@@ -14,49 +13,62 @@ Bug reports, feature suggestions and latest developments:
 
 -- INSTALLATION --
 
-1. Copy the transliteration module to your modules directory
+1. Install as usual, see http://drupal.org/node/70151 for further information.
 
-2. If you are installing to an existing Drupal site, you might want to enable
-   retroactive transliteration during installation of this module. This will
-   update all file names containing non-ASCII characters. However, if you have
-   hard-coded links in your contents these will be broken and require manual
-   fixing. Therefore you have to manually enable this feature by editing
-   transliteration.install and change the following line at the top of the file:
+2. If you are installing to an existing Drupal site, you might want to fix
+   existing file names after installation, which will update all file names
+   containing non-ASCII characters. However, if you have manually entered links
+   to those files in any contents, these links will break since the original
+   files are renamed. Therefore it is a good idea to test the conversion
+   first on a copy of your web site. You'll find the retroactive conversion at
+   Site configuration >> File system >> Transliteration.
 
-     define('TRANSLITERATION_RETROACTIVE', FALSE);
 
-   to
+-- CONFIGURATION --
 
-     define('TRANSLITERATION_RETROACTIVE', TRUE);
+This module doesn't require special permissions.
 
-   If you already installed the module and would like to execute retroactive
-   transliteration afterwards, you can rerun update.php and manually select
-   update #1.
+This module can be configured from the File system configuration page
+(Site configuration >> File system >> Settings).
 
-3. Enable the module on Site building > Modules.
+- Transliterate file names during upload: If you need more control over the
+  resulting file names you might want to disable this feature here and install
+  the FileField Paths module (http://drupal.org/project/filefield_paths)
+  instead.
 
-4. That's it. The names of all new uploaded files will now automatically be
-   transliterated and cleaned from non-ASCII characters.
+- Lowercase transliterated file names: It is recommended to enable this option
+  to prevent issues with case-insensitive file systems.
 
 
 -- 3RD PARTY INTEGRATION --
 
-Third party developers who are seeking an easy way to transliterate strings may
-use the transliteration_get() helper function:
+Third party developers seeking an easy way to transliterate text or file names
+may use transliteration functions as follows:
 
-if (module_exists('transliteration')) {
-  $transliterated = transliteration_get($string);
+if (function_exists('transliteration_get')) {
+  $transliterated = transliteration_get($text, $unknown, $source_langcode);
 }
 
-You might want to take a look at the PHPDoc for an explanation of additional
-function parameters.
+or, in case of file names:
+
+if (function_exists('transliteration_clean_filename')) {
+  $transliterated = transliteration_clean_filename($filename, $source_langcode);
+}
+
+Note that the optional $source_langcode parameter specifies the language code
+of the input. If the source language is not known at the time of transliter-
+ation, it is recommended to set this argument to the site default language:
+
+  $output = transliteration_get($text, '?', language_default('language'));
+
+Otherwise the current display language will be used, which might produce
+inconsistent results.
 
 
 -- LANGUAGE SPECIFIC REPLACEMENTS --
 
-This module uses transliteration data collected from various sources which might
-be incomplete or inaccurate for your specific language. Therefore,
-transliteration supports language specific alterations to the basic replacements. The following guide explains how to add them:
+This module supports language specific variations in addition to the basic
+transliteration replacements. The following guide explains how to add them:
 
 1. First find the Unicode character code you want to replace. As an example,
    we'll be adding a custom transliteration for the cyrillic character 'г'
@@ -72,10 +84,10 @@ transliteration supports language specific alterations to the basic replacements
    additional language-specific variants. To add our custom replacement, we need
    to do two things: first, we need to create a new transliteration variant
    for Azerbaijani since it doesn't exist yet, and second, we need to map the
-   last two digits of the hexadecimal character code (33) to the desired output.
-   To do this, add a new key right before the last closing bracket:
+   last two digits of the hexadecimal character code (33) to the desired output
+   string:
 
-     'az' => array(0x33 => 'q'),
+     $variant['az'] = array(0x33 => 'q');
 
    (see http://people.w3.org/rishida/names/languages.html for a list of
    language codes).
@@ -84,21 +96,17 @@ transliteration supports language specific alterations to the basic replacements
 
 Also take a look at data/x00.php which already contains a bunch of language
 specific replacements. If you think your overrides are useful for others please
-create and file a patch at http://drupal.org/project/issues/transliteration.
+file a patch at http://drupal.org/project/issues/transliteration.
 
 
 -- CREDITS --
 
 Authors:
-* Stefan M. Kudwien (smk-ka) - dev@unleashedmind.com
-* Daniel F. Kudwien (sun) - dev@unleashedmind.com
+* Stefan M. Kudwien (smk-ka) - http://drupal.org/user/48898
+* Daniel F. Kudwien (sun) - http://drupal.org/user/54136
 
-This project has been sponsored by UNLEASHED MIND
-Specialized in consulting and planning of Drupal powered sites, UNLEASHED
-MIND offers installation, development, theming, customization, and hosting
-to get you started. Visit http://www.unleashedmind.com for more information.
-
-UTF-8 normalization uses MediaWiki's UtfNormal.php (http://www.mediawiki.org)
-and transliteration is based on CPAN's Text::Unidecode library
+UTF-8 normalization is based on UtfNormal.php from MediaWiki
+(http://www.mediawiki.org) and transliteration uses data from Sean M. Burke's
+Text::Unidecode CPAN module
 (http://search.cpan.org/~sburke/Text-Unidecode-0.04/lib/Text/Unidecode.pm).
 
