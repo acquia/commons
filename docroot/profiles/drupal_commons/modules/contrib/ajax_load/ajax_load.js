@@ -1,23 +1,42 @@
-// $Id: ajax_load.js,v 1.11 2009/09/20 14:22:29 markuspetrux Exp $
+// $Id: ajax_load.js,v 1.13 2010/01/21 07:24:44 markuspetrux Exp $
 
 (function ($) {
 
-Drupal.AjaxLoad = Drupal.AjaxLoad || { externalScripts: [], loadPending: [] };
+Drupal.AjaxLoad = Drupal.AjaxLoad || { externalStyles: [], externalScripts: [], loadPending: [] };
 
 /**
- * Load JavaScript and CSS files and data. 
+ * Load JavaScript and CSS files and data.
  */
 Drupal.AjaxLoad.loadFiles = function (target, response) {
-  // Handle scripts.
+  // Initialize the list of currently loaded external stylesheets.
+  if (!Drupal.AjaxLoad.externalStyles.length) {
+    if (Drupal.settings.AjaxLoad && Drupal.settings.AjaxLoad['css']) {
+      $.each(Drupal.settings.AjaxLoad['css'], function(i, path) {
+        Drupal.AjaxLoad.externalStyles.push(path);
+      });
+    }
+    else {
+      $('link[type="text/css"]').each(function() {
+        Drupal.AjaxLoad.externalStyles.push($(this).attr('href'));
+      });
+    }
+  }
 
   // Initialize the list of currently loaded external scripts.
-  if (Drupal.AjaxLoad.externalScripts.length < 1) {
-    $('script[src]').each(function() {
-      Drupal.AjaxLoad.externalScripts.push($(this).attr('src'));
-    });
+  if (!Drupal.AjaxLoad.externalScripts.length) {
+    if (Drupal.settings.AjaxLoad && Drupal.settings.AjaxLoad['scripts']) {
+      $.each(Drupal.settings.AjaxLoad['scripts'], function(i, path) {
+        Drupal.AjaxLoad.externalScripts.push(path);
+      });
+    }
+    else {
+      $('script[src]').each(function() {
+        Drupal.AjaxLoad.externalScripts.push($(this).attr('src'));
+      });
+    }
   }
-  // See if we have any settings to extend. Do this first so that behaviors
-  // can access the new settings easily.
+
+  // Handle scripts. Do this first so that behaviors can access them easily.
   if (response.scripts) {
     // Each Ajax operation needs its own counter.
     var index = Drupal.AjaxLoad.loadPending.length;
@@ -58,16 +77,26 @@ Drupal.AjaxLoad.loadFiles = function (target, response) {
       Drupal.AjaxLoad.loadInline(response);
     }
   }
+
+  // Handle stylesheets.
   if (response.css) {
-    // Handle stylesheets.
     var types = ['module', 'theme'];
     $.each(response.css, function (media, files) {
       $.each(types, function (i, type) {
         if (files[type]) {
           $.each(files[type], function (src, data) {
+            // Load stylesheets.
             src = Drupal.settings.basePath + src;
             // Test if the stylesheet already exists.
-            if (!$('link[href*=' + src + ']').size()) {
+            var found = false;
+            for (var j = 0; j < Drupal.AjaxLoad.externalStyles.length; j++) {
+              if (Drupal.AjaxLoad.externalStyles[j].indexOf(src) == 0) {
+                found = true;
+                break;
+              }
+            }
+            if (!found) {
+              Drupal.AjaxLoad.externalStyles.push(src);
               $('<link type="text/css" rel="stylesheet" media="' + media + '" href="' + src + '" />').appendTo('head');
             }
           });
@@ -78,7 +107,7 @@ Drupal.AjaxLoad.loadFiles = function (target, response) {
 };
 
 /**
- * When all scripts have loaded, attach behaviors. 
+ * Parse inline scripts after all external scripts have loaded.
  */
 Drupal.AjaxLoad.loadInline = function(response) {
   // Handle inline scripts.
@@ -93,7 +122,7 @@ Drupal.AjaxLoad.loadInline = function(response) {
 };
 
 /**
- * When all scripts have loaded, attach behaviors. 
+ * When all scripts have loaded, attach behaviors.
  */
 Drupal.AjaxLoad.loadComplete = function(index, target, response) {
   Drupal.AjaxLoad.loadPending[index]--;

@@ -1,5 +1,5 @@
 <?php
-// $Id: ajax_load.module,v 1.5 2009/03/31 01:34:25 markuspetrux Exp $
+// $Id: ajax_load.module,v 1.6 2010/01/21 07:18:48 markuspetrux Exp $
 
 /**
  * @file
@@ -13,6 +13,59 @@ function ajax_load_init() {
   // Add on every page because we can't know in advance if an AJAX method
   // will be called.
   drupal_add_js(drupal_get_path('module', 'ajax_load') .'/ajax_load.js');
+}
+
+/**
+ * Implementation of hook_theme_registry_alter().
+ */
+function ajax_load_theme_registry_alter(&$theme_registry) {
+  // Prepend a template preprocess function to page.tpl.php.
+  array_unshift($theme_registry['page']['preprocess functions'], '_ajax_load_preprocess_page');
+}
+
+/**
+ * Template preprocess function for page.tpl.php.
+ */
+function _ajax_load_preprocess_page(&$variables) {
+  $base_path = base_path();
+  $resources = ajax_data_get_data();
+  $js_settings = array();
+
+  // Build the list of css files on the page when compression is enabled.
+  if (variable_get('preprocess_css', FALSE)) {
+    $files = array();
+    foreach ($resources['css'] as $data) {
+      foreach ($data as $paths) {
+        foreach (array_keys($paths) as $path) {
+          $files[$base_path . $path] = 1;
+        }
+      }
+    }
+    if (!empty($files)) {
+      $js_settings['css'] = array_keys($files);
+    }
+  }
+
+  // Build the list of javascript files on the page when compression is enabled.
+  if (variable_get('preprocess_js', FALSE)) {
+    $files = array();
+    foreach ($resources['scripts'] as $type => $paths) {
+      if (in_array($type, array('core', 'module', 'theme'))) {
+        foreach (array_keys($paths) as $path) {
+          $files[$base_path . $path] = 1;
+        }
+      }
+    }
+    if (!empty($files)) {
+      $js_settings['scripts'] = array_keys($files);
+    }
+  }
+
+  // Let the client-side know which individual files are present on the page
+  // when compression is enabled.
+  if (!empty($js_settings)) {
+    drupal_add_js(array('AjaxLoad' => $js_settings), 'setting');
+  }
 }
 
 /**
