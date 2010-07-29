@@ -64,7 +64,9 @@ function user_terms_user($op, &$edit, &$account, $category = NULL) {
     // The user account registration form is about to be displayed. 
     // The module should present the form elements it wishes to inject into the form.
     case 'register':
-      return $display ? user_terms_form_profile($edit, $account, $category, TRUE) : '';
+      // This should become optional in the next version
+      // Let's just remove it for now      
+      //return $display ? user_terms_form_profile($edit, $account, $category, TRUE) : '';
 
     // The user account is being added. 
     // The module should save its custom additions to the user object into the 
