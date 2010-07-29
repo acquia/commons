@@ -690,9 +690,6 @@ function drupal_commons_config_vars() {
   // Force anonymous users to login
   variable_set('commons_force_login', 1);
   
-  // Redirect login to the home page
-  variable_set('commons_redirect_login_home', 1);
-  
   // Tell getid3 where the library is
   variable_set('getid3_path', 'profiles/drupal_commons/libraries/getid3/getid3');
   
@@ -702,6 +699,9 @@ function drupal_commons_config_vars() {
   // Preprocess JS and CSS files
   variable_set('preprocess_css', 1);
   variable_set('preprocess_js', 1);
+  
+  // Keep errors in the log and off the screen
+  variable_set('error_level', 0);
 }
 
 // Various actions needed to clean up after the installation
