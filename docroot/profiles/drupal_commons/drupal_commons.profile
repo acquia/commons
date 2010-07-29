@@ -693,6 +693,9 @@ function drupal_commons_config_vars() {
   // Redirect login to the home page
   variable_set('commons_redirect_login_home', 1);
   
+  // Tell getid3 where the library is
+  variable_set('getid3_path', 'profiles/drupal_commons/libraries/getid3/getid3');
+  
   // Show large amount of tags on tag cloud page
   variable_set('tagadelic_page_amount', 500);
   
