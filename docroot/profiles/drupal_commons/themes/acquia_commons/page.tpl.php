@@ -158,7 +158,8 @@
             <?php print theme('grid_block', $footer_message, 'footer-message-text'); ?>
             <div id="acquia-footer-message">
             <?php global $theme_path; global $base_url;?>
-            <a href="http://acquia.com/drupalcommons" title="Powered by Drupal Commons"><img src="<?php print($base_url.'/'.$theme_path); ?>/images/commons_footer_logo.png" title="Powered by Drupal Commons" alt="Drupal Commons by Acquia" /></a>
+            <a href="http://commons.acquia.com" title="Drupal Commons social business software">
+<img src="<?php print($base_url.'/'.$theme_path); ?>/images/commons_footer_logo.png" title="Drupal Commons social business software" alt="Drupal Commons social business software" /></a>
             </div><!-- /acquia-footer-message-->
                         <div id="fusion-footer-message">Theme by 
             <a href="http://www.topnotchthemes.com" title="Drupal Themes by TopNotchThemes">TopNotchThemes</a>, powered by <a href="http://fusiondrupalthemes.com" title="Premium Drupal themes powered by Fusion">Fusion</a>.
