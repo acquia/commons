@@ -589,8 +589,6 @@ class view extends views_db_object {
       $this->exposed_widgets = $this->render_exposed_form();
       if (form_set_error() || !empty($this->build_info['abort'])) {
         $this->built = TRUE;
-        // Don't execute the query, but rendering will still be executed to display the empty text.
-        $this->executed = TRUE;
         return empty($this->build_info['fail']);
       }
     }
