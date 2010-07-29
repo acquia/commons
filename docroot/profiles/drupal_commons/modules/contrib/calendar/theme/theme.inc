@@ -12,8 +12,8 @@ function template_preprocess_calendar_main(&$vars) {
   $handler  = $view->style_plugin;
 
   $vars['display_type'] = $view->date_info->granularity;
-  $vars['min_date_formatted'] = date_format($view->date_info->min_date, DATE_FORMAT_DATETIME);
-  $vars['max_date_formatted'] = date_format($view->date_info->max_date, DATE_FORMAT_DATETIME);
+  $vars['min_date_formatted'] = $view->date_info->min_date ? date_format($view->date_info->min_date, DATE_FORMAT_DATETIME) : '';
+  $vars['max_date_formatted'] = $view->date_info->end_date ? date_format($view->date_info->max_date, DATE_FORMAT_DATETIME) : '';
   $view->date_info->mini = isset($view->date_info->mini) ? $view->date_info->mini : $view->date_info->granularity == 'year';
   
   // Create the links to other displays.
