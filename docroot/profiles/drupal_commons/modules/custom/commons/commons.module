@@ -509,6 +509,10 @@ function commons_set_breadcrumb($path) {
   $path = explode('/', $path);
   
   switch ($path[0]) {
+    case 'taxonomy':
+      $breadcrumb[] = l(t('Tags'), 'tagadelic');
+      break;
+      
     case 'content':
       if ($path[1]) {
         $breadcrumb[] = l(t('Community'), 'groups'); 
