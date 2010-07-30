@@ -41,6 +41,9 @@ define('DRUPAL_COMMONS_POINTS_NODE', 5);
 // Define the default point amount for posting a comment
 define('DRUPAL_COMMONS_POINTS_COMMENT', 2);
 
+// Define the default point amount for posting a shout
+define('DRUPAL_COMMONS_POINTS_SHOUT', 1);
+
 // Define the singular name of the user relationship
 define('DRUPAL_COMMONS_RELATIONSHIP_SINGULAR', 'Friend');
 
@@ -95,9 +98,6 @@ function drupal_commons_profile_modules() {
     // Editor
     'wysiwyg', 'better_formats',
     
-    // Shoutbox
-    'shoutbox', 'shoutbox_group',
-    
     // Messaging
     'messaging', 'messaging_mail', 'messaging_simple',
     
@@ -109,6 +109,9 @@ function drupal_commons_profile_modules() {
     'userpoints', 'userpoints_nc', 'wikitools', 'admin_menu', 'ajax_load', 'editablefields', 
     'calendar', 'jcalendar', 'diff', 'freelinking', 'flag', 'pathauto', 'jquery_ui', 'insert',
     'vertical_tabs', 'transliteration', 'password_policy',
+    
+    // Shoutbox
+    'shoutbox', 'shoutbox_group', 'shoutbox_points',
     
     // Heartbeat
     'heartbeat', 'heartbeat_views', 'hrules', 'friendlist_activity', 'flag_heartbeat', 'og_activity',
@@ -680,6 +683,7 @@ function drupal_commons_config_vars() {
   variable_set('userpoints_post_group', DRUPAL_COMMONS_POINTS_NODE);
   variable_set('userpoints_post_wiki', DRUPAL_COMMONS_POINTS_NODE);
   variable_set('userpoints_post_comment', DRUPAL_COMMONS_POINTS_COMMENT);
+  variable_set('shoutbox_points_amount', DRUPAL_COMMONS_POINTS_SHOUT);
   
   // Some Shoutbox tweaks
   variable_set('shoutbox_filter_format', 5);

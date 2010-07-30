@@ -462,7 +462,7 @@ function commons_init() {
     drupal_goto('users');
   }
   
-  // Temporary fix for a ctools bug causing the page title
+  // Temporary fix for a ctools (1.6) bug causing the page title
   // on searches to change
   if (arg(0) == 'search') {
     drupal_set_title(t('Search')); 
