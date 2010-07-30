@@ -462,6 +462,12 @@ function commons_init() {
     drupal_goto('users');
   }
   
+  // Temporary fix for a ctools bug causing the page title
+  // on searches to change
+  if (arg(0) == 'search') {
+    drupal_set_title(t('Search')); 
+  }
+  
   // Notify group admins of any pending requests on group home page
   if (arg(0) == 'node' && is_numeric(arg(1)) && !arg(2)) {
     // Load the current user
