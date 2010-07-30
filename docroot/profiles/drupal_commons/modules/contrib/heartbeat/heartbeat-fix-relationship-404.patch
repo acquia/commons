@@ -1,0 +1,19 @@
+--- includes/heartbeatparser.inc	2010-07-29 17:09:59.000000000 -0400
++++ includes/heartbeatparser.inc.new	2010-07-30 13:11:54.000000000 -0400
+@@ -86,9 +86,6 @@ class heartbeatParser {
+           if ($user->uid == $uid && isset($relations[$rel_uid . '-' . $uid])) {
+             $duplicates[] = $relations[$rel_uid . '-' . $uid]['key'];
+           }
+-          elseif ($user->uid == $rel_uid) {
+-            $duplicates[] = $relationship['key'];
+-          }
+           elseif (isset($relations[$rel_uid . '-' . $uid]) && $relationship['duplicate']) {
+             $duplicates[] = $relations[$rel_uid . '-' . $uid]['key'];
+           }
+@@ -407,4 +404,4 @@ class heartbeatParser {
+   }
+ }
+ 
+-// eof
+\ No newline at end of file
++// eof
