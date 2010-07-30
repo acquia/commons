@@ -1,5 +1,5 @@
 <?php
-//$Id: shoutbox.module,v 1.31.2.9 2010/07/14 17:49:39 mikestefff Exp $
+//$Id: shoutbox.module,v 1.31.2.14 2010/07/30 13:47:00 mikestefff Exp $
 
 /*
  * @file
@@ -177,14 +177,14 @@ function shoutbox_perm() {
 /*
  * Centralized function for shout deletion (for hook purposes)
  *
- * @param $shout_id
- *     Shout ID
+ * @param $shout
+ *     A shout object
  */
-function shoutbox_delete_shout($shout_id) {
+function shoutbox_delete_shout($shout) {
   //Delete shout
-  db_query("DELETE FROM {shoutbox} WHERE shout_id = %d", $shout_id);
+  db_query("DELETE FROM {shoutbox} WHERE shout_id = %d", $shout->shout_id);
   //Alert other modules
-  module_invoke_all('shoutbox_delete_shout', $shout_id);
+  module_invoke_all('shoutbox', 'delete', $shout);
 }
 
 //CALLBACKS.
@@ -403,7 +403,7 @@ function theme_shoutbox_post($shout, $links = array(), $alter_row_color=TRUE) {
   $user_name = shoutbox_get_user_link($shout);
 
   //Generate title attribute
-  $title = t('Posted ' . format_date($shout->created, 'custom', 'm/d/y') . ' at ' . format_date($shout->created, 'custom', 'h:ia') . ' by ' . $shout->nick);
+  $title = t('Posted !date at !time by !name', array('!date' => format_date($shout->created, 'custom', 'm/d/y'), '!time' => format_date($shout->created, 'custom', 'h:ia'), '!name' => $shout->nick));
   
   $shout_classes = "shoutbox-msg ";
   if ($alter_row_color) {
@@ -413,7 +413,7 @@ function theme_shoutbox_post($shout, $links = array(), $alter_row_color=TRUE) {
   //Check for moderation
   if ($shout->moderate == 1) {
     $shout_classes .= "shoutbox-unpublished ";
-    $shout->shout .= t("(This shout is waiting for approval by a moderator.)");
+    $shout->shout .= '(' . t('This shout is waiting for approval by a moderator.') . ')';
   }
   
   //Check for specific user class
@@ -424,7 +424,7 @@ function theme_shoutbox_post($shout, $links = array(), $alter_row_color=TRUE) {
     $user_class = ' shoutbox-anonymous-user';  
   }
   
-  return "<div class=\" $shout_classes \" title=\"$title\"><div class=\"shoutbox-admin-links\">$img_links</div><span class=\"shoutbox-user-name $user_class\">$user_name</span>: $shout->shout<span class=\"shoutbox-msg-time\">" . format_date($shout->created, 'custom', 'M jS g:ia') . "</span></div>\n";
+  return "<div class=\" $shout_classes \" title=\"$title\"><div class=\"shoutbox-admin-links\">$img_links</div><span class=\"shoutbox-user-name $user_class\">$user_name</span>: $shout->shout<span class=\"shoutbox-msg-time\">" . format_date($shout->created, 'short') . "</span></div>\n";
 }
 
 /*
@@ -446,7 +446,7 @@ function theme_shoutbox_page($content) {
  *   String containing HTML formatted access denied message.
  */
 function theme_shoutbox_post_forbidden() {
-  return '<div class="shoutbox-msg">' . t("You're not permitted to post shouts.") . '</div>';
+  return '<div class="shoutbox-msg">' . t('You\'re not permitted to post shouts.') . '</div>';
 }
 
 /*
@@ -468,7 +468,7 @@ function theme_shoutbox_block_page_link($page_path) {
 function theme_shoutbox_interval_message($interval) {
   //Check if autoupdate is enabled
   if ($interval) {
-    return '<div class="interval-msg-page">' . t('Shouts automatically update every ' . $interval . ' seconds') . '</div>';  
+    return '<div class="interval-msg-page">' . t('Shouts automatically update every !interval seconds', array('!interval' => $interval)) . '</div>';  
   }  
 }
 
@@ -723,6 +723,7 @@ function shoutbox_edit_form(&$form_state, $shout) {
  *   The shout id of the shout being edited.
  */
 function shoutbox_delete_form(&$form_state, $shout) {
+  theme('shoutbox_external_files');
   $form['shout_id'] = array(
     '#type' => 'value',
     '#value' => $shout->shout_id,
@@ -739,6 +740,7 @@ function shoutbox_delete_form(&$form_state, $shout) {
  *   The shout id of the shout being published.
  */
 function shoutbox_publish_form(&$form_state, $shout) {
+  theme('shoutbox_external_files');
   $form['shout_id'] = array(
     '#type' => 'value',
     '#value' => $shout->shout_id,
@@ -755,6 +757,7 @@ function shoutbox_publish_form(&$form_state, $shout) {
  *   The shout id of the shout being unpublished.
  */
 function shoutbox_unpublish_form(&$form_state, $shout) {
+  theme('shoutbox_external_files');
   $form['shout_id'] = array(
     '#type' => 'value',
     '#value' => $shout->shout_id,
@@ -797,7 +800,7 @@ function shoutbox_add_form_submit($form, &$form_state) {
   $shout = db_fetch_object(db_query("SELECT * FROM {shoutbox} WHERE uid = %d AND shout = '%s' AND created = %d AND sid = '%s'", $user->uid, $form_state['values']['message'], $created, session_id()) );
 
   //Alert other modules about the new shout via hook
-  module_invoke_all('shoutbox_shout_added', $shout, $form_state);
+  module_invoke_all('shoutbox', 'insert', $shout, $form_state);
   
   //If form was not submitted via javascript
   //set a display message and redirect the user
@@ -853,7 +856,8 @@ function shoutbox_edit_form_submit($form, &$form_state) {
 function shoutbox_delete_form_submit($form, &$form_state) {
   if ($form_state['clicked_button']['#value'] == t('Confirm')) {
     if (is_numeric($form_state['values']['shout_id'])) {
-      shoutbox_delete_shout($form_state['values']['shout_id']);
+      $shout = shoutbox_load($form_state['values']['shout_id']);
+      shoutbox_delete_shout($shout);
       drupal_set_message(t('Your shout was deleted.'));
       $form_state['redirect'] = '';
     }

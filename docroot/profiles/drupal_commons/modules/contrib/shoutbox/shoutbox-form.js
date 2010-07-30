@@ -1,4 +1,4 @@
-// $Id: shoutbox-form.js,v 1.11.2.4 2010/07/16 00:36:48 mikestefff Exp $
+// $Id: shoutbox-form.js,v 1.11.2.5 2010/07/23 02:40:17 mikestefff Exp $
 
 Drupal.shoutbox = {}
 Drupal.behaviors.shoutbox = function(context) {
@@ -16,7 +16,7 @@ Drupal.behaviors.shoutbox = function(context) {
 Drupal.shoutbox.attachShoutAddForm = function () {
   // initial color to use for first post
   // tell server what color to use
-  $("input[@name='nextcolor']").val(Drupal.settings.shoutbox.color);	
+  $("input[name='nextcolor']").val(Drupal.settings.shoutbox.color);	
   var options = {
 	  resetForm: true,
 	  beforeSubmit: Drupal.shoutbox.validate,
@@ -54,7 +54,7 @@ Drupal.shoutbox.success = function (responseText) {
   }
     
   // tell server what color to use
-  $("input[@name='nextcolor']").val(Drupal.settings.shoutbox.color);		
+  $("input[name='nextcolor']").val(Drupal.settings.shoutbox.color);		
   // enable submit button 
   $('#shoutbox-throbber').hide();
   $('input#edit-0').show();

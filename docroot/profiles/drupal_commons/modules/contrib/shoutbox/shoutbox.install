@@ -1,5 +1,5 @@
 <?php
-// $Id: shoutbox.install,v 1.4.4.3 2010/07/02 22:14:00 mikestefff Exp $
+// $Id: shoutbox.install,v 1.4.4.4 2010/07/22 13:18:43 mikestefff Exp $
 
 /**
  * @file
@@ -23,7 +23,7 @@ function shoutbox_schema() {
       'moderate' => array('type' => 'int', 'not null' => TRUE, 'default' => 0, 'description' => t('The moderation id.')),
       'created' => array('type' => 'int', 'not null' => TRUE, 'default' => 0, 'description' => t('Creation date.')),
       'changed' => array('type' => 'int', 'not null' => TRUE, 'default' => 0, 'description' => t('Last updated date.')),
-      'hostname' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'description' => t('The hostname where the post originated.')),
+      'hostname' => array('type' => 'varchar', 'length' => 255, 'default' => 'localhost', 'not null' => TRUE, 'description' => t('The hostname where the post originated.')),
       'sid' =>  array('type' => 'varchar', 'length' => 64, 'not null' => TRUE, 'default' => '', 'description' => t('Session id of the current session.')),
     ),
     'primary key' => array('shout_id'),

@@ -1,5 +1,5 @@
 <?php
-//  $Id: shoutbox_group.module,v 1.1.2.5 2010/06/18 14:19:21 mikestefff Exp $
+//  $Id: shoutbox_group.module,v 1.1.2.7 2010/07/30 13:47:00 mikestefff Exp $
 
 /*
  * Implementation of hook_perm().
@@ -82,28 +82,12 @@ function shoutbox_group_page($group_id) {
   drupal_set_breadcrumb(array(
       l(t('Home'), '<front>'),
       l(t('Groups'), 'og'),
-      l($group->title, 'node/' . $group->nid),
-      t('Shoutbox')
+      l($group->title, 'node/' . $group->nid)
     )
   );
   
   // Return normal shoutbox page
   return shoutbox_page_view();
-}
-
-/*
- * Implementation of hook_shoutbox_shout_added()
- * 
- * @param $shout
- *    The $shout object
- * @param $form_state
- *     The state of the shout submission form
- */
-function shoutbox_group_shoutbox_shout_added($shout, $form_state) {
-  // Determine if the shout was added to a group
-  if ($group_id = $form_state['values']['group_id']) {
-    db_query("INSERT INTO {shoutbox_groups} (shout_id, nid) VALUES (%d, %d)", $shout->shout_id, $group_id);
-  }
 }
 
 /*
@@ -176,13 +160,21 @@ function shoutbox_group_shoutbox_get_shouts($show_amount, $pager) {
 }
 
 /*
- * Implementation of hook_shoutbox_delete_shout()
- * 
- * @param $shout_id
- *     The shout ID
+ * Implementation of hook_shoutbox()
  */
-function shoutbox_group_shoutbox_delete_shout($shout_id) {
-  db_query("DELETE FROM {shoutbox_groups} WHERE shout_id = %d", $shout_id);  
+function shoutbox_group_shoutbox($op, $shout, $form_state) {
+  switch ($op) {
+    case 'insert':
+      // Determine if the shout was added to a group
+      if ($group_id = $form_state['values']['group_id']) {
+        db_query("INSERT INTO {shoutbox_groups} (shout_id, nid) VALUES (%d, %d)", $shout->shout_id, $group_id);
+      }
+      break;
+      
+    case 'delete':
+      db_query("DELETE FROM {shoutbox_groups} WHERE shout_id = %d", $shout->shout_id);  
+      break;
+  }
 }
 
 // Generate link path for shoutbox block footer
