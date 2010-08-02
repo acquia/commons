@@ -2869,7 +2869,7 @@ function _commons_core_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Wiki Posts');
+  $handler->override_option('title', 'Wiki posts');
   $handler->override_option('header', '<div class="addnew"><?php print l(t(\'Add a new wiki\'), \'node/add/wiki\'); ?></div>');
   $handler->override_option('header_format', '3');
   $handler->override_option('header_empty', 1);
