@@ -1,4 +1,5 @@
 <?php
+// $Id$
 
 /******* CHART BUILDING FUNCTIONS *******/
 
@@ -59,7 +60,7 @@ function quant_override_title(&$chart, $quant, $data) {
   }
 }
 
-function quant_load_palette() {
+function quant_load_palette($random = FALSE) {
   $palette = variable_get('quant_palette', array());
   
   if (!$palette) {
@@ -68,14 +69,16 @@ function quant_load_palette() {
   }
   
   // Random
-  shuffle($palette);
+  if ($random) {
+    shuffle($palette);
+  }
   
   return $palette;
 }
 
 function quant_chart_add_color(&$chart, $quant) {
   // Load the color palette
-  $palette = quant_load_palette(); 
+  $palette = quant_load_palette(TRUE); 
   
   // If quant is singular, add a random color
   if ($quant->dataType == 'single') {

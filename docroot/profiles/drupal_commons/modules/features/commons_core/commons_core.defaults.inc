@@ -5413,6 +5413,13 @@ function _commons_core_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_taxonomy_2_pattern';
+  $strongarm->value = 'tag/[catpath-raw]';
+
+  $export['pathauto_taxonomy_2_pattern'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'pathauto_tracker_pattern';
   $strongarm->value = 'users/[user-raw]/track';
 

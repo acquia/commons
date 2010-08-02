@@ -1,4 +1,5 @@
 <?php
+// $Id$
 
 /*** FORMS ***/
 
@@ -7,13 +8,13 @@ function quant_time_form() {
   $form = array();
   
   $options = array(
-    '1_week' => t('1 Week'),
-    '2_weeks' => t('2 Weeks'),
-    '1_month' => t('1 Month'),
-    '3_months' => t('3 Months'),
-    '6_months' => t('6 Months'),
-    '1_year' => t('1 Year'),
-    '2_years' => t('2 Years'),
+    '1_week' => t('1 week'),
+    '2_weeks' => t('2 weeks'),
+    '1_month' => t('1 month'),
+    '3_months' => t('3 months'),
+    '6_months' => t('6 months'),
+    '1_year' => t('1 year'),
+    '2_years' => t('2 years'),
   );
   
   $period = filter_xss($_GET['period']);
@@ -71,20 +72,20 @@ function quant_admin_settings() {
   
   $form['display'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Display Settings'),
+    '#title' => t('Display settings'),
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
   );
   $form['display']['quant_visible'] = array(
     '#type' => 'checkboxes',
-    '#title' => t('Show analytics for The following site items'),
+    '#title' => t('Show analytics for the following site items'),
     '#default_value' => $default,
     '#options' => $options,
     '#description' => t('The checked objects will be shown on the analytics page.'),
   );
   $form['display']['quant_width'] = array(
     '#type' => 'textfield',
-    '#title' => t('Chart Width'),
+    '#title' => t('Chart width'),
     '#default_value' => variable_get('quant_width', 500),
     '#size' => 6,
     '#maxlength' => 4,
@@ -93,7 +94,7 @@ function quant_admin_settings() {
   );
   $form['display']['quant_height'] = array(
     '#type' => 'textfield',
-    '#title' => t('Chart Height'),
+    '#title' => t('Chart height'),
     '#default_value' => variable_get('quant_height', 200),
     '#size' => 6,
     '#maxlength' => 4,
@@ -106,7 +107,7 @@ function quant_admin_settings() {
   
   $form['color'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Color Settings'),
+    '#title' => t('Color settings'),
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
     '#description' => t('Specify the colors that the charts will be rendered in.'),

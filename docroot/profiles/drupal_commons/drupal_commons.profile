@@ -181,7 +181,7 @@ function drupal_commons_profile_task_list() {
  */
 function drupal_commons_profile_tasks(&$task, $url) {
   drupal_commons_build_directories();
-  drupal_commons_config_vocabulary();
+  drupal_commons_config_taxonomy();
   drupal_commons_config_profile();
   drupal_commons_config_flag();
   drupal_commons_config_menu();
@@ -192,7 +192,6 @@ function drupal_commons_profile_tasks(&$task, $url) {
   drupal_commons_config_wysiwyg();
   drupal_commons_config_ur();
   drupal_commons_config_heartbeat();
-  drupal_commons_config_pathauto();
   drupal_commons_config_ctools();
   drupal_commons_config_views();
   drupal_commons_config_theme();
@@ -201,7 +200,9 @@ function drupal_commons_profile_tasks(&$task, $url) {
   drupal_commons_cleanup();
 }
 
-// Create necessary directories
+/**
+ * Create necessary directories
+ */
 function drupal_commons_build_directories() {
   $dirs = array('ctools', 'ctools/css', 'pictures', 'imagecache', 'css', 'js');
   
@@ -211,8 +212,12 @@ function drupal_commons_build_directories() {
   }
 }
 
-// Add and configure vocabularies
-function drupal_commons_config_vocabulary() {
+/*
+ * Configure taxonomy
+ * 
+ * Add and configure vocabularies
+ */
+function drupal_commons_config_taxonomy() {
   // Add vocabulary for Userpoints.module
   $vocab = array(
     'name' => t(USERPOINTS_CATEGORY_NAME),
@@ -257,7 +262,11 @@ function drupal_commons_config_vocabulary() {
   db_query($sql, DRUPAL_COMMONS_TAG_ID, 'wiki'); 
 }
 
-// Add custom profile fields
+/**
+ * Configure profile
+ * 
+ * Add custom profile fields
+ */
 function drupal_commons_config_profile() {
   // Add custom profile fields
   $sql = "INSERT INTO {profile_fields} (title, name, explanation, category, type, weight, required, register, visibility, autocomplete) VALUES ('%s', '%s', '%s', '%s', '%s', %d, %d, %d, %d, %d)";
@@ -274,7 +283,9 @@ function drupal_commons_config_profile() {
   db_query($sql, t('Organization'), 'profile_organization', t('Which organization or department are you a part of?'), t('Work information'), 'textfield', -9, 0, 1, 2, 0);
 }
 
-// Configure flag
+/**
+ * Configure flag
+ */
 function drupal_commons_config_flag() {
   // Fetch bookmark flag ID
   $flag_id = db_result(db_query("SELECT fid FROM {flags} WHERE name = '%s'", 'bookmarks'));
@@ -290,12 +301,12 @@ function drupal_commons_config_flag() {
   db_query($sql, $flag_id, 'wiki');
 }
 
-// Configure menu
+/**
+ * Configure menu
+ * 
+ * Create additional primary menu items
+ */
 function drupal_commons_config_menu() {
-  /*
-   * Create additional primary menu items
-   */
-  
   // Create "Community" drop down first, so we can fetch the mlid
   $parent = array('menu_name' => 'primary-links', 'weight' => 3, 'link_path' => 'groups', 'link_title' => t(DRUPAL_COMMONS_COMMUNITY_MENU_DROPDOWN), 'expanded' => 1);
   menu_link_save($parent);
@@ -315,11 +326,11 @@ function drupal_commons_config_menu() {
     menu_link_save($link);
   } 
   
-  // Create "My Stuff" drop down first, so we can fetch the mlid
+  // Create "My stuff" drop down first, so we can fetch the mlid
   $parent = array('menu_name' => 'primary-links', 'weight' => 5, 'link_path' => 'user', 'link_title' => t(DRUPAL_COMMONS_USER_MENU_DROPDOWN), 'expanded' => 1);
   menu_link_save($parent);
   
-  // Childs of "My Stuff" menu
+  // Childs of "My stuff" menu
   $links = array();
   $links[] = array('menu_name' => 'primary-links', 'weight' => 0, 'link_path' => 'user', 'link_title' => t('My profile'), 'plid' => $parent['mlid']);
   $links[] = array('menu_name' => 'primary-links', 'weight' => 1, 'link_path' => 'og/my', 'link_title' => t('My groups'), 'plid' => $parent['mlid']);
@@ -333,12 +344,13 @@ function drupal_commons_config_menu() {
   } 
 }
 
-// Configure input filters
+/**
+ * Configure input filters
+ */
 function drupal_commons_config_filter() {
-  /*
-   * Force filter format and filter IDs
-   * Necessary because Drupal doesn't use machine names for everything
-   */
+  // Force filter format and filter IDs
+  // Necessary because Drupal doesn't use machine names for everything
+  
   // Filtered HTML
   db_query("UPDATE {filters} f INNER JOIN {filter_formats} ff ON f.format = ff.format SET f.format = 1 WHERE ff.name = 'Filtered HTML'");
   db_query("UPDATE {filter_formats} SET format = 1 WHERE name = 'Filtered HTML'");
@@ -394,11 +406,13 @@ function drupal_commons_config_filter() {
   db_query($sql, 2, 'freelinking', 0, 10);  // Full HTML
 }
 
-// Configure password policy
+/**
+ * Configure password policy
+ */
 function drupal_commons_config_password() {
   // Create a password policy
   $policy = array(
-    'alphanumeric' => 7,   // Contain at least 7 alphanumeric chars
+    'alphanumeric' => 7,  // Contain at least 7 alphanumeric chars
     'username' => 1,      // Must not equal the username
     'length' => 7,        // Must be longer than 7 chars
     'punctuation' => 1,   // Punctuation is required
@@ -422,25 +436,31 @@ function drupal_commons_config_password() {
   variable_set('password_policy_show_restrictions', 1);
 }
 
-// Configure wysiwyg
+/**
+ * Configure wysiwyg
+ */
 function drupal_commons_config_wysiwyg() {
   // Load external file containing editor settings
   include_once('drupal_commons_editor.inc'); 
   
-  // Build SQL statement
-  $sql = "INSERT INTO {wysiwyg} (format, editor, settings) VALUES (%d, '%s', '%s')";
+  // Add settings for 'Filtered HTML'
+  $item = new stdClass;
+  $item->format = 1;
+  $item->editor = DRUPAL_COMMONS_EDITOR;
+  $item->settings = serialize(drupal_commons_editor_settings('Filtered HTML'));
+  drupal_write_record('wysiwyg', $item);
   
-  // Insert the settings
-  db_query($sql, 1, DRUPAL_COMMONS_EDITOR, serialize(drupal_commons_editor_settings('Filtered HTML')));
-  
-  // Build settings for filtered html array
-  $settings = array();
-  
-  // Insert the settings
-  db_query($sql, 2, DRUPAL_COMMONS_EDITOR, serialize(drupal_commons_editor_settings('Full HTML')));
+  // Add settings for 'Full HTML'
+  $item = new stdClass;
+  $item->format = 2;
+  $item->editor = DRUPAL_COMMONS_EDITOR;
+  $item->settings = serialize(drupal_commons_editor_settings('Full HTML'));
+  drupal_write_record('wysiwyg', $item);
 }
 
-// Configure user_relationships
+/**
+ * Configure user_relationships
+ */
 function drupal_commons_config_ur() {
   // Add initial relationship type 'Friend'
   $relationship = new stdClass;
@@ -464,7 +484,9 @@ function drupal_commons_config_ur() {
   }
 }
 
-// Configure heartbeat
+/**
+ * Configure heartbeat
+ */
 function drupal_commons_config_heartbeat() {
   // Refresh all available heartbeat streams
   // This registers the relational activity stream
@@ -485,13 +507,9 @@ function drupal_commons_config_heartbeat() {
   }
 }
 
-// Configure pathauto
-function drupal_commons_config_pathauto() {
-  // For reasons unknown, we can't Strongarm this
-  variable_set('pathauto_taxonomy_2_pattern', 'tag/[catpath-raw]');
-}
-
-// Configure ctools
+/**
+ * Configure ctools
+ */
 function drupal_commons_config_ctools() {
   ctools_include('context');
   ctools_include('plugins');
@@ -517,7 +535,9 @@ function drupal_commons_config_ctools() {
   }
 }
 
-// Configure roles
+/**
+ * Configure roles
+ */
 function drupal_commons_config_roles() {
   // Make sure default roles are set right (just in case)
   db_query("UPDATE {role} SET rid = 1 WHERE name = 'anonymous user'");
@@ -533,7 +553,11 @@ function drupal_commons_config_roles() {
   db_query("INSERT INTO {users_roles} (uid, rid) VALUES (1, 3)");
 }
 
-// Configure permissions
+/**
+ * Configure permissions
+ * 
+ * Avoid using Features because we expect these to be changed
+ */
 function drupal_commons_config_perms() {
   // Load external permissions file
   include_once('drupal_commons_perms.inc');
@@ -567,17 +591,20 @@ function drupal_commons_config_perms() {
   
   // Store all of the permissions
   foreach ($roles_data as $role_data) {
-    db_query("INSERT INTO {permission} (rid, perm) VALUES (%d, '%s')", $role_data['rid'], implode($role_data['permissions'], ', '));
+    $perm = new stdClass;
+    $perm->rid = $role_data['rid'];
+    $perm->perm = implode($role_data['permissions'], ', ');
+    drupal_write_record('permission', $perm);
   }
 }
 
-// Configure views
+/**
+ * Configure views
+ * 
+ * Disable unneeded views to avoid confusion
+ * This is helpful because we've overridden many OG views
+ */
 function drupal_commons_config_views() {
-  /*
-   * Disable unneeded views to avoid confusion
-   * This is helpful because we've overridden many OG views
-   */
-  
   // First fetch any disabled views, just in case
   $disabled = variable_get('views_defaults', array());
   
@@ -591,7 +618,9 @@ function drupal_commons_config_views() {
   views_invalidate_cache();
 }
   
-// Configure theme
+/**
+ * Configure theme
+ */
 function drupal_commons_config_theme() {
   // Disable garland
   db_query("UPDATE {system} SET status = 0 WHERE type = 'theme' and name = '%s'", 'garland');
@@ -610,7 +639,12 @@ function drupal_commons_config_theme() {
   drupal_rebuild_theme_registry();
 }
 
-// Configure default images
+/**
+ * Configure default images
+ * 
+ * The group and profile default images need to be processed by ImageCache
+ * and stored in the files directory
+ */
 function drupal_commons_config_images() {
   // Copy default user image to files directory
   $user_image = 'profiles/drupal_commons/images/default-user.png';
@@ -668,7 +702,11 @@ function drupal_commons_config_images() {
   );
 }
 
-// Configure variables. These should be set but not forced by Strongarm/Features
+/**
+ * Configure variables
+ * 
+ * These should be set but not enforced by Strongarm
+ */
 function drupal_commons_config_vars() {
   // Set default homepage
   variable_set('site_frontpage', DRUPAL_COMMONS_FRONTPAGE);
@@ -708,7 +746,9 @@ function drupal_commons_config_vars() {
   variable_set('error_level', 0);
 }
 
-// Various actions needed to clean up after the installation
+/**
+ * Various actions needed to clean up after the installation
+ */
 function drupal_commons_cleanup() {
   // Rebuild node access database - required after OG installation
   node_access_rebuild();

@@ -1,4 +1,5 @@
 <?php
+// $Id$
 
 /*
  * Implementation of hook_quants()
