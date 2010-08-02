@@ -86,6 +86,9 @@ class heartbeatParser {
           if ($user->uid == $uid && isset($relations[$rel_uid . '-' . $uid])) {
             $duplicates[] = $relations[$rel_uid . '-' . $uid]['key'];
           }
+          elseif ($user->uid == $rel_uid) {
+            $duplicates[] = $relationship['key'];
+          }
           elseif (isset($relations[$rel_uid . '-' . $uid]) && $relationship['duplicate']) {
             $duplicates[] = $relations[$rel_uid . '-' . $uid]['key'];
           }

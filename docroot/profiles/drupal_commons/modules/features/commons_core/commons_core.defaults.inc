@@ -3564,102 +3564,53 @@ function _commons_core_rules_defaults() {
     'rules' => array(
       'commons_core_1' => array(
         '#type' => 'rule',
-        '#set' => 'event_node_insert',
-        '#label' => 'Heartbeat: when user adds a page, log user activity',
+        '#set' => 'event_user_relationships_approve',
+        '#label' => 'Heartbeat: user B and user A are now friends',
         '#active' => 1,
         '#weight' => '0',
         '#categories' => array(
           'commons_core' => 'commons_core',
         ),
         '#status' => 'default',
-        '#conditions' => array(
-          '0' => array(
-            '#weight' => 0,
-            '#info' => array(
-              'label' => 'page is published',
-              'label callback' => FALSE,
-              'arguments' => array(
-                'node' => array(
-                  'type' => 'node',
-                  'label' => 'Content',
-                ),
-              ),
-              'module' => 'Node',
-            ),
-            '#name' => 'rules_condition_content_is_published',
-            '#settings' => array(
-              '#argument map' => array(
-                'node' => 'node',
-              ),
-            ),
-            '#type' => 'condition',
-          ),
-          '1' => array(
-            '#negate' => 1,
-            '#weight' => 0,
-            '#type' => 'condition',
-            '#settings' => array(
-              'type' => array(
-                'page' => 'page',
-              ),
-              '#argument map' => array(
-                'node' => 'node',
-              ),
-            ),
-            '#name' => 'rules_condition_content_is_type',
-            '#info' => array(
-              'label' => 'Content has type page',
-              'label callback' => FALSE,
-              'arguments' => array(
-                'node' => array(
-                  'type' => 'node',
-                  'label' => 'Content',
-                ),
-              ),
-              'module' => 'Node',
-            ),
-          ),
-        ),
+        '#conditions' => array(),
         '#actions' => array(
           '0' => array(
-            '#info' => array(
-              'label' => 'Logs activity for single users adding a page',
-              'label callback' => FALSE,
-              'eval input' => array(
-                '0' => 'uid_param',
-                '1' => 'uid_target_param',
-                '2' => 'nid_param',
-                '3' => 'nid_target_param',
-                '4' => 'message_id_param',
-                '5' => 'variables_param',
-              ),
-              'module' => 'heartbeat',
-            ),
-            '#name' => 'heartbeat_rules_default_action',
+            '#weight' => 0,
+            '#type' => 'action',
             '#settings' => array(
-              'uid_param' => '[author:uid]',
-              'uid_target_param' => '0',
-              'nid_param' => '[node:nid]',
-              'nid_target_param' => '',
-              'message_id_param' => 'heartbeat_add_node',
-              'variables_param' => '@username=|=[author:user-name-url]-|-@node_type=|=[node:type-name]-|-@node_title=|=[node:title-link]-|-@types=|=pages-|-',
+              'uid_param' => '[requestee:uid]',
+              'uid_target_param' => '[requester:uid]',
+              'nid_param' => 0,
+              'nid_target_param' => 0,
+              'message_id_param' => 'heartbeat_become_friends',
+              'variables_param' => '@user1=|=[requestee:user-name-url]-|-@relation_type=|=[relationship:relationship-name]s-|-@user2=|=[requester:user-name-url]-|-',
               '#eval input' => array(
                 'token_rules_input_evaluator' => array(
                   'uid_param' => array(
-                    '0' => 'author',
+                    '0' => 'requestee',
                   ),
-                  'nid_param' => array(
-                    '0' => 'node',
+                  'uid_target_param' => array(
+                    '0' => 'requester',
                   ),
                   'variables_param' => array(
-                    '0' => 'node',
-                    '1' => 'author',
+                    '0' => 'requester',
+                    '1' => 'requestee',
+                    '2' => 'relationship',
                   ),
                 ),
               ),
             ),
-            '#type' => 'action',
-            '#weight' => 0,
+            '#name' => 'heartbeat_rules_users_action',
+            '#info' => array(
+              'label' => 'Logs default user activity between users',
+              'eval input' => array(
+                '0' => 'uid_param',
+                '1' => 'uid_target_param',
+                '2' => 'message_id_param',
+                '3' => 'variables_param',
+              ),
+              'module' => 'heartbeat',
+            ),
           ),
         ),
         '#version' => 6003,
