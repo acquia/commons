@@ -214,7 +214,8 @@ function _commons_jumpstart_community_block() {
  * This is used in the footer to link back to acquia.com
  */
 function _commons_commons_info_block() {
-  $content = 'Commons';
+  $content = '<a href="http://acquia.com/drupalcommons" title="Drupal Commons social business software">';
+  $content .= '<img src="' . url('profiles/drupal_commons/images/commons_footer_logo.png') . '" title="Drupal Commons social business software" alt="Drupal Commons social business software" /></a>';
   
   return $content;
 }

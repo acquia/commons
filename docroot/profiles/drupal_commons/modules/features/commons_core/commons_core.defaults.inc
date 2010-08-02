@@ -1682,6 +1682,15 @@ function _commons_core_context_default_contexts() {
         'label' => 'User login',
         'type' => 'context_ui',
       ),
+      'commons_2' => array(
+        'module' => 'commons',
+        'delta' => '2',
+        'weight' => 37,
+        'region' => 'footer',
+        'status' => '0',
+        'label' => 'Drupal Commons information',
+        'type' => 'context_ui',
+      ),
     ),
   );
   $items[] = array(
