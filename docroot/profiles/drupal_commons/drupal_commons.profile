@@ -106,9 +106,12 @@ function drupal_commons_profile_modules() {
     'notifications_ui', 'notifications_views',
     
     // Misc
-    'userpoints', 'userpoints_nc', 'wikitools', 'admin_menu', 'ajax_load', 'editablefields', 
+    'wikitools', 'admin_menu', 'ajax_load', 'editablefields', 
     'calendar', 'jcalendar', 'diff', 'freelinking', 'flag', 'pathauto', 'jquery_ui', 'insert',
     'vertical_tabs', 'transliteration', 'password_policy',
+    
+    // Userpoints
+    'userpoints', 'userpoints_nc', 'userpoints_user_picture',
     
     // Shoutbox
     'shoutbox', 'shoutbox_group', 'shoutbox_points',

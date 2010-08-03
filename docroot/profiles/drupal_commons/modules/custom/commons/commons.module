@@ -214,8 +214,20 @@ function _commons_jumpstart_community_block() {
  * This is used in the footer to link back to acquia.com
  */
 function _commons_commons_info_block() {
-  $content = '<a href="http://acquia.com/drupalcommons" title="Drupal Commons social business software">';
-  $content .= '<img src="' . url('profiles/drupal_commons/images/commons_footer_logo.png') . '" title="Drupal Commons social business software" alt="Drupal Commons social business software" /></a>';
+  $content = '';
+  
+  $content .= '<div id="acquia-footer-message">';
+  $content .= '<a href="http://acquia.com/drupalcommons" title="Drupal Commons social business software">';
+  $content .= '<img src="' . url('profiles/drupal_commons/images/commons_footer_logo.png') . '" title="Drupal Commons social business software" alt="Drupal Commons social business software" />';
+  $content .= '</a>';
+  $content .= '</div>';
+  
+  $content .= '<div id="fusion-footer-message">';
+  $content .= t('Theme by') . '&nbsp;';
+  $content .= '<a href="http://www.topnotchthemes.com" title="Drupal Themes by TopNotchThemes">TopNotchThemes</a>';
+  $content .= ', ' . t('powered by') . '&nbsp;';
+  $content .= '<a href="http://fusiondrupalthemes.com" title="Premium Drupal themes powered by Fusion">Fusion</a>.';
+  $content .= '</div>';
   
   return $content;
 }
