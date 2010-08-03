@@ -1,4 +1,6 @@
-/* $Id: acquia_commons-style.css 7775 2010-08-03 18:57:38Z sheena $ */
+/* @override http://commons.acquia.com/sites/all/themes/acquia_commons/css/acquia_commons-style.css?v */
+
+/* $Id: acquia_commons-style.css 7777 2010-08-03 19:57:55Z sheena $ */
 
 /* Basic Typography & Colors-------------------------------------------------------------- */
 
@@ -508,12 +510,9 @@ body {
 
 /* Sidebar widths can be controlled through theme settings */
 
-.sidebar-first {
-  
-}
-
-.sidebar-last {
-  
+.sidebar-first .block .content, 
+.sidebar-last .block .content {
+  overflow: hidden;
 }
 
 /* Content Regions-------------------------------------------------------------- */
@@ -850,7 +849,6 @@ h2.block-title {
 .block .fusion-block-config,
 .block .fusion-block-edit {
   background: url(../images/gear.png) center center no-repeat;
-;
 }
 
 .block .fusion-edit a {
@@ -861,7 +859,6 @@ h2.block-title {
 .block .fusion-edit a:hover {
   background-color: transparent;
   text-decoration: none;
-;
 }
 
 /* Breadcrumbs-------------------------------------------------------------- */
@@ -1191,8 +1188,8 @@ tr.first.last td {
   border-bottom: 1px solid #ccc;
 }
 
-td.active {
-  
+tr td.active {
+background-color: #fafafa;  
 }
 
 tr.drag td,
@@ -2348,7 +2345,8 @@ html.js fieldset.views-exposed-form.collapsed {
 }
 
 /* global content views */
-
+.view-recent-featured .views-exposed-widget,
+.view-recent-feature .views-exposed-widget, 
 .view-content-global-polls .views-exposed-widget,
 .view-content-global-blogs .views-exposed-widget,
 .view-content-global-documents .views-exposed-widget,
@@ -2356,6 +2354,7 @@ html.js fieldset.views-exposed-form.collapsed {
 .view-content-global-wikis .views-exposed-widget {
   width: 22%;
 }
+
 
 .view-recent-content-all .views-exposed-widget {
   width: 16%;
@@ -2384,6 +2383,7 @@ html.js fieldset.views-exposed-form.collapsed {
   width: 22%;
 }
 
+.view-recent-featured table tr td.views-field-type span.node-type,
 .view-recent-content-all table tr td.views-field-type span.node-type,
 .view-og-content-tracker table tr td.views-field-type span.node-type {
   display: block;
@@ -2392,61 +2392,78 @@ html.js fieldset.views-exposed-form.collapsed {
   width: 18px;
 }
 
+.view-recent-featured table tr td.views-field-type span.blog,
 .view-og-content-tracker table tr td.views-field-type span.blog,
 .view-recent-content-all table tr td.views-field-type span.blog {
   background: transparent url(../images/icons/blog-node.png) no-repeat center center;
 }
 
+.view-recent-featured table tr td.views-field-type span.event,
 .view-recent-content-all table tr td.views-field-type span.event,
 .view-og-content-tracker table tr td.views-field-type span.event {
   background: transparent url(../images/icons/event-node.png) no-repeat center center;
 }
 
+.view-recent-featured table tr td.views-field-type span.wiki,
 .view-recent-content-all table tr td.views-field-type span.wiki,
 .view-og-content-tracker table tr td.views-field-type span.wiki {
   background: transparent url(../images/icons/wiki-node.png) no-repeat center center;
 }
 
+.view-recent-featured table tr td.views-field-type span.document,
 .view-recent-content-all table tr td.views-field-type span.document,
 .view-og-content-tracker table tr td.views-field-type span.document {
   background: transparent url(../images/icons/document-node.png) no-repeat center center;
 }
 
+.view-recent-featured table tr td.views-field-type span.discussion,
 .view-recent-content-all table tr td.views-field-type span.discussion,
 .view-og-content-tracker table tr td.views-field-type span.discussion {
   background: transparent url(../images/icons/forum-node.png) no-repeat center center;
 }
 
+.view-recent-featured table tr td.views-field-type span.poll,
 .view-recent-content-all table tr td.views-field-type span.poll,
 .view-og-content-tracker table tr td.views-field-type span.poll {
   background: transparent url(../images/icons/poll-node.png) no-repeat center center;
 }
 
+.view-recent-featured table tr td.views-field-type span.group,
 .view-recent-content-all table tr td.views-field-type span.group,
 .view-og-content-tracker table tr td.views-field-type span.group {
   background: transparent url(../images/icons/group-node.png) no-repeat center center;
 }
 
+.view-recent-featured table tr td.views-field-type span.notice,
 .view-recent-content-all table tr td.views-field-type span.notice,
 .view-og-content-tracker table tr td.views-field-type span.notice {
   background: transparent url(../images/icons/notice-node.png) no-repeat center center;
 }
 
+.view-recent-featured table tr td.views-field-title a,
 .view-recent-content-all table tr td.views-field-title a,
 .view-og-content-tracker table tr td.views-field-title a {
   white-space: normal;
 }
 
+.view-recent-featured table tr th.views-field-group-nid,
 .view-recent-content-all table tr th.views-field-group-nid,
-.view-recent-content-all table tr td.views-field-group-nid {
+.view-og-content-tracker table tr td.views-field-group-nid {
   max-width: 140px;
 }
 
+.view-recent-featured table tr td.views-field-name,
 .view-recent-content-all table tr td.views-field-name,
 .view-og-content-tracker table tr td.views-field-name {
   padding-right: 10px;
   text-align: right;
   white-space: nowrap;
+}
+
+.view-recent-featured table tr td.views-field-comment-count,
+.view-recent-content-all table tr td.views-field-comment-count,
+.view-og-content-tracker table tr td.views-field-comment-count {
+	text-align: center;
 }
 
 /* global blog posts view*/
