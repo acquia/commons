@@ -74,6 +74,13 @@ function commons_admin_settings() {
     '#description' => t('Specify what the group homepage tab title should be. If left empty, the tab title will be <i>View</i>.'),
   );
   
+  $form['group_settings']['commons_force_unique_groups'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Force unique group names'),
+    '#default_value' => variable_get('commons_force_unique_groups', 1),
+    '#description' => t('If checked, group names must be unique. This will not affect existing groups.'),
+  );
+  
   $form['group_settings']['commons_hide_shoutbox_link'] = array(
     '#type' => 'checkbox',
     '#title' => t('Remove Shoutbox link'),
@@ -639,42 +646,82 @@ function commons_set_breadcrumb($path) {
  * Implementation of hook_nodeapi()
  */
 function commons_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
-  global $user;
-  
   switch ($op) {
     case 'validate':
-      // Only act if the node was toggled as sticky
-      if ($node->field_group_sticky[0]['value'] == 'Sticky') {
-        $selected_groups = array();
-        
-        // Gather checked group ids, if any
-        if (isset($node->og_groups)) {
-          foreach ($node->og_groups as $gid) {
-            // Capture only checked groups
-            if ($gid) {
-              $selected_groups[] = $gid;
-            }
-          }
-        }
-
-        // Check if any group options were checked
-        if (!empty($selected_groups)) {
-          // If inadequate permissions & roles, then check for group admin status in each group
-          if (!user_access('administer nodes') && !array_search(variable_get('commons_manager_role', 'community manager'), $user->roles)) {
-            foreach ($selected_groups as $gid) {
-              if (!og_is_group_admin(node_load($gid), $user)) {
-                form_set_error('og_groups', t('You can only make posts sticky for the groups that you are an admin for.')); 
-              }
-            }
-          }
-        }
-        else {
-          // No groups were selected
-          form_set_error('field_group_sticky', t('You must specify a group in order to make this post group sticky.')); 
-        }
-      }
+      // Make sure the "group sticky" field was used correctly
+      commons_check_group_sticky($node);
+      
+      // Make sure group titles are unique
+      commons_check_group_title($node);
       
       break;
+  }
+}
+
+/*
+ * Enforce the rules of the "group sticky" field
+ * 
+ * This function is called when validating a node. If the "group sticky'
+ * field is checked, we make sure that the current user is the admin
+ * of all groups the node belongs to. A form error is thrown if the
+ * user shouldn't be setting this field.
+ * 
+ * @param $node
+ *   The node being validated
+ */
+function commons_check_group_sticky($node) {
+  global $user;
+  
+  // Only act if the node was toggled as sticky
+  if ($node->field_group_sticky[0]['value'] == 'Sticky') {
+    $selected_groups = array();
+    
+    // Gather checked group ids, if any
+    if (isset($node->og_groups)) {
+      foreach ($node->og_groups as $gid) {
+        // Capture only checked groups
+        if ($gid) {
+          $selected_groups[] = $gid;
+        }
+      }
+    }
+
+    // Check if any group options were checked
+    if (!empty($selected_groups)) {
+      // If inadequate permissions & roles, then check for group admin status in each group
+      if (!user_access('administer nodes') && !array_search(variable_get('commons_manager_role', 'community manager'), $user->roles)) {
+        foreach ($selected_groups as $gid) {
+          if (!og_is_group_admin(node_load($gid), $user)) {
+            form_set_error('og_groups', t('You can only make posts sticky for the groups that you are an admin for.')); 
+          }
+        }
+      }
+    }
+    else {
+      // No groups were selected
+      form_set_error('field_group_sticky', t('You must specify a group in order to make this post group sticky.')); 
+    }
+  }
+}
+
+/*
+ * Force unique group titles
+ * 
+ * @param $node
+ *   The node being validated
+ */
+function commons_check_group_title($node) {
+  // Check if we're enforcing unique group titles 
+  if (variable_get('commons_force_unique_groups', 1)) {
+    // Check that this is a group node
+    if (og_is_group_type($node->type)) {
+      // See if a group with this title already exists
+      $sql = "SELECT n.nid FROM {node} n INNER JOIN {og} o ON o.nid = n.nid WHERE n.title = '%s'";
+      $existing = db_fetch_object(db_query($sql, $node->title));
+      if ($existing) {
+        form_set_error('title', t('A group already exists with that name. Please choose another.')); 
+      }
+    }
   }
 }
 
