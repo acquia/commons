@@ -189,6 +189,7 @@ function _commons_core_heartbeat_message_info() {
       '@user_name' => '[user:user-name-url]',
       '@type' => '[node:type-name]',
       '@node_title' => '[node:title]',
+      '@types' => '[node:type-name]s',
     ),
   );
 

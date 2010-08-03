@@ -3571,6 +3571,66 @@ function _commons_core_default_page_manager_pages() {
 function _commons_core_rules_defaults() {
   return array(
     'rules' => array(
+      'commons_core_5' => array(
+        '#type' => 'rule',
+        '#set' => 'event_node_delete',
+        '#label' => 'Heartbeat: when user deletes content, log user activity',
+        '#active' => 1,
+        '#weight' => '0',
+        '#categories' => array(
+          'commons_core' => 'commons_core',
+        ),
+        '#status' => 'default',
+        '#conditions' => array(),
+        '#actions' => array(
+          '0' => array(
+            '#weight' => 0,
+            '#info' => array(
+              'label' => 'Logs user activity for single users',
+              'eval input' => array(
+                '0' => 'uid_param',
+                '1' => 'uid_target_param',
+                '2' => 'nid_param',
+                '3' => 'nid_target_param',
+                '4' => 'message_id_param',
+                '5' => 'variables_param',
+              ),
+              'module' => 'heartbeat',
+            ),
+            '#name' => 'heartbeat_rules_default_action',
+            '#settings' => array(
+              'uid_param' => '[user:uid]',
+              'uid_target_param' => '[author:uid]',
+              'nid_param' => '[node:nid]',
+              'nid_target_param' => '[node:og-id]',
+              'message_id_param' => 'heartbeat_delete_content',
+              'variables_param' => '@user_name=|=[user:user-name-url]-|-@type=|=[node:type-name]-|-@node_title=|=[node:title]-|-@types=|=[node:type-name]s-|-',
+              '#eval input' => array(
+                'token_rules_input_evaluator' => array(
+                  'uid_param' => array(
+                    '0' => 'user',
+                  ),
+                  'uid_target_param' => array(
+                    '0' => 'author',
+                  ),
+                  'nid_param' => array(
+                    '0' => 'node',
+                  ),
+                  'variables_param' => array(
+                    '0' => 'node',
+                    '1' => 'user',
+                  ),
+                  'nid_target_param' => array(
+                    '0' => 'node',
+                  ),
+                ),
+              ),
+            ),
+            '#type' => 'action',
+          ),
+        ),
+        '#version' => 6003,
+      ),
       'commons_core_1' => array(
         '#type' => 'rule',
         '#set' => 'event_user_relationships_approve',
@@ -3626,20 +3686,68 @@ function _commons_core_rules_defaults() {
       ),
       'commons_core_2' => array(
         '#type' => 'rule',
-        '#set' => 'event_comment_publish',
-        '#label' => 'Heartbeat: When a user adds a comment',
-        '#active' => 0,
+        '#set' => 'event_node_insert',
+        '#label' => 'Heartbeat: when user adds a node, log user activity',
+        '#active' => 1,
         '#weight' => '0',
         '#categories' => array(
           'commons_core' => 'commons_core',
         ),
         '#status' => 'default',
-        '#conditions' => array(),
+        '#conditions' => array(
+          '0' => array(
+            '#weight' => 0,
+            '#info' => array(
+              'label' => 'page is published',
+              'label callback' => FALSE,
+              'arguments' => array(
+                'node' => array(
+                  'type' => 'node',
+                  'label' => 'Content',
+                ),
+              ),
+              'module' => 'Node',
+            ),
+            '#name' => 'rules_condition_content_is_published',
+            '#settings' => array(
+              '#argument map' => array(
+                'node' => 'node',
+              ),
+            ),
+            '#type' => 'condition',
+          ),
+          '1' => array(
+            '#weight' => 0,
+            '#negate' => 1,
+            '#type' => 'condition',
+            '#settings' => array(
+              'type' => array(
+                'page' => 'page',
+              ),
+              '#argument map' => array(
+                'node' => 'node',
+              ),
+            ),
+            '#info' => array(
+              'label' => 'Content has type page',
+              'label callback' => FALSE,
+              'arguments' => array(
+                'node' => array(
+                  'type' => 'node',
+                  'label' => 'Content',
+                ),
+              ),
+              'module' => 'Node',
+            ),
+            '#name' => 'rules_condition_content_is_type',
+          ),
+        ),
         '#actions' => array(
           '0' => array(
             '#weight' => 0,
             '#info' => array(
-              'label' => 'Logs user activity for single users',
+              'label' => 'Logs activity for single users adding a page',
+              'label callback' => FALSE,
               'eval input' => array(
                 '0' => 'uid_param',
                 '1' => 'uid_target_param',
@@ -3652,27 +3760,26 @@ function _commons_core_rules_defaults() {
             ),
             '#name' => 'heartbeat_rules_default_action',
             '#settings' => array(
-              'uid_param' => '[comment_author:uid]',
-              'uid_target_param' => '[node_author:uid]',
+              'uid_param' => '[author:uid]',
+              'uid_target_param' => '0',
               'nid_param' => '[node:nid]',
-              'nid_target_param' => '0',
-              'message_id_param' => 'heartbeat_add_comment',
-              'variables_param' => '@username=|=[comment_author:user-name-url]-|-@title=|=[node:title-link]-|-@comment=|=[comment:comment-body-raw]-|-',
+              'nid_target_param' => '[node:og-id]',
+              'message_id_param' => 'heartbeat_add_node',
+              'variables_param' => '@username=|=[author:user-name-url]-|-@node_type=|=[node:type-name]-|-@node_title=|=[node:title-link]-|-@types=|=[node:type-name]s-|-',
               '#eval input' => array(
                 'token_rules_input_evaluator' => array(
                   'uid_param' => array(
-                    '0' => 'comment_author',
-                  ),
-                  'uid_target_param' => array(
-                    '0' => 'node_author',
+                    '0' => 'author',
                   ),
                   'nid_param' => array(
                     '0' => 'node',
                   ),
                   'variables_param' => array(
-                    '0' => 'comment',
-                    '1' => 'comment_author',
-                    '2' => 'node',
+                    '0' => 'node',
+                    '1' => 'author',
+                  ),
+                  'nid_target_param' => array(
+                    '0' => 'node',
                   ),
                 ),
               ),
@@ -3784,66 +3891,6 @@ function _commons_core_rules_defaults() {
             ),
             '#type' => 'action',
             '#weight' => 0,
-          ),
-        ),
-        '#version' => 6003,
-      ),
-      'commons_core_5' => array(
-        '#type' => 'rule',
-        '#set' => 'event_node_delete',
-        '#label' => 'Heartbeat: when user deletes content, log user activity',
-        '#active' => 1,
-        '#weight' => '0',
-        '#categories' => array(
-          'commons_core' => 'commons_core',
-        ),
-        '#status' => 'default',
-        '#conditions' => array(),
-        '#actions' => array(
-          '0' => array(
-            '#weight' => 0,
-            '#type' => 'action',
-            '#settings' => array(
-              'uid_param' => '[user:uid]',
-              'uid_target_param' => '[author:uid]',
-              'nid_param' => '[node:nid]',
-              'nid_target_param' => '[node:og-id]',
-              'message_id_param' => 'heartbeat_delete_content',
-              'variables_param' => '@user_name=|=[user:user-name-url]-|-@type=|=[node:type-name]-|-@node_title=|=[node:title]-|-',
-              '#eval input' => array(
-                'token_rules_input_evaluator' => array(
-                  'uid_param' => array(
-                    '0' => 'user',
-                  ),
-                  'uid_target_param' => array(
-                    '0' => 'author',
-                  ),
-                  'nid_param' => array(
-                    '0' => 'node',
-                  ),
-                  'variables_param' => array(
-                    '0' => 'node',
-                    '1' => 'user',
-                  ),
-                  'nid_target_param' => array(
-                    '0' => 'node',
-                  ),
-                ),
-              ),
-            ),
-            '#name' => 'heartbeat_rules_default_action',
-            '#info' => array(
-              'label' => 'Logs user activity for single users',
-              'eval input' => array(
-                '0' => 'uid_param',
-                '1' => 'uid_target_param',
-                '2' => 'nid_param',
-                '3' => 'nid_target_param',
-                '4' => 'message_id_param',
-                '5' => 'variables_param',
-              ),
-              'module' => 'heartbeat',
-            ),
           ),
         ),
         '#version' => 6003,
