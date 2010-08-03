@@ -264,6 +264,9 @@ function commons_form_alter(&$form, &$form_state, $form_id) {
         // Make user's aware of the max length
         $maxlength = $form['og_description']['#maxlength'];
         $form['og_description']['#description'] = $form['og_description']['#description'] . ' (' . t('!maxlength characters allowed', array('!maxlength' => $maxlength)) . ')'; 
+      
+        // Groups don't have titles, they have names
+        $form['title']['#title'] = t('Name');
       }
     }
   }
