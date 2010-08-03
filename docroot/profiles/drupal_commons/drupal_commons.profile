@@ -316,13 +316,14 @@ function drupal_commons_config_menu() {
   // Childs of "Community" menu
   $links = array();
   $links[] = array('menu_name' => 'primary-links', 'weight' => 0, 'link_path' => 'groups', 'link_title' => t('Groups'), 'plid' => $parent['mlid']);
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 1, 'link_path' => 'content/blogs', 'link_title' => t('Blog posts'), 'plid' => $parent['mlid']);
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 2, 'link_path' => 'content/documents', 'link_title' => t('Documents'), 'plid' => $parent['mlid']);
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 3, 'link_path' => 'content/discussions', 'link_title' => t('Discussions'), 'plid' => $parent['mlid']);
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 4, 'link_path' => 'content/wikis', 'link_title' => t('Wikis'), 'plid' => $parent['mlid']);
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 5, 'link_path' => 'content/calendar', 'link_title' => t('Calendar'), 'plid' => $parent['mlid']);
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 6, 'link_path' => 'users', 'link_title' => t('Members'), 'plid' => $parent['mlid']);
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 7, 'link_path' => 'analytics', 'link_title' => t('Site analytics'), 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 2, 'link_path' => 'content/blogs', 'link_title' => t('Blog posts'), 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 4, 'link_path' => 'content/documents', 'link_title' => t('Documents'), 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 6, 'link_path' => 'content/discussions', 'link_title' => t('Discussions'), 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 8, 'link_path' => 'content/polls', 'link_title' => t('Polls'), 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 10, 'link_path' => 'content/wikis', 'link_title' => t('Wikis'), 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 12, 'link_path' => 'content/calendar', 'link_title' => t('Calendar'), 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 14, 'link_path' => 'users', 'link_title' => t('Members'), 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 16, 'link_path' => 'analytics', 'link_title' => t('Site analytics'), 'plid' => $parent['mlid']);
   
   foreach ($links as $link) {
     menu_link_save($link);
