@@ -255,12 +255,15 @@ function _commons_commons_info_block() {
 function commons_form_alter(&$form, &$form_state, $form_id) {
   // A node is being added or edited
   if (strstr($form_id, 'node_form')) {
+    // Load the node
+    $node = $form['#node'];
+    
     // Remove default "Promoted to Front Page" option
     unset($form['options']['promote']);
   
     // Check if this is a group type
     if (module_exists('og')) {
-      if (og_is_group_type(str_replace('_node_form', '', $form_id))) {
+      if (og_is_group_type($node->type)) {
         // Make user's aware of the max length
         $maxlength = $form['og_description']['#maxlength'];
         $form['og_description']['#description'] = $form['og_description']['#description'] . ' (' . t('!maxlength characters allowed', array('!maxlength' => $maxlength)) . ')'; 

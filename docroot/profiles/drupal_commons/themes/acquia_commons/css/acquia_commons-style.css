@@ -1,4 +1,4 @@
-/* $Id: acquia_commons-style.css 7772 2010-08-03 13:53:07Z sheena $ */
+/* $Id: acquia_commons-style.css 7775 2010-08-03 18:57:38Z sheena $ */
 
 /* Basic Typography & Colors-------------------------------------------------------------- */
 
@@ -619,6 +619,10 @@ body {
   width: 49%;
 }
 
+ #fusion-footer-message a{
+	color: #fff;
+}
+
 /* Page titles/-------------------------------------------------------------- */
 
 /* Page and full node titles */
@@ -641,6 +645,13 @@ h1.title {
 
 .preview .node {
   background-color: #ffffea;
+}
+
+/* node admin styles*/
+.node-form #tagging-widget-container .description {
+	line-height: 1.2em;
+	padding: .6em;
+	float: left;
 }
 
 /* Typography for node titles */
@@ -679,6 +690,12 @@ h2.title a:active {
 }
 
 /* Links for nodes (taxonomy, commenting, read more, etc) */
+
+.node .groups,
+.node ul.links,
+.node .meta {
+	clear: both;
+}
 
 ul.links li,
 .node .inner ul.links li,
@@ -2332,6 +2349,7 @@ html.js fieldset.views-exposed-form.collapsed {
 
 /* global content views */
 
+.view-content-global-polls .views-exposed-widget,
 .view-content-global-blogs .views-exposed-widget,
 .view-content-global-documents .views-exposed-widget,
 .view-content-global-discussions .views-exposed-widget,
@@ -2345,6 +2363,7 @@ html.js fieldset.views-exposed-form.collapsed {
 
 /* Group content views*/
 
+.view-og-tab-polls .views-exposed-widget,
 .view-og-tab-documents .views-exposed-widget,
 .view-og-tab-discussions .views-exposed-widget,
 .view-og-tab-wikis .views-exposed-widget,
@@ -2432,6 +2451,7 @@ html.js fieldset.views-exposed-form.collapsed {
 
 /* global blog posts view*/
 
+.view-content-global-polls span.title,
 .view-content-global-blogs span.title,
 .view-content-global-documents span.title,
 .view-content-global-discussions span.title,
@@ -2441,6 +2461,8 @@ html.js fieldset.views-exposed-form.collapsed {
   padding-right: 10px;
 }
 
+.view-content-global-polls span.title,
+.view-content-global-polls span.posted-date,
 .view-content-global-blogs span.title,
 .view-content-global-blogs span.posted-date,
 .view-content-global-discussions span.title,
@@ -2450,6 +2472,9 @@ html.js fieldset.views-exposed-form.collapsed {
   white-space: nowrap;
 }
 
+.view-content-global-polls span.replies,
+.view-content-global-polls span.tags,
+.view-content-global-polls span.updated-date,
 .view-content-global-blogs span.replies,
 .view-content-global-blogs span.tags,
 .view-content-global-blogs span.updated-date,
@@ -2466,6 +2491,7 @@ html.js fieldset.views-exposed-form.collapsed {
   font-size: 11px;
 }
 
+.view-content-global-polls span.updated-date,
 .view-content-global-blogs span.updated-date,
 .view-content-global-documents span.updated-date,
 .view-content-global-discussions span.updated-date,
