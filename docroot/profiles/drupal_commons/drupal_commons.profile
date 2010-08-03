@@ -60,6 +60,7 @@ function drupal_commons_profile_modules() {
     // Default Drupal modules.
     'color', 'comment', 'help', 'menu', 'taxonomy', 'dblog', 'profile',
     'blog', 'aggregator', 'poll',  'search', 'tracker', 'php', 'path',
+    'contact',
     
     // Chaos Tools
     'ctools', 'page_manager', 'panels', 'context', 'context_contrib', 'context_ui',
@@ -242,6 +243,7 @@ function drupal_commons_config_taxonomy() {
     'relations' => '1',
     'tags' => '1',
     'module' => 'taxonomy',
+    'help' => t('Press enter or click !plus between tags.', array('!plus' => '\'+\'')),
   );
   taxonomy_save_vocabulary($vocab); 
   
@@ -254,12 +256,13 @@ function drupal_commons_config_taxonomy() {
   
   // Link free-tagging vocabulary to node types
   $sql = "INSERT INTO {vocabulary_node_types} (vid, type) VALUES (%d, '%s')";
-  db_query($sql, DRUPAL_COMMONS_TAG_ID, 'page');
   db_query($sql, DRUPAL_COMMONS_TAG_ID, 'blog');
   db_query($sql, DRUPAL_COMMONS_TAG_ID, 'discussion');
   db_query($sql, DRUPAL_COMMONS_TAG_ID, 'document');
   db_query($sql, DRUPAL_COMMONS_TAG_ID, 'event');
   db_query($sql, DRUPAL_COMMONS_TAG_ID, 'group');
+  db_query($sql, DRUPAL_COMMONS_TAG_ID, 'notice');
+  db_query($sql, DRUPAL_COMMONS_TAG_ID, 'page');
   db_query($sql, DRUPAL_COMMONS_TAG_ID, 'poll');
   db_query($sql, DRUPAL_COMMONS_TAG_ID, 'wiki'); 
 }

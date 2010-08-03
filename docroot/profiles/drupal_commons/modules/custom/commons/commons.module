@@ -260,9 +260,9 @@ function commons_form_alter(&$form, &$form_state, $form_id) {
       }
     }
   }
-  
-  // Optionally restrict voting only to members of the group that
-  // the poll is in
+
+  // Optionally restrict voting only to members of the group
+  // that the poll is in
   if ($form_id == 'poll_view_voting') {
     // Check the variable
     if (variable_get('commons_group_prevent_open_voting', 0)) { 
