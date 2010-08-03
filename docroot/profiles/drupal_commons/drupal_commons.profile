@@ -17,11 +17,7 @@ define('DRUPAL_COMMONS_COMMUNITY_MENU_DROPDOWN', 'Community');
 define('DRUPAL_COMMONS_EDITOR', 'ckeditor');
 
 // Define the allowed filtered html tags
-define('DRUPAL_COMMONS_FILTERED_HTML', 
-  '<a> <img> <br> <em> <p> <strong> <cite> <sub> <sup> <span> 
-  <blockquote> <code> <ul> <ol> <li> <dl> <dt> <dd> <pre> 
-  <address> <h2> <h3> <h4> <h5> <h6>'
-);
+define('DRUPAL_COMMONS_FILTERED_HTML', '<a> <img> <br> <em> <p> <strong> <cite> <sub> <sup> <span> <blockquote> <code> <ul> <ol> <li> <dl> <dt> <dd> <pre> <address> <h2> <h3> <h4> <h5> <h6>');
 
 // Define the "community manager" role name
 define('DRUPAL_COMMONS_MANAGER_ROLE', 'community manager');
@@ -40,6 +36,9 @@ define('DRUPAL_COMMONS_POINTS_NODE', 5);
 
 // Define the default point amount for posting a comment
 define('DRUPAL_COMMONS_POINTS_COMMENT', 2);
+
+// Define the default point amount for uploading a profile picture
+define('DRUPAL_COMMONS_POINTS_PICTURE', 5);
 
 // Define the default point amount for posting a shout
 define('DRUPAL_COMMONS_POINTS_SHOUT', 1);
@@ -147,7 +146,7 @@ function drupal_commons_profile_modules() {
  *   language-specific profiles.
  */
 function drupal_commons_profile_details() {
-  $image = '<img src="' . url('profiles/drupal_commons/images/logo.png') . '" alt="Drupal Commons" title="Drupal Commons"/>';
+  $image = '<img src="./profiles/drupal_commons/images/logo.png" alt="Drupal Commons" title="Drupal Commons"/>';
   
   return array(
     'name' => 'Drupal Commons',
@@ -723,6 +722,7 @@ function drupal_commons_config_vars() {
   variable_set('userpoints_post_event', DRUPAL_COMMONS_POINTS_NODE);
   variable_set('userpoints_post_group', DRUPAL_COMMONS_POINTS_NODE);
   variable_set('userpoints_post_wiki', DRUPAL_COMMONS_POINTS_NODE);
+  variable_set('userpoints_user_picture', DRUPAL_COMMONS_POINTS_PICTURE);
   variable_set('userpoints_post_comment', DRUPAL_COMMONS_POINTS_COMMENT);
   variable_set('shoutbox_points_amount', DRUPAL_COMMONS_POINTS_SHOUT);
   
