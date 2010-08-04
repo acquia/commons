@@ -3,11 +3,11 @@
 /*
  * Implementation of hook_install()
  */
-function commons_search_install() {
-  require_once('commons_search.defaults.inc');
+function acquia_network_subscription_install() {
+  require_once('acquia_network_subscription.defaults.inc');
   
   // Gather the exported variables
-  $vars = _commons_search_strongarm();
+  $vars = _acquia_network_subscription_strongarm();
   
   // This needs to be manually set because it's set on install
   variable_set('apachesolr_enabled_facets', $vars['apachesolr_enabled_facets']->value);
