@@ -1,6 +1,9 @@
-/* @override http://commons.acquia.com/sites/all/themes/acquia_commons/css/acquia_commons-style.css?v */
+/* @override 
+	http://commons.acquia.com/sites/all/themes/acquia_commons/css/acquia_commons-style.css?v
+	http://localhost:9016/profiles/drupal_commons/themes/acquia_commons/css/acquia_commons-style.css?T
+*/
 
-/* $Id: acquia_commons-style.css 7777 2010-08-03 19:57:55Z sheena $ */
+/* $Id: acquia_commons-style.css 7778 2010-08-04 15:23:05Z sheena $ */
 
 /* Basic Typography & Colors-------------------------------------------------------------- */
 
@@ -18,7 +21,7 @@ a,
 a:link,
 a:visited {
   color: #669acc;
-}
+} 
 
 /* Hover/active link styles. Don't forget :focus for accessibility */
 
@@ -2003,6 +2006,135 @@ div.shoutbox-even {
   border: none;
 }
 
+/* week view */
+
+.calendar-calendar .week-view th{
+	background-color: #fff;
+	border-top: 2px solid #eee;
+	border-right: 1px solid #eee;
+	border-left: 1px solid #eee;
+	border-bottom: 1px solid #ccc;
+	color: #666;
+}
+.calendar-calendar .week-view td{
+	font-family: Arial, Helvetica, sans-serif;
+	background-color: #fff;
+	border-bottom: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+}
+.calendar-calendar .week-view td.calendar-agenda-hour {
+	background-color: #eee;
+	color: #666;
+	font-size: .8em;
+	vertical-align: middle;
+	padding: 0 10px 0 10px;
+	border-right:  1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+	border-left: 1px solid #ddd;
+	white-space: nowrap;
+	text-align: right;
+}
+
+.calendar-calendar .week-view td div.view-item {
+	margin: 0 0 8px 0;
+}
+
+.calendar-calendar .week-view td div.view-item:last-child{
+	margin-bottom: 0;
+}
+.calendar-calendar .week-view td div.view-item div {
+	background-color: transparent;
+	color: #fff;
+}
+.calendar-calendar .week-view td div.view-item div.weekview{
+	background-color: #6599ca;
+}
+
+.calendar-calendar .week-view td div.view-item div.view-data-node-title {
+	padding: 0;
+	margin: 0 0 4px 0;
+}
+.calendar-calendar .week-view td div.view-item div.view-data-node-title a{
+	font-size: 1.2em;
+	font-weight: bold;
+	padding: 2px 4px;
+	background-color: #d8e5f4;
+	display: block;
+}
+
+.calendar-calendar .week-view .week.day,
+.calendar-calendar .week-view .week.day {
+  border: 1px solid #ececec;
+  text-align: center;
+  vertical-align: middle;
+  padding: 2px 4px;
+}
+
+.calendar-calendar .week-view .week.day a,
+.calendar-calendar .week-view .week.day a {
+  color: #666;
+  font-weight: bold;
+  font-size: 1.2em;
+  text-align: center;
+  }
+
+
+/* day view */
+
+.calendar-calendar .day-view th{
+	background-color: #fff;
+	border-top: 2px solid #eee;
+	border-right: 1px solid #eee;
+	border-left: 1px solid #eee;
+	border-bottom: 1px solid #ccc;
+	color: #666;
+}
+.calendar-calendar .day-view td{
+	font-family: Arial, Helvetica, sans-serif;
+	background-color: #fff;
+	border-bottom: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+}
+.calendar-calendar .day-view td.calendar-agenda-hour {
+	background-color: #eee;
+	color: #666;
+	font-size: .8em;
+	vertical-align: middle;
+	padding: 0 10px 0 10px;
+	border-right:  1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+	border-left: 1px solid #ddd;
+	white-space: nowrap;
+	text-align: right;
+}
+
+.calendar-calendar .day-view td div.view-item {
+	margin: 0 0 8px 0;
+}
+
+.calendar-calendar .day-view td div.view-item:last-child{
+	margin-bottom: 0;
+}
+.calendar-calendar .day-view td div.view-item div {
+	background-color: transparent;
+	color: #fff;
+}
+.calendar-calendar .day-view td div.view-item div.dayview{
+	background-color: #6599ca;
+}
+
+.calendar-calendar .day-view td div.view-item div.view-data-node-title {
+	padding: 0;
+	margin: 0 0 4px 0;
+}
+.calendar-calendar .day-view td div.view-item div.view-data-node-title a{
+	font-size: 1.2em;
+	font-weight: bold;
+	padding: 2px 4px;
+	background-color: #d8e5f4;
+	display: block;
+}
+
 /* block calendar */
 
 .block .view-og-calendar {
@@ -2460,11 +2592,6 @@ html.js fieldset.views-exposed-form.collapsed {
   white-space: nowrap;
 }
 
-.view-recent-featured table tr td.views-field-comment-count,
-.view-recent-content-all table tr td.views-field-comment-count,
-.view-og-content-tracker table tr td.views-field-comment-count {
-	text-align: center;
-}
 
 /* global blog posts view*/
 
@@ -2543,6 +2670,33 @@ html.js fieldset.views-exposed-form.collapsed {
   padding: 0px;
   text-align: right;
   width: auto;
+}
+
+/* User Directory */
+
+.view-user-directory table.views-view-grid td {
+	width: 23%;
+}
+
+.view-user-directory td {
+	border-right: 1px solid #eee;
+	border-bottom: 1px solid #eee;
+	padding: 1%;
+}
+
+.view-user-directory td:last-child {
+	border-right: none;
+}
+
+.view-user-directory tr:last-child td{
+	border-bottom: none;
+}
+
+.view-user-directory .views-field-name {
+	font-size: 1.2em;
+	font-weight: bold;
+	font-family: Arial, Helvetica, sans-serif;
+	margin: 0 0 4px 0;
 }
 
 /* User Meta - logout/account links in header w/ profile pic */
@@ -2637,6 +2791,10 @@ html.js fieldset.views-exposed-form.collapsed {
 .view-og-dashboard-groups td.views-field-field-group-image-fid {
   padding-left: 0px;
   width: 28px;
+}
+
+.block .view-most-active-users td.views-field-picture{
+	width: auto;
 }
 
 /* Heartbeat Module */
