@@ -656,15 +656,15 @@ function _commons_core_views_default_views() {
     'sticky' => 0,
     'order' => 'asc',
     'columns' => array(
-      'picture' => 'picture',
-      'name' => 'picture',
+      'picture' => 'name',
+      'name' => 'name',
       'title' => 'title',
       'timestamp' => 'title',
       'group_nid' => 'group_nid',
-      'comment_count' => 'title',
       'tid' => 'title',
-      'created' => 'created',
+      'comment_count' => 'title',
       'last_updated' => 'created',
+      'created' => 'created',
     ),
     'info' => array(
       'picture' => array(
@@ -685,18 +685,18 @@ function _commons_core_views_default_views() {
       'group_nid' => array(
         'separator' => '',
       ),
+      'tid' => array(
+        'separator' => '',
+      ),
       'comment_count' => array(
         'sortable' => 1,
         'separator' => '',
       ),
-      'tid' => array(
-        'separator' => '',
-      ),
-      'created' => array(
+      'last_updated' => array(
         'sortable' => 1,
         'separator' => '',
       ),
-      'last_updated' => array(
+      'created' => array(
         'sortable' => 1,
         'separator' => '',
       ),
@@ -13088,7 +13088,7 @@ else {
       'relationship' => 'none',
     ),
     'name' => array(
-      'label' => '',
+      'label' => 'Author',
       'alter' => array(
         'alter_text' => 0,
         'text' => '',
@@ -13325,7 +13325,7 @@ else {
       'decimal' => '.',
       'separator' => ',',
       'prefix' => '',
-      'suffix' => 'Replies',
+      'suffix' => ' Replies',
       'exclude' => 0,
       'id' => 'comment_count',
       'table' => 'node_comment_statistics',
