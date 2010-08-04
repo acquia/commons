@@ -14187,10 +14187,10 @@ else {
   ));
   $handler->override_option('title', 'Latest notices');
   $handler->override_option('header', '<?php
-  if(user_access(\'create notice content\')) {
-    print \'<div class="addnew">\' . l(t(\'Add a notice\'), \'node/add/notice\') . \'</div>\';
-  }
-  ?>');
+    if(user_access(\'create notice content\')) {
+      print \'<div class="addnew">\' . l(t(\'Add a notice\'), \'node/add/notice\') . \'</div>\';
+    }
+    ?>');
   $handler->override_option('header_format', '3');
   $handler->override_option('header_empty', 1);
   $handler->override_option('empty', 'No notices have been created yet.');
@@ -14284,11 +14284,79 @@ else {
   $handler->override_option('block_caching', -1);
   $handler = $view->new_display('page', 'Page', 'page_1');
   $handler->override_option('fields', array(
-    'title' => array(
-      'label' => 'Notice',
+    'picture' => array(
+      'label' => '',
       'alter' => array(
         'alter_text' => 0,
         'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'imagecache_preset' => 'user_picture_meta',
+      'exclude' => 0,
+      'id' => 'picture',
+      'table' => 'users',
+      'field' => 'picture',
+      'override' => array(
+        'button' => 'Use default',
+      ),
+      'relationship' => 'none',
+    ),
+    'name' => array(
+      'label' => 'Author',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'strip_tags' => 0,
+        'html' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'link_to_user' => 1,
+      'overwrite_anonymous' => 0,
+      'anonymous_text' => '',
+      'exclude' => 0,
+      'id' => 'name',
+      'table' => 'users',
+      'field' => 'name',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'title' => array(
+      'label' => 'Title',
+      'alter' => array(
+        'alter_text' => 1,
+        'text' => '<span class="title">[title]</span>',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
@@ -14348,8 +14416,8 @@ else {
       'field' => 'timestamp',
       'relationship' => 'none',
     ),
-    'name' => array(
-      'label' => 'Author',
+    'tid' => array(
+      'label' => 'Tags',
       'alter' => array(
         'alter_text' => 0,
         'text' => '',
@@ -14365,29 +14433,111 @@ else {
         'max_length' => '',
         'word_boundary' => 1,
         'ellipsis' => 1,
-        'strip_tags' => 0,
         'html' => 0,
+        'strip_tags' => 0,
       ),
       'empty' => '',
       'hide_empty' => 0,
       'empty_zero' => 0,
-      'link_to_user' => 1,
-      'overwrite_anonymous' => 0,
-      'anonymous_text' => '',
+      'type' => 'separator',
+      'separator' => ', ',
+      'link_to_taxonomy' => 1,
+      'limit' => 1,
+      'vids' => array(
+        '2' => 2,
+        '1' => 0,
+        '4' => 0,
+        '5' => 0,
+        '3' => 0,
+      ),
       'exclude' => 0,
-      'id' => 'name',
-      'table' => 'users',
-      'field' => 'name',
+      'id' => 'tid',
+      'table' => 'term_node',
+      'field' => 'tid',
       'override' => array(
-        'button' => 'Override',
+        'button' => 'Use default',
+      ),
+      'relationship' => 'none',
+    ),
+    'comment_count' => array(
+      'label' => 'Replies',
+      'alter' => array(
+        'alter_text' => 1,
+        'text' => '<span class="replies">[comment_count]</span>
+  <span class="tags">Tags: [tid]</span>',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'set_precision' => FALSE,
+      'precision' => 0,
+      'decimal' => '.',
+      'separator' => ',',
+      'prefix' => '',
+      'suffix' => ' Replies',
+      'exclude' => 0,
+      'id' => 'comment_count',
+      'table' => 'node_comment_statistics',
+      'field' => 'comment_count',
+      'override' => array(
+        'button' => 'Use default',
+      ),
+      'relationship' => 'none',
+    ),
+    'last_updated' => array(
+      'label' => 'Updated',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 0,
+        'ellipsis' => 0,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'date_format' => 'time ago',
+      'custom_date_format' => '',
+      'exclude' => 1,
+      'id' => 'last_updated',
+      'table' => 'node_comment_statistics',
+      'field' => 'last_updated',
+      'override' => array(
+        'button' => 'Use default',
       ),
       'relationship' => 'none',
     ),
     'created' => array(
       'label' => 'Post date',
       'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
+        'alter_text' => 1,
+        'text' => '<span class="posted-date">[created]</span>
+  <span class="updated-date">updated [last_updated]</span>',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
@@ -14406,14 +14556,14 @@ else {
       'empty' => '',
       'hide_empty' => 0,
       'empty_zero' => 0,
-      'date_format' => 'large',
+      'date_format' => 'small',
       'custom_date_format' => '',
       'exclude' => 0,
       'id' => 'created',
       'table' => 'node',
       'field' => 'created',
       'override' => array(
-        'button' => 'Override',
+        'button' => 'Use default',
       ),
       'relationship' => 'none',
     ),
@@ -14427,12 +14577,24 @@ else {
     'sticky' => 0,
     'order' => 'asc',
     'columns' => array(
+      'picture' => 'name',
+      'name' => 'name',
       'title' => 'title',
       'timestamp' => 'title',
-      'name' => 'name',
+      'tid' => 'title',
+      'comment_count' => 'title',
+      'last_updated' => 'created',
       'created' => 'created',
     ),
     'info' => array(
+      'picture' => array(
+        'sortable' => 0,
+        'separator' => '',
+      ),
+      'name' => array(
+        'sortable' => 1,
+        'separator' => '',
+      ),
       'title' => array(
         'sortable' => 1,
         'separator' => '',
@@ -14440,8 +14602,15 @@ else {
       'timestamp' => array(
         'separator' => '',
       ),
-      'name' => array(
-        'sortable' => 1,
+      'tid' => array(
+        'separator' => '',
+      ),
+      'comment_count' => array(
+        'sortable' => 0,
+        'separator' => '',
+      ),
+      'last_updated' => array(
+        'sortable' => 0,
         'separator' => '',
       ),
       'created' => array(

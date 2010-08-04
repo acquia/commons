@@ -1,4 +1,4 @@
-/* $Id: acquia_commons-style.css 7783 2010-08-04 18:51:13Z sheena $ */
+/* $Id: acquia_commons-style.css 7784 2010-08-04 19:48:17Z sheena $ */
 
 /* Basic Typography & Colors-------------------------------------------------------------- */
 
@@ -23,7 +23,7 @@ a:visited {
 a:hover,
 a:focus,
 a:active {
-  color: #333;
+  color: #333; 
 }
 
 h1 {
@@ -2612,7 +2612,7 @@ html.js fieldset.views-exposed-form.collapsed {
 	max-width: 25%; 
 }
 
-
+.view-recent-notices span.title,
 .view-recent-featured span.title, 
 .view-content-global-polls span.title,
 .view-content-global-blogs span.title,
@@ -2625,6 +2625,7 @@ html.js fieldset.views-exposed-form.collapsed {
   white-space: normal;
 } 
 
+.view-recent-notices span.posted-date,
 .view-recent-featured span.posted-date,
 .view-content-global-polls span.posted-date,
 .view-content-global-blogs span.posted-date,
@@ -2633,7 +2634,9 @@ html.js fieldset.views-exposed-form.collapsed {
   white-space: nowrap;
 }
 
-
+.view-recent-notices span.replies,
+.view-recent-notices span.tags,
+.view-recent-notices span.updated-date,
 .view-recent-featured span.replies,
 .view-recent-featured span.tags,
 .view-recent-featured span.updated-date,
@@ -2656,6 +2659,7 @@ html.js fieldset.views-exposed-form.collapsed {
   font-size: 11px;
 }
 
+.view-recent-notices span.updated-date,
 .view-recent-featured span.updated-date,
 .view-content-global-polls span.updated-date,
 .view-content-global-blogs span.updated-date,
