@@ -7,12 +7,6 @@ define('DRUPAL_COMMONS_TAG_NAME', 'Tags');
 // Define the forced ID of the free-tagging vocabulary
 define('DRUPAL_COMMONS_TAG_ID', 2);
 
-// Define the name of the user menu dropdown item
-define('DRUPAL_COMMONS_USER_MENU_DROPDOWN', 'My stuff');
-
-// Define the name of the community menu dropdown item
-define('DRUPAL_COMMONS_COMMUNITY_MENU_DROPDOWN', 'Community');
-
 // Define the default WYSIWYG editor
 define('DRUPAL_COMMONS_EDITOR', 'ckeditor');
 
@@ -308,46 +302,10 @@ function drupal_commons_config_flag() {
 
 /**
  * Configure menu
- * 
- * Create additional primary menu items
  */
 function drupal_commons_config_menu() {
-  // Create "Community" drop down first, so we can fetch the mlid
-  $parent = array('menu_name' => 'primary-links', 'weight' => 3, 'link_path' => 'groups', 'link_title' => t(DRUPAL_COMMONS_COMMUNITY_MENU_DROPDOWN), 'expanded' => 1);
-  menu_link_save($parent);
-  
-  // Childs of "Community" menu
-  $links = array();
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 0, 'link_path' => 'groups', 'link_title' => t('Groups'), 'plid' => $parent['mlid']);
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 2, 'link_path' => 'content/blogs', 'link_title' => t('Blog posts'), 'plid' => $parent['mlid']);
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 4, 'link_path' => 'content/documents', 'link_title' => t('Documents'), 'plid' => $parent['mlid']);
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 6, 'link_path' => 'content/discussions', 'link_title' => t('Discussions'), 'plid' => $parent['mlid']);
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 8, 'link_path' => 'content/polls', 'link_title' => t('Polls'), 'plid' => $parent['mlid']);
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 10, 'link_path' => 'content/wikis', 'link_title' => t('Wikis'), 'plid' => $parent['mlid']);
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 12, 'link_path' => 'content/calendar', 'link_title' => t('Calendar'), 'plid' => $parent['mlid']);
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 14, 'link_path' => 'users', 'link_title' => t('Members'), 'plid' => $parent['mlid']);
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 16, 'link_path' => 'analytics', 'link_title' => t('Site analytics'), 'plid' => $parent['mlid']);
-  
-  foreach ($links as $link) {
-    menu_link_save($link);
-  } 
-  
-  // Create "My stuff" drop down first, so we can fetch the mlid
-  $parent = array('menu_name' => 'primary-links', 'weight' => 5, 'link_path' => 'user', 'link_title' => t(DRUPAL_COMMONS_USER_MENU_DROPDOWN), 'expanded' => 1);
-  menu_link_save($parent);
-  
-  // Childs of "My stuff" menu
-  $links = array();
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 0, 'link_path' => 'user', 'link_title' => t('My profile'), 'plid' => $parent['mlid']);
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 1, 'link_path' => 'og/my', 'link_title' => t('My groups'), 'plid' => $parent['mlid']);
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 2, 'link_path' => 'group', 'link_title' => t('My unread'), 'plid' => $parent['mlid']);
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 3, 'link_path' => 'bookmarks', 'link_title' => t('My bookmarks'), 'plid' => $parent['mlid']);
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 4, 'link_path' => 'relationships', 'link_title' => t('My friends'), 'plid' => $parent['mlid']);
-  $links[] = array('menu_name' => 'primary-links', 'weight' => 5, 'link_path' => 'myuserpoints', 'link_title' => t('My points'), 'plid' => $parent['mlid']);
-  
-  foreach ($links as $link) {
-    menu_link_save($link);
-  } 
+  // Create additional primary menu items
+  commons_build_menu_dropdowns(FALSE);
 }
 
 /**

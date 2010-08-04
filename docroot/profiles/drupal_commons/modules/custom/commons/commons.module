@@ -1,10 +1,19 @@
 <?php
 // $Id$
 
+// Define the name of the user menu dropdown item
+define('COMMONS_USER_MENU_DROPDOWN', 'My stuff');
+
+// Define the name of the community menu dropdown item
+define('COMMONS_COMMUNITY_MENU_DROPDOWN', 'Community');
+
 /**
  * Implementation of hook_menu()
  */
 function commons_menu() {
+  // Rebuild primary nav drop-downs
+  commons_build_menu_dropdowns();
+  
   return array(
     'admin/settings/commons' => array(
       'title' => 'Drupal Commons',
@@ -15,6 +24,57 @@ function commons_menu() {
       'type' => MENU_NORMAL_ITEM,
     ),
   );
+}
+
+/**
+ * Create the needed drop-down primary menu entries
+ * 
+ * @param $reset
+ *   Boolean value to determine whether or not to attempt to remove
+ *   to drop-downs prior to inserting them. Defaults to TRUE.
+ */
+function commons_build_menu_dropdowns($reset = TRUE) {
+  // Delete any existing dropdowns before recreating them
+  if ($reset) {
+    db_query("DELETE FROM {menu_links} WHERE menu_name = 'primary-links' AND module = 'commons'");
+  }
+  
+  // Create "Community" drop down first, so we can fetch the mlid
+  $parent = array('menu_name' => 'primary-links', 'weight' => 3, 'link_path' => 'groups', 'link_title' => t(COMMONS_COMMUNITY_MENU_DROPDOWN), 'module' => 'commons', 'expanded' => 1);
+  menu_link_save($parent);
+  
+  // Children of "Community" menu
+  $links = array();
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 0, 'link_path' => 'groups', 'link_title' => t('Groups'), 'module' => 'commons', 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 2, 'link_path' => 'content/blogs', 'link_title' => t('Blog posts'), 'module' => 'commons', 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 4, 'link_path' => 'content/documents', 'link_title' => t('Documents'), 'module' => 'commons', 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 6, 'link_path' => 'content/discussions', 'link_title' => t('Discussions'), 'module' => 'commons', 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 8, 'link_path' => 'content/polls', 'link_title' => t('Polls'), 'module' => 'commons', 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 10, 'link_path' => 'content/wikis', 'link_title' => t('Wikis'), 'module' => 'commons', 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 12, 'link_path' => 'content/calendar', 'link_title' => t('Calendar'), 'module' => 'commons', 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 14, 'link_path' => 'users', 'link_title' => t('Members'), 'module' => 'commons', 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 16, 'link_path' => 'analytics', 'link_title' => t('Site analytics'), 'module' => 'commons', 'plid' => $parent['mlid']);
+  
+  foreach ($links as $link) {
+    menu_link_save($link);
+  } 
+  
+  // Create "My stuff" drop down first, so we can fetch the mlid
+  $parent = array('menu_name' => 'primary-links', 'weight' => 5, 'link_path' => 'user', 'link_title' => t(COMMONS_USER_MENU_DROPDOWN), 'module' => 'commons', 'expanded' => 1);
+  menu_link_save($parent);
+  
+  // Childs of "My stuff" menu
+  $links = array();
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 0, 'link_path' => 'user', 'link_title' => t('My profile'), 'module' => 'commons', 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 2, 'link_path' => 'og/my', 'link_title' => t('My groups'), 'module' => 'commons', 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 4, 'link_path' => 'group', 'link_title' => t('My unread'), 'module' => 'commons', 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 6, 'link_path' => 'bookmarks', 'link_title' => t('My bookmarks'), 'module' => 'commons', 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 8, 'link_path' => 'relationships', 'link_title' => t('My friends'), 'module' => 'commons', 'plid' => $parent['mlid']);
+  $links[] = array('menu_name' => 'primary-links', 'weight' => 10, 'link_path' => 'myuserpoints', 'link_title' => t('My points'), 'module' => 'commons', 'plid' => $parent['mlid']);
+  
+  foreach ($links as $link) {
+    menu_link_save($link);
+  }
 }
 
 /**
@@ -491,7 +551,7 @@ function commons_init() {
   }
 
   //  Force anonymous users to a login page
-  if (variable_get('commons_force_login', 0)) {
+  if (variable_get('commons_force_login', 0) && !variable_get('site_offline', 0)) {
     global $user;
   
     // If anonymous
@@ -630,6 +690,7 @@ function commons_set_breadcrumb($path) {
         switch ($path[1]) {
           case 'users':
           case 'search':
+          case 'subscribe':
             $group = node_load($path[2]);
             $breadcrumb[] = l(t('Groups'), 'groups');
             $breadcrumb[] = l($group->title, 'node/' . $group->nid); 
