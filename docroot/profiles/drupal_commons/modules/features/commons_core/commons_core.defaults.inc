@@ -4968,11 +4968,11 @@ function _commons_core_strongarm() {
   $strongarm->value = array(
     'title' => '-5',
     'body_field' => '-2',
-    'revision_information' => '6',
+    'revision_information' => '5',
     'author' => '9',
     'options' => '10',
     'comment_settings' => '7',
-    'menu' => '5',
+    'menu' => '6',
     'taxonomy' => '-3',
     'path' => '8',
     'og_description' => '-4',
@@ -4991,9 +4991,12 @@ function _commons_core_strongarm() {
     'title' => '-5',
     'body_field' => '-2',
     'revision_information' => '-1',
-    'comment_settings' => '1',
-    'menu' => '-4',
-    'path' => '0',
+    'author' => '3',
+    'options' => '4',
+    'comment_settings' => '2',
+    'menu' => '0',
+    'taxonomy' => '-4',
+    'path' => '1',
   );
 
   $export['content_extra_weights_notice'] = $strongarm;

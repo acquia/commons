@@ -593,6 +593,14 @@ function drupal_commons_import_permissions() {
       '0' => 'authenticated user',
     ),
   );
+  
+  // Permission: manage own subscriptions
+  $permissions[] = array(
+    'name' => 'manage all subscriptions',
+    'roles' => array(
+      '0' => DRUPAL_COMMONS_MANAGER_ROLE,
+    ),
+  );
 
   // Permission: manage own subscriptions
   $permissions[] = array(
@@ -718,7 +726,8 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'view field_content_images',
     'roles' => array(
-      '0' => 'authenticated user',
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
     ),
   );
 
@@ -799,18 +808,9 @@ function drupal_commons_import_permissions() {
     ),
   );
   
-  // Permission: view imagecache content_image_primary
+  // Permission: view imagecache Featured
   $permissions[] = array(
-    'name' => 'view imagecache content_image_primary',
-    'roles' => array(
-      '0' => 'anonymous user',
-      '1' => 'authenticated user',
-    ),
-  );
-  
-  // Permission: view imagecache content_image_secondary
-  $permissions[] = array(
-    'name' => 'view imagecache content_image_secondary',
+    'name' => 'view imagecache Featured',
     'roles' => array(
       '0' => 'anonymous user',
       '1' => 'authenticated user',
@@ -847,6 +847,15 @@ function drupal_commons_import_permissions() {
   // Permission: view imagecache profile_pictures
   $permissions[] = array(
     'name' => 'view imagecache profile_pictures',
+    'roles' => array(
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
+    ),
+  );
+  
+  // Permission: view imagecache Small
+  $permissions[] = array(
+    'name' => 'view imagecache Small',
     'roles' => array(
       '0' => 'anonymous user',
       '1' => 'authenticated user',

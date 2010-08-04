@@ -709,6 +709,9 @@ function drupal_commons_config_vars() {
   
   // Keep errors in the log and off the screen
   variable_set('error_level', 0);
+  
+  // Don't restrict user profile image upload size
+  variable_set('user_picture_file_size', '');
 }
 
 /**
