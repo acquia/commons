@@ -1,9 +1,4 @@
-/* @override 
-	http://commons.acquia.com/sites/all/themes/acquia_commons/css/acquia_commons-style.css?v
-	http://localhost:9016/profiles/drupal_commons/themes/acquia_commons/css/acquia_commons-style.css?T
-*/
-
-/* $Id: acquia_commons-style.css 7778 2010-08-04 15:23:05Z sheena $ */
+/* $Id: acquia_commons-style.css 7782 2010-08-04 18:28:49Z sheena $ */
 
 /* Basic Typography & Colors-------------------------------------------------------------- */
 
@@ -16,7 +11,7 @@ body {
 }
 
 /* Default link styles - separate a:visited for a different visited link style */
-
+ 
 a, 
 a:link,
 a:visited {
@@ -87,7 +82,7 @@ blockquote p:last-child {
   list-style-image: none;
   list-style: none;
   margin: 0 0 8px 0;
-  padding: 0 0 0 22px;
+  padding: 0 0 0 22px; 
   text-indent: 0;
 }
 
@@ -656,6 +651,12 @@ h1.title {
 	float: left;
 }
 
+/* images within node content */
+
+.node .content img {
+	padding: 10px;
+}
+
 /* Typography for node titles */
 
 h2.title {
@@ -1191,7 +1192,7 @@ tr.first.last td {
   border-bottom: 1px solid #ccc;
 }
 
-tr td.active {
+table tr td.active {
 background-color: #fafafa;  
 }
 
@@ -2524,6 +2525,10 @@ html.js fieldset.views-exposed-form.collapsed {
   width: 18px;
 }
 
+.view-recent-featured table tr td.views-field-type span.node-type {
+	margin-right: 10px;
+	}
+
 .view-recent-featured table tr td.views-field-type span.blog,
 .view-og-content-tracker table tr td.views-field-type span.blog,
 .view-recent-content-all table tr td.views-field-type span.blog {
@@ -2572,19 +2577,18 @@ html.js fieldset.views-exposed-form.collapsed {
   background: transparent url(../images/icons/notice-node.png) no-repeat center center;
 }
 
-.view-recent-featured table tr td.views-field-title a,
+
 .view-recent-content-all table tr td.views-field-title a,
 .view-og-content-tracker table tr td.views-field-title a {
   white-space: normal;
 }
 
-.view-recent-featured table tr th.views-field-group-nid,
+
 .view-recent-content-all table tr th.views-field-group-nid,
 .view-og-content-tracker table tr td.views-field-group-nid {
   max-width: 140px;
 }
 
-.view-recent-featured table tr td.views-field-name,
 .view-recent-content-all table tr td.views-field-name,
 .view-og-content-tracker table tr td.views-field-name {
   padding-right: 10px;
@@ -2595,6 +2599,17 @@ html.js fieldset.views-exposed-form.collapsed {
 
 /* global blog posts view*/
 
+.view-recent-featured td.views-field-title, 
+.view-content-global-polls td.views-field-title,
+.view-content-global-blogs td.views-field-title,
+.view-content-global-documents td.views-field-title,
+.view-content-global-discussions td.views-field-title,
+.view-content-global-wikis td.views-field-title {
+	max-width: 25%; 
+}
+
+
+.view-recent-featured span.title, 
 .view-content-global-polls span.title,
 .view-content-global-blogs span.title,
 .view-content-global-documents span.title,
@@ -2603,19 +2618,21 @@ html.js fieldset.views-exposed-form.collapsed {
   font-size: 1.2em;
   font-weight: bold;
   padding-right: 10px;
-}
+  white-space: normal;
+} 
 
-.view-content-global-polls span.title,
+.view-recent-featured span.posted-date,
 .view-content-global-polls span.posted-date,
-.view-content-global-blogs span.title,
 .view-content-global-blogs span.posted-date,
-.view-content-global-discussions span.title,
 .view-content-global-discussions span.posted-date,
-.view-content-global-wikis span.title,
 .view-content-global-wikis span.posted-date {
   white-space: nowrap;
 }
 
+
+.view-recent-featured span.replies,
+.view-recent-featured span.tags,
+.view-recent-featured span.updated-date,
 .view-content-global-polls span.replies,
 .view-content-global-polls span.tags,
 .view-content-global-polls span.updated-date,
@@ -2635,6 +2652,7 @@ html.js fieldset.views-exposed-form.collapsed {
   font-size: 11px;
 }
 
+.view-recent-featured span.updated-date,
 .view-content-global-polls span.updated-date,
 .view-content-global-blogs span.updated-date,
 .view-content-global-documents span.updated-date,
@@ -2697,6 +2715,10 @@ html.js fieldset.views-exposed-form.collapsed {
 	font-weight: bold;
 	font-family: Arial, Helvetica, sans-serif;
 	margin: 0 0 4px 0;
+}
+
+.view-user-directory .views-field-value-4{
+font-weight: bold;
 }
 
 /* User Meta - logout/account links in header w/ profile pic */
