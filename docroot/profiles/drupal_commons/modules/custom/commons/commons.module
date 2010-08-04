@@ -785,8 +785,8 @@ function commons_check_group_title($node) {
     // Check that this is a group node
     if (og_is_group_type($node->type)) {
       // See if a group with this title already exists
-      $sql = "SELECT n.nid FROM {node} n INNER JOIN {og} o ON o.nid = n.nid WHERE n.title = '%s'";
-      $existing = db_fetch_object(db_query($sql, $node->title));
+      $sql = "SELECT n.nid FROM {node} n INNER JOIN {og} o ON o.nid = n.nid WHERE n.title = '%s' AND n.nid != %d";
+      $existing = db_fetch_object(db_query($sql, $node->title, $node->nid));
       if ($existing) {
         form_set_error('title', t('A group already exists with that name. Please choose another.')); 
       }
