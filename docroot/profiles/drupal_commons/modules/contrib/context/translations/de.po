@@ -1,0 +1,556 @@
+# German translation of Context (6.x-2.0-rc2)
+# Copyright (c) 2010 by the German translation team
+# Generated from files:
+#  context_ui.admin.inc,v 1.1.2.7.2.22 2010/04/22 18:23:46 darthsteven
+#  context_ui.module,v 1.13.2.48.2.2 2010/04/21 01:23:38 darthsteven
+#  context.core.inc,v 1.1.2.3.2.26 2010/04/21 17:16:19 darthsteven
+#  context_contrib.module,v 1.1.2.2.2.10 2010/04/21 15:14:42 darthsteven
+#  context.info,v 1.4 2008/07/17 16:57:18 jmiccolis
+#  context_contrib.info,v 1.1.2.1 2009/03/09 06:43:55 yhahn
+#  context_ui.info,v 1.3 2008/07/17 16:57:19 jmiccolis
+#  context.install,v 1.1.2.1.2.6 2009/08/26 04:12:34 yhahn
+#  context_ui-list-contexts.tpl.php,v 1.1.2.1 2010/04/21 01:23:38 darthsteven
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Context (6.x-2.0-rc2)\n"
+"POT-Creation-Date: 2010-05-13 10:57+0200\n"
+"PO-Revision-Date: 2010-05-13 11:03+0100\n"
+"Last-Translator: Frank Tartler <frank.tartler@googlemail.com>\n"
+"Language-Team: German\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#: context.core.inc:67
+msgid "Node pages"
+msgstr "Beitragsseiten"
+
+#: context.core.inc:68
+msgid "Set this context when viewing a node page or using the add/edit form of one of these content types."
+msgstr "Diesen Kontext setzen, wenn eine Beitragsseite angezeigt wird oder beim Verwenden eines Hinzufügen-/Bearbeiten-Formulars eines dieser Inhaltstypen."
+
+#: context.core.inc:77
+msgid "User pages"
+msgstr "Benutzerseiten"
+
+#: context.core.inc:78
+msgid "Set this context when a user with selected role(s) is viewed"
+msgstr "Diesen Kontext setzen, wenn ein Benutzer der ausgewählten Rolle(n) angezeigt wrd."
+
+#: context.core.inc:90
+msgid "Book"
+msgstr "Buch"
+
+#: context.core.inc:91
+msgid "Set this context when a node in the selected book is viewed."
+msgstr "Diesen Kontext setzen, wenn ein Beitrag im ausgewählten Buch angezeigt wird."
+
+#: context.core.inc:99
+msgid "Sitewide context"
+msgstr "Websiteweiter Kontext"
+
+#: context.core.inc:101;111
+msgid "False"
+msgstr "Unwahr"
+
+#: context.core.inc:101;111
+msgid "True"
+msgstr "Wahr"
+
+#: context.core.inc:102
+msgid "Should this context always be set? If <strong>true</strong>, this context will be active across your entire site."
+msgstr "Soll dieser Kontext immer gesetzt werden? Bei <strong>wahr</strong> ist dieser Kontext auf der gesamten Webseite aktiv."
+
+#: context.core.inc:109
+msgid "Default context"
+msgstr "Standardkontext"
+
+#: context.core.inc:112
+msgid "If no other context is activated in this namespace and attribute, should this one be activated?"
+msgstr "Wenn in diesem Namensraum und Attribut kein anderer Kontext aktiviert ist, soll dann dieser aktiviert werden?"
+
+#: context.core.inc:119
+msgid "Path"
+msgstr "Pfad"
+
+#: context.core.inc:120
+msgid "Set this context when any of the paths above match the page path. Put each path on a separate line. You can use the \"*\" character as a wildcard and &lt;front&gt; for the front page."
+msgstr "Diesen Kontext setzen, weenn einer der obigen Pfade mit dem Seitenpfad übereinstimmt. Für jeden Pfad eine eigene Zeile verwenden. Das Zeichen „*“ ist ein Platzhalter, &lt;front%gt; ist die Startseite."
+
+#: context.core.inc:145;259
+msgid "None"
+msgstr "Ohne"
+
+#: context.core.inc:147
+msgid "Menu trail"
+msgstr "Menüpfad"
+
+#: context.core.inc:148
+msgid "Set this context when any of the selected menu items belong to the current active menu trail."
+msgstr "Diesen Kontext setzen, wenn einer der ausgewählten Menüeinträge zum momentan aktiven Menüpfad gehört."
+
+#: context.core.inc:172
+msgid "Taxonomy Terms"
+msgstr "Begriffe aus Taxonomien"
+
+#: context.core.inc:173
+msgid "Set this context when a node with a selected term is viewed. Select the vocabulary to set the context when a node contains any term in the vocabulary. Vocabularies and their terms will only appear in this list if you have explicity included them on their settings page."
+msgstr "Diesen Kontext setzen, wenn ein Beitrag mit einem ausgewählten Begriff angezeigt wird. Es muss das Vokabular ausgewählt werden um den Kontext zu setzen, wenn ein Beitrag einen Begriff im Vokabular enthält. Vokabulare und Begriffe erscheinen nur in dieser Liste, wenn sie auf ihrer Einstellungsseite ausdrücklich eingeschlossen wurden."
+
+#: context.core.inc:261
+msgid "Active menu"
+msgstr "Aktives Menü"
+
+#: context.core.inc:262
+msgid "Display the selected menu item as active in the <strong>$primary_links</strong> or <strong>$secondary_links</strong> of page.tpl.php when this context is set."
+msgstr "Den ausgewählten Menüeintrag in den <strong>$primary_links</strong> oder <strong>$secondary_links</strong> von page.tlp.php als aktiv anzeigen, wenn dieser Kontext gesetzt ist."
+
+#: context.core.inc:277
+msgid "Theme variables"
+msgstr "Theme-Variablen"
+
+#: context.core.inc:279
+msgid "Section title"
+msgstr "Abschnittstitel"
+
+#: context.core.inc:280
+msgid "Provides this text as a <strong>$section_title</strong> variable for display in page.tpl.php when this context is active."
+msgstr "Stellt diesen Text als Variable <strong>$section_title</strong> zur Anzeige in page.tpl.php bereit, wenn dieser Kontext aktiv ist."
+
+#: context.core.inc:285
+msgid "Section subtitle"
+msgstr "Abschnittsuntertitel"
+
+#: context.core.inc:286
+msgid "Provides this text as a <strong>$section_subtitle</strong> variable for display in page.tpl.php when this context is active."
+msgstr "Stellt diesen Text als Variable <strong>$section_subtitle</strong> zur Anzeige in page.tpl.php bereit, wenn dieser Kontext aktiv ist."
+
+#: context.core.inc:291
+msgid "Section class"
+msgstr "Abschnittsklasse"
+
+#: context.core.inc:292
+msgid "Provides this text as an additional body class (in <strong>$body_classes</strong> in page.tpl.php) when this section is active."
+msgstr "Stellt diesen Text als zusätzliche Textkörper-Klasse (in <strong>$body_classes</strong> in page.tpl.php) bereit, wenn dieser Kontext aktiv ist."
+
+#: context.core.inc:302
+msgid "Disabled regions"
+msgstr "Deaktivierte Bereiche"
+
+#: context.core.inc:376
+msgid "Include as context condition"
+msgstr "Als Kontext-Bedingung einschließen"
+
+#: context.core.inc:377
+msgid "Select to make this vocabulary available for use as a context condition."
+msgstr "Auswählen, damit dieses Vokabular zur Verwendung als Kontext-Bedingung verfügbar ist."
+
+#: context.core.inc:635
+msgid "Add !type"
+msgstr "Neue !type"
+
+#: context.install:23
+msgid "Storage for normal (user-defined) contexts."
+msgstr "Speicher für normale (benutzerdefinierte) Kontexte."
+
+#: context.install:26
+msgid "The primary identifier for a context."
+msgstr "Der Primärschlüssel für einen Kontext."
+
+#: context.install:32
+msgid "The namespace for a context."
+msgstr "Der Namensraum für einen Kontext."
+
+#: context.install:39
+msgid "The attribute for a context."
+msgstr "Das Attirbut für einen Kontext."
+
+#: context.install:46
+msgid "The value for a context."
+msgstr "Der Wert für einen Kontext."
+
+#: context.install:53
+msgid "Serialized storage of all associated context items."
+msgstr "Angeordneter Speicher aller verknüpfter Kontextelemente."
+
+#: context.info:0;0
+#: context_ui.info:0
+#: context_contrib/context_contrib.info:0
+#: context_ui/context_ui.admin.inc:794
+#: context_ui/context_ui.module:71
+#: context_ui/context_ui.info:0
+msgid "Context"
+msgstr "Kontext"
+
+#: context.info:0
+msgid "Provide modules with a cache that lasts for a single page request."
+msgstr "Stellt Modulen einen Cache bereit, der einen Seitenaufruf lang andauert."
+
+#: context_ui.info:0
+#: context_ui/context_ui.info:0
+msgid "Context UI"
+msgstr ""
+
+#: context_ui.info:0
+#: context_ui/context_ui.info:0
+#, fuzzy
+msgid "Provides a simple UI for setting up a site structure using Context."
+msgstr "Stellt eine einfache Benutzeroberfläche zum Aufsetzen einer Website-Struktur mittels Context bereit."
+
+#: context_contrib/context_contrib.module:14
+msgid "Views"
+msgstr "Ansichten"
+
+#: context_contrib/context_contrib.module:15
+msgid "Set this context when displaying the page of one of these views."
+msgstr "Diesen Kontext setzen, wenn die Seite einer dieser Ansichten angezeigt wird."
+
+#: context_contrib/context_contrib.module:29
+msgid "Nodequeue"
+msgstr ""
+
+#: context_contrib/context_contrib.module:30
+msgid "Set this context when a node in the selected nodequeue(s) is viewed."
+msgstr "Diesen Kontext setzen, wenn ein Beitrag in den ausgewählten Nodequeues angezeigt wird."
+
+#: context_contrib/context_contrib.module:62
+msgid "CSS injector"
+msgstr "CSS-Injektor"
+
+#: context_contrib/context_contrib.module:63
+msgid "Inject the selected css when this context is set."
+msgstr "Ausgewähltes CSS einfügen, wenn dieser Kontext gesetzt ist."
+
+#: context_contrib/context_contrib.module:72
+msgid "JS injector"
+msgstr "JS-Injektor"
+
+#: context_contrib/context_contrib.module:73
+msgid "Inject the selected js when this context is set."
+msgstr "Ausgewähltes JS einfügen, wenn dieser Kontext gesetzt ist."
+
+#: context_contrib/context_contrib.info:0
+msgid "Context Contrib"
+msgstr ""
+
+#: context_contrib/context_contrib.info:0
+msgid "Provides integration with Context on behalf of the following contrib modules: Nodequeue, Views, CSS Injector."
+msgstr "Stellt eine Integration mit Context auf Basis der folgenden Zusatzmodule bereit: Nodequeue, Views, CSS Injector."
+
+#: context_ui/context_ui-list-contexts.tpl.php:24
+msgid "<em>@type</em> context: <strong>@context</strong>"
+msgstr "<em>@type</em>-Kontext: <strong>@context</strong>"
+
+#: context_ui/context_ui-list-contexts.tpl.php:34
+msgid "Conditions: @conditions"
+msgstr "Bedingungen: @conditions"
+
+#: context_ui/context_ui-list-contexts.tpl.php:37
+msgid "Reactions: @reactions"
+msgstr "Reaktionen: @reactions"
+
+#: context_ui/context_ui.admin.inc:42
+msgid "Override"
+msgstr "Überschreiben"
+
+#: context_ui/context_ui.admin.inc:43;49;56;736
+#: context_ui/context_ui.module:97;127
+msgid "Export"
+msgstr "Exportieren"
+
+#: context_ui/context_ui.admin.inc:44;50;57
+#: context_ui/context_ui.module:121
+msgid "Clone"
+msgstr "Duplizieren"
+
+#: context_ui/context_ui.admin.inc:48;55
+#: context_ui/context_ui.module:110
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: context_ui/context_ui.admin.inc:51
+msgid "Revert"
+msgstr "Zurücksetzen"
+
+#: context_ui/context_ui.admin.inc:58;385
+#: context_ui/context_ui.module:133
+msgid "Delete"
+msgstr "Löschen"
+
+#: context_ui/context_ui.admin.inc:63
+#: context_ui/context_ui.module:145
+msgid "Enable"
+msgstr "Aktivieren"
+
+#: context_ui/context_ui.admin.inc:67
+#: context_ui/context_ui.module:139
+msgid "Disable"
+msgstr "Deaktivieren"
+
+#: context_ui/context_ui.admin.inc:76;83
+msgid "none"
+msgstr "keine"
+
+#: context_ui/context_ui.admin.inc:91
+msgid "Install the advanced help module to view the getting started"
+msgstr "Um die ersten Schritte anzuzeigen muss das Modul ‚Adcanced Help‘ installiert werden."
+
+#: context_ui/context_ui.admin.inc:92
+msgid "If you install the <a href=\"@advanced_help_link\">Advanced Help</a> module you can get more and better help."
+msgstr "Wenn das Modul <a href=\"@advanced_help_link\">Advanced Help</a> installiert wird, ist mehr und bessere Hilfe verfügbar."
+
+#: context_ui/context_ui.admin.inc:95
+msgid "Not sure what to do? Try the \"!getting-started\" page."
+msgstr "Nicht sicher was Sie machen sollen? Versuchen Sie die „!getting-started“-Seite aufzurufen."
+
+#: context_ui/context_ui.admin.inc:164
+msgid "Add a new context"
+msgstr "Einen neuen Kontext hinzufügen"
+
+#: context_ui/context_ui.admin.inc:168
+msgid "Edit context: %title"
+msgstr "Kontext bearbeiten: %title"
+
+#: context_ui/context_ui.admin.inc:171
+msgid "View %title"
+msgstr "%title anzeigen"
+
+#: context_ui/context_ui.admin.inc:175
+msgid "Clone context: %title"
+msgstr "Kontext duplizieren: %title"
+
+#: context_ui/context_ui.admin.inc:213
+msgid "A system name for this context. May only contain lowercase letters, underscores, and numbers. Example: <strong>science_blog</strong>"
+msgstr "Ein Systemname für diesen Kontext. Darf nur Kleinbuchstaben, Unterstriche und Zahlen enthalten. Beispiel: <strong>science_blog</strong>"
+
+#: context_ui/context_ui.admin.inc:216
+msgid "The type of context information provided in this namespace. Example: <strong>section</strong>"
+msgstr "Die Art der Kontextinformationen, die in diesem Namensraum bereitgestellt werden. Beispiel: <strong>section</strong>"
+
+#: context_ui/context_ui.admin.inc:219
+msgid "The namespace for this context definition. Example: <strong>context_ui</strong>"
+msgstr "Der Namensraum dieser Kontextdefinition. Beispiel: <strong>context_ui</strong>"
+
+#: context_ui/context_ui.admin.inc:224
+msgid "The description of this context definition."
+msgstr "Die Beschreibung dieser Kontextdefinition."
+
+#: context_ui/context_ui.admin.inc:289
+msgid "Control block visibility using context. Selected blocks will be shown when this context is set provided that custom block visibility settings and/or throttling do not hide them. Grayed out blocks are those provided by Drupal's standard block settings. These settings apply to the current theme and any enabled themes with regions in common."
+msgstr "Blocksichtbarkeit mittels Kontext steuern. Ausgewählte Blöcke werden angezeigt, wenn dieser Kontext gesetzt ist, vorausgesetzt benutzerdefinierte Blocksichtbarkeitseinstellungen und die Lastreduzierung diese nicht verbergen. Ausgegraute Blöcke werden von den standardmäßigen Drupal-Blockeinstellungen bereitgestellt. Diese Einstellungen beziehen sich sowohl auf das aktuelle Theme als auch auf alle Themes mit Bereichen."
+
+#: context_ui/context_ui.admin.inc:372
+msgid "Back"
+msgstr "Zurück"
+
+#: context_ui/context_ui.admin.inc:378
+msgid "Save"
+msgstr "Speichern"
+
+#: context_ui/context_ui.admin.inc:465
+msgid "Conditions"
+msgstr "Bedingungen"
+
+#: context_ui/context_ui.admin.inc:466
+msgid "trigger the activation of this context"
+msgstr "lösen die Aktivierung dieses Kontexts aus"
+
+#: context_ui/context_ui.admin.inc:474
+msgid "Reactions"
+msgstr "Reaktionen"
+
+#: context_ui/context_ui.admin.inc:475
+msgid "respond when this context is active"
+msgstr "sprechen an, wenn dieser Kontext aktiv ist"
+
+#: context_ui/context_ui.admin.inc:515
+msgid "revert"
+msgstr "Zurücksetzen"
+
+#: context_ui/context_ui.admin.inc:516
+msgid "This action will permanently remove any customizations made to this context."
+msgstr "Diese Aktion entfernt endgültig alle Anpassungen von diesem Kontext."
+
+#: context_ui/context_ui.admin.inc:519
+msgid "delete"
+msgstr "löschen"
+
+#: context_ui/context_ui.admin.inc:520
+msgid "This action will remove this context permanently from your site."
+msgstr "Diese Aktion entfernt diesen Kontext endgültig von dieser Webseite."
+
+#: context_ui/context_ui.admin.inc:525
+msgid "disable"
+msgstr "deaktivieren"
+
+#: context_ui/context_ui.admin.inc:529
+msgid "enable"
+msgstr "aktivieren"
+
+#: context_ui/context_ui.admin.inc:534
+msgid "Are you sure you want to !action the context %title?"
+msgstr "Wollen Sie den Kontext %title !action?"
+
+#: context_ui/context_ui.admin.inc:537
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: context_ui/context_ui.admin.inc:580
+msgid "Import context"
+msgstr "Kontext importieren"
+
+#: context_ui/context_ui.admin.inc:581
+msgid "You can import a context definition by pasting the exported context object code into the field below."
+msgstr "Es kann eine Kontextdefinition importiert werden, indem der exportierte Kontext-Objektcode in das Feld unten eingefügt wird."
+
+#: context_ui/context_ui.admin.inc:588
+msgid "Context Object"
+msgstr "Kontextobjekt"
+
+#: context_ui/context_ui.admin.inc:595
+#: context_ui/context_ui.module:90
+msgid "Import"
+msgstr "Importieren"
+
+#: context_ui/context_ui.admin.inc:618
+msgid "A user-defined context definition with this space/key/value identifier already exists. Please remove the existing context before importing this definition."
+msgstr "Eine benutzerdefinierte Kontextdefinition mit dieser Raum-/Schlüssel-/Wert-ID existiert bereits. Bitte vor dem Import dieser Definition den existierenden Kontext entfernen."
+
+#: context_ui/context_ui.admin.inc:622
+msgid "Add context"
+msgstr "Kontext hinzufügen"
+
+#: context_ui/context_ui.admin.inc:629
+msgid "An error occurred while importing. Please check your context definition."
+msgstr "Beim Importieren ist ein Fehler aufgetreten. Bitte die Kontextdefinition prüfen."
+
+#: context_ui/context_ui.admin.inc:644
+msgid "Export %title"
+msgstr "%title exportieren"
+
+#: context_ui/context_ui.admin.inc:707
+msgid "Code"
+msgstr "Code"
+
+#: context_ui/context_ui.admin.inc:708
+msgid "Put this in your module's .module file."
+msgstr "Dies in der .module-Datei Ihres Moduls ablegen."
+
+#: context_ui/context_ui.admin.inc:728
+msgid "Module Name"
+msgstr "Modulname"
+
+#: context_ui/context_ui.admin.inc:729
+msgid "The name of the module for which to generate the hook."
+msgstr "Der Name des Moduls, für den der Hook erzeugt werden soll."
+
+#: context_ui/context_ui.admin.inc:820
+msgid "X"
+msgstr "X"
+
+#: context_ui/context_ui.admin.inc:829
+msgid "+ Add"
+msgstr "+ Hinzufügen"
+
+#: context_ui/context_ui.admin.inc:844
+msgid "The context !elem can only consist of lowercase letters, underscores, and numbers."
+msgstr "Der Kontext !elem darf nur aus Kleinbuchstaben, Unterstrichen und Zahlen bestehen."
+
+#: context_ui/context_ui.admin.inc:854
+msgid "A user-defined context with this namespace/key/value identifier already exists. Please delete the existing definition before creating a new one."
+msgstr "Es existiert bereits ein benutzerdefinierter Kontext mit dieser Namensraum-/Schlüssel-/Wert-ID. Die existierende Definition muss gelöscht werden, bevor eine neue erstellt werden kann."
+
+#: context_ui/context_ui.admin.inc:865
+msgid "A user-defined context with this namespace/key/value identifier already exists. Please delete the existing context or change your namespace/key/value identifiers."
+msgstr "Es existiert bereits ein benutzerdefinierter Kontext mit dieser Namensraum-/Schlüssel-/Wert-ID. Bitte den existierenden Kontext löschen oder die Namensraum-/Schlüssel-/Wert-ID ändern."
+
+#: context_ui/context_ui.admin.inc:945
+msgid "The context %title was saved successfully."
+msgstr "Der Kontext %title wurde gespeichert."
+
+#: context_ui/context_ui.admin.inc:948
+msgid "An error occurred while attempting to save your context information."
+msgstr "Beim Versuch, die Kontextinformationen zu speichern, ist ein Fehler aufgetreten."
+
+#: context_ui/context_ui.module:46;52
+msgid "Context Devel"
+msgstr ""
+
+#: context_ui/context_ui.module:58
+msgid "No context information is set."
+msgstr "Keine Kontextinformationen gesetzt."
+
+#: context_ui/context_ui.module:180
+msgid "Contexts provide you with a way to organize your site using terms familiar to real human beings. You can create a set of sections like <em>'News'</em>, <em>'Projects'</em>, <em>'Staff'</em>, and associate different technical aspects of Drupal to each section. For example, the <em>'News'</em> section may be a collection of <em>Nodes</em>, <em>Views</em>, <em>Menus</em> and <em>Blocks</em>."
+msgstr ""
+
+#: context_ui/context_ui.module:214
+msgid "Override visibility"
+msgstr "Sichtbarkeit überschreiben"
+
+#: context_ui/context_ui.module:217
+msgid "Edit visibility"
+msgstr "Sichtbarkeit bearbeiten"
+
+#: context_ui/context_ui.module:226
+msgid "Namespace"
+msgstr "Namensraum"
+
+#: context_ui/context_ui.module:226
+msgid "Attribute"
+msgstr "Eigenschaft"
+
+#: context_ui/context_ui.module:226
+msgid "Value"
+msgstr "Wert"
+
+#: context_ui/context_ui.module:226
+msgid "Region"
+msgstr "Region"
+
+#: context_ui/context_ui.module:229
+msgid "No visibility rules have been set for this block using context_ui."
+msgstr "Für diesen Block wurden keine Sichtbarkeitsregeln mittels context_ui gesetzt."
+
+#: context_ui/context_ui.module:234
+msgid "Context UI visibility"
+msgstr "Context-UI-Sichtbarkeit"
+
+#: context_ui/context_ui.module:241
+msgid "To add or remove block visibility rules based on context, use the !context_admin."
+msgstr "Zum Hinzufügen oder Entfernen von Blocksichtbarkeitsregeln basierend auf Kontext, dazu !context_admin verwenden."
+
+#: context_ui/context_ui.module:241
+msgid "context administration page"
+msgstr "Kontextverwaltungsseite"
+
+#: context_ui/context_ui.module:72
+msgid "Associate menus, views, blocks, etc. with different contexts to structure your site."
+msgstr "Menüs, Ansichten, Blöcke usw. mit verschiedenen Kontexten verknüpfen, um diese Webseite zu strukturieren."
+
+#: context_ui/context_ui.module:77
+msgid "List"
+msgstr "Liste"
+
+#: context_ui/context_ui.module:82
+msgid "Add"
+msgstr "Hinzufügen"
+
+#: context_ui/context_ui.module:83
+msgid "Add a context to your site."
+msgstr "Einen Kontext zur Webseite hinzufügen."
+
+#: context_ui/context_ui.module:91
+msgid "Import a context definition into your site."
+msgstr "Eine Kontextdefinition in diese Webseite importieren."
+
+#: context_ui/context_ui.module:98
+msgid "Export multiple contexts from your site."
+msgstr "Mehrere Kontexte aus dieser Webseite exportieren."
+
+#: context_ui/context_ui.module:117
+msgid "Core attributes"
+msgstr "Kern Attribute"
+

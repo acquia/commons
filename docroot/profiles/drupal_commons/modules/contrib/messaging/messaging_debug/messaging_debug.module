@@ -1,0 +1,389 @@
+<?php
+// $Id: messaging_debug.module,v 1.1.2.4.2.11.2.2 2009/06/05 17:28:29 jareyero Exp $
+/**
+ * @file
+ * Simple messaging using html page. Messaging method plug-in
+ * 
+ * This is a really simple message viewer and also an illustration of pulling messaging methods
+ */
+
+// Number of messages to display per page
+define('MESSAGING_DEBUG_PAGER', 10);
+
+/**
+ * Implementation of hook_menu().
+ */
+function messaging_debug_menu() {
+  $items['user/%user/messagelog'] = array(
+    'type' => MENU_LOCAL_TASK,
+    'title' => 'Message log',
+    'page callback' => 'messaging_debug_user_page',
+    'page arguments' => array(1),
+    'access callback' => 'messaging_debug_access',
+    'access arguments' => array(1),
+  );
+  $items['admin/messaging/settings/test'] = array(
+    'title' => 'Test',
+    'description' => 'Test message sending',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('messaging_debug_post_form'),
+    'access arguments' => array('administer messaging'),
+    'weight' => -10,
+    'type' => MENU_LOCAL_TASK,
+  );
+  return $items;
+}
+
+/**
+ * Access calback
+ */
+function messaging_debug_access($account) {
+  global $user;
+  return $account->uid && (($account->uid == $user->uid) || user_access('administer messaging'));
+}
+
+/**
+ * Implementation of hook_block()
+ */
+function messaging_debug_block($op = 'list', $delta = 0, $edit = array()) {
+  switch ($op) {
+    case 'list':
+      $blocks[0]['info'] = t('Debug: Post message');
+      $blocks[1]['info'] = t('Debug: Message log');
+      return $blocks;
+    case 'view':
+      switch ($delta) {
+        case 0:
+          $block['subject'] = t('Post message');
+          $block['content'] = drupal_get_form('messaging_debug_post_form');
+          return $block;
+        case 1:
+          if (!empty($_SESSION['messaging_debug_store'])) {
+            $block['subject'] = t('Message log');
+            foreach ($_SESSION['messaging_debug_store'] as $index => $message) {
+              list($text, $variables) = _messaging_debug_log_text($message);
+              $description = t($text, $variables);
+              $form[$index]= array('#type' => 'fieldset', 
+                '#title' => truncate_utf8($description, 20),
+                '#description' => $description,
+                '#collapsible' => TRUE, '#collapsed' => TRUE);
+              $form[$index][] = array('#type' => 'item', '#title' => t('Subject'), '#value' => check_plain($message->subject));
+              $form[$index][] = array('#type' => 'item', '#title' => t('Body'), '#value' => check_plain($message->body));
+            }
+            $block['content'] = drupal_render($form);
+            unset($_SESSION['messaging_debug_store']);
+            return $block;
+          }
+          break;
+      }
+      break; 
+  }
+}
+
+/**
+ * Incoming message form
+ */
+function messaging_debug_post_form() {
+  global $user;
+
+  // Availbable sending methods
+  $form['method'] = array(
+    '#title' => t('Send method'),
+    '#type' => 'select',
+    '#options' => messaging_method_list(),
+    '#default_value' => messaging_method_default(),
+  );
+  $form['to'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Destination'),
+    '#size' => 20,
+    '#autocomplete_path' => 'user/autocomplete',
+    '#default_value' => $user->name, 
+  );
+  $form['subject'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Subject'),
+      '#size' => 20,
+  );
+  $form['body'] = array(
+      '#type' => 'textarea',
+      '#title' => t('Body'),    
+  );
+    
+  $form['submit'] = array('#type' => 'submit', '#value' => t('Send'));
+  
+  return $form;
+}
+
+/**
+ * Post test message
+ */
+function messaging_debug_post_form_submit($form, $form_state) {
+  global $user;  
+  
+  // Convert body in array of lines
+  $body = split("\n", $form_state['values']['body']);
+  $body = array_map('trim', $body);
+  
+  $message = (object)array(
+    'type' => 'debug',
+    'subject' => $form_state['values']['subject'],
+    'body' => $body,  
+  );
+  
+  // Destination may be account or plain parameter/s
+  $destination = $form_state['values']['to'];
+  if ($account = user_load(array('name' => $destination))) {
+    $result = messaging_message_send_user($account, $message, $form_state['values']['method']);
+  } else {
+    $result = messaging_message_send(array($destination), $message, $form_state['values']['method']);
+  }
+  drupal_set_message(t('Sent message with result: %result', array('%result' => $result ? 'OK' : 'Error'))); 
+}
+
+/**
+ * Implementation of hook_form_alter()
+ */
+function messaging_debug_form_alter(&$form, $form_state, $form_id) {
+  if ($form_id == 'messaging_admin_settings') {
+    $form['general']['messaging_debug'] = array(
+      '#title' => t('Debug mode'),
+      '#type' => 'radios',
+      '#options' => array(t('Disabled'), t('Enabled')),
+      '#default_value' => variable_get('messaging_debug', 0),
+      '#description' => t('If enabled, messages wont be sent out but logged to watchdog, and displayed in the page footer.')
+    );    
+  }
+}
+
+/**
+ * Menu callback. Display pending messages to the user
+ * 
+ * Sample Implementation of messaging pull methods
+ */
+function messaging_debug_user_page($account) {
+  drupal_set_title(t('Messages for %name', array('%name' => $account->name)));
+  // Fetch all pending messages.
+  $output = '';
+  
+  // Use this method's info for all the messages
+  $messages = messaging_store('get', array('uid' => $account->uid), array('mqid DESC'), MESSAGING_DEBUG_PAGER, 0);
+  if ($messages) {
+    $header = array(t('Method'), t('Subject'), t('Body'));
+    foreach ($messages as $message) {
+      // Check plain everything so we can actually see the mark up if any
+      $rows[] = array($message->method, check_plain($message->subject), check_plain($message->body));
+    }
+    $output .= theme('table', $header, $rows);
+    $output .= theme('pager', array(), MESSAGING_DEBUG_PAGER); 
+  } else {
+    $output .=  t('No logged messages');
+  }
+  return $output;
+}
+
+/**
+ * Implementation of hook_messaging
+ */
+function messaging_debug_messaging($op = 'info', $type = NULL) {
+  switch($op) {
+    case 'send methods':
+      $info['debug'] = array(
+        'title' => t('Debug'),
+        'name' => t('Debug'),
+        'destination' => 'name',
+        'type' => MESSAGING_TYPE_PUSH,
+        'glue' => '<br />',
+        'description' => t('The messages will be just logged (And printed on page if Devel module enabled).'),
+        'send callback' => 'messaging_debug_send_msg',
+      );
+      return $info;
+  }        
+}
+
+/**
+ * Implementation of hook_action_info().
+ */
+function messaging_debug_action_info() {
+  return array(
+    'messaging_debug_watchdog_msg' => array(
+      'type' => 'messaging',
+      'description' => t('Log message to watchdog'),
+      'configurable' => FALSE,
+      'hooks' => array(
+        'messaging' => array('incoming', 'outgoing'),
+      ),
+    ),
+    'messaging_debug_devlog_msg' => array(
+      'description' => t('Log message through devel module'),
+      'type' => 'messaging',
+      'configurable' => FALSE,
+      'hooks' => array(
+        'messaging' => array('incoming', 'outgoing'),
+      )
+    ),
+    'messaging_debug_block_msg' => array(
+      'description' => t('Display message in block'),
+      'type' => 'messaging',
+      'configurable' => FALSE,
+      'hooks' => array(
+        'messaging' => array('incoming', 'outgoing'),
+      )
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_messaging_methods_alter()
+ */
+function messaging_debug_messaging_methods_alter(&$info) {
+  // If debug enabled, replace all send callbacks
+  if (variable_get('messaging_debug', 0)) {
+    foreach (array_keys($info) as $method) {
+      $info[$method]['send callback'] = _messaging_callback('messaging_debug_send_msg');
+      //$info[$method]['user callback'] = _messaging_callback('messaging_debug_send_user');
+    }
+  }
+}
+
+/**
+ * Messaging processor
+ */
+function messaging_debug_watchdog_msg($message, $context) {
+  list($text, $variables) = _messaging_debug_log_text($message);
+  watchdog('messaging', $text, $variables);
+
+  // Return message without changes for further processing
+  return $message;
+}
+
+/**
+ * Message processor, just log incoming messages
+ */
+function messaging_debug_devlog_msg($message, $context) {
+  if (module_exists('devel')) {
+    list($text, $variables) = _messaging_debug_log_text($message);
+    dsm($message, t($text, $variables));
+  }
+
+  // Return message without changes for further processing
+  return $message;
+}
+
+/**
+ * Message processor, store for display in a block
+ */
+function messaging_debug_block_msg($message, $context) {
+  $_SESSION['messaging_debug_store'][] = $message;
+  return $message;
+}
+
+/**
+ * Format message as loggable text
+ */
+function _messaging_debug_log_text($message) {
+  $source = $message->source;
+  $variables = array(
+    '%subject' => $message->subject,
+  );
+  if ($source['type'] == 'incoming') {
+    $text = 'Incoming message, method %method, channel %channel: %subject';
+    $variables +=  array('%method' => $source['method'], '%channel' => $source['channel']);  
+  } elseif ($source['type'] == 'outgoing') {
+    $text = 'Outgoing message, method %method: %subject';
+    $variables += array('%method' => $message->method);  
+  } else {
+    $text = 'Unknown message type, full dump: %message';
+    $variables['%message'] = print_r($message, TRUE);
+  }
+  return array($text, $variables);
+}
+
+/**
+ * Messaging debug logs
+ */
+function messaging_debug_log($txt = NULL, $variables = NULL) {
+  // Sometimes we are passing objects as variables, we need to make sure they are not by reference
+  // We can let this be for normal logs but for debugging we want accurate unique data on each stage
+  if ($variables) {
+    foreach ($variables as $key => $value) {
+      if (is_object($value)) {
+        $variables[$key] = clone($value);
+      }
+    }
+  }
+  return _messaging_log('debug', $txt, $variables);
+}
+
+/**
+ * Format complex log as collapsible fieldset
+ */
+function _messaging_debug_format_log($type, $string, $append, $objects) {
+  $content = '';
+  foreach ($objects as $key => $value) {
+    $content .= _messaging_debug_format_object($value, $key);
+  }
+  // Build collapsible fieldset
+  $field['object'] = array(
+    '#type' => 'fieldset',
+    '#title' => $string,
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#description' => $append ? implode(' ', $append) : '',
+  );
+
+  $field['object']['content']['#value'] = $content;
+  
+  return drupal_render($field);    
+}
+
+/**
+ * Format objects/array in logs
+ */
+function _messaging_debug_format_object($data, $name) {
+  $rows = array();
+  foreach ($data as $key => $value) {
+    if (is_object($value) || is_array($value)) {
+      $content = _messaging_debug_format_object($value, $key);
+    } else {
+      // Make line endings visible
+      $content = str_replace("\n", '\n<br />', check_plain($value));
+    }
+    $rows[] = array(
+      check_plain($key),
+      $content, 
+    );
+  }
+  $header = array(check_plain($name), is_object($data) ? t('Object') : t('Array'));
+  return theme('table', $header, $rows);
+}
+
+/**
+ * Just show message title to the user. 
+ * 
+ * This is a pull method though, so this is mainly intended for testing options
+ */
+function messaging_debug_send_msg($destination, &$message) {
+  // Just logs everything and mark the message for logging too.
+  $message->log = 1;
+  $text = '';
+  $watchdog = array();
+  $variables = array('%name' => $destination, '%key' => $message->type, '%subject' => $message->subject, '!body' => $message->body);
+  messaging_log('Message %key for %name: %subject', $variables);
+  // Just log message body at the end
+  watchdog('messaging', 'Message %key for %name: %subject <br /> Message body: <br /><pre>!body</pre>', $variables);
+  return TRUE;
+}
+
+/**
+ * Implementation of hook_footer()
+ * 
+ * Only debugging functionality for administrators, prints out a table with logs
+ * 
+ * Note: this is useless when there is a redirection after submitting. Enable Devel option 'Display redirection page' to see them.
+ */
+function messaging_debug_footer() {
+  if (variable_get('messaging_debug', 0) && user_access('administer messaging') && ($logs = messaging_log())) {
+    return messaging_log_format($logs);
+  }
+}

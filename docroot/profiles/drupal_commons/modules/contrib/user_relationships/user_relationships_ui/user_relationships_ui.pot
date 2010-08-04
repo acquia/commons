@@ -1,0 +1,632 @@
+# $Id$
+#
+# LANGUAGE translation of Drupal (user_relationships_ui)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  user_relationships_ui.admin.inc,v 1.1.2.19 2009/10/15 15:23:26 aufumy
+#  user_relationships_ui.module,v 1.1.2.31 2009/10/24 19:44:06 alexk
+#  user_relationships_ui.pages.inc,v 1.1.2.6 2009/07/06 15:39:21 alexk
+#  user_relationships_ui.admin_actions.inc,v 1.1.2.12 2009/04/27 16:02:59 alexk
+#  user_relationships_ui.forms.inc,v 1.1.2.17 2009/10/15 15:23:26 aufumy
+#  user_relationships_ui.theme.inc,v 1.1.2.9 2009/10/15 15:23:26 aufumy
+#  user_relationships_ui/user_relationships_ui.js: n/a
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2009-11-04 11:56+0100\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:16
+msgid "General"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:21
+msgid "Allow multiple relationships"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:22
+msgid "Give users the option to create more than one relationship to each other."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:27
+msgid "Show direct request links"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:28
+msgid "Show a 'create relationship with...' link for each available relationship type."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:33
+msgid "Show user pictures in relationship pages"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:34
+msgid "This will show user's picture next to the user name on My relationships pages."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:39
+msgid "Allow users to auto approve"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:40
+msgid "This will provide an option for users to set an \"auto-approve\" option to automatically approve to all requested relationships."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:45
+msgid "Relationships per page"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:47
+msgid "Number of relationships to show per page. If set to 0 all will be shown."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:50
+msgid "The relationships per page setting is not an integer"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:56 user_relationships_ui/user_relationships_ui.module:695
+msgid "Private messages"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:60
+msgid "Restrict Private Messaging to only related users"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:61
+msgid "Allow Privatemsg to work only between related users"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:64
+msgid "Allow sending messages to all users"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:65
+msgid "Allow sending messages to all users, users have option to accept messages only from their confirmed relationships"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:66
+msgid "Allow sending messages only to confirmed relationships (You probably should enable \"Suggest only relationships\" below)"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:71
+msgid "Suggest only relationships in To: field"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:72
+msgid "Show only user's relationships when autocompleting the To: field."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:78
+msgid "AJAX Popup Positioning"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:81
+msgid "Some themes may require repositioning of AJAX confirmation dialogs. You may use these controls to set where the popup appears on the page or in relation to the mouse cursor."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:85
+msgid "Show AJAX confirmation popups"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:87
+msgid "Other popup settings below will only take effect if popups are enabled."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:91
+msgid "Elaboration form's css position"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:94
+msgid "Mouse cursor"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:95
+msgid "Fixed"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:97
+msgid "Sets the css <em>position</em> property of AJAX confirmation popups."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:101
+msgid "Elaboration form's css left value"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:104
+msgid "Sets the css <em>left</em> property of AJAX confirmation popups. Try the value of 0 for 'Mouse cursor', or 0.5 for 'Fixed'. You may enter a distance in pixels, or as a % using a value 1 or less. Relative positioning requires a fixed position."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:108
+msgid "Elaboration form's css top value"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:111
+msgid "Sets the css <em>top</em> property of AJAX confirmation popups. Try the value of 0 for 'Mouse cursor', or 0.4 for 'Fixed'. You may enter a distance in pixels, or as a % using a value 1 or less. Relative positioning requires a fixed position."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:124
+msgid "Messages"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:126
+msgid "Notifications to users. Replaceable tokens are: @replaceables"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:131
+msgid "Path to relationship requests"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:133
+msgid "replaces !pending_relationship_requests in messages such as what is shown to the user after login, change only if your requests list isn't 'relationships/requests'"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:152
+msgid "Example: buddy, friend, coworker, spouse."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:161
+msgid "Example: buddies, friends, coworkers, spouses."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:166
+msgid "This is a one-way relationship"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:168
+msgid "Check this if this relationship should only go one way (ex Manager, Subscriber)"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:173 user_relationships_ui/user_relationships_ui.pages.inc:14
+msgid "Requires Approval"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:175
+msgid "Check this if the requestee must approve the relationship"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:179
+msgid "Request expires in"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:180
+msgid "days"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:184
+msgid "After how many days should a request of this type be removed? (0 for never)"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:188
+msgid "Role access"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:190
+msgid "You may choose which roles are allowed to request this relationship. If none are selected, all roles are allowed."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin.inc:228
+msgid "Are you sure you want to delete %name?"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin_actions.inc:26
+msgid "%name has already been used."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin_actions.inc:31
+msgid "Expiration period must be an integer greater than or equal to 0."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin_actions.inc:67
+msgid "Relationship %name has been added."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin_actions.inc:80
+msgid "Relationship %name has been updated."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin_actions.inc:125
+msgid "Relationship %name has been deleted."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin_actions.inc:68
+msgid "User Relationships form: relationship %name added."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin_actions.inc:81
+msgid "User Relationships form: relationship %name updated."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.admin_actions.inc:126
+msgid "User Relationships form: relationship %name deleted."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.forms.inc:39
+msgid "My relationship is"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.forms.inc:132
+msgid "Request relationship"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.forms.inc:136
+msgid "Are you sure you wish to send a new %rel_name request to %name?"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.forms.inc:137
+msgid "Are you sure you want to become %name's %rel_name?"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.forms.inc:138
+msgid "How do you relate to %name?"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.forms.inc:139
+msgid "Send"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.forms.inc:180
+msgid "Are you sure you want to approve the %relationship_name relationship request from !name?"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.forms.inc:185
+msgid "Approve relationship"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.forms.inc:188
+msgid "Are you sure you want to disapprove the %relationship_name relationship request from !name?"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.forms.inc:193
+msgid "Disapprove relationship"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.forms.inc:196
+msgid "Are you sure you want to cancel your %relationship_name relationship request to !name?"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.forms.inc:201
+msgid "Cancel relationship"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.forms.inc:253
+msgid "Remove relationship"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.forms.inc:256
+msgid "Are you sure you wish to delete the %relationship_name relationship with !name?"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.pages.inc:14
+msgid "Plural"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.pages.inc:24
+msgid "yes"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.pages.inc:24
+msgid "no"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.pages.inc:25
+msgid "@expires_val"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.pages.inc:25
+msgid "Never"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.pages.inc:26
+msgid "edit"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.pages.inc:37
+msgid "No relationships available."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.pages.inc:42
+msgid "Relationship Types"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.pages.inc:25
+msgid "1 day"
+msgid_plural "@count days"
+msgstr[0] ""
+msgstr[1] ""
+
+#: user_relationships_ui/user_relationships_ui.theme.inc:13
+msgid "Not Approved"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.theme.inc:13
+msgid "Unknown"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.theme.inc:21
+msgid "Create a relationship with %name"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.theme.inc:39
+msgid "Become %name's %rel_name"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:82
+msgid "Your %relationship_name request has been sent to !requestee."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:83
+msgid "!requester's %relationship_name request has been approved."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:84
+msgid "!requester has declined your %relationship_name request."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:85
+msgid "Your %relationship_name request to !requestee has been canceled."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:86
+msgid "No action has been taken."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:87
+msgid "The %relationship_name relationship of !requester to !requestee has been deleted."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:88
+msgid "!requester has requested to be your %relationship_name.  Please view your !pending_relationship_requests to approve them."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:89
+msgid "You are !requestee's newest %relationship_name."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:92
+msgid "You may not create any more relationships to this user."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:93
+msgid "There is already an earlier %relationship_name request sent to !requestee."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:94
+msgid "There is already an existing %relationship_name relationship with !requestee."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:95
+msgid "This user does not accept relationship requests."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:96
+msgid "You may not create a relationship to yourself."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:97
+msgid "This user does not exist."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:98
+msgid "This relationship type does not exist."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:99
+msgid "An error has occurred. Please contact the site administrator."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:100
+msgid "Please choose the type of relationship."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:101
+msgid "You may not create %relationship_name relationships."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:111
+msgid "Informational Messages"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:112
+msgid "Submitted"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:113
+msgid "Accepted"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:114
+msgid "Disapproved"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:116
+msgid "Default"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:117
+msgid "Removed"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:120
+msgid "Error Messages"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:121
+msgid "Too many relationships"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:122
+msgid "Existing request"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:123
+msgid "Existing relationship"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:124
+msgid "Not accepting requests"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:125
+msgid "Self request"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:126
+msgid "Non-existent user"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:127
+msgid "Non-existent type"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:128
+msgid "Unknown error"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:129
+msgid "Relationship type not set"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:130
+msgid "Relationship type not allowed"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:168
+msgid "pending relationship requests"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:201
+msgid "%relationship_name (!remove_link)"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:224
+msgid "You have sent a new %relationship_name request to this user. (!pending_requests)"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:226;234
+msgid "pending requests"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:232
+msgid "This user has requested to be your %relationship_name. (!pending_requests)"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:363
+msgid "This module allows you to create relationship types that users can use to connect to each other."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:367
+msgid "This page lets you setup user relationship types."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:644;420
+msgid "Relationships"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:672
+msgid "Relationship settings"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:679
+msgid "Automatically approve the following relationship requests"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:682
+msgid "Check off the types of relationships you'd like to automatically approve."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:702
+msgid "Allow private messages"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:703
+msgid "Allow/disallow users in or outside relationships to send you private messages."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:704
+msgid "Everyone"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:704
+msgid "My relationships only"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:819
+msgid "My %relationships"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:820
+msgid "All my relationships"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:825
+msgid "All %username's relationships"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:840
+msgid "My pending relationships"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:840
+msgid "%username's pending relationships"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:397
+msgid "administer user relationships"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:398
+msgid "maintain own relationships"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:399
+msgid "view user relationships"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:421
+msgid "Create relationship types"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:428
+msgid "List"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:436
+msgid "Add type"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:446
+msgid "Edit type"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:455
+msgid "Delete type"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:464
+msgid "Settings"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.module:475
+msgid "User Relationships Autocomplete"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.js:0
+msgid "Form Loading"
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.js:0
+msgid "Saving..."
+msgstr ""
+
+#: user_relationships_ui/user_relationships_ui.js:0
+msgid "Not saving? Please wait a few seconds, reload this page, and try again."
+msgstr ""
+

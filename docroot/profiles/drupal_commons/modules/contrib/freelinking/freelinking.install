@@ -1,0 +1,83 @@
+<?php
+
+function freelinking_install() {
+
+  switch ($GLOBALS['db_type']) {
+    case 'mysql':
+    case 'mysqli':
+      db_query('CREATE TABLE {freelinking} (
+                   hash   CHAR(32)     NOT NULL,
+                   phrase VARCHAR(200) NOT NULL,
+                   path   VARCHAR(200) NOT NULL,
+                   args   VARCHAR(200) NOT NULL, 
+                   PRIMARY KEY(hash))
+                TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;');
+      break;
+    case 'pgsql':
+      db_query('CREATE TABLE {freelinking} (
+                  hash   CHAR(32)     NOT NULL,
+                  phrase VARCHAR(200) NOT NULL,
+                  path   VARCHAR(200) NOT NULL,
+                  args   VARCHAR(200) NOT NULL,
+                  PRIMARY KEY(hash));');
+      break;
+    }
+} // endfunction freelinking_install
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function freelinking_uninstall() {
+  db_query('DROP TABLE {freelinking}');
+  variable_del('freelinking_camelcase');
+  variable_del('freelinking_nodetype');
+  variable_del('freelinking_notfound');
+  variable_del('freelinking_onceonly');
+  variable_del('freelinking_restriction');
+} // end freelinking_uninstall
+
+function freelinking_update_1() {
+  $ret = array();
+  switch ($GLOBALS['db_type']) {
+    case 'mysql':
+    case 'mysqli':
+      $ret[] = update_sql('ALTER TABLE {freelinking} DROP PRIMARY KEY');
+      break;
+    case 'pgsql':
+      $ret[] = update_sql('ALTER TABLE {freelinking} DROP CONSTRAINT {freelinking}_pkey');
+      break;
+  } // endswitch on db type
+
+  $ret[] = _system_update_utf8(array('freelinking'));
+
+  return $ret;
+};
+
+function freelinking_update_2() { // this is the update to the 4.7 version
+  $ret = array();
+
+  switch ($GLOBALS['db_type']) {
+    case 'mysql':
+    case 'mysqli':
+      $ret[] = update_sql('ALTER TABLE {freelinking} ADD COLUMN hash CHAR(32)');
+      $ret[] = update_sql('ALTER TABLE {freelinking} ADD COLUMN path VARCHAR(200)');
+      $ret[] = update_sql('ALTER TABLE {freelinking} ADD COLUMN args VARCHAR(200)');
+      $ret[] = update_sql('UPDATE      {freelinking} SET path = target');
+      $ret[] = update_sql('UPDATE      {freelinking} SET hash = MD5(CONCAT(phrase, path))');
+      $ret[] = update_sql('ALTER TABLE {freelinking} DROP COLUMN target');
+      $ret[] = update_sql('ALTER TABLE {freelinking} ADD PRIMARY KEY hash (hash)');
+      break;
+
+    case 'pgsql':
+      $ret[] = update_sql('ALTER TABLE {freelinking} DROP COLUMN target');
+      db_add_column($ret, 'freelinking', 'hash', 'char(32)');
+      db_add_column($ret, 'freelinking', 'path', 'varchar(200)');
+      db_add_column($ret, 'freelinking', 'args', 'varchar(200)');
+      $ret[] = update_sql('ALTER TABLE {freelinking} ADD PRIMARY KEY hash');
+      break;
+  } // endswitch db_table
+  return $ret;
+}
+
+// vim: tw=300 nowrap syn=php
+?>

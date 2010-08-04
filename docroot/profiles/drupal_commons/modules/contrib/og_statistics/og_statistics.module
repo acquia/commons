@@ -1,0 +1,445 @@
+<?php
+// $Id: og_statistics.module,v 1.2.2.11 2010/04/16 22:49:57 dereine Exp $
+
+/**
+ * @file
+ *   Logs statistics of the organic group module.
+ *
+ * @todo
+ *   Write more inline comments.
+ *   Build a central api function.
+ *   Use the abstract api function to remove all this functions,
+ *   like og_stat_add_*, og_stat_update_*.
+ *
+ *   Remove all og_statistics_load in update/add/remove functions, its not needed there.
+ *
+ *   Make more functions use arrays instaed of single values.
+ */
+
+/**
+ * Implementation of hook_menu().
+ */
+function og_statistics_menu() {
+  $items = array();
+  $items['admin/settings/og_statistics'] = array(
+    'title' => 'Og Statistics settings',
+    'description' => '',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('og_statistics_settings'),
+    'access arguments' => array('administer organic groups'),
+    'file' => 'og_statistics.admin.inc',
+    'type' => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
+
+/**
+ * Central og_statistics api function.
+ *
+ * This function is not used yet.
+ *
+ * @param $gid
+ *  The group nid.
+ *
+ * @param $key
+ *   The statistics key, for example members_count.
+ *
+ * @param $method
+ *   How should the value be handled, possible values:
+ *   - set: Ignore the previos value.
+ *   - add: add a integer to the previos value.
+ *
+ * @param $value
+ *   The new statistics value.
+ *
+ */
+function og_statistics_update_statistic($gid, $key, $method = 'set', $value) {
+  $stat = og_statistics_load($gid);
+  $stat[$key] = $method == 'set' ? $value : $stat[$key] + $value;
+  // Update if a stat could be found
+  if (isset($stat['nid']) && $stat['nid']) {
+    return drupal_write_record('og_statistics', $stat, 'nid');
+  }
+  else {
+    return og_statistics_write_pure_record($gid);
+  }
+}
+
+/**
+ * Implementation of hook_nodeapi().
+ */
+function og_statistics_nodeapi(&$node, $op, $teaser = NULL, $page = NULL) {
+  switch ($op) {
+    case 'insert':
+      // Adds a new record for the new group.
+      if (og_is_group_type($node->type)) {
+        og_statistics_write_pure_record($node->nid);
+      }
+      // Update statistics.
+      elseif (og_is_group_post_type($node->type)) {
+        if (isset($node->og_groups)) {
+          $node->og_groups = array_unique($node->og_groups);
+          foreach ($node->og_groups as $gid) {
+            og_statistics_add_node($gid);
+            og_statistics_update_last_node($node, $gid);
+          }
+        }
+      }
+      break;
+    case 'delete':
+      // Remove a record for group.
+      if (og_is_group_type($node->type)) {
+        og_statistics_delete_record($node->nid);
+      }
+      // Update statistics.
+      elseif (og_is_group_post_type($node->type)) {
+        if (isset($node->og_groups)) {
+          $node->og_groups = array_unique($node->og_groups);
+          foreach ($node->og_groups as $gid) {
+            og_statistics_remove_node($node->nid, $gid);
+          }
+        }
+      }
+      break;
+    case 'update':
+      // Update statistics.
+      if (og_is_group_post_type($node->type)) {
+        if (isset($node->og_groups) && isset($node->og_initial_groups)) {
+          $updated_gid = array_intersect($node->og_groups, $node->og_initial_groups);
+          $added_gid = array_diff($node->og_groups, $node->og_initial_groups);
+          $removed_gid = array_diff($node->og_initial_groups, $node->og_groups);
+          foreach ($updated_gid as $gid) {
+            og_statistics_update_last_node($node, $gid);
+          }
+          foreach ($added_gid as $gid) {
+            og_statistics_add_node($gid);
+            og_statistics_update_last_node($node, $gid);
+          }
+          foreach ($removed_gid as $gid) {
+            og_statistics_remove_node($node->nid, $gid);
+          }
+        }
+      }
+      break;
+    case 'load' :
+      if (og_is_group_type($node->type)) {
+        $node->og_statistics = og_statistics_load($node->nid);
+      }
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_comment().
+ */
+function og_statistics_comment(&$a1, $op) {
+  switch ($op) {
+    case 'insert':
+      $node = node_load($a1['nid']);
+      if (og_is_group_post_type($node->type)) {
+        foreach ($node->og_groups as $gid) {
+          og_statistics_add_comment($gid);
+          og_statistics_update_last_comment($a1, $gid);
+        }
+      }
+      break;
+    case 'delete':
+      $node = node_load($a1->nid);
+      if (og_is_group_post_type($node->type)) {
+        foreach ($node->og_groups as $gid) {
+          og_statistics_remove_comment($gid);
+        }
+      }
+      break;
+    case 'update':
+      $node = node_load($a1['nid']);
+      if (og_is_group_post_type($node->type)) {
+        foreach ($node->og_groups as $gid) {
+          og_statistics_update_last_comment($a1, $gid);
+        }
+      }
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_og().
+ */
+function og_statistics_og($op, $gid, $uid, $args) {
+  switch ($op) {
+    case 'user insert':
+      $node = node_load($gid);
+      // If not a moderated group, update the membership count,
+      // or if it is a moderated group and unapproved users are to be counted,
+      // then update the statistics.
+      if ($node->og_selective != 1 || ($node->og_selective == 1 && variable_get('og_statistics_include_unapproved_members', TRUE))) {
+        $time = time();
+        og_statistics_add_user($gid);
+        og_statistics_update_last_member($time, $uid, $gid);
+      }
+      break;
+    case 'user delete':
+      og_statistics_remove_user($gid);
+      break;
+    case 'user approve':
+      // If not counting unapproved users, add them to the stats when their
+      // membership is approved.
+      if (!variable_get('og_statistics_include_unapproved_members', TRUE)) {
+        $time = time();
+        og_statistics_add_user($gid);
+        og_statistics_update_last_member($time, $uid, $gid);
+      }
+      break;
+  }
+}
+
+/**
+ * Returns a statistic for a group().
+ *
+ * @param $gid
+ *   The group nid.
+ *
+ * @todo
+ *   Build perhaps a static cache here.
+ *
+ */
+function og_statistics_load($gid) {
+  $result = db_query("SELECT * FROM {og_statistics} WHERE nid = %d", $gid);
+  return db_fetch_array($result);
+}
+
+/**
+ * Writes a record of statistics without any content, but nid.
+ *
+ * @param $gid
+ *   The group nid.
+ */
+function og_statistics_write_pure_record($gid) {
+  // All statistics are set to zero.
+  $stat = array(
+    'nid' => $gid,
+    'members_count' => 0,
+    'posts_count' => 0,
+    'comments_count' => 0,
+    'last_node_timestamp' => 0,
+    'last_comment_timestamp' => 0,
+    'last_member_timestamp' => 0,
+    'last_node_nid' => 0,
+    'last_node_uid' => 0,
+    'last_comment_cid' => 0,
+    'last_comment_nid' => 0,
+    'last_comment_uid' => 0,
+    'last_member_uid' => 0,
+  );
+  return drupal_write_record('og_statistics', $stat);
+}
+
+/**
+ * Add 1 to posts_count of a group.
+ *
+ * @param $gid
+ *   The group nid.
+ */
+function og_statistics_add_node($gid) {
+  $stat = og_statistics_load($gid);
+  $stat['posts_count']++;
+  return drupal_write_record('og_statistics', $stat, 'nid');
+}
+
+/**
+ * Removes 1 form posts_count of a group.
+ *
+ * @param $gid
+ *   The group nid.
+ */
+function og_statistics_remove_node($nid, $gid) {
+  $stat = og_statistics_load($gid);
+  $stat['posts_count']--;
+  // Load the count of comments and remove this amount of comments.
+  $node = node_load($nid);
+  $stat['comments_count'] -= $node->comment_count;
+
+  return drupal_write_record('og_statistics', $stat, 'nid');
+}
+
+/**
+ * Updates the last node of a group.
+ *
+ * @param $node
+ *   A node object.
+ * @param $gid
+ *   The group nid.
+ */
+function og_statistics_update_last_node($node, $gid) {
+  $stat = og_statistics_load($gid);
+  $stat['last_node_timestamp'] = $node->changed;
+  $stat['last_node_uid'] = $node->uid;
+  $stat['last_node_nid'] = $node->nid;
+  return drupal_write_record('og_statistics', $stat, 'nid');
+}
+
+/**
+ * Add 1 to comments_count of a group.
+ *
+ * @param $gid
+ *   The group nid.
+ */
+function og_statistics_add_comment($gid) {
+  $stat = og_statistics_load($gid);
+  $stat['comments_count']++;
+  return drupal_write_record('og_statistics', $stat, 'nid');
+}
+
+/**
+ * Removes 1 from comments_count of a group.
+ *
+ * @param $gid
+ *   The group nid.
+ */
+function og_statistics_remove_comment($gid) {
+  $stat = og_statistics_load($gid);
+  $stat['comments_count']--;
+  return drupal_write_record('og_statistics', $stat, 'nid');
+}
+
+/**
+ * Updates the last comment of a group.
+ *
+ * @param $comment
+ *   A comment array.
+ * @param $gid
+ *   The group nid.
+ */
+function og_statistics_update_last_comment($comment, $gid) {
+  $stat = og_statistics_load($gid);
+  $stat['last_comment_timestamp'] = $comment['timestamp'];
+  $stat['last_comment_uid'] = $comment['uid'];
+  $stat['last_comment_nid'] = $comment['nid'];
+  $stat['last_comment_cid'] = $comment['cid'];
+  return drupal_write_record('og_statistics', $stat, 'nid');
+}
+
+/**
+ * Add 1 to members_count of a group.
+ *
+ * @param $gid
+ *   The group nid.
+ */
+function og_statistics_add_user($gid) {
+  $stat = og_statistics_load($gid);
+  $stat['members_count']++;
+  return drupal_write_record('og_statistics', $stat, 'nid');
+}
+
+/**
+ * Removes 1 from members_count of a group.
+ *
+ * @param $gid
+ *   The group nid.
+ */
+function og_statistics_remove_user($gid) {
+  $stat = og_statistics_load($gid);
+  $stat['members_count']--;
+  return drupal_write_record('og_statistics', $stat, 'nid');
+}
+
+/**
+ * Updates the last member of a group.
+ *
+ * @param $gid
+ *   The group nid.
+ * @param $uid
+ *   The uid of the latest member.
+ */
+function og_statistics_update_last_member($timestamp, $uid, $gid) {
+  $stat = og_statistics_load($gid);
+  $stat['last_member_timestamp'] = $timestamp;
+  $stat['last_member_uid'] = $uid;
+  return drupal_write_record('og_statistics', $stat, 'nid');
+}
+
+/**
+ * Removes a complete record.
+ *
+ * @param $gid
+ *   The group nid.
+ */
+function og_statistics_delete_record($gid) {
+  db_query("DELETE FROM {og_statistics} WHERE nid = %d", $gid);
+}
+
+/**
+ * Recalcs mulitple records.
+ *
+ * @param $nids
+ *  A list of nids to recalc the records.
+ */
+function og_statistcs_recalc($nids = array()) {
+  foreach ($nids as $nid) {
+    // All statistics are set to zero.
+    $stat = array(
+      'nid' => $nid,
+      'members_count' => 0,
+      'posts_count' => 0,
+      'comments_count' => 0,
+      'last_node_timestamp' => 0,
+      'last_comment_timestamp' => 0,
+      'last_member_timestamp' => 0,
+      'last_node_nid' => 0,
+      'last_node_uid' => 0,
+      'last_comment_cid' => 0,
+      'last_comment_nid' => 0,
+      'last_comment_uid' => 0,
+      'last_member_uid' => 0,
+    );
+    if (variable_get('og_statistics_include_unapproved_members', TRUE)) {
+      $stat['members_count'] = db_result(db_query("SELECT COUNT(uid) FROM {og_uid} WHERE nid = %d", $nid));
+    }
+    else {
+      $stat['members_count'] = db_result(db_query("SELECT COUNT(uid) FROM {og_uid} WHERE nid = %d AND is_active = 1", $nid));
+    }
+    $stat['posts_count'] = db_result(db_query("SELECT COUNT(nid) FROM {og_ancestry} WHERE group_nid = %d", $nid));
+    $stat['comments_count'] = db_result(db_query("SELECT COUNT(c.cid) FROM {comments} c
+      INNER JOIN {og_ancestry} oa ON oa.nid = c.nid WHERE oa.group_nid = %d", $nid));
+
+    $array = db_fetch_array(db_query_range("SELECT n.uid AS last_node_uid, n.nid AS last_node_nid, n.created AS last_node_timestamp FROM {node} n
+      INNER JOIN {og_ancestry} oa ON oa.nid = n.nid WHERE oa.group_nid = %d ORDER BY n.created DESC", $nid, 0, 1));
+    $array = $array ? $array : array();
+    $stat = array_merge($stat, $array);
+    $array = db_fetch_array(db_query_range("SELECT c.nid AS last_comment_nid, c.uid AS last_comment_uid, c.cid AS last_comment_cid, c.timestamp AS last_comment_timestamp FROM {comments} c
+      INNER JOIN {og_ancestry} oa ON oa.nid = c.nid WHERE group_nid = %d ORDER BY c.timestamp DESC
+      ", $nid, 0, 1));
+    $array = $array ? $array : array();
+    $stat = array_merge($stat, $array);
+    $array = db_fetch_array(db_query_range("SELECT created AS last_member_timestamp, uid AS last_member_uid FROM {og_uid}
+      WHERE nid = %d ORDER BY created DESC", $nid, 0, 1));
+    $array = $array ? $array : array();
+    $stat = array_merge($stat, $array);
+
+    if (og_statistics_load($nid)) {
+      drupal_write_record('og_statistics', $stat, 'nid');
+    }
+    else {
+      drupal_write_record('og_statistics', $stat);
+    }
+  }
+}
+
+function og_statistcs_settings_finished() {
+  drupal_set_message('Statistics rebuilded successfull');
+}
+
+
+/**
+ * views stuff.
+ */
+
+/**
+ * Implementation of hook_views_api().
+ */
+function og_statistics_views_api() {
+  return array(
+    'api' => 2,
+  );
+}
+

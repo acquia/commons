@@ -1,0 +1,19 @@
+INSTALL
+-------
+1. Place the entire getid3 directory into your modules directory
+   (sites/all/modules is the usual location).
+2. Create a new folder for the getID3 library at:
+     cd YOUR-DRUPAL-ROOT
+     mkdir -p sites/all/libraries/getid3
+3. Go to http://www.getid3.org/ and download the latest stable version
+   (currently 1.7.9) into the new directory:
+     cd sites/all/libraries/getid3
+     wget "http://downloads.sourceforge.net/project/getid3/getID3%28%29%201.x/1.7.9/getid3-1.7.9.zip"
+4. Unzip the contents of the zip file into sites/all/modules/getid3/ so that
+   write.php is located in sites/all/libraries/getid3/getid3/:
+     unzip getid3-1.7.9.zip
+5. Delete the demos directory:
+     rm -r demos/
+6. Go to Administer > Site building > Modules and enable the GetID3 module.
+7. Go to Administer > Settings > getID3. If you see the version you just
+   downloaded, the module is installed correctly.

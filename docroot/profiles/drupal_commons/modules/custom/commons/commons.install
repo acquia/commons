@@ -1,0 +1,14 @@
+<?php
+// $Id$
+
+function commons_uninstall() {
+  // Remove variables
+  variable_del('commons_force_login');
+  variable_del('commons_manager_role');
+  variable_del('commons_force_unique_groups');
+  variable_del('commons_hide_shoutbox_link');
+  variable_del('commons_group_prevent_open_voting');
+  variable_del('commons_group_prevent_open_commenting');
+  variable_del('commons_email_selective_group');
+  variable_del('commons_group_admin_edit_comments');
+}

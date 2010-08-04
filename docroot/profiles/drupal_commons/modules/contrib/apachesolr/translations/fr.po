@@ -1,0 +1,1054 @@
+# $Id: fr.po,v 1.1.2.1 2010/07/07 07:24:52 slybud Exp $
+#
+# French translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  Solr_Base_Query.php,v 1.1.4.44 2009/12/10 17:43:28 pwolanin
+#  apachesolr.admin.inc,v 1.1.2.47 2010/02/27 01:54:50 pwolanin
+#  apachesolr_search.module,v 1.1.2.6.2.133 2010/02/24 23:00:01 pwolanin
+#  apachesolr.index.inc,v 1.1.2.22 2009/12/27 16:47:37 pwolanin
+#  apachesolr.module,v 1.1.2.12.2.183 2010/03/04 04:17:20 pwolanin
+#  apachesolr.install,v 1.1.4.30 2009/12/27 16:47:37 pwolanin
+#  apachesolr.info,v 1.1.2.1.2.8 2009/06/04 13:33:36 robertDouglass
+#  apachesolr_search.info,v 1.1.2.1.2.7 2009/03/20 04:11:16 pwolanin
+#  contrib/apachesolr_image/apachesolr_image.info: n/a
+#  apachesolr_nodeaccess.info,v 1.1.2.4 2009/01/27 20:12:52 pwolanin
+#  apachesolr_og.info,v 1.1.2.2 2009/04/30 17:23:13 pwolanin
+#  apachesolr.taxonomy.inc,v 1.1.2.3 2009/07/24 22:02:37 janusman
+#  apachesolr_search.admin.inc,v 1.1.2.24 2009/12/27 17:06:43 pwolanin
+#  apachesolr.js,v 1.1.2.6 2010/02/04 01:24:44 pwolanin
+#  apachesolr_image.module,v 1.1.2.1.2.5 2009/12/24 03:41:29 pwolanin
+#  apachesolr_nodeaccess.module,v 1.1.2.12 2009/12/24 03:41:29 pwolanin
+#  apachesolr_og.module,v 1.1.2.7 2009/10/14 13:28:40 pwolanin
+#  apachesolr_og.install,v 1.1.2.3 2009/10/22 13:32:44 pwolanin
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: french translation for drupal6 apachesolr module\n"
+"POT-Creation-Date: 2010-07-01 15:09+0200\n"
+"PO-Revision-Date: 2010-07-07 09:12+0100\n"
+"Last-Translator: Sylvain Moreau <sylvain.moreau@ows.fr>\n"
+"Language-Team: Sylvain Moreau, OWS <sylvain.moreau@ows.fr>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n>1);\n"
+"X-Poedit-Language: French\n"
+
+#: Solr_Base_Query.php:290
+msgid "Relevancy"
+msgstr "Pertinence"
+
+#: Solr_Base_Query.php:291
+#: apachesolr.admin.inc:465
+msgid "Title"
+msgstr "Titre"
+
+#: Solr_Base_Query.php:292
+msgid "Type"
+msgstr "Type"
+
+#: Solr_Base_Query.php:293
+msgid "Author"
+msgstr "Auteur"
+
+#: Solr_Base_Query.php:294
+msgid "Date"
+msgstr "Date"
+
+#: apachesolr.admin.inc:27
+msgid "Solr host name"
+msgstr "Nom d'hôte Solr"
+
+#: apachesolr.admin.inc:29
+msgid "Host name of your Solr server, e.g. <code>localhost</code> or <code>example.com</code>."
+msgstr "Le nom d'hôte de votre serveur Solr, par exemple <code>localhost</code> ou or <code>example.com</code>."
+
+#: apachesolr.admin.inc:34
+msgid "Solr port"
+msgstr "Port Solr"
+
+#: apachesolr.admin.inc:36
+msgid "Port on which the Solr server listens. The Jetty example server is 8983, while Tomcat is 8080 by default."
+msgstr "Port sur lequel le serveur Solr écoute. Le serveur d'exemple Jetty est 8983, tandis que Tomcat est 8080 par défaut."
+
+#: apachesolr.admin.inc:41
+msgid "Solr path"
+msgstr "Chemin Solr"
+
+#: apachesolr.admin.inc:43
+msgid "Path that identifies the Solr request handler to be used."
+msgstr "Chemin qui identifie le gestionnaire de requête Solr à utiliser."
+
+#: apachesolr.admin.inc:49
+msgid "Number of items to index per cron run"
+msgstr "Nombre d'éléments à indexer par tâche cron"
+
+#: apachesolr.admin.inc:52
+msgid "The maximum number of items indexed in each pass of a <a href=\"@cron\">cron maintenance task</a>. If necessary, reduce the number of items to prevent timeouts and memory errors while indexing."
+msgstr "Le nombre maximum d'éléments indexés lors de chaque passe d'une <a href=\"@cron\">tâche cron de maintenance</a>. Si nécessaire, réduire le nombre d'éléments peut prévenir des dépassements de temps ou de mémoire causant une erreur lors de l'indexation."
+
+#: apachesolr.admin.inc:58
+msgid "Results per page"
+msgstr "Résultats par page"
+
+#: apachesolr.admin.inc:61
+msgid "The number of results that will be shown per page."
+msgstr "Le nombre de résultats qui seront affichés par page"
+
+#: apachesolr.admin.inc:65
+msgid "On failure"
+msgstr "Si échec"
+
+#: apachesolr.admin.inc:66
+msgid "Show error message"
+msgstr "Afficher le message d'erreur"
+
+#: apachesolr.admin.inc:67
+msgid "Show core Drupal results"
+msgstr "Afficher les résultats du core Drupal"
+
+#: apachesolr.admin.inc:68
+msgid "Show no results"
+msgstr "Ne pas afficher de résultat"
+
+#: apachesolr.admin.inc:71
+msgid "What to display if Apache Solr search is not available."
+msgstr "Qu'afficher si la recherche Apache Solr n'est pas disponible."
+
+#: apachesolr.admin.inc:76
+msgid "Add a new content recommendation block"
+msgstr "Ajout un nouveau bloc de recommandation de contenu"
+
+#: apachesolr.admin.inc:81;559
+msgid "Advanced configuration"
+msgstr "Configuration avancée"
+
+#: apachesolr.admin.inc:87
+msgid "Extra help messages for administrators"
+msgstr "Messages d'aide supplémentaires pour les administrateurs"
+
+#: apachesolr.admin.inc:89
+#: apachesolr_search.module:997;1009
+msgid "Disabled"
+msgstr "Désactivé"
+
+#: apachesolr.admin.inc:89
+#: apachesolr_search.module:997;1009
+msgid "Enabled"
+msgstr "Activé"
+
+#: apachesolr.admin.inc:93
+msgid "Index write access"
+msgstr "Accès en écriture à l'index"
+
+#: apachesolr.admin.inc:95
+msgid "Read and write (normal)"
+msgstr "Lecture et écriture (normal)"
+
+#: apachesolr.admin.inc:95
+msgid "Read only"
+msgstr "Lecture uniquement"
+
+#: apachesolr.admin.inc:96
+msgid "<em>Read only</em> stops this site from sending updates to your search index. Useful for development sites."
+msgstr "<em>Lecture seule</em> permet à ce site d'arrêter d'envoyer des mises à jour à votre index de recherche. Utile pour les sites de développement."
+
+#: apachesolr.admin.inc:108
+msgid "The port has to be an integer between 1 and 65535."
+msgstr "Le port doit être un nombre entier compris entre 1 et 65535."
+
+#: apachesolr.admin.inc:135
+msgid "Using schema.xml version: <strong>@schema_version</strong>"
+msgstr "Utilisation de la version de schema.xml : <strong>@schema_version</strong>"
+
+#: apachesolr.admin.inc:137
+msgid "Solr core name: <strong>@core_name</strong>"
+msgstr "Nom du core Solr : <strong>@core_name</strong>"
+
+#: apachesolr.admin.inc:139
+msgid "<em>The server has a @autocommit_time delay before updates are processed.</em>"
+msgstr "<em> Le serveur possède un délai de @autocommit_time avant que les mises à jour ne soient traitées.</em>"
+
+#: apachesolr.admin.inc:140
+msgid "Number of pending deletions: @deletes_total"
+msgstr "Nombre de suppressions en attente : @deletes_total"
+
+#: apachesolr.admin.inc:146
+msgid "(@pending_docs sent but not yet processed)"
+msgstr "(@pending_docs envoyés mais pas encore traités)"
+
+#: apachesolr.admin.inc:147;178
+msgid "Number of documents in index: @num !pending"
+msgstr "Nombre de documents dans l'index : @num !pending"
+
+#: apachesolr.admin.inc:150
+msgid "View more details on the search index contents"
+msgstr "Voir plus de détails sur les contenus de l'index de recherche"
+
+#: apachesolr.admin.inc:156
+msgid "The index is in read-only mode. Options for deleting and re-indexing are therefore not available. The index mode can be changed on the !settings_page"
+msgstr "L'index est en mode lecture seule. Les options de suppressions et de ré-indexation ne sont donc pas disponibles. Le mode d'index peut être modifié sur la page !settings_page"
+
+#: apachesolr.admin.inc:156
+msgid "settings page"
+msgstr "page des paramétres"
+
+#: apachesolr.admin.inc:182
+msgid "You have more than @limit documents, so term frequencies are being omitted for performance reasons."
+msgstr "Vous avez plus de @limit documents, la fréquence des termes sera donc omise pour des raisons de performance."
+
+#: apachesolr.admin.inc:183
+msgid "<em>Omitted</em>"
+msgstr "<em>Omis</em>"
+
+#: apachesolr.admin.inc:186
+msgid "Not indexed"
+msgstr "Non indexé"
+
+#: apachesolr.admin.inc:191
+msgid "Number of terms in index: @num"
+msgstr "Nombre de termes dans l'index : @num"
+
+#: apachesolr.admin.inc:201
+msgid "Number of fields in index: @num"
+msgstr "Nombre de champs dans l'index : @num"
+
+#: apachesolr.admin.inc:209
+msgid "Field name"
+msgstr "Nom du champ"
+
+#: apachesolr.admin.inc:209
+msgid "Index type"
+msgstr "Type d'index"
+
+#: apachesolr.admin.inc:209
+msgid "Distinct terms"
+msgstr "Termes distincts"
+
+#: apachesolr.admin.inc:212
+msgid "No data on indexed fields."
+msgstr "Aucune donnée sur les champs indexés."
+
+#: apachesolr.admin.inc:269
+msgid "You can use this screen to select which search filter blocks should be created by enabling the corresponding filters on this page. For performance reasons, you should only enable filters that you intend to have available to users on the search page.  After selecting which filter blocks to create, you will be sent to the blocks page where you can choose which of those blocks should be enabled when your users search by placing each block in a region."
+msgstr "Vous pouvez utiliser cet écran pour sélectionner quels blocs de filtres de recherche doivent être créés, en activant les filtres correspondant sur cette page. Pour des raisons de performance, vous devriez seulement activer les filtres que vous souhaitez rendre disponibles aux utilisateurs sur la page de recherche. Après avoir sélectionné quels seront les blocs de filtres à créer, vous serez dirigé vers la page des blocs, où vous pourrez choisir lesquels de ces blocs seront activés à la recherche utilisateur, en plaçant chaque bloc dans une région."
+
+#: apachesolr.admin.inc:303;499
+msgid "Save"
+msgstr "Enregistrer"
+
+#: apachesolr.admin.inc:307
+msgid "<em>No filters are available from your currently enabled modules</em>"
+msgstr "<em>Aucun filtre disponible provenant de vos modules activés</em>"
+
+#: apachesolr.admin.inc:314
+msgid "The Apache Solr filters settings were changed.  To arrange the blocks for your enabled filters, visit the <a href=\"@url\">blocks administration page</a>."
+msgstr "Les paramètres de filtres de Apache Solr ont été modifiés. Pour organiser les blocs de vos filtres activés, visitez la <a href=\"@url\">page d'administration des blocs</a>."
+
+#: apachesolr.admin.inc:327
+msgid "Index controls"
+msgstr "Contrôles de l'index"
+
+#: apachesolr.admin.inc:332
+msgid "Re-index all content"
+msgstr "Ré-indexer tout le contenu"
+
+#: apachesolr.admin.inc:337
+msgid "Re-indexing will add all content to the index again (overwriting the index), but existing content in the index will remain searchable."
+msgstr "La ré-indexation ajoutera à nouveau le contenu à l'index (en ré-écrivant l'index), mais le contenu existant dans l'index restera disponible à la recherche."
+
+#: apachesolr.admin.inc:341
+msgid "Delete the index"
+msgstr "Supprimer l'index"
+
+#: apachesolr.admin.inc:346
+msgid "Deletes all of the documents in the Solr index. This is rarely necessary unless your index is corrupt or you have installed a new schema.xml."
+msgstr "Supprime tous les documents dans l'index Solr. Cette action sert rarement, à moins que votre index ne soit corrompu ou bien que vous ayiez installé un nouveau schema.xml."
+
+#: apachesolr.admin.inc:376
+msgid "Are you sure you want to re-index?"
+msgstr "Etes-vous sûr(e) de vouloir ré-indexer ?"
+
+#: apachesolr.admin.inc:376
+msgid "Re-index"
+msgstr "Ré-indexer"
+
+#: apachesolr.admin.inc:376;405;681
+msgid "Cancel"
+msgstr "Annuler"
+
+#: apachesolr.admin.inc:405
+msgid "Are you sure you want to delete your search index and start re-indexing?"
+msgstr "Etes-vous sûr(e) de vouloir supprimer votre index de recherche et de commencer la ré-indexation ?"
+
+#: apachesolr.admin.inc:405;681
+msgid "Delete"
+msgstr "Supprimer"
+
+#: apachesolr.admin.inc:419
+msgid "The Apache Solr content index has been erased. You must now !run_cron until your entire site has been re-indexed."
+msgstr "L'index de contenu de Apache Solr a été effacé. Vous devez maintenant !run_cron jusqu'à ce que votre site soir entièrement ré-indexé."
+
+#: apachesolr.admin.inc:419
+msgid "run cron"
+msgstr "exécuter le cron"
+
+#: apachesolr.admin.inc:464
+msgid "Body text - the full, rendered content"
+msgstr "Texte du corps - contenu complet et rendu"
+
+#: apachesolr.admin.inc:466
+msgid "Teaser"
+msgstr "Résumé"
+
+#: apachesolr.admin.inc:467
+msgid "Author name"
+msgstr "Nom de l'auteur"
+
+#: apachesolr.admin.inc:468
+msgid "Path alias"
+msgstr "Alias de chemin"
+
+#: apachesolr.admin.inc:469
+msgid "All taxonomy term names"
+msgstr "Tous les noms des termes de taxonomie"
+
+#: apachesolr.admin.inc:470
+msgid "Body text inside H1 tags"
+msgstr "Texte du corps à l'intérieur des balises H1"
+
+#: apachesolr.admin.inc:471
+msgid "Body text inside H2 or H3 tags"
+msgstr "Texte du corps à l'intérieur des balises H2 ou H3"
+
+#: apachesolr.admin.inc:472
+msgid "Body text inside H4, H5, or H6 tags"
+msgstr "Texte du corps à l'intérieur des balises H4 ou H5 ou H6"
+
+#: apachesolr.admin.inc:473
+msgid "Body text in inline tags like EM or STRONG"
+msgstr "Texte du corps à l'intérieur des balises en ligne EM ou STRONG"
+
+#: apachesolr.admin.inc:474
+msgid "Body text inside links (A tags)"
+msgstr "Texte du corps à l'intérieur de liens (balises A)"
+
+#: apachesolr.admin.inc:475
+msgid "Taxonomy term IDs"
+msgstr "IDs des termes de taxonomie"
+
+#: apachesolr.admin.inc:479
+msgid "Taxonomy term names only from the %name vocabulary"
+msgstr "Noms des termes de taxonomie provenant uniquement du vocabulaire %name"
+
+#: apachesolr.admin.inc:480
+msgid "Taxonomy term IDs from the %name vocabulary"
+msgstr "IDs des termes de taxonomie provenant du vocabulaire %name"
+
+#: apachesolr.admin.inc:484
+msgid "CCK @type field %label"
+msgstr "CCK @type champ %label"
+
+#: apachesolr.admin.inc:536
+msgid "Block name"
+msgstr "Nom du bloc"
+
+#: apachesolr.admin.inc:537
+msgid "The block name displayed to site users."
+msgstr "Le nom du bloc affiché aux utilisateurs du site."
+
+#: apachesolr.admin.inc:544
+msgid "Maximum number of related items to display"
+msgstr "Nombre maximum d'éléments liés à afficher"
+
+#: apachesolr.admin.inc:551
+msgid "Fields for finding related content"
+msgstr "Champs pour trouver des contenus liés"
+
+#: apachesolr.admin.inc:552
+msgid "Choose the fields to be used in calculating similarity. The default combination of %taxonomy_names and %title will provide relevant results for typical sites."
+msgstr "Choisissez les champs à utiliser pour le calcul de similarité. La combinaison par défaut de %taxonomy_names et %title fournira des résultats pertinents pour des sites typiques."
+
+#: apachesolr.admin.inc:567
+msgid "Minimum term frequency"
+msgstr "Fréquence de termes minimum"
+
+#: apachesolr.admin.inc:568
+msgid "A word must appear this many times in any given document before the document is considered relevant for comparison."
+msgstr "Un mot doit apparaître autant de fois dans un document donné avant que ce document ne soit considéré pertinent pour la comparaison."
+
+#: apachesolr.admin.inc:574
+msgid "Minimum document frequency"
+msgstr "Fréquence de document minimum"
+
+#: apachesolr.admin.inc:575
+msgid "A word must occur in at least this many documents before it will be used for similarity comparison."
+msgstr "Un mot doit apparaître dans autant de documents avant qu'il ne soit utilisé pour une comparaison de similarité."
+
+#: apachesolr.admin.inc:581
+msgid "Minimum word length"
+msgstr "Longueur minimale de mot"
+
+#: apachesolr.admin.inc:588
+msgid "Maximum word length"
+msgstr "Longueur maximale de mot"
+
+#: apachesolr.admin.inc:589
+msgid "You can use this to eliminate very long words from similarity comparisons. Words of more than this number of characters will be ignored."
+msgstr "Vous pouvez utiliser cette option pour exclure les mots très longs des comparaisons de similarité. Les mots de plus de ce nombre de caractères seront ignorés."
+
+#: apachesolr.admin.inc:595
+msgid "Maximum number of query terms"
+msgstr "Nombre maximum de termes de requête"
+
+#: apachesolr.admin.inc:596
+msgid "The maximum number of query terms that will be included in any query. Lower numbers will result in fewer recommendations but will get results faster. If a content recommendation is not returning any recommendations, you can either check more \"Comparison fields\" checkboxes or increase the maximum number of query terms here."
+msgstr "Le nombre maximum de termes de requête qui seront inclus dans n'importe quelle requête. Un nombre petit donnera moins de recommandations mais obtiendra les résultats plus rapidement. Si une recommandation de contenu ne renvoie aucune recommandation, vous pouvez soit cocher plus de cases de \"Champs de comparaison\", soit augmenter le nombre maximum de termes de requêtes ici."
+
+#: apachesolr.admin.inc:678
+msgid "Are you sure you want to delete the Apache Solr content recommendation block %name?"
+msgstr "Etes-vous sûr(e) de vouloir supprimer le bloc de recommandation de contenu Apache Solr %name ?"
+
+#: apachesolr.admin.inc:680
+msgid "The block will be deleted. This action cannot be undone."
+msgstr "Le bloc sera supprimé. Cette action est irréversible."
+
+#: apachesolr.admin.inc:689
+msgid "The block has been deleted."
+msgstr "Le bloc a été supprimé."
+
+#: apachesolr.admin.inc:77
+msgid "You currently have 1 block."
+msgid_plural "You currenly have @count blocks."
+msgstr[0] "Vous avez actuellement 1 bloc."
+msgstr[1] "Vous avez actuellement 2 blocs."
+
+#: (duplicate) apachesolr.index.inc:267;289
+#: apachesolr.module:356;363;379;18
+#: apachesolr.install:39
+#: apachesolr.info:0
+#: apachesolr_search.info:0
+#: contrib/apachesolr_image/apachesolr_image.info:0
+#: contrib/apachesolr_nodeaccess/apachesolr_nodeaccess.info:0
+#: contrib/apachesolr_og/apachesolr_og.info:0
+msgid "Apache Solr"
+msgstr "Apache Solr"
+
+#: apachesolr.index.inc:267
+msgid "On cron running apachesolr_nodeapi_mass_update() on nids @nids"
+msgstr "Le cron est en train d'exécuter apachesolr_nodeapi_mass_update() sur les nids @nids"
+
+#: apachesolr.index.inc:289
+msgid "On cron running apachesolr_nodeapi_mass_delete() on nids @nids"
+msgstr "Le cron est en train d'exécuter apachesolr_nodeapi_mass_delete() sur les nids @nids"
+
+#: apachesolr.taxonomy.inc:47
+msgid "Error running search"
+msgstr "Erreur à l'exéxution de la recherche"
+
+#: apachesolr.taxonomy.inc:54
+msgid "Results for %term"
+msgstr "Résultats pour %term"
+
+#: apachesolr.taxonomy.inc:57
+#: apachesolr_search.module:174
+msgid "Your search yielded no results"
+msgstr "Votre recherche n'a donné aucun résultat"
+
+#: apachesolr_search.admin.inc:22
+msgid "Cannot get information about the fields in the index at this time."
+msgstr "Impossible d'obtenir des informations à propos des champs dans l'index pour le moment."
+
+#: apachesolr_search.admin.inc:58;62;196
+msgid "Ignore"
+msgstr "Ignorer"
+
+#: apachesolr_search.admin.inc:66
+msgid "Result biasing"
+msgstr "Favorisation des résultats"
+
+#: apachesolr_search.admin.inc:69
+msgid "Give bias to certain properties when ordering the search results. Any value except <em>Ignore</em> will increase the score of the given type in search results. Choose <em>Ignore</em> to ignore any given property."
+msgstr "Favoriser certaines propriétés lors de l'ordonnancement des résultats de recherche. Toute valeur à l'exception de <em>Ignorer</em> augmentera le score du type donné au sein des résultats de recherche. Choisissez <em>Ignore</em> pour ignorer n'importe quelle propriété donnée."
+
+#: apachesolr_search.admin.inc:74
+msgid "Sticky at top of lists"
+msgstr "Epinglé en haut des listes"
+
+#: apachesolr_search.admin.inc:76
+msgid "Select additional bias to give to nodes that are set to be 'Sticky at top of lists'."
+msgstr "Séléctionner la favorisation additionelle à donner aux noeuds qui sont définis comme 'Promu en haut des listes'."
+
+#: apachesolr_search.admin.inc:81
+msgid "Promoted to home page"
+msgstr "Promu en page d'accueil"
+
+#: apachesolr_search.admin.inc:83
+msgid "Select additional bias to give to nodes that are set to be 'Promoted to home page'."
+msgstr "Séléctionner la favorisation additionelle à donner aux noeuds qui sont définis comme 'Promu en page d'accueil'."
+
+#: apachesolr_search.admin.inc:88
+msgid "More recently created"
+msgstr "Plus récemment créé"
+
+#: apachesolr_search.admin.inc:90
+msgid "This setting will change the result scoring so that nodes created more recently may appear before those with higher keyword matching."
+msgstr "Ce paramètre modifiera les scores du résultat pour que les noeuds les plus récemment créés puissent apparaître avant ceux possédant une occurence des mots-clés supérieure."
+
+#: apachesolr_search.admin.inc:95
+msgid "More comments"
+msgstr "Plus de commentaires"
+
+#: apachesolr_search.admin.inc:97
+msgid "This setting will change the result scoring so that nodes with more comments may appear before those with higher keyword matching."
+msgstr "Ce paramètre modifiera les scores du résultat pour que les noeuds possédant plus de commentaires puissent apparaître avant ceux possédant une occurence des mots-clés supérieure."
+
+#: apachesolr_search.admin.inc:102
+msgid "More recent comments"
+msgstr "Plus de commentaires"
+
+#: apachesolr_search.admin.inc:104
+msgid "This setting will change the result scoring so that nodes with the most recent comments (or most recent updates to the node itself) may appear before those with higher keyword matching."
+msgstr "Ce paramètre modifiera les scores du résultat pour que les noeuds possédant les commentaires les plus récents puissent apparaître avant ceux possédant une occurence des mots-clés supérieure."
+
+#: apachesolr_search.admin.inc:121
+msgid "Omit"
+msgstr "Omettre"
+
+#: apachesolr_search.admin.inc:141
+msgid "Field biases"
+msgstr "Favorisation des champs"
+
+#: apachesolr_search.admin.inc:145
+msgid "Specify here which fields are more important when searching. Give a field a greater numeric value to make it more important. If you omit a field, it will not be searched."
+msgstr "Spécifiez ici quels sont les champs les plus importants lors de la recherche. Attribuez une plus grande valeur numérique à un champ pour le rendre plus important. Si vous omettez un champ, son contenu ne sera pas recherché."
+
+#: apachesolr_search.admin.inc:185
+msgid "Type biasing and exclusion"
+msgstr "Favorisation et exclusion de types"
+
+#: apachesolr_search.admin.inc:191
+msgid "Specify here which node types should get a higher relevancy score in searches. Any value except <em>Ignore</em> will increase the score of the given type in search results."
+msgstr "Spécifiez ici quels types de noeud doivent avoir un plus haut score de pertinence lors des recherches. Toute valeur à l'exception de <em>Ignorer</em> augmentera le score d'un type donné dans les résultats de recherche."
+
+#: apachesolr_search.admin.inc:205
+msgid "%type type content bias"
+msgstr "Favorisation du type de contenu %type"
+
+#: apachesolr_search.admin.inc:213
+msgid "Types to exclude from the search index"
+msgstr "Types à exclure de l'index de recherche"
+
+#: apachesolr_search.admin.inc:216
+msgid "Specify here which node types should be totally excluded from the search index. Content excluded from the index will never appear in any search results."
+msgstr "Spécifiez ici quels types de noeud doivent totalement être exclus de l'index de recherche. Le contenu exclu de l'index n'apparaîtra jamais dans les résultats de recherche."
+
+#: apachesolr_search.admin.inc:235
+msgid "Reset to defaults"
+msgstr "Rétablir par défaut"
+
+#: apachesolr.module:109
+msgid "The Apache Solr search engine is not available. Please contact your site administrator."
+msgstr "Le moteur de recherche Apache Solr n'est pas disponible. Veuillez contacter votre administrateur de site."
+
+#: apachesolr.module:112
+msgid "%search_name is not available. Your search is being redirected."
+msgstr "%search_name n'est pas disponible. Votre recherche est en cours de redirection."
+
+#: apachesolr.module:335
+msgid "No Solr instance available during indexing."
+msgstr "Aucune instance Solr disponible au cours de l'indexation."
+
+#: apachesolr.module:607
+msgid "Apache Solr Core: Sorting"
+msgstr "Apache Solr Core : Tri"
+
+#: apachesolr.module:626
+msgid "Configure this block"
+msgstr "Configurer ce bloc"
+
+#: apachesolr.module:675
+msgid "Sort by"
+msgstr "Trier par"
+
+#: apachesolr.module:709
+msgid "Missing this field"
+msgstr "Ce champ est manquant"
+
+#: apachesolr.module:988
+msgid "Initial filter links"
+msgstr "Liens de filtre initiaux"
+
+#: apachesolr.module:990
+msgid "The initial number of filter links to show in this block."
+msgstr "Le nombre initial de liens de filtre à afficher dans ce bloc."
+
+#: apachesolr.module:996
+msgid "Maximum filter links"
+msgstr "Liens de filtre maximum"
+
+#: apachesolr.module:998
+msgid "The maximum number of filter links to show in this block."
+msgstr "Le nombre maximum de liens de filtre à afficher dans ce bloc."
+
+#: apachesolr.module:1003
+msgid "Include a facet for missing"
+msgstr "Inclure une facette pour le manquant"
+
+#: apachesolr.module:1004
+msgid "No"
+msgstr "Non"
+
+#: apachesolr.module:1004
+msgid "Yes"
+msgstr "Oui"
+
+#: apachesolr.module:1005
+msgid "A facet can be generated corresponding to all documents entirely missing this field."
+msgstr "Une facette peut être générée, correspondant à tous les documents où ce champ est manquant."
+
+#: apachesolr.module:1415
+msgid "delete"
+msgstr "supprimer"
+
+#: apachesolr.module:1437
+msgid "Apache Solr recommendations: !name"
+msgstr "Recommandations Apache Solr : !name"
+
+#: apachesolr.module:1546
+msgid "Configure enabled filters"
+msgstr "Configurer les filtres activés"
+
+#: apachesolr.module:356
+msgid "Error constructing documents to index: <br /> !message"
+msgstr "Erreur durant la construction des documents à indexer : <br /> !message"
+
+#: apachesolr.module:363
+msgid "Adding @count documents."
+msgstr "Ajout de @count documents."
+
+#: apachesolr.module:379
+msgid "Indexing failed on one of the following nodes: @nids <br /> !message"
+msgstr "L'indexation a échoué sur l'un des noeuds suivants : @nids <br /> !message"
+
+#: apachesolr.module:19
+msgid "Administer Apache Solr."
+msgstr "Administrer Apache Solr."
+
+#: apachesolr.module:27
+msgid "Settings"
+msgstr "Paramètres"
+
+#: apachesolr.module:34
+msgid "Enabled filters"
+msgstr "Filtres activés"
+
+#: apachesolr.module:43;73
+msgid "Search index"
+msgstr "Index de recherche"
+
+#: apachesolr.module:51
+msgid "Confirm the re-indexing of all content"
+msgstr "Confirmer la ré-indexation de tous les contenus"
+
+#: apachesolr.module:59
+msgid "Confirm index deletion"
+msgstr "Confirmer la suppression de l'index"
+
+#: apachesolr.module:67
+msgid "Apache Solr search index"
+msgstr "Index de recherche Apache Solr"
+
+#: apachesolr_search.module:17
+msgid "Operating in read-only mode; updates are disabled."
+msgstr "Fonctionnement en mode lecture seule; les mises à jour sont désaactivées."
+
+#: apachesolr_search.module:26
+msgid "The search index is generated by !cron. %percentage of the site content has been sent to the server. There @items left to send."
+msgstr "L'index de recherche est généré par !cron. %percentage du contenu du site a été envoyé au serveur. Il reste @items à envoyer."
+
+#: apachesolr_search.module:27
+msgid "running cron"
+msgstr "exécution du cron"
+
+#: apachesolr_search.module:29
+msgid "is 1 item"
+msgstr "est un élément"
+
+#: apachesolr_search.module:29
+msgid "are @count items"
+msgstr "sont @count éléments"
+
+#: apachesolr_search.module:115;165
+msgid "Search"
+msgstr "Recherche"
+
+#: apachesolr_search.module:134
+msgid "Solr search"
+msgstr "Recherche Solr"
+
+#: apachesolr_search.module:165
+msgid "results"
+msgstr "résultats"
+
+#: apachesolr_search.module:171
+msgid "Search results"
+msgstr "Résultats de la recherche"
+
+#: apachesolr_search.module:183
+msgid ""
+"<ul>\n"
+"<li>Check if your spelling is correct, or try removing filters.</li>\n"
+"<li>Remove quotes around phrases to match each word individually: <em>\"blue drop\"</em> will match less than <em>blue drop</em>.</li>\n"
+"<li>You can require or exclude terms using + and -: <em>big +blue drop</em> will require a match on <em>blue</em> while <em>big blue -drop</em> will exclude results that contain <em>drop</em>.</li>\n"
+"</ul>"
+msgstr ""
+"<ul>\n"
+"<li>Vérifiez si votre syntaxe est correcte, ou essayez de supprimer des filtres.</li>\n"
+"<li>Supprimez les guillemets autour des phrases pour rechercher individuellement sur chaque mot : <em>\"oiseau bleu\"</em> retournera moins de résultats que <em>oiseau bleu</em>.</li>\n"
+"<li>Vous pouvez rendre obligatoires ou exclure des termes en utilisant + et- : <em>gros oiseau +bleu</em> rendra obligatoire une correspondance sur <em>bleu</em> alors que <em>gros -oiseau bleu</em> ecluera les résultats contenant <em>oiseau</em>.</li>\n"
+"</ul>"
+
+#: apachesolr_search.module:202
+msgid "Could not construct a Solr query in function apachesolr_search_search()"
+msgstr "Impossible de construire une requête Solr dans la fonction apachesolr_search_search()"
+
+#: apachesolr_search.module:501
+msgid "Apache Solr Search: Filter by content type"
+msgstr "Apache Solr Search : Filtrer par type de contenu"
+
+#: apachesolr_search.module:505
+msgid "Apache Solr Search: Filter by author"
+msgstr "Apache Solr Search : Filtrer par auteur"
+
+#: apachesolr_search.module:509
+msgid "Apache Solr Search: Filter by language"
+msgstr "Apache Solr Search : Filtrer par langue"
+
+#: apachesolr_search.module:514
+msgid "Apache Solr Search: Filter by updated date"
+msgstr "Apache Solr Search : Filtrer par date de mise à jour"
+
+#: apachesolr_search.module:518
+msgid "Apache Solr Search: Filter by post date"
+msgstr "Apache Solr Search : Filtrer par date de publication"
+
+#: apachesolr_search.module:525
+msgid "Apache Solr Search: Filter by Book"
+msgstr "Apache Solr Search : Filtrer par Book"
+
+#: apachesolr_search.module:537
+msgid "Apache Solr Search: Filter by taxonomy @name"
+msgstr "Apache Solr Search : Filtrer par taxonomie @name"
+
+#: apachesolr_search.module:550
+msgid "Apache Solr Search: Filter by @field"
+msgstr "Apache Solr Search : Filtrer par @fiels"
+
+#: apachesolr_search.module:575
+msgid "Apache Solr Search: Current search"
+msgstr "Apache Solr Search : Recherche courante"
+
+#: apachesolr_search.module:603
+msgid "Filter by book"
+msgstr "Filtrer par book"
+
+#: apachesolr_search.module:605
+msgid "Filter by language"
+msgstr "Filtrer par langue"
+
+#: apachesolr_search.module:607
+msgid "Filter by author"
+msgstr "Filtrer par auteur"
+
+#: apachesolr_search.module:609
+msgid "Filter by type"
+msgstr "Filtrer par type"
+
+#: apachesolr_search.module:611
+msgid "Filter by modification date"
+msgstr "Filtrer par date de modification"
+
+#: apachesolr_search.module:613
+msgid "Filter by post date"
+msgstr "Filtrer par date de publication"
+
+#: apachesolr_search.module:620
+msgid "Filter by @field"
+msgstr "Filtrer par @field"
+
+#: apachesolr_search.module:740
+msgid "Filter by @name"
+msgstr "Filtrer par @name"
+
+#: apachesolr_search.module:756;1159
+msgid "Not in any book"
+msgstr "Présent dans aucun book"
+
+#: apachesolr_search.module:767
+msgid "Language neutral"
+msgstr "Indépendant de la langue"
+
+#: apachesolr_search.module:930
+msgid "Retain current filters"
+msgstr "Retenir les filtres courants"
+
+#: apachesolr_search.module:954
+msgid "Did you mean"
+msgstr "Vouliez-vous dire"
+
+#: apachesolr_search.module:983
+msgid "Please enter some keywords."
+msgstr "Veuillez entrer des mots-clés."
+
+#: apachesolr_search.module:995
+msgid "Make Apache Solr Search the default"
+msgstr "Faire d'Apache Solr Search le réglage par défaut"
+
+#: apachesolr_search.module:998
+msgid "Hides core node search, and makes the search block submit to Apache Solr Search"
+msgstr "Cache la recherche core sur les noeuds, et permet de soumettre le bloc de recherche à Apache Solr Search"
+
+#: apachesolr_search.module:1006
+msgid "Use Apache Solr for taxonomy links"
+msgstr "Utiliser Apache Solr pour les liens de taxonomies"
+
+#: apachesolr_search.module:1008
+msgid "Note: Vocabularies that need this behavior need to be checked off on the <a href=\"@enabled_filters_url\">enabled filters</a> settings page"
+msgstr "Note : les vocabulaires qui nécessitent ce comportement doivent être décochés sur la page de paramètres des <a href=\"@enabled_filters_url\">filtres activés</a>"
+
+#: apachesolr_search.module:1018
+msgid "Enable spellchecker and suggestions"
+msgstr "Activer le vérificateur d'orthographe et les suggestions"
+
+#: apachesolr_search.module:1020
+msgid "Enable spellchecker and get word suggestions. Also known as the \"Did you mean ... ?\" feature."
+msgstr "Activer le vérificateur d'orthographe et obtenir des suggestions de mots. Aussi connu sous le nom de la fonctionnalité \"Vous vouliez dire ... ?\"."
+
+#: apachesolr_search.module:1125
+msgid "Anonymous"
+msgstr "Anonyme"
+
+#: apachesolr_search.module:1266
+msgid "Current search"
+msgstr "Recherche actuelle"
+
+#: apachesolr_search.module:165
+msgid "search"
+msgstr "rechercher"
+
+#: apachesolr_search.module:165
+msgid "%keys (@type)."
+msgstr "%keys (@type)."
+
+#: apachesolr_search.module:433
+msgid "1 comment"
+msgid_plural "@count comments"
+msgstr[0] "1 commentaire"
+msgstr[1] "@count commentaires"
+
+#: apachesolr_search.module:1167
+msgid "Search found 1 item"
+msgid_plural "Search found @count items"
+msgstr[0] "1 élément trouvé."
+msgstr[1] "@count éléments trouvés"
+
+#: apachesolr_search.module:39
+msgid "Search fields"
+msgstr "Rechercher les champs"
+
+#: apachesolr_search.module:47
+msgid "Content bias settings"
+msgstr "Paramètres de favorisation de contenu"
+
+#: apachesolr.install:27
+msgid "No Solr instance available when checking requirements."
+msgstr "Aucune instance Solr disponible lors de la vérification des pré-requis"
+
+#: apachesolr.install:87
+msgid "More like this"
+msgstr "Plus de résultats similaires"
+
+#: apachesolr.install:89
+msgid "Search is enabled. Your site is <a href=\"!index_settings_link\">currently 0% indexed</a>."
+msgstr "La recherche est activée. Votre site est <a href=\"!index_settings_link\">indexé à 0% pour le moment</a>."
+
+#: apachesolr.install:107;163
+msgid "Stores a record of when a node property changed to determine if it needs indexing by Solr."
+msgstr "Stocke un enregistrement de quand une propriété du noeud a été modifiée, afin de déterminé si elle doit être indexée par Solr."
+
+#: apachesolr.install:110;166
+msgid "The primary identifier for a node."
+msgstr "L'identifiant primaire d'un noeud."
+
+#: apachesolr.install:115;171
+msgid "Boolean indicating whether the node is published (visible to non-administrators)."
+msgstr "Un booléen indiquant si le noeud est publié (visible aux non-administrateurs)."
+
+#: apachesolr.install:120;176
+msgid "The Unix timestamp when a node property was changed."
+msgstr "Le timestamp Unix de quand une propriété du noeud a été modifiée."
+
+#: (duplicate) apachesolr.install:33
+msgid "Your site has contacted the Apache Solr server."
+msgstr "Votre site a contacté le serveur Apache Solr."
+
+#: (duplicate) apachesolr.install:33
+msgid "Your site was unable to contact the Apache Solr server."
+msgstr "Votre site n'a pas pu contacté le serveur Apache Solr."
+
+#: (duplicate) apachesolr.install:35
+msgid "Host: %host"
+msgstr "Hôte : %host"
+
+#: (duplicate) apachesolr.install:36
+msgid "Port: %port"
+msgstr "Port : %port"
+
+#: (duplicate) apachesolr.install:37
+msgid "Path: %path"
+msgstr "Chemin : %path"
+
+#: (duplicate) apachesolr.install:46
+msgid "Apache Solr PHP Client Library"
+msgstr "Apache Solr PHP Client Library"
+
+#: (duplicate) apachesolr.install:53
+msgid "Correct version \"@expected\"."
+msgstr "Version correcte \"@expected\"."
+
+#: (duplicate) apachesolr.install:57
+msgid "Incorrect version \"@version\". See the instructions in README.txt."
+msgstr "Version \"@version\" incorrecte. Consultez les instructions dans le fichier README.txt."
+
+#: (duplicate) apachesolr.install:58
+msgid "The version of the library in the SolrPhpClient directory is \"@version\" compared to the expected \"@expected\""
+msgstr "La version de la librairie dans le répertoire SolrPhpClient est \"@version\" alors que celle attendue est  \"@expected\""
+
+#: (duplicate) apachesolr.install:71
+msgid "<em>Missing</em>.  See the instructions in README.txt"
+msgstr "<em>Manquante</em>. Consultez les instructions dans le fichier README.txt."
+
+#: (duplicate) apachesolr.install:72
+msgid "The Solr PHP library must be present in a sub-directory named SolrPhpClient."
+msgstr "La librairie PHP Solr doit être présente dans un sous-répertoire nommé SolrPhpClient."
+
+#: apachesolr.info:0
+msgid "Apache Solr framework"
+msgstr "Apache Solr framework"
+
+#: apachesolr.info:0
+msgid "Framework for searching with Solr"
+msgstr "Framework pour la recherche avec Solr"
+
+#: apachesolr_search.info:0
+msgid "Apache Solr search"
+msgstr "Apache Solr search"
+
+#: apachesolr_search.info:0
+msgid "Search with Solr"
+msgstr "Recherche avec Solr"
+
+#: apachesolr.js:0;0
+msgid "Show more"
+msgstr "En afficher plus"
+
+#: apachesolr.js:0
+msgid "Show fewer"
+msgstr "En afficher moins"
+
+#: contrib/apachesolr_image/apachesolr_image.module:67
+msgid "The Apache Solr image integration module will not have any apparent effect until Image type nodes are indexed or re-indexed."
+msgstr "Le module Apache Solr image integration n'aura pas d'effet visible jusqu'à ce que des noeuds de type Image soient indexés ou ré-indexés."
+
+#: contrib/apachesolr_image/apachesolr_image.info:0
+msgid "Apache Solr image module integration"
+msgstr "Apache Solr image module integration"
+
+#: contrib/apachesolr_image/apachesolr_image.info:0
+msgid "Integrates the Apache Solr and Image modules"
+msgstr "Intègre les modules Apache Solr et Image"
+
+#: contrib/apachesolr_nodeaccess/apachesolr_nodeaccess.module:126
+msgid "Solr search index will be rebuilt."
+msgstr "L'index de recherche Solr sera reconstruit."
+
+#: contrib/apachesolr_nodeaccess/apachesolr_nodeaccess.module:132
+msgid "Your content <a href=\"@url\">must be re-indexed</a> before Apache Solr node access will be functional on searches."
+msgstr "Votre contenu <a href=\"@url\">doit être ré-indexé</a> avant que Apache Solr node access ne soit fonctionnel dans les recherches."
+
+#: contrib/apachesolr_nodeaccess/apachesolr_nodeaccess.module:71
+msgid "apachesolr_nodeaccess"
+msgstr "apachesolr_nodeaccess"
+
+#: contrib/apachesolr_nodeaccess/apachesolr_nodeaccess.module:71
+msgid "User %name (UID:!uid) cannot search: @message"
+msgstr "L'utilisateur %name (UID:!uid) ne peut pas effectuer de recherche : @message"
+
+#: contrib/apachesolr_nodeaccess/apachesolr_nodeaccess.info:0
+msgid "Apache Solr node access"
+msgstr "Apache Solr node access"
+
+#: contrib/apachesolr_nodeaccess/apachesolr_nodeaccess.info:0
+msgid "Integrates the node access system with Apache Solr search"
+msgstr "Intègre le système d'accès aux noeuds avec la recherche Apache Solr"
+
+#: contrib/apachesolr_og/apachesolr_og.module:31
+msgid "Is the group node \"included\" within a group along with that group's posts"
+msgstr "Est-ce que le noeud du groupe est \"inclus\" dans un groupe avec l'ensemble des contenus de ce groupe"
+
+#: contrib/apachesolr_og/apachesolr_og.module:32
+msgid "Should group nodes be indexed as belonging to their own group for the purposes of faceting?"
+msgstr "Les noeuds de groupe doivent-ils être indexés comme appartenant à leur propre groupe, pour les besoins de la recherche par facettes ?"
+
+#: contrib/apachesolr_og/apachesolr_og.module:33
+msgid "Not included"
+msgstr "Non inclus"
+
+#: contrib/apachesolr_og/apachesolr_og.module:33
+msgid "Included"
+msgstr "Inclus"
+
+#: contrib/apachesolr_og/apachesolr_og.module:49
+msgid "All group nodes marked for re-indexing"
+msgstr "Tous les noeuds de groupe sélectionnés pour la ré-indexation"
+
+#: contrib/apachesolr_og/apachesolr_og.module:130
+msgid "Apache Solr OG: Filter by Organic Group"
+msgstr "Apache Solr OG : Filtrer par Organic Group"
+
+#: contrib/apachesolr_og/apachesolr_og.module:165
+msgid "Filter by Group"
+msgstr "Filtrer par Groupe"
+
+#: contrib/apachesolr_og/apachesolr_og.module:183;206
+msgid "No group"
+msgstr "Aucun groupe"
+
+#: contrib/apachesolr_og/apachesolr_og.module:105
+msgid "1 group"
+msgid_plural "@count groups"
+msgstr[0] "1 groupe"
+msgstr[1] "@count groupes"
+
+#: contrib/apachesolr_og/apachesolr_og.module:15
+msgid "Apache Solr OG configuration "
+msgstr "Configuration Apache Solr OG"
+
+#: contrib/apachesolr_og/apachesolr_og.module:16
+msgid "Apache Solr OG facet settings for group posts."
+msgstr "Paramètres Apache Solr OG de facettes pour les contenus de groupe."
+
+#: contrib/apachesolr_og/apachesolr_og.install:11
+msgid "All existing Organic Group posts will be re-indexed"
+msgstr "Tous les contenus Organic Group existant seront ré-indexés"
+
+#: contrib/apachesolr_og/apachesolr_og.info:0
+msgid "Apache Solr Organic Groups"
+msgstr "Apache Solr Organic Groups"
+
+#: contrib/apachesolr_og/apachesolr_og.info:0
+msgid "Integrates Organic Groups and Apache Solr Search"
+msgstr "Intègre Organic Groups avec Apache Solr Search"
+

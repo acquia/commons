@@ -1,0 +1,19 @@
+--- heartbeat.features.inc	2010-05-18 16:00:48.000000000 -0400
++++ heartbeat.new.features.inc	2010-07-29 10:22:16.000000000 -0400
+@@ -106,12 +106,15 @@ function heartbeat_features_export_rende
+  * Implementation of hook_features_revert().
+  */
+ function heartbeat_features_revert($module = NULL) {
++  // Load heartbeat.admin.inc
++  require_once(drupal_get_path('module', 'heartbeat') . '/heartbeat.admin.inc');
++  
+   // Get default heartbeats from feature
+   if (module_hook($module, 'heartbeat_message_info')) {
+     $heartbeats = module_invoke($module, 'heartbeat_message_info');
+ 
+     foreach ($heartbeats as $heartbeat) {
+-      heartbeat_messages_revert($heartbeat);
++      heartbeat_messages_revert($heartbeat['message_id']);
+     }
+   }
+ }

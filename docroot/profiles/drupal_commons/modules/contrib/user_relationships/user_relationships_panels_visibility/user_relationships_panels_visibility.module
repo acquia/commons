@@ -1,0 +1,15 @@
+<?php
+// $Id: user_relationships_panels_visibility.module,v 1.1.2.1 2009/10/25 21:12:37 alexk Exp $
+
+/**
+ * @file
+ * Module to provide a ctools access plugin
+ *
+*/
+
+
+function user_relationships_panels_visibility_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'ctools' && $plugin == 'access') {
+    return 'plugins/access';
+  }
+}

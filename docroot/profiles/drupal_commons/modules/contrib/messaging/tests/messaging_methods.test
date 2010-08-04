@@ -1,0 +1,65 @@
+<?php
+// $Id: messaging_methods.test,v 1.1.2.1.2.4 2008/12/16 15:00:29 jareyero Exp $ 
+/**
+ * Class for testing messaging module.
+ *
+ * Tests basic API functions
+ */
+ 
+require_once 'messaging_testcase.inc';
+
+class Messaging_Methods_Tests extends MessagingTestCase {
+  
+  function getInfo() {
+    return array(
+      'name' => 'Sending methods', 
+      'group' => 'Messaging', 
+      'description' => 'API compatibility for sending method plug-ins'
+    );
+  }
+
+  function setUp() {
+    // We can only test the plugins that don't require other modules
+    parent::setUp('messaging', 'messaging_debug', 'messaging_simple', 'messaging_mail', 'messaging_mime_mail', 'messaging_phpmailer', 'messaging_privatemsg', 'messaging_sms');
+  }
+
+  /**
+   * Test message sending callbacks for enabled plug-ins
+   */
+  function testMessagingMethods() {
+    $this->messagingStartTest();
+    $user = $this->drupalCreateUser();
+    
+    // First, with debug disabled, check sending method properties
+    variable_set('messaging_debug', 0);
+    foreach (messaging_method_info() as $method => $info) {
+      // Check for some sending method properties
+      $this->assertTrue(!empty($info['name']) && !empty($info['type']) && !empty($info['send callback']) && (!empty($info['destination']) || !empty($info['destination callback'])), 'Send method properties seem to be ok for method: ' . $method);
+      // Check existing callback functions
+      foreach (array('send', 'user', 'prepare', 'render', 'presend', 'aftersend', 'multisend') as $key) {
+        if ($function = _messaging_callback_get($info, $key)) {
+          $this->assertTrue(function_exists($function), "Function callback of type $key exists for method $method");
+        }
+      }
+    }
+    
+    // Enable debug mode so messages are not actually sent and create user for testing
+    variable_set('messaging_debug', 1);
+    foreach (messaging_method_info(NULL, NULL, NULL, TRUE) as $method => $info) {
+      $count = 0;
+      $name = $info['name'];
+      // This should create 3 messages for each method
+      $message = $this->randomMessage();
+      if (messaging_user_destination($user, $method, $message)) {
+        $this->assertEqual(messaging_message_send_user($user, $message, $method, TRUE), TRUE, 'Message sent for user using: '.$name);
+        $count++;
+      }
+      // Try these fake destinations, it should work as they're finally send through debug
+      $message->account = $user;
+      $this->assertEqual(messaging_message_send(array('foo1', 'foo2'), $message, $method, TRUE), TRUE, 'Bulk messages sent using: '.$name);
+      $count++;
+      $queued = messaging_store('get', array('uid' => $user->uid, 'method' => $method));
+      $this->assertEqual(count($queued), $count, 'The right number of messages have been queued for method: '.$method.' ('.count($queued).')');    
+    }    
+  }  
+}

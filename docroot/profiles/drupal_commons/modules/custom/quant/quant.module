@@ -1,0 +1,425 @@
+<?php
+// $Id$
+
+// Date formats
+define('QUANT_DATE_DAY_FORMAT', 'M j'); // Month Day (Feb 12)
+define('QUANT_DATE_MONTH_FORMAT', 'M y'); // Month Year (Jun 09) 
+
+// Number of allowed colors
+define('QUANT_PALETTE_AMOUNT', 25);
+
+// Include contributed quants
+require_once('quant.quants.inc');
+
+// Include chart building function
+require_once('quant.chart.inc');
+
+// Include forms
+require_once('quant.forms.inc');
+
+/*
+ * Implementation of hook_perm()
+ */
+function quant_perm() {
+  return array('administer site quant', 'view analytics page'); 
+}
+
+/*
+ * Implementation of hook_menu()
+ */
+function quant_menu() {
+  $items = array();
+ 
+  // Main analytics page
+  $items['analytics'] = array(
+    'title' => 'Site analytics',
+    'page callback' => 'quant_page',
+    'access arguments' => array('view analytics page'),
+    'type' => MENU_CALLBACK,
+  );
+  
+  // Settings page
+  $items['admin/settings/site-quant'] = array(
+    'title' => 'Site Quant configuration',
+    'description' => 'Configure the quantitative analytics page',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('quant_admin_settings'),
+    'access arguments' => array('administer site quant'),
+    'file' => 'quant.forms.inc',
+    'type' => MENU_NORMAL_ITEM,
+  );
+  
+  return $items;
+}
+
+// The main analytics page
+function quant_page() {
+  // Get time period, if any
+  $period = strtotime('-' . str_replace('_', ' ', filter_xss($_GET['period'])));
+  if (!is_numeric($period)) {
+    $period = strtotime('-1 month'); // Default
+  }
+  
+  // Fetch all available quants
+  $quants = quant_get();
+  foreach ($quants as $quant) {
+    // Check to see if this quant should be shown
+    if ($allowed = variable_get('quant_visible', 0)) {
+      if (!$allowed[$quant->id]) {
+        continue;
+      }
+    }
+    // Process the quant
+    $charts[] = quant_process($quant, $period);
+  }
+
+  // Add externals
+  drupal_add_css(drupal_get_path('module', 'quant') . '/quant.css');
+  
+  // Theme and return the page
+  return theme('quant_page', drupal_get_form('quant_time_form'), $charts);
+}
+
+/*
+ * Process quants and convert them to charts with data plotted
+ * 
+ * @param $quant
+ *   A quant object
+ * @param $period
+ *   A timestamp representing a date in which data should reach back to
+ * @return
+ *   A complete chart ready for display
+ */
+function quant_process($quant, $period) {
+  $chart = '';
+  
+  // Determine the amount of days in period
+  $days = ceil((time() - $period) / 86400);
+
+  switch ($quant->dataType) {
+    case 'single':
+      $items = quant_db_time($quant, $period);
+      $items = quant_generate_time($items, $quant->field, $days);
+      $chart = quant_init_chart($quant, $items);
+      $chart = quant_chart_time($chart, $quant, $items);
+      break;
+    case 'multiple':
+      $items = quant_db_time($quant, $period);
+      $items = quant_generate_time_multi($items, $quant->field, $quant->group, $days);
+      $chart = quant_init_chart($quant, $items);
+      $chart = quant_chart_time_multi($chart, $quant, $items);
+      break;
+    case 'count':
+      $items = quant_db_count($quant, $period);
+      $items = quant_generate_count($items, $quant->count);
+      $chart = quant_init_chart($quant, $items);
+      $chart = quant_chart_count($chart, $quant, $items);
+      break;
+  }
+    
+  return $chart ? $chart : FALSE;
+}
+
+/*
+ * Perform a database query based on quant data for calculating
+ * time-based trends
+ * 
+ * @param quant
+ *   A quant object
+ * @param $period
+ *   A timestamp which to return items older than
+ * @return
+ *   An executed database query
+ */
+function quant_db_time($quant, $period) {
+  // Generate if a query wasn't supplied
+  if (!$quant->query) {
+    $query = "SELECT $quant->field FROM {{$quant->table}}
+      WHERE $quant->field >= %d 
+      ORDER BY $quant->field DESC";
+  }
+  else {
+    $query = $quant->query;
+  }
+  
+  return db_query($query, $period);
+}
+
+/*
+ * Perform a database query based on quant data for calculating
+ * counts
+ * 
+ * @param quant
+ *   A quant object
+ * @param $period
+ *   A timestamp which to return items older than
+ * @return
+ *   An executed database query
+ */
+function quant_db_count($quant, $period) {
+  // Generate if a query wasn't supplied
+  if (!$quant->query) {
+    $query = "SELECT COUNT($quant->count), $quant->count 
+      FROM {{$quant->table}}
+      WHERE $quant->field >= %d 
+      GROUP BY $quant->count";
+  }
+  else {
+    $query = $quant->query;
+  }
+  
+  return db_query($query, $period);
+}
+
+/*
+ * Fetch all available quants
+ */
+function quant_get() {
+  return module_invoke_all('quants');
+}
+
+/*
+ * Generate chart data for a multiple data point over
+ * a time period
+ * 
+ * @param $items
+ *   Items resulting from a database query
+ * @param $field
+ *   The database field name that stores the timestamp
+ * @param $group
+ *   The database field name to group items on
+ * @param $days
+ *   How many days back should the data be generated for
+ * @return
+ *   A formatted array to be passed into a chart
+ */
+function quant_generate_time_multi($items, $field, $group, $days) {
+  $time = time();
+  $dates = array();
+  $data = array();
+  // The date() format to use. We compare by month if there are more than 96 days.
+  $format = ($days > 75) ? QUANT_DATE_MONTH_FORMAT : QUANT_DATE_DAY_FORMAT;
+  // Whether or not to jump by day or month
+  $period = ($days > 75) ? 2629743 : 86400;
+  // Possibly convert days to months
+  $days = ($days > 75) ? ($days / 30) : $days;
+  
+  // Place the items into an array for initial grouping by $group
+  // For example: $data['page'] = array('May 10', 'May 18');
+  while ($item = db_fetch_object($items)) {
+    $data[$item->$group][] = date($format, $item->$field);
+  }
+  
+  // Iterate through each group of items and calculate the amount of
+  // items for each time period
+  foreach ($data as $type => $values) {
+    $time = time();
+    // Create a new array that's preformatted with a key for
+    // every single time period
+    for ($i = 0; $i < $days; $i++) {
+      $dates[$type][date($format, $time)] = 0;
+      $time -= $period; // Backtrack a period
+    }
+
+    // Increment for each time period
+    foreach ($values as $value) {
+      if (isset($dates[$type][$value])) {
+        $dates[$type][$value]++;
+      }
+    }
+    
+    // Set in ascending order
+    $dates[$type] = array_reverse($dates[$type]);
+  }
+  
+  return $dates;
+}
+
+/*
+ * Generate chart data for a singular data point across
+ * a time period
+ * 
+ * @param $items
+ *   Items resulting from a database query
+ * @param $field
+ *   The database field name that stores the timestamp
+ * @param $days
+ *   How many days back should the data be generated for
+ * @return
+ *   A formatted array to be passed into a chart
+ */
+function quant_generate_time($items, $field, $days) {
+  $time = time();
+  $dates = array();
+  // The date() format to use. We compare by month if there are more than 183 days.
+  $format = ($days > 183) ? QUANT_DATE_MONTH_FORMAT : QUANT_DATE_DAY_FORMAT;
+  // Whether or not to jump by day or month
+  $period = ($days > 183) ? 2629743 : 86400;
+  // Possibly convert days to months
+  $days = ($days > 183) ? ($days / 30) : $days;
+
+  // Create a new array that's preformatted with a key for
+  // every single time period
+  for ($i = 0; $i < $days; $i++) {
+    $dates[date($format, $time)] = 0;
+    $time -= $period; // Backtrack a period
+  }
+ 
+  // Calculate the amount of occurrences per time period
+  while ($item = db_fetch_object($items)) {
+    if (isset($dates[date($format, $item->$field)])) {
+      $dates[date($format, $item->$field)]++;
+    }
+  }
+  
+  // Set in ascending order
+  $dates = array_reverse($dates);
+  
+  return $dates;
+}
+
+/*
+ * Generate chart data for an aggregate (count) data point 
+ * across a time period
+ * 
+ * @param $items
+ *   Items resulting from a database query
+ * @param $field
+ *   The database field name that stores the type to count
+ * @return
+ *   A formatted array to be passed into a chart
+ */
+function quant_generate_count($items, $field) {
+  $data = array();
+  
+  while($item = db_fetch_array($items)) {
+    $data[$item[$field]] = $item['COUNT(' . $field . ')']; 
+  }
+  
+  return $data;
+}
+
+/*
+ * Take formatted data for a count chart and convert to 
+ * a format that the charts can understand
+ * 
+ * @param $quant
+ *   A quant object
+ * @param $data
+ *   An array of data generated by a quant_generate function
+ * @return
+ *   A generated chart
+ */
+function quant_chart_count($chart, $quant, $data) {
+  $max = 0; // Determine the highest available value on y-axis
+  
+  foreach ($data as $key => $value) {
+    $chart['#data'][] = $value;
+    
+    // If pie chart, let's add the numeric value to the label
+    if ($quant->chartType == 'pie') {
+      quant_x_label($chart, $key . ' (' . $value . ')');
+    }
+    else {
+      quant_x_label($chart, $key);
+    }
+    
+    $max = max($max, $value);
+  }
+  
+  quant_y_range($chart, 0, $max);
+
+  return chart_render($chart);
+}
+
+/*
+ * Take formatted data for a single-point chart and convert to 
+ * a format that the charts can understand
+ * 
+ * @param $quant
+ *   A quant object
+ * @param $data
+ *   An array of data generated by a quant_generate function
+ * @return
+ *   A generated chart
+ */
+function quant_chart_time($chart, $quant, $data) {
+  $max = 0; // Determine the highest available value on y-axis
+  $interval = 0; // Counter to help break the x-axis label
+  $period = ceil(count($data) / 10); // Period when to break x-axis
+
+  foreach ($data as $date => $value) {
+    // Only show the X label every calculated period
+    if(!$interval) {
+      quant_x_label($chart, $date);
+      $interval = $period;
+    }
+    $chart['#data'][] = $value;
+    $max = max($max, $value);
+    $interval--;
+  }
+  
+  quant_y_range($chart, 0, $max);
+
+  return chart_render($chart);
+}
+
+/*
+ * Take formatted data for a multi-point chart and convert to 
+ * a format that the charts can understand
+ * 
+ * @param $quant
+ *   A quant object
+ * @param $data
+ *   An array of data generated by a quant_generate function
+ * @return
+ *   A generated chart
+ */
+function quant_chart_time_multi($chart, $quant, $data) {
+  $max = 0; // Determine the highest available value on y-axis
+  $interval = 0; // Counter to help break the x-axis label
+  $x = FALSE; // Only register the x-axis labels once
+  
+  foreach ($data as $type => $values) {
+    // Set type as a legend
+    $chart['#legends'][] = $type; 
+    // Period when to break x-axis
+    $period = ceil(count($data[$type]) / 10);
+    
+    foreach ($values as $date => $value) {
+      $chart['#data'][$type][] = $value;
+      $max = max($max, $value);
+      
+      if (!$x) { // Only set x-axis labels once
+        if(!$interval) {
+          quant_x_label($chart, $date);
+          $interval = $period;
+        }
+        $interval--;
+      }
+    }
+    
+    $x = TRUE; // x-axis labels have been set
+  }
+  
+  quant_y_range($chart, 0, $max);
+
+  return chart_render($chart);
+}
+
+/*** THEME ***/
+
+function quant_theme() {
+  return array(
+    'quant_page' => array(),
+  ); 
+}
+
+function theme_quant_page($form, $charts) {
+  $content = '';
+  $content .= $form;
+  foreach ($charts as $chart) {
+    $content .= '<div class="quant-chart">' . $chart . '</div>'; 
+  }
+  return $content;
+}

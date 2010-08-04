@@ -1,0 +1,342 @@
+<?php
+
+/**
+ * Implementation of hook_views_api().
+ */
+function notifications_views_views_api() {
+  return array('api' => 2);
+}
+
+/**
+ * Implementation of hook_views_data().
+ */
+function notifications_views_views_data() {
+  $data = array();
+
+  // ---------------------
+  // Messaging base table
+  // ---------------------
+  $data['messaging_store'] = array(
+    // Table info.
+    'table' => array(
+      'group' => t('Messaging'),
+      'base' => array(
+        'field' => 'mqid',
+        'title' => t('Messaging'),
+        'help' => t('Messaging store.'),
+        'weight' => 0,
+      ),
+    ),
+  );
+
+  $data['messaging_store']['mqid'] = array(
+    'title' => t('MQID'),
+    'help' => t('The ID of the message'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+  );
+
+  $data['messaging_store']['subject'] = array(
+    'title' => t('Subject'),
+    'help' => t('The subject of the message'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+  );
+
+  $data['messaging_store']['body'] = array(
+    'title' => t('Message'),
+    'help' => t('The body of the message'),
+    'field' => array(
+        'handler' => 'notifications_views_handler_field_body',
+    ),
+  );
+  
+  $data['messaging_store']['created'] = array(
+    'title' => t('Creation date'),
+    'help' => t('The date that the message was created.'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+  );
+  
+  $data['messaging_store']['delete_link'] = array(
+    'title' => t('Delete link'),
+    'help' => t('Provides a link to delete the message'),
+    'field' => array(
+        'handler' => 'notifications_views_handler_field_delete_link',
+    ),
+  );
+
+  $data['messaging_store']['method'] = array(
+    'title' => t('Method'),
+    'help' => t('The delivery method for the message'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+    ),
+  );
+
+  $data['messaging_store']['sender'] = array(
+    'title' => t('Sender'),
+    'help' => t("The User ID of the message sender."),
+    'relationship' => array(
+      'base' => 'users',
+      'field' => 'uid',
+      'handler' => 'views_handler_relationship',
+      'label' => t('Sender'),
+    ),
+  );
+
+  $data['messaging_store']['uid'] = array(
+    'title' => t('Receiver'),
+    'help' => t("The User ID of the message receiver."),
+    'relationship' => array(
+      'base' => 'users',
+      'field' => 'uid',
+      'handler' => 'views_handler_relationship',
+      'label' => t('Receiver'),
+    ),
+  );
+
+  // ----------------------------------------------
+  // Notifications base & joins to users and node
+  // ----------------------------------------------
+
+  // Notifications
+  $data['notifications']['table']['group'] = t('Notifications');
+  $data['notifications']['table']['base'] = array(
+        'field' => 'sid',
+        'title' => t('Notifications'),
+        'help' => t('Notifications subscriptions.'),
+        'weight' => 0,
+  );
+  $data['notifications']['table']['join'] = array(
+    'node' => array(
+      'table' => 'notifications',
+      'left_field' => 'sid',
+      'field' => 'sid',
+      'left_table' => 'notifications_fields',
+    ),
+    'users' => array(
+      'table' => 'notifications',
+      'left_field' => 'uid',
+      'field' => 'uid',
+      'left_table' => 'users',
+    ),
+  );
+
+  $data['notifications']['uid_current'] = array(
+    'title' => t('Subscription by the current user'),
+    'help' => t('Filter the view to the currently logged in user.'),
+    'filter' => array(
+      'real field' => 'uid',
+      'title' => t('Current'),
+      'handler' => 'views_handler_filter_user_current',
+    ),
+  );
+
+  //filter by the author to which people are subscribed
+  $data['notifications']['uid'] = array(
+    'title' => t('Subscriber UID'),
+    'help' => t('The UID of the subscriber.'), // The help that appears on the UI,
+    // Information for accepting a nid as an argument
+    'argument' => array(
+      'handler' => 'views_handler_argument_user_uid',
+      'parent' => 'views_handler_argument_numeric', // make sure parent is included
+      // 'name field' => 'title', // the field to display in the summary.
+      'numeric' => TRUE,
+    ),
+    'relationship' => array(
+      'base' => 'users',
+      'field' => 'uid',
+      'handler' => 'views_handler_relationship',
+      'label' => t('Subscriber'),
+    ),
+  );
+
+  $data['notifications']['send_method'] = array(
+    'title' => t('Send method'),
+    'help' => t('Subscription send method.'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+    ),
+    'filter' => array(
+      'title' => t('Method'),
+      'handler' => 'notifications_views_handler_filter_subscription_send_method',
+    ),
+  );
+  $data['notifications']['type'] = array(
+    'title' => t('Type'),
+    'help' => t('Subscription type.'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+    ),
+    'filter' => array(
+      'title' => t('Type'),
+      'handler' => 'notifications_views_handler_filter_subscription_type',
+    ),
+    'argument' => array(
+      'handler' => 'views_handler_argument_string',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+  );
+  $data['notifications']['send_interval'] = array(
+    'title' => t('Send Interval'),
+    'help' => t('Subscription send interval.'),
+    'field' => array(
+      'handler' => 'notifications_views_handler_field_subscription_interval',
+    ),
+    'filter' => array(
+      'title' => t('Send Interval'),
+      'handler' => 'notifications_views_handler_filter_subscription_interval',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+  );
+
+  // -------------------------------------------------------------
+  // Notifications_fields joins to users, node, and notifications
+  // -------------------------------------------------------------
+
+  $data['notifications_fields']['table']['group'] = t('Notifications');
+  $data['notifications_fields']['table']['join'] = array(
+    'users' => array(
+      'table' => 'notifications_fields',
+      'left_field' => 'sid',
+      'field' => 'sid',
+      'left_table' => 'notifications',
+    ),
+    'node' => array(
+      'table' => 'notifications_fields',
+      'left_field' => 'nid',
+      'field' => 'value',
+      'extra' => array(
+        array('field' => 'field', 'value' => 'nid'),
+      ),
+    ),
+    'notifications' => array(
+      'table' => 'notifications_fields',
+      'left_field' => 'sid',
+      'field' => 'sid',
+      'left_table' => 'notifications',
+    ),
+  );
+
+  //filter by the nid of the subscribed node
+  $data['notifications_fields']['nid'] = array(
+    'title' => t('Subscribed Nid'),
+    'help' => t('The node ID of the subscribed node.'), // The help that appears on the UI,
+    // Information for accepting a nid as an argument
+    'argument' => array(
+      'real field' => 'value',
+      'handler' => 'views_handler_argument_node_nid',
+      'parent' => 'views_handler_argument_numeric', // make sure parent is included
+      // 'name field' => 'title', // the field to display in the summary.
+      'numeric' => TRUE,
+      'validate type' => 'nid',
+      'extra' => array(
+        array('field' => 'field', 'value' => 'nid'),
+      ),
+    ),
+    //link to the node
+    'relationship' => array(
+      'base' => 'node',
+      'real field' => 'value',
+      'handler' => 'notifications_views_handler_relationship',
+      'label' => t('Thread'),
+      'extra' => array(
+        array('field' => 'field', 'value' => 'nid', 'table' => 'notifications_fields'),
+      ),
+    ),
+  );
+
+  //filter by the author to which people are subscribed
+  $data['notifications_fields']['author'] = array(
+    'title' => t('Subscribed Author'),
+    'help' => t('The UID of the subscribed author.'), // The help that appears on the UI,
+    // Information for accepting an author as an argument
+    'argument' => array(
+      'real field' => 'value',
+      'handler' => 'views_handler_argument_user_uid',
+      'parent' => 'views_handler_argument_numeric', // make sure parent is included
+      // 'name field' => 'title', // the field to display in the summary.
+      'numeric' => TRUE,
+      'extra' => array(
+        array('field' => 'field', 'value' => 'author'),
+      ),
+    ),
+    //link to the author
+    'relationship' => array(
+      'base' => 'users',
+      'real field' => 'value',
+      'handler' => 'notifications_views_handler_relationship',
+      'label' => t('Author'),
+      'extra' => array(
+        array('field' => 'field', 'value' => 'author', 'table' => 'notifications_fields'),
+      ),
+    ),
+  );
+
+
+  return $data;
+}
+
+
+function notifications_views_views_handlers() {
+  return array(
+    'info' => array(
+      'path' => drupal_get_path('module', 'notifications_views'),
+    ),
+    'handlers' => array(
+      // filter handlers
+      'notifications_views_handler_filter_subscription_send_method' => array(
+        'parent' => 'views_handler_filter_in_operator',
+      ),
+      'notifications_views_handler_filter_subscription_type' => array(
+        'parent' => 'views_handler_filter_in_operator',
+      ),
+      'notifications_views_handler_filter_subscription_interval' => array(
+        'parent' => 'views_handler_filter_in_operator',
+      ),
+
+      // arguments
+      'notifications_views_handler_argument_subscription_type' => array(
+        'parent' => 'views_handler_argument',
+      ),
+
+      // fields
+      'notifications_views_handler_field_body' => array(
+        'parent' => 'views_handler_field',
+      ),
+      'notifications_views_handler_field_delete_link' => array(
+        'parent' => 'views_handler_field',
+      ),
+      'notifications_views_handler_field_subscription_type' => array(
+        'parent' => 'views_handler_field',
+      ),
+      'notifications_views_handler_field_subscription_interval' => array(
+        'parent' => 'views_handler_field',
+      ),
+      
+      // relationships
+      'notifications_views_handler_relationship' => array(
+        'parent' => 'views_handler_relationship',
+      ),
+    ),
+  );
+}

@@ -1,0 +1,97 @@
+/* $Id:*/
+/* Author: Eugen Mayer (http://kontextwork.de)
+ * Copyright 2010
+ */
+
+.tagging-tag {
+  margin:5px 3px 5px 3px;
+  cursor:pointer;
+  background: url('remove.png') white no-repeat right center;
+  padding:3px 19px 3px 3px;
+  border:1px solid grey;
+  -moz-border-radius:4px;
+  -webkit-border-radius: 4px;
+  float:left;
+}
+
+.tagging-suggest-tag {
+  background: url('add.png') white no-repeat right;
+  margin:5px 5px 5px 5px;
+  padding:3px 18px 3px 3px;
+  cursor:pointer;
+  -moz-border-radius:4px;
+  -webkit-border-radius: 4px;
+  border:1px solid grey;
+  float:left;
+}
+#tagging-widget-container .form-item {
+  margin:0px;
+  padding:0px;
+  clear:both;
+}
+
+#tagging-widget-container {
+  clear:both;
+}
+
+#tagging-widget-container .tagging-widget-input {
+  width:150px;
+  float:left;
+  margin:3px 0px 3px 0px;
+}
+
+.tagging-button {
+  float:left;
+  margin:3px 0px 0px 5px;
+  width:19px;
+  height:19px;
+  background:url('add.png') transparent no-repeat center center;
+}
+
+.tagging-curtags-wrapper {
+  background-color:#eee;
+  padding:5px 0px 10px 0px;
+  display:inline-block;
+  width:100%;
+}
+.tagging-curtags-wrapper label {
+  padding:0px 0px 4px 20px;
+  margin-left:5px;
+  background:url('tag.png') transparent no-repeat left center;
+  display:block;
+}
+
+.tagging-suggestions-wrapper {
+  clear:both;
+  background-color:#eee;
+  padding:10px 0px 5px 0px;
+  display:inline-block;
+  width:100%;
+}
+
+.tagging-suggestions-wrapper label {
+  padding:0px 0px 4px 2px;
+  display:block;
+}
+
+
+/*#tagging-widget-container .tagging-button-container,, #tagging-widget-container .field-prefix*/
+#tagging-widget-container .field-suffix{
+  float:left;
+}
+
+.taggin-widget-input-wrapper #autocomplete {
+  background-color:white;
+}
+
+.clearfix:after {
+  clear:both;
+  content:".";
+  display:block;
+  font-size:0;
+  height:0;
+  visibility:hidden;
+}
+
+.clearfix { display:block; }
+

@@ -1,0 +1,13 @@
+<!-- $Id: type.html,v 1.1.2.1 2009/02/09 02:36:35 yhahn Exp $ -->
+<p>The <strong>context type</strong> describes how this context is stored; Context UI is capable of having contexts entirely in code that are not in the database. This allows modules to easily ship with Views built in, and it allows you to create a module to store your contexts for easy deployment between development and production servers.</p>
+
+<dl>
+<dt><strong>Normal</strong></dt>
+<dd>Normal contexts are stored in your database and are completely local to your system.  They are not defined by modules.</dd>
+
+<dt><strong>Default</strong></dt>
+<dd>Default contexts are stored only in code and are not anywhere in your database. They may be <strong>enabled</strong> or <strong>disabled</strong> but you may not completely remove them from your system. You can <strong>override</strong> the context which will create a local copy of your context that you can modify. If you do this, future updates to the version in code will not affect your context.</dd>
+
+<dt><strong>Overridden</strong></dt>
+<dd>Overridden contexts are stored both in code and in the database; while overridden, the version that is in code is completely dormant. If you <strong>revert</strong> the context, the version in the database will be deleted, and the version that is in code will once again be used.</dd>
+</dl>

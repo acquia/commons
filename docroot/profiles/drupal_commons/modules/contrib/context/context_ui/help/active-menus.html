@@ -1,0 +1,9 @@
+<!-- $Id: active-menus.html,v 1.1.2.1 2010/04/21 17:16:11 darthsteven Exp $ -->
+<p>You can use the active menu reaction to set the menu item that should be made active when a context is active.</p>
+<p>To do this Context module needs to modify the HTML that Drupal produces for your menus, it does this automatically for the primary and secondary links in your theme. However, it cannot know about all other menus you are showing on your page, and any other places that you might be showing them. For context to highlight the active menu item you may need to modify the code that produces the HTML for those menu items.</p>
+<p>Context module provides a helper function <code>context_menu_set_active()</code> that will walk an array of links and set an active class on those that should be active. Further details can be found in the following issues:</p>
+<ul>
+  <li><a href="http://drupal.org/node/442882">http://drupal.org/node/442882</a></li>
+  <li><a href="http://drupal.org/node/559132">http://drupal.org/node/559132</a></li>
+  <li><a href="http://drupal.org/node/554594">http://drupal.org/node/554594</a></li>
+</ul>

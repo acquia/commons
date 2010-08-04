@@ -1,0 +1,38 @@
+--- og_aggregator.module	2009-11-12 05:16:53.000000000 -0500
++++ og_aggregator.new.module	2010-07-29 10:32:23.000000000 -0400
+@@ -306,7 +306,7 @@ function og_aggregator_form_feed_submit(
+     unset($form_state['values']['title']);
+   }
+   og_aggregator_save_feed($form_state['values']);
+-  menu_rebuild();
++  
+   if (isset($form_state['values']['fid'])) {
+     if (isset($form_state['values']['title'])) {
+       drupal_set_message(t('The feed %feed has been updated.', array('%feed' => $form_state['values']['title'])));
+@@ -314,7 +314,7 @@ function og_aggregator_form_feed_submit(
+         $form_state['redirect'] = 'admin/og/aggregator/';
+       }
+       else {
+-    $form_state['redirect'] = 'node/'.$form_state['values']['og_id'].'/feed';
++    $form_state['redirect'] = 'node/'.$form_state['values']['og_id'].'/aggregator';
+       }
+     }
+     else {
+@@ -324,7 +324,7 @@ function og_aggregator_form_feed_submit(
+         $form_state['redirect'] = 'admin/og/aggregator/';
+       }
+       else {
+-        $form_state['redirect'] = 'node/'.$form_state['values']['og_id'].'/feed';
++        $form_state['redirect'] = 'node/'.$form_state['values']['og_id'].'/aggregator';
+       }
+     }
+   }
+@@ -332,6 +332,8 @@ function og_aggregator_form_feed_submit(
+     watchdog('og_aggregator', 'Feed %feed added.', array('%feed' => $form_state['values']['title']), WATCHDOG_NOTICE, l(t('view'), 'admin/aggregator'));
+     drupal_set_message(t('The feed %feed has been added.', array('%feed' => $form_state['values']['title'])));
+   }
++  
++  menu_rebuild();
+ }
+ 
+ /**

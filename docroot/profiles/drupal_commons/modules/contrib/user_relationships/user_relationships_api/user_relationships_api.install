@@ -1,0 +1,137 @@
+<?php
+// $Id: user_relationships_api.install,v 1.1.2.10 2010/05/13 19:15:57 alexk Exp $
+
+/**
+ * @file
+ * User Relationships API Module installation file.
+ */
+
+/**
+ * Implementation of hook_schema().
+ */
+function user_relationships_api_schema() {
+  $schema['user_relationships'] = array(
+    'fields' => array(
+      'rid'           => array('type' => 'serial', 'not null' => TRUE),
+      'requester_id'  => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'requestee_id'  => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'rtid'          => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'approved'      => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0, 'size' => 'tiny'),
+      'created_at'    => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'updated_at'    => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'flags'         => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+    ),
+    'primary key' => array('requester_id', 'requestee_id', 'rtid'),
+    'indexes' => array(
+      'requester_id' => array('requester_id'),
+      'requestee_id' => array('requestee_id'),
+      'rtid' => array('rtid'),
+      'rid' => array('rid'),
+    ),
+  );
+
+  $schema['user_relationship_types'] = array(
+    'fields' => array(
+      'rtid'              => array('type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE),
+      'name'              => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => ''),
+      'plural_name'       => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => ''),
+      'is_oneway'         => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0, 'size' => 'tiny'),
+      'is_reciprocal'     => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0, 'size' => 'tiny'),
+      'requires_approval' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0, 'size' => 'tiny'),
+      'expires_val'       => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+    ),
+    'unique keys' => array(
+      'name'  => array('name'),
+    ),
+    'primary key' => array('rtid')
+  );
+
+  $schema['user_relationship_type_roles'] = array(
+    'fields' => array(
+      'rtid'              => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'rid'              => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+    ),
+    'primary key' => array('rtid', 'rid'),
+    'indexes' => array(
+      'rtid' => array('rtid'),
+    )
+  );
+
+  $schema['user_relationship_type_roles_receive'] = array(
+    'fields' => array(
+      'rtid'              => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'rid'              => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+    ),
+    'primary key' => array('rtid', 'rid'),
+    'indexes' => array(
+      'rtid' => array('rtid'),
+    )
+  );
+
+  return $schema;
+}
+
+/**
+ * Implementation of hook_install().
+ */
+function user_relationships_api_install() {
+  drupal_install_schema('user_relationships_api');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function user_relationships_api_uninstall() {
+  drupal_uninstall_schema('user_relationships_api');
+}
+
+/**
+ * Implementation of hook_update_N().
+ * Update 6100 changes the {user_relationships} rid column from an INT to a SERIAL type.
+ */
+function user_relationships_api_update_6100() {
+  $ret = array();
+  db_drop_index($ret, 'user_relationships', 'rid');
+  db_change_field($ret, 'user_relationships', 'rid', 'rid', array('type' => 'serial', 'not null' => TRUE), array('indexes' => array('rid' => array('rid')))); 
+  return $ret;
+}
+
+/**
+ * Implementation of hook_update_N().
+ * Update 6101 adds the {user_relationship_type_roles} table
+ */
+function user_relationships_api_update_6101() {
+  $ret = array();
+  $schema = drupal_get_schema_unprocessed('user_relationships_api');
+  _drupal_initialize_schema('user_relationships_api', $schema);
+  db_create_table($ret, 'user_relationship_type_roles', $schema['user_relationship_type_roles']);
+  return $ret;
+}
+
+/**
+ * Implementation of hook_update_N().
+ * Update 6102 adds the column is_reciprocal to the {user_relationship_types} table
+ */
+function user_relationships_api_update_6102() {
+  $new_fields = array(
+    'is_reciprocal' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0, 'size' => 'tiny'),
+  );
+
+  $ret = array();
+  foreach ($new_fields as $field => $spec) {
+    db_add_field($ret, 'user_relationship_types', $field, $spec);
+  }
+  return $ret;
+}
+
+/**
+ * Implementation of hook_update_N().
+ * Update 6103 adds the {user_relationship_type_roles_receive} table
+ */
+function user_relationships_api_update_6103() {
+  $ret = array();
+  $schema = drupal_get_schema_unprocessed('user_relationships_api');
+  _drupal_initialize_schema('user_relationships_api', $schema);
+  db_create_table($ret, 'user_relationship_type_roles_receive', $schema['user_relationship_type_roles_receive']);
+  return $ret;
+}

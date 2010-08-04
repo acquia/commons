@@ -1,0 +1,541 @@
+<?php
+// $Id: heartbeat_comments.module,v 1.1.2.18 2010/05/18 20:00:48 stalski Exp $
+
+/**
+ * @file
+ *   heartbeat_comments.module
+ *   Heartbeat comments can come with two possible
+ */
+
+
+define('HEARTBEAT_NODE_COMMENTS_PER_PAGE', variable_get('heartbeat_comments_node_count', 5));
+define('HEARTBEAT_REACTIONS_PER_PAGE', variable_get('heartbeat_comments_comment_count', 5));
+
+
+/**
+ * Implementation of hook_perm().
+ */
+function heartbeat_comments_perm() {
+  return array('add heartbeat comment', 'administer heartbeat comments');
+}
+
+/**
+ * Implementation of hook_theme().
+ */
+function heartbeat_comments_theme($existing, $type, $theme, $path) {
+  return array(
+    'heartbeat_comments_admin_overview' => array(
+      'arguments' => array('form' => NULL),
+    ),
+    'heartbeat_comments' => array(
+      'arguments' => array('comments' => NULL, 'uaid' => 0, 'node_comment' => FALSE, 'has_more' => FALSE)
+    ),
+    'heartbeat_comment' => array(
+      'arguments' => array('comment' => NULL, 'node_comment' => FALSE)
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function heartbeat_comments_menu() {
+
+  $items['admin/content/heartbeat/comments'] = array(
+    'title' => 'Published heartbeat comments',
+    'description' => 'List and edit heartbeat comments.',
+    'page callback' => 'heartbeat_comments_admin',
+    'access arguments' => array('administer heartbeat comments'),
+    'file' => 'heartbeat_comments.admin.inc',
+    'type' => MENU_LOCAL_TASK,
+    'weight' => -10,
+  );
+
+  $items['heartbeat/comment/post'] = array(
+    'title' => 'heartbeat comment post',
+    'description' => 'Make a comment on an activity message',
+    'access arguments' => array('add heartbeat comment'),
+    'page callback' => 'heartbeat_comments_form_submit',
+    'type' => MENU_CALLBACK
+  );
+
+  return $items;
+}
+
+/**
+ * Implementation of hook_heartbeat_load().
+ */
+function heartbeat_comments_heartbeat_load(&$messages, HeartbeatAccess $stream) {
+
+  drupal_add_js(drupal_get_path('module', 'heartbeat_comments') . '/heartbeat_comments.js', 'module');
+  $comments_order = variable_get('heartbeat_comments_order', 'recent_on_top');
+  drupal_add_js(array('heartbeat_comments_order' => $comments_order), "setting");
+  $comments_position = variable_get('heartbeat_comments_position', 'down');
+  drupal_add_js(array('heartbeat_comments_position' => $comments_position), "setting");
+
+  foreach ($messages as $key => $message) {
+
+    if (!empty($message->template->attachments['heartbeat_comments'])) {
+
+      if ($message->nid > 0) {
+        $node = node_load($message->nid);
+      }
+
+      $messages[$key]->additions->comments_order = $comments_order;
+      $messages[$key]->additions->comments_position = $comments_position;
+
+      // Check for node comment reactions
+      if ($message->template->attachments['comment_comments'] && variable_get('comment_' . $node->type, 2) > 0) {
+
+        $messages[$key]->additions->node_comment = TRUE;
+        $messages[$key]->additions->object_type = $node->type;
+        $reactions = heartbeat_get_node_comments($node);
+
+      }
+      // or normal heartbeat comments
+      else {
+
+        $messages[$key]->additions->node_comment = FALSE;
+        $messages[$key]->additions->object_type = 'activity';
+        $reactions = heartbeat_get_message_reactions($message->uaid);
+
+      }
+      $messages[$key]->additions->reactions = $reactions;
+      $messages[$key]->additions->comment_count = count($reactions);
+
+    }
+  }
+}
+
+/**
+ * Implementation of hook_heartbeat_delete().
+ *   Delete the attached comments to a heartbeat activity object.
+ * @param $message
+ *   HeartbeatActivity ID
+ */
+function heartbeat_comments_heartbeat_delete($uaid) {
+  db_query("DELETE FROM {heartbeat_comments} WHERE uaid = %d", $uaid);
+}
+
+/**
+ * Implementation of hook_heartbeat_attachments().
+ * @param $message
+ *   HeartbeatActivity object
+ * @return unknown_type
+ */
+function heartbeat_comments_heartbeat_attachments($message = NULL) {
+  return array(
+    'heartbeat_comments' => array(
+      '#type' => 'checkbox',
+      '#default_value' => isset($message->attachments['heartbeat_comments']) ? $message->attachments['heartbeat_comments'] : 0,
+      '#title' => t('Add heartbeat react field to this message'),
+      '#weight' => 20,
+    ),
+    'comment_comments' => array(
+      '#type' => 'checkbox',
+      '#default_value' => isset($message->attachments['comment_comments']) ? $message->attachments['comment_comments'] : 0,
+      '#title' => t('Use the node comment within node contexts if available and possible'),
+      '#description' => t('Enabling this option will save a normal node comment when within node context(nid known). When enabled, normal reactions are <b>replaced</b> with the node comments, not appended!'),
+      '#weight' => 21,
+    ),
+  );
+}
+
+/**
+ * Implementation of <attchement>_widget().
+ */
+function heartbeat_comments_widget($attachments, &$message) {
+
+  $list = '<div id="heartbeat-comments-wrapper-' . $message->uaid . '" class="heartbeat-comments-wrapper">';
+  $extraCssClass = "heartbeat-comments-nocomments";
+
+  if ($message->additions->comment_count > 0) {
+
+    $extraCssClass = "heartbeat-comments-comments";
+    $has_more = FALSE;
+    $comments_per_page = HEARTBEAT_REACTIONS_PER_PAGE;
+    if ($message->template->attachments['comment_comments'] && variable_get('comment_' . $message->additions->object_type, 2) > 0) {
+      $comments_per_page = HEARTBEAT_NODE_COMMENTS_PER_PAGE;
+    }
+
+    if ($message->additions->comment_count > $comments_per_page) {
+      $has_more = TRUE;
+      $message->additions->reactions = array_slice($message->additions->reactions, 0, $comments_per_page);
+    }
+
+    if ($message->additions->comments_order == 'oldest_on_top') {
+      $message->additions->reactions = array_reverse($message->additions->reactions);
+    }
+
+    $list .= theme('heartbeat_comments', $message->additions->reactions, $message->uaid, $message->additions->node_comment, $has_more);
+  }
+
+
+  $list .= '</div>';
+
+  $output = '';
+  $output .= '<div class="heartbeat-comments heartbeat-comments-'. $message->additions->object_type .' '. $extraCssClass  .'">';
+  if ($message->additions->comments_position == 'up') {
+    $output .= $list;
+  }
+  $output .= drupal_get_form('heartbeat_comments_form', $message->uaid, $message->additions->node_comment, $message->nid);
+  if ($message->additions->comments_position == 'down') {
+    $output .= $list;
+  }
+  $output .= '</div>';
+
+  return $output;
+}/**
+ * Implementation of hook_token_values().
+ */
+function heartbeat_comments_token_values($type, $object = NULL, $options = array()) {
+  $values = array();
+  switch ($type) {
+    case 'heartbeat_comment':
+      $comment = (object)$object;
+      $values['heartbeat-comment-id'] = isset($comment->nid) ? $comment->cid : $comment->hcid;
+      $values['heartbeat-comment-body'] = check_markup($comment->comment);
+      $values['heartbeat-comment-body-raw'] = $comment->comment;
+      $values['heartbeat-comment-author-uid'] = $comment->uid;
+      $values['heartbeat-comment-date'] = isset($comment->nid) ? format_date($comment->timestamp, 'small') : $comment->time;
+      break;
+  }
+
+  return $values;
+}
+
+/**
+ * Implementation of hook_token_list().
+ */
+function heartbeat_comments_token_list($type = 'all') {
+
+  if ($type == 'heartbeat_comment') {
+    $tokens['heartbeat_comment']['heartbeat-comment-id'] = t('ID of the heartbeat comment or node comment');
+    $tokens['heartbeat_comment']['heartbeat-comment-body'] = t('Body of the heartbeat comment or node comment');
+    $tokens['heartbeat_comment']['heartbeat-comment-body-raw'] = t('Body of the heartbeat comment or node comment. WARNING - raw user input');
+    $tokens['heartbeat_comment']['heartbeat-comment-author-uid'] = t("Comment author's user id");
+    $tokens['heartbeat_comment']['heartbeat-comment-date'] = t("Comment creation year (four digit)");
+    return $tokens;
+  }
+}
+
+/**
+ * Heartbeat comments form
+ */
+function heartbeat_comments_form($form_state = array(), $uaid = 0, $node_comment = FALSE, $nid = 0) {
+
+  global $user;
+
+  $show_form = user_access('add heartbeat comment');
+
+  $form = array();
+
+  if ($show_form) {
+    $form['message'] = array(
+      '#title' => t('React'),
+      '#type' => 'textarea',
+      '#required' => TRUE,
+      '#rows' => 1,
+      '#attributes' => array('class' => 'heartbeat-message-comment')
+    );
+
+    $form['uaid'] = array(
+      '#type' => 'hidden',
+      '#value' => $uaid,
+      '#attributes' => array('class' => 'heartbeat-message-uaid')
+    );
+
+    $form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => t('Submit'),
+      '#prefix' => '<span class="heartbeat-comments-wrapper">',
+      '#suffix' => '<span class="heartbeat-messages-throbber">&nbsp;</span></span>',
+      '#attributes' => array(
+        'class' => 'heartbeat-comment-submit'
+      ),
+    );
+
+    if ($nid && $node_comment) {
+
+      $show_form = user_access('post comments');
+
+      if ($show_form) {
+
+        $form['node_comment'] = array(
+          '#type' => 'hidden',
+          '#value' => 1,
+          '#attributes' => array('class' => 'heartbeat-message-node-comment')
+        );
+        $form['nid'] = array(
+          '#type' => 'hidden',
+          '#value' => $nid,
+          '#attributes' => array('class' => 'heartbeat-message-nid')
+        );
+      }
+    }
+  }
+
+  if (!$show_form) {
+
+    $login = l(t('Login'), 'user');
+    $register = l(t('register'), 'user/register');
+
+    $text = t('!login or !register to make a comment', array('!login' => $login, '!register' => $register));
+
+    $form = array(
+      'login_info' => array(
+        '#value' => '<div class="user-login-teaser">' . $text . '</div>',
+      ),
+    );
+  }
+
+  return $form;
+
+}
+
+/**
+ * User submitted a heartbeat comment.
+ */
+function heartbeat_comments_form_submit($form = array(), &$form_state = array()) {
+
+  $ahah = empty($form) && empty($form_state);
+
+  global $user;
+  $uid = $user->uid;
+  $message = '';
+
+  $message = ($ahah ? $_POST['message'] : $form_state['values']['message']);
+  $uaid = ($ahah ? $_POST['uaid'] : (isset($form_state['values']['uaid']) ? $form_state['values']['uaid'] : $form_state['clicked_button']['#post']['uaid']));
+  $nid = ($ahah ? $_POST['nid'] : (isset($form_state['values']['nid']) ? $form_state['values']['nid']: 0));
+  $node_comment = $nid > 0 && ($ahah ? $_POST['node_comment'] : $form_state['values']['node_comment']);
+  $first_comment = ($ahah ? $_POST['first_comment'] : $form_state['values']['first_comment']);
+
+  if (!user_access('add heartbeat comment') || empty($message)) {
+    drupal_json(array('status' => FALSE, 'data' => t('No message recorded')));
+    exit;
+  }
+
+  $saved = NULL;
+  // Save the (node) comment
+  if ($node_comment) {
+    $comment = array(
+      'subject' => '',
+      'format' => '',
+      'pid' => 0,
+      'cid' => 0,
+      'comment' => $message,
+      'nid' => $nid,
+      'uid' => $uid);
+    $cid = comment_save($comment);
+    if ($cid) {
+      $saved = _comment_load($cid);
+    }
+  }
+  else {
+
+    $tuaid = module_exists('locale') ? heartbeat_get_tuaid($uaid) : $uaid;
+
+    if (db_query("INSERT INTO {heartbeat_comments} (uid, uaid, message, time) VALUES (%d, %d, '%s', '%s')", $uid, $tuaid, $message, date('Y-m-d H:i:s'))) {
+      $hcid = db_last_insert_id('heartbeat_comments', 'hcid');
+      $saved = db_fetch_object(db_query("SELECT hcid, uid, uaid, message AS 'comment', time FROM {heartbeat_comments} WHERE hcid = %d", $hcid));
+    }
+  }
+
+  $authorid = db_result(db_query("SELECT uid FROM {heartbeat_activity} WHERE uaid = %d", $uaid));
+  $author = user_load($authorid);
+
+  // Let rules know there has been a shout event
+  if (module_exists('rules')) {
+    rules_invoke_event('heartbeat_comment_post', $user, $saved, $author);
+  }
+
+  if ($ahah) {
+    if (isset($saved)) {
+      $content = $first_comment ? theme('heartbeat_comments', array($saved), $uaid, $node_comment) : theme('heartbeat_comment', $saved, $node_comment);
+      drupal_json(array('status' => TRUE, 'data' => $content, 'id' => $uaid));
+    }
+    else {
+      drupal_json(array('status' => TRUE, 'data' => 'error'));
+    }
+    exit;
+  }
+  else {
+    if ($saved) {
+      drupal_set_message(t('Comment has been posted.'));
+    }
+    else {
+      drupal_set_message(t('Error while posting comment.'));
+    }
+
+    return TRUE;
+  }
+}
+
+/**
+ * Theme function for heartbeat comments
+ * @param $comments Array of comment/reaction objects
+ * @param $type Boolean to indicate whether it is a node comment or not
+ * @return String Themed output for comments
+ */
+function theme_heartbeat_comments($comments, $uaid, $node_comment = FALSE, $has_more = FALSE) {
+
+  if (empty($comments)) {
+    return '';
+  }
+
+  $output = '';
+  //$output .= '<h4>' . t('Reactions') . '</h4>';
+  $comment = current($comments);
+
+  $output .= '<ul class="summary" id="heartbeat-comments-list-'. $uaid .'">';
+
+  $i = 1;
+  $max = count($comments);
+  foreach ($comments as $comment) {
+    $i++;
+    $output .= theme('heartbeat_comment', $comment, $node_comment, $i == $max);
+  }
+
+  if ($has_more) {
+    $output .= '<li class="heartbeat-comment heartbeat-comment-more">'. l(t('More &raquo;'), 'node/' . $comment->nid, array('html' => TRUE)) .'</li>';
+  }
+
+  $output .= '</ul>';
+
+  return $output;
+}
+
+/**
+ * Theme function for heartbeat comment
+ * @param $comment Object comment with user in it
+ * @param $type Boolean to indicate whether it is a node comment or not
+ * @param $last Boolean to indicate if an extra class has to be used
+ * @return String Themed output for a comment
+ */
+function theme_heartbeat_comment($comment, $node_comment = FALSE, $last = FALSE) {
+
+  $output = '';
+  if ($last == TRUE) {
+    $class = "heartbeat-comment-last";
+  }
+  else {
+    $class = "";
+  }
+  $output .= '<li class="heartbeat-comment '. $class .'" id="heartbeat-comment-' . ($node_comment ? $comment->cid : $comment->hcid) .'">';
+
+  $avatar = theme('user_picture', $comment);
+  $output .= '<span class="avatar">' . l($avatar, 'user/' . $comment->uid, array('html' => TRUE)) . '</span>';
+
+  $account = heartbeat_user_load($comment->uid);
+
+  $output .= '<div class="heartbeat-teaser">';
+  $output .= l($account->name, 'user/' . $comment->uid) . ' ';
+  $output .= $comment->comment;
+  $output .= '</div>';
+
+  $output .= '</li>';
+
+  return $output;
+}
+
+/**
+ * Get heartbeat comments on a message
+ *
+ * @param $uid user_id of comment to load
+ */
+function heartbeat_get_message_reactions($uaid) {
+
+  static $locale;
+  if (!isset($locale)) {
+    $locale = module_exists('locale');
+  }
+
+  // Get translated uaid if needed
+  $tuaid = $locale ? heartbeat_get_tuaid($uaid) : $uaid;
+
+  $reactions = array();
+  $result = db_query_range("SELECT s.hcid,
+    s.uid, s.message AS 'comment', s.cleared, s.time,
+    u.uid, u.name AS registered_name, u.signature,
+    u.signature_format, u.picture, u.data
+    FROM {heartbeat_comments} s INNER JOIN {users} u ON s.uid = u.uid
+    WHERE uaid = %d ORDER BY time DESC", $tuaid, 0, HEARTBEAT_REACTIONS_PER_PAGE + 1);
+  while ($comment = db_fetch_object($result)) {
+    // Sanitize the comment messages.
+    $comment->comment = filter_xss($comment->comment);
+    $reactions[] = $comment;
+  }
+
+  return $reactions;
+}
+
+/**
+ * Theme function to render comment(s) on a node
+ */
+function heartbeat_get_node_comments($node, $cid = 0) {
+  global $user;
+
+  $comments = array();
+
+  if (user_access('access comments')) {
+    // Pre-process variables.
+    $nid = $node->nid;
+
+    $comments_per_page = HEARTBEAT_NODE_COMMENTS_PER_PAGE;
+
+    // Single comment.
+    if ($cid && is_numeric($cid)) {
+      $query = 'SELECT c.cid, c.pid, c.nid, c.subject, c.comment, c.format, c.timestamp, c.name, c.mail, c.homepage, u.uid, u.name AS registered_name, u.signature, u.signature_format, u.picture, u.data, c.status FROM {comments} c INNER JOIN {users} u ON c.uid = u.uid WHERE c.cid = %d';
+      $query_args = array($cid);
+      if (!user_access('administer comments')) {
+        $query .= ' AND c.status = %d';
+        $query_args[] = COMMENT_PUBLISHED;
+      }
+
+      $query = db_rewrite_sql($query, 'c', 'cid');
+      $result = db_query($query, $query_args);
+
+      if ($comment = db_fetch_object($result)) {
+        $comment->name = $comment->uid ? $comment->registered_name : $comment->name;
+        // Sanitize the comment messages.
+        $comment->comment = check_markup($comment->comment, $comment->format, FALSE);
+        $comments[] = $comment;
+      }
+    }
+    // Multiple comment view
+    else {
+      //$query_count = 'SELECT COUNT(*) FROM {comments} c WHERE c.nid = %d';
+      $query = 'SELECT c.cid as cid, c.pid, c.nid, c.subject, c.comment, c.format, c.timestamp, c.name, c.mail, c.homepage, u.uid, u.name AS registered_name, u.signature, u.signature_format, u.picture, u.data, c.thread, c.status
+        FROM {comments} c INNER JOIN {users} u ON c.uid = u.uid
+        WHERE c.nid = %d';
+
+      $query_args = array($nid);
+      if (!user_access('administer comments')) {
+        $query .= ' AND c.status = %d';
+        //$query_count .= ' AND c.status = %d';
+        $query_args[] = COMMENT_PUBLISHED;
+      }
+
+      $query .= ' ORDER BY c.cid DESC';
+
+      $query = db_rewrite_sql($query, 'c', 'cid');
+      //$query_count = db_rewrite_sql($query_count, 'c', 'cid');
+
+      // Start a form, for use with comment control.
+      //$result = pager_query($query, $comments_per_page + 1, 0, $query_count, $query_args);
+      $result = db_query_range($query, $query_args, 0, $comments_per_page + 1);
+
+      //drupal_add_css(drupal_get_path('module', 'comment') .'/comment.css');
+      while ($comment = db_fetch_object($result)) {
+        $comment = drupal_unpack($comment);
+        // Sanitize the comment messages.
+        $comment->comment = check_markup($comment->comment, $comment->format, FALSE);
+        $comment->name = $comment->uid ? $comment->registered_name : $comment->name;
+        $comment->depth = count(explode('.', $comment->thread)) - 1;
+        $comments[]  = $comment;
+      }
+    }
+  }
+
+  return $comments;
+}

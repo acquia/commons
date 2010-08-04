@@ -1,0 +1,307 @@
+<?php
+// $Id: user_relationships_api.socnet.test,v 1.1.2.1 2008/10/23 10:03:30 alexk Exp $
+
+/**
+ * @file
+ * Social networking hook API testcase
+ * @see http://drupal.org/project/drupal_universal_relation_api
+ * @author Alex Karshakevich http://drupal.org/user/183217
+ */
+class UserRelationshipsApiSocnetTestCase extends DrupalWebTestCase {
+  //test users
+  var $users = array();
+  //test relationship types
+  var $rtypes = array();
+  
+  /**
+   * Implementation of getInfo().
+   */
+  function getInfo() {
+    return array(
+      'name' => t('Socnet hooks implementation'),
+      'description' => t('Checks that hooks of http://drupal.org/project/drupal_universal_relation_api are implemented.'),
+      'group' => t('User Relationships'),
+    );
+  }
+  
+  /**
+   * Enable modules.
+   */
+  function setUp() {
+    parent::setUp('user_relationships_api');
+    $this->users = array();
+    $this->rtypes = array();
+    //important, reset cache of rel types between runs
+    user_relationships_types_load(TRUE);
+    //create test users
+//    $user = $this->drupalCreateUser();
+//    $users[$user->uid] = $user;
+//    $user = $this->drupalCreateUser();
+//    $users[$user->uid] = $user;
+//    $user = $this->drupalCreateUser();
+//    $users[$user->uid] = $user;
+    //create relationships
+    $rtype = new StdClass;
+    $rtype->name = 'oneway';
+    $rtype->plural_name = 'oneways';
+    $rtype->is_oneway = TRUE;
+    $rtype->requires_approval = FALSE;
+    $rtype->expires_val = 0;
+    user_relationships_type_save($rtype);
+    $this->rtypes['oneway'] = $rtype;
+
+    unset($rtype);
+    $rtype = new StdClass;
+    $rtype->name = 'twoway';
+    $rtype->plural_name = 'twoways';
+    $rtype->is_oneway = FALSE;
+    $rtype->requires_approval = FALSE;
+    $rtype->expires_val = 0;
+    user_relationships_type_save($rtype);
+    $this->rtypes['twoway'] = $rtype;
+
+    unset($rtype);
+    $rtype = new StdClass;
+    $rtype->name = 'approval';
+    $rtype->plural_name = 'approvals';
+    $rtype->is_oneway = FALSE;
+    $rtype->requires_approval = TRUE;
+    $rtype->expires_val = 0;
+    user_relationships_type_save($rtype);
+    $this->rtypes['approval'] = $rtype;
+    
+    unset($rtype);
+    $rtype = new StdClass;
+    $rtype->name = 'approval-oneway';
+    $rtype->plural_name = 'approvals-oneway';
+    $rtype->is_oneway = TRUE;
+    $rtype->requires_approval = TRUE;
+    $rtype->expires_val = 0;
+    user_relationships_type_save($rtype);
+    $this->rtypes['approval-oneway'] = $rtype;
+    
+    user_relationships_types_load(TRUE);
+  }
+  
+  function tearDown() {
+    unset($this->rtypes);
+    parent::tearDown();
+  }
+  
+  //user_relationships_api_socnet_relation_type($relation_name){};
+  function testRelationType() {
+    //one-way relationships
+    $result = module_invoke_all('socnet_relation_type', 'oneway');
+    $this->assertTrue(count($result) == 1);
+    $this->assertTrue($result[0] == 'one-way');
+    $result = module_invoke_all('socnet_relation_type', 'approval-oneway');
+    $this->assertTrue(count($result) == 1);
+    $this->assertTrue($result[0] == 'one-way');
+    //two-way relationships
+    $result = module_invoke_all('socnet_relation_type', 'approval');
+    $this->assertTrue(count($result) == 1);
+    $this->assertTrue($result[0] == 'two-way');
+    $result = module_invoke_all('socnet_relation_type', 'twoway');
+    $this->assertTrue(count($result) == 1);
+    $this->assertTrue($result[0] == 'two-way');
+    //nonexistent
+    $result = module_invoke_all('socnet_relation_type', 'missing');
+    $this->assertTrue(count($result) == 0);
+    //no arguments
+    $result = module_invoke_all('socnet_relation_type');
+    $this->assertTrue(count($result) == 0);
+  }
+  
+  //user_relationships_api_socnet_get_relation_names($relation_style='all'){};
+  function testGetRelationNames() {
+    $result = module_invoke_all('socnet_get_relation_names');
+    $this->assertTrue(count($result) == 4);
+    $this->assertTrue(in_array('oneway', $result));
+    $this->assertTrue(in_array('twoway', $result));
+    $this->assertTrue(in_array('approval', $result));
+    $this->assertTrue(in_array('approval-oneway', $result));
+    $result = module_invoke_all('socnet_get_relation_names', 'one-way');
+    $this->assertTrue(count($result) == 2);
+    $this->assertTrue(in_array('oneway', $result));
+    $this->assertTrue(in_array('approval-oneway', $result));
+    $result = module_invoke_all('socnet_get_relation_names', 'two-way');
+    $this->assertTrue(count($result) == 2);
+    $this->assertTrue(in_array('twoway', $result));
+    $this->assertTrue(in_array('approval', $result));
+  }
+  
+  //user_relationships_api_socnet_all_pending_to($uid, $relation_name = NULL, $relation_style='all'){};
+  function testAllPendingTo() {
+    $u1 = $this->drupalCreateUser();
+    $u2 = $this->drupalCreateUser();
+    $u3 = $this->drupalCreateUser();
+    $u4 = $this->drupalCreateUser();
+    //make approved request to 1
+    user_relationships_request_relationship($u2, $u1, $this->rtypes['oneway']->rtid, TRUE);
+    //pending requests to 1
+    user_relationships_request_relationship($u3, $u1, $this->rtypes['approval']->rtid, FALSE);
+    user_relationships_request_relationship($u4, $u1, $this->rtypes['approval-oneway']->rtid, FALSE);
+    //and one from 1
+    user_relationships_request_relationship($u1, $u2, $this->rtypes['approval']->rtid, FALSE);
+    //test relationships towards 1
+    $result = module_invoke_all('socnet_all_pending_to', $u1->uid);
+    $this->assertTrue(count($result) == 2);
+    $this->assertTrue(in_array($u3->uid, $result));
+    $this->assertTrue(in_array($u4->uid, $result));
+  }
+  
+  //user_relationships_api_socnet_all_pending_from($uid, $relation_name = NULL, $relation_style='all'){};
+  function testAllPendingFrom() {
+    $u1 = $this->drupalCreateUser();
+    $u2 = $this->drupalCreateUser();
+    $u3 = $this->drupalCreateUser();
+    $u4 = $this->drupalCreateUser();
+    //make approved requests from 1
+    user_relationships_request_relationship($u1, $u2, $this->rtypes['oneway']->rtid, TRUE);
+    //make pending requests from 1
+    user_relationships_request_relationship($u1, $u3, $this->rtypes['approval']->rtid, FALSE);
+    user_relationships_request_relationship($u1, $u4, $this->rtypes['approval-oneway']->rtid, FALSE);
+    //and one towards 1
+    user_relationships_request_relationship($u4, $u1, $this->rtypes['approval']->rtid, FALSE);
+    //test 1's relationships
+    $result = module_invoke_all('socnet_all_pending_from', $u1->uid);
+    $this->assertTrue(count($result) == 2);
+    $this->assertTrue(in_array($u3->uid, $result));
+    $this->assertTrue(in_array($u4->uid, $result));
+    $result = module_invoke_all('socnet_all_pending_from', $u1->uid, 'approval-oneway');
+    $this->assertTrue(count($result) == 1);
+    $this->assertTrue(in_array($u4->uid, $result));
+    $result = module_invoke_all('socnet_all_pending_from', $u1->uid, NULL, 'one-way');
+    $this->assertTrue(count($result) == 1);
+    $this->assertTrue(in_array($u4->uid, $result));
+    $result = module_invoke_all('socnet_all_pending_from', $u1->uid, NULL, 'two-way');
+    $this->assertTrue(count($result) == 1);
+    $this->assertTrue(in_array($u3->uid, $result));
+  }
+  
+  //user_relationships_api_socnet_get_related_users($uid, $relation_name = NULL, $relation_style='all') {};
+  function testGetRelatedUsers() {
+    $u1 = $this->drupalCreateUser();
+    $u2 = $this->drupalCreateUser();
+    $u3 = $this->drupalCreateUser();
+    $u4 = $this->drupalCreateUser();
+    //some relationships
+    //1 knows 2 and 3, with 4 pending, 2 knows 3 and 4
+    user_relationships_request_relationship($u1, $u2, $this->rtypes['oneway']->rtid, TRUE); 
+    user_relationships_request_relationship($u1, $u3, $this->rtypes['twoway']->rtid, TRUE); 
+    user_relationships_request_relationship($u2, $u3, $this->rtypes['oneway']->rtid, TRUE); 
+    user_relationships_request_relationship($u4, $u2, $this->rtypes['twoway']->rtid, TRUE); 
+    user_relationships_request_relationship($u1, $u4, $this->rtypes['approval']->rtid, FALSE); 
+    //test 1's relationships
+    $result = module_invoke_all('socnet_get_related_users', $u1->uid);
+    $this->assertTrue(count($result) == 2);
+    $this->assertTrue(in_array($u2->uid, $result));
+    $this->assertTrue(in_array($u3->uid, $result));
+    $this->assertFalse(in_array($u1->uid, $result));
+    $this->assertFalse(in_array($u4->uid, $result));//this is pending
+    $result = module_invoke_all('socnet_get_related_users', $u1->uid, 'oneway');
+    $this->assertTrue(count($result) == 1);
+    $this->assertTrue(in_array($u2->uid, $result));
+    $result = module_invoke_all('socnet_get_related_users', $u1->uid, 'approval');
+    $this->assertTrue(count($result) == 0);
+    $result = module_invoke_all('socnet_get_related_users', $u1->uid, NULL, 'one-way');
+    $this->assertTrue(count($result) == 1);
+    $this->assertTrue(in_array($u2->uid, $result));
+    $result = module_invoke_all('socnet_get_related_users', $u1->uid, NULL, 'two-way');
+    $this->assertTrue(count($result) == 1);
+    $this->assertTrue(in_array($u3->uid, $result));
+    //test 2's relationships
+    $result = module_invoke_all('socnet_get_related_users', $u2->uid);
+    $this->assertTrue(count($result) == 2);
+    $this->assertTrue(in_array($u3->uid, $result));
+    $this->assertTrue(in_array($u4->uid, $result));
+  }
+  
+  //user_relationships_api_socnet_is_blocked($blocked_by_uid, $blocked_uid, $relation_name = NULL, $relation_style='all') {};
+  function testIsBlocked() {
+    $user1 = $this->drupalCreateUser();
+    $user2 = $this->drupalCreateUser();
+    //UR does not implement it
+    $result = module_invoke_all('socnet_is_blocked', $user1->uid, $user2->uid);
+    $this->assertTrue(count($result) == 0);
+  }
+  
+  //user_relationships_api_socnet_is_pending($id1, $uid2, $relation_name = NULL, $relation_style='all')
+  function testIsPending() {
+    $user1 = $this->drupalCreateUser();
+    $user2 = $this->drupalCreateUser();
+    //create an established relationship
+    user_relationships_request_relationship($user1, $user2, $this->rtypes['oneway']->rtid, TRUE);
+    //these should all be false
+    $result = module_invoke_all('socnet_is_pending', $user1->uid, $user2->uid);
+    $this->assertTrue(count($result) == 0);
+    $result = module_invoke_all('socnet_is_pending', $user1->uid, $user2->uid, 'one-way');
+    $this->assertTrue(count($result) == 0);
+    $result = module_invoke_all('socnet_is_pending', $user1->uid, $user2->uid, 'approval');
+    $this->assertTrue(count($result) == 0);
+    $result = module_invoke_all('socnet_is_related', $user2->uid, $user1->uid);
+    $this->assertTrue(count($result) == 0);
+    $result = module_invoke_all('socnet_is_related', $user2->uid, $user1->uid, NULL, 'one-way');
+    $this->assertTrue(count($result) == 0);
+    $result = module_invoke_all('socnet_is_related', $user2->uid, $user1->uid, NULL, 'two-way');
+    $this->assertTrue(count($result) == 0);
+    //now add a pending relationship from 1 to 2
+    $rel2 = user_relationships_request_relationship($user1, $user2, $this->rtypes['approval']->rtid, FALSE);
+    //these should be true
+    $result = module_invoke_all('socnet_is_related', $user1->uid, $user2->uid);
+    $this->assertTrue(count($result) == 1);
+    $result = module_invoke_all('socnet_is_related', $user1->uid, $user2->uid, 'approval');
+    $this->assertTrue(count($result) == 0);
+    $result = module_invoke_all('socnet_is_related', $user1->uid, $user2->uid, NULL, 'two-way');
+    $this->assertTrue(count($result) == 0);
+    //test other direction
+    $result = module_invoke_all('socnet_is_related', $user2->uid, $user1->uid);
+    $this->assertTrue(count($result) == 0);
+    //approve the pending relationship
+    $rel2->approved = TRUE;
+    user_relationships_save_relationship($rel2, 'approve');
+    //now there should be no pending
+    $result = module_invoke_all('socnet_is_pending', $user1->uid, $user2->uid);
+    $this->assertTrue(count($result) == 0);
+    $result = module_invoke_all('socnet_is_pending', $user2->uid, $user1->uid);
+    $this->assertTrue(count($result) == 0);
+    $result = module_invoke_all('socnet_is_related', $user1->uid, $user2->uid, 'approval');
+    $this->assertTrue(count($result) == 1);
+    $result = module_invoke_all('socnet_is_related', $user1->uid, $user2->uid, NULL, 'two-way');
+    $this->assertTrue(count($result) == 1);
+  }
+  
+  function testGetImplementations() {
+    $result = module_invoke_all('socnet_get_implementations');
+    $this->assertTrue(is_array($result), 'no result returned');
+    $this->assertTrue(in_array('user_relationships_api', $result), 'user_relatinships_api sig not found');
+  }
+  
+  //user_relationships_api_socnet_is_related
+  function testIsRelated() {
+    $user1 = $this->drupalCreateUser();
+    $user2 = $this->drupalCreateUser();
+    //one way from 1 to 2
+    user_relationships_request_relationship($user1, $user2, $this->rtypes['oneway']->rtid, TRUE);
+    //a pending relationship from 1 to 2
+    user_relationships_request_relationship($user1, $user2, $this->rtypes['approval-oneway']->rtid, FALSE);
+    $result = module_invoke_all('socnet_is_related', $user1->uid, $user2->uid);
+    $this->assertTrue(is_array($result));
+    $this->assertTrue($result[0] === TRUE);
+    $result = module_invoke_all('socnet_is_related', $user1->uid, $user2->uid, 'oneway');
+    $this->assertTrue(is_array($result));
+    $this->assertTrue($result[0] === TRUE);
+    $result = module_invoke_all('socnet_is_related', $user1->uid, $user2->uid, NULL, 'one-way');
+    $this->assertTrue(is_array($result));
+    $this->assertTrue($result[0] === TRUE);
+    //these should be false
+    $result = module_invoke_all('socnet_is_related', $user1->uid, $user2->uid, 'missing');
+    $this->assertTrue(count($result) == 0);
+    $result = module_invoke_all('socnet_is_related', $user1->uid, $user2->uid, NULL, 'two-way');
+    $this->assertTrue(count($result) == 0);
+    //test other direction
+    $result = module_invoke_all('socnet_is_related', $user2->uid, $user1->uid);
+    $this->assertTrue(count($result) == 0);
+  }
+  
+}

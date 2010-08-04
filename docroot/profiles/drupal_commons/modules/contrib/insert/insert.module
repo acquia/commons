@@ -1,0 +1,350 @@
+<?php
+// $Id: insert.module,v 1.4 2010/03/13 21:23:49 quicksketch Exp $
+
+/**
+ * @file
+ * Allows insertion of files, images, and other media directly into the body
+ * field by using an "Insert" button next to the uploaded file.
+ */
+
+/**
+ * Implementation of hook_elements().
+ */
+function insert_elements() {
+  $extra = array('#after_build' => array('insert_process'));
+
+  $elements = array();
+  foreach (insert_widgets() as $widget_type => $widget) {
+    $elements[$widget_type] = $extra;
+  }
+
+  return $elements;
+}
+
+/**
+ * Implementation of hook_init().
+ */
+function insert_init() {
+  // Default file and image implementations.
+  module_load_include('inc', 'insert', 'includes/insert');
+
+  // FileField support.
+  if (module_exists('filefield')) {
+    module_load_include('inc', 'insert', 'includes/filefield');
+  }
+
+  // ImageField support
+  if (module_exists('imagefield')) {
+    module_load_include('inc', 'insert', 'includes/imagefield');
+  }
+
+  // ImageCache support
+  if (module_exists('imagecache')) {
+    module_load_include('inc', 'insert', 'includes/imagecache');
+  }
+}
+
+/**
+ * Implementation of hook_theme().
+ */
+function insert_theme() {
+  return array(
+    'insert_widget' => array(
+      'arguments' => array('field' => NULL),
+      'template' => 'templates/insert-widget',
+    ),
+
+    // Theme functions in includes/insert.inc.
+    'insert_image' => array(
+      'arguments' => array('item' => NULL, 'widget' => NULL),
+      'template' => 'templates/insert-image',
+      'file' => 'includes/insert.inc',
+    ),
+    'insert_link' => array(
+      'arguments' => array('item' => NULL, 'widget' => NULL),
+      'template' => 'templates/insert-link',
+      'includes/insert.inc',
+    ),
+
+    // Theme functions in includes/imagecache.inc.
+    'imagecache_insert_image' => array(
+      'arguments' => array('item' => NULL, 'widget' => NULL, 'preset_name' => NULL),
+      'template' => 'templates/imagecache-insert-image',
+      'includes/imagecache.inc',
+    ),
+  );
+}
+
+/**
+ * Get a list of all supported image styles.
+ */
+function insert_styles($reset = FALSE) {
+  static $styles;
+
+  if (!isset($styles) || $reset) {
+    $styles = array();
+    foreach (module_implements('insert_styles') as $module) {
+      $module_styles = module_invoke($module, 'insert_styles');
+      foreach ($module_styles as $name => $style) {
+        $module_styles[$name]['name'] = $name;
+        $module_styles[$name]['module'] = $module;
+      }
+      $styles = array_merge($styles, $module_styles);
+    }
+    drupal_alter('insert_styles', $styles);
+    uasort($styles, '_user_sort');
+  }
+
+  return $styles;
+}
+
+/**
+ * Load an individual insert style.
+ */
+function insert_style_load($style_name) {
+  $styles = insert_styles();
+  return isset($styles[$style_name]) ? $styles[$style_name] : FALSE;
+}
+
+/**
+ * Get a list of styles suitable for an #options array.
+ */
+function insert_styles_list() {
+  $list = array();
+  foreach (insert_styles() as $name => $style) {
+    $list[$name] = $style['label'];
+  }
+  return $list;
+}
+
+/**
+ * Get a list of all supported field widgets.
+ */
+function insert_widgets($reset = FALSE) {
+  static $widgets;
+
+  if (!isset($widgets) || $reset) {
+    $widgets = array();
+    foreach (module_implements('insert_widgets') as $module) {
+      $module_widgets = module_invoke($module, 'insert_widgets');
+      foreach ($module_widgets as $type => $widget) {
+        $module_widgets[$type]['type'] = $type;
+        $module_widgets[$type]['module'] = $module;
+      }
+      $widgets = array_merge($widgets, $module_widgets);
+    }
+    drupal_alter('insert_widgets', $widgets);
+  }
+
+  return $widgets;
+}
+
+/**
+ * Load a single insert field widget info.
+ */
+function insert_widget_load($widget_type) {
+  $widgets = insert_widgets();
+  return isset($widgets[$widget_type]) ? $widgets[$widget_type] : FALSE;
+}
+
+/**
+ * Given an item and an insert style, return the output.
+ */
+function insert_content($item, $style, $widget) {
+  return module_invoke($style['module'], 'insert_content', $item, $style, $widget);
+}
+
+/**
+ * Process function for insert-enabled fields.
+ */
+function insert_process($element) {
+  static $js_added;
+
+  $item = $element['#value'];
+  $field = content_fields($element['#field_name'], $element['#type_name']);
+
+  // Bail out of Insert is not enabled on this field.
+  if (!$field['widget']['insert']) {
+    return $element;
+  }
+
+  // Add base settings only once.
+  if (!isset($js_added)) {
+    $js_added = array();
+    $settings = array('fileDirectoryPath' => file_directory_path());
+    drupal_add_js(array('insert' => $settings), 'setting');
+    drupal_add_js(drupal_get_path('module', 'insert') . '/insert.js');
+  }
+
+  // Add settings for this widget only once.
+  if (!isset($js_added[$field['widget']['type']])) {
+    $js_added[$field['widget']['type']] = TRUE;
+    $insert_widget = insert_widget_load($field['widget']['type']);
+    $insert_settings = array(
+      'maxWidth' => $field['widget']['insert_width'],
+      'wrapper' => $insert_widget['wrapper'],
+      'fields' => $insert_widget['fields'],
+    );
+    drupal_add_js(array('insert' => array('widgets' => array($field['widget']['type'] => $insert_settings))), 'setting');
+  }
+
+  if ($element['fid']['#value']) {
+    $insert_styles = array_filter((array) $field['widget']['insert_styles']);
+    $default = !empty($field['widget']['insert_default']) ? $field['widget']['insert_default'] : 'auto';
+    if (!isset($insert_styles[$default])) {
+      $insert_styles[$default] = $default;
+    }
+    foreach ($insert_styles as $style_name => $enabled) {
+      if ($enabled && ($style = insert_style_load($style_name))) {
+        $element['insert_templates'][$style_name] = array(
+          '#type' => 'hidden',
+          '#value' => insert_content($item, $style, $field['widget']),
+          '#id' => $element['#id'] . '-insert-template-' . str_replace('_', '-', $style_name),
+          '#name' => $element['#name'] . '[insert_template][' . $style_name . ']',
+          '#attributes' => array('class' => 'insert-template'),
+        );
+        $style_options[$style_name] = $style['label'];
+      }
+    }
+
+    $element['insert'] = array(
+      '#theme' => 'insert_widget',
+      '#type' => 'markup',
+      '#options' => $style_options,
+      '#widget' => $field['widget'],
+      '#weight' => -1,
+      '#default_value' => $default,
+    );
+  }
+
+  return $element;
+}
+
+/**
+ * Implementation of hook_widget_settings_alter().
+ */
+function insert_widget_settings_alter(&$settings, $op, $widget) {
+  // Only support modules that implement hook_insert_widgets().
+  $widget_type = isset($widget['widget_type']) ? $widget['widget_type'] : $widget['type'];
+  if (!in_array($widget_type, array_keys(insert_widgets()))) {
+    return;
+  }
+
+  // Add our new options to the list of settings to be saved.
+  if ($op == 'save') {
+    $settings = array_merge($settings, insert_widget_settings());
+  }
+
+  // Add the additional settings to the form.
+  if ($op == 'form') {
+    $settings = array_merge($settings, insert_widget_form($widget));
+  }
+}
+
+/**
+ * A list of settings needed by Insert module on widgets.
+ */
+function insert_widget_settings() {
+  return array(
+    'insert',
+    'insert_styles',
+    'insert_default',
+    'insert_class',
+    'insert_width',
+  );
+}
+
+/**
+ * Configuration form for editing insert settings for a field instance.
+ */
+function insert_widget_form($widget) {
+
+  $form['insert'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Insert'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#description' => t('These options allow the user to easily insert an HTML tags into text areas or WYSIWYG editors after uploading a file or image. The "Automatic" style will insert a &lt;img&gt; tag for images and a &lt;a&gt; tag for other files. Other styles may insert tags that may not match the file type.'),
+    '#weight' => 15,
+  );
+
+  $form['insert']['insert'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable insert button'),
+    '#default_value' => (bool) $widget['insert'],
+    '#description' => t('Enable the insert button and options for this widget.'),
+  );
+
+  $form['insert']['insert_styles'] = array(
+    '#title' => t('Enabled insert styles'),
+    '#type' => 'checkboxes',
+    '#options' => insert_styles_list(),
+    '#default_value' => (array) $widget['insert_styles'],
+    '#description' => t('Select which styles should be available when sending items to text areas. If no styles are selected, the option to use a style is not displayed.'),
+  );
+
+  $form['insert']['insert_default'] = array(
+    '#title' => t('Default insert style'),
+    '#type' => 'select',
+    '#options' => insert_styles_list(),
+    '#default_value' => (array) $widget['insert_default'],
+    '#description' => t('Select the default style which will be selected by default or used if no specific styles above are enabled.'),
+  );
+
+  $form['insert']['insert_class'] = array(
+    '#title' => t('Additional CSS classes'),
+    '#type' => 'textfield',
+    '#default_value' => empty($widget['insert_class']) ? '' : $widget['insert_class'],
+    '#description' => t('Add any classes that should be added to the item on output.'),
+  );
+
+  $form['insert']['insert_width'] = array(
+    '#title' => t('Maximum image insert width'),
+    '#type' => 'textfield',
+    '#size' => 10,
+    '#field_suffix' => ' '. t('pixels'),
+    '#default_value' => empty($widget['insert_width']) ? '' : $widget['insert_width'],
+    '#description' => t('When inserting images, the height and width of images may be scaled down to fit within the specified width. Note that this does not resize the image, it only affects the HTML output. To resize images it is recommended to install the <a href="http://drupal.org/project/image_resize_filter">Image Resize Filter</a> module.'),
+  );
+
+  return $form;
+}
+
+/**
+ * Utility function to create a URL for Insert.
+ *
+ * This is modeled after file_create_url(), but with the modification that it
+ * will consistently use absolute or relative URLs, depending on the Insert
+ * setting.
+ */
+function insert_create_url($path) {
+  // Strip file_directory_path from $path. We only include relative paths in urls.
+  if (strpos($path, file_directory_path() .'/') === 0) {
+    $path = trim(substr($path, strlen(file_directory_path())), '\\/');
+  }
+
+  // This variable has no configuration location. It may be set by placing
+  // $conf['insert_absolute_paths'] = FALSE;
+  // in the site settings.php file, or by manually running variable_set().
+  // For reasons why this might not do what you want and why there's no UI
+  // see http://drupal.org/node/640352.
+  $absolute = variable_get('insert_absolute_paths', TRUE);
+
+  switch (variable_get('file_downloads', FILE_DOWNLOADS_PUBLIC)) {
+    case FILE_DOWNLOADS_PUBLIC:
+      return ($absolute ? $GLOBALS['base_url'] . '/' : $GLOBALS['base_path']) . file_directory_path() . '/' . str_replace('\\', '/', $path);
+    case FILE_DOWNLOADS_PRIVATE:
+      return url('system/files/' . $path, array('absolute' => $absolute));
+  }
+}
+
+/**
+ * Preprocess variables for the insert-widget.tpl.php file.
+ */
+function template_preprocess_insert_widget(&$vars) {
+  $element = $vars['field'];
+
+  $vars['insert_styles'] = $element['#options'];
+  $vars['default_style'] = $element['#default_value'];
+  $vars['widget_type'] = $element['#widget']['type'];
+}

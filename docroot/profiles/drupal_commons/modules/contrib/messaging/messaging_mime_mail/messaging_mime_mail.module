@@ -1,0 +1,50 @@
+<?php
+/**
+ * @file
+ * Mime mail using Drupal API. Messaging method plug-in
+ */
+
+// Include messaging mail library
+require_once drupal_get_path('module', 'messaging') . '/messaging.mail.inc';
+
+/**
+ * Implementation of hook_messaging
+ */
+function messaging_mime_mail_messaging($op = 'info') {
+  switch($op) {
+    case 'send methods':
+      $info['mimemail'] = array(
+        'title' => 'Mime Mail',
+        'name' => t('Mime Mail'), // Name for display
+        'group' => 'mail', // Class of send method
+        'destination' => 'mail', // Account property to use as destination
+        'type' => MESSAGING_TYPE_SEND,  // Method type: push || pull
+        'glue' => "<br>", // don't use <br/> nor <br /> for maximum HTML email client compatibility
+        'footer' => "<br><br>--",  // Separator for message footer
+        'send callback' => 'messaging_mime_mail_send_msg',  // Sending callback
+      );
+      return $info;  
+  }
+}
+
+/**
+ * Send mime mail message to user account
+ * 
+ * @param $destination
+ *   Destination email address
+ * @param $message
+ *   Message array
+ */
+function messaging_mime_mail_send_msg($destination, $message, $params = array()) {
+  // Get parameters without invoking hook_mail_alter()
+  $mail = messaging_mail_prepare($destination, $message, $params, FALSE);
+  // mimemail($sender, $recipient, $subject, $body, $plaintext = NULL, $headers = array(), $text = NULL, $attachments = array(), $mailkey = '')  
+  return mimemail($mail['from'], $mail['to'], $mail['subject'], $mail['body'], NULL, $mail['headers'], NULL, $mail['attachments'], '');
+}
+
+/**
+ * Implementation of hook_disable()
+ */
+function messaging_mime_mail_disable() {
+  messaging_method_disable('mimemail');
+}

@@ -1,0 +1,39 @@
+<?php
+// $Id: user_relationship_defaults.install,v 1.1.2.5 2009/07/06 13:27:30 alexk Exp $
+/**
+ * @file User Relationships Defaults installation script
+ */
+
+/**
+ * Implementation of hook_schema()
+ */
+function user_relationship_defaults_schema() {
+  $schema['user_relationship_defaults'] = array(
+    'fields'  => array(
+      'rdid'          => array('type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE),
+      'uid'           => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'rtid'          => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+    ),
+    'indexes' => array(
+      'uid'   => array('uid'),
+      'rtid'  => array('rtid'),
+    ),
+    'primary key' => array('rdid')
+  );
+
+  return $schema;
+}
+
+/**
+ * Implementation of hook_install()
+*/
+function user_relationship_defaults_install() {
+  drupal_install_schema('user_relationship_defaults');
+}
+
+/**
+ * Implementation of hook_uninstall()
+ */
+function user_relationship_defaults_uninstall() {
+  drupal_uninstall_schema('user_relationship_defaults');
+}

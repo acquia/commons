@@ -1,0 +1,281 @@
+<?php
+// $Id: imagecache_canvasactions.module,v 1.3.2.16 2009/12/28 03:26:53 dman Exp $
+
+/**
+ * @file A collection of canvas (layer) type manipulations for imagecache -
+ * including "Watermark"
+ *
+ * Based on first draft of the code by Dimm (imagecache.module 5--1)
+ * http://drupal.org/node/184816
+ *
+ * Rewritten and ported to Imagecache actions API (imagecache.module 5--2) by
+ * dman http://coders.co.nz/
+ *
+ *
+ * Notes about imagecache action extensions. For each action:
+ *
+ * 1: Impliment imagecache_HOOK_form($formdata) to define the config form.
+ *
+ * 1a: Impliment theme_imagecache_HOOK_form if needed - optional
+ *
+ * 2: Impliment imagecache_HOOK_image(&$image, $data) to DO the process
+ *
+ * 3: Impliment theme_imagecache_HOOK($element) to return a text description of
+ * the setting
+ *
+ * 4: Declare the action in HOOK_imagecache_actions()
+ *
+ *
+ * API ref for hook_image()
+ *
+ * @param $image array defining an image file, including  :
+ *
+ *   $image- >source as the filename,
+ *
+ *   $image->info array
+ *
+ *   $image->resource handle on the image object
+ *
+ * @param $action array of settings as defined in your form.
+ *
+ */
+
+// During devel, caching is pointless. Flush it
+// imagecache_action_definitions(TRUE);
+
+require_once(dirname(__FILE__) .'/utility.inc');
+
+/**
+* Implementation of hook_imagecache_actions().
+*
+* Declare available actions, return help text about this filter.
+*
+* These funcs are all in their respective include libraries - as configured below
+*/
+function imagecache_canvasactions_imagecache_actions() {
+
+  $actions = array(
+    'canvasactions_definecanvas' => array(
+      'name' => t('Define Canvas'),
+      'description' => t('Define the size of the working canvas and background color, this controls the dimensions of the output image..'),
+      'file' => 'canvasactions.inc',
+    ),
+    'canvasactions_file2canvas' => array(
+      'name' => t('Overlay (watermark)'),
+      'description' => t(' Choose the file image you wish to use as an overlay, and position it in a layer on top of the canvas.'),
+      'file' => 'canvasactions.inc',
+    ),
+    'canvasactions_canvas2file' => array(
+      'name' => t('Underlay (background)'),
+      'description' => t(' Choose the file image you wish to use as an background, and position the processed image on it.'),
+      'file' => 'canvasactions.inc',
+    ),
+    'canvasactions_source2canvas' => array(    
+     'name' => t('Overlay: source image to canvas'),
+     'description' => t('Places the source image onto the canvas for compositing.'),   
+     'file' => 'canvasactions.inc',    
+    ),
+    'canvasactions_roundedcorners' => array(
+      'name' => t('Rounded Corners'),
+      'description' => t(' This is true cropping, not overlays, so the result <em>can</em> be transparent.'),
+      'file' => 'canvasactions.inc',
+    ),
+    'canvasactions_aspect' => array(
+      'name' => t('Aspect switcher: Switch between portrait and landscape.'),
+      'description' => t(' Use different effects depending on whether the image is landscape of portrait shaped. This re-uses other preset definitions, and just chooses between them based on the rule.'),
+      'file' => 'canvasactions.inc',
+    ),
+
+  );
+
+  return $actions;
+}
+
+
+//////////////////////
+// imageapi extensions
+// Maybe shift into there one day
+
+/**
+ * Place one image over another
+ *
+ * @param $image 
+ *   Base imageapi object.
+ * @param $overlay 
+ *   May be a filename or an imageAPI object
+ * @param $x 
+ *   Position of the overlay
+ * @param $y 
+ *   Position of the overlay
+ * @param $alpha 
+ *   Transparency of the overlay from 0-100. 0 is totally transparent. 100
+ * (default) is totally opaque.
+ * @param $reverse 
+ *   BOOL flag to indicate the 'overlay' actually goes under the image. As
+ * the imageapi callbacks modify the $image object by reference, this is needed
+ * to replace the old image resource with the new one.
+ * @return bool success
+ * 
+ * @ingroup imageapi
+ */
+function imageapi_image_overlay(&$image, &$layer, $x, $y, $alpha = 100, $reverse = FALSE) {
+  if (is_string($layer) ) {
+    if (! file_exists($layer)) {
+      trigger_error("Image file does not exist. Attempted to overlay $layer", E_USER_ERROR);
+      return FALSE;
+    }
+    $layer = imageapi_image_open($layer);
+  }
+  // else $layer had better be an image handle
+
+  $x = imagecache_actions_keyword_filter($x, $image->info['width'], $layer->info['width']);
+  $y = imagecache_actions_keyword_filter($y, $image->info['height'], $layer->info['height']);
+
+  return imageapi_toolkit_invoke('overlay', $image, array($layer, $x, $y, $alpha, $reverse));
+}
+
+/**
+ * Place one image over another
+ * This modifies the passed image by reference
+ * 
+ * This func is nominated for inclusion in imageapi package. Until then, we do
+ * it ourselves.
+ * 
+ * NOTE that the PHP libraries are not great at merging images SO we include a
+ * library that does it pixel-by-pixel which is INCREDIBLY inefficient. If this
+ * can be improved, in a way that supports all transparency, please let us know!
+ *
+ * A watermark is layer onto image, return the image. An underlay is image onto
+ * layer, return the layer. Almost identical, but seeing as we work with
+ * resource handles, the handle needs to be swapped before returning.
+ *
+ * @ingroup imageapi
+ * @param $image 
+ *   Base imageapi object.
+ * @param $overlay 
+ *   May be a filename or an imageAPI object
+ * @param $x 
+ *   Position of the overlay
+ * @param $y 
+ *   Position of the overlay
+ * @param $alpha 
+ *   Transparency of the overlay from 0-100. 0 is totally transparent. 100
+ * (default) is totally opaque.
+ * @param $reverse 
+ *   BOOL flag to indicate the 'overlay' actually goes under the image. As
+ * the imageapi callbacks modify the $image object by reference, this is needed
+ * to replace the old image resource with the new one.
+ * @return bool success
+ */
+function imageapi_gd_image_overlay(&$image, &$layer, $x, $y, $alpha = 100, $reverse = FALSE) {
+  if (empty($layer->resource)) {
+    trigger_error("Invalid input to ". __FUNCTION__ . " 'layer' is not a valid resource");
+    #dpm($layer);
+    return FALSE;
+  }
+  // If the given alpha is 100%, we can use imagecopy - which actually works, 
+  // Is more efficient, and seems to retain the overlays partial transparancy
+  // Still does not work great for indexed gifs though?
+
+  if ($alpha == 100 && ($layer->info['mime_type'] != 'image/gif')) {
+    imagealphablending($image->resource, TRUE);
+    imagesavealpha($image->resource, TRUE);
+    imagealphablending($layer->resource, TRUE);
+    imagesavealpha($layer->resource, TRUE);
+    imagecopy($image->resource, $layer->resource, $x, $y, 0, 0, $layer->info['width'], $layer->info['height']);
+    imagedestroy($layer->resource);
+    #imagealphablending($image->resource, FALSE);
+  }
+  else {
+    // Else imagecopymerge fails and we have to use the slow library 
+    require_once('watermark.inc');
+    $watermark = new watermark();
+    $image->resource = $watermark->create_watermark($image->resource, $layer->resource, $x, $y, $alpha);
+    imagedestroy($layer->resource);
+  }
+
+  if ($reverse) {
+    // When doing underlay, It's the second image object that we really care about. 
+    // Update that with the result
+    $layer->resource = $image->resource;
+    $layer->info = $image->info;
+  }
+  return TRUE;
+}
+
+/**
+ * Improvements on this are welcomed!
+ * 
+ * Please be aware of the limitations of imagemagick libraries out there - the
+ * versions distributed on hosted servers (if any) are often several years
+ * behind. Using the latest imagemagick release features will make this function
+ * unusable in real deployments.
+ * 
+ */
+function imageapi_imagemagick_image_overlay(&$image, &$layer, $x = 0, $y = 0, $alpha = 100, $reverse = FALSE) {
+  $layer_filepath = $layer->source;
+  # TODO - alpha channels
+  # I spent ages on the docs, but it appears my version of convert does not support -merge, -watermark or -dissolve
+  // Bloody libraries - I tried  [6.2.8 06/11/08] because thats what I could get for my distro.
+  
+  # This just drops the image on, no alpha:
+  if ($alpha == 100) {
+    $image->ops[] = "  \"$layer_filepath\" -geometry +$x+$y  -composite    "  ;
+  }
+  else {
+    $compose_arg = "  ";
+    # $compose_arg = " -compose dissolve ";
+    // -compose disolve is supposed to work, but doesn't in available imagemagick versions
+    $geometry_arg = " -geometry +$x+$y ";
+    $alpha_arg = " -set \"option:compose:args\" $alpha ";
+    $image->ops[] = "  \"$layer_filepath\" $compose_arg $geometry_arg $alpha_arg  -composite ";
+ 
+  }
+  #  watchdog('imagecache_canvas', print_r($image->ops, 1) );          
+  # This also worked
+  #  $image->ops[] = ' -draw "image over {$x},{$y} 0,0 \'{$layer_filepath}\'"'  ;
+
+  // TODO - I may end up with a different sized image from doing this?
+
+  return TRUE;
+}
+
+/**
+ * Need to register the theme functions we expect to use
+ */
+function imagecache_canvasactions_theme() {
+  return array(
+    'imagecacheactions_rgb_form' => array(
+      'file'      => 'utility.inc',
+      'arguments' => array('form' => NULL),
+    ),
+    'imagecacheactions_rgb' => array(
+      'file'      => 'utility.inc',
+      'arguments' => array('rgb' => NULL),
+    ),
+    'canvasactions_definecanvas' => array(
+      'file'      => 'canvasactions.inc',
+      'arguments' => array('element' => NULL),
+    ),
+    'canvasactions_file2canvas' => array(
+      'file'      => 'canvasactions.inc',
+      'arguments' => array('element' => NULL),
+    ),
+    'canvasactions_source2canvas' => array(
+      'file'      => 'canvasactions.inc',
+      'arguments' => array('element' => NULL),
+    ),
+    'canvasactions_canvas2file' => array(
+      'file'      => 'canvasactions.inc',
+      'arguments' => array('element' => NULL),
+    ),
+    'canvasactions_roundedcorners' => array(
+      'file'      => 'canvasactions.inc',
+      'arguments' => array('element' => NULL),
+    ),
+    'canvasactions_aspect' => array(
+      'file'      => 'canvasactions.inc',
+      'arguments' => array('element' => NULL),
+    ),
+  );
+}
