@@ -14199,7 +14199,7 @@ else {
   $handler->override_option('items_per_page', 5);
   $handler->override_option('use_more', 1);
   $handler->override_option('use_more_always', 0);
-  $handler->override_option('use_more_text', 'View All');
+  $handler->override_option('use_more_text', 'View all');
   $handler->override_option('distinct', 1);
   $handler->override_option('style_plugin', 'list');
   $handler->override_option('style_options', array(
