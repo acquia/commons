@@ -15820,7 +15820,7 @@ else {
   $handler->override_option('empty', 'There are currently no online users');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
-  $handler->override_option('items_per_page', 20);
+  $handler->override_option('items_per_page', 15);
   $handler->override_option('use_pager', 'mini');
   $handler->override_option('pager_element', 2);
   $handler->override_option('distinct', 1);
