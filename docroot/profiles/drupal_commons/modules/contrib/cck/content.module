@@ -1,5 +1,5 @@
 <?php
-// $Id: content.module,v 1.301.2.119 2010/06/09 01:34:35 karens Exp $
+// $Id: content.module,v 1.301.2.120 2010/08/11 23:27:10 pwolanin Exp $
 /**
  * @file
  * Allows administrators to associate custom fields to content types.
@@ -2252,7 +2252,10 @@ function content_access($op, $field, $account = NULL, $node = NULL) {
   if (is_null($account)) {
     $account = $user;
   }
-
+  // Check for valid field data.
+  if (!isset($field['field_name'])) {
+    return FALSE;
+  }
   $access = module_invoke_all('field_access', $op, $field, $account, $node);
   foreach ($access as $value) {
     if ($value === FALSE) {

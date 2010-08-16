@@ -1,5 +1,5 @@
 <?php
-// $Id: devel.install,v 1.24.2.7 2009/07/30 19:38:48 weitzman Exp $
+// $Id: devel.install,v 1.24.2.9 2010/08/05 16:13:21 weitzman Exp $
 /**
  * @file
  *   Install file for devel module.
@@ -170,5 +170,15 @@ function devel_update_6002() {
     'module' => 'devel',
   );
   menu_link_save($item);
+  return array();
+}
+
+/**
+ * As per issue #813132: change schablon.com to white for krumo.
+ */
+function devel_update_6003() {
+  if (variable_get('devel_krumo_skin', 'white') == 'schablon.com') {
+    variable_set('devel_krumo_skin', 'white');
+  }
   return array();
 }

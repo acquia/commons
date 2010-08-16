@@ -1,5 +1,5 @@
 <?php
-// $Id: devel_generate.drush.inc,v 1.1.2.13 2010/04/04 21:26:56 weitzman Exp $
+// $Id: devel_generate.drush.inc,v 1.1.2.14 2010/07/07 16:46:37 weitzman Exp $
 
 /**
  * @file
@@ -125,7 +125,8 @@ function drush_devel_generate_generate_content($num_nodes = NULL, $max_comments 
   $values['values']['add_terms'] = drush_get_option('add-terms', FALSE);
   $values['values']['add_upload'] = drush_get_option('add-upload', FALSE);
   $all_types = array_keys(devel_generate_content_types());
-  if ($types = drush_get_option('types')) {
+  if (drush_get_option('types')) {
+    $types = explode(',', drush_get_option('types'));
     $types = array_intersect($types, $all_types);
   }
   else {

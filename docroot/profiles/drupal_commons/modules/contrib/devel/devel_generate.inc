@@ -1,5 +1,5 @@
 <?php
-// $Id: devel_generate.inc,v 1.14.2.21 2010/04/21 15:27:44 weitzman Exp $
+// $Id: devel_generate.inc,v 1.14.2.22 2010/07/21 15:12:58 weitzman Exp $
 // If not in 'safe mode', increase the maximum execution time:
 if (!ini_get('safe_mode')) {
   set_time_limit(240);
@@ -32,7 +32,8 @@ function devel_create_users($num, $kill, $age = 0) {
       $pass = md5(user_password());
       $mail = $name .'@'. $url['host'];
       $now = time();
-      db_query("INSERT INTO {users} (name, pass, mail, status, created, access) VALUES ('%s', '%s', '%s', %d, %d, %d)", $name, $pass, $mail, 1, $now, $now);
+      $created = ($age ? $now - $age : $now - 1);
+      $account = user_save(NULL, array('name' => $name, 'pass' => $pass, 'mail' => $mail, 'status' =>'1', 'created' => $created, 'access' => $now, 'devel_generate' => TRUE));
     }
   drupal_set_message(t('!num_users created.', array('!num_users' => format_plural($num, '1 user', '@count users'))));
   }

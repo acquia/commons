@@ -1,5 +1,5 @@
 <?php
-// $Id: devel_node_access.module,v 1.15.2.29 2010/02/13 15:36:05 salvis Exp $
+// $Id: devel_node_access.module,v 1.15.2.31 2010/07/13 19:50:10 salvis Exp $
 /**
  * @file
  *
@@ -312,10 +312,10 @@ function devel_node_access_block($op = 'list', $delta = 0) {
                 }
               }
               // check for grants in the node_access table that aren't returned by node_access_acquire_grants()
-              $found = FALSE;
               if (isset($active_grants[$nid])) {
                 foreach ($active_grants[$nid] as $realm => $active_grants_realm) {
                   foreach ($active_grants_realm as $gid => $active_grant) {
+                    $found = FALSE;
                     $count_nonempty_grants = 0;
                     foreach ($acquired_grants_nid as $priority => $acquired_grants_nid_priority) {
                       if (isset($acquired_grants_nid_priority[$realm][$gid])) {
@@ -513,7 +513,11 @@ function devel_node_access_block($op = 'list', $delta = 0) {
             $result = db_query_range('SELECT DISTINCT u.* FROM {users} u ORDER BY u.access DESC', 0, 10);
             while ($data = db_fetch_object($result)) {
               $account = user_load($data->uid);
-              $rows[] = array(theme('username', $data),
+              $username = theme('username', $data);
+              if ($account->uid == $user->uid) {
+                $username = '<strong>'. $username .'</strong>';
+              }
+              $rows[] = array($username,
                               theme('dna_permission', _devel_node_access_explain_access('create', $nid, $account)),
                               theme('dna_permission', _devel_node_access_explain_access('view', $nid, $account)),
                               theme('dna_permission', _devel_node_access_explain_access('update', $nid, $account)),

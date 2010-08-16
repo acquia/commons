@@ -1,5 +1,5 @@
 <?php
-// $Id: devel.module,v 1.258.2.70 2010/04/21 20:03:10 salvis Exp $
+// $Id: devel.module,v 1.258.2.77 2010/08/13 16:46:59 weitzman Exp $
 
 // This module holds functions useful for Drupal development.
 // Please contribute!
@@ -594,8 +594,8 @@ function devel_switch_user_list() {
     $list_size = variable_get('devel_switch_user_list_size', 10);
     $dest = drupal_get_destination();
     // Try to find at least $list_size users that can switch.
-    $roles = user_roles(1, 'switch users');
-    if (isset($roles[2])) {
+    $roles = user_roles(TRUE, 'switch users');
+    if (isset($roles[DRUPAL_AUTHENTICATED_RID])) {
       // If authenticated users have this permission, just grab
       // the last $list_size users, since there won't be records in
       // {user_roles} and every user on the system can switch.
@@ -616,23 +616,35 @@ function devel_switch_user_list() {
         'query' => $dest,
         'attributes' => array('title' => t('This user can switch back.')),
         'html' => TRUE,
+        'last_access' => $user->access,
       );
     }
     $num_links = count($links);
     if ($num_links < $list_size) {
       // If we don't have enough, add distinct uids until we hit $list_size.
       $users = db_query_range('SELECT uid, name, access FROM {users} WHERE uid > 0 AND uid NOT IN ('. implode(',', array_keys($links)) .') ORDER BY access DESC', 0, $list_size - $num_links);
-      while (($user = db_fetch_object($users)) && count($links) < $list_size) {
+      while ($user = db_fetch_object($users)) {
         $links[$user->uid] = array(
           'title' => $user->name ? $user->name : 'anon',
           'href' => 'devel/switch/'. $user->name,
           'query' => $dest,
-          'attributes' => array('title' => t('Caution: this user will be unable switch back.')),
+          'attributes' => array('title' => t('Caution: this user will be unable to switch back.')),
+          'last_access' => $user->access,
         );
       }
+      uasort($links, '_devel_switch_user_list_cmp');
     }
   }
   return $links;
+}
+
+/**
+ * Comparison helper function for uasort() in devel_switch_user_list().
+ *
+ * Sorts the Switch User links by the user's last access timestamp.
+ */
+function _devel_switch_user_list_cmp($a, $b) {
+  return $b['last_access'] - $a['last_access'];
 }
 
 function devel_phpinfo() {
@@ -676,7 +688,7 @@ function devel_doc_function_form_submit($form, &$form_state) {
   $version = $form_state['values']['version'];
   $function = $form_state['values']['function'];
   $api = variable_get('devel_api_url', 'api.drupal.org');
-  $form_state['redirect'] =   "http://$api/api/$version/function/$function";
+  $form_state['redirect'] =   "http://$api/api/function/$function/$version";
 }
 
 function devel_switch_user_form_validate($form, &$form_state) {
@@ -817,7 +829,7 @@ function devel_store_queries() {
         $qids[$hash] = db_result(devel_db_query("SELECT qid FROM {devel_queries} WHERE hash = '%s'", $hash));
         if (!$qids[$hash]) {
           devel_db_query("INSERT INTO {devel_queries} (query, function, hash) VALUES ('%s', '%s', '%s')", $query, $function, $hash);
-          db_last_insert_id('devel_queries', 'qid');
+          $qids[$hash] = db_last_insert_id('devel_queries', 'qid');
         }
       }
       $fields[] = "(%d, '%f')";
@@ -865,7 +877,7 @@ function devel_function_reference() {
   sort($ufunctions);
   $api = variable_get('devel_api_url', 'api.drupal.org');
   foreach ($ufunctions as $function) {
-    $links[] = l($function, "http://$api/api/$version/function/$function");
+    $links[] = l($function, "http://$api/api/function/$function/$version");
   }
   return theme('item_list', $links);
 }
@@ -1000,7 +1012,7 @@ function devel_admin_settings() {
     $form['devel_error_handler']['#options'][DEVEL_ERROR_HANDLER_BACKTRACE] = t('Backtrace');
   }
 
-  $options = drupal_map_assoc(array('default', 'blue', 'green', 'orange', 'schablon.com', 'disabled'));
+  $options = drupal_map_assoc(array('default', 'blue', 'green', 'orange', 'white', 'disabled'));
   $form['devel_krumo_skin'] = array(
    '#type' => 'radios',
    '#title' => t('Krumo display'),
@@ -1226,7 +1238,9 @@ function theme_devel_variable_form($form) {
 function devel_variable_form_submit($form, &$form_state) {
   $deletes = array_filter($form_state['values']['variables']);
   array_walk($deletes, 'variable_del');
-  drupal_set_message(format_plural(count($deletes), 'One variable deleted.', '@count variables deleted.'));
+  if (count($deletes)) {
+    drupal_set_message(format_plural(count($deletes), 'One variable deleted.', '@count variables deleted.'));
+  }
 }
 
 function devel_variable_edit($form_state, $name) {
@@ -1501,6 +1515,9 @@ function _devel_print_object($obj, $prefix = NULL, $parents = NULL, $object = FA
  * generate the page.
  */
 function devel_query_table($queries, $counts) {
+  if (empty($queries)) {
+    return FALSE;
+  }
   $version = devel_get_core_version(VERSION);
   $header = array('ms', '#', 'where', 'query');
   $i = 0;

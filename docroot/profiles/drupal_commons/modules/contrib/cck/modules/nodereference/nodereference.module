@@ -1,5 +1,5 @@
 <?php
-// $Id: nodereference.module,v 1.138.2.67 2010/06/15 11:24:55 karens Exp $
+// $Id: nodereference.module,v 1.138.2.68 2010/08/11 23:27:10 pwolanin Exp $
 
 /**
  * @file
@@ -960,7 +960,7 @@ function _nodereference_potential_references_standard($field, $string = '', $mat
  * a user has edit but not view access.
  */
 function nodereference_autocomplete_access($field_name) {
-  return user_access('access content') && ($field = content_fields($field_name)) && content_access('view', $field) && content_access('edit', $field);
+  return user_access('access content') && ($field = content_fields($field_name)) && isset($field['field_name']) && content_access('view', $field) && content_access('edit', $field);
 }
 
 /**
