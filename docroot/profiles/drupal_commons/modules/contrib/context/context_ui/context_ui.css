@@ -1,0 +1,246 @@
+/**
+ * Context devel block ================================================
+ */
+.context-devel-space {
+  font-weight:bold;
+  padding:3px 5px;
+  background:#369; color:#fff;
+}
+
+.context-devel-tree {
+  border-right:1px solid #69c;
+  border-bottom:1px solid #69c;
+}
+
+.context-devel-wrapper {
+  border-left:1px solid #69c;
+}
+
+.context-devel-wrapper .context-devel-wrapper {
+  border-left:8px solid #69c;
+}
+
+.context-devel-wrapper label {
+  display:block;
+  border-top:1px solid #69c;
+  padding: 5px;
+}
+
+.context-devel-wrapper small {
+  font-weight:normal; float:right;
+  font-size:8px; line-height:14px; padding:0px 3px;
+  background:#333; color:#ccc;
+}
+
+/**
+ * Context admin listing page =========================================
+ */
+
+h3.context-space small {
+  display:inline;
+  padding:.1em .5em; margin-left:1em;
+  font-size:.6em; font-weight:bold;
+  text-transform:uppercase;
+  background:#e8f0f8; /* Garland blue */
+  }
+
+/**
+ * Context UI form ====================================================
+ */
+form#context-ui-form div.warning {
+  display:none !important;
+  }
+
+form#context-ui-form div.form-checkboxes input,
+form#context-ui-form div.form-radios input {
+  vertical-align:middle;
+  }
+
+form#context-ui-form table {
+  margin:0px 0px 20px;
+  }
+
+  form#context-ui-form table table {
+    margin:0px;
+    }
+
+  form#context-ui-form table td {
+    vertical-align:top;
+    }
+
+    form#context-ui-form table td td {
+      width:auto;
+      border:0px;
+      }
+
+    form#context-ui-form table tr.even .form-item,
+    form#context-ui-form table tr.odd .form-item {
+      white-space:normal;
+      }
+
+  form#context-ui-form table tr.hidden {
+    display:none;
+    }
+
+/**
+ * NS/A/V trio ========================================================
+ */
+table#context-ui-trio tr.section input.form-text {
+  font-size:200%;
+  }
+table#context-ui-trio td {
+  width:33%;
+  }
+
+/**
+ * Setter/getter items ================================================
+ */
+table#context-ui-blocks,
+table#context-ui-items {
+  width:100%;
+  }
+
+table#context-ui-blocks td,
+table#context-ui-items td {
+  width:50%;
+  padding:0px;
+  }
+
+form#context-ui-form td.display {}
+
+  form#context-ui-form td.display div.label {
+    border-bottom:1px solid #ddd;
+    padding:5px;
+    font: bold 13px/20px Arial,sans-serif;
+    background:#eee;
+    }
+
+  form#context-ui-form td.display div.label a,
+  form#context-ui-form td.display div.label span {
+    font-weight:normal;
+    margin-left:10px;
+    font-size:11px;
+    }
+
+  form#context-ui-form td.display div.label a { float:right; }
+
+  form#context-ui-form td.display tr,
+  form#context-ui-form td.display div.item-list {
+    border:0px;
+    border-bottom:1px solid #ddd;
+    }
+
+    form#context-ui-form td.display div.item-list h3,
+    form#context-ui-form td.display div.item-list ul,
+    form#context-ui-form td.display div.item-list li {
+      margin:0px;
+      padding:0px;
+      }
+
+    form#context-ui-form td.display div.item-list h3 a.context_ui-item-section-link {
+      display:block;
+      padding:5px;
+      font: bold 11px/15px Arial,sans-serif;
+      }
+    form#context-ui-form td.display div.item-list h3 a.advanced-help-link {
+      margin: 5px;
+    }
+
+      form#context-ui-form td.display div.item-list h3 a.context_ui-item-section-link.selected {
+        background:#eee;
+        color:#000;
+        }
+
+    form#context-ui-form td.display div.item-list li {
+      padding:5px 5px 5px 15px;
+      font: 9px/10px Arial,sans-serif;
+      }
+
+    form#context-ui-form td.display div.item-list li.empty { display:none; }
+
+    form#context-ui-form td.display tr td { padding:5px; }
+
+form#context-ui-form td.widget {
+  background:#eee;
+  padding:10px;
+  }
+
+  form#context-ui-form td.widget div.widget {
+    display:none;
+    }
+
+    form#context-ui-form td.widget div.active {
+      display:block;
+      }
+
+  form#context-ui-form td.widget select,
+  form#context-ui-form td.widget input.form-text {
+    width:90%;
+    }
+
+
+  form#context-ui-form td.widget .form-item {
+    margin:0px;
+    padding:0px;
+    }
+
+    form#context-ui-form td.widget .form-item .form-item {
+      background: transparent;
+      border:0px; padding:0px; margin:0px;
+    }
+
+    table#context-ui-blocks div.context-ui-block-selector,
+    table#context-ui-items td.widget .form-item div.form-checkboxes,
+    table#context-ui-items td.widget .form-item div.form-radios {
+      background:#fff; border:1px solid #ddd;
+      font: 11px/25px Arial,sans-serif;
+      height:20em;
+      overflow:auto;
+      }
+
+    table#context-ui-items td.widget .form-item div.form-checkboxes .form-item,
+    table#context-ui-items td.widget .form-item div.form-radios .form-item {
+      border-bottom:1px solid #eee;
+      display:block;
+      }
+
+/**
+ * Block visibility ===================================================
+ */
+#context-ui-blocks span.system-blocks {
+  color:#999;
+  }
+
+form#context-ui-form div.context-ui-block-regions,
+#context-ui-blocks td.display div.form-item,
+#context-ui-blocks td.display input.block-weight {
+  display:none;
+  }
+
+table#context-ui-blocks div.context-ui-block-selector {
+  font:11px/25px Arial,sans-serif;
+  }
+
+  table#context-ui-blocks div.context-ui-block-selector label {
+    padding:0px 5px;
+    background:#eee;
+    }
+
+  table#context-ui-blocks div.context-ui-block-selector div.form-checkboxes {
+    padding:0px; margin:0px;
+    }
+
+  table#context-ui-blocks div.context-ui-block-selector div.form-checkboxes div.form-item {
+    border-bottom:1px solid #eee;
+    }
+
+  table#context-ui-blocks div.context-ui-block-selector label.option {
+    background:transparent;
+    }
+
+/**
+ * Bulk export ===================================================
+ */
+table.context-ui-bulk-export td.context-ui-checkbox {
+  width: 30px;
+}

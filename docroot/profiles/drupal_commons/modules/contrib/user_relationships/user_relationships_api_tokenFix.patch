@@ -1,0 +1,11 @@
+--- user_relationships_api/user_relationships_api.module	2010-05-27 15:12:17.000000000 -0400
++++ user_relationships_api/user_relationships_apiNew.module	2010-05-27 15:09:54.000000000 -0400
+@@ -335,7 +335,7 @@ function user_relationships_api_token_va
+   }
+   elseif ($type == 'relationship') {
+     $r = $data;
+-    $r_type = user_relationships_type_load($r->rtid);
++    $r_type = user_relationships_type_load(array('rtid' => $r->rtid));
+    
+     $token_values = array(
+       'requestee' => theme('username', user_load(array('uid' => $r->requestee_id))),

@@ -1,0 +1,150 @@
+<?php
+// $Id: strongarm.module,v 1.1.2.6.2.9 2010/02/06 01:17:08 yhahn Exp $
+
+/**
+ * Implementation of hook_init().
+ */
+function strongarm_init() {
+  strongarm_set_conf();
+
+  // This is a workaround for the very early check of the 'site_frontpage'
+  // variable in the Drupal bootstrap process. The workaround re-runs
+  // drupal_init_path() to ensure the strongarm'ed version of
+  // 'site_frontpage' is used. Note that this may be too late if other modules
+  // weighted even lower than strongarm (which is a superlightweight -1000)
+  // rely on $_GET['q'] or 'site_frontpage' in hook_init().
+  $_GET['q'] = strongarm_language_strip($_REQUEST['q']);
+  drupal_init_path();
+}
+
+/**
+ * Retrieve variable configuration from the cache.
+ */
+function strongarm_set_conf($reset = FALSE) {
+  $varcache = cache_get('variables', 'cache');
+  $cache = cache_get('strongarm', 'cache');
+  // The > comparison here is cautious but ensures that the strongarm cache
+  // actually was populated after the variable cache. It is possible with
+  // >= for the var cache to be populated again during the same stale second.
+  if (!$reset && ($cache && $varcache && $cache->created > $varcache->created)) {
+    $var_conf = $cache->data;
+  }
+  else {
+    // Ensure that the schema cache is not stale when we init.
+    $schema = drupal_get_schema('variable');
+    if (!isset($schema['export'])) {
+      drupal_get_schema('variable', TRUE);
+    }
+
+    $var_conf = array();
+    ctools_include('export');
+    foreach (ctools_export_load_object('variable') as $var) {
+      $var_conf[$var->name] = $var->value;
+    }
+    cache_set('strongarm', $var_conf);
+  }
+  global $conf;
+  $conf = array_merge($var_conf, $conf);
+}
+
+/**
+ * Remove the language prefix for a given path.
+ * Strongarm implements this itself as language_initialize() directly affects
+ * $_GET['q'] and cannot be reused.
+ */
+function strongarm_language_strip($path) {
+  // Configured presentation language mode.
+  $mode = variable_get('language_negotiation', LANGUAGE_NEGOTIATION_NONE);
+
+  // Get a list of enabled languages.
+  $languages = language_list('enabled');
+  $languages = $languages[1];
+
+  if (in_array($mode, array(LANGUAGE_NEGOTIATION_PATH_DEFAULT, LANGUAGE_NEGOTIATION_PATH))) {
+    $args = explode('/', $path);
+    $prefix = array_shift($args);
+    // Search prefix within enabled languages.
+    foreach ($languages as $language) {
+      if (!empty($language->prefix) && $language->prefix == $prefix) {
+        return implode('/', $args);
+      }
+    }
+  }
+  return $path;
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function strongarm_menu() {
+  $items = array();
+  $items['admin/settings/strongarm'] = array(
+    'title' => 'Strongarm',
+    'description' => 'Manage Drupal variable settings that have been strongarmed.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('strongarm_admin_form'),
+    'access callback' => 'user_access',
+    'access arguments' => array('administer site configuration'),
+    'file' => 'strongarm.admin.inc',
+    'type' => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
+
+/**
+ * Implementation of hook_form_alter() for system_module form.
+ * Clear strongarm & variable caches on modules page.
+ */
+function strongarm_form_system_module_alter(&$form, &$form_state) {
+  strongarm_flush_caches();
+}
+
+/**
+ * Implementation of hook_theme().
+ */
+function strongarm_theme() {
+  return array(
+    'strongarm_admin_form' => array(
+      'arguments' => array(),
+      'file' => 'strongarm.admin.inc',
+      'path' => drupal_get_path('module', 'strongarm'),
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_flush_caches().
+ */
+function strongarm_flush_caches() {
+  cache_clear_all('variables', 'cache');
+  cache_clear_all('strongarm', 'cache');
+}
+
+/**
+ * Implementation of hook_schema_alter().
+ * Makes the variables table usable by ctools' export.inc.
+ */
+function strongarm_schema_alter(&$schema) {
+  $schema['variable']['export'] = array(
+    'key' => 'name',
+    'identifier' => 'strongarm',
+    'default hook' => 'strongarm',
+    'api' => array(
+      'owner' => 'strongarm',
+      'api' => 'strongarm',
+      'minimum_version' => 1,
+      'current_version' => 1,
+    ),
+  );
+  $schema['variable']['fields']['value']['serialize'] = TRUE;
+}
+
+/**
+ * Implementation of hook_features_revert().
+ */
+if (!function_exists('variable_features_revert')) {
+  function variable_features_revert($module) {
+    ctools_component_features_revert('variable', $module);
+    cache_clear_all('variables', 'cache');
+  }
+}

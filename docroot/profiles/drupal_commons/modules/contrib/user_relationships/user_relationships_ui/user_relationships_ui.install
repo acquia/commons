@@ -1,0 +1,26 @@
+<?php
+// $Id: user_relationships_ui.install,v 1.1.4.2 2009/07/08 09:17:06 alexk Exp $
+/**
+ * @file Installation functions for User Relationships UI module
+ */
+
+/**
+ * Implementation of hook_uninstall()
+ */
+function user_relationships_ui_uninstall() {
+  $message_defaults = _user_relationships_ui_default_messages(array());
+  $message_keys = array_merge(array_keys($message_defaults['informational']), array_keys($message_defaults['error']));
+  foreach ($message_keys as $key) {
+    variable_del("user_relationships_ui_msg_{$key}");
+  }
+  variable_del('user_relationships_top');
+  variable_del('user_relationships_show_user_pictures');
+  variable_del('user_relationships_show_direct_links');
+  variable_del('user_relationships_requests_link');
+  variable_del('user_relationships_relationships_per_page');
+  variable_del('user_relationships_position');
+  variable_del('user_relationships_left');
+  variable_del('user_relationships_last_expire');
+  variable_del('user_relationships_allow_multiple');
+  variable_del('user_relationships_allow_auto_approve');
+}

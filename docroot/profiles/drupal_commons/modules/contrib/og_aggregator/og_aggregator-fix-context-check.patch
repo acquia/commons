@@ -1,0 +1,25 @@
+--- og_aggregator.module	2009-11-12 05:16:53.000000000 -0500
++++ og_aggregator.new.module	2010-07-29 10:38:03.000000000 -0400
+@@ -187,14 +187,16 @@ function og_aggregator_block($op, $delta
+         $result = db_query_range("SELECT i.* FROM {og_aggregator_item} i JOIN {og_aggregator_feed} f ON i.fid = f.fid WHERE f.nid = %d ORDER BY i.timestamp desc", $groupnode->nid, 0, variable_get('og_aggregator_block_items_number',10));
+         $block['content'] = '<div class="more-link">'. 
+ l(t('more'), "node/$groupnode->nid/aggregator/feed", array('title' => t('View this feed\'s recent news.'))) .'</div>';
++      
++        $items = array();
++        while ($item = db_fetch_object($result)) {
++          $items[] = theme('og_aggregator_block_item', $item);
++        }
++        $block['content'] = theme('item_list', $items) . $block['content'];
++    
++        return $block;
+       }
+-      $items = array();
+-      while ($item = db_fetch_object($result)) {
+-        $items[] = theme('og_aggregator_block_item', $item);
+-      }
+-      $block['content'] = theme('item_list', $items) . $block['content'];
+     }
+-    return $block;
+   }
+ }
+ 

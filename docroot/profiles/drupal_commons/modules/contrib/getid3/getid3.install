@@ -1,0 +1,61 @@
+<?php
+// $Id: getid3.install,v 1.6.2.1 2009/11/26 01:21:39 drewish Exp $
+
+/**
+ * Implementation of hook_requirements()
+ */
+function getid3_requirements($phase) {
+  $t = get_t();
+  $requirements = array();
+
+  if ($phase == 'runtime') {
+    // Test getID3 version 
+    $requirements['getid3']['title'] = $t('getID3()');
+
+    if (getid3_load(FALSE)) {
+      $requirements['getid3']['value'] = check_plain(getid3_get_version());
+      $getid3_demos_path = getid3_get_path() .'/../demos';
+      if (file_exists($getid3_demos_path)) {
+        $requirements['getid3']['description'] = $t("Your getID3 library is insecure! The demos distributed with getID3 contains code which creates a huge security hole. Remove the demos directory (%path) from beneath Drupal's directory.", array('%path' => realpath($getid3_demos_path)));
+        $requirements['getid3']['severity'] = REQUIREMENT_ERROR; 
+      }
+    }
+    else {
+      $requirements['getid3']['value'] = $t('Not found or wrong version');
+      $requirements['getid3']['description'] = $t('You must install <a href="@getid3">getID3()</a> to %getid3dir, or <a href="@getid3settings">configure its installation path</a>.', array('@getid3' => 'http://www.getid3.org', '%getid3dir' => 'sites/all/libraries/getid3', '@getid3settings' => url('admin/settings/getid3')));
+      $requirements['getid3']['severity'] = REQUIREMENT_ERROR; 
+    }
+  }
+
+  return $requirements;
+}
+
+/**
+ * Implementation of hook_enable()
+ */ 
+function getid3_enable() {
+  // Display a message if it fails to load getID3().
+  getid3_load();
+}
+
+/**
+ * Implementation of hook_install().
+ */
+function getid3_install() {
+  $status = array();
+   // Set module weight for the getID3 module
+  $status[] = db_query("UPDATE {system} SET weight = -10 WHERE name = 'getid3'");
+
+  // If there is one FALSE value in the status array, there was an error.
+  if (array_search(FALSE, $status) !== FALSE) {
+    drupal_set_message(t('Setting the module weight of getID3 failed.'), 'error');
+  }
+}
+
+/**
+ * Implementation of hook_uninstall()
+ */ 
+function getid3_uninstall() {
+  db_query("DELETE FROM {variable} WHERE name LIKE 'getid3_%'");
+  cache_clear_all('variables', 'cache');
+}

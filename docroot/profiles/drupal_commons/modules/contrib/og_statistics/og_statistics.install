@@ -1,0 +1,153 @@
+<?php
+// $Id: og_statistics.install,v 1.2.2.2 2009/09/11 19:27:26 dereine Exp $
+
+/**
+ * @file
+ *   Installs the og_statistics module.
+ */
+
+/**
+ * Implemenation of hook_install().
+ */
+function og_statistics_install() {
+  drupal_install_schema('og_statistics');
+}
+
+/**
+ * Implemenation of hook_schema().
+ */
+function og_statistics_schema() {
+  $schema['og_statistics'] = array(
+    'description' => 'Saves some statistics foreach group',
+    'fields'          => array(
+      'nid'             => array(
+        'description'     => "The groups's {node}.nid.",
+        'type'            => 'int',
+        'size'            => 'normal',
+        'not null'        => TRUE,
+      ),
+      'members_count' => array(
+        'description' => 'How many members has a group',
+        'type' => 'int',
+        'size' => 'normal',
+        'not null' => TRUE,
+      ),
+      'posts_count' => array(
+        'description' => 'How many posts has a group',
+        'type' => 'int',
+        'size' => 'normal',
+        'not null' => TRUE,
+      ),
+      'comments_count' => array(
+        'description' => 'How many comments has a group',
+        'type' => 'int',
+        'size' => 'normal',
+        'not null' => TRUE,
+      ),
+      'last_node_timestamp' => array(
+        'description'     => 'Last Time when a in the group was created.',
+        'type'            => 'int',
+        'size'            => 'normal',
+        'not null'        => FALSE,
+        'default'         => 0,
+      ),
+      'last_comment_timestamp' => array(
+        'description'     => 'Last Time when a comment in the group was created.',
+        'type'            => 'int',
+        'size'            => 'normal',
+        'not null'        => FALSE,
+        'default'         => 0,
+      ),
+      'last_member_timestamp' => array(
+        'description'     => 'Last Time when a user joins a group.',
+        'type'            => 'int',
+        'size'            => 'normal',
+        'not null'        => FALSE,
+        'default'         => 0,
+      ),
+      'last_comment_uid' => array(
+        'description' => 'Last {users}.uid to post a comment in a group.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+        'default' => 0,
+      ),
+      'last_comment_nid' => array(
+        'description' => 'Node the last comment was posted to in a group.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+        'default' => 0,
+      ),
+      'last_comment_cid' => array(
+        'description' => '{comments}.cid of the last comment in a group.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+        'default' => 0,
+      ),
+      'last_node_nid' => array(
+        'description' => 'Last {node}.nid posted to a group.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+        'default' => 0,
+      ),
+      'last_node_uid' => array(
+        'description' => '{users}.uid of the last node posted to a group.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+        'default' => 0,
+      ),
+      'last_member_uid' => array(
+        'description' => '{users}.uid of the last user to join a group.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('nid'),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implemenation of hook_uninstall().
+ */
+function og_statistics_uninstall() {
+  drupal_uninstall_schema('og_statistics');
+}
+
+/**
+ * Adds more verbose og statistics.
+ */
+function og_statistics_update_6001() {
+  $ret = array();
+  $schema = drupal_get_schema_unprocessed('og_statistics');
+  $table_definition = $schema['og_statistics'];
+  // Add detailed columns for last comment post.
+  foreach (array('last_comment_uid', 'last_comment_nid', 'last_comment_cid') as $column) {
+    if (!db_column_exists('og_statistics', $column)) {
+      db_add_field($ret, 'og_statistics', $column, $table_definition['fields'][$column]);
+    }
+  }
+  // Add detailed columns for last node post.
+  foreach (array('last_node_uid', 'last_node_nid') as $column) {
+    if (!db_column_exists('og_statistics', $column)) {
+      db_add_field($ret, 'og_statistics', $column, $table_definition['fields'][$column]);
+    }
+  }
+  // Add detailed columns for last user to join.
+  foreach (array('last_member_uid') as $column) {
+    if (!db_column_exists('og_statistics', $column)) {
+      db_add_field($ret, 'og_statistics', $column, $table_definition['fields'][$column]);
+    }
+  }
+  // Rebuild schema.
+  drupal_get_schema('og_statistics', TRUE);
+
+  return $ret;
+}

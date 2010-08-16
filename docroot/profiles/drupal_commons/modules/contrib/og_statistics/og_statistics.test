@@ -1,0 +1,222 @@
+<?php
+// $Id: og_statistics.test,v 1.2.2.6 2009/09/07 19:22:31 dereine Exp $
+
+/**
+ * Test file for og_statitics.
+ *
+ * @TODO Use multiple groups for testing.
+ * @TODO Abstract part of the tests.
+ */
+
+require_once drupal_get_path('module', 'og') .'/tests/og_testcase.php';
+
+class OgStatisticsTestCase extends OgTestCase {
+  public static function getInfo() {
+    return array(
+      'name' => t('Organic groups statistics'),
+      'description' => t('tests statistics of og_statistics module'),
+      'group' => t('Organic groups'),
+    );
+  }
+
+  function setUp() {
+    parent::setUp('node', 'user', 'comment', 'views', 'og', 'og_views', 'og_statistics', 'og_access', 'devel');
+
+    // Create a user with admin permissions.
+    $web_admin = $this->drupalCreateUser(array('administer nodes', 'administer content types', 'access administration pages', 'administer site configuration', 'administer organic groups'));
+    $this->drupalLogin($web_admin);
+  }
+
+  function TestOgStatisticsWritePureRecord() {
+    // Create a group node content type.
+    $og_group_type = $this->drupalCreateContentType();
+    variable_set('og_content_type_usage_'. $og_group_type->name, 'group');
+
+    // Create a group post content type.
+    $og_post_type = $this->drupalCreateContentType();
+    variable_set('og_content_type_usage_'. $og_post_type->name, 'group_post_standard');
+
+    // Rebuild the menu so the new content types will appear in the menu.
+    menu_rebuild();
+
+    // Create a group node.
+    $gid = $this->addOgGroup($og_group_type->name);
+
+    // get the record of the group
+    $stat = og_statistics_load($gid);
+    unset($stat['nid']);
+    $members = 
+
+    $empty = FALSE;
+    foreach ($stat as $key => $item) {
+      $empty = $empty || $item == TRUE;
+    }
+    $this->assertFalse($empty, t('All stats should have 0 as item'));
+  }
+
+  // Tests nodeapi statistics.
+  function TestOgStatisticsNodeapi() {
+    // Create a group node content type.
+    $og_group_type = $this->drupalCreateContentType();
+    variable_set('og_content_type_usage_'. $og_group_type->name, 'group');
+
+    // Create a group post content type.
+    $og_post_type = $this->drupalCreateContentType();
+    variable_set('og_content_type_usage_'. $og_post_type->name, 'group_post_standard');
+
+    // Rebuild the menu so the new content types will appear in the menu.
+    menu_rebuild();
+
+    // create a test group
+    $gid = $this->addOgGroup($og_group_type->name);
+    $before = og_statistics_load($gid);
+
+    // add a test post
+    $nids[] = $nid = $this->addOgPost($og_post_type->name, array($gid));
+    $node = node_load($nid);
+    // Rebuild the menu so the new content types will appear in the menu.
+    menu_rebuild();
+    $after = og_statistics_load($gid);
+    $count_one_up = ($after['posts_count'] - $before['posts_count']) == 1;
+
+    $this->assertTrue($count_one_up, 'A node post in a group, counts the counter 1 up');
+    $this->assertEqual($node->created, $after['last_node_timestamp'], 'A node post in a group, sets the last node timestamp');
+    $this->assertEqual($node->nid, $after['last_node_nid'], 'A node post in a group sets the last node nid');
+    $this->assertEqual($node->uid, $after['last_node_uid'], 'A node post in a group sets the last node uid');
+
+    // remove the post
+    node_delete($nid);
+    $before = $after;
+    $after = og_statistics_load($gid);
+    $count_down = ($after['posts_count'] - $before['posts_count']) == -1;
+
+    $this->assertTrue($count_down, 'A node poast in a group was deleted, counts the counter 1 down');
+  }
+
+  function drupalCreateComment($edit) {
+    if ($cid = comment_save($edit)) {
+      return $cid;
+    }
+  }
+
+  // Tests comments hooks statistic
+  function TestOgStatisticsComment() {
+    global $user;
+    // Create a group node content type.
+    $og_group_type = $this->drupalCreateContentType();
+    variable_set('og_content_type_usage_'. $og_group_type->name, 'group');
+
+    // Create a group post content type.
+    $og_post_type = $this->drupalCreateContentType();
+    variable_set('og_content_type_usage_'. $og_post_type->name, 'group_post_standard');
+
+    // Rebuild the menu so the new content types will appear in the menu.
+    menu_rebuild();
+
+    // create a test group
+    $gid = $this->addOgGroup($og_group_type->name);
+    $before = og_statistics_load($gid);
+
+    // add a test post
+    $nids[] = $nid = $this->addOgPost($og_post_type->name, array($gid));
+    $node = node_load($nid);
+
+    // adds some comments
+    $edit = array();
+    $edit['subject'] = $this->randomName(10);
+    $edit['comment'] = $this->randomName(50);
+    $edit['nid'] = $nid;
+    $edit['format'] = FILTER_FORMAT_DEFAULT;
+    $edit['node'] = $node;
+    $edit['uid'] = $user->uid;
+    $edit['pid'] = NULL;
+    $edit['cid'] = NULL;
+    $cid = $this->drupalCreateComment($edit);
+    $comment = _comment_load($cid);
+
+    $after = og_statistics_load($gid);
+    $count_up = ($after['comments_count'] - $before['comments_count']) == 1;
+    $this->assertTrue($count_up, 'new comment to one group post, counts up the comment counter');
+    $this->assertEqual($comment->timestamp, $after['last_comment_timestamp'], 'new comment to one group post, counts up the comment counter');
+    $this->assertEqual($comment->cid, $after['last_comment_cid'], 'New comment to one group post sets the last comment cid.');
+    $this->assertEqual($comment->nid, $after['last_comment_nid'], 'New comment to one group post sets the last comment nid.');
+    $this->assertEqual($comment->uid, $after['last_comment_uid'], 'New comment to one group post sets the last comment uid.');
+
+    // add another comment.
+
+    $edit = array();
+    $edit['subject'] = $this->randomName(10);
+    $edit['comment'] = $this->randomName(50);
+    $edit['nid'] = $nid;
+    $edit['format'] = FILTER_FORMAT_DEFAULT;
+    $edit['node'] = $node;
+    $edit['uid'] = $user->uid;
+    $edit['pid'] = NULL;
+    $edit['cid'] = NULL;
+    $cid = $this->drupalCreateComment($edit);
+
+    // Remove the node and check whether comment count is updated
+    // reload the node, to update the stats.
+    $node = node_load($node, NULL, TRUE);
+
+    node_delete($nid);
+    $stat = og_statistics_load($gid);
+    $this->assertEqual($stat['comments_count'], 0, 'all comments were deleted');
+  }
+
+  function TestOgStatisticsOg() {
+    // Create a group node content type.
+    $og_group_type = $this->drupalCreateContentType();
+    variable_set('og_content_type_usage_'. $og_group_type->name, 'group');
+
+    // Create a group post content type.
+    $og_post_type = $this->drupalCreateContentType();
+    variable_set('og_content_type_usage_'. $og_post_type->name, 'group_post_standard');
+
+    // Rebuild the menu so the new content types will appear in the menu.
+    menu_rebuild();
+
+    // create a test group
+    $gid = $this->addOgGroup($og_group_type->name);
+    $before = og_statistics_load($gid);
+
+    // let one member choine the group
+    $account = $this->drupalCreateUser();
+    $time = time();
+    og_save_subscription($gid, $account->uid, array('created' => $time));
+
+    $after = og_statistics_load($gid);
+
+    $count_up = ($after['members_count'] - $before['members_count']) == 1;
+
+    $this->assertTrue($count_up, 'New subscription to a group adds the counter 1 up');
+    $this->assertEqual($time, $after['last_member_timestamp'], 'New subscription to a group adds the counter 1 up');
+    $this->assertEqual($account->uid, $after['last_member_uid'], 'New subscription to a group sets the last member uid.');
+  }
+
+  function TestOgStatisticsDelete() {
+    // Create a group node content type.
+    $og_group_type = $this->drupalCreateContentType();
+    variable_set('og_content_type_usage_'. $og_group_type->name, 'group');
+
+    // Create a group post content type.
+    $og_post_type = $this->drupalCreateContentType();
+    variable_set('og_content_type_usage_'. $og_post_type->name, 'group_post_standard');
+
+    // Rebuild the menu so the new content types will appear in the menu.
+    menu_rebuild();
+
+    $gid = $this->addOgGroup($og_group_type->name);
+    // create a test group
+    $gid = $this->addOgGroup($og_group_type->name);
+    $before = og_statistics_load($gid);
+
+    // Delete the node, the stat-record should be deleted too.
+    $node = node_load($gid);
+    node_delete($node->nid);
+    $after = og_statistics_load($gid);
+
+    $this->assertTrue(empty($after), 'Og statistics record get deleted');
+  }
+}
+

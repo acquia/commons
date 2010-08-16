@@ -1,0 +1,1156 @@
+# $Id: notifications.pot,v 1.1.2.1 2009/03/18 02:40:23 davidlesieur Exp $
+#
+# LANGUAGE translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  notifications.admin.inc,v 1.5.2.6.2.16 2008/12/30 15:29:44 jareyero
+#  notifications.module,v 1.6.2.9.2.33 2009/01/30 20:45:46 jareyero
+#  notifications_ui.module,v 1.3.2.8.2.9 2009/01/28 16:40:05 jareyero
+#  notifications.pages.inc,v 1.1.2.1 2008/11/08 20:25:09 jareyero
+#  notifications_content.module,v 1.4.2.9.2.21 2009/01/29 22:42:27 jareyero
+#  notifications_tags.module,v 1.1.2.5.2.6 2009/01/29 23:43:45 jareyero
+#  notifications.cron.inc,v 1.6.2.6.2.18 2009/01/30 20:45:46 jareyero
+#  notifications.info,v 1.1.4.1 2008/04/13 18:02:39 jareyero
+#  notifications_autosubscribe.info,v 1.2.2.1.2.1 2008/08/03 00:12:48 jareyero
+#  notifications_content.info,v 1.1.4.1 2008/04/13 18:02:39 jareyero
+#  notifications_feed.info,v 1.1 2008/01/26 12:57:38 jareyero
+#  notifications_lite.info,v 1.1.4.2 2008/04/29 10:03:06 jareyero
+#  notifications_tags.info,v 1.1.4.2 2008/11/07 17:27:30 jareyero
+#  notifications_ui.info,v 1.1.4.1 2008/04/13 18:02:39 jareyero
+#  notifications_lite.module,v 1.1.4.5 2008/12/26 17:19:36 jareyero
+#  notifications_autosubscribe.module,v 1.2.2.3.2.3 2008/09/20 15:43:30 jareyero
+#  notifications_feed.module,v 1.2.2.4.2.1 2008/08/03 00:12:47 jareyero
+#  notifications_content.install,v 1.1.2.2 2008/10/29 12:10:50 jareyero
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2009-03-17 20:38-0400\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: notifications.admin.inc:15
+msgid "Notify poster of own posts"
+msgstr ""
+
+#: notifications.admin.inc:17
+msgid ""
+"Notifies a node poster about their own posts.  Useful principally during "
+"testing.  Default is OFF."
+msgstr ""
+
+#: notifications.admin.inc:20
+msgid "Immediate sending"
+msgstr ""
+
+#: notifications.admin.inc:23
+msgid ""
+"Notifications are usually queued to be sent on cron process later. Checking "
+"this option will cause immediate notifications to be sent right away, "
+"instead of being queued. This will produce more timely notifications for "
+"sites with a small number of users. Not recommended for sites with a large "
+"number of users."
+msgstr ""
+
+#: notifications.admin.inc:26
+msgid "Notifications Sender"
+msgstr ""
+
+#: notifications.admin.inc:29
+msgid "No one (All notifications will appear as coming from the web site)"
+msgstr ""
+
+#: notifications.admin.inc:30
+msgid "User name, site data (Only the user name will be used)"
+msgstr ""
+
+#: notifications.admin.inc:31
+msgid "Full user data (User name and available user information)"
+msgstr ""
+
+#: notifications.admin.inc:34
+msgid ""
+"Use the site information as the sender for notification messages or use "
+"account data from the user causing the event. WARNING: Selecting the last "
+"option (Full user data) may undisclose private information to subscribers "
+"like the user e-mail address."
+msgstr ""
+
+#: notifications.admin.inc:39
+msgid "Logging"
+msgstr ""
+
+#: notifications.admin.inc:43
+msgid ""
+"If enabled all notifications will be logged and kept for the specified time "
+"after they're processed."
+msgstr ""
+
+#: notifications.admin.inc:48
+msgid "Default settings"
+msgstr ""
+
+#: notifications.admin.inc:52 notifications.module:239
+msgid "Default send interval"
+msgstr ""
+
+#: notifications.admin.inc:61
+msgid "Limits for queue processing"
+msgstr ""
+
+#: notifications.admin.inc:63
+msgid ""
+"These are the limits for each cron run on queue processing. The process will "
+"stop when it first meets any of them. Set to 0 for no limit."
+msgstr ""
+
+#: notifications.admin.inc:67
+msgid "Number of rows"
+msgstr ""
+
+#: notifications.admin.inc:73
+msgid "Number of messages sent"
+msgstr ""
+
+#: notifications.admin.inc:79
+msgid "Time (seconds)"
+msgstr ""
+
+#: notifications.admin.inc:85
+msgid "Time (% of cron time)"
+msgstr ""
+
+#: notifications.admin.inc:89
+msgid "Maximum percentage of cron time the process may use."
+msgstr ""
+
+#: notifications.admin.inc:100
+msgid "Digest formats"
+msgstr ""
+
+#: notifications.admin.inc:102
+msgid "These are the digest formats available for each interval."
+msgstr ""
+
+#: notifications.admin.inc:104
+msgid "None"
+msgstr ""
+
+#: notifications.admin.inc:113
+msgid "Minutes"
+msgstr ""
+
+#: notifications.admin.inc:114
+msgid "Hours"
+msgstr ""
+
+#: notifications.admin.inc:115
+msgid "Days"
+msgstr ""
+
+#: notifications.admin.inc:119
+msgid "Send intervals"
+msgstr ""
+
+#: notifications.admin.inc:122
+msgid "To delete an interval, set the time unit and the name empty."
+msgstr ""
+
+#: notifications.admin.inc:201
+msgid "The time intervals for your subscriptions have been updated"
+msgstr ""
+
+#: notifications.admin.inc:209
+msgid "Display name"
+msgstr ""
+
+#: notifications.admin.inc:209
+msgid "Digest"
+msgstr ""
+
+#: notifications.admin.inc:235
+msgid "Enabled events"
+msgstr ""
+
+#: notifications.admin.inc:238
+msgid "Check the events for which notifications should be triggered."
+msgstr ""
+
+#: notifications.admin.inc:251
+msgid "You need to enable some plug-ins to provide notifications events."
+msgstr ""
+
+#: notifications.admin.inc:291;306;329 notifications.pages.inc:19
+msgid "Number"
+msgstr ""
+
+#: notifications.admin.inc:302;337
+msgid "Total: %number"
+msgstr ""
+
+#: notifications.admin.inc:303
+msgid "Subscriptions by type"
+msgstr ""
+
+#: notifications.admin.inc:306
+msgid "Method"
+msgstr ""
+
+#: notifications.admin.inc:315
+msgid "Subscriptions by send method"
+msgstr ""
+
+#: notifications.admin.inc:329;807 notifications.pages.inc:102;232
+#: notifications.module:1374
+#: notifications_content/notifications_content.module:679
+#: notifications_tags/notifications_tags.module:142
+msgid "Send interval"
+msgstr ""
+
+#: notifications.admin.inc:338
+msgid "Notifications in queue"
+msgstr ""
+
+#: notifications.admin.inc:353
+msgid "Process log"
+msgstr ""
+
+#: notifications.admin.inc:405
+msgid "Run process"
+msgstr ""
+
+#: notifications.admin.inc:406
+msgid "Run normal queue processing, same as cron run."
+msgstr ""
+
+#: notifications.admin.inc:411
+msgid "Process immediate"
+msgstr ""
+
+#: notifications.admin.inc:412
+msgid "Process only rows marked for immediate sending."
+msgstr ""
+
+#: notifications.admin.inc:417
+msgid "Reset queue"
+msgstr ""
+
+#: notifications.admin.inc:418
+msgid "Delete all notifications in queue."
+msgstr ""
+
+#: notifications.admin.inc:423
+msgid "Run test"
+msgstr ""
+
+#: notifications.admin.inc:424
+msgid "Test run queue processing, without updating nor sending messages."
+msgstr ""
+
+#: notifications.admin.inc:440
+msgid "The queue has been reset."
+msgstr ""
+
+#: notifications.admin.inc:579
+msgid "drop"
+msgstr ""
+
+#: notifications.admin.inc:633
+msgid "Subscription %id"
+msgstr ""
+
+#: notifications.admin.inc:706
+msgid "method"
+msgstr ""
+
+#: notifications.admin.inc:711
+msgid "interval"
+msgstr ""
+
+#: notifications.admin.inc:729
+msgid "Activate"
+msgstr ""
+
+#: notifications.admin.inc:734
+msgid "Deactivate"
+msgstr ""
+
+#: notifications.admin.inc:744
+msgid "Change send method to"
+msgstr ""
+
+#: notifications.admin.inc:753
+msgid "Change send interval to"
+msgstr ""
+
+#: notifications.admin.inc:807 notifications.pages.inc:109;239
+#: notifications.module:1376
+#: notifications_content/notifications_content.module:679
+#: notifications_tags/notifications_tags.module:144
+msgid "Send method"
+msgstr ""
+
+#: notifications.admin.inc:829
+msgid "No subscriptions available."
+msgstr ""
+
+#: notifications.admin.inc:877
+msgid "No elements"
+msgstr ""
+
+#: notifications.cron.inc:154 notifications.module:0
+msgid "notifications"
+msgstr ""
+
+#: notifications.cron.inc:154
+msgid "Reached processing limit on queue processing: %name = %value"
+msgstr ""
+
+#: notifications.pages.inc:35
+msgid "No existing or allowed subscriptions"
+msgstr ""
+
+#: notifications.pages.inc:63;128
+msgid "Your subscription was activated."
+msgstr ""
+
+#: notifications.pages.inc:68
+msgid "Confirm your subscription"
+msgstr ""
+
+#: notifications.pages.inc:73
+msgid "Subscription type or parameters not allowed"
+msgstr ""
+
+#: notifications.pages.inc:95;189;222
+msgid "!type subscription to"
+msgstr ""
+
+#: notifications.pages.inc:115;126
+msgid "Subscribe"
+msgstr ""
+
+#: notifications.pages.inc:131
+msgid "Your subscription was cancelled"
+msgstr ""
+
+#: notifications.pages.inc:165;206
+msgid "Your subscription has been removed."
+msgstr ""
+
+#: notifications.pages.inc:168;193;204
+msgid "Unsubscribe"
+msgstr ""
+
+#: notifications.module:235
+msgid "Messaging and Notifications settings"
+msgstr ""
+
+#: notifications.module:243
+msgid "Default send interval for subscriptions."
+msgstr ""
+
+#: notifications.module:923;135 notifications.info:0;0
+#: notifications_autosubscribe/notifications_autosubscribe.info:0
+#: notifications_content/notifications_content.module:114
+#: notifications_content/notifications_content.info:0
+#: notifications_feed/notifications_feed.info:0
+#: notifications_lite/notifications_lite.info:0
+#: notifications_tags/notifications_tags.info:0
+#: notifications_ui/notifications_ui.info:0
+msgid "Notifications"
+msgstr ""
+
+#: notifications.module:924
+msgid "Messages coming from user subscriptions and system events"
+msgstr ""
+
+#: notifications.module:931
+msgid "Notifications event"
+msgstr ""
+
+#: notifications.module:932
+msgid "Fallback for all Notifications events."
+msgstr ""
+
+#: notifications.module:936
+msgid "Notifications digest"
+msgstr ""
+
+#: notifications.module:937
+msgid "Common parts for Notifications digests."
+msgstr ""
+
+#: notifications.module:946
+msgid "Subject for event notifications"
+msgstr ""
+
+#: notifications.module:947
+msgid "Header for event notifications"
+msgstr ""
+
+#: notifications.module:948
+msgid "Content for event notifications"
+msgstr ""
+
+#: notifications.module:949
+msgid "Footer for event notifications"
+msgstr ""
+
+#: notifications.module:953
+msgid "Subject for digested notifications"
+msgstr ""
+
+#: notifications.module:954
+msgid "Header for digested notifications"
+msgstr ""
+
+#: notifications.module:955
+msgid "Line for digested events"
+msgstr ""
+
+#: notifications.module:956
+msgid "Footer for digested notifications"
+msgstr ""
+
+#: notifications.module:965
+msgid "Event notification for [user] from [site-name]"
+msgstr ""
+
+#: notifications.module:966
+msgid "Greetings [user],"
+msgstr ""
+
+#: notifications.module:967
+msgid "A item to which you are subscribed has been updated"
+msgstr ""
+
+#: notifications.module:969;982
+#: notifications_lite/notifications_lite.module:182
+msgid "This is an automatic message from [site-name]"
+msgstr ""
+
+#: notifications.module:970;983
+#: notifications_lite/notifications_lite.module:183
+msgid "To manage your subscriptions, browse to [subscriptions-manage]"
+msgstr ""
+
+#: notifications.module:971
+msgid "You can unsubscribe at [unsubscribe-url]"
+msgstr ""
+
+#: notifications.module:978
+msgid "[site-name] subscription update for [user]"
+msgstr ""
+
+#: notifications.module:979
+msgid ""
+"Greetings, [user].\n"
+"\n"
+"These are your messages"
+msgstr ""
+
+#: notifications.module:980
+msgid ""
+"A [type] has been updated: [title]\n"
+"\n"
+"[event_list]"
+msgstr ""
+
+#: notifications.module:1039
+msgid "The url for the current user to manage subscriptions."
+msgstr ""
+
+#: notifications.module:1042
+msgid "The url for disabling a specific subscription."
+msgstr ""
+
+#: notifications.module:1045
+msgid "List of events for message digests"
+msgstr ""
+
+#: notifications.module:1046
+msgid "Detailed information for event"
+msgstr ""
+
+#: notifications.module:1208
+msgid "Short"
+msgstr ""
+
+#: notifications.module:1209
+msgid "Produces one line per event, grouped by object"
+msgstr ""
+
+#: notifications.module:1214
+msgid "Long"
+msgstr ""
+
+#: notifications.module:1215
+msgid "Adds full information for each event"
+msgstr ""
+
+#: notifications.module:1228
+msgid "Never"
+msgstr ""
+
+#: notifications.module:1229
+msgid "Immediately"
+msgstr ""
+
+#: notifications.module:1230
+msgid "Every hour"
+msgstr ""
+
+#: notifications.module:1231
+msgid "Twice a day"
+msgstr ""
+
+#: notifications.module:1278
+msgid "inactive"
+msgstr ""
+
+#: notifications.module:201
+msgid "administer notifications"
+msgstr ""
+
+#: notifications.module:201
+msgid "maintain own subscriptions"
+msgstr ""
+
+#: notifications.module:36
+msgid "Messaging & Notifications"
+msgstr ""
+
+#: notifications.module:38
+msgid "Administer and configure messaging and notifications"
+msgstr ""
+
+#: notifications.module:44 notifications_ui/notifications_ui.module:310;317
+msgid "Subscriptions"
+msgstr ""
+
+#: notifications.module:45
+msgid "Manage existing subscriptions and queue."
+msgstr ""
+
+#: notifications.module:52
+msgid "Subscriptions overview."
+msgstr ""
+
+#: notifications.module:59
+msgid "Administer subscriptions."
+msgstr ""
+
+#: notifications.module:67
+msgid "Queue"
+msgstr ""
+
+#: notifications.module:68
+msgid "Notifications queue."
+msgstr ""
+
+#: notifications.module:77
+msgid "Notifications Settings"
+msgstr ""
+
+#: notifications.module:78
+msgid "Site settings for user notifications."
+msgstr ""
+
+#: notifications.module:85
+msgid "General"
+msgstr ""
+
+#: notifications.module:91
+msgid "Intervals"
+msgstr ""
+
+#: notifications.module:99
+msgid "Events"
+msgstr ""
+
+#: notifications.module:126
+msgid "Subscription"
+msgstr ""
+
+#: notifications.info:0
+msgid "The basic notifications framework"
+msgstr ""
+
+#: notifications_autosubscribe/notifications_autosubscribe.module:47
+msgid "Autosubscribe"
+msgstr ""
+
+#: notifications_autosubscribe/notifications_autosubscribe.module:49
+msgid ""
+"Checking this box allows you to automatically subscribe to any thread you "
+"create or post a comment to."
+msgstr ""
+
+#: notifications_autosubscribe/notifications_autosubscribe.module:56
+msgid "Set all users to \"autosubscribe\" by default"
+msgstr ""
+
+#: notifications_autosubscribe/notifications_autosubscribe.module:58
+msgid "Sets each users \"autosubscribe\" profile option."
+msgstr ""
+
+#: notifications_autosubscribe/notifications_autosubscribe.module:93
+msgid ""
+"You are currently set to receive notifications for replies to content which "
+"you create. To change this default, uncheck the autosubscribe option in your "
+"user account settings."
+msgstr ""
+
+#: notifications_autosubscribe/notifications_autosubscribe.module:0
+msgid "notifications_autosubscribe"
+msgstr ""
+
+#: notifications_autosubscribe/notifications_autosubscribe.info:0
+msgid "Notifications Autosubscribe"
+msgstr ""
+
+#: notifications_autosubscribe/notifications_autosubscribe.info:0
+msgid "Provides automatic notifications."
+msgstr ""
+
+#: notifications_content/notifications_content.module:78
+msgid ""
+"This is the format for each digest group. A message may consist on one or "
+"many of these groups:"
+msgstr ""
+
+#: notifications_content/notifications_content.module:80;378
+msgid "Group title"
+msgstr ""
+
+#: notifications_content/notifications_content.module:81;82
+msgid "Digest line."
+msgstr ""
+
+#: notifications_content/notifications_content.module:84;379
+msgid "Group footer"
+msgstr ""
+
+#: notifications_content/notifications_content.module:102;122
+msgid "Disable Notifications"
+msgstr ""
+
+#: notifications_content/notifications_content.module:103
+msgid "Check this box if you wish to disable notifications for this comment."
+msgstr ""
+
+#: notifications_content/notifications_content.module:123
+msgid ""
+"Check this box if you wish to disable notifications for this content update."
+msgstr ""
+
+#: notifications_content/notifications_content.module:137
+msgid "Content type subscriptions"
+msgstr ""
+
+#: notifications_content/notifications_content.module:144
+msgid "Allowed content types"
+msgstr ""
+
+#: notifications_content/notifications_content.module:147
+msgid ""
+"Select content types which should be <em>allowed</em> for subscriptions to "
+"content type."
+msgstr ""
+
+#: notifications_content/notifications_content.module:164
+msgid "Content type: %type"
+msgstr ""
+
+#: notifications_content/notifications_content.module:167
+msgid "Author: %name"
+msgstr ""
+
+#: notifications_content/notifications_content.module:170
+msgid "Thread: %title"
+msgstr ""
+
+#: notifications_content/notifications_content.module:178;26
+msgid "Thread"
+msgstr ""
+
+#: notifications_content/notifications_content.module:185;35
+msgid "Content type"
+msgstr ""
+
+#: notifications_content/notifications_content.module:212
+msgid "Node type"
+msgstr ""
+
+#: notifications_content/notifications_content.module:255;432
+msgid "New content of type [type-name] has been submitted"
+msgstr ""
+
+#: notifications_content/notifications_content.module:256
+msgid "[type-name] [title] by [author-name]"
+msgstr ""
+
+#: notifications_content/notifications_content.module:258
+msgid "Node creation"
+msgstr ""
+
+#: notifications_content/notifications_content.module:267;275
+msgid "[type-name]: [title]"
+msgstr ""
+
+#: notifications_content/notifications_content.module:268
+msgid "The [type-name] has been updated"
+msgstr ""
+
+#: notifications_content/notifications_content.module:270
+msgid "Node update"
+msgstr ""
+
+#: notifications_content/notifications_content.module:276
+msgid "New comment by [comment-author-name]: [comment-title]"
+msgstr ""
+
+#: notifications_content/notifications_content.module:278
+msgid "Node comment"
+msgstr ""
+
+#: notifications_content/notifications_content.module:323
+msgid "The header and footer will be taken from Notification events"
+msgstr ""
+
+#: notifications_content/notifications_content.module:327
+msgid "Notifications for node events"
+msgstr ""
+
+#: notifications_content/notifications_content.module:328
+msgid "Defaults for all notifications related to node events."
+msgstr ""
+
+#: notifications_content/notifications_content.module:333
+msgid "Notifications for node creation"
+msgstr ""
+
+#: notifications_content/notifications_content.module:334
+msgid "Notifications produced when a new node is created."
+msgstr ""
+
+#: notifications_content/notifications_content.module:339
+msgid "Notifications for node updates"
+msgstr ""
+
+#: notifications_content/notifications_content.module:340
+msgid "Notifications produced when a node is updated."
+msgstr ""
+
+#: notifications_content/notifications_content.module:345
+msgid "Notifications for node comments"
+msgstr ""
+
+#: notifications_content/notifications_content.module:346
+msgid "Notifications produced when a comment is posted to a node."
+msgstr ""
+
+#: notifications_content/notifications_content.module:352
+msgid "Groups digests per node"
+msgstr ""
+
+#: notifications_content/notifications_content.module:353
+msgid "Group of events digested for each node."
+msgstr ""
+
+#: notifications_content/notifications_content.module:357
+msgid "Groups digests per node type"
+msgstr ""
+
+#: notifications_content/notifications_content.module:358
+msgid "Group of events digested for each node type."
+msgstr ""
+
+#: notifications_content/notifications_content.module:374
+msgid "Digest line"
+msgstr ""
+
+#: notifications_content/notifications_content.module:390
+msgid "Update for [type-name]: [title]"
+msgstr ""
+
+#: notifications_content/notifications_content.module:393;405;428
+msgid "Read more [node-url]"
+msgstr ""
+
+#: notifications_content/notifications_content.module:402
+msgid "New [type-name]: [title]"
+msgstr ""
+
+#: notifications_content/notifications_content.module:414
+msgid "Comment for [type-name]: [title]"
+msgstr ""
+
+#: notifications_content/notifications_content.module:416
+msgid "Comment by [comment-author-name]: [comment-title]"
+msgstr ""
+
+#: notifications_content/notifications_content.module:418
+msgid "Read more [comment-url]"
+msgstr ""
+
+#: notifications_content/notifications_content.module:421
+msgid "New Comment on [title] by [comment-author-name] titled [comment-title]"
+msgstr ""
+
+#: notifications_content/notifications_content.module:422
+msgid "Read more [comment-url"
+msgstr ""
+
+#: notifications_content/notifications_content.module:427
+msgid "Updates for [type-name]: [title]"
+msgstr ""
+
+#: notifications_content/notifications_content.module:467
+msgid "This post"
+msgstr ""
+
+#: notifications_content/notifications_content.module:473
+msgid "Posts of type %type"
+msgstr ""
+
+#: notifications_content/notifications_content.module:479
+msgid "Posts by %name"
+msgstr ""
+
+#: notifications_content/notifications_content.module:593
+msgid "You are not currently subscribed to any active threads"
+msgstr ""
+
+#: notifications_content/notifications_content.module:596
+msgid "You are currently subscribed to the following threads:"
+msgstr ""
+
+#: notifications_content/notifications_content.module:619
+msgid "There are no active content types."
+msgstr ""
+
+#: notifications_content/notifications_content.module:643
+msgid "There are no active author subscriptions."
+msgstr ""
+
+#: notifications_content/notifications_content.module:745
+#: notifications_ui/notifications_ui.module:203
+msgid "Your subscriptions have been updated."
+msgstr ""
+
+#: notifications_content/notifications_content.module:783
+msgid "The node teaser."
+msgstr ""
+
+#: notifications_content/notifications_content.module:784
+msgid "The node body."
+msgstr ""
+
+#: notifications_content/notifications_content.module:785
+msgid "The node view url for read more links."
+msgstr ""
+
+#: notifications_content/notifications_content.module:786
+msgid "Unfiltered node teaser. WARNING - raw user input."
+msgstr ""
+
+#: notifications_content/notifications_content.module:787
+msgid "Unfiltered node body. WARNING - raw user input."
+msgstr ""
+
+#: notifications_content/notifications_content.module:790
+msgid "The comment view url."
+msgstr ""
+
+#: notifications_content/notifications_content.module:791
+msgid "The comment reply url."
+msgstr ""
+
+#: notifications_content/notifications_content.module:67
+msgid "subscribe to content"
+msgstr ""
+
+#: notifications_content/notifications_content.module:67
+msgid "subscribe to content type"
+msgstr ""
+
+#: notifications_content/notifications_content.module:67
+msgid "subscribe to author"
+msgstr ""
+
+#: notifications_content/notifications_content.module:67
+msgid "skip notifications"
+msgstr ""
+
+#: notifications_content/notifications_content.module:16
+msgid "Content Subscriptions"
+msgstr ""
+
+#: notifications_content/notifications_content.module:0
+msgid "notifications_content"
+msgstr ""
+
+#: notifications_content/notifications_content.install:17
+msgid "Content notifications uninstallation script complete."
+msgstr ""
+
+#: notifications_content/notifications_content.info:0
+msgid "Content Notifications"
+msgstr ""
+
+#: notifications_content/notifications_content.info:0
+msgid "Allows users to subscribe to content related events."
+msgstr ""
+
+#: notifications_feed/notifications_feed.module:41
+msgid "Feeds"
+msgstr ""
+
+#: notifications_feed/notifications_feed.module:68
+msgid "Feed: %name"
+msgstr ""
+
+#: notifications_feed/notifications_feed.module:75;288
+msgid "Feed"
+msgstr ""
+
+#: notifications_feed/notifications_feed.module:118
+msgid "To items in this feed"
+msgstr ""
+
+#: notifications_feed/notifications_feed.module:146
+msgid "Notifications for feed events"
+msgstr ""
+
+#: notifications_feed/notifications_feed.module:168
+msgid "Feed updated: [title]"
+msgstr ""
+
+#: notifications_feed/notifications_feed.module:170
+msgid "Some feed items have been updated:"
+msgstr ""
+
+#: notifications_feed/notifications_feed.module:172
+msgid "Read more [feed-url]"
+msgstr ""
+
+#: notifications_feed/notifications_feed.module:221
+msgid "The feed name"
+msgstr ""
+
+#: notifications_feed/notifications_feed.module:222
+msgid "The feed teaser."
+msgstr ""
+
+#: notifications_feed/notifications_feed.module:223
+msgid "The URL for the feed"
+msgstr ""
+
+#: notifications_feed/notifications_feed.module:224
+msgid "The list of refreshed (new and updated) items."
+msgstr ""
+
+#: notifications_feed/notifications_feed.module:225
+msgid "The list of updated feed items."
+msgstr ""
+
+#: notifications_feed/notifications_feed.module:226
+msgid "The list of new feed items"
+msgstr ""
+
+#: notifications_feed/notifications_feed.module:247
+msgid "New: !title"
+msgstr ""
+
+#: notifications_feed/notifications_feed.module:250
+msgid "Updated: !title"
+msgstr ""
+
+#: notifications_feed/notifications_feed.module:252
+msgid "no updated items"
+msgstr ""
+
+#: notifications_feed/notifications_feed.module:253
+msgid "no new items"
+msgstr ""
+
+#: notifications_feed/notifications_feed.module:284
+msgid "There are no active feed subscriptions."
+msgstr ""
+
+#: notifications_feed/notifications_feed.module:55
+msgid "subscribe to feeds"
+msgstr ""
+
+#: notifications_feed/notifications_feed.module:0
+msgid "notifications_feed"
+msgstr ""
+
+#: notifications_feed/notifications_feed.info:0
+msgid "FeedAPI Subscriptions"
+msgstr ""
+
+#: notifications_feed/notifications_feed.info:0
+msgid ""
+"Allows users to subscribe to feeds and be notified when they are updated"
+msgstr ""
+
+#: notifications_lite/notifications_lite.module:158
+msgid "Simple notifications"
+msgstr ""
+
+#: notifications_lite/notifications_lite.module:159
+msgid "The subject and main body will be provided by the event itself"
+msgstr ""
+
+#: notifications_lite/notifications_lite.module:180
+msgid "Greetings, [user]."
+msgstr ""
+
+#: notifications_lite/notifications_lite.module:0
+msgid "notifications_lite"
+msgstr ""
+
+#: notifications_lite/notifications_lite.info:0
+msgid "Notifications Lite"
+msgstr ""
+
+#: notifications_lite/notifications_lite.info:0
+msgid ""
+"Extra Simple Notifications API. Enable only when required by other modules."
+msgstr ""
+
+#: notifications_tags/notifications_tags.module:41
+msgid "Term: %name"
+msgstr ""
+
+#: notifications_tags/notifications_tags.module:85
+msgid "Tag subscriptions"
+msgstr ""
+
+#: notifications_tags/notifications_tags.module:91
+msgid "Allowed vocabularies"
+msgstr ""
+
+#: notifications_tags/notifications_tags.module:94
+msgid "Select vocabularies to which subscriptions should be <em>allowed</em>."
+msgstr ""
+
+#: notifications_tags/notifications_tags.module:142
+msgid "Term"
+msgstr ""
+
+#: notifications_tags/notifications_tags.module:28
+msgid "subscribe to taxonomy terms"
+msgstr ""
+
+#: notifications_tags/notifications_tags.module:0
+msgid "notifications_tags"
+msgstr ""
+
+#: notifications_tags/notifications_tags.info:0
+msgid "Taxonomy Notifications"
+msgstr ""
+
+#: notifications_tags/notifications_tags.info:0
+msgid "Allows users to subscribe to taxonomy terms."
+msgstr ""
+
+#: notifications_ui/notifications_ui.module:14
+msgid ""
+"These are UI settings only. They will be combined with other settings and "
+"permissions to determine which subscription options will be finally "
+"available for each page."
+msgstr ""
+
+#: notifications_ui/notifications_ui.module:16
+msgid ""
+"To determine how the subscription controls will be rendered for each content "
+"type (links, form, block) visit the !content-type-settings"
+msgstr ""
+
+#: notifications_ui/notifications_ui.module:16
+msgid "content types settings page"
+msgstr ""
+
+#: notifications_ui/notifications_ui.module:71
+msgid "Enabled subscription types"
+msgstr ""
+
+#: notifications_ui/notifications_ui.module:74
+msgid "Check the subscription types the UI module should show."
+msgstr ""
+
+#: notifications_ui/notifications_ui.module:78
+msgid "Show subscribe link with teaser"
+msgstr ""
+
+#: notifications_ui/notifications_ui.module:80
+msgid ""
+"Uncheck to show links only in full node view. This will work only for "
+"content types that have subscription links enabled."
+msgstr ""
+
+#: notifications_ui/notifications_ui.module:96
+msgid "Subscriptions UI"
+msgstr ""
+
+#: notifications_ui/notifications_ui.module:99
+msgid "Enable different display options for subscriptions to this content type"
+msgstr ""
+
+#: notifications_ui/notifications_ui.module:160
+msgid "Subscriptions (%number)"
+msgstr ""
+
+#: notifications_ui/notifications_ui.module:220
+msgid "Unsubscribe from: !name"
+msgstr ""
+
+#: notifications_ui/notifications_ui.module:225
+msgid "Subscribe to: !name"
+msgstr ""
+
+#: notifications_ui/notifications_ui.module:359
+msgid "Display in node form"
+msgstr ""
+
+#: notifications_ui/notifications_ui.module:360
+msgid "Display in comment form"
+msgstr ""
+
+#: notifications_ui/notifications_ui.module:361
+msgid "Display as node links"
+msgstr ""
+
+#: notifications_ui/notifications_ui.module:362
+msgid "Display in block"
+msgstr ""
+
+#: notifications_ui/notifications_ui.module:27
+msgid "User Interface"
+msgstr ""
+
+#: notifications_ui/notifications_ui.module:28
+msgid "Enables site settings for user subscriptions."
+msgstr ""
+
+#: notifications_ui/notifications_ui.module:0
+msgid "notifications_ui"
+msgstr ""
+
+#: notifications_ui/notifications_ui.info:0
+msgid "Notifications UI"
+msgstr ""
+
+#: notifications_ui/notifications_ui.info:0
+msgid "Provides an UI to notifications"
+msgstr ""

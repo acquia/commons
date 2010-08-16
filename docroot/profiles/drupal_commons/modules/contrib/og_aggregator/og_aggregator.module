@@ -1,0 +1,916 @@
+<?php
+/**
+ * hook_help implementation
+ *
+ */
+function og_aggregator_help($path, $arg) {
+  switch ($path) {
+    case 'admin/modules#description':
+      return t('Organic group aggregator.');
+      break;
+    case 'admin/modules#name':
+      return 'og_aggregator';
+      break;
+    case 'admin/help#modulename':
+      return t("
+        The Organic group Aggregator module allows Organic group to maintain an individual list of subscribed feeds.
+      ");
+      break;
+    default: return null;
+  }
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function og_aggregator_menu() {
+  $items = array();
+
+  $items['admin/og/aggregator'] = array(
+    'title' => 'OG Aggregator',
+    'description' => 'OG Aggregator',
+    'page callback' => 'og_aggregator_admin_overview',
+    'access arguments' => array('administer og_aggregator'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['admin/og/aggregator/remove/%'] = array(
+    'title' => 'Remove items',
+    'description' => 'OG Aggregator',
+    'page callback' => 'og_aggregator_admin_remove_feed',
+    'page arguments' => array(4),
+    'access arguments' => array('administer og_aggregator'),
+    'type' => MENU_CALLBACK);
+  $items['admin/og/aggregator/update/%'] = array(
+    'title' => 'Update items',
+    'description' => 'OG Aggregator',
+    'page callback' => 'og_aggregator_admin_refresh_feed',
+    'page arguments' => array(4),
+    'access arguments' => array('administer og_aggregator'),
+    'type' => MENU_CALLBACK);
+  $items['admin/og/aggregator/list'] = array(
+    'title' => 'List',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -10,
+    'access arguments' => array('administer og_aggregator'),
+  );
+  $items['admin/og/aggregator/edit/feed/%'] = array(
+    'title' => 'Edit feed',
+    'description' => 'OG Aggregator',
+    'page callback' => 'og_aggregator_edit_feed',
+    'page arguments' => array(5, NULL),
+    'access arguments' => array('administer og_aggregator'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['og_aggregator/sources'] = array(
+    'title' => 'Sources',
+    'description' => 'OG Aggregator',
+    'page callback' => 'og_aggregator_page_sources',
+    'page arguments' => array(2),
+    'type' => MENU_CALLBACK,
+    'access arguments' => array('access og_aggregator'),
+   );
+
+  $items['node/%node/aggregator'] = array(
+    'title' => 'Group RSS feed',
+    'page callback' => 'og_aggregator_page',
+    'page arguments' => array(1),
+
+    'type' => MENU_LOCAL_TASK,
+    'access callback' => 'og_aggregator_access',
+    'access arguments' => array('group', 1),
+    'weight' => 1,
+  );
+
+  $items['node/%node/aggregator/feed'] = array(
+    'title' => 'Feed',
+    'page callback' => 'og_aggregator_page',
+    'page arguments' => array(1),
+    'access callback' => 'og_aggregator_access',
+    'access arguments' => array('group', 1),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => 0,
+  );
+
+  $items['node/%node/aggregator/overview'] = array(
+    'title' => 'Feed list',
+    'page callback' => 'og_aggregator_overview',
+    'page arguments' => array(1),
+    'access callback' => 'og_aggregator_access',
+    'access arguments' => array('group update', 1),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 1,
+  );
+
+  $items['node/%node/aggregator/add'] = array(
+    'title' => 'Add RSS feed',
+    'page callback' => 'og_aggregator_add_feed',
+    'page arguments' => array(null, 1),
+    'access callback' => 'og_aggregator_access',
+    'access arguments' => array('group update', 1),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 2,
+  );
+
+  $items['node/%node/aggregator/remove'] = array(
+    'title' => 'Remove items',
+    'page callback' => 'og_aggregator_remove_feed',
+    'access callback' => 'og_aggregator_access',
+    'access arguments' => array('group update', 1),
+    'type' => MENU_CALLBACK,
+  );
+  $items['node/%node/aggregator/update'] = array(
+    'title' => 'Update items',
+    'page callback' => 'og_aggregator_refresh_feed',
+    'access callback' => 'og_aggregator_access',
+    'access arguments' => array('group update', 1),
+    'type' => MENU_CALLBACK,
+  );
+  $items['node/%node/aggregator/edit'] = array(
+    'title' => 'Edit feed',
+    'page callback' => 'og_aggregator_edit_feed',
+    'page arguments' => array(4, 1),
+    'access callback' => 'og_aggregator_access',
+    'access arguments' => array('group update', 1),
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
+ * Implementation of hook_perm().
+ */
+function og_aggregator_perm() {
+  return array('access og_aggregator', 'administer og_aggregator', 'view all og_aggregator sources');
+}
+
+function og_aggregator_access($type, $object) {
+  switch ($type) {
+    case 'group update':
+      if ((node_access('update', $object)) && (og_is_group_type($object->type))) {
+        return TRUE;
+      }
+      break;
+    case 'group':
+      if((node_access('view', $object)) && og_is_group_type($object->type)) {
+        return TRUE;
+      }
+  }
+  return FALSE;
+
+}
+/**
+ * Implementation of hook_block().
+ *
+ * Generates blocks for the latest news items in each category and feed.
+ */
+function og_aggregator_block($op, $delta = 0, $edit = array()) {
+/* TODO
+   Please manually fix the parameters on the l() or url() function on the next line.
+   Typically, this was not changed because of a function call inside an array call like
+   array('title' => t('View user profile.')).*/
+  if (user_access('access og_aggregator')) {
+    if ($op == 'list') {
+      $blocks[0]['info'] = t('Group aggregator');
+     return $blocks;
+    }
+    else if ($op == 'configure') {
+      $form['og_aggregator_block_items_number'] = array('#type' => 'select', '#title' => t('Number of news items in block'), '#default_value' => variable_get('og_aggregator_block_items_number',10), '#options' => drupal_map_assoc(array(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20)));
+      return $form;
+    }
+    else if ($op == 'save') {
+      variable_set('og_aggregator_block_items_number', $edit['og_aggregator_block_items_number']);
+    }
+    else if ($op == 'view') {
+      if ($groupnode = og_get_group_context()) {
+        $block['subject'] = t('Aggregator');
+        $result = db_query_range("SELECT i.* FROM {og_aggregator_item} i JOIN {og_aggregator_feed} f ON i.fid = f.fid WHERE f.nid = %d ORDER BY i.timestamp desc", $groupnode->nid, 0, variable_get('og_aggregator_block_items_number',10));
+        $block['content'] = '<div class="more-link">'. 
+l(t('more'), "node/$groupnode->nid/aggregator/feed", array('title' => t('View this feed\'s recent news.'))) .'</div>';
+      
+        $items = array();
+        while ($item = db_fetch_object($result)) {
+          $items[] = theme('og_aggregator_block_item', $item);
+        }
+        $block['content'] = theme('item_list', $items) . $block['content'];
+     
+        return $block;
+      }
+    }
+  }
+}
+
+function og_aggregator_edit_feed($fid,$og_id) {
+  //return og_aggregator_form_feed($form_state, og_aggregator_get_feed($fid),$og_id);
+  return drupal_get_form('og_aggregator_form_feed', $edit = og_aggregator_get_feed($fid), $og_id);
+}
+
+function og_aggregator_get_feed($fid) {
+  return db_fetch_array(db_query('SELECT * FROM {og_aggregator_feed} WHERE fid = %d', $fid));
+}
+
+/**
+ * add a new feed to ogranic group
+ */
+function og_aggregator_add_feed($edit = array(),$og) {
+  $output .= drupal_get_form('og_aggregator_form_feed', $edit = array(), $og);
+  return $output;
+}
+
+/**
+ * a form for og_aggregator_add_feed function above
+ */
+function og_aggregator_form_feed(&$form_state, $edit = array(),$og) {
+
+  $period = drupal_map_assoc(array(900, 1800, 3600, 7200, 10800, 21600, 32400, 43200, 64800, 86400, 172800, 259200, 604800, 1209600, 2419200), 'format_interval');
+
+  if ($edit['refresh'] == '') {
+    $edit['refresh'] = 3600;
+  }
+
+  $form['title'] = array('#type' => 'textfield',
+    '#title' => t('Title'),
+    '#default_value' => $edit['title'],
+    '#maxlength' => 64,
+    '#description' => t('The name of the feed; typically the name of the web site you syndicate content from.'),
+    '#required' => TRUE,
+  );
+  $form['url'] = array('#type' => 'textfield',
+    '#title' => t('URL'),
+    '#default_value' => $edit['url'],
+    '#maxlength' => 255,
+    '#description' => t('The fully-qualified URL of the feed.'),
+    '#required' => TRUE,
+  );
+  $form['refresh'] = array('#type' => 'select',
+    '#title' => t('Update interval'),
+    '#default_value' => $edit['refresh'],
+    '#options' => $period,
+    '#description' => t('The refresh interval indicating how often you want to update this feed. Requires crontab.'),
+  );
+  $form['keyword'] = array('#type' => 'textfield',
+    '#title' => t('Keyword'),
+    '#default_value' => $edit['keyword'],
+    '#maxlength' => 255,
+    '#description' => t('The keyword of the feed; Feed content filter.'),
+  );
+  $form['antikeyword'] = array('#type' => 'textfield',
+    '#title' => t('Anti Keyword'),
+    '#default_value' => $edit['antikeyword'],
+    '#maxlength' => 255,
+    '#description' => t('The anti keyword of the feed; Feed content filter.'),
+  );
+
+  // Handling of categories:
+  $options = array();
+  $values = array();
+  $form['submit'] = array('#type' => 'submit', '#value' =>t('Submit'));
+
+  if ($edit['fid']) {
+    $form['delete'] = array('#type' => 'submit', '#value' =>t('Delete'));
+    $form['fid'] = array('#type' => 'hidden', '#value' => $edit['fid']);
+  }
+  
+  if ($og){
+    $form['og_id'] = array('#type' => 'hidden', '#value' => $og->nid);
+  }
+
+  return $form;
+}
+
+/**
+ * Validate og_aggregator_form_feed submissions. 
+ */
+function og_aggregator_form_feed_validate($form, &$form_state) {
+  if ($_POST['op'] == t('Submit')) {
+    // Check for duplicate titles
+    if (isset($form_state['values']['fid'])) {
+      $result = db_query("SELECT title, url FROM {og_aggregator_feed} WHERE (nid = '%d' AND url='%s') AND fid != %d", $form_state['values']['og_id'], $form_state['values']['url'], $form_state['values']['fid']);
+    }
+    else {
+      $result = db_query("SELECT title, url FROM {og_aggregator_feed} WHERE nid = '%d' AND url='%s'", $form_state['values']['og_id'], $form_state['values']['url']);
+    }
+    while ($feed = db_fetch_object($result)) {
+      if (strcasecmp($feed->title, $form_state['values']['title']) == 0) {
+        form_set_error('title', t('A feed named %feed already exists. Please enter a unique url.', array('%feed' => $form_state['values']['url'])));
+      }
+    }
+  }
+}
+
+/**
+ * Process og_aggregator_add_feed_form submissions.
+ */
+function og_aggregator_form_feed_submit($form, &$form_state) {
+  if ($_POST['op'] == t('Delete')) {
+    $title = $form_state['values']['title'];
+    // Unset the title:
+    unset($form_state['values']['title']);
+  }
+  og_aggregator_save_feed($form_state['values']);
+  
+  if (isset($form_state['values']['fid'])) {
+    if (isset($form_state['values']['title'])) {
+      drupal_set_message(t('The feed %feed has been updated.', array('%feed' => $form_state['values']['title'])));
+      if (arg(0) == 'admin') {
+        $form_state['redirect'] = 'admin/og/aggregator/';
+      }
+      else {
+        $form_state['redirect'] = 'node/'.$form_state['values']['og_id'].'/aggregator';
+      }
+    }
+    else {
+      watchdog('og_aggregator', 'Feed %feed deleted.', array('%feed' => $title));
+      drupal_set_message(t('The feed %feed has been deleted.', array('%feed' => $title)));
+      if (arg(0) == 'admin') {
+        $form_state['redirect'] = 'admin/og/aggregator/';
+      }
+      else {
+        $form_state['redirect'] = 'node/'.$form_state['values']['og_id'].'/aggregator';
+      }
+    }
+  }
+  else {
+    watchdog('og_aggregator', 'Feed %feed added.', array('%feed' => $form_state['values']['title']), WATCHDOG_NOTICE, l(t('view'), 'admin/aggregator'));
+    drupal_set_message(t('The feed %feed has been added.', array('%feed' => $form_state['values']['title'])));
+  }
+  
+  menu_rebuild();
+}
+
+/**
+ * Add/edit/delete an aggregator feed.
+ */
+function og_aggregator_save_feed($edit) {
+//print(var_dump($edit));
+
+  if ($edit['fid'] && $edit['title']) {
+    db_query("UPDATE {og_aggregator_feed} SET title = '%s', url = '%s', refresh = %d, keyword = '%s', antikeyword = '%s' WHERE fid = %d", $edit['title'], $edit['url'], $edit['refresh'], $edit['keyword'],$edit['antikeyword'],$edit['fid']);
+  }
+  else if ($edit['fid']) {
+    $result = db_query('SELECT iid FROM {og_aggregator_item} WHERE fid = %d', $edit['fid']);
+    db_query('DELETE FROM {og_aggregator_feed} WHERE fid = %d', $edit['fid']);
+    db_query('DELETE FROM {og_aggregator_item} WHERE fid = %d', $edit['fid']);
+  }
+  else if ($edit['title']) {
+    // A single unique id for bundles and feeds, to use in blocks.
+    db_query("INSERT INTO {og_aggregator_feed} (fid, title, url, refresh, block, nid, keyword, antikeyword) VALUES (NULL, '%s', '%s', %d, 5, %d, '%s', '%s')", $edit['title'], $edit['url'], $edit['refresh'], $edit['og_id'], $edit['keyword'], $edit['antikeyword']);
+  }
+}
+/**
+ * Menu callback; displays the aggregator overview page.
+ */
+function og_aggregator_overview($og) {
+  
+  og_set_group_context($og);
+  $query = 'SELECT f.*, COUNT(i.iid) AS items FROM {og_aggregator_feed} f LEFT JOIN {og_aggregator_item} i ON f.fid = i.fid ';
+
+  $query .= " WHERE f.nid = '".$og->nid."'";
+
+  $query .= ' GROUP BY f.fid, f.title, f.url, f.refresh, f.checked, f.link, f.description, f.etag, f.modified, f.image, f.block ORDER BY f.title';
+  
+  $result = db_query($query);
+
+  $output .= '<h3>'. t('Feed overview') .'</h3>';
+
+  $header = array(t('Title'), t('Items'), t('Last update'), t('Next update'), array('data' => t('Operations'), 'colspan' => '3'));
+  $rows = array();
+  while ($feed = db_fetch_object($result)) {
+    $rows[] = array($feed->title, format_plural($feed->items, '1 item', '@count items'), ($feed->checked ? t('%time ago', array('%time' => format_interval(time() - $feed->checked))) : t('never')), ($feed->checked ? t('%time left', array('%time' => format_interval($feed->checked + $feed->refresh - time()))) : t('never')), l(t('edit'), "node/$feed->nid/aggregator/edit/$feed->fid"), l(t('remove items'), "node/$feed->nid/aggregator/remove/$feed->fid"), l(t('update items'), "node/$feed->nid/aggregator/update/$feed->fid"));
+  }
+  $output .= theme('table', $header, $rows);
+
+  return $output;
+}
+
+/**
+ * Menu callback; displays the aggregator administration page.
+ */
+function og_aggregator_admin_overview() {
+  $query = 'SELECT f.*, COUNT(i.iid) AS items, n.title AS og_title FROM {og_aggregator_feed} f LEFT JOIN {og_aggregator_item} i ON f.fid = i.fid LEFT JOIN {node} n ON  f.nid=n.nid';
+
+  $query .= ' GROUP BY f.fid, f.title, f.url, f.refresh, f.checked, f.link, f.description, f.etag, f.modified, f.image, f.block ORDER BY f.title';
+  
+  $result = db_query($query);
+
+  $output .= '<h3>'. t('Feed overview') .'</h3>';
+
+  $header = array(t('Group'),t('Title'), t('Items'), t('Last update'), t('Next update'), array('data' => t('Operations'), 'colspan' => '3'));
+  $rows = array();
+  while ($feed = db_fetch_object($result)) {
+    $rows[] = array(l($feed->og_title, "node/$feed->nid"),$feed->title, format_plural($feed->items, '1 item', '@count items'), ($feed->checked ? t('%time ago', array('%time' => format_interval(time() - $feed->checked))) : t('never')), ($feed->checked ? t('%time left', array('%time' => format_interval($feed->checked + $feed->refresh - time()))) : t('never')), l(t('edit'), "admin/og/aggregator/edit/feed/$feed->fid"), l(t('remove items'), "admin/og/aggregator/remove/$feed->fid"), l(t('update items'), "admin/og/aggregator/update/$feed->fid"));
+  }
+  $output .= theme('table', $header, $rows);
+
+  return $output;
+}
+
+/**
+ * Menu callback; removes all items from a feed, then redirects to the overview page.
+ */
+function og_aggregator_admin_remove_feed($feed) {
+  og_aggregator_remove(og_aggregator_get_feed($feed));
+  drupal_goto('admin/og/aggregator');
+}
+
+function og_aggregator_remove_feed($feed) {
+  $feed = og_aggregator_get_feed($feed);
+  og_aggregator_remove($feed);
+  drupal_goto('node/'.$feed['nid'].'/aggregator/feed');
+}
+
+function og_aggregator_remove($feed) {
+  db_query('DELETE FROM {og_aggregator_item} WHERE fid = %d', $feed['fid']);
+  db_query("UPDATE {og_aggregator_feed} SET checked = 0, etag = '', modified = 0 WHERE fid = %d", $feed['fid']);
+  drupal_set_message(t('The news items from %site have been removed.', array('%site' => $feed['title'])));
+}
+
+/**
+ * Menu callback; refreshes a feed, then redirects to the overview page.
+ */
+function og_aggregator_admin_refresh_feed($feed) {
+  og_aggregator_refresh(og_aggregator_get_feed($feed));
+  drupal_goto('admin/og/aggregator');
+}
+
+function og_aggregator_refresh_feed($feed) {
+  $feed = og_aggregator_get_feed($feed);
+  og_aggregator_refresh($feed);
+  drupal_goto('node/'.$feed['nid'].'/aggregator/feed');
+}
+
+/**
+ * Checks a news feed for new items.
+ */
+function og_aggregator_refresh($feed) {
+  global $channel, $image;
+
+  // Generate conditional GET headers.
+  $headers = array();
+  if ($feed['etag']) {
+    $headers['If-None-Match'] = $feed['etag'];
+  }
+  if ($feed['modified']) {
+    $headers['If-Modified-Since'] = gmdate('D, d M Y H:i:s', $feed['modified']) .' GMT';
+  }
+
+  // Request feed.
+  $result = drupal_http_request($feed['url'], $headers);
+
+  // Process HTTP response code.
+  switch ($result->code) {
+    case 304:
+      db_query('UPDATE {og_aggregator_feed} SET checked = %d WHERE fid = %d', time(), $feed['fid']);
+      drupal_set_message(t('There is no new syndicated content from %site.', array('%site' => $feed['title'])));
+      break;
+    case 301:
+      $feed['url'] = $result->redirect_url;
+      watchdog('og_aggregator', 'Updated URL for feed %title to %url.', array('%title' => $feed['title'], '%url' => $feed['url']));
+
+    case 200:
+    case 302:
+    case 307:
+      // Filter the input data:
+     if (og_aggregator_parse_feed($result->data, $feed)) {
+
+        if ($result->headers['Last-Modified']) {
+          $modified = strtotime($result->headers['Last-Modified']);
+        }
+
+        /*
+        ** Prepare the channel data:
+        */
+
+        foreach ($channel as $key => $value) {
+          $channel[$key] = trim($value);
+        }
+
+        /*
+        ** Prepare the image data (if any):
+        */
+
+        foreach ($image as $key => $value) {
+          $image[$key] = trim($value);
+        }
+
+        if ($image['LINK'] && $image['URL'] && $image['TITLE']) {
+          // Note, we should really use theme_image() here but that only works with local images it won't work with images fetched with a URL unless PHP version > 5
+          $image = '<a href="'. check_url($image['LINK']) .'" class="feed-image"><img src="'. check_url($image['URL']) .'" alt="'. check_plain($image['TITLE']) .'" /></a>';
+        }
+        else {
+          $image = NULL;
+        }
+
+        /*
+        ** Update the feed data:
+        */
+
+        db_query("UPDATE {og_aggregator_feed} SET url = '%s', checked = %d, link = '%s', description = '%s', image = '%s', etag = '%s', modified = %d WHERE fid = %d", $feed['url'], time(), $channel['LINK'], $channel['DESCRIPTION'], $image, $result->headers['ETag'], $modified, $feed['fid']);
+
+        /*
+        ** Clear the cache:
+        */
+
+        cache_clear_all();
+
+        watchdog('og_aggregator', 'There is new syndicated content from %site.', array('%site' => $feed['title']));
+        drupal_set_message(t('There is new syndicated content from %site.', array('%site' => $feed['title'])));
+      }
+      break;
+    default:
+      watchdog('og_aggregator', 'The RSS-feed from %site seems to be broken, due to "%error".', array('%site' => $feed['title'], '%error' => $result->code .' '. $result->error), WATCHDOG_WARNING);
+      drupal_set_message(t('The RSS-feed from %site seems to be broken, because of error "%error".', array('%site' => $feed['title'], '%error' => $result->code .' '. $result->error)));
+  }
+}
+
+function og_aggregator_save_item($edit) {
+  if ($edit['iid'] && $edit['title']) {
+    db_query("UPDATE {og_aggregator_item} SET title = '%s', link = '%s', author = '%s', description = '%s' WHERE iid = %d", $edit['title'], $edit['link'], $edit['author'], $edit['description'], $edit['iid']);
+  }
+  else if ($edit['iid']) {
+    db_query('DELETE FROM {og_aggregator_item} WHERE iid = %d', $edit['iid']);
+  }
+  else if ($edit['title'] && $edit['link']) {
+    db_query("INSERT INTO {og_aggregator_item} (iid, fid, title, link, author, description, timestamp) VALUES (NULL, %d, '%s', '%s', '%s', '%s', %d)", $edit['fid'], $edit['title'], $edit['link'], $edit['author'], $edit['description'], $edit['timestamp']);
+  }
+}
+
+function og_aggregator_parse_feed(&$data, $feed) {
+  global $items, $image, $channel;
+
+  // Unset the global variables before we use them:
+  unset($GLOBALS['element'], $GLOBALS['item'], $GLOBALS['tag']);
+  $items = array();
+  $image = array();
+  $channel = array();
+
+  // parse the data:
+  $xml_parser = drupal_xml_parser_create($data);
+  xml_set_element_handler($xml_parser, 'aggregator_element_start', 'aggregator_element_end');
+  xml_set_character_data_handler($xml_parser, 'aggregator_element_data');
+
+  if (!xml_parse($xml_parser, $data, 1)) {
+    watchdog('og_aggregator', 'The RSS-feed from %site seems to be broken, due to an error "%error" on line %line.', array('%site' => $feed['title'], '%error' => xml_error_string(xml_get_error_code($xml_parser)), '%line' => xml_get_current_line_number($xml_parser)), WATCHDOG_WARNING);
+    drupal_set_message(t('The RSS-feed from %site seems to be broken, because of error "%error" on line %line.', array('%site' => $feed['title'], '%error' => xml_error_string(xml_get_error_code($xml_parser)), '%line' => xml_get_current_line_number($xml_parser))), 'error');
+    return 0;
+  }
+  xml_parser_free($xml_parser);
+
+  /*
+  ** We reverse the array such that we store the first item last,
+  ** and the last item first.  In the database, the newest item
+  ** should be at the top.
+  */
+
+  $items = array_reverse($items);
+
+  foreach ($items as $item) {
+    unset($title, $link, $author, $description);
+
+    // Prepare the item:
+    foreach ($item as $key => $value) {
+      $item[$key] = trim($value);
+    }
+
+    /*
+    ** Resolve the item's title.  If no title is found, we use
+    ** up to 40 characters of the description ending at a word
+    ** boundary but not splitting potential entities.
+    */
+
+    if ($item['TITLE']) {
+      $title = $item['TITLE'];
+    }
+    else {
+      $title = preg_replace('/^(.*)[^\w;&].*?$/', "\\1", truncate_utf8($item['DESCRIPTION'], 40));
+    }
+
+    /*
+    ** Resolve the items link.
+    */
+
+    if ($item['LINK']) {
+      $link = $item['LINK'];
+    }
+    elseif ($item['GUID'] && (strncmp($item['GUID'], 'http://', 7) == 0)) {
+      $link = $item['GUID'];
+    }
+    else {
+      $link = $feed['link'];
+    }
+
+    /**
+     * Atom feeds have a CONTENT and/or SUMMARY tag instead of a DESCRIPTION tag
+     */
+    if ($item['CONTENT:ENCODED']) {
+      $item['DESCRIPTION'] = $item['CONTENT:ENCODED'];
+    }
+    else if ($item['SUMMARY']) {
+      $item['DESCRIPTION'] = $item['SUMMARY'];
+    }
+
+    /*
+    ** Try to resolve and parse the item's publication date.  If no
+    ** date is found, we use the current date instead.
+    */
+
+    if ($item['PUBDATE']) $date = $item['PUBDATE'];                        // RSS 2.0
+    else if ($item['DC:DATE']) $date = $item['DC:DATE'];                   // Dublin core
+    else if ($item['DCTERMS:ISSUED']) $date = $item['DCTERMS:ISSUED'];     // Dublin core
+    else if ($item['DCTERMS:CREATED']) $date = $item['DCTERMS:CREATED'];   // Dublin core
+    else if ($item['DCTERMS:MODIFIED']) $date = $item['DCTERMS:MODIFIED']; // Dublin core
+    else if ($item['ISSUED']) $date = $item['ISSUED'];                     // Atom XML
+    else if ($item['CREATED']) $date = $item['CREATED'];                   // Atom XML
+    else if ($item['MODIFIED']) $date = $item['MODIFIED'];                 // Atom XML
+    else $date = 'now';
+
+    $timestamp = strtotime($date); // As of PHP 5.1.0, strtotime returns FALSE on failure instead of -1.
+    if ($timestamp <= 0) {
+      $timestamp = aggregator_parse_w3cdtf($date); // Returns FALSE on failure
+      if (!$timestamp) {
+        $timestamp = time(); // better than nothing
+      }
+    }
+
+    /*
+    ** Save this item.  Try to avoid duplicate entries as much as
+    ** possible.  If we find a duplicate entry, we resolve it and
+    ** pass along it's ID such that we can update it if needed.
+    */
+
+    if ($link && $link != $feed['link'] && $link != $feed['url']) {
+      $entry = db_fetch_object(db_query("SELECT iid FROM {og_aggregator_item} WHERE fid = %d AND link = '%s'", $feed['fid'], $link));
+    }
+    else {
+      $entry = db_fetch_object(db_query("SELECT iid FROM {og_aggregator_item} WHERE fid = %d AND title = '%s'", $feed['fid'], $title));
+    }
+    
+    /* hacked by lee
+    ** using for filtering item
+    */
+    if(!empty($feed['keyword']) || !empty($feed['antikeyword'])){
+      $save_flag=false;
+      $filter = split(" ",$feed['keyword']);
+      $antifilter = split(" ",$feed['antikeyword']);
+      if(!empty($feed['keyword'])){
+        foreach($filter as $keyword){
+          if(stristr($title,$keyword) || stristr($item['DESCRIPTION'],$keyword)){
+            $save_flag = true;
+            break;
+          }
+        }
+      }
+      if(!empty($feed['antikeyword'])){
+        foreach($antifilter as $keyword){
+          if(stristr($title,$keyword) || stristr($item['DESCRIPTION'],$keyword)){
+            $save_flag = false;
+            break;
+          }
+        }
+      }
+      if($save_flag){
+        og_aggregator_save_item(array('iid' => $entry->iid, 'fid' => $feed['fid'], 'timestamp' => $timestamp, 'title' => $title, 'link' => $link, 'author' => $item['AUTHOR'], 'description' => $item['DESCRIPTION']));
+      }
+    }
+    else{
+    og_aggregator_save_item(array('iid' => $entry->iid, 'fid' => $feed['fid'], 'timestamp' => $timestamp, 'title' => $title, 'link' => $link, 'author' => $item['AUTHOR'], 'description' => $item['DESCRIPTION']));
+    }
+  }
+
+  /*
+  ** Remove all items that are older than flush item timer:
+  */
+
+  $age = time() - variable_get('og_aggregator_clear', 9676800);
+  $result = db_query('SELECT iid FROM {og_aggregator_item} WHERE fid = %d AND timestamp < %d', $feed['fid'], $age);
+
+  if ($result) {
+    $items = array();
+    while ($item = db_fetch_object($result)) {
+      $items[] = $item->iid;
+    }
+    db_query('DELETE FROM {og_aggregator_item} WHERE fid = %d AND timestamp < %d', $feed['fid'], $age);
+  }
+
+  return 1;
+}
+
+function _og_aggregator_newsstream($og) {
+  $nodes_per_page = variable_get('default_nodes_main', 10);
+  $query_string = "SELECT f.*, i.* FROM {og_aggregator_feed} f
+  JOIN {og_aggregator_item} i ON i.fid = f.fid
+  WHERE f.nid = '".$og->nid."'
+  ORDER BY i.timestamp desc";
+  $query = pager_query($query_string, $nodes_per_page);
+
+  $out = '';
+  $num_rows = FALSE;
+  
+  while ($feed_item = db_fetch_object($query)) {
+     $out .= theme('og_aggregator_page_item', $feed_item);
+     $num_rows = TRUE;
+  }
+  if ($num_rows) {
+    $out .= theme('pager', NULL, $nodes_per_page);
+  }
+  else {
+    $out = t('There are no feeds from external sites for this group.');
+  }
+  return $out;
+}
+
+function og_aggregator_page($og = NULL, $option = 'newsstream') {
+  global $user;
+  switch ($option) {
+    case '':
+      // x most recent items in each subscribed feed - group by feed
+      break;
+    default:
+      // items from subscribed feeds in date order - no grouping
+      return _og_aggregator_newsstream($og ? $og : NULL);
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_cron().
+ *
+ * Checks news feeds for updates once their refresh interval has elapsed.
+ */
+function og_aggregator_cron() {
+  $result = db_query('SELECT * FROM {og_aggregator_feed} WHERE checked + refresh < %d', time());
+  while ($feed = db_fetch_array($result)) {
+    og_aggregator_refresh($feed);
+  }
+}
+
+function _og_aggregator_get_fids($nid = NULL) {
+
+  if (is_numeric($nid)) {
+    $return = array();
+    $result = db_query("SELECT f.* FROM {og_aggregator_feed} f WHERE f.nid = '%s'", $nid);
+    while($row = db_fetch_array($result)){
+      $return[$row['fid']] = $row['fid'];
+    }
+
+    return $return;
+  }
+}
+
+/**
+ * Implementation of hook_nodeapi().
+ */
+
+function og_aggregator_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
+  switch ($op) {
+    case 'delete':
+      $fids = _og_aggregator_get_fids($node->nid);
+      foreach ($fids AS $fid) {
+        db_query("DELETE FROM {og_aggregator_item} WHERE fid = '%s'", $fid);
+      }
+      db_query("DELETE FROM {og_aggregator_feed} WHERE nid = '%s'", $node->nid);
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_theme().
+ */
+function og_aggregator_theme() {
+  return array(
+    'og_aggregator_block_item' => array(
+      'arguments' => array('item' => NULL, 'feed' => '0'),
+    ),
+    'og_aggregator_page_item' => array(
+      'arguments' => array('item' => NULL),
+    ),
+    'og_aggregator_feed' => array(
+      'arguments' => array('feed' => NULL),
+    ),
+  );
+}
+
+/**
+ * Menu callback; displays all the feeds used by the aggregator.
+ */
+function og_aggregator_page_sources($fid=NULL) {
+  if ($fid){
+    $feed = db_fetch_object(db_query('SELECT * FROM {og_aggregator_feed} WHERE fid = %d', $fid));
+  
+    $node = node_load($feed->nid);
+    if(user_access('view all og_aggregator sources') || node_access('view', $node)){
+      $info = theme('og_aggregator_feed', $feed);
+
+    #module_load_include('inc', 'aggregator', 'aggregator.pages');
+    # $result = db_query("SELECT * FROM {og_aggregator_item} WHERE fid = '%d' ORDER BY timestamp DESC, iid DESC", $feed->fid);
+      return $info;
+    }
+    else{
+      drupal_access_denied();
+    }
+    #return _aggregator_page_list('SELECT * FROM {og_aggregator_item} WHERE fid = '. $feed->fid .' ORDER BY timestamp DESC, iid DESC', arg(3), $info);
+  }
+  else{
+    if(user_access('view all og_aggregator sources')){
+      $nodes_per_page = variable_get('default_nodes_main', 10);
+      $query_string = 'SELECT f.*, COUNT(i.iid) AS items FROM {og_aggregator_feed} f LEFT JOIN {og_aggregator_item} i ON f.fid = i.fid GROUP BY f.fid, f.title, f.url, f.refresh, f.checked, f.link, f.description, f.etag, f.modified, f.image, f.block ORDER BY f.title';  
+      $result = pager_query($query_string, $nodes_per_page, null, 'SELECT COUNT(*) FROM {og_aggregator_feed}');
+      $output .= '<h3>'. t('Feed overview') .'</h3>';
+      $header = array(t('Title'), t('Items'), t('Last update'), t('Next update'));
+      $rows = array();
+      while ($feed = db_fetch_object($result)) {
+        $rows[] = array(l($feed->title, 'og_aggregator/sources/'.$feed->fid), format_plural($feed->items, '1 item', '@count items'), ($feed->checked ? t('%time ago', array('%time' => format_interval(time() - $feed->checked))) : t('never')), ($feed->checked ? t('%time left', array('%time' => format_interval($feed->checked + $feed->refresh - time()))) : t('never')));
+        }
+      $output .= theme('table', $header, $rows);
+      $pager_string = theme('pager', NULL, $nodes_per_page);
+      return $output.$pager_string;
+    }
+    else{
+      drupal_access_denied();
+    }
+  }
+}
+
+
+/**
+ * Format an individual feed item for display in the block.
+ *
+ * @ingroup themeable
+ */
+function theme_og_aggregator_block_item($item, $feed = 0) {
+  // Display the external link to the item.
+  $output .= '<a href="'. check_url($item->link) .'">'. check_plain($item->title) ."</a>\n";
+
+  return $output;
+}
+
+/**
+ * Format an individual feed item for display on the aggregator page.
+ *
+ * @ingroup themeable
+ */
+function theme_og_aggregator_page_item($item) {
+  $source = '';
+  if ($item->fid) {
+    $result = db_query('SELECT * FROM {og_aggregator_feed} WHERE fid = %d', $item->fid);
+    while ($feed = db_fetch_object($result)) {
+    $source = l($feed->title, "og_aggregator/sources/$feed->fid", array('attributes' => array('class' => 'feed-item-source'))) . ' -';
+    }
+  }
+
+  if (date('Ymd', $item->timestamp) == date('Ymd')) {
+    $source_date = t('%ago ago', array('%ago' => format_interval(time() - $item->timestamp)));
+  }
+  else {
+    $source_date = format_date($item->timestamp, 'custom', variable_get('date_format_medium', 'D, Y-m-d H:i'));
+  }
+
+  $output .= "<div class=\"feed-item\">\n";
+  $output .= '<h3 class="feed-item-title"><a href="'. check_url($item->link) .'">'. check_plain($item->title) ."</a></h3>\n";
+  $output .= "<div class=\"feed-item-meta\">$source <span class=\"feed-item-date\">$source_date</span></div>\n";
+
+  if ($item->description) {
+    $output .= '<div class="feed-item-body">'. aggregator_filter_xss($item->description) ."</div>\n";
+  }
+
+  $result = db_query('SELECT c.title, c.cid FROM {aggregator_category_item} ci LEFT JOIN {aggregator_category} c ON ci.cid = c.cid WHERE ci.iid = %d ORDER BY c.title', $item->iid);
+  $categories = array();
+  while ($category = db_fetch_object($result)) {
+    $categories[] = l($category->title, 'aggregator/categories/'. $category->cid);
+  }
+  if ($categories) {
+    $output .= '<div class="feed-item-categories">'. t('Categories') .': '. implode(', ', $categories) ."</div>\n";
+  }
+
+  $output .= "</div>\n";
+
+  return $output;
+}
+/**
+ * Format a news feed.
+ *
+ * @ingroup themeable
+ */
+function theme_og_aggregator_feed($feed) {
+  if($feed->nid){
+    $og = db_fetch_object(db_query('SELECT * FROM {node} WHERE nid = %d', $feed->nid));
+    $output  = '<div class="feed-source">';
+    $output .= '<h3>'.$feed->title.'</h3>'.theme('feed_icon', $feed->url, $feed->title) ."\n";
+    $output .= $feed->image;
+    $output .= '<div class="feed-description">'. aggregator_filter_xss($feed->description) ."</div>\n";
+    $output .= '<div class="feed-url"><em>'. t('URL:') .'</em> '. l($feed->link, $feed->link, array('absolute' => TRUE)) ."</div>\n";
+  
+    if ($feed->checked) {
+      $updated = t('%time ago', array('%time' => format_interval(time() - $feed->checked)));
+    }
+    else {
+      $updated = t('never');
+    }
+  
+    $output .= '<div class="feed-updated"><em>'. t('Updated:') . "</em> $updated</div>";
+    $output .= '<div class="feed-description"><em>'. t('From Group:') .'</em> '. l($og->title,"node/$og->nid") ."</div>\n";
+    $output .= "</div>\n";
+  }
+  return $output;
+}
+

@@ -1,0 +1,42 @@
+<?php
+function og_aggregator_schema() {
+  $schema['og_aggregator_item'] = array(
+      'fields' => array(
+           'iid' => array('type' => 'serial', 'not null' => TRUE, 'disp-width' => '10'),
+           'fid' => array('type' => 'int', 'not null' => TRUE, 'default' => 0, 'disp-width' => '10'),
+           'title' => array('type' => 'varchar', 'length' => '255', 'not null' => TRUE, 'default' => ''),
+           'link' => array('type' => 'varchar', 'length' => '255', 'not null' => TRUE, 'default' => ''),
+           'author' => array('type' => 'varchar', 'length' => '255', 'not null' => TRUE, 'default' => ''),
+           'description' => array('type' => 'text', 'size' => 'big', 'not null' => TRUE),
+           'timestamp' => array('type' => 'int', 'not null' => FALSE, 'disp-width' => '11')),
+      'primary key' => array('iid'),
+  );
+  $schema['og_aggregator_feed'] = array(
+      'fields' => array(
+           'fid' => array('type' => 'serial', 'not null' => TRUE, 'disp-width' => '10'),
+           'title' => array('type' => 'varchar', 'length' => '255', 'not null' => TRUE, 'default' => ''),
+           'url' => array('type' => 'varchar', 'length' => '255', 'not null' => TRUE, 'default' => ''),
+           'refresh' => array('type' => 'int', 'not null' => TRUE, 'default' => 0, 'disp-width' => '10'),
+           'checked' => array('type' => 'int', 'not null' => TRUE, 'default' => 0, 'disp-width' => '10'),
+           'link' => array('type' => 'varchar', 'length' => '255', 'not null' => TRUE, 'default' => ''),
+           'description' => array('type' => 'text', 'size' => 'big', 'not null' => FALSE),
+           'image' => array('type' => 'text', 'size' => 'big', 'not null' => FALSE),
+           'etag' => array('type' => 'varchar', 'length' => '255', 'not null' => TRUE, 'default' => ''),
+           'modified' => array('type' => 'int', 'not null' => TRUE, 'default' => 0, 'disp-width' => '10'),
+           'block' => array('type' => 'int', 'size' => 'tiny', 'not null' => TRUE, 'default' => 0, 'disp-width' => '2'),
+           'nid' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0, 'disp-width' => '10'),
+           'keyword' => array('type' => 'varchar', 'length' => '255', 'not null' => TRUE, 'default' => ''),
+           'antikeyword' => array('type' => 'varchar', 'length' => '255', 'not null' => TRUE, 'default' => '')),
+      'primary key' => array('fid'),
+      'unique keys' => array(
+           'duplicate' => array('url', 'nid')),
+  );
+
+  return $schema;
+}
+function og_aggregator_install() {
+  drupal_install_schema('og_aggregator');
+}
+function og_aggregator_uninstall() {
+  drupal_uninstall_schema('og_aggregator');
+}

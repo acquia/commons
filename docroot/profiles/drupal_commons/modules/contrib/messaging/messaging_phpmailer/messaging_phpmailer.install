@@ -1,0 +1,45 @@
+<?php
+// $Id: messaging_phpmailer.install,v 1.1.2.1.2.2.2.2 2009/11/11 18:07:24 jareyero Exp $
+/**
+ * Implementation of hook_install()
+ */
+function messaging_phpmailer_install() {
+  drupal_set_message('Messaging PHPMailer sucessfully installed!');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function messaging_phpmailer_uninstall() {
+  variable_del('messaging_phpmailer_smtp_server');
+}
+
+/**
+ * Implementation of hook_disable()
+ */
+function messaging_phpmailer_disable() {
+  messaging_method_disable('phpmailer');
+}
+
+/**
+ * Implementation of hook_requirements().
+ */
+function messaging_phpmailer_requirements($phase) {
+  $requirements = array();
+  // Ensure translations don't break at install time.
+  $t = get_t();
+
+  if ($phase == 'runtime') {
+    drupal_load('module', 'messaging_phpmailer');
+
+    if (!messaging_phpmailer_load_library()) {
+      $requirements['messaging_html_mail'] = array(
+        'title' => $t('Messaging PHPMailer'),
+        'value' => $t('PHP Mailer missing'),
+        'severity' => REQUIREMENT_ERROR,
+        'description' => $t('HTML Mail requires the <a href="http://phpmailer.codeworxtech.com/">PHP Mailer</a> class to properly send HTML Mail. Please download the 2.0 version and place the phpmailer folder in your messaging_phpmailer module directory. Rename the folder to "PHPMailer".'),
+      );
+    }
+  }
+  return $requirements;
+}

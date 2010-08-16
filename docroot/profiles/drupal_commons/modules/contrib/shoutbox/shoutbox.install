@@ -1,0 +1,93 @@
+<?php
+// $Id: shoutbox.install,v 1.4.4.4 2010/07/22 13:18:43 mikestefff Exp $
+
+/**
+ * @file
+ * Shoutbox module install file.
+ */
+
+/**
+ * Define the 'shoutbox' and 'shoutbox_moderation' table structures.
+ *
+ * @return
+ *   The schema which contains the structure for the shoutbox module's tables.
+ */
+function shoutbox_schema() {
+  $schema['shoutbox'] = array(
+    'description' => t('A table containing the shoutbox posts.'),
+    'fields' => array(
+      'shout_id' => array('type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE, 'description' => t('The primary identifier for the shout post.')),
+      'uid' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0, 'description' => t('The primary identifier for the shout post author.')),
+      'nick' => array('type' => 'varchar', 'length' => 60, 'not null' => TRUE, 'description' => t('The author\'s nickname.')),
+      'shout' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'description' => t('The shout post.')),
+      'moderate' => array('type' => 'int', 'not null' => TRUE, 'default' => 0, 'description' => t('The moderation id.')),
+      'created' => array('type' => 'int', 'not null' => TRUE, 'default' => 0, 'description' => t('Creation date.')),
+      'changed' => array('type' => 'int', 'not null' => TRUE, 'default' => 0, 'description' => t('Last updated date.')),
+      'hostname' => array('type' => 'varchar', 'length' => 255, 'default' => 'localhost', 'not null' => TRUE, 'description' => t('The hostname where the post originated.')),
+      'sid' =>  array('type' => 'varchar', 'length' => 64, 'not null' => TRUE, 'default' => '', 'description' => t('Session id of the current session.')),
+    ),
+    'primary key' => array('shout_id'),
+  );
+
+  return $schema;
+}
+
+function shoutbox_install() {
+  drupal_install_schema('shoutbox');
+}
+
+/**
+ * Uninstall shoutbox.
+ */
+function shoutbox_uninstall() {
+  drupal_uninstall_schema('shoutbox');
+
+  // Delete variables.
+  variable_del('shoutbox_expire');
+  variable_del('shoutbox_ascending');
+  variable_del('shoutbox_refresh');
+  variable_del('shoutbox_anonymous_timeout');
+  variable_del('shoutbox_registered_timeout');
+  variable_del('shoutbox_filter_format');
+  variable_del('shoutbox_max_length');
+  variable_del('shoutbox_showamount_block');
+  variable_del('shoutbox_showamount_page');
+  variable_del('shoutbox_escape_html');
+  variable_del('shoutbox_profile_name');
+}
+
+/**
+ * Update hook.
+ * This update prepares the database for
+ * shoutbox 5.2.x
+ * Removes the moderation table
+ * Drops the status column on the shoutbox table
+ * Adds sid column to the shoutbox table
+ */
+function shoutbox_update_5200() {
+
+  $items = array();
+  switch ($GLOBALS['db_type']) {
+    case 'mysql':
+    case 'mysqli':
+    case 'pgsql':
+      $items[] = update_sql("DROP TABLE {shoutbox_moderation}");
+      $items[] = update_sql("ALTER TABLE {shoutbox} DROP status");
+      $items[] = update_sql("ALTER TABLE {shoutbox} ADD COLUMN sid varchar(64) NOT NULL default ''");
+      break;
+    default:
+      break;
+  }
+  return $items;
+}
+
+/*
+ * Update to 2.0
+ */
+function shoutbox_update_6200() {
+  $items = array();
+  $items[] = update_sql("ALTER TABLE {shoutbox} DROP url");
+  $items[] = update_sql("ALTER TABLE {shoutbox} MODIFY nick varchar(60)");
+  return $items;
+}
+

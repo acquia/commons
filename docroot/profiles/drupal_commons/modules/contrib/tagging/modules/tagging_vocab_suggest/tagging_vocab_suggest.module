@@ -1,0 +1,15 @@
+<?php
+// $Id: tagging_vocab_suggest.module,v 1.1.2.3 2010/07/18 10:11:01 eugenmayer Exp $
+
+// Author: Eugen Mayer (http://kontextwork.de)
+// Copyright 2010
+
+function tagging_vocab_suggest_tagging_suggestions($vid, $node) {
+  $result  = db_query('select * from {term_data} where vid=%d',$vid);
+  $suggestions = array();
+  while ($term = db_fetch_object($result)) {
+    $suggestions[] = array('#weight' => $term->weight, '#name' => $term->name);
+  }
+
+  return $suggestions;
+}

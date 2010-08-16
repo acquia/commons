@@ -1,0 +1,66 @@
+<?php
+// $Id: user_relationship_blocks.install,v 1.1.2.9 2009/09/13 23:35:41 alexk Exp $
+/**
+ * @file 
+ * User relationship blocks installation
+ */
+
+/**
+ * Schema
+ */
+function user_relationship_blocks_schema() {
+  $schema['user_relationship_blocks'] = array(
+    'fields' => array(
+      'bid'         => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => ''),
+      'size'        => array('type' => 'int', 'unsigned' => TRUE, 'default' => 10),
+      'sort'        => array('type' => 'varchar', 'length' => 255, 'default' => 'newest'),
+      'get_account' => array('type' => 'text', 'not null' => TRUE, 'size' => 'big'),
+    ),
+    'primary key' => array('bid'),
+  );
+
+  return $schema;
+}
+
+/**
+ * Install
+ */
+function user_relationship_blocks_install() {
+  drupal_install_schema('user_relationship_blocks');
+
+  include_once(drupal_get_path('module', 'user_relationship_blocks') .'/user_relationship_blocks.module');
+  include_once(drupal_get_path('module', 'user_relationships_api') .'/user_relationships_api.module');
+
+  _user_relationship_blocks_insert_defaults();
+}
+
+/**
+ * Uninstall
+ */
+function user_relationship_blocks_uninstall() {
+  drupal_uninstall_schema('user_relationship_blocks');
+}
+
+/**
+ * Implementation of hook_update_N().
+ * Update 6000 creates db tables after upgrade from D5.
+ */
+function user_relationship_blocks_update_6000() {
+  //do not execute if table already exists, to catch normal D6 updates.
+  if (db_table_exists('user_relationship_blocks')) {
+    return array();
+  }
+  user_relationship_blocks_install();
+  return array();
+}
+
+/**
+ * Implementation of hook_update_N().
+ * Update 6100 updates block caching flags #458520.
+ */
+function user_relationship_blocks_update_6100() {
+  $ret = array();
+  $ret[] = update_sql("UPDATE {blocks} SET cache = -1 WHERE module = 'user_relationship_blocks' AND delta IN ('actions', 'pending', 'user-all', 'my-all')"); 
+  return $ret;
+}
+

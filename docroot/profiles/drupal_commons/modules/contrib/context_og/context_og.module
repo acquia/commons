@@ -1,0 +1,140 @@
+<?php
+// $Id: context_og.module,v 1.1.4.3 2010/07/15 18:00:48 marcp Exp $
+
+/**
+ * Implementation of hook_context_conditions().
+ */
+function context_og_context_conditions() {
+  $items = array();
+
+  // OG
+  $items['og_group_node'] = array(
+    '#title' => t('OG Group Node'),
+    '#description' => t('Set this context when viewing a node or other page that is in any of the selected groups.'),
+    '#options' => context_og_get_group_node_list(),
+    '#type' => 'select',
+    '#multiple' => TRUE,
+  );
+
+  $items['og_group_type'] = array(
+    '#title' => t('OG Group Type'),
+    '#description' => t('Set this context when viewing a node or other page that is in any group of the selected types.'),
+    '#options' => context_og_get_group_type_list(),
+    '#type' => 'checkboxes',
+  );
+
+  return $items;
+}
+
+/**
+ * Implementation of hook_context_reactions().
+ */
+function context_og_context_reactions() {
+  $items = array();
+
+  // OG
+  if (module_exists('og')) {
+    $items['og_group_node'] = array(
+      '#title' => t('OG Group Node'),
+      '#description' => t('Set this group\'s context when this context is set.'),
+      '#options' => context_og_get_group_node_list(),
+      '#type' => 'select',
+      '#multiple' => FALSE,
+    );
+  }
+
+  return $items;
+}
+
+function context_og_get_group_node_list() {
+  $sql = "SELECT n.nid, n.title, n.type FROM {node} n INNER JOIN {og} o ON n.nid = o.nid ORDER BY n.type, n.title";
+  $result = db_query(db_rewrite_sql($sql));
+
+  $values = array();
+  while ($group = db_fetch_object($result)) {
+    $type = node_get_types('name', $group->type);
+    $values[$group->nid] = $type . ': ' . $group->title;
+  }
+
+  return $values;
+}
+
+function context_og_get_group_type_list() {
+  $values = array();
+  $og_types = og_get_types('group');
+  foreach (node_get_types() as $type) {
+    if (in_array($type->type, $og_types)) {
+      $values[$type->type] = $type->name;
+    }
+  }
+  return $values;
+}
+
+/**
+ * Implementation of hook_context_page_condition().
+ */
+function context_og_context_page_condition() {
+  context_og_set_og_context();
+}
+
+/**
+ * Implementation hook_context_page_reaction().
+ */
+function context_og_context_page_reaction() {
+  $values = context_active_values('og_group_node');
+  if (!empty($values)) {
+    $gid = array_shift($values);
+    $group = node_load(array('nid' => $gid));
+    if ($group) {
+      og_set_group_context($group);
+    }
+  }
+}
+
+/**
+ * Helper function that gets the current OG group context and
+ * sets the context module's contexts.
+ */
+function context_og_set_og_context() {
+  $group = og_get_group_context();
+  if ($group) {
+    context_set_by_condition('og_group_node', $group->nid);
+    context_set_by_condition('og_group_type', $group->type);
+  }
+}
+
+/**
+ * Implementation of hook_form_alter().
+ */
+function context_og_form_alter(&$form, $form_state, $form_id) {
+  if ($form['#id'] === 'node-form' && arg(0) != 'admin') { // Prevent this from firing on admin pages.
+    context_og_set_og_context();
+  }
+}
+
+/**
+ * Implementation of hook_nodeapi().
+ */
+function context_og_nodeapi(&$node, $op, $teaser, $page) {
+  if ($op == 'view' && $page && ($menu_ob = menu_get_object()) && $menu_ob->nid == $node->nid) {
+    context_og_set_og_context();
+  }
+}
+
+
+/**
+ * Implementation of hook_ctools_render_alter().
+ *
+ * Used to detect the presence of a page manager node view or node form.
+ */
+function context_og_ctools_render_alter($info, $page, $args, $contexts, $task, $subtask) {
+  if ($page && in_array($task['name'], array('node_view', 'node_edit'), TRUE)) {
+    foreach ($contexts as $ctools_context) {
+      if ($ctools_context->type === 'node' && !empty($ctools_context->data)) {
+        context_og_set_og_context();
+        break;
+      }
+    }
+  }
+}
+

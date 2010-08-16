@@ -1,0 +1,15 @@
+<?php
+// $Id: context_og.install,v 1.1 2010/07/12 23:17:21 marcp Exp $
+
+/**
+ * @file
+ * Install file for the context_og module.
+ */ 
+
+/**
+ * Implementation of hook_enable().
+ */
+function context_og_enable() {
+  context_invalidate_cache();
+}
+

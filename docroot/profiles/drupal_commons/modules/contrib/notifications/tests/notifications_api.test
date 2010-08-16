@@ -1,0 +1,173 @@
+<?php
+// $Id: notifications_api.test,v 1.1.2.1.2.8.2.1 2009/04/20 12:51:09 jareyero Exp $
+/**
+ * Class for testing notifications module.
+ * Tests basic API functions
+ */
+class NotificationsBasicTests extends DrupalWebTestCase {
+  
+  function getInfo() {
+    return array(
+      'name' => 'Notifications Basics',
+      'group' => 'Notifications', 
+      'description' => 'Notifications API functions and administration pages');
+  }
+  
+  function setUp() {
+    parent::setUp('notifications', 'notifications_lite');
+    require_once drupal_get_path('module', 'notifications') .'/notifications.cron.inc';
+  }
+
+  /**
+   * Play with creating, retrieving, deleting a pair subscriptions
+   */
+  function testNotificationsBasicAPI() {
+    $test_type = 'test';
+    $test_event_type = 'test event';
+    
+    // Any user will do for exercising the API
+    $user = $this->drupalCreateUser();
+    
+    $s1 = new Stdclass();
+    $s1->uid = $user->uid;
+    $s1->type = $test_type;
+    $s1->event_type = $test_event_type;
+    $s1->fields = array('field1' => 1, 'field2' => 2);
+    $s1->destination = '';
+    $s2 = clone($s1);
+
+    // Create the subscription and check assigned sid
+    $result = notifications_save_subscription($s1);
+    $this->assertEqual($result == SAVED_NEW && is_numeric($s1->sid) && $s1->sid > 0, TRUE, 'The subscription has been created');
+    
+    // Retrieve the subscription and check values
+    $s = notifications_load_subscription($s1->sid, TRUE);
+    $this->assertEqual($s, $s1, 'The subscription has been retrieved and values are ok');
+
+    // Attempt to create a second one with the same values
+    $result = notifications_save_subscription($s2);
+    $this->assertTrue($result == SAVED_UPDATED && $s1->sid == $s2->sid, 'A duplicate subscription has been detected and updated');
+    // Now change some field, try again with a different send method
+    unset($s2->sid);
+    $s2->send_method = 'test';
+    $result = notifications_save_subscription($s2);
+    $this->assertTrue($result == SAVED_NEW && is_numeric($s2->sid) && $s2->sid > $s1->sid, 'Another subscription has been created');
+
+    // Now change values for the second one
+    unset($s2->send_method);
+    $s2->fields['field2'] = 3;
+    $result =notifications_save_subscription($s2);
+    $this->assertEqual($result, SAVED_UPDATED, 'Another subscription has been created');
+    
+    // Trying several recovery options
+    $subs = notifications_get_subscriptions(array('type' => $test_type));
+    $this->assertEqual(count($subs), 2, 'Retrieved subscriptions by type');
+    $subs = notifications_get_subscriptions(array('type' => $test_type), array('field1' => $s1->fields['field1']), TRUE);
+    $this->assertEqual(count($subs), 0, 'Retrieved subscriptions by type and limited field');
+    $subs = notifications_get_subscriptions(array('type' => $test_type), array('field1' => $s1->fields['field1']), FALSE);
+    $this->assertEqual(count($subs), 2, 'Retrieved subscriptions by type and general field');
+    $subs = notifications_get_subscriptions(array('type' => $test_type), array('field1' => $s1->fields['field1'], 'field2' => $s1->fields['field2']), FALSE);
+    $this->assertEqual(count($subs), 1, 'Retrieved subscriptions by type and general field');
+       
+    // Delete the subscriptions and check
+    notifications_delete_subscriptions(array('type' => $test_type));
+    $subs = notifications_get_subscriptions(array('type' => $test_type));
+    $this->assertEqual(count($subs), 0, 'The subscriptions have been deleted');
+    
+    // Try notifications_lite API
+    notifications_lite_send($user->uid, 'Test Subject', 'Test body');
+    $this->assertEqual($this->countQueued(array('uid' => $user->uid)), 1, 'Notification queued with notifications_lite');
+  }
+
+  /**
+   * Log in as administrator and test page loading
+   */
+  function testNotificationsBasicPages() {
+    // Log in with administrator permissions
+    $user = $this->drupalCreateUser(array('administer notifications', 'maintain own subscriptions', 'administer site configuration'));
+    $this->drupalLogin($user);
+
+    $this->drupalGet('admin/messaging/notifications');
+    $this->assertText('General settings', 'General settings page showing up');
+    $this->drupalGet('admin/messaging/notifications/events');
+    $this->assertText('events', 'Enabled events page showing up');
+    $this->drupalGet('admin/messaging/notifications/intervals');
+    $this->assertText('Send intervals', 'Intervals page showing up');
+    $this->drupalGet('admin/messaging/subscriptions');
+    $this->assertText('Subscriptions by type', 'Subscriptions overview page showing up');
+    $this->drupalGet('admin/messaging/subscriptions/admin');
+    //$this->assertText('status', 'Subscriptions administration page showing up');
+    $this->drupalGet('admin/messaging/subscriptions/queue');
+    $this->assertText('Notifications in queue', 'Notifications queue page showing up');      
+  }
+
+  /**
+   * Test query builder
+   */
+  function testNotificationsQueryBuilder() {
+    // Test query builder, first basic query, then add some fields
+    $query = notifications_query_build(array('select' => 'field1', 'from' => 'table1', 'join' => 'JOIN table2'));
+    list($sql, $args) = notifications_query_sql($query);
+    $this->assertEqual($sql, 'SELECT field1 FROM table1 JOIN table2', 'Build basic query with SELECT and JOIN.');
+    
+    $fields = array(
+      'f1' => 1,
+      'f2' => 'value2',
+    );
+    $query = notifications_query_build(array('fields' => $fields), $query);
+    list($sql, $args) = notifications_query_sql($query);
+    $fields_sql = "(f.field = '%s' AND f.value = '%s') OR (f.field = '%s' AND f.value = '%s')";
+    $target = "SELECT field1 FROM table1 JOIN table2 WHERE ($fields_sql)";
+    $this->assertEqual($sql, $target, 'Build basic query with simple fields.' .$sql);
+    $this->assertEqual($args, array('f1', 1, 'f2', 'value2'), 'Arguments for basic query with simple fields.');
+    
+    $fields = array(
+      'f3' => array(1, 2),  
+      'f4' => array('value3', 'value4'),
+    );
+    $query = notifications_query_build(array('fields' => $fields), $query);
+    list($sql, $args) = notifications_query_sql($query);
+    $fields_sql .= " OR (f.field = '%s' AND f.value IN ('%s','%s'))";
+    $fields_sql .= " OR (f.field = '%s' AND f.value IN ('%s','%s'))";
+    $target = "SELECT field1 FROM table1 JOIN table2 WHERE ($fields_sql)";
+    $target_args = array('f1', 1, 'f2', 'value2', 'f3', 1, 2, 'f4', 'value3', 'value4');
+    $this->assertEqual($sql, $target, 'Build basic query with array fields, conditions match.');
+    $this->assertEqual($args, $target_args, 'Build basic query with array fields, arguments match.');
+    
+    // Test update/done/delete queries with two fake rows
+    foreach (array(1,2) as $i) {
+      db_query("INSERT INTO {notifications_queue}(eid, sid, uid, type, send_interval, send_method, sent, cron) VALUES(%d, %d, %d, 'test', 0 , 'test', 0, 1)", $i, $i, $i);
+    }
+    // We should have two rows, try a few things with them
+    $this->assertEqual($this->countQueued(), 2, 'We have two rows in queue' );
+    variable_set('notifications_log', 1);
+    notifications_queue_done(array('type' => 'test'));
+    $this->assertEqual($this->countQueued(array('cron' => 0)), 2, 'Both rows have been marked as done' );
+    variable_del('notifications_log');
+    notifications_queue_done(array('type' => 'test'));
+    $this->assertEqual($this->countQueued(array('cron' => 0)), 0, 'Both rows have been deleted' );
+  }
+
+  /**
+   * Helper function. Simple row counting with conditions, uses query builder
+   */
+  function countQueued($params = NULL) {
+    if ($params) {
+      $query = notifications_queue_query($params);
+      return db_result(db_query('SELECT COUNT(*) FROM {notifications_queue} WHERE ' . implode(' AND ', $query['where']), $query['args']));
+    } else {
+      return db_result(db_query('SELECT COUNT(*) FROM {notifications_queue}'));
+    }
+  }
+  
+  /**
+   * Implementation of tearDown().
+   */
+  function tearDown() {
+    // Perform any clean-up tasks.
+    //variable_del('some_variable');
+
+    // The last thing a tearDown() method should always do is call its parent tearDown() method.
+    parent::tearDown();
+  }
+}

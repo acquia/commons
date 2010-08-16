@@ -1,0 +1,22 @@
+--- heartbeat.module	2010-05-18 16:00:48.000000000 -0400
++++ heartbeat.new.module	2010-07-29 10:20:25.000000000 -0400
+@@ -899,8 +899,8 @@ function heartbeat_heartbeat_message_inf
+     5 =>
+     array(
+       'message_id' => 'heartbeat_edit_comment',
+-      'message' => '!username changed his comment on !title.',
+-      'message_concat' => '!username changed his comment on !title several times (%times%).',
++      'message' => '!username changed a comment on !title.',
++      'message_concat' => '!username changed a comment on !title several times (%times%).',
+       'concat_args' =>
+       array(
+         'type' => 'count',
+@@ -910,7 +910,7 @@ function heartbeat_heartbeat_message_inf
+       ),
+       'perms' => '1',
+       'custom' => HEARTBEAT_MESSAGE_DEFAULT,
+-      'description' => 'user changed his comment',
++      'description' => 'user changed a comment',
+       'variables' =>
+       array(
+         '@username' => '[user:user-name-url]',

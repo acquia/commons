@@ -1,0 +1,17 @@
+<?php
+// $Id: imagecache_textactions.install,v 1.1.2.3 2009/08/31 04:12:20 dman Exp $
+/**
+ * @file Set up new text actions. Tell imagecache.module about them
+ */
+
+/**
+ * Need to flush the cache when this module is enabled or disabled
+ */
+function imagecache_textactions_install() {
+  if (function_exists('imagecache_action_definitions') ) imagecache_action_definitions(TRUE);
+  cache_clear_all('imagecache_actions', 'cache');
+}
+function imagecache_textactions_uninstall() {
+  if (function_exists('imagecache_action_definitions') ) imagecache_action_definitions(TRUE);
+  cache_clear_all('imagecache_actions', 'cache');
+}

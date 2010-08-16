@@ -1,0 +1,96 @@
+<?php
+// $Id: views_content.module,v 1.4 2009/08/07 19:58:33 merlinofchaos Exp $
+
+/**
+ * @file views_content.module
+ *
+ * Provides views as panels content, configurable by the administrator.
+ * Each view provided as panel content must be configured in advance,
+ * but once configured, building panels with views is a little bit simpler.
+ */
+
+/**
+ * Implementation of hook_menu().
+ */
+function views_content_menu() {
+  $items = array();
+
+  if (!module_exists('panels')) {
+    $items['admin/settings/content-views'] = array(
+      'title' => 'Views panes',
+      'access arguments' => array('administer views content plugin'),
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('views_content_admin_page'),
+      'description' => 'Configure Views to be used as CTools content.',
+      'type' => MENU_NORMAL_ITEM,
+    );
+  }
+
+  return $items;
+}
+
+/**
+ * Implementation of hook_ctools_plugin_dierctory() to let the system know
+ * we implement task and task_handler plugins.
+ */
+function views_content_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'ctools' && $plugin == 'content_types') {
+    return 'plugins/' . $plugin;
+  }
+}
+
+/**
+ * Don't show Views' blocks; we expose them already.
+ */
+function views_ctools_block_info($module, $delta, &$info) {
+  if (strlen($delta) == 32) {
+    $hashes = variable_get('views_block_hashes', array());
+    if (!empty($hashes[$delta])) {
+      $delta = $hashes[$delta];
+    }
+  }
+
+  if (substr($delta, 0, 1) != '-') {
+    // Right now, 'special' blocks are all exposed forms. Let's
+    // call those widgets.
+    $info['category'] = t('Widgets');
+    $info['icon'] = 'icon_views_block_legacy.png';
+    $info['path'] = drupal_get_path('module', 'views_content');
+  }
+  else {
+    $info['category'] = t('Views');
+    $info['icon'] = 'icon_views_block_legacy.png';
+    $info['path'] = drupal_get_path('module', 'views_content');
+  }
+}
+
+/**
+ * Implementation of hook_views_api().
+ *
+ * This one is used as the base to reduce errors when updating.
+ */
+function views_content_views_api() {
+  return array(
+    'api' => 2,
+    'path' => drupal_get_path('module', 'views_content') . '/plugins/views',
+  );
+}
+
+/**
+ * Page callback to provide the basic administration form.
+ */
+function views_content_admin_page() {
+  $form = array();
+  views_content_admin_form($form);
+
+  return system_settings_form($form);
+}
+
+function views_content_admin_form(&$form) {
+  $form['ctools_content_all_views'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Make all views available as panes'),
+    '#description' => t("If checked, all views will be made available as content panes to be added to content types. If not checked, only Views that have a 'Content pane' display will be available as content panes. Uncheck this if you want to be able to more carefully control what view content is available to users using the panels layout UI."),
+    '#default_value' => variable_get('ctools_content_all_views', TRUE),
+  );
+}

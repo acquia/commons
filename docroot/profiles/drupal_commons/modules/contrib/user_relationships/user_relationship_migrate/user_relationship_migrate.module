@@ -1,0 +1,153 @@
+<?php
+// $Id: user_relationship_migrate.module,v 1.1.2.1 2009/06/22 12:36:05 alexk Exp $
+
+/**
+ * Drupal Module: User Relationship Migrate.
+ *
+ * @author: 
+ *    Jeff Smick <sprsquish [at] gmail [dot] com>
+ *    JB Christy <JBChristy [at] pacbell. [dot] net>
+ * @file
+ *    Migrate buddylist2 relationships to user relationships
+ */
+
+$db_type = $GLOBALS['db_type'];
+$db_type = strpos($db_type, 'mysql') !== FALSE ? 'mysql' : $db_type;
+module_load_include('inc', 'user_relationship_migrate', "user_relationship_migrate.{$db_type}");
+
+/**
+ * Implementation of hook_menu().
+ */
+function user_relationship_migrate_menu() {
+  $items = array();
+
+  $items['admin/user/relationships/migrate'] = array(
+    'title'     => 'Migrate from buddylist2',
+    'page callback'  => 'user_relationship_migrate_page',
+    'access arguments' => array('administer user relationships'),
+    'type'      => MENU_LOCAL_TASK,
+    'weight'    => 4,
+  );
+
+  $items['admin/user/relationships/migrate/error'] = array(
+    'title'     => 'Migrating from buddylist2 error',
+    'page callback'  => 'user_relationship_migrate_error',
+    'access arguments' => array('administer user relationships'),
+    'type'      => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+function user_relationship_migrate_page() {
+  if ($last_run = variable_get('user_relationship_migrate_last_run', NULL)) {
+    $last_run = strftime('%m/%d/%y %H:%M:%S', $last_run);
+    drupal_set_message(t("You ran this migration %date", array('%date' => $last_run)));
+  }
+
+  return drupal_get_form('user_relationship_migrate_form');
+}
+
+
+/**
+ * Migrate relationship form.
+ *
+ * This function just provides the form elements. theme_user_relationship_migrate_form()
+ * provides (most of) the supporting text/descriptions.
+ */
+function user_relationship_migrate_form(&$form_state) {
+  $relationships = user_relationships_types_load();
+  foreach ($relationships as $relationship) {
+    $relationships[$relationship->rtid] = $relationship->name;
+  }
+
+  // check that the tables actually exist before showing the form
+  $check = db_table_exists('buddylist') ? TRUE : FALSE;
+
+  if ($check === FALSE) {
+    $form['no_buddylist'] = array(
+      '#value' => t('No buddylist tables detected!'),
+    );
+    return $form;
+  }
+
+  $count = db_result(db_query("SELECT COUNT(*) FROM {buddylist}"));
+  $form['migrate'] = array(
+    '#type' => 'fieldset',
+    '#description' => t("%count buddylist records await your import.", array('%count' => $count))
+  );
+  
+  $form['migrate']['migration_skip_main'] = array(
+    '#title'          => t("Don't do the main migration"),
+    '#type'           => 'checkbox',
+    '#default_value'  => (bool)variable_get('user_relationship_migrate_last_run', FALSE),
+    '#description'    => t("Check this if you've already done the main migration and don't want to re-run it.")
+  );
+  $form['migrate']['migration_rtid'] = array(
+    '#title'    => t('Relationship type for migrated relationships'),
+    '#type'     => 'select',
+    '#options'  => $relationships,
+    '#required' => TRUE
+  );
+  
+  $count = db_result(db_query("SELECT COUNT(*) FROM {buddylist_pending_requests}"));
+  $form['migrate']['migrate_pending'] = array(
+    '#type'              => 'checkbox',
+    '#title'             => t('Migrate %count pending requests', array('%count' => $count)),
+    '#default_value'     => TRUE,
+  );
+  $form['migrate']['submit'] = array(
+    '#type'              => 'submit',
+    '#value'             => t('Migrate!'),
+  );
+  
+  return $form;
+}
+
+
+/**
+ * Validate migrate relationship form submission.
+ */
+function user_relationship_migrate_form_validate($form, &$form_state) {
+  if (!empty($form_state['values']['migration_rtid'])) {
+    if (!user_relationships_type_load($form_state['values']['migration_rtid'])) {
+      form_set_error('migration_rtid', t("You must enter the name of an existing relationship type."));
+    }
+  }
+}
+
+
+/**
+ * Process migrate relationship form submission.
+ */
+function user_relationship_migrate_form_submit($form, &$form_state) {
+  variable_del('user_relationship_migrate_last_run');
+
+  if (!$form_state['values']['migration_skip_main']) {
+    $start = time();
+    if (_user_relationship_migrate_run($form_state['values']['migration_rtid'])) {
+      drupal_set_message(t('Buddylist2 migration successfully ran.'));
+      drupal_set_message(t('Buddies Migration took @amount', array('@amount' => gmdate("H:i:s", time() - $start))));
+    }
+    else {
+      drupal_set_message(t('There was an error migrating the buddylist.'), 'error');
+    }
+  }
+
+  if ($form_state['values']['migrate_pending']) {
+    $start = time();
+
+    if (user_relationship_migrate_pending($form_state['values']['migration_rtid'])) {
+      drupal_set_message(t('Pending relationships migration successfully ran.'));
+      drupal_set_message(t('Pending Buddies Migration took @amount', array('@amount' => gmdate("H:i:s", time() - $start))));
+    }
+    else {
+      drupal_set_message(t('There was a problem migrating pending relationships'), 'error');
+    }
+  }
+
+  variable_set('user_relationship_migrate_last_run', time());
+
+  $form_state['redirect'] = 'admin/user/relationships/migrate';
+}
+

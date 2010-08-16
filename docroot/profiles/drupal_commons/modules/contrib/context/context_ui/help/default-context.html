@@ -1,0 +1,13 @@
+<!-- $Id: default-context.html,v 1.1.2.2 2010/05/10 11:35:15 darthsteven Exp $ -->
+<p>You can use the '<em>default</em>' context condition to ensure that at least on context within the selected namespace an attribute is active on any page of you site.</p>
+<p>Context will first evaluate all other context conditions, then of none of those have already matched it will try to active a default context within each namespace/attribute pair if one is present.</p>
+<h2>Example</h2>
+<p>Let's suppose that you have a block that you want to show on every page of your site, except in the 'news' section. Here's how you could do that:</p>
+<ol>
+  <li>Create your first, sitewide, context, set it using the default context condition and select the block that you would like to show using the reactions section.</li>
+  <li>Make a note of the value of this context with the chosen namespace and attribute.</li>
+  <li>Create your second context, use exactly the same namespace and attribute as the first.</li>
+  <li>Set up your second context with the conditions that define your 'news' section.</li>
+  <li>Set up the reactions to be the same as your first context, but <em>without</em> the block that you don't want to appear.</li>
+</ol>
+<p>That's it! Context should evaluate your contexts and if the 'news' context's conditions are met the blocks it defines for that namespace and attribute will be used otherwise the defaults will.</p>

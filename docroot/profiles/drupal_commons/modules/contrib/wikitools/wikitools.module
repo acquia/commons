@@ -1,0 +1,465 @@
+<?php
+// $Id: wikitools.module,v 1.4.2.13 2009/06/18 04:25:27 cwgordon7 Exp $
+
+/**
+ * @file
+ * A non-intrusive module to have some wiki-like behaviour.
+ */
+
+/**
+ * Implementation of hook_help().
+ */
+function wikitools_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#wikitools':
+      $output = '<p>'. t('The wikitools module allows you to set several options for your content to get a more wiki-like behaviour.') .'</p>';
+      return $output;
+    case 'admin/settings/wikitools':
+      $output = '<p>'. t('Below you can configure the settings for the wikitools module. The "wiki path" will be the path that will redirect you to the wiki page with the appropriate title; only the wiki node types selected can be accesssed from the wiki path. Choose from the other options to determine the behavior of the wiki path.') .'</p>';
+      return $output;
+    case 'admin/content/wikitools':
+      $output = '<p>'. t('Wikitools allows restrictions on node titles so that all new created nodes have guaranteed unique titles. Titles of nodes that were created before it was included in this option, however, are not guaranteed to have unique page titles. This page lists all nodes that have duplicate page titles, so that their titles may be changed to be unique.') .'</p>';
+      return $output;
+  }
+}
+
+/*
+ * Setup functions
+ */
+
+/**
+ * Implementation of hook_menu().
+ */
+function wikitools_menu() {
+  $items = array();
+  $items['admin/settings/wikitools'] = array(
+    'title' => t('Wikitools'),
+    'description' => t('Settings for wiki-like behaviour.'),
+    'access arguments' => array('administer site configuration'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('wikitools_admin_settings'),
+    'file' => 'wikitools.admin.inc',
+    'type' => MENU_NORMAL_ITEM,
+  );
+  if (wikitools_enforce_unique_titles()) {
+    $items['admin/content/wikitools'] = array(
+      'title' => t('Duplicate titles'),
+      'description' => t('List nodes which have duplicate titles'),
+      'page callback' => 'wikitools_page_duplicates',
+      'access arguments' => array('administer nodes'),
+      'file' => 'wikitools.admin.inc',
+      'type' => MENU_NORMAL_ITEM,
+    );
+  }
+  if ($wiki_path = wikitools_wiki_path()) {
+    $items[$wiki_path] = array(
+      'page callback' => 'wikitools_handle_request',
+      'access arguments' => array('access content'),
+      'file' => 'wikitools.pages.inc',
+      'type' => MENU_CALLBACK,
+    );
+  }
+  if (module_exists('freelinking') && wikitools_hijack_freelinking()) {
+    // Add a new path under the freelinking path.
+    $callbacks['freelinking/%'] = array(
+      'page callback' => 'wikitools_handle_request',
+      'access arguments' => array('access content'),
+      'file' => 'wikitools.pages.inc',
+      'type' => MENU_CALLBACK,
+    );
+  }
+  return $items;
+}
+
+/*
+ * Settings
+ */
+
+/**
+ * Drupal path of wiki.
+ */
+function wikitools_wiki_path($value = NULL) {
+  if (is_null($value)) {
+    return variable_get('wikitools_path', 'wiki');
+  }
+  variable_set('wikitools_path', $value);
+}
+
+/**
+ * Title of node on root path of wiki.
+ */
+function wikitools_main_page_title($value = NULL) {
+  if (is_null($value)) {
+    return variable_get('wikitools_main_page_title', 'Main Page');
+  }
+  variable_set('wikitools_main_page_title', $value);
+}
+
+/**
+ * Node types of wiki pages.
+ */
+function wikitools_node_types($value = NULL) {
+  if (is_null($value)) {
+    static $node_types = NULL;
+    if (is_null($node_types)) {
+      $node_types = array();
+      foreach(variable_get('wikitools_node_types', array()) as $type => $active) {
+        if ($active) {
+          $node_types[$type] = $type;
+        }
+      }
+    }
+    return $node_types;
+  }
+  variable_set('wikitools_node_types', $value);
+}
+
+/**
+ * Is node type affected by wikitool options?
+ */
+function wikitools_type_affected($type) {
+  static $node_types = NULL;
+  if (is_null($node_types)) {
+    $node_types = wikitools_node_types();
+  }
+  return isset($node_types[$type]) && $node_types[$type];
+}
+
+/**
+ * What 404 error settings are set?
+ */
+function wikitools_404($value = NULL) {
+  if (is_null($value)) {
+    return variable_get('wikitools_404_type', drupal_map_assoc(array('Link to creation')));
+  }
+  variable_set('wikitools_404_type', $values);
+}
+
+/**
+ * String of characters which are not allowed in a wiki page title.
+ */
+function wikitools_disallowed_characters($value = NULL) {
+  if (is_null($value)) {
+    return variable_get('wikitools_disallowed_characters', '[]{}|');
+  }
+  variable_set('wikitools_disallowed_characters', $value);
+}
+
+/**
+ * Various wikitool options.
+ */
+function wikitools_options() {
+  return variable_get('wikitools_options', drupal_map_assoc(array('node creation', 'node search', 'unique titles', 'underscore as space')));
+}
+
+/**
+ * Is node creation activated?
+ */
+function wikitools_node_creation() {
+  $options = wikitools_options();
+  return !empty($options['node creation']);
+}
+
+/**
+ * Is node search activated?
+ */
+function wikitools_node_search() {
+  $options = wikitools_options();
+  return !empty($options['node search']);
+}
+
+/**
+ * Is move protection activated?
+ */
+function wikitools_move_protection() {
+  $options = wikitools_options();
+  return !empty($options['move protection']);
+}
+
+/**
+ * Is automatic redirection activated?
+ */
+function wikitools_auto_redirect() {
+  $options = wikitools_options();
+  return !empty($options['auto redirect']);
+}
+
+/**
+ * Are unique titles enforced?
+ */
+function wikitools_enforce_unique_titles() {
+  $options = wikitools_options();
+  return !empty($options['unique titles']);
+}
+
+/**
+ * Are underscore characters treated as spaces?
+ */
+function wikitools_treat_underscore_as_space() {
+  $options = wikitools_options();
+  return !empty($options['underscore as space']);
+}
+
+/**
+ * Are dashes treated as spaces?
+ */
+function wikitools_treat_dash_as_space() {
+  $options = wikitools_options();
+  return !empty($options['dash as space']);
+}
+
+/**
+ * The subpage handling used?
+ * @return
+ *   'disabled', 'url' or 'query'
+ */
+function wikitools_subpages_handling($value = NULL) {
+  if (is_null($value)) {
+    return variable_get('wikitools_subpages_handling', 'disabled');
+  }
+  variable_set('wikitools_subpages_handling', $value);
+}
+
+/**
+ * The query string used to specify subpages.
+ */
+function wikitools_subpages_query_string() {
+  return 'wt_action';
+}
+
+/**
+ * Array of URL subpages.
+ */
+function wikitools_subpages($value = NULL) {
+  if (is_null($value)) {
+    return preg_split("/[\s,]+/", variable_get('wikitools_subpages', 'edit, delete, view, revisions'));
+  }
+  variable_set('wikitools_subpages', implode(", ", $value));
+}
+
+/**
+ * Is the freelinking path hijacked?
+ */
+function wikitools_hijack_freelinking($value = NULL) {
+  if (is_null($value)) {
+    return variable_get('wikitools_hijack_freelinking', FALSE);
+  }
+  variable_set('wikitools_hijack_freelinking', $value);
+}
+
+/*
+ * Operations
+ */
+
+/**
+ * Decode page name given via URL.
+ */
+function wikitools_decode_page_name($encoded_page_name) {
+  $page_name = trim(urldecode($encoded_page_name));
+  if (wikitools_treat_underscore_as_space()) {
+    $page_name = str_replace('_', ' ', $page_name);
+  }
+  if (wikitools_treat_dash_as_space()) {
+    $page_name = str_replace('-', ' ', $page_name);
+  }
+  return $page_name;
+}
+
+/**
+ * Encode page name for use in a URL.
+ */
+function wikitools_encode_page_name($page_name) {
+  if (wikitools_treat_underscore_as_space()) {
+    $page_name = str_replace(' ', '_', $page_name);
+  }
+  if (wikitools_treat_dash_as_space()) {
+    $page_name = str_replace(' ', '-', $page_name);
+  }
+  return urlencode($page_name);
+}
+
+/**
+ * Build an url to create a new node.
+ * @param $type
+ *   type of new node
+ * @param $title
+ *   title of new node
+ */
+function wikitools_create_url($type, $title) {
+  if (is_object($type)) {
+    $type_url_str = str_replace('_', '-', $type->type);
+  }
+  else {
+    $type_url_str = str_replace('_', '-', $type);
+  }
+  return url("node/add/$type_url_str", array('query' => array('edit[title]' => $title)));
+}
+
+/**
+ * Build an url to search for a title.
+ * @param $title
+ *   title to search for
+ */
+function wikitools_search_url($title) {
+  return url('search/node/'. $title);
+}
+
+/**
+ * Build an url to link to a page.
+ * @param $title
+ *   title to link to
+ * @param $query
+ *   an optional query string to append to the link
+ */
+function wikitools_wikilink_url($title, $query = NULL) {
+  $drupal_path = wikitools_wikilink_drupal_path($title);
+  if ($drupal_path) {
+    return url($drupal_path, array('query' => $query));
+  }
+}
+
+/**
+ * Build a Drupal path to link to a page.
+ * @param $title
+ *   title to link to
+ * @param $query
+ *   an optional query string to append to the link
+ */
+function wikitools_wikilink_drupal_path($title) {
+  if ($wiki_path = wikitools_wiki_path()) {
+    return $wiki_path .'/'. wikitools_encode_page_name($title);
+  }
+  elseif (wikitools_hijack_freelinking()) {
+    return 'freelinking/'. wikitools_encode_page_name($title);
+  }
+  else {
+    // Neither wikitools nor freelinking will handle the link.
+    // Try to find a node with the given name and link directly to the first match.
+    $result = db_query("SELECT nid, type FROM {node} WHERE LOWER(title) = LOWER('%s')", $title);
+    $found_nodes = array();
+    while ($node = db_fetch_object($result)) {
+      if (wikitools_type_affected($node->type)) {
+        return "node/$node->nid";
+      }
+    }
+  }
+}
+
+/**
+ * Implementation of hook_nodeapi().
+ */
+function wikitools_nodeapi(&$node, $op, $form = NULL, $a4 = NULL) {
+  switch ($op) {
+    case 'validate':
+      wikitools_node_validate($node);
+      break;
+  }
+}
+
+/**
+ * Validate check of node edit form.
+ */
+function wikitools_node_validate($node) {
+  if (wikitools_type_affected($node->type)) {
+    // Check for unique titles.
+    if (wikitools_enforce_unique_titles()) {
+      // Build node type condition.
+      $types_clause = NULL;
+      foreach(wikitools_node_types() as $type) {
+        if ($types_clause) {
+          $types_clause .= ",'" . db_escape_string($type) . "'";
+        }
+        else {
+          $types_clause = "type IN ('" . db_escape_string($type) . "'";
+        }
+      }
+      // There is at least one node type, so this will always be well-formed.
+      $types_clause .= ')';
+
+      $nid = db_result(db_query("SELECT nid FROM {node} WHERE LOWER(title) = LOWER('%s') AND $types_clause", $node->title));
+      if (!$nid && wikitools_treat_underscore_as_space()) {
+        $nid = db_result(db_query("SELECT nid FROM {node} WHERE LOWER(REPLACE(title, '_', ' ')) = LOWER(REPLACE('%s', '_', ' ')) AND $types_clause", $node->title));
+      }
+      if (!$nid && wikitools_treat_dash_as_space()) {
+        $nid = db_result(db_query("SELECT nid FROM {node} WHERE LOWER(REPLACE(title, '-', ' ')) = LOWER(REPLACE('%s', '-', ' ')) AND $types_clause", $node->title));
+      }
+      // It is only an error if the node which already exists is not the currently edited node.
+      if ($nid && $nid != $node->nid) {
+        form_set_error('title', t('A <a href="@page_url">page</a> with this name already exists.', array('@page_url' => url("node/$nid"))));
+      }
+    }
+    // Check for disallowed characters in title.
+    if ($disallowed_characters = wikitools_disallowed_characters()) {
+      for ($i = 0; $i < strlen($node->title); $i++) {
+        if (strpos($disallowed_characters, $node->title[$i]) !== FALSE) {
+          form_set_error('title', t('The character %c is not allowed in a title', array('%c' => $node->title[$i])));
+          break;
+        }
+      }
+    }
+    // Check for invalid title names if url subpages are enabled and "/" is allowed in titles.
+    if (wikitools_subpages_handling() == 'url' && strpos("/", $disallowed_characters) === FALSE) {
+      $title_parts = explode('/', $node->title);
+      if (count($title_parts) > 1 && in_array(end($title_parts), wikitools_subpages())) {
+        form_set_error('title', t('The title is not allowed to end in: %string', array('%string' => '/' . implode(', /', wikitools_subpages()))));
+      }
+    }
+  }
+}
+
+/**
+ * Implementation of hook_form_alter().
+ */
+function wikitools_form_alter(&$form, $form_state, $form_id) {
+  // Check if it is a node editing form of an affected type.
+  if (isset($form['type']) && $form['type']['#value'] .'_node_form' == $form_id) {
+    if (wikitools_type_affected($form['type']['#value'])) {
+      if ($form['nid']['#value']) {
+        // Node is edited.
+        if (wikitools_move_protection() && !user_access('administer nodes')) {
+          $form['wikitools_title'] = $form['title'];
+          $form['wikitools_title']['#attributes']['readonly'] = 'readonly';
+          $form['title']['#type'] = 'value';
+        }
+      }
+      else {
+        // Node is new.
+        if (isset($_GET['edit'])) {
+          $form['title']['#default_value'] = urldecode($_GET['edit']['title']);
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implementation of hook_theme().
+ */
+function wikitools_theme() {
+  return array(
+    'wikitools_page_found' => array(
+      'arguments' => array('page_name' => NULL, 'found_nodes' => NULL),
+      'file' => 'wikitools.pages.inc',
+    ),
+    'wikitools_page_moved' => array(
+      'arguments' => array('page_name' => NULL, 'moved_nodes' => NULL),
+      'file' => 'wikitools.pages.inc',
+    ),
+    'wikitools_page_does_not_exist' => array(
+      'arguments' => array('page_name' => NULL),
+      'file' => 'wikitools.pages.inc',
+    ),
+    'wikitools_search_notice' => array(
+      'arguments' => array('page_name' => NULL),
+      'file' => 'wikitools.pages.inc',
+    ),
+    'wikitools_create_notice' => array(
+      'arguments' => array('page_name' => NULL),
+      'file' => 'wikitools.pages.inc',
+    ),
+    'wikitools_create' => array(
+      'arguments' => array('page_name' => NULL),
+      'file' => 'wikitools.pages.inc',
+    ),
+  );
+}

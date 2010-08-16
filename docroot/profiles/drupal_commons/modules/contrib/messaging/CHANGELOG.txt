@@ -1,0 +1,167 @@
+// $Id: CHANGELOG.txt,v 1.1.2.8.2.29.2.14 2009/11/13 19:07:10 jareyero Exp $
+
+6.x-2.1 to 6.x-2.2
+-------------------------
+- Fixed: removed no caching for filters, #577418
+- Fixed: 'aftersend' typo by batje, #508054 
+- Added line break default filter on install, by aaronbauman, #516012
+- PHPMailer: Added support for libraries API, by markus_petrux, #541938
+- Fixed issue with sms sending, #407524
+- Strenghtening message filtering, better description, #546116
+ 
+6.x-2.0 to 6.x-2.1
+--------------------------
+- Fixed: outdated permission in privatemsg module, by askibinski, #491364
+- Fixed: message params not properly handled in the store table, by greenSkin, #449112
+- Added attachments support for some mail methods, by Dane Powell, #371596
+- Added messaging debug test page to messaging settings
+- PHPMailer: Added SMTP authentication, by batje, #467438
+- Fix to private messaging send method interface, by David Goode
+
+6.x-1.1 to 6.x-2.0
+--------------------------
+- Added new module, messaging_xmpp, to replace xmppframework xmpp_messaging
+- Added a new callback in message method info ('user callback') for use with xmppframework
+- Fixed some issues with SMS messages, gateway parameter is not used anymore.
+- Added some utility functions for text handling: messaging_text_build(), messaging_text_clean()
+- Reworked logging and log formatting and moved debug module to Development package
+- Fixed: default filter set to default variable if empty
+- Added line endings for 'Plain text' filter, #428440
+- Added new API function: messaging_user_setting()
+- Added wrapper for no pending messages text, by CrackWilding, #446218
+- Added new API function: messaging_text_truncate(), from sms module
+- Reworked SMS formatting, removed text limit, #390438
+- Fixed: messaging_phpmailer does not use passed headers, by jmcclelland, #363001
+- Added table and field descriptions to schema, #429184
+- Fixed regexp for compatibility, by Ogredude, #393384
+- Fixed broken function: messaging_pull_pending()
+- Moved messaging notify module to a different package, http://drupal.org/project/notifications_extra
+- Fixed minor issues with storing message templates (trim) by mehmeta #243743
+- Added support for anonymous accounts with 'destination' property set
+- Added PHPMailer settings and debug settings,  #358386 and #248743
+- Moved send method settings to its own tab, and moved mail functions to messaging.mail.inc
+- Defined some new constants for sending method types, updated plug-ins
+- Updated token_logic support, http://www.developmentseed.org/blog/2009/mar/25/tokenlogic-helps-messaging-and-notifications
+- Fixed issue with messaging logs not being deleted.
+- Updated Privatemsg integration, #340676
+- Fixed: Two 'Thread' subscription types on UI settings, #409084
+- Fixed: cron - mimemail parameters issue, by scottrigby, #382576
+- Added logging interface (messaging_log)
+- Improvements for messaging_twitter and messaging_debug
+- Messaging method list only displays the ones available for the user.
+- Fixed SMS subject & body formatting issues, #374903
+- Reworked message templates administration indicating fallbacks and added better help texts.
+
+6.x-1.0 to 6.x-1.1
+--------------------------
+- Fixed: Update SMS sending method for new SMS Framework, by diggersf, #337518
+- Fixed: PHPmailer, Handle rfc2822 formatted "From:" field, by rcourtna, #349224
+- Fixed: PHP notices, by sun, #366391
+- Fixed: Messaging_notify not adding uid to notifications event, by Scott Reynolds, #364466
+- Performance: added indexes to messaging_store table, by Scott Reynolds, #364590
+- Fixed: messaging_update_replace not finding the right replacement method
+- Fixed: wrong module description for messaging_phpmailer, #340685
+- Fixed: messaging_notify - wrong notification type and missing perm(), by Scott Reynolds, #361758
+- Fixed: No messages in watchdog with debug send method, #358667
+- Fixed: messaging_phpmailer does not use passed headers (fails with mail2web module), by jmcclelland, #363001
+- Fixed: error when params are unpacked for stored messages, by mcdruid, #364334
+- Fixed: Incomplete uninstall, by jaydub, #295444 
+- Fixed: Number of messages sent' value is ignored, #339422
+- Added twitter plug-in by Will White
+- Added messaging_text_replace() for tokens and token_support
+- Fixed issues with cron processing and queue storage, added tests
+- Added query builder helper for messaging and notifications
+- Improved messaging store, multiple destinations are now serialized and message stored only once
+- Implemented callbacks chain for message processing, callbacks defined on sending method.
+- Reworked message processing, using objects now instead of array
+
+6.x-1.0-rc3 to 6.x-1.0
+--------------------------
+- Fixed Cannot use object of type PHPMailer as array, #321212
+- Added some debug tools and some basic support for incoming messages
+- Formatting improvements and help texts for message templates admin page
+- Implemented handling for disabling send methods, notify other modules
+- Renamed some sending methods, better naming and avoid name clashes (phpmailer, mimemail)
+- Added configurable names for sending methods, some changes in admin pages
+
+6.x-1.0-rc2 to 6.x-1.0-rc3
+--------------------------
+- Upgraded messaging_phpmailer info file, by darren.ferguson, #309945
+- Upgraded messaging_sms module, by darren.ferguson, #314896
+- Updated unit tests to simpletest 6.x-2.x
+- Fixed minor issues with modules and documentation
+- Added German translation, by rastatt, #294378
+- Fixed wrong delta in filter system, by the greenman, #305593
+- Fixed namespace collisions with other hooks, #301715 and #294322
+ 
+6.x-1.0-rc1 to 6.x-1.0-rc2
+----------------------------
+- Some clean up, moved documentation to the handbook, http://drupal.org/node/252582
+- Fixed: Condition produces false positive when rendering messages, by andremolnar, #290163
+- Added unit tests for message rendering.
+
+6.x-1.0-beta1 to 6.x-1.0-rc1
+----------------------------
+- Creating a default input format on install, "Messaging plain text"
+- Fixed parameter inconsistency, by darren.ferguson, #272545
+- Some minor bug fixes, see 5.x changelog
+- Reworked administration menu options, grouping all settings under Admin/Messaging
+- Porting latest minor features from Drupal 5. Send method settings, etc..
+- Fixing template form not showing, by BTMash, #251372
+
+5.x-1.0-beta1 to 6.x-1.0-dev
+-----------------------------
+- Fixed issue with messaging log variable
+- Quick Drupal 6 upgrade and some code clean up
+- Ported latest patches from 5.x branch (MESSAGE_TYPE_NONE and help text)
+- Split admin UI on its own file messaging.admin.inc
+
+5.x-1.0-alpha2 to 5.x-1.0-beta1
+--------------------------------
+- Added formatting, pager and delete option for messaging_simple module
+- Added formatting and pager for messaging_debug(), fixed some strings
+- Fixed annoying hidden char issue for messaging_sms module, http://drupal.org/node/243246
+- Added helper function messaging_mail_params()
+- API change for consistency with queue processing: The send callback now takes a single destination
+- Added $message['sender_account'] parameter
+- Added some api documentation as function comments
+- Fixed bug in queue processing, by jaydub
+- New: Implemented message queueing and logging, big patch
+- Reworked message pull hooks, now it doesn't rely on other modules
+- Added some tests, covered message queueing and some plug-in APIs
+
+5.x-1.0-alpha1 to 5.x-1.0-alpha2
+--------------------------------
+- Fix display of tokens and some clean up by andremolnar, http://drupal.org/node/233467
+- New mime mail plug-in that has been there for a while, by Tim Cullen
+- Added hook_message_alter($message, $info, $method)
+- Fixed issue with message rendering for sms
+- Fixed missing value on db insert, by jaydub, http://drupal.org/node/227881
+- Simplified filtering and added some API functions. Used in phpmailer module
+- Fixed user_send and send methods for the SMS gateway
+
+06/02/08 - 28/02/08
+--------------------
+Important sending API Improvements:
+- Added messaging_message_send() to be able to send to non users and also for multiple sending.
+- Now messaging_message_send_user() is just a wrapper for the previous one. It does $account to $destination translation.
+- Reworked message rendering, so most plug-ins don't need to implement the render callback. Added more options.
+- New method info properties: 
+  'destination', field for getting destination from user account.
+  'subject_glue', to glue multipart message subjects, [Optional]
+  'send_user', callback for sending to users [Optional]
+- The send callback should accept now a $destination array for bulk sending
+Filtering improvements:
+- Added a different filter for the subject
+- Added support for drupal_html_to_text filtering. See http://drupal.org/project/html_to_text
+- Performance: Filtering is done now only once for the whole text
+Others:
+- Some improvements for the settings page.
+- Updated all contributed plug-ins accordingly.
+- Improved logging by messaging_debug module.
+- Fixed some other minor issues, added comments, etc..
+
+- Added pgsql support (untested), by jaydub, http://drupal.org/node/223670
+- Added 'administer messaging' permission.
+- Split the debug functionality out of messaging and messaging_simple: messaging_debug module
+- Fixed issues with messaging simple: http://drupal.org/node/218394
