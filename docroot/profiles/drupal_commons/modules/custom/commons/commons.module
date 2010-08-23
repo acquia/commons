@@ -253,7 +253,7 @@ function commons_block($op = 'list', $delta = 0, $edit = array()) {
       case 2:
         $block = array(
           'subject' => '',
-          'content' => _commons_commons_info_block()
+          'content' => theme('commons_info_block')
         );
         break;
     }
@@ -290,12 +290,12 @@ function _commons_jumpstart_community_block() {
  * 
  * This is used in the footer to link back to acquia.com
  */
-function _commons_commons_info_block() {
+function theme_commons_info_block() {
   $content = '';
   
   $content .= '<div id="acquia-footer-message">';
   $content .= '<a href="http://acquia.com/drupalcommons" title="Drupal Commons social business software">';
-  $content .= '<img src="' . url('profiles/drupal_commons/images/commons_footer_logo.png') . '" title="Drupal Commons social business software" alt="Drupal Commons social business software" />';
+  $content .= '<img src="./profiles/drupal_commons/images/commons_footer_logo.png" title="Drupal Commons social business software" alt="Drupal Commons social business software" />';
   $content .= '</a>';
   $content .= '</div>';
   
@@ -1097,6 +1097,7 @@ function commons_form_tagging_admin_settings_alter(&$form, &$form_state) {
 function commons_theme() {
   return array(
     'commons_user_stats_block' => array(),
+    'commons_info_block' => array(),
   );
 }
 
