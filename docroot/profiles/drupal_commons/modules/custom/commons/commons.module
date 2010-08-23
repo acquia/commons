@@ -295,7 +295,7 @@ function theme_commons_info_block() {
   
   $content .= '<div id="acquia-footer-message">';
   $content .= '<a href="http://acquia.com/drupalcommons" title="Drupal Commons social business software">';
-  $content .= '<img src="./profiles/drupal_commons/images/commons_footer_logo.png" title="Drupal Commons social business software" alt="Drupal Commons social business software" />';
+  $content .= '<img src="' . base_path() . 'profiles/drupal_commons/images/commons_footer_logo.png" title="Drupal Commons social business software" alt="Drupal Commons social business software" />';
   $content .= '</a>';
   $content .= '</div>';
   
