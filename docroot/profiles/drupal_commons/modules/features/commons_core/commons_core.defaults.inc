@@ -2825,7 +2825,7 @@ function _commons_core_default_page_manager_handlers() {
   $handler->handler = 'panel_context';
   $handler->weight = 0;
   $handler->conf = array(
-    'title' => 'Group Homepage',
+    'title' => 'Group homepage',
     'no_blocks' => FALSE,
     'css_id' => '',
     'css' => '',

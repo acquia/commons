@@ -1,6 +1,7 @@
 <?php
+// $Id$
 
-/*
+/**
  * Map of permissions and associated roles
  * 
  * @return

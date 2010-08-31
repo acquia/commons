@@ -1,7 +1,7 @@
 <?php
-// $Id: drupal_commons_editor.inc
+// $Id$
 
-/*
+/**
  *  Return settings for WYSIWYG editors
  * 
  * @param $format
@@ -10,8 +10,6 @@
  *   An array of editor settings
  */
 function drupal_commons_editor_settings($format) {
-  $settings = '';
-  
   switch($format) {
     case 'Full HTML':
       $settings = array(

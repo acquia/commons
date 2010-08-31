@@ -1,0 +1,30 @@
+--- tagging.module	2010-07-18 06:11:01.000000000 -0400
++++ tagging.module.new	2010-08-31 16:08:46.000000000 -0400
+@@ -51,6 +51,27 @@ function tagging_form_alter(&$form, $for
+       }
+     }
+   }
++  
++  // Check if user_terms is present
++  if (isset($form['user_terms'])) {
++    // Iterate all the available vocabularies
++    foreach ($form['user_terms'] as $key => $value) {
++      // Only act on form items containing vocabularies
++      if (strstr($key, 'user_terms_')) {
++        // Extract the vid
++        $id = str_replace('user_terms_', '', $key);
++        // Make sure it's numeric
++        if (is_numeric($id)) {
++          // Check if the tagging widget is enabled for this
++          if (variable_get('tagging_inject_' . $id, 0)) {
++            $form['user_terms'][$key]['#type'] = 'tagging_widget';
++            $form['user_terms'][$key]['#vid'] = $id;
++            $form['user_terms'][$key]['#uid'] = $form['#uid'];
++          }
++        }
++      }
++    }
++  }
+ }
+ 
+ /**
