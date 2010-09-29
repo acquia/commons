@@ -141,7 +141,7 @@ function drupal_commons_profile_modules() {
  *   language-specific profiles.
  */
 function drupal_commons_profile_details() {
-  $image = '<img src="./profiles/drupal_commons/images/logo.png" alt="Drupal Commons" title="Drupal Commons"/>';
+  $image = theme('image', 'profiles/drupal_commons/images/logo.png', t('Drupal Commons'), t('Drupal Commons'));
   
   return array(
     'name' => 'Drupal Commons',
