@@ -1,6 +1,4 @@
-/* @override http://localhost:9021/sites/all/themes/twitter_commons/css/twitter-commons-style.css */
-
-/* $Id: acquia_commons-style.css 7784M 2010-09-03 15:18:25Z (local) $ */
+/* $Id: acquia_commons-style.css 7965 2010-09-30 15:49:42Z sheena $ */
 
 /* Basic Typography & Colors-------------------------------------------------------------- */
 
@@ -1980,6 +1978,43 @@ div.shoutbox-even {
   text-align: right;
 }
 
+/* Homebox module*/
+
+.homebox-column:after {
+  clear: both;
+  content: ".";
+  display: block;
+  height: 0;
+  visibility: hidden;
+}
+
+#homebox .homebox-column {
+	background-color: #f9f9f9;
+	background-image: none;
+}
+
+#homebox .homebox-portlet h3.portlet-header {
+  background-color: #efefef;
+  color: #323232;
+  font-weight: normal;
+  line-height: 1.5em;
+  font-size: 1.3em;
+  margin: 0px;
+  padding: 3px 8px;
+} 
+
+#homebox .homebox-portlet h2.portlet-header a{
+  color: #323232;
+}
+
+#homebox .homebox-portlet .homebox-portlet-inner{
+  border: 1px solid #dedede;
+}
+
+#homebox .homebox-portlet .homebox-portlet-inner .portlet-content{
+  padding: 10px;
+}
+
 /* Group Info */
 
 .group-attributes.fieldgroup .content {
@@ -2503,6 +2538,8 @@ html.js fieldset.views-exposed-form.collapsed {
 .view-recent-content-all .views-exposed-widget {
   width: 16%;
 }
+
+.view-recent-content-all .views-field-title { width: 40%; }
 
 /* Group content views*/
 
