@@ -1,5 +1,5 @@
 <?php
-// $Id: template.php 7713 2010-07-16 15:26:08Z sheena $
+// $Id: template.php 8021 2010-10-19 13:01:34Z sheena $
 
 /**
  *  theme_breadcrumb()
@@ -127,7 +127,7 @@ $cur_tm = time();
 
 $dif = $cur_tm-$tm;
 
-$pds = array('second','minute','hour','day','week','month','year','decade');
+$pds = array(t('second'),t('minute'),t('hour'),t('day'),t('week'),t('month'),t('year'),t('decade'));
 
 $lngh = array(1,60,3600,86400,604800,2630880,31570560,315705600);
 

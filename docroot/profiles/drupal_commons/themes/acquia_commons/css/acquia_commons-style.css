@@ -1,4 +1,4 @@
-/* $Id: acquia_commons-style.css 7965 2010-09-30 15:49:42Z sheena $ */
+/* $Id: acquia_commons-style.css 8022 2010-10-19 17:51:54Z sheena $ */
 
 /* Basic Typography & Colors-------------------------------------------------------------- */
 
@@ -1256,6 +1256,11 @@ div.comment h3.title {
 .comment-info ul.links li {
 	font-size: 10px;
 	padding: 0 2px 0 0;
+}
+
+.comment-info ul.links li.comment_forbidden,
+.comment-info ul.links li.comment_forbidden span {
+	white-space: normal;
 }
 
 .comment-info ul.links li.last {
@@ -2539,6 +2544,7 @@ html.js fieldset.views-exposed-form.collapsed {
   width: 16%;
 }
 
+.view-AllRecentContent .views-field-title,
 .view-recent-content-all .views-field-title { width: 40%; }
 
 /* Group content views*/
