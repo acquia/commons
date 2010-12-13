@@ -1,0 +1,100 @@
+// $Id: CHANGELOG.txt,v 1.2.2.5 2010/08/11 00:12:34 mikestefff Exp $
+
+CHANGELOG for Homebox for Drupal
+
+6.x-1.x-dev - 2009/05/18
+  o Fixed warning during install
+  o Added a condition on hook_views_pre_execute() to prevent user_save from firing when not on a homebox context
+  o README.txt update
+
+6.x-1.x-dev - 2009/05/19
+  o Fixed uninstall procedure to delete url aliases from url_alias table
+  o Fixed block sorting on admin page
+  o Block overriding themselves for front end display when blocks had the same weight value
+  o Fixed exposed filters for views when defined in default display and not overriden in block display
+  o Fixed exposed filters to only be displayed in config portlet zone when view option "Exposed form in block" is set to "Yes"
+  o Replaced cache_clear_all() calls with menu_rebuild(), we have no cache to clear, but we have menu items to rebuild
+  o Removed unnecessary code here and there
+  o Removed unnecessary CSS rules
+  o Fixed all Drupal coding standards reported by Coder module
+  o Added Advanced help documentation
+
+6.x-1.x-dev - 2009/05/22
+  o Replace drupal_substr by drupal_strlen (http://drupal.org/node/469262)
+  o Do not save user settings when $user->0 i.e. Anonymous
+
+6.x-1.x-dev - 2009/05/26
+  o Added ability to set default visibility/collapse state settings for each block
+  o Fixes init page display where anonymous were saved
+  o Added warning message to unregistered users
+  o Delete variable upon page deletion
+  o Fixe a small issue that let settings icon appear on a block even if no block settings were available
+  o Added translations directory and homebox.pot
+  o Added a message for anymous users to tell them that they need to login/register
+
+6.x-1.0-beta1 - 2009/06/04
+  o Added french translations
+  o Added french advanced help
+  o Going to beta1
+
+6.x-1.0 - 2009/08/10
+  o Going to 1.0
+
+6.x-1.1 - 2009/10/20
+  o Fixed Ajax calls so that they can be executed without URL alias turn On
+  o Fixed block level permission check
+
+6.x-1.2 - 2009/10/30
+  o Fixed #615310: SQL query must follow schema design. and #618516: PostgreSQL not supported thanks to Josh Waihi and bendiy
+  o Fixed #616928: French translation : incorrect plural forms values thanks to niQo
+
+6.x-1.3 - 2010/04/30
+  o Fixed #640976: code clean up patch applied thanks to Josh Waihi
+  o Fixed #476560: Add a placeholder for boxes by kscheirer, timofey
+  o Fixed #739492: change jQuery selector for better theming by lasac
+  o Improved #685504: drag'n'drop behaviour by removing receiver zone constraints
+  o Fixed #645056: wrong block delta for exposed filters thanks to cdale
+  o Fixed #628692: PHP warning thanks to iwkse
+  o New: added support for Block caching system, activate per homebox page (be sure to read option description)
+  o New: support by default for 1 column layout (missing CSS rules)
+  o New: support by default for 4 columns layout (missing CSS rules)
+  o New: slightly improved JS for a better drag'n'drop behaviour, hope it fixes some tricky dragging!
+  o jQuery 1.3.2 seems to works pretty well with http://drupal.org/project/jquery_update 6.x-2.0-alpha1 (i.e jQuery 1.3.2)
+  o and hope I didn't forget anything
+  
+6.x-2.0-dev - 2010/07/02
+  o New #794728: Removed incrementing page IDs
+  o New #794728: Introduced page machine identifier names
+  o New #794728: Removed use and dependance of block IDs
+  o New #794728: Removed homebox_defaults table
+  o New #794728: Remove use of separate table entries for each block on a given page
+  o New #794728: Entire default page data stored in a single data object
+  o New #794728: Entire user page data stored in a single data object
+  o New #794728: Removed dependance of path module
+  o New #794728: Made menu entries optional
+  o New #794728: Fixed CSS region formatting
+  o New #794728: Fixed Views exposed filter duplication bug
+  o New #794728: No longer save on every page action
+  o New #794728: "Save setting" button introduced
+  o New #794728: "Restore to defaults" button introduced
+  o New #794728: Improved code inefficiencies, bad practicies, validations, etc
+  o New #794728: Import/export homeboxes
+  o New #794728: Option to make blocks unclosable
+  o New #794728: Optional block title overrides
+  o New #794728: Added JSON2
+  o New #794728: Option to enable/disable homeboxes
+  o New #794728: Maximizing widget feature
+  o New #794728: Move permissions from hook_perm into page config
+  o New #794728: Increase drag speed
+  o New #794728: Double-clicking a widget header collapses/expands the block
+  o New #794728: Added CSS support for up to 9 regions
+  o New #794728: Fixed cache issue with changing region amount
+  o New #794728: Option to disable theme block regions so homebox can go full-width
+  o New #794728: Allow homeboxes to live in code via hook_homebox() - included sample module displaying this
+  o New #794728: Features integration
+  o New #794728: Organic Groups integration
+  o New #794728: Offer Homebox as a profile tab
+  o New #794728: Region width overrides
+  o New #794728: Custom user-entered blocks
+  o New #794728: Indication of unsaved changes on the page
+  o New #794728: Admin option to flush user settings per page

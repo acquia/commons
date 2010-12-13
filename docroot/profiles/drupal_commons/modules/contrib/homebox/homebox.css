@@ -1,0 +1,266 @@
+/* $Id: homebox.css,v 1.1.4.25 2010/07/02 19:49:39 mikestefff Exp $ */
+
+/*
+** Administrative interface
+*/
+#homebox-admin-display-form .roles {
+  font-size: 86%;
+}
+
+/*
+** Columns/regions
+*/
+
+#homebox .homebox-column {
+  margin: 2px;
+  padding: 5px;
+  background: url(images/stripe.png);
+  min-height: 40px;
+}
+
+#homebox .homebox-column-wrapper {
+  float: left;
+}
+#homebox .homebox-maximized {
+  width: 100%;
+}
+#homebox.column-count-1 .homebox-column-wrapper {
+  width: 100%;
+}
+#homebox.column-count-2 .homebox-column-wrapper {
+  width: 50%;
+}
+#homebox.column-count-3 .homebox-column-wrapper {
+  width: 33.3%;
+}
+#homebox.column-count-4 .homebox-column-wrapper {
+  width: 25%;
+}
+#homebox.column-count-5 .homebox-column-wrapper {
+  width: 20%;
+}
+#homebox.column-count-6 .homebox-column-wrapper {
+  width: 16.6%;
+}
+#homebox.column-count-7 .homebox-column-wrapper {
+  width: 14.2%;
+}
+#homebox.column-count-8 .homebox-column-wrapper {
+  width: 12.5%;
+}
+#homebox.column-count-9 .homebox-column-wrapper {
+  width: 11.1%;
+}
+/*
+** Portlets/boxes
+*/
+#homebox .homebox-portlet {
+  margin: 2px 0 5px;
+  padding: 0;
+  border: 3px solid #eee;
+  background-color: white;
+}
+#homebox .homebox-portlet .homebox-portlet-inner {
+  border: 1px solid #c0c0c0;
+  overflow: hidden;
+}
+#homebox .portlet-content {
+  padding: 4px;
+}
+#homebox .homebox-portlet-collapsed .portlet-content {
+  display: none;
+}
+#homebox .homebox-portlet .portlet-header {
+  margin: 0;
+  padding: 2px 4px;
+  border-bottom: 1px solid #ddd;
+  background: #e4f0f8; /* matches garland */
+  color: #494949;
+  min-height: 18px;
+  font-size: 1em;
+}
+#homebox .homebox-draggable .portlet-header:hover {
+  cursor: move;
+}
+#homebox .homebox-portlet .portlet-header .portlet-title {
+  display: block;
+  z-index: 9; /* IE is terrible */
+  position: relative; /* IE is terrible */
+}
+#homebox .homebox-portlet .portlet-config {
+  display: none;
+  border-bottom: 1px solid #ddd;
+}
+#homebox .homebox-portlet div.views-exposed-widgets {
+  padding: 0 7px;
+}
+#homebox div.view-header {
+  text-align: right;
+}
+#homebox .portlet-maximized {
+  clear: both;
+}
+
+/*
+** Icons
+*/
+.portlet-icon {
+  float: right;
+  height: 16px;
+  width: 16px;
+  cursor: pointer;
+  z-index: 10; /* IE is terrible */
+  position: relative; /* IE is terrible */
+}
+.portlet-settings {
+  background: url(images/settings.gif);
+}
+.portlet-plus {
+  background: url(images/plus.gif);
+}
+.portlet-minus {
+  background: url(images/minus.gif);
+}
+.portlet-close {
+  background: url(images/close.gif);
+}
+.portlet-maximize {
+  background: url(images/maximize.gif);
+}
+.portlet-maximized .portlet-minimize {
+  background: url(images/minimize.gif);
+}
+
+/*
+** Closed box/portlet class
+*/
+.homebox-portlet-closed {
+  display: none;
+}
+
+/*
+** Placeholder
+*/
+#homebox .homebox-placeholder {
+  visibility: visible !important;
+  margin: 5px 0;
+  padding: 0;
+  /*background: #FFFFDD;*/
+  border: 3px dashed #ccc;
+}
+#homebox .homebox-placeholder * {
+  visibility: hidden;
+}
+
+/*
+** Colors
+*/
+div.homebox-colors {
+  float: right;
+  margin: 2px;
+}
+.homebox-color-selector {
+  display: block;
+  float: left;
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  margin: 1px;
+  border: 1px solid #999;
+}
+.homebox-color-message {
+  font-size: 85%;
+  color: #999;
+  float: left;
+  margin-right: 4px;
+}
+
+/* Page configure UI */
+#homebox-settings {
+  background: url(images/stripe.png) repeat;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+}
+#homebox-settings ul {
+  padding: 3px;
+}
+#homebox-settings li {
+  display: block;
+  float: left;
+  border: 1px solid #DDD;
+  margin: 2px;
+  padding: 3px 6px;
+  background: #FFF;
+}
+#homebox-buttons {
+  margin: 5px 0;
+}
+#homebox-buttons button {
+  background: #F6F6F6;
+  border: 1px solid #CCCCCC;
+  color: #1C94C4;
+  cursor: pointer;
+  margin-right: 2px;
+  padding: 4px 6px;
+}
+#homebox-minimize-to-save {
+  font-size: 90%;
+  color: #999;
+  font-style: italic;
+  display: none;
+  margin-right: 5px;
+}
+#homebox-changes-made {
+  font-size: 80%;
+  color: darkRed;
+  font-style: italic;
+  display: none;
+}
+.homebox-delete-custom-link,
+.homebox-edit-custom-link {
+  font-size: 85%;
+  border: none;
+  color: #1C94C4;
+  cursor: pointer;
+  background: #FFF;
+}
+
+/* Form Components */
+#homebox-add-form form, 
+#homebox-edit-form form {
+  margin: 0;
+}
+#homebox-add-form-status,
+#homebox-edit-form-status {
+  background: #FEF1EC;
+  border: 1px solid #CD0A0A;
+  color: #CD0A0A;
+  padding: 8px;
+  display: none;
+  margin-bottom: 5px;
+  width: 450px;
+}
+#homebox-add-form-title,
+#homebox-edit-form-title {
+  margin-bottom: 6px;
+  width: 450px;
+}
+#homebox-add-form-content,
+#homebox-edit-form-content {
+  width: 450px;
+  height: 135px;
+}
+
+/* 
+ * jQuery UI 
+ * 
+ * Until Drupal get's an updated jQuery UI
+ * and theme support
+ */
+
+.ui-dialog-overlay { 
+  background: #aaaaaa url(images/overlay.png) 50% 50% repeat-x; 
+  opacity: .30;
+  filter:Alpha(Opacity=30); 
+}

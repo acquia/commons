@@ -1,0 +1,51 @@
+<?php
+// $Id: homebox.install,v 1.1.4.9 2010/08/11 00:12:34 mikestefff Exp $
+
+/**
+ * @file
+ * The install file for Homebox allows the module to install (and uninstall) itself. This is required as this module uses its own table.
+ */
+
+/**
+ * Implementation of hook_install().
+ */
+function homebox_install() {
+  // Since there will be no upgrade path from 1.x to 2.x,
+  // we need to make sure that hook_install ran and that
+  // this wasn't simply enabled
+  variable_set('homebox_version', 2);
+  
+  drupal_install_schema('homebox');
+}
+
+function homebox_schema() {
+  // Schema for homebox pages
+  $schema['homebox_pages'] = array(
+    'fields' => array(
+      'name' => array('type' => 'varchar', 'length' => 64, 'not null' => TRUE, 'default' => ''),
+      'settings' => array('type' => 'blob', 'size' => 'big', 'not null' => TRUE, 'serialize' => TRUE, 'object default' => array()),
+    ),
+    'primary key' => array('name'),
+  );
+  // Schema for user custom settings
+  $schema['homebox_users'] = array(
+    'fields' => array(
+      'uid'    => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'name' => array('type' => 'varchar', 'length' => 64, 'not null' => TRUE, 'default' => ''),
+      'settings' => array('type' => 'text', 'size' => 'big', 'not null' => TRUE, 'serialize' => TRUE, 'object default' => array()),
+    ),
+  );
+  return $schema;
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function homebox_uninstall() {
+  // Remove variables
+  variable_del('homebox_user_tab');
+  variable_del('homebox_version');
+  
+  // Remove schema
+  drupal_uninstall_schema('homebox');
+}
