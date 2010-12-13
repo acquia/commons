@@ -14,7 +14,7 @@ function _heartbeat_features_api() {
     'heartbeat' => array(
       'name' => t('Heartbeat'),
       'default_hook' => 'heartbeat_message_info',
-      'default_file' => FEATURES_DEFAULTS_INCLUDED,
+      'default_file' => FEATURES_DEFAULTS_INCLUDED_COMMON,
       'features_source' => TRUE,
       'file' => drupal_get_path('module', 'heartbeat') .'/heartbeat.features.inc',
     ),
