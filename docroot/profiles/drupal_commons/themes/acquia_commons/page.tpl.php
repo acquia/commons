@@ -22,6 +22,7 @@
 </head>
 
 <body id="<?php print $body_id; ?>" class="<?php print $body_classes; ?>">
+  <div id="left-background"> </div><div id="right-background"> </div>
   <div id="page" class="page">
     <div id="page-inner" class="page-inner">
       <div id="skip">
@@ -64,19 +65,16 @@
             <?php print $header; ?>
               </div><!-- /header-region-inner -->
             </div><!-- /header-region -->
+         <div id="nav-group" class="nav-group clearfix">
+         <?php print theme('grid_block', $primary_links_tree, 'primary-menu'); ?>
+<?php print theme('grid_block', $search_box, 'search-box'); ?>
+          </div><!--/nav-group-->
           </div><!-- /header-group-inner -->
         </div><!-- /header-group -->
       </div><!-- /header-group-wrapper -->
    
-   <div id="nav-group-wrapper" class="nav-group-wrapper full-width">
-        <div id="nav-group" class="nav-group row <?php print $grid_width; ?>">
-          <div id="nav-group-inner" class="nav-group-inner inner clearfix">
-   <?php print theme('grid_block', $primary_links_tree, 'primary-menu'); ?>
-<?php print theme('grid_block', $search_box, 'search-box'); ?>
-        </div><!-- /nav-group-inner -->
-        </div><!-- /nav-group -->
-      </div><!-- /nav-group-wrapper -->
-       <?php print theme('grid_row', $breadcrumb, 'breadcrumbs', 'full-width', $grid_width); ?>  
+   
+     
 
       <!-- preface-top row: width = grid_width -->
       <?php print theme('grid_row', $preface_top, 'preface-top', 'full-width', $grid_width); ?>
@@ -115,9 +113,10 @@
 
                             <div id="content-inner" class="content-inner block">
                               <div id="content-inner-inner" class="content-inner-inner inner">
-                            <?php if ($title): ?>
+                            <?php if ($title && !$is_front): ?>
                                 <h1 class="title"><?php print $title; ?></h1>
                                 <?php endif; ?>
+                                  <?php print theme('grid_block', $breadcrumb, 'breadcrumbs'); ?>  
                             <?php print theme('grid_block', $tabs, 'content-tabs'); ?>
                                 <?php if ($content): ?>
                                 <div id="content-content" class="content-content">
