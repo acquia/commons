@@ -1,5 +1,5 @@
 <?php
-// $Id: ogheartbeat.inc,v 1.1.2.7 2010/08/16 21:56:59 stalski Exp $
+// $Id $
 
 /**
  * @file
@@ -10,12 +10,12 @@
 heartbeat_include('HeartbeatAccess');
 
 /**
- * Class OgHeartbeat
+ * Class MembersActivity
  * Concrete class to prepare messages for the current user
  * and all of his/her relations.
  *
  */
-class OgHeartbeat extends HeartbeatAccess {
+class MembersActivity extends HeartbeatAccess {
 
   protected $_gid = 0;
   protected $_group_access = FALSE;
@@ -26,7 +26,9 @@ class OgHeartbeat extends HeartbeatAccess {
     // Where the user id is a member of the group
     // and where the nid target is the group nid
     $this->setGroup();
-    
+    drupal_add_js(drupal_get_path('module', 'og_activity') . '/og_activity.js');
+    drupal_add_js(array('group_nid' => $this->_gid), "setting");
+        
   }
 
   protected function hasAccess() {
@@ -38,10 +40,11 @@ class OgHeartbeat extends HeartbeatAccess {
     }
     
     if (!isset($this->group)) {
-      $this->setError('We are not in a group context.');
+    	$this->setError('We are not in a group context.');
     }
 
     return $this->_group_access;
+    
   }
 
   private function setGroup($nid = 0) {
@@ -52,7 +55,11 @@ class OgHeartbeat extends HeartbeatAccess {
       return;
     }
 
-    if (arg(0) == 'node' && is_numeric(arg(1))) {
+    if (!empty($_REQUEST['group_nid'])) {
+      $this->_gid = $_REQUEST['group_nid'];
+      $this->group = node_load($this->_gid);
+    }
+    elseif (arg(0) == 'node' && is_numeric(arg(1))) {
 
       $node = node_load(arg(1));
 
@@ -70,9 +77,15 @@ class OgHeartbeat extends HeartbeatAccess {
 
   public function dressUpMessages(HeartbeatParser $heartbeat) {
 
-    $sql = " AND ua.nid <> 0 AND (ua.nid = %d OR ua.nid_target = %d) ";
+    $members = array();
+    $sql = og_list_users_sql(1, 0, NULL);
+    $res = db_query($sql, $this->_gid);
+    while ($row = db_fetch_object($res)) {
+      $members[] = $row->uid;
+    }
 
-    $heartbeat->raw_messages = $this->resultSql($sql, array($this->_gid, $this->_gid));
+    $sql = " AND ua.uid IN (". implode(',', $members) .") ";
+    $heartbeat->raw_messages = $this->resultSql($sql);
 
     return $heartbeat;
   }
@@ -84,12 +97,17 @@ class OgHeartbeat extends HeartbeatAccess {
    */
   public function addViewQuery(&$view) {
 
-    // Make the sql limited to the access
-    $field = "$view->table_alias.$view->real_field";
+
+    $members = array();
+    $sql = og_list_users_sql(1, 0, NULL);
+    $res = db_query($sql, $this->_gid);
+    while ($row = db_fetch_object($res)) {
+      $members[] = $row->uid;
+    }
+
+    $sql = "$view->table_alias.uid IN (". implode(',', $members) .") ";
 
     $view->query->set_where_group('AND', 'extra');
-
-    $sql = "$view->table_alias.nid <> 0 AND ( $view->table_alias.nid = %d OR $view->table_alias.nid_target = %d ) ";
-    $view->query->add_where('extra', $sql, $this->_gid, $this->_gid);
+    $view->query->add_where('extra', $sql);
   }
 }

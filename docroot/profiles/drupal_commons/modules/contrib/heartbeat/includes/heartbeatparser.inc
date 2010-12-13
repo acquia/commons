@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeatparser.inc,v 1.1.2.3.2.26 2010/04/15 00:38:21 stalski Exp $
+// $Id: heartbeatparser.inc,v 1.1.2.3.2.28 2010/10/16 09:16:35 stalski Exp $
 
 /**
  * @file
@@ -125,7 +125,7 @@ class heartbeatParser {
         continue;
       }
 
-      $type = $message->template->concat_args['type'];
+      $type = isset($message->template->concat_args['type']) ? $message->template->concat_args['type'] : 'single';
 
       // Create a gap id, which is a unique id per time gap
       $gap_id = $this->create_gap_id($message, $type, $set_count);
@@ -156,8 +156,9 @@ class heartbeatParser {
       }
       elseif ($type == 'count') {
 
+        $message_template = str_replace("%times%", $message->count, $message->message);
+        $message->message = str_replace("%count%", $message->count, $message_template);
         $this->_messages[$gap_id] = $message;
-        $this->_messages[$gap_id]->target_count++;
 
       }
       else {
@@ -240,50 +241,53 @@ class heartbeatParser {
       return $gap_id . '_single';
     }
     elseif ($type == 'count') {
-      return $gap_id . '_count';
+      return $gap_id . '_count_'. $message->uid;
     }
 
-    $grouptarget = $message->template->concat_args['group_target'];
-    $groupby = $message->template->concat_args['group_by'];
 
-    // group by node will result in a summary of
-    // users performing the activity
-    if ($groupby == 'node') {
-      $gap_id .= '_' . $grouptarget . '_node_' . $message->nid;
-    }
+    if (isset($message->template->concat_args['group_by'])) {
 
-    // group by user will result in a summary of content
-    // nodes which the user has done the activity on
-    elseif ($groupby == 'user') {
-
-      $gap_id .= '_' . $grouptarget . '_user_' . $message->uid;
-      if ($message->nid_target > 0) {
-        $gap_id .= '_'. $message->nid_target;
+      $grouptarget = $message->template->concat_args['group_target'];
+      $groupby = $message->template->concat_args['group_by'];
+      // group by node will result in a summary of
+      // users performing the activity
+      if ($groupby == 'node') {
+        $gap_id .= '_' . $grouptarget . '_node_' . $message->nid;
       }
-    }
 
-    // group by target object id will result in a summary of content
-    // nodes which the user has done the activity on
-    elseif ($groupby == 'node-target') {
+      // group by user will result in a summary of content
+      // nodes which the user has done the activity on
+      elseif ($groupby == 'user') {
 
-      $gap_id .= '_' . $grouptarget . '_user_' . $message->uid . '_node_target_' . $message->nid_target;
-    }
+        $gap_id .= '_' . $grouptarget . '_user_' . $message->uid;
+        if ($message->nid_target > 0) {
+          $gap_id .= '_'. $message->nid_target;
+        }
+      }
 
-    // group by user-user will result in unique user-user
-    // messages, expressing a relation between the two users
-    elseif ($groupby == 'user-user') {
+      // group by target object id will result in a summary of content
+      // nodes which the user has done the activity on
+      elseif ($groupby == 'node-target') {
 
-      $gap_id .= '_user_relation';
-      //$gap_id .= '_'. ($target_uid == 0 ? $message->uid : $target_uid);
-      $group_target = $message->template->concat_args['group_by_target'];
-      $string = $message->variables['@' . $group_target];
-      $group_gap_string = strip_tags(drupal_strtolower($string));
-      $gap_id .= '_' . $group_gap_string;
-    }
-    else {
+        $gap_id .= '_' . $grouptarget . '_user_' . $message->uid . '_node_target_' . $message->nid_target;
+      }
 
-      // Handle the fall-backs as unique messages
-      $gap_id .= '_' . $message->uid .'_' . (int)$message->uid_target;
+      // group by user-user will result in unique user-user
+      // messages, expressing a relation between the two users
+      elseif ($groupby == 'user-user') {
+
+        $gap_id .= '_user_relation';
+        //$gap_id .= '_'. ($target_uid == 0 ? $message->uid : $target_uid);
+        $group_target = $message->template->concat_args['group_by_target'];
+        $string = $message->variables['@' . $group_target];
+        $group_gap_string = strip_tags(drupal_strtolower($string));
+        $gap_id .= '_' . $group_gap_string;
+      }
+      else {
+
+        // Handle the fall-backs as unique messages
+        $gap_id .= '_' . $message->uid .'_' . (int)$message->uid_target;
+      }
     }
 
     return $gap_id;
@@ -306,7 +310,6 @@ class heartbeatParser {
       // Take care!! not message->count because this could be set with the sql as well
       // The purpose would be to fill %times% or its alias %count%
       if ($candidate['count'] > 1) {
-
         // rebuild the message using the candidate variables
         $this->_messages[$single_id]->create_grouped_message($candidate, $max_items_to_group);
 

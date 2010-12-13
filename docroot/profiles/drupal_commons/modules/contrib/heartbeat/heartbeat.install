@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeat.install,v 1.1.2.6.2.10.2.26 2010/05/18 20:00:48 stalski Exp $
+// $Id: heartbeat.install,v 1.1.2.6.2.10.2.29 2010/10/16 09:16:35 stalski Exp $
 
 /**
  * @file
@@ -14,6 +14,7 @@
 function heartbeat_install() {
 
   variable_set('heartbeat_enabled', 1);
+  variable_set('heartbeat_debug', 0);
   variable_set('heartbeat_show_time_grouped_items', 1);
   variable_set('heartbeat_show_message_times', 1);
   variable_set('message_access_types', array(
@@ -34,6 +35,7 @@ function heartbeat_install() {
     'connectedheartbeat' => array('profile' => 1),
     'publicheartbeat' => array('profile' => 0),
   ));
+  variable_set('heartbeat_profile_message_templates', array());
   // Disabling this means blocking user and node links by default
   // The decision is based on the fact that it's a community module
   variable_set('heartbeat_context_perm', 0);
@@ -60,11 +62,8 @@ function heartbeat_install() {
  */
 function heartbeat_create_messages() {
 
-  // Include heartbeat messages
-  $defaults = heartbeat_heartbeat_message_info();
-
   // Check existing modules for a heartbeat implementation of this hook
-  $defaults += module_invoke_all('heartbeat_message_info');
+  $defaults = module_invoke_all('heartbeat_message_info');
 
   foreach ($defaults as $key => $default) {
     heartbeat_message_insert($default);
@@ -78,6 +77,7 @@ function heartbeat_create_messages() {
 function heartbeat_uninstall() {
 
   variable_del('heartbeat_enabled');
+  variable_del('heartbeat_debug');
   variable_del('heartbeat_show_message_times');
   variable_del('heartbeat_show_time_grouped_items');
   variable_del('message_access_types');
@@ -87,6 +87,7 @@ function heartbeat_uninstall() {
   variable_del('heartbeat_activity_grouping_how_many');
   variable_del('heartbeat_activity_log_cron_delete');
   variable_del('heartbeat_access_types');
+  variable_del('heartbeat_profile_message_templates');
 
   // Remove all tables so no need to delete the messages
   drupal_uninstall_schema('heartbeat');
@@ -303,7 +304,28 @@ function heartbeat_schema() {
         'length' => 12,
         'not null' => FALSE,
         'default' => 'en',
-        'description' => t('language for a log".'),
+        'description' => t('language for a log.'),
+      ),
+      'nid_info' => array(
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => FALSE,
+        'default' => '',
+        'description' => t('node access info.'),
+      ),
+      'nid_target_info' => array(
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => FALSE,
+        'default' => '',
+        'description' => t('node target access info.'),
+      ),
+      'uaid_comments' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+        'default' => 0,
+        'description' => t('The comment count.'),
       ),
       'variables' => array(
         'type' => 'text',
@@ -461,4 +483,49 @@ function heartbeat_update_403() {
   variable_set('heartbeat_allowed_tags', implode(',', $tags));
 
   return array();
+}
+
+/**
+ * Update to version 4.10.x
+ *
+ * @return sql statements array
+ */
+function heartbeat_update_410() {
+
+  // Add the translations table for multilingual comments
+  $ret = array();
+  switch ($GLOBALS['db_type']) {
+    case 'mysql':
+    case 'mysqli':
+      $ret[] = update_sql("ALTER TABLE {heartbeat_activity} ADD nid_info VARCHAR(128) NULL DEFAULT '' AFTER language");
+      $ret[] = update_sql("ALTER TABLE {heartbeat_activity} ADD nid_target_info VARCHAR(128) NULL DEFAULT '' AFTER nid_info");
+      $ret[] = update_sql("ALTER TABLE {heartbeat_activity} ADD uaid_comments INT NULL DEFAULT 0 AFTER nid_target_info");
+      break;
+  }
+
+  $result = db_query("SELECT uaid, nid, nid_target FROM {heartbeat_activity} WHERE nid > 0");
+  while ($row = db_fetch_object($result)) {
+    $save_nid = array();
+    $save_nid_target = array();
+
+    $this_node = node_load($row->nid);
+    $save_nid = array();
+    $save_nid['uid'] = $this_node->uid;
+    $save_nid['type'] = $this_node->type;
+    $save_nid['format'] = $this_node->format;
+
+    if ($row->nid_target > 0) {
+      $this_node_target = node_load($row->nid_target);
+      $save_nid_target['uid'] = $this_node_target->uid;
+      $save_nid_target['type'] = $this_node_target->type;
+      $save_nid_target['format'] = $this_node_target->format;
+    }
+
+    $save_nid_ser = serialize($save_nid);
+    $save_nid_target_ser = serialize($save_nid_target);
+    $update_q = "UPDATE {heartbeat_activity} set nid_info = '%s', nid_target_info = '%s' WHERE uaid = %d";
+    db_query($update_q, $save_nid_ser, $save_nid_target_ser, $row->uaid);
+  }
+
+  return $ret;
 }

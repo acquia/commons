@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeat-message-row.tpl.php,v 1.1.2.10 2010/02/21 22:45:26 stalski Exp $
+// $Id: heartbeat-message-row.tpl.php,v 1.1.2.11 2010/06/09 20:05:23 stalski Exp $
 
 /**
  * @file
@@ -20,7 +20,7 @@
 ?>
 <div class="heartbeat-message-block <?php print $message->message_id . ' ' . $zebra; ?>">
 
-  <div class="beat-item" id="beat-item-<?php print $message->uaid ?>">
+  <div class="beat-item <?php print $message->classes ?>" id="beat-item-<?php print $message->uaid ?>">
 
     <?php print $message->content['message']; ?>
     <?php if (!empty($message->content['time_info'])): ?>

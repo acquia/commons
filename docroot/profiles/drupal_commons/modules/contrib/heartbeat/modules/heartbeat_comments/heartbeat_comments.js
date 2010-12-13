@@ -12,12 +12,14 @@ Drupal.heartbeat.comments.button = null;
  */
 Drupal.behaviors.heartbeat_comments = function (context) {
   $('.heartbeat-comment-submit', context).each(function() {
-    $(this).bind('click', function(e) { return Drupal.heartbeat.comments.submit(this); } );
+    $(this).bind('click', function(e) {
+      return Drupal.heartbeat.comments.submit(this); 
+    });
   });
 }
 
 Drupal.heartbeat.comments.submit = function(element) {
-    
+
   // Throw in the throbber
   Drupal.heartbeat.comments.button = $(element);
   Drupal.heartbeat.wait(Drupal.heartbeat.comments.button, '.heartbeat-comments-wrapper');
@@ -65,4 +67,17 @@ Drupal.heartbeat.comments.submitted = function(data) {
     Drupal.heartbeat.doneWaiting();
     Drupal.heartbeat.comments.button.removeAttr("disabled");
   }
+}
+
+Drupal.heartbeat.comments.load = function (uaid, node_comment, nid) {
+  var url = Drupal.settings.basePath + 'heartbeat/comments/load/js';
+  $.post(url, {uaid: uaid, node_comment: node_comment, nid: nid}, Drupal.heartbeat.comments.loaded, 'json');
+}
+
+Drupal.heartbeat.comments.loaded = function(data) {
+
+  if (data.data != undefined) {
+    $('#heartbeat-comments-wrapper-' + data.uaid).html(data.data);
+  }
+  
 }

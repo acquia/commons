@@ -1,5 +1,5 @@
 <?php
-// $Id: publicheartbeat.inc,v 1.1.2.2.2.10 2010/02/21 22:45:26 stalski Exp $
+// $Id: publicheartbeat.inc,v 1.1.2.2.2.11 2010/09/02 20:35:33 stalski Exp $
 
 /**
  * @file
@@ -26,9 +26,7 @@ class PublicHeartbeat extends HeartbeatAccess {
    */
   public function dressUpMessages(HeartbeatParser $heartbeat) {
 
-    // Always respect the private access restriction.
-    $sql = " AND ua.uid > 0 AND ua.access > 0 ";
-
+    $sql = " AND ua.access > 0 ";
     $heartbeat->raw_messages = $this->resultSql($sql);
 
     return $heartbeat;
@@ -42,7 +40,6 @@ class PublicHeartbeat extends HeartbeatAccess {
   public function addViewQuery(&$view) {
 
     // Make the sql limited to the access
-    $field = "$view->table_alias.$view->real_field";
-    $view->query->add_where('andgroup', "$field > %d  AND $view->table_alias.access > 0", 0);
+    $view->query->add_where('andgroup', "$view->table_alias.access > 0");
   }
 }

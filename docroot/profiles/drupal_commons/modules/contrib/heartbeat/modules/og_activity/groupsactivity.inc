@@ -1,5 +1,5 @@
 <?php
-// $Id: groupsactivity.inc,v 1.1.2.1 2010/03/06 21:48:44 stalski Exp $
+// $Id: groupsactivity.inc,v 1.1.2.3 2010/08/14 18:36:13 stalski Exp $
 
 /**
  * @file
@@ -84,7 +84,11 @@ class GroupsActivity extends HeartbeatAccess {
    * @param object $view The view handler object by reference to add our part to the query
    */
   public function addViewQuery(&$view) {
-    // Not needed because we can do the joining with views
-    // just add a relation for node with the og_ancestry table for instance
+
+    /*$join = new views_join();
+    $join->construct('og_ancestry', $view->table_alias, 'nid', 'group_nid', array(), 'INNER');
+    $view->query->add_relationship('og_ancestry', $join, $view->table_alias);*/
+
   }
+
 }

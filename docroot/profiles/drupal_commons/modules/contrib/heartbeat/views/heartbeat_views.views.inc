@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeat_views.views.inc,v 1.1.2.2.2.14 2010/04/26 20:54:21 stalski Exp $
+// $Id: heartbeat_views.views.inc,v 1.1.2.2.2.17 2010/10/16 09:16:36 stalski Exp $
 
 /**
  * @file
@@ -19,14 +19,7 @@ function heartbeat_views_data() {
   $data['heartbeat_messages'] = array(
       // Table to join
       'table' => array(
-        'group' => t('Heartbeat messages'), // Heartbeat activity
-        /* 'join' => array(
-          'heartbeat_activity' => array(
-            'left_table' => 'heartbeat_messages',
-            'left_field' => 'message_id',
-            'field' => 'message_id',
-          ),
-        ), */
+        'group' => t('Heartbeat messages'),
       ),
       'message_id' => array(
         'title' => t('Heartbeat message id'),
@@ -34,13 +27,6 @@ function heartbeat_views_data() {
         'filter' => array(
           'handler' => 'views_handler_filter_string',
         ),
-        /* 'relationship' => array(
-          'label' => t('Heartbeat message'),
-          'base' => 'heartbeat_messages',
-          'base field' => 'message_id',
-          'left_field' => 'message_id',
-          'field' => 'message_id',
-        ), */
       ),
       'message' => array(
         'title' => t('Heartbeat message'),
@@ -72,12 +58,6 @@ function heartbeat_views_data() {
           'title' => t('Heartbeat activity messages'),
           'help'  => t("All activity logged by heartbeat"),
         ),
-        /* 'join' => array(
-          'heartbeat_messages' => array(
-            'left_field' => 'message_id',
-            'field' => 'message_id',
-          ),
-        ), */
       ),
 
       // Fields to use or as filter, arguments, relationships ...
@@ -177,6 +157,21 @@ function heartbeat_views_data() {
         ),
       ),
 
+      'nid_target' => array(
+        'title' => t('Node Target'),
+        'help' => t('The target node the activity occured.'),
+        'argument' => array(
+          'handler' => 'views_handler_argument_node_nid',
+        ),
+        'relationship' => array(
+          'label' => t('Message node target id'),
+          'base' => 'node',
+          'base field' => 'nid',
+          'left_field' => 'nid_target',
+          'field' => 'nid_target',
+        ),
+      ),
+
   );
   if (module_exists('og_views')) {
     $data['heartbeat_activity']['og_rel'] = array(
@@ -214,7 +209,14 @@ function heartbeat_views_views_query_alter(&$view, &$query) {
       foreach (_heartbeat_get_fields('heartbeat_messages') as $field => $alias) {
         $query->add_field($view->relationship['message_id']->alias, $field, $alias);
       }
+      $query->add_field($view->relationship['message_id']->alias, 'variables', 'variables_orig');
+      $query->add_field($view->relationship['message_id']->alias, 'message', 'message_orig');
+      $query->add_field($view->relationship['message_id']->alias, 'message_concat', 'message_concat_orig');
     }
+    else {
+      drupal_set_message(t('Heartbeat views need to be joined over the heartbeat_messages table.'), 'error');
+    }
+
   }
 
   $view->pager['_items_per_page'] = $view->pager['items_per_page'];

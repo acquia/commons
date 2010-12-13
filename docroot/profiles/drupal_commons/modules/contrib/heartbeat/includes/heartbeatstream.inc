@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeatstream.inc,v 1.1.2.11 2010/04/15 00:38:21 stalski Exp $
+// $Id: heartbeatstream.inc,v 1.1.2.12 2010/09/26 21:03:17 stalski Exp $
 
 /**
  * @file
@@ -17,6 +17,9 @@ class HeartbeatStream {
 
   // Class name actualy used
   public $name = '';
+
+  // Real name actualy used
+  public $realname = '';
 
   // Human readable name
   public $title = '';
@@ -102,6 +105,7 @@ class HeartbeatStream {
   public function __construct($type) {
 
     $this->name = drupal_strtolower($type['class']);
+    $this->realname = drupal_strtolower(isset($type['realname']) ? $type['realname'] : $type['class']);
     $this->title = $type['name'];
     $this->module = $type['module'];
     $this->access = $type['access'];

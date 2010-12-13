@@ -1,5 +1,5 @@
 <?php
-// $Id: shouts.module,v 1.1.2.2.2.21 2010/05/18 20:00:48 stalski Exp $
+// $Id: shouts.module,v 1.1.2.2.2.25 2010/10/16 09:16:36 stalski Exp $
 // by Zuuperman and Stalski - Menhir - www.menhir.be
 
 /**
@@ -80,7 +80,9 @@ function shouts_user($op, &$edit, &$account, $category = NULL) {
   global $user;
   switch($op) {
     case 'load':
-      $user->latest_shout = get_latest_shout($user->uid);
+      if ($user->uid > 0) {
+        $user->latest_shout = get_latest_shout($user->uid);
+      }
       break;
     case 'view':
       $latest_shout = get_latest_shout($account->uid);
@@ -142,6 +144,7 @@ function shouts_token_values($type, $object = NULL, $options = array()) {
       $shout = (object)$object;
 
       $values['shout-id'] = $shout->shout_id;
+      $values['shout-actor-avatar'] = l(theme('user_picture', heartbeat_user_load($shout->uid)), 'user/' . $shout->uid, array('html' => TRUE));;
       $values['shout-body'] = check_markup($shout->message);
       $values['shout-body-raw'] = $shout->message;
       $values['shout-author-uid'] = $shout->uid;
@@ -159,11 +162,12 @@ function shouts_token_list($type = 'all') {
 
   if ($type == 'shout' || $type == 'all') {
 
-    $tokens['shout']['shout-id'] = t('Comment ID');
-    $tokens['shout']['shout-body'] = t('Comment body');
-    $tokens['shout']['shout-body-raw'] = t('Comment body. WARNING - raw user input');
-    $tokens['shout']['shout-author-uid'] = t("Comment author's user id");
-    $tokens['shout']['shout-date'] = t("Comment creation year (four digit)");
+    $tokens['shout']['shout-id'] = t('Shout ID');
+    $tokens['shout']['shout-actor-avatar'] = t('Shout actor avatar');
+    $tokens['shout']['shout-body'] = t('Shout body');
+    $tokens['shout']['shout-body-raw'] = t('Shout body. WARNING - raw user input');
+    $tokens['shout']['shout-author-uid'] = t("Shout author's user id");
+    $tokens['shout']['shout-date'] = t("Shout creation year (four digit)");
 
     return $tokens;
   }
@@ -213,11 +217,13 @@ function shouts_shout_form($form_state = array(), $show_latest_shout = TRUE) {
   $show_form = user_access('make shout');
 
   $form = array();
-  $latest_shout = $user->latest_shout;
 
-  if (empty($latest_shout) || !$show_latest_shout) {
+  if (empty($user->latest_shout) || !$show_latest_shout) {
     $latest_shout->message = '';
     $latest_shout->time = '';
+  }
+  else {
+    $latest_shout = $user->latest_shout;
   }
 
   if ($show_form) {
@@ -273,6 +279,9 @@ function shouts_shout_form_submit($form = array(), &$form_state = array()) {
 
   if (!empty($shout)) {
 
+    // Give other modules a chance to hook.
+    module_invoke_all('shout', $user, $shout);
+
     // Let rules know there has been a shout event
     if (module_exists('rules')) {
       rules_invoke_event('shout_post', $user, $shout);
@@ -313,9 +322,20 @@ function shout_load($shout_id) {
  * @param $uid user_id of shout to load
  */
 function get_latest_shout($uid) {
-  $shout = db_fetch_object(db_query_range('SELECT message, cleared, time FROM {shouts} WHERE uid = %d ORDER BY time DESC', $uid, 0, 1));
-  $shout->message = filter_xss($shout->message);
-  return $shout;
+  static $uids = array();
+
+  if (!isset($uids[$uid])) {
+    $shout = db_fetch_object(db_query_range('SELECT message, cleared, time FROM {shouts} WHERE uid = %d ORDER BY time DESC', $uid, 0, 1));
+    if (isset($shout->message)) {
+      $shout->message = filter_xss($shout->message);
+      $uids[$uid] = $shout;
+    }
+    else {
+      $uids[$uid] = '';
+    }
+  }
+
+  return $uids[$uid];
 }
 
 /**

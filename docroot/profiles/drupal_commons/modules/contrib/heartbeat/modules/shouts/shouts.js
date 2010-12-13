@@ -5,6 +5,24 @@
 Drupal.heartbeat = Drupal.heartbeat || {};
 
 /**
+ * Handle default text of heartbeat area
+ */
+Drupal.behaviors.Shouts = function(context) {
+  var submitField = $("#edit-shout");
+  var defaultShout = submitField.val();
+  submitField.focus(function() {
+    if (submitField.val() == defaultShout) {
+      submitField.val(""); 
+    }
+  });
+  submitField.blur(function() {
+    if (submitField.val() == "") {
+       submitField.val(defaultShout);
+    }
+  });
+}
+
+/**
  * Shouts object
  */
 Drupal.heartbeat.Shouts = Drupal.heartbeat.Shouts || {};
@@ -39,6 +57,8 @@ Drupal.heartbeat.Shouts.afterShout = function(data) {
   Drupal.heartbeat.doneWaiting();
   Drupal.heartbeat.Shouts.button.removeAttr("disabled");
   
-  Drupal.heartbeat.pollMessages();
+  $(".heartbeat-stream").each(function() {
+    Drupal.heartbeat.pollMessages($(this).attr('id').replace("heartbeat-stream-", ""));
+  });
   
 }

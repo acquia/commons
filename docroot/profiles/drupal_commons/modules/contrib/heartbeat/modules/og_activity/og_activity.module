@@ -1,5 +1,5 @@
 <?php
-// $Id: og_activity.module,v 1.1.2.2.2.11 2010/04/13 21:18:37 stalski Exp $
+// $Id: og_activity.module,v 1.1.2.2.2.13 2010/09/26 21:03:17 stalski Exp $
 // by Jochen Stals - Menhir - www.menhir.be
 
 define('HEARTBEAT_OG_PUBLIC', 10);
@@ -74,6 +74,12 @@ function og_activity_heartbeat_register_access_types() {
       'path' => 'groupsactivity.inc',
       'module' => 'og_activity'
     ),
+    2 => array(
+      'name' => 'Organic group member activity',
+      'class' => 'MembersActivity',
+      'path' => 'membersactivity.inc',
+      'module' => 'og_activity'
+    ),
   );
 }
 
@@ -94,10 +100,9 @@ function og_activity_token_values($type, $object = NULL, $options = array()) {
   switch ($type) {
     case 'node':
       if (!empty($object->og_groups) && is_array($object->og_groups)) {
-        $gids = array_filter($object->og_groups);
-        $gid = $gids[0];
-        $title = db_result(db_query("SELECT title FROM {node} WHERE nid = %d", $gid));
-        $values['ogname-title-link'] = l(check_plain($title),'node/'.$gid);
+        $gids = array_keys(array_filter($object->og_groups));
+        $title = db_result(db_query("SELECT title FROM {node} WHERE nid = %d", $gids[0]));
+        $values['ogname-title-link'] = l(check_plain($title),'node/'. $gids[0]);
         return $values;
       }
       break;

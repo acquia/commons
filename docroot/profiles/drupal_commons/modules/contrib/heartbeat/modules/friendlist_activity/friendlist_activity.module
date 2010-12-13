@@ -1,5 +1,5 @@
 <?php
-// $Id: friendlist_activity.module,v 1.1.2.2.2.22 2010/04/15 20:27:39 stalski Exp $
+// $Id: friendlist_activity.module,v 1.1.2.2.2.23 2010/10/16 09:16:36 stalski Exp $
 // by Jochen Stals - Menhir - www.menhir.be
 
 /**
@@ -69,12 +69,16 @@ function friendlist_activity_heartbeat_message_info() {
 
 /**
  * Implementation of hook_heartbeat_related_uid_info().
+ * Static cache helper for the friends of a user.
  */
 function friendlist_activity_heartbeat_related_uid_info($uid) {
+  static $uids = array();
 
-  $friends_uids = friendlist_activity_get_friends($uid);
+  if (!isset($uids[$uid])) {
+    $uids[$uid] = friendlist_activity_get_friends($uid);
+  }
 
-  return $friends_uids;
+  return $uids[$uid];
 }
 
 /**

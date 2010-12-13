@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeat_example.module,v 1.1.2.16 2010/04/10 20:59:29 stalski Exp $
+// $Id: heartbeat_example.module,v 1.1.2.21 2010/10/16 09:16:35 stalski Exp $
 
 /**
  * @file
@@ -54,6 +54,9 @@ function heartbeat_example_nodeapi(&$node, $op, $arg = 0) {
       '@username' => l(heartbeat_user_load($node->uid)->name, 'user/' . $node->uid),
       '@node_type' => 'page',
       '@node_title' => l($node->title, 'node/' . $node->nid),
+      // You could easily set the the time of the activity with
+      // the time of node creation. (devel generate, imports, ...)
+      'time' => $node->created,
     );
 
     heartbeat_api_log($message_id, $node->uid, 0, $node->nid, 0, $variables);
@@ -159,24 +162,25 @@ function heartbeat_example_heartbeat_messages_alter(&$messages, HeartbeatAccess 
  * @param $messages Array of heartbeat activity messages
  * @param $stream HeartbeatAccess as the object that holds the current stream scope
  */
-function heartbeat_example_heartbeat_theme_alter(&$messages, HeartbeatAccess $stream) {
+/*function heartbeat_example_heartbeat_theme_alter(&$messages, HeartbeatAccess $stream) {
 
   foreach ($messages as $key => $message) {
 
     $messages[$key]->display_time = FALSE;
 
     if ($message->nid > 0) {
-
+      // $node could be build here like in other examples, but too lazy right now :)
       $node = node_load($message->nid);
 
       // Catch normal story posts
       if ($node->type == 'story') {
         $messages[$key]->message = theme('heartbeat_content', $message, $node);
       }
+
     }
   }
 
-}
+}*/
 
 /**
  * Implementation of hook_heartbeat_stream_filters().
@@ -187,8 +191,8 @@ function heartbeat_example_heartbeat_theme_alter(&$messages, HeartbeatAccess $st
  */
 function heartbeat_example_heartbeat_stream_filters() {
   return array(
-    'reports' => array(
-      'name' => t('Reports')
+    'stories' => array(
+      'name' => t('Stories')
     ),
   );
 }
@@ -206,10 +210,6 @@ function phptemplate_heartbeat_comments($comments, $uaid, $node_comment = FALSE,
 
   $output .= '<ul class="summary" id="heartbeat-comments-list-' . $uaid . '">';
 
-  if ($node_comment && $has_more) {
-    $output .= '<li class="heartbeat-comment heartbeat-comment-more">'. l(t('Meer &raquo;'), 'node/'. $comment->nid, array('html' => TRUE)) .'</li>';
-  }
-
   if (!empty($comments)) {
     $i = 1;
     foreach ($comments as $comment) {
@@ -217,6 +217,12 @@ function phptemplate_heartbeat_comments($comments, $uaid, $node_comment = FALSE,
       $i++;
       $output .= theme('heartbeat_comment', $comment, $node_comment, $last);
     }
+  }
+
+  // Add more button.
+  if ($has_more) {
+    $link = heartbeat_comments_load_more_link($uaid, $node_comment, isset($comment->nid) ? $comment->nid : 0);
+    $output .= '<li class="heartbeat-comment heartbeat-comment-more">'. $link .'</li>';
   }
 
   $output .= '</ul>';
@@ -261,6 +267,24 @@ function phptemplate_heartbeat_comment($comment, $node_comment = FALSE, $last = 
   $output .= _theme_time_ago(isset($comment->time) ? strtotime($comment->time) : $comment->timestamp);
   $output .= '</span>';
   $output .= '</div>';
+
+  // For node comments link to the standard Drupal comment deletion form under comment/delete/%
+  // Only users who have the right permissions should see the delete link.
+  // Permissions are provided by the "Comment Delete" module.
+  global $user;
+  if ($node_comment) {
+    if (user_access('delete any comment') || ($user->uid == $comment->uid && user_access('delete own comments'))) {
+      $output .= l(t('Delete'), 'heartbeat/nodecomment/delete/'. $comment->cid, array('attributes' => array('class' => 'heartbeat-comment-delete'), 'query' => drupal_get_destination(), 'alias' => TRUE));
+    }
+  }
+  // For Heartbeat comments link to an own deletion form.
+  // Only users who have the right permissions or are the commenting person should see the delete link.
+  // Permissions are provided by Heartbeat itself ("administer heartbeat comments').
+  elseif(user_access('administer heartbeat comments') || ($comment->uid && $user->uid && $comment->uid == $user->uid)) {
+    $output .= l(t('Delete'), 'heartbeat/comment/delete/'. $comment->hcid, array('attributes' => array('class' => 'heartbeat-comment-delete'), 'query' => drupal_get_destination(), 'alias' => TRUE));
+  }
+
+
   $output .= '</li>';
 
   return $output;

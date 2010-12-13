@@ -1,5 +1,5 @@
 <?php
-// $Id: privateheartbeat.inc,v 1.1.2.2.2.10 2010/02/21 22:45:26 stalski Exp $
+// $Id: privateheartbeat.inc,v 1.1.2.2.2.12 2010/08/31 20:49:55 stalski Exp $
 
 /**
  * @file
@@ -20,7 +20,7 @@ class PrivateHeartbeat extends HeartbeatAccess {
 
     $sql = " AND ((ua.uid = %d  AND hm.perms > %d ) OR (ua.uid_target = %d AND ua.access > %d) )";
 
-    $heartbeat->raw_messages = $this->resultSql($sql, array($this->stream->uid, HEARTBEAT_PRIVATE, $this->stream->uid, HEARTBEAT_PRIVATE));
+    $heartbeat->raw_messages = $this->resultSql($sql, array($this->stream->uid, HEARTBEAT_PRIVATE, $this->stream->uid, HEARTBEAT_PUBLIC_TO_ADDRESSEE));
 
     return $heartbeat;
   }
@@ -37,10 +37,10 @@ class PrivateHeartbeat extends HeartbeatAccess {
 
     $view->query->set_where_group('OR', 'orgroup');
 
-    $sql = "$field = %d  AND $view->table_alias.access = %d ";
-    $view->query->add_where('orgroup', $sql, $this->_uid, $access);
+    $sql = "$field = %d  AND $view->table_alias.access > %d ";
+    $view->query->add_where('orgroup', $sql, $this->_uid, HEARTBEAT_PRIVATE);
 
-    $sql = "($view->table_alias.uid_target = %d AND $view->table_alias.access > 0)";
-    $view->query->add_where('orgroup', $sql, $this->_uid);
+    $sql = "($view->table_alias.uid_target = %d AND $view->table_alias.access > %d)";
+    $view->query->add_where('orgroup', $sql, $this->_uid, HEARTBEAT_PUBLIC_TO_ADDRESSEE);
   }
 }

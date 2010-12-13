@@ -1,16 +1,25 @@
 <?php
-// $Id: heartbeat.api.test,v 1.1.2.2 2010/02/21 12:31:33 stalski Exp $
+// $Id: heartbeat.api.test,v 1.1.2.3 2010/10/16 09:16:35 stalski Exp $
 
 /**
  * @file
  * Tests for heartbeat API
  */
 
+require_once(dirname(__FILE__) .'/heartbeatwebtestcase.inc');
+
 /**
  * Class HeartbeatAPITest
  *   Tests the heartbeat API.
  */
-class HeartbeatAPITest extends DrupalWebTestCase {
+class HeartbeatAPITest extends HeartbeatWebTestCase {
+
+  /**
+   * Implementation of setUp().
+   */
+  function setUp() {
+    parent::setUp('heartbeat', 'heartbeattest');
+  }
 
   /**
    * Implementation of getInfo().
@@ -24,35 +33,11 @@ class HeartbeatAPITest extends DrupalWebTestCase {
   }
 
   /**
-   * Implementation of setUp().
-   */
-  function setUp() {
-    parent::setUp('heartbeat', 'heartbeattest');
-  }
-
-  /**
-   * Implementation of tearDown().
-   */
-  function tearDown() {
-    parent::tearDown();
-  }
-
-  /**
-   * Debug helper function. Writes values away to a text file in the files directory.
-   */
-  function debugHelper($value, $mode = 'a+') {
-    $debug = fopen($this->originalFileDirectory .'/simpletestdebug.txt', $mode);
-    fwrite($debug, print_r($value, TRUE) ."\n");
-    fclose($debug);
-  }
-
-  /**
    * Function to test the heartbeat api log function
    */
   function testHeartbeatAPILog() {
 
-    $admin_user = $this->drupalCreateUser(array('administer nodes', 'access user profiles', 'view heartbeat messages', 'configure heartbeat messages'));
-    $this->drupalLogin($admin_user);
+    $this->drupalLogin($this->drupalCreateUser($this->testRoles));
 
     // Create page so heartbeattest.module can log activity through hook_nodeapi.
     $page_node = $this->drupalCreateNode(array('type' => 'page', 'title' => 'MyPageTitle'));

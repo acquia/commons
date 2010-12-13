@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeat.common.inc,v 1.1.2.2.2.20 2010/04/10 20:59:29 stalski Exp $
+// $Id: heartbeat.common.inc,v 1.1.2.2.2.23 2010/10/16 09:16:35 stalski Exp $
 
 /**
  * @file
@@ -18,11 +18,19 @@ function heartbeat_include($file, $module = 'heartbeat', $_file_path = '') {
 
   if (!isset($loaded[$file])) {
 
+    if ($file == 'heartbeatmessagebuilder' && variable_get('heartbeat_debug', 0)) {
+      require $path . '/includes/'. $file . 'debug.inc';
+      $loaded[$file] = TRUE;
+      return $loaded[$file];
+    }
+
     $file_path = $path . '/includes/'. $_file_path;
     if (is_file($file_path)) {
       require $file_path;
       $loaded[$file] = TRUE;
+      return $loaded[$file];
     }
+
     $file_path = $path . '/'. $_file_path;
     if (is_file($file_path)) {
       require $file_path;
@@ -176,6 +184,7 @@ function _heartbeat_stream_defaults($values) {
       'page_show_pager' => 1,
       'page_pager_ajax' => 1,
       'num_load_max' => 30,
+      'page_disabled' => 0
     ),
     'poll_messages' => 0,
   );
@@ -200,8 +209,7 @@ function heartbeat_stream_prev_link($access_type, $offset_time = 0) {
  * @return unknown_type
  */
 function _theme_time_ago($time) {
-
-  return format_interval(($_SERVER['REQUEST_TIME'] - $time), 1) .' '. t('ago') ;
+  return t('@time ago', array('@time' => format_interval(($_SERVER['REQUEST_TIME'] - $time), 1)));
 }
 
 /**

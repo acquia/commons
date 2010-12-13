@@ -27,7 +27,7 @@ function heartbeat_views_views_pre_view(&$view, &$display_id=0, &$args = NULL) {
  * Implementation of hook_views_pre_render().
  */
 function heartbeat_views_views_pre_render(&$view) {
-  if ($view->base_table == 'heartbeat_activity' && !empty($view->result) && !$view->rendered) {
+  if ($view->base_table == 'heartbeat_activity' && !empty($view->result) && empty($view->rendered)) {
     _heartbeat_render_view($view);
     $view->rendered = TRUE;
   }
@@ -63,7 +63,7 @@ function _heartbeat_render_view(&$view) {
   $name = $view->name . '_' . $view->current_display;
 
   // Prepare info object
-  $stream = $view->filter['access_type']->stream;
+  $stream = isset($view->filter['access_type']->stream) ? $view->filter['access_type']->stream : new stdClass();
 
   if ($view->style_plugin->uses_fields()) {
     $field_handlers = array();
@@ -97,10 +97,13 @@ function _heartbeat_render_view(&$view) {
         }
       }
 
-      $heartbeatactivity->content['message'] = $heartbeatactivity->message;
-      $heartbeatactivity->content['widgets'] = _theme_heartbeat_widgets($heartbeatactivity);
-      $heartbeatactivity->content['time_info'] = theme('heartbeat_time_ago', $heartbeatactivity);
-      $heartbeatactivity->content['buttons'] = theme('heartbeat_buttons', $heartbeatactivity);
+      $uses_ds = $view->style_plugin->uses_row_plugin() && $view->style_plugin->row_plugin->definition['module'] == 'ds';
+      if ($uses_ds) {
+	      $heartbeatactivity->content['message'] = $heartbeatactivity->message;
+	      $heartbeatactivity->content['widgets'] = _theme_heartbeat_widgets($heartbeatactivity);
+	      $heartbeatactivity->content['time_info'] = theme('heartbeat_time_ago', $heartbeatactivity);
+	      $heartbeatactivity->content['buttons'] = theme('heartbeat_buttons', $heartbeatactivity);
+      }
 
       $results[$row->uaid] = $heartbeatactivity;
     }
@@ -139,6 +142,24 @@ function _heartbeat_group_views_messages($name, $messages, $stream) {
 
   // From here we know the number of messages actualy loaded (and allowed)
   $messages = array_values(array_slice($messages, 0, $stream->limit_sql));
+
+  // Give contributes modules the last chance to hook into the messages
+  if (empty($stream->name)) {
+    heartbeat_include('heartbeatstream', 'heartbeat');
+    heartbeat_include('publicheartbeat', 'heartbeat');
+    $heartbeatAccess = new PublicHeartbeat(new HeartbeatStream(heartbeat_stream_load('publicheartbeat')));
+  }
+  else {
+    $class = $stream->name;
+    heartbeat_include($stream->name, $stream->module);
+    $heartbeatAccess = new $class($stream);
+  }
+  $hook = 'heartbeat_view';
+  foreach (module_implements($hook) as $module) {
+    $function = $module .'_'. $hook;
+    // $messages should be implemented by reference!!!
+    $function($messages, $heartbeatAccess);
+  }
 
   return $messages;
 }

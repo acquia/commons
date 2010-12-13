@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeatmessagebuilder.inc,v 1.1.2.5.2.27 2010/10/16 09:16:35 stalski Exp $
+// $Id: heartbeatmessagebuilderdebug.inc,v 1.1.2.2 2010/10/16 09:16:35 stalski Exp $
 
 /**
  * @file
@@ -78,20 +78,17 @@ class HeartbeatMessageBuilder {
       // Filter messages by permission
       $this->checkAccess($heartbeat);
 
-      // Group the activity messages as configured
-      $messages = $this->group($heartbeat);
-    }
-
-    if (!empty($messages)) {
-
       // Give contributes modules the opportunity to load
       // additions for the heartbeat activity message object
       $hook = 'heartbeat_load';
       foreach (module_implements($hook) as $module) {
         $function = $module .'_'. $hook;
         // $messages should be implemented by reference!!!
-        $function($messages, $this->_heartbeatState);
+        $function($heartbeat->raw_messages, $this->_heartbeatState);
       }
+
+      // Group the activity messages as configured
+      $messages = $this->group($heartbeat);
 
       // Let other modules retheme or completely rebuild messages
       $hook = 'heartbeat_theme_alter';
@@ -139,8 +136,9 @@ class HeartbeatMessageBuilder {
       }
 
       // Remove messages that are excluded for everyone
-      if ($message->access == HEARTBEAT_NONE) {
+      if ($message->actor->heartbeat_activity_settings[$message->message_id]['access'] == HEARTBEAT_NONE) {
         unset($heartbeat->raw_messages[$key]);
+        drupal_set_message(t('Activity message with id !id is filtered from display, because it was excluded for everyone.', array('!id' => $message->uaid)), 'warning');
         continue;
       }
 
@@ -149,6 +147,7 @@ class HeartbeatMessageBuilder {
       $private = $message->template->perms == HEARTBEAT_PRIVATE || $message->access == HEARTBEAT_PRIVATE;
       if ($private && $user->uid != $message->actor->uid) {
         unset($heartbeat->raw_messages[$key]);
+        drupal_set_message(t('Activity message with id !id is filtered from display, because it was blocked by administrator or the owner of the message.', array('!id' => $message->uaid)), 'warning');
         continue;
       }
 
@@ -158,6 +157,7 @@ class HeartbeatMessageBuilder {
       $connected = $message->access == HEARTBEAT_PUBLIC_TO_CONNECTED || $message->template->perms == HEARTBEAT_PUBLIC_TO_CONNECTED;
       if ($connected && !in_array($user->uid, $message->actor->heartbeat_relations)) {
         unset($heartbeat->raw_messages[$key]);
+        drupal_set_message(t('Activity message with id !id is filtered from display, because this message is only shown to the owners relations.', array('!id' => $message->uaid)), 'warning');
         continue;
       }
 
@@ -172,6 +172,7 @@ class HeartbeatMessageBuilder {
         }
         if (!$access) {
           unset($heartbeat->raw_messages[$key]);
+	        drupal_set_message(t('Activity message with id !id is filtered from display, because this message is blocked by role.', array('!id' => $message->uaid)), 'warning');
           continue;
         }
       }
@@ -183,9 +184,24 @@ class HeartbeatMessageBuilder {
         if (!user_access('access user profiles', $user)) {
           $heartbeat->raw_messages[$key]->uid_access = FALSE;
         }
+        if ($message->nid > 0) {
 
-        $this->checkNodeAccess($heartbeat->raw_messages[$key], $user);
+          if (!node_access('view', node_load($message->nid), $user)) {
+            $heartbeat->raw_messages[$key]->nid_access = FALSE;
+          }
 
+          if ($message->nid_target > 0) {
+            if (!node_access('view', node_load($message->nid_target), $user)) {
+              $heartbeat->raw_messages[$key]->nid_target_access = FALSE;
+            }
+          }
+
+        }
+
+      }
+
+      if ((!$heartbeat->raw_messages[$key]->nid_target_access || !$heartbeat->raw_messages[$key]->uid_access || !$heartbeat->raw_messages[$key]->nid_access)) {
+        drupal_set_message(t('Activity message (!id) is filtered from display, because this message is blocked by node access or profile access.', array('!id' => l($message->uaid, 'heartbeat/message/'. $message->uaid), array('alias' => TRUE))), 'warning');
       }
 
     }
@@ -222,45 +238,6 @@ class HeartbeatMessageBuilder {
     // In short: problem when querying to few messages, having lots
     // of them denied and leaving the user with no messages left.
 
-  }
-
-  /**
-   * Check the node access.
-   */
-  public function checkNodeAccess(& $message, $user) {
-
-
-    if ($message->nid > 0) {
-
-      // node_access only needs, nid, uid, type & format.
-      $message_node = new stdClass;
-      $message_node->nid = $message->nid;
-      $message_node->uid = $message->nid_info['uid'];
-      $message_node->type = $message->nid_info['type'];
-      $message_node->format = $message->nid_info['format'];
-      $message_node->status = 1; // unpublished nodes ignore access control
-
-      //if (!node_access('view', node_load($message->nid), $user)) {
-      if (!node_access('view', $message_node, $user)) {
-        $message->nid_access = FALSE;
-      }
-
-      if ($message->nid_target > 0) {
-
-        $message_node_target = new stdClass;
-        $message_node_target->nid = $message->nid_target;
-        $message_node_target->uid = $message->nid_target_info['info'];
-        $message_node_target->type = $message->nid_target_info['type'];
-        $message_node_target->format = $message->nid_target_info['format'];
-        $message_node_target->status = 1; // unpublished nodes ignore access control
-
-        //if (!node_access('view', node_load($message->nid_target), $user)) {
-        if (!node_access('view', $message_node_target, $user)) {
-          $message->nid_target_access = FALSE;
-        }
-      }
-
-    }
   }
 
   /**

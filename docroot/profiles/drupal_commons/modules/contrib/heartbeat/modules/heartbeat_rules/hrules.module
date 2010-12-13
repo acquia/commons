@@ -1,5 +1,5 @@
 <?php
-// $Id: hrules.module,v 1.1.2.4 2010/04/10 20:59:29 stalski Exp $
+// $Id: hrules.module,v 1.1.2.11 2010/10/16 09:25:53 stalski Exp $
 //
 
 /**
@@ -67,7 +67,11 @@ function hrules_token_list($type = 'all') {
     $tokens['heartbeat_message']['message-access'] =  t("The message access chosen by user");
   }
   if ($type == 'heartbeat_message') {
+    $tokens['heartbeat_message']['heartbeat-message'] = t("The logged heartbeat message");
     $tokens['heartbeat_message']['heartbeat-message-raw'] = t("The logged heartbeat message in raw format");
+    $tokens['heartbeat_message']['heartbeat-message-url'] = t("Absolute url to the parent activity message");
+    $tokens['heartbeat_message']['heartbeat-message-link'] = t("Link to the parent activity message, the title is the moment it occurred");
+    $tokens['heartbeat_message']['heartbeat-actor-picture'] = t("Avatar of the actor with a link to it leading to the user account page.");
   }
 
   if ($type == 'node') {
@@ -81,6 +85,7 @@ function hrules_token_list($type = 'all') {
   if ($type == 'user') {
     $tokens['user']['user-name-url'] = t("The currently logged-in username with a link to it");
     $tokens['user']['user-profile-url'] = t("The currently logged-in username with a link to his/her profile page. <strong>USE ONLY when url-path is set to profile/username </strong>");
+    $tokens['user']['heartbeat-user-picture'] = t("Avatar of the actor with a link to it leading to the user account page.");
   }
   return $tokens;
 }
@@ -103,7 +108,11 @@ function hrules_token_values($type, $object = NULL, $options = array()) {
       $values['message-access'] = (int)$object;
       break;
     case 'heartbeat_message':
+      $values['heartbeat-message'] = $object->message;
       $values['heartbeat-message-raw'] = check_plain($object->message);
+      $values['heartbeat-message-url'] = url('heartbeat/message/'. $object->uaid, array('absolute' => TRUE));
+      $values['heartbeat-message-link'] = l(_theme_time_ago($object->timestamp), 'heartbeat/message/'. $object->uaid);
+      $values['heartbeat-actor-picture'] = l(theme('user_picture', $object->actor), 'user/' . $object->actor->uid, array('html' => TRUE));
       break;
     case 'node':
       $values['title-link'] = l($object->title, 'node/'. $object->nid);
@@ -117,8 +126,18 @@ function hrules_token_values($type, $object = NULL, $options = array()) {
       }
       break;
     case 'user':
-      $values['user-name-url'] = l($object->name, 'user/'. $object->uid, array('attributes' => array('class' => 'user')));
-      $values['user-profile-url'] =  l($object->name, 'profile/'. $object->name, array('attributes' => array('class' => 'user')));
+      if ($object->uid) {
+        $name = check_plain($object->name);
+        $values['user-name-url'] = l($name, 'user/'. $object->uid, array('attributes' => array('class' => 'user')));
+        $values['user-profile-url'] =  l($name, 'profile/'. $object->name, array('attributes' => array('class' => 'user')));
+        $values['heartbeat-user-picture'] = l(theme('user_picture', $object), 'user/' . $object->uid, array('html' => TRUE));
+      }
+      else {
+        $anon = variable_get('anonymous', 'Anonymous');
+        $values['user-name-url'] = $anon;
+        $values['user-profile-url'] = $anon;
+        $values['heartbeat-user-picture'] = '<span class="user-picture">'. $anon .'</span>';
+      }
       break;
     case 'global':
       break;
@@ -134,8 +153,9 @@ function hrules_token_values($type, $object = NULL, $options = array()) {
 function heartbeat_activity_rules_action_message_id_js() {
 
   $message_id = $_GET['message_id'];
-  $default_values = heartbeat_rule_action_get_variables($message_id);
+  //$default_values = heartbeat_rule_action_get_variables($message_id);
   $message = heartbeat_message_load($message_id, 'message_id');
+  $default_values = heartbeat_rule_action_get_variables($message_id, heartbeat_encode_message_variables($message->variables));
 
   // Updating the drupal settings to be able to do one ahah request after another
   $javascript = drupal_add_js(NULL, NULL, 'header');

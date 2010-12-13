@@ -1,5 +1,5 @@
 <?php
-// $Id: flag_heartbeat.module,v 1.1.2.1.2.10 2010/04/18 18:39:09 stalski Exp $
+// $Id: flag_heartbeat.module,v 1.1.2.1.2.11 2010/06/09 21:17:44 stalski Exp $
 // by Stalski (Jochen Stals) - Menhir - www.menhir.be
 
 /**
@@ -61,4 +61,15 @@ function flags_widget($attachments, $message) {
   }
 
   return implode(' - ', $widgetfields);
+}
+
+/**
+ * Implementation of hook_heartbeat_activity_delete().
+ *   Delete the attached comments to a heartbeat activity object.
+ * @param $message
+ *   HeartbeatActivity ID
+ * @see module_invoke_all('heartbeat_activity_delete', $activity);
+ */
+function flag_heartbeat_heartbeat_activity_delete($activity) {
+  db_query("DELETE FROM {flag_content} WHERE content_type = 'heartbeat_message' AND content_id = %d ", $activity->uaid);
 }

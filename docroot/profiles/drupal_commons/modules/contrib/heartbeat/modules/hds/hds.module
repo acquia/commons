@@ -1,5 +1,5 @@
 <?php
-// $Id: hds.module,v 1.1.2.13 2010/04/05 23:18:42 stalski Exp $
+// $Id: hds.module,v 1.1.2.15 2010/08/19 17:00:02 stalski Exp $
 // by Stalski (Jochen Stals) - Menhir - www.menhir.be
 
 /**
@@ -51,7 +51,7 @@ function hds_theme_registry_alter(&$registry) {
 /**
  * Implementation of hook_heartbeat_view().
  */
-function hds_heartbeat_messages_alter(&$messages, HeartbeatAccess $stream) {
+function hds_heartbeat_view(&$messages, HeartbeatAccess $stream) {
 
   foreach ($messages as $key => $message) {
 
@@ -65,15 +65,7 @@ function hds_heartbeat_messages_alter(&$messages, HeartbeatAccess $stream) {
     if (isset($stream->stream->variables['build_mode']) && $stream->stream->variables['build_mode'] != 'none') {
       $messages[$key]->build_mode = $stream->stream->variables['build_mode'];
     }
-  }
-}
-
-/**
- * Implementation of hook_heartbeat_view().
- */
-function hds_heartbeat_view(&$messages, HeartbeatAccess $stream) {
-
-  foreach ($messages as $key => $message) {
+    
     ds_build_fields_and_regions($messages[$key], 'hds');
   }
 }
@@ -97,7 +89,10 @@ function hds_preprocess_heartbeat_message_row(&$vars) {
   // DS expects an array. Make sure that it contains the exact
   // fields DS expects. The __get/__set will end up in the
   // variables container of object HeartbeatActivity.
-  // Here it is put back in the root of the hash to let DS play with it
+  // Here it is put back in the root of the hash to let DS play with it.
+  // Another approach would be to wrap the object in another object with
+  // a composition as vd does. I chose the magic setter manner since this
+  // could be used by other modules.
   $message = (array) $vars['message'];
   $message += $message['variables'];
 
@@ -146,6 +141,17 @@ function hds_get_types() {
  */
 function hds_ds_fields($type_name, $build_mode, $extra) {
   $fields = array(
+    'ds_avatar' => array(
+      'title' => 'Actor avatar',
+      'properties' => array(
+        'formatters' => array(
+          'ds_eval_code' => t('Default'),
+        ),
+        'code' => '<?php print l(theme("user_picture", $object->actor), "user/". $object->actor->uid, array("html" => TRUE)); ?>'
+      ),
+      'type' => DS_FIELD_TYPE_CODE,
+      'status' => DS_FIELD_STATUS_STATIC,
+    ),
     'ds_message' => array(
       'title' => 'Message',
       'properties' => array(
@@ -176,7 +182,7 @@ function hds_ds_fields($type_name, $build_mode, $extra) {
         'formatters' => array(
           'ds_eval_code' => t('Default'),
         ),
-        'code' => '<?php print theme("heartbeat_widgets", $object); ?>'
+        'code' => '<?php print _theme_heartbeat_widgets($object); ?>'
       ),
       'type' => DS_FIELD_TYPE_CODE,
       'status' => DS_FIELD_STATUS_STATIC,

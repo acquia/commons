@@ -1,5 +1,5 @@
 <?php
-// $Id: hrules.rules.inc,v 1.1.2.11 2010/05/18 20:00:48 stalski Exp $
+// $Id: hrules.rules.inc,v 1.1.2.13 2010/09/26 21:03:17 stalski Exp $
 
 /**
  * @file
@@ -204,7 +204,7 @@ function heartbeat_rules_default_action_form($settings, &$form, $form_state) {
       colons are in the tokens as well.
       <br /><strong>Synthax</strong><pre>
 @username=[author:user-name-url]
-@node_type=[node:type-name]
+@node_type=[node:type]
 @node_title=[node:title-link]
 @types=pages</pre>'),
   );
@@ -233,8 +233,7 @@ function heartbeat_rules_default_action_form($settings, &$form, $form_state) {
     '#suffix' => '</div></div>',
     '#default_value' => $default_values,
     '#cols' => 60,
-    '#rows' => 5,
-    '#required' => TRUE
+    '#rows' => 5
   );
 }
 
@@ -252,7 +251,7 @@ function heartbeat_rules_default_action_submit(&$settings, $form, $form_state) {
   $vars = eregi_replace("=", "=|=", $vars);
   $settings['variables_param'] = $vars;
 
-  db_query("UPDATE {heartbeat_messages} SET variables = '%s' WHERE message_id = '%s'", $vars, $params['message_id_param']);
+  //db_query("UPDATE {heartbeat_messages} SET variables = '%s' WHERE message_id = '%s'", $vars, $params['message_id_param']);
 }
 
 /**

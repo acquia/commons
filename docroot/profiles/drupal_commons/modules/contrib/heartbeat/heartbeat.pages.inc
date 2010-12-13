@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeat.pages.inc,v 1.1.2.15 2010/05/18 20:00:48 stalski Exp $
+// $Id: heartbeat.pages.inc,v 1.1.2.21 2010/10/16 09:16:35 stalski Exp $
 
 /**
  * @file
@@ -13,6 +13,11 @@
  * @return string Themed list of messages
  */
 function heartbeat_messages_page($access_type, $offset_time = 0, $account = NULL) {
+
+  if (!user_access('view heartbeat messages') || !variable_get('heartbeat_enabled', 1)) {
+    drupal_access_denied();
+    exit();
+  }
 
   $output = '';
 
@@ -67,6 +72,8 @@ function heartbeat_messages_page($access_type, $offset_time = 0, $account = NULL
  */
 function heartbeat_message_activity($uaid) {
 
+  $output = '';
+
   // Message streams for each access type
   $context = heartbeat_stream_view('singleheartbeat', TRUE);
   if (!isset($context)) {
@@ -84,6 +91,7 @@ function heartbeat_message_activity($uaid) {
   	drupal_access_denied();
   	exit();
   }
+
   $output = theme('heartbeat_list', $messages, $heartbeataccess, '');
 
   return $output;
@@ -121,7 +129,11 @@ function heartbeat_activity_poll() {
   // Get the messages
   $messages = $context->execute();
 
-  $json = array('status' => TRUE, 'data' => theme('heartbeat_messages', $messages, $context->getState()), 'time_updates' => array());
+  $json = array(
+    'status' => TRUE,
+    'stream' => $heartbeataccess->stream->name,
+    'data' => theme('heartbeat_messages', $messages, $context->getState()),
+    'time_updates' => array());
 
   // Get the times to update to the current time
   if (!empty($_REQUEST['uaids'])) {
@@ -163,7 +175,13 @@ function heartbeat_delete_log_confirm($form_state, $uaid) {
  * Handler for wipe confirmation
  */
 function heartbeat_delete_log_confirm_submit($form, &$form_state) {
-  db_query("DELETE FROM {heartbeat_activity} WHERE uaid = %d", $form_state['values']['uaid']);
+
+  if (!is_numeric($form_state['values']['uaid'])) {
+    return;
+  }
+
+  _heartbeat_activity_delete($form_state['values']['uaid']);
+
   $form_state['redirect'] = isset($_GET['destination']) ? $_GET['destination'] : $form_state['values']['redirect_path'];
-  drupal_set_message('Message deleted');
+  drupal_set_message(t('Message deleted'));
 }

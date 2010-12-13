@@ -1,16 +1,18 @@
 <?php
-// $Id: heartbeat.rules.test,v 1.1.2.2 2010/02/21 12:31:33 stalski Exp $
+// $Id: heartbeat.rules.test,v 1.1.2.3 2010/10/16 09:16:36 stalski Exp $
 
 /**
  * @file
  *   Test class to test rules execution on heartbeat logging.
  */
 
+require_once(dirname(__FILE__) .'/../../../tests/heartbeatwebtestcase.inc');
+
 /**
  * Class HeartbeatRulesTest
  *
  */
-class HeartbeatRulesTest extends DrupalWebTestCase {
+class HeartbeatRulesTest extends HeartbeatWebTestCase {
   /**
    * Implementation of getInfo().
    */
@@ -30,28 +32,11 @@ class HeartbeatRulesTest extends DrupalWebTestCase {
   }
 
   /**
-   * Implementation of tearDown().
-   */
-  function tearDown() {
-    parent::tearDown();
-  }
-
-  /**
-   * Debug helper function. Writes values away to a text file in the files directory.
-   */
-  function debugHelper($value, $mode = 'a+') {
-    $debug = fopen($this->originalFileDirectory .'/simpletestdebug.txt', $mode);
-    fwrite($debug, print_r($value, TRUE) ."\n");
-    fclose($debug);
-  }
-
-  /**
    * Tests if a heartbeat message is logged for an event.
    */
   function testHeartbeatLogger() {
 
-    $admin_user = $this->drupalCreateUser(array('administer nodes', 'access user profiles', 'view heartbeat messages', 'configure heartbeat messages'));
-    $this->drupalLogin($admin_user);
+    $this->drupalLogin($this->drupalCreateUser($this->testRoles));
 
     $page_node = $this->drupalCreateNode(array('type' => 'page', 'title' => 'MyFirstPage'));
 

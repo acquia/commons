@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeat_comments.install,v 1.1.2.4 2010/02/21 12:31:33 stalski Exp $
+// $Id: heartbeat_comments.install,v 1.1.2.5 2010/10/16 09:16:36 stalski Exp $
 
 /**
  * @file
@@ -67,4 +67,21 @@ function heartbeat_comments_schema() {
   'primary key' => array('hcid'),
   );
   return $schema;
+}
+
+/**
+ * Update to version 4.10.x
+ *
+ * @return sql statements array
+ */
+function heartbeat_comments_update_410() {
+
+  // Crazy, but hey, who cares :)
+  $result = db_query("SELECT uaid FROM {heartbeat_activity}");
+  while ($row = db_fetch_object($result)) {
+    $count = db_result(db_query("SELECT COUNT(*) FROM {heartbeat_comments} WHERE uaid = %d ", $row->uaid));
+    $update_q = "UPDATE {heartbeat_activity} set uaid_comments = %d WHERE uaid = %d";
+    db_query($update_q, $count, $row->uaid);
+  }
+
 }

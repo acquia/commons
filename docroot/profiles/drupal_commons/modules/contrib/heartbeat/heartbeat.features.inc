@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeat.features.inc,v 1.1.2.1 2010/05/18 20:00:48 stalski Exp $
+// $Id: heartbeat.features.inc,v 1.1.2.2 2010/08/16 20:39:52 stalski Exp $
 
 /**
  * @file
@@ -106,6 +106,7 @@ function heartbeat_features_export_render($module = 'foo', $data) {
  * Implementation of hook_features_revert().
  */
 function heartbeat_features_revert($module = NULL) {
+  
   // Load heartbeat.admin.inc
   require_once(drupal_get_path('module', 'heartbeat') . '/heartbeat.admin.inc');
   
@@ -117,4 +118,5 @@ function heartbeat_features_revert($module = NULL) {
       heartbeat_messages_revert($heartbeat['message_id']);
     }
   }
+  
 }

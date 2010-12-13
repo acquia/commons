@@ -1,12 +1,21 @@
 <?php
-// $Id: heartbeat.functional.test,v 1.1.2.2 2010/03/06 21:48:44 stalski Exp $
+// $Id: heartbeat.functional.test,v 1.1.2.3 2010/10/16 09:16:35 stalski Exp $
 
 /**
  * @file
  * Functional tests for heartbeat
  */
 
-class HeartbeatFunctionalTest extends DrupalWebTestCase {
+require_once(dirname(__FILE__) .'/heartbeatwebtestcase.inc');
+
+class HeartbeatFunctionalTest extends HeartbeatWebTestCase {
+
+  /**
+   * Implementation of setUp().
+   */
+  function setUp() {
+    parent::setUp('heartbeat', 'heartbeattest');
+  }
 
   /**
    * Implementation of getInfo().
@@ -17,29 +26,6 @@ class HeartbeatFunctionalTest extends DrupalWebTestCase {
       'description' => t('Tests for heartbeat functionality.'),
       'group' => t('Heartbeat'),
     );
-  }
-
-  /**
-   * Implementation of setUp().
-   */
-  function setUp() {
-    parent::setUp('heartbeat', 'heartbeattest');
-  }
-
-  /**
-   * Implementation of tearDown().
-   */
-  function tearDown() {
-    parent::tearDown();
-  }
-
-  /**
-   * Debug helper function. Writes values away to a text file in the files directory.
-   */
-  function debugHelper($value, $mode = 'a+') {
-    $debug = fopen($this->originalFileDirectory .'/simpletestdebug.txt', $mode);
-    fwrite($debug, print_r($value, TRUE) ."\n");
-    fclose($debug);
   }
 
   /**
@@ -58,16 +44,13 @@ class HeartbeatFunctionalTest extends DrupalWebTestCase {
    */
   function testOlderActivity() {
 
-    $admin_user = $this->drupalCreateUser(array('administer nodes', 'access user profiles', 'view heartbeat messages', 'configure heartbeat messages'));
-    $this->drupalLogin($admin_user);
+    $this->drupalLogin($this->drupalCreateUser($this->testRoles));
 
-    // Configure the public heartbeat maximum messages to ease this test.
-    $this->drupalGet('admin/build/heartbeat/stream/publicheartbeat');
     $edit = array(
       'page_items_max' => 2,
-      'page_pager_ajax' => 0,
+      'page_pager_ajax' => FALSE,
     );
-    $this->drupalPost('admin/build/heartbeat/stream/publicheartbeat', $edit, t('Submit'));
+    $this->configureStream('publicheartbeat', $edit);
 
     // Add three page nodes to prepare test.
     $time = $_SERVER['REQUEST_TIME'];
@@ -91,7 +74,7 @@ class HeartbeatFunctionalTest extends DrupalWebTestCase {
 
     // Configure add_node message template to diable its default grouping.
     $edit = array('type' => 'single');
-    $this->drupalPost('admin/build/heartbeat/edit/2', $edit, t('Save'));
+    $this->drupalPost('admin/build/heartbeat/edit/1', $edit, t('Save'));
     // @TODO Javascript calls is for the future
 
     $this->drupalGet('heartbeat/publicheartbeat');
@@ -122,8 +105,7 @@ class HeartbeatFunctionalTest extends DrupalWebTestCase {
    */
   function testPollActivity() {
 
-    $admin_user = $this->drupalCreateUser(array('administer nodes', 'access user profiles', 'view heartbeat messages'));
-    $this->drupalLogin($admin_user);
+    $this->drupalLogin($this->drupalCreateUser($this->testRoles));
 
     // Create page so heartbeattest.module can log activity through hook_nodeapi.
     $page_node = $this->drupalCreateNode(array('type' => 'page', 'title' => 'MyPageTitle'));

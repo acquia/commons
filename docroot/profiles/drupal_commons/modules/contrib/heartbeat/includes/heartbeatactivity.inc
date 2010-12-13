@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeatactivity.inc,v 1.1.2.1.2.37 2010/05/18 20:00:48 stalski Exp $
+// $Id: heartbeatactivity.inc,v 1.1.2.1.2.41 2010/10/16 09:16:35 stalski Exp $
 
 /**
  * @file
@@ -15,6 +15,8 @@ class HeartbeatActivity {
   // DB fields
   public $uaid = 0;
   public $message_id = '';
+  public $nid_info = '';
+  public $nid_target_info = '';
   public $uid = 0;
   public $uid_access = TRUE;
   public $uid_target = 0;
@@ -29,13 +31,16 @@ class HeartbeatActivity {
   public $access = HEARTBEAT_PUBLIC_TO_ALL;
   public $variables = array();
   public $additions = NULL;
-  // User object of the uid, being the actor of activity
+  public $classes = '';
+  // User object of the uid, being the actor of activity.
   public $actor = NULL;
+  // Array of associated user activity ID's.
+  public $uaids = array();
 
   // Template composite
   public $template = '';
 
-  // Global properties on message base
+  // Global properties on message base.
   public $show_time = 0;
   public $count = 0; // count for same instance
   public $target_count = 0; // count for same instance that is merged by target
@@ -79,16 +84,19 @@ class HeartbeatActivity {
     $this->actor = heartbeat_user_load($data['uid']);
     $this->uid_target = $data['uid_target'];
     $this->nid = $data['nid'];
+    $this->nid_info = !empty($data['nid_info']) ? unserialize($data['nid_info']) : array();
     $this->nid_target = isset($data['nid_target']) ? (int)$data['nid_target'] : 0;
-    $this->timestamp = isset($data['timestamp']) ? $data['timestamp'] : $_SERVER['REQUEST_TIME'];
-
+    $this->nid_target_info = !empty($data['nid_target_info']) ? unserialize($data['nid_target_info']) : array();
+    $this->timestamp = !empty($data['timestamp']) ? $data['timestamp'] : $_SERVER['REQUEST_TIME'];
+    // For performance reasons, one activity has knowlegde of the comment count.
+    $this->additions->comment_count = isset($data['uaid_comments']) ? $data['uaid_comments'] : 0;
     $this->access = (int)$data['access'];
 
     if (isset($data['message'])) {
       $this->message = $data['message'];
     }
     else {
-      $this->template->message;
+      $this->message = $this->template->message;
     }
 
     if (!empty($data['message_concat'])) {
@@ -249,11 +257,30 @@ class HeartbeatActivity {
     $locale = module_exists('locale');
 
     if (!empty($this->nid)) {
-      // if a user selected a language, then we follow i19n
       $node = node_load($this->nid);
-      if (!empty($node->language)) {
-        return $this->_save($raw_args, $node->language);
+      // Add extra node access information for nid.
+      if (empty($this->nid_info)) {
+        // Add extra node access information for nid.
+        $this->nid_info = array(
+          'uid' => $node->uid,
+          'type' => $node->type,
+          'format' => $node->format,
+        );
       }
+    }
+    if (!empty($this->nid_target)) {
+      $node_target = node_load($this->nid);
+      // Add extra node access information for nid_target.
+      $this->nid_target_info = array(
+        'uid' => $node_target->uid,
+        'type' => $node_target->type,
+        'format' => $node_target->format,
+      );
+    }
+
+    // if a user selected a language, then we follow i19n.
+    if (isset($node) && !empty($node->language)) {
+      return $this->_save($raw_args, $node->language);
     }
 
     if ($locale) {
@@ -323,7 +350,8 @@ class HeartbeatActivity {
 
     }
 
-    return $uaid;
+    $this->uaid = $tuaid;
+    return $tuaid;
   }
 
   /**
@@ -334,7 +362,8 @@ class HeartbeatActivity {
   private function _save($raw_args = array(), $lang = '') {
     // Rebuild arguments with tokens
     $args = $this->rebuild_arguments($raw_args);
-    return $this->log_message($args, $lang);
+    $this->uaid = $this->log_message($args, $lang);
+    return $this->uaid;
   }
 
   /**
@@ -362,11 +391,19 @@ class HeartbeatActivity {
     // Log relational message to user activity
     $logged = db_query("INSERT INTO {heartbeat_activity}
       SET uid=%d, uid_target=%d, nid=%d, nid_target=%d, message_id='%s', language='%s',
-      access = %d, message ='%s',message_concat ='%s', timestamp=%d, variables='%s'",
+      access = %d, message ='%s',message_concat ='%s', timestamp=%d
+      , nid_info='%s', nid_target_info='%s', uaid_comments=%d, variables='%s'",
       $this->uid,  $this->uid_target, $this->nid, $this->nid_target, $this->message_id, $lang,
-      $this->access, $message, $message_concat, $_SERVER['REQUEST_TIME'], heartbeat_encode_message_variables($this->variables));
+      $this->access, $message, $message_concat, $this->timestamp,
+      serialize($this->nid_info), serialize($this->nid_target_info), 0,
+      heartbeat_encode_message_variables($this->variables));
 
-    return $logged ? db_last_insert_id('heartbeat_activity', 'uaid'): 0;
+    if (!$logged) {
+      return 0;
+    }
+    $uaid = db_last_insert_id('heartbeat_activity', 'uaid');
+    $this->uaids[] = $uaid;
+    return $uaid;
 
   }
 

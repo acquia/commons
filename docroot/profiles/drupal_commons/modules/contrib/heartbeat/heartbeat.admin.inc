@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeat.admin.inc,v 1.1.2.15.2.20.2.47 2010/05/18 20:00:48 stalski Exp $
+// $Id: heartbeat.admin.inc,v 1.1.2.15.2.20.2.62 2010/09/26 21:03:17 stalski Exp $
 
 /**
  * @file
@@ -94,19 +94,10 @@ function heartbeat_messages_admin_overview_validate($form, &$form_state) {
 function heartbeat_messages_admin_overview_submit($form, &$form_state) {
 
   if ($form_state['values']['operation'] == 'delete') {
-    // extract the appropriate database query operation
-    $query = "DELETE FROM {heartbeat_activity} WHERE uaid = %d";
+
     foreach ($form_state['values']['heartbeat-activity'] as $uaid => $value) {
       if ($value) {
-
-        $activity = heartbeat_load_message_instance($uaid);
-        // perform the update action, then refresh node statistics
-        db_query($query, $uaid);
-
-        // Allow modules to respond to the updating of a comment.
-        module_invoke_all('heartbeat_activity_delete', $activity);
-        // Add an entry to the watchdog log.
-        watchdog('content', 'Heartbeat: updated %message.', array('%message' => $activity->message), WATCHDOG_NOTICE, l(t('view'), 'heartbeat/message/'. $activity->uaid, array('fragment' => 'heartbeat-message-'. $activity->uaid)));
+        _heartbeat_activity_delete($uaid);
       }
     }
 
@@ -196,11 +187,7 @@ function heartbeat_messages_multiple_delete_confirm_submit($form, &$form_state) 
   if ($form_state['values']['confirm']) {
 
     foreach ($form_state['values']['heartbeat-activity'] as $uaid => $value) {
-
-      db_query("DELETE FROM {heartbeat_activity} WHERE uaid = %d", $uaid);
-
-      // Delete their attachments as well.
-      module_invoke_all('heartbeat_delete', $uaid);
+      if ($value) _heartbeat_activity_delete($uaid);
     }
 
     drupal_set_message(t('The messages have been deleted.'));
@@ -223,12 +210,20 @@ function heartbeat_admin_settings() {
     '#weight' => -5,
     '#title' => t('Global heartbeat log settings'),
     '#collapsible' => TRUE,
-    '#collapsed' => FALSE,
+    '#collapsed' => TRUE,
   );
   $form['hb_logging']['heartbeat_enabled'] = array(
-    '#title' => t('Do you want to enable the heatbeat logging'),
+    '#title' => t('Display heartbeat activity streams'),
+    '#description' => t('This is a quick way to deny the stream from display.'),
     '#type' => 'checkbox',
     '#default_value' => variable_get('heartbeat_enabled', 1),
+    '#weight' => -5,
+  );
+  $form['hb_logging']['heartbeat_debug'] = array(
+    '#title' => t('Run the heartbeat message builder in debug mode'),
+    '#description' => t('This is not for production sites. It\'s a developer tool to see which messages are blocked for which reason. Note that this needs to show for all user roles!'),
+    '#type' => 'checkbox',
+    '#default_value' => variable_get('heartbeat_debug', 0),
     '#weight' => -5,
   );
   $cron_delete_options = array(
@@ -251,7 +246,7 @@ function heartbeat_admin_settings() {
     '#weight' => -4,
     '#title' => t('Global heartbeat display settings'),
     '#collapsible' => TRUE,
-    '#collapsed' => FALSE,
+    '#collapsed' => TRUE,
   );
   $allowed_tags = array('h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'span', 'em', 'strong', 'ul', 'li', 'p', 'div', 'img', 'blockquote');
   $form['hb_fields'] ['heartbeat_allowed_tags'] = array(
@@ -321,41 +316,26 @@ function heartbeat_admin_settings() {
     '#default_value' => variable_get('heartbeat_context_perm', 0)
   );
 
-  if (module_exists('heartbeat_comments')) {
-    $form['hb_comments'] = array(
-      '#type' => 'fieldset',
-      '#weight' => -5,
-      '#title' => t('Global heartbeat comment settings'),
-      '#collapsible' => TRUE,
-      '#collapsed' => FALSE,
-    );
-    $form['hb_comments']['heartbeat_comments_position'] = array(
-      '#title' => t('Choose the position of the comment box'),
-      '#type' => 'select',
-      '#options' => array('down' => t('Comment list is beneath the comment box'), 'up' => t('Comment list is on top of the comment box')),
-      '#default_value' => variable_get('heartbeat_comments_position', 'down'),
-      '#weight' => -5,
-    );
-    $form['hb_comments']['heartbeat_comments_order'] = array(
-      '#title' => t('Select the sort order of the comments'),
-      '#type' => 'select',
-      '#options' => array('recent_on_top' => t('Most recent comments on top'), 'oldest_on_top' => t('Oldest comments on top')),
-      '#default_value' => variable_get('heartbeat_comments_order', 'recent_on_top'),
-      '#weight' => -5,
-    );
-    $form['hb_comments']['heartbeat_comments_comment_count'] = array(
-      '#title' => t('Maximum of displayed heartbeat comments'),
-      '#type' => 'textfield',
-      '#default_value' => variable_get('heartbeat_comments_comment_count', 5),
-      '#weight' => -5,
-    );
-    $form['hb_comments']['heartbeat_comments_node_count'] = array(
-      '#title' => t('Maximum of displayed heartbeat node comments'),
-      '#type' => 'textfield',
-      '#default_value' => variable_get('heartbeat_comments_node_count', 5),
-      '#weight' => -5,
-    );
+  // profile settings
+  $form['hb_profile'] = array(
+    '#type' => 'fieldset',
+    '#weight' => -3,
+    '#title' => t('User profile settings'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $templates = array();
+  foreach(heartbeat_messages('all', TRUE, FALSE) as $template) {
+    $templates[$template['message_id']] = $template['message_id'];
   }
+  $form['hb_profile'] ['heartbeat_profile_message_templates'] = array(
+    '#title' => t('Select the templates to show on the profile page'),
+    '#description' => t('The enduser can have the possibility to set the restriction level of message types. Here the administrator can select and expose those message templates you want to display on the profile page.'),
+    '#type' => 'select',
+    '#multiple' => TRUE,
+    '#options' => $templates,
+    '#default_value' => variable_get('heartbeat_profile_message_templates', array())
+  );
 
   $form = system_settings_form($form);
 
@@ -370,9 +350,6 @@ function heartbeat_messages_access_types($form_state = array()) {
 
   // Import default data (filters)
   heartbeat_default_data();
-
-  // Import access types
-  heartbeat_check_access_types();
 
   $types = variable_get('heartbeat_access_types', array());
   $stream_data = variable_get('heartbeat_stream_data', array());
@@ -400,11 +377,10 @@ function heartbeat_messages_access_types($form_state = array()) {
     Note that it often has very little purpose to use streams on profile page when the
     query does not target the actor. E.g. PublicHeartbeat.') . '</p>';
 
-  foreach ($types as $type) {
-    $stream_name = drupal_strtolower($type['class']);
-    $form['streams'][$stream_name] = array(
+  foreach (array_keys($types) as $key) {
+    $form['streams'][$key] = array(
       '#type' => 'checkbox',
-      '#default_value' => isset($stream_data[$stream_name]) ? $stream_data[$stream_name]['profile'] : 0,
+      '#default_value' => isset($stream_data[$key]) ? $stream_data[$key]['profile'] : 0,
     );
   }
 
@@ -436,14 +412,15 @@ function theme_heartbeat_stream_overview($form) {
   foreach (element_children($form) as $key) {
     $type = $types[drupal_strtolower($key)];
     if (drupal_strtolower($key) == 'singleheartbeat') {
-    	continue;
+      continue;
     }
     $rows[] = array(
       drupal_render($form[$key]),
       $type['name'],
       $type['class'],
       $type['module'] .'<br /><small>'. $type['path'] . '</small>',
-      l(t('configure'), 'admin/build/heartbeat/stream/' . drupal_strtolower($type['class']))
+      l(t('configure'), 'admin/build/heartbeat/stream/' . drupal_strtolower($key)) . ' - '.
+      l(t('clone'), 'admin/build/heartbeat/stream/' . drupal_strtolower($key). '/clone')
     );
   }
 
@@ -472,6 +449,53 @@ function heartbeat_messages_access_types_submit(&$form, &$form_state = array()) 
 }
 
 /**
+ * Callback function to clone a stream.
+ */
+function heartbeat_activity_stream_clone(& $form_state, $access_type) {
+
+  // Permissions, allow/deny message templates
+  $realname = isset($access_type['realname']) ? $access_type['realname'] : $access_type['class'];
+  $form['stream_name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('New stream name'),
+    '#default_value' => '',
+    '#description' => t('Choose a name for the stream, with origin <strong>@type</strong>', array('@type' => $realname)),
+  );
+  $form['stream_base'] = array(
+    '#type' => 'hidden',
+    '#default_value' => $realname,
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Clone stream'),
+  );
+
+  return $form;
+}
+
+/**
+ * Submit functon to clone a stream.
+ */
+function heartbeat_activity_stream_clone_submit($form, $form_state) {
+
+  $used = variable_get('heartbeat_access_types', array());
+  $base = drupal_strtolower($form_state['values']['stream_base']);
+  $key = str_replace(array('_', '-', ' '), array('', '', ''), drupal_strtolower($form_state['values']['stream_name']));
+
+  $stream_data = heartbeat_stream_load($base);
+  $stream_data['name_original'] = $stream_data['name'];
+  $stream_data['realname'] = $key;
+  //$stream_data['class'] = $key;
+  $stream_data['status'] = 'clone';
+  $stream_data['name'] = $form_state['values']['stream_name'];
+  $used[$key] = $stream_data;
+
+  variable_set('heartbeat_access_types', $used);
+
+}
+
+
+/**
  * Callback function to configure a heartbeat stream
  */
 function heartbeat_activity_stream_configure(& $form_state, $access_type) {
@@ -479,6 +503,7 @@ function heartbeat_activity_stream_configure(& $form_state, $access_type) {
   $edit = $access_type['settings'];
   $form_state['stream'] = $edit;
   $class = drupal_strtolower($access_type['class']);
+  $realname = isset($access_type['realname']) ? drupal_strtolower($access_type['realname']) : $class;
 
   $form = array('#prefix' => '<h3>'. t('Configure @type', array('@type' => $access_type['name'])) .'</h3>');
 
@@ -531,7 +556,7 @@ function heartbeat_activity_stream_configure(& $form_state, $access_type) {
     '#title' => t('Use these filters to show parts of the stream'),
     '#multiple' => TRUE,
     '#default_value' => isset($access_type['filters']) ? $access_type['filters'] : 0,
-        '#options' => drupal_map_assoc($options),
+    '#options' => drupal_map_assoc($options),
   );
 
   // Stream settings
@@ -583,7 +608,7 @@ function heartbeat_activity_stream_configure(& $form_state, $access_type) {
     '#type' => 'textfield',
     '#size' => 40,
     '#default_value' => $value,
-    '#description' => t('Currently set @value.', array('@value' => _heartbeat_activity_get_time($value))) . '<br />' . t('Maximum gap for the same activity to be grouped together and before an identical activity can be logged again'),
+    '#description' => t('Leave the field to see the updated value. Currently set @value.', array('@value' => _heartbeat_activity_get_time($value))) . '<br />' . t('Maximum gap for the same activity to be grouped together and before an identical activity can be logged again'),
     '#prefix' => '<div id="heartbeat-tabs-2">',
     '#suffix' => '</div>',
     '#ahah' => array(
@@ -612,18 +637,30 @@ function heartbeat_activity_stream_configure(& $form_state, $access_type) {
     '#options' => $options,
     '#default_value' => $edit['block_show_pager'],
   );
-  $form['fs_settings']['page_items_max'] = array(
+
+  $form['fs_settings']['page'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Page'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  );
+  $form['fs_settings']['page']['page_disabled'] = array(
+    '#title' => t('Disable the page for this stream'),
+    '#type' => 'checkbox',
+    '#default_value' => $edit['page_disabled'],
+  );
+  $form['fs_settings']['page']['page_items_max'] = array(
     '#title' => t('Maximum items in the @name pages', array('@name' => $access_type['name'])),
     '#type' => 'textfield',
     '#size' => 20,
     '#default_value' => $edit['page_items_max'],
   );
-  $form['fs_settings']['page_show_pager'] = array(
+  $form['fs_settings']['page']['page_show_pager'] = array(
     '#title' => t('Display "older messages" link in page displays'),
     '#type' => 'checkbox',
     '#default_value' => $edit['page_show_pager'],
   );
-  $form['fs_settings']['page_pager_ajax'] = array(
+  $form['fs_settings']['page']['page_pager_ajax'] = array(
     '#title' => t('Display "older messages" link in page displays with Ajax'),
     '#type' => 'checkbox',
     '#default_value' => $edit['page_pager_ajax'],
@@ -631,7 +668,7 @@ function heartbeat_activity_stream_configure(& $form_state, $access_type) {
 
   $form['fs_settings']['access_type'] = array(
     '#type' => 'value',
-    '#value' => $class,
+    '#value' => $realname,
   );
   $form['settings'] = array(
     '#tree' => TRUE,
@@ -669,6 +706,7 @@ function heartbeat_activity_stream_configure_submit($form, $form_state) {
     'block_items_max' => $form_state['values']['block_items_max'],
     'block_show_pager' => $form_state['values']['block_show_pager'],
     'page_items_max' => $form_state['values']['page_items_max'],
+    'page_disabled' => $form_state['values']['page_disabled'],
     'page_show_pager' => $form_state['values']['page_show_pager'],
     'page_pager_ajax' => $form_state['values']['page_pager_ajax'],
     'num_load_max' => $form_state['values']['num_load_max'],
@@ -746,7 +784,7 @@ function heartbeat_messages_overview() {
       $links .= ' - '. l(t('delete'), "admin/build/heartbeat/delete/". $message->hid, array('query' => 'destination=admin/build/heartbeat/list'));
     }
 
-    if ($incode && $message->custom & HEARTBEAT_MESSAGE_CHANGED) {
+    if (($incode && $message->custom & HEARTBEAT_MESSAGE_CHANGED) || (isset($operations['diffs'][$message->message_id]))) {
       $links .= ' - ' . l(t('revert'), "admin/build/heartbeat/revert/". $message->hid, array('query' => 'destination=admin/build/heartbeat/list'));
     }
 
@@ -815,18 +853,6 @@ function _heartbeat_messages_overview_language($languages, &$message) {
 }
 
 /**
- * Function to delete a heartbeat message
- */
-function heartbeat_messages_delete($message) {
-  global $base_url;
-  $result = db_query("DELETE FROM {heartbeat_messages} WHERE hid = %d", $message->hid);
-  if (isset($_REQUEST['destination'])) {
-    drupal_set_message(t('Message deleted'));
-    drupal_goto($base_url .'/'. urlencode($_REQUEST['destination']));
-  }
-}
-
-/**
  * Function to maintain and administer heartbeat messages
  *
  * @return settingsform
@@ -850,13 +876,28 @@ function heartbeat_messages_edit(&$form_state, $message) {
 
   $edit = !empty($message->message_id);
 
-  $form['message_id'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Unique but descriptive message id'),
-    '#description' => t('Example "heartbeat_add_content" in the format heartbeat_do_something.'),
-    '#default_value' => $edit ? $message->message_id : '',
-    '#disabled' => $edit,
-  );
+  if ($edit) {
+    $form['message_id_display'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Unique but descriptive message id'),
+      '#description' => t('Example "heartbeat_add_content" in the format heartbeat_do_something.'),
+      '#default_value' => $edit ? $message->message_id : '',
+      '#disabled' => TRUE,
+    );
+    $form['message_id'] = array(
+      '#type' => 'hidden',
+      '#default_value' => $message->message_id,
+    );
+  }
+  else {
+    $form['message_id'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Unique but descriptive message id'),
+      '#description' => t('Example "heartbeat_add_content" in the format heartbeat_do_something.'),
+      '#default_value' => '',
+    );
+  }
+
   $form['description'] = array(
     '#type' => 'textarea',
     '#title' => t('Description of the message'),
@@ -868,9 +909,9 @@ function heartbeat_messages_edit(&$form_state, $message) {
   $form['perms'] = array(
     '#type' => 'select',
     '#title' => t('Message display access'),
-    '#description' => t('Defines to whom the message is ment for and who is entitled to see the message.'),
+    '#description' => t('Defines to whom the message is meant for and who is entitled to see the message.'),
     '#options' => _heartbeat_perms_options(),
-    '#default_value' => empty($message->perms) ? HEARTBEAT_PUBLIC_TO_ALL : $message->perms,
+    '#default_value' => !isset($message->perms) ? HEARTBEAT_PUBLIC_TO_ALL : $message->perms,
   );
   $form['roles'] = array(
     '#type' => 'checkboxes',
@@ -925,14 +966,14 @@ function heartbeat_messages_edit(&$form_state, $message) {
     '#description' => t('"!" is available to interpret a words as variables.'),
   );
 
-  $desc = t('Type of message when it comes to grouping messages together.<br />
-    <strong>Single</strong> is when you want to repeat messages without merging them together. These messages
-    are standalone and they dont take notice on previous and upcoming messages.<br />
+  $desc = t("Type of message when it comes to grouping messages together.<br />
+    <strong>Summary</strong> is when you want to group the same instance of several messages together.
+    For this you will summarize a part of the message and use it as substitional variables (with separators) to
+    form the merged messages. The occurrency of the message instance is also known as the count.<br />
     <strong>Count</strong> means you want to merge the messages together so you know the occurrency.
     Only one message in its single format will be displayed.<br />
-    A <strong>summary</strong> is when you want to group the same instance of several messages together.
-    For this you will summarize a part of the message and use it as substitional variables (with separators) to
-  form the merged messages. The occurrency of the message instance is also known as the count.<br />');
+    <strong>Single</strong> is when you want to repeat messages without merging them together. These messages
+    are standalone and they don't take notice on previous and upcoming messages.<br />");
   $form['type'] = array(
     '#id' => 'heartbeat_message_type',
     '#type' => 'select',
@@ -969,7 +1010,7 @@ function heartbeat_messages_edit(&$form_state, $message) {
       'node-target' => t('Group by target object id to summarize nodes'),
       'user-user' => t('Group by user to summarize users'),
     ),
-    '#title' => t('Group by'),
+    '#title' => t('Message groups'),
     '#description' => t('<strong>Required for types summary. </strong>Messages with parts that merge together are grouped by user or node.
       E.g. Group by node if you want to summarize users and vice versa.<br />In some cases where the activity uses a relation
       between two users, then set the group by to "user-user". A good example is a friend-relation.'),
@@ -1015,7 +1056,7 @@ function heartbeat_messages_edit(&$form_state, $message) {
   );
   $form['type_summary']['merge_end_separator'] = array(
     '#type' => 'textfield',
-    '#title' => t('Fill in the target end separator.'),
+    '#title' => t('Fill in the target end separator'),
     '#description' => t('Separators finishing listed targets. E.g. "title1, title2 <strong>and</strong> title3"'),
     '#required' => FALSE,
     '#default_value' => empty($message->concat_args['merge_end_separator']) ? '' : $message->concat_args['merge_end_separator'],
@@ -1053,7 +1094,7 @@ function heartbeat_messages_edit(&$form_state, $message) {
  */
 function heartbeat_messages_add_submit($form, &$form_state) {
 
-  if ($form_state['clicked_button']['#value'] != t('Save')) {
+  if (!($form_state['clicked_button']['#value'] == t('Save') || $form_state['clicked_button']['#value'] == t('Import'))) {
     return;
   }
 
@@ -1102,7 +1143,8 @@ function heartbeat_messages_add_submit($form, &$form_state) {
 function heartbeat_messages_edit_submit($form, &$form_state) {
 
   // Message_id's cannot be changed
-  if ($form_state['clicked_button']['#value'] == t('Save')) {
+  if ($form_state['clicked_button']['#value'] == t('Save') || $form_state['clicked_button']['#value'] == t('Import')) {
+
     $message = new stdClass();
     $message->hid = $form_state['values']['hid'];
     $message->message_id = $form_state['values']['message_id'];
@@ -1148,10 +1190,40 @@ function heartbeat_messages_edit_submit($form, &$form_state) {
 }
 
 /**
+ * Menu callback: confirm delete message templates.
+ */
+function heartbeat_delete_confirm($form_state, $message) {
+  return confirm_form(
+    array('hid' => array('#type' => 'hidden', '#value' => $message->hid)),
+    t('Are you sure you want to delete !mess template?', array('!mess' => $message->message_id)),
+    'admin/build/heartbeat/list',
+    t('This action cannot be undone.'),
+    t('Delete heartbeat message template'),
+    t('Cancel'));
+}
+
+/**
+ * Handler for revert confirmation
+ */
+function heartbeat_delete_confirm_submit($form, &$form_state) {
+  heartbeat_messages_delete($form_state['values']['hid']);
+  $form_state['redirect'] = 'destination=admin/build/heartbeat/list';
+}
+
+/**
+ * Function to delete a heartbeat message
+ */
+function heartbeat_messages_delete($hid) {
+  global $base_url;
+  $result = db_query("DELETE FROM {heartbeat_messages} WHERE hid = %d", $hid);
+  drupal_set_message(t('Message deleted'));
+}
+
+/**
  * Menu callback: confirm revert message.
  */
 function heartbeat_revert_confirm($form_state, $hid) {
-  return confirm_form(array('hid' => array('#type' => 'hidden', '#value' => $hid)), t('Are you sure you want to revert this message back to default?'),
+  return confirm_form(array('hid' => array('#type' => 'hidden', '#value' => $hid)), t('Are you sure you want to revert this message template back to default?'),
     'admin/build/heartbeat/list', t('This action cannot be undone.'), t('Revert heartbeat message'), t('Cancel'));
 }
 
@@ -1239,6 +1311,54 @@ function heartbeat_messages_export_submit($form, &$form_state) {
 }
 
 /**
+ * Import for heartbeat message templates().
+ */
+function heartbeat_messages_import($form_state = array()) {
+  $form = array();
+  $form['import'] = array(
+    '#type' => 'textarea',
+    '#default_valu' => '',
+    '#title' => t('Paste your export here'),
+    '#rows' => 15,
+    '#required' => TRUE,
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Import'),
+  );
+  return $form;
+}
+
+/**
+ * Import for heartbeat message templates().
+ */
+function heartbeat_messages_import_submit($form, &$form_state) {
+  @eval('$import = '. $form_state['values']['import'] .';');
+  if (isset($import) && is_array($import) && count($import)) {
+    $messages = array();
+    foreach (heartbeat_messages('all', TRUE) as $template) {
+      $messages[$template->message_id] = $template->hid;
+    }
+
+    foreach ($import as $key => $message) {
+      $message['custom'] = HEARTBEAT_MESSAGE_CUSTOM;
+      if (isset($messages[$message['message_id']])) {
+        heartbeat_message_update($message);
+        drupal_set_message(t('Updated %template.', array('%template' => $message['message_id'])));
+      }
+      else {
+        heartbeat_message_insert($message);
+        drupal_set_message(t('Imported %template.', array('%template' => $message['message_id'])));
+      }
+
+    }
+  }
+  else {
+    drupal_set_message(t('Import failed.'), 'error');
+  }
+}
+
+/**
  * Function to export messages to use as default
  */
 function heartbeat_messages_export_messages($selected_messages) {
@@ -1254,6 +1374,7 @@ function heartbeat_messages_export_messages($selected_messages) {
     }
     $concat_args = heartbeat_decode_message_variables($message->concat_args);
     $variables = heartbeat_decode_message_variables($message->variables);
+    $attachments = unserialize($message->attachments);
     $info[$message->hid] = array(
       'message' => $message->message,
       'message_concat' => $message->message_concat,
@@ -1262,7 +1383,8 @@ function heartbeat_messages_export_messages($selected_messages) {
       'description' => $message->description,
       'perms' => $message->perms,
       'custom' => HEARTBEAT_MESSAGE_DEFAULT,
-      'variables' => $variables
+      'variables' => $variables,
+      'attachments' => $attachments
     );
   }
   return $info;

@@ -103,7 +103,7 @@ function hrules_rules_defaults() {
               'nid_param' => '[node:nid]',
               'nid_target_param' => '',
               'message_id_param' => 'heartbeat_add_node',
-              'variables_param' => '@username=|=[author:user-name-url]-|-@node_type=|=[node:type-name]-|-@node_title=|=[node:title-link]-|-@types=|=pages-|-',
+              'variables_param' => '@username=|=[author:user-name-url]-|-@node_type=|=[node:type]-|-@node_title=|=[node:title-link]-|-@types=|=pages-|-',
               '#eval input' =>
               array(
                 'token_rules_input_evaluator' =>

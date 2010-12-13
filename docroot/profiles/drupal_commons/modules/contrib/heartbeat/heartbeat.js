@@ -45,14 +45,14 @@ Drupal.heartbeat.getOlderMessages = function(element, page) {
  *   Function that checks and fetches newer messages to the
  *   current stream.
  */
-Drupal.heartbeat.pollMessages = function() {
+Drupal.heartbeat.pollMessages = function(stream) {
 
-  if ($('.heartbeat-stream').length > 0) {
-
+  var stream_selector = '#heartbeat-stream-' + stream;
+  
+  if ($(stream_selector).length > 0) {
     var href = Drupal.settings.basePath + 'heartbeat/js/poll';
-    var stream = $('.heartbeat-stream').attr('id').replace("heartbeat-stream-", "");    
     var uaids = new Array();
-    var beats = $('.heartbeat-stream .beat-item');
+    var beats = $(stream_selector + ' .beat-item');
     var firstUaid = 0;
     
     if (beats.length > 0) {    
@@ -64,8 +64,10 @@ Drupal.heartbeat.pollMessages = function() {
       });
     }
     
+    var post = {latestUaid: firstUaid, language: Drupal.settings.heartbeat_language, stream: stream, uaids: uaids.join(',')};
+    $.event.trigger('heartbeatBeforePoll', [post]); 
     if (firstUaid) {
-      $.post(href, {latestUaid: firstUaid, language: Drupal.settings.heartbeat_language, stream: stream, uaids: uaids.join(',')}, Drupal.heartbeat.prependMessages);
+      $.post(href, post, Drupal.heartbeat.prependMessages);
     }
   }
 }
@@ -98,18 +100,18 @@ Drupal.heartbeat.prependMessages = function(data) {
   var result = Drupal.parseJson(data);
   
   if (result['data'] != '') {
-  
+    var stream_selector = '#heartbeat-stream-' + result['stream'];
     // Append the messages
-    $('.heartbeat-messages-wrapper').prepend(result['data']);
+    $(stream_selector + ' .heartbeat-messages-wrapper').prepend(result['data']);
   
     // Update the times in the stream
     var time_updates = result['time_updates'];
     for (uaid in time_updates) {
-      $('#beat-item-' + uaid).find('.heartbeat_times').text(time_updates[uaid]);
+      $(stream_selector + ' #beat-item-' + uaid).find('.heartbeat_times').text(time_updates[uaid]);
     }
     
     // Reattach behaviors for new added html
-    Drupal.attachBehaviors($('.heartbeat-messages-wrapper'));
+    Drupal.attachBehaviors($(stream_selector + ' .heartbeat-messages-wrapper'));
   }
 }
 
@@ -117,10 +119,14 @@ Drupal.heartbeat.prependMessages = function(data) {
  * Document onReady().
  */
 $(document).ready(function() {
-
-  if (Drupal.settings.heartbeatPollNewerMessages > 0) {
-    var interval = Drupal.settings.heartbeatPollNewerMessages * 1000;
-    var poll = setInterval('Drupal.heartbeat.pollMessages()', interval);
+  var span = 0;
+  if (Drupal.settings.heartbeatPollNewerMessages != undefined) {
+    for (n in Drupal.settings.heartbeatPollNewerMessages) {
+      if (parseInt(Drupal.settings.heartbeatPollNewerMessages[n]) > 0) {
+        var interval = (Drupal.settings.heartbeatPollNewerMessages[n] * 1000) + span;
+        var poll = setInterval('Drupal.heartbeat.pollMessages("' + n + '")', interval);
+        span += 100;
+      }
+    }  
   }
-  
 });

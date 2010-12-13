@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeataccess.inc,v 1.1.2.2.2.25 2010/03/30 23:02:58 stalski Exp $
+// $Id: heartbeataccess.inc,v 1.1.2.2.2.30 2010/10/28 18:36:01 stalski Exp $
 
 /**
  * @file
@@ -47,6 +47,15 @@ abstract class HeartbeatAccess {
     $this->stream->setItemsMax($this->_page);
 
     $this->whoIsActor($account);
+
+    $this->construct();
+
+  }
+
+  /**
+   * Fake constructor to hook this method instead of the constructor.
+   */
+  public function construct() {
 
   }
 
@@ -136,12 +145,14 @@ abstract class HeartbeatAccess {
    */
   public function fetchMessages() {
 
-    $heartbeat = $this->prepareStream();
+  	if ($this->hasAccess()) {
+	    $heartbeat = $this->prepareStream();
+	    // Call to a hook method to adapt sql and thus result
+	    $heartbeat = $this->dressUpMessages($heartbeat);
+	    return $this->finishMessages($heartbeat);
+  	}
 
-    // Call to a hook method to adapt sql and thus result
-    $heartbeat = $this->dressUpMessages($heartbeat);
-
-    return $this->hasAccess() ? $this->finishMessages($heartbeat) : array();
+    return array();
   }
 
   /**
@@ -154,7 +165,7 @@ abstract class HeartbeatAccess {
   protected function resultSql($sql = '', $values = array()) {
 
     $args = array();
-    $args[] = $this->stream->sql_start . $sql . $this->stream->sql_end;
+    //$args[] = $this->stream->sql_start . $sql . $this->stream->sql_end;
     $args[] = $this->stream->language;
 
     if ($this->stream->latest_uaid > 0) {
@@ -174,12 +185,12 @@ abstract class HeartbeatAccess {
     // Put the arguments defined in subclasses into query
     $args = array_merge($args, $values);
 
-    $args[] = 0;
-    $args[] = $this->stream->num_load_max;
+    //$args[] = 0;
+    //$args[] = $this->stream->num_load_max;
 
     // The cron and maximum number limits results to a minimum
-    $result = call_user_func_array('db_query_range', $args);
-
+    //$result = call_user_func_array('db_query_range', $args);
+    $result = db_query_range($this->stream->sql_start . $sql . $this->stream->sql_end, $args, 0, $this->stream->num_load_max);
     $results = array();
     while ($row = db_fetch_object($result) ) {
 
@@ -253,7 +264,7 @@ abstract class HeartbeatAccess {
 
     $this->checkDeniedMessages();
 
-    $this->stream->sql_end = " ORDER BY timestamp DESC";
+    $this->stream->sql_end = " ORDER BY ua.timestamp DESC, ua.uaid DESC";
 
     $heartbeat = $this->createHeartbeatParser();
 
@@ -340,6 +351,6 @@ abstract class HeartbeatAccess {
    * @return string Stream
    */
   final public function getAccess() {
-    return drupal_strtolower(get_class($this));
+    return drupal_strtolower($this->stream->realname);
   }
 }
