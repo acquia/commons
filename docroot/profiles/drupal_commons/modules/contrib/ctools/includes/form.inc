@@ -1,5 +1,5 @@
 <?php
-// $Id: form.inc,v 1.11.2.1 2010/02/17 01:04:50 merlinofchaos Exp $
+// $Id: form.inc,v 1.11.2.3 2010/08/20 22:16:57 merlinofchaos Exp $
 
 /**
  * @file
@@ -36,13 +36,14 @@ function ctools_build_form($form_id, &$form_state) {
     unset($_SESSION['batch_form_state']);
   }
   else {
-    // If the incoming $_POST contains a form_build_id, we'll check the
+    // If the incoming $form_state['input'] contains a form_build_id, we'll check the
     // cache for a copy of the form in question. If it's there, we don't
     // have to rebuild the form to proceed. In addition, if there is stored
     // form_state data from a previous step, we'll retrieve it so it can
     // be passed on to the form processing code.
-    if (isset($_POST['form_id']) && $_POST['form_id'] == $form_id && !empty($_POST['form_build_id'])) {
-      $form = form_get_cache($_POST['form_build_id'], $form_state);
+    if (isset($form_state['input']['form_id']) && $form_state['input']['form_id'] == $form_id && !empty($form_state['input']['form_build_id'])) {
+      $form_build_id = $form_state['input']['form_build_id'];
+      $form = form_get_cache($form_build_id, $form_state);
       if (!empty($form['#no_cache']) || empty($form)) {
         unset($form);
       }
@@ -125,9 +126,15 @@ function ctools_build_form($form_id, &$form_state) {
   // workflow is NOT complete. We need to construct a fresh copy of
   // the form, passing in the latest $form_state in addition to any
   // other variables passed into drupal_get_form().
+  //
+  // If this function is being used to perform an '#ahah' callback
+  // to rebuild some or all of a ctools wizard form step, be sure that
+  // $form_state['wrapper callback'], $form_state['form_info'],
+  // $form_state['step'], $form_state['no_redirect'], and $form_state['rebuild']
+  // are properly set.
 
   if (!empty($form_state['rebuild']) || !empty($form_state['storage'])) {
-    $form = ctools_rebuild_form($form_id, $form_state, $args);
+    $form = ctools_rebuild_form($form_id, $form_state, $args, $form_build_id);
   }
 
   // If whoever is calling this wants the $form array (so that it can render it
@@ -167,7 +174,21 @@ function ctools_rebuild_form($form_id, &$form_state, $args, $form_build_id = NUL
   $args[0] = &$form_state; // Replaces placeholder.
   // And the form_id.
   array_unshift($args, $form_id);
-  $form = call_user_func_array('drupal_retrieve_form', $args);
+
+  if (isset($form_state['wrapper callback']) && function_exists($form_state['wrapper callback'])) {
+    // If there is a wrapper callback, we do not use drupal_retrieve_form.
+    // Instead, we call $form_id builder function directly. This means the args
+    // are *different* for forms used this way, which may not be ideal but
+    // is necessary right now.
+    $form = array();
+    $form_state['wrapper callback']($form, $form_state);
+    if (function_exists($form_id)) {
+      $form_id($form, $form_state);
+    }
+  }
+  else {
+    $form = call_user_func_array('drupal_retrieve_form', $args);
+  }
 
   if (!isset($form_build_id)) {
     // We need a new build_id for the new version of the form.
@@ -301,6 +322,10 @@ function ctools_validate_form($form_id, $form, &$form_state) {
       // Setting this error will cause the form to fail validation.
       form_set_error('form_token', t('Validation error, please try again. If this error persists, please contact the site administrator.'));
     }
+  }
+
+  if (!empty($form_state['clicked_button']['#skip validation'])) {
+    return;
   }
 
   _form_validate($form, $form_state, $form_id);

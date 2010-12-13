@@ -1,5 +1,5 @@
 <?php
-// $Id: page_manager.module,v 1.17.2.4 2010/05/17 20:25:43 sdboyer Exp $
+// $Id: page_manager.module,v 1.17.2.8 2010/07/23 21:47:20 merlinofchaos Exp $
 
 /**
  * @file
@@ -44,11 +44,11 @@ function page_manager_perm() {
 
 /**
  * Implementation of hook_ctools_plugin_directory() to let the system know
- * we implement task and task_handler plugins.
+ * where our task and task_handler plugins are.
  */
-function page_manager_ctools_plugin_directory($module, $plugin) {
-  if ($module == 'page_manager') {
-    return 'plugins/' . $plugin;
+function page_manager_ctools_plugin_directory($owner, $plugin_type) {
+  if ($owner == 'page_manager') {
+    return 'plugins/' . $plugin_type;
   }
 }
 
@@ -726,6 +726,8 @@ function page_manager_get_task_subtasks($task) {
   if ($function = ctools_plugin_get_function($task, 'subtasks callback')) {
     return $function($task);
   }
+
+  return array();
 }
 
 /**
@@ -1051,21 +1053,8 @@ function page_manager_page_manager_handlers_list() {
   $handlers = ctools_export_load_object('page_manager_handlers');
   foreach ($handlers as $handler) {
     if (in_array($handler->task, $types)) {
-      $list[$handler->name] = "$handler->task: {$handler->conf['title']} ($handler->name)";
+      $list[$handler->name] = check_plain("$handler->task: " . $handler->conf['title'] . " ($handler->name)");
     }
-  }
-  return $list;
-}
-
-/**
- * Callback to list pages available for export.
- */
-function page_manager_page_manager_pages_list() {
-  $list = array();
-
-  $pages = ctools_export_load_object('page_manager_pages', 'all');
-  foreach ($pages as $page) {
-    $list[$page->name] = "$page->admin_title ($page->name)";
   }
   return $list;
 }
@@ -1120,3 +1109,48 @@ function page_manager_get_current_page($page = NULL) {
 
   return $current;
 }
+
+/**
+ * Implementation of hook_panels_dashboard_blocks().
+ *
+ * Adds page information to the Panels dashboard.
+ */
+function page_manager_panels_dashboard_blocks(&$vars) {
+  $vars['links']['page_manager'] = array(
+    'weight' => -100,
+    'title' => l(t('Panel page'), 'admin/build/pages/add'),
+    'description' => t('Panel pages can be used as landing pages. They have a URL path, accept arguments and can have menu entries.'),
+  );
+
+  module_load_include('inc', 'page_manager', 'page_manager.admin');
+  $tasks = page_manager_get_tasks_by_type('page');
+  $pages = array('operations' => array());
+
+  page_manager_get_pages($tasks, $pages);
+  $count = 0;
+  $rows = array();
+  foreach ($pages['rows'] as $id => $info) {
+    $rows[] = array(
+      'data' => array(
+        $info['data']['title'],
+        $info['data']['operations'],
+      ),
+      'class' => $info['class'],
+    );
+
+    // Only show 10.
+    if (++$count >= 10) {
+      break;
+    }
+  }
+
+  $vars['blocks']['page_manager'] = array(
+    'weight' => -100,
+    'title' => t('Manage pages'),
+    'link' => l(t('Go to list'), 'admin/build/pages'),
+    'content' => theme('table', array(), $rows, array('class' => 'panels-manage')),
+    'class' => 'dashboard-pages',
+    'section' => 'right',
+  );
+}
+

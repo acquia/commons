@@ -1,5 +1,5 @@
 <?php
-// $Id: node_add_form.inc,v 1.9.2.2 2010/01/29 20:18:26 merlinofchaos Exp $
+// $Id: node_add_form.inc,v 1.9.2.3 2010/07/20 20:49:21 merlinofchaos Exp $
 
 /**
  * @file
@@ -31,12 +31,14 @@ $plugin = array(
  * are not always created from the UI.
  */
 function ctools_context_create_node_add_form($empty, $data = NULL, $conf = FALSE) {
+  static $created;
   $context = new ctools_context(array('form', 'node_add', 'node_form'));
   $context->plugin = 'node_add_form';
 
-  if ($empty) {
+  if ($empty || (isset($created) && $created)) {
     return $context;
   }
+  $created = TRUE;
 
   if ($conf && (isset($data['types']) || isset($data['type']))) {
     // Holdover from typo'd config.

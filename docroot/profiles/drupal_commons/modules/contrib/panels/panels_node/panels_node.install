@@ -1,5 +1,5 @@
 <?php
-// $Id: panels_node.install,v 1.3.4.1 2009/02/14 19:36:17 merlinofchaos Exp $
+// $Id: panels_node.install,v 1.3.4.2 2010/07/22 22:20:52 merlinofchaos Exp $
 
 /**
  * Implementation of hook_schema().
@@ -31,6 +31,10 @@ function panels_node_schema_1() {
         'type' => 'int',
         'not null' => TRUE,
       ),
+      'pipeline' => array(
+        'type' => 'varchar',
+        'length' => '255',
+      ),
     ),
     'primary key' => array('did'),
   );
@@ -53,4 +57,18 @@ function panels_node_uninstall() {
   // TODO: Delete all actual nodes that are panels_nodes.
   db_query("DELETE FROM {node} WHERE type = 'panel'");
   drupal_uninstall_schema('panels_node');
+}
+
+/**
+ * Implementation of hook_update to handle adding a pipeline
+ */
+function panels_node_update_6001() {
+  $ret = array();
+  $field = array(
+    'type' => 'varchar',
+    'length' => '255',
+  );
+
+  db_add_field($ret, 'panels_node', 'pipeline', $field);
+  return $ret;
 }

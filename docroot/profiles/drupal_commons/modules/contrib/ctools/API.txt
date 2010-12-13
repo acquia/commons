@@ -1,6 +1,42 @@
-API.txt: $Id: API.txt,v 1.5.2.16 2010/05/26 17:26:47 merlinofchaos Exp $
+API.txt: $Id: API.txt,v 1.5.2.25 2010/08/30 22:07:52 merlinofchaos Exp $
 
 This file contains a log of changes to the API.
+API version 1.8
+  Introduce 'get base contexts' callback to all tasks to facilitate
+    Page Manager's site template extracting contexts from the environment.
+  Introduce 'ctools_content_editable' function and the corresponding
+    'check editable' callback on all content types to determine if a
+    content type can be edited based upon configuration.
+  Introduce utility.inc and move some code to it.
+  Introduce page-wizard.inc and a "page_wizard" type plugin for Page Manager.
+
+API version 1.7.2
+  Allow Export UI to automatically have wizards by setting 'use wizard' => TRUE
+  Moved the Panels Stylizer module into CTools so that the UI can be
+    used to manage styles for modules other than Panels.
+  Introduce ctools_access_ruleset module for customizable access rulesets.
+  Introduce ctools_custom_content module for customizable content panes.
+  Add 'convert default' as a converter keyword for context implementations.
+    Instead of reverting $context->title this will cause %context without
+    :converter to use a default converter.
+  
+API version 1.7.1
+  Introduce 'modal return' and 'ajax return' to wizard.inc to allow
+    wizard owners to process their own ajax/modal output.
+  Introduce math-expr.inc to allow simple math expression parsing.
+
+API version 1.7
+  Introduce the export-ui plugin. This introduces new keys to the 'export'
+    section of schema: 'primary key', 'key name'.
+  Introduce ctools_export_crud_ functions to provide CRUD access to most
+    exportables. This introduces several optional callback keys to the
+    'export' section of the schema to provide overrides.
+  Introduce auto-submit.js. Forms may now be set to auto submit just by
+    adding appropriate classes.
+  Provide new default functions for bulk export. This may make items that
+    were previously not bulk exportable due to missing 'list' callback
+    appear in the bulk export UI.
+  
 API version 1.5
   Add two new alter hooks: page_manager_operations_alter and 
       page_manager_variant_operations_alter to allow modules to add tabs

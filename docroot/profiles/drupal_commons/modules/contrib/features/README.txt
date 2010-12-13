@@ -1,31 +1,32 @@
-$Id: README.txt,v 1.1.2.3 2010/02/02 16:23:15 yhahn Exp $
+$Id: README.txt,v 1.1.2.5 2010/07/05 14:28:33 yhahn Exp $
 
-Features for Drupal 6.x
+Features 1.x for Drupal 6.x
+---------------------------
+The features module enables the capture and management of features in Drupal. A
+feature is a collection of Drupal entities which taken together satisfy a
+certain use-case.
+
+Features provides a UI and API for taking different site building components
+from modules with exportables and bundling them together in a single feature
+module. A feature module is like any other Drupal module except that it declares
+its components (e.g. views, contexts, CCK fields, etc.) in its `.info` file so
+that it can be checked, updated, or reverted programmatically.
+
+Examples of features might be:
+
+- A blog
+- A pressroom
+- An image gallery
+- An e-commerce t-shirt store
+
 
 Installation
 ------------
-Features can be installed like any other Drupal module -- place it in
-the modules directory for your site and enable it on the
-admin/build/modules page. To take full advantage of some of the
-workflow benefits provided by Features, you should install Drush [1].
+Features can be installed like any other Drupal module -- place it in the
+modules directory for your site and enable it on the `admin/build/modules` page.
+To take full advantage of some of the workflow benefits provided by Features,
+you should install [Drush][1].
 
-1: http://drupal.org/project/drush
-
-What is a feature?
-------------------
-In short, each feature is a module. A feature differs from most other
-modules in that it is a collections of exportables from other modules
-configured to work together. Features, in short, capture a specific
-use case by taking advantage of larger, generalized, Drupal tools.
-Examples of features might be:
-
-* A blog
-* A pressroom
-* An image gallery
-* An e-commerce t-shirt store
-
-And so on. See API.txt for more information about the guts of feature
-modules.
 
 Basic usage
 -----------
@@ -33,66 +34,131 @@ Features is geared toward usage by developers and site builders. It
 is not intended to be used by the general audience of your Drupal site.
 Features provides tools for accomplishing two important tasks:
 
-Task 1: Export features
+### Task 1: Export features
 
-You can create features in Drupal by using site building tools. The ones
-that currently integrate against Features are node, cck, views, context,
-and imagecache. Other modules may integrate if they use common Drupal APIs
-(for example, you can include a block from another module in your feature
-or a different CCK field formatter), but modules that do things wildly
-on their own or have problematic APIs will not work well.
+You can build features in Drupal by using site building tools that are supported
+(see a short list under the *Compatibility* section).
 
-Once you've created a feature, you can export it into a feature module by
-using the export inteface at admin/features/export. Currently the export
-interface requires you to start from a context -- however the API has
-been designed that there might be other starting points for generating
-features in the future.
+Once you've built and configured functionality on a site, you can export it into
+a feature module by using the feature create page at
+`admin/build/features/create`.
 
-Task 2: Manage features
+
+### Task 2: Manage features
 
 The features module also provides a way to manage features through a more
-targeted interface than admin/build/modules. The interface at admin/features
-shows you only feature modules, and will also inform you if any of their
-components have been overridden. If this is the case, you can also re-export
-features to bring the module code up to date with any changes that have
-occurred in the database.
+targeted interface than `admin/build/modules`. The interface at
+`admin/build/features` shows you only feature modules, and will also inform you
+if any of their components have been overridden. If this is the case, you can
+also re-create features to bring the module code up to date with any changes
+that have occurred in the database.
+
+
+Including custom code and adding to your feature
+------------------------------------------------
+Once you've exported your feature you will see that you have several files:
+
+    myfeature.info
+    myfeature.module
+    myfeature.[*].inc
+
+You can add custom code (e.g. custom hook implementations, other functionality,
+etc.) to your feature in `myfeature.module` as you would with any other module.
+Do not change or add to any of the features `.inc` files unless you know what
+you are doing. These files are written to by features on updates so any custom
+changes may be overwritten.
+
+
+Using Features to manage development
+------------------------------------
+Because Features provides a centralized way to manage exportable components and
+write them to code it can be used during development in conjunction with a
+version control like SVN or git as a way to manage changes between development,
+staging and production sites. An example workflow for a developer using Features
+is to:
+
+1. Make configuration changes to a feature on her local development site.
+2. Update her local feature codebase using `drush features-update`.
+3. Commit those changes using `svn commit`.
+4. Roll out her changes to the development site codebase by running `svn update`
+  on the server. Other collaborating developers can also get her changes with
+  `svn update`.
+5. Reverting any configuration on the staging site to match the updated codebase
+by running `drush features-revert`.
+6. Rinse, repeat.
+
+Features also provides integration with the [Diff][3] module if enabled to show
+differences between configuration in the database and that in code. For site
+builders interested in using Features for development, enabling the diff module
+and reading `API.txt` for more details on the inner workings of Features is
+highly recommended.
+
 
 Drush usage
 -----------
 Features provides several useful drush commands:
 
-drush features
+- `drush features`
 
-  This command lists all the features on your and their status as well
-  as any supplemental information.
+  List all the available features on your site and their status.
 
-drush features-export [context]
+- `drush features-export [feature name] [component list]`
 
-  This command lets you create a new feature in code from one or more
-  context definitions. It will write a new feature module with a name
-  matching the ->value portion of the context definition.
+  Write a new feature in code containing the components listed.
 
-drush features-update [feature]
+- `drush features-update [feature name]`
 
-  This command lets you update a feature that has already been
-  exported. You can use it to push overrides/changes in your database
-  (for example, a new Views display) into the existing code of your
-  feature module.
+  Update the code of an existing feature to include any overrides/changes in
+  your database (e.g. a new view).
 
-drush features-revert [feature]
+- `drush features-revert [feature name]`
 
-  This command lets revert aspects of a feature in your site's database
-  to the state described in your feature module's defaults. For
-  example, if you have overridden one of your feature's contexts, a
-  drush revert command will revert those changes and return the feature
-  on your site to its original state.
+  Revert the components of a feature in your site's database to the state
+  described in your feature module's defaults.
+
+- `drush features-diff [feature name]`
+
+  Show a diff between a feature's database components and those in code.
+  Requires the Diff module.
+
+Additional commands and options can be found using `drush help`.
+
+
+Compatibility
+-------------
+Features provides integration for the following exportables:
+
+- CTools export API implementers (Context, Spaces, Boxes, Strongarm, Page
+  Manager)
+- ImageCache
+- Views
+- [Other contributed modules][2]
+
+Features also provides faux-exportable functionality for the following Drupal
+core and contrib components:
+
+- CCK fields
+- CCK fieldgroups
+- Content types
+- Input filters
+- User roles/permissions
+- Custom menus and menu links *
+- Taxonomy vocabularies *
+
+* Currently in development.
+
 
 For developers
 --------------
-Please read API.txt for more information about the concepts and integration
+Please read `API.txt` for more information about the concepts and integration
 points in the Features module.
+
 
 Maintainers
 -----------
-yhahn (Young Hahn)
-jmiccolis (Jeff Miccolis)
+- yhahn (Young Hahn)
+- jmiccolis (Jeff Miccolis)
+
+
+[1]: http://drupal.org/project/drush
+[2]: (http://drupal.org/taxonomy/term/11478)

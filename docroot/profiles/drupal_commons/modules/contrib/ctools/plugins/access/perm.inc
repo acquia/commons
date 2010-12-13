@@ -1,5 +1,5 @@
 <?php
-// $Id: perm.inc,v 1.6.2.2 2009/11/13 00:44:16 merlinofchaos Exp $
+// $Id: perm.inc,v 1.6.2.3 2010/07/14 01:30:19 merlinofchaos Exp $
 
 /**
  * @file
@@ -16,7 +16,7 @@ $plugin = array(
   'callback' => 'ctools_perm_ctools_access_check',
   'default' => array('perm' => 'access content'),
   'settings form' => 'ctools_perm_ctools_access_settings',
-  'summary' => 'ctools_perm_ctools_acesss_summary',
+  'summary' => 'ctools_perm_ctools_access_summary',
   'required context' => new ctools_context_required(t('User'), 'user'),
 );
 
@@ -59,7 +59,7 @@ function ctools_perm_ctools_access_check($conf, $context) {
 /**
  * Provide a summary description based upon the checked roles.
  */
-function ctools_perm_ctools_acesss_summary($conf, $context) {
+function ctools_perm_ctools_access_summary($conf, $context) {
   if (!isset($conf['perm'])) {
     return t('Error, unset permission');
   }

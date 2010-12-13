@@ -1,5 +1,5 @@
 <?php
-// $Id: site_language.inc,v 1.6.2.2 2009/11/13 00:44:16 merlinofchaos Exp $
+// $Id: site_language.inc,v 1.6.2.3 2010/07/14 01:30:19 merlinofchaos Exp $
 
 /**
  * @file
@@ -18,7 +18,7 @@ if (module_exists('locale')) {
     'default' => array('language' => array()),
     'settings form' => 'ctools_site_language_ctools_access_settings',
     'settings form submit' => 'ctools_site_language_ctools_access_settings_submit',
-    'summary' => 'ctools_site_language_ctools_acesss_summary',
+    'summary' => 'ctools_site_language_ctools_access_summary',
   );
 }
 
@@ -63,7 +63,7 @@ function ctools_site_language_ctools_access_check($conf, $context) {
 /**
  * Provide a summary description based upon the checked site_languages.
  */
-function ctools_site_language_ctools_acesss_summary($conf, $context) {
+function ctools_site_language_ctools_access_summary($conf, $context) {
   $languages = array(
     'default' => t('Default site language'),
   );

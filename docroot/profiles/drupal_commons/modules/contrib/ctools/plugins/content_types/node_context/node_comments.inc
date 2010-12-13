@@ -1,5 +1,5 @@
 <?php
-// $Id: node_comments.inc,v 1.2.2.3 2010/04/14 20:46:53 merlinofchaos Exp $
+// $Id: node_comments.inc,v 1.2.2.7 2010/10/29 20:13:15 merlinofchaos Exp $
 
 if (module_exists('comment')) {
   /**
@@ -17,6 +17,7 @@ if (module_exists('comment')) {
       'mode' => variable_get('comment_default_mode', COMMENT_MODE_THREADED_EXPANDED),
       'order' => variable_get('comment_default_order', COMMENT_ORDER_NEWEST_FIRST),
       'comments_per_page' => variable_get('comment_default_per_page', '50'),
+      'anchor' => 1,
     ),
   );
 }
@@ -31,7 +32,7 @@ function ctools_node_comments_content_type_render($subtype, $conf, $panel_args, 
   if (empty($node)) {
     $block->content = t('Node comments go here.');
   }
-  else {
+  else if ($node->comment) {
     $block->content = ctools_comment_render($node, $conf);
     // Update the history table, stating that this user viewed this node.
     node_tag_new($node->nid);
@@ -42,19 +43,27 @@ function ctools_node_comments_content_type_render($subtype, $conf, $panel_args, 
 
 function ctools_node_comments_content_type_edit_form(&$form, &$form_state) {
   $conf = $form_state['conf'];
+  $form['anchor'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('HTML anchor'),
+    '#description' => t('If checked, an HTML anchor is added to allow linking within the same page. For example, http://example.com/node/2345#comment will take you to the comment area of the page.'),
+      // The anchor is enabled by default, but only on new panes.
+    '#default_value' => isset($conf['anchor']) ? $conf['anchor'] : 0,
+    '#weight' => 1,
+  );
   $form['mode'] = array(
     '#type' => 'select',
     '#title' => t('Mode'),
     '#default_value' => $conf['mode'],
     '#options' => _comment_get_modes(),
-    '#weight' => 1,
+    '#weight' => 2,
   );
   $form['order'] = array(
     '#type' => 'select',
     '#title' => t('Sort'),
     '#default_value' => $conf['order'],
     '#options' => _comment_get_orders(),
-    '#weight' => 2,
+    '#weight' => 3,
   );
   foreach (_comment_per_page() as $i) {
     $options[$i] = t('!a comments per page', array('!a' => $i));
@@ -63,7 +72,7 @@ function ctools_node_comments_content_type_edit_form(&$form, &$form_state) {
     '#title' => t('Pager'),
     '#default_value' => $conf['comments_per_page'],
     '#options' => $options,
-    '#weight' => 3,
+    '#weight' => 4,
   );
 }
 
@@ -95,7 +104,15 @@ function ctools_comment_render($node, $conf) {
 
   // Multiple comment view
   $query_count = 'SELECT COUNT(*) FROM {comments} c WHERE nid = %d';
-  $query = 'SELECT c.cid AS cid, c.pid, c.nid, c.subject, c.comment, c.format, c.timestamp, c.name, c.mail, c.homepage, u.uid, u.name AS registered_name, u.picture, u.data, c.thread, c.status, parent_user.uid as parent_uid, parent_user.data as parent_data, parent_user.name as parent_name, parent_user.picture as parent_picture FROM {comments} c INNER JOIN {users} u ON c.uid = u.uid LEFT OUTER JOIN {comments} parent ON c.pid = parent.cid LEFT OUTER JOIN {users} parent_user ON parent.uid = parent_user.uid WHERE c.nid = %d';
+
+  if (db_column_exists('users', 'signature_format')) {
+    //We run drupal version > 6.13, users table has signature_format column
+    $query = 'SELECT c.cid AS cid, c.pid, c.nid, c.subject, c.comment, c.format, c.timestamp, c.name, c.mail, c.homepage, u.uid, u.name AS registered_name, u.picture, u.signature, u.signature_format, u.data, c.thread, c.status, parent_user.uid as parent_uid, parent_user.data as parent_data, parent_user.name as parent_name, parent_user.picture as parent_picture FROM {comments} c INNER JOIN {users} u ON c.uid = u.uid LEFT OUTER JOIN {comments} parent ON c.pid = parent.cid LEFT OUTER JOIN {users} parent_user ON parent.uid = parent_user.uid WHERE c.nid = %d';
+  }
+  else {
+    //We run outdated drupal version <= 6.13, users table doesn't have signature_format column
+    $query = 'SELECT c.cid AS cid, c.pid, c.nid, c.subject, c.comment, c.format, c.timestamp, c.name, c.mail, c.homepage, u.uid, u.name AS registered_name, u.picture, u.signature, u.data, c.thread, c.status, parent_user.uid as parent_uid, parent_user.data as parent_data, parent_user.name as parent_name, parent_user.picture as parent_picture FROM {comments} c INNER JOIN {users} u ON c.uid = u.uid LEFT OUTER JOIN {comments} parent ON c.pid = parent.cid LEFT OUTER JOIN {users} parent_user ON parent.uid = parent_user.uid WHERE c.nid = %d';
+  }
 
   $query_args = array($node->nid);
   if (!user_access('administer comments')) {
@@ -122,7 +139,7 @@ function ctools_comment_render($node, $conf) {
   }
   $query = db_rewrite_sql($query, 'c', 'cid');
   $query_count = db_rewrite_sql($query_count, 'c', 'cid');
-  
+
   // Start a form, for use with comment control.
   $result = pager_query($query, $comments_per_page, 0, $query_count, $query_args);
 
@@ -167,6 +184,9 @@ function ctools_comment_render($node, $conf) {
   }
   $output .= theme('pager', NULL, $comments_per_page, 0);
 
+  if (!empty($conf['anchor'])) {
+    $output = '<div id="comments">' . $output . '</div>';
+  }
   return $output;
 }
 

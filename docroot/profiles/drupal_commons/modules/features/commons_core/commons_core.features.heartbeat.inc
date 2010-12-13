@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Helper to implementation of hook_heartbeat_message_info().
+ * Implementation of hook_heartbeat_message_info().
  */
-function _commons_core_heartbeat_message_info() {
+function commons_core_heartbeat_message_info() {
   $messages = array();
 
   // Exported heartbeat message: heartbeat_join_group

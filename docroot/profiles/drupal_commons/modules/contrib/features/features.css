@@ -164,6 +164,12 @@ span.features-component-list span {
   -webkit-border-radius:5px;
   }
 
+  div.features-key span.admin-conflict,
+  span.features-component-list span.features-conflict {
+    background-color: #c30;
+    color: #fff;
+    }
+
   a.admin-update { background:transparent; }
 
   /* These pseudo selectors are necessary for themes like Garland. */
@@ -186,6 +192,12 @@ span.features-component-list span {
   span.admin-rebuilding {
     color:#fff;
     background:#699;
+    }
+
+  a.admin-conflict:link,
+  a.admin-conflict:visited,
+  span.admin-conflict {
+    color:#c30;
     }
 
 table.features-diff td.diff-addedline,

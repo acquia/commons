@@ -1,15 +1,6 @@
-/* $Id: panels-dashboard.css,v 1.1.2.3 2009/10/06 18:47:20 merlinofchaos Exp $ */
+/* $Id: panels-dashboard.css,v 1.1.2.4 2010/07/23 21:49:03 merlinofchaos Exp $ */
 
-.dashboard-entry .dashboard-icon {
-  float: left;
-  width: 50px;
-  height: 50px;
-  text-align: center;
-  vertical-align: middle;
-  margin: 0 5px;
-}
-
-.dashboard-entry .dashboard-link a {
+.dashboard-entry .dashboard-link {
   font-size: 120%;
   font-weight: bold;
 }
@@ -21,14 +12,6 @@
   font-weight: bold;
   font-size: 140%;
   margin-bottom: .5em;
-}
-
-.dashboard-entry {
-  padding-left: 1em;
-}
-
-.dashboard-entry .dashboard-link form {
-  margin: 0 !important;
 }
 
 .dashboard-link form input {
@@ -56,15 +39,25 @@
   text-align: center;
 }
 
-table.panels-manage {
-  margin: 0 1em 1em 1em;
+.dashboard-content table {
+  margin: 0;
   width: 100%;
 }
 
-.dashboard-pages .links {
+.dashboard-content {
+  padding: 0 1em;
+}
+
+.panels-dashboard .links {
   text-align: right;
 }
 
 .dashboard-pages .page-manager-page-operations {
   text-align: right;
+}
+
+.dashboard-block {
+  padding-bottom: 1em;
+  border-bottom: 1px dotted #ddd;
+  margin-bottom: 1em;
 }

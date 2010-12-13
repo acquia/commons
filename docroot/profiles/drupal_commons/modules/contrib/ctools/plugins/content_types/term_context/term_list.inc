@@ -1,5 +1,5 @@
 <?php
-// $Id: term_list.inc,v 1.3.2.1 2010/01/29 20:18:25 merlinofchaos Exp $
+// $Id: term_list.inc,v 1.3.2.3 2010/07/15 20:47:14 merlinofchaos Exp $
 
 /**
  * Plugins are described by creating a $plugin array which will be used
@@ -51,7 +51,12 @@ function ctools_term_list_content_type_render($subtype, $conf, $panel_args, $con
     }
     if ($terms) {
       foreach ($terms as $related) {
-        $items[$related->tid] = l($related->name, taxonomy_term_path($related), array('rel' => 'tag', 'title' => strip_tags($related->description)));
+        if (is_object($related)) {
+          $items[] = l($related->name, taxonomy_term_path($related), array('rel' => 'tag', 'title' => strip_tags($related->description)));
+        }
+        else {
+          $items[] = check_plain($related);
+        }
       }
 
       $block->content = theme('item_list', $items, NULL, $conf['list_type']);

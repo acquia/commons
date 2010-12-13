@@ -1,5 +1,5 @@
 <?php
-// $Id: node_form_buttons.inc,v 1.1.2.1 2010/01/29 20:18:25 merlinofchaos Exp $
+// $Id: node_form_buttons.inc,v 1.1.2.2 2010/07/05 19:34:34 merlinofchaos Exp $
 
 /**
  * Plugins are described by creating a $plugin array which will be used
@@ -23,6 +23,9 @@ function ctools_node_form_buttons_content_type_render($subtype, $conf, $panel_ar
 
   if (isset($context->form)) {
     $block->content = drupal_render($context->form['buttons']);
+    $block->content .= drupal_render($context->form['form_token']);
+    $block->content .= drupal_render($context->form['form_build_id']);
+    $block->content .= drupal_render($context->form['form_id']);
   }
   else {
     $block->content = t('Node form buttons.');

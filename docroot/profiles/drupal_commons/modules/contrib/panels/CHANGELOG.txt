@@ -1,6 +1,85 @@
-Panels 6.x-dev
+Panels 6.x-3.8 (2010-Oct-29)
 ==============
+hook_panels_pre_render() and hook_panels_post_render() getting empty displays.
+#865704: Editing mini panels styles failed badly due to missing piece of cache.
+Custom style could crash if trying to enable style reuse without first enabling stylizer.module.
+In Flexible, the "class" would not stick when adding a new region/row/column but would when editing.
+#861426: Editing a mini panel while that same mini panel is displayed on the page resulted in a crash.
+#871730: Panel nodes with IPE enabled let anyone use IPE.
+#877810: Multiple "Add flexible layout" tabs appearing based on number of flexible layouts stored.
+#873224 by thsutton: hook_requirements() could cause notice error.
+#867340 by cedarm: Restore removed but deprecated panels_render_layout() function.
+#871942 by dwatson: Invalid CSS made dragger image not appear during IPE.
+#867864: Fix a admin title and edit link problems with custom content types.
+#570194: Add support for the "checkall" module in the content permissions page.
+#696846: Mini panels conflated displayed title with admin title.
+#889824: Custom class could would cause stylizer class to become malformed.
+Add a simple "Panels" row style to Views that lets you put fields in a panel layout.
+Add two new Page Wizards to more easily create some of the most commonly used Panel pages.
+#869766 by rupl: flexible layout builder could fail with multiple columns in only one row. (Needs clear cache to see changes in generated CSS.)
+#897214: Mini panel uninstall tried to order mini panels by a non-existing field.
+#893456 by omerida: Change FAPI definition of panel node "body" field to be more consistent with other node body fields.
+#812658 by naxoc: Caching should take language into account.
+#890086: Possible crash in flexible layout by not having CTools export.inc loaded.
+#899456 by yareckon: IPE customize button needs to be reset to "static" instead of "normal".
+#806874 by ximo: Allow panes to specify "render first" as well as "render last".
+#920266 by dereine: Typo in cache.inc caused wsods in rare circumstances.
+#879482 by mvc: Ensure Panels and CTools module files are loaded during update. Apparently could cause WSOD if not.
+#917614 by jskulski: IPE broken in IE.
+#906520: Improve CSS for rounded shadow boxes on IE7.
+#923894 by yareckon: IPE save/cancel buttons can fail due to translation issues.
+#932632 by mikeytown2: Fix notice in .install file.
+#927840: Add clear-block to dashboard HTML to ensure themes do not do weird things to it.
+#941806: Fix incorrect link to configure mini panel on block config page.
+#869766: Fix occasional problem with flexible layout pushing the entire layout to the left in certain fixed-width only configurations.
+#949310: E_STRICT violation on declaration of render_pane() method of display renderers.
+#827628: "Add content" dialog could lose content with the same title as other content.
+#955102: Fix notice in panel nodes when legacy rendering is not on.
 
+Panels 6.x-3.7 (2010-Jul-26)
+==============
+Experimentally introduced the In-Place Editor (IPE).
+Updated Panels Stylizer to use CTools' new Export UI.
+Deprecated panels_get_panels() function. This will be eventually disappear. Use panels_get_regions() instead.
+#834084: Reusable flexible layout introduced. Admin UI at admin/build/panels/layouts.
+Clean up flexible. Attempt to reduce the use of unnecessary divs. 
+Add more ability to control flexible classes.
+Add ability to fix flexible canvas to a set width.
+Allow disabling of scaling for IE6 in flexible.
+Fixes to IPE:
+  Add pane would add the new pane outside region styling
+  Add pane would not appear in empty regions
+  Panes could not be dragged to empty regions
+  Save would lose content if they were inside stylizer styled regions
+#822234 by Amitaibu: Missing url() caused IPE to not work on sites not using top level URLs.
+#844062: Turned the normal drag and drop editor into a renderer plugin, made the IPE part of it. Also some fairly serious code reorganization.
+Improve the renderer selection framework. This framework has no UI, but it utilizes exportables and new choices can be hand crafted.
+Improve the IPE to use the proper cache if it is set, and to respect locking.
+#847784: IPE displayed "Edit" link when no such link should have existed.
+#843758: Legacy renderer caused "missing argument" warning when rendering.
+Made it possible to override jQuery UI sortable options via settings in the renderer plugin.
+Moved Panels stylizer to CTools. You must update CTools at the same time as Panels.
+#737602: Generic NOT checkbox for all access tests.
+#369628: Sort results by export key when bulk exporting.
+#690902: Improvement to export.module integration of panel nodes.
+#690814 by neclimdul: Panels mini edit form could overwrite page title.
+#675220 by dereine: Provide a watchdog message if a layout can't be loaded when rendering a panel.
+#713526 by psynaptic: Omit top and bottom region divs in stacked layouts if regions are empty.
+#823216 by jonathan1055: Put quotes around url() in rounded corners CSS.
+#603150 by hefox: Protect against the panels node add form being used in unusual places.
+#841824 by levacjeep: Extend panels_edit and panels_edit_layout to allow more options with the $destination.
+#842976 by drewish: Make sure the theme knows path and file information for plugin supplied themes.
+#743850 by foripepe: Add delete panel node permissions.
+#532900: Flexible sometimes did not update links when region settings changed.
+#723036: Node pane previews did not include node content as they should.
+#831216: It should not be possible to remove the Canvas.
+#216076: Make sure that empty panes are not rendered. Note: Legacy mode region styles can still render empty panes anyway.
+#609626: Static caching loading mini panels.
+#848712 by josh_k: Use panel nodes with IPE.
+#860306 by jcmarco: "Substitutions" fieldset would not open due to missing js.
+#856964: "Custom style" selection was not working.
+#863302: Allow IPE to cope with empty panes.
+#865344: by jrockowitz: Panel node access hook should use $account.
 
 Panels 6.x-3.5 (2010-May-28)
 ==============

@@ -1,5 +1,5 @@
 <?php
-// $Id: object-cache.inc,v 1.8.2.2 2010/05/18 07:18:26 sdboyer Exp $
+// $Id: object-cache.inc,v 1.8.2.3 2010/07/22 22:33:34 merlinofchaos Exp $
 
 /**
  * @file
@@ -55,6 +55,13 @@ function ctools_object_cache_get($obj, $name, $skip_cache = FALSE) {
  *   The object to be cached. This will be serialized prior to writing.
  */
 function ctools_object_cache_set($obj, $name, $cache) {
+  // Store the CTools session id in the user session to force a
+  // session for anonymous users in Drupal 7 and Drupal 6 Pressflow.
+  // see http://drupal.org/node/562374, http://drupal.org/node/861778
+  if (empty($GLOBALS['user']->uid) && empty($_SESSION['ctools_session_id'])) {
+    $_SESSION['ctools_hold_session'] = TRUE;
+  }
+
   ctools_object_cache_clear($obj, $name);
   db_query("INSERT INTO {ctools_object_cache} (sid, obj, name, data, updated) VALUES ('%s', '%s', '%s', %b, %d)", session_id(), $obj, $name, serialize($cache), time());
 }

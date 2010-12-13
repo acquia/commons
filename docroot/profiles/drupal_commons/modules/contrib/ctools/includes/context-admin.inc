@@ -1,5 +1,5 @@
 <?php
-// $Id: context-admin.inc,v 1.9.2.2 2010/05/18 17:44:49 sdboyer Exp $
+// $Id: context-admin.inc,v 1.9.2.3 2010/07/13 23:55:22 merlinofchaos Exp $
 
 /**
  * @file includes/common-context.inc
@@ -138,12 +138,16 @@ function ctools_context_data($type, $name) {
 /**
  * Add the argument table plus gadget plus javascript to the form.
  */
-function ctools_context_add_argument_form($module, &$form, &$form_state, &$form_location, $object) {
+function ctools_context_add_argument_form($module, &$form, &$form_state, &$form_location, $object, $name = NULL) {
+  if (empty($name)) {
+    $name = $object->name;
+  }
+
   $form_location = array(
     '#prefix' => '<div id="ctools-arguments-table">',
     '#suffix' => '</div>',
     '#theme' => 'ctools_context_item_form',
-    '#object_name' => $object->name,
+    '#object_name' => $name,
     '#ctools_context_type' => 'argument',
     '#ctools_context_module' => $module,
   );
@@ -161,12 +165,16 @@ function ctools_context_add_argument_form($module, &$form, &$form_state, &$form_
   }
 }
 
-function ctools_context_add_context_form($module, &$form, &$form_state, &$form_location, $object) {
+function ctools_context_add_context_form($module, &$form, &$form_state, &$form_location, $object, $name = NULL) {
+  if (empty($name)) {
+    $name = $object->name;
+  }
+
   $form_location = array(
     '#prefix' => '<div id="ctools-contexts-table">',
     '#suffix' => '</div>',
     '#theme' => 'ctools_context_item_form',
-    '#object_name' => $object->name,
+    '#object_name' => $name,
     '#ctools_context_type' => 'context',
     '#ctools_context_module' => $module,
   );
@@ -190,12 +198,16 @@ function ctools_context_add_context_form($module, &$form, &$form_state, &$form_l
   }
 }
 
-function ctools_context_add_required_context_form($module, &$form, &$form_state, &$form_location, $object) {
+function ctools_context_add_required_context_form($module, &$form, &$form_state, &$form_location, $object, $name = NULL) {
+  if (empty($name)) {
+    $name = $object->name;
+  }
+
   $form_location = array(
     '#prefix' => '<div id="ctools-requiredcontexts-table">',
     '#suffix' => '</div>',
     '#theme' => 'ctools_context_item_form',
-    '#object_name' => $object->name,
+    '#object_name' => $name,
     '#ctools_context_type' => 'requiredcontext',
     '#ctools_context_module' => $module,
   );
@@ -217,12 +229,16 @@ function ctools_context_add_required_context_form($module, &$form, &$form_state,
   }
 }
 
-function ctools_context_add_relationship_form($module, &$form, &$form_state, &$form_location, $object) {
+function ctools_context_add_relationship_form($module, &$form, &$form_state, &$form_location, $object, $name = NULL) {
+  if (empty($name)) {
+    $name = $object->name;
+  }
+
   $form_location = array(
     '#prefix' => '<div id="ctools-relationships-table">',
     '#suffix' => '</div>',
     '#theme' => 'ctools_context_item_form',
-    '#object_name' => $object->name,
+    '#object_name' => $name,
     '#ctools_context_type' => 'relationship',
     '#ctools_context_module' => $module,
   );

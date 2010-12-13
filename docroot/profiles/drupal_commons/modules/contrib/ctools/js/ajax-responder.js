@@ -1,4 +1,4 @@
-// $Id: ajax-responder.js,v 1.18.2.12 2010/05/26 16:42:44 merlinofchaos Exp $
+// $Id: ajax-responder.js,v 1.18.2.24 2010/08/27 22:09:48 merlinofchaos Exp $
 /**
  * @file
  *
@@ -12,10 +12,6 @@
   Drupal.CTools.AJAX.commandCache = Drupal.CTools.AJAX.comandCache || {} ;
   Drupal.CTools.AJAX.scripts = {};
   Drupal.CTools.AJAX.css = {};
-
-  Drupal.CTools.AJAX.getPageId = function() {
-    return Drupal.CTools.pageId;
-  }
 
   /**
    * Success callback for an ajax request.
@@ -57,7 +53,7 @@
       $.ajax({
         type: "POST",
         url: url,
-        data: { 'js': 1, 'ctools_ajax': 1, 'page_id': Drupal.CTools.AJAX.getPageId() },
+        data: { 'js': 1, 'ctools_ajax': 1},
         global: true,
         success: function (data) {
           Drupal.CTools.AJAX.commandCache[old_url] = data;
@@ -116,21 +112,21 @@
       $.ajax({
         type: "POST",
         url: url,
-        data: { 'js': 1, 'ctools_ajax': 1, 'page_id': Drupal.CTools.AJAX.getPageId() },
+        data: { 'js': 1, 'ctools_ajax': 1},
         global: true,
         success: Drupal.CTools.AJAX.respond,
         error: function(xhr) {
           Drupal.CTools.AJAX.handleErrors(xhr, url);
         },
         complete: function() {
-          object.removeClass('ctools-ajaxing');
+          $('.ctools-ajaxing').removeClass('ctools-ajaxing');
         },
         dataType: 'json'
       });
     }
     catch (err) {
       alert("An error occurred while attempting to process " + url);
-      $(this).removeClass('ctools-ajaxing');
+      $('.ctools-ajaxing').removeClass('ctools-ajaxing');
       return false;
     }
 
@@ -158,14 +154,14 @@
         $.ajax({
           type: "POST",
           url: url,
-          data: { 'js': 1, 'ctools_ajax': 1, 'page_id': Drupal.CTools.AJAX.getPageId() },
+          data: { 'js': 1, 'ctools_ajax': 1},
           global: true,
           success: Drupal.CTools.AJAX.respond,
           error: function(xhr) {
             Drupal.CTools.AJAX.handleErrors(xhr, url);
           },
           complete: function() {
-            object.removeClass('ctools-ajaxing');
+            $('.ctools-ajaxing').removeClass('ctools-ajaxing');
           },
           dataType: 'json'
         });
@@ -173,21 +169,7 @@
       else {
         var form = this.form;
         url = $(form).attr('action');
-        url = url.replace(/\/nojs(\/|$)/g, '/ajax$1');
-        $(form).ajaxSubmit({
-          type: "POST",
-          url: url,
-          data: { 'js': 1, 'ctools_ajax': 1, 'page_id': Drupal.CTools.AJAX.getPageId() },
-          global: true,
-          success: Drupal.CTools.AJAX.respond,
-          error: function(xhr) {
-            Drupal.CTools.AJAX.handleErrors(xhr, url);
-          },
-          complete: function() {
-            object.removeClass('ctools-ajaxing');
-          },
-          dataType: 'json'
-        });
+        setTimeout(function() { Drupal.CTools.AJAX.ajaxSubmit(form, url); }, 1);
       }
     }
     catch (err) {
@@ -197,6 +179,69 @@
     }
     return false;
   };
+
+  /**
+   * Event handler to submit an AJAX form.
+   *
+   * Using a secondary event ensures that our form submission is last, which
+   * is needed when submitting wysiwyg controlled forms, for example.
+   */
+  Drupal.CTools.AJAX.ajaxSubmit = function (form, url) {
+    $form = $(form);
+
+    if ($form.hasClass('ctools-ajaxing')) {
+      return false;
+    }
+
+    $form.addClass('ctools-ajaxing');
+
+    try {
+      url = url.replace(/\/nojs(\/|$)/g, '/ajax$1');
+
+      var ajaxOptions = {
+        type: 'POST',
+        url: url,
+        data: { 'js': 1, 'ctools_ajax': 1},
+        global: true,
+        success: Drupal.CTools.AJAX.respond,
+        error: function(xhr) {
+          Drupal.CTools.AJAX.handleErrors(xhr, url);
+        },
+        complete: function() {
+          $('.ctools-ajaxing').removeClass('ctools-ajaxing');
+          $('div.ctools-ajaxing-temporary').remove();
+        },
+        dataType: 'json'
+      };
+
+      // If the form requires uploads, use an iframe instead and add data to
+      // the submit to support this and use the proper response.
+      if ($form.attr('enctype') == 'multipart/form-data') {
+        $form.append('<input type="hidden" name="ctools_multipart" value="1">');
+        ajaxIframeOptions = {
+          success: Drupal.CTools.AJAX.iFrameJsonRespond,
+          iframe: true
+        };
+        ajaxOptions = $.extend(ajaxOptions, ajaxIframeOptions);
+      }
+
+      $form.ajaxSubmit(ajaxOptions);
+    }
+    catch (err) {
+      alert("An error occurred while attempting to process " + url);
+      $('.ctools-ajaxing').removeClass('ctools-ajaxing');
+      $('div.ctools-ajaxing-temporary').remove();
+      return false;
+    }
+  };
+
+  /**
+   * Wrapper for handling JSON responses from an iframe submission
+   */
+  Drupal.CTools.AJAX.iFrameJsonRespond = function(data) {
+    var myJson = eval(data);
+    Drupal.CTools.AJAX.respond(myJson);
+  }
 
   /**
    * Display error in a more fashion way
@@ -253,7 +298,7 @@
             Drupal.CTools.AJAX.handleErrors(xhr, url);
           },
           complete: function() {
-            object.removeClass('ctools-ajaxing');
+            $('.ctools-ajaxing').removeClass('ctools-ajaxing');
             if ($(object).hasClass('ctools-ajax-submit-onchange')) {
               $('form#' + form_id).submit();
             }
@@ -270,7 +315,7 @@
     }
     catch (err) {
       alert("An error occurred while attempting to process " + url);
-      $(this).removeClass('ctools-ajaxing');
+      $('.ctools-ajaxing').removeClass('ctools-ajaxing');
       return false;
     }
     return false;
@@ -296,6 +341,19 @@
       });
     return url;
   };
+
+  Drupal.CTools.AJAX.getPath = function (link) {
+    if (!link) {
+      return;
+    }
+
+    var index = link.indexOf('?');
+    if (index != -1) {
+      link = link.substr(0, index);
+    }
+
+    return link;
+  }
 
   Drupal.CTools.AJAX.commands.prepend = function(data) {
     $(data.selector).prepend(data.data);
@@ -360,18 +418,20 @@
   };
 
   Drupal.CTools.AJAX.commands.css_files = function(data) {
-    // Build a list of scripts already loaded:
-
+    // Build a list of css files already loaded:
     $('link:not(.ctools-temporary-css)').each(function () {
       if ($(this).attr('type') == 'text/css') {
-        Drupal.CTools.AJAX.css[$(this).attr('href')] = $(this).attr('href');
+        var link = Drupal.CTools.AJAX.getPath($(this).attr('href'));
+        if (link) {
+          Drupal.CTools.AJAX.css[link] = $(this).attr('href');
+        }
       }
     });
 
     var html = '';
     for (i in data.argument) {
-      if (!Drupal.CTools.AJAX.css[data.argument[i].file]) {
-//        Drupal.CTools.AJAX.css[data.argument[i].file] = data.argument[i].file;
+      var link = Drupal.CTools.AJAX.getPath(data.argument[i].file);
+      if (!Drupal.CTools.AJAX.css[link]) {
         html += '<link class="ctools-temporary-css" type="text/css" rel="stylesheet" media="' + data.argument[i].media +
           '" href="' + data.argument[i].file + '" />';
       }
@@ -391,13 +451,24 @@
     // Build a list of scripts already loaded:
     var scripts = {};
     $('script').each(function () {
-      Drupal.CTools.AJAX.scripts[$(this).attr('src')] = $(this).attr('src');
+      var link = Drupal.CTools.AJAX.getPath($(this).attr('src'));
+      if (link) {
+        Drupal.CTools.AJAX.scripts[link] = $(this).attr('src');
+      }
     });
 
     var html = '';
+    var head = document.getElementsByTagName('head')[0];
     for (i in data.argument) {
-      if (!Drupal.CTools.AJAX.scripts[data.argument[i]]) {
-        Drupal.CTools.AJAX.scripts[data.argument[i]] = data.argument[i];
+      var link = Drupal.CTools.AJAX.getPath(data.argument[i]);
+      if (!Drupal.CTools.AJAX.scripts[link]) {
+        Drupal.CTools.AJAX.scripts[link] = link;
+        // Use this to actually get the script tag into the dom, which is
+        // needed for scripts that self-reference to determine paths.
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = data.argument[i];
+        head.appendChild(script);
         html += '<script type="text/javascript" src="' + data.argument[i] + '"></script>';
       }
     }
@@ -429,7 +500,14 @@
   };
 
   Drupal.CTools.AJAX.commands.redirect = function(data) {
-    location.href = data.url;
+    if (data.delay > 0) {
+      setTimeout(function () {
+        location.href = data.url;
+      }, data.delay);
+    }
+    else {
+      location.href = data.url;
+    }
   };
 
   Drupal.CTools.AJAX.commands.reload = function(data) {
@@ -471,17 +549,13 @@
        .filter('.ctools-use-ajax-onchange:not(.ctools-use-ajax-processed)')
        .addClass('ctools-use-ajax-processed')
        .change(Drupal.CTools.AJAX.changeAJAX);
-  };
 
-  /**
-   * Use the ready() method to copy the page ID out of settings, because the
-   * the settings can get overwritten and the page ID can get lost.
-   */
-  $(function () {
-    Drupal.CTools.pageId = '';
-    if (Drupal.settings.CTools && Drupal.settings.CTools.pageId) {
-      Drupal.CTools.pageId = Drupal.settings.CTools.pageId;
+    // Add information about loaded CSS and JS files.
+    if (Drupal.settings.CToolsAJAX && Drupal.settings.CToolsAJAX.css) {
+      $.extend(Drupal.CTools.AJAX.css, Drupal.settings.CToolsAJAX.css);
     }
-  });
-
+    if (Drupal.settings.CToolsAJAX && Drupal.settings.CToolsAJAX.scripts) {
+      $.extend(Drupal.CTools.AJAX.scripts, Drupal.settings.CToolsAJAX.scripts);
+    }
+  };
 })(jQuery);

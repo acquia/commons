@@ -1,5 +1,5 @@
 <?php
-// $Id: panels_node.module,v 1.5.2.18 2010/05/20 09:05:37 sdboyer Exp $
+// $Id: panels_node.module,v 1.5.2.28 2010/10/29 21:50:22 merlinofchaos Exp $
 
 
 /**
@@ -17,7 +17,7 @@
  * Implementation of hook_perm().
  */
 function panels_node_perm() {
-  return array('create panel-nodes', 'edit any panel-nodes', 'edit own panel-nodes', 'administer panel-nodes');
+  return array('create panel-nodes', 'edit any panel-nodes', 'edit own panel-nodes', 'administer panel-nodes', 'delete any panel-nodes', 'delete own panel-nodes');
 }
 
 /**
@@ -101,15 +101,20 @@ function panels_node_node_info() {
  * Implementation of hook_access().
  */
 function panels_node_access($op, $node, $account) {
-  if (user_access('administer panel-nodes')) {
+  if (user_access('administer panel-nodes', $account)) {
     return TRUE;
   }
 
-  if ($op == 'create' && user_access('create panel-nodes')) {
+  if ($op == 'create' && user_access('create panel-nodes', $account)) {
     return TRUE;
   }
 
-  if ($op == 'update' && (user_access('edit any panel-nodes') || $node->uid == $account->uid && user_access('edit own panel-nodes'))) {
+  if ($op == 'update' && (user_access('edit any panel-nodes', $account) || $node->uid == $account->uid && user_access('edit own panel-nodes', $account))) {
+    return TRUE;
+  }
+
+
+  if ($op == 'delete' && (user_access('delete any panel-nodes') || $node->uid == $account->uid && user_access('delete own panel-nodes'))) {
     return TRUE;
   }
 }
@@ -121,20 +126,17 @@ function panels_node_add() {
   ctools_include('common', 'panels');
 
   $layouts = panels_common_get_allowed_layouts('panels_node');
-
-  // If no layout selected, present a list of choices.
-  foreach ($layouts as $id => $layout) {
-    $output .= panels_print_layout_link($id, $layout, 'node/add/panel/' . $id, array('query' => $_GET));
-  }
-  return $output;
+  return panels_common_print_layout_links($layouts, 'node/add/panel', array('query' => $_GET));
 }
 
 /**
  * Implementation of hook_form().
  */
 function panels_node_form(&$node, &$param) {
+  ctools_include('plugins', 'panels');
+
   $form['panels_node']['#tree'] = TRUE;
-  if (empty($node->nid)) {
+  if (empty($node->nid) && arg(0) == 'node' && arg(1) == 'add') {
     // Grab our selected layout from the $node, If it doesn't exist, try arg(3)
     // and if that doesn't work present them with a list to pick from.
     $panel_layout = isset($node->panel_layout) ? $node->panel_layout : arg(3);
@@ -144,7 +146,6 @@ function panels_node_form(&$node, &$param) {
       return drupal_goto('node/add/panel/choose-layout', $opts);
     }
 
-    ctools_include('plugins', 'panels');
     $layout = panels_get_layout($panel_layout);
     if (empty($layout)) {
       return drupal_not_found();
@@ -165,7 +166,9 @@ function panels_node_form(&$node, &$param) {
   );
 
   if (!empty($type->body_label)) {
-    $form['body'] = array(
+    $form['body_field']['#prefix'] = '<div class="body-field-wrapper">';
+    $form['body_field']['#suffix'] = '</div>';
+    $form['body_field']['body'] = array(
       '#type' => 'textarea',
       '#title' => check_plain($type->body_label),
       '#rows' => 10,
@@ -173,7 +176,7 @@ function panels_node_form(&$node, &$param) {
       '#description' => t('The teaser is a piece of text to describe when the panel is listed (such as when promoted to front page); the actual content will only be displayed on the full node view.'),
       '#default_value' => $node->body,
     );
-    $form['format'] = filter_form($node->format); // Now we can set the format!
+    $form['body_field']['format'] = filter_form($node->format); // Now we can set the format!
   }
 
 //  drupal_set_message('<pre>' . check_plain(var_export($node, true)) . '</pre>');
@@ -189,6 +192,35 @@ function panels_node_form(&$node, &$param) {
     '#description' => t('An ID that can be used by CSS to style the panel.'),
     '#default_value' => $css_id,
   );
+
+  // Support for different rendering pipelines
+  // Mostly borrowed from panel_context.inc
+  $pipelines = panels_get_renderer_pipelines();
+
+  // If there are no pipelines, that probably means we're operating in
+  // legacy mode.
+  if (empty($pipelines)) {
+    // We retain the original pipeline so we don't wreck things by installing
+    // old modules.
+    $form['panels_node']['pipeline'] = array(
+      '#type' => 'value',
+      '#value' => $node->panels_node['pipeline'],
+    );
+  }
+  else {
+    $options = array();
+    foreach ($pipelines as $name => $pipeline) {
+      $options[$name] = check_plain($pipeline->admin_title) . '<div class="description">' . check_plain($pipeline->admin_description) . '</div>';
+    }
+
+    $form['panels_node']['pipeline'] = array(
+      '#type' => 'radios',
+      '#options' => $options,
+      '#title' => t('Renderer'),
+      '#default_value' => !empty($node->panels_node['pipeline']) ? $node->panels_node['pipeline'] : 'standard',
+    );
+  }
+
   return $form;
 }
 
@@ -233,7 +265,7 @@ function panels_node_insert(&$node) {
   panels_save_display($display);
   $css_id = $node->panels_node['css_id'];
 
-  db_query("INSERT INTO {panels_node} (nid, did, css_id) VALUES (%d, %d, '%s')", $node->nid, $display->did, $node->panels_node['css_id']);
+  db_query("INSERT INTO {panels_node} (nid, did, css_id, pipeline) VALUES (%d, %d, '%s', '%s')", $node->nid, $display->did, $node->panels_node['css_id'], $node->panels_node['pipeline']);
 
   $node->panels_node['did'] = $display->did;
 }
@@ -252,7 +284,7 @@ function panels_node_delete(&$node) {
  * Implementation of hook_update().
  */
 function panels_node_update($node) {
-  db_query("UPDATE {panels_node} SET css_id = '%s' WHERE nid = %d", $node->panels_node['css_id'], $node->nid);
+  db_query("UPDATE {panels_node} SET css_id = '%s', pipeline = '%s' WHERE nid = %d", $node->panels_node['css_id'], $node->panels_node['pipeline'], $node->nid);
 }
 
 /**
@@ -281,9 +313,9 @@ function panels_node_view($node, $teaser = FALSE, $page = FALSE) {
       $display->css_id = $node->panels_node['css_id'];
       // TODO: Find a way to make sure this can't node_view.
       $display->context = panels_node_get_context($node);
-
+      $renderer = panels_get_renderer($node->panels_node['pipeline'], $display);
       $node->content['body'] = array(
-        '#value' => panels_render_display($display),
+        '#value' => panels_render_display($display, $renderer),
         '#weight' => 0,
       );
     }
@@ -347,14 +379,31 @@ function panels_node_get_context(&$node) {
 }
 
 /**
- * hook_export_node_alter() - integegrate with export.module for saving
- *                            panel_nodes into code.
+ * Implementation of hook_export_node_alter()
+ *
+ * Integrate with export.module for saving panel_nodes into code.
  */
 function panels_node_export_node_alter(&$node, $original_node, $method) {
   if ($method == 'export') {
-    drupal_set_message(t("NOTE: in order to import panel_nodes you must first set the export.module settings to \"Save as a new node then edit\", otherwise it won't work."));
+    $node_export_omitted = variable_get('node_export_omitted', array());
+    if (variable_get('node_export_method', '') != 'save-edit' && (array_key_exists('panel', $node_export_omitted) && !$node_export_omitted['panel'])) {
+      drupal_set_message(t("NOTE: in order to import panel_nodes you must first set the export.module settings to \"Save as a new node then edit\", otherwise it won't work."));
+    }
     $display = panels_load_display($node->panels_node['did']);
     $export = panels_export_display($display);
     $node->export_display = $export;
   }
+}
+
+/**
+ * Implementation of hook_panels_dashboard_blocks().
+ *
+ * Adds panel nodes information to the Panels dashboard.
+ */
+function panels_node_panels_dashboard_blocks(&$vars) {
+  $vars['links']['panels_node'] = array(
+    'title' => l(t('Panel node'), 'node/add/panel'),
+    'description' => t('Panel nodes are node content and appear in your searches, but are more limited than panel pages.'),
+    'weight' => -1,
+  );
 }

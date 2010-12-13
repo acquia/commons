@@ -1,5 +1,5 @@
 <?php
-// $Id: views_panes.inc,v 1.14.2.8 2010/05/18 09:31:31 sdboyer Exp $
+// $Id: views_panes.inc,v 1.14.2.15 2010/08/20 21:20:40 merlinofchaos Exp $
 
 /**
  * @file
@@ -50,7 +50,10 @@ function views_content_views_panes_content_type_content_types($plugin) {
         if (empty($display->handler->panel_pane_display)) {
           continue;
         }
-        $types[$view->name . '-' . $id] = _views_content_panes_content_type($view, $display);
+        $info = _views_content_panes_content_type($view, $display);
+        if ($info) {
+          $types[$view->name . '-' . $id] = $info;
+        }
       }
 
       $view->destroy();
@@ -79,6 +82,12 @@ function views_content_views_panes_content_type_content_type($subtype, $plugin) 
 }
 
 function _views_content_panes_content_type($view, $display) {
+  // Ensure the handler is the right type, as Views will fall back to
+  // the default display if something is broken:
+  if (get_class($display->handler) != 'views_content_plugin_display_panel_pane') {
+    return;
+  }
+
   $title = $display->handler->get_option('pane_title');
   if (!$title) {
     $title = $view->name;
@@ -177,7 +186,7 @@ function views_content_views_panes_content_type_render($subtype, $conf, $panel_a
         break;
 
       case 'user':
-        $args[] = isset($conf['arguments'][$id]) ? $conf['arguments'][$id] : NULL;
+        $args[] = (isset($conf['arguments'][$id])  && $conf['arguments'][$id] !== '') ? $conf['arguments'][$id] : NULL;
         break;
 
      case 'wildcard':
@@ -234,32 +243,60 @@ function views_content_views_panes_content_type_render($subtype, $conf, $panel_a
     }
   }
 
+  if ($allow['items_per_page'] && isset($conf['items_per_page'])) {
+    $view->display_handler->set_option('items_per_page', $conf['items_per_page']);
+    // And here too, which works in Views 3 where the above does not.
+    $view->set_items_per_page($conf['items_per_page']);
+  }
+
+  if ($allow['offset']) {
+    $view->display_handler->set_option('offset', $conf['offset']);
+    $view->set_offset($conf['offset']);
+  }
+
   if ($allow['use_pager']) {
     // Only set use_pager if they differ, this way we can avoid overwriting the
     // pager type that Views uses.
-    if (!$view->display_handler->get_option('use_pager') || empty($conf['use_pager'])) {
-      $view->display_handler->set_option('use_pager', $conf['use_pager']);
-    }
-    $view->display_handler->set_option('pager_element', $conf['pager_id']);
-  }
-  if ($allow['items_per_page'] && isset($conf['items_per_page'])) {
-    $view->display_handler->set_option('items_per_page', $conf['items_per_page']);
-  }
-  if ($allow['offset']) {
-    $view->display_handler->set_option('offset', $conf['offset']);
-  }
+    // Views 3 version
+    if (method_exists($view, 'init_pager')) {
+      $pager = $view->display_handler->get_option('pager');
+      if ($conf['use_pager'] && ($pager['type'] == 'none' || $pager['type'] == 'some')) {
+        $pager['type'] = 'full';
+      }
+      elseif (!$conf['use_pager'] && $pager['type'] != 'none' && $pager['type'] != 'some') {
+        $pager['type'] = $view->get_items_per_page() || !empty($pager['options']['items_per_page']) ? 'some' : 'none';
+      }
 
-  $view->init_style();
-  if ($allow['fields_override'] && $view->style_plugin->uses_fields()) {
-    $fields = $view->get_items('field');
-    if ($conf['fields_override']) {
-      foreach ($conf['fields_override'] as $field => $display) {
-        if ($conf['fields_override'][$field] == 0) {
-          $fields[$field]['exclude'] = 1;
-          $view->set_item($view->current_display, 'field', $field, $fields[$field]);
+      if ($conf['use_pager']) {
+        if (!isset($pager['options']['id']) || $pager['options']['id'] != $conf['pager_id']) {
+          $pager['options']['id'] = $conf['pager_id'];
         }
       }
+
+      $view->display_handler->set_option('pager', $pager);
     }
+    else {
+      if (!$view->display_handler->get_option('use_pager') || empty($conf['use_pager'])) {
+        $view->display_handler->set_option('use_pager', $conf['use_pager']);
+      }
+
+      $view->display_handler->set_option('pager_element', $conf['pager_id']);
+    }
+  }
+
+  if ($allow['fields_override']) {
+    if ($conf['fields_override']) {
+      $fields = $view->get_items('field');
+      foreach ($conf['fields_override'] as $field => $display) {
+        $fields[$field]['exclude'] = empty($conf['fields_override'][$field]);
+      }
+      $view->display_handler->set_option('fields', $fields);
+
+    }
+  }
+
+  if ($allow['exposed_form'] && !empty($conf['exposed'])) {
+    $view->set_exposed_input($conf['exposed']);
   }
 
   $stored_feeds = drupal_add_feed();
@@ -428,6 +465,9 @@ function views_content_views_panes_content_type_edit_form(&$form, &$form_state) 
     if (!empty($contexts)) {
       $form['path']['#description'] .= ' ' . t('You may use substitutions in this path.');
 
+      // Add js for collapsible fieldsets manually
+      drupal_add_js('misc/collapse.js');
+
       // We have to create a manual fieldset because fieldsets do not support IDs.
       // Use 'hidden' instead of 'markup' so that the process will run.
       $form['contexts_prefix'] = array(
@@ -453,6 +493,51 @@ function views_content_views_panes_content_type_edit_form(&$form, &$form_state) 
       );
     }
   }
+
+  if (empty($conf['exposed'])) {
+    $conf['exposed'] = array();
+  }
+
+  if ($allow['exposed_form']) {
+    // If the exposed form is part of pane configuration, get the exposed
+    // form re-tool it for our use.
+    $exposed_form_state = array(
+      'view' => &$view,
+      'display' => &$view->display[$display_id],
+    );
+
+    $view->set_exposed_input($conf['exposed']);
+
+    if (version_compare(views_api_version(), '3', '>=')) {
+      $exposed_form_state['exposed_form_plugin'] = $view->display_handler->get_plugin('exposed_form');
+    }
+    $view->init_handlers();
+    $exposed_form = views_exposed_form($exposed_form_state);
+
+    $form['exposed'] = array(
+      '#tree' => TRUE,
+    );
+
+    foreach ($exposed_form['#info'] as $id => $info) {
+      $form['exposed'][$id] = array(
+        '#type' => 'item',
+        '#id' => 'views-exposed-pane',
+      );
+
+      if (!empty($info['label'])) {
+        $form['exposed'][$id]['#title'] = $info['label'];
+      }
+
+      if (!empty($info['operator']) && !empty($exposed_form[$info['operator']])) {
+        $form['exposed'][$id][$info['operator']] = $exposed_form[$info['operator']];
+        $form['exposed'][$id][$info['operator']]['#parents'] = array('exposed', $info['operator']);
+        $form['exposed'][$id][$info['operator']]['#default_value'] = isset($conf['exposed'][$info['operator']]) ? $conf['exposed'][$info['operator']] : '';
+      }
+      $form['exposed'][$id][$info['value']] = $exposed_form[$info['value']];
+      $form['exposed'][$id][$info['value']]['#parents'] = array('exposed', $info['value']);
+      $form['exposed'][$id][$info['value']]['#default_value'] = isset($conf['exposed'][$info['value']]) ? $conf['exposed'][$info['value']] : '';
+    }
+  }
 }
 
 /**
@@ -461,7 +546,7 @@ function views_content_views_panes_content_type_edit_form(&$form, &$form_state) 
 function views_content_views_panes_content_type_edit_form_submit(&$form, &$form_state) {
   // Copy everything from our defaults.
   $keys = array('link_to_view', 'more_link', 'feed_icons', 'use_pager',
-    'pager_id', 'items_per_page', 'offset', 'path_override', 'path', 'arguments', 'fields_override');
+    'pager_id', 'items_per_page', 'offset', 'path_override', 'path', 'arguments', 'fields_override', 'exposed');
 
   foreach ($keys as $key) {
     if (isset($form_state['values'][$key])) {

@@ -1,5 +1,5 @@
 <?php
-// $Id: panels_mini.inc,v 1.1.2.5 2010/05/17 19:27:01 sdboyer Exp $
+// $Id: panels_mini.inc,v 1.1.2.7 2010/08/21 20:46:36 merlinofchaos Exp $
 
 /**
  * @file
@@ -7,7 +7,7 @@
  * need to be broken out into a .inc file, it's convenient that we do so
  * that we don't load code unneccessarily. Plus it demonstrates plugins
  * in modules other than Panels itself.
- * 
+ *
  */
 
 /**
@@ -52,7 +52,7 @@ function _panels_mini_panels_mini_content_type_content_type($mini) {
     return;
   }
 
-  $title = filter_xss_admin($mini->title);
+  $title = filter_xss_admin($mini->admin_title);
   $type = array(
     'title' => $title,
     // For now mini panels will just use the contrib block icon.
@@ -102,8 +102,8 @@ function panels_mini_panels_mini_content_type_render($subtype, $conf, $panel_arg
   $block = new stdClass();
   $block->module  = 'panels_mini';
   $block->delta   = $subtype;
-  $block->title = filter_xss_admin($mini->title);
   $block->content = panels_render_display($mini->display);
+  $block->title = $mini->display->get_title();
 
   unset($viewing[$mini->name]);
   return $block;
@@ -125,7 +125,7 @@ function panels_mini_panels_mini_content_type_admin_title($subtype, $conf) {
     return t('Deleted/missing mini panel @name', array('@name' => $subtype));
   }
 
-  $title = filter_xss_admin($mini->title);
+  $title = filter_xss_admin($mini->admin_title);
   if (empty($title)) {
     $title = t('Untitled mini panel');
   }

@@ -1,5 +1,5 @@
 <?php
-// $Id: context_ui.test,v 1.4.4.1 2009/07/24 01:06:00 yhahn Exp $
+// $Id: context_ui.test,v 1.4.4.1.2.2 2010/08/05 16:46:26 yhahn Exp $
 
 /**
  * Functional Test for Context UI
@@ -18,7 +18,7 @@ class ContextUiTestCase extends DrupalWebTestCase {
   }
 
   function setUp() {
-    parent::setUp('context', 'context_ui');
+    parent::setUp('ctools', 'context', 'context_ui');
 
     // Create and login user
     $admin_user = $this->drupalCreateUser(array('administer site configuration', 'administer blocks', 'access content', 'create page content'));
@@ -32,20 +32,20 @@ class ContextUiTestCase extends DrupalWebTestCase {
   function testCreateContext() {
     // Create context
     $context = new stdClass();
-    $context->namespace = strtolower($this->randomName(15));
-    $context->attribute = strtolower($this->randomName(15));
-    $context->value = strtolower($this->randomName(15));
+    $context->name = strtolower($this->randomName(15));
+    $context->description = strtolower($this->randomName(15));
+    $context->tag = strtolower($this->randomName(15));
     $this->context = $context;
 
     $edit = array(
-      'namespace' => $context->namespace,
-      'attribute' => $context->attribute,
-      'value' => $context->value,
-      'items[node][page]' => 'page',
-      'items[menu]' => 'node/add/page',
+      'name' => $context->name,
+      'description' => $context->description,
+      'tag' => $context->tag,
+      'conditions[plugins][node][values][page]' => 'page',
+      'reactions[plugins][menu]' => 'node/add/page',
     );
     $this->drupalPost('admin/build/context/add', $edit, 'Save');
-    $this->assertRaw(t('The context %title was saved successfully.', array('%title' =>  $edit['value'])), 'Context saved.');
+    $this->assertText($context->name . ' has been created.', 'Context saved.');
 
   }
 }

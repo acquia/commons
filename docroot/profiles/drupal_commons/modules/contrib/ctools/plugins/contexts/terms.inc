@@ -1,5 +1,5 @@
 <?php
-// $Id: terms.inc,v 1.4.2.2 2010/01/29 20:18:26 merlinofchaos Exp $
+// $Id: terms.inc,v 1.4.2.4 2010/10/15 21:06:51 merlinofchaos Exp $
 
 /**
  * @file
@@ -24,7 +24,9 @@ $plugin = array(
     'tid' => t('Term ID of first term'),
     'tids' => t('Term ID of all term, separated by + or ,'),
     'name' => t('Term name of first term'),
+    'name_dashed' => t('Term name of first term, lowercased and spaces converted to dashes'),
     'names' => t('Term name of all terms, separated by + or ,'),
+    'names_dashed' => t('Term name of all terms, separated by + or , and lowercased and spaces converted to dashes'),
     'vid' => t('Vocabulary ID of first term'),
   ),
   'convert' => 'ctools_context_terms_convert',
@@ -71,16 +73,23 @@ function ctools_context_terms_convert($context, $type) {
       return $context->argument;
     case 'name':
       return $context->data->name;
+    case 'name_dashed':
+      return drupal_strtolower(str_replace(' ', '-', $context->data->name));
     case 'names':
+    case 'names_dashed':
       // We only run this query if this item was requested:
       if (!isset($context->names)) {
         if (empty($context->tids)) {
           $context->names = '';
         }
         else {
+          $names = array();
           $result = db_query("SELECT tid, name FROM {term_data} WHERE tid IN (" . db_placeholders($context->tids) . ")", $context->tids);
           while ($term = db_fetch_object($result)) {
             $names[$term->tid] = $term->name;
+            if ($type == 'names_dashed') {
+              $names[$term->tid] = drupal_strtolower(str_replace(' ', '-', $names[$term->tid]));
+            }
           }
           $context->names = implode($context->operator == 'or' ? ' + ' : ', ', $names);
         }

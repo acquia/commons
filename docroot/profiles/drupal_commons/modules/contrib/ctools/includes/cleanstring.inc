@@ -132,7 +132,7 @@ function ctools_cleanstring($string, $settings = array()) {
 
   // Reduce to the subset of ASCII96 letters and numbers
   if ($settings['reduce ascii']) {
-    $pattern = '/[^a-zA-Z0-9\/]+/ ';
+    $pattern = '/[^a-zA-Z0-9\/]+/';
     $output = preg_replace($pattern, $settings['separator'], $output);
   }
 
@@ -169,7 +169,7 @@ function ctools_cleanstring($string, $settings = array()) {
 
   // Enforce the maximum component length
   if (!empty($settings['max length'])) {
-    $output = _pathauto_truncate_chars($output, $settings['max length'], $settings['separator']);
+    $output = ctools_cleanstring_truncate($output, $settings['max length'], $settings['separator']);
   }
 
   if (!empty($settings['lower case'])) {

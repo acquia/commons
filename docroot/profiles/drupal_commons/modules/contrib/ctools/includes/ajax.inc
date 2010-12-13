@@ -1,5 +1,8 @@
 <?php
-// $Id: ajax.inc,v 1.14.2.7 2010/05/26 17:26:47 merlinofchaos Exp $
+// $Id: ajax.inc,v 1.14.2.14 2010/10/15 20:56:03 merlinofchaos Exp $
+
+// Set this so we can tell that the file has been included at some point.
+define('CTOOLS_AJAX_INCLUDED', 1);
 
 /**
  * @file
@@ -408,11 +411,16 @@ function ctools_ajax_command_restripe($selector) {
  * @param $url
  *   The url to be redirected to. This can be an absolute URL or a
  *   Drupal path.
+ * @param $delay
+ *   A delay before applying the redirection, in milliseconds.
+ * @param $options
+ *   An array of options to pass to the url() function.
  */
-function ctools_ajax_command_redirect($url) {
+function ctools_ajax_command_redirect($url, $delay = 0, $options = array()) {
   return array(
     'command' => 'redirect',
-    'url' => url($url),
+    'url' => url($url, $options),
+    'delay' => $delay,
   );
 }
 
@@ -447,48 +455,11 @@ function ctools_ajax_command_submit($selector) {
  * to the AJAX requester.
  */
 function ctools_ajax_render($commands = array()) {
-  // Automatically extract any 'settings' added via drupal_add_js() and make
-  // them the first command.
+  $js_files = array();
+  $settings = ctools_process_js_files($js_files, 'header');
+  $settings += ctools_process_js_files($js_files, 'footer');
+
   $query_string = '?'. substr(variable_get('css_js_query_string', '0'), 0, 1);
-
-  $scripts = drupal_add_js(NULL, NULL);
-  $cached_scripts = array();
-
-  if (!empty($_POST['page_id'])) {
-    $cache = cache_get($_POST['page_id'], 'cache');
-    if (!empty($cache->data)) {
-      $cached_scripts = $cache->data;
-    }
-  }
-
-  // Get replacements that are going to be made by contrib modules and take
-  // them into account so we don't double-load scripts.
-  $replacements = module_invoke_all('js_replacements');
-
-  foreach ($scripts as $type => $data) {
-    switch ($type) {
-      case 'setting':
-        $settings = $data;
-        break;
-      case 'inline':
-      case 'theme':
-        // Presently we ignore inline javascript.
-        // Theme JS is already added and because of admin themes, this could add
-        // improper JS to the page.
-        break;
-      default:
-        // If JS preprocessing is off, we still need to output the scripts.
-        // Additionally, go through any remaining scripts if JS preprocessing is on and output the non-cached ones.
-        foreach ($data as $path => $info) {
-          if (!isset($cached_scripts['js'][$path])) {
-            // If the script is being replaced, take that replacment into account.
-            $final_path = isset($replacements[$type][$path]) ? $replacements[$type][$path] : $path;
-            $js_files[] = base_path() . $final_path . ($info['cache'] ? $query_string : '?' . time());
-          }
-        }
-    }
-  }
-
   $css = drupal_add_css();
   foreach ($css as $media => $types) {
     // If CSS preprocessing is off, we still need to output the styles.
@@ -513,7 +484,7 @@ function ctools_ajax_render($commands = array()) {
             continue;
           }
           // Only include the stylesheet if it exists.
-          if (file_exists($file) && !isset($cached_scripts['css'][$file])) {
+          if (file_exists($file)) {
             $css_files[] = array(
               'file' => base_path() . $file . $query_string,
               'media' => $media,
@@ -524,16 +495,16 @@ function ctools_ajax_render($commands = array()) {
     }
   }
 
-  if (!empty($settings)) {
-    array_unshift($commands, ctools_ajax_command_settings(call_user_func_array('array_merge_recursive', $settings)));
-  }
-
   if (!empty($js_files)) {
-    array_unshift($commands, ctools_ajax_command_scripts($js_files));
+    array_unshift($commands, ctools_ajax_command_scripts(array_keys($js_files)));
   }
 
   if (!empty($css_files)) {
     array_unshift($commands, ctools_ajax_command_css_files($css_files));
+  }
+
+  if (!empty($settings)) {
+    array_unshift($commands, ctools_ajax_command_settings(call_user_func_array('array_merge_recursive', $settings)));
   }
 
   if (!empty($_REQUEST['ctools_multipart'])) {
@@ -575,24 +546,31 @@ function ctools_ajax_render_error($error = '') {
  *   ctools_ajax_associate_url_to_element($form, $form['example'], 'example/ajax/urlpath');
  * @endcode
  *
- * The AJAX request will POST the value of the form element in the "ctools_changed" parameter.
+ * The AJAX request will POST the value of the form element in the
+ * "ctools_changed" parameter (i.e. $_POST['ctools_changed']).
  *
  * @param &$form
- *   Reference to the form element. This is required to have the #id and #attribute
- *   elements populated and to create the hidden form element for each select.
+ *   Reference to the form element. This is required to have the #id and
+ *   #attribute elements populated and to create the hidden form element for
+ *   each select.
  * @param &$form_element
  *   The form element we are going to take action on.
  * @param $dest
  *   The URL to associate the form element to.
  * @param $type
- *   A type to use, in case a different behavior should be attached. Defaults
- *   to ctools-use-ajax.
+ *   Optional; A type to use, in case a different behavior should be attached.
+ *   If empty the type will be set to "ctools-use-ajax" for submit elements and
+ *   "ctools-use-ajax-onchange" for other elements.
  */
-function ctools_ajax_associate_url_to_element(&$form, &$form_element, $dest, $type = 'ctools-use-ajax') {
+function ctools_ajax_associate_url_to_element(&$form, &$form_element, $dest, $type = '') {
   drupal_add_js('misc/jquery.form.js', 'core');
   if (!isset($form_element['#id'])) {
     //Create a unique ID to associate $form_element and hidden elements since we dont have an ID
     $form_element['#id'] = uniqid('ctools-ajax-url-');
+
+    if (empty($type)) {
+      $type = $form_element['#type'] == 'submit' ? 'ctools-use-ajax' : 'ctools-use-ajax-onchange';
+    }
 
     if (empty($form_element['#attributes']['class'])) {
       $form_element['#attributes']['class'] = $type;
@@ -608,4 +586,96 @@ function ctools_ajax_associate_url_to_element(&$form, &$form_element, $dest, $ty
     '#value' => $dest,
     '#attributes' => array('class' =>  $form_element['#id'] . '-url'),
   );
+}
+
+function ctools_ajax_page_preprocess(&$variables) {
+  $js_files = $css_files = array();
+  ctools_process_js_files($js_files, 'header');
+  ctools_process_js_files($js_files, 'footer');
+  ctools_process_css_files($css_files, $variables['css']);
+
+  // Add loaded JS and CSS information to the footer, so that an AJAX
+  // request knows if they are already loaded.
+  // For inline Javascript to validate as XHTML, all Javascript containing
+  // XHTML needs to be wrapped in CDATA. To make that backwards compatible
+  // with HTML 4, we need to comment out the CDATA-tag.
+  $loaded = array('CToolsAJAX' => array('scripts' => $js_files, 'css' => $css_files));
+  $embed_prefix = "\n<!--//--><![CDATA[//><!--\n";
+  $embed_suffix = "\n//--><!]]>\n";
+  $variables['closure'].= '<script type="text/javascript">' . $embed_prefix . 'jQuery.extend(Drupal.settings, ' . drupal_to_js($loaded) . ");" . $embed_suffix . "</script>\n";
+}
+
+/**
+ * Create a list of javascript files that are on the page.
+ */
+function ctools_process_js_files(&$js_files, $scope) {
+  // Automatically extract any 'settings' added via drupal_add_js() and make
+  // them the first command.
+  $scripts = drupal_add_js(NULL, NULL, $scope);
+
+  // Get replacements that are going to be made by contrib modules and take
+  // them into account so we don't double-load scripts.
+  static $replacements = NULL;
+  if (!isset($replacements)) {
+    $replacements = module_invoke_all('js_replacements');
+  }
+
+  $settings = array();
+  foreach ($scripts as $type => $data) {
+    switch ($type) {
+      case 'setting':
+        $settings = $data;
+        break;
+      case 'inline':
+      case 'theme':
+        // Presently we ignore inline javascript.
+        // Theme JS is already added and because of admin themes, this could add
+        // improper JS to the page.
+        break;
+      default:
+        // If JS preprocessing is off, we still need to output the scripts.
+        // Additionally, go through any remaining scripts if JS preprocessing is on and output the non-cached ones.
+        foreach ($data as $path => $info) {
+          // If the script is being replaced, take that replacment into account.
+          $final_path = isset($replacements[$type][$path]) ? $replacements[$type][$path] : $path;
+          $js_files[base_path() . $final_path] = TRUE;
+        }
+    }
+  }
+
+  return $settings;
+}
+
+/**
+ * Create a list of CSS files to add to the page.
+ */
+function ctools_process_css_files(&$css_files, $css) {
+  // Go through all CSS files that are being added to the page and catalog them.
+  $css_files = array();
+  foreach ($css as $media => $types) {
+    // If CSS preprocessing is off, we still need to output the styles.
+    // Additionally, go through any remaining styles if CSS preprocessing is on and output the non-cached ones.
+    foreach ($types as $type => $files) {
+      if ($type == 'module') {
+        // Setup theme overrides for module styles.
+        $theme_styles = array();
+        foreach (array_keys($css[$media]['theme']) as $theme_style) {
+          $theme_styles[] = basename($theme_style);
+        }
+      }
+      foreach ($types[$type] as $file => $preprocess) {
+        // If the theme supplies its own style using the name of the module style, skip its inclusion.
+        // This includes any RTL styles associated with its main LTR counterpart.
+        if ($type == 'module' && in_array(str_replace('-rtl.css', '.css', basename($file)), $theme_styles)) {
+          // Unset the file to prevent its inclusion when CSS aggregation is enabled.
+          unset($types[$type][$file]);
+          continue;
+        }
+        // Only include the stylesheet if it exists.
+        if (file_exists($file)) {
+          $css_files[base_path() . $file] = TRUE;
+        }
+      }
+    }
+  }
 }

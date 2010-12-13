@@ -1,224 +1,190 @@
-$Id: API.txt,v 1.1.2.4 2009/10/01 20:49:03 yhahn Exp $
+$Id: API.txt,v 1.1.2.5 2010/07/04 17:44:41 yhahn Exp $
 
-Features for Drupal 6.x
-API & code concepts documentation
+Features 1.x API for Drupal 6.x
+-------------------------------
+This file contains documentation for two audiences: site builders interested in
+creating and managing features and module developers interested in integrating
+with the features module.
 
-What is a feature? (technical definition)
------------------------------------------
-A feature is a module that contains the 'feature[]' property in its
-.info file. This array can be used to store the "components" of a
-feature (e.g. views, node types, fields, etc.)
 
-This allows existing modules to be turned into features by hand by
-simply adding the components that belong to the feature to the .info
-file. It also allows for programmatic updating of code from database
-changes and reverting database changes back to code defaults.
-
-hook_features_api()
--------------------
-This is the main info hook that features uses to determine what
-components your module provides and other behaviors you'd like to
-assign to each component.
-
-It should return an array keyed by component. Each component can
-define several attributes. Here is an example:
-
-  return array(
-    'mycomponent' => array(
-      'default_hook' => 'mycomponent_defaults',
-      'default_file' => FEATURES_DEFAULTS_INCLUDED,
-      'features_source' => TRUE,
-      'file' => drupal_get_path('module', 'mycomponent') .'/mycomponent.features.inc',
-    ),
-    'another_component' => array(
-      ...
-    ),
-  );
-
-Attributes:
-
-  'file': Optional path to a file to include which contains the rest
-    of the features API hooks for this module.
-
-  'default_hook': The defaults hook for your component that is called
-    when the cache of default components is generated. Examples include
-    hook_views_default_views() or hook_context_default_contexts().
-
-  'default_file': The file-writing behavior to use when exporting this
-    component. May be one of 3 constant values:
-
-    FEATURES_DEFAULTS_INCLUDED_COMMON: write hooks/components to
-      .defaults.inc with other components. This is the default behavior
-      if this key is not defined.
-
-    FEATURES_DEFAULTS_INCLUDED: write hooks/components to a component-
-      specific include named automatically by features.
-
-    FEATURES_DEFAULTS_CUSTOM: write hooks/components to a component-
-      specific include with a custom name provided.
-
-    If your module provides large amounts of code that should not be
-    parsed often (only on specific cache clears/rebuilds, for example)
-    you may want to use the 2nd or 3rd options to split your component
-    into its own include. For most purposes FEATURES_DEFAULTS_INCLUDED_COMMON
-    is an appropriate value.
-
-  'default_filename': The filename to use when 'default_file' is set to
-    FEATURES_DEFAULTS_CUSTOM.
-
-  'features_source': Boolean value for whether this component should be
-    offered as an option on the initial feature export form.
-
-hook_features_export($data, &$export, $module_name = '')
---------------------------------------------------------
-The most critical hook in the Features module that you will need to
-use to integrate your module with Features is hook_features_export().
-It receives 3 arguments:
-
-$data is an array of identifiers that is specific to the objects /
-  structure provided by your module. For example, $data should be an
-  array of view names views_features_export(). For node_features_export(),
-  $data is an array of content string names. etc.
-
-$export is an export array passed by reference. It has two main keys:
-  $export['features'] and $export['dependencies']. You can modify this
-  array to alter what components are part of the final feature and what
-  module dependencies the feature will require.
-
-$module_name is the name of the module to be exported to. This can be
-  useful when updating a module and determining whether a component needs
-  to be excluded and instead replaced wth a dependency on another module
-  (which might provide that component by default).
-
-In practice, hook_features_export() has 3 tasks:
-
-1.  Determine module dependencies for any of the components passed to it
-    e.g. the views implementation iterates over each views' handlers and
-    plugins to determine which modules need to be added as dependencies.
-
-2.  Correctly add components to the export array. In general this is usually
-    adding all of the items in $data to $export['features']['my_key'], but
-    can become more complicated if components are shared between features
-    or modules.
-
-3.  Delegating further detection and export tasks to related or derivative
-    components.
-
-#3 is a key concept in the Features module. Each export processor can
-kickoff further export processors by returning a keyed array where the
-key is the next export processor hook to call and value is an array to be
-passed to that processor's $data argument. This allows an export process to
-start rather simply, at a single object:
-
-  [context]
-
-And then branch out, delegating each level of branching to its
-appropriate hook:
-
-  [context]--------+------------+
-      |            |            |
-    [node]      [block]      [views]
-      |
-    [CCK]
-      |
- [imagecache]
-
-hook_features_export_options()
-------------------------------
-This hook is optional and lets you provide an FormAPI select $options
-array so that users can manually add any components that the Features
-autodetection fails to pick up.
-
-hook_features_export_render($module_name = '', $data)
------------------------------------------------------
-This hook passes you an array of identifiers (identical in format to
-$data) once the $export array has been fully populated. At this stage
-you are expected to return actual code that can be placed in a module
-that represents your exportable like so:
-
-  return array('my_defaults_hook' => $code);
-
-Where $code is a string of the actual contents of your defaults hook,
-and the 'my_defaults_hook' is the name of your defaults hook (without
-the "$module_name_" prefix.)
-
-hook_features_export_revert($module)
-------------------------------------
-This hook passes you a module name for which to revert all component.
-
-hook_features_export_rebuild($module)
--------------------------------------
-This hook is provided for modules that do not use exportables but
-would still like to integrate with Features. Examples of these within
-the Features module's default implementations include: CCK, filter,
-user.
-
-This hook is called at points where Features deems it to be "safe"
-for your module to replace objects in the database with defaults
-that you collect from your own defaults hook. See below for how
-Features determines whether a rebuild of components is possible.
-
-Tracking component states
--------------------------
-Features provides some infrastructure to help site builders determine
-what state their database is in. Each component for each feature
-will be detected to be in one of 4 states. In order to determine these
-states, Features retains a hash of the previous code state, database
-state, and current code state for each component type in each feature.
-
-FEATURES_DEFAULT: The object either has no database entry or the
-  database entry matches the state of the component in code. This
-  is the default state of components after installing a feature.
-  Updating the component can be done by altering the code definition
-  directly.
-
-FEATURES_OVERRIDDEN: The code remains constant but the database object
-  does not match the state of the component in code. Changes must
-  be reverted before the component can be updated from code.
-
-FEATURES_NEEDS_REVIEW: The previous code state, database state, and
-  current code state all differ. This occurs most commonly when a user
-  changes one of her components and then pulls updates to her codebase.
-  User input is necessary to resolve this state.
-
-FEATURES_REBUILDABLE: The database entry does not match the current
-  code state but does match the previous code state. Features assumes
-  that in this scenario the user has made no substantive changes and
-  the component can be updated automatically.
-
-Exportables
+Terminology
 -----------
-Features takes advantage of a concept in Drupal that goes by many
-names. For our purposes we will call them "Exportables". Exportables
-are simply exported definitions or configuration. They have several
-key distinguishing features:
+- A **feature module** is a Drupal module that contains the `feature` key in its
+`.info` file. This array describes the components that should be managed by
+Features within the module.
 
-1.  They are code, often PHP arrays or objects.
+- A **component** is a configuration object that can be exported. Examples: a
+view, content type or CCK field instance.
 
-2.  They are not "imported" or inserted into the database but rather
-    distinguished from normal user-created structures as "Defaults"
-    provided by modules.
+- A **machine name** is a string identifier for a specific type of component and
+should be unique within a single Drupal site. It should not be a numerically
+generated serial id.
 
-3.  They can be overridden by user defined structures, often by
-    convention (e.g. objects with the same identifier that exist in
-    both code and the database are considered "Overridden").
+- An **exportable** component is one that can be used solely from a default hook
+in code and without an instance in the database. For example, a view that lives
+in code does not need an entry in the database in order to be used.
 
-Modules with exportables are best identified by the presence of a
-hook which collects defaults in code and merges them into the set
-of usable objects. Examples include: hook_node_type_info(),
-hook_views_default_views(), hook_context_default_contexts(), etc.
+- A **faux-exportable** component is one that must exist in the database in
+order to be used. Any exports of this component are used to create or
+synchronize entries in the database that share the same machine name.
 
-Adding exportables to your module
----------------------------------
-Since the release of CTools 1.0 we highly recommend using the CTools
-export.inc API for adding exportables to your module. This will provide
-you with automatic basic integration with Features, leaving you to
-implement hook_features_export() on your own to provide dependency
-and dependent component detection.
 
-  http://drupal.org/project/ctools
+### Component states
 
-Stella has written a fantastic HOWTO on incorporating CTools exportables
-into your module here:
+Features provides some infrastructure to determine the state of components on
+the site. To determine the state of a component Features keeps track of three
+things using an md5 hash of
 
-  http://civicactions.com/blog/2009/jul/24/using_chaos_tools_module_create_exportables
+- current code for the component. This is the configuration as actually
+represented in code by a given feature.
+
+- the most recent prior code state that differs from the current code state. For
+example, if an `svn update` changes the configuration of a view, this stores the
+code state *prior* to the update.
+
+- The "normal" component state. This is the configuration represented by the
+component as stored in the database or the default component (with any changes
+introduced by `drupal_alter()`) if no database override exists.
+
+Using these three values, Features determines a component to be in one of the
+following five states:
+
+- **Default** (`FEATURES_DEFAULT`) The object has no database entry or the
+database entry matches the state of the component in code. This should be the
+default state of components after installing a feature. Updating the component
+can be done by altering the code definition directly.
+
+- **Overridden** (`FEATURES_OVERRIDDEN`) The code remains constant but the
+database object does not match the state of the component in code. Changes must
+be reverted before the component can be updated from code.
+
+- **Needs review** (`FEATURES_NEEDS_REVIEW`) The previous code state, database
+state, and current code state all differ. This occurs most commonly when a user
+changes one of her components and then pulls updates to her codebase. Since
+there is no way to tell whether the code state or the database state is more
+recent/valid, user input is necessary to resolve this state.
+
+- **Rebuildable** (`FEATURES_REBUILDABLE`) This state only applies to
+**faux-exportables** and indicates that the database component must and can be
+safely updated from the code definition. The database entry does not match the
+current code state but does match the previous code state. Features assumes that
+in this scenario the user has made no substantive changes and the component can
+be updated automatically.
+
+- **Rebuilding** (`FEATURES_REBUILDING`) This state is rarely seen and only
+applies to **faux-exportables.** This state is shown when a
+`FEATURES_REBUILDABLE` component is *currently* being synced to the database.
+Usually this operation is very fast and short lived. However, if the operation
+is interrupted (e.g. the server goes down) this state will be seen until the
+rebuild locking semaphore is cleared.
+
+
+How a feature is generated
+--------------------------
+At a high level Features writes the code in a feature module using the following
+steps:
+
+1. An `.info` file describing the components that should be included in a
+Feature is generated. It is either read from an existing feature or generated
+through the Features UI.
+
+2. Features converts the info file into an `$export` array which contains a list
+of elements to be exported. Each component type is given a chance to add to the
+export list as well as request that *other* components be given a second chance
+to add to the `$export` array.
+
+3. If any additional components have been queued up in the `$pipe` we repeat
+step 2 for each of the queued component types.
+
+4. Once a full `$export` array is populated each component renders items from
+the `$export` array to PHP code as a exportable defaults hook.
+
+5. Finally, Features writes the code into files and delivers it as a
+downloadable package (UI) or writes it directly to a module directory (drush).
+
+This workflow makes a variety of things possible:
+
+### Add components to a feature
+
+Add the components to the `features` array in the feature's `.info` file and run
+`drush features-update`. The same operation can be performed using the
+*Recreate* page in the Features UI.
+
+### Remove components from a feature
+
+Remove the corresponding component lines from the feature's `.info` file and run
+`drush features-update`. The same operation can be performed using the
+*Recreate* page in the Features UI.
+
+### Rename a component
+
+Rename a component by changing its name in the feature's `.info` file and the
+key and name property of the exported object in the appropriate `.inc` file in
+the feature. Note that any references in other configuration objects to the
+previous name should also be updated.
+
+
+Integrating your module with the Features API
+---------------------------------------------
+This section is for developers interested in adding Features-based management
+for the configuration objects in their modules. From the perspective of
+Features, there are a few different ways that modules store their configuration:
+
+- In the `variable` table using `variable_set()`. If a module is using variables
+for storing configuration, these variable settings can be exported with Features
+by using the [Strongarm][1] module.
+
+  **Features integration:** Install the Strongarm module.
+
+- Using a custom table with a serial ID for identifying configuration objects.
+If this is the case, you will need to change your schema to use a string
+identifier / machine name for each object.
+
+  **Features integration:** Fix your schema first, then see below.
+
+- Using a custom table with a machine name identifier and custom exportables
+handling (e.g. you have your own defaults hook handling and export generation).
+If this is the case, you will need to implement many of the features hooks
+yourself.
+
+  **Features integration:** `hook_features_api()`, `hook_features_export()`,
+`hook_features_export_render()`, `hook_features_export_options()`,
+`hook_features_revert()`.
+
+- Using a custom table with CTools Export API integration. If this is the case,
+Features will automatically have integration with your module. You can implement
+any of the Features hooks in order to override the default CTools exportables
+integration behavior.
+
+  **Features integration:** Automatically provided. You may implement any of the
+Features hooks where you need further customization for your configuration
+object.
+
+If it isn't clear by now, we highly recommend using the [CTools][2] Export API
+for adding exportables to your module. Stella has written a [fantastic HOWTO][3]
+on using the CTools Export API that can get you started.
+
+
+An overview of Features hooks
+-----------------------------
+Extensive documentation of the hooks provided by Features is available in
+`features.api.php`. This section provides a short overview of each hook and its
+role.
+
+- `hook_features_api()` defines one or more component types that are available
+to Features for export and a variety of settings for each type.
+- `hook_features_export()` processes a list of components, detecting any
+dependencies or further components
+- `hook_features_export_options()` provides an array of components that can be
+exported for a given type.
+- `hook_features_export_render()` renders a set of components to code as a
+defaults hook.
+- `hook_features_revert()` reverts components of a feature back to their default
+state.
+- `hook_features_rebuild()` updates faux-exportable components back to their
+default state. Only applies to faux-exportables.
+
+
+[1]: http://drupal.org/project/strongarm
+[2]: http://drupal.org/project/ctools
+[3]: http://civicactions.com/blog/2009/jul/24/using_chaos_tools_module_create_exportables

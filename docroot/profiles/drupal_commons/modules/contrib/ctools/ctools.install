@@ -1,5 +1,5 @@
 <?php
-// $Id: ctools.install,v 1.12.2.1 2010/02/23 23:03:16 merlinofchaos Exp $
+// $Id: ctools.install,v 1.12.2.7 2010/07/14 01:57:42 merlinofchaos Exp $
 
 /**
  * @file
@@ -34,7 +34,7 @@ function ctools_requirements($phase) {
     }
 
     if (!function_exists('error_get_last')) {
-	  $requirements['ctools_php_52']['title'] = t('CTools PHP requirements');
+  	  $requirements['ctools_php_52']['title'] = t('CTools PHP requirements');
       $requirements['ctools_php_52']['description'] = t('CTools requires certain features only available in PHP 5.2.0 or higher.');
       $requirements['ctools_php_52']['severity'] = REQUIREMENT_WARNING;
       $requirements['ctools_php_52']['value'] = t('PHP !version', array('!version' => phpversion()));
@@ -62,8 +62,6 @@ function ctools_uninstall() {
  * Implementation of hook_schemea
  */
 function ctools_schema() {
-  // Currently, schema 1 is the only schema we have. As we make updates,
-  // we might either create a new schema 2 or make adjustments here.
   return ctools_schema_2();
 }
 
@@ -209,3 +207,26 @@ function ctools_update_6004() {
   db_drop_index($ret, 'ctools_object_cache', 'sid_obj_name');
   return $ret;
 }
+
+/**
+ * Removed update.
+ */
+function ctools_update_6005() {
+  return array();
+}
+
+/**
+ * ctools_custom_content table was originally here, but is now moved to
+ * its own module.
+ */
+function ctools_update_6007() {
+  $ret = array();
+  if (db_table_exists('ctools_custom_content')) {
+    // Enable the module to make everything as seamless as possible.
+    drupal_install_modules(array('ctools_custom_content'));
+  }
+
+  return $ret;
+}
+
+

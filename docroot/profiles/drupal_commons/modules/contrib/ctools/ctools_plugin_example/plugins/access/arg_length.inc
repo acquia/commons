@@ -1,5 +1,5 @@
 <?php
-// $Id: arg_length.inc,v 1.1.2.1 2010/01/29 19:54:02 merlinofchaos Exp $
+// $Id: arg_length.inc,v 1.1.2.2 2010/07/14 01:30:19 merlinofchaos Exp $
 
 /**
  * @file
@@ -16,7 +16,7 @@ $plugin = array(
   'description' => t('Control access by length of simplecontext argument.'),
   'callback' => 'ctools_plugin_example_arg_length_ctools_access_check',
   'settings form' => 'ctools_plugin_example_arg_length_ctools_access_settings',
-  'summary' => 'ctools_plugin_example_arg_length_ctools_acesss_summary',
+  'summary' => 'ctools_plugin_example_arg_length_ctools_access_summary',
   'required context' => new ctools_context_required(t('Simplecontext'), 'simplecontext'),
 );
 
@@ -58,7 +58,7 @@ function ctools_plugin_example_arg_length_ctools_access_check($conf, $context) {
 /**
  * Provide a summary description based upon the checked roles.
  */
-function ctools_plugin_example_arg_length_ctools_acesss_summary($conf, $context) {
+function ctools_plugin_example_arg_length_ctools_access_summary($conf, $context) {
   return t('Simpletext argument must be !comp @length characters',
     array('!comp' => $conf['greater_than'] ? 'greater than' : 'less than or equal to',
       '@length' => $conf['arg_length']));

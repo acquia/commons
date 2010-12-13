@@ -1,246 +1,173 @@
 /**
- * Context devel block ================================================
+ * Editor =============================================================
  */
-.context-devel-space {
-  font-weight:bold;
-  padding:3px 5px;
-  background:#369; color:#fff;
-}
+div.context-editor div.label { float:left; }
+div.context-editor div.links { float:right; }
 
-.context-devel-tree {
-  border-right:1px solid #69c;
-  border-bottom:1px solid #69c;
-}
+div.context-editor div.context-editable { display:none; }
+div.context-editor div.links a.done { display:none; }
+div.context-editor li.context-editing a.edit { display:none; }
+div.context-editor li.context-editing a.done { display:block; }
 
-.context-devel-wrapper {
-  border-left:1px solid #69c;
-}
+/* Don't display form submission buttons initially or when editing */
+body.context-editing div.context-editor div.links { display:none; }
+body.context-editing div.context-editor li.context-editing div.links { display:block; }
 
-.context-devel-wrapper .context-devel-wrapper {
-  border-left:8px solid #69c;
-}
-
-.context-devel-wrapper label {
-  display:block;
-  border-top:1px solid #69c;
-  padding: 5px;
-}
-
-.context-devel-wrapper small {
-  font-weight:normal; float:right;
-  font-size:8px; line-height:14px; padding:0px 3px;
-  background:#333; color:#ccc;
-}
+div.context-editor div.buttons { display:none; }
+form.edited div.context-editor div.buttons { display:block; }
+body.context-editing form.edited div.context-editor div.buttons { display:none; }
 
 /**
- * Context admin listing page =========================================
+ * Styles for visual integration with admin.
  */
-
-h3.context-space small {
-  display:inline;
-  padding:.1em .5em; margin-left:1em;
-  font-size:.6em; font-weight:bold;
-  text-transform:uppercase;
-  background:#e8f0f8; /* Garland blue */
+#admin-toolbar div.context-editor div.links a:hover {
+  background:#eee;
+  color:#000;
   }
 
-/**
- * Context UI form ====================================================
- */
-form#context-ui-form div.warning {
-  display:none !important;
+#admin-toolbar div.context-editor div.links a {
+  float:left;
+
+  padding:0px 10px;
+  margin-right:5px;
+
+  background:#222;
+  font-size:11px;
+  -moz-border-radius:10px;
+  -webkit-border-radius:10px;
   }
 
-form#context-ui-form div.form-checkboxes input,
-form#context-ui-form div.form-radios input {
-  vertical-align:middle;
-  }
+div.context-editor div.context-editable { padding:5px 0px; }
 
-form#context-ui-form table {
-  margin:0px 0px 20px;
-  }
-
-  form#context-ui-form table table {
-    margin:0px;
-    }
-
-  form#context-ui-form table td {
-    vertical-align:top;
-    }
-
-    form#context-ui-form table td td {
-      width:auto;
-      border:0px;
-      }
-
-    form#context-ui-form table tr.even .form-item,
-    form#context-ui-form table tr.odd .form-item {
-      white-space:normal;
-      }
-
-  form#context-ui-form table tr.hidden {
-    display:none;
-    }
-
-/**
- * NS/A/V trio ========================================================
- */
-table#context-ui-trio tr.section input.form-text {
-  font-size:200%;
-  }
-table#context-ui-trio td {
-  width:33%;
+#admin-toolbar div.context-editor div.buttons {
+  padding:10px 0px;
+  text-align:center;
+  background:#111;
   }
 
 /**
- * Setter/getter items ================================================
+ * Horizontal
  */
-table#context-ui-blocks,
-table#context-ui-items {
-  width:100%;
+#admin-toolbar.horizontal form.edited div.context-editor div.buttons,
+#admin-toolbar.horizontal div.context-editor div.item-list {
+  float:left;
+  clear:left;
+  width:30%;
   }
 
-table#context-ui-blocks td,
-table#context-ui-items td {
-  width:50%;
+#admin-toolbar.horizontal div.context-editor div.contexts {
+  width:69.9%;
+  float:right;
+  }
+
+#admin-toolbar.horizontal div.context-editor div.context-editable { padding-left:20px }
+
+/**
+ * Admin listing page =================================================
+ */
+table.context-admin td.tag { font-style:italic; }
+
+table.context-admin td.ctools-export-ui-name {
+  width:75%;
+  padding-left:20px;
+  }
+
+table.context-admin td.ctools-export-ui-operations { white-space:nowrap; }
+
+table.context-admin td.ctools-export-ui-storage { color:#999; }
+
+table.context-admin div.description {
+  padding-left:10px;
+  margin:0px;
+  }
+
+table.context-admin input.form-text { width:90%; }
+
+/**
+ * Context form =======================================================
+ */
+.context-plugins {
+  position:relative;
+  margin:0px 0px 10px;
+  }
+
+.context-plugins .context-plugin-info {
+  padding:10px 10px 9px;
+  border-bottom:1px solid #e8e8e8;
+  }
+
+.context-plugins .context-plugin-info div.description {
+  margin:0px 0px 10px;
   padding:0px;
   }
 
-form#context-ui-form td.display {}
-
-  form#context-ui-form td.display div.label {
-    border-bottom:1px solid #ddd;
-    padding:5px;
-    font: bold 13px/20px Arial,sans-serif;
-    background:#eee;
-    }
-
-  form#context-ui-form td.display div.label a,
-  form#context-ui-form td.display div.label span {
-    font-weight:normal;
-    margin-left:10px;
-    font-size:11px;
-    }
-
-  form#context-ui-form td.display div.label a { float:right; }
-
-  form#context-ui-form td.display tr,
-  form#context-ui-form td.display div.item-list {
-    border:0px;
-    border-bottom:1px solid #ddd;
-    }
-
-    form#context-ui-form td.display div.item-list h3,
-    form#context-ui-form td.display div.item-list ul,
-    form#context-ui-form td.display div.item-list li {
-      margin:0px;
-      padding:0px;
-      }
-
-    form#context-ui-form td.display div.item-list h3 a.context_ui-item-section-link {
-      display:block;
-      padding:5px;
-      font: bold 11px/15px Arial,sans-serif;
-      }
-    form#context-ui-form td.display div.item-list h3 a.advanced-help-link {
-      margin: 5px;
-    }
-
-      form#context-ui-form td.display div.item-list h3 a.context_ui-item-section-link.selected {
-        background:#eee;
-        color:#000;
-        }
-
-    form#context-ui-form td.display div.item-list li {
-      padding:5px 5px 5px 15px;
-      font: 9px/10px Arial,sans-serif;
-      }
-
-    form#context-ui-form td.display div.item-list li.empty { display:none; }
-
-    form#context-ui-form td.display tr td { padding:5px; }
-
-form#context-ui-form td.widget {
-  background:#eee;
-  padding:10px;
+.context-plugins .context-plugin-selector {
+  width:25%;
+  background:#fff;
   }
 
-  form#context-ui-form td.widget div.widget {
-    display:none;
-    }
+  .context-plugins .context-plugin-list .disabled { display:none; }
 
-    form#context-ui-form td.widget div.active {
-      display:block;
-      }
-
-  form#context-ui-form td.widget select,
-  form#context-ui-form td.widget input.form-text {
-    width:90%;
-    }
-
-
-  form#context-ui-form td.widget .form-item {
+  .context-plugins .context-plugin-list ul {
     margin:0px;
     padding:0px;
     }
 
-    form#context-ui-form td.widget .form-item .form-item {
-      background: transparent;
-      border:0px; padding:0px; margin:0px;
-    }
-
-    table#context-ui-blocks div.context-ui-block-selector,
-    table#context-ui-items td.widget .form-item div.form-checkboxes,
-    table#context-ui-items td.widget .form-item div.form-radios {
-      background:#fff; border:1px solid #ddd;
-      font: 11px/25px Arial,sans-serif;
-      height:20em;
-      overflow:auto;
-      }
-
-    table#context-ui-items td.widget .form-item div.form-checkboxes .form-item,
-    table#context-ui-items td.widget .form-item div.form-radios .form-item {
-      border-bottom:1px solid #eee;
-      display:block;
-      }
-
-/**
- * Block visibility ===================================================
- */
-#context-ui-blocks span.system-blocks {
-  color:#999;
-  }
-
-form#context-ui-form div.context-ui-block-regions,
-#context-ui-blocks td.display div.form-item,
-#context-ui-blocks td.display input.block-weight {
-  display:none;
-  }
-
-table#context-ui-blocks div.context-ui-block-selector {
-  font:11px/25px Arial,sans-serif;
-  }
-
-  table#context-ui-blocks div.context-ui-block-selector label {
-    padding:0px 5px;
-    background:#eee;
-    }
-
-  table#context-ui-blocks div.context-ui-block-selector div.form-checkboxes {
-    padding:0px; margin:0px;
-    }
-
-  table#context-ui-blocks div.context-ui-block-selector div.form-checkboxes div.form-item {
-    border-bottom:1px solid #eee;
-    }
-
-  table#context-ui-blocks div.context-ui-block-selector label.option {
+  .context-plugins .context-plugin-list li {
+    list-style:none;
+    list-style-image:none;
     background:transparent;
+
+    padding:0px;
+    margin:0px;
+    border:0px;
     }
 
-/**
- * Bulk export ===================================================
- */
-table.context-ui-bulk-export td.context-ui-checkbox {
-  width: 30px;
-}
+  .context-plugins .context-plugin-list li a {
+    display:block;
+    position:relative;
+    padding:5px 10px 4px;
+    border-bottom:1px solid #e8e8e8;
+    }
+
+  .context-plugins .context-plugin-list li a.active-form {
+    background:#f8f8f8;
+    color:#333;
+    font-weight:bold;
+    }
+
+  .context-plugins .context-plugin-list li span.remove {
+    display:none;
+    position:absolute;
+    top:5px;
+    right:10px;
+
+    font-size:9px;
+    font-weight:normal;
+
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    padding:0px 5px;
+    background:#fff;
+    }
+
+    .context-plugins .context-plugin-list li a:hover span.remove { display:block; }
+
+.context-plugins .context-plugin-forms {
+  float:right;
+  width:75%;
+  background:#f8f8f8;
+  min-height:200px;
+  }
+
+  .context-plugins .context-plugin-forms .context-plugin-form {
+    padding:10px;
+    display:none;
+    }
+
+  .context-plugins .context-plugin-forms .active-form { display:block; }
+
+  .context-plugins .context-plugin-form .form-checkboxes {
+    max-height:300px;
+    overflow:auto;
+    }

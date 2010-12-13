@@ -1,20 +1,13 @@
 <?php
-// $Id: views.inc,v 1.11.2.6 2010/05/27 22:32:30 sdboyer Exp $
+// $Id: views.inc,v 1.11.2.11 2010/07/23 06:08:39 merlinofchaos Exp $
 
 /**
  * @file
  * Content type plugin to expose all views as content.
  */
 
-/**
- * Implementation of hook_ctools_content_types()
- */
-function views_content_views_ctools_content_types() {
-  if (!variable_get('ctools_content_all_views', TRUE)) {
-    return;
-  }
-
-  return array(
+if (variable_get('ctools_content_all_views', TRUE)) {
+  $plugin = array(
     'title' => t('All views'),
     'defaults' => array(
       'override_pager_settings' => FALSE,
@@ -129,7 +122,9 @@ function views_content_views_content_type_render($subtype, $conf, $panel_args, $
   }
 
   foreach ($panel_args as $id => $arg) {
-    $args = str_replace("@$id", $arg, $args);
+    if (is_string($arg)) {
+      $args = str_replace("@$id", $arg, $args);
+    }
   }
 
   $args = preg_replace(',/?(%\d|@\d),', '', $args);
@@ -175,15 +170,38 @@ function views_content_views_content_type_render($subtype, $conf, $panel_args, $
     $view->display_handler->set_option('use_more', FALSE);
   }
 
+  // Only set use_pager if they differ, this way we can avoid overwriting the
+  // pager type that Views uses.
   if ($conf['override_pager_settings']) {
-    // Only set use_pager if they differ, this way we can avoid overwriting the
-    // pager type that Views uses.
-    if (!$view->display_handler->get_option('use_pager') || empty($conf['use_pager'])) {
-      $view->display_handler->set_option('use_pager', $conf['use_pager']);
+    if (method_exists($view, 'init_pager')) {
+      // Views 3 version
+      $view->set_items_per_page($conf['nodes_per_page']);
+      $view->set_offset($conf['offset']);
+
+      $pager = $view->display_handler->get_option('pager');
+      if ($conf['use_pager'] && ($pager['type'] == 'none' || $pager['type'] == 'some')) {
+        $pager['type'] = 'full';
+      }
+      elseif (!$conf['use_pager'] && $pager['type'] != 'none' && $pager['type'] != 'some') {
+        $pager['type'] = $view->get_items_per_page() ? 'some' : 'none';
+      }
+
+      if ($conf['use_pager']) {
+        if (!isset($pager['options']['id']) || $pager['options']['id'] != $conf['pager_id']) {
+          $pager['options']['id'] = $conf['pager_id'];
+        }
+      }
+
+      $view->display_handler->set_option('pager', $pager);
     }
-    $view->display_handler->set_option('pager_element', $conf['pager_id']);
-    $view->display_handler->set_option('items_per_page', $conf['nodes_per_page']);
-    $view->display_handler->set_option('offset', $conf['offset']);
+    else {
+      if (!$view->display_handler->get_option('use_pager') || empty($conf['use_pager'])) {
+        $view->display_handler->set_option('use_pager', $conf['use_pager']);
+      }
+      $view->display_handler->set_option('pager_element', $conf['pager_id']);
+      $view->display_handler->set_option('items_per_page', $conf['nodes_per_page']);
+      $view->display_handler->set_option('offset', $conf['offset']);
+    }
   }
 
   $stored_feeds = drupal_add_feed();
@@ -491,7 +509,7 @@ function views_content_views_content_type_admin_info($subtype, $conf, $contexts)
  *   Correct error checking on this function checks against is_object().
  */
 function _views_content_views_update_conf(&$conf, $subtype) {
-  $task = views_content_views_ctools_content_types();
+  $plugin = ctools_get_content_type('views');
 
   // Special: Existing content types get a different default than new ones:
   if (!empty($conf) && !isset($conf['override_pager_settings'])) {
@@ -500,7 +518,7 @@ function _views_content_views_update_conf(&$conf, $subtype) {
 
   // Make sure that our defaults are always set if there is no
   // previous setting. This helps updates go more smoothly.
-  foreach ($task['defaults'] as $key => $value) {
+  foreach ($plugin['defaults'] as $key => $value) {
     if (!isset($conf[$key])) {
       $conf[$key] = $value;
     }
@@ -528,10 +546,19 @@ function _views_content_views_update_conf(&$conf, $subtype) {
 
   // If set NOT to override, go ahead and refresh from the view.
   if (empty($conf['override_pager_settings'])) {
-    $conf['use_pager'] = $view->display_handler->get_option('use_pager');
-    $conf['pager_id'] = $view->display_handler->get_option('element_id');
-    $conf['nodes_per_page'] = $view->display_handler->get_option('items_per_page');
-    $conf['offset'] = $view->display_handler->get_option('offset');
+    if (method_exists($view, 'init_pager')) {
+      $pager = $view->display_handler->get_option('pager');
+      $conf['use_pager'] = $pager['type'] != 'none' && $pager['type'] != 'some';
+      $conf['pager_id'] = isset($pager['options']['id']) ? $pager['options']['id'] : 0;
+      $conf['offset'] = isset($pager['options']['offset']) ? $pager['options']['offset'] : 0;
+      $conf['nodes_per_page'] = isset($pager['options']['items_per_page']) ? $pager['options']['items_per_page'] : 0;
+    }
+    else {
+      $conf['use_pager'] = $view->display_handler->get_option('use_pager');
+      $conf['pager_id'] = $view->display_handler->get_option('element_id');
+      $conf['nodes_per_page'] = $view->display_handler->get_option('items_per_page');
+      $conf['offset'] = $view->display_handler->get_option('offset');
+    }
   }
 
   return $view;

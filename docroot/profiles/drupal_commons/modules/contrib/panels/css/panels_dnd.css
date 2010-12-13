@@ -1,4 +1,4 @@
-/* $Id: panels_dnd.css,v 1.3.2.12 2009/10/21 21:02:24 merlinofchaos Exp $ */
+/* $Id: panels_dnd.css,v 1.3.2.15 2010/07/22 18:59:02 merlinofchaos Exp $ */
 
 #panels-dnd-main {
   margin: 0.5em 0;
@@ -100,7 +100,7 @@ div.panels-set-title-hide .panel-pane-is-title {
   background: #f8f8f8;
 }
 
-.panel-portlet .content {
+.panel-portlet .pane-content {
   margin: .5em 0 .5em 0;
   padding: 0 .25em 0 .25em;
   display: none; /* initially hidden */
@@ -440,7 +440,7 @@ a.close img {
 }
 
 
-div.panel-pane div.ctools-dropdown-container-wrapper {
+#panels-dnd-main div.panel-pane div.ctools-dropdown-container-wrapper {
   margin-left: -158px;
   margin-top: -4px;
 }
@@ -459,22 +459,22 @@ html.js div.panels-display-links div.ctools-dropdown-container ul li a {
 }
 */
 
-.panel-pane .pane-title {
+#panels-dnd-main .panel-pane .pane-title {
   padding: 0.25em 0.5em;
 }
-.panel-pane .pane-title:after {
+#panels-dnd-main .panel-pane .pane-title:after {
   font-size: 0.8em;
   color: crimson;
   letter-spacing: normal;
   display: block;
 }
-.panel-pane.hidden-pane .pane-title:after {
+#panels-dnd-main .panel-pane.hidden-pane .pane-title:after {
   content: " status: hidden";
 }
-.panel-pane.changed .pane-title:after {
+#panels-dnd-main .panel-pane.changed .pane-title:after {
   content: " status: changes not saved";
 }
-.panel-pane.hidden-pane.changed .pane-title:after {
+#panels-dnd-main .panel-pane.hidden-pane.changed .pane-title:after {
   content: " status: hidden & changed";
 }
 
@@ -499,7 +499,9 @@ html.js div.panels-display-links div.ctools-dropdown-container {
   -moz-border-radius: 0.333em;
   -webkit-box-shadow: 0.333em 0.333em 0.333em rgba(0, 0, 0, 0.25);
   font-size: 0.9em;
+  font-weight: bold;
 }
+
 html.js #panels-dnd-main div.ctools-dropdown div.ctools-dropdown-container ul li,
 html.js div.panels-display-links div.ctools-dropdown-container ul li {
 

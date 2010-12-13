@@ -1,5 +1,5 @@
 <?php
-// $Id: rounded_corners.inc,v 1.1.2.10 2010/01/13 06:25:15 merlinofchaos Exp $
+// $Id: rounded_corners.inc,v 1.1.2.16 2010/07/23 22:47:18 merlinofchaos Exp $
 
 /**
  * @file
@@ -9,8 +9,8 @@
 // Plugin definition
 $plugin = array(
   'title' => t('Rounded corners'),
-  'description' => t('Presents the panes or panels with a rounded corner box around them'),
-  'render panel' => 'panels_rounded_corners_style_render_panel',
+  'description' => t('Presents the panes or panel regions with a rounded corner box around them'),
+  'render region' => 'panels_rounded_corners_style_render_region',
   'render pane' => 'panels_rounded_corners_style_render_pane',
   'settings form' => 'panels_rounded_corners_style_settings_form',
   'hook theme' => array(
@@ -27,7 +27,7 @@ $plugin = array(
  *
  * @ingroup themeable
  */
-function theme_panels_rounded_corners_style_render_panel($display, $panel_id, $panes, $settings) {
+function theme_panels_rounded_corners_style_render_region($display, $region_id, $panes, $settings) {
   $output = '';
 
   // Determine where to put the box. If empty or 'pane' around each pane. If
@@ -35,19 +35,18 @@ function theme_panels_rounded_corners_style_render_panel($display, $panel_id, $p
   $where = empty($settings['corner_location']) ? 'pane' : $settings['corner_location'];
 
   $print_separator = FALSE;
-  foreach ($panes as $pane_id => $pane) {
-    $text = panels_render_pane($pane, $display->content[$pane_id], $display);
-    if ($text) {
+  foreach ($panes as $pane_id => $pane_output) {
+    if ($pane_output) {
       // Add the separator if we've already displayed a pane.
       if ($print_separator) {
-        $output .= '<div class="panel-separator">&nbsp;</div>';
+        $output .= '<div class="panel-region-separator">&nbsp;</div>';
       }
 
       if ($where == 'pane') {
-        $output .= theme('panels_rounded_corners_box', $text);
+        $output .= theme('panels_rounded_corners_box', $pane_output);
       }
       else {
-        $output .= $text;
+        $output .= $pane_output;
         $print_separator = TRUE;
       }
     }
@@ -111,7 +110,7 @@ function panels_rounded_corners_style_settings_form($style_settings) {
  *   A Panels display object.
  */
 function panels_rounded_corners_css($display) {
-  $idstr = empty($display->css_id) ? '.rounded-corner' : "#$display->css_id";
+  $idstr = empty($display->css_id) ? '.rounded-corner' : "#$display->css_id .rounded-corner";
   $css_id = 'rounded-corner:' . $idstr;
 
   ctools_include('css');
@@ -120,7 +119,7 @@ function panels_rounded_corners_css($display) {
     $filename = ctools_css_store($css_id, _panels_rounded_corners_css($idstr), FALSE);
   }
 
-  drupal_add_css($filename, 'module', 'all', FALSE);
+  ctools_css_add_css($filename, 'module', 'all', FALSE);
 }
 
 /**
@@ -137,18 +136,18 @@ function _panels_rounded_corners_css($idstr) {
   zoom: 1;
 }
 $idstr .t-edge {
-  background: url($url/shadow-t.png) repeat-x 0 top;
+  background: url('$url/shadow-t.png') repeat-x 0 top;
   font-size: 1px;
 }
 $idstr .b-edge {
-  background: url($url/shadow-b.png) repeat-x 0 bottom;
+  background: url('$url/shadow-b.png') repeat-x 0 bottom;
   font-size: 1px;
 }
 $idstr .l-edge {
-  background: url($url/shadow-l.png) repeat-y 0 0;
+  background: url('$url/shadow-l.png') repeat-y 0 0;
 }
 $idstr .r-edge {
-  background: url($url/shadow-r.png) repeat-y right 0;
+  background: url('$url/shadow-r.png') repeat-y right 0;
 }
 $idstr .wrap-corner {
   background: #fff !important;
@@ -161,7 +160,7 @@ $idstr .wrap-corner .l, $idstr .wrap-corner .r {
   top: 0;
   height: 11px;
   width: 11px;
-  background-image: url($url/corner-bits.png);
+  background-image: url('$url/corner-bits.png');
 }
 $idstr .wrap-corner .l {
   left: 0;
@@ -184,8 +183,8 @@ $idstr div.admin-links {
   margin-left: -12px;
 }
 
-$idstr .panel-separator {
-  background: url($url/shadow-b.png) repeat-x 0 center;
+$idstr .panel-region-separator {
+  background: url('$url/shadow-b.png') repeat-x 0 center;
   font-size: 1px;
   height: 30px;
 }

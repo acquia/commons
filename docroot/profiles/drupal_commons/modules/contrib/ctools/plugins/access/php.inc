@@ -1,5 +1,5 @@
 <?php
-// $Id: php.inc,v 1.1.2.2 2009/11/13 00:44:16 merlinofchaos Exp $
+// $Id: php.inc,v 1.1.2.4 2010/07/15 20:41:17 merlinofchaos Exp $
 
 /**
  * @file
@@ -16,7 +16,7 @@ $plugin = array(
   'callback' => 'ctools_php_ctools_access_check',
   'default' => array('description' => '', 'php' => ''),
   'settings form' => 'ctools_php_ctools_access_settings',
-  'summary' => 'ctools_php_ctools_acesss_summary',
+  'summary' => 'ctools_php_ctools_access_summary',
   'all contexts' => TRUE,
 );
 
@@ -59,6 +59,6 @@ function ctools_php_ctools_access_check($__conf, $contexts) {
 /**
  * Provide a summary description based upon the checked roles.
  */
-function ctools_php_ctools_acesss_summary($conf, $contexts) {
-  return check_plain($conf['description']);
+function ctools_php_ctools_access_summary($conf, $contexts) {
+  return !empty($conf['description']) ? check_plain($conf['description']) : t('No description');
 }

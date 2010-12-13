@@ -1,29 +1,12 @@
 <?php
-// $Id: strongarm.admin.inc,v 1.1.2.2.2.3 2009/12/24 03:00:01 jmiccolis Exp $
-
-/**
- * Get a map of variable to culprit (implementers of hook_strongarm()).
- */
-function strongarm_get_culprits() {
-  $culprits = array();
-  foreach (module_implements('strongarm') as $module) {
-    $module_conf = module_invoke($module, 'strongarm');
-    foreach ($module_conf as $name => $value) {
-      $culprits[$name] = $module;
-    }
-  }
-  return $culprits;
-}
+// $Id: strongarm.admin.inc,v 1.1.2.2.2.5 2010/08/04 22:53:54 yhahn Exp $
 
 /**
  * Variable management strongarm form.
  */
 function strongarm_admin_form($form_state) {
   global $conf;
-
-  ctools_include('export');
-  $vars = ctools_export_load_object('variable');
-  ksort($vars);
+  $vars = strongarm_vars_load(TRUE, TRUE);
   $form = array('#theme' => 'strongarm_admin_form',);
   foreach ($vars as $name => $variable) {
     if ($variable->export_type & EXPORT_IN_CODE) {

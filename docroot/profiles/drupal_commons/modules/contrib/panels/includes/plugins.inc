@@ -1,5 +1,5 @@
 <?php
-// $Id: plugins.inc,v 1.13.2.16 2010/03/13 20:11:46 merlinofchaos Exp $
+// $Id: plugins.inc,v 1.13.2.26 2010/07/25 18:59:12 merlinofchaos Exp $
 
 /**
  * @file
@@ -23,58 +23,14 @@ function panels_pane_access($pane, $display) {
 /**
  * Get a list of panels available in the layout.
  */
-function panels_get_panels($layout, $display) {
+function panels_get_regions($layout, $display) {
   if (!empty($layout['panels function']) && function_exists($layout['panels function'])) {
-    return $layout['panels function']($display, $display->layout_settings);
+    return $layout['panels function']($display, $display->layout_settings, $layout);
   }
   if (!empty($layout['panels'])) {
     return $layout['panels'];
   }
   return array();
-}
-
-/**
- * Get the content from a given pane.
- *
- * @param $pane
- *   The pane to retrieve content from.
- * @param $args
- *   The arguments sent to the display.
- * @param $context
- *   The panels context.
- * @param $incoming_content
- *   Any incoming content if this display is a wrapper.
- */
-function panels_get_pane_content($display, $pane, $keywords, $args = array(), $context = array(), $incoming_content = '') {
-  ctools_include('context');
-  if (!is_array($context)) {
-    $context = array();
-  }
-
-  if (!$incoming_content === '') {
-    $incoming_content = t('Incoming content will be displayed here.');
-  }
-
-  $content = FALSE;
-  $caching = !empty($pane->cache['method']) ? TRUE : FALSE;
-  if ($caching && ($cache = panels_get_cached_content($display, $args, $context, $pane))) {
-    $content = $cache->content;
-  }
-  else {
-    $content = ctools_content_render($pane->type, $pane->subtype, $pane->configuration, $keywords, $args, $context, $incoming_content);
-    foreach (module_implements('panels_pane_content_alter') as $module) {
-      $function = $module . '_panels_pane_content_alter';
-      $function($content, $pane, $args, $context);
-    }
-    if ($caching) {
-      $cache = new panels_cache_object();
-      $cache->set_content($content);
-      panels_set_cached_content($cache, $display, $args, $context, $pane);
-      $content = $cache->content;
-    }
-  }
-
-  return $content;
 }
 
 /**
@@ -298,26 +254,12 @@ function panels_get_pane_title(&$pane, $context = array(), $incoming_content = N
 }
 
 /**
- * Select a context for a pane.
- *
- * @param $pane
- *   A fully populated pane.
- * @param $contexts
- *   A keyed array of available contexts.
- *
- * @return
- *   The matching contexts or NULL if none or necessary, or FALSE if
- *   requirements can't be met.
- */
-function panels_pane_select_context($pane, $contexts) {
-  return ctools_content_select_context($pane->type, $pane->subtype, $pane->configuration, $contexts);
-}
-
-/**
  * Fetch metadata on a specific layout plugin.
  *
  * @param $layout
- *   Name of a panel layout.
+ *   Name of a panel layout. If the layout name contains a ':' this
+ *   indicates that we need to separate the sublayout out and
+ *   load it individually.
  *
  * @return
  *   An array with information about the requested panel layout.
@@ -336,6 +278,29 @@ function panels_get_layout($layout) {
 function panels_get_layouts() {
   ctools_include('plugins');
   return ctools_get_plugins('panels', 'layouts');
+}
+
+/**
+ * Fetch metadata for all layout plugins that provide builders.
+ *
+ * The layout builders allow reusable layouts be stored in the database and
+ * exported. Since there are different methods, we are not limiting this
+ * to just one plugin.
+ *
+ * @return
+ *   An array of arrays with information about panel layouts with builders.
+ */
+function panels_get_layout_builders() {
+  ctools_include('plugins');
+  $plugins = ctools_get_plugins('panels', 'layouts');
+  $builders = array();
+  foreach ($plugins as $name => $plugin) {
+    if (!empty($plugin['builder'])) {
+      $builders[$name] = $plugin;
+    }
+  }
+
+  return $builders;
 }
 
 /**
@@ -389,6 +354,131 @@ function panels_get_caches() {
 }
 
 /**
+ * Fetch metadata on a specific display renderer plugin.
+ *
+ * @return
+ *   An array of arrays with information about the requested panels display
+ *   renderer.
+ */
+function panels_get_display_renderer($renderer) {
+  ctools_include('plugins');
+  return ctools_get_plugins('panels', 'display_renderers', $renderer);
+}
+
+/**
+ * Fetch metadata for all display renderer plugins.
+ *
+ * @return
+ *   An array of arrays with information about all available panels display
+ *   renderer.
+ */
+function panels_get_display_renderers() {
+  ctools_include('plugins');
+  return ctools_get_plugins('panels', 'display_renderers');
+}
+
+/**
+ * Get and initialize the class to handle rendering a display.
+ *
+ * @return
+ *   Either the instantiated renderer or FALSE if one could not be found.
+ */
+function panels_get_renderer_handler($plugin, &$display) {
+  if (is_string($plugin)) {
+    $plugin = panels_get_display_renderer($plugin);
+  }
+
+  $class = ctools_plugin_get_class($plugin, 'handler');
+  if ($class) {
+    $renderer = new $class();
+    $renderer->init($plugin, $display);
+    return $renderer;
+  }
+
+  return FALSE;
+}
+
+/**
+ * Choose a renderer for a display based on a render pipeline setting.
+ */
+function panels_get_renderer($pipeline_name, &$display) {
+  // If operating in legacy mode, only the legacy renderer is available:
+  if (variable_get('panels_legacy_rendering_mode', TRUE)) {
+    return panels_get_renderer_handler('legacy', $display);
+  }
+
+  // Load the pipeline
+  ctools_include('export');
+  $pipeline = ctools_export_crud_load('panels_renderer_pipeline', $pipeline_name);
+
+  // If we can't, or it has no renderers, default.
+  if (!$pipeline || empty($pipeline->settings['renderers'])) {
+    return panels_get_renderer_handler('standard', $display);
+  }
+
+  // Get contexts set on the pipeline:
+  $contexts = array();
+  if (!empty($pipeline->settings['contexts'])) {
+    $contexts = ctools_context_load_contexts($pipeline->settings['context']);
+  }
+
+  // Cycle through our renderers and see.
+  foreach ($pipeline->settings['renderers'] as $candidate) {
+    // See if this passes selection criteria.
+    if (!ctools_access($candidate['access'], $contexts)) {
+      continue;
+    }
+
+    $renderer = panels_get_renderer_handler($candidate['renderer'], $display);
+
+    if (!empty($candidate['options'])) {
+      $renderer->set_options($candidate['options']);
+    }
+
+    return $renderer;
+  }
+
+  // Fall through. If no renderer is selected, use the standard renderer
+  return panels_get_renderer_handler('standard', $display);
+}
+
+/**
+ * Sort callback for sorting renderer pipelines.
+ *
+ * Sort first by weight, then by title.
+ */
+function _panels_renderer_pipeline_sort($a, $b) {
+  if ($a->weight == $b->weight) {
+      if ($a->admin_title == $b->admin_title) {
+        return 0;
+      }
+    return ($a->admin_title < $b->admin_title) ? -1 : 1;
+  }
+  return ($a->weight < $b->weight) ? -1 : 1;
+}
+
+/**
+ * Get a list of available renderer pipelines.
+ *
+ * This can be used to form a select or radios widget by enabling
+ * sorting. Descriptions are left in.
+ */
+function panels_get_renderer_pipelines($sort = TRUE) {
+  // If operating in legacy mode, only the legacy renderer is available:
+  if (variable_get('panels_legacy_rendering_mode', TRUE)) {
+    return array();
+  }
+
+  ctools_include('export');
+  $pipelines = ctools_export_crud_load_all('panels_renderer_pipeline');
+  if ($sort) {
+    uasort($pipelines, '_panels_renderer_pipeline_sort');
+  }
+
+  return $pipelines;
+}
+
+/**
  * Get a function from a plugin, if it exists.
  *
  * @param $plugin
@@ -414,6 +504,7 @@ function panels_plugin_get_function($plugin, $which, $function_name) {
 
 }
 
+// @todo these are DEPRECATED and can probably be removed.
 // These are placeholders to prevent crashes from the former plugins
 class panels_required_context { function filter() { } };
 class panels_optional_context extends panels_required_context {};

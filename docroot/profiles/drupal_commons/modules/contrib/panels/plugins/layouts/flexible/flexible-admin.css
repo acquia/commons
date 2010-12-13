@@ -1,4 +1,4 @@
-/* $Id: flexible-admin.css,v 1.1.2.5 2009/07/22 00:15:50 merlinofchaos Exp $ */
+/* $Id: flexible-admin.css,v 1.1.2.8 2010/07/20 21:00:28 merlinofchaos Exp $ */
 
 #panels-dnd-main .panel-flexible-edit-layout div.panels-display .pane-add-link,
 .panel-flexible-edit-layout .panel-pane {
@@ -10,7 +10,7 @@
 }
 
 .panel-flexible-edit-layout .panels-flexible-column-inside {
-  margin: 5px;
+/*  margin: 5px; */
   border: 1px dotted green;
 }
 
@@ -73,6 +73,7 @@
   position: absolute;
   z-index: 1000;
   background: white;
+  color: black;
   border: 1px solid black;
   width: 60px;
   height: 2em;
@@ -80,4 +81,8 @@
   line-height: 2em;
 }
 
+#panels-edit-display .panel-pane,
+#panels-edit-display .helperclass {
+  margin: .5em;
 }
+

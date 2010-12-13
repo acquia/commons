@@ -1,5 +1,5 @@
 <?php
-// $Id: page_manager.install,v 1.7 2009/07/12 11:32:30 sdboyer Exp $
+// $Id: page_manager.install,v 1.7.2.1 2010/06/16 15:42:28 merlinofchaos Exp $
 
 /**
  * @file
@@ -26,6 +26,7 @@ function page_manager_schema_1() {
       'identifier' => 'handler',
       'bulk export' => TRUE,
       'export callback' => 'page_manager_export_task_handler',
+      'primary key' => 'did',
       'api' => array(
         'owner' => 'page_manager',
         'api' => 'pages_default',

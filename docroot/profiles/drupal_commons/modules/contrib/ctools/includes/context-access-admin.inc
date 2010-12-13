@@ -1,5 +1,5 @@
 <?php
-// $Id: context-access-admin.inc,v 1.7 2009/08/16 21:59:42 merlinofchaos Exp $
+// $Id: context-access-admin.inc,v 1.7.2.2 2010/07/14 23:32:08 merlinofchaos Exp $
 
 /**
  * @file
@@ -64,12 +64,12 @@
  * the original settings.
  *
  * The callbacks:
- * - $module . _ctools_access_cache_get($argument) -- get the 'access' settings
+ * - $module . _ctools_access_get($argument) -- get the 'access' settings
  *   from cache. Must return array($access, $contexts); This callback can
  *   perform access checking to make sure this URL is not being gamed.
- * - $module . _ctools_access_cache_set($argument, $access) -- set the 'access'
+ * - $module . _ctools_access_set($argument, $access) -- set the 'access'
  *   settings in cache.
- * - $module . _ctools_access_cache_clear($argument) -- clear the cache.
+ * - $module . _ctools_access_clear($argument) -- clear the cache.
  *
  * The ctools_object_cache is recommended for this purpose, but you can use
  * any caching mechanism you like. An example:
@@ -385,7 +385,7 @@ function ctools_access_ajax_edit($fragment = NULL, $id = NULL) {
 }
 
 /**
- * From to edit the settings of an access test.
+ * Form to edit the settings of an access test.
  */
 function ctools_access_ajax_edit_item(&$form_state) {
   $test = &$form_state['test'];
@@ -394,11 +394,16 @@ function ctools_access_ajax_edit_item(&$form_state) {
   if (isset($plugin['required context'])) {
     $form['context'] = ctools_context_selector($form_state['contexts'], $plugin['required context'], $test['context']);
   }
-
   $form['settings'] = array('#tree' => TRUE);
   if ($function = ctools_plugin_get_function($plugin, 'settings form')) {
     $function($form, $form_state, $test['settings']);
   }
+
+  $form['not'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Reverse (NOT)'),
+    '#default_value' => !empty($test['not']),
+  );
 
   $form['save'] = array(
     '#type' => 'submit',
@@ -429,6 +434,7 @@ function ctools_access_ajax_edit_item_submit(&$form, &$form_state) {
   if (isset($form_state['values']['context'])) {
     $form_state['test']['context'] = $form_state['values']['context'];
   }
+  $form_state['test']['not'] = !empty($form_state['values']['not']);
 }
 
 /**

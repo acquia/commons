@@ -1,5 +1,5 @@
 <?php
-// $Id: stylizer.inc,v 1.1.2.4 2010/05/17 17:23:25 sdboyer Exp $
+// $Id: stylizer.inc,v 1.1.2.12 2010/10/15 20:52:02 merlinofchaos Exp $
 /**
  * @file
  * Create customized CSS and images from palettes created by user input.
@@ -28,6 +28,18 @@ function ctools_get_style_base($style_base) {
 function ctools_get_style_bases() {
   ctools_include('plugins');
   return ctools_get_plugins('ctools', 'style_bases');
+}
+
+/**
+ * Fetch metadata about all of the style base types that are available.
+ */
+function ctools_get_style_base_types() {
+  $types = array();
+  foreach (module_implements('ctools_style_base_types') as $module) {
+    $types[$module] = module_invoke($module, 'ctools_style_base_types');
+  }
+
+  return $types;
 }
 
 /**
@@ -175,6 +187,21 @@ function ctools_stylizer_recursive_delete($path) {
 }
 
 /**
+ * Get a safe name for the settings.
+ *
+ * This uses an md5 of the palette if the name is temporary so
+ * that multiple temporary styles on the same page can coexist
+ * safely.
+ */
+function ctools_stylizer_get_settings_name($settings) {
+  if ($settings['name'] != '_temporary') {
+    return $settings['name'];
+  }
+
+  return $settings['name'] . '-' . md5(serialize($settings['palette']));
+}
+
+/**
  * Get the path where images will be stored for a given style plugin and settings.
  *
  * This function will make sure the path exists.
@@ -210,7 +237,7 @@ function ctools_stylizer_get_css_id($plugin, $settings) {
  */
 function ctools_stylizer_get_css_class($plugin, $settings) {
   ctools_include('cleanstring');
-  return ctools_cleanstring($plugin['name'] . '-' . $settings['name']);
+  return ctools_cleanstring($plugin['name'] . '-' . ctools_stylizer_get_settings_name($settings));
 }
 
 class ctools_stylizer_image_processor {
@@ -395,7 +422,7 @@ class ctools_stylizer_image_processor {
 
   function command_fill($color, $x, $y, $width, $height) {
     $this->log("Fill: $color ($x, $y, $width, $height)");
-    imagefilledrectangle($this->workspace, $x, $y, $x + $width, $y + $height, _color_gd($this->workspace, $this->palette[$color]));
+    imagefilledrectangle($this->workspace, $x, $y, $x + $width, $y + $height, ctools_color_gd($this->workspace, $this->palette[$color]));
   }
 
   function command_gradient($from, $to, $x, $y, $width, $height, $direction = 'down') {
@@ -403,13 +430,13 @@ class ctools_stylizer_image_processor {
 
     if ($direction == 'down') {
       for ($i = 0; $i < $height; ++$i) {
-        $color = _color_blend($this->workspace, $this->palette[$from], $this->palette[$to], $i / ($height - 1));
+        $color = ctools_color_blend($this->workspace, $this->palette[$from], $this->palette[$to], $i / ($height - 1));
         imagefilledrectangle($this->workspace, $x, $y + $i, $x + $width, $y + $i + 1, $color);
       }
     }
     else {
       for ($i = 0; $i < $width; ++$i) {
-        $color = _color_blend($this->workspace, $this->palette[$from], $this->palette[$to], $i / ($width - 1));
+        $color = ctools_color_blend($this->workspace, $this->palette[$from], $this->palette[$to], $i / ($width - 1));
         imagefilledrectangle($this->workspace, $x + $i, $y, $x + $i + 1, $y + $height, $color);
       }
     }
@@ -432,7 +459,7 @@ class ctools_stylizer_image_processor {
     }
     $this->log("Colorize: $color ($x, $y, $width, $height)");
 
-    $c = _color_unpack($this->palette[$color]);
+    $c = ctools_color_unpack($this->palette[$color]);
 
     imagealphablending($this->workspace, FALSE);
     imagesavealpha($this->workspace, TRUE);
@@ -468,7 +495,7 @@ class ctools_stylizer_image_processor {
     }
     $this->log("Hue: $color ($x, $y, $width, $height)");
 
-    list($red, $green, $blue) = _color_unpack($this->palette[$color]);
+    list($red, $green, $blue) = ctools_color_unpack($this->palette[$color]);
 
     // We will create a monochromatic palette based on the input color
     // which will go from black to white.
@@ -679,7 +706,13 @@ function ctools_stylizer_edit_style(&$info, $js, $step = NULL) {
     if ($step != 'choose') {
       $cache = ctools_stylizer_get_settings_cache($name);
       if (!$cache) {
-        return t('Missing settings cache.');
+        $output = t('Missing settings cache.');
+        if ($js) {
+          return ctools_modal_form_render($form_state, $output);
+        }
+        else {
+          return $output;
+        }
       }
 
       if (!empty($cache['owner settings'])) {
@@ -695,7 +728,7 @@ function ctools_stylizer_edit_style(&$info, $js, $step = NULL) {
       );
       ctools_stylizer_clear_settings_cache($name);
     }
-    $form_type = 'add';
+    $op = 'add';
   }
   else {
     $cache = ctools_stylizer_get_settings_cache($info['settings']['name']);
@@ -709,45 +742,25 @@ function ctools_stylizer_edit_style(&$info, $js, $step = NULL) {
     else {
       $settings = $info['settings'];
     }
-    $form_type = 'edit';
+    $op = 'edit';
+  }
+
+  if (!empty($info['op'])) {
+    // Allow this to override. Necessary to allow cloning properly.
+    $op = $info['op'];
   }
 
   $plugin = NULL;
   if (!empty($settings['style_base'])) {
     $plugin = ctools_get_style_base($settings['style_base']);
-    // Add in forms specific to the plugin. The plugin can store forms
-    // either as a simple 'edit form' => 'form callback' or if it needs
-    // the more complicated wizard functionality, it can set 'forms'
-    // and 'order' with values suitable for the wizard $form_info
-    // array.
-
     $info['type'] = $plugin['type'];
-    if (empty($plugin['forms'])) {
-      if ($form_type == 'add' && isset($plugin['add form'])) {
-        $id = $plugin['add form'];
-      }
-      else if (isset($plugin['edit form'])) {
-        $id = $plugin['edit form'];
-      }
-      else {
-        $id = 'ctools_stylizer_edit_style_form_default';
-      }
-
-      $form_info['forms']['settings'] = array(
-        'form id' => $id,
-      );
-      $form_info['order']['settings'] = t('Settings');
-    }
-    else {
-      $form_info['forms'] += $plugin['forms'];
-      $form_info['order'] += $plugin['order'];
-    }
+    ctools_stylizer_add_plugin_forms($form_info, $plugin, $op);
   }
   else {
-    // This is here so the 'finish' button does not show up, but because
+    // This is here so the 'finish' button does not show up, and because
     // we don't have the selected style we don't know what the next form(s)
     // will be.
-    $form_info['order']['next'] = t('A meaningless second page');
+    $form_info['order']['next'] = t('Configure style');
   }
 
   if (count($form_info['order']) < 2 || $step == 'choose') {
@@ -763,7 +776,7 @@ function ctools_stylizer_edit_style(&$info, $js, $step = NULL) {
     'step' => $step,
     'settings' => $settings,
     'ajax' => $js,
-    'form_type' => $form_type,
+    'op' => $op,
   );
 
   if (!empty($info['modal'])) {
@@ -787,7 +800,50 @@ function ctools_stylizer_edit_style(&$info, $js, $step = NULL) {
     return ctools_stylizer_edit_style($info, $js, $form_state['clicked_button']['#next']);
   }
 
-  return $output;
+  if ($js) {
+    return ctools_modal_form_render($form_state, $output);
+  }
+  else {
+    return $output;
+  }
+}
+
+/**
+ * Add wizard forms specific to a style base plugin.
+ *
+ * The plugin can store forms either as a simple 'edit form'
+ * => 'form callback' or if it needs the more complicated wizard
+ * functionality, it can set 'forms' and 'order' with values suitable
+ * for the wizard $form_info array.
+ *
+ * @param &$form_info
+ *   The form info to modify.
+ * @param $plugin
+ *   The plugin to use.
+ * @param $op
+ *   Either 'add' or 'edit' so we can get the right forms.
+ */
+function ctools_stylizer_add_plugin_forms(&$form_info, $plugin, $op) {
+  if (empty($plugin['forms'])) {
+    if ($op == 'add' && isset($plugin['add form'])) {
+      $id = $plugin['add form'];
+    }
+    else if (isset($plugin['edit form'])) {
+      $id = $plugin['edit form'];
+    }
+    else {
+      $id = 'ctools_stylizer_edit_style_form_default';
+    }
+
+    $form_info['forms']['settings'] = array(
+      'form id' => $id,
+    );
+    $form_info['order']['settings'] = t('Settings');
+  }
+  else {
+    $form_info['forms'] += $plugin['forms'];
+    $form_info['order'] += $plugin['order'];
+  }
 }
 
 /**
@@ -963,7 +1019,6 @@ function ctools_stylizer_edit_style_form_default(&$form, &$form_state) {
   if (!empty($form_state['owner info']['owner form']) && function_exists($form_state['owner info']['owner form'])) {
     $form_state['owner info']['owner form']($form, $form_state);
   }
-
 }
 
 /**
@@ -1000,10 +1055,20 @@ function theme_ctools_stylizer_preview_form($form) {
   if (!empty($form['#form_state']['settings']['old_settings'])) {
     ctools_stylizer_cleanup_style($plugin, $form['#form_state']['settings']['old_settings']);
   }
+  $preview = '';
+  if (!empty($plugin['preview'])) {
+    $preview = $plugin['preview'];
+  }
+  else {
+    $base_types = ctools_get_style_base_types();
+    if (!empty($base_types[$plugin['module']][$plugin['type']]['preview'])) {
+      $preview = $base_types[$plugin['module']][$plugin['type']]['preview'];
+    }
+  }
 
-  if (!empty($plugin['preview']) && function_exists($plugin['preview'])) {
+  if (!empty($preview) && function_exists($preview)) {
     $output = '<fieldset id="preview"><legend>' . t('Preview') . '</legend>';
-    $output .= $plugin['preview']($plugin, $settings);
+    $output .= $preview($plugin, $settings);
     $output .= drupal_render($form);
     $output .= '</fieldset>';
 
@@ -1037,11 +1102,13 @@ function ctools_stylizer_edit_style_form_default_submit($form, &$form_state) {
   if ($form_state['clicked_button']['#value'] == t('Preview')) {
     $form_state['rerender'] = TRUE;
     // Update the cache with changes.
-    $cache = array('settings' => $form_state['settings']);
-    if (!empty($form_state['owner info']['owner settings'])) {
-      $cache['owner settings'] = $form_state['owner info']['owner settings'];
+    if (!empty($form_state['name'])) {
+      $cache = array('settings' => $form_state['settings']);
+      if (!empty($form_state['owner info']['owner settings'])) {
+        $cache['owner settings'] = $form_state['owner info']['owner settings'];
+      }
+      ctools_stylizer_set_settings_cache($form_state['name'], $cache);
     }
-    ctools_stylizer_set_settings_cache($form_state['name'], $cache);
   }
 }
 
@@ -1583,3 +1650,91 @@ function ctools_stylizer_padding_apply_style(&$stylesheet, $selector, $settings)
   }
 
 }
+
+/**
+ * Check to see that a directory exists.
+ *
+ * This is an exact copy of core's, but without the stupid drupal_set_message
+ * because we need this to be silent.
+ *
+ * @todo this should probably be in another file.
+ */
+function ctools_file_check_directory(&$directory, $mode = 0, $form_item = NULL) {
+  $directory = rtrim($directory, '/\\');
+
+  // Check if directory exists.
+  if (!is_dir($directory)) {
+    if (($mode & FILE_CREATE_DIRECTORY) && @mkdir($directory)) {
+      @chmod($directory, 0775); // Necessary for non-webserver users.
+    }
+    else {
+      if ($form_item) {
+        form_set_error($form_item, t('The directory %directory does not exist.', array('%directory' => $directory)));
+      }
+      return FALSE;
+    }
+  }
+
+  // Check to see if the directory is writable.
+  if (!is_writable($directory)) {
+    if (($mode & FILE_MODIFY_PERMISSIONS) && @chmod($directory, 0775)) {
+      drupal_set_message(t('The permissions of directory %directory have been changed to make it writable.', array('%directory' => $directory)));
+    }
+    else {
+      form_set_error($form_item, t('The directory %directory is not writable', array('%directory' => $directory)));
+      watchdog('file system', 'The directory %directory is not writable, because it does not have the correct permissions set.', array('%directory' => $directory), WATCHDOG_ERROR);
+      return FALSE;
+    }
+  }
+
+  if ((file_directory_path() == $directory || file_directory_temp() == $directory) && !is_file("$directory/.htaccess")) {
+    $htaccess_lines = "SetHandler Drupal_Security_Do_Not_Remove_See_SA_2006_006\nOptions None\nOptions +FollowSymLinks";
+    if (($fp = fopen("$directory/.htaccess", 'w')) && fputs($fp, $htaccess_lines)) {
+      fclose($fp);
+      chmod($directory .'/.htaccess', 0664);
+    }
+    else {
+      $variables = array('%directory' => $directory, '!htaccess' => '<br />'. nl2br(check_plain($htaccess_lines)));
+      form_set_error($form_item, t("Security warning: Couldn't write .htaccess file. Please create a .htaccess file in your %directory directory which contains the following lines: <code>!htaccess</code>", $variables));
+      watchdog('security', "Security warning: Couldn't write .htaccess file. Please create a .htaccess file in your %directory directory which contains the following lines: <code>!htaccess</code>", $variables, WATCHDOG_ERROR);
+    }
+  }
+
+  return TRUE;
+}
+
+/**
+ * Blend two hex colors and return the GD color.
+ */
+function ctools_color_blend($img, $hex1, $hex2, $alpha) {
+  $in1 = ctools_color_unpack($hex1);
+  $in2 = ctools_color_unpack($hex2);
+  $out = array($img);
+  for ($i = 0; $i < 3; ++$i) {
+    $out[] = $in1[$i] + ($in2[$i] - $in1[$i]) * $alpha;
+  }
+  return call_user_func_array('imagecolorallocate', $out);
+}
+
+/**
+ * Convert a hex color into an RGB triplet.
+ */
+function ctools_color_unpack($hex, $normalize = false) {
+  if (strlen($hex) == 4) {
+    $hex = $hex[1] . $hex[1] . $hex[2] . $hex[2] . $hex[3] . $hex[3];
+  }
+  $c = hexdec($hex);
+  for ($i = 16; $i >= 0; $i -= 8) {
+    $out[] = (($c >> $i) & 0xFF) / ($normalize ? 255 : 1);
+  }
+  return $out;
+}
+
+/**
+ * Convert a hex triplet into a GD color.
+ */
+function ctools_color_gd($img, $hex) {
+  $c = array_merge(array($img), ctools_color_unpack($hex));
+  return call_user_func_array('imagecolorallocate', $c);
+}
+

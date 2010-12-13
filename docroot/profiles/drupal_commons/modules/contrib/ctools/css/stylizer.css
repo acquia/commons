@@ -1,4 +1,4 @@
-/* $Id: stylizer.css,v 1.1.2.1 2010/02/17 01:04:50 merlinofchaos Exp $ */
+/* $Id: stylizer.css,v 1.1.2.3 2010/07/22 22:35:42 merlinofchaos Exp $ */
 
 /* Farbtastic placement */
 .color-form {
@@ -48,9 +48,6 @@
   width: 16px;
   height: 16px;
 }
-#palette .down, #palette .up, #palette .both {
-  background: url(images/hook.png) no-repeat 100% 0; /* LTR */
-}
 #palette .up {
   background-position: 100% -27px; /* LTR */
 }
@@ -58,19 +55,7 @@
   background-position: 100% -54px; /* LTR */
 }
 
-#palette .lock {
-  float: left; /* LTR */
-  position: relative;
-  top: -1.4em;
-  left: -10px; /* LTR */
-  width: 20px;
-  height: 25px;
-  background: url(images/lock.png) no-repeat 50% 2px;
-  cursor: pointer;
-}
-#palette .unlocked {
-  background-position: 50% -22px;
-}
+
 #palette .form-item {
   width: 24em;
 }

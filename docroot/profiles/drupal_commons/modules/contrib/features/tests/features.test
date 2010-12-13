@@ -1,5 +1,5 @@
 <?php
-// $Id: features.test,v 1.1.2.3 2010/02/07 06:58:41 yhahn Exp $
+// $Id: features.test,v 1.1.2.4 2010/07/23 23:35:55 yhahn Exp $
 
 /**
  * User permission component tests for Features
@@ -50,17 +50,17 @@ class FeaturesUserTestCase extends DrupalWebTestCase {
     module_load_include('inc', 'features', 'features.export');
 
     $components = array_filter(array(
-      'content',
-      // 'context', // @TODO write tests for context.
-      'fieldgroup',
-      'filter',
-      'imagecache',
-      'node',
-      'user',
-      'views',
+      'content' => 'content',
+      // 'context' => 'context', // @TODO write tests for context.
+      'fieldgroup' => 'fieldgroup',
+      'filter' => 'filter',
+      'imagecache' => 'imagecache',
+      'node' => 'node',
+      'user_permission' => 'user',
+      'views' => 'views',
     ), 'module_exists');
 
-    foreach ($components as $component) {
+    foreach (array_keys($components) as $component) {
       $callback = "_test_{$component}";
 
       // Ensure that the component/default is properly available.
@@ -193,7 +193,7 @@ class FeaturesUserTestCase extends DrupalWebTestCase {
     }
   }
 
-  protected function _test_user($op = 'load') {
+  protected function _test_user_permission($op = 'load') {
     switch ($op) {
       case 'load':
         // So... relying on our own API functions to test is pretty lame.

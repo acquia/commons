@@ -1,5 +1,5 @@
 <?php
-// $Id: node_body.inc,v 1.2.2.1 2010/01/29 20:18:25 merlinofchaos Exp $
+// $Id: node_body.inc,v 1.2.2.2 2010/07/24 18:01:11 merlinofchaos Exp $
 
 /**
  * Plugins are described by creating a $plugin array which will be used
@@ -33,11 +33,13 @@ function ctools_node_body_content_type_render($subtype, $conf, $panel_args, $con
     return;
   }
 
+  $body = str_replace('<!--break-->', '', $node->body);
+
   // Build the content type block.
   $block = new stdClass();
   $block->module  = 'node_body';
   $block->title   = $type->body_label;
-  $block->content = check_markup($node->body, $node->format, FALSE);
+  $block->content = check_markup($body, $node->format, FALSE);
   $block->delta   = $node->nid;
 
   return $block;

@@ -1,5 +1,5 @@
 <?php
-// $Id: callbacks.inc,v 1.2.4.11 2010/05/20 09:05:37 sdboyer Exp $
+// $Id: callbacks.inc,v 1.2.4.14 2010/08/30 22:08:57 merlinofchaos Exp $
 /**
  * @file callbacks.inc
  * Minor menu callbacks for Panels helpers.
@@ -12,98 +12,146 @@ function panels_admin_page() {
   return theme('panels_dashboard');
 }
 
+function panels_dashboard_final_blocks(&$vars) {
+  // Add in links for missing modules that we still want to mention:
+  if (empty($vars['links']['page_manager'])) {
+    $vars['links']['page_manager'] = array(
+      'weight' => -100,
+      'title' => t('Panel page'),
+      'description' => '<em>' . t('You must activate the page manager module for this functionality.') . '</em>',
+    );
+  }
+  if (empty($vars['links']['panels_mini'])) {
+    $vars['links']['panels_mini'] = array(
+      'title' => t('Mini panel'),
+      'description' => '<em>' . t('You must activate the Mini panels module for this functionality.') . '</em>',
+    );
+  }
+  if (empty($vars['links']['panels_node'])) {
+    $vars['links']['panels_mini'] = array(
+      'title' => t('Panel node'),
+      'description' => '<em>' . t('You must activate the panel node module for this functionality.') . '</em>',
+    );
+  }
+}
+
+/**
+ * Implementation of hook_panels_dashboard_blocks().
+ *
+ * Adds page information to the Panels dashboard.
+ */
+function panels_panels_dashboard_blocks(&$vars) {
+  $vars['links']['panels_layout'] = array(
+    'title' => l(t('Custom layout'), 'admin/build/panels/layouts/add'),
+    'description' => t('Custom layouts can add more, site-specific layouts that you can use in your panels.'),
+  );
+
+   // Load all mini panels and their displays.
+  ctools_include('export');
+  $items = ctools_export_crud_load_all('panels_layout');
+  $count = 0;
+  $rows = array();
+
+  foreach ($items as $item) {
+    $rows[] = array(
+      check_plain($item->admin_title),
+      array(
+        'data' => l(t('Edit'), "admin/build/panels/layouts/list/$item->name/edit"),
+        'class' => 'links',
+      ),
+    );
+
+    // Only show 10.
+    if (++$count >= 10) {
+      break;
+    }
+  }
+
+  if ($rows) {
+    $content = theme('table', array(), $rows, array('class' => 'panels-manage'));
+  }
+  else {
+    $content = '<p>' . t('There are no custom layouts.') . '</p>';
+  }
+
+  $vars['blocks']['panels_layout'] = array(
+    'title' => t('Manage custom layouts'),
+    'link' => l(t('Go to list'), 'admin/build/panels/layouts'),
+    'content' => $content,
+    'class' => 'dashboard-layouts',
+    'section' => 'right',
+  );
+}
+
 function template_preprocess_panels_dashboard(&$vars) {
-  drupal_add_css(panels_get_path('css/panels-dashboard.css'));
-  $vars['image_path'] = url(panels_get_path('images'));
+  ctools_add_css('panels-dashboard', 'panels');
+  ctools_include('plugins');
 
-  $vars['panel_page_description'] = t('Panel pages can be used as landing pages. They have a URL path, accept arguments and can have menu entries.');
-  $vars['panel_override_description'] = t('Customize an already existing page within your site.');
+  $vars['image_path'] = ctools_image_path('', 'panels');
+
+  $vars['links'] = array();
+  $vars['blocks'] = array();
+
+  foreach (module_implements('panels_dashboard_blocks') as $module) {
+    $function = $module . '_panels_dashboard_blocks';
+    $function($vars);
+  }
+
+  // Add in any default links for modules that are not active
+  panels_dashboard_final_blocks($vars);
+
+  // If page manager module is enabled, add a very low eight block to
+  // list the page wizards.
   if (module_exists('page_manager')) {
-    $vars['new_panel_page'] = l(t('Panel page'), 'admin/build/pages/add');
-  }
-  else {
-    $vars['new_panel_page'] = '<b>' . t('Panel page') . '</b><br /><em>' . t('You must activate the page manager module for this functionality.') . '</em>';
-    $vars['new_panel_override'] = '<em>' . t('You must activate the page manager module for this functionality.') . '</em>';
-  }
+    $vars['blocks']['wizards'] = array(
+      'weight' => -101,
+      'section' => 'right',
+      'title' => t('Page wizards'),
+      'content' => '',
+      'class' => 'dashboard-wizards',
+    );
 
-  $vars['panel_node_description'] = t('Panel nodes are node content and appear in your searches, but are more limited than panel pages.');
-  if (module_exists('panels_node')) {
-    $vars['new_panel_node'] = l(t('Panel node'), 'node/add/panel');
-  }
-  else {
-    $vars['new_panel_node'] = '<b>' . t('Panel node') . '</b><br /><em>' . t('You must activate the panel node module for this functionality.') . '</em>';
-  }
+    ctools_include('page-wizard');
+    $plugins = page_manager_get_page_wizards();
+    uasort($plugins, 'ctools_plugin_sort');
 
-  $vars['panel_mini_description'] = t('Mini panels are small content areas exposed as blocks, for when you need to have complex block layouts or layouts within layouts.');
-  if (module_exists('panels_mini')) {
-    $vars['new_panel_mini'] = l(t('Mini panel'), 'admin/build/panel-mini/add');
-  }
-  else {
-    $vars['new_panel_mini'] = '<b>' . t('Mini panel') . '</b><br /><em>' . t('You must activate the Mini panels module for this functionality.') . '</em>';
-  }
+    foreach ($plugins as $id => $plugin) {
+      if (isset($plugin['type']) && $plugin['type'] == 'panels') {
+        $link = array(
+          'title' => l($plugin['title'], 'admin/build/pages/wizard/' . $id),
+          'description' => $plugin['description'],
+        );
 
-  if (module_exists('page_manager')) {
-    module_load_include('inc', 'page_manager', 'page_manager.admin');
-    $tasks = page_manager_get_tasks_by_type('page');
-    $pages = array('operations' => array());
-
-    page_manager_get_pages($tasks, $pages);
-    $count = 0;
-    $rows = array();
-    foreach ($pages['rows'] as $id => $info) {
-      $rows[] = array(
-        'data' => array(
-          $info['data']['title'],
-          $info['data']['operations'],
-        ),
-        'class' => $info['class'],
-      );
-
-      // Only show 10.
-      if (++$count >= 10) {
-        break;
+        $vars['blocks']['wizards']['content'] .= theme('panels_dashboard_link', $link);
       }
     }
 
-    $vars['pages'] = theme('table', array(), $rows, array('class' => 'panels-manage'));
-    $vars['pagelink'] = l(t('Go to list'), 'admin/build/pages');
-  }
-  else {
-    $vars['pages'] = '<p>' . t('You must install and activate the Page Manager module to manage pages. This module is located within the Chaos Tools Suite.') . '</p>';
   }
 
-  if (module_exists('panels_mini')) {
-    // Load all mini panels and their displays.
-    $panel_minis = panels_mini_load_all();
-    $count = 0;
-    $rows = array();
+  uasort($vars['links'], 'ctools_plugin_sort');
 
-    foreach ($panel_minis as $panel_mini) {
-      $rows[] = array(
-        check_plain($panel_mini->title),
-        array(
-          'data' => l(t('Edit'), "admin/build/panel-mini/$panel_mini->name/edit-general"),
-          'class' => 'page-manager-page-operations',
-        ),
-      );
+  $vars['blocks']['links'] = array(
+    'weight' => -100,
+    'section' => 'left',
+    'title' => t('Create new') . '...',
+    'content' => '',
+    'class' => 'dashboard-create',
+  );
 
-      // Only show 10.
-      if (++$count >= 10) {
-        break;
-      }
-    }
-
-    if ($rows) {
-      $vars['minis'] = theme('table', array(), $rows, array('class' => 'panels-manage'));
-    }
-    else {
-      $vars['minis'] = '<p>' . t('There are no mini panels.') . '</p>';
-    }
-    $vars['minilink'] = l(t('Go to list'), 'admin/build/panel-mini');
+  // Turn the links into a block
+  foreach ($vars['links'] as $link) {
+    $vars['blocks']['links']['content'] .= theme('panels_dashboard_link', $link);
   }
-  else {
-    $vars['minis'] = '<p>' . t('You must install and activate the Mini Panels module to manage them.') . '</p>';
-    $vars['minilink'] = '';
+
+  uasort($vars['blocks'], 'ctools_plugin_sort');
+
+  $vars['left'] = '';
+  $vars['right'] = '';
+
+  // Render all the blocks
+  foreach ($vars['blocks'] as $block) {
+    $section = !empty($block['section']) ? $block['section'] : 'left';
+    $vars[$section] .= theme('panels_dashboard_block', $block);
   }
 }
 

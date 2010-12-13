@@ -1,5 +1,5 @@
 <?php
-// $Id: views_content_plugin_display_panel_pane.inc,v 1.3.2.2 2010/05/18 09:31:31 sdboyer Exp $
+// $Id: views_content_plugin_display_panel_pane.inc,v 1.3.2.3 2010/07/09 01:02:24 merlinofchaos Exp $
 
 /**
  * The plugin that handles a panel_pane.
@@ -163,7 +163,7 @@ class views_content_plugin_display_panel_pane extends views_plugin_display {
           'more_link' => t('More link'),
           'path_override' => t('Path override'),
           'title_override' => t('Title override'),
-//          'exposed_form' => t('Use exposed widgets form as pane configuration'),
+          'exposed_form' => t('Use exposed widgets form as pane configuration'),
           'fields_override' => t('Fields override'),
         );
 
@@ -383,5 +383,22 @@ class views_content_plugin_display_panel_pane extends views_plugin_display {
     }
     return $this->view->override_path;
   }
+
+  /**
+   * Determine if this display should display the exposed
+   * filters widgets, so the view will know whether or not
+   * to render them.
+   *
+   * Regardless of what this function
+   * returns, exposed filters will not be used nor
+   * displayed unless uses_exposed() returns TRUE.
+   */
+  function displays_exposed() {
+    $conf = $this->get_option('allow');
+    // If this is set, the exposed form is part of pane configuration, not
+    // rendered normally.
+    return empty($conf['exposed_form']);
+  }
+
 }
 

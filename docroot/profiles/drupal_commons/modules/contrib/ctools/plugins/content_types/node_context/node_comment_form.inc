@@ -1,5 +1,5 @@
 <?php
-// $Id: node_comment_form.inc,v 1.1.2.2 2010/05/18 04:41:05 sdboyer Exp $
+// $Id: node_comment_form.inc,v 1.1.2.3 2010/07/23 22:56:22 merlinofchaos Exp $
 
 if (module_exists('comment')) {
   /**
@@ -13,6 +13,7 @@ if (module_exists('comment')) {
     'description' => t('A form to add a new comment.'),
     'required context' => new ctools_context_required(t('Node'), 'node'),
     'category' => t('Node'),
+    'defaults' => array('anon_links' => false),
   );
 }
 
@@ -37,6 +38,9 @@ function ctools_node_comment_form_content_type_render($subtype, $conf, $panel_ar
       );
       $block->content = ctools_build_form('comment_form', $form_state);
     }
+    else if (!empty($conf['anon_links'])) {
+      $block->content = theme('comment_post_forbidden', $node);
+    }
   }
 
   return $block;
@@ -47,7 +51,24 @@ function ctools_node_comment_form_content_type_admin_title($subtype, $conf, $con
 }
 
 function ctools_node_comment_form_content_type_edit_form(&$form, &$form_state) {
-  // provide a blank form so we have a place to have context setting.
+  $form['anon_links'] = array(
+    '#type'  => 'checkbox',
+    '#title' => t('Shows links to register or login.'),
+    '#description' => t('If anonymous comments are not allowed, this will display the register and login links.'),
+    '#default_value' => $form_state['conf']['anon_links'],
+  );
+}
+
+function ctools_node_comment_form_content_type_edit_form_submit(&$form, &$form_state) {
+  // For each part of the form defined in the 'defaults' array set when you
+  // defined the content type, copy the value from the form into the array
+  // of items to be saved. We don't ever want to use
+  // $form_state['conf'] = $form_state['values'] because values contains
+  // buttons, form id and other items we don't want stored. CTools will handle
+  // the actual form submission.
+  foreach (array_keys($form_state['plugin']['defaults']) as $key) {
+    $form_state['conf'][$key] = $form_state['values'][$key];
+  }
 }
 
 /**

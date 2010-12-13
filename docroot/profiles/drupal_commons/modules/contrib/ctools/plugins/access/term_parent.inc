@@ -1,5 +1,5 @@
 <?php
-// $Id: term_parent.inc,v 1.1.2.1 2010/04/14 20:35:39 merlinofchaos Exp $
+// $Id: term_parent.inc,v 1.1.2.3 2010/08/20 21:05:17 merlinofchaos Exp $
 
 /**
  * @file
@@ -30,12 +30,10 @@ function ctools_term_parent_ctools_access_settings(&$form, &$form_state, $conf) 
   if (empty($conf)) {
     $conf = array(
       'vid' => 0,
-      'negate' => 0,
     );
   }
   if (!isset($conf['vid'])) {
     $conf['vid'] = 0;
-    $conf['negate'] = 0;
   }
 
   $form['settings']['vid'] = array(
@@ -55,15 +53,6 @@ function ctools_term_parent_ctools_access_settings(&$form, &$form_state, $conf) 
     $options[$vid] = $vocabulary->name;
   }
   $form['settings']['vid']['#options'] = $options;
-
-
-  $form['settings']['negate'] = array(
-    '#title' => t('Negate'),
-    '#type' => 'radios',
-    '#options' => array(0 => t('Has parent term'), 1 => t('Does not have parent term')),
-    '#description' => t('Negate this selection. If you chose "does not have parent term" and there does not exist a parent term in that vocabulary, this access check will succeed.'),
-    '#default_value' => $conf['negate'],
-  );
 }
 
 /**
@@ -82,14 +71,9 @@ function ctools_term_parent_ctools_access_check($conf, $context) {
   }
   $vid = $conf['vid'];
 
-  $count = db_query('SELECT COUNT(*) FROM {term_hierarchy} th INNER JOIN {term_data} td ON th.parent = td.tid WHERE th.parent = %d AND td.vid = %d',  $context->data->tid, $vid);
+  $count = db_result(db_query('SELECT COUNT(*) FROM {term_hierarchy} th INNER JOIN {term_data} td ON th.parent = td.tid WHERE th.tid = %d AND td.vid = %d',  $context->data->tid, $vid));
 
-  if ($conf['negate']) {
-    return $count ? FALSE : TRUE;
-  }
-  else {
-    return $count ? TRUE : FALSE;
-  }
+  return $count ? TRUE : FALSE;
 }
 
 /**
@@ -98,10 +82,5 @@ function ctools_term_parent_ctools_access_check($conf, $context) {
 function ctools_term_parent_ctools_access_summary($conf, $context) {
   $vocab = taxonomy_vocabulary_load($conf['vid']);
 
-  if ($conf['negate']) {
-    return t('"@term" has no parent in vocabulary "@vocab"', array('@term' => $context->identifier, '@vocab' => $vocab->name));
-  }
-  else {
-    return t('"@term" has parent in vocabulary "@vocab"', array('@term' => $context->identifier, '@vocab' => $vocab->name));
-  }
+  return t('"@term" has parent in vocabulary "@vocab"', array('@term' => $context->identifier, '@vocab' => $vocab->name));
 }

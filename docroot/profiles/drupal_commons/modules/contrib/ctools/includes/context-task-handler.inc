@@ -1,5 +1,5 @@
 <?php
-// $Id: context-task-handler.inc,v 1.23.2.5 2010/05/27 21:25:06 sdboyer Exp $
+// $Id: context-task-handler.inc,v 1.23.2.9 2010/09/10 18:25:13 merlinofchaos Exp $
 
 /**
  * @file
@@ -66,6 +66,27 @@ function ctools_context_handler_render($task, $subtask, $contexts, $args, $page 
           'handler' => $handler,
         ));
 
+        if (!empty($info['response code']) && $info['response code'] != 200) {
+          switch ($info['response code']) {
+            case 403:
+              return MENU_ACCESS_DENIED;
+            case 404:
+              return MENU_NOT_FOUND;
+            case 301:
+            case 302:
+            case 303:
+            case 304:
+            case 305:
+            case 307:
+              $info += array(
+                'query' => '',
+                'fragment' => '',
+              );
+              return drupal_goto($info['destination'], $info['query'], $info['fragment'], $info['response code']);
+            // @todo -- should other response codes be supported here?
+          }
+        }
+
         /*
         // Only do this if something hasn't already changed the active menu,
         // such as a book.
@@ -114,9 +135,22 @@ function ctools_context_handler_pre_render($handler, $contexts, $args) {
   if (user_access('administer page manager') && isset($handler->task)) {
     // Provide a tab to edit this context:
     ctools_include('menu');
+    $task = page_manager_get_task($handler->task);
+
+    $title = !empty($task['tab title']) ? $task['tab title'] : t('Edit @type', array('@type' => $plugin['title']));
+    $trail = array();
+    if (!empty($plugin['tab operation'])) {
+      if (is_array($plugin['tab operation'])) {
+        $trail = $plugin['tab operation'];
+      }
+      else if (function_exists($plugin['tab operation'])) {
+        $trail = $plugin['tab operation']($handler, $contexts, $args);
+      }
+    }
+
     ctools_menu_add_tab(array(
-      'title' => t('Edit @type', array('@type' => $plugin['title'])),
-      'href' => page_manager_edit_url(page_manager_make_task_name($handler->task, $handler->subtask)),
+      'title' => $title,
+      'href' => page_manager_edit_url(page_manager_make_task_name($handler->task, $handler->subtask), $trail),
     ));
   }
 }
@@ -188,8 +222,7 @@ function ctools_context_handler_summary($task, $subtask, $handler) {
  * for use in rendering.
  */
 function ctools_context_handler_get_task_contexts($task, $subtask, $args) {
-  $contexts = array();
-
+  $contexts = ctools_context_handler_get_base_contexts($task, $subtask);
   $arguments = ctools_context_handler_get_task_arguments($task, $subtask);
   ctools_context_get_context_from_arguments($arguments, $contexts, $args);
 
@@ -216,8 +249,10 @@ function ctools_context_handler_get_handler_contexts($contexts, $handler) {
  * the contexts as placeholders.
  */
 function ctools_context_handler_get_all_contexts($task, $subtask, $handler) {
+  $contexts = array();
+
   $object = ctools_context_handler_get_task_object($task, $subtask, $handler);
-  $contexts = ctools_context_load_contexts($object, TRUE);
+  $contexts = ctools_context_load_contexts($object, TRUE, $contexts);
   ctools_context_handler_set_access_restrictions($task, $subtask, $handler, $contexts);
   return $contexts;
 }
@@ -243,11 +278,26 @@ function ctools_context_handler_get_handler_object($handler) {
 function ctools_context_handler_get_task_object($task, $subtask, $handler) {
   $object = new stdClass;
   $object->name = !empty($handler->name) ? $handler->name : 'temp';
+  $object->base_contexts = ctools_context_handler_get_base_contexts($task, $subtask, TRUE);
   $object->arguments = ctools_context_handler_get_task_arguments($task, $subtask);
   $object->contexts = isset($handler->conf['contexts']) ? $handler->conf['contexts'] : array();
   $object->relationships = isset($handler->conf['relationships']) ? $handler->conf['relationships'] : array();
 
   return $object;
+}
+
+/**
+ * Get base contexts from a task, if it has any.
+ *
+ * Tasks can get their contexts either from base contexts or arguments; base
+ * contexts extract their information from the environment.
+ */
+function ctools_context_handler_get_base_contexts($task, $subtask, $placeholders = FALSE) {
+  if ($function = ctools_plugin_get_function($task, 'get base contexts')) {
+    return $function($task, $subtask, $placeholders);
+  }
+
+  return array();
 }
 
 /**
@@ -353,10 +403,17 @@ function ctools_context_handler_edit_context(&$form, &$form_state) {
   ctools_context_add_context_form($module, $form, $form_state, $form['right']['contexts_table'], $cache);
   ctools_context_add_relationship_form($module, $form, $form_state, $form['right']['relationships_table'], $cache);
 
+  // Set an additional description if CCK and Token are enabled, to notify of unlisted keywords
+  if (module_exists('content') && module_exists('token')) {
+    $description = t('Note that CCK fields may be used as keywords using patterns like <em>%node:field_name-formatted</em>.');
+  } elseif (!module_exists('token')) {
+    $description = t('More keywords will be available if you install the Token module, see http://drupal.org/project/token.');
+  }
+
   $form['left']['summary'] = array(
     '#prefix' => '<div class="page-manager-contexts">',
     '#suffix' => '</div>',
-    '#value' => theme('ctools_context_list', $cache, t('Summary of contexts')),
+    '#value' => theme('ctools_context_list', $cache, t('Summary of contexts'), $description),
   );
 
   $form_state['context_object'] = &$cache;

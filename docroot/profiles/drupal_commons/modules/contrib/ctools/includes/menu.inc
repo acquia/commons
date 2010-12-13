@@ -1,5 +1,5 @@
 <?php
-// $Id: menu.inc,v 1.4 2009/07/12 05:28:31 merlinofchaos Exp $
+// $Id: menu.inc,v 1.4.2.1 2010/07/16 00:40:13 merlinofchaos Exp $
 
 /**
  * @file
@@ -215,7 +215,7 @@ function ctools_menu_tree_page_data($item, $menu_name = 'navigation') {
 function ctools_menu_set_trail_parent($path) {
   $current = menu_get_active_trail();
   $keep = array_pop($current);
-  
+
   $trail = ctools_get_menu_trail($path);
   $trail[] = $keep;
 

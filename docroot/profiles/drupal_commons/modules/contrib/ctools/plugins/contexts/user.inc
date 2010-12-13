@@ -1,5 +1,5 @@
 <?php
-// $Id: user.inc,v 1.4.2.4 2010/01/30 00:48:40 merlinofchaos Exp $
+// $Id: user.inc,v 1.4.2.6 2010/08/03 18:45:21 merlinofchaos Exp $
 
 /**
  * @file
@@ -23,6 +23,7 @@ $plugin = array(
   'context name' => 'user',
   'convert list' => 'ctools_context_user_convert_list',
   'convert' => 'ctools_context_user_convert',
+  'convert default' => 'name',
   'js' => array('misc/autocomplete.js'),
 );
 
@@ -42,6 +43,7 @@ function ctools_context_create_user($empty, $data = NULL, $conf = FALSE) {
     if ($data['type'] == 'current') {
       global $user;
       $data = $user;
+      $data->logged_in_user = TRUE;
     }
     else {
       $data = user_load(array('uid' => $data['uid']));

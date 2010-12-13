@@ -1,5 +1,5 @@
 <?php
-// $Id: context.inc,v 1.33.2.7 2010/05/26 17:22:54 merlinofchaos Exp $
+// $Id: context.inc,v 1.33.2.17 2010/09/10 17:07:52 merlinofchaos Exp $
 
 /**
  * @file
@@ -456,8 +456,14 @@ function _ctools_context_get_converters($id, $plugin_name) {
     $converters = (array) $function();
   }
 
+  // DEPRECATED, but left in: This alter was misnamed.
   foreach (module_implements('ctools_context_convert_list') as $module) {
     $function = $module . '_ctools_context_convert_list';
+    $function($plugin, $converters);
+  }
+
+  foreach (module_implements('ctools_context_convert_list_alter') as $module) {
+    $function = $module . '_ctools_context_convert_list_alter';
     $function($plugin, $converters);
   }
 
@@ -608,28 +614,39 @@ function ctools_context_keyword_substitute($string, $keywords, $contexts) {
         continue;
       }
 
+      // If the keyword is already set by something passed in, don't try to
+      // overwrite it.
+      if (!empty($keywords['%' . $keyword])) {
+        continue;
+      }
+
+      // Figure out our keyword and converter, if specified.
       if (strpos($keyword, ':')) {
         list($context, $converter) = explode(':', $keyword);
-        if (empty($context->empty) && isset($context_keywords[$context])) {
-          $keywords['%' . $keyword] = ctools_context_convert_context($context_keywords[$context], $converter);
-        }
-        else {
-          $keywords['%' . $keyword] = '';
-        }
       }
       else {
+        $context = $keyword;
         if (isset($context_keywords[$keyword])) {
-          if (empty($context_keywords[$keyword]->empty)) {
-            $keywords['%' . $keyword] = $context_keywords[$keyword]->title;
-          }
-          else {
-            $keywords['%' . $keyword] = '';
+          $plugin = ctools_get_context($context_keywords[$context]->plugin);
+
+          // Fall back to a default converter, if specified.
+          if ($plugin && !empty($plugin['convert default'])) {
+            $converter = $plugin['convert default'];
           }
         }
+      }
+
+      if (empty($context_keywords[$context]) || !empty($context_keywords[$context]->empty)) {
+        $keywords['%' . $keyword] = '';
+      }
+      else if (!empty($converter)) {
+        $keywords['%' . $keyword] = ctools_context_convert_context($context_keywords[$context], $converter);
+      }
+      else {
+        $keywords['%' . $keyword] = $context_keywords[$keyword]->title;
       }
     }
   }
-
   return strtr($string, $keywords);
 }
 
@@ -845,20 +862,24 @@ function ctools_get_relationships() {
  *   - identifier: The human readable identifier for this relationship, usually
  *     defined by the UI.
  *   - keyword: The keyword used for this relationship for substitutions.
+ *
  * @param $source_context
  *   The context this relationship is based upon.
+ *
+ * @param $placeholders
+ *   If TRUE, placeholders are acceptable.
  *
  * @return
  *   A context object if one can be loaded.
  */
-function ctools_context_get_context_from_relationship($relationship, $source_context) {
+function ctools_context_get_context_from_relationship($relationship, $source_context, $placeholders = FALSE) {
   ctools_include('plugins');
   if ($function = ctools_plugin_load_function('ctools', 'relationships', $relationship['name'], 'context')) {
     if (!isset($relationship['relationship_settings'])) {
       $relationship['relationship_settings'] = array();
     }
 
-    $context = $function($source_context, $relationship['relationship_settings']);
+    $context = $function($source_context, $relationship['relationship_settings'], $placeholders);
     if ($context) {
       $context->identifier = $relationship['identifier'];
       $context->page_title = isset($relationship['title']) ? $relationship['title'] : '';
@@ -913,11 +934,15 @@ function ctools_context_get_relevant_relationships($contexts) {
  *   - context: context id relationship belongs to. This will be used to
  *     identify which context in the $contexts array to use to create the
  *     relationship context.
+ *
  * @param $contexts
  *   A keyed array of contexts used to figure out which relationships
  *   are relevant. New contexts will be added to this.
+ *
+ * @param $placeholders
+ *   If TRUE, placeholders are acceptable.
  */
-function ctools_context_get_context_from_relationships($relationships, &$contexts) {
+function ctools_context_get_context_from_relationships($relationships, &$contexts, $placeholders = FALSE) {
   $return = array();
 
   foreach ($relationships as $rdata) {
@@ -1034,12 +1059,17 @@ function ctools_context_get_context_from_context($context, $type = 'context', $a
  * @param $type
  *   Either 'context' or 'requiredcontext', which indicates whether the contexts
  *   are loaded from internal data or copied from an external source.
+ * @param $placeholders
+ *   If true, placeholders are acceptable.
  */
-function ctools_context_get_context_from_contexts($contexts, $type = 'context') {
+function ctools_context_get_context_from_contexts($contexts, $type = 'context', $placeholders = FALSE) {
   $return = array();
   foreach ($contexts as $context) {
     $ctext = ctools_context_get_context_from_context($context, $type);
     if ($ctext) {
+      if ($placeholders) {
+        $ctext->placeholder = TRUE;
+      }
       $return[ctools_context_id($context, $type)] = $ctext;
     }
   }
@@ -1068,7 +1098,11 @@ function ctools_context_match_required_contexts($required, $contexts) {
   }
 
   foreach ($required as $r) {
-    $return[ctools_context_id($r, 'requiredcontext')] = array_shift($contexts);
+    $context = drupal_clone(array_shift($contexts));
+    $context->identifier = $r['identifier'];
+    $context->page_title = isset($r['title']) ? $r['title'] : '';
+    $context->keyword    = $r['keyword'];
+    $return[ctools_context_id($r, 'requiredcontext')] = $context;
   }
 
   return $return;
@@ -1106,12 +1140,16 @@ function ctools_context_match_required_contexts($required, $contexts) {
  *   An array of pre-existing contexts that will be part of the return value.
  */
 function ctools_context_load_contexts($object, $placeholders = TRUE, $contexts = array()) {
+  if (!empty($object->base_contexts)) {
+    $contexts += $object->base_contexts;
+  }
+
   if ($placeholders) {
     // This will load empty contexts as placeholders for arguments that come
     // from external sources. If this isn't set, it's assumed these context
     // will already have been matched up and loaded.
     if (!empty($object->requiredcontexts) && is_array($object->requiredcontexts)) {
-      $contexts += ctools_context_get_context_from_contexts($object->requiredcontexts, 'requiredcontext');
+      $contexts += ctools_context_get_context_from_contexts($object->requiredcontexts, 'requiredcontext', $placeholders);
     }
 
     if (!empty($object->arguments) && is_array($object->arguments)) {
@@ -1120,12 +1158,12 @@ function ctools_context_load_contexts($object, $placeholders = TRUE, $contexts =
   }
 
   if (!empty($object->contexts) && is_array($object->contexts)) {
-    $contexts += ctools_context_get_context_from_contexts($object->contexts);
+    $contexts += ctools_context_get_context_from_contexts($object->contexts, 'context', $placeholders);
   }
 
   // add contexts from relationships
   if (!empty($object->relationships) && is_array($object->relationships)) {
-    ctools_context_get_context_from_relationships($object->relationships, $contexts);
+    ctools_context_get_context_from_relationships($object->relationships, $contexts, $placeholders);
   }
 
   return $contexts;
@@ -1327,8 +1365,13 @@ function ctools_access_summary($plugin, $contexts, $test) {
   if ($function = ctools_plugin_get_function($plugin, 'summary')) {
     $required_context = isset($plugin['required context']) ? $plugin['required context'] : array();
     $context          = isset($test['context']) ? $test['context'] : array();
-    $description      = $function($test['settings'], ctools_context_select($contexts, $required_context, $context));
+    $description      = $function($test['settings'], ctools_context_select($contexts, $required_context, $context), $plugin);
   }
+
+  if (!empty($test['not'])) {
+    $description = "NOT ($description)";
+  }
+
   return $description;
 }
 
@@ -1389,7 +1432,10 @@ function ctools_access($settings, $contexts = array()) {
         $test_contexts = ctools_context_select($contexts, $required_context, $context);
       }
 
-      $pass = $function($test['settings'], $test_contexts);
+      $pass = $function($test['settings'], $test_contexts, $plugin);
+      if (!empty($test['not'])) {
+        $pass = !$pass;
+      }
     }
 
     if ($pass && $settings['logic'] == 'or') {

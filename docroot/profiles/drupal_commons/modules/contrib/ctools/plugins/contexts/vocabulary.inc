@@ -1,5 +1,5 @@
 <?php
-// $Id: vocabulary.inc,v 1.3.2.2 2010/01/29 20:18:26 merlinofchaos Exp $
+// $Id: vocabulary.inc,v 1.3.2.3 2010/07/05 22:48:34 merlinofchaos Exp $
 
 /**
  * @file
@@ -56,7 +56,7 @@ function ctools_context_vocabulary_settings_form($conf) {
     '#title' => t('Vocabulary'),
     '#type' => 'select',
     '#options' => $options,
-    '#default_value' => isset($conf['vids']) ? $conf['vids'] : array(),
+    '#default_value' => isset($conf['vid']) ? $conf['vid'] : array(),
     '#prefix' => '<div class="clear-block">',
     '#suffix' => '</div>',
     '#description' => t('Select the vocabulary for this form.'),

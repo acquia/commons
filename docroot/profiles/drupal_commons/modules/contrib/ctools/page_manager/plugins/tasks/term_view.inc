@@ -1,5 +1,5 @@
 <?php
-// $Id: term_view.inc,v 1.5 2009/08/04 21:43:06 merlinofchaos Exp $
+// $Id: term_view.inc,v 1.5.2.1 2010/06/22 14:48:38 merlinofchaos Exp $
 
 /**
  * @file
@@ -35,7 +35,7 @@ function page_manager_term_view_page_manager_tasks() {
       // Even though we don't have subtasks, this allows us to save our settings.
       'save subtask callback' => 'page_manager_term_view_save',
 
-      // Callback to add items to the page managertask administration form:
+      // Callback to add items to the page manager task administration form:
       'task admin' => 'page_manager_term_view_task_admin',
 
       // This is task uses 'context' handlers and must implement these to give the
@@ -44,32 +44,16 @@ function page_manager_term_view_page_manager_tasks() {
       'get arguments' => 'page_manager_term_view_get_arguments',
       'get context placeholders' => 'page_manager_term_view_get_contexts',
 
-      // Allow additional operations
-      'operations' => array(
-        'settings' => array(
-          'title' => t('Settings'),
-          'description' => t('Update settings specific to the taxonomy term view.'),
-        ),
-        // This lets it automatically add relevant information for task handlers.
-        'handlers' => array('type' => 'handlers'),
-      ),
-
       // Allow this to be enabled or disabled:
       'disabled' => variable_get('page_manager_term_view_disabled', TRUE),
       'enable callback' => 'page_manager_term_view_enable',
 
+      // Allow additional operations
       'operations' => array(
         'settings' => array(
-          'type' => 'group',
-          'class' => 'operations-settings',
           'title' => t('Settings'),
-          'children' => array(
-            'basic' => array(
-              'title' => t('Basic'),
-              'description' => t('Edit name, path and other basic settings for the page.'),
-              'form' => 'page_manager_term_view_settings',
-            ),
-          ),
+          'description' => t('Edit name, path and other basic settings for the page.'),
+          'form' => 'page_manager_term_view_settings',
         ),
       ),
     );

@@ -1,5 +1,5 @@
 <?php
-// $Id: term.inc,v 1.1.2.4 2009/11/13 00:44:16 merlinofchaos Exp $
+// $Id: term.inc,v 1.1.2.6 2010/10/15 22:44:31 merlinofchaos Exp $
 
 /**
  * @file
@@ -107,17 +107,17 @@ function ctools_term_ctools_access_check($conf, $context) {
   if (!isset($conf[$vid])) {
     return FALSE;
   }
-  $terms = array_filter($conf[$vid]);
 
   $return = FALSE;
   // Tags get saved as an imploded array of strings.
-  if (!is_array($terms)) {
-    $terms = expand(', ', $terms);
+  if (!is_array($conf[$vid])) {
+    $terms = explode(', ', $conf[$vid]);
     // For multi-term with names, we'll only accept the first term because
     // that is the name we have.
     return in_array($context->data->name, $terms);
   }
   else {
+    $terms = array_filter($conf[$vid]);
     // For multi-term if any terms coincide, let's call that good enough:
     if (isset($context->tids)) {
       return (bool) array_intersect($terms, $context->tids);

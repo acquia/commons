@@ -1,25 +1,48 @@
 <?php
-// $Id: features.user.inc,v 1.1.2.11 2010/02/07 04:45:22 yhahn Exp $
+// $Id: features.user.inc,v 1.1.2.15 2010/08/05 20:59:41 yhahn Exp $
 
 /**
  * Implementation of hook_features_api().
  */
 function user_features_api() {
   return array(
-    'user' => array(
+    'user_role' => array(
+      'name' => t('Roles'),
+      'feature_source' => TRUE,
+      'default_hook' => 'user_default_roles',
+      'default_file' => FEATURES_DEFAULTS_INCLUDED,
+    ),
+    'user_permission' => array(
       'name' => t('Permissions'),
       'feature_source' => TRUE,
       'default_hook' => 'user_default_permissions',
+      'default_file' => FEATURES_DEFAULTS_INCLUDED,
+    ),
+    // DEPRECATED
+    'user' => array(
+      'name' => t('Permissions'),
+      'feature_source' => FALSE,
     )
   );
 }
 
 /**
  * Implementation of hook_features_export().
+ * DEPRECATED: This implementation simply migrates deprecated `user` items
+ * to the `user_permission` type.
  */
 function user_features_export($data, &$export, $module_name = '') {
-  // The default_permissions() hook integration is provided by the
-  // features module so we need to add it as a dependency.
+  $pipe = array();
+  foreach ($data as $perm) {
+    $pipe['user_permission'][] = $perm;
+  }
+  return $pipe;
+}
+
+/**
+ * Implementation of hook_features_export().
+ */
+function user_permission_features_export($data, &$export, $module_name = '') {
   $export['dependencies']['features'] = 'features';
 
   // Ensure the modules that provide the given permissions are included as dependencies.
@@ -28,18 +51,17 @@ function user_features_export($data, &$export, $module_name = '') {
     if (isset($map[$perm])) {
       $perm_module = $map[$perm];
       $export['dependencies'][$perm_module] = $perm_module;
-      $export['features']['user'][$perm] = $perm;
+      $export['features']['user_permission'][$perm] = $perm;
     }
   }
 
-  $pipe = array();
-  return $pipe;
+  return array();
 }
 
 /**
  * Implementation of hook_features_export_options().
  */
-function user_features_export_options() {
+function user_permission_features_export_options() {
   $options = array();
   foreach (module_list() as $module) {
     $prefix = check_plain($module) .': ';
@@ -56,7 +78,7 @@ function user_features_export_options() {
 /**
  * Implementation of hook_features_export_render().
  */
-function user_features_export_render($module = 'foo', $data) {
+function user_permission_features_export_render($module, $data) {
   $code = array();
   $code[] = '  $permissions = array();';
   $code[] = '';
@@ -73,10 +95,11 @@ function user_features_export_render($module = 'foo', $data) {
     else {
       $permission['roles'] = array();
     }
-
-    $code[] = '  // Exported permission: '. $perm_name;
-    $code[] = '  $permissions[] = '. features_var_export($permission, '  ') .';';
-    $code[] = '';
+    $perm_identifier = features_var_export($perm_name);
+    $perm_export = features_var_export($permission, '  ');
+    $code[] = "  // Exported permission: {$perm_name}";
+    $code[] = "  \$permissions[{$perm_identifier}] = {$perm_export};";
+    $code[] = "";
   }
 
   $code[] = '  return $permissions;';
@@ -87,8 +110,8 @@ function user_features_export_render($module = 'foo', $data) {
 /**
  * Implementation of hook_features_revert().
  */
-function user_features_revert($module) {
-  user_features_rebuild($module);
+function user_permission_features_revert($module) {
+  user_permission_features_rebuild($module);
 }
 
 /**
@@ -98,25 +121,15 @@ function user_features_revert($module) {
  * @param $module
  *   The module whose default user permissions should be rebuilt.
  */
-function user_features_rebuild($module) {
-  $defaults = module_invoke($module, 'user_default_permissions');
-  if (!empty($defaults)) {
+function user_permission_features_rebuild($module) {
+  if ($defaults = features_get_default('user_permission', $module)) {
     $roles = _features_get_roles();
     foreach ($defaults as $permission) {
       $perm = $permission['name'];
 
       // Add permissions for any roles that should have them.
       foreach ($permission['roles'] as $role) {
-        // Ensure that each role exists. If it does not, create it and store the rid.
-        if (!isset($roles[$role])) {
-          $record = array('name' => $role);
-          drupal_write_record('role', $record);
-          $roles[$role] = array(
-            'rid' => $record['rid'],
-            'perm' => array(),
-          );
-        }
-        if (!in_array($perm, $roles[$role]['perm'])) {
+        if (isset($roles[$role]) && !in_array($perm, $roles[$role]['perm'])) {
           $roles[$role]['perm'][] = $perm;
         }
       }
@@ -131,6 +144,80 @@ function user_features_rebuild($module) {
     }
     // Write the updated permissions.
     _user_features_save_roles($roles);
+  }
+}
+
+/**
+ * Implementation of hook_features_export().
+ */
+function user_role_features_export($data, &$export, $module_name = '') {
+  $export['dependencies']['features'] = 'features';
+  $map = features_get_default_map('user_role', 'name');
+  foreach ($data as $role) {
+    // Role is provided by another module. Add dependency.
+    if (isset($map[$role]) && $map[$role] != $module_name) {
+      $export['dependencies'][$map[$role]] = $map[$role];
+    }
+    // Export.
+    else {
+      $export['features']['user_role'][$role] = $role;
+    }
+  }
+  return array();
+}
+
+/**
+ * Implementation of hook_features_export_options().
+ */
+function user_role_features_export_options() {
+  $options = drupal_map_assoc(array_keys(_features_get_roles()));
+  asort($options);
+  return $options;
+}
+
+/**
+ * Implementation of hook_features_export_render().
+ */
+function user_role_features_export_render($module, $data) {
+  $code = array();
+  $code[] = '  $roles = array();';
+  $code[] = '';
+
+  $roles = _features_get_roles();
+  foreach ($data as $role) {
+    if (isset($roles[$role])) {
+      $object = array('name' => $role);
+      $role_identifier = features_var_export($role);
+      $role_export = features_var_export($object , '  ');
+      $code[] = "  // Exported role: {$role}";
+      $code[] = "  \$roles[{$role_identifier}] = {$role_export};";
+      $code[] = "";
+    }
+  }
+
+  $code[] = '  return $roles;';
+  $code = implode("\n", $code);
+  return array('user_default_roles' => $code);
+}
+
+/**
+ * Implementation of hook_features_revert().
+ */
+function user_role_features_revert($module) {
+  user_role_features_rebuild($module);
+}
+
+/**
+ * Implementation of hook_features_rebuild().
+ */
+function user_role_features_rebuild($module) {
+  if ($defaults = features_get_default('user_role', $module)) {
+    $roles = _features_get_roles();
+    foreach ($defaults as $role) {
+      if (!isset($roles[$role['name']])) {
+        drupal_write_record('role', $role);
+      }
+    }
   }
 }
 

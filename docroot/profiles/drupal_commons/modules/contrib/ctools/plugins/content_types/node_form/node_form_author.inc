@@ -1,5 +1,5 @@
 <?php
-// $Id: node_form_author.inc,v 1.1.2.2 2010/04/14 21:02:12 merlinofchaos Exp $
+// $Id: node_form_author.inc,v 1.1.2.3 2010/07/05 19:36:17 merlinofchaos Exp $
 
 /**
  * Plugins are described by creating a $plugin array which will be used
@@ -18,7 +18,7 @@ function ctools_node_form_author_content_type_render($subtype, $conf, $panel_arg
   $block = new stdClass();
   $block->module = t('node_form');
 
-  $block->title = $block->content = t('Authoring information');
+  $block->title = t('Authoring information');
   $block->delta = 'author-options';
 
   if (isset($context->form)) {

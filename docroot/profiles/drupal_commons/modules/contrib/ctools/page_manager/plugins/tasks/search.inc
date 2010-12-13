@@ -1,5 +1,5 @@
 <?php
-// $Id: search.inc,v 1.1.2.2 2010/04/14 20:14:29 merlinofchaos Exp $
+// $Id: search.inc,v 1.1.2.3 2010/07/16 00:40:13 merlinofchaos Exp $
 
 /**
  * @file
@@ -71,13 +71,15 @@ function page_manager_search_menu_alter(&$items, $task) {
     $items["search/$name/%menu_tail"]['tab_parent'] = "search/node/%menu_tail";
     $items["search/$name/%menu_tail"]['tab_root'] = "search/node/%menu_tail";
 
+    $callback = $items["search/$name/%menu_tail"]['page callback'];
+
     // Even if a search page is not implemented, we need to add an extra
     // entry anyway, for two reasons.
     //
     // 1) The 'search' menu entry actually handles all entries by default
     // and that is going to be bad if the node search is overridden and
     // 2) We need to have dual entries to make sure that the tabs are right.
-    if (variable_get('page_manager_search_disabled_' . $name, TRUE)) {
+    if (variable_get('page_manager_search_disabled_' . $name, TRUE) || ($callback != 'search_view' && !variable_get('page_manager_override_anyway', FALSE))) {
       $items["search/$name"] = $items["search/$name/%menu_tail"];
 
       // Put these items under the real search tab.
@@ -92,11 +94,15 @@ function page_manager_search_menu_alter(&$items, $task) {
         $items["search/$name/%menu_tail"]['weight'] = -10;
       }
 
+      if ($callback == 'search_view' || variable_get('page_manager_override_anyway', FALSE)) {
+        $items["search/$name/%menu_tail"]['page callback'] = 'page_manager_search_view';
+        $items["search/$name/%menu_tail"]['file path'] = $task['path'];
+        $items["search/$name/%menu_tail"]['file'] = $task['file'];
+      }
+
       continue;
     }
 
-    // Override the node view handler for our purpose.
-    $callback = $items["search/$name/%menu_tail"]['page callback'];
     if ($callback == 'search_view' || variable_get('page_manager_override_anyway', FALSE)) {
       $items["search/$name/%menu_tail"]['page callback'] = 'page_manager_search_page';
       $items["search/$name/%menu_tail"]['file path'] = $task['path'];
@@ -128,6 +134,7 @@ function page_manager_search_menu_alter(&$items, $task) {
       }
     }
     else {
+
       // automatically disable this task if it cannot be enabled.
       variable_set('page_manager_search_disabled_' . $name, TRUE);
       if (!empty($GLOBALS['page_manager_enabling_search'])) {
@@ -138,6 +145,20 @@ function page_manager_search_menu_alter(&$items, $task) {
 }
 
 /**
+ * Replacement function for normal search view.
+ *
+ * This function resets the active trail because menu system loses track
+ * of it due to the special way we're handling search items.
+ */
+function page_manager_search_view($type = 'node') {
+  ctools_include('menu');
+  menu_set_active_trail(ctools_get_menu_trail('search/' . $type));
+
+  module_load_include('inc', 'search', 'search.pages');
+  return search_view($type);
+}
+
+/**
  * Entry point for our overridden node view.
  *
  * This function asks its assigned handlers who, if anyone, would like
@@ -145,6 +166,9 @@ function page_manager_search_menu_alter(&$items, $task) {
  * node view, which is node_page_view().
  */
 function page_manager_search_page($type) {
+  ctools_include('menu');
+  menu_set_active_trail(ctools_get_menu_trail('search/' . $type));
+
   // Get the arguments and construct a keys string out of them.
   $args = func_get_args();
 
