@@ -289,11 +289,13 @@ function commons_core_context_default_contexts() {
   $context->description = 'User Profile';
   $context->tag = '';
   $context->conditions = array(
-    'user' => array(
+    'user_page' => array(
       'values' => array(
-        0 => 2,
+        'view' => 'view',
       ),
-      'options' => array(),
+      'options' => array(
+        'mode' => 'all',
+      ),
     ),
   );
   $context->reactions = array(
@@ -302,29 +304,20 @@ function commons_core_context_default_contexts() {
         'user_relationship_blocks-actions' => array(
           'module' => 'user_relationship_blocks',
           'delta' => 'actions',
-          'weight' => -43,
           'region' => 'sidebar_last',
-          'status' => '0',
-          'label' => 'User Relationships: Actions',
-          'type' => 'context_ui',
+          'weight' => 0,
         ),
         'views-og_profile_user_groups-block_1' => array(
           'module' => 'views',
           'delta' => 'og_profile_user_groups-block_1',
-          'weight' => -42,
           'region' => 'sidebar_last',
-          'status' => '0',
-          'label' => 'User Being Viewed\'s Groups',
-          'type' => 'context_ui',
+          'weight' => 1,
         ),
         'user_relationship_blocks-user-1' => array(
           'module' => 'user_relationship_blocks',
           'delta' => 'user-1',
-          'weight' => -41,
           'region' => 'sidebar_last',
-          'status' => '0',
-          'label' => 'User Relationships: Friends ',
-          'type' => 'context_ui',
+          'weight' => 2,
         ),
       ),
     ),
