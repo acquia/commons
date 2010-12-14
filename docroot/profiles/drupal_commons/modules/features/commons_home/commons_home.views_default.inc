@@ -368,7 +368,7 @@ function commons_home_views_default_views() {
       'link_to_user' => 1,
       'overwrite_anonymous' => 0,
       'anonymous_text' => '',
-      'exclude' => 1,
+      'exclude' => 0,
       'id' => 'name',
       'table' => 'users',
       'field' => 'name',
