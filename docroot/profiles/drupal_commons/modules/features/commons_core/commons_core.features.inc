@@ -348,6 +348,20 @@ function commons_core_imagecache_default_presets() {
         ),
       ),
     ),
+    'group_images_showcase' => array(
+      'presetname' => 'group_images_showcase',
+      'actions' => array(
+        '0' => array(
+          'weight' => '0',
+          'module' => 'imagecache',
+          'action' => 'imagecache_scale_and_crop',
+          'data' => array(
+            'width' => '150',
+            'height' => '150',
+          ),
+        ),
+      ),
+    ),
     'group_images_thumb' => array(
       'presetname' => 'group_images_thumb',
       'actions' => array(
