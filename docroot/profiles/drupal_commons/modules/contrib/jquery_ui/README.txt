@@ -1,4 +1,4 @@
-// $Id: README.txt,v 1.5.2.2 2009/06/21 03:43:03 sun Exp $
+// $Id: README.txt,v 1.5.2.6 2010/09/09 03:04:34 sun Exp $
 
 -- SUMMARY --
 
@@ -23,15 +23,28 @@ To submit bug reports and feature suggestions, or to track changes:
 
 -- INSTALLATION --
 
-* Copy the jquery_ui module directory to your sites/all/modules directory.
+* Copy the jquery_ui module directory to your sites/all/modules directory, so it
+  is located in sites/all/modules/jquery_ui/.
 
-* Download the latest jQuery UI 1.6 development package from:
+* Download the jQuery UI 1.6 release from:
 
-    http://code.google.com/p/jquery-ui/downloads/list?can=3&q=1.6
+    http://code.google.com/p/jquery-ui/downloads/list?q=1.6
 
-* Extract it as a sub-directory called 'jquery.ui' in the jquery_ui folder:
+* Put the downloaded archive into the module directory:
+
+    /sites/all/modules/jquery_ui/jquery.ui-1.6.zip
+
+* Extract the archive.  This will create the following sub-directory:
+
+    /sites/all/modules/jquery_ui/jquery.ui-1.6/
+
+* Rename the sub-directory into "jquery.ui" within the jquery_ui module folder:
 
     /sites/all/modules/jquery_ui/jquery.ui/
+
+  so the actual jQuery UI JavaScript files are located in:
+
+    /sites/all/modules/jquery_ui/jquery.ui/ui/*.js
 
 * Enable the module at Administer >> Site building >> Modules.
 
@@ -42,17 +55,31 @@ The jQuery UI module uses jQuery UI 1.6 because jQuery UI 1.7 requires at least
 jQuery 1.3, which is not shipped with Drupal 6. If you absolutely need to move
 to jQuery UI 1.7, you can get around this by doing the following:
 
-* Install the jQuery Update module appropriately from:
+* Download and install the corresponding jQuery Update module from:
 
     http://drupal.org/project/jquery_update
 
-* Download the latest jQuery UI 1.7 development package from:
+* Download the latest jQuery UI 1.7 release from:
 
-    http://code.google.com/p/jquery-ui/downloads/list?can=3&q=1.7
+    http://code.google.com/p/jquery-ui/downloads/list?q=1.7
 
-* Replace the old jQuery UI folder with the 1.7 package at:
+* Put the downloaded archive into the module directory:
+
+    /sites/all/modules/jquery_ui/jquery.ui-1.7.zip
+
+* Extract the archive.  This will create the following sub-directory:
+
+    /sites/all/modules/jquery_ui/jquery.ui-1.7/
+
+* Rename the sub-directory into "jquery.ui" within the jquery_ui module folder:
 
     /sites/all/modules/jquery_ui/jquery.ui/
+
+  so the actual jQuery UI JavaScript files are located in:
+
+    /sites/all/modules/jquery_ui/jquery.ui/ui/*.js
+
+* Enable the module at Administer >> Site building >> Modules.
 
 
 -- API --
