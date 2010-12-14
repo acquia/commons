@@ -1,5 +1,5 @@
 <?php
-// $Id: notifications_api.test,v 1.1.2.1.2.8.2.1 2009/04/20 12:51:09 jareyero Exp $
+// $Id: notifications_api.test,v 1.1.2.1.2.8.2.2 2010/01/27 15:04:25 jareyero Exp $
 /**
  * Class for testing notifications module.
  * Tests basic API functions
@@ -14,7 +14,7 @@ class NotificationsBasicTests extends DrupalWebTestCase {
   }
   
   function setUp() {
-    parent::setUp('notifications', 'notifications_lite');
+    parent::setUp('notifications', 'notifications_lite', 'messaging');
     require_once drupal_get_path('module', 'notifications') .'/notifications.cron.inc';
   }
 

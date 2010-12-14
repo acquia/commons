@@ -1,5 +1,5 @@
 <?php
-// $Id: notifications_ui.module,v 1.3.2.8.2.19.2.6 2009/11/13 19:00:10 jareyero Exp $
+// $Id: notifications_ui.module,v 1.3.2.8.2.19.2.8 2010/06/21 15:30:51 jareyero Exp $
 /**
  * @file
  * User Interface for subscriptions modules
@@ -71,7 +71,7 @@ function notifications_ui_menu() {
  */
 function notifications_ui_menu_alter(&$items) {
   foreach (notifications_subscription_types() as $type => $info) {
-    if (!empty($info['user page'])) {
+    if (!empty($info['user page']) && isset($items[$info['user page']])) {
       $items[$info['user page']]['access callback'] = 'notifications_ui_access_page';
       $items[$info['user page']]['access arguments'] = array($type, 1);
     }
@@ -497,6 +497,7 @@ function notifications_ui_block($op = 'list', $delta = 0) {
   
   if ($op == 'list') {
     $blocks[0]['info'] = t('Subscriptions');
+    $blocks[0]['cache'] = BLOCK_NO_CACHE;
     return $blocks;
   }
   else if ($op == 'view') {

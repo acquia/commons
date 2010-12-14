@@ -1,5 +1,5 @@
 <?php
-// $Id: notifications.pages.inc,v 1.1.2.8.2.8 2009/09/22 11:49:07 jareyero Exp $
+// $Id: notifications.pages.inc,v 1.1.2.8.2.9 2010/03/12 12:51:06 jareyero Exp $
 /**
  * @file
  * User pages for Notifications
@@ -24,7 +24,7 @@ function notifications_user_overview($form_state, $account) {
   if (empty($status)) {
     $status['none'] = t('You don\'t have any subscriptions yet.');
   }
-  $send_intervals = _notifications_send_intervals();
+  $send_intervals = notifications_send_intervals();
   $send_methods = _notifications_send_methods($account);
   if ($method = notifications_user_setting('send_method', $account)) {
     if (isset($send_methods[$method])) {      
@@ -97,7 +97,7 @@ function notifications_add_subscription_form($form_state, $account, $type, $dest
   $form['notifications']['send_interval'] = array(
     '#type' => 'select',
     '#title' => t('Send interval'),
-    '#options' => _notifications_send_intervals(),
+    '#options' => notifications_send_intervals(),
     '#default_value' => notifications_user_setting('send_interval', $account),
   );
   $send_methods = _notifications_send_methods($account);
@@ -228,7 +228,7 @@ function notifications_form_subscribe_confirm($form_state, $subscription, $accou
   $form['send_interval'] = array(
     '#type' => 'select',
     '#title' => t('Send interval'),
-    '#options' => _notifications_send_intervals(),
+    '#options' => notifications_send_intervals(),
     '#default_value' => $subscription->send_interval,
   );
   $send_methods = _notifications_send_methods($account);
@@ -388,7 +388,7 @@ function notifications_subscription_form($form_state, $subscription) {
   $form['send_interval'] = array(
     '#type' => 'select',
     '#title' => t('Send interval'),
-    '#options' => _notifications_send_intervals(),
+    '#options' => notifications_send_intervals(),
     '#default_value' => $subscription->send_interval,
   );
   $send_methods = _notifications_send_methods();

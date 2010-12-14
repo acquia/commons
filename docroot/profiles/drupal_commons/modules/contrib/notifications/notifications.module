@@ -1,5 +1,5 @@
 <?php
-// $Id: notifications.module,v 1.6.2.9.2.50.2.14 2009/11/13 14:10:49 jareyero Exp $
+// $Id: notifications.module,v 1.6.2.9.2.50.2.20 2010/05/21 11:22:22 jareyero Exp $
 
 /**
  * @file
@@ -120,7 +120,7 @@ function notifications_menu() {
     'access callback' => TRUE,
     'file' => 'notifications.pages.inc',
   );
-  // Edit subscription
+  // Edit subscription, stand alone page
   $items['notifications/subscription/%notifications_subscription'] = array(
     'type' => MENU_CALLBACK,
     'title' => 'Edit subscription',
@@ -154,6 +154,26 @@ function notifications_menu() {
     'access callback' => 'notifications_access_user',
     'access arguments' => array(1, 'manage'),
     'file' => 'notifications.manage.inc',
+  );
+  // Edit subscription under subscriptions tab
+  $items['user/%user/notifications/subscriptions/edit/%notifications_subscription'] = array(
+    'type' => MENU_LOCAL_TASK,
+    'title' => 'Edit subscription',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('notifications_subscription_form', 5),
+    'access callback' => 'notifications_subscription_access',
+    'access arguments' => array('edit', 5),
+    'file' => 'notifications.pages.inc',
+  );
+  // Delete subscription under subscriptions tab
+  $items['user/%user/notifications/subscriptions/delete/%notifications_subscription'] = array(
+    'type' => MENU_LOCAL_TASK,
+    'title' => 'Delete subscription',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('notifications_form_unsubscribe_confirm', 5),
+    'access callback' => 'notifications_subscription_access',
+    'access arguments' => array('unsubscribe', 5),
+    'file' => 'notifications.pages.inc',
   );
   $items['user/%user/notifications/update/%'] = array(
     'type' => MENU_CALLBACK,
@@ -317,7 +337,7 @@ function notifications_form_alter(&$form, $form_state, $form_id) {
     case 'user_profile_form':
       if ($form['_category']['#value'] == 'account' && (user_access('maintain own subscriptions') || user_access('administer notifications'))) {
         $form['messaging']['#title'] = t('Messaging and Notifications settings');
-        $send_intervals = _notifications_send_intervals();
+        $send_intervals = notifications_send_intervals();
         $form['messaging']['notifications_send_interval'] = array(
           '#type' => 'select',
           '#title' => t('Default send interval'),
@@ -438,7 +458,8 @@ function notifications_queue($event) {
     $query['select'] = array('s.uid', 's.destination', 's.sid', 's.module', '%d', 's.send_interval', 's.send_method', 's.cron', '%d', 's.conditions');
     $query['from'] = array('{notifications} s');
     $query['select args'] = array($event->eid, $event->created);
-    $query['join'] = array('INNER JOIN {notifications_fields} f ON s.sid = f.sid');
+    // We do a left join instead of inner join to allow subscriptions with no fields to work
+    $query['join'] = array('LEFT JOIN {notifications_fields} f ON s.sid = f.sid');
     $query['where'] = array('s.status = 1', "s.event_type = '%s'", 's.send_interval >= 0');
     $query['where args'] = array($event->type);
     // Add one more condition if we don't send notifications on own posts
@@ -1021,6 +1042,7 @@ function notifications_digest_method($send_interval = NULL, $refresh = FALSE) {
     // Mapping interval -> method
     $intervals = variable_get('notifications_digest_methods', array());
   }
+
   if (is_null($send_interval)) {
     return $digest_methods;
   }
@@ -1028,8 +1050,8 @@ function notifications_digest_method($send_interval = NULL, $refresh = FALSE) {
     return $digest_methods[$intervals[$send_interval]];
   }
   else {
-    // Default, that will be 'short' if interval > 0, none otherwise
-    return ($send_interval > 0) ? $digest_methods['short'] : NULL;
+    // Default, that will be 'short' if not set and interval > 0, none otherwise
+    return (!isset($intervals[$send_interval]) && $send_interval > 0) ? $digest_methods['short'] : NULL;
   }
 }
 
@@ -1264,8 +1286,10 @@ function notifications_event_types($type = NULL, $action = NULL) {
  * Implementation of hook_cron()
  */
 function notifications_cron() {
-  include_once drupal_get_path('module', 'notifications') .'/notifications.cron.inc';
-  notifications_process_run();
+  if (variable_get('notifications_process_on_cron', TRUE)) {
+    include_once drupal_get_path('module', 'notifications') .'/notifications.cron.inc';
+    notifications_process_run();
+  }
 }
 
 /**
@@ -1423,8 +1447,7 @@ function notifications_notifications($op, &$arg0, $arg1 = NULL, $arg2 = NULL) {
  * List of send intervals. These may be overriden in a variable.
  */
 function _notifications_send_intervals() {
-  return variable_get('notifications_send_intervals',
-    array(
+  return variable_get('notifications_send_intervals', array(
       // -1 => t('Never'),
       0 => t('Immediately'),
       3600 => t('Every hour'),
@@ -1433,6 +1456,21 @@ function _notifications_send_intervals() {
       604800 => t('Weekly'),  
     )
   );
+}
+
+/**
+ * List of send intervals, translated.
+ */
+function notifications_send_intervals() {
+  if ($intervals = variable_get('notifications_send_intervals', FALSE)) {
+    foreach ($intervals as $key => $name) {
+      $intervals[$key] = notifications_translate("send_interval:$key:name", $name);
+    }
+    return $intervals;
+  }
+  else {
+    return _notifications_send_intervals();
+  }
 }
 
 /**
@@ -1616,7 +1654,7 @@ function notifications_user_form($form_state, $account, $type, $subscriptions, $
     '#theme' => 'notifications_form_table',
     '#header' => $header,
   );
-
+  $send_intervals = notifications_send_intervals();
   foreach ($list as $key => $title) {
     $rowdefaults = isset($subscriptions[$key]) ? (array)($subscriptions[$key]) : $defaults;
     $rowdefaults += $rowdefaults;
@@ -1629,7 +1667,7 @@ function notifications_user_form($form_state, $account, $type, $subscriptions, $
     );
     $form['subscriptions']['send_interval'][$key] = array(
       '#type' => 'select',
-      '#options' => _notifications_send_intervals(),
+      '#options' => $send_intervals,
       '#default_value' => $rowdefaults['send_interval'],
     );
     // Hide send methods if only one available
@@ -1866,28 +1904,34 @@ function notifications_debug($message = NULL, $variables = NULL) {
 }
 
 /**   
- * Wrapper function for tt() if i18nstrings enabled.   
+ * Wrapper function for 1i8nstrings() if i18nstrings enabled.   
  */   
-function notifications_tt($name, $string, $langcode = NULL, $update = FALSE) {
-  if (module_exists('18nstrings')) {
-    return tt($name, $string, $langcode, $update);
-  }
-  else {
-    return $string;
-  }
+function notifications_translate($name, $string, $langcode = NULL, $textgroup = 'notifications') {
+  return function_exists('i18nstrings') ? i18nstrings($textgroup . ':' . $name, $string, $langcode) : $string;  
 }
 
 /**
  * Implementation of hook_locale().
  */
-function notifications_locale($op = 'groups', $group = NULL) {
+function notifications_locale($op = 'groups') {
   switch ($op) {
     case 'groups':
       return array('notifications' => t('Notifications'));
-
-    case 'refresh':
-      if ($group == 'notifications') {
-        // @todo: Re-create all strings, to be implemented
-      }
+    case 'info':
+      $info['notifications']['refresh callback'] = 'notifications_locale_refresh';
+      $info['notifications']['format'] = FALSE; // Strings have no format
+      return $info;
   }
+}
+
+/**
+ * Refresh notifications strings
+ */
+function notifications_locale_refresh() {
+  if ($intervals = variable_get('notifications_send_intervals', FALSE)) {
+    foreach ($intervals as $key => $name) {
+      i18nstrings_update("notifications:send_interval:$key:name", $name);
+    }
+  }
+  return TRUE;
 }

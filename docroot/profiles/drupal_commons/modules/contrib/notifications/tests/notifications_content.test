@@ -1,5 +1,7 @@
 <?php
-// $Id: notifications_content.test,v 1.1.2.10.2.4 2009/04/22 14:58:18 jareyero Exp $
+// $Id: notifications_content.test,v 1.1.2.10.2.5 2010/10/21 07:35:00 jareyero Exp $
+
+require_once drupal_get_path('module', 'notifications') . '/tests/notifications_test_case.inc';
 /**
  * Class for testing notifications module.
  * Tests basic API functions
@@ -7,7 +9,7 @@
  * Notes:
  *  - An exception (PHP warning) is thrown when content module (cck) is enabled, nothing to worry about.
  */
-class NotificationsContentTests extends DrupalWebTestCase {
+class NotificationsContentTests extends NotificationsTestCase {
   
   function getInfo() {
     return array(
@@ -215,11 +217,12 @@ class NotificationsContentTests extends DrupalWebTestCase {
     $events['node']['update'] = 1;
     variable_set('notifications_events', $events);
     
-    // Trigger a node update event, with node unpublished
-    $node = node_load($node->nid, NULL, TRUE);   
+    // Trigger a node update event, with node published. We need to reset static variable first in notifications_content_nodeapi().
+    $node = node_load($node->nid, NULL, TRUE);
+    notifications_content_nodeapi($node, 'notifications reset'); 
     $node->body .= 'Updated.';
     node_save($node);
-        
+    
     // Check queued notifications. We should have three queued notifs at the end
     $count = $this->countUserRows('notifications_queue', $user->uid);
     $this->assertEqual($count, 3, 'We have the right number of rows in queue: '. $count);
@@ -228,11 +231,12 @@ class NotificationsContentTests extends DrupalWebTestCase {
     $events['node']['update'] = 0;
     variable_set('notifications_events', $events);
 
-    // Trigger a node update event
-    $node = node_load($node->nid, NULL, TRUE);   
+    // Trigger a node update event. We need to reset static variable first in notifications_content_nodeapi().
+    $node = node_load($node->nid, NULL, TRUE);
+    notifications_content_nodeapi($node, 'notifications reset');
     $node->body .= 'Updated.';
     node_save($node);
- 
+
     // Check queued notifications. We should have three queued notifs at the end
     $count = db_result(db_query("SELECT COUNT(*) FROM {notifications_queue} WHERE uid = %d", $user->uid));
     $this->assertEqual($count, 3, 'Disabling notifications for node updates worked, we have the right number of rows in queue: '. $count);

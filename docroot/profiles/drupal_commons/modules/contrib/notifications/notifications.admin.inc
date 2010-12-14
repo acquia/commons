@@ -1,5 +1,5 @@
 <?php
-// $Id: notifications.admin.inc,v 1.5.2.6.2.19.2.9 2009/11/13 14:10:49 jareyero Exp $
+// $Id: notifications.admin.inc,v 1.5.2.6.2.19.2.12 2010/03/12 13:28:09 jareyero Exp $
 
 /**
  * Admin settings
@@ -60,8 +60,14 @@ function notifications_settings_form() {
     '#type' => 'fieldset',
     '#title' => t('Limits for queue processing'),
     '#tree' => TRUE,
-    '#description' => t('These are the limits for each cron run on queue processing. The process will stop when it first meets any of them. Set to 0 for no limit.'),
+    '#description' => t('These are the limits for each run on queue processing. The process will stop when it first meets any of them. Set to 0 for no limit.'),
     '#collapsible' => TRUE, '#collapsed' => TRUE,
+  );
+  $form['notifications_process_on_cron'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Process on cron'),
+    '#default_value' => variable_get('notifications_process_on_cron', TRUE),
+    '#description' => t('If disabled you must use code elsewhere to actually send your e-mails such as a <a href="http://drupal.org/project/drush">drush</a> script.'),
   );
   $form['notifications_process_limit']['row'] = array(
     '#title' => t('Number of rows'),
@@ -231,6 +237,10 @@ function notifications_send_intervals_form_submit($form, &$form_state) {
   if ($updated = db_affected_rows()) {
     drupal_set_message(format_plural($updated, 'Updated a subscription with invalid interval.', 'Updated @count subscriptions with invalid intervals.'));
   }
+  // Refresh strings after update if translation enabled
+  if (module_exists('i18nstrings')) {
+    notifications_locale_refresh();
+  }
 }
 
 /**
@@ -386,9 +396,8 @@ function notifications_admin_queue($op = 'status', $param = NULL) {
   $output .= notifications_admin_queue_summary();
 
   // Display logs from last process
-  if (!empty($_SESSION['notifications_logs'])) {
-    $output .= theme('box', t('Process log'), messaging_log_format($_SESSION['notifications_logs']));
-    unset($_SESSION['notifications_logs']);
+  if ($logs = messaging_log_get()) {
+    $output .= theme('box', t('Process log'), messaging_log_format($logs));
   }
   return $output;
 }
@@ -420,7 +429,8 @@ function notifications_admin_queue_operations() {
  */
 function notifications_admin_queue_operations_submit($form, $form_state) {
   include_once drupal_get_path('module', 'notifications') .'/notifications.cron.inc';
-
+  // Enable messaging & notifications logs
+  messaging_log_start();
   foreach (notifications_queue_operations() as $op => $data) {
     if ($form_state['values']['op'] == $data['label']) {
       $callback = $data['callback'];
@@ -429,8 +439,6 @@ function notifications_admin_queue_operations_submit($form, $form_state) {
       break;
     }  
   }
-  // Store logs to render on next page redirect
-  $_SESSION['notifications_logs'] = notifications_log();
 }
 
 /**

@@ -1,5 +1,5 @@
 <?php
-// $Id: notifications_content.pages.inc,v 1.1.2.3.2.2 2009/11/12 19:23:29 jareyero Exp $
+// $Id: notifications_content.pages.inc,v 1.1.2.3.2.3 2010/03/12 12:51:06 jareyero Exp $
 /**
  * @file
  * Subscriptions to content events
@@ -183,7 +183,7 @@ function notifications_content_form($account, $subscriptions, $list, $field, $fi
     );
     $form['subscriptions']['send_interval'][$key] = array(
       '#type' => 'select',
-      '#options' => _notifications_send_intervals(),
+      '#options' => notifications_send_intervals(),
       '#default_value' => $rowdefaults['send_interval'],
     );
     $form['subscriptions']['send_method'][$key] = array(

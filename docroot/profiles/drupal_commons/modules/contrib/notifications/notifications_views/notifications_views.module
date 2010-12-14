@@ -13,6 +13,30 @@ function notifications_views_views_api() {
 function notifications_views_views_data() {
   $data = array();
 
+  // --------------------
+  // Miscellaneous
+  // --------------------
+  // Permissions table
+  $data['permission']['table']['join'] = array(
+    // Directly links to users table.
+    // the extra is an evil hack to join users to the authenticated user rid
+    // as well as to roles they have. we thus need an OR, which isn't supported,
+    // at least not easily (check 'extra_type' for backstory/to look into it)
+    // Depends on order of ops going and THEN or, which is true of mysql5.
+    // don't know about other databases...
+    'users' => array(
+     'left_table' => 'users_roles',
+     'left_field' => 'rid',
+     'field' => 'rid',
+     'extra' => 'TRUE) OR permission.rid = '. DRUPAL_AUTHENTICATED_RID .' AND (TRUE',
+    ),
+    'user_roles' => array(
+      'left_field' => 'rid',
+      'field' => 'rid',
+      'extra' => 'TRUE) OR permission.rid = '. DRUPAL_AUTHENTICATED_RID .' AND (TRUE',
+    ),
+  );
+  
   // ---------------------
   // Messaging base table
   // ---------------------
@@ -313,9 +337,15 @@ function notifications_views_views_handlers() {
       'notifications_views_handler_filter_subscription_interval' => array(
         'parent' => 'views_handler_filter_in_operator',
       ),
+      'notifications_views_handler_filter_perm' => array(
+        'parent' => 'views_handler_filter_many_to_one',
+      ),
 
       // arguments
       'notifications_views_handler_argument_subscription_type' => array(
+        'parent' => 'views_handler_argument',
+      ),
+      'notifications_views_handler_argument_autocomplete' => array(
         'parent' => 'views_handler_argument',
       ),
 
@@ -337,6 +367,26 @@ function notifications_views_views_handlers() {
       'notifications_views_handler_relationship' => array(
         'parent' => 'views_handler_relationship',
       ),
+    ),
+  );
+}
+
+
+function notifications_views_views_data_alter(&$data) {
+  $data['users']['name2'] = array(
+    'title' => t('User name autocomplete filter'),
+    'real field' => 'name',
+    'help' => t('Filters by first part of username, used for autocompleting users.'),
+    'argument' => array(
+      'handler' => 'notifications_views_handler_argument_autocomplete',
+    ),
+  );
+  $data['users']['perm'] = array(
+    'title' => t('Permissions'),
+    'help' => t('Limit to users that have permissions. Emulates user access: allows user 1, gives authenticated role.'),
+    'real field' => 'uid',
+    'filter' => array(
+      'handler' => 'notifications_views_handler_filter_perm',
     ),
   );
 }

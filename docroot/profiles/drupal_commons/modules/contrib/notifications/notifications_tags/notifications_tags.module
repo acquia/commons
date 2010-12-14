@@ -1,5 +1,5 @@
 <?php
-// $Id: notifications_tags.module,v 1.1.2.5.2.12.2.4 2009/06/11 16:38:16 davidg Exp $
+// $Id: notifications_tags.module,v 1.1.2.5.2.12.2.5 2010/03/12 12:51:06 jareyero Exp $
 /**
  * @file
  * Subscriptions to taxonomy terms
@@ -290,7 +290,7 @@ function notifications_tags_user_form($form_state, $account) {
       );
       $form['subscriptions'][$vid]['send_interval'][$key] = array(
         '#type' => 'select',
-        '#options' => _notifications_send_intervals(),
+        '#options' => notifications_send_intervals(),
         '#default_value' => $rowdefaults['send_interval'],
       );
       

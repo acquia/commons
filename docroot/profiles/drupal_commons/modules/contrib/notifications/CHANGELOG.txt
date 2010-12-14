@@ -1,4 +1,16 @@
-// $Id: CHANGELOG.txt,v 1.1.2.11.2.51.2.26 2009/11/13 19:00:10 jareyero Exp $
+// $Id: CHANGELOG.txt,v 1.1.2.11.2.51.2.33 2010/10/20 13:35:18 jareyero Exp $
+
+6.x-2.2 to 6.x-2.3
+-------------------------------
+- Removed 'node-url' token, now added by token module >= 6.x-1.14, by Dave Reid, #845250
+- Prevent inconsistency with og menu items, see #789934
+- Fixed: Row count limit was not applied on queue processing
+- Disable block cache for notifications_ui, by kaare, #678004
+- Added option to disable cron processing, by greggles, #737238
+- Updated translation functions for new i18nstrings api. New notifications_translate()
+- Added tabs for edit / delete under user account subscriptions, by greggles, #669222
+- Fixed missing messaging module in test, by Owen Barton, #657790
+- Added support (at query level) for subscriptions with no fields.
 
 6.x-2.1 to 6.x-2.2
 ------------------------------

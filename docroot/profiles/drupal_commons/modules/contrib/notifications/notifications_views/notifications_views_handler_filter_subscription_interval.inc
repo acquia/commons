@@ -6,7 +6,7 @@ class notifications_views_handler_filter_subscription_interval extends views_han
   function get_value_options() {
     if (!isset($this->value_options)) {
       $this->value_title = t('Send Interval');
-      $options = _notifications_send_intervals();
+      $options = notifications_send_intervals();
       $this->value_options = $options;
     }
   }

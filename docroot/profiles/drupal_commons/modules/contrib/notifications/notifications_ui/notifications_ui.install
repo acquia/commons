@@ -1,5 +1,5 @@
 <?php
-// $Id: notifications_ui.install,v 1.1.2.4.2.2 2009/04/30 11:22:37 jareyero Exp $
+// $Id: notifications_ui.install,v 1.1.2.4.2.3 2010/03/12 13:28:09 jareyero Exp $
 
 /**
  * Implementation of hook_install()
@@ -38,4 +38,14 @@ function notifications_ui_update_6000() {
   variable_del('notifications_link_teaser');  
   drupal_set_message(t('Please, check all your Notifications UI settings and note the new options.'));
   return array();
+}
+
+/**
+ * Disable cache in subscription block
+ */
+function notifications_ui_update_6001() {
+  $ret = array();
+  $ret[] = update_sql("UPDATE {blocks} SET cache = ". BLOCK_NO_CACHE ." WHERE module = 'notifications_ui'");
+  $ret[] = update_sql("DELETE FROM {cache_block} WHERE cid LIKE 'notifications_ui:%'");
+  return $ret;
 }

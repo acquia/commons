@@ -1,5 +1,5 @@
 <?php
-// $Id: notifications_content.module,v 1.4.2.9.2.36.2.16 2009/11/13 14:10:49 jareyero Exp $
+// $Id: notifications_content.module,v 1.4.2.9.2.36.2.21 2010/10/21 07:34:59 jareyero Exp $
 /**
  * @file
  * Subscriptions to content events
@@ -194,7 +194,7 @@ function notifications_content_notifications($op, &$arg0, $arg1 = NULL, $arg2 = 
       if ($subs->event_type == 'node') {
         $subs->type_name = t('Content');
         if (!empty($subs->fields['type'])) {
-          $subs->names['type'] = t('Content type: @type', array('@type' => notifications_tt('nodetype:type:'. $subs->fields['type'] .':name', node_get_types('name', $subs->fields['type']))));
+          $subs->names['type'] = t('Content type: @type', array('@type' => notifications_translate('type:'. $subs->fields['type'] .':name', node_get_types('name', $subs->fields['type']), NULL, 'nodetype')));
         }
         if (!empty($subs->fields['author']) && ($author = user_load(array('uid' => $subs->fields['author'])))) {
           $subs->names['author'] = t('Author: @name', array('@name' => $author->name));
@@ -601,7 +601,7 @@ function _notifications_content_node_options($account, $node) {
   // Content type
   if (notifications_content_type_enabled($node->type, 'nodetype')) { 
     $options[] = array(
-      'name' => t('Posts of type @type', array('@type' => notifications_tt("nodetype:type:$node->type:name", node_get_types('name', $node->type)))),
+      'name' => t('Posts of type @type', array('@type' => notifications_translate("type:$node->type:name", node_get_types('name', $node->type), NULL, 'nodetype'))),
       'type' => 'nodetype',
       'fields' => array('type' => $node->type),
     );
@@ -659,7 +659,9 @@ function _notifications_content_type_options() {
  */
 function notifications_content_nodeapi(&$node, $op, $arg = 0) {
   global $user;
-
+  // Keep track of nodes so we don't send notifications twice for the same node. See http://drupal.org/node/722432
+  static $done;
+  
   switch ($op) {
     case 'load':
       // Store current status for later reference
@@ -669,7 +671,8 @@ function notifications_content_nodeapi(&$node, $op, $arg = 0) {
     case 'update':
     case 'insert':  
       // Notifications just for published nodes. If we don't have any option enabled for this content type, skip the event
-      if ($node->status && empty($node->notifications_content_disable) && notifications_content_type_enabled($node->type)) {
+      if (!isset($done[$node->nid]) && $node->status && empty($node->notifications_content_disable) && notifications_content_type_enabled($node->type)) {
+        $done[$node->nid] = TRUE;
         $event = array(
           'module' => 'node',
           'oid' => $node->nid,
@@ -702,6 +705,11 @@ function notifications_content_nodeapi(&$node, $op, $arg = 0) {
     case 'delete':
       // Remove all subscriptions for this node
       notifications_delete_subscriptions(array('event_type' => 'node'), array('nid' => $node->nid), FALSE);
+      break;
+    case 'notifications reset':
+      // Needed to be able to reset static variable for tests.
+      $done = array();
+      break;
   }
 }
 
@@ -844,7 +852,6 @@ function notifications_content_token_list($type = 'all') {
   if ($type == 'node' || $type == 'all') {
     $tokens['node']['node-teaser']    = t('The node teaser.');
     $tokens['node']['node-body']    = t('The node body.');
-    $tokens['node']['node-url']      = t('The node view url for read more links.');
     $tokens['node']['node-teaser-raw']    = t('Unfiltered node teaser. WARNING - raw user input.');
     $tokens['node']['node-body-raw']    = t('Unfiltered node body. WARNING - raw user input.');
   }
@@ -864,7 +871,6 @@ function notifications_content_token_values($type, $object = NULL, $options = ar
       if ($node = $object) {
         $values['node-teaser'] = !empty($node->teaser) ? check_markup($node->teaser, $node->format, FALSE) : '';
         $values['node-body'] = !empty($node->body) ? check_markup($node->body, $node->format, FALSE) : '';
-        $values['node-url'] = url('node/'. $node->nid, array('absolute' => TRUE));
         $values['node-teaser-raw'] = !empty($node->teaser) ? $node->teaser : '';
         $values['node-body-raw'] = !empty($node->body) ? $node->body : '';
         return $values;

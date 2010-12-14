@@ -1,5 +1,5 @@
 <?php
-// $Id: notifications.manage.inc,v 1.1.2.3.2.5 2009/11/13 14:10:49 jareyero Exp $
+// $Id: notifications.manage.inc,v 1.1.2.3.2.7 2010/03/12 12:51:06 jareyero Exp $
 
 /**
  * @file
@@ -65,7 +65,6 @@ function notifications_manage_subscriptions_access($sids) {
  */
 function notifications_manage_subscriptions_form($account = NULL, $full = TRUE) {
   $filter = notifications_subscriptions_build_filter_query($account);
-  
   if ($account) {
     $result = pager_query('SELECT n.* FROM {notifications} n '. $filter['join'] . $filter['where'] .' ORDER BY n.sid DESC', 50, 0, NULL, $filter['args']);
   } else {
@@ -101,7 +100,7 @@ function notifications_manage_subscriptions_form($account = NULL, $full = TRUE) 
   $subscriptions = array();
   $status = _notifications_subscription_status();
   $send_methods = messaging_method_info(NULL, 'name');
-  $send_intervals = _notifications_send_intervals();
+  $send_intervals = notifications_send_intervals();
   while ($sub = db_fetch_object($result)) {
     $subscriptions[$sub->sid] = '';
     // Naming for this specific subscription, formatted strings    
@@ -118,10 +117,19 @@ function notifications_manage_subscriptions_form($account = NULL, $full = TRUE) 
     $form['send_method'][$sub->sid] = array('#value' => !empty($send_methods[$sub->send_method]) ? $send_methods[$sub->send_method] : $sub->send_method);
     $form['send_interval'][$sub->sid] = array('#value' => !empty($send_intervals[$sub->send_interval]) ? $send_intervals[$sub->send_interval] : $sub->send_interval);  
     $form['status'][$sub->sid] =  array('#value' => $status[$sub->status]);
-    $operations = array(
-      l(t('edit'), 'notifications/subscription/' . $sub->sid, array('query' => $destination)),
-      l(t('drop'), 'notifications/unsubscribe/sid/' . $sub->sid, array('query' => $destination)),
-    );
+    // These links will be different depending on whether we are under admin or user account
+    if ($account) {
+      $operations = array(
+        l(t('edit'), 'user/'. $account->uid .'/notifications/subscriptions/edit/' . $sub->sid, array('query' => $destination)),
+        l(t('drop'), 'user/'. $account->uid .'/notifications/subscriptions/delete/' . $sub->sid, array('query' => $destination)),
+      );
+    }
+    else {
+      $operations = array(
+        l(t('edit'), 'notifications/subscription/' . $sub->sid, array('query' => $destination)),
+        l(t('drop'), 'notifications/unsubscribe/sid/' . $sub->sid, array('query' => $destination)),
+      );
+    }
     $form['operations'][$sub->sid] = array('#value' => implode(', ', $operations));
   }
   $form['subscriptions'] = array('#type' => 'checkboxes', '#options' => $subscriptions);
@@ -231,7 +239,7 @@ function notifications_subscriptions_filters($admin = FALSE) {
   );
   $filters['send_interval'] = array(
     'title' => t('interval'), 
-    'options' => _notifications_send_intervals(),
+    'options' => notifications_send_intervals(),
   );
   // Take out the filters when only one option
   foreach ($filters as $key => $data) {
@@ -284,7 +292,7 @@ function notifications_subscriptions_operations($account = NULL) {
     );
   }
   $parent = t('Change send interval to');
-  foreach (_notifications_send_intervals() as $key => $name) {
+  foreach (notifications_send_intervals() as $key => $name) {
     $operations['send_method-' . $key] = array(
       'label' => $name,
       'parent' => $parent,
