@@ -1,0 +1,97 @@
+<?php
+// $Id$
+
+require("AlchemyAPI.php");
+
+function tagging_alchemy_suggest_tagging_suggestions($vid, $node) {
+  $alchemyObj = new AlchemyAPI();
+  try {
+    @$alchemyObj->loadAPIKey( drupal_get_path('module', 'Tagging')."\\modules\\tagging_alchemy_suggest\\api_key.txt");
+  }
+  
+  catch(Exception $e) {
+    $suggestions[] = array('#name' => 'AlchemyAPI module needs key to work.  See README.', '#weight' =>  2 );
+    return $suggestions;
+  }
+  
+  $postContent = $node->body;
+  if( null == $postContent ) {
+    return;
+  }
+  $entityResult = $alchemyObj->HTMLGetRankedNamedEntities($postContent, "http://www.alchemyapi.com/tools/alchemytagger/?type=post");
+
+  $keywordParams =  new AlchemyAPI_KeywordParams();
+  $keywordParams->setKeywordExtractMode("strict");
+  $keywordResult = $alchemyObj->TextGetRankedKeywords($postContent, "xml", $keywordParams);
+  
+
+  $entitySuggestions = tagging_alchemy_suggest_ParseEntityResponse($entityResult);
+  $keywordSuggestions = tagging_alchemy_suggest_ParseKeywordResponse($keywordResult);
+  foreach( $keywordSuggestions as $keyword ) {
+    $found = false;
+    foreach( $entitySuggestions as $entity) {
+      if( $entity['#name'] == $keyword['#name'] ) {
+        $found = true;
+        continue;
+      }
+    }
+    if(!$found)
+      $suggestions[] = $keyword;
+  }
+  
+  $suggestions = array_merge($suggestions, $entitySuggestions);
+  return $suggestions;
+}
+
+function tagging_alchemy_suggest_ParseEntityResponse($result) {
+  $doc = simplexml_load_string($result);
+
+  $entities = $doc->xpath("//entity");
+
+  $returnEntityArr = array();
+  $returnRelevanceArr = array();
+  foreach ($entities as $key => $value) {
+    $typeArr = $doc->xpath("/results/entities/entity[$key+1]/type");
+    $textArr = $doc->xpath("/results/entities/entity[$key+1]/text");
+    $relevanceArr = $doc->xpath("/results/entities/entity[$key+1]/relevance");
+
+    if (count($typeArr) > 0 && count($textArr) > 0 && strlen($typeArr[0]) > 0) {
+      $type = "$typeArr[0]";
+      $text = "$textArr[0]";
+      $relevance = $relevanceArr[0];
+      
+      $disambArr = $doc->xpath("/results/entities/entity[$key+1]/disambiguated/name");
+      if (count($disambArr) > 0 && strlen($disambArr[0]) > 0) {
+        $doDisamb = "true";
+        if ($doDisamb == "true") {
+          $text = "$disambArr[0]";
+          $relevance = ((float)$relevance + 0.05);
+        }
+      }
+      $relevance = ((float)$relevance + 0.2);
+      $returnEntityArr[] = array('#name' => $text, '#weight' => (  10-round(((float)$relevance)*10) ));
+    }
+  }
+
+  return $returnEntityArr;
+}
+
+function tagging_alchemy_suggest_ParseKeywordResponse($result) {
+  $doc = simplexml_load_string($result);
+  
+  $keywords = $doc->xpath("/results/keywords/keyword");
+
+  $returnKeywordsArr = array();
+  $returnTelevanceArr = array();
+  foreach ($keywords as $key => $value) {
+    $textArr = $doc->xpath("//results/keywords/keyword[$key+1]/text");
+    $text = $textArr[0];
+    $relevanceArr = $doc->xpath("//results/keywords/keyword[$key+1]/relevance");
+    
+    if (count($textArr) > 0 && count($relevanceArr) > 0 && $text!="") {
+      $relevance = $relevanceArr[0];
+      $returnKeywordsArr[] = array('#name' => $text, '#weight' => ( 10-round(((float)$relevance)*10) ));
+    }
+  }
+  return $returnKeywordsArr;
+}

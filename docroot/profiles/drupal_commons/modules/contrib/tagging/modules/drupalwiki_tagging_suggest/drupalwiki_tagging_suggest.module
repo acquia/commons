@@ -1,0 +1,48 @@
+<?php
+// $Id$
+
+// Author: Eugen Mayer (http://kontextwork.de)
+// Copyright 2010
+
+function drupalwiki_tagging_suggest_tagging_suggestions($vid, $node) {
+  require 'drupalwiki_extractor.inc';
+  $suggestions = array();
+  $text = $node->body;
+  // TODO: check node->language for current lang
+  $terms = drupalwiki_extractor_extract($text,'de', NULL);
+  $vids = array($vid);
+  _drupalwiki_tagging_suggest_mark_new($terms, $vids);
+  return $terms;
+}
+
+/**
+ * Look up terms for a given word. Supports up to 2000 terms.
+ */
+function _drupalwiki_tagging_suggest_mark_new(&$tags, $vids) {
+  if(!is_array($vids) || count($vids) == 0) {
+    return;
+  }
+  static $term_cache = array();
+  static $loaded;
+
+  if (!$loaded) {
+    $result = db_query_range("SELECT td.tid, td.name FROM {term_data} td WHERE td.vid IN (%s)", implode(', ', $vids), 0, 2000);
+    
+    while ($term = db_fetch_object($result)) {
+      $term_cache[strtolower($term->name[0])][$term->name] = $term;
+    }
+    $loaded = TRUE;
+  }
+  if (!empty($term_cache)) {
+    foreach($tags as &$tag) {
+      $firstC = strtolower($tag['#name'][0]);
+      if (isset($term_cache[$firstC]) && array_key_exists($tag['#name'], $term_cache[$firstC]) ) {
+      }
+      else {
+    	  $tag['#new'] = TRUE;
+      }
+    }
+  }
+  return $terms;
+}
+

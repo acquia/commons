@@ -1,0 +1,103 @@
+<?php
+// $Id$
+
+// Author: Eugen Mayer (http://kontextwork.de)
+// Copyright 2010
+
+/*
+ * Implementation of hook_menu
+*/
+function tagging_vocab_extractor_suggest_menu() {
+  $items = array();
+  $items['admin/settings/tagging_vocab_extractor_suggest/settings'] = array (
+        'type' => MENU_NORMAL_ITEM,
+        'title' => 'Tagging Vocab Extractor configuration',
+        'description' => 'Configuration options for the Tagging Vocab Extractor submodule',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('tagging_vocab_extractor_suggest_admin_settings'),
+        'access arguments' => array('administer site configuration'),
+        'file' => 'tagging_vocab_extractor_suggest.admin.inc'
+   );
+
+  return $items;
+}
+
+/*
+ * Implements hook_tagging_suggestions API
+ */
+function tagging_vocab_extractor_suggest_tagging_suggestions($vid, $node) {
+  $terms = array();
+  // Include our new extractor for terms and synonyms
+  require_once( drupal_get_path('module','tagging_vocab_extractor_suggest').'/extractor_ng.inc' );
+
+  // Get all terms in selected CCK fields
+  $cck_terms = array();
+  $cck_fields = explode(',',variable_get('tagging_vocab_extractor_suggest_cck', ''));
+  if($cck_fields != '' && count($cck_fields) > 0) {
+    $cck_terms = _tagging_vocab_extractor_suggest_cck_handler($cck_fields,$node);
+    $terms = tagging_vocab_extractor_suggest_array_merge_recursive_distinct($terms,$cck_terms);
+  }
+  // Get all terms from the body
+  $body_terms = extractor_extract($node->body,'extractor_ng',NULL );
+  $terms = tagging_vocab_extractor_suggest_array_merge_recursive_distinct($terms,$body_terms);
+
+  // Get all terms from the teaser
+  $teaser_terms = extractor_extract($node->teaser,'extractor_ng',NULL );
+  $terms = tagging_vocab_extractor_suggest_array_merge_recursive_distinct($terms,$teaser_terms);
+
+  // Get all terms from the title
+  $title_terms = extractor_extract($node->title,'extractor_ng',NULL );
+  $terms = tagging_vocab_extractor_suggest_array_merge_recursive_distinct($terms,$title_terms);
+
+  // Add the weight
+  $result = array();
+  foreach($terms as $key => $term) {
+    $result[] = array('#weight' => (1/$key), '#name' => $term);
+  }
+  return $result;
+}
+
+/*
+ * For every given CCK field, check if the node has such and if
+ * extract all terms
+ */
+function _tagging_vocab_extractor_suggest_cck_handler($cck_fields,$node) {
+  if($node == NULL) {
+    return array();
+  }
+  $result = array();
+  foreach($cck_fields as $field) {
+     $field = trim($field);
+
+    if(array_key_exists( $field, get_object_vars( $node) ) ) {
+
+      $terms = array();
+      foreach($node->$field as $value) {
+
+        $new_terms = extractor_extract($value['value'],'extractor_ng',NULL );
+        $terms = tagging_vocab_extractor_suggest_array_merge_recursive_distinct($terms,$new_terms);
+      }
+      $result = tagging_vocab_extractor_suggest_array_merge_recursive_distinct($result,$terms);
+    }
+  }
+  return $result;
+}
+
+function tagging_vocab_extractor_suggest_array_merge_recursive_distinct ( array &$array1, array &$array2 )
+{
+  $merged = $array1;
+
+  foreach ( $array2 as $key => &$value )
+  {
+    if ( is_array ( $value ) && isset ( $merged [$key] ) && is_array ( $merged [$key] ) )
+    {
+      $merged [$key] = tagging_vocab_extractor_suggest_array_merge_recursive_distinct ( $merged [$key], $value );
+    }
+    else
+    {
+      $merged [$key] = $value;
+    }
+  }
+
+  return $merged;
+}

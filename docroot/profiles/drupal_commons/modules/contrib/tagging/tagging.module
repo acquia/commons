@@ -1,5 +1,5 @@
 <?php
-// $Id: tagging.module,v 1.14.2.5 2010/07/18 10:11:01 eugenmayer Exp $
+// $Id: tagging.module,v 1.14.2.6 2010/10/17 10:23:24 eugenmayer Exp $
 
 // Author: Eugen Mayer (http://kontextwork.de)
 // Copyright 2010
@@ -97,7 +97,7 @@ function tagging_theme() {
     'tagging_widget' => array('arguments' => array('element' => NULL) ),
     'tagging_widget_button' => array('arguments' => array('vid' => NULL) ),
     'tagging_widget_wrapper' => array('arguments' => array('content' => NULL, 'vid' => NULL) ),
-    'tagging_suggestions_list' => array('arguments' => array('suggestions' => array(), 'vid' => NULL) ),
+    'tagging_suggestions_list' => array('arguments' => array('suggestions' => array(), 'vid' => NULL )),
     'tagging_tags_list' => array('arguments' => array('tags' => array(), 'vid' => NULL) )
   );
 }
@@ -134,7 +134,7 @@ function theme_tagging_widget($element) {
   $element['#field_suffix'] = theme('tagging_widget_button', $vid).$old_input;
   $output .= theme('tagging_tags_list',split(',',$element['#value']),$vid)
             .'<div class="taggin-widget-input-wrapper clearfix">'
-               .theme('textfield', $element)
+            .theme('textfield', $element)
             .'</div>'
             .theme('tagging_suggestions_list', $element['#suggestions'], $vid);
   $fieldset['#value'] = $output;
@@ -183,7 +183,8 @@ function _tagging_check_tag($tag) {
 }
 
 /**
- * Rendering suggestions for a specific vocabulary
+ * Rendering suggestions
+ * we need $vid for namespacing only
  */
 function theme_tagging_suggestions_list($suggestions, $vid) {
     $suggested_tags = '';
@@ -193,8 +194,14 @@ function theme_tagging_suggestions_list($suggestions, $vid) {
         continue;
       }
       // TODO: Use # here...but out of any reason it gets encoded to %23 in html.
-      $term = "<span id='tagging-$vid' class='tagging-suggest-tag'>"._tagging_check_tag($term['#name'])."</span>";
-      $link = l($term, '', array('html' => true, 'attributes' => array('title' => t('Add tag'))));
+      $title = t('Add this already existing tag');
+      $class = 'tagging-suggest-tag';
+      if(array_key_exists('#new',$term) && $term['#new'] == TRUE) {
+	$class .= ' tagging-suggestion-new';
+        $title = t('Add this new tag');
+      }
+      $term = "<span id='tagging-$vid' class='{$class}'>"._tagging_check_tag($term['#name'])."</span>";
+      $link = l($term, '', array('html' => true, 'attributes' => array('title' =>$title )));
       $suggested_tags .= $link;
     }
     // If we have any suggestions, then place the wrapper.

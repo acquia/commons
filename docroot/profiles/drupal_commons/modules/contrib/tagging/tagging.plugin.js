@@ -1,4 +1,4 @@
-// $Id: tagging.plugin.js,v 1.12.2.5 2010/07/18 10:11:01 eugenmayer Exp $
+// $Id: tagging.plugin.js,v 1.12.2.6 2010/10/17 10:23:24 eugenmayer Exp $
 /**
  * @author Eugen Mayer (http://kontextwork.de)
  * @Copyright 2010 KontextWork
@@ -8,7 +8,7 @@
     return this.each( function(){
       // **************** Init *****************/
       var context = get_context($(this).attr('class'));
-
+      
       if(context === null) {
         alert('cant initialize tagging-widget: "'+$(this).attr('id')+'"..did you forget the "taggig-widget-$CONTEXT" class?');
         return;
@@ -32,7 +32,7 @@
       check_dublicates();
 
       $(input_sel).val('');
-
+      $(this).addClass('tagging-processed');
       // **************** Helper methods *****************/
       /*
       * Adds a tag to the visual list and to the hidden input field (target).
@@ -86,10 +86,10 @@
       * added, no matter its there or not.
       */
       function tag_exists(tag) {
-        var tag = Drupal.checkPlain($.trim(tag));
+        var tag = $.trim(tag.toLowerCase());
         var found = false;
         $(wrapper_sel+' '+tag_sel).each(function() {
-          if($(this).text() == tag) {
+          if($.trim($(this).text().toLowerCase()) == tag) {
             found = true;
             return;
           }
