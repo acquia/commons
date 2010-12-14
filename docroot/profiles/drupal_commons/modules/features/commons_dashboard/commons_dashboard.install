@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * Implementation of hook_install()
+ */
+function commons_dashboard_install() {
+  // Disable legacy dashboard components
+  if (module_exists('ctools')) {
+    ctools_include('context');
+    ctools_include('plugins');
+    ctools_include('export-ui');
+  
+    // Disable dashboard panel
+    $page = page_manager_get_page_cache('page-user_dashboard');
+    if ($function = ctools_plugin_get_function($page->subtask, 'enable callback')) {
+      $result = $function($page, TRUE);
+
+      if (!empty($page->changed)) {
+        page_manager_set_page_cache($page);
+      }
+    }
+    
+    // Disable dashboard context 
+    $context = ctools_export_ui_load('context_ui-dashboard-dashboard', 'context');
+    if ($context) {
+      ctools_export_ui_switcher_page('context', 'disable', $context);
+    }
+  }
+}
