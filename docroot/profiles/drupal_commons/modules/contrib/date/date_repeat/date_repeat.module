@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat.module,v 1.30.4.12 2009/05/12 09:58:59 karens Exp $
+// $Id: date_repeat.module,v 1.30.4.13 2010/08/12 19:41:04 karens Exp $
 /**
  * @file
  *
@@ -189,8 +189,8 @@ function date_repeat_rrule_description($rrule, $format = 'D M d Y') {
     foreach ($rrule['BYDAY'] as $byday) {
       $day = substr($byday, -2);
       $count = intval(str_replace(' '. $day, '', $byday));
-      if ($count = intval(str_replace(' '. $day, '', $byday))) {
-        $results[] = trim(t('!repeats_every_interval on the !date_order !day_of_week', array('!repeats_every_interval ' => '', '!date_order' => strtolower($counts[$count]), '!day_of_week' => $days[$day])));
+      if ($count = intval(str_replace(' ' . $day, '', $byday))) {
+        $results[] = trim(t('!repeats_every_interval on the !date_order !day_of_week', array('!repeats_every_interval ' => '', '!date_order' => strtolower($counts[substr($byday, 0, 2)]), '!day_of_week' => $days[$day])));
       }
       else {
         $results[] = trim(t('!repeats_every_interval every !day_of_week', array('!repeats_every_interval ' => '', '!day_of_week' => $days[$day])));

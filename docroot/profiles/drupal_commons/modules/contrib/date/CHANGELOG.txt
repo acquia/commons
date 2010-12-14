@@ -1,8 +1,75 @@
-//$Id: CHANGELOG.txt,v 1.1.8.453 2009/09/16 11:13:01 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.8.487 2010/08/14 11:53:45 karens Exp $
 Date Module 6.x
 =================
 Version 6.2-dev
 =================
+
+Version 6.2.6
+=============
+
+- Revert #802046. Unicode support change for date parsing causes serious errors.
+
+Version 6.2.5
+=============
+
+NOTE: The included copy of the jQuery UI datepicker in the Date Popups module has been removed. It is now necessary to install the jQuery UI module (http://drupal.org/project/jquery_ui) for the Date Popups datepicker to work!
+
+- #436490 Add support for the jQuery UI 1.7 datepicker.
+- #802046 by t3hk0d3, fix date parsing to better handle unicode characters.
+- #475926 by hawleyal, clean html out of ical export.
+- #675352 by sdague, clean up ical escape text.
+- #848644 by Crell, make sure ical_parse_rrule can handle embedded timezones.
+- #784652 by keinstein, fix 'r' format.
+- #679224 by brianV, add defaults for month and year for latest jQuery UI datepicker.
+- #518816 by dww, avoid 'date_format() expects parameter 1 to be DateTime' errors by checking for date class.
+- #772180 by recrit and dww, make sure date descriptions always use valid dates for format examples.
+- #642018 by slip and KarenS, make sure to eliminate spaces before AM/PM in date popup timepicker.
+- #582982 by yahn, make sure date_all_day gets the most significant date element.
+- #785708 by bdurbin and locomo, update jquery timeentry to latest version.
+- #390012 by joachim, Make sure view args are sorted when creating navigation links.
+- #408190 Fix mini calendar title link so it doesn't always link to current date.
+- #630972 by bec, make sure a default system timezone is set to make PHP 5.3 happy.
+- #641344 by arlinsandbulte, add option to use ISO weeks instead of calendar weeks.
+- #697144 by tstoeckler, date_format_date formatter fixes.
+- #774182 by keinstein, fix some strict error handling errors.
+- #702922 by rupl, add missing class to date popup.
+- #660776 by neilnz, fix postgresql sequence update.
+- #645936 by markus_petrux, allow other modules to add #afterbuild to user forms.
+- #406976 by dopry, Check both the field name and type name to get the right label for shared fields.
+- #599744 by anarcat, don't rename table to one that already exists.
+- #599484 by Gribnif, avoid infinite date repeat in PHP4.
+- #529734 by raintonr, reduce number of requires for PHP4.
+- #875978 by mikeryan, avoid notices when updating nodes with empty datefields.
+- #548866 by siritree, fix cannot use scalar value as array by testing that $item is an array.
+- #706006 by Gribnif, fix broken logic for every Nth DAY.
+- #460776 by Mr. Chips, fix ordinality in Date Repeat string.
+- #635778 by dagmar, fix typo keeping comment dates from showing up.
+- #819678 by jonathan1055, fix url on admin page to work without clean urls enabled.
+- #553884 by divinehawk, fix pgsql timezone support.
+- #320765 by joelstein, fix order of timezone name list.
+- #552154 by Ian Ward, make date_first_day defaults consistent.
+- #477868 Exposed select filter widget sometimes gives 'illegal choice' errors.
+- #385688 by Gribnif, adding a set_relationship() function to date filter and date argument to try to fix broken relationships problems.
+- #580178, Remove http://drupal.org/cvs?commit=263582, might be a problem.
+- Fix default values for date_fields, should be array.
+- Rename incorrectly named views definition.
+- #313704 Add timezone information earlier so that auto_nodetitle has it, patch by Kars-T.
+- #554546 Don't put translated timezone names in cache, patch by alex.k
+- #491954 Make sure translation works in date changer, patch by Bodo Maass and cyp25.
+- #675234 Try to convert deprecated timezones in ical, patch by David Goode.
+- #535270 Test for existing date format tables before update, patch by anarcat and Owen Barton.
+- #545466 Fix bid placeholder in date wizard, patch by colinsherry.
+- Be sure to set timezone when changing date type. Clean up unused parts of code from Date Wizard.
+- More work on repeating dates.
+- Adding experimental tool to change the date type.
+- Move event import and date wizard into separate files.
+- #698522 Make Views code work with Views 2 and Views 3, patch by rjbrown99, Ahqar, tauno, dagmar, perusio.
+- Coder review fixes.
+- Install file cleanup.
+- #489494, by poiu, Some RTL css fixes.
+
+Version 6.2.4
+=============
 
 - #565830, by bengtan, Fix Postgres handling of hour '0'.
 - #408770, by vkareh, Make sure dates with access control retain values during processing.

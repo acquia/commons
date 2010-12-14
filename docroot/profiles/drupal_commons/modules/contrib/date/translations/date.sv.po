@@ -1,0 +1,3525 @@
+# $Id$
+#
+# Swedish translation of Drupal (date)
+# Generated from files:
+#  date_api.admin.inc,v 1.1.2.2 2009/03/19 23:22:32 karens
+#  date_locale.module,v 1.1.2.1 2009/01/25 13:03:13 karens
+#  date_tools.module,v 1.1.2.16 2009/07/24 18:48:14 karens
+#  date_api_elements.inc,v 1.49.2.1.2.53 2009/09/16 10:56:28 karens
+#  date_popup.module,v 1.42.2.1.2.52 2009/08/13 16:17:29 karens
+#  date_api_ical.inc,v 1.35.4.28 2009/05/10 12:44:14 karens
+#  date_api_sql.inc,v 1.9.2.3.2.37 2009/09/16 11:13:01 karens
+#  date_admin.inc,v 1.40.2.3.2.39 2009/06/08 16:49:36 karens
+#  date_api_argument_handler.inc,v 1.1.2.38 2009/09/16 10:47:23 karens
+#  date_api.module,v 1.64.2.5.2.93 2009/08/13 10:57:27 karens
+#  date_api.install,v 1.16.2.1.2.21 2009/08/21 20:45:50 karens
+#  date_api.info,v 1.6 2008/02/18 19:32:28 karens
+#  date.info,v 1.3 2008/02/18 19:32:28 karens
+#  date_locale.info,v 1.1.2.2 2009/05/10 11:11:14 karens
+#  date_php4.info,v 1.3 2008/02/18 19:32:28 karens
+#  date_popup/date_popup.info: n/a
+#  date_repeat.info,v 1.5 2008/02/18 19:32:29 karens
+#  date_timezone.info,v 1.3.4.1 2008/06/27 14:14:01 karens
+#  date_tools.info,v 1.1.2.1 2009/01/10 20:06:10 karens
+#  date_elements.inc,v 1.46.2.2.2.66 2009/09/16 11:07:18 karens
+#  date_api_filter_handler.inc,v 1.1.2.41 2009/09/16 10:47:23 karens
+#  date_handler_field_multiple.inc,v 1.1.2.12 2009/02/27 14:48:34 karens
+#  date_repeat.inc,v 1.22.2.1.2.23 2009/06/09 10:33:48 karens
+#  date_token.inc,v 1.2.2.1.2.7 2009/03/20 12:07:51 karens
+#  date.module,v 1.61.2.4.2.62 2009/09/16 09:50:31 karens
+#  date.install,v 1.37.2.5.2.32 2009/08/21 20:31:37 karens
+#  date_api.views.inc,v 1.1.2.11 2009/06/09 12:57:12 karens
+#  date_php4.module,v 1.4.6.5 2008/10/05 17:05:20 karens
+#  date_popup.install,v 1.5.6.6 2009/07/29 10:53:38 karens
+#  date_repeat_form.inc,v 1.15.4.13 2009/02/16 23:46:08 karens
+#  date_repeat.module,v 1.30.4.12 2009/05/12 09:58:59 karens
+#  date_timezone.module,v 1.18.2.3.2.12 2009/03/26 10:25:50 karens
+#  date_timezone.install,v 1.7.2.2.2.6 2008/09/06 14:20:10 karens
+#  date_navigation_plugin_style.inc,v 1.1.2.9 2009/01/24 00:41:45 karens
+#  theme.inc,v 1.1.4.36 2009/06/08 23:10:58 karens
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Date 6.x\n"
+"POT-Creation-Date: 2010-04-08 17:02+0200\n"
+"PO-Revision-Date: 2010-04-08 17:08+0100\n"
+"Last-Translator: Magnus Gunnarsson <magnus.gunnarsson76@gmail.com>\n"
+"Language-Team: drupalsverige.se\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Poedit-Language: Swedish\n"
+"X-Poedit-Country: SWEDEN\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: date_api.admin.inc:40;250
+msgid "remove"
+msgstr "ta bort"
+
+#: date_api.admin.inc:48
+msgid "No custom formats configured. Please <a href=\"@link\">add</a> some."
+msgstr "Inga anpassade format konfigurerade. Var vänlig <a href=\"@link\">lägg till</a> några."
+
+#: date_api.admin.inc:64
+msgid "Format string"
+msgstr "Formatsträng"
+
+#: date_api.admin.inc:66
+msgid "A user-defined date format. See the <a href=\"@url\">PHP manual</a> for available options. This format is currently set to display as <span>%date</span>."
+msgstr "Ett användardefinierat datumformat.  Se <a href=\"@url\">manualen för PHP</a> för tillgängliga alternativ. Detta format är för närvarande angivet att visas som <span>%date</span>."
+
+#: date_api.admin.inc:72
+msgid "Save configuration"
+msgstr "Spara inställningar"
+
+#: date_api.admin.inc:91
+msgid "Date formats"
+msgstr "Datumformat"
+
+#: date_api.admin.inc:137
+msgid "This format already exists.  Please enter a unique format string."
+msgstr "Detta format existerar redan. Var vänlig ange en unik formatsträng."
+
+#: date_api.admin.inc:154
+#: date_locale/date_locale.module:252
+msgid "Configuration saved."
+msgstr "Inställningar sparade."
+
+#: date_api.admin.inc:169
+msgid "Are you sure you want to remove the format %format?"
+msgstr "Är du säker på att du vill ta bort formatet %format?"
+
+#: date_api.admin.inc:171;207
+#: date_tools/date_tools.module:154
+msgid "This action cannot be undone."
+msgstr "Denna åtgärd kan inte ångras."
+
+#: date_api.admin.inc:172;208
+#: date_tools/date_tools.module:155
+msgid "Remove"
+msgstr "Ta bort"
+
+#: date_api.admin.inc:172;208
+#: date_locale/date_locale.module:214
+#: date_tools/date_tools.module:155
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: date_api.admin.inc:186
+msgid "Removed date format %format."
+msgstr "Tog bort datumformatet %format"
+
+#: date_api.admin.inc:205
+msgid "Are you sure you want to remove the format type %format?"
+msgstr "Är du säker på att du vill ta bort formattypen %format?"
+
+#: date_api.admin.inc:222
+msgid "Removed date format type %format."
+msgstr "Tog bort datumformatstypen %format."
+
+#: date_api.admin.inc:238
+msgid "!type date format"
+msgstr "!type datumformat"
+
+#: date_api_elements.inc:150
+#: date_popup/date_popup.module:259;296
+msgid "Format: @date"
+msgstr "Format: date"
+
+#: date_api_elements.inc:414
+msgid "The year must be a number between %min and %max."
+msgstr "Året måste vara ett nummer mellan %min och %max."
+
+#: date_api_elements.inc:423
+msgid "The month must be a number between 1 and 12."
+msgstr "Månaden måste vara ett nummer mellan 1 och 12."
+
+#: date_api_elements.inc:433
+msgid "The day must be a number between !min and !max."
+msgstr "Dagen måste vara ett nummer mellan !min och !max."
+
+#: date_api_elements.inc:440
+msgid "The hour must be a number between !min and !max."
+msgstr "Timmen måste vara ett nummer mellan !min och !max."
+
+#: date_api_elements.inc:447
+msgid "The minute must be a number between !min and !max."
+msgstr "Minuten måste vara ett nummer mellan !min och !max."
+
+#: date_api_elements.inc:454
+msgid "The second must be a number between !min and !max."
+msgstr "Sekunden måste vara ett nummer mellan !min och !max."
+
+#: date_api_elements.inc:467
+msgid "A valid value is required."
+msgstr "Ett giltigt värde krävs."
+
+#: date_api_elements.inc:470
+msgid "Field %field has errors."
+msgstr "Fältet %field innehåller fel."
+
+#: date_api_elements.inc:514
+msgid "A valid date is required for %title."
+msgstr "Ett giltig datum krävs för %title."
+
+#: date_api_elements.inc:517
+msgid "%title is invalid."
+msgstr "%title är inte giltigt."
+
+#: date_api_ical.inc:86;95;101;122
+msgid "date ical"
+msgstr "datum ical"
+
+#: date_api_ical.inc:86
+msgid "HTTP Request Error importing %filename: @error"
+msgstr "HTTP Request Error importing %filename: @error"
+
+#: date_api_ical.inc:95
+msgid "Failed to open file: %filename"
+msgstr "Kunde inte öppna filen: %filename"
+
+#: date_api_ical.inc:101
+msgid "Invalid calendar file: %filename"
+msgstr "Ogiltig kalenderfil: %filename"
+
+#: date_api_ical.inc:122
+msgid "Invalid calendar file."
+msgstr "Ogiltig kalenderfil."
+
+#: date_api_sql.inc:696
+#: date/date_admin.inc:356
+#: date_tools/date_tools.wizard.inc:76
+#: includes/date_api_argument_handler.inc:64
+msgid "Granularity"
+msgstr "Noggrannhet"
+
+#: date_api.module:421
+msgid "Long"
+msgstr "Långt"
+
+#: date_api.module:422
+msgid "Medium"
+msgstr "Mellan"
+
+#: date_api.module:423
+msgid "Short"
+msgstr "Kort"
+
+#: date_api.module:529
+msgid "!timezone"
+msgstr "!timezone"
+
+#: date_api.module:615
+msgid "!day-name Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday"
+msgstr "!day-name söndag|måndag|tisdag|onsdag|torsdag|fredag|lördag"
+
+#: date_api.module:616
+msgid "!day-abbreviation Sun|Mon|Tue|Wed|Thu|Fri|Sat"
+msgstr "!day-abbreviation sön|mån|tis|ons|tors|fre|lör"
+
+#: date_api.module:617
+msgid "!day-abbreviation S|M|T|W|T|F|S"
+msgstr "!day-abbreviation S|M|T|O|T|F|L"
+
+#: date_api.module:618
+msgid "!day-abbreviation SU|MO|TU|WE|TH|FR|SA"
+msgstr "!day-abbreviation sö|må|ti|on|to|fr|lö"
+
+#: date_api.module:619
+msgid "!ampm-abbreviation am|pm|AM|PM"
+msgstr "!ampm-abbreviation am|pm|AM|PM"
+
+#: date_api.module:620
+msgid "!datetime Year|Month|Day|Week|Hour|Minute|Second|All Day|All day"
+msgstr "!datetime År|Månad|Dag|Vecka|Timme|Minut|Sekund|Hela Dagen|Hela dagen"
+
+#: date_api.module:621
+msgid "!datetime_plural Years|Months|Days|Weeks|Hours|Minutes|Seconds"
+msgstr "!datetime_plural År|Månader|Dagar|Veckor|Timmar|Minuter|Sekunder"
+
+#: date_api.module:622
+msgid "!date_order Every|First|Second|Third|Fourth|Fifth"
+msgstr "!date_order Varje|Första|Sekund|Tredje|Fjärde|Femte"
+
+#: date_api.module:623
+msgid "!date_order |Last|Next to last|Third from last|Fourth from last|Fifth from last"
+msgstr "!date_order |Sista|Näst sista|Tredje från slutet|Fjärde från slutet|Femte från slutet"
+
+#: date_api.module:624
+msgid "!date_nav Prev|Next|Today"
+msgstr "!date_nav Föregående|Nästa|Idag"
+
+#: date_api.module:627
+msgid "!month-name |January|February|March|April|May|June|July|August|September|October|November|December"
+msgstr "!month-name |januari|februari|mars|april|maj|juni|juli|augusti|september|oktober|november|december"
+
+#: date_api.module:628
+msgid "!month-abbreviation |Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec"
+msgstr "!month-abbreviation |jan|feb|mar|apr|may|jun|jul|aug|sep|okt|nov|dec"
+
+#: date_api.module:740
+msgid "!time ago"
+msgstr "!time sedan"
+
+#: date_api.module:54
+msgid "Formats"
+msgstr "Format"
+
+#: date_api.module:55;65
+msgid "Allow users to configure date formats"
+msgstr "Låt användare konfigurera datumformat"
+
+#: date_api.module:64
+msgid "Configure"
+msgstr "Inställningar"
+
+#: date_api.module:74
+msgid "Date and time lookup"
+msgstr "Uppslag av datum och tid"
+
+#: date_api.module:80
+msgid "Custom formats"
+msgstr "Anpassade format"
+
+#: date_api.module:81
+msgid "Allow users to configure custom date formats."
+msgstr "Låt användare konfigurera anpassade datumformat."
+
+#: date_api.module:89
+msgid "Add format"
+msgstr "Lägg till format"
+
+#: date_api.module:90
+msgid "Allow users to add additional date formats."
+msgstr "Låt användare lägga till ytterligare datumformat."
+
+#: date_api.module:99
+msgid "Delete date format"
+msgstr "Radera datumformat"
+
+#: date_api.module:100
+msgid "Allow users to delete a configured date format."
+msgstr "Låt användare radera konfigurerade datumformat."
+
+#: date_api.module:108
+msgid "Delete date format type"
+msgstr "Radera typ av datumformat"
+
+#: date_api.module:109
+msgid "Allow users to delete a configured date format type."
+msgstr "Låt användare radera en konfigurerad typ av datumformat."
+
+#: date_api.install:146
+msgid "Per-user timezone name."
+msgstr "Namn på tidszon enligt användare."
+
+#: date_api.install:274;292;318
+msgid "date module cannot be updated until after Views has been updated. Please return to <a href=\"@update-php\">update.php</a> and run the remaining updates."
+msgstr "modulen Date kan inte uppdateras förrän Views har uppdateras. Återgå till <a href=\"@update-php\">update.php</a> och kör de återstående uppdateringarna."
+
+#: date_api.install:275;293;319
+msgid "date.module has updates, but cannot be updated until views.module is updated first."
+msgstr "date.module har uppdateringar, men kan inte uppdateras innan views.module har uppdaterats."
+
+#: (duplicate) date_api.install:245
+msgid "The Date API module requires the <a href=\"@link\">Date PHP4 module</a> for PHP versions less than 5.2."
+msgstr "Modulen Date API kräver <a href=\"@link\">modulen Date PHP4</a> för versioner av PHP lägre än 5.2."
+
+#: (duplicate) date_api.install:249
+msgid "Date API requirements"
+msgstr "krav för Date API"
+
+#: date_api.info:0
+#: date_tools/date_tools.wizard.inc:356
+msgid "Date API"
+msgstr "Date API"
+
+#: date_api.info:0
+msgid "A Date API that can be used by other modules."
+msgstr "Ett Datum API som kan användas av andra moduler."
+
+#: date_api.info:0
+#: date/date.info:0
+#: date_locale/date_locale.info:0
+#: date_php4/date_php4.info:0
+#: date_popup/date_popup.info:0
+#: date_repeat/date_repeat.info:0
+#: date_timezone/date_timezone.info:0
+#: date_tools/date_tools.info:0
+msgid "Date/Time"
+msgstr "Datum/Tid"
+
+#: date/date_admin.inc:25
+msgid "The Strtotime default value is invalid."
+msgstr "Standardvärdet för Strtotime är ej giltigt."
+
+#: date/date_admin.inc:31
+msgid "The Strtotime default value for the To Date is invalid."
+msgstr "Standardvärdet för Strtotime åt \"Datumet till\" är ogilitigt."
+
+#: date/date_admin.inc:35
+msgid "Years back and forward must be in the format -9:+9."
+msgstr "År bakåt och framåt måste vara angivna i formatet -9:+9."
+
+#: date/date_admin.inc:70
+msgid "Default value"
+msgstr "Standardvärde"
+
+#: date/date_admin.inc:72;78
+msgid "Blank"
+msgstr "Tomt"
+
+#: date/date_admin.inc:72;78
+#: date_popup/date_popup.module:272
+msgid "Now"
+msgstr "Nu"
+
+#: date/date_admin.inc:72;78
+msgid "Relative"
+msgstr "Relaterat"
+
+#: date/date_admin.inc:73;79
+msgid "A default value to use for this field. If you select 'Relative', add details below."
+msgstr "Ett standardvärde att använda för detta fält. Fyll i detaljer nedan om du väljer \"Relaterat\"."
+
+#: date/date_admin.inc:76
+msgid "Default value for To date"
+msgstr "Standardvärde för \"Datum till\""
+
+#: date/date_admin.inc:78
+msgid "Same as From date"
+msgstr "Samma som \"Datum från\""
+
+#: date/date_admin.inc:83
+msgid "Customize Default Value"
+msgstr "Anpassa standardvärde"
+
+#: date/date_admin.inc:84
+msgid "The custom value for a Relative default should be something that describes a time by reference to the current day using strtotime, like '+90 days' (90 days from the day the field is created) or '+1 Saturday' (the next Saturday). See !strtotime for more details."
+msgstr "Värdet för ett relativt standardvärde skall vara något som beskriver en tid med referens till den nuvarande dagen med tillämpning av strtotime, till exempel \"+90 days\" (90 dagar från dagen då fältet skapades) eller \"+1 Saturday\" (nästa lördagen). Se !strtotime för mer detaljer."
+
+#: date/date_admin.inc:84
+msgid "strtotime"
+msgstr "strtotime"
+
+#: date/date_admin.inc:89
+msgid "Custom value for From date"
+msgstr "Anpassat värde för \"Datum från\""
+
+#: date/date_admin.inc:94
+msgid "Custom value for To date"
+msgstr "Anpassat värde för \"Datum till\""
+
+#: date/date_admin.inc:114
+msgid "Input format"
+msgstr "Inmatningsformat"
+
+#: date/date_admin.inc:117
+msgid "Set the order and format for the date parts in the input form. The format will be adapted to remove values not in the granularity for this field."
+msgstr "Bestäm ordning och format för datumets delar i inmatningsformuläret. Formatet kommer att omarbetas så att värden som inte stämmer överens med noggrannheten för detta fält tas bort."
+
+#: date/date_admin.inc:123
+msgid "Custom input format"
+msgstr "Anpassat inmatningsformat"
+
+#: date/date_admin.inc:125
+msgid "The custom format, if provided, will override the input format selected above. The custom format, if provided, will override the selected display or input options. Define a php date format string like 'm-d-Y H:i' (see <a href=\"@link\">http://php.net/date</a> for more details)."
+msgstr "Det anpassade formatet, om detta är angivet, kommer åsidosätta inmatningsformat angivet ovan. Även visnings- eller inmatningsalternativ angivna ovan kommer att åsidosättas. Ange en sträng i PHP-datumformat, såsom \"m-d-Y H:i\" (se <a href=\"@link\">http://php.net/date</a> för mer info)."
+
+#: date/date_admin.inc:137
+msgid "Years back and forward"
+msgstr "År bakåt och framåt"
+
+#: date/date_admin.inc:141
+msgid "Number of years to go back and forward in the year selection list, default is -3:+3."
+msgstr "Antal år att gå bakåt och framåt i rullgardinsmenyn för år. Standardvärdet är -3:+3."
+
+#: date/date_admin.inc:144
+msgid "Time increment"
+msgstr "Tidsökning"
+
+#: date/date_admin.inc:147
+msgid "Increment the minute and second fields by this amount."
+msgstr "Öka fälten minut och sekund med detta värde."
+
+#: date/date_admin.inc:172
+msgid "Customize Date Parts"
+msgstr "Anpassa datumdelar"
+
+#: date/date_admin.inc:178
+msgid "Above"
+msgstr "Ovanför"
+
+#: date/date_admin.inc:178
+msgid "Within"
+msgstr "Inom"
+
+#: date/date_admin.inc:178
+msgid "None"
+msgstr "Ingen"
+
+#: date/date_admin.inc:180
+msgid "Position of date part labels"
+msgstr "Position av etiketter för datumets delar"
+
+#: date/date_admin.inc:181
+msgid "The location of date part labels, like 'Year', 'Month', or 'Day'. 'Above' will display them as titles above each date part. 'Within' will insert the label as the first option in the select list and in blank textfields. 'None' will not label any of the date parts. The exact text in the label is controlled by themes like 'date_part_label_year' and 'date_part_label_month'."
+msgstr "Positionen av etiketter för datumets delar, som \"År\", \"Månad\", eller \"Dag\". \"Ovanför\" kommer att visa dem som titlar ovanför varje del i datumet. \"Inom\" kommer att lägga in etiketten som  första val i rullgardinslistan och i tomma textfält. \"Ingen\" kommer inte att etikettera någon av datumets delar. Den exakta texten i etiketterna styrs av temat som \"date_part_label_yea\"' och \"date_part_label_month\"."
+
+#: date/date_admin.inc:224
+msgid "Input Type"
+msgstr "Inmatningstyp"
+
+#: date/date_admin.inc:224
+msgid "Select list"
+msgstr "Listval"
+
+#: date/date_admin.inc:224
+msgid "Text field"
+msgstr "Textfält"
+
+#: date/date_admin.inc:239
+msgid "Granularity must include a year."
+msgstr "Noggrannheten måste innehålla ett år."
+
+#: date/date_admin.inc:242
+msgid "Dates without hours granularity must not use any timezone handling."
+msgstr "Datum utan noggrannhet för timmar får inte använda hantering av tidszon."
+
+#: date/date_admin.inc:275;276;277;278
+#: date/date_elements.inc:321
+#: includes/date_api_filter_handler.inc:257
+msgid "From date"
+msgstr "Datum från"
+
+#: date/date_admin.inc:280;281;282;283
+#: date/date_elements.inc:323
+#: includes/date_api_filter_handler.inc:260
+msgid "To date"
+msgstr "Datum till"
+
+#: date/date_admin.inc:347
+msgid "Display a matching second date field as a 'To date'. If marked 'Optional' field will be presented but not required. If marked 'Required' the 'To date' will be required if the 'From date' is required or filled in."
+msgstr "Visa ett matchande andra datumfält som ett \"Datum till\". Om det markeras som \"Valfritt\" så kommer det att visas men ej krävas. Om det markeras som \"Nödvändig\" kommer \"Datum tíll\" att krävas om \"Datum från\" krävs eller fylls i."
+
+#: date/date_admin.inc:350
+msgid "To Date"
+msgstr "Datum till"
+
+#: date/date_admin.inc:351
+msgid "Never"
+msgstr "Aldrig"
+
+#: date/date_admin.inc:351
+msgid "Optional"
+msgstr "Valfritt"
+
+#: date/date_admin.inc:351
+msgid "Required"
+msgstr "Nödvändig"
+
+#: date/date_admin.inc:360
+msgid "Set the date elements to be stored (at least a year is required)."
+msgstr "Ställ in datumelementen som skall lagras (åtminstone ett årtal krävs)."
+
+#: date/date_admin.inc:368
+msgid "Default Display"
+msgstr "Standardvisning"
+
+#: date/date_admin.inc:371
+msgid "Select a default format type to be used for the date display. Visit the <a href=\"@date-time-page\">Date and time date format page</a> to add and edit format types."
+msgstr "Välj en typ för standardformat som skall användas för visningen av datum. Besök sidan <a href=\"@date-time-page\">Datum och tid</a> för att lägga till och redigera typer av format."
+
+#: date/date_admin.inc:374
+msgid "Select the timezone handling method to be used for this date field."
+msgstr "Välj metod för hantering av tidszoner som skall användas för detta datumfält."
+
+#: date/date_admin.inc:378
+msgid "Time zone handling"
+msgstr "Hantering av tidszon"
+
+#: date/date_admin.inc:394
+msgid "Expanded"
+msgstr "Utfällt"
+
+#: date/date_admin.inc:394
+msgid "Collapsed"
+msgstr "Hopfälld"
+
+#: date/date_admin.inc:395
+msgid "Repeat display"
+msgstr "Visning av upprepning"
+
+#: date/date_admin.inc:396
+msgid "Should the repeat options form start out expanded or collapsed? Set to 'Collapsed' to make those options less obtrusive."
+msgstr "Skall formuläret för val av upprepning börja utfälld eller hopfälld? Ange \"Hopfälld\" för att göra dessa alternativ mindre iögonfallande."
+
+#: date/date_admin.inc:419
+msgid "Changing the %name setting after data has been created could result in the loss of data!"
+msgstr "Ändring av inställningen för %name efter att data skapats kan leda till förlust av data!"
+
+#: date/date_admin.inc:432
+msgid "Site's time zone"
+msgstr "Webbplatsens tidszon"
+
+#: date/date_admin.inc:433
+msgid "Date's time zone"
+msgstr "Datumets tidszon"
+
+#: date/date_admin.inc:434
+msgid "User's time zone"
+msgstr "Användarens tidszon"
+
+#: date/date_admin.inc:436
+msgid "No time zone conversion"
+msgstr "Ingen tidszonskonvertering"
+
+#: date/date_admin.inc:602
+msgid "Display From and To dates"
+msgstr "Visa Datum från och till"
+
+#: date/date_admin.inc:603
+msgid "Display From date only"
+msgstr "Visa endast Datum från"
+
+#: date/date_admin.inc:604
+msgid "Display To date only"
+msgstr "Visa endast Datum till"
+
+#: date/date_admin.inc:623
+msgid "Show @count value(s)"
+msgstr "Visa @count värde(n)"
+
+#: date/date_admin.inc:645
+msgid "starting from @count"
+msgstr "med början från @count"
+
+#: date/date_admin.inc:667
+msgid "ending on @count"
+msgstr "slutar på @count"
+
+#: date/date_admin.inc:696
+msgid "Display repeat rule"
+msgstr "Visa regel för upprepning"
+
+#: date/date_admin.inc:697
+msgid "Hide repeat rule"
+msgstr "Göm regel för upprepning"
+
+#: date/date_elements.inc:28
+msgid "A 'From date' date is required for field %field %delta."
+msgstr "Ett \"Datum från\" krävs för fältet %field %delta."
+
+#: date/date_elements.inc:34
+msgid "A 'To date' is required for field %field %delta."
+msgstr "Ett \"Datum till\" krävs för fältet %field %delta."
+
+#: date/date_elements.inc:328
+msgid "Empty 'To date' values will use the 'From date' values."
+msgstr "Ej angivna värden för \"Datum till\" kommer att använda angivna värden \"Datum från\"."
+
+#: date/date_elements.inc:339
+msgid "@field_name From date value #@delta"
+msgstr "@field_name värde för Datum från #@delta"
+
+#: date/date_elements.inc:341
+msgid "@field_name To date value #@delta"
+msgstr "@field_name värde för \"Datum till\" #@delta"
+
+#: date/date_elements.inc:345
+msgid "@field_name From date"
+msgstr "@field_name Datum från"
+
+#: date/date_elements.inc:346
+msgid "@field_name To date"
+msgstr "@field_name Datum till"
+
+#: date/date_elements.inc:452
+msgid "Some value must be entered in the To date."
+msgstr "Ett värde måste anges i Datum till."
+
+#: date/date_elements.inc:477
+msgid "The dates are invalid."
+msgstr "Datumen är ej giltiga."
+
+#: date/date_elements.inc:481
+msgid "The To date must be greater than the From date."
+msgstr "Värdet för Datum till måste vara större än Datum från."
+
+#: date/date_elements.inc:512
+msgid "The From date is invalid."
+msgstr "Datumet från är ogiltigt."
+
+#: date/date_elements.inc:515
+msgid "The To date is invalid."
+msgstr "Datumet till är ogiltigt."
+
+#: date/date_elements.inc:524
+msgid "There are errors in @field_name value #@delta:"
+msgstr "Det finns fel i @field_name, värde #@delta:"
+
+#: date/date_elements.inc:527
+msgid "There are errors in @field_name:"
+msgstr "Det finns fel i @field_name:"
+
+#: date/date_handler_field_multiple.inc:48
+msgid "Group multiple values"
+msgstr "Gruppera multipla värden"
+
+#: date/date_handler_field_multiple.inc:51
+msgid "If unchecked, each item in the field will create a new row, which may appear to cause duplicates. This setting is not compatible with click-sorting in table displays."
+msgstr "Om ej ikryssad kommer varje alternativ i fältet att skapa en ny rad, vilket kan orsaka dubletter. Denna inställning är inte kompatibel med klickvis sortering i tabellvisningar."
+
+#: date/date_repeat.inc:78
+msgid "The UNTIL value is required for repeating dates."
+msgstr "Värdet \"Tills\" krävs för återkommande datum."
+
+#: date/date_token.inc:12
+msgid "The raw date value."
+msgstr "Det obearbetade värdet för datum."
+
+#: date/date_token.inc:13
+msgid "The formatted date."
+msgstr "Det formaterade datum."
+
+#: date/date_token.inc:14
+msgid "The raw date timestamp."
+msgstr "Den obearbetade tidsstämpeln för datum."
+
+#: date/date_token.inc:15
+msgid "Date year (four digit)"
+msgstr "Datum år (fyra tecken)"
+
+#: date/date_token.inc:16
+msgid "Date year (two digit)"
+msgstr "Datum år (två tecken)"
+
+#: date/date_token.inc:17
+msgid "Date month (full word)"
+msgstr "Datum månad (fullständigt namn)"
+
+#: date/date_token.inc:18
+msgid "Date month (abbreviated)"
+msgstr "Datum månad (förkortning)"
+
+#: date/date_token.inc:19
+msgid "Date month (two digit, zero padded)"
+msgstr "Datum månad (två tecken, inledande nolla)"
+
+#: date/date_token.inc:20
+msgid "Date month (one or two digit)"
+msgstr "Datum månad (ett eller två tecken)"
+
+#: date/date_token.inc:21
+msgid "Date week (two digit)"
+msgstr "Datum vecka (två tecken)"
+
+#: date/date_token.inc:22
+msgid "Date date (YYYY-MM-DD)"
+msgstr "Datum datum (ÅÅÅÅ-MM-DD)"
+
+#: date/date_token.inc:23
+msgid "Date datetime (YYYY-MM-DDTHH:MM:SS)"
+msgstr "Datum datumtid (YYYY-MM-DDTHH:MM:SS)"
+
+#: date/date_token.inc:24
+msgid "Date day (full word)"
+msgstr "Datum dag (fullständigt namn)"
+
+#: date/date_token.inc:25
+msgid "Date day (abbreviation)"
+msgstr "Datum dag (förkortning)"
+
+#: date/date_token.inc:26
+msgid "Date day (two digit, zero-padded)"
+msgstr "Datum dag (två tecken, inledande nolla)"
+
+#: date/date_token.inc:27
+msgid "Date day (one or two digit)"
+msgstr "Datum dag (ett eller två tecken)"
+
+#: date/date_token.inc:28
+msgid "Time H:i"
+msgstr "Tid H:i"
+
+#: date/date_token.inc:30
+msgid "If the field has a to-date defined, the same tokens exist in the form: [to-????], where ???? is the normal token."
+msgstr "Om fältet har ett \"Datum till\" angivet så finns samma symbol i formen: [to-????], där ???? är den vanliga symbolersättningen."
+
+#: date/date.module:121
+msgid "Store a date in the database as an ISO date, recommended for historical or partial dates."
+msgstr "Lagra ett datum i databasen som ISO-datum, rekommenderat för historiska eller ofullständiga datum."
+
+#: date/date.module:125
+msgid "Store a date in the database as a timestamp, deprecated format to suppport legacy data."
+msgstr "Lagrar ett datum i databasen som en tidsstämpel, föråldrat format för att stöda äldre data."
+
+#: date/date.module:129
+msgid "Store a date in the database as a datetime field, recommended for complete dates and times that may need timezone conversion."
+msgstr "Lagra ett datum i databasen som ett fält för datumtid. Rekommenderas för fullständiga datum och tider som kan ha konvertering av tidszon."
+
+#: date/date.module:140
+msgid "Select List"
+msgstr "Vallista"
+
+#: date/date.module:148
+msgid "Select List with Repeat options"
+msgstr "Rullgardinsmeny med alternativ för upprepning"
+
+#: date/date.module:156
+msgid "Text Field with custom input format"
+msgstr "Textfält med anpassat inmatningsformat"
+
+#: date/date.module:164
+msgid "Text Field with Repeat options"
+msgstr "Textfält med alternativ för upprepning"
+
+#: date/date.module:174
+msgid "Text Field with Date Pop-up calendar"
+msgstr "Textfält med popupkalender"
+
+#: date/date.module:182
+msgid "Text Field with Date Pop-up and Repeat options"
+msgstr "Textfält med popupkalender och alternativ för upprepning"
+
+#: date/date.module:221
+msgid "Default"
+msgstr "Standard"
+
+#: date/date.module:224
+msgid "As Time Ago"
+msgstr "Som Tid sedan"
+
+#: date/date.module:437
+msgid "Complete documentation for the Date and Date API modules is available at <a href=\"@link\">http://drupal.org/node/92460</a>."
+msgstr "Fullständig dokumentation för modulerna Date och Date API finns på <a href=\"@link\">http://drupal.org/node/92460</a>"
+
+#: date/date.module:724
+msgid "Add format type"
+msgstr "Lägg till typ av format"
+
+#: date/date.module:728
+msgid "Name"
+msgstr "Namn"
+
+#: date/date.module:729
+msgid "The human-readable name for this format type."
+msgstr "Det läsbara namnet på denna typ av format"
+
+#: date/date.module:736
+msgid "Type"
+msgstr "Typ"
+
+#: date/date.module:737
+msgid "The machine-readable name of this format type. <br>This name must contain only lowercase letters, numbers, and underscores and must be unique."
+msgstr "Det maskinläsbara namnet på denna typ av format. <br>Detta namn får bara innehålla gemener, siffror, understreck och måste vara unikt."
+
+#: date/date.module:755
+msgid "The format type must contain only alphanumeric characters and underscores."
+msgstr "Typ av format får bara innehålla alfanumeriska tecken och understreck."
+
+#: date/date.module:759
+msgid "This format type already exists.  Please enter a unique type."
+msgstr "Denna typ av format finns redan. Var god ange en unik typ."
+
+#: date/date.module:40
+msgid "view date repeats"
+msgstr "visa upprepningar för datum"
+
+#: date/date.module:28
+msgid "Repeats"
+msgstr "Upprepningar"
+
+#: date/date.install:105
+msgid "All date fields using the jscalendar widget have been changed to use the text widget instead, since the jscalendar widget is no longer supported. Enable the Date Popup module to make a jQuery popup calendar available and edit the field settings to select it."
+msgstr "Alla datumfält som använder gränssnittskomponenten jscalendar har ändrats till att använda gränssnittskomponenten text istället, då jscalendar inte längre stöds. Aktivera modulen Date Popup för att kunna använda jQuery som popupkalendar, och redigera fältinställningarna för att välja denna."
+
+#: date/date.install:142
+msgid "All repeating date fields have been updated to use the new repeating widgets."
+msgstr "Alla återkommande datumfält har uppdaterats att använda de nya återkommande gränssnittskomponenterna."
+
+#: date/date.install:187
+msgid "The database has been updated to correct the stored timezone for fields using timezone 'none'."
+msgstr "Databasen har uppdaterats för att rätta till den lagrade tidszonen för fält som använder tidszonen \"ingen\"."
+
+#: date/date.install:202
+msgid "Some updates are still pending. Please return to <a href=\"@update-php\">update.php</a> and run the remaining updates."
+msgstr "Några uppdateringar är fortfarande kvar. Vänligen återvänd till <a href=\"@update-php\">update.php</a> och kör de kvarvarande uppdateringarna."
+
+#: date/date.install:203
+msgid "Some updates are still pending.<br/>Please re-run the update script."
+msgstr "Några uppdateringar är fortfarande kvar.<br />Var vänlig kör uppdateringsskriptet igen."
+
+#: date/date.install:222
+msgid "Time"
+msgstr "Tid"
+
+#: date/date.install:223
+msgid "Time with timezone"
+msgstr "Tid med tidszon"
+
+#: date/date.install:224
+msgid "iCal"
+msgstr "iCal"
+
+#: date/date.install:225
+msgid "Timestamp"
+msgstr "Tidsstämpel"
+
+#: date/date.install:226
+msgid "Feed"
+msgstr "Innehållsflöde"
+
+#: date/date.install:227
+msgid "ISO"
+msgstr "ISO"
+
+#: date/date.install:308
+msgid "Field %field formats were converted to custom formats."
+msgstr "Formaten för fält %field konverterades till anpassade format."
+
+#: date/date.install:311
+msgid "The old format type %from_format for field %field was converted to the new format type %to_format."
+msgstr "Den gamla formattypen %from_format för fält %field  konverterades till den nya formattypen %to_format."
+
+#: date/date.install:337
+msgid "The display settings for field %field in content type %type_name were updated."
+msgstr "Visningsinställningarna för fältet %field i innehållstypen %type_name har uppdaterats."
+
+#: date/date.install:366
+msgid "Date display formats are now included with the system date and time settings. Please visit <a href=\"@date-time-page\">the Date and time format page</a> to see the new format types."
+msgstr "Visningsformat för datum ingår nu med inställningarna för systemet datum och tid. Besök sidan <a href=\"@date-time-page\">Datum och tid</a> för att se de nya typerna av format."
+
+#: date/date.info:0
+#: date_tools/date_tools.wizard.inc:19;43;355
+#: includes/date_api.views.inc:130;141
+msgid "Date"
+msgstr "Datum"
+
+#: date/date.info:0
+msgid "Defines CCK date/time fields and widgets."
+msgstr "Definierar fält för Datum/Tid i CCK och gränssnittskomponenter."
+
+#: date_locale/date_locale.module:152
+msgid "Language"
+msgstr "Språk"
+
+#: date_locale/date_locale.module:160
+msgid "Search"
+msgstr "Sök"
+
+#: date_locale/date_locale.module:176
+msgid "Date format settings for %language_name"
+msgstr "Inställningar för datumformat åt %language_name"
+
+#: date_locale/date_locale.module:209
+#: date_php4/date_php4.module:54
+#: date_tools/date_tools.wizard.inc:112
+msgid "Save"
+msgstr "Spara"
+
+#: date_locale/date_locale.module:45
+msgid "Locale date settings"
+msgstr "Inställningar för plats"
+
+#: date_locale/date_locale.module:46
+msgid "Configure date formats for each locale"
+msgstr "Konfigurera datumformat för varje plats"
+
+#: date_locale/date_locale.info:0
+msgid "Date Locale"
+msgstr "Date Locale"
+
+#: date_locale/date_locale.info:0
+msgid "Allows the site admin to configure multiple formats for date/time display to tailor dates for a specific locale or audience."
+msgstr "Låter webbplatsen administratör konfigurera flera format för visning av datum/tid för att skräddarsy datum för en specifik plats eller publik."
+
+#: date_php4/date_php4.module:44
+msgid "Date PHP4 Settings"
+msgstr "Inställningar för Date PHP4"
+
+#: date_php4/date_php4.module:47
+msgid "TRUE"
+msgstr "SANT"
+
+#: date_php4/date_php4.module:47
+msgid "FALSE"
+msgstr "FALSKT"
+
+#: date_php4/date_php4.module:49
+msgid "Use PHP default timezone"
+msgstr "Använd förvald tidszon för PHP"
+
+#: date_php4/date_php4.module:50
+msgid "Getting date computations working correctly in PHP versions earlier than PHP 5.2 involves extra computations that add a lot of overhead. These computations are needed because the timezone PHP uses on date computations may not match the site or user timezone or other date-specific timezones. We can speed processing up if we assume that PHP is using the correct timezone, but need to do more time-intensive processing if it is not. If timezone adjustments do not seem to be working correctly in your setup, you can set this option to FALSE to force the system to use the more accurate, but slower, timezone computations."
+msgstr "Att få beräkningar av datum att fungera som det ska i PHP av versioner tidigare än 5.2 kräver extra beräkningar som lägger till en massa överliggande data. Dessa beräkningar krävs för att tidszonen som PHP använder på beräkningar av datum kanske inte passar webbplatsens, eller användarens tidszon eller andra datumspecifika tidszoner. Vi kan snabba på processen om vi antar att PHP använder den korrekta tidszonen, men kommer att vara mer tidskrävande om den inte är det. Om ändringar av tidszonen inte verkar fungera som det ska i din installation kan du sätta det här alternativet till FALSKT för att tvinga systemet att vara mer exakt, men det kommer att bli långsammare beräkningar av tidszoner."
+
+#: date_php4/date_php4.module:20
+msgid "administer date_php4 settings"
+msgstr "administrera inställningar för date_php4"
+
+#: date_php4/date_php4.module:29
+#: date_php4/date_php4.info:0
+msgid "Date PHP4"
+msgstr "Date PHP4"
+
+#: date_php4/date_php4.module:30
+msgid "Date PHP4 setup."
+msgstr "Installation av Date PHP4."
+
+#: date_php4/date_php4.info:0
+msgid "Emulate PHP 5.2 date functions in PHP 4.x, PHP 5.0, and PHP 5.1. Required when using the Date API with PHP versions less than PHP 5.2."
+msgstr "Emulerar datumfunktioner av typen PHP 5.2 i PHP 4.x, PHP 5.0 och PHP 5.1. Krävs när du använder Date API med versioner av PHP lägre än PHP 5.2."
+
+#: date_popup/date_popup.module:224
+msgid "Clear"
+msgstr "Rensa"
+
+#: date_popup/date_popup.module:225
+msgid "Close"
+msgstr "Stäng"
+
+#: date_popup/date_popup.module:272
+msgid "Previous field"
+msgstr "Föregående fält"
+
+#: date_popup/date_popup.module:272
+msgid "Next field"
+msgstr "Nästa fält"
+
+#: date_popup/date_popup.module:272
+msgid "Increment"
+msgstr "Öka"
+
+#: date_popup/date_popup.module:272
+msgid "Decrement"
+msgstr "Minska"
+
+#: date_popup/date_popup.module:324
+msgid "Field %field is required."
+msgstr "Fältet %field krävs."
+
+#: date_popup/date_popup.module:348
+msgid "Field %field is invalid."
+msgstr "Fäldet %field är inte giltigt."
+
+#: date_popup/date_popup.module:560
+msgid "<p>The Date Popup calendar datepicker uses the jQuery UI datepicker. A version of that is included with the Date Popup module, but you are strongly encouraged to use the <a href=\"http://drupal.org/project/jquery_ui\">jQuery UI module</a> instead. If the jQuery UI module is installed, the Date Popup will use the datepicker from that module, which is likely to be more current. If you are having any problems with Popups and you are not already using jQuery UI, please do that as a first step before reporting problems.</p>"
+msgstr "<p>Datumväljaren för popup av datum till kalender använder jQuery UI datumväljare. En version av detta medföljer modulen Date Popup, men du uppmanas att använda <a href=\"http://drupal.org/project/jquery_ui\">modulen jQuery UI</a> istället. Om jQuery UI är installerad kommer popup av datum använda datumväljare från den modulen, som sannolikt är mer aktuell. Gör detta som första steg innan du rapporterar problem om du har några problem med popupfönster och du inte redan använder jQuery UI.</p>"
+
+#: date_popup/date_popup.module:561
+msgid "<p>The Date Popup module uses a jQuery timepicker module. There is no \"official\" jQuery UI timepicker, and not everyone likes the one that is included here. If you do not want to use the timepicker, you can turn it off below and users will get a regular textfield instead.</p>"
+msgstr "<p>Modulen Date Popup använder en modul för jQuery tidsväljare. Det finns ingen \"officiell\" jQuery UI tidsväljare, och inte alla gillar den som ingår här. Om du inte vill använda tidsväljaren kan du stänga av det nedan och användarna kommer att få ett vanligt textfältet istället.</p>"
+
+#: date_popup/date_popup.module:565
+msgid "Use default jQuery timepicker"
+msgstr "Använd förvald jQueary tidsväljare"
+
+#: date_popup/date_popup.module:565
+msgid "Manual time entry, no jQuery timepicker"
+msgstr "Manuellt tidsinlägg, ingen jQuery tidsväljare"
+
+#: date_popup/date_popup.module:566
+msgid "Timepicker"
+msgstr "Tidsväljare"
+
+#: date_popup/date_popup.module:568
+msgid "Choose the jQuery timepicker to user."
+msgstr "Välj tidsväljaren jQuery för användare."
+
+#: date_popup/date_popup.module:586
+msgid "<p>The Date Popup calendar includes some css for IE6 that breaks css validation. Since IE 6 is now superceded by IE 7 and IE 8, the special css for IE 6 has been removed from the regular css used by the Date Popup. If you find you need that css after all, you can add it back in your theme. Look at the way the Garland theme adds special IE-only css in in its page.tpl.php file. The css you need is:</p>"
+msgstr "Popup för datum åt kalender innehåller en del CSS för IE6 som hindrar validering av CSS. Eftersom IE6<p>Popup för datum åt kalender innehåller en del CSS för IE6 som bryter CSS-validering. Eftersom IE 6 nu ersatts med IE 7 och IE 8, så har de specifika CSS:erna för IE 6 tagits bort från den ordinarie CSS-filen som används av Popup för datum. Om du upptäcker att du behöver denna CSS trots allt, kan du lägga tillbaka det i ditt tema. Titta på hur temat Garland lägger särskild CSS enbart för IE i sin fil page.tpl.php. CSS du behöver är:</p>"
+
+#: date_popup/date_popup.module:545
+msgid "Date Popup Configuration"
+msgstr "Konfiguration av popup för kalender"
+
+#: date_popup/date_popup.module:546
+msgid "Allows the user to configure the Date Popup settings."
+msgstr "Tillåter användaren att konfigurera inställningar för popup av datum"
+
+#: (duplicate) date_popup/date_popup.install:16
+msgid "Date Popup requirements"
+msgstr "Krav för popup åt datum"
+
+#: (duplicate) date_popup/date_popup.install:17
+msgid "The Date Popup module needs code added by the <a href=\"http://drupal.org/project/jquery_ui\">jQuery UI module.</a> This is not yet a requirement, but soon will be, so you are encouraged to install that module as soon as possible. In the meantime, a version of the needed code is included here."
+msgstr "Modulen Popup av datum behöver kod tillagd av <a href=\"http://drupal.org/project/jquery_ui\">modulen jQuery UI</a>. Detta är ännu inte ett krav, men kommer snart  att vara. Så du uppmanas att installera den modulen så snart som möjligt. Under tiden så ingår en version av den nödvändiga koden här."
+
+#: date_popup/date_popup.info:0
+#: date_tools/date_tools.wizard.inc:362
+msgid "Date Popup"
+msgstr "Date Popup"
+
+#: date_popup/date_popup.info:0
+msgid "Enables jquery popup calendars and time entry widgets for selecting dates and times."
+msgstr "Aktiverar JQuery popupkalender och gränssnittskomponenter för tidsinlägg för att välja datum och tid."
+
+#: date_repeat/date_repeat_form.inc:68
+msgid "Repeat"
+msgstr "Upprepa"
+
+#: date_repeat/date_repeat_form.inc:69
+msgid "Choose a frequency and period to repeat this date. If nothing is selected, the date will not repeat."
+msgstr "Använd en frekvens och en period att upprepa detta datum. Om inget är valt kommer datumet inte att upprepas."
+
+#: date_repeat/date_repeat_form.inc:101
+msgid "Until"
+msgstr "Till"
+
+#: date_repeat/date_repeat_form.inc:102
+msgid "Date to stop repeating this item."
+msgstr "Datum att sluta repetera denna post."
+
+#: date_repeat/date_repeat_form.inc:122
+msgid "Advanced"
+msgstr "Utökad"
+
+#: date_repeat/date_repeat_form.inc:125
+msgid "If no advanced options are selected, the date will repeat on the day of week of the start date for weekly repeats, otherwise on the month and day of the start date. Use the options below to override that behavior to select specific months and days to repeat on. Use the 'Except' box to input dates that should be omitted from the results."
+msgstr "Om inga utökade inställningar är valda kommer datumet att upprepas varje vecka  med samma veckodag som i startdatumet, annars per månad och startdatum. Använd alternativen nedan för att åsidosätta detta beteende för att välja specifik månad och dag att upprepa runt. Använd rutan \"Utom\" för att mata in datum som skall undantas från resultatet."
+
+#: date_repeat/date_repeat_form.inc:134;145;156
+msgid "-- Any"
+msgstr "-- Någon"
+
+#: date_repeat/date_repeat_form.inc:143
+msgid "Day of Month"
+msgstr "Dag av månad"
+
+#: date_repeat/date_repeat_form.inc:154
+msgid "Day of Week"
+msgstr "Dag av vecka"
+
+#: date_repeat/date_repeat_form.inc:168
+msgid "Except"
+msgstr "Utom"
+
+#: date_repeat/date_repeat_form.inc:169
+msgid "Dates to omit from the list of repeating dates."
+msgstr "Datum att åsidosätta från listan av upprepade datum."
+
+#: date_repeat/date_repeat_form.inc:258
+msgid "Delete"
+msgstr "Radera"
+
+#: date_repeat/date_repeat_form.inc:258
+msgid "Current exceptions"
+msgstr "Nuvarande undantag"
+
+#: date_repeat/date_repeat.module:41
+msgid "-- Period"
+msgstr "-- Period"
+
+#: date_repeat/date_repeat.module:51
+msgid "-- Frequency"
+msgstr "-- Frekvens"
+
+#: date_repeat/date_repeat.module:55
+msgid "Every @number"
+msgstr "Varje @number"
+
+#: date_repeat/date_repeat.module:193
+msgid "!repeats_every_interval on the !date_order !day_of_week"
+msgstr "!repeats_every_interval för !date_order !day_of_week"
+
+#: date_repeat/date_repeat.module:196
+msgid "!repeats_every_interval every !day_of_week"
+msgstr "!repeats_every_interval varje !day_of_week"
+
+#: date_repeat/date_repeat.module:199
+msgid "and"
+msgstr "och"
+
+#: date_repeat/date_repeat.module:209
+msgid "!repeats_every_interval on the !month_days of !month_names"
+msgstr "!repeats_every_interval på !month_days of !month_names"
+
+#: date_repeat/date_repeat.module:212
+msgid "!repeats_every_interval on !month_names"
+msgstr "!repeats_every_interval på !month_names"
+
+#: date_repeat/date_repeat.module:220
+msgid "!repeats_every_interval !count times"
+msgstr "!repeats_every_interval !count gånger"
+
+#: date_repeat/date_repeat.module:224
+msgid "!repeats_every_interval until !until_date"
+msgstr "!repeats_every_interval tills !until_date"
+
+#: date_repeat/date_repeat.module:231
+msgid "!repeats_every_interval except !except_dates"
+msgstr "!repeats_every_interval utom !except_dates"
+
+#: date_repeat/date_repeat.module:235
+msgid "!repeats_every_interval where the week start on !day_of_week"
+msgstr "!repeats_every_interval där veckan startar med en !day_of_week"
+
+#: date_repeat/date_repeat.module:237
+msgid "Repeats !interval !bymonth !byday !count !until !except."
+msgstr "Upprepar !interval !bymonth !byday !count !until !except."
+
+#: date_repeat/date_repeat.module:172
+msgid "every week"
+msgid_plural "every @count weeks"
+msgstr[0] "varje vecka"
+msgstr[1] "var @count vecka"
+
+#: date_repeat/date_repeat.module:175
+msgid "every month"
+msgid_plural "every @count months"
+msgstr[0] "varje månad"
+msgstr[1] "var @count månad"
+
+#: date_repeat/date_repeat.module:178
+msgid "every year"
+msgid_plural "every @count years"
+msgstr[0] "varje år"
+msgstr[1] "var @count år"
+
+#: date_repeat/date_repeat.module:181
+msgid "every day"
+msgid_plural "every @count days"
+msgstr[0] "varje dag"
+msgstr[1] "var @count dag"
+
+#: date_repeat/date_repeat.info:0
+msgid "Date Repeat API"
+msgstr "Date Repeat API"
+
+#: date_repeat/date_repeat.info:0
+msgid "A Date Repeat API to calculate repeating dates and times from iCal rules."
+msgstr "Ett Date Repeat API för att räkna ut upprepande datum och tider för regler från iCal."
+
+#: date_timezone/date_timezone.module:18
+msgid "The Date Timezone module requires you to <a href=\"@link\">set the site timezone name</a>."
+msgstr "Modulen Date Timezone kräver att du <a href=\"@link\">anger namnet på webbplatsens tidszons</a>."
+
+#: date_timezone/date_timezone.module:63;118
+msgid "Default time zone"
+msgstr "Förvald tidszon"
+
+#: date_timezone/date_timezone.module:66
+msgid "Select the default site time zone. If in doubt, choose the timezone that is closest to your location which has the same rules for daylight saving time."
+msgstr "Välj den förvalda tidszonen. Finns den inte med i listan så väljer du tidszonen som är närmast din plats som har samma regler för sommar- och vintertid."
+
+#: date_timezone/date_timezone.module:121
+msgid "Select your current local time. If in doubt, choose the timezone that is closest to your location which has the same rules for daylight saving time. Dates and times throughout this site will be displayed using this time zone."
+msgstr "Välj din nuvaranda lokala tid.Finns den inte med i listan så väljer du tidszonen som är närmast din plats som har samma regler för sommar- och vintertid. Datum och tider genom denna webbplats kommer att visas genom att använda denna tidszon."
+
+#: date_timezone/date_timezone.module:267
+msgid "timezone"
+msgstr "tidszon"
+
+#: date_timezone/date_timezone.module:267
+msgid "Detected time zone: %timezone; client date: %date; abbreviation: %abbreviation; offset: %offset; daylight saving time: %is_daylight_saving_time."
+msgstr "Upptäckt tidszon: %timezone; datum för klient: %date; finkornighet: %abbreviation; offset: %offset; sommartid: %is_daylight_saving_time."
+
+#: date_timezone/date_timezone.module:28
+msgid "User timezone"
+msgstr "Tidszon för användare"
+
+#: date_timezone/date_timezone.install:221
+msgid "Africa/Algiers"
+msgstr "Afrika/Algeriet"
+
+#: date_timezone/date_timezone.install:222
+msgid "Africa/Asmera"
+msgstr "Afrika/Asmara"
+
+#: date_timezone/date_timezone.install:223
+msgid "Africa/Bangui"
+msgstr "Afrika/Bangui"
+
+#: date_timezone/date_timezone.install:224
+msgid "Africa/Blantyre"
+msgstr "Afrika/Blantyre"
+
+#: date_timezone/date_timezone.install:225
+msgid "Africa/Brazzaville"
+msgstr "Afrika/Brazzaville"
+
+#: date_timezone/date_timezone.install:226
+msgid "Africa/Bujumbura"
+msgstr "Afrika/Bujumbura"
+
+#: date_timezone/date_timezone.install:227
+msgid "Africa/Cairo"
+msgstr "Afrika/Kairo"
+
+#: date_timezone/date_timezone.install:228
+msgid "Africa/Ceuta"
+msgstr "Afrika/Ceuta"
+
+#: date_timezone/date_timezone.install:229
+msgid "Africa/Dar_es_Salaam"
+msgstr "Afrika/Dar es-Salaam"
+
+#: date_timezone/date_timezone.install:230
+msgid "Africa/Djibouti"
+msgstr "Afrika/Djibouti"
+
+#: date_timezone/date_timezone.install:231
+msgid "Africa/Douala"
+msgstr "Afrika/Douala"
+
+#: date_timezone/date_timezone.install:232
+msgid "Africa/Gaborone"
+msgstr "Afrika/Gaborone"
+
+#: date_timezone/date_timezone.install:233
+msgid "Africa/Harare"
+msgstr "Afrika/Harare"
+
+#: date_timezone/date_timezone.install:234
+msgid "Africa/Johannesburg"
+msgstr "Afrika/Johannesburg"
+
+#: date_timezone/date_timezone.install:235
+msgid "Africa/Kampala"
+msgstr "Afrika/Kampala"
+
+#: date_timezone/date_timezone.install:236
+msgid "Africa/Khartoum"
+msgstr "Afrika/Khartoum"
+
+#: date_timezone/date_timezone.install:237
+msgid "Africa/Kigali"
+msgstr "Afrika/Kigali"
+
+#: date_timezone/date_timezone.install:238
+msgid "Africa/Kinshasa"
+msgstr "Afrika/Kinshasa"
+
+#: date_timezone/date_timezone.install:239
+msgid "Africa/Lagos"
+msgstr "Afrika/Lagos"
+
+#: date_timezone/date_timezone.install:240
+msgid "Africa/Libreville"
+msgstr "Afrika/Libreville"
+
+#: date_timezone/date_timezone.install:241
+msgid "Africa/Luanda"
+msgstr "Afrika/Luanda"
+
+#: date_timezone/date_timezone.install:242
+msgid "Africa/Lubumbashi"
+msgstr "Afrika/Lubumbashi"
+
+#: date_timezone/date_timezone.install:243
+msgid "Africa/Lusaka"
+msgstr "Afrika/Lusaka"
+
+#: date_timezone/date_timezone.install:244
+msgid "Africa/Malabo"
+msgstr "Afrika/Malabo"
+
+#: date_timezone/date_timezone.install:245
+msgid "Africa/Maputo"
+msgstr "Afrika/Maputo"
+
+#: date_timezone/date_timezone.install:246
+msgid "Africa/Maseru"
+msgstr "Afrika/Maseru"
+
+#: date_timezone/date_timezone.install:247
+msgid "Africa/Mbabane"
+msgstr "Afrika/Mbabane"
+
+#: date_timezone/date_timezone.install:248
+msgid "Africa/Mogadishu"
+msgstr "Afrika/Mogadishu"
+
+#: date_timezone/date_timezone.install:249
+msgid "Africa/Nairobi"
+msgstr "Afrika/Nairobi"
+
+#: date_timezone/date_timezone.install:250
+msgid "Africa/Ndjamena"
+msgstr "Afrika/N'Djamena"
+
+#: date_timezone/date_timezone.install:251
+msgid "Africa/Niamey"
+msgstr "Afrika/Niamey"
+
+#: date_timezone/date_timezone.install:252
+msgid "Africa/Porto-Novo"
+msgstr "Afrika/Porto-Novo"
+
+#: date_timezone/date_timezone.install:253
+msgid "Africa/Tripoli"
+msgstr "Afrika/Tripoli"
+
+#: date_timezone/date_timezone.install:254
+msgid "Africa/Tunis"
+msgstr "Afrika/Tunis"
+
+#: date_timezone/date_timezone.install:255
+msgid "Africa/Windhoek"
+msgstr "Afrika/Windhoek"
+
+#: date_timezone/date_timezone.install:256
+msgid "America/Adak"
+msgstr "Amerika/Adak"
+
+#: date_timezone/date_timezone.install:257
+msgid "America/Anchorage"
+msgstr "Amerika/Anchorage"
+
+#: date_timezone/date_timezone.install:258
+msgid "America/Anguilla"
+msgstr "Amerika/Anguilla"
+
+#: date_timezone/date_timezone.install:259
+msgid "America/Antigua"
+msgstr "Amerika/Antigua"
+
+#: date_timezone/date_timezone.install:260
+msgid "America/Araguaina"
+msgstr "Amerika/Araguaína"
+
+#: date_timezone/date_timezone.install:261
+msgid "America/Aruba"
+msgstr "Amerika/Aruba"
+
+#: date_timezone/date_timezone.install:262
+msgid "America/Asuncion"
+msgstr "Amerika/Asunción"
+
+#: date_timezone/date_timezone.install:263
+msgid "America/Atka"
+msgstr "Amerika/Atka"
+
+#: date_timezone/date_timezone.install:264
+msgid "America/Barbados"
+msgstr "Amerika/Barbados"
+
+#: date_timezone/date_timezone.install:265
+msgid "America/Belem"
+msgstr "Amerika/Belém"
+
+#: date_timezone/date_timezone.install:266
+msgid "America/Belize"
+msgstr "Amerika/Belize"
+
+#: date_timezone/date_timezone.install:267
+msgid "America/Boa_Vista"
+msgstr "Amerika/Boavista"
+
+#: date_timezone/date_timezone.install:268
+msgid "America/Bogota"
+msgstr "Amerika/Bogotá"
+
+#: date_timezone/date_timezone.install:269
+msgid "America/Boise"
+msgstr "Amerika/Boise"
+
+#: date_timezone/date_timezone.install:270
+msgid "America/Buenos_Aires"
+msgstr "Amerika/Buenos Aires"
+
+#: date_timezone/date_timezone.install:271
+msgid "America/Cambridge_Bay"
+msgstr "Amerika/Cambridge Bay"
+
+#: date_timezone/date_timezone.install:272
+msgid "America/Cancun"
+msgstr "Amerika/Cancún"
+
+#: date_timezone/date_timezone.install:273
+msgid "America/Caracas"
+msgstr "Amerika/Caracas"
+
+#: date_timezone/date_timezone.install:274
+msgid "America/Catamarca"
+msgstr "Amerika/Catamarca"
+
+#: date_timezone/date_timezone.install:275
+msgid "America/Cayenne"
+msgstr "Amerika/Cayenne"
+
+#: date_timezone/date_timezone.install:276
+msgid "America/Cayman"
+msgstr "Amerika/Cayman"
+
+#: date_timezone/date_timezone.install:277
+msgid "America/Chicago"
+msgstr "Amerika/Chicago"
+
+#: date_timezone/date_timezone.install:278
+msgid "America/Chihuahua"
+msgstr "Amerika/Chihuahua"
+
+#: date_timezone/date_timezone.install:279
+msgid "America/Cordoba"
+msgstr "Amerika/Córdoba"
+
+#: date_timezone/date_timezone.install:280
+msgid "America/Costa_Rica"
+msgstr "Amerika/Costa Rica"
+
+#: date_timezone/date_timezone.install:281
+msgid "America/Cuiaba"
+msgstr "Amerika/Cuiabá"
+
+#: date_timezone/date_timezone.install:282
+msgid "America/Curacao"
+msgstr "Amerika/Curaçao"
+
+#: date_timezone/date_timezone.install:283
+msgid "America/Dawson"
+msgstr "Amerika/Dawson"
+
+#: date_timezone/date_timezone.install:284
+msgid "America/Dawson_Creek"
+msgstr "Amerika/Dawsons Creek"
+
+#: date_timezone/date_timezone.install:285
+msgid "America/Denver"
+msgstr "Amerika/Denver"
+
+#: date_timezone/date_timezone.install:286
+msgid "America/Detroit"
+msgstr "Amerika/Detroit"
+
+#: date_timezone/date_timezone.install:287
+msgid "America/Dominica"
+msgstr "Amerika/Dominica"
+
+#: date_timezone/date_timezone.install:288
+msgid "America/Edmonton"
+msgstr "Amerika/Edmonton"
+
+#: date_timezone/date_timezone.install:289
+msgid "America/Eirunepe"
+msgstr "Amerika/Eirunepe"
+
+#: date_timezone/date_timezone.install:290
+msgid "America/El_Salvador"
+msgstr "Amerika/El Salvador"
+
+#: date_timezone/date_timezone.install:291
+msgid "America/Ensenada"
+msgstr "Amerika/Ensenada"
+
+#: date_timezone/date_timezone.install:292
+msgid "America/Fort_Wayne"
+msgstr "Amerika/Fort Wayne"
+
+#: date_timezone/date_timezone.install:293
+msgid "America/Fortaleza"
+msgstr "Amerika/Fortaleza"
+
+#: date_timezone/date_timezone.install:294
+msgid "America/Glace_Bay"
+msgstr "Amerika/Glace Bay"
+
+#: date_timezone/date_timezone.install:295
+msgid "America/Godthab"
+msgstr "Amerika/Godthab"
+
+#: date_timezone/date_timezone.install:296
+msgid "America/Goose_Bay"
+msgstr "Amerika/Goose Bay"
+
+#: date_timezone/date_timezone.install:297
+msgid "America/Grand_Turk"
+msgstr "Amerika/Grand Turk"
+
+#: date_timezone/date_timezone.install:298
+msgid "America/Grenada"
+msgstr "Amerika/Grenada"
+
+#: date_timezone/date_timezone.install:299
+msgid "America/Guadeloupe"
+msgstr "Amerika/Guadeloupe"
+
+#: date_timezone/date_timezone.install:300
+msgid "America/Guatemala"
+msgstr "Amerika/Guatemala"
+
+#: date_timezone/date_timezone.install:301
+msgid "America/Guayaquil"
+msgstr "Amerika/Guayaquil"
+
+#: date_timezone/date_timezone.install:302
+msgid "America/Guyana"
+msgstr "Amerika/Guyana"
+
+#: date_timezone/date_timezone.install:303
+msgid "America/Halifax"
+msgstr "Amerika/Halifax"
+
+#: date_timezone/date_timezone.install:304
+msgid "America/Havana"
+msgstr "Amerika/Havana"
+
+#: date_timezone/date_timezone.install:305
+msgid "America/Hermosillo"
+msgstr "Amerika/Hermosillo"
+
+#: date_timezone/date_timezone.install:306
+msgid "America/Indiana/Indianapolis"
+msgstr "Amerika/Indiana/Indianapolis"
+
+#: date_timezone/date_timezone.install:307
+msgid "America/Indiana/Knox"
+msgstr "Amerika/Indiana/Knox"
+
+#: date_timezone/date_timezone.install:308
+msgid "America/Indiana/Marengo"
+msgstr "Amerika/Indiana/Marengo"
+
+#: date_timezone/date_timezone.install:309
+msgid "America/Indiana/Vevay"
+msgstr "Amerika/Indiana/Vevay"
+
+#: date_timezone/date_timezone.install:310
+msgid "America/Indianapolis"
+msgstr "Amerika/Indianapolis"
+
+#: date_timezone/date_timezone.install:311
+msgid "America/Inuvik"
+msgstr "Amerika/Inuvik"
+
+#: date_timezone/date_timezone.install:312
+msgid "America/Iqaluit"
+msgstr "Amerika/Iqaluit"
+
+#: date_timezone/date_timezone.install:313
+msgid "America/Jamaica"
+msgstr "Amerika/Jamaica"
+
+#: date_timezone/date_timezone.install:314
+msgid "America/Jujuy"
+msgstr "Amerika/Jujuy"
+
+#: date_timezone/date_timezone.install:315
+msgid "America/Juneau"
+msgstr "Amerika/Juneau"
+
+#: date_timezone/date_timezone.install:316
+msgid "America/Kentucky/Louisville"
+msgstr "Amerika/Kentucky/Louisville"
+
+#: date_timezone/date_timezone.install:317
+msgid "America/Kentucky/Monticello"
+msgstr "Amerika/Kentucky/Monticello"
+
+#: date_timezone/date_timezone.install:318
+msgid "America/Knox_IN"
+msgstr "Amerika/Knox_IN"
+
+#: date_timezone/date_timezone.install:319
+msgid "America/La_Paz"
+msgstr "Amerika/La Paz"
+
+#: date_timezone/date_timezone.install:320
+msgid "America/Lima"
+msgstr "Amerika/Lima"
+
+#: date_timezone/date_timezone.install:321
+msgid "America/Los_Angeles"
+msgstr "Amerika/Los Angeles"
+
+#: date_timezone/date_timezone.install:322
+msgid "America/Louisville"
+msgstr "Amerika/Louisville"
+
+#: date_timezone/date_timezone.install:323
+msgid "America/Maceio"
+msgstr "Amerika/Maceió"
+
+#: date_timezone/date_timezone.install:324
+msgid "America/Managua"
+msgstr "Amerika/Managua"
+
+#: date_timezone/date_timezone.install:325
+msgid "America/Manaus"
+msgstr "Amerika/Manaus"
+
+#: date_timezone/date_timezone.install:326
+msgid "America/Martinique"
+msgstr "Amerika/Martinique"
+
+#: date_timezone/date_timezone.install:327
+msgid "America/Mazatlan"
+msgstr "Amerika/Mazatlán"
+
+#: date_timezone/date_timezone.install:328
+msgid "America/Mendoza"
+msgstr "Amerika/Mendoza"
+
+#: date_timezone/date_timezone.install:329
+msgid "America/Menominee"
+msgstr "Amerika/Menominee"
+
+#: date_timezone/date_timezone.install:330
+msgid "America/Merida"
+msgstr "Amerika/Mérida"
+
+#: date_timezone/date_timezone.install:331
+msgid "America/Mexico_City"
+msgstr "Amerika/Mexico City"
+
+#: date_timezone/date_timezone.install:332
+msgid "America/Miquelon"
+msgstr "Amerika/Miquelon"
+
+#: date_timezone/date_timezone.install:333
+msgid "America/Monterrey"
+msgstr "Amerika/Monterrey"
+
+#: date_timezone/date_timezone.install:334
+msgid "America/Montevideo"
+msgstr "Amerika/Montevideo"
+
+#: date_timezone/date_timezone.install:335
+msgid "America/Montreal"
+msgstr "Amerika/Montreal"
+
+#: date_timezone/date_timezone.install:336
+msgid "America/Montserrat"
+msgstr "Amerika/Montserrat"
+
+#: date_timezone/date_timezone.install:337
+msgid "America/Nassau"
+msgstr "Amerika/Nassau"
+
+#: date_timezone/date_timezone.install:338
+msgid "America/New_York"
+msgstr "Amerika/New York"
+
+#: date_timezone/date_timezone.install:339
+msgid "America/Nipigon"
+msgstr "Amerika/Nipigon"
+
+#: date_timezone/date_timezone.install:340
+msgid "America/Nome"
+msgstr "Amerika/Nome"
+
+#: date_timezone/date_timezone.install:341
+msgid "America/Noronha"
+msgstr "Amerika/Noronha"
+
+#: date_timezone/date_timezone.install:342
+msgid "America/Panama"
+msgstr "Amerika/Panama"
+
+#: date_timezone/date_timezone.install:343
+msgid "America/Pangnirtung"
+msgstr "Amerika/Pangnirtung"
+
+#: date_timezone/date_timezone.install:344
+msgid "America/Paramaribo"
+msgstr "Amerika/Paramaribo"
+
+#: date_timezone/date_timezone.install:345
+msgid "America/Phoenix"
+msgstr "Amerika/Phoenix"
+
+#: date_timezone/date_timezone.install:346
+msgid "America/Port-au-Prince"
+msgstr "Amerika/Port-au-Prince"
+
+#: date_timezone/date_timezone.install:347
+msgid "America/Port_of_Spain"
+msgstr "Amerika/Port of Spain"
+
+#: date_timezone/date_timezone.install:348
+msgid "America/Porto_Acre"
+msgstr "Amerika/Porto Acre"
+
+#: date_timezone/date_timezone.install:349
+msgid "America/Porto_Velho"
+msgstr "Amerika/Porto Velho"
+
+#: date_timezone/date_timezone.install:350
+msgid "America/Puerto_Rico"
+msgstr "Amerika/Puerto Rico"
+
+#: date_timezone/date_timezone.install:351
+msgid "America/Rainy_River"
+msgstr "Amerika/Rainy River"
+
+#: date_timezone/date_timezone.install:352
+msgid "America/Rankin_Inlet"
+msgstr "Amerika/Rankin Inlet"
+
+#: date_timezone/date_timezone.install:353
+msgid "America/Recife"
+msgstr "Amerika/Recife"
+
+#: date_timezone/date_timezone.install:354
+msgid "America/Regina"
+msgstr "Amerika/Regina"
+
+#: date_timezone/date_timezone.install:355
+msgid "America/Rio_Branco"
+msgstr "Amerika/Rio Branco"
+
+#: date_timezone/date_timezone.install:356
+msgid "America/Rosario"
+msgstr "Amerika/Rosario"
+
+#: date_timezone/date_timezone.install:357
+msgid "America/Santiago"
+msgstr "Amerika/Santiago"
+
+#: date_timezone/date_timezone.install:358
+msgid "America/Santo_Domingo"
+msgstr "Amerika/Santo Domingo"
+
+#: date_timezone/date_timezone.install:359
+msgid "America/Sao_Paulo"
+msgstr "Amerika/São Paulo"
+
+#: date_timezone/date_timezone.install:360
+msgid "America/Scoresbysund"
+msgstr "Amerika/Scoresbysund"
+
+#: date_timezone/date_timezone.install:361
+msgid "America/Shiprock"
+msgstr "Amerika/Shiprock"
+
+#: date_timezone/date_timezone.install:362
+msgid "America/St_Johns"
+msgstr "Amerika/Saint Johns"
+
+#: date_timezone/date_timezone.install:363
+msgid "America/St_Kitts"
+msgstr "Amerika/Saint Kitts"
+
+#: date_timezone/date_timezone.install:364
+msgid "America/St_Lucia"
+msgstr "Amerika/Saint Lucia"
+
+#: date_timezone/date_timezone.install:365
+msgid "America/St_Thomas"
+msgstr "Amerika/Saint Thomas"
+
+#: date_timezone/date_timezone.install:366
+msgid "America/St_Vincent"
+msgstr "Amerika/Saint Vincent"
+
+#: date_timezone/date_timezone.install:367
+msgid "America/Swift_Current"
+msgstr "Amerika/Swift Current"
+
+#: date_timezone/date_timezone.install:368
+msgid "America/Tegucigalpa"
+msgstr "Amerika/Tegucigalpa"
+
+#: date_timezone/date_timezone.install:369
+msgid "America/Thule"
+msgstr "Amerika/Thule"
+
+#: date_timezone/date_timezone.install:370
+msgid "America/Thunder_Bay"
+msgstr "Amerika/Thunder Bay"
+
+#: date_timezone/date_timezone.install:371
+msgid "America/Tijuana"
+msgstr "Amerika/Tijuana"
+
+#: date_timezone/date_timezone.install:372
+msgid "America/Tortola"
+msgstr "Amerika/Tortola"
+
+#: date_timezone/date_timezone.install:373
+msgid "America/Vancouver"
+msgstr "Amerika/Vancouver"
+
+#: date_timezone/date_timezone.install:374
+msgid "America/Virgin"
+msgstr "Amerika/Virgin"
+
+#: date_timezone/date_timezone.install:375
+msgid "America/Whitehorse"
+msgstr "Amerika/Whitehorse"
+
+#: date_timezone/date_timezone.install:376
+msgid "America/Winnipeg"
+msgstr "Amerika/Winnipeg"
+
+#: date_timezone/date_timezone.install:377
+msgid "America/Yakutat"
+msgstr "Amerika/Yakutat"
+
+#: date_timezone/date_timezone.install:378
+msgid "America/Yellowknife"
+msgstr "Amerika/Yellowknife"
+
+#: date_timezone/date_timezone.install:379
+msgid "Antarctica/Casey"
+msgstr "Antarktis/Casey"
+
+#: date_timezone/date_timezone.install:380
+msgid "Antarctica/Davis"
+msgstr "Antarktis/Davis"
+
+#: date_timezone/date_timezone.install:381
+msgid "Antarctica/DumontDUrville"
+msgstr "Antarktis/Dumont d'Urville"
+
+#: date_timezone/date_timezone.install:382
+msgid "Antarctica/Mawson"
+msgstr "Antarktis/Mawson"
+
+#: date_timezone/date_timezone.install:383
+msgid "Antarctica/McMurdo"
+msgstr "Antarktis/McMurdo"
+
+#: date_timezone/date_timezone.install:384
+msgid "Antarctica/Palmer"
+msgstr "Antarktis/Palmer"
+
+#: date_timezone/date_timezone.install:385
+msgid "Antarctica/South_Pole"
+msgstr "Antarktis/Sydpolen"
+
+#: date_timezone/date_timezone.install:386
+msgid "Antarctica/Syowa"
+msgstr "Antarktis/Syowa"
+
+#: date_timezone/date_timezone.install:387
+msgid "Antarctica/Vostok"
+msgstr "Antarktis/Vostok"
+
+#: date_timezone/date_timezone.install:388
+msgid "Arctic/Longyearbyen"
+msgstr "Arktis/Longyearbyen"
+
+#: date_timezone/date_timezone.install:389
+msgid "Asia/Aden"
+msgstr "Asien/Aden"
+
+#: date_timezone/date_timezone.install:390
+msgid "Asia/Almaty"
+msgstr "Asien/Almaty"
+
+#: date_timezone/date_timezone.install:391
+msgid "Asia/Amman"
+msgstr "Asien/Amman"
+
+#: date_timezone/date_timezone.install:392
+msgid "Asia/Anadyr"
+msgstr "Asien/Anadyr"
+
+#: date_timezone/date_timezone.install:393
+msgid "Asia/Aqtau"
+msgstr "Asien/Aktau"
+
+#: date_timezone/date_timezone.install:394
+msgid "Asia/Aqtobe"
+msgstr "Asien/Aqtöbe"
+
+#: date_timezone/date_timezone.install:395
+msgid "Asia/Ashgabat"
+msgstr "Asien/Asjchabad"
+
+#: date_timezone/date_timezone.install:396
+msgid "Asia/Ashkhabad"
+msgstr "Asien/Asjchabad"
+
+#: date_timezone/date_timezone.install:397
+msgid "Asia/Baghdad"
+msgstr "Asien/Bagdad"
+
+#: date_timezone/date_timezone.install:398
+msgid "Asia/Bahrain"
+msgstr "Asien/Bahrain"
+
+#: date_timezone/date_timezone.install:399
+msgid "Asia/Baku"
+msgstr "Asien/Baku"
+
+#: date_timezone/date_timezone.install:400
+msgid "Asia/Bangkok"
+msgstr "Asien/Bangkok"
+
+#: date_timezone/date_timezone.install:401
+msgid "Asia/Beirut"
+msgstr "Asien/Beirut"
+
+#: date_timezone/date_timezone.install:402
+msgid "Asia/Bishkek"
+msgstr "Asien/Bisjkek"
+
+#: date_timezone/date_timezone.install:403
+msgid "Asia/Brunei"
+msgstr "Asien/Brunei"
+
+#: date_timezone/date_timezone.install:404
+msgid "Asia/Calcutta"
+msgstr "Asien/Calcutta"
+
+#: date_timezone/date_timezone.install:405
+msgid "Asia/Chungking"
+msgstr "Asien/Chongqing"
+
+#: date_timezone/date_timezone.install:406
+msgid "Asia/Colombo"
+msgstr "Asien/Colombo"
+
+#: date_timezone/date_timezone.install:407
+msgid "Asia/Dacca"
+msgstr "Asien/Dhaka"
+
+#: date_timezone/date_timezone.install:408
+msgid "Asia/Damascus"
+msgstr "Asien/Damaskus"
+
+#: date_timezone/date_timezone.install:409
+msgid "Asia/Dhaka"
+msgstr "Asien/Dhaka"
+
+#: date_timezone/date_timezone.install:410
+msgid "Asia/Dili"
+msgstr "Asien/Dili"
+
+#: date_timezone/date_timezone.install:411
+msgid "Asia/Dubai"
+msgstr "Asien/Dubai"
+
+#: date_timezone/date_timezone.install:412
+msgid "Asia/Dushanbe"
+msgstr "Asien/Dusjanbe"
+
+#: date_timezone/date_timezone.install:413
+msgid "Asia/Gaza"
+msgstr "Asien/Gaza"
+
+#: date_timezone/date_timezone.install:414
+msgid "Asia/Harbin"
+msgstr "Asien/Harbin"
+
+#: date_timezone/date_timezone.install:415
+msgid "Asia/Hong_Kong"
+msgstr "Asien/Hong Kong"
+
+#: date_timezone/date_timezone.install:416
+msgid "Asia/Hovd"
+msgstr "Asien/Chovd"
+
+#: date_timezone/date_timezone.install:417
+msgid "Asia/Irkutsk"
+msgstr "Asien/Irkutsk"
+
+#: date_timezone/date_timezone.install:418
+msgid "Asia/Istanbul"
+msgstr "Asien/Istanbul"
+
+#: date_timezone/date_timezone.install:419
+msgid "Asia/Jakarta"
+msgstr "Asien/Jakarta"
+
+#: date_timezone/date_timezone.install:420
+msgid "Asia/Jayapura"
+msgstr "Asien/Jayapura"
+
+#: date_timezone/date_timezone.install:421
+msgid "Asia/Jerusalem"
+msgstr "Asien/Jerusalem"
+
+#: date_timezone/date_timezone.install:422
+msgid "Asia/Kabul"
+msgstr "Asien/Kabul"
+
+#: date_timezone/date_timezone.install:423
+msgid "Asia/Kamchatka"
+msgstr "Asien/Kamtjatka"
+
+#: date_timezone/date_timezone.install:424
+msgid "Asia/Karachi"
+msgstr "Asien/Karachi"
+
+#: date_timezone/date_timezone.install:425
+msgid "Asia/Kashgar"
+msgstr "Asien/Kashgar"
+
+#: date_timezone/date_timezone.install:426
+msgid "Asia/Katmandu"
+msgstr "Asien/Katmandu"
+
+#: date_timezone/date_timezone.install:427
+msgid "Asia/Krasnoyarsk"
+msgstr "Asien/Krasnojarsk"
+
+#: date_timezone/date_timezone.install:428
+msgid "Asia/Kuala_Lumpur"
+msgstr "Asien/Kuala Lumpur"
+
+#: date_timezone/date_timezone.install:429
+msgid "Asia/Kuching"
+msgstr "Asien/Kuching"
+
+#: date_timezone/date_timezone.install:430
+msgid "Asia/Kuwait"
+msgstr "Asien/Kuwait"
+
+#: date_timezone/date_timezone.install:431
+msgid "Asia/Macao"
+msgstr "Asien/Macao"
+
+#: date_timezone/date_timezone.install:432
+msgid "Asia/Magadan"
+msgstr "Asien/Magadan"
+
+#: date_timezone/date_timezone.install:433
+msgid "Asia/Manila"
+msgstr "Asien/Manila"
+
+#: date_timezone/date_timezone.install:434
+msgid "Asia/Muscat"
+msgstr "Asien/Muskat"
+
+#: date_timezone/date_timezone.install:435
+msgid "Asia/Nicosia"
+msgstr "Asien/Nicosia"
+
+#: date_timezone/date_timezone.install:436
+msgid "Asia/Novosibirsk"
+msgstr "Asien/Novosibirsk"
+
+#: date_timezone/date_timezone.install:437
+msgid "Asia/Omsk"
+msgstr "Asien/Omsk"
+
+#: date_timezone/date_timezone.install:438
+msgid "Asia/Phnom_Penh"
+msgstr "Asien/Phnom Penh"
+
+#: date_timezone/date_timezone.install:439
+msgid "Asia/Pyongyang"
+msgstr "Asien/Pyongyang"
+
+#: date_timezone/date_timezone.install:440
+msgid "Asia/Qatar"
+msgstr "Asien/Qatar"
+
+#: date_timezone/date_timezone.install:441
+msgid "Asia/Rangoon"
+msgstr "Asien/Rangoon"
+
+#: date_timezone/date_timezone.install:442
+msgid "Asia/Riyadh"
+msgstr "Asien/Riyadh"
+
+#: date_timezone/date_timezone.install:443
+msgid "Asia/Riyadh87"
+msgstr "Asien/Riyadh87"
+
+#: date_timezone/date_timezone.install:444
+msgid "Asia/Riyadh88"
+msgstr "Asien/Riyadh88"
+
+#: date_timezone/date_timezone.install:445
+msgid "Asia/Riyadh89"
+msgstr "Asien/Riyadh89"
+
+#: date_timezone/date_timezone.install:446
+msgid "Asia/Saigon"
+msgstr "Asien/Saigon"
+
+#: date_timezone/date_timezone.install:447
+msgid "Asia/Samarkand"
+msgstr "Asien/Samarkand"
+
+#: date_timezone/date_timezone.install:448
+msgid "Asia/Seoul"
+msgstr "Asien/Seoul"
+
+#: date_timezone/date_timezone.install:449
+msgid "Asia/Shanghai"
+msgstr "Asien/Shanghai"
+
+#: date_timezone/date_timezone.install:450
+msgid "Asia/Singapore"
+msgstr "Asien/Singapore"
+
+#: date_timezone/date_timezone.install:451
+msgid "Asia/Taipei"
+msgstr "Asien/Taipei"
+
+#: date_timezone/date_timezone.install:452
+msgid "Asia/Tashkent"
+msgstr "Asien/Tashkent"
+
+#: date_timezone/date_timezone.install:453
+msgid "Asia/Tbilisi"
+msgstr "Asien/Tbilisi"
+
+#: date_timezone/date_timezone.install:454
+msgid "Asia/Tehran"
+msgstr "Asien/Tehran"
+
+#: date_timezone/date_timezone.install:455
+msgid "Asia/Tel_Aviv"
+msgstr "Asien/Tel Aviv"
+
+#: date_timezone/date_timezone.install:456
+msgid "Asia/Thimbu"
+msgstr "Asien/Thimbu"
+
+#: date_timezone/date_timezone.install:457
+msgid "Asia/Thimphu"
+msgstr "Asien/Thimphu"
+
+#: date_timezone/date_timezone.install:458
+msgid "Asia/Tokyo"
+msgstr "Asien/Tokyo"
+
+#: date_timezone/date_timezone.install:459
+msgid "Asia/Ujung_Pandang"
+msgstr "Asien/Ujung Pandang"
+
+#: date_timezone/date_timezone.install:460
+msgid "Asia/Ulaanbaatar"
+msgstr "Asien/Ulaanbaatar"
+
+#: date_timezone/date_timezone.install:461
+msgid "Asia/Ulan_Bator"
+msgstr "Asien/Ulan Bator"
+
+#: date_timezone/date_timezone.install:462
+msgid "Asia/Urumqi"
+msgstr "Asien/Ürümqi"
+
+#: date_timezone/date_timezone.install:463
+msgid "Asia/Vientiane"
+msgstr "Asien/Vientiane"
+
+#: date_timezone/date_timezone.install:464
+msgid "Asia/Vladivostok"
+msgstr "Asien/Vladivostok"
+
+#: date_timezone/date_timezone.install:465
+msgid "Asia/Yakutsk"
+msgstr "Asien/Jakutsk"
+
+#: date_timezone/date_timezone.install:466
+msgid "Asia/Yekaterinburg"
+msgstr "Asien/Jekaterinburg"
+
+#: date_timezone/date_timezone.install:467
+msgid "Asia/Yerevan"
+msgstr "Asien/Jerevan"
+
+#: date_timezone/date_timezone.install:468
+msgid "Atlantic/Azores"
+msgstr "Atlanten/Azorerna"
+
+#: date_timezone/date_timezone.install:469
+msgid "Atlantic/Bermuda"
+msgstr "Atlanten/Bermuda"
+
+#: date_timezone/date_timezone.install:470
+msgid "Atlantic/Canary"
+msgstr "Atlanten/Kanarieöarna"
+
+#: date_timezone/date_timezone.install:471
+msgid "Atlantic/Cape_Verde"
+msgstr "Atlanten/Cape Verde"
+
+#: date_timezone/date_timezone.install:472
+msgid "Atlantic/Faeroe"
+msgstr "Atlanten/Färöarna"
+
+#: date_timezone/date_timezone.install:473
+msgid "Atlantic/Jan_Mayen"
+msgstr "Atlanten/Jan Mayen"
+
+#: date_timezone/date_timezone.install:474
+msgid "Atlantic/Madeira"
+msgstr "Atlanten/Madeira"
+
+#: date_timezone/date_timezone.install:475
+msgid "Atlantic/South_Georgia"
+msgstr "Atlanten/Sydgeorgien"
+
+#: date_timezone/date_timezone.install:476
+msgid "Atlantic/Stanley"
+msgstr "Atlanten/Stanley"
+
+#: date_timezone/date_timezone.install:477
+msgid "Australia/ACT"
+msgstr "Australien/ACT"
+
+#: date_timezone/date_timezone.install:478
+msgid "Australia/Adelaide"
+msgstr "Australien/Adelaide"
+
+#: date_timezone/date_timezone.install:479
+msgid "Australia/Brisbane"
+msgstr "Australien/Brisbane"
+
+#: date_timezone/date_timezone.install:480
+msgid "Australia/Broken_Hill"
+msgstr "Australien/Broken Hill"
+
+#: date_timezone/date_timezone.install:481
+msgid "Australia/Canberra"
+msgstr "Australien/Canberra"
+
+#: date_timezone/date_timezone.install:482
+msgid "Australia/Darwin"
+msgstr "Australien/Darwin"
+
+#: date_timezone/date_timezone.install:483
+msgid "Australia/Hobart"
+msgstr "Australien/Hobart"
+
+#: date_timezone/date_timezone.install:484
+msgid "Australia/LHI"
+msgstr "Australien/LHI"
+
+#: date_timezone/date_timezone.install:485
+msgid "Australia/Lindeman"
+msgstr "LHI"
+
+#: date_timezone/date_timezone.install:486
+msgid "Australia/Lord_Howe"
+msgstr "Australien/Lord Howe"
+
+#: date_timezone/date_timezone.install:487
+msgid "Australia/Melbourne"
+msgstr "Australien/Melbourne"
+
+#: date_timezone/date_timezone.install:488
+msgid "Australia/NSW"
+msgstr "Australien/NSW"
+
+#: date_timezone/date_timezone.install:489
+msgid "Australia/North"
+msgstr "Australien/Norra"
+
+#: date_timezone/date_timezone.install:490
+msgid "Australia/Perth"
+msgstr "Australien/Perth"
+
+#: date_timezone/date_timezone.install:491
+msgid "Australia/Queensland"
+msgstr "Australien/Queensland"
+
+#: date_timezone/date_timezone.install:492
+msgid "Australia/South"
+msgstr "Australien/Södra"
+
+#: date_timezone/date_timezone.install:493
+msgid "Australia/Sydney"
+msgstr "Australien/Sydney"
+
+#: date_timezone/date_timezone.install:494
+msgid "Australia/Tasmania"
+msgstr "Australien/Tasmanien"
+
+#: date_timezone/date_timezone.install:495
+msgid "Australia/Victoria"
+msgstr "Australien/Victoria"
+
+#: date_timezone/date_timezone.install:496
+msgid "Australia/West"
+msgstr "Australien/Västra"
+
+#: date_timezone/date_timezone.install:497
+msgid "Australia/Yancowinna"
+msgstr "Australien/Yancowinna"
+
+#: date_timezone/date_timezone.install:498
+msgid "Europe/Amsterdam"
+msgstr "Europa/Amsterdam"
+
+#: date_timezone/date_timezone.install:499
+msgid "Europe/Andorra"
+msgstr "Europa/Andorra"
+
+#: date_timezone/date_timezone.install:500
+msgid "Europe/Athens"
+msgstr "Europa/Aten"
+
+#: date_timezone/date_timezone.install:501
+msgid "Europe/Belfast"
+msgstr "Europa/Belfast"
+
+#: date_timezone/date_timezone.install:502
+msgid "Europe/Belgrade"
+msgstr "Europa/Belgrad"
+
+#: date_timezone/date_timezone.install:503
+msgid "Europe/Berlin"
+msgstr "Europa/Berlin"
+
+#: date_timezone/date_timezone.install:504
+msgid "Europe/Bratislava"
+msgstr "Europa/Bratislava"
+
+#: date_timezone/date_timezone.install:505
+msgid "Europe/Brussels"
+msgstr "Europa/Bryssel"
+
+#: date_timezone/date_timezone.install:506
+msgid "Europe/Bucharest"
+msgstr "Europa/Bukarest"
+
+#: date_timezone/date_timezone.install:507
+msgid "Europe/Budapest"
+msgstr "Europa/Budapest"
+
+#: date_timezone/date_timezone.install:508
+msgid "Europe/Chisinau"
+msgstr "Europa/Chişinău"
+
+#: date_timezone/date_timezone.install:509
+msgid "Europe/Copenhagen"
+msgstr "Europa/Köpenhamn"
+
+#: date_timezone/date_timezone.install:510
+msgid "Europe/Dublin"
+msgstr "Europa/Dublin"
+
+#: date_timezone/date_timezone.install:511
+msgid "Europe/Gibraltar"
+msgstr "Europa/Gibraltar"
+
+#: date_timezone/date_timezone.install:512
+msgid "Europe/Helsinki"
+msgstr "Europa/Helsingfors"
+
+#: date_timezone/date_timezone.install:513
+msgid "Europe/Istanbul"
+msgstr "Europa/Istanbul"
+
+#: date_timezone/date_timezone.install:514
+msgid "Europe/Kaliningrad"
+msgstr "Europa/Kaliningrad"
+
+#: date_timezone/date_timezone.install:515
+msgid "Europe/Kiev"
+msgstr "Europa/Kiev"
+
+#: date_timezone/date_timezone.install:516
+msgid "Europe/Lisbon"
+msgstr "Europa/Lissabon"
+
+#: date_timezone/date_timezone.install:517
+msgid "Europe/Ljubljana"
+msgstr "Europa/Ljubljana"
+
+#: date_timezone/date_timezone.install:518
+msgid "Europe/London"
+msgstr "Europa/London"
+
+#: date_timezone/date_timezone.install:519
+msgid "Europe/Luxembourg"
+msgstr "Europa/Luxemburg"
+
+#: date_timezone/date_timezone.install:520
+msgid "Europe/Madrid"
+msgstr "Europa/Madrid"
+
+#: date_timezone/date_timezone.install:521
+msgid "Europe/Malta"
+msgstr "Europa/Malta"
+
+#: date_timezone/date_timezone.install:522
+msgid "Europe/Minsk"
+msgstr "Europa/Minsk"
+
+#: date_timezone/date_timezone.install:523
+msgid "Europe/Monaco"
+msgstr "Europa/Monaco"
+
+#: date_timezone/date_timezone.install:524
+msgid "Europe/Moscow"
+msgstr "Europa/Moskva"
+
+#: date_timezone/date_timezone.install:525
+msgid "Europe/Nicosia"
+msgstr "Europa/Nicosia"
+
+#: date_timezone/date_timezone.install:526
+msgid "Europe/Oslo"
+msgstr "Europa/Oslo"
+
+#: date_timezone/date_timezone.install:527
+msgid "Europe/Paris"
+msgstr "Europa/Paris"
+
+#: date_timezone/date_timezone.install:528
+msgid "Europe/Prague"
+msgstr "Europa/Prag"
+
+#: date_timezone/date_timezone.install:529
+msgid "Europe/Riga"
+msgstr "Europa/Riga"
+
+#: date_timezone/date_timezone.install:530
+msgid "Europe/Rome"
+msgstr "Europa/Rom"
+
+#: date_timezone/date_timezone.install:531
+msgid "Europe/Samara"
+msgstr "Europa/Samara"
+
+#: date_timezone/date_timezone.install:532
+msgid "Europe/San_Marino"
+msgstr "Europa/San Marino"
+
+#: date_timezone/date_timezone.install:533
+msgid "Europe/Sarajevo"
+msgstr "Europa/Sarajevo"
+
+#: date_timezone/date_timezone.install:534
+msgid "Europe/Simferopol"
+msgstr "Europa/Simferopol"
+
+#: date_timezone/date_timezone.install:535
+msgid "Europe/Skopje"
+msgstr "Europa/Skopje"
+
+#: date_timezone/date_timezone.install:536
+msgid "Europe/Sofia"
+msgstr "Europa/Sofia"
+
+#: date_timezone/date_timezone.install:537
+msgid "Europe/Stockholm"
+msgstr "Europa/Stockholm"
+
+#: date_timezone/date_timezone.install:538
+msgid "Europe/Tallinn"
+msgstr "Europa/Tallinn"
+
+#: date_timezone/date_timezone.install:539
+msgid "Europe/Tirane"
+msgstr "Europa/Tirana"
+
+#: date_timezone/date_timezone.install:540
+msgid "Europe/Tiraspol"
+msgstr "Europa/Tiraspol"
+
+#: date_timezone/date_timezone.install:541
+msgid "Europe/Uzhgorod"
+msgstr "Europa/Uzjhorod"
+
+#: date_timezone/date_timezone.install:542
+msgid "Europe/Vaduz"
+msgstr "Europa/Vaduz"
+
+#: date_timezone/date_timezone.install:543
+msgid "Europe/Vatican"
+msgstr "Europa/Vatikanstaten"
+
+#: date_timezone/date_timezone.install:544
+msgid "Europe/Vienna"
+msgstr "Europa/Wien"
+
+#: date_timezone/date_timezone.install:545
+msgid "Europe/Vilnius"
+msgstr "Europa/Vilnius"
+
+#: date_timezone/date_timezone.install:546
+msgid "Europe/Warsaw"
+msgstr "Europa/Warszawa"
+
+#: date_timezone/date_timezone.install:547
+msgid "Europe/Zagreb"
+msgstr "Europa/Zagreb"
+
+#: date_timezone/date_timezone.install:548
+msgid "Europe/Zaporozhye"
+msgstr "Europa/Zaporizjzja"
+
+#: date_timezone/date_timezone.install:549
+msgid "Europe/Zurich"
+msgstr "Europa/Zürich"
+
+#: date_timezone/date_timezone.install:550
+msgid "Indian/Antananarivo"
+msgstr "Indiskia Oceanien/Antananarivo"
+
+#: date_timezone/date_timezone.install:551
+msgid "Indian/Chagos"
+msgstr "Indiskia Oceanien/Chagosöarna"
+
+#: date_timezone/date_timezone.install:552
+msgid "Indian/Christmas"
+msgstr "Indiskia Oceanien/Julön"
+
+#: date_timezone/date_timezone.install:553
+msgid "Indian/Cocos"
+msgstr "Indiskia Oceanien/Kokosöarna"
+
+#: date_timezone/date_timezone.install:554
+msgid "Indian/Comoro"
+msgstr "Indiskia Oceanien/Komorerna"
+
+#: date_timezone/date_timezone.install:555
+msgid "Indian/Kerguelen"
+msgstr "Indiskia Oceanien/Kerguelen"
+
+#: date_timezone/date_timezone.install:556
+msgid "Indian/Mahe"
+msgstr "Indiskia Oceanien/Mahé"
+
+#: date_timezone/date_timezone.install:557
+msgid "Indian/Maldives"
+msgstr "Indiskia Oceanien/Maldiverna"
+
+#: date_timezone/date_timezone.install:558
+msgid "Indian/Mauritius"
+msgstr "Indiskia Oceanien/Mauritius"
+
+#: date_timezone/date_timezone.install:559
+msgid "Indian/Mayotte"
+msgstr "Indiskia Oceanien/Mayotte"
+
+#: date_timezone/date_timezone.install:560
+msgid "Indian/Reunion"
+msgstr "Indiskia Oceanien/Réunion"
+
+#: date_timezone/date_timezone.install:561
+msgid "Pacific/Apia"
+msgstr "Stilla havet/Apia"
+
+#: date_timezone/date_timezone.install:562
+msgid "Pacific/Auckland"
+msgstr "Stilla havet/Auckland"
+
+#: date_timezone/date_timezone.install:563
+msgid "Pacific/Chatham"
+msgstr "Stilla havet/Chathamöarna"
+
+#: date_timezone/date_timezone.install:564
+msgid "Pacific/Easter"
+msgstr "Stilla havet/Påskön"
+
+#: date_timezone/date_timezone.install:565
+msgid "Pacific/Efate"
+msgstr "Stilla havet/Efate"
+
+#: date_timezone/date_timezone.install:566
+msgid "Pacific/Enderbury"
+msgstr "Stilla havet/Enderburyatollen"
+
+#: date_timezone/date_timezone.install:567
+msgid "Pacific/Fakaofo"
+msgstr "Stilla havet/Fakaofo"
+
+#: date_timezone/date_timezone.install:568
+msgid "Pacific/Fiji"
+msgstr "Stilla havet/Fiji"
+
+#: date_timezone/date_timezone.install:569
+msgid "Pacific/Funafuti"
+msgstr "Stilla havet/Funafuti"
+
+#: date_timezone/date_timezone.install:570
+msgid "Pacific/Galapagos"
+msgstr "Stilla havet/Galapagosöarna"
+
+#: date_timezone/date_timezone.install:571
+msgid "Pacific/Gambier"
+msgstr "Stilla havet/Gambieröarna"
+
+#: date_timezone/date_timezone.install:572
+msgid "Pacific/Guadalcanal"
+msgstr "Stilla havet/Guadalcanal"
+
+#: date_timezone/date_timezone.install:573
+msgid "Pacific/Guam"
+msgstr "Stilla havet/Guam"
+
+#: date_timezone/date_timezone.install:574
+msgid "Pacific/Honolulu"
+msgstr "Stilla havet/Honolulu"
+
+#: date_timezone/date_timezone.install:575
+msgid "Pacific/Johnston"
+msgstr "Stilla havet/Johnstonatollen"
+
+#: date_timezone/date_timezone.install:576
+msgid "Pacific/Kiritimati"
+msgstr "Stilla havet/Kiritimati"
+
+#: date_timezone/date_timezone.install:577
+msgid "Pacific/Kosrae"
+msgstr "Stilla havet/Kosrae"
+
+#: date_timezone/date_timezone.install:578
+msgid "Pacific/Kwajalein"
+msgstr "Stilla havet/Kwajalein"
+
+#: date_timezone/date_timezone.install:579
+msgid "Pacific/Majuro"
+msgstr "Stilla havet/Majuro"
+
+#: date_timezone/date_timezone.install:580
+msgid "Pacific/Marquesas"
+msgstr "Stilla havet/Marquesasöarna"
+
+#: date_timezone/date_timezone.install:581
+msgid "Pacific/Midway"
+msgstr "Stilla havet/Midwayöarna"
+
+#: date_timezone/date_timezone.install:582
+msgid "Pacific/Nauru"
+msgstr "Stilla havet/Nauru"
+
+#: date_timezone/date_timezone.install:583
+msgid "Pacific/Niue"
+msgstr "Stilla havet/Niue"
+
+#: date_timezone/date_timezone.install:584
+msgid "Pacific/Norfolk"
+msgstr "Stilla havet/Norfolkön"
+
+#: date_timezone/date_timezone.install:585
+msgid "Pacific/Noumea"
+msgstr "Stilla havet/Nouméa"
+
+#: date_timezone/date_timezone.install:586
+msgid "Pacific/Pago_Pago"
+msgstr "Stilla havet/Pago Pago"
+
+#: date_timezone/date_timezone.install:587
+msgid "Pacific/Palau"
+msgstr "Stilla havet/Palau"
+
+#: date_timezone/date_timezone.install:588
+msgid "Pacific/Pitcairn"
+msgstr "Stilla havet/Pitcairnöarna"
+
+#: date_timezone/date_timezone.install:589
+msgid "Pacific/Ponape"
+msgstr "Stilla havet/Ponape"
+
+#: date_timezone/date_timezone.install:590
+msgid "Pacific/Port_Moresby"
+msgstr "Stilla havet/Port Moresby"
+
+#: date_timezone/date_timezone.install:591
+msgid "Pacific/Rarotonga"
+msgstr "Stilla havet/Rarotonga"
+
+#: date_timezone/date_timezone.install:592
+msgid "Pacific/Saipan"
+msgstr "Stilla havet/Saipan"
+
+#: date_timezone/date_timezone.install:593
+msgid "Pacific/Samoa"
+msgstr "Stilla havet/Samoa"
+
+#: date_timezone/date_timezone.install:594
+msgid "Pacific/Tahiti"
+msgstr "Stilla havet/Tahiti"
+
+#: date_timezone/date_timezone.install:595
+msgid "Pacific/Tarawa"
+msgstr "Stilla havet/Tarawa"
+
+#: date_timezone/date_timezone.install:596
+msgid "Pacific/Tongatapu"
+msgstr "Stilla havet/Tongatapu"
+
+#: date_timezone/date_timezone.install:597
+msgid "Pacific/Truk"
+msgstr "Stilla havet/Chuuköarna"
+
+#: date_timezone/date_timezone.install:598
+msgid "Pacific/Wake"
+msgstr "Stilla havet/Wake"
+
+#: date_timezone/date_timezone.install:599
+msgid "Pacific/Wallis"
+msgstr "Stilla havet/Wallis"
+
+#: date_timezone/date_timezone.install:600
+msgid "Pacific/Yap"
+msgstr "Stilla havet/Yap"
+
+#: date_timezone/date_timezone.install:601
+msgid "Pacific/French_Polynesia-Marquesas_Islands"
+msgstr "Stilla havet/Franska Polynesien-Marquesasöarna"
+
+#: date_timezone/date_timezone.install:602
+msgid "UTC"
+msgstr "UTC"
+
+#: (duplicate) date_timezone/date_timezone.install:46
+msgid "The Date Timezone module requires you to !link."
+msgstr "Modulen Date Timezone kräver att du !link."
+
+#: (duplicate) date_timezone/date_timezone.install:46
+msgid "set the site timezone name"
+msgstr "ange namnet för webbplatsens tidszon"
+
+#: (duplicate) date_timezone/date_timezone.install:52
+msgid "The !link may not be correct."
+msgstr "!link kanske inte är korrekt."
+
+#: (duplicate) date_timezone/date_timezone.install:52
+msgid "site timezone name"
+msgstr "namn för webbplatsens tidszon"
+
+#: (duplicate) date_timezone/date_timezone.install:59
+msgid "Date Timezone requirements"
+msgstr "Krav för Date Timezone"
+
+#: date_timezone/date_timezone.info:0
+#: date_tools/date_tools.wizard.inc:357
+msgid "Date Timezone"
+msgstr "Date Timezone"
+
+#: date_timezone/date_timezone.info:0
+msgid "Needed when using Date API. Overrides site and user timezone handling to set timezone names instead of offsets."
+msgstr "Krävs när Date API används. Åsidosätter webbplatsens och användarens hantering av tidszoner genom att ange namn på tidszonen istället för offsets."
+
+#: date_tools/date_tools.change_type.inc:21
+msgid "Field @label (@field_name)"
+msgstr "Fält @label (@field_name)"
+
+#: date_tools/date_tools.change_type.inc:25
+msgid "There are no date fields in this database."
+msgstr "Det finns inga datumfält i denna databas."
+
+#: date_tools/date_tools.change_type.inc:31
+#: date_tools/date_tools.event.inc:348
+#: date_tools/date_tools.wizard.inc:31
+msgid "Date field"
+msgstr "Datumfält"
+
+#: date_tools/date_tools.change_type.inc:33
+msgid "The date field which whose type should be changed."
+msgstr "Det datumfält vars typ skall ändras."
+
+#: date_tools/date_tools.change_type.inc:40
+msgid "The type of date to change the field to."
+msgstr "Typ av datum att ändra fältet till."
+
+#: date_tools/date_tools.change_type.inc:41
+msgid "New type:"
+msgstr "Ny typ:"
+
+#: date_tools/date_tools.change_type.inc:43
+#: date_tools/date_tools.module:92
+msgid "Change"
+msgstr "Ändra"
+
+#: date_tools/date_tools.change_type.inc:53
+msgid "The current type is the same as the chosen type. There is nothing to change."
+msgstr "Den nuvarande typen är samma som den valda. Det finns inget att ändra."
+
+#: date_tools/date_tools.change_type.inc:93;162
+msgid "The field @field_name has been changed from @old_type to @new_type."
+msgstr "Fältet @field_name har ändrats från @old_type till @new_type."
+
+#: date_tools/date_tools.event.inc:11
+msgid "There is no event table in this database. No event import options are available."
+msgstr "Det finns ingen tabell för händelse i denna databas. Inga importval av händelser är tillgängliga."
+
+#: date_tools/date_tools.event.inc:27
+msgid "Create a new CCK content type to import your events into, or, if you do not want to create new nodes for your events, add a date field to the existing event type. Make sure the target content type has a date field that has an optional or required To date so it can accept the From date and To date of the event. If your source event has its own timezone field, make sure you set the target date timezone handling to 'date'. Test the target type by trying to create a node manually and make sure all the right options are available in the form before attempting an import."
+msgstr "Skapa en ny innehållstyp i CCK att importera dina händelser till, eller om du inte vill skapa nya noder för dina händelser, lägg till ett datumfält till den befintliga händelsetypen. Kontrollera att innehållstypen som utgör målet har ett datumfält som har ett valfritt eller krävt \"Datum till\" så att den kan acceptera \"Datum från\" och \"Datum till\" hos händelsen. Om din källhändelse har sitt eget fält för tidszon, se till att du ställer in målets datum/tidszonshantering till 'Datum'. Testa måltypen genom att skapa en nod manuellt och se till att de rätta valen finns tillgängliga i formuläret innan du försöker dig på en import."
+
+#: date_tools/date_tools.event.inc:27
+msgid "The import will create new nodes and trigger all related hooks, so you may want to turn off automatic email messaging for this node type while performing the import!"
+msgstr "Importen kommer att skapa nya noder och utlösa alla tillhörande åtgärder. Så du vill kanske stänga av automatiska e-postmeddelanden för denna nodtyp medan importen genomförs!"
+
+#: date_tools/date_tools.event.inc:34
+msgid "There are no event nodes in this database. No event import options are available."
+msgstr "Det finns inga noder av typen händelse i databasen. Inga importval av händelser är tillgängliga."
+
+#: date_tools/date_tools.event.inc:40;284
+msgid "Source type"
+msgstr "Källtyp"
+
+#: date_tools/date_tools.event.inc:44;67
+#: date_tools/date_tools.module:65
+msgid "Import"
+msgstr "Importera"
+
+#: date_tools/date_tools.event.inc:60
+msgid "!type Fields"
+msgstr "Fält för !type"
+
+#: date_tools/date_tools.event.inc:64
+#: date_tools/date_tools.wizard.inc:56;89;94;105
+msgid "Yes"
+msgstr "Ja"
+
+#: date_tools/date_tools.event.inc:64
+#: date_tools/date_tools.wizard.inc:56;89;94;105
+msgid "No"
+msgstr "Nej"
+
+#: date_tools/date_tools.event.inc:64
+msgid "Delete original event?"
+msgstr "Ta bort ursprunglig händelse?"
+
+#: date_tools/date_tools.event.inc:64
+msgid "Should the original entry be deleted once it has been copied to the new content type? If so, be sure to back up your database first."
+msgstr "Skall det ursprungliga inlägget tas bort när det kopierats till den nya innehållstypen? Om så är fallet, tänk på att säkerhetskopiera din databas först."
+
+#: date_tools/date_tools.event.inc:65
+msgid "Limit"
+msgstr "Begränsning"
+
+#: date_tools/date_tools.event.inc:65
+msgid "The maximum number of nodes to convert in this pass."
+msgstr "Det största antalet noder att konvertera i denna omgång."
+
+#: date_tools/date_tools.event.inc:66
+msgid "Starting nid"
+msgstr "NID för start"
+
+#: date_tools/date_tools.event.inc:66
+msgid "Convert nodes with nids greater than or equal to this number."
+msgstr "Konvertera noder med NID som är större eller lika med detta nummer."
+
+#: date_tools/date_tools.event.inc:109
+msgid "Node Title"
+msgstr "Nodtitel"
+
+#: date_tools/date_tools.event.inc:109
+msgid "Original Node ID"
+msgstr "Ursprungligt ID för nod"
+
+#: date_tools/date_tools.event.inc:109
+msgid "New Node ID"
+msgstr "Nytt ID för nod"
+
+#: date_tools/date_tools.event.inc:109
+msgid "Start date"
+msgstr "Startdatum"
+
+#: date_tools/date_tools.event.inc:109
+msgid "End date"
+msgstr "Slutdatum"
+
+#: date_tools/date_tools.event.inc:112
+msgid "No events have been converted."
+msgstr "Inga händelser har konverterats."
+
+#: date_tools/date_tools.event.inc:239;249
+msgid "view"
+msgstr "visa"
+
+#: date_tools/date_tools.event.inc:280;342
+msgid "There are no date fields in this database to import the data into. Please add a date field to the desired node types and be sure to indicate it uses both a \"from\" and a \"to\" date."
+msgstr "Det finns inga fält i den här databasen att importera datainformationen till. Lägg till ett datumfält till önskad typ av nod och se till att det använder både ett datum \"från\" och \"till\"."
+
+#: date_tools/date_tools.event.inc:284
+msgid "Target type"
+msgstr "Måltyp"
+
+#: date_tools/date_tools.event.inc:289
+msgid "Only content types with date fields appear in this list as possible target types."
+msgstr "Bara innehållstyper med datumfält syns i denna lista som möjliga måltyper."
+
+#: date_tools/date_tools.event.inc:297
+msgid "Add"
+msgstr "Lägg till"
+
+#: date_tools/date_tools.event.inc:298
+msgid "If your desired target type does not already have a date field, follow this link and select a content type to add a date field to that type."
+msgstr "Följ denna länk och välj innehållstypen för att lägga till ett datumfält till den om din önskade måltyp inte redan har ett datumfält."
+
+#: date_tools/date_tools.event.inc:304
+msgid "Add new date field"
+msgstr "Lägg till nytt datumfält"
+
+#: date_tools/date_tools.event.inc:340
+msgid "body"
+msgstr "brödtext"
+
+#: date_tools/date_tools.event.inc:350
+msgid "The field which will contain the source dates in target content type."
+msgstr "Fältet som "
+
+#: date_tools/date_tools.event.inc:355
+msgid "Description field"
+msgstr "Beskrivningsfält"
+
+#: date_tools/date_tools.event.inc:357
+msgid "The text or body field which will contain the source description in the target content type."
+msgstr "Text- eller brödtextfältet som innehåller källbeskrivningen i innehållstypen som utgör målet."
+
+#: date_tools/date_tools.event.inc:363
+msgid "Url field"
+msgstr "Fält för URL"
+
+#: date_tools/date_tools.event.inc:365
+msgid "The text or link field which will contain the source url in the target content type."
+msgstr "Text eller länkfält som innehåller käll-URL:en i innehållstypen som utgör målet."
+
+#: date_tools/date_tools.event.inc:370
+msgid "Location field"
+msgstr "Fält för plats"
+
+#: date_tools/date_tools.event.inc:372
+msgid "The text field which will contain the source location text in the target content type."
+msgstr "Textfältet som innehåller källtext för plats i innehållstypen som utgör målet."
+
+#: date_tools/date_tools.event.inc:377
+msgid "Uid field"
+msgstr "Fält för UID"
+
+#: date_tools/date_tools.event.inc:379
+msgid "The text field which will contain the source uid in the target content type."
+msgstr "Textfältet som innehåller uid-källa i innehållstypen som utgör målet."
+
+#: date_tools/date_tools.event.inc:235;245
+msgid "date_tools"
+msgstr "date_tools"
+
+#: date_tools/date_tools.event.inc:235
+msgid "!type: %title has been created."
+msgstr "!type: %title har skapats."
+
+#: date_tools/date_tools.event.inc:245
+msgid "!type: %title has been updated."
+msgstr "!type: %title har uppdaterats."
+
+#: date_tools/date_tools.event.inc:108
+msgid "1 event has been converted."
+msgid_plural "@count events have been converted."
+msgstr[0] "1 händelse har konverterats."
+msgstr[1] "@count händelser har konverterats."
+
+#: date_tools/date_tools.wizard.inc:9
+msgid "Content type"
+msgstr "Innehållstyp"
+
+#: date_tools/date_tools.wizard.inc:14
+msgid "Content type name"
+msgstr "Namn för innehållstyp"
+
+#: date_tools/date_tools.wizard.inc:15
+msgid "Machine-readable name. Allowed values: (a-z, 0-9, _). If this is not an existing content type, the content type will be created."
+msgstr "Maskinläsbart namn. Tillåtna tecken: (a-z, 0-9, _). Om detta inte är en existerande innehållstyp, kommer den att skapas."
+
+#: date_tools/date_tools.wizard.inc:20
+msgid "Content type label"
+msgstr "Etikett för innehållstyp"
+
+#: date_tools/date_tools.wizard.inc:21
+msgid "The human-readable name for this content type. Only needed when creating a new content type."
+msgstr "Det synliga namnet på denna innehållstyp. Behövs bara när man skapar en ny innehållstyp."
+
+#: date_tools/date_tools.wizard.inc:25
+msgid "A date content type that is linked to a Views calendar."
+msgstr "En datumbaserad innehållstyp som är länkad till en kalender i Views."
+
+#: date_tools/date_tools.wizard.inc:26
+msgid "Content type description"
+msgstr "Beskrivning av innehållstyp"
+
+#: date_tools/date_tools.wizard.inc:27
+msgid "A description for the content type. Only needed when creating a new content type."
+msgstr "En beskrivning av denna innehållstyp. Behövs bara när man skapar av en ny innehållstyp."
+
+#: date_tools/date_tools.wizard.inc:37
+msgid "Date field name"
+msgstr "Namn på datumfältet"
+
+#: date_tools/date_tools.wizard.inc:38
+msgid "Machine-readable name. Allowed values: (a-z, 0-9, _) Must not be an existing field name."
+msgstr "Maskinläsbart namn. Tillåtna värden: (a-z, 0-9, _). Får inte vara ett befintligt fältnamn."
+
+#: date_tools/date_tools.wizard.inc:44
+msgid "Date field label"
+msgstr "Etikett på datumfältet"
+
+#: date_tools/date_tools.wizard.inc:45
+msgid "The human-readable label for this field."
+msgstr "Den synliga etiketten på detta fält."
+
+#: date_tools/date_tools.wizard.inc:51
+msgid "Date widget type"
+msgstr "Typ av gränssnittskomponent för datumet"
+
+#: date_tools/date_tools.wizard.inc:57
+msgid "Show repeating date options"
+msgstr "Visa återkommande datumval"
+
+#: date_tools/date_tools.wizard.inc:63
+msgid "Advanced options"
+msgstr "Avancerade alternativ"
+
+#: date_tools/date_tools.wizard.inc:69
+msgid "Date field type"
+msgstr "Fälttyp för datum"
+
+#: date_tools/date_tools.wizard.inc:70
+msgid "The recommend type is Datetime, except for historical dates or dates with only year or month granularity. Older or incomplete dates should use the Date type (an ISO date)."
+msgstr "Den rekommenderade typen är Datumtid förutom för historiska datum eller datum med endast års- eller månadsprecision. Äldre eller inkompletta datum bör använda typen Datum (ett ISO datum)."
+
+#: date_tools/date_tools.wizard.inc:83
+msgid "Date timezone handling"
+msgstr "Hantering av tidszon för datum"
+
+#: date_tools/date_tools.wizard.inc:84
+msgid "Timezone handling should be set to 'none' for granularity without time elements."
+msgstr "Hantering av tidszon bör sättas till 'ingen' för finkornighet utan tidselement."
+
+#: date_tools/date_tools.wizard.inc:90
+msgid "Create a calendar for this date field"
+msgstr "Skapa en kalender för detta datumfält"
+
+#: date_tools/date_tools.wizard.inc:96
+msgid "Add calendar blocks to the current theme"
+msgstr "Lägg till kalenderblock till nuvarande tema"
+
+#: date_tools/date_tools.wizard.inc:101
+msgid "Location field name"
+msgstr "Fältnamn för plats"
+
+#: date_tools/date_tools.wizard.inc:107
+msgid "Turn on signup"
+msgstr "Slå på anmälan"
+
+#: date_tools/date_tools.wizard.inc:121
+msgid "This content type name already exists, adding new field to existing content type."
+msgstr "Denna innehållstyp existerar redan, lägger till det nya fältet till den."
+
+#: date_tools/date_tools.wizard.inc:124
+msgid "The machine-readable name must contain only lowercase letters, numbers, and underscores."
+msgstr "Det maskinläsbara namnet får bara innehålla gemena bokstäver, siffror och understreck."
+
+#: date_tools/date_tools.wizard.inc:127
+msgid "This field name already exists."
+msgstr "Detta fältnamn existerar redan."
+
+#: date_tools/date_tools.wizard.inc:130
+msgid "Timezone handling must be none for granularity without time."
+msgstr "Hantering av tidszon måste vara \"ingen\" för finkorninghet utan tid."
+
+#: date_tools/date_tools.wizard.inc:138
+msgid "Change the calendar as needed and save the view."
+msgstr "Ändra kalendern efter behov och spara vyn."
+
+#: date_tools/date_tools.wizard.inc:358
+msgid "Content"
+msgstr "Innehåll"
+
+#: date_tools/date_tools.wizard.inc:359
+#: date_tools/date_tools.module:134
+msgid "Calendar"
+msgstr "Kalender"
+
+#: date_tools/date_tools.wizard.inc:360
+msgid "Calendar iCal"
+msgstr "Kalender iCal"
+
+#: date_tools/date_tools.wizard.inc:361
+msgid "Date Repeat"
+msgstr "Upprepning av datum"
+
+#: date_tools/date_tools.wizard.inc:363
+msgid "Calendar Popup"
+msgstr "Popup av kalender"
+
+#: date_tools/date_tools.wizard.inc:364
+msgid "Signup"
+msgstr "Anmälan"
+
+#: date_tools/date_tools.wizard.inc:365
+#: includes/date_api_filter_handler.inc:81
+msgid "Text"
+msgstr "Text"
+
+#: date_tools/date_tools.wizard.inc:366
+msgid "Optionwidgets"
+msgstr "Gränssnittskomponenter för val"
+
+#: date_tools/date_tools.wizard.inc:367
+msgid "Nodereference"
+msgstr "Nodreferens"
+
+#: date_tools/date_tools.wizard.inc:368
+msgid "Feed API"
+msgstr "Feed API"
+
+#: date_tools/date_tools.wizard.inc:369
+msgid "Parser iCal"
+msgstr "Tolkare för iCal"
+
+#: date_tools/date_tools.wizard.inc:370
+msgid "Feed API Node"
+msgstr "Nod för Feed API"
+
+#: date_tools/date_tools.wizard.inc:371
+msgid "Feed API Mapper"
+msgstr "Karläggare för Feed Api"
+
+#: date_tools/date_tools.wizard.inc:372
+msgid "Views"
+msgstr "Views"
+
+#: date_tools/date_tools.wizard.inc:373
+msgid "Views UI"
+msgstr "Views UI"
+
+#: date_tools/date_tools.wizard.inc:383
+msgid "enabled"
+msgstr "aktiverad"
+
+#: date_tools/date_tools.wizard.inc:395
+msgid "disabled"
+msgstr "inaktiverad"
+
+#: date_tools/date_tools.module:10
+msgid "Tools for creating and importing dates and calendars."
+msgstr "Verktyg för att skapa och importera datum och kalendrar."
+
+#: date_tools/date_tools.module:13
+msgid "Change a date field from one type to another. Very experimental, use at your own risk!"
+msgstr "Ändra ett datumfält från en typ till en annan. I väldigt tidigt skede, använd på egen egen risk."
+
+#: date_tools/date_tools.module:18
+msgid "The following modules are required for the wizard to work:"
+msgstr "Följande moduler krävs för att guiden skall fungera."
+
+#: date_tools/date_tools.module:21
+msgid "Fill out the following form to auto-create a date content type, with a datetime field and matching pre-configured calendar. A calendar and upcoming events block will be created, an ical feed will be added to the calendar, and the mini calendar, calendar legend, and upcoming events blocks will be added to the sidebar of the default theme. Nodes created from this new content type will include a link to the calendar, and the calendar will have a link to the 'add new date' form. If the Signup module is enabled, Signups will also be enabled for this field. You can also add new date fields to an existing content type by entering the existing content type name instead of creating a new one."
+msgstr "Fyll i följande formulär för att automatiskt skapa en datumbaserad innehållstyp med ett fält av typen datumtid och en matchande förkonfigurerad kalender. En kalender och ett block för kommande händelser kommer att skapas. Till kalendern bifogas ett innehållsflöde för iCal läggs till kalendern. Block för minikalender, bildtexter och kommande händelser läggs till i sidfältet hos standardtemat. Noder skapade med denna nya innehållstyp kommer att inkludera en länk till kalendern och kalendern kommer att ha en länk till formuläret \"lägg till ett nytt datum\". Om modulen Signup är aktiverad kommer också registreringar att aktiveras för detta fält. Du kan också lägga till nya datumfält till existerande innehållstyper genom att mata in det befintliga namnet hos innehållstypen istället för att skapa en ny."
+
+#: date_tools/date_tools.module:23
+msgid "Only a limited set of options are displayed here to make this easy to set up. Once the date has been created you will be able to make other changes to the date settings and add other fields to your new content type on the Manage fields screen, and make changes to the calendar on the Views edit page."
+msgstr "Endast en begränsad uppsättning val visas här för att göra det enkelt att ställa in. När ett datum har skapats kan du göra andra ändringar i datuminställningarna och lägga till andra fält till din nya innehållstyp på sidan för att hantera fält, och göra ändringar i kalendern på redigeringssidan för Views."
+
+#: date_tools/date_tools.module:109
+msgid "Dates and calendars can be complicated to set up. The !date_wizard makes it easy to create a simple date content type and related calendar."
+msgstr "Datum och kalendrar kan vara komplicerade att ställa in. Guiden ¡date_wizard gör det lätt att skapa en enkel innehållstyp och tillhörande kalender."
+
+#: date_tools/date_tools.module:109;53
+msgid "Date wizard"
+msgstr "Datumguiden"
+
+#: date_tools/date_tools.module:123
+msgid "The calendar %view is a default calendar created for the content type %type_name."
+msgstr "Kalendern %view är en standardkalender skapad för innehållstypen %type_name."
+
+#: date_tools/date_tools.module:124
+msgid "remove !view"
+msgstr "ta bort !view"
+
+#: date_tools/date_tools.module:134
+msgid "Content Type"
+msgstr "Innehållstyp"
+
+#: date_tools/date_tools.module:134
+msgid "Description"
+msgstr "Beskrivning"
+
+#: date_tools/date_tools.module:134
+msgid "Operations"
+msgstr "Åtgärder"
+
+#: date_tools/date_tools.module:152
+msgid "Are you sure you want to remove the view %view?"
+msgstr "Är du säker på att du vill ta bort vyn %view?"
+
+#: date_tools/date_tools.module:170
+msgid "Removed calendar %calendar."
+msgstr "Tog bort kalender %calendar."
+
+#: date_tools/date_tools.module:30
+msgid "administer date tools"
+msgstr "administrera verktyg för datum"
+
+#: date_tools/date_tools.module:37
+#: date_tools/date_tools.info:0
+msgid "Date Tools"
+msgstr "Verktyg för datum"
+
+#: date_tools/date_tools.module:38;45
+#: date_tools/date_tools.info:0
+msgid "Tools to import and auto-create dates and calendars."
+msgstr "Verktyg för att importera och skapa datum och kalendrar automatiskt."
+
+#: date_tools/date_tools.module:44
+msgid "About"
+msgstr "Om"
+
+#: date_tools/date_tools.module:54
+msgid "Easy creation of date content types and calendars."
+msgstr "Enkelt skapande av innehållstyper för datum och kalendrar."
+
+#: date_tools/date_tools.module:75
+msgid "Event import"
+msgstr "Import av händelser"
+
+#: date_tools/date_tools.module:85
+msgid "Remove calendar"
+msgstr "Ta bort kalender"
+
+#: includes/date_api.views.inc:78;85
+msgid "Date browser"
+msgstr "Bläddrare för datum"
+
+#: includes/date_api.views.inc:79
+msgid "Date back/next navigation to attach to other displays. Requires the Date argument."
+msgstr "Navigeringarna tillbaka/nästa för datum att lägga till andra visningar. Kräver argumentet Datum."
+
+#: includes/date_api.views.inc:101
+msgid "Date browser style"
+msgstr "Stil på bläddrare för datum"
+
+#: includes/date_api.views.inc:102
+msgid "Creates back/next navigation."
+msgstr "Skapar navigeringen tillbaka/nästa"
+
+#: includes/date_api.views.inc:131;142
+msgid "Date (!base_table)"
+msgstr "Datum (!base_table)"
+
+#: includes/date_api.views.inc:132
+msgid "Filter any Views !base_table date field by a date argument, using any common ISO date/period format (i.e. YYYY, YYYY-MM, YYYY-MM-DD, YYYY-W99, YYYY-MM-DD--P3M, P90D, etc)."
+msgstr "Filtrera ett datumfält !base_table för en vy genom ett argument för datum, genom att använda ett vanligt ISO-format för datum/period (till exempel. YYYY, YYYY-MM, YYYY-MM-DD, YYYY-W99, YYYY-MM-DD--P3M, P90D, och så vidare)."
+
+#: includes/date_api.views.inc:135;146
+msgid "Undated"
+msgstr "Ej daterad"
+
+#: includes/date_api.views.inc:143
+msgid "Filter any Views !base_table date field."
+msgstr "Filtrera ett datumfält !base_table för en vy."
+
+#: includes/date_api_argument_handler.inc:69
+msgid "Select the type of date value to be used in defaults, summaries, and navigation. For example, a granularity of 'month' will set the default date to the current month, summarize by month in summary views, and link to the next and previous month when using date navigation."
+msgstr "Välj typ av värde för datum som skall användas som standard,  i summeringar, och navigering. Till exempel: en noggrannhet på \"månader\" kommer att ange det förvalda datumet till nuvarande månad, summering på månad i vyn för summeringar, och länka till nästa och föregående månad när navigering för datum används."
+
+#: includes/date_api_argument_handler.inc:73
+#: includes/date_api_filter_handler.inc:113
+msgid "Date year range"
+msgstr "Spännvidd för år"
+
+#: includes/date_api_argument_handler.inc:76
+#: includes/date_api_filter_handler.inc:116
+msgid "Set the allowable minimum and maximum year range for this argument, either a -X:+X offset from the current year, like '-3:+3' or an absolute minimum and maximum year, like '2005:2010'. When the argument is set to a date outside the range, the page will be returned as 'Page not found (404)'."
+msgstr "Anger den tillåtna minsta och mesta spännvidden av år för detta argument. Antingen en kompensation -Z:+Z  från det nuvarande året, såsom \"-3:+3\" eller ett absolut minsta och mesta år, såsom \"2005:2010\". När argumentet har angivits till ett datum utanför spännvidden kommer sidan att returneras som \"Sida inte funnen (404)\"."
+
+#: includes/date_api_argument_handler.inc:85
+#: includes/date_api_filter_handler.inc:125
+msgid "Date field(s)"
+msgstr "Datumfält"
+
+#: includes/date_api_argument_handler.inc:90
+msgid "Select one or more date fields to filter with this argument. Do not select both the 'From date' and 'To date' for CCK date fields, only one of them is needed."
+msgstr "Välj ett eller flera datumfält att filtrera på med detta argument. Välj inte både \"Datum från\" och \"Datum till\" för CCK datumfält. Enbart ett av dem är nödvändigt."
+
+#: includes/date_api_argument_handler.inc:93
+#: includes/date_api_filter_handler.inc:133
+msgid "Method"
+msgstr "Metod"
+
+#: includes/date_api_argument_handler.inc:95
+#: includes/date_api_filter_handler.inc:135
+msgid "OR"
+msgstr "OR"
+
+#: includes/date_api_argument_handler.inc:95
+#: includes/date_api_filter_handler.inc:135
+msgid "AND"
+msgstr "AND"
+
+#: includes/date_api_argument_handler.inc:97
+#: includes/date_api_filter_handler.inc:137
+msgid "Method of handling multiple date fields in the same query. Return items that have any matching date field (date = field_1 OR field_2), or only those with matches in all selected date fields (date = field_1 AND field_2)."
+msgstr "Metod för att hantera flera datumfält i samma databasfråga. Återger poster som har matchande datumfält (date = field_1 OR field_2), eller enbart de med matchningar i alla valda datumfält (date = field_1 AND field_2)."
+
+#: includes/date_api_argument_handler.inc:109
+msgid "You must select at least one date field for this argument."
+msgstr "Du måste välja minst ett datumfält för detta argument."
+
+#: includes/date_api_argument_handler.inc:113
+#: includes/date_api_filter_handler.inc:148
+msgid "Date year range must be in the format -9:+9 or 2005:2010."
+msgstr "Spännvidden för år måste vara på formatet -9:+9 eller 2005:2010."
+
+#: includes/date_api_filter_handler.inc:80
+msgid "Select"
+msgstr "Välj"
+
+#: includes/date_api_filter_handler.inc:82
+msgid "Popup"
+msgstr "Popup"
+
+#: includes/date_api_filter_handler.inc:103
+msgid "Date form type"
+msgstr "Typ av formulär för datum"
+
+#: includes/date_api_filter_handler.inc:106
+msgid "Choose the form element to use for date selection."
+msgstr "Välj element för formulär att använda för val av datum."
+
+#: includes/date_api_filter_handler.inc:110
+msgid "Select a granularity for the date filter. For instance, selecting 'day' will create a filter where users can select the year, month, and day."
+msgstr "Välj en noggrannhet för filtreringen av datum. Till exempel, genom att välja \"dag\" kommer ett filter skapas där användare kan välja år, månad och dag."
+
+#: includes/date_api_filter_handler.inc:130
+msgid "Select date field(s) to filter with this argument."
+msgstr "Välj datumfält att filtrera på med detta argument."
+
+#: includes/date_api_filter_handler.inc:144
+msgid "You must select at least one date field for this filter."
+msgstr "Du måste välja åtminstone ett datumfält för detta filter."
+
+#: includes/date_api_filter_handler.inc:206
+msgid " You can use any values PHP's date_create() can understand, like between '12AM today' and '12AM tomorrow."
+msgstr "Du kan använda värden som PHP:s date_create() förstår, såsom mellan '12AM today' och 12AM tomorrow'"
+
+#: includes/date_api_filter_handler.inc:208
+msgid "Absolute value"
+msgstr "Absolut värde"
+
+#: includes/date_api_filter_handler.inc:211
+msgid "Date default"
+msgstr "Standarddatum"
+
+#: includes/date_api_filter_handler.inc:213
+msgid "Relative value"
+msgstr "Relativt värde"
+
+#: includes/date_api_filter_handler.inc:213
+msgid "Relative values will be used if no date is set above. Use 'now' to default to the current date at runtime or add modifiers like 'now +1 day'. The To date default value is used when the operator is set to 'between' or 'not between'."
+msgstr "Relativa värden kommer att användas om inget datum är angett ovan. Använd \"now\" för att sätta förvalt till det nuvarande datumet, eller lägg till modifierare såsom \"now +1 day\". Förvalt värde för Datum till används när operatorn angivits till \"mellan\" eller \"inte mellan\"."
+
+#: includes/date_api_filter_handler.inc:213
+msgid "If the filter is exposed, these values will be used to set the inital value of the exposed filter. Leave both date and default values blank to start with no value in the exposed filter."
+msgstr "Om filtret visas kommer dessa värden att användas för att ange det första värdet på det visade filtret. Lämna både datum och förvalda värden tomma för att inte ha något startvärde i det visade filtret."
+
+#: includes/date_api_filter_handler.inc:217
+msgid "To date default"
+msgstr "Förvalt Datum till"
+
+#: includes/date_api_filter_handler.inc:337
+msgid "Please set a default value for the To date as well as the From date when using default values with the Between or Not between operators."
+msgstr "Ange ett förvalt värde för Datumet till och även Datum från när du använder förvalda värden med operatorerna Mellan eller Inte mellan."
+
+#: includes/date_api_filter_handler.inc:350
+msgid "Missing date fields!"
+msgstr "Datumfält saknas!"
+
+#: includes/date_api_filter_handler.inc:369
+msgid "(@field) <strong>Exposed</strong> @widget @format"
+msgstr "(@field) <strong>Visat</strong> @widget @format"
+
+#: includes/date_api_filter_handler.inc:375
+msgid "@min and @max"
+msgstr "@min och @max"
+
+#: includes/date_navigation_plugin_style.inc:24
+msgid "The %style cannot use more than one Date: Date argument."
+msgstr "%style kan inte använda fler än ett Datum: Argument för datum."
+
+#: includes/date_navigation_plugin_style.inc:27
+msgid "The %style requires the Date: Date argument be set to default to the current date."
+msgstr "%style kräver Date: Argument för datum kommer som standard att anges till dagens datum."
+
+#: includes/date_navigation_plugin_style.inc:34
+msgid "The %style requires the Date: Date argument."
+msgstr "%style kräver datum: Argument för datum."
+
+#: theme/theme.inc:64
+msgid "Navigate to previous year"
+msgstr "Gå till föregående år"
+
+#: theme/theme.inc:65
+msgid "Navigate to next year"
+msgstr "Gå till nästa år"
+
+#: theme/theme.inc:68
+msgid "Navigate to previous month"
+msgstr "Gå till föregående månad"
+
+#: theme/theme.inc:69
+msgid "Navigate to next month"
+msgstr "Gå till nästa månad"
+
+#: theme/theme.inc:72
+msgid "Navigate to previous week"
+msgstr "Gå till föregående vecka"
+
+#: theme/theme.inc:73
+msgid "Navigate to next week"
+msgstr "Gå till nästa vecka"
+
+#: theme/theme.inc:76
+msgid "Navigate to previous day"
+msgstr "Gå till föregående dag"
+
+#: theme/theme.inc:77
+msgid "Navigate to next day"
+msgstr "Gå till nästa dag"
+
+#: theme/theme.inc:118
+msgid "Week of @date"
+msgstr "Vecka för @date"
+
+#: theme/theme.inc:125
+msgid "View full page month"
+msgstr "Visa hela månaden"
+
+#: theme/theme.inc:356
+msgid "Timezone"
+msgstr "Tidszon"
+
+#: theme/theme.inc:388
+msgid "!time from now"
+msgstr "!time från nu"
+
+#: theme/theme.inc:393
+msgid "ongoing"
+msgstr "pågående"
+
+#~ msgid "Categories"
+#~ msgstr "Kategorier"
+#~ msgid "Select the categories that should be used for the imported nodes."
+#~ msgstr "Välj de kategorier som skall användas för importerade noder."
+#~ msgid "Authored by"
+#~ msgstr "Författad av"
+#~ msgid "Leave blank for %anonymous."
+#~ msgstr "Lämna detta tomt för %anonymous."
+#~ msgid "Anonymous"
+#~ msgstr "Gäst"
+#~ msgid "Published"
+#~ msgstr "Publicerad"
+#~ msgid "Promoted to front page"
+#~ msgstr "Publicerad på förstasidan"
+#~ msgid "Sticky at top of lists"
+#~ msgstr "Alltid överst i listan"
+#~ msgid "Create new revision"
+#~ msgstr "Skapa ny revision"
+#~ msgid ""
+#~ "Importing dates into CCK from a comma separated file can be done using "
+#~ "the <a href=\"@link\">Node Import module</a>."
+#~ msgstr ""
+#~ "Import av datum till CCK från en kommaseparerad fil kan göras med hjälp "
+#~ "av <a href=\"@link\">modulen Node Import</a>."
+#~ msgid "Use <a href=\"@link\">Feed API</a> to import ical dates into nodes."
+#~ msgstr ""
+#~ "Använd <a href=\"@link\">Feed API</a> för att importera datum från iCal "
+#~ "till noder."
+#~ msgid ""
+#~ "See complete instructions on how to do it in the <a href=\"@link"
+#~ "\">Advanced help</a>."
+#~ msgstr ""
+#~ "Se fullständiga instruktionener för hur man gör det i <a href=\"@link"
+#~ "\">Utökad hjälp</a>."
+#~ msgid ""
+#~ "Enable the <a href=\"http://drupal.org/project/advanced_help\">Advanced "
+#~ "help module</a> for more instructions."
+#~ msgstr ""
+#~ "Aktivera <a href=\"http://drupal.org/project/advanced_help\">modulen "
+#~ "Advanced help</a> för vidare instruktioner."
+#~ msgid "iCal import"
+#~ msgstr "Import av iCal"
+#~ msgid "CSV import"
+#~ msgstr "Importera CSV"
+

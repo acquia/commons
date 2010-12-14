@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.27.4.39 2009/05/12 09:58:59 karens Exp $
+// $Id: date_php4.inc,v 1.27.4.41 2010/08/13 10:50:52 karens Exp $
 
 /**
  * @file
@@ -99,6 +99,7 @@ if (!function_exists('date_create')) {
 }
 
 if (!function_exists('date_format')) {
+  require_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_calc.inc');
 /**
  * PHP 4 equivalent for date_format().
  *
@@ -123,7 +124,6 @@ if (!function_exists('date_format')) {
         $date_string .= gmdate($c, $timestamp);
       }
       else{
-        require_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_calc.inc');
         switch ($c) {
           case 'U':
             $date_string .= $timestamp;
@@ -186,8 +186,14 @@ if (!function_exists('date_format')) {
             $date_string .= date_calc_days_in_month(date_part_extract($date->value, 'month'),
               date_part_extract($date->value, 'year'));
             break;
+          case 'W':
+            $result = date_calc_gregorian_to_ISO(date_part_extract($date->value, 'day'),
+              date_part_extract($date->value, 'month'),
+              date_part_extract($date->value, 'year'));
+            $result = explode('-', $result);  
+            $date_string .= $result[1];  
           default:
-            if (strpos('AaeDFlMTBcdGgHhIijLmNnOoPrSstUuWwYyZz', $c) !== FALSE) {
+            if (strpos('AaeDFlMTBcdGgHhIijLmNnOoPrSstUuwYyZz', $c) !== FALSE) {
               $date_string .= date_date($c, $timestamp, $date->timezone);
             }
             else {
@@ -367,6 +373,7 @@ if (!function_exists('date_offset_get')) {
 }
 
 if (!function_exists('date_modify')) {
+  require_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_calc.inc');
 /**
  * A limited set of options are provided here to modify dates.
  * Uses strtotime() on dates after 1970. Uses date_php4_calc.inc to do
@@ -408,7 +415,6 @@ if (!function_exists('date_modify')) {
       $date->value = substr_replace(date_date(DATE_FORMAT_DATETIME, $cdate, $date->timezone), $time, 11);
     }
     else {
-      require_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_calc.inc');
       $days = date_week_days_untranslated();
       $dows = array_flip($days);
       preg_match('/([+|-])\s?([0-9]{1,32})\s?([day(s)?|week(s)?|month(s)?|year(s)?|hour(s)?|minute(s)?|second(s)?|Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday]{1,10})/', $change, $results);
@@ -853,6 +859,8 @@ function date_is_dst($timestamp, $timezone = NULL) {
  * POSSIBILITY OF SUCH DAMAGE.
 */
 
+require_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_lib.inc');
+
 /**
  * Returns an array with date info.
  *
@@ -862,7 +870,6 @@ function date_is_dst($timestamp, $timezone = NULL) {
  *   Use 'UTC' to avoid timezone conversion.
  */
 function date_getdate($timestamp = false, $timezone = false) {
-  require_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_lib.inc');
   return _date_getdate($timestamp, $timezone);
 }
 
@@ -907,7 +914,6 @@ function date_date($format, $timestamp = false, $timezone = false) {
       return @date($format, $timestamp);
     }
   }
-  require_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_lib.inc');
   return _date_date($format, $timestamp, $timezone);
 }
 
@@ -954,7 +960,6 @@ function date_mktime($hr, $min, $sec, $mon = false, $day = false, $year = false,
     return @gmmktime($hr, $min, $sec, $mon, $day, $year);
   }
   
-  require_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_lib.inc');
   return _date_mktime($hr, $min, $sec, $mon, $day, $year, $timezone);
 }
 

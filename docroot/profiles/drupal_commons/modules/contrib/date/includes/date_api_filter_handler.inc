@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_filter_handler.inc,v 1.1.2.41 2009/09/16 10:47:23 karens Exp $
+// $Id: date_api_filter_handler.inc,v 1.1.2.47 2010/08/12 22:32:58 karens Exp $
 
 /**
  * A flexible, configurable date filter.
@@ -31,6 +31,8 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     $handler->granularity = isset($options['granularity']) ? $options['granularity'] : 'day';
     $handler->adjustment_field = isset($options['adjustment_field']) ? $options['adjustment_field'] : 0;
     
+    if (empty($this->view->date_info)) $this->view->date_info = new stdClass();
+    
     // Set the view range, do this only if not already set in case there are multiple date arguments.
     if (empty($this->view->date_info->min_allowed_year)) {
       $range = date_range_years($this->options['year_range']);
@@ -50,22 +52,19 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     if (empty($this->options['exposed']) || (isset($this->options['expose']['identifier']) && !isset($_GET[$this->options['expose']['identifier']]))) {
       $this->force_value = TRUE;
     }
+
   }
 
   // Set default values for the date filter.
-  function options(&$options) {
-    parent::options($options);
-    $options['date_fields'] = array();
-    $options['date_method'] = 'OR';
-    $options['granularity'] = 'day';
-    $options['form_type'] = 'date_select';
-    $options['default_date'] = '';
-    $options['default_to_date'] = '';
-    $options['year_range'] = '-3:+3';    
-  }
-  
   function option_definition() {
     $options = parent::option_definition();
+    $options['date_fields'] = array('default' => array());
+    $options['date_method'] = array('default' => 'OR');
+    $options['granularity'] = array('default' => 'day');
+    $options['form_type'] = array('default' => 'date_select');
+    $options['default_date'] = array('default' => '');
+    $options['default_to_date'] = array('default' => '');
+    $options['year_range'] = array('default' => '-3:+3');
     return $options;
   }
 
@@ -280,6 +279,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     if (!empty($form_state['exposed'])) {
       $default_date = $this->default_value($prefix);
     }
+   
     $form[$prefix] = array(
       '#type' => $type,
       '#title' => $name,
@@ -400,17 +400,30 @@ class date_api_filter_handler extends views_handler_filter_numeric {
   }
    
   /**
+   * Called just prior to query(), this lets us set up table aliases for
+   * relationships. This can't be done in pre_query(), because the relationship
+   * isn't defined yet.
+   */
+  function set_relationship() {
+    parent::set_relationship();
+    $this->get_query_fields();
+    if (!empty($this->query_fields)) {
+      foreach ($this->query_fields as $query_field) {
+        $field = $query_field['field'];
+        $this->related_table_alias = $this->query->queue_table($field['table_name'], $this->relationship);
+      }
+    }
+  }
+ 
+  /**
    * Custom implementation of query() so we can get the
    * AND and OR methods in the right places.
    */
   function query() {
     $this->get_query_fields();
-    $this->table = $this->query_fields[0]['field']['table_name'];
-    $this->ensure_my_table();
     if (!empty($this->query_fields)) {
       foreach ((array) $this->query_fields as $query_field) {
         $field = $query_field['field'];
-        $query_field['field']['fullname'] = $this->table_alias. '.' .$field['field_name'];
         $sql = '';
         $sql_parts = array();
         switch ($this->operator) {

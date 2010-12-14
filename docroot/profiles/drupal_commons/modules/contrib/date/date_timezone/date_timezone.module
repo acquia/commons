@@ -1,5 +1,5 @@
 <?php
-// $Id: date_timezone.module,v 1.18.2.3.2.12 2009/03/26 10:25:50 karens Exp $
+// $Id: date_timezone.module,v 1.18.2.3.2.13 2010/08/12 21:59:07 karens Exp $
 /**
  * @file
  * This module will make the alter the user and site timezone forms to
@@ -41,11 +41,17 @@ function date_timezone_menu() {
 function date_timezone_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'system_date_time_settings') {
     date_timezone_site_form($form);
-    $form['#after_build'] = array('date_timezone_site_form_after_build');
+    if (!isset($form['#after_build'])) {
+      $form['#after_build'] = array();
+    }
+    $form['#after_build'][] = 'date_timezone_site_form_after_build';
   }
   elseif ($form_id == 'user_profile_form' && variable_get('configurable_timezones', 1) && isset($form['timezone'])) {
     date_timezone_user_form($form);
-    $form['#after_build'] = array('date_timezone_user_form_after_build');
+    if (!isset($form['#after_build'])) {
+      $form['#after_build'] = array();
+    }
+    $form['#after_build'][] = 'date_timezone_user_form_after_build';  
   }
 }
 

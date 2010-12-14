@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_argument_handler.inc,v 1.1.2.38 2009/09/16 10:47:23 karens Exp $
+// $Id: date_api_argument_handler.inc,v 1.1.2.44 2010/08/12 22:32:58 karens Exp $
 /**
  * Date API argument handler.
  */
@@ -27,6 +27,8 @@ class date_api_argument_handler extends views_handler_argument_date {
     $this->format = $date_handler->views_formats($date_handler->granularity, 'display');
     $this->sql_format = $date_handler->views_formats($date_handler->granularity, 'sql');
     
+    if (empty($this->view->date_info)) $this->view->date_info = new stdClass();
+
     // Set the view range, do this only if not already set in case there are multiple date arguments.
     if (empty($this->view->date_info->min_allowed_year)) {
       $range = date_range_years($this->options['year_range']);
@@ -42,12 +44,14 @@ class date_api_argument_handler extends views_handler_argument_date {
   /**
    * Default value for the date_fields option.
    */
-  function options(&$options) {
-    parent::options($options);
-    $options['date_fields'] = array();
-    $options['year_range'] = '-3:+3';
-    $options['date_method'] = 'OR';
-    $options['granularity'] = 'month';
+  function option_definition() {
+    $options = parent::option_definition();
+    $options['date_fields'] = array('default' => array());
+    $options['year_range'] = array('default' => '-3:+3');
+    $options['date_method'] = array('default' => 'OR');
+    $options['granularity'] = array('default' => 'month');
+
+    return $options;
   }
 
   /**
@@ -256,14 +260,20 @@ class date_api_argument_handler extends views_handler_argument_date {
         unset($this->view->args[$this->position]); 
       }
     }
-    
+  }
+  
+  /**
+   * Called just prior to query(), this lets us set up table aliases for
+   * relationships. This can't be done in pre_query(), because the relationship
+   * isn't defined yet.
+   */
+  function set_relationship() {
+    parent::set_relationship();
     $this->get_query_fields();
     if (!empty($this->query_fields)) {
       foreach ($this->query_fields as $query_field) {
         $field = $query_field['field'];
-        // Explicitly add this table using add_table so Views does not
-        // remove it if it is a duplicate, since that will break the query.
-        $this->query->add_table($field['table_name'], NULL, NULL, $field['table_name']);
+        $this->related_table_alias = $this->query->queue_table($field['table_name'], $this->relationship);
       }
     }
   }
@@ -339,14 +349,10 @@ class date_api_argument_handler extends views_handler_argument_date {
       foreach ($this->query_fields as $query_field) {
         $field = $query_field['field'];
         $date_handler = $query_field['date_handler'];
-        $from_field = str_replace($field['table_name'] .'_', $field['table_name'] .'.', $field['fromto'][0]);
-        $to_field = str_replace($field['table_name'] .'_', $field['table_name'] .'.', $field['fromto'][1]);
-        if ($this->options['relationship'] !== 'none') {
-          $from_field = str_replace($field['table_name'] .'_', $this->relationship .'_'. $field['table_name'] .'.', $field['fromto'][0]);
-          $to_field = str_replace($field['table_name'] .'_', $this->relationship .'_'.  $field['table_name'] .'.', $field['fromto'][1]);
-          $this->table = $this->query_fields[0]['field']['table_name'];
-          $this->ensure_my_table();
-        }
+        $table_alias = !empty($this->related_table_alias) ? $this->related_table_alias : $field['table_name'];
+        $from_field = str_replace($field['table_name'] .'_', $table_alias .'.', $field['fromto'][0]);
+        $to_field = str_replace($field['table_name'] .'_', $table_alias .'.', $field['fromto'][1]);
+        
         if ($this->granularity != 'week') {
           $from = $date_handler->sql_where_format($format, $from_field, '<=', date_format($max_date, $format));
           $to   = $date_handler->sql_where_format($format, $to_field, '>=', date_format($min_date, $format));

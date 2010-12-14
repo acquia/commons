@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.61.2.4.2.62 2009/09/16 09:50:31 karens Exp $
+// $Id: date.module,v 1.61.2.4.2.70 2010/08/12 20:19:50 karens Exp $
 
 /**
  * @file
@@ -195,6 +195,18 @@ function date_widget_info() {
     }
   }
   return $info;
+}
+
+function date_default_format($type) {
+  if (stristr($type, 'date_popup') && module_exists('date_popup')) {
+    $formats = date_popup_formats();
+    $default_format = array_shift($formats);
+  }
+  else {
+    // example input formats must show all possible date parts, so add seconds.
+    $default_format = str_replace('i', 'i:s', variable_get('date_format_short', 'm/d/Y - H:i'));
+  }
+  return $default_format;
 }
 
 function date_input_value($field, $element) {
@@ -460,9 +472,11 @@ function date_field($op, &$node, $field, &$items, $teaser, $page) {
   $additions[$field['field_name']] = $items;
   foreach ($items as $delta => $item) {
     $timezone = isset($item['timezone']) ? $item['timezone'] : '';
-    $additions[$field['field_name']][$delta]['timezone'] = date_get_timezone($field['tz_handling'], $timezone);
-    $additions[$field['field_name']][$delta]['timezone_db'] = date_get_timezone_db($field['tz_handling']);
-    $additions[$field['field_name']][$delta]['date_type'] = $field['type'];
+    if (is_array($additions[$field['field_name']][$delta])) {
+      $additions[$field['field_name']][$delta]['timezone'] = date_get_timezone($field['tz_handling'], $timezone);
+      $additions[$field['field_name']][$delta]['timezone_db'] = date_get_timezone_db($field['tz_handling']);
+      $additions[$field['field_name']][$delta]['date_type'] = $field['type'];
+    }
   }
   switch ($op) {
     case 'load':
@@ -474,11 +488,14 @@ function date_field($op, &$node, $field, &$items, $teaser, $page) {
       return _date_field_validate($op, $node, $field, $items, $teaser, $page);
       break;
 
+    case 'presave':
     case 'insert':
     case 'update':
-      require_once('./'. drupal_get_path('module', 'date') .'/date_elements.inc');
+      require_once('./'. drupal_get_path('module', 'date') .'/date_elements.inc');     
       $items = $additions[$field['field_name']];
-      $node->$field['field_name'] = $additions;
+      if ($additions[$field['field_name']]) {
+        $node->$field['field_name'] = $additions;
+      }
       return _date_field_update($op, $node, $field, $items, $teaser, $page);
       break;
 
@@ -559,7 +576,7 @@ function date_formatter_format($formatter, $field_name) {
   }
  
   if (empty($format)) {
-    $format = $default_format;
+    $format = $default;
   }
   // A selected format might include timezone information.
   $granularity = date_granularity($field);

@@ -1,5 +1,5 @@
 <?php
-// $Id: date_popup.module,v 1.42.2.1.2.52 2009/08/13 16:17:29 karens Exp $
+// $Id: date_popup.module,v 1.42.2.1.2.60 2010/08/13 18:48:34 karens Exp $
 /**
  * @file
  * A module to enable jquery calendar and time entry popups.
@@ -22,8 +22,6 @@
 
 /**
  * Load needed files.
- * 
- * Play nice with jQuery UI, if it is installed.
  */
 function date_popup_load() {
   static $loaded = FALSE;
@@ -34,22 +32,47 @@ function date_popup_load() {
   if (module_exists('jquery_ui')) {
     jquery_ui_add('ui.datepicker');
   }
-  else {
-    drupal_add_js($path .'/lib/ui.datepicker.js');
-  }
   if (variable_get('date_popup_timepicker', 'default') == 'default') {
     drupal_add_js($path .'/lib/jquery.timeentry.pack.js');
   }
   $loaded = TRUE;
 }
 
+function date_popup_css_default() {
+  return drupal_get_path('module', 'date_popup') .'/themes/datepicker.css';
+}
+
+function date_popup_css_options() {
+  $version = jquery_ui_get_version();
+  $jquery_ui_path = drupal_get_path('module', 'jquery_ui');
+  $paths = array();
+  switch ($version) {
+    case '1.6':
+      $paths[drupal_get_path('module', 'date_popup') .'/themes/datepicker.css'] = t('Date Popup default');
+      $paths[$jquery_ui_path .'/jquery.ui/themes/base/ui.datepicker.css'] = t('jQuery UI default');
+      break;
+    default:
+      $paths[drupal_get_path('module', 'date_popup') .'/themes/datepicker.1.7.css'] = t('Date Popup default');
+      $paths[$jquery_ui_path .'/jquery.ui/themes/default/ui.datepicker.css'] = t('jQuery UI default');
+      break;
+  }
+  return $paths;
+}
+
 /**
  * Implementation of hook_init().
  */
 function date_popup_init() {
-  drupal_add_css(drupal_get_path('module', 'date_popup')  .'/themes/datepicker.css');
+  global $user;
+  if (!module_exists('jquery_ui') && $user->uid == 1) {
+    drupal_set_message(t('The Date Popup module now requires the <a href="@link">jQuery UI module</a> as a source for the datepicker. Please install it immediately.', array('@link' => 'http://drupal.org/project/jquery_ui')), 'error');
+    return;
+  }
+  
+  drupal_add_css(variable_get('date_popup_css_file', date_popup_css_default()));
+  
   if (variable_get('date_popup_timepicker', 'default') == 'default') {
-    drupal_add_css(drupal_get_path('module', 'date_popup')  .'/themes/timeentry.css');
+    drupal_add_css(drupal_get_path('module', 'date_popup')  .'/themes/jquery.timeentry.css');
   }
 }
 
@@ -218,12 +241,14 @@ function date_popup_process_date(&$element, $edit = NULL, $date = NULL) {
   $year_range = date_range_string($range);
 
   $settings = array(
-    'prevText' => '&lt;'. date_t('Prev', 'date_nav'),
-    'nextText' => date_t('Next', 'date_nav') .'&gt;',
+    'prevText' => '&laquo;',
+    'nextText' => '&raquo;',
     'currentText' => date_t('Today', 'date_nav'),
+    'changeMonth' => TRUE,
+    'changeYear' => TRUE,    
     'clearText' => t('Clear'),
     'closeText' => t('Close'),
-    'firstDay' => intval(variable_get('date_first_day', 0)),
+    'firstDay' => intval(variable_get('date_first_day', 1)),
     'dayNames' => date_week_days(TRUE),
     'dayNamesShort' => date_week_days_abbr(TRUE, TRUE, 3),
     'dayNamesMin' => date_week_days_abbr(TRUE, TRUE, 2),
@@ -244,7 +269,7 @@ function date_popup_process_date(&$element, $edit = NULL, $date = NULL) {
   $id = date_popup_js_settings_id($element['#id'], 'datepicker', $settings);
   $sub_element = array(
     '#type' => 'textfield',
-    '#default_value' => (!empty($element['#value']['date']) || !empty($edit['date'])) && is_object($date) ? date_format($date, $date_format) : '',
+    '#default_value' => (!empty($element['#value']['date']) || !empty($edit['date'])) && is_object($date) ? date_format_date($date, 'custom', $date_format) : '',
     '#id' => $id,    
     '#size' => !empty($element['#size']) ? $element['#size'] : 20,
     '#maxlength' => !empty($element['#maxlength']) ? $element['#maxlength'] : 30,
@@ -256,7 +281,7 @@ function date_popup_process_date(&$element, $edit = NULL, $date = NULL) {
     $sub_element['#value'] = $sub_element['#default_value'];
   }
   // TODO, figure out exactly when we want this description. In many places it is not desired.
-  $sub_element['#description'] = ' '. t('Format: @date', array('@date' => date($date_format, time())));
+  $sub_element['#description'] = ' '. t('Format: @date', array('@date' => date_format_date(date_now(), 'custom', $date_format)));
   return $sub_element;
 }
 
@@ -496,6 +521,8 @@ function timepicker_format_replacements() {
     'G' => 'H',
     'g' => 'h',
     'a' => 'A',
+    ' a' => 'A',
+    ' A' => 'A',
     );
 }
 
@@ -524,7 +551,7 @@ function datepicker_format_replacements() {
  */
 function theme_date_popup($element) {
   $output = '';
-  $class = 'container-inline-date';
+  $class = 'container-inline-date form-item';
   // Add #date_float to allow date parts to float together on the same line. 
   if (empty($element['#date_float'])) {
     $class .= ' date-clear-block';
@@ -556,10 +583,15 @@ function date_popup_menu() {
  * General configuration form for controlling the Date Popup behaviour.
  */
 function date_popup_settings() {
-
-  $form['#prefix'] = t('<p>The Date Popup calendar datepicker uses the jQuery UI datepicker. A version of that is included with the Date Popup module, but you are strongly encouraged to use the <a href="http://drupal.org/project/jquery_ui">jQuery UI module</a> instead. If the jQuery UI module is installed, the Date Popup will use the datepicker from that module, which is likely to be more current. If you are having any problems with Popups and you are not already using jQuery UI, please do that as a first step before reporting problems.</p>');
-  $form['#prefix'] .= t('<p>The Date Popup module uses a jQuery timepicker module. There is no "official" jQuery UI timepicker, and not everyone likes the one that is included here. If you do not want to use the timepicker, you can turn it off below and users will get a regular textfield instead.</p>');
-  
+  $form['date_popup_css_file'] = array(
+    '#type' => 'select',
+    '#title' => t('Datepicker css'),
+    '#description' => t('Choose the css to use for the jQuery UI datepicker.'),
+    '#options' => date_popup_css_options(),
+    '#default_value' => variable_get('date_popup_css_file', date_popup_css_default()),
+  );
+  $form['date_popup_css_file']['#prefix'] = t('<p>The Date Popup calendar datepicker uses the jQuery UI datepicker. You must install the jQuery UI module for this to work. It has its own css file, or there is a Drupal adaptation included in Date Popup that you can use.</p>');
+    
   $form['date_popup_timepicker'] = array(
     '#type' => 'select',
     '#options' => array('default' => t('Use default jQuery timepicker'), 'none' => t('Manual time entry, no jQuery timepicker')),
@@ -567,6 +599,8 @@ function date_popup_settings() {
     '#default_value' => variable_get('date_popup_timepicker', 'default'),
     '#description' => t("Choose the jQuery timepicker to user."),
   );
+
+  $form['date_popup_timepicker']['#prefix'] .= t('<p>The Date Popup module uses a jQuery timepicker module. There is no "official" jQuery UI timepicker, and not everyone likes the one that is included here. If you do not want to use the timepicker, you can turn it off below and users will get a regular textfield instead.</p>');
   
   $css = <<<EOM
 /* ___________ IE6 IFRAME FIX ________ */

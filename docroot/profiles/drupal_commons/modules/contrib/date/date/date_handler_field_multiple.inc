@@ -1,5 +1,5 @@
 <?php
-// $Id: date_handler_field_multiple.inc,v 1.1.2.12 2009/02/27 14:48:34 karens Exp $
+// $Id: date_handler_field_multiple.inc,v 1.1.2.14 2010/03/05 12:02:31 karens Exp $
 
 /**
  * @file
@@ -10,13 +10,25 @@
  */
 class date_handler_field_multiple extends content_handler_field_multiple {
   
-  function options(&$options) {
-    parent::options($options);
+  function option_definition() {
+    $options = parent::option_definition();
     $options['repeat'] = array(
-      'show_repeat_rule' => '',
-      );
-    $options['multiple']['multiple_to'] = ''; 
-    $options['fromto']['fromto'] = 'both'; 
+      'contains' => array(
+        'show_repeat_rule' => array('default' => ''),
+      )
+    );  
+    $options['multiple'] = array(
+      'contains' => array(
+        'multiple_to' => array('default' => ''),
+      )
+    );
+    $options['fromto'] = array(
+      'contains' => array(
+        'fromto' => array('default' => 'both'),
+      )
+    );
+
+    return $options;  
   }
   
   /**

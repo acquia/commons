@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.9.2.3.2.37 2009/09/16 11:13:01 karens Exp $
+// $Id: date_api_sql.inc,v 1.9.2.3.2.39 2010/08/12 18:37:07 karens Exp $
 
 /**
  *  A helper function to do cross-database concatation of date parts
@@ -10,10 +10,10 @@
 function date_sql_concat($array) {
   global $db_type;
   switch ($db_type) {
-    case('mysql'):
-    case('mysqli'):
+    case ('mysql'):
+    case ('mysqli'):
       return "CONCAT(". implode(",", $array) .")";
-    case('pgsql'):
+    case ('pgsql'):
       return implode(" || ", $array);
   }
 }
@@ -27,9 +27,9 @@ function date_sql_concat($array) {
 function date_sql_coalesce($array) {
   global $db_type;
   switch ($db_type) {
-    case('mysql'):
-    case('mysqli'):
-    case('pgsql'):
+    case ('mysql'):
+    case ('mysqli'):
+    case ('pgsql'):
       return "COALESCE(". implode(',', $array) .")";
   }  
 }
@@ -44,7 +44,7 @@ function date_sql_coalesce($array) {
  */
 function date_sql_pad($str, $size = 2, $pad = '0', $side = 'l') {
   switch ($side) {
-  case('r'):
+  case ('r'):
     return "RPAD($str, $size, '$pad')";
   default:
     return "LPAD($str, $size, '$pad')";
@@ -93,7 +93,7 @@ class date_sql_handler {
           }
           break;
         case 'pgsql':
-          $test = db_result(db_query("'2008-02-15 12:00:00 UTC' AT TIME ZONE 'US/Central'"));
+          $test = db_result(db_query("SELECT '2008-02-15 12:00:00 UTC' AT TIME ZONE 'US/Central'"));
           if ($test == '2008-02-15 06:00:00') {
             $has_support = TRUE;
           }
@@ -306,7 +306,7 @@ class date_sql_handler {
         case 'pgsql':
           // WITH TIME ZONE assumes the date is using the system
           // timezone, which should have been set to UTC.
-          return "TIMESTAMP WITH TIME ZONE $field AT TIME ZONE $localzone";
+          return "$field::timestamp with time zone AT TIME ZONE $localzone";
       }
     }
   }
@@ -366,45 +366,45 @@ class date_sql_handler {
     // Note there is no space after FROM to avoid db_rewrite problems
     // see http://drupal.org/node/79904.
     switch (strtoupper($extract_type)) {
-    case('DATE'):
+    case ('DATE'):
       return $field;
-    case('YEAR'):
+    case ('YEAR'):
       return "EXTRACT(YEAR FROM($field))";
-    case('MONTH'):
+    case ('MONTH'):
       return "EXTRACT(MONTH FROM($field))";
-    case('DAY'):
+    case ('DAY'):
       return "EXTRACT(DAY FROM($field))";
-    case('HOUR'):
+    case ('HOUR'):
       return "EXTRACT(HOUR FROM($field))";
-    case('MINUTE'):
+    case ('MINUTE'):
       return "EXTRACT(MINUTE FROM($field))";
-    case('SECOND'):
+    case ('SECOND'):
       return "EXTRACT(SECOND FROM($field))";
-    case('WEEK'):  // ISO week number for date
+    case ('WEEK'):  // ISO week number for date
       switch ($this->db_type) {
-        case('mysql'):
-        case('mysqli'):
+        case ('mysql'):
+        case ('mysqli'):
           // WEEK using arg 3 in mysql should return the same value as postgres EXTRACT
           return "WEEK($field, 3)";
-        case('pgsql'):
+        case ('pgsql'):
           return "EXTRACT(WEEK FROM($field))";
       }
-    case('DOW'):
+    case ('DOW'):
       switch ($this->db_type) {
-        case('mysql'):
-        case('mysqli'):
+        case ('mysql'):
+        case ('mysqli'):
           // mysql returns 1 for Sunday through 7 for Saturday
           // php date functions and postgres use 0 for Sunday and 6 for Saturday
           return "INTEGER(DAYOFWEEK($field) - 1)";
-        case('pgsql'):
+        case ('pgsql'):
           return "EXTRACT(DOW FROM($field))";
       }
-    case('DOY'):
+    case ('DOY'):
       switch ($this->db_type) {
-        case('mysql'):
-        case('mysqli'):
+        case ('mysql'):
+        case ('mysqli'):
           return "DAYOFYEAR($field)";
-        case('pgsql'):
+        case ('pgsql'):
           return "EXTRACT(DOY FROM($field))";
       }
     }
@@ -659,31 +659,31 @@ class date_sql_handler {
     // Start with the site long date format and add seconds to it
     $long = str_replace(':i', ':i:s', variable_get('date_format_long',  'l, F j, Y - H:i'));
     switch ($granularity) {
-      case('year'):
+      case ('year'):
         $formats['display'] = 'Y';
         $formats['sql'] = 'Y';
         break;
-      case('month'):
+      case ('month'):
         $formats['display'] = date_limit_format($long, array('year', 'month'));
         $formats['sql'] = 'Y-m';
         break;
-      case('day'):
+      case ('day'):
         $formats['display'] = date_limit_format($long, array('year', 'month', 'day'));
         $formats['sql'] = 'Y-m-d';
         break;
-      case('hour'):
+      case ('hour'):
         $formats['display'] = date_limit_format($long, array('year', 'month', 'day', 'hour'));
         $formats['sql'] = 'Y-m-d\TH';
         break;
-      case('minute'):
+      case ('minute'):
         $formats['display'] = date_limit_format($long, array('year', 'month', 'day', 'hour', 'minute'));
         $formats['sql'] = 'Y-m-d\TH:i';
         break;
-      case('second'):
+      case ('second'):
         $formats['display'] = date_limit_format($long, array('year', 'month', 'day', 'hour', 'minute', 'second'));
         $formats['sql'] = 'Y-m-d\TH:i:s';
         break;
-      case('week'):
+      case ('week'):
         $formats['display'] = 'F j Y (W)';
         $formats['sql'] = 'Y-\WW';
         break;

@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.admin.inc,v 1.1.2.2 2009/03/19 23:22:32 karens Exp $
+// $Id: date_api.admin.inc,v 1.1.2.3 2010/08/12 18:40:48 karens Exp $
 
 /**
  * @file
@@ -45,7 +45,7 @@ function date_api_configure_custom_date_formats() {
 
   }
   else {
-    $output = t('No custom formats configured. Please <a href="@link">add</a> some.', array('@link' => base_path() . 'admin/settings/date-time/formats/add'));
+    $output = t('No custom formats configured. Please <a href="@link">add</a> some.', array('@link' => url('admin/settings/date-time/formats/add')));
   }
 
   return $output;

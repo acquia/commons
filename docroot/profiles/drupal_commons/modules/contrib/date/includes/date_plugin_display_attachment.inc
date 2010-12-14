@@ -1,5 +1,5 @@
 <?php
-// $Id: date_plugin_display_attachment.inc,v 1.1.2.2 2008/09/15 21:31:25 karens Exp $
+// $Id: date_plugin_display_attachment.inc,v 1.1.2.3 2010/03/05 11:55:53 karens Exp $
 /**
  * The plugin that handles date navigation attachments.
  * 
@@ -19,16 +19,18 @@ class date_plugin_display_attachment extends views_plugin_display_attachment {
     return parent::defaultable_sections($section);
   }
 
-  function options(&$display) {
-    parent::options($display);
-    $display->display_options['style_plugin'] = 'date_nav';
-    $display->display_options['items_per_page'] = 0;
-    $display->display_options['row_plugin'] = '';
-    //$display->display_options['defaults']['style_plugin'] = FALSE;
-    $display->display_options['defaults']['style_options'] = FALSE;
-    $display->display_options['defaults']['items_per_page'] = FALSE;
-    $display->display_options['defaults']['row_plugin'] = FALSE;
-    $display->display_options['defaults']['row_options'] = FALSE;
+  function option_definition() {
+    $options = parent::option_definition();
+    $options['style_plugin']['default'] = 'date_nav';
+    $options['items_per_page']['default'] = 0;
+    $options['row_plugin']['default'] = '';
+    //$options['defaults']['default']['style_plugin'] = FALSE;
+    $options['defaults']['default']['style_options'] = FALSE;
+    $options['defaults']['default']['items_per_page'] = FALSE;
+    $options['defaults']['default']['row_plugin'] = FALSE;
+    $options['defaults']['default']['row_options'] = FALSE;
+
+    return $options;
   } 
 }
 
