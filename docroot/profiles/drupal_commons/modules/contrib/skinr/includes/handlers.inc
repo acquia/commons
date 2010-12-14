@@ -1,5 +1,5 @@
 <?php
-// $Id: handlers.inc,v 1.2.2.1 2009/12/29 08:26:27 moonray Exp $
+// $Id: handlers.inc,v 1.2.2.5 2010/11/10 19:18:42 jgirlygirl Exp $
 /**
  * @file
  * Defines the various handler objects to support Skinr.
@@ -71,12 +71,13 @@ function skinr_data_handler(&$form, $form_state, $theme, $module, $form_settings
 function skinr_submit_handler(&$form, $form_state, $module, $form_settings) {
   if (isset($form_state['values']['skinr_settings'][$module .'_group'])) {
     foreach ($form_state['values']['skinr_settings'][$module .'_group'] as $theme_name => $theme) {
-      if ((isset($theme['widgets']) && count($theme['widgets'])) || isset($theme['advanced']['_additional'])) {
+      if ((!empty($theme['widgets']) && is_array($theme['widgets'])) || isset($theme['advanced']['_additional'])) {
         $hook  = $module;
         $key   = skinr_handler('form_index_handler', 'submit', $form_settings['index_handler'], $form, $form_state);
         $value = array();
-  
-        if (is_array($theme['widgets'])) {
+        $saved = skinr_get($theme_name, $hook , $key);
+
+        if (!empty($theme['widgets']) && is_array($theme['widgets'])) {
           foreach ($theme['widgets'] as $skin_id => $skin_value) {
             $skin_value = is_array($skin_value) ? _skinr_array_strip_empty($skin_value) : $skin_value;
             if (!empty($skin_value)) {
@@ -84,26 +85,41 @@ function skinr_submit_handler(&$form, $form_state, $module, $form_settings) {
             }
           }
         }
-  
+
         if (isset($theme['advanced']['_additional'])) {
           $theme['advanced']['_additional'] = trim($theme['advanced']['_additional']);
           if (!empty($theme['advanced']['_additional'])) {
             $value['_additional'] = $theme['advanced']['_additional'];
           }
         }
-  
+        else {
+          if (!user_access('access skinr classes') && isset($saved['_additional'])) {
+            // The user didn't have access to change this. Ensure the existing
+            // custom classes remain by populating the element with the
+            // previously saved values.
+            $value['_additional'] = $saved['_additional'];
+          }
+        }
         if (isset($theme['advanced']['_template'])) {
           $theme['advanced']['_template'] = trim($theme['advanced']['_template']);
           if (!empty($theme['advanced']['_template'])) {
             $value['_template'] = $theme['advanced']['_template'];
           }
         }
-  
+        else {
+          if (!user_access('access skinr classes') && isset($saved['_template'])) {
+            // The user didn't have access to change this. Ensure the existing
+            // template selection remains by populating the element with the
+            // previously saved values.
+            $value['_template'] = $saved['_template'];
+          }
+        }
+
         if (empty($key)) {
           // We didn't receive a valid key, so raise an error
           drupal_set_message(t("Skinr settings weren't saved due to an error."), 'error');
         }
-  
+
         skinr_set($theme_name, $hook, $key, $value);
       }
     }

@@ -1,5 +1,5 @@
 <?php
-// $Id: skinr.module,v 1.13.2.10 2010/02/19 21:13:41 moonray Exp $
+// $Id: skinr.module,v 1.13.2.21 2010/10/22 04:04:30 jgirlygirl Exp $
 
 /**
  * Implementation of hook_perm().
@@ -65,8 +65,12 @@ function skinr_help($path, $arg) {
  * Implementation of hook_init().
  */
 function skinr_init() {
-  skinr_include('handlers');
-  skinr_module_include('skinr.inc');
+  static $run = FALSE;
+  if (!$run) {
+    skinr_include('handlers');
+    skinr_module_include('skinr.inc');
+    $run = TRUE;
+  }
 }
 
 /**
@@ -94,12 +98,17 @@ function skinr_form_alter(&$form, $form_state, $form_id) {
       $themes = list_themes();
       ksort($themes);
 
+      // There's a bug that sometimes disables all themes. This will check for
+      // the bug in question. http://drupal.org/node/305653
+      $enabled_themes = 0;
+
       foreach ($themes as $theme) {
         if (!$theme->status) {
           continue;
         }
+        $enabled_themes++;
 
-        $preprocess_hook = $form_settings['preprocess_hook'] ? $form_settings['preprocess_hook'] : skinr_handler('preprocess_hook_callback', '', $form_settings['preprocess_hook_callback'], $form, $form_state);
+        $preprocess_hook = !empty($form_settings['preprocess_hook']) ? $form_settings['preprocess_hook'] : skinr_handler('preprocess_hook_callback', '', $form_settings['preprocess_hook_callback'], $form, $form_state);
 
         if (!$form_state['submitted']) {
           $skinr_data = skinr_handler('data_handler', 'form', $form_settings['data_handler'], $form, $form_state, $theme->name, $module, $form_settings);
@@ -125,8 +134,8 @@ function skinr_form_alter(&$form, $form_state, $form_id) {
         if (!isset($form['skinr_settings'][$module .'_group'])) {
           $form['skinr_settings'][$module .'_group'] = array(
             '#type' => 'fieldset',
-            '#title' => $form_settings['skinr_title'] .' '. $form_settings['title'],
-            '#description' => $form_settings['description'] .' <strong>'. $preprocess_hook .'</strong>.',
+            '#title' => t('@skinr_title @title', array('@skinr_title' => $form_settings['skinr_title'], '@title' => $form_settings['title'])),
+            '#description' => t($form_settings['description']) .' <strong>'. $preprocess_hook .'</strong>.',
             '#weight' => $form_settings['weight'],
             '#collapsible' => TRUE,
             '#collapsed' => $form_settings['collapsed'],
@@ -158,28 +167,31 @@ function skinr_form_alter(&$form, $form_state, $form_id) {
                 $form['skinr_settings'][$module .'_group'][$theme->name]['widgets'][$skin_id] = array(
                   '#type' => 'checkboxes',
                   '#multiple' => TRUE,
-                  '#title' => $skin['title'],
+                  '#title' => t($skin['title']),
                   '#options' => skinr_info_options_to_form_options($skin['options']),
                   '#default_value' => isset($defaults[$skin_id]) ? $defaults[$skin_id] : array(),
-                  '#description' => $skin['description'],
+                  '#description' => t($skin['description']),
+                  '#weight' => isset($skin['weight']) ? $skin['weight'] : NULL,
                 );
                 break;
               case 'radios':
                 $form['skinr_settings'][$module .'_group'][$theme->name]['widgets'][$skin_id] = array(
                   '#type' => 'radios',
-                  '#title' => $skin['title'],
+                  '#title' => t($skin['title']),
                   '#options' => array_merge(array('' => '&lt;none&gt;'), skinr_info_options_to_form_options($skin['options'])),
                   '#default_value' => isset($defaults[$skin_id]) ? $defaults[$skin_id] : '',
-                  '#description' => $skin['description'],
+                  '#description' => t($skin['description']),
+                  '#weight' => isset($skin['weight']) ? $skin['weight'] : NULL,
                 );
                 break;
               case 'select':
                 $form['skinr_settings'][$module .'_group'][$theme->name]['widgets'][$skin_id] = array(
                   '#type' => 'select',
-                  '#title' => $skin['title'],
+                  '#title' => t($skin['title']),
                   '#options' => array_merge(array('' => '<none>'), skinr_info_options_to_form_options($skin['options'])),
                   '#default_value' => isset($defaults[$skin_id]) ? $defaults[$skin_id] : '',
-                  '#description' => $skin['description'],
+                  '#description' => t($skin['description']),
+                  '#weight' => isset($skin['weight']) ? $skin['weight'] : NULL,
                 );
                 break;
             }
@@ -221,6 +233,10 @@ function skinr_form_alter(&$form, $form_state, $form_id) {
             $form['buttons']['submit']['#validate'][] = 'skinr_form_validate';
           }
         }
+      }
+
+      if ($enabled_themes == 0) {
+        drupal_set_message(t('Skinr has detected that none of your themes are enabled. This is likely related the Drupal bug: <a href="http://drupal.org/node/305653">Themes disabled during update</a>. Please re-enable your theme to continue using Skinr.'), 'warning', FALSE);
       }
 
       // Only add submit handler once.
@@ -280,6 +296,11 @@ function skinr_form_submit(&$form, &$form_state) {
  * Implementation of hook_preprocess().
  */
 function skinr_preprocess(&$vars, $hook) {
+  // Let's make sure this has been run. There have been problems where other
+  // modules implement a theme function in their hook_init(), so we make doubly
+  // sure that the includes are included.
+  skinr_init();
+
   $skinr_data = skinr_fetch_data();
   $info = skinr_process_info_files();
   $current_theme = skinr_current_theme();
@@ -295,6 +316,7 @@ function skinr_preprocess(&$vars, $hook) {
     $original_hook = $theme_registry[$hook]['original hook'];
   }
 
+  $vars['skinr'] = '';
   foreach ($skinr_data as $module => $settings) {
     if (!empty($settings['preprocess'][$original_hook])) {
       $preprocess_settings = $settings['preprocess'][$original_hook];
@@ -342,7 +364,7 @@ function skinr_preprocess(&$vars, $hook) {
 }
 
 /**
- * Helper fuction to add CSS and JS files.
+ * Helper function to add CSS and JS files.
  *
  * The function checks an array of paths for the existence of the file to account for base themes.
  */
@@ -350,15 +372,15 @@ function _skinr_add_file($filename, $themes, $type, $media = NULL) {
   if (!is_array($themes)) {
     $themes = array($themes);
   }
-  
+
   foreach ($themes as $theme) {
-    $filename = drupal_get_path('theme', $theme) .'/'. $filename;
-    if (file_exists($filename)) {
+    $file = drupal_get_path('theme', $theme) .'/'. $filename;
+    if (file_exists($file)) {
       if ($type == 'css') {
-        drupal_add_css($filename, 'theme', $media);
+        drupal_add_css($file, 'theme', $media);
       }
       else {
-        drupal_add_js($filename, 'theme');
+        drupal_add_js($file, 'theme');
       }
       break;
     }
@@ -491,7 +513,7 @@ function skinr_get($theme = NULL, $module = NULL, $key = NULL) {
  *   Optional. Set to TRUE to exclude the admin theme from possible themes to
  *   return.
  */
-function skinr_current_theme() {
+function skinr_current_theme($exclude_admin_theme = FALSE) {
   global $user, $custom_theme;
 
   if (!empty($user->theme)) {
@@ -562,6 +584,7 @@ function skinr_process_info_files() {
             'title' => isset($skin['title']) ? $skin['title'] : '',
             'type' => isset($skin['type']) ? $skin['type'] : 'checkboxes',
             'description' => isset($skin['description']) ? $skin['description'] : '',
+            'weight' => isset($skin['weight']) ? $skin['weight'] : NULL,
             'features' => isset($skin['features']) ? $skin['features'] : array('*'),
             'templates' => isset($skin['templates']) ? $skin['templates'] : array(),
             'options' => isset($skin['options']) ? $skin['options'] : array(),
@@ -585,7 +608,7 @@ function skinr_process_info_files() {
 function skinr_info_options_to_form_options($options) {
   $form_options = array();
   foreach ($options as $option) {
-    $form_options[$option['class']] = $option['label'];
+    $form_options[$option['class']] = t($option['label']);
   }
   return $form_options;
 }

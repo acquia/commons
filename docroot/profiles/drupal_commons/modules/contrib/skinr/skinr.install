@@ -15,3 +15,29 @@ function skinr_uninstall() {
     variable_del($variable->name);
   }
 }
+
+/**
+ * Update old Skinr variables per http://drupal.org/node/922136.
+ */
+function skinr_update_6100() {
+  $ret = array();
+  $result = db_query("SELECT name FROM {variable} WHERE name LIKE 'skinr_%'");
+  while ($variable = db_fetch_object($result)) {
+    $skinr = variable_get($variable->name, array());
+
+    if (!empty($skinr['panels'])) {
+      $keys = array_keys($skinr['panels']);
+      foreach ($keys as $key) {
+        if (strpos($key, '-panel-') !== FALSE) {
+          $value = $skinr['panels'][$key];
+          unset($skinr['panels'][$key]);
+          $new_key = str_replace('-panel-', '-region-', $key);
+          $skinr['panels'][$new_key] = $value;
+        }
+      }
+
+      variable_set($variable->name, $skinr);
+    }
+  }
+  return $ret;
+}
