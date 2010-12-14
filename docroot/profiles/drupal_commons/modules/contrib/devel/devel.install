@@ -1,5 +1,5 @@
 <?php
-// $Id: devel.install,v 1.24.2.9 2010/08/05 16:13:21 weitzman Exp $
+// $Id: devel.install,v 1.24.2.10 2010/09/11 22:27:32 salvis Exp $
 /**
  * @file
  *   Install file for devel module.
@@ -78,6 +78,8 @@ function devel_uninstall() {
   variable_del('dev_mem');
   variable_del('devel_error_handler');
   variable_del('devel_store_queries');
+  variable_del('devel_switch_user_list_size');
+  variable_del('devel_switch_user_show_form');
   
   db_query("DELETE FROM {menu_custom} WHERE menu_name = 'devel'");
   db_query("DELETE FROM {menu_links} WHERE module = 'devel'");

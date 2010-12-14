@@ -1,5 +1,5 @@
 <?php
-// $Id: devel_generate.module,v 1.11.2.15 2010/04/03 23:45:08 weitzman Exp $
+// $Id: devel_generate.module,v 1.11.2.16 2010/12/06 15:27:22 weitzman Exp $
 
 require_once('devel_generate_batch.inc');
 
@@ -98,6 +98,7 @@ function devel_generate_content_form() {
     '#options' => $options,
     '#default_value' => array_keys($options),
   );
+  if (module_exists('checkall')) $form['node_types']['#checkall'] = TRUE;
   $form['kill_content'] = array(
     '#type' => 'checkbox',
     '#title' => t('<strong>Delete all content</strong> in these node types before generating new content.'),

@@ -1,5 +1,5 @@
 <?php
-// $Id: devel_node_access.module,v 1.15.2.31 2010/07/13 19:50:10 salvis Exp $
+// $Id: devel_node_access.module,v 1.15.2.32 2010/09/11 21:26:21 salvis Exp $
 /**
  * @file
  *
@@ -75,7 +75,11 @@ function devel_node_access_form_alter(&$form, $form_state, $form_id) {
       '#type'          => 'checkbox',
       '#title'         => t('Devel Node Access debug mode'),
       '#default_value' => variable_get('devel_node_access_debug_mode', FALSE),
-      '#description'   => t('Debug mode verifies the grant records in the node_access table against those that would be set by running !Rebuild_permissions, and displays them all; this can cause considerable overhead.', array('!Rebuild_permissions' => l('['. $tr('Rebuild permissions') .']', 'admin/content/node-settings'))),
+      '#description'   => t('Debug mode verifies the grant records in the node_access table against those that would be set by running !Rebuild_permissions, and displays them all; this can cause considerable overhead.<br />For even more information enable the <a href="@link">%DNAbU block</a>, too.', array(
+        '!Rebuild_permissions' => l('[' . $tr('Rebuild permissions') . ']', 'admin/content/node-settings'),
+        '%DNAbU' => t('Devel Node Access by User'),
+        '@link' => url('admin/build/block/list'),
+      )),
     );
     // push these down:
     $form['devel_error_handler']['#weight'] = 1;
@@ -217,7 +221,7 @@ function devel_node_access_block($op = 'list', $delta = 0) {
   if (!isset($block1_visible)) {
     $block1_visible = db_result(db_query("SELECT status FROM {blocks} WHERE module = 'devel_node_access' AND delta = '1' AND theme = '%s'", $theme_key));
     if (!$block1_visible) {
-      $hint = t('For per-user access permissions enable the second DNA <a href="@block">block</a>.', array('@block' => url('admin/build/block')));
+      $hint = t('For per-user access permissions enable the second DNA <a href="@link">block</a>.', array('@link' => url('admin/build/block')));
     }
   }
 
