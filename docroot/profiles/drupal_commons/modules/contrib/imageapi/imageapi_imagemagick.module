@@ -1,4 +1,4 @@
-<?php  // $Id: imageapi_imagemagick.module,v 1.17.2.5 2009/05/29 17:48:32 drewish Exp $
+<?php  // $Id: imageapi_imagemagick.module,v 1.17.2.7 2010/10/17 18:02:32 drewish Exp $
 
 /**
  * @file
@@ -206,20 +206,33 @@ function _imageapi_imagemagick_convert_exec($command_args, &$output, &$errors) {
       $errors .= fgets($pipes[2]);
     }
 
+    fclose($pipes[0]);
+    fclose($pipes[1]);
+    fclose($pipes[2]);
+    $return_code = proc_close($h);
+
     // Display debugging information to authorized users.
     if (variable_get('imageapi_imagemagick_debugging', FALSE) && user_access('administer site configuration')) {
       drupal_set_message(t('ImageMagick command: @command', array('@command' => $convert_path .' '. $command_args)));
       drupal_set_message(t('ImageMagick output: @output', array('@output' => $output)));
     }
 
-    if ($errors) {
-      drupal_set_message(t('ImageMagick reported an error: %error', array('%error' => $errors)), 'error');
+    if ($return_code != 0) {
+      // If ImageMagick returned a non-zero code, trigger a PHP error that will
+      // be caught by Drupal's error handler, logged to the watchdog and
+      // eventually displayed to the user if configured to do so.
+
+      // If $errors is empty, only report the error code.
+      if (empty($errors)) {
+        trigger_error(t('ImageMagick reported error code !code.', array('!code' => $return_code)), E_USER_ERROR);
+      }
+      // Otherwise report the error code, and the error message.
+      else {
+        trigger_error(t("ImageMagick reported error code !code.\nMessage:\n!error", array('!code' => $return_code, '!error' => $errors)), E_USER_ERROR);
+      }
     }
 
-    fclose($pipes[0]);
-    fclose($pipes[1]);
-    fclose($pipes[2]);
-    return proc_close($h);
+    return $return_code;
   }
   return FALSE;
 }

@@ -1,4 +1,4 @@
-<?php // $Id: imageapi_gd.module,v 1.13.2.7 2009/04/17 00:15:21 drewish Exp $
+<?php // $Id: imageapi_gd.module,v 1.13.2.9 2010/10/17 18:16:13 drewish Exp $
 
 /**
  * @file
@@ -46,7 +46,7 @@ function imageapi_gd_image_open($image) {
 
 /**
  * Save an image file to a destination.
- * 
+ *
  * @param $image
  *   An image object.
  * @param $destination
@@ -200,7 +200,7 @@ function imageapi_gd_image_resize(&$image, $width, $height) {
   $image->info['width'] = imagesx($image->resource);
   $image->info['height'] = imagesy($image->resource);
   return TRUE;
-} 
+}
 
 function imageapi_gd_image_sharpen(&$image, $radius, $sigma, $amount, $threshold) {
   $threshold = round($threshold * 255);
@@ -246,7 +246,7 @@ function imageapi_gd_create_tmp($image, $width, $height) {
     // Grab transparent color index from image resource.
     $transparent = imagecolortransparent($image->resource);
 
-    if ($transparent >= 0) {
+    if ($transparent >= 0 && $transparent < imagecolorstotal($image->resource)) {
       // The original must have a transparent color, allocate to the new image.
       $transparent_color = imagecolorsforindex($image->resource, $transparent);
       $transparent = imagecolorallocate($res, $transparent_color['red'], $transparent_color['green'], $transparent_color['blue']);
@@ -276,16 +276,16 @@ function imageapi_gd_create_tmp($image, $width, $height) {
  */
 function imageapi_gd_unsharp_mask($img, $radius, $sigma, $amount, $threshold)    {
 
-  ////////////////////////////////////////////////////////////// 
-  ////   
-  ////                  Unsharp Mask for PHP - version 2.1.1   
-  ////   
-  ////    Unsharp mask algorithm by Torstein H�nsi 2003-07.   
-  ////             thoensi_at_netcom_dot_no.   
-  ////               Please leave this notice.   
-  ////   
   //////////////////////////////////////////////////////////////
-  
+  ////
+  ////                  Unsharp Mask for PHP - version 2.1.1
+  ////
+  ////    Unsharp mask algorithm by Torstein H�nsi 2003-07.
+  ////             thoensi_at_netcom_dot_no.
+  ////               Please leave this notice.
+  ////
+  //////////////////////////////////////////////////////////////
+
   // http://vikjavev.no/computing/ump.php
 
   // $img is an image that is already created within php using
@@ -309,17 +309,17 @@ function imageapi_gd_unsharp_mask($img, $radius, $sigma, $amount, $threshold)   
   $img_blur = imagecreatetruecolor($w, $h);
 
   // Gaussian blur matrix:
-  //                          
-  //    1    2    1          
-  //    2    4    2          
-  //    1    2    1          
-  //                          
-  //////////////////////////////////////////////////  
+  //
+  //    1    2    1
+  //    2    4    2
+  //    1    2    1
+  //
+  //////////////////////////////////////////////////
 
   $matrix = array(
     array( 1, 2, 1 ),
     array( 2, 4, 2 ),
-    array( 1, 2, 1 ) 
+    array( 1, 2, 1 )
     );
 
   imagecopy($img_blur, $img, 0, 0, 0, 0, $w, $h);

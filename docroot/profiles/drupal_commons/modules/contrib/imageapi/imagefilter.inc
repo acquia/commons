@@ -1,9 +1,9 @@
 <?php
-// $Id: imagefilter.inc,v 1.3.4.1 2009/03/18 08:35:59 drewish Exp $
+// $Id: imagefilter.inc,v 1.3.4.2 2010/10/17 17:58:07 drewish Exp $
 
 //Made by Chao Xu(Mgccl) 3/1/07
 //www.webdevlogs.com
-//V 1.0 
+//V 1.0
 
 // Drupal code style and some restructuring by dopry. http://www.darrelopry.com
 
@@ -21,7 +21,7 @@ define('IMG_FILTER_MEAN_REMOVAL', 9);
 define('IMG_FILTER_SMOOTH', 10);
 
 define('IMAGEAPI_IMAGEFILTER_PHP', 1);
-/** 
+/**
  * walk each pixel in an image applying $callback to it.
  */
 function _imageapi_gd_pixel_color_walk(&$im, $callback, $arg1 = NULL, $arg2 = NULL, $arg3 = NULL, $arg4 = NULL) {
@@ -36,7 +36,7 @@ function _imageapi_gd_pixel_color_walk(&$im, $callback, $arg1 = NULL, $arg2 = NU
       $a = $rgb >> 24;
 
       $callback($r, $g, $b, $a, $arg1, $arg2, $arg3, $arg4);
-  
+
       // sanitize rgb values.
       $r = ($r > 255)? 255 : (($r < 0)? 0:$r);
       $g = ($g > 255)? 255 : (($g < 0)? 0:$g);
@@ -71,7 +71,7 @@ function _imageapi_gd_pixel_brightness(&$r, &$g, &$b, &$a, $arg1) {
 }
 
 function _imageapi_gd_pixel_contrast(&$r, &$g, &$b, &$a, $contrast) {
-  // normalize color value between -0.5 - 0.5 
+  // normalize color value between -0.5 - 0.5
   // multiply by contrast value to accentuate positive/negative value.
   // denormalize to 0-255 range.
   $r = ((($r/255 - 0.5) * $contrast) + 0.5) * 255;
@@ -84,7 +84,7 @@ function _imageapi_gd_pixel_colorize(&$r, &$g, &$b, &$a, $arg1, $arg2, $arg3, $a
   $g += $arg2;
   $b += $arg3;
 }
- 
+
 function imagefilter(&$im, $var, $arg1 = NULL, $arg2 = NULL, $arg3 = NULL, $arg4 = NULL) {
 
   switch ($var) {
@@ -93,17 +93,17 @@ function imagefilter(&$im, $var, $arg1 = NULL, $arg2 = NULL, $arg3 = NULL, $arg4
       return TRUE;
 
     case IMG_FILTER_GRAYSCALE:
-      _imageapi_gd_pixel_color_walk($im, '_imageapi_gd_pixel_grayscale');  
+      _imageapi_gd_pixel_color_walk($im, '_imageapi_gd_pixel_grayscale');
       return TRUE;
 
     case IMG_FILTER_BRIGHTNESS:
-      _imageapi_gd_pixel_color_walk($im, '_imageapi_gd_pixel_brightness', $arg1);  
+      _imageapi_gd_pixel_color_walk($im, '_imageapi_gd_pixel_brightness', $arg1);
       return TRUE;
 
     case IMG_FILTER_CONTRAST:
       // normalize between 0-1, square to keep positive.
       $contrast = pow((100-$arg1)/100, 2);
-      _imageapi_gd_pixel_color_walk($im, '_imageapi_gd_pixel_contrast', $contrast);  
+      _imageapi_gd_pixel_color_walk($im, '_imageapi_gd_pixel_contrast', $contrast);
       return TRUE;
 
     case IMG_FILTER_COLORIZE:
@@ -111,7 +111,7 @@ function imagefilter(&$im, $var, $arg1 = NULL, $arg2 = NULL, $arg3 = NULL, $arg4
       $arg2 = (is_null($arg2)) ? 0 : $arg2;
       $arg3 = (is_null($arg3)) ? 0 : $arg3;
       $arg4 = (is_null($arg4)) ? 0 : $arg4;
-      _imageapi_gd_pixel_color_walk($im, '_imageapi_gd_pixel_colorize', $arg1, $arg2, $arg3, $arg4);  
+      _imageapi_gd_pixel_color_walk($im, '_imageapi_gd_pixel_colorize', $arg1, $arg2, $arg3, $arg4);
       return TRUE;
 
     case IMG_FILTER_EDGEDETECT:
@@ -132,7 +132,7 @@ function imagefilter(&$im, $var, $arg1 = NULL, $arg2 = NULL, $arg3 = NULL, $arg4
             for ($i=0; $i<3; ++$i) {
               if (($j == 1) && ($i == 1)) {
                 $flt_r[1][1] = $flt_g[1][1] = $flt_b[1][1] = 0.5;
-              } 
+              }
               else {
                 $pxl = imagecolorat($im, $x-(3>>1)+$i, $y-(3>>1)+$j);
                 $new_a = $pxl >> 24;
@@ -142,7 +142,7 @@ function imagefilter(&$im, $var, $arg1 = NULL, $arg2 = NULL, $arg3 = NULL, $arg4
                 $new_r = abs((($cpxl >> 16) & 0xFF) - (($pxl >> 16) & 0xFF));
                 if ($new_r != 0) {
                   $flt_r[$j][$i] = 1/$new_r;
-                } 
+                }
                 else {
                   $flt_r[$j][$i] = 1;
                 }
@@ -150,7 +150,7 @@ function imagefilter(&$im, $var, $arg1 = NULL, $arg2 = NULL, $arg3 = NULL, $arg4
                 $new_g = abs((($cpxl >> 8) & 0xFF) - (($pxl >> 8) & 0xFF));
                 if ($new_g != 0) {
                   $flt_g[$j][$i] = 1/$new_g;
-                } 
+                }
                 else {
                   $flt_g[$j][$i] = 1;
                 }
@@ -158,7 +158,7 @@ function imagefilter(&$im, $var, $arg1 = NULL, $arg2 = NULL, $arg3 = NULL, $arg4
                 $new_b = abs(($cpxl & 0xFF) - ($pxl & 0xFF));
                 if ($new_b != 0) {
                   $flt_b[$j][$i] = 1/$new_b;
-                } 
+                }
                 else {
                   $flt_b[$j][$i] = 1;
                 }
