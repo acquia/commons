@@ -1,5 +1,5 @@
 <?php
-// $Id: pathauto.inc,v 1.45.2.27 2010/08/10 23:09:01 davereid Exp $
+// $Id: pathauto.inc,v 1.45.2.29 2010/09/27 15:52:58 greggles Exp $
 
 /**
  * @file
@@ -543,9 +543,11 @@ function pathauto_get_placeholders($type, $object) {
     watchdog('Pathauto', 'It appears that you have installed Pathauto, which depends on token, but token is either not installed or not installed properly.');
     return array('tokens' => array(), 'values' => array());
   }
-  $full = token_get_values($type, $object, TRUE);
+
+  $options = array('pathauto' => TRUE);
+  $full = token_get_values($type, $object, TRUE, $options);
   $tokens = token_prepare_tokens($full->tokens);
-  $values = pathauto_clean_token_values($full);
+  $values = pathauto_clean_token_values($full, $options);
   return array('tokens' => $tokens, 'values' => $values);
 }
 
@@ -559,16 +561,25 @@ function pathauto_get_placeholders($type, $object) {
  * @return
  *   An array of the cleaned tokens.
  */
-function pathauto_clean_token_values($full) {
+function pathauto_clean_token_values($full, $options = array()) {
   $replacements = array();
   foreach ($full->values as $key => $value) {
-    // Only clean non-path tokens.
     $token = $full->tokens[$key];
-    if (!preg_match('/(path|alias|url|url-brief)(-raw)?$/', $token)) {
-      $replacements[$token] = pathauto_cleanstring($value);
+    if (strpos($token, 'path') !== FALSE && is_array($value) && !empty($options['pathauto'])) {
+      // If the token name contains 'path', the token value is an array, and
+      // the 'pathauto' option was passed to token_get_values(), then the token
+      // should have each segment cleaned, and then glued back together to
+      // construct a value resembling an URL.
+      $segments = array_map('pathauto_cleanstring', $value);
+      $replacements[$token] = implode('/', $segments);
+    }
+    elseif (preg_match('/(path|alias|url|url-brief)(-raw)?$/', $token)) {
+      // Token name matches an URL-type name and should be left raw.
+      $replacements[$token] = $value;
     }
     else {
-      $replacements[$token] = $value;
+      // Token is not an URL, so it should have its value cleaned.
+      $replacements[$token] = pathauto_cleanstring($value);
     }
   }
   return $replacements;

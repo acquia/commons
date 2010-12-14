@@ -1,5 +1,5 @@
 <?php
-// $Id: pathauto.module,v 1.118.2.29 2010/08/11 19:38:26 davereid Exp $
+// $Id: pathauto.module,v 1.118.2.30 2010/09/27 15:52:58 greggles Exp $
 
 /**
  * @defgroup pathauto Pathauto: Automatically generates aliases for content
@@ -166,12 +166,11 @@ function pathauto_token_values($type, $object = NULL, $options = array(), $label
         $parents = taxonomy_get_parents_all($object->tid);
         $catpath = $catpath_raw = array();
         foreach ($parents as $parent) {
-          $term_name_cleaned = pathauto_cleanstring($parent->name);
-          array_unshift($catpath, check_plain($term_name_cleaned));
-          array_unshift($catpath_raw, $term_name_cleaned);
+          array_unshift($catpath, check_plain($parent->name));
+          array_unshift($catpath_raw, $parent->name);
         }
-        $values[$label . 'path'] = implode('/', $catpath);
-        $values[$label . 'path-raw'] = implode('/', $catpath_raw);
+        $values[$label . 'path'] = !empty($options['pathauto']) ? $catpath : implode('/', $catpath);
+        $values[$label . 'path-raw'] = !empty($options['pathauto']) ? $catpath_raw : implode('/', $catpath_raw);
 
         // Token [catalias-raw] and [catalias].
         $values[$label . 'alias-raw'] = drupal_get_path_alias(taxonomy_term_path($object));

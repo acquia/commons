@@ -1,5 +1,5 @@
 <?php
-// $Id: pathauto.test,v 1.1.2.10 2010/08/11 19:38:26 davereid Exp $
+// $Id: pathauto.test,v 1.1.2.11 2010/09/27 15:52:58 greggles Exp $
 
 /**
  * @file
@@ -29,8 +29,8 @@ class PathautoTestHelper extends DrupalWebTestCase {
   }
 
   function assertToken($type, $object, $token, $expected) {
-    $tokens = pathauto_token_values($type, $object);
-    $this->assertEqual($tokens[$token], $expected, t("Token value for [@token] was '!actual', expected value '!expected'.", array('@token' => $token, '!actual' => $tokens[$token], '!expected' => $expected)));
+    $tokens = pathauto_get_placeholders($type, $object);
+    $this->assertEqual($tokens['values'][$token], $expected, t("Token value for [@token] was '!actual', expected value '!expected'.", array('@token' => $token, '!actual' => $tokens['values'][$token], '!expected' => $expected)));
   }
 
   function saveAlias($source, $alias, $language = '') {
