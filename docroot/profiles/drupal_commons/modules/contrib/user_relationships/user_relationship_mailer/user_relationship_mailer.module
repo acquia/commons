@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationship_mailer.module,v 1.1.2.10 2009/07/12 17:20:27 alexk Exp $
+// $Id: user_relationship_mailer.module,v 1.1.2.11 2010/05/31 20:01:10 alexk Exp $
 /**
  * @file User Relationships Mailer module. Handles email notifications when relationships are added or removed
  */
@@ -16,6 +16,10 @@ module_load_include('inc', 'user_relationship_mailer', 'user_relationship_mailer
  *
  */
 function user_relationship_mailer_send_email($op, $relationship) {
+  //use correct op for sending out message on pre-approved relationship (see #415536)
+  if ($relationship->approved == TRUE && $op == 'request') {
+    $op = 'pre_approved';
+  }
   if (!variable_get("user_relationship_mailer_send_{$op}", TRUE)) {
     return;
   }
@@ -29,9 +33,7 @@ function user_relationship_mailer_send_email($op, $relationship) {
   $send_to = array();
   switch ($op) {
   case 'request':
-    if ($relationship->approved == TRUE) {
-      $op = 'pre_approved';
-    }
+  case 'pre_approved':
   case 'cancel':
     $send_email = $send_to_requestee;
     $send_to[] = 'requestee';

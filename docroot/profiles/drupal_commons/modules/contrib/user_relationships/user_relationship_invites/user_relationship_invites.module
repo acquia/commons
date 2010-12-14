@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationship_invites.module,v 1.1.2.4 2010/01/02 16:43:30 alexk Exp $
+// $Id: user_relationship_invites.module,v 1.1.2.5 2010/05/24 08:11:54 alexk Exp $
 
 /**
  * Drupal Module: User Relationship Invites
@@ -60,7 +60,7 @@ function user_relationship_invites_invite_form_validate($form, &$form_state) {
 /**
  * Implementation of hook_invite().
 */
-function user_relationship_invites_invite($op, &$args) {
+function user_relationship_invites_invite($op, $args) {
   switch ($op) {
     case 'invite':
       db_query("INSERT INTO {user_relationship_invites} (inviter_uid, rtid, invite_code) VALUES (%d, %d, '%s')", $args['inviter']->uid, $args['inviter']->rtid, $args['code']);

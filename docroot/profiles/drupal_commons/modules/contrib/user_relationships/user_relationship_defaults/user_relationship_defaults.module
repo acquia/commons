@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationship_defaults.module,v 1.1.2.12 2009/10/15 15:23:26 aufumy Exp $
+// $Id: user_relationship_defaults.module,v 1.1.2.14 2010/09/18 16:56:50 alexk Exp $
 
 /**
  * Drupal Module: User Relationship Defaults
@@ -24,7 +24,7 @@
  *
 */
 function user_relationship_default_load($param = array()) {
-  $defaults = user_relationship_defaults_load($rdid);
+  $defaults = user_relationship_defaults_load();
 
   if (is_numeric($param)) {
     return $defaults[$param];
@@ -118,7 +118,7 @@ function user_relationship_defaults_add_form(&$form_state) {
     '#type'               => 'textfield',
     '#title'              => t('Username'),
     '#maxlength'          => 255,
-    '#default_value'      => $form_state['username'],
+    '#default_value'      => isset($form_state['username']) ? $form_state['username'] : NULL,
     '#description'        => t('Start typing the name of a user to automatically create a relationship to'),
     '#required'           => TRUE,
     '#autocomplete_path'  => 'user/autocomplete',
@@ -127,7 +127,7 @@ function user_relationship_defaults_add_form(&$form_state) {
     '#type'               => 'textfield',
     '#title'              => t('Relationship'),
     '#maxlength'          => 255,
-    '#default_value'      => $form_state['relationship_type_name'],
+    '#default_value'      => isset($form_state['relationship_type_name']) ? $form_state['relationship_type_name'] : NULL,
     '#description'        => t('Start typing the name of a relationship to use'),
     '#required'           => TRUE,
     '#autocomplete_path'  => 'relationship_types/autocomplete',
@@ -182,7 +182,7 @@ function user_relationship_defaults_add_form_submit($form, &$form_state) {
 /**
  * Default Relationship delete confirmation.
  */
-function user_relationship_defaults_delete_form(&$form_state, &$default_relationship) {
+function user_relationship_defaults_delete_form(&$form_state, $default_relationship) {
   $form['rdid'] = array(
     '#type'   => 'value',
     '#value'  => $default_relationship->rdid

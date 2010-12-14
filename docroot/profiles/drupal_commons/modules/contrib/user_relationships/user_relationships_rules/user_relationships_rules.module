@@ -1,0 +1,17 @@
+<?php
+/**
+ * Implementation of hook_user_relationships
+ * @param $op
+ * @param $relationship
+ */
+function user_relationships_rules_user_relationships($op, &$relationship) {
+  switch ($op) {
+    case 'request':
+    case 'approve':
+    case 'disapprove':
+    case 'cancel':
+    case 'remove':
+      rules_invoke_event('user_relationships_' . $op, user_load($relationship->requester_id), user_load($relationship->requestee_id), $relationship);
+      break;
+  }
+}

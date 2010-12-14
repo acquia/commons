@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationships_ui.admin.inc,v 1.1.2.23 2010/05/13 19:15:57 alexk Exp $
+// $Id: user_relationships_ui.admin.inc,v 1.1.2.27 2010/10/17 14:39:39 alexk Exp $
 
 /**
  * @file
@@ -146,6 +146,36 @@ function user_relationships_ui_settings() {
   $default_messages = _user_relationships_ui_default_messages(array());
   _user_relationships_ui_message_settings_form($form['messages'], $default_messages);
 
+  //options for author pane integration
+  if (function_exists('author_pane_api') && author_pane_api() == '2') {
+    $rtypes = user_relationships_types_load();
+    $form['author_pane'] = array(
+      '#type'   => 'fieldset',
+      '#title'  => t('Author Pane'),
+      '#collapsible' => TRUE,
+    );
+    $form['author_pane']['user_relationships_enable_author_pane'] = array(
+      '#type'           => 'checkbox',
+      '#title'          => t('Show links in Author Pane'),
+      '#description'    => t('Check if you wish to show add/remove relationship links in Author Pane.'),
+      '#default_value'  => variable_get('user_relationships_enable_author_pane', 0),
+    );
+    // Since AP supports only one link per module, need to pick one relationship type
+    if (count($rtypes)) {
+      $options = array();
+      foreach ($rtypes as $rtype) {
+        $options[$rtype->rtid] = $rtype->name;
+      }
+      $form['author_pane']['user_relationships_api_author_pane_rtids'] = array(
+        '#type' => 'select',
+        '#multiple' => TRUE,
+        '#title' => t('Relationship types to use'),
+        '#default_value' => variable_get('user_relationships_api_author_pane_rtids', 'absolute'),
+        '#options' => $options,
+        '#description' => t('The chosen relationship types will be used for add/remove links.'),
+      );
+    }
+  }
   return system_settings_form($form);
 }
 
@@ -158,7 +188,7 @@ function user_relationships_ui_type_edit(&$form_state, $relationship_type = NULL
     '#type'           => 'textfield',
     '#title'          => t('Name'),
     '#maxlength'      => 255,
-    '#default_value'  => $relationship_type->name,
+    '#default_value'  => isset($relationship_type) ? $relationship_type->name : NULL,
     '#description'    => t("Example: buddy, friend, coworker, spouse."),
     '#required'       => TRUE,
     '#weight'         => -10,
@@ -167,7 +197,7 @@ function user_relationships_ui_type_edit(&$form_state, $relationship_type = NULL
     '#type'           => 'textfield',
     '#title'          => t('Plural name'),
     '#maxlength'      => 255,
-    '#default_value'  => $relationship_type->plural_name,
+    '#default_value'  => isset($relationship_type) ? $relationship_type->plural_name : NULL,
     '#description'    => t("Example: buddies, friends, coworkers, spouses."),
     '#weight'         => -9,
   );
@@ -190,19 +220,19 @@ function user_relationships_ui_type_edit(&$form_state, $relationship_type = NULL
   $form['is_oneway'] = array(
     '#type'           => 'checkbox',
     '#title'          => t('This is a one-way relationship'),
-    '#default_value'  => $relationship_type->is_oneway,
+    '#default_value'  => isset($relationship_type) ? $relationship_type->is_oneway : NULL,
     '#description'    => t('Check this if this relationship should only go one way (ex Manager, Subscriber)'),
     '#weight'         => -6,
   );
   $form['is_reciprocal'] = array(
     '#type'           => 'checkbox',
     '#title'          => t('This one-way relationship can be reciprocated'),
-    '#default_value'  => $relationship_type->is_reciprocal,
+    '#default_value'  => isset($relationship_type) ? $relationship_type->is_reciprocal : NULL,
     '#description'    => t('Check if this one-way relationship can go either way'),
     '#weight'         => -5,
   );
   $form['roles'] = array(
-    '#title' => t('Role access'),
+    '#title' => t('Role request access'),
     '#type' => 'fieldset',
     '#description' => t('You may choose which roles are allowed to request this relationship. If none are selected, all roles are allowed.'),
     'roles' => array(
@@ -218,12 +248,12 @@ function user_relationships_ui_type_edit(&$form_state, $relationship_type = NULL
     'roles_receive' => array(
       '#type' => 'checkboxes',
       '#options' => user_roles(TRUE),
-      '#default_value' => is_array($relationship_type->roles_receive) ? $relationship_type->roles_receive : array(),
+      '#default_value' => isset($relationship_type->roles_receive)  && is_array($relationship_type->roles_receive) ? $relationship_type->roles_receive : array(),
     ),
   );
   $form['rtid'] = array(
     '#type'   => 'value',
-    '#value'  => (int)$relationship_type->rtid,
+    '#value'  => isset($relationship_type) ? (int)$relationship_type->rtid : NULL,
   );
   $form['action'] = array(
     '#type'   => 'value',

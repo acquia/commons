@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationship_mailer_defaults.inc,v 1.1.2.10 2010/01/03 19:46:49 alexk Exp $
+// $Id: user_relationship_mailer_defaults.inc,v 1.1.2.11 2010/10/17 07:45:34 alexk Exp $
 /**
  * @file User Relationships Mailer implementation. Contains all default strings and action definitions
  */
@@ -32,8 +32,8 @@ function _user_relationship_mailer_ops_translations() {
  * @param relationship relationship object for which emails are being sent
  */
 function user_relationship_mailer_replacements(&$relationship) {
-  $requester = $relationship->requester;
-  $requestee = $relationship->requestee;
+  $requester = isset($relationship->requester) ? $relationship->requester : NULL;
+  $requestee = isset($relationship->requestee) ? $relationship->requestee : NULL;
   //load relationship type, if necessary
   if (!isset($relationship->relationship_type)) {
     $relationship->relationship_type = user_relationships_type_load($relationship->rtid);
@@ -42,17 +42,17 @@ function user_relationship_mailer_replacements(&$relationship) {
     '@site'                     => variable_get('site_name', 'Drupal'),
     '@site_url'                 => $GLOBALS['base_url'],
 
-    '@requester_name'           => $requester->name,
-    '@requester_link'           => theme('user_relationships_user_link', $requester->uid),
-    '@requester_uid'            => $requester->uid,
-    '@requester_list_link'      => url("user/{$requester->uid}/relationships/list", array('absolute' => TRUE)),
-    '@requester_pending_link'   => url("user/{$requester->uid}/relationships/requests", array('absolute' => TRUE)),
+    '@requester_name'           => isset($requester->name) ? $requester->name : '',
+    '@requester_link'           => isset($requester->uid) ? theme('user_relationships_user_link', $requester->uid) : '',
+    '@requester_uid'            => isset($requester->uid) ? $requester->uid : '',
+    '@requester_list_link'      => isset($requester->uid) ? url("user/{$requester->uid}/relationships/list", array('absolute' => TRUE)) : '',
+    '@requester_pending_link'   => isset($requester->uid) ? url("user/{$requester->uid}/relationships/requests", array('absolute' => TRUE)) : '',
 
-    '@requestee_name'           => $requestee->name,
-    '@requestee_link'           => theme('user_relationships_user_link', $requestee->uid),
-    '@requestee_uid'            => $requestee->uid,
-    '@requestee_list_link'      => url("user/{$requestee->uid}/relationships/list", array('absolute' => TRUE)),
-    '@requestee_pending_link'   => url("user/{$requestee->uid}/relationships/requests", array('absolute' => TRUE)),
+    '@requestee_name'           => isset($requestee->name) ? $requestee->name : '',
+    '@requestee_link'           => isset($requestee->uid) ? theme('user_relationships_user_link', $requestee->uid) : '',
+    '@requestee_uid'            => isset($requestee->uid) ? $requestee->uid : '',
+    '@requestee_list_link'      => isset($requestee->uid) ? url("user/{$requestee->uid}/relationships/list", array('absolute' => TRUE)) : '',
+    '@requestee_pending_link'   => isset($requestee->uid) ? url("user/{$requestee->uid}/relationships/requests", array('absolute' => TRUE)) : '',
 
     '@relationship_name'        => $relationship->relationship_type->name,
     '@relationship_plural_name' => $relationship->relationship_type->plural_name,

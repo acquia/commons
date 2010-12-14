@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationship_views.views.inc,v 1.1.2.5 2009/11/07 21:47:04 alexk Exp $
+// $Id: user_relationship_views.views.inc,v 1.1.2.6 2010/09/12 18:08:30 alexk Exp $
 
 /**
  * @file
@@ -92,6 +92,14 @@ function user_relationship_views_views_data() {
         'help' => t('Bring in data about the user who started the relationship, or link to relationships that they have established'),
       ),
     ),
+    'requester_id_current' => array(
+      'real field' => 'requester_id',
+      'title' => t('Requester user is current user'),
+      'help' => t('Current user who started the relationship'),
+      'filter' => array(
+        'handler' => 'views_handler_filter_user_current'
+      ),
+    ),
     'requestee_id' => array(
       'title' => t('Requestee user'),
       'help' => t('User who accepted the relationship'),
@@ -113,6 +121,14 @@ function user_relationship_views_views_data() {
         'field' => 'uid',
         'label' => 'requestee',
         'help' => t('Bring in data about the user who accepted the relationship, or link to relationships that other users have established to this one'),
+      ),
+    ),
+    'requestee_id_current' => array(
+      'real field' => 'requestee_id',
+      'title' => t('Requestee user is current user'),
+      'help' => t('Current user who accepted the relationship'),
+      'filter' => array(
+        'handler' => 'views_handler_filter_user_current'
       ),
     ),
     'approved' => array(
@@ -164,6 +180,13 @@ function user_relationship_views_views_data() {
         'handler' => 'views_handler_field_user_relationships_status_link',
       ),
     ),
+    'requester_or_requestee_current_user' => array(
+      'title'  => t('Requester or Requestee is current user'),
+      'help'   => t('Current user who requested or accepted the relationship'),
+      'filter' => array(
+        'handler' => 'views_handler_filter_user_relationships_requester_or_requestee_current_user',
+      ),
+    ),        
   );
   $tables['user_relationship_types'] = array(
     'table' => array(
@@ -283,6 +306,7 @@ function user_relationship_views_views_handlers() {
       'views_handler_filter_user_relationships_type' => array('parent' => 'views_handler_filter_in_operator'),
       'views_handler_field_user_relationships_oneway' => array('parent' => 'views_handler_field'),
       'views_handler_field_user_relationships_status_link' => array('parent' => 'views_handler_field'),
+      'views_handler_filter_user_relationships_requester_or_requestee_current_user' => array('parent' => 'views_handler_filter_boolean_operator'),
     ),
   );
 }

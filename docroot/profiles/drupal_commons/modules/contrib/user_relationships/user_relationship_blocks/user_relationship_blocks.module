@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationship_blocks.module,v 1.1.2.15 2010/01/03 12:12:44 alexk Exp $
+// $Id: user_relationship_blocks.module,v 1.1.2.16 2010/10/17 06:59:41 alexk Exp $
 /**
  * @file
  * User Relationship Blocks implementation
@@ -94,12 +94,12 @@ function theme_user_relationship_block_subject($bid, $account, $rtid, $extra) {
   if ($bid == 'pending') {
     return t('Relationship requests');
   }
-  else if ($bid == 'actions') {
+  elseif ($bid == 'actions') {
     return t('Relationship actions');
   }
   //one-way relationships need special wording depending on the direction
   //this implies that we're showing a single relationship, no need to check for UR_BLOCK_ALL_TYPES
-  else if ($extra == 'you_to_them') {
+  elseif ($extra == 'you_to_them') {
     global $user;
     $rtype = user_relationships_type_load($rtid);
     if ($account->uid == $user->uid) {
@@ -230,7 +230,7 @@ function _user_relationship_blocks_view($block_type, $rtid, $extra, $bid) {
   if ($is_my_block && $user->uid) {
     $account =& $user;
   }
-  else if ($uid = drupal_eval($settings->get_account)) {
+  elseif ($uid = drupal_eval($settings->get_account)) {
     $account = user_load($uid);
   }
 
@@ -325,7 +325,7 @@ function _user_relationship_blocks_settings($bid = NULL, $new_settings = NULL) {
 
     $settings[$key] = (object)$new_settings;
   }
-  else if ($bid && (!isset($settings[$bid]) || !$settings[$bid])) {
+  elseif ($bid && (!isset($settings[$bid]) || !$settings[$bid])) {
     $settings[$bid] = db_fetch_object(db_query("SELECT * FROM {user_relationship_blocks} WHERE bid = '%s'", $bid));
   }
   else {
@@ -405,8 +405,8 @@ function template_preprocess_user_relationships_actions_block(&$variables) {
   $account  =& $variables['account'];
 
   if ($user != $account) {
-    $variables['current_relationships'] = _user_relationships_ui_between($user, $account);
+    $variables['current_relationships'] = _user_relationships_ui_actions_between($user, $account, array('remove' => 1));
   }
 
-  $variables['actions'] = _user_relationships_ui_actions_between($user, $account);
+  $variables['actions'] = _user_relationships_ui_actions_between($user, $account, array('add' => 1, 'requested' => 1, 'received' => 1));
 }

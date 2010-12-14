@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationships_api.api.inc,v 1.1.2.18 2010/05/13 19:15:57 alexk Exp $
+// $Id: user_relationships_api.api.inc,v 1.1.2.20 2010/10/17 07:53:02 alexk Exp $
 
 /**
  * @file
@@ -450,7 +450,7 @@ function user_relationships_api_can_request($requester, $relationship_type) {
   }
   //check user has at least one required role
   foreach ($relationship_type->roles as $role_id) {
-    if ($requester->roles[$role_id]) {
+    if (isset($requester->roles[$role_id])) {
       return TRUE;
     }
   }
@@ -481,7 +481,7 @@ function user_relationships_api_can_receive($requestee, $relationship_type) {
   }
   //check user has at least one required role
   foreach ($relationship_type->roles_receive as $role_id) {
-    if ($requestee->roles[$role_id]) {
+    if (isset($requestee->roles[$role_id])) {
       return TRUE;
     }
   }

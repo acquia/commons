@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationships_api.module,v 1.1.2.24 2010/02/23 22:45:38 alexk Exp $
+// $Id: user_relationships_api.module,v 1.1.2.27 2010/10/17 07:53:35 alexk Exp $
 
 /**
  * @file
@@ -18,6 +18,9 @@ foreach (array('api', 'actions', 'socnet') as $file) {
 }
 if (module_exists('privatemsg')) {
   module_load_include('inc', 'user_relationships_api', 'user_relationships_api.privatemsg');
+}
+if (module_exists('author_pane') && variable_get('user_relationships_enable_author_pane', 0)) {
+  module_load_include('inc', 'user_relationships_api', 'user_relationships_api.author_pane');
 }
 
 
@@ -278,10 +281,11 @@ function user_relationships_api_user_relationships($op, &$relationship) {
     $context = array(
       'hook' => 'user_relationships_api',
       'op' => $op,
-      'requester' => $relationship->requester_id,
-      'requestee' => $relationship->requestee_id,
+      'requester' => $relationship->requester,
+      'requestee' => $relationship->requestee,
       'relationship' => $relationship,
     );
+//print_r($relationship);
     actions_do(array_keys($aids), $relationship, $context);
   }
 }
@@ -327,16 +331,17 @@ function user_relationships_api_token_values($type, $data = NULL, $options = arr
   if ($type == 'requester') {
     $r = $data;
     $token_values = array(
-      'requester' => theme('username', user_load(array('uid' => $r))),
+      'requester' => theme('username', user_load(array('uid' => $r->uid))),
     );
   }
   elseif ($type == 'requestee') {
     $r = $data;
     $token_values = array(
-      'requestee' => theme('username', user_load(array('uid' => $r))),
+      'requestee' => theme('username', user_load(array('uid' => $r->uid))),
     );
   }
   elseif ($type == 'relationship') {
+    // http://drupal.org/node/811222 need to unwrap the relationship object from an array sometimes
     if (is_array($data)) {
       foreach ($data as $object) {
         if (is_object($object)) {

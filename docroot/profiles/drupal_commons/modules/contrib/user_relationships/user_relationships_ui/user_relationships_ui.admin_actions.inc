@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationships_ui.admin_actions.inc,v 1.1.2.15 2010/05/13 19:15:57 alexk Exp $
+// $Id: user_relationships_ui.admin_actions.inc,v 1.1.2.16 2010/09/12 18:59:54 alexk Exp $
 /**
  * @file
  * User Relationships admin submit handlers
@@ -64,6 +64,9 @@ function user_relationships_ui_type_edit_submit($form, &$form_state) {
     }
     drupal_write_record('user_relationship_types', $relationship_type);
 
+    // Update strings for translation
+    _user_relationships_ui_update_translations($relationship_type);
+
     $form_state['values']['rtid'] = $relationship_type->rtid;
     _user_relationships_invoke('insert', $relationship_type, TRUE);
 
@@ -81,6 +84,9 @@ function user_relationships_ui_type_edit_submit($form, &$form_state) {
       $relationship_type->is_reciprocal = 0;
     }
     drupal_write_record('user_relationship_types', $relationship_type, 'rtid');
+
+    // Update strings for translation
+    _user_relationships_ui_update_translations($relationship_type);
 
     _user_relationships_invoke('update', $relationship_type, TRUE);
 
@@ -150,4 +156,14 @@ function user_relationships_ui_type_delete_submit($form, &$form_state) {
   );
 
   $form_state['redirect'] = 'admin/user/relationships';
+}
+
+/**
+ * Make relationship type available to translation by i18nstrings.module
+ */
+function _user_relationships_ui_update_translations(&$relationship_type) {
+  if (function_exists('i18nstrings_update') && $relationship_type->rtid) {
+    i18nstrings_update("user_relationships:rtid:$relationship_type->rtid:name", $relationship_type->name);
+    i18nstrings_update("user_relationships:rtid:$relationship_type->rtid:plural_name", $relationship_type->plural_name);
+  }
 }

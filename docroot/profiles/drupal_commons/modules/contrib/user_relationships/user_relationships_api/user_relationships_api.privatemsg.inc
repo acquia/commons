@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationships_api.privatemsg.inc,v 1.1.2.7 2010/05/13 17:51:45 alexk Exp $
+// $Id: user_relationships_api.privatemsg.inc,v 1.1.2.8 2010/09/12 19:09:40 alexk Exp $
 /**
  * @file Integration with Privatemsg module
  * @author mansspams http://drupal.org/user/293179
@@ -12,7 +12,7 @@
 function user_relationships_api_privatemsg_sql_autocomplete_alter(&$fragments, $search, $names) {
   global $user;
   // Check if $author needs to be restricted.
-  if (!user_relationships_api_privatemsg_restrict($user)) {
+  if (!variable_get('user_relationships_privatemsg_autocomplete_alter', 0) || !user_relationships_api_privatemsg_restrict($user)) {
     return;
   }
   $fragments['inner_join'][] = "INNER JOIN {user_relationships} ur ON u.uid = ur.requestee_id";

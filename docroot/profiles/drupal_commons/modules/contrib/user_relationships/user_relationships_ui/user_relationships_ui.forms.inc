@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationships_ui.forms.inc,v 1.1.2.23 2010/03/03 20:20:34 alexk Exp $
+// $Id: user_relationships_ui.forms.inc,v 1.1.2.24 2010/09/12 18:17:39 alexk Exp $
 
 /**
  * @file
@@ -204,11 +204,19 @@ function user_relationships_ui_pending_requested(&$form_state, $action, $account
       $action_message = t('Cancel relationship');
   }
 
+  // http://drupal.org/node/489954 respect destination param if given
+  if (isset($_GET['destination'])) {
+    $dest = $_GET['destination'];
+  }
+  else {
+    $dest = ($viewed_id == $user->id ? 'relationships/requests' : "user/{$viewed_id}/relationships/requests");
+  }
+  
   global $user;
   $output = confirm_form(
     $form,
     $action_message,
-    ($viewed_id == $user->uid ? 'relationships/requests' : "user/{$viewed_id}/relationships/requests"),
+    $dest,
     $confirmation_message,
     t('Yes'), t('No'),
     'user_relationships_approve_confirm'

@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationship_implications.module,v 1.1.2.10 2010/02/23 22:45:38 alexk Exp $
+// $Id: user_relationship_implications.module,v 1.1.2.11 2010/11/11 19:58:16 alexk Exp $
 
 /**
  * Drupal Module: User Relationship Implications
@@ -30,7 +30,7 @@ function user_relationship_implications_theme() {
  * hook_form_alter()
  */
 function user_relationship_implications_form_user_relationships_ui_type_edit_alter(&$form, &$form_state) {
-  $relationship_type  = user_relationships_type_load($form['rtid']['#value']);
+  $relationship_type  = isset($form['rtid']['#value']) ? user_relationships_type_load($form['rtid']['#value']) : NULL;
   $relationship_types = user_relationships_types_load();
 
   $implied_by = array();
@@ -47,7 +47,7 @@ function user_relationship_implications_form_user_relationships_ui_type_edit_alt
   }
 
   foreach ($relationship_types as $type) {
-    if ($type->rtid != $relationship_type->rtid && !in_array($type->rtid, $implied_by)) {
+    if (!$relationship_type || ($type->rtid != $relationship_type->rtid && !in_array($type->rtid, $implied_by))) {
       $imp_name = "implies_{$type->rtid}";
       $form['implications']['opts'][$type->rtid][$imp_name] = array(
         '#title'          => t('@type_name', array('@type_name' => $type->name)),
@@ -60,14 +60,16 @@ function user_relationship_implications_form_user_relationships_ui_type_edit_alt
       $form['implications']['opts'][$type->rtid][$strict_name] = array(
         '#type'           => 'checkbox',
         '#return_value'   => 1,
-        '#default_value'  => isset($form['#post'][$strict_name]) || $values[$type->rtid]['strict'],
+        '#default_value'  => isset($form['#post'][$strict_name]) || 
+           isset($values[$type->rtid]['strict']) ? $values[$type->rtid]['strict'] : FALSE,
       );
 
       $opp_name = "implied_{$type->rtid}_reverse";
       $form['implications']['opts'][$type->rtid][$opp_name] = array(
         '#type'           => 'checkbox',
         '#return_value'   => 1,
-        '#default_value'  => isset($form['#post'][$opp_name]) || $values[$type->rtid]['reverse'],
+        '#default_value'  => isset($form['#post'][$opp_name]) || 
+           isset($values[$type->rtid]['reverse']) ? $values[$type->rtid]['reverse'] : FALSE,
       );
     }
   }
@@ -148,7 +150,7 @@ function user_relationship_implications_user_relationships_type($op, &$rtypes) {
       $rtypes[$implication->implies_rtid]->implied_by[$implication->rtid] = $implication;
     }
   }
-  else if ($op == 'delete') {
+  elseif ($op == 'delete') {
     $results = db_query(
       "DELETE FROM {user_relationship_implications} WHERE rtid = %d OR implies_rtid = %d",
       $rtypes->rtid, $rtypes->rtid

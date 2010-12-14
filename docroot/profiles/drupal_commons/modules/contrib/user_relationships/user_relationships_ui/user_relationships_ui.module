@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationships_ui.module,v 1.1.2.38 2010/05/13 19:15:57 alexk Exp $
+// $Id: user_relationships_ui.module,v 1.1.2.40 2010/10/17 06:59:41 alexk Exp $
 /**
  * @file
  * UI components of user_relationships
@@ -190,82 +190,84 @@ function _user_relationships_ui_autocomplete_types($string = '') {
 }
 
 /**
- * List of relationships between two users
+ * List of possible relationship actions with between two users
+ * @param $viewer - user object for the visitor
+ * @param $viewed - user object for the user being looked at
+ * @param action_types - associative array of kinds of links to show (all by default). Only the existence of specific array keys is needed:
+ *                       add, remove, requested, received
  */
-function _user_relationships_ui_between(&$viewer, &$viewed) {
-  $list = array();
-
-  $relationships = user_relationships_load(array('between' => array($viewer->uid, $viewed->uid)));
-  foreach ($relationships as $relationship) {
-    if ($relationship->approved && !isset($list[$relationship->rid])) {
-      $list[$relationship->rid] = t('%relationship_name (!remove_link)', array(
-        '%relationship_name'  => ur_tt("user_relationships:rtid:$relationship->rtid:name", $relationship->name) . ($relationship->is_oneway ? ($relationship->requester_id == $viewer->uid ? t(' (You to Them)') : t(' (Them to You)')) : NULL),
-        '!remove_link'        => theme('user_relationships_remove_link', $viewer->uid, $relationship->rid)
-      ));
-    }
-  }
-
-  return $list;
-}
-
-
-/**
- * List of pending relationships with between two users
- */
-function _user_relationships_ui_actions_between(&$viewer, &$viewed) {
+function _user_relationships_ui_actions_between(&$viewer, &$viewed, $action_types = array('add' => 1, 'remove' => 1, 'requested' => 1, 'received' => 1)) {
   if (!user_access('can have relationships') || $viewer->uid == $viewed->uid) {
     return;
   }
 
   $list = array();
 
-  $relationships = user_relationships_load(array('requester_id' => $viewer->uid, 'requestee_id' => $viewed->uid, 'approved' => FALSE));
-  foreach ($relationships as $relationship) {
-    $list[] = t('You have sent a new %relationship_name request to this user. (!pending_requests)', array(
-      '%relationship_name'  => ur_tt("user_relationships:rtid:$relationship->rtid:name", $relationship->name),
-      '!pending_requests'   => l(t('pending requests'), "relationships/requests"),
-    ));
-  }
-
-  $relationships = user_relationships_load(array('requester_id' => $viewed->uid, 'requestee_id' => $viewer->uid, 'approved' => FALSE));
-  foreach ($relationships as $relationship) {
-    $list[] = t('This user has requested to be your %relationship_name. (!pending_requests)', array(
-      '%relationship_name'  => ur_tt("user_relationships:rtid:$relationship->rtid:name", $relationship->name),
-      '!pending_requests'   => l(t('pending requests'), "user/{$viewer->uid}/relationships/requests"),
-    ));
-  }
-
-  // Compute if any more relationships can be created
-  $types_count = (int)db_result(db_query("SELECT COUNT(*) FROM {user_relationship_types}"));
-  $existing_relationships = user_relationships_load(array('between' => array($viewer->uid, $viewed->uid)), array('sort' => 'rtid'));
-  $all_relationships = user_relationships_types_load();
-  $relationships_count = 0;
-
-  // Unset the relationships which already exist
-  foreach ($existing_relationships as $rtid => $relationship_type) {
-    foreach ($relationship_type as $relationship) {
-      if (!$relationship->is_oneway || !$relationship->is_reciprocal || $relationship->requester_id == $viewer->uid) {
-        unset($all_relationships[$rtid]);
-        $relationships_count++;
-      }
+  if (isset($action_types['requested'])) {
+    $relationships = user_relationships_load(array('requester_id' => $viewer->uid, 'requestee_id' => $viewed->uid, 'approved' => FALSE));
+    foreach ($relationships as $relationship) {
+      $list[] = t('You have sent a new %relationship_name request to this user. (!pending_requests)', array(
+        '%relationship_name'  => ur_tt("user_relationships:rtid:$relationship->rtid:name", $relationship->name),
+        '!pending_requests'   => l(t('pending requests'), "relationships/requests"),
+      ));
     }
   }
 
-  if (!$relationships_count || (variable_get('user_relationships_allow_multiple', TRUE) && ($relationships_count < $types_count))) {
-    //if configured, create direct links
-    if (variable_get('user_relationships_show_direct_links', 1)) {
-      //draw a single link, or one for each relationship type
-      foreach ($all_relationships as $rtid => $relationship) {
-        //check this type can be requested
-        if (!user_relationships_api_can_request($viewer, $relationship) || !user_relationships_api_can_receive($viewed, $relationship)) {
-          continue;
+  if (isset($action_types['received'])) {
+    $relationships = user_relationships_load(array('requester_id' => $viewed->uid, 'requestee_id' => $viewer->uid, 'approved' => FALSE));
+    foreach ($relationships as $relationship) {
+      $list[] = t('This user has requested to be your %relationship_name. (!pending_requests)', array(
+        '%relationship_name'  => ur_tt("user_relationships:rtid:$relationship->rtid:name", $relationship->name),
+        '!pending_requests'   => l(t('pending requests'), "user/{$viewer->uid}/relationships/requests"),
+      ));
+    }
+  }
+
+  if (isset($action_types['add'])) {
+    // Compute if any more relationships can be created
+    $types_count = (int)db_result(db_query("SELECT COUNT(*) FROM {user_relationship_types}"));
+    $existing_relationships = user_relationships_load(array('between' => array($viewer->uid, $viewed->uid)), array('sort' => 'rtid'));
+    $all_relationships = user_relationships_types_load();
+    $relationships_count = 0;
+  
+    // Unset the relationships which already exist
+    foreach ($existing_relationships as $rtid => $relationship_type) {
+      foreach ($relationship_type as $relationship) {
+        if (!$relationship->is_oneway || !$relationship->is_reciprocal || $relationship->requester_id == $viewer->uid) {
+          unset($all_relationships[$rtid]);
+          $relationships_count++;
         }
-        $list[] = theme('user_relationships_request_relationship_direct_link', $viewed, $relationship);
       }
     }
-    //just one generic link pointing to a page with dropdown
-    else {
-      $list[] = theme('user_relationships_request_relationship_link', $viewed);
+  
+    if (!$relationships_count || (variable_get('user_relationships_allow_multiple', TRUE) && ($relationships_count < $types_count))) {
+      //if configured, create direct links
+      if (variable_get('user_relationships_show_direct_links', 1)) {
+        //draw a single link, or one for each relationship type
+        foreach ($all_relationships as $rtid => $relationship) {
+          //check this type can be requested
+          if (!user_relationships_api_can_request($viewer, $relationship) || !user_relationships_api_can_receive($viewed, $relationship)) {
+            continue;
+          }
+          $list[] = theme('user_relationships_request_relationship_direct_link', $viewed, $relationship);
+        }
+      }
+      //just one generic link pointing to a page with dropdown
+      else {
+        $list[] = theme('user_relationships_request_relationship_link', $viewed);
+      }
+    }
+  }
+  
+  if (isset($action_types['remove'])) {
+    $relationships = user_relationships_load(array('between' => array($viewer->uid, $viewed->uid)));
+    foreach ($relationships as $relationship) {
+      if ($relationship->approved && !isset($list[$relationship->rid])) {
+        $list[$relationship->rid] = t('%relationship_name (!remove_link)', array(
+          '%relationship_name'  => ur_tt("user_relationships:rtid:$relationship->rtid:name", $relationship->name) . ($relationship->is_oneway ? ($relationship->requester_id == $viewer->uid ? t(' (You to Them)') : t(' (Them to You)')) : NULL),
+          '!remove_link'        => theme('user_relationships_remove_link', $viewer->uid, $relationship->rid)
+        ));
+      }
     }
   }
 
@@ -312,6 +314,10 @@ function _user_relationships_ui_get_requestable_rtypes($requester, $requestee) {
   $relationships = array();
   foreach ($relationship_types as $rtype) {
     //exclude already established relationships
+    if (!isset($current_relationships[$rtype->rtid])) {
+      $relationships[$rtype->rtid] = ur_tt("user_relationships:rtid:$rtype->rtid:name", $rtype->name);
+      continue;
+    }
     $relationship = $current_relationships[$rtype->rtid];
     if (is_array($relationship) && count($relationship)) {
       $relationship = $relationship[0];
@@ -633,7 +639,7 @@ function user_relationships_ui_user($type, &$edit, &$account, $category = NULL) 
     }
 
     $output = array();
-    if ($list = _user_relationships_ui_between($viewer, $account)) {
+    if ($list = _user_relationships_ui_actions_between($viewer, $account, array('remove' => 1))) {
       $output['relations'] = array(
         '#title'      => t('Your relationships to this user'),
         '#type'       => 'user_profile_item',
@@ -642,7 +648,7 @@ function user_relationships_ui_user($type, &$edit, &$account, $category = NULL) 
       );
     }
 
-    if ($actions = _user_relationships_ui_actions_between($viewer, $account)) {
+    if ($actions = _user_relationships_ui_actions_between($viewer, $account, array('add' => 1, 'requested' => 1, 'received' => 1))) {
       $output['actions'] = array(
         '#title'      => t('Relationship actions'),
         '#type'       => 'user_profile_item',
