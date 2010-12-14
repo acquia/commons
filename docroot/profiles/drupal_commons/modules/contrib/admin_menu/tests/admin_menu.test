@@ -1,5 +1,5 @@
 <?php
-// $Id: admin_menu.test,v 1.1.2.7 2009/04/26 22:23:20 davereid Exp $
+// $Id: admin_menu.test,v 1.1.2.8 2010/07/28 02:09:12 sun Exp $
 
 /**
  * @file
@@ -31,7 +31,7 @@ class AdminMenuPermissionsTestCase extends DrupalWebTestCase {
    */
   function testPermissions() {
     // Anonymous users should not see the menu.
-    $this->assertNoRaw('<div id="admin-menu">', t('Admin menu not displayed to anonymous.'));
+    $this->assertNoRaw('<div id="admin-menu"', t('Admin menu not displayed to anonymous.'));
 
     // Create a new user who can access administration menu, but without the
     // permission 'display drupal links'.
@@ -39,18 +39,18 @@ class AdminMenuPermissionsTestCase extends DrupalWebTestCase {
     $this->drupalLogin($admin_user);
 
     // Check that the user can see the admin links, but not the drupal links.
-    $this->assertRaw('<div id="admin-menu">', t('Administration menu is displayed.'));
+    $this->assertRaw('<div id="admin-menu"', t('Administration menu is displayed.'));
     $this->drupalGet('node');
-    $this->assertPattern('@<div id="admin-menu">.*admin/content/node@s', t('Administer content link found.'));
-    $this->assertNoPattern('@<div id="admin-menu">.*http://drupal.org@s', t('Drupal links not found.'));
-    $this->assertNoPattern('@<div id="admin-menu">.*admin/build/contact@s', t('Contact module link not found.'));
+    $this->assertPattern('@<div id="admin-menu".*admin/content/node@s', t('Administer content link found.'));
+    $this->assertNoPattern('@<div id="admin-menu".*http://drupal.org@s', t('Drupal links not found.'));
+    $this->assertNoPattern('@<div id="admin-menu".*admin/build/contact@s', t('Contact module link not found.'));
 
     // Create a new user with the permission 'display drupal links'.
     $admin_user2 = $this->drupalCreateUser(array('administer site configuration', 'access administration pages', 'administer nodes', 'access administration menu', 'display drupal links'));
     $this->drupalLogin($admin_user2);
     $this->drupalGet('node');
-    $this->assertPattern('@<div id="admin-menu">.*http://drupal.org@s', t('Drupal links found.'));
-    $this->assertNoPattern('@<div id="admin-menu">.*admin/build/contact@s', t('Contact module link not found.'));
+    $this->assertPattern('@<div id="admin-menu".*http://drupal.org@s', t('Drupal links found.'));
+    $this->assertNoPattern('@<div id="admin-menu".*admin/build/contact@s', t('Contact module link not found.'));
   }
 }
 
@@ -79,9 +79,9 @@ class AdminMenuModulesTestCase extends DrupalWebTestCase {
     $this->drupalLogin($admin_user);
 
     // Verify that proper links are displayed.
-    $this->assertRaw('<div id="admin-menu">', t('Administration menu is displayed.'));
+    $this->assertRaw('<div id="admin-menu"', t('Administration menu is displayed.'));
     $this->drupalGet('node');
-    $this->assertNoPattern('@<div id="admin-menu">.*admin/build/contact@s', t('Contact module link not found.'));
+    $this->assertNoPattern('@<div id="admin-menu".*admin/build/contact@s', t('Contact module link not found.'));
 
     // Create a new user with 'administer site-wide contact form' permission.
     $admin_user = $this->drupalCreateUser(array('access administration pages', 'access administration menu', 'administer site-wide contact form'));
@@ -89,7 +89,7 @@ class AdminMenuModulesTestCase extends DrupalWebTestCase {
 
     // Verify that proper links are displayed.
     $this->drupalGet('node');
-    $this->assertPattern('@<div id="admin-menu">.*admin/build/contact@s', t('Contact module link found.'));
+    $this->assertPattern('@<div id="admin-menu".*admin/build/contact@s', t('Contact module link found.'));
   }
 }
 
@@ -131,21 +131,21 @@ class AdminMenuLinksTestCase extends DrupalWebTestCase {
 
     // Fetch a page.
     $this->drupalGet('node');
-    $this->assertRaw('<div id="admin-menu">', t('Administration menu is displayed.'));
+    $this->assertRaw('<div id="admin-menu"', t('Administration menu is displayed.'));
 
     // Verify that proper links are displayed.
     // We are explicitly NOT using t() here, since the purpose is to test our
     // custom link titles and 't' option.
     $links = array(
-      '/admin/content/node-type/page' => strtr('Edit !content-type', array('!content-type' => t('Page'))),
-      '/admin/content/node-type/special' => strtr('Edit !content-type', array('!content-type' => t('Cool & Special'))),
+      url('admin/content/node-type/page') => strtr('Edit !content-type', array('!content-type' => t('Page'))),
+      url('admin/content/node-type/special') => strtr('Edit !content-type', array('!content-type' => t('Cool & Special'))),
     );
     foreach ($links as $url => $title) {
       $this->assertFieldByXPath('//div[@id="admin-menu"]//a[@href="' . $url . '"]', $title, t('!link-title content-type link found.', array('!link-title' => $title)));
     }
     $links = array(
-      '/node/add/page' => t('Page'),
-      '/node/add/special' => t('Cool & Special'),
+      url('node/add/page') => t('Page'),
+      url('node/add/special') => t('Cool & Special'),
     );
     foreach ($links as $url => $title) {
       $this->assertFieldByXPath('//div[@id="admin-menu"]//a[@href="' . $url . '"]', $title, t('Create content &raquo; !link-title link found.', array('!link-title' => $title)));

@@ -1,5 +1,5 @@
 <?php
-// $Id: admin_menu.inc,v 1.11.2.25 2009/06/09 18:21:29 sun Exp $
+// $Id: admin_menu.inc,v 1.11.2.26 2009/12/24 15:45:50 sun Exp $
 
 /**
  * The key function that builds the menu links whenever there is a menu rebuild.
@@ -32,7 +32,11 @@ function _admin_menu_rebuild_links() {
   // Allow modules to add more links. If you want to alter links saved by
   // admin_menu, use hook_menu_link_alter() and look for
   // $item['module'] == 'admin_menu'
-  $links = module_invoke_all('admin_menu', $deleted);
+  $links = array();
+  foreach (module_implements('admin_menu') as $module) {
+    $function = $module . '_admin_menu';
+    $links = array_merge_recursive($links, $function($deleted));
+  }
   foreach ($links as $item) {
     admin_menu_link_save($item);
   }

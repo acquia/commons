@@ -1,8 +1,12 @@
-/* $Id: admin_menu.js,v 1.7.2.7 2009/01/24 04:59:22 sun Exp $ */
+/* $Id: admin_menu.js,v 1.7.2.9 2010/02/20 23:53:18 sun Exp $ */
 
 $(document).ready(function() {
+  if (!$('#admin-menu').length) {
+    return;
+  }
+
   // Apply margin-top if enabled; directly applying marginTop doesn't work in IE.
-  if ($('#admin-menu').size() && Drupal.settings.admin_menu) {
+  if (Drupal && Drupal.settings && Drupal.settings.admin_menu) {
     if (Drupal.settings.admin_menu.margin_top) {
       $('body').addClass('admin-menu');
     }
@@ -14,13 +18,12 @@ $(document).ready(function() {
       $('ul.tabs.primary li').each(function() {
         $(this).addClass('admin-menu-tab').appendTo('#admin-menu > ul');
       });
-      $('ul.tabs.secondary').appendTo('#admin-menu > ul > li.admin-menu-tab.active');
+      $('ul.tabs.secondary').appendTo('#admin-menu > ul > li.admin-menu-tab.active').removeClass('secondary');
     }
-  }
-
-  // Collapse fieldsets on Modules page. For why multiple selectors see #111719.
-  if (Drupal.settings.admin_menu && Drupal.settings.admin_menu.tweak_modules) {
-    $('#system-modules fieldset:not(.collapsed), #system-modules-1 fieldset:not(.collapsed)').addClass('collapsed');
+    // Collapse fieldsets on Modules page. For why multiple selectors see #111719.
+    if (Drupal.settings.admin_menu.tweak_modules) {
+      $('#system-modules fieldset:not(.collapsed), #system-modules-1 fieldset:not(.collapsed)').addClass('collapsed');
+    }
   }
 
   // Hover emulation for IE 6.
