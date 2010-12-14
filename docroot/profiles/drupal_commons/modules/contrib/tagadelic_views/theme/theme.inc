@@ -1,5 +1,5 @@
 <?php
-// $Id: theme.inc,v 1.1.2.3 2009/10/05 13:07:19 indytechcook Exp $
+// $Id: theme.inc,v 1.1.2.6 2010/06/26 13:19:36 indytechcook Exp $
 /**
  * @file
  * Main views plugin, creates Tagadelic as an option under the Style options when a view is created.
@@ -11,10 +11,24 @@ function template_preprocess_views_view_tagadelic(&$vars) {
   
   $options  = $view->style_plugin->options;
 
-  foreach ($view->result as $node) {
-    $nids[] = $node->nid;
+  /* Handle Term and Node views */
+  switch($view->base_table)
+  {
+	  case "term_data":
+		  $base_field_name = 'td.tid';
+		  foreach ($view->result as $term) {
+			  $ids[] = $term->tid;
+		  }
+		  break;
+	  case "node":
+	  default:
+		  $base_field_name = 'n.nid';
+		  foreach ($view->result as $node) {
+			  $ids[] = $node->nid;
+		  }
+		  break;
   }
-  $nid_restrictor = '('. implode(',', $nids) .')';
+  $base_restrictor = '('. implode(',', $ids) .')';
 
   if ($options['vocab'] != '') {
     $vocabs_selected = split(',', $options['vocab']);
@@ -34,7 +48,7 @@ function template_preprocess_views_view_tagadelic(&$vars) {
     }
 
     if (isset($vids)) {
-      $vid_restrictor = ' AND d.vid IN ('. implode(',', $vids) .')';
+      $vid_restrictor = ' AND td.vid IN ('. implode(',', $vids) .')';
     }
   }
   else {
@@ -45,12 +59,19 @@ function template_preprocess_views_view_tagadelic(&$vars) {
     $vars['output'] = 'Could not find '. implode(', ', $vocabs_selected) .'!';
   }
   else {
-    $result = db_query_range('SELECT COUNT(*) AS count, d.tid, d.name, d.vid FROM {term_data} d INNER JOIN {term_node} n ON d.tid = n.tid WHERE n.nid IN '. $nid_restrictor . $vid_restrictor .' GROUP BY d.tid, d.name, d.vid ORDER BY count DESC', 0, $options['size']);
+    $result = db_query_range(db_rewrite_sql(
+      'SELECT COUNT(*) AS count, td.tid, td.vid, td.name, td.description ' . 
+      'FROM {term_data} td INNER JOIN {term_node} tn ON td.tid = tn.tid ' .
+      'INNER JOIN {node} n ON tn.vid = n.vid ' .
+      'WHERE ' . $base_field_name . ' IN '. $base_restrictor . $vid_restrictor .
+      'GROUP BY td.tid, td.vid, td.name, td.description ' .
+      'HAVING COUNT(*) > 0 ' .
+      'ORDER BY count DESC'), 0, $options['size']);
     $tags = tagadelic_build_weighted_tags($result, $options['steps']);
     $tags = tagadelic_sort_tags($tags);
-    if (!empty($vars['output'])) {
-      $view->result= NULL;
-    }
     $vars['output'] = theme('tagadelic_weighted', $tags);
+    if (empty($vars['output'])) {
+      $view->result = NULL;
+    }
   }
 }
