@@ -1,5 +1,5 @@
 <?php
-// $Id: filefield.token.inc,v 1.6 2010/06/17 00:07:06 quicksketch Exp $
+// $Id: filefield.token.inc,v 1.7 2010/12/06 03:46:09 quicksketch Exp $
 
 /**
  * @file
@@ -58,7 +58,7 @@ function filefield_token_values($type, $object = NULL) {
     }
     if (!isset($tokens['filefield-extension'])) {
       $info = pathinfo($item['filename']);
-      $tokens['filefield-onlyname'] = $info['filename'];
+      $tokens['filefield-onlyname'] = basename($info['basename'], '.'. $info['extension']);
       $tokens['filefield-extension'] = $info['extension'];
     }
   }

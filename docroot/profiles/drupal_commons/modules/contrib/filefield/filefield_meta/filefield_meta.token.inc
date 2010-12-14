@@ -1,5 +1,5 @@
 <?php
-// $Id: fielfield_meta.token.inc,v 1.1 2010/06/16 22:06:44 quicksketch Exp $
+// $Id: filefield_meta.token.inc,v 1.2 2010/12/06 01:28:08 quicksketch Exp $
 
 /**
  * @file
@@ -11,7 +11,7 @@
  *
  * Provide a user readable list of FileField Meta tokens.
  */
-function filefield_token_list($type = 'all') {
+function filefield_meta_token_list($type = 'all') {
   if ($type == 'field' || $type == 'all') {
     $tokens['file']['filefield-width']               = t('File Video width');
     $tokens['file']['filefield-height']              = t('File Video height');
@@ -36,7 +36,7 @@ function filefield_token_list($type = 'all') {
  *
  * Provide the token values for a given file item.
  */
-function filefield_token_values($type, $object = NULL) {
+function filefield_meta_token_values($type, $object = NULL) {
   $tokens = array();
   if ($type == 'field' && isset($object[0]['fid'])) {
     $item = $object[0];
