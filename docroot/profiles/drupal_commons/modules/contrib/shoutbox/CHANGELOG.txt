@@ -1,4 +1,61 @@
+??
+-------------
+* Added Shoutbox tags module
+* Added Shoutbox user module
+* Added Shoutbox points module
+* Javascript uses mode (page|block) to determine shout amount
+* Use theme_username() to output the shout's author
+* Restored the 'no shouts' message
+* Added raw return of shouts in shoutbox_display_posts()
+* Admin setting to specify if the shout form widget is a textarea or textfield
+* Fixed javascript detection on shout submit handler which was causing the entire page
+to be returned on AJAX submits
+* Returned shout data via AJAX in JSON format
+
+08 SEPT 2010:
+--------------
+* Fixed SQL query for non-restricted shouts
+* Fixed show_amount for block view
+* Removed depreciated block view function
+* Added the admin option to select the shout time format
+* Removed page refresh on AJAX error
+* Inline error div used for AJAX errors
+
+27 AUG 2010:
+--------------
+* Moved shoutbox output into a table
+* Retrieve all shout updates upon addition
+* Expanded the API (see API.txt)
+* Pause/reset the auto-update timer on shout addition
+* Fixed shout deletion on cron
+* Complete rewrite of javascript
+* Hover to show shout admin links
+* Cleaned form handlers, theme functions, much more
+* Added shoutbox_points module (userpoints integration)
+* Shouts maxlength now unlimited
+* Shoutbox can differentiate between submodule shouts (module column added to shoutbox table)
+* Improved the shout form
+* Added better javascript detection and degrading
+* Change timestamp to "ago" format
+* Prevent auto-update when paging shouts
+* Disallow shouts when paging to avoid ajax updates
+* Moved error alert popups to inline divs
+* Changed shout operation pages from shoutbox/%shout to shout/%shout
+* Fixed redirect query on shoutbox admin link urls after an ajax update
+* Removed t()'s from .install files
+
+
 15 JULY 2010:
+--------------
+* Fixed #853540: Shouts redirecting to homepage: jQuery convention from 
+5.x that was ported into the 6.1.x branch was missed in 6.2.x. 
+This was causing certain themes to prevent AJAX functionality which
+resulted in page redirects.
+* Prevented editing a shout to make it empty
+* Added trim() on shout submission
+
+
+2 JULY 2010:
 -------------
 * Revamped for a 2.x release
 * Contains many bug fixes, efficiency fixes, and patched security holes
@@ -7,6 +64,7 @@
 * Introduced a number of helpful admin settings
 * Introduction of the Shoutbox Group module which integrates with Organic Groups
 * And much more..
+
 
 15 JULY 2008:
 -------------

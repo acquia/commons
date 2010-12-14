@@ -1,0 +1,42 @@
+<?php
+// $Id: shoutbox_user.install,v 1.1.2.1 2010/10/01 21:38:44 mikestefff Exp $
+
+/**
+ * Implementation of hook_schema
+ */
+function shoutbox_user_schema() {
+  $schema['shoutbox_user'] = array(
+    'description' => 'Link shouts to a user',
+    'fields' => array(
+      'shout_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'The shout id',
+      ),
+      'uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'The user id',
+      ),
+    ),
+    'primary key' => array('shout_id'),
+  ); 
+  
+  return $schema;            
+}
+
+/**
+ * Implementation of hook_install
+ */
+function shoutbox_user_install() {
+  drupal_install_schema('shoutbox_user');
+}
+
+/**
+ * Implementation of hook_uninstall
+ */
+function shoutbox_user_uninstall() {
+  drupal_uninstall_schema('shoutbox_user');
+}

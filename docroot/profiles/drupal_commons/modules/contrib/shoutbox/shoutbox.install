@@ -1,5 +1,5 @@
 <?php
-// $Id: shoutbox.install,v 1.4.4.4 2010/07/22 13:18:43 mikestefff Exp $
+// $Id: shoutbox.install,v 1.4.4.10 2010/12/08 00:47:41 mikestefff Exp $
 
 /**
  * @file
@@ -16,15 +16,16 @@ function shoutbox_schema() {
   $schema['shoutbox'] = array(
     'description' => t('A table containing the shoutbox posts.'),
     'fields' => array(
-      'shout_id' => array('type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE, 'description' => t('The primary identifier for the shout post.')),
-      'uid' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0, 'description' => t('The primary identifier for the shout post author.')),
-      'nick' => array('type' => 'varchar', 'length' => 60, 'not null' => TRUE, 'description' => t('The author\'s nickname.')),
-      'shout' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'description' => t('The shout post.')),
-      'moderate' => array('type' => 'int', 'not null' => TRUE, 'default' => 0, 'description' => t('The moderation id.')),
-      'created' => array('type' => 'int', 'not null' => TRUE, 'default' => 0, 'description' => t('Creation date.')),
-      'changed' => array('type' => 'int', 'not null' => TRUE, 'default' => 0, 'description' => t('Last updated date.')),
-      'hostname' => array('type' => 'varchar', 'length' => 255, 'default' => 'localhost', 'not null' => TRUE, 'description' => t('The hostname where the post originated.')),
-      'sid' =>  array('type' => 'varchar', 'length' => 64, 'not null' => TRUE, 'default' => '', 'description' => t('Session id of the current session.')),
+      'shout_id' => array('type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE, 'description' => 'The primary identifier for the shout post.'),
+      'uid' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0, 'description' => 'The primary identifier for the shout post author.'),
+      'nick' => array('type' => 'varchar', 'length' => 60, 'not null' => TRUE, 'description' => 'The author\'s nickname.'),
+      'shout' => array('type' => 'text', 'size' => 'big', 'not null' => TRUE, 'description' => 'The shout post.'),
+      'module' => array('type' => 'varchar', 'length' => 64, 'not null' => TRUE, 'description' => 'The module that this shout belongs to.'),
+      'moderate' => array('type' => 'int', 'not null' => TRUE, 'default' => 0, 'description' => 'The moderation id.'),
+      'created' => array('type' => 'int', 'not null' => TRUE, 'default' => 0, 'description' => 'Creation date.'),
+      'changed' => array('type' => 'int', 'not null' => TRUE, 'default' => 0, 'description' => 'Last updated date.'),
+      'hostname' => array('type' => 'varchar', 'length' => 255, 'default' => 'localhost', 'not null' => TRUE, 'description' => 'The hostname where the post originated.'),
+      'sid' =>  array('type' => 'varchar', 'length' => 64, 'not null' => TRUE, 'default' => '', 'description' => 'Session id of the current session.'),
     ),
     'primary key' => array('shout_id'),
   );
@@ -54,6 +55,9 @@ function shoutbox_uninstall() {
   variable_del('shoutbox_showamount_page');
   variable_del('shoutbox_escape_html');
   variable_del('shoutbox_profile_name');
+  variable_del('shoutbox_restrict_general_shouts');
+  variable_del('shoutbox_time_format');
+  variable_del('shoutbox_widget_type');
 }
 
 /**
@@ -81,7 +85,7 @@ function shoutbox_update_5200() {
   return $items;
 }
 
-/*
+/**
  * Update to 2.0
  */
 function shoutbox_update_6200() {
@@ -91,3 +95,22 @@ function shoutbox_update_6200() {
   return $items;
 }
 
+/**
+ * Remove size restrictions on shout messages
+ */
+function shoutbox_update_6201() {
+  $items = array();
+  $items[] = update_sql("ALTER TABLE {shoutbox} MODIFY shout longtext NOT NULL");
+  return $items;
+}
+
+/**
+ * Add module field to the schema
+ */
+function shoutbox_update_6202() {
+  $items = array();
+  $items[] = update_sql("ALTER TABLE {shoutbox} ADD module varchar(64)");
+  // Default all available shouts to belong to shoutbox
+  db_query("UPDATE {shoutbox} SET module = 'shoutbox'");
+  return $items;
+}

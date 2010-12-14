@@ -1,5 +1,5 @@
 <?php
-// $Id: shoutbox.pages.inc,v 1.2.2.1 2010/05/22 14:16:08 mikestefff Exp $
+// $Id: shoutbox.pages.inc,v 1.2.2.2 2010/08/10 02:29:35 mikestefff Exp $
 
 /**
  * @file
@@ -9,7 +9,6 @@
 /**
  *  Shout Deletion callbacks
  */
-
 
 /**
  * Function to handle deleting of shouts.

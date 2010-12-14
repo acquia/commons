@@ -1,0 +1,175 @@
+<?php
+// $Id: shoutbox_tags.module,v 1.1.2.4 2010/12/08 00:38:10 mikestefff Exp $
+
+/**
+ * Implementation of hook_menu()
+ */
+function shoutbox_tags_menu() {
+  return array(
+    'shoutbox/tag/%/js/view' => array(
+      'title' => 'Shout tag',
+      'page callback' => 'shoutbox_tags_js_view',
+      'page arguments' => array(2),
+      'access arguments' => array('view shouts'),
+      'description' => 'Javascript callback for viewing shout tags',
+      'type' => MENU_CALLBACK,
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_shoutbox()
+ */
+function shoutbox_tags_shoutbox($op, &$shout, &$a1 = NULL, $form_state = NULL) {
+  switch ($op) {
+    case 'insert':
+      // Extract the tags
+      $tags = shoutbox_tags_extract($shout);
+      // Save the tags
+      shoutbox_tags_save($shout, $tags);
+      break;
+      
+    case 'edit':
+      // Delete any tags from the shout
+      shoutbox_tags_shoutbox('delete', $shout);
+      // Redetect any tags from the shout
+      shoutbox_tags_shoutbox('insert', $shout);
+      break;
+      
+    case 'delete':
+      // Remove any tag references to this shout
+      db_query("DELETE FROM {shoutbox_tags} WHERE shout_id = %d", $shout->shout_id);  
+      break;
+      
+    case 'view':
+      // Replace tags with links
+      shoutbox_tags_to_links($shout);
+      break;
+      
+    case 'query':
+      // If we're viewing a tag, only returned shouts that have the tag
+      if ($tag = shoutbox_tags_is_page()) {
+        $a1 = "
+          SELECT s.* FROM {shoutbox} s 
+          INNER JOIN {shoutbox_tags} t 
+          ON s.shout_id = t.shout_id 
+          WHERE t.tag = '$tag' 
+          ORDER BY s.created DESC
+          ";
+          
+        // Set the title
+        drupal_set_title(t('Shout tag: %tag', array('%tag' => $tag)));
+      }
+      break;
+    
+    case 'js path':
+      // Alter the js update path so only shouts with the given
+      // tag are shown
+      if ($tag = shoutbox_tags_is_page()) {
+        $a1 = "shoutbox/tag/$tag/js/view/";
+      }
+      break;
+      
+    case 'form':
+      // Remove the shout form if we're viewing a tag
+      if (shoutbox_tags_is_page()) {
+        $a1 = array();
+      }
+      break;
+  }
+}
+
+/**
+ * Determine if we're viewing a shout tag page
+ * 
+ * @return
+ *   The tag, otherwise FALSE is we're not viewing a tag page
+ */
+function shoutbox_tags_is_page() {
+  if (arg(0) == 'shoutbox' && arg(1) == 'tag' && $tag = filter_xss(arg(2))) {
+    return $tag; 
+  }
+  return FALSE;
+}
+
+/**
+ * Replace tags with links inside a shout
+ * 
+ * @param &$shout
+ *   A shout object
+ */
+function shoutbox_tags_to_links(&$shout) {
+  // Extract the tags
+  $tags = shoutbox_tags_extract($shout);
+      
+  // Replace the links with tags
+  foreach ($tags as $tag) {
+    $shout->shout = str_replace('#' . $tag, l('#' . $tag, 'shoutbox/tag/' . strtolower($tag)), $shout->shout);
+  }
+}
+
+/**
+ * Extract tags from a shout
+ * 
+ * @param $shout
+ *   A shout object
+ * @return
+ *   An array of unique tags
+ */
+function shoutbox_tags_extract($shout) {
+  $tags = array();
+    
+  // Break down the shout by word
+  $words = explode(' ', $shout->shout);
+  foreach ($words as $word) {
+    // See if the word begins with a #
+    if (substr($word, 0, 1) == '#') {
+      // Remove the #
+      $word = str_replace('#', '', $word);
+      
+      // Remove a trailing non alphanumeric
+      if (preg_match('/\W/', substr($word, strlen($word) - 1))) {
+        $word = substr($word, 0, strlen($word) -1);
+      }
+      
+      // Store the tag
+      $tags[] = $word;
+    }
+  }
+  
+  // Remove duplicates and return
+  return array_unique($tags);
+}
+
+/**
+ * Save a tag or tags for a given shout
+ *
+ * @param $shout
+ *   A shout object
+ * @param $tags
+ *   A single tag or array of tags. This function will not
+ *   check for duplicate entries for the given shout.
+ */
+function shoutbox_tags_save($shout, $tags) {
+  // If a single tag is given, place it in an array
+  if (!is_array($tags)) {
+    $tags = array($tags);
+  }
+  
+  // Save each tag
+  foreach ($tags as $tag) {
+    $record = new stdClass;
+    $record->shout_id = $shout->shout_id;
+    $record->tag = strtolower($tag);
+    drupal_write_record('shoutbox_tags', $record);
+  }
+}
+
+/**
+ * Javascript callback for viewing shouts for a given tag
+ */
+function shoutbox_tags_js_view($tag) {
+  // This callback is only needed to keep the
+  // URL like shoutbox/tag/%tag so the query gets altered
+  shoutbox_js_view();
+}

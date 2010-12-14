@@ -1,126 +1,176 @@
-// $Id: shoutbox-form.js,v 1.11.2.5 2010/07/23 02:40:17 mikestefff Exp $
+// $Id: shoutbox-form.js,v 1.11.2.17 2010/12/08 01:39:14 mikestefff Exp $
 
 Drupal.shoutbox = {}
 Drupal.behaviors.shoutbox = function(context) {
-	  Drupal.settings.shoutbox.color = Drupal.settings.shoutbox.shownAmount;
-	  Drupal.shoutbox.attachForm();
-	  Drupal.shoutbox.attachShoutAddForm();
-	  if ( Drupal.settings.shoutbox.refreshDelay > 0) {
-	    Drupal.shoutbox.startTimer(Drupal.settings.shoutbox.refreshDelay);
-	  }	
-};
-
-/*
- * Submit shout with javascript.
- */
-Drupal.shoutbox.attachShoutAddForm = function () {
-  // initial color to use for first post
-  // tell server what color to use
-  $("input[name='nextcolor']").val(Drupal.settings.shoutbox.color);	
+  // Add AJAX behavior to the form
   var options = {
 	  resetForm: true,
 	  beforeSubmit: Drupal.shoutbox.validate,
 	  success: Drupal.shoutbox.success
   };
+  var shoutForm = $('#shoutbox-add-form:not(.shoutbox-processed)');
+  $(shoutForm).addClass('shoutbox-processed');
+  $(shoutForm).ajaxForm(options);
 
-  $("#shoutbox-add-form").ajaxForm(options);
+  // Tell the form that we have Javascript enabled
+  $(shoutForm).find('#edit-js').val(1);
+  
+  // Empty the shout textfield
+  $(shoutForm).find('#edit-message').val('');
+  
+  // Close errors if they're clicked
+  $('#shoutbox-error').click(function() {
+    $(this).hide(); 
+  });
+
+  // Show the admin links on hover
+  Drupal.shoutbox.adminHover();
+  
+  // Initialize the timer for shout updates
+  Drupal.shoutbox.shoutTimer('start');
 }
 
 /**
-  * Display response text and update the color
-  * field. Remove top message if we are over 
-  * the max count. 
-  */
-Drupal.shoutbox.success = function (responseText) {
-	if (Drupal.settings.shoutbox.shownAmount == 0) {
-	  $('#shoutbox-posts').children().eq(0).remove();
-	  Drupal.settings.shoutbox.shownAmount += 1;		
-  }
-  else if(Drupal.settings.shoutbox.shownAmount >= Drupal.settings.shoutbox.showAmount) {
-	  var indexToRemove = ((Drupal.settings.shoutbox.ascending) ? ($('#shoutbox-posts').children().length - 1) : 0 );
-	  $('#shoutbox-posts').children().eq(indexToRemove).remove();		
-	}
-  else {
-	  Drupal.settings.shoutbox.shownAmount += 1;		
-  }
+ * Attach a hover event to the shoutbox admin links
+ */
+Drupal.shoutbox.adminHover = function() {
+  // Remove binded events
+  $('#shoutbox-body .shoutbox-msg').unbind();
   
-  //update color
-  Drupal.settings.shoutbox.color = (Drupal.settings.shoutbox.color) ? 0 : 1;
-  if(Drupal.settings.shoutbox.ascending) {
-	  $('#shoutbox-posts').prepend(responseText);
-  }
-  else {		
-	  $('#shoutbox-posts').append(responseText);
-  }
-    
-  // tell server what color to use
-  $("input[name='nextcolor']").val(Drupal.settings.shoutbox.color);		
-  // enable submit button 
-  $('#shoutbox-throbber').hide();
-  $('input#edit-0').show();
-}
-
-/**
-  * Attach focus handling code to the form
-  * fields 
-  */ 
-Drupal.shoutbox.attachForm = function() {
-  $('input#edit-message').val(Drupal.settings.shoutbox.defaultMsg);
-  
-  $('input#edit-message').focus(
-	  function() {
-      $(this).val("")
+  // Bind hover event on admin links
+  $('#shoutbox-body .shoutbox-msg').hover(
+    function() {
+      $(this).find('.shoutbox-admin-links').show();
+    },
+    function() {
+      $(this).find('.shoutbox-admin-links').hide();
     }
   );
-  
-  var button = $("input#edit-0");
-  $('<div id="shoutbox-throbber">&nbsp;</div>').insertAfter(button);
-  $('#shoutbox-throbber').hide();
 }
 
 /**
- * Creates a timer that triggers every delay seconds.
+ * Fix the destination query on shout admin link URLs
+ * 
+ * This is required because on an AJAX reload of shouts, the
+ * ?destination= query on shout admin links points to the JS
+ * callback URL
  */
-Drupal.shoutbox.startTimer = function(delay) {
-	Drupal.shoutbox.interval = setInterval("Drupal.shoutbox.loadShouts()", delay);	
+Drupal.shoutbox.adminFixDestination = function() {
+  var href = '';
+  $('.shoutbox-admin-links').find('a').each(function() {
+    // Extract the current href
+    href= $(this).attr('href');
+    // Remove the query
+    href = href.substr(0, href.indexOf('?'));
+    // Add the new destination
+    href = href + '?destination=' + Drupal.settings.shoutbox.currentPath;
+    // Set the new href
+    $(this).attr('href', href);
+  });
+}
+
+/**
+ * Callback for a successful shout submission
+ */
+Drupal.shoutbox.success = function(responseText) {
+  // Load the latest shouts
+  Drupal.shoutbox.loadShouts(true);
+}
+
+/**
+ * Starts or stops a timer that triggers every delay seconds.
+ */
+Drupal.shoutbox.shoutTimer = function(op) {
+  var delay = Drupal.settings.shoutbox.refreshDelay;
+  if (delay > 0) {
+    switch (op) {
+      case 'start':
+        Drupal.shoutbox.interval = setInterval("Drupal.shoutbox.loadShouts()", delay);
+        break;
+      
+      case 'stop':
+        clearInterval(Drupal.shoutbox.interval);
+        break;
+    }
+	}	
 }
 
 /**
  * Reloads all shouts from the server.
  */
-Drupal.shoutbox.loadShouts = function() {
-	$("#shoutbox-posts").load(Drupal.settings.shoutbox.refreshPath + '?shouts=' + Drupal.settings.shoutbox.showAmount);
+Drupal.shoutbox.loadShouts = function(restoreForm) {
+  // Stop the timer
+  Drupal.shoutbox.shoutTimer('stop');
+  
+	$.ajax({
+    url: Drupal.settings.shoutbox.refreshPath,
+    type: "GET",
+    cache: "false",
+    dataType: "json",
+    data: {mode: Drupal.settings.shoutbox.mode},
+    success: function (response) {
+      // Update the shouts
+      $("#shoutbox-body").html(response.data);
+      
+      // Rebind the hover for admin links
+      Drupal.shoutbox.adminHover();
+      
+      // Fix the destination URL queries on admin links
+      Drupal.shoutbox.adminFixDestination();
+      
+      // Resume the timer
+      Drupal.shoutbox.shoutTimer('start');
+      
+      // Hide any errors
+      $('#shoutbox-error').hide();
+      
+      // Restore the button
+      if (restoreForm) {
+        $('#shoutbox-add-form input#edit-submit').show();
+        $('#shoutbox-throbber').hide();
+      }
+    },
+    error: function() {
+      $('#shoutbox-error').html(Drupal.t('Error updating shouts. Please refresh the page.'));
+      $('#shoutbox-error').show();
+    }
+  });
 }
 
 /**
  * Validate input before submitting.
  * Don't accept default values or empty strings.
  */
-
 Drupal.shoutbox.validate = function (formData, jqForm, options) {
-  var form = jqForm[0];	
+  var errorMsg = '';
+  var errorDiv = $('#shoutbox-error');
+  var form = jqForm[0];
 
-  if ((!form.message.value) ||
-    (form.message.value == Drupal.settings.shoutbox.defaultMsg)) {
-	  alert('Enter a valid Message');
-	  return false;		
+  // Check if a message is present
+  if ((!form.message.value)) {
+	  errorMsg = Drupal.t('Enter a message');
   }
   
-  if (form.message.value.length > Drupal.settings.shoutbox.maxLength) {
-	  alert('You shout can only be ' + Drupal.settings.shoutbox.maxLength + ' characters long');
-	  return false;		
+  // If a maxlength is set, enforce it
+  if ((Drupal.settings.shoutbox.maxLength > 0) && (form.message.value.length > Drupal.settings.shoutbox.maxLength)) {
+	  errorMsg = Drupal.t('The shout you entered is too long');
   }    
   
-  // tell server we are using ajax
-  for (var i=0; i < formData.length; i++) { 
-	  if (formData[i].name == 'ajax') { 
-      formData[i].value = 1;      
-	  }
+  if (errorMsg) {
+    // Show the message and stop heres
+    errorDiv.html(errorMsg);
+    errorDiv.show();
+    return false;
+  }
+  else {
+    // No errors registered, continue
+    errorDiv.hide();
+    errorDiv.html('');
   }
   
-  // clear the typed in put 
-  $("#shoutbox-add-form").resetForm();
-  $('input#edit-0').hide();
+  // Clear the form input 
+  $('#shoutbox-add-form').resetForm();
   $('#shoutbox-throbber').show();
+  $('#shoutbox-add-form input#edit-submit').hide();
   return true;	
 }

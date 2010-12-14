@@ -1,0 +1,57 @@
+<?php
+// $Id: shoutbox_tags.install,v 1.1.2.2 2010/10/01 21:36:52 mikestefff Exp $
+
+/**
+ * Implementation of hook_schema
+ */
+function shoutbox_tags_schema() {
+  $schema['shoutbox_tags'] = array(
+    'description' => 'Link shouts to their tags',
+    'fields' => array(
+      'shout_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'The shout id',
+      ),
+      'tag' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'The shout tag',
+      ),
+    ),
+    'primary key' => array('shout_id'),
+  ); 
+  
+  return $schema;            
+}
+
+/**
+ * Implementation of hook_install
+ */
+function shoutbox_tags_install() {
+  drupal_install_schema('shoutbox_tags');
+  
+  // Load the module
+  module_load_include('module', 'shoutbox_tags');
+  
+  // Index all available shouts
+  $shouts = db_query("SELECT * FROM {shoutbox}");
+  
+  while ($shout = db_fetch_object($shouts)) {
+    // Get the tags
+    $tags = shoutbox_tags_extract($shout);
+    // Save the tags
+    foreach ($tags as $tag) {
+      db_query("INSERT INTO {shoutbox_tags} (shout_id, tag) VALUES (%d, '%s')", $shout->shout_id, $tag);
+    }
+  }
+}
+
+/**
+ * Implementation of hook_uninstall
+ */
+function shoutbox_tags_uninstall() {
+  drupal_uninstall_schema('shoutbox_tags');
+}

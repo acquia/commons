@@ -1,7 +1,7 @@
 <?php
-// $Id: shoutbox_points.module,v 1.1.2.2 2010/07/30 14:07:38 mikestefff Exp $
+// $Id: shoutbox_points.module,v 1.1.2.8 2010/08/23 23:10:08 mikestefff Exp $
 
-/*
+/**
  * Implementation of hook_userpoints()
  */
 function shoutbox_points_userpoints($op, $params = array()) {
@@ -32,10 +32,10 @@ function shoutbox_points_userpoints($op, $params = array()) {
   }
 }
 
-/*
+/**
  * Implementation of hook_shoutbox()
  */
-function shoutbox_points_shoutbox($op, $shout, $form_state = NULL) {
+function shoutbox_points_shoutbox($op, &$shout, &$a1 = NULL, $form_state = NULL) {
   // If this shout was anonymous, points can't be handled
   if (!$shout->uid) {
     return; 
@@ -47,9 +47,9 @@ function shoutbox_points_shoutbox($op, $shout, $form_state = NULL) {
         $params = array(
           'points' => $points,
           'uid' => $shout->uid,
-          'operation' => 'insert',
+          'operation' => t('shouted'),
           'entity_id' => $shout->shout_id,
-          'entity_type' => 'shout',
+          'entity_type' => t('shout'),
           'display' => FALSE,
         );
         userpoints_userpointsapi($params);
@@ -62,9 +62,9 @@ function shoutbox_points_shoutbox($op, $shout, $form_state = NULL) {
           $params = array(
             'points' => ($points * -1),
             'uid' => $shout->uid,
-            'operation' => 'operation',
+            'operation' => t('shout removed'),
             'entity_id' => $shout->shout_id,
-            'entity_type' => 'shout',
+            'entity_type' => t('shout'),
             'display' => FALSE,
           );
           userpoints_userpointsapi($params);
