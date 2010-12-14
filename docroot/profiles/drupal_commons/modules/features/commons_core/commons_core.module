@@ -9,6 +9,21 @@ define('COMMONS_USER_MENU_DROPDOWN', 'My stuff');
 define('COMMONS_COMMUNITY_MENU_DROPDOWN', 'Community');
 
 /**
+ * Alter the default cck fields right before they are cached into the database.
+ *
+ * @param &$fields
+ *   By reference. The fields that have been declared by another feature.
+ */
+function commons_core_content_default_fields_alter(&$fields) {
+  // Dynamically set the group default image path to the
+  // current files directory
+  if (isset($fields['group-field_group_image'])) {
+    $fields['group-field_group_image']['widget']['default_image']['filepath'] = file_directory_path() . '/default-group.png';
+    $fields['group-field_group_image']['widget']['default_image']['destination'] = file_directory_path() . '/default-group.png';
+  }
+}
+
+/**
  * Implementation of hook_menu()
  */
 function commons_core_menu() {
