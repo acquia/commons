@@ -1,4 +1,4 @@
-// $Id: README.txt,v 1.1 2010/03/13 21:02:32 quicksketch Exp $
+// $Id: README.txt,v 1.1.2.1 2010/07/27 04:01:13 quicksketch Exp $
 
 Insert is a utility that makes inserting images and links to files into text
 areas or WYSIWYGs much easier. It adds a simple JavaScript-based button to
@@ -43,6 +43,20 @@ Install
    an "Insert" button will appear. Click this button to send the file or image
    into the Body field.
 
-Insert should would on multiple fields (the last field that was active will
+Insert should work on multiple fields (the last field that was active will
 received the file), and with most popular WYSIWYG editors. Note that FCKeditor
 only supports the Body field due to an API limitation.
+
+Theming
+-------
+
+Insert can be configured to work with non-HTML filters like BBCode or Markdown.
+To do this, copy the template file you would like to change from the "templates"
+directory to your active theme's directory. Then empty your Drupal caches at
+admin/settings/performance.
+
+The ImageCache templates may also be used per ImageCache preset. You can copy
+the imagecache-insert-image.tpl.php file to your theme directory and then
+rename it to imagecache-insert-image--[preset-name].tpl.php, where [preset-name]
+is the name of the ImageCache preset. Change underscores to hyphens in the
+preset name.

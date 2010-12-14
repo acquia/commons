@@ -1,5 +1,5 @@
 <?php
-// $Id: insert.module,v 1.4 2010/03/13 21:23:49 quicksketch Exp $
+// $Id: insert.module,v 1.4.2.5 2010/08/07 18:45:25 quicksketch Exp $
 
 /**
  * @file
@@ -11,11 +11,12 @@
  * Implementation of hook_elements().
  */
 function insert_elements() {
-  $extra = array('#after_build' => array('insert_process'));
+  $extra = array('#after_build' => array('insert_element_process'));
 
   $elements = array();
   foreach (insert_widgets() as $widget_type => $widget) {
-    $elements[$widget_type] = $extra;
+    $element_type = isset($widget['element_type']) ? $widget['element_type'] : $widget_type;
+    $elements[$element_type] = $extra;
   }
 
   return $elements;
@@ -50,7 +51,7 @@ function insert_init() {
 function insert_theme() {
   return array(
     'insert_widget' => array(
-      'arguments' => array('field' => NULL),
+      'arguments' => array('element' => NULL),
       'template' => 'templates/insert-widget',
     ),
 
@@ -63,14 +64,15 @@ function insert_theme() {
     'insert_link' => array(
       'arguments' => array('item' => NULL, 'widget' => NULL),
       'template' => 'templates/insert-link',
-      'includes/insert.inc',
+      'file' => 'includes/insert.inc',
     ),
 
     // Theme functions in includes/imagecache.inc.
     'imagecache_insert_image' => array(
       'arguments' => array('item' => NULL, 'widget' => NULL, 'preset_name' => NULL),
       'template' => 'templates/imagecache-insert-image',
-      'includes/imagecache.inc',
+      'pattern' => 'imagecache_insert_image__[a-z0-9_]+',
+      'file' => 'includes/imagecache.inc',
     ),
   );
 }
@@ -92,10 +94,19 @@ function insert_styles($reset = FALSE) {
       $styles = array_merge($styles, $module_styles);
     }
     drupal_alter('insert_styles', $styles);
-    uasort($styles, '_user_sort');
+    uasort($styles, '_insert_style_sort');
   }
 
   return $styles;
+}
+
+/**
+ * Sort the styles.
+ */
+function _insert_style_sort($a, $b) {
+  $a = (array)$a + array('weight' => 0, 'label' => '');
+  $b = (array)$b + array('weight' => 0, 'label' => '');
+  return $a['weight'] < $b['weight'] ? -1 : ($a['weight'] > $b['weight'] ? 1 : strnatcasecmp($a['label'], $b['label']));
 }
 
 /**
@@ -157,14 +168,17 @@ function insert_content($item, $style, $widget) {
 /**
  * Process function for insert-enabled fields.
  */
-function insert_process($element) {
+function insert_element_process($element) {
   static $js_added;
 
   $item = $element['#value'];
   $field = content_fields($element['#field_name'], $element['#type_name']);
 
+  $widget_settings = $field['widget'];
+  $widget_type = $field['widget']['type'];
+
   // Bail out of Insert is not enabled on this field.
-  if (!$field['widget']['insert']) {
+  if (!$widget_settings['insert']) {
     return $element;
   }
 
@@ -177,20 +191,20 @@ function insert_process($element) {
   }
 
   // Add settings for this widget only once.
-  if (!isset($js_added[$field['widget']['type']])) {
-    $js_added[$field['widget']['type']] = TRUE;
-    $insert_widget = insert_widget_load($field['widget']['type']);
+  if (!isset($js_added[$widget_type])) {
+    $js_added[$widget_type] = TRUE;
+    $insert_widget = insert_widget_load($widget_type);
     $insert_settings = array(
-      'maxWidth' => $field['widget']['insert_width'],
+      'maxWidth' => $widget_settings['insert_width'],
       'wrapper' => $insert_widget['wrapper'],
       'fields' => $insert_widget['fields'],
     );
-    drupal_add_js(array('insert' => array('widgets' => array($field['widget']['type'] => $insert_settings))), 'setting');
+    drupal_add_js(array('insert' => array('widgets' => array($widget_type => $insert_settings))), 'setting');
   }
 
   if ($element['fid']['#value']) {
-    $insert_styles = array_filter((array) $field['widget']['insert_styles']);
-    $default = !empty($field['widget']['insert_default']) ? $field['widget']['insert_default'] : 'auto';
+    $insert_styles = array_filter((array) $widget_settings['insert_styles']);
+    $default = !empty($widget_settings['insert_default']) ? $widget_settings['insert_default'] : 'auto';
     if (!isset($insert_styles[$default])) {
       $insert_styles[$default] = $default;
     }
@@ -323,6 +337,13 @@ function insert_create_url($path) {
     $path = trim(substr($path, strlen(file_directory_path())), '\\/');
   }
 
+  // Convert all the URL pieces to be URL-encoded.
+  $pieces = explode('/', $path);
+  foreach ($pieces as $part => $piece) {
+    $pieces[$part] = rawurlencode($piece);
+  }
+  $path = implode('/', $pieces);
+
   // This variable has no configuration location. It may be set by placing
   // $conf['insert_absolute_paths'] = FALSE;
   // in the site settings.php file, or by manually running variable_set().
@@ -342,7 +363,7 @@ function insert_create_url($path) {
  * Preprocess variables for the insert-widget.tpl.php file.
  */
 function template_preprocess_insert_widget(&$vars) {
-  $element = $vars['field'];
+  $element = $vars['element'];
 
   $vars['insert_styles'] = $element['#options'];
   $vars['default_style'] = $element['#default_value'];

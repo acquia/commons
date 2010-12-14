@@ -1,5 +1,5 @@
 <?php
-// $Id: imagecache.inc,v 1.2 2010/01/08 18:58:23 quicksketch Exp $
+// $Id: imagecache.inc,v 1.2.2.1 2010/07/27 04:01:13 quicksketch Exp $
 
 /**
  * @file
@@ -25,7 +25,7 @@ function imagecache_insert_styles() {
  */
 function imagecache_insert_content($item, $style, $widget) {
   $preset_name = preg_replace('/^imagecache_/', '', $style['name']);
-  return theme('imagecache_insert_image', $item, $widget, $preset_name);
+  return theme(array('imagecache_insert_image__' . str_replace('-', '_', $preset_name), 'imagecache_insert_image'), $item, $widget, $preset_name);
 }
 
 /**
