@@ -1,5 +1,5 @@
 <?php
-// $Id: rules.module,v 1.1.2.72 2010/03/08 18:22:32 fago Exp $
+// $Id: rules.module,v 1.1.2.74 2010/08/10 08:28:00 fago Exp $
 
 /**
  * @file Rules engine module
@@ -822,7 +822,7 @@ function rules_item_save($item_type, $name, $item) {
  */
 function rules_item_delete($item_type, $name) {
   if ($info = rules_get_items($item_type)) {
-    rules_item_type_invoke($item_type, 'delete', $name);
+    rules_item_type_invoke($item_type, 'delete', array($name));
     db_query("DELETE FROM {". $info['db_table'] ."} WHERE name = '%s'", $name);
   }
 }
@@ -845,7 +845,7 @@ function rules_enable_items($item_type, $ret = array()) {
  * base appended with _$op. The parameters given in $params will be
  * passed to this function.
  */
-function rules_item_type_invoke($item_type, $op, $params) {
+function rules_item_type_invoke($item_type, $op, $params = array()) {
   $info = rules_get_items($item_type);
   if (function_exists($function = $info['base'] .'_'. $op)) {
     return call_user_func_array($function, $params);
@@ -1026,15 +1026,18 @@ function rules_rule_format_upgrade($rule) {
  * Implementation of hook_token_list()
  *
  * We expose some simple types to token so that our simple rules variables can
- * also be used by others when doing token replacement, this is actually more
- * useful than the rules variables in themselves.
+ * also be used by others when doing token replacement.
  */
 function rules_token_list($type = 'all') {
+  $tokens = array();
   if ($type == 'string' || $type == 'all') {
-    $tokens['string']['string']          = t("The string, passed through check_plain");
-    $tokens['string']['string-raw']      = t("The string, raw and unfiltered");
-    return $tokens;
+    $tokens['string']['string']          = t("The sanitized string.");
+    $tokens['string']['string-raw']      = t("The string, WARNING - raw user input");
   }
+  if ($type == 'number' || $type == 'all') {
+    $tokens['number']['number'] = t("The number.");
+  }
+  return $tokens;
 }
 
 /**
@@ -1043,12 +1046,16 @@ function rules_token_list($type = 'all') {
  * @see rules_token_list().
  */
 function rules_token_values($type, $object = NULL, $options = array()) {
+  $values = array();
   if ($type == 'string') {
     $string = $object;
-    $tokens['string']      = check_plain($string);
-    $tokens['string-raw']  = $string;
-    return $tokens;
+    $values['string']      = check_plain($string);
+    $values['string-raw']  = $string;
   }
+  if ($type == 'number') {
+    $values['number'] = (float)$object;
+  }
+  return $values;
 }
 
 /**

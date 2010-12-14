@@ -1,5 +1,5 @@
 <?php
-// $Id: rules_forms.rules_forms.inc,v 1.1.2.3 2009/08/14 09:52:51 klausi Exp $
+// $Id: rules_forms.rules_forms.inc,v 1.1.2.5 2010/03/18 11:18:10 klausi Exp $
 
 /**
  * @file
@@ -65,6 +65,7 @@ function rules_forms_action_prefix_suffix_html_form($settings, &$form) {
  */
 function rules_forms_action_set_error_form($settings, &$form) {
   $form['settings']['element']['#required'] = FALSE;
+  $form['settings']['message']['#type'] = 'textarea';
 }
 
 /**
@@ -103,13 +104,6 @@ function rules_forms_action_adjust_weight_label($settings, $argument_labels) {
  */
 function rules_forms_action_hide_element_label($settings, $argument_labels) {
   return t("Hide form element '@element'", array('@element' => $settings['hide']));
-}
-
-/**
- * Label callback for disabling form elements action.
- */
-function rules_forms_action_disable_element_label($settings, $argument_labels) {
-  return t("Disable form element '@element'", array('@element' => $settings['disable']));
 }
 
 /**

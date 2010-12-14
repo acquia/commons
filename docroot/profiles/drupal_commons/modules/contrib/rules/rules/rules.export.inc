@@ -1,5 +1,5 @@
 <?php
-// $Id: rules.export.inc,v 1.1.2.8 2010/03/26 13:56:10 fago Exp $
+// $Id: rules.export.inc,v 1.1.2.11 2010/08/05 14:51:41 fago Exp $
 
 /**
  * @file
@@ -55,8 +55,9 @@ function rules_item_rule_export($rule_name, &$rule, &$export, $module = NULL) {
     // Change #status to 'default'.
     $rule['#status'] = 'default';
     // Add the module name as category.
-    $rule += array('#categories' => array());
-    $rule['#categories'][$module] = $module;
+    if (empty($rule['#categories']) || !in_array($module, $rule['#categories'])) {
+      $rule['#categories'][$module] = $module;
+    }
 
     // We increase the counter in any case. As already renamed rules are passed
     // in first, this makes sure to not overwrite the names of those even if
@@ -65,7 +66,7 @@ function rules_item_rule_export($rule_name, &$rule, &$export, $module = NULL) {
 
     if (strpos($rule_name, $module) !== 0) {
       // Make sure the name isn't already taken.
-      $rules = rules_get_items('rules');
+      $rules = rules_get_configured_items('rules');
       while (isset($rules[$module .'_'. $counter])) {
         $counter++;
       }
@@ -77,10 +78,6 @@ function rules_item_rule_export($rule_name, &$rule, &$export, $module = NULL) {
     }
   }
 }
-
-
-
-
 
 /**
  * Implementation of hook_features_export_options() for tags.
@@ -101,7 +98,6 @@ function rules_categories_features_export_render($module = 'foo', $data) {
   // Build the usual rules $export structure for sets and categories.
   $rules_export = array();
   $items = rules_get_configured_items('rule_sets');
-
   rules_include('rules_admin');
   module_load_include('inc', 'rules_admin', 'rules_admin.export');
   rules_admin_export_by_category($rules_export, $data);

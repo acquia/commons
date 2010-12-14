@@ -1,5 +1,5 @@
 <?php
-// $Id: rules.events.inc,v 1.1.2.12 2009/05/15 13:03:12 fago Exp $
+// $Id: rules.events.inc,v 1.1.2.14 2010/07/27 11:09:27 fago Exp $
 
 
 /**
@@ -37,9 +37,20 @@ function rules_user($op, &$edit, &$account, $category = NULL) {
     rules_invoke_event('user_update', array('account' => &$account, 'account_unchanged' => $account_unchanged));
   }
   else if (in_array($op, array('insert', 'login', 'logout', 'view', 'delete'))) {
+    // At user creation add the assigned roles which are not available in
+    // $account yet to $account, so rules is aware of them.
+    if ($op == 'insert' && isset($edit['roles'])) {
+      $system_roles = user_roles();
+      foreach ($edit['roles'] as $role_id => $value) {
+        if (isset($system_roles[$role_id])) {
+          $account->roles[$role_id] = $system_roles[$role_id];
+        }
+      }
+    }
+
     rules_invoke_event('user_'. $op, array('account' => &$account));
 
-    // Allow adding user roles during registration
+    // Allow adding user roles during registration.
     if ($op == 'insert' && isset($account->roles)) {
       $edit += array('roles' => array());
       $edit['roles'] += $account->roles;
