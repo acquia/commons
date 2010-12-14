@@ -1,10 +1,15 @@
 <?php
-// $Id: taxonomy.inc,v 1.2.2.2.2.1 2008/04/08 14:01:57 weitzman Exp $
+// $Id: taxonomy.inc,v 1.1.2.2 2010/08/12 16:34:08 yhahn Exp $
+
+/**
+ * @file
+ * Implementation of hook_diff() for taxonomy.
+ */
 
 /**
  * Implementation of hook_diff() for taxonomy.
  */
-function taxonomy_diff(&$old_node, &$new_node) {
+function taxonomy_diff($old_node, $new_node) {
   $result = array();
   // TODO: make taxonomy by category not only by whole taxonomy?
   $old_taxonomy = array();
@@ -37,6 +42,11 @@ function taxonomy_diff(&$old_node, &$new_node) {
             }
           }
         }
+      }
+      elseif (is_numeric($entry)) {
+        // During editing, taxonomy is a single id.
+        $term = taxonomy_get_term($entry);
+        $new_taxonomy[] = $term->name;
       }
       else {
         // Not during editing the taxonomy list is a list of terms.

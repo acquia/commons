@@ -1,7 +1,8 @@
 <?php
-// $Id: DiffEngine.php,v 1.4.2.1.2.1 2008/04/08 14:01:57 weitzman Exp $
+// $Id: DiffEngine.php,v 1.4.2.1.2.4 2010/08/12 16:34:08 yhahn Exp $
 
 /**
+ * @file
  * A PHP diff engine for phpwiki. (Taken from phpwiki-1.3.3)
  *
  * Copyright (C) 2000, 2001 Geoffrey T. Dairiki <dairiki@dairiki.org>
@@ -485,7 +486,7 @@ class _DiffEngine {
       while (++$i < $len && $changed[$i]) {
         continue;
       }
-      
+
       do {
         /*
          * Record the length of this run of changes, so that
@@ -774,7 +775,7 @@ class DiffFormatter {
    * Should a block header be shown?
    */
   var $show_header = TRUE;
-  
+
   /**
    * Number of leading context "lines" to preserve.
    *
@@ -898,7 +899,7 @@ class DiffFormatter {
 
   function _start_block($header) {
     if ($this->show_header) {
-      echo $header;
+      echo $header . "\n";
     }
   }
 
@@ -1201,5 +1202,129 @@ class DrupalDiffFormatter extends DiffFormatter {
     foreach ($add as $line) {  // If any leftovers
       $this->rows[] = array_merge($this->emptyLine(), $this->addedLine($line));
     }
+  }
+}
+
+/**
+ * Drupal inline Diff formatter.
+ * @private
+ * @subpackage DifferenceEngine
+ */
+class DrupalDiffInline {
+  var $a;
+  var $b;
+
+  /**
+   * Constructor.
+   */
+  function __construct($a, $b) {
+    $this->a = $a;
+    $this->b = $b;
+  }
+
+  /**
+   * Render differences inline using HTML markup.
+   */
+  function render() {
+    $a = preg_split('/(<[^>]+?>| )/', $this->a, -1, PREG_SPLIT_DELIM_CAPTURE);
+    $b = preg_split('/(<[^>]+?>| )/', $this->b, -1, PREG_SPLIT_DELIM_CAPTURE);
+    $diff = new Diff($a, $b);
+    $diff->edits = $this->process_edits($diff->edits);
+
+    // Assemble highlighted output
+    $output = '';
+    foreach ($diff->edits as $chunk) {
+      switch ($chunk->type) {
+        case 'copy':
+          $output .= implode('', $chunk->closing);
+          break;
+        case 'delete':
+          foreach ($chunk->orig as $i => $piece) {
+            if (strpos($piece, '<') === 0 && substr($piece, strlen($piece) - 1) === '>') {
+              $output .= $piece;
+            }
+            else {
+              $output .= theme('diff_inline_chunk', $piece, $chunk->type);
+            }
+          }
+          break;
+        default:
+          $chunk->closing = $this->process_chunk($chunk->closing);
+          foreach ($chunk->closing as $i => $piece) {
+            if ($piece === ' ' || (strpos($piece, '<') === 0 && substr($piece, strlen($piece) - 1) === '>' && strtolower(substr($piece, 1, 3)) != 'img')) {
+              $output .= $piece;
+            }
+            else {
+              $output .= theme('diff_inline_chunk', $piece, $chunk->type);
+            }
+          }
+          break;
+      }
+    }
+    return $output;
+  }
+
+  /**
+   * Merge chunk segments between tag delimiters.
+   */
+  function process_chunk($chunk) {
+    $processed = array();
+    $j = 0;
+    foreach ($chunk as $i => $piece) {
+      $next = isset($chunk[$i+1]) ? $chunk[$i+1] : NULL;
+      if (strpos($piece, '<') === 0 && substr($piece, strlen($piece) - 1) === '>') {
+        $processed[$j] = $piece;
+        $j++;
+      }
+      else if (isset($next) && strpos($next, '<') === 0 && substr($next, strlen($next) - 1) === '>') {
+        $processed[$j] .= $piece;
+        $j++;
+      }
+      else {
+        $processed[$j] .= $piece;
+      }
+    }
+    return $processed;
+  }
+
+  /**
+   * Merge copy and equivalent edits into intelligible chunks.
+   */
+  function process_edits($edits) {
+    $processed = array();
+    $current = array_shift($edits);
+
+    // Make two passes -- first merge space delimiter copies back into their originals.
+    while ($chunk = array_shift($edits)) {
+      if ($chunk->type == 'copy' && $chunk->orig === array(' ')) {
+        $current->orig = array_merge((array) $current->orig, (array) $chunk->orig);
+        $current->closing = array_merge((array) $current->closing, (array) $chunk->closing);
+      }
+      else {
+        $processed[] = $current;
+        $current = $chunk;
+      }
+    }
+    $processed[] = $current;
+
+    // Initial setup
+    $edits = $processed;
+    $processed = array();
+    $current = array_shift($edits);
+
+    // Second, merge equivalent chunks into each other.
+    while ($chunk = array_shift($edits)) {
+      if ($current->type == $chunk->type) {
+        $current->orig = array_merge((array) $current->orig, (array) $chunk->orig);
+        $current->closing = array_merge((array) $current->closing, (array) $chunk->closing);
+      }
+      else {
+        $processed[] = $current;
+        $current = $chunk;
+      }
+    }
+    $processed[] = $current;
+
+    return $processed;
   }
 }
