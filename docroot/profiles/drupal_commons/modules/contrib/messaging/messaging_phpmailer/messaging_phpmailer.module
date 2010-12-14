@@ -72,12 +72,31 @@ function messaging_phpmailer_settings_form($form_state) {
     '#default_value' => variable_get('messaging_phpmailer_smtp_password', ''),
     '#description'   => t('SMTP password.'),
   );
+  $form['messaging_phpmailer_auth']['messaging_phpmailer_smtp_secure'] = array(
+    '#type'          => 'radios',
+    '#title'         => t('SMTP Security'),
+    '#options'       => array('' => t('None'), 'tls' => t('TLS'), 'ssl' => t('SSL')),
+    '#default_value' => variable_get('messaging_phpmailer_smtp_secure', ''),
+    '#description'   => t('What security, if any, to use for this SMTP connection.'),
+  );
+  $form['messaging_phpmailer_auth']['messaging_phpmailer_smtp_port'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('SMTP Port'),
+    '#default_value' => variable_get('messaging_phpmailer_smtp_port', 25),
+    '#description'   => t('What port to use for the connection.'),
+  );  
   $form['messaging_phpmailer_attach'] = array(
       '#title' => t('Include attachments'),
       '#type' => 'checkbox',
       '#default_value' => variable_get('messaging_phpmailer_attach', 0),
       '#description' => t('If enabled, attachments will be included with outgoing messages.')
-  );  
+  );
+  $form['messaging_phpmailer_bcc'] = array(
+    '#title' => t('Send all messages via BCC'),
+    '#type' => 'checkbox',
+    '#default_value' => variable_get('messaging_phpmailer_bcc', 0),
+    '#description' => t('If enabled, all messages will be sent as BCCs and will have no "To:" address. ')
+  );
   $form['messaging_phpmailer_debug'] = array(
       '#title' => t('Debug mode'),
       '#type' => 'radios',
@@ -155,8 +174,11 @@ function messaging_phpmailer_drupal_mail($message) {
   $mail->IsSMTP(); // telling the class to use SMTP
   $mail->CharSet = 'utf-8';
   $mail->ContentType = 'text/html';
-  
-    // Set the authentication settings.
+  if (variable_get('messaging_phpmailer_smtp_secure', '') != '') {
+    $mail->SMTPSecure = variable_get('messaging_phpmailer_smtp_secure', '');
+  }
+  $mail->Port = variable_get('messaging_phpmailer_smtp_port', 25);  
+  // Set the authentication settings.
   $username = variable_get('messaging_phpmailer_smtp_username', '');
   $password = variable_get('messaging_phpmailer_smtp_password', '');
 
@@ -188,15 +210,35 @@ function messaging_phpmailer_drupal_mail($message) {
   if (!empty($matches[2])) {
     $from['email'] = $matches[2];
   }
+  $matches = array();
+  preg_match('/["\']?(.*)["\']? <(.*)>/', $message['headers']['Reply-To'], $matches);
+  if (!empty($matches[1])) {
+    $replyto['name'] = $matches[1];
+  }
+  if (!empty($matches[2])) {
+    $replyto['email'] = $matches[2];
+  }
   $mail->From = !empty($from['email']) ? $from['email'] : $message['headers']['From'];
   $mail->FromName = !empty($from['name']) ? $from['name'] : '';
-  $mail->AddAddress($message['to']);
+  if (variable_get('messaging_phpmailer_bcc', 0)) {
+    $mail->AddBCC($message['to']);
+  }
+  else {
+    $mail->AddAddress($message['to']);
+  }
 
-  if(!empty($message['headers']['Message-ID'])) {
+  if (!empty($message['headers']['Sender'])) {
+    $mail->Sender = $message['headers']['Sender'];
+  }
+  if (!empty($message['headers']['Errors-To'])) {
+    $mail->AddCustomHeader('Errors-To:'. $message['headers']['Errors-To']);
+  }
+
+  if (!empty($message['headers']['Message-ID'])) {
     $mail->MessageID = $message['headers']['Message-ID'];
   }
-  if(!empty($message['headers']['Reply-To'])) {
-    $mail->AddReplyTo($message['headers']['Reply-To']);
+  if (!empty($replyto['name']) && !empty($replyto['email'])) {
+    $mail->AddReplyTo($replyto['email'], $replyto['name']);
   }
   // Strip HTML out of $body for plaintext equivalent of HTML email.
   $mail->AltBody = drupal_html_to_text($body);
@@ -205,8 +247,8 @@ function messaging_phpmailer_drupal_mail($message) {
   $mail->Subject = $subject;
   $mail->Body = str_replace("\r", '', $body);
 
-  if(!empty($message['attachments']) && variable_get('messaging_phpmailer_attach', 0)){
-    foreach($message['attachments'] as $attachment) {
+  if (!empty($message['attachments']) && variable_get('messaging_phpmailer_attach', 0)) {
+    foreach ($message['attachments'] as $attachment) {
       $mail->AddAttachment($attachment->filepath, $attachment->filename, 'base64', $attachment->filemime);
     }
   }
@@ -217,7 +259,11 @@ function messaging_phpmailer_drupal_mail($message) {
     watchdog('messaging', 'PHPMailer debug message: '. $mail->Send() . ' - ' . $mail->ErrorInfo);    
   }
   else {
-    return $mail->Send();
+    $result = $mail->Send();
+    if (!$result) {
+      watchdog('messaging', 'PHPMailer exception: !details', array('!details' => $mail->ErrorInfo), WATCHDOG_ERROR);
+    }
+    return $result;
   }
 }
 
@@ -226,4 +272,12 @@ function messaging_phpmailer_drupal_mail($message) {
  */
 function theme_messaging_phpmailer($mail) {
   return array($mail['subject'], $mail['body']);
+}
+
+
+/**
+ * Implementation of hook_disable()
+ */
+function messaging_phpmailer_disable() {
+  messaging_method_disable('phpmailer');
 }

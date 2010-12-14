@@ -1,5 +1,5 @@
 <?php
-// $Id: messaging.admin.inc,v 1.1.2.13.2.2 2009/04/30 10:42:35 jareyero Exp $
+// $Id: messaging.admin.inc,v 1.1.2.13.2.5 2010/05/11 16:36:13 danepowell Exp $
 /**
  * @file
  * Messaging Framework - Admin UI
@@ -250,6 +250,24 @@ function messaging_admin_settings() {
     '#options' => $methods,
     '#default_value' => variable_get('messaging_default_method', ''),
   );
+  $form['general']['messaging_sender_name'] = array(
+    '#title' => t('Format for sender name'),
+    '#type' => 'textfield',
+    '#size' => 10,
+    '#default_value' => variable_get('messaging_sender_name', '[user]'),
+  );
+  $form['general']['messaging_sender_mail'] = array(
+    '#title' => t('Format for sender email address'),
+    '#type' => 'textfield',
+    '#size' => 10,
+    '#default_value' => variable_get('messaging_sender_mail', '[mail]'),
+  );
+  $form['general']['messaging_returnpath_mail'] = array(
+    '#title' => t('Format for return-path and errors-to email address'),
+    '#type' => 'textfield',
+    '#size' => 10,
+    '#default_value' => variable_get('messaging_returnpath_mail', '[site-mail]'),
+  );
   // Logging settings  
   $period = array(0 => t('Disabled')) + drupal_map_assoc(array(3600, 10800, 21600, 32400, 43200, 86400, 172800, 259200, 604800, 1209600, 2419200, 4838400, 9676800), 'format_interval');
   $form['general']['messaging_log'] = array(
@@ -289,6 +307,19 @@ function messaging_admin_settings() {
     '#default_value' => $limit['percent'],
     '#description' => t('Maximum percentage of cron time the process may use.'),
   );
+  if (module_exists('token')) {
+    $form['view']['token_help'] = array(
+      '#title' => t('Replacement patterns'),
+      '#type' => 'fieldset',
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+//      '#description' => t('Prefer raw-text replacements for text to avoid problems with HTML entities!'),
+      );
+
+    $form['view']['token_help']['help'] = array(
+      '#value' => theme('token_help', 'user'),
+      );
+  }
   return system_settings_form($form);
 }
 
@@ -327,13 +358,18 @@ function messaging_admin_method_settings() {
   } else {
     $form['warning'] = array('#value' => t('You should enable some messaging method plug-ins for this to work.'));
   }
-  return system_settings_form($form);  
+  $form = system_settings_form($form);
+  // Refresh strings after update if translation enabled
+  if (module_exists('i18nstrings')) {
+    $form['#submit'][] = 'messaging_locale_refresh';
+  }
+  return $form;
 }
 
 /**
  * Theme method settings
  */
-function theme_messaging_admin_method_settings(&$form) {
+function theme_messaging_admin_method_settings($form) {
   $header = array(t('Method'), t('Name for display'), t('Message body filter'));
   $rows = array();
   foreach (element_children($form) as $key) {

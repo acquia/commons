@@ -1,5 +1,5 @@
 <?php
-// $Id: messaging.install,v 1.2.2.4.2.13.2.2 2009/11/11 18:07:24 jareyero Exp $
+// $Id: messaging.install,v 1.2.2.4.2.13.2.5 2010/05/07 17:30:53 jareyero Exp $
 
 /**
 * Implementation of hook_schema().
@@ -135,7 +135,7 @@ function _messaging_install_create_filter() {
   db_query("INSERT INTO {filters} (format, module, delta, weight) VALUES (%d, 'messaging', 1, 0)", $format);
   db_query("INSERT INTO {filters} (format, module, delta, weight) VALUES (%d, 'filter', 1, -1)", $format);
   variable_set('messaging_default_filter', $format);
-  drupal_set_message(t("A new Input format has been created: %name", array('%name' => t('Messaging plain text'))));
+  drupal_set_message(t("A new Input format has been created: !name", array('!name' => t('Messaging plain text'))));
 }
 
 /**

@@ -1,5 +1,5 @@
 <?php
-// $Id: messaging_phpmailer.install,v 1.1.2.1.2.2.2.2 2009/11/11 18:07:24 jareyero Exp $
+// $Id: messaging_phpmailer.install,v 1.1.2.1.2.2.2.4 2010/05/11 16:36:13 danepowell Exp $
 /**
  * Implementation of hook_install()
  */
@@ -12,13 +12,6 @@ function messaging_phpmailer_install() {
  */
 function messaging_phpmailer_uninstall() {
   variable_del('messaging_phpmailer_smtp_server');
-}
-
-/**
- * Implementation of hook_disable()
- */
-function messaging_phpmailer_disable() {
-  messaging_method_disable('phpmailer');
 }
 
 /**
@@ -37,7 +30,7 @@ function messaging_phpmailer_requirements($phase) {
         'title' => $t('Messaging PHPMailer'),
         'value' => $t('PHP Mailer missing'),
         'severity' => REQUIREMENT_ERROR,
-        'description' => $t('HTML Mail requires the <a href="http://phpmailer.codeworxtech.com/">PHP Mailer</a> class to properly send HTML Mail. Please download the 2.0 version and place the phpmailer folder in your messaging_phpmailer module directory. Rename the folder to "PHPMailer".'),
+        'description' => $t('HTML Mail requires the <a href="http://phpmailer.codeworxtech.com/">PHP Mailer</a> class to properly send HTML Mail. Please download the 2.0 version (if you use PHP4) or 5.0 version (if you use PHP5) and place the phpmailer folder in your messaging_phpmailer module directory. Rename the folder to "PHPMailer".'),
       );
     }
   }

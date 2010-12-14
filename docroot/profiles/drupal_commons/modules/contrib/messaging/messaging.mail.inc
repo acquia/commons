@@ -1,5 +1,5 @@
 <?php
-// $Id: messaging.mail.inc,v 1.1.2.1.2.1 2009/06/13 14:49:13 jareyero Exp $
+// $Id: messaging.mail.inc,v 1.1.2.1.2.5 2010/06/21 16:20:37 jareyero Exp $
 /**
  * @file
  *   Common library for mail methods
@@ -27,9 +27,10 @@ function messaging_mail_prepare($destination, $message, $params, $alter = TRUE) 
   
   if (empty($params['from'])) {
     if (!empty($message->sender_account) && !empty($message->sender_account->mail)) {
-      $from = check_plain($message->sender_account->name) . ' <'.$message->sender_account->mail.'>';
+      $from_format = variable_get('messaging_sender_name', '[user]') . ' <' . variable_get('messaging_sender_mail', '[mail]') . '>';
+      $from = token_replace($from_format, 'user', $message->sender_account);
     } elseif(!empty($message->sender_name) && $default_from) {
-      $from = check_plain($message->sender_name) . ' <'.$default_from.'>';
+      $from = token_replace('[user]', 'user', $message->sender_account) . ' <'.$default_from.'>';
     } else {
       $from = $default_from;
     }
@@ -37,6 +38,8 @@ function messaging_mail_prepare($destination, $message, $params, $alter = TRUE) 
   } else {
     $from = $params['from'];
   }
+
+  $params['returnpath'] = token_replace(variable_get('messaging_returnpath_mail', '[site-mail]'), 'user', $message->sender_account);
 
   // Build the mail object, mimic drupal_mail() format
   $mail = array(
@@ -63,9 +66,9 @@ function messaging_mail_prepare($destination, $message, $params, $alter = TRUE) 
  * 
  */
 function messaging_mail_headers($message, $params) {
-  
-  $headers = !empty($params['headers']) ? $params['headers'] : array();
-  
+
+  $headers = !empty($params['headers']) && is_array($params['headers']) ? $params['headers'] : array();
+
   // Add some default headers
   $headers += array(
     'MIME-Version'              => '1.0',
@@ -83,11 +86,11 @@ function messaging_mail_headers($message, $params) {
     'Reply-To' => $from,
   );
   
-  if ($default_from) {
+  if ($params['returnpath']) {
     // To prevent e-mail from looking like spam, the addresses in the Sender and
     // Return-Path headers should have a domain authorized to use the originating
     // SMTP server. Errors-To is redundant, but shouldn't hurt.
-    $more_headers['Sender'] = $more_headers['Return-Path'] = $more_headers['Errors-To'] = $default_from;
+    $more_headers['Sender'] = $more_headers['Return-Path'] = $more_headers['Errors-To'] = $params['returnpath'];
     $headers += $more_headers;
   }  
 

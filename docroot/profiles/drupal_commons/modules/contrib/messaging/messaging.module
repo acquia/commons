@@ -1,5 +1,5 @@
 <?php
-// $Id: messaging.module,v 1.7.2.8.2.27.2.8 2009/11/13 19:07:10 jareyero Exp $
+// $Id: messaging.module,v 1.7.2.8.2.27.2.14 2010/04/09 17:35:27 jareyero Exp $
 /**
  * Drupal Messaging Framework
  *
@@ -203,14 +203,18 @@ function messaging_message_send_user($account, &$message, $method = NULL, $queue
   } elseif (!empty($params['log'])) {
     // Save the message, let it there for further reference
     messaging_log('Destination not available for user account', array('method' => $method, 'account' => $account));
-    $message->destination = 'ERROR';
-    $info = messaging_method_info($method);
-    $message = messaging_message_prepare($message, $info);
-    $message = messaging_message_render($message, $info);
+    $message->destination = 'ERROR';    
+    if ($info = messaging_method_info($method)) {
+      $message = messaging_message_prepare($message, $info);
+      $message = messaging_message_render($message, $info);
+    }
+    else {
+      $message->subject = $message->body = '';
+    }
     $message->cron = $message->queue = 0;
     $message->log = 1;
     $message->success = FALSE;
-    $message = messaging_store('save', $message);    
+    $message = messaging_store('save', $message);
   }
   return FALSE;
 }
@@ -506,6 +510,9 @@ function messaging_method_list($account = NULL) {
       // Check access for each method and check destination
       if (!messaging_method_permission($method, $account) || !messaging_user_destination($account, $method)) {
         unset($info[$method]);
+      }
+      else {
+        $info[$method] = messaging_translate("method:$method:name", $info[$method]);
       }
     }
   }
@@ -1151,6 +1158,13 @@ function messaging_theme() {
   );
 }
 
+/**   
+ * Wrapper function for 1i8nstrings() if i18nstrings enabled.   
+ */   
+function messaging_translate($name, $string, $langcode = NULL, $textgroup = 'messaging') {
+  return function_exists('i18nstrings') ? i18nstrings($textgroup . ':' . $name, $string, $langcode) : $string;  
+}
+
 /**
  * Add a callback to a callback collection
  * 
@@ -1216,26 +1230,35 @@ function _messaging_info($info, $method = NULL, $property = NULL, $default = NUL
  * Helper function for query builders.
  * 
  * Using schema data get 'field = [placeholder]' and args arrays
+ * 
+ * @param $table
+ *   Table name (to be prefixed)
+ * @param $params
+ *   Array of field => value conditions
+ * @param $table_alias
+ *   Optional table alias to prefix fields in conditions
  */
-function _messaging_query_conditions($table, $params) {
+function _messaging_query_conditions($table, $params, $table_alias = NULL) {
  $schema = drupal_get_schema($table);
  $conditions = $args = array();
  foreach ($params as $field => $value) {
    $type = $schema['fields'][$field]['type'];
+   $field_name = $table_alias ? "$table_alias.$field" : $field;
    // For array values, build IN conditions
    if (is_array($value)) {
-     $conditions[] = $field . ' IN (' . db_placeholders($value, $type) . ')';
+     $conditions[] = $field_name . ' IN (' . db_placeholders($value, $type) . ')';
      $args = array_merge($args, $value);
    }
    elseif (is_null($value)) {
-     $condtions[] = $field . ' IS NULL';
+     $condtions[] = $field_name . ' IS NULL';
    }
    else {
-     $conditions[] = $field . ' = ' . db_type_placeholder($type);
+     $conditions[] = $field_name . ' = ' . db_type_placeholder($type);
      $args[] = $value;
    }
  }
- return array('conditions' => $conditions, 'args' => $args);
+ // Return arrwy with conditions and arguments. Also full where clause.
+ return array('conditions' => $conditions, 'args' => $args, 'where' => implode(' AND ', $conditions));
 }
 
 /**
@@ -1246,24 +1269,29 @@ function messaging_log($txt = NULL, $variables = NULL) {
 }
 
 /**
+ * Get logs without formatting
+ */
+function messaging_log_get() {
+  if ($logs = _messaging_log('return')) {
+    _messaging_log('reset');
+    return $logs;
+  }
+}
+
+/**
+ * Init logging system so logs are saved from now on
+ */
+function messaging_log_start() {
+  return _messaging_log('start');
+}
+
+/**
  * Short hand for debug logs
  */
 function messaging_debug($txt = NULL, $variables = NULL) {
   if (function_exists('messaging_debug_log')) {
     return messaging_debug_log($txt, $variables);
   }  
-}
-
-/**
- * Print formatted logs as table
- */
-function messaging_get_log() {
-  if ($logs = _messaging_log()) {
-    messsaging_log_format($logs);
-  }
-  else {
-    return '';
-  }
 }
 
 /**
@@ -1295,13 +1323,26 @@ function messaging_log_format($logs) {
  * Quick logging for debugging and manual queue processing
  */
 function _messaging_log($type, $txt = NULL, $variables = NULL, $severity = WATCHDOG_NOTICE) {
-  static $logs;
-  
-  if ($txt) {
-    $logs[] = array($type, $txt, $variables, $severity);
-  }
-  else {
-    return $logs;
+  static $enabled = FALSE;
+  switch ($type) {
+    case 'info':
+    case 'debug':
+      if ($enabled) {
+        $_SESSION['messaging_log'][] = array($type, $txt, $variables, $severity);
+      }
+      break;
+    case 'return':
+      return isset($_SESSION['messaging_log']) ? $_SESSION['messaging_log'] : NULL;
+      break;
+    case 'reset':
+      unset($_SESSION['messaging_log']);
+      break;
+    case 'start':
+      $enabled = TRUE;
+      break;
+    case 'stop':
+      $enabled = FALSE;
+      break;
   }
 }
 
@@ -1342,3 +1383,4 @@ function _messaging_log_format($log) {
 
   return array($type, $string, $append, $objects);
 }
+
