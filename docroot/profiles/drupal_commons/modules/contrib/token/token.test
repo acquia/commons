@@ -1,5 +1,5 @@
 <?php
-// $Id: token.test,v 1.1.2.5 2010/03/25 20:18:50 davereid Exp $
+// $Id: token.test,v 1.1.2.14 2010/08/09 18:39:54 davereid Exp $
 
 /**
  * @file
@@ -13,8 +13,13 @@ class TokenTestHelper extends DrupalWebTestCase {
   function setUp() {
     // Call parent::setUp() allowing test cases to pass further modules.
     $modules = func_get_args();
-    $modules = array_merge(array('token'), $modules);
-    call_user_func_array(array('parent', 'setUp'), $modules);
+    $modules = array_merge(array('path', 'token'), $modules);
+    
+    $parent_callback = 'parent::setUp';
+    if (version_compare(PHP_VERSION, '5.3.0', '<')) {
+      $parent_callback = array($this, 'parent::setUp');
+    }
+    call_user_func_array($parent_callback, $modules);
   }
 
   function assertToken($type, $object, $token, $expected, array $options = array()) {
@@ -25,7 +30,52 @@ class TokenTestHelper extends DrupalWebTestCase {
     $values = token_get_values($type, $object, TRUE, $options);
     $values = array_combine($values->tokens, $values->values);
     foreach ($tokens as $token => $expected) {
-      $this->assertIdentical($values[$token], $expected, t("Token value for [@token] was '!actual', expected value '!expected'.", array('@token' => $token, '!actual' => $values[$token], '!expected' => $expected)));
+      $this->assertIdentical($values[$token], $expected, t("Token value for [@token] was '@actual', expected value '@expected'.", array('@token' => $token, '@actual' => $values[$token], '@expected' => $expected)));
+    }
+  }
+}
+
+class TokenUnitTestCase extends TokenTestHelper {
+  public static function getInfo() {
+    return array(
+      'name' => 'Token unit tests',
+      'description' => 'Test basic, low-level token functions.',
+      'group' => 'Token',
+    );
+  }
+
+  /**
+   * Test token_get_invalid_tokens() and token_get_invalid_tokens_by_context().
+   */
+  public function testGetInvalidTokens() {
+    $tests = array();
+    $tests[] = array(
+      'valid tokens' => array(
+        '[title-raw]',
+        '[yyyy]',
+        '[mod-yyyy]',
+        '[site-name]',
+        '[site-slogan]',
+      ),
+      'invalid tokens' => array(
+        '[title-invalid]',
+        '[invalid]',
+        '[mod-invalid]',
+        '[invalid-title]',
+        '[site-invalid]',
+      ),
+      'types' => array('node'),
+    );
+
+    foreach ($tests as $test) {
+      $tokens = array_merge($test['valid tokens'], $test['invalid tokens']);
+      shuffle($tokens);
+
+      $invalid_tokens = token_get_invalid_tokens_by_context(implode(' ', $tokens), $test['types']);
+
+      sort($invalid_tokens);
+      sort($test['invalid tokens']);
+      $this->assertEqual($invalid_tokens, $test['invalid tokens'], 'Invalid tokens detected properly.');
     }
   }
 }
@@ -40,20 +90,26 @@ class TokenNodeTestCase extends TokenTestHelper {
   }
 
   function testNodeTokens() {
+    $time = time();
     $created = gmmktime(0, 0, 0, 11, 19, 1978);
     $changed = gmmktime(0, 0, 0, 7, 4, 1984);
     $node = $this->drupalCreateNode(array(
       'type' => 'page',
       'language' => 'und',
       'created' => $created,
+      'log' => '<blink>' . $this->randomName() . '</blink>',
     ));
     $node->changed = $changed;
+    path_set_alias('node/' . $node->nid, 'content/first-node');
 
     $tokens = array(
       'nid' => $node->nid,
       'type' => 'page',
       'type-name' => 'Page',
       'language' => 'und',
+      'node-path' => 'content/first-node',
+      'node-url' => url('node/' . $node->nid, array('absolute' => TRUE)),
+      'small' => '11/19/1978 - 00:00',
       'yyyy' => '1978',
       'yy' => '78',
       'month' => 'November',
@@ -67,6 +123,8 @@ class TokenNodeTestCase extends TokenTestHelper {
       'dd' => '19',
       'd' => '19',
       'raw' => 280281600,
+      'since' => format_interval($time - 280281600),
+      'mod-small' => '07/04/1984 - 00:00',
       'mod-yyyy' => '1984',
       'mod-yy' => '84',
       'mod-month' => 'July',
@@ -80,6 +138,9 @@ class TokenNodeTestCase extends TokenTestHelper {
       'mod-dd' => '04',
       'mod-d' => '4',
       'mod-raw' => 457747200,
+      'mod-since' => format_interval($time - 457747200),
+      'log' => filter_xss($node->log),
+      'log-raw' => $node->log,
     );
     $this->assertTokens('node', $node, $tokens);
   }
@@ -123,6 +184,7 @@ class TokenCommentTestCase extends TokenTestHelper {
   }
 
   function testCommentTokens() {
+    $time = time();
     $comment = $this->createComment(array(
       'timestamp' => gmmktime(0, 0, 0, 7, 4, 1984),
     ));
@@ -143,6 +205,9 @@ class TokenCommentTestCase extends TokenTestHelper {
       'comment-dd' => '04',
       'comment-d' => '4',
       'comment-raw' => '457747200',
+      'comment-since' => format_interval($time - 457747200),
+      'comment-node-title' => check_plain($this->node->title),
+      'comment-node-title-raw' => $this->node->title,
     );
     $this->assertTokens('comment', $comment, $tokens);
 
@@ -206,6 +271,47 @@ class TokenTaxonomyTestCase extends TokenTestHelper {
       'vocab-description' => 'Vocab Description',
     );
     $this->assertTokens('taxonomy', $term, $tokens);
+  }
+}
+
+class TokenMenuTestCase extends TokenTestHelper {
+  public static function getInfo() {
+    return array(
+      'name' => 'Menu token tests',
+      'description' => 'Test the menu tokens.',
+      'group' => 'Token',
+    );
+  }
+
+  function setUp() {
+    parent::setUp('menu');
+  }
+
+  function testMenuTokens() {
+    $root_link = array(
+      'link_path' => '<front>',
+      'link_title' => 'Front link',
+      'menu_name' => 'primary-links',
+    );
+    menu_link_save($root_link);
+
+    $node_link = array(
+      'enabled' => TRUE,
+      'link_title' => 'Node link',
+      'plid' => $root_link['mlid'],
+      'customized' => 0,
+    );
+    $node = $this->drupalCreateNode(array('menu' => $node_link));
+
+    // Test [node:menu] tokens.
+    $tokens = array(
+      'menu' => 'Primary links',
+      'menu-link-title' => 'Node link',
+      'menu-link-mlid' => $node->menu['mlid'],
+      'menu-link-plid' => $node->menu['plid'],
+      'menu-link-plid' => $root_link['mlid'],
+    );
+    $this->assertTokens('node', $node, $tokens);
   }
 }
 

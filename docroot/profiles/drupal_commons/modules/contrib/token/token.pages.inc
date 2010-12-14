@@ -1,5 +1,5 @@
 <?php
-// $Id: token.pages.inc,v 1.7.2.2 2010/03/26 00:03:19 davereid Exp $
+// $Id: token.pages.inc,v 1.7.2.7 2010/09/30 18:30:08 davereid Exp $
 
 /**
  * @file
@@ -18,8 +18,10 @@
  * @param suffix
  *    The suffix your module will use when parsing tokens. Defaults to ']'
  * @return An HTML table containing the formatting docs.
+ *
+ * @ingroup themeable
  */
-function theme_token_help($types = 'all', $prefix = '[', $suffix = ']') {
+function theme_token_help($types = 'all', $prefix = TOKEN_PREFIX, $suffix = TOKEN_SUFFIX) {
   token_include();
   $full_list = token_get_list($types);
 
@@ -41,20 +43,28 @@ function theme_token_help($types = 'all', $prefix = '[', $suffix = ']') {
 
 /**
  * Provide a 'tree' display of nested tokens.
+ *
+ * @ingroup themeable
  */
-function theme_token_tree($token_types = array(), $global_types = TRUE, $click_insert = TRUE, $recursion_limit = 4) {
-  $info = token_get_list('all');
-
-  if ($token_types == 'all') {
-    $token_types = array_keys($info);
+function theme_token_tree($token_types = array(), $global_types = TRUE, $click_insert = TRUE) {
+  if ($token_types == 'all' || !is_array($token_types) || in_array('all', $token_types)) {
+    $token_types = array('all');
   }
   elseif ($global_types) {
     $token_types[] = 'global';
-    $token_types = array_unique($token_types);
+  }
+  else {
+    $global_key = array_search('global', $token_types);
+    if ($global_key !== FALSE) {
+      unset($token_types[$global_key]);
+    }
   }
 
   // Check for token type validity and sort.
-  $token_types = array_intersect($token_types, array_keys($info));
+  $token_types = array_unique($token_types);
+  $info = token_get_list($token_types);
+  //$token_types = array_intersect($token_types, array_keys($info));
+  $token_types = array_keys($info);
   sort($token_types);
 
   $header = array(
@@ -137,4 +147,13 @@ function _token_token_tree_format_row($token, $token_info = array(), $is_group =
 
 function _token_clean_css_identifier($id) {
   return 'token-' . str_replace(array('][', '_', ' ', ':'), '-', trim($id, '[]'));
+}
+
+/**
+ * Menu callback; prints the available tokens and values for an object.
+ */
+function token_devel_token_object($entity, $object) {
+  $tokens = token_get_values($entity, $object);
+  $tokens = array_combine($tokens->tokens, $tokens->values);
+  return kdevel_print_object($tokens);
 }

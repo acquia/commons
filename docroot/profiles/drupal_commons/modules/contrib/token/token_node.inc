@@ -1,5 +1,5 @@
 <?php
-// $Id: token_node.inc,v 1.5.4.22 2010/06/05 16:45:58 davereid Exp $
+// $Id: token_node.inc,v 1.5.4.31 2010/09/24 22:47:29 greggles Exp $
 
 /**
  * @file
@@ -35,11 +35,17 @@ function node_token_values($type, $object = NULL, $options = array()) {
       $values['language']           = filter_xss_admin($node->language);
       $values['title']              = check_plain($node->title);
       $values['title-raw']          = $node->title;
+      $values['node-path-raw']      = drupal_get_path_alias('node/'. $node->nid);
+      $values['node-path']          = check_plain($values['node-path-raw']);
+      $values['node-url']           = url('node/' . $node->nid, array('absolute' => TRUE));
       $values['author-uid']         = $node->uid;
       $values['author-name']        = check_plain($account->name);
       $values['author-name-raw']    = $account->name;
       $values['author-mail']        = check_plain($account->mail);
       $values['author-mail-raw']    = $account->mail;
+
+      $values['log-raw']            = isset($node->log) ? $node->log : '';
+      $values['log']                = filter_xss($values['log-raw']);
 
       if (module_exists('comment')) {
         $values['node_comment_count'] = isset($node->comment_count) ? $node->comment_count : 0;
@@ -73,12 +79,14 @@ function node_token_values($type, $object = NULL, $options = array()) {
           $trail[] = check_plain($title);
         }
 
-        $values['menupath']            = implode('/', $trail);
-        $values['menupath-raw']        = implode('/', $trail_raw);
+        $values['menupath']            = !empty($options['pathauto']) ? $trail : implode('/', $trail);
+        $values['menupath-raw']        = !empty($options['pathauto']) ? $trail_raw : implode('/', $trail_raw);
         $values['menu']                = check_plain($menu);
         $values['menu-raw']            = $menu;
         $values['menu-link-title']     = check_plain($menu_link['title']);
         $values['menu-link-title-raw'] = $menu_link['link_title'];
+        $values['menu-link-mlid']      = $menu_link['mlid'];
+        $values['menu-link-plid']      = $menu_link['plid'];
       }
       else {
         $values['menu']                = '';
@@ -87,6 +95,8 @@ function node_token_values($type, $object = NULL, $options = array()) {
         $values['menupath-raw']        = '';
         $values['menu-link-title']     = '';
         $values['menu-link-title-raw'] = '';
+        $values['menu-link-mlid']      = '';
+        $values['menu-link-plid']      = '';
       }
 
       // And now taxonomy, which is a bit more work. This code is adapted from
@@ -161,40 +171,54 @@ function node_token_values($type, $object = NULL, $options = array()) {
  */
 function node_token_list($type = 'all') {
   if ($type == 'node' || $type == 'all') {
-    $tokens['node']['nid']             = t('Node ID');
-    $tokens['node']['type']            = t('Node type');
-    $tokens['node']['type-name']       = t('Node type (user-friendly version)');
-    $tokens['node']['language']        = t('Node language');
-    $tokens['node']['title']           = t('Node title');
-    $tokens['node']['title-raw']       = t('Unfiltered node title.');
+    $tokens['node']['nid']             = t('The unique ID of the content item, or "node".');
+    $tokens['node']['type']            = t('The type of the node.');
+    $tokens['node']['type-name']       = t('The human-readable name of the node type.');
+    $tokens['node']['language']        = t('The language the node is written in.');
+    $tokens['node']['title']           = t('The title of the node.');
+    $tokens['node']['title-raw']       = t('The title of the node.');
+    $tokens['node']['node-path']       = t('The URL alias of the node.');
+    $tokens['node']['node-path-raw']   = t('The URL alias of the node.');
+    $tokens['node']['node-url']        = t('The URL of the node.');
 
-    $tokens['node']['author-uid']      = t("Node author's user id");
-    $tokens['node']['author-name']     = t("Node author's user name");
-    $tokens['node']['author-name-raw'] = t("Node author's user name.");
-    $tokens['node']['author-mail']     = t("Node author's e-mail.");
-    $tokens['node']['author-mail-raw'] = t("Node author's e-mail.");
-    $tokens['node']['node_comment_count'] = t("The number of comments on a node.");
-    $tokens['node']['unread_comment_count'] = t("The number of new comments on a node.");
+    $tokens['node']['author-uid']      = t("The unique ID of the author of the node.");
+    $tokens['node']['author-name']     = t("The login name of the author of the node.");
+    $tokens['node']['author-name-raw'] = t("The login name of the author of the node.");
+    $tokens['node']['author-mail']     = t("The email address of the author of the node.");
+    $tokens['node']['author-mail-raw'] = t("The email address of the author of the node.");
 
-    $tokens['node']['term']            = t("Name of top taxonomy term");
-    $tokens['node']['term-raw']        = t("Unfiltered name of top taxonomy term.");
-    $tokens['node']['term-id']         = t("ID of top taxonomy term");
-    $tokens['node']['vocab']           = t("Name of top term's vocabulary");
-    $tokens['node']['vocab-raw']       = t("Unfiltered name of top term's vocabulary.");
-    $tokens['node']['vocab-id']        = t("ID of top term's vocabulary");
-
-    // Temporarily disabled -- see notes in node_token_values.
-    // $tokens['node']['catpath']        = t("Full taxonomy tree for the topmost term");
+    $tokens['node']['log']     = t('The explanation of the most recent changes made to the node.');
+    $tokens['node']['log-raw'] = t('The explanation of the most recent changes made to the node.');
 
     $tokens['node'] += token_get_date_token_info(t('Node creation'));
-    $tokens['node']['mod-????']        = t('All tokens for node creation dates can also be used with with the "mod-" prefix; doing so will use the modification date rather than the creation date.');
+    $tokens['node'] += token_get_date_token_info(t('Node modification'), 'mod-');
 
-    $tokens['node']['menu']                = t("The name of the menu the node belongs to.");
-    $tokens['node']['menu-raw']            = t("The name of the menu the node belongs to.");
-    $tokens['node']['menupath']            = t("The menu path (as reflected in the breadcrumb), not including Home or [menu]. Separated by /.");
-    $tokens['node']['menupath-raw']        = t("The unfiltered menu path (as reflected in the breadcrumb), not including Home or [menu]. Separated by /.");
-    $tokens['node']['menu-link-title']     = t("The text used in the menu as link text for this item.");
-    $tokens['node']['menu-link-title-raw'] = t("The unfiltered text used in the menu as link text for this item.");
+    if (module_exists('comment')) {
+      $tokens['node']['node_comment_count']   = t("The number of comments posted on a node.");
+      $tokens['node']['unread_comment_count'] = t("The number of comments posted on a node since the reader last viewed it.");
+    }
+
+    if (module_exists('taxonomy')) {
+      $tokens['node']['term']            = t("Name of top taxonomy term");
+      $tokens['node']['term-raw']        = t("Unfiltered name of top taxonomy term.");
+      $tokens['node']['term-id']         = t("ID of top taxonomy term");
+      $tokens['node']['vocab']           = t("Name of top term's vocabulary");
+      $tokens['node']['vocab-raw']       = t("Unfiltered name of top term's vocabulary.");
+      $tokens['node']['vocab-id']        = t("ID of top term's vocabulary");
+      // Temporarily disabled -- see notes in node_token_values.
+      // $tokens['node']['catpath']        = t("Full taxonomy tree for the topmost term");
+    }
+
+    if (module_exists('menu')) {
+      $tokens['node']['menu']                = t("The name of the menu the node belongs to.");
+      $tokens['node']['menu-raw']            = t("The name of the menu the node belongs to.");
+      $tokens['node']['menupath']            = t("The menu path (as reflected in the breadcrumb), not including Home or [menu]. Separated by /.");
+      $tokens['node']['menupath-raw']        = t("The unfiltered menu path (as reflected in the breadcrumb), not including Home or [menu]. Separated by /.");
+      $tokens['node']['menu-link-title']     = t("The text used in the menu as link text for this item.");
+      $tokens['node']['menu-link-title-raw'] = t("The unfiltered text used in the menu as link text for this item.");
+      $tokens['node']['menu-link-mlid']      = t("The unique ID of the node's menu link.");
+      $tokens['node']['menu-link-plid']      = t("The unique ID of the node's menu link parent.");
+    }
 
     return $tokens;
   }
@@ -270,8 +294,8 @@ function book_token_values($type, $object = NULL, $options = array()) {
       $tokens['book'] = $book;
       $tokens['book-raw'] = $book_raw;
       $tokens['book_id'] = $node->book['bid'];
-      $tokens['bookpath'] = implode('/', $trail);
-      $tokens['bookpath-raw'] = implode('/', $trail_raw);
+      $tokens['bookpath'] = !empty($options['pathauto']) ? $trail : implode('/', $trail);
+      $tokens['bookpath-raw'] = !empty($options['pathauto']) ? $trail_raw : implode('/', $trail_raw);
     }
 
     return $tokens;

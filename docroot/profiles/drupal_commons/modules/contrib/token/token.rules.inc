@@ -1,5 +1,5 @@
 <?php
-// $Id: token.rules.inc,v 1.1.2.4 2009/08/05 17:17:10 fago Exp $
+// $Id: token.rules.inc,v 1.1.2.5 2010/06/09 00:48:56 davereid Exp $
 /**
  * @file
  * Rules integration for the token module.
@@ -34,7 +34,7 @@ function token_rules_evaluator() {
 function token_rules_input_evaluator_prepare($string, $variables) {
   $used_vars = array();
   foreach ($variables as $name => $info) {
-    if (strpos($string, '['. $name .':') !== FALSE) {
+    if (strpos($string, TOKEN_PREFIX. $name .':') !== FALSE) {
       $used_vars[] = $name;
     }
   }
@@ -71,7 +71,7 @@ function token_rules_input_evaluator_apply($text, $used_vars, &$state) {
           token_get_values('global', NULL, TRUE);
         }
 
-        $text = token_replace($text, $type, $vars[$name], '['. $name .':', ']');
+        $text = token_replace($text, $type, $vars[$name], TOKEN_PREFIX. $name .':', TOKEN_SUFFIX);
 
         // remember that this variable has been used and got cached
         $token_cache[$token_id] = $name;
@@ -107,7 +107,7 @@ function token_rules_input_evaluator_help($variables) {
         '#collapsed' => TRUE,
       );
       $form[$name]['content'] = array(
-        '#value' => theme('token_help', $type, '['. $name . ':', ']'),
+        '#value' => theme('token_help', $type, TOKEN_PREFIX. $name . ':', TOKEN_SUFFIX),
       );
     }
   }
