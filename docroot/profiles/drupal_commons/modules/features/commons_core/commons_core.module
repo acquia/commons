@@ -20,7 +20,7 @@ function commons_core_menu() {
       'title' => 'Drupal Commons',
       'description' => 'Configure settings for the Drupal Commons environment',
       'page callback' => 'drupal_get_form',
-      'page arguments' => array('commons_admin_settings'),
+      'page arguments' => array('commons_core_admin_settings'),
       'access arguments' => array('administer site configuration'),
       'type' => MENU_NORMAL_ITEM,
     ),
