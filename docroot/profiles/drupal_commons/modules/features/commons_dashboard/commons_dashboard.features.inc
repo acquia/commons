@@ -21,42 +21,6 @@ function commons_dashboard_homebox() {
     ),
     'blocks' => 
     array (
-      'views_og_featured-block_1' => 
-      array (
-        'module' => 'views',
-        'delta' => 'og_featured-block_1',
-        'region' => 3,
-        'movable' => 1,
-        'status' => 1,
-        'open' => 1,
-        'closable' => 1,
-        'title' => '',
-        'weight' => -36,
-      ),
-      'heartbeat_connectedheartbeat' => 
-      array (
-        'module' => 'heartbeat',
-        'delta' => 'connectedheartbeat',
-        'region' => 2,
-        'movable' => 1,
-        'status' => 1,
-        'open' => 1,
-        'closable' => 1,
-        'title' => 'Recent activity',
-        'weight' => -38,
-      ),
-      'views_most_active_users-block_1' => 
-      array (
-        'module' => 'views',
-        'delta' => 'most_active_users-block_1',
-        'region' => 3,
-        'movable' => 1,
-        'status' => 1,
-        'open' => 1,
-        'closable' => 1,
-        'title' => '',
-        'weight' => -35,
-      ),
       'views_og_dashboard_groups-block_1' => 
       array (
         'module' => 'views',
@@ -68,42 +32,6 @@ function commons_dashboard_homebox() {
         'closable' => 1,
         'title' => '',
         'weight' => -38,
-      ),
-      'views_my_recent_items-block_1' => 
-      array (
-        'module' => 'views',
-        'delta' => 'my_recent_items-block_1',
-        'region' => 1,
-        'movable' => 1,
-        'status' => 1,
-        'open' => 1,
-        'closable' => 1,
-        'title' => '',
-        'weight' => -37,
-      ),
-      'views_my_unread_items-block_1' => 
-      array (
-        'module' => 'views',
-        'delta' => 'my_unread_items-block_1',
-        'region' => 1,
-        'movable' => 1,
-        'status' => 1,
-        'open' => 1,
-        'closable' => 1,
-        'title' => '',
-        'weight' => -36,
-      ),
-      'views_recent_notices-block_1' => 
-      array (
-        'module' => 'views',
-        'delta' => 'recent_notices-block_1',
-        'region' => 3,
-        'movable' => 1,
-        'status' => 1,
-        'open' => 1,
-        'closable' => 1,
-        'title' => '',
-        'weight' => -37,
       ),
       'views_upcoming_events-block_2' => 
       array (
@@ -117,18 +45,6 @@ function commons_dashboard_homebox() {
         'title' => '',
         'weight' => -38,
       ),
-      'user_relationship_blocks_user-1' => 
-      array (
-        'module' => 'user_relationship_blocks',
-        'delta' => 'user-1',
-        'region' => 1,
-        'movable' => 1,
-        'status' => 1,
-        'open' => 1,
-        'closable' => 1,
-        'title' => 'My friends',
-        'weight' => -37,
-      ),
       'views_recent_content_all-block_1' => 
       array (
         'module' => 'views',
@@ -139,7 +55,103 @@ function commons_dashboard_homebox() {
         'open' => 1,
         'closable' => 1,
         'title' => '',
-        'weight' => 33,
+        'weight' => -38,
+      ),
+      'heartbeat_connectedheartbeat' => 
+      array (
+        'module' => 'heartbeat',
+        'delta' => 'connectedheartbeat',
+        'region' => 2,
+        'movable' => 1,
+        'status' => 1,
+        'open' => 1,
+        'closable' => 1,
+        'title' => 'Recent activity',
+        'weight' => -37,
+      ),
+      'views_my_recent_items-block_1' => 
+      array (
+        'module' => 'views',
+        'delta' => 'my_recent_items-block_1',
+        'region' => 1,
+        'movable' => 1,
+        'status' => 1,
+        'open' => 1,
+        'closable' => 1,
+        'title' => '',
+        'weight' => -37,
+      ),
+      'views_recent_notices-block_1' => 
+      array (
+        'module' => 'views',
+        'delta' => 'recent_notices-block_1',
+        'region' => 3,
+        'movable' => 1,
+        'status' => 1,
+        'open' => 1,
+        'closable' => 1,
+        'title' => '',
+        'weight' => -37,
+      ),
+      'views_og_featured-block_1' => 
+      array (
+        'module' => 'views',
+        'delta' => 'og_featured-block_1',
+        'region' => 3,
+        'movable' => 1,
+        'status' => 1,
+        'open' => 1,
+        'closable' => 1,
+        'title' => '',
+        'weight' => -36,
+      ),
+      'views_my_unread_items-block_1' => 
+      array (
+        'module' => 'views',
+        'delta' => 'my_unread_items-block_1',
+        'region' => 1,
+        'movable' => 1,
+        'status' => 1,
+        'open' => 1,
+        'closable' => 1,
+        'title' => '',
+        'weight' => -36,
+      ),
+      'views_most_active_users-block_1' => 
+      array (
+        'module' => 'views',
+        'delta' => 'most_active_users-block_1',
+        'region' => 3,
+        'movable' => 1,
+        'status' => 1,
+        'open' => 1,
+        'closable' => 1,
+        'title' => '',
+        'weight' => -35,
+      ),
+      'user_relationship_blocks_user-1' => 
+      array (
+        'module' => 'user_relationship_blocks',
+        'delta' => 'user-1',
+        'region' => 1,
+        'movable' => 1,
+        'status' => 1,
+        'open' => 1,
+        'closable' => 1,
+        'title' => 'My friends',
+        'weight' => -35,
+      ),
+      'views_users_online-block_1' => 
+      array (
+        'module' => 'views',
+        'delta' => 'users_online-block_1',
+        'region' => 1,
+        'movable' => 1,
+        'status' => 1,
+        'open' => 1,
+        'closable' => 1,
+        'title' => '',
+        'weight' => -34,
       ),
     ),
     'widths' => 
@@ -152,7 +164,7 @@ function commons_dashboard_homebox() {
     'path' => 'dashboard',
     'menu' => 0,
     'enabled' => 1,
-    'full' => 0,
+    'full' => 1,
     'custom' => 0,
     'roles' => 
     array (
