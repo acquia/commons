@@ -21,3 +21,22 @@ function commons_core_uninstall() {
   variable_del('commons_email_selective_group');
   variable_del('commons_group_admin_edit_comments');
 }
+
+/**
+ * Upgrade to 1.2
+ */
+function commons_core_update_6000() {
+  // Remove custom primary menu items added by Commons
+  db_query("DELETE FROM {menu_links} WHERE menu_name = 'primary-links' AND module = 'commons'");
+  
+  // Enable new features
+  $features = array(
+    'commons_admin',
+    'commons_seo',
+    'commons_home',
+    'commons_dashboard',
+  );
+  features_install_modules($features);
+  
+  return array();
+}
