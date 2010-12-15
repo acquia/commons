@@ -105,6 +105,10 @@ CKEDITOR.lang['fi'] =
 		targetTop		: 'Päällimmäinen ikkuna (_top)',
 		targetSelf		: 'Sama ikkuna (_self)',
 		targetParent	: 'Ylemmän tason ikkuna (_parent)',
+		langDirLTR		: 'Vasemmalta oikealle (LTR)',
+		langDirRTL		: 'Oikealta vasemmalle (RTL)',
+		styles			: 'Tyyli',
+		cssClasses		: 'Tyylitiedoston luokat',
 
 		// Put the voice-only part of the label in the span.
 		unavailable		: '%1<span class="cke_accessibility">, ei saatavissa</span>'
@@ -112,7 +116,7 @@ CKEDITOR.lang['fi'] =
 
 	contextmenu :
 	{
-		options : 'Context Menu Options' // MISSING
+		options : 'Pikavalikon ominaisuudet'
 	},
 
 	// Special char dialog.
@@ -120,14 +124,14 @@ CKEDITOR.lang['fi'] =
 	{
 		toolbar		: 'Lisää erikoismerkki',
 		title		: 'Valitse erikoismerkki',
-		options : 'Special Character Options' // MISSING
+		options : 'Erikoismerkin ominaisuudet'
 	},
 
 	// Link dialog.
 	link :
 	{
 		toolbar		: 'Lisää linkki/muokkaa linkkiä',
-		other 		: '<other>', // MISSING
+		other 		: '<muu>',
 		menu		: 'Muokkaa linkkiä',
 		title		: 'Linkki',
 		info		: 'Linkin tiedot',
@@ -187,6 +191,30 @@ CKEDITOR.lang['fi'] =
 		title		: 'Ankkurin ominaisuudet',
 		name		: 'Nimi',
 		errorName	: 'Ankkurille on kirjoitettava nimi'
+	},
+
+	// List style dialog
+	list:
+	{
+		numberedTitle		: 'Numeroidun listan ominaisuudet',
+		bulletedTitle		: 'Numeroimattoman listan ominaisuudet',
+		type				: 'Tyyppi',
+		start				: 'Alku',
+		validateStartNumber				:'Listan ensimmäisen numeron tulee olla kokonaisluku.',
+		circle				: 'Ympyrä',
+		disc				: 'Levy',
+		square				: 'Neliö',
+		none				: 'Ei mikään',
+		notset				: '<ei asetettu>',
+		armenian			: 'Armeenialainen numerointi',
+		georgian			: 'Georgialainen numerointi (an, ban, gan, etc.)',
+		lowerRoman			: 'Pienet roomalaiset (i, ii, iii, iv, v, jne.)',
+		upperRoman			: 'Isot roomalaiset (I, II, III, IV, V, jne.)',
+		lowerAlpha			: 'Pienet aakkoset (a, b, c, d, e, jne.)',
+		upperAlpha			: 'Isot aakkoset (A, B, C, D, E, jne.)',
+		lowerGreek			: 'Pienet kreikkalaiset (alpha, beta, gamma, jne.)',
+		decimal				: 'Desimaalit (1, 2, 3, jne.)',
+		decimalLeadingZero	: 'Desimaalit, alussa nolla (01, 02, 03, jne.)'
 	},
 
 	// Find And Replace Dialog
@@ -387,7 +415,7 @@ CKEDITOR.lang['fi'] =
 		lockRatio	: 'Lukitse suhteet',
 		unlockRatio	: 'Vapauta suhteet',
 		resetSize	: 'Alkuperäinen koko',
-		border		: 'Raja',
+		border		: 'Kehys',
 		hSpace		: 'Vaakatila',
 		vSpace		: 'Pystytila',
 		align		: 'Kohdistus',
@@ -400,7 +428,7 @@ CKEDITOR.lang['fi'] =
 		urlMissing	: 'Kuvan lähdeosoite puuttuu.',
 		validateWidth	: 'Leveyden täytyy olla kokonaisluku.',
 		validateHeight	: 'Korkeuden täytyy olla kokonaisluku.',
-		validateBorder	: 'Reunan täytyy olla kokonaisluku.',
+		validateBorder	: 'Kehyksen täytyy olla kokonaisluku.',
 		validateHSpace	: 'HSpace-määrityksen täytyy olla kokonaisluku.',
 		validateVSpace	: 'VSpace-määrityksen täytyy olla kokonaisluku.'
 	},
@@ -408,7 +436,7 @@ CKEDITOR.lang['fi'] =
 	// Flash Dialog
 	flash :
 	{
-		properties		: 'Flash ominaisuudet',
+		properties		: 'Flash-ominaisuudet',
 		propertiesTab	: 'Ominaisuudet',
 		title			: 'Flash ominaisuudet',
 		chkPlay			: 'Automaattinen käynnistys',
@@ -484,7 +512,7 @@ CKEDITOR.lang['fi'] =
 	{
 		toolbar	: 'Hymiö',
 		title	: 'Lisää hymiö',
-		options : 'Smiley Options' // MISSING
+		options : 'Hymiön ominaisuudet'
 	},
 
 	elementsPath :
@@ -536,7 +564,7 @@ CKEDITOR.lang['fi'] =
 	{
 		button			: 'Pohjat',
 		title			: 'Sisältöpohjat',
-		options : 'Template Options', // MISSING
+		options : 'Sisältöpohjan ominaisuudet',
 		insertOption	: 'Korvaa editorin koko sisältö',
 		selectPromptMsg	: 'Valitse pohja editoriin<br>(aiempi sisältö menetetään):',
 		emptyListMsg	: '(Ei määriteltyjä pohjia)'
@@ -657,6 +685,7 @@ CKEDITOR.lang['fi'] =
 	scayt :
 	{
 		title			: 'Oikolue kirjoitettaessa',
+		opera_title		: 'Opera ei tue tätä ominaisuutta',
 		enable			: 'Ota käyttöön oikoluku kirjoitettaessa',
 		disable			: 'Poista käytöstä oikoluku kirjoitetaessa',
 		about			: 'Tietoja oikoluvusta kirjoitetaessa',
@@ -668,9 +697,23 @@ CKEDITOR.lang['fi'] =
 		ignoreAll		: 'Ohita kaikki',
 		addWord			: 'Lisää sana',
 		emptyDic		: 'Sanakirjan nimi on annettava.',
+
 		optionsTab		: 'Asetukset',
+		allCaps			: 'Ohita sanat, jotka on kirjoitettu kokonaan isoilla kirjaimilla',
+		ignoreDomainNames : 'Ohita verkkotunnukset',
+		mixedCase		: 'Ohita sanat, joissa on sekoitettu isoja ja pieniä kirjaimia',
+		mixedWithDigits	: 'Ohita sanat, joissa on numeroita',
+
 		languagesTab	: 'Kielet',
+
 		dictionariesTab	: 'Sanakirjat',
+		dic_field_name	: 'Sanakirjan nimi',
+		dic_create		: 'Luo',
+		dic_restore		: 'Palauta',
+		dic_delete		: 'Poista',
+		dic_rename		: 'Nimeä uudelleen',
+		dic_info		: 'Oletuksena sanakirjat tallennetaan evästeeseen, mutta evästeiden koko on kuitenkin rajallinen. Sanakirjan kasvaessa niin suureksi, ettei se enää mahdu evästeeseen, sanakirja täytyy tallentaa palvelimellemme. Tallentaaksesi sanakirjasi palvelimellemme tulee sinun antaa sille nimi. Jos olet jo tallentanut sanakirjan, anna sen nimi ja klikkaa Palauta-painiketta',
+
 		aboutTab		: 'Tietoa'
 	},
 
@@ -698,11 +741,18 @@ CKEDITOR.lang['fi'] =
 	colordialog :
 	{
 		title		: 'Valitse väri',
+		options	:	'Värin ominaisuudet',
 		highlight	: 'Korostus',
 		selected	: 'Valittu',
 		clear		: 'Poista'
 	},
 
 	toolbarCollapse	: 'Kutista työkalupalkki',
-	toolbarExpand	: 'Laajenna työkalupalkki'
+	toolbarExpand	: 'Laajenna työkalupalkki',
+
+	bidi :
+	{
+		ltr : 'Tekstin suunta vasemmalta oikealle',
+		rtl : 'Tekstin suunta oikealta vasemmalle'
+	}
 };
