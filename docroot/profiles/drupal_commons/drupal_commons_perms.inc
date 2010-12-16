@@ -826,6 +826,15 @@ function drupal_commons_import_permissions() {
       '1' => 'authenticated user',
     ),
   );
+  
+  // Permission: view imagecache group_images_showcase
+  $permissions[] = array(
+    'name' => 'view imagecache group_images_showcase',
+    'roles' => array(
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
+    ),
+  );
 
   // Permission: view imagecache group_images_thumb
   $permissions[] = array(

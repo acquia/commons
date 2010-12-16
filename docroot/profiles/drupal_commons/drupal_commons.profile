@@ -56,8 +56,14 @@ function drupal_commons_profile_modules() {
     'blog', 'aggregator', 'poll',  'search', 'tracker', 'php', 'path',
     'contact',
     
-    // Chaos Tools
-    'ctools', 'page_manager', 'panels', 'context', 'context_contrib', 'context_ui',
+    // CTools
+    'ctools', 
+    
+    // Panels
+    'page_manager', 'panels', 
+    
+    // Context
+    'context', 'context_ui',
     
     // Views
     'views', 'views_ui', 'views_content',
@@ -119,14 +125,11 @@ function drupal_commons_profile_modules() {
     // Theme
     'skinr',
     
-    // Commons
-    'commons',
-    
     // Strongarm
     'strongarm', 
     
     // Features
-    'features', 'commons_core', 'commons_notifications',
+    'features',
   );
 
   return $modules;
@@ -141,11 +144,9 @@ function drupal_commons_profile_modules() {
  *   language-specific profiles.
  */
 function drupal_commons_profile_details() {
-  $image = theme('image', 'profiles/drupal_commons/images/logo.png', t('Drupal Commons'), t('Drupal Commons'));
-  
   return array(
     'name' => 'Drupal Commons',
-    'description' => $image . '<br/>Social collaboration software.'
+    'description' => 'Social collaboration software.'
   );
 }
 
@@ -177,11 +178,11 @@ function drupal_commons_profile_task_list() {
  *   modify the $task, otherwise discarded.
  */
 function drupal_commons_profile_tasks(&$task, $url) {
+  drupal_commons_enable_features();
   drupal_commons_build_directories();
   drupal_commons_config_taxonomy();
   drupal_commons_config_profile();
   drupal_commons_config_flag();
-  drupal_commons_config_menu();
   drupal_commons_config_roles();
   drupal_commons_config_perms();
   drupal_commons_config_filter();
@@ -198,6 +199,21 @@ function drupal_commons_profile_tasks(&$task, $url) {
 }
 
 /**
+ * Enable the Commons features
+ */
+function drupal_commons_enable_features() {
+  $features = array(
+    'commons_core',
+    'commons_notifications',
+    'commons_admin',
+    'commons_seo',
+    'commons_home',
+    'commons_dashboard',
+  );
+  features_install_modules($features);
+}
+
+/**
  * Create necessary directories
  */
 function drupal_commons_build_directories() {
@@ -209,7 +225,7 @@ function drupal_commons_build_directories() {
   }
 }
 
-/*
+/**
  * Configure taxonomy
  * 
  * Add and configure vocabularies
@@ -301,14 +317,6 @@ function drupal_commons_config_flag() {
 }
 
 /**
- * Configure menu
- */
-function drupal_commons_config_menu() {
-  // Create additional primary menu items
-  commons_build_menu_dropdowns(FALSE);
-}
-
-/**
  * Configure input filters
  */
 function drupal_commons_config_filter() {
@@ -373,28 +381,28 @@ function drupal_commons_config_filter() {
 /**
  * Configure password policy
  */
-function drupal_commons_config_password() {
-  // Create a password policy
-  $policy = array(
+function drupal_commons_config_password() {  
+  // Add the password policy
+  $policy = new stdClass;
+  $policy->pid = 1;
+  $policy->name = t('Constraints');
+  $policy->description = t('Default list of password constraints');
+  $policy->enabled = 1;
+  $policy->policy = array(
     'alphanumeric' => 7,  // Contain at least 7 alphanumeric chars
     'username' => 1,      // Must not equal the username
     'length' => 7,        // Must be longer than 7 chars
-    'punctuation' => 1,   // Punctuation is required
+    'punctuation' => 0,   // Punctuation is required
   );
-  
-  // Add the password policy
-  db_query("INSERT INTO {password_policy} (pid, name, description, enabled, policy, created)
-    VALUES (%d, '%s', '%s', %d, '%s', %d)",
-    1,
-    t('Constraints'),
-    t('Default list of password constraints'),
-    1,
-    serialize($policy),
-    time()
-  );
+  $policy->policy = serialize($policy->policy);
+  $policy->created = time();
+  drupal_write_record('password_policy', $policy);
   
   // Attach the policy to the authenticated user role
-  db_query("INSERT INTO {password_policy_role} (rid, pid) VALUES (2, 1)");
+  $policy_role = new stdClass;
+  $policy_role->rid = 2;
+  $policy_role->pid = $policy->pid;
+  drupal_write_record('password_policy_role', $policy_role);
   
   // Make the restrictions visible when changing your password
   variable_set('password_policy_show_restrictions', 1);
@@ -503,10 +511,6 @@ function drupal_commons_config_ctools() {
  * Configure roles
  */
 function drupal_commons_config_roles() {
-  // Make sure default roles are set right (just in case)
-  db_query("UPDATE {role} SET rid = 1 WHERE name = 'anonymous user'");
-  db_query("UPDATE {role} SET rid = 2 WHERE name = 'authenticated user'");
-  
   // Add the "Community Manager" role
   db_query("INSERT INTO {role} (rid, name) VALUES (3, '%s')", t(DRUPAL_COMMONS_MANAGER_ROLE));
   
@@ -693,9 +697,6 @@ function drupal_commons_config_vars() {
   variable_set('shoutbox_escape_html', 0);
   variable_set('shoutbox_expire', 120);
   variable_set('shoutbox_showamount_block', 8);
-  
-  // Force anonymous users to login
-  variable_set('commons_force_login', 1);
   
   // Tell getid3 where the library is
   variable_set('getid3_path', 'profiles/drupal_commons/libraries/getid3/getid3');
