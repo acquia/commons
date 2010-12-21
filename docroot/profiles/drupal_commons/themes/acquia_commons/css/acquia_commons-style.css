@@ -951,6 +951,7 @@ h2.block-title {
 	background-color: #fff;
 	color: #333;
 	margin: 0 auto;
+  float: none;
 }
 
 .breadcrumb {
@@ -2088,10 +2089,6 @@ panels-pane.commons-colors-grayblue .inner {
 
 /*Shoutbox module*/
 
-.shoutbox-add-form {
-	margin: 0 0 10px 0;
-}
-
 .shoutbox-add-form:after,
 .shoutbox-admin-links:after,
 .shoutbox-msg:after {
@@ -2102,14 +2099,15 @@ panels-pane.commons-colors-grayblue .inner {
 	visibility: hidden;
 }
 
-.shoutbox-add-form input.form-text {
+#shoutbox-add-form input.form-text {
 	float: left;
 	font-size: 12px;
 	height: 18px;
 	line-height: 18px;
-	margin: 0;
+	margin: 0 0 4px;
 	padding: 2px 2px;
-	width: 74%;
+	width: 99%;
+  max-width: 99%;
 }
 
 .page-home .shoutbox-add-form input.form-text {
@@ -2133,6 +2131,12 @@ panels-pane.commons-colors-grayblue .inner {
 
 #shoutbox-body {
 	overflow: visible;
+}
+
+#shoutbox-body tr,
+#shoutbox-body td, 
+#shoutbox-body tbody {
+  border: none;
 }
 
 .shoutbox-admin-links {
@@ -2269,6 +2273,16 @@ div.shoutbox-even {
 
 #homebox .homebox-portlet .homebox-portlet-inner .portlet-content {
 	padding: 10px;
+}
+
+#homebox .homebox-portlet {
+  float: none;
+  width: auto;
+}
+
+/* Temporary hack needed until homebox can handle hiding these */
+body#pid-dashboard h1.title, body#pid-dashboard #breadcrumbs {
+  display: none;
 }
 
 /* Group Info */
