@@ -23,7 +23,8 @@ function drupal_commons_import_permissions() {
   $permissions[] = array(
     'name' => 'access content',
     'roles' => array(
-      '0' => 'authenticated user',
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
     ),
   );
 
