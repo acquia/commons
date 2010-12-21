@@ -178,24 +178,6 @@ function commons_core_menu_default_menu_links() {
     'weight' => '-50',
     'parent_path' => 'community',
   );
-  // Exported menu link: primary-links:user
-  $menu_links['primary-links:user'] = array(
-    'menu_name' => 'primary-links',
-    'link_path' => 'user',
-    'router_path' => 'user',
-    'link_title' => 'My stuff',
-    'options' => array(
-      'attributes' => array(
-        'title' => '',
-      ),
-    ),
-    'module' => 'menu',
-    'hidden' => '0',
-    'external' => '0',
-    'has_children' => '1',
-    'expanded' => '1',
-    'weight' => '20',
-  );
   // Exported menu link: primary-links:myuserpoints
   $menu_links['primary-links:myuserpoints'] = array(
     'menu_name' => 'primary-links',
@@ -226,24 +208,23 @@ function commons_core_menu_default_menu_links() {
     'weight' => '-20',
     'parent_path' => 'user',
   );
-  // Exported menu link: primary-links:myprofile
-  $menu_links['primary-links:myprofile'] = array(
+  // Exported menu link: primary-links:user
+  $menu_links['primary-links:user'] = array(
     'menu_name' => 'primary-links',
-    'link_path' => 'myprofile',
-    'router_path' => 'myprofile',
-    'link_title' => 'My profile',
+    'link_path' => 'user',
+    'router_path' => 'user',
+    'link_title' => 'My stuff',
     'options' => array(
       'attributes' => array(
         'title' => '',
       ),
     ),
-    'module' => 'commons',
+    'module' => 'menu',
     'hidden' => '0',
     'external' => '0',
-    'has_children' => '0',
-    'expanded' => '0',
-    'weight' => '-50',
-    'parent_path' => 'user',
+    'has_children' => '1',
+    'expanded' => '1',
+    'weight' => '20',
   );
   // Exported menu link: primary-links:users
   $menu_links['primary-links:users'] = array(
@@ -272,7 +253,6 @@ function commons_core_menu_default_menu_links() {
   t('My bookmarks');
   t('My friends');
   t('My points');
-  t('My profile');
   t('My stuff');
   t('My unread');
   t('Polls');

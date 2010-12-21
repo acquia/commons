@@ -10,7 +10,7 @@ function commons_core_context_default_contexts() {
   $context->api_version = 3;
   $context->name = 'context_ui-content-global_content';
   $context->description = 'Site-wide content pages';
-  $context->tag = '';
+  $context->tag = 'commons';
   $context->conditions = array(
     'path' => array(
       'values' => array(
@@ -18,7 +18,6 @@ function commons_core_context_default_contexts() {
         'featured' => 'featured',
         'notices' => 'notices',
       ),
-      'options' => array(),
     ),
   );
   $context->reactions = array(
@@ -27,20 +26,14 @@ function commons_core_context_default_contexts() {
         'views-tag_cloud-block_1' => array(
           'module' => 'views',
           'delta' => 'tag_cloud-block_1',
-          'weight' => 43,
           'region' => 'sidebar_last',
-          'status' => '0',
-          'label' => 'Popular Tags',
-          'type' => 'context_ui',
+          'weight' => 0,
         ),
         'views-most_active_users-block_1' => array(
           'module' => 'views',
           'delta' => 'most_active_users-block_1',
-          'weight' => 44,
           'region' => 'sidebar_last',
-          'status' => '0',
-          'label' => 'Most Active Users',
-          'type' => 'context_ui',
+          'weight' => 1,
         ),
       ),
     ),
@@ -50,6 +43,7 @@ function commons_core_context_default_contexts() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Site-wide content pages');
+  t('commons');
 
   $export['context_ui-content-global_content'] = $context;
   $context = new stdClass;
@@ -57,7 +51,7 @@ function commons_core_context_default_contexts() {
   $context->api_version = 3;
   $context->name = 'context_ui-global-global';
   $context->description = 'Show on every page';
-  $context->tag = '';
+  $context->tag = 'commons';
   $context->conditions = array(
     'sitewide' => array(
       'values' => array(
@@ -94,6 +88,7 @@ function commons_core_context_default_contexts() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Show on every page');
+  t('commons');
 
   $export['context_ui-global-global'] = $context;
   $context = new stdClass;
@@ -101,7 +96,7 @@ function commons_core_context_default_contexts() {
   $context->api_version = 3;
   $context->name = 'context_ui-group-group';
   $context->description = 'Show on group context';
-  $context->tag = '';
+  $context->tag = 'commons';
   $context->conditions = array(
     'context_og_condition_group_type' => array(
       'values' => array(
@@ -171,6 +166,7 @@ function commons_core_context_default_contexts() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Show on group context');
+  t('commons');
 
   $export['context_ui-group-group'] = $context;
   $context = new stdClass;
@@ -178,7 +174,7 @@ function commons_core_context_default_contexts() {
   $context->api_version = 3;
   $context->name = 'context_ui-profile-profile';
   $context->description = 'User Profile';
-  $context->tag = '';
+  $context->tag = 'commons';
   $context->conditions = array(
     'user_page' => array(
       'values' => array(
@@ -218,6 +214,7 @@ function commons_core_context_default_contexts() {
   // Translatables
   // Included for use with string extractors like potx.
   t('User Profile');
+  t('commons');
 
   $export['context_ui-profile-profile'] = $context;
   $context = new stdClass;
@@ -225,7 +222,7 @@ function commons_core_context_default_contexts() {
   $context->api_version = 3;
   $context->name = 'context_ui-users-user_browser';
   $context->description = 'User Browser';
-  $context->tag = '';
+  $context->tag = 'commons';
   $context->conditions = array(
     'views' => array(
       'values' => array(
@@ -268,6 +265,7 @@ function commons_core_context_default_contexts() {
   // Translatables
   // Included for use with string extractors like potx.
   t('User Browser');
+  t('commons');
 
   $export['context_ui-users-user_browser'] = $context;
   return $export;
