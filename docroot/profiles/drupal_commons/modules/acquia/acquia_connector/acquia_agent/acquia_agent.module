@@ -1,5 +1,5 @@
 <?php
-// $Id: acquia_agent.module,v 1.17.2.3 2010/06/17 03:16:19 pwolanin Exp $
+// $Id: acquia_agent.module,v 1.17.2.6 2010/09/15 21:39:18 pwolanin Exp $
 
 /**
  * @file
@@ -18,6 +18,7 @@ define('SUBSCRIPTION_MESSAGE_FUTURE'  , 1500);
 define('SUBSCRIPTION_MESSAGE_EXPIRED' , 1600);
 define('SUBSCRIPTION_MESSAGE_INVALID' , 1700);
 define('SUBSCRIPTION_VALIDATION_ERROR', 1800);
+define('SUBSCRIPTION_PROVISION_ERROR' , 9000);
 
 /**
  * Subscription message lifetime defined by the Acquia Network.
@@ -29,7 +30,7 @@ define('SUBSCRIPTION_MESSAGE_LIFETIME', 15*60);
  */
 function acquia_agent_menu() {
   $items['admin/settings/acquia-agent'] = array(
-    'title' => 'Acquia settings',
+    'title' => 'Acquia Network settings',
     'description' => 'Connect your site to the Acquia Network.',
     'page callback' => 'acquia_agent_settings_page',
     'file' => 'acquia_agent.pages.inc',
@@ -48,17 +49,25 @@ function acquia_agent_menu() {
  * Implementation of hook_init().
  */
 function acquia_agent_init() {
-  if (empty($_POST) && user_access('administer site configuration') && (!acquia_agent_has_credentials())) {
+  if (arg(2) != 'acquia-agent' && empty($_POST) && user_access('administer site configuration') && (!acquia_agent_has_credentials())) {
+    $message = t('Get a <a href="@acquia-free">free 30 day trial</a> of Drupal support, enhanced content search, comment spam blocking and more. If you have an Acquia Network subscription, <a href="@settings">connect now</a>.', array('@acquia-free' => url('admin/settings/acquia-agent'), '@settings' => url('admin/settings/acquia-agent/connection')));
     if (arg(0) == 'admin') {
-      drupal_set_message(t('Subscribe to the <a href="@acquia-network">Acquia Network</a> to access Network Services and Technical Support for your Drupal site.<br /> 
-To learn how Acquia can help you manage your Drupal site, visit the <a href="@acquia-ps">Acquia Products &amp; Services page</a>.<br />
-Once subscribed, please enter your subscription key and identifier on the <a href="@settings">settings page</a>.<br />
-To turn this message off, disable the Acquia Network Connector modules.', array('@acquia-network' => 'http://acquia.com/network', '@acquia-ps' => 'http://acquia.com/products-services', '@settings' => url('admin/settings/acquia-agent'))), 'warning', FALSE);
+      $message .= '<br />'. t('To turn this message off, disable the Acquia Network Connector <a href="@admin-modules">modules</a>.', array('@admin-modules' => url('admin/build/modules', array('fragment' => 'system-modules'))));
     }
-    else {
-      drupal_set_message(t('If you have an <a href="@acquia-network">Acquia Network subscription</a>, please enter your subscription key and identifier on the <a href="@settings">settings page</a>.', array('@acquia-network' => 'http://acquia.com/network', '@settings' => url('admin/settings/acquia-agent'))), 'warning', FALSE);
-    }
+    drupal_set_message($message, 'warning', FALSE);
   }
+}
+
+/**
+ * Implementation of hook_theme().
+ */
+function acquia_agent_theme() {
+  return array(
+    'acquia_agent_banner_form' => array(
+      'arguments' => array('form' => NULL),
+      'file' => 'acquia_agent.pages.inc',
+    ),
+  );
 }
 
 /**
@@ -114,6 +123,9 @@ function acquia_agent_check_subscription($params = array()) {
   return $subscription;
 }
 
+function acquia_agent_report_xmlrpc_error() {
+  drupal_set_message(t('Error: @message (@errno)', array('@message' => xmlrpc_error_msg(), '@errno' => xmlrpc_errno())), 'error');
+}
 /**
  * Implementation of hook_update_status_alter().
  *
@@ -129,12 +141,12 @@ function acquia_agent_check_subscription($params = array()) {
  * @see update_calculate_project_data()
  */
 function acquia_agent_update_status_alter(&$projects) {
-  
+
   if (!$subscription = acquia_agent_has_update_service()) {
     // Get subscription data or return if the service is not enabled.
     return;
   }
-  
+
   foreach ($projects as $project => $project_info) {
     if ($project == 'drupal') {
       if (isset($subscription['update'])) {
@@ -195,7 +207,7 @@ function acquia_agent_has_update_service() {
     // that the web service willingly told us to not do update notifications.
     return FALSE;
   }
-  
+
   return $subscription;
 }
 
@@ -324,13 +336,6 @@ function acquia_agent_theme_registry_alter(&$theme_registry) {
   if (isset($theme_registry['admin_menu_icon'])) {
     $theme_registry['admin_menu_icon']['function'] = 'acquia_agent_menu_icon';
   }
-  // Re-theme the modules page to add extra warnings inline.
-  
-  if (isset($theme_registry['system_modules'])) {
-    $theme_registry['system_modules']['function'] = 'acquia_agent_system_modules';
-    $theme_registry['system_modules']['file'] = 'acquia_agent.pages.inc';
-    $theme_registry['system_modules']['path'] = drupal_get_path('module', 'acquia_agent');
-  }
 }
 
 /**
@@ -365,23 +370,7 @@ function acquia_agent_call($method, $params, $identifier = NULL, $key = NULL, $a
   $path = drupal_get_path('module', 'acquia_agent');
   require_once $path .'/acquia_agent_streams.inc';
 
-  if (empty($acquia_network_address)) {
-    $acquia_network_address = acquia_agent_settings('acquia_network_address');
-  }
-  // Strip protocol (scheme) from Network address
-  $uri = parse_url($acquia_network_address);
-  $port = isset($uri['port']) ? ':'. $uri['port'] : '';
-  $path = isset($uri['path']) ? $uri['path'] : '';
-  $acquia_network_address = $uri['host'] . $port . $path;
-  // Add a scheme based on PHP's capacity.
-  if (in_array('ssl', stream_get_transports(), TRUE) && !defined('ACQUIA_DEVELOPMENT_NOSSL')) {
-    // OpenSSL is available in PHP
-    $acquia_network_address = 'https://'. $acquia_network_address;
-  }
-  else {
-    $acquia_network_address = 'http://'. $acquia_network_address;
-  }
-  $acquia_network_address .= '/xmlrpc.php';
+  $acquia_network_address = acquia_agent_network_address($acquia_network_address);
   $host = isset($_SERVER["SERVER_ADDR"]) ? $_SERVER["SERVER_ADDR"] : '';
   $data = array(
     'authenticator' => _acquia_agent_authenticator($params, $identifier, $key),
@@ -425,6 +414,30 @@ function acquia_agent_connection_error_message() {
     }
   }
   return FALSE;
+}
+
+/**
+ * Helper function to build the xmlrpc target address.
+ */
+function acquia_agent_network_address($acquia_network_address = NULL) {
+  if (empty($acquia_network_address)) {
+    $acquia_network_address = acquia_agent_settings('acquia_network_address');
+  }
+  // Strip protocol (scheme) from Network address
+  $uri = parse_url($acquia_network_address);
+  $port = isset($uri['port']) ? ':'. $uri['port'] : '';
+  $path = isset($uri['path']) ? $uri['path'] : '';
+  $acquia_network_address = $uri['host'] . $port . $path;
+  // Add a scheme based on PHP's capacity.
+  if (in_array('ssl', stream_get_transports(), TRUE) && !defined('ACQUIA_DEVELOPMENT_NOSSL')) {
+    // OpenSSL is available in PHP
+    $acquia_network_address = 'https://'. $acquia_network_address;
+  }
+  else {
+    $acquia_network_address = 'http://'. $acquia_network_address;
+  }
+  $acquia_network_address .= '/xmlrpc.php';
+  return $acquia_network_address;
 }
 
 /**
@@ -473,7 +486,7 @@ function acquia_agent_settings($variable_name) {
  * @param $count
  *   The number of characters (bytes) to return in the string.
  */
-function acquia_agent_random_bytes($count){
+function acquia_agent_random_bytes($count) {
   static $random_state;
   // We initialize with the somewhat random PHP process ID on the first call.
   if (empty($random_state)) {
@@ -498,7 +511,7 @@ function acquia_agent_random_bytes($count){
 /**
  * API function used by others to ensure version information is loaded.
  *
- * Saves us some cycles to not load it each time, when it is actually 
+ * Saves us some cycles to not load it each time, when it is actually
  * not needed. We store this in a separate file, so that the Acquia
  * build process only needs to alter that file instead of the main
  * module file.
@@ -512,17 +525,16 @@ function acquia_agent_load_versions() {
  * Implementation of hook_form_[form_id]_alter()..
  */
 function acquia_agent_form_system_modules_alter(&$form, &$form_state) {
-  
+
   if (isset($form['description']['acquia_search'])) {
     $subscription = acquia_agent_settings('acquia_subscription_data');
-    
+
     if (!module_exists('acquia_search') && empty($subscription['active'])) {
       $form['status']['#disabled_modules'][] = 'acquia_search';
       $text = 'Acquia Search requires an <a href="@network-url">Acquia Network subscription</a>';
       $message = t($text, array('@network-url' => 'http://acquia.com/products-services/acquia-search'));
-      $form['description']['acquia_search']['#extra'] = '<div style="padding-left:5px; margin:8px 0px" class="messages warning" id="acquia-agent-no-search">'. $message .'</div>';
+      $form['description']['acquia_search']['#value'] = '<div style="padding-left:5px; margin:8px 0px" class="messages warning" id="acquia-agent-no-search">' . $message . '</div>' . $form['description']['acquia_search']['#value'];
     }
   }
 }
-
 

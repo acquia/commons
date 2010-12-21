@@ -1,5 +1,5 @@
 <?php
-// $Id: mollom.inc,v 1.1.2.3 2010/01/29 15:06:32 dries Exp $
+// $Id: mollom.inc,v 1.1.2.7 2010/09/13 23:52:36 sun Exp $
 
 /**
  * @file
@@ -66,20 +66,48 @@ function _mollom_authentication($public_key = NULL, $private_key = NULL) {
  * Refreshes the list of Mollom's XML-RPC servers.
  */
 function _mollom_retrieve_server_list() {
-  // Start from a hard coded list of servers:
+  // Start from a hard-coded list of servers.
   $servers = array('http://xmlrpc1.mollom.com', 'http://xmlrpc2.mollom.com', 'http://xmlrpc3.mollom.com');
+  $messages = array();
 
-  // Use the list of servers to retrieve a list of servers from mollom.com:
+  // mollom.getServerList cannot use mollom() as we need to prevent infinite
+  // recursion. In addition, we handle returned error codes differently here,
+  // since MOLLOM_REDIRECT and MOLLOM_REFRESH, as well as any other
+  // communication error requires us to skip to the next server to retrieve a
+  // new server list. We only ever abort, if a server returns MOLLOM_ERROR, in
+  // which case there must be a configuration error (e.g., invalid API keys).
+  $method = 'mollom.getServerList';
   foreach ($servers as $server) {
-    $result = xmlrpc($server . '/' . MOLLOM_API_VERSION, 'mollom.getServerList', _mollom_authentication());
-    if (!xmlrpc_error()) {
-      return $result;
+    $result = xmlrpc($server . '/' . MOLLOM_API_VERSION, $method, _mollom_authentication());
+    if ($result === FALSE && ($error = xmlrpc_error())) {
+      // In any case, log the error.
+      $messages[] = array(
+        'Error @errno from %server for %method: %message' => array(
+          '@errno' => $error->code,
+          '%server' => $server,
+          '%method' => $method,
+          '%message' => $error->message,
+        ),
+      );
+      // Skip to the next server in case of any error, except if we have a
+      // MOLLOM_ERROR, which indicates a bogus configuration. In this case, stop
+      // trying, since all servers will fail.
+      if ($error->code === MOLLOM_ERROR) {
+        break;
+      }
     }
+    // Otherwise, we have a valid result.
     else {
-      watchdog('mollom', 'Error @errno: %server - %message - mollom.getServerList', array('@errno' => xmlrpc_errno(), '%server' => $server, '%message' => xmlrpc_error_msg()), WATCHDOG_ERROR);
+      break;
     }
   }
-
-  return xmlrpc_errno();
+  if (is_array($result)) {
+    _mollom_watchdog_multiple($messages, WATCHDOG_DEBUG);
+    return $result;
+  }
+  else {
+    _mollom_watchdog_multiple($messages, WATCHDOG_ERROR);
+    return xmlrpc_errno();
+  }
 }
 

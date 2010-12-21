@@ -1,12 +1,12 @@
 <?php
-// $Id: acquia_search.module 5257 2010-06-10 04:36:20Z buildbot $
+// $Id: acquia_search.module 5289 2010-08-12 04:42:20Z buildbot $
 
 /**
  * @file
  *   Integration between Acquia Drupal and Acquia's hosted solr search service.
  */
 
-define('ACQUIA_SEARCH_VERSION', "6.x-1.5256");
+define('ACQUIA_SEARCH_VERSION', "6.x-1.5288");
 
 /**
  * Implementation of hook_enable().
@@ -140,9 +140,20 @@ function acquia_search_apachesolr_modify_query($query, &$params, $caller) {
   // Set the qt to edismax if we have keywords, and we always use it, or are
   // using a wildcard (* or ?).
   $keys = $query->get_query_basic();
-  if ($keys && (variable_get('acquia_search_edismax_default', 0) || preg_match('/\S+[*?]/', $keys))) {
+  if ($keys && (($wildcard = preg_match('/\S+[*?]/', $keys)) || variable_get('acquia_search_edismax_default', 0))) {
     $params['qt'] = 'edismax';
+    if ($wildcard) {
+      $keys = preg_replace_callback('/(\S+[*?]\S*)/', '_acquia_search_lower', $keys);
+      $query->set_keys($keys);
+    }
   }
+}
+
+/**
+ * Convert to lower-case any keywords containing a wildcard.
+ */
+function _acquia_search_lower($matches) {
+  return drupal_strtolower($matches[1]);
 }
 
 /**
