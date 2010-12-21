@@ -28,8 +28,8 @@ function commons_core_content_default_fields_alter(&$fields) {
  */
 function commons_core_menu() {  
   return array(
-    'mystuff' => array(
-      'title' => 'My stuff',
+    'myprofile' => array(
+      'title' => 'My profile',
       'description' => 'View your user profile',
       'page callback' => 'commons_core_profile_redirect',
       'access callback' => 'user_is_logged_in',

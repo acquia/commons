@@ -34,7 +34,7 @@ function commons_core_menu_default_menu_links() {
     'has_children' => '0',
     'expanded' => '0',
     'weight' => '-30',
-    'parent_path' => 'mystuff',
+    'parent_path' => 'user',
   );
   // Exported menu link: primary-links:community
   $menu_links['primary-links:community'] = array(
@@ -157,7 +157,7 @@ function commons_core_menu_default_menu_links() {
     'has_children' => '0',
     'expanded' => '0',
     'weight' => '-40',
-    'parent_path' => 'mystuff',
+    'parent_path' => 'user',
   );
   // Exported menu link: primary-links:groups
   $menu_links['primary-links:groups'] = array(
@@ -178,11 +178,11 @@ function commons_core_menu_default_menu_links() {
     'weight' => '-50',
     'parent_path' => 'community',
   );
-  // Exported menu link: primary-links:mystuff
-  $menu_links['primary-links:mystuff'] = array(
+  // Exported menu link: primary-links:user
+  $menu_links['primary-links:user'] = array(
     'menu_name' => 'primary-links',
-    'link_path' => 'mystuff',
-    'router_path' => 'mystuff',
+    'link_path' => 'user',
+    'router_path' => 'user',
     'link_title' => 'My stuff',
     'options' => array(
       'attributes' => array(
@@ -209,7 +209,7 @@ function commons_core_menu_default_menu_links() {
     'has_children' => '0',
     'expanded' => '0',
     'weight' => '-10',
-    'parent_path' => 'mystuff',
+    'parent_path' => 'user',
   );
   // Exported menu link: primary-links:relationships
   $menu_links['primary-links:relationships'] = array(
@@ -224,13 +224,13 @@ function commons_core_menu_default_menu_links() {
     'has_children' => '0',
     'expanded' => '0',
     'weight' => '-20',
-    'parent_path' => 'mystuff',
+    'parent_path' => 'user',
   );
-  // Exported menu link: primary-links:user
-  $menu_links['primary-links:user'] = array(
+  // Exported menu link: primary-links:myprofile
+  $menu_links['primary-links:myprofile'] = array(
     'menu_name' => 'primary-links',
-    'link_path' => 'user',
-    'router_path' => 'user',
+    'link_path' => 'myprofile',
+    'router_path' => 'myprofile',
     'link_title' => 'My profile',
     'options' => array(
       'attributes' => array(
@@ -243,7 +243,7 @@ function commons_core_menu_default_menu_links() {
     'has_children' => '0',
     'expanded' => '0',
     'weight' => '-50',
-    'parent_path' => 'mystuff',
+    'parent_path' => 'user',
   );
   // Exported menu link: primary-links:users
   $menu_links['primary-links:users'] = array(
