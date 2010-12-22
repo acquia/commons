@@ -517,17 +517,6 @@ function commons_core_node_info() {
       'min_word_count' => '0',
       'help' => '',
     ),
-    'wiki' => array(
-      'name' => t('Wiki page'),
-      'module' => 'features',
-      'description' => t('A wiki is used for information collaboration.'),
-      'has_title' => '1',
-      'title_label' => t('Title'),
-      'has_body' => '1',
-      'body_label' => t('Body'),
-      'min_word_count' => '0',
-      'help' => '',
-    ),
   );
   return $items;
 }

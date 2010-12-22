@@ -129,20 +129,20 @@ function commons_core_menu_default_menu_links() {
     'weight' => '-10',
     'parent_path' => 'community',
   );
-  // Exported menu link: primary-links:content/wikis
-  $menu_links['primary-links:content/wikis'] = array(
+  // Exported menu link: primary-links:myprofile
+  $menu_links['primary-links:myprofile'] = array(
     'menu_name' => 'primary-links',
-    'link_path' => 'content/wikis',
-    'router_path' => 'content/wikis',
-    'link_title' => 'Wikis',
+    'link_path' => 'myprofile',
+    'router_path' => 'myprofile',
+    'link_title' => 'My profile',
     'options' => array(),
     'module' => 'commons',
     'hidden' => '0',
     'external' => '0',
     'has_children' => '0',
     'expanded' => '0',
-    'weight' => '0',
-    'parent_path' => 'community',
+    'weight' => '-50',
+    'parent_path' => 'user',
   );
   // Exported menu link: primary-links:group
   $menu_links['primary-links:group'] = array(
@@ -257,7 +257,6 @@ function commons_core_menu_default_menu_links() {
   t('My unread');
   t('Polls');
   t('Site analytics');
-  t('Wikis');
 
 
   return $menu_links;
