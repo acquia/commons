@@ -54,21 +54,6 @@ function commons_core_menu_default_menu_links() {
     'expanded' => '1',
     'weight' => '10',
   );
-  // Exported menu link: primary-links:content/blogs
-  $menu_links['primary-links:content/blogs'] = array(
-    'menu_name' => 'primary-links',
-    'link_path' => 'content/blogs',
-    'router_path' => 'content/blogs',
-    'link_title' => 'Blog posts',
-    'options' => array(),
-    'module' => 'commons',
-    'hidden' => '0',
-    'external' => '0',
-    'has_children' => '0',
-    'expanded' => '0',
-    'weight' => '-40',
-    'parent_path' => 'community',
-  );
   // Exported menu link: primary-links:content/calendar
   $menu_links['primary-links:content/calendar'] = array(
     'menu_name' => 'primary-links',
@@ -129,21 +114,6 @@ function commons_core_menu_default_menu_links() {
     'weight' => '-10',
     'parent_path' => 'community',
   );
-  // Exported menu link: primary-links:myprofile
-  $menu_links['primary-links:myprofile'] = array(
-    'menu_name' => 'primary-links',
-    'link_path' => 'myprofile',
-    'router_path' => 'myprofile',
-    'link_title' => 'My profile',
-    'options' => array(),
-    'module' => 'commons',
-    'hidden' => '0',
-    'external' => '0',
-    'has_children' => '0',
-    'expanded' => '0',
-    'weight' => '-50',
-    'parent_path' => 'user',
-  );
   // Exported menu link: primary-links:group
   $menu_links['primary-links:group'] = array(
     'menu_name' => 'primary-links',
@@ -177,6 +147,21 @@ function commons_core_menu_default_menu_links() {
     'expanded' => '0',
     'weight' => '-50',
     'parent_path' => 'community',
+  );
+  // Exported menu link: primary-links:myprofile
+  $menu_links['primary-links:myprofile'] = array(
+    'menu_name' => 'primary-links',
+    'link_path' => 'myprofile',
+    'router_path' => 'myprofile',
+    'link_title' => 'My profile',
+    'options' => array(),
+    'module' => 'commons',
+    'hidden' => '0',
+    'external' => '0',
+    'has_children' => '0',
+    'expanded' => '0',
+    'weight' => '-50',
+    'parent_path' => 'user',
   );
   // Exported menu link: primary-links:myuserpoints
   $menu_links['primary-links:myuserpoints'] = array(
@@ -243,7 +228,6 @@ function commons_core_menu_default_menu_links() {
   );
   // Translatables
   // Included for use with string extractors like potx.
-  t('Blog posts');
   t('Calendar');
   t('Community');
   t('Discussions');
@@ -253,6 +237,7 @@ function commons_core_menu_default_menu_links() {
   t('My bookmarks');
   t('My friends');
   t('My points');
+  t('My profile');
   t('My stuff');
   t('My unread');
   t('Polls');

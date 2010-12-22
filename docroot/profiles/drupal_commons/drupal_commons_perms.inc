@@ -91,14 +91,6 @@ function drupal_commons_import_permissions() {
     ),
   );
 
-  // Exported permission: create blog entries
-  $permissions['create blog entries'] = array(
-    'name' => 'create blog entries',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
   // Exported permission: create discussion content
   $permissions['create discussion content'] = array(
     'name' => 'create discussion content',
@@ -152,14 +144,6 @@ function drupal_commons_import_permissions() {
     'name' => 'create poll content',
     'roles' => array(
       '0' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: delete any blog entry
-  $permissions['delete any blog entry'] = array(
-    'name' => 'delete any blog entry',
-    'roles' => array(
-      '0' => 'community manager',
     ),
   );
 
@@ -224,14 +208,6 @@ function drupal_commons_import_permissions() {
     'name' => 'delete heartbeat activity logs',
     'roles' => array(
       '0' => 'community manager',
-    ),
-  );
-
-  // Exported permission: delete own blog entries
-  $permissions['delete own blog entries'] = array(
-    'name' => 'delete own blog entries',
-    'roles' => array(
-      '0' => 'authenticated user',
     ),
   );
 
@@ -312,14 +288,6 @@ function drupal_commons_import_permissions() {
     'name' => 'delete revisions',
     'roles' => array(
       '0' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: edit any blog entry
-  $permissions['edit any blog entry'] = array(
-    'name' => 'edit any blog entry',
-    'roles' => array(
-      '0' => 'community manager',
     ),
   );
 
@@ -454,14 +422,6 @@ function drupal_commons_import_permissions() {
   // Exported permission: edit field_location
   $permissions['edit field_location'] = array(
     'name' => 'edit field_location',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: edit own blog entries
-  $permissions['edit own blog entries'] = array(
-    'name' => 'edit own blog entries',
     'roles' => array(
       '0' => 'authenticated user',
     ),

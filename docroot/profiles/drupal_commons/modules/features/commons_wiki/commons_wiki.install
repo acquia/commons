@@ -6,6 +6,7 @@
 function commons_wiki_install() {
   commons_wiki_add_freelinking();
   commons_wiki_add_flag();
+  commons_wiki_add_taxonomy();
 }
 
 /**
@@ -48,5 +49,21 @@ function commons_wiki_add_flag() {
       $flag->type = 'wiki';
       drupal_write_record('flag_types', $flag);
     }
+  }
+}
+
+/**
+ * Add taxonomy to wiki nodes
+ */
+function commons_wiki_add_taxonomy() {
+  require_once('profiles/drupal_commons/drupal_commons.profile');
+  
+  $check_sql = "SELECT vid FROM {vocabulary_node_types} WHERE vid = %d and type = '%s'";
+  
+  if (!db_result(db_query($check_sql, DRUPAL_COMMONS_TAG_ID, 'wiki'))) {
+    $taxonomy = new stdClass;
+    $taxonomy->vid = DRUPAL_COMMONS_TAG_ID;
+    $taxonomy->type = 'wiki';
+    drupal_write_record('vocabulary_node_types', $taxonomy);
   }
 }

@@ -180,7 +180,6 @@ function drupal_commons_profile_tasks(&$task, $url) {
   drupal_commons_config_taxonomy();
   drupal_commons_config_profile();
   drupal_commons_config_flag();
-  drupal_commons_config_roles();
   drupal_commons_config_perms();
   drupal_commons_config_filter();
   drupal_commons_config_password();
@@ -207,6 +206,7 @@ function drupal_commons_enable_features() {
     'commons_home',
     'commons_dashboard',
     'commons_wiki',
+    'commons_blog',
   );
   features_install_modules($features);
 }
@@ -264,7 +264,6 @@ function drupal_commons_config_taxonomy() {
   
   // Link free-tagging vocabulary to node types
   $sql = "INSERT INTO {vocabulary_node_types} (vid, type) VALUES (%d, '%s')";
-  db_query($sql, DRUPAL_COMMONS_TAG_ID, 'blog');
   db_query($sql, DRUPAL_COMMONS_TAG_ID, 'discussion');
   db_query($sql, DRUPAL_COMMONS_TAG_ID, 'document');
   db_query($sql, DRUPAL_COMMONS_TAG_ID, 'event');
@@ -272,7 +271,6 @@ function drupal_commons_config_taxonomy() {
   db_query($sql, DRUPAL_COMMONS_TAG_ID, 'notice');
   db_query($sql, DRUPAL_COMMONS_TAG_ID, 'page');
   db_query($sql, DRUPAL_COMMONS_TAG_ID, 'poll');
-  db_query($sql, DRUPAL_COMMONS_TAG_ID, 'wiki'); 
 }
 
 /**
@@ -306,7 +304,6 @@ function drupal_commons_config_flag() {
   // Enable default bookmark flag to work on content types
   $sql = "INSERT INTO {flag_types} (fid, type) VALUES (%d, '%s')";
   db_query("DELETE FROM {flag_types}");
-  db_query($sql, $flag_id, 'blog');
   db_query($sql, $flag_id, 'discussion');
   db_query($sql, $flag_id, 'document');
   db_query($sql, $flag_id, 'event');
