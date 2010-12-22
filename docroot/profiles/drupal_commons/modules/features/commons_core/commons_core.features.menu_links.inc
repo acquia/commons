@@ -54,21 +54,6 @@ function commons_core_menu_default_menu_links() {
     'expanded' => '1',
     'weight' => '10',
   );
-  // Exported menu link: primary-links:content/calendar
-  $menu_links['primary-links:content/calendar'] = array(
-    'menu_name' => 'primary-links',
-    'link_path' => 'content/calendar',
-    'router_path' => 'content/calendar',
-    'link_title' => 'Calendar',
-    'options' => array(),
-    'module' => 'commons',
-    'hidden' => '0',
-    'external' => '0',
-    'has_children' => '0',
-    'expanded' => '0',
-    'weight' => '10',
-    'parent_path' => 'community',
-  );
   // Exported menu link: primary-links:content/polls
   $menu_links['primary-links:content/polls'] = array(
     'menu_name' => 'primary-links',
@@ -198,7 +183,6 @@ function commons_core_menu_default_menu_links() {
   );
   // Translatables
   // Included for use with string extractors like potx.
-  t('Calendar');
   t('Community');
   t('Groups');
   t('Members');

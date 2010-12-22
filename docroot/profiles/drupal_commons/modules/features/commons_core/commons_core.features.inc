@@ -451,17 +451,6 @@ function commons_core_imagecache_default_presets() {
  */
 function commons_core_node_info() {
   $items = array(
-    'event' => array(
-      'name' => t('Event'),
-      'module' => 'features',
-      'description' => t('An item that is used to provide details about an event. Events can be connected to multiple groups.'),
-      'has_title' => '1',
-      'title_label' => t('Title'),
-      'has_body' => '1',
-      'body_label' => t('Description'),
-      'min_word_count' => '0',
-      'help' => '',
-    ),
     'group' => array(
       'name' => t('Group'),
       'module' => 'features',

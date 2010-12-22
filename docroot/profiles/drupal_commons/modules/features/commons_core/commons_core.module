@@ -283,16 +283,18 @@ function commons_core_node_add_link($type) {
   }
   
   // Detect a group context
-  if ($group = commons_core_get_group_context()) {
-    // No access if the user is not logged in
-    if (!$user->uid) {
-      return NULL;
-    }
-    // No access if the user is not a member
-    else if (!og_is_group_member($group->nid, TRUE, $user->uid)) {
-      // Unless they are a community manager
-      if (!array_search(variable_get('commons_manager_role', 'community manager'), $account->roles)) {
+  if (og_is_group_post_type($type)) {
+    if ($group = commons_core_get_group_context()) {
+      // No access if the user is not logged in
+      if (!$user->uid) {
         return NULL;
+      }
+      // No access if the user is not a member
+      else if (!og_is_group_member($group->nid, TRUE, $user->uid)) {
+        // Unless they are a community manager
+        if (!array_search(variable_get('commons_manager_role', 'community manager'), $account->roles)) {
+          return NULL;
+        }
       }
     }
   }

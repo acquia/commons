@@ -38,11 +38,28 @@ function commons_document_user_default_permissions() {
     ),
   );
 
+  // Exported permission: edit field_file
+  $permissions['edit field_file'] = array(
+    'name' => 'edit field_file',
+    'roles' => array(
+      '0' => 'authenticated user',
+    ),
+  );
+
   // Exported permission: edit own document content
   $permissions['edit own document content'] = array(
     'name' => 'edit own document content',
     'roles' => array(
       '0' => 'authenticated user',
+    ),
+  );
+
+  // Exported permission: view field_file
+  $permissions['view field_file'] = array(
+    'name' => 'view field_file',
+    'roles' => array(
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
     ),
   );
 

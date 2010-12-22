@@ -91,14 +91,6 @@ function drupal_commons_import_permissions() {
     ),
   );
 
-  // Exported permission: create event content
-  $permissions['create event content'] = array(
-    'name' => 'create event content',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
   // Exported permission: create group content
   $permissions['create group content'] = array(
     'name' => 'create group content',
@@ -128,14 +120,6 @@ function drupal_commons_import_permissions() {
     'name' => 'create poll content',
     'roles' => array(
       '0' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: delete any event content
-  $permissions['delete any event content'] = array(
-    'name' => 'delete any event content',
-    'roles' => array(
-      '0' => 'community manager',
     ),
   );
 
@@ -176,14 +160,6 @@ function drupal_commons_import_permissions() {
     'name' => 'delete heartbeat activity logs',
     'roles' => array(
       '0' => 'community manager',
-    ),
-  );
-
-  // Exported permission: delete own event content
-  $permissions['delete own event content'] = array(
-    'name' => 'delete own event content',
-    'roles' => array(
-      '0' => 'authenticated user',
     ),
   );
 
@@ -243,14 +219,6 @@ function drupal_commons_import_permissions() {
     ),
   );
 
-  // Exported permission: edit any event content
-  $permissions['edit any event content'] = array(
-    'name' => 'edit any event content',
-    'roles' => array(
-      '0' => 'community manager',
-    ),
-  );
-
   // Exported permission: edit any group content
   $permissions['edit any group content'] = array(
     'name' => 'edit any group content',
@@ -299,14 +267,6 @@ function drupal_commons_import_permissions() {
     ),
   );
 
-  // Exported permission: edit field_date
-  $permissions['edit field_date'] = array(
-    'name' => 'edit field_date',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
   // Exported permission: edit field_featured_content
   $permissions['edit field_featured_content'] = array(
     'name' => 'edit field_featured_content',
@@ -320,14 +280,6 @@ function drupal_commons_import_permissions() {
     'name' => 'edit field_featured_group',
     'roles' => array(
       '0' => 'community manager',
-    ),
-  );
-
-  // Exported permission: edit field_file
-  $permissions['edit field_file'] = array(
-    'name' => 'edit field_file',
-    'roles' => array(
-      '0' => 'authenticated user',
     ),
   );
 
@@ -350,22 +302,6 @@ function drupal_commons_import_permissions() {
   // Exported permission: edit field_grouplink
   $permissions['edit field_grouplink'] = array(
     'name' => 'edit field_grouplink',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: edit field_location
-  $permissions['edit field_location'] = array(
-    'name' => 'edit field_location',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: edit own event content
-  $permissions['edit own event content'] = array(
-    'name' => 'edit own event content',
     'roles' => array(
       '0' => 'authenticated user',
     ),
@@ -590,15 +526,6 @@ function drupal_commons_import_permissions() {
     ),
   );
 
-  // Exported permission: view field_date
-  $permissions['view field_date'] = array(
-    'name' => 'view field_date',
-    'roles' => array(
-      '0' => 'anonymous user',
-      '1' => 'authenticated user',
-    ),
-  );
-
   // Exported permission: view field_featured_content
   $permissions['view field_featured_content'] = array(
     'name' => 'view field_featured_content',
@@ -612,15 +539,6 @@ function drupal_commons_import_permissions() {
     'name' => 'view field_featured_group',
     'roles' => array(
       '0' => 'community manager',
-    ),
-  );
-
-  // Exported permission: view field_file
-  $permissions['view field_file'] = array(
-    'name' => 'view field_file',
-    'roles' => array(
-      '0' => 'anonymous user',
-      '1' => 'authenticated user',
     ),
   );
 
@@ -644,15 +562,6 @@ function drupal_commons_import_permissions() {
   // Exported permission: view field_grouplink
   $permissions['view field_grouplink'] = array(
     'name' => 'view field_grouplink',
-    'roles' => array(
-      '0' => 'anonymous user',
-      '1' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: view field_location
-  $permissions['view field_location'] = array(
-    'name' => 'view field_location',
     'roles' => array(
       '0' => 'anonymous user',
       '1' => 'authenticated user',

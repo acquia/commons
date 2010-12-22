@@ -1,0 +1,25 @@
+<?php
+
+include_once('commons_event.features.inc');
+
+/**
+ * Implementation of hook_views_pre_view()
+ */
+function commons_event_views_pre_view(&$view, &$display_id, &$args) {
+  switch ($view->name) {
+    case 'og_calendar':
+    case 'content_global_calendar':
+      $view->display_handler->override_option('header', commons_core_node_add_link('event'));
+      break;
+      
+    case 'og_upcoming_events':
+      if ($group = commons_core_get_group_context()) {
+        $view->display_handler->override_option('footer', l(t('View events on calendar'), "node/{$group->nid}/content/calendar"));
+      }
+      break;
+      
+    case 'upcoming_events':
+      $view->display_handler->override_option('footer', l(t('View events on calendar'), 'content/calendar'));
+      break;
+  }
+}

@@ -211,6 +211,7 @@ function drupal_commons_enable_features() {
     'commons_blog',
     'commons_document',
     'commons_discussion',
+    'commons_event',
   );
   features_install_modules($features);
 }
@@ -268,7 +269,6 @@ function drupal_commons_config_taxonomy() {
   
   // Link free-tagging vocabulary to node types
   $sql = "INSERT INTO {vocabulary_node_types} (vid, type) VALUES (%d, '%s')";
-  db_query($sql, DRUPAL_COMMONS_TAG_ID, 'event');
   db_query($sql, DRUPAL_COMMONS_TAG_ID, 'group');
   db_query($sql, DRUPAL_COMMONS_TAG_ID, 'notice');
   db_query($sql, DRUPAL_COMMONS_TAG_ID, 'page');
@@ -305,8 +305,6 @@ function drupal_commons_config_flag() {
   
   // Enable default bookmark flag to work on content types
   $sql = "INSERT INTO {flag_types} (fid, type) VALUES (%d, '%s')";
-  db_query("DELETE FROM {flag_types}");
-  db_query($sql, $flag_id, 'event');
   db_query($sql, $flag_id, 'poll');
 }
 
