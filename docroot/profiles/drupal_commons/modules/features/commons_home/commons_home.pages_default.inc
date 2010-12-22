@@ -7,7 +7,7 @@ function commons_home_default_page_manager_pages() {
   $page = new stdClass;
   $page->disabled = FALSE; /* Edit this to true to make a default page disabled initially */
   $page->api_version = 1;
-  $page->name = 'Home';
+  $page->name = 'commons_homepage';
   $page->task = 'page';
   $page->admin_title = 'Homepage';
   $page->admin_description = 'Community homepage';
@@ -34,9 +34,9 @@ function commons_home_default_page_manager_pages() {
   $handler = new stdClass;
   $handler->disabled = FALSE; /* Edit this to true to make a default handler disabled initially */
   $handler->api_version = 1;
-  $handler->name = 'page_Home_panel_context_2';
+  $handler->name = 'page_Home_panel_context';
   $handler->task = 'page';
-  $handler->subtask = 'Home';
+  $handler->subtask = 'commons_homepage';
   $handler->handler = 'panel_context';
   $handler->weight = 1;
   $handler->conf = array(
@@ -307,7 +307,7 @@ function commons_home_default_page_manager_pages() {
   $display->title_pane = '0';
   $handler->conf['display'] = $display;
   $page->default_handlers[$handler->name] = $handler;
-  $pages['Home'] = $page;
+  $pages['commons_homepage'] = $page;
 
  return $pages;
 
