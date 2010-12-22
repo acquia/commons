@@ -494,12 +494,7 @@ function commons_wiki_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Wiki posts');
-  $handler->override_option('header', '<?php
-  if (user_access(\'create wiki content\')) {
-    print \'<div class="addnew">\' . l(t(\'Add a new wiki\'), \'node/add/wiki\') . \'</div>\';
-  }
-?>');
-  $handler->override_option('header_format', '3');
+  $handler->override_option('header_format', '1');
   $handler->override_option('header_empty', 1);
   $handler->override_option('empty', 'No wikis have been added yet.');
   $handler->override_option('empty_format', '1');
@@ -1108,17 +1103,7 @@ function commons_wiki_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Wikis');
-  $handler->override_option('header', '<?php 
-  if (user_access(\'create wiki content\')) {
-    if (og_is_group_member(arg(1))) {
-      print \'<div class="addnew">\' . l(t(\'Add a new wiki\'), \'node/add/wiki\', array(\'query\' => \'gids[]=\' . arg(1))) . \'</div>\'; 
-    }
-    else {
-      print t(\'You must be a member of this group to add items.\');
-    }
-  }
-?>');
-  $handler->override_option('header_format', '3');
+  $handler->override_option('header_format', '1');
   $handler->override_option('header_empty', 1);
   $handler->override_option('empty', 'No wikis have been added to this group yet.');
   $handler->override_option('empty_format', '1');

@@ -1,3 +1,15 @@
 <?php
 
 include_once('commons_blog.features.inc');
+
+/**
+ * Implementation of hook_views_pre_view()
+ */
+function commons_blog_views_pre_view(&$view, &$display_id, &$args) {
+  switch ($view->name) {
+    case 'og_tab_blogs':
+    case 'content_global_blogs':
+      $view->display_handler->override_option('header', commons_core_node_add_link('blog'));
+      break;
+  }
+}

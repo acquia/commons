@@ -500,12 +500,7 @@ function commons_blog_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Blog posts');
-  $handler->override_option('header', '<?php
-  if (user_access(\'create blog entries\')) {
-    print \'<div class="addnew">\' . l(t(\'Add a new blog post\'), \'node/add/blog\') . \'</div>\';
-  }
-?>');
-  $handler->override_option('header_format', '3');
+  $handler->override_option('header_format', '1');
   $handler->override_option('header_empty', 1);
   $handler->override_option('empty', 'No blog posts have been added yet.');
   $handler->override_option('empty_format', '1');
@@ -1114,17 +1109,7 @@ function commons_blog_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Blog posts');
-  $handler->override_option('header', '<?php 
-  if (user_access(\'create blog entries\')) {
-    if (og_is_group_member(arg(1))) {
-      print \'<div class="addnew">\' . l(t(\'Add a new blog\'), \'node/add/blog\', array(\'query\' => \'gids[]=\' . arg(1))) . \'</div>\'; 
-    }
-    else {
-      print t(\'You must be a member of this group to add items.\');
-    }
-  }
-?>');
-  $handler->override_option('header_format', '3');
+  $handler->override_option('header_format', '1');
   $handler->override_option('header_empty', 1);
   $handler->override_option('empty', 'No blog posts have been added to this group yet.');
   $handler->override_option('empty_format', '1');

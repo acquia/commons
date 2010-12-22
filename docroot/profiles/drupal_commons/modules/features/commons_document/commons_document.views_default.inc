@@ -537,12 +537,7 @@ function commons_document_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Documents');
-  $handler->override_option('header', '<?php
-  if (user_access(\'create document content\')) {
-    print \'<div class="addnew">\' . l(t(\'Add a new document\'), \'node/add/document\') . \'</div>\';
-  }
-?>');
-  $handler->override_option('header_format', '3');
+  $handler->override_option('header_format', '1');
   $handler->override_option('header_empty', 1);
   $handler->override_option('empty', 'No wikis have been added yet.');
   $handler->override_option('empty_format', '1');
@@ -1196,17 +1191,7 @@ function commons_document_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Documents');
-  $handler->override_option('header', '<?php 
-  if (user_access(\'create document content\')) {
-    if (og_is_group_member(arg(1))) {
-      print \'<div class="addnew">\' . l(t(\'Add a new document\'), \'node/add/document\', array(\'query\' => \'gids[]=\' . arg(1))) . \'</div>\'; 
-    }
-    else {
-      print t(\'You must be a member of this group to add items.\');
-    }
-  }
-?>');
-  $handler->override_option('header_format', '3');
+  $handler->override_option('header_format', '1');
   $handler->override_option('header_empty', 1);
   $handler->override_option('empty', 'No documents have been added to this group yet.');
   $handler->override_option('empty_format', '1');

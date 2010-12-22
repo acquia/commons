@@ -262,27 +262,109 @@ function _commons_core_jumpstart_community_block() {
 }
 
 /**
- * Display the Commons information block
+ * Helper function to provide node add links
  * 
- * This is used in the footer to link back to acquia.com
+ * @param $type
+ *   The machine-name of the node
+ * @return
+ *   A link to add a new node, if permissions allow
  */
-function theme_commons_core_info_block() {
-  $content = '';
+function commons_core_node_add_link($type) {
+  global $user;
   
-  $content .= '<div id="acquia-footer-message">';
-  $content .= '<a href="http://acquia.com/drupalcommons" title="Drupal Commons social business software">';
-  $content .= theme('image', 'profiles/drupal_commons/images/commons_footer_logo.png', t('Drupal Commons social business software'), t('Drupal Commons social business software'));
-  $content .= '</a>';
-  $content .= '</div>';
+  // Determine the name of the node type, and see if it's valid
+  if (!($name = node_get_types('name', $type))) {
+    return NULL;
+  }
   
-  $content .= '<div id="fusion-footer-message">';
-  $content .= t('Theme by') . '&nbsp;';
-  $content .= '<a href="http://www.topnotchthemes.com" title="Drupal Themes by TopNotchThemes">TopNotchThemes</a>';
-  $content .= ', ' . t('powered by') . '&nbsp;';
-  $content .= '<a href="http://fusiondrupalthemes.com" title="Premium Drupal themes powered by Fusion">Fusion</a>.';
-  $content .= '</div>';
+  // First detect normal node permissions
+  if (!node_access('create', $type)) {
+    return NULL;
+  }
   
-  return $content;
+  // Detect a group context
+  if ($group = commons_core_get_group_context()) {
+    // No access if the user is not logged in
+    if (!$user->uid) {
+      return NULL;
+    }
+    // No access if the user is not a member
+    else if (!og_is_group_member($group->nid, TRUE, $user->uid)) {
+      // Unless they are a community manager
+      if (!array_search(variable_get('commons_manager_role', 'community manager'), $account->roles)) {
+        return NULL;
+      }
+    }
+  }
+  
+  // Build the link
+  $link = array();
+  $link['title'] = t('Add a new !name', array('!name' => $name));
+  $link['href'] = "node/add/$type";
+  
+  // Add group URL query, if needed
+  if ($group) {
+    $link['options'] = array(
+      'query' => "gids[]={$group->nid}",
+    );
+  }
+  
+  // Generate the link
+  $link = l($link['title'], $link['href'], isset($link['options']) ? $link['options'] : array());
+  
+  return theme('commons_core_node_add_link', $link);
+}
+
+/**
+ * Detect a group context
+ * This function is more robust than just og_get_group_context()
+ *
+ * @param $node
+ *   Optionally specify a node being viewed
+ * @return
+ *   A group object if available, otherwise NULL
+ */
+function commons_core_get_group_context($node = NULL) {
+  static $group = FALSE;
+  
+  if ($group === FALSE) { 
+    // Get group context
+    if (!($group = og_get_group_context())) {
+      // If group context not yet set, see if we can get it from the URL
+      if (is_numeric(arg(1))) {
+        $node = $node ? $node : node_load(arg(1));
+        if ($node) {
+          if (!og_is_group_type($node->type)) {
+            // If we pulled a node that isn't a group, see if the node is
+            // inside a group
+            if ($groups = og_get_node_groups($node)) {
+              // Use the first group
+              $group = node_load(key($groups));
+            }
+          }
+          else {
+            $group = $node;
+          }
+        }
+      }
+      // The node add form URL queries might help
+      else if (arg(0) == 'node' && arg(1) == 'add' && arg(2)) {
+        $gids = $_GET['gids'];
+        if (is_array($gids)) {
+          $gid = $gids[0];
+          if (is_numeric($gid)) {
+            if ($node = node_load($gid)) {
+              if (og_is_group_type($node->type)) {
+                $group = $node;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return $group;
 }
 
 /**
@@ -467,7 +549,7 @@ function commons_core_field_access($op, $field, $account = NULL, $node = NULL) {
       case 'view':
       case 'edit':
         // If on node add form, use og_get_group_context() to determine group
-        if (arg(0) == 'node' && arg(1) == 'add' && ($group = og_get_group_context())) {
+        if (arg(0) == 'node' && arg(1) == 'add' && ($group = commons_core_get_group_context())) {
           // hook_nodeapi() validates group admin status if additional
           // groups are selected
           
@@ -563,12 +645,6 @@ function commons_core_init() {
   // Redirect core /profile which lists users to our new list of users
   if (arg(0) == 'profile' && !arg(1)) {
     drupal_goto('users');
-  }
-  
-  // Temporary fix for a ctools (1.6) bug causing the page title
-  // on searches to change
-  if (arg(0) == 'search') {
-    drupal_set_title(t('Search')); 
   }
   
   // Notify group admins of any pending requests on group home page
@@ -1097,7 +1173,17 @@ function commons_core_theme() {
   return array(
     'commons_core_user_stats_block' => array(),
     'commons_core_info_block' => array(),
+    'commons_core_node_add_link' => array(
+      'arguments' => array('link' => NULL),
+    ),
   );
+}
+
+/**
+ * Theme handler for node add links
+ */
+function theme_commons_core_node_add_link($link) {
+  return '<span class="addnew">' . $link . '</span>';
 }
 
 /**
@@ -1109,6 +1195,30 @@ function theme_commons_core_user_stats_block($data) {
     $content .= '<li>' . $item . '</li>';
   }
   $content .= '</ul>';
+  
+  return $content;
+}
+
+/**
+ * Display the Commons information block
+ * 
+ * This is used in the footer to link back to acquia.com
+ */
+function theme_commons_core_info_block() {
+  $content = '';
+  
+  $content .= '<div id="acquia-footer-message">';
+  $content .= '<a href="http://acquia.com/drupalcommons" title="Drupal Commons social business software">';
+  $content .= theme('image', 'profiles/drupal_commons/images/commons_footer_logo.png', t('Drupal Commons social business software'), t('Drupal Commons social business software'));
+  $content .= '</a>';
+  $content .= '</div>';
+  
+  $content .= '<div id="fusion-footer-message">';
+  $content .= t('Theme by') . '&nbsp;';
+  $content .= '<a href="http://www.topnotchthemes.com" title="Drupal Themes by TopNotchThemes">TopNotchThemes</a>';
+  $content .= ', ' . t('powered by') . '&nbsp;';
+  $content .= '<a href="http://fusiondrupalthemes.com" title="Premium Drupal themes powered by Fusion">Fusion</a>.';
+  $content .= '</div>';
   
   return $content;
 }
