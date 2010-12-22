@@ -22,9 +22,6 @@ define('DRUPAL_COMMONS_CONTENT_ROLE', 'content manager');
 // Define the default theme
 define('DRUPAL_COMMONS_THEME', 'acquia_commons');
 
-// Define the default frontpage
-define('DRUPAL_COMMONS_FRONTPAGE', 'home');
-
 // Define the default point amount for posting a node
 define('DRUPAL_COMMONS_POINTS_NODE', 5);
 
@@ -96,7 +93,7 @@ function drupal_commons_profile_modules() {
     'token', 'rules', 'rules_admin',
     
     // Editor
-    'wysiwyg', 'better_formats',
+    'wysiwyg',
     
     // Messaging
     'messaging', 'messaging_mail', 'messaging_simple',
@@ -209,6 +206,7 @@ function drupal_commons_enable_features() {
     'commons_seo',
     'commons_home',
     'commons_dashboard',
+    'commons_wiki',
   );
   features_install_modules($features);
 }
@@ -313,7 +311,6 @@ function drupal_commons_config_flag() {
   db_query($sql, $flag_id, 'document');
   db_query($sql, $flag_id, 'event');
   db_query($sql, $flag_id, 'poll');
-  db_query($sql, $flag_id, 'wiki');
 }
 
 /**
@@ -341,20 +338,6 @@ function drupal_commons_config_filter() {
   
   // Let community and content manager role use Full HTML
   db_query("UPDATE {filter_formats} SET roles = ',3,4,' WHERE name = 'Full HTML'");
-  
-  // Set Full HTML as default format for community and content manager roles
-  db_query("INSERT INTO {better_formats_defaults} (rid, type, format, type_weight, weight)
-    VALUES (3, 'node', 2, 1, -4)");
-  db_query("INSERT INTO {better_formats_defaults} (rid, type, format, type_weight, weight)
-    VALUES (3, 'comment', 2, 1, -4)");
-  db_query("INSERT INTO {better_formats_defaults} (rid, type, format, type_weight, weight)
-    VALUES (3, 'block', 2, 1, -4)");
-  db_query("INSERT INTO {better_formats_defaults} (rid, type, format, type_weight, weight)
-    VALUES (4, 'node', 2, 1, -6)");
-  db_query("INSERT INTO {better_formats_defaults} (rid, type, format, type_weight, weight)
-    VALUES (4, 'comment', 2, 1, -6)");
-  db_query("INSERT INTO {better_formats_defaults} (rid, type, format, type_weight, weight)
-    VALUES (4, 'block', 2, 1, -6)");
     
   // Create a "links-only" filter format that Shoutbox will use
   db_query("INSERT INTO {filter_formats} (format, name, cache) VALUES (5, 'Links Only', 1)");
@@ -371,11 +354,6 @@ function drupal_commons_config_filter() {
   
   // Set allowed HTML tags for Filter HTML format
   variable_set('allowed_html_1', DRUPAL_COMMONS_FILTERED_HTML);
-  
-  // Add wiki-style freelinking to both default formats
-  $sql = "INSERT INTO {filters} (format, module, delta, weight) VALUES (%d, '%s', %d, %d)";
-  db_query($sql, 1, 'freelinking', 0, 10);  // Filtered HTML
-  db_query($sql, 2, 'freelinking', 0, 10);  // Full HTML
 }
 
 /**
@@ -676,9 +654,6 @@ function drupal_commons_config_images() {
  * These should be set but not enforced by Strongarm
  */
 function drupal_commons_config_vars() {
-  // Set default homepage
-  variable_set('site_frontpage', DRUPAL_COMMONS_FRONTPAGE);
-  
   // Set a default point amount so userpoints works out-of-the-box
   variable_set('userpoints_post_page', DRUPAL_COMMONS_POINTS_NODE);
   variable_set('userpoints_post_blog', DRUPAL_COMMONS_POINTS_NODE);
