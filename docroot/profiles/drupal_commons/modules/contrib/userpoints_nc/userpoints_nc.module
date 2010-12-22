@@ -118,7 +118,7 @@ function userpoints_nodeapi(&$node, $op, $teaser, $page) {
         $params = array(
           'points' => $points,
           'uid' => $node->uid,
-          'operation' => 'operation',
+          'operation' => 'delete',
           'entity_id' => $node->nid,
           'entity_type' => 'node',
         );

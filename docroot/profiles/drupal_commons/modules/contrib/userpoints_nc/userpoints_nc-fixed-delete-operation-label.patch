@@ -1,0 +1,13 @@
+Index: userpoints_nc.module
+===================================================================
+--- userpoints_nc.module	(revision 21699)
++++ userpoints_nc.module	(working copy)
+@@ -118,7 +118,7 @@
+         $params = array(
+           'points' => $points,
+           'uid' => $node->uid,
+-          'operation' => 'operation',
++          'operation' => 'delete',
+           'entity_id' => $node->nid,
+           'entity_type' => 'node',
+         );
