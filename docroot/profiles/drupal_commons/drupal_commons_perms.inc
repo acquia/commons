@@ -115,14 +115,6 @@ function drupal_commons_import_permissions() {
     ),
   );
 
-  // Exported permission: create poll content
-  $permissions['create poll content'] = array(
-    'name' => 'create poll content',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
   // Exported permission: delete any group content
   $permissions['delete any group content'] = array(
     'name' => 'delete any group content',
@@ -142,14 +134,6 @@ function drupal_commons_import_permissions() {
   // Exported permission: delete any page content
   $permissions['delete any page content'] = array(
     'name' => 'delete any page content',
-    'roles' => array(
-      '0' => 'community manager',
-    ),
-  );
-
-  // Exported permission: delete any poll content
-  $permissions['delete any poll content'] = array(
-    'name' => 'delete any poll content',
     'roles' => array(
       '0' => 'community manager',
     ),
@@ -195,14 +179,6 @@ function drupal_commons_import_permissions() {
     ),
   );
 
-  // Exported permission: delete own poll content
-  $permissions['delete own poll content'] = array(
-    'name' => 'delete own poll content',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
   // Exported permission: delete own shouts
   $permissions['delete own shouts'] = array(
     'name' => 'delete own shouts',
@@ -238,14 +214,6 @@ function drupal_commons_import_permissions() {
   // Exported permission: edit any page content
   $permissions['edit any page content'] = array(
     'name' => 'edit any page content',
-    'roles' => array(
-      '0' => 'community manager',
-    ),
-  );
-
-  // Exported permission: edit any poll content
-  $permissions['edit any poll content'] = array(
-    'name' => 'edit any poll content',
     'roles' => array(
       '0' => 'community manager',
     ),
@@ -326,14 +294,6 @@ function drupal_commons_import_permissions() {
   // Exported permission: edit own page content
   $permissions['edit own page content'] = array(
     'name' => 'edit own page content',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: edit own poll content
-  $permissions['edit own poll content'] = array(
-    'name' => 'edit own poll content',
     'roles' => array(
       '0' => 'authenticated user',
     ),
@@ -674,14 +634,6 @@ function drupal_commons_import_permissions() {
   // Exported permission: view userpoints
   $permissions['view userpoints'] = array(
     'name' => 'view userpoints',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: vote on polls
-  $permissions['vote on polls'] = array(
-    'name' => 'vote on polls',
     'roles' => array(
       '0' => 'authenticated user',
     ),

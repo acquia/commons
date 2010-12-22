@@ -182,7 +182,6 @@ function drupal_commons_profile_tasks(&$task, $url) {
   drupal_commons_build_directories();
   drupal_commons_config_taxonomy();
   drupal_commons_config_profile();
-  drupal_commons_config_flag();
   drupal_commons_config_filter();
   drupal_commons_config_password();
   drupal_commons_config_wysiwyg();
@@ -212,6 +211,7 @@ function drupal_commons_enable_features() {
     'commons_document',
     'commons_discussion',
     'commons_event',
+    'commons_poll',
   );
   features_install_modules($features);
 }
@@ -272,7 +272,6 @@ function drupal_commons_config_taxonomy() {
   db_query($sql, DRUPAL_COMMONS_TAG_ID, 'group');
   db_query($sql, DRUPAL_COMMONS_TAG_ID, 'notice');
   db_query($sql, DRUPAL_COMMONS_TAG_ID, 'page');
-  db_query($sql, DRUPAL_COMMONS_TAG_ID, 'poll');
 }
 
 /**
@@ -294,18 +293,6 @@ function drupal_commons_config_profile() {
   // Work Information
   db_query($sql, t('Job title'), 'profile_job', t('What is your job title?'), t('Work information'), 'textfield', -10, 0, 1, 2, 0);
   db_query($sql, t('Organization'), 'profile_organization', t('Which organization or department are you a part of?'), t('Work information'), 'textfield', -9, 0, 1, 2, 0);
-}
-
-/**
- * Configure flag
- */
-function drupal_commons_config_flag() {
-  // Fetch bookmark flag ID
-  $flag_id = db_result(db_query("SELECT fid FROM {flags} WHERE name = '%s'", 'bookmarks'));
-  
-  // Enable default bookmark flag to work on content types
-  $sql = "INSERT INTO {flag_types} (fid, type) VALUES (%d, '%s')";
-  db_query($sql, $flag_id, 'poll');
 }
 
 /**

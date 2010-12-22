@@ -1,0 +1,21 @@
+<?php
+
+include_once('commons_poll.features.inc');
+
+/**
+ * Implementation of hook_views_pre_view()
+ */
+function commons_poll_views_pre_view(&$view, &$display_id, &$args) {
+  switch ($view->name) {
+    case 'og_polls_all':
+    case 'content_global_polls':
+      $view->display_handler->override_option('header', commons_core_node_add_link('poll'));
+      break;
+      
+    case 'og_recent_poll':
+      if ($group = commons_core_get_group_context()) {
+        $view->display_handler->override_option('footer', l(t('View all group polls'), "node/{$group->nid}/content/polls"));
+      }
+      break;
+  }
+}
