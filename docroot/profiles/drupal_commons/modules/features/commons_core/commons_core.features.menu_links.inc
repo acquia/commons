@@ -69,21 +69,6 @@ function commons_core_menu_default_menu_links() {
     'weight' => '10',
     'parent_path' => 'community',
   );
-  // Exported menu link: primary-links:content/discussions
-  $menu_links['primary-links:content/discussions'] = array(
-    'menu_name' => 'primary-links',
-    'link_path' => 'content/discussions',
-    'router_path' => 'content/discussions',
-    'link_title' => 'Discussions',
-    'options' => array(),
-    'module' => 'commons',
-    'hidden' => '0',
-    'external' => '0',
-    'has_children' => '0',
-    'expanded' => '0',
-    'weight' => '-20',
-    'parent_path' => 'community',
-  );
   // Exported menu link: primary-links:content/polls
   $menu_links['primary-links:content/polls'] = array(
     'menu_name' => 'primary-links',
@@ -215,7 +200,6 @@ function commons_core_menu_default_menu_links() {
   // Included for use with string extractors like potx.
   t('Calendar');
   t('Community');
-  t('Discussions');
   t('Groups');
   t('Members');
   t('My bookmarks');

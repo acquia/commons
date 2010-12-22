@@ -91,14 +91,6 @@ function drupal_commons_import_permissions() {
     ),
   );
 
-  // Exported permission: create discussion content
-  $permissions['create discussion content'] = array(
-    'name' => 'create discussion content',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
   // Exported permission: create event content
   $permissions['create event content'] = array(
     'name' => 'create event content',
@@ -136,14 +128,6 @@ function drupal_commons_import_permissions() {
     'name' => 'create poll content',
     'roles' => array(
       '0' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: delete any discussion content
-  $permissions['delete any discussion content'] = array(
-    'name' => 'delete any discussion content',
-    'roles' => array(
-      '0' => 'community manager',
     ),
   );
 
@@ -192,14 +176,6 @@ function drupal_commons_import_permissions() {
     'name' => 'delete heartbeat activity logs',
     'roles' => array(
       '0' => 'community manager',
-    ),
-  );
-
-  // Exported permission: delete own discussion content
-  $permissions['delete own discussion content'] = array(
-    'name' => 'delete own discussion content',
-    'roles' => array(
-      '0' => 'authenticated user',
     ),
   );
 
@@ -264,14 +240,6 @@ function drupal_commons_import_permissions() {
     'name' => 'delete revisions',
     'roles' => array(
       '0' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: edit any discussion content
-  $permissions['edit any discussion content'] = array(
-    'name' => 'edit any discussion content',
-    'roles' => array(
-      '0' => 'community manager',
     ),
   );
 
@@ -390,14 +358,6 @@ function drupal_commons_import_permissions() {
   // Exported permission: edit field_location
   $permissions['edit field_location'] = array(
     'name' => 'edit field_location',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: edit own discussion content
-  $permissions['edit own discussion content'] = array(
-    'name' => 'edit own discussion content',
     'roles' => array(
       '0' => 'authenticated user',
     ),

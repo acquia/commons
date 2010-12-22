@@ -8,13 +8,6 @@ function commons_core_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'comment_default_order_discussion';
-  $strongarm->value = '2';
-
-  $export['comment_default_order_discussion'] = $strongarm;
-  $strongarm = new stdClass;
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
   $strongarm->name = 'comment_default_order_event';
   $strongarm->value = '2';
 
@@ -43,13 +36,6 @@ function commons_core_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'comment_preview_discussion';
-  $strongarm->value = '0';
-
-  $export['comment_preview_discussion'] = $strongarm;
-  $strongarm = new stdClass;
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
   $strongarm->name = 'comment_preview_event';
   $strongarm->value = '0';
 
@@ -68,25 +54,6 @@ function commons_core_strongarm() {
   $strongarm->value = '0';
 
   $export['comment_preview_poll'] = $strongarm;
-  $strongarm = new stdClass;
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'content_extra_weights_discussion';
-  $strongarm->value = array(
-    'title' => '-5',
-    'body_field' => '-3',
-    'revision_information' => '2',
-    'author' => '6',
-    'options' => '7',
-    'comment_settings' => '4',
-    'menu' => '3',
-    'taxonomy' => '-4',
-    'path' => '5',
-    'flag' => '1',
-    'og_nodeapi' => '-1',
-  );
-
-  $export['content_extra_weights_discussion'] = $strongarm;
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
@@ -353,16 +320,6 @@ function commons_core_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'node_options_discussion';
-  $strongarm->value = array(
-    0 => 'status',
-    1 => 'promote',
-  );
-
-  $export['node_options_discussion'] = $strongarm;
-  $strongarm = new stdClass;
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
   $strongarm->name = 'node_options_event';
   $strongarm->value = array(
     0 => 'status',
@@ -425,13 +382,6 @@ function commons_core_strongarm() {
   $strongarm->value = '1';
 
   $export['og_audience_required'] = $strongarm;
-  $strongarm = new stdClass;
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'og_content_type_usage_discussion';
-  $strongarm->value = 'group_post_standard';
-
-  $export['og_content_type_usage_discussion'] = $strongarm;
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;

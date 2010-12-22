@@ -451,17 +451,6 @@ function commons_core_imagecache_default_presets() {
  */
 function commons_core_node_info() {
   $items = array(
-    'discussion' => array(
-      'name' => t('Discussion'),
-      'module' => 'features',
-      'description' => t('A item which allows the open discussion of a given topic.'),
-      'has_title' => '1',
-      'title_label' => t('Title'),
-      'has_body' => '1',
-      'body_label' => t('Body'),
-      'min_word_count' => '0',
-      'help' => '',
-    ),
     'event' => array(
       'name' => t('Event'),
       'module' => 'features',
