@@ -99,14 +99,6 @@ function drupal_commons_import_permissions() {
     ),
   );
 
-  // Exported permission: create document content
-  $permissions['create document content'] = array(
-    'name' => 'create document content',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
   // Exported permission: create event content
   $permissions['create event content'] = array(
     'name' => 'create event content',
@@ -150,14 +142,6 @@ function drupal_commons_import_permissions() {
   // Exported permission: delete any discussion content
   $permissions['delete any discussion content'] = array(
     'name' => 'delete any discussion content',
-    'roles' => array(
-      '0' => 'community manager',
-    ),
-  );
-
-  // Exported permission: delete any document content
-  $permissions['delete any document content'] = array(
-    'name' => 'delete any document content',
     'roles' => array(
       '0' => 'community manager',
     ),
@@ -214,14 +198,6 @@ function drupal_commons_import_permissions() {
   // Exported permission: delete own discussion content
   $permissions['delete own discussion content'] = array(
     'name' => 'delete own discussion content',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: delete own document content
-  $permissions['delete own document content'] = array(
-    'name' => 'delete own document content',
     'roles' => array(
       '0' => 'authenticated user',
     ),
@@ -294,14 +270,6 @@ function drupal_commons_import_permissions() {
   // Exported permission: edit any discussion content
   $permissions['edit any discussion content'] = array(
     'name' => 'edit any discussion content',
-    'roles' => array(
-      '0' => 'community manager',
-    ),
-  );
-
-  // Exported permission: edit any document content
-  $permissions['edit any document content'] = array(
-    'name' => 'edit any document content',
     'roles' => array(
       '0' => 'community manager',
     ),
@@ -430,14 +398,6 @@ function drupal_commons_import_permissions() {
   // Exported permission: edit own discussion content
   $permissions['edit own discussion content'] = array(
     'name' => 'edit own discussion content',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: edit own document content
-  $permissions['edit own document content'] = array(
-    'name' => 'edit own document content',
     'roles' => array(
       '0' => 'authenticated user',
     ),

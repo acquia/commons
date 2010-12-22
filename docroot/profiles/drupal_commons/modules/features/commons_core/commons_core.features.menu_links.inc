@@ -84,21 +84,6 @@ function commons_core_menu_default_menu_links() {
     'weight' => '-20',
     'parent_path' => 'community',
   );
-  // Exported menu link: primary-links:content/documents
-  $menu_links['primary-links:content/documents'] = array(
-    'menu_name' => 'primary-links',
-    'link_path' => 'content/documents',
-    'router_path' => 'content/documents',
-    'link_title' => 'Documents',
-    'options' => array(),
-    'module' => 'commons',
-    'hidden' => '0',
-    'external' => '0',
-    'has_children' => '0',
-    'expanded' => '0',
-    'weight' => '-30',
-    'parent_path' => 'community',
-  );
   // Exported menu link: primary-links:content/polls
   $menu_links['primary-links:content/polls'] = array(
     'menu_name' => 'primary-links',
@@ -231,7 +216,6 @@ function commons_core_menu_default_menu_links() {
   t('Calendar');
   t('Community');
   t('Discussions');
-  t('Documents');
   t('Groups');
   t('Members');
   t('My bookmarks');

@@ -175,12 +175,14 @@ function drupal_commons_profile_task_list() {
  *   modify the $task, otherwise discarded.
  */
 function drupal_commons_profile_tasks(&$task, $url) {
+  drupal_commons_config_roles();
+  drupal_commons_config_perms();
+  
   drupal_commons_enable_features();
   drupal_commons_build_directories();
   drupal_commons_config_taxonomy();
   drupal_commons_config_profile();
   drupal_commons_config_flag();
-  drupal_commons_config_perms();
   drupal_commons_config_filter();
   drupal_commons_config_password();
   drupal_commons_config_wysiwyg();
@@ -207,6 +209,7 @@ function drupal_commons_enable_features() {
     'commons_dashboard',
     'commons_wiki',
     'commons_blog',
+    'commons_document',
   );
   features_install_modules($features);
 }
@@ -265,7 +268,6 @@ function drupal_commons_config_taxonomy() {
   // Link free-tagging vocabulary to node types
   $sql = "INSERT INTO {vocabulary_node_types} (vid, type) VALUES (%d, '%s')";
   db_query($sql, DRUPAL_COMMONS_TAG_ID, 'discussion');
-  db_query($sql, DRUPAL_COMMONS_TAG_ID, 'document');
   db_query($sql, DRUPAL_COMMONS_TAG_ID, 'event');
   db_query($sql, DRUPAL_COMMONS_TAG_ID, 'group');
   db_query($sql, DRUPAL_COMMONS_TAG_ID, 'notice');
@@ -305,7 +307,6 @@ function drupal_commons_config_flag() {
   $sql = "INSERT INTO {flag_types} (fid, type) VALUES (%d, '%s')";
   db_query("DELETE FROM {flag_types}");
   db_query($sql, $flag_id, 'discussion');
-  db_query($sql, $flag_id, 'document');
   db_query($sql, $flag_id, 'event');
   db_query($sql, $flag_id, 'poll');
 }
@@ -669,9 +670,6 @@ function drupal_commons_config_vars() {
   variable_set('shoutbox_escape_html', 0);
   variable_set('shoutbox_expire', 120);
   variable_set('shoutbox_showamount_block', 8);
-  
-  // Tell getid3 where the library is
-  variable_set('getid3_path', 'profiles/drupal_commons/libraries/getid3/getid3');
   
   // Show large amount of tags on tag cloud page
   variable_set('tagadelic_page_amount', 500);

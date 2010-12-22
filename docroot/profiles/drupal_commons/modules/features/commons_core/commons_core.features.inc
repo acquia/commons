@@ -462,17 +462,6 @@ function commons_core_node_info() {
       'min_word_count' => '0',
       'help' => '',
     ),
-    'document' => array(
-      'name' => t('Document'),
-      'module' => 'features',
-      'description' => t('A document item which contains a title, description, an unlimited amount of attached files.'),
-      'has_title' => '1',
-      'title_label' => t('Title'),
-      'has_body' => '1',
-      'body_label' => t('Body'),
-      'min_word_count' => '0',
-      'help' => '',
-    ),
     'event' => array(
       'name' => t('Event'),
       'module' => 'features',

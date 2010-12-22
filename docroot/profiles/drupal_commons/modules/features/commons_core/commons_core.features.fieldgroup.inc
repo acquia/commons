@@ -101,100 +101,6 @@ function commons_core_fieldgroup_default_groups() {
     ),
   );
 
-  // Exported group: group_promote_content
-  $groups['document-group_promote_content'] = array(
-    'group_type' => 'standard',
-    'type_name' => 'document',
-    'group_name' => 'group_promote_content',
-    'label' => 'Promote content',
-    'settings' => array(
-      'form' => array(
-        'style' => 'fieldset',
-        'description' => '',
-      ),
-      'display' => array(
-        'weight' => '1',
-        'label' => 'above',
-        'teaser' => array(
-          'format' => 'fieldset',
-          'exclude' => 1,
-        ),
-        'full' => array(
-          'format' => 'fieldset_collapsed',
-          'exclude' => 0,
-        ),
-        'description' => '',
-        '4' => array(
-          'format' => 'fieldset',
-          'exclude' => 0,
-        ),
-        '2' => array(
-          'format' => 'fieldset',
-          'exclude' => 0,
-        ),
-        '3' => array(
-          'format' => 'fieldset',
-          'exclude' => 0,
-        ),
-        'token' => array(
-          'format' => 'fieldset',
-          'exclude' => 0,
-        ),
-      ),
-    ),
-    'weight' => '0',
-    'fields' => array(
-      '0' => 'field_group_sticky',
-      '1' => 'field_featured_content',
-    ),
-  );
-
-  // Exported group: group_upload
-  $groups['document-group_upload'] = array(
-    'group_type' => 'standard',
-    'type_name' => 'document',
-    'group_name' => 'group_upload',
-    'label' => 'Upload',
-    'settings' => array(
-      'form' => array(
-        'style' => 'fieldset',
-        'description' => '',
-      ),
-      'display' => array(
-        'description' => '',
-        'label' => 'above',
-        'teaser' => array(
-          'format' => 'fieldset',
-          'exclude' => 0,
-        ),
-        'full' => array(
-          'format' => 'fieldset',
-          'exclude' => 0,
-        ),
-        '4' => array(
-          'format' => 'fieldset',
-          'exclude' => 0,
-        ),
-        '2' => array(
-          'format' => 'fieldset',
-          'exclude' => 0,
-        ),
-        '3' => array(
-          'format' => 'fieldset',
-          'exclude' => 0,
-        ),
-        'token' => array(
-          'format' => 'fieldset',
-          'exclude' => 0,
-        ),
-      ),
-    ),
-    'weight' => '-2',
-    'fields' => array(
-      '0' => 'field_file',
-    ),
-  );
-
   // Exported group: group_event_details
   $groups['event-group_event_details'] = array(
     'group_type' => 'standard',
@@ -565,7 +471,6 @@ function commons_core_fieldgroup_default_groups() {
   t('Images');
   t('Promote content');
   t('Promote group');
-  t('Upload');
 
   return $groups;
 }
