@@ -33,7 +33,7 @@ function commons_core_menu_default_menu_links() {
     'external' => '0',
     'has_children' => '0',
     'expanded' => '0',
-    'weight' => '-30',
+    'weight' => '-20',
     'parent_path' => 'user',
   );
   // Exported menu link: primary-links:community
@@ -66,7 +66,7 @@ function commons_core_menu_default_menu_links() {
     'external' => '0',
     'has_children' => '0',
     'expanded' => '0',
-    'weight' => '-40',
+    'weight' => '-30',
     'parent_path' => 'user',
   );
   // Exported menu link: primary-links:groups
@@ -87,6 +87,25 @@ function commons_core_menu_default_menu_links() {
     'expanded' => '0',
     'weight' => '-50',
     'parent_path' => 'community',
+  );
+  // Exported menu link: primary-links:groups/my
+  $menu_links['primary-links:groups/my'] = array(
+    'menu_name' => 'primary-links',
+    'link_path' => 'groups/my',
+    'router_path' => 'groups/my',
+    'link_title' => 'My groups',
+    'options' => array(
+      'attributes' => array(
+        'title' => '',
+      ),
+    ),
+    'module' => 'commons',
+    'hidden' => '0',
+    'external' => '0',
+    'has_children' => '0',
+    'expanded' => '0',
+    'weight' => '-40',
+    'parent_path' => 'user',
   );
   // Exported menu link: primary-links:myprofile
   $menu_links['primary-links:myprofile'] = array(
@@ -115,7 +134,7 @@ function commons_core_menu_default_menu_links() {
     'external' => '0',
     'has_children' => '0',
     'expanded' => '0',
-    'weight' => '-10',
+    'weight' => '0',
     'parent_path' => 'user',
   );
   // Exported menu link: primary-links:relationships
@@ -130,7 +149,7 @@ function commons_core_menu_default_menu_links() {
     'external' => '0',
     'has_children' => '0',
     'expanded' => '0',
-    'weight' => '-20',
+    'weight' => '-10',
     'parent_path' => 'user',
   );
   // Exported menu link: primary-links:user
@@ -173,6 +192,7 @@ function commons_core_menu_default_menu_links() {
   t('Members');
   t('My bookmarks');
   t('My friends');
+  t('My groups');
   t('My points');
   t('My profile');
   t('My stuff');
