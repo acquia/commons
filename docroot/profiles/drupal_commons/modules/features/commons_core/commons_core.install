@@ -26,6 +26,15 @@ function commons_core_uninstall() {
  * Upgrade to 1.2
  */
 function commons_core_update_6000() {
+  // Rebuild the module cache
+  module_rebuild_cache();
+
+  // Clear out all the caches
+  drupal_flush_all_caches();
+
+  // Clear out the rules cache
+  rules_clear_cache();
+
   // Remove custom primary menu items added by Commons
   db_query("DELETE FROM {menu_links} WHERE menu_name = 'primary-links' AND module = 'commons'");
   
