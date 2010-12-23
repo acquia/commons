@@ -331,30 +331,6 @@ function drupal_commons_import_permissions() {
     ),
   );
 
-  // Exported permission: maintain own subscriptions
-  $permissions['maintain own subscriptions'] = array(
-    'name' => 'maintain own subscriptions',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: manage all subscriptions
-  $permissions['manage all subscriptions'] = array(
-    'name' => 'manage all subscriptions',
-    'roles' => array(
-      '0' => 'community manager',
-    ),
-  );
-
-  // Exported permission: manage own subscriptions
-  $permissions['manage own subscriptions'] = array(
-    'name' => 'manage own subscriptions',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
   // Exported permission: moderate shoutbox
   $permissions['moderate shoutbox'] = array(
     'name' => 'moderate shoutbox',
@@ -417,38 +393,6 @@ function drupal_commons_import_permissions() {
     'roles' => array(
       '0' => 'anonymous user',
       '1' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: skip notifications
-  $permissions['skip notifications'] = array(
-    'name' => 'skip notifications',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: subscribe to author
-  $permissions['subscribe to author'] = array(
-    'name' => 'subscribe to author',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: subscribe to content
-  $permissions['subscribe to content'] = array(
-    'name' => 'subscribe to content',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: subscribe to content type
-  $permissions['subscribe to content type'] = array(
-    'name' => 'subscribe to content type',
-    'roles' => array(
-      '0' => 'authenticated user',
     ),
   );
 
