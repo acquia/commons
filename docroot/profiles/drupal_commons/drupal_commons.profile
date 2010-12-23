@@ -618,16 +618,15 @@ function drupal_commons_config_images() {
   );
   
   // Simulate that we've uploaded the group image
-  db_query("INSERT INTO {files} (uid, filename, filepath, filemime, filesize, status, timestamp)
-    VALUES (%d, '%s', '%s', '%s', %d, %d, %d)",
-    1,
-    'default-group.png',
-    file_directory_path() . '/default-group.png',
-    'image/png',
-    filesize($group_image),
-    1,
-    time()
-  );
+  $file = new stdClass;
+  $file->uid = 1;
+  $file->filename = 'default-group.png';
+  $file->filepath = file_directory_path() . '/' . $file->filename;
+  $file->filemime = 'image/png';
+  $file->filesize = filesize($group_image);
+  $file->status = 1;
+  $file->timestamp = time();
+  drupal_write_record('files', $file);
 }
 
 /**

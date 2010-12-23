@@ -871,6 +871,38 @@ function commons_core_check_group_title($node) {
   }
 }
 
+/**
+ * Implementation of hook_views_pre_view()
+ */
+function commons_core_views_pre_view(&$view, &$display_id, &$args) {
+  switch ($view->name) {
+    case 'og_my_groups':
+    case 'og_all':
+    case 'og_most_active':
+      $view->display_handler->override_option('header', commons_core_node_add_link('group'));
+      break;
+      
+    case 'recent_notices':
+      $view->display_handler->override_option('header', commons_core_node_add_link('notice'));
+      break;
+      
+    case 'most_active_users':
+      if (user_access('view userpoints')) {
+        $view->display_handler->override_option('footer', l(t('View all users'), 'userpoints'));
+      }
+      break;
+      
+    case 'tag_cloud':
+      $view->display_handler->override_option('footer', l(t('View more'), 'tagadelic'));
+      break;
+      
+    case 'recent_featured_stream':
+      $view->display_handler->override_option('footer', l(t('View all featured content'), 'featured'));
+      break;
+  }
+}
+
+
 // COMMENT OVERRIDES
 
 /*

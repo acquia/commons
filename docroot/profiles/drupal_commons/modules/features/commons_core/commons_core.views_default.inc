@@ -148,8 +148,7 @@ function commons_core_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Most active users');
-  $handler->override_option('footer', '<?php print l(t(\'View all users\'), \'userpoints\'); ?>');
-  $handler->override_option('footer_format', '3');
+  $handler->override_option('footer_format', '1');
   $handler->override_option('footer_empty', 0);
   $handler->override_option('empty', 'No users have received any points yet.');
   $handler->override_option('empty_format', '1');
@@ -1200,12 +1199,7 @@ function commons_core_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Groups');
-  $handler->override_option('header', '<?php
-  if (user_access(\'create group content\')) {
-    print \'<div class="addnew">\' . l(t(\'Add a new group\'), \'node/add/group\') . \'</div>\';
-  }
-?>');
-  $handler->override_option('header_format', '3');
+  $handler->override_option('header_format', '1');
   $handler->override_option('header_empty', 1);
   $handler->override_option('empty', 'There are currently no groups');
   $handler->override_option('empty_format', '1');
@@ -3265,6 +3259,8 @@ function commons_core_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Most active groups');
+  $handler->override_option('header_format', '1');
+  $handler->override_option('header_empty', 1);
   $handler->override_option('empty', 'There are no groups.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_more', 1);
@@ -4032,12 +4028,7 @@ function commons_core_views_default_views() {
     'hide_empty' => 0,
   ));
   $handler = $view->new_display('page', 'Page', 'page');
-  $handler->override_option('header', '<?php
-  if (user_access(\'create group content\')) {
-    print \'<div class="addnew">\' . l(t(\'Add a new group\'), \'node/add/group\') . \'</div>\';
-  }
-?>');
-  $handler->override_option('header_format', '3');
+  $handler->override_option('header_format', '1');
   $handler->override_option('header_empty', 1);
   $handler->override_option('use_ajax', TRUE);
   $handler->override_option('path', 'groups/my');
@@ -4330,7 +4321,7 @@ function commons_core_views_default_views() {
   $handler->override_option('block_caching', -1);
 
   $views[$view->name] = $view;
-  
+
   // Exported view: og_tag_cloud
   $view = new view;
   $view->name = 'og_tag_cloud';
@@ -6224,8 +6215,7 @@ function commons_core_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Latest featured content');
-  $handler->override_option('footer', '<?php print l(t(\'View all featured content\'), \'featured\'); ?>');
-  $handler->override_option('footer_format', '3');
+  $handler->override_option('footer_format', '1');
   $handler->override_option('footer_empty', 0);
   $handler->override_option('empty', 'No items have been marked featured in yet.');
   $handler->override_option('empty_format', '1');
@@ -6447,12 +6437,7 @@ function commons_core_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Latest notices');
-  $handler->override_option('header', '<?php
-  if(user_access(\'create notice content\')) {
-    print \'<div class="addnew">\' . l(t(\'Add a notice\'), \'node/add/notice\') . \'</div>\';
-  }
-?>');
-  $handler->override_option('header_format', '3');
+  $handler->override_option('header_format', '1');
   $handler->override_option('header_empty', 1);
   $handler->override_option('empty', 'No notices have been created yet.');
   $handler->override_option('empty_format', '1');
@@ -6967,8 +6952,7 @@ function commons_core_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Popular tags');
-  $handler->override_option('footer', '<div><?php print l(t(\'View more\'), \'tagadelic\'); ?></div>');
-  $handler->override_option('footer_format', '3');
+  $handler->override_option('footer_format', '1');
   $handler->override_option('footer_empty', 0);
   $handler->override_option('empty', 'No tags have been added yet.');
   $handler->override_option('empty_format', '1');
