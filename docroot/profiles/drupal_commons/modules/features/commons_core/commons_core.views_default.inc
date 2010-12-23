@@ -1824,7 +1824,7 @@ function commons_core_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Recent group content');
-  $handler->override_option('empty', 'No content has been submitted to this group in.');
+  $handler->override_option('empty', 'No content has been submitted to this group yet.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
   $handler->override_option('use_pager', '1');
@@ -3964,6 +3964,8 @@ function commons_core_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'My groups');
+  $handler->override_option('header_format', '1');
+  $handler->override_option('header_empty', 1);
   $handler->override_option('empty', 'Not a member of any groups.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('items_per_page', 30);
@@ -4028,8 +4030,6 @@ function commons_core_views_default_views() {
     'hide_empty' => 0,
   ));
   $handler = $view->new_display('page', 'Page', 'page');
-  $handler->override_option('header_format', '1');
-  $handler->override_option('header_empty', 1);
   $handler->override_option('use_ajax', TRUE);
   $handler->override_option('path', 'groups/my');
   $handler->override_option('menu', array(
