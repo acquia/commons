@@ -678,9 +678,6 @@ function drupal_commons_cleanup() {
   // Rebuild node types
   node_types_rebuild();
   
-  // Rebuild the menu
-  menu_rebuild();
-  
   // Clear drupal message queue for non-warning/errors
   drupal_get_messages('status', TRUE);
 
