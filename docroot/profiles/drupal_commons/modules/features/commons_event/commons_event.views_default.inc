@@ -981,7 +981,7 @@ function commons_event_views_default_views() {
   $handler->override_option('block_caching', -1);
 
   $views[$view->name] = $view;
-  
+
   // Exported view: og_upcoming_events
   $view = new view;
   $view->name = 'og_upcoming_events';

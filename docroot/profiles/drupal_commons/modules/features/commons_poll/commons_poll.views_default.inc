@@ -1205,7 +1205,7 @@ function commons_poll_views_default_views() {
   ));
 
   $views[$view->name] = $view;
-  
+
   // Exported view: og_recent_poll
   $view = new view;
   $view->name = 'og_recent_poll';

@@ -10,7 +10,7 @@ function commons_core_context_default_contexts() {
   $context->api_version = 3;
   $context->name = 'context_ui-content-global_content';
   $context->description = 'Site-wide content pages';
-  $context->tag = 'commons';
+  $context->tag = 'Commons';
   $context->conditions = array(
     'path' => array(
       'values' => array(
@@ -51,7 +51,7 @@ function commons_core_context_default_contexts() {
   $context->api_version = 3;
   $context->name = 'context_ui-global-global';
   $context->description = 'Show on every page';
-  $context->tag = 'commons';
+  $context->tag = 'Commons';
   $context->conditions = array(
     'sitewide' => array(
       'values' => array(
@@ -70,13 +70,13 @@ function commons_core_context_default_contexts() {
         ),
         'user-0' => array(
           'module' => 'user',
-          'delta' => 0,
+          'delta' => '0',
           'region' => 'header',
           'weight' => 1,
         ),
         'commons_core-2' => array(
           'module' => 'commons_core',
-          'delta' => 2,
+          'delta' => '2',
           'region' => 'footer',
           'weight' => 0,
         ),
@@ -95,8 +95,8 @@ function commons_core_context_default_contexts() {
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
   $context->name = 'context_ui-group-group';
-  $context->description = 'Show on group context';
-  $context->tag = 'commons';
+  $context->description = 'Various group blocks';
+  $context->tag = 'Group';
   $context->conditions = array(
     'context_og_condition_group_type' => array(
       'values' => array(
@@ -122,41 +122,29 @@ function commons_core_context_default_contexts() {
           'region' => 'sidebar_last',
           'weight' => 1,
         ),
-        'views-og_upcoming_events-block_1' => array(
-          'module' => 'views',
-          'delta' => 'og_upcoming_events-block_1',
-          'region' => 'sidebar_last',
-          'weight' => 2,
-        ),
         'views-og_members_custom_block-block_1' => array(
           'module' => 'views',
           'delta' => 'og_members_custom_block-block_1',
           'region' => 'sidebar_last',
-          'weight' => 3,
+          'weight' => 2,
         ),
         'og_aggregator-0' => array(
           'module' => 'og_aggregator',
           'delta' => 0,
           'region' => 'sidebar_last',
-          'weight' => 4,
-        ),
-        'views-og_recent_poll-block_1' => array(
-          'module' => 'views',
-          'delta' => 'og_recent_poll-block_1',
-          'region' => 'sidebar_last',
-          'weight' => 5,
+          'weight' => 3,
         ),
         'views-og_tag_cloud-block_1' => array(
           'module' => 'views',
           'delta' => 'og_tag_cloud-block_1',
           'region' => 'sidebar_last',
-          'weight' => 6,
+          'weight' => 4,
         ),
         'views-og_members_custom_block-block' => array(
           'module' => 'views',
           'delta' => 'og_members_custom_block-block',
           'region' => 'sidebar_last',
-          'weight' => 7,
+          'weight' => 5,
         ),
       ),
     ),
@@ -165,8 +153,8 @@ function commons_core_context_default_contexts() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Show on group context');
-  t('commons');
+  t('Group');
+  t('Various group blocks');
 
   $export['context_ui-group-group'] = $context;
   $context = new stdClass;
@@ -174,7 +162,7 @@ function commons_core_context_default_contexts() {
   $context->api_version = 3;
   $context->name = 'context_ui-profile-profile';
   $context->description = 'User Profile';
-  $context->tag = 'commons';
+  $context->tag = 'Commons';
   $context->conditions = array(
     'user_page' => array(
       'values' => array(
@@ -222,7 +210,7 @@ function commons_core_context_default_contexts() {
   $context->api_version = 3;
   $context->name = 'context_ui-users-user_browser';
   $context->description = 'User Browser';
-  $context->tag = 'commons';
+  $context->tag = 'Commons';
   $context->conditions = array(
     'views' => array(
       'values' => array(
