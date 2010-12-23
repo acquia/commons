@@ -1,3 +1,28 @@
+=========================================================
+UPGRADING TO 1.2:
+
+1. Backup your code and database
+2. Turn on maintenance mode (admin/settings/site-maintenance)
+3. Replace your codebase (excluding the sites directory) with the contents of this archive
+4. Update your site via /update.php
+5. Ignore any errors about missing included/required files 
+ - Those are caused by some modules changing location
+6. View the status of the features (admin/build/features)
+7. If any features are overridden, view the components of the feature that are overridden
+ - It's recommended that you revert all the overridden components, but be aware that
+   this will revert any custom changes you've made to those components
+8. Review the available Contexts (admin/build/context)
+ - Delete or disable context_ui-dashboard-dashboard, as it's no longer used by Commons
+   but may still be saved in your database
+9. Review the available Pages (admin/build/pages)
+ - Delete or disable page-Home, as it's no longer used by Commons but may
+   still be saved in your database
+10. Clear the cache (admin/settings/performance)
+11. Ensure the rest of your site is functioning as expected
+
+=========================================================
+CHANGELOG: 
+
 Drupal Commons 1.2, ????-??-??
 --------------------------------
 - Fixed: Create content links in Views (Added access check) 
