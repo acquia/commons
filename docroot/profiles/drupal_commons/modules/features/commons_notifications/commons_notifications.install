@@ -4,12 +4,5 @@
  * Implementation of hook_install()
  */
 function commons_notifications_install() {
-  module_load_include('inc', 'commons_notifications', 'commons_notifications.strongarm');
-  
-  // Gather the exported variables
-  $vars = commons_notifications_strongarm();
-  
-  // These needs to be manually set because notifications.module sets this on install
-  variable_set('notifications_ui_node', $vars['notifications_ui_node']->value);
-  variable_set('notifications_ui_types', $vars['notifications_ui_types']->value);
+  // No longer being used at the moment
 }

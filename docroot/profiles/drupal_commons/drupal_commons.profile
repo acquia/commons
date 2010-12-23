@@ -718,6 +718,21 @@ function drupal_commons_cleanup() {
   drupal_clear_css_cache();
   drupal_clear_js_cache();
   
+  
+  // Some features will need reverting
+  $revert = array(
+    'commons_core' => array('menu_links'),
+    'commons_notifications' => array('variable'),
+    'commons_blog' => array('menu_links'),
+    'commons_event' => array('menu_links'),
+    'commons_poll' => array('menu_links'),
+    'commons_document' => array('menu_links'),
+    'commons_discussion' => array('menu_links'),
+    'commons_wiki' => array('menu_links', 'variable'),
+    'commons_home' => array('page_manager_pages'),
+  );
+  features_revert($revert);
+  
   // Say hello to the dog!
   watchdog('commons', t('Welcome to Drupal Commons from Acquia!'));
   
