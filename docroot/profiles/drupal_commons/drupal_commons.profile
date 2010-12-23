@@ -177,7 +177,6 @@ function drupal_commons_profile_task_list() {
 function drupal_commons_profile_tasks(&$task, $url) {
   drupal_commons_config_roles();
   drupal_commons_config_perms();
-  
   drupal_commons_enable_features();
   drupal_commons_build_directories();
   drupal_commons_config_taxonomy();
@@ -212,6 +211,7 @@ function drupal_commons_enable_features() {
     'commons_discussion',
     'commons_event',
     'commons_poll',
+    'commons_group_aggregator',
   );
   features_install_modules($features);
 }

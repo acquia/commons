@@ -42,8 +42,8 @@ function commons_core_context_default_contexts() {
 
   // Translatables
   // Included for use with string extractors like potx.
+  t('Commons');
   t('Site-wide content pages');
-  t('commons');
 
   $export['context_ui-content-global_content'] = $context;
   $context = new stdClass;
@@ -87,8 +87,8 @@ function commons_core_context_default_contexts() {
 
   // Translatables
   // Included for use with string extractors like potx.
+  t('Commons');
   t('Show on every page');
-  t('commons');
 
   $export['context_ui-global-global'] = $context;
   $context = new stdClass;
@@ -112,25 +112,19 @@ function commons_core_context_default_contexts() {
       'blocks' => array(
         'og-0' => array(
           'module' => 'og',
-          'delta' => 0,
+          'delta' => '0',
           'region' => 'sidebar_last',
           'weight' => 0,
         ),
         'og_views-0' => array(
           'module' => 'og_views',
-          'delta' => 0,
+          'delta' => '0',
           'region' => 'sidebar_last',
-          'weight' => 1,
+          'weight' => 2,
         ),
         'views-og_members_custom_block-block_1' => array(
           'module' => 'views',
           'delta' => 'og_members_custom_block-block_1',
-          'region' => 'sidebar_last',
-          'weight' => 2,
-        ),
-        'og_aggregator-0' => array(
-          'module' => 'og_aggregator',
-          'delta' => 0,
           'region' => 'sidebar_last',
           'weight' => 3,
         ),
@@ -138,13 +132,13 @@ function commons_core_context_default_contexts() {
           'module' => 'views',
           'delta' => 'og_tag_cloud-block_1',
           'region' => 'sidebar_last',
-          'weight' => 4,
+          'weight' => 6,
         ),
         'views-og_members_custom_block-block' => array(
           'module' => 'views',
           'delta' => 'og_members_custom_block-block',
           'region' => 'sidebar_last',
-          'weight' => 5,
+          'weight' => 7,
         ),
       ),
     ),
@@ -201,8 +195,8 @@ function commons_core_context_default_contexts() {
 
   // Translatables
   // Included for use with string extractors like potx.
+  t('Commons');
   t('User Profile');
-  t('commons');
 
   $export['context_ui-profile-profile'] = $context;
   $context = new stdClass;
@@ -252,8 +246,8 @@ function commons_core_context_default_contexts() {
 
   // Translatables
   // Included for use with string extractors like potx.
+  t('Commons');
   t('User Browser');
-  t('commons');
 
   $export['context_ui-users-user_browser'] = $context;
   return $export;
