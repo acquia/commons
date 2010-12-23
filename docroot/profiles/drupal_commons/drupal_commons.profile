@@ -157,7 +157,9 @@ function drupal_commons_profile_details() {
  *   task list.
  */
 function drupal_commons_profile_task_list() {
-
+  $tasks = array();
+  $tasks['configure-commons'] = t('Configure Drupal Commons');
+  return $tasks;
 }
 
 /**
@@ -175,23 +177,47 @@ function drupal_commons_profile_task_list() {
  *   modify the $task, otherwise discarded.
  */
 function drupal_commons_profile_tasks(&$task, $url) {
-  drupal_commons_config_roles();
-  drupal_commons_config_perms();
-  drupal_commons_enable_features();
-  drupal_commons_build_directories();
-  drupal_commons_config_taxonomy();
-  drupal_commons_config_profile();
-  drupal_commons_config_filter();
-  drupal_commons_config_password();
-  drupal_commons_config_wysiwyg();
-  drupal_commons_config_ur();
-  drupal_commons_config_heartbeat();
-  drupal_commons_config_ctools();
-  drupal_commons_config_views();
-  drupal_commons_config_theme();
-  drupal_commons_config_images();
-  drupal_commons_config_vars();
-  drupal_commons_cleanup();
+  if ($task == 'profile') {
+    $task = 'configure-commons';  
+  }
+  
+  if ($task == 'configure-commons-batch') {
+    include_once 'includes/batch.inc';
+    $output = _batch_page();
+  }
+  
+  if ($task == 'configure-commons') {
+    $operations = array();
+    $operations[] = array('drupal_commons_config_roles', array());
+    $operations[] = array('drupal_commons_config_perms', array());
+    $operations[] = array('drupal_commons_enable_features', array());
+    $operations[] = array('drupal_commons_build_directories', array());
+    $operations[] = array('drupal_commons_config_taxonomy', array());
+    $operations[] = array('drupal_commons_config_profile', array());
+    $operations[] = array('drupal_commons_config_filter', array());
+    $operations[] = array('drupal_commons_config_password', array());
+    $operations[] = array('drupal_commons_config_wysiwyg', array());
+    $operations[] = array('drupal_commons_config_ur', array());
+    $operations[] = array('drupal_commons_config_heartbeat', array());
+    $operations[] = array('drupal_commons_config_ctools', array());
+    $operations[] = array('drupal_commons_config_views', array());
+    $operations[] = array('drupal_commons_config_theme', array());
+    $operations[] = array('drupal_commons_config_images', array());
+    $operations[] = array('drupal_commons_config_vars', array());
+  
+    $batch = array(
+      'operations' => $operations,
+      'title' => t('Configuring Drupal Commons'),
+      'error_message' => t('An error occurred. Please try reinstalling again.'),
+      'finished' => 'drupal_commons_cleanup',
+    );
+  
+    variable_set('install_task', 'configure-commons-batch');
+    batch_set($batch);
+    batch_process($url, $url);
+  }
+  
+  return $output;
 }
 
 /**
@@ -694,6 +720,9 @@ function drupal_commons_cleanup() {
   
   // Say hello to the dog!
   watchdog('commons', t('Welcome to Drupal Commons from Acquia!'));
+  
+  // Finish the installation
+  variable_set('install_task', 'profile-finished');
 }
 
 /**
