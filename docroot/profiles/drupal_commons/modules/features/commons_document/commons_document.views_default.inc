@@ -539,7 +539,7 @@ function commons_document_views_default_views() {
   $handler->override_option('title', 'Documents');
   $handler->override_option('header_format', '1');
   $handler->override_option('header_empty', 1);
-  $handler->override_option('empty', 'No wikis have been added yet.');
+  $handler->override_option('empty', 'No documents have been added yet.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
   $handler->override_option('items_per_page', 20);
