@@ -129,20 +129,8 @@ function commons_home_default_page_manager_pages() {
     $pane->access = array();
     $pane->configuration = array(
       'admin_title' => 'Homepage Intro text',
-      'title' => 'Community. Powered. Innovation.',
-      'body' => 'Drupal Commons is a ready-to-use solution for building communities.  It takes the guesswork out of building a community site with Drupal. 
-  
-  This is our community site for organizations using Drupal Commons.  Join it to:
-  
-  <div class="intro-textblock"><h3>Get social</h3>
-  
-  Learn about the benefits that social business software can provide your organization.</div><div class="intro-textblock"><h3>Try our community</h3>
-  
-  Participate in the activities here to see first-hand how Commons enables community innovation.</div><div class="intro-textblock"><h3>Or build your own</h3>
-  
-  Discover how to grow your own community with Acquia\'s help..</div>
-  
-  <a href="#" class="intro-morebutton">Learn more</a>',
+      'title' => 'Community Powered Innovation',
+      'body' => '<p>Welcome to your Drupal Commons installation, your ready-to-use solution for communities of all types - from intranets to customer community sites and more. To get your site running, you may want to:</p><div class="intro-textblock"><h3>Customize your site</h3>Learn how to change the look &amp; feel, how to require a login, and other customizations.</div><div class="intro-textblock"><h3>Try the Acquia Network</h3>Enable your free trial to add content recommendations, advanced site search &amp; other features to your site.</div><div class="intro-textblock"><h3>Get help</h3>Find a consultant to add new features, get support for what&#39;s there, or learn how to grow your community.</div><p><a class="intro-morebutton" href="http://commons.acquia.com/get-started" target="_blank">Learn more</a></p>',
       'format' => '2',
       'substitute' => 1,
     );
