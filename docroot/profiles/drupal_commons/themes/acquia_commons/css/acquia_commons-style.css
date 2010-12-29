@@ -1,4 +1,4 @@
-/* $Id: acquia_commons-style.css 8252 2010-12-14 14:10:51Z sheena $ */
+/* $Id: acquia_commons-style.css 8280 2010-12-29 13:52:33Z sheena $ */
 
 /* Basic Typography & Colors-------------------------------------------------------------- */
 
@@ -6,7 +6,7 @@
 
 body {
 	color: #1f1f1f;
-	font-family: Georgia, Baskerville, serif;
+	font-family: Tahoma, Verdana, sans-serif;
 	font-size: 75%;
 	background: #a5a5a5 url(../images/body-bg.png) repeat-x 0 0;
 	padding: 0;
@@ -30,6 +30,7 @@ a:active {
 }
 
 h1 {
+  font-family: Georgia, Baskerville, times, serif;
 	font-size: 3em;
 	font-weight: normal;
 	line-height: 1.1em;
@@ -37,14 +38,16 @@ h1 {
 }
 
 h2 {
-	font-size: 1.4em;
-	font-weight: bold;
+  font-family: Georgia, Baskerville, times, serif;
+	font-size: 1.6em;
+	font-weight: normal;
 	margin: 18px 0;
 }
 
 h3 {
-	border-bottom: 1px solid #666;
-	font-weight: normal;
+  font-family: Georgia, Baskerville, times, serif;
+	font-weight: bold;
+	font-size: 1.2em;
 	margin: 18px 0;
 }
 
@@ -105,12 +108,19 @@ body {
 	
 }
 
+/*force the front page to be 960px wide*/
+.front .grid16-16 {
+	width: 960px;
+	max-width: 960px; !important
+	margin:  0 auto;
+}
+
 /* Site Info-------------------------------------------------------------- */
 
 .header-site-info {
 	float: left;
 	width: auto;
-}
+} 
 
 /* Wrapper around logo, site name, and slogan */
 
@@ -514,7 +524,7 @@ body {
 	color: #ddd;
 	display: block;
 	float: left;
-	font-family: Baskerville, georgia, serif;
+	font-family: Tahoma, Verdana, sans-serif;
 	font-size: 11px;
 	height: 22px;
 	letter-spacing: .1em;
@@ -683,7 +693,7 @@ body {
 #fusion-footer-message {
 	float: right;
 	clear: both;
-	font-family: Helvetica, Arial, sans-serif;
+	font-family: Tahoma, Verdana, sans-serif;
 	font-size: 1.1em;
 	padding: 8px 0;
 	text-align: right;
@@ -859,7 +869,9 @@ div.help p:last-child {
 /* Status messages: green */
 
 div.content-messages-inner div.status {
-	border-width: 1px;
+background-color: #D2E1FF;
+border: 1px solid #6A96C3;
+color: #cccccc;
 }
 
 /* Warning messages: yellow */
@@ -1697,7 +1709,7 @@ input.list-add-to-cart:focus {
 
 .front .panel-pane.pane-custom.pane-1 .inner,
 .front .panel-pane.pane-user-0 .inner {
-	min-height: 300px;
+	min-height: 320px;
 }
 
 .front .panel-pane.pane-homepage-group-showcase .inner {
@@ -1731,7 +1743,7 @@ input.list-add-to-cart:focus {
 	font-family: Tahoma, Verdana, sans-serif;
 	font-size: 1.2em;
 	line-height: 1.4em;
-	margin: 0 0 .8em 0;
+	margin: 0 0 .7em 0;
 }
 
 .front .pane-content .intro-textblock {
@@ -1745,7 +1757,7 @@ input.list-add-to-cart:focus {
 	font-family: Georgia, Baskerville, serf;
 	font-weight: normal;
 	color: #000;
-	font-size: 1.8em;
+	font-size: 1.7em;
 	line-height: 1.2em;
 	border: none;
 	margin-bottom: .2em;
@@ -1780,7 +1792,7 @@ input.list-add-to-cart:focus {
 
 .front .pane-user-0 .inner h2.pane-title {
 	color: #fff;
-	font-size: 2.4em;
+	font-size: 2.3em;
 	text-shadow: 0px 2px 2px rgba(0, 0, 0, .4);
 	margin-bottom: 30px;
 }
@@ -2089,6 +2101,10 @@ panels-pane.commons-colors-grayblue .inner {
 
 /*Shoutbox module*/
 
+.shoutbox-add-form {
+	margin: 0 0 10px 0;
+}
+
 .shoutbox-add-form:after,
 .shoutbox-admin-links:after,
 .shoutbox-msg:after {
@@ -2192,7 +2208,7 @@ panels-pane.commons-colors-grayblue .inner {
 
 .shoutbox-msg .shoutbox-post-info span.shoutbox-msg-time {
 	color: #323232;
-	font-family: Arial Helvetica, sans-serif;
+	font-family: Tahoma, Verdana, sans-serif;
 	font-size: 9px;
 	font-style: normal;
 	line-height: 1em;
@@ -2335,7 +2351,7 @@ body#pid-dashboard h1.title, body#pid-dashboard #breadcrumbs {
 }
 
 .calendar-calendar .week-view td {
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: Tahoma, Verdana, sans-serif;
 	background-color: #fff;
 	border-bottom: 1px solid #ddd;
 	border-right: 1px solid #ddd;
@@ -2412,7 +2428,7 @@ body#pid-dashboard h1.title, body#pid-dashboard #breadcrumbs {
 }
 
 .calendar-calendar .day-view td {
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: Tahoma, Verdana, sans-serif;
 	background-color: #fff;
 	border-bottom: 1px solid #ddd;
 	border-right: 1px solid #ddd;
@@ -2480,7 +2496,7 @@ body#pid-dashboard h1.title, body#pid-dashboard #breadcrumbs {
 .block .calendar-calendar .month-view table tr td {
 	border-bottom: 2px solid #ececec;
 	border-right: 2px solid #ececec;
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: Tahoma, Verdana, sans-serif;
 	font-weight: bold;
 	padding: 2px 0;
 	text-align: center;
@@ -2720,7 +2736,7 @@ html.js fieldset.views-exposed-form.collapsed {
 
 #autocomplete ul li {
 	border-bottom: 1px solid #eee;
-	font-family: Arial, helvetica, sans-serif;
+	font-family: Tahoma, Verdana, sans-serif;
 	font-size: 12px;
 	line-height: 1.6em;
 	margin: 0;
@@ -3113,7 +3129,7 @@ html.js fieldset.views-exposed-form.collapsed {
 .view-user-directory .views-field-name {
 	font-size: 1.2em;
 	font-weight: bold;
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: Tahoma, Verdana, sans-serif;
 	margin: 0 0 4px 0;
 }
 
@@ -3248,7 +3264,7 @@ html.js fieldset.views-exposed-form.collapsed {
 
 .heartbeat-message-block .beat-item .beat-item-info a {
 	color: #323232;
-	font-family: Arial Helvetica, sans-serif;
+	font-family: Tahoma, Verdana, sans-serif;
 	font-size: 9px;
 	font-style: normal;
 	line-height: 1em;
