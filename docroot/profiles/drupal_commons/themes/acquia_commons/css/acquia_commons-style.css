@@ -1,4 +1,4 @@
-/* $Id: acquia_commons-style.css 8280 2010-12-29 13:52:33Z sheena $ */
+/* $Id: acquia_commons-style.css 8282 2010-12-29 21:25:58Z sheena $ */
 
 /* Basic Typography & Colors-------------------------------------------------------------- */
 
@@ -988,8 +988,13 @@ h2.block-title {
 #content-tabs {
 	background-color: transparent;
 	float: none;
-	margin: 0 0 22px;
+	margin: 15px 0 22px; 
 	padding: 0;
+}
+
+#breadcrumbs + #content-tabs,
+h1 + #content-tabs {
+	margin-top: 0;
 }
 
 #content-tabs-inner {
