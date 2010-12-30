@@ -68,15 +68,15 @@ function commons_core_context_default_contexts() {
           'region' => 'header',
           'weight' => 0,
         ),
-        'user-0' => array(
-          'module' => 'user',
-          'delta' => '0',
+        'commons_core-3' => array(
+          'module' => 'commons_core',
+          'delta' => 3,
           'region' => 'header',
           'weight' => 1,
         ),
         'commons_core-2' => array(
           'module' => 'commons_core',
-          'delta' => '2',
+          'delta' => 2,
           'region' => 'footer',
           'weight' => 0,
         ),

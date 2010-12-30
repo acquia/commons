@@ -209,6 +209,14 @@ function commons_core_block($op = 'list', $delta = 0, $edit = array()) {
       'info' => t('Drupal Commons information'),
       'cache' => BLOCK_CACHE_GLOBAL,
     );
+    $blocks[3] = array(
+      'info' => t('Header login block'),
+      'cache' => BLOCK_CACHE_GLOBAL,
+    );
+    $blocks[4] = array(
+      'info' => t('Join & learn more'),
+      'cache' => BLOCK_CACHE_GLOBAL,
+    );
 
     return $blocks;
   }
@@ -230,6 +238,18 @@ function commons_core_block($op = 'list', $delta = 0, $edit = array()) {
         $block = array(
           'subject' => '',
           'content' => theme('commons_core_info_block')
+        );
+        break;
+      case 3:
+        $block = array(
+          'subject' => '',
+          'content' => _commons_core_header_login_block()
+        );
+        break;
+      case 4:
+        $block = array(
+          'subject' => t('Join & learn more'),
+          'content' => drupal_get_form('commons_core_join_block')
         );
         break;
     }
@@ -259,6 +279,38 @@ function _commons_core_user_stats_block() {
  */
 function _commons_core_jumpstart_community_block() {
   return t('!view, or !create new <strong>groups</strong> to start creating your community!', array('!view' => l(t('View'), 'groups'), '!create' => l(t('create'), 'node/add/group')));
+}
+
+/**
+ * Display our custom login block for the header
+ */
+function _commons_core_header_login_block() {
+  global $user;
+  
+  // Only anonymous users can log in
+  if ($user->uid) {
+    return NULL;
+  }
+  
+  // Determine if we're on the front page
+  if (drupal_is_front_page()) {
+    // Only provide a link
+    return t('Already a member? !login', array('!login' => l(t('Login'), 'user')));
+  }
+  
+  // Render the standard login form
+  return drupal_get_form('user_login_block');
+}
+
+/**
+ * The "Join & learn more" registration block form
+ */
+function commons_core_join_block() {
+  $form = array();
+  
+  //$form['text'] = array('#type' => 'item', '#value' => 'hey!');
+  
+  return $form;
 }
 
 /**
