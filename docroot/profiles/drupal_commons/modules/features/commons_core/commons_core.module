@@ -356,6 +356,11 @@ function commons_core_join_form() {
   }
   unset($rform['account']);
   
+  // Shorten the email field (if available)
+  if (isset($form['mail'])) {
+    $form['mail']['#title'] = t('Email');
+  }
+  
   // Copy the registration validators
   $form['#validate'] = $rform['#validate'];
   
