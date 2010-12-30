@@ -1353,7 +1353,8 @@ function theme_commons_core_info_block() {
   
   $content .= '<div id="acquia-footer-message">';
   $content .= '<a href="http://acquia.com/drupalcommons" title="Drupal Commons social business software">';
-  $content .= theme('image', 'profiles/drupal_commons/images/commons_footer_logo.png', t('Drupal Commons social business software'), t('Drupal Commons social business software'));
+  $content .= theme('image', 'profiles/drupal_commons/images/commons_droplet.png', t('Drupal Commons social business software'), t('Drupal Commons social business software'));
+  $content .= '<span>' . t('A Drupal Commons Community, powered by Acquia') . '</span>';
   $content .= '</a>';
   $content .= '</div>';
   
