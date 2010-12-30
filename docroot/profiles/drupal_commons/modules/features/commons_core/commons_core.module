@@ -328,17 +328,6 @@ function commons_core_join_form() {
   // Pull the standard user registration form
   $rform = user_register();
   
-  // Extract needed account elements
-  foreach ($rform['account'] as $key => $field) {
-    if (is_array($field) && $field['#required']) {
-      // Remove the description
-      unset($field['#description']);
-      // Add to our form
-      $form[$key] = $field;
-    }
-  }
-  unset($rform['account']);
-  
   // Extract required profile fields
   foreach ($rform as $key => $profile) {
     if (is_array($profile)) {
@@ -354,7 +343,18 @@ function commons_core_join_form() {
         }
       }
     }
-  }  
+  } 
+  
+  // Extract needed account elements
+  foreach ($rform['account'] as $key => $field) {
+    if (is_array($field) && $field['#required']) {
+      // Remove the description
+      unset($field['#description']);
+      // Add to our form
+      $form[$key] = $field;
+    }
+  }
+  unset($rform['account']);
   
   // Copy the registration validators
   $form['#validate'] = $rform['#validate'];
