@@ -13,7 +13,9 @@ function acquia_network_subscription_strongarm() {
     'apachesolr_search' => array(
       'uid' => 'uid',
       'type' => 'type',
+      'created' => 'created',
       'im_vid_2' => 'im_vid_2',
+      'changed' => 'changed',
     ),
     'apachesolr_og' => array(
       'im_og_gid' => 'im_og_gid',
