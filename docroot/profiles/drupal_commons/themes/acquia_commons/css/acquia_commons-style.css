@@ -1,4 +1,4 @@
-/* $Id: acquia_commons-style.css 8282 2010-12-29 21:25:58Z sheena $ */
+/* $Id: acquia_commons-style.css 8284 2010-12-30 18:50:11Z sheena $ */
 
 /* Basic Typography & Colors-------------------------------------------------------------- */
 
@@ -11,6 +11,11 @@ body {
 	background: #a5a5a5 url(../images/body-bg.png) repeat-x 0 0;
 	padding: 0;
 	margin: 0;
+}
+
+body.cke_show_borders {
+	background-color: #fff;
+	background-image: none;
 }
 
 /* Default link styles - separate a:visited for a different visited link style */
@@ -79,6 +84,12 @@ blockquote p:last-child {
 .panel-pane .inner ul,
 .block .inner ul {
 	margin-left: 0;
+}
+
+.node .inner ul.krumo-node ul,
+.panel-pane .inner ul.krumo-node ul,
+.block .inner ul.krumo-node ul{
+	margin-left: 20px;
 }
 
 .node .inner ul li,
@@ -266,14 +277,19 @@ body {
 
 /*user login form if it is in the Header region */
 
-.header-region-inner .block-user form {
-	min-width: 390px;
+.header-region-inner .block-user form,
+.header-region-inner form#user-login-form {
+	min-width: 420px;
 }
 
+.header-region-inner form#user-login-form,
 .header-region-inner .block-user .inner {
 	float: right;
 }
 
+.header-region-inner form#user-login-form .form-item,
+.header-region-inner form#user-login-form input.form-submit,
+.header-region-inner form#user-login-form div.item-list,
 .header-region-inner .block-user .form-item,
 .header-region-inner .block-user input.form-submit,
 .header-region-inner .block-user #user-login-form div.item-list {
@@ -282,6 +298,16 @@ body {
 	clear: none;
 }
 
+.header-region-inner .block-user #user-login-form div.item-list, 
+.header-region-inner form#user-login-form div.item-list {
+	width: auto;
+	float: right;
+	margin: 10px 0 0;
+}
+
+.header-region-inner form#user-login-form .form-item label,
+.header-region-inner form#user-login-form .form-item input,
+.header-region-inner form#user-login-form input.form-submit,
 .header-region-inner .block-user .form-item label,
 .header-region-inner .block-user .form-item input,
 .header-region-inner .block-user input.form-submit {
@@ -291,6 +317,7 @@ body {
 	margin: 0 0.2em 0;
 }
 
+.header-region-inner form#user-login-form .form-item label,
 .header-region-inner .block-user .form-item label {
 	color: #666;
 	margin: 0 0 .2em .4em;
@@ -298,6 +325,7 @@ body {
 	font-weight: normal;
 }
 
+.header-region-inner form#user-login-form input.form-submit,
 .header-region-inner .block-user input.form-submit {
 	margin-top: 1.3em;
 	height: 1.8em;
@@ -305,15 +333,17 @@ body {
 	margin-right: 8px;
 }
 
+.header-region-inner form#user-login-form .item-list ul,
 .header-region-inner .block-user #user-login-form .item-list ul {
-	margin: 1em .2em 0 0;
+	margin: 0 .2em 0 0;
 	padding: 0;
 }
 
+.header-region-inner form#user-login-form .item-list ul li,
 .header-region-inner .block-user .item-list ul li {
 	background-image: none;
-	padding: 0;
-	font-size: .95em;
+	padding: 0 10px 0 0;
+	font-size: .9em;
 	line-height: 1.2em;
 }
 
@@ -685,23 +715,38 @@ body {
 }
 
 #acquia-footer-message {
-	float: right;
-	width: 49%;
-	text-align: right;
+	float: left;
+	width: 48%;
+	text-align: left;
+}
+
+#acquia-footer-message a img {
+	display: block;
+	float: left;
+}
+
+#acquia-footer-message a span{
+	display: block;
+	float: left;
+	margin: 10px 10px 0;
 }
 
 #fusion-footer-message {
 	float: right;
-	clear: both;
+	clear: none;
 	font-family: Tahoma, Verdana, sans-serif;
 	font-size: 1.1em;
-	padding: 8px 0;
+	padding: 10px 0;
 	text-align: right;
 	width: 49%;
 }
 
+#acquia-footer-message a,
 #fusion-footer-message a {
 	color: #fff;
+	font-family: Tahoma, Verdana, sans-serif;	
+	font-size: 1.1em;
+	text-decoration: none;
 }
 
 /* Page titles/-------------------------------------------------------------- */
@@ -871,7 +916,7 @@ div.help p:last-child {
 div.content-messages-inner div.status {
 background-color: #D2E1FF;
 border: 1px solid #6A96C3;
-color: #cccccc;
+color: #666;
 }
 
 /* Warning messages: yellow */
@@ -1362,8 +1407,9 @@ div.comment h3.title {
 	background: transparent url(../images/shoutbox-bubble.png) no-repeat right 8px;
 	float: left;
 	position: relative;
-	width: 90px;
+	width: auto;
 	z-index: 10;
+	padding: 0 10px 0 0;
 }
 
 .comment-info ul.links li {
@@ -1394,7 +1440,9 @@ div.comment h3.title {
 	-webkit-box-shadow: 1px 1px 3px #ddd;
 	border: 1px solid #d6d6d6;
 	box-shadow: 1px 1px 3px #ddd;
-	margin-left: 89px;
+  width: auto;
+  float: left;
+  margin-left: -1px;
 	padding: 10px;
 	position: relative;
 	z-index: 1;
@@ -1692,6 +1740,12 @@ input.list-add-to-cart:focus {
 
 /* Block/Pane Styles */
 
+/*login block */
+#block-commons_core-3 .content {
+  font-family: Georgia, Baskerville, times, serif;
+  margin: 15px 0 0;
+}
+
 /*Homepage blocks/panes*/
 
 .front .panel-pane .inner,
@@ -1703,18 +1757,18 @@ input.list-add-to-cart:focus {
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
 	padding: 0 20px;
-}
+} 
 
 .front .panel-pane.pane-custom.pane-1 + .panel-separator,
-.front .panel-pane.pane-user-0 + .panel-separator {
+.front .panel-pane.pane-commons-core-4 + .panel-separator {
 	height: 1px;
 	border-top: 1px dotted #000;
 	margin: 0 0 20px 0;
 }
 
 .front .panel-pane.pane-custom.pane-1 .inner,
-.front .panel-pane.pane-user-0 .inner {
-	min-height: 320px;
+.front .panel-pane.pane-commons-core-4 .inner {
+	min-height: 280px;
 }
 
 .front .panel-pane.pane-homepage-group-showcase .inner {
@@ -1766,6 +1820,7 @@ input.list-add-to-cart:focus {
 	line-height: 1.2em;
 	border: none;
 	margin-bottom: .2em;
+	margin-top: 0;
 }
 
 .front .pane-content .intro-textblock p {
@@ -1791,36 +1846,42 @@ input.list-add-to-cart:focus {
 	font-size: 2.4em;
 }
 
-.front .pane-user-0 .inner {
+.front .pane-commons-core-4 .inner {
 	background: #d9d9d9 url(../images/home-login-bg.png) repeat-x 0 0;
 }
 
-.front .pane-user-0 .inner h2.pane-title {
+.front .pane-commons-core-4 .inner h2.pane-title {
 	color: #fff;
 	font-size: 2.3em;
 	text-shadow: 0px 2px 2px rgba(0, 0, 0, .4);
 	margin-bottom: 30px;
 }
 
-.front .pane-user-0 .inner .form-item label {
+.front .pane-commons-core-4 .inner .form-item label {
 	font-family: Tahoma, Verdana, sans-serif;
 	font-weight: bold;
-	font-size: 1em;
+	font-size: .8em;
+	float: left;
+	width: 75px;
 }
 
-.front .pane-user-0 .inner .form-item input.form-text {
-	width: 100%;
-	font-size: 1.6em;
+.front .pane-commons-core-4 .inner .form-item label span.form-required {
+	padding: 0;
+}
+
+.front .pane-commons-core-4 .inner .form-item input.form-text {
+	width: 130px;
+	font-size: 1.4em;
 	border: 1px solid #888;
 	background-color: #fff;
 	background-image: none;
-	padding: 8px;
+	padding: 2px 8px;
 }
 
-.front .pane-user-0 .inner input.form-submit {
+.front .pane-commons-core-4 .inner input.form-submit {
 	font-family: Georgia, Baskerville, serif;
 	width: 100%;
-	font-size: 2em;
+	font-size: 1.8em;
 	line-height: 1.2em;
 	height: auto;
 	padding: 6px;
@@ -1832,16 +1893,17 @@ input.list-add-to-cart:focus {
 	-webkit-box-shadow: 0px 2px 4px rgba(0, 0, 0, .4);
 	-moz-box-shadow: 0px 2px 4px rgba(0, 0, 0, .4);
 	box-shadow: 0px 2px 4px rgba(0, 0, 0, .4);
+	text-align: center;
 }
 
-.front .pane-user-0 .inner .item-list li {
+.front .pane-commons-core-4 .inner .item-list li {
 	background-image: none;
 	padding: 0;
 	display: inline-block;
 	padding: 0 10px 0 0;
 }
 
-.front .pane-user-0 .inner .item-list li a {
+.front .pane-commons-core-4 .inner .item-list li a {
 	color: #000;
 }
 
