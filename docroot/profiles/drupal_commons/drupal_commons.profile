@@ -143,7 +143,7 @@ function drupal_commons_profile_modules() {
 function drupal_commons_profile_details() {
   return array(
     'name' => 'Drupal Commons',
-    'description' => 'Social collaboration software.'
+    'description' => 'Select this profile to install the Drupal Commons distribution for powering your community website. Drupal Commons provides provides blogging, discussions, user profiles, and other useful community features for both private communities (e.g. an Intranet), or public communities (e.g. a customer community).'
   );
 }
 
