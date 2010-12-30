@@ -141,9 +141,13 @@ function drupal_commons_profile_modules() {
  *   language-specific profiles.
  */
 function drupal_commons_profile_details() {
+  $logo = '<a href="http://drupal.org/project/commons" target="_blank"><img alt="Drupal Commons" title="Drupal Commons" src="' . base_path() . 'profiles/drupal_commons/images/logo.png' . '"></img></a>';
+  $description = 'Select this profile to install the Drupal Commons distribution for powering your community website. Drupal Commons provides provides blogging, discussions, user profiles, and other useful community features for both private communities (e.g. an Intranet), or public communities (e.g. a customer community).';
+  $description .= '<br/>' . $logo;
+  
   return array(
     'name' => 'Drupal Commons',
-    'description' => 'Select this profile to install the Drupal Commons distribution for powering your community website. Drupal Commons provides provides blogging, discussions, user profiles, and other useful community features for both private communities (e.g. an Intranet), or public communities (e.g. a customer community).'
+    'description' => $description,
   );
 }
 
