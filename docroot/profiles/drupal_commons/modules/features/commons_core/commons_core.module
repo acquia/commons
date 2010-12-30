@@ -249,7 +249,7 @@ function commons_core_block($op = 'list', $delta = 0, $edit = array()) {
       case 4:
         $block = array(
           'subject' => t('Join & learn more'),
-          'content' => drupal_get_form('commons_core_join_block')
+          'content' => _commons_core_join_block()
         );
         break;
     }
@@ -292,6 +292,11 @@ function _commons_core_header_login_block() {
     return NULL;
   }
   
+  // No login needed if we're on the login page
+  if (arg(0) == 'user') {
+    return NULL;
+  }
+  
   // Determine if we're on the front page
   if (drupal_is_front_page()) {
     // Only provide a link
@@ -303,12 +308,65 @@ function _commons_core_header_login_block() {
 }
 
 /**
- * The "Join & learn more" registration block form
+ * The "Join & learn more" registration block callback
  */
-function commons_core_join_block() {
+function _commons_core_join_block() {
+  // Check access
+  if (!user_register_access()) {
+    return NULL;
+  }
+  
+  return drupal_get_form('commons_core_join_form');
+}
+
+/**
+ * The "Join & learn more" registration form
+ */
+function commons_core_join_form() {
   $form = array();
   
-  //$form['text'] = array('#type' => 'item', '#value' => 'hey!');
+  // Pull the standard user registration form
+  $rform = user_register();
+  
+  // Extract needed account elements
+  foreach ($rform['account'] as $key => $field) {
+    if (is_array($field) && $field['#required']) {
+      // Remove the description
+      unset($field['#description']);
+      // Add to our form
+      $form[$key] = $field;
+    }
+  }
+  unset($rform['account']);
+  
+  // Extract required profile fields
+  foreach ($rform as $key => $profile) {
+    if (is_array($profile)) {
+      foreach ($profile as $pkey => $pfield) {
+        if (substr($pkey, 0, 8) == 'profile_') {
+          if ($pfield['#required']) {
+            // Remove description
+            unset($pfield['#description']);
+            // Add to our form
+            $form[$pkey] = $pfield;
+          }
+          unset($rform[$key][$pkey]);
+        }
+      }
+    }
+  }  
+  
+  // Copy the registration validators
+  $form['#validate'] = $rform['#validate'];
+  
+  // Attach the registration submit callback
+  $form['#submit'] = array('user_register_submit');
+  
+  // Add the submit button
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Join our community'),
+  );
   
   return $form;
 }
