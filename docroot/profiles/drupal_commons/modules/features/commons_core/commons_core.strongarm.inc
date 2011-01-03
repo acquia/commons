@@ -470,5 +470,202 @@ function commons_core_strongarm() {
   );
 
   $export['user_terms_vocabs'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'wysiwyg_filter_styles_border-1_1';
+  $strongarm->value = array(
+    'border' => 'border',
+    'border-top' => 'border-top',
+    'border-right' => 'border-right',
+    'border-bottom' => 'border-bottom',
+    'border-left' => 'border-left',
+    'border-width' => 'border-width',
+    'border-top-width' => 'border-top-width',
+    'border-right-width' => 'border-right-width',
+    'border-bottom-width' => 'border-bottom-width',
+    'border-left-width' => 'border-left-width',
+  );
+
+  $export['wysiwyg_filter_styles_border-1_1'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'wysiwyg_filter_styles_border-2_1';
+  $strongarm->value = array(
+    'border-color' => 'border-color',
+    'border-top-color' => 'border-top-color',
+    'border-right-color' => 'border-right-color',
+    'border-bottom-color' => 'border-bottom-color',
+    'border-left-color' => 'border-left-color',
+    'border-style' => 'border-style',
+    'border-top-style' => 'border-top-style',
+    'border-right-style' => 'border-right-style',
+    'border-bottom-style' => 'border-bottom-style',
+    'border-left-style' => 'border-left-style',
+  );
+
+  $export['wysiwyg_filter_styles_border-2_1'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'wysiwyg_filter_styles_dimension_1';
+  $strongarm->value = array(
+    'height' => 'height',
+    'width' => 'width',
+    'line-height' => 0,
+    'max-height' => 0,
+    'max-width' => 0,
+    'min-height' => 0,
+    'min-width' => 0,
+  );
+
+  $export['wysiwyg_filter_styles_dimension_1'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'wysiwyg_filter_styles_layout_1';
+  $strongarm->value = array(
+    'float' => 'float',
+    'clear' => 0,
+    'display' => 0,
+    'position' => 0,
+    'visibility' => 0,
+  );
+
+  $export['wysiwyg_filter_styles_layout_1'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'wysiwyg_filter_styles_text_1';
+  $strongarm->value = array(
+    'text-align' => 'text-align',
+    'text-decoration' => 0,
+    'text-indent' => 0,
+    'text-transform' => 0,
+    'letter-spacing' => 0,
+    'word-spacing' => 0,
+    'white-space' => 0,
+    'direction' => 0,
+    'unicode-bidi' => 0,
+  );
+
+  $export['wysiwyg_filter_styles_text_1'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'wysiwyg_filter_valid_elements_parsed_1';
+  $strongarm->value = array(
+    'a' => array(
+      'href' => array(
+        'required' => TRUE,
+      ),
+      'target' => array(
+        'values' => array(
+          0 => '_blank',
+        ),
+      ),
+      'title' => array(),
+      'style' => array(),
+    ),
+    'address' => array(
+      'style' => array(),
+    ),
+    'blockquote' => array(
+      'style' => array(),
+    ),
+    'br' => array(
+      'style' => array(),
+    ),
+    'cite' => array(
+      'style' => array(),
+    ),
+    'code' => array(
+      'style' => array(),
+    ),
+    'dd' => array(
+      'style' => array(),
+    ),
+    'dl' => array(
+      'style' => array(),
+    ),
+    'dt' => array(
+      'style' => array(),
+    ),
+    'em' => array(
+      'style' => array(),
+    ),
+    'h2' => array(
+      'style' => array(),
+    ),
+    'h3' => array(
+      'style' => array(),
+    ),
+    'h4' => array(
+      'style' => array(),
+    ),
+    'h5' => array(
+      'style' => array(),
+    ),
+    'h6' => array(
+      'style' => array(),
+    ),
+    'img' => array(
+      'src' => array(
+        'required' => TRUE,
+      ),
+      'alt' => array(),
+      'title' => array(),
+      'style' => array(),
+    ),
+    'li' => array(
+      'style' => array(),
+    ),
+    'ol' => array(
+      'style' => array(),
+    ),
+    'p' => array(
+      'align' => array(
+        'values' => array(
+          0 => 'center',
+          1 => 'justify',
+          2 => 'left',
+          3 => 'right',
+        ),
+      ),
+      'style' => array(),
+    ),
+    'pre' => array(
+      'style' => array(),
+    ),
+    'span' => array(
+      'style' => array(),
+    ),
+    'strong' => array(
+      'style' => array(),
+    ),
+    'sub' => array(
+      'style' => array(),
+    ),
+    'sup' => array(
+      'style' => array(),
+    ),
+    'ul' => array(
+      'style' => array(),
+    ),
+  );
+
+  $export['wysiwyg_filter_valid_elements_parsed_1'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'wysiwyg_filter_valid_elements_raw_1';
+  $strongarm->value = '@[style],
+a[!href|target<_blank|title],
+p[align<center?justify?left?right],
+img[!src|alt|title|style],
+br, em, strong, cite, sub, sup, span, blockquote, code, ul, ol, li, dl, dt, dd, pre, address, h2, h3, h4, h5, h6';
+
+  $export['wysiwyg_filter_valid_elements_raw_1'] = $strongarm;
   return $export;
 }

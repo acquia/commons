@@ -1,0 +1,215 @@
+# $Id: wysiwyg_filter.pot,v 1.1.2.2 2009/09/12 07:55:47 markuspetrux Exp $
+#
+# LANGUAGE translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  wysiwyg_filter.admin.inc,v 1.1.2.7 2009/09/12 07:46:25 markuspetrux
+#  wysiwyg_filter.module,v 1.1.2.12 2009/09/12 07:46:25 markuspetrux
+#  wysiwyg_filter.info,v 1.1.2.1 2008/10/24 19:43:54 markuspetrux
+#  wysiwyg_filter.inc,v 1.1.2.1 2009/09/12 07:46:25 markuspetrux
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2009-09-12 07:51+0000\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: wysiwyg_filter.admin.inc:24 wysiwyg_filter.module:15 wysiwyg_filter.info:0
+msgid "WYSIWYG Filter"
+msgstr ""
+
+#: wysiwyg_filter.admin.inc:35
+msgid "HTML elements and attributes"
+msgstr ""
+
+#: wysiwyg_filter.admin.inc:39
+msgid "<p>\nThis option allows you to specify which HTML elements and attributes are allowed in <a href=\"@valid-elements\">TinyMCE valid_elements format</a>.\n</p>\n<strong>Syntax tips:</strong><ul>\n  <li>Use a comma separated list to allow several HTML elements. Example: &quot;em,strong,br,p,ul,ol,li&quot;. Note that you can split your definitions using any number of lines.</li>\n  <li>Use square brackets &quot;[]&quot; to specify the attributes that are allowed for each HTML element. Attributes should be whitelisted explicitly, otherwise element attributes will be ignored. Example: &quot;a&quot; will NOT allow users to post links, you should use &quot;a[href]&quot; instead!</li>\n  <li>Use the vertical bar character &quot;|&quot; to separate several attribute definitions for a single HTML element. Example: &quot;a[href|target]&quot; means users may optionally specify the &quot;href&quot; and &quot;target&quot; attributes for &quot;a&quot; elements, any other attribute will be ignored.</li>\n  <li>Use the exclamation mark &quot;!&quot; to set one attribute as being required for a particular HTML element. Example: &quot;a[!href|target]&quot; means users must specify the &quot;href&quot; attribute, otherwise the whole &quot;a&quot; element will be ignored. Users may optionally specify the &quot;target&quot; attribute as well. However, any other attribute will be ignored.</li>\n  <li>Use the asterisk symbol &quot;*&quot; to whitelist all possible attributes for a particular HTML element. Example: &quot;a[*]&quot; means users will be allowed to use any attribute for the &quot;a&quot; element.</li>\n  <li>Use the at sign character &quot;@&quot; to whitelist a common set of attributes for all allowed HTML elements. Example: &quot;@[class|style]&quot; means users will be allowed to use the &quot;class&quot; and &quot;style&quot; attributes for any whitelisted HTML element.</li>\n  <li>For further information and examples, please consult documentation of the <a href=\"@valid-elements\">valid_elements</a> option in the TinyMCE Wiki site.</li>\n</ul>\n<strong>Additional notes:</strong><ul>\n  <li>The following elements cannot be whitelisted due to security reasons, to prevent users from breaking site layout and/or to avoid posting invalid HTML. Forbidden elements: %elements-blacklist.</li>\n  <li>JavaScript event attributes such as onclick, onmouseover, etc. are always ignored. Should you need them, please consider using the &quot;Full HTML&quot; input format instead.</li>\n  <li>If you allow usage of the attributes &quot;id&quot;, &quot;class&quot; and/or &quot;style&quot;, then you should also select which style properties are allowed and/or specify explicit matching rules for them using the &quot;Advanced rules&quot; section below.</li>\n</ul>"
+msgstr ""
+
+#: wysiwyg_filter.admin.inc:63
+msgid "Style properties"
+msgstr ""
+
+#: wysiwyg_filter.admin.inc:66
+msgid "This section allows you to select which style properties can be used for HTML elements where the &quot;style&quot; attribute has been allowed. The <em>WYSIWYG Filter</em> will strip out style properties (and their values) not explicitly enabled here. On the other hand, for allowed style properties the <em>WYSIWYG Filter</em> will check their values for strict CSS syntax and strip out those that do not match."
+msgstr ""
+
+#: wysiwyg_filter.admin.inc:67
+msgid "Additional matching rules should be specified from the &quot;Advanced rules&quot; section below for a few of these properties that may contain URLs in their values (&quot;background&quot;, &quot;background-image&quot;, &quot;list-style&quot; and &quot;list-style-image&quot;). Otherwise, these style properties will be ignored from user input."
+msgstr ""
+
+#: wysiwyg_filter.admin.inc:91
+msgid "Advanced rules"
+msgstr ""
+
+#: wysiwyg_filter.admin.inc:93
+msgid "Use the following options to configure additional rules for certain HTML element attributes. As a safety measure, these rules should be defined explicitly. Otherwise, the corresponding HTML element attributes will be ignored from user input."
+msgstr ""
+
+#: wysiwyg_filter.admin.inc:119
+msgid "Spam link deterrent settings"
+msgstr ""
+
+#: wysiwyg_filter.admin.inc:121
+msgid "As a measure to reduce the effectiveness of spam links, it is often recommended to add rel=&quot;nofollow&quot; to posted links leading to external sites. The WYSIWYG Filter can easily do this for you while HTML is being processed with almost no additional performance impact."
+msgstr ""
+
+#: wysiwyg_filter.admin.inc:125
+msgid "Policy"
+msgstr ""
+
+#: wysiwyg_filter.admin.inc:127
+msgid "Disabled - Do not add rel=&quot;nofollow&quot; to any link."
+msgstr ""
+
+#: wysiwyg_filter.admin.inc:128
+msgid "Whitelist - Add rel=&quot;nofollow&quot; to all links except those leading to domain names specified in the list below."
+msgstr ""
+
+#: wysiwyg_filter.admin.inc:129
+msgid "Blacklist - Add rel=&quot;nofollow&quot; to all links leading to domain names specified in the list below."
+msgstr ""
+
+#: wysiwyg_filter.admin.inc:132
+msgid "If you choose the whitelist option, be sure to add your own domain names to the list!"
+msgstr ""
+
+#: wysiwyg_filter.admin.inc:141
+msgid "Domains list"
+msgstr ""
+
+#: wysiwyg_filter.admin.inc:145
+msgid "Enter a comma separated list of top level domain names. Note that all subdomains will also be included. Example: example.com will match example.com, www.example.com, etc."
+msgstr ""
+
+#: wysiwyg_filter.admin.inc:225
+msgid "The following elements cannot be allowed: %elements."
+msgstr ""
+
+#: wysiwyg_filter.admin.inc:234
+msgid "Invalid expression %expression. Please, do not use more than one consecutive asterisk (**) or one that is next to a question mark wildcard (?* or *?)."
+msgstr ""
+
+#: wysiwyg_filter.admin.inc:237
+msgid "Invalid expression %expression. Please, check the syntax of the %field field."
+msgstr ""
+
+#: wysiwyg_filter.admin.inc:248
+msgid "Invalid domain %domain. Please, enter a comma separated list of valid domain names."
+msgstr ""
+
+#: wysiwyg_filter.inc:22
+msgid "Rules for Class Names"
+msgstr ""
+
+#: wysiwyg_filter.inc:23
+msgid "Enter a comma separated list of rules for <em>Class Names</em>. Whitespaces and line-breaks are ignored. <em>Class Names</em> should start with an upper or lower case letter &quot;a to z&quot; and can be followed by one or more upper or lower case letters &quot;a to z&quot;, digits &quot;0 to 9&quot;, hyphens &quot;-&quot; and/or underscores &quot;_&quot;. The asterisk character &quot;*&quot; can be used in rules to represent any number of characters from the second position of the rule. Example: &quot;userclass*, my-font-*&quot; are valid rules for <em>Class Names</em>, whereas &quot;*class&quot; is invalid."
+msgstr ""
+
+#: wysiwyg_filter.inc:27
+msgid "The <strong>class</strong> attribute is used in your <em>HTML elements and attributes</em> rules. You should specify the <em>Rules for Class Names</em> field in the &quot;Advanced rules&quot; section below. Leaving it unspecified will result in all class attributes filtered out."
+msgstr ""
+
+#: wysiwyg_filter.inc:30
+msgid "Rules for Element IDs"
+msgstr ""
+
+#: wysiwyg_filter.inc:31
+msgid "Enter a comma separated list of rules for <em>Element IDs</em>. Whitespaces and line-breaks are ignored. <em>Element IDs</em> should start with an upper or lower case letter &quot;a to z&quot; and can be followed by one or more upper or lower case letters &quot;a to z&quot;, digits &quot;0 to 9&quot;, hyphens &quot;-&quot; and/or underscores &quot;_&quot;. The asterisk character &quot;*&quot; can be used in rules to represent any number of characters from the second position of the rule. Example: &quot;foo*&quot; is a valid rule for <em>Element IDs</em>, whereas &quot;*bar&quot; is invalid."
+msgstr ""
+
+#: wysiwyg_filter.inc:35
+msgid "The <strong>id</strong> attribute is used in your <em>HTML elements and attributes</em> rules. You should specify the <em>Rules for Element IDs</em> field in the &quot;Advanced rules&quot; section below. Leaving it unspecified will result in all id attributes filtered out."
+msgstr ""
+
+#: wysiwyg_filter.inc:38
+msgid "Rules for URLs used within inline styles"
+msgstr ""
+
+#: wysiwyg_filter.inc:39
+msgid "Enter a comma separated list of rules for <em>URLs used within inline styles</em>. Whitespaces and line-breaks are ignored. These rules affect the following style properties: &quot;background&quot;, &quot;background-image&quot;, &quot;list-style&quot; and &quot;list-style-image&quot;. Each rule represents a single path or URL. The asterisk character &quot;*&quot; can be used to represent any number of characters. Examples: use &quot;/*&quot; for local URLs only, use &quot;/images/*&quot; for one particular directory, use &quot;http://www.example.com/*&quot; for URLs of an external site, use &quot;@base-path*, @base-url*&quot; for URLs of your own site."
+msgstr ""
+
+#: wysiwyg_filter.inc:44
+msgid "The <strong>style</strong> attribute is used in your <em>HTML elements and attributes</em> rules, and you have enabled one of the following style properties: &quot;background&quot;, &quot;background-image&quot;, &quot;list-style&quot; or &quot;list-style-image&quot;. You should specify the <em>Rules for URLs used within inline styles</em> field in the &quot;Advanced rules&quot; section below. Leaving it unspecified will result in all URLs used within inline styles filtered out."
+msgstr ""
+
+#: wysiwyg_filter.inc:335
+msgid "Color and background properties"
+msgstr ""
+
+#: wysiwyg_filter.inc:347
+msgid "Font properties"
+msgstr ""
+
+#: wysiwyg_filter.inc:360
+msgid "Text properties"
+msgstr ""
+
+#: wysiwyg_filter.inc:374
+msgid "Box properties"
+msgstr ""
+
+#: wysiwyg_filter.inc:389
+msgid "Border properties (1)"
+msgstr ""
+
+#: wysiwyg_filter.inc:404
+msgid "Border properties (2)"
+msgstr ""
+
+#: wysiwyg_filter.inc:419
+msgid "Dimension properties"
+msgstr ""
+
+#: wysiwyg_filter.inc:431
+msgid "Positioning properties"
+msgstr ""
+
+#: wysiwyg_filter.inc:444
+msgid "Layout properties"
+msgstr ""
+
+#: wysiwyg_filter.inc:454
+msgid "List properties"
+msgstr ""
+
+#: wysiwyg_filter.inc:463
+msgid "Table properties"
+msgstr ""
+
+#: wysiwyg_filter.inc:473
+msgid "User interface properties"
+msgstr ""
+
+#: wysiwyg_filter.module:19
+msgid "Allows you to restrict whether users can post HTML and which tags and attributes per HTML tag to filter out."
+msgstr ""
+
+#: wysiwyg_filter.module:54
+msgid "Allowed HTML tags: @tags"
+msgstr ""
+
+#: wysiwyg_filter.module:57
+msgid "Allowed Style properties: @properties"
+msgstr ""
+
+#: wysiwyg_filter.module:0
+msgid "wysiwyg_filter"
+msgstr ""
+
+#: wysiwyg_filter.info:0
+msgid "Provides an input filter that allows site administrators configure which HTML elements, attributes and style properties are allowed."
+msgstr ""
+
+#: wysiwyg_filter.info:0
+msgid "Input filters"
+msgstr ""
+

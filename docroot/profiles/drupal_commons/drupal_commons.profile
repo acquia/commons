@@ -10,9 +10,6 @@ define('DRUPAL_COMMONS_TAG_ID', 2);
 // Define the default WYSIWYG editor
 define('DRUPAL_COMMONS_EDITOR', 'ckeditor');
 
-// Define the allowed filtered html tags
-define('DRUPAL_COMMONS_FILTERED_HTML', '<a> <img> <br> <em> <p> <strong> <cite> <sub> <sup> <span> <blockquote> <code> <ul> <ol> <li> <dl> <dt> <dd> <pre> <address> <h2> <h3> <h4> <h5> <h6>');
-
 // Define the "community manager" role name
 define('DRUPAL_COMMONS_MANAGER_ROLE', 'community manager');
 
@@ -93,7 +90,7 @@ function drupal_commons_profile_modules() {
     'token', 'rules', 'rules_admin',
     
     // Editor
-    'wysiwyg',
+    'wysiwyg', 'wysiwyg_filter',
     
     // Messaging
     'messaging', 'messaging_mail', 'messaging_simple',
@@ -103,7 +100,7 @@ function drupal_commons_profile_modules() {
     'notifications_ui', 'notifications_views',
     
     // Misc
-    'wikitools', 'admin_menu', 'ajax_load', 'editablefields', 
+    'wikitools', 'admin_menu', 'ajax_load', 'editablefields',
     'calendar', 'jcalendar', 'diff', 'freelinking', 'flag', 'pathauto', 'jquery_ui', 'insert',
     'vertical_tabs', 'transliteration', 'password_policy',
     
@@ -330,7 +327,6 @@ function drupal_commons_config_profile() {
  */
 function drupal_commons_config_filter() {
   // Force filter format and filter IDs
-  // Necessary because Drupal doesn't use machine names for everything
   
   // Filtered HTML
   db_query("UPDATE {filters} f INNER JOIN {filter_formats} ff ON f.format = ff.format SET f.format = 1 WHERE ff.name = 'Filtered HTML'");
@@ -358,14 +354,20 @@ function drupal_commons_config_filter() {
   db_query("INSERT INTO {filters} (format, module, delta, weight) VALUES (5, 'filter', 0, -10)");
   db_query("INSERT INTO {filters} (format, module, delta, weight) VALUES (5, 'filter', 2, -9)");
   
+  // Remove the HTML filter from Filtered HTML
+  db_query("DELETE FROM {filters} WHERE format = 1 AND module = 'filter' AND delta = 0");
+  
+  // Add WYSIWYG filter to Filtered HTML
+  db_query("INSERT INTO {filters} (format, module, delta, weight) VALUES (1, 'wysiwyg_filter', 0, -8)");
+  
+  // Adjust the weight of the HTML corrector for Filtered HTML
+  db_query("UPDATE {filters} SET weight = -7 WHERE module = 'filter' AND delta = 3");
+  
   // Adjust settings for the filter
   variable_set('filter_url_length_5', 60);
   variable_set('filter_html_5', 1);
   variable_set('filter_html_help_5', 0);
   variable_set('allowed_html_5', '');
-  
-  // Set allowed HTML tags for Filter HTML format
-  variable_set('allowed_html_1', DRUPAL_COMMONS_FILTERED_HTML);
 }
 
 /**

@@ -1,0 +1,73 @@
+<?php
+// $Id: wysiwyg_filter.module,v 1.1.2.13 2010/03/08 02:59:58 markuspetrux Exp $
+
+/**
+ * @file
+ * Provides an input filter that allows site administrators configure which
+ * HTML elements, attributes and style properties are allowed.
+ */
+
+/**
+ * Implementation of hook_filter().
+ */
+function wysiwyg_filter_filter($op, $delta = 0, $format = -1, $text = '') {
+  if ($op == 'list') {
+    return array(0 => t('WYSIWYG Filter'));
+  }
+  else if ($op == 'description') {
+    if ($delta == 0) {
+      return t('Allows you to restrict whether users can post HTML and which tags and attributes per HTML tag to filter out.');
+    }
+  }
+  else if ($op == 'settings') {
+    if ($delta == 0) {
+      module_load_include('inc', 'wysiwyg_filter', 'wysiwyg_filter.admin');
+      return wysiwyg_filter_settings_filter($format);
+    }
+  }
+  else if ($op == 'process') {
+    if ($delta == 0) {
+      module_load_include('inc', 'wysiwyg_filter', 'wysiwyg_filter.pages');
+      return wysiwyg_filter_process($text, $format);
+    }
+  }
+  else {
+    return $text;
+  }
+}
+
+/**
+ * Implementation of hook_filter_tips().
+ */
+function wysiwyg_filter_filter_tips($delta, $format, $long = FALSE) {
+  if ($delta == 0) {
+    // Load common functions.
+    module_load_include('inc', 'wysiwyg_filter');
+
+    $filter_options = wysiwyg_filter_get_filter_options($format);
+    $tips = array();
+    if (!empty($filter_options['valid_elements'])) {
+      $tags = array();
+      foreach (array_keys($filter_options['valid_elements']) as $tag) {
+        $tags[] = '<'. $tag .'>';
+      }
+      $tips[] = t('Allowed HTML tags: @tags', array('@tags' => implode(' ', $tags)));
+    }
+    if (!empty($filter_options['style_properties'])) {
+      $tips[] = t('Allowed Style properties: @properties', array('@properties' => implode(', ', array_keys($filter_options['style_properties']))));
+    }
+    if (!empty($tips)) {
+      return implode('<br />', $tips);
+    }
+  }
+}
+
+/**
+ * Implementation of wysiwyg_editor_settings_alter().
+ */
+function wysiwyg_filter_wysiwyg_editor_settings_alter(&$settings, $context) {
+  // Provide the valid_elements option to TinyMCE editors.
+  if ($context['profile']->editor == 'tinymce' && ($valid_elements = variable_get('wysiwyg_filter_valid_elements_raw_'. $context['profile']->format, ''))) {
+    $settings['valid_elements'] = preg_replace('#\s+#', '', $valid_elements);
+  }
+}

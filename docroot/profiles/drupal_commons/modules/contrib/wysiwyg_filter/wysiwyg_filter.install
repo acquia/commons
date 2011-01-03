@@ -1,0 +1,16 @@
+<?php
+// $Id: wysiwyg_filter.install,v 1.1.2.1 2008/10/24 19:43:54 markuspetrux Exp $
+
+/**
+ * @file
+ * Module installation/uninstallation hooks.
+ */
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function wysiwyg_filter_uninstall() {
+  // Delete all module variables and then clear the variables cache.
+  db_query("DELETE FROM {variable} WHERE name LIKE 'wysiwyg\_filter\_%'");
+  cache_clear_all('variables', 'cache');
+}

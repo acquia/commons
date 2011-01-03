@@ -38,6 +38,14 @@ function commons_core_update_6000() {
   // Remove custom primary menu items added by Commons
   db_query("DELETE FROM {menu_links} WHERE menu_name = 'primary-links' AND module = 'commons'");
   
+  // Enable wysiwyg filter
+  drupal_install_modules(array('wysiwyg_filter'));
+  
+  // Replace HTML filter with WYSIWYG filter for the Filtered HTML format
+  db_query("DELETE FROM {filters} WHERE format = 1 AND module = 'filter' AND delta = 0");
+  db_query("INSERT INTO {filters} (format, module, delta, weight) VALUES (1, 'wysiwyg_filter', 0, -8)");
+  db_query("UPDATE {filters} SET weight = -7 WHERE module = 'filter' AND delta = 3");
+  
   // Disable the old home page
   ctools_include('context');
   ctools_include('plugins');

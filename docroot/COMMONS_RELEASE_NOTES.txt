@@ -17,8 +17,10 @@ UPGRADING TO 1.2:
 9. Review the available Pages (admin/build/pages)
  - Delete or disable page-Home, as it's no longer used by Commons but may
    still be saved in your database
-10. Clear the cache (admin/settings/performance)
-11. Ensure the rest of your site is functioning as expected
+10. Review your input format and filters. WYSIWYG Filter has been set to be used
+  in place of HTML Filter (for the Filtered HTML format)
+11. Clear the cache (admin/settings/performance)
+12. Ensure the rest of your site is functioning as expected
 
 =========================================================
 CHANGELOG: 
@@ -86,6 +88,7 @@ Drupal Commons 1.2, ????-??-??
 - Moved: Permissions to respective sub-features
 - Added: Teaser break button to default WYSIWYG settings
 - Added: Context to control Acquia Search/Solr facet blocks
+- Added: WYSIWYG Filter (Set to Filtered HTML in place of the default HTML filter)
 
 Drupal Commons 1.1, 2010-08-16
 --------------------------------
