@@ -11,8 +11,6 @@ function acquia_network_subscription_strongarm() {
   $strongarm->name = 'apachesolr_enabled_facets';
   $strongarm->value = array(
     'apachesolr_search' => array(
-      'uid' => 'uid',
-      'type' => 'type',
       'created' => 'created',
       'im_vid_2' => 'im_vid_2',
       'changed' => 'changed',
