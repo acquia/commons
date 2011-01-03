@@ -52,6 +52,9 @@ function drupal_commons_editor_settings($format) {
             'CreateDiv' => 1,
             'Maximize' => 1,
           ),
+          'drupal' => array(
+            'break' => 1,
+          ),
         ),
         'toolbar_loc' => 'top',
         'toolbar_align' => 'left',
@@ -109,6 +112,9 @@ function drupal_commons_editor_settings($format) {
             'Format' => 1,
             'SelectAll' => 1,
             'Find' => 1,
+          ),
+          'drupal' => array(
+            'break' => 1,
           ),
         ),
         'toolbar_loc' => 'top',
