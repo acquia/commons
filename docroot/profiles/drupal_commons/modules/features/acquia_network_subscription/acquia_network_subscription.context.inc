@@ -51,6 +51,18 @@ function acquia_network_subscription_context_default_contexts() {
           'region' => 'sidebar_first',
           'weight' => 4,
         ),
+        'apachesolr_search-uid' => array(
+          'module' => 'apachesolr_search',
+          'delta' => 'uid',
+          'region' => 'sidebar_first',
+          'weight' => 5,
+        ),
+        'apachesolr_search-type' => array(
+          'module' => 'apachesolr_search',
+          'delta' => 'type',
+          'region' => 'sidebar_first',
+          'weight' => 6,
+        ),
       ),
     ),
   );
