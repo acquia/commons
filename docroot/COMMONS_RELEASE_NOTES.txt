@@ -3,10 +3,13 @@ UPGRADING TO 1.2:
 
 1. Backup your code and database
 2. Turn on maintenance mode (admin/settings/site-maintenance)
-3. Replace your codebase (excluding the sites directory) with the contents of this archive
-4. Update your site via /update.php
+3. Replace your codebase (excluding the sites directory) with the contents of this archive.
+ - It is important that you do not *merge* the new codebase, as a number of modules were
+   remove or relocated!
+4. Update your site via /update.php (run this twice to be safe)
 5. Ignore any errors about missing included/required files 
  - Those are caused by some modules changing location
+ - Ignore SQL errors from Context and/or Rules
 6. View the status of the features (admin/build/features)
 7. If any features are overridden, view the components of the feature that are overridden
  - It's recommended that you revert all the overridden components, but be aware that
@@ -85,6 +88,7 @@ Drupal Commons 1.2, ????-??-??
 - Added: 'My groups' to the 'My stuff' menu
 - Fixed: Dependence of PHP input filter inside various views
 - Added: Batch process of post-installation tasks (to avoid PHP timeout)
+- Fixed: Lowered install profile module dependencies (to avoid PHP timeout)
 - Moved: Permissions to respective sub-features
 - Added: Teaser break button to default WYSIWYG settings
 - Added: Context to control Acquia Search/Solr facet blocks

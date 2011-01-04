@@ -39,6 +39,12 @@ define('DRUPAL_COMMONS_RELATIONSHIP_PLURAL', 'Friends');
 
 /**
  * Return an array of the modules to be enabled when this profile is installed.
+ * 
+ * To save time during installation, only enable module here that are either
+ * required by Features or not included in any Commons features
+ * 
+ * @see
+ *   drupal_commons_enable_features()
  *
  * @return
  *   An array of modules to enable.
@@ -57,61 +63,16 @@ function drupal_commons_profile_modules() {
     'page_manager', 'panels', 
     
     // Context
-    'context', 'context_ui',
-    
-    // Views
-    'views', 'views_ui', 'views_content',
-    
-    // getID
-    'getid3',
-    
-    // CCK
-    'content', 'content_permissions', 'fieldgroup', 'text', 'filefield', 'imagefield',
-    'optionwidgets', 'link', 'filefield_meta',
+    'context',
     
     // Date
-    'date_api', 'date_timezone', 'date',  'date_popup', 'date_tools',
-     
-    // ImageAPI + ImageCache
-    'imageapi', 'imagecache', 'imageapi_gd',  'imagecache_profiles', 'imagecache_ui',
-    'imagecache_canvasactions',
-    
-    // Organic Groups
-    'og', 'og_access', 'og_aggregator', 'og_statistics', 'og_views', 'context_og',
-    
-    // User Relationships
-    'user_relationships_api', 'user_relationships_ui', 'user_relationship_views', 'user_relationships_rules',
-    'user_relationship_blocks', 'user_relationship_elaborations', 'user_relationship_mailer',
-    
+    'date_api', 'date_timezone',
+
     // Taxonomy
-    'tagadelic', 'tagadelic_views', 'tagging', 'user_terms',
-    
-    // Rules
-    'token', 'rules', 'rules_admin',
-    
-    // Editor
-    'wysiwyg', 'wysiwyg_filter',
-    
-    // Messaging
-    'messaging', 'messaging_mail', 'messaging_simple',
-    
-    // Notifications
-    'notifications', 'notifications_autosubscribe', 'notifications_content',
-    'notifications_ui', 'notifications_views',
+    'tagging',
     
     // Misc
-    'wikitools', 'admin_menu', 'ajax_load', 'editablefields',
-    'calendar', 'jcalendar', 'diff', 'freelinking', 'flag', 'pathauto', 'jquery_ui', 'insert',
     'vertical_tabs', 'transliteration', 'password_policy',
-    
-    // Userpoints
-    'userpoints', 'userpoints_nc', 'userpoints_user_picture',
-    
-    // Shoutbox
-    'shoutbox', 'shoutbox_group', 'shoutbox_points',
-    
-    // Heartbeat
-    'heartbeat', 'heartbeat_views', 'hrules', 'friendlist_activity', 'flag_heartbeat', 'og_activity',
     
     // Analytics
     'chart', 'quant',
