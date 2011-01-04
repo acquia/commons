@@ -1281,10 +1281,20 @@ function commons_core_can_edit_comment($comment) {
 * Implementation of hook_action_info().
 */
 function commons_core_action_info() {
-  // Provide a "Mark as read" action for VBO
   return array(
+    // Provide a "Mark as read" action for VBO
     'commons_core_noderead_action' => array(
       'description' => t('Mark as read'),
+      'type' => 'node',
+      'configurable' => FALSE,
+      'hooks' => array(
+        'nodeapi' => array('presave'),
+        'comment' => array('insert', 'update'),  
+      )    
+    ),
+    // Provide a "Mark as unread" action for VBO
+    'commons_core_nodeunread_action' => array(
+      'description' => t('Mark as unread'),
       'type' => 'node',
       'configurable' => FALSE,
       'hooks' => array(
@@ -1314,6 +1324,21 @@ function commons_core_noderead_action(&$node) {
     $record->uid = $user->uid;
     $record->timestamp = time();
     drupal_write_record('history', $record);     
+  }     
+}
+
+/**
+ * Set a given node as unread for the current user
+ * 
+ * @see
+ *   commons_core_action_info()
+ */
+function commons_core_nodeunread_action(&$node) {
+  global $user;
+
+  if ($user->uid) {
+    // Remove any records for this node for this user
+    db_query("DELETE FROM {history} WHERE nid = %d AND uid = %d", $node->nid, $user->uid);    
   }     
 }
 
