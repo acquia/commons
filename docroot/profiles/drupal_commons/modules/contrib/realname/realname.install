@@ -1,0 +1,170 @@
+<?php
+// $Id: realname.install,v 1.4.4.10 2010/10/27 06:52:01 davereid Exp $
+
+/**
+ * @file
+ *   Handles installation and updates for the RealName module.
+ *
+ * @copyright Copyright (c) 2007-2008 Nancy Wichmann.  All rights reserved.
+ */
+
+//********************************************************************
+//* Drupal Hooks
+//********************************************************************
+
+/**
+ * Implementation of hook_schema().
+ */
+function realname_schema() {
+  $schema['realname'] = array(
+    'module' => 'RealName',
+    'description' => 'Computed RealNames to reduce overhead.',
+    'fields' => array(
+      'uid' => array(
+        'description' => 'User ID, links to User table.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        ),
+      'realname' => array(
+        'description' => 'Saved computed RealName.',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        ),
+      ),
+    'primary key' => array('uid'),
+    'indexes' => array(
+      'realname' => array('realname')
+      ),
+    );
+  return $schema;
+}
+
+/**
+ * Implementation of hook_install().
+ */
+function realname_install() {
+  drupal_install_schema('realname');
+}
+
+/**
+ * Implementation of hook_enable().
+ */
+function realname_enable() {
+  drupal_set_message(t('The RealName module has been enabled. You may wish to proceed to <a href="!url">the settings page</a>.', array('!url' => url('admin/user/realname'))));  
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function realname_uninstall() {
+  variable_del('realname_fields');
+  variable_del('realname_homepage');
+  variable_del('realname_max_username');
+  variable_del('realname_myacct');
+  variable_del('realname_nodeapi');
+  variable_del('realname_nofollow');
+  variable_del('realname_notver');
+  variable_del('realname_pattern');
+  variable_del('realname_profile_module');
+  variable_del('realname_profile_type');
+  variable_del('realname_search_enable');
+  variable_del('realname_search_login');
+  variable_del('realname_theme');
+  variable_del('realname_use_title');
+  variable_del('realname_user_disable');
+
+  drupal_uninstall_schema('realname');
+}
+
+/**
+ * Implementation of hook_update_N().
+ */
+function realname_update_6100() {
+  $ret = array();
+
+  if (variable_get('realname_profile_module', NULL)) {
+    $ret[] = array('success' => TRUE, 'query' => t('No change required.'));
+  }
+  else {
+    variable_set('realname_profile_module', 'profile');
+    $ret[] = array('success' => TRUE, 'query' => "variable_set('realname_profile_module', 'profile')");
+  }
+
+  return $ret;
+}
+
+/**
+ * Implementation of hook_update_N().
+ */
+function realname_update_6101() {
+  $ret = array();
+
+  if (variable_get('realname_use_myacct', TRUE)) {
+    variable_set('realname_myacct', 'My account');
+    $ret[] = array('success' => TRUE, 'query' => "variable_set('realname_myacct', 'My account')");
+  }
+  else {
+    variable_set('realname_myacct', NULL);
+    $ret[] = array('success' => TRUE, 'query' => "variable_set('realname_myacct', NULL)");
+  }
+  variable_del('realname_use_myacct');
+
+  return $ret;
+}
+
+/**
+ * Implementation of hook_update_N().
+ */
+function realname_update_6102() {
+  $ret = array();
+  $table = array(
+    'module' => 'RealName',
+    'description' => 'Computed RealNames to reduce overhead.',
+    'fields' => array(
+      'uid' => array(
+        'description' => 'User ID, links to User table.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        ),
+      'realname' => array(
+        'description' => 'Saved computed RealName.',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        ),
+      ),
+    );
+
+  // Create new table.
+  if (db_table_exists('realname')) {
+    // Update is being re-run.
+    drupal_uninstall_schema('realname');
+  }
+  db_create_table($ret, 'realname', $table);
+
+  db_add_primary_key($ret, 'realname', array('uid'));
+  db_add_index($ret, 'realname', 'realname', array('realname'));
+
+  // Populate table using current settings.
+  // @TODO: User processing can take quite long. We probably need to use BATCH API
+  $module = variable_get('realname_profile_module' , NULL);
+  if ($module) {
+    drupal_load('module', 'realname');
+    $result = db_query("SELECT u.uid, u.name FROM {users} u");
+    while ($row = db_fetch_object($result)) {
+      $realname = _realname_make_name($row);
+      db_query("INSERT INTO {realname} (uid, realname) VALUES(%d, '%s')", $row->uid, $realname);
+    }
+    $ret[] = array('success' => TRUE, 'query' => t('Realnames have been recalculated'));
+  }
+  else {
+    drupal_set_message(t('The Realname module has been updated. In order to start using it, you have to select a profile module to be used.'), 'warning');
+  }
+
+  return $ret;
+}

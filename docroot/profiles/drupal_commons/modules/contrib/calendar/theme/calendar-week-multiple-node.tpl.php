@@ -1,5 +1,5 @@
 <?php
-// $Id: calendar-week-multiple-node.tpl.php,v 1.1.2.4 2008/11/20 12:29:14 karens Exp $
+// $Id: calendar-week-multiple-node.tpl.php,v 1.1.2.5 2010/11/21 13:19:37 karens Exp $
 /**
  * @file
  * Template to display a summary of the days items as a calendar week node.
@@ -8,7 +8,7 @@
  */ 
 ?>
 <div class="view-item view-item-<?php print $view->name ?>">
-  <div class="calendar weekview" id="<?php print $curday ?>">
+  <div class="<?php print $curday; ?> calendar weekview">
     <?php foreach ($types as $type): ?>
       <?php if ($view->date_info->style_max_items_behavior != 'more'): ?>
         <?php print theme('calendar_stripe_stripe', $type); ?>

@@ -1,5 +1,5 @@
 <?php
-//$Id: date_token.inc,v 1.2.2.1.2.7 2009/03/20 12:07:51 karens Exp $
+//$Id: date_token.inc,v 1.2.2.1.2.8 2010/09/08 02:38:09 arlinsandbulte Exp $
 /**
  * @file
  * Token module integration.
@@ -25,6 +25,7 @@ function date_token_list($type = 'all') {
     $tokens['date']['ddd']            = t("Date day (abbreviation)");
     $tokens['date']['dd']             = t("Date day (two digit, zero-padded)");
     $tokens['date']['d']              = t("Date day (one or two digit)");
+    $tokens['date']['dS']             = t("Date day (one or two digit) with ordinal suffix (st, nd, rd or th)");
     $tokens['date']['time']           = t("Time H:i");
     
     $tokens['date']['to-????']        = t("If the field has a to-date defined, the same tokens exist in the form: [to-????], where ???? is the normal token.");
@@ -61,6 +62,7 @@ function date_token_values($type, $object = NULL) {
     $tokens['ddd']            = !empty($date) ? date_format_date($date, 'custom', 'D') : '';
     $tokens['dd']             = !empty($date) ? date_format_date($date, 'custom', 'd') : '';
     $tokens['d']              = !empty($date) ? date_format_date($date, 'custom', 'j') : '';
+    $tokens['dS']             = !empty($date) ? date_format_date($date, 'custom', 'jS') : '';
     $tokens['time']           = !empty($date) ? date_format_date($date, 'custom', 'H:i') : '';
 
     if (!empty($item['value2'])) {
@@ -87,6 +89,7 @@ function date_token_values($type, $object = NULL) {
       $tokens['to-ddd']            = !empty($date) ? date_format_date($date, 'custom', 'D') : '';
       $tokens['to-dd']             = !empty($date) ? date_format_date($date, 'custom', 'd') : '';
       $tokens['to-d']              = !empty($date) ? date_format_date($date, 'custom', 'j') : '';
+      $tokens['to-dS']             = !empty($date) ? date_format_date($date, 'custom', 'jS') : '';
       $tokens['to-time']           = !empty($date) ? date_format_date($date, 'custom', 'H:i') : '';
 
     }

@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_calc.inc,v 1.8.4.19 2010/08/12 21:06:57 karens Exp $
+// $Id: date_repeat_calc.inc,v 1.8.4.25 2011/01/01 00:52:57 karens Exp $
 /**
  * @file
  * Code to compute the dates that match an iCal RRULE.
@@ -14,7 +14,7 @@
  * so the calculation code is not called more often than necessary.
  *
  * Currently implemented:
- * INTERVAL, UNTIL, COUNT, EXDATE, BYDAY, BYMONTHDAY, BYMONTH,
+ * INTERVAL, UNTIL, COUNT, EXDATE, RDATE, BYDAY, BYMONTHDAY, BYMONTH,
  * YEARLY, MONTHLY, WEEKLY, DAILY
  *
  * Currently not implemented:
@@ -31,7 +31,7 @@
  *
  * Compute dates that match the requested rule, within a specified date range.
  */
-function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone) {
+function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone, $additions) {
   require_once('./'. drupal_get_path('module', 'date_api') .'/date_api_ical.inc');
   
   if (empty($timezone)) {
@@ -39,7 +39,7 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone) {
   }
   
   // Make sure the 'EXCEPTIONS' string isn't appended to the rule.
-  $parts = split("\n", $rrule);
+  $parts = explode("\n", $rrule);
   if (count($parts)) {
     $rrule = $parts[0];
   }
@@ -107,7 +107,7 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone) {
     $direction_days = array();
     // Deconstruct the day in case it has a negative modifier.
     foreach ($rrule['BYMONTHDAY'] as $day) {
-      ereg("(-)?([0-9]{1,2})", $day, $regs);
+      preg_match("@(-)?([0-9]{1,2})@", $day, $regs);
       if (!empty($regs[2])) {
         // Convert parameters into full day name, count, and direction.
         $direction_days[$day] = array(
@@ -133,7 +133,7 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone) {
             $period_finished = TRUE;
           }
           // Back up to first of month and jump.
-          $current_day = date_repeat_set_month_day($current_day, NULL, 1, $timezone);
+          $current_day = date_repeat_set_month_day($current_day, NULL, 1, '+', $timezone);
           date_modify($current_day, '+'. $jump);
         }
         // If it's yearly, break out of the loop at the
@@ -144,14 +144,14 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone) {
           }
           else {
             // Back up to first of month and jump.
-            $current_day = date_repeat_set_month_day($current_day, NULL, 1, $timezone);
+            $current_day = date_repeat_set_month_day($current_day, NULL, 1, '+', $timezone);
             date_modify($current_day, '+1 month');
           }
         }
       }
       if ($rrule['FREQ'] == 'YEARLY') {
         // Back up to first of year and jump.
-        $current_day = date_repeat_set_year_day($current_day, NULL, 1, $timezone);
+        $current_day = date_repeat_set_year_day($current_day, NULL, 1, '+', $timezone);
         date_modify($current_day, '+'. $jump);
       }
       $finished = date_repeat_is_finished($current_day, $days, $count, $end_date);
@@ -202,7 +202,7 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone) {
     $ordered_keys = array_flip($ordered);
 
     foreach ($rrule['BYDAY'] as $day) {
-      ereg("(-)?([1-5])?([SU|MO|TU|WE|TH|FR|SA]{2})", trim($day), $regs);
+      preg_match("@(-)?([0-9]+)?([SU|MO|TU|WE|TH|FR|SA]{2})@", trim($day), $regs);
       if (!empty($regs[2])) {
         // Convert parameters into full day name, count, and direction.
         $direction_days[] = array(
@@ -263,12 +263,11 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone) {
       $current_day = drupal_clone($start_date);
       $format = $rrule['FREQ'] == 'YEARLY' ? 'Y' : 'n';
       $current_period = date_format($current_day, $format);
-
       // Back up to the beginning of the week in case we are somewhere in the
       // middle of the possible week days, needed so we don't prematurely
       // jump to the next week. The date_repeat_add_dates() function will
       // keep dates outside the range from getting added.
-      if (date_format($current_day, 'l') != $day) {  
+      if (date_format($current_day, 'l') != $day_names[$day]) {  
         date_modify($current_day, '-1 '. $week_start_day);
       }
       while (!$finished) {
@@ -341,6 +340,12 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone) {
       }
     }
   }
+  
+  // add additional dates
+  foreach($additions as $addition) {
+    $days[] = date_format($addition, DATE_FORMAT_DATETIME);
+  }
+  
   sort($days);
   return $days;
 }
@@ -419,16 +424,18 @@ function date_repeat_add_dates(&$days, $current_day, $start_date, $end_date, $ex
   }
   if (!empty($rrule['BYMONTHDAY'])) {
     // Test month days, but only if there are no negative numbers.
+    $test = TRUE;
     $BYMONTHDAYS = array();
     foreach ($rrule['BYMONTHDAY'] as $day) {
       if ($day > 0) {
         $BYMONTHDAYS[] = $day;
       }
       else {
+        $test = FALSE;
         break;
       }
     }
-    if (!empty($BYMONTHDAYS) && !in_array(date_format($current_day, 'j'), $BYMONTHDAYS)) {
+    if ($test && !empty($BYMONTHDAYS) && !in_array(date_format($current_day, 'j'), $BYMONTHDAYS)) {
       return FALSE;
     }
   }
@@ -492,7 +499,8 @@ function date_repeat_set_month_day($date_in, $day, $count = 1, $direction = '+',
       // Use the English text for order, like First Sunday
       // instead of +1 Sunday to overcome PHP5 bug, (see #369020).
       $order = date_order();
-      date_modify($date, $order[$direction . $count] .' '. $day);
+      $step = $count <= 5 ? $order[$direction . $count] : $count;
+      date_modify($date, $step . ' ' . $day);
     }
     
     // If that takes us outside the current month, don't go there.
@@ -538,7 +546,8 @@ function date_repeat_set_year_day($date_in, $day, $count = 1, $direction = '+', 
       // Use the English text for order, like First Sunday
       // instead of +1 Sunday to overcome PHP5 bug, (see #369020).
       $order = date_order();
-      date_modify($date, $order[$direction . $count] .' '. $day);
+      $step = $count <= 5 ? $order[$direction . $count] : $count;
+      date_modify($date, $step . ' ' . $day);
     }
     
     // If that takes us outside the current year, don't go there.

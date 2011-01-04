@@ -1,46 +1,5 @@
 <?php
-//$Id: calendar.install,v 1.13.2.11 2009/03/17 18:03:36 karens Exp $
-/**
- * @file
- * Install File
- */
-/**
- * Implementation of hook_requirements().
- * Added to be sure the Date API version matches this code so invalid
- * functions are not called.
- */
-function calendar_requirements($phase) {
-  $requirements = array();
-  $t = get_t();
-
-  // This is the minimum required version for the Date API so that it will work with this module.
-  $required_version = 5.2;
-
-  // Make sure the matching version of date_api is installed.
-  // Use info instead of an error at install time since the problem may
-  // just be that they were installed in the wrong order.
-  switch ($phase) {
-    case 'runtime':
-      if (variable_get('date_api_version', 0) < $required_version) {
-        $requirements['calendar_api_version'] = array(
-          'title' => $t('Calendar requirements'),
-          'value' => $t('The Calendar module requires a more current version of the Date API. Please check for a newer version.'),
-          'severity' => REQUIREMENT_ERROR,
-          );
-      }
-      break;
-     case 'install':
-      if (variable_get('date_api_version', 0) < $required_version) {
-        $requirements['calendar_api_version'] = array(
-          'title' => $t('Calendar requirements'),
-          'value' => $t('The Calendar module requires the latest version of the Date API, be sure you are installing the latest versions of both modules.'),
-          'severity' => REQUIREMENT_INFO,
-          );
-      }
-      break;
-  }
-  return $requirements;
-}
+//$Id: calendar.install,v 1.13.2.12 2010/02/28 14:23:48 karens Exp $
 
 /**
  * Implementation of hook_enable().
@@ -106,35 +65,8 @@ function calendar_install() {
   return $ret;
 }
 
-/**
- * Move these caches from 'cache' to 'cache_views' so they get cleared
- * automatically whenever views_invalidate_cache() is called.
- */
-function calendar_update_5000() {
-  $ret = array();
-  cache_clear_all('calendar_fields', 'cache');
-  cache_clear_all('calendar_views', 'cache');
-  return $ret;
-}
-
-/**
- * Implementation of hook_update().
- */
-function calendar_update_5001() {
-  $ret = array();
-  $ret[] = update_sql("UPDATE {system} SET weight = 1 WHERE name = 'calendar'");
-
-  return $ret;
-}
-
-function calendar_update_5200() {
-  $ret = array();
-  module_enable(array('date_api'));
-  if (version_compare(PHP_VERSION, '5.2', '<')) {
-    module_enable(array('date_php4'));
-  }
-  module_enable(array('date_timezone'));
-  return $ret;
+function calendar_update_last_removed() {
+  return 5200;
 }
 
 // No longer track views info in variables now that

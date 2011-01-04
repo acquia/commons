@@ -1,5 +1,5 @@
 <?php
-// $Id: calendar.module,v 1.121.2.38 2009/03/17 18:03:36 karens Exp $
+// $Id: calendar.module,v 1.121.2.43 2010/12/31 16:25:43 karens Exp $
 define('CALENDAR_SHOW_ALL', 0);
 define('CALENDAR_HIDE_ALL', -1);
 
@@ -30,18 +30,22 @@ function calendar_help($section, $arg) {
 }
 
 function calendar_init() {
-  drupal_add_css(drupal_get_path('module', 'calendar') .'/calendar.css');
+  // If the multiday module is enabled, let it control the css.
+  if (module_exists('calendar_multiday') || substr($_GET['q'], 0, 24) == 'admin/build/modules/list') {
+    return;
+  }
   // The css for Farbtastic color picker, painless to add it here 
   // even though it isn't needed everywhere.
   drupal_add_css('misc/farbtastic/farbtastic.css');
-
+  drupal_add_css(drupal_get_path('module', 'calendar') .'/calendar.css');
   require_once('./'. drupal_get_path('module', 'calendar') .'/theme/theme.inc');
 }
 
 function calendar_theme() {
+  if (module_exists('calendar_multiday')) {
+    return array();
+  }
   $path = drupal_get_path('module', 'calendar');
-  require_once "./$path/theme/theme.inc";
-
   $base = array(
     'file' => 'theme.inc',
     'path' => "$path/theme",
@@ -92,8 +96,8 @@ function calendar_theme() {
       ),
     'calendar_time_row_heading' => $base + array(
       'arguments' => array('start_time', 'next_start_time', 'curday_date'),
-      ),  
-    );
+      ),
+  );
 }
 
 /**
@@ -267,6 +271,52 @@ function calendar_node_taxonomy_stripe($view, &$node, $query_name, $delta, $stri
     $node->stripe_label[] = '';
   } 
   return;
+}
+
+
+/**
+ * Create a stripe based on group.
+ *
+ * @param $node - the node object
+ * @param $query_name - the views queryname for this date field
+ * @param $delta - the delta for this field, used to distinguish fields that appear more than once in the calendar
+ * @param $stripe - the hex code for this stripe.
+ * @param $label - the label to give this stripe.
+ * 
+ * TODO Reconsider use of $GLOBALS as a method of triggering the legend, there
+ * may be a better way.
+ */
+function calendar_node_group_stripe($view, &$node, $query_name, $delta, $stripe = NULL, $label = '') {
+  $colors_group = isset($view->date_info->calendar_colors_group) ? $view->date_info->calendar_colors_group : array();
+  if (empty($colors_group)) {
+    return;
+  }
+  if (!function_exists('og_get_node_groups')) {
+    return;
+  }
+
+  $groups_for_node = og_get_node_groups($node);
+  if(!(isset($node->stripe))){
+    $node->stripe = array();
+    $node->stripe_label = array();
+  }
+  if (count($groups_for_node)){
+    foreach($groups_for_node as $gid => $group_name){
+      if (!array_key_exists($gid, $colors_group)) {
+        continue;
+      }
+      $stripe = $colors_group[$gid];
+      $stripe_label = $group_name;
+      $node->stripe[] = $stripe;
+      $node->stripe_label[] = $stripe_label;
+      $GLOBALS['calendar_stripe_labels'][][$gid] = array('stripe' => $stripe, 'label' => $stripe_label);
+    }
+  }
+  else {
+    $node->stripe[] = '';
+    $node->stripe_label[] = '';
+  } 
+  return $stripe;
 }
 
 
@@ -492,4 +542,380 @@ function calendar_remove($view_name) {
     $view->delete();
   }
   views_invalidate_cache();
+}
+
+/**
+ * Formats the weekday information into table header format
+ *
+ * @ingroup event_support
+ * @return array with weekday table header data
+ */
+function calendar_week_header($view) {
+  $len = isset($view->date_info->style_name_size) ? $view->date_info->style_name_size : (!empty($view->date_info->mini) ? 1 : 3);
+  $with_week = !empty($view->date_info->style_with_weekno);
+ 
+  // create week header
+  $untranslated_days = calendar_untranslated_days();
+  if ($len == 99) {
+    $translated_days = date_week_days_ordered(date_week_days(TRUE));
+  }
+  else {
+    $translated_days = date_week_days_ordered(date_week_days_abbr(TRUE));
+  }
+  if ($with_week) {
+    $row[] = array('header' => TRUE, 'class' => "days week", 'data' => '&nbsp;');
+  }
+  foreach ($untranslated_days as $delta => $day) {
+    $label = $len < 3 ? drupal_substr($translated_days[$delta], 0 , $len) : $translated_days[$delta];
+    $row[] = array('header' => TRUE, 'class' => "days ". $day, 'data' => $label);
+  }
+  return $row;
+}
+/**
+ * Array of untranslated day name abbreviations, forced to lowercase
+ * and ordered appropriately for the site setting for the first day of week.
+ *
+ * The untranslated day abbreviation is used in css classes.
+ */
+function calendar_untranslated_days() {
+  $untranslated_days = date_week_days_ordered(date_week_days_untranslated());
+  foreach ($untranslated_days as $delta => $day) {
+    $untranslated_days[$delta] = strtolower(substr($day, 0, 3));
+  }
+  return $untranslated_days;
+}
+
+/**
+ * Take the array of items and alter it to an array of
+ * calendar nodes that the theme can handle.
+ *
+ * Iterate through each datefield in the view and each item
+ * returned by the query, and create pseudo date nodes.
+ *
+ * If there is more than one date field in the node, this will create
+ * multiple nodes, one each with the right calendar date for that
+ * field's value. If a field value has a date range that covers more than
+ * one day, separate nodes will be created for each day in the field's
+ * day range, limited to the minimum and maximum dates for the view.
+ *
+ * When we finish, we will have a distinct node for each distinct day
+ * and date field.
+ */
+function calendar_build_nodes(&$view, &$items) {
+  if (empty($view->date_info->min_date) || empty($view->date_info->max_date)) {
+    return $items;
+  }
+  // Midnights are determined based on the same timezone as the View uses
+  $display_timezone = date_timezone_get($view->date_info->min_date);
+  $display_timezone_name = timezone_name_get($display_timezone);
+ 
+  // Translate the view min and max dates to UTC values
+  // so we can compare UTC dates to the view range.
+  $min_utc = drupal_clone($view->date_info->min_date);
+  date_timezone_set($min_utc, timezone_open('UTC'));
+  $max_utc = drupal_clone($view->date_info->max_date);
+  date_timezone_set($max_utc, timezone_open('UTC'));
+  $min_zone_string = array(); // Will cache $min_utc-strings in various timezones
+  $max_zone_string = array();
+  $view->date_info->nodes_per_page = 0;
+  $type_names = node_get_types('names');
+  $datefields = array();
+  $fields = date_api_fields($view->base_table);
+  if (!empty($view->filter['date_filter'])) {
+    $date_filter = $view->filter['date_filter'];
+    foreach ($view->filter['date_filter']->options['date_fields'] as $name) {
+      $datefields[] = $fields['name'][$name]['query_name'];
+    }
+  }
+  if (!empty($view->argument['date_argument'])) {
+    $date_filter = $view->argument['date_argument'];
+    foreach ($view->argument['date_argument']->options['date_fields'] as $name) {
+      $datefields[] = $fields['name'][$name]['query_name'];
+    }
+  }
+  $view_fields = date_api_views_fetch_fields('node', 'field');
+  $field_names = (array) array_keys($fields['name']);
+  $nodes = array();
+  $i = 0;
+  foreach ($date_filter->options['date_fields'] as $name) {
+    $field        = $fields['name'][$name];
+    $field_type   = strstr($field['type'], 'string') ? 'string' : 'timestamp';
+    $alias        = $field['query_name'];
+    $field_name   = $field['field_name'];
+    $fromto       = $field['fromto'];
+    $tz_handling  = $field['tz_handling'];
+    $label        = isset($view->field[$name]) ? $view->field[$name]['label'] : $field['field_name'];
+    $tz_alias     = str_replace('.', '_', $field['timezone_field']);
+    $db_tz        = date_get_timezone_db($field['tz_handling']);
+    $local_tz     = date_get_timezone($field['tz_handling'], 'date');
+    $field_name   = $field['field_name'];
+    $rrule_field  = str_replace(array('_value2', '_value'), '_rrule', $alias);
+           
+    // Set a flag to tell us if individual multi-day dates need to be
+    // split into separate nodes.
+    $split_dates = TRUE;
+    if (strstr($view->current_display, '_ical')) {
+      $split_dates = FALSE;
+    }
+   
+    // If there is no field for this item, just default to the site format.
+    if (!isset($view->field[$field_name])) {
+      $format = variable_get('date_format_short', 'm/d/Y - H:i');
+    }
+    else {
+      if (strstr($field['type'], 'cck')) {
+        $format = $view->field[$field_name]->options['format'];
+        $cck_field_name = str_replace(array('_value2', '_value'), '', $field_name);
+        $format = date_formatter_format($format, $cck_field_name);
+      }
+      else {
+        $format = $view->field[$field_name]->options['date_format'];
+        $cck_field_name = NULL;
+        switch ($format) {
+          case 'long':
+            $format = variable_get('date_format_long',  'l, F j, Y - H:i');
+            break;
+          case 'medium':
+            $format = variable_get('date_format_medium',  'D, m/d/Y - H:i');
+            break;
+          case 'custom':
+            $format = $view->field[$field_name]->options['custom_date_format'];
+            break;
+          case 'time ago':
+            break;
+          default:
+            $format = variable_get('date_format_short', 'm/d/Y - H:i');
+            break;
+        }
+      }
+    }
+
+    // set the domain part of the id
+    $domain = check_plain($_SERVER['SERVER_NAME']);
+     
+    // If there are multiple date fields in this calendar we may get
+    // duplicate items from the other date fields, so add a way to
+    // make sure each individual date field only gets added to the
+    // calendar one time.
+    $processed = array();
+    $rrule_processed = array();
+    foreach ($items as $pos => $item) {
+      $delta = !empty($field['delta_field']) && !empty($item->{$field['delta_field']}) ? $item->{$field['delta_field']} : 0;
+      $real_field = $field_name;
+      if (substr($field['type'], 0, 3) == 'cck') {
+        $real_field = str_replace(array('_value2', '_value'), '', $field_name);
+      }
+      
+      $id = 'calendar.'. $item->{$view->base_field} .'.'. $real_field .'.'. $delta;
+      
+      // When creating iCal feeds for repeating dates we don't want all
+      // the multiple values, send only the first value.
+      if (strstr($view->current_display, '_ical')) {
+        if (!isset($rrule_processed[$item->nid])) {
+          $rrule_processed[$item->nid] = TRUE;
+        }
+        else {
+          continue;
+        }
+      }
+     
+      if (!in_array($id, $processed) && !empty($item->calendar_fields->$alias)) {
+       
+        // Create from and to date values for each item, adjusted to
+        // the correct timezone.
+        $values[0] = !empty($item->calendar_fields->$fromto[0]) ? $item->calendar_fields->$fromto[0] : $item->calendar_fields->$alias;
+        $values[1] = !empty($item->calendar_fields->$fromto[1]) ? $item->calendar_fields->$fromto[1] : $item->calendar_fields->$alias;
+              
+        $db_tz   = date_get_timezone_db($tz_handling, isset($item->$tz_alias) ? $item->$tz_alias : $display_timezone_name);
+        $to_zone = date_get_timezone($tz_handling, isset($item->$tz_alias) ? $item->$tz_alias : $display_timezone_name);
+       
+        // Now $display_timezone determines how $item is split into
+        // one entry per day, while $to_zone determines how date is displayed.
+        // For now, use the date fields's timezone for the day splitting.
+        $display_timezone_name = $to_zone;
+        $values_display = array();
+       
+        // Start date
+        $date = date_make_date($values[0], $db_tz, $field['sql_type']);
+        if ($db_tz != $to_zone) {
+          date_timezone_set($date, timezone_open($to_zone));
+        }
+        $values[0] = date_format($date, DATE_FORMAT_DATETIME);
+           
+        if ($display_timezone_name != $to_zone) {
+          date_timezone_set($date, $display_timezone);
+          $values_display[0] = date_format($date, DATE_FORMAT_DATETIME);
+        }
+        else {
+          $values_display[0] = $values[0];
+        }
+           
+        // End date
+        $date = date_make_date($values[1], $db_tz, $field['sql_type']);
+        if ($db_tz != $to_zone) {
+          date_timezone_set($date, timezone_open($to_zone));
+        }
+        $values[1] = date_format($date, DATE_FORMAT_DATETIME);
+        if ($display_timezone_name != $to_zone) {
+          date_timezone_set($date, $display_timezone);
+          $values_display[1] = date_format($date, DATE_FORMAT_DATETIME);
+        }
+        else {
+          $values_display[1] = $values[1];
+        }
+              
+        // Now $values contain start and end date of a node,
+        // expressed as strings in the display (local) timezone.
+        // $values_utc does the same in UTC timezone.
+        // Get calendar min and max day (not time) as strings in the
+        // $display_timezone. Cache in $min_zone_string and $max_zone_string,
+        // since many items or fields typically use the samee timezone.
+        if (!isset($min_zone_string[$display_timezone_name])) {
+          $date = drupal_clone($view->date_info->min_date);
+          date_timezone_set($date, $display_timezone);
+          $min_zone_string[$display_timezone_name] = date_format($date, DATE_FORMAT_DATE);
+          $date = drupal_clone($view->date_info->max_date);
+          date_timezone_set($date, $display_timezone);
+          $max_zone_string[$display_timezone_name] = date_format($date, DATE_FORMAT_DATE);
+        }
+       
+        // Create a node for each date within the field's date range,
+        // limited to the view's date range (regarding only day, not time).
+        $now = max($min_zone_string[$display_timezone_name], substr($values_display[0], 0, 10));
+        $to  = min($max_zone_string[$display_timezone_name], substr($values_display[1], 0, 10));
+        $next = date_make_date($now, $display_timezone);
+       
+        if ($display_timezone_name != $to_zone) {
+          // Make $start and $end (derived from $node) use the timezone $to_zone, just as $values[..] do
+          date_timezone_set($next, timezone_open($to_zone));
+        }
+        if (empty($to)) {
+          $to = $now;
+        }
+                 
+        // $now and $next are midnight (in display timezone) on the first day where node will occur.
+        // $to is midnight on the last day where node will occur.
+        // All three were limited by the min-max date range of the view.
+        while ($now <= $to) {
+          $node = drupal_clone($item);
+         
+          // Make sure the pseudo node has the same properties a
+          // regular node would have.
+          if (isset($node->node_title) && !isset($node->title)) {
+            $node->title = $node->node_title;
+          }
+          if (isset($node->node_type) && !isset($node->type)) {
+            $node->type = $node->node_type;
+          }
+          $exceptions = array('format_interval', 'time ago');
+          $node->label = $label;
+          $node->format = $format;
+          if (!in_array($node->format, $exceptions)) {
+            if (!isset($formats[$format])) {
+              $formats[$format] = date_limit_format($format, array('hour', 'minute', 'second'));
+              $node->format_time = $formats[$format];
+            }
+          }
+          else {
+            $node->format_time = '';
+          }
+          $node->url = calendar_get_node_link($node);
+                             
+          //$node->$fromto[0] = $values[0];
+          //$node->$fromto[1] = $values[1];
+         
+          // Flag which datefield this node is using, in case
+          // there are multiple date fields in the view.
+          $node->datefield = $alias;
+          // If there are other datefields in the View, get rid
+          // of them in this pseudo node. There should only be one
+          // date in each calendar node.
+          foreach ($node as $key => $val) {
+            if ($key != $alias && in_array($key, $datefields)) {
+              unset($node->$key);
+              foreach ($fields['name'] as $other_fields) {
+                // If the unused date has other fields, unset them, too.
+                if ($other_fields['query_name'] == $key) {
+                  foreach ($other_fields['related_fields'] as $related_field) {
+                    $key2 = str_replace('.', '_', $related_field);
+                    unset($node->$key2);
+                  }
+                }
+              }
+            }
+          }
+          // If we don't deconstruct dates into individual date parts,
+          // use date values as-is.
+          if (!$split_dates) {
+            $node->calendar_start = $values[0];
+            $node->calendar_end = $values[1];
+          }
+          // Split dates get intersection of current day and the node
+          // value's duration (as strings in $to_zone timezone)
+          else {
+           // Get start and end of current day
+            $start = date_format($next, DATE_FORMAT_DATETIME);
+            date_modify($next, '+1 day');
+            date_modify($next, '-1 second');
+            $end = date_format($next, DATE_FORMAT_DATETIME);
+            $node->calendar_start = $values[0] < $start ? $start : $values[0];
+            $node->calendar_end = !empty($values[1]) ? ($values[1] > $end ? $end : $values[1]) : $node->calendar_start;
+          }
+          $node->date_start = date_create($values[0], timezone_open($to_zone));
+          $node->date_end = date_create(!empty($values[1]) ? $values[1] : $values[0], timezone_open($to_zone));;
+          
+          // Make date objects
+          $node->calendar_start_date = date_create($node->calendar_start, timezone_open($to_zone));
+          $node->calendar_end_date = date_create($node->calendar_end, timezone_open($to_zone));
+          
+          // Change string timezones into
+          // calendar_start and calendar_end are UTC dates as formatted strings
+          $node->calendar_start = date_format($node->calendar_start_date, DATE_FORMAT_DATETIME);
+          $node->calendar_end = date_format($node->calendar_end_date, DATE_FORMAT_DATETIME);
+          
+          if (substr($real_field, 0, 9) == 'field_') {
+            $cck_field = content_fields($cck_field_name);
+            $granularity = $cck_field['granularity'];
+            $increment = $cck_field['widget']['increment'];
+          }
+          else {
+            $granularity = 'second';
+            $increment = 1;
+          }
+          $node->calendar_all_day = date_is_all_day($node->calendar_end, $node->calendar_end, $granularity, $increment);
+         
+          // Flag all day values specifically set in date.
+          $all_day_field = str_replace(array('_value2', '_value'), '_all_day', $node->datefield);
+          if (!empty($all_day_field) && !empty($item->$all_day_field)) {
+            $node->calendar_all_day = TRUE;
+          }
+         
+          unset($node->calendar_fields);
+          if (isset($node) && (empty($node->calendar_start))) {
+            // if no date for the node and no date in the item
+            // there is no way to display it on the calendar
+            unset($node);
+          }
+          else {
+            calendar_node_stripe($view, $node, $alias, $alias);
+            calendar_node_taxonomy_stripe($view, $node, $alias, $alias);
+            calendar_node_group_stripe($view, $node, $alias, $alias);
+            $node->date_id = $id .'.'. $pos;
+
+            $nodes[] = $node;
+            unset($node);
+          }
+          $processed[] = $id;
+          if ($split_dates) {
+            date_modify($next, '+1 second');
+            $now = date_format($next, DATE_FORMAT_DATE);
+          }
+          else {
+            break;
+          }
+        }
+      }
+    }
+  }
+  return $nodes;
 }

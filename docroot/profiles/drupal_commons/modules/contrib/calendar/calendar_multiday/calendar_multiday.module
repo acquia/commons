@@ -1,0 +1,90 @@
+<?php
+// $Id: calendar_multiday.module,v 1.1.2.2 2010/12/31 16:25:43 karens Exp $
+
+/**
+ * Implementation of hook_views_api().
+ *
+ * This one is used as the base to reduce errors when updating.
+ */
+function calendar_multiday_views_api() {
+  return array(
+    'api' => 2,
+    'path' => drupal_get_path('module', 'calendar_multiday'),
+  );
+}
+
+/**
+ * @file
+ * Adds calendar filtering and displays to Views.
+ */
+function calendar_multiday_init() {
+  if (substr($_GET['q'], 0, 24) == 'admin/build/modules/list') {
+    return;
+  }
+  drupal_add_css(drupal_get_path('module', 'calendar_multiday') .'/calendar_multiday.css');
+  require_once('./'. drupal_get_path('module', 'calendar_multiday') .'/theme/theme.inc');
+}
+
+function calendar_multiday_theme() {
+  $path = drupal_get_path('module', 'calendar_multiday');
+  $base = array(
+    'file' => 'theme.inc',
+    'path' => "$path/theme",
+  );
+  return array(
+    'calendar_day_node' => $base + array(
+       'template' => 'calendar-day-node',
+       'arguments' => array('node' => NULL, 'view' => NULL),
+       ),
+    'calendar_month_node' => $base + array(
+      'template' => 'calendar-month-node',
+      'arguments' => array('node' => NULL, 'view' => NULL),
+      ),
+    'calendar_week_node' => $base + array(
+      'template' => 'calendar-week-node',
+      'arguments' => array('node' => NULL, 'view' => NULL),
+      ),
+    'calendar_month_multiple_node' => $base + array(
+      'template' => 'calendar-month-multiple-node',
+      'arguments' => array('curday' => NULL, 'count' => NULL, 'view' => NULL, 'types' => NULL),
+      ),
+    'calendar_week_multiple_node' => $base + array(
+      'template' => 'calendar-week-multiple-node',
+      'arguments' => array('curday' => NULL, 'count' => NULL, 'view' => NULL, 'types' => NULL),
+      ),
+    'calendar_datebox' => $base + array(
+      'template' => 'calendar-datebox',
+      'arguments' => array(
+        'date' => NULL, 'view' => NULL, 'items' => NULL, 'selected' => NULL),
+      ),
+    'calendar_date_combo' => $base + array(
+      'arguments' => array('node', 'lable', 'view'),
+      ),
+    'calendar_empty_day' => $base + array(
+      'arguments' => array('curday', 'view'),
+      ),
+    'calendar_stripe_legend' => $base + array(
+      'arguments' => array('stripe_labels'),
+      ),
+    'calendar_stripe_stripe' => $base + array(
+      'arguments' => array('node'),
+      ),
+    'calendar_colorpicker' => $base + array(
+      'arguments' => array('element'),
+      ),
+    'calendar_colorfield' => $base + array(
+      'arguments' => array('element'),
+      ),
+    'calendar_time_row_heading' => $base + array(
+      'arguments' => array('start_time', 'next_start_time', 'curday_date'),
+      ),
+    'calendar_month_col' => $base + array(
+      'template' => 'calendar-month-col',
+      'arguments' => array('item' => NULL),
+      ),  
+    'calendar_month_row' => $base + array(
+      'template' => 'calendar-month-row',
+      'arguments' => array('inner' => NULL, 'class' => NULL, 'iehint' => NULL),
+      ),  
+   );
+}

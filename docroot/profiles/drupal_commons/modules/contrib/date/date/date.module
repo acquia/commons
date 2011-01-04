@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.61.2.4.2.70 2010/08/12 20:19:50 karens Exp $
+// $Id: date.module,v 1.61.2.4.2.74 2010/11/29 18:22:00 karens Exp $
 
 /**
  * @file
@@ -15,6 +15,7 @@ function date_init() {
     require_once('./'. drupal_get_path('module', 'date') .'/date_token.inc');
   }
 }
+
 /**
  * Implementation of hook_menu().
  */
@@ -857,4 +858,31 @@ function date_formatter_get_settings($field_name, $type_name, $context) {
   $options['multiple']['multiple_to'] = variable_get($value .'_multiple_to', '');
   $options['fromto']['fromto'] = variable_get($value .'_fromto', 'both');  
   return $options;
+}
+
+/**
+ * Determine if a from/to date combination qualify as 'All day'.
+ *
+ * @param array $field, the field definition for this date field.
+ * @param object $date1, a date/time object for the 'from' date.
+ * @param object $date2, a date/time object for the 'to' date.
+ * @return TRUE or FALSE.
+ */
+function date_field_all_day($field, $date1, $date2 = NULL) {
+  if (empty($date1) || !is_object($date1)) {
+    return FALSE;
+  }
+  elseif (!date_has_time($field['granularity'])) {
+    return FALSE;
+  }
+  if (empty($date2)) {
+    $date2 = $date1;
+  }
+  $granularity = $field['granularity'];
+  $granularity = array_pop($granularity);
+  $increment = isset($field['widget']['increment']) ? $field['widget']['increment'] : 1;
+  $date1 = date_format($date1, DATE_FORMAT_DATETIME);
+  $date2 = date_format($date2, DATE_FORMAT_DATETIME);
+  return date_is_all_day($date1, $date2, $granularity, $increment);
+
 }

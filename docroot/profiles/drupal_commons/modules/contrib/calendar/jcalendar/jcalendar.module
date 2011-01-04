@@ -1,5 +1,5 @@
 <?php
-// $Id: jcalendar.module,v 1.1.4.16 2009/07/28 21:38:07 karens Exp $
+// $Id: jcalendar.module,v 1.1.4.17 2010/11/21 12:24:45 karens Exp $
 
 /**
  * @file
@@ -60,11 +60,16 @@ function jcalendar_menu() {
 * @return unknown as of yet.
 */
 function jcalendar_views_pre_view(&$view, &$display_id) {
+  static $js_added = false;
+  if ($js_added) {
+    return;
+  }
   foreach ($view->display as $display) {
     if ($display->display_plugin == 'calendar') {
+      $js_added = true;
       $path = drupal_get_path('module', 'jcalendar');
-      drupal_add_js('var var_path = '. drupal_to_js(base_path() . $path) .";", 'inline');
-      drupal_add_js('var var_base_path = '. drupal_to_js((base_path())) .";", 'inline');
+      $settings['jcalendar']['path'] = base_path() . $path;
+      drupal_add_js($settings, 'setting');
       drupal_add_js($path .'/jcalendar.js');
       drupal_add_css($path .'/jcalendar.css');
     }

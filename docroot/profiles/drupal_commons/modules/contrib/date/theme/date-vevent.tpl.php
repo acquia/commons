@@ -1,5 +1,5 @@
 <?php
-// $Id: date-vevent.tpl.php,v 1.1.2.2 2008/10/10 20:59:15 karens Exp $
+// $Id: date-vevent.tpl.php,v 1.1.2.3 2010/11/20 13:25:54 karens Exp $
 /**
  * $event
  *   An array with the following information about each event:
@@ -18,23 +18,23 @@
  */
 ?>
 BEGIN:VEVENT
-UID:<?php print($event['uid'] . "\n") ?>
-SUMMARY:<?php print($event['summary'] . "\n") ?>
-DTSTAMP;TZID=<?php print $site_timezone ?>;VALUE=DATE-TIME:<?php print($current_date . "\n") ?>
-DTSTART;<?php print $event['timezone'] ?>VALUE=DATE-TIME:<?php print($event['start'] . "\n") ?>
+UID:<?php print($event['uid'] . "\r\n") ?>
+SUMMARY:<?php print($event['summary'] . "\r\n") ?>
+DTSTAMP:<?php print($site_timezone_utc . "Z\r\n") ?>
+DTSTART;<?php print $event['timezone'] ?><?php print($event['start'] . "\r\n") ?>
 <?php if (!empty($event['end'])): ?>
-DTEND;<?php print $event['timezone'] ?>VALUE=DATE-TIME:<?php print($event['end'] . "\n") ?>
+DTEND;<?php print $event['timezone'] ?><?php print($event['end'] . "\r\n") ?>
 <?php endif; ?>
 <?php if (!empty($event['rrule'])) : ?>
-RRULE;<?php print($event['rrule'] . "\n") ?>
+<?php print($event['rrule'] . "\r\n") ?>
 <?php endif; ?>
 <?php if (!empty($event['url'])): ?>
-URL;VALUE=URI:<?php print($event['url'] . "\n") ?>
+URL;VALUE=URI:<?php print($event['url'] . "\r\n") ?>
 <?php endif; ?>
 <?php if (!empty($event['location'])): ?>
-LOCATION:<?php print($event['location'] . "\n") ?>
+LOCATION:<?php print($event['location'] . "\r\n") ?>
 <?php endif; ?>
 <?php if (!empty($event['description'])) : ?>
-DESCRIPTION:<?php print($event['description'] . "\n") ?>
+DESCRIPTION:<?php print($event['description'] . "\r\n") ?>
 <?php endif; ?>
 END:VEVENT

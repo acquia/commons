@@ -1,5 +1,5 @@
 <?php
-//$Id: date_admin.inc,v 1.40.2.3.2.40 2010/04/13 13:50:40 karens Exp $
+//$Id: date_admin.inc,v 1.40.2.3.2.43 2010/12/28 16:37:37 karens Exp $
 /**
  * @file
  * Date administration code.
@@ -31,7 +31,7 @@ function _date_widget_settings($op, &$field) {
           form_set_error('default_value_code2', t('The Strtotime default value for the To Date is invalid.'));
         }
       }
-      if ($field['type'] == 'date_select' && !preg_match('@\-[0-9]*:[\+|\-][0-9]*@', $field['year_range'])) {
+      if (in_array($field['widget']['type'], array('date_select', 'date_popup', 'date_select_repeat', 'date_popup_repeat')) && !date_range_valid($field['year_range'])) {
         form_set_error('year_range', t('Years back and forward must be in the format -9:+9.'));
       }
       break;
@@ -262,8 +262,10 @@ function _date_field_settings($op, $field) {
       
       // Unset the filter and argument handlers, dates can use the generic 
       // date argument and filter handlers created by the Date API.
-      unset($data[$table_alias][$field['field_name'] .'_value']['argument']);
-      unset($data[$table_alias][$field['field_name'] .'_value']['filter']);
+      //unset($data[$table_alias][$field['field_name'] .'_value']['argument']);
+      //unset($data[$table_alias][$field['field_name'] .'_value']['filter']);
+      $data[$table_alias][$field['field_name'] .'_value']['argument']['handler'] = 'date_api_argument_handler';
+      $data[$table_alias][$field['field_name'] .'_value']['filter']['handler'] = 'date_api_filter_handler';
      
       // Add in another set of fields for the To date.
       if (!empty($field['todate'])) {
@@ -368,7 +370,7 @@ function date_field_settings_form($field) {
     '#title' => t('Default Display'),
     '#default_value' => !empty($field['default_format']) ? $field['default_format'] : 'medium',
     '#options' => $format_types,
-    '#description' => t('Select a default format type to be used for the date display. Visit the <a href="@date-time-page">Date and time date format page</a> to add and edit format types.', array('@date-time-page' => base_path() .'admin/settings/date-time/formats')),
+    '#description' => t('Select a default format type to be used for the date display. Visit the <a href="@date-time-page">Date and time date format page</a> to add and edit format types.', array('@date-time-page' => url('admin/settings/date-time/formats'))),
     );
 
   $description = t('Select the timezone handling method to be used for this date field.');

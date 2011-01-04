@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat.module,v 1.30.4.13 2010/08/12 19:41:04 karens Exp $
+// $Id: date_repeat.module,v 1.30.4.16 2010/10/30 14:25:27 karens Exp $
 /**
  * @file
  *
@@ -26,10 +26,26 @@ function date_repeat_elements() {
   return $type;
 }
 
+/**
+ * Implementation of hook_menu.
+ */
+function date_repeat_menu() {
+  $items = array();
+  $items['date_repeat_get_exception_form_ajax'] = array(
+    'page callback' => 'date_repeat_get_exception_form_ajax',
+    'page arguments' => array(1, 2),
+    'file' => 'date_repeat_form.inc',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK
+  );
+  return $items; 
+}
+
 function date_repeat_theme() {
   return array(
     'date_repeat' => array('arguments' => array('element' => NULL)),
     'date_repeat_current_exceptions' => array('arguments' => array('element' => NULL)),
+    'date_repeat_current_additions' => array('arguments' => array('element' => NULL)),
   );
 }
 
@@ -161,9 +177,11 @@ function date_repeat_rrule_description($rrule, $format = 'D M d Y') {
     '!count' => '',
     '!until' => '', 
     '!except' => '',
+    '!additional' => '',
     '!week_starts_on' => '',
     );
   $parts = date_repeat_split_rrule($rrule);
+  $additions = $parts[2];
   $exceptions = $parts[1];
   $rrule = $parts[0];
   $interval = INTERVAL_options();
@@ -230,11 +248,18 @@ function date_repeat_rrule_description($rrule, $format = 'D M d Y') {
     }
     $description['!except'] = trim(t('!repeats_every_interval except !except_dates', array('!repeats_every_interval ' => '', '!except_dates' => implode(', ', $values))));
   }
+  if ($additions) {
+    $values = array();
+    foreach ($additions as $addition) {
+      $values[] = date_format_date(date_ical_date($addition), 'custom', $format);
+    }
+    $description['!additional'] = trim(t('Also includes !additional_dates.', array('!additional_dates' => implode(', ', $values))));
+  }
   if (!empty($rrule['WKST'])) {
     $day_names = date_repeat_dow_day_options();
     $description['!week_starts_on'] = trim(t('!repeats_every_interval where the week start on !day_of_week', array('!repeats_every_interval ' => '', '!day_of_week' => $day_names[trim($rrule['WKST'])])));
   }
-  return t('Repeats !interval !bymonth !byday !count !until !except.', $description);
+  return t('Repeats !interval !bymonth !byday !count !until !except. !additional', $description);
 }
 
 /**
@@ -244,6 +269,7 @@ function date_repeat_split_rrule($rrule) {
   $parts = explode("\n", $rrule);
   $rrule = array();
   $exceptions = array();
+  $additions = array();
   foreach ($parts as $part) {
     if (strstr($part, 'RRULE')) {
       $RRULE = str_replace('RRULE:', '', $part);
@@ -254,16 +280,21 @@ function date_repeat_split_rrule($rrule) {
       $exceptions = (array) date_ical_parse_exceptions('EXDATE:', $EXDATE);
       unset($exceptions['DATA']);
     }
+    elseif (strstr($part, 'RDATE')) {
+      $RDATE = str_replace('RDATE:', '', $part);
+      $additions = (array) date_ical_parse_exceptions('RDATE:', $RDATE);
+      unset($additions['DATA']);
+    }
   }
-  return array($rrule, $exceptions);
+  return array($rrule, $exceptions, $additions);
 }
 
 /**
  * Analyze a RRULE and return dates that match it.
  */
-function date_repeat_calc($rrule, $start, $end, $exceptions = array(), $timezone = NULL) {
+function date_repeat_calc($rrule, $start, $end, $exceptions = array(), $timezone = NULL, $additions = array()) {
   require_once('./'. drupal_get_path('module', 'date_repeat') .'/date_repeat_calc.inc');
-  return _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone);
+  return _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone, $additions);
 }
 
 /**

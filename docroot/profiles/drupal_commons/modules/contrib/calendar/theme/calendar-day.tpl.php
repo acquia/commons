@@ -1,5 +1,5 @@
 <?php
-// $Id: calendar-day.tpl.php,v 1.7.2.9 2009/07/28 21:50:50 karens Exp $
+// $Id: calendar-day.tpl.php,v 1.7.2.10 2010/11/21 13:19:37 karens Exp $
 /**
  * @file
  * Template to display a view as a calendar day, grouped by time
@@ -33,10 +33,10 @@
 <div class="calendar-calendar"><div class="day-view">
 <table>
   <col width="<?php print $first_column_width?>"></col>
+  <?php foreach ($columns as $column): ?>
+  <col width="<?php print $column_width; ?>%"></col>
+  <?php endforeach; ?>
   <thead>
-    <?php foreach ($columns as $column): ?>
-    <col width="<?php print $column_width; ?>%"></col>
-    <?php endforeach; ?>
     <tr>
       <th class="calendar-dayview-hour"><?php print $by_hour_count > 0 ? t('Time') : ''; ?></th>
       <?php foreach ($columns as $column): ?>

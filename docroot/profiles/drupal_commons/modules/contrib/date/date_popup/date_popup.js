@@ -1,4 +1,4 @@
-// $Id: date_popup.js,v 1.1.2.3 2009/01/12 17:23:25 karens Exp $
+// $Id: date_popup.js,v 1.1.2.4 2010/11/20 12:03:36 karens Exp $
 
 /**
  * Attaches the calendar behavior to all required fields
@@ -14,14 +14,18 @@ Drupal.behaviors.date_popup = function (context) {
             $(this)
               .datepicker(datePopup.settings)
               .addClass('date-popup-init')
-              .focus();
+            $(this).click(function(){
+              $(this).focus();
+            });
             break;
 
           case 'timeEntry':
             $(this)
               .timeEntry(datePopup.settings)
               .addClass('date-popup-init')
-              .focus();
+            $(this).click(function(){
+              $(this).focus();
+            });
             break;
         }
       }

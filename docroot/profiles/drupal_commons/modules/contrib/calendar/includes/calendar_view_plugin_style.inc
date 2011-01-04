@@ -1,5 +1,5 @@
 <?php
-// $Id: calendar_view_plugin_style.inc,v 1.1.2.19 2009/02/17 18:09:35 karens Exp $
+// $Id: calendar_view_plugin_style.inc,v 1.1.2.21 2010/12/28 15:35:50 karens Exp $
 
 /**
  * Style plugin to render the year, month, week, or day calendar view.
@@ -10,11 +10,13 @@ class calendar_view_plugin_style extends calendar_plugin_style {
    * Init will be called after construct, when the plugin is attached to a
    * view and a display. 
    */
-  function init(&$view, &$display) {
-    parent::init($view, $display);
+  function init(&$view, &$display, $options = NULL) {
+    parent::init($view, $display, $options);
     $calendar_type = $this->display->handler->get_option('calendar_type');
     $view->date_info->style_name_size = $this->options['name_size'];
     $view->date_info->style_with_weekno = $this->options['with_weekno'];
+    $view->date_info->style_multiday_theme = $this->options['multiday_theme'];
+    $view->date_info->style_theme_style = $this->options['theme_style'];
     $view->date_info->style_max_items = $this->options['max_items'];
     $view->date_info->style_max_items_behavior = $this->options['max_items_behavior'];
     if (!empty($this->options['groupby_times_custom'])) {
@@ -39,6 +41,8 @@ class calendar_view_plugin_style extends calendar_plugin_style {
   function options(&$options) {
     $options['name_size'] = 3;
     $options['with_weekno'] = 0;
+    $options['multiday_theme'] = '1';
+    $options['theme_style'] = '1';
     $options['max_items'] = 0;
     $options['max_items_behavior'] = 'more';
     $options['groupby_times'] = 'hour';
@@ -58,13 +62,14 @@ class calendar_view_plugin_style extends calendar_plugin_style {
       '#options' => array(1 => t('First letter of name'), 2 => t('First two letters of name'), 3 => t('Abbreviated name'), 99 => t('Full name')),
       '#description' => t('The way day of week names should be displayed in a calendar.'),
       );
+      
     $form['with_weekno'] = array(
       '#title' => t('Show week numbers'),
       '#default_value' => $this->options['with_weekno'],
       '#type' => in_array($calendar_type, array('month')) ? 'radios' : 'value',
       '#options' => array(0 => t('No'), 1 => t('Yes')),
       '#description' => t('Whether or not to show week numbers in the left column of calendar weeks and months.'),
-      );
+    );
     $form['max_items'] = array(
       '#title' => t('Maximum items'),
       '#type' => in_array($calendar_type, array('month')) ? 'select' : 'value',
@@ -114,6 +119,24 @@ class calendar_view_plugin_style extends calendar_plugin_style {
       '#description' => t("Optionally group items into columns by a field value, for instance select the content type to show items for each content type in their own column, or use a location field to organize items into columns by location."),
       '#options' => array('' => '') + $field_options,
       );
+      
+    if (module_exists('calendar_multiday')) {  
+      $form['multiday_theme'] = array(
+        '#title' => t('Multi-day style'),
+        '#default_value' => $this->options['multiday_theme'],
+        '#type' => in_array($calendar_type, array('month', 'week')) ? 'select' : 'value',
+        '#options' => array(0 => t('Display multi-day item as a single column'), 1 => t('Display multi-day item as a multiple column row')),
+        '#description' => t('If selected, items which span multiple days will displayed as a multi-column row.  If not selected, items will be displayed as an individual column.'),
+        );
+      $form['theme_style'] = array(
+        '#title' => t('Overlapping time style'),
+        '#default_value' => $this->options['theme_style'],
+        '#type' => in_array($calendar_type, array('day', 'week')) ? 'select' : 'value',
+        '#options' => array(0 => t('Do not display overlapping items'), 1 => t('Display overlapping items')),
+        '#description' => t('Select whether calendar items are displayed as overlapping items.'),
+        );
+    }  
+      
     foreach ($form as $key => $value) {
       if ($value['#type'] == 'value') {
         $form[$key]['#value'] = $value['#default_value'];
@@ -125,15 +148,24 @@ class calendar_view_plugin_style extends calendar_plugin_style {
    * Render the calendar attachment style.
    */
   function render() {
+    $calendar_type = $this->display->handler->get_option('calendar_type');
     // Adjust the theme to match the currently selected default.
     // Only the month view needs the special 'mini' class,
     // which is used to retrieve a different, more compact, theme.
     if (!empty($this->view->date_info->mini) && $this->view->date_info->granularity == 'month') {
       $this->definition['theme'] = 'calendar_mini';
     }
+    elseif (  module_exists('calendar_multiday') && $calendar_type == 'week') {
+      $this->view->date_info->mini = FALSE;
+      $this->definition['theme'] = ($this->view->style_options['multiday_theme'] == '1' && $this->view->style_options['theme_style'] == '1') ? 'calendar_'. $this->view->date_info->granularity .'_overlap' : 'calendar_'. $this->view->date_info->granularity;
+    }
+    elseif ( module_exists('calendar_multiday') && $calendar_type == 'day') {
+      $this->view->date_info->mini = FALSE;
+      $this->definition['theme'] = ($this->view->style_options['theme_style'] == '1') ? 'calendar_'. $this->view->date_info->granularity .'_overlap' : 'calendar_'. $this->view->date_info->granularity;
+    }
     else {
       $this->view->date_info->mini = FALSE;
-      $this->definition['theme'] = 'calendar_'. $this->view->date_info->granularity;
+      $this->definition['theme'] ='calendar_'. $this->view->date_info->granularity;
     }
     $this->view->date_info->hide_admin_links = TRUE;
     return theme($this->theme_functions(), $this->view, $this->options, array());

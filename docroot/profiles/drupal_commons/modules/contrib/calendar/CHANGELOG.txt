@@ -6,6 +6,38 @@ See documentation at http://drupal.org/node/262064.
 Version 2.0 dev
 =================
 
+Version 6.2.4
+=============
+- Theme folder got lost in 6.2.3 release.
+
+Version 6.2.3
+=============
+- #811704 Fix broken handling of calendar links that looses track of where you are if you click around too much.
+- #720868 by dereine and KarenS, Fix argument handling for dates outside allowed range so only page views return 404.
+- #1005412 by developer-x, fix multiday date id.
+- #999708 Try to avoid fatal errors from duplicate functions when enabling the Multiday module.
+- #1003938 Fix position of multiday navigation when displayed in a block.
+- #708258 by Kars-T, remove D7 drupal_exit() call from popup.
+- #372988 by joachim, Eliminate 'broken field' message in view summary when no date link is chosen.
+- #870018 by crell, don't call date_limit_format thousands of times.
+- #931392 by developer-x, Add multiday striping effect as an optional alternative display.
+- #978442 by bwynants and KarenS, fix some remaining brokenness from ical validation fix.
+- #638620 by ericduran, show add event link to user with administer nodes permissions.
+- #439454 by TheRec, Darren Oh, don't show link to calendar day if there are no items.
+- #389334 by Gribnif and dnotes, fix ical feed to show all repeating dates.
+- #513794 by jhedstrom, add array keys to calendar links for easier theming.
+- #638304 by bricef, make sure time groupings display all items.
+- #697738 by Zoltan Balogh and Magnus, clean html out of translation strings.
+- #452690 by aufumy and mikesteff, avoid errors if calendar min or max dates are empty.
+- #469394 by extect, fix validation of calendar by removing duplicate ids.
+- #522914 by jjemmett, user date_real_url() on week links.
+- #704068 by gibus, add option to color calendar items by group.
+- #360364 by marcushenningsen, don't link to day if there is no day view.
+- #382852 by llslim, make sure replacements patterns work even if field is excluded.
+- #660880 by kaare, fix method of including js in jacalendar module.
+- #760316 by skwashd, arithmetric clean up ical rfc compliance.
+- #613528 Fix Views option handling to set options correctly and avoid attempt to modify property of non-object error.
+
 Version 6.2.2
 =============
 - #429446 Col element must not be in thead.

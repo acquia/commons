@@ -1,5 +1,5 @@
 <?php
-// $Id: calendar-mini.tpl.php,v 1.1.2.6 2008/11/23 01:46:21 karens Exp $
+// $Id: calendar-mini.tpl.php,v 1.1.2.7 2010/11/21 13:19:37 karens Exp $
 /**
  * @file
  * Template to display a view as a mini calendar month.
@@ -36,7 +36,7 @@
     <?php foreach ((array) $rows as $row): ?>
       <tr>
         <?php foreach ($row as $cell): ?>
-          <td id="<?php print $cell['id']; ?>" class="<?php print $cell['class']; ?>">
+          <td class="<?php print $cell['class']; ?> <?php print $cell['id']; ?>">
             <?php print $cell['data']; ?>
           </td>
         <?php endforeach; ?>

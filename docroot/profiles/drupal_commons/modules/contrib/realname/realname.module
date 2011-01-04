@@ -1,0 +1,954 @@
+<?php
+// $Id: realname.module,v 1.4.4.71 2010/12/10 16:13:45 davereid Exp $
+
+/**
+ * @file
+ * The RealName module allows the admin to choose fields from the user profile
+ * that will be used to add a "realname" element (method) to a user object.
+ */
+  define('MODULE_VERSION', '$Id: realname.module,v 1.4.4.71 2010/12/10 16:13:45 davereid Exp $');
+
+  if (module_exists('token')) {
+    include_once(drupal_get_path('module', 'realname') . '/token_realname.inc');
+  }
+
+  // This is a copy of D7's static function.
+  if (!function_exists('drupal_static')) {
+    function &drupal_static($name, $default_value = NULL, $reset = FALSE) {
+      static $data = array(), $default = array();
+      if (!isset($name)) {
+        // All variables are reset. This needs to be done one at a time so that
+        // references returned by earlier invocations of drupal_static() also get reset.
+        foreach ($default as $name => $value) {
+          $data[$name] = $value;
+        }
+        // As the function returns a reference, the return should always be a variable.
+        return $data;
+      }
+      if ($reset) {
+        // The reset means the default is loaded.
+        if (array_key_exists($name, $default)) {
+          $data[$name] = $default[$name];
+        }
+        else {
+          // Reset was called before a default is set and yet a variable must be returned.
+          return $data;
+        }
+      }
+      elseif (!array_key_exists($name, $data)) {
+        // Store the default value internally and also copy it to the reference to be returned.
+        $default[$name] = $data[$name] = $default_value;
+      }
+      return $data[$name];
+    }
+  }
+
+//********************************************************************
+//* Drupal Hooks
+//********************************************************************/
+
+/**
+ * Views API implementation.
+ */
+function realname_views_api() {
+  return array('api' => 2.0);
+}
+
+/**
+ * Implements hook_help().
+ */
+function realname_help($path, $args = NULL) {
+  switch ($path) {
+    case 'admin/user/realname':
+    case 'admin/user/realname/module':
+    case 'admin/user/realname/fields':
+    case 'admin/user/realname/bypass':
+      $output = t('This page displays the status of and settings for the RealName module.');
+      $output .= '<p>Version: ' . MODULE_VERSION . '</p>';
+
+      // Show rebuild warning
+      if (variable_get('realname_recalculate', FALSE)) {
+        drupal_set_message(t('In order to apply new settings you need to <a href="!rebuild">rebuild</a> your realnames.', array('!rebuild' => url('admin/user/realname/recalc'))), 'warning');
+      }
+
+      return $output;
+
+    case 'admin/help#realname':
+      return t('This simple module adds a "realname" element (method) to a user object when that object is loaded.');
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function realname_theme() {
+  return array(
+    'realname_admin_levels' => array(
+      'arguments' => array('form' => NULL),
+      'file' => 'realname.admin.inc',
+      ),
+    'realname_new_role' => array(
+      'arguments' => array('form' => NULL),
+      'file' => 'realname_theme.inc',
+      ),
+    );
+}
+
+/**
+ * Implements hook_perm().
+ */
+function realname_perm() {
+  return array('use realname');
+}
+
+/**
+ * Implements hook_menu().
+ */
+function realname_menu() {
+  global $user;
+  $items = array();
+
+  $items['admin/user/realname'] = array(
+    'title' => 'RealName',
+    'description' => "Configure which fields are used to create a user's RealName.",
+    'access arguments' => array('administer users'),
+    'page callback' => 'realname_admin_settings',
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'realname.admin.inc',
+    );
+
+  $items['admin/user/realname/general'] = array(
+    'title' => 'General',
+    'access arguments' => array('administer users'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('realname_admin_general'),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'file' => 'realname.admin.inc',
+    'weight' => 0,
+    );
+
+  $items['admin/user/realname/fields'] = array(
+    'title' => 'Fields',
+    'access arguments' => array('administer users'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('realname_admin_fields'),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'realname.admin.inc',
+    'weight' => 2,
+    );
+
+  $items['admin/user/realname/module'] = array(
+    'title' => 'Module',
+    'access arguments' => array('administer users'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('realname_admin_module'),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'realname.admin.inc',
+    'weight' => 4,
+    );
+
+  $items['admin/user/realname/bypass'] = array(
+    'title' => 'Bypass Forms',
+    'access arguments' => array('administer users'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('realname_admin_bypass'),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'realname.admin.inc',
+    'weight' => 6,
+    );
+
+  $items['admin/user/realname/recalc'] = array(
+    'title' => 'Recalculate names',
+    'access arguments' => array('administer users'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('realname_rebuild_confirm'),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'realname.admin.inc',
+    'weight' => 8,
+    );
+
+  // Path is not admin/build/views due to menu complications with the wildcards from
+  // the generic ajax callback.
+  $items['admin/user/realname/ajax/autocomplete/user'] = array(
+    'page callback' => 'realname_ajax_autocomplete_user',
+    'access callback' => 'user_access',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    );
+
+  // Privatemsg intercept for recipient autocomplete.
+  $items['realname/privatemsg/autocomplete'] = array(
+    'title' => 'Realname Privatemsg autocomplete',
+    'access callback' => user_access('access private messages'),
+    'page callback' => 'realname_privatemsg_autocomplete',
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_menu_alter().
+ */
+function realname_menu_alter(&$callbacks) {
+  $callbacks['user/%user_uid_optional']['title callback'] = 'realname_user_page_title';
+
+  // Adjust menu page callbacks to the real name alternatives.
+  foreach ($callbacks as $path => $callback) {
+    if (isset($callback['page callback'])) {
+      switch ($callback['page callback']) {
+        case 'user_view':
+          // Skip if the Page manager module is installed, which needs to
+          // override
+          if ($path == 'user/%user_uid_optional' && module_exists('page_manager')) {
+            continue;
+          }
+        case 'user_edit':
+        case 'tracker_page':
+        case 'statistics_user_tracker':
+        case 'content_profile_page_edit':
+          $callbacks[$path]['page callback'] = 'realname_' . $callback['page callback'];
+          break;
+        case 'contact_user_page':
+          $callbacks[$path]['page callback'] = 'realname_contact_user';
+          break;
+        case 'blog_page_user':
+          $callbacks[$path]['page callback'] = 'realname_blog_page';
+          break;
+      }
+    }
+  }
+
+  // Remove the core user_search, if requested.
+  if (variable_get('realname_user_disable', FALSE) && isset($callbacks['search/user/%menu_tail'])) {
+    unset($callbacks['search/user/%menu_tail']);
+  }
+}
+
+/**
+* Ask Delegator to use our version of the node page view instead of
+* Drupal's when falling back.
+*/
+function realname_delegator_override($type) {
+  // Continue to support the older delegator module by passing thru
+  // to the newer function:
+  return realname_page_manager_override($type);
+}
+
+/**
+* Ask Page Manager to use our version of the node page view instead of
+* Drupal's when falling back.
+*/
+function realname_page_manager_override($type) {
+  if ($type == 'user_view') {
+    return 'realname_user_view';
+  }
+}
+
+/**
+ * Implements hook_ctools_context_converter_alter().
+ */
+function realname_ctools_context_converter_alter($context, $converter, &$value) {
+  if ($context->type == 'user' && $converter == 'name') {
+    $value = theme('username', $context->data, array('plain' => TRUE));
+  }
+}
+
+/**
+ * Correct user page breadcrumbs.
+ */
+function realname_check_breadcrumbs($account) {
+  $trail = array(l(t('Home'), '<front>'));
+  // If we are looking at someone other than the current user, fix the breadcrumb.
+  if ($account->uid != $GLOBALS['user']->uid) {
+    $trail[] = decode_entities(l($account->realname, 'user/' . $account->uid));
+  }
+  $trail = drupal_set_breadcrumb($trail);
+}
+
+/**
+ * Intercept the user page view. Modified from user.module.
+ * Fix some core bugs.
+ */
+function realname_user_view($account) {
+  realname_check_breadcrumbs($account);
+
+  drupal_set_title(realname_user_page_title($account));
+
+  // Retrieve all profile fields and attach to $account->content.
+  user_build_content($account);
+
+  // To theme user profiles, copy modules/user/user_profile.tpl.php
+  // to your theme directory, and edit it as instructed in that file's comments.
+  return theme('user_profile', $account);
+}
+
+/**
+ * Intercept the user edit page. Modified from user.module.
+ * Fix some core bugs.
+ */
+function realname_user_edit($account, $category = 'account') {
+  realname_check_breadcrumbs($account);
+
+  drupal_set_title(realname_user_page_title($account));
+
+  return drupal_get_form('user_profile_form', $account, $category);
+}
+
+/**
+ * Intercept the user blog page.
+ */
+function realname_blog_page($account) {
+  if (module_exists('blogtitle')) {
+    $output = blogtitle_blog_page_user($account);
+  } else {
+    $output = blog_page_user($account);
+    drupal_set_title($title = t("@name's blog", array('@name' => $account->realname)));
+  }
+
+  return $output;
+}
+
+/**
+ * Intercept the tracker page.
+ */
+function realname_tracker_page($account = NULL, $set_title = FALSE) {
+  if (function_exists('tracker2_page')) {
+    $output = tracker2_page($account, $set_title);
+  }
+  else {
+    $output = tracker_page($account, $set_title);
+  }
+
+  if ($account) {
+    realname_check_breadcrumbs($account);
+    if ($set_title) {
+      drupal_set_title(check_plain($account->realname));
+    }
+  }
+  return $output;
+}
+
+/**
+ * Intercept the statistics tracker page.
+ */
+function realname_statistics_user_tracker() {
+  $output = statistics_user_tracker();
+
+  if ($account = user_load(array('uid' => arg(1)))) {
+    drupal_set_title(check_plain($account->realname));
+  }
+
+  return $output;
+}
+
+/**
+ * Intercept the content profile edit page.
+ */
+function realname_content_profile_page_edit($type, $account) {
+  $output = content_profile_page_edit($type, $account);
+  drupal_set_title(realname_user_page_title($account));
+  return $output;
+}
+
+/**
+ * Intercept the Personal contact page.
+ */
+function realname_contact_user($account) {
+  global $user;
+
+  if (!valid_email_address($user->mail)) {
+    $output = t('You need to provide a valid e-mail address to contact other users. Please update your <a href="@url">user information</a> and try again.', array('@url' => url("user/$user->uid/edit")));
+  }
+  else if (!flood_is_allowed('contact', variable_get('contact_hourly_threshold', 3))) {
+    $output = t('You cannot contact more than %number users per hour. Please try again later.', array('%number' => variable_get('contact_hourly_threshold', 3)));
+  }
+  else {
+    realname_check_breadcrumbs($account);
+    $output = drupal_get_form('contact_mail_user', $account);
+  }
+
+  return $output;
+}
+
+/**
+ * Intercept the user page title to use the user's name.
+ */
+function realname_user_page_title($account) {
+  global $user;
+  $myacct = variable_get('realname_myacct', t('My account'));
+  if ($user->uid == $account->uid && $myacct) {
+    return $myacct;
+  }
+  $name = (isset($account->realname) ? $account->realname : realname_make_name($account));
+  return $name;
+}
+
+/**
+ * An Implements hook_theme_registry_alter()
+ *
+ * Swap in our own replacement for theme_username(), allowing the
+ * site admin to configure the string on a per-nodetype basis.
+ **/
+function realname_theme_registry_alter(&$theme_registry) {
+  if (!empty($theme_registry['form_element'])) {
+    $path = drupal_get_path('module', 'realname');
+    if (variable_get('realname_theme', TRUE)) {
+      $theme_registry['username']['function'] = 'realname_username';
+      $theme_registry['username']['file'] = $path . '/realname_theme.inc';
+      $theme_registry['username']['theme path'] = $path;
+      $theme_registry['username']['theme paths'][0] = $path;
+    }
+    $theme_registry['user_admin_new_role']['function'] = 'theme_realname_new_role';
+    $theme_registry['user_admin_new_role']['file'] = $path . '/realname_theme.inc';
+    $theme_registry['user_admin_new_role']['theme path'] = $path;
+    $theme_registry['user_admin_new_role']['theme paths'][0] = $path;
+
+    $theme_registry['user_picture']['theme path'] = $path;
+    $theme_registry['user_picture']['theme paths'][0] = $path;
+    foreach ($theme_registry['user_picture']['preprocess functions'] as $key => $value) {
+      if ($value == 'template_preprocess_user_picture') {
+        $theme_registry['user_picture']['preprocess functions'][$key] = 'template_preprocess_user_picture_realname';
+      }
+    }
+  }
+}
+
+/**
+ * Process variables for user-picture.tpl.php (copied from user.module).
+ */
+function template_preprocess_user_picture_realname(&$variables) {
+  $variables['picture'] = '';
+  if (variable_get('user_pictures', 0)) {
+    $account = $variables['account'];
+    if (!empty($account->picture) && file_exists($account->picture)) {
+      $picture = file_create_url($account->picture);
+    }
+    elseif (variable_get('user_picture_default', '')) {
+      $picture = variable_get('user_picture_default', '');
+    }
+
+    if (isset($picture)) {
+      $name = isset($account->realname) ? $account->realname : realname_make_name($account);
+      $name = $name ? $name : variable_get('anonymous', t('Anonymous'));
+      $alt = t("@user's picture", array('@user' => $name));
+      $variables['picture'] = theme('image', $picture, $alt, $alt, '', FALSE);
+      if (!empty($account->uid) && user_access('access user profiles')) {
+        $attributes = array('attributes' => array('title' => t('View user profile.')), 'html' => TRUE);
+        $variables['picture'] = l($variables['picture'], "user/$account->uid", $attributes);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_user().
+ */
+function realname_user($op, &$edit, &$account, $category = NULL) {
+  switch ($op) {
+    case 'load':
+      $account->realname = realname_make_name($account);
+
+      // If theme then replace name with realname.
+      if (variable_get('realname_theme', TRUE) && $account->realname) {
+        // Store it for places where it needed.
+        if (!isset($account->realname_save) && is_object($account)) {
+          $account->realname_save = $account->name;
+        }
+      }
+      break;
+
+    case 'delete':
+      db_query("DELETE FROM {realname} WHERE uid = %d", $account->uid);
+      break;
+
+    case 'insert':
+    case 'after_update':
+      $account->realname = _realname_make_name($account);
+      // If we delete it first, then drupal_write_record is always an insert.
+      db_query("DELETE FROM {realname} WHERE uid = %d", $account->uid);
+      drupal_write_record('realname', $account);
+  }
+}
+
+/**
+ * Implements hook_nodeapi().
+ */
+function realname_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
+  static $type;
+  static $accounts = array();
+  if (!user_access('use realname')) {
+    return;
+  }
+
+  // NickSI: Yes, we will have another switch later but I would like to separate table update with other processing
+  // Just delete the old nickname from the table. New one is automatically generated on next request.
+  if ( variable_get('realname_profile_module', NULL) == 'content_profile' && module_exists('content_profile') && is_content_profile($node->type)) {
+    switch ($op) {
+      case 'update':
+      case 'insert':
+      case 'delete':
+        db_query('DELETE FROM {realname} WHERE uid = %d', $node->uid);
+    }
+  }
+
+  if (!variable_get('realname_nodeapi', FALSE)) {
+    return;
+  }
+  switch ($op) {
+    case 'view':
+      // Don't operate on the node type that we are using.
+      if (!isset($type)) {
+        $type = variable_get('realname_profile_type', NULL);
+      }
+      if ($node->type == $type) {
+        break;
+      }
+      // Node is being loaded.
+      // Save the username that is already there.
+      $node->realname_save = $node->name;
+      if (!isset($accounts[$node->uid])) {
+        $accounts[$node->uid] = realname_get_user($node->uid);
+      }
+      $account = $accounts[$node->uid];
+      $node->realname = $node->name = $account->name;
+      $node->homepage = isset($account->homepage) ? $account->homepage : NULL;
+      break;
+
+    case 'prepare':
+      // Node is about to be edited.
+      // Reset the username or save will fail.
+      if (isset($node->realname_save)) {
+        $node->name = $node->realname_save;
+      }
+      break;
+  }
+}
+
+/**
+ * Helper to replace user_load() and be much faster.
+ */
+function realname_get_user($uid) {
+  $result = db_query("SELECT uid, name, mail FROM {users} WHERE uid = %d", $uid);
+  $account = db_fetch_object($result);
+  $account->name = realname_make_name($account);
+  return $account;
+}
+
+/**
+ * Implements hook_comment().
+ */
+function realname_comment(&$comment, $op) {
+  static $users = array();
+  switch ($op) {
+    case 'view':
+      if (!$comment->homepage) {
+        if (isset($users[$comment->uid])) {
+          $account = $users[$comment->uid];
+        }
+        else {
+          $users[$comment->uid] = $account = realname_get_user($comment->uid);
+        }
+
+        $comment->homepage = isset($account->homepage) ? $account->homepage : NULL;
+      }
+      break;
+  }
+  return;
+}
+
+/**
+ * Implements hook_mail_alter().
+ * Intercepts the user activation form to show the username.
+ */
+function realname_mail_alter(&$message) {
+  switch ($message['id']) {
+    case 'user_status_activated':
+      // Look for the "username: " string which precedes the username.
+      if (isset($message['params']['account']->realname_save)) {
+        $message['body'][0] = str_replace(t('username: ') . $message['params']['account']->name, t('username: ') . $message['params']['account']->realname_save, $message['body'][0]);
+      }
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ * Intercepts the contact forms to show the realname.
+ */
+function realname_form_alter(&$form, $form_state, $form_id) {
+  global $user;
+  if (!user_access('use realname')) {
+    return;
+  }
+
+  $bypass_forms = variable_get('realname_bypass_forms', array(array('name' => 'comment_form', 'fields' => array('name'))));
+  foreach ($bypass_forms as $bypass) {
+    // Is it a form the admin wants bypassed?
+    if ($form_id == $bypass['name']) {
+      $field_name = '$form[\'' . implode("']['", $bypass['fields']) ."']['#default_value']";
+      if (!isset($user->realname)) {
+        $user->realname = realname_make_name($user);
+      }
+      $value = $user->uid ? $user->realname_save : variable_get('anonymous', 'Anonymous');
+      eval($field_name . ' = $value;');
+    }
+  }
+
+  switch ($form_id) {
+    case 'user_profile_form':
+      if (variable_get('realname_theme', TRUE)) {
+        $form['account']['name']['#default_value'] = $form['_account']['#value']->realname_save;
+      }
+      break;
+
+    case 'contact_mail_user':
+      if (!isset($user->realname)) {
+        $user->realname = realname_make_name($user);
+      }
+      $form['from']['#value'] = check_plain($user->realname) . ' &lt;' . check_plain($user->mail) . '&gt;';
+      if (!isset($form['recipient']['#value']->realname)) {
+        $form['recipient']['#value']->realname = realname_make_name($form['recipient']['#value']);
+      }
+      $form['to']['#value'] = check_plain($form['recipient']['#value']->realname);
+      break;
+
+    case 'contact_mail_page':
+      if (!isset($user->realname)) {
+        $user->realname = realname_make_name($user);
+      }
+      $form['name']['#default_value'] = $user->uid ? $user->realname : '';
+      break;
+
+    case 'user_admin_role':
+      $rid = $form['rid']['#value'];
+      $pic = variable_get('realname_user_level_' . $rid, NULL);
+      $form['level'] = array(
+        '#type' => 'textfield',
+        '#default_value' => $pic,
+        '#title' => t('User level image'),
+        '#description' => t('This image will be shown when the user name is themed.
+          It can be used to show special attributes or user participation level.
+          The path is relative to the files directory "%files".', array('%files' => file_directory_path())),
+        '#field_suffix' => empty($pic) ? '' : '&nbsp;&nbsp;<img src="' . file_create_url($pic) . '" />',
+        );
+
+      $form['submit']['#weight'] = 98;
+      $form['delete']['#weight'] = 99;
+      $form['#submit'][] = '_realname_role_submit';
+      break;
+
+    case 'privatemsg_new':
+      $form['privatemsg']['recipient']['#autocomplete_path'] = 'realname/privatemsg/autocomplete';
+      break;
+  }
+}
+
+/**
+ * Get picture entered on role form.
+ */
+function _realname_role_submit($form, &$form_state) {
+  $rid = $form_state['values']['rid'];
+  $pic = $form_state['values']['level'];
+  variable_set('realname_user_level_' . $rid, $pic);
+}
+
+/**
+ * Implements hook_search().
+ */
+function realname_search($op = 'search', $keys = NULL, $skip_access_check = FALSE) {
+  if (!variable_get('realname_search_enable', FALSE)) {
+    return;
+  }
+  switch ($op) {
+    case 'name':
+      if ($skip_access_check || user_access('access user profiles')) {
+        return variable_get('realname_user_disable', FALSE) ? t('Users') : t('User names');
+      }
+      break;
+
+    case 'reset':
+      variable_set('realname_last_index', -1);
+      break;
+
+    case 'status':
+      $start = variable_get('realname_last_index', -1) + 1;
+      $total = db_result(db_query('SELECT COUNT(uid) FROM {users} WHERE status = 1'));
+      $remaining = db_result(db_query("SELECT COUNT(uid) FROM {users} WHERE status = 1 AND uid >= %d ORDER BY uid", $start));
+      return array('remaining' => $remaining, 'total' => $total);
+
+    case 'search':
+      if ($skip_access_check || user_access('access user profiles')) {
+        $results = array();
+        $find = do_search($keys, 'realname');
+        foreach ($find as $item) {
+          if ($item->type != 'realname') {
+            continue;
+          }
+          $account = user_load(array('uid' => $item->sid));
+          $realname = realname_make_name($account);
+          $results[] = array(
+            'link' => url('user/' . $account->uid, array('absolute' => TRUE)),
+            'type' => t('User'),
+            'title' => $realname,
+            'user' => theme('username', $account) . '<div class="clear-block"></div>',
+            'score' => $item->score,
+            'snippet' => theme('user_picture', $account)
+              . (user_access('administer users') ? t('Login name: !name', array('!name' => $account->name)) : NULL),
+          );
+        }
+        return $results;
+      }
+      break;
+  }
+}
+
+/**
+ * Implements hook_update_index().
+ */
+function realname_update_index() {
+  if (variable_get('realname_search_enable', FALSE)) {
+    $start = variable_get('realname_last_index', -1) + 1;
+    $limit = (int)variable_get('search_cron_limit', 100);
+    $how_many = db_result(db_query("SELECT COUNT(uid) FROM {users} WHERE status = 1 AND uid >= %d ORDER BY uid", $start));
+    $limit = min($limit, $how_many);
+    if ($limit < 1) {
+      return;
+    }
+    watchdog('RealName', 'Indexing up to !limit users, starting at !start',
+      array('!start' => $start, '!limit' => $limit),
+      WATCHDOG_NOTICE);
+    $result = db_query_range("SELECT uid FROM {users} WHERE status = 1 AND uid >= %d ORDER BY uid", $start, 0, $limit);
+    while ($uid = db_result($result)) {
+      $account = user_load(array('uid' => $uid));
+      $index_text = realname_make_name($account);
+      if (variable_get('realname_search_login', FALSE)) {
+        $index_text .= ' ' . $account->name;
+      }
+      search_index($account->uid, 'realname', $index_text);
+      variable_set('realname_last_index', $account->uid);
+    }
+  }
+}
+
+/**
+ * Intercept Privatemsg autocomplete results for usernames.
+ */
+function realname_privatemsg_autocomplete($string) {
+  $names = explode(',', $string);
+  $names = array_map('trim', $names);
+  $search = array_pop($names);
+  if ($search != '') {
+    $sql = 'SELECT u.uid, u.name, r.realname FROM {users} u INNER JOIN {realname} r USING(uid) ';
+    $sql .= ' WHERE u.status <> 0 AND LOWER(r.realname) LIKE LOWER(\'%%%s%%\') AND ';
+    $sql .= variable_get('privatemsg_default_allow', 1) ? '(u.data NOT LIKE \'%%:16:"privatemsg_allow";i:0%%\' OR u.data IS NULL)' : 'u.data LIKE \'%%:16:"privatemsg_allow";i:1%%\'';
+    $sql .= ' ORDER BY r.realname ASC';
+    $result = db_query_range($sql, $search, 0, 10);
+    $prefix = count($names) ? implode(', ', $names) . ', ' : '';
+    $matches = array();
+    while ($user = db_fetch_object($result)) {
+      $account = user_load(array('uid' => $user->uid));
+      $matches[$prefix . $user->name] = $user->realname;
+      if ($user->realname != $user->name) {
+        $matches[$prefix . $user->name] .= ' (' . $user->name . ')';
+      }
+    }
+    drupal_json($matches);
+  }
+  else {
+    drupal_json(array()); // prevent Drupal autocomplete error message
+  }
+}
+
+//********************************************************************
+//* Module Functions
+//********************************************************************
+
+/**
+ * Retreive calculated user name. Try static cache first, DB next and on failure call
+ * helper function to calculate realname and populate DB.
+ *
+ * @param
+ *   $account - the user object to update.
+ *
+ * @return
+ *   The retreived "real name" string.
+ */
+function realname_make_name(&$account) {
+  $users = &drupal_static('users',array());
+  $links = &drupal_static('links',array());
+
+  // Return anonymous user right away.
+  if ($account->uid == 0) {
+    return isset($account->name) ? $account->name : variable_get('anonymous', t('Anonymous'));
+  }
+
+  // Check static cache first.
+  if (isset($users[$account->uid])) {
+    $account->homepage = isset($links[$account->uid]) ? $links[$account->uid] : NULL;
+    return $users[$account->uid];
+  }
+
+  $result = _realname_make_name($account);
+  if (empty($result)) {
+    return $account->name;
+  }
+  if (!db_result(db_query("SELECT uid FROM {realname} WHERE uid = %d", $account->uid))) {
+    db_query("INSERT INTO {realname} (uid, realname) VALUES (%d, '%s')", $account->uid, $result);
+  }
+  else {
+    db_query("UPDATE {realname} SET realname = '%s' WHERE uid = %d", $result, $account->uid);
+  }
+  return $result;
+}
+
+/**
+ * Helper function for realname_make_name. Using selected fields, build the "real name" field in the object.
+ *
+ * @param
+ *   $account - the user object to update.
+ *
+ * @return
+ *   The constructed "real name" string.
+ */
+function _realname_make_name(&$account) {
+  static $fields, $pattern_saved, $homepage, $use_theme, $type, $module, $profile_privacy;
+  $users = &drupal_static('users',array());
+  $links = &drupal_static('links',array());
+  $edit = &drupal_static('edit',array());
+
+  // Get our controlling variables (static makes it once per page load).
+  if (!isset($fields)) {
+    $fields = variable_get('realname_fields', array());
+    // Are there any fields assigned yet?
+    if (!$fields) {
+      // No, so just return the name.
+      return $account->name;
+    }
+    $pattern_saved = variable_get('realname_pattern', ' ');
+    $homepage = variable_get('realname_homepage', '');
+    $use_theme = variable_get('realname_theme', TRUE);
+    $module = variable_get('realname_profile_module', NULL);
+    $type = variable_get('realname_profile_type', NULL);
+    $profile_privacy = module_exists('profile_privacy');
+    if ($module && module_exists($module)) {
+      include_once(drupal_get_path('module', 'realname') . '/realname_' . $module . '.inc');
+    }
+    else {
+      drupal_set_message(t('No module is available for RealName.'), 'error');
+      return $account->name;
+    }
+  }
+  $pattern = $pattern_saved;
+
+  // Has the module been set up yet?
+  if ($fields) {
+    // Has the profile been loaded?
+    if (!isset($account->{key($fields)})) {
+      $load_func = $module . '_load_profile';
+      if (!function_exists($load_func)) {
+        drupal_set_message(t('The profile load function (!module) was not found.', array('!module' => $load_func)), 'error');
+        return $account->name;
+      }
+      $load_func($account, $type);
+      if ($profile_privacy) {
+        profile_privacy_user('load', $edit, $account);
+      }
+    }
+
+    $stuff = array();
+    $i = 0;
+    foreach ($fields as $name => $weight) {
+      ++$i;
+      $private = 'private_' . $name;
+      // This will let you see that a user is using Profile Privacy.
+//    if (isset($account->{$private})) {
+//      drupal_set_message("$account->name ($account->uid) has marked the $name field as private.");
+//    }
+      $private_field = isset($account->{$private}) ? $account->{$private} : FALSE;
+      if (isset($account->$name) && !empty($account->$name) && !$private_field) {
+        if (is_array($account->$name)) {
+          $stuff['%' . $i] = $account->{$name}[0]['view'];
+        }
+        else {
+          $stuff['%' . $i] = $account->$name;
+        }
+      }
+      else {
+        // If there is no value, remove the pattern piece, except the first.
+        $pattern = str_replace('%' . $i, NULL, $pattern);
+      }
+    }
+
+    // If no fields set, use username.
+    if (count($stuff) == 0) {
+      $stuff['%1'] = $account->name;
+      $pattern = '%1';
+    }
+
+    if (!empty($homepage) && !empty($account->$homepage)) {
+      $links[$account->uid] = $account->$homepage;
+    }
+
+    $string = trim(strtr($pattern, $stuff));
+    $users[$account->uid] = $string;
+  }
+  else {
+    $string = $account->name;
+  }
+  return html_entity_decode(filter_xss_admin($string));
+}
+
+/**
+ * Provides array sorting function for uasort.
+ *  @link http://us2.php.net/manual/en/function.uasort.php PHP Manual @end-link
+ *
+ * @param
+ *   $a - the first array to be compared.
+ *
+ * @param
+ *   $b - the second array to be compared.
+ *
+ * @return
+ *   integer indicating ordering.
+ */
+function _realname_sort($a, $b) {
+  // Sort first by weight.
+  $ret = $a['weight'] - $b['weight'];
+  if ($ret == 0) {
+    // The two are equal, so use the title.
+    $ret = strcmp($a['title'], $b['title']);
+  }
+
+  return $ret;
+}
+
+/**
+* Page callback for user autocomplete.
+*/
+function realname_ajax_autocomplete_user($string = '') {
+  // The user enters a comma-separated list of tags. We only autocomplete the last tag.
+  $array = drupal_explode_tags($string);
+
+  // Fetch last tag
+  $last_string = trim(array_pop($array));
+  $matches = array();
+  if ($last_string != '') {
+    $prefix = count($array) ? implode(', ', $array) . ', ' : '';
+
+    if (strpos('anonymous', strtolower($last_string)) !== FALSE) {
+      $matches[$prefix . 'Anonymous'] = 'Anonymous';
+    }
+    $result = db_query_range("SELECT realname FROM {realname} WHERE LOWER(realname) LIKE LOWER('%s%%')", $last_string, 0, 10);
+
+    while ($account = db_fetch_object($result)) {
+      $n = $account->realname;
+      // Commas and quotes in terms are special cases, so encode 'em.
+      if (strpos($account->realname, ',') !== FALSE || strpos($account->realname, '"') !== FALSE) {
+        $n = '"' . str_replace('"', '""', $account->realname) . '"';
+      }
+      $matches[$prefix . $n] = check_plain($account->realname);
+    }
+  }
+
+  drupal_json($matches);
+}

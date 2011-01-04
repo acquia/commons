@@ -1,0 +1,134 @@
+<?php
+class DateTestCase extends DrupalWebTestCase {
+  protected $privileged_user;
+
+  function getInfo() {
+    return array(
+      'name' => 'CCK UI',
+      'description' => 'Test creation of various date fields and widgets using CCK UI.',
+      'group' => 'Date',
+    );
+  }
+
+  function setUp() {
+    // Load the date_api module.
+    parent::setUp('content', 'date_api', 'date_timezone', 'date', 'date_popup', 'jquery_ui');
+
+    // Create and log in our privileged user.
+    $this->privileged_user = $this->drupalCreateUser(array(
+      'administer content types', 'administer nodes'
+    ));
+    $this->drupalLogin($this->privileged_user);
+    
+    variable_set('date_format_long', 'D, m/d/Y - H:i');
+    variable_set('date_format_short', 'm/d/Y - H:i');
+  }
+
+  function testDate() {  
+    // Creates select list date field stored as a date with default settings.
+    $this->createDateField($type = 'date', $widget = 'date_select');
+    $edit = array();
+    $this->drupalPost(NULL, $edit, t('Save field settings'));
+    $this->dateForm($options = 'select');
+    $this->assertText('Thu, 10/07/2010 - 10:30', 'Found the correct date for a date field using the date_select widget.');
+    $this->deleteDateField();
+    // Creates text date field stored as a date with default settings.
+    $this->createDateField($type = 'date', $widget = 'date_text');
+    $edit = array();
+    $this->drupalPost(NULL, $edit, t('Save field settings'));
+    $this->dateForm($options = 'text');
+    $this->assertText('Thu, 10/07/2010 - 10:30', 'Found the correct date for a date field using the date_text widget.');
+    $this->deleteDateField();
+    // Creates popup date field stored as a date with default settings.
+    $this->createDateField($type = 'date', $widget = 'date_popup');
+    $edit = array();
+    $this->drupalPost(NULL, $edit, t('Save field settings'));
+    $this->dateForm($options = 'popup');
+    $this->assertText('Thu, 10/07/2010 - 10:30', 'Found the correct date for a date field using the date_popup widget.');
+    $this->deleteDateField();
+    // Creates select list date field stored as a datestamp with default settings.
+    $this->createDateField($type = 'datestamp', $widget = 'date_select');
+    $edit = array();
+    $this->drupalPost(NULL, $edit, t('Save field settings'));
+    $this->dateForm($options = 'select');
+    $this->assertText('Thu, 10/07/2010 - 10:30', 'Found the correct date for a datestamp field using the date_select widget.');
+    $this->deleteDateField();
+    // Creates text date field stored as a datestamp with default settings.
+    $this->createDateField($type = 'datestamp', $widget = 'date_text');
+    $edit = array();
+    $this->drupalPost(NULL, $edit, t('Save field settings'));
+    $this->dateForm($options = 'text');
+    $this->assertText('Thu, 10/07/2010 - 10:30', 'Found the correct date for a datestamp field using the date_text widget.');
+    $this->deleteDateField();
+    // Creates popup date field stored as a datestamp with default settings.
+    $this->createDateField($type = 'datestamp', $widget = 'date_popup');
+    $edit = array();
+    $this->drupalPost(NULL, $edit, t('Save field settings'));
+    $this->dateForm($options = 'popup');
+    $this->assertText('Thu, 10/07/2010 - 10:30', 'Found the correct date for a datestamp field using the date_popup widget.');
+    $this->deleteDateField();
+    // Creates select list date field stored as a datetime with default settings.
+    $this->createDateField($type = 'datetime', $widget = 'date_select');
+    $edit = array();
+    $this->drupalPost(NULL, $edit, t('Save field settings'));
+    $this->dateForm($options = 'select');
+    $this->assertText('Thu, 10/07/2010 - 10:30', 'Found the correct date for a datetime field using the date_select widget.');
+    $this->deleteDateField();
+    // Creates text date field stored as a datetime with default settings.
+    $this->createDateField($type = 'datetime', $widget = 'date_text');
+    $edit = array();
+    $this->drupalPost(NULL, $edit, t('Save field settings'));
+    $this->dateForm($options = 'text');
+    $this->assertText('Thu, 10/07/2010 - 10:30', 'Found the correct date for a datetime field using the date_text widget.');
+    $this->deleteDateField();
+    // Creates popup date field stored as a datetime with default settings.
+    $this->createDateField($type = 'datetime', $widget = 'date_popup');
+    $edit = array();
+    $this->drupalPost(NULL, $edit, t('Save field settings'));
+    $this->dateForm($options = 'popup');
+    $this->assertText('Thu, 10/07/2010 - 10:30', 'Found the correct date for a datetime field using the date_popup widget.');
+    $this->deleteDateField();
+  }
+
+  function createDateField($type, $widget) {
+    $edit = array();
+    $edit['_add_new_field[label]'] = 'Test';
+    $edit['_add_new_field[field_name]'] = 'test';
+    $edit['_add_new_field[weight]'] = '-4';
+    $edit['_add_new_field[type]'] = $type;
+    $edit['_add_new_field[widget_type]'] = $widget;
+    $this->drupalPost('admin/content/node-type/story/fields', $edit, t('Save'));
+    
+  }
+
+  function dateForm($options) {
+    // Tests that date field functions properly.
+    $edit = array();
+    $edit['title'] = $this->randomName(8);
+    $edit['body'] = $this->randomName(16);
+    if ($options == 'select') {
+      $edit['field_test[0][value][year]'] = '2010';
+      $edit['field_test[0][value][month]'] = '10';
+      $edit['field_test[0][value][day]'] = '7';
+      $edit['field_test[0][value][hour]'] = '10';
+      $edit['field_test[0][value][minute]'] = '30';
+    }
+    elseif ($options == 'text') {
+      $edit['field_test[0][value][date]'] = '10/07/2010 - 10:30';
+    }
+    elseif ($options == 'popup') {
+      // The default format for a popup is an odd one.
+      $edit['field_test[0][value][date]'] = '10/07/2010';
+      $edit['field_test[0][value][time]'] = '10:30';
+    }
+    $this->drupalPost('node/add/story', $edit, t('Save'));
+    $this->assertText($edit['title'], 'Test node has been created');
+  }
+
+  function deleteDateField() {
+    $this->drupalGet('admin/content/node-type/story/fields');
+    $this->clickLink('Remove');
+    $this->drupalPost(NULL, NULL, t('Remove'));
+    $this->assertText('Removed field Test from Story.', 'Removed date field.');
+  }
+}

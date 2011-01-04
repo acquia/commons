@@ -1,8 +1,43 @@
-//$Id: CHANGELOG.txt,v 1.1.8.487 2010/08/14 11:53:45 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.8.499 2011/01/03 12:47:46 karens Exp $
 Date Module 6.x
 =================
 Version 6.2-dev
 =================
+
+Version 6.2.7
+=============
+- #514242 Day repeated every two weeks was broken by wrong day comparison value.
+- Fix a bug in the calculation of the week days when using ISO weeks.
+- #549042 The date_week() function should return an integer even when using ISO weeks.
+- #575770 Fix handling of empty vs zero date parts in the date combo processing.
+- #385688 by jcmarco, Make sure we don't set relationships where there should be none.
+- Fix a strict warning for use of is_a().
+- #882980 Fix WSOD in PHP4 from date_format process to create a new date.
+- #998498 Don't try to use jquery_ui function in update if it isn't installed, add a warning message.
+- #993148 Use url() for link to date format page in date widget settings so it works without clean urls.
+- Add more date repeat tests and fix date repeat handling of day of month > 5.
+- #784854 by akeemw, fix broken date repeat handling of negative by-day computations.
+- Add functions to get a granularity precision from a granularity array or an array from a precision.
+- #760284 by skwashd, arithmetric clean up ical rfc compliance.
+- #939152 by amelfe add z-index to datepicker 1.7.
+- #826458 by troynt Keep date popup from popping up on page load.
+- #441970 by recrit and patcon, tweak year range validation in date filter and date argument to be more flexible.
+- #952036 by cwc, Date popup defaulted to earliest year instead of current year when using jquery ui 1.7.
+- #977002 Ensure that the year range always sets the minium year as the minimum even if the year range string has it reversed.
+- #848656 by Mark Trapp, remove use of ereg from date_calc for compatibility with PHP 5.3.
+- #385688 by christianchristensen Fix filter handling for relationships.
+- #963844 Fix the date filter and argument so they will show up both under the 'Date' group and as 'Content' fields.
+- Add tests for date popup widget.
+- #560054 by travist and AllPlayers.com, add AHAH Add More buttons to date repeat exceptions and additions.
+- #292522 by chaps2, fix typo in new date repeat additions feature.
+- #292522 by chaps2, add additive exception to repeating date form.
+- Avoid errors with incomplete time values in dates.
+- #337666 Fix UNTIL and EXCEPT dates to not show time and automatically set them to 23:59:59 before storing.
+- #769064 Fix translation in format example text.
+- #898024 by jaydub and #834388 by arroncouch Fix the jquery ui css paths.
+- Adding and updating test, including a test provided by tristanoneil, with a few fixes uncovered by the tests.
+- #521990 by Aron Novak: Make sure popup date selector grid is in correct year by.
+- #587338 by Kevin Rogers - Add token to support day number with English ordinal (st, nd, rd or th).
 
 Version 6.2.6
 =============

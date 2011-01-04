@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.46.2.2.2.68 2010/08/12 21:31:07 karens Exp $
+//$Id: date_elements.inc,v 1.46.2.2.2.70 2010/12/29 14:11:50 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -434,8 +434,8 @@ function date_combo_validate($element, &$form_state) {
       $merged_date = array();
       $to_date_empty = TRUE;
       foreach ($posted[$to_field] as $part => $value) {
-        $to_date_empty = $to_date_empty && empty($value);
-        $merged_date[$part] = empty($value) ? $posted[$from_field][$part] : $value;
+        $to_date_empty = $to_date_empty && empty($value) && !is_numeric($value);
+        $merged_date[$part] = empty($value) && !is_numeric($value) ? $posted[$from_field][$part] : $value;
         if ($part == 'ampm' && $merged_date['ampm'] == 'pm' && $merged_date['hour'] < 12) {
           $merged_date['hour'] += 12;
         }
@@ -533,14 +533,11 @@ function date_combo_validate($element, &$form_state) {
  * Handle widget processing.
  */
 function date_widget_validate($element, &$form_state) {
-  $form_values = $form_state['values'];
-  $field_name = $element['#field_name'];
-  $fields = content_fields();
   $field = $form_state['#field_info'][$element['#field_name']];
-  if (module_exists('date_repeat') && array_key_exists('rrule', $form_values[$field_name])) {
-    require_once('./'. drupal_get_path('module', 'date') .'/date_repeat.inc');
+  if (module_exists('date_repeat') && $field['repeat'] == 1) {
+    module_load_include('inc', 'date', 'date_repeat');
     return _date_repeat_widget_validate($element, $form_state);
-  }
+  }  
 }
 
 /**

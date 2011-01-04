@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_filter_handler.inc,v 1.1.2.47 2010/08/12 22:32:58 karens Exp $
+// $Id: date_api_filter_handler.inc,v 1.1.2.52 2010/12/28 15:32:56 karens Exp $
 
 /**
  * A flexible, configurable date filter.
@@ -124,6 +124,12 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     foreach ($fields['name'] as $name => $field) {
       $options[$name] = $field['label'];
     }
+    
+    // If this filter was added as a CCK field filter and no other date field
+    // has been chosen, update the default with the right date.
+    if (empty($this->options['date_fields']) && $this->field != 'date_filter') {
+      $this->options['date_fields'] = array($this->table .'.'. $this->field);
+    }
     $form['date_fields'] = array(
       '#title' => t('Date field(s)'),
       '#type' => 'checkboxes',
@@ -146,9 +152,8 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     if (empty($check_fields)) {
       form_error($form['date_fields'], t('You must select at least one date field for this filter.'));
     }
-    if (!preg_match('@\-[0-9]*:[\+|\-][0-9]*@', $form_state['values']['options']['year_range']) 
-      && !preg_match('@[0-9]{4}:[0-9]{4}@', $form_state['values']['options']['year_range'])) {
-      form_error($form['year_range'], t('Date year range must be in the format -9:+9 or 2005:2010.'));
+    if (!preg_match('/^(?:\-[0-9]{1,4}|[0-9]{4}):(?:[\+|\-][0-9]{1,4}|[0-9]{4})$/', $form_state['values']['options']['year_range'])) {
+      form_error($form['year_range'], t('Date year range must be in the format -9:+9, 2005:2010, -9:2010, or 2005:+9'));
     }
   }
   
@@ -407,10 +412,12 @@ class date_api_filter_handler extends views_handler_filter_numeric {
   function set_relationship() {
     parent::set_relationship();
     $this->get_query_fields();
-    if (!empty($this->query_fields)) {
-      foreach ($this->query_fields as $query_field) {
-        $field = $query_field['field'];
-        $this->related_table_alias = $this->query->queue_table($field['table_name'], $this->relationship);
+    if (!empty($this->relationship)) {
+      if (!empty($this->query_fields)) {
+        foreach ($this->query_fields as $query_field) {
+          $field = $query_field['field'];
+          $this->related_table_alias = $this->query->queue_table($field['table_name'], $this->relationship);
+        }
       }
     }
   }
@@ -424,6 +431,9 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     if (!empty($this->query_fields)) {
       foreach ((array) $this->query_fields as $query_field) {
         $field = $query_field['field'];
+        $table_alias = !empty($this->related_table_alias) ? $this->related_table_alias : $field['table_name'];
+        $query_field['field']['fullname'] = $table_alias .'.'. $query_field['field']['field_name'];
+        
         $sql = '';
         $sql_parts = array();
         switch ($this->operator) {
@@ -453,6 +463,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
   
   function date_filter($prefix, $query_field, $operator) {
     $field = $query_field['field'];
+    
     // Handle the simple operators first.
     if ($operator == 'empty') {
       $this->add_date_field($field);
@@ -533,6 +544,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
         $value = date_format($date, $this->format);
         break;
     }
+    
     if ($this->date_handler->granularity != 'week') {
       $sql = $date_handler->sql_where_format($this->format, $field['fullname'], $operator, $value);
     }

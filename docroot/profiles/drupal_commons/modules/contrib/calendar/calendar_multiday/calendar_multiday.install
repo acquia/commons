@@ -1,0 +1,12 @@
+<?php
+
+/**
+ * Enabling and disabling this module requires that the registry be rebuilt.
+ */
+function calendar_multiday_enable() {
+  drupal_flush_all_caches();
+}
+
+function calendar_multiday_disable() {
+  drupal_flush_all_caches();
+}

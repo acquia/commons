@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_argument_handler.inc,v 1.1.2.44 2010/08/12 22:32:58 karens Exp $
+// $Id: date_api_argument_handler.inc,v 1.1.2.48 2011/01/03 02:39:15 karens Exp $
 /**
  * Date API argument handler.
  */
@@ -83,6 +83,13 @@ class date_api_argument_handler extends views_handler_argument_date {
     foreach ($fields['name'] as $name => $field) {
       $options[$name] = $field['label'];
     }
+    
+    // If this argument was added as a CCK field argument and no other date field
+    // has been chosen, update the default with the right date.
+    if (empty($this->options['date_fields']) && $this->field != 'date_argument') {
+      $this->options['date_fields'] = array($this->table .'.'. $this->field);
+    }
+    
     $form['date_fields'] = array(
       '#title' => t('Date field(s)'),
       '#type' => 'checkboxes',
@@ -110,9 +117,8 @@ class date_api_argument_handler extends views_handler_argument_date {
       if (empty($check_fields)) {
         form_error($form['date_fields'], t('You must select at least one date field for this argument.'));
       }
-      if (!preg_match('@\-[0-9]*:[\+|\-][0-9]*@', $form_state['values']['options']['year_range']) 
-        && !preg_match('@[0-9]{4}:[0-9]{4}@', $form_state['values']['options']['year_range'])) {
-        form_error($form['year_range'], t('Date year range must be in the format -9:+9 or 2005:2010.'));
+      if (!preg_match('/^(?:\-[0-9]{1,4}|[0-9]{4}):(?:[\+|\-][0-9]{1,4}|[0-9]{4})$/', $form_state['values']['options']['year_range'])) {
+        form_error($form['year_range'], t('Date year range must be in the format -9:+9, 2005:2010, -9:2010, or 2005:+9'));
       }
     }
   }
@@ -270,10 +276,12 @@ class date_api_argument_handler extends views_handler_argument_date {
   function set_relationship() {
     parent::set_relationship();
     $this->get_query_fields();
-    if (!empty($this->query_fields)) {
-      foreach ($this->query_fields as $query_field) {
-        $field = $query_field['field'];
-        $this->related_table_alias = $this->query->queue_table($field['table_name'], $this->relationship);
+    if (!empty($this->relationship)) {
+      if (!empty($this->query_fields)) {
+        foreach ($this->query_fields as $query_field) {
+          $field = $query_field['field'];
+          $this->related_table_alias = $this->query->queue_table($field['table_name'], $this->relationship);
+        }
       }
     }
   }
@@ -332,8 +340,9 @@ class date_api_argument_handler extends views_handler_argument_date {
     
     // See if we're outside the allowed date range for our argument.
     if (date_format($min_date, 'Y') < $this->view->date_info->min_allowed_year || date_format($max_date, 'Y') > $this->view->date_info->max_allowed_year) {
-      drupal_not_found();
-      exit;
+      $this->forbid = TRUE;
+      $this->query->add_where('date', "0=1");
+      return;
     }
     
     // The second option seems to work better in the block view if 

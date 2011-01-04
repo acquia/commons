@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.64.2.5.2.105 2010/08/13 14:36:31 karens Exp $
+// $Id: date_api.module,v 1.64.2.5.2.121 2011/01/01 00:29:04 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -46,6 +46,7 @@ function date_api_init() {
     date_default_timezone_set(date_default_timezone_name());
   }  
   drupal_add_css(drupal_get_path('module', 'date_api')  .'/date.css');
+
 }
 
 /**
@@ -472,6 +473,63 @@ function date_granularity_names() {
     );
 }
 
+
+/**
+ * Give a granularity $precision, return an array of 
+ * all the possible granularity elements.
+ */
+function date_granularity_array_from_precision($precision) {
+  $granularity_array = array('year', 'month', 'day', 'hour', 'minute', 'second');
+  switch(($precision)) {
+    case 'year':
+      return array_slice($granularity_array, -6);
+    case 'month':
+      return array_slice($granularity_array, -5);
+    case 'day':
+      return array_slice($granularity_array, -4);
+    case 'hour':
+      return array_slice($granularity_array, -3);
+    case 'minute':
+      return array_slice($granularity_array, -2);
+    default:
+      return $granularity_array;
+  }
+}
+
+
+/**
+ * Give a granularity array, return the highest precision.
+ */
+function date_granularity_precision($granularity_array) {
+  $input = clone($granularity_array);
+  return array_pop($input);
+}
+
+
+/**
+ * Construct an appropriate DATETIME format string for the granularity of an item.
+ */
+function date_granularity_format($granularity) {
+  if (is_array($granularity)) {
+    $granularity = date_granularity_precision($granularity);
+  }
+  $format = 'Y-m-d H:i:s';
+  switch ($granularity) {
+    case 'year':
+      return substr($format, 0, 1);
+    case 'month':
+      return substr($format, 0, 3);
+    case 'day':
+      return substr($format, 0, 5);
+    case 'hour';
+      return substr($format, 0, 7);
+    case 'minute':
+      return substr($format, 0, 9);
+    default:
+      return $format;
+  } 
+}
+
 /**
  * A translated array of timezone names.
  * Cache the untranslated array, make the translated array a static variable.
@@ -649,11 +707,11 @@ function date_t_strings(&$replace, $langcode) {
  *   A translated date string in the requested format.
  */
 function date_format_date($date, $type = 'medium', $format = '', $langcode = NULL) {
+  if (get_class($date) != 'DateTime') {
+    $date = date_make_date($date);
+  }
   if (empty($date)) {
     return '';
-  }
-  if (get_Class($date) != 'DateTime') {
-    $date = new DateTime($date);
   }
   
   switch ($type) {
@@ -780,16 +838,23 @@ function date_now($timezone = NULL) {
  *    dates so they pass validation and don't get reset to 'now'.
  */
 function date_make_date($date, $timezone = NULL, $type = DATE_DATETIME, $granularity = array('year', 'month', 'day', 'hour', 'minute')) {
-  // No value or one that can't be used.
-  if (empty($date) || is_array($date)) {
-    return NULL;
-  }
-
+  
   // Make sure some value is set for the date and timezone even if the
   // site timezone is not yet set up to avoid fatal installation
   // errors.
   if (empty($timezone) || !date_timezone_is_valid($timezone)) {
     $timezone = date_default_timezone_name();
+  }
+  
+  // Special handling for a unix timestamp of '0', since it will fail 'empty' tests below.
+  if ($date === 0 && $type == DATE_UNIX) {
+    $date = date_convert($date, $type, DATE_DATETIME, $timezone);
+    $type = DATE_DATETIME;
+  }
+  
+  // No value or one with unexpected array keys.
+  if (empty($date) || (is_array($date) && array_diff($granularity, array_keys($date)))) {
+    return NULL;
   }
     
   // Special handling for partial dates that don't need precision.
@@ -877,9 +942,10 @@ function date_days_in_month($year, $month) {
 function date_days_in_year($date = NULL, $type = DATE_OBJECT) {
   if (empty($date)) {
     $date = date_now();
-    $type = DATE_OBJECT;
   }
-  $date = date_convert($date, $type, DATE_OBJECT);
+  if (!is_object($date)) {
+    $date = date_convert($date, $type, DATE_OBJECT);
+  }  
   if (is_object($date)) {
     if (date_format($date, 'L')) {
       return 366;
@@ -903,9 +969,10 @@ function date_days_in_year($date = NULL, $type = DATE_OBJECT) {
 function date_iso_weeks_in_year($date = NULL, $type = DATE_OBJECT) {
   if (empty($date)) {
     $date = date_now();
-    $type = DATE_OBJECT;
   }
-  $date = date_convert($date, $type, DATE_OBJECT);
+  if (!is_object($date)) {
+    $date = date_convert($date, $type, DATE_OBJECT);
+  }  
   if (is_object($date)) {
     date_date_set($date, date_format($date, 'Y'), 12, 28);
     return date_format($date, 'W');
@@ -1075,13 +1142,13 @@ function date_week_range($week, $year) {
  */
 function date_iso_week_range($week, $year) {
   
-  // Get to the first ISO week of the year.
-  $min_date = date_make_date($year .'-01-01 00:00:00', date_default_timezone_name());
+  // Get to the last ISO week of the previous year.
+  $min_date = date_make_date(($year - 1) .'-12-28 00:00:00', date_default_timezone_name());
   date_timezone_set($min_date, date_default_timezone());
   
-  if (date_format($min_date, 'W') != 1) {
-    date_modify($min_date, '+1 Monday');
-  }
+  // Find the first day of the first ISO week in the year.
+  date_modify($min_date, '+1 Monday');
+  
   // Jump ahead to the desired week for the beginning of the week range.
   if ($week > 1) {
     date_modify($min_date, '+ '. ($week - 1) .' weeks');
@@ -1118,12 +1185,11 @@ function date_weeks_in_year($year) {
 function date_week($date) {
   $date = substr($date, 0, 10);
   $parts = explode('-', $date);
-
   $date = date_make_date($date . ' 12:00:00', 'UTC');
   
   // If we are using ISO weeks, this is easy.
   if (variable_get('date_api_use_iso8601', FALSE)) {
-    return date_format($date, 'W');
+    return intval(date_format($date, 'W'));
   }
   
   $year_date = date_make_date($parts[0] . '-01-01 12:00:00', 'UTC');
@@ -1277,6 +1343,11 @@ function date_fuzzy_datetime($date) {
   if (empty($date['day'])) {
     $date['day'] = 1;
   }
+  foreach(array('hour', 'minute', 'second') as $part) {
+    if (empty($date[$part])) {
+      $date[$part] = 0;
+    }
+  }
   $value = date_pad($date['year'], 4) .'-'. date_pad($date['month']) .'-'. 
     date_pad($date['day']) .' '. date_pad($date['hour']) .':'. 
     date_pad($date['minute']) .':'. date_pad($date['second']);
@@ -1380,7 +1451,8 @@ function date_part_extract($date, $part, $type = DATE_DATETIME, $tz = 'UTC') {
 function date_is_valid($date, $type = DATE_DATETIME, $granularity = array('year', 'month', 'day', 'hour', 'minute')) {
   
   // Check that the value is properly structured.
-  if (empty($date)) return FALSE;
+  // Remember that DATE_UNIX can have a valid value of '0', which is 'empty'.
+  if (empty($date) && $type != DATE_UNIX) return FALSE;
   if ($type == DATE_OBJECT && !is_object($date)) return FALSE;
   if (($type == DATE_ISO || $type == DATE_DATETIME) && (!is_string($date) || !preg_match(DATE_REGEX_LOOSE, $date))) return FALSE;
   if ($type == DATE_UNIX and !is_numeric($date)) return FALSE;
@@ -2187,10 +2259,10 @@ function date_order() {
     '+4' => 'Fourth',
     '+5' => 'Fifth',
     '-1' => 'Last',
-    '-2' => 'Next to last',
-    '-3' => 'Third from last',
-    '-4' => 'Fourth from last',
-    '-5' => 'Fifth from last'
+    '-2' => '-2',
+    '-3' => '-3',
+    '-4' => '-4',
+    '-5' => '-5'
   );
 }
 
@@ -2373,17 +2445,18 @@ function date_real_url($view, $date_type = NULL, $date_arg = NULL, $force_view_u
   if (!$force_view_url && 
   (!empty($view->preview) || !empty($view->date_info->block_identifier))) {
     $url = $view->get_url($args);
-    return url($_GET['q'], array(
-      'query' => date_querystring($view, array(date_block_identifier($view) => $url)), 
-      'absolute' => TRUE));
-  }
-  else {
-    // Normal views may need querystrings appended to them
-    // if they use exposed filters.
-    return url($view->get_url($args), array(
-      'query' => date_querystring($view), 
-      'absolute' => TRUE));
-  }
+    $key = date_block_identifier($view);
+    if (!empty($key)) {
+      return url($_GET['q'], array(
+        'query' => date_querystring($view, array($key => $url)), 
+        'absolute' => TRUE));
+    }
+  }  
+  // Normal views may need querystrings appended to them
+  // if they use exposed filters.
+  return url($view->get_url($args), array(
+    'query' => date_querystring($view), 
+    'absolute' => TRUE));
 }
 
 /**
@@ -2488,6 +2561,14 @@ function date_api_date_time_lookup() {
   exit;
 }
 
+/*
+ * Test validity of a date range string.
+ */
+function date_range_valid($string) {
+  $matches = preg_match('@\-[0-9]*:[\+|\-][0-9]*@', $string);
+  return $matches < 1 ? FALSE : TRUE;
+}
+
 /**
  * Split a string like -3:+3 or 2001:2010 into 
  * an array of min and max years.
@@ -2518,6 +2599,13 @@ function date_range_years($string, $date = NULL) {
     else {
       $max_year = $this_year;
     }
+  }
+  // We expect the $min year to be less than the $max year.
+  // Some custom values for -99:+99 might not obey that.
+  if ($min_year > $max_year) {
+    $temp = $max_year;
+    $max_year = $min_year;
+    $min_year = $temp;
   }
   // If there is a current value, stretch the range to include it.
   $value_year = is_object($date) ? date_format($date, 'Y') : '';
@@ -2556,4 +2644,132 @@ function date_range_string($years) {
  */
 function date_api_date_api_tables() {
   return array('node', 'comments', 'users');
+}
+
+/**
+ * Determine if a from/to date combination qualify as 'All day'.
+ *
+ * @param object $date1, a string date in datetime format for the 'from' date.
+ * @param object $date2, a string date in datetime format for the 'to' date.
+ * @return TRUE or FALSE.
+ */
+function date_is_all_day($string1, $string2, $granularity = 'second', $increment = 1) {
+  if (empty($string1) || empty($string2)) {
+    return FALSE;
+  }
+  elseif (!in_array($granularity, array('hour', 'minute', 'second'))) {
+    return FALSE;
+  }
+  
+  preg_match('/([0-9]{4}-[0-9]{2}-[0-9]{2}) (([0-9]{2}):([0-9]{2}):([0-9]{2}))/', $string1, $matches);
+  $count = count($matches);
+  $date1 = $count > 1 ? $matches[1] : '';
+  $time1 = $count > 2 ? $matches[2] : '';
+  $hour1 = $count > 3 ? intval($matches[3]) : 0;
+  $min1 = $count > 4 ? intval($matches[4]) : 0;
+  $sec1 = $count > 5 ? intval($matches[5]) : 0;
+  preg_match('/([0-9]{4}-[0-9]{2}-[0-9]{2}) (([0-9]{2}):([0-9]{2}):([0-9]{2}))/', $string2, $matches);
+  $count = count($matches);
+  $date2 = $count > 1 ? $matches[1] : '';
+  $time2 = $count > 2 ? $matches[2] : '';
+  $hour2 = $count > 3 ? intval($matches[3]) : 0;
+  $min2 = $count > 4 ? intval($matches[4]) : 0;
+  $sec2 = $count > 5 ? intval($matches[5]) : 0;
+  
+  if (empty($date1) || empty($date2) || $date1 != $date2) {
+    return FALSE;
+  }
+  if (empty($time1) || empty($time2)) {
+    return FALSE;
+  }
+    
+  $tmp = date_seconds('s', TRUE, $increment);
+  $max_seconds = intval(array_pop($tmp));
+  $tmp = date_minutes('i', TRUE, $increment);
+  $max_minutes = intval(array_pop($tmp));
+  
+  switch ($granularity) {
+    case 'second':
+      $min_match = $time1 == '00:00:00' || ($hour1 == 0 && $min1 == 0 && $sec1 == 0);
+      $max_match = $time2 == '00:00:00' || ($hour2 == 23 && $min2 == $max_minutes && $sec2 == $max_seconds) || ($hour1 == 0 && $hour2 == 0 && $min1 == 0 && $min2 == 0 && $sec1 == 0 && $sec2 == 0);
+      break;
+    case 'minute':
+      $min_match = $time1 == '00:00:00' || ($hour1 == 0 && $min1 == 0);
+      $max_match = $time2 == '00:00:00' || ($hour2 == 23 && $min2 == $max_minutes) || ($hour1 == 0 && $hour2 == 0 && $min1 == 0 && $min2 == 0);
+      break;
+    case 'hour':
+      $min_match = $time1 == '00:00:00' || ($hour1 == 0);
+      $max_match = $time2 == '00:00:00' || ($hour2 == 23) || ($hour1 == 0 && $hour2 == 0);
+      break;
+    default:
+      $min_match = TRUE;
+      $max_match = FALSE;
+  }
+  
+  if ($min_match && $max_match) {
+    return TRUE;
+  }
+    
+  return FALSE;
+}
+
+/**
+ * Return the nested form elements for a field by name.
+ * This can be used either to retrieve the entire sub-element
+ * for a field by name, no matter how deeply nested it is within
+ * fieldgroups or multigroups, or to find the multiple value
+ * sub-elements within a field element by name (i.e. 'value' or
+ * 'rrule'). You can also use this function to see if an item exists 
+ * in a form (the return will be an empty array if it does not exist).
+ *
+ * The function returns an array of results. A field will generally
+ * only exist once in a form but the function can also be used to 
+ * locate all the 'value' elements within a multiple value field,
+ * so the result is always returned as an array of values.
+ *
+ * For example, for a field named field_custom,  the following will 
+ * pluck out the form elements for this field from the node form, 
+ * no matter how deeply it is nested within fieldgroups or fieldsets:
+ *
+ * $elements = content_get_nested_elements($node_form, 'field_custom');
+ *
+ * You can prefix the function with '&' to retrieve the element by 
+ * reference to alter it directly:
+ *
+ * $elements = &content_get_nested_elements($form, 'field_custom');
+ * foreach ($elements as $element) {
+ *   $element['#after_build'][] = 'my_field_afterbuild';
+ * }
+ *
+ * During the #after_build you could then do something like the
+ * following to alter each individual part of a multiple value field:
+ *
+ * $sub_elements = &content_get_nested_elements($element, 'value');
+ * foreach ($sub_elements as $sub_element) {
+ *   $sub_element['#element_validate'][] = 'custom_validation';
+ * }
+ *
+ * @param $form
+ *   The form array to search.
+ * @param $field_name
+ *   The name or key of the form elements to return.
+ * @return
+ *   An array of all matching form elements, returned by reference.
+ */
+function &date_get_nested_elements(&$form, $field_name) {
+  $elements = array();
+
+  foreach (element_children($form) as $key) {
+    if ($key === $field_name) {
+      $elements[] = &$form[$key];
+    }
+    else if (is_array($form[$key])) {
+      $nested_form = &$form[$key];
+      if ($sub_elements = &date_get_nested_elements($nested_form, $field_name)) {
+        $elements = array_merge($elements, $sub_elements);
+      }
+    }
+  }
+
+  return $elements;
 }

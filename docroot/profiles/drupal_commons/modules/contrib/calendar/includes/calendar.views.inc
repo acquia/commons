@@ -1,5 +1,5 @@
 <?php
-//$Id: calendar.views.inc,v 1.1.2.9 2009/01/23 21:05:41 karens Exp $
+//$Id: calendar.views.inc,v 1.1.2.11 2010/11/29 11:41:58 karens Exp $
 /**
  *  Implementation of hook_views_query()
  *  
@@ -27,7 +27,7 @@ function calendar_views_query_alter(&$view, &$query) {
         
     }
     drupal_goto(str_replace($_POST['calendar_previous_arg'], $arg, $_POST['view_url']));
-    drupal_exit();
+    exit();
   }
 }
 
@@ -71,8 +71,13 @@ function calendar_views_pre_view(&$view, &$display_id, &$args) {
  */
 function calendar_views_plugins() {
   $path = drupal_get_path('module', 'calendar');
+  $theme_path = $path;
+  if (module_exists('calendar_multiday')) {
+    $theme_path = drupal_get_path('module', 'calendar_multiday');
+  }
+  
   $views_path = drupal_get_path('module', 'views');
-  require_once "./$path/theme/theme.inc";
+  require_once "./$theme_path/theme/theme.inc";
 
   $data = array(
     'module' => 'calendar', // This just tells our themes are elsewhere.
@@ -184,7 +189,7 @@ function calendar_views_plugins() {
         'parent' => 'parent',
         'theme' => 'calendar_main',
         'theme file' => 'theme.inc',
-        'theme path' => "$path/theme",
+        'theme path' => "$theme_path/theme",
         'uses row plugin' => FALSE,
         'uses fields' => TRUE,
         'uses options' => FALSE,
@@ -199,7 +204,7 @@ function calendar_views_plugins() {
         'parent' => 'calendar_nav',
         'theme' => 'calendar_month',
         'theme file' => 'theme.inc',
-        'theme path' => "$path/theme",
+        'theme path' => "$theme_path/theme",
         'additional themes' => array(
           'calendar_year' => 'style',
           'calendar_day' => 'style',
@@ -214,5 +219,13 @@ function calendar_views_plugins() {
       ),
     ),
   );
+  
+  if (module_exists('calendar_multiday')) {
+    $data['style']['calendar_style']['additional themes'] += array(
+      'calendar_day_overlap' => 'style',
+      'calendar_week_overlap' => 'style',    
+    );
+  }
+
   return $data;
 }

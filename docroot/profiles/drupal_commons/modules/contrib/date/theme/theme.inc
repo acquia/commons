@@ -1,5 +1,5 @@
 <?php
-// $Id: theme.inc,v 1.1.4.37 2010/08/13 12:07:26 karens Exp $
+// $Id: theme.inc,v 1.1.4.38 2010/11/20 13:25:54 karens Exp $
 /**
  *  Preprocessor to construct back and next navigation from the date argument.
  */
@@ -169,6 +169,7 @@ function theme_date_nav_title($granularity, $view, $link = FALSE, $format = NULL
 function template_preprocess_date_vcalendar(&$vars) {
     
   $vars['current_date'] = date_format(date_now(), DATE_FORMAT_ICAL);
+  $vars['current_date_utc'] = date_format(date_now('UTC'), DATE_FORMAT_ICAL);
   $vars['site_timezone'] = date_default_timezone_name();
   $vars['calname'] = date_ical_escape_text(!empty($vars['calname']) ? $vars['calname'] : variable_get('site_name', ''));
   
@@ -183,7 +184,7 @@ function template_preprocess_date_vcalendar(&$vars) {
       $events[$uid] = $event;
       $timezone = timezone_name_get(date_timezone_get($event['start']));
       if (!empty($timezone)) {
-        $events[$uid]['timezone'] = "TZID=$timezone;";
+        $events[$uid]['timezone'] = "TZID=$timezone:";
       }
       else {
         $events[$uid]['timezone'] = '';
@@ -212,7 +213,7 @@ function template_preprocess_date_vcalendar(&$vars) {
           }
         }
         elseif (in_array($key, array('summary', 'description', 'location'))) {
-          $events[$uid][$key] = date_ical_escape_text($value);
+          $events[$uid][$key] = date_ical_escape_text(html_entity_decode($value, ENT_QUOTES, 'UTF-8'));
         }
       }
     }

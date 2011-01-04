@@ -1,5 +1,5 @@
 <?php
-//$Id: date_popup.install,v 1.5.6.7 2010/02/28 14:23:04 karens Exp $
+//$Id: date_popup.install,v 1.5.6.10 2010/12/21 12:21:16 karens Exp $
 
 /**
  * Implementation of hook_requirements().
@@ -97,4 +97,25 @@ function date_popup_disable() {
     }
     content_clear_type_cache(TRUE);
   }
+}
+
+/**
+ * Update default path for date popup css
+ */
+function date_popup_update_6001() {
+  $ret = array();
+  $version = function_exists('jquery_ui_get_version') ? jquery_ui_get_version() : '1.6';
+  switch ($version) {
+    case '1.6':
+      $path = drupal_get_path('module', 'date_popup') . '/themes/datepicker.css';
+      break;
+    default:
+      $path = drupal_get_path('module', 'date_popup') . '/themes/datepicker.1.7.css';
+      break;
+  }
+  variable_set('date_popup_css_file', $path);
+  if (!module_exists('jquery_ui')) {
+    drupal_set_message('The jQuery UI module is now required when using Date Popup. See the <a href="http://drupal.org/project/jquery_ui">jQuery UI</a> page for installation instructions.', 'error');
+  }
+  return $ret;
 }

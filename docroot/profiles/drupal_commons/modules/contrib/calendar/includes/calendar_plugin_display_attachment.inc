@@ -1,5 +1,5 @@
 <?php
-// $Id: calendar_plugin_display_attachment.inc,v 1.1.2.17 2009/03/17 18:03:36 karens Exp $
+// $Id: calendar_plugin_display_attachment.inc,v 1.1.2.22 2011/01/03 02:39:05 karens Exp $
 /**
  * The plugin that handles calendar attachment displays.
  * 
@@ -22,6 +22,9 @@ class calendar_plugin_display_attachment extends views_plugin_display_attachment
    * to the style handler.
    */
   function render() {
+    if (!empty($this->view->date_info->forbid)) {
+      return '';
+    }
     return $this->view->style_plugin->render($this->view->result);
   }
   
@@ -125,7 +128,7 @@ class calendar_plugin_display_attachment extends views_plugin_display_attachment
     if (substr($display_id, 0, 14) == 'calendar_block') {
       $this->view->date_info->mini = TRUE;
       $this->view->date_info->block = TRUE;
-      $this->date_info->calendar_popup = FALSE;
+      $this->view->date_info->calendar_popup = FALSE;
       if (!isset($this->view->date_info->block_identifier)) {
         $this->view->date_info->block_identifier = 'mini';
       }
@@ -133,6 +136,7 @@ class calendar_plugin_display_attachment extends views_plugin_display_attachment
     elseif (substr($display_id, 0, 9) == 'calendar_') {
       $this->view->date_info->calendar_colors = $this->view->display[$display_id]->handler->options['calendar_colors'];
       $this->view->date_info->calendar_colors_taxonomy = $this->view->display[$display_id]->handler->options['calendar_colors_taxonomy'];
+      $this->view->date_info->calendar_colors_group = $this->view->display[$display_id]->handler->options['calendar_colors_group'];
       $this->view->date_info->calendar_popup = $this->view->display[$display_id]->handler->options['calendar_popup'];
       $this->view->date_info->calendar_date_link = $this->view->display[$display_id]->handler->options['calendar_date_link'];
     }  
@@ -157,20 +161,19 @@ class calendar_plugin_display_attachment extends views_plugin_display_attachment
   }
   
   /**
-   * Set default values for the display.
+   * Override some of the parent options.
    */
   function options(&$display) {
     parent::options($display);
-    $display->display_options['inherit_argments'] = TRUE;
-    $display->display_options['inherit_filters'] = TRUE;
-    $display->display_options['attachment_position'] = 'after';
-    $display->display_options['calendar_type'] = $this->calendar_type();
+    $display['inherit_argments'] = TRUE;
+    $display['inherit_filters'] = TRUE;
+    $display['attachment_position'] = 'after';
   }  
 
   /**
    * Add custom option definitions.
    */
-  function option_definition () {
+  function option_definition() {
     $options = parent::option_definition();
     $options['calendar_type'] = array('default' => $this->calendar_type());
     return $options;

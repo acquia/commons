@@ -1,5 +1,5 @@
 <?php
-//$Id: calendar.views_default.inc,v 1.1.2.21 2009/02/21 16:33:15 karens Exp $
+//$Id: calendar.views_default.inc,v 1.1.2.23 2010/11/28 23:31:28 karens Exp $
 /**
  * Set up so it can be used as an API to create default calendars for
  * specific date fields.
@@ -332,6 +332,7 @@ $handler->override_option('tab_options', array(
 $handler->override_option('calendar_colors', array($colors));
 $handler->override_option('calendar_colors_vocabulary', array());
 $handler->override_option('calendar_colors_taxonomy', array());
+$handler->override_option('calendar_colors_group', array());
 $handler->override_option('calendar_popup', 0);
 $handler->override_option('calendar_date_link', $date_link_type);
 // Calendar block.
@@ -368,6 +369,11 @@ $handler->override_option('style_options', array(
   'date_fields' => NULL,
   'max_items' => 0,
 ));
+
+if (module_exists('calendar_multiday')) {
+  $handler->override_option['style_options']['multiday_theme'] = 1;
+}
+
 $handler->override_option('attachment_position', 'after');
 $handler->override_option('inherit_arguments', TRUE);
 $handler->override_option('inherit_exposed_filters', TRUE);
@@ -390,6 +396,11 @@ $handler->override_option('style_options', array(
   'groupby_times_custom' => '',
   'groupby_field' => '',
 ));
+
+if (module_exists('calendar_multiday')) {
+  $handler->override_option['style_options']['theme_style'] = 1;
+}
+
 $handler->override_option('attachment_position', 'after');
 $handler->override_option('inherit_arguments', TRUE);
 $handler->override_option('inherit_exposed_filters', TRUE);
@@ -412,6 +423,11 @@ $handler->override_option('style_options', array(
   'groupby_times_custom' => '',
   'groupby_field' => '',
 ));
+
+if (module_exists('calendar_multiday')) {
+  $handler->override_option['style_options']['theme_style'] = 1;
+}
+
 $handler->override_option('attachment_position', 'after');
 $handler->override_option('inherit_arguments', TRUE);
 $handler->override_option('inherit_exposed_filters', TRUE);

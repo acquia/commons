@@ -1,0 +1,504 @@
+# $Id: sv.po,v 1.1.2.4 2009/10/17 05:50:49 nancyw Exp $
+#
+# Swedish translation of Drupal (realname)
+# Generated from files:
+#  realname.admin.inc,v 1.1.2.9 2009/10/08 20:50:31 nancyw
+#  realname.module,v 1.4.4.57 2009/10/13 17:48:06 nancyw
+#  realname.info,v 1.1.4.2 2008/11/03 19:59:58 nancyw
+#  realname.views.inc,v 1.1.2.3 2009/10/08 19:43:07 nancyw
+#  realname_theme.inc,v 1.2.4.18 2009/10/01 15:25:11 nancyw
+#  realname_content_profile.inc,v 1.1.2.7 2009/10/01 15:25:11 nancyw
+#  realname_handler_argument_user_uid.inc,v 1.1.2.2 2009/04/22 00:44:47 nancyw
+#  realname_handler_filter_user_name.inc: n/a
+#  token_realname.inc,v 1.1.2.9 2009/03/06 20:07:19 nancyw
+#  realname.install,v 1.4.4.9 2009/07/07 15:33:44 nancyw
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Realname 6.x\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Magnus Gunnarsson <seals@passagen.se>\n"
+"Language-Team: drupalsverige.se\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Poedit-Language: Swedish\n"
+"X-Poedit-Country: SWEDEN\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: realname.admin.inc:26
+msgid "Show realname in nodes"
+msgstr "Visa RealName i noder"
+
+#: realname.admin.inc:27
+msgid "If this option is selected, the \"Real name\" will be used on node displays."
+msgstr "Om detta alternativ är valt kommer \"RealName\" att användas för nodvisning."
+
+#: realname.admin.inc:34
+msgid "Add node title to available fields"
+msgstr "Lägg till titel för nod till tillgängliga fält"
+
+#: realname.admin.inc:35
+msgid "This option allows you to include the profile title in the list of available fields."
+msgstr "Detta alternativ låter dig inkludera titeln på profilen i listan på tillgängliga fält."
+
+#: realname.admin.inc:46
+msgid "Overwrite user fields in view to show realnames"
+msgstr "Skriv över användarfält i visning för att visa RealNames"
+
+#: realname.admin.inc:47
+msgid "This option will overwrite the default user name definition in Views in order to show Realnames without the need to modify Views. Remember to rebuild your Views cache if you change this option."
+msgstr "Detta alternativ kommer att skriva över det förvalda användarnamnets definition i Views för att kunna visa RealNames utan att behöva modifiera Views. Kom ihåg att bygga om cachen för Views om du ändrar detta alternativ."
+
+#: realname.admin.inc:54
+msgid "Title for own account"
+msgstr "Titel för eget konto"
+
+#: realname.admin.inc:55
+msgid "This will be shown instead of \"My account\" on the user's own account pages and in the menu. If it is empty, the user's RealName will be shown."
+msgstr "Detta kommer att visas istället för \"Mitt konto\" på användarens egna kontosida och i menyn. Om detta är tomt kommer användarens RealName att visas."
+
+#: realname.admin.inc:56
+#: realname.module:295
+msgid "My account"
+msgstr "Mitt konto"
+
+#: realname.admin.inc:61
+msgid "Search options"
+msgstr "Inställningar för sökning"
+
+#: realname.admin.inc:62
+msgid "These settings control how RealName search will work."
+msgstr "Dessa inställningar styr hur sökning för RealName fungerar."
+
+#: realname.admin.inc:75
+msgid "Enable realname search"
+msgstr "Aktivera sökning för RealName"
+
+#: realname.admin.inc:76
+msgid "If this option is selected, the \"Real name\" searching will be allowed. The menus will be rebuilt if this setting changes."
+msgstr "Om detta alternativ är valt kommer sökning med hjälp av RealName vara tillåtet. Om denna inställning ändras kommer menyerna att byggas om."
+
+#: realname.admin.inc:82
+msgid "Disable user search"
+msgstr "Inaktivera användarsökning"
+
+#: realname.admin.inc:83
+msgid "If this option is selected, the standard \"Users\" search page will be disabled. The menus will be rebuilt if this setting changes."
+msgstr "Om detta alternativ är valt kommer standardsökningen av \"Användare\" att vara inaktiverad. Om denna inställning ändras kommer menyerna att byggas om."
+
+#: realname.admin.inc:89
+msgid "Include login name in search"
+msgstr "Inkludera inloggningsnamn i sökning"
+
+#: realname.admin.inc:90
+msgid "Should the \"Real name\" search also index the login name?"
+msgstr "Skall även inloggningsnamn indexeras vid sökning med RealName?"
+
+#: realname.admin.inc:96
+msgid "Theme_username options"
+msgstr "Inställningar för theme_username"
+
+#: realname.admin.inc:97
+msgid "These settings control how \"theme('username', ...)\" will work."
+msgstr "Dessa inställningar styr hur \"theme('username', ...) kommer att fungera."
+
+#: realname.admin.inc:104
+msgid "Override username theme"
+msgstr "Åsidosätt temats användarnamn"
+
+#: realname.admin.inc:105
+msgid "If this option is selected, the standard username theme function will be overriden to use the \"Real name.\""
+msgstr "Om detta alternativ är valt kommer det förvalda användarnamnet för temafunktionen att åsidosättas av \"RealName\"."
+
+#: realname.admin.inc:111
+msgid "Maximum allowed username length"
+msgstr "Maximal längd på tillåtet användarnamn"
+
+#: realname.admin.inc:112
+msgid "Long usernames may \"break\" some tables or other displays; this setting limits the maximum length. Note that the core recommendation is 20."
+msgstr "Långa användarnamn kan \"förstöra\" vissa tabeller eller andra visningar. Denna inställning begränsar den maximala längden. Observera att rekommendationen i Drupals kärna är 20."
+
+#: realname.admin.inc:119
+msgid "Show \"Not verified\" for anonymous users"
+msgstr "Visa \"Ej verifierad\" för gäster"
+
+#: realname.admin.inc:120
+msgid "Drupal core adds \"Not verified\" for anonymous users, this option allows that to be turned off."
+msgstr "Drupals kärna lägger till \"Ej verifierad\" för gäster, detta alternativ tillåter det att slås av."
+
+#: realname.admin.inc:126
+msgid "Save configuration"
+msgstr "Spara inställningar"
+
+#: realname.admin.inc:136
+msgid "User search disable cannot be used if RealName search is not enabled."
+msgstr "Inaktivering av användarsökning kan inte göras om sökning genom RealName inte är aktiverad."
+
+#: realname.admin.inc:157
+msgid "The menu router has been rebuilt."
+msgstr "Menyvägen har byggts om."
+
+#: realname.admin.inc:161
+msgid "Configuration saved."
+msgstr "Inställning sparad."
+
+#: realname.admin.inc:176
+msgid "<strong>WARNING</strong>: This form may cause errors if the instructions below are not followed or if you give an invalid form name or field name. Please do not remove the \"comment_form\" line."
+msgstr "<strong>Varning</strong>: Detta formulär kan orsaka problem om instruktionerna nedan inte följs eller om du matar in ett ogiltigt formulärnamn eller fältnamn. Var vänlig och ta inte bort raden \"comment_form\"."
+
+#: realname.admin.inc:181;190
+msgid "Bypass these forms"
+msgstr "Kringå dessa formulär"
+
+#: realname.admin.inc:184
+msgid "Enter one form per line. Each line should start with the form name. That should be followed by the name of the field to be reset to the username. If the field is a child field, include its full parent path, separated by spaces. For example: mymodule_form fieldset_1 fieldset_2 name"
+msgstr "Ange ett formulär per rad. Varje rad skall starta med formulärnamnet. Detta skall följas av namnet på fältet som skall återställas till användarnamnet. Inkludera dess fullständiga ovanliggande sökväg om fältet är ett underliggande fält. Separerade med mellanslag. Till exempel: mymodule_form fieldset_1 fieldset_2 name"
+
+#: realname.admin.inc:212
+msgid "Information saved for !count forms."
+msgstr "Information sparad för !count formulär."
+
+#: realname.admin.inc:235
+msgid "You have chosen the \"@module\" module to provide data."
+msgstr "Du har valt modulen \"@module\" för att tillhandahålla data."
+
+#: realname.admin.inc:238
+msgid "Use this content type"
+msgstr "Använd den här innehållstypen"
+
+#: realname.admin.inc:241
+msgid "Content types available to @module"
+msgstr "Innehållstyper tillgängliga för @module"
+
+#: realname.admin.inc:248
+msgid "Use this module"
+msgstr "Använd den här modulen"
+
+#: realname.admin.inc:251
+msgid "These modules are available for providing data to RealName"
+msgstr "Dessa moduler är tillgängliga för att tillhandahålla data till RealName"
+
+#: realname.admin.inc:308
+msgid "You are using the %module module to provide fields."
+msgstr "Du använder modulen %module för att tillhandahålla fält."
+
+#: realname.admin.inc:310
+msgid "The %type type is the source of data."
+msgstr "Källan för datan är typen %type."
+
+#: realname.admin.inc:368
+msgid "Name Pattern"
+msgstr "Mönster för namn"
+
+#: realname.admin.inc:369
+msgid "The determines how the fields will be used to create the \"Real name.\" Use \"%1\" to refer to the first field, \"%2\" to refer to the second, etc.."
+msgstr "Fastställer hur fälten skall användas för att skapa \"RealName\". Använd \"%1\" för att hänvisa till första fältet, \"%2\" för att hänvisa till det andra och så vidare."
+
+#: realname.admin.inc:380
+msgid "Homepage options"
+msgstr "Inställningar för hemsida"
+
+#: realname.admin.inc:381
+msgid "There were URL fields in the profile. If one of these is a personal homepage link, you may choose to link to it rather than the user profile. Choose which field to use."
+msgstr "Det finns URL-fält i profilen. Om en av dessa är en personlig hemsideslänk kan du välja att länka till den istället för användarprofilen. Välj vilket fält som skall användas."
+
+#: realname.admin.inc:389
+msgid "Link to homepage"
+msgstr "Länka till hemsida"
+
+#: realname.admin.inc:390
+msgid "Select a personal homepage link, if appropriate."
+msgstr "Välj en personlig länk för hemsida, om detta är lämpligt."
+
+#: realname.admin.inc:396
+msgid "Spam link deterrent"
+msgstr "Avskräckning för spamlänk"
+
+#: realname.admin.inc:397
+msgid "If enabled, Drupal will add rel=\"nofollow\" to all links, as a measure to reduce the effectiveness of spam links. Note: this will also prevent valid links from being followed by search engines, therefore it is likely most effective when enabled for anonymous users."
+msgstr "Om detta är aktiverat lägger Drupal till rel=\"nofollow\" till alla länkar, för att minska spamlänkars effektivitet. OBS! Det hindrar även giltiga länkar från att följas av sökmotorer, det är därför sannolikt mest användbart för anonyma användare."
+
+#: realname.admin.inc:404
+msgid "Save"
+msgstr "Spara"
+
+#: realname.admin.inc:439
+msgid "Configuration has been updated."
+msgstr "Inställningarna har uppdaterats."
+
+#: realname.admin.inc:450
+msgid "Are you sure you want to rebuild the RealNames for all site users?"
+msgstr "Är du säker på att du vill bygga om RealNames för alla användare på webbplatsen?"
+
+#: realname.admin.inc:451
+msgid ""
+"This action rebuilds RealNames for all users, and may be a lengthy process.\n"
+"    This action cannot be undone."
+msgstr "Denna åtgärd bygger om RealNames för alla användare och kan vara en långsam process. Denna åtgärd kan inte ångras."
+
+#: realname.admin.inc:452
+msgid "Rebuild realnames"
+msgstr "Bygg om RealNames"
+
+#: realname.admin.inc:452
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: realname.admin.inc:460
+msgid "Rebuilding realnames"
+msgstr "Bygger om RealNames"
+
+#: realname.admin.inc:510
+msgid "The realnames have been rebuilt."
+msgstr "RealNames har byggts om."
+
+#: realname.admin.inc:515
+msgid "The realnames have not been properly rebuilt."
+msgstr "RealNames har inte byggts om ordentligt."
+
+#: realname.admin.inc:158
+#: realname.module:631;81
+#: realname.info:0
+msgid "RealName"
+msgstr "RealName"
+
+#: realname.admin.inc:158
+msgid "User module search disabled."
+msgstr "Modulen för användarsökning inaktiverades."
+
+#: realname.views.inc:20
+msgid "Realname"
+msgstr "RealName"
+
+#: realname.views.inc:29
+msgid "Uid"
+msgstr "Uid"
+
+#: realname.views.inc:30
+msgid "The user ID"
+msgstr "Användarens ID"
+
+#: realname.views.inc:33
+msgid "User Realname"
+msgstr "RealName för användare"
+
+#: realname.views.inc:39
+#: realname_theme.inc:133
+msgid "Name"
+msgstr "Namn"
+
+#: realname.views.inc:40
+msgid "The user or author name."
+msgstr "Användar- eller författarnamnet."
+
+#: realname.views.inc:61
+msgid "User (realname)"
+msgstr "Användare (RealName)"
+
+#: realname_content_profile.inc:64
+msgid "The RealName module does not currently support fields with multiple values, such as @fld."
+msgstr "Modulen RealName stödjer för närvarande inte fält med flera värden såsom @fld."
+
+#: realname_content_profile.inc:82
+msgid "The !type content type has no fields to use."
+msgstr "Innehållstypen !type har inga fält som kan användas."
+
+#: realname_content_profile.inc:87
+msgid "Node title"
+msgstr "Titel för nod"
+
+#: realname_handler_argument_user_uid.inc:19
+#: realname_theme.inc:123
+#: realname.module:349
+msgid "Anonymous"
+msgstr "Gäst"
+
+#: realname_handler_filter_user_name.inc:28
+msgid "Realnames"
+msgstr "RealNames"
+
+#: realname_handler_filter_user_name.inc:29
+msgid "Enter a comma separated list of user real names."
+msgstr "Ange en kommaseparerad lista"
+
+#: realname_handler_filter_user_name.inc:71
+msgid "Unable to find user: @users"
+msgid_plural "Unable to find users: @users"
+msgstr[0] "Kunde inte hitta användaren: @users"
+msgstr[1] "Kunde inte hitta användarna: @users"
+
+#: realname_theme.inc:86;111
+msgid "View user's home page."
+msgstr "Visa användarens hemsida."
+
+#: realname_theme.inc:93
+#: realname.module:353
+msgid "View user profile."
+msgstr "Visa användarprofil."
+
+#: realname_theme.inc:119
+msgid "not verified"
+msgstr "inte verifierad"
+
+#: realname_theme.inc:133
+msgid "User level"
+msgstr "Användarnivå"
+
+#: realname_theme.inc:133
+msgid "Operations"
+msgstr "Alternativ"
+
+#: realname_theme.inc:137
+msgid "edit permissions"
+msgstr "redigera rättigheter"
+
+#: realname_theme.inc:139
+msgid "edit role"
+msgstr "redigera roll"
+
+#: realname_theme.inc:142
+msgid "locked"
+msgstr "låst"
+
+#: token_realname.inc:16
+msgid "The RealName for the user."
+msgstr "RealName för användaren."
+
+#: token_realname.inc:17
+msgid "Themed username link."
+msgstr "Temalänk för användarnamnet."
+
+#: token_realname.inc:18
+msgid "The home page for the user."
+msgstr "Hemsidan för användaren."
+
+#: realname.module:35
+msgid "This page displays the status of and settings for the RealName module."
+msgstr "Denna sida visar status- och inställningar för modulen RealName."
+
+#: realname.module:40
+msgid "In order to apply new settings you need to <a href=\"!rebuild\">rebuild</a> your realnames."
+msgstr "För att kunna lägga till nya inställningar måste du <a href=\"!rebuild\">bygga om</a> dina RealNames."
+
+#: realname.module:46
+msgid "This simple module adds a \"realname\" element (method) to a user object when that object is loaded."
+msgstr "Denna enkla modul lägger till ett element (metod) av typen \"RealName\" för en användares objekt när objektet laddas."
+
+#: realname.module:207
+msgid "Home"
+msgstr "Hem"
+
+#: realname.module:246
+msgid "@name's blog"
+msgstr "Blogg för @name"
+
+#: realname.module:277
+msgid "You need to provide a valid e-mail address to contact other users. Please update your <a href=\"@url\">user information</a> and try again."
+msgstr "Du måste ange en giltig e-postadress för att kontakta andra användare. Var vänlig ändra din <a href=\"@url\">användarinformation</a>."
+
+#: realname.module:280
+msgid "You cannot contact more than %number users per hour. Please try again later."
+msgstr "Du kan inte kontakta mer än %number användare per timme. Försök igen senare."
+
+#: realname.module:350
+msgid "@user's picture"
+msgstr "bild för @user"
+
+#: realname.module:485;485
+msgid "username: "
+msgstr "användarnamn:"
+
+#: realname.module:544
+msgid "User level image"
+msgstr "Bild för användarnivå"
+
+#: realname.module:545
+msgid ""
+"This image will be shown when the user name is themed.\n"
+"          It can be used to show special attributes or user participation level.\n"
+"          The path is relative to the files directory \"%files\"."
+msgstr "Denna bild kommer att visas när användarnamnet är temat. Det kan användas för att visa specialla attribut eller användarens deltagande nivå. Sökvägen är relativ till filkatalogen \"%files\"."
+
+#: realname.module:581
+msgid "Users"
+msgstr "Användare"
+
+#: realname.module:581
+msgid "User names"
+msgstr "Användarnamn"
+
+#: realname.module:606
+msgid "User"
+msgstr "Användare"
+
+#: realname.module:611
+msgid "Login name: !name"
+msgstr "Inloggningsnamn: !name"
+
+#: realname.module:748
+msgid "No module is available for RealName."
+msgstr "Ingen modul är tillgänglig för RealName."
+
+#: realname.module:760
+msgid "The profile load function (!module) was not found."
+msgstr "Laddningen för profilfunktionen (!module) hittades inte."
+
+#: realname.module:631
+msgid "Indexing up to !limit users, starting at !start"
+msgstr "Indexerar upp till !limit användare, startar på !start"
+
+#: realname.module:70
+msgid "use realname"
+msgstr "använd RealName"
+
+#: realname.module:82
+msgid "Configure which fields are used to create a user's RealName."
+msgstr "Ställ in vilka fält som skall användas för att skapa en användares RealName."
+
+#: realname.module:90
+msgid "General"
+msgstr "Allmänt"
+
+#: realname.module:100
+msgid "Fields"
+msgstr "Fält"
+
+#: realname.module:110
+msgid "Module"
+msgstr "Modul"
+
+#: realname.module:120
+msgid "Bypass Forms"
+msgstr "Kringå formulär"
+
+#: realname.module:130
+msgid "Recalculate names"
+msgstr "Räkna om namn"
+
+#: realname.module:150
+msgid "Realname Privatemsg autocomplete"
+msgstr "RealName för Privatemsg automatiskt klart"
+
+#: realname.install:56
+msgid "The RealName module has been enabled. You may wish to proceed to <a href=\"!url\">the settings page</a>."
+msgstr "Modulen RealName har inaktiverats. Du kan fortsätta till <a href=\"!url\">inställningssidan</a>."
+
+#: realname.install:89
+msgid "No change required."
+msgstr "Inga ändringar krävdes."
+
+#: realname.install:163
+msgid "Realnames have been recalculated"
+msgstr "RealNames har räknats om"
+
+#: realname.install:166
+msgid "The Realname module has been updated. In order to start using it, you have to select a profile module to be used."
+msgstr "Modulen RealName har uppdaterats. För att kunna börja använda den måste du välja en modulprofil som skall användas."
+
+#: realname.info:0
+msgid "Use user profile fields to build a 'realname' field in a user object."
+msgstr "Använd användarprofilens fält för att bygga ett fält av typen \"RealName\" för en användares objekt."
+

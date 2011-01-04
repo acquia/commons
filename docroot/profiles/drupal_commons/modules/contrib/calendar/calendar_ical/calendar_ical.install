@@ -1,5 +1,6 @@
 <?php
-// $Id: calendar_ical.install,v 1.1.2.5 2008/10/15 13:34:00 karens Exp $
+// $Id: calendar_ical.install,v 1.1.2.6 2010/02/28 14:23:48 karens Exp $
+
 /**
  * Implementation of hook_install().
  */
@@ -29,14 +30,8 @@ function calendar_ical_disable() {
   db_query("DELETE FROM {cache_views}");
 }
 
-function calendar_ical_update_1() {
-  $ret = array();
-  $ret[] = update_sql("UPDATE {system} SET weight = 1 WHERE name = 'calendar_ical'");
-  if (db_table_exists('cache_calendar_ical')) {
-    $ret[] = update_sql("INSERT INTO {cache} (cid, data, expire, created, headers) SELECT cid, data, expire, created, headers FROM {cache_calendar_ical}");
-    $ret[] = update_sql('DROP TABLE {cache_calendar_ical}');
-  }
-  return $ret;
+function calendar_ical_update_last_removed() {
+  return 1;
 }
 
 function calendar_ical_update_6000() {

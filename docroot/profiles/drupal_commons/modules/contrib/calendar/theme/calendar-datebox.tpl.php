@@ -1,5 +1,5 @@
 <?php
-// $Id: calendar-datebox.tpl.php,v 1.2.2.2 2008/06/10 16:05:16 karens Exp $
+// $Id: calendar-datebox.tpl.php,v 1.2.2.3 2010/11/21 14:15:32 karens Exp $
 /**
  * @file 
  * Template to display the date box in a calendar.
@@ -16,4 +16,4 @@
  * - $items: An array of items for this day.
  */
 ?>
-<div class="<?php print $granularity ?> <?php print $class; ?>"> <?php print $link; ?> </div>
+<div class="<?php print $granularity ?> <?php print $class; ?>"> <?php print $selected ? $link : $day; ?> </div>

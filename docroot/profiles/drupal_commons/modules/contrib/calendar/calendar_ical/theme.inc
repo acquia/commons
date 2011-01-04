@@ -1,5 +1,5 @@
 <?php
-// $Id: theme.inc,v 1.1.2.13 2009/02/27 14:10:35 karens Exp $
+// $Id: theme.inc,v 1.1.2.15 2010/11/21 11:00:56 karens Exp $
 /**
  * Preprocess an ical feed
  */
@@ -65,6 +65,10 @@ function template_preprocess_calendar_view_ical(&$vars) {
     $event['uid'] = !empty($node->date_id) ? $node->date_id : $event['url'];
     $event['rrule'] = !empty($rrule_field) && !empty($node->$rrule_field) ? $node->$rrule_field : '';
     $events[$event['uid']] = $event;
+
+    /* force UTC timezone */
+    date_timezone_set($event['start'], timezone_open('UTC'));
+    date_timezone_set($event['end'], timezone_open('UTC'));
   }
   
   $headertitle = filter_xss_admin($view->get_title());

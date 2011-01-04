@@ -1,5 +1,5 @@
 <?php
-//$Id: date_repeat.inc,v 1.22.2.1.2.23 2009/06/09 10:33:48 karens Exp $
+//$Id: date_repeat.inc,v 1.22.2.1.2.24 2010/10/26 10:21:36 karens Exp $
 /**
  * @file
  * Implementation of Date Repeat API calculations for the CCK Date field.
@@ -156,8 +156,8 @@ function date_repeat_build_dates($rrule = NULL, $values = NULL, $field, $item) {
     $end = date_ical_date($values['UNTIL'], $timezone);
   }
   $end_datetime = date_format($end, DATE_FORMAT_DATETIME);
-  
-  // Split the RRULE into RRULE and EXDATE parts.
+
+  // Split the RRULE into RRULE, EXDATE, and RDATE parts.
   $parts = date_repeat_split_rrule($rrule);
   $parsed_exceptions = (array) $parts[1];
   $exceptions = array();
@@ -165,8 +165,16 @@ function date_repeat_build_dates($rrule = NULL, $values = NULL, $field, $item) {
     $date = date_ical_date($exception);
     $exceptions[] = date_format($date, 'Y-m-d');
   }
+
+  $parsed_rdates = (array) $parts[2];
+  $additions = array();
+  foreach ($parsed_rdates as $rdate) {
+    $additions[] = date_ical_date($rdate);
+  }
   
-  $dates = date_repeat_calc($rrule, $start_datetime, $end_datetime, $exceptions, $timezone);
+  $dates = date_repeat_calc($rrule, $start_datetime, $end_datetime, $exceptions, $timezone, $additions);
+
+  
   $value = array();
   foreach ($dates as $delta => $date) {
     // date_repeat_calc always returns DATE_DATETIME dates, which is

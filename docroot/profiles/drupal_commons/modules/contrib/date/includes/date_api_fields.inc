@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_fields.inc,v 1.1.2.9 2009/06/08 23:23:46 karens Exp $
+// $Id: date_api_fields.inc,v 1.1.2.10 2010/12/24 13:03:56 karens Exp $
 /**
  *  Identify all potential date/timestamp fields.
  *
@@ -50,7 +50,9 @@ function _date_api_fields($base = 'node') {
     // Allow custom modules to provide date fields.
     // The is_a() function makes this work for any handler
     // that was derived from 'views_handler_field_date'.
-    elseif (is_a($handler, 'views_handler_field_date')) {
+    // Unfortunately is_a() is deprecated in PHP 5.2, so we need
+    // a more convoluted test.
+    elseif ((version_compare(PHP_VERSION, '5.2', '<') && is_a($handler, 'views_handler_field_date')) || ($handler instanceof views_handler_field_date)) {
       foreach (module_implements('date_api_fields') as $module) {
         $function = $module .'_date_api_fields';
         if ($custom = $function("$table_name.$field_name")) {
