@@ -38,6 +38,9 @@ function commons_core_update_6000() {
   // Remove custom primary menu items added by Commons
   db_query("DELETE FROM {menu_links} WHERE menu_name = 'primary-links' AND module = 'commons'");
   
+  // Disable better_formats (to avoid node permissiono issues with Full HTML)
+  drupal_uninstall_modules(array('better_formats'));
+  
   // Enable wysiwyg filter
   drupal_install_modules(array('wysiwyg_filter'));
   

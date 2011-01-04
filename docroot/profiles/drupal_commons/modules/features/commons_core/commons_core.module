@@ -1277,6 +1277,46 @@ function commons_core_can_edit_comment($comment) {
   return FALSE;
 }
 
+/**
+* Implementation of hook_action_info().
+*/
+function commons_core_action_info() {
+  // Provide a "Mark as read" action for VBO
+  return array(
+    'commons_core_noderead_action' => array(
+      'description' => t('Mark as read'),
+      'type' => 'node',
+      'configurable' => FALSE,
+      'hooks' => array(
+        'nodeapi' => array('presave'),
+        'comment' => array('insert', 'update'),  
+      )    
+    )
+  );
+}
+
+/**
+ * Set a given node as read for the current user
+ * 
+ * @see
+ *   commons_core_action_info()
+ */
+function commons_core_noderead_action(&$node) {
+  global $user;
+
+  if ($user->uid) {
+    // Remove any records for this node for this user
+    db_query("DELETE FROM {history} WHERE nid = %d AND uid = %d", $node->nid, $user->uid);
+    
+    // Add a record showing this node was just viewed by this user
+    $record = new stdClass;
+    $record->nid = $node->nid;
+    $record->uid = $user->uid;
+    $record->timestamp = time();
+    drupal_write_record('history', $record);     
+  }     
+}
+
 // TAGGING
 
 /**
