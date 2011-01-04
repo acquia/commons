@@ -3991,6 +3991,9 @@ function commons_core_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'My content');
+  $handler->override_option('header', 'These are all the items inside the groups you belong to');
+  $handler->override_option('header_format', '1');
+  $handler->override_option('header_empty', 1);
   $handler->override_option('empty', 'There are currently no content items available.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
@@ -4091,15 +4094,13 @@ function commons_core_views_default_views() {
     ),
   ));
   $handler = $view->new_display('page', 'My content', 'page');
-  $handler->override_option('header', 'These items are items which you\'ve either created or commented on');
-  $handler->override_option('header_format', '1');
-  $handler->override_option('header_empty', 1);
+  $handler->override_option('header', 'These items are items which you\'ve either created or commented on inside your groups');
   $handler->override_option('path', 'mycontent/mine');
   $handler->override_option('menu', array(
-    'type' => 'default tab',
+    'type' => 'tab',
     'title' => 'My content',
     'description' => '',
-    'weight' => '0',
+    'weight' => '1',
     'name' => 'navigation',
   ));
   $handler->override_option('tab_options', array(
@@ -4117,7 +4118,7 @@ function commons_core_views_default_views() {
     'type' => 'tab',
     'title' => 'All content',
     'description' => 'All content items inside my groups',
-    'weight' => '1',
+    'weight' => '2',
     'name' => 'navigation',
   ));
   $handler->override_option('tab_options', array(
@@ -4224,6 +4225,7 @@ function commons_core_views_default_views() {
     ),
   ));
   $handler->override_option('title', 'My unread content');
+  $handler->override_option('header', 'These are items inside your groups which you have not read yet');
   $handler->override_option('style_options', array(
     'grouping' => '',
     'override' => 1,
@@ -4318,17 +4320,17 @@ function commons_core_views_default_views() {
   ));
   $handler->override_option('path', 'mycontent/unread');
   $handler->override_option('menu', array(
-    'type' => 'tab',
+    'type' => 'default tab',
     'title' => 'My unread',
     'description' => '',
-    'weight' => '2',
+    'weight' => '0',
     'name' => 'navigation',
   ));
   $handler->override_option('tab_options', array(
-    'type' => 'none',
-    'title' => '',
+    'type' => 'normal',
+    'title' => 'My content',
     'description' => '',
-    'weight' => 0,
+    'weight' => '0',
     'name' => 'navigation',
   ));
 

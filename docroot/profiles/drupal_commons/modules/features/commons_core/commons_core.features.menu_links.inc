@@ -92,21 +92,6 @@ function commons_core_menu_default_menu_links() {
     'weight' => '-40',
     'parent_path' => 'user',
   );
-  // Exported menu link: primary-links:myprofile
-  $menu_links['primary-links:myprofile'] = array(
-    'menu_name' => 'primary-links',
-    'link_path' => 'myprofile',
-    'router_path' => 'myprofile',
-    'link_title' => 'My profile',
-    'options' => array(),
-    'module' => 'commons',
-    'hidden' => '0',
-    'external' => '0',
-    'has_children' => '0',
-    'expanded' => '0',
-    'weight' => '-50',
-    'parent_path' => 'user',
-  );
   // Exported menu link: primary-links:mycontent
   $menu_links['primary-links:mycontent'] = array(
     'menu_name' => 'primary-links',
@@ -120,6 +105,21 @@ function commons_core_menu_default_menu_links() {
     'has_children' => '0',
     'expanded' => '0',
     'weight' => '-30',
+    'parent_path' => 'user',
+  );
+  // Exported menu link: primary-links:myprofile
+  $menu_links['primary-links:myprofile'] = array(
+    'menu_name' => 'primary-links',
+    'link_path' => 'myprofile',
+    'router_path' => 'myprofile',
+    'link_title' => 'My profile',
+    'options' => array(),
+    'module' => 'commons',
+    'hidden' => '0',
+    'external' => '0',
+    'has_children' => '0',
+    'expanded' => '0',
+    'weight' => '-50',
     'parent_path' => 'user',
   );
   // Exported menu link: primary-links:myuserpoints
