@@ -707,6 +707,23 @@ function commons_home_views_default_views() {
       ),
       'relationship' => 'none',
     ),
+    'directory' => array(
+      'operator' => '=',
+      'value' => '1',
+      'group' => '0',
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'id' => 'directory',
+      'table' => 'og',
+      'field' => 'directory',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
   ));
   $handler->override_option('access', array(
     'type' => 'none',
