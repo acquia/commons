@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationship_elaborations.module,v 1.1.2.13 2010/05/14 08:28:03 alexk Exp $
+// $Id: user_relationship_elaborations.module,v 1.1.2.14 2010/11/14 22:09:15 alexk Exp $
 
 /**
  * @file
@@ -106,7 +106,7 @@ function _user_relationship_elaborations_walk_recursive($action, &$relationships
     }
     else {
       if ($action == 'find_rids') {
-        if ($relationship->rid) {
+        if (isset($relationship->rid)) {
           $data[$relationship->rid] = $relationship->rid;
         }
       }

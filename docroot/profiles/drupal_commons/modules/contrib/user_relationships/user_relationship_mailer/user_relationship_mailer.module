@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationship_mailer.module,v 1.1.2.11 2010/05/31 20:01:10 alexk Exp $
+// $Id: user_relationship_mailer.module,v 1.1.2.12 2010/11/14 22:09:04 alexk Exp $
 /**
  * @file User Relationships Mailer module. Handles email notifications when relationships are added or removed
  */
@@ -16,6 +16,10 @@ module_load_include('inc', 'user_relationship_mailer', 'user_relationship_mailer
  *
  */
 function user_relationship_mailer_send_email($op, $relationship) {
+  //Cron runs may call this and not set $relationship to a valid object. Happens during request expiry in user_relationships_api_cron().
+  if (!isset($relationship->rtid)) {
+    return;
+  }
   //use correct op for sending out message on pre-approved relationship (see #415536)
   if ($relationship->approved == TRUE && $op == 'request') {
     $op = 'pre_approved';

@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationships_api.module,v 1.1.2.27 2010/10/17 07:53:35 alexk Exp $
+// $Id: user_relationships_api.module,v 1.1.2.30 2010/12/05 15:43:02 alexk Exp $
 
 /**
  * @file
@@ -19,10 +19,6 @@ foreach (array('api', 'actions', 'socnet') as $file) {
 if (module_exists('privatemsg')) {
   module_load_include('inc', 'user_relationships_api', 'user_relationships_api.privatemsg');
 }
-if (module_exists('author_pane') && variable_get('user_relationships_enable_author_pane', 0)) {
-  module_load_include('inc', 'user_relationships_api', 'user_relationships_api.author_pane');
-}
-
 
 /**
  *  Invoke hook_user_relationships() or hook_user_relationships_type()
@@ -236,6 +232,7 @@ function user_relationships_api_cron() {
 
   if (count($expired_requests)) {
     db_query('DELETE FROM {user_relationships} WHERE rid IN ('. db_placeholders($expired_requests) .')', $expired_requests);
+    //FIXME: this will trigger various hook_user_relationships() but will not pass a valid relationship object. E.g. in mailer.
     _user_relationships_invoke('delete', $expired_requests);
   }
 
@@ -315,7 +312,7 @@ function user_relationships_api_token_list($type = 'all') {
       'requester' => t('The user who issued the connection request.'),
     );
   }
-  elseif ($type = 'relationship') {
+  elseif ($type == 'relationship') {
     $tokens['user_relationships_api'] = array(     
       'requestee' => t('The user who approved the connnection request.'),
       'relationship-name' => t('The relationship name (singular form)'),
