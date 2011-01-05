@@ -21,7 +21,7 @@ function friendlist_activity_heartbeat_register_access_types() {
  */
 function friendlist_activity_heartbeat_message_info() {
   $info = array(
-    0 => array(
+    'heartbeat_become_friends' => array(
       'message' => '!user1 is now !relation_type with !user2.',
       'message_concat' => '!user1 is now !relation_type with %user2%.',
       'message_id' => 'heartbeat_become_friends',
@@ -43,7 +43,7 @@ function friendlist_activity_heartbeat_message_info() {
         'build_mode' => 'full',
       ),
     ),
-    1 => array(
+    'heartbeat_add_FL_OW_relation' => array(
       'message' => '!user1 has become a !relation of !user2.',
       'message_concat' => '%users% have become a !relation of !user2.',
       'message_id' => 'heartbeat_add_FL_OW_relation',
