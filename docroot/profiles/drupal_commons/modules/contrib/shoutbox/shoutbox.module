@@ -1,5 +1,5 @@
 <?php
-// $Id: shoutbox.module,v 1.31.2.38 2010/12/08 01:39:14 mikestefff Exp $
+// $Id: shoutbox.module,v 1.31.2.39 2011/01/05 16:42:22 mikestefff Exp $
 
 /**
  * @file
@@ -385,7 +385,7 @@ function theme_shoutbox_post($shout, $links = array()) {
   if ($links) {
     foreach ($links as $link) {
       $linkattributes = $link['linkattributes'];
-      $link_html = '<img src="'. $link['img'] .'"  width="'. $link['img_width'] .'" height="'. $link['img_height'] .'" alt="'. $link['title'] .'" class="shoutbox-imglink">';
+      $link_html = '<img src="'. $link['img'] .'"  width="'. $link['img_width'] .'" height="'. $link['img_height'] .'" alt="'. $link['title'] .'" class="shoutbox-imglink"/>';
       $link_url = 'shout/'. $shout->shout_id .'/'. $link['action'];
       $img_links = l($link_html, $link_url, array('html' => TRUE, 'query' => array('destination' => drupal_get_path_alias($_GET['q'])))) . $img_links;
     }
