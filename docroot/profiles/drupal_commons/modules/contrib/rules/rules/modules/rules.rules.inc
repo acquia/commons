@@ -1,5 +1,5 @@
 <?php
-// $Id: rules.rules.inc,v 1.1.2.44 2010/06/25 11:15:57 fago Exp $
+// $Id: rules.rules.inc,v 1.1.2.45 2011/01/05 13:59:43 fago Exp $
 
 
 /**
@@ -171,7 +171,10 @@ function rules_rules_condition_info() {
  * Condition Implementation: Textual comparison.
  */
 function rules_condition_text_compare($text1, $text2, $settings) {
-  return $settings['regex'] ? ereg($text2, $text1) : $text1 == $text2;
+  if ($settings['regex']) {
+    return (bool) preg_match('/'. $text2 .'/', $text1);
+  }
+  return $text1 == $text2;
 }
 
 /**

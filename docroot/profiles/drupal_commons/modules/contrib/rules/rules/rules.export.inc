@@ -1,5 +1,5 @@
 <?php
-// $Id: rules.export.inc,v 1.1.2.11 2010/08/05 14:51:41 fago Exp $
+// $Id: rules.export.inc,v 1.1.2.12 2010/11/25 11:14:52 fago Exp $
 
 /**
  * @file
@@ -41,8 +41,7 @@ function rules_item_rule_set_export($set_name, &$rule_set, &$export, $module = N
 
 
 /**
- * Prefix exported rules with the module name (if given) and change the status to default.
- * If used through the features integration the module name is given.
+ * Change the status of the rules to default.
  */
 function rules_item_rule_export($rule_name, &$rule, &$export, $module = NULL) {
   static $counter = 0;
@@ -57,24 +56,6 @@ function rules_item_rule_export($rule_name, &$rule, &$export, $module = NULL) {
     // Add the module name as category.
     if (empty($rule['#categories']) || !in_array($module, $rule['#categories'])) {
       $rule['#categories'][$module] = $module;
-    }
-
-    // We increase the counter in any case. As already renamed rules are passed
-    // in first, this makes sure to not overwrite the names of those even if
-    // they aren't saved yet.
-    $counter++;
-
-    if (strpos($rule_name, $module) !== 0) {
-      // Make sure the name isn't already taken.
-      $rules = rules_get_configured_items('rules');
-      while (isset($rules[$module .'_'. $counter])) {
-        $counter++;
-      }
-
-      // Rename the rule.
-      $export['rules'][$module .'_'. $counter] = $rule;
-      // Unset the non-prefixed item.
-      unset($export['rules'][$rule_name]);
     }
   }
 }

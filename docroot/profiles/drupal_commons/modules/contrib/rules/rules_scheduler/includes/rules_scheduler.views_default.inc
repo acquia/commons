@@ -1,5 +1,5 @@
 <?php
-// $Id: rules_scheduler.views_default.inc,v 1.1.2.1 2009/07/13 13:34:27 fago Exp $
+// $Id: rules_scheduler.views_default.inc,v 1.1.2.2 2010/11/19 11:35:17 klausi Exp $
 
 /**
  * @file
@@ -167,6 +167,7 @@ function rules_scheduler_views_default_views() {
   $handler->override_option('empty', 'No tasks scheduled.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('items_per_page', 30);
+  $handler->override_option('use_pager', '1');
   $handler->override_option('style_plugin', 'table');
   $handler->override_option('style_options', array(
     'grouping' => '',

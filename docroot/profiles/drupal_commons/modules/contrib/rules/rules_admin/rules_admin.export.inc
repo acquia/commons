@@ -1,5 +1,5 @@
 <?php
-// $Id: rules_admin.export.inc,v 1.1.2.9 2009/08/25 13:01:03 fago Exp $
+// $Id: rules_admin.export.inc,v 1.1.2.10 2010/11/25 11:14:52 fago Exp $
 
 
 /**
@@ -62,10 +62,6 @@ function rules_item_rule_import(&$name, &$rule) {
     }
   }
   if (isset($rule['#status']) && $rule['#status'] == 'custom' && (!isset($rules[$name]) || $rules[$name]['#label'] != $rule['#label'] || $rules[$name]['#set'] != $rule['#set'])) {
-    if (strpos($name, 'rules_') === 0) {
-      // Generate a new unique name for this rule, but only if it's "our rule".
-      $name = _rules_admin_rule_get_new_unique_name();
-    }
     $rule['#status'] = 'custom';
   }
   rules_import_hook($rule);
