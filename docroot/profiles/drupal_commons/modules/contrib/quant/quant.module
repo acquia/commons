@@ -1,5 +1,5 @@
 <?php
-// $Id: quant.module,v 1.1.2.6 2010/09/21 16:09:19 mikestefff Exp $
+// $Id: quant.module,v 1.1.2.7 2010/12/22 21:21:58 mikestefff Exp $
 
 // Date formats
 define('QUANT_DATE_DAY_FORMAT', 'M j'); // Month Day (Feb 12)
@@ -265,7 +265,7 @@ function quant_get() {
 }
 
 /**
- * Implementation of hook_quants()
+ * Wrapper for hook_quants()
  */
 function quant_quants() {
   module_load_include('inc', 'quant', 'quant.quants');
