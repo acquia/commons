@@ -90,7 +90,7 @@ function heartbeat_features_export_render($module = 'foo', $data) {
     );
 
     // Add to code
-    $code[] = '  $messages[] = ' . str_replace("\n", "\n  ", var_export($message, 1)) . ";\n";
+    $code[] = '  $messages[\'' . $message['message_id'] . '\'] = ' . str_replace("\n", "\n  ", var_export($message, 1)) . ";\n";
   }
 
   // End code

@@ -23,7 +23,7 @@ function commons_core_heartbeat_message_info() {
   $messages = array();
 
   // Exported heartbeat message: heartbeat_join_group
-  $messages[] = array (
+  $messages['heartbeat_join_group'] = array (
     'message' => '!username joined the group !group_title',
     'message_concat' => '',
     'message_id' => 'heartbeat_join_group',
@@ -54,7 +54,7 @@ function commons_core_heartbeat_message_info() {
   );
 
   // Exported heartbeat message: heartbeat_leave_group
-  $messages[] = array (
+  $messages['heartbeat_leave_group'] = array (
     'message' => '!username has left the group !group_name',
     'message_concat' => '',
     'message_id' => 'heartbeat_leave_group',
@@ -85,7 +85,7 @@ function commons_core_heartbeat_message_info() {
   );
 
   // Exported heartbeat message: heartbeat_flag_content
-  $messages[] = array (
+  $messages['heartbeat_flag_content'] = array (
     'message' => '!username bookmarked the !type !node_title',
     'message_concat' => '',
     'message_id' => 'heartbeat_flag_content',
@@ -117,7 +117,7 @@ function commons_core_heartbeat_message_info() {
   );
 
   // Exported heartbeat message: heartbeat_create_user
-  $messages[] = array (
+  $messages['heartbeat_create_user'] = array (
     'message' => 'The user account !user_name has been created',
     'message_concat' => '',
     'message_id' => 'heartbeat_create_user',
@@ -147,7 +147,7 @@ function commons_core_heartbeat_message_info() {
   );
 
   // Exported heartbeat message: heartbeat_delete_user
-  $messages[] = array (
+  $messages['heartbeat_delete_user'] = array (
     'message' => 'The user !user_name has been deleted',
     'message_concat' => '',
     'message_id' => 'heartbeat_delete_user',
@@ -177,7 +177,7 @@ function commons_core_heartbeat_message_info() {
   );
 
   // Exported heartbeat message: heartbeat_delete_content
-  $messages[] = array (
+  $messages['heartbeat_delete_content'] = array (
     'message' => '!user_name deleted the !type "!node_title"',
     'message_concat' => '',
     'message_id' => 'heartbeat_delete_content',
@@ -210,7 +210,7 @@ function commons_core_heartbeat_message_info() {
   );
 
   // Exported heartbeat message: heartbeat_delete_comment
-  $messages[] = array (
+  $messages['heartbeat_delete_comment'] = array (
     'message' => '!username deleted the comment !comment_title from !node_title',
     'message_concat' => '',
     'message_id' => 'heartbeat_delete_comment',
@@ -242,7 +242,7 @@ function commons_core_heartbeat_message_info() {
   );
 
   // Exported heartbeat message: heartbeat_friend_removed
-  $messages[] = array (
+  $messages['heartbeat_friend_removed'] = array (
     'message' => '!userA and !userB are no longer !relationship_type',
     'message_concat' => '',
     'message_id' => 'heartbeat_friend_removed',

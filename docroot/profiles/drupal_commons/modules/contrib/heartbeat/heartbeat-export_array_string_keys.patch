@@ -1,0 +1,272 @@
+Index: heartbeat.module
+===================================================================
+--- heartbeat.module	(revision 21699)
++++ heartbeat.module	(working copy)
+@@ -555,141 +555,119 @@
+  * Implementation of hook_heartbeat_message_info().
+  */
+ function heartbeat_heartbeat_message_info() {
++  $info = array();
+ 
+-  $info = array(
+-
+-    /**
+-     * Default node messages
+-     */
+-    2 => array(
+-      'message' => '!username has updated !node_type "!node_title"',
+-      'message_concat' => '!username has updated %node_title%',
+-      'message_id' => 'heartbeat_edit_node',
+-      'concat_args' =>
+-      array(
+-        'type' => 'summary',
+-        'group_by' => 'user',
+-        'group_target' => 'node_title',
+-        'merge_separator' => ', ',
+-        'merge_end_separator' => ' and ',
+-      ),
+-      'description' => 'When editing a node, log the users activity',
+-      'perms' => '1',
+-      'custom' => HEARTBEAT_MESSAGE_DEFAULT,
+-      'variables' =>
+-      array(
+-        '@username' => '[node:author-name-url]',
+-        '@node_type' => '[node:type-name]',
+-        '@node_title' => '[node:title-link]',
+-      ),
++  // Default node messages
++  $info['heartbeat_edit_node'] = array(
++    'message' => '!username has updated !node_type "!node_title"',
++    'message_concat' => '!username has updated %node_title%',
++    'message_id' => 'heartbeat_edit_node',
++    'concat_args' => array(
++      'type' => 'summary',
++      'group_by' => 'user',
++      'group_target' => 'node_title',
++      'merge_separator' => ', ',
++      'merge_end_separator' => ' and ',
+     ),
+-    3 =>
+-    array(
+-      'message' => '!username has added !node_type !node_title.',
+-      'message_concat' => '!username has added the following !types: %node_title%.',
+-      'message_id' => 'heartbeat_add_node',
+-      'concat_args' =>
+-      array(
+-        'type' => 'summary',
+-        'group_by' => 'user',
+-        'group_target' => 'node_title',
+-        'merge_separator' => ', ',
+-        'merge_end_separator' => ' and ',
+-      ),
+-      'description' => 'User adds a node, save user activity',
+-      'perms' => '1',
+-      'custom' => HEARTBEAT_MESSAGE_DEFAULT,
+-      'variables' =>
+-      array(
+-        '@username' => '[user:user-name-url]',
+-        '@node_type' => '[node:type-name]',
+-        '@node_title' => '[node:title-link]',
+-        '@types' => '[node:type-name]s',
+-      ),
++    'description' => 'When editing a node, log the users activity',
++    'perms' => '1',
++    'custom' => HEARTBEAT_MESSAGE_DEFAULT,
++    'variables' => array(
++      '@username' => '[node:author-name-url]',
++      '@node_type' => '[node:type-name]',
++      '@node_title' => '[node:title-link]',
+     ),
++  );
++    
++  $info['heartbeat_add_node'] = array(
++    'message' => '!username has added !node_type !node_title.',
++    'message_concat' => '!username has added the following !types: %node_title%.',
++    'message_id' => 'heartbeat_add_node',
++    'concat_args' => array(
++      'type' => 'summary',
++      'group_by' => 'user',
++      'group_target' => 'node_title',
++      'merge_separator' => ', ',
++      'merge_end_separator' => ' and ',
++    ),
++    'description' => 'User adds a node, save user activity',
++    'perms' => '1',
++    'custom' => HEARTBEAT_MESSAGE_DEFAULT,
++    'variables' => array(
++      '@username' => '[user:user-name-url]',
++      '@node_type' => '[node:type-name]',
++      '@node_title' => '[node:title-link]',
++      '@types' => '[node:type-name]s',
++    ),
++  );
+ 
+ 
+-    /**
+-     * Default comment messages
+-     */
+-    4 =>
+-    array(
+-      'message' => '!username replied on !title:
++  // Default comment messages
++  $info['heartbeat_add_comment'] = array(
++    'message' => '!username replied on !title:
+       <blockquote><p>!comment</p></blockquote>',
+-      'message_concat' => '!username replied on !title.',
+-      'message_id' => 'heartbeat_add_comment',
+-      'concat_args' =>
+-      array(
+-        'type' => 'count',
+-        'group_by' => 'none',
+-        'group_target' => '',
+-        'merge_separator' => '',
+-        'merge_end_separator' => '',
+-      ),
+-      'description' => 'user replied on some content',
+-      'perms' => '1',
+-      'custom' => HEARTBEAT_MESSAGE_DEFAULT,
+-      'variables' =>
+-      array(
+-        '@username' => '[user:user-name-url]  ',
+-        '@title' => '[node:title-link]',
+-        '@comment' => '[comment:comment-body-raw]',
+-      ),
++    'message_concat' => '!username replied on !title.',
++    'message_id' => 'heartbeat_add_comment',
++    'concat_args' => array(
++      'type' => 'count',
++      'group_by' => 'none',
++      'group_target' => '',
++      'merge_separator' => '',
++      'merge_end_separator' => '',
+     ),
+-
+-    5 =>
+-    array(
+-      'message_id' => 'heartbeat_edit_comment',
+-      'message' => '!username changed a comment on !title.',
+-      'message_concat' => '!username changed a comment on !title several times (%times%).',
+-      'concat_args' =>
+-      array(
+-        'type' => 'count',
+-        'merge_target' => 'times',
+-        'merge_separator' => '',
+-        'merge_end_separator' => '',
+-      ),
+-      'perms' => '1',
+-      'custom' => HEARTBEAT_MESSAGE_DEFAULT,
+-      'description' => 'user changed a comment',
+-      'variables' =>
+-      array(
+-        '@username' => '[user:user-name-url]',
+-        '@title' => '[node:title-link]',
+-      ),
++    'description' => 'user replied on some content',
++    'perms' => '1',
++    'custom' => HEARTBEAT_MESSAGE_DEFAULT,
++    'variables' => array(
++      '@username' => '[user:user-name-url]  ',
++      '@title' => '[node:title-link]',
++      '@comment' => '[comment:comment-body-raw]',
+     ),
++  );
+ 
+-    6 =>
+-    array(
+-      'message_id' => 'heartbeat_edit_account',
+-      'message' => '!username\'s personal account page has been changed.',
+-      'message_concat' => '',
+-      'concat_args' =>
+-      array(
+-        'type' => 'single',
+-        'merge_target' => '',
+-        'merge_separator' => '',
+-        'merge_end_separator' => '',
+-      ),
+-      'perms' => '1',
+-      'custom' => HEARTBEAT_MESSAGE_DEFAULT,
+-      'description' => 'user changed his/her account',
+-      'variables' =>
+-      array(
+-        '@username' => '[user:user-name-url]',
+-      ),
++  $info['heartbeat_edit_comment'] = array(
++    'message_id' => 'heartbeat_edit_comment',
++    'message' => '!username changed a comment on !title.',
++    'message_concat' => '!username changed a comment on !title several times (%times%).',
++    'concat_args' => array(
++      'type' => 'count',
++      'merge_target' => 'times',
++      'merge_separator' => '',
++      'merge_end_separator' => '',
+     ),
++    'perms' => '1',
++    'custom' => HEARTBEAT_MESSAGE_DEFAULT,
++    'description' => 'user changed a comment',
++    'variables' => array(
++      '@username' => '[user:user-name-url]',
++      '@title' => '[node:title-link]',
++    ),
++  );
+ 
++  $info['heartbeat_edit_account'] = array(
++    'message_id' => 'heartbeat_edit_account',
++    'message' => '!username\'s personal account page has been changed.',
++    'message_concat' => '',
++    'concat_args' => array(
++      'type' => 'single',
++      'merge_target' => '',
++      'merge_separator' => '',
++      'merge_end_separator' => '',
++    ),
++    'perms' => '1',
++    'custom' => HEARTBEAT_MESSAGE_DEFAULT,
++    'description' => 'user changed his/her account',
++    'variables' => array(
++      '@username' => '[user:user-name-url]',
++    ),
+   );
+ 
+-
+   if (module_exists('image')) {
+-    $info[7] = array(
++    $info['heartbeat_add_image'] = array(
+       'message' => '!username has added !title.<div class="images">!image</div>',
+       'message_concat' => '!username has added <div class="images">%image%</div>',
+       'message_id' => 'heartbeat_add_image',
+-      'concat_args' =>
+-      array(
++      'concat_args' => array(
+         'type' => 'summary',
+         'group_by' => 'user',
+         'group_target' => 'image',
+@@ -699,14 +677,14 @@
+       'description' => 'When adding an image, log the users activity',
+       'perms' => '1',
+       'custom' => HEARTBEAT_MESSAGE_DEFAULT,
+-      'variables' =>
+-      array(
++      'variables' => array(
+         '@username' => '[node:user-name-url]',
+         '@title' => '[node:title-link]',
+         '@image' => '',
+       ),
+     );
+   }
++  
+   return $info;
+ }
+ 
+Index: heartbeat.features.inc
+===================================================================
+--- heartbeat.features.inc	(revision 21699)
++++ heartbeat.features.inc	(working copy)
+@@ -90,7 +90,7 @@
+     );
+ 
+     // Add to code
+-    $code[] = '  $messages[] = ' . str_replace("\n", "\n  ", var_export($message, 1)) . ";\n";
++    $code[] = '  $messages[\'' . $message['message_id'] . '\'] = ' . str_replace("\n", "\n  ", var_export($message, 1)) . ";\n";
+   }
+ 
+   // End code
