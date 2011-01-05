@@ -1,5 +1,5 @@
 <?php
-// $Id: user_relationships_api.author_pane.inc,v 1.1.2.2 2010/10/17 14:39:39 alexk Exp $
+// $Id: user_relationships_api.author-pane.inc,v 1.1.2.2 2010/12/22 09:34:01 alexk Exp $
 
 /**
  * @file integration with Author Pane
@@ -45,14 +45,14 @@ function user_relationships_api_preprocess_author_pane(&$variables) {
       // there should only be one.)
       foreach ($relationships as $rtid => $relationship) {
         $link_label = t('Remove @name from @rel_plural_name', array('@name' => $account->name, '@rel_plural_name' => $relationship->plural_name));
-        $css_class = str_replace(' ', '-', $relationship->name) .' user_relationships_popup_link author-relationship-remove-icon';
+        $css_class = str_replace(' ', '-', $relationship->name) .' author-pane-link user_relationships_popup_link author-relationship-remove-icon';
         //link to remove
         if (!isset($variables['user_relationships_api'])) {
           $variables['user_relationships_api'] = '';
         }
         $variables['user_relationships_api'] .= '<div class="author-pane-ur-link-item">';
         $variables['user_relationships_api'] .=
-          l(t('Remove @rel_name', array('@name' => $account->name, '@rel_name' => ur_tt("user_relationships:rtid:$relationship->rtid:name", $relationship->name))),
+          l('<span>' . t('Remove @rel_name', array('@name' => $account->name, '@rel_name' => ur_tt("user_relationships:rtid:$relationship->rtid:name", $relationship->name))) . '</span>',
           "user/{$user->uid}/relationships/{$relationship->rid}/remove",
           array(
                 'query' => drupal_get_destination(),
@@ -69,14 +69,14 @@ function user_relationships_api_preprocess_author_pane(&$variables) {
       }
       $relationships_count = user_relationships_load(array('between' => array($user->uid, $account->uid)), array('count' => TRUE));
       $link_label = t('Add @rel_name', array('@rel_name' => ur_tt("user_relationships:rtid:$rtype->rtid:name", $rtype->name)));
-      $css_class = str_replace(' ', '-', $rtype->name) .' user_relationships_popup_link author-relationship-add-icon';
+      $css_class = str_replace(' ', '-', $rtype->name) .' author-pane-link user_relationships_popup_link author-relationship-add-icon';
       //add link
       if (!isset($variables['user_relationships_api'])) {
         $variables['user_relationships_api'] = '';
       }
       $variables['user_relationships_api'] .= '<div class="author-pane-ur-link-item">';
       $variables['user_relationships_api'] .=
-        l(t('Add @rel_name', array('@name' => $account->name, '@rel_name' => ur_tt("user_relationships:rtid:$rtype->rtid:name", $rtype->name))),
+        l('<span>' . t('Add @rel_name', array('@name' => $account->name, '@rel_name' => ur_tt("user_relationships:rtid:$rtype->rtid:name", $rtype->name))) . '</span>',
           "relationship/{$account->uid}/request/{$rtype->rtid}",
           array(
             'query' => drupal_get_destination(),
