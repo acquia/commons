@@ -121,6 +121,7 @@ function drupal_commons_profile_details() {
 function drupal_commons_profile_task_list() {
   $tasks = array();
   $tasks['configure-commons'] = t('Configure Drupal Commons');
+  $tasks['install-commons'] = t('Install Drupal Commons');
   return $tasks;
 }
 
@@ -139,33 +140,33 @@ function drupal_commons_profile_task_list() {
  *   modify the $task, otherwise discarded.
  */
 function drupal_commons_profile_tasks(&$task, $url) {
+  // Skip to the configure task
   if ($task == 'profile') {
     $task = 'configure-commons';  
   }
   
-  if ($task == 'configure-commons-batch') {
-    include_once 'includes/batch.inc';
-    $output = _batch_page();
+  // Provide a form to choose features
+  if ($task == 'configure-commons') {
+    $output = drupal_get_form('drupal_commons_features_form', $url);
   }
   
-  if ($task == 'configure-commons') {
+  // Installation batch process
+  if ($task == 'install-commons') {
+    // Determine the installation operations
     $operations = array();
+    
+    // Pre-installation operations
     $operations[] = array('drupal_commons_build_directories', array());
     $operations[] = array('drupal_commons_config_roles', array());
     $operations[] = array('drupal_commons_config_perms', array());
-    $operations[] = array('features_install_modules', array(array('commons_core')));
-    $operations[] = array('features_install_modules', array(array('commons_notifications')));
-    $operations[] = array('features_install_modules', array(array('commons_admin')));
-    $operations[] = array('features_install_modules', array(array('commons_seo')));
-    $operations[] = array('features_install_modules', array(array('commons_home')));
-    $operations[] = array('features_install_modules', array(array('commons_dashboard')));
-    $operations[] = array('features_install_modules', array(array('commons_wiki')));
-    $operations[] = array('features_install_modules', array(array('commons_document')));
-    $operations[] = array('features_install_modules', array(array('commons_blog')));
-    $operations[] = array('features_install_modules', array(array('commons_discussion')));
-    $operations[] = array('features_install_modules', array(array('commons_event')));
-    $operations[] = array('features_install_modules', array(array('commons_poll')));
-    $operations[] = array('features_install_modules', array(array('commons_group_aggregator')));
+    
+    // Feature installation operations
+    $features = variable_get('commons_selected_featured', array());
+    foreach ($features as $feature) {
+      $operations[] = array('features_install_modules', array(array($feature)));
+    }
+
+    // Post-installation operations
     $operations[] = array('drupal_commons_config_taxonomy', array());
     $operations[] = array('drupal_commons_config_profile', array());
     $operations[] = array('drupal_commons_config_filter', array());
@@ -179,6 +180,7 @@ function drupal_commons_profile_tasks(&$task, $url) {
     $operations[] = array('drupal_commons_config_images', array());
     $operations[] = array('drupal_commons_config_vars', array());
   
+    // Build the batch process
     $batch = array(
       'operations' => $operations,
       'title' => t('Configuring Drupal Commons'),
@@ -186,12 +188,186 @@ function drupal_commons_profile_tasks(&$task, $url) {
       'finished' => 'drupal_commons_cleanup',
     );
   
-    variable_set('install_task', 'configure-commons-batch');
+    // Start the batch
+    variable_set('install_task', 'install-commons-batch');
     batch_set($batch);
     batch_process($url, $url);
   }
   
+  // Persist the page while batch executes
+  if ($task == 'install-commons-batch') {
+    include_once 'includes/batch.inc';
+    $output = _batch_page();
+  }
+  
   return $output;
+}
+
+/**
+ * Provide a form to choose which features to enable
+ */
+function drupal_commons_features_form($form_state, $url) {
+  drupal_set_title(t('Choose from available features'));
+  
+  $form = array();
+  
+  // Help message
+  $form['message'] = array(
+    '#type' => 'item',
+    '#value' => t('The selected features will be enabled after the installation has completed. At any time, you can turn the available features on or off.'),
+  );
+  
+  // Required features
+  $form['required'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Required'),
+    '#description' => t('These features are required for Commons to operate.'),
+  );
+  $form['required']['feature-commons_core'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Core'),
+    '#default_value' => 1,
+    '#value' => 1,
+    '#required' => TRUE,
+    '#disabled' => TRUE,
+    '#description' => t('The core system that powers Drupal Commons.'),
+  );
+  
+  // Content-related features
+  $form['content'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Content'),
+    '#description' => t('These features offer different content types for groups.'),
+  );
+  $form['content']['feature-commons_blog'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Blogs'),
+    '#default_value' => 1,
+    '#description' => t('Create blog posts inside of groups.'),
+  );
+  $form['content']['feature-commons_discussion'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Discussions'),
+    '#default_value' => 1,
+    '#description' => t('Create discussions inside of groups.'),
+  );
+  $form['content']['feature-commons_document'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Documents'),
+    '#default_value' => 1,
+    '#description' => t('Upload documents inside of groups.'),
+  );
+  $form['content']['feature-commons_poll'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Polls'),
+    '#default_value' => 1,
+    '#description' => t('Create polls inside of groups for members to vote on.'),
+  );
+  $form['content']['feature-commons_event'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Events & Calendars'),
+    '#default_value' => 1,
+    '#description' => t('Create events and provide calendars inside of groups.'),
+  );
+  $form['content']['feature-commons_wiki'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Wikis'),
+    '#default_value' => 1,
+    '#description' => t('Create wikis inside of groups.'),
+  );
+  
+  // Misc features
+  $form['misc'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Miscellaneous'),
+  );
+  $form['misc']['feature-commons_home'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Home page'),
+    '#default_value' => 1,
+    '#description' => t('Provide a community-driven home page.'),
+  );
+  $form['misc']['feature-commons_dashboard'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Dashboard'),
+    '#default_value' => 1,
+    '#description' => t('Enable a drag-and-drop dashboard for users.'),
+  );
+  $form['misc']['feature-commons_notifications'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Notifications'),
+    '#default_value' => 1,
+    '#description' => t('Allow users to subscribe to content notifications.'),
+  );
+  $form['misc']['feature-commons_group_aggregator'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Group aggregator'),
+    '#default_value' => 1,
+    '#description' => t('Give groups the ability to subscribe to RSS feeds.'),
+  );
+  $form['misc']['feature-commons_admin'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Admin'),
+    '#default_value' => 1,
+    '#description' => t('Provide additional administrative interfaces that aid in customizing your site.'),
+  );
+  $form['misc']['feature-commons_seo'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('SEO'),
+    '#default_value' => 1,
+    '#description' => t('Make your site more search-engine friendly by providing things like descriptive URLs.'),
+  );
+  
+  $form['acquia'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Acquia'),
+    '#description' => t('Integrate your site with the !an', array('!an' => l(t('Acquia Network'), 'http://acquia.com/products-services/acquia-network', array('attributes' => array('target' => '_blank'))))),
+  );
+  $form['acquia']['feature-acquia_network_subscription'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Acquia Network Subscription'),
+    '#default_value' => 0,
+    '#description' => t('Enabled functionality provided by the Acquia Network, such as Apache Solr search, Mollom spam prevention, and more. A free 30-day trial is available.'),
+  );
+  
+  // Redirect URL to remain inside the installation after submission
+  $form['url'] = array(
+    '#type' => 'value',
+    '#value' => $url,
+  );
+  
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Continue'),
+  );
+  
+  return $form;
+}
+
+/**
+ * Submit handler for the feature choice form
+ */
+function drupal_commons_features_form_submit(&$form, &$form_state) {
+  // Build an array of chosen features
+  $features = array();
+  foreach ($form_state['values'] as $key => $value) {
+    if (substr($key, 0, 8) == 'feature-') {
+      if ($value == 1) {
+        $features[] = substr($key, 8);
+      }
+    }
+  }
+  
+  // Store a temporary variable to access later
+  if (!empty($features)) {
+    variable_set('commons_selected_featured', $features);
+  }
+  
+  // Initiate the next installation step
+  variable_set('install_task', 'install-commons');
+  
+  // Redirect back to the installation page
+  drupal_goto($form_state['values']['url']);
 }
 
 /**
@@ -639,7 +815,7 @@ function drupal_commons_config_perms() {
  * Configure views
  * 
  * Disable unneeded views to avoid confusion
- * This is helpful because we've overridden many OG views
+ * This is helpful because we've cloned many OG views
  */
 function drupal_commons_config_views() {
   // First fetch any disabled views, just in case
@@ -808,23 +984,26 @@ function drupal_commons_create_group() {
   $group->og_selective = 0;
   node_save($group);
   
-  // Create the discussion
-  $node = new stdClass;
-  $node->type = 'discussion';
-  node_object_prepare($node);
-  $node->uid = 1;
-  $node->status = 1;
-  $node->format = 2;
-  $node->revision = 0;
-  $node->title = t('Jumpstarting our community');
-  $node->body = t('<p>In Drupal Commons, all content is all created within the context of a &quot;Group&quot;. Start exploring how to use your site by:</p><ul><li><a href="/og">Viewing a list of all the groups</a> on this site. (Note: Only this demonstration group exists by default.)</li><li><a href="/node/add/group">Creating a new group</a> of your own. Before you do, you might find an image / graphic for identification use on the group home page. Perhaps a logo, or ..?</li></ul><p>Once you&#39;ve created your group, start building your community by creating various kinds of content. &nbsp;Drupal Commons lets members of a group create:</p><ul><li>Blog posts. These are just what you think: personal notes from individuals. &nbsp;Note that other users can comment on these posts.</li><li>Documents. If you want to store attached documents that are useful for a group, create a Document page, describe the attachment in the body of the page, and then attach the files you want.</li><li>Discussions. &nbsp;A discussion is just that: Somebody starts by creating a page with a thought, idea, or question. Others can then comment on the initial post. Comments are &quot;threaded&quot; so you can comment on a comment.</li><li>Wikis. All the three posts above work the same: The initial author of a blog/document/discussion is the only person who can edit the &quot;body&quot; of the page. In contrast, any member of a group can edit the body of a Wiki page. &nbsp;That&#39;s what makes Wiki pages special - anybody can edit the content.</li><li>Events. If you have a special thing happening on a given day/time, create an &quot;Event&quot; describing it. These events will show up on the Calendar tab of a group home page.</li><li>Group RSS feed. If there is interesting content coming from outside this site that you want your group to track, pull that content in as an RSS feed to the site.</li></ul><p>There&#39;s more to building a community than the technology; it&#39;s the people &amp; participation that makes a community work. This set of content types should give you all the choices you need to jump-start this community.</p>');
-  $node->teaser = node_teaser($node->body);
-  $node->created = time();
-  $node->field_featured_content[0]['value'] = 'Featured';
-  $node->taxonomy['tags'][2] = t('content types, getting started, groups, jumpstart');
-  $node->og_public = 1;
-  $node->og_groups = array($group->nid => $group->nid);
-  node_save($node);
+  // Check if discussion nodes were enabled
+  if (in_array('commons_discussion', variable_get('commons_selected_featured', array()))) {
+    // Create the discussion
+    $node = new stdClass;
+    $node->type = 'discussion';
+    node_object_prepare($node);
+    $node->uid = 1;
+    $node->status = 1;
+    $node->format = 2;
+    $node->revision = 0;
+    $node->title = t('Jumpstarting our community');
+    $node->body = t('<p>In Drupal Commons, all content is all created within the context of a &quot;Group&quot;. Start exploring how to use your site by:</p><ul><li><a href="/og">Viewing a list of all the groups</a> on this site. (Note: Only this demonstration group exists by default.)</li><li><a href="/node/add/group">Creating a new group</a> of your own. Before you do, you might find an image / graphic for identification use on the group home page. Perhaps a logo, or ..?</li></ul><p>Once you&#39;ve created your group, start building your community by creating various kinds of content. &nbsp;Drupal Commons lets members of a group create:</p><ul><li>Blog posts. These are just what you think: personal notes from individuals. &nbsp;Note that other users can comment on these posts.</li><li>Documents. If you want to store attached documents that are useful for a group, create a Document page, describe the attachment in the body of the page, and then attach the files you want.</li><li>Discussions. &nbsp;A discussion is just that: Somebody starts by creating a page with a thought, idea, or question. Others can then comment on the initial post. Comments are &quot;threaded&quot; so you can comment on a comment.</li><li>Wikis. All the three posts above work the same: The initial author of a blog/document/discussion is the only person who can edit the &quot;body&quot; of the page. In contrast, any member of a group can edit the body of a Wiki page. &nbsp;That&#39;s what makes Wiki pages special - anybody can edit the content.</li><li>Events. If you have a special thing happening on a given day/time, create an &quot;Event&quot; describing it. These events will show up on the Calendar tab of a group home page.</li><li>Group RSS feed. If there is interesting content coming from outside this site that you want your group to track, pull that content in as an RSS feed to the site.</li></ul><p>There&#39;s more to building a community than the technology; it&#39;s the people &amp; participation that makes a community work. This set of content types should give you all the choices you need to jump-start this community.</p>');
+    $node->teaser = node_teaser($node->body);
+    $node->created = time();
+    $node->field_featured_content[0]['value'] = 'Featured';
+    $node->taxonomy['tags'][2] = t('content types, getting started, groups, jumpstart');
+    $node->og_public = 1;
+    $node->og_groups = array($group->nid => $group->nid);
+    node_save($node);
+  }
 }
 
 /**
@@ -871,6 +1050,9 @@ function drupal_commons_cleanup() {
   
   // Create a test group which contains a node
   drupal_commons_create_group();
+  
+  // Remove the feature choices
+  variable_del('commons_selected_features');
   
   // Finish the installation
   variable_set('install_task', 'profile-finished');

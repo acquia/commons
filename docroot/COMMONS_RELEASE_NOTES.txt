@@ -20,6 +20,8 @@ UPGRADING TO 1.2:
 9. Review the available Pages (admin/build/pages)
  - Delete or disable page-Home, as it's no longer used by Commons but may
    still be saved in your database
+ - Being that Commons 1.2 now comes with a new home page, you may want to review
+   it and make any changes you deem necessary
 10. Review your input format and filters. WYSIWYG Filter has been set to be used
   in place of HTML Filter (for the Filtered HTML format)
 11. Clear the cache (admin/settings/performance)
@@ -70,6 +72,7 @@ Drupal Commons 1.2, ????-??-??
 - Updated: Messaging
 - Updated: Notifications
 - Updated: Shoutbox
+- Updated: Wysiwyg
 - Updated: Tagedelic views
 - Updated: User relationships
 - Moved: User relationship rules (now included in User relationships)
@@ -90,7 +93,8 @@ Drupal Commons 1.2, ????-??-??
 - Removed: Better formats (included, but not installed, updating to 1.2 will disable the module)
 - Fixed: Userpoints node delete operation label (http://drupal.org/node/875140)
 - Added: 'My groups' to the 'My stuff' menu
-- Fixed: Dependence of PHP input filter inside various views
+- Removed: Dependence of PHP input filter inside various views
+- Added: Form to determine which features are enabled during installation
 - Added: Batch process of post-installation tasks (to avoid PHP timeout)
 - Fixed: Lowered install profile module dependencies (to avoid PHP timeout)
 - Moved: Permissions to respective sub-features
