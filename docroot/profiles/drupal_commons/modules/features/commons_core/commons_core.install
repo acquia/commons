@@ -39,7 +39,7 @@ function commons_core_update_6000() {
   db_query("DELETE FROM {menu_links} WHERE menu_name = 'primary-links' AND module = 'commons'");
   
   // Disable better_formats (to avoid node permissiono issues with Full HTML)
-  drupal_uninstall_modules(array('better_formats'));
+  drupal_uninstall_module('better_formats');
   
   // Enable wysiwyg filter and views_bulk_operations
   drupal_install_modules(array('wysiwyg_filter', 'views_bulk_operations'));
