@@ -150,10 +150,22 @@ function drupal_commons_profile_tasks(&$task, $url) {
   
   if ($task == 'configure-commons') {
     $operations = array();
+    $operations[] = array('drupal_commons_build_directories', array());
     $operations[] = array('drupal_commons_config_roles', array());
     $operations[] = array('drupal_commons_config_perms', array());
-    $operations[] = array('drupal_commons_enable_features', array());
-    $operations[] = array('drupal_commons_build_directories', array());
+    $operations[] = array('features_install_modules', array(array('commons_core')));
+    $operations[] = array('features_install_modules', array(array('commons_notifications')));
+    $operations[] = array('features_install_modules', array(array('commons_admin')));
+    $operations[] = array('features_install_modules', array(array('commons_seo')));
+    $operations[] = array('features_install_modules', array(array('commons_home')));
+    $operations[] = array('features_install_modules', array(array('commons_dashboard')));
+    $operations[] = array('features_install_modules', array(array('commons_wiki')));
+    $operations[] = array('features_install_modules', array(array('commons_document')));
+    $operations[] = array('features_install_modules', array(array('commons_blog')));
+    $operations[] = array('features_install_modules', array(array('commons_discussion')));
+    $operations[] = array('features_install_modules', array(array('commons_event')));
+    $operations[] = array('features_install_modules', array(array('commons_poll')));
+    $operations[] = array('features_install_modules', array(array('commons_group_aggregator')));
     $operations[] = array('drupal_commons_config_taxonomy', array());
     $operations[] = array('drupal_commons_config_profile', array());
     $operations[] = array('drupal_commons_config_filter', array());
@@ -180,28 +192,6 @@ function drupal_commons_profile_tasks(&$task, $url) {
   }
   
   return $output;
-}
-
-/**
- * Enable the Commons features
- */
-function drupal_commons_enable_features() {
-  $features = array(
-    'commons_core',
-    'commons_notifications',
-    'commons_admin',
-    'commons_seo',
-    'commons_home',
-    'commons_dashboard',
-    'commons_wiki',
-    'commons_blog',
-    'commons_document',
-    'commons_discussion',
-    'commons_event',
-    'commons_poll',
-    'commons_group_aggregator',
-  );
-  features_install_modules($features);
 }
 
 /**
@@ -256,10 +246,12 @@ function drupal_commons_config_taxonomy() {
   );
   
   // Link free-tagging vocabulary to node types
-  $sql = "INSERT INTO {vocabulary_node_types} (vid, type) VALUES (%d, '%s')";
-  db_query($sql, DRUPAL_COMMONS_TAG_ID, 'group');
-  db_query($sql, DRUPAL_COMMONS_TAG_ID, 'notice');
-  db_query($sql, DRUPAL_COMMONS_TAG_ID, 'page');
+  foreach (array('group', 'notice', 'page') as $type) {
+    $record = new stdClass;
+    $record->vid = DRUPAL_COMMONS_TAG_ID;
+    $record->type = $type;
+    drupal_write_record('vocabulary_node_types', $record);
+  }
 }
 
 /**
@@ -268,19 +260,114 @@ function drupal_commons_config_taxonomy() {
  * Add custom profile fields
  */
 function drupal_commons_config_profile() {
-  // Add custom profile fields
-  $sql = "INSERT INTO {profile_fields} (title, name, explanation, category, type, weight, required, register, visibility, autocomplete) VALUES ('%s', '%s', '%s', '%s', '%s', %d, %d, %d, %d, %d)";
-  
+  $fields = array();
+
   // Personal Information
-  db_query($sql, t('First name'), 'profile_name', t('Enter your first name.'), t('Personal information'), 'textfield', -10, 1, 1, 2, 0);
-  db_query($sql, t('Last name'), 'profile_last_name', t('Enter your last name.'), t('Personal information'), 'textfield', -9, 1, 1, 2, 0);
-  db_query($sql, t('Location'), 'profile_location', t('Where are you located?'), t('Personal information'), 'textfield', -8, 0, 0, 2, 0);
-  db_query($sql, t('My interests'), 'profile_interests', t('What are your interests, hobbies, etc?'), t('Personal information'), 'textarea', -7, 0, 0, 2, 0);
-  db_query($sql, t('About me'), 'profile_aboutme', t('Explain a little about yourself.'), t('Personal information'), 'textarea', -6, 0, 0, 2, 0); 
+  
+  // First name
+  $field = new stdClass;
+  $field->title = t('First name');
+  $field->name = 'profile_name';
+  $field->explanation = t('Enter your first name.');
+  $field->category = t('Personal information');
+  $field->type = 'textfield';
+  $field->weight = -10;
+  $field->required = 1;
+  $field->register = 1;
+  $field->visibility = 2;
+  $field->autocomplete = 0;
+  $fields[] = $field;
+  
+  // Last name
+  $field = new stdClass;
+  $field->title = t('Last name');
+  $field->name = 'profile_last_name';
+  $field->explanation = t('Enter your last name.');
+  $field->category = t('Personal information');
+  $field->type = 'textfield';
+  $field->weight = -9;
+  $field->required = 1;
+  $field->register = 1;
+  $field->visibility = 2;
+  $field->autocomplete = 0;
+  $fields[] = $field;
+  
+  // Location
+  $field = new stdClass;
+  $field->title = t('Location');
+  $field->name = 'profile_location';
+  $field->explanation = t('Where are you location?');
+  $field->category = t('Personal information');
+  $field->type = 'textfield';
+  $field->weight = -8;
+  $field->required = 0;
+  $field->register = 0;
+  $field->visibility = 2;
+  $field->autocomplete = 0;
+  $fields[] = $field;
+  
+  // My interests
+  $field = new stdClass;
+  $field->title = t('My interests');
+  $field->name = 'profile_interests';
+  $field->explanation = t('What are your interests, hobbies, etc?');
+  $field->category = t('Personal information');
+  $field->type = 'textarea';
+  $field->weight = -7;
+  $field->required = 0;
+  $field->register = 0;
+  $field->visibility = 2;
+  $field->autocomplete = 0;
+  $fields[] = $field;
+  
+  // About me
+  $field = new stdClass;
+  $field->title = t('About me');
+  $field->name = 'profile_aboutme';
+  $field->explanation = t('Explain a little about yourself.');
+  $field->category = t('Personal information');
+  $field->type = 'textarea';
+  $field->weight = -6;
+  $field->required = 0;
+  $field->register = 0;
+  $field->visibility = 2;
+  $field->autocomplete = 0;
+  $fields[] = $field;
   
   // Work Information
-  db_query($sql, t('Job title'), 'profile_job', t('What is your job title?'), t('Work information'), 'textfield', -10, 0, 1, 2, 0);
-  db_query($sql, t('Organization'), 'profile_organization', t('Which organization or department are you a part of?'), t('Work information'), 'textfield', -9, 0, 1, 2, 0);
+  
+  // Job title
+  $field = new stdClass;
+  $field->title = t('Job title');
+  $field->name = 'profile_job';
+  $field->explanation = t('What is your job title?');
+  $field->category = t('Work information');
+  $field->type = 'textfield';
+  $field->weight = -10;
+  $field->required = 0;
+  $field->register = 1;
+  $field->visibility = 2;
+  $field->autocomplete = 0;
+  $fields[] = $field;
+  
+  // Organization
+  $field = new stdClass;
+  $field->title = t('Organization');
+  $field->name = 'profile_organization';
+  $field->explanation = t('Which organization or department are you a part of?');
+  $field->category = t('Work information');
+  $field->type = 'textfield';
+  $field->weight = -9;
+  $field->required = 0;
+  $field->register = 1;
+  $field->visibility = 2;
+  $field->autocomplete = 0;
+  $fields[] = $field;
+  
+  // Save the fields
+  foreach ($fields as $field) {
+    drupal_write_record('profile_fields', $field);
+  }
 }
 
 /**
@@ -309,26 +396,46 @@ function drupal_commons_config_filter() {
   db_query("UPDATE {filter_formats} SET roles = ',3,4,' WHERE name = 'Full HTML'");
     
   // Create a "links-only" filter format that Shoutbox will use
-  db_query("INSERT INTO {filter_formats} (format, name, cache) VALUES (5, 'Links Only', 1)");
+  $format = new stdClass;
+  $format->format = 5;
+  $format->name = t('Links only');
+  $format->cache = 1;
+  drupal_write_record('filter_formats', $format);
   
   // Add filters to the format
-  db_query("INSERT INTO {filters} (format, module, delta, weight) VALUES (5, 'filter', 0, -10)");
-  db_query("INSERT INTO {filters} (format, module, delta, weight) VALUES (5, 'filter', 2, -9)");
+  $filter = new stdClass;
+  $filter->format = 5;
+  $filter->module = 'filter';
+  $filter->delta = 0;
+  $filter->weight = -10;
+  drupal_write_record('filters', $filter);
   
-  // Remove the HTML filter from Filtered HTML
-  db_query("DELETE FROM {filters} WHERE format = 1 AND module = 'filter' AND delta = 0");
-  
-  // Add WYSIWYG filter to Filtered HTML
-  db_query("INSERT INTO {filters} (format, module, delta, weight) VALUES (1, 'wysiwyg_filter', 0, -8)");
-  
-  // Adjust the weight of the HTML corrector for Filtered HTML
-  db_query("UPDATE {filters} SET weight = -7 WHERE module = 'filter' AND delta = 3");
+  $filter = new stdClass;
+  $filter->format = 5;
+  $filter->module = 'filter';
+  $filter->delta = 2;
+  $filter->weight = -9;
+  drupal_write_record('filters', $filter);
   
   // Adjust settings for the filter
   variable_set('filter_url_length_5', 60);
   variable_set('filter_html_5', 1);
   variable_set('filter_html_help_5', 0);
   variable_set('allowed_html_5', '');
+  
+  // Remove the HTML filter from Filtered HTML
+  db_query("DELETE FROM {filters} WHERE format = 1 AND module = 'filter' AND delta = 0");
+  
+  // Add WYSIWYG filter to Filtered HTML
+  $filter = new stdClass;
+  $filter->format = 1;
+  $filter->module = 'wysiwyg_filter';
+  $filter->delta = 0;
+  $filter->weight = -8;
+  drupal_write_record('filters', $filter);
+  
+  // Adjust the weight of the HTML corrector for Filtered HTML
+  db_query("UPDATE {filters} SET weight = -7 WHERE module = 'filter' AND delta = 3");
 }
 
 /**
@@ -465,13 +572,22 @@ function drupal_commons_config_ctools() {
  */
 function drupal_commons_config_roles() {
   // Add the "Community Manager" role
-  db_query("INSERT INTO {role} (rid, name) VALUES (3, '%s')", t(DRUPAL_COMMONS_MANAGER_ROLE));
+  $record = new stdClass;
+  $record->rid = 3;
+  $record->name = DRUPAL_COMMONS_MANAGER_ROLE;
+  drupal_write_record('role', $record);
   
   // Add the "Content Manager" role
-  db_query("INSERT INTO {role} (rid, name) VALUES (4, '%s')", t(DRUPAL_COMMONS_CONTENT_ROLE));
+  $record = new stdClass;
+  $record->rid = 4;
+  $record->name = DRUPAL_COMMONS_CONTENT_ROLE;
+  drupal_write_record('role', $record);
   
   // Make sure first user is a "Community Manager"
-  db_query("INSERT INTO {users_roles} (uid, rid) VALUES (1, 3)");
+  $record = new stdClass;
+  $record->uid = 1;
+  $record->rid = 3;
+  drupal_write_record('user_roles', $record);
 }
 
 /**
