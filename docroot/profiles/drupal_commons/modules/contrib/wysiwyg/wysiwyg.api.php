@@ -1,5 +1,5 @@
 <?php
-// $Id: wysiwyg.api.php,v 1.3.2.1 2009/08/09 02:46:55 sun Exp $
+// $Id: wysiwyg.api.php,v 1.3.2.4 2011/01/06 00:19:10 sun Exp $
 
 /**
  * @file
@@ -44,8 +44,13 @@ function hook_wysiwyg_plugin($editor, $version) {
           'myplugin' => array(
             // A URL to the plugin's homepage.
             'url' => 'http://drupal.org/project/img_assist',
-            // The full path to the native editor plugin.
-            'path' => drupal_get_path('module', 'img_assist') . '/drupalimage/editor_plugin.js',
+            // The full path to the native editor plugin, no trailing slash.
+            // Ignored when 'internal' is set to TRUE below.
+            'path' => drupal_get_path('module', 'img_assist') . '/drupalimage',
+            // The name of the plugin's main JavaScript file.
+            // Ignored when 'internal' is set to TRUE below.
+            // Default value depends on which editor the plugin is for.
+            'filename' => 'editor_plugin.js',
             // A list of buttons provided by this native plugin. The key has to
             // match the corresponding JavaScript implementation. The value is
             // is displayed on the editor configuration form only.
@@ -72,7 +77,8 @@ function hook_wysiwyg_plugin($editor, $version) {
             'load' => TRUE,
             // Boolean whether this plugin is a native plugin, i.e. shipped with
             // the editor. Definition must be ommitted for plugins provided by
-            // other modules.
+            // other modules. TRUE means 'path' and 'filename' above are ignored
+            // and the plugin is instead loaded from the editor's plugin folder.
             'internal' => TRUE,
             // TinyMCE-specific: Additional HTML elements to allow in the markup.
             'extended_valid_elements' => array(
@@ -149,6 +155,12 @@ function hook_INCLUDE_plugin() {
     // An alternative filename of the integration JavaScript; defaults to
     // '[plugin-name].js'.
     'js file' => 'awesome.js',
+    // An alternative path to the integration stylesheet; defaults to
+    // '[path-to-module]/[plugins-directory]/[plugin-name]'.
+    'css path' => drupal_get_path('module', 'mymodule') . '/awesomeness',
+    // An alternative filename of the integration stylesheet; defaults to
+    // '[plugin-name].css'.
+    'css file' => 'awesome.css',
     // An array of settings for this button. Required, but API is still in flux.
     'settings' => array(
     ),
@@ -161,3 +173,35 @@ function hook_INCLUDE_plugin() {
   return $plugins;
 }
 
+/**
+ * Act on editor profile settings.
+ *
+ * This hook is invoked from wysiwyg_get_editor_config() after the JavaScript
+ * settings have been generated for an editor profile and before the settings
+ * are added to the page. The settings may be customized or enhanced; typically
+ * with options that cannot be controlled through Wysiwyg module's
+ * administrative UI currently.
+ *
+ * Modules implementing this hook to enforce settings that can also be
+ * controlled through the UI should also implement
+ * hook_form_wysiwyg_profile_form_alter() to adjust or at least indicate on the
+ * editor profile configuration form that certain/affected settings cannot be
+ * changed.
+ *
+ * @param $settings
+ *   An associative array of JavaScript settings to pass to the editor.
+ * @param $context
+ *   An associative array containing additional context information:
+ *   - editor: The plugin definition array of the editor.
+ *   - profile: The editor profile object, as loaded from the database.
+ *   - theme: The name of the editor theme/skin.
+ */
+function hook_wysiwyg_editor_settings_alter(&$settings, $context) {
+  // Each editor has its own collection of native settings that may be extended
+  // or overridden. Please consult the respective official vendor documentation
+  // for details.
+  if ($context['profile']->editor == 'tinymce') {
+    // Supported values to JSON data types.
+    $settings['cleanup_on_startup'] = TRUE;
+  }
+}

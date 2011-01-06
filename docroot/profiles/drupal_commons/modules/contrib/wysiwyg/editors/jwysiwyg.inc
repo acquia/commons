@@ -1,5 +1,5 @@
 <?php
-// $Id: jwysiwyg.inc,v 1.4 2009/06/09 00:18:11 sun Exp $
+// $Id: jwysiwyg.inc,v 1.4.2.1 2010/04/02 14:05:54 sun Exp $
 
 /**
  * @file
@@ -48,6 +48,9 @@ function wysiwyg_jwysiwyg_editor() {
  */
 function wysiwyg_jwysiwyg_version($editor) {
   $script = $editor['library path'] . '/jquery.wysiwyg.js';
+  if (!file_exists($script)) {
+    return;
+  }
   $script = fopen($script, 'r');
   fgets($script);
   $line = fgets($script);

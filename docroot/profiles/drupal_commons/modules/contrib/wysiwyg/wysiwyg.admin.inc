@@ -1,5 +1,5 @@
 <?php
-// $Id: wysiwyg.admin.inc,v 1.15.2.9 2010/02/13 23:58:41 sun Exp $
+// $Id: wysiwyg.admin.inc,v 1.15.2.12 2010/12/19 21:00:25 sun Exp $
 
 /**
  * @file
@@ -92,11 +92,24 @@ function wysiwyg_profile_form($form_state, $profile) {
 
   $form['basic']['language'] = array(
     '#type' => 'select',
-    '#title' => t('Language'),
+    '#title' => t('Interface language'),
     '#default_value' => $profile->settings['language'],
-    '#options' => drupal_map_assoc(array('ar', 'ca', 'cs', 'cy', 'da', 'de', 'el', 'en', 'es', 'fa', 'fi', 'fr', 'fr_ca', 'he', 'hu', 'is', 'it', 'ja', 'ko', 'nb', 'nl', 'nn', 'pl', 'pt', 'pt_br', 'ru', 'ru_KOI8-R', 'ru_UTF-8', 'si', 'sk', 'sv', 'th', 'tr', 'uk', 'zh_cn', 'zh_tw', 'zh_tw_utf8')),
-    '#description' => t('The language to use for the editor interface. Language codes are based on the <a href="http://www.loc.gov/standards/iso639-2/englangn.html">ISO-639-2</a> format.'),
   );
+  // @see _locale_prepare_predefined_list()
+  require_once './includes/locale.inc';
+  $predefined = _locale_get_predefined_list();
+  foreach ($predefined as $key => $value) {
+    // Include native name in output, if possible
+    if (count($value) > 1) {
+      $tname = t($value[0]);
+      $predefined[$key] = ($tname == $value[1]) ? $tname : "$tname ($value[1])";
+    }
+    else {
+      $predefined[$key] = t($value[0]);
+    }
+  }
+  asort($predefined);
+  $form['basic']['language']['#options'] = $predefined;
 
   $form['buttons'] = array(
     '#type' => 'fieldset',
@@ -305,6 +318,10 @@ function wysiwyg_profile_form_submit($form, &$form_state) {
     // Store only enabled plugins.
     $values['buttons'] = array_filter($values['buttons']);
   }
+  // Remove any white-space from 'block_formats' setting, since editor
+  // implementations rely on a comma-separated list to explode().
+  $values['block_formats'] = preg_replace('@\s+@', '', $values['block_formats']);
+
   // Remove input format name.
   $format = $values['format'];
   $input_format = $values['input_format'];

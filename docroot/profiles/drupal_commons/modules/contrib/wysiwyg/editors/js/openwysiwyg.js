@@ -1,7 +1,26 @@
-// $Id: openwysiwyg.js,v 1.1.4.1 2010/02/13 23:58:41 sun Exp $
+// $Id: openwysiwyg.js,v 1.1.4.3 2010/11/13 19:07:49 sun Exp $
 
-// Reset $() to jQuery.  Yuck!
+// Backup $ and reset it to jQuery.
+Drupal.wysiwyg._openwysiwyg = $;
 $ = jQuery;
+
+// Wrap openWYSIWYG's methods to temporarily use its version of $.
+jQuery.each(WYSIWYG, function (key, value) {
+  if (jQuery.isFunction(value)) {
+    WYSIWYG[key] = function () {
+      var old$ = $;
+      $ = Drupal.wysiwyg._openwysiwyg;
+      var result = value.apply(this, arguments);
+      $ = old$;
+      return result;
+    };
+  }
+});
+
+// Override editor functions.
+WYSIWYG.getEditor = function (n) {
+  return Drupal.wysiwyg._openwysiwyg("wysiwyg" + n);
+};
 
 (function($) {
 
@@ -9,9 +28,6 @@ $ = jQuery;
  * Attach this editor to a target element.
  */
 Drupal.wysiwyg.editor.attach.openwysiwyg = function(context, params, settings) {
-  jQuery.noConflict();
-  $ = Drupal.wysiwyg._openwysiwyg;
-
   // Initialize settings.
   settings.ImagesDir = settings.path + 'images/';
   settings.PopupsDir = settings.path + 'popups/';
@@ -25,17 +41,12 @@ Drupal.wysiwyg.editor.attach.openwysiwyg = function(context, params, settings) {
   WYSIWYG.setSettings(params.field, config);
   WYSIWYG_Core.includeCSS(WYSIWYG.config[params.field].CSSFile);
   WYSIWYG._generate(params.field, config);
-
-  $ = jQuery;
 };
 
 /**
  * Detach a single or all editors.
  */
 Drupal.wysiwyg.editor.detach.openwysiwyg = function(context, params) {
-  jQuery.noConflict();
-  $ = Drupal.wysiwyg._openwysiwyg;
-
   if (typeof params != 'undefined') {
     var instance = WYSIWYG.config[params.field];
     if (typeof instance != 'undefined') {
@@ -53,48 +64,6 @@ Drupal.wysiwyg.editor.detach.openwysiwyg = function(context, params) {
       jQuery('#' + field).show();
     });
   }
-
-  $ = jQuery;
-};
-
-/**
- * Custom implementation of $() for openwysiwyg.
- */
-Drupal.wysiwyg._openwysiwyg = function (id) {
-	return document.getElementById(id);
-};
-
-// Override editor functions.
-WYSIWYG.getEditor = function (n) {
-  return Drupal.wysiwyg._openwysiwyg("wysiwyg" + n);
-};
-WYSIWYG._closeDropDowns = WYSIWYG.closeDropDowns;
-WYSIWYG.closeDropDowns = function (n, id) {
-  jQuery.noConflict();
-  $ = Drupal.wysiwyg._openwysiwyg;
-  WYSIWYG._closeDropDowns(n, id);
-  $ = jQuery;
-};
-WYSIWYG._openDropDown = WYSIWYG.openDropDown;
-WYSIWYG.openDropDown = function (n, id) {
-  jQuery.noConflict();
-  $ = Drupal.wysiwyg._openwysiwyg;
-  WYSIWYG._openDropDown(n, id);
-  $ = jQuery;
-};
-WYSIWYG._viewSource = WYSIWYG.viewSource;
-WYSIWYG.viewSource = function (n, id) {
-  jQuery.noConflict();
-  $ = Drupal.wysiwyg._openwysiwyg;
-  WYSIWYG._viewSource(n, id);
-  $ = jQuery;
-};
-WYSIWYG._viewText = WYSIWYG.viewText;
-WYSIWYG.viewText = function (n, id) {
-  jQuery.noConflict();
-  $ = Drupal.wysiwyg._openwysiwyg;
-  WYSIWYG._viewText(n, id);
-  $ = jQuery;
 };
 
 })(jQuery);

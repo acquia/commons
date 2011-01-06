@@ -1,4 +1,4 @@
-// $Id: tinymce-2.js,v 1.10.2.2 2010/02/13 23:58:41 sun Exp $
+// $Id: tinymce-2.js,v 1.10.2.4 2010/10/17 20:52:54 twod Exp $
 (function($) {
 
 /**
@@ -48,6 +48,17 @@ Drupal.wysiwyg.editor.attach.tinymce = function(context, params, settings) {
   for (var setting in settings) {
     tinyMCE.settings[setting] = settings[setting];
   }
+
+  // Remove TinyMCE's internal mceItem class, which was incorrectly added to
+  // submitted content by Wysiwyg <2.1. TinyMCE only temporarily adds the class
+  // for placeholder elements. If preemptively set, the class prevents (native)
+  // editor plugins from gaining an active state, so we have to manually remove
+  // it prior to attaching the editor. This is done on the client-side instead
+  // of the server-side, as Wysiwyg has no way to figure out where content is
+  // stored, and the class only affects editing.
+  $field = $('#' + params.field);
+  $field.val($field.val().replace(/(<.+?\s+class=['"][\w\s]*?)\bmceItem\b([\w\s]*?['"].*?>)/ig, '$1$2'));
+
   // Attach editor.
   tinyMCE.execCommand('mceAddControl', true, params.field);
 };

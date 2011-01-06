@@ -1,5 +1,5 @@
 <?php
-// $Id: openwysiwyg.inc,v 1.4 2009/06/13 02:17:10 sun Exp $
+// $Id: openwysiwyg.inc,v 1.4.2.3 2010/11/13 18:31:25 sun Exp $
 
 /**
  * @file
@@ -45,7 +45,11 @@ function wysiwyg_openwysiwyg_editor() {
  *   The installed editor version.
  */
 function wysiwyg_openwysiwyg_version($editor) {
+  // 'library path' has '/scripts' appended already.
   $changelog = $editor['editor path'] . '/changelog';
+  if (!file_exists($changelog)) {
+    return;
+  }
   $changelog = fopen($changelog, 'r');
   $line = fgets($changelog, 20);
   if (preg_match('@v([\d\.]+)@', $line, $version)) {
@@ -104,6 +108,7 @@ function wysiwyg_openwysiwyg_settings($editor, $config, $theme) {
     }
   }
 
+  $settings['Toolbar'] = array();
   if (!empty($config['buttons'])) {
     $plugins = wysiwyg_get_plugins($editor['name']);
     foreach ($config['buttons'] as $plugin => $buttons) {

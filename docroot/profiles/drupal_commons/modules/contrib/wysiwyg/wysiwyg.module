@@ -1,5 +1,5 @@
 <?php
-// $Id: wysiwyg.module,v 1.33.2.11 2010/02/14 01:59:47 sun Exp $
+// $Id: wysiwyg.module,v 1.33.2.14 2011/01/06 02:00:34 sun Exp $
 
 /**
  * @file
@@ -11,7 +11,7 @@
  */
 function wysiwyg_menu() {
   $items['admin/settings/wysiwyg'] = array(
-    'title' => 'Wysiwyg',
+    'title' => 'Wysiwyg profiles',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('wysiwyg_profile_overview'),
     'description' => 'Configure client-side editors.',
@@ -19,7 +19,7 @@ function wysiwyg_menu() {
     'file' => 'wysiwyg.admin.inc',
   );
   $items['admin/settings/wysiwyg/profile'] = array(
-    'title' => 'Profiles',
+    'title' => 'List',
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
   $items['admin/settings/wysiwyg/profile/%wysiwyg_profile/edit'] = array(
@@ -316,6 +316,7 @@ function wysiwyg_load_editor($profile) {
   if (!isset($settings_added) && $loaded[$name]) {
     drupal_add_js(array('wysiwyg' => array(
       'configs' => array(),
+      'plugins' => array(),
       'disable' => t('Disable rich-text'),
       'enable' => t('Enable rich-text'),
     )), 'setting');
@@ -353,7 +354,9 @@ function wysiwyg_add_editor_settings($profile, $theme) {
     $config = wysiwyg_get_editor_config($profile, $theme);
     // drupal_to_js() does not properly convert numeric array keys, so we need
     // to use a string instead of the format id.
-    drupal_add_js(array('wysiwyg' => array('configs' => array($profile->editor => array('format' . $profile->format => $config)))), 'setting');
+    if ($config) {
+      drupal_add_js(array('wysiwyg' => array('configs' => array($profile->editor => array('format' . $profile->format => $config)))), 'setting');
+    }
     $formats[$profile->format] = TRUE;
   }
 }
@@ -428,7 +431,9 @@ function wysiwyg_add_plugin_settings($profile) {
     // settings for native external plugins with required values.
     $settings_native = call_user_func($editor['plugin settings callback'], $editor, $profile, $profile_plugins_native);
 
-    drupal_add_js(array('wysiwyg' => array('plugins' => array('format' . $profile->format => array('native' => $settings_native)))), 'setting');
+    if ($settings_native) {
+      drupal_add_js(array('wysiwyg' => array('plugins' => array('format' . $profile->format => array('native' => $settings_native)))), 'setting');
+    }
   }
 
   // Process Drupal plugins.
@@ -457,7 +462,9 @@ function wysiwyg_add_plugin_settings($profile) {
     // the settings for Drupal plugins with custom, required values.
     $settings_drupal = call_user_func($editor['proxy plugin settings callback'], $editor, $profile, $profile_plugins_drupal);
 
-    drupal_add_js(array('wysiwyg' => array('plugins' => array('format' . $profile->format => array('drupal' => $settings_drupal)))), 'setting');
+    if ($settings_drupal) {
+      drupal_add_js(array('wysiwyg' => array('plugins' => array('format' . $profile->format => array('drupal' => $settings_drupal)))), 'setting');
+    }
   }
 }
 
@@ -564,7 +571,9 @@ function wysiwyg_get_css() {
     return $files;
   }
   // In node form previews, the theme has not been initialized yet.
-  init_theme();
+  if (!empty($_POST)) {
+    init_theme();
+  }
 
   $files = array();
   foreach (drupal_add_css() as $media => $css) {
@@ -617,56 +626,69 @@ function wysiwyg_profile_load_all() {
 /**
  * Implementation of hook_user().
  */
-function wysiwyg_user($type, &$edit, &$user, $category = NULL) {
-  if ($type == 'form' && $category == 'account') {
-    // @todo http://drupal.org/node/322433
-    $profiles = wysiwyg_profile_load_all();
+function wysiwyg_user($op, &$edit, $account, $category = NULL) {
+  if ($op == 'form' && $category == 'account') {
     $user_formats = filter_formats();
     $options = array();
     $options_default = array();
-    foreach ($profiles as $format => $profile) {
-      // Only show formats a user has access to use that allow user_choose.
-      if (isset($profile->settings['user_choose']) && $profile->settings['user_choose'] && array_key_exists($format, $user_formats)) {
-        $options[$format] = $user_formats[$format]->name;
-        if (wysiwyg_user_get_status($profile)) {
+    foreach (wysiwyg_profile_load_all() as $format => $profile) {
+      // Only show profiles that have user_choose enabled.
+      if (!empty($profile->settings['user_choose']) && isset($user_formats[$format])) {
+        $options[$format] = check_plain($user_formats[$format]->name);
+        if (wysiwyg_user_get_status($profile, $account)) {
           $options_default[] = $format;
         }
       }
     }
-    if (count($options)) {
-      $form['wysiwyg'] = array(
-        '#type' => 'fieldset',
-        '#title' => t('Wysiwyg Editor settings'),
-        '#weight' => 10,
-        '#collapsible' => TRUE,
-        '#collapsed' => TRUE,
-      );
+    if (!empty($options)) {
       $form['wysiwyg']['wysiwyg_status'] = array(
         '#type' => 'checkboxes',
-        '#title' => t('Enable editor by default'),
-        '#default_value' => $options_default,
+        '#title' => t('Text formats enabled for rich-text editing'),
         '#options' => $options,
-        '#description' => t('For each of the input formats, select whether or not rich-text editing is enabled by default in textarea fields.'),
+        '#default_value' => $options_default,
       );
-      return array('wysiwyg' => $form);
+      return $form;
     }
   }
-  elseif ($type == 'validate' && isset($edit['wysiwyg_status'])) {
-    return array('wysiwyg_status' => $edit['wysiwyg_status']);
+  elseif ($op == 'insert' || $op == 'update') {
+    if (isset($edit['wysiwyg_status'])) {
+      db_query("DELETE FROM {wysiwyg_user} WHERE uid = %d", $account->uid);
+      foreach ($edit['wysiwyg_status'] as $format => $status) {
+        db_query("INSERT INTO {wysiwyg_user} (uid, format, status) VALUES (%d, %d, %d)", array(
+          $account->uid,
+          $format,
+          (int) (bool) $status,
+        ));
+      }
+    }
   }
 }
 
-function wysiwyg_user_get_status($profile) {
+function wysiwyg_user_get_status($profile, $account = NULL) {
   global $user;
 
-  if (!empty($profile->settings['user_choose']) && isset($user->wysiwyg_status[$profile->format])) {
-    $status = $user->wysiwyg_status[$profile->format];
+  if (!isset($account)) {
+    $account = $user;
+  }
+
+  // Default wysiwyg editor status information is only required on forms, so we
+  // do not pre-emptively load and attach this information on every user_load().
+  if (!isset($account->wysiwyg_status)) {
+    $account->wysiwyg_status = array();
+    $result = db_query("SELECT format, status FROM {wysiwyg_user} WHERE uid = %d", $account->uid);
+    while ($row = db_fetch_object($result)) {
+      $account->wysiwyg_status[$row->format] = $row->status;
+    }
+  }
+
+  if (!empty($profile->settings['user_choose']) && isset($account->wysiwyg_status[$profile->format])) {
+    $status = $account->wysiwyg_status[$profile->format];
   }
   else {
     $status = isset($profile->settings['default']) ? $profile->settings['default'] : TRUE;
   }
 
-  return $status;
+  return (bool) $status;
 }
 
 /**
@@ -809,7 +831,7 @@ function wysiwyg_get_all_plugins() {
 function wysiwyg_load_includes($type = 'editors', $hook = 'editor', $file = NULL) {
   // Determine implementations.
   $directories = wysiwyg_get_directories($type);
-  $directories['wysiwyg_'] = drupal_get_path('module', 'wysiwyg') . '/' . $type;
+  $directories['wysiwyg'] = drupal_get_path('module', 'wysiwyg') . '/' . $type;
   $file_list = array();
   foreach ($directories as $module => $path) {
     $file_list[$module] = drupal_system_listing("$file" . '.inc$', $path, 'name', 0);
@@ -820,7 +842,7 @@ function wysiwyg_load_includes($type = 'editors', $hook = 'editor', $file = NULL
   foreach (array_filter($file_list) as $module => $files) {
     foreach ($files as $file) {
       include_once './' . $file->filename;
-      $result = _wysiwyg_process_include('wysiwyg', $module . $file->name, dirname($file->filename), $hook);
+      $result = _wysiwyg_process_include($module, $module . '_' . $file->name, dirname($file->filename), $hook);
       if (is_array($result)) {
         $info = array_merge($info, $result);
       }
@@ -944,7 +966,7 @@ function wysiwyg_get_directories($plugintype) {
   foreach (module_implements('wysiwyg_include_directory') as $module) {
     $result = module_invoke($module, 'wysiwyg_include_directory', $plugintype);
     if (isset($result) && is_string($result)) {
-      $directories[$module . '_'] = drupal_get_path('module', $module) . '/' . $result;
+      $directories[$module] = drupal_get_path('module', $module) . '/' . $result;
     }
   }
   return $directories;

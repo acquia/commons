@@ -1,4 +1,4 @@
-// $Id: tinymce-3.js,v 1.17.2.2 2010/02/13 23:58:41 sun Exp $
+// $Id: tinymce-3.js,v 1.17.2.5 2010/10/17 20:52:54 twod Exp $
 (function($) {
 
 /**
@@ -64,6 +64,17 @@ Drupal.wysiwyg.editor.attach.tinymce = function(context, params, settings) {
     $('#' + ed.editorContainer + ' table.mceLayout td.mceToolbar').append($toolbar);
     $('#' + ed.editorContainer + ' table.mceToolbar').remove();
   });
+
+  // Remove TinyMCE's internal mceItem class, which was incorrectly added to
+  // submitted content by Wysiwyg <2.1. TinyMCE only temporarily adds the class
+  // for placeholder elements. If preemptively set, the class prevents (native)
+  // editor plugins from gaining an active state, so we have to manually remove
+  // it prior to attaching the editor. This is done on the client-side instead
+  // of the server-side, as Wysiwyg has no way to figure out where content is
+  // stored, and the class only affects editing.
+  $field = $('#' + params.field);
+  $field.val($field.val().replace(/(<.+?\s+class=['"][\w\s]*?)\bmceItem\b([\w\s]*?['"].*?>)/ig, '$1$2'));
+
   // Attach editor.
   ed.render();
 };
@@ -110,7 +121,9 @@ Drupal.wysiwyg.editor.instance.tinymce = {
         ed.addCommand(plugin, function() {
           if (typeof Drupal.wysiwyg.plugins[plugin].invoke == 'function') {
             var data = { format: 'html', node: ed.selection.getNode(), content: ed.selection.getContent() };
-            Drupal.wysiwyg.plugins[plugin].invoke(data, pluginSettings, ed.id);
+            // TinyMCE creates a completely new instance for fullscreen mode.
+            var instanceId = ed.id == 'mce_fullscreen' ? ed.getParam('fullscreen_editor_id') : ed.id;
+            Drupal.wysiwyg.plugins[plugin].invoke(data, pluginSettings, instanceId);
           }
         });
 
@@ -167,9 +180,10 @@ Drupal.wysiwyg.editor.instance.tinymce = {
   },
 
   openDialog: function(dialog, params) {
-    var editor = tinyMCE.get(this.field);
+    var instanceId = this.isFullscreen() ? 'mce_fullscreen' : this.field;
+    var editor = tinyMCE.get(instanceId);
     editor.windowManager.open({
-      file: dialog.url + '/' + this.field,
+      file: dialog.url + '/' + instanceId,
       width: dialog.width,
       height: dialog.height,
       inline: 1
@@ -177,7 +191,8 @@ Drupal.wysiwyg.editor.instance.tinymce = {
   },
 
   closeDialog: function(dialog) {
-    var editor = tinyMCE.get(this.field);
+    var instanceId = this.isFullscreen() ? 'mce_fullscreen' : this.field;
+    var editor = tinyMCE.get(instanceId);
     editor.windowManager.close(dialog);
   },
 
@@ -212,7 +227,13 @@ Drupal.wysiwyg.editor.instance.tinymce = {
 
   insert: function(content) {
     content = this.prepareContent(content);
-    tinyMCE.execInstanceCommand(this.field, 'mceInsertContent', false, content);
+    var instanceId = this.isFullscreen() ? 'mce_fullscreen' : this.field;
+    tinyMCE.execInstanceCommand(instanceId, 'mceInsertContent', false, content);
+  },
+
+  isFullscreen: function() {
+    // TinyMCE creates a completely new instance for fullscreen mode.
+    return tinyMCE.activeEditor.id == 'mce_fullscreen' && tinyMCE.activeEditor.getParam('fullscreen_editor_id') == this.field;
   }
 };
 
