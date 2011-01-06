@@ -217,22 +217,6 @@ function drupal_commons_features_form($form_state, $url) {
     '#value' => t('The selected features will be enabled after the installation has completed. At any time, you can turn the available features on or off.'),
   );
   
-  // Required features
-  $form['required'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Required'),
-    '#description' => t('These features are required for Commons to operate.'),
-  );
-  $form['required']['feature-commons_core'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Core'),
-    '#default_value' => 1,
-    '#value' => 1,
-    '#required' => TRUE,
-    '#disabled' => TRUE,
-    '#description' => t('The core system that powers Drupal Commons.'),
-  );
-  
   // Content-related features
   $form['content'] = array(
     '#type' => 'fieldset',
@@ -350,6 +334,11 @@ function drupal_commons_features_form($form_state, $url) {
 function drupal_commons_features_form_submit(&$form, &$form_state) {
   // Build an array of chosen features
   $features = array();
+  
+  // Add the required core
+  $features[] = 'commons_core';
+  
+  // Extract the selected features from the form
   foreach ($form_state['values'] as $key => $value) {
     if (substr($key, 0, 8) == 'feature-') {
       if ($value == 1) {
