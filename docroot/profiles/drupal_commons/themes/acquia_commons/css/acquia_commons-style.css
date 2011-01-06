@@ -2836,9 +2836,13 @@ html.js fieldset.views-exposed-form.collapsed {
 	width: 60px;
 }
 
+div#block-og_views-0 h2.title {
+  display: none;
+}
+
 #views-exposed-form-og-search-default .views-exposed-widget.views-exposed-submit {
 	max-width: none;
-	width: 90px;
+	width: auto;
 }
 
 #views-exposed-form-og-search-default .views-exposed-widget.views-exposed-submit .form-submit,
@@ -2860,11 +2864,16 @@ html.js fieldset.views-exposed-form.collapsed {
 }
 
 #views-exposed-form-og-search-default .views-exposed-widgets {
-	float: left;
+	float: none;
 	margin-right: 2%;
-	margin: 0px;
+	margin: 0 0 5px 0;
 	padding: 0;
-	width: 60%;
+	width: 100%;
+	max-width: 100%;
+}
+
+#views-exposed-form-og-search-default .views-exposed-widget .form-item input {
+  width: 100%;
 }
 
 .views-exposed-widget label {
