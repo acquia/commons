@@ -843,6 +843,7 @@ function commons_core_set_breadcrumb($path) {
     case 'bookmarks':
     case 'relationships':
     case 'myuserpoints':
+    case 'mycontent':
       $breadcrumb[] = l(t('My account'), 'user');
       break;
       
