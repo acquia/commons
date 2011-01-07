@@ -18,7 +18,11 @@ function commons_document_fieldgroup_default_groups() {
         'description' => '',
       ),
       'display' => array(
-        'weight' => '1',
+        'weight' => '-1',
+        '4' => array(
+          'format' => 'fieldset',
+          'exclude' => 1,
+        ),
         'label' => 'above',
         'teaser' => array(
           'format' => 'fieldset',
@@ -29,10 +33,6 @@ function commons_document_fieldgroup_default_groups() {
           'exclude' => 0,
         ),
         'description' => '',
-        '4' => array(
-          'format' => 'fieldset',
-          'exclude' => 0,
-        ),
         '2' => array(
           'format' => 'fieldset',
           'exclude' => 0,
@@ -66,6 +66,11 @@ function commons_document_fieldgroup_default_groups() {
         'description' => '',
       ),
       'display' => array(
+        'weight' => '-2',
+        '4' => array(
+          'format' => 'fieldset',
+          'exclude' => 1,
+        ),
         'description' => '',
         'label' => 'above',
         'teaser' => array(
@@ -73,10 +78,6 @@ function commons_document_fieldgroup_default_groups() {
           'exclude' => 0,
         ),
         'full' => array(
-          'format' => 'fieldset',
-          'exclude' => 0,
-        ),
-        '4' => array(
           'format' => 'fieldset',
           'exclude' => 0,
         ),

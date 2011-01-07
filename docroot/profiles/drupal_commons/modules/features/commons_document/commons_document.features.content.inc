@@ -13,6 +13,10 @@ function commons_document_content_default_fields() {
     'display_settings' => array(
       'weight' => '7',
       'parent' => 'group_promote_content',
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
       'label' => array(
         'format' => 'above',
       ),
@@ -22,10 +26,6 @@ function commons_document_content_default_fields() {
       ),
       'full' => array(
         'format' => 'editable',
-        'exclude' => 0,
-      ),
-      '4' => array(
-        'format' => 'default',
         'exclude' => 0,
       ),
       '2' => array(
@@ -68,8 +68,12 @@ Featured',
     'field_name' => 'field_file',
     'type_name' => 'document',
     'display_settings' => array(
-      'weight' => '-2',
-      'parent' => '',
+      'weight' => '-1',
+      'parent' => 'group_upload',
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
       'label' => array(
         'format' => 'above',
       ),
@@ -78,10 +82,6 @@ Featured',
         'exclude' => 0,
       ),
       'full' => array(
-        'format' => 'default',
-        'exclude' => 0,
-      ),
-      '4' => array(
         'format' => 'default',
         'exclude' => 0,
       ),
@@ -132,6 +132,10 @@ Featured',
     'display_settings' => array(
       'weight' => '6',
       'parent' => 'group_promote_content',
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
       'label' => array(
         'format' => 'above',
       ),
@@ -141,10 +145,6 @@ Featured',
       ),
       'full' => array(
         'format' => 'editable',
-        'exclude' => 0,
-      ),
-      '4' => array(
-        'format' => 'default',
         'exclude' => 0,
       ),
       '2' => array(

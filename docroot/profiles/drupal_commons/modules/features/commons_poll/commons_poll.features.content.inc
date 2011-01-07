@@ -13,6 +13,10 @@ function commons_poll_content_default_fields() {
     'display_settings' => array(
       'weight' => '11',
       'parent' => 'group_images',
+      '4' => array(
+        'format' => 'image_plain',
+        'exclude' => 0,
+      ),
       'label' => array(
         'format' => 'hidden',
       ),
@@ -22,10 +26,6 @@ function commons_poll_content_default_fields() {
       ),
       'full' => array(
         'format' => 'content_image_primary_default',
-        'exclude' => 0,
-      ),
-      '4' => array(
-        'format' => 'image_plain',
         'exclude' => 0,
       ),
       '2' => array(
@@ -96,6 +96,10 @@ function commons_poll_content_default_fields() {
     'display_settings' => array(
       'weight' => 0,
       'parent' => 'group_promote_content',
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
       'label' => array(
         'format' => 'above',
       ),
@@ -105,10 +109,6 @@ function commons_poll_content_default_fields() {
       ),
       'full' => array(
         'format' => 'editable',
-        'exclude' => 0,
-      ),
-      '4' => array(
-        'format' => 'default',
         'exclude' => 0,
       ),
       '2' => array(

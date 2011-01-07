@@ -13,6 +13,10 @@ function commons_core_content_default_fields() {
     'display_settings' => array(
       'weight' => '4',
       'parent' => 'group_promote_content',
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
       'label' => array(
         'format' => 'above',
       ),
@@ -22,10 +26,6 @@ function commons_core_content_default_fields() {
       ),
       'full' => array(
         'format' => 'editable',
-        'exclude' => 0,
-      ),
-      '4' => array(
-        'format' => 'default',
         'exclude' => 0,
       ),
       '2' => array(
@@ -70,6 +70,10 @@ Featured',
     'display_settings' => array(
       'weight' => '5',
       'parent' => 'group_attributes',
+      '4' => array(
+        'format' => 'image_plain',
+        'exclude' => 0,
+      ),
       'label' => array(
         'format' => 'hidden',
       ),
@@ -79,10 +83,6 @@ Featured',
       ),
       'full' => array(
         'format' => 'group_images_default',
-        'exclude' => 0,
-      ),
-      '4' => array(
-        'format' => 'image_plain',
         'exclude' => 0,
       ),
       '2' => array(
@@ -147,8 +147,12 @@ Featured',
     'field_name' => 'field_grouplink',
     'type_name' => 'group',
     'display_settings' => array(
-      'weight' => '4',
+      'weight' => '6',
       'parent' => 'group_attributes',
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
       'label' => array(
         'format' => 'above',
       ),
@@ -157,10 +161,6 @@ Featured',
         'exclude' => 0,
       ),
       'full' => array(
-        'format' => 'default',
-        'exclude' => 0,
-      ),
-      '4' => array(
         'format' => 'default',
         'exclude' => 0,
       ),
@@ -215,6 +215,10 @@ Featured',
     'display_settings' => array(
       'weight' => '35',
       'parent' => 'group_images',
+      '4' => array(
+        'format' => 'image_plain',
+        'exclude' => 0,
+      ),
       'label' => array(
         'format' => 'hidden',
       ),
@@ -224,10 +228,6 @@ Featured',
       ),
       'full' => array(
         'format' => 'content_image_primary_default',
-        'exclude' => 0,
-      ),
-      '4' => array(
-        'format' => 'image_plain',
         'exclude' => 0,
       ),
       '2' => array(

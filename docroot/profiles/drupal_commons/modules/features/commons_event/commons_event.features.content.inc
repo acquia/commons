@@ -13,6 +13,10 @@ function commons_event_content_default_fields() {
     'display_settings' => array(
       'weight' => '35',
       'parent' => 'group_images',
+      '4' => array(
+        'format' => 'image_plain',
+        'exclude' => 0,
+      ),
       'label' => array(
         'format' => 'hidden',
       ),
@@ -22,10 +26,6 @@ function commons_event_content_default_fields() {
       ),
       'full' => array(
         'format' => 'content_image_primary_default',
-        'exclude' => 0,
-      ),
-      '4' => array(
-        'format' => 'image_plain',
         'exclude' => 0,
       ),
       '2' => array(
@@ -98,6 +98,10 @@ function commons_event_content_default_fields() {
     'display_settings' => array(
       'weight' => '-1',
       'parent' => 'group_event_details',
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
       'label' => array(
         'format' => 'above',
       ),
@@ -106,10 +110,6 @@ function commons_event_content_default_fields() {
         'exclude' => 0,
       ),
       'full' => array(
-        'format' => 'default',
-        'exclude' => 0,
-      ),
-      '4' => array(
         'format' => 'default',
         'exclude' => 0,
       ),
@@ -159,6 +159,10 @@ function commons_event_content_default_fields() {
     'display_settings' => array(
       'weight' => '7',
       'parent' => 'group_promote_content',
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
       'label' => array(
         'format' => 'above',
       ),
@@ -168,10 +172,6 @@ function commons_event_content_default_fields() {
       ),
       'full' => array(
         'format' => 'editable',
-        'exclude' => 0,
-      ),
-      '4' => array(
-        'format' => 'default',
         'exclude' => 0,
       ),
       '2' => array(
@@ -216,6 +216,10 @@ Featured',
     'display_settings' => array(
       'weight' => '6',
       'parent' => 'group_promote_content',
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
       'label' => array(
         'format' => 'above',
       ),
@@ -225,10 +229,6 @@ Featured',
       ),
       'full' => array(
         'format' => 'editable',
-        'exclude' => 0,
-      ),
-      '4' => array(
-        'format' => 'default',
         'exclude' => 0,
       ),
       '2' => array(
@@ -277,6 +277,10 @@ Sticky',
     'display_settings' => array(
       'weight' => 0,
       'parent' => 'group_event_details',
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
       'label' => array(
         'format' => 'above',
       ),
@@ -285,10 +289,6 @@ Sticky',
         'exclude' => 0,
       ),
       'full' => array(
-        'format' => 'default',
-        'exclude' => 0,
-      ),
-      '4' => array(
         'format' => 'default',
         'exclude' => 0,
       ),
