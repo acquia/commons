@@ -268,8 +268,12 @@ function commons_event_views_default_views() {
   $handler->override_option('header_empty', 1);
   $handler->override_option('items_per_page', 0);
   $handler->override_option('use_more', 0);
+  $handler->override_option('distinct', 1);
   $handler->override_option('style_plugin', 'calendar_nav');
   $handler = $view->new_display('calendar', 'Calendar page', 'calendar_1');
+  $handler->override_option('style_options', NULL);
+  $handler->override_option('row_plugin', '');
+  $handler->override_option('row_options', NULL);
   $handler->override_option('path', 'content/calendar');
   $handler->override_option('menu', array(
     'type' => 'none',
@@ -290,9 +294,13 @@ function commons_event_views_default_views() {
   ));
   $handler->override_option('calendar_colors_vocabulary', array());
   $handler->override_option('calendar_colors_taxonomy', array());
+  $handler->override_option('calendar_colors_group', array());
   $handler->override_option('calendar_popup', 0);
   $handler->override_option('calendar_date_link', '');
   $handler = $view->new_display('calendar_block', 'Calendar block', 'calendar_block_1');
+  $handler->override_option('style_options', NULL);
+  $handler->override_option('row_plugin', '');
+  $handler->override_option('row_options', NULL);
   $handler->override_option('block_description', 'Calendar');
   $handler->override_option('block_caching', -1);
   $handler = $view->new_display('calendar_period', 'Year view', 'calendar_period_1');
@@ -475,6 +483,91 @@ function commons_event_views_default_views() {
   ));
   $handler->override_option('block_description', 'Upcoming');
   $handler->override_option('block_caching', -1);
+  $handler = $view->new_display('feed', 'Feed', 'feed_1');
+  $handler->override_option('relationships', array());
+  $handler->override_option('sorts', array(
+    'created' => array(
+      'order' => 'DESC',
+      'granularity' => 'second',
+      'id' => 'created',
+      'table' => 'node',
+      'field' => 'created',
+      'override' => array(
+        'button' => 'Use default',
+      ),
+      'relationship' => 'none',
+    ),
+  ));
+  $handler->override_option('arguments', array());
+  $handler->override_option('filters', array(
+    'status' => array(
+      'operator' => '=',
+      'value' => 1,
+      'group' => '0',
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'id' => 'status',
+      'table' => 'node',
+      'field' => 'status',
+      'relationship' => 'none',
+    ),
+    'type' => array(
+      'operator' => 'in',
+      'value' => array(
+        'event' => 'event',
+      ),
+      'group' => '0',
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'id' => 'type',
+      'table' => 'node',
+      'field' => 'type',
+      'relationship' => 'none',
+    ),
+  ));
+  $handler->override_option('access', array(
+    'type' => 'perm',
+    'perm' => 'view content rss feeds',
+  ));
+  $handler->override_option('items_per_page', 50);
+  $handler->override_option('style_plugin', 'rss');
+  $handler->override_option('style_options', array(
+    'mission_description' => FALSE,
+    'description' => '',
+  ));
+  $handler->override_option('row_plugin', 'node_rss');
+  $handler->override_option('row_options', array(
+    'relationship' => 'none',
+    'item_length' => 'teaser',
+  ));
+  $handler->override_option('path', 'content/calendar/feed');
+  $handler->override_option('menu', array(
+    'type' => 'none',
+    'title' => '',
+    'description' => '',
+    'weight' => 0,
+    'name' => 'navigation',
+  ));
+  $handler->override_option('tab_options', array(
+    'type' => 'none',
+    'title' => '',
+    'description' => '',
+    'weight' => 0,
+    'name' => 'navigation',
+  ));
+  $handler->override_option('displays', array(
+    'calendar_1' => 'calendar_1',
+    'default' => 0,
+    'calendar_block_1' => 0,
+    'block_1' => 0,
+  ));
+  $handler->override_option('sitename_title', FALSE);
 
   $views[$view->name] = $view;
 
@@ -774,6 +867,9 @@ function commons_event_views_default_views() {
   $handler->override_option('use_more', 0);
   $handler->override_option('style_plugin', 'calendar_nav');
   $handler = $view->new_display('calendar', 'Calendar page', 'calendar_1');
+  $handler->override_option('style_options', NULL);
+  $handler->override_option('row_plugin', '');
+  $handler->override_option('row_options', NULL);
   $handler->override_option('path', 'node/%/content/calendar');
   $handler->override_option('menu', array(
     'type' => 'tab',
@@ -794,9 +890,13 @@ function commons_event_views_default_views() {
   ));
   $handler->override_option('calendar_colors_vocabulary', array());
   $handler->override_option('calendar_colors_taxonomy', array());
+  $handler->override_option('calendar_colors_group', array());
   $handler->override_option('calendar_popup', 0);
   $handler->override_option('calendar_date_link', '');
   $handler = $view->new_display('calendar_block', 'Calendar block', 'calendar_block_1');
+  $handler->override_option('style_options', NULL);
+  $handler->override_option('row_plugin', '');
+  $handler->override_option('row_options', NULL);
   $handler->override_option('block_description', 'Calendar');
   $handler->override_option('block_caching', -1);
   $handler = $view->new_display('calendar_period', 'Year view', 'calendar_period_1');

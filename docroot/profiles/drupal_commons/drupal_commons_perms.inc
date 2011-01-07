@@ -420,6 +420,15 @@ function drupal_commons_import_permissions() {
       '0' => 'community manager',
     ),
   );
+  
+  // Exported permission: view content rss feeds
+  $permissions['view content rss feeds'] = array(
+    'name' => 'view content rss feeds',
+    'roles' => array(
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
+    ),
+  );
 
   // Exported permission: view field_content_images
   $permissions['view field_content_images'] = array(
@@ -466,6 +475,15 @@ function drupal_commons_import_permissions() {
   // Exported permission: view field_grouplink
   $permissions['view field_grouplink'] = array(
     'name' => 'view field_grouplink',
+    'roles' => array(
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
+    ),
+  );
+  
+  // Exported permission: view group content rss feeds
+  $permissions['view group content rss feeds'] = array(
+    'name' => 'view group content rss feeds',
     'roles' => array(
       '0' => 'anonymous user',
       '1' => 'authenticated user',

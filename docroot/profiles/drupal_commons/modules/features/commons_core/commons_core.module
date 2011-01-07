@@ -3,6 +3,8 @@
 include_once('commons_core.features.inc');
 
 /**
+ * Implementation of hook_content_default_fields_alter()
+ * 
  * Alter the default cck fields right before they are cached into the database.
  *
  * @param &$fields
@@ -15,6 +17,13 @@ function commons_core_content_default_fields_alter(&$fields) {
     $fields['group-field_group_image']['widget']['default_image']['filepath'] = file_directory_path() . '/default-group.png';
     $fields['group-field_group_image']['widget']['default_image']['destination'] = file_directory_path() . '/default-group.png';
   }
+}
+
+/**
+ * Implementation of hook_perm()
+ */
+function commons_core_perm() {
+  return array('view content rss feeds', 'view group content rss feeds');
 }
 
 /**
