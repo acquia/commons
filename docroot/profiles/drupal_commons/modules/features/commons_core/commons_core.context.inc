@@ -110,35 +110,29 @@ function commons_core_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'og-0' => array(
-          'module' => 'og',
-          'delta' => '0',
+        'commons_core-5' => array(
+          'module' => 'commons_core',
+          'delta' => 5,
           'region' => 'sidebar_last',
           'weight' => 0,
         ),
         'og_views-0' => array(
           'module' => 'og_views',
-          'delta' => '0',
+          'delta' => 0,
           'region' => 'sidebar_last',
-          'weight' => 2,
+          'weight' => 1,
         ),
         'views-og_members_custom_block-block_1' => array(
           'module' => 'views',
           'delta' => 'og_members_custom_block-block_1',
           'region' => 'sidebar_last',
-          'weight' => 3,
+          'weight' => 2,
         ),
         'views-og_tag_cloud-block_1' => array(
           'module' => 'views',
           'delta' => 'og_tag_cloud-block_1',
           'region' => 'sidebar_last',
-          'weight' => 6,
-        ),
-        'views-og_members_custom_block-block' => array(
-          'module' => 'views',
-          'delta' => 'og_members_custom_block-block',
-          'region' => 'sidebar_last',
-          'weight' => 7,
+          'weight' => 3,
         ),
       ),
     ),

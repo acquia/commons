@@ -191,8 +191,15 @@ function commons_core_set_node_tab_title($node) {
  * Optionally remove Shoutbox link from Group menu
  */
 function commons_core_og_links_alter(&$links, &$node) {
+  // Optionally hide the shoutbox link
   if (variable_get('commons_hide_shoutbox_link', 1)) {
     unset($links['shoutbox']);
+  }
+  
+  // Change the Manager item to a link to our managers page
+  if (isset($links['manager'])) {
+    $group = og_get_group_context();
+    $links['manager'] = l(t('Group managers'), "og/users/{$group->nid}/managers");
   }
 }
 
@@ -219,6 +226,10 @@ function commons_core_block($op = 'list', $delta = 0, $edit = array()) {
     );
     $blocks[4] = array(
       'info' => t('Join & learn more'),
+      'cache' => BLOCK_CACHE_GLOBAL,
+    );
+    $blocks[5] = array(
+      'info' => t('Group actions'),
       'cache' => BLOCK_CACHE_GLOBAL,
     );
 
@@ -255,6 +266,15 @@ function commons_core_block($op = 'list', $delta = 0, $edit = array()) {
           'subject' => t('Join & learn more'),
           'content' => _commons_core_join_block()
         );
+        break;
+      case 5:
+        $details = og_block_details();
+        if (isset($details['content'])) {
+          $block = array(
+            'subject' => t('Actions'),
+            'content' => $details['content']
+          );
+        }
         break;
     }
     return $block;

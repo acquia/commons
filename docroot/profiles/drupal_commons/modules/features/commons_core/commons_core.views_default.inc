@@ -874,6 +874,196 @@ function commons_core_views_default_views() {
 
   $views[$view->name] = $view;
 
+  // Exported view: og_admins_faces
+  $view = new view;
+  $view->name = 'og_admins_faces';
+  $view->description = 'Admin listing in grid with user pictures';
+  $view->tag = 'og';
+  $view->view_php = '';
+  $view->base_table = 'users';
+  $view->is_cacheable = FALSE;
+  $view->api_version = 2;
+  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+  $handler = $view->new_display('default', 'Defaults', 'default');
+  $handler->override_option('fields', array(
+    'picture' => array(
+      'id' => 'picture',
+      'table' => 'users',
+      'field' => 'picture',
+      'label' => '',
+      'relationship' => 'none',
+    ),
+    'name' => array(
+      'id' => 'name',
+      'table' => 'users',
+      'field' => 'name',
+      'label' => '',
+      'link_to_user' => 1,
+      'relationship' => 'none',
+    ),
+    'is_admin' => array(
+      'id' => 'is_admin',
+      'table' => 'og_uid',
+      'field' => 'is_admin',
+      'label' => '',
+      'relationship' => 'none',
+    ),
+  ));
+  $handler->override_option('sorts', array(
+    'name' => array(
+      'id' => 'name',
+      'table' => 'users',
+      'field' => 'name',
+      'order' => 'ASC',
+      'relationship' => 'none',
+    ),
+  ));
+  $handler->override_option('arguments', array(
+    'nid' => array(
+      'id' => 'nid',
+      'table' => 'og_uid',
+      'field' => 'nid',
+      'default_action' => 'not found',
+      'style_plugin' => 'default_summary',
+      'style_options' => array(
+        'count' => TRUE,
+        'override' => FALSE,
+        'items_per_page' => 25,
+      ),
+      'wildcard' => 'all',
+      'wildcard_substitution' => 'All',
+      'title' => 'Members of %1',
+      'default_argument_type' => 'fixed',
+      'default_argument' => '',
+      'validate_type' => 'og_group_types',
+      'validate_fail' => 'not found',
+      'break_phrase' => 0,
+      'add_table' => 0,
+      'relationship' => 'none',
+      'default_argument_user' => 0,
+      'default_argument_fixed' => '',
+      'default_argument_php' => '',
+      'validate_argument_node_type' => array(
+        'blog' => 0,
+        'poll' => 0,
+        'book' => 0,
+        'group1' => 0,
+        'group2' => 0,
+        'page' => 0,
+        'story' => 0,
+      ),
+      'validate_argument_node_access' => 0,
+      'validate_argument_nid_type' => 'nid',
+      'validate_argument_vocabulary' => array(
+        '1' => 0,
+        '2' => 0,
+        '3' => 0,
+        '4' => 0,
+      ),
+      'validate_argument_type' => 'tid',
+      'validate_argument_php' => '',
+      'require_value' => 0,
+      'reduce_duplicates' => 0,
+      'validate_argument_is_member' => 1,
+      'not' => 0,
+    ),
+  ));
+  $handler->override_option('filters', array(
+    'status' => array(
+      'id' => 'status',
+      'table' => 'users',
+      'field' => 'status',
+      'operator' => '=',
+      'value' => 1,
+      'group' => 0,
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'relationship' => 'none',
+      'expose_button' => array(
+        'button' => 'Expose',
+      ),
+    ),
+    'is_active' => array(
+      'id' => 'is_active',
+      'table' => 'og_uid',
+      'field' => 'is_active',
+      'operator' => '=',
+      'value' => 1,
+      'group' => 0,
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'relationship' => 'none',
+      'expose_button' => array(
+        'button' => 'Expose',
+      ),
+    ),
+    'is_admin' => array(
+      'operator' => 'in',
+      'value' => array(
+        '1' => '1',
+      ),
+      'group' => '0',
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'id' => 'is_admin',
+      'table' => 'og_uid',
+      'field' => 'is_admin',
+      'relationship' => 'none',
+    ),
+  ));
+  $handler->override_option('access', array(
+    'type' => 'none',
+  ));
+  $handler->override_option('cache', array(
+    'type' => 'none',
+  ));
+  $handler->override_option('title', 'Managers');
+  $handler->override_option('empty_format', '1');
+  $handler->override_option('use_ajax', '1');
+  $handler->override_option('items_per_page', 25);
+  $handler->override_option('use_pager', '1');
+  $handler->override_option('distinct', 0);
+  $handler->override_option('style_plugin', 'grid');
+  $handler->override_option('style_options', array(
+    'columns' => '5',
+    'alignment' => 'horizontal',
+  ));
+  $handler->override_option('row_options', array(
+    'inline' => array(
+      'name' => 'name',
+      'is_manager' => 'is_manager',
+      'is_admin' => 'is_admin',
+    ),
+    'separator' => '',
+  ));
+  $handler = $view->new_display('page', 'Page', 'page_1');
+  $handler->override_option('path', 'og/users/%/managers');
+  $handler->override_option('menu', array(
+    'type' => 'tab',
+    'title' => 'Managers',
+    'description' => '',
+    'weight' => '2',
+    'name' => 'navigation',
+  ));
+  $handler->override_option('tab_options', array(
+    'type' => 'none',
+    'title' => '',
+    'description' => '',
+    'weight' => 0,
+    'name' => 'navigation',
+  ));
+
+  $views[$view->name] = $view;
+
   // Exported view: og_all
   $view = new view;
   $view->name = 'og_all';
