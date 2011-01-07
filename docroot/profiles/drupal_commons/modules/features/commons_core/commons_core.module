@@ -180,10 +180,8 @@ function commons_core_menu_alter(&$items) {
  * Callback for group node tab titles
  */
 function commons_core_set_node_tab_title($node) {
-  if ($title = variable_get('commons_group_tab_title', 'Home')) {
-    if (og_is_group_type($node->type)) {
-      return $title;
-    }
+  if (og_is_group_type($node->type)) {
+    return variable_get('commons_group_tab_title', t('Home'));
   }
   
   return t('View');
@@ -284,7 +282,7 @@ function _commons_core_user_stats_block() {
  * Display "jumpstart" block
  */
 function _commons_core_jumpstart_community_block() {
-  return t('!view, or !create new <strong>groups</strong> to start creating your community!', array('!view' => l(t('View'), 'groups'), '!create' => l(t('create'), 'node/add/group')));
+  return t('!view, or !create new groups to start creating your community!', array('!view' => l(t('View'), 'groups'), '!create' => l(t('create'), 'node/add/group')));
 }
 
 /**

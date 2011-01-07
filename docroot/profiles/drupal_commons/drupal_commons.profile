@@ -1,8 +1,5 @@
 <?php
-// $Id: drupal_commons.profile
-
-// Define the name of the free-tagging vocabulary
-define('DRUPAL_COMMONS_TAG_NAME', 'Tags');
+// $Id$
 
 // Define the forced ID of the free-tagging vocabulary
 define('DRUPAL_COMMONS_TAG_ID', 2);
@@ -30,12 +27,6 @@ define('DRUPAL_COMMONS_POINTS_PICTURE', 5);
 
 // Define the default point amount for posting a shout
 define('DRUPAL_COMMONS_POINTS_SHOUT', 1);
-
-// Define the singular name of the user relationship
-define('DRUPAL_COMMONS_RELATIONSHIP_SINGULAR', 'Friend');
-
-// Define the plural name of the user relationship
-define('DRUPAL_COMMONS_RELATIONSHIP_PLURAL', 'Friends');
 
 /**
  * Return an array of the modules to be enabled when this profile is installed.
@@ -100,7 +91,7 @@ function drupal_commons_profile_modules() {
  */
 function drupal_commons_profile_details() {
   $logo = '<a href="http://drupal.org/project/commons" target="_blank"><img alt="Drupal Commons" title="Drupal Commons" src="' . base_path() . 'profiles/drupal_commons/images/logo.png' . '"></img></a>';
-  $description = 'Select this profile to install the Drupal Commons distribution for powering your community website. Drupal Commons provides provides blogging, discussions, user profiles, and other useful community features for both private communities (e.g. an Intranet), or public communities (e.g. a customer community).';
+  $description = st('Select this profile to install the Drupal Commons distribution for powering your community website. Drupal Commons provides provides blogging, discussions, user profiles, and other useful community features for both private communities (e.g. an Intranet), or public communities (e.g. a customer community).');
   $description .= '<br/>' . $logo;
   
   return array(
@@ -120,8 +111,8 @@ function drupal_commons_profile_details() {
  */
 function drupal_commons_profile_task_list() {
   $tasks = array();
-  $tasks['configure-commons'] = t('Configure Drupal Commons');
-  $tasks['install-commons'] = t('Install Drupal Commons');
+  $tasks['configure-commons'] = st('Configure Drupal Commons');
+  $tasks['install-commons'] = st('Install Drupal Commons');
   return $tasks;
 }
 
@@ -183,8 +174,8 @@ function drupal_commons_profile_tasks(&$task, $url) {
     // Build the batch process
     $batch = array(
       'operations' => $operations,
-      'title' => t('Configuring Drupal Commons'),
-      'error_message' => t('An error occurred. Please try reinstalling again.'),
+      'title' => st('Configuring Drupal Commons'),
+      'error_message' => st('An error occurred. Please try reinstalling again.'),
       'finished' => 'drupal_commons_cleanup',
     );
   
@@ -207,87 +198,87 @@ function drupal_commons_profile_tasks(&$task, $url) {
  * Provide a form to choose which features to enable
  */
 function drupal_commons_features_form($form_state, $url) {
-  drupal_set_title(t('Choose from available features'));
+  drupal_set_title(st('Choose from available features'));
   
   $form = array();
   
   // Help message
   $form['message'] = array(
     '#type' => 'item',
-    '#value' => t('The selected features will be enabled after the installation has completed. At any time, you can turn the available features on or off.'),
+    '#value' => st('The selected features will be enabled after the installation has completed. At any time, you can turn the available features on or off.'),
   );
   
   // Content-related features
   $form['content'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Content'),
+    '#title' => st('Content'),
     '#description' => t('These features offer different content types for groups.'),
   );
   $form['content']['feature-commons_blog'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Blogs'),
+    '#title' => st('Blogs'),
     '#default_value' => 1,
     '#description' => t('Create blog posts inside of groups.'),
   );
   $form['content']['feature-commons_discussion'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Discussions'),
+    '#title' => st('Discussions'),
     '#default_value' => 1,
-    '#description' => t('Create discussions inside of groups.'),
+    '#description' => st('Create discussions inside of groups.'),
   );
   $form['content']['feature-commons_document'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Documents'),
+    '#title' => st('Documents'),
     '#default_value' => 1,
-    '#description' => t('Upload documents inside of groups.'),
+    '#description' => st('Upload documents inside of groups.'),
   );
   $form['content']['feature-commons_poll'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Polls'),
+    '#title' => st('Polls'),
     '#default_value' => 1,
-    '#description' => t('Create polls inside of groups for members to vote on.'),
+    '#description' => st('Create polls inside of groups for members to vote on.'),
   );
   $form['content']['feature-commons_event'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Events & Calendars'),
+    '#title' => st('Events & Calendars'),
     '#default_value' => 1,
-    '#description' => t('Create events and provide calendars inside of groups.'),
+    '#description' => st('Create events and provide calendars inside of groups.'),
   );
   $form['content']['feature-commons_wiki'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Wikis'),
+    '#title' => st('Wikis'),
     '#default_value' => 1,
-    '#description' => t('Create wikis inside of groups.'),
+    '#description' => st('Create wikis inside of groups.'),
   );
   
   // Misc features
   $form['misc'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Miscellaneous'),
+    '#title' => st('Miscellaneous'),
   );
   $form['misc']['feature-commons_home'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Home page'),
+    '#title' => st('Home page'),
     '#default_value' => 1,
-    '#description' => t('Provide a community-driven home page.'),
+    '#description' => st('Provide a community-driven home page.'),
   );
   $form['misc']['feature-commons_dashboard'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Dashboard'),
+    '#title' => st('Dashboard'),
     '#default_value' => 1,
-    '#description' => t('Enable a drag-and-drop dashboard for users.'),
+    '#description' => st('Enable a drag-and-drop dashboard for users.'),
   );
   $form['misc']['feature-commons_notifications'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Notifications'),
+    '#title' => st('Notifications'),
     '#default_value' => 1,
-    '#description' => t('Allow users to subscribe to content notifications.'),
+    '#description' => st('Allow users to subscribe to content notifications.'),
   );
   $form['misc']['feature-commons_group_aggregator'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Group aggregator'),
+    '#title' => st('Group aggregator'),
     '#default_value' => 1,
-    '#description' => t('Give groups the ability to subscribe to RSS feeds.'),
+    '#description' => st('Give groups the ability to subscribe to RSS feeds.'),
   );
   $form['misc']['feature-commons_admin'] = array(
     '#type' => 'checkbox',
@@ -297,21 +288,21 @@ function drupal_commons_features_form($form_state, $url) {
   );
   $form['misc']['feature-commons_seo'] = array(
     '#type' => 'checkbox',
-    '#title' => t('SEO'),
+    '#title' => st('SEO'),
     '#default_value' => 1,
-    '#description' => t('Make your site more search-engine friendly by providing things like descriptive URLs.'),
+    '#description' => st('Make your site more search-engine friendly by providing things like descriptive URLs.'),
   );
   
   $form['acquia'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Acquia'),
-    '#description' => t('Integrate your site with the !an', array('!an' => l(t('Acquia Network'), 'http://acquia.com/products-services/acquia-network', array('attributes' => array('target' => '_blank'))))),
+    '#title' => st('Acquia'),
+    '#description' => st('Integrate your site with the !an', array('!an' => l(t('Acquia Network'), 'http://acquia.com/products-services/acquia-network', array('attributes' => array('target' => '_blank'))))),
   );
   $form['acquia']['feature-acquia_network_subscription'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Acquia Network Subscription'),
+    '#title' => st('Acquia Network Subscription'),
     '#default_value' => 0,
-    '#description' => t('Enabled functionality provided by the Acquia Network, such as Apache Solr search, Mollom spam prevention, and more. A free 30-day trial is available.'),
+    '#description' => st('Enabled functionality provided by the Acquia Network, such as Apache Solr search, Mollom spam prevention, and more. A free 30-day trial is available.'),
   );
   
   // Redirect URL to remain inside the installation after submission
@@ -322,7 +313,7 @@ function drupal_commons_features_form($form_state, $url) {
   
   $form['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Continue'),
+    '#value' => st('Continue'),
   );
   
   return $form;
@@ -379,8 +370,8 @@ function drupal_commons_build_directories() {
 function drupal_commons_config_taxonomy() {
   // Add vocabulary for Userpoints.module
   $vocab = array(
-    'name' => t(USERPOINTS_CATEGORY_NAME),
-    'description' => t('Automatically created by the userpoints module'),
+    'name' => USERPOINTS_CATEGORY_NAME,
+    'description' => st('Automatically created by the userpoints module'),
     'multiple' => '0',
     'required' => '0',
     'hierarchy' => '1',
@@ -391,15 +382,15 @@ function drupal_commons_config_taxonomy() {
   
   // Add free-tagging vocabulary for content
   $vocab = array(
-    'name' => t(DRUPAL_COMMONS_TAG_NAME),
-    'description' => t('Free-tagging vocabulary for all content items'),
+    'name' => st('Tags'),
+    'description' => st('Free-tagging vocabulary for all content items'),
     'multiple' => '0',
     'required' => '0',
     'hierarchy' => '0',
     'relations' => '1',
     'tags' => '1',
     'module' => 'taxonomy',
-    'help' => t('Press enter or click !plus between tags.', array('!plus' => '\'+\'')),
+    'help' => st('Press enter or click !plus between tags.', array('!plus' => '\'+\'')),
   );
   taxonomy_save_vocabulary($vocab); 
   
@@ -407,7 +398,7 @@ function drupal_commons_config_taxonomy() {
   // This is needed for bundled views to work
   db_query("UPDATE {vocabulary} SET vid = %d WHERE name = '%s'",
     DRUPAL_COMMONS_TAG_ID,
-    DRUPAL_COMMONS_TAG_NAME
+    st('Tags')
   );
   
   // Link free-tagging vocabulary to node types
@@ -431,10 +422,10 @@ function drupal_commons_config_profile() {
   
   // First name
   $field = new stdClass;
-  $field->title = t('First name');
+  $field->title = st('First name');
   $field->name = 'profile_name';
-  $field->explanation = t('Enter your first name.');
-  $field->category = t('Personal information');
+  $field->explanation = st('Enter your first name.');
+  $field->category = st('Personal information');
   $field->type = 'textfield';
   $field->weight = -10;
   $field->required = 1;
@@ -445,10 +436,10 @@ function drupal_commons_config_profile() {
   
   // Last name
   $field = new stdClass;
-  $field->title = t('Last name');
+  $field->title = st('Last name');
   $field->name = 'profile_last_name';
-  $field->explanation = t('Enter your last name.');
-  $field->category = t('Personal information');
+  $field->explanation = st('Enter your last name.');
+  $field->category = st('Personal information');
   $field->type = 'textfield';
   $field->weight = -9;
   $field->required = 1;
@@ -459,10 +450,10 @@ function drupal_commons_config_profile() {
   
   // Location
   $field = new stdClass;
-  $field->title = t('Location');
+  $field->title = st('Location');
   $field->name = 'profile_location';
-  $field->explanation = t('Where are you location?');
-  $field->category = t('Personal information');
+  $field->explanation = st('Where are you location?');
+  $field->category = st('Personal information');
   $field->type = 'textfield';
   $field->weight = -8;
   $field->required = 0;
@@ -473,10 +464,10 @@ function drupal_commons_config_profile() {
   
   // My interests
   $field = new stdClass;
-  $field->title = t('My interests');
+  $field->title = st('My interests');
   $field->name = 'profile_interests';
-  $field->explanation = t('What are your interests, hobbies, etc?');
-  $field->category = t('Personal information');
+  $field->explanation = st('What are your interests, hobbies, etc?');
+  $field->category = st('Personal information');
   $field->type = 'textarea';
   $field->weight = -7;
   $field->required = 0;
@@ -487,10 +478,10 @@ function drupal_commons_config_profile() {
   
   // About me
   $field = new stdClass;
-  $field->title = t('About me');
+  $field->title = st('About me');
   $field->name = 'profile_aboutme';
-  $field->explanation = t('Explain a little about yourself.');
-  $field->category = t('Personal information');
+  $field->explanation = st('Explain a little about yourself.');
+  $field->category = st('Personal information');
   $field->type = 'textarea';
   $field->weight = -6;
   $field->required = 0;
@@ -503,10 +494,10 @@ function drupal_commons_config_profile() {
   
   // Job title
   $field = new stdClass;
-  $field->title = t('Job title');
+  $field->title = st('Job title');
   $field->name = 'profile_job';
-  $field->explanation = t('What is your job title?');
-  $field->category = t('Work information');
+  $field->explanation = st('What is your job title?');
+  $field->category = st('Work information');
   $field->type = 'textfield';
   $field->weight = -10;
   $field->required = 0;
@@ -517,10 +508,10 @@ function drupal_commons_config_profile() {
   
   // Organization
   $field = new stdClass;
-  $field->title = t('Organization');
+  $field->title = st('Organization');
   $field->name = 'profile_organization';
-  $field->explanation = t('Which organization or department are you a part of?');
-  $field->category = t('Work information');
+  $field->explanation = st('Which organization or department are you a part of?');
+  $field->category = st('Work information');
   $field->type = 'textfield';
   $field->weight = -9;
   $field->required = 0;
@@ -563,7 +554,7 @@ function drupal_commons_config_filter() {
   // Create a "links-only" filter format that Shoutbox will use
   $format = new stdClass;
   $format->format = 5;
-  $format->name = t('Links only');
+  $format->name = st('Links only');
   $format->cache = 1;
   drupal_write_record('filter_formats', $format);
   
@@ -610,8 +601,8 @@ function drupal_commons_config_password() {
   // Add the password policy
   $policy = new stdClass;
   $policy->pid = 1;
-  $policy->name = t('Constraints');
-  $policy->description = t('Default list of password constraints');
+  $policy->name = st('Constraints');
+  $policy->description = st('Default list of password constraints');
   $policy->enabled = 1;
   $policy->policy = array(
     'alphanumeric' => 7,  // Contain at least 7 alphanumeric chars
@@ -661,8 +652,8 @@ function drupal_commons_config_wysiwyg() {
 function drupal_commons_config_ur() {
   // Add initial relationship type 'Friend'
   $relationship = new stdClass;
-  $relationship->name = t(DRUPAL_COMMONS_RELATIONSHIP_SINGULAR);
-  $relationship->plural_name = t(DRUPAL_COMMONS_RELATIONSHIP_PLURAL);
+  $relationship->name = st('Friend');
+  $relationship->plural_name = st('Friends');
   $relationship->requires_approval = 1;
   $relationship->expires_val = 0;
   $relationship->is_oneway = 0;
@@ -956,8 +947,8 @@ function drupal_commons_create_group() {
   $group->status = 1;
   $group->format = 2;
   $group->revision = 0;
-  $group->title = t('Our Community');
-  $group->body = t('Drupal Commons provides the software; but we the people need to work out the human aspects of helping this community to succeed. Let&#39;s collaborate on that using this group.');
+  $group->title = st('Our Community');
+  $group->body = st('Drupal Commons provides the software; but we the people need to work out the human aspects of helping this community to succeed. Let&#39;s collaborate on that using this group.');
   $group->teaser = node_teaser($group->body);
   $group->created = time();
   $group->field_featured_group = array(
@@ -965,8 +956,8 @@ function drupal_commons_create_group() {
       'value' => 'Featured',
     ),
   );
-  $group->og_description = t('A group for collaborating to make this community site successful');
-  $group->taxonomy['tags'][2] = t('community');
+  $group->og_description = st('A group for collaborating to make this community site successful');
+  $group->taxonomy['tags'][2] = st('community');
   $group->og_private = 0;
   $group->og_directory = 1;
   $group->og_register = 0;
@@ -983,12 +974,12 @@ function drupal_commons_create_group() {
     $node->status = 1;
     $node->format = 2;
     $node->revision = 0;
-    $node->title = t('Jumpstarting our community');
-    $node->body = t('<p>In Drupal Commons, all content is all created within the context of a &quot;Group&quot;. Start exploring how to use your site by:</p><ul><li><a href="/og">Viewing a list of all the groups</a> on this site. (Note: Only this demonstration group exists by default.)</li><li><a href="/node/add/group">Creating a new group</a> of your own. Before you do, you might find an image / graphic for identification use on the group home page. Perhaps a logo, or ..?</li></ul><p>Once you&#39;ve created your group, start building your community by creating various kinds of content. &nbsp;Drupal Commons lets members of a group create:</p><ul><li>Blog posts. These are just what you think: personal notes from individuals. &nbsp;Note that other users can comment on these posts.</li><li>Documents. If you want to store attached documents that are useful for a group, create a Document page, describe the attachment in the body of the page, and then attach the files you want.</li><li>Discussions. &nbsp;A discussion is just that: Somebody starts by creating a page with a thought, idea, or question. Others can then comment on the initial post. Comments are &quot;threaded&quot; so you can comment on a comment.</li><li>Wikis. All the three posts above work the same: The initial author of a blog/document/discussion is the only person who can edit the &quot;body&quot; of the page. In contrast, any member of a group can edit the body of a Wiki page. &nbsp;That&#39;s what makes Wiki pages special - anybody can edit the content.</li><li>Events. If you have a special thing happening on a given day/time, create an &quot;Event&quot; describing it. These events will show up on the Calendar tab of a group home page.</li><li>Group RSS feed. If there is interesting content coming from outside this site that you want your group to track, pull that content in as an RSS feed to the site.</li></ul><p>There&#39;s more to building a community than the technology; it&#39;s the people &amp; participation that makes a community work. This set of content types should give you all the choices you need to jump-start this community.</p>');
+    $node->title = st('Jumpstarting our community');
+    $node->body = st('<p>In Drupal Commons, all content is all created within the context of a &quot;Group&quot;. Start exploring how to use your site by:</p><ul><li><a href="/og">Viewing a list of all the groups</a> on this site. (Note: Only this demonstration group exists by default.)</li><li><a href="/node/add/group">Creating a new group</a> of your own. Before you do, you might find an image / graphic for identification use on the group home page. Perhaps a logo, or ..?</li></ul><p>Once you&#39;ve created your group, start building your community by creating various kinds of content. &nbsp;Drupal Commons lets members of a group create:</p><ul><li>Blog posts. These are just what you think: personal notes from individuals. &nbsp;Note that other users can comment on these posts.</li><li>Documents. If you want to store attached documents that are useful for a group, create a Document page, describe the attachment in the body of the page, and then attach the files you want.</li><li>Discussions. &nbsp;A discussion is just that: Somebody starts by creating a page with a thought, idea, or question. Others can then comment on the initial post. Comments are &quot;threaded&quot; so you can comment on a comment.</li><li>Wikis. All the three posts above work the same: The initial author of a blog/document/discussion is the only person who can edit the &quot;body&quot; of the page. In contrast, any member of a group can edit the body of a Wiki page. &nbsp;That&#39;s what makes Wiki pages special - anybody can edit the content.</li><li>Events. If you have a special thing happening on a given day/time, create an &quot;Event&quot; describing it. These events will show up on the Calendar tab of a group home page.</li><li>Group RSS feed. If there is interesting content coming from outside this site that you want your group to track, pull that content in as an RSS feed to the site.</li></ul><p>There&#39;s more to building a community than the technology; it&#39;s the people &amp; participation that makes a community work. This set of content types should give you all the choices you need to jump-start this community.</p>');
     $node->teaser = node_teaser($node->body);
     $node->created = time();
     $node->field_featured_content[0]['value'] = 'Featured';
-    $node->taxonomy['tags'][2] = t('content types, getting started, groups, jumpstart');
+    $node->taxonomy['tags'][2] = st('content types, getting started, groups, jumpstart');
     $node->og_public = 1;
     $node->og_groups = array($group->nid => $group->nid);
     node_save($node);
@@ -1035,7 +1026,7 @@ function drupal_commons_cleanup() {
   features_revert($revert);
   
   // Say hello to the dog!
-  watchdog('commons', t('Welcome to Drupal Commons from Acquia!'));
+  watchdog('commons', st('Welcome to Drupal Commons from Acquia!'));
   
   // Create a test group which contains a node
   drupal_commons_create_group();
@@ -1060,7 +1051,7 @@ function system_form_install_configure_form_alter(&$form, $form_state) {
       '#title' => t('Default time zone'),
       '#default_value' => NULL,
       '#options' => date_timezone_names(FALSE, TRUE),
-      '#description' => t('Select the default site time zone. If in doubt, choose the timezone that is closest to your location which has the same rules for daylight saving time.'),
+      '#description' => st('Select the default site time zone. If in doubt, choose the timezone that is closest to your location which has the same rules for daylight saving time.'),
       '#required' => TRUE,
     );
   }
