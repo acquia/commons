@@ -3969,7 +3969,7 @@ function commons_core_views_default_views() {
   ));
   $handler->override_option('fields', array(
     'type' => array(
-      'label' => 'Type',
+      'label' => '',
       'alter' => array(
         'alter_text' => 0,
         'text' => '',
@@ -3992,12 +3992,15 @@ function commons_core_views_default_views() {
       'hide_empty' => 0,
       'empty_zero' => 0,
       'link_to_node' => 0,
-      'machine_name' => 0,
+      'machine_name' => 1,
       'exclude' => 0,
       'id' => 'type',
       'table' => 'node',
       'field' => 'type',
       'relationship' => 'none',
+      'override' => array(
+        'button' => 'Override',
+      ),
     ),
     'title' => array(
       'id' => 'title',
@@ -4426,7 +4429,73 @@ function commons_core_views_default_views() {
     ),
   ));
   $handler = $view->new_display('page', 'My content', 'page');
-  $handler->override_option('header', 'These items are items which you\'ve either created or commented on inside your groups');
+  $handler->override_option('relationships', array());
+  $handler->override_option('filters', array(
+    'status' => array(
+      'id' => 'status',
+      'table' => 'node',
+      'field' => 'status',
+      'operator' => '=',
+      'value' => 1,
+      'group' => 0,
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'relationship' => 'none',
+      'expose_button' => array(
+        'button' => 'Expose',
+      ),
+    ),
+    'keys' => array(
+      'operator' => 'optional',
+      'value' => '',
+      'group' => '0',
+      'exposed' => TRUE,
+      'expose' => array(
+        'use_operator' => 0,
+        'operator' => 'keys_op',
+        'identifier' => 'keys',
+        'label' => 'Search',
+        'optional' => 1,
+        'remember' => 0,
+      ),
+      'id' => 'keys',
+      'table' => 'search_index',
+      'field' => 'keys',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'type' => array(
+      'operator' => 'not in',
+      'value' => array(
+        'group' => 'group',
+      ),
+      'group' => '0',
+      'exposed' => TRUE,
+      'expose' => array(
+        'use_operator' => 0,
+        'operator' => 'type_op',
+        'identifier' => 'type',
+        'label' => 'Type',
+        'optional' => 1,
+        'single' => 1,
+        'remember' => 0,
+        'reduce' => 0,
+      ),
+      'id' => 'type',
+      'table' => 'node',
+      'field' => 'type',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+  ));
+  $handler->override_option('header', 'These items are items which you\'ve either created or commented on');
   $handler->override_option('path', 'mycontent/mine');
   $handler->override_option('menu', array(
     'type' => 'tab',
@@ -4463,7 +4532,7 @@ function commons_core_views_default_views() {
   $handler = $view->new_display('page', 'Unread content', 'page_2');
   $handler->override_option('fields', array(
     'type' => array(
-      'label' => 'Type',
+      'label' => '',
       'alter' => array(
         'alter_text' => 0,
         'text' => '',
@@ -4486,12 +4555,15 @@ function commons_core_views_default_views() {
       'hide_empty' => 0,
       'empty_zero' => 0,
       'link_to_node' => 0,
-      'machine_name' => 0,
+      'machine_name' => 1,
       'exclude' => 0,
       'id' => 'type',
       'table' => 'node',
       'field' => 'type',
       'relationship' => 'none',
+      'override' => array(
+        'button' => 'Use default',
+      ),
     ),
     'title' => array(
       'id' => 'title',
