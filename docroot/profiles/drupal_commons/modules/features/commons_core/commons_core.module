@@ -271,11 +271,11 @@ function _commons_core_user_stats_block() {
   
   // Determine total users on the site
   $total = db_result(db_query("SELECT COUNT(uid) FROM {users} WHERE status = 1"));
-  $data[] = t('%members', array('%members' => format_plural($total, '1 user', '@count users')));
+  $data[] = format_plural($total, '1 user', '@count users');
   
   // Determine recently joined users
   $total = db_result(db_query("SELECT COUNT(uid) FROM {users} WHERE status = 1 AND created > %d", strtotime('-' . variable_get('commons_recent_join_interval', '3 months'), time())));
-  $data[] = t('%members', array('%members' => format_plural($total, '1 recently joined member', '@count recently joined members')));
+  $data[] = format_plural($total, '1 recently joined member', '@count recently joined members');
   
   return theme('commons_core_user_stats_block', $data);
 }
