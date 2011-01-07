@@ -4257,7 +4257,9 @@ function commons_core_views_default_views() {
     ),
     'type' => array(
       'operator' => 'not in',
-      'value' => array(),
+      'value' => array(
+        'group' => 'group',
+      ),
       'group' => '0',
       'exposed' => TRUE,
       'expose' => array(
@@ -4483,7 +4485,9 @@ function commons_core_views_default_views() {
     ),
     'type' => array(
       'operator' => 'not in',
-      'value' => array(),
+      'value' => array(
+        'group' => 'group',
+      ),
       'group' => '0',
       'exposed' => TRUE,
       'expose' => array(
@@ -4500,7 +4504,7 @@ function commons_core_views_default_views() {
       'table' => 'node',
       'field' => 'type',
       'override' => array(
-        'button' => 'Override',
+        'button' => 'Use default',
       ),
       'relationship' => 'none',
     ),
