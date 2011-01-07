@@ -4332,7 +4332,6 @@ function commons_core_views_default_views() {
   $handler->override_option('empty', 'There are currently no content items available.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
-  $handler->override_option('items_per_page', 15);
   $handler->override_option('use_pager', '1');
   $handler->override_option('distinct', 1);
   $handler->override_option('style_plugin', 'bulk');
@@ -4813,10 +4812,10 @@ function commons_core_views_default_views() {
       'type' => 'type',
       'title' => 'title',
       'comment_count' => 'title',
+      'teaser' => 'teaser',
       'name' => 'name',
       'group_nid' => 'group_nid',
       'last_updated' => 'last_updated',
-      'timestamp' => 'timestamp',
       'new_comments' => 'new_comments',
     ),
     'info' => array(
@@ -4832,6 +4831,9 @@ function commons_core_views_default_views() {
         'sortable' => 0,
         'separator' => '',
       ),
+      'teaser' => array(
+        'separator' => '',
+      ),
       'name' => array(
         'sortable' => 0,
         'separator' => '',
@@ -4841,9 +4843,6 @@ function commons_core_views_default_views() {
       ),
       'last_updated' => array(
         'sortable' => 0,
-        'separator' => '',
-      ),
-      'timestamp' => array(
         'separator' => '',
       ),
       'new_comments' => array(

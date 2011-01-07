@@ -540,6 +540,13 @@ function commons_core_form_alter(&$form, &$form_state, $form_id) {
       }
     }
   }
+  
+  // Views bulk operations form
+  // Use strstr() because the form_id contains a suffix
+  if (strstr($form_id, 'views_bulk_operations_form')) {
+    // Move operation controls above the content
+    $form['submit']['#weight'] = -100; 
+  }
 }
 
 /**
