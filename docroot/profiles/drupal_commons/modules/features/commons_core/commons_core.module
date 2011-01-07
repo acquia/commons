@@ -2,6 +2,9 @@
 
 include_once('commons_core.features.inc');
 
+// The version of Drupal Commons
+define('DRUPAL_COMMONS_VERSION', 1.2);
+
 /**
  * Implementation of hook_content_default_fields_alter()
  * 
@@ -1382,6 +1385,20 @@ function commons_core_form_tagging_admin_settings_alter(&$form, &$form_state) {
     '#weight' => -5,
     '#default_value' => variable_get('commons_tag_suggestions', ''),
   );
+}
+
+/**
+ * Implementation of hook_requirements()
+ */
+function commons_core_requirements($phase) {
+  if ($phase == 'runtime') {
+    return array(array(
+      'title' => t('Drupal Commons'),
+      'value' => DRUPAL_COMMONS_VERSION,
+      'description' => t('The current version of Drupal Commons'),
+      'severity' => REQUIREMENT_INFO,
+    ));
+  }
 }
 
 /**
