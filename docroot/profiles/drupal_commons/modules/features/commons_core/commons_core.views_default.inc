@@ -1279,6 +1279,88 @@ function commons_core_views_default_views() {
       'relationship' => 'none',
     ),
   ));
+  $handler->override_option('filters', array(
+    'status' => array(
+      'id' => 'status',
+      'table' => 'node',
+      'field' => 'status',
+      'operator' => '=',
+      'value' => 1,
+      'group' => 0,
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'relationship' => 'none',
+      'expose_button' => array(
+        'button' => 'Expose',
+      ),
+    ),
+    'title' => array(
+      'operator' => 'contains',
+      'value' => '',
+      'group' => 0,
+      'exposed' => TRUE,
+      'expose' => array(
+        'use_operator' => 0,
+        'operator' => 'title_oper',
+        'identifier' => 'title',
+        'label' => 'Group name',
+        'optional' => 1,
+        'remember' => 0,
+      ),
+      'case' => 0,
+      'id' => 'title',
+      'table' => 'node',
+      'field' => 'title',
+      'relationship' => 'none',
+      'expose_button' => array(
+        'button' => 'Hide',
+      ),
+      'override' => array(
+        'button' => 'Override',
+      ),
+    ),
+    'type_groups_all' => array(
+      'id' => 'type_groups_all',
+      'table' => 'og',
+      'field' => 'type_groups_all',
+      'operator' => '=',
+      'value' => '',
+      'group' => 0,
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'relationship' => 'none',
+      'expose_button' => array(
+        'button' => 'Expose',
+      ),
+    ),
+    'directory' => array(
+      'id' => 'directory',
+      'table' => 'og',
+      'field' => 'directory',
+      'operator' => '=',
+      'value' => 1,
+      'group' => 0,
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'relationship' => 'none',
+      'expose_button' => array(
+        'button' => 'Expose',
+      ),
+    ),
+  ));
+  $handler->override_option('access', array(
+    'type' => 'perm',
+    'perm' => 'view content rss feeds',
+  ));
   $handler->override_option('items_per_page', 20);
   $handler->override_option('style_plugin', 'rss');
   $handler->override_option('style_options', array(
@@ -1306,6 +1388,7 @@ function commons_core_views_default_views() {
   ));
   $handler->override_option('displays', array(
     'page' => 'page',
+    'page_1' => 'page_1',
     'default' => 0,
   ));
   $handler->override_option('sitename_title', FALSE);
