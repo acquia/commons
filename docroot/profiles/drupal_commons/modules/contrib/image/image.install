@@ -1,5 +1,5 @@
 <?php
-// $Id: image.install,v 1.33 2009/09/05 15:12:00 joachim Exp $
+// $Id: image.install,v 1.33.2.3 2010/08/25 13:35:11 joachim Exp $
 
 /**
  * Implementation of hook_schema().
@@ -73,7 +73,7 @@ function image_requirements($phase) {
       $requirements['image_toolkit'] = array(
         'value' => t('The %toolkit_name toolkit is installed.', array('%toolkit_name' => $toolkit)),
         'severity' => REQUIREMENT_OK,
-      ); 
+      );
     }
     else {
       $requirements['image_toolkit'] = array(
@@ -86,7 +86,7 @@ function image_requirements($phase) {
 
 
     // File paths
-    $image_path = file_create_path(file_directory_path() .'/'. variable_get('image_default_path', 'images'));
+    $image_path = file_create_path(file_directory_path() . '/' . variable_get('image_default_path', 'images'));
     $temp_path = $image_path . '/temp';
     if (!file_check_directory($image_path, FILE_CREATE_DIRECTORY)) {
       $requirements['image_dirs'] = array(
@@ -113,7 +113,6 @@ function image_requirements($phase) {
 
   return $requirements;
 }
-
 
 /**
  * Upgrade to the new image_sizes variable format.
@@ -155,33 +154,33 @@ function image_update_4() {
   $ret = array();
 
   // Locate image files that aren't stored in the files directory.
-  $files_path = rtrim(file_directory_path(), '\\/');  
+  $files_path = rtrim(file_directory_path(), '\\/');
   $result = db_query("SELECT f.nid, f.fid, f.filename, f.filepath FROM {files} f INNER JOIN {node} n ON f.nid = n.nid WHERE n.type = 'image' AND f.filename = '_original' AND NOT f.filepath LIKE '%s/%%'", $files_path);
   while ($file = db_fetch_object($result)) {
     $file->filepath = file_create_path($file->filepath);
     if (file_exists($file->filepath)) {
       // File exists, make sure there's not a duplicate record.
       if (db_result(db_query("SELECT COUNT(*) FROM {files} f INNER JOIN {node} n ON f.nid = n.nid WHERE n.type = 'image' AND filepath = '%s' AND fid <> %d", $file->filepath, $file->fid))) {
-        $ret[] = update_sql("DELETE FROM {files} WHERE fid = ". (int)$file->fid);
-        $ret[] = update_sql("DELETE FROM {file_revisions} WHERE fid = ". (int)$file->fid);
+        $ret[] = update_sql("DELETE FROM {files} WHERE fid = " . (int) $file->fid);
+        $ret[] = update_sql("DELETE FROM {file_revisions} WHERE fid = " . (int) $file->fid);
       }
       else {
-        $ret[] = update_sql("UPDATE {files} SET filepath = '". db_escape_string($file->filepath) ."' WHERE fid = ". (int)$file->fid);
+        $ret[] = update_sql("UPDATE {files} SET filepath = '" . db_escape_string($file->filepath) . "' WHERE fid = " . (int) $file->fid);
       }
     }
     else {
-      $ret[] = update_sql("DELETE FROM {files} WHERE fid = ". (int)$file->fid);
-      $ret[] = update_sql("DELETE FROM {file_revisions} WHERE fid = ". (int)$file->fid);
+      $ret[] = update_sql("DELETE FROM {files} WHERE fid = " . (int) $file->fid);
+      $ret[] = update_sql("DELETE FROM {file_revisions} WHERE fid = " . (int) $file->fid);
     }
   }
 
   // Check for and remove {files} with duplicate filenames.
   $result = db_query("SELECT f1.fid, f1.nid, f1.filepath FROM {files} f1 INNER JOIN {node} n ON f1.nid = n.nid  WHERE n.type = 'image' AND EXISTS ( SELECT * FROM {files} f2 WHERE f2.filepath = f1.filepath AND f1.fid <> f2.fid AND f1.fid < f2.fid )");
   while ($file = db_fetch_object($result)) {
-    $ret[] = update_sql("DELETE FROM {files} WHERE fid = ". (int)$file->fid);
+    $ret[] = update_sql("DELETE FROM {files} WHERE fid = " . (int) $file->fid);
   }
 
-  // Delete rows from {file_revisions} that don't have matching {files}. 
+  // Delete rows from {file_revisions} that don't have matching {files}.
   $ret[] = update_sql("DELETE FROM {file_revisions} WHERE NOT EXISTS (SELECT * FROM {files} WHERE {files}.fid = {file_revisions}.fid)");
 
   return $ret;
@@ -215,7 +214,7 @@ function image_update_5() {
       $new_key = drupal_strtolower(drupal_substr($old_key, 0, 32));
       // Update the files.
       if ($new_key != $old_key) {
-        $ret[] = update_sql("UPDATE {files} f INNER JOIN {node} n ON f.nid = n.nid SET f.filename = '". db_escape_string($new_key) ."' WHERE n.type = 'image' AND filename = '". db_escape_string($old_key) ."'");
+        $ret[] = update_sql("UPDATE {files} f INNER JOIN {node} n ON f.nid = n.nid SET f.filename = '" . db_escape_string($new_key) . "' WHERE n.type = 'image' AND filename = '" . db_escape_string($old_key) . "'");
       }
       $new_sizes[$new_key] = $size;
     }
@@ -228,20 +227,20 @@ function image_update_5() {
 
 /**
  * Move image files into their own table.
- * 
+ *
  * First update for the 5.2 branch, using the update naming convention layed
  * out in: http://drupal.org/node/114774#update-n
  */
 function image_update_5200() {
   $ret = array();
-  
+
   // Versions prior to 5 had an {image} table which is no longer used on 5.1
   // but not removed.
   if (db_table_exists('image')) {
-    db_rename_table($ret, 'image', 'image_old');    
-    // Notify the user that their table has been moved. 
+    db_rename_table($ret, 'image', 'image_old');
+    // Notify the user that their table has been moved.
     drupal_set_message('Your existing {image} table has been renamed {image_old}.');
-  }  
+  }
 
   switch ($GLOBALS['db_type']) {
     case 'mysql':
@@ -254,6 +253,7 @@ function image_update_5200() {
           INDEX image_fid(`fid`)
         ) /*!40100 DEFAULT CHARACTER SET utf8 */;");
       break;
+
     case 'pgsql':
       $ret[] = update_sql("CREATE TABLE {image} (
           nid int_unsigned NOT NULL,
@@ -267,18 +267,18 @@ function image_update_5200() {
   // Copy image files records into the new table.
   drupal_load('module', 'image');
   $args = array_map('db_escape_string', array_keys(image_get_sizes()));
-  $cond = " IN ('". implode("', '",  $args) ."')";
+  $cond = " IN ('" . implode("', '", $args) . "')";
 
   // Upgrade from 5.x-1.x to 5.x-2.x.
-  // Group by clause prevents duplicate insertions from bad data:
+  // IGNORE prevents duplicate insertions from bad data:
   // @see http://drupal.org/node/207557
   if (db_table_exists('file_revisions')) {
-    $ret[] = update_sql("INSERT INTO {image} SELECT DISTINCT f.nid, f.fid, f.filename FROM {files} f INNER JOIN {node} n ON f.nid = n.nid WHERE n.type = 'image' AND f.filename" . $cond . " GROUP BY nid,filename");
+    $ret[] = update_sql("INSERT IGNORE INTO {image} SELECT DISTINCT f.nid, f.fid, f.filename FROM {files} f INNER JOIN {node} n ON f.nid = n.nid WHERE n.type = 'image' AND f.filename" . $cond);
     $ret[] = update_sql("DELETE FROM {file_revisions} WHERE EXISTS (SELECT * FROM {image} WHERE {image}.fid = {file_revisions}.fid)");
   }
   // Upgrade from 5.x to 6.x-1.x.
   else {
-    $ret[] = update_sql("INSERT INTO {image} SELECT DISTINCT u.nid, f.fid, f.filename FROM {upload} u INNER JOIN {files} f ON u.fid = f.fid INNER JOIN {node} n ON u.nid = n.nid WHERE n.type = 'image' AND f.filename" . $cond . " GROUP BY nid,filename");
+    $ret[] = update_sql("INSERT IGNORE INTO {image} SELECT DISTINCT u.nid, f.fid, f.filename FROM {upload} u INNER JOIN {files} f ON u.fid = f.fid INNER JOIN {node} n ON u.nid = n.nid WHERE n.type = 'image' AND f.filename" . $cond);
     $ret[] = update_sql("DELETE FROM {upload} WHERE EXISTS (SELECT * FROM {image} WHERE {image}.fid = {upload}.fid)");
   }
 
@@ -295,7 +295,7 @@ function image_update_5201() {
     $sizes[$key]['operation'] = 'scale';
   }
   variable_set('image_sizes', $sizes);
-  
+
   return array();
 }
 
@@ -316,19 +316,19 @@ function image_update_6100() {
     'not null' => TRUE,
     'default' => 0,
   ));
-  
+
   /**
    * We remove and re-add primary keys and indexes because the column types
    * are changed.
-   * Sometimes however these don't exist in the first place (@see 
-   * <http://drupal.org/node/562810>; the @ takes care of suppressing the 
+   * Sometimes however these don't exist in the first place (@see
+   * <http://drupal.org/node/562810>; the @ takes care of suppressing the
    * error message this causes.
-   */  
+   */
   @db_drop_primary_key($ret, 'image');
   db_add_primary_key($ret, 'image', array('nid', 'image_size'));
   @db_drop_index($ret, 'image', 'image_fid');
   db_add_index($ret, 'image', 'fid', array('fid'));
-  
+
   // Notify the user that they may get harmless fail messages here.
   $ret[] = array('success' => TRUE, 'query' => t('If you see a message of the form "Failed: ALTER TABLE {image} DROP PRIMARY KEY" or "DROP INDEX image_fid" here it is harmless.'));
   return $ret;
@@ -376,3 +376,14 @@ function image_update_6103() {
   }
   return $ret;
 }
+
+/**
+ * Fix default value for {image}.image_size, introduced in image_update_5200().
+ */
+function image_update_6104() {
+  $ret = array();
+  $query = "ALTER TABLE {image} ALTER COLUMN image_size SET DEFAULT ''";
+  $ret[] = update_sql($query);
+  return $ret;
+}
+

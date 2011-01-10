@@ -1,12 +1,13 @@
 <?php
-// $Id: image_gallery_handler_field_gallery_count.inc,v 1.1 2009/08/27 12:10:57 joachim Exp $
+// $Id: image_gallery_handler_field_gallery_count.inc,v 1.1.2.1 2010/08/03 17:43:00 sun Exp $
 
 /**
  * Views handler for Image gallery count field. This counts all the nodes in
  * the gallery, including descendant galleries, using taxonomy.module's
  * taxonomy_term_count_nodes.
  */
-class image_gallery_handler_field_gallery_count extends views_handler_field_taxonomy {  
+class image_gallery_handler_field_gallery_count extends views_handler_field_taxonomy {
+
   /**
    * Override query() so we don't query: fake field.
    */
@@ -14,7 +15,7 @@ class image_gallery_handler_field_gallery_count extends views_handler_field_taxo
     $this->ensure_my_table();
     $this->add_additional_fields();
   }
-  
+
   /**
    * Return field html.
    */

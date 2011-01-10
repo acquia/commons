@@ -1,5 +1,5 @@
 <?php
-// $Id: image_attach.install,v 1.22 2009/09/07 13:09:33 joachim Exp $
+// $Id: image_attach.install,v 1.22.2.1 2010/08/03 17:43:00 sun Exp $
 
 /**
  * Implementation of hook_schema().
@@ -106,19 +106,19 @@ function image_attach_update_6100() {
     'not null' => TRUE,
     'default' => 0,
   ));
-  
+
   /**
    * We remove and re-add primary keys and indexes because the column types
    * are changed.
-   * Sometimes however these don't exist in the first place (@see 
-   * <http://drupal.org/node/562810>; the @ takes care of suppressing the 
+   * Sometimes however these don't exist in the first place (@see
+   * <http://drupal.org/node/562810>; the @ takes care of suppressing the
    * error message this causes.
-   */  
+   */
   @db_drop_primary_key($ret, 'image_attach');
   db_add_primary_key($ret, 'image_attach', array('nid'));
   @db_drop_index($ret, 'image_attach', 'iid');
   db_add_index($ret, 'image_attach', 'iid', array('iid'));
-  
+
   // Notify the user that they may get harmless fail messages here.
   $ret[] = array('success' => TRUE, 'query' => t('If you see a message of the form "Failed: ALTER TABLE {image_attach} DROP PRIMARY KEY" or "DROP INDEX iid" here it is harmless.'));
   return $ret;
@@ -133,7 +133,7 @@ function image_attach_update_6101() {
   $ret = array();
   $ret[] = update_sql("DELETE FROM {blocks} WHERE module = 'image_attach' AND delta = '0'");
 
-  return $ret;  
+  return $ret;
 }
 
 /**

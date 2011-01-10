@@ -1,5 +1,5 @@
 <?php
-// $Id: image.admin.inc,v 1.9 2009/10/13 08:38:52 joachim Exp $
+// $Id: image.admin.inc,v 1.9.2.2 2010/08/03 17:43:00 sun Exp $
 
 /**
  * Menu callback; Form builder function for image settings.
@@ -12,7 +12,7 @@ function image_admin_settings() {
 
   $form['files'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Image file settings')
+    '#title' => t('Image file settings'),
   );
   $form['files']['image_default_path'] = array(
     '#type' => 'textfield',
@@ -50,7 +50,7 @@ function image_admin_settings() {
   // Add some empty rows for user defined sizes.
   $num_sizes = count($sizes);
   for ($i = $num_sizes; $i < ($num_sizes + 3); $i++) {
-    $sizes['new'. $i] = array(
+    $sizes['new' . $i] = array(
       'label' => '',
       'operation' => 'scale',
       'width' => '',
@@ -67,7 +67,7 @@ function image_admin_settings() {
       '#size' => 25,
       '#maxlength' => 32,
     );
-    
+
     // For required sizes, set the value and disable the field.
     if (_image_is_required_size($key)) {
       $form['image_sizes'][$key]['label']['#disabled'] = TRUE;
@@ -109,27 +109,28 @@ function image_admin_settings() {
  * Form validation handler for image admin settings form.
  */
 function image_admin_settings_validate($form, &$form_state) {
-  // Check that the sizes provided have the required amount of information.  
-  foreach (element_children($form['image_sizes']) as $key) {
+  // Check that the sizes provided have the required amount of information.
+  $image_sizes = $form_state['values']['image_sizes'];
+  foreach (element_children($image_sizes) as $key) {
     // If there's a label they must provide at either a height or width.
-    if ($key != IMAGE_ORIGINAL && !empty($form['image_sizes'][$key]['label']['#value'])) {
-      if (empty($form['image_sizes'][$key]['width']['#value']) && empty($form['image_sizes'][$key]['height']['#value'])) {
+    if ($key != IMAGE_ORIGINAL && !empty($image_sizes[$key]['label'])) {
+      if (empty($image_sizes[$key]['width']) && empty($image_sizes[$key]['height'])) {
         form_set_error("image_sizes][$key][width", t('You must specify width, height or both dimensions.'));
       }
     }
   }
-    
+
   // Try to create directories and warn the user of errors.
   $image_default_path = $form_state['values']['image_default_path'];
   $image_path = file_create_path(file_directory_path() . '/' . $image_default_path);
-  $temp_path = $image_path .'/temp';
+  $temp_path = $image_path . '/temp';
 
   if (!file_check_directory($image_path, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS, 'image_default_path')) {
     form_set_error('image_default_path', t('You have specified an invalid directory.'));
   }
   if (!file_check_directory($temp_path, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS, 'image_default_path')) {
-    form_set_error('image_default_path', t('You have specified an invalid directory.'));    
-  }  
+    form_set_error('image_default_path', t('You have specified an invalid directory.'));
+  }
 }
 
 /**

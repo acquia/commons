@@ -1,5 +1,5 @@
 <?php
-// $Id: image_gallery.module,v 1.46 2009/09/04 13:24:41 joachim Exp $
+// $Id: image_gallery.module,v 1.46.2.1 2010/08/03 17:43:00 sun Exp $
 
 define('IMAGE_GALLERY_SORT_CREATE_DESC', 0);
 define('IMAGE_GALLERY_SORT_CREATE_ASC', 1);
@@ -21,6 +21,7 @@ function image_gallery_help($path, $arg) {
       $output .= '</ul>';
       $output .= '<p>' . t('For more information, see the online handbook entry for <a href="@image-url">Image module</a> and its related submodules.', array('@image-url' => 'http://drupal.org/handbook/modules/image')) . '</p>';
       return $output;
+
     case 'admin/content/image':
       $output = '<p>' . t('<a href="@image-gallery-url">Image galleries</a> can be used to organize and present groups of images. Galleries may be nested. To add a new gallery click the "add gallery" tab.', array('@image-gallery-url' => url('image'))) . '</p>';
       return $output;
@@ -106,7 +107,7 @@ function image_gallery_taxonomy($op, $type, $array) {
  * Implementation of hook_term_path().
  */
 function image_gallery_term_path($term) {
-  return 'image/tid/'. $term->tid;
+  return 'image/tid/' . $term->tid;
 }
 
 /**
@@ -116,19 +117,19 @@ function image_gallery_nodeapi(&$node, $op, $teaser = NULL, $page = NULL) {
   switch ($op) {
     case 'view':
       if ($page && !$teaser && $node->type == 'image') {
-        $vid = _image_gallery_get_vid();
+        $vid   = _image_gallery_get_vid();
         $terms = taxonomy_node_get_terms_by_vocabulary($node, $vid);
-        $term = array_pop($terms);
+        $term  = array_pop($terms);
         if ($term) {
           $vocabulary = taxonomy_vocabulary_load($vid);
           // Breadcrumb navigation
-          $breadcrumb = array();
+          $breadcrumb   = array();
           $breadcrumb[] = l(t('Home'), NULL);
           $breadcrumb[] = l($vocabulary->name, 'image');
           if ($parents = taxonomy_get_parents_all($term->tid)) {
             $parents = array_reverse($parents);
             foreach ($parents as $parent) {
-              $breadcrumb[] = l($parent->name, 'image/tid/'. $parent->tid);
+              $breadcrumb[] = l($parent->name, 'image/tid/' . $parent->tid);
             }
           }
           drupal_set_breadcrumb($breadcrumb);
@@ -163,8 +164,8 @@ function image_gallery_theme() {
  */
 function theme_image_gallery_count($count) {
   return format_plural(
-    $count, 
-    'There is 1 image in this gallery', 
+    $count,
+    'There is 1 image in this gallery',
     'There are @count images in this gallery'
   );
 }
@@ -223,6 +224,7 @@ function _image_gallery_get_vid() {
 function image_gallery_views_api() {
   return array(
     'api' => 2,
-    'path' => drupal_get_path('module', 'image_gallery') .'/views',
+    'path' => drupal_get_path('module', 'image_gallery') . '/views',
   );
 }
+

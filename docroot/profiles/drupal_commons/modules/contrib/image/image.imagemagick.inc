@@ -1,5 +1,5 @@
 <?php
-// $Id: image.imagemagick.inc,v 1.24 2009/03/06 01:40:09 sun Exp $
+// $Id: image.imagemagick.inc,v 1.24.2.1 2010/08/03 17:43:00 sun Exp $
 
 /**
  * Return information about the imagemagick toolkit.
@@ -37,14 +37,14 @@ function image_imagemagick_settings() {
 }
 
 function _image_imagemagick_build_version($form, $form_element) {
-  // Don't check the path when another toolkit is being selected.  
+  // Don't check the path when another toolkit is being selected.
   if (!isset($form['#post']['image_toolkit']) || $form['#post']['image_toolkit'] == 'imagemagick') {
     $valid = _image_imagemagick_check_path($form_element['values']['image_imagemagick_convert'], 'image_imagemagick_convert');
     if ($valid) {
       _image_imagemagick_convert_exec('-version', $output, $errors);
       $form['imagemagick_binary']['version'] = array(
         '#type' => 'item',
-        '#value' => '<pre>'. check_plain(trim($output)) .'</pre>',
+        '#value' => '<pre>' . check_plain(trim($output)) . '</pre>',
       );
     }
   }
@@ -78,12 +78,13 @@ function _image_imagemagick_check_path($path, $attach_error_to = FALSE) {
  *   String containing the path to the image that is being processed.
  * @param $args
  *   Array containing ImageMagick options.
+ *
  * @return
  *   Array of modified arguments.
  */
 function _image_imagemagick_alter_invoke($op, $filepath, $args) {
   foreach (module_implements('imagemagick_alter') as $module) {
-    $function = $module .'_imagemagick_alter'; 
+    $function = $module . '_imagemagick_alter';
     $function($op, $filepath, $args);
   }
   return $args;
@@ -93,7 +94,7 @@ function _image_imagemagick_alter_invoke($op, $filepath, $args) {
  * Resize an image to the given width and height.
  */
 function image_imagemagick_resize($source, $dest, $width, $height) {
-  $args = array('resize' => '-resize '. (int) $width .'x'. (int) $height .'!');
+  $args = array('resize' => '-resize ' . (int) $width . 'x' . (int) $height . '!');
   $args = _image_imagemagick_alter_invoke('resize', $source, $args);
   return _image_imagemagick_convert($source, $dest, $args);
 }
@@ -103,8 +104,8 @@ function image_imagemagick_resize($source, $dest, $width, $height) {
  */
 function image_imagemagick_rotate($source, $dest, $degrees, $bg_color = 0x000000) {
   $args = array(
-    'rotate' => '-rotate '. (float) $degrees,
-    'background' => '-background #'. str_pad(dechex($bg_color), 6, 0),
+    'rotate' => '-rotate ' . (float) $degrees,
+    'background' => '-background #' . str_pad(dechex($bg_color), 6, 0),
   );
   $args = _image_imagemagick_alter_invoke('rotate', $source, $args);
   return _image_imagemagick_convert($source, $dest, $args);
@@ -114,7 +115,7 @@ function image_imagemagick_rotate($source, $dest, $degrees, $bg_color = 0x000000
  * Crop an image to the specified dimensions.
  */
 function image_imagemagick_crop($source, $dest, $x, $y, $width, $height) {
-  $args = array('crop' => '-crop '. (int) $width .'x'. (int) $height .'+'. (int) $x .'+'. (int) $y .'!');
+  $args = array('crop' => '-crop ' . (int) $width . 'x' . (int) $height . '+' . (int) $x . '+' . (int) $y . '!');
   $args = _image_imagemagick_alter_invoke('crop', $source, $args);
   return _image_imagemagick_convert($source, $dest, $args);
 }
@@ -147,15 +148,15 @@ function _image_imagemagick_convert_exec($command_args, &$output, &$errors) {
     // http://us3.php.net/manual/en/function.exec.php#56599
     // Use /D to run the command from PHP's current working directory so the
     // file paths don't have to be absolute.
-    $convert_path = 'start "window title" /D'. escapeshellarg(getcwd()) .' /B '. escapeshellarg($convert_path);
+    $convert_path = 'start "window title" /D' . escapeshellarg(getcwd()) . ' /B ' . escapeshellarg($convert_path);
   }
 
   $descriptors = array(
     0 => array('pipe', 'r'), // stdin
     1 => array('pipe', 'w'), // stdout
-    2 => array('pipe', 'w')  // stderr
+    2 => array('pipe', 'w'), // stderr
   );
-  if ($h = proc_open($convert_path .' '. $command_args, $descriptors, $pipes)) {
+  if ($h = proc_open($convert_path . ' ' . $command_args, $descriptors, $pipes)) {
     $output = '';
     while (!feof($pipes[1])) {
       $output .= fgets($pipes[1]);
@@ -168,7 +169,7 @@ function _image_imagemagick_convert_exec($command_args, &$output, &$errors) {
 
     // Display debugging information to authorized users.
     if (variable_get('image_imagemagick_debugging', FALSE) && user_access('administer site configuration')) {
-      drupal_set_message(t('ImageMagick command: @command', array('@command' => $convert_path .' '. $command_args)));
+      drupal_set_message(t('ImageMagick command: @command', array('@command' => $convert_path . ' ' . $command_args)));
       drupal_set_message(t('ImageMagick output: @output', array('@output' => $output)));
     }
 

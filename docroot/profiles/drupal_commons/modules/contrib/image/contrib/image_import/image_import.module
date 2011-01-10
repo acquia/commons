@@ -1,5 +1,5 @@
 <?php
-// $Id: image_import.module,v 1.21 2009/03/09 02:57:25 sun Exp $
+// $Id: image_import.module,v 1.21.2.1 2010/08/03 17:43:00 sun Exp $
 
 /**
  * Implementation of hook_help().
@@ -7,7 +7,12 @@
 function image_import_help($path, $arg) {
   switch ($path) {
     case 'admin/content/image_import':
-      return '<p>'. t("Import multiple image files and save them as image nodes. The files will be moved from their location into the image module's files directory. Searching for image files in %dirpath.", array('%dirpath' => realpath(variable_get('image_import_path', '')))) .'</p>';
+      $output = '<p>';
+      $output .= t("Import multiple image files and save them as image nodes. The files will be moved from their location into the image module's files directory. Searching for image files in %dirpath.", array(
+        '%dirpath' => realpath(variable_get('image_import_path', '')),
+      ));
+      $output .= '</p>';
+      return $output;
   }
 }
 

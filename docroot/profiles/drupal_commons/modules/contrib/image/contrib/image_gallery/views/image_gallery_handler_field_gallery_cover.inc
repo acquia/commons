@@ -1,5 +1,5 @@
 <?php
-// $Id: image_gallery_handler_field_gallery_cover.inc,v 1.1 2009/08/27 12:10:57 joachim Exp $
+// $Id: image_gallery_handler_field_gallery_cover.inc,v 1.1.2.1 2010/08/03 17:43:00 sun Exp $
 
 /**
  * Parent class for field handlers that gives us a gallery cover.
@@ -16,6 +16,7 @@
  *   grabbing the query from another view.
  */
 class image_gallery_handler_field_gallery_cover extends views_handler_field_taxonomy {
+
   /**
    * Constructor to provide additional fields to add.
    */
@@ -68,10 +69,10 @@ class image_gallery_handler_field_gallery_cover extends views_handler_field_taxo
       // Child handlers should replace this text with something more relevant
       // to what they do.
       '#description' => theme('advanced_help_topic', 'image_gallery', 'descendants') .
-        t('How to get data from subgalleries: either only select from this gallery itself, or consider subgalleries all together, or recurse into subgalleries if the gallery itself is empty.'),
+      t('How to get data from subgalleries: either only select from this gallery itself, or consider subgalleries all together, or recurse into subgalleries if the gallery itself is empty.'),
       '#options' => array(
-        'single'  => t('Only select from this gallery'),
-        'flat'    => t('Consider subgalleries, flattened.'),
+        'single' => t('Only select from this gallery'),
+        'flat' => t('Consider subgalleries, flattened.'),
         'recurse' => t('Consider subgalleries, recursively. (Warning: this can produce many queries per row if your parent galleries are empty!).'),
       ),
       '#default_value' => $this->options['descendants'],
@@ -113,7 +114,7 @@ class image_gallery_handler_field_gallery_cover extends views_handler_field_taxo
         $this->basic_query = $this->get_cover_node_nid_query();
       }
     }
-    
+
     // If we don't have a query, return NULL now to prevent SQL errors.
     if (is_null($this->basic_query)) {
       return NULL;
@@ -142,6 +143,7 @@ class image_gallery_handler_field_gallery_cover extends views_handler_field_taxo
         $where_clause = "tn.tid = $tid ";
         $query = str_replace('***WHERE_CLAUSE***', $where_clause, $this->basic_query);
         break;
+
       // Flat: all descendant galleries considered for the cover query.
       case 'flat':
         if ($depth == 'all') {
@@ -231,3 +233,4 @@ class image_gallery_handler_field_gallery_cover extends views_handler_field_taxo
     return $nid;
   }
 }
+

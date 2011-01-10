@@ -1,5 +1,5 @@
 <?php
-// $Id: image.module,v 1.322 2009/09/13 20:21:04 joachim Exp $
+// $Id: image.module,v 1.322.2.4 2010/08/18 16:40:06 joachim Exp $
 
 define('IMAGE_ORIGINAL', '_original');
 define('IMAGE_PREVIEW', 'preview');
@@ -73,7 +73,7 @@ function image_node_info() {
       'name' => t('Image'),
       'module' => 'image',
       'description' => t('An image (with thumbnail). This is ideal for publishing photographs or screenshots.'),
-    )
+    ),
   );
 }
 
@@ -145,10 +145,10 @@ function image_menu() {
  * Implements hook_cron. (deletes old temp images)
  */
 function image_cron() {
-  $path = file_directory_path() .'/'. variable_get('image_default_path', 'images') .'/temp';
+  $path = file_directory_path() . '/' . variable_get('image_default_path', 'images') . '/temp';
   $files = file_scan_directory(file_create_path($path), '.*');
   foreach ($files as $file => $info) {
-    if (time() - filemtime($file) > 60*60*6) {
+    if (time() - filemtime($file) > 60 * 60 * 6) {
       file_delete($file);
     }
   }
@@ -201,8 +201,8 @@ function image_file_download($filename) {
       unset($images[IMAGE_ORIGINAL]);
       if (user_access('view original images') || in_array($filepath, $images)) {
         return array(
-          'Content-Type: '. mime_header_encode($file->filemime),
-          'Content-Length: '. (int) $file->filesize,
+          'Content-Type: ' . mime_header_encode($file->filemime),
+          'Content-Length: ' . (int) $file->filesize,
         );
       }
     }
@@ -225,24 +225,24 @@ function image_link($type, $node, $main = 0) {
         // but other sizes will not be set.
         if (isset($node->images[$key]) && $node->images[$key] != $node->images[$request]) {
           if ($size['link'] == IMAGE_LINK_NEW) {
-            $links['image_size_'. $key] = array(
+            $links['image_size_' . $key] = array(
               'title' => t($size['label']),
               'href' => "image/view/{$node->nid}/$key",
               'attributes' => array('target' => '_blank'),
             );
           }
           else {
-            $links['image_size_'. $key] = array(
+            $links['image_size_' . $key] = array(
               'title' => t($size['label']),
-              'href' => 'node/'. $node->nid,
-              'query' => 'size='. urlencode($key)
+              'href' => 'node/' . $node->nid,
+              'query' => 'size=' . urlencode($key),
             );
           }
         }
       }
     }
     if (!user_access('view original images')) {
-      unset($links['image_size_'. IMAGE_ORIGINAL]);
+      unset($links['image_size_' . IMAGE_ORIGINAL]);
     }
   }
 
@@ -263,7 +263,7 @@ function image_block($op = 'list', $delta = 0, $edit = array()) {
 
     case 'configure':
       $form['number_images'] = array(
-        '#type' => 'select', 
+        '#type' => 'select',
         '#title' => t('Number of images to display'),
         '#options' => drupal_map_assoc(range(1, 99)),
         '#default_value' => variable_get("image_block_{$delta}_number_images", 1),
@@ -324,7 +324,7 @@ function image_form(&$node, $form_state) {
     '#size' => 60,
     '#maxlength' => 128,
     '#required' => TRUE,
-    '#default_value' => $node->title
+    '#default_value' => $node->title,
   );
 
   $form['images']['#tree'] = TRUE;
@@ -384,7 +384,7 @@ function image_form_validate($form, &$form_state) {
 
   // New image uploads need to be saved in images/temp in order to be viewable
   // during node preview.
-  $temporary_file_path = file_create_path(file_directory_path() . '/' . variable_get('image_default_path', 'images') .'/temp');
+  $temporary_file_path = file_create_path(file_directory_path() . '/' . variable_get('image_default_path', 'images') . '/temp');
 
   if ($file = file_save_upload('image', $validators, $temporary_file_path)) {
     // Resize the original.
@@ -476,14 +476,14 @@ function image_load(&$node) {
     // There's no original image, we're in trouble...
     return;
   }
-  
+
   if ((arg(0) != 'batch') && (strpos($_GET['q'], 'admin/content/node') === FALSE)) {
     _image_build_derivatives_if_needed($node);
   }
 }
-  
+
 /**
- * Rebuild derivatives if needed. Helper function for image_load(). 
+ * Rebuild derivatives if needed. Helper function for image_load().
  */
 function _image_build_derivatives_if_needed(&$node) {
   $node->rebuild_images = FALSE;
@@ -523,9 +523,9 @@ function _image_build_derivatives_if_needed(&$node) {
   // Correct any problems with the derivative images.
   if ($node->rebuild_images) {
     // Possibly TODO: calling a hook implementation here isn't very elegant.
-    // but the code there is tangled and it works, so maybe leave it ;)    
+    // but the code there is tangled and it works, so maybe leave it ;)
     image_update($node);
-    watchdog('image', 'Derivative images were regenerated for %title.', array('%title' => $node->title), WATCHDOG_INFO, l(t('view'), 'node/'. $node->nid));
+    watchdog('image', 'Derivative images were regenerated for %title.', array('%title' => $node->title), WATCHDOG_INFO, l(t('view'), 'node/' . $node->nid));
   }
 }
 
@@ -538,7 +538,7 @@ function image_insert($node) {
   if (empty($node->new_file) && !empty($node->translation_source)) {
     db_query("INSERT INTO {image} (nid, fid, image_size) SELECT %d, fid, image_size FROM {image} WHERE nid = %d", $node->nid, $node->translation_source->nid);
     return;
-  }    
+  }
 
   // Derivative images that aren't needed are set to the original file. Make
   // note of the current path before calling _image_insert() because if it's
@@ -623,9 +623,9 @@ function image_update(&$node) {
 function image_delete($node) {
   $result = db_query('SELECT i.fid, f.filepath FROM {image} i INNER JOIN {files} f ON i.fid = f.fid WHERE i.nid = %d', $node->nid);
   while ($file = db_fetch_object($result)) {
-    db_query("DELETE FROM {image} WHERE nid = %d AND fid = %d", $node->nid, $file->fid);  
+    db_query("DELETE FROM {image} WHERE nid = %d AND fid = %d", $node->nid, $file->fid);
     _image_file_remove($file);
-  }  
+  }
 }
 
 /**
@@ -637,7 +637,7 @@ function image_display(&$node, $label = IMAGE_PREVIEW, $attributes = array()) {
   }
 
   $image_info = image_get_info(file_create_path($node->images[$label]));
-  $attributes['class'] = "image image-$label ". (isset($attributes['class']) ? $attributes['class'] : "");
+  $attributes['class'] = "image image-$label " . (isset($attributes['class']) ? $attributes['class'] : "");
   // Only output width/height attributes if image_get_info() was able to detect
   // the image dimensions, since certain browsers interpret an empty attribute
   // value as zero.
@@ -670,7 +670,7 @@ function image_fetch($nid = 0, $size = IMAGE_PREVIEW) {
 
       if (isset($node->images[$size])) {
         $file = $node->images[$size];
-        $headers = image_file_download($file);
+        $headers = module_invoke_all('file_download', $file);
         if ($headers == -1) {
           return drupal_access_denied();
         }
@@ -685,7 +685,7 @@ function image_fetch($nid = 0, $size = IMAGE_PREVIEW) {
  * Theme a teaser
  */
 function theme_image_teaser($node, $size) {
-  return l(image_display($node, IMAGE_THUMBNAIL), 'node/'. $node->nid, array('html' => TRUE));
+  return l(image_display($node, IMAGE_THUMBNAIL), 'node/' . $node->nid, array('html' => TRUE));
 }
 
 /**
@@ -701,6 +701,9 @@ function theme_image_body($node, $size) {
 function theme_image_display($node, $label, $url, $attributes) {
   $title = isset($attributes['title']) ? $attributes['title'] : $node->title;
   $alt = isset($attributes['alt']) ? $attributes['alt'] : $node->title;
+  // Remove alt and title from $attributes, otherwise they get added to the img tag twice.
+  unset($attributes['title']);
+  unset($attributes['alt']);
   return theme('image', $url, $alt, $title, $attributes, FALSE);
 }
 
@@ -710,7 +713,7 @@ function theme_image_display($node, $label, $url, $attributes) {
 function theme_image_block_random($images, $size) {
   $output = '';
   foreach ($images as $image) {
-    $output .= l(image_display($image, $size), 'node/'. $image->nid, array('html' => TRUE));
+    $output .= l(image_display($image, $size), 'node/' . $image->nid, array('html' => TRUE));
   }
   return $output;
 }
@@ -721,7 +724,7 @@ function theme_image_block_random($images, $size) {
 function theme_image_block_latest($images, $size) {
   $output = '';
   foreach ($images as $image) {
-    $output .= l(image_display($image, $size), 'node/'. $image->nid, array('html' => TRUE));
+    $output .= l(image_display($image, $size), 'node/' . $image->nid, array('html' => TRUE));
   }
   return $output;
 }
@@ -765,22 +768,22 @@ function image_get_latest($count = 1, $tid = 0) {
  */
 function _image_check_settings() {
   // File paths
-  $image_path = file_create_path(file_directory_path() .'/'. variable_get('image_default_path', 'images'));
-  $temp_path = $image_path .'/temp';
+  $image_path = file_create_path(file_directory_path() . '/' . variable_get('image_default_path', 'images'));
+  $temp_path = $image_path . '/temp';
 
   if (!file_check_directory($image_path, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS, 'image_default_path')) {
-    return false;
+    return FALSE;
   }
   if (!file_check_directory($temp_path, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS, 'image_default_path')) {
-    return false;
+    return FALSE;
   }
 
   // Sanity check : make sure we've got a working toolkit
   if (!image_get_toolkit()) {
     drupal_set_message(t('No image toolkit is currently enabled. Without one the image module will not be able to resize your images. You can select one from the <a href="@link">image toolkit settings page</a>.', array('@link' => url('admin/settings/image-toolkit'))), 'error');
-    return false;
+    return FALSE;
   }
-  return true;
+  return TRUE;
 }
 
 /**
@@ -788,6 +791,7 @@ function _image_check_settings() {
  *
  * @param $image_path
  *   String file path to the image.
+ *
  * @return
  *   Returns a subset of image_get_sizes()'s results depending on what
  *   derivative images are needed.
@@ -825,6 +829,7 @@ function image_get_derivative_sizes($image_path) {
  * @param $temp
  *   Boolean indicating if the derivatives should be saved to the temp
  *   directory.
+ *
  * @return
  *   New array of images for the node.
  */
@@ -832,8 +837,8 @@ function _image_build_derivatives($node, $temp = FALSE) {
   $original_path = file_create_path($node->images[IMAGE_ORIGINAL]);
 
   // Figure out which sizes we need to generate.
-  $all_sizes = image_get_sizes();
-  $needed_sizes = image_get_derivative_sizes($original_path);
+  $all_sizes      = image_get_sizes();
+  $needed_sizes   = image_get_derivative_sizes($original_path);
   $unneeded_sizes = array_diff(array_keys($all_sizes), array_keys($needed_sizes));
 
   // Images that don't need a derivative image get set to the original.
@@ -855,7 +860,7 @@ function _image_build_derivatives($node, $temp = FALSE) {
         break;
 
       case 'scale_crop':
-        $status = image_scale_and_crop($original_path, $destination,  $size['width'], $size['height']);
+        $status = image_scale_and_crop($original_path, $destination, $size['width'], $size['height']);
         break;
     }
 
@@ -879,12 +884,13 @@ function _image_build_derivatives($node, $temp = FALSE) {
  * @param $filepath
  *   The full path and filename of the original image file,relative to Drupal
  *   root, eg 'sites/default/files/images/myimage.jpg'.
+ *
  * @return
  *   A full path and filename with derivative image label inserted if required.
  */
 function _image_filename($filepath, $label = IMAGE_ORIGINAL, $temp = FALSE) {
   // Get default path for a new file.
-  $path = file_directory_path() .'/'. variable_get('image_default_path', 'images');
+  $path = file_directory_path() . '/' . variable_get('image_default_path', 'images');
   if ($temp) {
     $path .= '/temp';
   }
@@ -900,18 +906,18 @@ function _image_filename($filepath, $label = IMAGE_ORIGINAL, $temp = FALSE) {
     }
     // Insert the resized name in non-original images.
     $pos = strrpos($filename, '.');
-    if ($pos === false) {
+    if ($pos === FALSE) {
       // The file had no extension - which happens in really old image.module
       // versions, so figure out the extension.
-      $image_info = image_get_info(file_create_path($path .'/'. $filename));
-      $filename = $filename .'.'. $label .'.'. $image_info['extension'];
+      $image_info = image_get_info(file_create_path($path . '/' . $filename));
+      $filename = $filename . '.' . $label . '.' . $image_info['extension'];
     }
     else {
-      $filename = substr($filename, 0, $pos) .'.'. $label . substr($filename, $pos);
+      $filename = substr($filename, 0, $pos) . '.' . $label . substr($filename, $pos);
     }
   }
 
-  return file_create_path($path .'/'. $filename);
+  return file_create_path($path . '/' . $filename);
 }
 
 /**
@@ -919,9 +925,10 @@ function _image_filename($filepath, $label = IMAGE_ORIGINAL, $temp = FALSE) {
  *
  * @param $size
  *   An optional string to return only the image size with the specified key.
-  * @param $aspect_ratio
+ * @param $aspect_ratio
  *   Float value with the ratio of image height / width. If a size has only one
  *   dimension provided this will be used to compute the other.
+ *
  * @return
  *   An associative array with width, height, and label fields for the size.
  *   If a $size parameter was specified and it cannot be found FALSE will be
@@ -931,7 +938,7 @@ function image_get_sizes($size = NULL, $aspect_ratio = NULL) {
   $defaults = array(
     IMAGE_ORIGINAL => array('width' => '', 'height' => '', 'label' => t('Original'), 'operation' => 'scale', 'link' => IMAGE_LINK_SHOWN),
     IMAGE_THUMBNAIL => array('width' => 100, 'height' => 100, 'label' => t('Thumbnail'), 'operation' => 'scale', 'link' => IMAGE_LINK_SHOWN),
-    IMAGE_PREVIEW   => array('width' => 640, 'height' => 640, 'label' => t('Preview'), 'operation' => 'scale', 'link' => IMAGE_LINK_SHOWN),
+    IMAGE_PREVIEW => array('width' => 640, 'height' => 640, 'label' => t('Preview'), 'operation' => 'scale', 'link' => IMAGE_LINK_SHOWN),
   );
 
   $sizes = array();
@@ -971,11 +978,12 @@ function _image_get_sizes($size = NULL, $aspect_ratio = NULL) {
   return image_get_sizes($size, $aspect_ratio);
 }
 
-
 /**
  * Is a given size a built-in, required size?
+ *
  * @param $size
  *   One of the keys in the array returned by image_get_sizes().
+ *
  * @return boolean
  */
 function _image_is_required_size($size) {
@@ -1039,10 +1047,13 @@ function _image_file_remove($file) {
  *   String to be used as the node's body.
  * @param $taxonomy
  *   Taxonomy terms to assign to the node if the taxonomy.module is installed.
+ * @param $keep_original
+ *   Boolean to indicate whether the original file should be deleted
+ *
  * @return
  *   A node object if the node is created successfully or FALSE on error.
  */
-function image_create_node_from($filepath, $title = NULL, $body = '', $taxonomy = NULL) {
+function image_create_node_from($filepath, $title = NULL, $body = '', $taxonomy = NULL, $keep_original = FALSE) {
   global $user;
 
   if (!user_access('create images')) {
@@ -1099,8 +1110,10 @@ function image_create_node_from($filepath, $title = NULL, $body = '', $taxonomy 
   $node = node_submit($node);
   node_save($node);
 
-  // Remove the original image now that the import has completed.
-  file_delete($original_path);
+  // By default, remove the original image now that the import has completed.
+  if ($keep_original !== TRUE) {
+    file_delete($original_path);
+  }
 
   return $node;
 }
@@ -1111,7 +1124,7 @@ function image_create_node_from($filepath, $title = NULL, $body = '', $taxonomy 
 function image_views_api() {
   return array(
     'api' => 2,
-    'path' => drupal_get_path('module', 'image') .'/views',
+    'path' => drupal_get_path('module', 'image') . '/views',
   );
 }
 
@@ -1130,3 +1143,4 @@ function image_content_extra_fields($type_name) {
     return $extra;
   }
 }
+

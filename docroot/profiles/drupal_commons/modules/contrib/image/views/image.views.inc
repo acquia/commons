@@ -1,5 +1,5 @@
 <?php
-// $Id: image.views.inc,v 1.4 2009/08/27 12:10:57 joachim Exp $
+// $Id: image.views.inc,v 1.4.2.1 2010/08/03 17:43:00 sun Exp $
 
 /**
  * @file
@@ -167,7 +167,7 @@ function image_views_plugins() {
        * A fluid grid view style for gallery items.
        */
       'image_gallery' => array(
-        'title'  => 'Gallery',
+        'title' => 'Gallery',
         'help' => t('Displays items in a fluid grid.'),
         'parent' => 'list',
         'handler' => 'views_plugin_style_list',
@@ -192,7 +192,8 @@ function image_views_plugins() {
         'title' => t('Image size'),
         'handler' => 'image_plugin_argument_default_image_size',
         'path' => drupal_get_path('module', 'image') . '/views',
-        'parent' => 'fixed', // so that the parent class is included
+        // Include parent class.
+        'parent' => 'fixed',
       ),
     ),
   );

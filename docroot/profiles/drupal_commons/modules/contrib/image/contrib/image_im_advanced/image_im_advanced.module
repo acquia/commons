@@ -1,5 +1,5 @@
 <?php
-// $Id: image_im_advanced.module,v 1.7 2009/03/06 01:40:10 sun Exp $
+// $Id: image_im_advanced.module,v 1.7.2.1 2010/08/03 17:43:00 sun Exp $
 
 /**
  * Retrieve the settings array.
@@ -13,7 +13,7 @@ function image_im_advanced_options() {
     'unsharp' => array(
       'radius' => 0.9,
       'amount' => 0,
-    ), 
+    ),
     'profile' => array('path' => ''),
   );
   return variable_get('image_im_advanced_options', $defaults);
@@ -105,17 +105,16 @@ function image_im_advanced_form_alter(&$form, $form_state, $form_id) {
     );
 
     // Move the buttons below our additions.
-    $form['buttons']['#weight'] = 10;    
-  } 
+    $form['buttons']['#weight'] = 10;
+  }
 }
-
 
 /**
  * Validate settings form.
  */
 function image_im_advanced_settings_validate($element, &$form_state) {
   $options = $form_state['values']['image_im_advanced_options'];
-  
+
   // Check that the JPEG quality is a valid number.
   if (!is_numeric($options['jpeg_quality']) || $options['jpeg_quality'] < 1 || $options['jpeg_quality'] > 100) {
     form_set_error('image_im_advanced_options][jpeg_quality', t('The JPEG quality must be a positive number between 1 and 100.'));
@@ -135,7 +134,7 @@ function image_im_advanced_settings_validate($element, &$form_state) {
       form_set_error('image_im_advanced_options][unsharp][radius', t('The sharpness radius must be specified as a positive value.'));
     }
   }
-  
+
   // Check that if the color profile is provided that it's a readable file.
   if (!empty($options['profile']['path']) && (!file_exists($options['profile']['path']) || !is_readable($options['profile']['path']))) {
     form_set_error('image_im_advanced_options][profile][path', t('The ICC profile could not be read.'));
@@ -158,7 +157,7 @@ function image_im_advanced_imagemagick_alter($op, $filepath, &$args) {
       // Add sharpening filter.
       if ($options['unsharp']['amount'] && $options['unsharp']['radius']) {
         // 0.7 and 0.02 are reasonable values for Sigma and Threshold.
-        $args['unsharp'] = '-unsharp '. $options['unsharp']['radius'] .'x0.7+'. round($options['unsharp']['amount'] / 100, 2) .'+0.02';
+        $args['unsharp'] = '-unsharp ' . $options['unsharp']['radius'] . 'x0.7+' . round($options['unsharp']['amount'] / 100, 2) . '+0.02';
       }
       break;
 
@@ -167,7 +166,7 @@ function image_im_advanced_imagemagick_alter($op, $filepath, &$args) {
       $size = preg_replace('/[^\d]*(\d+x\d+)[^\d]*/', '$1', $args['crop']);
       list($width, $height) = explode('x', $size);
       break;
-      
+
     case 'rotate':
       // For lack of a better guess, use the current image size.
       $width = $image['width'];
@@ -177,13 +176,13 @@ function image_im_advanced_imagemagick_alter($op, $filepath, &$args) {
 
   // Convert to specified color profile.
   if (!empty($options['profile']['path']) && is_readable($options['profile']['path'])) {
-    $args['profile'] = '-profile '. $options['profile']['path'];
+    $args['profile'] = '-profile ' . $options['profile']['path'];
   }
 
   // Assign a color space. Skip this if a color profile has been provided,
   // as it will be more accurate.
   if ($options['colorspace'] && !isset($args['profile'])) {
-    $args['colorspace'] = ' -colorspace '. $options['colorspace'];
+    $args['colorspace'] = ' -colorspace ' . $options['colorspace'];
   }
 
   // Determine if the -strip parameter should be used.
@@ -195,7 +194,7 @@ function image_im_advanced_imagemagick_alter($op, $filepath, &$args) {
   // Set JPEG quality.
   if ($image['mime_type'] == 'image/jpeg') {
     if (empty($args['quality']) && $options['jpeg_quality']) {
-      $args['quality'] = '-quality '. $options['jpeg_quality'];
+      $args['quality'] = '-quality ' . $options['jpeg_quality'];
     }
   }
 

@@ -1,5 +1,5 @@
 <?php
-// $Id: image_im_advanced.install,v 1.4 2009/03/06 01:40:10 sun Exp $
+// $Id: image_im_advanced.install,v 1.4.2.1 2010/08/03 17:43:00 sun Exp $
 
 /**
  * Implementation of hook_requirements().
@@ -12,9 +12,8 @@ function image_im_advanced_requirements($phase) {
     $toolkits = image_get_available_toolkits();
     $requirements['imagemagick'] = array('title' => t('ImageMagick advanced options'));
     if (!isset($toolkits['imagemagick'])) {
-      $requirements['imagemagick']['value'] =
-      t('ImageMagick image toolkit is not properly installed');
-      $requirements['imagemagick']['description'] = t('The %toolkit_inc file must be copied to %inc_dir in order for the ImageMagick image toolkit to function.', array('%toolkit_inc' => drupal_get_path('module', 'image') .'/image.imagemagick.inc', '%inc_dir' => 'includes')); 
+      $requirements['imagemagick']['value'] = t('ImageMagick image toolkit is not properly installed');
+      $requirements['imagemagick']['description'] = t('The %toolkit_inc file must be copied to %inc_dir in order for the ImageMagick image toolkit to function.', array('%toolkit_inc' => drupal_get_path('module', 'image') . '/image.imagemagick.inc', '%inc_dir' => 'includes'));
       $requirements['imagemagick']['severity'] = REQUIREMENT_ERROR;
       return $requirements;
     }
@@ -39,3 +38,4 @@ function image_im_advanced_requirements($phase) {
   }
   return $requirements;
 }
+

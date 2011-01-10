@@ -1,5 +1,5 @@
 <?php
-// $Id: image_handler_argument_image_node_image_size.inc,v 1.1 2009/08/26 18:41:44 joachim Exp $
+// $Id: image_handler_argument_image_node_image_size.inc,v 1.1.2.1 2010/08/03 17:43:00 sun Exp $
 
 /**
  * @file
@@ -9,6 +9,7 @@
  * This expects the image_handler_field_image_node_image to be present.
  */
 class image_handler_argument_image_node_image_size extends views_handler_argument_string {
+
   /**
    * Change the argument's options for more image specific options.
    */
@@ -31,24 +32,28 @@ class image_handler_argument_image_node_image_size extends views_handler_argumen
       'ignore' => array(
         'title' => t('Ignore and use the field setting'),
         'method' => 'default_ignore',
-        'breadcrumb' => TRUE, // generate a breadcrumb to here
+        // generate a breadcrumb to here
+        'breadcrumb' => TRUE,
       ),
       'not found' => array(
         'title' => t('Hide view / Page not found (404)'),
         'method' => 'default_not_found',
-        'hard fail' => TRUE, // This is a hard fail condition
+        // This is a hard fail condition.
+        'hard fail' => TRUE,
       ),
       'empty' => array(
         'title' => t('Display empty text'),
         'method' => 'default_empty',
-        'breadcrumb' => TRUE, // generate a breadcrumb to here
+        // generate a breadcrumb to here
+        'breadcrumb' => TRUE,
       ),
       'default' => array(
         'title' => t('Provide default argument'),
         'method' => 'default_default',
         'form method' => 'default_argument_form',
         'has default argument' => TRUE,
-        'default only' => TRUE, // this can only be used for missing argument, not validation failure
+        // this can only be used for missing argument, not validation failure
+        'default only' => TRUE,
       ),
     );
 
@@ -106,3 +111,4 @@ class image_handler_argument_image_node_image_size extends views_handler_argumen
     }
   }
 }
+

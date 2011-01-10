@@ -1,5 +1,5 @@
 <?php
-// $Id: image_gallery_plugin_display_image_gallery.inc,v 1.1 2009/08/27 12:10:57 joachim Exp $
+// $Id: image_gallery_plugin_display_image_gallery.inc,v 1.1.2.1 2010/08/03 17:43:00 sun Exp $
 
 /**
  * A display plugin for image galleries.
@@ -16,7 +16,6 @@
  * @ingroup views_display_plugins
  */
 class image_gallery_plugin_display_image_gallery extends views_plugin_display_page {
-
   function options_summary(&$categories, &$options) {
     // It is very important to call the parent function here:
     parent::options_summary($categories, $options);
@@ -48,7 +47,7 @@ class image_gallery_plugin_display_image_gallery extends views_plugin_display_pa
 
       // Tack THIS view onto the gallery terms view. We don't do anything with
       // this yet, but other handlers might need it.
-      $this->gallery_terms_view->embedding_view =& $this->view;
+      $this->gallery_terms_view->embedding_view = &$this->view;
 
       $output = $this->gallery_terms_view->preview('default', $args);
     }
@@ -73,3 +72,4 @@ class image_gallery_plugin_display_image_gallery extends views_plugin_display_pa
     }
   }
 }
+

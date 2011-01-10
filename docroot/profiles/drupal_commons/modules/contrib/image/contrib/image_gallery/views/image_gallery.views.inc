@@ -1,5 +1,5 @@
 <?php
-// $Id: image_gallery.views.inc,v 1.3 2009/09/05 14:50:31 joachim Exp $
+// $Id: image_gallery.views.inc,v 1.3.2.1 2010/08/03 17:43:00 sun Exp $
 
 /**
  * @file
@@ -15,9 +15,9 @@
  * The default views are:
  * - image_gallery
  * - image_gallery_terms
- 
+ *
  * There are two ways of getting the image gallery cover image:
- * - a plain field. This allows complex code like recursion (check the gallery itself, 
+ * - a plain field. This allows complex code like recursion (check the gallery itself,
  *   if empty, check the child galleries, etc)
  *   Plain field also allows us to grab the sort order set on the gallery images
  *   and get the first image from that order as the front.
@@ -50,14 +50,14 @@ function image_gallery_views_data_alter(&$data) {
   // Note that a bug in Views -- http://drupal.org/node/380560 -- will cause
   // an error message when adding node fields on these relationships.
   $data['term_data']['image_gallery_cover_latest'] = array(
-    'group' => t('Image gallery'),    
+    'group' => t('Image gallery'),
     'relationship' => array(
       'title' => t('Latest image'),
-      'label'  => t('Cover image, latest'),
+      'label' => t('Cover image, latest'),
       'help' => t('Relate an image gallery to its most recently updated node (does not consider child galleries).'),
       'handler' => 'image_gallery_handler_relationship_gallery_cover',
-      'base'   => 'node',
-      'field'  => 'nid',
+      'base' => 'node',
+      'field' => 'nid',
       'correlated field' => 'tid',
       'subquery order' => ' gallery_cover_node.created DESC ',
     ),
@@ -66,11 +66,11 @@ function image_gallery_views_data_alter(&$data) {
     'group' => t('Image gallery'),
     'relationship' => array(
       'title' => t('Oldest image'),
-      'label'  => t('Cover image, oldest'),
+      'label' => t('Cover image, oldest'),
       'help' => t('Relate an image gallery to its oldest node (does not consider child galleries).'),
       'handler' => 'image_gallery_handler_relationship_gallery_cover',
-      'base'   => 'node',
-      'field'  => 'nid',
+      'base' => 'node',
+      'field' => 'nid',
       'correlated field' => 'tid',
       'subquery order' => ' gallery_cover_node.created ASC ',
     ),
@@ -79,11 +79,11 @@ function image_gallery_views_data_alter(&$data) {
     'group' => t('Image gallery'),
     'relationship' => array(
       'title' => t('First image by title'),
-      'label'  => t('Cover image, first by title'),
+      'label' => t('Cover image, first by title'),
       'help' => t('Relate an image gallery to its first node when sorted by title (does not consider child galleries).'),
       'handler' => 'image_gallery_handler_relationship_gallery_cover',
-      'base'   => 'node',
-      'field'  => 'nid',
+      'base' => 'node',
+      'field' => 'nid',
       'correlated field' => 'tid',
       'subquery order' => ' gallery_cover_node.title ASC ',
     ),
@@ -101,7 +101,7 @@ function image_gallery_views_data_alter(&$data) {
       'handler' => 'image_gallery_handler_field_gallery_count',
     ),
   );
-  
+
   // ----------------------------------------------------------------------
   // Fields for cover image.
   //
@@ -116,7 +116,7 @@ function image_gallery_views_data_alter(&$data) {
   // To add more fields, define them on term_data and optionally add handlers.
   // See image_gallery_handler_field_gallery_cover for more information.
   $data['term_data']['image_gallery_latest_thumbnail'] = array(
-    'group' => t('Image gallery'),    
+    'group' => t('Image gallery'),
     'field' => array(
       'title' => t('Latest image'),
       'help' => t('The most recently posted image in the gallery or its child galleries.'),
@@ -125,7 +125,7 @@ function image_gallery_views_data_alter(&$data) {
     ),
   );
   $data['term_data']['image_gallery_latest_time'] = array(
-    'group' => t('Image gallery'),    
+    'group' => t('Image gallery'),
     'field' => array(
       'title' => t('Last updated time'),
       'help' => t('The time of the most recently posted image in the gallery or its child galleries.'),
@@ -167,10 +167,10 @@ function image_gallery_views_handlers() {
       ),
       'image_gallery_handler_field_gallery_cover' => array(
         'parent' => 'views_handler_field_taxonomy',
-     ),
+      ),
       'image_gallery_handler_field_gallery_cover_thumbnail' => array(
         'parent' => 'image_gallery_handler_field_gallery_cover',
-     ),
+      ),
       'image_gallery_handler_field_gallery_cover_latest_time' => array(
         'parent' => 'image_gallery_handler_field_gallery_cover',
       ),
@@ -178,7 +178,7 @@ function image_gallery_views_handlers() {
         'parent' => 'views_handler_relationship',
       ),
       'image_gallery_plugin_display_image_gallery' => array(
-         'parent' => 'views_plugin_display_page',
+        'parent' => 'views_plugin_display_page',
       ),
     ),
   );
@@ -206,7 +206,8 @@ function image_gallery_views_plugins() {
         'use pager' => TRUE,
         'accept attachments' => TRUE,
         'admin' => t('Page'),
-        'help topic' => 'display-page', // TODO ??
+        // @todo ?
+        'help topic' => 'display-page',
         'path' => drupal_get_path('module', 'image_gallery') . '/views',
       ),
     ),
@@ -215,7 +216,7 @@ function image_gallery_views_plugins() {
        * A list style for term lists.
        */
       'image_gallery_terms' => array(
-        'title'  => 'Subgallery list',
+        'title' => 'Subgallery list',
         'help' => t('Displays subgalleries in a formatted list.'),
         'parent' => 'list',
         'handler' => 'views_plugin_style_list',
@@ -311,5 +312,5 @@ class image_gallery_join_subquery extends views_join {
     }
     return $output;
   }
-} // class image_gallery_join_subquery
+}
 

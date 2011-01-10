@@ -1,5 +1,5 @@
 <?php
-// $Id: image_gallery.views_default.inc,v 1.3 2009/09/05 15:13:42 joachim Exp $
+// $Id: image_gallery.views_default.inc,v 1.4.2.2 2010/10/14 07:46:55 joachim Exp $
 
 /**
  * Implementation of hook_views_default_views().
@@ -176,6 +176,20 @@ function image_gallery_views_default_views() {
     ),
   ));
   $handler->override_option('filters', array(
+    'status' => array(
+      'operator' => '=',
+      'value' => '1',
+      'group' => '0',
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'id' => 'status',
+      'table' => 'node',
+      'field' => 'status',
+      'relationship' => 'none',
+    ),
     'type' => array(
       'operator' => 'in',
       'value' => array(
@@ -194,6 +208,9 @@ function image_gallery_views_default_views() {
     ),
   ));
   $handler->override_option('access', array(
+    'type' => 'none',
+  ));
+  $handler->override_option('cache', array(
     'type' => 'none',
   ));
   $handler->override_option('title', 'Image galleries');
@@ -269,20 +286,26 @@ function image_gallery_views_default_views() {
     'name' => array(
       'label' => '',
       'alter' => array(
-        'alter_text' => 1,
+        'alter_text' => 0,
         'text' => '<h3>[name]</h3>',
         'make_link' => 0,
         'path' => '',
+        'link_class' => '',
         'alt' => '',
         'prefix' => '',
         'suffix' => '',
+        'target' => '',
         'help' => '',
         'trim' => 0,
         'max_length' => '',
         'word_boundary' => 1,
         'ellipsis' => 1,
         'html' => 0,
+        'strip_tags' => 0,
       ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
       'link_to_taxonomy' => 1,
       'exclude' => 0,
       'id' => 'name',
@@ -338,6 +361,35 @@ function image_gallery_views_default_views() {
       'id' => 'image_gallery_latest_time',
       'table' => 'term_data',
       'field' => 'image_gallery_latest_time',
+      'relationship' => 'none',
+    ),
+    'description' => array(
+      'label' => 'Term description',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'exclude' => 0,
+      'id' => 'description',
+      'table' => 'term_data',
+      'field' => 'description',
       'relationship' => 'none',
     ),
   ));
@@ -415,11 +467,19 @@ function image_gallery_views_default_views() {
   $handler->override_option('access', array(
     'type' => 'none',
   ));
+  $handler->override_option('cache', array(
+    'type' => 'none',
+  ));
   $handler->override_option('items_per_page', 0);
   $handler->override_option('style_plugin', 'image_gallery_terms');
   $handler->override_option('style_options', array(
     'grouping' => '',
     'type' => 'ul',
+  ));
+  $handler->override_option('row_options', array(
+    'inline' => array(),
+    'separator' => '',
+    'hide_empty' => 0,
   ));
   $views[$view->name] = $view;
 

@@ -1,5 +1,5 @@
 <?php
-// $Id: image_attach_views_handler_field_attached_images.inc,v 1.4 2009/11/06 17:05:20 joachim Exp $
+// $Id: image_attach_views_handler_field_attached_images.inc,v 1.4.2.2 2010/08/03 17:43:00 sun Exp $
 
 /**
  * Field handler to display the attached images on a node.
@@ -10,8 +10,7 @@
  *
  * Inherit from image_handler_field_image_node_image so we get image sizes.
  */
-class image_attach_views_handler_field_attached_images 
-  extends image_handler_field_image_node_image {
+class image_attach_views_handler_field_attached_images extends image_handler_field_image_node_image {
 
   /**
    * Constructor to provide additional fields to add.
@@ -26,10 +25,10 @@ class image_attach_views_handler_field_attached_images
       'field' => 'nid',
     );
   }
-  
+
   /**
    * Define default values for options.
-   * 
+   *
    * We inherit the image size option.
    */
   function option_definition() {
@@ -55,10 +54,10 @@ class image_attach_views_handler_field_attached_images
       '#default_value' => $this->options['as_link'],
     );
   }
-  
+
   /**
    * We don't add to the query (see the parent class).
-   * Instead, run our own query on pre-render. This is the same approach as CCK 
+   * Instead, run our own query on pre-render. This is the same approach as CCK
    * multiple fields.
    */
   function pre_render(&$values) {
@@ -71,7 +70,7 @@ class image_attach_views_handler_field_attached_images
         $nids[$nid] = $nid;
       }
     }
-    
+
     if (count($nids)) {
       $nids_string = implode(',', $nids);
       $result = db_query("SELECT nid, iid FROM {image_attach} WHERE nid IN (" . $nids_string . ") ORDER BY weight");
@@ -79,7 +78,7 @@ class image_attach_views_handler_field_attached_images
         // Store all the attached image nids (iid) keyed by attaching nid.
         $attached_images[$data->nid][] = $data->iid;
       }
-      
+
       // Place the data into the $values array for each result.
       foreach ($values as $id => $v) {
         if (isset($attached_images[$v->{$this->aliases['image_attach_nid']}])) {
@@ -94,31 +93,20 @@ class image_attach_views_handler_field_attached_images
    */
   function render($values) {
     if (isset($values->image_attach_iids)) {
-      $derivative = $this->options['image_derivative'];
+      // Images need to loaded as full nodes to check node_access() for each of them.
       foreach ($values->image_attach_iids as $iid) {
-        // Create fake nodes suitable for image_display().
-        $node = new stdClass();
-        $node->nid = $iid;
-        
-        // image_load() will load the files for all derivatives. Derivatives larger
-        // than the original fall back to the original. Stale derivatives will be
-        // regenerated.
-        image_load($node);
-        $image_img = image_display($node, $derivative);
-        
-        switch($this->options['as_link']) {
-          case 'node':
-            $output = l($image_img, 'node/' . $values->{$this->aliases['nid']}, array('html' => true));
-            break;
-          case 'image':
-            $output = l($image_img, 'node/' . $node->nid, array('html' => true));
-            break;
-          default:
-            $output = $image_img;
-            break;
-        }
+        $image_nodes[$iid] = node_load($iid);
       }
+
+      $options = array(
+        'size' => $this->options['image_derivative'],
+        'link' => $this->options['as_link'],
+      );
+
+      $output = theme('image_attach_attached_images', $values->{$this->aliases['image_attach_nid']}, $image_nodes, $options);
+
       return $output;
     }
   }
 }
+

@@ -1,5 +1,6 @@
 <?php
-// $Id: image_plugin_argument_default_image_size.inc,v 1.1 2009/08/26 18:41:44 joachim Exp $
+// $Id: image_plugin_argument_default_image_size.inc,v 1.1.2.1 2010/08/03 17:43:00 sun Exp $
+
 /**
  * @file
  * Contains the image size argument default plugin.
@@ -19,12 +20,12 @@ class image_plugin_argument_default_image_size extends views_plugin_argument_def
     $form[$this->option_name] = array(
       '#type' => 'select',
       '#title' => t('Default argument'),
-      '#options' => $sizes,    
+      '#options' => $sizes,
       '#default_value' => $this->get_argument(),
       '#process' => array('views_process_dependency'),
       '#dependency' => array(
         'radio:options[default_action]' => array('default'),
-        'radio:options[default_argument_type]' => array($this->id)
+        'radio:options[default_argument_type]' => array($this->id),
       ),
       '#dependency_count' => 2,
     );

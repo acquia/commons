@@ -1,4 +1,4 @@
-/* $Id: image.css,v 1.5 2009/08/27 12:10:56 joachim Exp $ */
+/* $Id: image.css,v 1.5.2.1 2010/08/26 05:41:07 joachim Exp $ */
 
 /* Views: gallery style plugin. */
 .view .image-gallery-nodes ul {
@@ -6,10 +6,13 @@
 }
 .view .image-gallery-nodes ul li {
   display:inline-block;
+  *display:inline;
   /*
     There is no pretty way to get thumbnail sizes here.
     This will need to be overridden for sites that set a different size.
   */
+  zoom: 1;
+  list-style-type: none;
   width:150px;
   height: 150px;
   text-align:center;

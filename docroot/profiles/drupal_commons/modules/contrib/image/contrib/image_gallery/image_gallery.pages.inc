@@ -1,9 +1,9 @@
 <?php
-// $Id: image_gallery.pages.inc,v 1.1 2009/09/04 13:24:41 joachim Exp $
+// $Id: image_gallery.pages.inc,v 1.1.2.2 2010/12/22 00:09:59 joachim Exp $
 
 /**
  * @file
- * Contains menu callbacks for image_gallery pages, 
+ * Contains menu callbacks for image_gallery pages,
  * ie galleries not made with views module.
  * This file is not loaded when Views is creating the gallery.
  */
@@ -38,13 +38,13 @@ function image_gallery_page($type = NULL, $tid = 0) {
 
   $vid = _image_gallery_get_vid();
   $galleries = taxonomy_get_tree($vid, $tid, -1, 1);
-  for ($i=0; $i < count($galleries); $i++) {
+  for ($i = 0; $i < count($galleries); $i++) {
     $galleries[$i]->count = taxonomy_term_count_nodes($galleries[$i]->tid, 'image');
     $tree = taxonomy_get_tree($vid, $galleries[$i]->tid, -1);
     $descendant_tids = array_merge(array($galleries[$i]->tid), array_map('_taxonomy_get_tid_from_term', $tree));
     // The values of $descendant_tids should be safe for raw inclusion in the
     // SQL since they're all loaded from integer fields in the database.
-    $sql = "SELECT n.nid FROM {node} n INNER JOIN {term_node} tn ON n.nid = tn.nid $join WHERE tn.tid IN (". implode(',', $descendant_tids) .") AND n.type = 'image' AND n.status = 1 $where $order";
+    $sql = "SELECT n.nid FROM {node} n INNER JOIN {term_node} tn ON n.nid = tn.nid $join WHERE tn.tid IN (" . implode(',', $descendant_tids) . ") AND n.type = 'image' AND n.status = 1 $where $order";
     if ($nid = db_result(db_query(db_rewrite_sql($sql), $args))) {
       $galleries[$i]->latest = node_load(array('nid' => $nid));
     }
@@ -69,10 +69,10 @@ function image_gallery_page($type = NULL, $tid = 0) {
     $breadcrumb[] = l(t('Image galleries'), 'image');
     foreach ($parents as $parent) {
       // Add parents to breadcrumb navigation
-      $breadcrumb[] = l($parent->name, 'image/tid/'. $parent->tid);
+      $breadcrumb[] = l($parent->name, 'image/tid/' . $parent->tid);
     }
     drupal_set_breadcrumb($breadcrumb);
-    drupal_set_title($gallery->name);
+    drupal_set_title(check_plain($gallery->name));
   }
 
   return theme('image_gallery', $galleries, $images);
@@ -82,7 +82,7 @@ function image_gallery_page($type = NULL, $tid = 0) {
  * Theme a gallery page
  */
 function theme_image_gallery($galleries, $images) {
-  drupal_add_css(drupal_get_path('module', 'image_gallery') .'/image_gallery.css');
+  drupal_add_css(drupal_get_path('module', 'image_gallery') . '/image_gallery.css');
 
   $size = image_get_sizes(IMAGE_THUMBNAIL);
 
@@ -92,13 +92,13 @@ function theme_image_gallery($galleries, $images) {
     foreach ($galleries as $gallery) {
       $content .= '<li class="clear-block">';
       if ($gallery->count) {
-        $content .= l(image_display($gallery->latest, IMAGE_THUMBNAIL), 'image/tid/'. $gallery->tid, array('html' => TRUE));
+        $content .= l(image_display($gallery->latest, IMAGE_THUMBNAIL), 'image/tid/' . $gallery->tid, array('html' => TRUE));
       }
-      $content .= "<h3>". l($gallery->name, 'image/tid/'. $gallery->tid) ."</h3>\n";
-      $content .= '<div class="description">'. check_markup($gallery->description) ."</div>\n";
-      $content .= '<p class="count">'. format_plural($gallery->count, 'There is 1 image in this gallery.', 'There are @count images in this gallery.') ."</p>\n";
+      $content .= "<h3>" . l($gallery->name, 'image/tid/' . $gallery->tid) . "</h3>\n";
+      $content .= '<div class="description">' . check_markup($gallery->description) . "</div>\n";
+      $content .= '<p class="count">' . format_plural($gallery->count, 'There is 1 image in this gallery.', 'There are @count images in this gallery.') . "</p>\n";
       if (isset($gallery->latest) && $gallery->latest->changed) {
-        $content .= '<p class="last">'. t('Last updated: %date', array('%date' => format_date($gallery->latest->changed))) ."</p>\n";
+        $content .= '<p class="last">' . t('Last updated: %date', array('%date' => format_date($gallery->latest->changed))) . "</p>\n";
       }
       $content .= "</li>\n";
     }
@@ -118,7 +118,7 @@ function theme_image_gallery($galleries, $images) {
   }
 
   if (count($images) + count($galleries) == 0) {
-      $content .= '<p class="count">'. format_plural(0, 'There is 1 image in this gallery.', 'There are @count images in this gallery.') ."</p>\n";
+    $content .= '<p class="count">' . format_plural(0, 'There is 1 image in this gallery.', 'There are @count images in this gallery.') . "</p>\n";
   }
 
   return $content;
@@ -137,15 +137,16 @@ function theme_image_gallery_img($image, $size) {
     $content .= ' class="sticky"';
   }
   $content .= " style='height : {$height}px; width : {$width}px;'>\n";
-  $content .= l(image_display($image, IMAGE_THUMBNAIL), 'node/'. $image->nid, array('html' => TRUE));
-  $content .= '<h3>'. l($image->title, 'node/'. $image->nid) .'</h3>';
+  $content .= l(image_display($image, IMAGE_THUMBNAIL), 'node/' . $image->nid, array('html' => TRUE));
+  $content .= '<h3>' . l($image->title, 'node/' . $image->nid) . '</h3>';
   if (variable_get('image_gallery_node_info', 0)) {
-    $content .= '<div class="author">'. t('Posted by: !name', array('!name' => theme('username', $image))) ."</div>\n";
+    $content .= '<div class="author">' . t('Posted by: !name', array('!name' => theme('username', $image))) . "</div>\n";
     if ($image->created > 0) {
-      $content .= '<div class="date">'. format_date($image->created) ."</div>\n";
+      $content .= '<div class="date">' . format_date($image->created) . "</div>\n";
     }
   }
   $content .= "</li>\n";
 
   return $content;
 }
+

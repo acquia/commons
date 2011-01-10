@@ -1,5 +1,5 @@
 <?php
-// $Id: image_gallery.admin.inc,v 1.2 2009/09/13 07:53:58 joachim Exp $
+// $Id: image_gallery.admin.inc,v 1.2.2.1 2010/08/03 17:43:00 sun Exp $
 
 /**
  * @file
@@ -11,7 +11,7 @@
  */
 function image_gallery_admin_settings() {
   _image_check_settings();
-  
+
   // Show various messages if Views module is enabled.
   if (module_exists('views')) {
     // Test the status of the view:
@@ -20,7 +20,7 @@ function image_gallery_admin_settings() {
     // - FALSE:   view enabled
     // - TRUE:    view disabled
     // @see views_get_all_views().
-    $status = variable_get('views_defaults', array());    
+    $status = variable_get('views_defaults', array());
     if (isset($status['image_gallery']) && $status['image_gallery']) {
       // The view is disabled: tell the user that more interesting things can be done.
       $form['info']['#value'] = t('Enabling the <a href="!views-link">image_gallery view</a> will give you many more ways to customize your galleries.', array('!views-link' => url('admin/build/views')));
@@ -36,7 +36,7 @@ function image_gallery_admin_settings() {
       }
       else {
         $form['info']['#value'] = t('To change the way galleries are displayed, enable the <strong>Views UI</strong> module on the <a href="!modules-link">Modules administration page</a>, then override the default image_gallery view.', array('!modules-link' => url('admin/build/modules')));
-      }      
+      }
       return $form;
     }
   }
@@ -83,7 +83,7 @@ function image_gallery_admin() {
   if ($tree) {
     $header = array(t('Name'), t('Operations'));
     foreach ($tree as $term) {
-      $rows[] = array(str_repeat(' -- ', $term->depth) .' '. l($term->name, "image/tid/$term->tid"), l(t('edit gallery'), "admin/content/image/edit/$term->tid"));
+      $rows[] = array(str_repeat(' -- ', $term->depth) . ' ' . l($term->name, "image/tid/$term->tid"), l(t('edit gallery'), "admin/content/image/edit/$term->tid"));
     }
     return theme('table', $header, $rows);
   }
@@ -108,7 +108,7 @@ function image_gallery_admin_edit($tid = NULL) {
       'name' => '',
       'description' => '',
       'vid' => _image_gallery_get_vid(),
-      'tid' => null,
+      'tid' => NULL,
       'weight' => 0,
     );
   }
@@ -124,7 +124,7 @@ function image_gallery_admin_form(&$form_state, $edit = array()) {
     '#title' => t('Gallery name'),
     '#default_value' => $edit['name'],
     '#size' => 60,
-    '#maxlength' =>  64,
+    '#maxlength' => 64,
     '#description' => t('The name is used to identify the gallery.'),
     '#required' => TRUE,
   );
@@ -149,7 +149,7 @@ function image_gallery_admin_form(&$form_state, $edit = array()) {
     '#type' => 'hidden',
     '#value' => _image_gallery_get_vid(),
   );
-  $form['submit' ] = array(
+  $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Save'),
   );
@@ -187,11 +187,11 @@ function _image_gallery_parent_select($tid, $title) {
   $exclude[] = $tid;
 
   $tree = taxonomy_get_tree(_image_gallery_get_vid());
-  $options[0] = '<'. t('root') .'>';
+  $options[0] = '<' . t('root') . '>';
   if ($tree) {
     foreach ($tree as $term) {
       if (!in_array($term->tid, $exclude)) {
-        $options[$term->tid] = str_repeat(' -- ', $term->depth) .' '. $term->name;
+        $options[$term->tid] = str_repeat(' -- ', $term->depth) . ' ' . $term->name;
       }
     }
   }
@@ -202,7 +202,7 @@ function _image_gallery_parent_select($tid, $title) {
     '#default_value' => $parent,
     '#options' => $options,
     '#description' => t('Image galleries may be nested below other galleries.'),
-    '#required' => TRUE
+    '#required' => TRUE,
   );
 }
 
@@ -215,9 +215,11 @@ function image_gallery_admin_submit($form, &$form_state) {
     case SAVED_NEW:
       drupal_set_message(t('Created new gallery %term.', array('%term' => $form_state['values']['name'])));
       break;
+
     case SAVED_UPDATED:
       drupal_set_message(t('The gallery %term has been updated.', array('%term' => $form_state['values']['name'])));
       break;
+
     case SAVED_DELETED:
       drupal_set_message(t('The gallery %term has been deleted.', array('%term' => $form_state['values']['name'])));
       break;
@@ -245,3 +247,4 @@ function image_gallery_confirm_delete_form_submit($form, &$form_state) {
   drupal_set_message(t('The image gallery %term and all sub-galleries have been deleted.', array('%term' => $form_state['values']['name'])));
   $form_state['redirect'] = 'admin/content/image';
 }
+

@@ -1,4 +1,4 @@
-// $Id: CHANGELOG.txt,v 1.142 2010/01/16 11:41:40 joachim Exp $
+// $Id: CHANGELOG.txt,v 1.144.2.32 2010/12/22 00:09:59 joachim Exp $
 
 Image x.x-x.x, xxxx-xx-xx
 ------------------------
@@ -6,6 +6,58 @@ Image x.x-x.x, xxxx-xx-xx
 
 Image 6.x-1.x, xxxx-xx-xx
 -------------------------
+
+
+Image 6.x-1.1, 2010-12-22
+-------------------------
+by sun: Fixed output of image gallery title.
+
+
+Image 6.x-1.0, 2010-10-14
+-------------------------
+#933612 by joachim: Fixed image gallery term titles to pass W3C validation.
+#875114 by joachim: Fixed missing description field in gallery terms view.
+#929868 by joachim: Fixed undefined variable error in
+  theme_image_attach_attached_images().
+#925122 by joachim: Fixed missing default attributes key in theme function.
+#925098 by joachim: Fixed views classes variable not defined in gallery terms
+  style plugin template.
+#747900 by Karlheinz, joachim, sun: Fixed warning when no images are attached.
+#916128 by joachim: Fixed undefined variable error in image_attach_validate().
+#910370 by jonathan1055: Fixed attached image not shown for teaser in preview.
+#575790 by mokko: Fixed CSS for galleries to work on IE*.
+
+
+Image 6.x-1.0-BETA6, 2010-08-25
+-------------------------
+#207557 by joachim: (Revisited) Fixed update errors due to duplicate data in 
+  Drupal 5 files table.
+#892816 by joachim: Fixed attached image limit not checked if new image 
+  uploaded with the node save button.
+#867386 by joachim: (Followup) Fixed remaining checks for 'Attach' button.
+#790670 by skyredwang: Changed error message for image attach maximum.
+#888578 by Agileware: Fixed block passing empty param to theme function.
+#883338 by joachim: Fixed direct calling of hook_file_download() implementation.
+#867386 by sun: Changed image attach form's 'Attach' button to 'Upload'.
+#868442 by sun, joachim: Code clean-up.
+#824324 by jonathan1055: Fixed theme function allowing duplicate ALT and TITLE 
+ in IMG tag.
+#642052 by joachim: Fixed schema mis-match introduced by image_update_5200().
+#649384 by sp3boy: Fixed gallery thumbnail HTML to pass W3C validation.
+#825130 by joachim: Fixed image attach Views field showing only last attached
+  image per node.
+#412288 by joachim: (Continued) Changed structure of theming functions for 
+  attached images, this time with Views support.
+#841680 by dman: Fixed inappropriate inspection of submitted values in $form 
+  array rather than $form_values in image_admin_settings_validate().
+#703542 by the_real_codecowboy, joachim: Added option for keeping the original
+  file to the create image node from file API function.
+#777966 by joachim: Fixed whitespace in image attach.
+#773888 by joachim: Added a different css class for each attached image.
+#774314 by kylegt: Fixed missing element size on image attach form upload field.
+#741484 by joachim: Fixed missing t() on form text.
+#705582 by joachim: Fixed image gallery default view showing unpublished nodes.
+#412288 by joachim: Changed structure of theming functions for attached images.
 
 
 Image 6.x-1.0-BETA5, 2010-01-16
