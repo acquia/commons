@@ -629,20 +629,22 @@ function drupal_commons_config_password() {
  */
 function drupal_commons_config_wysiwyg() {
   // Load external file containing editor settings
-  include_once('drupal_commons_editor.inc'); 
+  require_once('drupal_commons.editor.inc'); 
+  
+  $settings = drupal_commons_editor_settings();
   
   // Add settings for 'Filtered HTML'
   $item = new stdClass;
   $item->format = 1;
   $item->editor = DRUPAL_COMMONS_EDITOR;
-  $item->settings = serialize(drupal_commons_editor_settings('Filtered HTML'));
+  $item->settings = serialize($settings['Filtered HTML']);
   drupal_write_record('wysiwyg', $item);
   
   // Add settings for 'Full HTML'
   $item = new stdClass;
   $item->format = 2;
   $item->editor = DRUPAL_COMMONS_EDITOR;
-  $item->settings = serialize(drupal_commons_editor_settings('Full HTML'));
+  $item->settings = serialize($settings['Full HTML']);
   drupal_write_record('wysiwyg', $item);
 }
 
@@ -658,14 +660,13 @@ function drupal_commons_config_ur() {
   $relationship->expires_val = 0;
   $relationship->is_oneway = 0;
   $relationship->is_reciprocal = 0; 
-  $is_type = TRUE;
   $type = 'insert';
   
   // Save relationship
   drupal_write_record('user_relationship_types', $relationship);
 
   // Alert other modules about the new relationship
-  $hook = 'user_relationships'. ($is_type ? '_type' : '');
+  $hook = 'user_relationships_type';
   foreach (module_implements($hook) as $module) {
     $function = $module .'_'. $hook;
     $function($type, $relationship);
@@ -753,7 +754,7 @@ function drupal_commons_config_roles() {
  */
 function drupal_commons_config_perms() {
   // Load external permissions file
-  include_once('drupal_commons_perms.inc');
+  require_once('drupal_commons.permissions.inc');
   
   $roles_data = array();
   
@@ -769,7 +770,7 @@ function drupal_commons_config_perms() {
   }
   
   // Fetch set permissions
-  $permissions = drupal_commons_import_permissions();
+  $permissions = drupal_commons_user_permissions();
   
   // Add permissions to roles
   foreach ($permissions as $permission) {

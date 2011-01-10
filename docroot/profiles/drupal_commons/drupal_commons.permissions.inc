@@ -8,7 +8,7 @@
  *   An associative array containing permissions and the roles
  *   to which the permission is granted to
  */
-function drupal_commons_import_permissions() {
+function drupal_commons_user_permissions() {
   $permissions = array();
 
   // Exported permission: access comments
