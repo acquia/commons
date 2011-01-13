@@ -12,6 +12,9 @@ function commons_reputation_install() {
   
   // Set userpoint thresholds for badges
   commons_reputation_set_point_thresholds();
+  
+  // Add userpoints vocabulary
+  commons_reputation_insert_vocabulary();
 }
 
 /**
@@ -130,7 +133,7 @@ function commons_reputation_set_point_thresholds() {
         $points = 50;
         break;
       default:
-        $points  = 0;
+        $points = 0;
         break;
     }
     
@@ -141,4 +144,21 @@ function commons_reputation_set_point_thresholds() {
       drupal_write_record('userpoints_badges', $record);
     }
   }
+}
+
+/**
+ * Add a vocabulary for userpoints
+ */
+function commons_reputation_insert_vocabulary() {
+  // Add vocabulary for Userpoints.module
+  $vocab = array(
+    'name' => USERPOINTS_CATEGORY_NAME,
+    'description' => st('Automatically created by the userpoints module'),
+    'multiple' => '0',
+    'required' => '0',
+    'hierarchy' => '1',
+    'relations' => '0',
+    'module' => 'userpoints',
+  );
+  taxonomy_save_vocabulary($vocab);
 }
