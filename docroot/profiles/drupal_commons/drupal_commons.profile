@@ -16,18 +16,6 @@ define('DRUPAL_COMMONS_CONTENT_ROLE', 'content manager');
 // Define the default theme
 define('DRUPAL_COMMONS_THEME', 'acquia_commons');
 
-// Define the default point amount for posting a node
-define('DRUPAL_COMMONS_POINTS_NODE', 5);
-
-// Define the default point amount for posting a comment
-define('DRUPAL_COMMONS_POINTS_COMMENT', 2);
-
-// Define the default point amount for uploading a profile picture
-define('DRUPAL_COMMONS_POINTS_PICTURE', 5);
-
-// Define the default point amount for posting a shout
-define('DRUPAL_COMMONS_POINTS_SHOUT', 1);
-
 /**
  * Return an array of the modules to be enabled when this profile is installed.
  * 
@@ -150,6 +138,7 @@ function drupal_commons_profile_tasks(&$task, $url) {
     $operations[] = array('drupal_commons_build_directories', array());
     $operations[] = array('drupal_commons_config_roles', array());
     $operations[] = array('drupal_commons_config_perms', array());
+    $operations[] = array('drupal_commons_config_taxonomy', array());
     
     // Feature installation operations
     $features = variable_get('commons_selected_featured', array());
@@ -158,7 +147,6 @@ function drupal_commons_profile_tasks(&$task, $url) {
     }
 
     // Post-installation operations
-    $operations[] = array('drupal_commons_config_taxonomy', array());
     $operations[] = array('drupal_commons_config_profile', array());
     $operations[] = array('drupal_commons_config_filter', array());
     $operations[] = array('drupal_commons_config_password', array());
@@ -208,101 +196,128 @@ function drupal_commons_features_form($form_state, $url) {
     '#value' => st('The selected features will be enabled after the installation has completed. At any time, you can turn the available features on or off.'),
   );
   
+  // Required features
+  $form['required'] = array(
+    '#type' => 'fieldset',
+    '#title' => st('Required'),
+    '#description' => t('These features are required for Commons to operate.'),
+  );
+  $form['required']['feature-commons_core'] = array(
+    '#type' => 'checkbox',
+    '#title' => st('Core'),
+    '#default_value' => 1,
+    '#disabled' => 1,
+    '#required' => TRUE,
+    '#value' => 1,
+    '#description' => st('Provides the essential components for Drupal Commons'),
+  );
+  $form['required']['feature-commons_home'] = array(
+    '#type' => 'checkbox',
+    '#title' => st('Home page'),
+    '#default_value' => 1,
+    '#disabled' => 1,
+    '#required' => TRUE,
+    '#value' => 1,
+    '#description' => st('Provides a community-driven home page.'),
+  );
+  
   // Content-related features
   $form['content'] = array(
     '#type' => 'fieldset',
     '#title' => st('Content'),
-    '#description' => t('These features offer different content types for groups.'),
+    '#description' => t('Select which content types you wish Drupal Commons to make available to members of Drupal Commons groups. Note: If you de-select any of these, you can always enable them again after installation.'),
   );
   $form['content']['feature-commons_blog'] = array(
     '#type' => 'checkbox',
     '#title' => st('Blogs'),
     '#default_value' => 1,
-    '#description' => t('Create blog posts inside of groups.'),
+    '#description' => t('Used by individuals to create personal blog posts within a group.'),
   );
   $form['content']['feature-commons_discussion'] = array(
     '#type' => 'checkbox',
     '#title' => st('Discussions'),
     '#default_value' => 1,
-    '#description' => st('Create discussions inside of groups.'),
+    '#description' => st('Used to have threaded topical discussions within a group.'),
   );
   $form['content']['feature-commons_document'] = array(
     '#type' => 'checkbox',
     '#title' => st('Documents'),
     '#default_value' => 1,
-    '#description' => st('Upload documents inside of groups.'),
-  );
-  $form['content']['feature-commons_poll'] = array(
-    '#type' => 'checkbox',
-    '#title' => st('Polls'),
-    '#default_value' => 1,
-    '#description' => st('Create polls inside of groups for members to vote on.'),
-  );
-  $form['content']['feature-commons_event'] = array(
-    '#type' => 'checkbox',
-    '#title' => st('Events & Calendars'),
-    '#default_value' => 1,
-    '#description' => st('Create events and provide calendars inside of groups.'),
+    '#description' => st('Used as a container for attaching documents, images, and other digital files useful to a group.'),
   );
   $form['content']['feature-commons_wiki'] = array(
     '#type' => 'checkbox',
     '#title' => st('Wikis'),
     '#default_value' => 1,
-    '#description' => st('Create wikis inside of groups.'),
+    '#description' => st('A type of page that is editable by all members in a group (vs. editable only its original author).'),
+  );
+  $form['content']['feature-commons_poll'] = array(
+    '#type' => 'checkbox',
+    '#title' => st('Polls'),
+    '#default_value' => 1,
+    '#description' => st('Used to create polls within a group.'),
+  );
+  $form['content']['feature-commons_event'] = array(
+    '#type' => 'checkbox',
+    '#title' => st('Events & calendars'),
+    '#default_value' => 1,
+    '#description' => st('Used to create an event calendar for a group.'),
   );
   
   // Misc features
   $form['misc'] = array(
     '#type' => 'fieldset',
-    '#title' => st('Miscellaneous'),
-  );
-  $form['misc']['feature-commons_home'] = array(
-    '#type' => 'checkbox',
-    '#title' => st('Home page'),
-    '#default_value' => 1,
-    '#description' => st('Provide a community-driven home page.'),
+    '#title' => st('Other functions'),
+    '#description' => st('Select which functions you wish to provide in Drupal Commons. Again, if you de-select any of these, you can enable them again after installation.'),
   );
   $form['misc']['feature-commons_dashboard'] = array(
     '#type' => 'checkbox',
     '#title' => st('Dashboard'),
     '#default_value' => 1,
-    '#description' => st('Enable a drag-and-drop dashboard for users.'),
+    '#description' => st('A feature that provides a unique-per-user, user-customizable dashboard of recent relevant site activity.'),
   );
   $form['misc']['feature-commons_notifications'] = array(
     '#type' => 'checkbox',
     '#title' => st('Notifications'),
     '#default_value' => 1,
-    '#description' => st('Allow users to subscribe to content notifications.'),
+    '#description' => st('Provides a way for group administrators to pull RSS content into a group from other sources.'),
+  );
+  $form['misc']['feature-commons_reputation'] = array(
+    '#type' => 'checkbox',
+    '#title' => st('User awards'),
+    '#default_value' => 1,
+    '#description' => st('Award users points and badges for performing community-related actions.'),
   );
   $form['misc']['feature-commons_group_aggregator'] = array(
     '#type' => 'checkbox',
-    '#title' => st('Group aggregator'),
+    '#title' => st('Content aggregator'),
     '#default_value' => 1,
-    '#description' => st('Give groups the ability to subscribe to RSS feeds.'),
+    '#description' => st('Provides a way for group administrators to pull RSS content into a group from other sources.'),
   );
   $form['misc']['feature-commons_admin'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Admin'),
+    '#title' => t('Admin assist'),
     '#default_value' => 1,
-    '#description' => t('Provide additional administrative interfaces that aid in customizing your site.'),
+    '#description' => st('Bundles a variety of administrative interface tools in one place. (Bundled as a single feature so administrators who wish to use alternate admin interface tools can turn off the defaults easily.).'),
   );
   $form['misc']['feature-commons_seo'] = array(
     '#type' => 'checkbox',
     '#title' => st('SEO'),
     '#default_value' => 1,
-    '#description' => st('Make your site more search-engine friendly by providing things like descriptive URLs.'),
+    '#description' => st('Bundles all SEO-oriented capabilities in a module separate from Drupal Commons Core (for ease of administration).'),
   );
   
+  // Acquia features
   $form['acquia'] = array(
     '#type' => 'fieldset',
     '#title' => st('Acquia'),
-    '#description' => st('Integrate your site with the !an', array('!an' => l(t('Acquia Network'), 'http://acquia.com/products-services/acquia-network', array('attributes' => array('target' => '_blank'))))),
+    '#description' => st('The !an can supplement the functionality of Drupal Commons by providing enhanced site search (faceted search, content recommendations, content biasing, multi-site search, and others using the Apache Solr service), spam protection (using the Mollom service), and more.  A free 30-day trial is available.', array('!an' => l(t('Acquia Network'), 'http://acquia.com/products-services/acquia-network', array('attributes' => array('target' => '_blank'))))),
   );
   $form['acquia']['feature-acquia_network_subscription'] = array(
     '#type' => 'checkbox',
-    '#title' => st('Acquia Network Subscription'),
+    '#title' => st('Acquia Network'),
     '#default_value' => 0,
-    '#description' => st('Enabled functionality provided by the Acquia Network, such as Apache Solr search, Mollom spam prevention, and more. A free 30-day trial is available.'),
+    '#description' => st('Select this either if you wish to try a free trial of the Acquia Network or want to enter the keys for your existing Acquia Network subscription.'),
   );
   
   // Redirect URL to remain inside the installation after submission
@@ -326,9 +341,6 @@ function drupal_commons_features_form_submit(&$form, &$form_state) {
   // Build an array of chosen features
   $features = array();
   
-  // Add the required core
-  $features[] = 'commons_core';
-  
   // Extract the selected features from the form
   foreach ($form_state['values'] as $key => $value) {
     if (substr($key, 0, 8) == 'feature-') {
@@ -339,9 +351,7 @@ function drupal_commons_features_form_submit(&$form, &$form_state) {
   }
   
   // Store a temporary variable to access later
-  if (!empty($features)) {
-    variable_set('commons_selected_featured', $features);
-  }
+  variable_set('commons_selected_featured', $features);
   
   // Initiate the next installation step
   variable_set('install_task', 'install-commons');
@@ -367,19 +377,7 @@ function drupal_commons_build_directories() {
  * 
  * Add and configure vocabularies
  */
-function drupal_commons_config_taxonomy() {
-  // Add vocabulary for Userpoints.module
-  $vocab = array(
-    'name' => USERPOINTS_CATEGORY_NAME,
-    'description' => st('Automatically created by the userpoints module'),
-    'multiple' => '0',
-    'required' => '0',
-    'hierarchy' => '1',
-    'relations' => '0',
-    'module' => 'userpoints',
-  );
-  taxonomy_save_vocabulary($vocab);
-  
+function drupal_commons_config_taxonomy() {  
   // Add free-tagging vocabulary for content
   $vocab = array(
     'name' => st('Tags'),
@@ -400,14 +398,6 @@ function drupal_commons_config_taxonomy() {
     DRUPAL_COMMONS_TAG_ID,
     st('Tags')
   );
-  
-  // Link free-tagging vocabulary to node types
-  foreach (array('group', 'notice', 'page') as $type) {
-    $record = new stdClass;
-    $record->vid = DRUPAL_COMMONS_TAG_ID;
-    $record->type = $type;
-    drupal_write_record('vocabulary_node_types', $record);
-  }
 }
 
 /**
@@ -608,7 +598,7 @@ function drupal_commons_config_password() {
     'alphanumeric' => 7,  // Contain at least 7 alphanumeric chars
     'username' => 1,      // Must not equal the username
     'length' => 7,        // Must be longer than 7 chars
-    'punctuation' => 0,   // Punctuation is required
+    'punctuation' => 0,   // Punctuation isn't required
   );
   $policy->policy = serialize($policy->policy);
   $policy->created = time();
@@ -901,19 +891,6 @@ function drupal_commons_config_images() {
  * These should be set but not enforced by Strongarm
  */
 function drupal_commons_config_vars() {
-  // Set a default point amount so userpoints works out-of-the-box
-  variable_set('userpoints_post_page', DRUPAL_COMMONS_POINTS_NODE);
-  variable_set('userpoints_post_blog', DRUPAL_COMMONS_POINTS_NODE);
-  variable_set('userpoints_post_poll', DRUPAL_COMMONS_POINTS_NODE);
-  variable_set('userpoints_post_discussion', DRUPAL_COMMONS_POINTS_NODE);
-  variable_set('userpoints_post_document', DRUPAL_COMMONS_POINTS_NODE);
-  variable_set('userpoints_post_event', DRUPAL_COMMONS_POINTS_NODE);
-  variable_set('userpoints_post_group', DRUPAL_COMMONS_POINTS_NODE);
-  variable_set('userpoints_post_wiki', DRUPAL_COMMONS_POINTS_NODE);
-  variable_set('userpoints_user_picture', DRUPAL_COMMONS_POINTS_PICTURE);
-  variable_set('userpoints_post_comment', DRUPAL_COMMONS_POINTS_COMMENT);
-  variable_set('shoutbox_points_amount', DRUPAL_COMMONS_POINTS_SHOUT);
-  
   // Some Shoutbox tweaks
   variable_set('shoutbox_filter_format', 5);
   variable_set('shoutbox_escape_html', 0);
@@ -1015,6 +992,7 @@ function drupal_commons_cleanup() {
   $revert = array(
     'commons_core' => array('menu_links'),
     'commons_notifications' => array('variable'),
+    'commons_seo' => array('variable'),
     'commons_blog' => array('menu_links'),
     'commons_event' => array('menu_links'),
     'commons_poll' => array('menu_links'),
@@ -1022,7 +1000,16 @@ function drupal_commons_cleanup() {
     'commons_discussion' => array('menu_links'),
     'commons_wiki' => array('menu_links', 'variable'),
     'commons_home' => array('page_manager_pages'),
+    'commons_reputation' => array('menu_links'),
   );
+  
+  // Make sure we only try to revert features we've enabled
+  $enabled = variable_get('commons_selected_features', array('commons_core'));
+  foreach ($revert as $feature => $value) {
+    if (!in_array($feature, $enabled)) {
+      unset($revert[$feature]);
+    }
+  }
   features_revert($revert);
   
   // Say hello to the dog!

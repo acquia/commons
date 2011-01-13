@@ -561,14 +561,6 @@ function drupal_commons_user_permissions() {
     ),
   );
 
-  // Exported permission: view own userpoints
-  $permissions['view own userpoints'] = array(
-    'name' => 'view own userpoints',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
   // Exported permission: view revisions
   $permissions['view revisions'] = array(
     'name' => 'view revisions',
@@ -588,14 +580,6 @@ function drupal_commons_user_permissions() {
   // Exported permission: view user relationships
   $permissions['view user relationships'] = array(
     'name' => 'view user relationships',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: view userpoints
-  $permissions['view userpoints'] = array(
-    'name' => 'view userpoints',
     'roles' => array(
       '0' => 'authenticated user',
     ),
