@@ -37,8 +37,10 @@ function acquia_commons_preprocess_node(&$vars) {
     
   // User badges
   if ($author->uid && module_exists('user_badges')) {
-    foreach ($author->badges as $badge) {
-      $badges[] = theme('user_badge', $badge, $author);
+    if (is_array($author->badges)) {
+      foreach ($author->badges as $badge) {
+        $badges[] = theme('user_badge', $badge, $author);
+      }
     }
     
     if (!empty($badges)) {
