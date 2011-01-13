@@ -3,7 +3,7 @@
 include_once('commons_core.features.inc');
 
 // The version of Drupal Commons
-define('DRUPAL_COMMONS_VERSION', 1.2);
+define('DRUPAL_COMMONS_VERSION', 1.3);
 
 /**
  * Implementation of hook_content_default_fields_alter()
@@ -1420,7 +1420,6 @@ function commons_core_requirements($phase) {
     return array(array(
       'title' => t('Drupal Commons'),
       'value' => DRUPAL_COMMONS_VERSION,
-      'description' => t('The current version of Drupal Commons'),
       'severity' => REQUIREMENT_INFO,
     ));
   }
