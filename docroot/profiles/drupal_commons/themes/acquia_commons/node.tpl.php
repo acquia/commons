@@ -18,10 +18,6 @@
     </div><!-- /node-top -->
     <?php endif; ?>
 
-    <div class="content clearfix">
-      <?php print $content ?>
-    </div>
-
     <?php if ($submitted): ?>
     <div class="meta">
       <span class="submitted"><?php print $submitted ?></span>
@@ -33,6 +29,10 @@
       <?php print $terms; ?>
     </div>
     <?php endif;?>
+    
+    <div class="content clearfix">
+      <?php print $content ?>
+    </div>
 
     <?php if ($links): ?>
     <div class="links">

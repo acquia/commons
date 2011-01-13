@@ -12,6 +12,49 @@ function acquia_commons_breadcrumb($breadcrumb) {
 }
 
 /**
+ * Node preprocessing
+ */
+function acquia_commons_preprocess_node(&$vars) {
+  // Load the node author
+  $author = user_load($vars['node']->uid);
+  
+  // Author picture
+  $picture = theme_imagecache('user_picture_meta', $author->picture ? $author->picture : variable_get('user_picture_default', ''), $author->name, $author->name);
+  $submitted = $author->uid ? l($picture, "user/{$author->uid}", array('html' => TRUE)) : $picture;
+    
+  // Author information
+  $submitted .= '<span class="submitted-by">';
+  $submitted .= t('Submitted by !name', array('!name' => theme('username', $author)));
+  $submitted .= '</span>';
+    
+  // User points
+  if ($author->uid && module_exists('userpoints')) {
+    $points = userpoints_get_current_points($author->uid);
+    $submitted .= '<span class="userpoints-value" title="' . t('!val user points', array('!val' => $points)) . '">';
+    $submitted .= "({$points})"; 
+    $submitted .= '</span>';
+  }
+    
+  // User badges
+  if ($author->uid && module_exists('user_badges')) {
+    foreach ($author->badges as $badge) {
+      $badges[] = theme('user_badge', $badge, $author);
+    }
+    
+    if (!empty($badges)) {
+      $submitted .= theme('user_badge_group', $badges);
+    }
+  }
+    
+  // Created time
+  $submitted .= '<span class="submitted-on">';
+  $submitted .= format_date($vars['node']->created);
+  $submitted .= '</span>';
+    
+  $vars['submitted'] = $submitted;
+}
+
+/**
  * Comment preprocessing
  */
 function acquia_commons_preprocess_comment(&$vars) {

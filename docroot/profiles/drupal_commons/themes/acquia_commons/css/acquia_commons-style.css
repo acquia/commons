@@ -103,12 +103,6 @@ blockquote p:last-child {
 	text-indent: 0;
 }
 
-.node .inner ul li > a,
-.panel-pane .inner ul li > a,
-.block .content ul li > a {
-	color: #565656;
-}
-
 .node .inner .links ul li > a {
 	color: #669acc;
 }
@@ -757,7 +751,7 @@ h1.title {
 	font-size: 3em;
 	font-weight: normal;
 	line-height: 1.2em;
-	margin: 0 0 .6em 0;
+	margin: 0 0 .2em 0;
 }
 
 /* Default node styles/-------------------------------------------------------------- */
@@ -817,8 +811,54 @@ h2.title a:active {
 	
 }
 
+.meta .terms-inline {
+  display: block;
+  margin-top: 5px;
+}
+
+.meta ul.links li {
+  border-color: #eee;
+}
+
 .submitted {
-	
+  color: #777;
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  padding: 3px 7px 2px;
+  display: block;
+  max-width: 700px;
+  -moz-border-radius: 7px;
+  -webkit-border-radius: 7px;
+}
+
+.submitted .userpoints-value {
+  font-style: italic;
+  font-size: 85%;
+  padding: 0 3px;
+}
+
+.submitted span a {
+	font-weight: bold;
+}
+
+.submitted img.imagecache-user_picture_meta {
+  padding: 4px 5px 0 0;
+  float: left;
+}
+
+.submitted .user_badges {
+  display: inline;
+  padding: 0 0 0 2px;
+}
+
+.submitted .user_badges img {
+  padding: 0 5px 0 0;
+}
+
+.submitted .submitted-on {
+  font-weight: bold;
+  display: block;
+  font-size: 90%;
 }
 
 /* Links for nodes (taxonomy, commenting, read more, etc) */
@@ -1011,7 +1051,7 @@ h2.block-title {
 }
 
 .breadcrumb {
-	padding: 4px 0 4px 12px;
+	padding: 8px 0;
 }
 
 .breadcrumbs.block .breadcrumbs-inner {
@@ -2833,6 +2873,12 @@ html.js fieldset.views-exposed-form.collapsed {
 	margin-top: 22px;
 	max-width: 100%;
 	width: 60px;
+}
+
+div#block-commons_core-5 a,
+div#block-commons_core-5 a:link,
+div#block-commons_core-5 a:visited {
+  color: #565656;
 }
 
 div#block-og_views-0 h2.title {

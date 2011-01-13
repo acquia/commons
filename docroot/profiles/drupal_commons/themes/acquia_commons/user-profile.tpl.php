@@ -42,16 +42,21 @@
  */
 ?>
 <div class="profile">
-<div class="column-left">
-<?php print($profile['user_picture']); 
-unset($profile['user_picture']);
-print('<div class="userpoints">'.$profile['userpoints'].'</div>');
-unset($profile['userpoints']);
-?>
-</div>
-<div class="column-right">
-<?php foreach($profile as $section){
-print($section);
-} ?>
-</div>
+  <div class="column-left">
+    <?php 
+      print($profile['user_picture']); 
+      unset($profile['user_picture']);
+      if (module_exists('userpoints')) {
+        print('<div class="userpoints">'.$profile['userpoints'].'</div>');
+        unset($profile['userpoints']);
+      }
+    ?>
+  </div>
+  <div class="column-right">
+    <?php 
+      foreach ($profile as $section) {
+        print($section);
+      } 
+    ?>
+  </div>
 </div>
