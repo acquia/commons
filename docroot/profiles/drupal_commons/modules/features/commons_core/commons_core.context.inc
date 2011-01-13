@@ -9,8 +9,8 @@ function commons_core_context_default_contexts() {
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
   $context->name = 'context_ui-content-global_content';
-  $context->description = 'Site-wide content pages';
-  $context->tag = 'Commons';
+  $context->description = 'Various blocks to show on the global content views';
+  $context->tag = 'Global content';
   $context->conditions = array(
     'path' => array(
       'values' => array(
@@ -29,12 +29,6 @@ function commons_core_context_default_contexts() {
           'region' => 'sidebar_last',
           'weight' => 0,
         ),
-        'views-most_active_users-block_1' => array(
-          'module' => 'views',
-          'delta' => 'most_active_users-block_1',
-          'region' => 'sidebar_last',
-          'weight' => 1,
-        ),
       ),
     ),
   );
@@ -42,8 +36,8 @@ function commons_core_context_default_contexts() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Commons');
-  t('Site-wide content pages');
+  t('Global content');
+  t('Various blocks to show on the global content views');
 
   $export['context_ui-content-global_content'] = $context;
   $context = new stdClass;
@@ -51,7 +45,7 @@ function commons_core_context_default_contexts() {
   $context->api_version = 3;
   $context->name = 'context_ui-global-global';
   $context->description = 'Show on every page';
-  $context->tag = 'Commons';
+  $context->tag = 'Sitewide';
   $context->conditions = array(
     'sitewide' => array(
       'values' => array(
@@ -70,13 +64,13 @@ function commons_core_context_default_contexts() {
         ),
         'commons_core-3' => array(
           'module' => 'commons_core',
-          'delta' => 3,
+          'delta' => '3',
           'region' => 'header',
           'weight' => 1,
         ),
         'commons_core-2' => array(
           'module' => 'commons_core',
-          'delta' => 2,
+          'delta' => '2',
           'region' => 'footer',
           'weight' => 0,
         ),
@@ -87,8 +81,8 @@ function commons_core_context_default_contexts() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Commons');
   t('Show on every page');
+  t('Sitewide');
 
   $export['context_ui-global-global'] = $context;
   $context = new stdClass;
@@ -149,8 +143,8 @@ function commons_core_context_default_contexts() {
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
   $context->name = 'context_ui-profile-profile';
-  $context->description = 'User Profile';
-  $context->tag = 'Commons';
+  $context->description = 'User profile';
+  $context->tag = 'Profile';
   $context->conditions = array(
     'user_page' => array(
       'values' => array(
@@ -189,16 +183,16 @@ function commons_core_context_default_contexts() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Commons');
-  t('User Profile');
+  t('Profile');
+  t('User profile');
 
   $export['context_ui-profile-profile'] = $context;
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
   $context->name = 'context_ui-users-user_browser';
-  $context->description = 'User Browser';
-  $context->tag = 'Commons';
+  $context->description = 'Various block to show on the user browser page';
+  $context->tag = 'User browser';
   $context->conditions = array(
     'views' => array(
       'values' => array(
@@ -211,7 +205,7 @@ function commons_core_context_default_contexts() {
       'blocks' => array(
         'commons_core-0' => array(
           'module' => 'commons_core',
-          'delta' => 0,
+          'delta' => '0',
           'region' => 'sidebar_last',
           'weight' => 0,
         ),
@@ -220,12 +214,6 @@ function commons_core_context_default_contexts() {
           'delta' => 'users_online-block_1',
           'region' => 'sidebar_last',
           'weight' => 1,
-        ),
-        'views-most_active_users-block_1' => array(
-          'module' => 'views',
-          'delta' => 'most_active_users-block_1',
-          'region' => 'sidebar_last',
-          'weight' => 2,
         ),
         'views-newest_users-block_1' => array(
           'module' => 'views',
@@ -240,8 +228,8 @@ function commons_core_context_default_contexts() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Commons');
-  t('User Browser');
+  t('User browser');
+  t('Various block to show on the user browser page');
 
   $export['context_ui-users-user_browser'] = $context;
   return $export;

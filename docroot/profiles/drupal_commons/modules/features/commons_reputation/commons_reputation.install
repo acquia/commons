@@ -1,0 +1,144 @@
+<?php
+
+/**
+ * Implementation of hook_install()
+ */
+function commons_reputation_install() {
+  // Insert the user badges
+  commons_reputation_insert_badges();
+  
+  // Set a default badge for authenticated users
+  commons_reputation_set_auth_badge();
+  
+  // Set userpoint thresholds for badges
+  commons_reputation_set_point_thresholds();
+}
+
+/**
+ * An array containing the default user badges
+ */
+function commons_reputation_default_badges() {
+  $path = drupal_get_path('module', 'commons_reputation');
+  $badges = array();
+  
+  // Badge: Community Master
+  $badge = new stdClass;
+  $badge->name = t('Community Master');
+  $badge->image = $path . '/images/bars-5.png';
+  $badge->weight = -5;
+  $badge->fixedweight = 1;
+  $badges['community_master'] = $badge;
+  
+  // Badge: Community Guru
+  $badge = new stdClass;
+  $badge->name = t('Community Guru');
+  $badge->image = $path . '/images/bars-4.png';
+  $badge->weight = -4;
+  $badge->fixedweight = 1;
+  $badges['community_guru'] = $badge;
+  
+  // Badge: Community Extraordinaire
+  $badge = new stdClass;
+  $badge->name = t('Community Extraordinaire');
+  $badge->image = $path . '/images/bars-3.png';
+  $badge->weight = -3;
+  $badge->fixedweight = 1;
+  $badges['community_extraordinaire'] = $badge;
+  
+  // Badge: Community Contributor
+  $badge = new stdClass;
+  $badge->name = t('Community Contributor');
+  $badge->image = $path . '/images/bars-2.png';
+  $badge->weight = -2;
+  $badge->fixedweight = 1;
+  $badges['community_contributor'] = $badge;
+  
+  // Badge: Community Member
+  $badge = new stdClass;
+  $badge->name = t('Community Member');
+  $badge->image = $path . '/images/bars-1.png';
+  $badge->weight = -1;
+  $badge->fixedweight = 1;
+  $badges['community_member'] = $badge;
+  
+  // Badge: Community Newbie
+  $badge = new stdClass;
+  $badge->name = t('Community Newbie');
+  $badge->image = $path . '/images/bars-0.png';
+  $badge->weight = 0;
+  $badge->fixedweight = 1;
+  $badges['community_newbie'] = $badge;
+  
+  return $badges;
+}
+
+/**
+ * Insert the default badges
+ */
+function commons_reputation_insert_badges() {
+  $badges = commons_reputation_default_badges();
+  foreach ($badges as $badge) {
+    drupal_write_record('user_badges_badges', $badge);
+  }
+}
+
+/**
+ * Set the default badge for authenticated users
+ */
+function commons_reputation_set_auth_badge() {
+  $badges = commons_reputation_default_badges();
+  
+  // Fetch the badge
+  $badge = db_fetch_object(db_query("SELECT * FROM {user_badges_badges} WHERE name = '%s' AND image = '%s'", $badges['community_newbie']->name, $badges['community_newbie']->image));
+
+  // Set badge for authenticated role
+  if ($badge->bid) {
+    $record = new stdClass;
+    $record->bid = $badge->bid;
+    $record->rid = 2;
+    drupal_write_record('user_badges_roles', $record);
+  }
+}
+
+/**
+ * Set userpoint thresholds for badges
+ */
+function commons_reputation_set_point_thresholds() {
+  // Fetch the badges
+  $badges = commons_reputation_default_badges();
+  
+  // Set the point values
+  foreach ($badges as $key => $badge) {
+    // Determine the bid
+    $bid = db_result(db_query("SELECT bid FROM {user_badges_badges} WHERE name = '%s'", $badge->name));
+    
+    // Determine the point value
+    switch ($key) {
+      case 'community_master':
+        $points = 5000;
+        break;
+      case 'community_guru':
+        $points = 2000;
+        break;
+      case 'community_extraordinaire':
+        $points = 1000;
+        break;
+      case 'community_contributor':
+        $points = 250;
+        break;
+      case 'community_member':
+        $points = 50;
+        break;
+      default:
+        $points  = 0;
+        break;
+    }
+    
+    if ($bid && $points) {
+      $record = new stdClass;
+      $record->bid = $bid;
+      $record->userpoints_goal = $points;
+      drupal_write_record('userpoints_badges', $record);
+    }
+  }
+}

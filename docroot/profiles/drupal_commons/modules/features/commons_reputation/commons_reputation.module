@@ -1,0 +1,16 @@
+<?php
+
+include_once('commons_reputation.features.inc');
+
+/**
+ * Implementation of hook_views_pre_view()
+ */
+function commons_reputation_views_pre_view(&$view, &$display_id, &$args) {
+  switch ($view->name) {
+    case 'most_active_users':
+      if (user_access('view userpoints')) {
+        $view->display_handler->override_option('footer', l(t('View all users'), 'userpoints'));
+      }
+      break;
+  }
+}

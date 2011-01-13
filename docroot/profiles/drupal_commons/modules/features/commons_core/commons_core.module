@@ -1033,12 +1033,6 @@ function commons_core_views_pre_view(&$view, &$display_id, &$args) {
       $view->display_handler->override_option('header', commons_core_node_add_link('notice'));
       break;
       
-    case 'most_active_users':
-      if (user_access('view userpoints')) {
-        $view->display_handler->override_option('footer', l(t('View all users'), 'userpoints'));
-      }
-      break;
-      
     case 'tag_cloud':
       $view->display_handler->override_option('footer', l(t('View more'), 'tagadelic'));
       break;

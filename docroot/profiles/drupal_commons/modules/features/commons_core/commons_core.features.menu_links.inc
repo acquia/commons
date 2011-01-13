@@ -122,21 +122,6 @@ function commons_core_menu_default_menu_links() {
     'weight' => '-50',
     'parent_path' => 'user',
   );
-  // Exported menu link: primary-links:myuserpoints
-  $menu_links['primary-links:myuserpoints'] = array(
-    'menu_name' => 'primary-links',
-    'link_path' => 'myuserpoints',
-    'router_path' => 'myuserpoints',
-    'link_title' => 'My points',
-    'options' => array(),
-    'module' => 'commons',
-    'hidden' => '0',
-    'external' => '0',
-    'has_children' => '0',
-    'expanded' => '0',
-    'weight' => '0',
-    'parent_path' => 'user',
-  );
   // Exported menu link: primary-links:relationships
   $menu_links['primary-links:relationships'] = array(
     'menu_name' => 'primary-links',
@@ -194,7 +179,6 @@ function commons_core_menu_default_menu_links() {
   t('My content');
   t('My friends');
   t('My groups');
-  t('My points');
   t('My profile');
   t('My stuff');
   t('Site analytics');
