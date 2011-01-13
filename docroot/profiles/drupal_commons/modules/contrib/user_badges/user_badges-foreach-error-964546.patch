@@ -1,0 +1,38 @@
+Index: user_badges.module
+===================================================================
+--- user_badges.module	(revision 22519)
++++ user_badges.module	(working copy)
+@@ -202,23 +202,17 @@
+         $account->badges_all = user_badges_get_badges($account->uid, array('nolimit' => TRUE));
+ 
+         //Now make the array of badges we will show.
+-        if (variable_get('user_badges_showone', 0)) {
+-          //Figure out our limit to the number of badges
+-          if (variable_get('user_badges_showone', 0)) {
+-            $limit = variable_get('user_badges_showone', 1);
+-          }
+-          else {
+-            //Set to -1 for no limit
+-            $limit = -1;
+-          }
++        if ($limit = variable_get('user_badges_showone', 0)) {
+           //Loop through all potential badges and get the ones we can show
+-          foreach ($account->badges_all as $bid => $badge) {
+-            //Display the badge if there's no limit or if the badge is unhideable or if we are within our limit
+-            if ( $limit != 0 || $badge->unhideable == 1 ) {
+-              $account->badges[$bid] = $badge;
+-              //Count down our limit, unless the badge doesn't count towards it
+-              if (!$badge->doesnotcounttolimit) {
+-                $limit--;
++          if (is_array($account->badges_all)) {
++            foreach ($account->badges_all as $bid => $badge) {
++              //Display the badge if there's no limit or if the badge is unhideable or if we are within our limit
++              if ( $limit != 0 || $badge->unhideable == 1 ) {
++                $account->badges[$bid] = $badge;
++                //Count down our limit, unless the badge doesn't count towards it
++                if (!$badge->doesnotcounttolimit) {
++                  $limit--;
++                }
+               }
+             }
+           }
