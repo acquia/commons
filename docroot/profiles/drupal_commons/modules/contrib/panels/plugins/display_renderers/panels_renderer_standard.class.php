@@ -1,5 +1,5 @@
 <?php
-// $Id: panels_renderer_standard.class.php,v 1.1.2.31 2010/10/19 19:17:29 merlinofchaos Exp $
+// $Id: panels_renderer_standard.class.php,v 1.1.2.32 2011/01/12 23:48:44 merlinofchaos Exp $
 
 /**
  * The standard render pipeline for a Panels display object.
@@ -552,12 +552,12 @@ class panels_renderer_standard {
 
     // Pass long the css_id that is usually available.
     if (!empty($pane->css['css_id'])) {
-      $content->css_id = $pane->css['css_id'];
+      $content->css_id = check_plain($pane->css['css_id']);
     }
 
     // Pass long the css_class that is usually available.
     if (!empty($pane->css['css_class'])) {
-      $content->css_class = $pane->css['css_class'];
+      $content->css_class = check_plain($pane->css['css_class']);
     }
 
     return $content;
