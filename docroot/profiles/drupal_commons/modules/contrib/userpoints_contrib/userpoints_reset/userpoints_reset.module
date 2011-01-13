@@ -1,0 +1,60 @@
+<?php
+// $Id: userpoints_reset.module,v 1.4 2008/11/13 15:08:35 kbahey Exp $
+
+define(USERPOINTS_PERM_RESET, 'reset userpoints');
+
+function userpoints_reset_help($path, $arg) {
+  switch ($path) {
+    case 'admin/settings/userpoints/reset':
+      $output = t('Reset userpoints');
+      break;
+  }
+  return $output;
+}
+
+function userpoints_reset_menu() {
+  $items['admin/settings/userpoints/reset'] = array(
+    'page callback' => 'userpoints_reset_page',
+    'title'    => 'Reset',
+    'access arguments'   => array(USERPOINTS_PERM_RESET),
+    'type'     => MENU_NORMAL_ITEM
+		);
+   return $items;
+}
+
+function userpoints_reset_perm() {
+  return array (USERPOINTS_PERM_RESET);
+}
+
+function userpoints_reset_page() {
+  return drupal_get_form('userpoints_reset', $form);
+}
+
+function userpoints_reset() {
+  $form = array();
+
+  $form['confirm'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Delete all !points! You can not undo this action, transaction history WILL BE FOREVER DELETED! Enter YES to reset', userpoints_translation()),
+    '#size' => 3,
+    '#maxlength' => 3,
+    '#default_value' => t('NO'));
+
+  $form['reset'] = array(
+    '#type' => 'submit',
+    '#value' => t('Reset'));
+
+  return $form;
+}
+function userpoints_reset_submit($form, &$form_state) {
+  if ($form_state['values']['confirm'] == t('YES')) {
+    userpoints_reset_do();
+    drupal_set_message(t('All userpoints have been reset!'));
+    drupal_goto('admin/settings/userpoints');
+  }
+}
+
+function userpoints_reset_do() {
+  db_query('TRUNCATE {userpoints}');
+  db_query('TRUNCATE {userpoints_txn}');
+}

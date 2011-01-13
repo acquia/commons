@@ -1,0 +1,59 @@
+<?php
+// $Id: user_badges_products.install,v 1.1.2.4 2010/10/12 22:20:14 nancyw Exp $
+
+/**
+ * @file
+ * @brief User Badges Product install file
+ *
+ * This file contains all the installation functions of the schema, tables and variables
+ * used by the module.
+ *
+ * @author Nuno Veloso (nunoveloso18), http://drupal.org/user/80656
+ * @author Richard Skinner (Likeless), http://drupal.org/user/310635
+ *
+ * @warning For more information on licensing, read the LICENCE.txt file.
+ *
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function user_badges_products_schema() {
+  $schema['user_badges_product'] = array(
+    'description' => 'Stores which products grant which badges.',
+    'fields' => array(
+      'bid' => array(
+        'description' => t('Badge ID'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0
+      ),
+      'nid' => array(
+        'description' => t('Node ID'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('bid', 'nid'),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implements hook_install().
+ */
+function user_badges_products_install() {
+  drupal_install_schema('user_badges_products');
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function user_badges_products_uninstall() {
+  drupal_uninstall_schema('user_badges_products');
+}
+

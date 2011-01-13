@@ -1,0 +1,72 @@
+<?php
+// $Id: userpoints_admin_email.module,v 1.1.2.1 2009/01/24 17:12:56 kbahey Exp $
+// Copyright 2008 Khalid Baheyeldin http://2bits.com
+
+/**
+ * Implementation of hook_userpoints()
+ */
+function userpoints_admin_email_userpoints($op, $params = array()) {
+  switch($op) {
+    case 'setting':
+      $group = 'admin_email';
+      $form[$group] = array(
+        '#type'        => 'fieldset',
+        '#title'       => t('Admin Email'),
+        '#description' => t('Email admin when a user reaches a set number of points'),
+        '#collapsible' => TRUE,
+        '#collapsed'   => TRUE,
+      );
+
+      $form[$group][USERPOINTS_ADMIN_EMAIL_THRESHOLD] = array(
+        '#type'          => 'textfield',
+        '#title'         => t('Number of points'),
+        '#description'   => t('Threshold to notify the admin by email when this number of points is reached by a user'),
+        '#default_value' => variable_get(USERPOINTS_ADMIN_EMAIL_THRESHOLD, 0),
+      );
+
+      return $form;
+      break;
+
+    case 'points after':
+      $uid    = $params['uid'];
+      // Get user's balance of points
+      $points = userpoints_get_current_points($uid);
+      // Get the threshold
+      $threshold = variable_get(USERPOINTS_ADMIN_EMAIL_THRESHOLD, 0);
+      if ($point >= $threshold) {
+        // The points reached the threshold
+        userpoints_admin_email_send_mail($uid, $points);
+      }
+      break;
+  }
+}
+
+function userpoints_admin_email_send_mail($uid, $points) {
+  $account = user_load(array('uid' => $uid));
+
+  $params = array(
+    'subject' => t('User !uid reached threshold',
+      array('!uid'   => $uid)),
+    'body' => t('User !username (!url) has reached the number of points set in the threshold: !points',
+      array(
+        '!username' => $account->name,
+        '!url'      => url('user/' . $uid, array('absolute' => TRUE)),
+        '!points'   => $points,
+        )),
+  );
+
+  // Get email address for user 1
+  $admin = user_load(array('uid' => 1));
+  $email = $admin->mail;
+
+  // Send the email
+  drupal_mail('userpoints_admin_email', '', $email, language_default(), $params, $email);
+}
+
+/**
+ * Implementation of hook_mail().
+ */
+function userpoints_admin_email_mail($key, &$message, $params) {
+  $message['subject'] = $params['subject'];
+  $message['body'][]  = $params['body'];
+}

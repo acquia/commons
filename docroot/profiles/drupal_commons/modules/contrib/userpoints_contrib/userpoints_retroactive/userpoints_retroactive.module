@@ -1,0 +1,134 @@
+<?php
+// $Id: userpoints_retroactive.module,v 1.5.2.6 2010/02/21 21:39:58 kbahey Exp $
+
+// Based on a script by Miguel Figueiredo <elmig@debianpt.org>, 2006
+
+define(USERPOINTS_PERM_RETROACTIVE, 'retroactive userpoints');
+
+function userpoints_retroactive_help($path, $arg) {
+  switch ($path) {
+    case 'admin/settings/userpoints/retroactive':
+      $output = t('Award users !points for nodes, comments and votes they created in the past.', userpoints_translation());
+      break;
+  }
+  return $output;
+}
+
+function userpoints_retroactive_menu() {
+  $items['admin/settings/userpoints/retroactive'] = array(
+    'page callback'    => 'userpoints_retroactive_page',
+    'title'            => t('Retroactive'),
+    'access arguments' => array(USERPOINTS_PERM_RETROACTIVE),
+    'type'             => MENU_NORMAL_ITEM
+  );
+
+  return $items;
+}
+
+function userpoints_retroactive_perm() {
+  return array (USERPOINTS_PERM_RETROACTIVE);
+}
+
+function userpoints_retroactive_page() {
+  return drupal_get_form('userpoints_retroactive', $form);
+}
+
+function userpoints_retroactive() {
+  $form = array();
+  
+  $form['confirm'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Award users !points for nodes, comments and votes they created in the past. Enter YES to reset', userpoints_translation()),
+    '#default_value' => t('NO'),
+    '#size'          => 3,
+    '#maxlength'     => 3,
+  );
+
+  $form['submit'] = array(
+    '#type'  => 'submit',
+    '#value' => t('Submit'),
+  );
+
+  return $form;
+}
+
+function userpoints_retroactive_submit($form, &$form_state) {
+  if ($form_state['values']['confirm'] == t('YES')) {
+    userpoints_retroactive_do();
+    drupal_set_message(t('Retroactive !points awarded.', userpoints_translation()));
+    drupal_goto('admin/settings/userpoints');
+  }
+}
+
+function userpoints_retroactive_do() {
+  set_time_limit(240);
+  timer_start('up_retro');
+  $num = userpoints_retroactive_nodes();
+  $num += userpoints_retroactive_comments();
+  if (module_exists('votingapi')) {
+    $num += userpoints_retroactive_votingapi();
+  }
+  $ms = timer_read('up_retro');
+
+  watchdog('userpoints', t('Userpoints retroactive processed %count items in %ms milliseconds'), array('%ms' => $ms, '%count' => $num));
+}
+
+function userpoints_retroactive_nodes() {
+  $num = 0;
+  $result = db_query("SELECT uid, type, COUNT(uid) AS val FROM {node} WHERE status = 1 AND uid > 0 GROUP BY uid, type");
+  while($node = db_fetch_object($result)) {
+    $weight = variable_get(USERPOINTS_POST . $node->type, 0);
+    $tid = variable_get(USERPOINTS_POST . $node->type . '_category', 0);
+    $params = array(
+      'uid'       => $node->uid,
+      'tid'       => $tid,
+      'points'    => ($node->val * $weight),
+      'moderate'  => FALSE,
+      'display'   => FALSE,
+      'operation' => t('Retroactive node'),
+    );
+    userpoints_userpointsapi($params);
+    $num++;
+  }
+  return $num;
+}
+
+function userpoints_retroactive_comments() {
+  $num = 0;
+  $weight = variable_get(USERPOINTS_POST_COMMENT, 0);
+  $tid = variable_get(USERPOINTS_POST_COMMENT . '_category', 0);
+  $result = db_query('SELECT uid, COUNT(uid) AS val FROM {comments} WHERE status = 0 AND uid > 0 GROUP BY uid');
+  while($comment = db_fetch_object($result)) {
+    $params = array(
+      'uid'       => $comment->uid,
+      'tid'       => $tid,
+      'points'    => ($comment->val * $weight),
+      'moderate'  => FALSE,
+      'display'   => FALSE,
+      'operation' => t('Retroactive comment'),
+    );
+    userpoints_userpointsapi($params);
+    $num++;
+  }
+  return $num;
+}
+
+function userpoints_retroactive_votingapi() {
+  $num = 0;
+  $weight = variable_get('userpoints_votingapi_vote', 0);
+  $tid = variable_get('userpoints_votingapi_tid', 0);
+  $result = db_query('SELECT uid, COUNT(*) AS val from {votingapi_vote} GROUP BY uid');
+  while($u = db_fetch_object($result)) {
+    $params = array(
+      'uid'       => $u->uid,
+      'tid'       => $tid,
+      'points'    => ($u->val * $weight),
+      'moderate'  => FALSE,
+      'display'   => FALSE,
+      'operation' => t('Retroactive votingapi'),
+    );
+    userpoints_userpointsapi($params);
+    $num++;
+  }
+  return $num;
+}

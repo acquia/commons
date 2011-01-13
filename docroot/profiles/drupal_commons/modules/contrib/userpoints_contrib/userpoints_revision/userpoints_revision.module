@@ -1,0 +1,121 @@
+<?php
+
+/*******************************************************************
+	DRUPAL HOOKS
+*******************************************************************/
+
+function userpoints_revision_nodeapi(&$node, $op, $teaser, $page)
+{
+  	switch ($op)
+	{
+	
+		case 'update':
+
+			if($node->revision)
+			{
+				global $user;
+				$points_own_nodes = variable_get('userpoint_revision_own_nodes', 0);
+				if(!$points_own_nodes && $user->uid==$node->uid)
+					break;
+				//load old node revision to compare against
+				$old_node = node_load($node->nid);
+				
+				//flag for significant changes between the two revisions
+				$change = FALSE;
+				
+				//lets check the length of content in each revision
+					$size1 = strlen($old_node->body);
+					$size2 = strlen($node->body);
+					
+					$diff = abs($size1 - $size2);
+				
+				if($diff > 20)
+				{
+					$change = TRUE;
+				}
+				//similar character count, lets check character by character
+				else
+				{
+					$count = 0;
+					
+					for($i = 0; $i < $size1, $i < $size2; $i++)
+					{
+						if($old_node->body{$i} != $node->body{$i})
+						{
+							$count++;
+						}
+					}
+					
+					if($count > 20)
+					{
+						$change = TRUE;
+					}
+				}
+								
+				if($change)
+				{
+					$points = variable_get('userpoints_revision_'.$node->type, 0);
+			
+					$params = array(
+						'points' 		=> $points,
+						'uid' 			=> $user->uid,
+						'operation' 	=> t('New revision'),
+						'entity_id'		=> $node->nid,
+						'entity_type'	=> 'node'
+					);
+					
+					userpoints_userpointsapi($params);
+				}
+			}
+						
+			break;
+	}
+}
+
+/*******************************************************************
+	USERPOINTS HOOKS
+*******************************************************************/
+
+function userpoints_revision_userpoints($op, $params = array())
+{
+	switch($op)
+	{
+		case 'setting':
+
+			$form['revision'] = array(
+				'#collapsed'	=> TRUE,
+				'#collapsible'	=> TRUE,
+				'#title'		=> t('!Points for creating node revisions',
+									userpoints_translation()),
+				'#type' 		=> 'fieldset',
+			);
+			
+			$form['revision']['userpoint_revision_own_nodes'] = array(
+				'#type' => 'checkbox',
+				'#default_value' => variable_get('userpoint_revision_own_nodes', 0),
+				'#title' => t('Award points for revisions by the node author'),
+			);
+
+			foreach (node_get_types() as $type => $name)
+			{
+				$form['revision']['userpoints_revision_'.$type] = array(
+					'#default_value' => variable_get('userpoints_revision_'.$type, '0'),					
+					'#maxlength'     => 5,
+					'#size'          => 5,
+					'#title'         => t('!Points for creating a revision of a
+											!node-name',
+											array_merge(
+												userpoints_translation(),
+												array('!node-name' => $name->name)
+											)
+										),
+					'#type'          => 'textfield',
+				);
+			}
+
+			return $form;
+
+			break;
+	}
+}
+

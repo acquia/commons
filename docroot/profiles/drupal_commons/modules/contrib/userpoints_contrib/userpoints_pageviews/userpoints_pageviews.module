@@ -1,0 +1,143 @@
+<?php
+// $Id: userpoints_pageviews.module,v 1.1.4.4 2009/01/20 21:15:11 kbahey Exp $
+
+
+define('USERPOINTS_PAGEVIEWS_NODE',                	'userpoints_pageviews_node_');
+define('USERPOINTS_PAGEVIEW_TID',                   'userpoints_pageview_tid');
+define('USERPOINTS_PAGEVIEW_PAGE_LIMIT',            'userpoints_pageview_page_limit');
+define('USERPOINTS_PAGEVIEW_CLICK_IGNORE_INTERVAL', 'userpoints_pageview_click_ignore_interval');
+
+function userpoints_pageviews_perm() {
+  return array('userpoints pageviews click');
+}
+
+function userpoints_pageviews_userpoints($op = 'setting', $params = array()) {
+  if ($op == 'setting') {
+    $group = 'pageviews';
+    $form[$group] = array(
+      '#type'          => 'fieldset',
+      '#collapsible'   => TRUE,
+      '#collapsed'     => TRUE,
+      '#title'         => t('!Points for node page views', userpoints_translation()),
+      '#description'   => t('You can assign different points for each content type. If you want a content type not to have any points awarded, then specify 0 for it.'), 
+    );
+
+    foreach (node_get_types() as $type => $name) {
+        $form[$group][USERPOINTS_PAGEVIEWS_NODE . $type] = array(
+          '#type'          => 'textfield',
+          '#title'         => t('!Points for viewing a !node-name', array_merge(userpoints_translation(), array('!node-name' => $name->name))),
+          '#default_value' => variable_get(USERPOINTS_PAGEVIEWS_NODE . $type, 0),
+          '#size'          => 5,
+          '#maxlength'     => 5,
+          );
+      }
+    
+    $form[$group][USERPOINTS_PAGEVIEW_TID] = array(
+      '#type'          => 'select',
+      '#title'         => t('Category'),
+      '#default_value' => variable_get(USERPOINTS_PAGEVIEW_TID, 0),
+      '#options'       => userpoints_get_categories(),
+      '#description'   => t('Page views will be assigned to this category. You can modify what categories are available by modifying the <a href="!url">Userpoints taxonomy</a>.', 
+        array('!url' => url('admin/content/taxonomy/'. variable_get(USERPOINTS_CATEGORY_DEFAULT_VID, '')))),
+    );
+      
+    $form[$group][USERPOINTS_PAGEVIEW_CLICK_IGNORE_INTERVAL] = array(
+      '#type'          => 'select',
+      '#title'         => t('IP Click Ignore'),
+      '#default_value' => variable_get(USERPOINTS_PAGEVIEW_CLICK_IGNORE_INTERVAL, 86400),
+      '#options'       => drupal_map_assoc(array(3600, 10800, 21600, 32400, 43200, 86400, 172800, 259200, 604800, 1209600, 2419200), 'format_interval'),
+      '#description'   => t('Ignore clicks from the same IP address for this time interval.'),
+    );
+    
+    $options = array(
+      t('All'),
+      t('One'),
+    );
+
+    $form[$group][USERPOINTS_PAGEVIEW_PAGE_LIMIT] = array(
+      '#type'          => 'radios',
+      '#title'         => t('Page limit'),
+      '#default_value' => variable_get(USERPOINTS_PAGEVIEW_PAGE_LIMIT, 0),
+      '#options'       => $options,
+      '#description'   => t('Selecting <b>All</b> allows a single point award response for every node during the set interval. This is the default behavior.<br>Selecting <b>One</b> limits the point award response to once only during the set interval, regardless of how many different nodes the user views.', userpoints_translation()),
+    );
+      
+    return $form;
+  }
+}
+
+function userpoints_pageviews_nodeapi(&$node, $op = 'view', $teaser, $page) {
+  global $user;
+
+  if($op != 'view') {
+    return;
+  }
+
+  if (!$page) {
+    // Node is not in page mode, but rather in a list
+    return;
+  }
+
+  if (!user_access('userpoints pageviews click')) {
+    // User does not have access to earn points for clicks
+    return;
+  }
+
+  if ($node->uid == $user->uid) {
+    // User created this node...
+    return;
+  }
+
+  $num = userpoints_pageviews_check_timeout($node->nid, $user->uid);
+  if ($num) {
+    // Allow points if time between click is greater than defined interval and the user has permissions
+    return;
+  }
+
+  // All good ...
+
+  // Create a record, so we can check it later
+  db_query("INSERT INTO {userpoints_pageviews} (uid, nid, ip, timestamp) VALUES (%d, %d, '%s', %d)",
+    $user->uid, $node->nid, ip_address(), time());
+ 
+  // Award the points
+  userpoints_userpointsapi(array(
+    'uid'         => $node->uid,
+    'points'      => variable_get(USERPOINTS_PAGEVIEWS_NODE . $node->type, 0),
+    'operation'   => 'node view',
+    'entity_id'   => $node->nid,
+    'entity_type' => 'node',
+    'tid'         => variable_get(USERPOINTS_PAGEVIEW_TID, 0),
+  ));
+}
+
+function userpoints_pageviews_check_timeout($nid = 0, $uid = 0) {
+  switch (variable_get(USERPOINTS_PAGEVIEW_PAGE_LIMIT, 0)) {
+    case 0: // All
+      return (int)db_result(db_query("SELECT COUNT(*) FROM {userpoints_pageviews}
+        WHERE ip = '%s'
+        AND %d < (timestamp + %d)
+        AND nid = %d
+        AND uid = %d",
+        ip_address(), time(), variable_get(USERPOINTS_PAGEVIEW_CLICK_IGNORE_INTERVAL, 86400), $nid, $uid));
+
+    case 1: // One
+      return (int)db_result(db_query("SELECT COUNT(*) FROM {userpoints_pageviews}
+        WHERE ip = '%s'
+        AND %d < (timestamp + %d)
+        AND uid = %d",
+        ip_address(), time(), variable_get(USERPOINTS_PAGEVIEW_CLICK_IGNORE_INTERVAL, 86400), $uid));
+  }
+}
+
+/**
+ * hook_cron - delete rows so the table does not grow indefinitely
+ */
+function userpoints_pageviews_cron() {
+  $frequency = 86400; // 24 hours
+  $last_run = variable_get('cron_last', time());
+  if (time() >= ($last_run + $frequency)) {
+    db_query("DELETE FROM {userpoints_pageviews} WHERE timestamp < %d",
+      time() - variable_get(USERPOINTS_PAGEVIEW_CLICK_IGNORE_INTERVAL, 86400));
+  }
+}

@@ -1,0 +1,377 @@
+<?php
+
+//$Id: userpoints_role.module,v 1.4.2.5 2009/02/03 17:00:01 kbahey Exp $
+
+// Copyright 2005-2008 Khalid Baheyeldin http://2bits.com
+
+// Variables
+define('USERPOINTS_ROLE',               'userpoints_role_');
+define('USERPOINTS_ROLE_TEXT_JOIN',     'userpoints_role_text_join');
+define('USERPOINTS_ROLE_TEXT_LEAVE',    'userpoints_role_text_leave');
+define('USERPOINTS_ROLE_SUBJECT_JOIN',  'userpoints_role_subject_join');
+define('USERPOINTS_ROLE_SUBJECT_LEAVE', 'userpoints_role_subject_leave');
+
+function userpoints_role_defaults($key) {
+  $data = array(
+    'join_subject' => 'Congratulations! You have joined a new role',
+
+    'join_text'    => "!username,\n\nCongratulations!\nYou have met the minimum required points for joining a new role.\n\nAs a new member of this role, you now join a select few in having access to more areas and privileges on the web site.\n\nRole: !rolename\nPoints Required: !points\n\nWe extend our warmest welcome.",
+
+    'leave_subject' => 'Sorry! You have left a role',
+
+    'leave_text'    => "!username,\n\nWe are sorry!\nYou have lost the number of points required to stay in your current role.\n\nYou no longer have access to the areas and privileges of the following role:\n\nRole: !rolename\nPoints Required: !points.",
+  );
+
+  return $data[$key];
+}
+
+function userpoints_role_help($path, $arg) {
+  switch ($path) {
+    case 'admin/modules#description':
+      return t('Users gain/lose roles as they earn !points', userpoints_translation());
+  }
+}
+
+function userpoints_role_menu() {
+  $items = array();
+
+  $items['admin/settings/userpoints/role/%'] = array(
+    'title'            => t('!Points roles settings', userpoints_translation()),
+    'description'      => t('Settings for role'),
+    'page callback'    => 'drupal_get_form',
+    'page arguments'   => array('userpoints_role_admin_settings', 4),
+    'access arguments' => array(USERPOINTS_PERM_ADMIN),
+    'type'             => MENU_NORMAL_ITEM
+  );
+
+  return $items;
+}
+
+function userpoints_role_admin_settings($form_state, $rid) {
+  $role_list = user_roles();
+  $role_name = $role_list[$rid];
+
+  $group = 'role';
+  $form[$group] = array(
+    '#type'        => 'fieldset',
+    '#title'       => t('Role email settings for @role', array('@role' => $role_name)),
+    '#description' => t('Role settings, subject and text of email.'),
+    '#collapsible' => TRUE,
+    '#collapsed'   => FALSE,
+  );
+
+  $form[$group][USERPOINTS_ROLE_SUBJECT_JOIN . $rid] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Subject of email to sent upon joining a role'),
+    '#default_value' => variable_get(USERPOINTS_ROLE_SUBJECT_JOIN . $rid, t(userpoints_role_defaults('join_subject'))),
+  );
+
+  $form[$group][USERPOINTS_ROLE_TEXT_JOIN . $rid] = array(
+    '#type'          => 'textarea',
+    '#title'         => t('Text of email to sent upon joining a role'),
+    '#default_value' => variable_get(USERPOINTS_ROLE_TEXT_JOIN . $rid, t(userpoints_role_defaults('join_text'))),
+    '#width'         => 70,
+    '#lines'         => 5,
+  );
+
+  $form[$group][USERPOINTS_ROLE_SUBJECT_LEAVE . $rid] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Subject of email to sent upon leaving a role'),
+    '#default_value' => variable_get(USERPOINTS_ROLE_SUBJECT_LEAVE . $rid, t(userpoints_role_defaults('leave_subject'))),
+  );
+
+  $form[$group][USERPOINTS_ROLE_TEXT_LEAVE . $rid] = array(
+    '#type'          => 'textarea',
+    '#title'         => t('Text of email to sent upon leaving a role'),
+    '#default_value' => variable_get(USERPOINTS_ROLE_TEXT_LEAVE . $rid, t(userpoints_role_defaults('leave_text'))),
+    '#width'         => 70,
+    '#lines'         => 5,
+  );
+
+  return system_settings_form($form);
+}
+
+/**
+ * Role promotion/demotion based on points gained/lost
+ */
+function userpoints_role_userpoints($op, $params = array()) {
+  switch($op) {
+    case 'setting':
+      $group = 'role';
+      $form[$group] = array(
+        '#type'        => 'fieldset',
+        '#title'       => t('!Points for Roles', userpoints_translation()),
+        '#description' => t('Users join/leave to roles as they gain/lose points'),
+        '#collapsible' => TRUE,
+        '#collapsed'   => TRUE,
+      );
+
+      $subgroup = 'default_email';
+
+      $form[$group][$subgroup] = array(
+        '#type'        => 'fieldset',
+        '#title'       => t('Default email settings', userpoints_translation()),
+        '#description' => t('Email subject and body for joining and leaving roles. You can modify that further for each role if you wish, using the links below each role. If you a role does not have its own subject and body settings, then the ones below will apply.'),
+        '#collapsible' => TRUE,
+        '#collapsed'   => TRUE,
+      );
+
+      $form[$group][$subgroup][USERPOINTS_ROLE_SUBJECT_JOIN] = array(
+        '#type'          => 'textfield',
+        '#title'         => t('Subject of email to sent upon joining a role'),
+        '#default_value' => variable_get(USERPOINTS_ROLE_SUBJECT_JOIN, t(userpoints_role_defaults('join_subject'))),
+      );
+
+      $form[$group][$subgroup][USERPOINTS_ROLE_TEXT_JOIN] = array(
+        '#type'          => 'textarea',
+        '#title'         => t('Text of email to sent upon joining a role'),
+        '#default_value' => variable_get(USERPOINTS_ROLE_TEXT_JOIN, t(userpoints_role_defaults('join_text'))),
+        '#width'         => 70,
+        '#lines'         => 5,
+        );
+
+      $form[$group][$subgroup][USERPOINTS_ROLE_SUBJECT_LEAVE] = array(
+        '#type'          => 'textfield',
+        '#title'         => t('Subject of email to sent upon leaving a role'),
+        '#default_value' => variable_get(USERPOINTS_ROLE_SUBJECT_LEAVE, t(userpoints_role_defaults('leave_subject'))),
+      );
+
+      $form[$group][$subgroup][USERPOINTS_ROLE_TEXT_LEAVE] = array(
+        '#type'          => 'textarea',
+        '#title'         => t('Text of email to sent upon leaving a role'),
+        '#default_value' => variable_get(USERPOINTS_ROLE_TEXT_LEAVE, t(userpoints_role_defaults('leave_text'))),
+        '#width'         => 70,
+        '#lines'         => 5,
+        );
+
+      $role_list = userpoints_role_load_role_points(TRUE);
+
+      $subgroup = 'role_details';
+
+      $form[$group][$subgroup] = array(
+        '#type'        => 'fieldset',
+        '#title'       => t('Role settings', userpoints_translation()),
+        '#description' => t('Points required to join each role. Enter 0 to ignore that role.'),
+        '#collapsible' => TRUE,
+        '#collapsed'   => TRUE,
+      );
+
+      if (empty($role_list)) {
+        $form[$group][$subgroup]['no_roles'] = array(
+          '#type '  => 'markup',
+          '#prefix' => '<div>',
+          '#suffix' => '</div>',
+          '#value'  => t('There are no additional roles defined. This module will not work for anonymous and authenticated users. You need to define more roles to use this module.'),
+        );
+      }
+
+      foreach($role_list as $role_point) {
+        $name = $role_point['name'];
+        $rid  = $role_point['rid'];
+        $role = USERPOINTS_ROLE . $rid;
+
+        $form[$group][$subgroup][$role] = array(
+          '#type'          => 'textfield',
+          '#title'         => t('Points for role :') . $name,
+          '#default_value' => variable_get($role, 0),
+        );
+        $form[$group][$subgroup][$role .'_tid'] = array(
+          '#type'          => 'select',
+          '#title'         => t('Category'),
+          '#default_value' => variable_get($role .'_tid', 0),
+          '#options'       => userpoints_get_categories(),
+          '#description'   => t('Category of these points'),
+        );
+        $form[$group][$subgroup][$role . 'links'] = array(
+          '#type '  => 'markup',
+          '#prefix' => '<div>',
+          '#suffix' => '</div>',
+          '#value'  => t('Change email settings for !role', array('!role' => l($name, 'admin/settings/userpoints/role/' . $rid, array('html' => TRUE)))),
+        );
+      }
+
+      return $form;
+      break;
+
+    case 'points after':
+      $uid        = $params['uid'];
+      $new_points = $params['points'];
+
+      // Check the roles the user belong to, and if they are exempted from userpoints
+      $points = userpoints_get_current_points($uid);
+      _userpoints_role_update_roles($uid, $points, $new_points);
+      break;
+  }
+}
+
+function _userpoints_role_update_roles($uid, $points, $new_points) {
+  $role_points = userpoints_role_load_role_points();
+  if ($new_points < 0) {
+    // we may need to demote the user in roles
+    foreach($role_points as $role_point) {
+      if ($role_point['points'] > 0) {
+        // Ignore roles that have 0 in them, since the admin does not want
+        // users to join those roles
+        if ($role_point['tid'] > 0) {
+          $cat_points = userpoints_get_current_points($uid, $role_point['tid']);
+          if ($cat_points < $role_point['points']) {
+            userpoints_role_leave($uid, $role_point);
+          }
+        }
+        else if ($points < $role_point['points']) {
+          userpoints_role_leave($uid, $role_point);
+        }
+      }
+    }
+  }
+  else {
+    // we need to promote the user to new roles, if they have the threshold
+    foreach($role_points as $role_point) {
+      if ($role_point['points'] > 0) {
+        // Ignore roles that have 0 in them, since the admin does not want
+        // users to join those roles
+        if ($role_point['tid'] > 0) {
+          $cat_points = userpoints_get_current_points($uid, $role_point['tid']);
+          if ($cat_points < $role_point['points']) {
+            userpoints_role_join($uid, $role_point);
+          }
+        }
+        else if ($points >= $role_point['points']) {
+          userpoints_role_join($uid, $role_point);
+        }
+      }
+    }
+  }
+}
+
+function userpoints_role_check_user_role($uid, $rid) {
+  return (int)db_result(db_query("SELECT COUNT(*) FROM {users_roles} WHERE rid = %d AND uid = %d", $rid, $uid));
+}
+
+function userpoints_role_join($uid, $role_point) {
+  $rid = $role_point['rid'];
+  $points = $role_point['points'];
+  if (userpoints_role_check_user_role($uid, $rid)) {
+    // User already has that role, no need to do anything
+  }
+  else {
+    userpoints_role_send_mail('join', $uid, $role_point);
+    user_multiple_role_edit(array($uid), 'add_role', $rid);
+  }
+}
+
+function userpoints_role_leave($uid, $role_point) {
+  $rid = $role_point['rid'];
+  $points = $role_point['points'];
+  if (userpoints_role_check_user_role($uid, $rid)) {
+    // User is in that role, need to remove him
+    userpoints_role_send_mail('leave', $uid, $role_point);
+    user_multiple_role_edit(array($uid), 'remove_role', $rid);
+  }
+}
+
+function userpoints_role_send_mail($op = 'join', $uid, $role_point) {
+  $account = user_load(array('uid' => $uid));
+  $vars = array(
+    '!username' => $account->name,
+    '!rolename' => $role_point['name'],
+    '!points'   => $role_point['points'],
+    );
+
+  $params = array(
+    'subject' => userpoints_role_email($op, 'subject', $role_point['rid'], $vars),
+    'body'    => userpoints_role_email($op, 'text',    $role_point['rid'], $vars),
+  );
+
+  $from = variable_get('site_mail', ini_get('sendmail_from'));
+  drupal_mail('userpoints_role', 'userpoints_role', $account->mail, $language, $params, $from);
+}
+
+function userpoints_role_email($op = 'join', $type = 'text', $rid, $vars) {
+  // Note: this function manipulates variable names, so be careful changing any of them
+
+
+  // Get the data for this role
+  $output = variable_get('userpoints_role_' . $type . '_' . $op . $rid, '');
+  if (!$output) {
+    // If it is empty, use the default data
+    $output = variable_get('userpoints_role_' . $type . '_' . $op, userpoints_role_defaults($op . '_' . $type));
+  }
+  // Substitute the variables
+  return t($output, $vars);
+}
+
+/**
+ * Implementation of hook_mail().
+ */
+function userpoints_role_mail($key, &$message, $params) {
+  $message['subject'] = $params['subject'];
+  $message['body'][] = drupal_html_to_text($params['body']);
+}
+
+function userpoints_role_load_role_points($list_all = FALSE) {
+  $role_points = array();
+  foreach (user_roles() as $rid => $name) {
+    if (1 == $rid || 2 == $rid) {
+      // Anonymous and authenticated roles are ignored
+      continue;
+    }
+
+    if (!$list_all) {
+      $points = variable_get(USERPOINTS_ROLE . $rid, 0);
+      if ($points) {
+        // In case the site admin did not enter any points for a role, we ignore it
+        $role_points[] = _userpoints_role_load_role_data($rid, $name);
+      }
+    }
+    else {
+      // Include the role regardless
+      $role_points[] = _userpoints_role_load_role_data($rid, $name);
+    }
+  }
+  return $role_points;
+}
+
+function _userpoints_role_load_role_data($rid, $name) {
+  return array(
+    'rid'    => $rid,
+    'name'   => $name,
+    'points' => (int)variable_get(USERPOINTS_ROLE . $rid, 0),
+    'tid'    => variable_get(USERPOINTS_ROLE . $rid .'_tid', 0),
+  );
+}
+
+/**
+ * Public function to return the name of the highest * role a user has reached.
+ *
+ * @param $uid
+ *  Option user ID. Current logged in user if not specified.
+ *
+ * @return 
+ *  name of their role
+ *
+ */
+function userpoints_role_highest_role($uid = 0) {
+  global $user;
+
+  // If no user specified, then it is for the current user
+  if (!$uid) {
+    $uid = $user->uid;
+  }
+
+  // Get the points the user has
+  $current_points = userpoints_get_current_points($uid);
+
+  // Get a list of roles
+  $role_points = userpoints_role_load_role_points();
+  $roles_within = array();
+  foreach($role_points as $role) {
+    //put all the roles user is in into an array.
+    if ($current_points > $role['points']){
+      $roles_within[$role['points']] = $role['name'];
+    }
+  }
+  // return the maximum role name
+  // max() returns the value of the largest key
+  return max($roles_within);
+}

@@ -1,0 +1,73 @@
+<?php
+// $Id: userpoints_modr8.module,v 1.2.2.1 2009/06/26 15:19:09 kbahey Exp $
+
+define('USERPOINTS_MODR8', 'userpoints_modr8_');
+
+function userpoints_modr8_userpoints($op, $params = array()) {
+  if ($op == 'setting') {
+    $group = 'modr8';
+    $form[$group] = array(
+      '#type'        => 'fieldset',
+      '#title'       => t('modr8'),
+      '#description' =>  t('Points to award for each modr8 action.'),
+      '#collapsible' => TRUE,
+      '#collapsed'   => TRUE,
+    );
+
+    foreach(_userpoints_modr8_actions() as $action => $desc) {
+      $up_op     = USERPOINTS_MODR8 . $action;
+      $up_op_tid = USERPOINTS_MODR8 . $action . '_tid';
+
+      $form[$group][$up_op] = array(
+        '#type'          => 'textfield',
+        '#title'         => t('Points for action: !action', array('!action' => $desc)),
+        '#default_value' => variable_get($up_op, 0),
+      );
+      $form[$group][$up_op_tid] = array(
+        '#type'          => 'select',
+        '#title'         => t('Category'),
+        '#default_value' => variable_get($up_op_tid, 0),
+        '#options'       => userpoints_get_categories(),
+        '#description'   => t('Category of these points'),
+      );
+    }
+
+    return $form;
+  }
+}
+
+/*
+ * Implementation of hook_modr8_log()
+ */
+function userpoints_modr8_modr8_log($op, $nid, $values, $message) {
+  global $user;
+
+  if (!$user->uid) {
+    // This is an anonymous user, do nothing ...
+    return;
+  }
+
+  $points = variable_get(USERPOINTS_MODR8 . $op, 0);
+  if (!$points) {
+    // Admin has not configured any points for modr8
+    return;
+  }
+
+  userpoints_userpointsapi(array(
+    'uid'         => $user->uid,
+    'points'      => $points,
+    'tid'         => variable_get(USERPOINTS_MODR8 . $op . '_tid', 0),
+    'operation'   => "modr8-$op-$nid",
+    'description' => "Moderation action: $op, for Node: $nid",
+    )
+  );
+}
+
+function _userpoints_modr8_actions() {
+  return array(
+    'approve'  => t('Approve'),
+    'delete'   => t('Delete'),
+    'nada'     => t('No action (note)'),
+    'response' => t('Response'),
+  );
+}

@@ -1,0 +1,50 @@
+<?php
+// $Id: userpoints_pageviews.install,v 1.1 2009/01/16 15:31:20 kbahey Exp $
+
+/**
+ * Implementation of hook_install().
+ */
+function userpoints_pageviews_install() {
+  drupal_install_schema('userpoints_pageviews');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function userpoints_pageviews_uninstall() {
+  drupal_uninstall_schema('userpoints_pageviews');
+  db_query("DELETE FROM {variable} WHERE name LIKE 'userpoints%pageview%'");
+}
+
+
+/**
+* Implementation of hook_schema().
+*/
+function userpoints_pageviews_schema() {
+  $schema = array();
+
+  $schema['userpoints_pageviews'] = array(
+  'description' => 'Records userpoints pageview clicks',
+    'fields' => array(
+      'id'        => array('type' => 'serial',  'length' => '10', 'unsigned' => TRUE, 'not null' => TRUE ),
+      'uid'       => array('type' => 'int',     'length' => '10', 'unsigned' => TRUE, 'default' => NULL, ),
+      'nid'       => array('type' => 'int',     'length' => '10', 'unsigned' => TRUE, 'default' => NULL, ),
+      'ip'        => array('type' => 'varchar', 'length' => '16',                     'default' => NULL ),
+      'timestamp' => array('type' => 'int',     'length' => '11',                     'default' => NULL ),  
+    ),
+    'primary key' => array('id'),
+    'indexes' => array(
+      'userpoints_pageviews_uid'       => array('uid'),
+      'userpoints_pageviews_nid'       => array('nid'),
+      'userpoints_pageviews_ip'        => array('ip'),
+      'userpoints_pageviews_timestamp' => array('timestamp'),
+    ),
+  );  
+  
+  return $schema;
+}
+
+function userpoints_pageviews_update_6001() { 
+  drupal_install_schema('userpoints_pageviews');
+	return array();
+}

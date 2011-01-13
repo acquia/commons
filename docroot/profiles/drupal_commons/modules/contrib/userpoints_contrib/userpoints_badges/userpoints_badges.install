@@ -1,0 +1,39 @@
+<?php
+
+// $Id: userpoints_badges.install,v 1.1 2008/11/10 18:13:22 kbahey Exp $
+
+function userpoints_badges_schema() {
+  $schema = array();
+  $schema['userpoints_badges'] = array(
+    'description' => 'Holds the user badge images',
+    'fields' => array(
+      'bid' => array(
+        'description' => t('Original badge ID'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'userpoints_goal' => array(
+        'description' => t('Number points user much reach.'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('bid'),
+    'indexes' => array(
+      'bid_userpoints_goal' => array('bid', 'userpoints_goal'),
+    )
+  );
+  return $schema;
+}
+
+function userpoints_badges_install() {
+  drupal_install_schema('userpoints_badges');
+}
+
+function userpoints_badges_uninstall() {
+  drupal_uninstall_schema('userpoints_badges');
+}
+

@@ -1,0 +1,55 @@
+<?php
+
+/**
+ * @file
+ * Userpoints Cap module for Drupal 6.x
+ * Limit the number of points a user can earn.
+ * @author Mike Smullin (http://www.mikesmullin.com), D6 update by fred0
+ * @license GNU General Public License (http://www.gnu.org/copyleft/gpl.html)
+ */
+
+define('USERPOINTS_CAP_MAXIMUM', 'userpoints_cap_maximum');
+define('USERPOINTS_CAP_MAXIMUM_DEFAULT', 1000000);
+define('USERPOINTS_CAP_MESSAGE', 'userpoints_cap_message');
+define('USERPOINTS_CAP_MESSAGE_DEFAULT', '!Points are limited to a maximum; you must spend to earn more.');
+
+function userpoints_cap_userpoints($op, $params = array()) {
+  switch($op) {
+    case 'setting':
+      $group = 'userpoints_cap';
+      $form[$group] = array(
+        '#type' => 'fieldset',
+        '#title' => t('!Points Cap', userpoints_translation()),
+        '#description' =>  t('Maximum number of !points allowed for each user.', userpoints_translation()),
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,
+      );
+
+      $form[$group][USERPOINTS_CAP_MAXIMUM] = array(
+        '#type' => 'textfield',
+        '#title' => t('Maximum !Points per User', userpoints_translation()),
+        '#default_value' => t(variable_get(USERPOINTS_CAP_MAXIMUM, USERPOINTS_CAP_MAXIMUM_DEFAULT), userpoints_translation()),
+      );
+      $form[$group][USERPOINTS_CAP_MESSAGE] = array(
+        '#type' => 'textarea',
+        '#title' => t('Maximum !Points Exceeded Message', userpoints_translation()),
+        '#default_value' => t(variable_get(USERPOINTS_CAP_MESSAGE, USERPOINTS_CAP_MESSAGE_DEFAULT), userpoints_translation()),
+        '#description' =>  t('The message a user will see if they exceed the cap. Insert '.'<b>!</b>'.'<b>Points</b> to use the branded name of your points.', userpoints_translation()),
+      );
+
+      return $form;
+      break;
+
+    case 'points before':
+      $current_points = userpoints_get_current_points($uid, 'all');
+      $new_points = $params['points'];
+      $max_points = variable_get(USERPOINTS_CAP_MAXIMUM, USERPOINTS_CAP_MAXIMUM_DEFAULT);
+      if ($current_points + $new_points > $max_points) {
+        drupal_set_message(variable_get(USERPOINTS_CAP_MESSAGE, USERPOINTS_CAP_MESSAGE_DEFAULT));
+        return FALSE; // DO NOT add points
+      } else {
+        return TRUE; // OK to add points
+      }
+      break;
+  }
+}

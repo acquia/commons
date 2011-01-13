@@ -1,0 +1,102 @@
+<?php
+// $Id: userpoints_download.module,v 1.1.2.1 2010/03/28 15:02:54 kbahey Exp $
+
+define('USERPOINTS_DOWNLOAD_POINTS',     'userpoints_download_points');
+define('USERPOINTS_DOWNLOAD_TID',        'userpoints_download_tid');
+define('USERPOINTS_DOWNLOAD_EXTENSIONS', 'userpoints_download_extensions');
+
+function userpoints_download_userpoints($op, $params = array()) {
+  if ($op == 'setting') {
+
+    if (!userpoints_download_check_method()) {
+      // This should really be a hook_requirements() in a .install file
+      drupal_set_message(t('Download method is not set to private. In order for users to earn or lose points for download, the !method has to be changed to private.', array('!method' => l('download method', 'admin/settings/file-system'))), 'error');
+    }
+
+    $group = 'download';
+    $form[$group] = array(
+      '#type'          => 'fieldset',
+      '#title'         => t('Download'),
+      '#collapsible'   => TRUE,
+      '#collapsed'     => TRUE,
+      '#description'   => t("Points a user will earn, or lose when they download an attachment. Note that this module requires that the 'upload' module be enabled, and that Drupal's file download method is set to 'private'. Otherwise, you will get unexpected results."),
+    );
+
+    $form[$group][USERPOINTS_DOWNLOAD_POINTS] = array(
+      '#type'          => 'textfield',
+      '#title'         => t('Points to add/deduct for download'),
+      '#default_value' => variable_get(USERPOINTS_DOWNLOAD_POINTS, 0),
+      '#description'   => t("Points to add to or deduct from a user when they download an attachment. Use a negatie number if you want users to lose points for downloading. For example, for a user to lose 2 points for download, use '-2'. To make users earn 3 points, use just '3'."),
+    );
+
+    $form[$group][USERPOINTS_DOWNLOAD_TID] = array(
+      '#type'          => 'select',
+      '#title'         => t('Category'),
+      '#default_value' => variable_get(USERPOINTS_DOWNLOAD_TID, 0),
+      '#options'       => userpoints_get_categories(),
+      '#description'   => t('Category of download points. Ignore this if you are not using categories.'),
+    );
+
+    $form[$group][USERPOINTS_DOWNLOAD_EXTENSIONS] = array(
+      '#type'          => 'textfield',
+      '#title'         => t('Extensions'),
+      '#default_value' => variable_get(USERPOINTS_DOWNLOAD_EXTENSIONS, ''),
+      '#description'   => t("Only extensions that are listed here will add or deduct points. All other extensions will be ignored, and will not add nor deduct any points. Enter the extensions separated by a space. For example, if you only want Open Office text documents and spreadsheets to add or deduct polints, then enter 'odt ods'"),
+    );
+
+    return $form;
+  }
+}
+
+function userpoints_download_file_download($filepath = NULL) {
+  global $user;
+
+  if (!$user->uid) {
+    // This is an anonymous user, do nothing ...
+    return;
+  }
+
+  if (!userpoints_download_check_method()) {
+    return;
+  }
+
+  $extensions = explode(' ', strtolower(trim(variable_get(USERPOINTS_DOWNLOAD_EXTENSIONS, ''))));
+  if (!count($extensions)) {
+    // No extensions configured, do nothing
+    return;
+  }
+
+  // Search for the current file extension in the list of extensions
+  $file_ext = strtolower(array_pop(explode('.', $filepath)));
+  if (!in_array($file_ext, $extensions)) {
+    // Extension not found in list of extensions
+    return;
+  }
+
+  $points = variable_get(USERPOINTS_DOWNLOAD_POINTS, 0);
+  if (!$points) {
+    // Admin has not configured any points for download, do nothing ...
+    return;
+  }
+
+  userpoints_userpointsapi(array(
+    'uid'         => $user->uid,
+    'points'      => $points,
+    'tid'         => variable_get(USERPOINTS_DOWNLOAD_TID, 0),
+    'operation'   => 'download',
+    'description' => 'Download ' . $filepath,
+    )
+  );
+
+  return;
+}
+
+function userpoints_download_check_method() {
+  if (variable_get('file_downloads', FILE_DOWNLOADS_PUBLIC) == FILE_DOWNLOADS_PRIVATE) {
+    return TRUE;
+  }
+  else {
+    // File downloads are not set to Private, do nothing ...
+    return FALSE;
+  }
+}

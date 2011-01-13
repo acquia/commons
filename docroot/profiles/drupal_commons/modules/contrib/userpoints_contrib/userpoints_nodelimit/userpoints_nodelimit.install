@@ -1,0 +1,32 @@
+<?php
+
+/**
+* Implementation of hook_install().
+*/
+function userpoints_nodelimit_install() {
+	
+	db_query("UPDATE {system} SET weight = 5 WHERE name = 'userpoints_nodelimit'");
+  drupal_set_message(t('User Points Node Limit has been successfully installed.'));
+  drupal_set_message(t('You can configure the User Points Node Limit module on the <a href="@url">Content Types settings page</a>.', array('@url' => url('admin/content/types/list'))));
+}
+
+
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function userpoints_nodelimit_uninstall() {
+  foreach (node_get_types('names') as $type => $type_name) {
+    variable_del('userpoints_nodelimit_'. $type);
+    variable_del('userpoints_nodelimit_nodepoints_'. $type);
+  }
+}
+
+/**
+ * make sure hooks are invoked after cck main hooks
+ */
+function userpoints_nodelimit_update_1() {
+  $ret = array();
+  $ret[] = update_sql("UPDATE {system} SET weight = 5 WHERE name = 'userpoints_nodelimit'");
+  return $ret;
+}

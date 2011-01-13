@@ -1,0 +1,165 @@
+<?php
+// $Id: userpoints_badges.module,v 1.1.2.4 2010/08/11 17:13:45 kbahey Exp $
+
+function userpoints_badges_menu() {
+  $items = array();
+  // Add items if necessary
+  return $items;
+}
+
+function userpoints_badges_form_alter(&$form, $form_state, $form_id) {
+  if ('user_badges_edit_form' === $form_id) {
+    if (isset($form['bid']) && isset($form['bid']['#value'])) {
+      $userpoints_goal = db_result(db_query("SELECT userpoints_goal FROM {userpoints_badges} WHERE bid=%d", $form['bid']['#value']));
+    }
+    if ($userpoints_goal !== '0' && empty($userpoints_goal)) {
+      $userpoints_goal = '';
+    }
+    $form['userpoints_goal'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Userpoints Goal'),
+      '#description' => t('Enter the minimum number of points a user must have to get this badge'),
+      '#default_value' => $userpoints_goal,
+      '#size' => 10,
+      '#maxlength' => 10,
+    );
+    $form['submit']['#weight'] = 10;
+    
+    $form['#validate'][] = 'userpoints_badges_edit_badge_validate';
+    $form['#submit'][] = 'userpoints_badges_edit_badge_submit';
+  }
+  else if ('user_badges_delete_form' === $form_id) {
+    $form['#submit'][] = 'userpoints_badges_delete_badge_submit';
+  }
+}
+
+/**
+ * Returns all userpoints related badges
+ */
+function userpoints_badges_get_badges($select = 'normal') {
+  static $userpoints_badges_list;
+  if (!isset($userpoints_badges_list)) {
+    $userpoints_badges_list = array('normal' => array(), 'select' => array());
+    $sql = db_query('SELECT b.bid, b.weight, b.name, b.image, u.userpoints_goal FROM {user_badges_badges} b INNER JOIN {userpoints_badges} u ON b.bid=u.bid ORDER BY b.weight, b.name');
+    while ($badge = db_fetch_object($sql)) {
+      $userpoints_badges_list['select']["badge-$badge->bid"] = $badge->name;
+      $userpoints_badges_list['normal']["badge-$badge->bid"] = $badge;
+    }
+  }
+  return $userpoints_badges_list[$select];
+}
+
+/**
+ * Extra validation on userpoints badge edit/create
+ */
+function userpoints_badges_edit_badge_validate($form, &$form_state) {
+  $values = $form_state['values'];
+  if (trim($values['userpoints_goal']) !== '' && !preg_match("/^[1-9][0-9]*$/D", $values['userpoints_goal'])) {
+    form_set_error('userpoints_goal', t('Please enter a valid goal greater than 1'));
+  }
+}
+
+/**
+ * Extra submit handler for the userpoints badge edit/create
+ */
+function userpoints_badges_edit_badge_submit($form, &$form_state) {
+  $form_values = $form_state['values'];
+  if (isset($form_values['bid'])) {
+    $bid = $form_values['bid'];
+  }
+  else {
+    $bid = db_result(db_query_range("SELECT b.bid FROM {user_badges_badges} b WHERE weight=%d AND name='%s' AND image='%s' ORDER BY bid DESC",
+      $form_values['weight'], $form_values['name'], $form_values['image'], 0, 1));
+  }
+  db_query("DELETE FROM {userpoints_badges} WHERE bid=%d", $bid);
+  
+  if (trim($form_values['userpoints_goal']) !== '') {
+    db_query("INSERT INTO {userpoints_badges} (bid, userpoints_goal) VALUES (%d, %d)",
+      $bid, $form_values['userpoints_goal']);
+    userpoints_badges_run_mass_badge_check($bid, $form_values['userpoints_goal']);
+  }
+}
+
+/**
+ * Extra submit handler for the userpoints badge deletion
+ */
+function userpoints_badges_delete_badge_submit($form, &$form_state) {
+  db_query("DELETE FROM {userpoints_badges} WHERE bid=%d", $form_state['values']['bid']);
+}
+
+/**
+ * When a userpoints badge is created or edited, a mass check is run on the users to see if they qualify for the new badge 
+ */
+function userpoints_badges_run_mass_badge_check($bid, $userpoints_goal) {
+  db_query("DELETE FROM {user_badges_user} WHERE bid=%d", $bid);
+  $resultset = db_query("SELECT uid FROM {userpoints} WHERE uid > 0 GROUP BY uid HAVING SUM(points) > %d", 
+    $userpoints_goal);
+  while ($account = db_fetch_object($resultset)) {
+    user_badges_user_add_badge($account->uid, $bid, strtr('Userpoints @bid', array('@bid' => $bid)));
+  }
+  drupal_set_message(t('Added all users with badges as well'));
+}
+
+/**
+ * Implementation of hook_userpoints
+ */
+function userpoints_badges_userpoints($op, $params = array()) {
+  switch ($op) {
+    case 'setting':
+      $group = 'userpoints_badges';
+      $form[$group] = array(
+        '#type' => 'item',
+        '#value' => t('Go to !link to edit userpoint badges', array('!link' => l(t('Userpoints Badges Settings'), 'admin/user/user_badges')))
+      );
+      return $form;
+    case 'points after':
+      $badges = userpoints_badges_get_badges();
+      $total_points = userpoints_get_current_points($params['uid'], 'all');
+      
+      // Remove all existing badges for this user
+      db_query("DELETE FROM {user_badges_user} WHERE uid = %d AND type LIKE 'Userpoints%'", $params['uid']);
+      
+      // Iterate through each badge and assign any badge that passes the threshold 
+      foreach ($badges as $badge) {
+        if ($total_points >= $badge->userpoints_goal) {
+          user_badges_user_add_badge($params['uid'], $badge->bid, t('Userpoints @bid', array('@bid' => $badge->bid)));
+        }
+      }
+  }
+}
+
+/**
+ * Figure out the best userpoint badge (ie the highest points the user has received)
+ */
+function userpoints_badges_get_best_badge($uid) {
+  if ($uid) {
+    // $account = user_load(array('uid' => $uid));
+    $badges = userpoints_badges_get_badges();
+    $badges_by_goal = array();
+    $lookup = array();
+    foreach ($badges as $badge) {
+      $goal = $badge->userpoints_goal;
+      $badges_by_goal[$goal] = $badge;
+      $lookup[$badge->bid] = $goal;
+    }
+    krsort($badges_by_goal, SORT_NUMERIC);
+  
+    $user_badges = user_badges_get_badges($uid);
+    $user_badges_by_goal = array();
+    foreach ($user_badges as $badge) {
+      $goal = $lookup[$badge->bid];
+      $user_badges_by_goal[$goal] = $badge;
+    }
+    krsort($user_badges_by_goal, SORT_NUMERIC);
+    
+    if (count($user_badges_by_goal)) {
+      $badge = array_shift($user_badges_by_goal);
+    }
+    else {
+      $badge = array_pop($badges_by_goal);
+    }
+
+    return $badge;
+  }
+  return '';
+}

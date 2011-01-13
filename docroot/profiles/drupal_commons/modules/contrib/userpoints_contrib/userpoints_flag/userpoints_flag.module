@@ -1,0 +1,123 @@
+<?php
+/**
+ * Implementation of hook_form_alter().
+ *
+ * Extends User Points module with Flag settings.
+ */
+function userpoints_flag_form_alter(&$form, $form_state, $form_id) {
+  if ($form_id == 'userpoints_admin_settings') {
+    // Shift system_settings_form buttons.
+    $weight = $form['buttons']['#weight'];
+    $form['buttons']['#weight'] = $weight + 1;
+    
+    $group = "flagapi";
+    $form[$group] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Flag settings'),
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+      '#description' => t(''),
+    );
+    
+    $form[$group][userpoints_flag_moderation] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Moderate votes'),
+      '#default_value' => variable_get(userpoints_flag_moderation, 0),
+      '#description' => t('Moderate User Points earned from votes.'),
+    );
+    
+    $form[$group][userpoints_flag_vote] = array(
+        '#type'          => 'textfield',
+        '#title' => t('!Points for flag', userpoints_translation()),
+        '#default_value' => variable_get(userpoints_flag_vote, 1),
+        '#size'          => 5,
+        '#maxlength'     => 5,
+    );
+    
+    $form[$group][userpoints_flag_author_node_vote] = array(
+        '#type'          => 'textfield',
+      '#title' => t('!Points to node author', userpoints_translation()),
+        '#default_value' => variable_get(userpoints_flag_author_node_vote, 0),
+        '#size'          => 5,
+        '#maxlength'     => 5,
+		'#description' => t('Select 0 to ignore.'),
+    );	
+	
+    $form[$group][userpoints_flag_author_comment_vote] = array(
+        '#type'          => 'textfield',
+      '#title' => t('!Points to comment author', userpoints_translation()),
+        '#default_value' => variable_get(userpoints_flag_author_comment_vote, 0),
+        '#size'          => 5,
+        '#maxlength'     => 5,
+		'#description' => t('Select 0 to ignore.'),
+    );	
+	
+    $form[$group][userpoints_flag_daily_threshold] = array(
+      '#type' => 'select',
+      '#title' => t('Daily threshold'),
+      '#options' => drupal_map_assoc(array(0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50)),
+      '#default_value' => variable_get(userpoints_flag_daily_threshold, 0),
+      '#description' => t('The maximum number of votes -- that will earn User Points -- in a 24-hour period.<br />Select 0 to ignore.'),
+    );
+  }
+}
+
+/**
+ * Implementation of hook_flag().
+ *
+ */
+ 
+function userpoints_flag_flag($action, $flag, $content_id, $account) { 
+  
+  //points author - content_id
+  $author_points = 0;
+  if ($flag->content_type == 'node') {  
+    $author_points = variable_get(userpoints_flag_author_node_vote, 0);
+    $uid = _userpoints_flag_get_node_author($content_id);
+  } else if ($flag->content_type == 'comment') {
+    $author_points = variable_get(userpoints_flag_author_comment_vote, 0);
+    $uid = _userpoints_flag_get_comment_author($content_id);
+  }
+  
+  //no points for author
+  if ($uid != $account->uid) {
+      $threshold = variable_get(userpoints_flag_daily_threshold, 0);
+	  if (($threshold == '0') OR (_userpoints_flag_within_threshold($account->uid, $threshold))) {
+		  userpoints_userpointsapi(array(
+		    'uid'       => $account->uid,
+		    'points'    => ($action == 'flag' ? variable_get(userpoints_flag_vote, 1): -1 * variable_get(userpoints_flag_vote, 1)),
+		    'moderate' => variable_get(userpoints_flag_moderation, 0),
+		    'entity_id' => $content_id,
+		    'entity_type' => $flag->content_type,
+		    'operation'     => 'flag',
+		    'description' => t('Flag cast: !content_type !content_id.',array('!content_type'=> $flag->content_type, '!content_id'=> $content_id)),
+		    )
+		  );
+		  if (($author_points != 0) AND ($uid != 0)) {
+		    userpoints_userpointsapi(array(
+		    'uid'       => $uid,
+		    'points'    => ($action == 'flag' ? $author_points: -1 * $author_points),
+		    'moderate' => variable_get(userpoints_flag_moderation, 0),
+		    'entity_id' => $content_id,
+		    'entity_type' => $flag->content_type,
+		    'operation'     => 'flag author',
+		    'description' => t('Flag author cast: !content_type !content_id.',array('!content_type'=> $flag->content_type, '!content_id'=> $content_id)),
+		    )
+		    );
+		  }
+	  }
+  }
+}
+
+function _userpoints_flag_get_node_author($nid) {
+ return db_result(db_query("SELECT uid FROM {node} WHERE nid = %d LIMIT 1", $nid)); 
+}
+
+function _userpoints_flag_get_comment_author($cid) {
+ return db_result(db_query("SELECT uid FROM {comments} WHERE cid = %d LIMIT 1", $cid)); 
+}
+
+function _userpoints_flag_within_threshold($uid, $threshold) {
+  $number = db_result(db_query("SELECT COUNT(*) FROM {flag_content} WHERE uid = %d AND timestamp > %d", $uid, time() - 86400));
+  return ($number <= $threshold ? TRUE : FALSE);
+}

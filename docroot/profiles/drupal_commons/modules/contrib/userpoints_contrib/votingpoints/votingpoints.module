@@ -1,0 +1,21 @@
+<?php
+//$Id: votingpoints.module,v 1.1 2009/01/29 17:36:04 kbahey Exp $
+
+/** 
+ * @file
+ * 
+ * 
+ * 
+*/
+
+/**
+ * Implementation of hook_votingapi_insert
+* @ingroup votingapi
+ */
+function votingpoints_votingapi_insert($votes) {
+  $vote = (object)$votes[0];  
+  $user = user_load($vote->uid);
+  $node = node_load($vote->content_id);
+  //dsm($vote);
+  rules_invoke_event('votingpoints_event',$user, $node, $vote);  
+}

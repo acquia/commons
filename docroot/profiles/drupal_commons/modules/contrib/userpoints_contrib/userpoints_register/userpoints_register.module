@@ -1,0 +1,73 @@
+<?php
+
+// @file
+// userpoints_contrib to award people a configurable number of userpoints for registering
+// Created by Thomas Turnbull (tom_o_t) for Sony Music
+
+define('USERPOINTS_REGISTER_REGISTER', 'userpoints_register_register');
+define('USERPOINTS_REGISTER_TID',      'userpoints_register_tid');
+define('USERPOINTS_REGISTER_DISPLAY',  'userpoints_register_display');
+
+/*
+* Implementation of hook_userpoints()
+* Creates points configuration form for awarding points for registering
+*/
+
+function userpoints_register_userpoints($op, $params = array()) {
+  switch($op) {
+    case 'setting':
+      $group = 'register';
+      $form[$group] = array(
+        '#type'        => 'fieldset',
+        '#collapsible' => TRUE,
+        '#collapsed'   => TRUE,
+        '#title'       => t('!Points for registering', userpoints_translation()),
+      );
+
+      $form[$group][USERPOINTS_REGISTER_REGISTER] = array(
+        '#type'          => 'textfield',
+        '#title'         => t('!Points for registering', userpoints_translation()),
+        '#default_value' => variable_get(USERPOINTS_REGISTER_REGISTER, 0),
+        '#size'          => 5,
+        '#maxlength'     => 5,
+      );
+
+      $form[$group][USERPOINTS_REGISTER_TID] = array(
+        '#type'          => 'select',
+        '#title'         => t('Category'),
+        '#default_value' => variable_get(USERPOINTS_REGISTER_TID, 0),
+        '#options'       => userpoints_get_categories(),
+        '#description'   => t('Registration will be assigned to this category. You can modify what categories are available by modifying the <a href="!url">Userpoints taxonomy</a>.',
+          array('!url' => url('admin/content/taxonomy/'. variable_get(USERPOINTS_CATEGORY_DEFAULT_VID, '')))),
+      );
+
+      $form[$group][USERPOINTS_REGISTER_DISPLAY] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Display message to user upon registering'),
+        '#default_value' => variable_get(USERPOINTS_REGISTER_DISPLAY, 1),
+        '#description' => t('If disabled, UserPoints will hide informational message about the points during registering. Useful for situations, where username is not fully available, such as when using Content Profile module.'),
+      );
+
+      return $form;
+  }
+}
+
+/*
+*   Implementation of hook_user()
+*   Awards the points for registering
+*/
+function userpoints_register_user($op, &$edit, &$account, $category = NULL) {
+  if ($op == 'insert') {
+    // Award the points - implementation of hook_userpointsapi()
+    $param = array(
+      'points'      => variable_get(USERPOINTS_REGISTER_REGISTER, 0),
+      'uid'         => $account->uid,
+      'operation'   => 'register',
+      'entity_type' => 'user',
+      'entity_id'   => $account->uid,
+      'tid'         => variable_get(USERPOINTS_REGISTER_TID, 0),
+      'display'     => variable_get(USERPOINTS_REGISTER_DISPLAY, 1),
+    );
+    userpoints_userpointsapi($param);
+  }
+}

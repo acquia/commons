@@ -1,0 +1,277 @@
+<?php
+// $Id: user2userpoints.module,v 1.4.2.2 2009/11/27 02:39:48 kbahey Exp $
+
+/**
+ * @file
+ *
+ * user2userpoints uses userpoints api to give users ability to give points to others.
+ *
+ * @ingroup userpoints_contrib
+ */
+
+define('USER2USERPOINTS_PERM_SEND',       'user2userpoints_send');
+define('USER2USERPOINTS_FIELDSET_TITLE',  'user2userpoints_fieldset_title');
+define('USER2USERPOINTS_TO_LABEL',        'user2userpoints_to_label');
+define('USER2USERPOINTS_AMOUNT_LABEL',    'user2userpoints_amount_label');
+define('USER2USERPOINTS_SHOW_CATEGORIES', 'user2userpoints_show_categories');
+define('USER2USERPOINTS_SHOW_LINKS',     'user2userpoints_show_links');
+
+/**
+ * Implements hook_user().
+ */
+function user2userpoints_user($op, &$edit, &$account, $category = NULL) {
+  if ($op == 'view') {
+    $url = 'user2userpoints/'. $account->name;
+    $items[t('!Points', userpoints_translation())] = array(
+      'value' => l(t('Give !points to '. $account->name, userpoints_translation()), $url),
+      'class' => 'member',
+    );
+    return array(t('!Points', userpoints_translation()) => $items);
+  }
+}
+
+/**
+ * Implements hook_perm().
+ */
+function user2userpoints_perm() {
+  return array(USER2USERPOINTS_PERM_SEND);
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function user2userpoints_menu() {
+
+  /**
+   * This function takes a URL in this form:
+   *   user2userpoints/[to]/[amount]/[tid]
+   * where:
+   *   [to] is uid or username of user points are given to
+   *   [amount] (optional) is points quantity.  defaults to 1 if empty.
+   *   [tid] (optional) taxonomy id, 'choose' to have user choose, 'all' to pass all param to userpoints api
+   *
+   * For example:
+   *
+   *   user2userpoints/              (a blank form is presented to the user)
+   *   user2userpoints/johndoe       (apply to johndoe, user selects amount and category)
+   *   user2userpoints/johndoe/5     (apply 5 points to johndoe and let them select category)
+   *   user2userpoints/johndoe/5/51  (apply 5 points to johndoe in in term 51)
+   *   user2userpoints/11/5/51       (apply 5 points to uid #11 in in term 51. User may select another term)
+   */
+  $items['user2userpoints'] = array(
+    'title'            => 'Give !points',
+    'page callback'    => 'drupal_get_form',
+    'page arguments'   => array('user2userpoints_giveform', 1, 2, 3),
+    'access arguments' => array(USER2USERPOINTS_PERM_SEND),
+    'type'             => MENU_LOCAL_TASK,
+    'weight'           => 1,
+  );
+
+  return $items;
+}
+
+/**
+ * Display the give points link below nodes and comments.
+ */
+function user2userpoints_link($type, $node = NULL, $teaser = FALSE) {
+  global $user;
+  if (variable_get(USER2USERPOINTS_SHOW_LINKS,TRUE)) {
+    $links = array();
+    if ($node->uid != $user->uid) {
+      if ($node->type != 'page') {
+        if (user_access(USER2USERPOINTS_PERM_SEND)) {
+          $links['user2userpoints'] = array(
+          'title' => t('Give !points', userpoints_translation()),
+          'href'  => 'user2userpoints/'. $node->name
+          );
+        }
+      }
+    }
+    return $links;
+  }
+}
+
+function user2userpoints_giveform(&$form_state,  $account = NULL, $amount = 0, $tid = 0) {
+  if (is_numeric($account)) {
+    $to = user_load(array('uid' => $to_id));
+    $account =  $to->name;
+  }
+
+  $default_tid = variable_get(USERPOINTS_CATEGORY_DEFAULT_TID, NULL);
+  if ($default_tid) {
+    if (! $tid) {
+      $tid = $default_tid;
+    }
+  }
+
+  $form = array();
+
+  $form['points'] = array(
+    '#type'        => 'fieldset',
+    '#title'       => variable_get(USER2USERPOINTS_FIELDSET_TITLE, 'Give Points'),
+    '#collapsible' => TRUE,
+    '#collapsed'   => FALSE,
+  );
+
+  $form['points']['to'] = array(
+    '#type'              => 'textfield',
+    '#title'             => variable_get(USER2USERPOINTS_TO_LABEL, 'To'),
+    '#autocomplete_path' => 'user/autocomplete',
+    '#default_value'     => $account,
+    '#size'              => 20,
+    '#maxlength'         => 64,
+    '#required'          => TRUE
+  );
+
+  $form['points']['amount'] = array(
+    '#type'          => 'textfield',
+    '#title'         => variable_get(USER2USERPOINTS_AMOUNT_LABEL, 'Amount'),
+    '#default_value' => $amount,
+    '#size'          => 20,
+    '#required'      => TRUE
+  );
+
+  if ($default_tid) {
+    if (variable_get(USER2USERPOINTS_SHOW_CATEGORIES, 1) === 0 ) {
+      $form['points']['tid'] = array(
+      '#type'          => 'hidden',
+      '#default_value' => $tid,
+      '#required'      => TRUE,
+      );
+    }
+    else {
+      $form['points']['tid'] = array(
+      '#type'          => 'select',
+      '#title'         =>  t('Type'),
+      '#default_value' => $tid,
+      '#required'      => TRUE,
+      '#options'       => userpoints_get_categories()
+      );
+    }
+  }
+
+  $form[] = array(
+    '#type'  => 'submit',
+    '#value' => t('Give !Points', userpoints_translation())
+  );
+  return $form;
+}
+
+function user2userpoints_giveform_validate($form, $form_state) {
+  global $user;
+
+  /* Check the name to be valid. */
+  if (!empty($form_state['values']['to'])) {
+    $to_id = $form_state['values']['to'];
+    $field = (is_int($to_id)) ? 'uid' : 'name';
+    $to = user_load(array($field => $to_id));
+
+    if (!$to->uid) {
+      form_set_error('to', t('That is not a valid user.'));
+    }
+
+    if ($to->uid == $user->uid) {
+      form_set_error('to', t("You can't give !points to yourself.", userpoints_translation()));
+    }
+  }
+
+  /* Check the value to be valid. */
+  if (!empty($form_state['values']['amount'])) {
+    if ($form_state['values']['amount'] < 1) {
+      form_set_error('amount', t("You can't give less than one !point.", userpoints_translation()));
+    }
+
+    $tid = ($form_state['values']['tid']) ? $form_state['values']['tid'] : arg(2);
+    if (!$tid) {
+      $tid = 'all';
+    }
+
+    if ($form_state['values']['amount'] > userpoints_get_current_points($user->uid, $tid)) {
+      form_set_error('amount', t("You don't have enough !points for that.", userpoints_translation()));
+    }
+  }
+}
+
+function user2userpoints_giveform_submit($form, &$form_state) {
+  global $user;
+
+  $points = $form_state['values']['amount'];
+  $to_id  = $form_state['values']['to'];
+
+  $tid = NULL;
+  if ($form_state['values']['tid']) {
+    $tid = $form_state['values']['tid'];
+  }
+
+  $field = (is_int($to_id)) ? 'uid' : 'name';
+  $to = user_load(array($field => $to_id));
+
+  $params = array(
+    'uid'    => $to->uid,
+    'points' => $points,
+    'event'  => 'From: '. $user->name,
+    'tid'    => $tid,
+  );
+  userpoints_userpointsapi($params);
+
+  $params = array(
+    'uid'    => $user->uid,
+    'points' => -$points,
+    'event'  => 'To: '. $to->name,
+    'tid'    => $tid,
+  );
+  userpoints_userpointsapi($params);
+}
+
+function user2userpoints_userpoints($op, $params = array()) {
+  switch ($op) {
+    case 'setting':
+      $form['user2user'] = array(
+        '#type'        => 'fieldset',
+        '#title'       => t('User 2 User Points'),
+        '#collapsible' => TRUE,
+        '#collapsed'   => TRUE,
+      );
+
+      $form['user2user'][USER2USERPOINTS_FIELDSET_TITLE] = array(
+        '#type'          => 'textfield',
+        '#title'         => t('Fieldset heading to use in the interface'),
+        '#default_value' => variable_get(USER2USERPOINTS_FIELDSET_TITLE, t('Give !Points', userpoints_translation())),
+        '#size'          => 40,
+        '#maxlength'     => 40,
+      );
+
+      $form['user2user'][USER2USERPOINTS_TO_LABEL] = array(
+        '#type'          => 'textfield',
+        '#title'         => t('Word to use in the interface "to" label !Points', userpoints_translation()),
+        '#default_value' => variable_get(USER2USERPOINTS_TO_LABEL, 'To'),
+        '#size'          => 20,
+        '#maxlength'     => 20,
+      );
+
+      $form['user2user'][USER2USERPOINTS_AMOUNT_LABEL] = array(
+        '#type'          => 'textfield',
+        '#title'         => t('Word to use in the interface "amount" label !Points', userpoints_translation()),
+        '#default_value' => variable_get(USER2USERPOINTS_AMOUNT_LABEL, 'Amount'),
+        '#size'          => 20,
+        '#maxlength'     => 20,
+      );
+
+      $form['user2user'][USER2USERPOINTS_SHOW_CATEGORIES] = array(
+        '#type'          => 'checkbox',
+        '#title'         => 'Show category select input if categories enabled',
+        '#default_value' => variable_get(USER2USERPOINTS_SHOW_CATEGORIES, TRUE),
+        '#description'   => 'If a taxonomy id is passed via the url or post or get form, the taxonomy id will still be assigned. It will be passed along as a hidden input in the form.',
+      );
+      $form['user2user'][USER2USERPOINTS_SHOW_LINKS] = array(
+        '#type'          => 'checkbox',
+        '#title'         => t("Show 'Give Userpoints' links beneath nodes"),
+        '#default_value' => TRUE,
+        '#description'   => t("Nodes that are not of type 'page' will have a 'Give points' link added to them"),
+      );
+      return $form;
+      break;
+  }
+}
+
+

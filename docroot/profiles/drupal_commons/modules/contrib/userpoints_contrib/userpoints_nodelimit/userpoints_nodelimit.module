@@ -1,0 +1,166 @@
+<?php
+// $Id: userpoints_nodelimit.module,v 1.4.2.3 2010/01/11 04:20:48 kbahey Exp $
+
+/**
+ * Enables a limit on node creation based on user's current user points.
+ * Can't create the node if the points for the node is negative and would
+ * bring the user below 0 points.
+ *
+ * 
+ * @author Eric Wright, eric.wright@bluevestconsulting.com
+ * 
+ * Many thanks to Jesse Mortenson for the original 5.x version &
+ * Wolfgang Ziegler for auto_nodetitle which I leaned on heavily
+ *
+ */
+
+define('USERPOINTS_NODELIMIT_DISABLED', 0);
+define('USERPOINTS_NODELIMIT_ENABLED', 1);
+
+/**
+ * Implementation of hook_form_alter().
+ */
+function userpoints_nodelimit_form_alter(&$form, $form_state, $form_id) {
+
+  if (isset($form['#node_type']) && 'node_type_form' == $form_id) {
+    userpoints_nodelimit_node_settings_form($form);
+  }
+  else {
+    if (isset($form['#node']) && isset($form['#method']) && $form['#node']->type .'_node_form' == $form_id) {
+      $type = $form['#node']->type;
+      // This is a node form; user is either adding a new node or editing an existing one.
+      // Don't check if user is editing node.  Access check has happened already, so user is assumed to have access to edit / create this node type.
+      if (userpoints_nodelimit_get_setting($type) == USERPOINTS_NODELIMIT_ENABLED) {
+        // check the number of available user points against the requirements for this node
+        // Only check when user is adding a new node.  $form['#node']->nid is unset when adding a new node.
+        if (!isset($form['#node']->nid) && !userpoints_nodelimit_check($type)) {
+          $friendly_name = node_get_types('name', $form['#node']); 
+          drupal_set_message(theme('userpoints_nodelimit_insufficent_points_message', $type, $friendly_name), 'error');
+      	  //destroy the form
+      	  $form = NULL;
+      	  //return a simple hidden field so that function doesn't fail
+      	  $form['dummy'] = array(
+       		  '#type' => 'hidden',
+        	  '#default_value' => '',
+      	  );
+        }
+        else {
+     		  // add a validate function as the points may change between the opening for the form  
+     		  // and the submission of the form, so we should check again prior to submission
+				  $form['#validate'][] = 'userpoints_nodelimit_validate';
+			  }
+      }
+    }
+  }
+}
+
+/**
+  * Form validation
+  */ 
+function userpoints_nodelimit_validate($form, &$form_state) {
+  // check the user points and confirm they have enough
+  $type = $form['#node']->type;
+  // check the number of available user points against the requirements for this node
+  // Only check when user is adding a new node.  $form['#node']->nid is unset when adding a new node.
+  if (!isset($form['#node']->nid) && !userpoints_nodelimit_check($type)) {
+    $friendly_name = node_get_types('name', $form['#node']); 
+    form_set_error('userpoints_nodelimit_details', theme('userpoints_nodelimit_insufficent_points_message',$type, $friendly_name));
+  }
+}
+
+/**
+  * Node Limit Error Message
+  */
+function theme_userpoints_nodelimit_insufficent_points_message($node_type, $friendly_name) {
+	$html_message =	t('You do not have enough !points to create @friendly content.<br />You currently have @user_points !points, you need @node_points !points to create a @friendly.', 
+    array_merge(userpoints_translation(), 
+    array('@user_points' => userpoints_get_current_points($user->uid), 
+      '@node_points' => variable_get('userpoints_nodelimit_nodepoints_'.$node_type, '?'),
+      '@friendly' => $friendly_name,
+      '@type' => $node_type
+      ) 
+    )
+  );
+  return $html_message;
+}
+
+/**
+  * Helper function for hook_form_alter() renders the settings per node-type.
+  */
+function userpoints_nodelimit_node_settings_form(&$form) {
+  $form['userpoints_nodelimit'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('User points node limit settings'),
+    '#weight' => 0,
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  
+  $form['userpoints_nodelimit']['userpoints_nodelimit'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable User Points Node Limit for this type.'),
+    '#description' => t('Node Limit will check to ensure users trying to create this node type have the required number of user points.'),
+    '#default_value' => userpoints_nodelimit_get_setting($form['#node_type']->type),
+  );
+    
+  $form['userpoints_nodelimit']['userpoints_nodelimit_nodepoints'] = array(
+    '#type' => 'textfield',
+    '#title' => t('User Points Required'),
+    '#description' => t('Enter the number of user points required to create a new node of this type.'),
+    '#default_value' => variable_get('userpoints_nodelimit_nodepoints_'. $form['#node_type']->type, '0'),
+  );
+}
+
+/**
+ * Gets the userpoints node limit setting associated with the given content type.
+ */
+function userpoints_nodelimit_get_setting($type) {
+  return variable_get('userpoints_nodelimit_'. $type, USERPOINTS_NODELIMIT_DISABLED);
+}
+
+/**
+ * Implementation of hook_node_type().
+ */
+function userpoints_nodelimit_node_type($op, $info) {
+  switch ($op) {
+    case 'delete':
+      variable_del('userpoints_nodelimit_'. $info->type);
+      variable_del('userpoints_nodelimit_nodepoints_'. $info->type);
+      break;
+    case 'update':
+      if (!empty($info->old_type) && $info->old_type != $info->type) {
+        variable_set('userpoints_nodelimit_'. $info->type, userpoints_nodelimit_get_setting($info->old_type));
+        variable_set('userpoints_nodelimit_nodepoints_'. $info->type, variable_get('userpoints_nodelimit_nodepoints_'. $info->old_type, ''));
+        variable_del('userpoints_nodelimit_'. $info->old_type);
+        variable_del('userpoints_nodelimit_nodepoints_'. $info->old_type);
+      }
+      break;
+  }
+}
+
+/**
+ * Check if user has sufficient points to create a node of a certain type
+ */
+function userpoints_nodelimit_check($nodetype) {
+  global $user;
+
+  $current_points = userpoints_get_current_points($user->uid);
+  $node_points = variable_get('userpoints_nodelimit_nodepoints_'. $nodetype, 0);
+  if ($current_points >= $node_points) {
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/**
+ * Implementation of hook_theme()
+ */
+
+function userpoints_nodelimit_theme($existing, $type, $theme, $path) {
+  return array(
+    'userpoints_nodelimit_insufficent_points_message' => array(
+      'arguments' => array('node_type' => NULL, 'friendly_name' => NULL),
+      ));
+}

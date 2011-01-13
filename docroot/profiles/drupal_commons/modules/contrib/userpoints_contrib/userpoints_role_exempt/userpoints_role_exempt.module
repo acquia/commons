@@ -1,0 +1,76 @@
+<?php
+//$Id: userpoints_role_exempt.module,v 1.3.2.3 2009/04/12 19:14:56 kbahey Exp $
+
+// Copyright 2005-2008 Khalid Baheyeldin http://2bits.com
+
+define('USERPOINTS_ROLE_EXEMPT', 'userpoints_role_exempt_');
+
+function userpoints_role_exempt_help($section) {
+  switch ($section) {
+    case 'admin/settings/userpoints_role_exempt':
+    case 'admin/modules#description':
+      return t('Allows certain roles to be exempt from points.');
+  }
+}
+
+function userpoints_role_exempt_userpoints($op, $params = array()) {
+  switch($op) {
+    case 'setting':
+      $group = 'role_exempt';
+      $form[$group] = array(
+        '#type'        => 'fieldset',
+        '#title'       => t('Exempt roles'),
+        '#description' =>  t('Select one or more roles to be exempted from earning points. This is useful for administrators, moderators and the like.'),
+        '#collapsible' => TRUE,
+        '#collapsed'   => TRUE,
+      );
+  
+      foreach (user_roles(TRUE) as $rid => $name) {
+        $role = USERPOINTS_ROLE_EXEMPT . $rid;
+          $form[$group][USERPOINTS_ROLE_EXEMPT . $rid] = array(
+            '#type'          => 'checkbox',
+            '#title'         => $name,
+            '#return_value'  => 1,
+            '#default_value' => variable_get($role, 0),
+        );
+      }
+      return $form;
+
+    case 'points before':
+      if (userpoints_role_exempt_is_exempt($params['uid'])) {
+        // User is exempt
+        return FALSE;
+      }
+      else {
+        return TRUE;
+      }
+  }
+}
+
+/**
+ * Check the roles the user belong to, and if they are exempted from userpoints
+ *
+ * @param: $uid: The user UID
+ *
+ * @return: TRUE if the user is exempt, FALSE if the user is not exempt.
+ */
+function userpoints_role_exempt_is_exempt($uid) {
+  // If the user is anonymous, they are exempt anyway
+  if ($uid == 0) {
+    return TRUE;
+  }
+  // Load the user object
+  $account = user_load(array('uid' => $uid));
+
+  // Search the user's roles
+  foreach($account->roles as $rid => $name) {
+    // Check if they belong to any role that is exempt
+    if (variable_get(USERPOINTS_ROLE_EXEMPT . $rid, 0)) {
+      // User is exempt
+      return TRUE;
+    }
+  }
+  // User is not exempt
+  return FALSE;
+}
+

@@ -1,0 +1,164 @@
+<?php
+// $Id: userpoints_commentspertype.module,v 1.1.2.1 2009/07/31 15:56:42 kbahey Exp $
+
+define('USERPOINTS_MAX_COMMENT_POINTS', 'userpoints_max_comment_points');
+
+function userpoints_commentspertype_userpoints($op, $params = array()) {
+  if ($op != 'setting') {
+    return;
+  }
+
+  $group = 'comments-per-type';
+  $form[$group] = array(
+    '#type'        => 'fieldset',
+    '#collapsible' => TRUE,
+    '#collapsed'   => TRUE,
+    '#title'       => t('!Points for posting comments per node type', userpoints_translation()),
+  );
+  
+  $form[$group][USERPOINTS_MAX_COMMENT_POINTS] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Max number of comments per node that will earn !Points for a user.', userpoints_translation()), 
+    '#default_value' => variable_get(USERPOINTS_MAX_COMMENT_POINTS, 0),
+    '#size'          => 5,
+    '#maxlength'     => 5,
+    '#description'   => t('Set as 0 for no limit.', userpoints_translation()),
+  );
+
+  foreach (node_get_types() as $type => $name) {
+    $form[$group][USERPOINTS_POST_COMMENT . $type] = array(
+      '#type'          => 'textfield',
+      '#title'         => t('!Points for posting a comment on !node-name', array_merge(userpoints_translation(),
+        array('!node-name' => $name->name))),
+      '#default_value' => variable_get(USERPOINTS_POST_COMMENT . $type, 0),
+      '#size'          => 5,
+      '#maxlength'     => 5,
+    );
+  }
+  return $form;
+}
+
+function userpoints_commentspertype_comment($comment, $op) {
+  global $user;
+
+  $node = node_load(is_array($comment) ? $comment['nid'] : $comment->nid);
+  $points = variable_get(USERPOINTS_POST_COMMENT . $node->type, 0);
+  $description = 'Comment';
+  $reference = $node->nid;
+  $comment_count = (int)db_result(db_query("SELECT COUNT(*) FROM {comments} WHERE nid = '%d' AND uid = %d", $node->nid, $user->uid));
+  $max_comments = variable_get(USERPOINTS_MAX_COMMENT_POINTS, 0);
+      
+  if (!$points) {
+    return;
+  }
+  
+  switch ($op) {
+    case 'insert':
+      $params = array(
+        'points' => $points,
+        'uid' => $user->uid,
+        'operation' => 'insert',
+        'entity_id' => $comment['cid'],
+        'entity_type' => 'comment',
+        'description' => $description,
+        'reference'=> $reference
+      );
+      if ($max_comments <= 0) {
+        userpoints_userpointsapi($params);        
+      }
+      else if ($comment_count > $max_comments) {
+        return;        
+      }
+      else {
+        userpoints_userpointsapi($params);        
+      }
+      break;
+
+    case 'delete':
+      $points = -$points;
+      $params = array(
+        'points' => $points,
+        'uid' => $comment->uid,
+        'operation' => 'delete',
+        'entity_id' => $comment->cid,
+        'entity_type' => 'comment',
+        'description' => $description,
+        'reference'=> $reference
+      );
+      userpoints_userpointsapi($params);
+      break;
+
+    case 'update':
+      // Find the last points granted on this node inserts and ownership gains
+      $sql = "SELECT points, uid 
+        FROM {userpoints_txn} 
+        WHERE entity_id = %d AND entity_type = '%s' 
+        AND (operation = '%s' OR operation ='%s')
+        ORDER BY time_stamp DESC
+        LIMIT 1";
+      $cid = $comment['cid'];
+      $new_uid = $comment['uid'];
+      $last_owner = db_fetch_object(db_query($sql, $cid, 'comment', 'insert', 'Ownership gain'));
+
+      // Check the UID of the original to this user, if different add/substract points
+      if ($new_uid != $last_owner->uid && is_numeric($last_owner->uid) ) {
+        // The owner has changed so we're removing from the
+        // the original owner and giving to the new owner
+        // Give to the original owner
+        $points = $last_owner->points;
+        $params = array(
+          'points' => $points,
+          'uid' => $new_uid,
+          'operation' => 'Ownership gain',
+          'entity_id' => $cid,
+          'entity_type' => 'comment'
+        );
+        userpoints_userpointsapi($params);
+
+        // Take away from the original owner
+        $params = array(
+          'points' => -$points,
+          'uid' => $last_owner->uid,
+          'operation' => 'Ownership loss',
+          'entity_id' => $cid,
+          'entity_type' => 'comment',
+          'description' => $description,
+          'reference'=> $reference
+        );
+        userpoints_userpointsapi($params);
+
+      }
+      else {
+        // We failed to pull a matching operation via the DB
+        // If the user wants to use the V2BUG we'll use it..
+        // please read drupal.org/node/183520
+        if (variable_get(USERPOINTS_USE_V2BUG, false)) {
+          if ($orig_uid != $comment['uid']) {
+            $params = array(
+              'points' => $points,
+              'uid' => $new_uid,
+              'operation' => 'Ownership gain',
+              'entity_id' => $cid,
+              'entity_type' => 'comment',
+              'description' => $description,
+              'reference'=> $reference
+            );
+            userpoints_userpointsapi($params);
+
+            // Take away from the original owner
+            $params = array(
+              'points' => -$points,
+              'uid' => $comment['uid'],
+              'operation' => 'Ownership loss',
+              'entity_id' => $new_uid,
+              'entity_type' => 'comment',
+              'description' => $description,
+              'reference'=> $reference
+            );
+            userpoints_userpointsapi($params);
+          }
+        }
+      }
+      break;
+  }
+}

@@ -1,0 +1,248 @@
+<?php
+// $Id: user_badges.install,v 1.2.2.10 2010/10/13 02:09:19 nancyw Exp $
+
+/**
+ * @file
+ * @brief User Badges install file
+ *
+ * This file contains all the installation functions of the schema, tables and variables
+ * used by the module.
+ *
+ * @author Jeff Robbins (jjeff), http://drupal.org/user/17190
+ * @author Chad Phillips (hunmonk), http://drupal.org/user/22079
+ * @author Heine Deelstra (Heine), http://drupal.org/user/17943
+ * @author Nuno Veloso (nunoveloso18), http://drupal.org/user/80656
+ * @author Richard Skinner (Likeless), http://drupal.org/user/310635
+ *
+ * @warning For more information on licensing, read the LICENCE.txt file.
+ *
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function user_badges_schema() {
+  $schema = array();
+
+  $schema['user_badges_badges'] = array(
+    'description' => 'Defines the user badges themselves (image, weight etc.)',
+    'fields' => array(
+      'bid' => array(
+        'description' => t('Original badge ID'),
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        ),
+      'name' => array(
+        'description' => t('Badge name'),
+        'type' => 'varchar',
+        'length' => 50,
+        'not null' => TRUE,
+        'default' => '',
+        ),
+      'image' => array(
+        'description' => t('Associated image. Can be a full URL, or a relative path for the image library.'),
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        ),
+      'weight' => array(
+        'description' => t('Order in list'),
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        ),
+      'href' => array(
+        'description' => t('Badge description URL'),
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'tid' => array(
+        'description' => t('Optional associated taxonomn term id'),
+        'type' => 'int',
+        'not null' => FALSE,
+        'unsigned' => TRUE,
+        ),
+      'unhideable' => array(
+        'description' => t('If this is 1, the badge cannot be hidden by being moved down in weight. It will always show up.'),
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+        ),
+      'fixedweight' => array(
+        'description' => t('If this is 1, the badge cannot have a user assigned weight, regardless of settings.'),
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+        ),
+      'doesnotcounttolimit' => array(
+        'description' => t('If this is 1, the badge does not count towards the limit for number of badges to display per user.'),
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+        ),
+      ),
+    'primary key' => array('bid'),
+    'indexes' => array(
+      'bid_weight_name' => array('bid', 'weight', 'name'),
+      'weight_name' => array('weight', 'name'),
+      'tid_name' => array('tid', 'name'),
+      )
+    );
+
+  $schema['user_badges_roles'] = array(
+    'description' => 'Stores which roles grant which badges.',
+    'fields' => array(
+      'rid' => array(
+        'description' => t('Role ID'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        ),
+      'bid' => array(
+        'description' => t('Badge ID'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        ),
+      ),
+    'primary key' => array('bid', 'rid'),
+    );
+
+  $schema['user_badges_user'] = array(
+    'description' => 'Stores which users have which badges.',
+    'fields' => array(
+      'uid' => array(
+        'description' => t('User ID'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        ),
+      'bid' => array(
+        'description' => t('Badge ID'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        ),
+      'type' => array(
+        'description' => t("Whether set as part of the role, or individually assigned ('user', 'role')"),
+        'type' => 'varchar',
+        'length' => 20,
+        'not null' => TRUE,
+        'default' => '',
+        ),
+      'userweight' => array(
+        'description' => t('Order in list, as set by user.'),
+        'type' => 'int',
+        'not null' => FALSE,
+        ),
+      ),
+    'primary key' => array('bid', 'uid', 'type'),
+    'indexes' => array(
+      'uid_bid' => array('uid', 'bid'),
+      'uid_weight' => array('uid', 'userweight'),
+      'type' => array('type'),
+      ),
+    );
+
+  return $schema;
+}
+
+/**
+ * Implements hook_install().
+ */
+function user_badges_install() {
+  drupal_install_schema('user_badges');
+}
+
+
+/**
+ * Implements hook_uninstall().
+ */
+function user_badges_uninstall() {
+  // Delete files.
+  $dir = file_create_path('badges');
+  if ($dir) {
+    $files = file_scan_directory($dir, '.*\.(gif|jpg|jpeg|png)', array('.', '..', 'CVS'), 0, FALSE);
+    foreach ($files as $file) {
+      file_delete($file->filename);
+    }
+  }
+
+  // Delete the badges directory.
+  if (file_exists($dir)) {
+    rmdir($dir);
+  }
+
+  drupal_uninstall_schema('user_badges');
+
+  variable_del('user_badges_showone');
+  variable_del('user_badges_showblocked');
+  variable_del('user_badges_userweight');
+  variable_del('user_badges_defaulthref');
+  variable_del('user_badges_vid');
+}
+
+
+/**
+ * Implements hook_update_N()
+ * new DB structure
+ */
+function user_badges_update_6001() {
+  $ret = array();
+  db_drop_primary_key($ret, 'user_badges_user');
+  db_add_primary_key($ret, 'user_badges_user', array('bid', 'uid', 'type'));
+  db_add_index($ret, 'user_badges_user', 'type', array('type'));
+  return $ret;
+}
+
+
+function user_badges_update_6100() {
+  $ret = array();
+  db_add_field($ret, 'user_badges_badges', 'href',
+    array('type' => 'varchar', 'length' => 80, 'not null' => FALSE, 'default' => ''));
+  return $ret;
+}
+
+function user_badges_update_6101() {
+  $ret = array();
+  db_drop_index($ret, 'user_badges_product', 'bid_nid');
+  db_drop_index($ret, 'user_badges_product', 'nid_bid');
+  db_drop_index($ret, 'user_badges_roles', 'bid_nid');
+  db_drop_index($ret, 'user_badges_roles', 'nid_bid');
+  db_drop_index($ret, 'user_badges_user', 'bid_uid_type');
+  return $ret;
+}
+
+function user_badges_update_6102() {
+  $ret = array();
+
+    db_change_field($ret, 'user_badges_badges', 'image', 'image', 'varchar(255)', array('not null' => FALSE, 'default' => "''"));
+
+  //Add the new fields for the on/off checkbox settings
+  db_add_field($ret, 'user_badges_badges', 'unhideable', array('type' => 'int', 'size' => 'tiny', 'not null' => TRUE, 'default' => 0));
+  db_add_field($ret, 'user_badges_badges', 'fixedweight', array('type' => 'int', 'size' => 'tiny', 'not null' => TRUE, 'default' => 0));
+  db_add_field($ret, 'user_badges_badges', 'doesnotcounttolimit', array('type' => 'int', 'size' => 'tiny', 'not null' => TRUE, 'default' => 0));
+
+  //Add the new user weight field
+  db_add_field($ret, 'user_badges_user', 'userweight', array('type' => 'int', 'not null' => FALSE));
+  db_add_index($ret, 'user_badges_user', 'uid_weight', array('uid', 'userweight'));
+
+  return $ret;
+}
+
+function user_badges_update_6103() {
+  $ret = array();
+
+  //Add the new field for the taxonomy support
+  db_add_field($ret, 'user_badges_badges', 'tid', array('type' => 'int', 'not null' => FALSE, 'unsigned' => TRUE));
+  db_add_index($ret, 'user_badges_badges', 'tid_name', array('tid', 'name'));
+
+  return $ret;
+}

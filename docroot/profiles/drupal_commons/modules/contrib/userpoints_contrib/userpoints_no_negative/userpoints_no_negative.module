@@ -1,0 +1,31 @@
+<?php
+// $Id: userpoints_no_negative.module,v 1.1.4.5 2009/01/19 14:07:03 kbahey Exp $ 
+
+// @file
+// Very simple userpoints_contrib to prevent accounts from going (further) negative
+
+// Implementation of hook_userpoints
+
+function userpoints_no_negative_userpoints($op, $params = array()) {
+  if ($op == 'points before') {
+    $points = $params['points'];
+    $uid    = $params['uid'];
+
+    if ($points < 0) {
+      $current_points = userpoints_get_current_points($uid, 'all');
+      if (($current_points + $points) < 0) {
+        $account = user_load(array('uid' => $uid));
+        $message = t('User %uname losing %pointsvalue !points! skipped because it would move thir !points! (further) negative',
+          array_merge(userpoints_translation(), array(
+            '%uname'  => $account->name,
+            '%pointsvalue' => abs($points),
+          )));
+        if (variable_get('userpoints_display_message', '1')) {
+          drupal_set_message($message);
+        }
+        watchdog('userpoints no negative', $message);
+        return FALSE;
+      }
+    }
+  }
+}

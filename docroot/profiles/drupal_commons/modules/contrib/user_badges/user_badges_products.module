@@ -1,0 +1,223 @@
+<?php
+// $Id: user_badges_products.module,v 1.1.2.5 2009/09/14 21:37:50 likeless Exp $
+
+/**
+ * @file
+ * @brief User Badges Product module file
+ * 
+ * This file contains all the functions used by the module.
+ *
+ * @author Jeff Robbins (jjeff), http://drupal.org/user/17190
+ * @author Chad Phillips (hunmonk), http://drupal.org/user/22079
+ * @author Heine Deelstra (Heine), http://drupal.org/user/17943
+ * @author Nuno Veloso (nunoveloso18), http://drupal.org/user/80656
+ * @author Richard Skinner (Likeless), http://drupal.org/user/310635
+ *
+ * @warning For more information on licensing, read the LICENCE.txt file.
+ *
+ */
+
+/**
+ * Implementation of hook_help().
+ */
+function user_badges_products_help($path, $arg) {
+  switch ($path) {
+    case 'admin/user/user_badges/products':
+      return t("For each ecommerce product listed below, select the badge that will be assigned to users upon payment completion.");
+  }
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function user_badges_products_menu() {
+  $items['admin/user/user_badges/products'] = array(
+    'title' => 'Products',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('user_badges_products_list_form'),
+    'access arguments' => array('manage badges'),
+    'weight' => 8,
+    'type' => MENU_LOCAL_TASK,
+  );
+  return $items;
+}
+
+/**
+ * Implementation of hook_theme().
+ */
+function user_badges_products_theme() {
+  return array(
+    'user_badges_products_list_form' => array(
+      'arguments' => array('form' => NULL),
+    ),
+  );
+}
+
+/**
+ * Form builder; list of badges
+ */
+function user_badges_products_list_form() {
+  
+  // load the badges that we want to display
+  $form['header'] = array('#type' => 'value', '#value' => array(
+    array('data' => t('Product'), 'field' => 'title', 'sort' => 'asc'),
+    array('data' => t('Badge'), 'field' => 'weight'),
+    array('data' => t('Remove')),
+    array('data' => t('New Badge')),
+  ));
+  
+  $result = pager_query('SELECT ubb.*, n.title, n.nid FROM {ec_product} p INNER JOIN {node} n ON p.nid = n.nid LEFT JOIN {user_badges_product} ubp ON ubp.nid=p.nid LEFT JOIN {user_badges_badges} ubb ON ubp.bid=ubb.bid'. tablesort_sql($form['header']['#value']), 50 );
+
+  // build a table listing the appropriate badges
+  while ($badgeprod = db_fetch_object($result)) {
+    $form['name'][$badgeprod->nid] = array('#value' => check_plain($badgeprod->title));
+    $form['newbadge'][$badgeprod->nid] = array('#type' => 'textfield', '#size' => 40, '#maxlength' => 255, '#autocomplete_path' => 'user_badges/autocomplete' );
+    //Only make these elements active if there is a badge
+    if ($badgeprod->bid) {
+      $form['badge'][$badgeprod->nid] = array('#value' => theme('user_badge', $badgeprod));
+      $form['clear']['clear'. $badgeprod->nid] = array('#type' => 'checkbox', '#return_value' => 1, '#default_value' => 0);
+    }
+    else {
+      $form['badge'][$badgeprod->nid] = array('#value' => ' ');
+      $form['clear']['clear'. $badgeprod->nid] = array('#value' => ' ');
+    }
+  }
+  
+  $form['submit'] = array('#type' => 'submit', '#value' => t('Update'));
+  
+  $form['pager'] = array('#value' => theme('pager', NULL, 50, 0));
+  
+  return $form;
+}
+
+
+/**
+ * Validate user_badges_products_list_form form submissions.
+ *
+ * All weights should be numeric
+ */
+function user_badges_products_list_form_validate($form, &$form_state) {
+  if (isset($form['newbadge']) && is_array($form['newbadge'])) {
+    foreach (element_children($form['newbadge']) as $nid) {
+      if (!empty($form_state['values'][$nid])) {
+        //The field isn't empty, so we should validate it
+        $validation = user_badges_badge_autocomplete_validation($form_state['values'][$nid]);
+        //Is it correctly formatted?
+        if ($validation[1] == 'string') {
+          form_set_error($nid, t('"@value" is not a valid badge name. Try using the autocomplete function (requires javascript).', array('@value' => $form_state['values'][$nid])));
+        }
+        //The format was correct, but we need to check the bid exists
+        elseif ($validation[1] == 'nobid') {
+          form_set_error($nid, t('@value is not a valid badge ID. Try using the autocomplete function (requires javascript).', array('@value' => $validation[0])));
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Process user_badges_products_list_form form submissions.
+ *
+ * Update the badge weights
+ */
+function user_badges_products_list_form_submit($form, &$form_state) {
+  if (isset($form['newbadge']) && is_array($form['newbadge'])) {
+    foreach (element_children($form['newbadge']) as $nid) {
+      //Remove any old badge if set to clear
+      if ($form_state['values']['clear'.$nid]) {
+        db_query('DELETE FROM {user_badges_product} WHERE nid=%d', $nid);
+      }
+      //Add any new badge if one has been entered
+      if (!empty($form_state['values'][$nid])) {
+        $validation = user_badges_badge_autocomplete_validation($form_state['values'][$nid]);
+        db_query('DELETE FROM {user_badges_product} WHERE nid=%d', $nid);
+        db_query('INSERT INTO {user_badges_product} (nid, bid) VALUES (%d, %d)', $nid, $validation[0]);
+      }
+    }
+    drupal_set_message(t('The badge product associations have been updated.'));
+  }
+}
+
+/**
+ * Theme the badge list form.
+ *
+ * @param $form
+ *   An associative array containing the structure of the form.
+ * @ingroup themeable
+ */
+function theme_user_badges_products_list_form($form) {
+  
+  //Loop through the array items in the name array to get all the bids for our listed badges
+  if (isset($form['newbadge']) && is_array($form['newbadge'])) {
+    foreach (element_children($form['newbadge']) as $key) {
+      //We only want nids as values of $key
+      if (!is_numeric($key)) {
+        continue;
+      }
+      
+      //Create the rows array for the table theme
+      $row = array();
+      $row[] = drupal_render($form['name'][$key]);
+      $row[] = drupal_render($form['badge'][$key]);
+      $row[] = drupal_render($form['clear']['clear'. $key]);
+      $row[] = drupal_render($form['newbadge'][$key]);
+      $rows[] = $row;
+    }
+    
+    //Add the submit button
+    $row = array();
+    $row[] = '';
+    $row[] = '';
+    $row[] = '';
+    $row[] = drupal_render($form['submit']);
+    $rows[] = $row;
+    
+  }
+  else {
+    $rows[] = array(array('data' => t('No products available.'), 'colspan' => '4'));
+  }
+  
+  //Theme all that we have processed so far into a table
+  $output .= theme('table', $form['header']['#value'], $rows);
+  
+  //Create the table's pager
+  if ($form['pager']['#value']) {
+    $output .= drupal_render($form['pager']);
+  }
+  
+  //Render any remaining form elements
+  $output .= drupal_render($form);
+  
+  return $output;
+}
+
+/**
+ * Implementation of hook_ecommerceapi().
+ */
+function user_badges_products_ecommerceapi($t, $op) {
+  switch ($op) {
+    case 'on payment completion':
+      $productbadges = user_badges_products_get_products();
+      foreach ($t['items'] as $item) {
+        if (array_key_exists($item->nid, $productbadges)) {
+          // no duplicates please...
+          db_query("DELETE FROM {user_badges_user} WHERE uid=%d AND bid=%d", $t['uid'], $productbadges[$item->nid]);
+          db_query("INSERT INTO {user_badges_user} (uid, bid, type) VALUES (%d, %d, 'product')", $t['uid'], $productbadges[$item->nid]);
+        }
+      }
+  }
+}
+
+/**
+  * Get list of products that have badges
+  * keys are node ids (nid)
+  * values are badge ids (bid)
+  */
+function user_badges_products_get_products() {
+  $products = array();
+  $sql = db_query('SELECT * FROM {user_badges_product}');
+  while ($row = db_fetch_object($sql)) {
+    $products[$row->nid] = $row->bid;
+  }
+  return $products;
+}
