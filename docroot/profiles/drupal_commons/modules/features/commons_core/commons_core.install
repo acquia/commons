@@ -4,7 +4,22 @@
  * Implementation of hook_install()
  */
 function commons_core_install() {
+  // Link vocabulary to nodes
+  commons_core_add_taxonomy();
+}
 
+/**
+ * Add taxonomy to nodes
+ */
+function commons_core_add_taxonomy() {
+  require_once('profiles/drupal_commons/drupal_commons.profile');
+  // Link free-tagging vocabulary to node types
+  foreach (array('group', 'notice', 'page') as $type) {
+    $record = new stdClass;
+    $record->vid = DRUPAL_COMMONS_TAG_ID;
+    $record->type = $type;
+    drupal_write_record('vocabulary_node_types', $record);
+  }
 }
 
 /**
