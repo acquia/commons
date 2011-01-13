@@ -43,14 +43,26 @@
 ?>
 <div class="profile">
   <div class="column-left">
-    <?php 
-      print($profile['user_picture']); 
-      unset($profile['user_picture']);
-      if (module_exists('userpoints')) {
-        print('<div class="userpoints">'.$profile['userpoints'].'</div>');
-        unset($profile['userpoints']);
-      }
-    ?>
+    <?php print $profile['user_picture']; ?>
+    <?php unset($profile['user_picture']); ?>
+    <?php if (isset($profile['userpoints'])): ?>
+      <div class="userpoints">
+        <?php print $profile['userpoints']; ?>
+        <?php unset($profile['userpoints']); ?>
+        <?php if (isset($account->badges)): ?>
+          <?php
+            foreach ($account->badges as $badge) {
+              $badges[] = theme('user_badge', $badge, $account);
+            }
+    
+            if (!empty($badges)) {
+              print theme('user_badge_group', $badges);
+            }
+          ?>
+          <?php unset($profile['user_badges']); ?>
+        <?php endif; ?>
+      </div>
+    <?php endif; ?>
   </div>
   <div class="column-right">
     <?php 

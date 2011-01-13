@@ -97,33 +97,27 @@ function acquia_commons_preprocess_user_profile_item(&$vars) {
 }
 
 /**
- *  implementation of theme_shoutbox_post()
+ * Implementation of theme_shoutbox_post()
  */
 function acquia_commons_shoutbox_post($shout, $links = array(), $alter_row_color=TRUE) {
   global $user;
   
-  //Gather moderation links
+  // Gather moderation links
   if ($links) {
     foreach ($links as $link) {
       $linkattributes = $link['linkattributes'];
-      $link_html = '<img src="'. $link['img'] .'"  width="'. $link['img_width'] .'" height="'. $link['img_height'] .'" alt="'. $link['title'] .'" class="shoutbox-imglink">';
-      $link_url = 'shoutbox/'. $shout->shout_id .'/'. $link['action'];
+      $link_html = '<img src="'. $link['img'] .'"  width="'. $link['img_width'] .'" height="'. $link['img_height'] .'" alt="'. $link['title'] .'" class="shoutbox-imglink"/>';
+      $link_url = 'shout/'. $shout->shout_id .'/'. $link['action'];
       $img_links = l($link_html, $link_url, array('html' => TRUE, 'query' => array('destination' => drupal_get_path_alias($_GET['q'])))) . $img_links;
     }
   }
   
-  //Generate user name with link
-  if ($shout->uid > 0) {
-    $user_name = l($shout->nick, 'user/' . $shout->uid);
-  }
-  else {
-    //Anonymous
-    $user_name = $shout->nick;  
-  }
+  // Generate user name with link
+  $user_name = shoutbox_get_user_link($shout);
 
-  //Generate title attribute
-  $title = t('Posted ' . format_date($shout->created, 'custom', 'm/d/y') . ' at ' . format_date($shout->created, 'custom', 'h:ia') . ' by ' . $shout->nick);
-  
+  // Generate title attribute
+  $title = t('Posted !date at !time by !name', array('!date' => format_date($shout->created, 'custom', 'm/d/y'), '!time' => format_date($shout->created, 'custom', 'h:ia'), '!name' => $shout->nick));
+
   $shout_classes = "shoutbox-msg ";
   if ($alter_row_color) {
     $shout_classes .= (($shout->color) ? ("odd ") : ("even "));
@@ -247,6 +241,5 @@ function acquia_commons_item_list($items = array(), $title = NULL, $type = 'ul',
 
 function acquia_commons_preprocess_block ($variables) {
   $variables['template_files'][] = 'block-'.$variables['block']->region.'-'.$variables['block']->module;
-    $variables['template_files'][] = 'block-'.$variables['block']->region.'-'.$variables['block']->module.'-'.$variables['block']->delta;
-  
+  $variables['template_files'][] = 'block-'.$variables['block']->region.'-'.$variables['block']->module.'-'.$variables['block']->delta;
 }
