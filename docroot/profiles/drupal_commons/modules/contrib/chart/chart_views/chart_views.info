@@ -1,11 +1,10 @@
-; $Id: system_charts.info,v 1.5 2009/07/16 21:23:12 boombatower Exp $
-name = Drupal System Charting
-description = Charting for various core modules.
+name = Chart API Views Integration
+description = Provides a "Google Chart" Views style.
 package = Charting
 core = 6.x
-php = 5
 dependencies[] = chart
-
+dependencies[] = views
+dependencies[] = views_calc
 ; Information added by drupal.org packaging script on 2010-11-16
 version = "6.x-1.3"
 core = "6.x"

@@ -1,0 +1,11 @@
+<?php
+//$Id;
+/**
+ * Implementation of hook_views_api().
+ */
+function chart_views_views_api() {
+  return array(
+    'api' => 2,
+    'path' => drupal_get_path('module', 'chart_views') .'/includes/views',
+  );
+}
