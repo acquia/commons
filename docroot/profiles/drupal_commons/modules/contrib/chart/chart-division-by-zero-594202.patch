@@ -1,0 +1,14 @@
+Index: chart.module
+===================================================================
+--- chart.module	(revision 22510)
++++ chart.module	(working copy)
+@@ -429,7 +429,8 @@
+       $divider = round($max[$chart_id] / $resoluton, 1);
+     }
+     else {
+-      $multiplier = round($resoluton / $max[$chart_id], 1);
++      $max[$chart_id] = max($max[$chart_id], 1);
++      $multiplier = round($resoluton / $max[$chart_id], 1);  
+     }
+ 
+     foreach($data AS $k => $v){

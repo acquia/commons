@@ -429,7 +429,8 @@ function _chart_adjust_resolution($chart_id, &$data, $max_value = NULL) {
       $divider = round($max[$chart_id] / $resoluton, 1);
     }
     else {
-      $multiplier = round($resoluton / $max[$chart_id], 1);
+      $max[$chart_id] = max($max[$chart_id], 1);
+      $multiplier = round($resoluton / $max[$chart_id], 1);  
     }
 
     foreach($data AS $k => $v){
