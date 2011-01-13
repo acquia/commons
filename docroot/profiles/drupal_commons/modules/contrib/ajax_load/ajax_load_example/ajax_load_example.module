@@ -1,0 +1,25 @@
+<?php
+// $Id: ajax_load_example.module,v 1.1 2008/12/17 20:01:54 nedjo Exp $
+
+/**
+ * @file
+ * Demonstrate Ajax load functionality.
+ */
+
+/**
+ * Implementation of hook_menu().
+ */
+function ajax_load_example_menu() {
+  $items = array();
+  $items['ajax-load-example'] = array(
+    'page callback' => 'ajax_load_example_page',
+    'title' => 'Ajax load example page',
+    'access arguments' => array('administer site configuration'),
+    'description' => 'Demonstration of Ajax load functionality',
+    'file' => 'ajax_load_example.page.inc',
+  );
+  return $items;
+}
+
+
+

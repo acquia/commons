@@ -1,0 +1,147 @@
+/* $Id: shoutbox.css,v 1.6.2.1 2010/05/22 14:16:08 mikestefff Exp $ */
+
+#shoutbox-body {
+    margin: 0px;
+    padding: 0px;
+    overflow: auto;
+}
+
+/* override drupal.css values */
+.shoutbox-add-form .form-item {
+    margin: 0;
+    display: inline;
+}
+
+.shoutbox-view-form .form-submit {
+    visibility: hidden;
+    display:none;
+}
+
+/* 
+shoutbox block: main divs 
+*/
+div#shoutbox-posts {
+    text-align: left;
+}
+
+div.shoutbox-msg {
+    color: #000000;
+    padding: 4px;
+    border-bottom: 1px solid #EEE;
+}
+
+td div.shoutbox-msg { border: none; }
+
+span.shoutbox-user-name, span.shoutbox-user-name a, span.shoutbox-user-name a:visited {
+	font-weight: bold;
+	color: #27609B;
+}
+
+span.shoutbox-current-user-name, span.shoutbox-current-user-name a, span.shoutbox-current-user-name a:visited {
+	color: darkRed;
+}
+
+span.shoutbox-anonymous-user {
+	color: #C0C000;
+}
+
+div.shoutbox-msg p {
+	display: inline;
+	margin: 0;
+}
+
+div.shoutbox-add-form {	
+    text-align: center;
+    padding: 6px 0;
+    color:#848484;
+}
+
+div.shoutbox-archive a, div.shoutbox-archive a:visited {
+    text-align: center;
+    color: #fff;
+    background-color: #999;
+    display: block;
+}
+
+div.shoutbox-archive a:hover {
+    color: #fff;
+    background-color: #aaa;
+    text-decoration: none;
+}
+
+/* 
+shoutbox box: nested elements 
+*/
+div.shoutbox-even {
+    padding: 18px 5px;
+}
+
+div.shoutbox-odd {
+    color : #000000;
+    background-color : #fff;
+    width: 100%;
+}
+
+span.shoutbox-msg-time {
+	color: #999;
+	font-style: italic;
+	font-size: 90%;
+	padding-left: 7px;
+}
+
+.shoutbox-addinput {
+    width: 100%;
+}
+
+.shoutbox-imglink {
+    padding: 0px 2px 0px 2px;
+    float: right;
+}
+
+.shoutbox-queue-title {
+    font-weight: bold;
+    color: #FFFFFF;
+    background-color: #999;
+    text-align: center;
+}
+
+div.shout-odd { background: #f7f7f9; }
+
+/*
+other shoutbox pages
+*/
+.shoutbox-add-form input.form-text {
+    width: 80%;
+}
+
+.shoutbox-add-form input.textarea {
+    width: 80%;
+}
+
+.shoutbox-unpublished {
+    background-color: #f00;
+}
+
+.interval-msg { 
+	float:left; 
+	font-size: 90%; 
+	color: #999; 
+}
+
+.interval-msg-page { 
+	font-size: 95%; 
+	color: #555; 
+	padding: 0 0 5px; 
+	text-align: center; 
+}
+
+#shoutbox-throbber {
+    width: 16px;
+    height: 16px;
+    margin: 2px;
+    margin-left: 40%; 
+    background: transparent url(throbber.gif) no-repeat;
+}
+
+#shoutbox-add-form .form-text, #shoutbox-add-form .form-submit { font-size: 120%; }
+

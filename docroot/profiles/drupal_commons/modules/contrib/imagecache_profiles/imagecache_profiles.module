@@ -1,0 +1,287 @@
+<?php
+// ; $Id: imagecache_profiles.module,v 1.4.2.16 2010/03/25 10:58:23 andypost Exp $
+
+/**
+ * Implements hook_help().
+ */
+function imagecache_profiles_help($path, $arg) {
+  switch($path) {
+    case 'admin/help#imagecache_profiles':
+      return t('Utilizes imagecache presets for user profile pictures.');
+  }
+}
+
+/**
+ * Overrides process variables for user-picture.tpl.php
+ *
+ * Originally variables are built by template_preprocess_user_picture()
+ * locate in core user.module.
+ *
+ * The $variables array contains the following arguments:
+ * - $account
+ *
+ * @see user-picture.tpl.php
+ */
+function imagecache_profiles_preprocess_user_picture(&$variables) {
+  $default = $variables['picture'];
+  if (variable_get('user_pictures', 0)) {
+    $account = $variables['account'];
+    // Determine imagecache preset to use for user profile picture
+    // First let's determine if we have a default imagecache preset
+    if (variable_get('user_picture_imagecache_profiles_default', 0)) {
+      // Define default user picture size
+      $size = variable_get('user_picture_imagecache_profiles_default', 0);
+    }
+    // If on user profile page.
+    if (arg(0) == 'user') {
+      // Only show profile image for profile page, and edit account form,
+      // not user/123/relationships or other module define pages.
+      if (arg(2) == NULL || arg(2) == 'edit') {
+        if (is_numeric(arg(1)) || (module_exists('me') && arg(1) == me_variable_get('me_alias'))) {
+          if (variable_get('user_picture_imagecache_profiles', 0)) {
+            $size = variable_get('user_picture_imagecache_profiles', 0);
+          }
+        }
+      }
+    }
+    // If viewing a comment
+    if (is_object($account) && array_key_exists('cid', get_object_vars($account))) {
+      if (variable_get('user_picture_imagecache_comments', 0)) {
+        $size = variable_get('user_picture_imagecache_comments', 0);
+      }
+    }
+
+    // If views set an imagecache preset
+    if (isset($account->imagecache_preset)) {
+      $size = $account->imagecache_preset;
+    }
+
+    if (!empty($account->picture) && file_exists($account->picture)) {
+      $picture = $account->picture;
+    }
+    else if (variable_get('user_picture_default', '')) {
+      $picture = variable_get('user_picture_default', '');
+    }
+
+    if (isset($picture)) {
+      $alt = t("@user's picture", array('@user' => $account->name ? $account->name : variable_get('anonymous', t('Anonymous'))));
+      $preset = is_numeric($size) ? imagecache_preset($size) : imagecache_preset_by_name($size);
+      if (empty($preset)) {
+        $variables['picture'] = $default; //theme('image', $picture, $alt, $alt, '', FALSE);
+      }
+      else {
+        if (!empty($account->uid) && user_access('access user profiles')) {
+          $title = t('View user profile.');
+          $attributes = array('attributes' => array('title' => $title), 'html' => TRUE);
+          $image = theme('imagecache', $preset['presetname'], $picture, $alt, $title);
+          $variables['picture'] = l($image, "user/$account->uid", $attributes);
+        }
+        else {
+          $variables['picture'] = theme('imagecache', $preset['presetname'], $picture, $alt, $alt);
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function imagecache_profiles_form_user_admin_settings_alter(&$form, $form_state) {
+  // Load imagecache presets
+  $presets = array();
+  $presets[] = '';
+  foreach (imagecache_presets() as $preset) {
+    $presets[$preset['presetname']] = check_plain($preset['presetname']);
+  }
+
+  $form['pictures']['settings']['user_picture_imagecache_profiles'] = array(
+    '#type' => 'select',
+    '#title' => t('Profile picture preset'),
+    '#default_value' => variable_get('user_picture_imagecache_profiles', ''),
+    '#options' => $presets,
+    '#description' => t("This will set the picture size when viewing a user's profile page."),
+  );
+
+  $form['pictures']['settings']['user_picture_imagecache_comments'] = array(
+    '#type' => 'select',
+    '#title' => t('Comment picture preset'),
+    '#default_value' => variable_get('user_picture_imagecache_comments', ''),
+    '#options' => $presets,
+    '#description' => t("This will set the picture size when viewing a comment post."),
+  );
+
+  $form['pictures']['settings']['user_picture_imagecache_profiles_default'] = array(
+    '#type' => 'select',
+    '#title' => t('Default picture preset'),
+    '#default_value' => variable_get('user_picture_imagecache_profiles_default', ''),
+    '#options' => $presets,
+    '#description' => t('This will set the default user picture size throughout the site.'),
+  );
+
+  $form['pictures']['settings']['user_picture_imagecache_profiles_min_width'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Picture minimum width'),
+    '#default_value' => variable_get('user_picture_imagecache_profiles_min_width', ''),
+    '#description' => t('Minimum width dimension for picture, in pixels. To prevent upscaling this value should be set to your maximum imagecache preset width.'),
+    '#size' => 10,
+  );
+
+  $form['pictures']['settings']['user_picture_imagecache_profiles_min_height'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Picture minimum height'),
+    '#default_value' => variable_get('user_picture_imagecache_profiles_min_height', ''),
+    '#description' => t('Minimum height dimension for picture, in pixels. To prevent upscaling this value should be set to your maximum imagecache preset height.'),
+    '#size' => 10,
+  );
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * @see imagecache_profiles_imagecache_ui_preset_form_submit()
+ */
+function imagecache_profiles_form_imagecache_ui_preset_form_alter(&$form, $form_state) {
+  $form['#submit'][] = 'imagecache_profiles_imagecache_ui_preset_form_submit';
+}
+
+/**
+ * Renames changed preset.
+ */
+function imagecache_profiles_imagecache_ui_preset_form_submit($form, &$form_state) {
+  $preset = array(
+    'presetid' => $form_state['values']['presetid'],
+    'presetname_new' => $form_state['values']['presetname'],
+    'presetname' => $form['#parameters'][2]['presetname'],
+  );
+  _imagecache_profiles_change_variables($preset, FALSE);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * @see imagecache_profiles_imagecache_ui_preset_delete_form_submit()
+ */
+function imagecache_profiles_form_imagecache_ui_preset_delete_form_alter(&$form, $form_state) {
+  $form['#submit'][] = 'imagecache_profiles_imagecache_ui_preset_delete_form_submit';
+}
+
+/**
+ * Unsets deleted preset.
+ */
+function imagecache_profiles_imagecache_ui_preset_delete_form_submit($form, &$form_state) {
+  $preset = array(
+    'presetid' => $form_state['values']['presetid'],
+    'presetname_new' => $form['#parameters'][2]['presetname'],
+    'presetname' => $form['#parameters'][2]['presetname'],
+  );
+  _imagecache_profiles_change_variables($preset, TRUE);
+}
+
+/**
+ * Changes or deletes modules variables.
+ */
+function _imagecache_profiles_change_variables($preset, $delete = FALSE) {
+  $vars = array(
+    'user_picture_imagecache_profiles' => t('Profile picture preset'),
+    'user_picture_imagecache_comments' => t('Comment picture preset'),
+    'user_picture_imagecache_profiles_default' => t('Default picture preset'),
+  );
+  $presetid = $preset['presetid'];
+  $presetname = $preset['presetname'];
+  // Find and unset variabales that use this preset.
+  $messages = array();
+  foreach ($vars as $key => $param) {
+    $value = variable_get($key, '');
+    if (!empty($value)) {
+    	if (is_numeric($value) && $value == $presetid) {
+    	  $messages[$key] = $param;
+    	}
+    	else if ($value == $presetname) {
+    		$messages[$key] = $param;
+    	}
+    }
+  }
+  // Update variables and notify user.
+  foreach ($messages as $var => $param) {
+    if ($delete) {
+      variable_del($var);
+      drupal_set_message(t('The imagecache profile setting %setting was deleted.', array('%setting' => $param)));
+    }
+  	else if ($preset['presetname'] != $preset['presetname_new']) {
+  		variable_set($var, $preset['presetname_new']);
+  		drupal_set_message(t('The imagecache profile setting %setting was changed.', array('%setting' => $param)));
+  	}
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * @see imagecache_profiles_user_profile_form_validate()
+ */
+function imagecache_profiles_form_user_profile_form_alter(&$form, $form_state) {
+  $width = variable_get('user_picture_imagecache_profiles_min_width', '');
+  $height = variable_get('user_picture_imagecache_profiles_min_height', '');
+  $description = '';
+  if (!empty($width)) {
+    if (!empty($height)) {
+      $description = t('Minimum dimensions are %dimensions.', array('%dimensions' => $width . 'x' . $height));
+    }
+    else {
+      $description = t('Minimum width is %width.', array('%width' => $width));
+    }
+  }
+  else {
+    $description = t('Minimum height is %height.', array('%height' => $height));
+  }
+  if (!empty($description)) {
+    $form['picture']['picture_upload']['#description'] .= ' ' . $description;
+  }
+  $form['#validate'][] = 'imagecache_profiles_user_profile_form_validate';
+}
+
+/**
+ * Custom form validation callback.
+ *
+ * @todo: Investigage validate $op of hook_user()
+ * as this is not working correctly for the user_profile_form.
+ * See - http://drupal.org/node/239676
+ */
+function imagecache_profiles_user_profile_form_validate($form, &$form_state) {
+  if (isset($form_state['values']['picture'])) {
+    $image_info = image_get_info($form_state['values']['picture']);
+    if ($image_info['width'] < variable_get('user_picture_imagecache_profiles_min_width', 0) || $image_info['height'] < variable_get('user_picture_imagecache_profiles_min_height', 0)) {
+      form_set_error('picture_upload', t('Your picture must be at least @min_user_picture_width pixels wide and @min_user_picture_height pixels tall (your image was @width x @height pixels).', array('@min_user_picture_width' => variable_get('user_picture_imagecache_profiles_min_width', 0), '@min_user_picture_height' => variable_get('user_picture_imagecache_profiles_min_height', 0), '@width' => $image_info['width'], '@height' => $image_info['height'])));
+    }
+  }
+}
+
+/**
+ * Implements hook_user().
+ *
+ * Flush imagecache picture if user is updating their account picture.
+ */
+function imagecache_profiles_user($op, &$edit, &$account, $category = NULL) {
+  if ($op == 'submit' && $category == 'account') {
+    if ($edit['picture_delete']) {
+      imagecache_image_flush($account->picture);
+    }
+    if (isset($edit['picture'])) {
+      imagecache_image_flush($edit['picture']);
+    }
+  }
+  elseif ($op == 'delete' && isset($account->picture)) {
+    imagecache_image_flush($account->picture);
+  }
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function imagecache_profiles_views_api() {
+  return array(
+    'api' => 2,
+    'path' => drupal_get_path('module', 'imagecache_profiles') .'/views',
+  );
+}

@@ -1,0 +1,100 @@
+/* $Id: context_ui-list.css,v 1.1.2.1 2010/04/21 01:23:38 darthsteven Exp $ */
+
+div.context-namespace-attribute {
+  margin-top: 1em;
+  background: #eee;
+  border: 2px solid #ddd;
+}
+
+div.context-namespace-attribute-title {
+  margin: 2px;
+  padding-left: 10px;
+  font-weight: bold;
+  background: #fff;
+  line-height: 1.8;
+  border: 1px solid #ddd;
+}
+
+table.contexts-entry {
+  margin: 3px 0;
+  border: 1px solid #ddd;
+  background-color: white;
+  color: #494949; /* matches garland */
+  clear: left; /* LTR */
+  width: 97%;
+  margin-left: 2%;
+}
+
+table.contexts-entry tbody {
+  border: none;
+}
+
+table.contexts-entry td.context-ops {
+  width: 45%;
+  text-align: right; /* LTR */
+  background-color: #eee;
+}
+
+table.contexts-entry td.context-name {
+  background-color: #eee;
+}
+
+table.contexts-entry .description {
+  vertical-align: top;
+}
+
+body form#contexts-ui-list-contexts-form {
+  margin: 0 0 1.5em 0;
+}
+
+#contexts-ui-list-contexts-form .form-item {
+  padding-right: 1em; /* LTR */
+  float: left; /* LTR */
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+#edit-order-wrapper {
+  clear: left; /* LTR */
+}
+
+#edit-contexts-apply,
+#edit-contexts-reset {
+  margin-top: 1.65em;
+  float: left; /* LTR */
+}
+
+.contexts-entry .advanced-help-link {
+  position: relative;
+  top: 2px;
+  padding-right: 3px; /* LTR */
+}
+
+table.context-disabled {
+  color: #999;
+}
+
+table.contexts-entry td {
+  line-height: 1.4;
+  padding-bottom: 10px;
+}
+table.context-disabled td {
+  line-height: 1.4;
+  padding-bottom: 10px;
+  background: none;
+}
+table.context-enabled td.context-name,
+table.context-enabled td.context-ops,
+table.context-disabled td.context-name,
+table.context-disabled td.context-ops {
+  line-height: 1.6;
+  padding-bottom: 0.3em;
+}
+table.contexts-entry td.context-name,
+table.contexts-entry td.context-ops {
+  background: #eee;
+}
+table.context-enabled td.context-name,
+table.context-enabled td.context-ops {
+  background: #E4F0F8; 
+}

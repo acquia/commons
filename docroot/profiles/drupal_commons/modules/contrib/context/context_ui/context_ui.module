@@ -1,0 +1,292 @@
+<?php
+// $Id: context_ui.module,v 1.13.2.48.2.3 2010/04/24 15:39:13 darthsteven Exp $
+
+/**
+ * Implementation of hook_theme().
+ */
+function context_ui_theme() {
+
+  // This is required so that the preprocess function within gets registered:
+  module_load_include('inc', 'context_ui', 'context_ui.admin');
+
+  // Minor code reduction technique.
+  $base = array(
+    'arguments' => array('form' => array()),
+    'file' => 'context_ui.admin.inc',
+  );
+
+  $items['context_ui_export_form'] = $base;
+  $items['context_ui_item_display'] = $base;
+  $items['context_ui_form'] = $base;
+  $items['context_ui_block_ui'] = $base;
+  $items['context_ui_bulk_export_table'] = $base;
+
+  // List contexts (admin landing page).
+ $items['context_ui_list_contexts'] = array(
+   'template' => 'context_ui-list-contexts',
+   'path' => drupal_get_path('module', 'context_ui'),
+  );
+
+  $items['context_devel'] = array(
+    'arguments' => array('form' => array()),
+  );
+  $items['context_devel_recurse'] = array(
+    'arguments' => array('form' => array()),
+  );
+  return $items;
+}
+
+/**
+ * Implementation of hook_block().
+ */
+function context_ui_block($op = 'list', $delta = 0, $edit = array()) {
+  switch ($op) {
+    case 'list':
+      $blocks = array();
+      $blocks['devel']['info'] = t('Context Devel');
+      return $blocks;
+    case 'view':
+      switch ($delta) {
+        case 'devel':
+          $block = array();
+          $block['subject'] = t('Context Devel');
+          if ($context = context_get()) {
+            $output = theme('context_devel', $context);
+            $block['content'] = $output;
+          }
+          else {
+            $block['content'] = "<p>". t('No context information is set.') ."</p>";
+          }
+          return $block;
+      }
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function context_ui_menu() {
+  $items['admin/build/context'] = array(
+    'title' => 'Context',
+    'description' => 'Associate menus, views, blocks, etc. with different contexts to structure your site.',
+    'page callback' => 'context_ui_list_contexts',
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['admin/build/context/list'] = array(
+    'title' => 'List',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => 0,
+  );
+  $items['admin/build/context/add'] = array(
+    'title' => 'Add',
+    'description' => 'Add a context to your site.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('context_ui_form', 'add'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 1,
+  );
+  $items['admin/build/context/import'] = array(
+    'title' => 'Import',
+    'description' => 'Import a context definition into your site.',
+    'page callback' => 'context_ui_import_page',
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 2,
+  );
+  $items['admin/build/context/export'] = array(
+    'title' => 'Export',
+    'description' => 'Export multiple contexts from your site.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('context_ui_bulk_export', 3),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 2,
+  );
+  $items['admin/build/context/%context_ui_menu'] = array(
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('context_ui_form', 'edit', 3),
+    'type' => MENU_CALLBACK,
+  );
+  $items['admin/build/context/%context_ui_menu/edit'] = array(
+    'title' => 'Edit',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('context_ui_form', 'edit', 3),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -1,
+  );
+  $items['admin/build/context/%context_ui_menu/edit/items'] = array(
+    'title' => 'Core attributes',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+  $items['admin/build/context/%context_ui_menu/clone'] = array(
+    'title' => 'Clone',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('context_ui_form', 'clone', 3),
+    'type' => MENU_LOCAL_TASK,
+  );
+  $items['admin/build/context/%context_ui_menu/export'] = array(
+    'title' => 'Export',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('context_ui_export', 3),
+    'type' => MENU_LOCAL_TASK,
+  );
+  $items['admin/build/context/%context_ui_menu/delete'] = array(
+    'title' => 'Delete',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('context_ui_confirm', 'delete', 3),
+    'type' => MENU_LOCAL_TASK,
+  );
+  $items['admin/build/context/%context_ui_menu/disable'] = array(
+    'title' => 'Disable',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('context_ui_confirm', 'disable', 3),
+    'type' => MENU_LOCAL_TASK,
+  );
+  $items['admin/build/context/%context_ui_menu/enable'] = array(
+    'title' => 'Enable',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('context_ui_confirm', 'enable', 3),
+    'type' => MENU_LOCAL_TASK,
+  );
+  foreach ($items as $path => $item) {
+    $items[$path]['access callback'] = 'user_access';
+    $items[$path]['access arguments'] = array('administer site configuration');
+    $items[$path]['file'] = 'context_ui.admin.inc';
+  }
+  return $items;
+}
+
+/**
+ * Helper loader to parse menu arguments and load contexts accordingly.
+ */
+function context_ui_menu_load($arg) {
+  if (is_numeric($arg)) {
+    return context_load_context($arg);
+  }
+  else {
+    $contexts = context_contexts();
+    if (!empty($contexts[$arg])) {
+      return $contexts[$arg];
+    }
+  }
+}
+
+/**
+ * Implementation of hook_help().
+ */
+function context_ui_help($path, $arg) {
+  switch ($path) {
+    case 'admin/build/context':
+      return '<p>'.
+        t("Contexts provide you with a way to organize your site using terms familiar to real human beings. You can create a set of sections like <em>'News'</em>, <em>'Projects'</em>, <em>'Staff'</em>, and associate different technical aspects of Drupal to each section. For example, the <em>'News'</em> section may be a collection of <em>Nodes</em>, <em>Views</em>, <em>Menus</em> and <em>Blocks</em>.")
+        .'</p>';
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_form_alter() for block_admin_configure.
+ */
+function context_ui_form_block_admin_configure_alter(&$form, $form_state) {
+  // Display context_ui visibility information on block configuration pages
+  $module = $form['module']['#value'];
+  $delta = $form['delta']['#value'];
+
+  $rows = array();
+
+  $contexts = context_enabled_contexts();
+  foreach ($contexts as $context) {
+    if (!empty($context->block)) {
+      foreach ($context->block as $block) {
+        // @TODO: normalize this to either an array or object. I apolgize for this sloppy shiz : |
+        $block = (object) $block;
+        if ($block->module == $module && $block->delta == $delta) {
+          $row = array();
+          $row[] = $context->namespace;
+          $row[] = $context->attribute;
+          $row[] = $context->value;
+          $row[] = $block->region;
+          $identifier = "{$context->namespace}-{$context->attribute}-{$context->value}";
+          $options = array(
+            'fragment' => 'context-ui-blocks',
+            'query' => 'destination='. $_GET['q'],
+          );
+          if ($context->system) {
+            $row[] = l(t('Override visibility'), "admin/build/context/$identifier/clone", $options);
+          }
+          else {
+            $row[] = l(t('Edit visibility'), "admin/build/context/{$context->cid}", $options);
+          }
+          $rows[] = $row;
+        }
+      }
+    }
+  }
+
+  if ($rows) {
+    $content = theme('table', array(t('Namespace'), t('Attribute'), t('Value'), t('Region'), ''), $rows);
+  }
+  else {
+    $content = "<p>". t('No visibility rules have been set for this block using context_ui.') ."</p>";
+  }
+
+  $form['context_ui'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Context UI visibility'),
+    '#weight' => -1,
+    '#collapsible' => true,
+  );
+  $form['context_ui']['contexts'] = array(
+    '#type' => 'item',
+    '#value' => $content,
+    '#description' => t('To add or remove block visibility rules based on context, use the !context_admin.', array('!context_admin' => l(t('context administration page'), 'admin/build/context'))),
+  );
+  $form['block_settings']['#weight'] = -5;
+}
+
+/**
+ * THEME FUNCTIONS ====================================================
+ */
+
+/**
+ * Takes a retrieved context array and returns a themed out tree representation of that context.
+ */
+function theme_context_devel($context) {
+  drupal_add_css(drupal_get_path("module", "context_ui") ."/context_ui.css");
+  $output = '';
+  foreach ($context as $space => $a) {
+    $output .= "<div class='context-devel-space'>$space</div>";
+    $output .= "<div class='context-devel-tree'>". theme_context_devel_recurse($a) ."</div>";
+  }
+  return $output;
+}
+
+/**
+ * Helper function to theme_context_devel that recurses down context arrays and themes accordingly.
+ */
+function theme_context_devel_recurse($value) {
+  $output = '';
+  if (is_array($value) || is_object($value)) {
+    if (is_array($value)) {
+      $type = 'array';
+    }
+    else if (is_object($value)) {
+      $type = 'object';
+    }
+    foreach ((array)$value as $key => $a) {
+      $output .= "<div class='context-devel-wrapper'><label><small>$type</small>$key</label>". theme('context_devel_recurse', $a) ."</div>";
+    }
+  }
+  else {
+    if (is_string($value)) {
+      $type = 'string';
+    }
+    else if (is_int($value)) {
+      $type = 'int';
+    }
+    else if (is_bool($value)) {
+      $type = 'bool';
+    }
+    $output .= "<div class='context-devel-wrapper'><label><small>$type</small>$value</label></div>";
+  }
+  return $output;
+}

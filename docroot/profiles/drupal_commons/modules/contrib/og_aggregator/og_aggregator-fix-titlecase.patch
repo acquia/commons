@@ -1,0 +1,80 @@
+--- og_aggregator.module	2009-11-12 05:16:53.000000000 -0500
++++ og_aggregator.new.module	2010-07-29 10:34:36.000000000 -0400
+@@ -34,27 +34,27 @@ function og_aggregator_menu() {
+     'type' => MENU_NORMAL_ITEM,
+   );
+   $items['admin/og/aggregator/remove/%'] = array(
+-    'title' => 'remove items',
++    'title' => 'Remove items',
+     'description' => 'OG Aggregator',
+     'page callback' => 'og_aggregator_admin_remove_feed',
+     'page arguments' => array(4),
+     'access arguments' => array('administer og_aggregator'),
+     'type' => MENU_CALLBACK);
+   $items['admin/og/aggregator/update/%'] = array(
+-    'title' => 'update items',
++    'title' => 'Update items',
+     'description' => 'OG Aggregator',
+     'page callback' => 'og_aggregator_admin_refresh_feed',
+     'page arguments' => array(4),
+     'access arguments' => array('administer og_aggregator'),
+     'type' => MENU_CALLBACK);
+   $items['admin/og/aggregator/list'] = array(
+-    'title' => 'list',
++    'title' => 'List',
+     'type' => MENU_DEFAULT_LOCAL_TASK,
+     'weight' => -10,
+     'access arguments' => array('administer og_aggregator'),
+   );
+   $items['admin/og/aggregator/edit/feed/%'] = array(
+-    'title' => 'edit feed',
++    'title' => 'Edit feed',
+     'description' => 'OG Aggregator',
+     'page callback' => 'og_aggregator_edit_feed',
+     'page arguments' => array(5, NULL),
+@@ -71,10 +71,9 @@ function og_aggregator_menu() {
+    );
+ 
+   $items['node/%node/aggregator'] = array(
+-    'title' => 'Group RSS Feed',
++    'title' => 'Group RSS feed',
+     'page callback' => 'og_aggregator_page',
+     'page arguments' => array(1),
+-
+     'type' => MENU_LOCAL_TASK,
+     'access callback' => 'og_aggregator_access',
+     'access arguments' => array('group', 1),
+@@ -102,7 +101,7 @@ function og_aggregator_menu() {
+   );
+ 
+   $items['node/%node/aggregator/add'] = array(
+-    'title' => 'Add RSS Feed',
++    'title' => 'Add RSS feed',
+     'page callback' => 'og_aggregator_add_feed',
+     'page arguments' => array(null, 1),
+     'access callback' => 'og_aggregator_access',
+@@ -112,21 +111,21 @@ function og_aggregator_menu() {
+   );
+ 
+   $items['node/%node/aggregator/remove'] = array(
+-    'title' => 'remove items',
++    'title' => 'Remove items',
+     'page callback' => 'og_aggregator_remove_feed',
+     'access callback' => 'og_aggregator_access',
+     'access arguments' => array('group update', 1),
+     'type' => MENU_CALLBACK,
+   );
+   $items['node/%node/aggregator/update'] = array(
+-    'title' => 'update items',
++    'title' => 'Update items',
+     'page callback' => 'og_aggregator_refresh_feed',
+     'access callback' => 'og_aggregator_access',
+     'access arguments' => array('group update', 1),
+     'type' => MENU_CALLBACK,
+   );
+   $items['node/%node/aggregator/edit'] = array(
+-    'title' => 'edit feed',
++    'title' => 'Edit feed',
+     'page callback' => 'og_aggregator_edit_feed',
+     'page arguments' => array(4, 1),
+     'access callback' => 'og_aggregator_access',

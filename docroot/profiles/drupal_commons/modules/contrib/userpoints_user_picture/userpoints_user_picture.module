@@ -1,0 +1,89 @@
+<?php
+//$Id: userpoints_user_picture.module,v 1.1.2.1 2009/03/08 01:00:26 fred0 Exp $
+define('USERPOINTS_USER_PICTURE',                   'userpoints_user_picture');
+define('USERPOINTS_USER_PICTURE_TID',               'userpoints_user_picture_tid');
+
+function userpoints_user_picture_perm() {
+  return array('userpoints user picture');
+}
+
+/*
+ * Function: Implementation of hook_userpoints
+ */
+function userpoints_user_picture_userpoints($op = 'setting', $params = array()) {
+  if ($op == 'setting') {
+      $group = 'userpoints_user_picture';
+      $form[$group] = array(
+        '#type'        => 'fieldset',
+        '#collapsible' => TRUE,
+        '#collapsed'   => TRUE,
+        '#title'       => t('!Points for adding a user picture', userpoints_translation()),
+      );
+      
+      $form[$group][USERPOINTS_USER_PICTURE] = array(
+        '#type'          => 'textfield',
+        '#title'         => t('!Points for adding a user picture', userpoints_translation()),
+        '#default_value' => variable_get(USERPOINTS_USER_PICTURE, 0),
+        '#size'          => 5,
+        '#maxlength'     => 5,
+      );
+      
+      $form[$group][USERPOINTS_USER_PICTURE_TID] = array(
+      '#type'          => 'select',
+      '#title'         => t('Category'),
+      '#default_value' => variable_get(USERPOINTS_USER_PICTURE_TID, 0),
+      '#options'       => userpoints_get_categories(),
+      '#description'   => t('User Picture points will be assigned to this category. You can modify what categories are available by modifying the <a href="!url">Userpoints taxonomy</a>.', 
+        array('!url' => url('admin/content/taxonomy/'. variable_get(USERPOINTS_CATEGORY_DEFAULT_VID, '')))),
+    );
+    
+      return $form;
+  }
+}
+
+/*
+ * Implementation of hook_user().
+ */
+function userpoints_user_picture_user($op, &$edit, &$account, $category = NULL) {
+ global $user;
+   
+ if (!user_access('userpoints user picture')) {
+  // User does not have access to earn points for user picture
+  return;
+ }
+   
+ if ((variable_get('user_pictures', 0)) && (empty($user->picture))) {
+  switch($op) {
+   case 'update':
+      if ($file = file_save_upload('picture_upload')) {
+       // Award the points
+       userpoints_userpointsapi(array(
+          'points'      => variable_get(USERPOINTS_USER_PICTURE, 0),
+          'uid'         => $user->uid,
+          'operation'   => 'user picture',
+          'entity_id'   => $user->uid,
+          'entity_type' => 'user',
+          'tid'         => variable_get(USERPOINTS_USER_PICTURE_TID, 0),
+          ));
+      }
+    break;
+  }
+ }
+ elseif ((variable_get('user_pictures', 0)) && (!empty($user->picture))) {
+  switch($op) {
+   case 'update':
+    if (!empty($edit['picture_delete'])) {
+       // Subtract the points
+       userpoints_userpointsapi(array(
+          'points'      => -(variable_get(USERPOINTS_USER_PICTURE, 0)),
+          'uid'         => $user->uid,
+          'operation'   => 'user picture',
+          'entity_id'   => $user->uid,
+          'entity_type' => 'user',
+          'tid'         => variable_get(USERPOINTS_USER_PICTURE_TID, 0),
+          ));
+      }
+    break;
+  }
+ }
+}

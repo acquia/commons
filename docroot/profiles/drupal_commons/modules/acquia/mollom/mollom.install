@@ -1,0 +1,631 @@
+<?php
+// $Id: mollom.install,v 1.2.2.36 2010/10/28 02:04:52 dries Exp $
+
+/**
+ * @file
+ * Install and uninstall functions as well as schema definition for the Mollom module.
+ */
+
+/**
+ * Implements hook_requirements().
+ *
+ * @param $check
+ *   (optional) Boolean whether to re-check the module's installation and
+ *   configuration status. Defaults to TRUE, as this argument is not passed for
+ *   hook_requirements() by default. Passing FALSE allows other run-time code
+ *   to re-generate requirements error messages to be displayed on other pages
+ *   than the site's system status report page.
+ *
+ * @see mollom_init()
+ * @see mollom_admin_settings()
+ * @see _mollom_status()
+ */
+function mollom_requirements($phase = 'runtime', $check = TRUE) {
+  $requirements = array();
+  if ($phase == 'runtime') {
+    // This is invoked from both mollom_install() and mollom_init(); make sure
+    // that mollom.module is loaded.
+    drupal_load('module', 'mollom');
+
+    $status = _mollom_status($check);
+    // Immediately return if everything is in order.
+    if ($status === TRUE) {
+      return $requirements;
+    }
+    // If not, something is wrong; prepare the requirements entry and set
+    // defaults for any yet unknown edge-cases.
+    $requirements['mollom'] = array(
+      'title' => 'Mollom API keys',
+      'value' => '',
+      'severity' => REQUIREMENT_ERROR,
+    );
+    // Append a link to the settings page to the error message on all pages,
+    // except on the settings page itself. These error messages also need to be
+    // shown on the settings page, since Mollom API keys can be entered later.
+    $admin_message = '';
+    if ($_GET['q'] != 'admin/settings/mollom/settings') {
+      $admin_message = t('Visit the <a href="@settings-url">Mollom settings page</a> to configure your keys.', array(
+        '@settings-url' => url('admin/settings/mollom/settings'),
+      ));
+    }
+    // Generate an appropriate error message:
+    // Missing API keys.
+    if (!$status['keys']) {
+      $requirements['mollom']['value'] = t('Not configured');
+      $requirements['mollom']['description'] = t('The Mollom API keys are not configured yet. !admin-message', array(
+        '!admin-message' => $admin_message,
+      ));
+    }
+    // Invalid API keys.
+    elseif ($status['keys valid'] === MOLLOM_ERROR) {
+      $requirements['mollom']['value'] = t('Invalid');
+      $requirements['mollom']['description'] = t('The configured Mollom API keys are invalid. !admin-message', array(
+        '!admin-message' => $admin_message,
+      ));
+    }
+    // Communication error.
+    elseif ($status['keys valid'] === NETWORK_ERROR) {
+      $requirements['mollom']['value'] = t('Network error');
+      $requirements['mollom']['description'] = t('The Mollom servers could not be contacted. Please make sure that your web server can make outgoing HTTP requests.');
+    }
+  }
+  return $requirements;
+}
+
+/**
+ * Implements hook_schema().
+ */
+function mollom_schema() {
+  $schema['mollom'] = array(
+    'description' => 'Stores Mollom responses for content.',
+    'fields' => array(
+      'entity' => array(
+        'description' => 'Entity type of the content.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'id' => array(
+        'description' => 'Unique entity ID of the content.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'session_id' => array(
+        'description' => 'Session hash returned by Mollom.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'form_id' => array(
+        'description' => 'The form_id of the form being protected.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'changed' => array(
+        'description' => 'Unix timestamp when the data was changed.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      // Server response columns are NULL by default, because any default value
+      // would have an unintended meaning. Also, values are stored in individual
+      // columns, so as to be able to join and filter/sort on these values for
+      // improved content moderation.
+      'spam' => array(
+        'description' => 'Text analysis spam check result.',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => FALSE,
+      ),
+      'quality' => array(
+        'description' => 'Text analysis quality check result.',
+        'type' => 'float',
+        'size' => 'tiny',
+        'not null' => FALSE,
+      ),
+      'languages' => array(
+        'description' => 'Text analysis language check result.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'indexes' => array('session_id' => array('session_id')),
+    'primary key' => array('entity', 'id'),
+    'foreign keys' => array(
+      'mollom_form_id' => array(
+        'table' => 'mollom_form',
+        'columns' => array(
+          'form_id' => 'form_id',
+        ),
+      ),
+    ),
+  );
+
+  $schema['mollom_form'] = array(
+    'description' => 'Stores configuration of forms protected by Mollom.',
+    'fields' => array(
+      'form_id' => array(
+        'description' => 'The protected form ID.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'mode' => array(
+        'description' => 'Protection mode for the form.',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'checks' => array(
+        'description' => 'Text analyis checks to perform.',
+        'type' => 'text',
+        'not null' => FALSE,
+        'serialize' => TRUE,
+      ),
+      'discard' => array(
+        'description' => 'Whether to discard (1) or retain (0) bad posts.',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 1,
+      ),
+      'enabled_fields' => array(
+        'description' => 'Form elements to analyze.',
+        'type' => 'text',
+        'not null' => FALSE,
+        'serialize' => TRUE,
+      ),
+      'module' => array(
+        'description' => 'Module name owning the form.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'primary key' => array('form_id'),
+  );
+
+  $schema['cache_mollom'] = drupal_get_schema_unprocessed('system', 'cache');
+  $schema['cache_mollom']['description'] = 'Cache table for the Mollom module to store information for forms it protects.';
+
+  return $schema;
+}
+
+/**
+ * Implements hook_install().
+ */
+function mollom_install() {
+  drupal_install_schema('mollom');
+
+  // Point the user to Mollom's settings page after installation.
+  $requirements = mollom_requirements('runtime', FALSE);
+  // When running tests in D6, hook_install() seems to be invoked very (too?)
+  // early, leading to a potentially predefined valid module configuration from
+  // the parent site, therefore throwing a PHP notice here.
+  if (isset($requirements['mollom'])) {
+    drupal_set_message($requirements['mollom']['description'], 'warning');
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function mollom_uninstall() {
+  db_query("DELETE FROM {variable} WHERE name LIKE 'mollom_%'");
+  drupal_uninstall_schema('mollom');
+}
+
+/**
+ * An update function to add the language field.
+ */
+function mollom_update_1() {
+  $ret = array();
+  db_add_field($ret, 'mollom', 'languages', array(
+    'type' => 'varchar',
+    'length' => 255,
+    'not null' => TRUE,
+    'default' => '',
+  ));
+  return $ret;
+}
+
+/**
+ * Create the cache_mollom table.
+ */
+function mollom_update_2() {
+  $ret = array();
+  $schema = drupal_get_schema_unprocessed('system', 'cache');
+  db_create_table($ret, 'cache_mollom', $schema);
+  return $ret;
+}
+
+/**
+ * Upgrade form protection storage.
+ */
+function mollom_update_3() {
+  // Load hook_mollom_form_info() implementations for mollom_form_list().
+  foreach (module_list(FALSE, FALSE) as $module) {
+    drupal_load('module', $module);
+  }
+  drupal_load('module', 'mollom');
+
+  foreach (mollom_form_list() as $form_id => $info) {
+    $name = 'mollom_' . $form_id;
+    $mode = variable_get($name, NULL);
+    // $mode was stored as 1; convert to MOLLOM_MODE_ANALYSIS.
+    if (isset($mode)) {
+      variable_set($name, 2);
+    }
+  }
+}
+
+/**
+ * Add a reputation field to the mollom table.
+ */
+function mollom_update_4() {
+  // Unused. Removed in mollom_update_6114().
+  $ret = array();
+  return $ret;
+}
+
+/**
+ * Add the {mollom_form} table.
+ */
+function mollom_update_6105() {
+  $ret = array();
+  $schema = array(
+    'fields' => array(
+      'form_id' => array(
+        'description' => 'The protected form ID.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'mode' => array(
+        'description' => 'Protection mode for the form.',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'enabled_fields' => array(
+        'description' => 'Form elements to analyze.',
+        'type' => 'text',
+        'serialize' => TRUE,
+      ),
+      'module' => array(
+        'description' => 'Module name owning the form.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'primary key' => array('form_id'),
+  );
+  db_create_table($ret, 'mollom_form', $schema);
+
+  // Migrate form configuration for enabled, supported modules.
+  foreach (module_list(FALSE, FALSE) as $module) {
+    drupal_load('module', $module);
+  }
+  drupal_load('module', 'mollom');
+
+  $form_list = mollom_form_list();
+  $result = db_query("SELECT name, value FROM {variable} WHERE name LIKE 'mollom_%%' AND name NOT IN ('mollom_servers', 'mollom_fallback', 'mollom_public_key', 'mollom_private_key')");
+  while ($row = db_fetch_object($result)) {
+    $form_id = substr($row->name, 7);
+    $mode = unserialize($row->value);
+    if (!empty($mode) && isset($form_list[$form_id])) {
+      $info = $form_list[$form_id];
+      $info += mollom_form_info($form_id, $info['module']);
+      $info['enabled_fields'] = ($mode == MOLLOM_MODE_ANALYSIS ? array_keys($info['elements']) : array());
+      db_query("INSERT INTO {mollom_form} (form_id, mode, enabled_fields, module) VALUES ('%s', %d, '%s', '%s')", array($form_id, $mode, serialize($info['enabled_fields']), $info['module']));
+    }
+    variable_del($row->name);
+  }
+  return $ret;
+}
+
+/**
+ * Add the {mollom}.form_id column.
+ */
+function mollom_update_6106() {
+  $ret = array();
+  // Add the 'entity' column.
+  db_add_field($ret, 'mollom', 'entity', array(
+    'description' => 'Entity type of the content.',
+    'type' => 'varchar',
+    'length' => 32,
+    'not null' => TRUE,
+    'default' => '',
+  ));
+
+  // Change the primary key to prevent duplicate key errors in the following
+  // data conversions.
+  db_drop_primary_key($ret, 'mollom');
+  db_add_primary_key($ret, 'mollom', array('entity', 'did'));
+
+  // Migrate existing node data.
+  $ret[] = update_sql("UPDATE {mollom} SET entity = 'node' WHERE did LIKE 'node-%'");
+  $ret[] = update_sql("UPDATE {mollom} SET did = SUBSTR(did, 6) WHERE entity = 'node'");
+  // Migrate existing comment data.
+  $ret[] = update_sql("UPDATE {mollom} SET entity = 'comment' WHERE did LIKE 'comment-%'");
+  $ret[] = update_sql("UPDATE {mollom} SET did = SUBSTR(did, 9) WHERE entity = 'comment'");
+
+  // Decrease the size of the 'did' column.
+  // @todo We do not change the type to 'int' here to still support named
+  //   identifiers. Reconsider this.
+  db_change_field($ret, 'mollom', 'did', 'did', array(
+    'description' => 'Unique entity ID of the content.',
+    'type' => 'varchar',
+    'length' => 32,
+    'not null' => TRUE,
+    'default' => '',
+  ));
+
+  return $ret;
+}
+
+/**
+ * Disable the privacy policy link for existing sites by default.
+ */
+function mollom_update_6107() {
+  $ret = array();
+  variable_set('mollom_privacy_link', 0);
+  $ret[] = array('success' => TRUE, 'query' => "Link to Mollom's privacy policy on forms protected via textual analysis has been disabled.");
+  return $ret;
+}
+
+/**
+ * Rename 'post with no checking' permission to 'bypass mollom protection'.
+ */
+function mollom_update_6108() {
+  $ret = array();
+  $ret[] = update_sql("UPDATE {permission} SET perm = REPLACE(perm, 'post with no checking', 'bypass mollom protection')");
+  return $ret;
+}
+
+/**
+ * Rename 'fields' column to 'enabled_fields'; previously introduced in mollom_update_6105().
+ *
+ * 'fields' is a reserved keyword in MySQL.
+ */
+function mollom_update_6109() {
+  $ret = array();
+  if (db_column_exists('mollom_form', 'fields')) {
+    db_change_field($ret, 'mollom_form', 'fields', 'enabled_fields', array(
+      'description' => 'Form elements to analyze.',
+      'type' => 'text',
+      'serialize' => TRUE,
+    ));
+  }
+  return $ret;
+}
+
+/**
+ * Automatically update the new 'mollom_status' variable.
+ *
+ * _mollom_status() was introduced in 6.x-1.11 to prevent Mollom from
+ * interfering with forms when it is incorrectly configured. Sites updating from
+ * previous versions should be correctly configured, so we just invoke it here.
+ */
+function mollom_update_6110() {
+  $ret = array();
+  drupal_load('module', 'mollom');
+  _mollom_status(TRUE);
+  return $ret;
+}
+
+/**
+ * Fix enabled_fields array for CAPTCHA-only protected forms.
+ *
+ * mollom_update_6105() incorrectly stored enabled_fields values for forms
+ * protected by CAPTCHAs only.
+ */
+function mollom_update_6111() {
+  $ret = array();
+  // @see update_sql()
+  $sql = "UPDATE {mollom_form} SET enabled_fields = '%s' WHERE mode = %d";
+  $result = db_query($sql, array(serialize(array()), 1));
+  $ret[] = array('success' => $result !== FALSE, 'query' => check_plain($sql));
+  return $ret;
+}
+
+/**
+ * Add {mollom}.changed column to auto-flush expired entries.
+ */
+function mollom_update_6112() {
+  $ret = array();
+  if (!db_column_exists('mollom', 'changed')) {
+    db_add_field($ret, 'mollom', 'changed', array(
+      'description' => 'Unix timestamp when the data was changed.',
+      'type' => 'int',
+      'not null' => TRUE,
+      'default' => 0,
+    ));
+    db_query("UPDATE {mollom} SET changed = %d", array(time()));
+  }
+  return $ret;
+}
+
+/**
+ * Replace {mollom_form}.data with {mollom_form}.checks.
+ */
+function mollom_update_6113() {
+  $ret = array();
+  // Add {mollom_form}.checks.
+  if (!db_column_exists('mollom_form', 'checks')) {
+    db_add_field($ret, 'mollom_form', 'checks', array(
+      'description' => 'Text analyis checks to perform.',
+      'type' => 'text',
+      'not null' => FALSE,
+      'serialize' => TRUE,
+    ));
+    // Default all checks to 'spam', including CAPTCHA-only rows, so spam
+    // checking is enabled by default when switching the protection mode.
+    // @see update_sql()
+    $sql = "UPDATE {mollom_form} SET checks = '%s'";
+    $result = db_query($sql, array(serialize(array('spam'))));
+    $ret[] = array('success' => $result !== FALSE, 'query' => check_plain($sql));
+  }
+  // {mollom_form}.data did never exist in D6.
+
+  return $ret;
+}
+
+/**
+ * Clean up and complete server response columns in {mollom}.
+ */
+function mollom_update_6114() {
+  $ret = array();
+  // Remove 'reputation' column introduced in mollom_update_4(); unused.
+  if (db_column_exists('mollom', 'reputation')) {
+    db_drop_field($ret, 'mollom', 'reputation');
+  }
+
+  // Change {mollom}.quality from varchar into float.
+  db_change_field($ret, 'mollom', 'quality', 'quality', array(
+    'description' => 'Text analysis quality check result.',
+    'type' => 'float',
+    'size' => 'tiny',
+    'not null' => FALSE,
+  ));
+
+  // Add {mollom}.spam.
+  if (!db_column_exists('mollom', 'spam')) {
+    db_add_field($ret, 'mollom', 'spam', array(
+      'description' => 'Text analysis spam check result.',
+      'type' => 'int',
+      'size' => 'tiny',
+      'not null' => FALSE,
+    ));
+    // Fill {mollom}.spam with approximate values based on {mollom}.quality.
+    // Note that this is just to have some values. 'quality' and 'spam' are
+    // completely unrelated otherwise.
+    // MOLLOM_ANALYSIS_SPAM
+    $ret[] = update_sql("UPDATE {mollom} SET spam = 2 WHERE quality < 0.5");
+    // MOLLOM_ANALYSIS_UNSURE
+    $ret[] = update_sql("UPDATE {mollom} SET spam = 3 WHERE quality = 0.5");
+    // MOLLOM_ANALYSIS_HAM
+    $ret[] = update_sql("UPDATE {mollom} SET spam = 1 WHERE quality > 0.5");
+  }
+
+  // Addition of {mollom}.profanity deferred to D7.
+
+  return $ret;
+}
+
+/**
+ * Add {mollom}.form_id column to look up the originating form_id for an entity.
+ */
+function mollom_update_6115() {
+  $ret = array();
+  if (!db_column_exists('mollom', 'form_id')) {
+    db_add_field($ret, 'mollom', 'form_id', array(
+      'description' => 'The form_id of the form being protected.',
+      'type' => 'varchar',
+      'length' => 255,
+      'not null' => TRUE,
+      'default' => '',
+    ));
+    // Update simple cases first.
+    $ret[] = update_sql("UPDATE {mollom} SET form_id = 'user_register' WHERE entity = 'user'");
+    $ret[] = update_sql("UPDATE {mollom} SET form_id = 'contact_mail_page' WHERE entity = 'session'");
+    // Also perform simple update on behalf of Webform, as that is a very common
+    // use-case.
+    $ret[] = update_sql("UPDATE {mollom} SET form_id = CONCAT('webform_client_form_', did) WHERE entity = 'webform'");
+
+    // Update node entity data records.
+    $result = db_query("SELECT n.type, m.did
+      FROM {mollom} m
+      INNER JOIN {node} n ON n.nid = m.did
+      WHERE m.entity = 'node'");
+    $ids = array();
+    while ($row = db_fetch_object($result)) {
+      $ids[$row->type][] = $row->did;
+    }
+    foreach ($ids as $type => $nids) {
+      $in = implode(',', $nids);
+      $ret[] = update_sql("UPDATE {mollom} SET form_id = '{$type}_node_form' WHERE entity = 'node' AND did IN ($in)");
+    }
+
+    // Update comment entity data records.
+    // In Drupal 6, there is only one 'comment_form'. The corresponding update
+    // to Drupal 7 takes into account that {mollom}.form_id can already exist,
+    // and if it does, only comment form IDs are updated accordingly.
+    $ret[] = update_sql("UPDATE {mollom} SET form_id = 'comment_form' WHERE entity = 'comment'");
+  }
+  return $ret;
+}
+
+/**
+ * Rename {mollom}.did to .id, and {mollom}.session to .session_id.
+ */
+function mollom_update_6116() {
+  $ret = array();
+  db_drop_primary_key($ret, 'mollom');
+  if (!db_column_exists('mollom', 'id')) {
+    db_change_field($ret, 'mollom', 'did', 'id', array(
+      'description' => 'Unique entity ID of the content.',
+      'type' => 'varchar',
+      'length' => 32,
+      'not null' => TRUE,
+      'default' => '',
+    ));
+  }
+  db_add_primary_key($ret, 'mollom', array('entity', 'id'));
+
+  db_drop_index($ret, 'mollom', 'session');
+  if (!db_column_exists('mollom', 'session_id')) {
+    db_change_field($ret, 'mollom', 'session', 'session_id', array(
+      'description' => 'Session hash returned by Mollom.',
+      'type' => 'varchar',
+      'length' => 255,
+      'not null' => TRUE,
+      'default' => '',
+    ));
+  }
+  db_add_index($ret, 'mollom', 'session_id', array('session_id'));
+  return $ret;
+}
+
+/**
+ * Add {mollom_form}.discard and {mollom}.moderate columns.
+ */
+function mollom_update_6117() {
+  $ret = array();
+  if (!db_column_exists('mollom_form', 'discard')) {
+    db_add_field($ret, 'mollom_form', 'discard', array(
+      'description' => 'Whether to discard (1) or retain (0) bad posts.',
+      'type' => 'int',
+      'size' => 'tiny',
+      'not null' => TRUE,
+      'default' => 1,
+    ));
+  }
+  return $ret;
+}
+
+/**
+ * Remove the {mollom}.moderate column introduced in mollom_update_6117().
+ */
+function mollom_update_6118() {
+  $ret = array();
+  if (db_column_exists('mollom', 'moderate')) {
+    db_drop_field($ret, 'mollom', 'moderate');
+  }
+  return $ret;
+}

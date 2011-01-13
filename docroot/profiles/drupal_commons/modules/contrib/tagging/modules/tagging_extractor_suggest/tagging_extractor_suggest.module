@@ -1,0 +1,16 @@
+<?php
+// $Id: tagging_extractor_suggest.module,v 1.1.2.3 2010/07/18 10:11:01 eugenmayer Exp $
+
+// Author: Eugen Mayer (http://kontextwork.de)
+// Copyright 2010
+
+function tagging_extractor_suggest_tagging_suggestions($vid, $node) {
+  $suggestions = array();
+  $terms = extractor_extract($node->body);
+
+  $result = array();
+  foreach($terms as $key => $term) {
+    $result[] = array('#weight' => (1/$key), '#name' => $term);
+  }
+  return $result;
+}

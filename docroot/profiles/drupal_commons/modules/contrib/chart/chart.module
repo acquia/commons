@@ -1,0 +1,1161 @@
+<?php
+  
+/**
+* @file 
+* Google Charting API
+* @author Tj Holowaychuk <http://www.350designs.com/>
+* @package Chart
+*/
+ 
+/**
+* Misc
+*/
+define('CHART_URI', 'http://chart.apis.google.com/chart');
+
+/**
+* Chart types                                                      
+*/
+define('CHART_TYPE_LINE',          'lc');
+define('CHART_TYPE_LINE_XY',       'lxy');
+define('CHART_TYPE_BAR_H',         'bhs');
+define('CHART_TYPE_BAR_V',         'bvs');
+define('CHART_TYPE_BAR_H_GROUPED', 'bhg');
+define('CHART_TYPE_BAR_V_GROUPED', 'bvg');
+define('CHART_TYPE_PIE',           'p');
+define('CHART_TYPE_PIE_3D',        'p3');
+define('CHART_TYPE_VENN',          'v');
+define('CHART_TYPE_SCATTER',       's');
+define('CHART_TYPE_MAP',           't');
+
+/**
+* Marker types
+*/
+define('CHART_MARKER_ARROW',             'a');
+define('CHART_MARKER_CROSS',             'c');
+define('CHART_MARKER_DIAMOND',           'd');
+define('CHART_MARKER_CIRCLE',            'o');
+define('CHART_MARKER_SQUARE',            's');
+define('CHART_MARKER_VIRTICAL_LINE_X',   'v');
+define('CHART_MARKER_VIRTICAL_LINE_TOP', 'V');
+define('CHART_MARKER_HORIZONTAL_LINE',   'h');
+define('CHART_MARKER_X',                 'x');
+
+/**
+* Axis
+*/
+define('CHART_AXIS_X_BOTTOM', 'x');
+define('CHART_AXIS_X_TOP',    't');
+define('CHART_AXIS_Y_LEFT',   'y');
+define('CHART_AXIS_Y_RIGHT',  'r');
+
+/**
+* Alignment
+*/
+define('CHART_ALIGN_LEFT',  -1);
+define('CHART_ALIGN_CENTER', 0);
+define('CHART_ALIGN_RIGHT',  1);
+
+/* -----------------------------------------------------------------
+
+  Hook Implementations 
+
+------------------------------------------------------------------ */
+
+/**
+* Implementation of hook_perm();
+*/
+function chart_perm() {
+  return array('administer chart');
+}
+
+/**
+* Implementation of hook_init().
+*/
+function chart_init() {
+  _chart_color_schemes(TRUE);
+}
+
+/**
+* Implementation of hook_menu().
+*/  
+function chart_menu() {
+  $items = array();
+  
+  $items['admin/settings/chart'] = array(
+      'title' => 'Charts',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('chart_settings'),
+      'access arguments' => array('administer chart'),
+    );  
+            
+  return $items;
+}
+
+/* -----------------------------------------------------------------
+
+  Public API   
+
+------------------------------------------------------------------ */
+
+/**
+* Renders a chart structure.
+*   
+* @param array $chart
+* 
+* @param array $attributes
+*   (optional) Assoc array of attributes parsed by drupal_attributes();
+* 
+* @return mixed      
+*   - Success: Chart image markup
+*   - Failure: FALSE
+*/
+function chart_render($chart, $attributes = array()) {   
+  if ($chart_query_string = chart_build($chart)){ 
+    $attributes['id'] = 'chart-' . $chart['#chart_id'];
+    $attributes['class'] .= ' chart';
+    
+    return '<img src="' . CHART_URI . '?' . $chart_query_string . '"' . drupal_attributes($attributes) . ' />';
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/**
+* Returns the chart URL.
+*   
+* @param array $chart
+* 
+* @return mixed      
+*   - Success: Chart image markup
+*   - Failure: FALSE
+*/
+function chart_url($chart) {   
+  if ($chart_query_string = chart_build($chart)){ 
+    return CHART_URI . '?' . $chart_query_string;
+  }
+  else {
+    return FALSE;
+  }
+}
+
+
+/**
+* Copies rendered chart image.
+*   
+* @param array $chart
+*   Chart API structure
+* 
+* @param string $name
+*   (optional) Filename WITHOUT extension.
+*   when NULL #chart_id is used.
+*   
+* @param string $dest 
+*   (optional) A string containing the path to verify. If this value is
+*   omitted, Drupal's 'files/charts' directory will be used.
+* 
+* @param string $replace 
+*   (optional) Replace behavior when the destination file already exists.
+*     - FILE_EXISTS_REPLACE: Replace the existing file
+*     - FILE_EXISTS_RENAME: Appends _{incrementing number} until the filename is unique
+*     - FILE_EXISTS_ERROR: Do nothing and return FALSE.
+* 
+* @return bool
+*/
+function chart_copy($chart, $name = NULL, $dest = 'charts', $replace = FILE_EXISTS_REPLACE) {
+  if (!$chart_query_string = chart_build($chart)){
+    return FALSE;
+  }       
+  
+  if ($dest = file_create_path($dest)) {     
+    if (file_check_directory($dest, FILE_CREATE_DIRECTORY)){
+      // Defaults
+      $name = is_null($name) ? $chart['#chart_id'] : $name; 
+      
+      // Generate temp image
+      $tempname = tempnam(file_directory_temp(), 'tmp_');
+      $filename = file_create_path($dest) . '/' . $name . '.png';  
+      $png      = imagecreatefrompng(CHART_URI . '?' . $chart_query_string);
+      $fh       = fopen($tempname, 'w+');
+      imagepng($png, $tempname);
+      
+      // Copy temp image to new location 
+      if (!file_copy($tempname, $filename, $replace)){
+        _chart_error(t('Failed to copy chart image.'));
+        return FALSE;
+      }
+      
+      // Remove temp image
+      fclose($fh);
+    }                   
+  }
+  
+  return TRUE;
+}
+
+/**
+* Build chart query string.
+* 
+* @param array $chart 
+* 
+*   REQUIRED
+*     #chart_id
+*     #type
+*     #data
+* 
+*   OPTIONAL
+*     #title  
+*     #size  
+*     #legends          
+*     #labels  
+*     #adjust_resolution  
+*     #line_styles          
+*     #grid_lines          
+*     #shape_markers          
+*     #data_colors          
+*     #chart_fill 
+*     #mixed_axis_labels 
+*     #mixed_axis_label_styles
+*     #bar_size 
+* 
+* @return mixed
+*   Query string or FALSE on failure.
+*/
+function chart_build($chart) {
+  static $charts;
+                           
+  // In the odd event that the same chart may appear twice 
+  // we will statically cache the results below
+  if (isset($charts[$chart['#chart_id']])){ 
+    return $charts[$chart['#chart_id']];
+  }
+               
+  $data = array();
+  
+  // Must have a chart id                    
+  if (!strlen(trim($chart['#chart_id']))){
+    return FALSE;
+  }
+  
+  // We need data :)           
+  if (!count($chart['#data']) || !is_array($chart['#data'])){
+    return FALSE;
+  }                
+  
+  // Chart alter hook
+  foreach (module_implements('chart_alter') as $module) {
+    $function = $module . '_chart_alter';
+    $function($chart['#chart_id'], $chart);
+  }
+  
+  // Adjust resolution
+  if (isset($chart['#adjust_resolution'])){
+    if ($chart['#adjust_resolution'] === TRUE){ 
+      _chart_adjust_resolution($chart['#chart_id'], $chart['#data']);
+    }
+    elseif ($chart['#adjust_resolution']['#adjust'] == TRUE){
+      _chart_adjust_resolution($chart['#chart_id'], $chart['#data'], $chart['#adjust_resolution']['#max']);
+    }
+  }
+  
+  $data['chd'] = 't:' . _chart_encode_data($chart['#data']);
+    
+  _chart_append('cht',  $chart['#type'],                    $data);   
+  _chart_append('chs',  $chart['#size'],                    $data);   
+  _chart_append('chtt', $chart['#title'],                   $data);   
+  _chart_append('chl',  $chart['#labels'],                  $data);   
+  _chart_append('chdl', $chart['#legends'],                 $data);   
+  _chart_append('chls', $chart['#line_styles'],             $data);   
+  _chart_append('chg',  $chart['#grid_lines'],              $data);   
+  _chart_append('chm',  $chart['#shape_markers'],           $data);   
+  _chart_append('chco', $chart['#data_colors'],             $data);   
+  _chart_append('chf',  $chart['#chart_fill'],              $data);   
+  _chart_append('chxt', $chart['#mixed_axis_labels'],       $data);   
+  _chart_append('chxs', $chart['#mixed_axis_label_styles'], $data);
+  _chart_append('chbh', $chart['#bar_size'],                $data); 
+  _chart_append('chld', $chart['#countries'],               $data); 
+  _chart_append('chtm', $chart['#georange'],                $data); 
+         
+  $charts[$chart['#chart_id']] = drupal_query_string_encode($data);       
+                  
+  return $charts[$chart['#chart_id']];
+}
+
+/* -----------------------------------------------------------------
+
+  Page Callbacks 
+
+------------------------------------------------------------------ */
+
+/**
+* Settings form page callback handler.
+*/
+function chart_settings() {   
+  $form = array();
+  
+  $form['overrides'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Overrides'),
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
+    );
+  // @todo: overrides global / per theme
+  $form['overrides']['chart_global_bg'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Global Background Color'),
+      '#description' => t('Specify a global background color for all charts. When set this will take precedence over any custom value which is useful for highly themed sites.'),
+      '#default_value' => variable_get('chart_global_bg', ''),
+    );
+  $form['overrides']['chart_max_width'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Max Width'),
+      '#description' => t('Max chart width.'),
+      '#default_value' => variable_get('chart_max_width', ''),
+    );
+  $form['overrides']['chart_max_height'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Max Height'),
+      '#description' => t('Max chart height.'),
+      '#default_value' => variable_get('chart_max_height', ''),
+    );
+           
+  return system_settings_form($form);
+}
+
+
+/**
+* Implementation of hook_validate();
+*/
+function chart_settings_validate($form, &$form_state) {  
+  if (!empty($form_state['values']['chart_global_bg']) && !preg_match('/[a-fA-F0-9]{6}/is', $form_state['values']['chart_global_bg'])){
+    form_set_error('chart_global_bg', t('Invalid color. Formatted as RRGGBB with no pound sign.'));  
+  }
+  if (!empty($form_state['values']['chart_max_width']) && !is_numeric($form_state['values']['chart_max_width'])){
+    form_set_error('chart_max_width', t('Width must be an integer.'));
+  }     
+  if (!empty($form_state['values']['chart_max_height']) && !is_numeric($form_state['values']['chart_max_height'])){
+    form_set_error('chart_max_height', t('Height must be an integer.'));  
+  }  
+}
+
+/* -----------------------------------------------------------------
+
+  Helpers
+
+------------------------------------------------------------------ */
+
+/**
+* Encode an array of data.
+* 
+* Missing data placeholder 'NULL' is replaced
+* the appropriate placeholder.
+* 
+* @return string
+*/
+function _chart_encode_data($data) {
+  if (count($data)){
+    foreach($data AS $k => $v){
+      if (is_array($v) || is_object($v)){
+        $output .= '|';
+        $output .= _chart_encode_data($v, $type);
+      }
+      else {     
+        if ($v != 'NULL'){
+          $output .= $v . ','; 
+        }
+        else {
+          $output .= '-1,';
+        }
+      }
+    }
+  }
+  
+  return trim($output, '|,');
+}
+
+/**
+* Adjusts chart data transforming values so that they may
+* be represented properly within the given resolution 
+* for the selected encoding type.
+*/
+function _chart_adjust_resolution($chart_id, &$data, $max_value = NULL) {  
+  static $max;
+                   
+  if (count($data)){
+    // Set max data value
+    if (!isset($max[$chart_id])){
+      $max[$chart_id] = isset($max_value) ? $max_value : _chart_get_max($data); 
+    }  
+    
+    // Encoding resolution        
+    $resoluton = 100;
+    
+    // When the max is larger than the resolution
+    // we need to scale down the values
+    if ($max[$chart_id] > $resoluton){
+      $divider = round($max[$chart_id] / $resoluton, 1);  
+    }
+    else {
+      $max[$chart_id] = max($max[$chart_id], 1);
+      $multiplier = round($resoluton / $max[$chart_id], 1);  
+    }
+                 
+    foreach($data AS $k => $v){
+      if (is_array($v)){           
+        _chart_adjust_resolution($chart_id, $data[$k]);
+      }
+      else {   
+        if ($v != 'NULL' && $v > 0){   
+          // Adjust values
+          if ($v >= $max){
+            $data[$k] = $resoluton;
+          }
+          else {
+            // Multiply or divide data values to adjust them to the resolution
+            if (isset($divider)){
+              $data[$k] = floor($v / $divider); 
+            }
+            elseif (isset($multiplier)){
+              $data[$k] = floor($v * $multiplier);    
+            }
+            else {
+              $data[$k] = $v;
+            }   
+          }
+        }  
+      }
+    }
+  }
+}
+
+/**
+* When the value passed is valid append a chart API 
+* attribute and parsed values to $data.
+*/
+function _chart_append($attr, $value, &$data) {
+  // Size and fill contain defaults, all other attributes must be set
+  if (!isset($value) && $attr != 'chs' && $attr != 'chf'){
+    return;                                     
+  }   
+                                                
+  switch($attr) {
+    // Type
+    case 'cht':
+      $data[$attr] = $value;  
+      break;
+    
+    // Size  
+    case 'chs':
+      if (_chart_is_valid_size($value)){
+        $width  = $value['#width']; 
+        $height = $value['#height']; 
+      }
+      else {
+        $width  = 300; 
+        $height = 150; 
+      }
+      _chart_override_aspect($width, $height);      
+      $data[$attr] = $width . 'x' . $height;  
+      break;
+      
+    // Labels        
+    case 'chl':
+      $data[$attr] = implode('|', $value);
+      break;
+    
+    // Color  
+    case 'chco':
+      $data[$attr] = implode(',', $value);
+      break; 
+    
+    // Chart and background fill 
+    case 'chf':                   
+      if (variable_get('chart_global_bg', FALSE) || !isset($value)){               
+        $data[$attr] = implode(',', chart_fill('bg', trim(variable_get('chart_global_bg', 'FFFFFF'), '#')));
+      }
+      else {
+        $data[$attr] = implode(',', $value); 
+      }
+      break;  
+    
+    // Chart title  
+    case 'chtt':
+      if (is_array($value)){
+        $data[$attr]   = $value['#title']; 
+        $data['chts'] .= isset($value['#color']) ? $value['#color'] : '000000';
+        $data['chts'] .= ',';
+        $data['chts'] .= isset($value['#size']) ? $value['#size'] : 14;
+      }  
+      else {
+        $data[$attr] = $value;
+      }
+      break;
+                   
+    default:
+    
+    // Legends 
+    case 'chdl':
+      $data[$attr] = implode('|', $value);
+      break;   
+    
+    // Line styles  
+    case 'chls':
+      $styles = array();
+      
+      if (count($value)){
+        foreach($value AS $k => $v){
+          $tmp_style = array();
+          
+          if (!is_array($v)){
+            // Style parameters
+            $tmp_style[] = $v;  
+          }
+          else {
+            // Array of styles
+            $styles[] = implode(',', $v);
+          }
+          
+          if (count($tmp_style)){
+            $styles[] = implode(',', $tmp_style);
+          }
+        }
+      }
+      
+      if (count($styles)){
+        $data[$attr] = implode('|', $styles);
+      }
+      break;    
+    
+    // Grid lines  
+    case 'chg':
+      $data[$attr] = implode(',', $value); 
+      break;  
+      
+    // Shape markers  
+    case 'chm':
+      if (count($value)){
+        $markers = array();
+        foreach($value AS $marker){
+          $markers[] = implode(',', $marker);
+        }
+        $data[$attr] = implode('|', $markers);
+      }
+      else {
+        $data[$attr] = implode(',', $value);
+      }
+      break;
+      
+    // Bar chart bar sizing
+    case 'chbh':
+      $data[$attr] .= implode(',', array($value['#size'], $value['#spacing']));
+      break;
+      
+     // Mixed axis positions, labels and styles
+     // @todo: refactor
+    case 'chxt':
+      $index     = 0;
+      $positions = array();
+      $types     = array();
+      $regular   = array();
+                     
+      // Seperate regular labels and generate range labels
+      if (count($value)){
+        foreach($value AS $axis => $indices){
+          if (count($indices)){
+            ksort($indices);
+            foreach($indices AS $i => $labels){ 
+              if (count($labels)){
+                foreach($labels AS $j => $label){
+                  // Regular
+                  if (isset($label['#label'])){
+                    // Array of labels
+                    if (is_array($label['#label'])){
+                      foreach($label['#label'] AS $l){ 
+                        $regular[$axis][$i][] = is_array($l) ? $l : array('#label' => $l, '#position' => NULL); 
+                      }
+                    }
+                    else {       
+                      $regular[$axis][$i][] = $label; 
+                    }
+                  }
+                  // Range
+                  elseif (isset($label['#start']) && isset($label['#end'])){
+                    $data['chxr'] .= $index . ',' . $label['#start'] . ',' . $label['#end'] . '|';  
+                    $types[] = $axis;
+                    $index++;
+                  }
+                }
+              }
+            }
+          }            
+        }
+      }   
+      // Generate regular labels
+      if (count($regular)){  
+        foreach($regular AS $axis => $indices){
+          if (count($indices)){   
+            foreach($indices AS $i => $labels){     
+              $types[] = $axis;
+              $data['chxl'] .= $index . ':'; 
+              if (count($labels)){
+                foreach($labels AS $j => $label){ 
+                  $data['chxl'] .= '|' . $label['#label'];
+                  $positions[$index]['data'][] = isset($label['#position']) ? $label['#position'] : 0; 
+                  if ($label['#position']){
+                    $positions[$index]['set'] = TRUE;
+                  }  
+                }
+              }
+              $data['chxl'] .= '|'; 
+              $index++;  
+            }
+          }
+        }
+      }
+      // Generate positions
+      if (count($positions)){
+        foreach($positions AS $i => $position){
+          if ($position['set'] == TRUE){
+            $data['chxp'] .= $i . ',' . implode(',', $position['data']) .  '|';
+          }
+        }
+      }
+                 
+      $data['chxt'] = implode(',', $types);     
+      $data['chxl'] = rtrim($data['chxl'], '|');    
+      $data['chxr'] = rtrim($data['chxr'], '|'); 
+      $data['chxp'] = rtrim($data['chxp'], '|'); 
+      break; 
+    
+    // Mixed axis label styles  
+    case 'chxs':         
+      if (count($value)){
+        $styles = array();   
+        foreach($value AS $i => $style){  
+          $styles[] = implode(',', $style);
+        }
+        $data[$attr] = implode('|', $styles);    
+      }
+      break;
+      
+   // Geographical Scope
+   case 'chtm':
+     $data[$attr] = $value;
+     break;  
+     
+   // Country List
+   case 'chld':
+     $data[$attr] = implode('', $value); 
+     break;          
+  }
+}
+
+/**
+* Return the max value of a single level array.
+*/
+function _chart_get_max($array) {
+  rsort($array, SORT_NUMERIC);
+  $max = is_array($array[0]) ? 1 : $array[0];  
+                               
+  if (count($array)){      
+    foreach($array AS $k => $v){
+      if (is_array($v)){
+        rsort($v, SORT_NUMERIC);
+        if ($v[0] > $max){
+          $max = $v[0];
+        }
+      }
+    } 
+  }      
+       
+  return $max;
+}
+
+/**
+* Override the default chart aspect ratio.
+*/
+function _chart_override_aspect(&$width, &$height) {
+  $decrement  = 20;
+  $max_width  = variable_get('chart_max_width',  FALSE);
+  $max_height = variable_get('chart_max_height', FALSE);
+  
+  if (!$max_width && !$max_height){
+    return;
+  }
+
+  // Width
+  if ($max_width){
+    while($width > $max_width){
+      $width  -= $decrement;
+      $height -= $decrement;
+    }
+  }
+  // Height
+  if ($max_height){
+    while($height > $max_height){
+      $width  -= $decrement;
+      $height -= $decrement;
+    }
+  }
+}
+                          
+/**
+* Admin error. 
+*/
+function _chart_error($message, $admin = TRUE) {
+  if ($admin){
+    if (user_access('administer chart')){
+      drupal_set_message(t('Chart API error: ') . $message, 'error');
+    }
+  }
+  else {
+    drupal_set_message($message, 'error');
+  }
+}
+
+/**
+* Check if chart data is below size limit.
+*/
+function _chart_is_valid_size($size) {   
+  if (!is_numeric($size['#width']) && !is_numeric($size['#height'])){ 
+    return FALSE;
+  }
+  
+  if (($size['#width'] * $size['#height']) >= 300000){
+    return FALSE;
+  } 
+    
+  return TRUE;
+}
+
+/**
+* Invoke chart_color_schemes(); hook to gather available schemes.
+* When $init is FALSE the color schemes gathered are returned.
+*/
+function _chart_color_schemes($init = FALSE) {
+  static $colors;
+  
+  $colors['default'] = array(
+      'FF8000',
+      'FFC080',
+      'FFDFBF',
+      'FFC080',
+      'FFCC00',
+      'FFE500',
+      '8e8524',
+      '78c0e9',
+      '179ce8',
+      '30769e',
+      'c8e9fc',
+      '748b98',
+      '00ccff',
+      '4086AA',
+      '91C3DC',
+      '87907D',
+      'AAB6A2',
+      '555555',
+      '666666',
+      '21B6A8',
+      '177F75',
+      'B6212D',
+      '7F171F',
+      'B67721',
+      '7F5417',
+    );
+    
+  if ($init === TRUE){  
+    foreach(module_implements('chart_color_schemes') AS $module){
+      $function = $module . '_chart_color_schemes';
+      $function($colors);
+    }
+  }
+  else {
+    return $colors;
+  }
+}
+
+/* -----------------------------------------------------------------
+
+  Label Utils 
+
+------------------------------------------------------------------ */
+
+/**
+* Title
+* 
+* @param string $title
+* 
+* @param string $color
+* 
+* @param int $size
+* 
+* @return array
+*/
+function chart_title($title, $color = '000000', $size = 14) {
+  return array(
+      '#title' => $title,
+      '#color' => $color,
+      '#size'  => $size,
+    );
+}
+
+/**
+* Create a mixed axis label.
+* 
+* Labels must be nested by axis and index: 
+* @code
+*   $chart['#mixed_axis_labels'][CHART_AXIS_X_BOTTOM][0][] = chart_mixed_axis_label(t('Monday'));    
+*   $chart['#mixed_axis_labels'][CHART_AXIS_X_BOTTOM][0][] = chart_mixed_axis_label(t('Tuesday'));    
+*   $chart['#mixed_axis_labels'][CHART_AXIS_X_BOTTOM][0][] = chart_mixed_axis_label(t('Wednesday')); 
+*   $chart['#mixed_axis_labels'][CHART_AXIS_Y_LEFT][1][] = chart_mixed_axis_range_label(0, 50);    
+*   $chart['#mixed_axis_labels'][CHART_AXIS_Y_LEFT][2][] = chart_mixed_axis_label(t('Min'));    
+*   $chart['#mixed_axis_labels'][CHART_AXIS_Y_LEFT][2][] = chart_mixed_axis_label(t('Max')); 
+* @endcode
+* 
+* @param mixed $label 
+*   - string: A single label 
+*   - array: An array of label strings, or an assoc array containing #label and #position   
+* 
+* @param int $position 
+*   (optional) An integer between 0 - 100 representing where the label should appear along the axis.
+*   0 representing bottom and left, 100 representing top and right. When one label within a given set 
+*   is given a position, the remaining labels in the set must have a position.
+* 
+* @return array
+*/
+function chart_mixed_axis_label($label, $position = NULL) {
+  return array(
+      '#label'    => $label,
+      '#position' => $position,
+    );       
+}   
+              
+/**
+* Create a mixed axis range label.
+* 
+* Labels must be nested by axis and index: 
+* @code
+*   $chart['#mixed_axis_labels'][CHART_AXIS_X_BOTTOM][0][] = chart_mixed_axis_label(t('Monday'));    
+*   $chart['#mixed_axis_labels'][CHART_AXIS_X_BOTTOM][0][] = chart_mixed_axis_label(t('Tuesday'));    
+*   $chart['#mixed_axis_labels'][CHART_AXIS_X_BOTTOM][0][] = chart_mixed_axis_label(t('Wednesday')); 
+*   $chart['#mixed_axis_labels'][CHART_AXIS_Y_LEFT][1][] = chart_mixed_axis_range_label(0, 50);    
+*   $chart['#mixed_axis_labels'][CHART_AXIS_Y_LEFT][2][] = chart_mixed_axis_label(t('Min'));    
+*   $chart['#mixed_axis_labels'][CHART_AXIS_Y_LEFT][2][] = chart_mixed_axis_label(t('Max')); 
+* @endcode
+* 
+* @param string $start
+* 
+* @param string $end
+* 
+* @return array
+*/
+function chart_mixed_axis_range_label($start, $end) {
+  return array(
+      '#start' => $start,
+      '#end'   => $end,
+    );       
+}  
+
+/**
+* Create a mixed axis for a corresponding label set index. 
+* 
+* @param int $index
+* 
+* @param string $color
+*   
+* @param int $font_size
+* 
+* @param int $alignment
+*   - CHART_ALIGN_LEFT
+*   - CHART_ALIGN_CENTER
+*   - CHART_ALIGN_RIGHT
+* 
+* @return array  
+*/
+function chart_mixed_axis_label_style($index, $color, $font_size = 12, $alignment = CHART_ALIGN_CENTER) {
+  return array(
+      '#index'     => $index,
+      '#color'     => $color,
+      '#font_size' => $font_size,
+      '#alignment' => $alignment,
+    );
+}
+
+/* -----------------------------------------------------------------
+
+  Style Utils 
+
+------------------------------------------------------------------ */
+
+/**
+* Chart size
+* 
+* @return array
+*/
+function chart_size($width, $height) {
+  return array(
+      '#width'  => $width,
+      '#height' => $height
+    );
+}
+
+/**
+* Data Colors
+* 
+* @param array $colors
+* 
+* @return array
+*/
+function chart_data_colors($colors) {
+  return $colors;
+}
+
+/**
+* Line Style
+* 
+* @param int $line_thickness
+* 
+* @param int $segment_length
+* 
+* @param int $blank_segment_length
+* 
+* @return array
+*/
+function chart_line_style($line_thickness = 1, $segment_length = 1, $blank_segment_length = 0) {
+  return array(       
+      '#line_thickness'       => $line_thickness,  
+      '#segment_length'       => $segment_length,  
+      '#blank_segment_length' => $blank_segment_length,  
+    );
+}
+
+/**
+* Grid Lines
+* 
+* @param int $x_step
+*   Space in pixels in which to step the horizontal lines.
+* 
+* @param int $y_step
+*   Space in pixels in which to step the virtical lines. 
+* 
+* @param int $segment_length
+*   (optional) Visibile segment length in pixels.
+* 
+* @param int $blank_segment_length
+*   (optional) Blank segment length in pixels.
+* 
+* @return array
+*/
+function chart_grid_lines($x_step, $y_step, $segment_length = 1, $blank_segment_length = 3) {
+  return array(       
+      '#x_step'               => $x_step,  
+      '#y_step'               => $y_step,  
+      '#segment_length'       => $segment_length,  
+      '#blank_segment_length' => $blank_segment_length,  
+    );
+}
+
+/**
+* Shape Marker
+* 
+* @param int $index
+*   (optional) The index of the line on which to draw the marker.
+* 
+* @param float $point
+*   (optional) Floating point value that specifies on which data point 
+*   the marker will be drawn.    
+* 
+* @param string $type    
+*   - CHART_MARKER_ARROW 
+*   - CHART_MARKER_CROSS 
+*   - CHART_MARKER_DIAMOND    
+*   - CHART_MARKER_CIRCLE    
+*   - CHART_MARKER_SQUARE    
+*   - CHART_MARKER_VIRTICAL_LINE_X 
+*   - CHART_MARKER_VIRTICAL_LINE_TOP       
+*   - CHART_MARKER_HORIZONTAL_LINE
+*   - CHART_MARKER_X
+* 
+* @param int $size
+*   (optional) Marker size in pixels.
+* 
+* @param string $color 
+* 
+* @return array
+*/
+function chart_shape_marker($index = 0, $point = 0, $type = 'o', $size = 20, $color = '000000') {
+  return array(       
+      '#type'  => $type, 
+      '#color' => $color, 
+      '#index' => $index,
+      '#point' => $point,
+      '#size'  => $size,  
+    );
+}
+
+/**
+* Range Marker
+* 
+* @param int $start
+* 
+* @param int $end
+* 
+* @param bool $virtical
+* 
+* @param string $color 
+* 
+* @return array
+*/
+function chart_range_marker($start, $end, $virtical = TRUE, $color = '000000') {
+  return array(       
+      '#start'    => $start,  
+      '#end'      => $end,  
+      '#virtical' => $virtical,  
+      '#color'    => $color,  
+    );
+}
+
+/**
+* Bar chart bar sizing.
+* 
+* @param int $size
+*   (optional) Height or width of the bar.
+* 
+* @param int $spacing
+*   (optional) Pixel spacing between bars.
+* 
+* @return array
+*/
+function chart_bar_size($size = 40, $spacing = 20) {
+  return array(       
+      '#size'    => $size,  
+      '#spacing' => $spacing,  
+    );
+}
+
+/**
+* Solid Fill
+* 
+* @param int $type
+*   (optional) 'bg' or 'c'
+* 
+* @param string $color 
+* 
+* @return array
+*/
+function chart_fill($type = 'c', $color = '000000') {
+  return array(       
+      '#type'      => $type,  
+      '#fill_type' => 's',  
+      '#color'     => $color,  
+    );
+}
+
+/**
+* Linear Gradient
+* 
+* @param int $type   
+*   (optional) 'bg' or 'c' 
+* 
+* @param int $color 
+* 
+* @param int $offset
+*   (optional) Cpecify at what point the color is pure where: 0 specifies the right-most
+*   chart position and 1 the left-most.
+*    
+* @return array
+*/
+function chart_linear_gradient($type = 'c', $color = '000000', $offset = 0) {
+  return array(       
+      '#type'      => $type,  
+      '#fill_type' => 'lg',  
+      '#color'     => $color,  
+    );
+}
+
+/**
+* Linear Stripes
+* 
+* @param int $type
+*   (optional) 'bg' or 'c'
+* 
+* @param int $color  
+* 
+* @param int $angle 
+*   (optional) Specifies the angle of the gradient between 0 (horizontal) and 90 (vertical).
+* 
+* @param float $width
+*   (optional) Must be between 0 and 1 where 1 is the full width of the chart. Stripes are 
+*   repeated until the chart is filled.
+*    
+* @return array
+*/
+function chart_linear_stripes($type = 'c', $color = '000000', $angle = 0, $width = 0.25) {
+  return array(       
+      '#type'      => $type,  
+      '#fill_type' => 'ls',  
+      '#angle'     => $angle,  
+      '#color'     => $color,  
+      '#width'     => $width,  
+    );
+}
+
+/* -----------------------------------------------------------------
+
+  Color Schemes 
+
+------------------------------------------------------------------ */
+
+/**
+* Supplies a unique color.
+* 
+* When an assoc array color scheme is provided
+* $content_id can be used to sync the color to 
+* the data rendered. Otherwise the next available
+* color in the stack is assigned to $content_id  
+* 
+* @param string $content_id
+* 
+* @param string $scheme
+*   (optional) Color scheme. 
+* 
+* @return string
+*   hex RGB value 
+*/
+function chart_unique_color($content_id, $scheme = 'default') { 
+  static $colors_used;
+  $colors = _chart_color_schemes();   
+                                          
+  if (count($colors[$scheme])){
+    $colors['default'];    
+  }
+  
+  // Associative color is available 
+  if (isset($colors[$scheme][$content_id])){    
+    return $colors[$scheme][$content_id]; 
+  }
+  // The content_id has already been mapped
+  elseif ($colors_used[$scheme][$content_id]){
+    return $colors_used[$scheme][$content_id];
+  }
+  else {
+    // No used colors yet use the first one in the scheme
+    // and map it to the content id
+    if (!is_array($colors_used)){
+      $colors_used[$scheme][$content_id] = array_shift($colors[$scheme]); 
+      
+      return $colors_used[$scheme][$content_id];
+    }
+    // Get the avilable colors left in the scheme
+    // and map the remaining colors that are used
+    else {
+      $available_colors = array_diff($colors[$scheme], (array) $colors_used[$scheme]);    
+      $colors_used[$scheme][$content_id] = array_shift($available_colors);
+      
+      return $colors_used[$scheme][$content_id];
+    }
+  }
+  
+  return '000000';
+}                                              
+

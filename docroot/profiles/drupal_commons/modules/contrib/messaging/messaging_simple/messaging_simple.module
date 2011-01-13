@@ -1,0 +1,155 @@
+<?php
+// $Id: messaging_simple.module,v 1.3.2.4.2.8.2.2 2009/09/21 22:07:17 jareyero Exp $
+/**
+ * @file
+ * Simple messaging using html page. Messaging method plug-in
+ * 
+ * This is a really simple message viewer and also an illustration of pulling messaging methods
+ * 
+ * @ TODO: Add ability to delete queued messages
+ */
+
+// Number of messages to display per page
+define('MESSAGING_SIMPLE_PAGER', 20);
+
+/**
+ * Implementation of hook_menu().
+ */
+function messaging_simple_menu() {
+  $items['user/%user/messages'] = array(
+    'type' => MENU_LOCAL_TASK,
+    'title' => 'Messages',
+    'page callback' => 'messaging_simple_user_page',
+    'page arguments' => array(1),
+    'access callback' => 'messaging_simple_access',
+    'access arguments' => array(1),
+  );
+  return $items;
+}
+
+/**
+ * Access calback
+ */
+function messaging_simple_access($account) {
+  global $user;
+  return $account->uid && (($account->uid == $user->uid) || user_access('administer messaging'));
+}
+
+/**
+ * Menu callback. Display pending messages to the user
+ * 
+ * Sample Implementation of messaging pull methods
+ */
+function messaging_simple_user_page($account, $op = NULL, $id = NULL) {
+  drupal_set_title(t('Messages for %name', array('%name' => $account->name)));
+  // Fetch all pending messages.
+  switch ($op) {
+    case 'view':
+      return drupal_get_form('messaging_simple_user_message', $account, $id);
+      break;
+    default:
+      return messaging_simple_user_overview($account);
+  }
+  
+}
+
+/**
+ * Display message overview list
+ */
+function messaging_simple_user_overview($account) {
+  $output = '';
+  $messages = messaging_store('get', array('method' => 'simple', 'uid' => $account->uid), array('mqid DESC'), MESSAGING_SIMPLE_PAGER, 0, TRUE);
+  if ($messages) {
+    $header = array(t('Subject'), t('From'), t('Date'));
+    $rows = array();
+    foreach ($messages as $message) {
+      $message = (array)$message;
+      $rows[] = array(
+        l($message['subject'], 'user/'. $account->uid .'/messages/view/'. $message['mqid']),
+        !empty($message['sender_account']) ? theme('username', $message['sender_account']) : t('System'),
+        format_date($message['created']),
+      );
+    }    
+    $output .= theme('table', $header, $rows);
+    $output .= theme('pager', array(), MESSAGING_SIMPLE_PAGER);
+  } else {
+    $output .= '<p class="message-queue-empty">' . t('No pending messages') . '</p>';
+  }
+  return $output;
+}
+
+/**
+ * Display single message
+ */
+function messaging_simple_user_message($form_state, $account, $id) {
+  $form = array();
+  if ($messages = messaging_store('get', array('mqid' => $id, 'method' => 'simple', 'uid' => $account->uid))) {
+    $message = (array)array_shift($messages);
+    $form['account'] = array('#type' => 'value', '#value' => $account);
+    $form['message'] = array('#type' => 'value', '#value' => $message);
+    $form['subject'] = array(
+      '#type' => 'item',
+      '#title' => t('Subject'),
+      '#value' => $message['subject'],
+    );
+    $form['body'] = array(
+      '#type' => 'item',
+      '#title' => t('Content'),
+      '#value' => check_markup($message['body']),
+    );
+    $form['delete'] = array(
+      '#type' => 'submit',
+      '#value' => t('Delete'),
+    );
+    $form['#redirect'] = 'user/'. $account->uid .'/messages';
+  }
+  return $form;
+}
+
+/**
+ * Message form submit
+ */
+function messaging_simple_user_message_submit($form, &$form_state) {
+  messaging_store('del', array('mqid' => $form_state['values']['message']['mqid']));
+  drupal_set_message(t('The message has been deleted'));
+}
+
+/**
+ * Implementation of hook_messaging
+ */
+function messaging_simple_messaging($op = 'info') {
+  switch($op) {
+    case 'send methods':
+      $info['simple'] = array(
+        'title' => t('Simple'),
+        'name' => t('Web'),
+        'group' => 'web',
+        'type' => MESSAGING_TYPE_PULL,
+        'glue' => '<br />',
+        'description' => t('Don\'t send messages but display them on a user account tab'),
+        'send callback' => 'messaging_simple_send_msg',
+        'destination' => 'uid',
+        'format' => 'HTML',
+      );
+      return $info;  
+  }
+}
+
+/**
+ * Just store the message to be shown later 
+ * 
+ * This is a pull method though, so this is mainly intended for testing options
+ * 
+ * Do nothing, the message will be retrieved from the queue
+ */
+function messaging_simple_send_msg($destination, &$message) {
+  $message = messaging_store('save', $message);
+  return TRUE;
+}
+
+/**
+ * Implementation of hook_disable()
+ */
+function messaging_simple_disable() {
+  messaging_method_disable('simple');
+}

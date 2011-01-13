@@ -1,0 +1,236 @@
+<?php
+// $Id: context_contrib.module,v 1.1.2.2.2.12 2010/05/21 14:53:42 darthsteven Exp $
+
+/**
+ * Implementation of hook_context_conditions().
+ */
+function context_contrib_context_conditions() {
+  $items = array();
+
+  // Views
+  if (module_exists('views')) {
+    drupal_add_js(drupal_get_path('module', 'context_contrib') .'/context_contrib.js');
+    $items['views'] = array(
+      '#title' => t('Views'),
+      '#description' => t('Set this context when displaying the page of one of these views.'),
+      '#options' => _context_contrib_get_views(),
+      '#type' => 'checkboxes',
+    );
+  }
+
+  // Nodequeue
+  if (module_exists('nodequeue')) {
+    $result = db_query("SELECT qid, title FROM {nodequeue_queue}");
+    $options = array();
+    while ($nq = db_fetch_object($result)) {
+      $options[$nq->qid] = $nq->title;
+    }
+    $items['nodequeue'] = array(
+      '#title' => t('Nodequeue'),
+      '#description' => t('Set this context when a node in the selected nodequeue(s) is viewed.'),
+      '#options' => $options,
+      '#type' => 'checkboxes',
+    );
+  }
+
+  // CCK
+  if (module_exists('content')) {
+    foreach (content_fields() as $field) {
+      if ($options = content_allowed_values($field)) {
+        $items[$field['field_name']] = array(
+          '#title' => t('CCK Field: @field_label', array('@field_label' => $field['widget']['label'])),
+          '#type' => 'checkboxes',
+          '#options' => $options,
+          '#description' => filter_xss_admin($field['widget']['description']),
+        );
+      }
+    }
+  }
+
+  return $items;
+}
+
+/**
+ * Implementation of hook_context_reactions().
+ */
+function context_contrib_context_reactions() {
+  $items = array();
+
+  // CSS Injector
+  if (module_exists('css_injector')) {
+    $items['css_injector'] = array(
+      '#title' => t('CSS injector'),
+      '#description' => t('Inject the selected css when this context is set.'),
+      '#options' => _context_contrib_get_css_injector(),
+      '#type' => 'checkboxes',
+    );
+   }
+
+  // JS Injector
+  if (module_exists('js_injector')) {
+    $items['js_injector'] = array(
+      '#title' => t('JS injector'),
+      '#description' => t('Inject the selected js when this context is set.'),
+      '#options' => _context_contrib_get_js_injector(),
+      '#type' => 'checkboxes',
+    );
+  }
+  return $items;
+}
+
+/**
+ * Implementation of hook_nodeapi().
+ */
+function context_contrib_nodeapi(&$node, $op, $teaser, $page) {
+  if ($op == 'view' && $page && ($menu_ob = menu_get_object()) && $menu_ob->nid == $node->nid) {
+    context_contrib_node_condition($node, $op);
+  }
+}
+
+/**
+ * Implementation of hook_ctools_render_alter().
+ *
+ * Used to detect the presence of a page manager node view or node form.
+ */
+function context_contrib_ctools_render_alter($info, $page, $args, $contexts, $task, $subtask) {
+  if ($page && in_array($task['name'], array('node_view', 'node_edit'), TRUE)) {
+    foreach ($contexts as $ctools_context) {
+      if ($ctools_context->type === 'node' && !empty($ctools_context->data)) {
+        context_contrib_node_condition($ctools_context->data, $task['name'] === 'node_view' ? 'view' : 'form');
+        break;
+      }
+    }
+  }
+}
+
+/**
+ * Centralized node condition call function for the ever increasing number of
+ * ways to get at a node view / node form.
+ */
+function context_contrib_node_condition(&$node, $op) {
+
+  // Implementation of context for nodequeue.
+  if (module_exists('nodequeue')) {
+    $result = db_query("SELECT qid FROM {nodequeue_nodes} WHERE nid = %d", $node->nid);
+    while($qid = db_fetch_object($result)) {
+      context_set_by_condition('nodequeue', $qid->qid);
+    }
+  }
+
+  // Implementation of context for CCK.
+  if (module_exists('content')) {
+    foreach (content_fields() as $field) {
+      if (isset($node->$field['field_name']) && $options = content_allowed_values($field)) {
+        foreach ($node->$field['field_name'] as $item) {
+          context_set_by_condition($field['field_name'], $item['value']);
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implementation of hook_views_pre_view().
+ */
+function context_contrib_views_pre_view($view, $args) {
+  switch ($view->display_handler->display->display_plugin) {
+    case 'page':
+    case 'calendar':
+      context_set_by_condition('views', $view->name);
+      // Set any contexts associated with the current display
+      if (!empty($view->current_display)) {
+        context_set_by_condition('views', "{$view->name}:{$view->current_display}");
+      }
+      break;
+  }
+}
+
+/**
+ * Helper function to generate a list of database and module provided views.
+ */
+function _context_contrib_get_views() {
+  $enabled_views = array();
+
+  $views = views_get_all_views();
+
+  // Sort the views so our list is nice and alphabetical:
+  ksort($views);
+
+  foreach ($views as $view) {
+    if (!isset($views[$view->name]->disabled) || !$views[$view->name]->disabled) {
+      $enabled_views[$view->name] = $view->name;
+
+      // Provide more granular options for each page display
+      $displays = array();
+      foreach ($view->display as $id => $display) {
+        if ($display->display_plugin == 'page') {
+          $displays[$view->name .":". $id] = "-- {$display->display_title}";
+        }
+      }
+      if (count($displays) > 1) {
+        $enabled_views += $displays;
+      }
+    }
+  }
+
+  return $enabled_views;
+}
+
+/**
+ * Helper function to generate a list of css_injector files.
+ */
+function _context_contrib_get_css_injector() {
+  $list = array();
+  foreach (_css_injector_load_rule() as $css_rule) {
+    $list[$css_rule['crid']] = $css_rule['title'];
+  }
+  ksort($list);
+  return $list;
+}
+
+/**
+ * Implementation hook_context_page_reaction() on behalf of css injector.
+ */
+function css_injector_context_page_reaction() {
+  $css_rules = context_active_values('css_injector');
+  if (!empty($css_rules)) {
+    foreach ($css_rules as $crid) {
+      if ($css_rule = _css_injector_load_rule($crid)) {
+        drupal_add_css(file_create_path($css_rule['file_path']), 'module', $css_rule['media'], $css_rule['preprocess']);
+      }
+    }
+  }
+  else {
+    return;
+  }
+}
+
+/**
+ * Helper function to generate a list of js_injector files.
+ */
+function _context_contrib_get_js_injector() {
+  $list = array();
+  foreach (_js_injector_load_rule() as $js_rule) {
+    $list[$js_rule['crid']] = $js_rule['title'];
+  }
+  ksort($list);
+  return $list;
+}
+
+
+/**
+ * Implementation hook_context_page_reaction() on behalf of js injector.
+ */
+function js_injector_context_page_reaction() {
+  $js_rules = context_active_values('js_injector');
+  if (!empty($js_rules)) {
+    foreach ($js_rules as $crid) {
+      if ($js_rule = _js_injector_load_rule($crid)) {
+        drupal_add_js(file_create_path($js_rule['file_path']), 'module', $js_rule['scope'], FALSE, $js_rule['cache'], $js_rule['preprocess']);
+      }
+    }
+  }
+  else {
+    return;
+  }
+}

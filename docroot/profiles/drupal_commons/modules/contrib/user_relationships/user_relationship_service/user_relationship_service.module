@@ -1,0 +1,122 @@
+<?php
+// $Id: user_relationship_service.module,v 1.1.2.1 2009/07/06 10:24:44 alexk Exp $
+/**
+ * @author Drupal 6 port by Darren Ferguson <http://drupal.org/user/70179>
+ * @author Written by scottgifford http://drupal.org/user/245699
+ * @file Link general user relationship functionalities to services module.
+ */
+
+/**
+ * Implementation of hook_help().
+ */
+function user_relationship_service_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#services_user':
+      return '<p>'. t('Provides user relationship methods to services applications. Requires services.module.') .'</p>';
+    case 'admin/modules#description':
+      return t('Provides user relationship methods to services applications. Requires services.module.');
+  }
+}
+
+/**
+ * Implementation of hook_service().
+ */
+function user_relationship_service_service() {
+  return array(
+    array(
+      '#method' => 'user_relationships.types',
+      '#callback' => 'user_relationship_service_types',
+      '#file' => array('file' => 'inc', 'module' => 'user_relationship_service'),
+      '#args' => array(
+        array(
+    '#name' => 'version',
+    '#type' => 'int',
+    '#description' => t('API version to use'),
+  ),
+      ),
+      '#return' => 'array',
+      '#help' => t('Get a list of relationship types'),
+    ),
+    array(
+      '#method' => 'user_relationships.mine',
+      '#callback' => 'user_relationship_service_mine',
+      '#file' => array('file' => 'inc', 'module' => 'user_relationship_service'),
+      '#args' => array(
+        array(
+    '#name' => 'version',
+    '#type' => 'int',
+    '#description' => t('API version to use'),
+  ),
+      ),
+      '#return' => 'array',
+      '#help' => t('Get a list of my relationships'),
+    ),
+    array(
+      '#method' => 'user_relationships.delete',
+      '#callback' => 'user_relationship_service_delete',
+      '#file' => array('file' => 'inc', 'module' => 'user_relationship_service'),
+      '#args' => array(
+        array(
+    '#name' => 'version',
+    '#type' => 'int',
+    '#description' => t('API version to use'),
+  ),
+        array(
+          '#name' => 'rid',
+          '#type' => 'int',
+          '#description' => t('Relationship ID to delete'),
+        ),
+        array(
+          '#name' => 'reason',
+          '#type' => 'string',
+          '#description' => t('Reason for deletion (cancel, disapprove, remove)'),
+        ),
+      ),
+      '#return' => 'struct',
+      '#help' => t('Delete an existing or pending relationship'),
+    ),
+    array(
+      '#method' => 'user_relationships.approve',
+      '#callback' => 'user_relationship_service_approve',
+      '#file' => array('file' => 'inc', 'module' => 'user_relationship_service'),
+      '#args' => array(
+        array(
+    '#name' => 'version',
+    '#type' => 'int',
+    '#description' => t('API version to use'),
+  ),
+        array(
+          '#name' => 'rid',
+          '#type' => 'int',
+          '#description' => t('Relationship ID to approve'),
+        ),
+      ),
+      '#return' => 'struct',
+      '#help' => t('Approve a requested relationship'),
+    ),
+    array(
+      '#method' => 'user_relationships.request',
+      '#callback' => 'user_relationship_service_request',
+      '#file' => array('file' => 'inc', 'module' => 'user_relationship_service'),
+      '#args' => array(
+        array(
+    '#name' => 'version',
+    '#type' => 'int',
+    '#description' => t('API version to use'),
+  ),
+        array(
+          '#name' => 'uid',
+          '#type' => 'int',
+          '#description' => t('UID to request a relationship with'),
+        ),
+        array(
+          '#name' => 'type',
+          '#type' => 'string',
+          '#description' => t('Name of relationship type to create'),
+        ),
+      ),
+      '#return' => 'struct',
+      '#help' => t('Request a relationship with another user'),
+    ),
+  );
+}

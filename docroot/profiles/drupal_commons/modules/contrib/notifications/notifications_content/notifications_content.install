@@ -1,0 +1,44 @@
+<?php
+// $Id: notifications_content.install,v 1.1.2.4.2.2 2009/04/30 11:22:37 jareyero Exp $
+
+/**
+ * Implementation of hook_install().
+ */
+function notifications_content_install() {
+  // Module weight. It must run after most modules, to make sure they've done
+  // their work before we add the notifications queries.
+  db_query("UPDATE {system} SET weight = 100 WHERE name = 'notifications_content' AND type = 'module'");
+  // Enable the most common subscription types
+  variable_set('notifications_content_type', array('thread' => 'thread', 'nodetype' => 'nodetype', 'author' => 'author'));
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function notifications_content_uninstall() {
+  // Delete global variables
+  variable_del('notifications_content_types');
+  variable_del('notifications_content_per_type');
+  // Delete per content type variables
+  foreach (array_keys(node_get_types()) as $type) {
+    variable_del('notifications_content_type_'. $type);
+  }  
+  drupal_set_message(t('Content notifications uninstallation script complete.'));
+}
+
+/**
+ * Update module weight
+ */
+function notifications_content_update_6000() {
+  notifications_content_install();
+  return array();
+}
+
+/**
+ * Update enabled options
+ */
+function notifications_content_update_6001() {
+  // All options will be messed up so we better do manual review
+  drupal_set_message(t('Please, check all your Notifications content settings and note the new options.'));
+  return array();
+}

@@ -1,0 +1,14 @@
+<?php
+
+/*
+ * Implementation of hook_install()
+ */
+function commons_core_install() {
+  require_once('commons_core.strongarm.inc');
+  
+  // Gather the exported variables
+  $vars = commons_core_strongarm();
+  
+  // This needs to be manually set
+  variable_set('pathauto_taxonomy_2_pattern', $vars['pathauto_taxonomy_2_pattern']->value);
+}

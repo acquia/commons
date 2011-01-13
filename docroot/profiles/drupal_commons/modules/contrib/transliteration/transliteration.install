@@ -1,0 +1,32 @@
+<?php
+// $Id: transliteration.install,v 1.4.2.3 2009/11/28 12:48:53 smk Exp $
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the transliteration module.
+ */
+
+/**
+ * Implementation of hook_install().
+ */
+function transliteration_install() {
+  module_load_include('inc', 'transliteration', 'transliteration.admin');
+
+  if (!$query = transliteration_file_query(TRUE)) {
+    // Database not supported.
+    return;
+  }
+  if (!db_result(db_query($query))) {
+    // Don't bother if no files need to be fixed.
+    return;
+  }
+  $t = get_t();
+  drupal_set_message($t('Transliteration has been installed. <a href="@transliteration-url">Fix existing file names</a>.', array('@transliteration-url' => url('admin/settings/file-system/transliteration'))));
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function transliteration_uninstall() {
+}
+

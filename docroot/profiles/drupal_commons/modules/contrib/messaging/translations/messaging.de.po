@@ -1,0 +1,346 @@
+# $Id: messaging.de.po,v 1.1.2.2 2009/10/31 23:20:59 thomaszahreddin Exp $
+#
+# German translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  messaging.admin.inc,v 1.1.2.13.2.2 2009/04/30 10:42:35 jareyero
+#  messaging_debug.module,v 1.1.2.4.2.11.2.1 2009/04/29 16:24:40 jareyero
+#  messaging_simple.module,v 1.3.2.4.2.8.2.1 2009/04/29 09:26:08 jareyero
+#  messaging.module,v 1.7.2.8.2.27.2.6 2009/04/30 10:42:35 jareyero
+#  messaging_phpmailer/messaging_phpmailer.module: n/a
+#  messaging.info,v 1.1.4.1 2008/04/12 18:40:14 jareyero
+#  messaging_mail.info,v 1.1.4.1 2008/04/12 18:40:14 jareyero
+#  messaging_mime_mail/messaging_mime_mail.info: n/a
+#  messaging_phpmailer.info,v 1.1.2.1.2.2 2009/01/26 15:51:40 jareyero
+#  messaging_privatemsg.info,v 1.1.2.1 2008/12/16 15:00:29 jareyero
+#  messaging_simple.info,v 1.2.4.1 2008/04/12 18:40:15 jareyero
+#  messaging_sms/messaging_sms.info: n/a
+#  messaging_twitter.info,v 1.1.2.1 2009/01/15 18:29:12 jareyero
+#  messaging_xmpp.info,v 1.1.2.1 2009/04/30 10:42:35 jareyero
+#  messaging.install,v 1.2.2.4.2.13.2.1 2009/04/24 11:27:50 jareyero
+#  messaging_debug.info,v 1.1.4.1.2.1 2009/04/29 16:24:40 jareyero
+#  messaging_mail.module,v 1.2.2.4.2.8 2009/04/01 11:54:50 jareyero
+#  messaging_mime_mail/messaging_mime_mail.module: n/a
+#  messaging_phpmailer.install,v 1.1.2.1.2.2 2009/01/22 18:53:39 jareyero
+#  messaging_privatemsg/messaging_privatemsg.module: n/a
+#  messaging_sms/messaging_sms.module: n/a
+#  messaging_twitter.module,v 1.1.2.5 2009/04/02 10:23:06 jareyero
+#  messaging_xmpp.module,v 1.1.2.1 2009/04/30 10:42:35 jareyero
+#
+msgid ""
+msgstr "Project-Id-Version: Drupal Messaging V6.x-2.0\n"
+"POT-Creation-Date: 2009-06-28 14:17+0200\n"
+"PO-Revision-Date: 2009-06-28 14:22+0100\n"
+"Last-Translator: Thomas Zahreddin\n"
+"Language-Team: Frank Tartler <frank.tartler@googlemail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: messaging.admin.inc:20
+msgid "Configure the templates for different types of messages. Each message group is defined by other modules using the Messaging Framework. A typical message consists on the following parts:"
+msgstr "Konfigurieren Sie die Vorlagen für die verschiedenen Arten von Nachrichten. Jede Nachricht Gruppe ist mit den anderen Modulen mit dem Messaging Framework definiert. Eine typische Meldung besteht auf folgenden Teilen:"
+
+#: messaging.admin.inc:22
+msgid "Single line with a short description"
+msgstr "Einzelne Zeile mit einer kurzen Beschreibung"
+
+#: messaging.admin.inc:23
+msgid "Header"
+msgstr "Kopfzeile"
+
+#: messaging.admin.inc:23
+msgid "Greetings line"
+msgstr "Anredezeile"
+
+#: messaging.admin.inc:24
+msgid "Message main content, usually longer with the full description"
+msgstr "Hauptinhalt der Nachricht, mit der vollständigen Beschreibung normalerweise länger"
+
+#: messaging.admin.inc:25
+msgid "Footer"
+msgstr "Fußzeile"
+
+#: messaging.admin.inc:25
+msgid "Closing part with site information, unsubscribe links, etc..."
+msgstr "Abschließender Teil mit Website-Informationen, Links zum Aufheben des Abonnements, usw."
+
+#: messaging.admin.inc:27
+msgid "Here you'll be able to configure each of these parts for each sending method. When one of these parts is left blank, there is a fallback system which goes as follows:"
+msgstr "Hier kann jeder dieser Teile für jede Sendemethode konfiguriert werden.  Wenn einer dieser Teile leer gelassen wird, wird wie folgt vorgegangen:"
+
+#: messaging.admin.inc:29
+msgid "If a message part is left blank for a sending method, the text part from Default sending method will be used."
+msgstr "Wenn ein Nachrichtenteil leergelassen wird, wird der Textteil der Standardsendemethode verwendet."
+
+#: messaging.admin.inc:30
+msgid "If the Default part is blank too, the fallback template (the parent in this tree) will be used."
+msgstr "Wenn der Standardteil ebenfalls leer ist, wird die Rückgriff-Vorlage (die übergeordnete im Baum) verwendet."
+
+#: messaging.admin.inc:34
+msgid "Depending on your content format and the tokens you are using for messages it is important that you use the right filtering for the message body. Set up the filters you need using the <a href=\"@input_formats\">Input formats</a> page"
+msgstr " Abhängig vom Inhaltsformat und den für Nachrichten verwendeten Tokens ist es wichtig, dass die richtige Filtermethode für den Nachrichtentext verwendet wird.  Benötigte Filter können auf der Seite <a href=\"@input_formats\">Eingabeformate</a> eingerichtet werden."
+
+#: messaging.admin.inc:40
+msgid "These are the message parts for %group."
+msgstr "Dies sind die Nachrichtenteile für %group."
+
+#: messaging.admin.inc:48
+msgid "Leave blank to use the default texts or use '%empty' for an empty message part, preventing fallback to default message texts."
+msgstr "Leer lassen zum Verwenden der Standardtexte oder ‚%empty‘ zum Verwenden eines leeren Nachrichtenteils ohne Rückgriff auf Standardnachrichtentexte."
+
+#: messaging.admin.inc:50
+msgid "The fallback template from which message parts will be taken if left blank is <a href=\"@template_edit\">%template_name</a>"
+msgstr "Die Rückgriff-Vorlage von der - falls leer gelassen - Nachrichtenteile übernommen werden ist <a href=\"@template_edit\">%template_name</a>"
+
+#: messaging.admin.inc:76
+msgid "Message groups"
+msgstr "Nachrichtengruppen"
+
+#: messaging.admin.inc:76
+msgid "Description"
+msgstr "Beschreibung"
+
+#: messaging.admin.inc:76
+msgid "Parts"
+msgstr "Teile"
+
+#: messaging.admin.inc:88
+msgid "Sending methods"
+msgstr "Sendemethoden"
+
+#: messaging.admin.inc:118
+msgid "Message template for %name"
+msgstr "Nachrichtenvorlage für %name"
+
+#: messaging.admin.inc:131
+msgid "Default"
+msgstr "Standard"
+
+#: messaging.admin.inc:155
+msgid "Token"
+msgstr "Token"
+
+#: messaging.admin.inc:155
+msgid "Replacement value"
+msgstr "Ersetzungswert"
+
+#: messaging.admin.inc:164
+msgid "Available tokens"
+msgstr "Verfügbare Token"
+
+#: messaging.admin.inc:166
+msgid "These special strings will be replaced by their real value at run time."
+msgstr "Diese besonderen Zeichenketten werden zur Laufzeit durch ihre realen Werte ersetzt."
+
+#: messaging.admin.inc:176
+msgid "Save"
+msgstr "Speichern"
+
+#: messaging.admin.inc:245
+#: messaging.module:88
+msgid "General settings"
+msgstr "Allgemeine Einstellungen"
+
+#: messaging.admin.inc:248
+#: messaging.module:134
+msgid "Default send method"
+msgstr "Standard-Sendemethode"
+
+#: messaging.admin.inc:256
+msgid "Logging"
+msgstr "Protokollierung"
+
+#: messaging.admin.inc:260
+msgid "If enabled all messages will be logged and kept for the specified time after they're sent."
+msgstr "Wenn aktiviert werden alle Nachrichten protokolliert und für die angegebene Zeit nach dem Versand aufbewahrt."
+
+#: messaging.admin.inc:267
+msgid "Limits for queue processing"
+msgstr "Grenzwerte für das Abarbeiten der Warteschlange"
+
+#: messaging.admin.inc:271
+msgid "These are the limits for each cron run on queue processing. The process will stop when it first meets any of them. Set to 0 for no limit."
+msgstr "Dies sind Grenzwerte für jeden Cron-Lauf für das Abarbeiten der Warteschlange Der Prozess endet, wenn es den ersten einem der Kriterien genügt. Auf 0 einstellen für keinen Grenzwert."
+
+#: messaging.admin.inc:274
+msgid "Number of messages sent"
+msgstr "Anzahl gesendeter Nachrichten"
+
+#: messaging.admin.inc:280
+msgid "Time (seconds)"
+msgstr "Zeit (Sekunden)"
+
+#: messaging.admin.inc:286
+msgid "Time (% of cron time)"
+msgstr "Zeit (% des Cron-Laufs)"
+
+#: messaging.admin.inc:290
+msgid "Maximum percentage of cron time the process may use."
+msgstr "Maximaler Prozentsatz der Cron-Zeit, die der Prozess verwenden darf."
+
+#: messaging.admin.inc:305
+msgid "None (Insecure)"
+msgstr "Keiner (Unsicher)"
+
+#: messaging.admin.inc:328
+msgid "You should enable some messaging method plug-ins for this to work."
+msgstr "Es müssen Plug-Ins für Nachrichten-Methoden aktiviert werden, damit dies funktioniert."
+
+#: messaging.admin.inc:337
+msgid "Name for display"
+msgstr "Anzeigename"
+
+#: messaging.admin.inc:337
+msgid "Message body filter"
+msgstr "Filter für den Nachrichtentext"
+
+#: messaging.module:34
+msgid "The messaging module is the engine that handles outgoing messages and message queueing for different sending methods."
+msgstr "Das Nachrichten-Modul ist die Funktionseinheit, die ausgehende Nachrichten und Warteschlangen für verschiedene Sendemethoden verarbeitet."
+
+#: messaging.module:35
+msgid "You need to enable one or more of the included plug-ins to be able to actually take advantage of it."
+msgstr "Es müssen ein oder mehrere beinhaltete Plug-Ins aktiviert werden, um tatsächlich davon zu profitieren."
+
+#: messaging.module:40
+msgid "Filters are used also for messaging. If the input format is to be used only for messaging you don't need to allow any role for it."
+msgstr "Die Filter werden auch für Mitteilungen verwendet. Wenn das zu verwendende Eingabeformat nur für Nachrichten verwendet werden soll, muss dafür keine Rolle berechtigt werden."
+
+#: messaging.module:128;63
+msgid "Messaging settings"
+msgstr "Nachrichten-Einstellungen"
+
+#: messaging.module:137
+msgid "Default sending method for getting messages from this system."
+msgstr "Standard-Sendemethode für den Erhalt von Nachrichten dieses Systems."
+
+#: messaging.module:772
+msgid "Plain text"
+msgstr "Klartext"
+
+#: messaging.module:773
+msgid "HTML to text"
+msgstr "HTML zu Text"
+
+#: messaging.module:782
+msgid "Filters out all HTML tags and replaces HTML entities by characters, respects HTML line breaks."
+msgstr "Filtert alle HTML-Tags heraus und ersetzt HTML-Entities durch Zeichen, berücksichtigt HTML-Zeilenumbrüche."
+
+#: messaging.module:784
+msgid "Replaces HTML tags and entities with plain text formatting, moving links at the end."
+msgstr "Ersetzt HTML-Tags und -Entities durch Klartextformatierung, wobei Links ans Ende gesetzt werden."
+
+#: messaging.module:1030
+msgid "Disabled messaging sending method %method and replaced by %replace"
+msgstr "Nachrichten-Sendemethode %method deaktiviert und ersetzt durch %replace"
+
+#: messaging.module:1033
+msgid "Disabled messaging sending method but cannot find a replacement. Please, enable some other sending method."
+msgstr "Nachrichten-Sendemethode ist deaktiviert, es kann aber kein Ersatz gefunden werden. Es muss eine andere Sendemethode aktiviert werden."
+
+#: messaging.module:1117
+msgid "The message subject."
+msgstr "Der Betreff der Nachricht."
+
+#: messaging.module:1118
+msgid "The message body."
+msgstr "Der Textkörper der Nachricht."
+
+#: messaging.module:1119
+msgid "The message's author name."
+msgstr "Der Name des Autors der Nachricht."
+
+#: messaging.module:1120
+msgid "The message's method name."
+msgstr "Der Methodenname der Nachricht."
+
+#: messaging.module:1121
+msgid "The message's sending date."
+msgstr "Das Sendedatum der Nachricht."
+
+#: messaging.module:1294
+msgid "Type"
+msgstr "Typ"
+
+#: messaging.module:1294
+msgid "Message"
+msgstr "Nachricht"
+
+#: (duplicate) messaging.module:999
+msgid "Messaging sending methods"
+msgstr "Nachrichten-Sendemethoden"
+
+#: (duplicate) messaging.module:1000
+msgid "No sending method plug-ins available. Please enable some Sending Method on the !admin-modules page."
+msgstr "Es sind keine Plug-Ins für Sendemethoden verfügbar. Es müssen Sendemethoden auf !admin-modules aktiviert werden."
+
+#: (duplicate) messaging.module:1000
+msgid "Modules administration"
+msgstr "Modulverwaltung"
+
+#: messaging.module:433
+msgid "Message could not be delivered for method %method"
+msgstr "Nachricht konnte für Methode %method nicht zugestellt werden"
+
+#: messaging.module:114
+msgid "administer messaging"
+msgstr "Nachrichten verwalten"
+
+#: messaging.module:55;71
+#: messaging.info:0;0
+#: messaging_mail/messaging_mail.info:0
+#: messaging_mime_mail/messaging_mime_mail.info:0
+#: messaging_phpmailer/messaging_phpmailer.info:0
+#: messaging_privatemsg/messaging_privatemsg.info:0
+#: messaging_simple/messaging_simple.info:0
+#: messaging_sms/messaging_sms.info:0
+#: messaging_twitter/messaging_twitter.info:0
+#: messaging_xmpp/messaging_xmpp.info:0
+msgid "Messaging"
+msgstr "Nachrichten"
+
+#: messaging.module:57
+msgid "Administer and configure messaging"
+msgstr "Nachrichten verwalten und konfigurieren"
+
+#: messaging.module:64
+msgid "Configuration of messaging framework"
+msgstr "Konfiguration des Nachrichten-Rahmenwerks"
+
+#: messaging.module:72;78
+msgid "Configuration of sending methods"
+msgstr "Konfiguration der Sende-Methoden"
+
+#: messaging.module:77
+msgid "Send methods"
+msgstr "Sendemethoden"
+
+#: messaging.module:87
+msgid "General"
+msgstr "Allgemein"
+
+#: messaging.module:93;100
+msgid "Message templates"
+msgstr "Nachrichten-Vorlagen"
+
+#: messaging.module:94
+msgid "Configuration of message templates"
+msgstr "Konfiguration der Nachrichten-Vorlagen"
+
+#: messaging.install:133;137
+msgid "Messaging plain text"
+msgstr "Klartext senden"
+
+#: messaging.install:137
+msgid "A new Input format has been created: %name"
+msgstr "Ein neues Eingabeformat wurde erstellt: %name"
+
+#: messaging.info:0
+msgid "Messaging system. This is the base module for the Messaging Framework"
+msgstr "Messaging System Dies ist das Basismodul für das Messaging Framework"
+

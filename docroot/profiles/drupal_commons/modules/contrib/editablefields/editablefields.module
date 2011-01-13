@@ -1,0 +1,340 @@
+<?php
+// $Id: editablefields.module,v 1.3.2.17.2.10 2010/01/18 08:48:10 markfoodyburton Exp $
+
+/**
+ * @file
+ * Editable fields module.
+ */
+
+/**
+ * Implementation of hook_menu().
+ */
+function editablefields_menu() {
+  global $user;
+  $items = array();
+
+  // Admin pages:
+  $items['editablefields_view'] = array(
+    'page callback' => 'editablefields_view',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    'title' => 'ajax view',
+    );
+  $items['editablefields_html'] = array(
+    'page callback' => 'editablefields_html',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    'title' => 'ajax form',
+    );
+  $items['editablefields_submit'] = array(
+    'page callback' => 'editablefields_submit',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    'title' => 'ajax submit',
+    );
+
+  return $items;
+}
+
+/**
+ * Implementation of hook_theme().
+ */
+function editablefields_theme() {
+  return array(
+    'editablefields_formatter_editable' => array(
+      'arguments' => array('element' => NULL),
+      'function' => 'theme_editablefields_formatter_editable',
+      ),
+    'editablefields_formatter_editable_html' => array(
+      'arguments' => array('element' => NULL),
+      'function' => 'theme_editablefields_formatter_editable',
+      ),
+    'editablefields_formatter_clicktoedit' => array(
+      'arguments' => array('element' => NULL),
+      'function' => 'theme_editablefields_formatter_editable',
+      ),
+    );
+}
+
+/**
+ * Implementation of hook_field_formatter_info().
+ */
+function editablefields_field_formatter_info() {
+  return array(
+    'editable' => array(
+      'label' => t('Editable (Ajax)'),
+      'field types' => array_keys(_content_field_types()),
+      ),
+    'editable_html' => array(
+      'label' => t('Editable (HTML)'),
+      'field types' => array_keys(_content_field_types()),
+      ),
+    'clicktoedit' => array(
+      'label' => t('Click to Edit'),
+      'field types' => array_keys(_content_field_types()),
+      ),
+    );
+}
+
+/**
+ * Theme the editable field.
+ */
+function theme_editablefields_formatter_editable($element) {
+  static $js_ready;
+
+  $field_name = $element['#field_name'];
+  $field = content_fields($field_name);
+  $node = $element['#node'];
+  $delta = $element['#item']['#delta'];
+
+  if (content_handle('widget', 'multiple values', $field) == CONTENT_HANDLE_CORE) {
+  }
+
+  // See if access to this form element is restricted,
+  // if so, skip widget processing and just set the value.
+  if (!node_access('update', $node) || !content_access('edit', $field)) {
+    // can't edit
+    $formatter_name = 'default';
+    if ($formatter = _content_get_formatter($formatter_name, $field['type'])) {
+      $theme = $formatter['module'] . '_formatter_' . $formatter_name;
+      return theme($theme, $element);
+    }
+  }
+  else {
+    $formatter_name = 'default';
+    if ($formatter = _content_get_formatter($formatter_name, $field['type'])) {
+      if (!isset($js_ready)) {
+        $js_ready = TRUE;
+        drupal_add_js('misc/jquery.form.js');
+        drupal_add_js(drupal_get_path('module', 'editablefields') . '/editablefields.js');
+        drupal_add_css(drupal_get_path('module', 'editablefields') . '/editablefields.css');
+
+        $settings = array(
+          'url_html' => url('editablefields_html', array('absolute' => TRUE)),
+          'url_submit' => url('editablefields_submit', array('absolute' => TRUE)),
+          'url_view' => url('editablefields_view', array('absolute' => TRUE)),
+          'clicktoedit_message' => '<div class="editablefields_clicktoedit_message">'. t('[edit]') .'</div>',
+        );
+        drupal_add_js(array('editablefields' => $settings), 'setting');
+      }
+      $theme = $formatter['module'] . '_formatter_' . $formatter_name;
+      $class = "editablefields";
+      if ($element['#formatter'] == 'clicktoedit') {
+        $class .= " clicktoedit";
+      }
+      elseif ($element['#formatter'] == 'editable_html') {
+        $class .= " editablefields-html-load";
+      }
+      // CORE handling shoudl have a div on each,
+      // MODULE handling should have a div surounding all elements (treat it as
+      // one field) (So, we'll arrainge for the JS to remove the rest!)
+      if (content_handle('widget', 'multiple values', $field) != CONTENT_HANDLE_CORE) {
+        if ($delta != 0) {
+          $class = "editablefields editablefields_REMOVE";
+        }
+      }
+
+      $pre = '<div class="' . $class . '" nid="' . $node->nid . '" field="' . $field_name . '" delta="' . $delta . '">';
+      $post = '</div>';
+
+      if ($element['#formatter'] != 'editable_html') {
+        return $pre . theme($theme, $element) . $post;
+      }
+      else {
+        // $node seems to be incomplete, so we reload it
+        $node = node_load($node->nid);
+        return $pre . drupal_get_form('editablefields_form', $node, $field_name, $delta) . $post;
+      }
+    }
+  }
+}
+
+/**
+ * Implementation of hook_forms().
+ */
+function editablefields_forms() {
+  $forms = array();
+  $forms['editablefields_form'] = array(
+    'callback' => 'editablefields_form_builder',
+//    'callback arguments' => array('node', 'field_name'),
+  );
+  return $forms;
+}
+
+/**
+ * Form builder callback.
+ */
+function editablefields_form_builder(&$form_state, $node, $field_name, $delta) {
+  $field = content_fields($field_name);
+
+  $form = array('#node' => $node);
+//  $form_state = array('values' => array($field['field_name'] => $default_value));
+  module_load_include('inc', 'content', 'includes/content.node_form');
+  $form['#field_info'] = array($field['field_name'] => $field);
+  $form = content_field_form($form, $form_state, $field, $delta);
+
+  unset($form[$field_name]['#title']);
+  if (is_array($form[$field_name][0]) && !is_array($form[$field_name][1])) {
+    unset($form[$field_name][0]['#title']);
+  }
+
+  $form['#field_info'] = array($field['field_name'] => $field);
+  $form['#pre_render'] = array('_editablefields_pre_render');
+
+  return $form;
+}
+
+/**
+ * Resizable Textarea has an issue with setting focus.
+ * To circumvent this we have to set the forms fields #resizable field to FALSE.
+ * We have to use pre_render because the here the field's #type is still textarea.
+ * TODO Keep editable_HTML and editable_JAVA fields resizable, they don't have the focus issue.
+ */
+function _editablefields_pre_render(&$form) {
+  if ($form['field_name'][0]['value']['#type'] == 'textarea') {
+    $form['field_name'][0]['value']['#resizable'] = FALSE;
+  }
+  return $form;
+}
+/**
+ * Menu callback: ajax view.
+ */
+function editablefields_view() {
+
+  $nid = arg(1);
+  $field_name = arg(2);
+  $delta = arg(3);
+  $node = node_load($nid);
+  drupal_set_header('Content-Type: text; charset=utf-8');
+//  $html = node_view($node, FALSE, FALSE, FALSE);
+  // this required traversing the entire node to get the field (and doesn't work
+  // for checkboxes anyway)
+
+  $field = content_fields($field_name, $node->type);
+
+  $field['display_settings']['label']['format']='hidden';
+  // We have 2 reasonable choices here. We COULD use 'clicktoedit' and end up
+  // with the same HTML - then we could strip that HTML down to remove the
+  // surrounding 'click to edit' div (which we dont want, as we'll be replacing
+  // the html inside one of those div's)
+  // or we can simply use the 'defualt' formatter - which wont have the click to
+  // edit inside it  - and is hard coded into this module (for now) anyway!
+  $field['display_settings']['full']['format']='default';
+  $html=content_view_field($field,$node);
+  
+  $messages = drupal_get_messages('status', TRUE);
+  if (count($messages) > 0) {
+    foreach ($messages as $type => $messages) {
+      foreach ($messages as $message) {
+        $output .= '<div class="messages ' . $type . '">' . $message . "</div>";
+      }
+    }
+  }
+
+  $object = new stdClass();
+  $object->content = $output . $html.drupal_render($node->content[$field_name]);
+  drupal_json($object);
+  exit();
+}
+
+/**
+ * Menu callback: ajax form.
+ */
+function editablefields_html() {
+  $nid = arg(1);
+  $field_name = arg(2);
+  $delta = arg(3);
+  $node = node_load($nid);
+
+  if (node_access('update', $node)) {
+    //  $html = _editablefields_create_form($node, $field_name);
+    $html = drupal_get_form('editablefields_form', $node, $field_name, $delta);
+    $object = new stdClass();
+    $object->content = $html;
+    // Register the JavaScript callback for this module.
+    $object->__callbacks = array();
+    // Allow other modules to extend the data returned.
+    drupal_alter('ajax_data', $object, 'editablefields', $html);
+    drupal_json($object);
+  }
+  else {
+    drupal_not_found();
+  }
+  exit();
+}
+
+/**
+ * Menu callback: ajax submit.
+ */
+function editablefields_submit() {
+  $nid = $_POST['nid'];
+  $field_name = $_POST['field'];
+  $delta = $_POST['delta'];
+
+  $node = node_load($nid);
+
+  if (node_access('update', $node)) {
+
+    if (!isset($_POST[$field_name])) {
+      $_POST[$field_name] = array();
+    }
+
+    $form_state = array('values' => $_POST);
+
+    /* it seems that the serializer does not serialize e.g. un-checked
+     * checkboxes. Leaving them as empty arrays. This FILTHY hack fills in the
+     * array with 'something' so that when the form is executed, it fills in the
+     * right value - I dislike this code - JMB */
+    if (is_array($node->{$field_name})) {
+      if (content_handle('widget', 'multiple values', $field) == CONTENT_HANDLE_CORE) {
+        if (empty($form_state['values'][$field_name])) {
+          $form_state['values'][$field_name]=array('value'=>0);
+        }
+      } else {
+        if (empty($form_state['values'][$field_name][0])) {
+          $form_state['values'][$field_name][0]=array('value'=>0);
+        }
+      }
+
+      drupal_execute('editablefields_form', $form_state, $node, $field_name, $delta);
+      
+      $err = drupal_get_messages();
+      
+      if (count($err) > 0) {
+        drupal_set_header('HTTP/1.1 404 Not Found');
+        // format the error message suitable for a popup window in simple text.
+        foreach ($err as $type => $messages) {
+          foreach ($messages as $message) {
+            print $type . ' : ' . $message . "\n";
+          }
+        }
+        exit();
+      }
+
+      $field = content_fields($field_name);
+      if (content_handle('widget', 'multiple values', $field) == CONTENT_HANDLE_CORE) {
+        if ($node->{$field_name}[$delta] != $form_state['values'][$field_name][0]) {
+          $node->{$field_name}[$delta] = $form_state['values'][$field_name][0];
+          node_save($node);
+        }
+      }
+      else {
+        if ($node->{$field_name} != $form_state['values'][$field_name]) {
+          $node->{$field_name} = $form_state['values'][$field_name];
+          node_save($node);
+        }
+      }
+      // make sure sensible headers etc are sent...
+      drupal_set_header('Content-Type: text; charset=utf-8');
+    }
+    else {
+      drupal_set_header('HTTP/1.1 404 Not Found');
+      print t('No field found, of name: %field', array('%field' => $field_name));
+    }
+  }
+  else {
+    drupal_set_header('HTTP/1.1 404 Not Found');
+    print t('No write permissions for %field', array('%field' => $field_name));
+  }
+  exit();
+}

@@ -1,0 +1,149 @@
+<?php
+// $Id: imagecache_textactions.module,v 1.2.2.9 2009/09/04 23:28:04 dman Exp $
+/**
+ * @file Provide text manipulation process for imagecache.
+ * 
+ * Ported by dman 
+ * from http://drupal.org/node/264862#comment-865490 by patrickharris
+ * 
+ */
+  cache_clear_all('imagecache_actions', 'cache');
+
+require_once(dirname(__FILE__) .'/utility.inc'); // For simple color routines
+
+/**
+* Implementation of hook_imagecache_actions().
+*/ 
+function imagecache_textactions_imagecache_actions() {
+  $actions = array(
+    'textactions_text2canvas' => array(
+      'name' => t('Text'),
+      'description' => t('Add static or dynamic (coded) text to an image.'),
+      'file' => 'textactions.inc',
+    ),
+    'textactions_rendertext' => array(
+      'name' => t('Render Text'),
+      'description' => t('EXPERIMENTAL Add static or dynamic (coded) text to an image using <a href="!imageapi_link">imageapi_text</a> CSS-like effects.', array(url('admin/settings/imageapi/config/text'))),
+      'file' => 'textrender.inc',
+    ),
+  );
+
+  return $actions;
+}
+
+/**
+ * Experimental diagnostic page to assist locating valid fonts on the system.
+ * Only tuned for Ubuntu so far. I've been unable do find ubiquitous tools that
+ * provide useful font listings.'
+ */
+function imagecache_textactions_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#imagecache_textactions':
+      $output = "<p>
+        For text rendering to work on a server, we <em>must</em>
+        know the system path to the font <em>file</em>, not just the name.
+        Font library handling differs too much on different systems and
+        the available PHP toolkits are unable to return good diagnostics.
+        </p><p>
+        On Debian/Ubuntu, you may find your fonts in and under
+        <code>/usr/share/fonts/truetype/</code>
+        eg <code>'/usr/share/fonts/truetype/ttf-bitstream-vera/VeraMono.ttf'</code>
+        </p><p>
+        On OSX, they are probably in <code>/Library/Fonts/</code>
+        eg <code>'/Library/Fonts/Times New Roman Bold Italic.ttf'</code>
+        </p><p>
+        On Windows, they are probably in <code>C://WINDOWS/Fonts/</code>
+        eg <code>'C://WINDOWS/Fonts/comic.TTF'</code>
+        </p><p>
+        Of course, this will change if you deploy to a different server!
+        so the best approach is to place your own TTF font file inside your
+        <em>files</em> directory and use that. 
+        Just give the filename with no path and it should be found..
+        </p>
+      ";
+      $output .= t("<p>Files directory is !files</p>", array('!files' => file_directory_path()));
+      if (ini_get('safe_mode')) {
+        $output .= t("<p>
+          It appears PHP 'safe mode' is on. 
+          This prevents me for knowing which fonts are on your system. 
+          You will have to know the exact path and filename of the fonts you intend to use 
+          - or upload some *.ttf files to your 'files' directory and use them from there.
+        </p>");
+      }
+      else {
+        $list = `find /usr/share/fonts -name \*.ttf`;
+        $output .= "<p>Fonts Found : <pre>" . $list . "</pre></p>";
+      }
+ 
+      return $output;
+      break;
+  }
+}
+
+/**
+ * Need to register the theme functions we expect to use
+ */
+function imagecache_textactions_theme() {
+  return array(
+    'textactions_text2canvas' => array(
+      'file'      => 'textactions.inc',
+      'arguments' => array('element' => NULL),
+    ),
+    'textactions_rendertext' => array(
+      'file'      => 'textrender.inc',
+      'arguments' => array('element' => NULL),
+    ),
+    'imagecacheactions_rgb_form' => array(
+      'file'      => 'utility.inc',
+      'arguments' => array('form' => NULL),
+    ),
+    'imagecacheactions_rgb' => array(
+      'file'      => 'utility.inc',
+      'arguments' => array('rgb' => NULL),
+    ),
+  );
+}
+
+
+/**
+ * Generate the dynamic text for this image.
+ * Was textactions caption - now merged as an option of text2canvas
+ * 
+ * TODO further code review for safety etc
+ * 
+ * @param $image object, as provided by imageapi
+ * @param $action definition
+ * 
+ * @return $text Plain or code string to be placed on the imagecache process.
+ */
+function textactions_evaluate_text($image, $action) {
+
+  // HOOK_metadata from file attempts to glean info from any direction possible - EXIF, XMP, DB, description.txt
+  // @see the meta_* project
+  if (!empty($image->source)) {
+    $meta = module_invoke_all('metadata_from_file', $image->source);
+    $file_data = (object) $meta;
+  }
+
+  // Try to load the attached node - if any
+  static $panic; #This can trigger recursion! build-load-build-etc
+  if ($panic) return;
+  $panic = TRUE;
+  $node = imagecache_actions_node_from_filepath($image->source, $file_data) ;
+  $panic = FALSE;
+
+  // Process the php using drupal_eval (rather than eval), 
+  // but with GLOBAL variables, so they can be passed successfully
+  $GLOBALS['image'] = $image;
+  $GLOBALS['node'] = $node;
+  $GLOBALS['file_data'] = $file_data;
+  
+  $text = @drupal_eval('<'.'?php global $node; global $image; global $file_data; '.$action['text'].' ?'.'>');
+
+  // Warn about errors in the php code if I can
+  if (empty($text) && function_exists('error_get_last') && $last_error = error_get_last()) {
+    drupal_set_message("Problem evaluating dynamic text. <br/><code>{$action['text']}</code><br/> ". $last_error['message'], 'error');
+  }
+
+  return $text;
+}

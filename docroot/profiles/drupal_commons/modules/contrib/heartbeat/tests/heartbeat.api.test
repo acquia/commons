@@ -1,0 +1,80 @@
+<?php
+// $Id: heartbeat.api.test,v 1.1.2.2 2010/02/21 12:31:33 stalski Exp $
+
+/**
+ * @file
+ * Tests for heartbeat API
+ */
+
+/**
+ * Class HeartbeatAPITest
+ *   Tests the heartbeat API.
+ */
+class HeartbeatAPITest extends DrupalWebTestCase {
+
+  /**
+   * Implementation of getInfo().
+   */
+  function getInfo() {
+    return array(
+      'name' => t('Heartbeat API'),
+      'description' => t('Tests for heartbeat API.'),
+      'group' => t('Heartbeat'),
+    );
+  }
+
+  /**
+   * Implementation of setUp().
+   */
+  function setUp() {
+    parent::setUp('heartbeat', 'heartbeattest');
+  }
+
+  /**
+   * Implementation of tearDown().
+   */
+  function tearDown() {
+    parent::tearDown();
+  }
+
+  /**
+   * Debug helper function. Writes values away to a text file in the files directory.
+   */
+  function debugHelper($value, $mode = 'a+') {
+    $debug = fopen($this->originalFileDirectory .'/simpletestdebug.txt', $mode);
+    fwrite($debug, print_r($value, TRUE) ."\n");
+    fclose($debug);
+  }
+
+  /**
+   * Function to test the heartbeat api log function
+   */
+  function testHeartbeatAPILog() {
+
+    $admin_user = $this->drupalCreateUser(array('administer nodes', 'access user profiles', 'view heartbeat messages', 'configure heartbeat messages'));
+    $this->drupalLogin($admin_user);
+
+    // Create page so heartbeattest.module can log activity through hook_nodeapi.
+    $page_node = $this->drupalCreateNode(array('type' => 'page', 'title' => 'MyPageTitle'));
+
+    // Test if something was logged to database
+    $count_logs = db_result(db_query("SELECT COUNT(uaid) FROM {heartbeat_activity}"));
+    $this->assertEqual(1, $count_logs, t('Number of activity messages ( '. $count_logs .') matches the number of logs.'), t('Heartbeat'));
+
+    // Get a stream page and check if the page post appears in the heartbeat activity stream.
+    $this->drupalGet('heartbeat/publicheartbeat');
+    $this->assertText('MyPageTitle', t('The page title is displayed in the public heartbeat stream.'), t('Heartbeat'));
+
+    // Get a stream page and check if the page post appears in the heartbeat activity stream.
+    $this->drupalGet('heartbeat/privateheartbeat');
+    $this->assertText('MyPageTitle', t('The page title is displayed in the private heartbeat stream.'), t('Heartbeat'));
+
+    // Create page so heartbeattest.module can log activity through hook_nodeapi.
+    $page_node2 = $this->drupalCreateNode(array('type' => 'page', 'title' => 'MySecondPage'));
+
+    // Test if something was logged to database
+    $count_logs = db_result(db_query("SELECT COUNT(uaid) FROM {heartbeat_activity}"));
+    $this->assertEqual(2, $count_logs, t('Number of activity messages ( '. $count_logs .') matches the number of logs.'), t('Heartbeat'));
+
+  }
+}

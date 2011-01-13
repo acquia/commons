@@ -1,0 +1,19 @@
+<?php
+
+include_once('commons_core.features.inc');
+
+// The version of Drupal Commons
+define('DRUPAL_COMMONS_VERSION', 1.2);
+
+/**
+ * Implementation of hook_requirements()
+ */
+function commons_core_requirements($phase) {
+  if ($phase == 'runtime') {
+    return array(array(
+      'title' => t('Drupal Commons'),
+      'value' => DRUPAL_COMMONS_VERSION,
+      'severity' => REQUIREMENT_INFO,
+    ));
+  }
+}

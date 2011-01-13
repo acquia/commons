@@ -1,0 +1,19 @@
+<?php
+// $Id: imagecache_canvasactions.install,v 1.1.4.3 2009/08/31 04:12:20 dman Exp $
+/**
+ * @file Set up new canvas actions. Tell imagecache.module about them
+ */
+
+/**
+ * Need to flush the cache when this module is enabled or disabled
+ */
+function imagecache_canvasactions_install() {
+  if (function_exists('imagecache_action_definitions') ) imagecache_action_definitions(TRUE);
+  cache_clear_all('imagecache_actions', 'cache');
+  drupal_set_message(t('Additional imagecache actions should now be available in the presets !settings_link', array('!settings_link' => l(t('settings'), 'admin/build/imagecache'))));
+}
+
+function imagecache_canvasactions_uninstall() {
+  if (function_exists('imagecache_action_definitions') ) imagecache_action_definitions(TRUE);
+  cache_clear_all('imagecache_actions', 'cache');
+}

@@ -1,0 +1,75 @@
+<?php
+// $Id: shoutbox_points.module,v 1.1.2.2 2010/07/30 14:07:38 mikestefff Exp $
+
+/*
+ * Implementation of hook_userpoints()
+ */
+function shoutbox_points_userpoints($op, $params = array()) {
+  switch ($op) {
+    case 'setting':
+      $form['shoutbox'] = array(
+        '#type'        => 'fieldset',
+        '#collapsible' => TRUE,
+        '#collapsed'   => TRUE,
+        '#title'       => t('!Points for posting shouts', userpoints_translation()),
+      );
+      
+      $form['shoutbox']['shoutbox_points_delete_points'] = array(
+        '#type'          => 'checkbox',
+        '#title'         => t('Take away !points on shout delete', array_merge(userpoints_translation())),
+        '#default_value' => variable_get('shoutbox_points_delete_points', 1),
+      );
+      
+      $form['shoutbox']['shoutbox_points_amount'] = array(
+        '#type'          => 'textfield',
+        '#title'         => t('!Points for posting a shout', array_merge(userpoints_translation())),
+        '#default_value' => variable_get('shoutbox_points_amount', '0'),
+        '#size'          => 5,
+        '#maxlength'     => 5,
+      );
+      
+      return $form;
+  }
+}
+
+/*
+ * Implementation of hook_shoutbox()
+ */
+function shoutbox_points_shoutbox($op, $shout, $form_state = NULL) {
+  // If this shout was anonymous, points can't be handled
+  if (!$shout->uid) {
+    return; 
+  }
+  
+  switch ($op) {
+    case 'insert':
+      if ($points = variable_get('shoutbox_points_amount', '0')) {
+        $params = array(
+          'points' => $points,
+          'uid' => $shout->uid,
+          'operation' => 'insert',
+          'entity_id' => $shout->shout_id,
+          'entity_type' => 'shout',
+          'display' => FALSE,
+        );
+        userpoints_userpointsapi($params);
+      }
+      break;
+      
+    case 'delete':
+      if (variable_get('shoutbox_points_delete_points', 1)) {
+        if ($points = variable_get('shoutbox_points_amount', '0')) { 
+          $params = array(
+            'points' => ($points * -1),
+            'uid' => $shout->uid,
+            'operation' => 'operation',
+            'entity_id' => $shout->shout_id,
+            'entity_type' => 'shout',
+            'display' => FALSE,
+          );
+          userpoints_userpointsapi($params);
+        }
+      }
+      break;
+  }
+}

@@ -1,0 +1,66 @@
+<?php
+// $Id: imagecache_profiles.install,v 1.1.2.2 2009/08/29 14:02:17 andypost Exp $
+
+/*
+ * Implementation of hook_update_N().
+ *
+ *  Views support patch includes changes stored variables from the name of the imagecache preset to its numerical value.
+ *   This function converts variables from preset names to their preset id.
+ */
+function imagecache_profiles_update_6000() {
+
+  $ret = array();
+  $variables = array(
+    'user_picture_imagecache_profiles',
+    'user_picture_imagecache_comments',
+    'user_picture_imagecache_profiles_default',
+  );
+
+  foreach ($variables as $var) {
+    $value = variable_get($var, '');
+    if ($value && !is_numeric($value)) {
+      $preset = imagecache_preset_by_name($value);
+      if ($preset['presetid']) {
+        variable_set($var, $preset['presetid']);
+        $ret[] = array('success' => TRUE,
+          'query' => t('%var updated from %value to %presetid', array(
+            '%var' => $var,
+            '%value' => $value,
+            '%presetid' => $preset['presetid'],
+          ))
+        );
+      }
+      else {
+        $ret[] = array(
+          'success' => FALSE,
+          'query' => t('%var not updated: no imagecache preset could be found for %value. <a href="@settings_page"> Update your profile picture presets manually </a>', array(
+            '%var' => $var,
+            '%value' => $value,
+            '@settings_page' => url('admin/user/settings'),
+          ))
+        );
+      }
+    }
+  }
+
+  return $ret;
+}
+
+/*
+ * Implementation of hook_uninstall
+ *
+ * Delete all the variables created by imagecache_profiles
+ */
+function imagecache_profiles_uninstall() {
+  $variables = array(
+    'user_picture_imagecache_profiles',
+    'user_picture_imagecache_comments',
+    'user_picture_imagecache_profiles_default',
+    'user_picture_imagecache_profiles_min_width',
+    'user_picture_imagecache_profiles_min_height',
+  );
+
+  foreach ($variables as $var) {
+    variable_del($var);
+  }
+}

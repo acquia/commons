@@ -1,0 +1,306 @@
+<?php
+
+//$Id: userpoints_nc.module,v 1.4 2009/01/09 10:35:21 jredding Exp $
+
+// Copyright 2005 Khalid Baheyeldin http://2bits.com
+
+define('USERPOINTS_POST',                'userpoints_post_');
+define('USERPOINTS_POST_COMMENT',        'userpoints_post_comment');
+define('USERPOINTS_MODERATE_COMMENT',    'userpoints_moderate_comment');
+//define a variable to trigger the use of the v2bug please read drupal.org/node/183520
+define('USERPOINTS_USE_V2BUG',    'userpoints_use_v2bug');
+
+function userpoints_nc_help($path, $arg) {
+  switch ($path) {
+    case 'admin/settings/userpoints_nc':
+      return t('<strong>UP:</strong> Some basic interfaces for userpoints, such as posting nodes, comments, ...etc.');
+  }
+}
+
+function userpoints_nc_userpoints($op, $params = array()) {
+  switch ($op) {
+    case 'setting':
+      $group = 'node';
+      $form[$group] = array(
+        '#type'        => 'fieldset',
+        '#collapsible' => TRUE,
+        '#collapsed'   => TRUE,
+        '#title'       => t('!Points for posting nodes', userpoints_translation()),
+      );
+      
+      $form[$group][USERPOINTS_POST . '_undo_points_on_delete'] = array(
+        '#type'          => 'checkbox',
+        '#title'         => t('Take away !points on node delete', array_merge(userpoints_translation())),
+        '#default_value' => variable_get(USERPOINTS_POST . '_undo_points_on_delete', true),
+        );
+        
+      foreach (node_get_types() as $type => $name) {
+        $form[$group][USERPOINTS_POST . $type] = array(
+          '#type'          => 'textfield',
+          '#title'         => t('!Points for posting a !node-name', array_merge(userpoints_translation(), array('!node-name' => $name->name))),
+          '#default_value' => variable_get(USERPOINTS_POST . $type, '0'),
+          '#size'          => 5,
+          '#maxlength'     => 5,
+          );
+      }
+      $group = 'comment';
+      $form[$group] = array(
+        '#type'        => 'fieldset',
+        '#collapsible' => TRUE,
+        '#collapsed'   => TRUE,
+        '#title'       => t('!Points for posting comments', userpoints_translation()),
+      );
+      $form[$group][USERPOINTS_POST_COMMENT] = array(
+        '#type'          => 'textfield',
+        '#title'         => t('!Points for posting a comment', userpoints_translation()),
+        '#default_value' => variable_get(USERPOINTS_POST_COMMENT, 0),
+        '#size'          => 5,
+        '#maxlength'     => 5,
+        );
+
+      $form[$group][USERPOINTS_MODERATE_COMMENT] = array(
+        '#type'          => 'textfield',
+        '#title'         => t('!Points for moderating a comment', userpoints_translation()),
+        '#default_value' => variable_get(USERPOINTS_MODERATE_COMMENT, 0),
+        '#size'          => 5,
+        '#maxlength'     => 5,
+        );
+      $group = 'v2compatibility';
+      $form[$group] = array(
+        '#type'        => 'fieldset',
+        '#collapsible' => TRUE,
+        '#collapsed'   => TRUE,
+        '#title'       => t('userpoints_basic events version 2.14 Compatibility', userpoints_translation()),
+        '#description' => t('If you have used userpoints_basic prior to version 2.14 you may need to enable this fix.<br />
+                             If you have not used userpoints_basic prior to v3 you do NOT need to (nor should) enable this fix. <br />
+                             This fix only affects the behavior of how !points are handled when ownership of a node/comment
+                             changes. In version 2 data on the original owner was not kept and a static variable was used to 
+                             store this information. Unfortunately people have experienced unusual side effects such as
+                             !points moving from one owner to a completely random user. All !points accrued with version 3 will
+                             not exhibit this behavior thus this fix is unnecessary. 
+                             Only check this box under the following conditions <br />
+                             1) You have existing !points granted by a userpoints version prior to version 3 <br />
+                             2) If ownership changes on a node/comment you want points to follow ownership <br />
+                             <i>All !points accrued by version 3 will move ownership automatically this setting only affects !points accrued with v2</i>
+                             <br />
+                             3) You have read <a href="http://drupal.org/node/183520">Article 183520</a> on drupal.org and 
+                                understand that there could be unusual issues with ownership moves', userpoints_translation()),
+      );
+      $form[$group][USERPOINTS_USE_V2BUG] = array(
+        '#type'          => 'checkbox',
+        '#title'         => t('I agree to the above description and want to use the V2 bug fix'),
+        '#default_value' => variable_get(USERPOINTS_USE_V2BUG, false),
+      );
+
+      return $form;
+      break;
+  }
+}
+  
+function userpoints_nodeapi(&$node, $op, $teaser, $page) {
+  //static up_orig_uid please read drupal.org/node/183520 
+  static $up_orig_uid;
+  $points = variable_get(USERPOINTS_POST . $node->type, 0);
+  switch ($op) {
+    case 'insert':
+      $params = array(
+        'points' => $points,
+        'uid' => $node->uid,
+        'operation' => 'insert',
+        'entity_id' => $node->nid,
+        'entity_type' => 'node'
+      );
+      userpoints_userpointsapi($params);
+      break;
+    case 'delete':
+      if (variable_get(USERPOINTS_POST . '_undo_points_on_delete', true)) {
+        $points = -$points;
+        $params = array(
+          'points' => $points,
+          'uid' => $node->uid,
+          'operation' => 'operation',
+          'entity_id' => $node->nid,
+          'entity_type' => 'node',
+        );
+        userpoints_userpointsapi($params);
+      }
+      break;
+    case 'prepare':
+      $up_orig_uid = $node->uid;
+      break;
+    case 'update':
+      //Find the last points granted on this node inserts and ownership gains
+      $sql = "SELECT points, uid 
+              FROM {userpoints_txn} 
+              WHERE entity_id = %d AND entity_type = '%s' 
+              AND (operation = '%s' OR operation ='%s')
+              ORDER BY time_stamp DESC
+              LIMIT 1
+              ";
+      $last_owner = db_fetch_object(db_query($sql, $node->nid, 'node', 'insert', 'Ownership gain'));
+      
+      //Check the UID of the original to this user, if different add/substract points
+      if ($node->uid != $last_owner->uid && is_numeric($last_owner->uid) ) {
+        //Check to see if this user has already lost the points for
+        // Add to the new node owner
+        $params = array(
+          'points' => $points,
+          'uid' => $node->uid,
+          'operation' => 'Ownership gain',
+          'entity_id' => $node->nid,
+          'entity_type' => 'node'
+        );
+        userpoints_userpointsapi($params);
+        // subtract from the original node owner
+        $params = array(
+          'points' => -$points,
+          'uid' => $up_orig_uid,
+          'operation' => 'Ownership loss',
+          'entity_id' => $node->nid,
+          'entity_type' => 'node'
+        );
+        userpoints_userpointsapi($params);
+      }
+      else {
+        //We failed to pull a matching operation via the DB
+        //If the user wants to use the V2BUG we'll use it..
+        //please read drupal.org/node/183520
+        if (variable_get(USERPOINTS_USE_V2BUG, false)) {
+          if ($node->uid != $up_orig_uid) {
+            // Add to the new node owner
+            $params = array(
+              'points' => $points,
+              'uid' => $node->uid,
+              'operation' => 'Ownership gain',
+              'entity_id' => $node->nid,
+              'entity_type' => 'node'
+            );
+            userpoints_userpointsapi($params);
+            // subtract from the original node owner
+            $params = array(
+              'points' => -$points,
+              'uid' => $up_orig_uid,
+              'operation' => 'Ownership loss',
+              'entity_id' => $node->nid,
+              'entity_type' => 'node'
+            );
+            userpoints_userpointsapi($params);
+          }
+        }
+      }
+      break;
+  }
+}
+
+function userpoints_comment($comment, $op) {
+  global $user;
+  //static up_orig_uid, please read this thread http://drupal.org/node/183520
+  static $up_orig_com_uid;
+
+  $points = variable_get(USERPOINTS_POST_COMMENT, 0);
+  switch ($op) {
+    case 'insert':
+      $params = array(
+        'points' => $points,
+        'uid' => $user->uid,
+        'operation' => 'insert',
+        'entity_id' => $comment['cid'],
+        'entity_type' => 'comment'
+      );
+      userpoints_userpointsapi($params);
+      break;
+    case 'delete':
+      $points = -$points;
+      $params = array(
+        'points' => $points,
+        'uid' => $comment->uid,
+        'operation' => 'delete',
+        'entity_id' => $comment->cid,
+        'entity_type' => 'comment'
+      );
+      userpoints_userpointsapi($params);
+      break;
+    case 'moderate':
+      $points = variable_get(USERPOINTS_MODERATE_COMMENT, 0);
+      $params = array(
+        'points' => $points,
+        'uid' => $comment->uid,
+        'operation' => 'moderate',
+        'entity_id' => $comment->cid,
+        'entity_type' => 'comment'
+      );
+      userpoints_userpointsapi($params);
+      break;
+    case 'form':
+      $up_orig_com_uid = $comment['uid']['#value'];
+      break;
+    case 'update':
+      //Find the last points granted on this node inserts and ownership gains
+      $sql = "SELECT points, uid 
+              FROM {userpoints_txn} 
+              WHERE entity_id = %d AND entity_type = '%s' 
+              AND (operation = '%s' OR operation ='%s')
+              ORDER BY time_stamp DESC
+              LIMIT 1
+              ";
+      $cid = $comment['cid'];
+      $new_uid = $comment['uid'];
+      $last_owner = db_fetch_object(db_query($sql, $cid, 'comment', 'insert', 'Ownership gain'));
+
+      //Check the UID of the original to this user, if different add/substract points
+      if ($new_uid != $last_owner->uid && is_numeric($last_owner->uid) ) {
+        //The owner has changed so we're removing from the
+        //the original owner and giving to the new owner
+        //Give to the original owner
+        $points = $last_owner->points;
+        $params = array(
+          'points' => $points,
+          'uid' => $new_uid,
+          'operation' => 'Ownership gain',
+          'entity_id' => $cid,
+          'entity_type' => 'comment'
+        );
+        userpoints_userpointsapi($params);
+
+        //Take away from the original owner
+        $params = array(
+          'points' => -$points,
+          'uid' => $last_owner->uid,
+          'operation' => 'Ownership loss',
+          'entity_id' => $cid,
+          'entity_type' => 'comment'
+        );
+        userpoints_userpointsapi($params);
+
+      }
+      else {
+        //We failed to pull a matching operation via the DB
+        //If the user wants to use the V2BUG we'll use it..
+        //please read drupal.org/node/183520
+        if (variable_get(USERPOINTS_USE_V2BUG, false)) {
+          if ($orig_uid != $comment['uid']) {
+            $params = array(
+              'points' => $points,
+              'uid' => $new_uid,
+              'operation' => 'Ownership gain',
+              'entity_id' => $cid,
+              'entity_type' => 'comment'
+            );
+            userpoints_userpointsapi($params);
+
+            //Take away from the original owner
+            $params = array(
+              'points' => -$points,
+              'uid' => $comment['uid'],
+              'operation' => 'Ownership loss',
+              'entity_id' => $new_uid,
+              'entity_type' => 'comment'
+            );
+            userpoints_userpointsapi($params);
+          }
+        }
+      }
+      break;
+  }
+}
+

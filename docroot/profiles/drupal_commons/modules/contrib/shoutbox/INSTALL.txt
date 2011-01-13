@@ -1,0 +1,49 @@
+// $Id: INSTALL.txt,v 1.4.4.2 2010/07/16 00:36:48 mikestefff Exp $
+Readme
+------
+
+The Shoutbox module provides a block where visitors can quickly post short messages. 
+Permissions can be set so that posts go live immediately or go to a moderation queue.
+
+** The translations are NOT SUPPORTED in the 2.x branch yet! **
+
+Requirements
+------------
+This module requires Drupal 6.x.
+
+
+Installation
+------------
+
+1. Extract and copy the contents of Shoutbox package to the Drupal "modules/" directory.
+
+2. Go to the administration section, into "Adminster > Site building > Modules" and enable the Shoutbox module.
+
+3. Go to the "Shoutbox" page in "Administer > Site configuration > Shoutbox" and set permissions for posting, moderating and administering the Shoutbox. 
+
+4. Go to "Administer > Site building > Blocks" and enable the Shoutbox block. 
+
+
+Smiley Support
+--------------
+
+1. Install the smileys module 
+2. Create an input filter and enable the smileys filter for it.
+3. It is highly advisable to enable html filtering to prevent XSS scripting.
+4. Go to the "Shoutbox" page in "Administer > Site configuration > Shoutbox" and set the input filter for Shoutbox. 
+
+
+Author
+------
+
+Benjamin Shell <drupal@benjaminshell.com>
+
+Maintainers
+-----------
+mikestefff
+disterics 
+snpower
+
+
+
+

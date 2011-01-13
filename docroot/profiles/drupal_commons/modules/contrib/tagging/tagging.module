@@ -1,0 +1,239 @@
+<?php
+// $Id: tagging.module,v 1.14.2.5 2010/07/18 10:11:01 eugenmayer Exp $
+
+// Author: Eugen Mayer (http://kontextwork.de)
+// Copyright 2010
+
+/**
+ * hook_menu
+ */
+function tagging_menu() {
+  $items = array();
+  $items['admin/settings/tagging/settings'] = array (
+        'type' => MENU_NORMAL_ITEM,
+        'title' => 'Tagging configuration',
+        'description' => 'Configuration options for the tagging module',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('tagging_admin_settings'),
+        'access arguments' => array('administer site configuration'),
+        'file' => 'tagging.admin.inc'
+   );
+
+  return $items;
+}
+
+/**
+ * Implementing hook_elements
+ * Registering the new form element, so we can render the tagging form element properly
+ */
+function tagging_elements() {
+  $type['tagging_widget'] = array(
+    '#input' => TRUE,
+    '#after_build' => array('_tagging_widget_javascript'),
+    '#process' => array('_tagging_add_suggestions'),
+    '#default_value' => -1,
+  );
+  return $type;
+}
+
+/**
+ * Implementation of hook_form_alter.
+ *
+ */
+function tagging_form_alter(&$form, $form_state, $form_id) {
+  // Check if we are editting a node and we actually have a tag taxonomy.
+  if ($form['#id'] == 'node-form' && isset($form['taxonomy']['tags'])) {
+    foreach ($form['taxonomy']['tags'] as $id => $values) {
+      if (variable_get('tagging_inject_'. $id, 0) == 1) {
+        $form['taxonomy']['tags'][$id]['#type'] = 'tagging_widget';
+        $form['taxonomy']['tags'][$id]['#vid'] = $id;
+        $form['taxonomy']['tags'][$id]['#nid'] = $form['nid']['#value'];
+      }
+    }
+  }
+}
+
+/**
+ * Implementation of hook_form_ID_alter.
+ *
+ */
+function tagging_form_taxonomy_form_vocabulary_alter(&$form, $form_state ) {
+  $form['settings']['tagging_inject'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Tagging Widget'),
+    '#weight' => 10,
+    '#default_value' => variable_get('tagging_inject_'. $form['vid']['#value'], 0),
+    '#description' => t('Use the visual tagging-widget, when this taxonomy is shown to the user'),
+  );
+  $form['#submit'][] = 'tagging_form_vocabulary_submit';
+}
+
+/**
+ * Implementing hook_theme.
+ */
+function tagging_theme() {
+  return array(
+    'tagging_widget' => array('arguments' => array('element' => NULL) ),
+    'tagging_widget_button' => array('arguments' => array('vid' => NULL) ),
+    'tagging_widget_wrapper' => array('arguments' => array('content' => NULL, 'vid' => NULL) ),
+    'tagging_suggestions_list' => array('arguments' => array('suggestions' => array(), 'vid' => NULL) ),
+    'tagging_tags_list' => array('arguments' => array('tags' => array(), 'vid' => NULL) )
+  );
+}
+
+/**
+ * Rendering the tagging widget.
+ */
+function theme_tagging_widget($element) {
+  // TODO: Maybe use a file as a template..but otherwise...performance?
+  $vid = $element['#vid'];
+  $cur_tags = '';
+
+  $id = "tagging-widget-input-$vid";
+  $fieldset['#title'] = $element['#title'];
+  $fieldset['#collapsed'] = false;
+  // Well this is the original. We actually just need it in the background, so that we
+  // dont need to fight in the validation filter. We can let the normal taxonomy.modul
+  // validators and submitters do their job.
+  $element['#type'] = 'hidden';
+  $element['#attributes']['class'] = "tagging-widget-target-$vid";
+  $old_input = theme('hidden', $element);
+
+  // Ok now lets render the input textfield we will use for the tagging
+  $element['#type'] = 'textfield';
+  // Its convention that the tagging-widget-VID class it addid. That vid will be used
+  // to get the unique "context" id for all the other wrappers and functions.
+  $element['#attributes']['class'] = "tagging-widget-input $id";
+  $element['#id']= $id;
+  $element['#title']= ""; 
+  
+  if($element['#description'] == '') {
+    $element['#description'] = t("Type and press enter to add the tag");
+  }  
+  $element['#field_suffix'] = theme('tagging_widget_button', $vid).$old_input;
+  $output .= theme('tagging_tags_list',split(',',$element['#value']),$vid)
+            .'<div class="taggin-widget-input-wrapper clearfix">'
+               .theme('textfield', $element)
+            .'</div>'
+            .theme('tagging_suggestions_list', $element['#suggestions'], $vid);
+  $fieldset['#value'] = $output;
+  $output = theme('fieldset',$fieldset);
+  return theme('tagging_widget_wrapper',$output,$vid);
+}
+
+/**
+ * Rendering the widget button
+ */
+function theme_tagging_widget_button($vid) {
+  return '<a class="tagging-button-container" href="#" title="'.t('Add').'"><span class="tagging-button tagging-button-'.$vid.'"></span></a>';
+}
+
+/**
+ * Rendering the wrapper of the widget
+ */
+function theme_tagging_widget_wrapper($content, $vid) {
+   return "<div id='tagging-widget-container'>$content</div>";
+}
+
+
+/**
+ * Rendering suggestions for a specific vocabulary
+ */
+function theme_tagging_tags_list($tags, $vid) {
+  $cur_tags = '';
+  // they are sorted already
+  foreach ($tags as $term) {
+    if($term == '') {
+      continue;
+    }
+    // TODO: use # here...but out of any reason it gets encoded to %23 in html
+    // using trim here, as mostly the old tagging system was "one, two, three"..
+    $term = "<span class='tagging-tag'>"._tagging_check_tag($term)."</span>";
+    
+    $link = l($term, '', array('html' => true, 'attributes' => array('title' => t('Remove tag'), 'fragment' => '#')));
+    $cur_tags .= $link;
+  }
+  return "<div class='tagging-curtags-wrapper tagging-curtags-wrapper-$vid'><label>".t('Assigned Tags:')."</label>$cur_tags</div>";
+}
+
+function _tagging_check_tag($tag) {
+  $tag = trim(check_plain($tag));
+  return $tag;
+}
+
+/**
+ * Rendering suggestions for a specific vocabulary
+ */
+function theme_tagging_suggestions_list($suggestions, $vid) {
+    $suggested_tags = '';
+    // They are sorted already.
+    foreach ($suggestions as $term) {
+      if($term['#name'] == '') {
+        continue;
+      }
+      // TODO: Use # here...but out of any reason it gets encoded to %23 in html.
+      $term = "<span id='tagging-$vid' class='tagging-suggest-tag'>"._tagging_check_tag($term['#name'])."</span>";
+      $link = l($term, '', array('html' => true, 'attributes' => array('title' => t('Add tag'))));
+      $suggested_tags .= $link;
+    }
+    // If we have any suggestions, then place the wrapper.
+    if($suggested_tags != '') {
+      return "<div class='tagging-suggestions-wrapper tagging-suggestions-wrapper-$vid'><label>"
+                                . t('Suggestions') . ":</label>$suggested_tags</div>";
+    }
+    // We have no suggestions, so no need to show any output
+    return '';
+}
+
+/**
+ * Defining new hook: hook_tagging_suggestion
+ * Modules can use this hook to implement their methods to provide suggestions for tagging
+ * the current node
+ */
+function _tagging_add_suggestions($element) {
+  // TODO: Quite expensive here. Should we only fetch the body? This might
+  // change in the future
+  $node = node_load($element['#nid']);
+  /*
+  * @vid: This is the vid the suggestions have been called for. You can use this to decide whether you
+  *       want to suggest something or not for this vocabulary
+  * @node: This is the complete expanded node object. Use this to e.g. base your suggestions on the body
+  *        of the node or the title or whatever you wish on
+  */
+  $suggestions = module_invoke_all('tagging_suggestions', $element['#vid'], $node);
+  drupal_alter('tagging_suggestions', $suggestions);
+
+  // Validation
+  if ( !is_array($suggestions) ) {
+    $suggestions = array();
+    watchdog(WATCHDOG_WARNING, 'Tagging: Could not parse suggestion array - maybe some hooks are out of bound?');
+  }
+  // Iam not going to hold the devs hand and validate if we got a valid array with #name / #weight
+  uasort($suggestions,'element_sort');
+  // Only show a maximum ammount of suggesitons
+  if(variable_get('tagging_show_max_suggestion', 20) > 0) {
+    $suggestions = array_slice($suggestions,0, variable_get('tagging_show_max_suggestion', 20));
+  }
+  $element['#suggestions'] = $suggestions;
+  return $element;
+}
+
+
+/**
+ * Implementing #process of the form element tagging_widget.
+ * Adding Javascript-Libraries needed, if a widget has been placed.
+ */
+function _tagging_widget_javascript($form_element, &$form_state) {
+  drupal_add_css(drupal_get_path('module', 'tagging') .'/tagging.css', 'module');
+  drupal_add_js(drupal_get_path('module', 'tagging') .'/tagging.plugin.js', 'module');
+  drupal_add_js(drupal_get_path('module', 'tagging') .'/tagging.init.js', 'module');
+  return $form_element;
+}
+
+/**
+ * Saving the variable, whether to show the widget for a taxonomy or not
+ */
+function tagging_form_vocabulary_submit($form, &$form_state) {
+  variable_set('tagging_inject_'. $form_state['values']['vid'], $form_state['values']['tagging_inject']);
+  return TRUE;
+}

@@ -1,0 +1,14 @@
+<?php
+
+/*
+ * Implementation of hook_install()
+ */
+function acquia_network_subscription_install() {
+  require_once('acquia_network_subscription.strongarm.inc');
+  
+  // Gather the exported variables
+  $vars = acquia_network_subscription_strongarm();
+  
+  // This needs to be manually set because it's set on install
+  variable_set('apachesolr_enabled_facets', $vars['apachesolr_enabled_facets']->value);
+}

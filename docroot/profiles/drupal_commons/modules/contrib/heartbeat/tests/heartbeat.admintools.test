@@ -1,0 +1,65 @@
+<?php
+// $Id: heartbeat.admintools.test,v 1.1.2.2 2010/02/21 12:31:33 stalski Exp $
+
+/**
+ * @file
+ *   Tests the administration tasks within heartbeat.
+ */
+
+/**
+ * Class HeartbeatAdminTools
+ *
+ */
+class HeartbeatAdminTools extends DrupalWebTestCase {
+
+  /**
+   * Implementation of getInfo().
+   */
+  function getInfo() {
+    return array(
+      'name' => t('Heartbeat administration tools'),
+      'description' => t('Test heartbeat administration tools.'),
+      'group' => t('Heartbeat'),
+    );
+  }
+
+  /**
+   * Implementation of setUp().
+   */
+  function setUp() {
+    parent::setUp('heartbeat');
+  }
+
+  /**
+   * Implementation of tearDown().
+   */
+  function tearDown() {
+    parent::tearDown();
+  }
+
+  /**
+   * Debug helper function. Writes values away to a text file in the files directory.
+   */
+  function debugHelper($value, $mode = 'a+') {
+    $debug = fopen($this->originalFileDirectory .'/simpletestdebug.txt', $mode);
+    fwrite($debug, print_r($value, TRUE) ."\n");
+    fclose($debug);
+  }
+
+  /**
+   * Tests if a heartbeat message template is imported.
+   */
+  function testImport() {
+
+    $admin_user = $this->drupalCreateUser(array('administer nodes', 'access user profiles', 'view heartbeat messages', 'configure heartbeat messages'));
+    $this->drupalLogin($admin_user);
+
+    drupal_install_modules(array('heartbeattest'));
+
+    // Make sure message templates are imported. This should not be needed.
+    $this->drupalGet('admin/build/heartbeat');
+    $this->assertText('heartbeattest_add_node', t('The test message template we are using is imported and available.'), t('Heartbeat'));
+
+  }
+}
+

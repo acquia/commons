@@ -1,0 +1,142 @@
+Index: imagecache/imagecache.module
+===================================================================
+RCS file: /cvs/drupal-contrib/contributions/modules/imagecache/imagecache.module,v
+retrieving revision 1.68.2.3
+diff -u -p -r1.68.2.3 imagecache.module
+--- imagecache/imagecache.module	11 May 2008 23:58:47 -0000	1.68.2.3
++++ imagecache/imagecache.module	28 May 2008 11:42:22 -0000
+@@ -474,6 +474,8 @@ function imagecache_build_derivative($ac
+     return false; 
+   }
+ 
++  imagesavealpha($image->res, TRUE);
++
+   foreach ($actions as $action) {
+     if (!empty($action['data'])) {
+       // QuickSketch, why do these run first/twice? - dopry.
+@@ -670,7 +672,9 @@ function _imagecache_keyword_filter($val
+  *   A filepath relative to file_directory_path.
+  */
+ function _imagecache_recursive_delete($dir) {
++  if(!is_dir($dir)) return;
+   $d = dir($dir);
++  if(!$d) return;
+   while (($entry = $d->read()) !== false) {
+     if ($entry == '.' || $entry == '..') continue;
+     $path = $dir .'/'. $entry;
+Index: imagecache/imagecache_actions.inc
+===================================================================
+RCS file: /cvs/drupal-contrib/contributions/modules/imagecache/imagecache_actions.inc,v
+retrieving revision 1.12
+diff -u -p -r1.12 imagecache_actions.inc
+--- imagecache/imagecache_actions.inc	24 Apr 2008 05:27:45 -0000	1.12
++++ imagecache/imagecache_actions.inc	28 May 2008 11:42:22 -0000
+@@ -150,6 +150,10 @@ function theme_imagecache_crop($element)
+ }
+ 
+ function imagecache_crop_image(&$image, $data) {
++	// Allow for cropping in one dimension only;
++	if(! $data['width']) {$data['width'] = $image->info['width'];}
++	if(! $data['height']) {$data['height'] = $image->info['height'];}
++
+   if (!imageapi_image_crop($image, $data['xoffset'], $data['yoffset'], $data['width'], $data['height'])) {
+       watchdog('imagecache', t('imagecache_crop failed. image: %image, data: %data.', array('%path' => $image, '%data' => print_r($data, true))), WATCHDOG_ERROR);
+     return false;
+@@ -216,10 +220,11 @@ function imagecache_rotate_image(&$image
+   // Set sane default values.
+   $data['degrees'] = $data['degrees'] ? $data['degrees'] : 0;
+   $data['random'] = $data['random'] ? $data['random'] : false;
+-  $data['bgcolor'] = $data['bgcolor'] ? $data['bgcolor'] : '#FFFFFF';
++  $data['bgcolor'] = $data['bgcolor'] ? $data['bgcolor'] : -1; // Transparent
++  #$data['bgcolor'] = $data['bgcolor'] ? $data['bgcolor'] : '#FFFFFF';
+ 
+   // Manipulate the if we need to randomize, and convert to proper colors.
+-  $data['bgcolor'] = '0x'. str_replace('#', '', $data['bgcolor']);
++  //  $data['bgcolor'] = '0x'. str_replace('#', '', $data['bgcolor']);
+ 
+   if (!empty($data['random'])) {
+     $degrees = abs((float)$data['degrees']);
+@@ -230,5 +235,10 @@ function imagecache_rotate_image(&$image
+     watchdog('imagecache', t('imagecache_rotate_image failed. image: %image, data: %data.', array('%path' => $image, '%data' => print_r($data, true))), WATCHDOG_ERROR);
+     return false;
+   }
++  // Rotation is likely to change the actual image dimensions. Better make a note of that before the next change
++  $image->info['width']  = imagesx($image->res);
++  $image->info['height']  = imagesy($image->res);
++  
++  
+   return true;
+ }
+Index: imagecache/imagecache_ui.module
+===================================================================
+RCS file: /cvs/drupal-contrib/contributions/modules/imagecache/imagecache_ui.module,v
+retrieving revision 1.11
+diff -u -p -r1.11 imagecache_ui.module
+--- imagecache/imagecache_ui.module	24 Apr 2008 05:27:45 -0000	1.11
++++ imagecache/imagecache_ui.module	28 May 2008 11:42:22 -0000
+@@ -121,9 +121,40 @@ function imagecache_ui_presets() {
+     $rows[] = $row;
+   }
+   $output = theme('table', $header, $rows);
++
++  $output .=  drupal_get_form(imagecache_settings);
++  
++  if(! is_writable( file_create_path('imagecache') )) {
++    drupal_set_message(t('Warning: The configured imagecache directory [%imagecachedir] cannot be written to by %whoami. You should check permissions on the server', array('%imagecachedir' => file_create_path('imagecache'), '%whoami' => `whoami`)), 'error');
++  }
++  
+   return $output;
+ }
+ 
++function imagecache_settings(){
++  $preview = variable_get('imagecache_preview_image', 'misc/druplicon.png');
++  $preview_source = file_create_path() .'/'. $preview;
++  if (! file_exists($preview_source)) {
++    file_copy($preview, basename($preview_source));
++  }
++  $preview_source = file_create_path() .'/'. basename($preview);
++
++  $form = array(
++    '#type' => 'form',
++	  'imagecache_preview_image' => array(
++	    '#type' => 'textfield',
++	    '#title' => t('Sample image to use in previews'),
++	    '#default_value' => variable_get('imagecache_preview_image', 'misc/druplicon.png'),
++	    '#description' => t('May be relative to the files directory or the Drupal root'),
++      ),
++	  'preview_image' => array(
++	    '#type' => 'markup',
++	    '#value' => theme('image', $preview_source),
++      )
++  );  
++  return system_settings_form($form);
++}
++
+ function imagecache_ui_preset_add_form($presetid = 0) {
+   $form = array();
+   $form['presetname'] = array(
+@@ -352,6 +383,24 @@ function imagecache_ui_preset_form($pres
+     '#type' => 'submit',
+     '#value' => t('Update Preset'),
+   );
++  
++  ///////
++  // preview
++  $preview_original = variable_get('imagecache_preview_image', 'misc/druplicon.png');
++  $preview_source = file_create_path() .'/'. basename($preview_original);
++  if (! file_exists($preview_source)) {
++    file_copy($preview_original, $preview_source);
++  }
++  $preview_source = file_create_path() .'/'. basename($preview_original);
++
++  imagecache_image_flush($preview_source);
++  $imagecache_path = imagecache_create_url($preset['presetname'], $preview_source) . '?random='. rand(0,10000);
++  $form['preview'] = array(
++    '#type' => 'markup',
++    '#value' => "<img src='$imagecache_path' /><a href='$imagecache_path' >$imagecache_path</a>",
++  ); 
++  ///////
++
+   return $form;
+ }
+ 

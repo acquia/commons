@@ -1,0 +1,157 @@
+<?php
+// $Id: getid3.module,v 1.10.2.3 2009/11/26 01:21:40 drewish Exp $
+
+define('GETID3_RECOMMEND_VERSION', '1.7.9');
+
+/**
+ * Implementation of hook_help
+ */
+function getid3_help($section, $arg) {
+  switch ($section) {
+    case 'admin/settings/getid3':
+      $help = '<p>'. t("To use this module you'll need to <a href='!download-link'>download the library</a> from the <a href='!info-link'>getID3 website</a> and extract the contents into the  module's getid3 directory. Currently, the recommended version of the getID3 library is %recommended-version.", array(
+        '!download-link' => url('http://prdownloads.sourceforge.net/getid3'),
+        '!info-link' => url('http://getid3.org/'),
+        '%recommended-version' => GETID3_RECOMMEND_VERSION
+      )) .'</p>';
+      return $help;
+  }
+}
+
+/**
+ * Loads the getID3 library once and returns whether it was successfully loaded.
+ *
+ * @return
+ *   Boolean indicating if the library was loaded
+ */
+function getid3_load($display_warning = TRUE) {
+  $getid3_path = getid3_get_path();
+
+  if (file_exists($getid3_path .'/getid3.php') && file_exists($getid3_path .'/write.php')) {
+    // A little workaround for getID3 on Windows.
+    if (!defined('GETID3_HELPERAPPSDIR')) {
+      define('GETID3_HELPERAPPSDIR', realpath($getid3_path .'/../helperapps') .'/');
+    }
+    include_once($getid3_path .'/getid3.php');
+
+    // Initialize getID3 tag-writing module. NOTE: Their wanky dependency setup
+    // requires that this file must be included AFTER an instance of the getID3
+    // class has been instantiated.
+    $getid3 = new getID3;
+    require_once($getid3_path .'/write.php');
+
+    return defined('GETID3_VERSION');
+  }
+  else {
+    drupal_set_message(t("The getID3() module cannot find the getID3 library used to read and write ID3 tags. The site administrator will need to verify that it is installed and then update the <a href='!admin-settings-audio-getid3'>settings</a>.", array('!admin-settings-audio-getid3' => url('admin/settings/getid3'))), 'error', FALSE);
+    return FALSE;
+  }
+}
+
+/**
+ * Create and initialize an instance of getID3 class.
+ */
+function &getid3_instance() {
+  $id3 = NULL;
+  if (getid3_load()) {
+    $id3 = new getID3();
+    // MD5 is a big performance hit. Disable it by default.
+    $id3->option_md5_data = FALSE;
+    $id3->option_md5_data_source = FALSE;
+    $id3->encoding = 'UTF-8';
+  }
+  return $id3;
+}
+
+/**
+ * Analyze file and return its media information.
+ */
+function &getid3_analyze($path) {
+  $info = array();
+  if($id3 = &getid3_instance()) {
+    $info = $id3->analyze($path);
+    unset($id3);
+  }
+  return $info;
+}
+
+/**
+ * Implementation of hook_menu()
+ */
+function getid3_menu() {
+  $items['admin/settings/getid3'] = array(
+    'title' => 'getID3()',
+    'description' => 'Configure settings associated with getID3().',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('getid3_admin_settings_form', NULL),
+    'access arguments' => array('administer site configuration'),
+  );
+  return $items;
+}
+
+/**
+ * Administration settings for getID3().
+ */
+function getid3_admin_settings_form() {
+  $form['getid3_path'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Path'),
+    '#default_value' => getid3_get_path(),
+    '#description' => t('The location where getID3() is installed. Relative paths are from the Drupal root directory.'),
+    '#after_build' => array('_getid3_admin_settings_check_path'),
+  );
+  if ($version = getid3_get_version()) {
+    $form['getid3_version'] = array(
+      '#type' => 'item',
+      '#title' => t('Version'),
+      '#value' => '<pre>'. check_plain($version) .'</pre>',
+      '#description' => t("If you're seeing this it indicates that the getID3 library was found."),
+    );
+
+    // Check for existence of the 'demos' folder, contained in the getID3
+    // library. The contents of this folder create a potential securtiy hole,
+    // so we recommend that the user delete it.
+    $getid3_demos_path = getid3_get_path() .'/../demos';
+    if (file_exists($getid3_demos_path)) {
+      drupal_set_message(t("Your getID3 library is insecure! The demos distributed with getID3 contains code which creates a huge security hole. Remove the demos directory (%path) from beneath Drupal's directory.", array('%path' => realpath($getid3_demos_path))), 'error');
+    }
+  }
+  $form['getid3_show_warnings'] = array(
+    '#type' => 'checkbox',
+    '#title' => t("Display Warnings"),
+    '#default_value' => variable_get('getid3_show_warnings', FALSE),
+    '#description' => t("Check this to display the warning messages from the getID3 library when reading and writing ID3 tags. Generally it's a good idea to leave this unchecked, getID3 reports warnings for several trivial problems and the warnings can be confusing to users. This setting can be useful when debugging problems with the ID3 tags."),
+  );
+  return system_settings_form($form);
+}
+
+/**
+ * Checks the that the directory in $form_element exists and contains a file
+ * named 'getid3.php'. If validation fails, the form element is flagged with an
+ * error from within the file_check_directory function. See:
+ * system_check_directory()
+ *
+ * @param $form_element
+ *   The form element containing the name of the directory to check.
+ */
+function _getid3_admin_settings_check_path($form_element) {
+  $path = $form_element['#value'];
+  if (!is_dir($path) || !(file_exists($path .'/getid3.php') && file_exists($path .'/write.php'))) {
+    form_set_error($form_element['#parents'][0], t('The getID3 files <em>getid3.php</em> and <em>write.php</em> could not be found in the %path directory.', array('%path' => $path)));
+  }
+  return $form_element;
+}
+
+/**
+ * Returns the path where getID3() is installed.
+ */
+function getid3_get_path() {
+  return variable_get('getid3_path', 'sites/all/libraries/getid3/getid3');
+}
+
+/**
+ * Returns the version number of getID3() that's installed.
+ */
+function getid3_get_version() {
+  return getid3_load(FALSE) ? GETID3_VERSION : NULL;
+}

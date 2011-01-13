@@ -1,0 +1,49 @@
+<?php
+// $Id: insert.install,v 1.3 2009/10/22 00:03:46 quicksketch Exp $
+
+/**
+ * @file
+ * Update and install functions for Insert.
+ */
+
+/**
+ * Implementation of hook_install().
+ */
+function insert_install() {
+  // Insert needs to load after both ImageField and FileField.
+  db_query("UPDATE {system} SET weight = 15 WHERE type = 'module' AND name = 'insert'");
+}
+
+/**
+ * Implementation of hook_enable().
+ */
+function insert_enable() {
+  // Check if an upgrade from FileField Insert is necessary.
+  if (($filefield_insert_settings = variable_get('filefield_insert_settings', FALSE)) && module_exists('content')) {
+    module_load_include('inc', 'content', 'includes/content.crud');
+    foreach ($filefield_insert_settings as $type_name => $type_settings) {
+      foreach ($type_settings as $field_name => $settings) {
+        $field = content_fields($field_name, $type_name);
+        if ($field && !empty($field['widget'])) {
+          $field['widget']['insert'] = (int) $settings['filefield_insert'];
+          $field['widget']['insert_width'] = $settings['filefield_insert_width'];
+          $field['widget']['insert_class'] = '';
+          $field['widget']['insert_styles'] = array();
+          $field['widget']['insert_styles']['auto'] = 'auto';
+          foreach ($settings['filefield_insert_presets'] as $preset) {
+            $field['widget']['insert_styles']['imagecache_' . $preset] = 'imagecache_' . $preset;
+          }
+          $field['widget']['insert_default'] = 'auto';
+          content_field_instance_update($field);
+        }
+      }
+    }
+    variable_del('filefield_insert_settings');
+    drupal_set_message(t('The settings for FileField Insert have been migrated to the Insert module.'));
+  }
+
+  if (module_exists('filefield_insert')) {
+    module_disable(array('filefield_insert'));
+    drupal_set_message(t('FileField Insert has been disabled. You may safely delete it from your installation.'));
+  }
+}

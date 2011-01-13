@@ -1,0 +1,1 @@
+For further informations please consult the project page : http://drupal.org/project/tagging
