@@ -80,8 +80,10 @@ function commons_reputation_default_badges() {
  */
 function commons_reputation_insert_badges() {
   $badges = commons_reputation_default_badges();
+  $sql = "INSERT INTO {user_badges_badges} (name, image, weight, fixedweight) VALUES ('%s', '%s', %d, %d)";
   foreach ($badges as $badge) {
-    drupal_write_record('user_badges_badges', $badge);
+    // drupal_write_record() is not working here
+    db_query($sql, $badge->name, $badge->image, $badge->weight, $badge->fixedweight);
   }
 }
 
@@ -96,10 +98,9 @@ function commons_reputation_set_auth_badge() {
 
   // Set badge for authenticated role
   if ($badge->bid) {
-    $record = new stdClass;
-    $record->bid = $badge->bid;
-    $record->rid = 2;
-    drupal_write_record('user_badges_roles', $record);
+    $sql = "INSERT INTO {user_badges_roles} (bid, rid) VALUES (%d, %d)";
+    // drupal_write_record() is not working here
+    db_query($sql, $badge->bid, 2);
   }
 }
 
@@ -109,6 +110,9 @@ function commons_reputation_set_auth_badge() {
 function commons_reputation_set_point_thresholds() {
   // Fetch the badges
   $badges = commons_reputation_default_badges();
+  
+  // Insert SQL
+  $sql = "INSERT INTO {userpoints_badges} (bid, userpoints_goal) VALUES (%d, %d)";
   
   // Set the point values
   foreach ($badges as $key => $badge) {
@@ -138,10 +142,8 @@ function commons_reputation_set_point_thresholds() {
     }
     
     if ($bid && $points) {
-      $record = new stdClass;
-      $record->bid = $bid;
-      $record->userpoints_goal = $points;
-      drupal_write_record('userpoints_badges', $record);
+      // drupal_write_record() is not working here
+      db_query($sql, $bid, $points);
     }
   }
 }
