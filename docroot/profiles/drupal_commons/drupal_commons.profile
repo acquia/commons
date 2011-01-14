@@ -141,7 +141,7 @@ function drupal_commons_profile_tasks(&$task, $url) {
     $operations[] = array('drupal_commons_config_taxonomy', array());
     
     // Feature installation operations
-    $features = variable_get('commons_selected_featured', array());
+    $features = variable_get('commons_selected_features', array());
     foreach ($features as $feature) {
       $operations[] = array('features_install_modules', array(array($feature)));
     }
@@ -351,7 +351,7 @@ function drupal_commons_features_form_submit(&$form, &$form_state) {
   }
   
   // Store a temporary variable to access later
-  variable_set('commons_selected_featured', $features);
+  variable_set('commons_selected_features', $features);
   
   // Initiate the next installation step
   variable_set('install_task', 'install-commons');
@@ -943,7 +943,7 @@ function drupal_commons_create_group() {
   node_save($group);
   
   // Check if discussion nodes were enabled
-  if (in_array('commons_discussion', variable_get('commons_selected_featured', array()))) {
+  if (in_array('commons_discussion', variable_get('commons_selected_features', array()))) {
     // Create the discussion
     $node = new stdClass;
     $node->type = 'discussion';
