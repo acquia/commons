@@ -1,4 +1,4 @@
-; $Id$
+; $Id: README.txt,v 1.1 2011/01/14 16:39:15 mikestefff Exp $
 
 COMMONS RELEASE (1.3)
 ============================
