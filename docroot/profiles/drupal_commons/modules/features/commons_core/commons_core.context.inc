@@ -158,23 +158,17 @@ function commons_core_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'user_relationship_blocks-actions' => array(
-          'module' => 'user_relationship_blocks',
-          'delta' => 'actions',
-          'region' => 'sidebar_last',
-          'weight' => 0,
-        ),
         'views-og_profile_user_groups-block_1' => array(
           'module' => 'views',
           'delta' => 'og_profile_user_groups-block_1',
           'region' => 'sidebar_last',
-          'weight' => 1,
+          'weight' => 0,
         ),
         'user_relationship_blocks-user-1' => array(
           'module' => 'user_relationship_blocks',
           'delta' => 'user-1',
           'region' => 'sidebar_last',
-          'weight' => 2,
+          'weight' => 1,
         ),
       ),
     ),
