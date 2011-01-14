@@ -229,6 +229,10 @@ function commons_core_block($op = 'list', $delta = 0, $edit = array()) {
       'info' => t('Group actions'),
       'cache' => BLOCK_CACHE_GLOBAL,
     );
+    $blocks[6] = array(
+      'info' => t('Subscribe to user being viewed'),
+      'cache' => BLOCK_CACHE_GLOBAL,
+    );
 
     return $blocks;
   }
@@ -272,6 +276,12 @@ function commons_core_block($op = 'list', $delta = 0, $edit = array()) {
             'content' => $details['content']
           );
         }
+        break;
+      case 6:
+        $block = array(
+          'subject' => '',
+          'content' => _commons_core_subscribe_to_user_profile_block()
+        );
         break;
     }
     return $block;
@@ -395,6 +405,29 @@ function commons_core_join_form() {
   );
   
   return $form;
+}
+
+/**
+ * Provide a block that contains a link to subscribe to the
+ * user being viewed
+ */
+function _commons_core_subscribe_to_user_profile_block() {
+  global $user;
+  
+  // Current user must be logged in
+  if ($user->uid) {
+    // Must be viewing a user who is not the currnet user
+    if (arg(0) == 'user' && is_numeric(arg(1)) && $user->uid != arg(1) && $account = user_load(arg(1))) {
+      // Notifications UI must be enabled
+      if (module_exists('notifications_ui')) {
+        // Check notification settings
+        if (notifications_ui_account_options('links') && ($options = notifications_ui_subscribe_options($user, 'user', $account))) {
+          $links = notifications_ui_build_links($options);
+          return theme('links', $links, array('class' => 'item-list'));
+        }
+      }
+    }
+  }
 }
 
 /**
@@ -1298,6 +1331,17 @@ function commons_core_can_edit_comment($comment) {
   }
   
   return FALSE;
+}
+
+/**
+ * Implementation of hook_user()
+ */
+function commons_core_user($op, &$edit, &$account, $category = NULL) {
+  if ($op == 'view' ) {
+    // Remove the "subscribe to" link because we're providing
+    // a custom block for that to be placed elsewhere
+    unset($account->content['summary']['notifications']);
+  }
 }
 
 /**
