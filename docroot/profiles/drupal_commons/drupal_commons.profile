@@ -192,7 +192,7 @@ function drupal_commons_features_form($form_state, $url) {
   $form['required'] = array(
     '#type' => 'fieldset',
     '#title' => st('Required'),
-    '#description' => t('These features are required for Commons to operate.'),
+    '#description' => t('These features are required for Drupal Commons to operate.'),
   );
   $form['required']['feature-commons_core'] = array(
     '#type' => 'checkbox',
@@ -229,7 +229,7 @@ function drupal_commons_features_form($form_state, $url) {
     '#type' => 'checkbox',
     '#title' => st('Discussions'),
     '#default_value' => 1,
-    '#description' => st('Used to have threaded topical discussions within a group.'),
+    '#description' => st('Used to create threaded topical discussions within a group.'),
   );
   $form['content']['feature-commons_document'] = array(
     '#type' => 'checkbox',
