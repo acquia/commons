@@ -1,6 +1,14 @@
-=========================================================
+Drupal Commons 1.3, 2011-01-14
+------------------------------------
+NOTES:
+ - Excluded module updates:
+  * User terms
+    - Commons 1.0 contained a large patch which introduced free-tagging to
+      user terms. Until we re-evaluate exactly what functionality we want
+      for user tagging, we will continue to use the version that we started
+      with.
+------------------------------------
 UPGRADING TO 1.3:
-
 1. Backup your code and database
 2. Turn on maintenance mode (admin/settings/site-maintenance)
 3. Replace your codebase (excluding the sites directory) with the contents of this archive.
@@ -24,25 +32,12 @@ UPGRADING TO 1.3:
    it and make any changes you deem necessary
 10. Review your input format and filters. WYSIWYG Filter has been set to be used
   in place of HTML Filter (for the Filtered HTML format)
-11. Clear the cache (admin/settings/performance)
-12. Ensure the rest of your site is functioning as expected
-13. Check the status report for any errors. Address them, if needed. 
-
-=========================================================
-NOTES FOR 1.3:
-
-- Excluded module updates:
-  * User terms
-    - Commons 1.0 contained a large patch which introduced free-tagging to
-      user terms. Until we re-evaluate exactly what functionality we want
-      for user tagging, we will continue to use the version that we started
-      with.
-      
-=========================================================
-CHANGELOG: 
-
-Drupal Commons 1.3, 2011-01-13
---------------------------------
+11. Review the user permissions and roles
+12. Clear the cache (admin/settings/performance)
+13. Ensure the rest of your site is functioning as expected
+14. Check the status report for any errors. Address them, if needed. 
+------------------------------------
+CHANGELOG:
 - Fixed: Create content links in Views (Added access check) 
 - Redesigned: Home page panel
 - Updated: Context
@@ -119,10 +114,27 @@ Drupal Commons 1.3, 2011-01-13
 - Added: Manager tab on group members directory
 - Changed: Group details block to altered Group actions block
 - Removed: Group admins block from group sidebar
+- Added: Commons release (version controller and update checker for the distribution)
+- Fixed: Calendar off by one day bug
+- Added: 'Site admin' user role
+- Moved: All roles and permissions to features
 
 
 Drupal Commons 1.2, 2011-01-13 [Security release]
---------------------------------
+------------------------------------
+NOTES: This release was built for the sole purpose of providing fixes
+to all security issues that have arose from the modules included in this
+distribution. There are no functional changes introduced by this release.
+All other modules not listed below have not been updated and do not pose
+any security issues.
+------------------------------------
+UPGRADING TO 1.2:
+ - Follow standard procedures for updating a Drupal site
+   - Back up code and database
+   - Put site into maintainance mode
+   - Run update.php
+------------------------------------
+CHANGELOG:
 - Updated Drupal (Security update)
 - Updated Panels (Security update)
 - Updated Views (Security update)
@@ -135,7 +147,19 @@ Drupal Commons 1.2, 2011-01-13 [Security release]
 
 
 Drupal Commons 1.1, 2010-08-16 [Security release]
---------------------------------
+------------------------------------
+NOTES: This release was built for the sole purpose of providing fixes
+to all security issues that have arose from the modules included in this
+distribution. There are no functional changes introduced by this release.
+All other modules not listed below have not been updated and do not pose
+any security issues.
+------------------------------------
+UPGRADING TO 1.1:
+ - Follow standard procedures for updating a Drupal site
+   - Back up code and database
+   - Put site into maintainance mode
+   - Run update.php
+------------------------------------
 - Updated Drupal (Security update)
 - Updated CCK (Security update)
 - Updated Pathauto (Security update)

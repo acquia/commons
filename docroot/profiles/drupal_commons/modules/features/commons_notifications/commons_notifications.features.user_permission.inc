@@ -6,10 +6,20 @@
 function commons_notifications_user_default_permissions() {
   $permissions = array();
 
+  // Exported permission: administer messaging
+  $permissions['administer messaging'] = array(
+    'name' => 'administer messaging',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
   // Exported permission: administer notifications
   $permissions['administer notifications'] = array(
     'name' => 'administer notifications',
-    'roles' => array(),
+    'roles' => array(
+      '0' => 'site admin',
+    ),
   );
 
   // Exported permission: maintain own subscriptions
@@ -25,6 +35,7 @@ function commons_notifications_user_default_permissions() {
     'name' => 'manage all subscriptions',
     'roles' => array(
       '0' => 'community manager',
+      '1' => 'site admin',
     ),
   );
 

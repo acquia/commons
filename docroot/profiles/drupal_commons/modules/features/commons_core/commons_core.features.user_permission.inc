@@ -1,15 +1,26 @@
 <?php
-// $Id$
 
 /**
- * Map of permissions and associated roles
- * 
- * @return
- *   An associative array containing permissions and the roles
- *   to which the permission is granted to
+ * Implementation of hook_user_default_permissions().
  */
-function drupal_commons_user_permissions() {
+function commons_core_user_default_permissions() {
   $permissions = array();
+
+  // Exported permission: access administration pages
+  $permissions['access administration pages'] = array(
+    'name' => 'access administration pages',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: access all views
+  $permissions['access all views'] = array(
+    'name' => 'access all views',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
 
   // Exported permission: access comments
   $permissions['access comments'] = array(
@@ -28,19 +39,11 @@ function drupal_commons_user_permissions() {
     ),
   );
 
-  // Exported permission: access news feeds
-  $permissions['access news feeds'] = array(
-    'name' => 'access news feeds',
+  // Exported permission: access site reports
+  $permissions['access site reports'] = array(
+    'name' => 'access site reports',
     'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: access og_aggregator
-  $permissions['access og_aggregator'] = array(
-    'name' => 'access og_aggregator',
-    'roles' => array(
-      '0' => 'authenticated user',
+      '0' => 'site admin',
     ),
   );
 
@@ -52,18 +55,101 @@ function drupal_commons_user_permissions() {
     ),
   );
 
+  // Exported permission: administer actions
+  $permissions['administer actions'] = array(
+    'name' => 'administer actions',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: administer advanced pane settings
+  $permissions['administer advanced pane settings'] = array(
+    'name' => 'administer advanced pane settings',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: administer blocks
+  $permissions['administer blocks'] = array(
+    'name' => 'administer blocks',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
   // Exported permission: administer comments
   $permissions['administer comments'] = array(
     'name' => 'administer comments',
     'roles' => array(
       '0' => 'community manager',
+      '1' => 'site admin',
     ),
   );
 
   // Exported permission: administer content types
   $permissions['administer content types'] = array(
     'name' => 'administer content types',
-    'roles' => array(),
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: administer features
+  $permissions['administer features'] = array(
+    'name' => 'administer features',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: administer files
+  $permissions['administer files'] = array(
+    'name' => 'administer files',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: administer filters
+  $permissions['administer filters'] = array(
+    'name' => 'administer filters',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: administer flags
+  $permissions['administer flags'] = array(
+    'name' => 'administer flags',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: administer imageapi
+  $permissions['administer imageapi'] = array(
+    'name' => 'administer imageapi',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: administer imagecache
+  $permissions['administer imagecache'] = array(
+    'name' => 'administer imagecache',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: administer menu
+  $permissions['administer menu'] = array(
+    'name' => 'administer menu',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
   );
 
   // Exported permission: administer nodes
@@ -72,6 +158,151 @@ function drupal_commons_user_permissions() {
     'roles' => array(
       '0' => 'community manager',
       '1' => 'content manager',
+      '2' => 'site admin',
+    ),
+  );
+
+  // Exported permission: administer organic groups
+  $permissions['administer organic groups'] = array(
+    'name' => 'administer organic groups',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: administer page manager
+  $permissions['administer page manager'] = array(
+    'name' => 'administer page manager',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: administer pane access
+  $permissions['administer pane access'] = array(
+    'name' => 'administer pane access',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: administer pane visibility
+  $permissions['administer pane visibility'] = array(
+    'name' => 'administer pane visibility',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: administer panels layouts
+  $permissions['administer panels layouts'] = array(
+    'name' => 'administer panels layouts',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: administer permissions
+  $permissions['administer permissions'] = array(
+    'name' => 'administer permissions',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: administer quant
+  $permissions['administer quant'] = array(
+    'name' => 'administer quant',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: administer search
+  $permissions['administer search'] = array(
+    'name' => 'administer search',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: administer shoutbox
+  $permissions['administer shoutbox'] = array(
+    'name' => 'administer shoutbox',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: administer shoutbox_group
+  $permissions['administer shoutbox_group'] = array(
+    'name' => 'administer shoutbox_group',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: administer site configuration
+  $permissions['administer site configuration'] = array(
+    'name' => 'administer site configuration',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: administer site-wide contact form
+  $permissions['administer site-wide contact form'] = array(
+    'name' => 'administer site-wide contact form',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: administer skinr
+  $permissions['administer skinr'] = array(
+    'name' => 'administer skinr',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: administer taxonomy
+  $permissions['administer taxonomy'] = array(
+    'name' => 'administer taxonomy',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: administer url aliases
+  $permissions['administer url aliases'] = array(
+    'name' => 'administer url aliases',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: administer user relationships
+  $permissions['administer user relationships'] = array(
+    'name' => 'administer user relationships',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: administer users
+  $permissions['administer users'] = array(
+    'name' => 'administer users',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: administer views
+  $permissions['administer views'] = array(
+    'name' => 'administer views',
+    'roles' => array(
+      '0' => 'site admin',
     ),
   );
 
@@ -83,11 +314,27 @@ function drupal_commons_user_permissions() {
     ),
   );
 
-  // Exported permission: cancel own vote
-  $permissions['cancel own vote'] = array(
-    'name' => 'cancel own vote',
+  // Exported permission: change own username
+  $permissions['change own username'] = array(
+    'name' => 'change own username',
     'roles' => array(
-      '0' => 'authenticated user',
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: configure heartbeat
+  $permissions['configure heartbeat'] = array(
+    'name' => 'configure heartbeat',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: configure heartbeat messages
+  $permissions['configure heartbeat messages'] = array(
+    'name' => 'configure heartbeat messages',
+    'roles' => array(
+      '0' => 'site admin',
     ),
   );
 
@@ -144,6 +391,7 @@ function drupal_commons_user_permissions() {
     'name' => 'delete heartbeat activity logs',
     'roles' => array(
       '0' => 'community manager',
+      '1' => 'site admin',
     ),
   );
 
@@ -160,6 +408,7 @@ function drupal_commons_user_permissions() {
     'name' => 'delete own heartbeat activity logs',
     'roles' => array(
       '0' => 'community manager',
+      '1' => 'site admin',
     ),
   );
 
@@ -219,19 +468,12 @@ function drupal_commons_user_permissions() {
     ),
   );
 
-  // Exported permission: edit any wiki content
-  $permissions['edit any wiki content'] = array(
-    'name' => 'edit any wiki content',
-    'roles' => array(
-      '0' => 'community manager',
-    ),
-  );
-
   // Exported permission: edit field_content_images
   $permissions['edit field_content_images'] = array(
     'name' => 'edit field_content_images',
     'roles' => array(
       '0' => 'authenticated user',
+      '1' => 'site admin',
     ),
   );
 
@@ -240,6 +482,7 @@ function drupal_commons_user_permissions() {
     'name' => 'edit field_featured_content',
     'roles' => array(
       '0' => 'community manager',
+      '1' => 'site admin',
     ),
   );
 
@@ -248,6 +491,7 @@ function drupal_commons_user_permissions() {
     'name' => 'edit field_featured_group',
     'roles' => array(
       '0' => 'community manager',
+      '1' => 'site admin',
     ),
   );
 
@@ -256,6 +500,7 @@ function drupal_commons_user_permissions() {
     'name' => 'edit field_group_image',
     'roles' => array(
       '0' => 'authenticated user',
+      '1' => 'site admin',
     ),
   );
 
@@ -263,7 +508,8 @@ function drupal_commons_user_permissions() {
   $permissions['edit field_group_sticky'] = array(
     'name' => 'edit field_group_sticky',
     'roles' => array(
-      '0' => 'authenticated user',
+      '0' => 'community manager',
+      '1' => 'site admin',
     ),
   );
 
@@ -272,6 +518,7 @@ function drupal_commons_user_permissions() {
     'name' => 'edit field_grouplink',
     'roles' => array(
       '0' => 'authenticated user',
+      '1' => 'site admin',
     ),
   );
 
@@ -307,11 +554,11 @@ function drupal_commons_user_permissions() {
     ),
   );
 
-  // Exported permission: inspect all votes
-  $permissions['inspect all votes'] = array(
-    'name' => 'inspect all votes',
+  // Exported permission: flush imagecache
+  $permissions['flush imagecache'] = array(
+    'name' => 'flush imagecache',
     'roles' => array(
-      '0' => 'authenticated user',
+      '0' => 'site admin',
     ),
   );
 
@@ -320,6 +567,7 @@ function drupal_commons_user_permissions() {
     'name' => 'maintain own activity',
     'roles' => array(
       '0' => 'community manager',
+      '1' => 'site admin',
     ),
   );
 
@@ -328,6 +576,14 @@ function drupal_commons_user_permissions() {
     'name' => 'maintain own relationships',
     'roles' => array(
       '0' => 'authenticated user',
+    ),
+  );
+
+  // Exported permission: manage features
+  $permissions['manage features'] = array(
+    'name' => 'manage features',
+    'roles' => array(
+      '0' => 'site admin',
     ),
   );
 
@@ -396,20 +652,28 @@ function drupal_commons_user_permissions() {
     ),
   );
 
+  // Exported permission: select different theme
+  $permissions['select different theme'] = array(
+    'name' => 'select different theme',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
+  // Exported permission: use PHP for block visibility
+  $permissions['use PHP for block visibility'] = array(
+    'name' => 'use PHP for block visibility',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
   // Exported permission: use advanced search
   $permissions['use advanced search'] = array(
     'name' => 'use advanced search',
     'roles' => array(
       '0' => 'anonymous user',
       '1' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: view all og_aggregator sources
-  $permissions['view all og_aggregator sources'] = array(
-    'name' => 'view all og_aggregator sources',
-    'roles' => array(
-      '0' => 'community manager',
     ),
   );
 
@@ -420,7 +684,7 @@ function drupal_commons_user_permissions() {
       '0' => 'community manager',
     ),
   );
-  
+
   // Exported permission: view content rss feeds
   $permissions['view content rss feeds'] = array(
     'name' => 'view content rss feeds',
@@ -436,6 +700,7 @@ function drupal_commons_user_permissions() {
     'roles' => array(
       '0' => 'anonymous user',
       '1' => 'authenticated user',
+      '2' => 'site admin',
     ),
   );
 
@@ -444,6 +709,7 @@ function drupal_commons_user_permissions() {
     'name' => 'view field_featured_content',
     'roles' => array(
       '0' => 'community manager',
+      '1' => 'site admin',
     ),
   );
 
@@ -452,6 +718,7 @@ function drupal_commons_user_permissions() {
     'name' => 'view field_featured_group',
     'roles' => array(
       '0' => 'community manager',
+      '1' => 'site admin',
     ),
   );
 
@@ -461,6 +728,7 @@ function drupal_commons_user_permissions() {
     'roles' => array(
       '0' => 'anonymous user',
       '1' => 'authenticated user',
+      '2' => 'site admin',
     ),
   );
 
@@ -468,7 +736,8 @@ function drupal_commons_user_permissions() {
   $permissions['view field_group_sticky'] = array(
     'name' => 'view field_group_sticky',
     'roles' => array(
-      '0' => 'authenticated user',
+      '0' => 'community manager',
+      '1' => 'site admin',
     ),
   );
 
@@ -478,9 +747,10 @@ function drupal_commons_user_permissions() {
     'roles' => array(
       '0' => 'anonymous user',
       '1' => 'authenticated user',
+      '2' => 'site admin',
     ),
   );
-  
+
   // Exported permission: view group content rss feeds
   $permissions['view group content rss feeds'] = array(
     'name' => 'view group content rss feeds',
@@ -497,7 +767,7 @@ function drupal_commons_user_permissions() {
       '0' => 'authenticated user',
     ),
   );
-  
+
   // Exported permission: view imagecache Featured
   $permissions['view imagecache Featured'] = array(
     'name' => 'view imagecache Featured',
@@ -569,7 +839,7 @@ function drupal_commons_user_permissions() {
       '1' => 'authenticated user',
     ),
   );
-  
+
   // Exported permission: view personal heartbeat activity
   $permissions['view personal heartbeat activity'] = array(
     'name' => 'view personal heartbeat activity',

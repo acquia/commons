@@ -6,6 +6,14 @@
 function commons_event_user_default_permissions() {
   $permissions = array();
 
+  // Exported permission: administer date tools
+  $permissions['administer date tools'] = array(
+    'name' => 'administer date tools',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
   // Exported permission: create event content
   $permissions['create event content'] = array(
     'name' => 'create event content',
@@ -43,6 +51,7 @@ function commons_event_user_default_permissions() {
     'name' => 'edit field_date',
     'roles' => array(
       '0' => 'authenticated user',
+      '1' => 'site admin',
     ),
   );
 
@@ -51,6 +60,7 @@ function commons_event_user_default_permissions() {
     'name' => 'edit field_location',
     'roles' => array(
       '0' => 'authenticated user',
+      '1' => 'site admin',
     ),
   );
 
@@ -68,6 +78,7 @@ function commons_event_user_default_permissions() {
     'roles' => array(
       '0' => 'anonymous user',
       '1' => 'authenticated user',
+      '2' => 'site admin',
     ),
   );
 
@@ -77,6 +88,7 @@ function commons_event_user_default_permissions() {
     'roles' => array(
       '0' => 'anonymous user',
       '1' => 'authenticated user',
+      '2' => 'site admin',
     ),
   );
 

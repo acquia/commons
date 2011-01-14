@@ -7,12 +7,6 @@ define('DRUPAL_COMMONS_TAG_ID', 2);
 // Define the default WYSIWYG editor
 define('DRUPAL_COMMONS_EDITOR', 'ckeditor');
 
-// Define the "community manager" role name
-define('DRUPAL_COMMONS_MANAGER_ROLE', 'community manager');
-
-// Define the "content manager" role name
-define('DRUPAL_COMMONS_CONTENT_ROLE', 'content manager');
-
 // Define the default theme
 define('DRUPAL_COMMONS_THEME', 'acquia_commons');
 
@@ -32,8 +26,7 @@ function drupal_commons_profile_modules() {
   $modules = array(
     // Default Drupal modules.
     'color', 'comment', 'help', 'menu', 'taxonomy', 'dblog', 'profile',
-    'blog', 'aggregator', 'poll',  'search', 'tracker', 'php', 'path',
-    'contact',
+    'search', 'tracker', 'php', 'path', 'contact',
     
     // CTools
     'ctools', 
@@ -52,9 +45,6 @@ function drupal_commons_profile_modules() {
     
     // Misc
     'vertical_tabs', 'transliteration', 'password_policy',
-    
-    // Analytics
-    'chart', 'quant',
     
     // Theme
     'skinr',
@@ -139,8 +129,6 @@ function drupal_commons_profile_tasks(&$task, $url) {
     
     // Pre-installation operations
     $operations[] = array('drupal_commons_build_directories', array());
-    $operations[] = array('drupal_commons_config_roles', array());
-    $operations[] = array('drupal_commons_config_perms', array());
     $operations[] = array('drupal_commons_config_taxonomy', array());
     
     // Feature installation operations
@@ -150,6 +138,7 @@ function drupal_commons_profile_tasks(&$task, $url) {
     }
 
     // Post-installation operations
+    $operations[] = array('drupal_commons_config_roles', array());
     $operations[] = array('drupal_commons_config_profile', array());
     $operations[] = array('drupal_commons_config_filter', array());
     $operations[] = array('drupal_commons_config_password', array());
@@ -721,68 +710,11 @@ function drupal_commons_config_ctools() {
  * Configure roles
  */
 function drupal_commons_config_roles() {
-  // Add the "Community Manager" role
-  $record = new stdClass;
-  $record->rid = 3;
-  $record->name = DRUPAL_COMMONS_MANAGER_ROLE;
-  drupal_write_record('role', $record);
-  
-  // Add the "Content Manager" role
-  $record = new stdClass;
-  $record->rid = 4;
-  $record->name = DRUPAL_COMMONS_CONTENT_ROLE;
-  drupal_write_record('role', $record);
-  
   // Make sure first user is a "Community Manager"
   $record = new stdClass;
   $record->uid = 1;
   $record->rid = 3;
   drupal_write_record('user_roles', $record);
-}
-
-/**
- * Configure permissions
- * 
- * Avoid using Features because we expect these to be changed
- */
-function drupal_commons_config_perms() {
-  // Load external permissions file
-  require_once('drupal_commons.permissions.inc');
-  
-  $roles_data = array();
-  
-  // Fetch available roles
-  $roles = db_query("SELECT * FROM {role}");
-  
-  // Set up roles data
-  while ($role = db_fetch_object($roles)) {
-    $roles_data[$role->name] = array(
-      'rid' => $role->rid,
-      'permissions' => array(),
-    );  
-  }
-  
-  // Fetch set permissions
-  $permissions = drupal_commons_user_permissions();
-  
-  // Add permissions to roles
-  foreach ($permissions as $permission) {
-    // Find which roles have the given permission
-    foreach ($permission['roles'] as $role) {
-      $roles_data[$role]['permissions'][] = $permission['name'];
-    }
-  }
-  
-  // Purge permissions, just in case there are any stored
-  db_query("DELETE FROM {permission}");
-  
-  // Store all of the permissions
-  foreach ($roles_data as $role_data) {
-    $perm = new stdClass;
-    $perm->rid = $role_data['rid'];
-    $perm->perm = implode($role_data['permissions'], ', ');
-    drupal_write_record('permission', $perm);
-  }
 }
 
 /**
@@ -996,7 +928,7 @@ function drupal_commons_cleanup() {
     'commons_core' => array('menu_links'),
     'commons_notifications' => array('variable'),
     'commons_seo' => array('variable'),
-    'commons_blog' => array('menu_links'),
+    'commons_blog' => array('menu_links', 'user_permission'),
     'commons_event' => array('menu_links'),
     'commons_poll' => array('menu_links'),
     'commons_document' => array('menu_links'),
@@ -1004,6 +936,8 @@ function drupal_commons_cleanup() {
     'commons_wiki' => array('menu_links', 'variable'),
     'commons_home' => array('page_manager_pages'),
     'commons_reputation' => array('menu_links'),
+    'commons_admin' => array('user_permission'),
+    'acquia_network_subscription' => array('user_permission')
   );
   
   // Make sure we only try to revert features we've enabled

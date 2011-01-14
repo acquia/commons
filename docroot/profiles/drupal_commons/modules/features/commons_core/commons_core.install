@@ -95,6 +95,11 @@ function commons_core_update_6000() {
     context_delete($context);
   }
   
+  // Add a 'site admin' role
+  if (!db_result(db_query("SELECT bid FROM {role} WHERE name = '%s'", t('site admin')))) {
+    db_query("INSERT INTO {role} (name) VALUES ('%s')", t('site admin'));
+  }
+  
   // Enable new features
   $features = array(
     'commons_admin',
