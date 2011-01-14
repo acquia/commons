@@ -57,8 +57,8 @@ function commons_core_update_6000() {
   module_disable(array('better_formats'));
   drupal_uninstall_module('better_formats');
   
-  // Enable wysiwyg filter, views_bulk_operations, and commons_version
-  drupal_install_modules(array('wysiwyg_filter', 'views_bulk_operations', 'commons_version'));
+  // Enable wysiwyg filter, views_bulk_operations, and commons_release
+  drupal_install_modules(array('wysiwyg_filter', 'views_bulk_operations', 'commons_release'));
   
   // Replace HTML filter with WYSIWYG filter for the Filtered HTML format
   db_query("DELETE FROM {filters} WHERE format = 1 AND module = 'filter' AND delta = 0");
