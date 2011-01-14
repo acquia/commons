@@ -497,6 +497,15 @@ function drupal_commons_user_permissions() {
       '0' => 'authenticated user',
     ),
   );
+  
+  // Exported permission: view imagecache Featured
+  $permissions['view imagecache Featured'] = array(
+    'name' => 'view imagecache Featured',
+    'roles' => array(
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
+    ),
+  );
 
   // Exported permission: view imagecache Small
   $permissions['view imagecache Small'] = array(
@@ -558,6 +567,14 @@ function drupal_commons_user_permissions() {
     'roles' => array(
       '0' => 'anonymous user',
       '1' => 'authenticated user',
+    ),
+  );
+  
+  // Exported permission: view personal heartbeat activity
+  $permissions['view personal heartbeat activity'] = array(
+    'name' => 'view personal heartbeat activity',
+    'roles' => array(
+      '0' => 'authenticated user',
     ),
   );
 
