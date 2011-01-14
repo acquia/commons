@@ -1,3 +1,28 @@
 <?php
 
 include_once('commons_dashboard.features.inc');
+
+/**
+ * Implementation of hook_views_pre_view()
+ */
+function commons_dashboard_views_pre_view(&$view, &$display_id, &$args) {
+  if ($view->name == 'og_dashboard_groups') {
+    switch ($display_id) {
+      // My groups
+      case 'block_1':
+        $view->display_handler->override_option('empty', t('You haven\'t joined any groups yet. !link to browse all of the available groups.', array('!link' => l(t('Click here'), 'groups'))));
+        break;
+      
+      // New groups
+      case 'block_2':
+        $empty = t('No groups have been created yet.');
+        
+        if (user_access('create group content')) {
+          $empty .= '&nbsp' . t('!link to create a new group.', array('!link' => l(t('Click here'), 'node/add/group')));
+        }
+        
+        $view->display_handler->override_option('empty', $empty);
+        break;
+    }
+  }
+}

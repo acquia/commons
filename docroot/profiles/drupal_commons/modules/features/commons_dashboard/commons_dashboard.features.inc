@@ -175,3 +175,12 @@ function commons_dashboard_homebox() {
 
   return $homeboxes;
 }
+
+/**
+ * Implementation of hook_views_api().
+ */
+function commons_dashboard_views_api() {
+  return array(
+    'api' => '2',
+  );
+}
