@@ -24,53 +24,53 @@ function commons_reputation_default_badges() {
   $path = drupal_get_path('module', 'commons_reputation');
   $badges = array();
   
-  // Badge: Community Master
+  // Badge: super_contributor
   $badge = new stdClass;
-  $badge->name = t('Community Master');
+  $badge->name = t('Super contributor');
   $badge->image = $path . '/images/bars-5.png';
   $badge->weight = -5;
   $badge->fixedweight = 1;
-  $badges['community_master'] = $badge;
+  $badges['super_contributor'] = $badge;
   
-  // Badge: Community Guru
+  // Badge: frequent_contributor
   $badge = new stdClass;
-  $badge->name = t('Community Guru');
+  $badge->name = t('Frequent contributor');
   $badge->image = $path . '/images/bars-4.png';
   $badge->weight = -4;
   $badge->fixedweight = 1;
-  $badges['community_guru'] = $badge;
+  $badges['frequent_contributor'] = $badge;
   
-  // Badge: Community Extraordinaire
+  // Badge: regular_contributor
   $badge = new stdClass;
-  $badge->name = t('Community Extraordinaire');
+  $badge->name = t('Regular contributor');
   $badge->image = $path . '/images/bars-3.png';
   $badge->weight = -3;
   $badge->fixedweight = 1;
-  $badges['community_extraordinaire'] = $badge;
+  $badges['regular_contributor'] = $badge;
   
-  // Badge: Community Contributor
+  // Badge: contributor
   $badge = new stdClass;
-  $badge->name = t('Community Contributor');
+  $badge->name = t('contributor');
   $badge->image = $path . '/images/bars-2.png';
   $badge->weight = -2;
   $badge->fixedweight = 1;
-  $badges['community_contributor'] = $badge;
+  $badges['contributor'] = $badge;
   
-  // Badge: Community Member
+  // Badge: member
   $badge = new stdClass;
-  $badge->name = t('Community Member');
+  $badge->name = t('Member');
   $badge->image = $path . '/images/bars-1.png';
   $badge->weight = -1;
   $badge->fixedweight = 1;
-  $badges['community_member'] = $badge;
+  $badges['member'] = $badge;
   
-  // Badge: Community Newbie
+  // Badge: user
   $badge = new stdClass;
-  $badge->name = t('Community Newbie');
+  $badge->name = t('User');
   $badge->image = $path . '/images/bars-0.png';
   $badge->weight = 0;
   $badge->fixedweight = 1;
-  $badges['community_newbie'] = $badge;
+  $badges['user'] = $badge;
   
   return $badges;
 }
@@ -94,7 +94,7 @@ function commons_reputation_set_auth_badge() {
   $badges = commons_reputation_default_badges();
   
   // Fetch the badge
-  $badge = db_fetch_object(db_query("SELECT * FROM {user_badges_badges} WHERE name = '%s' AND image = '%s'", $badges['community_newbie']->name, $badges['community_newbie']->image));
+  $badge = db_fetch_object(db_query("SELECT * FROM {user_badges_badges} WHERE name = '%s' AND image = '%s'", $badges['user']->name, $badges['user']->image));
 
   // Set badge for authenticated role
   if ($badge->bid) {
@@ -121,20 +121,20 @@ function commons_reputation_set_point_thresholds() {
     
     // Determine the point value
     switch ($key) {
-      case 'community_master':
-        $points = 5000;
+      case 'super_contributor':
+        $points = 1500;
         break;
-      case 'community_guru':
-        $points = 2000;
-        break;
-      case 'community_extraordinaire':
+      case 'frequent_contributor':
         $points = 1000;
         break;
-      case 'community_contributor':
-        $points = 250;
+      case 'regular_contributor':
+        $points = 1000;
         break;
-      case 'community_member':
+      case 'contributor':
         $points = 50;
+        break;
+      case 'member':
+        $points = 2;
         break;
       default:
         $points = 0;
