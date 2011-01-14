@@ -4032,10 +4032,8 @@ function commons_core_views_default_views() {
       'relationship' => 'none',
     ),
     'type' => array(
-      'operator' => 'not in',
-      'value' => array(
-        'group' => 'group',
-      ),
+      'operator' => 'in',
+      'value' => array(),
       'group' => '0',
       'exposed' => TRUE,
       'expose' => array(
@@ -4210,10 +4208,8 @@ function commons_core_views_default_views() {
       'relationship' => 'none',
     ),
     'type' => array(
-      'operator' => 'not in',
-      'value' => array(
-        'group' => 'group',
-      ),
+      'operator' => 'in',
+      'value' => array(),
       'group' => '0',
       'exposed' => TRUE,
       'expose' => array(
@@ -4230,7 +4226,7 @@ function commons_core_views_default_views() {
       'table' => 'node',
       'field' => 'type',
       'override' => array(
-        'button' => 'Override',
+        'button' => 'Use default',
       ),
       'relationship' => 'none',
     ),
@@ -4524,10 +4520,8 @@ function commons_core_views_default_views() {
       'relationship' => 'none',
     ),
     'type' => array(
-      'operator' => 'not in',
-      'value' => array(
-        'group' => 'group',
-      ),
+      'operator' => 'in',
+      'value' => array(),
       'group' => '0',
       'exposed' => TRUE,
       'expose' => array(
