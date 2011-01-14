@@ -2,7 +2,7 @@
 // $Id: commons_release.module,v 1.1 2011/01/14 16:39:15 mikestefff Exp $
 
 // The version of Drupal Commons
-define('DRUPAL_commons_release', 1.3);
+define('DRUPAL_COMMONS_VERSION', 1.3);
 
 /**
  * Implementation of hook_requirements()
@@ -12,7 +12,7 @@ function commons_release_requirements($phase) {
     return array(
       array(
         'title' => t('Drupal Commons'),
-        'value' => DRUPAL_commons_release,
+        'value' => DRUPAL_COMMONS_VERSION,
         'severity' => REQUIREMENT_INFO,
       )
     );
@@ -63,7 +63,6 @@ function commons_release_included_modules() {
     'acquia_connector',
     'acquia_search',
     'admin_menu',
-    'drupal',
     'ajax_load',
     'apachesolr',
     'calendar',
