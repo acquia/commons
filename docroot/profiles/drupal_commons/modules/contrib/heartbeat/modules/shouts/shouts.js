@@ -41,11 +41,14 @@ Drupal.heartbeat.Shouts.shout = function(element, callback_url) {
   Drupal.heartbeat.Shouts.button.attr("disabled", "disabled");
   
   var field = $(element).parents('form').find('.shout-message:first');
-  var shout = field.val();
-  field.val('');
+  var fields = $(element).parents('form').serialize();
   
-  $.post(Drupal.settings.basePath + callback_url, {shout: shout}, Drupal.heartbeat.Shouts.afterShout);
+  $.post(Drupal.settings.basePath + callback_url, fields, Drupal.heartbeat.Shouts.afterShout);
+  //var shout = field.val();
+  //$.post(Drupal.settings.basePath + callback_url, {shout: shout}, Drupal.heartbeat.Shouts.afterShout);
   
+  // Clear the textarea again.
+  field.val('');  
 }
 
 /**

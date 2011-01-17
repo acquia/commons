@@ -1,5 +1,5 @@
 <?php
-// $Id: connectedheartbeat.inc,v 1.1.2.1 2010/04/14 20:09:10 stalski Exp $
+// $Id: connectedheartbeat.inc,v 1.1.2.4 2010/12/13 18:38:09 stalski Exp $
 
 /**
  * @file
@@ -16,11 +16,25 @@ heartbeat_include('HeartbeatAccess');
  */
 class ConnectedHeartbeat extends HeartbeatAccess {
 
+  /**
+   * proctected fuinction whoIsActor
+   *   Add the heartbeat relations for the stream's active user.
+   */
+  protected function whoIsActor($account = NULL) {
+    parent::whoIsActor($account);
+    $this->stream->heartbeat_relations = heartbeat_get_related_uids($this->stream->uid);
+  }
+
+  /**
+   * Override dressupMessages to change the query.
+   * @see HeartbeatAccess::dressUpMessages().
+   */
   public function dressUpMessages(HeartbeatParser $heartbeat) {
 
-    if (!empty($this->stream->user_relations)) {
+    if (!empty($this->stream->heartbeat_relations)) {
+      // filter activity for related users and activity that was addressed to the current user.
       $sql = " AND ((ua.uid in( %s ) AND ua.access >= 0) OR (ua.uid_target = %d AND ua.nid <> 0))";
-      $heartbeat->raw_messages = $this->resultSql($sql, array(implode(',', $this->stream->user_relations), $this->stream->uid));
+      $heartbeat->raw_messages = $this->resultSql($sql, array(implode(',', $this->stream->heartbeat_relations), $this->stream->uid));
     }
     else {
       $heartbeat->raw_messages = array();
@@ -38,12 +52,18 @@ class ConnectedHeartbeat extends HeartbeatAccess {
 
     // Make the sql limited to the access
     $field = "$view->table_alias.$view->real_field";
+    if (!empty($this->stream->heartbeat_relations)) {
 
-    $view->query->set_where_group('OR', 'orgroup');
-    $sql = "$field in( ". implode(',', $GLOBALS['user']->heartbeat_relations) ." ) AND $view->table_alias.access >= 0 ";
-    $view->query->add_where('orgroup', $sql);
+      $view->query->set_where_group('OR', 'orgroup');
+      $sql = "$field in( ". implode(',', $this->stream->heartbeat_relations) ." ) AND $view->table_alias.access >= 0 ";
+      $view->query->add_where('orgroup', $sql);
 
-    $sql = "$view->table_alias.uid_target = %d AND $view->table_alias.nid <> 0";
-    $view->query->add_where('orgroup', $sql, $this->_uid);
+      $sql = "$view->table_alias.uid_target = %d AND $view->table_alias.nid <> 0";
+      $view->query->add_where('orgroup', $sql, $this->_uid);
+
+    }
+    else {
+      $view->query->add_where('deny', "$view->table_alias.access < 0");
+    }
   }
 }

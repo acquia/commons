@@ -1,5 +1,5 @@
 <?php
-// $Id: hrules.module,v 1.1.2.11 2010/10/16 09:25:53 stalski Exp $
+// $Id: hrules.module,v 1.1.2.14 2011/01/05 12:49:46 stalski Exp $
 //
 
 /**
@@ -67,11 +67,21 @@ function hrules_token_list($type = 'all') {
     $tokens['heartbeat_message']['message-access'] =  t("The message access chosen by user");
   }
   if ($type == 'heartbeat_message') {
+
+    $tokens['heartbeat_message']['heartbeat-message-uaid'] = t("Activity message ID");
+    $tokens['heartbeat_message']['heartbeat-message-type'] = t("Machine name of the activity message template");
+    $tokens['heartbeat_message']['heartbeat-message-uid'] = t("Message owner's user id");
+    $tokens['heartbeat_message']['heartbeat-message-nid'] = t("Attached node's ID");
+    $tokens['heartbeat_message']['heartbeat-message-language'] = t("Activity message language");
+    $tokens['heartbeat_message']['heartbeat-message-nid-target'] = t("Target node ID");
+    $tokens['heartbeat_message']['heartbeat-message-uid-target'] = t("Target user ID");
+
     $tokens['heartbeat_message']['heartbeat-message'] = t("The logged heartbeat message");
     $tokens['heartbeat_message']['heartbeat-message-raw'] = t("The logged heartbeat message in raw format");
     $tokens['heartbeat_message']['heartbeat-message-url'] = t("Absolute url to the parent activity message");
     $tokens['heartbeat_message']['heartbeat-message-link'] = t("Link to the parent activity message, the title is the moment it occurred");
     $tokens['heartbeat_message']['heartbeat-actor-picture'] = t("Avatar of the actor with a link to it leading to the user account page.");
+
   }
 
   if ($type == 'node') {
@@ -108,11 +118,21 @@ function hrules_token_values($type, $object = NULL, $options = array()) {
       $values['message-access'] = (int)$object;
       break;
     case 'heartbeat_message':
+
+      $values['heartbeat-message-uaid'] = $object->uaid;
+      $values['heartbeat-message-type'] = $object->message_id;
+      $values['heartbeat-message-uid'] = $object->uid;
+      $values['heartbeat-message-nid'] = $object->nid;
+      $values['heartbeat-message-language'] = $object->language;
+      $values['heartbeat-message-nid-target'] = $object->nid_target;
+      $values['heartbeat-message-uid-target'] = $object->uid_target;
+
       $values['heartbeat-message'] = $object->message;
       $values['heartbeat-message-raw'] = check_plain($object->message);
       $values['heartbeat-message-url'] = url('heartbeat/message/'. $object->uaid, array('absolute' => TRUE));
-      $values['heartbeat-message-link'] = l(_theme_time_ago($object->timestamp), 'heartbeat/message/'. $object->uaid);
+      $values['heartbeat-message-link'] = l(_theme_time_ago($object->timestamp), 'heartbeat/message/'. $object->uaid, array('html' => TRUE));
       $values['heartbeat-actor-picture'] = l(theme('user_picture', $object->actor), 'user/' . $object->actor->uid, array('html' => TRUE));
+
       break;
     case 'node':
       $values['title-link'] = l($object->title, 'node/'. $object->nid);
@@ -151,19 +171,18 @@ function hrules_token_values($type, $object = NULL, $options = array()) {
  *  user activity actions forms
  */
 function heartbeat_activity_rules_action_message_id_js() {
-
-  $message_id = $_GET['message_id'];
-  //$default_values = heartbeat_rule_action_get_variables($message_id);
-  $message = heartbeat_message_load($message_id, 'message_id');
-  $default_values = heartbeat_rule_action_get_variables($message_id, heartbeat_encode_message_variables($message->variables));
+  $message = heartbeat_message_load($_GET['message_id'], 'message_id');
+  if (isset($message)) {
+    $default_values = heartbeat_rule_action_get_variables($message, heartbeat_encode_message_variables($message->variables));
+  }
 
   // Updating the drupal settings to be able to do one ahah request after another
   $javascript = drupal_add_js(NULL, NULL, 'header');
   // Final rendering callback.
   return drupal_json(array(
     'status' => TRUE,
-    'data' => $default_values,
-    'message' => $message->message,
+    'data' => isset($default_values) ? $default_values : '',
+    'message' => isset($message->message) ? $message->message : '',
     'settings' => call_user_func_array('array_merge_recursive', $javascript['setting'])
   ));
 }
@@ -171,22 +190,14 @@ function heartbeat_activity_rules_action_message_id_js() {
 /**
  * Helper function to fetch the defined variables for this message
  */
-function heartbeat_rule_action_get_variables($message_id, $values = array()) {
-
-  if ($message_id) {
-    // With the message id, we fetch the whole message
-    $message = heartbeat_message_load($message_id, 'message_id');
-    $defined_variables = heartbeat_match_variables($message->message, $message->message_concat);
-
-    // If words are found as match to a heartbeat message variable,
-    // variables are needed in the message
-    if (count($defined_variables['words']) > 0) {
-
-      // Add the textarea where all the magic variables go into
-      return heartbeat_variables_compare($defined_variables['words'], $values);
-    }
+function heartbeat_rule_action_get_variables($message, $values = array()) {
+  $defined_variables = heartbeat_match_variables($message->message, $message->message_concat);
+  // If words are found as match to a heartbeat message variable,
+  // variables are needed in the message
+  if (count($defined_variables['words']) > 0) {
+    // Add the textarea where all the magic variables go into
+    return heartbeat_variables_compare($defined_variables['words'], $values);
   }
-
   return '';
 }
 

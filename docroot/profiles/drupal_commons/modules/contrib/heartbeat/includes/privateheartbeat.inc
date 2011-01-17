@@ -1,5 +1,5 @@
 <?php
-// $Id: privateheartbeat.inc,v 1.1.2.2.2.12 2010/08/31 20:49:55 stalski Exp $
+// $Id: privateheartbeat.inc,v 1.1.2.2.2.13 2010/11/20 22:19:07 stalski Exp $
 
 /**
  * @file
@@ -15,6 +15,17 @@ heartbeat_include('HeartbeatAccess');
  * current user only
  */
 class PrivateHeartbeat extends HeartbeatAccess {
+
+  /**
+   * Skip active user.
+   * We never want to skip the active user. not for
+   * logged-in user and not for displayed user (profile).
+   * This is ofcourse because private stream is intended to
+   * show own activity.
+   */
+  public function skipActiveUser() {
+    return FALSE;
+  }
 
   public function dressUpMessages(HeartbeatParser $heartbeat) {
 

@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeat_comments.install,v 1.1.2.5 2010/10/16 09:16:36 stalski Exp $
+// $Id: heartbeat_comments.install,v 1.1.2.7 2010/12/27 16:38:28 stalski Exp $
 
 /**
  * @file
@@ -76,6 +76,14 @@ function heartbeat_comments_schema() {
  */
 function heartbeat_comments_update_410() {
 
+  // Due to racing conditions it's possible the update hook in heartbeat.install
+  // has not ran yet. Check for the 'uaid_comments' field and in case it doesn't
+  // exists, run heartbeat_update_410 first.
+  if (!db_column_exists('heartbeat_activity', 'uaid_comments')) {
+    module_load_include('install', 'heartbeat');
+    heartbeat_update_410();
+  }
+
   // Crazy, but hey, who cares :)
   $result = db_query("SELECT uaid FROM {heartbeat_activity}");
   while ($row = db_fetch_object($result)) {
@@ -83,5 +91,7 @@ function heartbeat_comments_update_410() {
     $update_q = "UPDATE {heartbeat_activity} set uaid_comments = %d WHERE uaid = %d";
     db_query($update_q, $count, $row->uaid);
   }
+
+  return array();
 
 }

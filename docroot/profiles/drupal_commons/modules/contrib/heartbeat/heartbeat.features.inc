@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeat.features.inc,v 1.1.2.2 2010/08/16 20:39:52 stalski Exp $
+// $Id: heartbeat.features.inc,v 1.1.2.5 2011/01/15 20:49:55 stalski Exp $
 
 /**
  * @file
@@ -68,7 +68,9 @@ function heartbeat_features_export_render($module = 'foo', $data) {
 
   foreach ($messages as $message) {
     $message = (object) $message;
-    if (!array_search($message->message_id, $data)) {
+    // Skip the message if it's not within the templates
+    // registered by features.
+    if (!in_array($message->message_id, $data)) {
       continue; // Leave if not selected
     }
 
@@ -106,10 +108,10 @@ function heartbeat_features_export_render($module = 'foo', $data) {
  * Implementation of hook_features_revert().
  */
 function heartbeat_features_revert($module = NULL) {
-  
+
   // Load heartbeat.admin.inc
   require_once(drupal_get_path('module', 'heartbeat') . '/heartbeat.admin.inc');
-  
+
   // Get default heartbeats from feature
   if (module_hook($module, 'heartbeat_message_info')) {
     $heartbeats = module_invoke($module, 'heartbeat_message_info');
@@ -118,5 +120,5 @@ function heartbeat_features_revert($module = NULL) {
       heartbeat_messages_revert($heartbeat['message_id']);
     }
   }
-  
+
 }

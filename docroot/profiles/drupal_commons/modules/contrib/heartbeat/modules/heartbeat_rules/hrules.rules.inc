@@ -1,5 +1,5 @@
 <?php
-// $Id: hrules.rules.inc,v 1.1.2.13 2010/09/26 21:03:17 stalski Exp $
+// $Id: hrules.rules.inc,v 1.1.2.14 2010/11/01 19:03:33 stalski Exp $
 
 /**
  * @file
@@ -208,13 +208,18 @@ function heartbeat_rules_default_action_form($settings, &$form, $form_state) {
 @node_title=[node:title-link]
 @types=pages</pre>'),
   );
-  // ajax wrapper must always exist
-  $default_values = heartbeat_rule_action_get_variables($heartbeat_message_id, $settings['variables_param']);
-  $template_message = '';
+
+  $template_message = $template_message_concat = $default_values = '';
   if ($heartbeat_message_id) {
     $message = heartbeat_message_load($heartbeat_message_id, 'message_id');
-    $template_message = $message->message;
-    $template_message_concat = $message->message_concat;
+    if (isset($message)) {
+      $default_values = heartbeat_rule_action_get_variables($message, $settings['variables_param']);
+      $template_message = $message->message;
+      $template_message_concat = $message->message_concat;
+    }
+    else {
+      drupal_set_message(t('The message template "@template" has been removed or the module that had the definition for it has been disabled.', array('@template' => $heartbeat_message_id)));
+    }
   }
   $display = empty($settings['variables_param']) ? 'none' : 'block';
   $template = '<blockquote>';

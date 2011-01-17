@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeat.admin.inc,v 1.1.2.15.2.20.2.62 2010/09/26 21:03:17 stalski Exp $
+// $Id: heartbeat.admin.inc,v 1.1.2.15.2.20.2.68 2011/01/05 12:49:46 stalski Exp $
 
 /**
  * @file
@@ -248,11 +248,10 @@ function heartbeat_admin_settings() {
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   );
-  $allowed_tags = array('h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'span', 'em', 'strong', 'ul', 'li', 'p', 'div', 'img', 'blockquote');
   $form['hb_fields'] ['heartbeat_allowed_tags'] = array(
     '#title' => t('Filter the messages with for these tags only'),
     '#type' => 'textfield',
-    '#default_value' => variable_get('heartbeat_allowed_tags', implode(',', $allowed_tags))
+    '#default_value' => heartbeat_allowed_tags(FALSE),
   );
   $form['hb_fields'] ['heartbeat_show_message_times'] = array(
     '#title' => t('Show the time of action in message displays'),
@@ -352,7 +351,8 @@ function heartbeat_messages_access_types($form_state = array()) {
   heartbeat_default_data();
 
   $types = variable_get('heartbeat_access_types', array());
-  $stream_data = variable_get('heartbeat_stream_data', array());
+  $default_stream_data = array('privateheartbeat' => array('profile' => 1), 'publicheartbeat' => array('profile' => 0));
+  $stream_data = variable_get('heartbeat_stream_data', $default_stream_data);
 
   $form = array();
 
@@ -505,7 +505,7 @@ function heartbeat_activity_stream_configure(& $form_state, $access_type) {
   $class = drupal_strtolower($access_type['class']);
   $realname = isset($access_type['realname']) ? drupal_strtolower($access_type['realname']) : $class;
 
-  $form = array('#prefix' => '<h3>'. t('Configure @type', array('@type' => $access_type['name'])) .'</h3>');
+  drupal_set_title(t('Configure @type', array('@type' => $access_type['name'])));
 
   // Permissions, allow/deny message templates
   $form['fs_perms'] = array(
@@ -673,6 +673,12 @@ function heartbeat_activity_stream_configure(& $form_state, $access_type) {
   $form['settings'] = array(
     '#tree' => TRUE,
   );
+  // Give contributions the change to add extra properties.
+  // Note that the auto-storage is triggered in the 'settings' key.
+  heartbeat_include('heartbeatstream');
+  heartbeat_include($class, $access_type['module'], $access_type['path']);
+  $heartbeatAccess = new $class(new HeartbeatStream($access_type));
+  $heartbeatAccess->configurationForm($form, $form_state);
 
   $form['submit'] = array(
     '#type' => 'submit',
@@ -728,6 +734,7 @@ function heartbeat_activity_stream_configure_submit($form, $form_state) {
   );
 
   heartbeat_stream_save($type, $additions);
+  menu_rebuild();
 }
 
 /**
@@ -979,7 +986,7 @@ function heartbeat_messages_edit(&$form_state, $message) {
     '#type' => 'select',
     '#title' => t('Type of message'),
     '#description' => $desc,
-    '#options' => drupal_map_assoc(variable_get('heartbeat_types', array('single', 'summary', 'count'))),
+    '#options' => drupal_map_assoc(array('single', 'summary', 'count')),
     '#required' => TRUE,
     '#default_value' => empty($message->concat_args['type']) ? '' : $message->concat_args['type'],
     '#attributes' => array('onchange' => 'javascript:heartbeat_message_type_onchange(this); return false;')
@@ -1162,8 +1169,9 @@ function heartbeat_messages_edit_submit($form, &$form_state) {
       'group_num_max' => $form_state['values']['group_num_max'],
       'merge_separator' => $form_state['values']['merge_separator'],
       'merge_end_separator' => $form_state['values']['merge_end_separator'],
-      'roles' => $form_state['values']['roles']
+      'roles' => $form_state['values']['roles'],
     );
+
     $message->concat_args = $concat_args;
 
     if (!empty($form_state['values']['attachments'])) {

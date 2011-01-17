@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeat.common.inc,v 1.1.2.2.2.23 2010/10/16 09:16:35 stalski Exp $
+// $Id: heartbeat.common.inc,v 1.1.2.2.2.27 2010/11/20 13:39:18 stalski Exp $
 
 /**
  * @file
@@ -17,12 +17,6 @@ function heartbeat_include($file, $module = 'heartbeat', $_file_path = '') {
   $_file_path = empty($_file_path) ? $file . '.inc' : $_file_path;
 
   if (!isset($loaded[$file])) {
-
-    if ($file == 'heartbeatmessagebuilder' && variable_get('heartbeat_debug', 0)) {
-      require $path . '/includes/'. $file . 'debug.inc';
-      $loaded[$file] = TRUE;
-      return $loaded[$file];
-    }
 
     $file_path = $path . '/includes/'. $_file_path;
     if (is_file($file_path)) {
@@ -156,9 +150,13 @@ function _heartbeat_access_type_options() {
 /**
  * Function to get the allowed tags for heartbeat strings
  */
-function heartbeat_allowed_tags() {
-  $tags = str_replace(' ', '', variable_get('heartbeat_allowed_tags', ''));
-  return explode(',', $tags);
+function heartbeat_allowed_tags($array = TRUE) {
+  $allowed_tags = array('h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'span', 'em', 'strong', 'ul', 'li', 'p', 'div', 'img', 'blockquote');
+  $tags = str_replace(' ', '', variable_get('heartbeat_allowed_tags', implode(',', $allowed_tags)));
+  if ($array) {
+    return explode(',', $tags);
+  }
+  return $tags;
 }
 
 /**
@@ -205,11 +203,12 @@ function heartbeat_stream_prev_link($access_type, $offset_time = 0) {
 }
 
 /**
- *
- * @return unknown_type
+ * Pseudo theme function to render the time ago link.
+ * This is implemented much like facebook does.
+ * @return String output of time.
  */
 function _theme_time_ago($time) {
-  return t('@time ago', array('@time' => format_interval(($_SERVER['REQUEST_TIME'] - $time), 1)));
+  return '<span class="activity-time">' . t('@time ago', array('@time' => format_interval(($_SERVER['REQUEST_TIME'] - $time), 1))) . '</span>';
 }
 
 /**
@@ -220,6 +219,23 @@ function _theme_time_ago($time) {
 function heartbeat_get_tuaid($uaid) {
   $result = db_fetch_object(db_query("SELECT tuaid FROM {heartbeat_translations} WHERE uaid=%d", $uaid));
   return $result ? $result->tuaid : $uaid;
+}
+
+/**
+ * Function to retrieve the user activity ids for each language.
+ */
+function heartbeat_get_uaids($tuaid) {
+  $uaids = array();
+  if (module_exists('locale')) {
+    $result = db_query("SELECT uaid FROM {heartbeat_translations} WHERE tuaid = %d", $tuaid);
+    while ($row = db_fetch_object($result)) {
+      $uaids[] = $row->uaid;
+    }
+  }
+  else {
+    $uaids[] = $tuaid;
+  }
+  return $uaids;
 }
 
 /**

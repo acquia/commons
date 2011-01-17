@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeatparser.inc,v 1.1.2.3.2.28 2010/10/16 09:16:35 stalski Exp $
+// $Id: heartbeatparser.inc,v 1.1.2.3.2.32 2010/11/20 10:17:28 stalski Exp $
 
 /**
  * @file
@@ -18,7 +18,7 @@ class heartbeatParser {
   private $_messages = array();
   private $_sets = array();
   private $_timespan_gap = 0;
-  private $_allowed_tags = array('p', 'span', 'a', 'em', 'strong', 'u', 'i', 'blockquote');
+  private $_allowed_tags = array();
   public $raw_messages = array();
 
   private function __construct() {
@@ -279,7 +279,7 @@ class heartbeatParser {
         $gap_id .= '_user_relation';
         //$gap_id .= '_'. ($target_uid == 0 ? $message->uid : $target_uid);
         $group_target = $message->template->concat_args['group_by_target'];
-        $string = $message->variables['@' . $group_target];
+        $string = $message->variables["@" . $group_target];
         $group_gap_string = strip_tags(drupal_strtolower($string));
         $gap_id .= '_' . $group_gap_string;
       }
@@ -301,7 +301,7 @@ class heartbeatParser {
 
     global $base_url;
 
-    $max_items_to_group = variable_get('heartbeat_activity_grouping_how_many', 6);
+    $max_items_to_group = variable_get('heartbeat_activity_grouping_how_many', 5);
 
     // Check the candidates and make the rebuild array
     foreach ($this->_candidates as $single_id => $candidate) {
@@ -350,10 +350,10 @@ class heartbeatParser {
    */
   public function build_sets($messages_raw) {
 
-    // The start is the end of the current day
+    // The start is the end of the current day.
     $renewal_time = $_SERVER['REQUEST_TIME'] - (3600 * date("H") + 60 * date("i") + date("s")) + (24 *3600);
 
-    // Retrieve variables to put on the object
+    // Retrieve variables to put on the object.
     $show_time = variable_get('heartbeat_show_message_times', 1);
     $time_info_grouped = variable_get('heartbeat_show_time_grouped_items', 1);
 
@@ -364,13 +364,13 @@ class heartbeatParser {
     $raw_messages = array();
     foreach ($messages_raw as $key => $message) {
 
-      // Set basic properties for all messages
+      // Set basic properties for all messages.
       $message->show_time = $show_time;
       $message->time_info_grouped = $time_info_grouped;
       $message->delete_access = $delete_access;
       $message->actor_access = $actor_access;
 
-      // if the time with the gap exceeds the starttime
+      // if the time with the gap exceeds the starttime.
       if ($renewal_time >= $message->timestamp) {
         // reset the start time of the set
         $renewal_time = $message->timestamp - $this->_timespan_gap;

@@ -1,5 +1,5 @@
 <?php
-// $Id: shouts.module,v 1.1.2.2.2.25 2010/10/16 09:16:36 stalski Exp $
+// $Id: shouts.module,v 1.1.2.2.2.26 2010/11/12 10:47:07 stalski Exp $
 // by Zuuperman and Stalski - Menhir - www.menhir.be
 
 /**
@@ -245,10 +245,10 @@ function shouts_shout_form($form_state = array(), $show_latest_shout = TRUE) {
       '#suffix' => '<span class="heartbeat-messages-throbber">&nbsp;</span></span>',
       '#type' => 'submit',
       '#value' => t('Shout'),
-        '#attributes' => array(
-          'class' => 'shout-submit',
-          'onclick' => 'javascript:Drupal.heartbeat.Shouts.shout(this, \'shout/post\'); return false;'
-        ),
+      '#attributes' => array(
+        'class' => 'shout-submit',
+        'onclick' => 'javascript:Drupal.heartbeat.Shouts.shout(this, \'shout/post\'); return false;'
+      ),
     );
   }
 

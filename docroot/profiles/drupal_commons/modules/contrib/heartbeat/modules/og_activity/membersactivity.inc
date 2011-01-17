@@ -20,7 +20,7 @@ class MembersActivity extends HeartbeatAccess {
   protected $_gid = 0;
   protected $_group_access = FALSE;
   protected $group = NULL;
-  
+
   public function construct() {
 
     // Where the user id is a member of the group
@@ -28,9 +28,22 @@ class MembersActivity extends HeartbeatAccess {
     $this->setGroup();
     drupal_add_js(drupal_get_path('module', 'og_activity') . '/og_activity.js');
     drupal_add_js(array('group_nid' => $this->_gid), "setting");
-        
+
   }
 
+  /**
+   * Skip active user.
+   * We never want to skip the active user.
+   */
+  public function skipActiveUser() {
+    return FALSE;
+  }
+
+  /**
+   * hasAccess
+   *
+   * Checks access for this stream.
+   */
   protected function hasAccess() {
 
     // if the user has access to this node (member or public group)
@@ -38,15 +51,22 @@ class MembersActivity extends HeartbeatAccess {
     if (isset($this->group) && (og_is_group_member($this->group) || $this->group->og_private == 0)) {
       $this->_group_access = TRUE;
     }
-    
+
     if (!isset($this->group)) {
     	$this->setError('We are not in a group context.');
     }
 
     return $this->_group_access;
-    
+
   }
 
+  /**
+   * setGroup
+   *
+   * Sets the group for a given node ID.
+   * @param Integer $nid
+   *   The group node ID.
+   */
   private function setGroup($nid = 0) {
 
     if ($nid != 0) {
@@ -75,6 +95,12 @@ class MembersActivity extends HeartbeatAccess {
 
   }
 
+  /**
+   * dressUpMessages
+   *
+   * @param HeartbeatParser $heartbeat
+   *   The parser for the messages in this stream.
+   */
   public function dressUpMessages(HeartbeatParser $heartbeat) {
 
     $members = array();

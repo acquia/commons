@@ -193,9 +193,8 @@ function heartbeat_comments_multiple_delete_confirm(&$form_state) {
 function heartbeat_comments_multiple_delete_confirm_submit($form, &$form_state) {
   if ($form_state['values']['confirm']) {
     foreach ($form_state['values']['comments'] as $cid => $value) {
-      db_query("DELETE FROM {heartbeat_comments} WHERE hcid = %d", $cid);
+      _heartbeat_comments_delete($cid);
     }
-
     drupal_set_message(t('The comments have been deleted.'));
   }
   $form_state['redirect'] = 'admin/content/heartbeat/comments';

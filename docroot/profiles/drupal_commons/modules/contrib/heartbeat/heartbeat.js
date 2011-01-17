@@ -64,7 +64,12 @@ Drupal.heartbeat.pollMessages = function(stream) {
       });
     }
     
-    var post = {latestUaid: firstUaid, language: Drupal.settings.heartbeat_language, stream: stream, uaids: uaids.join(',')};
+    var post = {
+      latestUaid: firstUaid, 
+      language: Drupal.settings.heartbeat_language, 
+      stream: stream, 
+      uaids: uaids.join(',')
+    };
     $.event.trigger('heartbeatBeforePoll', [post]); 
     if (firstUaid) {
       $.post(href, post, Drupal.heartbeat.prependMessages);

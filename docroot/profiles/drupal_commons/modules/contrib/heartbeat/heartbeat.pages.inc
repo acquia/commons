@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeat.pages.inc,v 1.1.2.21 2010/10/16 09:16:35 stalski Exp $
+// $Id: heartbeat.pages.inc,v 1.1.2.26 2011/01/15 20:49:55 stalski Exp $
 
 /**
  * @file
@@ -7,7 +7,7 @@
  */
 
 /**
- * Page callback function to load an activity stream page
+ * Page callback function to load an activity stream page.
  *
  * @param array $access_type
  * @return string Themed list of messages
@@ -37,8 +37,15 @@ function heartbeat_messages_page($access_type, $offset_time = 0, $account = NULL
 
   // For block updates by ajax displayed on the user
   // profile page, we want to show the account requested.
-  if (!$page && is_numeric($account) && $account > 0 && variable_get('heartbeat_show_user_profile_messages_'. $access_type, 0)) {
-    $account = heartbeat_user_load($account);
+  if (is_numeric($account) && $account > 0) {
+    if (!$page) {
+      if (variable_get('heartbeat_show_user_profile_messages_'. $access_type, 0)) {
+        $account = heartbeat_user_load($account);
+      }
+    }
+    else {
+      $account = heartbeat_user_load($account);
+    }
   }
 
   // Message streams for each access type
@@ -50,12 +57,15 @@ function heartbeat_messages_page($access_type, $offset_time = 0, $account = NULL
 
   // Get the messages
   $messages = $context->execute();
+  if (variable_get('heartbeat_debug', 0) && $context->hasErrors()) {
+    drupal_set_message(implode('<br />', $context->getErrors()), 'warning');
+  }
 
   $heartbeataccess = $context->getState();
   $link = '';
   if ($context->hasMoreMessages()) {
     $last_message = end($messages);
-    $link = heartbeat_stream_more_link($heartbeataccess, $last_message->timestamp, $page);
+    $link = theme('heartbeat_stream_more_link', $heartbeataccess, $last_message->timestamp, $page);
   }
   $theme_function = $ajax ? 'heartbeat_messages' : 'heartbeat_list';
   $output .= theme($theme_function, $messages, $heartbeataccess, $link);
@@ -68,7 +78,7 @@ function heartbeat_messages_page($access_type, $offset_time = 0, $account = NULL
 }
 
 /**
- * Page callback for one activity message
+ * Page callback for one activity message.
  */
 function heartbeat_message_activity($uaid) {
 
@@ -85,6 +95,9 @@ function heartbeat_message_activity($uaid) {
 
   // Get the message
   $messages = $context->execute();
+  if ($context->hasErrors()) {
+    drupal_set_message(implode('<br />', $context->getErrors()), 'warning');
+  }
   $heartbeataccess = $context->getState();
 
   if (count($messages) == 0) {
@@ -98,7 +111,7 @@ function heartbeat_message_activity($uaid) {
 }
 
 /**
- * Callback to poll for newer messages
+ * Callback to poll for newer messages.
  */
 function heartbeat_activity_poll() {
 
@@ -172,7 +185,7 @@ function heartbeat_delete_log_confirm($form_state, $uaid) {
 }
 
 /**
- * Handler for wipe confirmation
+ * Handler for wipe confirmation.
  */
 function heartbeat_delete_log_confirm_submit($form, &$form_state) {
 

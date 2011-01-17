@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeat.install,v 1.1.2.6.2.10.2.29 2010/10/16 09:16:35 stalski Exp $
+// $Id: heartbeat.install,v 1.1.2.6.2.10.2.34 2010/11/16 20:19:54 stalski Exp $
 
 /**
  * @file
@@ -12,34 +12,6 @@
  * Implementation of hook_install().
  */
 function heartbeat_install() {
-
-  variable_set('heartbeat_enabled', 1);
-  variable_set('heartbeat_debug', 0);
-  variable_set('heartbeat_show_time_grouped_items', 1);
-  variable_set('heartbeat_show_message_times', 1);
-  variable_set('message_access_types', array(
-    0 => 'private',
-    1 => 'public to all',
-    2 => 'actor and addressee only if exists',
-    3 => 'public to connections if exists'));
-  variable_set('heartbeat_types', array('summary', 'single', 'count'));
-
-  variable_set('heartbeat_activity_grouping_seconds', 7200);
-  variable_set('heartbeat_activity_grouping_how_many', 5);
-  $allowed_tags = array('h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'span', 'em', 'strong', 'ul', 'li', 'p', 'div', 'img', 'blockquote');
-  variable_set('heartbeat_allowed_tags', implode(',', $allowed_tags));
-  variable_set('heartbeat_activity_log_cron_delete', 2678400);
-  variable_set('heartbeat_access_types', array());
-  variable_set('heartbeat_stream_data', array(
-    'privateheartbeat' => array('profile' => 1),
-    'connectedheartbeat' => array('profile' => 1),
-    'publicheartbeat' => array('profile' => 0),
-  ));
-  variable_set('heartbeat_profile_message_templates', array());
-  // Disabling this means blocking user and node links by default
-  // The decision is based on the fact that it's a community module
-  variable_set('heartbeat_context_perm', 0);
-
   // Create tables.
   drupal_install_schema('heartbeat');
 
@@ -76,23 +48,14 @@ function heartbeat_create_messages() {
  */
 function heartbeat_uninstall() {
 
-  variable_del('heartbeat_enabled');
-  variable_del('heartbeat_debug');
-  variable_del('heartbeat_show_message_times');
-  variable_del('heartbeat_show_time_grouped_items');
-  variable_del('message_access_types');
-  variable_del('heartbeat_types');
+  // Remove all variables.
+  db_query("DELETE FROM {variable} WHERE name LIKE 'heartbeat_%%'");
+  cache_clear_all('variables', 'cache');
 
-  variable_del('heartbeat_activity_grouping_seconds');
-  variable_del('heartbeat_activity_grouping_how_many');
-  variable_del('heartbeat_activity_log_cron_delete');
-  variable_del('heartbeat_access_types');
-  variable_del('heartbeat_profile_message_templates');
-
-  // Remove all tables so no need to delete the messages
+  // Remove all tables so no need to delete the messages.
   drupal_uninstall_schema('heartbeat');
 
-  // This should clear the rules with a linkage to the heartbeat action
+  // This should clear the rules with a linkage to the heartbeat action.
   if (module_exists('rules')) {
     menu_rebuild();
     rules_clear_cache();
@@ -431,12 +394,6 @@ function heartbeat_update_401() {
  */
 function heartbeat_update_402() {
 
-  // Add a variable to set streams on profile pages
-  variable_set('heartbeat_stream_data', array(
-    'privateheartbeat' => array('profile' => 1),
-    'connectedheartbeat' => array('profile' => 1),
-    'publicheartbeat' => array('profile' => 0),
-  ));
 
   // Add the translations table for multilingual comments
   $ret = array();
@@ -492,6 +449,15 @@ function heartbeat_update_403() {
  */
 function heartbeat_update_410() {
 
+  // Prevent this update hook from running twice.
+  // @see heartbeat_comments_update_410().
+  static $run = FALSE;
+  if ($run) {
+    return;
+  }
+
+  $run = TRUE;
+
   // Add the translations table for multilingual comments
   $ret = array();
   switch ($GLOBALS['db_type']) {
@@ -507,6 +473,7 @@ function heartbeat_update_410() {
   while ($row = db_fetch_object($result)) {
     $save_nid = array();
     $save_nid_target = array();
+    $this_node = NULL;
 
     $this_node = node_load($row->nid);
     $save_nid = array();

@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeat_example.module,v 1.1.2.21 2010/10/16 09:16:35 stalski Exp $
+// $Id: heartbeat_example.module,v 1.1.2.22 2010/11/12 01:08:36 stalski Exp $
 
 /**
  * @file
@@ -263,9 +263,7 @@ function phptemplate_heartbeat_comment($comment, $node_comment = FALSE, $last = 
 
   $output .= l($name, 'user/'. $comment->uid, array('attributes' => array('class' => 'user')));
   $output .= $comment->comment .'<br />';
-  $output .= '<span class="heartbeat_times">';
   $output .= _theme_time_ago(isset($comment->time) ? strtotime($comment->time) : $comment->timestamp);
-  $output .= '</span>';
   $output .= '</div>';
 
   // For node comments link to the standard Drupal comment deletion form under comment/delete/%

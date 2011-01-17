@@ -1,5 +1,5 @@
 <?php
-// $Id: groupsactivity.inc,v 1.1.2.3 2010/08/14 18:36:13 stalski Exp $
+// $Id: groupsactivity.inc,v 1.1.2.5 2010/12/13 21:51:36 stalski Exp $
 
 /**
  * @file
@@ -15,6 +15,14 @@ heartbeat_include('HeartbeatAccess');
  *
  */
 class GroupsActivity extends HeartbeatAccess {
+
+  /**
+   * Skip active user.
+   * We never want to skip the active user.
+   */
+  public function skipActiveUser() {
+    return FALSE;
+  }
 
   /**
    * Override of the prepareStream function
@@ -44,8 +52,12 @@ class GroupsActivity extends HeartbeatAccess {
     FROM {heartbeat_activity} ua
     LEFT JOIN {heartbeat_messages} hm ON ua.message_id = hm.message_id
     INNER JOIN {og_ancestry} oa ON (oa.nid = ua.nid OR oa.group_nid = ua.nid)
+    LEFT JOIN {users} ua_users ON ua.uid = ua_users.uid
+    LEFT JOIN {users} ua_target_users ON ua.uid_target = ua_target_users.uid
     WHERE
       ua.language = '%s'
+      AND (ua_users.uid = 0 OR ua_users.status = 1)
+      AND (ua_target_users.uid = 0 OR ua_target_users.status = 1)
     ";
 
     // Calls with an offset uaid will fetch newer messages

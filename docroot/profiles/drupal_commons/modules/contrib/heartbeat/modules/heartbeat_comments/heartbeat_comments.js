@@ -28,11 +28,14 @@ Drupal.heartbeat.comments.submit = function(element) {
   var formElement = $(element).parents('form');
   
   var url = Drupal.settings.basePath + 'heartbeat/comment/post';
+  var nid = formElement.find('.heartbeat-message-nid').val();
+  var node_comment = formElement.find('.heartbeat-message-node-comment').val();
   var args = {
     message: formElement.find('.heartbeat-message-comment').val(), 
     uaid: formElement.find('.heartbeat-message-uaid').val(), 
-    nid: formElement.find('.heartbeat-message-nid').val(), 
-    node_comment: formElement.find('.heartbeat-message-node-comment').val(),
+    nid: (nid == undefined ? 0 : nid), 
+    node_comment: (node_comment == undefined ? 0 : node_comment),
+    path: location.href,
     first_comment: !$('#heartbeat-comments-list-' + formElement.find('.heartbeat-message-uaid').val()).length
   };
   $.post(url, args, Drupal.heartbeat.comments.submitted,'json');

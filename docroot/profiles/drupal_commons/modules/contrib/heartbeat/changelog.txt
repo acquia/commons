@@ -6,6 +6,27 @@
 #############################################################################
 
 ---------------------------------------------------------------
+# @date ? For release DRUPAL-6--4-x
+---------------------------------------------------------------
+  * #777596 by mikestefff: Integration with Features.module.
+  * Performance issue: Changed the loading on the user object
+    heartbeat_relations is checked on the actor(heartbeatMessageBuilder) itself
+    now, not stuffed on the user if it is not needed.
+    Also the stream actor (whoIsActor) is populated with its connections, 
+    without the need of the user object. 
+  * #966124 Added theme function for the 'older messages' link.
+  * Fixed the hardcoded shout element submission. Serializing values of the 
+    form, makes it easy to add other variables.
+  * #964346 Removed variables in install file. Changed the removal during 
+    uninstall.
+  * #965678 Added a setting to configure the heartbeat comments cache.
+    Disabled will have allways recent messages, but is slower.
+  * #964258 Added a way for stream classes to manipulate the configuration
+    form. See example in heartbeatAccess.inc
+  * #964066 Added class to the _theme_time_ago function.
+  * Fixed a caching issue on heartbeat comments (non-node)
+  
+---------------------------------------------------------------
 # @date 10/05/2010 For release DRUPAL-6--4-10
 ---------------------------------------------------------------
 - Refactoring to improve perfomance
@@ -19,7 +40,6 @@
   * Made sure no extra queries were run due to "comment_count = 0".
   * Cached the message entry output on activity row base(html output)
     cleared when actions occur that involve this activity.
-
 
 ---------------------------------------------------------------
 # @date 10/05/2010 For release DRUPAL-6--4-9

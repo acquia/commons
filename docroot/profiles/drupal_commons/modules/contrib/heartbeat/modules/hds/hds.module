@@ -1,5 +1,5 @@
 <?php
-// $Id: hds.module,v 1.1.2.15 2010/08/19 17:00:02 stalski Exp $
+// $Id: hds.module,v 1.1.2.16 2010/11/12 01:08:37 stalski Exp $
 // by Stalski (Jochen Stals) - Menhir - www.menhir.be
 
 /**
@@ -65,7 +65,7 @@ function hds_heartbeat_view(&$messages, HeartbeatAccess $stream) {
     if (isset($stream->stream->variables['build_mode']) && $stream->stream->variables['build_mode'] != 'none') {
       $messages[$key]->build_mode = $stream->stream->variables['build_mode'];
     }
-    
+
     ds_build_fields_and_regions($messages[$key], 'hds');
   }
 }
@@ -266,7 +266,7 @@ function hds_form_alter(& $form, $form_state, $form_id) {
  * Formatter for the time ago created display
  */
 function theme_hds_created_time_ago($heartbeatactivity) {
-  return '<span class="heartbeat_times">' . _theme_time_ago($heartbeatactivity['object']->timestamp) . '</span>';
+  return _theme_time_ago($heartbeatactivity['object']->timestamp);
 }
 
 /**

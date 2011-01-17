@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeatstream.inc,v 1.1.2.12 2010/09/26 21:03:17 stalski Exp $
+// $Id: heartbeatstream.inc,v 1.1.2.14 2010/11/21 12:33:36 stalski Exp $
 
 /**
  * @file
@@ -28,7 +28,7 @@ class HeartbeatStream {
   public $uid = 0;
 
   // The relations of the user <uid>
-  public $user_relations = array();
+  public $heartbeat_relations = array();
 
   // The module the query builder is located
   public $module = '';
@@ -89,6 +89,9 @@ class HeartbeatStream {
 
   // Boolean to indicate if the pager is ajax-driven
   public $page_pager_ajax = 0;
+
+  // Page disabled or not
+  public $page_disabled = 0;
 
   // Poll for newer messages
   public $poll_messages = 0;

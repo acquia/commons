@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeataccess.inc,v 1.1.2.2.2.30 2010/10/28 18:36:01 stalski Exp $
+// $Id: heartbeataccess.inc,v 1.1.2.2.2.35 2010/12/13 21:51:36 stalski Exp $
 
 /**
  * @file
@@ -60,28 +60,43 @@ abstract class HeartbeatAccess {
   }
 
   /**
+   * Function to retrieve the active user.
+   */
+  public function getActiveUser() {
+    return $this->_uid;
+  }
+
+  /**
+   * Skip active user.
+   * Return whether you want to skip the active user (being
+   * the logged-in user and NOT the displayed user) from display.
+   * Typical private will not skip this one ofcourse where most
+   * other will skip active user since you don't want to watch
+   * your own activity.
+   */
+  public function skipActiveUser() {
+    return $this->_whoisuser_type == self::TYPE_USER_PROFILE ? FALSE : TRUE;
+  }
+
+  /**
    * proctected fuinction whoIsActor
    *   Calculate the user of whom we want to see activity for.
    *   Set the actor of the stream.
    */
   protected function whoIsActor($account = NULL) {
-
-    // Break all calculation if the requested user is given.
+    // Use the account if available.
     if (isset($account)) {
       $this->_whoisuser_type = self::TYPE_USER_PROFILE;
       $this->_actor = $account;
       $this->stream->uid = $this->_uid = $account->uid;
-      $this->stream->user_relations = $account->heartbeat_relations;
-      return;
     }
-
-    global $user;
-
-    $this->_whoisuser_type = self::TYPE_ACTOR;
-    $this->_actor = $user;
-    $this->stream->uid = $this->_uid = $user->uid;
-    $this->stream->user_relations = $user->heartbeat_relations;
-
+    // Otherwise the active user for the stream will be the logged-in user.
+    else {
+      global $user;
+      $this->_whoisuser_type = self::TYPE_ACTOR;
+      $this->_actor = $user;
+      $this->stream->uid = $this->_uid = $user->uid;
+    }
   }
 
   /**
@@ -234,18 +249,24 @@ abstract class HeartbeatAccess {
     }
 
     // Sql parts
+    // If users are involved (uid or uid_target) in heartbeat_activity
+    // check if they are not blocked (status = 1).
     $this->stream->sql_start = "SELECT
       hm.hid AS 'hid', hm.message AS 'message_orig',
       hm.message_concat AS 'message_concat_orig',
       hm.attachments AS 'attachments', hm.concat_args,
       hm.custom AS 'custom', hm.description as 'description',
       hm.perms, hm.variables AS 'variables_orig',
-      ua.*,
+      ua.*, ua_users.*,
       1 AS 'count'
     FROM {heartbeat_activity} ua
     LEFT JOIN {heartbeat_messages} hm ON ua.message_id = hm.message_id
+    LEFT JOIN {users} ua_users ON ua.uid = ua_users.uid
+    LEFT JOIN {users} ua_target_users ON ua.uid_target = ua_target_users.uid
     WHERE
       ua.language = '%s'
+      AND (ua_users.uid = 0 OR ua_users.status = 1)
+      AND (ua_target_users.uid = 0 OR ua_target_users.status = 1)
     ";
 
     // Calls with an offset uaid will fetch newer messages
@@ -353,4 +374,16 @@ abstract class HeartbeatAccess {
   final public function getAccess() {
     return drupal_strtolower($this->stream->realname);
   }
+
+  /**
+   * ConfigurationForm
+   * Basic configuration form for streams.
+   */
+  public function configurationForm(& $form, & $form_state) {
+    // Add extra form properties.
+    // A couple of examples to manipulate the form.
+    //$form['settings']['my_stream_setting'] = array('#type' => 'checkbox', '#default_value' => 0, '#title' => t(''));
+    //$form['poll_settings']['#access'] = FALSE;
+  }
+
 }

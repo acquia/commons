@@ -130,7 +130,7 @@ function _heartbeat_group_views_messages($name, $messages, $stream) {
     $timespan->grouping_seconds;
   }
   else {
-    $timespan = variable_get('heartbeat_activity_grouping_seconds', 720);
+    $timespan = variable_get('heartbeat_activity_grouping_seconds', 7200);
   }
   $heartbeat->set_timespan_gap($timespan);
   $heartbeat->build_sets($messages);

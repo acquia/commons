@@ -1,5 +1,5 @@
 <?php
-// $Id: friendlist_activity.module,v 1.1.2.2.2.23 2010/10/16 09:16:36 stalski Exp $
+// $Id: friendlist_activity.module,v 1.1.2.2.2.28 2011/01/05 19:11:02 stalski Exp $
 // by Jochen Stals - Menhir - www.menhir.be
 
 /**
@@ -16,6 +16,7 @@ function friendlist_activity_heartbeat_register_access_types() {
     ),
   );
 }
+
 /**
  * Implementation of hook_heartbeat_message_info().
  */
@@ -69,16 +70,9 @@ function friendlist_activity_heartbeat_message_info() {
 
 /**
  * Implementation of hook_heartbeat_related_uid_info().
- * Static cache helper for the friends of a user.
  */
 function friendlist_activity_heartbeat_related_uid_info($uid) {
-  static $uids = array();
-
-  if (!isset($uids[$uid])) {
-    $uids[$uid] = friendlist_activity_get_friends($uid);
-  }
-
-  return $uids[$uid];
+  return friendlist_activity_get_friends($uid);
 }
 
 /**
@@ -145,12 +139,7 @@ function friendlist_activity_get_friends($uid) {
     // fetch them
     $sql = "SELECT DISTINCT ur.requestee_id FROM {user_relationships} ur
     INNER JOIN {user_relationship_types} urt ON ur.rtid = urt.rtid
-    WHERE
-    (
-      ur.requester_id = %d AND urt.is_oneway = 0
-    OR
-      ur.requester_id = %d AND ur.approved = 1 AND urt.is_oneway <> 0
-    )";
+    WHERE ur.requester_id = %d AND  ur.approved = 1";
     $result = db_query($sql, $uid, $uid);
     if (!empty($result)) {
       while ($row = db_fetch_object($result)) {

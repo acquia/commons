@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeatactivity.inc,v 1.1.2.1.2.41 2010/10/16 09:16:35 stalski Exp $
+// $Id: heartbeatactivity.inc,v 1.1.2.1.2.43 2011/01/05 12:49:46 stalski Exp $
 
 /**
  * @file
@@ -80,8 +80,19 @@ class HeartbeatActivity {
     if (isset($data['count'])) {
       $this->count = $data['count'];
     }
+    // Only load the user if it's needed.
+    if (empty($data['mail'])) {
+      $this->actor = heartbeat_user_load($data['uid']);
+    }
+    else {
+      $account = new stdClass();
+      foreach (user_fields() as $field)  {
+        $account->$field = $data[$field];
+      }
+      $this->actor = $account;
+    }
     $this->uid = $data['uid'];
-    $this->actor = heartbeat_user_load($data['uid']);
+
     $this->uid_target = $data['uid_target'];
     $this->nid = $data['nid'];
     $this->nid_info = !empty($data['nid_info']) ? unserialize($data['nid_info']) : array();
@@ -218,11 +229,21 @@ class HeartbeatActivity {
               $merged_string .= ' ' . $stored_variables["@". $target];
             }
             elseif ($i < $count && $count > 2) {
-              $merged_string .= ' ' . $this->template->concat_args['merge_separator'];
+              if (!empty($this->template->concat_args['merge_separator_t'])) {
+                $merged_string .= ' ' . t($this->template->concat_args['merge_separator']);
+              }
+              else {
+                $merged_string .= ' ' . $this->template->concat_args['merge_separator'];
+              }
               $merged_string .= ' ' . $stored_variables["@". $target];
             }
             elseif ($i == $count || $count == 2) {
-              $merged_string .= ' ' . $this->template->concat_args['merge_end_separator'];
+              if (!empty($this->template->concat_args['merge_end_separator_t'])) {
+                $merged_string .= ' ' . t($this->template->concat_args['merge_end_separator']);
+              }
+              else {
+                $merged_string .= ' ' . $this->template->concat_args['merge_end_separator'];
+              }
               if (count($remains) >= 1 && $hidden_remains != '') {
                 $attributes = array(
                   'attributes' => array(
