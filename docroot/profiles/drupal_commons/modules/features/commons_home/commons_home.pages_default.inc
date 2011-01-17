@@ -34,7 +34,7 @@ function commons_home_default_page_manager_pages() {
   $handler = new stdClass;
   $handler->disabled = FALSE; /* Edit this to true to make a default handler disabled initially */
   $handler->api_version = 1;
-  $handler->name = 'page_Home_panel_context';
+  $handler->name = 'page_commons_home_panel_context';
   $handler->task = 'page';
   $handler->subtask = 'commons_homepage';
   $handler->handler = 'panel_context';
