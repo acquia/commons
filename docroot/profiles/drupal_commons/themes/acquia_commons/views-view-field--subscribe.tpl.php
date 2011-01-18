@@ -20,6 +20,10 @@
   * the view is modified.
   */
 ?>
-<div class="joinnow-button">
-  <?php print str_ireplace('Join', '', $output); ?>
-</div>
+<?php if (strstr($output, t('Join'))): ?>
+  <div class="joinnow-button">
+    <?php print str_ireplace('Join', '', $output); ?>
+  </div>
+<?php else: ?>
+  <?php print $output; ?>
+<?php endif; ?>
