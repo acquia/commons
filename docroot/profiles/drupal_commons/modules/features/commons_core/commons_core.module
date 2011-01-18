@@ -1073,6 +1073,29 @@ function commons_core_views_pre_view(&$view, &$display_id, &$args) {
   }
 }
 
+/**
+ * Implementation of hook_form_views_exposed_form_alter()
+ */
+function commons_core_form_views_exposed_form_alter(&$form, &$form_state) {
+  switch ($form['#id']) {
+    // The "My unread" tab on the "My content" section
+    case 'views-exposed-form-og-my-content-page-2':
+    // The "All Content" tab on the "My content" section
+    case 'views-exposed-form-og-my-content-page-1':
+    // The "Recent group content" block found on group home pages
+    case 'views-exposed-form-og-content-tracker-panel-pane-1':
+      // The exposed filter for node type contains all nodes on the site
+      // We want to limit it to group post types only
+      if (isset($form['type'])) {
+        foreach ($form['type']['#options'] as $type => $name) {
+          if ($type != 'All' && !og_is_group_post_type($type)) {
+            unset($form['type']['#options'][$type]);
+          }
+        }
+      }
+      break;
+  }
+}
 
 // COMMENT OVERRIDES
 
