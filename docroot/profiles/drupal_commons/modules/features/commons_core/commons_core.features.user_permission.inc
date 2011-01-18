@@ -765,7 +765,8 @@ function commons_core_user_default_permissions() {
   $permissions['view heartbeat messages'] = array(
     'name' => 'view heartbeat messages',
     'roles' => array(
-      '0' => 'authenticated user',
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
     ),
   );
 
