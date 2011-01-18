@@ -1950,15 +1950,7 @@ function commons_core_views_default_views() {
     ),
     'type' => array(
       'operator' => 'in',
-      'value' => array(
-        'blog' => 'blog',
-        'poll' => 'poll',
-        'discussion' => 'discussion',
-        'document' => 'document',
-        'event' => 'event',
-        'page' => 'page',
-        'wiki' => 'wiki',
-      ),
+      'value' => array(),
       'group' => '0',
       'exposed' => TRUE,
       'expose' => array(
@@ -1969,7 +1961,7 @@ function commons_core_views_default_views() {
         'optional' => 1,
         'single' => 1,
         'remember' => 0,
-        'reduce' => 1,
+        'reduce' => 0,
       ),
       'id' => 'type',
       'table' => 'node',
