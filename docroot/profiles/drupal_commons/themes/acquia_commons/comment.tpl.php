@@ -15,7 +15,12 @@
       }
       if ($comment->picture) { 
         $picture = theme_imagecache('user_picture_meta', $comment->picture, $name, $name);
-        print('<a href="'.$BASE_URL.'/user/'.$comment->uid.'" >'.$picture.'</a>');
+        if (user_access('access user profiles')) {
+          print l($picture, "user/{$comment->uid}", array('html' => TRUE));
+        }
+        else {
+          print $picture; 
+        }
       }
     ?>
     <div class="submitted">

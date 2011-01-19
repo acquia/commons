@@ -23,7 +23,7 @@ function acquia_commons_preprocess_node(&$vars) {
   
     // Author picture
     $picture = theme_imagecache('user_picture_meta', $author->picture ? $author->picture : variable_get('user_picture_default', ''), $author->name, $author->name);
-    $submitted = $author->uid ? l($picture, "user/{$author->uid}", array('html' => TRUE)) : $picture;
+    $submitted = ($author->uid && user_access('access user profiles')) ? l($picture, "user/{$author->uid}", array('html' => TRUE)) : $picture;
     
     // Author information
     $submitted .= '<span class="submitted-by">';
