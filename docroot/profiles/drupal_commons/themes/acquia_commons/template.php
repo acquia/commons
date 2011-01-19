@@ -2,9 +2,8 @@
 // $Id: template.php 8021 2010-10-19 13:01:34Z sheena $
 
 /**
- *  theme_breadcrumb()
+ * Breadcrumb themeing
  */
-
 function acquia_commons_breadcrumb($breadcrumb) {
   if (!empty($breadcrumb)) {
     return '<div class="breadcrumb">'. implode(' > ', $breadcrumb) .'</div>';
@@ -83,24 +82,22 @@ function acquia_commons_preprocess_comment(&$vars) {
   $vars['comment_classes'] = implode(' ', $comment_classes);                                              // Create class list separated by spaces
 
   // Date & author
-  $submitted_by = '<span class="comment-name">'.  theme('username', $vars['comment']) .'</span>';
-  $submitted_by .= '<span class="comment-date">'.  time_ago($vars['comment']->timestamp).' '.t('ago').'</span>';     // Format date as small, medium, or large
+  $ago =  t('!interval ago', array('!interval' => format_interval(time() - $vars['comment']->timestamp)));
+  $submitted_by = '<span class="comment-name">' . theme('username', $vars['comment']) . '</span>';
+  $submitted_by .= '<span class="comment-date">' . $ago . '</span>';     // Format date as small, medium, or large
   $vars['submitted'] = $submitted_by;
 }
 
 /**
-*  Profile preprocessing
-**/
-
+ * Profile preprocessing
+ */
 function acquia_commons_preprocess_user_profile_item(&$vars) {
- 
- //separate userpoints value from the edit links
- if($vars['title'] == 'Points') { 
- $userpoints = explode(' - ', $vars['value']);
-  $vars['value'] = '<span class="points">'.$userpoints[0].'</span><span    class="edit-links">'.$userpoints[1].'</span>';
-  unset($vars['title']);
+  // Separate userpoints value from the edit links
+  if ($vars['title'] == 'Points') { 
+    $userpoints = explode(' - ', $vars['value']);
+    $vars['value'] = '<span class="points">' . $userpoints[0] . '</span><span class="edit-links">' . $userpoints[1] . '</span>';
+    unset($vars['title']);
   }
-  
 }
 
 /**
@@ -182,27 +179,6 @@ function acquia_commons_shoutbox_post($shout, $links = array(), $alter_row_color
   return $post;
 }
 
-
-//script to convert timestamp to "time ago"
-function time_ago($tm,$rcs = 0) {
-
-$cur_tm = time(); 
-
-$dif = $cur_tm-$tm;
-
-$pds = array(t('second'),t('minute'),t('hour'),t('day'),t('week'),t('month'),t('year'),t('decade'));
-
-$lngh = array(1,60,3600,86400,604800,2630880,31570560,315705600);
-
-for($v = sizeof($lngh)-1; ($v >= 0)&&(($no = $dif/$lngh[$v])<=1); $v--); if($v < 0) $v = 0; $_tm = $cur_tm-($dif%$lngh[$v]);
-
-$no = floor($no); if($no <> 1) $pds[$v] .='s'; $x=sprintf("%d %s ",$no,$pds[$v]);
-if(($rcs == 1)&&($v >= 1)&&(($cur_tm-$_tm) > 0)) $x .= time_ago($_tm);
-return $x;
-
-}
-
-
 function acquia_commons_item_list($items = array(), $title = NULL, $type = 'ul', $attributes = NULL) {
   $output = '<div class="item-list">';
   if (isset($title)) {
@@ -265,7 +241,7 @@ function acquia_commons_item_list($items = array(), $title = NULL, $type = 'ul',
   return $output;
 }
 
-function acquia_commons_preprocess_block ($variables) {
+function acquia_commons_preprocess_block($variables) {
   $variables['template_files'][] = 'block-'.$variables['block']->region.'-'.$variables['block']->module;
   $variables['template_files'][] = 'block-'.$variables['block']->region.'-'.$variables['block']->module.'-'.$variables['block']->delta;
 }
