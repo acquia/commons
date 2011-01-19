@@ -1446,6 +1446,7 @@ div.comment h3.title {
 	z-index: 10;
 	padding: 0 10px 0 0;
   text-align: center;
+  margin-right: -2px;
 }
 
 .comment-info ul.links li {
@@ -1473,17 +1474,19 @@ div.comment h3.title {
 	width: auto;
 }
 
-.comment .comment-content {
+.comment .comment-content-wrapper {
 	-moz-box-shadow: 1px 1px 3px #ddd;
 	-webkit-box-shadow: 1px 1px 3px #ddd;
 	border: 1px solid #d6d6d6;
 	box-shadow: 1px 1px 3px #ddd;
-  width: auto;
-  float: left;
-  margin-left: -1px;
 	padding: 10px;
 	position: relative;
 	z-index: 1;
+  overflow: auto;
+}
+
+.comment .comment-content {
+  float: left;
 }
 
 /*fix for comment title being cut off */
