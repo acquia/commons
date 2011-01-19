@@ -411,7 +411,7 @@ function commons_core_strongarm() {
     'toggle_node_info_blog' => 1,
     'toggle_node_info_discussion' => 1,
     'toggle_node_info_document' => 1,
-    'toggle_node_info_event' => 0,
+    'toggle_node_info_event' => 1,
     'toggle_node_info_group' => 1,
     'toggle_node_info_notice' => 0,
     'toggle_node_info_page' => 0,
