@@ -1,5 +1,5 @@
 <?php
-// $Id: shoutbox.module,v 1.31.2.39 2011/01/05 16:42:22 mikestefff Exp $
+// $Id: shoutbox.module,v 1.31.2.41 2011/01/18 15:55:08 mikestefff Exp $
 
 /**
  * @file
@@ -404,7 +404,7 @@ function theme_shoutbox_post($shout, $links = array()) {
   // Check for moderation
   if ($shout->moderate == 1) {
     $shout_classes[] = 'shoutbox-unpublished';
-    $shout->shout .= '&nbsp;(' . t('This shout is waiting for approval by a moderator.') . ')';
+    $approval_message = '&nbsp;(' . t('This shout is waiting for approval by a moderator.') . ')';
   }
   
   // Check for specific user class
@@ -422,7 +422,7 @@ function theme_shoutbox_post($shout, $links = array()) {
   $post .= '<div class="' . implode(' ', $shout_classes) . '" title="' . $title . '">';
   $post .= '<div class="shoutbox-admin-links">' . $img_links . '</div>';
   $post .= '<span class="' . implode(' ', $user_classes) . '">' . $user_name . '</span>:&nbsp;';
-  $post .= '<span class="shoutbox-shout">' . $shout->shout . '</span>';
+  $post .= '<span class="shoutbox-shout">' . $shout->shout . $approval_message . '</span>';
   $post .= '<span class="shoutbox-msg-time">';
   $format = variable_get('shoutbox_time_format', 'ago');
   switch ($format) {
@@ -796,7 +796,7 @@ function shoutbox_edit_form(&$form_state, $shout) {
   if (_shoutbox_user_access('edit own shouts', $shout)) {
     $max = variable_get('shoutbox_max_length', 255);
     $form['shout'] = array(
-      '#type' => 'textfield',
+      '#type' => variable_get('shoutbox_widget_type', 'textfield'),
       '#title' => t('Shout'),
       '#default_value' => $shout->shout,
       '#cols' => 13,
