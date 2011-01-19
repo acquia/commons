@@ -862,7 +862,8 @@ function commons_core_user_default_permissions() {
   $permissions['view shouts'] = array(
     'name' => 'view shouts',
     'roles' => array(
-      '0' => 'authenticated user',
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
     ),
   );
 
