@@ -1,8 +1,17 @@
-Index: user_badges.module
-===================================================================
---- user_badges.module	(revision 22519)
-+++ user_badges.module	(working copy)
-@@ -202,23 +202,17 @@
+diff --git a/user_badges.module b/user_badges.module
+index e54b167..5c458b7 100644
+--- a/user_badges.module
++++ b/user_badges.module
+@@ -196,29 +196,26 @@ function user_badges_user($op, &$edit, &$account, $category = 'account') {
+       if (isset($badges[$account->uid])) {
+         $account->badges = $badges[$account->uid];
+       }
++      else {
++        $account->badges = array();
++      }
+ 
+       if ($account->uid > 0) {
+         //Get all user badges for this user, regardless of whether we filter the ones we show.
          $account->badges_all = user_badges_get_badges($account->uid, array('nolimit' => TRUE));
  
          //Now make the array of badges we will show.
