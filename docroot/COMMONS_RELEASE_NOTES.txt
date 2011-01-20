@@ -1,4 +1,33 @@
-Drupal Commons 1.3, 2011-01-14
+Drupal Commons 1.3-dev, 2011-01-20 (Beta update)
+------------------------------------
+CHANGELOG [1.3-dev]:
+* 2011-01-20
+ - Fixed: (Re)patched user_badges (#964546)
+ * 2011-01-19
+ - Added: Default permission for anonymous viewing of shouts
+ - Added: Access check for user profiles before linking user pictures to profiles 
+   on comments and node submission information
+ - Fixed: Comment theme to allow for full-width without text overlap
+ - Updated: Shoutbox post template override for new version of shoutbox
+ - Updated: Shoutbox to current dev release
+ - Added: Pathauto pattern for page nodes 
+ - Fixed: Display post information not following theme settings (#1031338)
+* 2011-01-18
+ - Fixed: New comment count on my content views
+ - Fixed: Dynamically remove non group post node types from exposed node type filters 
+   in group content views
+ - Fixed: Removed node type restrictions from recent group content exposed filter
+ - Restored: Updated Commons droplet footer image 
+ - Fixed: 'Join now' button overlap of group membership request links 
+ - Added: Default permission to view heartbeat messages for anonymous users
+ * 2011-01-17
+ - Fixed: Homepage panel auto-deletion on manual edit
+ - Fixed: Homepage join now block form element themeing
+ - Added: Default taxonomy integration with Acquia Search
+ - Fixed: Commons Core feature always overridden issue (Heartbeat.module)
+ - Fixed: Default userpoints vocabulary name 
+
+Drupal Commons 1.3-dev, 2011-01-14 (Beta)
 ------------------------------------
 NOTES:
  - Excluded module updates:
@@ -44,8 +73,6 @@ UPGRADING TO 1.3:
 14. Check the status report for any errors. Address them, if needed. 
 ------------------------------------
 CHANGELOG:
-- Fixed: Create content links in Views (Added access check) 
-- Redesigned: Home page panel
 - Updated: Context
 - Updated: CCK
 - Updated: Context OG
@@ -84,6 +111,7 @@ CHANGELOG:
 - Added: Commons SEO (Feature) [Extracted pathauto components from Commons Core]
 - Added: Commons Admin (Feature) [Extracted admin UI and admin menu modules from Commons Core]
 - Added: Commons Home (Feature) [Extracted home page components from Commons Core]
+- Redesigned: Home page panel
 - Added: Commons Dashboard (Feature) [Extracted dashboard components from Commons Core]
 - Added: Commons Wiki (Feature) [Extracted wiki components from Commons Core]
 - Added: Commons Blog (Feature) [Extracted blog components from Commons Core]
@@ -103,6 +131,7 @@ CHANGELOG:
 - Fixed: Userpoints node delete operation label (http://drupal.org/node/875140)
 - Added: 'My groups' to the 'My stuff' menu
 - Removed: Dependence of PHP input filter inside various views
+- Fixed: Create content links in Views (Added access check) 
 - Added: Form to determine which features are enabled during installation
 - Added: Batch process of post-installation tasks (to avoid PHP timeout)
 - Fixed: Lowered install profile module dependencies (to avoid PHP timeout)
@@ -124,13 +153,6 @@ CHANGELOG:
 - Fixed: Calendar off by one day bug
 - Added: 'Site admin' user role
 - Moved: All roles and permissions to features
-- Fixed: Commons Core feature always overridden issue (Heartbeat.module)
-------------------------------------
-CHANGELOG [1.3-dev]:
-- Fixed: Homepage panel auto-deletion on manual edit
-- Fixed: Homepage join now block form element themeing
-- Added: Defauly taxonomy integration with Acquia Search
-
 
 
 Drupal Commons 1.2, 2011-01-13 [Security release]
