@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeat.pages.inc,v 1.1.2.26 2011/01/15 20:49:55 stalski Exp $
+// $Id: heartbeat.pages.inc,v 1.1.2.27 2011/01/20 20:37:04 stalski Exp $
 
 /**
  * @file
@@ -154,7 +154,7 @@ function heartbeat_activity_poll() {
     $placeholders = implode(',', array_fill(0, count($uaids), "%d"));
     $result = db_query("SELECT uaid, timestamp FROM {heartbeat_activity} WHERE uaid IN($placeholders) ", $uaids);
     while ($row = db_fetch_object($result)) {
-      $json['time_updates'][$row->uaid] = _theme_time_ago($row->timestamp);
+      $json['time_updates'][$row->uaid] = theme('heartbeat_time_ago', $row);
     }
   }
 

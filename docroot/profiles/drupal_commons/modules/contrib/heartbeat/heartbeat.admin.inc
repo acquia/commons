@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeat.admin.inc,v 1.1.2.15.2.20.2.68 2011/01/05 12:49:46 stalski Exp $
+// $Id: heartbeat.admin.inc,v 1.1.2.15.2.20.2.69 2011/01/20 20:37:04 stalski Exp $
 
 /**
  * @file
@@ -628,8 +628,9 @@ function heartbeat_activity_stream_configure(& $form_state, $access_type) {
   );
   $options = array(
     0 => t('No more link'),
-    1 => t('Display "full list" link in block display'),
-    2 => t('Display an ajax-driven older messages link')
+    1 => t('Display "full list" link'),
+    2 => t('Display an ajax-driven older messages link'),
+    3 => t('Display an ajax-driven older messages link and a "full list" link')
   );
   $form['fs_settings']['block_show_pager'] = array(
     '#title' => t('Show "older messages" link in block display'),

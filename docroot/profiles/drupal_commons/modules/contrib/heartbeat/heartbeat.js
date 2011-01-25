@@ -103,20 +103,42 @@ Drupal.heartbeat.appendMessages = function(data) {
 Drupal.heartbeat.prependMessages = function(data) {
 
   var result = Drupal.parseJson(data);
-  
-  if (result['data'] != '') {
-    var stream_selector = '#heartbeat-stream-' + result['stream'];
-    // Append the messages
-    $(stream_selector + ' .heartbeat-messages-wrapper').prepend(result['data']);
-  
-    // Update the times in the stream
+  var stream_selector = '#heartbeat-stream-' + result['stream'];
+
+  // Update the times in the stream
+  if (result['time_updates'] != undefined) {
     var time_updates = result['time_updates'];
     for (uaid in time_updates) {
-      $(stream_selector + ' #beat-item-' + uaid).find('.heartbeat_times').text(time_updates[uaid]);
+      $(stream_selector + ' #beat-item-' + uaid).find('.heartbeat_times').html(time_updates[uaid]);
     }
-    
+  }
+
+  // Append the messages
+  if (result['data'] != '') {
+    $(stream_selector + ' .heartbeat-messages-wrapper').prepend(result['data']);
     // Reattach behaviors for new added html
     Drupal.attachBehaviors($(stream_selector + ' .heartbeat-messages-wrapper'));
+  }
+}
+
+/**
+ * splitGroupedMessage().
+ * 
+ * Splits a grouped message into separate ones.
+ * 
+ * @param Integer uaid
+ *   The user activity Id for the grouped message.
+ * @param Array uaids
+ *   The standalone user activity Ids involved in the grouped message.
+ */
+Drupal.heartbeat.splitGroupedMessage = function(uaid, uaids) {
+  if (uaids == null) {
+    $("#beat-item-" + uaid).show('slow');
+    $("#beat-item-" + uaid + "-ungrouped").hide('slow');  
+  }
+  else {
+    $("#beat-item-" + uaid).hide('slow');
+    $("#beat-item-" + uaid + "-ungrouped").show('slow'); 
   }
 }
 

@@ -8,6 +8,14 @@
 ---------------------------------------------------------------
 # @date ? For release DRUPAL-6--4-x
 ---------------------------------------------------------------
+
+  * #1029780 by dmadruga: Comments (not related to nodes) not showing on activity streams 
+    when multiple languages enabled.
+    This is a big refactoring. Started from patches but then decided to re-analyze the 
+    translation part and it is much more clear and even obvious now.
+  * #1007520 by master-of-magic: translation missing for merge_end_separator / merge_separator
+  * #1007536 by master-of-magic: improved deletion of grouped acitvity logs
+  * #1007068 by master-of-magic: Full list" link optional on block even for AJAX paging
   * #777596 by mikestefff: Integration with Features.module.
   * Performance issue: Changed the loading on the user object
     heartbeat_relations is checked on the actor(heartbeatMessageBuilder) itself

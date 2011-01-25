@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeat.module,v 1.1.2.26.2.46.2.105 2011/01/05 18:33:49 stalski Exp $
+// $Id: heartbeat.module,v 1.1.2.26.2.46.2.108 2011/01/21 00:53:09 stalski Exp $
 // by Stalski (Jochen Stals) - Menhir - www.menhir.be
 
 
@@ -566,7 +566,7 @@ function heartbeat_heartbeat_message_info() {
       '@node_title' => '[node:title-link]',
     ),
   );
-    
+
   $info['heartbeat_add_node'] = array(
     'message' => '!username has added !node_type !node_title.',
     'message_concat' => '!username has added the following !types: %node_title%.',
@@ -602,6 +602,8 @@ function heartbeat_heartbeat_message_info() {
       'group_target' => '',
       'merge_separator' => '',
       'merge_end_separator' => '',
+      'merge_separator_t' => '0',
+      'merge_end_separator_t' => '0',
     ),
     'description' => 'user replied on some content',
     'perms' => '1',
@@ -641,6 +643,8 @@ function heartbeat_heartbeat_message_info() {
       'merge_target' => '',
       'merge_separator' => '',
       'merge_end_separator' => '',
+      'merge_separator_t' => '0',
+      'merge_end_separator_t' => '0',
     ),
     'perms' => '1',
     'custom' => HEARTBEAT_MESSAGE_DEFAULT,
@@ -672,7 +676,7 @@ function heartbeat_heartbeat_message_info() {
       ),
     );
   }
-  
+
   return $info;
 }
 
@@ -862,7 +866,7 @@ function theme_heartbeat_buttons($message) {
   global $user;
   $buttons = array();
   if ($message->delete_access || ($message->actor_access && $message->uid == $user->uid)) {
-    $buttons[] = '<span class="hover-delete">' . l(t('Delete'), 'heartbeat/delete/' . $message->uaid, array('query' => drupal_get_destination(), 'alias' => TRUE)) . '</span>';
+    $buttons[] = $message->delete_button();
   }
 
   return implode('', $buttons);
@@ -1682,8 +1686,7 @@ function heartbeat_stream_save($access_type, $properties = array()) {
  */
 function theme_heartbeat_stream_more_link($heartbeatAccess, $offset_time, $page = TRUE, $absolute = FALSE) {
 
-  $ajax_pager = $page ? $heartbeatAccess->getStream()->page_pager_ajax : $heartbeatAccess->getStream()->block_show_pager == 2;
-  $path = 'heartbeat/' . $heartbeatAccess->getAccess();
+  $ajax_pager = $page ? $heartbeatAccess->getStream()->page_pager_ajax : ($heartbeatAccess->getStream()->block_show_pager == 2 || $heartbeatAccess->getStream()->block_show_pager == 3);
   $attributes = array('html' => FALSE, 'attributes' => array('class' => 'heartbeat-older-messages'));
 
   if (isset($_GET['filters'])) {
@@ -1693,12 +1696,11 @@ function theme_heartbeat_stream_more_link($heartbeatAccess, $offset_time, $page 
     $attributes['absolute'] = TRUE;
   }
 
-  // Blocks link to the pages
-  if (!$page && !$ajax_pager) {
-    return '<div class="more fullarchive">' . l(t('Full list'), $path, $attributes) . '</div>';
-  }
-  else {
+  $content = '';
+  $content .= '<div class="heartbeat-more-messages-wrapper">';
+  if ($ajax_pager) {
 
+    $path = 'heartbeat/' . $heartbeatAccess->getAccess();
     $path .= '/' . $offset_time;
 
     // Add a fourth paramter to indicate that where on a profile page.
@@ -1710,12 +1712,24 @@ function theme_heartbeat_stream_more_link($heartbeatAccess, $offset_time, $page 
       $attributes['attributes']['onclick'] = 'javascript:Drupal.heartbeat.getOlderMessages(this, ' . (int)$page . '); return false;';
     }
 
-    $formattedlink = '<span class="heartbeat-more-messages-wrapper">';
-    $formattedlink .= l(t('Older messages'), $path, $attributes);
-    $formattedlink .= '<span class="heartbeat-messages-throbber">&nbsp;</span></span>';
+    $formattedlink = l(t('Older messages'), $path, $attributes) . '<span class="heartbeat-messages-throbber">&nbsp;</span>';
+    $content .= $formattedlink;
 
-    return $formattedlink;
   }
+
+  // Blocks link to the pages.
+  if (!$page && (!$ajax_pager || $heartbeatAccess->getStream()->block_show_pager == 3)) {
+    $path = 'heartbeat/' . $heartbeatAccess->getAccess();
+    if (isset($attributes['attributes']['onclick'])) {
+      unset($attributes['attributes']['onclick']);
+    }
+    $fulllink = '<div class="more fullarchive heartbeat-full">' . l(t('Full list'), $path, $attributes) . '</div>';
+    $content .= $fulllink;
+  }
+
+  $content .= '</div>';
+
+  return $content;
 
 }
 

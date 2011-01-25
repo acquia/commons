@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeatparser.inc,v 1.1.2.3.2.32 2010/11/20 10:17:28 stalski Exp $
+// $Id: heartbeatparser.inc,v 1.1.2.3.2.33 2011/01/21 00:53:09 stalski Exp $
 
 /**
  * @file
@@ -142,10 +142,12 @@ class heartbeatParser {
           );
           // Add the message
           $this->_messages[$gap_id] = $message;
+          $this->_messages[$gap_id]->additions->source = array($message->message . $message->delete_button());
         }
         // Make sure the the timestamp gets updated
         else {
           $this->_messages[$gap_id]->timestamp = $message->timestamp;
+          $this->_messages[$gap_id]->additions->source[] = $message->message . $message->delete_button();
         }
 
         // Add the counters and variables needed for merging in groups
@@ -153,6 +155,7 @@ class heartbeatParser {
 
         $this->_candidates[$gap_id]['variables'][] = $message->variables;
         $this->_candidates[$gap_id]['count']++;  // variable count, NOT the same as target_count
+        $this->_messages[$gap_id]->uaids[] = $message->uaid;
       }
       elseif ($type == 'count') {
 
@@ -312,7 +315,6 @@ class heartbeatParser {
       if ($candidate['count'] > 1) {
         // rebuild the message using the candidate variables
         $this->_messages[$single_id]->create_grouped_message($candidate, $max_items_to_group);
-
       }
     }
   }

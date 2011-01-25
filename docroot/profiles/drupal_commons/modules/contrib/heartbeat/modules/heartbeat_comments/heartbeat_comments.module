@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeat_comments.module,v 1.1.2.43 2010/12/21 23:27:10 stalski Exp $
+// $Id: heartbeat_comments.module,v 1.1.2.45 2011/01/21 00:53:09 stalski Exp $
 
 /**
  * @file
@@ -170,6 +170,9 @@ function heartbeat_comments_heartbeat_load(&$messages, HeartbeatAccess $stream) 
 
     if (!empty($message->template->attachments['heartbeat_comments'])) {
 
+      // Get the original message from the translation table if needed.
+      $messages[$key]->tuaid = heartbeat_get_tuaid($message->uaid);
+
       $node = NULL;
       $node_comment = 0;
       if ($message->nid > 0) {
@@ -198,7 +201,9 @@ function heartbeat_comments_heartbeat_load(&$messages, HeartbeatAccess $stream) 
         $output = '<div class="user-login-teaser">' . t('!login or !register to make a comment', array('!login' => l(t('Login'), 'user'), '!register' => l(t('register'), 'user/register'))) . '</div>';
       }
       // Try to load from cache.
-      elseif ($comment_cache_enabled && $objects_cache = cache_get('heartbeat:comments:'. $message->uaid. ':'. $message_nid_cache)) {
+      elseif ($comment_cache_enabled && $objects_cache = cache_get('heartbeat:comments:'. $messages[$key]->tuaid. ':'. $message_nid_cache)) {
+        // Make sure the textarea.js script is attached.
+        drupal_add_js('misc/textarea.js');
         $output = $objects_cache->data;
       }
       // Cache this widget.
@@ -226,7 +231,7 @@ function heartbeat_comments_heartbeat_load(&$messages, HeartbeatAccess $stream) 
         // Fetch the comments if needed.
         $messages[$key]->additions->reactions = array();
         if ($messages[$key]->additions->comment_count > 0) {
-          $messages[$key]->additions->reactions = heartbeat_get_reactions($message->uaid, $messages[$key]->additions->node_comment, $node, $messages[$key]->additions->all_comments);
+          $messages[$key]->additions->reactions = heartbeat_get_reactions($messages[$key]->tuaid, $messages[$key]->additions->node_comment, $node, $messages[$key]->additions->all_comments);
           $messages[$key]->classes .= 'has-comments';
         }
         else {
@@ -234,8 +239,9 @@ function heartbeat_comments_heartbeat_load(&$messages, HeartbeatAccess $stream) 
         }
 
         $output = heartbeat_comments_widget($message->template->attachments, $messages[$key]);
+
         if ($comment_cache_enabled) {
-          cache_set('heartbeat:comments:'. $message->uaid. ':'. $message_nid_cache, $output);
+          cache_set('heartbeat:comments:'. $messages[$key]->tuaid. ':'. $message_nid_cache, $output);
         }
 
       }
@@ -306,7 +312,7 @@ function heartbeat_comments_heartbeat_attachments($message = NULL) {
  * Implementation of <attchement>_widget().
  */
 function heartbeat_comments_widget($attachments, &$message) {
-  $list = '<div id="heartbeat-comments-wrapper-' . $message->uaid . '" class="heartbeat-comments-wrapper">';
+  $list = '<div id="heartbeat-comments-wrapper-' . $message->tuaid . '" class="heartbeat-comments-wrapper">';
   $extraCssClass = "heartbeat-comments-nocomments";
 
   if ($message->additions->comment_count > 0) {
@@ -326,9 +332,8 @@ function heartbeat_comments_widget($attachments, &$message) {
     if ($message->additions->comments_order == 'oldest_on_top') {
       $message->additions->reactions = array_reverse($message->additions->reactions);
     }
-    $list .= theme('heartbeat_comments', $message->additions->reactions, $message->uaid, $message->additions->node_comment, $has_more);
+    $list .= theme('heartbeat_comments', $message->additions->reactions, $message->tuaid, $message->additions->node_comment, $has_more);
   }
-
 
   $list .= '</div>';
 
@@ -337,7 +342,7 @@ function heartbeat_comments_widget($attachments, &$message) {
   if ($message->additions->comments_position == 'up') {
     $output .= $list;
   }
-  $output .= drupal_get_form('heartbeat_comments_form', $message->uaid, $message->additions->node_comment, $message->nid);
+  $output .= drupal_get_form('heartbeat_comments_form', $message->tuaid, $message->additions->node_comment, $message->nid);
   if ($message->additions->comments_position == 'down') {
     $output .= $list;
   }
@@ -414,6 +419,7 @@ function heartbeat_comments_form($form_state = array(), $uaid = 0, $node_comment
       '#attributes' => array('class' => 'heartbeat-message-comment')
     );
 
+    // Get the original message from the translation table if needed.
     $form['uaid'] = array(
       '#type' => 'hidden',
       '#value' => $uaid,
@@ -499,10 +505,13 @@ function heartbeat_comments_form_submit($form = array(), &$form_state = array())
     if (variable_get('heartbeat_comments_cache', 1)) {
       cache_clear_all('heartbeat:comments:'. $uaid. ':'. $nid, 'cache');
     }
+
+    $tuaid = $uaid;
   }
   else {
 
-    $tuaid = module_exists('locale') ? heartbeat_get_tuaid($uaid) : $uaid;
+    // Get the original message from the translation table if needed.
+    $tuaid = heartbeat_get_tuaid($uaid);
 
     if (db_query("INSERT INTO {heartbeat_comments} (uid, uaid, message, time) VALUES (%d, %d, '%s', '%s')", $uid, $tuaid, $message, date('Y-m-d H:i:s'))) {
       $hcid = db_last_insert_id('heartbeat_comments', 'hcid');
@@ -513,13 +522,14 @@ function heartbeat_comments_form_submit($form = array(), &$form_state = array())
     }
 
     $uaids = heartbeat_get_uaids($tuaid);
+    if (empty($uaids)) {
+      $uaids = array($uaid);
+    }
     // Alter the uaid_comments field for this user activity id.
     db_query("UPDATE {heartbeat_activity} SET uaid_comments = uaid_comments + 1 WHERE uaid IN ( %s ) ", implode(',', $uaids));
-    foreach ($uaids as $uaid) {
-      // Clear the heartbeat comment cache.
-      if (variable_get('heartbeat_comments_cache', 1)) {
-        cache_clear_all('heartbeat:comments:'. $uaid. ':0', 'cache');
-      }
+    // Clear the heartbeat comment cache.
+    if (variable_get('heartbeat_comments_cache', 1)) {
+      cache_clear_all('heartbeat:comments:'. $tuaid. ':0', 'cache');
     }
 
   }
@@ -551,9 +561,9 @@ function heartbeat_comments_form_submit($form = array(), &$form_state = array())
         $content = theme('heartbeat_comment', $saved, $node_comment);
       }
       else {
-        $content = theme('heartbeat_comments', array($saved), $uaid, $node_comment);
+        $content = theme('heartbeat_comments', array($saved), $tuaid, $node_comment);
       }
-      drupal_json(array('status' => TRUE, 'data' => $content, 'id' => $uaid));
+      drupal_json(array('status' => TRUE, 'data' => $content, 'id' => $tuaid));
     }
     else {
       drupal_json(array('status' => TRUE, 'data' => 'error'));
@@ -721,7 +731,11 @@ function heartbeat_get_message_reactions($uaid, $all = FALSE) {
   }
   $reactions = array();
 
-  // Get translated uaid if needed
+  // When locale is enabled, we need to look up the translation id,
+  // the only problem here is that locale could have been enabled.
+  // This comments will never be fetched since locale will target
+  // a translation that is not there, consequently.
+  // That is hard coded taken care of while saving the comment.
   if ($locale) {
     $query = "SELECT s.hcid, s.uid, s.message AS 'comment', s.cleared, s.time, u.uid,
       u.name, u.signature, u.signature_format, u.picture, u.data, ht.tuaid
@@ -743,6 +757,7 @@ function heartbeat_get_message_reactions($uaid, $all = FALSE) {
   else {
     $result = db_query_range($query, $uaid, 0, HEARTBEAT_REACTIONS_PER_PAGE);
   }
+
   while ($comment = db_fetch_object($result)) {
     // Sanitize the comment messages.
     $comment->comment = filter_xss($comment->comment);
@@ -869,9 +884,7 @@ function _heartbeat_comments_delete($hcid) {
   db_query("DELETE FROM {heartbeat_comments} WHERE hcid = %d", $hcid);
   db_query("UPDATE {heartbeat_activity} SET uaid_comments = uaid_comments - 1 WHERE uaid IN ( %s ) ", implode(',', $uaids));
   if (variable_get('heartbeat_comments_cache', 1)) {
-    foreach ($uaids as $uaid) {
-      cache_clear_all('heartbeat:comments:'. $uaid. ':0', 'cache');
-    }
+    cache_clear_all('heartbeat:comments:'. $uaid. ':0', 'cache');
   }
 }
 

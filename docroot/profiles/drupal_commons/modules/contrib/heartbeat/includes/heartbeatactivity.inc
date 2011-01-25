@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeatactivity.inc,v 1.1.2.1.2.43 2011/01/05 12:49:46 stalski Exp $
+// $Id: heartbeatactivity.inc,v 1.1.2.1.2.45 2011/01/21 00:53:09 stalski Exp $
 
 /**
  * @file
@@ -14,6 +14,7 @@ class HeartbeatActivity {
 
   // DB fields
   public $uaid = 0;
+  public $tuaid = 0;
   public $message_id = '';
   public $nid_info = '';
   public $nid_target_info = '';
@@ -164,6 +165,20 @@ class HeartbeatActivity {
     return t($this->template->message, $variables);
   }
 
+  /**
+   * Create the link for a delete button.
+   */
+  public function delete_button($args = array()) {
+    $attributes = array('query' => drupal_get_destination(), 'alias' => TRUE);
+    if (count($this->uaids) > 1) {
+      $attributes['attributes'] = array(
+        'onclick' => 'javascript:Drupal.heartbeat.splitGroupedMessage('. $this->uaid .', new Array('. implode(",", $this->uaids) .')); return false;',
+      );
+    }
+    $attributes += $args;
+    return '<span class="hover-delete">' . l(t('Delete'), 'heartbeat/delete/' . $this->uaid, $attributes) . '</span>';
+  }
+
   /*
    * Rebuild the message with given candidate variables
    */
@@ -229,7 +244,7 @@ class HeartbeatActivity {
               $merged_string .= ' ' . $stored_variables["@". $target];
             }
             elseif ($i < $count && $count > 2) {
-              if (!empty($this->template->concat_args['merge_separator_t'])) {
+              if (strlen(strip_tags($this->template->concat_args['merge_separator_t'])) > 0) {
                 $merged_string .= ' ' . t($this->template->concat_args['merge_separator']);
               }
               else {
@@ -238,7 +253,7 @@ class HeartbeatActivity {
               $merged_string .= ' ' . $stored_variables["@". $target];
             }
             elseif ($i == $count || $count == 2) {
-              if (!empty($this->template->concat_args['merge_end_separator_t'])) {
+              if (strlen(strip_tags($this->template->concat_args['merge_end_separator_t'])) > 0) {
                 $merged_string .= ' ' . t($this->template->concat_args['merge_end_separator']);
               }
               else {

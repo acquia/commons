@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeatmessagebuilder.inc,v 1.1.2.5.2.35 2010/12/27 19:31:48 stalski Exp $
+// $Id: heartbeatmessagebuilder.inc,v 1.1.2.5.2.36 2011/01/20 20:37:04 stalski Exp $
 
 /**
  * @file
@@ -44,7 +44,7 @@ class HeartbeatMessageBuilder {
    */
   public function get_instance(HeartbeatAccess $heartbeatState) {
     if (variable_get('heartbeat_debug', 0)) {
-      require 'heartbeatmessagebuilderdebug.inc';
+      require_once 'heartbeatmessagebuilderdebug.inc';
       return new HeartbeatMessageBuilderDebug($heartbeatState);
     }
     else {

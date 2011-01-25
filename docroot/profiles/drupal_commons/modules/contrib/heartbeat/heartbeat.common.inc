@@ -1,5 +1,5 @@
 <?php
-// $Id: heartbeat.common.inc,v 1.1.2.2.2.27 2010/11/20 13:39:18 stalski Exp $
+// $Id: heartbeat.common.inc,v 1.1.2.2.2.28 2011/01/21 00:53:09 stalski Exp $
 
 /**
  * @file
@@ -217,8 +217,21 @@ function _theme_time_ago($time) {
  * @return Integer $tuaid
  */
 function heartbeat_get_tuaid($uaid) {
-  $result = db_fetch_object(db_query("SELECT tuaid FROM {heartbeat_translations} WHERE uaid=%d", $uaid));
-  return $result ? $result->tuaid : $uaid;
+  // Untranslated messages have the original activity id.
+  if (!module_exists('locale')) {
+    return $uaid;
+  }
+
+  // Translated messages will have the original activity id as "tuaid".
+  if ($result = db_fetch_object(db_query("SELECT tuaid FROM {heartbeat_translations} WHERE uaid = %d", $uaid))) {
+    return $result->tuaid;
+  }
+  // Messages that were created before locale was installed,
+  // need a record in the translation table.
+  else {
+    db_query("INSERT INTO {heartbeat_translations} SET uaid = %d, tuaid = %d", $uaid, $uaid);
+    return $uaid;
+  }
 }
 
 /**
