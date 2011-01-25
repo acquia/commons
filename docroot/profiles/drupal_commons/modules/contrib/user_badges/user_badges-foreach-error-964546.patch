@@ -1,14 +1,15 @@
 diff --git a/user_badges.module b/user_badges.module
-index e54b167..5c458b7 100644
+index e54b167..06f3c76 100644
 --- a/user_badges.module
 +++ b/user_badges.module
-@@ -196,29 +196,26 @@ function user_badges_user($op, &$edit, &$account, $category = 'account') {
+@@ -195,30 +195,27 @@ function user_badges_user($op, &$edit, &$account, $category = 'account') {
+       // Have we loaded this user before?
        if (isset($badges[$account->uid])) {
          $account->badges = $badges[$account->uid];
++        break;
        }
-+      else {
-+        $account->badges = array();
-+      }
++      
++      $account->badges = array();
  
        if ($account->uid > 0) {
          //Get all user badges for this user, regardless of whether we filter the ones we show.

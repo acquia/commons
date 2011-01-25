@@ -195,10 +195,10 @@ function user_badges_user($op, &$edit, &$account, $category = 'account') {
       // Have we loaded this user before?
       if (isset($badges[$account->uid])) {
         $account->badges = $badges[$account->uid];
+        break;
       }
-      else {
-        $account->badges = array();
-      }
+      
+      $account->badges = array();
 
       if ($account->uid > 0) {
         //Get all user badges for this user, regardless of whether we filter the ones we show.
