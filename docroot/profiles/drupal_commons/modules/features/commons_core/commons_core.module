@@ -461,7 +461,7 @@ function commons_core_node_add_link($type) {
       // No access if the user is not a member
       else if (!og_is_group_member($group->nid, TRUE, $user->uid)) {
         // Unless they are a community manager
-        if (!array_search(variable_get('commons_manager_role', 'community manager'), $account->roles)) {
+        if (!array_search(variable_get('commons_manager_role', 'community manager'), $user->roles)) {
           return NULL;
         }
       }
