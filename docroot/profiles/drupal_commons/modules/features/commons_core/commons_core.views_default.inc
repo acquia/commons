@@ -2368,7 +2368,7 @@ function commons_core_views_default_views() {
   $handler->override_option('use_ajax', TRUE);
   $handler->override_option('use_more', 1);
   $handler->override_option('use_more_always', 0);
-  $handler->override_option('use_more_text', 'View All');
+  $handler->override_option('use_more_text', 'View all');
   $handler->override_option('distinct', 1);
   $handler->override_option('style_plugin', 'table');
   $handler = $view->new_display('block', 'Block', 'block_1');
@@ -3274,7 +3274,7 @@ function commons_core_views_default_views() {
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_more', 1);
   $handler->override_option('use_more_always', 0);
-  $handler->override_option('use_more_text', 'View All');
+  $handler->override_option('use_more_text', 'View all');
   $handler->override_option('distinct', 1);
   $handler->override_option('style_plugin', 'table');
   $handler->override_option('style_options', array(
@@ -6316,7 +6316,7 @@ function commons_core_views_default_views() {
   $handler->override_option('items_per_page', 5);
   $handler->override_option('use_more', 1);
   $handler->override_option('use_more_always', 0);
-  $handler->override_option('use_more_text', 'View All');
+  $handler->override_option('use_more_text', 'View all');
   $handler->override_option('distinct', 1);
   $handler->override_option('style_plugin', 'list');
   $handler->override_option('style_options', array(
@@ -7241,7 +7241,7 @@ function commons_core_views_default_views() {
   $handler->override_option('items_per_page', 5);
   $handler->override_option('use_more', 1);
   $handler->override_option('use_more_always', 0);
-  $handler->override_option('use_more_text', 'View All');
+  $handler->override_option('use_more_text', 'View all');
   $handler->override_option('distinct', 1);
   $handler->override_option('style_plugin', 'list');
   $handler->override_option('style_options', array(
