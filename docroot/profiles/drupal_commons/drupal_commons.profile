@@ -272,7 +272,7 @@ function drupal_commons_features_form($form_state, $url) {
     '#type' => 'checkbox',
     '#title' => st('Notifications'),
     '#default_value' => 1,
-    '#description' => st('Provides a way for group administrators to pull RSS content into a group from other sources.'),
+    '#description' => st('A feature that allows users to subscribe to email & site-based notifications of site activity & new content.'),
   );
   $form['misc']['feature-commons_reputation'] = array(
     '#type' => 'checkbox',
