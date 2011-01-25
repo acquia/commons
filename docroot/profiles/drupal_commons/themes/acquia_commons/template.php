@@ -209,32 +209,37 @@ function acquia_commons_item_list($items = array(), $title = NULL, $type = 'ul',
       else {
          $data = $item;
       }
-      if(!is_numeric($i)){
-      if (count($children) > 0) {
-        $data .= theme_item_list($children, NULL, $type, $attributes); // Render nested list
+      
+      if (!is_numeric($i)) {
+        if (count($children) > 0) {
+          $data .= theme_item_list($children, NULL, $type, $attributes); // Render nested list
+        }
+        if ($c == $num_items - 1) {
+          $attributes['class'] = empty($attributes['class']) ? 'first' : ($attributes['class'] .' first');
+        }
+        if ($c == 0) {
+          $attributes['class'] = empty($attributes['class']) ? 'last' : ($attributes['class'] .' last');
+        }
+        
+        $attributes['class'] .= ' ' . ($c % 2 ? 'even' : 'odd');
+        $output .= '<li'. drupal_attributes($attributes) .'>'. $data ."</li>\n";
+      } 
+      else {
+        if (count($children) > 0) {
+          $data .= theme_item_list($children, NULL, $type, $attributes); // Render nested list
+        }
+        if ($i == 0) {
+          $attributes['class'] = empty($attributes['class']) ? 'first' : ($attributes['class'] .' first');
+        }
+        if ($i == $num_items - 1) {
+          $attributes['class'] = empty($attributes['class']) ? 'last' : ($attributes['class'] .' last');
+        }
+        
+        $attributes['class'] .= ' ' . ($i % 2 ? 'even' : 'odd');
+        $output .= '<li'. drupal_attributes($attributes) .'>'. $data ."</li>\n";
       }
-      if ($c == $num_items - 1) {
-        $attributes['class'] = empty($attributes['class']) ? 'first' : ($attributes['class'] .' first');
-      }
-      if ($c == 0) {
-        $attributes['class'] = empty($attributes['class']) ? 'last' : ($attributes['class'] .' last');
-      }
-      $attributes['class'] = $attributes['class'].' ' . ($c % 2 ? 'even' : 'odd');
-      $output .= '<li'. drupal_attributes($attributes) .'>'. $data ."</li>\n";
-      } else {
-      if (count($children) > 0) {
-        $data .= theme_item_list($children, NULL, $type, $attributes); // Render nested list
-      }
-      if ($i == 0) {
-        $attributes['class'] = empty($attributes['class']) ? 'first' : ($attributes['class'] .' first');
-      }
-      if ($i == $num_items - 1) {
-        $attributes['class'] = empty($attributes['class']) ? 'last' : ($attributes['class'] .' last');
-      }
-      $attributes['class'] = $attributes['class'].' ' . ($i % 2 ? 'even' : 'odd');
-      $output .= '<li'. drupal_attributes($attributes) .'>'. $data ."</li>\n";
     }
-    }
+    
     $output .= "</$type>";
   }
   $output .= '</div>';
