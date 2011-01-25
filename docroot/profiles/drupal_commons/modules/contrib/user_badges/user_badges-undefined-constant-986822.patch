@@ -1,0 +1,13 @@
+diff --git a/user_badges.module b/user_badges.module
+index e54b167..e951d27 100644
+--- a/user_badges.module
++++ b/user_badges.module
+@@ -1024,7 +1024,7 @@ function theme_user_badge($badge, $account = NULL) {
+     $image = theme('imagecache', 'user-badges', $badge->image, $badge->name, $badge->name, array('class' => $badge->class));
+   }
+   else {
+-    $image = theme('image', $badge->image, $badge->name, $badge->name, array('class' => $badge->class), !get_size);
++    $image = theme('image', $badge->image, $badge->name, $badge->name, array('class' => $badge->class), !$get_size);
+   }
+ 
+   //We don't link the badge if there is no link and no default, or if the default is overridden
