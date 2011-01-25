@@ -1,4 +1,4 @@
-// $Id: insert.js,v 1.6.2.3 2010/07/27 04:46:18 quicksketch Exp $
+// $Id: insert.js,v 1.6.2.4 2011/01/20 23:11:35 quicksketch Exp $
 
 (function ($) {
 
@@ -112,6 +112,11 @@ Drupal.insert = {
           break;
         }
       }
+    }
+    // CKeditor module support.
+    else if (typeof(CKEDITOR) != 'undefined' && typeof(Drupal.ckeditorActiveId) != 'undefined') {
+      Drupal.insert.activateTabPane(document.getElementById(Drupal.ckeditorActiveId));
+      CKEDITOR.instances[Drupal.ckeditorActiveId].insertHtml(content);
     }
     // Direct CKeditor support (only body field supported).
     else if (typeof(CKEDITOR) != 'undefined' && CKEDITOR.instances[insertTextarea.id]) {

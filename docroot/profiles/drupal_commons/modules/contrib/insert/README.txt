@@ -1,4 +1,4 @@
-// $Id: README.txt,v 1.1.2.1 2010/07/27 04:01:13 quicksketch Exp $
+// $Id: README.txt,v 1.1.2.2 2010/08/19 04:50:37 quicksketch Exp $
 
 Insert is a utility that makes inserting images and links to files into text
 areas or WYSIWYGs much easier. It adds a simple JavaScript-based button to
@@ -44,8 +44,20 @@ Install
    into the Body field.
 
 Insert should work on multiple fields (the last field that was active will
-received the file), and with most popular WYSIWYG editors. Note that FCKeditor
+receive the file), and with most popular WYSIWYG editors. Note that FCKeditor
 only supports the Body field due to an API limitation.
+
+Paths
+-----
+
+By default the path to the inserted file will be absolute, including the full
+domain name, such as http://www.example.com/sites/default/files/image.jpg. If
+you prefer relative paths, such as /sites/default/files/image.jpg, add the
+following variable to your settings.php file:
+
+$conf['insert_absolute_paths'] = FALSE;
+
+See http://drupal.org/node/622964#comment-2451810
 
 Theming
 -------
