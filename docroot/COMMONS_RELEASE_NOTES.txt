@@ -1,6 +1,15 @@
-Drupal Commons 1.3-dev, 2011-01-20 (Beta update)
+Drupal Commons 1.3-dev, 2011-01-25 (Beta update)
 ------------------------------------
 CHANGELOG [1.3-dev]:
+* 2011-01-25
+ - Fixed: PHP errors from user role detection for node add links
+ - Updated: Heartbeat
+ - Updated: Insert
+ - Fixed: Theme font family stack
+ - Fixed: Duplicate description on feature selection form (#1038862)
+ - Fixed: User badges undefined constant error (#986822)
+ - Fixed: Theme template PHP notices
+ - Fixed: (Re)patched user badges for #964546: Misuse of static cache on user load
 * 2011-01-20
  - Fixed: (Re)patched user_badges (#964546)
  - Fixed: Panel WSOD caused by missing panels style version in theme info
@@ -22,7 +31,7 @@ CHANGELOG [1.3-dev]:
  - Restored: Updated Commons droplet footer image 
  - Fixed: 'Join now' button overlap of group membership request links 
  - Added: Default permission to view heartbeat messages for anonymous users
- * 2011-01-17
+* 2011-01-17
  - Fixed: Homepage panel auto-deletion on manual edit
  - Fixed: Homepage join now block form element themeing
  - Added: Default taxonomy integration with Acquia Search
@@ -86,6 +95,7 @@ CHANGELOG:
 - Updated: Devel
 - Updated: Diff
 - Updated: getId3
+- Updated: Insert
 - Updated: Token
 - Updated: Pathauto
 - Updated: FileField
