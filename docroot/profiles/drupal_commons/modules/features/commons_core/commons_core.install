@@ -6,6 +6,9 @@
 function commons_core_install() {
   // Link vocabulary to nodes
   commons_core_add_taxonomy();
+  
+  // Set module weight
+  commons_core_set_weight();
 }
 
 /**
@@ -20,6 +23,13 @@ function commons_core_add_taxonomy() {
     $record->type = $type;
     drupal_write_record('vocabulary_node_types', $record);
   }
+}
+
+/**
+ * Set the module weight so it can act after most
+ */
+function commons_core_set_weight() {
+  db_query("UPDATE {system} SET weight = 5 WHERE name = 'commons_core'");
 }
 
 /**
@@ -118,4 +128,12 @@ function commons_core_update_6000() {
   features_install_modules($features);
   
   return array();
+}
+
+/**
+ * Set the module weight above others
+ */
+function commons_core_update_6001() {
+  commons_core_set_weight();
+  return array(); 
 }

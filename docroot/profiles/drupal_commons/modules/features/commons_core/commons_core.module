@@ -559,6 +559,21 @@ function commons_core_form_alter(&$form, &$form_state, $form_id) {
       
         // Groups don't have titles, they have names
         $form['title']['#title'] = t('Name');
+        
+        // Add og options to a fieldset
+        $form['og_options'] = array(
+          '#type' => 'fieldset',
+          '#title' => t('Group options'),
+        );
+        
+        $form['og_options']['og_selective'] = $form['og_selective'];
+        $form['og_options']['og_directory'] = $form['og_directory'];
+        $form['og_options']['og_private'] = $form['og_private'];
+        $form['og_options']['og_register'] = $form['og_register'];
+        unset($form['og_selective']);
+        unset($form['og_directory']);
+        unset($form['og_register']);
+        unset($form['og_private']);
       }
     }
   }
