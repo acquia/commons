@@ -1,0 +1,9 @@
+<?php
+
+/**
+ * Enable og_notifications
+ */
+function commons_notifications_update_6000() {
+  drupal_install_modules(array('og_notifications'));
+  return array();
+}

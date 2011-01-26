@@ -71,6 +71,14 @@ function commons_notifications_user_default_permissions() {
     ),
   );
 
+  // Exported permission: subscribe to content in groups
+  $permissions['subscribe to content in groups'] = array(
+    'name' => 'subscribe to content in groups',
+    'roles' => array(
+      '0' => 'authenticated user',
+    ),
+  );
+
   // Exported permission: subscribe to content type
   $permissions['subscribe to content type'] = array(
     'name' => 'subscribe to content type',
