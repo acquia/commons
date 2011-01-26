@@ -72,37 +72,6 @@ function og_notifications_user($type, &$edit, &$user, $category = NULL) {
  */
 function og_notifications_form_alter(&$form, $form_state, $form_id) {
   switch ($form_id) {
-    case 'notifications_content_settings_form':
-      $form['group'] = array(
-        '#type' => 'fieldset',
-        '#title' => t('Group subscriptions'),
-        '#collapsible' => TRUE,
-        '#weight' => 0
-      );
-      // General content settings
-      $select = array();
-      $nodetypes = node_get_types();
-      $ogtypes = og_get_types('group_post');
-      foreach ($ogtypes as $ntype) {
-        $select[$ntype] = $nodetypes[$ntype]->name;
-      }
-
-      $form['group']['og_notifications_content_types'] = array(
-        '#type' => 'checkboxes',
-        '#title' => t('Allowed content types'),
-        '#default_value' => variable_get('og_notifications_content_types', array()),
-        '#options' => $select,
-        '#description' => t('Select specific content types which should be <em>allowed</em> for subscriptions to <em>group + content type</em>.'),
-        '#multiple' => TRUE
-      );
-      break;
-    case 'notifications_add_subscription_form':
-      // Remove unauthorised node types.
-      if ($form['type']['#value'] == 'grouptype') {
-        $content_types = array_filter(variable_get('og_notifications_content_types', array()));
-        $form['info']['fields'][1]['value']['#options'] = array_intersect_key($form['info']['fields'][1]['value']['#options'], $content_types);
-      }
-      break;
     case 'user_profile_form':
       // Insert autosubscribe option into the messaging section of the user edit
       // form.
@@ -263,6 +232,30 @@ function og_notifications_messaging($op, $arg1 = NULL, $arg2 = NULL, $arg3 = NUL
 
       return $tokens;
   }
+}
+
+/**
+ * Return all available group post content types that can be subscribed to
+ *
+ * @return
+ *   An associative array of node types, keyed by the machine-name
+ */
+function og_notifications_node_types() {
+  // All available group post types
+  $group_types = og_get_types('group_post');
+  // All available nodes and their names
+  $content_options = node_get_types('names');
+  // All available nodes which can be subscribed to
+  $allowed = notifications_content_types('name', 'grouptype');
+  foreach ($content_options as $type => $type) {
+    // Type is only allowed if it can be posted inside a group
+    // and placed in a subscription
+    if (!in_array($type, $group_types) || !in_array($type, array_keys($allowed))) {
+      unset($content_options[$type]);
+    }
+  }
+  
+  return $content_options;
 }
 
 /**
@@ -502,23 +495,25 @@ function og_notifications_user_unsubscribe($account, $gid) {
  */
 function _og_notifications_node_options($account, $node) {
   $options = array();
+  $types = og_notifications_node_types();
 
   // If node is a group type and the user is subscribed to this group.
   if (og_is_group_type($node->type) && isset($account->og_groups[$node->nid])) {
-    foreach (array_filter(variable_get('og_notifications_content_types', array())) as $type) {
+    foreach ($types as $type => $name) {
       $options[] = array(
-        'name' => t('%type posts in %group', array('%group' => $node->title, '%type' => node_get_types('name', $type))),
+        'name' => t('%type posts in %group', array('%group' => $node->title, '%type' => $name)),
         'type' => 'grouptype',
         'fields' => array('group' => $node->nid, 'type' => $type)
       );
     }
   }
+  
   // If node is part of a group user may be subscribed to the node through one
   // of the groups.
   if (isset($node->og_groups)) {
     foreach ($node->og_groups as $index => $gid) {
       // Only members get to see subscription options.
-      if (isset($account->og_groups[$gid]) && in_array($node->type, array_filter(variable_get('og_notifications_content_types', array())))) {
+      if (isset($account->og_groups[$gid]) && in_array($node->type, array_keys($types))) {
         // Content type
         $options[] = array(
           'name' => t('%type posts in %group', array('%group' => $node->og_groups_both[$gid], '%type' => node_get_types('name', $node->type))),
