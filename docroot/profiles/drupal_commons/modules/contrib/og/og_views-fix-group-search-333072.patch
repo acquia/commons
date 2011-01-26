@@ -1,5 +1,7 @@
---- og.og_search.view	2008-10-31 14:45:31.000000000 -0400
-+++ og.og_search.view.new	2010-07-21 14:33:04.000000000 -0400
+diff --git a/modules/og_views/views/og.og_search.view b/modules/og_views/views/og.og_search.view
+index 4cbf90e..830e090 100644
+--- a/modules/og_views/views/og.og_search.view
++++ b/modules/og_views/views/og.og_search.view
 @@ -5,6 +5,14 @@ if (!module_exists('search')) {
    return;
  }
@@ -35,7 +37,7 @@
      'relationship' => 'none',
    ),
  ));
-@@ -118,13 +128,31 @@ $handler->override_option('access', arra
+@@ -118,13 +128,31 @@ $handler->override_option('access', array(
    'type' => 'perm',
    'perm' => 'search content',
  ));
