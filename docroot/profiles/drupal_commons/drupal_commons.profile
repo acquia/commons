@@ -15,9 +15,6 @@ define('DRUPAL_COMMONS_THEME', 'acquia_commons');
  * 
  * To save time during installation, only enable module here that are either
  * required by Features or not included in any Commons features
- * 
- * @see
- *   drupal_commons_enable_features()
  *
  * @return
  *   An array of modules to enable.
@@ -673,9 +670,19 @@ function drupal_commons_config_heartbeat() {
     foreach ($streams as $key => $value) {
       $streams[$key]['profile'] = 0;
     }
-  
-    variable_set('heartbeat_stream_data', $streams);
   }
+  else {
+    $streams = array(
+      'privateheartbeat' => array(
+        'profile' => 0
+      ), 
+      'publicheartbeat' => array(
+        'profile' => 0
+      )
+    );
+  }
+  
+  variable_set('heartbeat_stream_data', $streams);
 }
 
 /**
