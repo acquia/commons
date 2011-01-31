@@ -217,7 +217,9 @@ class context_reaction_block extends context_reaction {
       return $this->render_ajax($_GET['context_block']);
     }
     if ($this->is_enabled_region($region)) {
-      return theme('context_block_editable_region', $region, $this->block_list($region), $this->is_editable());
+      // Fetch any content assigned to this region through drupal_set_content() calls.
+      $content = drupal_get_content($region);
+      return theme('context_block_editable_region', $region, $this->block_list($region), $this->is_editable(), $content);
     }
     return '';
   }

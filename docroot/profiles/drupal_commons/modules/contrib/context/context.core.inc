@@ -65,7 +65,7 @@ function context_theme() {
     'file' => 'context_reaction_block.theme.inc',
   );
   $items['context_block_editable_region'] = array(
-    'arguments' => array('region' => '', 'blocks' => array(), 'editable' => FALSE),
+    'arguments' => array('region' => '', 'blocks' => array(), 'editable' => FALSE, 'content' => NULL),
     'path' => drupal_get_path('module', 'context') . '/theme',
     'template' => 'context-block-editable-region',
     'file' => 'context_reaction_block.theme.inc',

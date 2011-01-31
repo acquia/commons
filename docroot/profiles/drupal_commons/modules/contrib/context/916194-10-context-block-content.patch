@@ -1,0 +1,48 @@
+Index: context.core.inc
+===================================================================
+RCS file: /cvs/drupal-contrib/contributions/modules/context/Attic/context.core.inc,v
+retrieving revision 1.1.2.3.2.20.2.29
+diff -u -p -r1.1.2.3.2.20.2.29 context.core.inc
+--- context.core.inc	5 Aug 2010 08:03:29 -0000	1.1.2.3.2.20.2.29
++++ context.core.inc	17 Nov 2010 06:23:10 -0000
+@@ -65,7 +65,7 @@ function context_theme() {
+     'file' => 'context_reaction_block.theme.inc',
+   );
+   $items['context_block_editable_region'] = array(
+-    'arguments' => array('region' => '', 'blocks' => array(), 'editable' => FALSE),
++    'arguments' => array('region' => '', 'blocks' => array(), 'editable' => FALSE, 'content' => NULL),
+     'path' => drupal_get_path('module', 'context') . '/theme',
+     'template' => 'context-block-editable-region',
+     'file' => 'context_reaction_block.theme.inc',
+Index: plugins/context_reaction_block.inc
+===================================================================
+RCS file: /cvs/drupal-contrib/contributions/modules/context/plugins/Attic/context_reaction_block.inc,v
+retrieving revision 1.1.2.35
+diff -u -p -r1.1.2.35 context_reaction_block.inc
+--- plugins/context_reaction_block.inc	6 Aug 2010 16:13:32 -0000	1.1.2.35
++++ plugins/context_reaction_block.inc	17 Nov 2010 06:23:10 -0000
+@@ -217,7 +217,9 @@ class context_reaction_block extends con
+       return $this->render_ajax($_GET['context_block']);
+     }
+     if ($this->is_enabled_region($region)) {
+-      return theme('context_block_editable_region', $region, $this->block_list($region), $this->is_editable());
++      // Fetch any content assigned to this region through drupal_set_content() calls.
++      $content = drupal_get_content($region);
++      return theme('context_block_editable_region', $region, $this->block_list($region), $this->is_editable(), $content);
+     }
+     return '';
+   }
+Index: theme/context-block-editable-region.tpl.php
+===================================================================
+RCS file: /cvs/drupal-contrib/contributions/modules/context/theme/Attic/context-block-editable-region.tpl.php,v
+retrieving revision 1.1.2.4
+diff -u -p -r1.1.2.4 context-block-editable-region.tpl.php
+--- theme/context-block-editable-region.tpl.php	27 Jul 2010 18:49:22 -0000	1.1.2.4
++++ theme/context-block-editable-region.tpl.php	17 Nov 2010 06:23:10 -0000
+@@ -11,3 +11,6 @@
+   <?php print theme('block', $block); ?>
+ <?php endforeach; ?>
+ <?php endif; ?>
++<?php if (!empty($content)): ?>
++  <?php print $content; ?>
++<?php endif; ?>
