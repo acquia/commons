@@ -269,12 +269,16 @@ function commons_core_block($op = 'list', $delta = 0, $edit = array()) {
         );
         break;
       case 5:
-        $details = og_block_details();
-        if (isset($details['content'])) {
-          $block = array(
-            'subject' => t('Actions'),
-            'content' => $details['content']
-          );
+        // Detect group context
+        if ($group = og_get_group_context()) {
+          // Get the standard group details block
+          $details = og_block_details();
+          if (isset($details['content'])) {
+            $block = array(
+              'subject' => l(t('Actions'), "node/{$group->nid}", array('attributes' => array('title' => t('Return to !group', array('!group' => $group->title))))),
+              'content' => $details['content']
+            );
+          }
         }
         break;
       case 6:
