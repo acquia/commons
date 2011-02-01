@@ -192,6 +192,12 @@ l(t('more'), "node/$groupnode->nid/aggregator/feed", array('title' => t('View th
         while ($item = db_fetch_object($result)) {
           $items[] = theme('og_aggregator_block_item', $item);
         }
+        
+        // If no items are available, don't return a block
+        if (empty($items)) {
+          return NULL;
+        }
+        
         $block['content'] = theme('item_list', $items) . $block['content'];
      
         return $block;
