@@ -2,6 +2,10 @@
 
 include_once('commons_core.features.inc');
 
+/** 
+ * HOOKS ======================================================
+ */
+
 /**
  * Implementation of hook_content_default_fields_alter()
  * 
@@ -174,18 +178,7 @@ function commons_core_menu_alter(&$items) {
 }
 
 /**
- * Callback for group node tab titles
- */
-function commons_core_set_node_tab_title($node) {
-  if (og_is_group_type($node->type)) {
-    return variable_get('commons_group_tab_title', t('Home'));
-  }
-  
-  return t('View');
-}
-
-/**
- * Optionally remove Shoutbox link from Group menu
+ * Implementation of hook_og_links_alter()
  */
 function commons_core_og_links_alter(&$links, &$node) {
   // Optionally hide the shoutbox link
@@ -290,6 +283,470 @@ function commons_core_block($op = 'list', $delta = 0, $edit = array()) {
     }
     return $block;
   }  
+}
+
+/**
+ * Implementation of hook_form_alter()
+ */
+function commons_core_form_alter(&$form, &$form_state, $form_id) {
+  // A node is being added or edited
+  if (strstr($form_id, 'node_form')) {
+    // Load the node
+    $node = $form['#node'];
+    
+    // Remove default "Promoted to Front Page" option
+    unset($form['options']['promote']);
+  
+    // Check if this is a group type
+    if (module_exists('og')) {
+      if (og_is_group_type($node->type)) {
+        // Make user's aware of the max length
+        $maxlength = $form['og_description']['#maxlength'];
+        $form['og_description']['#description'] = $form['og_description']['#description'] . ' (' . t('!maxlength characters allowed', array('!maxlength' => $maxlength)) . ')'; 
+      
+        // Groups don't have titles, they have names
+        $form['title']['#title'] = t('Name');
+        
+        // Add og options to a fieldset
+        $form['og_options'] = array(
+          '#type' => 'fieldset',
+          '#title' => t('Group options'),
+        );
+        
+        $form['og_options']['og_selective'] = $form['og_selective'];
+        $form['og_options']['og_directory'] = $form['og_directory'];
+        $form['og_options']['og_private'] = $form['og_private'];
+        $form['og_options']['og_register'] = $form['og_register'];
+        unset($form['og_selective']);
+        unset($form['og_directory']);
+        unset($form['og_register']);
+        unset($form['og_private']);
+      }
+    }
+  }
+
+  // Optionally restrict voting only to members of the group
+  // that the poll is in
+  if ($form_id == 'poll_view_voting') {
+    // Check the variable
+    if (variable_get('commons_group_prevent_open_voting', 0)) { 
+      // Extract the poll node itself
+      $poll = $form['#node'];
+        
+      commons_core_group_restrict_form($poll, $form, t('vote'), array('vote'));
+    }
+  }
+  
+  // Optionally restrict commenting only to members of the group that
+  // the node is in
+  if ($form_id == 'comment_form') {
+    // Check the variable
+    if (variable_get('commons_group_prevent_open_commenting', 0)) { 
+      // Determine the node
+      // The node ID is either located at node/id or comment/reply/id
+      $node = (arg(0) == 'node') ? node_load(arg(1)) : node_load(arg(2));  
+        
+      // Make sure the node loaded correctly
+      if ($node) {
+        commons_core_group_restrict_form($node, $form, t('comment'));
+      }
+    }
+  }
+  
+  // Views bulk operations form
+  // Use strstr() because the form_id contains a suffix
+  if (strstr($form_id, 'views_bulk_operations_form')) {
+    // Move operation controls above the content
+    $form['submit']['#weight'] = -100; 
+  }
+}
+
+/**
+ * Implementation of hook_og()
+ */
+function commons_core_og($op, $gid, $uid, $args) {
+  switch ($op) {
+    case 'user insert':
+    case 'user delete':
+      // Load the group object
+      $group = node_load($gid);
+      og_load_group($group);
+      
+      // Load the user
+      $user = user_load($uid);
+      
+      // Should we try to send an email alert?
+      if (variable_get('commons_email_selective_group', 1)) {
+        // Don't act if this is the group creator
+        if ($group->uid != $user->uid) {
+          // Only act if the group is invite-only or closed
+          if ($group->og_selective == OG_INVITE_ONLY ||
+            $group->og_selective == OG_CLOSED) {
+            // Send the email alert
+            drupal_mail(
+              'commons',
+              "og $op",
+              $user->mail,
+              language_default(),
+              array('group' => $group)
+            );
+          }
+        }
+      }
+      
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_mail()
+ */
+function commons_core_mail($key, &$message, $params) {
+  switch ($key) {
+    case 'og user delete':
+      $message['subject'] = t('You have been removed from !group', array('!group' => $params['group']->title));
+      $message['body'] = t('A manager from !group has removed you from the group.', array('!group' => $params['group']->title));
+      break;
+    
+    case 'og user insert':
+      global $base_url;
+      $link = $base_url . '/' . ($params['group']->path ? $params['group']->path : ('node/' . $params['group']->nid));
+      $message['subject'] = t('You have been added to !group', array('!group' => $params['group']->title));
+      $message['body'] = t('A manager from !group has added you to the group.', array('!group' => $params['group']->title));
+      $message['body'] .= "\n\n\n";
+      $message['body'] .= t('The group is located at !link', array('!link' => $link));
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_field_access()
+ */
+function commons_core_field_access($op, $field, $account = NULL, $node = NULL) {
+  if ($field['field_name'] == 'field_group_sticky') {
+    switch($op) {
+      case 'view':
+      case 'edit':
+        // If on node add form, use og_get_group_context() to determine group
+        if (arg(0) == 'node' && arg(1) == 'add' && ($group = commons_core_get_group_context())) {
+          // hook_nodeapi() validates group admin status if additional
+          // groups are selected
+          
+          // Show only under the following conditions
+          if (!og_is_group_admin($group, $account) && 
+              !user_access('administer nodes') && 
+              !array_search(variable_get('commons_manager_role', 'community manager'), $account->roles)) {
+          
+            return FALSE;
+          }
+          else {
+            return TRUE;
+          }
+        }
+      
+        /**
+         * If here, we're now viewing the node. Must handle access controls
+         * for editablefields.module
+         */
+
+        if ($node) {
+          // Determine all group affiliations for the current node
+          $groups = og_get_node_groups($node);
+          
+          // If no group affiliates, never show
+          if (empty($groups)) {
+            return FALSE;
+          }
+          
+          // Users with admin nodes permission and community manager role can always edit
+          if (user_access('administer nodes') || array_search(variable_get('commons_manager_role', 'community manager'), $account->roles)) {
+            return TRUE;
+          }
+
+          // Check that current user is the admin of all groups
+          foreach ($groups as $nid => $group) {
+            if (!og_is_group_admin(node_load($nid))) {
+              return FALSE;
+            }
+          }
+        }
+        
+        return TRUE;
+    }
+  }
+}
+
+/**
+ * Implementation of hook_tagging_suggestions()
+ */
+function commons_core_tagging_suggestions($vid, $node) {
+  $suggestions = array();
+  
+  // Check if there are suggestions stored
+  if ($tags = variable_get('commons_tag_suggestions', '')) {
+    $tags = array_reverse(explode(',', $tags));
+    foreach ($tags as $tag) {
+      $suggestions[] = array(
+        '#name' => trim($tag),
+      );
+    }
+  }
+
+  return $suggestions;
+}
+
+/**
+ * Implementation of hook_form_tagging_admin_settings_alter()
+ */
+function commons_core_form_tagging_admin_settings_alter(&$form, &$form_state) {
+  // Remove checkbox
+  unset($form['tagging_show_suggestion_example']);
+  
+  // Add a field to supply static suggestions
+  $form['commons_tag_suggestions'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Static tag suggestions'),
+    '#description' => t('Enter a comma-separated list of terms that will show up as tag suggestions when creating content items.'),
+    '#weight' => -5,
+    '#default_value' => variable_get('commons_tag_suggestions', ''),
+  );
+}
+
+/**
+ * Implementation of hook_theme()
+ */
+function commons_core_theme() {
+  return array(
+    'commons_core_user_stats_block' => array(),
+    'commons_core_info_block' => array(),
+    'commons_core_node_add_link' => array(
+      'arguments' => array('link' => NULL),
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_user()
+ */
+function commons_core_user($op, &$edit, &$account, $category = NULL) {
+  if ($op == 'view' ) {
+    // Remove the "subscribe to" link because we're providing
+    // a custom block for that to be placed elsewhere
+    unset($account->content['summary']['notifications']);
+  }
+}
+
+/**
+ * Implementation of hook_action_info().
+ */
+function commons_core_action_info() {
+  return array(
+    // Provide a "Mark as read" action for VBO
+    'commons_core_noderead_action' => array(
+      'description' => t('Mark as read'),
+      'type' => 'node',
+      'configurable' => FALSE,
+      'hooks' => array(
+        'nodeapi' => array('presave'),
+        'comment' => array('insert', 'update'),  
+      )    
+    ),
+    // Provide a "Mark as unread" action for VBO
+    'commons_core_nodeunread_action' => array(
+      'description' => t('Mark as unread'),
+      'type' => 'node',
+      'configurable' => FALSE,
+      'hooks' => array(
+        'nodeapi' => array('presave'),
+        'comment' => array('insert', 'update'),  
+      )    
+    )
+  );
+}
+
+/**
+ * Implementation of hook_init()
+ */
+function commons_core_init() {
+  // Exit if coming from the command-line (needed for drush),
+  // if we're not calling index.php (so cron.php, xmlrpc.php, etc, works),
+  // of if the site is in maintenance mode
+  if ((php_sapi_name() == 'cli') ||
+    (str_replace(base_path(), '', $_SERVER['SCRIPT_NAME']) != 'index.php') ||
+    variable_get('site_offline', 0)) {
+    return;
+  }
+
+  //  Force anonymous users to a login page
+  if (variable_get('commons_force_login', 0)) {
+    global $user;
+  
+    // If anonymous
+    if (!$user->uid) {
+      //  Avoid endless redirect and allow for user registration/creation/login
+      //  Checking arg(1) for numeric value prevents /user/# path
+      if (arg(0) != 'user' || is_numeric(arg(1))) {
+        // Redirect to home
+        if ($dest = $_GET['q']) {
+          // If the user was trying to reach a certain page,
+          // try to preserve the redirection after login
+          drupal_goto('user', "destination=$dest");
+        }
+        else {
+          drupal_goto('user');
+        }
+      }
+    }
+  }
+  
+  // We've overridden /og with a custom view, so redirect
+  if (arg(0) == 'og' && !arg(1)) {
+    drupal_goto('groups');
+  }
+  
+  // We've overridden /og/my with a custom view, so redirect
+  if (arg(0) == 'og' && arg(1) == 'my') {
+    drupal_goto('groups/my');
+  }
+  
+  // Redirect core /profile which lists users to our new list of users
+  if (arg(0) == 'profile' && !arg(1)) {
+    drupal_goto('users');
+  }
+  
+  // Notify group admins of any pending requests on group home page
+  if (arg(0) == 'node' && is_numeric(arg(1)) && !arg(2)) {
+    // Load the current user
+    global $user;
+    
+    // Check to see if user is logged in
+    if ($user->uid) {
+      // Load the current node
+      $node = node_load(arg(1));
+      // Determine if this is a group
+      if (og_is_group_type($node->type)) {
+        // Check if current member is an admin
+        if (og_is_group_admin($node, $user)) {
+          // Check if there are pending requests
+          $count = db_result(db_query("
+            SELECT COUNT(uid) FROM {og_uid} 
+            WHERE nid = %d AND is_active = 0", $node->nid));
+            
+          if ($count) {
+            drupal_set_message(t('There are currently !count pending membership requests. Click !here to view them.', array('!count' => $count, '!here' => l('here', 'og/users/' . $node->nid))));
+          }
+        }
+      }
+    }
+  }
+  
+  // Set the breadcrumbs
+  commons_core_set_breadcrumb($_GET['q']);
+}
+
+/**
+ * Implementation of hook_nodeapi()
+ */
+function commons_core_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
+  switch ($op) {
+    case 'validate':
+      // Make sure the "group sticky" field was used correctly
+      commons_core_check_group_sticky($node);
+      
+      // Make sure group titles are unique
+      commons_core_check_group_title($node);
+      
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_views_pre_view()
+ */
+function commons_core_views_pre_view(&$view, &$display_id, &$args) {
+  switch ($view->name) {
+    case 'og_my_groups':
+    case 'og_all':
+    case 'og_most_active':
+      $view->display_handler->override_option('header', commons_core_node_add_link('group'));
+      break;
+      
+    case 'recent_notices':
+      $view->display_handler->override_option('header', commons_core_node_add_link('notice'));
+      break;
+      
+    case 'tag_cloud':
+      $view->display_handler->override_option('footer', l(t('View more'), 'tagadelic'));
+      break;
+      
+    case 'recent_featured_stream':
+      $view->display_handler->override_option('footer', l(t('View all featured content'), 'featured'));
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_form_views_exposed_form_alter()
+ */
+function commons_core_form_views_exposed_form_alter(&$form, &$form_state) {
+  switch ($form['#id']) {
+    // The "My unread" tab on the "My content" section
+    case 'views-exposed-form-og-my-content-page-2':
+    // The "All Content" tab on the "My content" section
+    case 'views-exposed-form-og-my-content-page-1':
+    // The "Recent group content" block found on group home pages
+    case 'views-exposed-form-og-content-tracker-panel-pane-1':
+      // The exposed filter for node type contains all nodes on the site
+      // We want to limit it to group post types only
+      if (isset($form['type'])) {
+        foreach ($form['type']['#options'] as $type => $name) {
+          if ($type != 'All' && !og_is_group_post_type($type)) {
+            unset($form['type']['#options'][$type]);
+          }
+        }
+      }
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_link_alter()
+ */
+function commons_core_link_alter(&$links, $node, $comment = NULL) {
+  global $user;
+  
+  // Only act on comment links
+  if ($comment) {
+    // Only check if the edit link is missing
+    if (!isset($links['comment_edit'])) {
+      // Check if user can edit the comment
+      if (commons_core_can_edit_comment($comment)) {
+        // Provide an edit link
+        $link['comment_edit'] = array(
+          'title' => t('edit'),
+          'href' => 'comment/edit/' . $comment->cid,
+        );
+        
+        // Add link to the beginning
+        $links = $link + $links;
+      }
+    }
+  }
+}
+
+/** 
+ * MISC ===================================================
+ */
+
+/**
+ * Callback for group node tab titles
+ */
+function commons_core_set_node_tab_title($node) {
+  if (og_is_group_type($node->type)) {
+    return variable_get('commons_group_tab_title', t('Home'));
+  }
+  
+  return t('View');
 }
 
 /**
@@ -543,82 +1000,6 @@ function commons_core_get_group_context($node = NULL) {
 }
 
 /**
- * Implementation of hook_form_alter()
- */
-function commons_core_form_alter(&$form, &$form_state, $form_id) {
-  // A node is being added or edited
-  if (strstr($form_id, 'node_form')) {
-    // Load the node
-    $node = $form['#node'];
-    
-    // Remove default "Promoted to Front Page" option
-    unset($form['options']['promote']);
-  
-    // Check if this is a group type
-    if (module_exists('og')) {
-      if (og_is_group_type($node->type)) {
-        // Make user's aware of the max length
-        $maxlength = $form['og_description']['#maxlength'];
-        $form['og_description']['#description'] = $form['og_description']['#description'] . ' (' . t('!maxlength characters allowed', array('!maxlength' => $maxlength)) . ')'; 
-      
-        // Groups don't have titles, they have names
-        $form['title']['#title'] = t('Name');
-        
-        // Add og options to a fieldset
-        $form['og_options'] = array(
-          '#type' => 'fieldset',
-          '#title' => t('Group options'),
-        );
-        
-        $form['og_options']['og_selective'] = $form['og_selective'];
-        $form['og_options']['og_directory'] = $form['og_directory'];
-        $form['og_options']['og_private'] = $form['og_private'];
-        $form['og_options']['og_register'] = $form['og_register'];
-        unset($form['og_selective']);
-        unset($form['og_directory']);
-        unset($form['og_register']);
-        unset($form['og_private']);
-      }
-    }
-  }
-
-  // Optionally restrict voting only to members of the group
-  // that the poll is in
-  if ($form_id == 'poll_view_voting') {
-    // Check the variable
-    if (variable_get('commons_group_prevent_open_voting', 0)) { 
-      // Extract the poll node itself
-      $poll = $form['#node'];
-        
-      commons_core_group_restrict_form($poll, $form, t('vote'), array('vote'));
-    }
-  }
-  
-  // Optionally restrict commenting only to members of the group that
-  // the node is in
-  if ($form_id == 'comment_form') {
-    // Check the variable
-    if (variable_get('commons_group_prevent_open_commenting', 0)) { 
-      // Determine the node
-      // The node ID is either located at node/id or comment/reply/id
-      $node = (arg(0) == 'node') ? node_load(arg(1)) : node_load(arg(2));  
-        
-      // Make sure the node loaded correctly
-      if ($node) {
-        commons_core_group_restrict_form($node, $form, t('comment'));
-      }
-    }
-  }
-  
-  // Views bulk operations form
-  // Use strstr() because the form_id contains a suffix
-  if (strstr($form_id, 'views_bulk_operations_form')) {
-    // Move operation controls above the content
-    $form['submit']['#weight'] = -100; 
-  }
-}
-
-/**
  * Alter a form based on the current user's group membership status
  * 
  * If the current user is not a member of any of the given group(s)
@@ -677,201 +1058,6 @@ function commons_core_group_restrict_form($node, &$form, $action, $elements = ar
       );
     } 
   }
-}
-
-/**
- * Implementation of hook_og()
- */
-function commons_core_og($op, $gid, $uid, $args) {
-  switch ($op) {
-    case 'user insert':
-    case 'user delete':
-      // Load the group object
-      $group = node_load($gid);
-      og_load_group($group);
-      
-      // Load the user
-      $user = user_load($uid);
-      
-      // Should we try to send an email alert?
-      if (variable_get('commons_email_selective_group', 1)) {
-        // Don't act if this is the group creator
-        if ($group->uid != $user->uid) {
-          // Only act if the group is invite-only or closed
-          if ($group->og_selective == OG_INVITE_ONLY ||
-            $group->og_selective == OG_CLOSED) {
-            // Send the email alert
-            drupal_mail(
-              'commons',
-              "og $op",
-              $user->mail,
-              language_default(),
-              array('group' => $group)
-            );
-          }
-        }
-      }
-      
-      break;
-  }
-}
-
-/**
- * Implementation of hook_mail()
- */
-function commons_core_mail($key, &$message, $params) {
-  switch ($key) {
-    case 'og user delete':
-      $message['subject'] = t('You have been removed from !group', array('!group' => $params['group']->title));
-      $message['body'] = t('A manager from !group has removed you from the group.', array('!group' => $params['group']->title));
-      break;
-    
-    case 'og user insert':
-      global $base_url;
-      $link = $base_url . '/' . ($params['group']->path ? $params['group']->path : ('node/' . $params['group']->nid));
-      $message['subject'] = t('You have been added to !group', array('!group' => $params['group']->title));
-      $message['body'] = t('A manager from !group has added you to the group.', array('!group' => $params['group']->title));
-      $message['body'] .= "\n\n\n";
-      $message['body'] .= t('The group is located at !link', array('!link' => $link));
-      break;
-  }
-}
-
-/**
- * Implementation of hook_field_access()
- */
-function commons_core_field_access($op, $field, $account = NULL, $node = NULL) {
-  if ($field['field_name'] == 'field_group_sticky') {
-    switch($op) {
-      case 'view':
-      case 'edit':
-        // If on node add form, use og_get_group_context() to determine group
-        if (arg(0) == 'node' && arg(1) == 'add' && ($group = commons_core_get_group_context())) {
-          // hook_nodeapi() validates group admin status if additional
-          // groups are selected
-          
-          // Show only under the following conditions
-          if (!og_is_group_admin($group, $account) && 
-              !user_access('administer nodes') && 
-              !array_search(variable_get('commons_manager_role', 'community manager'), $account->roles)) {
-          
-            return FALSE;
-          }
-          else {
-            return TRUE;
-          }
-        }
-      
-        /**
-         * If here, we're now viewing the node. Must handle access controls
-         * for editablefields.module
-         */
-
-        if ($node) {
-          // Determine all group affiliations for the current node
-          $groups = og_get_node_groups($node);
-          
-          // If no group affiliates, never show
-          if (empty($groups)) {
-            return FALSE;
-          }
-          
-          // Users with admin nodes permission and community manager role can always edit
-          if (user_access('administer nodes') || array_search(variable_get('commons_manager_role', 'community manager'), $account->roles)) {
-            return TRUE;
-          }
-
-          // Check that current user is the admin of all groups
-          foreach ($groups as $nid => $group) {
-            if (!og_is_group_admin(node_load($nid))) {
-              return FALSE;
-            }
-          }
-        }
-        
-        return TRUE;
-    }
-  }
-}
-
-/**
- * Implementation of hook_init()
- */
-function commons_core_init() {
-  // Exit if coming from the command-line (needed for drush),
-  // if we're not calling index.php (so cron.php, xmlrpc.php, etc, works),
-  // of if the site is in maintenance mode
-  if ((php_sapi_name() == 'cli') ||
-    (str_replace(base_path(), '', $_SERVER['SCRIPT_NAME']) != 'index.php') ||
-    variable_get('site_offline', 0)) {
-    return;
-  }
-
-  //  Force anonymous users to a login page
-  if (variable_get('commons_force_login', 0)) {
-    global $user;
-  
-    // If anonymous
-    if (!$user->uid) {
-      //  Avoid endless redirect and allow for user registration/creation/login
-      //  Checking arg(1) for numeric value prevents /user/# path
-      if (arg(0) != 'user' || is_numeric(arg(1))) {
-        // Redirect to home
-        if ($dest = $_GET['q']) {
-          // If the user was trying to reach a certain page,
-          // try to preserve the redirection after login
-          drupal_goto('user', "destination=$dest");
-        }
-        else {
-          drupal_goto('user');
-        }
-      }
-    }
-  }
-  
-  // We've overridden /og with a custom view, so redirect
-  if (arg(0) == 'og' && !arg(1)) {
-    drupal_goto('groups');
-  }
-  
-  // We've overridden /og/my with a custom view, so redirect
-  if (arg(0) == 'og' && arg(1) == 'my') {
-    drupal_goto('groups/my');
-  }
-  
-  // Redirect core /profile which lists users to our new list of users
-  if (arg(0) == 'profile' && !arg(1)) {
-    drupal_goto('users');
-  }
-  
-  // Notify group admins of any pending requests on group home page
-  if (arg(0) == 'node' && is_numeric(arg(1)) && !arg(2)) {
-    // Load the current user
-    global $user;
-    
-    // Check to see if user is logged in
-    if ($user->uid) {
-      // Load the current node
-      $node = node_load(arg(1));
-      // Determine if this is a group
-      if (og_is_group_type($node->type)) {
-        // Check if current member is an admin
-        if (og_is_group_admin($node, $user)) {
-          // Check if there are pending requests
-          $count = db_result(db_query("
-            SELECT COUNT(uid) FROM {og_uid} 
-            WHERE nid = %d AND is_active = 0", $node->nid));
-            
-          if ($count) {
-            drupal_set_message(t('There are currently !count pending membership requests. Click !here to view them.', array('!count' => $count, '!here' => l('here', 'og/users/' . $node->nid))));
-          }
-        }
-      }
-    }
-  }
-  
-  // Set the breadcrumbs
-  commons_core_set_breadcrumb($_GET['q']);
 }
 
 /**
@@ -985,22 +1171,6 @@ function commons_core_community_redirect() {
 }
 
 /**
- * Implementation of hook_nodeapi()
- */
-function commons_core_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
-  switch ($op) {
-    case 'validate':
-      // Make sure the "group sticky" field was used correctly
-      commons_core_check_group_sticky($node);
-      
-      // Make sure group titles are unique
-      commons_core_check_group_title($node);
-      
-      break;
-  }
-}
-
-/*
  * Enforce the rules of the "group sticky" field
  * 
  * This function is called when validating a node. If the "group sticky'
@@ -1068,57 +1238,47 @@ function commons_core_check_group_title($node) {
 }
 
 /**
- * Implementation of hook_views_pre_view()
+ * Set a given node as read for the current user
+ * 
+ * @see
+ *   commons_core_action_info()
  */
-function commons_core_views_pre_view(&$view, &$display_id, &$args) {
-  switch ($view->name) {
-    case 'og_my_groups':
-    case 'og_all':
-    case 'og_most_active':
-      $view->display_handler->override_option('header', commons_core_node_add_link('group'));
-      break;
-      
-    case 'recent_notices':
-      $view->display_handler->override_option('header', commons_core_node_add_link('notice'));
-      break;
-      
-    case 'tag_cloud':
-      $view->display_handler->override_option('footer', l(t('View more'), 'tagadelic'));
-      break;
-      
-    case 'recent_featured_stream':
-      $view->display_handler->override_option('footer', l(t('View all featured content'), 'featured'));
-      break;
-  }
+function commons_core_noderead_action(&$node) {
+  global $user;
+
+  if ($user->uid) {
+    // Remove any records for this node for this user
+    db_query("DELETE FROM {history} WHERE nid = %d AND uid = %d", $node->nid, $user->uid);
+    
+    // Add a record showing this node was just viewed by this user
+    $record = new stdClass;
+    $record->nid = $node->nid;
+    $record->uid = $user->uid;
+    $record->timestamp = time();
+    drupal_write_record('history', $record);     
+  }     
 }
 
 /**
- * Implementation of hook_form_views_exposed_form_alter()
+ * Set a given node as unread for the current user
+ * 
+ * @see
+ *   commons_core_action_info()
  */
-function commons_core_form_views_exposed_form_alter(&$form, &$form_state) {
-  switch ($form['#id']) {
-    // The "My unread" tab on the "My content" section
-    case 'views-exposed-form-og-my-content-page-2':
-    // The "All Content" tab on the "My content" section
-    case 'views-exposed-form-og-my-content-page-1':
-    // The "Recent group content" block found on group home pages
-    case 'views-exposed-form-og-content-tracker-panel-pane-1':
-      // The exposed filter for node type contains all nodes on the site
-      // We want to limit it to group post types only
-      if (isset($form['type'])) {
-        foreach ($form['type']['#options'] as $type => $name) {
-          if ($type != 'All' && !og_is_group_post_type($type)) {
-            unset($form['type']['#options'][$type]);
-          }
-        }
-      }
-      break;
-  }
+function commons_core_nodeunread_action(&$node) {
+  global $user;
+
+  if ($user->uid) {
+    // Remove any records for this node for this user
+    db_query("DELETE FROM {history} WHERE nid = %d AND uid = %d", $node->nid, $user->uid);    
+  }     
 }
 
-// COMMENT OVERRIDES
+/** 
+ * COMMENT OVERRIDES ================================================
+ */
 
-/*
+/**
  * Minor override and alteration of comment_edit()
  * 
  * Allows group admins to edit comments in their group
@@ -1319,32 +1479,7 @@ function commons_core_comment_form(&$form_state, $edit, $title = NULL) {
   return $form;
 }
 
-/*
- * Implementation of hook_link_alter()
- */
-function commons_core_link_alter(&$links, $node, $comment = NULL) {
-  global $user;
-  
-  // Only act on comment links
-  if ($comment) {
-    // Only check if the edit link is missing
-    if (!isset($links['comment_edit'])) {
-      // Check if user can edit the comment
-      if (commons_core_can_edit_comment($comment)) {
-        // Provide an edit link
-        $link['comment_edit'] = array(
-          'title' => t('edit'),
-          'href' => 'comment/edit/' . $comment->cid,
-        );
-        
-        // Add link to the beginning
-        $links = $link + $links;
-      }
-    }
-  }
-}
-
-/*
+/**
  * Determine whether a user can edit a comment
  * 
  * This is determined by the checking the group which the comment
@@ -1375,132 +1510,9 @@ function commons_core_can_edit_comment($comment) {
   return FALSE;
 }
 
-/**
- * Implementation of hook_user()
+/** 
+ * THEME ================================================
  */
-function commons_core_user($op, &$edit, &$account, $category = NULL) {
-  if ($op == 'view' ) {
-    // Remove the "subscribe to" link because we're providing
-    // a custom block for that to be placed elsewhere
-    unset($account->content['summary']['notifications']);
-  }
-}
-
-/**
-* Implementation of hook_action_info().
-*/
-function commons_core_action_info() {
-  return array(
-    // Provide a "Mark as read" action for VBO
-    'commons_core_noderead_action' => array(
-      'description' => t('Mark as read'),
-      'type' => 'node',
-      'configurable' => FALSE,
-      'hooks' => array(
-        'nodeapi' => array('presave'),
-        'comment' => array('insert', 'update'),  
-      )    
-    ),
-    // Provide a "Mark as unread" action for VBO
-    'commons_core_nodeunread_action' => array(
-      'description' => t('Mark as unread'),
-      'type' => 'node',
-      'configurable' => FALSE,
-      'hooks' => array(
-        'nodeapi' => array('presave'),
-        'comment' => array('insert', 'update'),  
-      )    
-    )
-  );
-}
-
-/**
- * Set a given node as read for the current user
- * 
- * @see
- *   commons_core_action_info()
- */
-function commons_core_noderead_action(&$node) {
-  global $user;
-
-  if ($user->uid) {
-    // Remove any records for this node for this user
-    db_query("DELETE FROM {history} WHERE nid = %d AND uid = %d", $node->nid, $user->uid);
-    
-    // Add a record showing this node was just viewed by this user
-    $record = new stdClass;
-    $record->nid = $node->nid;
-    $record->uid = $user->uid;
-    $record->timestamp = time();
-    drupal_write_record('history', $record);     
-  }     
-}
-
-/**
- * Set a given node as unread for the current user
- * 
- * @see
- *   commons_core_action_info()
- */
-function commons_core_nodeunread_action(&$node) {
-  global $user;
-
-  if ($user->uid) {
-    // Remove any records for this node for this user
-    db_query("DELETE FROM {history} WHERE nid = %d AND uid = %d", $node->nid, $user->uid);    
-  }     
-}
-
-// TAGGING
-
-/**
- * Implementation of hook_tagging_suggestions()
- */
-function commons_core_tagging_suggestions($vid, $node) {
-  $suggestions = array();
-  
-  // Check if there are suggestions stored
-  if ($tags = variable_get('commons_tag_suggestions', '')) {
-    $tags = array_reverse(explode(',', $tags));
-    foreach ($tags as $tag) {
-      $suggestions[] = array(
-        '#name' => trim($tag),
-      );
-    }
-  }
-
-  return $suggestions;
-}
-
-/**
- * Implementation of hook_form_tagging_admin_settings_alter()
- */
-function commons_core_form_tagging_admin_settings_alter(&$form, &$form_state) {
-  // Remove checkbox
-  unset($form['tagging_show_suggestion_example']);
-  
-  // Add a field to supply static suggestions
-  $form['commons_tag_suggestions'] = array(
-    '#type' => 'textarea',
-    '#title' => t('Static tag suggestions'),
-    '#description' => t('Enter a comma-separated list of terms that will show up as tag suggestions when creating content items.'),
-    '#weight' => -5,
-    '#default_value' => variable_get('commons_tag_suggestions', ''),
-  );
-}
-
-/**
- * Implementation of hook_theme()
- */
-function commons_core_theme() {
-  return array(
-    'commons_core_user_stats_block' => array(),
-    'commons_core_info_block' => array(),
-    'commons_core_node_add_link' => array(
-      'arguments' => array('link' => NULL),
-    ),
-  );
-}
 
 /**
  * Theme handler for node add links
