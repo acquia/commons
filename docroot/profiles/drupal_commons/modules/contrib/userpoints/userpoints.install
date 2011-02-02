@@ -1,5 +1,5 @@
 <?php
-// $Id: userpoints.install,v 1.15.2.5 2009/10/08 23:35:55 kbahey Exp $
+// $Id: userpoints.install,v 1.15.2.9 2010/12/02 10:16:31 berdir Exp $
 
 /**
  * Implementation of hook_schema().
@@ -51,7 +51,7 @@ function userpoints_schema() {
       'uid_tid' => array('uid', 'tid'),
     ),
   );
-  
+
   $schema['userpoints_txn'] = array(
     'description' => 'Userpoints Transactions',
     'fields' => array(
@@ -147,13 +147,13 @@ function userpoints_schema() {
         'type' => 'varchar',
         'length' => 32,
       ),
-      
+
     ),
     'primary key' => array('txn_id'),
     'indexes' => array(
       'operation' => array('operation'),
       'reference' => array('reference'),
-      'status' => array('status'),
+      'status_expired_expiry' => array('status', 'expired', 'expirydate'),
       //Optional as in update_6011
       'changed' => array('changed'),
     )
@@ -174,7 +174,7 @@ function userpoints_install() {
 function userpoints_uninstall() {
   drupal_uninstall_schema('userpoints');
   db_query("DELETE FROM {variable} WHERE name like '%userpoints%'");
-  
+
   $vid = db_result(db_query("SELECT vid FROM {vocabulary} WHERE module='userpoints'"));
   if ($vid) {
     taxonomy_del_vocabulary($vid);
@@ -214,29 +214,29 @@ function userpoints_update_5() {
 
 function userpoints_update_6() {
   $ret = array();
-  db_add_field($ret, 'userpoints_txn', 'expirydate', array('type' => 'int', 'length' => 11, 'not null' => true));
-  db_add_field($ret, 'userpoints_txn', 'expired', array('type' => 'int', 'length' => 1, 'not null' => true, 'size' => 'tiny'));
+  db_add_field($ret, 'userpoints_txn', 'expirydate', array('type' => 'int', 'length' => 11, 'not null' => TRUE));
+  db_add_field($ret, 'userpoints_txn', 'expired', array('type' => 'int', 'length' => 1, 'not null' => TRUE, 'size' => 'tiny'));
   db_add_field($ret, 'userpoints_txn', 'parent_txn_id', array('type' => 'int'));
   db_add_field($ret, 'userpoints_txn', 'tid', array('type' => 'int'));
 
   db_drop_primary_key($ret, 'userpoints');
 
   db_add_field($ret, 'userpoints', 'tid', array('type' => 'int'));
-  db_add_field($ret, 'userpoints', 'pid', array('type' => 'serial', 'not null' => true));
+  db_add_field($ret, 'userpoints', 'pid', array('type' => 'serial', 'not null' => TRUE));
   db_add_primary_key($ret, 'userpoints', 'pid');
   return $ret;
 }
 function userpoints_update_7() {
   $ret = array();
-  db_add_field($ret, 'userpoints_txn', 'entity_id', array('type' => 'int', 'length' => 11, 'not null' => true));
+  db_add_field($ret, 'userpoints_txn', 'entity_id', array('type' => 'int', 'length' => 11, 'not null' => TRUE));
   db_add_field($ret, 'userpoints_txn', 'entity_type', array('type' => 'varchar', 'length' => 32));
   db_change_field($ret, 'userpoints_txn', 'event', 'operation', array('type' => 'varchar'));
   return $ret;
 }
 function userpoints_update_8() {
   $ret = array();
-  db_change_field($ret, 'userpoints_txn', 'tid', 'tid', array('type' => 'int', 'not null' => true, 'default' => 0, 'length' => 11));
-  db_change_field($ret, 'userpoints', 'tid', 'tid', array('type' => 'int', 'not null' => true, 'default' => 0, 'length' => 11));
+  db_change_field($ret, 'userpoints_txn', 'tid', 'tid', array('type' => 'int', 'not null' => TRUE, 'default' => 0, 'length' => 11));
+  db_change_field($ret, 'userpoints', 'tid', 'tid', array('type' => 'int', 'not null' => TRUE, 'default' => 0, 'length' => 11));
   return $ret;
 }
 
@@ -269,5 +269,15 @@ function userpoints_update_6011() {
   db_add_index($ret, 'userpoints_txn', 'changed', array('changed'));
 //Optional: update table information to mark each transaction as changed on creation only..
   $ret[] = update_sql("UPDATE {userpoints_txn} SET changed = time_stamp");
+  return $ret;
+}
+
+/**
+ * For userpoints_txn, need an index on expirydate and expired columns.
+ */
+function userpoints_update_6012() {
+  $ret = array();
+  db_drop_index($ret, 'userpoints_txn', 'status');
+  db_add_index($ret, 'userpoints_txn', 'status_expired_expiry', array('status', 'expired', 'expirydate'));
   return $ret;
 }

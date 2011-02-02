@@ -1,5 +1,5 @@
 <?php
-// $Id: userpoints_rules.module,v 1.1.2.6 2009/09/13 02:47:01 kbahey Exp $
+// $Id: userpoints_rules.module,v 1.1.2.7 2010/02/09 15:24:27 kbahey Exp $
 
 /**
  * @file
@@ -13,7 +13,7 @@ function userpoints_rules_userpoints($op, $params='') {
   switch ($op) {
   case 'points after':
     $account = user_load($params['uid']);
-    rules_invoke_event('userpoints_event_points_awarded', $account, $params['points']);
+    rules_invoke_event('userpoints_event_points_awarded', $account, $params);
     break;
   }
 }

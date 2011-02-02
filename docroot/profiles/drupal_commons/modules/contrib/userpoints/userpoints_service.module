@@ -1,5 +1,5 @@
 <?php
-// $Id: userpoints_service.module,v 1.1 2008/04/02 23:41:08 kbahey Exp $
+// $Id: userpoints_service.module,v 1.1.4.2 2010/07/15 21:52:34 kbahey Exp $
 
 /**
  * Implementation of hook_help().
@@ -16,7 +16,7 @@ function userpoints_service_help($section) {
 /**
  * Implementation of hook_service().
  */
- 
+
 function userpoints_service_service() {
   return array(
 
@@ -28,17 +28,17 @@ function userpoints_service_service() {
           '#name' => 'uid',
           '#type' => 'int',
           '#description' => t('A valid Drupal User ID.'),
-        ), 
+        ),
         array(
           '#name'        => 'tid',
           '#type'        => 'int',
           '#optional'    => TRUE,
           '#description' => t('An optional Term ID for the category.'),
-        ), 
+        ),
       ),
       '#return'   => 'struct',
       '#help'     => t('Retrieves the number of points the user has.')),
-    
+
     array(
       '#method'   => 'userpoints.points',
       '#callback' => 'userpoints_service_points',
@@ -47,30 +47,30 @@ function userpoints_service_service() {
           '#name'        => 'uid',
           '#type'        => 'int',
           '#description' => t('A valid Drupal User ID.'),
-        ), 
+        ),
         array(
           '#name'        => 'points',
           '#type'        => 'int',
           '#description' => t('Number of points to add/subtract.'),
-        ), 
+        ),
         array(
           '#name'        => 'tid',
           '#type'        => 'int',
           '#optional'    => TRUE,
           '#description' => t('An optional Term ID for the category.'),
-        ), 
+        ),
         array(
           '#name'        => 'event',
           '#type'        => 'string',
           '#optional'    => TRUE,
           '#description' => t('An optional event ID for this transaction.'),
-        ), 
+        ),
         array(
           '#name'        => 'description',
           '#type'        => 'string',
           '#optional'    => TRUE,
           '#description' => t('An optional description of this transaction.'),
-        ), 
+        ),
       ),
       '#return'   => 'struct',
       '#help'     => t('Adds/subtracts points to a user.')),
@@ -105,12 +105,12 @@ function userpoints_service_points($uid, $points, $tid = NULL, $event = 'userpoi
     return services_error(t('Points parameter must be a negative or positive number.'));
   }
 
-  $params = array (
+  $params = array(
     'uid'         => $uid,
     'points'      => $points,
     'tid'         => $tid,
     'event'       => $event,
-    'description' => $desc,
+    'description' => $description,
     'display'     => FALSE,
     'moderate'    => FALSE,
   );

@@ -1,5 +1,5 @@
 <?php
-//$Id: userpoints_user_picture.module,v 1.1.2.2 2010/12/31 02:44:41 fred0 Exp $
+//$Id: userpoints_user_picture.module,v 1.1.2.3 2011/01/26 05:04:58 fred0 Exp $
 define('USERPOINTS_USER_PICTURE', 'userpoints_user_picture');
 define('USERPOINTS_USER_PICTURE_TID', 'userpoints_user_picture_tid');
 
@@ -47,38 +47,51 @@ function userpoints_user_picture_userpoints($op, $params = array()) {
 /*
  * Implementation of hook_user().
  */
-function userpoints_user_picture_user($op, &$edit, &$account, $category = NULL) {
- switch($op) {
-   case 'update':
-   global $user;
-   
-   // Check that user pictures are enabled
-   if (!variable_get('user_pictures', 0)){
-     return;
-   }
-   
-   // Check user has access to earn points for user picture
-   if (!user_access('userpoints user picture')) {
-     return;
-   }
-   
-   $params = array(
-     'uid'         => $user->uid,'entity_id'   => $user->uid,
-     'entity_type' => 'user',
-     'tid'         => variable_get(USERPOINTS_USER_PICTURE_TID, 0),
-   );
-   
-   if ((empty($user->picture)) && $file = file_save_upload('picture_upload')) {
-         // Award the points
-         $params['points'] = variable_get(USERPOINTS_USER_PICTURE, 0);
-         $params['operation'] = 'User Picture Added';
-   }
-   elseif ((!empty($user->picture)) && !empty($edit['picture_delete'])) {
-         // Subtract the points
-         $params['points'] = -(variable_get(USERPOINTS_USER_PICTURE, 0));
-         $params['operation'] = 'User Picture Deleted';
-   }
-   
-   userpoints_userpointsapi($params);
-  }
+function userpoints_user_picture_user($op, &$edit, &$user, $category = NULL) {
+
+	// Check that user pictures are enabled
+	if (!variable_get('user_pictures', 0)){
+	 return;
+	}
+	
+	// Check user has access to earn points for user picture
+	if (!user_access('userpoints user picture')) {
+	 return;
+	}
+	
+	$params = array(
+	 'uid'         => $user->uid,
+	 'entity_id'   => $user->uid,
+	 'entity_type' => 'user',
+	 'tid'         => variable_get(USERPOINTS_USER_PICTURE_TID, 0),
+	);
+	
+	switch($op) {
+		case 'update':
+			if ((empty($user->picture)) && $file = file_save_upload('picture_upload')) {
+				 // Award the points
+				 $params['points'] = variable_get(USERPOINTS_USER_PICTURE, 0);
+				 $params['operation'] = 'User Picture Added';
+			}
+			elseif ((!empty($user->picture)) && !empty($edit['picture_delete'])) {
+				 // Subtract the points
+				 $params['points'] = -(variable_get(USERPOINTS_USER_PICTURE, 0));
+				 $params['operation'] = 'User Picture Deleted';
+			}
+			break;
+		
+		case 'insert':
+			// Register with Picture module integration
+			// You must allow anonymous users to earn user picture points for this to work
+			if (module_exists('reg_with_pic') && ($file = file_save_upload('picture_upload') || $file = file_save_upload('picture_upload_register'))) {
+				// Award the points
+				$params['uid'] = $user->uid;
+				$params['entity_id'] = $user->uid;
+				$params['points'] = variable_get(USERPOINTS_USER_PICTURE, 0);
+				$params['operation'] = 'User Picture Added';
+			}
+			break;
+			
+	}
+	userpoints_userpointsapi($params);
 }

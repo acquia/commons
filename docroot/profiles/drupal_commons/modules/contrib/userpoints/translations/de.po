@@ -1,10 +1,9 @@
 msgid ""
-msgstr ""
-"Project-Id-Version: Userpoints\n"
+msgstr "Project-Id-Version: Userpoints\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2006-09-14 18:48+0100\n"
-"Last-Translator: unleashed mind <dev@unleashedmind.com>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2009-11-04 19:16+0100\n"
+"Last-Translator: Thomas Zahreddin <thomas@voicehero.net>\n"
+"Language-Team:  <tz@it-arts.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,192 +12,728 @@ msgstr ""
 "X-Poedit-Country: GERMANY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: userpoints.module:26
-#: ;29
-msgid "Users earn points as they post nodes, comments, and vote on nodes"
-msgstr "Benutzer verdienen Punkte, wenn sie Inhalte erstellen, Kommentare schreiben und Inhalte bewerten."
+#: userpoints.views.inc:19;23
+#: userpoints.info:0;0
+#: userpoints_rules.info:0
+#: userpoints_service.info:0
+msgid "Userpoints"
+msgstr "Userpoints"
 
-#: userpoints.module:42
-msgid "users by points"
-msgstr "Benutzer nach Punkten"
+#: userpoints.views.inc:24
+msgid "!Points accumulated by users on your site."
+msgstr "Die Nutzer Iher Website haben !Points gesammelt."
 
-#: userpoints.module:49
-msgid "reset points"
-msgstr "Punkte zurücksetzen"
+#: userpoints.views.inc:46
+#: userpoints.module:908;923;1338;1451;1559;1735;100
+msgid "!Points"
+msgstr "!Points"
 
-#: userpoints.module:63
-msgid "Reset all user points. This is useful in certain situations such as monthly contests. Enter YES without quotes to reset"
-msgstr "Alle Punkte zurücksetzen. Dies ist in bestimmten Fällen sinnvoll, bspw. bei monatlichen Wettbewerben. \"JA\" ohne Anführungszeichen eingeben, um alle Punkte zurückzusetzen."
+#: userpoints.views.inc:47
+msgid "A User's current !points."
+msgstr "!points des aktuellen Benutzers"
 
-#: userpoints.module:66
-msgid "NO"
-msgstr "NEIN"
-
-#: userpoints.module:70
-msgid "Reset"
-msgstr "Zurücksetzen"
-
-#: userpoints.module:76
-msgid "YES"
-msgstr "JA"
-
-#: userpoints.module:78
-msgid "All user points have been reset!"
-msgstr "Alle Punkte wurden zurückgesetzt!"
-
-#: userpoints.module:88
-msgid "Points for each event"
-msgstr "Punkte für jede Aktion"
-
-#: userpoints.module:94
-msgid "Points for posting a %node-name"
-msgstr "Punkte für das Erstellen von %node-name"
-
-#: userpoints.module:103
-msgid "Points for posting a comment"
-msgstr "Punkte für einen Kommentar"
-
-#: userpoints.module:111
-msgid "Points for moderating a comment"
-msgstr "Punkte für das Moderieren eines Kommentars"
-
-#: userpoints.module:120
-msgid "Points for voting on a node (requires nodevote module)"
-msgstr "Punkte für das Bewerten eines Inhalts (erfordert Nodevote Modul)"
-
-#: userpoints.module:130
-msgid "Points for referring a user (requires the user_referral module)"
-msgstr "Punkte für das Einladen von Benutzern (erfordert das User Referral Modul)"
-
-#: userpoints.module:140
-msgid "Points for inviting a user (requires the invite module)"
-msgstr "Punkte für das Einladen eines Benutzers (erfordert das Invite Modul)"
-
-#: userpoints.module:150
-msgid "Points when invited user registers (requires the invite module)"
-msgstr "Punkte für die Registrierung eines eingeladenen Benutzers (erfordert das Invite Modul)"
-
-#: userpoints.module:163
-msgid "Ecommerce Options"
-msgstr "Ecommerce Optionen"
-
-#: userpoints.module:168
-msgid "Points awarded for buying (multiplied by price)"
-msgstr "Punkte für das Kaufen von Produkten (multipliziert mit dem Produktpreis)"
-
-#: userpoints.module:176
-msgid "Smallest purchase for which points are awarded"
-msgstr "Mindestbetrag der Bestellung, für die Punkte vergeben wird"
-
-#: userpoints.module:184
-msgid "Accept user points as payment?"
-msgstr "Punkte als Zahlungsmittel erlauben?"
-
-#: userpoints.module:186
-msgid "Disable"
-msgstr "Deaktivieren"
-
-#: userpoints.module:186
-msgid "Enable"
-msgstr "Aktivieren"
-
-#: userpoints.module:191
-msgid "Points used in payment (for every dollar)"
-msgstr "Wert der Punkte bei Zahlungen (Wert pro Euro)"
-
-#: userpoints.module:199
-msgid "Number of points that must be spent per purchase"
-msgstr "Anzahl der Punkte, die pro Bestellung verwendet werden müssen"
-
-#: userpoints.module:211
-msgid "Advanced Options"
-msgstr "Erweiterte Optionen"
-
-#: userpoints.module:215
-msgid "Reset points"
-msgstr "Punkte zurücksetzen"
-
-#: userpoints.module:216
-msgid "Reset the points for all users."
-msgstr "Punkte aller Benutzer zurücksetzen"
-
-#: userpoints.module:230
-msgid "User points"
-msgstr "Benutzerpunkte"
-
-#: userpoints.module:233
-#: ;245;304
-msgid "Points"
-msgstr "Punkte"
-
-#: userpoints.module:244
-#: ;304
+#: userpoints.views.inc:67
+#: userpoints_rules.rules.inc:17;73
+#: userpoints.module:921;1336;1449;1559
 msgid "User"
 msgstr "Benutzer"
 
-#: userpoints.module:269
-msgid "%user's points"
-msgstr "%user's Punkte"
+#: userpoints.views.inc:68
+msgid "Relate the userpoints table to the user table."
+msgstr "Verknüpfen der Tabelle userpoinsts mit der user Tabelle."
 
-#: userpoints.module:270
-msgid "Highest users"
-msgstr "Beste Benutzer"
+#: userpoints.views.inc:72
+msgid "Users"
+msgstr "Benutzer"
+
+#: userpoints_rules.rules.inc:15
+msgid "Grant !points to a user"
+msgstr "Gebe !points einem Benutzer"
+
+#: userpoints_rules.rules.inc:31
+msgid "User was awarded !points"
+msgstr "Benutzer wurde belohnt mit !points"
+
+#: userpoints_rules.rules.inc:33
+msgid "updated user"
+msgstr "aktualisierter Benutzer"
+
+#: userpoints_rules.rules.inc:34
+msgid "Points awarded"
+msgstr "Punkte vergeben"
+
+#: userpoints_rules.rules.inc:54
+msgid "Number of points"
+msgstr "Anzahl an Punkten"
+
+#: userpoints_rules.rules.inc:56
+msgid "The number of !points to award. You may enter a negative number as-well"
+msgstr "Die Anzahl !points wurde vergeben Sie können auch eine negative Zahl eingeben"
+
+#: userpoints_rules.rules.inc:71
+msgid "Userpoints amount is >= than x"
+msgstr "Benutzerpunkte sind mindestens "
+
+#: userpoints_rules.rules.inc:87
+msgid "amount to compare"
+msgstr "vergleichen mit der Summe"
+
+#: userpoints_rules.rules.inc:89
+msgid "The amount to compare if userpoints are >=. Example:30, will trigger the condition if the user userpoints are >= than 30 points."
+msgstr "Die Zahl der Benuterpunkte zum Vergleichen >= Beispiel: 30, wird eine Schwelle oder Bedingung für ein Ereignis, das eintritt, sobald die 30 Punkte erreicht oder überschritten werden."
+
+#: userpoints_rules.rules.inc:93;96
+msgid "Userpoints Categories to analyze"
+msgstr "Wählen Sie die zu analysierende Kategorien:"
+
+#: userpoints.module:67;311
+msgid "Approved"
+msgstr "Bestätigt"
+
+#: userpoints.module:68
+msgid "Pending"
+msgstr "Anstehend"
+
+#: userpoints.module:69
+msgid "Declined"
+msgstr "Abgelehnt"
+
+#: userpoints.module:79
+msgid "Configure userpoints moderation and branding translation"
+msgstr "Konfigurieren von Userpoints (Benutzerpunkte) und Anpassung der Übersetzung"
+
+#: userpoints.module:81
+msgid "Users earn !points as they post nodes, comments, and vote on nodes"
+msgstr "Benutzer verdienen !points, wenn sie Inhalte erstellen, Kommentare schreiben und Inhalte bewerten."
+
+#: userpoints.module:147
+msgid "Approve !points"
+msgstr "Bestätigte !points "
+
+#: userpoints.module:242
+msgid "The number of points a user has."
+msgstr "Die Anzahl der Punkte, die ein User hat."
+
+#: userpoints.module:258
+msgid "Points branding"
+msgstr "Branding von Punkten"
+
+#: userpoints.module:263
+msgid "Word to use in the interface for the upper case plural word !Points"
+msgstr "Wort, das in der Benutzeroberfläche verwendet wird für die Pluralform, mit einem Großbuchstaben beginnend: !Points"
+
+#: userpoints.module:271
+msgid "Word to use in the interface for the lower case plural word !points"
+msgstr "Wort, das in der Benutzeroberfläche verwendet wird für die Pluralform, in Kleinbuchstaben: !points"
+
+#: userpoints.module:278
+msgid "Word to use in the interface for the upper case singular word !Point"
+msgstr "Wort, das in der Benutzeroberfläche verwendet wird für den Singular, mit einem Großbuchstaben beginnend: !Points"
 
 #: userpoints.module:285
-msgid "You have %p %c"
-msgstr "Sie haben %p %c"
+msgid "Word to use in the interface for the lower case singular word !point"
+msgstr "Wort, das in der Benutzeroberfläche verwendet wird für den Singular, in Kleinbuchstaben: !Points"
 
-#: userpoints.module:288
-msgid "Points are visible to logged in users only"
-msgstr "Punkte sind nur für angemeldete Benutzer sichtbar"
+#: userpoints.module:292
+msgid "Word to use for the uncategorized category"
+msgstr "Begriff für die Kategorie 'ohne Kategorie' (z.B. sonstiges, allgemein)"
 
-#: userpoints.module:306
-msgid "more"
-msgstr "mehr"
+#: userpoints.module:301;115
+msgid "Moderation"
+msgstr "Moderation"
 
-#: userpoints.module:306
-msgid "All users by points"
-msgstr "Alle Benutzer nach Punkten"
+#: userpoints.module:309
+msgid "Transaction status"
+msgstr "Status der Transaktion"
 
-#: userpoints.module:419
+#: userpoints.module:311
+msgid "Moderated"
+msgstr "Moderiert"
+
+#: userpoints.module:312
+msgid "Select whether all !points should be approved automatically, or moderated, and require admin approval"
+msgstr "Wählen Sie, ob alle !points automatisch genehmigt  werden oder eine Freigabe durch einen Administrator erforderlich ist, d.h. moderiert."
+
+#: userpoints.module:320
+msgid "!Points expiration"
+msgstr "Verfall von !Points "
+
+#: userpoints.module:321
+msgid "These settings affect new !points only, they are not retroactive. !Points expiration depends upon cron."
+msgstr "Diese Einstellungen wirken sich neue !points aus, nicht rückwirkend. Verfall von !Points ist auf den Cron-Lauf angewiesen"
+
+#: userpoints.module:326
+msgid "Expire !points after"
+msgstr "!points verfallen nach"
+
+#: userpoints.module:327
+msgid ""
+"Once !points have been obtained by the user\n"
+"                          they will expire according to this setting"
+msgstr "Wenn !points von Benutzern erworben wurden,\n"
+"                          dann verfallen diese gemäß der Konfiguration"
+
+#: userpoints.module:342
+msgid "This setting will not take affect, date must be in the future"
+msgstr "Damit die Einstellungen wirksam werden können, muss der Zeitpunkt in der Zukunft liegen"
+
+#: userpoints.module:347
+msgid "Expire !points on this date"
+msgstr "!points verfallen am"
+
+#: userpoints.module:348
+msgid ""
+"Once !points have been obtained by the user they will\n"
+"                         last until this date. This setting overrides the \n"
+"                         \"Expire after setting\" above "
+msgstr "Wenn !points von Benutzern erworben wurden, dann\n"
+"                         bleiben diese bis zum Verfallsdatum bestehen.  Diese Einstellung überschreibt  \n"
+"                         \"Ablauf lt. Konfiguration\" von oben "
+
+#: userpoints.module:355
+msgid "Expiration entry description"
+msgstr "Beschreibung zum Eintrag für den Verfall"
+
+#: userpoints.module:356
+msgid ""
+"A negating expiration entry is made to expire \n"
+"                         !points leaving the original entry intact\n"
+"                         (e.g. original !points + expiration !points = 0).\n"
+"                         When the expiration entry is made this description will\n"
+"                         be placed on the entry. This is useful so the users will\n"
+"                         know what happened to their !point balance. In crafting\n"
+"                         your message you can use the following variables."
+msgstr "Falls kein Eintrag für den Verfall gemacht wird, \n"
+"                         bleiben die !points bestehen\n"
+"                         (z.B. Original !points + Verfallene !points = 0).\n"
+"                         Falls ein Eintrag für den Verfall gemacht wurde, wird diese Beschreibung\n"
+"                         bei der Eingabe angezeigt. Dies ist nützlich, so dass die Nutzer\n"
+"                         wissen, was mit ihrem !point-Stand passiert. Für die Eingabe\n"
+"                         Ihre Nachricht können Sie die folgenden Variablen verwenden:"
+
+#: userpoints.module:363
+msgid ""
+"\n"
+"                         <br /> !points = The name used in branding \n"
+"                         above (also use !Points and !point)"
+msgstr "\n"
+"                         <br /> !points = Der für das Branding verwendete Name \n"
+"                         oben, genauso kann  !Points und !point verwendet werden"
+
+#: userpoints.module:365
+msgid ""
+"\n"
+"                         <br /> !operation = Original operation that granted the !points\n"
+"                         <br /> !description = Original description for the !point\n"
+"                         <br /> !txn_id Original transaction ID \n"
+"                         <br /> !date = Date of the original entry"
+msgstr "\n"
+"                         <br /> !operation = Original Operation, die !points verteilt\n"
+"                         <br /> !description = Original Beschreibung für die !point\n"
+"                         <br /> !txn_id Original Transaktions-ID \n"
+"                         <br /> !date = Datum der ursprünglichen Eintragung"
+
+#: userpoints.module:378
+msgid "Messages"
+msgstr "Nachrichten"
+
+#: userpoints.module:379
+msgid "Control the behavior of messages users see. "
+msgstr "Steuern der Nachrichten, die Benutzern angezeigt werden. "
+
+#: userpoints.module:384
+msgid "Display message"
+msgstr "Nachricht anzeigen"
+
+#: userpoints.module:386;409
+msgid "No"
+msgstr "Nein"
+
+#: userpoints.module:386;409
+msgid "Yes"
+msgstr "Ja"
+
+#: userpoints.module:387
+msgid "Determines if a message should be displayed whenever !points are awarded/substracted "
+msgstr "Bestimmt, ob eine Meldung angezeigt wird, wenn !points  vergeben / abgezogen werden. "
+
+#: userpoints.module:394
+msgid "Report Settings"
+msgstr "Einstellungen auflisten"
+
+#: userpoints.module:400
+msgid "Transactions per page"
+msgstr "Transaktionen pro Seite"
+
+#: userpoints.module:403
+msgid "Limits the number of transactions displayed per page"
+msgstr "Begrenzt die Anzahl der Transaktionen, die pro Seite angezeigt werden"
+
+#: userpoints.module:407
+msgid "Display zero !point users?"
+msgstr "Benutzer mit Null !point anzeigen?"
+
+#: userpoints.module:410
+msgid "If set to \"No\" users with zero !points will not be displayed in the reports "
+msgstr "Nein bedeutet, Benutzer mit Null !points werden in der Liste nicht angezeigt "
+
+#: userpoints.module:414
+msgid "Users per page"
+msgstr "Benutzer pro Seite"
+
+#: userpoints.module:417
+msgid "When listing !points by user limit how many users are displayed on a single page"
+msgstr "Wenn !points pro Benutzer aufgelistet werden, dann begrenzt dies die Anzahl Benutzer pro Seite"
+
+#: userpoints.module:431
+msgid "!Points Categorization"
+msgstr "!Points Kategorisierung"
+
+#: userpoints.module:435
+msgid "Default Category"
+msgstr "Standard-Kategorie"
+
+#: userpoints.module:438
+msgid "By default all !points are assigned to this category.  You can modify what categories are available by modifying the <a href=\"!url\">Userpoints taxonomy</a>"
+msgstr "Standardmäßig werden alle !points dieser Kategorie zugeordnet.  Sie können festlegen, welche Kategorien zur Verfügung stehen über  <a href=\"!url\">Userpoints taxonomy</a> "
+
+#: userpoints.module:443
+msgid "All categories"
+msgstr " Alle Kategorien"
+
+#: userpoints.module:446
+msgid "Category to display on the user profile page"
+msgstr "Kategorie, die auf der Seite des Benutzerprofils angezeigt werden"
+
+#: userpoints.module:449
+msgid "Select which category of !points to display on the user profile page. Select \"All\" to display a sum total of all categories"
+msgstr "Kategorien von !points, die auf der Seite des Benutzerprofils angezeigt werden Wählen Sie \"Alle\", um eine Summe für alle Kategorien anzuzeigen"
+
+#: userpoints.module:458
+msgid "Transaction stamping"
+msgstr "[fuzzy] Transaktionen festhalten"
+
+#: userpoints.module:463
+msgid "Always use system time"
+msgstr "Immer die Systemzeit verwenden"
+
+#: userpoints.module:465
+msgid "Sets if the transaction timestamp should obey current time, or can be modified by the API operations. Unchecking this option will allow customization of timetamp for the transactions."
+msgstr "Die Transaktion soll den Zeitstempel mit der aktuellen Uhrzeit erhalten; dies kann über die API modifiziert werden. Abwählen dieser Option für die Anpassung des Zeitstempels von Transaktionen."
+
+#: userpoints.module:631
+msgid "@key returned false from the hook_userpoints points before call"
+msgstr "@key hatte 'FALSE / Falsch' als Rückgabewert für hook_userpoints und !points vor dem Aufruf"
+
+#: userpoints.module:636
 msgid "lost"
 msgstr "verloren"
 
-#: userpoints.module:422
+#: userpoints.module:640
+msgid "was declined"
+msgstr "wurde abgelehnt"
+
+#: userpoints.module:643
 msgid "earned"
 msgstr "verdient"
 
-#: userpoints.module:427
-msgid "User %uname %op %points points! Total now is %total points."
-msgstr "Benutzer %name hat %points Punkte %op! %name hat jetzt insgesamt %total Punkte."
+#: userpoints.module:656
+msgid "User %uname %op %pointsvalue !points, pending administrator approval."
+msgstr "Benutzer %uname %op %pointsvalue !points, die Bestätigung durch den Administrator steht noch aus."
 
-#: userpoints.module:500
-msgid "User Points"
+#: userpoints.module:667
+msgid "User %uname %op %pointsvalue !points Total now is %total !points."
+msgstr "Benutzer %uname %op %pointsvalue !points, insgesamt %total !points."
+
+#: userpoints.module:890
+msgid "View"
+msgstr "View"
+
+#: userpoints.module:890
+msgid "View detailed transactions"
+msgstr "Detaillierte Transaktionen anzeigen"
+
+#: userpoints.module:896
+msgid "Adjust"
+msgstr "Justieren"
+
+#: userpoints.module:896
+msgid "Add/substract !points from this user"
+msgstr "Punkte hinzufügen/entfernen für den Benutzer"
+
+#: userpoints.module:904
+msgid "User !points"
+msgstr " Benutzer-!points"
+
+#: userpoints.module:922
+msgid "Time stamp"
+msgstr "Zeitstempel"
+
+#: userpoints.module:924;926;1221;1738
+msgid "Operation"
+msgstr "Operation"
+
+#: userpoints.module:925;1148;1337;1450;1739
+msgid "Category"
+msgstr "Kategorie"
+
+#: userpoints.module:938;958;1312;1345;1388;1464;1713;1755;1851
+msgid "!Uncategorized"
+msgstr "!Uncategorized"
+
+#: userpoints.module:945;1319;1392
+msgid "All"
+msgstr "Alle"
+
+#: userpoints.module:949;1321;1417
+msgid "!points"
+msgstr "!points"
+
+#: userpoints.module:1005
+msgid "No !points awaiting moderation"
+msgstr "Keine zu moderierenden !points"
+
+#: userpoints.module:1048
+msgid "Are you sure you want to @op txn @txn_id"
+msgstr "Wollen Sie @op txn @txn_id"
+
+#: userpoints.module:1098
+msgid "User Name"
+msgstr "Benutzername"
+
+#: userpoints.module:1103
+msgid "User Name for the user you want the !points to affect"
+msgstr "Name des Benutzers, dem Sie !points zuweisen wollen"
+
+#: userpoints.module:1108
+msgid "Points"
 msgstr "Punkte"
 
-#: userpoints.module:507
-msgid "You must spend at least %min points"
-msgstr "Sie müssen mindestens %min Punkte verwenden."
+#: userpoints.module:1112
+msgid "Number of !points to add/subtract from the user. For example, 25 (to add !points) or -25 (to subtract !points)."
+msgstr "Anzahl an hinzuzufügenden/ zu entfernenden !points. z.B. 25 !points (hinzufügen)  oder -25 !points (abziehen)"
 
-#: userpoints.module:512
-msgid "You do not have enough points for this purchase"
-msgstr "Sie haben nicht genügend Punkte für diese Bestellung."
+#: userpoints.module:1117
+msgid "Date/Time"
+msgstr "Datum / Zeit"
 
-#: userpoints.module:514
-msgid "This purchase will cost you %points points"
-msgstr "Sie benötigen %points Punkte für diese Bestellung."
+#: userpoints.module:1121
+msgid "Date and time of this transaction, in the form YYYY-MM-DD HH:MM +ZZZZ"
+msgstr " Zeitpunkt der Transaktion (YYYY-MM-DD HH:MM +ZZZZ)"
 
-#: userpoints.module:555
-msgid "Your purchase using %points points has been completed"
-msgstr "Ihre Bestellung wurde abgeschlossen. Sie haben %points Punkte verwendet."
+#: userpoints.module:1138
+msgid "Expiration date"
+msgstr "Verfallsdatum:"
 
-#: userpoints.module:285
-msgid "point"
-msgid_plural "points"
-msgstr[0] "Punkt"
-msgstr[1] "Punkte"
+#: userpoints.module:1142
+msgid "Date and time to expire these !points, in the form YYYY-MM-DD HH:MM +ZZZZ"
+msgstr "Zeitpunkt, an dem diese !points verfallen werden (YYYY-MM-DD HH:MM +ZZZZ)"
 
-#: userpoints.module:0
+#: userpoints.module:1143
+msgid "Leave blank for non-expiring !points"
+msgstr " Für nicht zeitbeschränkte Punkte leer lassen"
+
+#: userpoints.module:1151
+msgid "Category to apply these !points to"
+msgstr "Kategorie für die hinzugefügten !points"
+
+#: userpoints.module:1157
+msgid "Reference"
+msgstr "Referenz"
+
+#: userpoints.module:1161
+msgid "Enter optional reference for this transaction. This field will be indexed and searchable."
+msgstr "Geben Sie eine optionale Referenz für diese Transaktion an. Dieses Feld wird indiziert und durchsucht werden."
+
+#: userpoints.module:1166;1740
+msgid "Description"
+msgstr "Beschreibung"
+
+#: userpoints.module:1170
+msgid "Enter an optional description for this transaction, such as the reason it is created."
+msgstr "Optionale Beschreibung für diese Transaktion, z.B. der Grund für die Punktevergabe."
+
+#: userpoints.module:1212
+msgid "Approver ID"
+msgstr "Approver ID"
+
+#: userpoints.module:1216
+msgid "The user ID of the person who approved this transaction. 0 means not yet approved."
+msgstr "Die Benutzer-ID der Person, die diese Transaktion genehmigt. 0 bedeutet noch nicht genehmigt."
+
+#: userpoints.module:1225
+msgid "The operation type for this transaction. Normally, it is \"admin\"."
+msgstr "Die Betriebsart für diese Transaktion. Normalerweise ist es \"admin\"."
+
+#: userpoints.module:1229
+msgid "Approval status"
+msgstr "Genehmigungsstatus"
+
+#: userpoints.module:1232
+msgid "Approval status of the transaction."
+msgstr "Status der Genehmigung der Transaktion."
+
+#: userpoints.module:1245
+msgid "Save"
+msgstr "Speichern"
+
+#: userpoints.module:1348;1469
+msgid "(details)"
+msgstr "(Details)"
+
+#: userpoints.module:1491
+msgid "Display all"
+msgstr "Alle anzeigen"
+
+#: userpoints.module:1499
+msgid "Filter by category"
+msgstr "Nach Kategorie filtern"
+
+#: userpoints.module:1515
+msgid "User's !points"
+msgstr "Benutzer !points"
+
+#: userpoints.module:1526
+msgid "@user's !points"
+msgstr "@user's !points"
+
+#: userpoints.module:1530
+msgid "You have %p %c"
+msgstr "Sie haben %p %c"
+
+#: userpoints.module:1533
+msgid "!Points are visible to logged in users only"
+msgstr "!Points sind nur für angemeldete Benutzer sichtbar"
+
+#: userpoints.module:1539
+msgid "Highest Users"
+msgstr "Beste Benutzer"
+
+#: userpoints.module:1561
+msgid "more"
+msgstr "mehr"
+
+#: userpoints.module:1561
+msgid "All users by !points"
+msgstr "Alle Benutzer nach !points"
+
+#: userpoints.module:1571
+msgid "Number of users to display"
+msgstr "Anzahl der angezeigten Benutzer"
+
+#: userpoints.module:1578
+msgid "Limit the number of users displayed to this value"
+msgstr "Beschränken Sie die Anzahl der angezeigten Nutzer auf diesen Wert"
+
+#: userpoints.module:1700
+msgid "!Points for "
+msgstr "!Points für "
+
+#: userpoints.module:1736
+msgid "Approved?"
+msgstr "Bestätigt?"
+
+#: userpoints.module:1737
+msgid "Date"
+msgstr "Datum"
+
+#: userpoints.module:1761
+msgid "None"
+msgstr "Keine"
+
+#: userpoints.module:1802
+msgid "No !Points earned"
+msgstr "Keine !Points erreicht"
+
+#: userpoints.module:1823
+msgid "Created Userpoints vocabulary"
+msgstr "Ein Vokabular für Userpoints erstellt"
+
+#: userpoints.module:1827
+msgid "Automatically created by the userpoints module"
+msgstr "Automatisch erzeugt durch das Userpoints Modul"
+
+#: userpoints.module:1880
+msgid "!points Balance"
+msgstr "!points Bilanz"
+
+#: userpoints.module:1885
+msgid "Approved !points Balance"
+msgstr "Bestätigte !points Bilanz"
+
+#: userpoints.module:1886
+msgid "!Points awaiting moderation"
+msgstr "!Points die noch auf Moderation warten"
+
+#: userpoints.module:1887
+msgid "Net !points Balance"
+msgstr "Netto !points Bilanz"
+
+#: userpoints.module:1840
 msgid "userpoints"
 msgstr "Benutzerpunkte"
+
+#: userpoints.module:1840
+msgid "userpoints module was unable to select or create a vocabulary. !Points will be uncategorized"
+msgstr "Userpoints Modul: Es wurde noch kein Vokabular erstellt oder ausgewählt. Kategorien für !Points werden entfernt"
+
+#: userpoints.module:1529
+msgid "!point"
+msgid_plural "!points"
+msgstr[0] "!point"
+msgstr[1] "!points"
+
+#: userpoints.module:91
+msgid "!Points settings"
+msgstr "!Points Einstellungen"
+
+#: userpoints.module:107
+msgid "List"
+msgstr "Liste"
+
+#: userpoints.module:124
+msgid "Add"
+msgstr "Hinzufügen"
+
+#: userpoints.module:125
+msgid "Admin add/delete userpoints"
+msgstr "Benutzerpunkte verwalten"
+
+#: userpoints.module:133
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: userpoints.module:141
+msgid "Approve Userpoints"
+msgstr "Bestätigte Benutzerpunkte"
+
+#: userpoints.module:154
+msgid "Users by !points"
+msgstr "Benutzer nach !points"
+
+#: userpoints.module:162
+msgid "My !points"
+msgstr "Meine !points"
+
+#: userpoints_service.module:12
+msgid "<p>Provides Userpoints XML-RPC service. Requires services.module.</p>"
+msgstr "<p>Bietet Userpoints XML-RPC service. Erfordert das services.module.</p>"
+
+#: userpoints_service.module:30;49
+msgid "A valid Drupal User ID."
+msgstr "Eine gültige Drupal User-ID."
+
+#: userpoints_service.module:36;60
+msgid "An optional Term ID for the category."
+msgstr "Eine optionale Term-ID für die Kategorie."
+
+#: userpoints_service.module:40
+msgid "Retrieves the number of points the user has."
+msgstr "Ruft die Anzahl der Punkte ab, die ein Benutzer hat."
+
+#: userpoints_service.module:54
+msgid "Number of points to add/subtract."
+msgstr "Anzahl der Punkte die addiert und subtrahiert werden."
+
+#: userpoints_service.module:66
+msgid "An optional event ID for this transaction."
+msgstr "Eine optionale Ereignis-ID für die Transaktion."
+
+#: userpoints_service.module:72
+msgid "An optional description of this transaction."
+msgstr "Eine optionale Beschreibung dieser Transaktion."
+
+#: userpoints_service.module:76
+msgid "Adds/subtracts points to a user."
+msgstr "Benutzer erhält Punkte oder bekommt diese abgezogen."
+
+#: userpoints_service.module:85;101
+msgid "User ID parameter is required."
+msgstr "Benutzer-ID ist als Parameter erforderlich."
+
+#: userpoints_service.module:105
+msgid "Points parameter must be a negative or positive number."
+msgstr "Punkte-Parameter muss einen negativen oder positiven Wert."
+
+#: userpoints.info:0
+msgid "Userpoints core: API module for recording points for other modules."
+msgstr "Userpoints core: API Module für Punkte, die durch andere Module vergeben werden."
+
+#: userpoints_rules.info:0
+msgid "Userpoints rules integration"
+msgstr "Userpoints rules integration"
+
+#: userpoints_rules.info:0
+msgid "Provides integration of Userpoints with rules"
+msgstr "Bietet die Integration von Userpoints mit dem Modul Rules"
+
+#: userpoints_service.info:0
+msgid "Userpoints Service"
+msgstr "Userpoints Service"
+
+#: userpoints_service.info:0
+msgid "Exposes userpoints functionality via XML-RPC"
+msgstr "Die Funktionalität von Userpoints via XML-RPC bereitstellen"
+
+#~ msgid ""
+#~ "Reset all user points. This is useful in certain situations such as "
+#~ "monthly contests. Enter YES without quotes to reset"
+#~ msgstr ""
+#~ "Alle Punkte zurücksetzen. Dies ist in bestimmten Fällen sinnvoll, bspw. "
+#~ "bei monatlichen Wettbewerben. \"JA\" ohne Anführungszeichen eingeben, um "
+#~ "alle Punkte zurückzusetzen."
+#~ msgid "NO"
+#~ msgstr "NEIN"
+#~ msgid "Reset"
+#~ msgstr "Zurücksetzen"
+#~ msgid "YES"
+#~ msgstr "JA"
+#~ msgid "All user points have been reset!"
+#~ msgstr "Alle Punkte wurden zurückgesetzt!"
+#~ msgid "Points for posting a %node-name"
+#~ msgstr "Punkte für das Erstellen von %node-name"
+#~ msgid "Points for posting a comment"
+#~ msgstr "Punkte für einen Kommentar"
+#~ msgid "Points for voting on a node (requires nodevote module)"
+#~ msgstr "Punkte für das Bewerten eines Inhalts (erfordert Nodevote Modul)"
+#~ msgid "Points for referring a user (requires the user_referral module)"
+#~ msgstr ""
+#~ "Punkte für das Einladen von Benutzern (erfordert das User Referral Modul)"
+#~ msgid "Points for inviting a user (requires the invite module)"
+#~ msgstr ""
+#~ "Punkte für das Einladen eines Benutzers (erfordert das Invite Modul)"
+#~ msgid "Points when invited user registers (requires the invite module)"
+#~ msgstr ""
+#~ "Punkte für die Registrierung eines eingeladenen Benutzers (erfordert das "
+#~ "Invite Modul)"
+#~ msgid "Ecommerce Options"
+#~ msgstr "Ecommerce Optionen"
+#~ msgid "Points awarded for buying (multiplied by price)"
+#~ msgstr ""
+#~ "Punkte für das Kaufen von Produkten (multipliziert mit dem Produktpreis)"
+#~ msgid "Smallest purchase for which points are awarded"
+#~ msgstr "Mindestbetrag der Bestellung, für die Punkte vergeben wird"
+#~ msgid "Accept user points as payment?"
+#~ msgstr "Punkte als Zahlungsmittel erlauben?"
+#~ msgid "Disable"
+#~ msgstr "Deaktivieren"
+#~ msgid "Enable"
+#~ msgstr "Aktivieren"
+#~ msgid "Points used in payment (for every dollar)"
+#~ msgstr "Wert der Punkte bei Zahlungen (Wert pro Euro)"
+#~ msgid "Advanced Options"
+#~ msgstr "Erweiterte Optionen"
+#~ msgid "Reset points"
+#~ msgstr "Punkte zurücksetzen"
+#~ msgid "User Points"
+#~ msgstr "Punkte"
+#~ msgid "You must spend at least %min points"
+#~ msgstr "Sie müssen mindestens %min Punkte verwenden."
+#~ msgid "You do not have enough points for this purchase"
+#~ msgstr "Sie haben nicht genügend Punkte für diese Bestellung."
+#~ msgid "This purchase will cost you %points points"
+#~ msgstr "Sie benötigen %points Punkte für diese Bestellung."
+#~ msgid "Your purchase using %points points has been completed"
+#~ msgstr ""
+#~ "Ihre Bestellung wurde abgeschlossen. Sie haben %points Punkte verwendet."
 
