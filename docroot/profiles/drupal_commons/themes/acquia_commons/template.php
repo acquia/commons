@@ -22,8 +22,11 @@ function acquia_commons_preprocess_node(&$vars) {
     $author = user_load($vars['node']->uid);
   
     // Author picture
-    $picture = theme_imagecache('user_picture_meta', $author->picture ? $author->picture : variable_get('user_picture_default', ''), $author->name, $author->name);
-    $submitted = ($author->uid && user_access('access user profiles')) ? l($picture, "user/{$author->uid}", array('html' => TRUE)) : $picture;
+    if (theme_get_setting('toggle_node_user_picture')) {
+      $picture = $vars['picture'];
+      unset($vars['picture']);
+      $submitted = ($author->uid && user_access('access user profiles')) ? l($picture, "user/{$author->uid}", array('html' => TRUE)) : $picture;
+    }
     
     // Author information
     $submitted .= '<span class="submitted-by">';
@@ -106,6 +109,22 @@ function acquia_commons_preprocess_comment(&$vars) {
   $submitted_by = '<span class="comment-name">' . theme('username', $vars['comment']) . '</span>';
   $submitted_by .= '<span class="comment-date">' . $ago . '</span>';     // Format date as small, medium, or large
   $vars['submitted'] = $submitted_by;
+  
+  // Picture
+  if (theme_get_setting('toggle_comment_user_picture')) {
+    if (!$vars['comment']->picture && (variable_get('user_picture_default', '') != '')) {
+      $vars['comment']->picture = variable_get('user_picture_default', '');
+    }
+    if ($vars['comment']->picture) { 
+      $picture = theme_imagecache('user_picture_meta', $vars['comment']->picture, $vars['comment']->name, $vars['comment']->name);
+      if (user_access('access user profiles')) {
+        $vars['comment']->picture = l($picture, "user/{$vars['comment']->uid}", array('html' => TRUE));
+      }
+      else {
+        $vars['comment']->picture = $picture; 
+      }
+    }
+  }
 }
 
 /**

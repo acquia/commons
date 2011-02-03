@@ -9,20 +9,11 @@
       <a id="new"></a>
       <span class="new"><?php print $new ?></span>
     <?php endif; ?>
-    <?php 
-      if (!$comment->picture && (variable_get('user_picture_default', '') != '')) {
-        $comment->picture =  variable_get('user_picture_default', '');
-      }
-      if ($comment->picture) { 
-        $picture = theme_imagecache('user_picture_meta', $comment->picture, $name, $name);
-        if (user_access('access user profiles')) {
-          print l($picture, "user/{$comment->uid}", array('html' => TRUE));
-        }
-        else {
-          print $picture; 
-        }
-      }
-    ?>
+    <?php if ($comment->picture) :?>
+      <div class="picture">
+        <?php print $comment->picture; ?>
+      </div>
+    <?php endif; ?>
     <div class="submitted">
       <?php print $submitted ?>
     </div>
