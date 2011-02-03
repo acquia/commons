@@ -9,7 +9,7 @@ function commons_reputation_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'shoutbox_points_amount';
-  $strongarm->value = '1';
+  $strongarm->value = 1;
 
   $export['shoutbox_points_amount'] = $strongarm;
   $strongarm = new stdClass;
@@ -86,7 +86,7 @@ function commons_reputation_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'user_badges_showone';
-  $strongarm->value = '1';
+  $strongarm->value = 1;
 
   $export['user_badges_showone'] = $strongarm;
   $strongarm = new stdClass;
@@ -100,70 +100,70 @@ function commons_reputation_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'userpoints_post_blog';
-  $strongarm->value = '5';
+  $strongarm->value = 5;
 
   $export['userpoints_post_blog'] = $strongarm;
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'userpoints_post_comment';
-  $strongarm->value = '2';
+  $strongarm->value = 2;
 
   $export['userpoints_post_comment'] = $strongarm;
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'userpoints_post_discussion';
-  $strongarm->value = '5';
+  $strongarm->value = 5;
 
   $export['userpoints_post_discussion'] = $strongarm;
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'userpoints_post_document';
-  $strongarm->value = '5';
+  $strongarm->value = 5;
 
   $export['userpoints_post_document'] = $strongarm;
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'userpoints_post_event';
-  $strongarm->value = '5';
+  $strongarm->value = 5;
 
   $export['userpoints_post_event'] = $strongarm;
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'userpoints_post_group';
-  $strongarm->value = '5';
+  $strongarm->value = 5;
 
   $export['userpoints_post_group'] = $strongarm;
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'userpoints_post_page';
-  $strongarm->value = '5';
+  $strongarm->value = 5;
 
   $export['userpoints_post_page'] = $strongarm;
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'userpoints_post_poll';
-  $strongarm->value = '5';
+  $strongarm->value = 5;
 
   $export['userpoints_post_poll'] = $strongarm;
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'userpoints_post_wiki';
-  $strongarm->value = '5';
+  $strongarm->value = 5;
 
   $export['userpoints_post_wiki'] = $strongarm;
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'userpoints_user_picture';
-  $strongarm->value = '5';
+  $strongarm->value = 5;
 
   $export['userpoints_user_picture'] = $strongarm;
   return $export;
