@@ -61,6 +61,26 @@ function acquia_commons_preprocess_node(&$vars) {
 }
 
 /**
+ * Page preprocessing
+ */
+function acquia_commons_preprocess_page(&$vars) {
+  // Format the footer message
+  // We do this here instead of in page.tpl.php because 
+  // we need a formatted message to pass along to the
+  // same theme function as the $footer in order to have
+  // them nested together
+  if (isset($vars['footer_message']) && strlen($vars['footer_message'])) {
+    $markup = '';
+    $markup .= '<div id="footer-message" class="footer-message">';
+    $markup .= '<div id="footer-message-inner" class="footer-message-inner inner">';
+    $markup .= $vars['footer_message'];
+    $markup .= '</div><!-- /footer-message-inner -->';
+    $markup .= '</div><!-- /footer-message -->';
+    $vars['footer_message'] = $markup;
+  }
+}
+
+/**
  * Comment preprocessing
  */
 function acquia_commons_preprocess_comment(&$vars) {
