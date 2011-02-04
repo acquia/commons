@@ -179,7 +179,7 @@ function drupal_commons_features_form($form_state, $url) {
   drupal_set_title(st('Choose from available features'));
   
   // Homebox, which is included in the Commons dashboard feature
-  // required PHP 5.2, so we need to check that to avoid allowing
+  // requires PHP 5.2, so we need to check that to avoid allowing
   // the user to install it
   module_load_include('module', 'homebox');
   $php5_2 = _homebox_check_php();
