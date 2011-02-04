@@ -29,11 +29,11 @@ function commons_notifications_og_links_alter(&$links) {
       // Determine if the user has subscriptions for the current group
       if (commons_notifications_is_group_subscribed($group)) {
         // Provide a link to unsubscribe
-        $links['commons_notifications-unsubscribe'] = l(t('Stop group notifications'), "notifications/group/{$group->nid}/unsubscribe");
+        $links['commons_notifications-unsubscribe'] = l(t('Stop getting notifications'), "notifications/group/{$group->nid}/unsubscribe");
       }
       else {
         // Provide a link to subscribe
-        $links['commons_notifications-subscribe'] = l(t('Start group notifications'), "user/{$user->uid}/notifications/add/grouptype", array('query' => "gid={$group->nid}&destination=node/{$group->nid}"));
+        $links['commons_notifications-subscribe'] = l(t('Get notifications'), "user/{$user->uid}/notifications/add/grouptype", array('query' => "gid={$group->nid}&destination=node/{$group->nid}"));
       }
     }
   }
