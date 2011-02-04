@@ -970,10 +970,17 @@ function drupal_commons_cleanup() {
 }
 
 /**
- * Alter the install profile configuration form and provide timezone location options.
+ * Alter the install profile configuration
  */
 function system_form_install_configure_form_alter(&$form, $form_state) {
-  // Taken from Open Atrium
+  // Add option to turn on forced login
+  $form['site_information']['commons_force_login'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Force users to login'),
+    '#description' => t('If checked, users will be required to log into the site to access it. Users who are not logged in will be redirected to a login page. Select this setting if your Drupal Commons site must be closed to the public, such as a company intranet.'),
+  );
+  
+  // Add timezone options required by date (Taken from Open Atrium)
   if (function_exists('date_timezone_names') && function_exists('date_timezone_update_site')) {
     $form['server_settings']['date_default_timezone']['#access'] = FALSE;
     $form['server_settings']['#element_validate'] = array('date_timezone_update_site');
@@ -986,4 +993,14 @@ function system_form_install_configure_form_alter(&$form, $form_state) {
       '#required' => TRUE,
     );
   }
+  
+  // Add an additional submit handler to process the form
+  $form['#submit'][] = 'drupal_commons_install_configure_form_submit';
+}
+
+/**
+ * Submit handler for the installation configure form
+ */
+function drupal_commons_install_configure_form_submit(&$form, &$form_state) {
+  variable_set('commons_force_login', $form_state['values']['commons_force_login']);
 }
