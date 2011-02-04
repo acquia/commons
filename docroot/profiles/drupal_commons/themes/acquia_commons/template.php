@@ -125,6 +125,9 @@ function acquia_commons_preprocess_comment(&$vars) {
       }
     }
   }
+  else {
+    unset($vars['comment']); 
+  }
 }
 
 /**
