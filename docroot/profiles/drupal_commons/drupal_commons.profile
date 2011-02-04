@@ -175,9 +175,14 @@ function drupal_commons_profile_tasks(&$task, $url) {
  * Provide a form to choose which features to enable
  */
 function drupal_commons_features_form($form_state, $url) {
+  $form = array();
   drupal_set_title(st('Choose from available features'));
   
-  $form = array();
+  // Homebox, which is included in the Commons dashboard feature
+  // required PHP 5.2, so we need to check that to avoid allowing
+  // the user to install it
+  module_load_include('module', 'homebox');
+  $php5_2 = _homebox_check_php();
   
   // Help message
   $form['message'] = array(
@@ -262,9 +267,14 @@ function drupal_commons_features_form($form_state, $url) {
   $form['misc']['feature-commons_dashboard'] = array(
     '#type' => 'checkbox',
     '#title' => st('Dashboard'),
-    '#default_value' => 1,
+    '#default_value' => $php5_2 ? 1 : 0,
+    '#disabled' => !$php5_2,
     '#description' => st('A feature that provides a unique-per-user, user-customizable dashboard of recent relevant site activity.'),
   );
+  if (!$php5_2) {
+    $form['misc']['feature-commons_dashboard']['#value'] = 0;
+    $form['misc']['feature-commons_dashboard']['#description'] .= '<span style="color:red;"> ' . st('Your server must have PHP 5.2 or higher in order to active this feature.') . '</span>';
+  }
   $form['misc']['feature-commons_notifications'] = array(
     '#type' => 'checkbox',
     '#title' => st('Notifications'),
