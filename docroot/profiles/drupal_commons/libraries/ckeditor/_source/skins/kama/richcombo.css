@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2003-2010, CKSource - Frederico Knabben. All rights reserved.
+Copyright (c) 2003-2011, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.html or http://ckeditor.com/license
 */
 
@@ -198,6 +198,16 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 {
 	filter: alpha(opacity=50); /* IE */
 	opacity: 0.5; /* Safari, Opera and Mozilla */
+}
+
+/* IE with zoom != 100% will distort the icons otherwise #4821 */
+.cke_skin_kama .cke_browser_ie .cke_rcombo .cke_disabled .cke_openbutton
+{
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale'), alpha(opacity=50);
+}
+.cke_skin_kama .cke_browser_ie6 .cke_rcombo .cke_disabled .cke_openbutton
+{
+	filter: alpha(opacity=50);
 }
 
 .cke_skin_kama .cke_hc .cke_rcombo .cke_disabled .cke_text,

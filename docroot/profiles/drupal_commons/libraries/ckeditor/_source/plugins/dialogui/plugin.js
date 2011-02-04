@@ -1,5 +1,5 @@
 ﻿/*
-Copyright (c) 2003-2010, CKSource - Frederico Knabben. All rights reserved.
+Copyright (c) 2003-2011, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.html or http://ckeditor.com/license
 */
 
@@ -1460,7 +1460,7 @@ CKEDITOR.plugins.add( 'dialogui' );
 
 				getValue : function()
 				{
-					return this.getInputElement().$.value;
+					return this.getInputElement().$.value || '';
 				},
 
 				/***
@@ -1521,3 +1521,17 @@ CKEDITOR.plugins.add( 'dialogui' );
 	CKEDITOR.dialog.addUIElement( 'html', commonBuilder );
 	CKEDITOR.dialog.addUIElement( 'fieldset', containerBuilder );
 })();
+
+/**
+ * Fired when the value of the uiElement is changed
+ * @name CKEDITOR.ui.dialog.uiElement#change
+ * @event
+ */
+
+/**
+ * Fired when the inner frame created by the element is ready.
+ * Each time the button is used or the dialog is loaded a new
+ * form might be created.
+ * @name CKEDITOR.ui.dialog.fileButton#formLoaded
+ * @event
+ */

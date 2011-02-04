@@ -1,5 +1,5 @@
 ﻿/*
-Copyright (c) 2003-2010, CKSource - Frederico Knabben. All rights reserved.
+Copyright (c) 2003-2011, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.html or http://ckeditor.com/license
 */
 
@@ -278,7 +278,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 			}
 			else if ( element.filebrowser.action == 'QuickUpload' && element[ 'for' ] )
 			{
-				var url = element.filebrowser.url;
+				url = element.filebrowser.url;
 				if ( url === undefined )
 				{
 					url = editor.config[ 'filebrowser' + ucFirst( dialogName ) + 'UploadUrl' ];
@@ -388,6 +388,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 		init : function( editor, pluginPath )
 		{
 			editor._.filebrowserFn = CKEDITOR.tools.addFunction( setUrl, editor );
+			editor.on( 'destroy', function () { CKEDITOR.tools.removeFunction( this._.filebrowserFn ); } );
 		}
 	} );
 

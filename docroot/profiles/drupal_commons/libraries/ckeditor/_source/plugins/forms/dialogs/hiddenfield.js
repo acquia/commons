@@ -1,5 +1,5 @@
 ﻿/*
-Copyright (c) 2003-2010, CKSource - Frederico Knabben. All rights reserved.
+Copyright (c) 2003-2011, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.html or http://ckeditor.com/license
 */
 CKEDITOR.dialog.add( 'hiddenfield', function( editor )
@@ -17,7 +17,7 @@ CKEDITOR.dialog.add( 'hiddenfield', function( editor )
 				selection = editor.getSelection(),
 				element = selection.getSelectedElement();
 
-			if ( element && element.getAttribute( '_cke_real_element_type' ) && element.getAttribute( '_cke_real_element_type' ) == 'hiddenfield' )
+			if ( element && element.data( 'cke-real-element-type' ) && element.data( 'cke-real-element-type' ) == 'hiddenfield' )
 			{
 				this.hiddenField = element;
 				element = editor.restoreRealElement( this.hiddenField );
@@ -59,7 +59,7 @@ CKEDITOR.dialog.add( 'hiddenfield', function( editor )
 						setup : function( element )
 						{
 							this.setValue(
-									element.getAttribute( '_cke_saved_name' ) ||
+									element.data( 'cke-saved-name' ) ||
 									element.getAttribute( 'name' ) ||
 									'' );
 						},
