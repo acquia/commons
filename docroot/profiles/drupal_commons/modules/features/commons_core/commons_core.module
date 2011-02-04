@@ -568,36 +568,8 @@ function commons_core_action_info() {
  * Implementation of hook_init()
  */
 function commons_core_init() {
-  // Exit if coming from the command-line (needed for drush),
-  // if we're not calling index.php (so cron.php, xmlrpc.php, etc, works),
-  // of if the site is in maintenance mode
-  if ((php_sapi_name() == 'cli') ||
-    (str_replace(base_path(), '', $_SERVER['SCRIPT_NAME']) != 'index.php') ||
-    variable_get('site_offline', 0)) {
-    return;
-  }
-
-  //  Force anonymous users to a login page
-  if (variable_get('commons_force_login', 0)) {
-    global $user;
-  
-    // If anonymous
-    if (!$user->uid) {
-      //  Avoid endless redirect and allow for user registration/creation/login
-      //  Checking arg(1) for numeric value prevents /user/# path
-      if (arg(0) != 'user' || is_numeric(arg(1))) {
-        // Redirect to home
-        if ($dest = $_GET['q']) {
-          // If the user was trying to reach a certain page,
-          // try to preserve the redirection after login
-          drupal_goto('user', "destination=$dest");
-        }
-        else {
-          drupal_goto('user');
-        }
-      }
-    }
-  }
+  // Optionally force a user to login before proceeding
+  commons_core_force_login();
   
   // We've overridden /og with a custom view, so redirect
   if (arg(0) == 'og' && !arg(1)) {
@@ -737,6 +709,48 @@ function commons_core_link_alter(&$links, $node, $comment = NULL) {
 /** 
  * MISC ===================================================
  */
+ 
+/**
+ * Callback to optionally force a login
+ */
+function commons_core_force_login() {
+  // Exit if coming from the command-line (needed for drush),
+  // if we're not calling index.php (so cron.php, xmlrpc.php, etc, works),
+  // of if the site is in maintenance mode
+  if ((php_sapi_name() == 'cli') ||
+    (str_replace(base_path(), '', $_SERVER['SCRIPT_NAME']) != 'index.php') ||
+    variable_get('site_offline', 0)) {
+    return;
+  }
+  
+  // Althought services does not come with Commons, it is one
+  // module that unquestionably needs to bypass a forced redirect
+  if (arg(0) == 'services' && module_exists('services')) {
+    return; 
+  }
+
+  //  Force anonymous users to a login page
+  if (variable_get('commons_force_login', 0)) {
+    global $user;
+  
+    // If anonymous
+    if (!$user->uid) {
+      //  Avoid endless redirect and allow for user registration/creation/login
+      //  Checking arg(1) for numeric value prevents /user/# path
+      if (arg(0) != 'user' || is_numeric(arg(1))) {
+        // Redirect to home
+        if ($dest = $_GET['q']) {
+          // If the user was trying to reach a certain page,
+          // try to preserve the redirection after login
+          drupal_goto('user', "destination=$dest");
+        }
+        else {
+          drupal_goto('user');
+        }
+      }
+    }
+  }
+}
 
 /**
  * Callback for group node tab titles
