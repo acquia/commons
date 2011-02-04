@@ -96,11 +96,11 @@ function commons_notifications_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'notifications_ui_types';
   $strongarm->value = array(
-    'grouptype' => 'grouptype',
     'thread' => 'thread',
     'nodetype' => 'nodetype',
     'author' => 'author',
     'typeauthor' => 0,
+    'grouptype' => 'grouptype',
   );
 
   $export['notifications_ui_types'] = $strongarm;
