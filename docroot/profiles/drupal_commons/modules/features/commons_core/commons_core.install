@@ -115,7 +115,6 @@ function commons_core_update_6000() {
     'commons_admin',
     'commons_seo',
     'commons_home',
-    'commons_dashboard',
     'commons_wiki',
     'commons_blog',
     'commons_document',
@@ -125,6 +124,14 @@ function commons_core_update_6000() {
     'commons_group_aggregator',
     'commons_reputation',
   );
+  
+  // Homebox, which is included in the Commons dashboard feature
+  // requires PHP 5.2, so we need to check that before installing
+  module_load_include('module', 'homebox');
+  if (_homebox_check_php()) {
+    $features[] = 'commons_dashboard';
+  }
+  
   features_install_modules($features);
   
   return array();
