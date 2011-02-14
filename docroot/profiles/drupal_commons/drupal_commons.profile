@@ -68,7 +68,7 @@ function drupal_commons_profile_modules() {
  *   language-specific profiles.
  */
 function drupal_commons_profile_details() {
-  $logo = '<a href="http://drupal.org/project/commons" target="_blank"><img alt="Drupal Commons" title="Drupal Commons" src="' . base_path() . 'profiles/drupal_commons/images/logo.png' . '"></img></a>';
+  $logo = '<a href="http://drupal.org/project/commons" target="_blank"><img alt="Drupal Commons" title="Drupal Commons" src="./profiles/drupal_commons/images/logo.png' . '"></img></a>';
   $description = st('Select this profile to install the Drupal Commons distribution for powering your community website. Drupal Commons provides provides blogging, discussions, user profiles, and other useful community features for both private communities (e.g. an Intranet), or public communities (e.g. a customer community).');
   $description .= '<br/>' . $logo;
   
@@ -116,7 +116,34 @@ function drupal_commons_profile_tasks(&$task, $url) {
   
   // Provide a form to choose features
   if ($task == 'configure-commons') {
-    $output = drupal_get_form('drupal_commons_features_form', $url);
+    // If we're using Drush to install, skip the form and install
+    // all the available features
+    if (defined('DRUSH_BASE_PATH')) {
+      $features = array(
+        'commons_core',
+        'commons_home',
+        'commons_blog',
+        'commons_discussion',
+        'commons_document',
+        'commons_wiki',
+        'commons_poll',
+        'commons_event',
+        'commons_dashboard',
+        'commons_notifications',
+        'commons_reputation',
+        'commons_group_aggregator',
+        'commons_admin',
+        'commons_seo'
+      );
+      variable_set('commons_selected_features', $features);
+  
+      // Initiate the next installation step
+      $task = 'install-commons';
+      variable_set('install_task', $task);
+    }
+    else {
+      $output = drupal_get_form('drupal_commons_features_form', $url);
+    }
   }
   
   // Installation batch process
