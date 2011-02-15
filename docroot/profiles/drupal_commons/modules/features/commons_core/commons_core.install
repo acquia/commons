@@ -38,7 +38,7 @@ function commons_core_set_weight() {
 function commons_core_uninstall() {
   // Remove variables
   variable_del('commons_force_login');
-  variable_del('commons_manager_role');
+  variable_del('commons_force_login_allowed_paths');
   variable_del('commons_force_unique_groups');
   variable_del('commons_hide_shoutbox_link');
   variable_del('commons_group_prevent_open_voting');
@@ -143,4 +143,12 @@ function commons_core_update_6000() {
 function commons_core_update_6001() {
   commons_core_set_weight();
   return array(); 
+}
+
+/**
+ * Removed unused variable for community manager role
+ */
+function commons_core_update_6002() {
+  variable_del('commons_manager_role');
+  return array();
 }

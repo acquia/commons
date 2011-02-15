@@ -109,14 +109,6 @@ function commons_core_admin_settings() {
     '#description' => t('The !user_directory contains a block that indicates the amount of recently joined members. Select the time-frame to be used to calculate this value.', array('!user_directory' => l(t('user directory'), 'users'))),
   );
   
-  $form['general_settings']['commons_manager_role'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Community manager role'),
-    '#required' => TRUE,
-    '#default_value' => variable_get('commons_manager_role', 'community manager'),
-    '#description' => t('The name of the role given to community managers.'),
-  );
-  
   $form['group_settings'] = array(
     '#type' => 'fieldset',
     '#title' => t('Group settings'),
@@ -446,7 +438,7 @@ function commons_core_field_access($op, $field, $account = NULL, $node = NULL) {
           // Show only under the following conditions
           if (!og_is_group_admin($group, $account) && 
               !user_access('administer nodes') && 
-              !array_search(variable_get('commons_manager_role', 'community manager'), $account->roles)) {
+              !array_search('community manager', $account->roles)) {
           
             return FALSE;
           }
@@ -455,11 +447,8 @@ function commons_core_field_access($op, $field, $account = NULL, $node = NULL) {
           }
         }
       
-        /**
-         * If here, we're now viewing the node. Must handle access controls
-         * for editablefields.module
-         */
-
+        // If here, we're now viewing the node. 
+        // Must handle access controls for editablefields.module
         if ($node) {
           // Determine all group affiliations for the current node
           $groups = og_get_node_groups($node);
@@ -470,7 +459,7 @@ function commons_core_field_access($op, $field, $account = NULL, $node = NULL) {
           }
           
           // Users with admin nodes permission and community manager role can always edit
-          if (user_access('administer nodes') || array_search(variable_get('commons_manager_role', 'community manager'), $account->roles)) {
+          if (user_access('administer nodes') || array_search('community manager', $account->roles)) {
             return TRUE;
           }
 
@@ -966,7 +955,7 @@ function commons_core_node_add_link($type) {
       // No access if the user is not a member
       else if (!og_is_group_member($group->nid, TRUE, $user->uid)) {
         // Unless they are a community manager
-        if (!array_search(variable_get('commons_manager_role', 'community manager'), $user->roles)) {
+        if (!array_search('community manager', $user->roles)) {
           return NULL;
         }
       }
@@ -1245,7 +1234,7 @@ function commons_core_check_group_sticky($node) {
     // Check if any group options were checked
     if (!empty($selected_groups)) {
       // If inadequate permissions & roles, then check for group admin status in each group
-      if (!user_access('administer nodes') && !array_search(variable_get('commons_manager_role', 'community manager'), $user->roles)) {
+      if (!user_access('administer nodes') && !array_search('community manager', $user->roles)) {
         foreach ($selected_groups as $gid) {
           if (!og_is_group_admin(node_load($gid), $user)) {
             form_set_error('og_groups', t('You can only make posts sticky for the groups that you are an admin for.')); 
