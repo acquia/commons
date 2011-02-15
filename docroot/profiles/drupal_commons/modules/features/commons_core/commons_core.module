@@ -66,18 +66,32 @@ function commons_core_menu() {
 function commons_core_admin_settings() {
   $form = array();
   
+  $form['login_settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Login settings'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  );
+  
+  $form['login_settings']['commons_force_login'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Force users to login'),
+    '#default_value' => variable_get('commons_force_login', 0),
+    '#description' => t('If checked, anonymous users will be redirected from all pages to a log in page. Select this setting if your Drupal Commons site must be closed to the public, such as a company intranet.'),
+  );
+  
+  $form['login_settings']['commons_force_login_allowed_paths'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Allowed paths'),
+    '#default_value' => variable_get('commons_force_login_allowed_paths', ''),
+    '#description' => t('If users are forced to login (by checking the previous checkbox), you may specify a list of paths which will not redirect to a login page. Use internal addresses, such as, node/123. Enter each path on a new line.'),
+  );
+  
   $form['general_settings'] = array(
     '#type' => 'fieldset',
     '#title' => t('General settings'),
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
-  );
-  
-  $form['general_settings']['commons_force_login'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Force users to login'),
-    '#default_value' => variable_get('commons_force_login', 0),
-    '#description' => t('If checked, anonymous users will be redirected from all pages to a log in page.'),
   );
   
   $form['general_settings']['commons_recent_join_interval'] = array(
@@ -711,41 +725,60 @@ function commons_core_link_alter(&$links, $node, $comment = NULL) {
  * Callback to optionally force a login
  */
 function commons_core_force_login() {
-  // Exit if coming from the command-line (needed for drush),
-  // if we're not calling index.php (so cron.php, xmlrpc.php, etc, works),
-  // of if the site is in maintenance mode
-  if ((php_sapi_name() == 'cli') ||
-    (str_replace(base_path(), '', $_SERVER['SCRIPT_NAME']) != 'index.php') ||
-    variable_get('site_offline', 0)) {
+  global $user;
+  
+  // Exit if authenticated
+  if ($user->uid) {
+    return;  
+  }
+  
+  // Exit if coming from the command-line (needed for drush)
+  if (php_sapi_name() == 'cli') {
     return;
   }
   
-  // Althought services does not come with Commons, it is one
-  // module that unquestionably needs to bypass a forced redirect
-  if (arg(0) == 'services' && module_exists('services')) {
-    return; 
+  // Exit if we're not calling index.php (so cron.php, xmlrpc.php, etc, works)
+  if (str_replace(base_path(), '', $_SERVER['SCRIPT_NAME']) != 'index.php') {
+    return;
   }
-
-  //  Force anonymous users to a login page
-  if (variable_get('commons_force_login', 0)) {
-    global $user;
   
-    // If anonymous
-    if (!$user->uid) {
-      //  Avoid endless redirect and allow for user registration/creation/login
-      //  Checking arg(1) for numeric value prevents /user/# path
-      if (arg(0) != 'user' || is_numeric(arg(1))) {
-        // Redirect to home
-        if ($dest = $_GET['q']) {
-          // If the user was trying to reach a certain page,
-          // try to preserve the redirection after login
-          drupal_goto('user', "destination=$dest");
-        }
-        else {
-          drupal_goto('user');
-        }
+  // Exit if the site is in maintenance mode
+  if (variable_get('site_offline', 0)) {
+    return;
+  }
+  
+  // Exit if forced-login isn't enabled
+  if (!variable_get('commons_force_login', 0)) {
+    return;
+  }
+  
+  // Avoid endless redirect and allow for user registration/creation/login
+  // Checking arg(1) for numeric value prevents /user/# path
+  if (arg(0) != 'user' || is_numeric(arg(1))) {
+    // Check the allowed pages
+    if ($allowed = variable_get('commons_force_login_allowed_paths', FALSE)) {
+      // Store the path
+      $path = $_GET['q'];
+      // Store the path alias
+      $path_alias = drupal_get_path_alias($path);
+      // Check if the path is allowed
+      if (drupal_match_path($path, $allowed)) {
+        return;
+      }
+      // Check if the path alias is allowed
+      if ($path != $path_alias && drupal_match_path($path_alias, $allowed)) {
+        return;
       }
     }
+    
+    // If the user was trying to reach a certain page,
+    // try to preserve the redirection after login
+    if ($path) {
+      $query = "destination={$path}";
+    }
+    
+    // Redirect to the login
+    drupal_goto('user', $query);
   }
 }
 
