@@ -87,28 +87,6 @@ function commons_core_admin_settings() {
     '#description' => t('If users are forced to login (by checking the previous checkbox), you may specify a list of paths which will not redirect to a login page. Use internal addresses, such as, node/123. Enter each path on a new line.'),
   );
   
-  $form['general_settings'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('General settings'),
-    '#collapsible' => TRUE,
-    '#collapsed' => FALSE,
-  );
-  
-  $form['general_settings']['commons_recent_join_interval'] = array(
-    '#type' => 'select',
-    '#title' => t('Recent joins time-frame'),
-    '#default_value' => variable_get('commons_recent_join_interval', '3 months'),
-    '#options' => array(
-      '3 days' => '3 days',
-      '1 week' => '1 week',
-      '2 weeks' => '2 weeks',
-      '1 month' => '1 month',
-      '3 months' => '3 months',
-      '6 months' => '6 months',
-    ),
-    '#description' => t('The !user_directory contains a block that indicates the amount of recently joined members. Select the time-frame to be used to calculate this value.', array('!user_directory' => l(t('user directory'), 'users'))),
-  );
-  
   $form['group_settings'] = array(
     '#type' => 'fieldset',
     '#title' => t('Group settings'),
@@ -231,6 +209,33 @@ function commons_core_block($op = 'list', $delta = 0, $edit = array()) {
     );
 
     return $blocks;
+  }
+  else if ($op == 'configure') {
+    switch ($delta) {
+      case 0:
+        $form['commons_recent_join_interval'] = array(
+          '#type' => 'select',
+          '#title' => t('Recent joins time-frame'),
+          '#default_value' => variable_get('commons_recent_join_interval', '3 months'),
+          '#options' => array(
+            '3 days' => '3 days',
+            '1 week' => '1 week',
+            '2 weeks' => '2 weeks',
+            '1 month' => '1 month',
+            '3 months' => '3 months',
+            '6 months' => '6 months',
+          ),
+          '#description' => t('The !user_directory contains a block that indicates the amount of recently joined members. Select the time-frame to be used to calculate this value.', array('!user_directory' => l(t('user directory'), 'users'))),
+        );
+        return $form;
+    }
+  }
+  else if ($op == 'save') {
+    switch ($delta) {
+      case 0:
+        variable_set('commons_recent_join_interval', $edit['commons_recent_join_interval']);
+        break;
+    }
   }
   else if ($op == 'view') {
     switch($delta) {
