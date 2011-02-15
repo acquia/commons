@@ -1,3 +1,11 @@
 <?php
 
 include_once('commons_group_aggregator.features.inc');
+
+/**
+ * Implementation of hook_menu_alter()
+ */
+function commons_group_aggregator_menu_alter(&$items) {
+  // Move OG_Aggregator menu tab to far right
+  $items['node/%node/aggregator']['weight'] = 20;
+}

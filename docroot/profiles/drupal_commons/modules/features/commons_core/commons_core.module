@@ -170,9 +170,6 @@ function commons_core_menu_alter(&$items) {
   $items['node/%node/view']['title callback'] = 'commons_core_set_node_tab_title';
   $items['node/%node/view']['title arguments'] = array(1);
   
-  // Move OG_Aggregator menu tab to far right
-  $items['node/%node/aggregator']['weight'] = 100;
-  
   // (Optionally) override comment edit permissions
   $items['comment/edit']['page callback'] = 'commons_core_comment_edit';
 }
