@@ -61,92 +61,6 @@ function commons_core_menu() {
 }
 
 /**
- * Implemenation of hook_admin_settings()
- */
-function commons_core_admin_settings() {
-  $form = array();
-  
-  $form['login_settings'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Login settings'),
-    '#collapsible' => TRUE,
-    '#collapsed' => FALSE,
-  );
-  
-  $form['login_settings']['commons_force_login'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Force users to login'),
-    '#default_value' => variable_get('commons_force_login', 0),
-    '#description' => t('If checked, anonymous users will be redirected from all pages to a log in page. Select this setting if your Drupal Commons site must be closed to the public, such as a company intranet.'),
-  );
-  
-  $form['login_settings']['commons_force_login_allowed_paths'] = array(
-    '#type' => 'textarea',
-    '#title' => t('Allowed paths'),
-    '#default_value' => variable_get('commons_force_login_allowed_paths', ''),
-    '#description' => t('If users are forced to login (by checking the previous checkbox), you may specify a list of paths which will not redirect to a login page. Use internal addresses, such as, node/123. Enter each path on a new line.'),
-  );
-  
-  $form['group_settings'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Group settings'),
-    '#collapsible' => TRUE,
-    '#collapsed' => FALSE,
-  );
-  
-  $form['group_settings']['commons_group_tab_title'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Group homepage tab'),
-    '#default_value' => variable_get('commons_group_tab_title', 'Home'),
-    '#description' => t('Specify what the group homepage tab title should be. If left empty, the tab title will be <i>View</i>.'),
-  );
-  
-  $form['group_settings']['commons_force_unique_groups'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Force unique group names'),
-    '#default_value' => variable_get('commons_force_unique_groups', 1),
-    '#description' => t('If checked, group names must be unique. This will not affect existing groups.'),
-  );
-  
-  $form['group_settings']['commons_hide_shoutbox_link'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Remove Shoutbox link'),
-    '#default_value' => variable_get('commons_hide_shoutbox_link', 1),
-    '#description' => t('If checked, the Shoutbox link will be removed from the Group details menu.'),
-  );
-  
-  $form['group_settings']['commons_email_selective_group'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Alert users when added to a selective group'),
-    '#default_value' => variable_get('commons_email_selective_group', 1),
-    '#description' => t('If checked, an email alert will be sent to users that are added to groups that are marked as either invite-only or closed.'),
-  );
-  
-  $form['group_settings']['commons_group_admin_edit_comments'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Allow group admins to edit all group comments'),
-    '#default_value' => variable_get('commons_group_admin_edit_comments', 0),
-    '#description' => t('If checked, group admins will have the ability to edit any comments on content items inside their groups.'),
-  );
-  
-  $form['group_settings']['commons_group_prevent_open_voting'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Restrict voting to group members'),
-    '#default_value' => variable_get('commons_group_prevent_open_voting', 0),
-    '#description' => t('If checked, only group members will be able to vote on polls that are part of a given group.'),
-  );
-  
-  $form['group_settings']['commons_group_prevent_open_commenting'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Restrict commenting to group members'),
-    '#default_value' => variable_get('commons_group_prevent_open_commenting', 0),
-    '#description' => t('If checked, only group members will be able to comment on nodes that are part of a given group.'),
-  );
-
-  return system_settings_form($form); 
-}
-
-/**
  * Implementation of hook_menu_alter()
  */
 function commons_core_menu_alter(&$items) {
@@ -443,7 +357,7 @@ function commons_core_field_access($op, $field, $account = NULL, $node = NULL) {
           // Show only under the following conditions
           if (!og_is_group_admin($group, $account) && 
               !user_access('administer nodes') && 
-              !array_search('community manager', $account->roles)) {
+              !commons_core_is_community_manager($account)) {
           
             return FALSE;
           }
@@ -464,7 +378,7 @@ function commons_core_field_access($op, $field, $account = NULL, $node = NULL) {
           }
           
           // Users with admin nodes permission and community manager role can always edit
-          if (user_access('administer nodes') || array_search('community manager', $account->roles)) {
+          if (user_access('administer nodes') || commons_core_is_community_manager($account)) {
             return TRUE;
           }
 
@@ -960,7 +874,7 @@ function commons_core_node_add_link($type) {
       // No access if the user is not a member
       else if (!og_is_group_member($group->nid, TRUE, $user->uid)) {
         // Unless they are a community manager
-        if (!array_search('community manager', $user->roles)) {
+        if (!commons_core_is_community_manager($user)) {
           return NULL;
         }
       }
@@ -983,6 +897,92 @@ function commons_core_node_add_link($type) {
   $link = l($link['title'], $link['href'], isset($link['options']) ? $link['options'] : array());
   
   return theme('commons_core_node_add_link', $link);
+}
+
+/**
+ * Admin settings form
+ */
+function commons_core_admin_settings() {
+  $form = array();
+  
+  $form['login_settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Login settings'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  );
+  
+  $form['login_settings']['commons_force_login'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Force users to login'),
+    '#default_value' => variable_get('commons_force_login', 0),
+    '#description' => t('If checked, anonymous users will be redirected from all pages to a log in page. Select this setting if your Drupal Commons site must be closed to the public, such as a company intranet.'),
+  );
+  
+  $form['login_settings']['commons_force_login_allowed_paths'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Allowed paths'),
+    '#default_value' => variable_get('commons_force_login_allowed_paths', ''),
+    '#description' => t('If users are forced to login (by checking the previous checkbox), you may specify a list of paths which will not redirect to a login page. Use internal addresses, such as, node/123. Enter each path on a new line.'),
+  );
+  
+  $form['group_settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Group settings'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  );
+  
+  $form['group_settings']['commons_group_tab_title'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Group homepage tab'),
+    '#default_value' => variable_get('commons_group_tab_title', 'Home'),
+    '#description' => t('Specify what the group homepage tab title should be. If left empty, the tab title will be <i>View</i>.'),
+  );
+  
+  $form['group_settings']['commons_force_unique_groups'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Force unique group names'),
+    '#default_value' => variable_get('commons_force_unique_groups', 1),
+    '#description' => t('If checked, group names must be unique. This will not affect existing groups.'),
+  );
+  
+  $form['group_settings']['commons_hide_shoutbox_link'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Remove Shoutbox link'),
+    '#default_value' => variable_get('commons_hide_shoutbox_link', 1),
+    '#description' => t('If checked, the Shoutbox link will be removed from the Group details menu.'),
+  );
+  
+  $form['group_settings']['commons_email_selective_group'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Alert users when added to a selective group'),
+    '#default_value' => variable_get('commons_email_selective_group', 1),
+    '#description' => t('If checked, an email alert will be sent to users that are added to groups that are marked as either invite-only or closed.'),
+  );
+  
+  $form['group_settings']['commons_group_admin_edit_comments'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Allow group admins to edit all group comments'),
+    '#default_value' => variable_get('commons_group_admin_edit_comments', 0),
+    '#description' => t('If checked, group admins will have the ability to edit any comments on content items inside their groups.'),
+  );
+  
+  $form['group_settings']['commons_group_prevent_open_voting'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Restrict voting to group members'),
+    '#default_value' => variable_get('commons_group_prevent_open_voting', 0),
+    '#description' => t('If checked, only group members will be able to vote on polls that are part of a given group.'),
+  );
+  
+  $form['group_settings']['commons_group_prevent_open_commenting'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Restrict commenting to group members'),
+    '#default_value' => variable_get('commons_group_prevent_open_commenting', 0),
+    '#description' => t('If checked, only group members will be able to comment on nodes that are part of a given group.'),
+  );
+
+  return system_settings_form($form); 
 }
 
 /**
@@ -1096,6 +1096,23 @@ function commons_core_group_restrict_form($node, &$form, $action, $elements = ar
       );
     } 
   }
+}
+
+/**
+ * Determine if a user is a community manager, which is a role
+ * provided by this feature
+ * 
+ * @param $user
+ *   Optionally supply a user object, or use the current user
+ * @return
+ *   TRUE if the user is a community manager, otherwise FALSE
+ */
+function commons_core_is_community_manager($user = NULL) {
+  if (!$user) {
+    global $user;
+  }
+  
+  return array_search('community manager', $user->roles);
 }
 
 /**
@@ -1239,7 +1256,7 @@ function commons_core_check_group_sticky($node) {
     // Check if any group options were checked
     if (!empty($selected_groups)) {
       // If inadequate permissions & roles, then check for group admin status in each group
-      if (!user_access('administer nodes') && !array_search('community manager', $user->roles)) {
+      if (!user_access('administer nodes') && !commons_core_is_community_manager($user)) {
         foreach ($selected_groups as $gid) {
           if (!og_is_group_admin(node_load($gid), $user)) {
             form_set_error('og_groups', t('You can only make posts sticky for the groups that you are an admin for.')); 
