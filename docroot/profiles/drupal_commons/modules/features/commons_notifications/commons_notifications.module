@@ -40,6 +40,14 @@ function commons_notifications_og_links_alter(&$links) {
 }
 
 /**
+ * Implementation of hook_menu_alter()
+ */
+function commons_notifications_menu_alter(&$items) {
+  // Move Broadcast menu tab to far right
+  $items['node/%node/broadcast']['weight'] = 25;
+}
+
+/**
  * Determine if a user has any subscriptions for a given group
  * 
  * @param $group
