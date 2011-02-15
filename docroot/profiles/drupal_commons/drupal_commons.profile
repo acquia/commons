@@ -162,7 +162,6 @@ function drupal_commons_profile_tasks(&$task, $url) {
     }
 
     // Post-installation operations
-    $operations[] = array('drupal_commons_config_roles', array());
     $operations[] = array('drupal_commons_config_profile', array());
     $operations[] = array('drupal_commons_config_filter', array());
     $operations[] = array('drupal_commons_config_password', array());
@@ -748,17 +747,6 @@ function drupal_commons_config_ctools() {
       page_manager_set_page_cache($page);
     }
   }
-}
-
-/**
- * Configure roles
- */
-function drupal_commons_config_roles() {
-  // Make sure first user is a "Community Manager"
-  $record = new stdClass;
-  $record->uid = 1;
-  $record->rid = 3;
-  drupal_write_record('user_roles', $record);
 }
 
 /**
