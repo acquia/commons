@@ -1,5 +1,5 @@
 <?php
-// $Id: messaging.module,v 1.7.2.8.2.27.2.14 2010/04/09 17:35:27 jareyero Exp $
+// $Id: messaging.module,v 1.7.2.8.2.27.2.15 2011/02/16 23:30:37 jareyero Exp $
 /**
  * Drupal Messaging Framework
  *
@@ -516,7 +516,7 @@ function messaging_method_list($account = NULL) {
       }
     }
   }
-  return $info;
+  return array_map('check_plain', $info);
 }
 
 /**

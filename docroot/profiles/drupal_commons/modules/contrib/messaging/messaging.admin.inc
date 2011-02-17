@@ -1,5 +1,5 @@
 <?php
-// $Id: messaging.admin.inc,v 1.1.2.13.2.5 2010/05/11 16:36:13 danepowell Exp $
+// $Id: messaging.admin.inc,v 1.1.2.13.2.6 2011/02/16 23:30:37 jareyero Exp $
 /**
  * @file
  * Messaging Framework - Admin UI
@@ -81,7 +81,7 @@ function messaging_admin_template() {
   messaging_method_list();
   foreach (messaging_method_info() as $method => $info) {
     $rows[] = array(
-      '<strong>'. $info['name'] .'</strong>',
+      '<strong>'. $info['title'] .'</strong>',
       !empty($info['description']) ? $info['description'] : ''
     );
   }
