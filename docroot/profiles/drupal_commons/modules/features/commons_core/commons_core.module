@@ -83,7 +83,7 @@ function commons_core_og_links_alter(&$links, &$node) {
   
   // Change the Manager item to a link to our managers page
   if (isset($links['manager'])) {
-    $group = og_get_group_context();
+    $group = commons_core_get_group_context();
     $links['manager'] = l(t('Group managers'), "og/users/{$group->nid}/managers");
   }
 }
@@ -185,7 +185,7 @@ function commons_core_block($op = 'list', $delta = 0, $edit = array()) {
         break;
       case 5:
         // Detect group context
-        if ($group = og_get_group_context()) {
+        if ($group = commons_core_get_group_context()) {
           // Get the standard group details block
           $details = og_block_details();
           if (isset($details['content'])) {
@@ -349,7 +349,7 @@ function commons_core_field_access($op, $field, $account = NULL, $node = NULL) {
     switch($op) {
       case 'view':
       case 'edit':
-        // If on node add form, use og_get_group_context() to determine group
+        // If on node add form, determine group
         if (arg(0) == 'node' && arg(1) == 'add' && ($group = commons_core_get_group_context())) {
           // hook_nodeapi() validates group admin status if additional
           // groups are selected
