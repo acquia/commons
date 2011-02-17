@@ -1,4 +1,4 @@
-// $Id: ajax_load.js,v 1.13 2010/01/21 07:24:44 markuspetrux Exp $
+// $Id: ajax_load.js,v 1.14 2010/12/02 20:19:22 markuspetrux Exp $
 
 (function ($) {
 
@@ -42,7 +42,7 @@ Drupal.AjaxLoad.loadFiles = function (target, response) {
     var index = Drupal.AjaxLoad.loadPending.length;
     Drupal.AjaxLoad.loadPending[index] = 0;
     if (!response.__customSettings && response.scripts.setting) {
-      $.extend(Drupal.settings, response.scripts.setting);
+      $.extend(true, Drupal.settings, response.scripts.setting);
     }
     // Inline scripts will be handled separately.
     var types = ['core', 'module', 'theme'];
