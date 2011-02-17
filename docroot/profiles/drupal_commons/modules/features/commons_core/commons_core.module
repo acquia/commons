@@ -130,14 +130,14 @@ function commons_core_block($op = 'list', $delta = 0, $edit = array()) {
         $form['commons_recent_join_interval'] = array(
           '#type' => 'select',
           '#title' => t('Recent joins time-frame'),
-          '#default_value' => variable_get('commons_recent_join_interval', '3 months'),
+          '#default_value' => variable_get('commons_recent_join_interval', t('3 months')),
           '#options' => array(
-            '3 days' => '3 days',
-            '1 week' => '1 week',
-            '2 weeks' => '2 weeks',
-            '1 month' => '1 month',
-            '3 months' => '3 months',
-            '6 months' => '6 months',
+            '3 days' => t('3 days'),
+            '1 week' => t('1 week'),
+            '2 weeks' => t('2 weeks'),
+            '1 month' => t('1 month'),
+            '3 months' => t('3 months'),
+            '6 months' => t('6 months'),
           ),
           '#description' => t('The !user_directory contains a block that indicates the amount of recently joined members. Select the time-frame to be used to calculate this value.', array('!user_directory' => l(t('user directory'), 'users'))),
         );
