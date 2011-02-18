@@ -1,6 +1,6 @@
-; $Id: README.txt,v 1.1 2011/01/14 16:39:15 mikestefff Exp $
+; $Id: README.txt,v 1.1.2.1 2011/02/18 14:17:12 mikestefff Exp $
 
-COMMONS RELEASE (1.3)
+COMMONS RELEASE
 ============================
 
 This module is used to utilize the core update tracker module to provide
