@@ -306,7 +306,7 @@ function commons_core_og($op, $gid, $uid, $args) {
             $group->og_selective == OG_CLOSED) {
             // Send the email alert
             drupal_mail(
-              'commons',
+              'commons_core',
               "og $op",
               $user->mail,
               language_default(),
