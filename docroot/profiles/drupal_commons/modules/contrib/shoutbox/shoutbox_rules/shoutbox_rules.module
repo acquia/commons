@@ -1,0 +1,179 @@
+<?php
+// $Id: shoutbox_rules.module,v 1.1.2.1 2011/02/22 16:46:54 mikestefff Exp $
+
+/**
+ * TOKEN INTEGRATION
+ */
+
+/**
+ * Implementation of hook_token_values().
+ */
+function shoutbox_rules_token_values($type, $object = NULL, $options = array()) {
+  if ($type == 'shout' || $type == 'all') {
+    $values['shout']          = check_plain($object->shout);
+    $values['shout']          = $object->shout;
+    $values['shout-id']       = check_plain($object->shout_id);
+    return $values;
+  }
+}
+
+/**
+ * Implementation of hook_token_list().
+ */
+function shoutbox_rules_token_list($type = 'all') {
+  if ($type == 'shout' || $type == 'all') {
+    $tokens['shout']['shout']         = t('Shout message text.');
+    $tokens['shout']['shout-raw']     = t('Shout message raw text.');
+    $tokens['shout']['shout-id']      = t('Shout message ID.');
+    return $tokens;
+  }
+}
+
+/**
+ * RULES INTEGRATION - EVENTS
+ */
+
+/**
+ * Implementation of hook_shoutbox().
+ */
+function shoutbox_rules_shoutbox($op, &$shout, &$a1 = NULL, $form_state = NULL) {
+  // expose some shoutbox events to Rules
+  if (in_array($op, array( 'insert', 'edit', 'unpublish', 'publish', 'delete'))) {
+    rules_invoke_event('shout_' . $op, $user->uid, $shout);
+  }
+}
+
+/**
+ * Implementation of hook_rules_event_info().
+ */
+function shoutbox_rules_rules_event_info() {
+  return array(
+    'shout_insert' => array(
+      'label' => t('A shout was posted'),
+      'module' => 'Shoutbox',
+      'arguments' => array(
+        'user' => array('type' => 'user', 'label' => t('The user who posted the shout.')),
+        'shout' => array('type' => 'shout', 'label' => t('The shout text that was posted.')),
+      ),
+    ),
+    'shout_edit' => array(
+      'label' => t('A shout was edited'),
+      'module' => 'Shoutbox',
+      'arguments' => array(
+        'user' => array('type' => 'user', 'label' => t('The user who edited the shout.')),
+        'shout' => array('type' => 'shout', 'label' => t('The shout text that was edited.')),
+      ),
+    ),
+    'shout_publish' => array(
+      'label' => t('A shout was published'),
+      'module' => 'Shoutbox',
+      'arguments' => array(
+        'user' => array('type' => 'user', 'label' => t('The user who published the shout.')),
+        'shout' => array('type' => 'shout', 'label' => t('The shout text that was published.')),
+      ),
+    ),
+    'shout_unpublish' => array(
+      'label' => t('A shout was unpublished'),
+      'module' => 'Shoutbox',
+      'arguments' => array(
+        'user' => array('type' => 'user', 'label' => t('The user who unpublished the shout.')),
+        'shout' => array('type' => 'shout', 'label' => t('The shout text that was unpublished.')),
+      ),
+    ),
+    'shout_delete' => array(
+      'label' => t('A shout was deleted'),
+      'module' => 'Shoutbox',
+      'arguments' => array(
+        'user' => array('type' => 'user', 'label' => t('The user who deleted the shout.')),
+        'shout' => array('type' => 'shout', 'label' => t('The shout text that was deleted.')),
+      ),
+    ),
+  );
+}
+
+/**
+ * RULES INTEGRATION - ACTIONS
+ */
+
+/**
+ * Implementation of hook_rules_action_info().
+ */
+function shoutbox_rules_rules_action_info() {
+  return array(
+    'shoutbox_rules_add_action' => array(
+      'label' => t('Add a shout'),
+      'help' => t('Enter the shout text.'),
+      'module' => 'Shoutbox',
+      'eval input' => array('poster', 'shout'),
+    ),
+  );
+}
+
+/**
+ * Builds the form for adding a shout.
+ */
+function shoutbox_rules_add_action_form($settings, &$form) {
+  $settings += array('poster' => '', 'shout' => '');
+  $form['settings']['poster'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Poster username'),
+    '#autocomplete_path' => 'user/autocomplete',
+    '#description' => t('If you leave this blank, the current user will be assumed.'),
+    '#default_value' => $settings['poster'],
+  );
+  $form['settings']['shout'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Shout'),
+    '#default_value' => $settings['shout'],
+  );
+}
+
+/**
+ * Validates the form for adding a shout.
+ */
+function shoutbox_rules_add_action_validate($form, $form_state) {
+}
+
+/**
+ * Adds a shout.
+ */
+function shoutbox_rules_add_action($settings) {
+
+  // Set a basic form_state for hooks in case other modules are expecting it
+  $form_state = array( 'values' => array(
+            'message' => $settings['shout'],
+            'op' => 'Shout', 'submit' => 'Shout', 'js' => 1,
+            'form_id' => 'shoutbox_add_form',
+  ));
+
+  $theuser = user_load(array('name' => $settings['poster']));
+
+  // The rest of this function is basically copied from shoutbox_add_form_submit()
+
+  // Build the shout object
+  $shout = new stdClass;
+  $shout->uid = $theuser->uid;
+  $shout->nick = $settings['poster'];
+  $shout->shout = $settings['shout'];
+  $shout->moderate = 0;
+  $shout->created = time();
+  $shout->changed = $shout->created;
+  $shout->sid = session_id();
+  $shout->module = 'shoutbox';
+
+  // Allow other modules to make changes to the shout
+  shoutbox_invoke('presave', $shout, $a1 = NULL, $form_state);
+
+  // Add shout to the database.
+  drupal_write_record('shoutbox', $shout);
+
+  // Pull shout out of db
+  // We are pulling it out because thats the only way to get the shout_id
+  $shout = db_fetch_object(db_query("SELECT * FROM {shoutbox} WHERE uid = %d AND shout = '%s' AND created = %d AND sid = '%s'", $shout->uid, $shout->shout, $shout->created, $shout->sid) );
+
+  // Alert other modules about the new shout via hook
+  shoutbox_invoke('insert', $shout, $a1 = NULL, $form_state);
+
+  return;
+}
+

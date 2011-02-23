@@ -1,5 +1,5 @@
 <?php
-//  $Id: shoutbox_group.module,v 1.1.2.14 2010/12/08 00:38:10 mikestefff Exp $
+//  $Id: shoutbox_group.module,v 1.1.2.15 2011/02/07 16:35:36 mikestefff Exp $
 
 /**
  * Implementation of hook_perm().
@@ -159,7 +159,9 @@ function shoutbox_group_shoutbox($op, &$shout, &$a1 = NULL, $form_state = NULL) 
  * Add a shoutbox link to OG menu block
  */
 function shoutbox_group_og_create_links($node) {
-  return array('shoutbox' => l(t('Shout box'), 'shoutbox/group/' . $node->nid));
+  if (user_access('view shouts')) {
+    return array('shoutbox' => l(t('Shout box'), 'shoutbox/group/' . $node->nid));
+  }
 }
 
 /**

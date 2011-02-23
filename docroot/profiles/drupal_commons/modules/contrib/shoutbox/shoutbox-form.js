@@ -1,33 +1,41 @@
-// $Id: shoutbox-form.js,v 1.11.2.17 2010/12/08 01:39:14 mikestefff Exp $
+// $Id: shoutbox-form.js,v 1.11.2.18 2011/02/22 21:29:17 mikestefff Exp $
 
 Drupal.shoutbox = {}
 Drupal.behaviors.shoutbox = function(context) {
-  // Add AJAX behavior to the form
+  // Declare AJAX behavior for the form
   var options = {
 	  resetForm: true,
 	  beforeSubmit: Drupal.shoutbox.validate,
 	  success: Drupal.shoutbox.success
   };
+  
+  // Detect the shout form
   var shoutForm = $('#shoutbox-add-form:not(.shoutbox-processed)');
-  $(shoutForm).addClass('shoutbox-processed');
-  $(shoutForm).ajaxForm(options);
+  
+  if (shoutForm.length) {
+    // Set a class to the form indicating that it's been processed
+    $(shoutForm).addClass('shoutbox-processed');
+    
+    // Add AJAX behavior to the form
+    $(shoutForm).ajaxForm(options);
 
-  // Tell the form that we have Javascript enabled
-  $(shoutForm).find('#edit-js').val(1);
+    // Tell the form that we have Javascript enabled
+    $(shoutForm).find('#edit-js').val(1);
   
-  // Empty the shout textfield
-  $(shoutForm).find('#edit-message').val('');
+    // Empty the shout textfield
+    $(shoutForm).find('#edit-message').val('');
   
-  // Close errors if they're clicked
-  $('#shoutbox-error').click(function() {
-    $(this).hide(); 
-  });
+    // Close errors if they're clicked
+    $('#shoutbox-error').click(function() {
+      $(this).hide(); 
+    });
 
-  // Show the admin links on hover
-  Drupal.shoutbox.adminHover();
+    // Show the admin links on hover
+    Drupal.shoutbox.adminHover();
   
-  // Initialize the timer for shout updates
-  Drupal.shoutbox.shoutTimer('start');
+    // Initialize the timer for shout updates
+    Drupal.shoutbox.shoutTimer('start');
+  }
 }
 
 /**

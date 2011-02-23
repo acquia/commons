@@ -1,18 +1,21 @@
-// $Id: API.txt,v 1.1.2.6 2010/08/23 23:10:08 mikestefff Exp $
+<?php
+// $Id: shoutbox.api.php,v 1.1.2.1 2011/02/22 16:42:27 mikestefff Exp $
 
-API DOCUMENTATION
-----------------------
-
-See shoutbox_group.module for a detailed example
-
-@param $op
-  The current operation (see code below)
-@param $shout
-  The shout object used in the operation
-@param $form_state
-  The form state of the shout form. Usually only used on the shoutbox form.
-  Modules like shoutbox_group attach extra data to the form with a form_alter
-
+/**
+ * Implementation of hook_shoutbox()
+ * 
+ * See shoutbox_group for a detailed example
+ * 
+ * @param $op
+ *   The current operation (see code below)
+ * @param $shout
+ *   The shout object used in the operation
+ * @param $a1
+ *   An additional parameter that contains data based on the operation
+ * @param $form_state
+ *   The form state of the shout form. Usually only used on the shoutbox form.
+ *   Modules like shoutbox_group attach extra data to the form with a form_alter.
+ */
 function hook_shoutbox($op, &$shout, &$a1 = NULL, $form_state = NULL) {
   switch ($op) {
     case 'insert':
@@ -21,6 +24,10 @@ function hook_shoutbox($op, &$shout, &$a1 = NULL, $form_state = NULL) {
       
     case 'presave':
       // A shout is about to be saved
+      // ********** IMPORTANT**********
+      // If it recommended that in presave, you set $shout->module to the name of your
+      // module. This will prevent shoutbox from displaying your module's shouts on
+      // general shoutboxes - unless that is what is desired.
       break;
     
     case 'edit':
@@ -66,10 +73,3 @@ function hook_shoutbox($op, &$shout, &$a1 = NULL, $form_state = NULL) {
       break;
   }
 }
-
-******************************* IMPORTANT ***********************************
-If it recommended that in presave, you set $shout->module to the name of your
-module. This will prevent shoutbox from displaying your module's shouts on
-general shoutboxes - unless that is what is desired.
-*****************************************************************************
-
