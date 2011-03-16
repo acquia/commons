@@ -1,5 +1,5 @@
 <?php
-// $Id: tagadelic.module,v 1.40.2.4 2008/12/31 11:35:44 ber Exp $
+// $Id$
 
 /**
  * Implementation of hook_help
@@ -146,7 +146,11 @@ function tagadelic_page_list($vocs) {
 
   foreach ($vocs as $vid) {
     $vocabulary = taxonomy_vocabulary_load($vid);
-
+    
+    //Clean out vocabulary, so that we don't have to leave security to our theme layer.
+    $vocabulary->description = filter_xss_admin($vocabulary->description);
+    $vocabulary->name = filter_xss_admin($vocabulary->name);
+    
     $tags = tagadelic_get_weighted_tags(array($vocabulary->vid), variable_get('tagadelic_levels', 6), variable_get('tagadelic_page_amount', '60'));
     $tags = tagadelic_sort_tags($tags);
 
