@@ -1001,31 +1001,33 @@ function commons_core_get_group_context($node = NULL) {
     // Get group context
     if (!($group = og_get_group_context())) {
       // If group context not yet set, see if we can get it from the URL
-      if (is_numeric(arg(1))) {
-        $node = $node ? $node : node_load(arg(1));
-        if ($node) {
-          if (!og_is_group_type($node->type)) {
-            // If we pulled a node that isn't a group, see if the node is
-            // inside a group
-            if ($groups = og_get_node_groups($node)) {
-              // Use the first group
-              $group = node_load(key($groups));
+      if (arg(0) == 'node') {
+        if (is_numeric(arg(1))) {
+          $node = $node ? $node : node_load(arg(1));
+          if ($node) {
+            if (!og_is_group_type($node->type)) {
+              // If we pulled a node that isn't a group, see if the node is
+              // inside a group
+              if ($groups = og_get_node_groups($node)) {
+                // Use the first group
+                $group = node_load(key($groups));
+              }
+            }
+            else {
+              $group = $node;
             }
           }
-          else {
-            $group = $node;
-          }
         }
-      }
-      // The node add form URL queries might help
-      else if (arg(0) == 'node' && arg(1) == 'add' && arg(2)) {
-        $gids = $_GET['gids'];
-        if (is_array($gids)) {
-          $gid = $gids[0];
-          if (is_numeric($gid)) {
-            if ($node = node_load($gid)) {
-              if (og_is_group_type($node->type)) {
-                $group = $node;
+        // The node add form URL queries might help
+        else if (arg(1) == 'add' && arg(2)) {
+          $gids = $_GET['gids'];
+          if (is_array($gids)) {
+            $gid = $gids[0];
+            if (is_numeric($gid)) {
+              if ($node = node_load($gid)) {
+                if (og_is_group_type($node->type)) {
+                  $group = $node;
+                }
               }
             }
           }
