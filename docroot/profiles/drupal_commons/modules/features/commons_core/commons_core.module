@@ -884,7 +884,7 @@ function commons_core_node_add_link($type) {
   // Build the link
   $link = array();
   $link['title'] = t('Add a new !name', array('!name' => $name));
-  $link['href'] = "node/add/$type";
+  $link['href'] = 'node/add/' . str_replace('_', '-', $type);
   
   // Add group URL query, if needed
   if ($group) {
