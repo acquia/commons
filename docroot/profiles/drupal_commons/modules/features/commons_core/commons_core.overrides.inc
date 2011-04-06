@@ -18,7 +18,7 @@ function commons_core_comment_edit($cid) {
   $comment->name = $comment->uid ? $comment->registered_name : $comment->name;
   
   // See if the user can edit the comment
-  if (commons_core_can_edit_comment($comment)) {
+  if (_commons_core_can_admin_comment($comment)) {
     // We need to use our own comment form now
     return theme('box', NULL, drupal_get_form('commons_core_comment_form', (array)$comment, NULL));  
   }

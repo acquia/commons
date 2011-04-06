@@ -625,7 +625,7 @@ function commons_core_link_alter(&$links, $node, $comment = NULL) {
     // Only check if the edit link is missing
     if (!isset($links['comment_edit'])) {
       // Check if user can edit the comment
-      if (_commons_core_can_edit_comment($comment)) {
+      if (comment_access('edit', $comment) || _commons_core_can_admin_comment($comment)) {
         // Provide an edit link
         $link['comment_edit'] = array(
           'title' => t('edit'),
@@ -1245,7 +1245,7 @@ function commons_core_nodeunread_action(&$node) {
 }
 
 /**
- * Determine whether a user can edit a comment
+ * Determine whether a user can admin a comment
  * 
  * This is determined by the checking the group which the comment
  * belongs to via it's parent node. If the current user is an admin
@@ -1256,7 +1256,7 @@ function commons_core_nodeunread_action(&$node) {
  * @return
  *   TRUE if the user is allowed to edit, otherwise FALSE
  */
-function _commons_core_can_edit_comment($comment) {
+function _commons_core_can_admin_comment($comment) {
   global $user;
   
   // Are we allowing group admins to edit comments?
