@@ -226,5 +226,55 @@ function commons_core_context_default_contexts() {
   t('Various block to show on the user browser page');
 
   $export['context_ui-users-user_browser'] = $context;
+  $context = new stdClass;
+  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
+  $context->api_version = 3;
+  $context->name = 'group_listing';
+  $context->description = 'The list of available groups on the site';
+  $context->tag = '';
+  $context->conditions = array(
+    'views' => array(
+      'values' => array(
+        'groups_main_listing' => 'groups_main_listing',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'views-groups_my_groups-block_1' => array(
+          'module' => 'views',
+          'delta' => 'groups_my_groups-block_1',
+          'region' => 'sidebar_last',
+          'weight' => 0,
+        ),
+        'views-groups_most_active-block_1' => array(
+          'module' => 'views',
+          'delta' => 'groups_most_active-block_1',
+          'region' => 'sidebar_last',
+          'weight' => 1,
+        ),
+        'views-groups_newest_groups-block_1' => array(
+          'module' => 'views',
+          'delta' => 'groups_newest_groups-block_1',
+          'region' => 'sidebar_last',
+          'weight' => 2,
+        ),
+        'views-groups_featured_groups-block_1' => array(
+          'module' => 'views',
+          'delta' => 'groups_featured_groups-block_1',
+          'region' => 'content_top',
+          'weight' => 0,
+        ),
+      ),
+    ),
+  );
+  $context->condition_mode = 0;
+
+  // Translatables
+  // Included for use with string extractors like potx.
+  t('The list of available groups on the site');
+
+  $export['group_listing'] = $context;
   return $export;
 }

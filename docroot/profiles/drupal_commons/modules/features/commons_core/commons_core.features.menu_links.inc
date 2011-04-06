@@ -73,25 +73,6 @@ function commons_core_menu_default_menu_links() {
     'weight' => '-50',
     'parent_path' => 'community',
   );
-  // Exported menu link: primary-links:groups/my
-  $menu_links['primary-links:groups/my'] = array(
-    'menu_name' => 'primary-links',
-    'link_path' => 'groups/my',
-    'router_path' => 'groups/my',
-    'link_title' => 'My groups',
-    'options' => array(
-      'attributes' => array(
-        'title' => '',
-      ),
-    ),
-    'module' => 'commons',
-    'hidden' => '0',
-    'external' => '0',
-    'has_children' => '0',
-    'expanded' => '0',
-    'weight' => '-40',
-    'parent_path' => 'user',
-  );
   // Exported menu link: primary-links:mycontent
   $menu_links['primary-links:mycontent'] = array(
     'menu_name' => 'primary-links',
@@ -178,7 +159,6 @@ function commons_core_menu_default_menu_links() {
   t('My bookmarks');
   t('My content');
   t('My friends');
-  t('My groups');
   t('My profile');
   t('My stuff');
   t('Site analytics');
