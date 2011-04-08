@@ -1397,6 +1397,80 @@ function commons_event_views_default_views() {
       ),
       'relationship' => 'none',
     ),
+    'group_nid' => array(
+      'label' => 'Group',
+      'alter' => array(
+        'alter_text' => FALSE,
+        'text' => '',
+        'make_link' => FALSE,
+        'path' => '',
+        'alt' => '',
+        'link_class' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'trim' => FALSE,
+        'max_length' => '',
+        'word_boundary' => TRUE,
+        'ellipsis' => TRUE,
+        'strip_tags' => FALSE,
+        'html' => FALSE,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'type' => 'separator',
+      'separator' => ', ',
+      'exclude' => 0,
+      'id' => 'group_nid',
+      'table' => 'og_ancestry',
+      'field' => 'group_nid',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'field_location_value' => array(
+      'label' => 'Location',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'link_to_node' => 0,
+      'label_type' => 'widget',
+      'format' => 'default',
+      'multiple' => array(
+        'group' => TRUE,
+        'multiple_number' => '',
+        'multiple_from' => '',
+        'multiple_reversed' => FALSE,
+      ),
+      'exclude' => 0,
+      'id' => 'field_location_value',
+      'table' => 'node_data_field_location',
+      'field' => 'field_location_value',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
   ));
   $handler->override_option('sorts', array(
     'field_date_value' => array(
@@ -1499,7 +1573,7 @@ function commons_event_views_default_views() {
   $handler->override_option('empty', 'There are no upcoming events.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
-  $handler->override_option('items_per_page', 5);
+  $handler->override_option('items_per_page', 3);
   $handler->override_option('use_pager', 'mini');
   $handler->override_option('pager_element', 6);
   $handler->override_option('distinct', 1);
@@ -1507,10 +1581,10 @@ function commons_event_views_default_views() {
   $handler->override_option('style_options', array(
     'type' => 'ul',
   ));
-  $handler = $view->new_display('block', 'Upcoming events', 'block_1');
-  $handler->override_option('block_description', 'Upcoming Events (Global)');
+  $handler = $view->new_display('block', 'All upcoming events', 'block_1');
+  $handler->override_option('block_description', 'All upcoming events');
   $handler->override_option('block_caching', -1);
-  $handler = $view->new_display('block', 'Events in my group', 'block_2');
+  $handler = $view->new_display('block', 'Events in my groups', 'block_2');
   $handler->override_option('relationships', array(
     'group_nid' => array(
       'label' => 'Group node (post)',
@@ -1617,8 +1691,7 @@ function commons_event_views_default_views() {
       'relationship' => 'none',
     ),
   ));
-  $handler->override_option('title', 'Events in my groups');
-  $handler->override_option('block_description', 'Upcoming Events (My groups)');
+  $handler->override_option('block_description', 'Upcoming events in my groups');
   $handler->override_option('block_caching', -1);
   $handler = $view->new_display('block', 'Featured events', 'block_3');
   $handler->override_option('filters', array(

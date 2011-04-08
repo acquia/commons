@@ -19,7 +19,9 @@ function commons_event_views_pre_view(&$view, &$display_id, &$args) {
       break;
       
     case 'upcoming_events':
-      $view->display_handler->override_option('footer', l(t('View events on calendar'), 'content/calendar'));
+      if ($view->current_display == 'block_1') {
+        $view->display_handler->override_option('footer', l(t('View events on calendar'), 'content/calendar'));
+      }
       break;
   }
 }

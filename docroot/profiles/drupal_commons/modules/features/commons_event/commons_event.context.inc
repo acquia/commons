@@ -41,5 +41,38 @@ function commons_event_context_default_contexts() {
   t('Upcoming group events');
 
   $export['context_ui-group-event'] = $context;
+  $context = new stdClass;
+  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
+  $context->api_version = 3;
+  $context->name = 'context_ui-profile-profile-me-events';
+  $context->description = 'Add events listings to user profiles when viewing your own profile';
+  $context->tag = 'Profile';
+  $context->conditions = array(
+    'context' => array(
+      'values' => array(
+        'context_ui-profile-profile-me' => 'context_ui-profile-profile-me',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'views-upcoming_events-block_2' => array(
+          'module' => 'views',
+          'delta' => 'upcoming_events-block_2',
+          'region' => 'sidebar_last',
+          'weight' => 1,
+        ),
+      ),
+    ),
+  );
+  $context->condition_mode = 0;
+
+  // Translatables
+  // Included for use with string extractors like potx.
+  t('Add events listings to user profiles when viewing your own profile');
+  t('Profile');
+
+  $export['context_ui-profile-profile-me-events'] = $context;
   return $export;
 }
