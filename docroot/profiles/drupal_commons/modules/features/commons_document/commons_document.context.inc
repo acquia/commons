@@ -3,13 +3,13 @@
 /**
  * Implementation of hook_context_default_contexts().
  */
-function commons_poll_context_default_contexts() {
+function commons_document_context_default_contexts() {
   $export = array();
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-group-group-home-poll';
-  $context->description = 'Poll block for the group home page';
+  $context->name = 'context_ui-group-group-home-documents';
+  $context->description = 'Documents block for the group home page';
   $context->tag = 'Group';
   $context->conditions = array(
     'node' => array(
@@ -24,11 +24,11 @@ function commons_poll_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'views-group_block_poll_latest-block_1' => array(
+        'views-group_block_document_latest-block_1' => array(
           'module' => 'views',
-          'delta' => 'group_block_poll_latest-block_1',
+          'delta' => 'group_block_document_latest-block_1',
           'region' => 'sidebar_last',
-          'weight' => 3,
+          'weight' => 6,
         ),
       ),
     ),
@@ -37,29 +37,29 @@ function commons_poll_context_default_contexts() {
 
   // Translatables
   // Included for use with string extractors like potx.
+  t('Documents block for the group home page');
   t('Group');
-  t('Poll block for the group home page');
 
-  $export['context_ui-group-group-home-poll'] = $context;
+  $export['context_ui-group-group-home-documents'] = $context;
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-group-group-tab-polls';
-  $context->description = 'The poll tab on a group';
+  $context->name = 'context_ui-group-group-tab-documents';
+  $context->description = 'The document tab on a group';
   $context->tag = 'Group';
   $context->conditions = array(
     'views' => array(
       'values' => array(
-        'group_tab_polls:page_1' => 'group_tab_polls:page_1',
+        'group_tab_documents:page_1' => 'group_tab_documents:page_1',
       ),
     ),
   );
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'views-527d55149807f4938ae8e394bc5a1aba' => array(
+        'views-4fa75b28a31d39d57d4357bf10199287' => array(
           'module' => 'views',
-          'delta' => '527d55149807f4938ae8e394bc5a1aba',
+          'delta' => '4fa75b28a31d39d57d4357bf10199287',
           'region' => 'sidebar_last',
           'weight' => 0,
         ),
@@ -71,8 +71,8 @@ function commons_poll_context_default_contexts() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Group');
-  t('The poll tab on a group');
+  t('The document tab on a group');
 
-  $export['context_ui-group-group-tab-polls'] = $context;
+  $export['context_ui-group-group-tab-documents'] = $context;
   return $export;
 }

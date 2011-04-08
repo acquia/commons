@@ -88,16 +88,16 @@ function commons_core_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-group-group';
-  $context->description = 'Various group blocks';
+  $context->name = 'context_ui-group-group-home';
+  $context->description = 'The group home page';
   $context->tag = 'Group';
   $context->conditions = array(
-    'context_og_condition_group_type' => array(
+    'node' => array(
       'values' => array(
         'group' => 'group',
       ),
       'options' => array(
-        'node_form' => 1,
+        'node_form' => '1',
       ),
     ),
   );
@@ -116,17 +116,17 @@ function commons_core_context_default_contexts() {
           'region' => 'sidebar_last',
           'weight' => 1,
         ),
-        'views-og_members_custom_block-block_1' => array(
-          'module' => 'views',
-          'delta' => 'og_members_custom_block-block_1',
+        'shoutbox-0' => array(
+          'module' => 'shoutbox',
+          'delta' => 0,
           'region' => 'sidebar_last',
           'weight' => 2,
         ),
-        'views-og_tag_cloud-block_1' => array(
-          'module' => 'views',
-          'delta' => 'og_tag_cloud-block_1',
-          'region' => 'sidebar_last',
-          'weight' => 3,
+        'heartbeat-ogheartbeat' => array(
+          'module' => 'heartbeat',
+          'delta' => 'ogheartbeat',
+          'region' => 'content',
+          'weight' => 0,
         ),
       ),
     ),
@@ -136,9 +136,9 @@ function commons_core_context_default_contexts() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Group');
-  t('Various group blocks');
+  t('The group home page');
 
-  $export['context_ui-group-group'] = $context;
+  $export['context_ui-group-group-home'] = $context;
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;

@@ -7,7 +7,6 @@ include_once('commons_document.features.inc');
  */
 function commons_document_views_pre_view(&$view, &$display_id, &$args) {
   switch ($view->name) {
-    case 'og_tab_documents':
     case 'content_global_documents':
       $view->display_handler->override_option('header', commons_core_node_add_link('document'));
       break;
