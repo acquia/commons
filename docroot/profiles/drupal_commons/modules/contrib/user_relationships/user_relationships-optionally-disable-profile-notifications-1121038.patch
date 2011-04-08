@@ -1,0 +1,45 @@
+diff --git a/user_relationships_ui/user_relationships_ui.admin.inc b/user_relationships_ui/user_relationships_ui.admin.inc
+index 4feadce..1da6b4b 100644
+--- a/user_relationships_ui/user_relationships_ui.admin.inc
++++ b/user_relationships_ui/user_relationships_ui.admin.inc
+@@ -50,6 +50,15 @@ function user_relationships_ui_settings() {
+       'is_numeric' => array('msg' => t('The relationships per page setting is not an integer'))
+     )))
+   );
++  
++  // this disables the notification messages on the top of the page 
++  $form['general']['user_relationships_notifications_disabled'] = array(
++    '#type'           => 'checkbox',
++    '#title'          => t('Disable notifications'),
++    '#description'    => t('Disable notifications about pending relationship requests on top of the page when the user logins or see its profile.'),
++    '#default_value'  => variable_get('user_relationships_notifications_disabled', FALSE)
++  );
++  
+   if (module_exists('privatemsg')) {
+       $form['privatemsg'] = array(
+         '#type'   => 'fieldset',
+diff --git a/user_relationships_ui/user_relationships_ui.install b/user_relationships_ui/user_relationships_ui.install
+index 66a8718..f57ed68 100644
+--- a/user_relationships_ui/user_relationships_ui.install
++++ b/user_relationships_ui/user_relationships_ui.install
+@@ -25,4 +25,5 @@ function user_relationships_ui_uninstall() {
+   variable_del('user_relationships_allow_auto_approve');
+   variable_del('user_relationships_enable_author_pane');
+   variable_del('user_relationships_api_author_pane_rtids');
++  variable_del('user_relationships_notifications_disabled');
+ }
+diff --git a/user_relationships_ui/user_relationships_ui.module b/user_relationships_ui/user_relationships_ui.module
+index bfaba55..60cbe55 100644
+--- a/user_relationships_ui/user_relationships_ui.module
++++ b/user_relationships_ui/user_relationships_ui.module
+@@ -158,6 +158,10 @@ function _user_relationships_ui_set_notifications(&$account) {
+   if ($account->uid != $user->uid) {
+     return;
+   }
++  
++  if (variable_get('user_relationships_notifications_disabled', FALSE)) {
++    return;
++  }
+ 
+   $notifications = drupal_get_messages('status', FALSE);
+   $notifications = isset($notifications['status']) ? $notifications['status'] : array();

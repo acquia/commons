@@ -158,6 +158,10 @@ function _user_relationships_ui_set_notifications(&$account) {
   if ($account->uid != $user->uid) {
     return;
   }
+  
+  if (variable_get('user_relationships_notifications_disabled', FALSE)) {
+    return;
+  }
 
   $notifications = drupal_get_messages('status', FALSE);
   $notifications = isset($notifications['status']) ? $notifications['status'] : array();

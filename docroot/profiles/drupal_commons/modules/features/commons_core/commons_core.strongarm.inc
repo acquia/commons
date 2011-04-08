@@ -471,6 +471,13 @@ function commons_core_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'user_relationships_notifications_disabled';
+  $strongarm->value = 1;
+
+  $export['user_relationships_notifications_disabled'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'user_terms_group_terms';
   $strongarm->value = 0;
 

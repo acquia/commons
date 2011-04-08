@@ -50,6 +50,15 @@ function user_relationships_ui_settings() {
       'is_numeric' => array('msg' => t('The relationships per page setting is not an integer'))
     )))
   );
+  
+  // this disables the notification messages on the top of the page 
+  $form['general']['user_relationships_notifications_disabled'] = array(
+    '#type'           => 'checkbox',
+    '#title'          => t('Disable notifications'),
+    '#description'    => t('Disable notifications about pending relationship requests on top of the page when the user logins or see its profile.'),
+    '#default_value'  => variable_get('user_relationships_notifications_disabled', FALSE)
+  );
+  
   if (module_exists('privatemsg')) {
       $form['privatemsg'] = array(
         '#type'   => 'fieldset',
