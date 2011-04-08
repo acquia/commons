@@ -23,12 +23,12 @@ function commons_core_heartbeat_message_info() {
   $messages = array();
 
   // Exported heartbeat message: heartbeat_join_group
-  $messages['heartbeat_join_group'] = array (
+  $messages['heartbeat_join_group'] = array(
     'message' => '!username joined the group !group_title',
     'message_concat' => '',
     'message_id' => 'heartbeat_join_group',
     'concat_args' => 
-    array (
+    array(
       'type' => 'single',
       'group_by' => 'none',
       'group_target' => '',
@@ -37,7 +37,7 @@ function commons_core_heartbeat_message_info() {
       'merge_separator' => '',
       'merge_end_separator' => '',
       'roles' => 
-      array (
+      array(
         0 => '0',
         1 => '0',
         2 => '0',
@@ -49,19 +49,19 @@ function commons_core_heartbeat_message_info() {
     'perms' => '1',
     'custom' => 1,
     'variables' => 
-    array (
+    array(
       '@username' => '[account:user-name-url]',
       '@group_title' => '[group:title-link]',
     ),
   );
 
   // Exported heartbeat message: heartbeat_leave_group
-  $messages['heartbeat_leave_group'] = array (
+  $messages['heartbeat_leave_group'] = array(
     'message' => '!username has left the group !group_name',
     'message_concat' => '',
     'message_id' => 'heartbeat_leave_group',
     'concat_args' => 
-    array (
+    array(
       'type' => 'single',
       'group_by' => 'none',
       'group_target' => '',
@@ -70,7 +70,7 @@ function commons_core_heartbeat_message_info() {
       'merge_separator' => '',
       'merge_end_separator' => '',
       'roles' => 
-      array (
+      array(
         0 => '0',
         1 => '0',
         2 => '0',
@@ -82,19 +82,19 @@ function commons_core_heartbeat_message_info() {
     'perms' => '1',
     'custom' => 1,
     'variables' => 
-    array (
+    array(
       '@username' => '[account:user-name-url]',
       '@group_name' => '[group:title-link]',
     ),
   );
 
   // Exported heartbeat message: heartbeat_flag_content
-  $messages['heartbeat_flag_content'] = array (
+  $messages['heartbeat_flag_content'] = array(
     'message' => '!username bookmarked the !type !node_title',
     'message_concat' => '',
     'message_id' => 'heartbeat_flag_content',
     'concat_args' => 
-    array (
+    array(
       'type' => 'single',
       'group_by' => 'none',
       'group_target' => '',
@@ -103,7 +103,7 @@ function commons_core_heartbeat_message_info() {
       'merge_separator' => '',
       'merge_end_separator' => '',
       'roles' => 
-      array (
+      array(
         0 => '0',
         1 => '0',
         2 => '0',
@@ -115,7 +115,7 @@ function commons_core_heartbeat_message_info() {
     'perms' => '1',
     'custom' => 1,
     'variables' => 
-    array (
+    array(
       '@username' => '[flagging_user:user-name-url]',
       '@type' => '[node:type-name]',
       '@node_title' => '[node:title-link]',
@@ -123,12 +123,12 @@ function commons_core_heartbeat_message_info() {
   );
 
   // Exported heartbeat message: heartbeat_create_user
-  $messages['heartbeat_create_user'] = array (
+  $messages['heartbeat_create_user'] = array(
     'message' => 'The user account !user_name has been created',
     'message_concat' => '',
     'message_id' => 'heartbeat_create_user',
     'concat_args' => 
-    array (
+    array(
       'type' => 'single',
       'group_by' => 'none',
       'group_target' => '',
@@ -137,7 +137,7 @@ function commons_core_heartbeat_message_info() {
       'merge_separator' => '',
       'merge_end_separator' => '',
       'roles' => 
-      array (
+      array(
         0 => '0',
         1 => '0',
         2 => '0',
@@ -149,18 +149,18 @@ function commons_core_heartbeat_message_info() {
     'perms' => '1',
     'custom' => 1,
     'variables' => 
-    array (
+    array(
       '@user_name' => '[account:account-url]',
     ),
   );
 
   // Exported heartbeat message: heartbeat_delete_user
-  $messages['heartbeat_delete_user'] = array (
+  $messages['heartbeat_delete_user'] = array(
     'message' => 'The user !user_name has been deleted',
     'message_concat' => '',
     'message_id' => 'heartbeat_delete_user',
     'concat_args' => 
-    array (
+    array(
       'type' => 'single',
       'group_by' => 'none',
       'group_target' => '',
@@ -169,7 +169,7 @@ function commons_core_heartbeat_message_info() {
       'merge_separator' => '',
       'merge_end_separator' => '',
       'roles' => 
-      array (
+      array(
         0 => '0',
         1 => '0',
         2 => '0',
@@ -181,18 +181,18 @@ function commons_core_heartbeat_message_info() {
     'perms' => '1',
     'custom' => 1,
     'variables' => 
-    array (
+    array(
       '@user_name' => '[account:user]',
     ),
   );
 
   // Exported heartbeat message: heartbeat_delete_content
-  $messages['heartbeat_delete_content'] = array (
+  $messages['heartbeat_delete_content'] = array(
     'message' => '!user_name deleted the !type "!node_title"',
     'message_concat' => '',
     'message_id' => 'heartbeat_delete_content',
     'concat_args' => 
-    array (
+    array(
       'type' => 'single',
       'group_by' => 'none',
       'group_target' => '',
@@ -201,7 +201,7 @@ function commons_core_heartbeat_message_info() {
       'merge_separator' => '',
       'merge_end_separator' => '',
       'roles' => 
-      array (
+      array(
         0 => '0',
         1 => '0',
         2 => '0',
@@ -213,7 +213,7 @@ function commons_core_heartbeat_message_info() {
     'perms' => '1',
     'custom' => 1,
     'variables' => 
-    array (
+    array(
       '@user_name' => '[user:user-name-url]',
       '@type' => '[node:type-name]',
       '@node_title' => '[node:title]',
@@ -222,12 +222,12 @@ function commons_core_heartbeat_message_info() {
   );
 
   // Exported heartbeat message: heartbeat_delete_comment
-  $messages['heartbeat_delete_comment'] = array (
+  $messages['heartbeat_delete_comment'] = array(
     'message' => '!username deleted the comment !comment_title from !node_title',
     'message_concat' => '',
     'message_id' => 'heartbeat_delete_comment',
     'concat_args' => 
-    array (
+    array(
       'type' => 'single',
       'group_by' => 'none',
       'group_target' => '',
@@ -236,7 +236,7 @@ function commons_core_heartbeat_message_info() {
       'merge_separator' => '',
       'merge_end_separator' => '',
       'roles' => 
-      array (
+      array(
         0 => '0',
         1 => '0',
         2 => '0',
@@ -248,7 +248,7 @@ function commons_core_heartbeat_message_info() {
     'perms' => '1',
     'custom' => 1,
     'variables' => 
-    array (
+    array(
       '@username' => '[user:user-name-url]',
       '@comment_title' => '[comment:comment-title]',
       '@node_title' => '[node:title-link]',
@@ -256,12 +256,12 @@ function commons_core_heartbeat_message_info() {
   );
 
   // Exported heartbeat message: heartbeat_friend_removed
-  $messages['heartbeat_friend_removed'] = array (
+  $messages['heartbeat_friend_removed'] = array(
     'message' => '!userA and !userB are no longer !relationship_type',
     'message_concat' => '',
     'message_id' => 'heartbeat_friend_removed',
     'concat_args' => 
-    array (
+    array(
       'type' => 'single',
       'group_by' => 'none',
       'group_target' => '',
@@ -270,7 +270,7 @@ function commons_core_heartbeat_message_info() {
       'merge_separator' => '',
       'merge_end_separator' => '',
       'roles' => 
-      array (
+      array(
         0 => '0',
         1 => '0',
         2 => '0',
@@ -282,7 +282,7 @@ function commons_core_heartbeat_message_info() {
     'perms' => '1',
     'custom' => 1,
     'variables' => 
-    array (
+    array(
       '@userA' => '[requester:user-name-url]',
       '@userB' => '[requestee:user-name-url]',
       '@relationship_type' => '[relationship:relationship-name]s',
@@ -364,6 +364,80 @@ function commons_core_imagecache_default_presets() {
         ),
       ),
     ),
+    'group_images_featured' => array(
+      'presetname' => 'group_images_featured',
+      'actions' => array(
+        0 => array(
+          'weight' => '0',
+          'module' => 'imagecache',
+          'action' => 'imagecache_scale_and_crop',
+          'data' => array(
+            'width' => '136',
+            'height' => '136',
+          ),
+        ),
+        1 => array(
+          'weight' => '0',
+          'module' => 'imagecache_canvasactions',
+          'action' => 'canvasactions_definecanvas',
+          'data' => array(
+            'RGB' => array(
+              'HEX' => '',
+            ),
+            'under' => 1,
+            'exact' => array(
+              'width' => '136',
+              'height' => '136',
+              'xpos' => 'center',
+              'ypos' => 'center',
+            ),
+            'relative' => array(
+              'leftdiff' => '',
+              'rightdiff' => '',
+              'topdiff' => '',
+              'bottomdiff' => '',
+            ),
+          ),
+        ),
+      ),
+    ),
+    'group_images_medium' => array(
+      'presetname' => 'group_images_medium',
+      'actions' => array(
+        0 => array(
+          'weight' => '-10',
+          'module' => 'imagecache',
+          'action' => 'imagecache_scale_and_crop',
+          'data' => array(
+            'width' => '66',
+            'height' => '66',
+          ),
+        ),
+        1 => array(
+          'weight' => '-9',
+          'module' => 'imagecache_canvasactions',
+          'action' => 'canvasactions_definecanvas',
+          'data' => array(
+            'RGB' => array(
+              'HEX' => '',
+            ),
+            'under' => 1,
+            'exact' => array(
+              'width' => '66',
+              'height' => '66',
+              'xpos' => 'center',
+              'ypos' => 'center',
+            ),
+            'relative' => array(
+              'leftdiff' => '',
+              'rightdiff' => '',
+              'topdiff' => '',
+              'bottomdiff' => '',
+            ),
+          ),
+        ),
+      ),
+    ),
     'group_images_showcase' => array(
       'presetname' => 'group_images_showcase',
       'actions' => array(
@@ -381,17 +455,7 @@ function commons_core_imagecache_default_presets() {
     'group_images_thumb' => array(
       'presetname' => 'group_images_thumb',
       'actions' => array(
-        '0' => array(
-          'weight' => '0',
-          'module' => 'imagecache',
-          'action' => 'imagecache_scale',
-          'data' => array(
-            'width' => '24',
-            'height' => '24',
-            'upscale' => 1,
-          ),
-        ),
-        '1' => array(
+        0 => array(
           'weight' => '0',
           'module' => 'imagecache_canvasactions',
           'action' => 'canvasactions_definecanvas',
@@ -401,8 +465,8 @@ function commons_core_imagecache_default_presets() {
             ),
             'under' => 1,
             'exact' => array(
-              'width' => '24',
-              'height' => '24',
+              'width' => '28',
+              'height' => '28',
               'xpos' => 'left',
               'ypos' => 'center',
             ),
@@ -412,6 +476,15 @@ function commons_core_imagecache_default_presets() {
               'topdiff' => '',
               'bottomdiff' => '',
             ),
+          ),
+        ),
+        1 => array(
+          'weight' => '0',
+          'module' => 'imagecache',
+          'action' => 'imagecache_scale_and_crop',
+          'data' => array(
+            'width' => '28',
+            'height' => '28',
           ),
         ),
       ),
