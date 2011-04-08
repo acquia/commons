@@ -43,7 +43,7 @@ function commons_core_views_default_views() {
       'empty_zero' => 0,
       'link_to_node' => 0,
       'label_type' => 'none',
-      'format' => 'group_images_linked',
+      'format' => 'group_images_featured_linked',
       'multiple' => array(
         'group' => TRUE,
         'multiple_number' => '',
@@ -55,6 +55,9 @@ function commons_core_views_default_views() {
       'table' => 'node_data_field_group_image',
       'field' => 'field_group_image_fid',
       'relationship' => 'none',
+      'override' => array(
+        'button' => 'Override',
+      ),
     ),
     'title' => array(
       'label' => '',
@@ -351,15 +354,15 @@ function commons_core_views_default_views() {
         'max_length' => '',
         'word_boundary' => 1,
         'ellipsis' => 1,
-        'strip_tags' => 0,
         'html' => 0,
+        'strip_tags' => 0,
       ),
       'empty' => '',
       'hide_empty' => 0,
       'empty_zero' => 0,
       'link_to_node' => 0,
       'label_type' => 'none',
-      'format' => 'group_images_thumb_linked',
+      'format' => 'group_images_medium_linked',
       'multiple' => array(
         'group' => TRUE,
         'multiple_number' => '',
