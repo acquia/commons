@@ -179,7 +179,7 @@ function commons_home_default_page_manager_pages() {
     $pane->pid = 'new-3';
     $pane->panel = 'right';
     $pane->type = 'block';
-    $pane->subtype = 'commons_core-4';
+    $pane->subtype = 'commons_core-join_learn';
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array(
