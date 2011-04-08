@@ -158,9 +158,9 @@ function commons_core_context_default_contexts() {
           'region' => 'sidebar_last',
           'weight' => 2,
         ),
-        'heartbeat-ogheartbeat' => array(
-          'module' => 'heartbeat',
-          'delta' => 'ogheartbeat',
+        'commons_core-group_activity' => array(
+          'module' => 'commons_core',
+          'delta' => 'group_activity',
           'region' => 'content',
           'weight' => 0,
         ),
