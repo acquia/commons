@@ -169,7 +169,6 @@ function drupal_commons_profile_tasks(&$task, $url) {
     $operations[] = array('drupal_commons_config_wysiwyg', array());
     $operations[] = array('drupal_commons_config_ur', array());
     $operations[] = array('drupal_commons_config_heartbeat', array());
-    $operations[] = array('drupal_commons_config_ctools', array());
     $operations[] = array('drupal_commons_config_views', array());
     $operations[] = array('drupal_commons_config_theme', array());
     $operations[] = array('drupal_commons_config_images', array());
@@ -616,34 +615,6 @@ function drupal_commons_config_heartbeat() {
   }
   
   variable_set('heartbeat_stream_data', $streams);
-}
-
-/**
- * Configure ctools
- */
-function drupal_commons_config_ctools() {
-  ctools_include('context');
-  ctools_include('plugins');
-  
-  // Enable node view override (variants imported via Features)
-  $page = page_manager_get_page_cache('node_view');
-  if ($function = ctools_plugin_get_function($page->subtask, 'enable callback')) {
-    $result = $function($page, FALSE);
-
-    if (!empty($page->changed)) {
-      page_manager_set_page_cache($page);
-    }
-  }
-  
-  // Enable profile view override (variant imported via Features) 
-  $page = page_manager_get_page_cache('user_view');
-  if ($function = ctools_plugin_get_function($page->subtask, 'enable callback')) {
-    $result = $function($page, FALSE);
-
-    if (!empty($page->changed)) {
-      page_manager_set_page_cache($page);
-    }
-  }
 }
 
 /**
