@@ -89,6 +89,14 @@ function commons_core_og_links_alter(&$links, &$node) {
       $links['manager'] = l(t('Group managers'), "og/users/{$group->nid}/managers");
     }
   }
+  
+  // Remove content creation links because the group content
+  // create selector will be displaying them
+  foreach ($links as $key => $link) {
+    if (substr($key, 0, 7) == 'create_') {
+      unset($links[$key]);
+    }
+  }
 }
 
 /**

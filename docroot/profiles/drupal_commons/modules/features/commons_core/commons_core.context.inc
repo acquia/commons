@@ -88,6 +88,42 @@ function commons_core_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
+  $context->name = 'context_ui-group-group-context';
+  $context->description = 'The context of a group';
+  $context->tag = 'Group';
+  $context->conditions = array(
+    'context_og_condition_group_type' => array(
+      'values' => array(
+        'group' => 'group',
+      ),
+      'options' => array(
+        'node_form' => 1,
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'commons_core-group_create_content' => array(
+          'module' => 'commons_core',
+          'delta' => 'group_create_content',
+          'region' => 'preface_top',
+          'weight' => 0,
+        ),
+      ),
+    ),
+  );
+  $context->condition_mode = 0;
+
+  // Translatables
+  // Included for use with string extractors like potx.
+  t('Group');
+  t('The context of a group');
+
+  $export['context_ui-group-group-context'] = $context;
+  $context = new stdClass;
+  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
+  $context->api_version = 3;
   $context->name = 'context_ui-group-group-home';
   $context->description = 'The group home page';
   $context->tag = 'Group';

@@ -30,6 +30,10 @@ function _commons_core_block_list() {
     'info' => t('Group actions menu'),
     'cache' => BLOCK_CACHE_GLOBAL,
   );
+  $blocks['group_create_content'] = array(
+    'info' => t('Group create contenet selector'),
+    'cache' => BLOCK_CACHE_GLOBAL,
+  );
   return $blocks;
 }
 
@@ -162,4 +166,91 @@ function _commons_core_group_menu_block() {
   }
   
   return NULL;
+}
+
+/**
+ * Display the dropdown group create content selector
+ */
+function _commons_core_group_create_content_block() {
+  if ($group = commons_core_get_group_context()) {
+    if ($form = drupal_get_form('commons_core_group_create_content_block_form')) {
+      return array(
+        'subject' => '',
+        'content' => $form,
+      );
+    }
+  }
+  
+  return NULL;
+}
+
+/**
+ * Provide the form for the group create content selector
+ */
+function commons_core_group_create_content_block_form(&$form_state) {
+  $form = array();
+  
+  if (!($group = commons_core_get_group_context())) {
+    return NULL;
+  }
+  
+  // Gather group node type links
+  $links = module_invoke_all('og_create_links', $group);
+  
+  // Allow og_features to alter them
+  // We avoid allowing any module to alter them, because the alter 
+  // hook is often used to add non-node links
+  og_features_og_links_alter($links);
+  
+  // Turn the links into node types
+  $types = array();
+  foreach($links as $key => $link) {
+    // Extract the node type
+    if ($type = str_replace('create_', '', $key)) {
+      // Load the node type
+      if ($type = node_get_types('type', $type)) {
+        // Add the type
+        $types[$type->type] = $type->name;
+      }
+    }
+  }
+  
+  // Make sure we have at least one type
+  if (empty($types)) {
+    return NULL;
+  }
+  
+  // Provide the selector
+  $form['node_type'] = array(
+    '#type' => 'select',
+    '#options' => $types,
+  );
+  
+  // Store the group
+  $form['group'] = array(
+    '#type' => 'value',
+    '#value' => $group,
+  );
+  
+  // Submit button
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Create'),
+  );
+  
+  return $form;
+}
+
+/**
+ * Submit handler for the group create content selector
+ */
+function commons_core_group_create_content_block_form_submit(&$form, $form_state) {
+  // Extract the group
+  $group = $form_state['values']['group'];
+  
+  // Extract the node type
+  $type = $form_state['values']['node_type'];
+  
+  // Redirect to the node form
+  drupal_goto("node/add/{$type}", array('gids' => array($group->nid)));
 }
