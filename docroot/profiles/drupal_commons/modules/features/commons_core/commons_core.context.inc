@@ -62,15 +62,15 @@ function commons_core_context_default_contexts() {
           'region' => 'header',
           'weight' => 0,
         ),
-        'commons_core-3' => array(
+        'commons_core-header_login' => array(
           'module' => 'commons_core',
-          'delta' => '3',
+          'delta' => 'header_login',
           'region' => 'header',
           'weight' => 1,
         ),
-        'commons_core-2' => array(
+        'commons_core-commons_info' => array(
           'module' => 'commons_core',
-          'delta' => '2',
+          'delta' => 'commons_info',
           'region' => 'footer',
           'weight' => 0,
         ),
@@ -104,9 +104,9 @@ function commons_core_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'commons_core-5' => array(
+        'commons_core-group_menu' => array(
           'module' => 'commons_core',
-          'delta' => 5,
+          'delta' => 'group_menu',
           'region' => 'sidebar_last',
           'weight' => 0,
         ),
@@ -155,9 +155,9 @@ function commons_core_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'commons_core-0' => array(
+        'commons_core-user_statistics' => array(
           'module' => 'commons_core',
-          'delta' => '0',
+          'delta' => 'user_statistics',
           'region' => 'sidebar_last',
           'weight' => 0,
         ),

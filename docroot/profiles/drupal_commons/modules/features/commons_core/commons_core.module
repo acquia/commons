@@ -95,118 +95,21 @@ function commons_core_og_links_alter(&$links, &$node) {
  * Implementation of hook_block()
  */
 function commons_core_block($op = 'list', $delta = 0, $edit = array()) {
+  module_load_include('inc', 'commons_core', 'commons_core.blocks');
   if ($op == 'list') {
-    $blocks[0] = array(
-      'info' => t('User statistics'),
-      'cache' => BLOCK_CACHE_GLOBAL,
-    );
-    $blocks[1] = array(
-      'info' => t('Jumpstart your community!'),
-      'cache' => BLOCK_CACHE_GLOBAL,
-    );
-    $blocks[2] = array(
-      'info' => t('Drupal Commons information'),
-      'cache' => BLOCK_CACHE_GLOBAL,
-    );
-    $blocks[3] = array(
-      'info' => t('Header login block'),
-      'cache' => BLOCK_CACHE_GLOBAL,
-    );
-    $blocks[4] = array(
-      'info' => t('Join & learn more'),
-      'cache' => BLOCK_CACHE_GLOBAL,
-    );
-    $blocks[5] = array(
-      'info' => t('Group actions'),
-      'cache' => BLOCK_CACHE_GLOBAL,
-    );
-    $blocks[6] = array(
-      'info' => t('Subscribe to user being viewed'),
-      'cache' => BLOCK_CACHE_GLOBAL,
-    );
-
-    return $blocks;
+    return _commons_core_block_list();
   }
   else if ($op == 'configure') {
-    switch ($delta) {
-      case 0:
-        $form['commons_recent_join_interval'] = array(
-          '#type' => 'select',
-          '#title' => t('Recent joins time-frame'),
-          '#default_value' => variable_get('commons_recent_join_interval', t('3 months')),
-          '#options' => array(
-            '3 days' => t('3 days'),
-            '1 week' => t('1 week'),
-            '2 weeks' => t('2 weeks'),
-            '1 month' => t('1 month'),
-            '3 months' => t('3 months'),
-            '6 months' => t('6 months'),
-          ),
-          '#description' => t('The !user_directory contains a block that indicates the amount of recently joined members. Select the time-frame to be used to calculate this value.', array('!user_directory' => l(t('user directory'), 'users'))),
-        );
-        return $form;
-    }
+    $func = "_commons_core_{$delta}_block_configure";
+    return $func();
   }
   else if ($op == 'save') {
-    switch ($delta) {
-      case 0:
-        variable_set('commons_recent_join_interval', $edit['commons_recent_join_interval']);
-        break;
-    }
+    $func = "_commons_core_{$delta}_block_save";
+    return $func($edit);
   }
   else if ($op == 'view') {
-    switch($delta) {
-      case 0:
-        $block = array(
-          'subject' => t('User statistics'),
-          'content' => _commons_core_user_stats_block()
-        );
-        break;
-      case 1:
-        $block = array(
-          'subject' => t('Jumpstart your community!'),
-          'content' => _commons_core_jumpstart_community_block()
-        );
-        break;
-      case 2:
-        $block = array(
-          'subject' => '',
-          'content' => theme('commons_core_info_block')
-        );
-        break;
-      case 3:
-        $block = array(
-          'subject' => '',
-          'content' => _commons_core_header_login_block()
-        );
-        break;
-      case 4:
-        $block = array(
-          'subject' => t('Join & learn more'),
-          'content' => _commons_core_join_block()
-        );
-        break;
-      case 5:
-        // Detect group context
-        if ($group = commons_core_get_group_context()) {
-          // Get the standard group details block
-          $details = og_block_details();
-          if (isset($details['content'])) {
-            $block = array(
-              'subject' => l(t('Actions'), "node/{$group->nid}", array('attributes' => array('title' => t('Return to !group', array('!group' => $group->title))))),
-              'content' => $details['content']
-            );
-          }
-        }
-        break;
-      case 6:
-        $block = array(
-          'subject' => '',
-          'content' => _commons_core_subscribe_to_user_profile_block()
-        );
-        break;
-    }
-    return $block;
+    $func = "_commons_core_{$delta}_block";
+    return $func();
   }  
 }
 
@@ -712,68 +615,6 @@ function commons_core_set_node_tab_title($node) {
 }
 
 /**
- * Display a block with global user statistics
- */
-function _commons_core_user_stats_block() {
-  $data = array();
-  
-  // Determine total users on the site
-  $total = db_result(db_query("SELECT COUNT(uid) FROM {users} WHERE status = 1"));
-  $data[] = format_plural($total, '1 user', '@count users');
-  
-  // Determine recently joined users
-  $total = db_result(db_query("SELECT COUNT(uid) FROM {users} WHERE status = 1 AND created > %d", strtotime('-' . variable_get('commons_recent_join_interval', '3 months'), time())));
-  $data[] = format_plural($total, '1 recently joined member', '@count recently joined members');
-  
-  return theme('commons_core_user_stats_block', $data);
-}
-
-/**
- * Display "jumpstart" block
- */
-function _commons_core_jumpstart_community_block() {
-  return t('!view, or !create new groups to start creating your community!', array('!view' => l(t('View'), 'groups'), '!create' => l(t('create'), 'node/add/group')));
-}
-
-/**
- * Display our custom login block for the header
- */
-function _commons_core_header_login_block() {
-  global $user;
-  
-  // Only anonymous users can log in
-  if ($user->uid) {
-    return NULL;
-  }
-  
-  // No login needed if we're on the login page
-  if (arg(0) == 'user') {
-    return NULL;
-  }
-  
-  // Determine if we're on the front page
-  if (drupal_is_front_page()) {
-    // Only provide a link
-    return t('Already a member? !login', array('!login' => l(t('Login'), 'user')));
-  }
-  
-  // Render the standard login form
-  return drupal_get_form('user_login_block');
-}
-
-/**
- * The "Join & learn more" registration block callback
- */
-function _commons_core_join_block() {
-  // Check access
-  if (!user_register_access()) {
-    return NULL;
-  }
-  
-  return drupal_get_form('commons_core_join_form');
-}
-
-/**
  * The "Join & learn more" registration form
  */
 function commons_core_join_form() {
@@ -828,29 +669,6 @@ function commons_core_join_form() {
   );
   
   return $form;
-}
-
-/**
- * Provide a block that contains a link to subscribe to the
- * user being viewed
- */
-function _commons_core_subscribe_to_user_profile_block() {
-  global $user;
-  
-  // Current user must be logged in
-  if ($user->uid) {
-    // Must be viewing a user who is not the currnet user
-    if (arg(0) == 'user' && is_numeric(arg(1)) && $user->uid != arg(1) && $account = user_load(arg(1))) {
-      // Notifications UI must be enabled
-      if (module_exists('notifications_ui')) {
-        // Check notification settings
-        if (notifications_ui_account_options('links') && ($options = notifications_ui_subscribe_options($user, 'user', $account))) {
-          $links = notifications_ui_build_links($options);
-          return theme('links', $links, array('class' => 'item-list'));
-        }
-      }
-    }
-  }
 }
 
 /**
@@ -985,7 +803,7 @@ function commons_core_group_restrict_form($node, &$form, $action, $elements = ar
     return; 
   }
   
-  //Determine which groups the poll belongs to
+  // Determine which groups the poll belongs to
   $groups = og_get_node_groups($node);
         
   // Only act if this poll is part of a group
@@ -1015,7 +833,7 @@ function commons_core_group_restrict_form($node, &$form, $action, $elements = ar
         }
       }
       
-      //Let user know why they can't act
+      // Let user know why they can't act
       $form['denied_message'] = array(
         '#type' => 'item',
         '#value' => t('You must be a member of the group to !action', array('!action' => $action)),
