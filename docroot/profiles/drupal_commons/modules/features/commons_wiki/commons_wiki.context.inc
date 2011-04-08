@@ -21,9 +21,9 @@ function commons_wiki_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'views-157e77ff7551b8ace96fdd6c04d716cf' => array(
+        'views-group_block_wiki_latest_comments-block_1' => array(
           'module' => 'views',
-          'delta' => '157e77ff7551b8ace96fdd6c04d716cf',
+          'delta' => 'group_block_wiki_latest_comments-block_1',
           'region' => 'sidebar_last',
           'weight' => 0,
         ),

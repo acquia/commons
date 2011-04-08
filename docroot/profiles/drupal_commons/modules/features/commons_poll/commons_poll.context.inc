@@ -57,9 +57,9 @@ function commons_poll_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'views-527d55149807f4938ae8e394bc5a1aba' => array(
+        'views-group_block_poll_latest_comments-block_1' => array(
           'module' => 'views',
-          'delta' => '527d55149807f4938ae8e394bc5a1aba',
+          'delta' => 'group_block_poll_latest_comments-block_1',
           'region' => 'sidebar_last',
           'weight' => 0,
         ),

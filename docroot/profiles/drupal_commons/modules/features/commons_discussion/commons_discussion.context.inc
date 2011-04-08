@@ -57,9 +57,9 @@ function commons_discussion_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'views-1048f0a19e6b5b9b52580ed82aae1972' => array(
+        'views-group_block_disc_latest_comments-block_1' => array(
           'module' => 'views',
-          'delta' => '1048f0a19e6b5b9b52580ed82aae1972',
+          'delta' => 'group_block_disc_latest_comments-block_1',
           'region' => 'sidebar_last',
           'weight' => 0,
         ),
