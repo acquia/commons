@@ -1295,7 +1295,7 @@ function commons_profile_views_default_views() {
       'relationship' => 'none',
     ),
     'title' => array(
-      'label' => 'Name',
+      'label' => '',
       'alter' => array(
         'alter_text' => 0,
         'text' => '',
