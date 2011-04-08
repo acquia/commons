@@ -12,3 +12,31 @@ function commons_blog_views_pre_view(&$view, &$display_id, &$args) {
       break;
   }
 }
+
+/**
+ * Implementation of hook_og_features_registry()
+ */
+function commons_blog_og_features_registry() {
+  $registry = array();
+  
+  // Feature: commons_blog
+  $feature = new stdClass;
+  $feature->id = 'commons_blog';
+  $feature->name = t('Blog');
+  $feature->description = t('Provide a simple blog for your group');
+  $feature->components = array(
+    'views' => array(
+      'group_tab_blogs',
+    ),
+    'node' => array(
+      'blog',
+    ),
+    'context' => array(
+      'context_ui-group-group-home-blogs',
+      'context_ui-group-group-tab-blogs',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+  
+  return $registry;
+}

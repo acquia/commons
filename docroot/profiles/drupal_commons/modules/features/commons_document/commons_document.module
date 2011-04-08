@@ -12,3 +12,31 @@ function commons_document_views_pre_view(&$view, &$display_id, &$args) {
       break;
   }
 }
+
+/**
+ * Implementation of hook_og_features_registry()
+ */
+function commons_document_og_features_registry() {
+  $registry = array();
+  
+  // Feature: commons_document
+  $feature = new stdClass;
+  $feature->id = 'commons_document';
+  $feature->name = t('Documents');
+  $feature->description = t('Create document content inside your group');
+  $feature->components = array(
+    'views' => array(
+      'group_tab_documents',
+    ),
+    'node' => array(
+      'document',
+    ),
+    'context' => array(
+      'context_ui-group-group-home-documents',
+      'context_ui-group-group-tab-documents',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+  
+  return $registry;
+}

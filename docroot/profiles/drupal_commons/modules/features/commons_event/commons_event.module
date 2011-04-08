@@ -24,3 +24,31 @@ function commons_event_views_pre_view(&$view, &$display_id, &$args) {
       break;
   }
 }
+
+/**
+ * Implementation of hook_og_features_registry()
+ */
+function commons_event_og_features_registry() {
+  $registry = array();
+  
+  // Feature: commons_event
+  $feature = new stdClass;
+  $feature->id = 'commons_event';
+  $feature->name = t('Events');
+  $feature->description = t('Create events and display them on calendars');
+  $feature->components = array(
+    'views' => array(
+      'group_tab_event_calendar',
+    ),
+    'node' => array(
+      'event',
+    ),
+    'context' => array(
+      'context_ui-group-group-home-events',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+  
+  return $registry;
+}
+

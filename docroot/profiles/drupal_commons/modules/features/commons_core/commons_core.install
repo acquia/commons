@@ -189,3 +189,11 @@ function commons_core_update_6004() {
   features_install_modules(array('commons_invite'));
   return array();
 }
+
+/**
+ * Install og_features
+ */
+function commons_core_update_6005() {
+  drupal_install_modules(array('og_features'));
+  return array();
+}

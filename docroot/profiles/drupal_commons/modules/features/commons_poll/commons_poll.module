@@ -12,3 +12,31 @@ function commons_poll_views_pre_view(&$view, &$display_id, &$args) {
       break;
   }
 }
+
+/**
+ * Implementation of hook_og_features_registry()
+ */
+function commons_poll_og_features_registry() {
+  $registry = array();
+  
+  // Feature: commons_poll
+  $feature = new stdClass;
+  $feature->id = 'commons_poll';
+  $feature->name = t('Polling');
+  $feature->description = t('Create polls for members to vote on');
+  $feature->components = array(
+    'views' => array(
+      'group_tab_polls',
+    ),
+    'node' => array(
+      'poll',
+    ),
+    'context' => array(
+      'context_ui-group-group-home-poll',
+      'context_ui-group-group-tab-polls',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+  
+  return $registry;
+}

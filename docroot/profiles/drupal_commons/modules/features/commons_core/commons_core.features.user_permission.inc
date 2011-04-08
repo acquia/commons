@@ -445,6 +445,15 @@ function commons_core_user_default_permissions() {
     ),
   );
 
+  // Exported permission: edit all group features
+  $permissions['edit all group features'] = array(
+    'name' => 'edit all group features',
+    'roles' => array(
+      '0' => 'community manager',
+      '1' => 'site admin',
+    ),
+  );
+
   // Exported permission: edit any group content
   $permissions['edit any group content'] = array(
     'name' => 'edit any group content',
@@ -526,6 +535,14 @@ function commons_core_user_default_permissions() {
   // Exported permission: edit own group content
   $permissions['edit own group content'] = array(
     'name' => 'edit own group content',
+    'roles' => array(
+      '0' => 'authenticated user',
+    ),
+  );
+
+  // Exported permission: edit own group features
+  $permissions['edit own group features'] = array(
+    'name' => 'edit own group features',
     'roles' => array(
       '0' => 'authenticated user',
     ),

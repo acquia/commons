@@ -13,3 +13,30 @@ function commons_wiki_views_pre_view(&$view, &$display_id, &$args) {
       break;
   }
 }
+
+/**
+ * Implementation of hook_og_features_registry()
+ */
+function commons_wiki_og_features_registry() {
+  $registry = array();
+  
+  // Feature: commons_wiki
+  $feature = new stdClass;
+  $feature->id = 'commons_wiki';
+  $feature->name = t('Wiki');
+  $feature->description = t('Add wiki posts which any member can edit');
+  $feature->components = array(
+    'views' => array(
+      'group_tab_wikis',
+    ),
+    'node' => array(
+      'wiki',
+    ),
+    'context' => array(
+      'context_ui-group-group-tab-wikis',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+  
+  return $registry;
+}

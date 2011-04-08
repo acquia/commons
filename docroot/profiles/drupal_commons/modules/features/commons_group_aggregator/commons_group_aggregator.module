@@ -9,3 +9,24 @@ function commons_group_aggregator_menu_alter(&$items) {
   // Move OG_Aggregator menu tab to far right
   $items['node/%node/aggregator']['weight'] = 20;
 }
+
+/**
+ * Implementation of hook_og_features_registry()
+ */
+function commons_group_aggregator_og_features_registry() {
+  $registry = array();
+  
+  // Feature: commons_group_aggregator
+  $feature = new stdClass;
+  $feature->id = 'commons_group_aggregator';
+  $feature->name = t('Group aggregator');
+  $feature->description = t('Subscribe to external RSS feeds within your group');
+  $feature->components = array(
+    'path' => array(
+      'node/%node/aggregator',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+  
+  return $registry;
+}
