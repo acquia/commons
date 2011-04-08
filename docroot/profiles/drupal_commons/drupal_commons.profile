@@ -318,6 +318,12 @@ function drupal_commons_features_form($form_state, $url) {
     '#default_value' => 1,
     '#description' => st('Award users points and badges for performing community-related actions.'),
   );
+  $form['misc']['feature-commons_invite'] = array(
+    '#type' => 'checkbox',
+    '#title' => st('Invitations'),
+    '#default_value' => 1,
+    '#description' => st('Enable users to send invitations to join the site to external people.'),
+  );
   $form['misc']['feature-commons_group_aggregator'] = array(
     '#type' => 'checkbox',
     '#title' => st('Content aggregator'),

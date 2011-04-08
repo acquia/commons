@@ -1,0 +1,382 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: it\n"
+"POT-Creation-Date: 2007-03-19 16:34+0100\n"
+"PO-Revision-Date: 2007-03-19 16:34+0100\n"
+"Last-Translator: Gaetano Dentamaro aka Mr.Bittertooth <bittertooth@radicali3000.net>\n"
+"Language-Team: Radicali3000.net\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: 2\n"
+"X-Poedit-Language: Italian\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: invite.module:19
+msgid "Allows users to send GMail style invitations, and automatically escalates new users who join the site to a role of your designation."
+msgstr "Permette agli utenti di inviare inviti in stile GMail. I nuovi utenti che si registrano possono essere automaticamente assegnati a un ruolo prescelto."
+
+#: invite.module:42
+msgid "User settings"
+msgstr "Configurazione utente"
+
+#: invite.module:50
+msgid "Target role (default)"
+msgstr "Ruolo assegnato (default)"
+
+#: invite.module:53
+msgid "Choose the default role that invited users will be added to when they register. For example, <em>authenticated user</em>."
+msgstr "Scegliere il ruolo a cui saranno assegnati gli invitati che si registrano. Per esempio, <em>utente regisrato</em>."
+
+#: invite.module:61
+msgid "Target role for %role invitees"
+msgstr "Ruolo da assegnare per %role invitati"
+
+#: invite.module:64
+msgid "Choose the role that invited users will be added to if invited by a %role."
+msgstr "Scegliere il ruolo da assegnare agli utenti se invitati da un %role."
+
+#: invite.module:71
+msgid "Invitation expiry"
+msgstr "Scadenza dell'invito"
+
+#: invite.module:74
+msgid "Set the expiry period for user invitations, in days."
+msgstr "Selezionare la durato dell'invito, in giorni."
+
+#: invite.module:80
+msgid "Allow deletion of joined users"
+msgstr "Permette la cancellazione degli utenti che aderiscono all'invito"
+
+#: invite.module:82
+msgid "This option allows users to delete invitations marked as <em>joined</em>. Useful to prevent users from deleting their account to be re-invited."
+msgstr "Questa opzione permette agli utenti di cancellare gli inviti classificati <em>accettati</em>. Utile per prevenire che gli utenti si cancellino per essere re-invitati."
+
+#: invite.module:87
+msgid "Role limitations"
+msgstr "Limitazioni per ruolo"
+
+#: invite.module:97
+msgid "Limit for %role"
+msgstr "Limitazioni per %role"
+
+#: invite.module:99;120
+msgid "unlimited"
+msgstr "illimitati"
+
+#: invite.module:100
+msgid "Limits for %role"
+msgstr "Limitazioni per %role"
+
+#: invite.module:108
+msgid "Multiple invitations"
+msgstr "Inviti multipli"
+
+#: invite.module:118
+msgid "Limit per turn for %role"
+msgstr "Limite per sessione per %role"
+
+#: invite.module:120
+msgid "disabled"
+msgstr "disabilitato"
+
+#: invite.module:121
+msgid "Allows to limit the maximum number of invitations a %role can send per turn."
+msgstr "Consente di fissare un numero massimo di invito che un %role può spedire per sessione."
+
+#: invite.module:130
+msgid "Email settings"
+msgstr "Configurazione Email"
+
+#: invite.module:137
+msgid "Subject"
+msgstr "Oggetto"
+
+#: invite.module:138;740
+msgid "You've been invited"
+msgstr "Hai ricevuto un invito"
+
+#: invite.module:141
+msgid "Type the subject of the invitation email."
+msgstr "Scrivi l'oggetto della email di invito"
+
+#: invite.module:147
+msgid "Mail template"
+msgstr "Modello di email"
+
+#: invite.module:150
+msgid "Use the following placeholders: @site, @homepage, @join_link, @message, @inviter."
+msgstr "Usare i seguenti segnaposto: @sito, @homepage, @link_invito, @messagio, @ospite."
+
+#: invite.module:155
+msgid "<em>From</em> email address"
+msgstr "Indirizzo E-Mail del mittente"
+
+#: invite.module:156
+msgid "Choose which email address will be in the From: header for the invitation mails sent; <em>site</em> or <em>inviter</em>. <em>Site</em> will use the default email address of the site, whereas <em>inviter</em> will use the email address of the user who is sending the invitation. Alternatively, you can set this value manually by clicking on <em>advanced settings</em> below."
+msgstr "Scegliere quale indirizzo email usare nel campo Da: delle lettere di invito inviate; <em>Pagina web</em> per usare come indirizzo quello generale del sito. <em>Ospite</em> per usare l'indirizzo della persona che invita. Oppure scegliere manualmente usando la configurazione avanzata qui sotto."
+
+#: invite.module:157;165
+msgid "site"
+msgstr "Sito"
+
+#: invite.module:157;;165;725;;733
+msgid "inviter"
+msgstr "Ospite"
+
+#: invite.module:163
+msgid "<em>Reply-To</em> email address"
+msgstr "indirizzo email a cui <em>Rispondere</em> (Reply-to)"
+
+#: invite.module:164
+msgid "Choose which email address will be in the Reply-To: header for the invitation mails sent; <em>site</em> or <em>inviter</em>. <em>Site</em> will use the default email address of the site, whereas <em>inviter</em> will use the email address of the user who is sending the invitation. Alternatively, you can set this value manually by clicking on <em>advanced settings</em> below."
+msgstr "Scegliere l'indirizzo email da usare per il campo Reply-to della email di invito; <em>sito</em> oppure <em>ospite</em>.<em>Pagina web</em> per usare come indirizzo quello generale del sito. <em>Ospite</em> per usare l'indirizzo della persona che invita. Oppure scegliere manualmente usano la configurazione avanzata qui sotto."
+
+#: invite.module:171
+msgid "Advanced settings"
+msgstr "Configurazione avanzata"
+
+#: invite.module:174
+msgid "<strong>Note:</strong> unless these fields are blank, they will override the radio button choices above."
+msgstr "<strong>Nota:</strong> se selezionate, queste scelte prevalgono sulle scelte dei bottoni radio qui sopra."
+
+#: invite.module:179
+msgid "Manually override <em>From</em> email address"
+msgstr "Cambiare l'indirizzo email del mittente"
+
+#: invite.module:181
+msgid "The email address the invitation email is sent from."
+msgstr "Indirizzo email da cui spedire l'invito"
+
+#: invite.module:186
+msgid "Manually override <em>Reply-To</em> email address"
+msgstr "Cambiare manualmente l'indirizzo email da cui spedire l'invito"
+
+#: invite.module:188
+msgid "The email address you want recipients to reply to."
+msgstr "L'indirizzo email a cui volete che rispondano gli invitati"
+
+#: invite.module:194
+msgid "Invite page customization"
+msgstr "Personalizzazione della pagina di invito"
+
+#: invite.module:201
+msgid "Invite page title"
+msgstr "Titolo della pagina di invito"
+
+#: invite.module:202;237
+msgid "Invite your friends and colleagues"
+msgstr "Invita i tuoi amici e colleghi"
+
+#: invite.module:203
+msgid "The title of the page where users invite friends."
+msgstr "Il titolo della pagina da cui gli utenti invitano gli amici"
+
+#: invite.module:209
+msgid "Invite help text"
+msgstr "Testo di aiuto dell'Invito"
+
+#: invite.module:212
+msgid "Customize the text that appears above the email form on the invite page for users."
+msgstr "Personalizza il testo che compare sopra il modulo di email della pagina d'invito per gli utenti"
+
+#: invite.module:229
+msgid "Manage Invite settings"
+msgstr "Gestire la configurazione degli inviti"
+
+#: invite.module:262
+msgid "New user registration by invitation only."
+msgstr "Registrazione nuovi utenti solo su invito"
+
+#: invite.module:287;327
+msgid "Sorry, this invitation code has expired."
+msgstr "Spiacente, questo codice di invito e' scaduto."
+
+#: invite.module:290
+msgid "Sorry, new user registration by invite only."
+msgstr "Spiacente, registrazione nuovi utenti solo su invito."
+
+#: invite.module:306
+msgid "Request new password"
+msgstr "Richiesta nuova password"
+
+#: invite.module:306
+msgid "Request new password via e-mail."
+msgstr "Richiedi una nuova password per e-mail."
+
+#: invite.module:332
+msgid "You have not been invited to join this site."
+msgstr "Non sei stato invitato a registrarti a questo sito."
+
+#: invite.module:333
+msgid "Uninvited user registration attempt."
+msgstr "Tentativo di registrazione da parte di un utente non invitato."
+
+#: invite.module:360
+msgid "Registration code failed for %name %email."
+msgstr "Il codice di registrazione non e' valido per %name %email."
+
+#: invite.module:360;623
+msgid "view"
+msgstr "vedi"
+
+#: invite.module:391
+msgid "Your invitations"
+msgstr "i tuoi inviti"
+
+#: invite.module:398
+msgid "Delete invitation"
+msgstr "Cancella invito"
+
+#: invite.module:401
+msgid "Expired"
+msgstr "Scaduto"
+
+#: invite.module:401
+msgid "Pending"
+msgstr "In attesa"
+
+#: invite.module:407
+msgid "View user profile."
+msgstr "Vedi profilo utente"
+
+#: invite.module:412
+msgid "Joined"
+msgstr "Registrato"
+
+#: invite.module:412
+msgid "Deleted"
+msgstr "Cancellato"
+
+#: invite.module:420
+#: ;408
+msgid "Email"
+msgstr "Email"
+
+#: invite.module:420
+msgid "Status"
+msgstr "Stato"
+
+#: invite.module:424
+msgid "You have not sent any invitations yet."
+msgstr "Non hai ancora invitato nessuno."
+
+#: invite.module:433
+msgid "Invite a friend"
+msgstr "Invita un amico"
+
+#: invite.module:433
+msgid "Maximum number (@max) of invitations reached."
+msgstr "Raggiunto il numero massimo di inviti a disposizione."
+
+#: invite.module:484
+msgid "Your message"
+msgstr "Il tuo messaggio"
+
+#: invite.module:491
+msgid "Submit"
+msgstr "Invia"
+
+#: invite.module:616
+msgid "Invitation to %email has been deleted."
+msgstr "L'invito a %email e' stato cancellato."
+
+#: invite.module:619
+msgid "Invitations to registered users cannot be deleted."
+msgstr "Gli inviti agli utenti registrati non possono essere cancellati"
+
+#: invite.module:623
+msgid "Detected malicious attempt to delete an invitation."
+msgstr "E' stato scoperto un tentativo di cancellare un invito."
+
+#: invite.module:707
+msgid "!user (@email) has joined @site-name!"
+msgstr "!user (@email) si e' registrato a @site-name!"
+
+#: invite.module:707;743
+msgid "Drupal"
+msgstr "Drupal"
+
+#: invite.module:755
+msgid "Problems occurred sending the invitation(s). Please contact the site administrator."
+msgstr "Si e' verificato un problema nella spedizione degli inviti. Per favore informare l'amministratore"
+
+#: invite.module:758
+msgid "Failed sending invitation. To: @email From: @from"
+msgstr "Spedizione dell'invito fallita. A: @email Da: @from"
+
+#: invite.module:765
+msgid "Your friend, @inviter has invited you to join @site [@homepage].\n\nTo become a member of @site, click the link below or paste it into the address bar of your browser. \n\n@join_link\n\n----------\n\n@message"
+msgstr "Il tuo amico, @inviter ti ha invitato a registrarti a @site [@homepage].\n\nPer registrarti a @site, fai click sul collegamento qui sotto o incollalo nella barra indirizzi del tuo navigatore. \n\n@join_link\n\n----------\n\n@message"
+
+#: invite.module:779
+msgid "<p>This is an overview of the invitations you have sent. The status of each invitation is shown:\n<ul>\n  <li><strong>Joined</strong>: Shows that the person you have invited has used your invitation to join the site. Click on the email address to take you to their profile page.</li>\n  <li><strong>Pending</strong>: The invitation has been sent, but your friend has still not accepted the invitation. You may send a reminder, by clicking the 'Remind Me' link.</li>\n  <li><strong>Expired</strong>: The invitation has not been used to register on the site within the expiration period.</li>\n</ul>\n</p>\n<p>At any time, you may delete either 'Pending' or 'Expired' invitations. 'Joined' invitation cannot be deleted and count permanently toward your invitation allotment.</p>"
+msgstr "<p>Questa e' la revisione dell'invito che hai spedito. Lo stato di ogni invito e' visibile:\n<ul>\n  <li><strong>Registrato</strong>: Indica che la persona che hai invitato ha utilizzato il tuo invito per registrarsi al sito. Fai click sull'indirizzo email per andare alla pagina del profilo utente.</li>\n  <li><strong>In attesa</strong>: L'invito e' stato spedito ma il tuo amico non ha ancora accettato l'invito. Puoi spedire un promemoria facendo click su 'Ricordami'.</li>\n  <li><strong>Scaduto</strong>: L'invito non e' stato accettato nei termini previsti.</li>\n</ul>\n</p>\n<p>Puoi cancellare gli inviti con stato 'in attesa' o 'Scaduto' in qualsiasi momento. Gli inviti con stato 'Registrato' non possono essere cancellati e contanto nel numero degli inviti assegnati.</p>"
+
+#: invite.module:333;360;623;758;0
+msgid "invite"
+msgstr "invita"
+
+#: invite.module:442
+msgid "You have one invite left."
+msgid_plural "You have @count invites left."
+msgstr[0] "Hai a disposizione @count solo altro invito"
+msgstr[1] "Hai ancora @count inviti."
+
+#: invite.module:479
+msgid "Email"
+msgid_plural "Email(s)"
+msgstr[0] "Email"
+msgstr[1] "Email"
+
+#: invite.module:480
+msgid "Type the email of the person you would like to invite."
+msgid_plural "Type the email address(es) of the person(s) you would like to invite."
+msgstr[0] "Scrivi il nome della persona che vorresti invitare"
+msgstr[1] "Scrivi il nome delle persone che vorresti invitare"
+
+#: invite.module:487
+msgid "This message will be added to the mail sent to the person you are inviting."
+msgid_plural "This message will be added to the mail sent to the person(s) you are inviting."
+msgstr[0] "Questo messaggio viene aggiunto alla lettera da spedire alla persona che stai invitando."
+msgstr[1] "Questo messaggio viene aggiunto alle lettere da spedire alle persone che stai invitando."
+
+#: invite.module:527
+msgid "The following recipient has already registered:"
+msgid_plural "The following recipients have already registered:"
+msgstr[0] "Il seguente destinatario si e' gia' registrato:"
+msgstr[1] "I seguenti destinatari sono gia' registrati:"
+
+#: invite.module:539
+msgid "The following recipient has already been invited:"
+msgid_plural "The following recipients have already been invited:"
+msgstr[0] "Il seguente destinatario e' gia' stato invitato:"
+msgstr[1] "I seguenti destinatari sono gia' stati invitati:"
+
+#: invite.module:546
+msgid "You have only one invitate left."
+msgid_plural "You have only @count invitates left."
+msgstr[0] "Ti e' rimasto solo @count invitato."
+msgstr[1] "Ti sono rimasti @count invitati"
+
+#: invite.module:553
+msgid "You can send only one invitation per turn."
+msgid_plural "You cannot send more than @count invitations per turn."
+msgstr[0] "Puoi spedire solo un invito per sessione"
+msgstr[1] "Non puoi spedire piu' di @count inviti per sessione."
+
+#: invite.module:594
+msgid "@count invite has been successfully sent."
+msgid_plural "@count invites have been successfully sent."
+msgstr[0] "@count invito e' stato inviato correttamente."
+msgstr[1] "@count inviti sono stati inviati correttamente"
+
+#: invite.module:599
+msgid "@count entered email is invalid. Please correct it."
+msgid_plural "@count entered emails are invalid. Please correct them."
+msgstr[0] "@count indirizzo email inserito non e' valido. Per favore correggere."
+msgstr[1] "@count indirizzi email inseriti non sono validi. Per favore correggere."
+
+#: invite.module:30
+msgid "send invitations"
+msgstr "spedisci inviti"

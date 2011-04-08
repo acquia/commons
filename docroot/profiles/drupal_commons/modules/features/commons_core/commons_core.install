@@ -181,3 +181,11 @@ function commons_core_update_6003() {
   
   return array();
 }
+
+/**
+ * Install commons_invite feature
+ */
+function commons_core_update_6004() {
+  features_install_modules(array('commons_invite'));
+  return array();
+}
