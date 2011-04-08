@@ -153,3 +153,20 @@ function commons_notifications_group_access($group, $user = NULL) {
   
   return FALSE;
 }
+
+/**
+ * Implementation of hook_commons_profile_action_links_alter()
+ */
+function commons_notifications_commons_profile_action_links_alter(&$links, $account) {
+  global $user;
+  
+  // If we're viewing our own profile
+  if ($user->uid == $account->uid) {
+    // Add a link to edit notification settings
+    $links['notification_settings'] = array(
+      'title' => t('Notification settings'),
+      'href' => "user/{$account->uid}/notifications",
+    );
+  }
+}
+  
