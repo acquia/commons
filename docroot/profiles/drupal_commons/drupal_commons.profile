@@ -134,6 +134,8 @@ function drupal_commons_profile_tasks(&$task, $url) {
         'commons_group_aggregator',
         'commons_admin',
         'commons_seo'
+        'commons_invite'
+        'commons_profile'
       );
       variable_set('commons_selected_features', $features);
   
