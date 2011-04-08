@@ -1,5 +1,4 @@
 <?php
-// $Id: shoutbox.api.php,v 1.1.2.1 2011/02/22 16:42:27 mikestefff Exp $
 
 /**
  * Implementation of hook_shoutbox()
@@ -67,9 +66,11 @@ function hook_shoutbox($op, &$shout, &$a1 = NULL, $form_state = NULL) {
       $a1 = 'something/js/callback';
       break;
       
-    case 'query':
-      // Alter the database query used to fetch shouts
-      $a1 = "SELECT s.* FROM {shoutbox} s INNER JOIN ....";
+    case 'context':
+      // Set a shoutbox "context", for example, indicating the current group
+      // These will be passed into hook_db_rewrite_query() so you can alter
+      // the shout query accordingly
+      $a1['shoutbox_group'] = $group->nid;
       break;
   }
 }

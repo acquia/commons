@@ -1,4 +1,3 @@
-// $Id: shoutbox-form.js,v 1.11.2.18 2011/02/22 21:29:17 mikestefff Exp $
 
 Drupal.shoutbox = {}
 Drupal.behaviors.shoutbox = function(context) {

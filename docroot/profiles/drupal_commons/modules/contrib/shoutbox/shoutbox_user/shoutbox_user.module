@@ -1,5 +1,4 @@
 <?php
-// $Id: shoutbox_user.module,v 1.1.2.3 2010/12/08 00:38:10 mikestefff Exp $
 
 /**
  * Implementation of hook_menu()
@@ -14,7 +13,7 @@ function shoutbox_user_menu() {
       'description' => 'A dedicated shoutbox page for group shouts.',
       'type' => MENU_CALLBACK,
     ),
-    'shoutbox/user/%/js/view' => array(
+    'shoutbox/user/%user/js/view' => array(
       'title' => 'Shout tag',
       'page callback' => 'shoutbox_user_js_view',
       'page arguments' => array(2),
@@ -52,6 +51,12 @@ function shoutbox_user_access() {
  */
 function shoutbox_user_shoutbox($op, &$shout, &$a1 = NULL, $form_state = NULL) {
   switch ($op) {
+    case 'context':
+      if ($uid = shoutbox_user_get_current_uid()) {
+        $a1['shoutbox_user'] = $uid;
+      }
+      break;
+      
     case 'insert':
       // Determine if the shout was added for a user
       if ($uid = $form_state['values']['uid']) {
@@ -70,31 +75,18 @@ function shoutbox_user_shoutbox($op, &$shout, &$a1 = NULL, $form_state = NULL) {
       // Remove any tag references to this shout
       db_query("DELETE FROM {shoutbox_user} WHERE shout_id = %d", $shout->shout_id);  
       break;
-      
-    case 'query':
-      // If we're viewing a tag, only returned shouts that have the tag
-      if ($uid = shoutbox_user_get_current_user()) {
-        $a1 = "
-          SELECT s.* FROM {shoutbox} s 
-          INNER JOIN {shoutbox_user} u 
-          ON s.shout_id = u.shout_id 
-          WHERE u.uid = {$uid}
-          ORDER BY s.created DESC
-          ";
-      }
-      break;
     
     case 'js path':
       // Alter the js update path so only shouts with the given
       // tag are shown
-      if ($uid = shoutbox_user_get_current_user()) {
+      if ($uid = shoutbox_user_get_current_uid()) {
         $a1 = "shoutbox/user/{$uid}/js/view/";
       }
       break;
       
     case 'form':
       // Remove the shout form if we're viewing a tag
-      if ($uid = shoutbox_user_get_current_user()) {
+      if ($uid = shoutbox_user_get_current_uid()) {
         $a1['uid'] = array(
           '#type' => 'value',
           '#value' => $uid,
@@ -103,7 +95,7 @@ function shoutbox_user_shoutbox($op, &$shout, &$a1 = NULL, $form_state = NULL) {
       break;
       
     case 'link':
-      if ($uid = shoutbox_user_get_current_user()) {
+      if ($uid = shoutbox_user_get_current_uid()) {
         $a1 = "shoutbox/user/$uid";  
       }
       break;
@@ -111,12 +103,23 @@ function shoutbox_user_shoutbox($op, &$shout, &$a1 = NULL, $form_state = NULL) {
 }
 
 /**
- * Determine if we're viewing a suser
+ * Implementation of hook_db_rewrite_sql()
+ */
+function shoutbox_user_db_rewrite_sql($query, $table, $primary, $contexts){
+  if ($table == 'shoutbox' && isset($contexts['shoutbox_user'])) {
+    $query_mods['join'] = "INNER JOIN {shoutbox_user} shoutbox_user ON shoutbox.shout_id = shoutbox_user.shout_id\r\n";
+    $query_mods['where'] = "shoutbox_user.uid = " . (int)$contexts['shoutbox_user'];
+    return $query_mods;
+  }
+}
+
+/**
+ * Determine the user ID of the user we're viewing
  * 
  * @return
  *   The user id being viewed, otherwise FALSE is we're not viewing one
  */
-function shoutbox_user_get_current_user() {
+function shoutbox_user_get_current_uid() {
   // Detect user/%uid
   if (arg(0) == 'user' && is_numeric(arg(1))) {
     return arg(1); 
