@@ -152,3 +152,32 @@ function commons_core_update_6002() {
   variable_del('commons_manager_role');
   return array();
 }
+
+/**
+ * Install commons_profile feature and disable components we no longer
+ * want enabled
+ */
+function commons_core_update_6003() {
+  // Install the commons_profile feature
+  features_install_modules(array('commons_profile'));
+  
+  // Disable the old profile panel page
+  ctools_include('export-ui');
+  if ($page = page_manager_get_page_cache('user_view')) {
+    if ($function = ctools_plugin_get_function($page->subtask, 'enable callback')) {
+      $result = $function($page, TRUE);
+
+      if (!empty($page->changed)) {
+        page_manager_set_page_cache($page);
+      }
+    }
+  }
+  
+  // Delete the old profile context
+  $context = ctools_export_ui_load('context_ui-profile-profile', 'context');
+  if ($context) {
+    context_delete($context);
+  }
+  
+  return array();
+}

@@ -142,48 +142,6 @@ function commons_core_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-profile-profile';
-  $context->description = 'User profile';
-  $context->tag = 'Profile';
-  $context->conditions = array(
-    'user_page' => array(
-      'values' => array(
-        'view' => 'view',
-      ),
-      'options' => array(
-        'mode' => 'all',
-      ),
-    ),
-  );
-  $context->reactions = array(
-    'block' => array(
-      'blocks' => array(
-        'views-og_profile_user_groups-block_1' => array(
-          'module' => 'views',
-          'delta' => 'og_profile_user_groups-block_1',
-          'region' => 'sidebar_last',
-          'weight' => 0,
-        ),
-        'user_relationship_blocks-user-1' => array(
-          'module' => 'user_relationship_blocks',
-          'delta' => 'user-1',
-          'region' => 'sidebar_last',
-          'weight' => 1,
-        ),
-      ),
-    ),
-  );
-  $context->condition_mode = 0;
-
-  // Translatables
-  // Included for use with string extractors like potx.
-  t('Profile');
-  t('User profile');
-
-  $export['context_ui-profile-profile'] = $context;
-  $context = new stdClass;
-  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
-  $context->api_version = 3;
   $context->name = 'context_ui-users-user_browser';
   $context->description = 'Various block to show on the user browser page';
   $context->tag = 'User browser';

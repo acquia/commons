@@ -1,0 +1,324 @@
+<?php
+
+include_once('commons_profile.features.inc');
+
+/**
+ * Implementation of hook_menu()
+ */
+function commons_profile_menu() {
+  $items = array();
+  $items['user/findfriends/autocomplete'] = array(
+    'title' => 'Find friends autocomplete', 
+    'page callback' => 'commons_profile_find_friends_autocomplete', 
+    'access callback' => 'user_access', 
+    'access arguments' => array('access user profiles'), 
+    'type' => MENU_CALLBACK, 
+    'file' => 'commons_profile.pages.inc',
+  );
+  return $items; 
+}
+
+/**
+ * Implementation of hook_menu_alter()
+ */
+function commons_profile_menu_alter(&$items) {
+  // Alter the profile tab title
+  $items['user/%user/view']['title'] = t('Recent activity');
+  
+  // Hide certain profile tabs 
+  foreach ($items as $key => $item) {
+    switch ($key) {
+      case 'user/%user/badges';
+      case 'user/%user/messages';
+      case 'user/%user/notifications';
+      case 'user/%user/bookmarks';
+        $items[$key]['type'] = MENU_CALLBACK;
+        break;
+    }  
+  }
+}
+
+/**
+ * Implementation of hook_block()
+ */
+function commons_profile_block($op = 'list', $delta = 0, $edit = array()) {
+  if ($op == 'list') {
+    $blocks['profile_find_new_friends'] = array(
+      'info' => t('Find new friends'),
+      'cache' => BLOCK_CACHE_GLOBAL,
+    );
+    $blocks['profile_image_links'] = array(
+      'info' => t('Profile image and action links'),
+      'cache' => BLOCK_CACHE_GLOBAL,
+    );
+    $blocks['profile_recent_activity'] = array(
+      'info' => t('Profile recent activity'),
+      'cache' => BLOCK_CACHE_GLOBAL,
+    );
+    
+    return $blocks;
+  }
+  elseif ($op == 'view') {
+    switch ($delta) {
+      case 'profile_find_new_friends':
+        $block = array(
+          'subject' => t('Find new friends'),
+          'content' => _commons_profile_find_friends_block(),
+        );
+        break; 
+        
+      case 'profile_image_links':
+        $block = array(
+          'subject' => '',
+          'content' => _commons_profile_image_action_links_block(),
+        );
+        break;
+        
+      case 'profile_recent_activity':
+        $block = array(
+          'subject' => '',
+          'content' => _commons_profile_recent_activity_block(),
+        );
+        break;
+    }     
+    
+    return $block;
+  }
+}
+
+/**
+ * Implementation of hook_theme()
+ */
+function commons_profile_theme() {
+  $registry = array(
+    'commons_profile_image_action_links_block' => array(
+      'arguments' => array('picture' => NULL, 'links' => NULL, 'account' => NULL),
+    ),
+    'commons_profile_friend_autocomplete_item' => array(
+      'arguments' => array('name' => NULL, 'picture' => NULL),
+    ),
+  );
+  
+  // Iterate the registry to add the theme template file
+  foreach ($registry as $key => $item) {
+    $registry[$key]['file'] = 'commons_profile.theme.inc'; 
+  }
+  
+  return $registry;
+}   
+
+/**
+ * Implementation of hook_user()
+ */
+function commons_profile_user($op, &$edit, &$account, $category = NULL) {    
+  global $user;
+  
+  switch ($op) {
+    case 'view':
+      // Remove the core profile fields, as we'll be providing our
+      // own content via Context
+      $account->content = array();
+      
+      // Select the profile context based on whether or not the
+      // current user is viewing their own profile or not    
+      if ($account->uid == $user->uid) {
+         context_set('context', 'context_ui-profile-profile-me', context_load('context_ui-profile-profile-me'));      
+      }
+      else {
+         context_set('context', 'context_ui-profile-profile-other', context_load('context_ui-profile-profile-other'));
+      }
+      
+      break;
+  }
+}
+
+/**
+ * The "find a new friend" search form
+ */
+function commons_profile_friend_search_form(&$form_state) {
+  $form['search_text'] = array(
+    '#type' => 'textfield',
+	  '#autocomplete_path' => 'user/findfriends/autocomplete', 
+  );
+    
+  $form['search_button'] = array(
+    '#type' => 'submit',
+    '#value' => t('Search')
+  );
+  
+  return $form;
+}
+
+/**
+ * Submit handler for the "find a friend" search form
+ */
+function commons_profile_friend_search_form_submit($form_id, &$form_state) {
+  // Extract and filter the input
+  if ($name = check_plain($form_state['values']['search_text'])) {
+    // Try to match a user name
+    $sql = "SELECT uid FROM {users} WHERE name = '%s'";
+    $uid = db_result(db_query($sql, $name));
+    
+    // Redirect based on what we found
+    if ($uid) {
+      // Go to the user's profile
+      drupal_goto("user/{$uid}");
+    }
+    else {
+      // Search for the input provided
+      drupal_goto("search/user/{$name}");
+    }
+  }
+}
+
+/**
+ * Implementation of hook_views_pre_render()
+ */
+function commons_profile_views_pre_render(&$view) {
+  global $user;
+  
+  // When viewing the "About" profile tab
+  if ($view->name == 'profile_about_page') {
+    // Determine if the user is viewing their own profile so the
+    // correct context can be set
+    if ($user->uid == arg(1)) {
+      context_set('context', 'context_ui-profile-profile-about-me', context_load('context_ui-profile-profile-about-me'));      
+    }
+    else {
+      context_set('context', 'context_ui-profile-profile-about-other', context_load('context_ui-profile-profile-about-other'));
+    }
+  }
+  
+  
+}
+
+/**
+ * Implementation of hook_views_pre_view()
+ */
+function commons_profile_views_pre_view(&$view) {
+  global $user;
+  
+  // When viewing the "Friends" block
+  if ($view->name == 'profile_friends' && $user->uid) {
+    // Get the set title
+    $title = $view->display_handler->get_option('title');
+    
+    // Fetch the user's friends
+    $friends = user_relationships_load(array('user' => $user->uid, 'approved' => TRUE));
+    
+    // Add a friend count to the block
+    $title .= ' (' . count($friends) . ')';
+
+    // Set the new title
+    $view->display_handler->set_option('title', $title);
+  }
+}
+
+/**
+ * Generate the profile image and action links block
+ */
+function _commons_profile_image_action_links_block() {
+  global $user;
+  
+  // Make sure we're viewing a user
+  if (arg(0) == 'user') {
+    // If the user is not logged in, check that a profile is being viewed 
+    if ((!$user->uid && !is_numeric(arg(1))) || (arg(1) && !is_numeric(arg(1)))) {
+      return FALSE;
+    }
+  }
+  
+  // Attempt to load the user being viewed, if we need to
+  if ($user->uid != arg(1)) {
+    if (!($account = user_load(arg(1)))) {
+      // If we can't load, then quit
+      return FALSE;
+    }
+  }
+  else {
+    $account = drupal_clone($user);
+  }
+  
+  // Fetch the profile image
+  $picture = theme('user_picture', $account);
+  
+  // Generate a list of action links
+  $links = array();
+  
+  // The links depend on whether or not the user is viewing
+  // their own profile
+  if ($user->uid == $account->uid) {
+    // Provide a link to edit your profile
+    $links['edit_profile'] = array(
+      'title' => t('Edit my profile'),
+      'href' => "user/{$account->uid}/edit",
+    );
+    
+    // See if you have friend requests
+    if (user_access('maintain own relationships')) {
+      $requests = user_relationships_load(array('requestee_id' => $account->uid, 'approved' => FALSE));
+      if (count($requests)) {
+        // Provide a link to see the requests
+        $links['friend_requests'] = array(
+          'title' => t('Friend requests (!count)', array('!count' => count($requests))),
+          'href' => variable_get('user_relationships_requests_link', 'relationships/requests'),
+        );
+      }
+    }
+    
+    // Add a link to view your bookmarks
+    $links['bookmarks'] = array(
+      'title' => t('My bookmarks'),
+      'href' => "user/{$account->uid}/bookmarks",
+    );
+  }
+  else {
+    // If the current user has access to, provide a link
+    // to edit the viewed user's profile
+    if (user_access('administer users')) {
+      $links['edit_profile'] = array(
+        'title' => t('Edit !user\'s profile', array('!user' => $account->name)),
+        'href' => "user/{$account->uid}/edit",
+      );
+    }
+    
+    // Provide relationship links/messages
+    if (user_access('maintain own relationships')) {
+      $actions = _user_relationships_ui_actions_between($user, $account);
+      foreach ($actions as $key => $action) {
+        $links["ur_action_{$key}"] = array(
+          'title' => $action,
+          // No href because this is the best that UR can offer
+          'html' => TRUE,
+        );
+      }
+    }
+  }
+  
+  // Allow other modules to alter the list of links
+  drupal_alter('commons_profile_action_links', $links, $account);
+
+  return theme('commons_profile_image_action_links_block', $picture, $links, $account);
+}
+
+/**
+ * Render the recent activity block for the profile
+ */
+function _commons_profile_recent_activity_block() {
+  // Gather the activity from Heartbeat
+  $block = heartbeat_block('view', 'privateheartbeat');
+  
+  return isset($block['content']) ? $block['content'] : NULL;
+}
+
+/**
+ * Render the "find new friends" block
+ */
+function _commons_profile_find_friends_block() {
+  // Check access required to use this block
+  if (user_access('search content') && user_access('access user profiles')) {
+    return drupal_get_form('commons_profile_friend_search_form');
+  }
+  
+  return NULL;
+}

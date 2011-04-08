@@ -162,7 +162,6 @@ function drupal_commons_profile_tasks(&$task, $url) {
     }
 
     // Post-installation operations
-    $operations[] = array('drupal_commons_config_profile', array());
     $operations[] = array('drupal_commons_config_filter', array());
     $operations[] = array('drupal_commons_config_password', array());
     $operations[] = array('drupal_commons_config_wysiwyg', array());
@@ -289,6 +288,12 @@ function drupal_commons_features_form($form_state, $url) {
     '#type' => 'fieldset',
     '#title' => st('Other functions'),
     '#description' => st('Select which functions you wish to provide in Drupal Commons. Again, if you de-select any of these, you can enable them again after installation.'),
+  );
+  $form['misc']['feature-commons_profile'] = array(
+    '#type' => 'checkbox',
+    '#title' => st('User profiles'),
+    '#default_value' => 1,
+    '#description' => st('Allow users to have social profiles.'),
   );
   $form['misc']['feature-commons_dashboard'] = array(
     '#type' => 'checkbox',
@@ -423,122 +428,6 @@ function drupal_commons_config_taxonomy() {
     DRUPAL_COMMONS_TAG_ID,
     st('Tags')
   );
-}
-
-/**
- * Configure profile
- * 
- * Add custom profile fields
- */
-function drupal_commons_config_profile() {
-  $fields = array();
-
-  // Personal Information
-  
-  // First name
-  $field = new stdClass;
-  $field->title = st('First name');
-  $field->name = 'profile_name';
-  $field->explanation = st('Enter your first name.');
-  $field->category = st('Personal information');
-  $field->type = 'textfield';
-  $field->weight = -10;
-  $field->required = 1;
-  $field->register = 1;
-  $field->visibility = 2;
-  $field->autocomplete = 0;
-  $fields[] = $field;
-  
-  // Last name
-  $field = new stdClass;
-  $field->title = st('Last name');
-  $field->name = 'profile_last_name';
-  $field->explanation = st('Enter your last name.');
-  $field->category = st('Personal information');
-  $field->type = 'textfield';
-  $field->weight = -9;
-  $field->required = 1;
-  $field->register = 1;
-  $field->visibility = 2;
-  $field->autocomplete = 0;
-  $fields[] = $field;
-  
-  // Location
-  $field = new stdClass;
-  $field->title = st('Location');
-  $field->name = 'profile_location';
-  $field->explanation = st('Where are you location?');
-  $field->category = st('Personal information');
-  $field->type = 'textfield';
-  $field->weight = -8;
-  $field->required = 0;
-  $field->register = 0;
-  $field->visibility = 2;
-  $field->autocomplete = 0;
-  $fields[] = $field;
-  
-  // My interests
-  $field = new stdClass;
-  $field->title = st('My interests');
-  $field->name = 'profile_interests';
-  $field->explanation = st('What are your interests, hobbies, etc?');
-  $field->category = st('Personal information');
-  $field->type = 'textarea';
-  $field->weight = -7;
-  $field->required = 0;
-  $field->register = 0;
-  $field->visibility = 2;
-  $field->autocomplete = 0;
-  $fields[] = $field;
-  
-  // About me
-  $field = new stdClass;
-  $field->title = st('About me');
-  $field->name = 'profile_aboutme';
-  $field->explanation = st('Explain a little about yourself.');
-  $field->category = st('Personal information');
-  $field->type = 'textarea';
-  $field->weight = -6;
-  $field->required = 0;
-  $field->register = 0;
-  $field->visibility = 2;
-  $field->autocomplete = 0;
-  $fields[] = $field;
-  
-  // Work Information
-  
-  // Job title
-  $field = new stdClass;
-  $field->title = st('Job title');
-  $field->name = 'profile_job';
-  $field->explanation = st('What is your job title?');
-  $field->category = st('Work information');
-  $field->type = 'textfield';
-  $field->weight = -10;
-  $field->required = 0;
-  $field->register = 1;
-  $field->visibility = 2;
-  $field->autocomplete = 0;
-  $fields[] = $field;
-  
-  // Organization
-  $field = new stdClass;
-  $field->title = st('Organization');
-  $field->name = 'profile_organization';
-  $field->explanation = st('Which organization or department are you a part of?');
-  $field->category = st('Work information');
-  $field->type = 'textfield';
-  $field->weight = -9;
-  $field->required = 0;
-  $field->register = 1;
-  $field->visibility = 2;
-  $field->autocomplete = 0;
-  $fields[] = $field;
-  
-  // Save the fields
-  foreach ($fields as $field) {
-    drupal_write_record('profile_fields', $field);
-  }
 }
 
 /**
