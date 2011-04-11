@@ -1,5 +1,4 @@
 <?php
-// $Id: wikitools.module,v 1.4.2.13 2009/06/18 04:25:27 cwgordon7 Exp $
 
 /**
  * @file
@@ -15,7 +14,7 @@ function wikitools_help($path, $arg) {
       $output = '<p>'. t('The wikitools module allows you to set several options for your content to get a more wiki-like behaviour.') .'</p>';
       return $output;
     case 'admin/settings/wikitools':
-      $output = '<p>'. t('Below you can configure the settings for the wikitools module. The "wiki path" will be the path that will redirect you to the wiki page with the appropriate title; only the wiki node types selected can be accesssed from the wiki path. Choose from the other options to determine the behavior of the wiki path.') .'</p>';
+      $output = '<p>'. t('Below you can configure the settings for the wikitools module. The "wiki path" will be the path that will redirect you to the wiki page with the appropriate title; only the wiki node types selected can be accesssed from the wiki path. Choose from the other options to determine the behavior of the wiki path. To check if nodes with duplicate titles exist in your wiki, visit the <a href="!url">duplicate titles</a> page.', array('!url' => url('admin/content/wikitools'))) .'</p>';
       return $output;
     case 'admin/content/wikitools':
       $output = '<p>'. t('Wikitools allows restrictions on node titles so that all new created nodes have guaranteed unique titles. Titles of nodes that were created before it was included in this option, however, are not guaranteed to have unique page titles. This page lists all nodes that have duplicate page titles, so that their titles may be changed to be unique.') .'</p>';
@@ -130,9 +129,13 @@ function wikitools_type_affected($type) {
  */
 function wikitools_404($value = NULL) {
   if (is_null($value)) {
-    return variable_get('wikitools_404_type', drupal_map_assoc(array('Link to creation')));
+    $variable = variable_get('wikitools_404_type', drupal_map_assoc(array('Link to creation')));
+    if (!module_exists('search')) {
+      unset($variable['Link to search']);
+    }
+    return $variable;
   }
-  variable_set('wikitools_404_type', $values);
+  variable_set('wikitools_404_type', $value);
 }
 
 /**
@@ -149,7 +152,11 @@ function wikitools_disallowed_characters($value = NULL) {
  * Various wikitool options.
  */
 function wikitools_options() {
-  return variable_get('wikitools_options', drupal_map_assoc(array('node creation', 'node search', 'unique titles', 'underscore as space')));
+  $variable = variable_get('wikitools_options', drupal_map_assoc(array('node creation', 'node search', 'unique titles', 'underscore as space')));
+  if (!module_exists('search')) {
+    unset($variable['node search']);
+  }
+  return $variable;
 }
 
 /**
