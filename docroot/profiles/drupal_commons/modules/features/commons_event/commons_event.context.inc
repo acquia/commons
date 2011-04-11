@@ -8,39 +8,6 @@ function commons_event_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'profile-me-events';
-  $context->description = 'Add events listings to user profiles when viewing your own profile';
-  $context->tag = 'Event';
-  $context->conditions = array(
-    'context' => array(
-      'values' => array(
-        'profile-me' => 'profile-me',
-      ),
-    ),
-  );
-  $context->reactions = array(
-    'block' => array(
-      'blocks' => array(
-        'views-upcoming_events-block_2' => array(
-          'module' => 'views',
-          'delta' => 'upcoming_events-block_2',
-          'region' => 'sidebar_last',
-          'weight' => 1,
-        ),
-      ),
-    ),
-  );
-  $context->condition_mode = 0;
-
-  // Translatables
-  // Included for use with string extractors like potx.
-  t('Add events listings to user profiles when viewing your own profile');
-  t('Profile');
-
-  $export['profile-me-events'] = $context;
-  $context = new stdClass;
-  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
-  $context->api_version = 3;
   $context->name = 'group-event-node';
   $context->description = 'An event node inside a group';
   $context->tag = 'Event';
@@ -124,5 +91,77 @@ function commons_event_context_default_contexts() {
   t('Events block for the group home page');
 
   $export['group-home-events'] = $context;
+  $context = new stdClass;
+  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
+  $context->api_version = 3;
+  $context->name = 'group-tab-events';
+  $context->description = 'The event tab on a group';
+  $context->tag = 'Document';
+  $context->conditions = array(
+    'views' => array(
+      'values' => array(
+        'group_tab_event_calendar' => 'group_tab_event_calendar',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'views-a1d17833246cc27c991e939ae8e26a96' => array(
+          'module' => 'views',
+          'delta' => 'a1d17833246cc27c991e939ae8e26a96',
+          'region' => 'sidebar_last',
+          'weight' => 0,
+        ),
+        'views-5f71f8bfdda731f7f0c854e134dab79b' => array(
+          'module' => 'views',
+          'delta' => '5f71f8bfdda731f7f0c854e134dab79b',
+          'region' => 'sidebar_last',
+          'weight' => 1,
+        ),
+      ),
+    ),
+  );
+  $context->condition_mode = 0;
+
+  // Translatables
+  // Included for use with string extractors like potx.
+  t('Document');
+  t('The event tab on a group');
+
+  $export['group-tab-events'] = $context;
+  $context = new stdClass;
+  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
+  $context->api_version = 3;
+  $context->name = 'profile-me-events';
+  $context->description = 'Add events listings to user profiles when viewing your own profile';
+  $context->tag = 'Event';
+  $context->conditions = array(
+    'context' => array(
+      'values' => array(
+        'profile-me' => 'profile-me',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'views-upcoming_events-block_2' => array(
+          'module' => 'views',
+          'delta' => 'upcoming_events-block_2',
+          'region' => 'sidebar_last',
+          'weight' => 1,
+        ),
+      ),
+    ),
+  );
+  $context->condition_mode = 0;
+
+  // Translatables
+  // Included for use with string extractors like potx.
+  t('Add events listings to user profiles when viewing your own profile');
+  t('Event');
+
+  $export['profile-me-events'] = $context;
   return $export;
 }
