@@ -8,6 +8,56 @@ function commons_discussion_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
+  $context->name = 'context_ui-group-group-discussion-node';
+  $context->description = 'A discussion node inside a group';
+  $context->tag = 'Group';
+  $context->conditions = array(
+    'context_og_condition_group_type' => array(
+      'values' => array(
+        'group' => 'group',
+      ),
+      'options' => array(
+        'node_form' => 0,
+      ),
+    ),
+    'node' => array(
+      'values' => array(
+        'discussion' => 'discussion',
+      ),
+      'options' => array(
+        'node_form' => '0',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'views-7c1e1568b7392470cbb8406f05742e0e' => array(
+          'module' => 'views',
+          'delta' => '7c1e1568b7392470cbb8406f05742e0e',
+          'region' => 'sidebar_last',
+          'weight' => 0,
+        ),
+        'views-1048f0a19e6b5b9b52580ed82aae1972' => array(
+          'module' => 'views',
+          'delta' => '1048f0a19e6b5b9b52580ed82aae1972',
+          'region' => 'sidebar_last',
+          'weight' => 1,
+        ),
+      ),
+    ),
+  );
+  $context->condition_mode = 1;
+
+  // Translatables
+  // Included for use with string extractors like potx.
+  t('A discussion node inside a group');
+  t('Group');
+
+  $export['context_ui-group-group-dicussion-node'] = $context;
+  $context = new stdClass;
+  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
+  $context->api_version = 3;
   $context->name = 'context_ui-group-group-home-discussions';
   $context->description = 'Discussion block for the group home page';
   $context->tag = 'Group';

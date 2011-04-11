@@ -923,7 +923,7 @@ function commons_blog_views_default_views() {
       'wildcard_substitution' => 'All',
       'title' => '',
       'breadcrumb' => '',
-      'default_argument_type' => 'node',
+      'default_argument_type' => 'og_group_node',
       'default_argument' => '',
       'validate_type' => 'og_group_types',
       'validate_fail' => 'not found',
