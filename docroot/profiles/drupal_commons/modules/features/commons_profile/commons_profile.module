@@ -122,10 +122,10 @@ function commons_profile_user($op, &$edit, &$account, $category = NULL) {
       // Select the profile context based on whether or not the
       // current user is viewing their own profile or not    
       if ($account->uid == $user->uid) {
-         context_set('context', 'context_ui-profile-profile-me', context_load('context_ui-profile-profile-me'));      
+         context_set('context', 'profile-me', context_load('profile-me'));      
       }
       else {
-         context_set('context', 'context_ui-profile-profile-other', context_load('context_ui-profile-profile-other'));
+         context_set('context', 'profile-other', context_load('profile-other'));
       }
       
       break;
@@ -182,10 +182,10 @@ function commons_profile_views_pre_render(&$view) {
     // Determine if the user is viewing their own profile so the
     // correct context can be set
     if ($user->uid == arg(1)) {
-      context_set('context', 'context_ui-profile-profile-about-me', context_load('context_ui-profile-profile-about-me'));      
+      context_set('context', 'profile-about-me', context_load('profile-about-me'));      
     }
     else {
-      context_set('context', 'context_ui-profile-profile-about-other', context_load('context_ui-profile-profile-about-other'));
+      context_set('context', 'profile-about-other', context_load('profile-about-other'));
     }
   }
   
