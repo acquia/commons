@@ -28,7 +28,7 @@ function commons_poll_context_default_contexts() {
           'module' => 'views',
           'delta' => 'group_block_poll_latest-block_1',
           'region' => 'sidebar_last',
-          'weight' => 3,
+          'weight' => 4,
         ),
       ),
     ),

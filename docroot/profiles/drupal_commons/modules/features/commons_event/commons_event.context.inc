@@ -78,7 +78,7 @@ function commons_event_context_default_contexts() {
           'module' => 'views',
           'delta' => 'deb9ea35a724682175e6d2c990e7009c',
           'region' => 'sidebar_last',
-          'weight' => 4,
+          'weight' => 5,
         ),
       ),
     ),

@@ -31,11 +31,15 @@ function _commons_core_block_list() {
     'cache' => BLOCK_CACHE_GLOBAL,
   );
   $blocks['group_create_content'] = array(
-    'info' => t('Group create contenet selector'),
+    'info' => t('Group create content selector'),
     'cache' => BLOCK_CACHE_GLOBAL,
   );
   $blocks['group_activity'] = array(
     'info' => t('Group activity'),
+    'cache' => BLOCK_CACHE_GLOBAL,
+  );
+  $blocks['group_members'] = array(
+    'info' => t('Group members and admins'),
     'cache' => BLOCK_CACHE_GLOBAL,
   );
   return $blocks;
@@ -269,6 +273,46 @@ function _commons_core_group_activity_block() {
   if (isset($block['content'])) {
     // Alter the title
     $block['subject'] = t('Latest group activity');
+    return $block;
+  }
+  
+  return NULL;
+}
+
+/**
+ * Display the "Group members" block
+ */
+function _commons_core_group_members_block() {
+  // Detect the group context
+  if ($group = commons_core_get_group_context()) {
+    $block = array('content' => '', 'subject' => '');
+    
+    // Generate the block title from the member count
+    $sql = "SELECT count(uid) FROM {og_uid} WHERE nid = %d AND is_active = 1";
+    $count = db_result(db_query($sql, $group->nid));
+      
+    // Set the block title
+    $block['subject'] = t('Group members (!count)', array('!count' => $count));
+      
+    // Load the group managers from the view
+    if ($view = views_get_view('group_block_members')) {
+      if ($output = $view->execute_display('block_1')) {
+        $block['content'] .= t('Managers:') . $output['content'];
+      }
+      $view->destroy();
+    }
+    
+    // Load the group members from the view
+    if ($view = views_get_view('group_block_members')) {
+      if ($output = $view->execute_display('block_2')) {
+        $block['content'] .= t('Members:') . $output['content'];
+      }
+      $view->destroy();
+    }
+    
+    // Add a link to view all the members
+    $block['content'] .= l(t('View all members'), "og/users/{$group->nid}/faces");
+    
     return $block;
   }
   

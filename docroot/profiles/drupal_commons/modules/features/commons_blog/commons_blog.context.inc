@@ -78,7 +78,7 @@ function commons_blog_context_default_contexts() {
           'module' => 'views',
           'delta' => 'group_block_blog_latest-block_1',
           'region' => 'sidebar_last',
-          'weight' => 5,
+          'weight' => 6,
         ),
       ),
     ),

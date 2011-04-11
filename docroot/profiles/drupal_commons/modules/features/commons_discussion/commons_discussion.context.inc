@@ -78,7 +78,7 @@ function commons_discussion_context_default_contexts() {
           'module' => 'views',
           'delta' => '7c1e1568b7392470cbb8406f05742e0e',
           'region' => 'sidebar_last',
-          'weight' => 7,
+          'weight' => 8,
         ),
       ),
     ),
