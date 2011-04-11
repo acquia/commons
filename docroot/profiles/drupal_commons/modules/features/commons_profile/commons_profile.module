@@ -28,10 +28,13 @@ function commons_profile_menu_alter(&$items) {
   // Hide certain profile tabs 
   foreach ($items as $key => $item) {
     switch ($key) {
-      case 'user/%user/badges';
+      case 'user/%/badges';
+      case 'user/%user/messages';
+      case 'user/%user_category/edit';
       case 'user/%user/messages';
       case 'user/%user/notifications';
-      case 'user/%user/bookmarks';
+      case 'user/%views_arg/bookmarks';
+      case 'user/%user/invites';
         $items[$key]['type'] = MENU_CALLBACK;
         break;
     }  
