@@ -86,6 +86,8 @@ function _commons_core_commons_info_block() {
 function _commons_core_header_login_block() {
   global $user;
   
+  $block = array('subject' => '', 'content' => '');
+  
   // Only anonymous users can log in
   if ($user->uid) {
     return NULL;
@@ -99,14 +101,12 @@ function _commons_core_header_login_block() {
   // Determine if we're on the front page
   if (drupal_is_front_page()) {
     // Only provide a link
-    return t('Already a member? !login', array('!login' => l(t('Login'), 'user')));
+    $block['content'] = t('Already a member? !login', array('!login' => l(t('Login'), 'user')));
   }
-  
-  // Build the block
-  $block = array(
-    'subject' => '',
-    'content' => drupal_get_form('user_login_block'), 
-  );
+  else {
+    // Provide the login form
+    $block['subject'] = drupal_get_form('user_login_block');
+  }
   
   return $block;
 }
