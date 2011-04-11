@@ -1467,8 +1467,8 @@ function commons_core_views_default_views() {
     'post_count_new' => array(
       'label' => '',
       'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
+        'alter_text' => 1,
+        'text' => '[post_count_new] post(s)',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
