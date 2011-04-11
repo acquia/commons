@@ -8,7 +8,7 @@ function commons_profile_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-profile-profile-about-me';
+  $context->name = 'profile-about-me';
   $context->description = 'User profile when viewing your about page';
   $context->tag = 'Profile';
   $context->conditions = array();
@@ -49,11 +49,11 @@ function commons_profile_context_default_contexts() {
   t('Profile');
   t('User profile when viewing your about page');
 
-  $export['context_ui-profile-profile-about-me'] = $context;
+  $export['profile-about-me'] = $context;
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-profile-profile-about-other';
+  $context->name = 'profile-about-other';
   $context->description = 'User profile about page when viewing another user';
   $context->tag = 'Profile';
   $context->conditions = array();
@@ -94,11 +94,11 @@ function commons_profile_context_default_contexts() {
   t('Profile');
   t('User profile about page when viewing another user');
 
-  $export['context_ui-profile-profile-about-other'] = $context;
+  $export['profile-about-other'] = $context;
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-profile-profile-me';
+  $context->name = 'profile-me';
   $context->description = 'User profile when viewing yourself';
   $context->tag = 'Profile';
   $context->conditions = array();
@@ -145,11 +145,11 @@ function commons_profile_context_default_contexts() {
   t('Profile');
   t('User profile when viewing yourself');
 
-  $export['context_ui-profile-profile-me'] = $context;
+  $export['profile-me'] = $context;
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-profile-profile-other';
+  $context->name = 'profile-other';
   $context->description = 'User profile when viewing another user';
   $context->tag = 'Profile';
   $context->conditions = array();
@@ -196,6 +196,6 @@ function commons_profile_context_default_contexts() {
   t('Profile');
   t('User profile when viewing another user');
 
-  $export['context_ui-profile-profile-other'] = $context;
+  $export['profile-other'] = $context;
   return $export;
 }

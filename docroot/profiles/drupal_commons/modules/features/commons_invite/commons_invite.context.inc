@@ -8,13 +8,13 @@ function commons_invite_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-profile-profile-me-invite';
+  $context->name = 'profile-me-invite';
   $context->description = 'Add invite sender to your own profile';
   $context->tag = 'Profile';
   $context->conditions = array(
     'context' => array(
       'values' => array(
-        'context_ui-profile-profile-me' => 'context_ui-profile-profile-me',
+        'profile-me' => 'profile-me',
       ),
     ),
   );
@@ -37,6 +37,6 @@ function commons_invite_context_default_contexts() {
   t('Add invite sender to your own profile');
   t('Profile');
 
-  $export['context_ui-profile-profile-me-invite'] = $context;
+  $export['profile-me-invite'] = $context;
   return $export;
 }

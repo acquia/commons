@@ -43,7 +43,7 @@ function commons_core_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'global-global';
+  $context->name = 'global';
   $context->description = 'Show on every page';
   $context->tag = 'Sitewide';
   $context->conditions = array(
@@ -84,7 +84,7 @@ function commons_core_context_default_contexts() {
   t('Show on every page');
   t('Sitewide');
 
-  $export['global-global'] = $context;
+  $export['global'] = $context;
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
@@ -178,7 +178,7 @@ function commons_core_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'users-user_browser';
+  $context->name = 'user-browser';
   $context->description = 'Various block to show on the user browser page';
   $context->tag = 'User browser';
   $context->conditions = array(
@@ -219,7 +219,7 @@ function commons_core_context_default_contexts() {
   t('User browser');
   t('Various block to show on the user browser page');
 
-  $export['users-user_browser'] = $context;
+  $export['user-browser'] = $context;
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
