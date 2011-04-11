@@ -32,8 +32,9 @@ function commons_blog_og_features_registry() {
       'blog',
     ),
     'context' => array(
-      'context_ui-group-group-home-blogs',
-      'context_ui-group-group-tab-blogs',
+      'group-home-blogs',
+      'group-tab-blogs',
+      'group-blog-node',
     ),
   );
   $registry[$feature->id] = $feature;

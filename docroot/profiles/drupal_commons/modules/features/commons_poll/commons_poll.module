@@ -32,8 +32,9 @@ function commons_poll_og_features_registry() {
       'poll',
     ),
     'context' => array(
-      'context_ui-group-group-home-poll',
-      'context_ui-group-group-tab-polls',
+      'group-home-poll',
+      'group-tab-polls',
+      'group-poll-node',
     ),
   );
   $registry[$feature->id] = $feature;

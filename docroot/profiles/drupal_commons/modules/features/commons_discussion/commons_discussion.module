@@ -32,8 +32,9 @@ function commons_discussion_og_features_registry() {
       'discussion',
     ),
     'context' => array(
-      'context_ui-group-group-home-discussions',
-      'context_ui-group-group-tab-discussions',
+      'group-home-discussions',
+      'group-tab-discussions',
+      'group-discussion-node',
     ),
   );
   $registry[$feature->id] = $feature;
