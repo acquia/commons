@@ -8,41 +8,6 @@ function commons_core_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'content-global_content';
-  $context->description = 'Various blocks to show on the global content views';
-  $context->tag = 'Global content';
-  $context->conditions = array(
-    'path' => array(
-      'values' => array(
-        'content/*' => 'content/*',
-        'featured' => 'featured',
-        'notices' => 'notices',
-      ),
-    ),
-  );
-  $context->reactions = array(
-    'block' => array(
-      'blocks' => array(
-        'views-tag_cloud-block_1' => array(
-          'module' => 'views',
-          'delta' => 'tag_cloud-block_1',
-          'region' => 'sidebar_last',
-          'weight' => 0,
-        ),
-      ),
-    ),
-  );
-  $context->condition_mode = 0;
-
-  // Translatables
-  // Included for use with string extractors like potx.
-  t('Global content');
-  t('Various blocks to show on the global content views');
-
-  $export['content-global_content'] = $context;
-  $context = new stdClass;
-  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
-  $context->api_version = 3;
   $context->name = 'global';
   $context->description = 'Show on every page';
   $context->tag = 'Sitewide';
