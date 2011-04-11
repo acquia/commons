@@ -10,7 +10,7 @@ function commons_discussion_context_default_contexts() {
   $context->api_version = 3;
   $context->name = 'context_ui-group-group-discussion-node';
   $context->description = 'A discussion node inside a group';
-  $context->tag = 'Group';
+  $context->tag = 'Discussion';
   $context->conditions = array(
     'context_og_condition_group_type' => array(
       'values' => array(
@@ -52,15 +52,15 @@ function commons_discussion_context_default_contexts() {
   // Translatables
   // Included for use with string extractors like potx.
   t('A discussion node inside a group');
-  t('Group');
+  t('Discussion');
 
-  $export['context_ui-group-group-dicussion-node'] = $context;
+  $export['context_ui-group-group-discussion-node'] = $context;
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
   $context->name = 'context_ui-group-group-home-discussions';
   $context->description = 'Discussion block for the group home page';
-  $context->tag = 'Group';
+  $context->tag = 'Discussion';
   $context->conditions = array(
     'node' => array(
       'values' => array(
@@ -71,24 +71,13 @@ function commons_discussion_context_default_contexts() {
       ),
     ),
   );
-  $context->reactions = array(
-    'block' => array(
-      'blocks' => array(
-        'views-group_block_discussion_latest-block_1' => array(
-          'module' => 'views',
-          'delta' => 'group_block_discussion_latest-block_1',
-          'region' => 'sidebar_last',
-          'weight' => 7,
-        ),
-      ),
-    ),
-  );
+  $context->reactions = array();
   $context->condition_mode = 0;
 
   // Translatables
   // Included for use with string extractors like potx.
+  t('Discussion');
   t('Discussion block for the group home page');
-  t('Group');
 
   $export['context_ui-group-group-home-discussions'] = $context;
   $context = new stdClass;
@@ -96,7 +85,7 @@ function commons_discussion_context_default_contexts() {
   $context->api_version = 3;
   $context->name = 'context_ui-group-group-tab-discussions';
   $context->description = 'The discussion tab on a group';
-  $context->tag = 'Group';
+  $context->tag = 'Discussion';
   $context->conditions = array(
     'views' => array(
       'values' => array(
@@ -104,23 +93,12 @@ function commons_discussion_context_default_contexts() {
       ),
     ),
   );
-  $context->reactions = array(
-    'block' => array(
-      'blocks' => array(
-        'views-group_block_disc_latest_comments-block_1' => array(
-          'module' => 'views',
-          'delta' => 'group_block_disc_latest_comments-block_1',
-          'region' => 'sidebar_last',
-          'weight' => 0,
-        ),
-      ),
-    ),
-  );
+  $context->reactions = array();
   $context->condition_mode = 0;
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Group');
+  t('Discussion');
   t('The discussion tab on a group');
 
   $export['context_ui-group-group-tab-discussions'] = $context;

@@ -10,7 +10,7 @@ function commons_wiki_context_default_contexts() {
   $context->api_version = 3;
   $context->name = 'context_ui-group-group-tab-wikis';
   $context->description = 'The wiki tab on a group';
-  $context->tag = 'Group';
+  $context->tag = 'Wiki';
   $context->conditions = array(
     'views' => array(
       'values' => array(
@@ -18,24 +18,13 @@ function commons_wiki_context_default_contexts() {
       ),
     ),
   );
-  $context->reactions = array(
-    'block' => array(
-      'blocks' => array(
-        'views-group_block_wiki_latest_comments-block_1' => array(
-          'module' => 'views',
-          'delta' => 'group_block_wiki_latest_comments-block_1',
-          'region' => 'sidebar_last',
-          'weight' => 0,
-        ),
-      ),
-    ),
-  );
+  $context->reactions = array();
   $context->condition_mode = 0;
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Group');
   t('The wiki tab on a group');
+  t('Wiki');
 
   $export['context_ui-group-group-tab-wikis'] = $context;
   $context = new stdClass;
@@ -43,7 +32,7 @@ function commons_wiki_context_default_contexts() {
   $context->api_version = 3;
   $context->name = 'context_ui-group-group-wiki-node';
   $context->description = 'A wiki node inside a group';
-  $context->tag = 'Group';
+  $context->tag = 'Wiki';
   $context->conditions = array(
     'context_og_condition_group_type' => array(
       'values' => array(
@@ -85,7 +74,7 @@ function commons_wiki_context_default_contexts() {
   // Translatables
   // Included for use with string extractors like potx.
   t('A wiki node inside a group');
-  t('Group');
+  t('Wiki');
 
   $export['context_ui-group-group-wiki-node'] = $context;
   return $export;

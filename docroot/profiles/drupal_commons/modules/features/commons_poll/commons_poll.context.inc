@@ -10,7 +10,7 @@ function commons_poll_context_default_contexts() {
   $context->api_version = 3;
   $context->name = 'context_ui-group-group-home-poll';
   $context->description = 'Poll block for the group home page';
-  $context->tag = 'Group';
+  $context->tag = 'Poll';
   $context->conditions = array(
     'node' => array(
       'values' => array(
@@ -28,7 +28,7 @@ function commons_poll_context_default_contexts() {
           'module' => 'views',
           'delta' => 'group_block_poll_latest-block_1',
           'region' => 'sidebar_last',
-          'weight' => 3,
+          'weight' => 0,
         ),
       ),
     ),
@@ -37,7 +37,7 @@ function commons_poll_context_default_contexts() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Group');
+  t('Poll');
   t('Poll block for the group home page');
 
   $export['context_ui-group-group-home-poll'] = $context;
@@ -46,7 +46,7 @@ function commons_poll_context_default_contexts() {
   $context->api_version = 3;
   $context->name = 'context_ui-group-group-poll-node';
   $context->description = 'A poll node inside a group';
-  $context->tag = 'Group';
+  $context->tag = 'Poll';
   $context->conditions = array(
     'context_og_condition_group_type' => array(
       'values' => array(
@@ -88,7 +88,7 @@ function commons_poll_context_default_contexts() {
   // Translatables
   // Included for use with string extractors like potx.
   t('A poll node inside a group');
-  t('Group');
+  t('Poll');
 
   $export['context_ui-group-group-poll-node'] = $context;
   $context = new stdClass;
@@ -96,7 +96,7 @@ function commons_poll_context_default_contexts() {
   $context->api_version = 3;
   $context->name = 'context_ui-group-group-tab-polls';
   $context->description = 'The poll tab on a group';
-  $context->tag = 'Group';
+  $context->tag = 'Poll';
   $context->conditions = array(
     'views' => array(
       'values' => array(
@@ -104,23 +104,12 @@ function commons_poll_context_default_contexts() {
       ),
     ),
   );
-  $context->reactions = array(
-    'block' => array(
-      'blocks' => array(
-        'views-group_block_poll_latest_comments-block_1' => array(
-          'module' => 'views',
-          'delta' => 'group_block_poll_latest_comments-block_1',
-          'region' => 'sidebar_last',
-          'weight' => 0,
-        ),
-      ),
-    ),
-  );
+  $context->reactions = array();
   $context->condition_mode = 0;
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Group');
+  t('Poll');
   t('The poll tab on a group');
 
   $export['context_ui-group-group-tab-polls'] = $context;

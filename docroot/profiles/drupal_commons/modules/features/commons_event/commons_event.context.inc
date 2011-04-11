@@ -10,7 +10,7 @@ function commons_event_context_default_contexts() {
   $context->api_version = 3;
   $context->name = 'context_ui-group-group-event-node';
   $context->description = 'An event node inside a group';
-  $context->tag = 'Group';
+  $context->tag = 'Event';
   $context->conditions = array(
     'context_og_condition_group_type' => array(
       'values' => array(
@@ -52,7 +52,7 @@ function commons_event_context_default_contexts() {
   // Translatables
   // Included for use with string extractors like potx.
   t('An event node inside a group');
-  t('Group');
+  t('Event');
 
   $export['context_ui-group-group-event-node'] = $context;
   $context = new stdClass;
@@ -60,7 +60,7 @@ function commons_event_context_default_contexts() {
   $context->api_version = 3;
   $context->name = 'context_ui-group-group-home-events';
   $context->description = 'Events block for the group home page';
-  $context->tag = 'Group';
+  $context->tag = 'Event';
   $context->conditions = array(
     'node' => array(
       'values' => array(
@@ -71,24 +71,13 @@ function commons_event_context_default_contexts() {
       ),
     ),
   );
-  $context->reactions = array(
-    'block' => array(
-      'blocks' => array(
-        'views-group_block_events_upcoming-block_1' => array(
-          'module' => 'views',
-          'delta' => 'group_block_events_upcoming-block_1',
-          'region' => 'sidebar_last',
-          'weight' => 4,
-        ),
-      ),
-    ),
-  );
+  $context->reactions = array();
   $context->condition_mode = 0;
 
   // Translatables
   // Included for use with string extractors like potx.
+  t('Event');
   t('Events block for the group home page');
-  t('Group');
 
   $export['context_ui-group-group-home-events'] = $context;
   $context = new stdClass;

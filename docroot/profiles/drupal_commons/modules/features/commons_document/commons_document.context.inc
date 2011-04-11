@@ -10,7 +10,7 @@ function commons_document_context_default_contexts() {
   $context->api_version = 3;
   $context->name = 'context_ui-group-group-document-node';
   $context->description = 'A document node inside a group';
-  $context->tag = 'Group';
+  $context->tag = 'Document';
   $context->conditions = array(
     'context_og_condition_group_type' => array(
       'values' => array(
@@ -52,7 +52,7 @@ function commons_document_context_default_contexts() {
   // Translatables
   // Included for use with string extractors like potx.
   t('A document node inside a group');
-  t('Group');
+  t('Document');
 
   $export['context_ui-group-group-document-node'] = $context;
   $context = new stdClass;
@@ -60,7 +60,7 @@ function commons_document_context_default_contexts() {
   $context->api_version = 3;
   $context->name = 'context_ui-group-group-home-documents';
   $context->description = 'Documents block for the group home page';
-  $context->tag = 'Group';
+  $context->tag = 'Document';
   $context->conditions = array(
     'node' => array(
       'values' => array(
@@ -71,24 +71,13 @@ function commons_document_context_default_contexts() {
       ),
     ),
   );
-  $context->reactions = array(
-    'block' => array(
-      'blocks' => array(
-        'views-group_block_document_latest-block_1' => array(
-          'module' => 'views',
-          'delta' => 'group_block_document_latest-block_1',
-          'region' => 'sidebar_last',
-          'weight' => 6,
-        ),
-      ),
-    ),
-  );
+  $context->reactions = array();
   $context->condition_mode = 0;
 
   // Translatables
   // Included for use with string extractors like potx.
+  t('Document');
   t('Documents block for the group home page');
-  t('Group');
 
   $export['context_ui-group-group-home-documents'] = $context;
   $context = new stdClass;
@@ -96,7 +85,7 @@ function commons_document_context_default_contexts() {
   $context->api_version = 3;
   $context->name = 'context_ui-group-group-tab-documents';
   $context->description = 'The document tab on a group';
-  $context->tag = 'Group';
+  $context->tag = 'Document';
   $context->conditions = array(
     'views' => array(
       'values' => array(
@@ -104,23 +93,12 @@ function commons_document_context_default_contexts() {
       ),
     ),
   );
-  $context->reactions = array(
-    'block' => array(
-      'blocks' => array(
-        'views-group_block_doc_latest_comments-block_1' => array(
-          'module' => 'views',
-          'delta' => 'group_block_doc_latest_comments-block_1',
-          'region' => 'sidebar_last',
-          'weight' => 0,
-        ),
-      ),
-    ),
-  );
+  $context->reactions = array();
   $context->condition_mode = 0;
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Group');
+  t('Document');
   t('The document tab on a group');
 
   $export['context_ui-group-group-tab-documents'] = $context;
