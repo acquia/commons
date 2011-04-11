@@ -8,6 +8,39 @@ function commons_poll_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
+  $context->name = 'content-poll-page';
+  $context->description = 'The poll page';
+  $context->tag = 'Poll';
+  $context->conditions = array(
+    'views' => array(
+      'values' => array(
+        'content_poll_page:page_1' => 'content_poll_page:page_1',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'views-poll_latest_comments-block_1' => array(
+          'module' => 'views',
+          'delta' => 'poll_latest_comments-block_1',
+          'region' => 'sidebar_last',
+          'weight' => 0,
+        ),
+      ),
+    ),
+  );
+  $context->condition_mode = 0;
+
+  // Translatables
+  // Included for use with string extractors like potx.
+  t('Poll');
+  t('The poll page');
+
+  $export['content-poll-page'] = $context;
+  $context = new stdClass;
+  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
+  $context->api_version = 3;
   $context->name = 'group-home-poll';
   $context->description = 'Poll block for the group home page';
   $context->tag = 'Poll';

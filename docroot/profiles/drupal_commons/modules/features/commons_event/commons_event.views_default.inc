@@ -6,9 +6,9 @@
 function commons_event_views_default_views() {
   $views = array();
 
-  // Exported view: content_global_calendar
+  // Exported view: content_calendar_page
   $view = new view;
-  $view->name = 'content_global_calendar';
+  $view->name = 'content_calendar_page';
   $view->description = 'A multi-dimensional calendar view with back/next navigation.';
   $view->tag = 'Calendar';
   $view->view_php = '';
@@ -568,6 +568,556 @@ function commons_event_views_default_views() {
     'block_1' => 0,
   ));
   $handler->override_option('sitename_title', FALSE);
+
+  $views[$view->name] = $view;
+
+  // Exported view: event_latest
+  $view = new view;
+  $view->name = 'event_latest';
+  $view->description = 'Global recently created events';
+  $view->tag = '';
+  $view->view_php = '';
+  $view->base_table = 'node';
+  $view->is_cacheable = FALSE;
+  $view->api_version = 2;
+  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+  $handler = $view->new_display('default', 'Defaults', 'default');
+  $handler->override_option('relationships', array(
+    'group_nid' => array(
+      'label' => 'Group node (post)',
+      'required' => 0,
+      'id' => 'group_nid',
+      'table' => 'og_ancestry',
+      'field' => 'group_nid',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+  ));
+  $handler->override_option('fields', array(
+    'title' => array(
+      'label' => '',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'strip_tags' => 0,
+        'html' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'link_to_node' => 1,
+      'exclude' => 0,
+      'id' => 'title',
+      'table' => 'node',
+      'field' => 'title',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'field_date_value' => array(
+      'label' => '',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'strip_tags' => 0,
+        'html' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'link_to_node' => 0,
+      'label_type' => 'none',
+      'format' => 'medium',
+      'multiple' => array(
+        'multiple_number' => '',
+        'multiple_from' => '',
+        'multiple_to' => '',
+        'group' => TRUE,
+      ),
+      'repeat' => array(
+        'show_repeat_rule' => '',
+      ),
+      'fromto' => array(
+        'fromto' => 'both',
+      ),
+      'exclude' => 0,
+      'id' => 'field_date_value',
+      'table' => 'node_data_field_date',
+      'field' => 'field_date_value',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'field_location_value' => array(
+      'label' => 'Location',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'link_to_node' => 0,
+      'label_type' => 'widget',
+      'format' => 'default',
+      'multiple' => array(
+        'group' => TRUE,
+        'multiple_number' => '',
+        'multiple_from' => '',
+        'multiple_reversed' => FALSE,
+      ),
+      'exclude' => 0,
+      'id' => 'field_location_value',
+      'table' => 'node_data_field_location',
+      'field' => 'field_location_value',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'group_nid' => array(
+      'label' => 'Groups',
+      'alter' => array(
+        'alter_text' => FALSE,
+        'text' => '',
+        'make_link' => FALSE,
+        'path' => '',
+        'alt' => '',
+        'link_class' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'trim' => FALSE,
+        'max_length' => '',
+        'word_boundary' => TRUE,
+        'ellipsis' => TRUE,
+        'strip_tags' => FALSE,
+        'html' => FALSE,
+      ),
+      'empty' => '',
+      'hide_empty' => 1,
+      'empty_zero' => 0,
+      'type' => 'separator',
+      'separator' => ', ',
+      'exclude' => 0,
+      'id' => 'group_nid',
+      'table' => 'og_ancestry',
+      'field' => 'group_nid',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+  ));
+  $handler->override_option('sorts', array(
+    'created' => array(
+      'order' => 'DESC',
+      'granularity' => 'second',
+      'id' => 'created',
+      'table' => 'node',
+      'field' => 'created',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+  ));
+  $handler->override_option('filters', array(
+    'status' => array(
+      'operator' => '=',
+      'value' => '1',
+      'group' => '0',
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'id' => 'status',
+      'table' => 'node',
+      'field' => 'status',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'type' => array(
+      'operator' => 'in',
+      'value' => array(
+        'event' => 'event',
+      ),
+      'group' => '0',
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'id' => 'type',
+      'table' => 'node',
+      'field' => 'type',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+  ));
+  $handler->override_option('access', array(
+    'type' => 'perm',
+    'perm' => 'access content',
+  ));
+  $handler->override_option('cache', array(
+    'type' => 'none',
+  ));
+  $handler->override_option('title', 'Recently added events');
+  $handler->override_option('footer_format', '1');
+  $handler->override_option('footer_empty', 0);
+  $handler->override_option('empty', 'No events have been added yet');
+  $handler->override_option('empty_format', '1');
+  $handler->override_option('use_ajax', TRUE);
+  $handler->override_option('items_per_page', 3);
+  $handler->override_option('use_pager', 'mini');
+  $handler->override_option('pager_element', 41);
+  $handler->override_option('distinct', 1);
+  $handler->override_option('style_plugin', 'list');
+  $handler->override_option('style_options', array(
+    'type' => 'ul',
+  ));
+  $handler = $view->new_display('block', 'Block', 'block_1');
+  $handler->override_option('block_description', 'Recently added events');
+  $handler->override_option('block_caching', -1);
+
+  $views[$view->name] = $view;
+
+  // Exported view: event_latest_comments
+  $view = new view;
+  $view->name = 'event_latest_comments';
+  $view->description = 'The latest comments on all events';
+  $view->tag = '';
+  $view->view_php = '';
+  $view->base_table = 'comments';
+  $view->is_cacheable = FALSE;
+  $view->api_version = 2;
+  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+  $handler = $view->new_display('default', 'Defaults', 'default');
+  $handler->override_option('relationships', array(
+    'nid' => array(
+      'label' => 'Node',
+      'required' => 0,
+      'id' => 'nid',
+      'table' => 'comments',
+      'field' => 'nid',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+  ));
+  $handler->override_option('fields', array(
+    'picture' => array(
+      'label' => '',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'imagecache_preset' => 'user_picture_meta',
+      'exclude' => 0,
+      'id' => 'picture',
+      'table' => 'users',
+      'field' => 'picture',
+      'relationship' => 'nid',
+      'override' => array(
+        'button' => 'Override',
+      ),
+    ),
+    'subject' => array(
+      'label' => '',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'link_to_comment' => 1,
+      'exclude' => 0,
+      'id' => 'subject',
+      'table' => 'comments',
+      'field' => 'subject',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'timestamp' => array(
+      'label' => 'Posted',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'date_format' => 'small',
+      'custom_date_format' => '',
+      'exclude' => 0,
+      'id' => 'timestamp',
+      'table' => 'comments',
+      'field' => 'timestamp',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'name' => array(
+      'label' => 'by',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'link_to_user' => 1,
+      'overwrite_anonymous' => 0,
+      'anonymous_text' => '',
+      'exclude' => 0,
+      'id' => 'name',
+      'table' => 'users',
+      'field' => 'name',
+      'relationship' => 'nid',
+      'override' => array(
+        'button' => 'Override',
+      ),
+    ),
+    'group_nid' => array(
+      'label' => 'Groups',
+      'alter' => array(
+        'alter_text' => FALSE,
+        'text' => '',
+        'make_link' => FALSE,
+        'path' => '',
+        'alt' => '',
+        'link_class' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'trim' => FALSE,
+        'max_length' => '',
+        'word_boundary' => TRUE,
+        'ellipsis' => TRUE,
+        'strip_tags' => FALSE,
+        'html' => FALSE,
+      ),
+      'empty' => '',
+      'hide_empty' => 1,
+      'empty_zero' => 0,
+      'type' => 'separator',
+      'separator' => ', ',
+      'exclude' => 0,
+      'id' => 'group_nid',
+      'table' => 'og_ancestry',
+      'field' => 'group_nid',
+      'relationship' => 'nid',
+    ),
+  ));
+  $handler->override_option('sorts', array(
+    'timestamp' => array(
+      'order' => 'DESC',
+      'granularity' => 'second',
+      'id' => 'timestamp',
+      'table' => 'comments',
+      'field' => 'timestamp',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+  ));
+  $handler->override_option('filters', array(
+    'status' => array(
+      'operator' => '=',
+      'value' => '0',
+      'group' => '0',
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'id' => 'status',
+      'table' => 'comments',
+      'field' => 'status',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'status_1' => array(
+      'operator' => '=',
+      'value' => '1',
+      'group' => '0',
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'id' => 'status_1',
+      'table' => 'node',
+      'field' => 'status',
+      'relationship' => 'nid',
+      'override' => array(
+        'button' => 'Override',
+      ),
+    ),
+    'type' => array(
+      'operator' => 'in',
+      'value' => array(
+        'event' => 'event',
+      ),
+      'group' => '0',
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'id' => 'type',
+      'table' => 'node',
+      'field' => 'type',
+      'relationship' => 'nid',
+      'override' => array(
+        'button' => 'Override',
+      ),
+    ),
+  ));
+  $handler->override_option('access', array(
+    'type' => 'perm',
+    'perm' => 'access comments',
+  ));
+  $handler->override_option('cache', array(
+    'type' => 'none',
+  ));
+  $handler->override_option('title', 'Latest event comments');
+  $handler->override_option('empty', 'No comments have been made yet');
+  $handler->override_option('empty_format', '1');
+  $handler->override_option('use_ajax', TRUE);
+  $handler->override_option('items_per_page', 5);
+  $handler->override_option('use_pager', 'mini');
+  $handler->override_option('pager_element', 11);
+  $handler->override_option('distinct', 1);
+  $handler->override_option('style_plugin', 'list');
+  $handler->override_option('style_options', array(
+    'type' => 'ul',
+  ));
+  $handler->override_option('row_options', array(
+    'inline' => array(
+      'timestamp' => 'timestamp',
+      'name' => 'name',
+    ),
+    'separator' => '',
+    'hide_empty' => 0,
+  ));
+  $handler = $view->new_display('block', 'Block', 'block_1');
+  $handler->override_option('block_description', 'Latest event comments');
+  $handler->override_option('block_caching', -1);
 
   $views[$view->name] = $view;
 

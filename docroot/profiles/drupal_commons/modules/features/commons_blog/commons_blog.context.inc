@@ -8,6 +8,39 @@ function commons_blog_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
+  $context->name = 'content-blog-page';
+  $context->description = 'The blog page';
+  $context->tag = 'Blog';
+  $context->conditions = array(
+    'views' => array(
+      'values' => array(
+        'content_blog_page:page_1' => 'content_blog_page:page_1',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'views-blog_latest_comments-block_1' => array(
+          'module' => 'views',
+          'delta' => 'blog_latest_comments-block_1',
+          'region' => 'sidebar_last',
+          'weight' => 0,
+        ),
+      ),
+    ),
+  );
+  $context->condition_mode = 0;
+
+  // Translatables
+  // Included for use with string extractors like potx.
+  t('Blog');
+  t('The blog page');
+
+  $export['content-blog-page'] = $context;
+  $context = new stdClass;
+  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
+  $context->api_version = 3;
   $context->name = 'group-blog-node';
   $context->description = 'A blog node inside a group';
   $context->tag = 'Blog';

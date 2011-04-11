@@ -6,10 +6,10 @@
 function commons_poll_views_default_views() {
   $views = array();
 
-  // Exported view: content_global_polls
+  // Exported view: content_poll_page
   $view = new view;
-  $view->name = 'content_global_polls';
-  $view->description = 'Show a page with all polls';
+  $view->name = 'content_poll_page';
+  $view->description = 'A global view of all site polls';
   $view->tag = '';
   $view->view_php = '';
   $view->base_table = 'node';
@@ -56,48 +56,16 @@ function commons_poll_views_default_views() {
       'id' => 'picture',
       'table' => 'users',
       'field' => 'picture',
-      'relationship' => 'none',
-    ),
-    'name' => array(
-      'label' => 'Author',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'strip_tags' => 0,
-        'html' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'link_to_user' => 1,
-      'overwrite_anonymous' => 0,
-      'anonymous_text' => '',
-      'exclude' => 0,
-      'id' => 'name',
-      'table' => 'users',
-      'field' => 'name',
       'override' => array(
         'button' => 'Override',
       ),
       'relationship' => 'none',
     ),
     'title' => array(
-      'label' => 'Title',
+      'label' => '',
       'alter' => array(
         'alter_text' => 1,
-        'text' => '<span class="title">[title]</span>',
+        'text' => '',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
@@ -121,6 +89,75 @@ function commons_poll_views_default_views() {
       'id' => 'title',
       'table' => 'node',
       'field' => 'title',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'created' => array(
+      'label' => 'Posted',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'date_format' => 'small',
+      'custom_date_format' => '',
+      'exclude' => 0,
+      'id' => 'created',
+      'table' => 'node',
+      'field' => 'created',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'name' => array(
+      'label' => 'by',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'link_to_user' => 1,
+      'overwrite_anonymous' => 0,
+      'anonymous_text' => '',
+      'exclude' => 0,
+      'id' => 'name',
+      'table' => 'users',
+      'field' => 'name',
       'override' => array(
         'button' => 'Override',
       ),
@@ -160,8 +197,8 @@ function commons_poll_views_default_views() {
       ),
       'relationship' => 'none',
     ),
-    'tid' => array(
-      'label' => 'Tags',
+    'teaser' => array(
+      'label' => '',
       'alter' => array(
         'alter_text' => 0,
         'text' => '',
@@ -183,60 +220,10 @@ function commons_poll_views_default_views() {
       'empty' => '',
       'hide_empty' => 0,
       'empty_zero' => 0,
-      'type' => 'separator',
-      'separator' => ', ',
-      'link_to_taxonomy' => 1,
-      'limit' => 0,
-      'vids' => array(
-        '2' => 0,
-        '1' => 0,
-        '4' => 0,
-        '5' => 0,
-        '3' => 0,
-      ),
-      'exclude' => 1,
-      'id' => 'tid',
-      'table' => 'term_node',
-      'field' => 'tid',
-      'override' => array(
-        'button' => 'Override',
-      ),
-      'relationship' => 'none',
-    ),
-    'comment_count' => array(
-      'label' => 'Replies',
-      'alter' => array(
-        'alter_text' => 1,
-        'text' => '<span class="replies">[comment_count]</span>
-  <span class="tags">Tags: [tid]</span>',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'set_precision' => FALSE,
-      'precision' => 0,
-      'decimal' => '.',
-      'separator' => ',',
-      'prefix' => '',
-      'suffix' => ' Replies',
       'exclude' => 0,
-      'id' => 'comment_count',
-      'table' => 'node_comment_statistics',
-      'field' => 'comment_count',
+      'id' => 'teaser',
+      'table' => 'node_revisions',
+      'field' => 'teaser',
       'override' => array(
         'button' => 'Override',
       ),
@@ -270,10 +257,13 @@ function commons_poll_views_default_views() {
       'id' => 'group_nid',
       'table' => 'og_ancestry',
       'field' => 'group_nid',
+      'override' => array(
+        'button' => 'Override',
+      ),
       'relationship' => 'none',
     ),
-    'last_updated' => array(
-      'label' => 'Updated',
+    'tid' => array(
+      'label' => 'Tags',
       'alter' => array(
         'alter_text' => 0,
         'text' => '',
@@ -293,25 +283,30 @@ function commons_poll_views_default_views() {
         'strip_tags' => 0,
       ),
       'empty' => '',
-      'hide_empty' => 0,
+      'hide_empty' => 1,
       'empty_zero' => 0,
-      'date_format' => 'time ago',
-      'custom_date_format' => '',
-      'exclude' => 1,
-      'id' => 'last_updated',
-      'table' => 'node_comment_statistics',
-      'field' => 'last_updated',
+      'type' => 'separator',
+      'separator' => ', ',
+      'link_to_taxonomy' => 1,
+      'limit' => 0,
+      'vids' => array(
+        '2' => 0,
+        '3' => 0,
+      ),
+      'exclude' => 0,
+      'id' => 'tid',
+      'table' => 'term_node',
+      'field' => 'tid',
       'override' => array(
         'button' => 'Override',
       ),
       'relationship' => 'none',
     ),
-    'created' => array(
-      'label' => 'Post date',
+    'comment_count' => array(
+      'label' => '',
       'alter' => array(
         'alter_text' => 1,
-        'text' => '<span class="posted-date">[created]</span>
-  <span class="updated-date">updated [last_updated]</span>',
+        'text' => '[comment_count] comment(s)',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
@@ -330,12 +325,16 @@ function commons_poll_views_default_views() {
       'empty' => '',
       'hide_empty' => 0,
       'empty_zero' => 0,
-      'date_format' => 'small',
-      'custom_date_format' => '',
+      'set_precision' => FALSE,
+      'precision' => 0,
+      'decimal' => '.',
+      'separator' => ',',
+      'prefix' => '',
+      'suffix' => '',
       'exclude' => 0,
-      'id' => 'created',
-      'table' => 'node',
-      'field' => 'created',
+      'id' => 'comment_count',
+      'table' => 'node_comment_statistics',
+      'field' => 'comment_count',
       'override' => array(
         'button' => 'Override',
       ),
@@ -350,19 +349,30 @@ function commons_poll_views_default_views() {
       'field' => 'score',
       'relationship' => 'none',
     ),
-    'last_updated' => array(
+    'created' => array(
       'order' => 'DESC',
       'granularity' => 'second',
-      'id' => 'last_updated',
-      'table' => 'node_comment_statistics',
-      'field' => 'last_updated',
-      'override' => array(
-        'button' => 'Override',
-      ),
+      'id' => 'created',
+      'table' => 'node',
+      'field' => 'created',
       'relationship' => 'none',
     ),
   ));
   $handler->override_option('filters', array(
+    'status' => array(
+      'operator' => '=',
+      'value' => '1',
+      'group' => '0',
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'id' => 'status',
+      'table' => 'node',
+      'field' => 'status',
+      'relationship' => 'none',
+    ),
     'type' => array(
       'operator' => 'in',
       'value' => array(
@@ -377,23 +387,6 @@ function commons_poll_views_default_views() {
       'id' => 'type',
       'table' => 'node',
       'field' => 'type',
-      'override' => array(
-        'button' => 'Override',
-      ),
-      'relationship' => 'none',
-    ),
-    'status_extra' => array(
-      'operator' => '=',
-      'value' => '',
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'status_extra',
-      'table' => 'node',
-      'field' => 'status_extra',
       'override' => array(
         'button' => 'Override',
       ),
@@ -488,7 +481,8 @@ function commons_poll_views_default_views() {
     ),
   ));
   $handler->override_option('access', array(
-    'type' => 'none',
+    'type' => 'perm',
+    'perm' => 'access content',
   ));
   $handler->override_option('cache', array(
     'type' => 'none',
@@ -498,70 +492,30 @@ function commons_poll_views_default_views() {
   $handler->override_option('header_empty', 1);
   $handler->override_option('empty', 'No polls have been added yet.');
   $handler->override_option('empty_format', '1');
-  $handler->override_option('use_ajax', TRUE);
   $handler->override_option('use_pager', '1');
   $handler->override_option('distinct', 1);
-  $handler->override_option('style_plugin', 'table');
+  $handler->override_option('style_plugin', 'list');
   $handler->override_option('style_options', array(
     'grouping' => '',
-    'override' => 1,
-    'sticky' => 0,
-    'order' => 'asc',
-    'columns' => array(
-      'picture' => 'name',
-      'name' => 'name',
-      'title' => 'title',
-      'timestamp' => 'title',
-      'tid' => 'title',
-      'comment_count' => 'title',
-      'group_nid' => 'group_nid',
-      'last_updated' => 'created',
+    'type' => 'ul',
+  ));
+  $handler->override_option('row_options', array(
+    'inline' => array(
+      'picture' => 'picture',
       'created' => 'created',
+      'name' => 'name',
+      'timestamp' => 'timestamp',
     ),
-    'info' => array(
-      'picture' => array(
-        'sortable' => 0,
-        'separator' => '',
-      ),
-      'name' => array(
-        'sortable' => 1,
-        'separator' => '',
-      ),
-      'title' => array(
-        'sortable' => 1,
-        'separator' => '',
-      ),
-      'timestamp' => array(
-        'separator' => '',
-      ),
-      'tid' => array(
-        'separator' => '',
-      ),
-      'comment_count' => array(
-        'sortable' => 1,
-        'separator' => '',
-      ),
-      'group_nid' => array(
-        'separator' => '',
-      ),
-      'last_updated' => array(
-        'sortable' => 1,
-        'separator' => '',
-      ),
-      'created' => array(
-        'sortable' => 1,
-        'separator' => '',
-      ),
-    ),
-    'default' => '-1',
+    'separator' => '',
+    'hide_empty' => 0,
   ));
   $handler = $view->new_display('page', 'Page', 'page_1');
   $handler->override_option('path', 'content/polls');
   $handler->override_option('menu', array(
     'type' => 'none',
-    'title' => 'Discussions',
-    'description' => 'View all site discussions',
-    'weight' => '3',
+    'title' => 'Blog Posts',
+    'description' => 'View all of the blog posts',
+    'weight' => '6',
     'name' => 'primary-links',
   ));
   $handler->override_option('tab_options', array(
@@ -602,7 +556,7 @@ function commons_poll_views_default_views() {
       'table' => 'node',
       'field' => 'type',
       'override' => array(
-        'button' => 'Override',
+        'button' => 'Use default',
       ),
       'relationship' => 'none',
     ),
@@ -2387,6 +2341,298 @@ function commons_poll_views_default_views() {
     'weight' => 0,
     'name' => 'navigation',
   ));
+
+  $views[$view->name] = $view;
+
+  // Exported view: poll_latest_comments
+  $view = new view;
+  $view->name = 'poll_latest_comments';
+  $view->description = 'The latest comments on all polls';
+  $view->tag = '';
+  $view->view_php = '';
+  $view->base_table = 'comments';
+  $view->is_cacheable = FALSE;
+  $view->api_version = 2;
+  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+  $handler = $view->new_display('default', 'Defaults', 'default');
+  $handler->override_option('relationships', array(
+    'nid' => array(
+      'label' => 'Node',
+      'required' => 0,
+      'id' => 'nid',
+      'table' => 'comments',
+      'field' => 'nid',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+  ));
+  $handler->override_option('fields', array(
+    'picture' => array(
+      'label' => '',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'imagecache_preset' => 'user_picture_meta',
+      'exclude' => 0,
+      'id' => 'picture',
+      'table' => 'users',
+      'field' => 'picture',
+      'relationship' => 'nid',
+      'override' => array(
+        'button' => 'Override',
+      ),
+    ),
+    'subject' => array(
+      'label' => '',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'link_to_comment' => 1,
+      'exclude' => 0,
+      'id' => 'subject',
+      'table' => 'comments',
+      'field' => 'subject',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'timestamp' => array(
+      'label' => 'Posted',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'date_format' => 'small',
+      'custom_date_format' => '',
+      'exclude' => 0,
+      'id' => 'timestamp',
+      'table' => 'comments',
+      'field' => 'timestamp',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'name' => array(
+      'label' => 'by',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'link_to_user' => 1,
+      'overwrite_anonymous' => 0,
+      'anonymous_text' => '',
+      'exclude' => 0,
+      'id' => 'name',
+      'table' => 'users',
+      'field' => 'name',
+      'relationship' => 'nid',
+      'override' => array(
+        'button' => 'Override',
+      ),
+    ),
+    'group_nid' => array(
+      'label' => 'Groups',
+      'alter' => array(
+        'alter_text' => FALSE,
+        'text' => '',
+        'make_link' => FALSE,
+        'path' => '',
+        'alt' => '',
+        'link_class' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'trim' => FALSE,
+        'max_length' => '',
+        'word_boundary' => TRUE,
+        'ellipsis' => TRUE,
+        'strip_tags' => FALSE,
+        'html' => FALSE,
+      ),
+      'empty' => '',
+      'hide_empty' => 1,
+      'empty_zero' => 0,
+      'type' => 'separator',
+      'separator' => ', ',
+      'exclude' => 0,
+      'id' => 'group_nid',
+      'table' => 'og_ancestry',
+      'field' => 'group_nid',
+      'relationship' => 'nid',
+    ),
+  ));
+  $handler->override_option('sorts', array(
+    'timestamp' => array(
+      'order' => 'DESC',
+      'granularity' => 'second',
+      'id' => 'timestamp',
+      'table' => 'comments',
+      'field' => 'timestamp',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+  ));
+  $handler->override_option('filters', array(
+    'status' => array(
+      'operator' => '=',
+      'value' => '0',
+      'group' => '0',
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'id' => 'status',
+      'table' => 'comments',
+      'field' => 'status',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'status_1' => array(
+      'operator' => '=',
+      'value' => '1',
+      'group' => '0',
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'id' => 'status_1',
+      'table' => 'node',
+      'field' => 'status',
+      'relationship' => 'nid',
+      'override' => array(
+        'button' => 'Override',
+      ),
+    ),
+    'type' => array(
+      'operator' => 'in',
+      'value' => array(
+        'poll' => 'poll',
+      ),
+      'group' => '0',
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'id' => 'type',
+      'table' => 'node',
+      'field' => 'type',
+      'relationship' => 'nid',
+      'override' => array(
+        'button' => 'Override',
+      ),
+    ),
+  ));
+  $handler->override_option('access', array(
+    'type' => 'perm',
+    'perm' => 'access comments',
+  ));
+  $handler->override_option('cache', array(
+    'type' => 'none',
+  ));
+  $handler->override_option('title', 'Latest poll comments');
+  $handler->override_option('empty', 'No comments have been made yet');
+  $handler->override_option('empty_format', '1');
+  $handler->override_option('use_ajax', TRUE);
+  $handler->override_option('items_per_page', 5);
+  $handler->override_option('use_pager', 'mini');
+  $handler->override_option('pager_element', 11);
+  $handler->override_option('distinct', 1);
+  $handler->override_option('style_plugin', 'list');
+  $handler->override_option('style_options', array(
+    'type' => 'ul',
+  ));
+  $handler->override_option('row_options', array(
+    'inline' => array(
+      'timestamp' => 'timestamp',
+      'name' => 'name',
+    ),
+    'separator' => '',
+    'hide_empty' => 0,
+  ));
+  $handler = $view->new_display('block', 'Block', 'block_1');
+  $handler->override_option('block_description', 'Latest poll comments');
+  $handler->override_option('block_caching', -1);
 
   $views[$view->name] = $view;
 

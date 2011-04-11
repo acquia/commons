@@ -8,6 +8,45 @@ function commons_event_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
+  $context->name = 'content-calendar-page';
+  $context->description = 'The event calendar page';
+  $context->tag = 'Event';
+  $context->conditions = array(
+    'views' => array(
+      'values' => array(
+        'content_calendar_page' => 'content_calendar_page',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'views-event_latest-block_1' => array(
+          'module' => 'views',
+          'delta' => 'event_latest-block_1',
+          'region' => 'sidebar_first',
+          'weight' => 0,
+        ),
+        'views-event_latest_comments-block_1' => array(
+          'module' => 'views',
+          'delta' => 'event_latest_comments-block_1',
+          'region' => 'sidebar_first',
+          'weight' => 1,
+        ),
+      ),
+    ),
+  );
+  $context->condition_mode = 0;
+
+  // Translatables
+  // Included for use with string extractors like potx.
+  t('Event');
+  t('The event calendar page');
+
+  $export['content-calendar-page'] = $context;
+  $context = new stdClass;
+  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
+  $context->api_version = 3;
   $context->name = 'group-event-node';
   $context->description = 'An event node inside a group';
   $context->tag = 'Event';
@@ -96,7 +135,7 @@ function commons_event_context_default_contexts() {
   $context->api_version = 3;
   $context->name = 'group-tab-events';
   $context->description = 'The event tab on a group';
-  $context->tag = 'Document';
+  $context->tag = 'Event';
   $context->conditions = array(
     'views' => array(
       'values' => array(
@@ -126,7 +165,7 @@ function commons_event_context_default_contexts() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Document');
+  t('Event');
   t('The event tab on a group');
 
   $export['group-tab-events'] = $context;

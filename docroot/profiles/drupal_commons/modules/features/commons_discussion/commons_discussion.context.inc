@@ -8,6 +8,39 @@ function commons_discussion_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
+  $context->name = 'content-discussion-page';
+  $context->description = 'The discussion page';
+  $context->tag = 'Discussion';
+  $context->conditions = array(
+    'views' => array(
+      'values' => array(
+        'content_discussion_page:page_1' => 'content_discussion_page:page_1',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'views-f24f764575fea8b17a65697fa4ac9a8d' => array(
+          'module' => 'views',
+          'delta' => 'f24f764575fea8b17a65697fa4ac9a8d',
+          'region' => 'sidebar_last',
+          'weight' => 0,
+        ),
+      ),
+    ),
+  );
+  $context->condition_mode = 0;
+
+  // Translatables
+  // Included for use with string extractors like potx.
+  t('Discussion');
+  t('The discussion page');
+
+  $export['content-discussion-page'] = $context;
+  $context = new stdClass;
+  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
+  $context->api_version = 3;
   $context->name = 'group-discussion-node';
   $context->description = 'A discussion node inside a group';
   $context->tag = 'Discussion';

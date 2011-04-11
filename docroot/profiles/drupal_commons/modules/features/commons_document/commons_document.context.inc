@@ -8,6 +8,39 @@ function commons_document_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
+  $context->name = 'content-document-page';
+  $context->description = 'The documents page';
+  $context->tag = 'Document';
+  $context->conditions = array(
+    'views' => array(
+      'values' => array(
+        'content_document_page:page_1' => 'content_document_page:page_1',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'views-caad6a250d3875f477bedd51f96ab857' => array(
+          'module' => 'views',
+          'delta' => 'caad6a250d3875f477bedd51f96ab857',
+          'region' => 'sidebar_last',
+          'weight' => 0,
+        ),
+      ),
+    ),
+  );
+  $context->condition_mode = 0;
+
+  // Translatables
+  // Included for use with string extractors like potx.
+  t('Blog');
+  t('The documents page');
+
+  $export['content-document-page'] = $context;
+  $context = new stdClass;
+  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
+  $context->api_version = 3;
   $context->name = 'group-document-node';
   $context->description = 'A document node inside a group';
   $context->tag = 'Document';
