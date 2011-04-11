@@ -8,7 +8,7 @@ function commons_blog_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-group-group-blog-node';
+  $context->name = 'group-blog-node';
   $context->description = 'A blog node inside a group';
   $context->tag = 'Blog';
   $context->conditions = array(
@@ -54,11 +54,11 @@ function commons_blog_context_default_contexts() {
   t('A blog node inside a group');
   t('Blog');
 
-  $export['context_ui-group-group-blog-node'] = $context;
+  $export['group-blog-node'] = $context;
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-group-group-home-blogs';
+  $context->name = 'group-home-blogs';
   $context->description = 'Blog posts block for the group home page';
   $context->tag = 'Blog';
   $context->conditions = array(
@@ -78,7 +78,7 @@ function commons_blog_context_default_contexts() {
           'module' => 'views',
           'delta' => 'group_block_blog_latest-block_1',
           'region' => 'sidebar_last',
-          'weight' => 0,
+          'weight' => 5,
         ),
       ),
     ),
@@ -90,11 +90,11 @@ function commons_blog_context_default_contexts() {
   t('Blog');
   t('Blog posts block for the group home page');
 
-  $export['context_ui-group-group-home-blogs'] = $context;
+  $export['group-home-blogs'] = $context;
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-group-group-tab-blogs';
+  $context->name = 'group-tab-blogs';
   $context->description = 'The blog tab on a group';
   $context->tag = 'Blog';
   $context->conditions = array(
@@ -104,7 +104,18 @@ function commons_blog_context_default_contexts() {
       ),
     ),
   );
-  $context->reactions = array();
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'views-f8cb0875780fe573595fe3b2bb97ff69' => array(
+          'module' => 'views',
+          'delta' => 'f8cb0875780fe573595fe3b2bb97ff69',
+          'region' => 'sidebar_last',
+          'weight' => 0,
+        ),
+      ),
+    ),
+  );
   $context->condition_mode = 0;
 
   // Translatables
@@ -112,6 +123,6 @@ function commons_blog_context_default_contexts() {
   t('Blog');
   t('The blog tab on a group');
 
-  $export['context_ui-group-group-tab-blogs'] = $context;
+  $export['group-tab-blogs'] = $context;
   return $export;
 }

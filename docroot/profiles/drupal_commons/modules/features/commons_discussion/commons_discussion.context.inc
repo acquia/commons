@@ -8,7 +8,7 @@ function commons_discussion_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-group-group-discussion-node';
+  $context->name = 'group-discussion-node';
   $context->description = 'A discussion node inside a group';
   $context->tag = 'Discussion';
   $context->conditions = array(
@@ -54,11 +54,11 @@ function commons_discussion_context_default_contexts() {
   t('A discussion node inside a group');
   t('Discussion');
 
-  $export['context_ui-group-group-discussion-node'] = $context;
+  $export['group-discussion-node'] = $context;
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-group-group-home-discussions';
+  $context->name = 'group-home-discussions';
   $context->description = 'Discussion block for the group home page';
   $context->tag = 'Discussion';
   $context->conditions = array(
@@ -71,7 +71,18 @@ function commons_discussion_context_default_contexts() {
       ),
     ),
   );
-  $context->reactions = array();
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'views-7c1e1568b7392470cbb8406f05742e0e' => array(
+          'module' => 'views',
+          'delta' => '7c1e1568b7392470cbb8406f05742e0e',
+          'region' => 'sidebar_last',
+          'weight' => 7,
+        ),
+      ),
+    ),
+  );
   $context->condition_mode = 0;
 
   // Translatables
@@ -79,11 +90,11 @@ function commons_discussion_context_default_contexts() {
   t('Discussion');
   t('Discussion block for the group home page');
 
-  $export['context_ui-group-group-home-discussions'] = $context;
+  $export['group-home-discussions'] = $context;
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-group-group-tab-discussions';
+  $context->name = 'group-tab-discussions';
   $context->description = 'The discussion tab on a group';
   $context->tag = 'Discussion';
   $context->conditions = array(
@@ -93,7 +104,18 @@ function commons_discussion_context_default_contexts() {
       ),
     ),
   );
-  $context->reactions = array();
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'views-1048f0a19e6b5b9b52580ed82aae1972' => array(
+          'module' => 'views',
+          'delta' => '1048f0a19e6b5b9b52580ed82aae1972',
+          'region' => 'sidebar_last',
+          'weight' => 0,
+        ),
+      ),
+    ),
+  );
   $context->condition_mode = 0;
 
   // Translatables
@@ -101,6 +123,6 @@ function commons_discussion_context_default_contexts() {
   t('Discussion');
   t('The discussion tab on a group');
 
-  $export['context_ui-group-group-tab-discussions'] = $context;
+  $export['group-tab-discussions'] = $context;
   return $export;
 }

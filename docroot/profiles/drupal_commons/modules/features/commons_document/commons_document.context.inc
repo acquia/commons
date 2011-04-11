@@ -8,7 +8,7 @@ function commons_document_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-group-group-document-node';
+  $context->name = 'group-document-node';
   $context->description = 'A document node inside a group';
   $context->tag = 'Document';
   $context->conditions = array(
@@ -54,11 +54,11 @@ function commons_document_context_default_contexts() {
   t('A document node inside a group');
   t('Document');
 
-  $export['context_ui-group-group-document-node'] = $context;
+  $export['group-document-node'] = $context;
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-group-group-home-documents';
+  $context->name = 'group-home-documents';
   $context->description = 'Documents block for the group home page';
   $context->tag = 'Document';
   $context->conditions = array(
@@ -71,7 +71,18 @@ function commons_document_context_default_contexts() {
       ),
     ),
   );
-  $context->reactions = array();
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'views-363c36ed99d1c774fcc13d74a03dad8b' => array(
+          'module' => 'views',
+          'delta' => '363c36ed99d1c774fcc13d74a03dad8b',
+          'region' => 'sidebar_last',
+          'weight' => 6,
+        ),
+      ),
+    ),
+  );
   $context->condition_mode = 0;
 
   // Translatables
@@ -79,11 +90,11 @@ function commons_document_context_default_contexts() {
   t('Document');
   t('Documents block for the group home page');
 
-  $export['context_ui-group-group-home-documents'] = $context;
+  $export['group-home-documents'] = $context;
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-group-group-tab-documents';
+  $context->name = 'group-tab-documents';
   $context->description = 'The document tab on a group';
   $context->tag = 'Document';
   $context->conditions = array(
@@ -93,7 +104,18 @@ function commons_document_context_default_contexts() {
       ),
     ),
   );
-  $context->reactions = array();
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'views-4fa75b28a31d39d57d4357bf10199287' => array(
+          'module' => 'views',
+          'delta' => '4fa75b28a31d39d57d4357bf10199287',
+          'region' => 'sidebar_last',
+          'weight' => 0,
+        ),
+      ),
+    ),
+  );
   $context->condition_mode = 0;
 
   // Translatables
@@ -101,6 +123,6 @@ function commons_document_context_default_contexts() {
   t('Document');
   t('The document tab on a group');
 
-  $export['context_ui-group-group-tab-documents'] = $context;
+  $export['group-tab-documents'] = $context;
   return $export;
 }

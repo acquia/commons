@@ -8,7 +8,7 @@ function commons_poll_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-group-group-home-poll';
+  $context->name = 'group-home-poll';
   $context->description = 'Poll block for the group home page';
   $context->tag = 'Poll';
   $context->conditions = array(
@@ -28,7 +28,7 @@ function commons_poll_context_default_contexts() {
           'module' => 'views',
           'delta' => 'group_block_poll_latest-block_1',
           'region' => 'sidebar_last',
-          'weight' => 0,
+          'weight' => 3,
         ),
       ),
     ),
@@ -40,11 +40,11 @@ function commons_poll_context_default_contexts() {
   t('Poll');
   t('Poll block for the group home page');
 
-  $export['context_ui-group-group-home-poll'] = $context;
+  $export['group-home-poll'] = $context;
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-group-group-poll-node';
+  $context->name = 'group-poll-node';
   $context->description = 'A poll node inside a group';
   $context->tag = 'Poll';
   $context->conditions = array(
@@ -90,11 +90,11 @@ function commons_poll_context_default_contexts() {
   t('A poll node inside a group');
   t('Poll');
 
-  $export['context_ui-group-group-poll-node'] = $context;
+  $export['group-poll-node'] = $context;
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-group-group-tab-polls';
+  $context->name = 'group-tab-polls';
   $context->description = 'The poll tab on a group';
   $context->tag = 'Poll';
   $context->conditions = array(
@@ -104,7 +104,18 @@ function commons_poll_context_default_contexts() {
       ),
     ),
   );
-  $context->reactions = array();
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'views-527d55149807f4938ae8e394bc5a1aba' => array(
+          'module' => 'views',
+          'delta' => '527d55149807f4938ae8e394bc5a1aba',
+          'region' => 'sidebar_last',
+          'weight' => 0,
+        ),
+      ),
+    ),
+  );
   $context->condition_mode = 0;
 
   // Translatables
@@ -112,6 +123,6 @@ function commons_poll_context_default_contexts() {
   t('Poll');
   t('The poll tab on a group');
 
-  $export['context_ui-group-group-tab-polls'] = $context;
+  $export['group-tab-polls'] = $context;
   return $export;
 }

@@ -8,7 +8,7 @@ function commons_core_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-content-global_content';
+  $context->name = 'content-global_content';
   $context->description = 'Various blocks to show on the global content views';
   $context->tag = 'Global content';
   $context->conditions = array(
@@ -39,11 +39,11 @@ function commons_core_context_default_contexts() {
   t('Global content');
   t('Various blocks to show on the global content views');
 
-  $export['context_ui-content-global_content'] = $context;
+  $export['content-global_content'] = $context;
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-global-global';
+  $context->name = 'global-global';
   $context->description = 'Show on every page';
   $context->tag = 'Sitewide';
   $context->conditions = array(
@@ -84,11 +84,11 @@ function commons_core_context_default_contexts() {
   t('Show on every page');
   t('Sitewide');
 
-  $export['context_ui-global-global'] = $context;
+  $export['global-global'] = $context;
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-group-group-context';
+  $context->name = 'group-context';
   $context->description = 'The context of a group';
   $context->tag = 'Group';
   $context->conditions = array(
@@ -120,11 +120,11 @@ function commons_core_context_default_contexts() {
   t('Group');
   t('The context of a group');
 
-  $export['context_ui-group-group-context'] = $context;
+  $export['group-context'] = $context;
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-group-group-home';
+  $context->name = 'group-home';
   $context->description = 'The group home page';
   $context->tag = 'Group';
   $context->conditions = array(
@@ -174,11 +174,11 @@ function commons_core_context_default_contexts() {
   t('Group');
   t('The group home page');
 
-  $export['context_ui-group-group-home'] = $context;
+  $export['group-home'] = $context;
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-users-user_browser';
+  $context->name = 'users-user_browser';
   $context->description = 'Various block to show on the user browser page';
   $context->tag = 'User browser';
   $context->conditions = array(
@@ -219,11 +219,11 @@ function commons_core_context_default_contexts() {
   t('User browser');
   t('Various block to show on the user browser page');
 
-  $export['context_ui-users-user_browser'] = $context;
+  $export['users-user_browser'] = $context;
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'group_listing';
+  $context->name = 'group-listing';
   $context->description = 'The list of available groups on the site';
   $context->tag = '';
   $context->conditions = array(
@@ -269,6 +269,6 @@ function commons_core_context_default_contexts() {
   // Included for use with string extractors like potx.
   t('The list of available groups on the site');
 
-  $export['group_listing'] = $context;
+  $export['group-listing'] = $context;
   return $export;
 }
