@@ -105,7 +105,7 @@ function _commons_core_header_login_block() {
   }
   else {
     // Provide the login form
-    $block['subject'] = drupal_get_form('user_login_block');
+    $block['content'] = drupal_get_form('user_login_block');
   }
   
   return $block;
