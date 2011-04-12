@@ -109,21 +109,7 @@ function commons_core_og_links_alter(&$links, &$node) {
  */
 function commons_core_block($op = 'list', $delta = 0, $edit = array()) {
   module_load_include('inc', 'commons_core', 'commons_core.blocks');
-  if ($op == 'list') {
-    return _commons_core_block_list();
-  }
-  else if ($op == 'configure') {
-    $func = "_commons_core_{$delta}_block_configure";
-    return $func();
-  }
-  else if ($op == 'save') {
-    $func = "_commons_core_{$delta}_block_save";
-    return $func($edit);
-  }
-  else if ($op == 'view') {
-    $func = "_commons_core_{$delta}_block";
-    return $func();
-  }  
+  return _commons_core_block($op, $delta, $edit);
 }
 
 /**

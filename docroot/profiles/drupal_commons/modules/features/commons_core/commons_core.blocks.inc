@@ -6,6 +6,27 @@
  */
 
 /**
+ * Callback for hook_block()
+ */
+function _commons_core_block($op = 'list', $delta = 0, $edit = array()) {
+  if ($op == 'list') {
+    return _commons_core_block_list();
+  }
+  else if ($op == 'configure') {
+    $func = "_commons_core_{$delta}_block_configure";
+    return $func();
+  }
+  else if ($op == 'save') {
+    $func = "_commons_core_{$delta}_block_save";
+    return $func($edit);
+  }
+  else if ($op == 'view') {
+    $func = "_commons_core_{$delta}_block";
+    return $func();
+  } 
+}
+
+/**
  * Declare a list of all the available blocks
  */
 function _commons_core_block_list() {
@@ -75,6 +96,34 @@ function _commons_core_user_statistics_block() {
 }
 
 /**
+ * Configure the basic user statistics block
+ */
+function _commons_core_user_statistics_block_configure() {
+  $form['commons_recent_join_interval'] = array(
+    '#type' => 'select',
+    '#title' => t('Recent joins time-frame'),
+    '#default_value' => variable_get('commons_recent_join_interval', t('3 months')),
+    '#options' => array(
+      '3 days' => t('3 days'),
+      '1 week' => t('1 week'),
+      '2 weeks' => t('2 weeks'),
+      '1 month' => t('1 month'),
+      '3 months' => t('3 months'),
+      '6 months' => t('6 months'),
+    ),
+    '#description' => t('The !user_directory contains a block that indicates the amount of recently joined members. Select the time-frame to be used to calculate this value.', array('!user_directory' => l(t('user directory'), 'users'))),
+  );
+  return $form;
+}
+
+/**
+ * Save the basic user statistics block
+ */
+function _commons_core_user_statistics_block_save($edit) {
+  variable_set('commons_recent_join_interval', $edit['commons_recent_join_interval']);
+}
+
+/**
  * Display the Commons information block
  */
 function _commons_core_commons_info_block() {
@@ -131,34 +180,6 @@ function _commons_core_join_learn_block() {
   );
   
   return $block;
-}
-
-/**
- * Configure the "Join & learn more" block
- */
-function _commons_core_join_learn_block_configure() {
-  $form['commons_recent_join_interval'] = array(
-    '#type' => 'select',
-    '#title' => t('Recent joins time-frame'),
-    '#default_value' => variable_get('commons_recent_join_interval', t('3 months')),
-    '#options' => array(
-      '3 days' => t('3 days'),
-      '1 week' => t('1 week'),
-      '2 weeks' => t('2 weeks'),
-      '1 month' => t('1 month'),
-      '3 months' => t('3 months'),
-      '6 months' => t('6 months'),
-    ),
-    '#description' => t('The !user_directory contains a block that indicates the amount of recently joined members. Select the time-frame to be used to calculate this value.', array('!user_directory' => l(t('user directory'), 'users'))),
-  );
-  return $form;
-}
-
-/**
- * Save the "Join & learn more" block
- */
-function _commons_core_join_learn_block_save() {
-  variable_set('commons_recent_join_interval', $edit['commons_recent_join_interval']);
 }
 
 /**
