@@ -63,8 +63,12 @@ function bl_commons_preprocess_node(&$vars) {
     $submitted .= '</span>';
     
     $vars['submitted'] = $submitted;
+	
+  
   }
 }
+
+
 
 /**
  * Page preprocessing

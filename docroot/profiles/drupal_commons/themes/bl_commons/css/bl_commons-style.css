@@ -951,8 +951,8 @@ div.content-help-inner div.warning {
 
 .marker,
 .form-required {
-	color: #aa1144;
-	padding-left: .5em;
+	color: #e10019;
+	/*padding-left: .5em;*/
 }
 
 /* Default block title styles/-------------------------------------------------------------- */
@@ -1104,7 +1104,7 @@ TR */
 
 /* Pagers-------------------------------------------------------------- */
 
-ul.pager {
+/*ul.pager {
 	
 }
 
@@ -1114,7 +1114,7 @@ ul.pager {
 	margin: 0;
 	padding: 2px 4px;
 	text-indent: 0;
-  -moz-border-radius: 5px;
+ -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
 }
 
@@ -1136,6 +1136,53 @@ ul.pager li a:focus {
 	background-color: #777;
 	border-color: #333;
 	color: #fff;
+}*/
+.item-list .pager {
+	clear:both;
+}
+.item-list ul.pager {
+	display:inline-block;
+	float:right;
+	margin:10px 0;
+	padding:0;
+	text-align:right;
+}
+.item-list ul.pager li {
+	float:left;
+	margin:0;
+	padding:0;
+	background:none;
+	border:none;
+}
+.item-list ul.pager li a.active {
+	color:#5B5B5B;
+}
+.item-list ul.pager li a { border:solid 0px #dadada;}
+.item-list ul.pager li a:link, 
+.item-list ul.pager li a:visited, 
+.item-list ul.pager li.pager-current {
+	color:#1E90B6;
+	margin:0;
+	padding:0 0.2em;
+	text-decoration:none;
+}
+.item-list ul.pager li a:hover, 
+.item-list ul.pager li a:active {
+	text-decoration:underline;
+}
+.item-list ul.pager li.pager-current {
+	background-color:#DADADA;
+	color:#0F2B33;
+	font-weight:bold;
+	
+}
+.item-list ul.pager li.pager-current, .item-list ul.pager li.pager-item, .item-list ul.pager li.pager-next, .item-list ul.pager li.pager-last, .item-list ul.pager li.pager-first, .item-list ul.pager li.pager-previous {
+	margin:0;
+	padding:0 6px;
+	border:none;
+}
+.item-list ul.pager li.pager-item {
+	border-right:1px solid #DEDEDE;
 }
 
 /* Forms/-------------------------------------------------------------- */
@@ -2751,6 +2798,7 @@ table.views-view-grid td {
 	text-align: right;
 	background:transparent url(../images/gray-arrow-right.png) no-repeat top right;
 	line-height:1.1em;
+	clear: both;
 }
 
 .view-footer div {
@@ -3327,6 +3375,7 @@ a.feed-icon img {
 	background-color: #eee;
 	display: block;
 	position: absolute;
+	right:0px;
 }
 
 .heartbeat-message-block .beat-item:after {
@@ -3437,9 +3486,76 @@ div.beat-item blockquote {
 
 /* side blocks */
 .sidebar-last .block-views .content .view .view-content .item-list ul li { background:none; padding:0px 0px 10px 0px; margin-bottom:0px;}
-.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-field-group-image-fid { float:left; width:30px; margin-right:10px;}
-.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-field-group-image-fid img { width:28px; height:28px; border:solid 1px #c2c2c2;}
+.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-field-group-image-fid,
+.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-picture{ float:left; width:30px; margin-right:10px;}
+.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-field-group-image-fid img,
+.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-picture img{ width:28px; height:28px; border:solid 1px #c2c2c2;}
+
+.sidebar-last .block-views .content .view .view-content .item-list ul li .small { font-size:11px;}
+
+.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-post-count-new,
+.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-posts-count,
+.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-description,
+.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-comment-count{ overflow:hidden;} 
+
+.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-post-count-new a,
 .sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-title { font-weight:bold;}
+
+
+/* profile page */
+
+body.page-user #main-inner #sidebar-first #sidebar-first-inner,
+body.page-user-1 #main-inner #sidebar-first #sidebar-first-inner{ width:90%}
+
+#block-commons_profile-profile_image_links ul.links li { border:none; display:block; width:90%; background:transparent url(../images/doublearrow.gif) no-repeat 0px 6px; padding:0px 6px 0px 12px;}
+#block-commons_profile-profile_image_links ul.links li a { font-weight:bold;}
+#block-commons_profile-profile_image_links ul.links li.userpoints { border:none; display:block; width:90%; background:none; padding:6px 6px 0px 0px;}
+#block-commons_profile-profile_image_links ul.links li.user_badges { border:none; display:block; width:90%; background:none; padding:0px 6px 0px 0px;}
+
+.heartbeat-block .heartbeat-message-block { border-bottom:solid 1px #ccc;}
+.heartbeat-block .heartbeat-message-block .beat-item { padding-top:8px;}
+
+.beat-item-info img { width:40px; height:40px;}
+
+#block-views-profile_about-block_1 .view-content label { font-weight:bold;}
+
+#block-views-profile_about-block_1 .view-content p { margin-top:0px;}
+#block-views-profile_about-block_1 .view-content .views-row div { margin-bottom:6px;}
+
+/* group page */
+#block-commons_core-group_members table.views-view-grid td { border:none; padding:0px;}
+
+/* event calendar icon */
+
+.dateblock {
+	float:left;
+	font-weight:bold;
+	margin-right:10px;
+	padding-bottom:7px;
+	width:30px;
+}
+.dateblock .month {
+	background-color:#228bc8;
+	color:#FFFFFF;
+	float:left;
+	font-size:11px;
+	line-height:1.1em;
+	text-align:center;
+	text-transform:capitalize;
+	width:30px;
+}
+.dateblock .day {
+	background-color:#dadee1;
+	color:#000000;
+	float:left;
+	font-size:14px;
+	font-weight: bold;
+	line-height:1.1em;
+	text-align:center;
+	width:30px;
+	padding:2px 0px;
+}
+.dateblock .year { display:none; }
 
 
 
