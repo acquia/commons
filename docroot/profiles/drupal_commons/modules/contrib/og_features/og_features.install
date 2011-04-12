@@ -15,6 +15,13 @@ function og_features_install() {
  */
 function og_features_uninstall() {
   drupal_uninstall_schema('og_features');
+  
+  // Fetch all node-type variables
+  $sql = "SELECT name FROM {variable} WHERE name LIKE = 'og_features_%'";
+  $result = db_query($sql);
+  while ($var = db_fetch_object($result)) {
+    variable_del($var->name);
+  }
 }
 
 function og_features_schema() {

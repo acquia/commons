@@ -10,6 +10,11 @@ function og_features_feature_form(&$form_state, $group) {
   
   // Iterate all the available features to provide a toggle switch
   foreach ($registry as $key => $feature) {
+    // Make sure this feature can be toggled by this group
+    if (!og_features_feature_can_toggle($group, $key)) {
+      continue;  
+    }
+    
     $form["feature-$key"]["name-$key"] = array(
       '#type' => 'item',
       '#value' => $feature->name,

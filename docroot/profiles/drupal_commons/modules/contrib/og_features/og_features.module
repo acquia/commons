@@ -1,5 +1,9 @@
 <?php
 
+define('OG_FEATURES_ADMIN_DISABLED', 0);
+define('OG_FEATURES_ADMIN_ENABLED', 1);
+define('OG_FEATURES_ADMIN_TOGGLE', 2);
+
 /**
  * @todo
  *  bugs:
@@ -11,8 +15,9 @@
  */
 function og_features_perm() {
   return array(
-    'edit own group features',
-    'edit all group features'
+    'administer og features',
+    'edit all group features',
+    'edit own group features'
   );
 }
 
@@ -31,6 +36,16 @@ function og_features_menu() {
     'file' => 'og_features.pages.inc',
     'type' => MENU_LOCAL_TASK,
     'weight' => 1,
+  );
+  $menu['admin/og/og_features'] = array(
+    'title' => 'OG features configuration',
+    'description' => 'Set the available features for each group type',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('og_features_admin_settings'),
+    'access callback' => 'user_access',
+    'access arguments' =>  array('administer og features'),
+    'file' => 'og_features.admin.inc',
+    'type' => MENU_NORMAL_ITEM,
   );
   return $menu;
 }
@@ -336,11 +351,23 @@ function og_features_feature_form_access($group) {
     return FALSE;
   }
   
-  // Fetch the og features registry to ensure at least 
-  // one toggleable feature is available
+  // Fetch the og features registry to make sure there is one
   $registry = og_features_get_registry();
   if (empty($registry)) {
     return FALSE;
+  }
+  // We have a registry, but we need at least one toggleable feature
+  else if ($settings = og_features_get_node_type_settings($group->type)) {
+    $toggle = FALSE;
+    foreach ($settings as $value) {
+      if ($value == OG_FEATURES_ADMIN_TOGGLE) {
+        $toggle = TRUE;
+      }
+    }
+    
+    if (!$toggle) {
+      return FALSE;
+    }
   }
   
   // Administers always have access
@@ -469,11 +496,31 @@ function og_features_get_registry($feature = NULL, $reset = FALSE) {
  */
 function og_features_load_disabled_features(&$group) {
   static $disabled;
+  
+  // Regenerate the disabled features list, if needed
   if (!isset($disabled[$group->nid])) {
     $sql = "SELECT disabled FROM {og_features} WHERE nid = %d";
     $result = db_result(db_query($sql, $group->nid));
     $disabled[$group->nid] = $result ? unserialize($result) : array();
+    
+    // Check if the admin settings indicate statics options for this group type
+    if ($settings = og_features_get_node_type_settings($group->type)) {
+      foreach ($settings as $key => $setting) {
+        switch ($setting) {
+          // If this feature should always be disabled, add it
+          case OG_FEATURES_ADMIN_DISABLED:
+            $disabled[$group->nid][$key] = $key;
+            break;
+            
+          // If this feature should always be enabled, remove it
+          case OG_FEATURES_ADMIN_ENABLED:
+            unset($disabled[$group->nid][$key]);
+            break;
+        }
+      }
+    }
   }
+  
   $group->features_disabled = $disabled[$group->nid];
 }
 
@@ -655,6 +702,49 @@ function og_features_save_disabled_features($group, $disabled = array()) {
   }
   
   return $success;
+}
+
+/**
+ * Determine whether or not a given feature can be toggled within
+ * a given group (or group type)
+ * 
+ * This is based on the admin settings for each group type. This function
+ * does not check for actual access permissions. For that, see 
+ * og_features_feature_form_access().
+ * 
+ * @param $group
+ *   The group object or group node type
+ * @param $feature
+ *   The feature or feature ID
+ * @return
+ *   TRUE if the feature can be toggled  within this group
+ */
+function og_features_feature_can_toggle($group, $feature) {
+  // Extract the group type
+  $type = is_object($group) ? $group->type : $group;
+  
+  // Extract the feature ID
+  $feature = is_object($feature) ? $feature->id : $feature;
+  
+  // Fetch the settings for this group type, if any
+  if ($settings = og_features_get_node_type_settings($type)) {
+    return $settings[$feature] == OG_FEATURES_ADMIN_TOGGLE;
+  }
+  
+  return TRUE;
+}
+
+/**
+ * Return the group node type settings for features
+ * 
+ * @param $type
+ *   The group type
+ * @return
+ *   An array of settings keyed by feature ID, or FALSE if there are
+ *   no settings
+ */
+function og_features_get_node_type_settings($type) {
+  return variable_get("og_features_node_type_{$type}", FALSE);
 }
 
 /**

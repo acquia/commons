@@ -15,6 +15,8 @@ function hook_og_features_registry() {
   
   // Feature: my_feature
   $feature = new stdClass;
+  // The feature id
+  $feature->id = 'my_feature';
   // The name that will show up on the feature toggle form
   $feature->name = t('Blog');
   // The description that will show up on the feature toggle form
@@ -41,7 +43,7 @@ function hook_og_features_registry() {
   // module/feature that is supplying this, so that any custom page
   // callbacks provided by this module/feature become disabled within
   // the group
-  $registry['my_feature'] = $feature;
+  $registry[$feature->id] = $feature;
   
   // Feature: my_second_feature
   $feature = new stdClass;
