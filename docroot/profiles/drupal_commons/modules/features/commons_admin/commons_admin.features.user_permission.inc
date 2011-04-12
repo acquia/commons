@@ -6,9 +6,9 @@
 function commons_admin_user_default_permissions() {
   $permissions = array();
 
-  // Exported permission: access administration menu
-  $permissions['access administration menu'] = array(
-    'name' => 'access administration menu',
+  // Exported permission: use admin toolbar
+  $permissions['use admin toolbar'] = array(
+    'name' => 'use admin toolbar',
     'roles' => array(
       '0' => 'site admin',
     ),
