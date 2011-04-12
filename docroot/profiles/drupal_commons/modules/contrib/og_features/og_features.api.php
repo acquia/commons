@@ -38,6 +38,9 @@ function hook_og_features_registry() {
     'pane' => array(
       'og_content_tracker-panel_pane_1',
     ),
+    'og link' => array(
+      'og_invite',  // The key of the link in the group details block
+    ),
   );
   // It's recommended that you key the feature with the name of the 
   // module/feature that is supplying this, so that any custom page

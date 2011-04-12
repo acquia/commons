@@ -28,6 +28,7 @@ hooks used to prevent access to certain components:
 
 * hook_og_links_alter() 
  - To remove disabled node types from the og details block
+ - To remove specified link keys
 * hook_context_load_alter() [
  - To remove contexts from disabled features
 * hook_views_exposed_form_alter() [
@@ -57,6 +58,18 @@ WHAT IS SUPPORTED
    the path for OG Features to disable within the group
  - OG Features will also automatically disable any custom page callbacks 
    implemented inside the feature itself
+* OG menu links
+ - Provide the key of the link inside the group details block
+ 
+
+ADMIN SETTINGS
+-------------------------------------------
+Navigate to the OG features admin page inside the OG admin menu. From there,
+you can set global settings for each OG feature, for each group type. The
+available options for each OG feature, for each node type, are "toggle"
+(group admins can toggle the feature), "always enabled", or "always 
+disabled". If the feature is not set to "toggle", it won't show on the
+group "Features" tab.
 
 
 WHAT IS MISSING

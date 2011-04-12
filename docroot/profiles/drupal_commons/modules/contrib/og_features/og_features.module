@@ -107,6 +107,11 @@ function og_features_og_links_alter(&$links) {
             unset($links[$key]);
           }
         }
+      
+        // Test to see if the link itself is disabled
+        if (og_features_component_is_disabled('og link', $key, $group)) {
+          unset($links[$key]);
+        }
       }
     }
   }
@@ -663,7 +668,7 @@ function og_features_component_is_disabled($type, $name, $group = NULL) {
 function og_features_in_feature($feature, $type, $name) {
   // Load the og features registry
   $registry = og_features_get_registry();
-  
+
   // See if the component is in the feature
   if (isset($registry[$feature]->components[$type])) {
     if (in_array($name, $registry[$feature]->components[$type])) {

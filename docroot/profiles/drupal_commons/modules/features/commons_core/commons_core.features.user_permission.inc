@@ -154,6 +154,14 @@ function commons_core_user_default_permissions() {
       '2' => 'site admin',
     ),
   );
+  
+  // Exported permission: administer og features
+  $permissions['administer og features'] = array(
+    'name' => 'administer og features',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
 
   // Exported permission: administer organic groups
   $permissions['administer organic groups'] = array(
