@@ -227,13 +227,13 @@ function commons_home_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Happening right now');
+  $handler->override_option('title', 'Happening right now in %site-name');
   $handler->override_option('empty', 'There are currently no featured groups');
   $handler->override_option('empty_format', '1');
   $handler->override_option('items_per_page', 3);
   $handler->override_option('distinct', 1);
   $handler = $view->new_display('block', 'Groups', 'block_1');
-  $handler->override_option('block_description', '');
+  $handler->override_option('block_description', 'Group showcase');
   $handler->override_option('block_caching', -1);
   $handler = $view->new_display('block', 'Group Content', 'block_2');
   $handler->override_option('fields', array(
