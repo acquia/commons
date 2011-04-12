@@ -83,6 +83,12 @@ function commons_event_context_default_contexts() {
           'region' => 'sidebar_last',
           'weight' => 1,
         ),
+        'views-group_block_events_past-block_1' => array(
+          'module' => 'views',
+          'delta' => 'group_block_events_past-block_1',
+          'region' => 'sidebar_last',
+          'weight' => 2,
+        ),
       ),
     ),
   );
