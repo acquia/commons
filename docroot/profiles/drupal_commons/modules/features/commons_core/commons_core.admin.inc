@@ -53,13 +53,6 @@ function commons_core_admin_settings() {
     '#description' => t('If checked, group names must be unique. This will not affect existing groups.'),
   );
   
-  $form['group_settings']['commons_hide_shoutbox_link'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Remove Shoutbox link'),
-    '#default_value' => variable_get('commons_hide_shoutbox_link', 1),
-    '#description' => t('If checked, the Shoutbox link will be removed from the Group details menu.'),
-  );
-  
   $form['group_settings']['commons_email_selective_group'] = array(
     '#type' => 'checkbox',
     '#title' => t('Alert users when added to a selective group'),

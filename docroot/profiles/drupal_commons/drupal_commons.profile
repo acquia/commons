@@ -133,6 +133,7 @@ function drupal_commons_profile_tasks(&$task, $url) {
         'commons_seo',
         'commons_invite',
         'commons_profile',
+        'commons_shoutbox',
       );
       variable_set('commons_selected_features', $features);
   
@@ -322,6 +323,12 @@ function drupal_commons_features_form($form_state, $url) {
     '#default_value' => 1,
     '#description' => st('Enable users to send invitations to join the site to external people.'),
   );
+  $form['misc']['feature-commons_shoutbox'] = array(
+    '#type' => 'checkbox',
+    '#title' => st('Shoutbox'),
+    '#default_value' => 1,
+    '#description' => st('Provide a simple, micro-style chat for groups.'),
+  );
   $form['misc']['feature-commons_group_aggregator'] = array(
     '#type' => 'checkbox',
     '#title' => st('Content aggregator'),
@@ -459,7 +466,7 @@ function drupal_commons_config_filter() {
   // Let community and content manager role use Full HTML
   db_query("UPDATE {filter_formats} SET roles = ',3,4,' WHERE name = 'Full HTML'");
     
-  // Create a "links-only" filter format that Shoutbox will use
+  // Create a "links-only" filter format
   $format = new stdClass;
   $format->format = 5;
   $format->name = st('Links only');
@@ -723,12 +730,6 @@ function drupal_commons_config_images() {
  * These should be set but not enforced by Strongarm
  */
 function drupal_commons_config_vars() {
-  // Some Shoutbox tweaks
-  variable_set('shoutbox_filter_format', 5);
-  variable_set('shoutbox_escape_html', 0);
-  variable_set('shoutbox_expire', 120);
-  variable_set('shoutbox_showamount_block', 8);
-  
   // Show large amount of tags on tag cloud page
   variable_set('tagadelic_page_amount', 500);
   

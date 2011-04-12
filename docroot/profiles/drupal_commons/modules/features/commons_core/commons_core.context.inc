@@ -123,12 +123,6 @@ function commons_core_context_default_contexts() {
           'region' => 'sidebar_last',
           'weight' => 2,
         ),
-        'shoutbox-0' => array(
-          'module' => 'shoutbox',
-          'delta' => 0,
-          'region' => 'sidebar_last',
-          'weight' => 3,
-        ),
         'views-group_node-block_1' => array(
           'module' => 'views',
           'delta' => 'group_node-block_1',

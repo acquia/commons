@@ -1,0 +1,47 @@
+<?php
+
+include_once('commons_shoutbox.features.inc');
+
+/**
+ * Implementation of hook_og_features_registry()
+ */
+function commons_shoutbox_og_features_registry() {
+  $registry = array();
+  
+  // Feature: commons_shoutbox
+  $feature = new stdClass;
+  $feature->id = 'commons_shoutbox';
+  $feature->name = t('Shoutbox');
+  $feature->description = t('Provide a micro-style chat for the group');
+  $feature->components = array(
+    'path' => array(
+      'shoutbox/group/%node',
+      'shoutbox/group/%node/js/view',
+    ),
+    'context' => array(
+      'group-home-shoutbox',
+    ),
+    'og link' => array(
+      'shoutbox',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+  
+  return $registry;
+}
+
+/**
+ * Implementation of hook_init()
+ */
+function commons_shoutbox_init() {
+  // Shoutbox doesn't do a very good job setting the group context
+  // early enough, so we have to force og_features to be aware
+  // of the group, if we're viewing a shoutbox group page
+  if (arg(0) == 'shoutbox' && arg(1) == 'group' && is_numeric(arg(2))) {
+    if ($group = node_load(arg(2))) {
+      if (og_is_group_type($group->type)) {
+        og_features_get_group_context($group, TRUE);
+      }
+    }
+  }
+}

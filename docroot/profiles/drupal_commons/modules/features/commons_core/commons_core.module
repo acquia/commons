@@ -83,11 +83,6 @@ function commons_core_menu_alter(&$items) {
  * Implementation of hook_og_links_alter()
  */
 function commons_core_og_links_alter(&$links, &$node) {
-  // Optionally hide the shoutbox link
-  if (variable_get('commons_hide_shoutbox_link', 1)) {
-    unset($links['shoutbox']);
-  }
-  
   // Change the Manager item to a link to our managers page
   if (isset($links['manager'])) {
     if ($group = commons_core_get_group_context()) {

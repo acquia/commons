@@ -187,22 +187,6 @@ function commons_core_user_default_permissions() {
     ),
   );
 
-  // Exported permission: administer shoutbox
-  $permissions['administer shoutbox'] = array(
-    'name' => 'administer shoutbox',
-    'roles' => array(
-      '0' => 'site admin',
-    ),
-  );
-
-  // Exported permission: administer shoutbox_group
-  $permissions['administer shoutbox_group'] = array(
-    'name' => 'administer shoutbox_group',
-    'roles' => array(
-      '0' => 'site admin',
-    ),
-  );
-
   // Exported permission: administer site configuration
   $permissions['administer site configuration'] = array(
     'name' => 'administer site configuration',
@@ -389,14 +373,6 @@ function commons_core_user_default_permissions() {
     ),
   );
 
-  // Exported permission: delete own shouts
-  $permissions['delete own shouts'] = array(
-    'name' => 'delete own shouts',
-    'roles' => array(
-      '0' => 'community manager',
-    ),
-  );
-
   // Exported permission: delete revisions
   $permissions['delete revisions'] = array(
     'name' => 'delete revisions',
@@ -524,14 +500,6 @@ function commons_core_user_default_permissions() {
     ),
   );
 
-  // Exported permission: edit own shouts
-  $permissions['edit own shouts'] = array(
-    'name' => 'edit own shouts',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
   // Exported permission: flush imagecache
   $permissions['flush imagecache'] = array(
     'name' => 'flush imagecache',
@@ -565,14 +533,6 @@ function commons_core_user_default_permissions() {
     ),
   );
 
-  // Exported permission: moderate shoutbox
-  $permissions['moderate shoutbox'] = array(
-    'name' => 'moderate shoutbox',
-    'roles' => array(
-      '0' => 'community manager',
-    ),
-  );
-
   // Exported permission: post comments
   $permissions['post comments'] = array(
     'name' => 'post comments',
@@ -584,30 +544,6 @@ function commons_core_user_default_permissions() {
   // Exported permission: post comments without approval
   $permissions['post comments without approval'] = array(
     'name' => 'post comments without approval',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: post shouts
-  $permissions['post shouts'] = array(
-    'name' => 'post shouts',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: post shouts in all groups
-  $permissions['post shouts in all groups'] = array(
-    'name' => 'post shouts in all groups',
-    'roles' => array(
-      '0' => 'community manager',
-    ),
-  );
-
-  // Exported permission: post shouts without approval
-  $permissions['post shouts without approval'] = array(
-    'name' => 'post shouts without approval',
     'roles' => array(
       '0' => 'authenticated user',
     ),
@@ -832,15 +768,6 @@ function commons_core_user_default_permissions() {
     'name' => 'view revisions',
     'roles' => array(
       '0' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: view shouts
-  $permissions['view shouts'] = array(
-    'name' => 'view shouts',
-    'roles' => array(
-      '0' => 'anonymous user',
-      '1' => 'authenticated user',
     ),
   );
 
