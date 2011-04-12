@@ -171,7 +171,7 @@ function shoutbox_group_db_rewrite_sql($query, $table, $primary, $contexts){
 function shoutbox_group_og_links_alter(&$links) {
   if (user_access('view shouts')) {
     if ($group = og_get_group_context()) {
-      $links['shoutbox'] = l(t('Shout box'), "shoutbox/group/{$node->nid}");
+      $links['shoutbox'] = l(t('Shout box'), "shoutbox/group/{$group->nid}");
     }
   }
 }
