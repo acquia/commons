@@ -162,23 +162,29 @@ function commons_core_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
+        'commons_core-create_group' => array(
+          'module' => 'commons_core',
+          'delta' => 'create_group',
+          'region' => 'sidebar_last',
+          'weight' => 0,
+        ),
         'views-groups_my_groups-block_1' => array(
           'module' => 'views',
           'delta' => 'groups_my_groups-block_1',
           'region' => 'sidebar_last',
-          'weight' => 0,
+          'weight' => 1,
         ),
         'views-groups_most_active-block_1' => array(
           'module' => 'views',
           'delta' => 'groups_most_active-block_1',
           'region' => 'sidebar_last',
-          'weight' => 1,
+          'weight' => 2,
         ),
         'views-groups_newest_groups-block_1' => array(
           'module' => 'views',
           'delta' => 'groups_newest_groups-block_1',
           'region' => 'sidebar_last',
-          'weight' => 2,
+          'weight' => 3,
         ),
         'views-groups_featured_groups-block_1' => array(
           'module' => 'views',

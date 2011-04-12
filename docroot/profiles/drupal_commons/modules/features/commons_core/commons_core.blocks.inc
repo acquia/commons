@@ -42,6 +42,10 @@ function _commons_core_block_list() {
     'info' => t('Group members and admins'),
     'cache' => BLOCK_CACHE_GLOBAL,
   );
+  $blocks['create_group'] = array(
+    'info' => t('Create a group'),
+    'cache' => BLOCK_CACHE_GLOBAL,
+  );
   return $blocks;
 }
 
@@ -317,4 +321,32 @@ function _commons_core_group_members_block() {
   }
   
   return NULL;
+}
+
+/**
+ * Display the "create a group" block
+ */
+function _commons_core_create_group_block() {
+  // Check permissions
+  if (user_access('create group content')) {
+    return array(
+      'subject' => '',
+      'content' => drupal_get_form('commons_core_create_group_form'),
+    );
+  }
+
+  return NULL;
+}
+
+/**
+ * Provide the form for the "create a group" block
+ */
+function commons_core_create_group_form() {
+  $form = array();
+  $form['#action'] = url('node/add/group');
+  $form['create'] = array(
+    '#type' => 'submit',
+    '#value' => t('Create a group'),
+  );
+  return $form;
 }
