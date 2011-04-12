@@ -1492,15 +1492,15 @@ function commons_event_views_default_views() {
         'max_length' => '',
         'word_boundary' => 1,
         'ellipsis' => 1,
-        'strip_tags' => 0,
         'html' => 0,
+        'strip_tags' => 0,
       ),
       'empty' => '',
       'hide_empty' => 0,
       'empty_zero' => 0,
       'link_to_node' => 0,
       'label_type' => 'none',
-      'format' => 'medium',
+      'format' => 'month',
       'multiple' => array(
         'multiple_number' => '',
         'multiple_from' => '',
@@ -1511,10 +1511,108 @@ function commons_event_views_default_views() {
         'show_repeat_rule' => '',
       ),
       'fromto' => array(
+        'fromto' => 'value',
+      ),
+      'exclude' => 1,
+      'id' => 'field_date_value',
+      'table' => 'node_data_field_date',
+      'field' => 'field_date_value',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'field_date_value_1' => array(
+      'label' => '',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'link_to_node' => 0,
+      'label_type' => 'none',
+      'format' => 'day',
+      'multiple' => array(
+        'multiple_number' => '',
+        'multiple_from' => '',
+        'multiple_to' => '',
+        'group' => '',
+      ),
+      'repeat' => array(
+        'show_repeat_rule' => '',
+      ),
+      'fromto' => array(
         'fromto' => 'both',
       ),
+      'exclude' => 1,
+      'id' => 'field_date_value_1',
+      'table' => 'node_data_field_date',
+      'field' => 'field_date_value',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'field_date_value_2' => array(
+      'label' => '',
+      'alter' => array(
+        'alter_text' => 1,
+        'text' => '<div class="dateblock">
+    <span class="month">[field_date_value]</span>
+    <span class="day">[field_date_value_1]</span>
+    <span class="year">[field_date_value_2]</span>
+  </div>',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'link_to_node' => 0,
+      'label_type' => 'none',
+      'format' => 'year',
+      'multiple' => array(
+        'multiple_number' => '',
+        'multiple_from' => '',
+        'multiple_to' => '',
+        'group' => '',
+      ),
+      'repeat' => array(
+        'show_repeat_rule' => '',
+      ),
+      'fromto' => array(
+        'fromto' => 'value',
+      ),
       'exclude' => 0,
-      'id' => 'field_date_value',
+      'id' => 'field_date_value_2',
       'table' => 'node_data_field_date',
       'field' => 'field_date_value',
       'override' => array(
@@ -2652,7 +2750,7 @@ function commons_event_views_default_views() {
       ),
       'relationship' => 'none',
     ),
-    'field_date_value' => array(
+    'field_date_value_1' => array(
       'label' => '',
       'alter' => array(
         'alter_text' => 0,
@@ -2677,21 +2775,119 @@ function commons_event_views_default_views() {
       'empty_zero' => 0,
       'link_to_node' => 0,
       'label_type' => 'none',
-      'format' => 'medium',
+      'format' => 'month',
       'multiple' => array(
         'multiple_number' => '',
         'multiple_from' => '',
         'multiple_to' => '',
-        'group' => TRUE,
+        'group' => '',
       ),
       'repeat' => array(
         'show_repeat_rule' => '',
       ),
       'fromto' => array(
-        'fromto' => 'value',
+        'fromto' => 'both',
+      ),
+      'exclude' => 1,
+      'id' => 'field_date_value_1',
+      'table' => 'node_data_field_date',
+      'field' => 'field_date_value',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'field_date_value_2' => array(
+      'label' => '',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'link_to_node' => 0,
+      'label_type' => 'none',
+      'format' => 'day',
+      'multiple' => array(
+        'multiple_number' => '',
+        'multiple_from' => '',
+        'multiple_to' => '',
+        'group' => '',
+      ),
+      'repeat' => array(
+        'show_repeat_rule' => '',
+      ),
+      'fromto' => array(
+        'fromto' => 'both',
+      ),
+      'exclude' => 1,
+      'id' => 'field_date_value_2',
+      'table' => 'node_data_field_date',
+      'field' => 'field_date_value',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'field_date_value_3' => array(
+      'label' => '',
+      'alter' => array(
+        'alter_text' => 1,
+        'text' => '<div class="dateblock">
+    <span class="month">[field_date_value_1]</span>
+    <span class="day">[field_date_value_2]</span>
+    <span class="year">[field_date_value_3]</span>
+  </div>',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'link_to_node' => 0,
+      'label_type' => 'none',
+      'format' => 'year',
+      'multiple' => array(
+        'multiple_number' => '',
+        'multiple_from' => '',
+        'multiple_to' => '',
+        'group' => '',
+      ),
+      'repeat' => array(
+        'show_repeat_rule' => '',
+      ),
+      'fromto' => array(
+        'fromto' => 'both',
       ),
       'exclude' => 0,
-      'id' => 'field_date_value',
+      'id' => 'field_date_value_3',
       'table' => 'node_data_field_date',
       'field' => 'field_date_value',
       'override' => array(
@@ -2876,7 +3072,7 @@ function commons_event_views_default_views() {
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
   $handler->override_option('items_per_page', 3);
-  $handler->override_option('use_pager', 'mini');
+  $handler->override_option('use_pager', '1');
   $handler->override_option('pager_element', 6);
   $handler->override_option('distinct', 1);
   $handler->override_option('style_plugin', 'list');
@@ -3093,7 +3289,7 @@ function commons_event_views_default_views() {
     ),
   ));
   $handler->override_option('title', 'Featured events');
-  $handler->override_option('block_description', 'Featured Events');
+  $handler->override_option('block_description', 'Featured events');
   $handler->override_option('block_caching', -1);
 
   $views[$view->name] = $view;

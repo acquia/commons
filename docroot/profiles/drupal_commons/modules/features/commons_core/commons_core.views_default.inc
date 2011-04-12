@@ -192,11 +192,12 @@ function commons_core_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('items_per_page', 4);
+  $handler->override_option('items_per_page', 6);
   $handler->override_option('distinct', 1);
   $handler->override_option('style_plugin', 'grid');
   $handler->override_option('style_options', array(
-    'columns' => '4',
+    'grouping' => '',
+    'columns' => '6',
     'alignment' => 'horizontal',
     'fill_single_line' => 1,
   ));
@@ -259,7 +260,7 @@ function commons_core_views_default_views() {
       'relationship' => 'none',
     ),
   ));
-  $handler->override_option('items_per_page', 12);
+  $handler->override_option('items_per_page', 18);
   $handler->override_option('block_description', '');
   $handler->override_option('block_caching', -1);
 
@@ -1031,15 +1032,18 @@ function commons_core_views_default_views() {
         'strip_tags' => 0,
       ),
       'empty' => '',
-      'hide_empty' => 0,
+      'hide_empty' => 1,
       'empty_zero' => 0,
       'type' => 'separator',
       'separator' => ', ',
       'link_to_taxonomy' => 1,
       'limit' => 0,
       'vids' => array(
+        '5' => 0,
         '2' => 0,
         '3' => 0,
+        '6' => 0,
+        '4' => 0,
       ),
       'exclude' => 1,
       'id' => 'tid',
@@ -1055,8 +1059,8 @@ function commons_core_views_default_views() {
       'alter' => array(
         'alter_text' => 1,
         'text' => '<div class="title">[title]</div>
-  <div class="tags">Tags: [tid] </div>
-  <div class="description">[description] </div>',
+    <div class="tags">Tags: [tid] </div>
+    <div class="description">[description] </div>',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
@@ -1524,7 +1528,7 @@ function commons_core_views_default_views() {
       'hide_empty' => 0,
       'empty_zero' => 0,
       'link_to_node' => 1,
-      'exclude' => 0,
+      'exclude' => 1,
       'id' => 'title',
       'table' => 'node',
       'field' => 'title',
@@ -1536,7 +1540,7 @@ function commons_core_views_default_views() {
     'members_count' => array(
       'label' => '',
       'alter' => array(
-        'alter_text' => 1,
+        'alter_text' => 0,
         'text' => '[members_count] member(s)',
         'make_link' => 0,
         'path' => '',
@@ -1562,7 +1566,7 @@ function commons_core_views_default_views() {
       'separator' => ',',
       'prefix' => '',
       'suffix' => '',
-      'exclude' => 0,
+      'exclude' => 1,
       'id' => 'members_count',
       'table' => 'og_statistics',
       'field' => 'members_count',
@@ -1572,7 +1576,9 @@ function commons_core_views_default_views() {
       'label' => '',
       'alter' => array(
         'alter_text' => 1,
-        'text' => '[posts_count] post(s)',
+        'text' => '<div class="title">[title] </div>
+  [members_count] member(s)<br />
+  [posts_count] post(s)',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
@@ -1795,7 +1801,7 @@ function commons_core_views_default_views() {
       'hide_empty' => 0,
       'empty_zero' => 0,
       'link_to_node' => 1,
-      'exclude' => 0,
+      'exclude' => 1,
       'id' => 'title',
       'table' => 'node',
       'field' => 'title',
@@ -1808,7 +1814,8 @@ function commons_core_views_default_views() {
       'label' => '',
       'alter' => array(
         'alter_text' => 1,
-        'text' => '[post_count_new] post(s)',
+        'text' => '<div class="title">[title] </div>
+  [post_count_new] post(s)',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
@@ -1825,7 +1832,7 @@ function commons_core_views_default_views() {
         'strip_tags' => 0,
       ),
       'empty' => '',
-      'hide_empty' => 1,
+      'hide_empty' => 0,
       'empty_zero' => 0,
       'set_precision' => FALSE,
       'precision' => 0,
@@ -2009,7 +2016,7 @@ function commons_core_views_default_views() {
       'hide_empty' => 0,
       'empty_zero' => 0,
       'link_to_node' => 1,
-      'exclude' => 0,
+      'exclude' => 1,
       'id' => 'title',
       'table' => 'node',
       'field' => 'title',
@@ -2021,8 +2028,9 @@ function commons_core_views_default_views() {
     'description' => array(
       'label' => '',
       'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
+        'alter_text' => 1,
+        'text' => '<div class="title">[title]</div>
+  [description]',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
@@ -2039,7 +2047,7 @@ function commons_core_views_default_views() {
         'strip_tags' => 0,
       ),
       'empty' => '',
-      'hide_empty' => 1,
+      'hide_empty' => 0,
       'empty_zero' => 0,
       'exclude' => 0,
       'id' => 'description',

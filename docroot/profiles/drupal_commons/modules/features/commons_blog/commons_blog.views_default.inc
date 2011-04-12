@@ -990,7 +990,7 @@ function commons_blog_views_default_views() {
       'hide_empty' => 0,
       'empty_zero' => 0,
       'link_to_node' => 1,
-      'exclude' => 0,
+      'exclude' => 1,
       'id' => 'title',
       'table' => 'node',
       'field' => 'title',
@@ -1016,15 +1016,15 @@ function commons_blog_views_default_views() {
         'max_length' => '',
         'word_boundary' => 1,
         'ellipsis' => 1,
-        'strip_tags' => 0,
         'html' => 0,
+        'strip_tags' => 0,
       ),
       'empty' => '',
       'hide_empty' => 0,
       'empty_zero' => 0,
       'link_to_node' => 0,
       'comments' => 1,
-      'exclude' => 0,
+      'exclude' => 1,
       'id' => 'timestamp',
       'table' => 'history_user',
       'field' => 'timestamp',
@@ -1056,9 +1056,9 @@ function commons_blog_views_default_views() {
       'empty' => '',
       'hide_empty' => 0,
       'empty_zero' => 0,
-      'date_format' => 'small',
-      'custom_date_format' => '',
-      'exclude' => 0,
+      'date_format' => 'custom',
+      'custom_date_format' => 'd.m.Y',
+      'exclude' => 1,
       'id' => 'created',
       'table' => 'node',
       'field' => 'created',
@@ -1093,7 +1093,7 @@ function commons_blog_views_default_views() {
       'link_to_user' => 1,
       'overwrite_anonymous' => 0,
       'anonymous_text' => '',
-      'exclude' => 0,
+      'exclude' => 1,
       'id' => 'name',
       'table' => 'users',
       'field' => 'name',
@@ -1106,7 +1106,12 @@ function commons_blog_views_default_views() {
       'label' => '',
       'alter' => array(
         'alter_text' => 1,
-        'text' => '[comment_count] comment(s)',
+        'text' => '<div class="title">[title]</div>
+  <div class="date">[timestamp] </div>
+  <div class="small">
+  <div class="created">Posted: [created] by [name] </div>
+  <div class="comments">[comment_count] comment(s)</div>
+  </div>',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
@@ -1286,7 +1291,7 @@ function commons_blog_views_default_views() {
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
   $handler->override_option('items_per_page', 2);
-  $handler->override_option('use_pager', 'mini');
+  $handler->override_option('use_pager', '1');
   $handler->override_option('pager_element', 10);
   $handler->override_option('distinct', 1);
   $handler->override_option('style_plugin', 'list');

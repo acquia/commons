@@ -462,8 +462,8 @@ function commons_core_imagecache_default_presets() {
             ),
             'under' => 1,
             'exact' => array(
-              'width' => '28',
-              'height' => '28',
+              'width' => '30',
+              'height' => '30',
               'xpos' => 'left',
               'ypos' => 'center',
             ),
@@ -480,8 +480,8 @@ function commons_core_imagecache_default_presets() {
           'module' => 'imagecache',
           'action' => 'imagecache_scale_and_crop',
           'data' => array(
-            'width' => '28',
-            'height' => '28',
+            'width' => '30',
+            'height' => '30',
           ),
         ),
       ),
