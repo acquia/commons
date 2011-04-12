@@ -5094,7 +5094,7 @@ function commons_core_views_default_views() {
     'vocab' => '',
   ));
   $handler = $view->new_display('block', 'Block', 'block_1');
-  $handler->override_option('block_description', 'Popular Tags');
+  $handler->override_option('block_description', 'Popular tags');
   $handler->override_option('block_caching', -1);
 
   $views[$view->name] = $view;
