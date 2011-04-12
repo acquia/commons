@@ -5597,7 +5597,6 @@ function commons_core_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Browse users');
-  $handler->override_option('use_ajax', TRUE);
   $handler->override_option('items_per_page', 16);
   $handler->override_option('use_pager', '1');
   $handler->override_option('distinct', 1);
@@ -6012,7 +6011,7 @@ function commons_core_views_default_views() {
     'hide_empty' => 0,
   ));
   $handler = $view->new_display('block', 'Block', 'block_1');
-  $handler->override_option('block_description', 'Who\'s online? (Custom)');
+  $handler->override_option('block_description', 'Online users');
   $handler->override_option('block_caching', -1);
 
   $views[$view->name] = $view;
