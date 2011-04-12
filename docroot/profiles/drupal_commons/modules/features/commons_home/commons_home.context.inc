@@ -27,9 +27,9 @@ function commons_home_context_default_contexts() {
           'region' => 'sidebar_last',
           'weight' => 1,
         ),
-        'views-6ffa9e747a3ede64ea84b6556652920e' => array(
+        'views-groups_most_active-block_1' => array(
           'module' => 'views',
-          'delta' => '6ffa9e747a3ede64ea84b6556652920e',
+          'delta' => 'groups_most_active-block_1',
           'region' => 'sidebar_last',
           'weight' => 2,
         ),
