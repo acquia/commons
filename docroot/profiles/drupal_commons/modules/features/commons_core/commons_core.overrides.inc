@@ -6,6 +6,26 @@
  */
  
 /**
+ * Override of node_page_view() on /node/%node
+ * 
+ * We need this in order to handle group home pages
+ */
+function commons_core_node_page_view($node) {
+  // If this node is a group
+  if (og_is_group_type($node->type)) {
+    // Make context aware of the node view since hook_nodeapi() won't
+    // be triggered here
+    context_node_condition($node, 'view');
+    
+    // Return nothing, allowing context to handle the content
+    return '';
+  }
+  
+  // Pass the node to the normal callback
+  return node_page_view($node);
+}
+ 
+/**
  * Minor override and alteration of comment_edit()
  * 
  * Allows group admins to edit comments in their group

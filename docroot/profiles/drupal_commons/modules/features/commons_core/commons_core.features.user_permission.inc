@@ -64,14 +64,6 @@ function commons_core_user_default_permissions() {
     ),
   );
 
-  // Exported permission: administer advanced pane settings
-  $permissions['administer advanced pane settings'] = array(
-    'name' => 'administer advanced pane settings',
-    'roles' => array(
-      '0' => 'site admin',
-    ),
-  );
-
   // Exported permission: administer blocks
   $permissions['administer blocks'] = array(
     'name' => 'administer blocks',
@@ -166,38 +158,6 @@ function commons_core_user_default_permissions() {
   // Exported permission: administer organic groups
   $permissions['administer organic groups'] = array(
     'name' => 'administer organic groups',
-    'roles' => array(
-      '0' => 'site admin',
-    ),
-  );
-
-  // Exported permission: administer page manager
-  $permissions['administer page manager'] = array(
-    'name' => 'administer page manager',
-    'roles' => array(
-      '0' => 'site admin',
-    ),
-  );
-
-  // Exported permission: administer pane access
-  $permissions['administer pane access'] = array(
-    'name' => 'administer pane access',
-    'roles' => array(
-      '0' => 'site admin',
-    ),
-  );
-
-  // Exported permission: administer pane visibility
-  $permissions['administer pane visibility'] = array(
-    'name' => 'administer pane visibility',
-    'roles' => array(
-      '0' => 'site admin',
-    ),
-  );
-
-  // Exported permission: administer panels layouts
-  $permissions['administer panels layouts'] = array(
-    'name' => 'administer panels layouts',
     'roles' => array(
       '0' => 'site admin',
     ),

@@ -98,7 +98,7 @@ function commons_core_context_default_contexts() {
         'group' => 'group',
       ),
       'options' => array(
-        'node_form' => '1',
+        'node_form' => '0',
       ),
     ),
   );
@@ -129,11 +129,17 @@ function commons_core_context_default_contexts() {
           'region' => 'sidebar_last',
           'weight' => 3,
         ),
+        'views-group_node-block_1' => array(
+          'module' => 'views',
+          'delta' => 'group_node-block_1',
+          'region' => 'content',
+          'weight' => 0,
+        ),
         'commons_core-group_activity' => array(
           'module' => 'commons_core',
           'delta' => 'group_activity',
           'region' => 'content',
-          'weight' => 0,
+          'weight' => 1,
         ),
       ),
     ),
