@@ -28,9 +28,6 @@ function drupal_commons_profile_modules() {
     // CTools
     'ctools', 
     
-    // Panels
-    'page_manager', 'panels', 
-    
     // Context
     'context',
     
