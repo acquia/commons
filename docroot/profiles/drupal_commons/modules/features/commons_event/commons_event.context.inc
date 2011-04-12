@@ -24,13 +24,13 @@ function commons_event_context_default_contexts() {
         'views-event_latest-block_1' => array(
           'module' => 'views',
           'delta' => 'event_latest-block_1',
-          'region' => 'sidebar_first',
+          'region' => 'sidebar_last',
           'weight' => 0,
         ),
         'views-event_latest_comments-block_1' => array(
           'module' => 'views',
           'delta' => 'event_latest_comments-block_1',
-          'region' => 'sidebar_first',
+          'region' => 'sidebar_last',
           'weight' => 1,
         ),
       ),
