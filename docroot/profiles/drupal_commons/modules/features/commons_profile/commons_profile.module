@@ -243,6 +243,7 @@ function _commons_profile_image_action_links_block() {
   }
   
   // Fetch the profile image
+  $account->imagecache_preset = variable_get('user_picture_imagecache_profiles', '');
   $picture = theme('user_picture', $account);
   
   // Generate a list of action links
