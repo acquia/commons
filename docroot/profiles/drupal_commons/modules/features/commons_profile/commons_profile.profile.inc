@@ -82,7 +82,7 @@ function commons_profile_profile_fields() {
   $field = new stdClass;
   $field->title = t('Twitter');
   $field->name = 'profile_twitter_link';
-  $field->explanation = t('Link to your Twitter account.');
+  $field->explanation = t('Link to your Twitter account, e.g. http://twitter.com/your-username.');
   $field->category = t('Personal information');
   $field->type = 'url';
   $field->weight = -5;
@@ -96,7 +96,7 @@ function commons_profile_profile_fields() {
   $field = new stdClass;
   $field->title = t('Facebook');
   $field->name = 'profile_facebook_link';
-  $field->explanation = t('Link to your Facebook account.');
+  $field->explanation = t('Link to your Facebook account, e.g. http://facebook.com/your-username.');
   $field->category = t('Personal information');
   $field->type = 'url';
   $field->weight = -4;
@@ -110,7 +110,7 @@ function commons_profile_profile_fields() {
   $field = new stdClass;
   $field->title = t('LinkedIn');
   $field->name = 'profile_linkedin_link';
-  $field->explanation = t('Link to your LinkedIn account.');
+  $field->explanation = t('Link to your LinkedIn account, e.g. http://linkedin.com/in/your-username.');
   $field->category = t('Personal information');
   $field->type = 'url';
   $field->weight = -3;
