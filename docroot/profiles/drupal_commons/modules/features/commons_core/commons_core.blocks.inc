@@ -126,7 +126,7 @@ function _commons_core_join_learn_block() {
   
   // Build the block
   $block = array(
-    'subject' => '',
+    'subject' => t('Join & learn more'),
     'content' => drupal_get_form('commons_core_join_form'), 
   );
   
