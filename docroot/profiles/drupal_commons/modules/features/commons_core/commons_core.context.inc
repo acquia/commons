@@ -62,7 +62,7 @@ function commons_core_context_default_contexts() {
         'group' => 'group',
       ),
       'options' => array(
-        'node_form' => 1,
+        'node_form' => 0,
       ),
     ),
   );
