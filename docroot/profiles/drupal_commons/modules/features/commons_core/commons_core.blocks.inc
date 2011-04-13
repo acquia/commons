@@ -221,7 +221,7 @@ function _commons_core_group_create_content_block() {
 function commons_core_group_create_content_block_form(&$form_state) {
   $form = array();
   $types = array();
-  
+
   // If we're in a group context, the content types will be 
   // gathered based on the group
   if ($group = commons_core_get_group_context()) {
@@ -257,7 +257,7 @@ function commons_core_group_create_content_block_form(&$form_state) {
       }
     }
   }
-  
+
   // Make sure we have at least one type
   if (empty($types)) {
     return NULL;

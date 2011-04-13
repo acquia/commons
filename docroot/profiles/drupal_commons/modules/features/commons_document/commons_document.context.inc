@@ -21,11 +21,17 @@ function commons_document_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
+        'commons_core-group_create_content' => array(
+          'module' => 'commons_core',
+          'delta' => 'group_create_content',
+          'region' => 'sidebar_last',
+          'weight' => 0,
+        ),
         'views-caad6a250d3875f477bedd51f96ab857' => array(
           'module' => 'views',
           'delta' => 'caad6a250d3875f477bedd51f96ab857',
           'region' => 'sidebar_last',
-          'weight' => 0,
+          'weight' => 1,
         ),
       ),
     ),

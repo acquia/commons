@@ -21,17 +21,23 @@ function commons_event_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
+        'commons_core-group_create_content' => array(
+          'module' => 'commons_core',
+          'delta' => 'group_create_content',
+          'region' => 'sidebar_last',
+          'weight' => 0,
+        ),
         'views-event_latest-block_1' => array(
           'module' => 'views',
           'delta' => 'event_latest-block_1',
           'region' => 'sidebar_last',
-          'weight' => 0,
+          'weight' => 1,
         ),
         'views-event_latest_comments-block_1' => array(
           'module' => 'views',
           'delta' => 'event_latest_comments-block_1',
           'region' => 'sidebar_last',
-          'weight' => 1,
+          'weight' => 2,
         ),
       ),
     ),

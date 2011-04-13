@@ -21,11 +21,17 @@ function commons_discussion_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
+        'commons_core-group_create_content' => array(
+          'module' => 'commons_core',
+          'delta' => 'group_create_content',
+          'region' => 'sidebar_last',
+          'weight' => 0,
+        ),
         'views-f24f764575fea8b17a65697fa4ac9a8d' => array(
           'module' => 'views',
           'delta' => 'f24f764575fea8b17a65697fa4ac9a8d',
           'region' => 'sidebar_last',
-          'weight' => 0,
+          'weight' => 1,
         ),
       ),
     ),
