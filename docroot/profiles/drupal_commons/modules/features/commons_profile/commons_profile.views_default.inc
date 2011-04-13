@@ -1318,7 +1318,7 @@ function commons_profile_views_default_views() {
       'hide_empty' => 0,
       'empty_zero' => 0,
       'link_to_node' => 1,
-      'exclude' => 1,
+      'exclude' => 0,
       'id' => 'title',
       'table' => 'node',
       'field' => 'title',
@@ -1331,8 +1331,7 @@ function commons_profile_views_default_views() {
       'label' => '',
       'alter' => array(
         'alter_text' => 1,
-        'text' => '[title]<br />
-  [post_count_new] post(s)',
+        'text' => '[post_count_new] post(s)',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
@@ -1488,7 +1487,6 @@ function commons_profile_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'User\'s groups');
-  $handler->override_option('empty', 'You haven\'t joined any groups yet');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
   $handler->override_option('items_per_page', 5);
@@ -1647,7 +1645,6 @@ function commons_profile_views_default_views() {
       ),
     ),
   ));
-  $handler->override_option('empty', 'The user hasn\'t joined any groups yet');
   $handler->override_option('block_description', 'User\'s groups');
   $handler->override_option('block_caching', -1);
 

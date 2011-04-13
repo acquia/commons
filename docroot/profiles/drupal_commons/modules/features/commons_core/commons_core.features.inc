@@ -508,8 +508,8 @@ function commons_core_imagecache_default_presets() {
           'module' => 'imagecache',
           'action' => 'imagecache_scale_and_crop',
           'data' => array(
-            'width' => '150',
-            'height' => '150',
+            'width' => '186',
+            'height' => '186',
           ),
         ),
       ),

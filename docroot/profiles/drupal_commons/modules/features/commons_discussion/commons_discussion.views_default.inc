@@ -129,10 +129,10 @@ function commons_discussion_views_default_views() {
       'relationship' => 'none',
     ),
     'name' => array(
-      'label' => 'by',
+      'label' => '',
       'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
+        'alter_text' => 1,
+        'text' => 'by [name]',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
@@ -1034,10 +1034,10 @@ function commons_discussion_views_default_views() {
       'relationship' => 'none',
     ),
     'name' => array(
-      'label' => 'by',
+      'label' => '',
       'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
+        'alter_text' => 1,
+        'text' => 'by [name]',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
@@ -1413,10 +1413,10 @@ function commons_discussion_views_default_views() {
       'relationship' => 'none',
     ),
     'name' => array(
-      'label' => 'by',
+      'label' => '',
       'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
+        'alter_text' => 1,
+        'text' => 'by [name]',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
@@ -1642,6 +1642,7 @@ function commons_discussion_views_default_views() {
   $handler->override_option('row_options', array(
     'inline' => array(
       'created' => 'created',
+      'name' => 'name',
     ),
     'separator' => '',
     'hide_empty' => 0,

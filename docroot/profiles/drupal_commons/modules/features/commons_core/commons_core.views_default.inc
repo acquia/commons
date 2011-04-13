@@ -320,7 +320,7 @@ function commons_core_views_default_views() {
       'label' => '',
       'alter' => array(
         'alter_text' => 0,
-        'text' => '',
+        'text' => '[subscribe]',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
@@ -337,13 +337,16 @@ function commons_core_views_default_views() {
         'strip_tags' => 0,
       ),
       'empty' => '',
-      'hide_empty' => 0,
+      'hide_empty' => 1,
       'empty_zero' => 0,
       'exclude' => 0,
       'id' => 'subscribe',
       'table' => 'og',
       'field' => 'subscribe',
       'relationship' => 'none',
+      'override' => array(
+        'button' => 'Override',
+      ),
     ),
     'body' => array(
       'label' => '',
@@ -1528,7 +1531,7 @@ function commons_core_views_default_views() {
       'hide_empty' => 0,
       'empty_zero' => 0,
       'link_to_node' => 1,
-      'exclude' => 1,
+      'exclude' => 0,
       'id' => 'title',
       'table' => 'node',
       'field' => 'title',
@@ -1540,7 +1543,7 @@ function commons_core_views_default_views() {
     'members_count' => array(
       'label' => '',
       'alter' => array(
-        'alter_text' => 0,
+        'alter_text' => 1,
         'text' => '[members_count] member(s)',
         'make_link' => 0,
         'path' => '',
@@ -1566,7 +1569,7 @@ function commons_core_views_default_views() {
       'separator' => ',',
       'prefix' => '',
       'suffix' => '',
-      'exclude' => 1,
+      'exclude' => 0,
       'id' => 'members_count',
       'table' => 'og_statistics',
       'field' => 'members_count',
@@ -1576,9 +1579,7 @@ function commons_core_views_default_views() {
       'label' => '',
       'alter' => array(
         'alter_text' => 1,
-        'text' => '<div class="title">[title] </div>
-  [members_count] member(s)<br />
-  [posts_count] post(s)',
+        'text' => '[posts_count] post(s)',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
@@ -1801,7 +1802,7 @@ function commons_core_views_default_views() {
       'hide_empty' => 0,
       'empty_zero' => 0,
       'link_to_node' => 1,
-      'exclude' => 1,
+      'exclude' => 0,
       'id' => 'title',
       'table' => 'node',
       'field' => 'title',
@@ -1814,8 +1815,7 @@ function commons_core_views_default_views() {
       'label' => '',
       'alter' => array(
         'alter_text' => 1,
-        'text' => '<div class="title">[title] </div>
-  [post_count_new] post(s)',
+        'text' => '[post_count_new] post(s)',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
@@ -2016,7 +2016,7 @@ function commons_core_views_default_views() {
       'hide_empty' => 0,
       'empty_zero' => 0,
       'link_to_node' => 1,
-      'exclude' => 1,
+      'exclude' => 0,
       'id' => 'title',
       'table' => 'node',
       'field' => 'title',
@@ -2028,9 +2028,8 @@ function commons_core_views_default_views() {
     'description' => array(
       'label' => '',
       'alter' => array(
-        'alter_text' => 1,
-        'text' => '<div class="title">[title]</div>
-  [description]',
+        'alter_text' => 0,
+        'text' => '[description]',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
