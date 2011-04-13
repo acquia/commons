@@ -1488,6 +1488,7 @@ function commons_profile_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'User\'s groups');
+  $handler->override_option('empty', 'You haven\'t joined any groups yet');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
   $handler->override_option('items_per_page', 5);
@@ -1646,6 +1647,7 @@ function commons_profile_views_default_views() {
       ),
     ),
   ));
+  $handler->override_option('empty', 'The user hasn\'t joined any groups yet');
   $handler->override_option('block_description', 'User\'s groups');
   $handler->override_option('block_caching', -1);
 
