@@ -932,7 +932,7 @@ function commons_core_views_default_views() {
   $view = new view;
   $view->name = 'groups_main_listing';
   $view->description = 'The main listing of all groups';
-  $view->tag = 'og';
+  $view->tag = '';
   $view->view_php = '';
   $view->base_table = 'node';
   $view->is_cacheable = FALSE;
@@ -1939,6 +1939,366 @@ function commons_core_views_default_views() {
 
   $views[$view->name] = $view;
 
+  // Exported view: groups_my_groups_listing
+  $view = new view;
+  $view->name = 'groups_my_groups_listing';
+  $view->description = 'The page listing of my groups';
+  $view->tag = '';
+  $view->view_php = '';
+  $view->base_table = 'node';
+  $view->is_cacheable = FALSE;
+  $view->api_version = 2;
+  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+  $handler = $view->new_display('default', 'Defaults', 'default');
+  $handler->override_option('fields', array(
+    'field_group_image_fid' => array(
+      'label' => '',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'link_to_node' => 0,
+      'label_type' => 'none',
+      'format' => 'group_images_medium_linked',
+      'multiple' => array(
+        'group' => TRUE,
+        'multiple_number' => '',
+        'multiple_from' => '',
+        'multiple_reversed' => FALSE,
+      ),
+      'exclude' => 0,
+      'id' => 'field_group_image_fid',
+      'table' => 'node_data_field_group_image',
+      'field' => 'field_group_image_fid',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'title' => array(
+      'label' => '',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'link_to_node' => 1,
+      'exclude' => 1,
+      'id' => 'title',
+      'table' => 'node',
+      'field' => 'title',
+      'relationship' => 'none',
+      'override' => array(
+        'button' => 'Override',
+      ),
+    ),
+    'tid' => array(
+      'label' => 'Tags',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 1,
+      'empty_zero' => 0,
+      'type' => 'separator',
+      'separator' => ', ',
+      'link_to_taxonomy' => 1,
+      'limit' => 0,
+      'vids' => array(
+        '5' => 0,
+        '2' => 0,
+        '3' => 0,
+        '6' => 0,
+        '4' => 0,
+      ),
+      'exclude' => 1,
+      'id' => 'tid',
+      'table' => 'term_node',
+      'field' => 'tid',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'description' => array(
+      'label' => '',
+      'alter' => array(
+        'alter_text' => 1,
+        'text' => '<div class="title">[title]</div>
+    <div class="tags">Tags: [tid] </div>
+    <div class="description">[description] </div>',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'exclude' => 0,
+      'id' => 'description',
+      'table' => 'og',
+      'field' => 'description',
+      'relationship' => 'none',
+      'override' => array(
+        'button' => 'Override',
+      ),
+    ),
+    'managelinkmy' => array(
+      'label' => '',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'text' => 'Edit membership',
+      'exclude' => 0,
+      'id' => 'managelinkmy',
+      'table' => 'og_uid',
+      'field' => 'managelinkmy',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+  ));
+  $handler->override_option('sorts', array(
+    'score' => array(
+      'order' => 'DESC',
+      'id' => 'score',
+      'table' => 'search_index',
+      'field' => 'score',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'title' => array(
+      'order' => 'ASC',
+      'id' => 'title',
+      'table' => 'node',
+      'field' => 'title',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+  ));
+  $handler->override_option('filters', array(
+    'status' => array(
+      'id' => 'status',
+      'table' => 'node',
+      'field' => 'status',
+      'operator' => '=',
+      'value' => 1,
+      'group' => 0,
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'relationship' => 'none',
+      'expose_button' => array(
+        'button' => 'Expose',
+      ),
+    ),
+    'type_groups_all' => array(
+      'id' => 'type_groups_all',
+      'table' => 'og',
+      'field' => 'type_groups_all',
+      'operator' => '=',
+      'value' => '',
+      'group' => 0,
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'relationship' => 'none',
+      'expose_button' => array(
+        'button' => 'Expose',
+      ),
+    ),
+    'uid' => array(
+      'operator' => '=',
+      'value' => '1',
+      'group' => '0',
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'id' => 'uid',
+      'table' => 'og_uid',
+      'field' => 'uid',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'keys' => array(
+      'operator' => 'optional',
+      'value' => '',
+      'group' => '0',
+      'exposed' => TRUE,
+      'expose' => array(
+        'use_operator' => 0,
+        'operator' => 'keys_op',
+        'identifier' => 'keys',
+        'label' => 'Search',
+        'optional' => 1,
+        'remember' => 0,
+      ),
+      'id' => 'keys',
+      'table' => 'search_index',
+      'field' => 'keys',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'tid' => array(
+      'operator' => 'or',
+      'value' => '',
+      'group' => '0',
+      'exposed' => TRUE,
+      'expose' => array(
+        'use_operator' => 0,
+        'operator' => 'tid_op',
+        'identifier' => 'tid',
+        'label' => 'Tags',
+        'optional' => 1,
+        'single' => 0,
+        'remember' => 0,
+      ),
+      'type' => 'textfield',
+      'limit' => TRUE,
+      'vid' => '2',
+      'id' => 'tid',
+      'table' => 'term_node',
+      'field' => 'tid',
+      'hierarchy' => 0,
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+      'reduce_duplicates' => 0,
+    ),
+  ));
+  $handler->override_option('access', array(
+    'type' => 'role',
+    'role' => array(
+      '2' => 2,
+    ),
+  ));
+  $handler->override_option('cache', array(
+    'type' => 'none',
+  ));
+  $handler->override_option('title', 'My groups');
+  $handler->override_option('header_format', '1');
+  $handler->override_option('header_empty', 1);
+  $handler->override_option('empty', 'You haven\'t joined any groups yet');
+  $handler->override_option('empty_format', '1');
+  $handler->override_option('use_pager', '1');
+  $handler->override_option('distinct', 1);
+  $handler->override_option('style_plugin', 'list');
+  $handler->override_option('style_options', array(
+    'grouping' => '',
+    'type' => 'ul',
+  ));
+  $handler = $view->new_display('page', 'Page', 'page_1');
+  $handler->override_option('path', 'groups/mine');
+  $handler->override_option('menu', array(
+    'type' => 'none',
+    'title' => '',
+    'description' => '',
+    'weight' => 0,
+    'name' => 'navigation',
+  ));
+  $handler->override_option('tab_options', array(
+    'type' => 'none',
+    'title' => '',
+    'description' => '',
+    'weight' => 0,
+    'name' => 'navigation',
+  ));
+
+  $views[$view->name] = $view;
+
   // Exported view: groups_newest_groups
   $view = new view;
   $view->name = 'groups_newest_groups';
@@ -2873,7 +3233,7 @@ function commons_core_views_default_views() {
   $view = new view;
   $view->name = 'og_my_content';
   $view->description = 'Shows your content across your groups';
-  $view->tag = 'commons';
+  $view->tag = '';
   $view->view_php = '';
   $view->base_table = 'node';
   $view->is_cacheable = FALSE;
