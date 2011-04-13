@@ -21,41 +21,17 @@ function commons_dashboard_homebox() {
     ),
     'blocks' => 
     array (
-      'views_og_dashboard_groups-block_1' => 
+      'views_a63079788b0d983bea5a09b9eaa5671b' => 
       array (
         'module' => 'views',
-        'delta' => 'og_dashboard_groups-block_1',
-        'region' => 1,
-        'movable' => 1,
-        'status' => 1,
-        'open' => 1,
-        'closable' => 1,
-        'title' => '',
-        'weight' => -38,
-      ),
-      'views_upcoming_events-block_2' => 
-      array (
-        'module' => 'views',
-        'delta' => 'upcoming_events-block_2',
-        'region' => 3,
-        'movable' => 1,
-        'status' => 1,
-        'open' => 1,
-        'closable' => 1,
-        'title' => '',
-        'weight' => -38,
-      ),
-      'views_recent_content_all-block_1' => 
-      array (
-        'module' => 'views',
-        'delta' => 'recent_content_all-block_1',
+        'delta' => 'a63079788b0d983bea5a09b9eaa5671b',
         'region' => 2,
         'movable' => 1,
         'status' => 1,
         'open' => 1,
         'closable' => 1,
         'title' => '',
-        'weight' => -38,
+        'weight' => -64,
       ),
       'heartbeat_connectedheartbeat' => 
       array (
@@ -67,7 +43,19 @@ function commons_dashboard_homebox() {
         'open' => 1,
         'closable' => 1,
         'title' => 'Recent activity',
-        'weight' => -37,
+        'weight' => -64,
+      ),
+      'views_profile_user_groups-block_1' => 
+      array (
+        'module' => 'views',
+        'delta' => 'profile_user_groups-block_1',
+        'region' => 1,
+        'movable' => 1,
+        'status' => 1,
+        'open' => 1,
+        'closable' => 1,
+        'title' => '',
+        'weight' => -64,
       ),
       'views_my_recent_items-block_1' => 
       array (
@@ -79,31 +67,7 @@ function commons_dashboard_homebox() {
         'open' => 1,
         'closable' => 1,
         'title' => '',
-        'weight' => -37,
-      ),
-      'views_recent_notices-block_1' => 
-      array (
-        'module' => 'views',
-        'delta' => 'recent_notices-block_1',
-        'region' => 3,
-        'movable' => 1,
-        'status' => 1,
-        'open' => 1,
-        'closable' => 1,
-        'title' => '',
-        'weight' => -37,
-      ),
-      'views_og_featured-block_1' => 
-      array (
-        'module' => 'views',
-        'delta' => 'og_featured-block_1',
-        'region' => 3,
-        'movable' => 1,
-        'status' => 1,
-        'open' => 1,
-        'closable' => 1,
-        'title' => '',
-        'weight' => -36,
+        'weight' => -63,
       ),
       'views_my_unread_items-block_1' => 
       array (
@@ -115,19 +79,7 @@ function commons_dashboard_homebox() {
         'open' => 1,
         'closable' => 1,
         'title' => '',
-        'weight' => -36,
-      ),
-      'views_most_active_users-block_1' => 
-      array (
-        'module' => 'views',
-        'delta' => 'most_active_users-block_1',
-        'region' => 3,
-        'movable' => 1,
-        'status' => 1,
-        'open' => 1,
-        'closable' => 1,
-        'title' => '',
-        'weight' => -35,
+        'weight' => -62,
       ),
       'user_relationship_blocks_user-1' => 
       array (
@@ -139,7 +91,7 @@ function commons_dashboard_homebox() {
         'open' => 1,
         'closable' => 1,
         'title' => 'My friends',
-        'weight' => -35,
+        'weight' => -61,
       ),
       'views_users_online-block_1' => 
       array (
@@ -151,7 +103,55 @@ function commons_dashboard_homebox() {
         'open' => 1,
         'closable' => 1,
         'title' => '',
-        'weight' => -34,
+        'weight' => -60,
+      ),
+      'views_upcoming_events-block_2' => 
+      array (
+        'module' => 'views',
+        'delta' => 'upcoming_events-block_2',
+        'region' => 3,
+        'movable' => 1,
+        'status' => 1,
+        'open' => 1,
+        'closable' => 1,
+        'title' => '',
+        'weight' => -64,
+      ),
+      'views_recent_notices-block_1' => 
+      array (
+        'module' => 'views',
+        'delta' => 'recent_notices-block_1',
+        'region' => 3,
+        'movable' => 1,
+        'status' => 1,
+        'open' => 1,
+        'closable' => 1,
+        'title' => '',
+        'weight' => -63,
+      ),
+      'views_most_active_users-block_1' => 
+      array (
+        'module' => 'views',
+        'delta' => 'most_active_users-block_1',
+        'region' => 3,
+        'movable' => 1,
+        'status' => 1,
+        'open' => 1,
+        'closable' => 1,
+        'title' => '',
+        'weight' => -62,
+      ),
+      'og_3' => 
+      array (
+        'module' => 'og',
+        'delta' => '3',
+        'region' => 3,
+        'movable' => 1,
+        'status' => 1,
+        'open' => 1,
+        'closable' => 1,
+        'title' => '',
+        'weight' => -61,
       ),
     ),
     'widths' => 

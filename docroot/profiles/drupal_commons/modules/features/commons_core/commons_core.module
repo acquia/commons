@@ -466,16 +466,6 @@ function commons_core_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
  */
 function commons_core_views_pre_view(&$view, &$display_id, &$args) {
   switch ($view->name) {
-    case 'og_my_groups':
-    case 'og_all':
-    case 'og_most_active':
-      $view->display_handler->override_option('header', commons_core_node_add_link('group'));
-      break;
-      
-    case 'recent_notices':
-      $view->display_handler->override_option('header', commons_core_node_add_link('notice'));
-      break;
-      
     case 'tag_cloud':
       $view->display_handler->override_option('footer', l(t('View more'), 'tagadelic'));
       break;
