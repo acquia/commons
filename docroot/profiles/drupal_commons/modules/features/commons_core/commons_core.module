@@ -82,14 +82,13 @@ function commons_core_menu_alter(&$items) {
 /**
  * Implementation of hook_og_links_alter()
  */
-function commons_core_og_links_alter(&$links, &$node) {
-  // Change the Manager item to a link to our managers page
-  if (isset($links['manager'])) {
-    if ($group = commons_core_get_group_context()) {
-      $links['manager'] = l(t('Group managers'), "og/users/{$group->nid}/managers");
-    }
-  }
-  
+function commons_core_og_links_alter(&$links, &$node) {  
+  // Remove the Manager item and members item because our
+  // group manager and members block provides this information
+  // in a much better way
+  unset($links['manager']);
+  unset($links['subscribers']);
+
   // Remove content creation links because the group content
   // create selector will be displaying them
   foreach ($links as $key => $link) {
