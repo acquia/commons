@@ -22,7 +22,8 @@
 ?>
 <?php if (strstr($output, t('Join'))): ?>
   <div class="joinnow-button">
-    <?php print str_ireplace('Join', '', $output); ?>
+    <?php //print str_ireplace('Join', '', $output); 
+          echo $output; ?>
   </div>
 <?php else: ?>
   <?php print $output; ?>

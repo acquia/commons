@@ -108,6 +108,7 @@ body {
 /* Site Info-------------------------------------------------------------- */
 
 #header-site-info { float: left; width: 670px;}
+#header-site-info .inner { margin-left:0px;}
 
 /* Wrapper around logo, site name, and slogan */
 
@@ -122,7 +123,7 @@ body {
 	margin: 0 12px 0 0;
 	vertical-align: middle;
 	width: auto;
-	padding-top:15px;
+	padding:15px 0px;
 }
 
 #logo a {
@@ -136,13 +137,13 @@ body {
 	line-height: 150%;
 	margin-top: 20px;
   font-family: Arial, Helvetica, sans-serif;
+  color:#fff;
 }
 
 #site-name-wrapper {
 	float: left;
-	vertical-align: middle;
-	width: auto;
-	clear:left;
+	width: 80%;
+	padding:15px 0px;
 }
 
 #site-name a:link,
@@ -150,6 +151,7 @@ body {
 #site-name a:hover,
 #site-name a:active {
 	margin: 0;
+	color:#fff;
 }
 
 /* Typography for site slogan */
@@ -709,9 +711,9 @@ h1.title {
 
 /* images within node content */
 
-.node .content img {
-	padding: 10px;
-}
+.node .content img { padding: 10px;}
+.node .content .filefield-file img { padding: 0px;}
+
 
 /* Typography for node titles */
 
@@ -1205,6 +1207,22 @@ form input.form-submit,
 .views-exposed-form .views-exposed-widget input.form-submit {
 	margin-top: 18px;
 }
+
+.views-field-subscribe {
+	background: #228bc8 url(../images/button_bkgd.gif) repeat-x bottom left;
+	border:solid 1px #228bc8;
+	color: #fff;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 22px;
+	margin: 2px;
+	padding: 1px 5px 2px 5px;
+	text-transform:uppercase;
+	display:inline-block;
+}
+.views-field-subscribe a { color:#fff;}
+
 
 /* Hover style for form buttons */
 
@@ -1842,8 +1860,21 @@ input.list-add-to-cart:focus {
 .front .pane-content .intro-textblock p {
 	margin-top: 0;
 }
+/* homepage intro block */
 
-.front .pane-content a.intro-morebutton {
+#block-boxes-homepage_info_box { padding:10px; background-color:#f6f6f6; width:98%; margin-bottom:30px;}
+#block-boxes-homepage_info_box a.intro-morebutton {display: block;
+	clear: both;
+	text-align: right;
+	margin-right: 3%;
+	font-size: 1.4em;
+	line-height: 18px;
+	background: transparent url(../images/intro-morebutton.png) no-repeat right center;
+	padding: 9px 40px;
+	font-weight:bold;
+} 
+	
+/*.front .pane-content a.intro-morebutton {
 	display: block;
 	clear: both;
 	text-align: right;
@@ -1852,7 +1883,7 @@ input.list-add-to-cart:focus {
 	line-height: 18px;
 	background: transparent url(../images/intro-morebutton.png) no-repeat right center;
 	padding: 9px 40px;
-}
+}*/
 
 .front .pane-custom.pane-1 .inner {	background: #fafafa url(../images/intro-pane-bg.png) repeat-x 0 0;}
 
@@ -2003,8 +2034,10 @@ input.list-add-to-cart:focus {
 	margin-right: 0px;
 	background-color:#eeeeee;
 }
-
-.sidebar-last #block-commons_core-group_create_content.block .inner { border:solid 3px #dee4e7;}
+.sidebar-last #block-commons_core-group_create_content.block .inner { background:none;}
+.sidebar-last #block-commons_core-group_create_content.block .inner .content { padding:0px;}
+#commons-core-group-create-content-block-form #edit-node-type-wrapper { float:left; width:100px; margin-top:0px;}
+#commons-core-group-create-content-block-form input#edit-submit-1 { float:left; margin-top:0px;}
 
 .sidebar-first .block .content,
 .sidebar-last .block .content {
@@ -2213,6 +2246,7 @@ div.joinnow-button a {
   color:#F00;
 }
 
+
 /*Shoutbox module*/
 
 .shoutbox-add-form {
@@ -2377,7 +2411,6 @@ div.shoutbox-even {
 /* Homebox module*/
 
 #homebox-buttons {
-  text-align: right;
 }
 
 .homebox-column:after {
@@ -2391,16 +2424,8 @@ div.shoutbox-even {
 #homebox .homebox-column {
 	background-color: #f9f9f9;
 	background-image: none;
-}
-
-#homebox .homebox-portlet h3.portlet-header {
-	background-color: #efefef;
-	color: #323232;
-	font-weight: normal;
-	line-height: 1.5em;
-	font-size: 1.1em;
-	margin: 0px;
-	padding: 3px 8px;
+	padding:0px;
+	
 }
 
 #homebox .homebox-portlet h2.portlet-header a {
@@ -2408,7 +2433,9 @@ div.shoutbox-even {
 }
 
 #homebox .homebox-portlet .homebox-portlet-inner {
-	border: 1px solid #dedede;
+	border: 1px solid #eeeeee;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
 }
 
 #homebox .homebox-portlet .homebox-portlet-inner .portlet-content {
@@ -2418,10 +2445,69 @@ div.shoutbox-even {
 #homebox .homebox-portlet {
   float: none;
   width: auto;
+  border: none;
 }
 
 #homebox-buttons button {
-  font-family: inherit;
+  	background: #228bc8 url(../images/button_bkgd.gif) repeat-x bottom left;
+	border:solid 1px #228bc8;
+	color: #fff;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 22px;
+	margin: 2px;
+	padding: 1px 5px 2px 5px;
+	text-transform:uppercase;
+}
+
+
+#homebox .homebox-portlet h3.portlet-header {
+    background-color: #EFEFEF;
+    color: #323232;
+    font-size: 1.6em;
+    line-height: 1.5em;
+    margin: 0;
+    padding: 3px 8px;
+}
+#homebox .homebox-portlet .homebox-portlet-inner {
+  border: 0;
+  overflow: hidden;
+}
+#homebox .homebox-portlet .portlet-header {
+  margin: 0;
+  padding: 2px 4px;
+  border-bottom: 0px solid #ddd;
+  background: #e4f0f8; /* matches garland */
+  color: #494949;
+  min-height: 18px;
+  font-size: 1em;
+}
+
+#homebox .homebox-portlet {
+    background-color: #EEEEEE;
+    border: 3px solid #EEEEEE;
+    margin: 2px 0 10px;
+    padding: 0;
+	border-radius: 5px 5px 5px 5px;
+}
+#homebox  .homebox-column-wrapper-3 .homebox-column {
+    background: url("images/stripe.png") repeat scroll 0 0 transparent;
+    margin: 2px 0px 2px 2px;
+    min-height: 40px;
+    padding: 5px 0px 5px 5px;
+}
+#homebox  .homebox-column-wrapper-1 .homebox-column {
+    background: url("images/stripe.png") repeat scroll 0 0 transparent;
+    margin: 2px 2px 2px 0px;
+    min-height: 40px;
+    padding: 5px 5px 5px 0px;
+}
+#homebox  .homebox-column-wrapper-2 .homebox-column {
+    background: url("images/stripe.png") repeat scroll 0 0 transparent;
+    margin: 2px;
+    min-height: 40px;
+    padding: 5px;
 }
 
 /* Temporary hack needed until homebox can handle hiding these */
@@ -2964,6 +3050,8 @@ div#block-og_views-0 h2.title {
 	width: 28%;
 }
 
+
+
 /*homepage featured groups view */
 
 .view-homepage-group-showcase .views-row {
@@ -3505,6 +3593,22 @@ div.beat-item blockquote {
 .sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-post-count-new a,*/
 .sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-title { font-weight:bold;}
 
+.view-groups-most-active .views-field-field-group-image-fid{float: left;}
+.view-groups-most-active .views-field-title,
+.view-groups-most-active .views-field-members-count,
+.view-groups-most-active .views-field-posts-count {float:right; width: 180px;}
+
+.view-groups-my-groups .views-field-field-group-image-fid{float: left;}
+.view-groups-my-groups .views-field-title,
+.view-groups-my-groups .views-field-post-count-new {float:right; width: 180px;}
+
+.view-groups-newest-groups .views-field-field-group-image-fid{float: left;}
+.view-groups-newest-groups .views-field-title,
+.view-groups-newest-groups .views-field-description {float:right; width: 180px;}
+
+.view-group-block-events-upcoming .views-field-field-date-value {float: left;}
+.view-group-block-events-upcoming .views-field-title,
+.view-group-block-events-upcoming .views-field-field-location-value {float: right; width: 180px;}
 
 /* profile page */
 
@@ -3536,7 +3640,7 @@ body.page-user-1 #main-inner #sidebar-first #sidebar-first-inner{ width:90%}
 #block-views-group_node-block_1 .view-content .views-field-field-group-image-fid img { width:136px; height:136px; border:solid 2px #fff;}
 #block-views-group_node-block_1 .view-content .views-field-subscribe div.joinnow-button a { margin:0px 0px 0px 150px;}
 
-#block-views-group_node-block_1 .view-content .views-field-field-featured-group-value { background-color:#dddddd; padding:6px 10px; margin-top:10px;}
+#block-views-group_node-block_1 .view-content .views-field-field-featured-group-value { background-color:#dddddd; padding:6px 10px; margin-top:10px; clear:both;}
 
 
 
@@ -3572,6 +3676,52 @@ body.page-user-1 #main-inner #sidebar-first #sidebar-first-inner{ width:90%}
 }
 .dateblock .year { display:none; }
 
+#homebox .homebox-portlet {
+  margin: 2px 0 5px;
+  padding: 0;
+  border: 3px solid #eee;
+  background-color: #eee;
+}
+#homebox .homebox-portlet h3.portlet-header {
+    background-color: #EFEFEF;
+    color: #323232;
+    font-size: 1.6em;
+    line-height: 1.5em;
+    margin: 0;
+    padding: 3px 8px;
+}
+#homebox .homebox-portlet .homebox-portlet-inner {
+  border: 0;
+  overflow: hidden;
+}
+#homebox .homebox-portlet .portlet-header {
+  margin: 0;
+  padding: 2px 4px;
+  border-bottom: 0px solid #ddd;
+  background: #e4f0f8; /* matches garland */
+  color: #494949;
+  min-height: 18px;
+  font-size: 1em;
+}
 
+#homebox .homebox-portlet {
+    background-color: #EEEEEE;
+    border: 3px solid #EEEEEE;
+    margin: 2px 0 10px;
+    padding: 0;
+	border-radius: 5px 5px 5px 5px;
+}
+#homebox  .homebox-column-wrapper-3 .homebox-column {
+    background: url("images/stripe.png") repeat scroll 0 0 transparent;
+    margin: 2px 0px 2px 2px;
+    min-height: 40px;
+    padding: 5px 0px 5px 5px;
+}
+#homebox  .homebox-column-wrapper-1 .homebox-column {
+    background: url("images/stripe.png") repeat scroll 0 0 transparent;
+    margin: 2px 2px 2px 0px;
+    min-height: 40px;
+    padding: 5px 5px 5px 0px;
+}
 
 
