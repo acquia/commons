@@ -3,17 +3,6 @@
 include_once('commons_poll.features.inc');
 
 /**
- * Implementation of hook_views_pre_view()
- */
-function commons_poll_views_pre_view(&$view, &$display_id, &$args) {
-  switch ($view->name) {
-    case 'content_global_polls':
-      $view->display_handler->override_option('header', commons_core_node_add_link('poll'));
-      break;
-  }
-}
-
-/**
  * Implementation of hook_og_features_registry()
  */
 function commons_poll_og_features_registry() {

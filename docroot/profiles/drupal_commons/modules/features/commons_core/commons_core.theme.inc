@@ -6,13 +6,6 @@
  */
 
 /**
- * Theme handler for node add links
- */
-function theme_commons_core_node_add_link($link) {
-  return '<span class="addnew">' . $link . '</span>';
-}
-
-/**
  * Theme handler for user stats block
  */
 function theme_commons_core_user_stats_block($data) {

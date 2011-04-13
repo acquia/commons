@@ -342,9 +342,6 @@ function commons_core_theme() {
   $registry = array(
     'commons_core_user_stats_block' => array(),
     'commons_core_info_block' => array(),
-    'commons_core_node_add_link' => array(
-      'arguments' => array('link' => NULL),
-    ),
     'commons_core_group_members_block' => array(
       'arguments' => array('managers' => NULL, 'members' => NULL, 'link' => NULL),
     ),
@@ -665,62 +662,6 @@ function commons_core_join_form() {
   );
   
   return $form;
-}
-
-/**
- * Helper function to provide node add links
- * 
- * @param $type
- *   The machine-name of the node
- * @return
- *   A link to add a new node, if permissions allow
- */
-function commons_core_node_add_link($type) {
-  global $user;
-  
-  // Determine the name of the node type, and see if it's valid
-  if (!($name = node_get_types('name', $type))) {
-    return NULL;
-  }
-  
-  // First detect normal node permissions
-  if (!node_access('create', $type)) {
-    return NULL;
-  }
-  
-  // Detect a group context
-  if (og_is_group_post_type($type)) {
-    if ($group = commons_core_get_group_context()) {
-      // No access if the user is not logged in
-      if (!$user->uid) {
-        return NULL;
-      }
-      // No access if the user is not a member
-      else if (!og_is_group_member($group->nid, TRUE, $user->uid)) {
-        // Unless they are a community manager
-        if (!commons_core_is_community_manager($user)) {
-          return NULL;
-        }
-      }
-    }
-  }
-  
-  // Build the link
-  $link = array();
-  $link['title'] = t('Add a new !name', array('!name' => $name));
-  $link['href'] = 'node/add/' . str_replace('_', '-', $type);
-  
-  // Add group URL query, if needed
-  if ($group) {
-    $link['options'] = array(
-      'query' => "gids[]={$group->nid}",
-    );
-  }
-  
-  // Generate the link
-  $link = l($link['title'], $link['href'], isset($link['options']) ? $link['options'] : array());
-  
-  return theme('commons_core_node_add_link', $link);
 }
 
 /**
