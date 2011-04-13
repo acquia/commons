@@ -33,11 +33,17 @@ function commons_home_context_default_contexts() {
           'region' => 'sidebar_last',
           'weight' => 2,
         ),
+        'views-recent_notices-block_1' => array(
+          'module' => 'views',
+          'delta' => 'recent_notices-block_1',
+          'region' => 'sidebar_last',
+          'weight' => 3,
+        ),
         'views-tag_cloud-block_1' => array(
           'module' => 'views',
           'delta' => 'tag_cloud-block_1',
           'region' => 'sidebar_last',
-          'weight' => 3,
+          'weight' => 4,
         ),
         'boxes-homepage_info_box' => array(
           'module' => 'boxes',
