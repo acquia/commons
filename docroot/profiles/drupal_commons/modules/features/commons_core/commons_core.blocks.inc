@@ -205,14 +205,18 @@ function _commons_core_group_menu_block() {
  * Display the dropdown group create content selector
  */
 function _commons_core_group_create_content_block() {
-  if ($form = drupal_get_form('commons_core_group_create_content_block_form')) {
-    return array(
-      'subject' => '',
-      'content' => $form,
-    );
+  // If we're inside a group
+  if ($group = commons_core_get_group_context()) {
+    // Make sure the current user is a group member
+    if (!og_is_group_member($group->nid)) {
+      return NULL;
+    }
   }
-  
-  return NULL;
+
+  return array(
+    'subject' => '',
+    'content' => drupal_get_form('commons_core_group_create_content_block_form'),
+  );
 }
 
 /**
