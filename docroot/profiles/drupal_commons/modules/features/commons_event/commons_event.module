@@ -3,29 +3,6 @@
 include_once('commons_event.features.inc');
 
 /**
- * Implementation of hook_views_pre_view()
- */
-function commons_event_views_pre_view(&$view, &$display_id, &$args) {
-  switch ($view->name) {
-    case 'content_global_calendar':
-      $view->display_handler->override_option('header', commons_core_node_add_link('event'));
-      break;
-      
-    case 'group_block_events_upcoming':
-      if ($group = commons_core_get_group_context()) {
-        $view->display_handler->override_option('footer', l(t('View events on calendar'), "node/{$group->nid}/content/calendar"));
-      }
-      break;
-      
-    case 'upcoming_events':
-      if ($view->current_display == 'block_1') {
-        $view->display_handler->override_option('footer', l(t('View events on calendar'), 'content/calendar'));
-      }
-      break;
-  }
-}
-
-/**
  * Implementation of hook_og_features_registry()
  */
 function commons_event_og_features_registry() {
@@ -38,7 +15,8 @@ function commons_event_og_features_registry() {
   $feature->description = t('Create events and display them on calendars');
   $feature->components = array(
     'views' => array(
-      'group_tab_event_calendar',
+      'group_tab_events',
+      'group_event_calendar',
     ),
     'node' => array(
       'event',

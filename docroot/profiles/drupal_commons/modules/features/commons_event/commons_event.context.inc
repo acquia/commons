@@ -8,13 +8,13 @@ function commons_event_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'content-calendar-page';
-  $context->description = 'The event calendar page';
+  $context->name = 'content-event-page';
+  $context->description = 'The event page';
   $context->tag = 'Event';
   $context->conditions = array(
     'views' => array(
       'values' => array(
-        'content_calendar_page' => 'content_calendar_page',
+        'content_event_page:page_1' => 'content_event_page:page_1',
       ),
     ),
   );
@@ -27,17 +27,29 @@ function commons_event_context_default_contexts() {
           'region' => 'sidebar_last',
           'weight' => 0,
         ),
+        'views-228f369cb15ea72f0c4ceed52aaf99c7' => array(
+          'module' => 'views',
+          'delta' => '228f369cb15ea72f0c4ceed52aaf99c7',
+          'region' => 'sidebar_last',
+          'weight' => 1,
+        ),
         'views-event_latest-block_1' => array(
           'module' => 'views',
           'delta' => 'event_latest-block_1',
           'region' => 'sidebar_last',
-          'weight' => 1,
+          'weight' => 2,
+        ),
+        'views-event_past_events-block_1' => array(
+          'module' => 'views',
+          'delta' => 'event_past_events-block_1',
+          'region' => 'sidebar_last',
+          'weight' => 3,
         ),
         'views-event_latest_comments-block_1' => array(
           'module' => 'views',
           'delta' => 'event_latest_comments-block_1',
           'region' => 'sidebar_last',
-          'weight' => 2,
+          'weight' => 4,
         ),
       ),
     ),
@@ -47,9 +59,9 @@ function commons_event_context_default_contexts() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Event');
-  t('The event calendar page');
+  t('The event page');
 
-  $export['content-calendar-page'] = $context;
+  $export['content-event-page'] = $context;
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
@@ -151,24 +163,36 @@ function commons_event_context_default_contexts() {
   $context->conditions = array(
     'views' => array(
       'values' => array(
-        'group_tab_event_calendar' => 'group_tab_event_calendar',
+        'group_tab_events:page_1' => 'group_tab_events:page_1',
       ),
     ),
   );
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
+        'views-0cde383a1963a6ecc04a0e9e98fa4213' => array(
+          'module' => 'views',
+          'delta' => '0cde383a1963a6ecc04a0e9e98fa4213',
+          'region' => 'sidebar_last',
+          'weight' => 0,
+        ),
         'views-a1d17833246cc27c991e939ae8e26a96' => array(
           'module' => 'views',
           'delta' => 'a1d17833246cc27c991e939ae8e26a96',
           'region' => 'sidebar_last',
-          'weight' => 0,
+          'weight' => 1,
+        ),
+        'views-group_block_events_past-block_1' => array(
+          'module' => 'views',
+          'delta' => 'group_block_events_past-block_1',
+          'region' => 'sidebar_last',
+          'weight' => 2,
         ),
         'views-5f71f8bfdda731f7f0c854e134dab79b' => array(
           'module' => 'views',
           'delta' => '5f71f8bfdda731f7f0c854e134dab79b',
           'region' => 'sidebar_last',
-          'weight' => 1,
+          'weight' => 3,
         ),
       ),
     ),
