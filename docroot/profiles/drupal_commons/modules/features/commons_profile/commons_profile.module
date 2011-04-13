@@ -35,6 +35,7 @@ function commons_profile_menu_alter(&$items) {
       case 'user/%user/notifications';
       case 'user/%views_arg/bookmarks';
       case 'user/%user/invites';
+      case 'user/%user/contact';
         $items[$key]['type'] = MENU_CALLBACK;
         break;
     }  
@@ -296,6 +297,14 @@ function _commons_profile_image_action_links_block() {
           'html' => TRUE,
         );
       }
+    }
+    
+    // Provide link to contact the user
+    if (_contact_user_tab_access($account)) {
+      $links['contact'] = array(
+        'title' => t('Contact !user', array('!user' => $account->name)),
+        'href' => "user/{$account->uid}/contact",
+      );
     }
   }
   
