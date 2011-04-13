@@ -72,8 +72,8 @@ function commons_core_context_default_contexts() {
         'commons_core-group_create_content' => array(
           'module' => 'commons_core',
           'delta' => 'group_create_content',
-          'region' => 'preface_top',
-          'weight' => 0,
+          'region' => 'sidebar_last',
+          'weight' => -1,
         ),
       ),
     ),

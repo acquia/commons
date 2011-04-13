@@ -205,13 +205,11 @@ function _commons_core_group_menu_block() {
  * Display the dropdown group create content selector
  */
 function _commons_core_group_create_content_block() {
-  if ($group = commons_core_get_group_context()) {
-    if ($form = drupal_get_form('commons_core_group_create_content_block_form')) {
-      return array(
-        'subject' => '',
-        'content' => $form,
-      );
-    }
+  if ($form = drupal_get_form('commons_core_group_create_content_block_form')) {
+    return array(
+      'subject' => '',
+      'content' => $form,
+    );
   }
   
   return NULL;
@@ -222,28 +220,40 @@ function _commons_core_group_create_content_block() {
  */
 function commons_core_group_create_content_block_form(&$form_state) {
   $form = array();
-  
-  if (!($group = commons_core_get_group_context())) {
-    return NULL;
-  }
-  
-  // Gather group node type links
-  $links = module_invoke_all('og_create_links', $group);
-  
-  // Allow og_features to alter them
-  // We avoid allowing any module to alter them, because the alter 
-  // hook is often used to add non-node links
-  og_features_og_links_alter($links);
-  
-  // Turn the links into node types
   $types = array();
-  foreach($links as $key => $link) {
-    // Extract the node type
-    if ($type = str_replace('create_', '', $key)) {
-      // Load the node type
-      if ($type = node_get_types('type', $type)) {
-        // Add the type
-        $types[$type->type] = $type->name;
+  
+  // If we're in a group context, the content types will be 
+  // gathered based on the group
+  if ($group = commons_core_get_group_context()) {
+    // Gather group node type links
+    $links = module_invoke_all('og_create_links', $group);
+  
+    // Allow og_features to alter them
+    // We avoid allowing any module to alter them, because the alter 
+    // hook is often used to add non-node links
+    og_features_og_links_alter($links);
+    
+    // Turn the links into node types
+    foreach($links as $key => $link) {
+      // Extract the node type
+      if ($type = str_replace('create_', '', $key)) {
+        // Load the node type
+        if ($type = node_get_types('type', $type)) {
+          // Add the type
+          $types[$type->type] = $type->name;
+        }
+      }
+    }
+  }
+  else {
+    // Iterate all available node types
+    foreach (node_get_types() as $id => $type) {
+      // Check that this is a group post type
+      if (og_is_group_post_type($id)) {
+        // Check create permissions
+        if (node_access('create', $id)) {
+          $types[$id] = $type->name;
+        } 
       }
     }
   }
@@ -262,7 +272,7 @@ function commons_core_group_create_content_block_form(&$form_state) {
   // Store the group
   $form['group'] = array(
     '#type' => 'value',
-    '#value' => $group,
+    '#value' => $group ? $group : NULL,
   );
   
   // Submit button
@@ -284,8 +294,11 @@ function commons_core_group_create_content_block_form_submit(&$form, $form_state
   // Extract the node type
   $type = $form_state['values']['node_type'];
   
+  // Add a link query for the group, if there is one
+  $options = $group ? array('gids' => array($group->nid)) : NULL;
+  
   // Redirect to the node form
-  drupal_goto("node/add/{$type}", array('gids' => array($group->nid)));
+  drupal_goto("node/add/{$type}", $options);
 }
 
 /**
