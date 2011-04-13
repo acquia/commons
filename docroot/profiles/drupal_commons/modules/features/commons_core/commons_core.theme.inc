@@ -26,7 +26,7 @@ function theme_commons_core_user_stats_block($data) {
 }
 
 /**
- * Display the Commons information block
+ * Theme handler for the Commons information block
  * 
  * This is used in the footer to link back to acquia.com
  */
@@ -51,5 +51,24 @@ function theme_commons_core_info_block() {
   $content .= '<a href="http://fusiondrupalthemes.com" title="Premium Drupal themes powered by Fusion">Fusion</a>.';
   $content .= '</div>';
   
+  return $content;
+}
+
+/**
+ * Theme handler for the group members and managers block
+ */
+function theme_commons_core_group_members_block($managers, $members, $link) {
+  $content = '';
+  if ($managers) {
+    $content .= '<div class="group-managers-label">' . t('Managers') . '</div>';
+    $content .= "<div class=\"group-managers\">$managers</div>";
+  }
+  if ($members) {
+    $content .= '<div class="group-members-label">' . t('Members') . '</div>';
+    $content .= "<div class=\"group-members\">$members</div>";
+  }
+  if ($link) {
+    $content .= "<div class=\"group-members-link\">$link</div>";
+  }
   return $content;
 }

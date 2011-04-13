@@ -387,19 +387,14 @@ function _commons_core_group_activity_block() {
 function _commons_core_group_members_block() {
   // Detect the group context
   if ($group = commons_core_get_group_context()) {
-    $block = array('content' => '', 'subject' => '');
-    
-    // Generate the block title from the member count
+    // Count the number of group members for the block title
     $sql = "SELECT count(uid) FROM {og_uid} WHERE nid = %d AND is_active = 1";
     $count = db_result(db_query($sql, $group->nid));
-      
-    // Set the block title
-    $block['subject'] = t('Group members (!count)', array('!count' => $count));
       
     // Load the group managers from the view
     if ($view = views_get_view('group_block_members')) {
       if ($output = $view->execute_display('block_1')) {
-        $block['content'] .= t('Managers:') . $output['content'];
+        $managers .= $output['content'];
       }
       $view->destroy();
     }
@@ -407,15 +402,18 @@ function _commons_core_group_members_block() {
     // Load the group members from the view
     if ($view = views_get_view('group_block_members')) {
       if ($output = $view->execute_display('block_2')) {
-        $block['content'] .= t('Members:') . $output['content'];
+        $members .= $output['content'];
       }
       $view->destroy();
     }
     
     // Add a link to view all the members
-    $block['content'] .= l(t('View all members'), "og/users/{$group->nid}/faces");
+    $link .= l(t('View all members'), "og/users/{$group->nid}/faces");
     
-    return $block;
+    return array(
+      'subject' => t('Group members (!count)', array('!count' => $count)),
+      'content' => theme('commons_core_group_members_block', $managers, $members, $link),
+    );
   }
   
   return NULL;
