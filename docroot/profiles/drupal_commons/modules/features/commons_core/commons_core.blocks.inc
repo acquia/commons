@@ -269,6 +269,66 @@ function commons_core_group_create_content_block_form(&$form_state) {
     '#options' => $types,
   );
   
+  // Determine the default node type for the selector based on the path
+  if (arg(0) == 'node' && is_numeric(arg(1))) {
+    // Viewing a node
+    if (!arg(2)) {
+      $arg = arg(1);
+    }
+    // Viewing a group content tab
+    else if (arg(2) == 'content' && arg(3)) {
+      $arg = arg(3);
+    }
+  }
+  // Viewing a global content page
+  else if (arg(0) == 'content' && arg(1)) {
+    $arg = arg(1);
+  }
+  
+  if ($arg) {
+    switch ($arg) {
+      // Known content-type paths within Commons
+      case 'polls':
+        $form['node_type']['#default_value'] = 'poll';
+        break;
+      case 'discussions':
+        $form['node_type']['#default_value'] = 'discussion';
+        break;
+      case 'documents':
+        $form['node_type']['#default_value'] = 'document';
+        break;
+      case 'blogs':
+        $form['node_type']['#default_value'] = 'blog';
+        break;
+      case 'wikis':
+        $form['node_type']['#default_value'] = 'wiki';
+        break;
+      case 'events':
+      case 'calendar':
+        $form['node_type']['#default_value'] = 'event';
+        break;
+      default:
+        // If numeric, try to load the nid to determine the node type
+        // currently being viewed
+        if (is_numeric($arg)) {
+          if ($node = node_load($arg)) {
+            $form['node_type']['#default_value'] = $node->type;
+            break;
+          }
+        }
+        // Try to account for any additional content types added
+        else {
+          foreach ($types as $type => $name) {
+            // Try for a match (accounting for a trailing 's')
+            if (strstr($arg, substr($type, 0, strlen($type) - 1))) {
+              $form['node_type']['#default_value'] = $type;
+              break;
+            }
+          }
+        }
+    }
+  }
+  
   // Store the group
   $form['group'] = array(
     '#type' => 'value',
