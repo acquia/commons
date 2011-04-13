@@ -45,3 +45,12 @@ function commons_shoutbox_init() {
     }
   }
 }
+
+/**
+ * Implementation of hook_og_links_alter()
+ */
+function commons_shoutbox_og_links_alter(&$links) {
+  // Remove the shoutbox link from this menu because
+  // the block already provides it
+  unset($links['shoutbox']); 
+}
