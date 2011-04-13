@@ -1,5 +1,9 @@
 <?php
-// $Id$
+
+/**
+ * @file
+ *   Includes functions related to rich-text editor configuration
+ */
 
 /**
  * Return settings for WYSIWYG editors
