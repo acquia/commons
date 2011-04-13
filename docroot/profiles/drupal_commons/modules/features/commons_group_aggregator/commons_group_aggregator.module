@@ -8,6 +8,8 @@ include_once('commons_group_aggregator.features.inc');
 function commons_group_aggregator_menu_alter(&$items) {
   // Move OG_Aggregator menu tab to far right
   $items['node/%node/aggregator']['weight'] = 20;
+  // Rename the tab to "Feeds"
+  $items['node/%node/aggregator']['title'] = t('Feeds');
 }
 
 /**
