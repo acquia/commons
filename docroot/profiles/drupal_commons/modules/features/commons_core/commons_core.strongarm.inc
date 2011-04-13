@@ -685,6 +685,9 @@ function commons_core_strongarm() {
     'sup' => array(
       'style' => array(),
     ),
+    'u' => array(
+      'style' => array(),
+    ),
     'ul' => array(
       'style' => array(),
     ),
@@ -699,7 +702,7 @@ function commons_core_strongarm() {
 a[!href|target<_blank|title],
 p[align<center?justify?left?right],
 img[!src|alt|title|style],
-br, em, strong, cite, sub, sup, span, blockquote, code, ul, ol, li, dl, dt, dd, pre, address, h2, h3, h4, h5, h6';
+br, em, strong, cite, sub, sup, span, blockquote, code, ul, ol, li, dl, dt, dd, pre, address, h2, h3, h4, h5, h6, u';
 
   $export['wysiwyg_filter_valid_elements_raw_1'] = $strongarm;
   return $export;
