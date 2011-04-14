@@ -15,6 +15,7 @@ function commons_shoutbox_og_features_registry() {
   $feature->description = t('Provide a micro-style chat for the group');
   $feature->components = array(
     'path' => array(
+      'node/%node/shoutbox',
       'shoutbox/group/%node',
       'shoutbox/group/%node/js/view',
     ),
@@ -31,19 +32,15 @@ function commons_shoutbox_og_features_registry() {
 }
 
 /**
- * Implementation of hook_init()
+ * Implementation of hook_menu_alter()
  */
-function commons_shoutbox_init() {
-  // Shoutbox doesn't do a very good job setting the group context
-  // early enough, so we have to force og_features to be aware
-  // of the group, if we're viewing a shoutbox group page
-  if (arg(0) == 'shoutbox' && arg(1) == 'group' && is_numeric(arg(2))) {
-    if ($group = node_load(arg(2))) {
-      if (og_is_group_type($group->type)) {
-        og_features_get_group_context($group, TRUE);
-      }
-    }
-  }
+function commons_shoutbox_menu_alter(&$items) {
+  // Change the path of the group shoutbox page
+  // so og_features can extract the group context
+  $items['node/%node/shoutbox'] = $items['shoutbox/group/%node'];
+  $items['node/%node/shoutbox']['page arguments'] = array(1);
+  $items['node/%node/shoutbox']['access arguments'] = array('view', 1);
+  unset($items['shoutbox/group/%node']);
 }
 
 /**
@@ -53,4 +50,18 @@ function commons_shoutbox_og_links_alter(&$links) {
   // Remove the shoutbox link from this menu because
   // the block already provides it
   unset($links['shoutbox']); 
+}
+
+/**
+ * Implementation of hook_shoutbox()
+ */
+function commons_shoutbox_shoutbox($op, &$shout, &$a1 = NULL, $form_state = NULL) {
+  switch ($op) {
+    case 'link':
+      // Change the "view all shouts" link to our new path
+      if ($group = og_get_group_context()) {
+        $a1 = "node/{$group->nid}/shoutbox";
+      }
+      break;
+  }
 }
