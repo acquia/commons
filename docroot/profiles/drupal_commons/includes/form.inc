@@ -8,7 +8,7 @@
 /**
  * Provide a form to choose which features to enable
  */
-function drupal_commons_features_form($form_state, $url) {
+function drupal_commons_features_form(&$form_state, $url) {
   $form = array();
   drupal_set_title(st('Choose from available features'));
   
@@ -205,8 +205,97 @@ function drupal_commons_features_form_submit(&$form, &$form_state) {
   variable_set('commons_selected_features', $features);
   
   // Initiate the next installation step
+  variable_set('install_task', 'configure-theme');
+  
+  // Redirect back to the installation page
+  drupal_goto($form_state['values']['url']);
+}
+
+/**
+ * Provide a form to choose the default theme
+ */
+function drupal_commons_theme_form(&$form_state, $url) {
+  $form = array();
+  drupal_set_title(st('Choose your default theme'));
+  
+  // Help message
+  $form['message'] = array(
+    '#type' => 'item',
+    '#value' => st('Choose the initial theme for your site. At any time after the installation, the theme can be changed.'),
+  );
+  
+  // Theme selector
+  $form['theme'] = array(
+    '#type' => 'radios',
+    '#options' => array(
+      'bl_commons' => _drupal_commons_theme_option('bl_commons', st('BrightLemon Commons')),
+      'acquia_commons' => _drupal_commons_theme_option('acquia_commons', st('Acquia Commons')),
+    ),
+    '#default_value' => DRUPAL_COMMONS_DEFAULT_THEME,
+  );
+  
+  // Submit button
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => st('Continue'),
+  );
+  
+  // Store the installation url for redirection post-submit
+  $form['url'] = array(
+    '#type' => 'value',
+    '#value' => $url,
+  );
+  
+  return $form; 
+}
+
+/**
+ * Submit handler for the theme form
+ */
+function drupal_commons_theme_form_submit(&$form, &$form_state) {
+  $sql = "UPDATE {system} SET status = %d WHERE type = 'theme' and name = '%s'";
+  
+  // Disable garland
+  db_query($sql, 0, 'garland');
+  
+  // Enable Fusion
+  db_query($sql, 1, 'fusion_core');
+  
+  // Enable all of the available themes
+  foreach ($form['theme']['#options'] as $theme => $label) {
+    db_query($sql, 1, $theme);
+  }
+  
+  // Set the selected theme as the default
+  variable_set('theme_default', $form_state['values']['theme']);
+  
+  // Refresh the theme registry registry
+  list_themes(TRUE);
+  drupal_rebuild_theme_registry();
+
+  // Initiate the next installation step
   variable_set('install_task', 'install-commons');
   
   // Redirect back to the installation page
   drupal_goto($form_state['values']['url']);
+}
+
+/**
+ * Format a theme selection option
+ * 
+ * @param $theme
+ *   The theme system name
+ * @param $name
+ *   The theme full name
+ * @return
+ *   An HTML string to be used as a theme form option
+ */
+function _drupal_commons_theme_option($theme, $name) {
+  $option = '';
+  $option .= "<strong>{$name}</strong>";
+  $option .= "<br/>";
+  $option .= "<img alt=\"{$name}\" title=\"{$name}\" src=\"./profiles/drupal_commons/images/{$theme}_screenshot.png\"></img>";
+  $option .= "<br/>";
+  $option .= "<br/>";
+  return $option;
 }

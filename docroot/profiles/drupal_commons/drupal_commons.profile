@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 // Define the forced ID of the free-tagging vocabulary
 define('DRUPAL_COMMONS_TAG_ID', 2);
@@ -8,7 +7,7 @@ define('DRUPAL_COMMONS_TAG_ID', 2);
 define('DRUPAL_COMMONS_EDITOR', 'ckeditor');
 
 // Define the default theme
-define('DRUPAL_COMMONS_THEME', 'bl_commons');
+define('DRUPAL_COMMONS_DEFAULT_THEME', 'bl_commons');
 
 /**
  * Return an array of the modules to be enabled when this profile is installed.
@@ -65,7 +64,7 @@ function drupal_commons_profile_modules() {
  *   language-specific profiles.
  */
 function drupal_commons_profile_details() {
-  $logo = '<a href="http://drupal.org/project/commons" target="_blank"><img alt="Drupal Commons" title="Drupal Commons" src="./profiles/drupal_commons/images/logo.png' . '"></img></a>';
+  $logo = '<a href="http://drupal.org/project/commons" target="_blank"><img alt="Drupal Commons" title="Drupal Commons" src="./profiles/drupal_commons/images/logo.png"></img></a>';
   $description = st('Select this profile to install the Drupal Commons distribution for powering your community website. Drupal Commons provides provides blogging, discussions, user profiles, and other useful community features for both private communities (e.g. an Intranet), or public communities (e.g. a customer community).');
   $description .= '<br/>' . $logo;
   
@@ -86,7 +85,8 @@ function drupal_commons_profile_details() {
  */
 function drupal_commons_profile_task_list() {
   $tasks = array();
-  $tasks['configure-commons'] = st('Configure Drupal Commons');
+  $tasks['configure-features'] = st('Select features');
+  $tasks['configure-theme'] = st('Select theme');
   $tasks['install-commons'] = st('Install Drupal Commons');
   return $tasks;
 }
@@ -108,43 +108,51 @@ function drupal_commons_profile_task_list() {
 function drupal_commons_profile_tasks(&$task, $url) {
   // Skip to the configure task
   if ($task == 'profile') {
-    $task = 'configure-commons';  
+    $task = 'configure-features';  
+  }
+  
+  // If we're using Drush to install, skip the forms
+  if (defined('DRUSH_BASE_PATH')) {
+    // Set the features
+    $features = array(
+      'commons_core',
+      'commons_home',
+      'commons_blog',
+      'commons_discussion',
+      'commons_document',
+      'commons_wiki',
+      'commons_poll',
+      'commons_event',
+      'commons_dashboard',
+      'commons_notifications',
+      'commons_reputation',
+      'commons_group_aggregator',
+      'commons_admin',
+      'commons_seo',
+      'commons_invite',
+      'commons_profile',
+      'commons_shoutbox',
+    );
+    variable_set('commons_selected_features', $features);
+    
+    // Set the theme
+    variable_set('theme_default', DRUPAL_COMMONS_DEFAULT_THEME);
+    
+    // Initiate the installation
+    $task = 'install-commons';
+    variable_set('install_task', $task);
   }
   
   // Provide a form to choose features
-  if ($task == 'configure-commons') {
-    // If we're using Drush to install, skip the form and install
-    // all the available features
-    if (defined('DRUSH_BASE_PATH')) {
-      $features = array(
-        'commons_core',
-        'commons_home',
-        'commons_blog',
-        'commons_discussion',
-        'commons_document',
-        'commons_wiki',
-        'commons_poll',
-        'commons_event',
-        'commons_dashboard',
-        'commons_notifications',
-        'commons_reputation',
-        'commons_group_aggregator',
-        'commons_admin',
-        'commons_seo',
-        'commons_invite',
-        'commons_profile',
-        'commons_shoutbox',
-      );
-      variable_set('commons_selected_features', $features);
+  if ($task == 'configure-features') {
+    drupal_commons_include('form');
+    $output = drupal_get_form('drupal_commons_features_form', $url);
+  }
   
-      // Initiate the next installation step
-      $task = 'install-commons';
-      variable_set('install_task', $task);
-    }
-    else {
-      drupal_commons_include('form');
-      $output = drupal_get_form('drupal_commons_features_form', $url);
-    }
+  // Provide a form to choose the theme
+  if ($task == 'configure-theme') {
+    drupal_commons_include('form');
+    $output = drupal_get_form('drupal_commons_theme_form', $url);
   }
   
   // Installation batch process
@@ -169,7 +177,6 @@ function drupal_commons_profile_tasks(&$task, $url) {
     $operations[] = array('drupal_commons_config_ur', array());
     $operations[] = array('drupal_commons_config_heartbeat', array());
     $operations[] = array('drupal_commons_config_views', array());
-    $operations[] = array('drupal_commons_config_theme', array());
     $operations[] = array('drupal_commons_config_images', array());
     $operations[] = array('drupal_commons_config_vars', array());
   
@@ -436,29 +443,6 @@ function drupal_commons_config_views() {
   // Disable views and update the cache
   variable_set('views_defaults', $disabled);
   views_invalidate_cache();
-}
-  
-/**
- * Configure theme
- */
-function drupal_commons_config_theme() {
-  $sql = "UPDATE {system} SET status = %d WHERE type = 'theme' and name = '%s'";
-  
-  // Disable garland
-  db_query($sql, 0, 'garland');
-  
-  // Enable Fusion
-  db_query($sql, 1, 'fusion_core');
-  
-  // Enable Commons theme
-  db_query($sql, 1, DRUPAL_COMMONS_THEME);
-  
-  // Set Commons theme as the default
-  variable_set('theme_default', DRUPAL_COMMONS_THEME);
-  
-  // Refresh registry
-  list_themes(TRUE);
-  drupal_rebuild_theme_registry();
 }
 
 /**
