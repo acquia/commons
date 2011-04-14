@@ -454,29 +454,6 @@ function commons_core_imagecache_default_presets() {
       'actions' => array(
         '0' => array(
           'weight' => '0',
-          'module' => 'imagecache_canvasactions',
-          'action' => 'canvasactions_definecanvas',
-          'data' => array(
-            'RGB' => array(
-              'HEX' => '',
-            ),
-            'under' => 1,
-            'exact' => array(
-              'width' => '30',
-              'height' => '30',
-              'xpos' => 'left',
-              'ypos' => 'center',
-            ),
-            'relative' => array(
-              'leftdiff' => '',
-              'rightdiff' => '',
-              'topdiff' => '',
-              'bottomdiff' => '',
-            ),
-          ),
-        ),
-        '1' => array(
-          'weight' => '0',
           'module' => 'imagecache',
           'action' => 'imagecache_scale_and_crop',
           'data' => array(
