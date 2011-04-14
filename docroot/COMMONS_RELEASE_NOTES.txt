@@ -3,12 +3,38 @@ Track Drupal Commons development on GitHub!
  - https://github.com/acquia/commons/
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Drupal Commons 1.6-dev, 2010-04-06
+Drupal Commons 1.6-dev, 2010-04-14
 ------------------------------------
 NOTES:
+- A new theme has been added. If you would like to use it, navigate to
+  the theme administration page to enable it. Make sure that Fusion remains
+  enabled.
+- The panels module and all previously included panels have been removed
+  from the distribution. In previous versions, the home page, user profile,
+  and group home page were rendered by Panels. If you'd like to continue 
+  using panels, you must download the module separately and place it in your
+  sites/all directory. Since the panel exports that came with Commons are now
+  gone, in order to continue using them, you must save a copy of them from
+  within the panels UI prior to upgrading to 1.6.
+- Context is now being used to render all of the previously mentioned pages,
+  as well as all other pages.
+- Admin menu has been replaced by Admin. Admin contains a very useful in-place
+  editor for the Context module. When viewing any page, click the wrench icon
+  on the top-right corner of the page and click on "Context editor". From
+  there, you can edit the blocks and their layout for every page.
+- OG features has been added to the distribution. This allows admins and 
+  group managers to turn off groups of features within each individual
+  group. A "Features" tab will appear within the groups.
+- All of the Features within the distribution have been rebuilt, leading
+  to most of the exports (views, contexts, etc) being renamed and redesigned.
+  If you have altered and saved any of the previous exports, they will 
+  persist within your database. It is important that you carefully review
+  any of these depreciated components and disable or remove them to they 
+  do not interfere with the new ones.
+  (See: http://commons.acquia.com/wiki/feature-components-removed-commons-16) 
 ------------------------------------
 UPGRADING TO 1.6:
-(placeholder: profile panel and context removed)
+(upgrade instructions not available until full release)
 ------------------------------------
 CHANGELOG:
 - Added: New theme
@@ -25,10 +51,11 @@ CHANGELOG:
 - Updated: Shoutbox
 - Updated: Wikitools
 - Added: OG invite link
-- Removed: Panels and all pane exports
+- Removed: Panels (and all panel page exports)
 - Added: Commons shoutbox (feature); extract shoutbox components from core
 - Removed: Admin menu
 - Added: Admin
+
 
 Drupal Commons 1.5, 2011-03-17
 ------------------------------------
