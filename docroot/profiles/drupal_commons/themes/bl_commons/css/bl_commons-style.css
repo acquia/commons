@@ -13,12 +13,6 @@ body {
 	margin: 0;
 }
 
-body.cke_show_borders {
-	background-color: #fff;
-	background-image: none;
-}
-
-
 a, 
 a:link { color: #228bc8;}
 a:visited { color: #228bc8;}
@@ -591,7 +585,8 @@ form#search-theme-form input.form-submit {
 /* Content Regions-------------------------------------------------------------- */
 
 .content-top {}
-.content {}
+.content {
+}
 .page-admin .content-inner-inner { padding-bottom: 80px;}
 .content-bottom {}
 
@@ -1198,10 +1193,10 @@ form input.form-submit,
 	font-family:Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	font-weight: bold;
-	line-height: 22px;
 	margin: 2px;
 	padding: 1px 5px 2px 5px;
 	text-transform:uppercase;
+
 }
 
 .views-exposed-form .views-exposed-widget input.form-submit {
@@ -1220,6 +1215,7 @@ form input.form-submit,
 	padding: 1px 5px 2px 5px;
 	text-transform:uppercase;
 	display:inline-block;
+	float:right;
 }
 .views-field-subscribe a { color:#fff;}
 
@@ -2009,7 +2005,7 @@ input.list-add-to-cart:focus {
 	font-weight: normal;
 	margin: 6px 0px;
 }
-.sidebar-last { margin-top:45px;}
+.sidebar-last { margin-top:5px;}
 .sidebar-last .sidebar-last-inner .block { margin-left:25px; width:250px;}
 
 .sidebar-last .block h2.block-title,
@@ -3558,7 +3554,7 @@ div.beat-item blockquote {
 
 #block-views-groups_featured_groups-block_1 .content .views-row .views-field-description { float:left; width:410px; }
 #block-views-groups_featured_groups-block_1 .content .views-row .title { font-weight:bold;}
-#block-views-groups_featured_groups-block_1 .content .views-row .views-field-subscribe { float:left; width:410px;}
+#block-views-groups_featured_groups-block_1 .content .views-row .views-field-subscribe { }
 #block-views-groups_featured_groups-block_1 .content .views-row .views-field-subscribe .field-content { float:right;}
 #block-views-groups_featured_groups-block_1 .content .views-row .views-field-subscribe div.joinnow-button a { margin:0px;}
 
@@ -3723,5 +3719,30 @@ body.page-user-1 #main-inner #sidebar-first #sidebar-first-inner{ width:90%}
     min-height: 40px;
     padding: 5px 5px 5px 0px;
 }
+#edit-body-wrapper.form-item {
+    margin-right: 1em;
+}
+#edit-profile-name-wrapper.form-item {
+   margin-top: 0px;
+}
+#edit-node-type.form-select{
 
-
+line-height:24px;
+	height:24px;
+	border: 1px solid #A9A9A9;
+	border-radius: 4px 4px 4px 4px;
+	background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0.14, rgb(221,221,221)),
+    color-stop(0.57, rgb(246,246,246)),
+    color-stop(0.79, rgb(246,246,246))
+);
+background-image: -moz-linear-gradient(
+    center bottom,
+    rgb(221,221,221) 14%,
+    rgb(246,246,246) 57%,
+    rgb(246,246,246) 79%
+);
+}
