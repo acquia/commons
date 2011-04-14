@@ -10,7 +10,7 @@ function commons_shoutbox_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'shoutbox_escape_html';
   $strongarm->value = 0;
-  
+
   $export['shoutbox_escape_html'] = $strongarm;
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
