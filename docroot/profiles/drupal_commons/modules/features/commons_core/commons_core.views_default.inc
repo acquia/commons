@@ -1239,6 +1239,39 @@ function commons_core_views_default_views() {
         'button' => 'Override',
       ),
     ),
+    'leave_group' => array(
+      'label' => '',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'text' => 'Leave group',
+      'exclude' => 0,
+      'id' => 'leave_group',
+      'table' => 'og_uid',
+      'field' => 'leave_group',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
   ));
   $handler->override_option('sorts', array(
     'score' => array(
@@ -2218,7 +2251,7 @@ function commons_core_views_default_views() {
         'button' => 'Override',
       ),
     ),
-    'managelinkmy' => array(
+    'leave_group' => array(
       'label' => '',
       'alter' => array(
         'alter_text' => 0,
@@ -2241,11 +2274,11 @@ function commons_core_views_default_views() {
       'empty' => '',
       'hide_empty' => 0,
       'empty_zero' => 0,
-      'text' => 'Edit membership',
+      'text' => 'Leave group',
       'exclude' => 0,
-      'id' => 'managelinkmy',
+      'id' => 'leave_group',
       'table' => 'og_uid',
-      'field' => 'managelinkmy',
+      'field' => 'leave_group',
       'override' => array(
         'button' => 'Override',
       ),
