@@ -65,7 +65,7 @@
   <?php endif; ?>
 
   <?php if ($terms): ?>
-    <div class="terms terms-inline"><h4>Tags:</h4><?php print $terms ?></div>
+    <div class="terms terms-inline"><h4><?php print t('Tags:') ?></h4><?php print $terms ?></div>
   <?php endif;?>
   </div>
 
