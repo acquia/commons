@@ -181,7 +181,9 @@ body {
 
 /* By default this wrapper is set to 100% width and centered -- override here to  narrow wrapper or align left or right */
 
-.page {}
+.page {
+
+}
 
 /* The 0 values here remove padding and spacing at the bottom of the page.  Remove to add a gap at the very bottom of the page */
 
@@ -191,7 +193,10 @@ body {
 
 /* Header Top region to the bottom of Header region */
 
-.header-group-wrapper { background-color:#1f1f2d;}
+.header-group-wrapper { 
+background-color:#296AAA;
+background: url(../images/header_bkgd.png) repeat-x;
+}
 
 .header-group {	position: relative;	z-index: 10; overflow: hidden; background:transparent url(../images/header_region_bkgd.gif) no-repeat top right;}
 
@@ -932,6 +937,7 @@ div.content-messages div.error,
 div.content-help-inner div.help,
 div.content-messages div.status,
 div.content-help-inner div.warning {
+	width:630px;
 	padding: 4px 8px;
 }
 
@@ -1196,7 +1202,8 @@ form input.form-submit,
 	margin: 2px;
 	padding: 1px 5px 2px 5px;
 	text-transform:uppercase;
-
+	height:22px;
+	line-height:20px;
 }
 
 .views-exposed-form .views-exposed-widget input.form-submit {
@@ -1260,6 +1267,13 @@ fieldset {
   -webkit-border-radius: 7px;*/
 }
 
+.shoutbox-add-form fieldset {
+	overflow: hidden;
+	background-color: #EEEEEE;
+	border: 0px;
+	margin:0px;
+	padding:0px;
+}
 html.js fieldset.collapsed {
 	background-color: transparent;
   padding: 0 5px;
@@ -1835,7 +1849,7 @@ input.list-add-to-cart:focus {
 	margin: 0 0 .7em 0;
 }
 
-.front .pane-content .intro-textblock {
+.intro-textblock {
 	width: 30%;
 	float: left;
 	margin-right: 3%;
@@ -2032,7 +2046,7 @@ input.list-add-to-cart:focus {
 }
 .sidebar-last #block-commons_core-group_create_content.block .inner { background:none;}
 .sidebar-last #block-commons_core-group_create_content.block .inner .content { padding:0px;}
-#commons-core-group-create-content-block-form #edit-node-type-wrapper { float:left; width:100px; margin-top:0px;}
+#commons-core-group-create-content-block-form #edit-node-type-wrapper { float:left; margin-top:0px;}
 #commons-core-group-create-content-block-form input#edit-submit-1 { float:left; margin-top:0px;}
 
 .sidebar-first .block .content,
@@ -2688,50 +2702,17 @@ body#pid-dashboard h1.title, body#pid-dashboard #breadcrumbs {
 }
 
 /* block calendar */
-
-.block .view-og-calendar {
-	border: 2px solid #ececec;
-}
-
-.block .view-og-calendar .date-heading h3 {
-	font-weight: bold;
-}
-
-.block .calendar-calendar .month-view table tr th {
-	background-color: #fff;
-	border-bottom: 2px solid #ececec;
-	border: none;
-}
-
 .block .calendar-calendar .month-view table tr td {
-	border-bottom: 2px solid #ececec;
-	border-right: 2px solid #ececec;
-	font-family:Arial, Helvetica, sans-serif;
-	font-weight: bold;
-	padding: 2px 0;
-	text-align: center;
-}
-
-.block .calendar-calendar .month-view table tr:last-child td {
-	border-bottom: none;
-}
-
-.block .calendar-calendar .month-view table tr td.sun {
-	border-right: none;
-}
-
-.block .calendar-calendar .month-view table tr td a {
-	color: #666;
 	font-weight: bold;
 }
-
-.block .calendar-calendar .month-view table tr td.today {
-	background-color: #6599ca;
+.calendar-calendar td.empty {
+    background: none repeat scroll 0 0 #E0E0E0;
+    border-color: #CCCCCC;
 }
 
-.block .calendar-calendar .month-view table tr td.today,
-.block .calendar-calendar .month-view table tr td.today  a {
-	color: #fff;
+ul.links  li.calendar{
+    border-right: 0px;
+    display: inline;
 }
 
 /* page calendar */
@@ -3726,23 +3707,25 @@ body.page-user-1 #main-inner #sidebar-first #sidebar-first-inner{ width:90%}
    margin-top: 0px;
 }
 #edit-node-type.form-select{
-
-line-height:24px;
-	height:24px;
-	border: 1px solid #A9A9A9;
-	border-radius: 4px 4px 4px 4px;
-	background-image: -webkit-gradient(
-    linear,
-    left bottom,
-    left top,
-    color-stop(0.14, rgb(221,221,221)),
-    color-stop(0.57, rgb(246,246,246)),
-    color-stop(0.79, rgb(246,246,246))
-);
-background-image: -moz-linear-gradient(
-    center bottom,
-    rgb(221,221,221) 14%,
-    rgb(246,246,246) 57%,
-    rgb(246,246,246) 79%
-);
+	line-height:22px;
+	height:22px;
+	width:180px;
+}
+#edit-node-type-wrapper.form-item{
+	width:180px;
+	margin-left:2px;
+}
+.group-members-link{
+background: url("../images/gray-arrow-right.png") no-repeat scroll right top transparent;
+    clear: both;
+    display: block;
+    font-size: 11px;
+    font-weight: normal;
+    line-height: 1.1em;
+    margin: 10px 0 0;
+    padding: 0 15px 0 0;
+    text-align: right;
+}
+.view-group-tab-events .views-field-title .field-content{
+    font-weight: bold;
 }
