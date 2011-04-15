@@ -79,6 +79,9 @@ function og_views_views_handlers() {
       'og_views_handler_field_og_managelink' => array(
         'parent' => 'og_views_handler_field_og_uid',
       ),
+      'og_views_handler_field_og_leave_group' => array(
+        'parent' => 'og_views_handler_field_og_uid',
+      ),
       'og_views_handler_field_og_uid_groups' => array(
         'parent' => 'views_handler_field_prerender_list',
       ),
@@ -445,6 +448,15 @@ function og_views_data_og_uid() {
     'real field' => 'uid',
     'field' => array(
       'handler' => 'og_views_handler_field_og_managelinkmy',
+      'click sortable' => FALSE,
+    ),
+  );
+  $data['og_uid']['leave_group'] = array(
+    'title' => t('OG: Leave group link'),
+    'help' => t('A link to leave the group.'),
+    'real field' => 'uid',
+    'field' => array(
+      'handler' => 'og_views_handler_field_og_leave_group',
       'click sortable' => FALSE,
     ),
   );
