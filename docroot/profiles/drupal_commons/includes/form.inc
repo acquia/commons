@@ -208,7 +208,9 @@ function drupal_commons_features_form_submit(&$form, &$form_state) {
   variable_set('install_task', 'configure-theme');
   
   // Redirect back to the installation page
-  drupal_goto($form_state['values']['url']);
+  if (isset($form_state['values']['url'])) {
+    drupal_goto($form_state['values']['url']);
+  }
 }
 
 /**
@@ -277,7 +279,9 @@ function drupal_commons_theme_form_submit(&$form, &$form_state) {
   variable_set('install_task', 'install-commons');
   
   // Redirect back to the installation page
-  drupal_goto($form_state['values']['url']);
+  if (isset($form_state['values']['url'])) {
+    drupal_goto($form_state['values']['url']);
+  }
 }
 
 /**

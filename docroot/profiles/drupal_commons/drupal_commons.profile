@@ -113,34 +113,8 @@ function drupal_commons_profile_tasks(&$task, $url) {
   
   // If we're using Drush to install, skip the forms
   if (defined('DRUSH_BASE_PATH')) {
-    // Set the features
-    $features = array(
-      'commons_core',
-      'commons_home',
-      'commons_blog',
-      'commons_discussion',
-      'commons_document',
-      'commons_wiki',
-      'commons_poll',
-      'commons_event',
-      'commons_dashboard',
-      'commons_notifications',
-      'commons_reputation',
-      'commons_group_aggregator',
-      'commons_admin',
-      'commons_seo',
-      'commons_invite',
-      'commons_profile',
-      'commons_shoutbox',
-    );
-    variable_set('commons_selected_features', $features);
-    
-    // Set the theme
-    variable_set('theme_default', DRUPAL_COMMONS_DEFAULT_THEME);
-    
-    // Initiate the installation
-    $task = 'install-commons';
-    variable_set('install_task', $task);
+    drupal_commons_include('drush');
+    _drupal_commons_drush_tasks($task);
   }
   
   // Provide a form to choose features
@@ -610,6 +584,18 @@ function drupal_commons_cleanup() {
 }
 
 /**
+ * Helper function to load include files
+ * 
+ * @param $name
+ *   The file name without the .inc extension
+ * @param $dir
+ *   The directory containing the include file
+ */
+function drupal_commons_include($name, $dir = 'includes') {
+  require_once("profiles/drupal_commons/{$dir}/{$name}.inc");
+}
+
+/**
  * Alter the install profile configuration
  */
 function system_form_install_configure_form_alter(&$form, $form_state) {
@@ -643,16 +629,4 @@ function system_form_install_configure_form_alter(&$form, $form_state) {
  */
 function drupal_commons_install_configure_form_submit(&$form, &$form_state) {
   variable_set('commons_force_login', $form_state['values']['commons_force_login']);
-}
-
-/**
- * Helper function to load include files
- * 
- * @param $name
- *   The file name without the .inc extension
- * @param $dir
- *   The directory containing the include file
- */
-function drupal_commons_include($name, $dir = 'includes') {
-  require_once("profiles/drupal_commons/{$dir}/{$name}.inc");
 }
