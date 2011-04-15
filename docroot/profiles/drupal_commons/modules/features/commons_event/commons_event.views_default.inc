@@ -2162,7 +2162,7 @@ function commons_event_views_default_views() {
       'relationship' => 'none',
     ),
     'field_date_value' => array(
-      'label' => 'Date',
+      'label' => '',
       'alter' => array(
         'alter_text' => 0,
         'text' => '',
@@ -2185,7 +2185,7 @@ function commons_event_views_default_views() {
       'hide_empty' => 0,
       'empty_zero' => 0,
       'link_to_node' => 0,
-      'label_type' => 'widget',
+      'label_type' => 'none',
       'format' => 'default',
       'multiple' => array(
         'multiple_number' => '',
@@ -2204,6 +2204,9 @@ function commons_event_views_default_views() {
       'table' => 'node_data_field_date',
       'field' => 'field_date_value',
       'relationship' => 'none',
+      'override' => array(
+        'button' => 'Override',
+      ),
     ),
     'field_location_value' => array(
       'label' => 'Location',

@@ -2017,7 +2017,7 @@ function commons_core_views_default_views() {
         'strip_tags' => 0,
       ),
       'empty' => '',
-      'hide_empty' => 0,
+      'hide_empty' => 1,
       'empty_zero' => 0,
       'set_precision' => FALSE,
       'precision' => 0,
