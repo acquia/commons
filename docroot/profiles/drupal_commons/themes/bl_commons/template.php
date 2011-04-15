@@ -308,5 +308,29 @@ function bl_commons_search_theme_form($form) {
 	return '<div id="search" class="container-inline">' . drupal_render($form) . '</div>';
 }
 
+function bl_commons_commons_core_info_block() {
+  $content = '';
+  
+  $content .= '<div id="acquia-footer-message">';
+
+  $content .= '<a href="http://acquia.com/drupalcommons" title="Drupal Commons social business software">';
+  $content .= theme('image', 'profiles/drupal_commons/images/commons_droplet.png', t('Drupal Commons social business software'), t('Drupal Commons social business software'));
+  $content .= '</a>';
+  $content .= '<span>';
+  $content .= t('A !dc Community, powered by', array('!dc' => l(t('Drupal Commons'), 'http://acquia.com/drupalcommons', array('attributes' => array('title' => t('A Drupal Commons social business software')))))) . '&nbsp;';
+  $content .= l(t('Acquia'), 'http://acquia.com', array('attributes' => array('title' => t('Acquia'))));
+  $content .= '</span>';
+  $content .= '</div>';
+  
+  $content .= '<div id="fusion-footer-message">';
+  $content .= t('Theme by') . '&nbsp;';
+  $content .= '<a href="http://www.brightlemon.com" title="Drupal Themes by BrightLemon">BrightLemon</a>';
+  $content .= ', ' . t('powered by') . '&nbsp;';
+  $content .= '<a href="http://fusiondrupalthemes.com" title="Premium Drupal themes powered by Fusion">Fusion</a>.';
+  $content .= '</div>';
+
+  return $content;
+}
+
 // call scripts
 drupal_add_js(path_to_theme() . '/scripts/clear_default_searchbox_text.js', 'theme'); // call on every page since search box is displayed everywhere
