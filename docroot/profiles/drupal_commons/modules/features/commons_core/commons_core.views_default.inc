@@ -853,8 +853,8 @@ function commons_core_views_default_views() {
       'alter' => array(
         'alter_text' => 1,
         'text' => '<div class="title">[title] </div>
-  <div class="tags">Tags: [tid]</div>
-  <div class="description">[description] </div>',
+    <div class="tags">Tags: [tid]</div>
+    <div class="description">[description] </div>',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
@@ -900,12 +900,48 @@ function commons_core_views_default_views() {
         'strip_tags' => 0,
       ),
       'empty' => '',
-      'hide_empty' => 0,
+      'hide_empty' => 1,
       'empty_zero' => 0,
       'exclude' => 0,
       'id' => 'subscribe',
       'table' => 'og',
       'field' => 'subscribe',
+      'relationship' => 'none',
+      'override' => array(
+        'button' => 'Override',
+      ),
+    ),
+    'leave_group' => array(
+      'label' => '',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 1,
+      'empty_zero' => 0,
+      'text' => 'Leave',
+      'exclude' => 0,
+      'id' => 'leave_group',
+      'table' => 'og_uid',
+      'field' => 'leave_group',
+      'override' => array(
+        'button' => 'Override',
+      ),
       'relationship' => 'none',
     ),
   ));
@@ -1178,8 +1214,8 @@ function commons_core_views_default_views() {
       'alter' => array(
         'alter_text' => 1,
         'text' => '<div class="title">[title]</div>
-    <div class="tags">Tags: [tid] </div>
-    <div class="description">[description] </div>',
+      <div class="tags">Tags: [tid] </div>
+      <div class="description">[description] </div>',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
@@ -1228,7 +1264,7 @@ function commons_core_views_default_views() {
         'strip_tags' => 0,
       ),
       'empty' => '',
-      'hide_empty' => 0,
+      'hide_empty' => 1,
       'empty_zero' => 0,
       'exclude' => 0,
       'id' => 'subscribe',
@@ -1260,9 +1296,9 @@ function commons_core_views_default_views() {
         'strip_tags' => 0,
       ),
       'empty' => '',
-      'hide_empty' => 0,
+      'hide_empty' => 1,
       'empty_zero' => 0,
-      'text' => 'Leave group',
+      'text' => 'Leave',
       'exclude' => 0,
       'id' => 'leave_group',
       'table' => 'og_uid',
