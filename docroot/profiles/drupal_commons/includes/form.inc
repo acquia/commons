@@ -296,6 +296,7 @@ function _drupal_commons_theme_option($theme, $name) {
   $option .= "<br/>";
   $option .= "<img alt=\"{$name}\" title=\"{$name}\" src=\"./profiles/drupal_commons/images/{$theme}_screenshot.png\"></img>";
   $option .= "<br/>";
+  $option .= "<ul><li><i><a href=\"./profiles/drupal_commons/images/{$theme}_screenshot_full.png\" target=\"_blank\">" . t('Click to view fullsize') . "</a></i></li></ul>";
   $option .= "<br/>";
   return $option;
 }
