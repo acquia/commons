@@ -14,11 +14,15 @@ function _commons_core_block($op = 'list', $delta = 0, $edit = array()) {
   }
   else if ($op == 'configure') {
     $func = "_commons_core_{$delta}_block_configure";
-    return $func();
+    if (function_exists($func)) {
+      return $func(); 
+    }
   }
   else if ($op == 'save') {
     $func = "_commons_core_{$delta}_block_save";
-    return $func($edit);
+    if (function_exists($func)) {
+      return $func($edit); 
+    }
   }
   else if ($op == 'view') {
     $func = "_commons_core_{$delta}_block";
