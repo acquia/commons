@@ -182,7 +182,6 @@ body {
 /* By default this wrapper is set to 100% width and centered -- override here to  narrow wrapper or align left or right */
 
 .page {
-
 }
 
 /* The 0 values here remove padding and spacing at the bottom of the page.  Remove to add a gap at the very bottom of the page */
@@ -1210,7 +1209,7 @@ form input.form-submit,
 	margin-top: 18px;
 }
 
-.views-field-subscribe {
+.views-field-subscribe, .views-field-leave-group {
 	background: #228bc8 url(../images/button_bkgd.gif) repeat-x bottom left;
 	border:solid 1px #228bc8;
 	color: #fff;
@@ -1221,11 +1220,11 @@ form input.form-submit,
 	margin: 2px;
 	padding: 1px 5px 2px 5px;
 	text-transform:uppercase;
-	display:inline-block;
+	display:block;
 	float:right;
 }
 .views-field-subscribe a { color:#fff;}
-
+.views-field-leave-group a { color:#fff;}
 
 /* Hover style for form buttons */
 
@@ -3533,7 +3532,7 @@ div.beat-item blockquote {
 #block-views-groups_featured_groups-block_1 .content .views-row .views-field-field-group-image-fid { float:left; width:140px; margin-right:10px;}
 #block-views-groups_featured_groups-block_1 .content .views-row .views-field-field-group-image-fid img { width:136px; height:136px; border:solid 2px #fff;}
 
-#block-views-groups_featured_groups-block_1 .content .views-row .views-field-description { float:left; width:410px; }
+#block-views-groups_featured_groups-block_1 .content .views-row .views-field-description { float:right; width:410px; }
 #block-views-groups_featured_groups-block_1 .content .views-row .title { font-weight:bold;}
 #block-views-groups_featured_groups-block_1 .content .views-row .views-field-subscribe { }
 #block-views-groups_featured_groups-block_1 .content .views-row .views-field-subscribe .field-content { float:right;}

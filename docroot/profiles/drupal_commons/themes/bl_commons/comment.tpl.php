@@ -11,7 +11,7 @@
     <?php endif; ?>
     <?php if ($comment->picture) :?>
       <div class="picture">
-        <?php print $comment->picture; ?>
+        <?php print '<div class="cornerImg"><img width="30" height="30" alt="" src=/' . $comment->picture . ' /></div>' ?>
       </div>
     <?php endif; ?>
     <div class="submitted">
