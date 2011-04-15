@@ -361,6 +361,13 @@ function commons_core_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'og_statistics_include_unapproved_members';
+  $strongarm->value = '0';
+
+  $export['og_statistics_include_unapproved_members'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'og_visibility';
   $strongarm->value = '2';
 
