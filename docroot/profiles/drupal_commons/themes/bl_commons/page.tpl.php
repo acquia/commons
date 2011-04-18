@@ -155,9 +155,16 @@
       <?php print theme('grid_row', $postscript_bottom, 'postscript-bottom', 'full-width', $grid_width); ?>
 
       <!-- footer row: width = grid_width -->
-      <?php if ($footer || $footer_message): ?>
-			  <?php print theme('grid_row', $footer . $footer_message, 'footer', 'full-width', $grid_width); ?>
-	    <?php endif; ?>
+      <?php 
+			$footer = '<a class=\'context-block-region\' id=\'context-block-region-footer\'>footer</a>
+			<div id="block-commons_core-commons_info" class="block block-commons_core odd first  grid16-0">
+			  <div class="inner clearfix">
+					<div class="fusion-edit"><a href="/admin/build/block/configure/commons_core/commons_info?destination=groups" title="configure this Commons_core block (in footer)" class="fusion-block-config">configure block</a></div>            <div class="content">
+				  <div id="acquia-footer-message"><a href="http://acquia.com/drupalcommons" title="Drupal Commons social business software"><img src="/profiles/drupal_commons/images/commons_droplet.png" alt="Drupal Commons social business software" title="Drupal Commons social business software" width="23" height="34" /></a><span>A <a href="http://acquia.com/drupalcommons" title="A Drupal Commons social business software">Drupal Commons</a> Community, powered by&nbsp;<a href="http://acquia.com" title="Acquia">Acquia</a></span></div><div id="fusion-footer-message">Theme by&nbsp;<a href="http://www.brightlemon.com" title="Drupal Themes by Brightlemon">Brightlemon</a>, powered by&nbsp;<a href="http://fusiondrupalthemes.com" title="Premium Drupal themes powered by Fusion">Fusion</a>.</div><a id=\'context-block-commons_core-commons_info\' class=\'context-block editable edit-global\'></a>    </div>
+			  </div><!-- /block-inner -->
+			</div><!-- /block -->';
+			print theme('grid_row', $footer . $footer_message, 'footer', 'full-width', $grid_width); 
+	  ?>
 
     </div><!-- /page-inner -->
   </div><!-- /page -->

@@ -230,7 +230,7 @@ function drupal_commons_theme_form(&$form_state, $url) {
   $form['theme'] = array(
     '#type' => 'radios',
     '#options' => array(
-      'bl_commons' => _drupal_commons_theme_option('bl_commons', st('BrightLemon Commons')),
+      'bl_commons' => _drupal_commons_theme_option('bl_commons', st('Commons Connect')),
       'acquia_commons' => _drupal_commons_theme_option('acquia_commons', st('Acquia Commons')),
     ),
     '#default_value' => DRUPAL_COMMONS_DEFAULT_THEME,
