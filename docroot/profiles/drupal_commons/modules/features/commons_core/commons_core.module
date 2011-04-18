@@ -82,7 +82,7 @@ function commons_core_menu_alter(&$items) {
 /**
  * Implementation of hook_og_links_alter()
  */
-function commons_core_og_links_alter(&$links, &$node) {  
+function commons_core_og_links_alter(&$links, $node) {  
   // Remove the Manager item and members item because our
   // group manager and members block provides this information
   // in a much better way
