@@ -598,63 +598,6 @@ function commons_core_set_node_tab_title($node) {
 }
 
 /**
- * The "Join & learn more" registration form
- */
-function commons_core_join_form() {
-  $form = array();
-  
-  // Pull the standard user registration form
-  $rform = user_register();
-  
-  // Extract required profile fields
-  foreach ($rform as $key => $profile) {
-    if (is_array($profile)) {
-      foreach ($profile as $pkey => $pfield) {
-        if (substr($pkey, 0, 8) == 'profile_') {
-          if ($pfield['#required']) {
-            // Remove description
-            unset($pfield['#description']);
-            // Add to our form
-            $form[$pkey] = $pfield;
-          }
-          unset($rform[$key][$pkey]);
-        }
-      }
-    }
-  } 
-  
-  // Extract needed account elements
-  foreach ($rform['account'] as $key => $field) {
-    if (is_array($field) && $field['#required']) {
-      // Remove the description
-      unset($field['#description']);
-      // Add to our form
-      $form[$key] = $field;
-    }
-  }
-  unset($rform['account']);
-  
-  // Shorten the email field (if available)
-  if (isset($form['mail'])) {
-    $form['mail']['#title'] = t('Email');
-  }
-  
-  // Copy the registration validators
-  $form['#validate'] = $rform['#validate'];
-  
-  // Attach the registration submit callback
-  $form['#submit'] = array('user_register_submit');
-  
-  // Add the submit button
-  $form['submit'] = array(
-    '#type' => 'submit',
-    '#value' => t('Join our community'),
-  );
-  
-  return $form;
-}
-
-/**
  * Detect a group context
  * This function is more robust than just og_get_group_context()
  *
