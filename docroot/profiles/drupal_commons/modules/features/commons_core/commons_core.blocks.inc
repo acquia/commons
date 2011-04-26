@@ -419,7 +419,7 @@ function commons_core_group_create_content_block_form_submit(&$form, $form_state
   $group = $form_state['values']['group'];
   
   // Extract the node type
-  $type = $form_state['values']['node_type'];
+  $type = str_replace('_', '-', $form_state['values']['node_type']);
   
   // Add a link query for the group, if there is one
   $options = $group ? array('gids' => array($group->nid)) : NULL;
