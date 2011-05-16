@@ -1,5 +1,4 @@
 <?php
-// $Id: invite.install,v 1.13.2.4 2009/11/15 16:15:53 smk Exp $
 
 /**
  * @file
@@ -17,6 +16,12 @@ function invite_schema() {
   $schema['invite'] = array(
     'description' => 'The base table for invites.',
     'fields' => array(
+      'iid' => array(
+        'description' => 'The primary identifier for a invite.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
       'reg_code' => array(
         'description' => 'Stores the issued registration code and acts as primary identifier for a invite.',
         'type' => 'varchar',
@@ -88,6 +93,7 @@ function invite_schema() {
       'email' => array('email'),
       'uid'   => array('uid'),
     ),
+    'primary key' => array('iid'),
   );
 
   $schema['invite_notifications'] = array(
@@ -393,3 +399,23 @@ function invite_update_203() {
   return $ret;
 }
 
+
+/**
+ * add primary identifier (iid)
+ */
+function invite_update_6200() {
+  $ret = array();
+  $spec = array(
+    'description' => 'The primary identifier for a invite.',
+    'type' => 'serial',
+    'unsigned' => TRUE,
+    'not null' => TRUE,
+  );
+  $new_keys = array(
+    'primary key' => array(
+      'invite' => 'iid',
+    )
+  );
+  db_add_field($ret, 'invite', 'iid', $spec, $new_keys);
+  return $ret;
+}

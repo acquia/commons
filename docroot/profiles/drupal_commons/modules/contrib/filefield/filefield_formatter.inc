@@ -1,5 +1,4 @@
 <?php
-// $Id: filefield_formatter.inc,v 1.21 2010/12/12 23:36:07 quicksketch Exp $
 /**
  * @file
  * FileField: Defines a CCK file field type.

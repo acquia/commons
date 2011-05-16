@@ -10,7 +10,6 @@
 * @license http://opensource.org/licenses/lgpl-license.php GNU Lesser General Public License Version 2.1
 *
 * @package Krumo
-* @version $Id: class.krumo.php,v 1.1.2.5 2009/09/23 18:14:19 davereid Exp $
 */
 
 //////////////////////////////////////////////////////////////////////////////

@@ -23,11 +23,10 @@ development. Many other nice functions like dpm(), dvm().
 AJAX developers in particular ought to install FirePHP Core from http://www.firephp.org/ and put it in the devel directory. Your path to fb.php should looks like devel/FirePHPCore/lib/FirePHPCore/fb.php. You can use svn checkout http://firephp.googlecode.com/svn/trunk/trunk/Libraries/FirePHPCore. Then you can log php variables to the firebug console. Is quite useful. 
 
 Included in this package is also: 
-- devel_themer.module which outputs deep information related to all theme calls on a page.
 - devel_node_access module which prints out the node_access records for a given node. Also offers hook_node_access_explain for all node access modules to implement. Handy.
 - devel_generate.module which bulk creates nodes, users, comment, terms for development
 
-Macro module has moved to http://drupal.org/project/macro.
+Some nifty drush integration ships with devel and devel_generate. See drush help for details.
 
 COMPATIBILITY NOTES
 ==================
@@ -37,5 +36,5 @@ COMPATIBILITY NOTES
 
 AUTHOR/MAINTAINER
 ======================
--moshe weitzman
-weitzman at tejasa DOT com
+Moshe Weitzman <weitzman at tejasa DOT com> http://cyrve.com
+Hans Salvisberg <drupal at salvisberg DOT com>

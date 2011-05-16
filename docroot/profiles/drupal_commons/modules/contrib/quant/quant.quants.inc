@@ -1,5 +1,4 @@
 <?php
-// $Id: quant.quants.inc,v 1.1.2.6 2010/09/28 13:25:20 mikestefff Exp $
 
 /**
  * Implementation of hook_quants()

@@ -1,5 +1,4 @@
 <?php
-// $Id: filefield_handler_field_data.inc,v 1.3 2010/12/08 04:57:07 quicksketch Exp $
 
 /**
  * @file
@@ -30,7 +29,7 @@ class filefield_handler_field_data extends views_handler_field_node {
       '#options' => $options,
       '#required' => TRUE,
       '#default_value' => $this->options['data_key'],
-      '#description' => t('The data column may contain only a few or none any of these data options. The name of the module that provides the data is shown in parathesis.'),
+      '#description' => t('The data column may contain only a few or none any of these data options. The name of the module that provides the data is shown in parentheses.'),
       '#weight' => 4,
     );
   }
@@ -45,7 +44,11 @@ class filefield_handler_field_data extends views_handler_field_node {
     $values = drupal_clone($values); // Prevent affecting the original.
     $data = unserialize($values->{$this->field_alias});
     $values->{$this->field_alias} = filefield_data_value($this->options['data_key'], $data[$this->options['data_key']]);
-    return parent::render($values);
+
+    // Copied from views_handler_field_node(). We just remove the call to
+    // sanitize_value() from the original call, becaue our value has already
+    // been cleaned by filefield_data_value().
+    return $this->render_link($values->{$this->field_alias}, $values);
   }
 
 }

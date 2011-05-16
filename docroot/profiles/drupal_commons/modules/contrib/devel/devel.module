@@ -1,5 +1,4 @@
 <?php
-// $Id: devel.module,v 1.258.2.87 2010/12/01 23:42:15 salvis Exp $
 
 // This module holds functions useful for Drupal development.
 // Please contribute!
@@ -520,12 +519,30 @@ function devel_start() {
   register_shutdown_function('devel_shutdown');
 }
 
-function backtrace_error_handler($errno, $message, $filename, $line) {
-  // Don't respond to the error if it was suppressed with a '@'
+function backtrace_error_handler($errno, $message, $filename, $line, $context) {
+  // Hide stack trace and parameters from unqualified users.
+  if (!user_access('access devel information')) {
+    return drupal_error_handler($errno, $message, $filename, $line, $context);
+  }
+  // Don't respond to the error if it was suppressed with a '@'.
   if (error_reporting() == 0) {
     return;
   }
+  // Don't respond to warning caused by ourselves.
+  if (preg_match('#Cannot modify header information - headers already sent by \\([^\\)]*[/\\\\]devel[/\\\\]#', $message)) {
+    return;
+  }
   if ($errno & (E_ALL ^ E_DEPRECATED)) {
+    // Only write each distinct NOTICE message once, as repeats do not give any
+    // further information and can choke the page output.
+    if ($errno == E_NOTICE) {
+      static $written = array();
+      if (!empty($written[$line][$filename][$message])) {
+        return;
+      }
+      $written[$line][$filename][$message] = TRUE;
+    }
+
     // We can't use the PHP E_* constants here as not all versions of PHP have all
     // the constants defined, so for consistency, we just use the numeric equivelant.
     $types = array(
@@ -1875,8 +1892,10 @@ function ddebug_backtrace() {
   if (user_access('access devel information')) {
     $trace = debug_backtrace();
     array_shift($trace);
-    foreach ($trace as $key => $value) {
-      $rich_trace[$value['function']] = $value;
+    $count = count($trace);
+    foreach ($trace as $i => $call) {
+      $key = ($count - $i) .': '. $call['function'];
+      $rich_trace[$key] = $call;
     }
     if (has_krumo()) {
       print krumo($rich_trace);
@@ -1902,6 +1921,32 @@ function db_queryd($query) {
   _db_query_callback($args, TRUE);
   $query = preg_replace_callback(DB_QUERY_REGEXP, '_db_query_callback', $query);
   return _db_query($query, 1);
+}
+
+/**
+ * Debugging version of db_query_range().
+ *
+ * Echoes the query to the browser.
+ */
+function db_queryd_range($query) {
+  $args = func_get_args();
+  $count = array_pop($args);
+  $from = array_pop($args);
+  array_shift($args);
+
+  $query = db_prefix_tables($query);
+  if (isset($args[0]) and is_array($args[0])) { // 'All arguments in one array' syntax
+    $args = $args[0];
+  }
+  _db_query_callback($args, TRUE);
+  $query = preg_replace_callback(DB_QUERY_REGEXP, '_db_query_callback', $query);
+  if ($GLOBALS['db_type'] == 'pgsql') {
+    $query .= ' LIMIT '. (int)$count .' OFFSET '. (int)$from;
+  }
+  else {
+    $query .= ' LIMIT '. (int)$from .', '. (int)$count;
+  }
+  return _db_query($query ,1);
 }
 
 // Only define our mail wrapper if the devel module is the current mail
@@ -1991,20 +2036,38 @@ function devel_rebuild_node_comment_statistics_page() {
   drupal_goto('admin');
 }
 
-/**
- * Regenerate the data in node_comment_statistics table.
+/*
+ * Rebuild ncs table.
  *
- * @return void
- **/
+ * Note: In drupal 6, this function depends on dbtng module.
+ */
 function devel_rebuild_node_comment_statistics() {
   // Empty table
-  $sql = "DELETE FROM {node_comment_statistics}";
-  db_query($sql);
+  db_truncate('node_comment_statistics')->execute();
 
-  $sql = "INSERT INTO {node_comment_statistics} (nid, last_comment_timestamp, last_comment_name, last_comment_uid, comment_count) (select nid, c.timestamp, name, uid, comment_count FROM {comments} c INNER JOIN (SELECT MAX(timestamp) AS timestamp, COUNT(*) AS comment_count FROM {comments} WHERE status=%d GROUP BY nid) AS c2 ON c.nid = c2.nid AND c.timestamp=c2.timestamp)";
+  // TODO: DBTNG. Ignore keyword is Mysql only? Is only used in the rare case when
+  // two comments on the same node share same timestamp.
+  $sql = "
+    INSERT IGNORE INTO {node_comment_statistics} (nid, last_comment_timestamp, last_comment_name, last_comment_uid, comment_count) (
+      SELECT c.nid, c.timestamp, c.name, c.uid, c2.comment_count FROM {comments} c
+      JOIN (
+        SELECT c.nid, MAX(c.timestamp) AS timestamp, COUNT(*) AS comment_count FROM {comments} c WHERE status = %d GROUP BY c.nid
+      ) AS c2 ON c.nid = c2.nid AND c.timestamp = c2.timestamp
+    )";
   db_query($sql, COMMENT_PUBLISHED);
 
-  // Insert 0 count records into the node_comment_statistics for nodes that are missing. See comment_enable()
-  db_query_temporary("SELECT n.nid, n.created, n.uid FROM {node} n LEFT JOIN {node_comment_statistics} c ON n.nid = c.nid WHERE c.comment_count IS NULL", 'missing_nids');
-  db_query("INSERT INTO {node_comment_statistics} (nid, last_comment_timestamp, last_comment_name, last_comment_uid, comment_count) SELECT n.nid, n.created, NULL, n.uid, 0 FROM missing_nids n");
+  // Insert records into the node_comment_statistics for nodes that are missing.
+  $query = db_select('node', 'n');
+  $query->leftJoin('node_comment_statistics', 'ncs', 'ncs.nid = n.nid');
+  $query->addField('n', 'changed', 'last_comment_timestamp');
+  $query->addField('n', 'uid', 'last_comment_uid');
+  $query->addField('n', 'nid');
+  $query->addExpression('0', 'comment_count');
+  $query->addExpression('NULL', 'last_comment_name');
+  $query->isNull('ncs.comment_count');
+
+  db_insert('node_comment_statistics')
+    ->from($query)
+    ->execute();
 }
+

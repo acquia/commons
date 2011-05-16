@@ -1,5 +1,4 @@
 <?php
-// $Id: quant.forms.inc,v 1.1.2.4 2010/09/16 15:24:15 mikestefff Exp $
 
 /**
  * Provide a simple form to change time periods

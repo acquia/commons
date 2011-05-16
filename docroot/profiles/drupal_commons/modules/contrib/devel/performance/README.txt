@@ -1,4 +1,3 @@
-$Id: README.txt,v 1.1.4.1 2010/05/16 22:14:28 kbahey Exp $
 
 By Khalid Baheyeldin
 

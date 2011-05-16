@@ -273,29 +273,32 @@ function og_features_views_query_alter($view, &$query) {
     if (!empty($group->features_disabled)) {
       // Alter only node queries
       if ($query->base_table == 'node') {
-        // Load the og features registry
-        $registry = og_features_get_registry();
+        // Make sure an OG argument or filter is being used
+        if (isset($view->arguments['group_nid']) || isset($view->filter['picg'])) {
+          // Load the og features registry
+          $registry = og_features_get_registry();
       
-        // Determine which node types, if any, are disabled for this group
-        $disabled_types = array();
-        foreach ($group->features_disabled as $feature) {
-          if (isset($registry[$feature]->components['node'])) {
-            foreach ($registry[$feature]->components['node'] as $type) {
-              $disabled_types[$type] = $type;
-            }
-          }  
-        }
+          // Determine which node types, if any, are disabled for this group
+          $disabled_types = array();
+          foreach ($group->features_disabled as $feature) {
+            if (isset($registry[$feature]->components['node'])) {
+              foreach ($registry[$feature]->components['node'] as $type) {
+                $disabled_types[$type] = $type;
+              }
+            }  
+          }
         
-        // If there are any disabled node types, alter the view query
-        // to omit them
-        if (!empty($disabled_types)) {
-          $query->where[] = array(
-            'clauses' => array(
-              'node.type NOT IN (' . db_placeholders($disabled_types, 'varchar') . ')',
-            ),
-            'args' => $disabled_types,
-            'type' => '',
-          );
+          // If there are any disabled node types, alter the view query
+          // to omit them
+          if (!empty($disabled_types)) {
+            $query->where[] = array(
+              'clauses' => array(
+                'node.type NOT IN (' . db_placeholders($disabled_types, 'varchar') . ')',
+              ),
+              'args' => $disabled_types,
+              'type' => '',
+            );
+          }
         }
       }
     }
@@ -407,7 +410,7 @@ function og_features_menu_access_callback() {
   $module = array_shift($access_args);
   // Extract the path from the arguments
   $path = array_shift($access_args);
-  
+
   // Detect a group context
   if ($group = og_features_get_group_context()) {
     // Only proceed if there is at least one disabled feature
@@ -447,7 +450,7 @@ function og_features_menu_access_callback() {
     if ($access_callback == 'user_access' && empty($access_args)) {
       return TRUE;  
     }
-    
+
     return call_user_func_array($access_callback, $access_args);
   }
   else {
@@ -550,7 +553,7 @@ function og_features_get_group_context($node = NULL, $reset = FALSE) {
     // Get group context
     if (!($group = og_get_group_context())) {
       // If group context not yet set, see if we can get it from the URL
-      if (arg(0) == 'node' && is_numeric(arg(1))) {
+      if ($node || (arg(0) == 'node' && is_numeric(arg(1)))) {
         $node = $node ? $node : node_load(arg(1));
         if ($node) {
           if (!og_is_group_type($node->type)) {
@@ -575,6 +578,19 @@ function og_features_get_group_context($node = NULL, $reset = FALSE) {
             if ($node = node_load($gid)) {
               if (og_is_group_type($node->type)) {
                 $group = $node;
+              }
+            }
+          }
+        }
+      }
+      // The og paths might help
+      else if (arg(0) == 'og') {
+        foreach (arg() as $arg) {
+          if (is_numeric($arg)) {
+            if ($node = node_load($arg)) {
+              if (og_is_group_type($node->type)) {
+                $group = $node;
+                break;
               }
             }
           }
@@ -733,7 +749,7 @@ function og_features_feature_can_toggle($group, $feature) {
   
   // Fetch the settings for this group type, if any
   if ($settings = og_features_get_node_type_settings($type)) {
-    return $settings[$feature] == OG_FEATURES_ADMIN_TOGGLE;
+    return !isset($settings[$feature]) || ($settings[$feature] == OG_FEATURES_ADMIN_TOGGLE);
   }
   
   return TRUE;

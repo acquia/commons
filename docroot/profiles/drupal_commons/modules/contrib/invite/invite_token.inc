@@ -1,5 +1,4 @@
 <?php
-// $Id: invite_token.inc,v 1.5.2.1 2008/10/06 13:03:08 smk Exp $
 
 /**
  * @file

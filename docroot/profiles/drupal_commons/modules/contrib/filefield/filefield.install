@@ -1,5 +1,4 @@
 <?php
-// $Id: filefield.install,v 1.42 2010/12/09 21:47:14 quicksketch Exp $
 /**
  * @file
  * FileField: Defines a CCK file field type.
@@ -303,12 +302,19 @@ function _filefield_update_6001_move_operation($field, &$context) {
     $context['sandbox']['col_desc'] = $db_info['columns']['description']['column'];
     $context['sandbox']['max'] = db_result(db_query("SELECT COUNT(*) FROM {". $db_info['table'] ."}"));
     $context['sandbox']['current_node'] = 0;
+    $context['sandbox']['current_delta'] = 0;
     $context['sandbox']['processed_files'] = array();
   }
 
   // Work our way through the field values 50 rows at a time.
   $limit = 50;
-  $result = db_query_range("SELECT * FROM {{$context['sandbox']['table']}} WHERE vid >= %d ORDER BY vid ASC", $context['sandbox']['current_node'], 0, $limit);
+  $result = NULL;
+  if ($field['multiple']) {
+    $result = db_query_range("SELECT * FROM {{$context['sandbox']['table']}} WHERE (vid = %d AND delta > %d) OR vid > %d ORDER BY vid ASC, delta ASC", $context['sandbox']['current_node'], $context['sandbox']['current_delta'], $context['sandbox']['current_node'], 0, $limit);
+  }
+  else {
+    $result = db_query_range("SELECT * FROM {{$context['sandbox']['table']}} WHERE vid >= %d ORDER BY vid ASC", $context['sandbox']['current_node'], 0, $limit);
+  }
   while ($row = db_fetch_array($result)) {
     // Do not process the same file twice. This may happen when a node's files
     // are split across two separate batch update HTTP requests.
@@ -334,6 +340,7 @@ function _filefield_update_6001_move_operation($field, &$context) {
     // Update our progress information.
     $context['sandbox']['processed_files'][$row['vid'] . '_' . $delta] = TRUE;
     $context['sandbox']['current_node'] = $row['vid'];
+    $context['sandbox']['current_delta'] = $delta;
   }
 
   // Inform the batch engine that we are not finished,

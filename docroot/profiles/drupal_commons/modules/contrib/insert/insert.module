@@ -1,5 +1,4 @@
 <?php
-// $Id: insert.module,v 1.4.2.5 2010/08/07 18:45:25 quicksketch Exp $
 
 /**
  * @file
@@ -53,6 +52,9 @@ function insert_theme() {
     'insert_widget' => array(
       'arguments' => array('element' => NULL),
       'template' => 'templates/insert-widget',
+    ),
+    'insert_field_widget_settings_styles' => array(
+      'arguments' => array('element' => NULL),
     ),
 
     // Theme functions in includes/insert.inc.
@@ -178,7 +180,7 @@ function insert_element_process($element) {
   $widget_type = $field['widget']['type'];
 
   // Bail out of Insert is not enabled on this field.
-  if (!$widget_settings['insert']) {
+  if (empty($widget_settings['insert'])) {
     return $element;
   }
 
@@ -202,8 +204,8 @@ function insert_element_process($element) {
     drupal_add_js(array('insert' => array('widgets' => array($widget_type => $insert_settings))), 'setting');
   }
 
-  if ($element['fid']['#value']) {
-    $insert_styles = array_filter((array) $widget_settings['insert_styles']);
+  if ($element['fid']['#value']) {;
+    $insert_styles = !empty($widget_settings['insert_styles']['<all>']) ? drupal_map_assoc(array_keys(insert_styles())) : array_filter((array) $widget_settings['insert_styles']);
     $default = !empty($widget_settings['insert_default']) ? $widget_settings['insert_default'] : 'auto';
     if (!isset($insert_styles[$default])) {
       $insert_styles[$default] = $default;
@@ -219,6 +221,15 @@ function insert_element_process($element) {
         );
         $style_options[$style_name] = $style['label'];
       }
+
+      // Always provide a file name property.
+      $element['insert_filename'] = array(
+        '#type' => 'hidden',
+        '#value' => $item['filename'],
+        '#id' => $element['#id'] . '-insert-filename',
+        '#name' => $element['#name'] . '[insert_filename]',
+        '#attributes' => array('class' => 'insert-filename'),
+      );
     }
 
     $element['insert'] = array(
@@ -293,8 +304,10 @@ function insert_widget_form($widget) {
     '#title' => t('Enabled insert styles'),
     '#type' => 'checkboxes',
     '#options' => insert_styles_list(),
-    '#default_value' => (array) $widget['insert_styles'],
-    '#description' => t('Select which styles should be available when sending items to text areas. If no styles are selected, the option to use a style is not displayed.'),
+    '#default_value' => !empty($widget['insert_styles']['<all>']) ? array_keys(insert_styles_list()) : (array) $widget['insert_styles'],
+    '#description' => t('Select which styles should be available when sending items to text areas. If no styles are selected, the option to use a style is not displayed. If all styles are selected, new styles will be enabled by default.'),
+    '#element_validate' => array('insert_field_widget_settings_styles_validate'),
+    '#theme' => 'insert_field_widget_settings_styles',
   );
 
   $form['insert']['insert_default'] = array(
@@ -322,6 +335,34 @@ function insert_widget_form($widget) {
   );
 
   return $form;
+}
+
+/**
+ * An #element_validate function for the styles list on the settings form.
+ */
+function insert_field_widget_settings_styles_validate($element, &$form_state) {
+  if (array_values($element['#value']) == array_keys($element['#options'])) {
+    form_set_value($element, array('<all>' => '<all>'), $form_state);
+  }
+}
+
+/**
+ * Theme the output of the styles list on the settings form.
+ */
+function theme_insert_field_widget_settings_styles($element) {
+  drupal_add_js('misc/tableselect.js');
+
+  $header = array(
+    array('class' => 'select-all', 'data' => ' ' . t('Select all')),
+  );
+
+  $rows = array();
+  foreach ($element['#options'] as $key => $label) {
+    $row = array();
+    $row[] = drupal_render($element[$key]);
+    $rows[] = $row;
+  }
+  return theme('table', $header, $rows);
 }
 
 /**

@@ -1,5 +1,4 @@
 <?php
-// $Id: devel.drush.inc,v 1.7.2.2 2010/11/19 03:46:13 weitzman Exp $
 
 /**
  * @file
@@ -93,7 +92,7 @@ function drush_devel_download() {
   else {
     $path = drush_get_context('DRUSH_DRUPAL_ROOT');
     if (module_exists('libraries')) {
-      $path .= libraries_get_path('FirePHPCore') . '/FirePHPCore';
+      $path .= '/' . libraries_get_path('FirePHPCore') . '/FirePHPCore';
     }
     else {
       $path .= '/'. drupal_get_path('module', 'devel') . '/FirePHPCore';
@@ -104,19 +103,19 @@ function drush_devel_download() {
     drush_log('FirePHP already present. No download required.', 'ok');
   }
   elseif (drush_shell_exec('svn checkout http://firephp.googlecode.com/svn/branches/Library-FirePHPCore-0.3 ' . $path)) {
-    drush_log(dt('FirePHP has been downloaded to @path.', array('@path' => $path)), 'success');
+    drush_log(dt('FirePHP has been checked out via svn to @path.', array('@path' => $path)), 'success');
   }
   else {
-    drush_log(dt('Drush was unable to download FirePHP to @path.', array('@path' => $path)), 'error');
+    drush_log(dt('Drush was unable to checkout FirePHP to @path.', array('@path' => $path)), 'error');
   }
 }
 
 /**
  * Implements drush_MODULE_post_COMMAND().
  */
-function drush_devel_post_enable() {
+function drush_devel_post_pm_enable() {
   $modules = func_get_args();
-  if (in_array('devel', $modules)) {
+  if (in_array('devel', $modules) && !drush_get_option('skip')) {
     drush_devel_download();
   }
 }

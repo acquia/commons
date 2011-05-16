@@ -1,5 +1,4 @@
 <?php
-// $Id: invite.module,v 1.25.2.17 2010/08/01 16:19:22 smk Exp $
 
 /**
  * @file
@@ -257,7 +256,11 @@ function invite_user_register_access() {
     }
   }
   if (!$invite && !user_access('administer users')) {
-    drupal_set_message(t('Sorry, new user registration by invitation only.'));
+    // The menu system checks access whenever local tasks are displayed. Make
+    // sure the message is output only for the path user/register.
+    if (arg(1) == 'register') {
+      drupal_set_message(t('Sorry, new user registration by invitation only.'));
+    }
     return FALSE;
   }
 
@@ -717,7 +720,7 @@ function invite_get_role_limit($account) {
   }
 
   $role_limit = 0;
-  foreach (user_roles(FALSE, 'send invitations') as $rid => $role) {    
+  foreach (user_roles(FALSE, 'send invitations') as $rid => $role) {
     if (array_key_exists($rid, $account->roles)) {
       $role_max = variable_get('invite_maxnum_'. $rid, INVITE_UNLIMITED);
       if ($role_max == INVITE_UNLIMITED) {
@@ -822,7 +825,6 @@ function invite_page_form($remaining_invites, $edit = array()) {
       '#type' => 'textfield',
       '#title' => t('Subject'),
       '#default_value' => $subject,
-      '#maxlength' => 64,
       '#description' => t('Type the subject of the invitation e-mail.'),
       '#required' => TRUE,
     );
@@ -843,7 +845,7 @@ function invite_page_form($remaining_invites, $edit = array()) {
   $form['message'] = array(
     '#type' => 'textarea',
     '#default_value' => ($edit && !empty($edit['data']['message'])) ? $edit['data']['message'] : '',
-    '#description' => format_plural($allow_multiple ? 1 : 99, 'This message will be added to the mail sent to the person you are inviting.', 'This message will be added to the mail sent to the persons you are inviting.'),
+    '#description' => format_plural($allow_multiple ? 1 : 99, 'This message will be added to the mail sent to the persons you are inviting.', 'This message will be added to the mail sent to the person you are inviting.'),
   );
 
   $form['submit'] = array(
@@ -1386,4 +1388,3 @@ function _invite_substitutions($args = array()) {
   );
   return (object)array_merge($defaults, $args);
 }
-

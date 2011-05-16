@@ -1,5 +1,4 @@
 <?php
-// $Id: filefield.module,v 1.231 2010/12/12 23:37:11 quicksketch Exp $
 
 /**
  * @file
@@ -111,11 +110,6 @@ function filefield_theme() {
       'arguments' => array('file' => NULL, 'field' => NULL),
       'file' => 'filefield_formatter.inc',
     ),
-    'filefield_file' => array(
-      'arguments' => array('file' => NULL),
-      'file' => 'filefield_formatter.inc',
-    ),
-
  );
 }
 
@@ -310,10 +304,6 @@ function filefield_widget_settings($op, $widget) {
  * Implementation of hook_widget().
  */
 function filefield_widget(&$form, &$form_state, $field, $items, $delta = 0) {
-  if (module_exists('devel_themer') && (user_access('access devel theme information') || user_access('access devel information'))) {
-    drupal_set_message(t('Files may not be uploaded while the Theme Developer tool is enabled. It is highly recommended to <a href="!url">disable this module</a> unless it is actively being used.', array('!url' => url('admin/build/modules'))), 'error');
-  }
-
   // CCK doesn't give a validate callback at the field level...
   // and FAPI's #require is naive to complex structures...
   // we validate at the field level ourselves.
@@ -322,7 +312,6 @@ function filefield_widget(&$form, &$form_state, $field, $items, $delta = 0) {
   }
   $form['#attributes']['enctype'] = 'multipart/form-data';
 
-  module_load_include('inc', 'filefield', 'field_widget');
   module_load_include('inc', $field['widget']['module'], $field['widget']['module'] .'_widget');
 
   $item = array('fid' => 0, 'list' => $field['list_default'], 'data' => array('description' => ''));
@@ -550,28 +539,20 @@ function filefield_filefield_icon_sets() {
 }
 
 /**
- * Access callback for the JavaScript upload and deletion AHAH callbacks.
+ * Access callback for AHAH upload/delete callbacks and node form validation.
  *
  * The content_permissions module provides nice fine-grained permissions for
  * us to check, so we can make sure that the user may actually edit the file.
  */
-function filefield_edit_access($type_name, $field_name) {
-  if (!content_access('edit', content_fields($field_name, $type_name))) {
-    return FALSE;
-  }
-  // No content permissions to check, so let's fall back to a more general permission.
-  return user_access('access content') || user_access('administer nodes');
+function filefield_edit_access($type_name, $field_name, $node = NULL) {
+  return content_access('edit', content_fields($field_name, $type_name), NULL, $node);
 }
 
 /**
  * Access callback that checks if the current user may view the filefield.
  */
 function filefield_view_access($field_name, $node = NULL) {
-  if (!content_access('view', content_fields($field_name), NULL, $node)) {
-    return FALSE;
-  }
-  // No content permissions to check, so let's fall back to a more general permission.
-  return user_access('access content') || user_access('administer nodes');
+  return content_access('view', content_fields($field_name), NULL, $node);
 }
 
 /**
@@ -626,7 +607,8 @@ function filefield_js($type_name, $field_name, $delta) {
       $form_element = $form[$group_name][$field_name][$delta];
     }
   }
-  else {
+
+  if (!isset($form_element)) {
     $form_element = $form[$field_name][$delta];
   }
 
@@ -1068,9 +1050,9 @@ function filefield_get_file_references($file, $field = NULL) {
 /**
  * Get all FileField files connected to a node ID.
  *
- * @param $nid
+ * @param $node
  *   The node object.
- * @param $field_name
+ * @param $field
  *   Optional. The CCK field array or field name as a string.
  * @return
  *   An array of all files attached to that field (or all fields).

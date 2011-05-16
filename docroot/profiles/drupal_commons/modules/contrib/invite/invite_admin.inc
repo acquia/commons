@@ -1,5 +1,4 @@
 <?php
-// $Id: invite_admin.inc,v 1.3.2.5 2010/08/01 09:01:49 smk Exp $
 
 /**
  * @file
@@ -10,9 +9,11 @@
  * Menu callback; display invite settings form.
  */
 function invite_settings() {
+  $permissions_url = url('admin/user/permissions', array('query' => drupal_get_destination(), 'fragment' => 'module-invite'));
+
   $roles = user_roles(FALSE, 'send invitations');
   if (count($roles) == 0) {
-    drupal_set_message(t('Please enable the <em>send invitations</em> permission for at least one role. This can be done on the <a href="!permissions-url">Permissions page</a>.', array('!permissions-url' => url('admin/user/permissions'))));
+    drupal_set_message(t('Please enable the <em>send invitations</em> permission for at least one role on the <a href="@url">permissions page</a>.', array('@url' => $permissions_url)), 'warning');
   }
   $target_roles = user_roles(TRUE);
 
@@ -22,6 +23,7 @@ function invite_settings() {
     '#title' => t('General settings'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
+    '#group' => 'additional_settings',
   );
   $form['general']['invite_target_role_default'] = array(
     '#type' => 'select',
@@ -51,9 +53,10 @@ function invite_settings() {
   $form['role'] = array(
     '#type' => 'fieldset',
     '#title' => t('Role settings'),
-    '#description' => t('Note: Permission related settings can be found at the <a href="!permissions-url">Permissions page</a>.', array('!permissions-url' => url('admin/user/permissions'))),
+    '#description' => t('To control which roles may send invitations visit the <a href="@url">permissions page</a>.', array('@url' => $permissions_url)),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
+    '#group' => 'additional_settings',
   );
 
   foreach ($roles as $rid => $role) {
@@ -88,13 +91,12 @@ function invite_settings() {
     '#title' => t('E-mail settings'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
+    '#group' => 'additional_settings',
   );
   $form['email']['invite_subject'] = array(
     '#type' => 'textfield',
     '#title' => t('Subject'),
     '#default_value' => variable_get('invite_subject', t('[inviter-raw] has sent you an invite!')),
-    '#size' => 30,
-    '#maxlength' => 64,
     '#description' => t('Type the default subject of the invitation e-mail.') .' '. t('Use the syntax [token] if you want to insert a replacement pattern.'),
     '#required' => TRUE,
   );
@@ -160,6 +162,7 @@ function invite_settings() {
     '#title' => t('Invite page customization'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
+    '#group' => 'additional_settings',
   );
   $form['custom']['invite_page_title'] = array(
     '#type' => 'textfield',
@@ -168,6 +171,9 @@ function invite_settings() {
     '#description' => t('The title of the page where users invite friends.'),
     '#required' => TRUE,
   );
+
+  // Add vertical tabs display if available.
+  $form['#pre_render'][] = 'vertical_tabs_form_pre_render';
 
   return system_settings_form($form);
 }

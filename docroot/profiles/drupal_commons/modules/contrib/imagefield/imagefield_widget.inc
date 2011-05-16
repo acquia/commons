@@ -1,5 +1,4 @@
 <?php
-// $Id: imagefield_widget.inc,v 1.46 2010/12/10 18:36:50 quicksketch Exp $
 
 /**
  * @file

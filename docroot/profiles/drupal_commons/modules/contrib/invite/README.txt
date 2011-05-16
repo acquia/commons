@@ -1,4 +1,3 @@
-/* $Id: README.txt,v 1.14.2.1 2010/07/29 00:58:30 smk Exp $ */
 
 -- SUMMARY --
 
@@ -102,29 +101,18 @@ Bug reports, feature suggestions and latest developments:
 
 -- USAGE --
 
-To invite a friend :
-
-1. Click the 'Invite your friends and colleages' link.
-3. Fill in the e-mail address(es) of the person(s) you would like to invite,
-   and add a personal message.
-4. Press submit.
-5. This will send an invitation e-mail which you can now track from the
-   'Your invitations' page.
-
-Invitations show up in one of the states accepted, pending, expired, and the
-special case deleted.
+Sent invitations show up in one of three states accepted, pending, expired, or deleted.
 
 * Accepted: Shows that the person you have invited has accepted the invitation
-  to join the site. Click on the e-mail address to watch the user's profile
-  page.
-* Pending: The invitation has been sent, but the invitee has still not accepted
+  to join the site.
+* Pending: The invitation has been sent, but the invitee has since not accepted
   the invitation.
 * Expired: The invitation has not been used to register within the expiration
   period.
-* Deleted: The user account has been terminated.
+* Deleted: The user account has been blocked.
 
-At any time, you may withdraw either pending or expired invitations.
-Accepted invitations can only be withdrawn if the configuration allows you to.
+At any time, pending or expired invitations may be withdrawn. Accepted
+invitations may only be withdrawn if the configuration allows you to.
 
 
 -- INVITE API --
@@ -158,33 +146,6 @@ function hook_invite($op, $args) {
     $args['code']:    The tracking code of the invitation.
 }
 
-There are several third-party modules that can react on invite events:
-
-* Buddylist http://drupal.org/project/buddylist
-  User Relationships http://drupal.org/project/user_relationships
-  Inviter and invitee are automagically put on their respective buddy list.
-
-* Userpoints http://drupal.org/project/userpoints
-  Credit some points for sending registrations and/or when an invited user
-  registers.
-
-
--- TROUBLESHOOTING --
-
-When the site is set to allow new accounts by invitation only, it would be nice 
-to remove the 'Create new account' tab that shows up if a user clicks on the 
-'Request a new password' link. There seems no way to remove existing menu 
-entries.
-
-To solve this issue, you could add the following function to your template.php:
-
-function phptemplate_menu_item_link($item, $link_item) {
-  if ($link_item['path'] == 'user/register') return;
-  return l($item['title'], $link_item['path'], !empty($item['description']) ? array('title' => $item['description']) : array(), isset($item['query']) ? $item['query'] : NULL);
-}
-
-This prevents the 'Create new account' menu item from being rendered.
-
 
 -- CREDITS --
 
@@ -192,10 +153,5 @@ Original author:
   David Hill (tatonca)
 
 Current maintainer:
-  Stefan M. Kudwien (smk-ka)
-
-Sponsored by UNLEASHED MIND
-  Specialized in consulting and planning of Drupal powered sites, UNLEASHED
-  MIND offers installation, development, theming, customization, and hosting
-  to get you started. Visit http://www.unleashedmind.com for more information.
+  Stefan M. Kudwien (smk-ka) - http://drupal.org/user/48898
 

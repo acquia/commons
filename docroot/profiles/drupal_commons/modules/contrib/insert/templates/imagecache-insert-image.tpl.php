@@ -1,5 +1,4 @@
 <?php
-// $Id: imagecache-insert-image.tpl.php,v 1.1 2009/10/21 06:23:43 quicksketch Exp $
 
 /**
  * @file
@@ -19,6 +18,9 @@
  * - __alt__: The ALT text, intended for use in the <img> tag.
  * - __title__: The Title text, intended for use in the <img> tag.
  * - __description__: A description of the image, sometimes used as a caption.
+ * - __filename__: The file name.
+ * - __[token]_or_filename__: Any of the above tokens if available, otherwise
+ *   use the file's name. i.e. __title_or_filename__.
  */
 ?>
 <img src="<?php print $url ?>" alt="__alt__" title="__title__" class="imagecache-<?php print $preset_name ?><?php print $class ? ' ' . $class : '' ?>" />
