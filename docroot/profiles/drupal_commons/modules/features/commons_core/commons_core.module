@@ -356,17 +356,6 @@ function commons_core_theme() {
 }
 
 /**
- * Implementation of hook_user()
- */
-function commons_core_user($op, &$edit, &$account, $category = NULL) {
-  if ($op == 'view') {
-    // Remove the "subscribe to" link because we're providing
-    // a custom block for that to be placed elsewhere
-    unset($account->content['summary']['notifications']);
-  }
-}
-
-/**
  * Implementation of hook_action_info().
  */
 function commons_core_action_info() {
