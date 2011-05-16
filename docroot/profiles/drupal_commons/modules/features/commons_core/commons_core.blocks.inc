@@ -45,27 +45,27 @@ function _commons_core_block_list() {
   );
   $blocks['header_login'] = array(
     'info' => t('Header login block'),
-    'cache' => BLOCK_CACHE_GLOBAL,
+    'cache' => BLOCK_NO_CACHE,
   );
   $blocks['join_learn'] = array(
     'info' => t('Join & learn more'),
     'cache' => BLOCK_CACHE_GLOBAL,
   );
   $blocks['group_menu'] = array(
-    'info' => t('Group actions menu'),
-    'cache' => BLOCK_CACHE_GLOBAL,
+    'info' => t('Group menu'),
+    'cache' => BLOCK_NO_CACHE,
   );
   $blocks['group_create_content'] = array(
     'info' => t('Group create content selector'),
-    'cache' => BLOCK_CACHE_GLOBAL,
+    'cache' => BLOCK_NO_CACHE,
   );
   $blocks['group_activity'] = array(
     'info' => t('Group activity'),
-    'cache' => BLOCK_CACHE_GLOBAL,
+    'cache' => BLOCK_NO_CACHE,
   );
   $blocks['group_members'] = array(
     'info' => t('Group members and admins'),
-    'cache' => BLOCK_CACHE_GLOBAL,
+    'cache' => BLOCK_NO_CACHE,
   );
   $blocks['create_group'] = array(
     'info' => t('Create a group'),
