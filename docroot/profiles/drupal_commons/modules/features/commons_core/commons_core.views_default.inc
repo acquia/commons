@@ -5431,11 +5431,24 @@ function commons_core_views_default_views() {
     ),
   ));
   $handler->override_option('sorts', array(
-    'name' => array(
+    'value_1' => array(
       'order' => 'ASC',
-      'id' => 'name',
-      'table' => 'users',
-      'field' => 'name',
+      'id' => 'value_1',
+      'table' => 'profile_values_profile_last_name',
+      'field' => 'value',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'value' => array(
+      'order' => 'ASC',
+      'id' => 'value',
+      'table' => 'profile_values_profile_name',
+      'field' => 'value',
+      'override' => array(
+        'button' => 'Override',
+      ),
       'relationship' => 'none',
     ),
   ));
