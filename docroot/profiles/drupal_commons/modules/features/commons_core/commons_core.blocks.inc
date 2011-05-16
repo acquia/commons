@@ -250,7 +250,7 @@ function commons_core_join_form() {
  */
 function _commons_core_group_menu_block() {
   // Detect group context
-  if ($group = commons_core_get_group_context()) {
+  if ($group = og_features_get_group_context()) {
     // Get the standard group details block
     $details = og_block_details();
     if (isset($details['content'])) {
@@ -269,7 +269,7 @@ function _commons_core_group_menu_block() {
  */
 function _commons_core_group_create_content_block() {
   // If we're inside a group
-  if ($group = commons_core_get_group_context()) {
+  if ($group = og_features_get_group_context()) {
     // Make sure the current user is a group member
     if (!og_is_group_member($group->nid)) {
       return NULL;
@@ -291,7 +291,7 @@ function commons_core_group_create_content_block_form(&$form_state) {
 
   // If we're in a group context, the content types will be 
   // gathered based on the group
-  if ($group = commons_core_get_group_context()) {
+  if ($group = og_features_get_group_context()) {
     // Gather group node type links
     $links = module_invoke_all('og_create_links', $group);
   
@@ -449,7 +449,7 @@ function _commons_core_group_activity_block() {
  */
 function _commons_core_group_members_block() {
   // Detect the group context
-  if ($group = commons_core_get_group_context()) {
+  if ($group = og_features_get_group_context()) {
     // Count the number of group members for the block title
     $sql = "SELECT count(uid) FROM {og_uid} WHERE nid = %d AND is_active = 1";
     $count = db_result(db_query($sql, $group->nid));

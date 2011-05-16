@@ -23,7 +23,7 @@ function commons_notifications_og_links_alter(&$links) {
   global $user;
   
   // Detect the group context
-  if ($group = commons_core_get_group_context()) {
+  if ($group = og_features_get_group_context()) {
     // Check if the user can subscribe to the group
     if (commons_notifications_group_access($group)) {
       // Determine if the user has subscriptions for the current group

@@ -254,7 +254,7 @@ function commons_core_field_access($op, $field, $account = NULL, $node = NULL) {
       case 'view':
       case 'edit':
         // If on node add form, determine group
-        if (arg(0) == 'node' && arg(1) == 'add' && ($group = commons_core_get_group_context())) {
+        if (arg(0) == 'node' && arg(1) == 'add' && ($group = og_features_get_group_context())) {
           // hook_nodeapi() validates group admin status if additional
           // groups are selected
           
@@ -595,60 +595,6 @@ function commons_core_set_node_tab_title($node) {
   }
   
   return t('View');
-}
-
-/**
- * Detect a group context
- * This function is more robust than just og_get_group_context()
- *
- * @param $node
- *   Optionally specify a node being viewed
- * @return
- *   A group object if available, otherwise NULL
- */
-function commons_core_get_group_context($node = NULL) {
-  static $group = FALSE;
-  
-  if ($group === FALSE) { 
-    // Get group context
-    if (!($group = og_get_group_context())) {
-      // If group context not yet set, see if we can get it from the URL
-      if (arg(0) == 'node') {
-        if (is_numeric(arg(1))) {
-          $node = $node ? $node : node_load(arg(1));
-          if ($node) {
-            if (!og_is_group_type($node->type)) {
-              // If we pulled a node that isn't a group, see if the node is
-              // inside a group
-              if ($groups = og_get_node_groups($node)) {
-                // Use the first group
-                $group = node_load(key($groups));
-              }
-            }
-            else {
-              $group = $node;
-            }
-          }
-        }
-        // The node add form URL queries might help
-        else if (arg(1) == 'add' && arg(2)) {
-          $gids = $_GET['gids'];
-          if (is_array($gids)) {
-            $gid = $gids[0];
-            if (is_numeric($gid)) {
-              if ($node = node_load($gid)) {
-                if (og_is_group_type($node->type)) {
-                  $group = $node;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-
-  return $group;
 }
 
 /**
