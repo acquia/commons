@@ -255,7 +255,7 @@ function _commons_core_group_menu_block() {
     $details = og_block_details();
     if (isset($details['content'])) {
       return array(
-        'subject' => l(t('Actions'), "node/{$group->nid}", array('attributes' => array('title' => t('Return to !group', array('!group' => $group->title))))),
+        'subject' => l(t('Group menu'), "node/{$group->nid}", array('attributes' => array('title' => t('Return to !group', array('!group' => $group->title))))),
         'content' => $details['content']
       );
     }
