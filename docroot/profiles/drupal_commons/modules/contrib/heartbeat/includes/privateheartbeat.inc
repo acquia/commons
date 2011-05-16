@@ -1,5 +1,4 @@
 <?php
-// $Id: privateheartbeat.inc,v 1.1.2.2.2.13 2010/11/20 22:19:07 stalski Exp $
 
 /**
  * @file

@@ -1,5 +1,4 @@
 <?php
-// $Id: heartbeat.module,v 1.1.2.26.2.46.2.108 2011/01/21 00:53:09 stalski Exp $
 // by Stalski (Jochen Stals) - Menhir - www.menhir.be
 
 
@@ -110,6 +109,7 @@ function heartbeat_init() {
   global $user, $language;
   drupal_add_js(drupal_get_path('module', 'heartbeat') . '/heartbeat.js');
   drupal_add_js(array('heartbeat_language' => $language->language), "setting");
+  drupal_add_js(array('heartbeat_language_prefix' => $language->prefix), "setting");
 }
 
 /**
@@ -120,6 +120,7 @@ function heartbeat_perm() {
   return array(
     'configure heartbeat',
     'configure heartbeat messages',
+    'access user activity',
     'delete heartbeat activity logs',
     'delete own heartbeat activity logs',
     'view heartbeat messages',
@@ -141,9 +142,7 @@ function heartbeat_menu() {
   // Menu page callbacks for each heartbeat access type
   $access_types = variable_get('heartbeat_access_types', array());
   foreach ($access_types as $access_type => $type) {
-    if (isset($type['settings']['page_disabled']) && $type['settings']['page_disabled']) {
-      continue;
-    }
+    $menu_item_type = (isset($type['settings']['page_disabled']) && $type['settings']['page_disabled']) ? MENU_NORMAL_ITEM : MENU_CALLBACK;
     $items['heartbeat/'. $access_type] = array(
       'title callback' => 'heartbeat_messages_title',
       'title arguments' => array(1),
@@ -153,7 +152,7 @@ function heartbeat_menu() {
       'access callback' => '_heartbeat_access_type_has_access',
       'access arguments' => array(1),
       'file' => 'heartbeat.pages.inc',
-      'type' => $access_type == 'singleheartbeat' ? MENU_CALLBACK : MENU_NORMAL_ITEM,
+      'type' => $access_type == 'singleheartbeat' ? MENU_CALLBACK : $menu_item_type,
     );
   }
 
@@ -482,7 +481,7 @@ function heartbeat_block($op = 'list', $delta = 0, $edit = array()) {
   elseif ($op == 'view') {
 
     // Message streams for each access type
-    if (variable_get('heartbeat_show_user_profile_messages_' . drupal_strtolower($delta), 0)
+    if (variable_get('heartbeat_show_user_profile_messages_' . drupal_strtolower($delta), 1)
       && arg(0) == 'user' && is_numeric(arg(1))) {
       $context = heartbeat_stream_view($delta, FALSE, 0, FALSE, heartbeat_user_load(arg(1)));
     }
@@ -518,7 +517,7 @@ function heartbeat_block($op = 'list', $delta = 0, $edit = array()) {
       '#description' => t('By default heartbeat will show activity in relation to the
         currently logged in user.  With this setting enabled and only on the user profile page,
         the messages will be shown in relation to the user profile.'),
-      '#default_value' => variable_get('heartbeat_show_user_profile_messages_' . drupal_strtolower($realname), 0),
+      '#default_value' => variable_get('heartbeat_show_user_profile_messages_' . drupal_strtolower($realname), 1),
     );
 
     return $form;
@@ -968,6 +967,8 @@ function _theme_user_message_select_form($title, $settings) {
     );
 
   }
+
+  ksort($form['heartbeat_activity_settings']);
 
   return $form;
 }
@@ -1492,6 +1493,7 @@ function heartbeat_get_related_uids($uid) {
     // all the messages where the current uid is in the friendlist
     // if function exists use it
     $related_uids = module_invoke_all('heartbeat_related_uid_info', $uid);
+    $related_uids[$uid] = $uid;
     if (count($related_uids) > 0) {
       foreach ($related_uids as $rel_uid) {
         $uids[$uid][$rel_uid] = $rel_uid;
@@ -1554,6 +1556,21 @@ function heartbeat_load_message_instance($uaid) {
 }
 
 /**
+ * Promote a message to the list again.
+ *
+ * @param string $hid
+ */
+function heartbeat_promote_message_instance($uaid) {
+  $uaids = heartbeat_get_uaids($uaid);
+  foreach ($uaids as $row_uaid) {
+    if ($row = heartbeat_load_message_instance($row_uaid)) {
+      db_query("UPDATE {heartbeat_activity} set timestamp = %d WHERE uaid = %d ", time(), $row_uaid);
+    }
+  }
+  return FALSE;
+}
+
+/**
  * Helper function to check access on an Access type activity stream
  */
 function _heartbeat_message_has_access($uaid) {
@@ -1612,6 +1629,7 @@ function heartbeat_stream_view($access_type, $page = FALSE, $offset = 0, $ajax =
 
   // Message streams for each access type
   if ($type = _heartbeat_access_type_has_access($access_type)) {
+
     heartbeat_include('HeartbeatStream');
     heartbeat_include('HeartbeatMessageBuilder');
     heartbeat_include('HeartbeatParser');
@@ -1704,12 +1722,15 @@ function theme_heartbeat_stream_more_link($heartbeatAccess, $offset_time, $page 
     $path .= '/' . $offset_time;
 
     // Add a fourth paramter to indicate that where on a profile page.
-    if (arg(0) == 'user' && is_numeric(arg(1)) && variable_get('heartbeat_show_user_profile_messages_' . $heartbeatAccess->getStream()->name, 0)) {
+    if (arg(0) == 'user' && is_numeric(arg(1)) && variable_get('heartbeat_show_user_profile_messages_' . $heartbeatAccess->getStream()->name, 1)) {
       $path .= '/' . arg(1);
     }
 
     if ($ajax_pager) {
       $attributes['attributes']['onclick'] = 'javascript:Drupal.heartbeat.getOlderMessages(this, ' . (int)$page . '); return false;';
+      if (method_exists($heartbeatAccess, 'getGroup')) {
+        $attributes['attributes']['class'] = 'heartbeat-group-' . $heartbeatAccess->getGroup()->nid;
+      }
     }
 
     $formattedlink = l(t('Older messages'), $path, $attributes) . '<span class="heartbeat-messages-throbber">&nbsp;</span>';

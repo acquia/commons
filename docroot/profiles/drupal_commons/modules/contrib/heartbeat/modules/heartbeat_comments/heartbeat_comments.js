@@ -12,7 +12,7 @@ Drupal.heartbeat.comments.button = null;
  */
 Drupal.behaviors.heartbeat_comments = function (context) {
   $('.heartbeat-comment-submit', context).each(function() {
-    $(this).bind('click', function(e) {
+    $(this).click(function(e) {
       return Drupal.heartbeat.comments.submit(this); 
     });
   });
@@ -20,12 +20,22 @@ Drupal.behaviors.heartbeat_comments = function (context) {
 
 Drupal.heartbeat.comments.submit = function(element) {
 
+  // If the button is set to disabled, don't do anything or if 
+  // the field is blank, don't do anything.
+  Drupal.heartbeat.comments.field = $(element).parents('form').find('.heartbeat-message-comment');
+  if ($(element).attr("disabled") || Drupal.heartbeat.comments.field.val() == ''){
+    return false;
+  }
+  
   // Throw in the throbber
   Drupal.heartbeat.comments.button = $(element);
   Drupal.heartbeat.wait(Drupal.heartbeat.comments.button, '.heartbeat-comments-wrapper');
   Drupal.heartbeat.comments.button.attr("disabled", "disabled");
   
   var formElement = $(element).parents('form');
+  
+  // Disable form element, uncomment the line below
+  formElement.find('.heartbeat-message-comment').attr('disabled', 'disabled');
   
   var url = Drupal.settings.basePath + 'heartbeat/comment/post';
   var nid = formElement.find('.heartbeat-message-nid').val();
@@ -69,6 +79,7 @@ Drupal.heartbeat.comments.submitted = function(data) {
     
     Drupal.heartbeat.doneWaiting();
     Drupal.heartbeat.comments.button.removeAttr("disabled");
+    $('#heartbeat-comments-list-' + data.id).parent().parent().find('.heartbeat-message-comment').removeAttr("disabled");
   }
 }
 

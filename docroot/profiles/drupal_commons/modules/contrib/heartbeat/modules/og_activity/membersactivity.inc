@@ -61,6 +61,13 @@ class MembersActivity extends HeartbeatAccess {
   }
 
   /**
+   * getGroup
+   */
+  public function getGroup() {
+    return $this->group;
+  }
+
+  /**
    * setGroup
    *
    * Sets the group for a given node ID.
@@ -70,14 +77,16 @@ class MembersActivity extends HeartbeatAccess {
   private function setGroup($nid = 0) {
 
     if ($nid != 0) {
+
       $this->_gid = $nid;
       $this->group = node_load($nid);
-      return;
-    }
 
-    if (!empty($_REQUEST['group_nid'])) {
+    }
+    elseif (!empty($_REQUEST['group_nid'])) {
+
       $this->_gid = $_REQUEST['group_nid'];
       $this->group = node_load($this->_gid);
+
     }
     elseif (arg(0) == 'node' && is_numeric(arg(1))) {
 
@@ -91,6 +100,7 @@ class MembersActivity extends HeartbeatAccess {
         $this->_gid = current($node->og_groups);
         $this->group = node_load($this->_gid);
       }
+
     }
 
   }
@@ -110,8 +120,14 @@ class MembersActivity extends HeartbeatAccess {
       $members[] = $row->uid;
     }
 
-    $sql = " AND ua.uid IN (". implode(',', $members) .") ";
-    $heartbeat->raw_messages = $this->resultSql($sql);
+    if (!empty($members)) {
+      $sql = " AND ua.uid IN (". implode(',', $members) .") ";
+      $heartbeat->raw_messages = $this->resultSql($sql);
+    }
+    // Skip the messages if there are no members for a group.
+    else {
+      $heartbeat->raw_messages = array();
+    }
 
     return $heartbeat;
   }

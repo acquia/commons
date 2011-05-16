@@ -9,6 +9,26 @@
 # @date ? For release DRUPAL-6--4-x
 ---------------------------------------------------------------
 
+  * #1117738 by Baroch Orgen : URL-encoded 'user-name-url' token breaks message concatenation on translated (Hebrew) site
+  * #1051630 by gateway69: warning: Invalid argument supplied for foreach() in sites/all/modules/heartbeat/heartbeat.common.inc on line 70.
+  * #1050634 by aether: Multiple comments by same user on same node not displaying in stream.
+  * #1049512 by aether: HeartbeatMessageBuilder not respecting profile access settings.
+  * #1037488 by dmadruga: No single key for message ordering.
+  * #1041832 by wanggy and thomjjames: Heartbeat cannot show user's own message on heartbeat relational activity
+  * Fixed a couple of bugs i found myself. 
+    - Ogheartbeat did not poll correct.
+    - Fixed the double submit problem of a comment after clicking older messages or
+      polling for newer messages.
+    - the ungrouped delete buttons where overlapping each other
+  * Removed the trigger of heartbeat_comments_post from node_comment context. The 
+    available tokens are too different.
+  * #1044344 by reynaldio: Heartbeat shows invalid activity in panels.
+    The block configuration to show the displayed user instead of the logged-in one
+    now defaults to 1!
+  * Added/changed default styling so it's more out-of-the-box
+  * #1031014 by LiuShaz: OG activity paging
+  * #1046050 by mrfelton: Ability to filter heartbeat messages by date
+  * #1046988 by aether: Possible to override heartbeatParser
   * #1029780 by dmadruga: Comments (not related to nodes) not showing on activity streams 
     when multiple languages enabled.
     This is a big refactoring. Started from patches but then decided to re-analyze the 

@@ -1,5 +1,4 @@
 <?php
-// $Id: heartbeat.common.inc,v 1.1.2.2.2.28 2011/01/21 00:53:09 stalski Exp $
 
 /**
  * @file
@@ -67,11 +66,13 @@ function heartbeat_decode_message_variables($string, $object = FALSE) {
  */
 function heartbeat_encode_message_variables($array) {
   $string = '';
-  foreach ($array as $key => $value) {
-    if (is_array($value)) {
-      $value = implode('***', $value);
+  if (!empty($array) && is_array($array)) {
+    foreach ($array as $key => $value) {
+      if (is_array($value)) {
+        $value = implode('***', $value);
+      }
+      $string .= $key .'=|='. $value .'-|-';
     }
-    $string .= $key .'=|='. $value .'-|-';
   }
   //$string = serialize((object)$array);
   return $string;
@@ -182,7 +183,8 @@ function _heartbeat_stream_defaults($values) {
       'page_show_pager' => 1,
       'page_pager_ajax' => 1,
       'num_load_max' => 30,
-      'page_disabled' => 0
+      'page_disabled' => 0,
+      'skip_active_user' => 0,
     ),
     'poll_messages' => 0,
   );

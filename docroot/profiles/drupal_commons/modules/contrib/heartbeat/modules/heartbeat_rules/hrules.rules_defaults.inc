@@ -1,5 +1,4 @@
 <?php
-// $Id: hrules.rules_defaults.inc,v 1.1.2.2 2010/02/21 12:31:33 stalski Exp $
 
 /**
  * @file

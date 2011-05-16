@@ -1,5 +1,4 @@
 <?php
-// $Id: heartbeat-message-row.tpl.php,v 1.1.2.12 2011/01/21 00:53:09 stalski Exp $
 
 /**
  * @file
@@ -16,9 +15,8 @@
  *   visibility of the "number more" messages when grouping exceeded the
  *   maximum allowed grouped property.
  */
-
 ?>
-<div class="heartbeat-message-block <?php print $message->message_id . ' ' . $zebra; ?>">
+<div class="heartbeat-message-block <?php print str_replace("_", "-", $message->message_id) . ' ' . $zebra; ?>">
 
   <div class="beat-item <?php print $message->classes ?>" id="beat-item-<?php print $message->uaid ?>">
 
@@ -46,7 +44,7 @@
   </div>
 
   <?php if (count($message->uaids) > 0) :?>
-  <div class="beat-item <?php print $message->classes ?>" id="beat-item-<?php print $message->uaid ?>-ungrouped" style="display: none;">
+  <div class="beat-item <?php print $message->classes ?> beat-item-ungrouped" id="beat-item-<?php print $message->uaid ?>-ungrouped" style="display: none;">
   <?php foreach ($message->additions->source as $ungrouped_message) { ?>
     <?php print $ungrouped_message; ?><br />
   <?php } ?>

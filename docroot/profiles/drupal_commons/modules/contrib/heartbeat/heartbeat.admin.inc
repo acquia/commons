@@ -1,5 +1,4 @@
 <?php
-// $Id: heartbeat.admin.inc,v 1.1.2.15.2.20.2.69 2011/01/20 20:37:04 stalski Exp $
 
 /**
  * @file
@@ -217,6 +216,13 @@ function heartbeat_admin_settings() {
     '#description' => t('This is a quick way to deny the stream from display.'),
     '#type' => 'checkbox',
     '#default_value' => variable_get('heartbeat_enabled', 1),
+    '#weight' => -5,
+  );
+  $form['hb_logging']['heartbeat_skip_admin'] = array(
+    '#title' => t('Skip the admin user'),
+    '#description' => t('Note that the admin user will be logged but retained from display in the query.'),
+    '#type' => 'checkbox',
+    '#default_value' => variable_get('heartbeat_skip_admin', 0),
     '#weight' => -5,
   );
   $form['hb_logging']['heartbeat_debug'] = array(
@@ -566,6 +572,12 @@ function heartbeat_activity_stream_configure(& $form_state, $access_type) {
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
   );
+  $form['fs_settings']['skip_active_user'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Skip active user'),
+    '#default_value' => isset($edit['skip_active_user']) ? $edit['skip_active_user'] : 0,
+    '#description' => t('Enabling this will make sure the active or logged-in user will not see his own messages.'),
+  );
   $form['fs_settings']['poll_messages'] = array(
     '#type' => 'select',
     '#options' => array(
@@ -718,6 +730,7 @@ function heartbeat_activity_stream_configure_submit($form, $form_state) {
     'page_pager_ajax' => $form_state['values']['page_pager_ajax'],
     'num_load_max' => $form_state['values']['num_load_max'],
     'grouping_seconds' => $form_state['values']['grouping_seconds'],
+    'skip_active_user' => $form_state['values']['skip_active_user'],
   );
   // populate the settings with the form state
   if (isset($form_state['values']['settings'])) {
@@ -861,6 +874,18 @@ function _heartbeat_messages_overview_language($languages, &$message) {
 }
 
 /**
+ * Validate function to maintain and administer heartbeat messages.
+ */
+function heartbeat_messages_add_validate($form, &$form_state) {
+  $name = $form_state['values']['message_id'];
+
+  // View name must be alphanumeric or underscores, no other punctuation.
+  if (preg_match('/[^a-zA-Z0-9_]/', $name)) {
+    form_error($form['message_id'], t('Heartbeat template name must be alphanumeric or underscores only.'));
+  }
+}
+
+/**
  * Function to maintain and administer heartbeat messages
  *
  * @return settingsform
@@ -971,7 +996,7 @@ function heartbeat_messages_edit(&$form_state, $message) {
     '#rows' => 1,
     '#required' => TRUE,
     '#default_value' => empty($message->message) ? '' : $message->message,
-    '#description' => t('"!" is available to interpret a words as variables.'),
+    '#description' => t('"!" is available to interpret a words as variables.<br />Note that the actor variable needs to be <strong>@username</strong> to be handled correct.'),
   );
 
   $desc = t("Type of message when it comes to grouping messages together.<br />

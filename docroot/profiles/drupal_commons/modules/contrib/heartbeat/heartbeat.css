@@ -1,28 +1,54 @@
 @CHARSET "UTF-8";
-
+/** global css **/
 div.beat-item blockquote {
   background: #ffffff url('images/blockquote-start.gif') 0 0 no-repeat;
   margin: 0 20px; padding: 0;
 }
-
 div.beat-item blockquote div {
   background: #ffffff url('images/blockquote-end.gif') 100% 100% no-repeat;
   padding: 30px 30px;
   margin: 0px 25px;
 }
-
 span.heartbeat_times {
   font-style: oblique;
   font-size: 0.75em;
 }
-
 a.heartbeat-older-messages {
   clear: both;
   display: block;
   width: 100%;
 }
+.underlined .activity-time {
+  text-decoration: underline;
+  color: #999;
+}
+div.heartbeat-message-block:hover .beat-item,
+div.heartbeat-message-block.hover .beat-item {
+  position: relative;
+}
+.hover-delete {
+  display: none;
+  color: #999;
+}
+div.heartbeat-message-block:hover .hover-delete,
+div.heartbeat-message-block.hover .hover-delete {
+  position: absolute; top: 2px; right: 2px; z-index: 1;
+  display: inline;
+}
+div.heartbeat-message-block:hover .hover-delete a,
+div.heartbeat-message-block.hover .hover-delete a {
+  padding: 1px 3px;
+  background-color: #999;
+  color: #FFF;
+}
+div.heartbeat-message-block:hover .beat-item-ungrouped .hover-delete,
+div.heartbeat-message-block.hover .beat-item-ungrouped .hover-delete {
+  position: relative;
+  margin-left: 10px;
+}
 
-/*  Custom throbber */
+
+/**  Custom throbber **/
 .heartbeat-messages-waiting a,
 .heartbeat-messages-waiting input {
   opacity: 0.5;
@@ -31,4 +57,27 @@ a.heartbeat-older-messages {
 .heartbeat-messages-waiting .heartbeat-messages-throbber {
   background: url(images/heartbeat-throbber.gif) no-repeat right center;
   padding-right: 13px;
+}
+
+/** Heartbeat comments if available **/
+.heartbeat-comments-activity .form-item {
+  margin: 0.3em 0;
+}
+.heartbeat-comments-activity .form-submit {
+    margin: 0 0 0 0;
+}
+.heartbeat-comment {
+  position: relative;
+}
+.heartbeat-comment-delete {
+  display: none;
+  color: #999;
+}
+.heartbeat-comment:hover .heartbeat-comment-delete,
+.heartbeat-comment.hover .heartbeat-comment-delete {
+  position: absolute; top: 2px; right: 2px; z-index: 1;
+  display: inline;
+  padding: 1px 3px;
+  background-color: #999;
+  color: #FFF;
 }

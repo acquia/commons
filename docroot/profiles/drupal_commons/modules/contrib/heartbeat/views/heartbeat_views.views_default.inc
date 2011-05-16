@@ -1,5 +1,4 @@
 <?php
-// $Id: heartbeat_views.views_default.inc,v 1.1.2.2.2.5 2010/02/21 22:45:27 stalski Exp $
 
 /**
  * @file

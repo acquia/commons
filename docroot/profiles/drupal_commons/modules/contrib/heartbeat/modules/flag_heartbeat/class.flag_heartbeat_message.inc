@@ -1,5 +1,4 @@
 <?php
-// $Id: class.flag_heartbeat_message.inc,v 1.1.2.1.2.4 2010/02/21 22:45:27 stalski Exp $
 
 /**
  * @file

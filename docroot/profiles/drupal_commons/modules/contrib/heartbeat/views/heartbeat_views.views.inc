@@ -1,5 +1,4 @@
 <?php
-// $Id: heartbeat_views.views.inc,v 1.1.2.2.2.17 2010/10/16 09:16:36 stalski Exp $
 
 /**
  * @file
@@ -111,7 +110,7 @@ function heartbeat_views_data() {
         'help' => t('Logged Message'),
         'field' => array(
           'handler' => 'views_handler_field_markup',
-          'format' => FILTER_FORMAT_DEFAULT,
+          'format' => FILTER_HTML_ESCAPE,
         ),
       ),
       // Language field
@@ -130,7 +129,11 @@ function heartbeat_views_data() {
           'click sortable' => TRUE,
         ),
         'sort' => array(
+          //'handler' => 'views_handler_sort',
           'handler' => 'views_handler_sort_date',
+        ),
+        'filter' => array(
+          'handler' => 'views_handler_filter_date',
         ),
       ),
       'access_type' => array(
@@ -181,6 +184,19 @@ function heartbeat_views_data() {
       'relationship' => array(
         'relationship table' => 'heartbeat_activity',
         'relationship field' => 'nid_target',
+        'handler' => 'views_handler_relationship',
+        'base' => 'og_ancestry',
+        'base field' => 'nid',
+        'label' => t('Group'),
+      ),
+    );
+    $data['heartbeat_activity']['og_relation'] = array(
+      'group' => t('Heartbeat'),
+      'title' => t('Organic group'),
+      'help' => t('Create a relationship to organic group nodes.'),
+      'relationship' => array(
+        'relationship table' => 'heartbeat_activity',
+        'relationship field' => 'nid',
         'handler' => 'views_handler_relationship',
         'base' => 'og_ancestry',
         'base field' => 'nid',
