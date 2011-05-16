@@ -202,50 +202,5 @@ function commons_core_context_default_contexts() {
   t('The list of available groups on the site');
 
   $export['group-listing'] = $context;
-  $context = new stdClass;
-  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
-  $context->api_version = 3;
-  $context->name = 'user-browser';
-  $context->description = 'Various block to show on the user browser page';
-  $context->tag = 'User browser';
-  $context->conditions = array(
-    'views' => array(
-      'values' => array(
-        'user_directory' => 'user_directory',
-      ),
-    ),
-  );
-  $context->reactions = array(
-    'block' => array(
-      'blocks' => array(
-        'commons_core-user_statistics' => array(
-          'module' => 'commons_core',
-          'delta' => 'user_statistics',
-          'region' => 'sidebar_last',
-          'weight' => 0,
-        ),
-        'views-users_online-block_1' => array(
-          'module' => 'views',
-          'delta' => 'users_online-block_1',
-          'region' => 'sidebar_last',
-          'weight' => 1,
-        ),
-        'views-newest_users-block_1' => array(
-          'module' => 'views',
-          'delta' => 'newest_users-block_1',
-          'region' => 'sidebar_last',
-          'weight' => 3,
-        ),
-      ),
-    ),
-  );
-  $context->condition_mode = 0;
-
-  // Translatables
-  // Included for use with string extractors like potx.
-  t('User browser');
-  t('Various block to show on the user browser page');
-
-  $export['user-browser'] = $context;
   return $export;
 }
