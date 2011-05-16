@@ -6,28 +6,23 @@
  */
 
 /**
- * Callback for hook_block()
+ * Callback for hook_block_view()
  */
 function _commons_core_block($op = 'list', $delta = 0, $edit = array()) {
-  if ($op == 'list') {
-    return _commons_core_block_list();
+  switch ($op) {
+    case 'list':
+      $function = "_commons_core_block_list";
+      break;
+    case 'view':
+    case 'configure':
+    case 'save':
+      $function = "_commons_core_{$delta}_block_{$op}";
+      break;
   }
-  else if ($op == 'configure') {
-    $func = "_commons_core_{$delta}_block_configure";
-    if (function_exists($func)) {
-      return $func(); 
-    }
+  
+  if ($function && function_exists($function)) {
+    return call_user_func($function, $edit); 
   }
-  else if ($op == 'save') {
-    $func = "_commons_core_{$delta}_block_save";
-    if (function_exists($func)) {
-      return $func($edit); 
-    }
-  }
-  else if ($op == 'view') {
-    $func = "_commons_core_{$delta}_block";
-    return $func();
-  } 
 }
 
 /**
@@ -77,7 +72,7 @@ function _commons_core_block_list() {
 /**
  * Display a block with global user statistics
  */
-function _commons_core_user_statistics_block() {
+function _commons_core_user_statistics_block_view() {
   $data = array();
   
   // Determine total users on the site
@@ -130,7 +125,7 @@ function _commons_core_user_statistics_block_save($edit) {
 /**
  * Display the Commons information block
  */
-function _commons_core_commons_info_block() {
+function _commons_core_commons_info_block_view() {
   return array(
     'subject' => '',
     'content' => theme('commons_core_info_block'),
@@ -140,7 +135,7 @@ function _commons_core_commons_info_block() {
 /**
  * Display our custom login block for the header
  */
-function _commons_core_header_login_block() {
+function _commons_core_header_login_block_view() {
   global $user;
   
   $block = array('subject' => '', 'content' => '');
@@ -171,7 +166,7 @@ function _commons_core_header_login_block() {
 /**
  * Display the "Join & learn more" registration block
  */
-function _commons_core_join_learn_block() {
+function _commons_core_join_learn_block_view() {
   // Check access
   if (!user_register_access()) {
     return NULL;
@@ -248,7 +243,7 @@ function commons_core_join_form() {
 /**
  * Display the customized group actions menu block
  */
-function _commons_core_group_menu_block() {
+function _commons_core_group_menu_block_view() {
   // Detect group context
   if ($group = og_features_get_group_context()) {
     // Get the standard group details block
@@ -267,7 +262,7 @@ function _commons_core_group_menu_block() {
 /**
  * Display the dropdown group create content selector
  */
-function _commons_core_group_create_content_block() {
+function _commons_core_group_create_content_block_view() {
   // If we're inside a group
   if ($group = og_features_get_group_context()) {
     // Make sure the current user is a group member
@@ -431,7 +426,7 @@ function commons_core_group_create_content_block_form_submit(&$form, $form_state
 /**
  * Display the recent group activity block
  */
-function _commons_core_group_activity_block() {
+function _commons_core_group_activity_block_view() {
   // Gather the activity from Heartbeat
   $block = heartbeat_block('view', 'ogheartbeat');
   
@@ -447,7 +442,7 @@ function _commons_core_group_activity_block() {
 /**
  * Display the "Group members" block
  */
-function _commons_core_group_members_block() {
+function _commons_core_group_members_block_view() {
   // Detect the group context
   if ($group = og_features_get_group_context()) {
     // Count the number of group members for the block title
@@ -485,7 +480,7 @@ function _commons_core_group_members_block() {
 /**
  * Display the "create a group" block
  */
-function _commons_core_create_group_block() {
+function _commons_core_create_group_block_view() {
   // Check permissions
   if (user_access('create group content')) {
     return array(
