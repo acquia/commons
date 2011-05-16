@@ -471,7 +471,7 @@ function _commons_core_group_members_block() {
     }
     
     // Add a link to view all the members
-    $link .= l(t('View all members'), "og/users/{$group->nid}/faces");
+    $link = og_menu_access_picture($group->nid) ? l(t('View all members'), "og/users/{$group->nid}/faces") : NULL;
     
     return array(
       'subject' => t('Group members (!count)', array('!count' => $count)),
