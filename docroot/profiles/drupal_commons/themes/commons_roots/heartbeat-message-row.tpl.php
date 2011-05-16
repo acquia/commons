@@ -23,9 +23,10 @@
   <div class="beat-item" id="beat-item-<?php print $message->uaid ?>">
 
 <div class="beat-item-info">
-   <?php if(!empty($message->actor->picture)):?>
-   <span class="heartbeat_times"><?php print(theme_imagecache('user_picture_meta',$message->actor->picture, $message->actor->name, $message->actor->name)); ?></span>
-   <?php endif; ?>
+   <span class="heartbeat_times"><?php      
+     print commons_roots_thumb_user_picture($message->actor->picture, 'user_picture_meta', $message->actor->name, $message->actor->uid);
+    ?>
+   </span>
    <?php if (!empty($message->content['time_info'])): ?>
     <span class="heartbeat_times"><?php print $message->content['time_info']; ?></span>
     <?php endif; ?>

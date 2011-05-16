@@ -7,7 +7,7 @@ define('DRUPAL_COMMONS_TAG_ID', 2);
 define('DRUPAL_COMMONS_EDITOR', 'ckeditor');
 
 // Define the default theme
-define('DRUPAL_COMMONS_DEFAULT_THEME', 'bl_commons');
+define('DRUPAL_COMMONS_DEFAULT_THEME', 'commons_origins');
 
 /**
  * Return an array of the modules to be enabled when this profile is installed.

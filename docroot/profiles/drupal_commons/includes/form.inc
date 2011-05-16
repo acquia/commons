@@ -230,8 +230,8 @@ function drupal_commons_theme_form(&$form_state, $url) {
   $form['theme'] = array(
     '#type' => 'radios',
     '#options' => array(
+      'commons_origins' => _drupal_commons_theme_option('commons_origins', st('Commons Origins')),
       'bl_commons' => _drupal_commons_theme_option('bl_commons', st('Commons Connect')),
-      'acquia_commons' => _drupal_commons_theme_option('acquia_commons', st('Acquia Commons')),
     ),
     '#default_value' => DRUPAL_COMMONS_DEFAULT_THEME,
   );
@@ -262,6 +262,9 @@ function drupal_commons_theme_form_submit(&$form, &$form_state) {
   
   // Enable Fusion
   db_query($sql, 1, 'fusion_core');
+  
+  // Enable Commons Roots
+  db_query($sql, 1, 'commons_roots');
   
   // Enable all of the available themes
   foreach ($form['theme']['#options'] as $theme => $label) {
@@ -300,7 +303,7 @@ function _drupal_commons_theme_option($theme, $name) {
   $option .= "<br/>";
   $option .= "<img alt=\"{$name}\" title=\"{$name}\" src=\"./profiles/drupal_commons/images/{$theme}_screenshot.png\"></img>";
   $option .= "<br/>";
-  $option .= "<ul><li><i><a href=\"./profiles/drupal_commons/images/{$theme}_screenshot_full.png\" target=\"_blank\">" . t('Click to view fullsize') . "</a></i></li></ul>";
+  $option .= "<ul><li><i><a href=\"./profiles/drupal_commons/images/{$theme}_screenshot_full.png\" target=\"_blank\">" . st('Click to view fullsize') . "</a></i></li></ul>";
   $option .= "<br/>";
   return $option;
 }

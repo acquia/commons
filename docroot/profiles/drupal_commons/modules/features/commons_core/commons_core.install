@@ -215,3 +215,14 @@ function commons_core_updated_6007() {
   features_install_modules(array('commons_shoutbox'));
   return array();
 }
+
+/**
+ * Enable the new themes
+ */
+function commons_core_update_6008() {
+  $sql = "UPDATE {system} SET status = 1 WHERE name = '%s'";
+  db_query($sql, 'commons_roots');
+  db_query($sql, 'commons_origins');
+  variable_set('theme_default', 'commons_origins');
+  return array();
+}

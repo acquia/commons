@@ -11,18 +11,13 @@
     <?php endif; ?>
     <?php if ($comment->picture) :?>
       <div class="picture">
-        <?php print $comment->picture; ?>
+        <div class="cornerImg"><?php print $comment->picture; ?></div>
       </div>
     <?php endif; ?>
     <div class="submitted">
       <?php print $submitted ?>
     </div>
   
-    <?php if ($links): ?>
-      <div class="links">
-        <?php print $links ?>
-      </div>
-    <?php endif; ?>
   </div>
  
   <div class="comment-content-wrapper">
@@ -36,6 +31,11 @@
           </div>
         <?php endif; ?>
       </div>
+      <?php if ($links): ?>
+      <div class="links">
+        <?php print $links ?>
+      </div>
+    <?php endif; ?>
     </div>
   </div>
   

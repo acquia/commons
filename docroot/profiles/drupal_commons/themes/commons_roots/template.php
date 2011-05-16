@@ -4,7 +4,7 @@
 /**
  * Breadcrumb themeing
  */
-function acquia_commons_breadcrumb($breadcrumb) {
+function commons_roots_breadcrumb($breadcrumb) {
   if (!empty($breadcrumb)) {
     return '<div class="breadcrumb">'. implode(' > ', $breadcrumb) .'</div>';
   }
@@ -13,7 +13,7 @@ function acquia_commons_breadcrumb($breadcrumb) {
 /**
  * Node preprocessing
  */
-function acquia_commons_preprocess_node(&$vars) {
+function commons_roots_preprocess_node(&$vars) {
   // Only build custom submitted information if it was first available
   // If it's not, that indicates that it's been turned off for this
   // node type
@@ -66,7 +66,7 @@ function acquia_commons_preprocess_node(&$vars) {
 /**
  * Page preprocessing
  */
-function acquia_commons_preprocess_page(&$vars) {
+function commons_roots_preprocess_page(&$vars) {
   // Format the footer message
   // We do this here instead of in page.tpl.php because 
   // we need a formatted message to pass along to the
@@ -86,7 +86,7 @@ function acquia_commons_preprocess_page(&$vars) {
 /**
  * Comment preprocessing
  */
-function acquia_commons_preprocess_comment(&$vars) {
+function commons_roots_preprocess_comment(&$vars) {
   global $user;
   static $comment_odd = TRUE;                                                                             // Comment is odd or even
 
@@ -133,7 +133,7 @@ function acquia_commons_preprocess_comment(&$vars) {
 /**
  * Profile preprocessing
  */
-function acquia_commons_preprocess_user_profile_item(&$vars) {
+function commons_roots_preprocess_user_profile_item(&$vars) {
   // Separate userpoints value from the edit links
   if ($vars['title'] == 'Points') { 
     $userpoints = explode(' - ', $vars['value']);
@@ -145,7 +145,7 @@ function acquia_commons_preprocess_user_profile_item(&$vars) {
 /**
  * Implementation of theme_shoutbox_post()
  */
-function acquia_commons_shoutbox_post($shout, $links = array(), $alter_row_color=TRUE) {
+function commons_roots_shoutbox_post($shout, $links = array(), $alter_row_color=TRUE) {
   global $user;
   
   // Gather moderation links
@@ -221,7 +221,7 @@ function acquia_commons_shoutbox_post($shout, $links = array(), $alter_row_color
   return $post;
 }
 
-function acquia_commons_item_list($items = array(), $title = NULL, $type = 'ul', $attributes = NULL) {
+function commons_roots_item_list($items = array(), $title = NULL, $type = 'ul', $attributes = NULL) {
   $output = '<div class="item-list">';
   if (isset($title)) {
     $output .= '<h3>'. $title .'</h3>';
@@ -288,7 +288,22 @@ function acquia_commons_item_list($items = array(), $title = NULL, $type = 'ul',
   return $output;
 }
 
-function acquia_commons_preprocess_block($variables) {
+function commons_roots_preprocess_block($variables) {
   $variables['template_files'][] = 'block-'.$variables['block']->region.'-'.$variables['block']->module;
   $variables['template_files'][] = 'block-'.$variables['block']->region.'-'.$variables['block']->module.'-'.$variables['block']->delta;
+}
+
+function commons_roots_thumb_user_picture ($picture, $imagecache_preset, $user_name, $user_uid) {
+  if (!isset($picture) || $picture == '') {
+    $picture = variable_get('user_picture_default', '');
+  }
+    
+  $img = theme('imagecache', $imagecache_preset, $picture, $user_name, $user_name);  
+  
+  if (user_access('access user profiles')) {
+    return l($img, "user/{$user_uid}", array('html' => TRUE));
+  }
+  else { 
+    return $img;
+  }
 }

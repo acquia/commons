@@ -1,15 +1,12 @@
 ; $Id: fusion_starter.info 7101 2010-04-08 06:51:41Z chris $
 
-name = Acquia Commons
+name = Commons Origins
 description = Fusion Starter sub-theme. Requires <a href="http://drupal.org/project/fusion">Fusion Core</a> and the <a href="http://drupal.org/project/skinr">Skinr</a> module to enable easy point-and-click theming.
-base theme = fusion_core
+base theme = commons_roots
 core = 6.x
 engine = phptemplate
 
-stylesheets[all][] = css/acquia_commons-style.css
-
-plugins[panels][layouts] = panels
-api[panels][styles][version] = 2
+stylesheets[all][] = css/commons_origins-style.css
 
 regions[sidebar_first] = sidebar first
 regions[sidebar_last] = sidebar last
@@ -37,14 +34,14 @@ features[] = primary_links
 features[] = secondary_links
 
 ; Default theme settings
-settings[theme_grid] = grid16-fluid
+//settings[theme_grid] = grid16-fluid
 settings[theme_grid_options][] = grid16-960
-settings[theme_grid_options][] = grid16-fluid
-settings[fluid_grid_width] = fluid-85
+//settings[theme_grid_options][] = grid16-fluid
+//settings[fluid_grid_width] = fluid-85
 settings[theme_font_size] = font-size-12
 settings[sidebar_layout] = sidebars-split
-settings[sidebar_first_width] = 3
-settings[sidebar_last_width] = 3
+settings[sidebar_first_width] = 4
+settings[sidebar_last_width] = 5
 
 ; Inherit Skinr styles from Fusion Core
 skinr[options][inherit_skins] = true
