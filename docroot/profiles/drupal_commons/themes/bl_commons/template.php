@@ -332,5 +332,64 @@ function bl_commons_commons_core_info_block() {
   return $content;
 }
 
+//hide links and change page title
+function bl_commons_taxonomy_term_page($tids, $result) {
+  $str_tids = arg(2);
+  $terms = taxonomy_terms_parse_string($str_tids);
+  $title_result = db_query(db_rewrite_sql('SELECT t.tid, t.name FROM {term_data} t WHERE t.tid IN ('. db_placeholders($terms['tids']) .')', 't', 'tid'), $terms['tids']);
+  $title_tids = array(); // we rebuild the $tids-array so it only contains terms the user has access to.
+  $names = array();
+  while ($term = db_fetch_object($title_result)) {
+    $title_tids[] = $term->tid;
+    $names[] = $term->name;
+  }
+  $last_name = array_pop($names);
+  if (count($names) == 0) {
+    $title = t("Pages containing '@tag'", array('@tag' => $last_name));    
+  } elseif ($terms['operator'] == "or") {
+      $title = t("Pages containing '@tags or @last_tag'", array('@tags' => implode(", ", $names), '@last_tag' => $last_name));
+  } else {
+      $title = t("Pages containing '@tags and @last_tag'", array('@tags' => implode(", ", $names), '@last_tag' => $last_name));
+  }
+  drupal_set_title($title);
+
+  drupal_add_css(drupal_get_path('module', 'taxonomy') .'/taxonomy.css');
+
+  $output = '';
+
+  // Only display the description if we have a single term, to avoid clutter and confusion.
+  if (count($tids) == 1) {
+    $term = taxonomy_get_term($tids[0]);
+    $description = $term->description;
+
+    // Check that a description is set.
+    if (!empty($description)) {
+      $output .= '<div class="taxonomy-term-description">';
+      $output .= filter_xss_admin($description);
+      $output .= '</div>';
+    }
+  }
+
+  $output .= bl_commons_taxonomy_render_nodes($result);
+
+  return $output;
+}
+
+function bl_commons_taxonomy_render_nodes($result) {
+  $output = '';
+  $has_rows = FALSE;
+  while ($node = db_fetch_object($result)) {
+    $output .= node_view(node_load($node->nid), TRUE, FALSE, FALSE);
+    $has_rows = TRUE;
+  }
+  if ($has_rows) {
+    $output .= theme('pager', NULL, variable_get('default_nodes_main', 10), 0);
+  }
+  else {
+    $output .= '<p>'. t('There are currently no posts in this category.') .'</p>';
+  }
+  return $output;
+}
+
 // call scripts
 drupal_add_js(path_to_theme() . '/scripts/clear_default_searchbox_text.js', 'theme'); // call on every page since search box is displayed everywhere
