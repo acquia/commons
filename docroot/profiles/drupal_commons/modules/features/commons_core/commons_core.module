@@ -3,23 +3,6 @@
 include_once('commons_core.features.inc');
 
 /**
- * Implementation of hook_content_default_fields_alter()
- * 
- * Alter the default cck fields right before they are cached into the database.
- *
- * @param &$fields
- *   By reference. The fields that have been declared by another feature.
- */
-function commons_core_content_default_fields_alter(&$fields) {
-  // Dynamically set the group default image path to the
-  // current files directory
-  if (isset($fields['group-field_group_image'])) {
-    $fields['group-field_group_image']['widget']['default_image']['filepath'] = file_directory_path() . '/default-group.png';
-    $fields['group-field_group_image']['widget']['default_image']['destination'] = file_directory_path() . '/default-group.png';
-  }
-}
-
-/**
  * Implementation of hook_perm()
  */
 function commons_core_perm() {
@@ -77,25 +60,6 @@ function commons_core_menu_alter(&$items) {
   $items['comment/edit']['page callback'] = 'commons_core_comment_edit';
   $items['comment/edit']['file'] = 'commons_core.overrides.inc';
   $items['comment/edit']['file path'] = $path;
-}
-
-/**
- * Implementation of hook_og_links_alter()
- */
-function commons_core_og_links_alter(&$links, $node) {  
-  // Remove the Manager item and members item because our
-  // group manager and members block provides this information
-  // in a much better way
-  unset($links['manager']);
-  unset($links['subscribers']);
-
-  // Remove content creation links because the group content
-  // create selector will be displaying them
-  foreach ($links as $key => $link) {
-    if (substr($key, 0, 7) == 'create_') {
-      unset($links[$key]);
-    }
-  }
 }
 
 /**
@@ -188,6 +152,139 @@ function commons_core_form_comment_form_alter(&$form, &$form_state) {
 }
 
 /**
+ * Implementation of hook_mail()
+ */
+function commons_core_mail($key, &$message, $params) {
+  switch ($key) {
+    case 'og user delete':
+      $message['subject'] = t('You have been removed from !group', array('!group' => $params['group']->title));
+      $message['body'] = t('A manager from !group has removed you from the group.', array('!group' => $params['group']->title));
+      break;
+    
+    case 'og user insert':
+      global $base_url;
+      $link = $base_url . '/' . ($params['group']->path ? $params['group']->path : ('node/' . $params['group']->nid));
+      $message['subject'] = t('You have been added to !group', array('!group' => $params['group']->title));
+      $message['body'] = t('A manager from !group has added you to the group.', array('!group' => $params['group']->title));
+      $message['body'] .= "\n\n\n";
+      $message['body'] .= t('The group is located at !link', array('!link' => $link));
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_init()
+ */
+function commons_core_init() {
+  // Optionally force a user to login before proceeding
+  commons_core_force_login();
+  
+  // We've overridden /og with a custom view, so redirect
+  if (arg(0) == 'og' && !arg(1)) {
+    drupal_goto('groups');
+  }
+  
+  // We've overridden /og/my with a custom view, so redirect
+  if (arg(0) == 'og' && arg(1) == 'my') {
+    drupal_goto('groups/my');
+  }
+  
+  // Redirect core /profile which lists users to our new list of users
+  if (arg(0) == 'profile' && !arg(1)) {
+    drupal_goto('users');
+  }
+  
+  // Notify group admins of any pending requests on group home page
+  if (arg(0) == 'node' && is_numeric(arg(1)) && !arg(2)) {
+    // Load the current user
+    global $user;
+    
+    // Check to see if user is logged in
+    if ($user->uid) {
+      // Load the current node
+      $node = node_load(arg(1));
+      // Determine if this is a group
+      if (og_is_group_type($node->type)) {
+        // Check if current member is an admin
+        if (og_is_group_admin($node, $user)) {
+          // Check if there are pending requests
+          $sql = "SELECT COUNT(uid) FROM {og_uid} WHERE nid = %d AND is_active = 0";
+          $count = db_result(db_query($sql, $node->nid));
+            
+          if ($count) {
+            drupal_set_message(t('There are currently !count pending membership requests. Click !here to view them.', array('!count' => $count, '!here' => l('here', 'og/users/' . $node->nid))));
+          }
+        }
+      }
+    }
+  }
+  
+  // Set the breadcrumbs
+  commons_core_set_breadcrumb($_GET['q']);
+}
+
+/**
+ * Implementation of hook_nodeapi()
+ */
+function commons_core_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
+  switch ($op) {
+    case 'validate':
+      // Make sure the "group sticky" field was used correctly
+      _commons_core_check_group_sticky($node);
+      
+      // Make sure group titles are unique
+      _commons_core_check_group_title($node);
+      
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_link_alter()
+ */
+function commons_core_link_alter(&$links, $node, $comment = NULL) {
+  global $user;
+  
+  // Only act on comment links
+  if ($comment) {
+    // Only check if the edit link is missing
+    if (!isset($links['comment_edit'])) {
+      // Check if user can edit the comment
+      if (comment_access('edit', $comment) || _commons_core_can_admin_comment($comment)) {
+        // Provide an edit link
+        $link['comment_edit'] = array(
+          'title' => t('edit'),
+          'href' => 'comment/edit/' . $comment->cid,
+        );
+        
+        // Add link to the beginning
+        $links = $link + $links;
+      }
+    }
+  }
+}
+
+/**
+ * Implementation of hook_theme()
+ */
+function commons_core_theme() {
+  $registry = array(
+    'commons_core_user_stats_block' => array(),
+    'commons_core_info_block' => array(),
+    'commons_core_group_members_block' => array(
+      'arguments' => array('managers' => NULL, 'members' => NULL, 'link' => NULL),
+    ),
+  );
+  
+  // Add the theme file to each
+  foreach ($registry as $key => $entry) {
+    $registry[$key]['file'] = 'commons_core.theme.inc';
+  }
+  
+  return $registry;
+}
+
+/**
  * Implementation of hook_og()
  */
 function commons_core_og($op, $gid, $uid, $args) {
@@ -225,23 +322,38 @@ function commons_core_og($op, $gid, $uid, $args) {
 }
 
 /**
- * Implementation of hook_mail()
+ * Implementation of hook_og_links_alter()
  */
-function commons_core_mail($key, &$message, $params) {
-  switch ($key) {
-    case 'og user delete':
-      $message['subject'] = t('You have been removed from !group', array('!group' => $params['group']->title));
-      $message['body'] = t('A manager from !group has removed you from the group.', array('!group' => $params['group']->title));
-      break;
-    
-    case 'og user insert':
-      global $base_url;
-      $link = $base_url . '/' . ($params['group']->path ? $params['group']->path : ('node/' . $params['group']->nid));
-      $message['subject'] = t('You have been added to !group', array('!group' => $params['group']->title));
-      $message['body'] = t('A manager from !group has added you to the group.', array('!group' => $params['group']->title));
-      $message['body'] .= "\n\n\n";
-      $message['body'] .= t('The group is located at !link', array('!link' => $link));
-      break;
+function commons_core_og_links_alter(&$links, $node) {  
+  // Remove the Manager item and members item because our
+  // group manager and members block provides this information
+  // in a much better way
+  unset($links['manager']);
+  unset($links['subscribers']);
+
+  // Remove content creation links because the group content
+  // create selector will be displaying them
+  foreach ($links as $key => $link) {
+    if (substr($key, 0, 7) == 'create_') {
+      unset($links[$key]);
+    }
+  }
+}
+
+/**
+ * Implementation of hook_content_default_fields_alter()
+ * 
+ * Alter the default cck fields right before they are cached into the database.
+ *
+ * @param &$fields
+ *   By reference. The fields that have been declared by another feature.
+ */
+function commons_core_content_default_fields_alter(&$fields) {
+  // Dynamically set the group default image path to the
+  // current files directory
+  if (isset($fields['group-field_group_image'])) {
+    $fields['group-field_group_image']['widget']['default_image']['filepath'] = file_directory_path() . '/default-group.png';
+    $fields['group-field_group_image']['widget']['default_image']['destination'] = file_directory_path() . '/default-group.png';
   }
 }
 
@@ -336,26 +448,6 @@ function commons_core_form_tagging_admin_settings_alter(&$form, &$form_state) {
 }
 
 /**
- * Implementation of hook_theme()
- */
-function commons_core_theme() {
-  $registry = array(
-    'commons_core_user_stats_block' => array(),
-    'commons_core_info_block' => array(),
-    'commons_core_group_members_block' => array(
-      'arguments' => array('managers' => NULL, 'members' => NULL, 'link' => NULL),
-    ),
-  );
-  
-  // Add the theme file to each
-  foreach ($registry as $key => $entry) {
-    $registry[$key]['file'] = 'commons_core.theme.inc';
-  }
-  
-  return $registry;
-}
-
-/**
  * Implementation of hook_action_info().
  */
 function commons_core_action_info() {
@@ -381,73 +473,6 @@ function commons_core_action_info() {
       )    
     )
   );
-}
-
-/**
- * Implementation of hook_init()
- */
-function commons_core_init() {
-  // Optionally force a user to login before proceeding
-  commons_core_force_login();
-  
-  // We've overridden /og with a custom view, so redirect
-  if (arg(0) == 'og' && !arg(1)) {
-    drupal_goto('groups');
-  }
-  
-  // We've overridden /og/my with a custom view, so redirect
-  if (arg(0) == 'og' && arg(1) == 'my') {
-    drupal_goto('groups/my');
-  }
-  
-  // Redirect core /profile which lists users to our new list of users
-  if (arg(0) == 'profile' && !arg(1)) {
-    drupal_goto('users');
-  }
-  
-  // Notify group admins of any pending requests on group home page
-  if (arg(0) == 'node' && is_numeric(arg(1)) && !arg(2)) {
-    // Load the current user
-    global $user;
-    
-    // Check to see if user is logged in
-    if ($user->uid) {
-      // Load the current node
-      $node = node_load(arg(1));
-      // Determine if this is a group
-      if (og_is_group_type($node->type)) {
-        // Check if current member is an admin
-        if (og_is_group_admin($node, $user)) {
-          // Check if there are pending requests
-          $sql = "SELECT COUNT(uid) FROM {og_uid} WHERE nid = %d AND is_active = 0";
-          $count = db_result(db_query($sql, $node->nid));
-            
-          if ($count) {
-            drupal_set_message(t('There are currently !count pending membership requests. Click !here to view them.', array('!count' => $count, '!here' => l('here', 'og/users/' . $node->nid))));
-          }
-        }
-      }
-    }
-  }
-  
-  // Set the breadcrumbs
-  commons_core_set_breadcrumb($_GET['q']);
-}
-
-/**
- * Implementation of hook_nodeapi()
- */
-function commons_core_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
-  switch ($op) {
-    case 'validate':
-      // Make sure the "group sticky" field was used correctly
-      _commons_core_check_group_sticky($node);
-      
-      // Make sure group titles are unique
-      _commons_core_check_group_title($node);
-      
-      break;
-  }
 }
 
 /**
@@ -486,31 +511,6 @@ function commons_core_form_views_exposed_form_alter(&$form, &$form_state) {
         }
       }
       break;
-  }
-}
-
-/**
- * Implementation of hook_link_alter()
- */
-function commons_core_link_alter(&$links, $node, $comment = NULL) {
-  global $user;
-  
-  // Only act on comment links
-  if ($comment) {
-    // Only check if the edit link is missing
-    if (!isset($links['comment_edit'])) {
-      // Check if user can edit the comment
-      if (comment_access('edit', $comment) || _commons_core_can_admin_comment($comment)) {
-        // Provide an edit link
-        $link['comment_edit'] = array(
-          'title' => t('edit'),
-          'href' => 'comment/edit/' . $comment->cid,
-        );
-        
-        // Add link to the beginning
-        $links = $link + $links;
-      }
-    }
   }
 }
  
