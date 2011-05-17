@@ -1220,8 +1220,8 @@ function commons_core_views_default_views() {
       'alter' => array(
         'alter_text' => 1,
         'text' => '<div class="title">[title]</div>
-      <div class="tags">Tags: [tid] </div>
-      <div class="description">[description] </div>',
+<div class="tags">Tags: [tid] </div>
+<div class="description">[description] </div>',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
@@ -1327,11 +1327,69 @@ function commons_core_views_default_views() {
       'relationship' => 'none',
     ),
     'created' => array(
-      'order' => 'DESC',
+      'exposed' => TRUE,
+      'order' => 'unsorted',
+      'identifier' => 'unsorted',
       'granularity' => 'second',
       'id' => 'created',
       'table' => 'node',
       'field' => 'created',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+      'expose' => array(
+        'label' => 'Created',
+        'identifier' => 'created_sort',
+        'order' => 'unsorted',
+      ),
+    ),
+    'title' => array(
+      'exposed' => TRUE,
+      'order' => 'unsorted',
+      'identifier' => 'unsorted',
+      'id' => 'title',
+      'table' => 'node',
+      'field' => 'title',
+      'expose' => array(
+        'label' => 'Title',
+        'identifier' => 'title_sort',
+        'order' => 'unsorted',
+      ),
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'members_count' => array(
+      'exposed' => TRUE,
+      'order' => 'unsorted',
+      'identifier' => 'unsorted',
+      'id' => 'members_count',
+      'table' => 'og_statistics',
+      'field' => 'members_count',
+      'expose' => array(
+        'label' => 'Members',
+        'identifier' => 'members_count_sort',
+        'order' => 'unsorted',
+      ),
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
+    'posts_count' => array(
+      'exposed' => TRUE,
+      'order' => 'DESC',
+      'identifier' => 'unsorted',
+      'id' => 'posts_count',
+      'table' => 'og_statistics',
+      'field' => 'posts_count',
+      'expose' => array(
+        'label' => 'Posts',
+        'identifier' => 'posts_count_sort',
+        'order' => 'unsorted',
+      ),
       'override' => array(
         'button' => 'Override',
       ),
