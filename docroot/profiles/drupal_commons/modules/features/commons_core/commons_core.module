@@ -487,6 +487,11 @@ function commons_core_views_pre_view(&$view, &$display_id, &$args) {
     case 'recent_featured_stream':
       $view->display_handler->override_option('footer', l(t('View all featured content'), 'featured'));
       break;
+      
+    case 'recent_notices':
+      if (node_access('create', 'notice')) {
+        $view->display_handler->override_option('header', l(t('Create a notice'), 'node/add/notice'));
+      }
   }
 }
 
