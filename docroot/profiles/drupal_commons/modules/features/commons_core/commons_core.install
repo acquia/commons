@@ -221,8 +221,10 @@ function commons_core_update_6007() {
  */
 function commons_core_update_6008() {
   $sql = "UPDATE {system} SET status = 1 WHERE name = '%s'";
+  system_theme_data();
   db_query($sql, 'commons_roots');
   db_query($sql, 'commons_origins');
+  db_query($sql, 'fusion_core');
   variable_set('theme_default', 'commons_origins');
   return array();
 }
