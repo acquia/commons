@@ -179,6 +179,9 @@ function commons_core_update_6003() {
     context_delete($context);
   }
   
+  // Disable page manager
+  module_disable(array('page_manager'));
+  
   return array();
 }
 
