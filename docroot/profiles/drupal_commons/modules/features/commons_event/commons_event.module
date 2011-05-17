@@ -12,7 +12,7 @@ function commons_event_og_features_registry() {
   $feature = new stdClass;
   $feature->id = 'commons_event';
   $feature->name = t('Events');
-  $feature->description = t('Create events and display them on calendars');
+  $feature->description = t('Enable your group members to announce events associated with your group, and display them on calendars & sidebar blocks.');
   $feature->components = array(
     'views' => array(
       'group_tab_events',
