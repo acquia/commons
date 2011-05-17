@@ -1,0 +1,1524 @@
+Index: plugins/views_plugin_display.inc
+===================================================================
+--- plugins/views_plugin_display.inc	(revision 252)
++++ plugins/views_plugin_display.inc	(working copy)
+@@ -71,9 +71,9 @@
+    */
+   function uses_exposed() {
+     if (!isset($this->has_exposed)) {
+-      foreach (array('field', 'filter') as $type) {
+-        foreach ($this->view->$type as $key => $handler) {
+-          if ($handler->is_exposed()) {
++      foreach ($this->handlers as $type => $value) {
++        foreach ($this->view->$type as $id => $handler) {
++          if ($handler->can_expose() && $handler->is_exposed()) {
+             // one is all we need; if we find it, return true.
+             $this->has_exposed = TRUE;
+             return TRUE;
+Index: views.module
+===================================================================
+--- views.module	(revision 252)
++++ views.module	(working copy)
+@@ -996,16 +996,18 @@
+     );
+   }
+ 
+-  // Go through each filter and let it generate its info.
+-  foreach ($view->filter as $id => $filter) {
+-    $view->filter[$id]->exposed_form($form, $form_state);
+-    if ($info = $view->filter[$id]->exposed_info()) {
+-      $form['#info']['filter-' . $id] = $info;
++  // Go through each handler and let it generate its exposed widget.
++  foreach ($view->display_handler->handlers as $type => $value) {
++    foreach ($view->$type as $id => $handler) {
++      if ($handler->can_expose() && $handler->is_exposed()) {
++        $handler->exposed_form($form, $form_state);
++        if ($info = $handler->exposed_info()) {
++          $form['#info']["$type-$id"] = $info;
++        }
++      }
+     }
+   }
+-
+-  // @todo deal with exposed sorts
+-
++  
+   $form['submit'] = array(
+     '#name' => '', // prevent from showing up in $_GET.
+     '#type' => 'submit',
+Index: help/sort.html
+===================================================================
+--- help/sort.html	(revision 252)
++++ help/sort.html	(working copy)
+@@ -22,4 +22,7 @@
+ </dd>
+ <dt>Date fields</dt>
+ <dd>Date fields often can have a 'granularity', which is a way of making similar dates actually be the same date. Take two dates that are close to each other: <strong>May 1, 2007 5:30 am</strong> and <strong>May 1, 2007 9:45am</strong>. Without granularity, the two dates are compared and the first date comes before the second date. However, if the granularity is set to 'day' it only looks at the parts of the date up to the day: <strong>May 1, 2007</strong> and <strong>May 1, 2007</strong>. At that point, they are the same, and the sort would move on to the next sort criterion.</dd>
++
++<dt>Exposed Sorts</dt>
++<dd>If you expose a sort, users can define how will be sorted the view through a form element. Not all kind of sorts can be exposed. When you expose sorts is important the order in Views UI. If an exposed sort is by default unordered, only will be applied if users selects Ascendant or Descendent.</dd>
+ </dl>
+Index: 228510.patch
+===================================================================
+--- 228510.patch	(revision 242)
++++ 228510.patch	(working copy)
+@@ -1,8 +1,25 @@
++Index: plugins/views_plugin_display.inc
++===================================================================
++--- plugins/views_plugin_display.inc	(revision 252)
+++++ plugins/views_plugin_display.inc	(working copy)
++@@ -71,9 +71,9 @@
++    */
++   function uses_exposed() {
++     if (!isset($this->has_exposed)) {
++-      foreach (array('field', 'filter') as $type) {
++-        foreach ($this->view->$type as $key => $handler) {
++-          if ($handler->is_exposed()) {
+++      foreach ($this->handlers as $type => $value) {
+++        foreach ($this->view->$type as $id => $handler) {
+++          if ($handler->can_expose() && $handler->is_exposed()) {
++             // one is all we need; if we find it, return true.
++             $this->has_exposed = TRUE;
++             return TRUE;
+ Index: views.module
+ ===================================================================
+---- views.module	(revision 620)
++--- views.module	(revision 252)
+ +++ views.module	(working copy)
+-@@ -955,16 +955,18 @@
++@@ -996,16 +996,18 @@
+      );
+    }
+  
+@@ -29,26 +46,9 @@
+    $form['submit'] = array(
+      '#name' => '', // prevent from showing up in $_GET.
+      '#type' => 'submit',
+-Index: plugins/views_plugin_display.inc
+-===================================================================
+---- plugins/views_plugin_display.inc	(revision 620)
+-+++ plugins/views_plugin_display.inc	(working copy)
+-@@ -71,9 +71,9 @@
+-    */
+-   function uses_exposed() {
+-     if (!isset($this->has_exposed)) {
+--      foreach (array('field', 'filter') as $type) {
+--        foreach ($this->view->$type as $key => $handler) {
+--          if ($handler->is_exposed()) {
+-+      foreach ($this->handlers as $type => $value) {
+-+        foreach ($this->view->$type as $id => $handler) {
+-+          if ($handler->can_expose() && $handler->is_exposed()) {
+-             // one is all we need; if we find it, return true.
+-             $this->has_exposed = TRUE;
+-             return TRUE;
+ Index: help/sort.html
+ ===================================================================
+---- help/sort.html	(revision 620)
++--- help/sort.html	(revision 252)
+ +++ help/sort.html	(working copy)
+ @@ -22,4 +22,7 @@
+  </dd>
+@@ -58,703 +58,3 @@
+ +<dt>Exposed Sorts</dt>
+ +<dd>If you expose a sort, users can define how will be sorted the view through a form element. Not all kind of sorts can be exposed. When you expose sorts is important the order in Views UI. If an exposed sort is by default unordered, only will be applied if users selects Ascendant or Descendent.</dd>
+  </dl>
+-Index: handlers/views_handler_sort_formula.inc
+-===================================================================
+---- handlers/views_handler_sort_formula.inc	(revision 620)
+-+++ handlers/views_handler_sort_formula.inc	(working copy)
+-@@ -41,8 +41,18 @@
+-     else {
+-       $formula = $this->formula;
+-     }
+--    $this->ensure_my_table();
+--    // Add the field.
+--    $this->query->add_orderby(NULL, $formula, $this->options['order'], $this->table_alias . '_' . $this->field);
+-+    
+-+    if (!empty($this->options['exposed']) && !empty($this->view->exposed_input[$this->options['expose']['identifier']])) {
+-+      $sort = drupal_strtolower($this->view->exposed_input[$this->options['expose']['identifier']]);
+-+    }
+-+    else {
+-+      $sort = drupal_strtolower($this->options['order']);
+-+    }    
+-+    
+-+    // Ensure $this->sort is valid and add the field.
+-+    if (!empty($sort) && ($sort == 'asc' || $sort == 'desc')) {
+-+      $this->ensure_my_table();
+-+      $this->query->add_orderby(NULL, $formula, $sort, $this->table_alias . '_' . $this->field);
+-+    }    
+-   }
+- }
+-Index: handlers/views_handler_sort_date.inc
+-===================================================================
+---- handlers/views_handler_sort_date.inc	(revision 620)
+-+++ handlers/views_handler_sort_date.inc	(working copy)
+-@@ -41,12 +41,21 @@
+-    * Called to add the sort to a query.
+-    */
+-   function query() {
+-+    // When a exposed sort is by default ASC or DESC, we have to check if 
+-+    // this value was modified. If not, we use the default value for this sort.
+-+    if (!empty($this->options['exposed']) && !empty($this->view->exposed_input[$this->options['expose']['identifier']])) {
+-+      $sort = drupal_strtolower($this->view->exposed_input[$this->options['expose']['identifier']]);
+-+    }
+-+    else {
+-+      $sort = drupal_strtolower($this->options['order']);
+-+    }
+-+    
+-     $this->ensure_my_table();
+-     switch ($this->options['granularity']) {
+-       case 'second':
+-       default:
+--        $this->query->add_orderby($this->table_alias, $this->real_field, $this->options['order']);
+--        return;
+-+        $formula = NULL;
+-+        break;
+-       case 'minute':
+-         $formula = views_date_sql_format('YmdHi', "$this->table_alias.$this->real_field");
+-         break;
+-@@ -64,7 +73,14 @@
+-         break;
+-     }
+- 
+--    // Add the field.
+--    $this->query->add_orderby(NULL, $formula, $this->options['order'], $this->table_alias . '_' . $this->field . '_' . $this->options['granularity']);
+-+    // Ensure sort is valid and add the field.
+-+    if (!empty($sort) && ($sort == 'asc' || $sort == 'desc')) {
+-+      if ($formula) {
+-+        $this->query->add_orderby(NULL, $formula, $sort, $this->table_alias . '_' . $this->field . '_' . $this->options['granularity']);
+-+      }
+-+      else {
+-+        $this->query->add_orderby($this->table_alias, $this->real_field, $sort);
+-+      }
+-+    }
+-   }
+- }
+-Index: handlers/views_handler_filter.inc
+-===================================================================
+---- handlers/views_handler_filter.inc	(revision 620)
+-+++ handlers/views_handler_filter.inc	(working copy)
+-@@ -188,98 +188,6 @@
+-   function value_submit($form, &$form_state) { }
+- 
+-   /**
+--   * Shortcut to display the expose/hide button.
+--   */
+--  function show_expose_button(&$form, &$form_state) {
+--    $form['expose_button'] = array(
+--      '#prefix' => '<div class="views-expose clear-block">',
+--      '#suffix' => '</div>',
+--    );
+--    if (empty($this->options['exposed'])) {
+--      $form['expose_button']['button'] = array(
+--        '#type' => 'submit',
+--        '#value' => t('Expose'),
+--        '#submit' => array('views_ui_config_item_form_expose'),
+--      );
+--      $form['expose_button']['markup'] = array(
+--        '#prefix' => '<div class="description">',
+--        '#value' => t('This item is currently not exposed. If you <strong>expose</strong> it, users will be able to change the filter as they view it.'),
+--        '#suffix' => '</div>',
+--      );
+--    }
+--    else {
+--      $form['expose_button']['button'] = array(
+--        '#type' => 'submit',
+--        '#value' => t('Hide'),
+--        '#submit' => array('views_ui_config_item_form_expose'),
+--      );
+--      $form['expose_button']['markup'] = array(
+--        '#prefix' => '<div class="description">',
+--        '#value' => t('This item is currently exposed. If you <strong>hide</strong> it, users will not be able to change the filter as they view it.'),
+--        '#suffix' => '</div>',
+--      );
+--    }
+--  }
+--
+--  /**
+--   * Shortcut to display the exposed options form.
+--   */
+--  function show_expose_form(&$form, &$form_state) {
+--    if (empty($this->options['exposed'])) {
+--      return;
+--    }
+--
+--    $form['expose'] = array(
+--      '#prefix' => '<div class="views-expose-options clear-block">',
+--      '#suffix' => '</div>',
+--    );
+--    $this->expose_form($form, $form_state);
+--
+--    // When we click the expose button, we add new gadgets to the form but they
+--    // have no data in $_POST so their defaults get wiped out. This prevents
+--    // these defaults from getting wiped out. This setting will only be TRUE
+--    // during a 2nd pass rerender.
+--    if (!empty($form_state['force_expose_options'])) {
+--      foreach (element_children($form['expose']) as $id) {
+--        if (isset($form['expose'][$id]['#default_value']) && !isset($form['expose'][$id]['#value'])) {
+--          $form['expose'][$id]['#value'] = $form['expose'][$id]['#default_value'];
+--        }
+--      }
+--    }
+--  }
+--
+--  /**
+--   * Overridable form for exposed filter options.
+--   *
+--   * If overridden, it is best to call the parent or re-implement
+--   * the stuff here.
+--   *
+--   * Many filters will need to override this in order to provide options
+--   * that are nicely tailored to the given filter.
+--   */
+--  function expose_form(&$form, &$form_state) {
+--    $form['expose']['start_left'] = array(
+--      '#value' => '<div class="views-left-50">',
+--    );
+--
+--    $this->expose_form_left($form, $form_state);
+--
+--    $form['expose']['end_left'] = array(
+--      '#value' => '</div>',
+--    );
+--
+--    $form['expose']['start_checkboxes'] = array(
+--      '#value' => '<div class="form-checkboxes views-left-40 clear-block">',
+--    );
+--
+--    $this->expose_form_right($form, $form_state);
+--
+--    $form['expose']['end_checkboxes'] = array(
+--      '#value' => '</div>',
+--    );
+--  }
+--
+--  /**
+-    * Handle the 'left' side fo the exposed options form.
+-    */
+-   function expose_form_left(&$form, &$form_state) {
+-@@ -370,12 +278,6 @@
+-   }
+- 
+-   /**
+--   * Perform any necessary changes to the form exposes prior to storage.
+--   * There is no need for this function to actually store the data.
+--   */
+--  function expose_submit($form, &$form_state) { }
+--
+--  /**
+-    * Provide default options for exposed filters.
+-    */
+-   function expose_options() {
+-@@ -475,6 +377,12 @@
+-   /**
+-    * Tell the renderer about our exposed form. This only needs to be
+-    * overridden for particularly complex forms. And maybe not even then.
+-+   * 
+-+   * @return
+-+   *   An array with the following keys:
+-+   *   - operator: The $form key of the operator. Set to NULL if no operator.
+-+   *   - value: The $form key of the value. Set to NULL if no value.
+-+   *   - label: The label to use for this piece.
+-    */
+-   function exposed_info() {
+-     if (empty($this->options['exposed'])) {
+-Index: handlers/views_handler_sort.inc
+-===================================================================
+---- handlers/views_handler_sort.inc	(revision 620)
+-+++ handlers/views_handler_sort.inc	(working copy)
+-@@ -10,52 +10,274 @@
+-  * Base sort handler that has no options and performs a simple sort
+-  */
+- class views_handler_sort extends views_handler {
+-+
+-   /**
+-+   * Determine if a sort can be exposed.
+-+   */
+-+  function can_expose() { return TRUE; }
+-+
+-+  /**
+-+   * Provide the basic form which calls through to subforms.
+-+   * If overridden, it is best to call through to the parent,
+-+   * or to at least make sure all of the functions in this form
+-+   * are called.
+-+   */
+-+  function options_form(&$form, &$form_state) {
+-+    if ($this->can_expose()) {
+-+      $this->show_expose_button($form, $form_state);
+-+    }
+-+    $form['start'] = array('#value' => '<div class="clear-block">');
+-+    $this->sort_form($form, $form_state);
+-+    $form['end'] = array('#value' => '</div>');
+-+    if ($this->can_expose()) {
+-+      $this->show_expose_form($form, $form_state);
+-+    }
+-+  }
+-+
+-+  /**
+-+   * Simple validate handler
+-+   */
+-+  function options_validate(&$form, &$form_state) {
+-+    $this->sort_validate($form, $form_state);
+-+    if (!empty($this->options['exposed'])) {
+-+      $this->expose_validate($form, $form_state);
+-+    }
+-+  }
+-+
+-+  /**
+-+   * Validate the sort form.
+-+   */
+-+  function sort_validate($form, &$form_state) { }
+-+
+-+  /**
+-+   * Perform any necessary changes to the form values prior to storage.
+-+   * There is no need for this function to actually store the data.
+-+   */
+-+  function sort_submit($form, &$form_state) { }
+-+
+-+  /**
+-+   * Simple submit handler
+-+   */
+-+  function options_submit(&$form, &$form_state) {
+-+    unset($form_state['values']['expose_button']); // don't store this.
+-+    $this->sort_submit($form, $form_state);
+-+    if (!empty($this->options['exposed'])) {
+-+      $this->expose_submit($form, $form_state);
+-+    }
+-+  }
+-+
+-+  /**
+-+   * Provide a form for setting the sort.
+-+   *
+-+   * This may be overridden by child classes, and it must
+-+   * define $form['order'];
+-+   */
+-+  function sort_form(&$form, &$form_state) {
+-+    $options = $this->sort_options();
+-+    if (!empty($options)) {
+-+      $form['order'] = array(
+-+        '#type' => 'radios',
+-+        '#options' => $options,
+-+        '#default_value' => $this->options['order'],
+-+      );
+-+    }
+-+  }
+-+
+-+  /**
+-+   * Provide a list of options for the default sort form.
+-+   * Should be overridden by classes that don't override sort_form
+-+   */
+-+  function sort_options() { return array(
+-+    'unsorted' => t('Unsorted'),
+-+    'ASC' => t('Sort ascending'), 
+-+    'DESC' => t('Sort descending'),
+-+    ); 
+-+  }
+-+
+-+  function expose_form_left(&$form, &$form_state) {
+-+    $form['expose']['label'] = array(
+-+      '#type' => 'textfield',
+-+      '#default_value' => $this->options['expose']['label'],
+-+      '#title' => t('Label'),
+-+      '#size' => 40,
+-+    );
+-+    $form['expose']['identifier'] = array(
+-+      '#type' => 'textfield',
+-+      '#default_value' => $this->options['expose']['identifier'],
+-+      '#title' => t('Sort identifier'),
+-+      '#size' => 40,
+-+      '#description' => t('This will appear in the URL after the ? to identify this sort. Cannot be blank.'),
+-+    );
+-+  }
+-+  
+-+  /**
+-+   * Handle the 'left' side fo the exposed options form.
+-+   */
+-+  function expose_form_right(&$form, &$form_state) {
+-+
+-+    $form['expose']['order'] = array(
+-+      '#type' => 'value',
+-+      '#value' => 'unsorted',
+-+     );
+-+
+-+    $form['expose']['label'] = array(
+-+      '#type' => 'textfield',
+-+      '#default_value' => $this->options['expose']['label'],
+-+      '#title' => t('Label'),
+-+      '#size' => 40,
+-+    );
+-+  }
+-+
+-+  /**
+-+   * Provide default options for exposed sorts.
+-+   */
+-+  function expose_options() {
+-+    $this->options['expose'] = array(
+-+      'order' => $this->options['order'],
+-+      'label' => t('Sort by: ') . $this->ui_name(),
+-+      'identifier' => $this->options['id'] .'_sort',
+-+    );
+-+  }
+-+
+-+  /**
+-+   * Validate the options form.
+-+   */
+-+  function expose_validate($form, &$form_state) {
+-+    if (empty($this->options['expose']['identifier'])) {
+-+      if (empty($form_state['values']['options']['expose']['identifier'])) {
+-+        form_error($form['expose']['identifier'], t('The identifier is required if the sort is exposed.'));
+-+      }
+-+    }
+-+
+-+    if (!empty($form_state['values']['options']['expose']['identifier']) && $form_state['values']['options']['expose']['identifier'] == 'value') {
+-+      form_error($form['expose']['identifier'], t('This identifier is not allowed.'));
+-+    }
+-+  }
+-+  
+-+  /**
+-+   * Render our chunk of the exposed sort form when selecting
+-+   *
+-+   * You can override this if it doesn't do what you expect.
+-+   */
+-+  function exposed_form(&$form, &$form_state) {
+-+    if (empty($this->options['exposed'])) {
+-+      return;
+-+    }
+-+    
+-+    if (!empty($this->options['expose']['identifier'])) {
+-+      $value = $this->options['expose']['identifier'];
+-+      
+-+      $this->sort_form($form, $form_state);
+-+      $form[$value] = $form['order'];
+-+
+-+      $this->exposed_translate($form[$value], 'order');
+-+
+-+      unset($form['order']);
+-+    }
+-+
+-+  }
+-+
+-+  /**
+-+   * Make some translations to a form item to make it more suitable to
+-+   * exposing.
+-+   */
+-+  function exposed_translate(&$form, $type) {
+-+    if (!isset($form['#type'])) {
+-+      return;
+-+    }
+-+
+-+    if ($form['#type'] == 'radios') {
+-+      $form['#type'] = 'select';
+-+    }
+-+  }
+-+
+-+  /**
+-+   * Tell the renderer about our exposed form. This only needs to be
+-+   * overridden for particularly complex forms. And maybe not even then.
+-+   * 
+-+   * @return
+-+   *   An array with the following keys:
+-+   *   - operator: The $form key of the operator. Set to NULL if no operator.
+-+   *   - value: The $form key of the value. Set to NULL if no value.
+-+   *   - label: The label to use for this piece.
+-+   */
+-+  function exposed_info() {
+-+    if (empty($this->options['exposed'])) {
+-+      return;
+-+    }
+-+
+-+    return array(
+-+      'order' => $this->options['expose']['order'],
+-+      'label' => $this->options['expose']['label'],
+-+      'value' => $this->options['expose']['identifier'],
+-+    );
+-+  }
+-+
+-+  /**
+-+   * Check to see if input from the exposed sorts should change
+-+   * the behavior of this sort.
+-+   */
+-+  function accept_exposed_input($input) {
+-+    return TRUE;
+-+  }
+-+
+-+  function store_exposed_input($input, $status) {
+-+    return TRUE;
+-+  }
+-+ 
+-+  /**
+-    * Called to add the sort to a query.
+-    */
+-   function query() {
+--    $this->ensure_my_table();
+--    // Add the field.
+--    $this->query->add_orderby($this->table_alias, $this->real_field, $this->options['order']);
+-+    
+-+    // When a exposed sort is by default ASC or DESC, we have to check if 
+-+    // this value was modified. If not, we use the default value for this sort.
+-+    if (!empty($this->options['exposed']) && !empty($this->view->exposed_input[$this->options['expose']['identifier']])) {
+-+      $sort = drupal_strtolower($this->view->exposed_input[$this->options['expose']['identifier']]);
+-+    }
+-+    else {
+-+      $sort = drupal_strtolower($this->options['order']);
+-+    }
+-+    
+-+    // Ensure sort is valid and add the field.
+-+    if (!empty($sort) && ($sort == 'asc' || $sort == 'desc')) {
+-+      $this->ensure_my_table();
+-+      $this->query->add_orderby($this->table_alias, $this->real_field, $sort);
+-+    }
+-   }
+- 
+-   function option_definition() {
+-     $options = parent::option_definition();
+- 
+--    $options['order'] = array('default' => 'ASC');
+-+    $options['exposed'] = array('default' => FALSE);
+-+    $options['order'] = array('default' => 'unsorted');
+-+    $options['identifier'] = array('default' => 'unsorted');
+- 
+-     return $options;
+-   }
+- 
+-   /**
+--   * Display whether or not the sort order is ascending or descending
+-+   * Display whether or not the sort sort is ascending or descending
+-    */
+-   function admin_summary() {
+-+    if (!empty($this->options['exposed'])) {
+-+      return t('exposed');
+-+    }
+-     switch ($this->options['order']) {
+-       case 'ASC':
+-       case 'asc':
+--      default:
+--        $type = t('asc');
+-+        return t('asc');
+-         break;
+-       case 'DESC';
+-       case 'desc';
+--        $type = t('desc');
+-+        return t('desc');
+-         break;
+-+      default:
+-+        return t('unsorted');
+-+        break;
+-     }
+--    return '<span class="views-ascending"><span>' . $type . '</span></span>';
+-   }
+- 
+--  /**
+--   * Basic options for all sort criteria
+--   */
+--  function options_form(&$form, &$form_state) {
+--    $form['order'] = array(
+--      '#type' => 'radios',
+--      '#title' => t('Sort order'),
+--      '#options' => array('ASC' => t('Ascending'), 'DESC' => t('Descending')),
+--      '#default_value' => $this->options['order'],
+--    );
+--  }
+- }
+- 
+- /**
+-Index: handlers/views_handler_sort_random.inc
+-===================================================================
+---- handlers/views_handler_sort_random.inc	(revision 620)
+-+++ handlers/views_handler_sort_random.inc	(working copy)
+-@@ -5,6 +5,9 @@
+-  * Handle a random sort.
+-  */
+- class views_handler_sort_random extends views_handler_sort {
+-+
+-+  function can_expose() {return FALSE;}
+-+
+-   function query() {
+-     global $db_type;
+-     switch ($db_type) {
+-@@ -25,4 +28,8 @@
+-     parent::options_form($form, $form_state);
+-     $form['order']['#access'] = FALSE;
+-   }
+-+  
+-+  function admin_summary() {
+-+    return '';
+-+  }
+- }
+-Index: includes/view.inc
+-===================================================================
+---- includes/view.inc	(revision 620)
+-+++ includes/view.inc	(working copy)
+-@@ -578,7 +578,6 @@
+- 
+-     // Let the handlers interact with each other if they really want.
+-     $this->_pre_query();
+--
+-     if ($this->display_handler->uses_exposed()) {
+-       $this->exposed_widgets = $this->render_exposed_form();
+-       if (form_set_error() || !empty($this->build_info['abort'])) {
+-Index: includes/handlers.inc
+-===================================================================
+---- includes/handlers.inc	(revision 620)
+-+++ includes/handlers.inc	(working copy)
+-@@ -312,39 +312,141 @@
+-    * There is no need for this function to actually store the data.
+-    */
+-   function extra_options_submit($form, &$form_state) { }
+--
+-+  
+-   /**
+-    * Set new exposed option defaults when exposed setting is flipped
+-    * on.
+-    */
+-   function expose_options() { }
+-+  
+-   /**
+--   * Render our chunk of the exposed filter form when selecting
+-+   * Get information about the exposed form for the form renderer.
+-    */
+-+  function exposed_info() { }
+-+  
+-+  /**
+-+   * Render our chunk of the exposed handler form when selecting
+-+   */
+-   function exposed_form(&$form, &$form_state) { }
+- 
+-   /**
+--   * Validate the exposed filter form
+-+   * Validate the exposed handler form
+-    */
+-   function exposed_validate(&$form, &$form_state) { }
+- 
+-   /**
+--   * Submit the exposed filter form
+-+   * Submit the exposed handler form
+-    */
+-   function exposed_submit(&$form, &$form_state) { }
+- 
+-   /**
+--   * Get information about the exposed form for the form renderer.
+-+   * Overridable form for exposed handler options.
+-    *
+--   * @return
+--   *   An array with the following keys:
+--   *   - operator: The $form key of the operator. Set to NULL if no operator.
+--   *   - value: The $form key of the value. Set to NULL if no value.
+--   *   - label: The label to use for this piece.
+-+   * If overridden, it is best to call the parent or re-implement
+-+   * the stuff here.
+-+   *
+-+   * Many handlers will need to override this in order to provide options
+-+   * that are nicely tailored to the given filter.
+-    */
+--  function exposed_info() { }
+-+  function expose_form(&$form, &$form_state) {
+-+    $form['expose']['start_left'] = array(
+-+      '#value' => '<div class="views-left-50">',
+-+    );
+- 
+-+    $this->expose_form_left($form, $form_state);
+-+
+-+    $form['expose']['end_left'] = array(
+-+      '#value' => '</div>',
+-+    );
+-+
+-+    $form['expose']['start_checkboxes'] = array(
+-+      '#value' => '<div class="form-checkboxes views-left-40 clear-block">',
+-+    );
+-+
+-+    $this->expose_form_right($form, $form_state);
+-+
+-+    $form['expose']['end_checkboxes'] = array(
+-+      '#value' => '</div>',
+-+    );
+-+  }
+-+
+-+  function expose_form_left(&$form, &$form_state) { }
+-+  
+-+  function expose_form_right(&$form, &$form_state){ }
+-+
+-   /**
+-+   * Validate the options form.
+-+   */
+-+  function expose_validate($form, &$form_state) { }
+-+
+-+  /**
+-+   * Perform any necessary changes to the form exposes prior to storage.
+-+   * There is no need for this function to actually store the data.
+-+   */
+-+  function expose_submit($form, &$form_state) { }
+-+ 
+-+    /**
+-+   * Shortcut to display the expose/hide button.
+-+   */
+-+  function show_expose_button(&$form, &$form_state) {
+-+    $form['expose_button'] = array(
+-+      '#prefix' => '<div class="views-expose clear-block">',
+-+      '#suffix' => '</div>',
+-+    );
+-+    if (empty($this->options['exposed'])) {
+-+      $form['expose_button']['button'] = array(
+-+        '#type' => 'submit',
+-+        '#value' => t('Expose'),
+-+        '#submit' => array('views_ui_config_item_form_expose'),
+-+      );
+-+      $form['expose_button']['markup'] = array(
+-+        '#prefix' => '<div class="description">',
+-+        '#value' => t('This item is currently not exposed. If you <strong>expose</strong> it, users will be able to change the filter as they view it.'),
+-+        '#suffix' => '</div>',
+-+      );
+-+    }
+-+    else {
+-+      $form['expose_button']['button'] = array(
+-+        '#type' => 'submit',
+-+        '#value' => t('Hide'),
+-+        '#submit' => array('views_ui_config_item_form_expose'),
+-+      );
+-+      $form['expose_button']['markup'] = array(
+-+        '#prefix' => '<div class="description">',
+-+        '#value' => t('This item is currently exposed. If you <strong>hide</strong> it, users will not be able to change the filter as they view it.'),
+-+        '#suffix' => '</div>',
+-+      );
+-+    }
+-+  }
+-+    
+-+  /**
+-+   * Shortcut to display the exposed options form.
+-+   */
+-+  function show_expose_form(&$form, &$form_state) {
+-+    if (empty($this->options['exposed'])) {
+-+      return;
+-+    }
+-+
+-+    $form['expose'] = array(
+-+      '#prefix' => '<div class="views-expose-options clear-block">',
+-+      '#suffix' => '</div>',
+-+    );
+-+    $this->expose_form($form, $form_state);
+-+
+-+    // When we click the expose button, we add new gadgets to the form but they
+-+    // have no data in $_POST so their defaults get wiped out. This prevents
+-+    // these defaults from getting wiped out. This setting will only be TRUE
+-+    // during a 2nd pass rerender.
+-+    if (!empty($form_state['force_expose_options'])) {
+-+      foreach (element_children($form['expose']) as $id) {
+-+        if (isset($form['expose'][$id]['#default_value']) && !isset($form['expose'][$id]['#value'])) {
+-+          $form['expose'][$id]['#value'] = $form['expose'][$id]['#default_value'];
+-+        }
+-+      }
+-+    }
+-+  }
+-+  
+-+  /**
+-    * Determine if a handler can be exposed.
+-    */
+-   function can_expose() { return FALSE; }
+-@@ -444,7 +546,7 @@
+-   }
+- 
+-   /**
+--   * Take input from exposed filters and assign to this handler, if necessary.
+-+   * Take input from exposed handlers and assign to this handler, if necessary.
+-    */
+-   function accept_exposed_input($input) { return TRUE; }
+- 
+Index: handlers/views_handler_sort_formula.inc
+===================================================================
+--- handlers/views_handler_sort_formula.inc	(revision 252)
++++ handlers/views_handler_sort_formula.inc	(working copy)
+@@ -41,8 +41,18 @@
+     else {
+       $formula = $this->formula;
+     }
+-    $this->ensure_my_table();
+-    // Add the field.
+-    $this->query->add_orderby(NULL, $formula, $this->options['order'], $this->table_alias . '_' . $this->field);
++    
++    if (!empty($this->options['exposed']) && !empty($this->view->exposed_input[$this->options['expose']['identifier']])) {
++      $sort = drupal_strtolower($this->view->exposed_input[$this->options['expose']['identifier']]);
++    }
++    else {
++      $sort = drupal_strtolower($this->options['order']);
++    }    
++    
++    // Ensure $this->sort is valid and add the field.
++    if (!empty($sort) && ($sort == 'asc' || $sort == 'desc')) {
++      $this->ensure_my_table();
++      $this->query->add_orderby(NULL, $formula, $sort, $this->table_alias . '_' . $this->field);
++    }    
+   }
+ }
+Index: handlers/views_handler_sort_date.inc
+===================================================================
+--- handlers/views_handler_sort_date.inc	(revision 252)
++++ handlers/views_handler_sort_date.inc	(working copy)
+@@ -41,12 +41,21 @@
+    * Called to add the sort to a query.
+    */
+   function query() {
++    // When a exposed sort is by default ASC or DESC, we have to check if 
++    // this value was modified. If not, we use the default value for this sort.
++    if (!empty($this->options['exposed']) && !empty($this->view->exposed_input[$this->options['expose']['identifier']])) {
++      $sort = drupal_strtolower($this->view->exposed_input[$this->options['expose']['identifier']]);
++    }
++    else {
++      $sort = drupal_strtolower($this->options['order']);
++    }
++    
+     $this->ensure_my_table();
+     switch ($this->options['granularity']) {
+       case 'second':
+       default:
+-        $this->query->add_orderby($this->table_alias, $this->real_field, $this->options['order']);
+-        return;
++        $formula = NULL;
++        break;
+       case 'minute':
+         $formula = views_date_sql_format('YmdHi', "$this->table_alias.$this->real_field");
+         break;
+@@ -64,7 +73,14 @@
+         break;
+     }
+ 
+-    // Add the field.
+-    $this->query->add_orderby(NULL, $formula, $this->options['order'], $this->table_alias . '_' . $this->field . '_' . $this->options['granularity']);
++    // Ensure sort is valid and add the field.
++    if (!empty($sort) && ($sort == 'asc' || $sort == 'desc')) {
++      if ($formula) {
++        $this->query->add_orderby(NULL, $formula, $sort, $this->table_alias . '_' . $this->field . '_' . $this->options['granularity']);
++      }
++      else {
++        $this->query->add_orderby($this->table_alias, $this->real_field, $sort);
++      }
++    }
+   }
+ }
+Index: handlers/views_handler_filter.inc
+===================================================================
+--- handlers/views_handler_filter.inc	(revision 252)
++++ handlers/views_handler_filter.inc	(working copy)
+@@ -188,98 +188,6 @@
+   function value_submit($form, &$form_state) { }
+ 
+   /**
+-   * Shortcut to display the expose/hide button.
+-   */
+-  function show_expose_button(&$form, &$form_state) {
+-    $form['expose_button'] = array(
+-      '#prefix' => '<div class="views-expose clear-block">',
+-      '#suffix' => '</div>',
+-    );
+-    if (empty($this->options['exposed'])) {
+-      $form['expose_button']['button'] = array(
+-        '#type' => 'submit',
+-        '#value' => t('Expose'),
+-        '#submit' => array('views_ui_config_item_form_expose'),
+-      );
+-      $form['expose_button']['markup'] = array(
+-        '#prefix' => '<div class="description">',
+-        '#value' => t('This item is currently not exposed. If you <strong>expose</strong> it, users will be able to change the filter as they view it.'),
+-        '#suffix' => '</div>',
+-      );
+-    }
+-    else {
+-      $form['expose_button']['button'] = array(
+-        '#type' => 'submit',
+-        '#value' => t('Hide'),
+-        '#submit' => array('views_ui_config_item_form_expose'),
+-      );
+-      $form['expose_button']['markup'] = array(
+-        '#prefix' => '<div class="description">',
+-        '#value' => t('This item is currently exposed. If you <strong>hide</strong> it, users will not be able to change the filter as they view it.'),
+-        '#suffix' => '</div>',
+-      );
+-    }
+-  }
+-
+-  /**
+-   * Shortcut to display the exposed options form.
+-   */
+-  function show_expose_form(&$form, &$form_state) {
+-    if (empty($this->options['exposed'])) {
+-      return;
+-    }
+-
+-    $form['expose'] = array(
+-      '#prefix' => '<div class="views-expose-options clear-block">',
+-      '#suffix' => '</div>',
+-    );
+-    $this->expose_form($form, $form_state);
+-
+-    // When we click the expose button, we add new gadgets to the form but they
+-    // have no data in $_POST so their defaults get wiped out. This prevents
+-    // these defaults from getting wiped out. This setting will only be TRUE
+-    // during a 2nd pass rerender.
+-    if (!empty($form_state['force_expose_options'])) {
+-      foreach (element_children($form['expose']) as $id) {
+-        if (isset($form['expose'][$id]['#default_value']) && !isset($form['expose'][$id]['#value'])) {
+-          $form['expose'][$id]['#value'] = $form['expose'][$id]['#default_value'];
+-        }
+-      }
+-    }
+-  }
+-
+-  /**
+-   * Overridable form for exposed filter options.
+-   *
+-   * If overridden, it is best to call the parent or re-implement
+-   * the stuff here.
+-   *
+-   * Many filters will need to override this in order to provide options
+-   * that are nicely tailored to the given filter.
+-   */
+-  function expose_form(&$form, &$form_state) {
+-    $form['expose']['start_left'] = array(
+-      '#value' => '<div class="views-left-50">',
+-    );
+-
+-    $this->expose_form_left($form, $form_state);
+-
+-    $form['expose']['end_left'] = array(
+-      '#value' => '</div>',
+-    );
+-
+-    $form['expose']['start_checkboxes'] = array(
+-      '#value' => '<div class="form-checkboxes views-left-40 clear-block">',
+-    );
+-
+-    $this->expose_form_right($form, $form_state);
+-
+-    $form['expose']['end_checkboxes'] = array(
+-      '#value' => '</div>',
+-    );
+-  }
+-
+-  /**
+    * Handle the 'left' side fo the exposed options form.
+    */
+   function expose_form_left(&$form, &$form_state) {
+@@ -370,12 +278,6 @@
+   }
+ 
+   /**
+-   * Perform any necessary changes to the form exposes prior to storage.
+-   * There is no need for this function to actually store the data.
+-   */
+-  function expose_submit($form, &$form_state) { }
+-
+-  /**
+    * Provide default options for exposed filters.
+    */
+   function expose_options() {
+@@ -475,6 +377,12 @@
+   /**
+    * Tell the renderer about our exposed form. This only needs to be
+    * overridden for particularly complex forms. And maybe not even then.
++   *
++   * @return
++   *   An array with the following keys:
++   *   - operator: The $form key of the operator. Set to NULL if no operator.
++   *   - value: The $form key of the value. Set to NULL if no value.
++   *   - label: The label to use for this piece.
+    */
+   function exposed_info() {
+     if (empty($this->options['exposed'])) {
+Index: handlers/views_handler_sort_random.inc
+===================================================================
+--- handlers/views_handler_sort_random.inc	(revision 252)
++++ handlers/views_handler_sort_random.inc	(working copy)
+@@ -5,6 +5,9 @@
+  * Handle a random sort.
+  */
+ class views_handler_sort_random extends views_handler_sort {
++
++  function can_expose() {return FALSE;}
++
+   function query() {
+     global $db_type;
+     switch ($db_type) {
+@@ -25,4 +28,8 @@
+     parent::options_form($form, $form_state);
+     $form['order']['#access'] = FALSE;
+   }
++  
++  function admin_summary() {
++    return '';
++  }
+ }
+Index: handlers/views_handler_sort.inc
+===================================================================
+--- handlers/views_handler_sort.inc	(revision 252)
++++ handlers/views_handler_sort.inc	(working copy)
+@@ -10,52 +10,274 @@
+  * Base sort handler that has no options and performs a simple sort
+  */
+ class views_handler_sort extends views_handler {
++
+   /**
++   * Determine if a sort can be exposed.
++   */
++  function can_expose() { return TRUE; }
++
++  /**
++   * Provide the basic form which calls through to subforms.
++   * If overridden, it is best to call through to the parent,
++   * or to at least make sure all of the functions in this form
++   * are called.
++   */
++  function options_form(&$form, &$form_state) {
++    if ($this->can_expose()) {
++      $this->show_expose_button($form, $form_state);
++    }
++    $form['start'] = array('#value' => '<div class="clear-block">');
++    $this->sort_form($form, $form_state);
++    $form['end'] = array('#value' => '</div>');
++    if ($this->can_expose()) {
++      $this->show_expose_form($form, $form_state);
++    }
++  }
++
++  /**
++   * Simple validate handler
++   */
++  function options_validate(&$form, &$form_state) {
++    $this->sort_validate($form, $form_state);
++    if (!empty($this->options['exposed'])) {
++      $this->expose_validate($form, $form_state);
++    }
++  }
++
++  /**
++   * Validate the sort form.
++   */
++  function sort_validate($form, &$form_state) { }
++
++  /**
++   * Perform any necessary changes to the form values prior to storage.
++   * There is no need for this function to actually store the data.
++   */
++  function sort_submit($form, &$form_state) { }
++
++  /**
++   * Simple submit handler
++   */
++  function options_submit(&$form, &$form_state) {
++    unset($form_state['values']['expose_button']); // don't store this.
++    $this->sort_submit($form, $form_state);
++    if (!empty($this->options['exposed'])) {
++      $this->expose_submit($form, $form_state);
++    }
++  }
++
++  /**
++   * Provide a form for setting the sort.
++   *
++   * This may be overridden by child classes, and it must
++   * define $form['order'];
++   */
++  function sort_form(&$form, &$form_state) {
++    $options = $this->sort_options();
++    if (!empty($options)) {
++      $form['order'] = array(
++        '#type' => 'radios',
++        '#options' => $options,
++        '#default_value' => $this->options['order'],
++      );
++    }
++  }
++
++  /**
++   * Provide a list of options for the default sort form.
++   * Should be overridden by classes that don't override sort_form
++   */
++  function sort_options() { return array(
++    'unsorted' => t('Unsorted'),
++    'ASC' => t('Sort ascending'), 
++    'DESC' => t('Sort descending'),
++    ); 
++  }
++
++  function expose_form_left(&$form, &$form_state) {
++    $form['expose']['label'] = array(
++      '#type' => 'textfield',
++      '#default_value' => $this->options['expose']['label'],
++      '#title' => t('Label'),
++      '#size' => 40,
++    );
++    $form['expose']['identifier'] = array(
++      '#type' => 'textfield',
++      '#default_value' => $this->options['expose']['identifier'],
++      '#title' => t('Sort identifier'),
++      '#size' => 40,
++      '#description' => t('This will appear in the URL after the ? to identify this sort. Cannot be blank.'),
++    );
++  }
++  
++  /**
++   * Handle the 'left' side fo the exposed options form.
++   */
++  function expose_form_right(&$form, &$form_state) {
++
++    $form['expose']['order'] = array(
++      '#type' => 'value',
++      '#value' => 'unsorted',
++     );
++
++    $form['expose']['label'] = array(
++      '#type' => 'textfield',
++      '#default_value' => $this->options['expose']['label'],
++      '#title' => t('Label'),
++      '#size' => 40,
++    );
++  }
++
++  /**
++   * Provide default options for exposed sorts.
++   */
++  function expose_options() {
++    $this->options['expose'] = array(
++      'order' => $this->options['order'],
++      'label' => t('Sort by: ') . $this->ui_name(),
++      'identifier' => $this->options['id'] .'_sort',
++    );
++  }
++
++  /**
++   * Validate the options form.
++   */
++  function expose_validate($form, &$form_state) {
++    if (empty($this->options['expose']['identifier'])) {
++      if (empty($form_state['values']['options']['expose']['identifier'])) {
++        form_error($form['expose']['identifier'], t('The identifier is required if the sort is exposed.'));
++      }
++    }
++
++    if (!empty($form_state['values']['options']['expose']['identifier']) && $form_state['values']['options']['expose']['identifier'] == 'value') {
++      form_error($form['expose']['identifier'], t('This identifier is not allowed.'));
++    }
++  }
++  
++  /**
++   * Render our chunk of the exposed sort form when selecting
++   *
++   * You can override this if it doesn't do what you expect.
++   */
++  function exposed_form(&$form, &$form_state) {
++    if (empty($this->options['exposed'])) {
++      return;
++    }
++    
++    if (!empty($this->options['expose']['identifier'])) {
++      $value = $this->options['expose']['identifier'];
++      
++      $this->sort_form($form, $form_state);
++      $form[$value] = $form['order'];
++
++      $this->exposed_translate($form[$value], 'order');
++
++      unset($form['order']);
++    }
++
++  }
++
++  /**
++   * Make some translations to a form item to make it more suitable to
++   * exposing.
++   */
++  function exposed_translate(&$form, $type) {
++    if (!isset($form['#type'])) {
++      return;
++    }
++
++    if ($form['#type'] == 'radios') {
++      $form['#type'] = 'select';
++    }
++  }
++
++  /**
++   * Tell the renderer about our exposed form. This only needs to be
++   * overridden for particularly complex forms. And maybe not even then.
++   * 
++   * @return
++   *   An array with the following keys:
++   *   - operator: The $form key of the operator. Set to NULL if no operator.
++   *   - value: The $form key of the value. Set to NULL if no value.
++   *   - label: The label to use for this piece.
++   */
++  function exposed_info() {
++    if (empty($this->options['exposed'])) {
++      return;
++    }
++
++    return array(
++      'order' => $this->options['expose']['order'],
++      'label' => $this->options['expose']['label'],
++      'value' => $this->options['expose']['identifier'],
++    );
++  }
++
++  /**
++   * Check to see if input from the exposed sorts should change
++   * the behavior of this sort.
++   */
++  function accept_exposed_input($input) {
++    return TRUE;
++  }
++
++  function store_exposed_input($input, $status) {
++    return TRUE;
++  }
++ 
++  /**
+    * Called to add the sort to a query.
+    */
+   function query() {
+-    $this->ensure_my_table();
+-    // Add the field.
+-    $this->query->add_orderby($this->table_alias, $this->real_field, $this->options['order']);
++    
++    // When a exposed sort is by default ASC or DESC, we have to check if 
++    // this value was modified. If not, we use the default value for this sort.
++    if (!empty($this->options['exposed']) && !empty($this->view->exposed_input[$this->options['expose']['identifier']])) {
++      $sort = drupal_strtolower($this->view->exposed_input[$this->options['expose']['identifier']]);
++    }
++    else {
++      $sort = drupal_strtolower($this->options['order']);
++    }
++    
++    // Ensure sort is valid and add the field.
++    if (!empty($sort) && ($sort == 'asc' || $sort == 'desc')) {
++      $this->ensure_my_table();
++      $this->query->add_orderby($this->table_alias, $this->real_field, $sort);
++    }
+   }
+ 
+   function option_definition() {
+     $options = parent::option_definition();
+ 
+-    $options['order'] = array('default' => 'ASC');
++    $options['exposed'] = array('default' => FALSE);
++    $options['order'] = array('default' => 'unsorted');
++    $options['identifier'] = array('default' => 'unsorted');
+ 
+     return $options;
+   }
+ 
+   /**
+-   * Display whether or not the sort order is ascending or descending
++   * Display whether or not the sort sort is ascending or descending
+    */
+   function admin_summary() {
++    if (!empty($this->options['exposed'])) {
++      return t('exposed');
++    }
+     switch ($this->options['order']) {
+       case 'ASC':
+       case 'asc':
+-      default:
+-        $type = t('asc');
++        return t('asc');
+         break;
+       case 'DESC';
+       case 'desc';
+-        $type = t('desc');
++        return t('desc');
+         break;
++      default:
++        return t('unsorted');
++        break;
+     }
+-    return '<span class="views-ascending"><span>' . $type . '</span></span>';
+   }
+ 
+-  /**
+-   * Basic options for all sort criteria
+-   */
+-  function options_form(&$form, &$form_state) {
+-    $form['order'] = array(
+-      '#type' => 'radios',
+-      '#title' => t('Sort order'),
+-      '#options' => array('ASC' => t('Ascending'), 'DESC' => t('Descending')),
+-      '#default_value' => $this->options['order'],
+-    );
+-  }
+ }
+ 
+ /**
+Index: includes/view.inc
+===================================================================
+--- includes/view.inc	(revision 252)
++++ includes/view.inc	(working copy)
+@@ -584,7 +584,6 @@
+ 
+     // Let the handlers interact with each other if they really want.
+     $this->_pre_query();
+-
+     if ($this->display_handler->uses_exposed()) {
+       $this->exposed_widgets = $this->render_exposed_form();
+       if (form_set_error() || !empty($this->build_info['abort'])) {
+Index: includes/handlers.inc
+===================================================================
+--- includes/handlers.inc	(revision 252)
++++ includes/handlers.inc	(working copy)
+@@ -312,39 +312,141 @@
+    * There is no need for this function to actually store the data.
+    */
+   function extra_options_submit($form, &$form_state) { }
+-
++  
+   /**
+    * Set new exposed option defaults when exposed setting is flipped
+    * on.
+    */
+   function expose_options() { }
++  
+   /**
+-   * Render our chunk of the exposed filter form when selecting
++   * Get information about the exposed form for the form renderer.
+    */
++  function exposed_info() { }
++  
++  /**
++   * Render our chunk of the exposed handler form when selecting
++   */
+   function exposed_form(&$form, &$form_state) { }
+ 
+   /**
+-   * Validate the exposed filter form
++   * Validate the exposed handler form
+    */
+   function exposed_validate(&$form, &$form_state) { }
+ 
+   /**
+-   * Submit the exposed filter form
++   * Submit the exposed handler form
+    */
+   function exposed_submit(&$form, &$form_state) { }
+ 
+   /**
+-   * Get information about the exposed form for the form renderer.
++   * Overridable form for exposed handler options.
+    *
+-   * @return
+-   *   An array with the following keys:
+-   *   - operator: The $form key of the operator. Set to NULL if no operator.
+-   *   - value: The $form key of the value. Set to NULL if no value.
+-   *   - label: The label to use for this piece.
++   * If overridden, it is best to call the parent or re-implement
++   * the stuff here.
++   *
++   * Many handlers will need to override this in order to provide options
++   * that are nicely tailored to the given filter.
+    */
+-  function exposed_info() { }
++  function expose_form(&$form, &$form_state) {
++    $form['expose']['start_left'] = array(
++      '#value' => '<div class="views-left-50">',
++    );
+ 
++    $this->expose_form_left($form, $form_state);
++
++    $form['expose']['end_left'] = array(
++      '#value' => '</div>',
++    );
++
++    $form['expose']['start_checkboxes'] = array(
++      '#value' => '<div class="form-checkboxes views-left-40 clear-block">',
++    );
++
++    $this->expose_form_right($form, $form_state);
++
++    $form['expose']['end_checkboxes'] = array(
++      '#value' => '</div>',
++    );
++  }
++
++  function expose_form_left(&$form, &$form_state) { }
++  
++  function expose_form_right(&$form, &$form_state){ }
++
+   /**
++   * Validate the options form.
++   */
++  function expose_validate($form, &$form_state) { }
++
++  /**
++   * Perform any necessary changes to the form exposes prior to storage.
++   * There is no need for this function to actually store the data.
++   */
++  function expose_submit($form, &$form_state) { }
++ 
++    /**
++   * Shortcut to display the expose/hide button.
++   */
++  function show_expose_button(&$form, &$form_state) {
++    $form['expose_button'] = array(
++      '#prefix' => '<div class="views-expose clear-block">',
++      '#suffix' => '</div>',
++    );
++    if (empty($this->options['exposed'])) {
++      $form['expose_button']['button'] = array(
++        '#type' => 'submit',
++        '#value' => t('Expose'),
++        '#submit' => array('views_ui_config_item_form_expose'),
++      );
++      $form['expose_button']['markup'] = array(
++        '#prefix' => '<div class="description">',
++        '#value' => t('This item is currently not exposed. If you <strong>expose</strong> it, users will be able to change the filter as they view it.'),
++        '#suffix' => '</div>',
++      );
++    }
++    else {
++      $form['expose_button']['button'] = array(
++        '#type' => 'submit',
++        '#value' => t('Hide'),
++        '#submit' => array('views_ui_config_item_form_expose'),
++      );
++      $form['expose_button']['markup'] = array(
++        '#prefix' => '<div class="description">',
++        '#value' => t('This item is currently exposed. If you <strong>hide</strong> it, users will not be able to change the filter as they view it.'),
++        '#suffix' => '</div>',
++      );
++    }
++  }
++    
++  /**
++   * Shortcut to display the exposed options form.
++   */
++  function show_expose_form(&$form, &$form_state) {
++    if (empty($this->options['exposed'])) {
++      return;
++    }
++
++    $form['expose'] = array(
++      '#prefix' => '<div class="views-expose-options clear-block">',
++      '#suffix' => '</div>',
++    );
++    $this->expose_form($form, $form_state);
++
++    // When we click the expose button, we add new gadgets to the form but they
++    // have no data in $_POST so their defaults get wiped out. This prevents
++    // these defaults from getting wiped out. This setting will only be TRUE
++    // during a 2nd pass rerender.
++    if (!empty($form_state['force_expose_options'])) {
++      foreach (element_children($form['expose']) as $id) {
++        if (isset($form['expose'][$id]['#default_value']) && !isset($form['expose'][$id]['#value'])) {
++          $form['expose'][$id]['#value'] = $form['expose'][$id]['#default_value'];
++        }
++      }
++    }
++  }
++  
++  /**
+    * Determine if a handler can be exposed.
+    */
+   function can_expose() { return FALSE; }
+@@ -444,7 +546,7 @@
+   }
+ 
+   /**
+-   * Take input from exposed filters and assign to this handler, if necessary.
++   * Take input from exposed handlers and assign to this handler, if necessary.
+    */
+   function accept_exposed_input($input) { return TRUE; }
+ 

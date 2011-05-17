@@ -996,16 +996,18 @@ function views_exposed_form(&$form_state) {
     );
   }
 
-  // Go through each filter and let it generate its info.
-  foreach ($view->filter as $id => $filter) {
-    $view->filter[$id]->exposed_form($form, $form_state);
-    if ($info = $view->filter[$id]->exposed_info()) {
-      $form['#info']['filter-' . $id] = $info;
+  // Go through each handler and let it generate its exposed widget.
+  foreach ($view->display_handler->handlers as $type => $value) {
+    foreach ($view->$type as $id => $handler) {
+      if ($handler->can_expose() && $handler->is_exposed()) {
+        $handler->exposed_form($form, $form_state);
+        if ($info = $handler->exposed_info()) {
+          $form['#info']["$type-$id"] = $info;
+        }
+      }
     }
   }
-
-  // @todo deal with exposed sorts
-
+  
   $form['submit'] = array(
     '#name' => '', // prevent from showing up in $_GET.
     '#type' => 'submit',
