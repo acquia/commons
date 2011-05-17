@@ -227,19 +227,19 @@ function drupal_commons_config_filter() {
   
   // Filtered HTML
   db_query($filters_sql, 1, 'Filtered HTML');
-  db_query($filter_format, 1, 'Filtered HTML');
+  db_query($filter_formats, 1, 'Filtered HTML');
   
   // Full HTML
   db_query($filters_sql, 2, 'Full HTML');
-  db_query($filter_format, 2, 'Full HTML');
+  db_query($filter_formats, 2, 'Full HTML');
   
   // PHP code
   db_query($filters_sql, 3, 'PHP code');
-  db_query($filter_format, 3, 'PHP code');
+  db_query($filter_formats, 3, 'PHP code');
   
   // Messaging
   db_query($filters_sql, 4, 'Messaging plain text');
-  db_query($filter_format, 4, 'Messaging plain text');
+  db_query($filter_formats, 4, 'Messaging plain text');
   
   // Let community and content manager role use Full HTML
   db_query("UPDATE {filter_formats} SET roles = ',3,4,' WHERE name = 'Full HTML'");
