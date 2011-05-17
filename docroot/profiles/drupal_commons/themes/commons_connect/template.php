@@ -4,7 +4,7 @@
 /**
  * Breadcrumb themeing
  */
-function bl_commons_breadcrumb($breadcrumb) {
+function commons_connect_breadcrumb($breadcrumb) {
 	$breadcrumb[] = drupal_get_title();
   if (!empty($breadcrumb)) {
     return '<div class="breadcrumb">'. implode(' &raquo; ', $breadcrumb) .'</div>';
@@ -16,7 +16,7 @@ function bl_commons_breadcrumb($breadcrumb) {
 /**
  * Node preprocessing
  */
-function bl_commons_preprocess_node(&$vars) {
+function commons_connect_preprocess_node(&$vars) {
   // Only build custom submitted information if it was first available
   // If it's not, that indicates that it's been turned off for this
   // node type
@@ -140,7 +140,7 @@ function acquia_commons_preprocess_comment(&$vars) {
 /**
  * Profile preprocessing
  */
-function bl_commons_preprocess_user_profile_item(&$vars) {
+function commons_connect_preprocess_user_profile_item(&$vars) {
   // Separate userpoints value from the edit links
   if ($vars['title'] == 'Points') { 
     $userpoints = explode(' - ', $vars['value']);
@@ -152,7 +152,7 @@ function bl_commons_preprocess_user_profile_item(&$vars) {
 /**
  * Implementation of theme_shoutbox_post()
  */
-function bl_commons_shoutbox_post($shout, $links = array(), $alter_row_color=TRUE) {
+function commons_connect_shoutbox_post($shout, $links = array(), $alter_row_color=TRUE) {
   global $user;
   
   // Gather moderation links
@@ -228,7 +228,7 @@ function bl_commons_shoutbox_post($shout, $links = array(), $alter_row_color=TRU
   return $post;
 }
 
-function bl_commons_item_list($items = array(), $title = NULL, $type = 'ul', $attributes = NULL) {
+function commons_connect_item_list($items = array(), $title = NULL, $type = 'ul', $attributes = NULL) {
   $output = '<div class="item-list">';
   if (isset($title)) {
     $output .= '<h3>'. $title .'</h3>';
@@ -295,12 +295,12 @@ function bl_commons_item_list($items = array(), $title = NULL, $type = 'ul', $at
   return $output;
 }
 
-function bl_commons_preprocess_block($variables) {
+function commons_connect_preprocess_block($variables) {
   $variables['template_files'][] = 'block-'.$variables['block']->region.'-'.$variables['block']->module;
   $variables['template_files'][] = 'block-'.$variables['block']->region.'-'.$variables['block']->module.'-'.$variables['block']->delta;
 }
 
-function bl_commons_search_theme_form($form) {
+function commons_connect_search_theme_form($form) {
 	$form['search_theme_form']['#value']= 'Search...';
 	$form['submit']['#type'] = 'image_button';
 	$form['submit']['#src'] = drupal_get_path('theme', 'bl_commons') . '/images/search_icon.gif';
@@ -308,7 +308,7 @@ function bl_commons_search_theme_form($form) {
 	return '<div id="search" class="container-inline">' . drupal_render($form) . '</div>';
 }
 
-function bl_commons_commons_core_info_block() {
+function commons_connect_commons_core_info_block() {
   $content = '';
   
   $content .= '<div id="acquia-footer-message">';
@@ -333,7 +333,7 @@ function bl_commons_commons_core_info_block() {
 }
 
 //hide links and change page title
-function bl_commons_taxonomy_term_page($tids, $result) {
+function commons_connect_taxonomy_term_page($tids, $result) {
   $str_tids = arg(2);
   $terms = taxonomy_terms_parse_string($str_tids);
   $title_result = db_query(db_rewrite_sql('SELECT t.tid, t.name FROM {term_data} t WHERE t.tid IN ('. db_placeholders($terms['tids']) .')', 't', 'tid'), $terms['tids']);
@@ -370,12 +370,12 @@ function bl_commons_taxonomy_term_page($tids, $result) {
     }
   }
 
-  $output .= bl_commons_taxonomy_render_nodes($result);
+  $output .= commons_connect_taxonomy_render_nodes($result);
 
   return $output;
 }
 
-function bl_commons_taxonomy_render_nodes($result) {
+function commons_connect_taxonomy_render_nodes($result) {
   $output = '';
   $has_rows = FALSE;
   while ($node = db_fetch_object($result)) {
