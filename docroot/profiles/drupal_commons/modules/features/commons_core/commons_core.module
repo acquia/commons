@@ -513,6 +513,16 @@ function commons_core_form_views_exposed_form_alter(&$form, &$form_state) {
       break;
   }
 }
+
+/**
+ * Implementation of hook_wysiwyg_editor_settings_alter()
+ */
+function commons_core_wysiwyg_editor_settings_alter(&$settings, $context) {
+  if ($context['editor']['name'] == 'ckeditor') {
+    // Lower the width to avoid overflow
+    $settings['width'] = '95%';
+  }
+}
  
 /**
  * Callback to optionally force a login
