@@ -1,5 +1,4 @@
 <?php
-// $Id: imagefilter.inc,v 1.3.4.2 2010/10/17 17:58:07 drewish Exp $
 
 //Made by Chao Xu(Mgccl) 3/1/07
 //www.webdevlogs.com

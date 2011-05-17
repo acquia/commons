@@ -1,4 +1,4 @@
-<?php // $Id: imageapi_gd.module,v 1.13.2.9 2010/10/17 18:16:13 drewish Exp $
+<?php // $Id$
 
 /**
  * @file
@@ -26,6 +26,21 @@ function imageapi_gd_settings_form() {
     '#maxlength' => 3,
     '#default_value' => variable_get('imageapi_jpeg_quality', 75),
     '#field_suffix' => '%',
+  );
+  $form['imageapi_crop_background'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Crop background'),
+    '#description' => t('Hex string specifying the background color to use when cropping images. If not provided, will use the default. Examples: "ABC", "ABCD", "AABBCC", "AABBCCDD".'),
+    '#size' => 10,
+    '#maxlength' => 8,
+    '#default_value' => variable_get('imageapi_crop_background', ''),
+    '#field_prefix' => '#',
+  );
+  $form['imageapi_interlaced'] = array(
+    '#title' => t('Enable Interlacing'),
+    '#type' => 'checkbox',
+    '#default_value' => variable_get('imageapi_interlaced', 0),
+    '#description' => t('Interlacing is a method of encoding a bitmap image such that a person who has partially received it sees a degraded copy of the entire image. When communicating over a slow communications link, this is often preferable to seeing a perfectly clear copy of one part of the image, as it helps the viewer decide more quickly whether to abort or continue the transmission.')
   );
   return system_settings_form($form);
 }
@@ -62,6 +77,9 @@ function imageapi_gd_image_close($image, $destination) {
   if (!function_exists($function)) {
     return FALSE;
   }
+  if (variable_get('imageapi_interlaced', 0)) {
+    imageinterlace($image->resource, 1);
+  }
   if ($extension == 'jpeg') {
     return $function($image->resource, $destination, variable_get('imageapi_jpeg_quality', 75));
   }
@@ -93,9 +111,22 @@ function imageapi_gd_image_close($image, $destination) {
  *   TRUE or FALSE, based on success.
  */
 function imageapi_gd_image_crop(&$image, $x, $y, $width, $height) {
+  // Create an image with the new width and height.
   $res = imageapi_gd_create_tmp($image, $width, $height);
 
-  if (!imagecopyresampled($res, $image->resource, 0, 0, $x, $y, $width, $height, $width, $height)) {
+  // Fill the background color if desired.
+  $background = variable_get('imageapi_crop_background', '');
+  if (!empty($background)) {
+    $background = imageapi_hex2rgba($background);
+    $background = imagecolorallocatealpha($res, $background[0], $background[1], $background[2], $background[3]);
+    imagefill($res, 0, 0, $background);
+  }
+
+  // Copy the source image to our new destination image. We use
+  // $image->info['width] instead of $width because we are copying
+  // using the source image's width and height, not the destination
+  // width and height.
+  if (!imagecopyresampled($res, $image->resource, -$x, -$y, 0, 0, $image->info['width'], $image->info['height'], $image->info['width'], $image->info['height'])) {
     return FALSE;
   }
 
