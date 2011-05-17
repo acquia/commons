@@ -210,7 +210,7 @@ function commons_core_update_6006() {
  * Remove shoutbox admin setting variable
  * Install commons_shoutbox
  */
-function commons_core_updated_6007() {
+function commons_core_update_6007() {
   variable_del('commons_hide_shoutbox_link');
   features_install_modules(array('commons_shoutbox'));
   return array();
