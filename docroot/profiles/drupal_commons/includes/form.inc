@@ -100,9 +100,9 @@ function drupal_commons_features_form(&$form_state, $url) {
   );
   $form['misc']['feature-commons_profile'] = array(
     '#type' => 'checkbox',
-    '#title' => st('User profiles'),
+    '#title' => st('Social profiles'),
     '#default_value' => 1,
-    '#description' => st('Allow users to have social profiles.'),
+    '#description' => st('A feature that extends Drupal\'s simple profiles to include a variety of additional profile fields useful for community sites, plus various important user listings. (Strongly recommended.)'),
   );
   $form['misc']['feature-commons_dashboard'] = array(
     '#type' => 'checkbox',
@@ -129,7 +129,7 @@ function drupal_commons_features_form(&$form_state, $url) {
   );
   $form['misc']['feature-commons_invite'] = array(
     '#type' => 'checkbox',
-    '#title' => st('Invitations'),
+    '#title' => st('Community invitations'),
     '#default_value' => 1,
     '#description' => st('Enable users to send invitations to join the site to external people.'),
   );
@@ -137,7 +137,7 @@ function drupal_commons_features_form(&$form_state, $url) {
     '#type' => 'checkbox',
     '#title' => st('Shoutbox'),
     '#default_value' => 1,
-    '#description' => st('Provide a simple, micro-style chat for groups.'),
+    '#description' => st('A feature that lets users post short messages to each other, with (almost) live updates to other users. If enabled, this is provided on group home pages for group users.'),
   );
   $form['misc']['feature-commons_group_aggregator'] = array(
     '#type' => 'checkbox',
