@@ -15,9 +15,9 @@ function commons_profile_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'commons_profile-profile_image_links' => array(
+        'commons_profile-image_links' => array(
           'module' => 'commons_profile',
-          'delta' => 'profile_image_links',
+          'delta' => 'image_links',
           'region' => 'sidebar_first',
           'weight' => 0,
         ),
@@ -27,9 +27,9 @@ function commons_profile_context_default_contexts() {
           'region' => 'sidebar_first',
           'weight' => 1,
         ),
-        'commons_profile-profile_find_new_friends' => array(
+        'commons_profile-find_new_friends' => array(
           'module' => 'commons_profile',
-          'delta' => 'profile_find_new_friends',
+          'delta' => 'find_new_friends',
           'region' => 'sidebar_first',
           'weight' => 2,
         ),
@@ -60,9 +60,9 @@ function commons_profile_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'commons_profile-profile_image_links' => array(
+        'commons_profile-image_links' => array(
           'module' => 'commons_profile',
-          'delta' => 'profile_image_links',
+          'delta' => 'image_links',
           'region' => 'sidebar_first',
           'weight' => 0,
         ),
@@ -105,9 +105,9 @@ function commons_profile_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'commons_profile-profile_image_links' => array(
+        'commons_profile-image_links' => array(
           'module' => 'commons_profile',
-          'delta' => 'profile_image_links',
+          'delta' => 'image_links',
           'region' => 'sidebar_first',
           'weight' => 0,
         ),
@@ -117,9 +117,9 @@ function commons_profile_context_default_contexts() {
           'region' => 'sidebar_first',
           'weight' => 1,
         ),
-        'commons_profile-profile_find_new_friends' => array(
+        'commons_profile-find_new_friends' => array(
           'module' => 'commons_profile',
-          'delta' => 'profile_find_new_friends',
+          'delta' => 'find_new_friends',
           'region' => 'sidebar_first',
           'weight' => 2,
         ),
@@ -129,9 +129,9 @@ function commons_profile_context_default_contexts() {
           'region' => 'sidebar_last',
           'weight' => 0,
         ),
-        'commons_profile-profile_recent_activity' => array(
+        'commons_profile-recent_activity' => array(
           'module' => 'commons_profile',
-          'delta' => 'profile_recent_activity',
+          'delta' => 'recent_activity',
           'region' => 'content',
           'weight' => 0,
         ),
@@ -156,9 +156,9 @@ function commons_profile_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'commons_profile-profile_image_links' => array(
+        'commons_profile-image_links' => array(
           'module' => 'commons_profile',
-          'delta' => 'profile_image_links',
+          'delta' => 'image_links',
           'region' => 'sidebar_first',
           'weight' => 0,
         ),
@@ -180,9 +180,9 @@ function commons_profile_context_default_contexts() {
           'region' => 'sidebar_last',
           'weight' => 1,
         ),
-        'commons_profile-profile_recent_activity' => array(
+        'commons_profile-recent_activity' => array(
           'module' => 'commons_profile',
-          'delta' => 'profile_recent_activity',
+          'delta' => 'recent_activity',
           'region' => 'content',
           'weight' => 0,
         ),
