@@ -2100,7 +2100,7 @@ function commons_event_views_default_views() {
   ));
   $handler->override_option('block_description', 'Upcoming events in my groups');
   $handler->override_option('block_caching', -1);
-  
+
   $views[$view->name] = $view;
 
   // Exported view: event_past_events
@@ -3346,7 +3346,6 @@ function commons_event_views_default_views() {
   $handler->override_option('title', 'Upcoming group events');
   $handler->override_option('footer_format', '1');
   $handler->override_option('footer_empty', 0);
-  $handler->override_option('empty', 'There are no upcoming events');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
   $handler->override_option('items_per_page', 3);
@@ -5517,7 +5516,7 @@ function commons_event_views_default_views() {
   $handler->override_option('title', 'Featured events');
   $handler->override_option('block_description', 'Featured events');
   $handler->override_option('block_caching', -1);
-  
+
   $views[$view->name] = $view;
 
   return $views;

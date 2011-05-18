@@ -21,8 +21,8 @@ function commons_group_aggregator_og_features_registry() {
   // Feature: commons_group_aggregator
   $feature = new stdClass;
   $feature->id = 'commons_group_aggregator';
-  $feature->name = t('Group aggregator');
-  $feature->description = t('Subscribe to external RSS feeds within your group');
+  $feature->name = t('Feed aggregator');
+  $feature->description = t('Pull in articles from external RSS feeds that are relevant to your group via subscriptions to those feed sources.');
   $feature->components = array(
     'path' => array(
       'node/%node/aggregator',

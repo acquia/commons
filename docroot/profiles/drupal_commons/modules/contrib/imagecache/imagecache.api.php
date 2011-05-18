@@ -1,5 +1,4 @@
 <?php
-// $Id: imagecache.api.php,v 1.2 2009/02/17 21:36:18 drewish Exp $
 
 /**
  * @file
@@ -62,4 +61,42 @@ function hook_imagecache_default_presets() {
     ),
   );
   return $presets;
+}
+
+/**
+ * Allows other modules to perform actions on an image before it is flushed.
+ *
+ * This hook can be used to send purge requests to a reverse proxy or delete
+ * a file from a remote file server or CDN when the imagecached version is
+ * flushed.
+ *
+ * Implementations of hook_imagecache_image_flush should not delete the image
+ * at $filepath, as ImageCache will perform this action.
+ *
+ * @param $derivative_path
+ *   The path to the file about to be flushed.
+ * @param $preset
+ *   An ImageCache preset array.
+ * @param $original_path
+ *   The Drupal file path to the original image.
+ */
+function hook_imagecache_image_flush($derivative_path, $preset, $original_path) {
+}
+
+/**
+ * Allows other modules to perform actions when a preset is about to be flushed.
+ *
+ * This hook can be used to send purge requests to a reverse proxy or delete
+ * files from a remote file server or CDN when the imagecached versions are
+ * flushed.
+ *
+ * Implementations of hook_imagecache_preset_flush should not delete the
+ * images in $presetdir, as ImageCache will perform this action.
+ *
+ * @param $presetdir
+ *   The directory containing the images about to be flushed.
+ * @param $preset
+ *   An ImageCache preset array.
+ */
+function hook_imagecache_preset_flush($presetdir, $preset) {
 }

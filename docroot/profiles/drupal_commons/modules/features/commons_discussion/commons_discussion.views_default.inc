@@ -1627,7 +1627,6 @@ function commons_discussion_views_default_views() {
   $handler->override_option('title', 'Latest discussions');
   $handler->override_option('header_format', '1');
   $handler->override_option('header_empty', 0);
-  $handler->override_option('empty', 'No discussions have been added to this group yet.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
   $handler->override_option('items_per_page', 2);

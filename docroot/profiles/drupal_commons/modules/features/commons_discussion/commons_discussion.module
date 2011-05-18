@@ -12,7 +12,7 @@ function commons_discussion_og_features_registry() {
   $feature = new stdClass;
   $feature->id = 'commons_discussion';
   $feature->name = t('Discussions');
-  $feature->description = t('Provide a space for discussions for your group');
+  $feature->description = t('Enable collaborative (threaded) discussions among your group members.');
   $feature->components = array(
     'views' => array(
       'group_tab_discussions',

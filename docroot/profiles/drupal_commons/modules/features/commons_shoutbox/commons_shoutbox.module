@@ -12,7 +12,7 @@ function commons_shoutbox_og_features_registry() {
   $feature = new stdClass;
   $feature->id = 'commons_shoutbox';
   $feature->name = t('Shoutbox');
-  $feature->description = t('Provide a micro-style chat for the group');
+  $feature->description = t('Enable your users to post short messages to each other without creating a complete new page, and see (almost) live updates from other users.');
   $feature->components = array(
     'path' => array(
       'node/%node/shoutbox',

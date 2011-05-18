@@ -1007,7 +1007,6 @@ function commons_poll_views_default_views() {
   $handler->override_option('title', 'Latest poll');
   $handler->override_option('header_format', '1');
   $handler->override_option('header_empty', 0);
-  $handler->override_option('empty', 'No polls have been added to this group yet.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('items_per_page', 1);
   $handler->override_option('use_pager', '0');
