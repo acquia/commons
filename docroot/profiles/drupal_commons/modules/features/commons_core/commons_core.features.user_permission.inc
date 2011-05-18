@@ -47,7 +47,7 @@ function commons_core_user_default_permissions() {
       '0' => 'site admin',
     ),
   );
-  
+
   // Exported permission: access user activity
   $permissions['access user activity'] = array(
     'name' => 'access user activity',

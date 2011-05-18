@@ -8,6 +8,40 @@ function commons_core_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
+  $context->name = 'bookmarks';
+  $context->description = 'The bookmarks page';
+  $context->tag = 'Bookmarks';
+  $context->conditions = array(
+    'path' => array(
+      'values' => array(
+        'bookmarks' => 'bookmarks',
+        'user/*/bookmarks' => 'user/*/bookmarks',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'views-most_bookmarked-block_1' => array(
+          'module' => 'views',
+          'delta' => 'most_bookmarked-block_1',
+          'region' => 'sidebar_last',
+          'weight' => 0,
+        ),
+      ),
+    ),
+  );
+  $context->condition_mode = 0;
+
+  // Translatables
+  // Included for use with string extractors like potx.
+  t('Bookmarks');
+  t('The bookmarks page');
+
+  $export['bookmarks'] = $context;
+  $context = new stdClass;
+  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
+  $context->api_version = 3;
   $context->name = 'global';
   $context->description = 'Show on every page';
   $context->tag = 'Sitewide';
