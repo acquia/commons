@@ -121,6 +121,43 @@ function commons_core_form_alter(&$form, &$form_state, $form_id) {
 /**
  * Implementation of hook_form_FORM_ID_alter()
  * 
+ * Alter the OG Features form
+ */
+function commons_core_form_og_features_feature_form_alter(&$form, &$form_state) {
+  // Reorder the group features
+  foreach ($form as $key => $item) {
+    switch ($key) {
+      case 'feature-commons_blog';
+        $form[$key]['#weight'] = -100;
+        break;
+      case 'feature-commons_discussion';
+        $form[$key]['#weight'] = -90;
+        break;
+      case 'feature-commons_wiki';
+        $form[$key]['#weight'] = -80;
+        break;
+      case 'feature-commons_document';
+        $form[$key]['#weight'] = -70;
+        break;
+      case 'feature-commons_poll';
+        $form[$key]['#weight'] = -60;
+        break;
+      case 'feature-commons_event';
+        $form[$key]['#weight'] = -50;
+        break;
+      case 'feature-commons_group_aggregator';
+        $form[$key]['#weight'] = -40;
+        break;
+      case 'feature-commons_shoutbox';
+        $form[$key]['#weight'] = -30;
+        break;
+    } 
+  }
+}
+
+/**
+ * Implementation of hook_form_FORM_ID_alter()
+ * 
  * Optionally restrict voting only to members of the group
  */
 function commons_core_form_poll_view_voting_alter(&$form, &$form_state) {
