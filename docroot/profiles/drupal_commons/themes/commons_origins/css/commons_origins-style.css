@@ -6,7 +6,7 @@
 
 body {
 	color: #1f1f1f;
-	font-family: "Helvetical Neue",Helvetica,Arial,Sans-serif;
+	font-family: "Helvetica Neue",Helvetica,Arial,Sans-serif;
 	font-size: 75%;
 	background: #a5a5a5 url(../images/body-bg.png) repeat-x 0 0;
 	padding: 0;
@@ -101,6 +101,13 @@ blockquote p:last-child {
 	color: #669acc;
 }
 
+.node .inner .links ul li.comment_add {
+	background-color: #669acc;
+}
+
+.node .inner .links ul li.comment_add a{
+	color: #fff;
+}
 /* HTML Elements-------------------------------------------------------------- */
 
 body {
@@ -147,22 +154,26 @@ body {
 
 /* All Regions-------------------------------------------------------------- */
 
-#left-background,
-#right-background {
+.grid-type-960-fluid #left-background,
+.grid-type-960-fluid #right-background {
 	width: 339px;
 	height: 100%;
 	position: absolute;
 	z-index: 1;
 }
 
-#left-background {
+.grid-type-960-fluid #left-background {
 	background: #cecece url(../images/background-left.png) no-repeat 0 0;
 	left: 0;
 }
 
-#right-background {
+.grid-type-960-fluid #right-background {
 	background: transparent url(../images/background-right.png) no-repeat 0 0;
 	right: 0;
+}
+
+.grid-type-960 .page {
+	background: transparent url(../images/fixed-background.jpg) no-repeat center top;
 }
 
 .header-group,
@@ -296,6 +307,19 @@ body {
 	padding: 0 10px 0 0;
 	font-size: .9em;
 	line-height: 1.2em;
+}
+
+/*user meta block*/
+
+#block-views-user_meta-block_1 {
+	margin-top: 12px;
+}
+
+.view-user-meta .views-field-name span {
+    font-style: italic;
+   margin: 0;
+	padding: 0 10px 0 0;
+	width: 100%;
 }
 
 /* Nav Group which sits below the header and site inf */
@@ -795,10 +819,14 @@ ul.links li,
 	display: inline-block;
 	margin: 0;
 	padding: 0 6px 0 6px;
-	white-space: nowrap;
 }
 
-
+ul.links li.last,
+.node .inner ul.links li.last,
+.block .content ul.links li.last,
+.panel-pane .inner ul.links li.last {
+	border: none;
+}
 
 .node ul.links li.last {
 	border-right: none;
@@ -982,26 +1010,11 @@ h2.block-title {
 	padding: 0 2px;
 }
 
-.view-user-meta .views-field-name span {
-    font-style: italic;
-}
-
-/*
-
-LT
-
-R */
-  margin: 0;
-	padding: 0 10px 0 0;
-	width: 100%;
-}
-
 #content-tabs ul.secondary {
 	border-bottom: 1px solid #d1d1d1;
 	margin-top: 10px;
 	text-transform: lowercase;
 }
-
 
 #content-tabs ul.primary li a:link,
 #content-tabs ul.primary li a:visited {
@@ -1015,12 +1028,7 @@ R */
 	border: 1px solid #d1d1d1;
 	color: #323232;
 	cursor: pointer;
-	float: left;
-	
-
-/* LTR */
- 
-
+	float: left;/* LTR */
 margin: 0 2px -2px 0;
 	padding: 4px 6px 4px 6px;
 	text-decoration: none;
@@ -1037,12 +1045,7 @@ margin: 0 2px -2px 0;
 	background-color: transparent;
 	border: none;
 	color: #323232;
-	float: left;
-	
-
-/* 
-
-LTR */
+	float: left;/* LTR */
   font-weight: bold;
 	margin: 0;
 	padding: 0 0 6px 0;
@@ -1247,6 +1250,17 @@ tr.even td {
 	line-height: 1.2em;
 	padding: .6em .2em;
 }
+
+tr.even .form-item ,
+tr.odd .form-item {
+	white-space: normal;
+}
+
+.page-admin tr.even .form-item ,
+.page-admin tr.odd .form-item {
+	white-space: nowrap;
+}
+
 
 tr.odd,
 tr.odd td {
@@ -2118,6 +2132,71 @@ body#pid-dashboard h1.title, body#pid-dashboard #breadcrumbs {
 .og-mission p:first-child {
 	font-weight: bold;
 }
+/*Group pages*/
+
+.block#block-commons_core-group_create_content .inner,
+.block#block-commons_core-group_create_content .inner .content{
+	border: none;
+	padding: 0;
+	border-radius: 0px;
+	-moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+}
+
+#block-commons_core-group_create_content form .form-item {
+	float: left;
+	margin-top: 0px;
+	height: 18px;
+	margin-top: 3px;
+	margin-right: 1%;
+	width: 70%;
+}
+
+#block-commons_core-group_create_content form .form-item select {
+	width: 100%;
+ 	padding: 0;
+}
+
+#block-commons_core-group_create_content form .form-submit {
+	float: left;
+	height: 24px;
+	width: 27%;
+}
+
+/*My Groups list */
+
+#view-id-groups_my_groups_listing-page_1 .views-row .views-field-field-group-image-fid {
+	width: 14%;
+	float: left;
+}
+
+#view-id-groups_my_groups_listing-page_1 .views-row .views-field-description{
+	width: 60%;
+	float: left;
+}
+
+#view-id-groups_my_groups_listing-page_1 .views-row .views-field-leave-group {
+	width: 24%;
+	float: left;
+}
+
+#view-id-groups_my_groups_listing-page_1 .views-row{
+	border-bottom: 1px solid #eee;
+	margin-bottom: 10px;
+}
+
+#view-id-groups_my_groups_listing-page_1 .views-row.views-row-last {
+	border: 0px;
+	margin-bottom: 0px;
+}
+
+#view-id-groups_my_groups_listing-page_1 .views-row:after{
+clear: both;
+content: ".";
+display: block;
+height: 0;
+visibility: hidden;
+}
 
 /* Calendars */
 
@@ -2638,38 +2717,33 @@ div#block-og_views-0 h2.title {
 
 #block-boxes-homepage_info_box, #block-views-groups_featured_groups-block_1, #block-views-group_node-block_1 {
 	clear: both;
-	margin: 10px;
-	border: 1px solid #CCC;
-	border-radius: 10px;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
 	padding: 0;
-	padding-right: 0px;
-	background: url("../images/intro-pane-bg.png") repeat-x scroll 0 0 #FAFAFA;
+	margin: 0px;
+	float: left;
+	width: 100%;
 }
 
-#block-boxes-homepage_info_box, #block-views-groups_featured_groups-block_1 { 
-	padding:10px; 
-	background-color:#f6f6f6; 
-	width:95%; 
-	margin-bottom:30px;
+.block#block-boxes-homepage_info_box .inner, 
+.block#block-views-groups_featured_groups-block_1 .inner, 
+.block#block-views-group_node-block_1 .inner {
+background: url("../images/intro-pane-bg.png") repeat-x scroll 0 0 #FAFAFA;
+border: 1px solid #CCC;
+border-radius: 10px;
+-moz-border-radius: 10px;
+-webkit-border-radius: 10px;
+padding: 10px;
+margin: 0px 10px 10px;
 }
 
-#block-views-groups_featured_groups-block_1 {   
-    width:94%;
-}
 
 #block-views-group_node-block_1 {
-    width:94%;		
 }
 
-#block-views-group_node-block_1 .inner {
-    margin: 18px;
+ 
+.block#block-views-group_node-block_1 .inner {
+    margin: 18px 0px;
 }
 
-#block-boxes-homepage_info_box .inner {
-    margin: 18px;
-}
 
 #block-boxes-homepage_info_box h2.block-title {
     font-size: 2.4em;
@@ -3000,6 +3074,41 @@ div#block-og_views-0 h2.title {
 	padding: 0px;
 	text-align: right;
 	width: auto;
+}
+
+/*taxonomy pages list of nodes*/
+
+.page-taxonomy .node h2 {
+  margin-top: 0px;
+  	margin-bottom: .6em;
+}
+.page-taxonomy .node .meta {
+	width:14%;
+	float: left;
+	margin-right: 2%;
+}
+
+.page-taxonomy .node .content {
+	width: 80%;
+	float: left;
+}
+
+.page-taxonomy .node {
+	margin-bottom: 20px;
+	padding-bottom: 20px;
+	border-bottom: 1px solid #eee; 
+}
+
+.page-taxonomy .node .content p:last-child{
+	margin-bottom: 0px;
+}
+
+.page-taxonomy .node:after  {
+clear: both;
+content: ".";
+display: block;
+height: 0;
+visibility: hidden;
 }
 
 /* User Directory */
