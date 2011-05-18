@@ -129,7 +129,7 @@ function commons_core_init() {
   
   // We've overridden /og/my with a custom view, so redirect
   if (arg(0) == 'og' && arg(1) == 'my') {
-    drupal_goto('groups/my');
+    drupal_goto('groups/mine');
   }
   
   // Redirect core /profile which lists users to our new list of users
