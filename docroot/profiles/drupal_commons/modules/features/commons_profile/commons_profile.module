@@ -109,7 +109,17 @@ function commons_profile_theme() {
   }
   
   return $registry;
-}   
+}  
+
+/**
+ * Implementation of hook_init()
+ */
+function commons_profile_init() {
+  // Redirect core /profile which lists users to our new list of users
+  if (arg(0) == 'profile' && !arg(1)) {
+    drupal_goto('users');
+  }
+}
 
 /**
  * Implementation of hook_user()
@@ -192,8 +202,6 @@ function commons_profile_views_pre_render(&$view) {
       context_set('context', 'profile-about-other', context_load('profile-about-other'));
     }
   }
-  
-  
 }
 
 /**
