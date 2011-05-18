@@ -385,3 +385,62 @@ function commons_core_group_create_content_block_form_submit(&$form, $form_state
   // Redirect to the node form
   drupal_goto("node/add/{$type}", $options);
 }
+
+/**
+ * The "Join & learn more" registration form
+ */
+function commons_core_join_form() {
+  $form = array();
+  
+  // Pull the standard user registration form
+  $rform = user_register();
+  
+  // Extract required profile fields
+  foreach ($rform as $key => $profile) {
+    if (is_array($profile)) {
+      foreach ($profile as $pkey => $pfield) {
+        if (substr($pkey, 0, 8) == 'profile_') {
+          if ($pfield['#required']) {
+            // Remove description
+            unset($pfield['#description']);
+            // Add to our form
+            $form[$pkey] = $pfield;
+          }
+          unset($rform[$key][$pkey]);
+        }
+      }
+    }
+  } 
+  
+  // Extract needed account elements
+  if (is_array($rform['account'])) {
+    foreach ($rform['account'] as $key => $field) {
+      if (is_array($field) && $field['#required']) {
+        // Remove the description
+        unset($field['#description']);
+        // Add to our form
+        $form[$key] = $field;
+      }
+    }
+    unset($rform['account']);
+  }
+  
+  // Shorten the email field (if available)
+  if (isset($form['mail'])) {
+    $form['mail']['#title'] = t('Email');
+  }
+  
+  // Copy the registration validators
+  $form['#validate'] = $rform['#validate'];
+  
+  // Attach the registration submit callback
+  $form['#submit'] = array('user_register_submit');
+  
+  // Add the submit button
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Join our community'),
+  );
+  
+  return $form;
+}
