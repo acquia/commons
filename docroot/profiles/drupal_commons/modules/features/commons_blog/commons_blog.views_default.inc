@@ -2208,7 +2208,7 @@ function commons_blog_views_default_views() {
     'type' => 'tab',
     'title' => 'Blogs',
     'description' => 'View the group blog posts',
-    'weight' => '7',
+    'weight' => '4',
     'name' => 'navigation',
   ));
   $handler->override_option('tab_options', array(

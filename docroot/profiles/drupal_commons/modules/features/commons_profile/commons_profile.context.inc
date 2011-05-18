@@ -200,6 +200,45 @@ function commons_profile_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
+  $context->name = 'profile-track';
+  $context->description = 'The user profile track page';
+  $context->tag = 'Profile';
+  $context->conditions = array(
+    'path' => array(
+      'values' => array(
+        'user/*/track' => 'user/*/track',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'commons_profile-image_links' => array(
+          'module' => 'commons_profile',
+          'delta' => 'image_links',
+          'region' => 'sidebar_last',
+          'weight' => 0,
+        ),
+        'views-profile_friends-block_1' => array(
+          'module' => 'views',
+          'delta' => 'profile_friends-block_1',
+          'region' => 'sidebar_last',
+          'weight' => 1,
+        ),
+      ),
+    ),
+  );
+  $context->condition_mode = 0;
+
+  // Translatables
+  // Included for use with string extractors like potx.
+  t('Profile');
+  t('The user profile track page');
+
+  $export['profile-track'] = $context;
+  $context = new stdClass;
+  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
+  $context->api_version = 3;
   $context->name = 'user-browser';
   $context->description = 'Various block to show on the user browser page';
   $context->tag = 'User browser';
