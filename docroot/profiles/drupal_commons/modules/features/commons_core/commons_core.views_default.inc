@@ -3330,7 +3330,6 @@ function commons_core_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'My unread items');
-  $handler->override_option('empty', 'You have no unread items');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
   $handler->override_option('items_per_page', 5);
