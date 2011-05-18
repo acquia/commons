@@ -5015,7 +5015,7 @@ function commons_event_views_default_views() {
     'type' => 'tab',
     'title' => 'Events',
     'description' => 'View the group events',
-    'weight' => '11',
+    'weight' => '14',
     'name' => 'navigation',
   ));
   $handler->override_option('tab_options', array(

@@ -2205,7 +2205,7 @@ function commons_document_views_default_views() {
     'type' => 'tab',
     'title' => 'Documents',
     'description' => 'View the group documents',
-    'weight' => '8',
+    'weight' => '10',
     'name' => 'navigation',
   ));
   $handler->override_option('tab_options', array(
