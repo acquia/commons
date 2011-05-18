@@ -307,3 +307,15 @@ function commons_roots_thumb_user_picture ($picture, $imagecache_preset, $user_n
     return $img;
   }
 }
+
+/**
+ * Theme a box
+ */
+function commons_roots_boxes_box($block) {
+  $output = "<div id='boxes-box-" . $block['delta'] . "' class='boxes-box" . (!empty($block['editing']) ? ' boxes-box-editing' : '') . "'>";
+  $output .= '<div class="boxes-box-content">' . $block['content'] . '</div>';
+  // Remove the box controls and editing portion because it doesn't
+  // currently work with WYSIWYG
+  $output .= '</div>';
+  return $output;
+}
