@@ -1,0 +1,17 @@
+diff --git a/docroot/profiles/drupal_commons/modules/contrib/og_statistics/og_statistics.module b/docroot/profiles/drupal_commons/modules/contrib/og_statistics/og_statistics.module
+index 1e8f02a..24568df 100644
+--- a/docroot/profiles/drupal_commons/modules/contrib/og_statistics/og_statistics.module
++++ b/docroot/profiles/drupal_commons/modules/contrib/og_statistics/og_statistics.module
+@@ -165,10 +165,8 @@ function og_statistics_og($op, $gid, $uid, $args) {
+   switch ($op) {
+     case 'user insert':
+       $node = node_load($gid);
+-      // If not a moderated group, update the membership count,
+-      // or if it is a moderated group and unapproved users are to be counted,
+-      // then update the statistics.
+-      if ($node->og_selective != 1 || ($node->og_selective == 1 && variable_get('og_statistics_include_unapproved_members', TRUE))) {
++      // If the user is approved or if we're adding unapproved members
++      if ($args['is_active'] == 1 || variable_get('og_statistics_include_unapproved_members', TRUE)) {
+         $time = time();
+         og_statistics_add_user($gid);
+         og_statistics_update_last_member($time, $uid, $gid);
