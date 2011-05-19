@@ -1,5 +1,4 @@
 <?php
-// $Id: token.pages.inc,v 1.7.2.7 2010/09/30 18:30:08 davereid Exp $
 
 /**
  * @file
@@ -28,7 +27,7 @@ function theme_token_help($types = 'all', $prefix = TOKEN_PREFIX, $suffix = TOKE
   $headers = array(t('Token'), t('Replacement value'));
   $rows = array();
   foreach ($full_list as $key => $category) {
-    $rows[] = array(array('data' => drupal_ucfirst($key) .' '. t('tokens'), 'class' => 'region', 'colspan' => 2));
+    $rows[] = array(array('data' => t('@type tokens', array('@type' => drupal_ucfirst($key))), 'class' => 'region', 'colspan' => 2));
     foreach ($category as $token => $description) {
       $row = array();
       $row[] = $prefix . $token . $suffix;
