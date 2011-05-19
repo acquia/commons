@@ -255,7 +255,16 @@ h1 + #content-tabs {
 #content-tabs ul.secondary {
   border-bottom: 2px solid #d1d1d1;
   clear: both;
-  float: left;   
+  float: none;   
+}
+
+#content-tabs ul.primary:after,
+#content-tabs ul.secondary:after{
+	clear: both;
+	content: ".";
+	display: block;
+	height: 0;
+	visibility: hidden;
 }
 
 

@@ -1,4 +1,4 @@
-<?php  // $Id: imageapi_imagemagick.module,v 1.17.2.7 2010/10/17 18:02:32 drewish Exp $
+<?php  // $Id$
 
 /**
  * @file
@@ -180,7 +180,7 @@ function _imageapi_imagemagick_convert_exec($command_args, &$output, &$errors) {
 
   // Specify Drupal's root as the working a working directory so that relative
   // paths are interpreted correctly.
-  $drupal_path = $_SERVER['DOCUMENT_ROOT'] . dirname($_SERVER['SCRIPT_NAME'] ? $_SERVER['SCRIPT_NAME'] : $_SERVER['SCRIPT_FILENAME']);
+  $drupal_path = getcwd();
 
   if (strstr($_SERVER['SERVER_SOFTWARE'], 'Win32') || strstr($_SERVER['SERVER_SOFTWARE'], 'IIS')) {
     // Use Window's start command to avoid the "black window" from showing up:
@@ -217,7 +217,11 @@ function _imageapi_imagemagick_convert_exec($command_args, &$output, &$errors) {
       drupal_set_message(t('ImageMagick output: @output', array('@output' => $output)));
     }
 
-    if ($return_code != 0) {
+    if ($return_code == 1 && $command_args == '-version') {
+      // Some versions of ImageMagick return status code 1 when outputting the
+      // version info. This should not be caught as an error.
+    }
+    else if ($return_code != 0) {
       // If ImageMagick returned a non-zero code, trigger a PHP error that will
       // be caught by Drupal's error handler, logged to the watchdog and
       // eventually displayed to the user if configured to do so.

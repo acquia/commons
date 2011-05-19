@@ -1917,7 +1917,7 @@ function commons_wiki_views_default_views() {
     'type' => 'tab',
     'title' => 'Wikis',
     'description' => 'View the group wikis',
-    'weight' => '10',
+    'weight' => '8',
     'name' => 'navigation',
   ));
   $handler->override_option('tab_options', array(

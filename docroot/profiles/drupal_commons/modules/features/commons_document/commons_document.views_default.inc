@@ -1624,7 +1624,6 @@ function commons_document_views_default_views() {
   $handler->override_option('title', 'Latest documents');
   $handler->override_option('header_format', '1');
   $handler->override_option('header_empty', 0);
-  $handler->override_option('empty', 'No documents have been added to this group yet.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
   $handler->override_option('items_per_page', 2);
@@ -2206,7 +2205,7 @@ function commons_document_views_default_views() {
     'type' => 'tab',
     'title' => 'Documents',
     'description' => 'View the group documents',
-    'weight' => '8',
+    'weight' => '10',
     'name' => 'navigation',
   ));
   $handler->override_option('tab_options', array(

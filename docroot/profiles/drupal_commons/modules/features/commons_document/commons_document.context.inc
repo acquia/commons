@@ -40,7 +40,7 @@ function commons_document_context_default_contexts() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Blog');
+  t('Document');
   t('The documents page');
 
   $export['content-document-page'] = $context;
