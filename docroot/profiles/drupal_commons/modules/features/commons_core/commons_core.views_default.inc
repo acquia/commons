@@ -5464,8 +5464,8 @@ function commons_core_views_default_views() {
     'name' => array(
       'label' => '',
       'alter' => array(
-        'alter_text' => 1,
-        'text' => '<span class="welcome-text">Welcome back, </span><span class="username">[name]</span>',
+        'alter_text' => 0,
+        'text' => '',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
@@ -5499,9 +5499,9 @@ function commons_core_views_default_views() {
     'nothing' => array(
       'label' => '',
       'alter' => array(
-        'text' => 'Logout',
-        'make_link' => 1,
-        'path' => 'logout',
+        'text' => '<!-- Logout -->',
+        'make_link' => 0,
+        'path' => '',
         'link_class' => '',
         'alt' => '',
         'prefix' => '',
@@ -5530,9 +5530,9 @@ function commons_core_views_default_views() {
     'nothing_1' => array(
       'label' => '',
       'alter' => array(
-        'text' => 'My account',
-        'make_link' => 1,
-        'path' => 'user',
+        'text' => '<!-- My account -->',
+        'make_link' => 0,
+        'path' => '',
         'link_class' => '',
         'alt' => '',
         'prefix' => '',
