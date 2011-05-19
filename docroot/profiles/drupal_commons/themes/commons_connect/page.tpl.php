@@ -78,7 +78,6 @@
 		<div id="preface-top-wrapper" class="preface-top-wrapper full-width">
         	<div id="preface-top" class="preface-top row <?php print $grid_width; ?>">
             	<div class="breadcrumbs-wrapper">
-           		<?php print '<div class="crumbTitle">You are here: </div>'; ?>                
 				<?php print theme('grid_block', $breadcrumb, 'breadcrumbs'); ?>  
                 </div>
 				<?php print theme('grid_block', $search_box, 'search-box'); ?>
