@@ -1,4 +1,4 @@
-<?
+<?php
 function commons_environs_commons_core_info_block() {
   $content = '';
   

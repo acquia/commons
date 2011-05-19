@@ -49,6 +49,8 @@ $curr_contexts = context_active_contexts();
           
             <?php if ($logo || $site_name || $site_slogan): ?>
             <div id="header-site-info" class="header-site-info block">
+              <?php print '<img src="' . base_path() . path_to_theme() . '/images/border-orange-left.png" class="border-orange-left"/>' ?>
+              <?php print '<img src="' . base_path() . path_to_theme() . '/images/border-orange-right.png" class="border-orange-right"/>' ?>
               <div id="header-site-info-inner" class="header-site-info-inner inner">
                 <?php if ($logo): ?>
                 <div id="logo">
