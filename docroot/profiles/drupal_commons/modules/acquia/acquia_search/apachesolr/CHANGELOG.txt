@@ -1,10 +1,45 @@
-// $Id: CHANGELOG.txt,v 1.1.2.187 2010/08/11 21:49:19 pwolanin Exp $
 
 Apache Solr Search Integration x.x-x.x, xxxx-xx-xx
 ------------------------------
 
-Apache Solr Search Integration 6.x-1.3, xxxx-xx-xx
+Apache Solr Search Integration 6.x-1.x, xxxx-xx-xx
 ------------------------------
+
+Apache Solr Search Integration 6.x-1.3, 2011-04-22
+------------------------------
+#920482 by jpmckinney: $info_split['date'] template variable should contain changed, not created, date.
+#871440 by jpmckinney, elliotttf: Solr taxonomy page displays search form and blocks when the user has no access.
+#899590 by jpmckinney, elliotttf: Support indexing of CCK fields that are not facets.
+#1084332 by pwolanin, elliotttf: replace drush command with drush make file to get Solr php library.
+#993476 by jpmckinney, pwolanin: allow arbitrary results per page in the 0-200 range.
+#891962 by Network, pwolanin: Solr_Base_Query->parse_filters() causes filters to disappear when using or search on taxonomy id's.
+#903802 by jpmckinney: BLOCK_CACHE_PER_PAGE conflicts with theme_apachesolr_facet_list.
+#882638 by pwolanin, jpmckinney: Clean the text inside indexed tags.
+#864146 by pwolanin: When moving fq to q.alt, we should parenthesize each fq.
+#562214 by ecofinn, wmostry, jpmckinney: Problems with double-encoded ampersands.
+#533044 by janusman | jpmckinney: Document that "hijack taxonomy pages" only displays indexed content.
+#1033630 by jpmckinney | Patrizio: Apache Solr node access broken permissions rebuilding.
+#979194 by janusman: Missing 'module' element in menu_alter for taxonomy hijack.
+#993448 by pwolanin, scor: get Solr result docs as stdClass instead of Apache_Solr_Document.
+#1050000 by pwolanin: More generically prevent calling nodeapi update_index when indexing.
+#996800 by elliotttf, pwolanin: use trim on host, port, path.
+#890314 by quaoar: avoid searching twice when using the search block. 
+#1064782 by jpmckinney: Use module_load_include, module_load_install instead of include_once
+#791916 by Network | jpmckinney: Allow facet search block to have children always show
+#937328 by Davy Van Den Bremt | pwolanin: Drush support for indexing remaining nodes.
+#1060698 by dww | jpmckinney: Always display the current value of apachesolr_cron_limit in the admin UI
+#904312 by pounard: Use drupal_get_breadcrumb() not menu_get_active_breadcrumb()
+#908252 by katbailey: Wrap the output of apachesolr_search_view in a theme function
+#616888 bangpound: Pass delta to MLT blocks' theme function
+#991444 by Nick_vh: None of start, end, gap should show up as date facets.
+#528086 by pwolanin: Fix for special html entity search and display bugs.
+#957652 by aegnor, pwolanin: fix str_replace may remove a substring in filter_extract.
+#983458 by craig_: respect apachesolr_read_only setting for mass updates, use defined constants.
+#983572 by amateescu, pwolanin: fix for empty filter values causing Solr error.
+#949768 by pwolanin: Index more CCK fields by default.
+#925700 by janusman: Changed Quick fix: reduce t() string duplicity.
+#899560 by robertDouglass: Fixed apachesolr_do_query() has to take $params by reference.
+#885950 by pwolanin, csevb10 preserve added/removed filters when filterstring is re-parsed.
 
 Apache Solr Search Integration 6.x-1.2, 2010-08-11
 ------------------------------

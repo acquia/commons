@@ -1,5 +1,4 @@
 <?php
-// $Id: apachesolr.install,v 1.1.4.34 2010/05/03 19:08:12 jpmckinney Exp $
 
 /**
  * @file
@@ -142,6 +141,7 @@ function apachesolr_uninstall() {
   variable_del('apachesolr_port');
   variable_del('apachesolr_path');
   variable_del('apachesolr_rows');
+  variable_del('apachesolr_facet_show_children');
   variable_del('apachesolr_facet_query_limits');
   variable_del('apachesolr_facet_query_limit_default');
   variable_del('apachesolr_site_hash');
@@ -149,6 +149,7 @@ function apachesolr_uninstall() {
   variable_del('apachesolr_mlt_blocks');
   variable_del('apachesolr_cron_limit');
   variable_del('apachesolr_enabled_facets');
+  variable_del('apachesolr_exclude_nodeapi_types');
   // Remove tables.
   drupal_uninstall_schema('apachesolr');
   // Remove blocks.
@@ -260,5 +261,32 @@ function apachesolr_update_6005() {
   $table = drupal_get_schema_unprocessed('system', 'cache');
   $table['description'] = 'Cache table for apachesolr to store Luke data and indexing information.';
   db_create_table($ret, 'cache_apachesolr', $table);
+  return $ret;
+}
+
+/**
+ * Move excluded comment types into a new variable.
+ */
+function apachesolr_update_6006() {
+  $exclude_comment_types = variable_get('apachesolr_exclude_comments_types', NULL);
+  if (is_array($exclude_comment_types)) {
+    $exclude = array();
+    foreach ($exclude_comment_types as $type) {
+      $exclude[$type]['comment'] = TRUE;
+    }
+    variable_set('apachesolr_exclude_nodeapi_types', $exclude);
+  }
+  variable_del('apachesolr_exclude_comments_types');
+  return array();
+}
+
+/**
+ * Fix block caching settings.
+ */
+function apachesolr_update_6007() {
+  $ret = array();
+
+  $ret[] = update_sql("UPDATE {blocks} set cache = " . (BLOCK_CACHE_PER_ROLE | BLOCK_CACHE_PER_PAGE) . " WHERE module LIKE 'apachesolr%' AND cache = " . BLOCK_CACHE_PER_PAGE . " AND delta != 'currentsearch' AND delta != 'sort'");
+
   return $ret;
 }

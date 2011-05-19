@@ -1,5 +1,4 @@
 <?php
-// $Id: apachesolr_search.module,v 1.1.2.6.2.156 2010/08/11 21:43:16 pwolanin Exp $
 
 /**
  * @file
@@ -13,7 +12,7 @@
 function apachesolr_search_help($section) {
   switch ($section) {
     case 'admin/settings/apachesolr/index':
-      if (variable_get('apachesolr_read_only', 0)) {
+      if (variable_get('apachesolr_read_only', APACHESOLR_READ_WRITE) == APACHESOLR_READ_ONLY) {
         return t('Operating in read-only mode; updates are disabled.');
       }
       $remaining = 0;
@@ -79,6 +78,7 @@ function apachesolr_search_menu_alter(&$menu) {
   }
   if (variable_get('apachesolr_search_taxonomy_links', 0)) {
     if (isset($menu['taxonomy/term/%'])) {
+      $menu['taxonomy/term/%']['module'] = 'apachesolr_search';
       $menu['taxonomy/term/%']['page callback'] = 'apachesolr_search_taxonomy_term_page';
       $menu['taxonomy/term/%']['file path'] = drupal_get_path('module', 'apachesolr_search');
       $menu['taxonomy/term/%']['file'] = 'apachesolr.taxonomy.inc';
@@ -182,7 +182,7 @@ function apachesolr_search_view($type = NULL) {
     // The form may be altered based on the query that was run.
     $form = drupal_get_form('search_form', NULL, $keys, $type);
   }
-  return $form . $results;
+  return theme('apachesolr_search_results_page', $form, $results);
 }
 
 function apachesolr_search_noresults() {
@@ -237,7 +237,7 @@ function apachesolr_search_execute($keys, $filterstring, $solrsort, $base_path =
   // Add search terms and filters onto the breadcrumb.
   // We use the original $query to avoid exposing, for example, nodeaccess
   // filters in the breadcrumb.
-  drupal_set_breadcrumb(array_merge(menu_get_active_breadcrumb(), $query->get_breadcrumb()));
+  drupal_set_breadcrumb(array_merge(drupal_get_breadcrumb(), $query->get_breadcrumb()));
   return apachesolr_process_response($response, $final_query, $params);
 }
 
@@ -421,10 +421,8 @@ function apachesolr_process_response($response, $query, $params) {
       if (isset($doc->is_upload_count)) {
         $extra[] = format_plural($doc->is_upload_count, '1 attachment', '@count attachments');
       }
-      $fields = array();
-      foreach ($doc->getFieldNames() as $field_name) {
-        $fields[$field_name] = $doc->$field_name;
-      }
+
+      $fields = (array) $doc;
 
       $results[] = array(
         'link' => url($doc->path, array('absolute' => TRUE)),
@@ -433,7 +431,7 @@ function apachesolr_process_response($response, $query, $params) {
         // again.  Decode to correct the display.
         'title' => htmlspecialchars_decode($doc->title, ENT_QUOTES),
         'user' => theme('username', $doc),
-        'date' => $doc->created,
+        'date' => $doc->changed,
         'node' => $doc,
         'extra' => $extra,
         'score' => $doc->score,
@@ -536,12 +534,14 @@ function apachesolr_search_apachesolr_facets() {
   $fields = apachesolr_cck_fields();
   if ($fields) {
     foreach ($fields as $name => $field) {
-      // $delta can only be 32 chars, and the CCK field name may be this
-      // long also, so we cannot add anything to it.
-      $facets[$field['field_name']] = array(
-        'info' => t('Apache Solr Search: Filter by @field', array('@field' => $field['widget']['label'])),
-        'facet_field' => apachesolr_index_key($field),
-      );
+      if (!empty($field['facets'])) {
+        // $delta can only be 32 chars, and the CCK field name may be this
+        // long also, so we cannot add anything to it.
+        $facets[$field['field_name']] = array(
+          'info' => t('Apache Solr Search: Filter by @field', array('@field' => $field['widget']['label'])),
+          'facet_field' => apachesolr_index_key($field),
+        );
+      }
     }
   }
   return $facets;
@@ -560,7 +560,7 @@ function apachesolr_search_block($op = 'list', $delta = 0, $edit = array()) {
       $blocks = array();
       foreach ($enabled_facets as $delta => $facet_field) {
         if (isset($facets[$delta])) {
-          $blocks[$delta] = $facets[$delta] + array('cache' => BLOCK_CACHE_PER_PAGE);
+          $blocks[$delta] = $facets[$delta] + array('cache' => BLOCK_CACHE_PER_ROLE | BLOCK_CACHE_PER_PAGE);
         }
       }
       $blocks['currentsearch'] = array(
@@ -727,7 +727,7 @@ function apachesolr_search_taxonomy_facet_block($response, $query, $delta) {
       $initial_limits = variable_get('apachesolr_facet_query_initial_limits', array());
       $limit = isset($initial_limits['apachesolr_search'][$delta]) ? $initial_limits['apachesolr_search'][$delta] : variable_get('apachesolr_facet_query_initial_limit_default', 10);
       return array(
-        'subject' => t('Filter by @name', array('@name' => $vocab->name)),
+        'subject' => t('Filter by @field', array('@field' => $vocab->name)),
         'content' => theme('apachesolr_facet_list', $items, $limit),
       );
     }
@@ -750,7 +750,7 @@ function apachesolr_search_taxonomy_facet_block($response, $query, $delta) {
  *   the facets will be returned in the order they were received.
  */
 function apachesolr_search_nested_facet_items($query, $facets, $num_found, $sort = TRUE) {
-
+  $facet_show_children = variable_get('apachesolr_facet_show_children', array());
   $items = array();
   foreach ($facets as $field) {
     $facet_text = theme('apachesolr_breadcrumb_' . $field['#name'], $field['#value'], $field['#exclude']);
@@ -783,8 +783,8 @@ function apachesolr_search_nested_facet_items($query, $facets, $num_found, $sort
       $sortpre = 1000000 - $field['#count'];
     }
 
-    // We don't display children unless the parent is clicked.
-    if (!empty($field['#children']) && $field['#active'] == TRUE) {
+    // Only display children if the block enables it or the parent is clicked.
+    if ((isset($facet_show_children['apachesolr_search'][$field_name]) && $facet_show_children['apachesolr_search'][$field_name]) || (!empty($field['#children']) && $field['#active'] == TRUE)) {
       $link['children'] = apachesolr_search_nested_facet_items($query, $field['#children'], $num_found, $sort);
       $link['class'] = "expanded-facet";
     }
@@ -867,6 +867,7 @@ function apachesolr_search_form_search_theme_form_alter(&$form, $form_state) {
  */
 function apachesolr_search_form_search_block_form_alter(&$form, $form_state) {
   if (variable_get('apachesolr_search_make_default', 0)) {
+    $form['#action'] = url('search/apachesolr_search');
     if (!isset($form['#submit'])) {
       $form['#submit'] = array('apachesolr_search_search_box_form_submit');
     }
@@ -1019,7 +1020,7 @@ function apachesolr_search_form_apachesolr_settings_alter(&$form, $form_state) {
     '#type' => 'radios',
     '#title' => t('Use Apache Solr for taxonomy links'),
     '#default_value' => variable_get('apachesolr_search_taxonomy_links', 0),
-    '#description' => t('Note: Vocabularies that need this behavior need to be checked off on the <a href="@enabled_filters_url">enabled filters</a> settings page', array('@enabled_filters_url' => url('admin/settings/apachesolr/enabled-filters'))),
+    '#description' => t('Note: Vocabularies that need this behavior need to be checked off on the <a href="@enabled_filters_url">enabled filters</a> settings page. Note that content types ommitted from the Apache Solr index will not be shown.', array('@enabled_filters_url' => url('admin/settings/apachesolr/enabled-filters'))),
     '#options' => array(0 => t('Disabled'), 1 => t('Enabled')),
   );
   $form['advanced']['apachesolr_search_taxonomy_previous'] = array(
@@ -1109,6 +1110,9 @@ function apachesolr_search_theme() {
     'apachesolr_search_snippets' => array(
       'arguments' => array('doc' => NULL, 'snippets' => NULL),
     ),
+    'apachesolr_search_results_page' => array(
+      'arguments' => array('form' => '', 'results' => ''),
+    ),
   );
 }
 
@@ -1196,6 +1200,12 @@ function theme_apachesolr_search_snippets($doc, $snippets) {
   return implode(' ... ', $snippets) .' ...';
 }
 
+/**
+ * Theme function for the search results page.
+ */
+function theme_apachesolr_search_results_page($form, $results) {
+  return $form . $results;
+}
 
 function apachesolr_get_parent_terms($tids) {
   // Find the starting tid terms and then all their parents.
