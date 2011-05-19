@@ -231,7 +231,8 @@ function drupal_commons_theme_form(&$form_state, $url) {
     '#type' => 'radios',
     '#options' => array(
       'commons_origins' => _drupal_commons_theme_option('commons_origins', st('Commons Origins')),
-      'bl_commons' => _drupal_commons_theme_option('bl_commons', st('Commons Connect')),
+      'commons_connect' => _drupal_commons_theme_option('commons_connect', st('Commons Connect')),
+      'commons_environs' => _drupal_commons_theme_option('commons_environs', st('Commons Environs')),
     ),
     '#default_value' => DRUPAL_COMMONS_DEFAULT_THEME,
   );
