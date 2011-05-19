@@ -101,7 +101,16 @@ function commons_profile_context_default_contexts() {
   $context->name = 'profile-me';
   $context->description = 'User profile when viewing yourself';
   $context->tag = 'Profile';
-  $context->conditions = array();
+  $context->conditions = array(
+    'user_page' => array(
+      'values' => array(
+        'view' => 'view',
+      ),
+      'options' => array(
+        'mode' => 'current',
+      ),
+    ),
+  );
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
@@ -152,7 +161,16 @@ function commons_profile_context_default_contexts() {
   $context->name = 'profile-other';
   $context->description = 'User profile when viewing another user';
   $context->tag = 'Profile';
-  $context->conditions = array();
+  $context->conditions = array(
+    'user_page' => array(
+      'values' => array(
+        'view' => 'view',
+      ),
+      'options' => array(
+        'mode' => 'other',
+      ),
+    ),
+  );
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
