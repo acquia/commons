@@ -209,6 +209,11 @@ function commons_profile_context_default_contexts() {
         'user/*/track' => 'user/*/track',
       ),
     ),
+    'user' => array(
+      'values' => array(
+        'authenticated user' => 'authenticated user',
+      ),
+    ),
   );
   $context->reactions = array(
     'block' => array(
@@ -228,7 +233,7 @@ function commons_profile_context_default_contexts() {
       ),
     ),
   );
-  $context->condition_mode = 0;
+  $context->condition_mode = 1;
 
   // Translatables
   // Included for use with string extractors like potx.
