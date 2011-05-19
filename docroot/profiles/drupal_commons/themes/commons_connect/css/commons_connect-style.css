@@ -477,7 +477,7 @@ Works well with inline login or inline menu block style */
 	font-size:11px;
 	line-height:18px;
 }
-.crumbTitle {
+.crumbtitle {
 	float:left;
 	font-size:11px;
 	width:70px;
@@ -748,17 +748,6 @@ h2.title a:active {
 .node-type-group .terms h4 { display: inline-block; font-weight:normal;}
 
 .meta ul.links li { border-color: #eee;}
-
-.submitted {
-  color: #777;
-  background: #f5f5f5;
-  border: 1px solid #ddd;
-  padding: 3px 7px 2px;
-  display: block;
-  max-width: 700px;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-}
 
 .submitted .userpoints-value {
   font-style: italic;
@@ -2540,6 +2529,9 @@ body#pid-dashboard h1.title, body#pid-dashboard #breadcrumbs {
 	border: none;
 }
 
+.calendar-calendar td {
+    text-align: center;
+}
 /* week view */
 
 .calendar-calendar .week-view th {
@@ -3679,7 +3671,12 @@ div.beat-item blockquote {
 .view-groups-my-groups-listing ul li { clear:left;}
 .view-groups-my-groups-listing .views-field-field-group-image-fid {float: left; margin-right:15px;}
 .view-groups-my-groups-listing .views-field-description {float: left; width: 600px;}
-.view-groups-my-groups-listing .views-field-leave-group { float:right;}
+.view-groups-my-groups-listing .views-field-leave-group {float:right;}
+
+.view-group-block-events-latest .views-field-field-location-value,
+.view-group-block-events-past .views-field-field-location-value {float: right; width: 180px;}
+
+.view-most-bookmarked  .views-field-name {float: right; width: 180px;}
 
 /* group feed listing */
 
@@ -3807,11 +3804,13 @@ body.page-user-1 #main-inner #sidebar-first #sidebar-first-inner{ width:90%}
 #edit-node-type.form-select{
 	line-height:22px;
 	height:22px;
-	width:180px;
+	width:170px;
 }
 #edit-node-type-wrapper.form-item{
-	width:180px;
+	width:175px;
 	margin-left:2px;
+    padding-top: 2px;
+    vertical-align: middle;
 }
 .group-members-link{
 background: url("../images/gray-arrow-right.png") no-repeat scroll right top transparent;
@@ -3844,3 +3843,21 @@ padding:3px 7px 2px;
 }
 body.page-taxonomy #content-content .node .meta .picture,
 body.page-taxonomy #content-content .node .meta .user_badges{ display:none;}
+
+.ur_action_0 span{
+white-space: normal;
+}
+#content-content .og-feature-description .form-item{
+white-space: normal;
+}
+.node-form .form-text {
+    width: 98%;
+}
+
+textarea, .form-item input, .form-item select, #content-region input.form-text {
+    max-width: 98%;
+}
+.flag-message {
+    top: 1.2em;
+
+}

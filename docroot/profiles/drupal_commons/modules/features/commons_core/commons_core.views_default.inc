@@ -2980,6 +2980,11 @@ function commons_core_views_default_views() {
     'hide_empty' => 0,
   ));
   $handler = $view->new_display('block', 'Block', 'block_1');
+  $handler->override_option('style_plugin', 'list');
+  $handler->override_option('style_options', array(
+    'grouping' => '',
+    'type' => 'ul',
+  ));
   $handler->override_option('block_description', 'Most bookmarked');
   $handler->override_option('block_caching', -1);
 

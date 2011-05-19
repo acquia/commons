@@ -5,9 +5,11 @@
  * Breadcrumb themeing
  */
 function commons_connect_breadcrumb($breadcrumb) {
-	$breadcrumb[] = drupal_get_title();
+  $breadcrumb[] = drupal_get_title();
   if (!empty($breadcrumb)) {
-    return '<div class="breadcrumb">'. implode(' &raquo; ', $breadcrumb) .'</div>';
+    $html = '<div class="crumbtitle">' . t('You are here:') . '</div>';
+	$html .= '<div class="breadcrumb">'. implode(' &raquo; ', $breadcrumb) .'</div>';
+    return $html;
   }
 }
 
@@ -303,7 +305,7 @@ function commons_connect_preprocess_block($variables) {
 function commons_connect_search_theme_form($form) {
 	$form['search_theme_form']['#value']= 'Search...';
 	$form['submit']['#type'] = 'image_button';
-	$form['submit']['#src'] = drupal_get_path('theme', 'bl_commons') . '/images/search_icon.gif';
+	$form['submit']['#src'] = drupal_get_path('theme', 'commons_connect') . '/images/search_icon.gif';
 	$form['submit']['#attributes']['class'] = 'btn';
 	return '<div id="search" class="container-inline">' . drupal_render($form) . '</div>';
 }

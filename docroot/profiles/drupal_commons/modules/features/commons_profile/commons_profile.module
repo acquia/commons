@@ -92,16 +92,6 @@ function commons_profile_user($op, &$edit, &$account, $category = NULL) {
       // Remove the core profile fields, as we'll be providing our
       // own content via Context
       $account->content = array();
-      
-      // Select the profile context based on whether or not the
-      // current user is viewing their own profile or not    
-      if ($account->uid == $user->uid) {
-         context_set('context', 'profile-me', context_load('profile-me'));      
-      }
-      else {
-         context_set('context', 'profile-other', context_load('profile-other'));
-      }
-      
       break;
   }
 }
