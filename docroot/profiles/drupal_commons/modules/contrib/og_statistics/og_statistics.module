@@ -337,7 +337,7 @@ function og_statistics_add_user($gid) {
   $new = FALSE;
   
   if (!($stat = og_statistics_load($gid))) {
-    $stat = og_statistics_default_record
+    $stat = og_statistics_default_record($gid);
     $new = TRUE;
   }
   
