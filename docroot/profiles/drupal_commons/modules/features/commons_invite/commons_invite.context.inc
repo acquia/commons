@@ -12,9 +12,12 @@ function commons_invite_context_default_contexts() {
   $context->description = 'Add invite sender to your own profile';
   $context->tag = 'Profile';
   $context->conditions = array(
-    'context' => array(
+    'user_page' => array(
       'values' => array(
-        'profile-me' => 'profile-me',
+        'view' => 'view',
+      ),
+      'options' => array(
+        'mode' => 'current',
       ),
     ),
   );

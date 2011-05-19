@@ -9,9 +9,7 @@ $(document).ready(function(){
       $(this).attr('value', 'SEARCH');
     };
       });
-  
-  $('.header-site-info').prepend('<img src="/profiles/drupal_commons/themes/commons_environs/images/border-orange-left.png" class="border-orange-left"/><img src="/profiles/drupal_commons/themes/commons_environs/images/border-orange-right.png" class="border-orange-right"/>');
-  
+    
   $('.content-content').each(function(){
     if ($(this).prev().hasClass('content-tabs')) {
       $(this).addClass('top-left-straight');
