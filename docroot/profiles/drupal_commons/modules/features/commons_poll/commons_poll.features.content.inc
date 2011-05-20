@@ -65,20 +65,23 @@ function commons_poll_content_default_fields() {
       'title_type' => 'textfield',
       'default_image' => NULL,
       'use_default_image' => 0,
-      'insert' => 0,
+      'insert' => 1,
       'insert_styles' => array(
+        'image' => 'image',
+        'imagecache_Featured' => 'imagecache_Featured',
+        'imagecache_Small' => 'imagecache_Small',
         'auto' => 0,
         'link' => 0,
-        'image' => 0,
-        'imagecache_profile_pictures' => 0,
-        'imagecache_content_image_secondary' => 0,
         'imagecache_group_images' => 0,
-        'imagecache_user_picture_meta' => 0,
+        'imagecache_group_images_featured' => 0,
+        'imagecache_group_images_medium' => 0,
+        'imagecache_group_images_showcase' => 0,
         'imagecache_group_images_thumb' => 0,
-        'imagecache_content_image_primary' => 0,
         'imagecache_member_list_image' => 0,
+        'imagecache_profile_pictures' => 0,
+        'imagecache_user_picture_meta' => 0,
       ),
-      'insert_default' => 'auto',
+      'insert_default' => 'imagecache_Featured',
       'insert_class' => '',
       'insert_width' => '',
       'label' => 'Add images',
@@ -146,9 +149,73 @@ Featured',
     ),
   );
 
+  // Exported field: field_poll_body
+  $fields['poll-field_poll_body'] = array(
+    'field_name' => 'field_poll_body',
+    'type_name' => 'poll',
+    'display_settings' => array(
+      'weight' => '-2',
+      'parent' => '',
+      'label' => array(
+        'format' => 'hidden',
+      ),
+      'teaser' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '2' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '3' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'token' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'text',
+    'required' => '0',
+    'multiple' => '0',
+    'module' => 'text',
+    'active' => '1',
+    'text_processing' => '1',
+    'max_length' => '',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'widget' => array(
+      'rows' => '5',
+      'size' => 60,
+      'default_value' => array(
+        '0' => array(
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_poll_body][0][value',
+        ),
+      ),
+      'default_value_php' => NULL,
+      'label' => 'Body',
+      'weight' => '-2',
+      'description' => '',
+      'type' => 'text_textarea',
+      'module' => 'text',
+    ),
+  );
+
   // Translatables
   // Included for use with string extractors like potx.
   t('Add images');
+  t('Body');
   t('Featured content');
 
   return $fields;
