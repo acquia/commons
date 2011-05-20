@@ -19,10 +19,15 @@
   * regardless of any changes in the aliasing that might happen if
   * the view is modified.
   */
+  
 $time = strtotime($row->{$field->field_alias});
 ?>
-<div class="dateblock">
-  <span class="month"><?php echo date('M', $time); ?></span>
-  <span class="day"><?php echo date('j', $time) ?></span>
-  <span class="year"><?php echo date('Y', $time) ?></span>
-</div>
+<?php if ($variables['view']->plugin_name != 'calendar_style'): ?>
+  <div class="dateblock">
+    <span class="month"><?php echo date('M', $time); ?></span>
+    <span class="day"><?php echo date('j', $time) ?></span>
+    <span class="year"><?php echo date('Y', $time) ?></span>
+  </div>
+<?php else: ?>
+  <?php print $output; ?>
+<?php endif; ?>
