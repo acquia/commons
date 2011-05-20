@@ -182,6 +182,9 @@ function commons_core_update_6003() {
   // Disable page manager
   module_disable(array('page_manager'));
   
+  // Disable views_content
+  module_disable(array('views_content'));
+  
   return array();
 }
 

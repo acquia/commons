@@ -1,5 +1,4 @@
 <?php
-// $Id: token.install,v 1.2.2.2 2010/09/24 20:37:21 davereid Exp $
 
 /**
  * @file
@@ -19,7 +18,7 @@ function token_requirements($phase = 'runtime') {
   if ($phase == 'runtime') {
     if ($duplicate_tokens = token_find_duplicate_tokens()) {
       foreach ($duplicate_tokens as $token => $modules) {
-        $duplicate_tokens[$token] = t('@token (defined by modules: @modules)', array('@token' => $token, '@modules' => implode(', ', $modules)));
+        $duplicate_tokens[$token] = $t('@token (defined by modules: @modules)', array('@token' => $token, '@modules' => implode(', ', $modules)));
       }
       $requirements['token_duplicates'] = array(
         'title' => $t('Duplicate tokens'),

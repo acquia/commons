@@ -1,5 +1,4 @@
 <?php
-// $Id: apachesolr_og.module,v 1.1.2.10 2010/05/03 19:08:13 jpmckinney Exp $
 
 /**
  * @file
@@ -145,7 +144,7 @@ function apachesolr_og_block($op = 'list', $delta = 0, $edit = array()) {
       $blocks = array();
       foreach ($enabled_facets as $delta => $facet_field) {
         if (isset($facets[$delta])) {
-          $blocks[$delta] = $facets[$delta] + array('cache' => BLOCK_CACHE_PER_PAGE);
+          $blocks[$delta] = $facets[$delta] + array('cache' => BLOCK_CACHE_PER_ROLE | BLOCK_CACHE_PER_PAGE);
         }
       }
       return $blocks;

@@ -1,0 +1,71 @@
+diff --git a/docroot/profiles/drupal_commons/modules/contrib/og_statistics/og_statistics.module b/docroot/profiles/drupal_commons/modules/contrib/og_statistics/og_statistics.module
+index 31d30e3..b9504cd 100644
+--- a/docroot/profiles/drupal_commons/modules/contrib/og_statistics/og_statistics.module
++++ b/docroot/profiles/drupal_commons/modules/contrib/og_statistics/og_statistics.module
+@@ -71,12 +71,8 @@ function og_statistics_update_statistic($gid, $key, $method = 'set', $value) {
+ function og_statistics_nodeapi(&$node, $op, $teaser = NULL, $page = NULL) {
+   switch ($op) {
+     case 'insert':
+-      // Adds a new record for the new group.
+-      if (og_is_group_type($node->type)) {
+-        og_statistics_write_pure_record($node->nid);
+-      }
+       // Update statistics.
+-      elseif (og_is_group_post_type($node->type)) {
++      if (og_is_group_post_type($node->type)) {
+         if (isset($node->og_groups)) {
+           $node->og_groups = array_unique($node->og_groups);
+           foreach ($node->og_groups as $gid) {
+@@ -215,8 +211,21 @@ function og_statistics_load($gid) {
+  *   The group nid.
+  */
+ function og_statistics_write_pure_record($gid) {
++  // Load the default record
++  $stat = og_statistics_delete_record($gid);
++  
++  return drupal_write_record('og_statistics', $stat);
++}
++
++/**
++ * Provide the default group statisitics
++ * 
++ * @return
++ *   An associative array of statistics
++ */
++function og_statistics_default_record($gid) {
+   // All statistics are set to zero.
+-  $stat = array(
++  return array(
+     'nid' => $gid,
+     'members_count' => 0,
+     'posts_count' => 0,
+@@ -231,7 +240,6 @@ function og_statistics_write_pure_record($gid) {
+     'last_comment_uid' => 0,
+     'last_member_uid' => 0,
+   );
+-  return drupal_write_record('og_statistics', $stat);
+ }
+ 
+ /**
+@@ -326,9 +334,19 @@ function og_statistics_update_last_comment($comment, $gid) {
+  *   The group nid.
+  */
+ function og_statistics_add_user($gid) {
+-  $stat = og_statistics_load($gid);
++  // It's possible that this is called for the first time
++  // so this might require a new record
++  $new = FALSE;
++  
++  if (!($stat = og_statistics_load($gid))) {
++    $new = TRUE;
++    $stat = og_statistics_default_record($gid);
++  }
++  
++  // Increment the count
+   $stat['members_count']++;
+-  return drupal_write_record('og_statistics', $stat, 'nid');
++  
++  return drupal_write_record('og_statistics', $stat, $new ? NULL : 'nid');
+ }
+ 
+ /**

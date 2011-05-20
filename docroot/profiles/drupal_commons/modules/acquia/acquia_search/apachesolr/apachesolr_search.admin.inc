@@ -1,5 +1,4 @@
 <?php
-// $Id: apachesolr_search.admin.inc,v 1.1.2.26 2010/06/16 20:43:39 jpmckinney Exp $
 
 /**
  * @file

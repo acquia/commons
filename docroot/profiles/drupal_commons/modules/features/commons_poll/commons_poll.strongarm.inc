@@ -8,6 +8,20 @@ function commons_poll_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'comment_anonymous_poll';
+  $strongarm->value = 0;
+
+  $export['comment_anonymous_poll'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_controls_poll';
+  $strongarm->value = '3';
+
+  $export['comment_controls_poll'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'comment_default_mode_poll';
   $strongarm->value = '4';
 
@@ -60,17 +74,17 @@ function commons_poll_strongarm() {
   $strongarm->name = 'content_extra_weights_poll';
   $strongarm->value = array(
     'title' => '-5',
-    'revision_information' => '3',
-    'author' => '7',
-    'options' => '8',
-    'comment_settings' => '5',
-    'menu' => '4',
+    'revision_information' => '4',
+    'author' => '8',
+    'options' => '9',
+    'comment_settings' => '6',
+    'menu' => '5',
     'taxonomy' => '-4',
-    'path' => '6',
+    'path' => '7',
     'choice_wrapper' => '-3',
-    'settings' => '-2',
-    'flag' => '2',
-    'og_nodeapi' => '1',
+    'settings' => '-1',
+    'flag' => '3',
+    'og_nodeapi' => '2',
   );
 
   $export['content_extra_weights_poll'] = $strongarm;

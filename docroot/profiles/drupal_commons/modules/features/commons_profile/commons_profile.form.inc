@@ -9,6 +9,10 @@
  * The "find a new friend" search form
  */
 function commons_profile_friend_search_form(&$form_state) {
+  $form['search_message'] = array(
+    '#value' => t('Search for other site users'),
+  );
+  
   $form['search_text'] = array(
     '#type' => 'textfield',
 	  '#autocomplete_path' => 'user/findfriends/autocomplete', 

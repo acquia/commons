@@ -1,5 +1,4 @@
 <?php
-// $Id: apachesolr.admin.inc,v 1.1.2.53 2010/06/28 01:59:56 pwolanin Exp $
 
 /**
  * @file
@@ -11,10 +10,7 @@ function apachesolr_settings() {
 
   // Perform a check to ensure the server is there
   if (empty($_POST)) {
-    // update_help() loads install.inc via include_once, so not much
-    // point in working around it.
-    include_once './includes/install.inc';
-    module_load_include('install', 'apachesolr');
+    module_load_install('apachesolr');
 
     foreach (apachesolr_requirements('runtime') as $requirement) {
       $status = $requirement['severity'] == REQUIREMENT_ERROR ? 'error' : 'status';
@@ -44,20 +40,24 @@ function apachesolr_settings() {
   );
 
   $numbers = drupal_map_assoc(array(1, 5, 10, 20, 50, 100, 200));
+  $default_cron_limit = variable_get('apachesolr_cron_limit', 50);
+  // apachesolr_cron_limit may be overridden in settings.php. If its current
+  // value is not among the default set of options, add it.
+  if (!isset($numbers[$default_cron_limit])) {
+    $numbers[$default_cron_limit] = $default_cron_limit;
+  }
   $form['apachesolr_cron_limit'] = array(
     '#type' => 'select',
     '#title' => t('Number of items to index per cron run'),
-    '#default_value' => variable_get('apachesolr_cron_limit', 50),
+    '#default_value' => $default_cron_limit,
     '#options' => $numbers,
     '#description' => t('The maximum number of items indexed in each pass of a <a href="@cron">cron maintenance task</a>. If necessary, reduce the number of items to prevent timeouts and memory errors while indexing.', array('@cron' => url('admin/reports/status')))
   );
 
-  $options = drupal_map_assoc(array(5, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100));
   $form['apachesolr_rows'] = array(
-    '#type' => 'select',
+    '#type' => 'textfield',
     '#title' => t('Results per page'),
     '#default_value' => variable_get('apachesolr_rows', 10),
-    '#options' => $options,
     '#description' => t('The number of results that will be shown per page.'),
   );
   $form['apachesolr_failure'] = array(
@@ -108,6 +108,22 @@ function apachesolr_settings_validate($form, &$form_state) {
     if (!ctype_digit($port) || $port < 1 || $port > 65535) {
       form_set_error('apachesolr_port', t('The port has to be an integer between 1 and 65535.'));
     }
+    else {
+      $form_state['values']['apachesolr_host'] = trim($form_state['values']['apachesolr_host']);
+      $form_state['values']['apachesolr_port'] = trim($form_state['values']['apachesolr_port']);
+      $form_state['values']['apachesolr_path'] = '/' . trim($form_state['values']['apachesolr_path'], "/ \t\r\n\0\x0B");
+    }
+  }
+
+  $intval = intval($form_state['values']['apachesolr_rows']);
+  // TODO: does the max need to be variable?
+  $max = 200;
+  if (!is_numeric($form_state['values']['apachesolr_rows']) || $intval < 0 || $intval > $max) {
+    form_set_error('apachesolr_rows', t('Results per page should be non-negative integer less than @max.', array('@max' => $max)));
+  }
+  else {
+    // Set the integer value as the one we are saving to the variable.
+    $form_state['values']['apachesolr_rows'] = $intval;
   }
 }
 

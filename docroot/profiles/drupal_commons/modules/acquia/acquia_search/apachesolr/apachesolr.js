@@ -1,4 +1,3 @@
-// $Id: apachesolr.js,v 1.1.2.6 2010/02/04 01:24:44 pwolanin Exp $
 
 Drupal.behaviors.apachesolr = function(context) {
   $('.apachesolr-hidden-facet', context).hide();

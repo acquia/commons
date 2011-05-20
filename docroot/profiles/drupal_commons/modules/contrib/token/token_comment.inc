@@ -1,5 +1,4 @@
 <?php
-// $Id: token_comment.inc,v 1.3.4.11 2010/07/08 00:41:19 davereid Exp $
 
 /**
  * @file

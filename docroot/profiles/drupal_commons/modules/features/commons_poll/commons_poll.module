@@ -3,6 +3,18 @@
 include_once('commons_poll.features.inc');
 
 /**
+ * Implementation of hook_nodeapi()
+ */
+function commons_poll_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
+  switch ($op) {
+    case 'view':
+      // Push the voting widgets to the top
+      $node->content['body']['#weight'] = -100;
+      break;
+  }
+}
+
+/**
  * Implementation of hook_og_features_registry()
  */
 function commons_poll_og_features_registry() {
