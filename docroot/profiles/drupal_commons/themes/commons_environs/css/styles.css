@@ -37,6 +37,11 @@ h1.title {
   font-weight: bold;
   font-size: 22px;
   color: #736357;
+  margin: 0 0 8px 0px;
+}
+
+.breadcrumbs { 
+	margin-left: 0px;
 }
 
 h3 {
@@ -253,12 +258,12 @@ label {
   border-radius: 0;
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
-  margin-bottom: 25px;
+  margin-bottom: 10px;
 }
 
 #primary-menu {
   float: none;
-  margin: 19px 0;
+  margin: 0px 0 0px;
 }
 
 .primary-menu-inner ul.sf-menu a {
@@ -528,7 +533,7 @@ label {
 }
 
 #homebox-buttons {
-  text-align: left;
+  text-align: right;
 }
 
 button, #homebox-buttons button {
@@ -634,8 +639,7 @@ form input.form-submit, .views-exposed-form .views-exposed-widget input.form-sub
   margin: 0;
 }
 
-.sidebar-last .block .inner,
-.sidebar-first .block .inner {
+.sidebar-last .block .inner, .sidebar-first .block .inner {
   border: none;
   -moz-border-radius: 16px;
   -webkit-border-radius: 16px;
@@ -706,7 +710,138 @@ form input.form-submit, .views-exposed-form .views-exposed-widget input.form-sub
 }
 
 .front .views-field-field-group-image-fid {
+  float: left;
+  width: 152px;
   margin-top: 5px;
+  margin-right: 10px;
+}
+
+.front div.views-field-title {
+	font-weight: bold;
+}
+
+/*cols-1 table on home page for groups */
+.front .cols-1 {
+	/*float: right;*/
+	width: 442px;
+	overflow: hidden;
+}
+
+.view-dashboard-recent-content .views-field-picture {
+	float: left;
+	min-height: 37px;
+	#height: 37px;
+	margin: 0 10px 0 0;
+}
+
+/*------------------------------------------
+	icons
+--------------------------------------------*/
+.view-homepage-group-showcase table tr td.views-field-type span.blog,
+.view-recent-featured table tr td.views-field-type span.blog,
+.view-og-content-tracker table tr td.views-field-type span.blog,
+.view-recent-content-all table tr td.views-field-type span.blog,
+.view-og-my-content table tr td.views-field-type span.blog {
+	background: transparent url(../../commons_origins/images/icons/blog-node.png) no-repeat center center;
+	display: block;
+	width: 40px;
+	text-indent: -10000px !important;
+}
+
+.view-homepage-group-showcase table tr td.views-field-type span.event,
+.view-recent-featured table tr td.views-field-type span.event,
+.view-recent-content-all table tr td.views-field-type span.event,
+.view-og-content-tracker table tr td.views-field-type span.event,
+.view-og-my-content table tr td.views-field-type span.event {
+	background: transparent url(../../commons_origins/images/icons/event-node.png) no-repeat center center;
+	display: block;
+	width: 40px;
+	text-indent: -10000px !important;
+}
+
+.view-homepage-group-showcase table tr td.views-field-type span.wiki,
+.view-recent-featured table tr td.views-field-type span.wiki,
+.view-recent-content-all table tr td.views-field-type span.wiki,
+.view-og-content-tracker table tr td.views-field-type span.wiki,
+.view-og-my-content table tr td.views-field-type span.wiki {
+	background: transparent url(../../commons_origins/images/icons/wiki-node.png) no-repeat center center;
+	display: block;
+	width: 40px;
+	text-indent: -10000px !important;
+}
+
+.view-homepage-group-showcase table tr td.views-field-type span.document,
+.view-recent-featured table tr td.views-field-type span.document,
+.view-recent-content-all table tr td.views-field-type span.document,
+.view-og-content-tracker table tr td.views-field-type span.document,
+.view-og-my-content table tr td.views-field-type span.document {
+	background: transparent url(../../commons_origins/images/icons/document-node.png) no-repeat center center;
+	display: block;
+	width: 40px;
+	text-indent: -10000px !important;
+}
+
+.view-homepage-group-showcase table tr td.views-field-type span.discussion,
+.view-recent-featured table tr td.views-field-type span.discussion,
+.view-recent-content-all table tr td.views-field-type span.discussion,
+.view-og-content-tracker table tr td.views-field-type span.discussion,
+.view-og-my-content table tr td.views-field-type span.discussion {
+	background: transparent url(../../commons_origins/images/icons/forum-node.png) no-repeat center center;
+	display: block;
+	width: 40px;
+	text-indent: -10000px !important;
+}
+
+.view-homepage-group-showcase table tr td.views-field-type span.poll,
+.view-recent-featured table tr td.views-field-type span.poll,
+.view-recent-content-all table tr td.views-field-type span.poll,
+.view-og-content-tracker table tr td.views-field-type span.poll,
+.view-og-my-content table tr td.views-field-type span.poll {
+	background: transparent url(../../commons_origins/images/icons/poll-node.png) no-repeat center center;
+	display: block;
+	width: 40px;
+	text-indent: -10000px !important;
+}
+
+.view-homepage-group-showcase table tr td.views-field-type span.group,
+.view-recent-featured table tr td.views-field-type span.group,
+.view-recent-content-all table tr td.views-field-type span.group,
+.view-og-content-tracker table tr td.views-field-type span.group,
+.view-og-my-content table tr td.views-field-type span.group {
+	background: transparent url(../../commons_origins/images/icons/group-node.png) no-repeat center center;
+	display: block;
+	width: 40px;
+	text-indent: -10000px !important;
+}
+
+.view-homepage-group-showcase table tr td.views-field-type span.notice,
+.view-recent-featured table tr td.views-field-type span.notice,
+.view-recent-content-all table tr td.views-field-type span.notice,
+.view-og-content-tracker table tr td.views-field-type span.notice,
+.view-og-my-content table tr td.views-field-type span.notice {
+	background: transparent url(../../commons_origins/images/icons/notice-node.png) no-repeat center center;
+	display: block;
+	width: 40px;
+	text-indent: -10000px !important;
+}
+/*------------------------------------------
+	end icons
+--------------------------------------------*/
+
+/*heartbeat times */
+span.heartbeat_times img {
+	float: left;
+	margin-right: 10px;
+}
+.beat-item-info span.heartbeat_times a.underlined {
+	display: block;
+	float: left;
+	clear: left;
+}
+
+/*Shout box*/
+.shoutbox-add-form fieldset {
+	border: 0px;
 }
 
 .page-tagadelic h1.title, .page-taxonomy h1.title {
@@ -735,8 +870,8 @@ form input.form-submit, .views-exposed-form .views-exposed-widget input.form-sub
   zoom: 1;
 }
 
-.not-front.page-groups .primary-menu-inner ul.sf-menu ul li:hover {
-  background-color: rgba(119, 177, 68, 0.89);
+.not-front.og-context .primary-menu-inner ul.sf-menu li > a:hover, .not-front.page-groups .primary-menu-inner ul.sf-menu li > a:hover {
+  color: #8AC559;
 }
 
 .not-front.og-context .primary-menu-inner ul.sf-menu li.sfHover li.first a, .not-front.page-groups .primary-menu-inner ul.sf-menu li.sfHover li.first a {
@@ -751,6 +886,42 @@ form input.form-submit, .views-exposed-form .views-exposed-widget input.form-sub
   border: 2px solid #8ac559;
   overflow: hidden;
 }
+
+/*groups page leave/join button style*/
+.not-front .views-field-field-group-image-fid {
+	float: left;
+	margin-right: 10px;
+}
+
+.not-front .views-field-description { 
+	float: left;
+}
+
+.not-front .views-field-leave-group, .not-front .views-field-subscribe {
+	/*position: absolute;
+	top: 25px;
+	right: 15px;*/
+	float: right;
+	margin: 0 10px 0 0;
+	padding: 0;	
+}
+/*end groups page leave/join button style*/
+
+
+/*blog posts create blog entry pod*/
+#edit-node-type-wrapper {
+	float: left;
+}
+
+#edit-submit {
+	margin: 5px 0 0 10px;
+}
+
+.not-front .views-field-picture {
+	float: left;
+	margin-right: 10px;
+}
+/*end blog posts create blog entry pod*/
 
 .not-front.og-context #content-tabs {
   margin: 2px 0 0 0;
