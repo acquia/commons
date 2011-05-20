@@ -627,7 +627,7 @@ function commons_core_views_default_views() {
       'style_options' => array(),
       'wildcard' => 'all',
       'wildcard_substitution' => 'All',
-      'title' => '',
+      'title' => 'Recent posts in %1',
       'breadcrumb' => '',
       'default_argument_type' => 'fixed',
       'default_argument' => '',
