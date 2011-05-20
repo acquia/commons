@@ -621,29 +621,32 @@ function commons_core_views_default_views() {
     ),
   ));
   $handler->override_option('arguments', array(
-    'nid' => array(
-      'default_action' => 'default',
+    'group_nid' => array(
+      'default_action' => 'not found',
       'style_plugin' => 'default_summary',
       'style_options' => array(),
       'wildcard' => 'all',
       'wildcard_substitution' => 'All',
-      'title' => '%1: Recent content',
+      'title' => '',
       'breadcrumb' => '',
-      'default_argument_type' => 'node',
+      'default_argument_type' => 'fixed',
       'default_argument' => '',
-      'validate_type' => 'og_group_types',
+      'validate_type' => 'node',
       'validate_fail' => 'not found',
       'break_phrase' => 0,
       'not' => 0,
-      'id' => 'nid',
-      'table' => 'node',
-      'field' => 'nid',
+      'id' => 'group_nid',
+      'table' => 'og_ancestry',
+      'field' => 'group_nid',
       'validate_user_argument_type' => 'uid',
       'validate_user_roles' => array(
         '2' => 0,
         '3' => 0,
         '4' => 0,
         '5' => 0,
+      ),
+      'override' => array(
+        'button' => 'Use default',
       ),
       'relationship' => 'none',
       'default_options_div_prefix' => '',
@@ -661,7 +664,7 @@ function commons_core_views_default_views() {
         'notice' => 0,
         'page' => 0,
       ),
-      'validate_argument_node_access' => 0,
+      'validate_argument_node_access' => 1,
       'validate_argument_nid_type' => 'nid',
       'validate_argument_vocabulary' => array(
         '2' => 0,
@@ -681,9 +684,25 @@ function commons_core_views_default_views() {
         'group' => 0,
       ),
       'validate_argument_php' => '',
-      'override' => array(
-        'button' => 'Use default',
+    ),
+  ));
+  $handler->override_option('filters', array(
+    'status' => array(
+      'operator' => '=',
+      'value' => '1',
+      'group' => '0',
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
       ),
+      'id' => 'status',
+      'table' => 'node',
+      'field' => 'status',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
     ),
   ));
   $handler->override_option('access', array(
