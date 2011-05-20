@@ -8,6 +8,57 @@ function commons_event_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
+  $context->name = 'content-event-calendar';
+  $context->description = 'The event calendar';
+  $context->tag = 'Event';
+  $context->conditions = array(
+    'views' => array(
+      'values' => array(
+        'content_event_calendar' => 'content_event_calendar',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'commons_core-group_create_content' => array(
+          'module' => 'commons_core',
+          'delta' => 'group_create_content',
+          'region' => 'sidebar_last',
+          'weight' => 0,
+        ),
+        'views-event_latest-block_1' => array(
+          'module' => 'views',
+          'delta' => 'event_latest-block_1',
+          'region' => 'sidebar_last',
+          'weight' => 1,
+        ),
+        'views-event_past_events-block_1' => array(
+          'module' => 'views',
+          'delta' => 'event_past_events-block_1',
+          'region' => 'sidebar_last',
+          'weight' => 2,
+        ),
+        'views-event_latest_comments-block_1' => array(
+          'module' => 'views',
+          'delta' => 'event_latest_comments-block_1',
+          'region' => 'sidebar_last',
+          'weight' => 3,
+        ),
+      ),
+    ),
+  );
+  $context->condition_mode = 0;
+
+  // Translatables
+  // Included for use with string extractors like potx.
+  t('Event');
+  t('The event calendar');
+
+  $export['content-event-calendar'] = $context;
+  $context = new stdClass;
+  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
+  $context->api_version = 3;
   $context->name = 'content-event-page';
   $context->description = 'The event page';
   $context->tag = 'Event';
@@ -205,6 +256,51 @@ function commons_event_context_default_contexts() {
   t('The event tab on a group');
 
   $export['group-tab-events'] = $context;
+  $context = new stdClass;
+  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
+  $context->api_version = 3;
+  $context->name = 'group-tab-events-calendar';
+  $context->description = 'The event calendar for a group';
+  $context->tag = 'Event';
+  $context->conditions = array(
+    'views' => array(
+      'values' => array(
+        'group_event_calendar' => 'group_event_calendar',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'views-a1d17833246cc27c991e939ae8e26a96' => array(
+          'module' => 'views',
+          'delta' => 'a1d17833246cc27c991e939ae8e26a96',
+          'region' => 'sidebar_last',
+          'weight' => 0,
+        ),
+        'views-group_block_events_past-block_1' => array(
+          'module' => 'views',
+          'delta' => 'group_block_events_past-block_1',
+          'region' => 'sidebar_last',
+          'weight' => 1,
+        ),
+        'views-5f71f8bfdda731f7f0c854e134dab79b' => array(
+          'module' => 'views',
+          'delta' => '5f71f8bfdda731f7f0c854e134dab79b',
+          'region' => 'sidebar_last',
+          'weight' => 2,
+        ),
+      ),
+    ),
+  );
+  $context->condition_mode = 0;
+
+  // Translatables
+  // Included for use with string extractors like potx.
+  t('Event');
+  t('The event calendar for a group');
+
+  $export['group-tab-events-calendar'] = $context;
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
