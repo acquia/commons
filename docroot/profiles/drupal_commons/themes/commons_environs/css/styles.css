@@ -357,6 +357,7 @@ label {
 .breadcrumbs {
   background-color: transparent;
   float: none;
+  margin-bottom: 1em;
 }
 
 .view-homepage-group-showcase .views-row {
@@ -612,7 +613,8 @@ form input.form-submit, .views-exposed-form .views-exposed-widget input.form-sub
   margin: 0;
 }
 
-.sidebar-last .block .inner, .sidebar-first .block .inner {
+.sidebar-last .block .inner,
+.sidebar-first .block .inner {
   border: none;
   -moz-border-radius: 16px;
   -webkit-border-radius: 16px;
@@ -620,9 +622,14 @@ form input.form-submit, .views-exposed-form .views-exposed-widget input.form-sub
   -moz-box-shadow: 0px 0px 9px #cbc6c1;
   -webkit-box-shadow: 0px 0px 9px #cbc6c1;
   box-shadow: 0px 0px 9px #cbc6c1;
-  margin: 9px;
+  margin: 0 9px 9px 9px;
   padding: 12px 16px;
   background: #fff url(../images/bg-box-orange.png) 0px 0px no-repeat;
+}
+
+.sidebar-last .block + .block .inner,
+.sidebar-first .block + .block .inner {
+  margin-top: 9px;
 }
 
 .sidebar-last #block-views-groups_most_active-block_1.block .inner, .sidebar-first #block-views-groups_most_active-block_1.block .inner {
@@ -752,6 +759,7 @@ form input.form-submit, .views-exposed-form .views-exposed-widget input.form-sub
   border-radius: 9px;
   -webkit-border-radius: 9px;
   -moz-border-radius: 9px;
+  margin-bottom: 1em;
 }
 
 .not-front.og-context #content-tabs ul.primary li, .not-front.og-context #content-tabs ul.primary li {
