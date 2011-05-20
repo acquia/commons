@@ -273,15 +273,36 @@ label {
 
 .sf-menu li:hover ul, .sf-menu li.sfHover ul {
   left:           0;
-  top:            3em;
+  top:            100%;
   z-index:        99;
+}
+
+.sf-menu .expanded:hover {
+  background: #736357;
+}
+
+.sf-menu .expanded:hover > a {
+  color: #F0EDEA;
+}
+
+.sf-menu .expanded:hover .menu,
+.sf-menu .expanded .menu:hover {
+  background: #F0EDEA;
+  -moz-box-shadow: 0px 0px 9px #cbc6c1;
+  -webkit-box-shadow: 0px 0px 9px #cbc6c1;
+  box-shadow: 0px 0px 9px #cbc6c1;
+}
+
+.sf-menu .expanded .menu li:hover {
+  background: #E0DDDA;
 }
 
 .sf-menu ul {
     position: absolute;
     top: 3em;
     left: -9999em;
-    width: 10em;
+    width: auto;
+    white-space: nowrap;
 }
 
 .front #content-top-inner {
@@ -706,15 +727,16 @@ form input.form-submit, .views-exposed-form .views-exposed-widget input.form-sub
   line-height: 35px;
 }
 
-.not-front.og-context .primary-menu-inner ul.sf-menu ul, .not-front.page-groups .primary-menu-inner ul.sf-menu ul {
+.not-front.og-context .primary-menu-inner ul.sf-menu ul,
+.not-front.page-groups .primary-menu-inner ul.sf-menu ul {
   background-color: transparent;
   background-color: rgba(139, 197, 88, 0.89);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#E58BC558,endColorstr=#E58BC558);
   zoom: 1;
 }
 
-.not-front.og-context .primary-menu-inner ul.sf-menu li > a:hover, .not-front.page-groups .primary-menu-inner ul.sf-menu li > a:hover {
-  color: #8AC559;
+.not-front.page-groups .primary-menu-inner ul.sf-menu ul li:hover {
+  background-color: rgba(119, 177, 68, 0.89);
 }
 
 .not-front.og-context .primary-menu-inner ul.sf-menu li.sfHover li.first a, .not-front.page-groups .primary-menu-inner ul.sf-menu li.sfHover li.first a {
@@ -798,7 +820,10 @@ form input.form-submit, .views-exposed-form .views-exposed-widget input.form-sub
   box-shadow: inset -2px -2px 0px 1px #008f4e;
 }
 
-.not-front.og-context .primary-menu-inner ul.sf-menu li.active-trail > a, .not-front.og-context .primary-menu-inner ul.sf-menu li.active-trail > a:visited, .page-groups .primary-menu-inner ul.sf-menu li.active-trail > a, .page-groups .primary-menu-inner ul.sf-menu li.active-trail > a:visited {
+.not-front.og-context .primary-menu-inner ul.sf-menu > li.active-trail > a,
+.not-front.og-context .primary-menu-inner ul.sf-menu > li.active-trail > a:visited,
+.page-groups .primary-menu-inner ul.sf-menu > li.active-trail > a,
+.page-groups .primary-menu-inner ul.sf-menu > li.active-trail > a:visited {
   color: #8ac559;
 }
 
