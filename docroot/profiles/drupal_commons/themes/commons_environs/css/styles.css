@@ -898,6 +898,13 @@ span.heartbeat_times img {
   overflow: hidden;
 }
 
+.view-groups-main-listing .view-content .item-list ul li {
+  overflow: hidden;
+  position: relative;
+  border-bottom: 1px solid #8AC559;
+  margin-bottom: 10px;
+}
+
 /*groups page leave/join button style*/
 .not-front .views-field-field-group-image-fid {
 	float: left;
@@ -905,13 +912,14 @@ span.heartbeat_times img {
 }
 
 .not-front .views-field-description { 
-	float: left;
+	float: none;
+	margin-left: 85px;
 }
 
 .not-front .views-field-leave-group, .not-front .views-field-subscribe {
-	/*position: absolute;
-	top: 25px;
-	right: 15px;*/
+	position: absolute;
+	top: 0px;
+	right: 0px;
 	float: right;
 	margin: 0 10px 0 0;
 	padding: 0;	
