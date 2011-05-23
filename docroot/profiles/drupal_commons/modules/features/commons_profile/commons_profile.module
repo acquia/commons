@@ -85,8 +85,6 @@ function commons_profile_init() {
  * Implementation of hook_user()
  */
 function commons_profile_user($op, &$edit, &$account, $category = NULL) {    
-  global $user;
-  
   switch ($op) {
     case 'view':
       // Remove the core profile fields, as we'll be providing our
@@ -119,20 +117,34 @@ function commons_profile_views_pre_render(&$view) {
  * Implementation of hook_views_pre_view()
  */
 function commons_profile_views_pre_view(&$view) {
-  global $user;
-  
   // When viewing the "Friends" block
-  if ($view->name == 'profile_friends' && $user->uid) {
-    // Get the set title
-    $title = $view->display_handler->get_option('title');
+  if ($view->name == 'profile_friends') {
+    // Get the current user being viewed
+    if ($account = _commons_profile_get_current_user()) {
+      // Get the set title
+      $title = $view->display_handler->get_option('title');
     
-    // Fetch the user's friends
-    $friends = user_relationships_load(array('user' => $user->uid, 'approved' => TRUE));
-    
-    // Add a friend count to the block
-    $title .= ' (' . count($friends) . ')';
+      // Fetch the user's friends count
+      $friends = user_relationships_load(array('user' => $account->uid, 'approved' => TRUE), array('count' => TRUE));
 
-    // Set the new title
-    $view->display_handler->set_option('title', $title);
+      // Add a friend count to the block
+      $title .= " ({$friends})";
+
+      // Set the new title
+      $view->display_handler->set_option('title', $title);
+    }
   }
+}
+
+/**
+ * Helper function to get the current user being viewed
+ */
+function _commons_profile_get_current_user() {
+  static $account = FALSE;
+  if (!$account) {
+    if (arg(0) == 'user' && is_numeric(arg(1))) {
+      $account = user_load(arg(1));
+    }
+  }
+  return $account;
 }
