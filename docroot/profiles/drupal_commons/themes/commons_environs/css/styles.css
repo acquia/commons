@@ -11,11 +11,9 @@ div.content-messages div.messages, div.content-help div.help {
 }
 
 #header-site-info-inner {
-  
 }
 
 #logo {
-  
 }
 
 #site-name-wrapper {
@@ -40,8 +38,8 @@ h1.title {
   margin: 0 0 8px 2px;
 }
 
-.breadcrumbs { 
-	margin-left: 5px;
+.breadcrumbs {
+  margin-left: 5px;
 }
 
 h3 {
@@ -290,8 +288,7 @@ label {
   color: #F0EDEA;
 }
 
-.sf-menu .expanded:hover .menu,
-.sf-menu .expanded .menu:hover {
+.sf-menu .expanded:hover .menu, .sf-menu .expanded .menu:hover {
   background: #F0EDEA;
   -moz-box-shadow: 0px 0px 9px #cbc6c1;
   -webkit-box-shadow: 0px 0px 9px #cbc6c1;
@@ -303,17 +300,18 @@ label {
 }
 
 .sf-menu ul {
-    position: absolute;
-    top: 3em;
-    left: -9999em;
-    width: auto;
-	max-width: 180px;
-    white-space: nowrap;
-	z-index: 9999;
+  position: absolute;
+  top: 3em;
+  left: -9999em;
+  width: auto;
+  max-width: 180px;
+  white-space: nowrap;
+  z-index: 9999;
 }
+
 /*removes z-index on dashboard minimize/move/maximize icons*/
 .portlet-icon {
-	z-index: 0;
+  z-index: 0;
 }
 
 .front #content-top-inner {
@@ -430,8 +428,8 @@ label {
 }
 
 /*#content-tabs ul.primary {
-	margin-left: 7px;
-}*/
+ margin-left: 7px;
+ }*/
 
 #content-tabs ul.primary li a:link, #content-tabs ul.primary li a:visited {
   -moz-border-radius-topleft: 7px;
@@ -459,20 +457,16 @@ label {
   background-image: none;
   border-bottom: 1px solid #fff;
   color: #fbb03b;
-}
-
-#homebox { padding-bottom:40px; }
-
-#homebox .homebox-placeholder {
-  clear: both;
+  position: relative;
+  z-index: 1;
 }
 
 .content-content {
   background: #fff;
   padding: 10px;
-  -moz-border-radius: 16px;
-  -webkit-border-radius: 16px;
-  border-radius: 16px;
+  -moz-border-radius: 0 16px 16px 16px;
+  -webkit-border-radius: 0 16px 16px 16px;
+  border-radius: 0 16px 16px 16px;
   border: 2px solid #fbb03b;
   overflow: hidden;
 }
@@ -543,26 +537,6 @@ label {
   margin: 0;
 }
 
-#homebox-buttons {
-  text-align: right;
-}
-
-button, #homebox-buttons button {
-  font-size: 12px;
-  font-weight: bold;
-  color: #fff;
-  text-transform: uppercase;
-  background: #29ABE2;
-  border: none;
-  -moz-box-shadow: inset -2px -2px 0px 1px #0071BC;
-  -webkit-box-shadow: inset -2px -2px 0px 1px #0071BC;
-  box-shadow: inset -2px -2px 0px 1px #0071BC;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  border-radius: 4px;
-  padding: 6px 7px 9px 7px;
-}
-
 form input.form-submit, .views-exposed-form .views-exposed-widget input.form-submit {
   font-size: 14px;
   font-weight: bold;
@@ -584,6 +558,34 @@ form input.form-submit, .views-exposed-form .views-exposed-widget input.form-sub
 
 #views-exposed-form-og-search-default .views-exposed-widget.views-exposed-submit .form-submit, #views-exposed-form-og-search-page-1 .views-exposed-widget.views-exposed-submit .form-submit {
   padding: 6px 7px 9px 7px;
+}
+
+/* dashboard */
+#homebox {
+  padding-bottom:40px;
+}
+
+#homebox-buttons {
+}
+
+button, #homebox-buttons button {
+  font-size: 12px;
+  font-weight: bold;
+  color: #fff;
+  text-transform: uppercase;
+  background: #29ABE2;
+  border: none;
+  -moz-box-shadow: inset -2px -2px 0px 1px #0071BC;
+  -webkit-box-shadow: inset -2px -2px 0px 1px #0071BC;
+  box-shadow: inset -2px -2px 0px 1px #0071BC;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  padding: 6px 7px 9px 7px;
+}
+
+#homebox .homebox-placeholder {
+  clear: both;
 }
 
 #homebox-changes-made {
@@ -608,18 +610,21 @@ form input.form-submit, .views-exposed-form .views-exposed-widget input.form-sub
   margin: 9px;
   padding: 12px 16px;
   background: #fff url(../images/bg-box-orange.png) 0px 0px no-repeat;
+  float: none;
+  width: auto;
 }
 
-#homebox .homebox-column-wrapper-1 .homebox-portlet, #homebox .homebox-column-wrapper-3 .homebox-portlet {
+/*#homebox .homebox-column-wrapper-1 .homebox-portlet, #homebox .homebox-column-wrapper-3 .homebox-portlet {
   width: 80%
 }
 
 #homebox .homebox-column-wrapper-2 .homebox-portlet {
   width: 90%
-}
+}*/
 
 #homebox .homebox-portlet .homebox-portlet-inner {
   border: none;
+  overflow: hidden;
 }
 
 #homebox .homebox-portlet h3.portlet-header {
@@ -663,8 +668,7 @@ form input.form-submit, .views-exposed-form .views-exposed-widget input.form-sub
   background: #fff url(../images/bg-box-orange.png) 0px 0px no-repeat;
 }
 
-.sidebar-last .block + .block .inner,
-.sidebar-first .block + .block .inner {
+.sidebar-last .block + .block .inner, .sidebar-first .block + .block .inner {
   margin-top: 9px;
 }
 
@@ -728,135 +732,105 @@ form input.form-submit, .views-exposed-form .views-exposed-widget input.form-sub
 }
 
 .front div.views-field-title {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 /*cols-1 table on home page for groups */
 .front .views-table {
-	/*float: right;*/
-	width: 442px;
-	overflow: hidden;
+  /*float: right;*/
+  width: 442px;
+  overflow: hidden;
 }
 
 .view-dashboard-recent-content .views-field-picture {
-	float: left;
-	min-height: 37px;
-	#height: 37px;
-	margin: 0 10px 0 0;
+  float: left;
+  min-height: 37px;
+  #height: 37px;
+  margin: 0 10px 0 0;
 }
 
 html.js fieldset.collapsible .fieldset-wrapper {
-	overflow: hidden !important;
+  overflow: hidden !important;
 }
 
 /*------------------------------------------
-	icons
---------------------------------------------*/
-.view-homepage-group-showcase table tr td.views-field-type span.blog,
-.view-recent-featured table tr td.views-field-type span.blog,
-.view-og-content-tracker table tr td.views-field-type span.blog,
-.view-recent-content-all table tr td.views-field-type span.blog,
-.view-og-my-content table tr td.views-field-type span.blog {
-	background: transparent url(../../commons_origins/images/icons/blog-node.png) no-repeat center center;
-	display: block;
-	width: 40px;
-	text-indent: -10000px !important;
+ icons
+ --------------------------------------------*/
+.view-homepage-group-showcase table tr td.views-field-type span.blog, .view-recent-featured table tr td.views-field-type span.blog, .view-og-content-tracker table tr td.views-field-type span.blog, .view-recent-content-all table tr td.views-field-type span.blog, .view-og-my-content table tr td.views-field-type span.blog {
+  background: transparent url(../../commons_origins/images/icons/blog-node.png) no-repeat center center;
+  display: block;
+  width: 40px;
+  text-indent: -10000px !important;
 }
 
-.view-homepage-group-showcase table tr td.views-field-type span.event,
-.view-recent-featured table tr td.views-field-type span.event,
-.view-recent-content-all table tr td.views-field-type span.event,
-.view-og-content-tracker table tr td.views-field-type span.event,
-.view-og-my-content table tr td.views-field-type span.event {
-	background: transparent url(../../commons_origins/images/icons/event-node.png) no-repeat center center;
-	display: block;
-	width: 40px;
-	text-indent: -10000px !important;
+.view-homepage-group-showcase table tr td.views-field-type span.event, .view-recent-featured table tr td.views-field-type span.event, .view-recent-content-all table tr td.views-field-type span.event, .view-og-content-tracker table tr td.views-field-type span.event, .view-og-my-content table tr td.views-field-type span.event {
+  background: transparent url(../../commons_origins/images/icons/event-node.png) no-repeat center center;
+  display: block;
+  width: 40px;
+  text-indent: -10000px !important;
 }
 
-.view-homepage-group-showcase table tr td.views-field-type span.wiki,
-.view-recent-featured table tr td.views-field-type span.wiki,
-.view-recent-content-all table tr td.views-field-type span.wiki,
-.view-og-content-tracker table tr td.views-field-type span.wiki,
-.view-og-my-content table tr td.views-field-type span.wiki {
-	background: transparent url(../../commons_origins/images/icons/wiki-node.png) no-repeat center center;
-	display: block;
-	width: 40px;
-	text-indent: -10000px !important;
+.view-homepage-group-showcase table tr td.views-field-type span.wiki, .view-recent-featured table tr td.views-field-type span.wiki, .view-recent-content-all table tr td.views-field-type span.wiki, .view-og-content-tracker table tr td.views-field-type span.wiki, .view-og-my-content table tr td.views-field-type span.wiki {
+  background: transparent url(../../commons_origins/images/icons/wiki-node.png) no-repeat center center;
+  display: block;
+  width: 40px;
+  text-indent: -10000px !important;
 }
 
-.view-homepage-group-showcase table tr td.views-field-type span.document,
-.view-recent-featured table tr td.views-field-type span.document,
-.view-recent-content-all table tr td.views-field-type span.document,
-.view-og-content-tracker table tr td.views-field-type span.document,
-.view-og-my-content table tr td.views-field-type span.document {
-	background: transparent url(../../commons_origins/images/icons/document-node.png) no-repeat center center;
-	display: block;
-	width: 40px;
-	text-indent: -10000px !important;
+.view-homepage-group-showcase table tr td.views-field-type span.document, .view-recent-featured table tr td.views-field-type span.document, .view-recent-content-all table tr td.views-field-type span.document, .view-og-content-tracker table tr td.views-field-type span.document, .view-og-my-content table tr td.views-field-type span.document {
+  background: transparent url(../../commons_origins/images/icons/document-node.png) no-repeat center center;
+  display: block;
+  width: 40px;
+  text-indent: -10000px !important;
 }
 
-.view-homepage-group-showcase table tr td.views-field-type span.discussion,
-.view-recent-featured table tr td.views-field-type span.discussion,
-.view-recent-content-all table tr td.views-field-type span.discussion,
-.view-og-content-tracker table tr td.views-field-type span.discussion,
-.view-og-my-content table tr td.views-field-type span.discussion {
-	background: transparent url(../../commons_origins/images/icons/forum-node.png) no-repeat center center;
-	display: block;
-	width: 40px;
-	text-indent: -10000px !important;
+.view-homepage-group-showcase table tr td.views-field-type span.discussion, .view-recent-featured table tr td.views-field-type span.discussion, .view-recent-content-all table tr td.views-field-type span.discussion, .view-og-content-tracker table tr td.views-field-type span.discussion, .view-og-my-content table tr td.views-field-type span.discussion {
+  background: transparent url(../../commons_origins/images/icons/forum-node.png) no-repeat center center;
+  display: block;
+  width: 40px;
+  text-indent: -10000px !important;
 }
 
-.view-homepage-group-showcase table tr td.views-field-type span.poll,
-.view-recent-featured table tr td.views-field-type span.poll,
-.view-recent-content-all table tr td.views-field-type span.poll,
-.view-og-content-tracker table tr td.views-field-type span.poll,
-.view-og-my-content table tr td.views-field-type span.poll {
-	background: transparent url(../../commons_origins/images/icons/poll-node.png) no-repeat center center;
-	display: block;
-	width: 40px;
-	text-indent: -10000px !important;
+.view-homepage-group-showcase table tr td.views-field-type span.poll, .view-recent-featured table tr td.views-field-type span.poll, .view-recent-content-all table tr td.views-field-type span.poll, .view-og-content-tracker table tr td.views-field-type span.poll, .view-og-my-content table tr td.views-field-type span.poll {
+  background: transparent url(../../commons_origins/images/icons/poll-node.png) no-repeat center center;
+  display: block;
+  width: 40px;
+  text-indent: -10000px !important;
 }
 
-.view-homepage-group-showcase table tr td.views-field-type span.group,
-.view-recent-featured table tr td.views-field-type span.group,
-.view-recent-content-all table tr td.views-field-type span.group,
-.view-og-content-tracker table tr td.views-field-type span.group,
-.view-og-my-content table tr td.views-field-type span.group {
-	background: transparent url(../../commons_origins/images/icons/group-node.png) no-repeat center center;
-	display: block;
-	width: 40px;
-	text-indent: -10000px !important;
+.view-homepage-group-showcase table tr td.views-field-type span.group, .view-recent-featured table tr td.views-field-type span.group, .view-recent-content-all table tr td.views-field-type span.group, .view-og-content-tracker table tr td.views-field-type span.group, .view-og-my-content table tr td.views-field-type span.group {
+  background: transparent url(../../commons_origins/images/icons/group-node.png) no-repeat center center;
+  display: block;
+  width: 40px;
+  text-indent: -10000px !important;
 }
 
-.view-homepage-group-showcase table tr td.views-field-type span.notice,
-.view-recent-featured table tr td.views-field-type span.notice,
-.view-recent-content-all table tr td.views-field-type span.notice,
-.view-og-content-tracker table tr td.views-field-type span.notice,
-.view-og-my-content table tr td.views-field-type span.notice {
-	background: transparent url(../../commons_origins/images/icons/notice-node.png) no-repeat center center;
-	display: block;
-	width: 40px;
-	text-indent: -10000px !important;
+.view-homepage-group-showcase table tr td.views-field-type span.notice, .view-recent-featured table tr td.views-field-type span.notice, .view-recent-content-all table tr td.views-field-type span.notice, .view-og-content-tracker table tr td.views-field-type span.notice, .view-og-my-content table tr td.views-field-type span.notice {
+  background: transparent url(../../commons_origins/images/icons/notice-node.png) no-repeat center center;
+  display: block;
+  width: 40px;
+  text-indent: -10000px !important;
 }
+
 /*------------------------------------------
-	end icons
---------------------------------------------*/
+ end icons
+ --------------------------------------------*/
 
 /*heartbeat times */
 span.heartbeat_times img {
-	float: left;
-	margin-right: 10px;
+  float: left;
+  margin-right: 10px;
 }
+
 .beat-item-info span.heartbeat_times a.underlined {
-	display: block;
-	float: left;
-	clear: left;
+  display: block;
+  float: left;
+  clear: left;
 }
 
 /*Shout box*/
 .shoutbox-add-form fieldset {
-	border: 0px;
+  border: 0px;
 }
 
 .page-tagadelic h1.title, .page-taxonomy h1.title {
@@ -877,11 +851,11 @@ span.heartbeat_times img {
   line-height: 35px;
 }
 
-.not-front.og-context .primary-menu-inner ul.sf-menu ul,
-.not-front.page-groups .primary-menu-inner ul.sf-menu ul {
+.not-front.og-context .primary-menu-inner ul.sf-menu ul, .not-front.page-groups .primary-menu-inner ul.sf-menu ul {
   background-color: transparent;
   background-color: rgba(139, 197, 88, 0.89);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#E58BC558,endColorstr=#E58BC558);
+  filter: progid
+  :DXImageTransform.Microsoft.gradient(startColorstr=#E58BC558,endColorstr=#E58BC558);
   zoom: 1;
 }
 
@@ -911,39 +885,40 @@ span.heartbeat_times img {
 
 /*groups page leave/join button style*/
 .not-front .views-field-field-group-image-fid {
-	float: left;
-	margin-right: 10px;
+  float: left;
+  margin-right: 10px;
 }
 
-.not-front .views-field-description { 
-	float: none;
-	margin-left: 85px;
+.not-front .views-field-description {
+  float: none;
+  margin-left: 85px;
 }
 
 .not-front .views-field-leave-group, .not-front .views-field-subscribe {
-	position: absolute;
-	top: 0px;
-	right: 0px;
-	float: right;
-	margin: 0 10px 0 0;
-	padding: 0;	
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  float: right;
+  margin: 0 10px 0 0;
+  padding: 0;
 }
-/*end groups page leave/join button style*/
 
+/*end groups page leave/join button style*/
 
 /*blog posts create blog entry pod*/
 #edit-node-type-wrapper {
-	float: left;
+  float: left;
 }
 
 #edit-submit {
-	margin: 5px 0 0 10px;
+  margin: 5px 0 0 10px;
 }
 
 .not-front .views-field-picture {
-	float: left;
-	margin-right: 10px;
+  float: left;
+  margin-right: 10px;
 }
+
 /*end blog posts create blog entry pod*/
 
 .not-front.og-context #content-tabs {
@@ -955,18 +930,18 @@ span.heartbeat_times img {
 }
 
 /*.not-front.og-context .primary-menu-inner ul.sf-menu li.active-trail a {
-  padding: 0;
-}
+ padding: 0;
+ }
 
-.not-front.og-context .primary-menu-inner ul.sf-menu li.active-trail a span {
-  background-color: #fff;
-  margin: 0 5px 0 4px;
-  display: block;
-  padding: 0 8px 6px 8px;
-  border-radius: 9px 9px 0 0;
-  -webkit-border-radius: 9px 9px 0 0;
-  -moz-border-radius: 9px 9px 0 0;
-}*/
+ .not-front.og-context .primary-menu-inner ul.sf-menu li.active-trail a span {
+ background-color: #fff;
+ margin: 0 5px 0 4px;
+ display: block;
+ padding: 0 8px 6px 8px;
+ border-radius: 9px 9px 0 0;
+ -webkit-border-radius: 9px 9px 0 0;
+ -moz-border-radius: 9px 9px 0 0;
+ }*/
 
 .not-front.og-context #content-tabs ul.primary, .not-front.og-context #content-tabs ul.primary {
   background: #fff;
@@ -1014,10 +989,7 @@ span.heartbeat_times img {
   box-shadow: inset -2px -2px 0px 1px #008f4e;
 }
 
-.not-front.og-context .primary-menu-inner ul.sf-menu > li.active-trail > a,
-.not-front.og-context .primary-menu-inner ul.sf-menu > li.active-trail > a:visited,
-.page-groups .primary-menu-inner ul.sf-menu > li.active-trail > a,
-.page-groups .primary-menu-inner ul.sf-menu > li.active-trail > a:visited {
+.not-front.og-context .primary-menu-inner ul.sf-menu > li.active-trail > a, .not-front.og-context .primary-menu-inner ul.sf-menu > li.active-trail > a:visited, .page-groups .primary-menu-inner ul.sf-menu > li.active-trail > a, .page-groups .primary-menu-inner ul.sf-menu > li.active-trail > a:visited {
   color: #8ac559;
 }
 
@@ -1065,9 +1037,7 @@ ul.links.inline li a {
   padding: 2px 4px;
 }
 
-ul.links.inline a:hover,
-ul.links.inline a:focus,
-ul.links.inline a:active {
+ul.links.inline a:hover, ul.links.inline a:focus, ul.links.inline a:active {
   color: #fff;
   background-color: #29ABE2;
   text-decoration: none;
@@ -1107,6 +1077,7 @@ ul.pager a, ul.pager li.pager-current {
 .views_slideshow_singleframe_controls a {
   margin-right: 10px;
 }
+
 #block-views-groups_featured_groups-block_1 .content .views-row .views-field-field-group-image-fid {
   float: left;
   width: 140px;
