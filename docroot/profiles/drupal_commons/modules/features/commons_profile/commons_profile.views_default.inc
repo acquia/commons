@@ -1070,12 +1070,12 @@ function commons_profile_views_default_views() {
   ));
   $handler->override_option('title', 'Friends');
   $handler->override_option('use_ajax', TRUE);
-  $handler->override_option('items_per_page', 9);
+  $handler->override_option('items_per_page', 12);
   $handler->override_option('use_pager', 'mini');
   $handler->override_option('style_plugin', 'grid');
   $handler->override_option('style_options', array(
     'grouping' => '',
-    'columns' => '3',
+    'columns' => '4',
     'alignment' => 'horizontal',
     'fill_single_line' => 1,
   ));
