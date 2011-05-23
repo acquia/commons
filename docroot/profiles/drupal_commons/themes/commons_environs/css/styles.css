@@ -1089,3 +1089,12 @@ ul.links.inline a:active {
 .feed-item + .feed-item {
   margin-top: 3em;
 }
+
+/* pager */
+ul.pager a, ul.pager li.pager-current {
+  border: none;
+}
+
+.node .inner ul.pager li, .panel-pane .inner ul.pager li, .block .content ul.pager li {
+  display: inline-block !important;
+}
