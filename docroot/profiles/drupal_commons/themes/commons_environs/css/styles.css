@@ -770,6 +770,18 @@ button, #homebox-buttons button {
   margin-bottom: 8px;
 }
 
+/* a fix by Jay (read "Untrained themer") to unwind the font size increase introduced
+ * into the content title in the view by the above selector
+ */
+.view-homepage-group-showcase .view-homepage-group-showcase .views-field-title {
+  font-size: 12px;
+}
+
+/* another "fix" by Jay to line up the text in the Latest Notices block on /home */
+.view-recent-notices .views-field-timestamp, 
+.view-recent-notices .views-field-created,
+.view-recent-notices .views-field-name { margin-left: 40px; }
+
 /*cols-1 table on home page for groups */
 .front .views-table {
   /*float: right;*/
