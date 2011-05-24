@@ -221,6 +221,9 @@ Works well with inline login or inline menu block style */
 
 /*user login form if it is in the Header region */
 
+/*Note: This next line seems to be commons-specific, and doesn't leverage the CSS that follows for user login form. It's a temporary fix until we sort this out.*/
+#header-region-inner #block-commons_core-header_login { margin-top: 20px;}
+
 .header-region-inner .block-user form,
 .header-region-inner form#user-login-form {
 	/*min-width: 420px;*/
@@ -594,7 +597,6 @@ form#search-theme-form input.form-submit {
 .content-bottom {}
 
 .node-type-document .node .field-field-file {
-	width: 28%;
 	float: left;
 	margin-right: 2%;
 	margin-bottom: 12px;
@@ -3295,7 +3297,7 @@ a.feed-icon img {
 	float: right;
 	width: 180px;
   font-family: /*"Helvetical Neue",Helvetica,Arial,Sans-serif*/Arial, Helvetica, sans-serif;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 .view-user-meta .views-field-name span {
@@ -3389,58 +3391,6 @@ a.feed-icon img {
 	width: auto;
 }
 
-/* Heartbeat Module */
-
-.heartbeat-message-block .beat-item .heartbeat-buttons {
-	display: none;
-}
-
-.heartbeat-message-block .beat-item:hover .heartbeat-buttons {
-	background-color: #eee;
-	display: block;
-	position: absolute;
-	right:0px;
-}
-
-.heartbeat-message-block .beat-item:after {
-	clear: both;
-	content: ".";
-	display: block;
-	height: 0;
-	visibility: hidden;
-}
-
-.heartbeat-message-block .beat-item .beat-item-info {
-	float: left;
-	padding-right: 10px;
-	width: 50px;
-	line-height: 1em;
-}
-
-.heartbeat-message-block .beat-item .beat-item-info a {
-	color: #323232;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 9px;
-	font-style: normal;
-	line-height: 1em;	
-}
-
-.heartbeat-message-block .beat-item .beat-item-info img {
-	display: block;
-}
-
-.heartbeat-older-messages {
-	font-size: 1em;
-	margin: 0;
-	text-align: right;
-}
-
-div.beat-item blockquote {
-	background-image: none;
-	font-style: italic;
-	padding: 0;
-}
-
 .tagadelic_views { line-height:1.5em}
 
 /*********************/
@@ -3530,9 +3480,9 @@ div.beat-item blockquote {
 /*****************************************/
 
 .view-groups-most-active .views-field-field-group-image-fid{float: left;}
-.view-groups-most-active .views-field-title,
+/*.view-groups-most-active .views-field-title,
 .view-groups-most-active .views-field-members-count,
-.view-groups-most-active .views-field-posts-count {float:right; width: 180px;}
+.view-groups-most-active .views-field-posts-count {float:right; width: 180px;}*/
 
 .view-groups-my-groups .views-field-field-group-image-fid{float: left;}
 .view-groups-my-groups .views-field-title,
@@ -3653,7 +3603,7 @@ div.beat-item blockquote {
 
 .view-groups-my-groups-listing ul li { clear:left;}
 .view-groups-my-groups-listing .views-field-field-group-image-fid {float: left; margin-right:15px;}
-.view-groups-my-groups-listing .views-field-description {float: left; width: 600px;}
+.view-groups-my-groups-listing .views-field-description {float: left; width: 60%;}
 .view-groups-my-groups-listing .views-field-leave-group {float:right;}
 
 .view-group-block-events-latest .views-field-field-location-value,

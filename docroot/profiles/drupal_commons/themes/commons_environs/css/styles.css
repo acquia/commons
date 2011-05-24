@@ -35,11 +35,11 @@ h1.title {
   font-weight: bold;
   font-size: 22px;
   color: #736357;
-  margin: 0 0 8px 2px;
+  margin: 0 0 8px 14px;
 }
 
 .breadcrumbs {
-  margin-left: 5px;
+  margin-left: 15px;
 }
 
 h3 {
@@ -121,6 +121,21 @@ label {
 
 .header-region-inner form#user-login-form .item-list ul li.first {
   padding-top: 9px;
+}
+
+.header-region-inner form#user-login-form .form-item {
+  float: left;
+  margin-right: 15px;
+}
+
+.header-region-inner form#user-login-form div.item-list {
+  float: left;
+  margin: 10px 0 0 0;;
+}
+
+.header-region-inner form#user-login-form #edit-submit {
+  float: left;
+  margin: 22px 15px 0 0 ;
 }
 
 #search-box {
@@ -392,6 +407,16 @@ label {
 
 .view-homepage-group-showcase .views-row {
   border: none;
+  overflow: hidden;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 12px;
+}
+
+.view-homepage-group-showcase .views-row-last {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
 }
 
 .front .panel-pane {
@@ -464,27 +489,30 @@ label {
 .content-content {
   background: #fff;
   padding: 10px;
-  -moz-border-radius: 0 16px 16px 16px;
-  -webkit-border-radius: 0 16px 16px 16px;
-  border-radius: 0 16px 16px 16px;
+  -moz-border-radius: 16px;
+  -webkit-border-radius: 16px;
+  border-radius: 16px;
   border: 2px solid #fbb03b;
   overflow: hidden;
 }
 
 .page-dashboard .content-content {
   background: none;
-  padding: 10px;
+  padding: 0 10px 10px 10px;
   -moz-border-radius: 0;
   -webkit-border-radius: 0;
   border-radius: 0;
   border: none;
 }
 
+.page-dashboard h1.title, .page-dashboard #breadcrumbs {
+  display: none;
+}
+
 #content-content.top-left-straight {
-  -moz-border-radius: 0 9px 9px 9px;
-  -webkit-border-radius: 0 9px 9px 9px;
-  border-radius: 0 9px 9px 9px;
-  overflow: hidden;
+  -moz-border-radius: 0 16px 16px 16px;
+  -webkit-border-radius: 0 16px 16px 16px;
+  border-radius: 0 16px 16px 16px;
 }
 
 .front .content-content {
@@ -538,7 +566,7 @@ label {
 }
 
 form input.form-submit, .views-exposed-form .views-exposed-widget input.form-submit {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: bold;
   color: #fff;
   text-transform: uppercase;
@@ -566,6 +594,7 @@ form input.form-submit, .views-exposed-form .views-exposed-widget input.form-sub
 }
 
 #homebox-buttons {
+	margin: 0 0 5px 2px;
 }
 
 button, #homebox-buttons button {
@@ -614,13 +643,14 @@ button, #homebox-buttons button {
   width: auto;
 }
 
-/*#homebox .homebox-column-wrapper-1 .homebox-portlet, #homebox .homebox-column-wrapper-3 .homebox-portlet {
-  width: 80%
-}
+/*#homebox .homebox-column-wrapper-1 .homebox-portlet, #homebox
+ * .homebox-column-wrapper-3 .homebox-portlet {
+ width: 80%
+ }
 
-#homebox .homebox-column-wrapper-2 .homebox-portlet {
-  width: 90%
-}*/
+ #homebox .homebox-column-wrapper-2 .homebox-portlet {
+ width: 90%
+ }*/
 
 #homebox .homebox-portlet .homebox-portlet-inner {
   border: none;
@@ -727,12 +757,17 @@ button, #homebox-buttons button {
 .front .views-field-field-group-image-fid {
   float: left;
   width: 152px;
-  margin-top: 5px;
+  margin-top: 0px;
   margin-right: 10px;
 }
 
 .front div.views-field-title {
   font-weight: bold;
+}
+
+.view-homepage-group-showcase .views-field-title {
+  font-size: 16px;
+  margin-bottom: 8px;
 }
 
 /*cols-1 table on home page for groups */
@@ -751,6 +786,18 @@ button, #homebox-buttons button {
 
 html.js fieldset.collapsible .fieldset-wrapper {
   overflow: hidden !important;
+}
+
+.views-exposed-form .views-exposed-widget .form-submit {
+  margin: 0px;
+}
+
+html.js fieldset.collapsed {
+  margin-bottom: 0px;
+}
+
+#views-bulk-operations-submit {
+  padding: 0;
 }
 
 /*------------------------------------------
@@ -895,15 +942,36 @@ span.heartbeat_times img {
 }
 
 .not-front .views-field-leave-group, .not-front .views-field-subscribe {
-  position: absolute;
-  top: 0px;
-  right: 0px;
   float: right;
-  margin: 0 10px 0 0;
+  margin: 0 10px 10px 10px;
   padding: 0;
+  background: #8bc558;
+  -moz-box-shadow: inset -2px -2px 0px 1px #008f4e;
+  -webkit-box-shadow: inset -2px -2px 0px 1px #008f4e;
+  box-shadow: inset -2px -2px 0px 1px #008f4e;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  padding: 6px 7px 9px 7px;
+  line-height: normal;
+  height: auto;
+  font-family: Arial, "Lucida Grande", Verdana, sans-serif;
+  border: none;
+}
+
+.not-front .views-field-leave-group a, .not-front .views-field-subscribe a {
+  color: #fff;
+  text-decoration: none;
 }
 
 /*end groups page leave/join button style*/
+
+.not-front .view-groups-newest-groups .views-field-description {
+  margin-left: 40px;
+}
 
 /*blog posts create blog entry pod*/
 #edit-node-type-wrapper {
@@ -1099,3 +1167,16 @@ ul.pager a, ul.pager li.pager-current {
 .view .view-content .item-list li.views-row-last {
   border-bottom: none;
 }
+
+/* group block listings 
+.views-field-title, .views-field-members-count, .views-field-posts-count {
+  margin-left: 40px;
+}*/
+
+/* Featured content block on home page.
+ * This is a bit of a hack by Jay (a non-themer) to make this block have text line up correctly.
+ * TNT should fix this the "right" way at some point.
+ */
+.view-homepage-recent-featured .views-field-created,
+.view-homepage-recent-featured .views-field-name {float: right; width: 210px;}
+

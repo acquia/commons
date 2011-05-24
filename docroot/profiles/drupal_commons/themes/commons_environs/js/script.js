@@ -22,4 +22,8 @@ $(document).ready(function(){
       /*$(this).wrapInner('<span/>');*/
     }
   });
+  
+  if($('#content-group').siblings('#content-tabs').length > 0){
+    $('#content-content').addClass('top-left-straight');
+  }
 });

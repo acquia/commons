@@ -84,7 +84,7 @@
 }
 
 #primary-menu-inner {
-  margin-left: 0;
+  margin-left: 0px;
 }
 
 /* styles for Superfish primary menu */
@@ -235,6 +235,21 @@
   width: 30px;
 }
 
+/* User profile about page */
+.view-profile-about-page label {
+  font-weight: bold;
+  background: #f2f2f2;
+  padding: 5px;
+  display: inline-block;
+  border-bottom: 1px solid #ddd;
+  width: 30%;
+}
+
+.view-profile-about-page span.field-content {
+  padding-left: 5px;
+  display: inline-block;
+}
+
 /* Tab Menus   TODO: tab styles?/-------------------------------------------------------------- */
 
 #content-tabs {
@@ -327,9 +342,56 @@ h1 + #content-tabs {
   margin: 0 10px 10px 0;
 }
 
-/* Used in heartbeat */
-.heartbeat-block .heartbeat-message-block {
-  border-bottom: 1px solid #CCCCCC;
+/* Heartbeat Module */
+
+.heartbeat-message-block .beat-item .heartbeat-buttons {
+	display: none;
+}
+
+.heartbeat-message-block .beat-item:hover .heartbeat-buttons {
+	background-color: #eee;
+	display: block;
+	position: absolute;
+	right:0px;
+}
+
+.heartbeat-message-block .beat-item:after {
+	clear: both;
+	content: ".";
+	display: block;
+	height: 0;
+	visibility: hidden;
+}
+
+.heartbeat-message-block .beat-item .beat-item-info {
+	float: left;
+	padding-right: 10px;
+	width: 50px;
+	line-height: 1em;
+}
+
+.heartbeat-message-block .beat-item .beat-item-info a {
+	color: #323232;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 9px;
+	font-style: normal;
+	line-height: 1em;	
+}
+
+.heartbeat-message-block .beat-item .beat-item-info img {
+	display: block;
+}
+
+.heartbeat-older-messages {
+	font-size: 1em;
+	margin: 0;
+	text-align: right;
+}
+
+div.beat-item blockquote {
+	background-image: none;
+	font-style: italic;
+	padding: 0;
 }
 
 /* event calendar icon */
@@ -387,5 +449,18 @@ h1 + #content-tabs {
   margin: 0 10px 10px 0;
 }
 
-.view-groups-main-listing .view-content .item-list ul li .views-field-field-group-image-fid { float:left; width:68px; margin-right:10px;}
-.view-groups-main-listing .view-content .item-list ul li .views-field-field-group-image-fid img { width:66px; height:66px; border:solid 1px #c2c2c2;}
+.view-groups-main-listing .view-content .item-list ul li .views-field-field-group-image-fid {
+  float:left;
+  width:68px;
+  margin-right:10px;
+}
+
+.view-groups-main-listing .view-content .item-list ul li .views-field-field-group-image-fid img {
+  width:66px;
+  height:66px;
+  border:solid 1px #c2c2c2;
+}
+
+.view-groups-most-active .views-field-title, .view-groups-most-active .views-field-members-count, .view-groups-most-active .views-field-posts-count {
+  margin-left: 40px;
+}
