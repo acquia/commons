@@ -342,9 +342,56 @@ h1 + #content-tabs {
   margin: 0 10px 10px 0;
 }
 
-/* Used in heartbeat */
-.heartbeat-block .heartbeat-message-block {
-  border-bottom: 1px solid #CCCCCC;
+/* Heartbeat Module */
+
+.heartbeat-message-block .beat-item .heartbeat-buttons {
+	display: none;
+}
+
+.heartbeat-message-block .beat-item:hover .heartbeat-buttons {
+	background-color: #eee;
+	display: block;
+	position: absolute;
+	right:0px;
+}
+
+.heartbeat-message-block .beat-item:after {
+	clear: both;
+	content: ".";
+	display: block;
+	height: 0;
+	visibility: hidden;
+}
+
+.heartbeat-message-block .beat-item .beat-item-info {
+	float: left;
+	padding-right: 10px;
+	width: 50px;
+	line-height: 1em;
+}
+
+.heartbeat-message-block .beat-item .beat-item-info a {
+	color: #323232;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 9px;
+	font-style: normal;
+	line-height: 1em;	
+}
+
+.heartbeat-message-block .beat-item .beat-item-info img {
+	display: block;
+}
+
+.heartbeat-older-messages {
+	font-size: 1em;
+	margin: 0;
+	text-align: right;
+}
+
+div.beat-item blockquote {
+	background-image: none;
+	font-style: italic;
+	padding: 0;
 }
 
 /* event calendar icon */
