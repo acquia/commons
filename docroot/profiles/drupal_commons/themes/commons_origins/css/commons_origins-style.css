@@ -2186,6 +2186,9 @@ height: 0;
 visibility: hidden;
 }
 
+/* Newest group sidebar block view */
+.not-front .view-groups-newest-groups .views-field-description { margin-left: 40px;}
+
 /*featured groups slideshow*/
 
 #block-views-groups_featured_groups-block_1 h2.block-title {
@@ -3079,6 +3082,10 @@ margin: 0px 10px 10px;
 	font-style: italic;
 }
 
+/* This is a bit of a hack by Jay (a non-themer) to make this block have text line up correctly.  TNT should fix this the "right" way at some point. */
+.view-homepage-recent-featured .views-field-created,
+.view-homepage-recent-featured .views-field-name {float: right; width: 218px;}
+
 .view-content-global-documents .views-field-field-file-fid .filefield-file,
 .view-content-global-documents .views-field-field-file-fid .filefield-file a {
 	margin-right: 10px;
@@ -3207,58 +3214,6 @@ a.feed-icon img {
 
 .block .view-most-active-users td.views-field-picture {
 	width: auto;
-}
-
-/* Heartbeat Module */
-
-.heartbeat-message-block .beat-item .heartbeat-buttons {
-	display: none;
-}
-
-.heartbeat-message-block .beat-item:hover .heartbeat-buttons {
-	background-color: #eee;
-	display: block;
-	position: absolute;
-}
-
-.heartbeat-message-block .beat-item:after {
-	clear: both;
-	content: ".";
-	display: block;
-	height: 0;
-	visibility: hidden;
-}
-
-.heartbeat-message-block .beat-item .beat-item-info {
-	float: left;
-	padding-right: 10px;
-	width: 50px;
-	line-height: 1em;
-}
-
-.heartbeat-message-block .beat-item .beat-item-info a {
-	color: #323232;
-	font-family: Tahoma, Verdana, sans-serif;
-	font-size: 9px;
-	font-style: normal;
-	line-height: 1em;
-}
-
-.heartbeat-message-block .beat-item .beat-item-info img {
-	display: block;
-}
-
-.heartbeat-older-messages {
-	font-size: 1em;
-	font-weight: bold;
-	margin: 0;
-	text-align: right;
-}
-
-div.beat-item blockquote {
-	background-image: none;
-	font-style: italic;
-	padding: 0;
 }
 
 .views-field-subscribe a, .views-field-leave-group a, .views-field-subscribe a, .views-field-leave-group a,
