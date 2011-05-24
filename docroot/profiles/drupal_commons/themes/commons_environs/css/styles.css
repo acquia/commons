@@ -498,11 +498,15 @@ label {
 
 .page-dashboard .content-content {
   background: none;
-  padding: 10px;
+  padding: 0 10px 10px 10px;
   -moz-border-radius: 0;
   -webkit-border-radius: 0;
   border-radius: 0;
   border: none;
+}
+
+.page-dashboard h1.title, .page-dashboard #breadcrumbs {
+  display: none;
 }
 
 #content-content.top-left-straight {
@@ -590,7 +594,7 @@ form input.form-submit, .views-exposed-form .views-exposed-widget input.form-sub
 }
 
 #homebox-buttons {
-	margin-left: 2px;
+	margin: 0 0 5px 2px;
 }
 
 button, #homebox-buttons button {
