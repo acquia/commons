@@ -78,11 +78,6 @@ $curr_contexts = context_active_contexts();
       <div id="nav-group-wrapper" class="nav-group-wrapper full-width">
         <div id="nav-group" class="nav-group row <?php print $grid_width; ?>">
           <?php print theme('grid_block', $primary_links_tree, 'primary-menu'); ?>
-          <?php
-            if($curr_contexts['group-context']->name == 'group-context'){
-              print theme('grid_block', $tabs, 'content-tabs');
-            }
-          ?>
         </div>
       </div><!--/nav-group-->
      
@@ -103,6 +98,12 @@ $curr_contexts = context_active_contexts();
 
                 <div id="main-content" class="main-content row nested">
                   <div id="main-content-inner" class="main-content-inner inner">
+                    
+                    <?php if ($title && !$is_front): ?>
+                    <h1 class="title"><?php print $title; ?></h1>
+                    <?php endif; ?>
+                    <?php print theme('grid_block', $breadcrumb, 'breadcrumbs'); ?>  
+                    <?php print theme('grid_block', $tabs, 'content-tabs'); ?>
                     <!-- content group: width = grid_width - (sidebar_first_width + sidebar_last_width) -->
                     <div id="content-group" class="content-group row nested <?php print $content_group_width; ?>">
                       <div id="content-group-inner" class="content-group-inner inner">
@@ -121,18 +122,9 @@ $curr_contexts = context_active_contexts();
                         <div id="content-region" class="content-region row nested">
                           <div id="content-region-inner" class="content-region-inner inner">
                             <a name="main-content-area" id="main-content-area"></a>
-
+                                
                             <div id="content-inner" class="content-inner block">
                               <div id="content-inner-inner" class="content-inner-inner inner">
-                            <?php if ($title && !$is_front): ?>
-                                <h1 class="title"><?php print $title; ?></h1>
-                                <?php endif; ?>
-                                  <?php print theme('grid_block', $breadcrumb, 'breadcrumbs'); ?>  
-                                  <?php 
-                                    if($curr_contexts['group-context']->name != 'group-context'){
-                                      print theme('grid_block', $tabs, 'content-tabs'); 
-                                    }
-                                  ?>
                                 <?php if ($content): ?>
                                 <div id="content-content" class="content-content">
                                   <?php print $content; ?>

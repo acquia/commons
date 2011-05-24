@@ -185,11 +185,18 @@
 .node .inner ul li,
 .panel-pane .inner ul li,
 .block .content ul li {
+  border: none;
   list-style-image: none;
   list-style: none;
-  margin: 0 0 8px 0;
-  padding: 0 0 0 22px;
+  margin: 0 0 0px 0;
+  padding: 0 0 0 0px;
   text-indent: 0;
+  display: block !important;
+}
+
+/* User page - Find new friends block*/
+.block#block-commons_profile-find_new_friends {
+	overflow: visible;
 }
 
 /* Blocks */
@@ -221,17 +228,12 @@
   clear: both;
 }
 
-.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-field-group-image-fid, .sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-picture {
+.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-field-group-image-fid, .sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-picture,
+.sidebar-last .block-views .content .view .view-content .views-row .views-field-picture {
   float: left;
   margin-right: 10px;
   width: 30px;
 }
-
-.view-groups-most-active .views-field-title, .view-groups-most-active .views-field-members-count, .view-groups-most-active .views-field-posts-count {
-  float: right;
-  width: 180px;
-}
-
 
 /* Tab Menus   TODO: tab styles?/-------------------------------------------------------------- */
 
@@ -362,3 +364,28 @@ h1 + #content-tabs {
 }
 .dateblock .year { display:none; }
 
+.submitted img.imagecache-user_picture_meta {
+  float: left;
+  margin: 0.5em 1em 0 0;
+}
+
+.submitted .user_badges {
+  display: inline-block;
+  padding: 0 0 0 2px;
+}
+
+.submitted .user_badges img {
+  vertical-align: middle;
+}
+
+.submitted .submitted-on {
+  display: block;
+}
+
+.view .view-content .item-list li.views-row .views-field-picture {
+  float: left;
+  margin: 0 10px 10px 0;
+}
+
+.view-groups-main-listing .view-content .item-list ul li .views-field-field-group-image-fid { float:left; width:68px; margin-right:10px;}
+.view-groups-main-listing .view-content .item-list ul li .views-field-field-group-image-fid img { width:66px; height:66px; border:solid 1px #c2c2c2;}

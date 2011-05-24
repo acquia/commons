@@ -13,65 +13,6 @@ function commons_connect_breadcrumb($breadcrumb) {
   }
 }
 
-
-
-/**
- * Node preprocessing
- */
-function commons_connect_preprocess_node(&$vars) {
-  // Only build custom submitted information if it was first available
-  // If it's not, that indicates that it's been turned off for this
-  // node type
-  if ($vars['submitted']) {
-    // Load the node author
-    $author = user_load($vars['node']->uid);
-  
-    // Author picture
-    if (theme_get_setting('toggle_node_user_picture')) {
-      $picture = $vars['picture'];
-      unset($vars['picture']);
-      $submitted = ($author->uid && user_access('access user profiles')) ? l($picture, "user/{$author->uid}", array('html' => TRUE)) : $picture;
-    }
-    
-    // Author information
-    $submitted .= '<span class="submitted-by">';
-    $submitted .= t('Submitted by !name', array('!name' => theme('username', $author)));
-    $submitted .= '</span>';
-    
-    // User points
-    if ($author->uid && module_exists('userpoints')) {
-      $points = userpoints_get_current_points($author->uid);
-      $submitted .= '<span class="userpoints-value" title="' . t('!val user points', array('!val' => $points)) . '">';
-      $submitted .= "({$points})"; 
-      $submitted .= '</span>';
-    }
-    
-    // User badges
-    if ($author->uid && module_exists('user_badges')) {
-      if (is_array($author->badges)) {
-        foreach ($author->badges as $badge) {
-          $badges[] = theme('user_badge', $badge, $author);
-        }
-      }
-    
-      if (!empty($badges)) {
-        $submitted .= theme('user_badge_group', $badges);
-      }
-    }
-    
-    // Created time
-    $submitted .= '<span class="submitted-on">';
-    $submitted .= format_date($vars['node']->created);
-    $submitted .= '</span>';
-    
-    $vars['submitted'] = $submitted;
-	
-  
-  }
-}
-
-
-
 /**
  * Page preprocessing
  */
