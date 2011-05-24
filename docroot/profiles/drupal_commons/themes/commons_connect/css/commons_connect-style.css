@@ -221,6 +221,9 @@ Works well with inline login or inline menu block style */
 
 /*user login form if it is in the Header region */
 
+/*Note: This next line seems to be commons-specific, and doesn't leverage the CSS that follows for user login form. It's a temporary fix until we sort this out.*/
+#header-region-inner #block-commons_core-header_login { margin-top: 20px;}
+
 .header-region-inner .block-user form,
 .header-region-inner form#user-login-form {
 	/*min-width: 420px;*/
@@ -3294,7 +3297,7 @@ a.feed-icon img {
 	float: right;
 	width: 180px;
   font-family: /*"Helvetical Neue",Helvetica,Arial,Sans-serif*/Arial, Helvetica, sans-serif;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 .view-user-meta .views-field-name span {
