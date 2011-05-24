@@ -3938,7 +3938,7 @@ function commons_event_views_default_views() {
       'fromto' => array(
         'fromto' => 'both',
       ),
-      'exclude' => 1,
+      'exclude' => 0,
       'id' => 'field_date_value',
       'table' => 'node_data_field_date',
       'field' => 'field_date_value',
