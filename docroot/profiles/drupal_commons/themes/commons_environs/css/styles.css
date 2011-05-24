@@ -538,7 +538,7 @@ label {
 }
 
 form input.form-submit, .views-exposed-form .views-exposed-widget input.form-submit {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: bold;
   color: #fff;
   text-transform: uppercase;
@@ -751,6 +751,18 @@ button, #homebox-buttons button {
 
 html.js fieldset.collapsible .fieldset-wrapper {
   overflow: hidden !important;
+}
+
+.views-exposed-form .views-exposed-widget .form-submit {
+	margin: 0px;
+}
+
+html.js fieldset.collapsed {
+	margin-bottom: 0px;
+}
+
+#views-bulk-operations-submit {
+	padding: 0;
 }
 
 /*------------------------------------------
