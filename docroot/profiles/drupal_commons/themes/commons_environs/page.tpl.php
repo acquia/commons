@@ -80,8 +80,14 @@ $curr_contexts = context_active_contexts();
           <?php print theme('grid_block', $primary_links_tree, 'primary-menu'); ?>
         </div>
       </div><!--/nav-group-->
-     
-
+      
+      <?php if ($help || $messages): ?>
+        <div class="row <?php print $grid_width; ?>">
+          <?php print theme('grid_block', $help, 'content-help');?>
+          <?php print theme('grid_block', $messages, 'content-messages');?>
+        </div>
+      <?php endif;?>
+      
       <!-- preface-top row: width = grid_width -->
       <?php print theme('grid_row', $preface_top, 'preface-top', 'full-width', $grid_width); ?>
 
@@ -109,11 +115,9 @@ $curr_contexts = context_active_contexts();
                       <div id="content-group-inner" class="content-group-inner inner">
                     
 
-                        <?php if ($content_top || $help || $messages): ?>
+                        <?php if ($content_top): ?>
                         <div id="content-top" class="content-top row nested">
                           <div id="content-top-inner" class="content-top-inner inner">
-                            <?php print theme('grid_block', $help, 'content-help'); ?>
-                            <?php print theme('grid_block', $messages, 'content-messages'); ?>
                             <?php print $content_top; ?>
                           </div><!-- /content-top-inner -->
                         </div><!-- /content-top -->
