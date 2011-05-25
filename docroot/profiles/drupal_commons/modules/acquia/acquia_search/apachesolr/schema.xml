@@ -10,7 +10,7 @@
  http://wiki.apache.org/solr/SchemaXml
 -->
 
-<schema name="drupal-1.3" version="1.2">
+<schema name="drupal-1.4" version="1.2">
     <!-- attribute "name" is the name of this schema and is only used for display purposes.
          Applications should change this to reflect the nature of the search collection.
          version="1.2" is Solr's version number for the schema syntax and semantics.  It should
@@ -415,20 +415,7 @@
         Alternately, change the type="ignored" to some other type e.g. "text" if you want
         unknown fields indexed and/or stored by default -->
    <dynamicField name="*" type="ignored" multiValued="true" />
-   
-   
-   
-   <!-- BACKWARDS COMPATIBILITY -->
-   <!-- Here is where we store fields which are no longer used -->
-   
-   <!-- Fields previously used for sorting -->
-   <field name="stitle" type="string" indexed="true" stored="true"/>
-   <field name="title_sort" type="sortString" indexed="true" stored="false"/>
 
-   <field name="name_sort" type="sortString" indexed="true" stored="false"/>
-    
-    
-   <!-- /BACKWARDS COMPATIBILITY -->
  </fields>
 
  <!-- Field to use to determine and enforce document uniqueness.

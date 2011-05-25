@@ -46,7 +46,7 @@ function apachesolr_drush_command() {
     // the name of the function implementing your command.
     'callback' => 'apachesolr_drush_solr_index',
     // a short description of your command
-    'description' => dt('Reindexes content marked for (re)indexing.'),
+    'description' => dt('Send to Solr content marked for (re)indexing. Same as running cron once but without the other overhead.'),
   );
   $items['solr-search'] = array(
     'callback' => 'apachesolr_drush_solr_search',
@@ -77,7 +77,7 @@ function apachesolr_drush_help($section) {
     case 'drush:solr-reindex':
       return dt("Used without parameters, this command marks all of the content in the Solr index for reindexing. Used with paramters for content type, it marks just the content types that are specified. Reindexing is different than deleting as the content is still searchable while it is in queue to be reindexed. Reindexing is done on future cron runs.");
     case 'drush:solr-index':
-      return dt("Reindexes content marked for (re)indexing. If you want to reindex all content or content of a specific type, use solr-reindex first to mark that content.");
+      return dt("Sends to Solr content marked for (re)indexing, as if cron ran once. If you want to reindex all content or content of a specific type, use solr-reindex first to mark that content.");
     case 'drush:solr-search':
       return dt('Executes a search against the site\'s Apache Solr search index and returns the restults.');
   }
@@ -120,9 +120,11 @@ function apachesolr_drush_solr_reindex() {
 }
 
 function apachesolr_drush_solr_index() {
-  module_load_include('inc', 'apachesolr', 'apachesolr.admin');
-  apachesolr_batch_index_remaining();
-  drush_backend_batch_process();
+  $cron_limit = variable_get('apachesolr_cron_limit', 50);
+  $rows = apachesolr_get_nodes_to_index('apachesolr_search', $cron_limit);
+  apachesolr_index_nodes($rows, 'apachesolr_search');
+  $count = count($rows);
+  drush_print("{$count} nodes were sent to Solr.");
 }
 
 function apachesolr_drush_solr_search() {
