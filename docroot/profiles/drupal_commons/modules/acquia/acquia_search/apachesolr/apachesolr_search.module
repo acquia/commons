@@ -265,7 +265,7 @@ function apachesolr_search_highlighting_params($query) {
   $params['hl.simple.pre'] = variable_get('apachesolr_hl_pretag', NULL);
   $params['hl.simple.post'] = variable_get('apachesolr_hl_posttag', NULL);
   $params['hl.snippets'] = variable_get('apachesolr_hl_numsnippets', NULL);
-  $params['hl.fl'] = variable_get('apachesolr_hl_fieldtohightlight', NULL);
+  $params['hl.fl'] = variable_get('apachesolr_hl_fieldtohighlight', NULL);
   return $params;
 }
 
@@ -867,7 +867,11 @@ function apachesolr_search_form_search_theme_form_alter(&$form, $form_state) {
  */
 function apachesolr_search_form_search_block_form_alter(&$form, $form_state) {
   if (variable_get('apachesolr_search_make_default', 0)) {
-    $form['#action'] = url('search/apachesolr_search');
+    $item = menu_get_item();
+    // Avoid double searches when already on a search page.
+    if ($item['path'] == 'search/apachesolr_search/%') {
+      $form['#action'] = url('search/apachesolr_search');
+    }
     if (!isset($form['#submit'])) {
       $form['#submit'] = array('apachesolr_search_search_box_form_submit');
     }

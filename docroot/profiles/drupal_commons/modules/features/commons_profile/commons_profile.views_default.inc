@@ -527,8 +527,8 @@ function commons_profile_views_default_views() {
       ),
       'relationship' => 'none',
     ),
-    'value_3' => array(
-      'label' => 'My interests',
+    'value_5' => array(
+      'label' => 'Organization',
       'alter' => array(
         'alter_text' => 0,
         'text' => '',
@@ -550,17 +550,18 @@ function commons_profile_views_default_views() {
       'empty' => '',
       'hide_empty' => 1,
       'empty_zero' => 0,
+      'link_to_user' => 0,
       'exclude' => 0,
-      'id' => 'value_3',
-      'table' => 'profile_values_profile_interests',
+      'id' => 'value_5',
+      'table' => 'profile_values_profile_organization',
       'field' => 'value',
       'relationship' => 'none',
       'override' => array(
         'button' => 'Override',
       ),
     ),
-    'value' => array(
-      'label' => 'About me',
+    'value_4' => array(
+      'label' => 'Job title',
       'alter' => array(
         'alter_text' => 0,
         'text' => '',
@@ -582,13 +583,45 @@ function commons_profile_views_default_views() {
       'empty' => '',
       'hide_empty' => 1,
       'empty_zero' => 0,
+      'link_to_user' => 0,
       'exclude' => 0,
-      'id' => 'value',
-      'table' => 'profile_values_profile_aboutme',
+      'id' => 'value_4',
+      'table' => 'profile_values_profile_job',
       'field' => 'value',
+      'relationship' => 'none',
       'override' => array(
         'button' => 'Override',
       ),
+    ),
+    'created' => array(
+      'label' => 'Member for',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'date_format' => 'raw time ago',
+      'custom_date_format' => '',
+      'exclude' => 0,
+      'id' => 'created',
+      'table' => 'users',
+      'field' => 'created',
       'relationship' => 'none',
     ),
     'value_9' => array(
@@ -690,8 +723,8 @@ function commons_profile_views_default_views() {
       ),
       'relationship' => 'none',
     ),
-    'value_4' => array(
-      'label' => 'Job title',
+    'value_3' => array(
+      'label' => 'My interests',
       'alter' => array(
         'alter_text' => 0,
         'text' => '',
@@ -713,18 +746,17 @@ function commons_profile_views_default_views() {
       'empty' => '',
       'hide_empty' => 1,
       'empty_zero' => 0,
-      'link_to_user' => 0,
       'exclude' => 0,
-      'id' => 'value_4',
-      'table' => 'profile_values_profile_job',
+      'id' => 'value_3',
+      'table' => 'profile_values_profile_interests',
       'field' => 'value',
       'relationship' => 'none',
       'override' => array(
         'button' => 'Override',
       ),
     ),
-    'value_5' => array(
-      'label' => 'Organization',
+    'value' => array(
+      'label' => 'About me',
       'alter' => array(
         'alter_text' => 0,
         'text' => '',
@@ -746,45 +778,13 @@ function commons_profile_views_default_views() {
       'empty' => '',
       'hide_empty' => 1,
       'empty_zero' => 0,
-      'link_to_user' => 0,
       'exclude' => 0,
-      'id' => 'value_5',
-      'table' => 'profile_values_profile_organization',
+      'id' => 'value',
+      'table' => 'profile_values_profile_aboutme',
       'field' => 'value',
-      'relationship' => 'none',
       'override' => array(
         'button' => 'Override',
       ),
-    ),
-    'created' => array(
-      'label' => 'Member for',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'date_format' => 'raw time ago',
-      'custom_date_format' => '',
-      'exclude' => 0,
-      'id' => 'created',
-      'table' => 'users',
-      'field' => 'created',
       'relationship' => 'none',
     ),
   ));
@@ -1070,12 +1070,12 @@ function commons_profile_views_default_views() {
   ));
   $handler->override_option('title', 'Friends');
   $handler->override_option('use_ajax', TRUE);
-  $handler->override_option('items_per_page', 9);
+  $handler->override_option('items_per_page', 12);
   $handler->override_option('use_pager', 'mini');
   $handler->override_option('style_plugin', 'grid');
   $handler->override_option('style_options', array(
     'grouping' => '',
-    'columns' => '3',
+    'columns' => '4',
     'alignment' => 'horizontal',
     'fill_single_line' => 1,
   ));

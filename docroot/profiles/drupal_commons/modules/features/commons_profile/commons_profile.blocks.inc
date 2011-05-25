@@ -68,22 +68,8 @@ function _commons_profile_image_links_block_view() {
   global $user;
   
   // Make sure we're viewing a user
-  if (arg(0) == 'user') {
-    // If the user is not logged in, check that a profile is being viewed 
-    if ((!$user->uid && !is_numeric(arg(1))) || (arg(1) && !is_numeric(arg(1)))) {
-      return NULL;
-    }
-  }
-  
-  // Attempt to load the user being viewed, if we need to
-  if ($user->uid != arg(1)) {
-    if (!($account = user_load(arg(1)))) {
-      // If we can't load, then quit
-      return NULL;
-    }
-  }
-  else {
-    $account = drupal_clone($user);
+  if (!($account = _commons_profile_get_current_user())) {
+    return NULL;
   }
   
   // Fetch the profile image

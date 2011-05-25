@@ -7,6 +7,7 @@
 
 define('APACHESOLR_READ_WRITE', 0);
 define('APACHESOLR_READ_ONLY', 1);
+define('APACHESOLR_API_VERSION', '1.0');
 
 /**
  * Implementation of hook_init().
@@ -1528,7 +1529,7 @@ function apachesolr_field_name_map($field_name) {
 }
 
 /**
- * Invokes hook_apachesolr_cck_field_mappings to find out how to handle CCK fields.
+ * Invokes hook_apachesolr_cck_fields_alter() to find out how to handle CCK fields.
  */
 function apachesolr_cck_fields() {
   static $fields;

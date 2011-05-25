@@ -2876,6 +2876,40 @@ function commons_core_views_default_views() {
       ),
       'relationship' => 'none',
     ),
+    'timestamp' => array(
+      'label' => '',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'link_to_node' => 0,
+      'comments' => 1,
+      'exclude' => 0,
+      'id' => 'timestamp',
+      'table' => 'history_user',
+      'field' => 'timestamp',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
     'name' => array(
       'label' => 'by',
       'alter' => array(
@@ -2906,40 +2940,6 @@ function commons_core_views_default_views() {
       'id' => 'name',
       'table' => 'users',
       'field' => 'name',
-      'override' => array(
-        'button' => 'Override',
-      ),
-      'relationship' => 'none',
-    ),
-    'timestamp' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'link_to_node' => 0,
-      'comments' => 1,
-      'exclude' => 0,
-      'id' => 'timestamp',
-      'table' => 'history_user',
-      'field' => 'timestamp',
       'override' => array(
         'button' => 'Override',
       ),
@@ -3003,6 +3003,14 @@ function commons_core_views_default_views() {
   $handler->override_option('style_options', array(
     'grouping' => '',
     'type' => 'ul',
+  ));
+  $handler->override_option('row_options', array(
+    'inline' => array(
+      'title' => 'title',
+      'timestamp' => 'timestamp',
+    ),
+    'separator' => '',
+    'hide_empty' => 0,
   ));
   $handler->override_option('block_description', 'Most bookmarked');
   $handler->override_option('block_caching', -1);
