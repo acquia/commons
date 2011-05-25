@@ -2232,8 +2232,13 @@ div.joinnow-button a {
 	line-height: 18px;
 	margin: 0 0 4px;
 	padding: 2px 2px;
-	width: 99%;
-  max-width: 99%;
+/* These next two lines SHOULD inherit 95% from Commons Roots, but I (Jay) can't
+ * figure out how to shift the Submit button below it to the left (which would
+ * be needed with the narrower width. I also adjusted the width to fix the too-wide
+ * input field.
+ */
+	width: 97%;
+	max-width: 97%;
 }
 
 .page-home .shoutbox-add-form input.form-text {
@@ -2926,6 +2931,23 @@ div#block-og_views-0 h2.title {
 #views-exposed-form-og-search-default .views-exposed-widget.views-exposed-submit {
 	max-width: none;
 	width: auto;
+/* The Submit button here should inherit float:right from Roots; but it doesn't and
+ * I don't have time to sort out why. So this forces the float, and adds a couple of
+ * px of margin to make the right side of the button line up with the right of the
+ * text field.
+ * -jb
+ */
+	float: right;
+	margin-right: 2px;
+}
+
+
+/* Again, this should come from Roots somehow, but it comes in un-aligned with the Group Search block
+ * so this forces the search text field to be wider
+ * -jay
+ */
+#views-exposed-form-og-search-default input#edit-keys.form-text {
+  width: 95%;
 }
 
 #views-exposed-form-og-search-default .views-exposed-widget.views-exposed-submit .form-submit,
