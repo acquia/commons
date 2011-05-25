@@ -583,10 +583,7 @@ form input.form-submit, .views-exposed-form .views-exposed-widget input.form-sub
   height: auto;
   font-family: Arial, "Lucida Grande", Verdana, sans-serif;
 }
-
-#views-exposed-form-og-search-default .views-exposed-widget.views-exposed-submit .form-submit, #views-exposed-form-og-search-page-1 .views-exposed-widget.views-exposed-submit .form-submit {
-  padding: 6px 7px 9px 7px;
-}
+/* moved OG search field & button to Roots to generalize it -jay */
 
 /* dashboard */
 #homebox {
@@ -1196,3 +1193,15 @@ ul.pager a, ul.pager li.pager-current {
 .view-homepage-recent-featured .views-field-created,
 .view-homepage-recent-featured .views-field-name {float: right; width: 210px;}
 
+/* Somehow the Environs theme is handling the node type dropdown differently; it needs to have
+ * its width set differntly in order to get the dropdown to fill the space before the Create button.
+ * Plus, given the height of the Create button, some extra top margin is needed for the dropdown.
+ * -jay
+ */
+#edit-node-type-wrapper #edit-node-type {
+  width: 100%;
+}
+
+#edit-submit.form-submit {
+  margin: 9px 3px 0 0;
+}
