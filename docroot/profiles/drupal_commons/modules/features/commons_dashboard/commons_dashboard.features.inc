@@ -7,7 +7,7 @@ function commons_dashboard_homebox() {
   $homeboxes = array();
 
   $homeboxes['dashboard'] = array (
-    'regions' => 3,
+    'regions' => 2,
     'cache' => 0,
     'color' => 0,
     'colors' => 
@@ -25,42 +25,6 @@ function commons_dashboard_homebox() {
       array (
         'module' => 'views',
         'delta' => 'a63079788b0d983bea5a09b9eaa5671b',
-        'region' => 2,
-        'movable' => 1,
-        'status' => 1,
-        'open' => 1,
-        'closable' => 1,
-        'title' => '',
-        'weight' => -64,
-      ),
-      'heartbeat_connectedheartbeat' => 
-      array (
-        'module' => 'heartbeat',
-        'delta' => 'connectedheartbeat',
-        'region' => 2,
-        'movable' => 1,
-        'status' => 1,
-        'open' => 1,
-        'closable' => 1,
-        'title' => 'Recent activity',
-        'weight' => -64,
-      ),
-      'views_profile_user_groups-block_1' => 
-      array (
-        'module' => 'views',
-        'delta' => 'profile_user_groups-block_1',
-        'region' => 1,
-        'movable' => 1,
-        'status' => 1,
-        'open' => 1,
-        'closable' => 1,
-        'title' => '',
-        'weight' => -64,
-      ),
-      'views_my_recent_items-block_1' => 
-      array (
-        'module' => 'views',
-        'delta' => 'my_recent_items-block_1',
         'region' => 1,
         'movable' => 1,
         'status' => 1,
@@ -69,11 +33,35 @@ function commons_dashboard_homebox() {
         'title' => '',
         'weight' => -63,
       ),
-      'views_my_unread_items-block_1' => 
+      'views_recent_notices-block_1' => 
       array (
         'module' => 'views',
-        'delta' => 'my_unread_items-block_1',
+        'delta' => 'recent_notices-block_1',
+        'region' => 2,
+        'movable' => 1,
+        'status' => 1,
+        'open' => 1,
+        'closable' => 1,
+        'title' => '',
+        'weight' => -63,
+      ),
+      'heartbeat_connectedheartbeat' => 
+      array (
+        'module' => 'heartbeat',
+        'delta' => 'connectedheartbeat',
         'region' => 1,
+        'movable' => 1,
+        'status' => 1,
+        'open' => 1,
+        'closable' => 1,
+        'title' => 'Recent activity',
+        'weight' => -62,
+      ),
+      'views_users_online-block_1' => 
+      array (
+        'module' => 'views',
+        'delta' => 'users_online-block_1',
+        'region' => 2,
         'movable' => 1,
         'status' => 1,
         'open' => 1,
@@ -85,7 +73,7 @@ function commons_dashboard_homebox() {
       array (
         'module' => 'user_relationship_blocks',
         'delta' => 'user-1',
-        'region' => 1,
+        'region' => 2,
         'movable' => 1,
         'status' => 1,
         'open' => 1,
@@ -93,72 +81,59 @@ function commons_dashboard_homebox() {
         'title' => 'My friends',
         'weight' => -61,
       ),
-      'views_users_online-block_1' => 
-      array (
-        'module' => 'views',
-        'delta' => 'users_online-block_1',
-        'region' => 1,
-        'movable' => 1,
-        'status' => 1,
-        'open' => 1,
-        'closable' => 1,
-        'title' => '',
-        'weight' => -60,
-      ),
       'views_upcoming_events-block_2' => 
       array (
         'module' => 'views',
         'delta' => 'upcoming_events-block_2',
-        'region' => 3,
+        'region' => 2,
         'movable' => 1,
         'status' => 1,
-        'open' => 1,
+        'open' => 0,
         'closable' => 1,
         'title' => '',
-        'weight' => -64,
+        'weight' => -60,
       ),
-      'views_recent_notices-block_1' => 
+      'views_profile_user_groups-block_1' => 
       array (
         'module' => 'views',
-        'delta' => 'recent_notices-block_1',
-        'region' => 3,
+        'delta' => 'profile_user_groups-block_1',
+        'region' => 2,
         'movable' => 1,
         'status' => 1,
-        'open' => 1,
+        'open' => 0,
         'closable' => 1,
         'title' => '',
-        'weight' => -63,
-      ),
-      'views_most_active_users-block_1' => 
-      array (
-        'module' => 'views',
-        'delta' => 'most_active_users-block_1',
-        'region' => 3,
-        'movable' => 1,
-        'status' => 1,
-        'open' => 1,
-        'closable' => 1,
-        'title' => '',
-        'weight' => -62,
+        'weight' => -59,
       ),
       'og_3' => 
       array (
         'module' => 'og',
         'delta' => '3',
-        'region' => 3,
+        'region' => 2,
         'movable' => 1,
         'status' => 1,
         'open' => 1,
         'closable' => 1,
         'title' => '',
-        'weight' => -61,
+        'weight' => -58,
+      ),
+      'views_my_recent_items-block_1' => 
+      array (
+        'module' => 'views',
+        'delta' => 'my_recent_items-block_1',
+        'region' => 2,
+        'movable' => 1,
+        'status' => 1,
+        'open' => 0,
+        'closable' => 1,
+        'title' => '',
+        'weight' => -57,
       ),
     ),
     'widths' => 
     array (
-      1 => 25,
-      2 => 50,
-      3 => 25,
+      1 => 70,
+      2 => 30,
     ),
     'title' => 'Dashboard',
     'path' => 'dashboard',
