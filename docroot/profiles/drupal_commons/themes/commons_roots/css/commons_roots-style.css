@@ -2,6 +2,18 @@
   padding: 0;
 }
 
+/* @group Forms */
+
+#og-features-feature-form tr.odd .form-item, 
+#og-features-feature-form tr.even .form-item {
+  /* This overrides a system.css style that should always be knocked out.
+     I'm making this selector extemely specific to prevent destroying anything
+     that might rely on the white-space: nowrap declaration. Please make this
+     generic in future updates - jessebeach */
+  white-space: normal;
+}
+
+/* @end */
 
 /* Header Region which floats to the right of the site info */
 
