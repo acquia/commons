@@ -164,7 +164,7 @@ function apachesolr_node_to_document($nid, $namespace) {
 /**
  * Extract taxonomy from $node and add to dynamic fields.
  */
-function apachesolr_add_taxonomy_to_document(&$document, $node) {
+function apachesolr_add_taxonomy_to_document($document, $node) {
   static $ancestors = array();
   if (isset($node->taxonomy) && is_array($node->taxonomy)) {
     foreach ($node->taxonomy as $term) {
@@ -215,7 +215,7 @@ function apachesolr_vocab_name($vid) {
  *
  * $text must be stripped of control characters before hand.
  */
-function apachesolr_add_tags_to_document(&$document, $text) {
+function apachesolr_add_tags_to_document($document, $text) {
   $tags_to_index = variable_get('apachesolr_tags_to_index', array(
     'h1' => 'tags_h1',
     'h2' => 'tags_h2_h3',

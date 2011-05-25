@@ -54,14 +54,14 @@ function theme_commons_core_group_members_block($managers, $members, $link) {
   $content = '';
   if ($managers) {
     $content .= '<div class="group-managers-label">' . t('Managers:') . '</div>';
-    $content .= "<div class=\"group-managers\">$managers</div>";
+    $content .= '<div class="group-managers">' . $managers . '</div>';
   }
   if ($members) {
     $content .= '<div class="group-members-label">' . t('Recent members:') . '</div>';
-    $content .= "<div class=\"group-members\">$members</div>";
+    $content .= '<div class="group-members">' . $members . '</div>';
   }
   if ($link) {
-    $content .= "<div class=\"group-members-link\">$link</div>";
+    $content .= '<div class="group-members-link">' . $link . '</div>';
   }
   return $content;
 }

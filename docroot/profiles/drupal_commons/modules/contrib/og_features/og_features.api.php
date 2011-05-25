@@ -86,6 +86,24 @@ function hook_og_features_toggle($group, $disabled) {
 }
 
 /**
+ * Implementation of hook_og_features_disabled_alter()
+ * 
+ * Alter the list of disabled features for a given node upon
+ * loading them
+ * 
+ * @param &$disabled
+ *   The array of features disabled for the given group
+ * @param $group
+ *   The group being loaded
+ */
+function hook_og_features_disabled_alter(&$disabled, $group) {
+  // Force-enable a feature for a given group
+  if ($group->nid == SPECIAL_GROUP_ID) {
+    $disabled['special_feature'] = 'special_feature';
+  }
+}
+
+/**
  * USEFUL FUNCTIONS ===========================================
  * 
  * @see

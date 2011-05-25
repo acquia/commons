@@ -49,43 +49,48 @@ UPGRADING TO 1.6:
    remove or relocated!
 5. Update your site via /update.php
  - Ignore any errors about missing Panels files
-6. Navigate to the admin theme page (admin/build/themes)
+6. Make sure the Page manager module is disabled. Or, if you wish to continue
+  using it, delete any pages using the path "/home", the Node template, and
+  the User profile template, which may be leftover from a previous version 
+  of Commons.
+7. Navigate to the admin theme page (admin/build/themes)
  - Ensure that Fusion Core and Commons Roots (both base themes) are enabled
  - Ensure that at least one Commons-supported theme is enabled, and choose
    your desired default theme (if not already set)
- - The original Acquia Commons theme is not named Commons Origins
-7. View the status report (admin/reports/status) to see if there are any
+ - The original Acquia Commons theme is now named Commons Origins
+8. View the status report (admin/reports/status) to see if there are any
   errors to tend to
-8. Take the time to delete or disable any of the components listed at:
+9. Take the time to delete or disable any of the components listed at:
    http://commons.acquia.com/wiki/feature-components-removed-commons-16
   - This is extremely important!
   - Once done, navigate to all areas of your site, making sure there is 
     no remaining strange or duplicate behavior of any kind.
-9. Navigate to the Features admin page (admin/build/features)
+10. Navigate to the Features admin page (admin/build/features)
  - Determine which features are overridden
  - Click on the overridden link for each feature to review what the 
    the overrides are for each component inside the given feature
  - If possible, revert as many components as possible, remembering that
    reverting a component will remove any customizations you've made to
    the given item
-10. A bug revealed in Heartbeat led to the need for an additional permission
+11. A bug revealed in Heartbeat led to the need for an additional permission
   to be created (access user activity). Users will need this permission
   in order to see the activity streams on group home pages. Commons comes
   with this permission given to anonymous and authenticated users by default,
   but you may have to either revert the Commons Core feature, or assigned
   the permissions manually, if upgrading.
-11. Because of the introduction of Commons Profile (Feature) to handle
+12. Because of the introduction of Commons Profile (Feature) to handle
   the profile aspects of Commons, if you have deleted any profile fields
   that came with Commons initially, they will be restored after the upgrade.
   You must go in (admin/user/profile) and remove them once again.
-12. If no issues have arisen, it is recommended that you make another backup
+13. If no issues have arisen, it is recommended that you make another backup
   of your codebase and database, then you may turn off maintenance mode.
 ------------------------------------
 CHANGELOG:
 - Added: New themes and replaced original theme
   - Commons roots (base theme)
-  - Commons origins 
+  - Commons origins (original theme)
   - Commons connect
+  - Commons environs
 - Added: Theme selection form on site installation
 - Removed: commons_core_node_add_link() in favor of content-selection block
 - Added: Views slideshow
