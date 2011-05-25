@@ -1,5 +1,4 @@
 <?php
-// $Id: cache.inc,v 1.17.2.5 2010/11/03 19:07:46 goba Exp $
 
 /**
  * Return data from the persistent cache. Data may be stored as either plain text or as serialized data.

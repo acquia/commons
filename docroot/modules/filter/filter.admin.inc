@@ -1,5 +1,4 @@
 <?php
-// $Id: filter.admin.inc,v 1.8.2.1 2008/02/12 14:25:34 goba Exp $
 
 /**
  * @file

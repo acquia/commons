@@ -1,5 +1,4 @@
 <?php
-// $Id: node.module,v 1.947.2.29 2010/12/15 12:53:33 goba Exp $
 
 /**
  * @file
@@ -974,6 +973,7 @@ function node_delete($nid) {
   if (node_access('delete', $node)) {
     db_query('DELETE FROM {node} WHERE nid = %d', $node->nid);
     db_query('DELETE FROM {node_revisions} WHERE nid = %d', $node->nid);
+    db_query('DELETE FROM {node_access} WHERE nid = %d', $node->nid);
 
     // Call the node-specific callback (if any):
     node_invoke($node, 'delete');

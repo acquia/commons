@@ -1,5 +1,4 @@
 <?php
-// $Id: mail.inc,v 1.8.2.8 2010/06/02 12:07:24 goba Exp $
 
 /**
  * Compose and optionally send an e-mail message.

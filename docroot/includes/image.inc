@@ -1,5 +1,4 @@
 <?php
-// $Id: image.inc,v 1.24.2.1 2010/12/15 14:08:17 goba Exp $
 
 /**
  * @file
@@ -114,7 +113,9 @@ function image_toolkit_invoke($method, $params = array()) {
  *    'file_size' - File size in bytes.
  */
 function image_get_info($file) {
-  if (!is_file($file) && !is_uploaded_file($filepath)) {
+  // Proceed no further if this file doesn't exist. Some web servers (IIS) may
+  // not pass is_file() for newly uploaded files, so we need two checks here.
+  if (!is_file($file) && !is_uploaded_file($file)) {
     return FALSE;
   }
 

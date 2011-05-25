@@ -1,5 +1,4 @@
 <?php
-// $Id: update.compare.inc,v 1.8.2.9 2010/03/05 09:10:49 goba Exp $
 
 /**
  * @file

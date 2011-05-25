@@ -1,5 +1,4 @@
 <?php
-// $Id: comment.tpl.php,v 1.10 2008/01/04 19:24:24 goba Exp $
 ?>
 <div class="comment<?php print ($comment->new) ? ' comment-new' : ''; print ' '. $status; print ' '. $zebra; ?>">
 

@@ -1,5 +1,4 @@
 <?php
-// $Id: locale.inc,v 1.174.2.14 2010/08/11 19:42:26 goba Exp $
 
 /**
  * @file
@@ -1672,7 +1671,7 @@ function _locale_import_shorten_comments($comment) {
       break;
     }
   }
-  return substr($comm, 0, -2);
+  return trim(substr($comm, 0, -2));
 }
 
 /**

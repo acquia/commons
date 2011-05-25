@@ -1,5 +1,4 @@
 <?php
-// $Id: statistics.admin.inc,v 1.6.2.2 2010/06/02 12:14:48 goba Exp $
 
 /**
  * @file

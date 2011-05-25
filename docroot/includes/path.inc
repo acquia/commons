@@ -1,5 +1,4 @@
 <?php
-// $Id: path.inc,v 1.19.2.7 2010/11/04 10:27:46 goba Exp $
 
 /**
  * @file

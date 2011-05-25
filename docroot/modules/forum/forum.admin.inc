@@ -1,5 +1,4 @@
 <?php
-// $Id: forum.admin.inc,v 1.8.2.1 2009/05/26 08:13:00 goba Exp $
 
 /**
  * @file

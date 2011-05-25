@@ -1,5 +1,4 @@
 <?php
-// $Id: update.settings.inc,v 1.3.2.1 2009/04/29 17:17:21 goba Exp $
 
 /**
  * @file

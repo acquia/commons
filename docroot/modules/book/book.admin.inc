@@ -1,5 +1,4 @@
 <?php
-// $Id: book.admin.inc,v 1.8.2.3 2008/10/22 19:26:01 goba Exp $
 
 /**
  * @file

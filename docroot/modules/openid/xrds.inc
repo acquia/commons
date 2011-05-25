@@ -1,5 +1,4 @@
 <?php
-// $Id: xrds.inc,v 1.2 2007/10/15 09:40:42 goba Exp $
 
 // Global variables to track parsing state
 $xrds_open_elements = array();
