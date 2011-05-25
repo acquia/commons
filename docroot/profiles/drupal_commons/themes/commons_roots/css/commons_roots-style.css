@@ -464,3 +464,41 @@ div.beat-item blockquote {
 .view-groups-most-active .views-field-title, .view-groups-most-active .views-field-members-count, .view-groups-most-active .views-field-posts-count {
   margin-left: 40px;
 }
+
+/* Added by Jay to generalize the Search Group field & button */
+#views-exposed-form-og-search-default .views-exposed-widget.views-exposed-submit .form-submit, #views-exposed-form-og-search-page-1 .views-exposed-widget.views-exposed-submit .form-submit {
+  float: right;
+  padding: 6px 7px 9px 7px;
+}
+
+#views-exposed-form-og-search-default input#edit-keys.form-text {
+  width: 90%;
+}
+
+/* A couple of shoutbox generalizations. -jay */
+.shoutbox-add-form fieldset {
+  margin: 5px 0;
+  padding: 10px;
+}
+
+#shoutbox-add-form input.form-text {
+  width: 95%;
+  max-width: 95%;
+}
+
+/* An attempt to generalize the node type dropdown & "create" button, though as of
+ * release 1.6, all 3 themes need _some_ tweaking of one element or another.
+ * -jay
+ */
+#edit-node-type-wrapper.form-item {
+  width: 65%;
+  margin-left: 2px;
+  padding-top: 2px;
+  vertical-align: middle;
+}
+
+#edit-submit.form-submit {
+  float: right;
+  margin: 0 12px 0;
+}
+
