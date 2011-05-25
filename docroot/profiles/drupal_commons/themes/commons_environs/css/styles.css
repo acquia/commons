@@ -324,9 +324,8 @@ label {
   z-index: 9999;
 }
 
-/*removes z-index on dashboard minimize/move/maximize icons*/
 .portlet-icon {
-  z-index: 0;
+  z-index: 100;
 }
 
 .front #content-top-inner {
@@ -583,10 +582,7 @@ form input.form-submit, .views-exposed-form .views-exposed-widget input.form-sub
   height: auto;
   font-family: Arial, "Lucida Grande", Verdana, sans-serif;
 }
-
-#views-exposed-form-og-search-default .views-exposed-widget.views-exposed-submit .form-submit, #views-exposed-form-og-search-page-1 .views-exposed-widget.views-exposed-submit .form-submit {
-  padding: 6px 7px 9px 7px;
-}
+/* moved OG search field & button to Roots to generalize it -jay */
 
 /* dashboard */
 #homebox {
@@ -765,10 +761,22 @@ button, #homebox-buttons button {
   font-weight: bold;
 }
 
-.view-homepage-group-showcase .views-field-title {
+.view-homepage-group-showcase .views-row > .views-field-title {
   font-size: 16px;
   margin-bottom: 8px;
 }
+
+/* a fix by Jay (read "Untrained themer") to unwind the font size increase introduced
+ * into the content title in the view by the above selector
+ */
+.view-homepage-group-showcase .view-homepage-group-showcase .views-field-title {
+  font-size: 12px;
+}
+
+/* another "fix" by Jay to line up the text in the Latest Notices block on /home */
+.view-recent-notices .views-field-timestamp, 
+.view-recent-notices .views-field-created,
+.view-recent-notices .views-field-name { margin-left: 40px; }
 
 /*cols-1 table on home page for groups */
 .front .views-table {
@@ -1011,6 +1019,10 @@ span.heartbeat_times img {
  -moz-border-radius: 9px 9px 0 0;
  }*/
 
+.primary-menu-inner ul.sf-menu > li.active-trail > a {
+  color: #FBB03B;
+}
+
 .not-front.og-context #content-tabs ul.primary, .not-front.og-context #content-tabs ul.primary {
   background: #fff;
   padding: 10px;
@@ -1179,4 +1191,25 @@ ul.pager a, ul.pager li.pager-current {
  */
 .view-homepage-recent-featured .views-field-created,
 .view-homepage-recent-featured .views-field-name {float: right; width: 210px;}
+
+/* Somehow the Environs theme is handling the node type dropdown differently; it needs to have
+ * its width set differntly in order to get the dropdown to fill the space before the Create button.
+ * Plus, given the height of the Create button, some extra top margin is needed for the dropdown.
+ * -jay
+ */
+#edit-node-type-wrapper #edit-node-type {
+  width: 100%;
+}
+
+#edit-submit.form-submit {
+  margin: 9px 3px 0 0;
+}
+
+/* added to get proper alignment for upcoming events in the sidebar -jay */
+.view-upcoming-events .views-field-field-date-value {float: left;}
+.view-upcoming-events .views-field-title,
+.view-upcoming-events .views-field-group-nid,
+.view-upcoming-events .views-field-field-location-value {float: right; width: 180px;}
+
+
 

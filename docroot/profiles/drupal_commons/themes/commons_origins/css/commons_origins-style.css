@@ -1084,14 +1084,18 @@ ul.pager {
 	padding: 2px 4px;
 	text-indent: 0;
   -moz-border-radius: 5px;
+  -o-border-radius: 5px;
   -webkit-border-radius: 5px;
+  border-radius: 5px;
 }
 
 ul.pager a,
 ul.pager li.pager-current {
 	border-color: #333;
   -moz-border-radius: 5px;
+  -o-border-radius: 5px;
   -webkit-border-radius: 5px;
+  border-radius: 5px;
 }
 
 ul.pager li.pager-current {
@@ -1917,8 +1921,8 @@ div.joinnow-button a {
 	line-height: 18px;
 	margin: 0 0 4px;
 	padding: 2px 2px;
-	width: 99%;
-  max-width: 99%;
+	width: 95%;
+	max-width: 95%;
 }
 
 .page-home .shoutbox-add-form input.form-text {
@@ -2137,7 +2141,10 @@ body#pid-dashboard h1.title, body#pid-dashboard #breadcrumbs {
 	height: 18px;
 	margin-top: 3px;
 	margin-right: 1%;
-	width: 70%;
+/* Again, (width) not inheriting from Roots correctly, but can't take the time to figure it out
+ * -jay
+ */
+	width: 65%;
 }
 
 #block-commons_core-group_create_content form .form-item select {
@@ -2146,9 +2153,13 @@ body#pid-dashboard h1.title, body#pid-dashboard #breadcrumbs {
 }
 
 #block-commons_core-group_create_content form .form-submit {
-	float: left;
+/* More tweaks to fix inheritance from roots problems
+ * -jb
+ */
+/*	float: left; */
 	height: 24px;
-	width: 27%;
+	margin: 5px 24px 0 0;
+/*	width: 27%; */
 }
 
 /*My Groups list */
@@ -2690,11 +2701,12 @@ div#block-og_views-0 h2.title {
 #views-exposed-form-og-search-default .views-exposed-widget.views-exposed-submit {
 	max-width: none;
 	width: auto;
+	margin: 0 15px 0 0;
+	float: right;
 }
 
 #views-exposed-form-og-search-default .views-exposed-widget.views-exposed-submit .form-submit,
 #views-exposed-form-og-search-page-1 .views-exposed-widget.views-exposed-submit .form-submit {
-	float: left;
 	margin: 0;
 	padding: 0px 5px;
 	text-align: center;
@@ -2769,6 +2781,9 @@ border-radius: 10px;
 padding: 10px;
 margin: 0px 10px 10px;
 }
+
+/* a fix by Jay (read "Untrained themer") to line up the text in the Latest Notices block on /home */
+.view-recent-notices .views-field-name { margin-left: 40px; }
 
 
 #block-views-group_node-block_1 {
@@ -3118,7 +3133,7 @@ margin: 0px 10px 10px;
 /*author images on all views*/
 .view-content .views-row .views-field-picture{
 	display: block;
-	float: left;
+	float: right;
 	margin-right: 10px;
 }
 

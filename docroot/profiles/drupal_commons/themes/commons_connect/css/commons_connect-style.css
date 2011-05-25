@@ -602,7 +602,7 @@ form#search-theme-form input.form-submit {
 	margin-bottom: 12px;
 }
 
-#main-content-inner .grid16-16 .content-group-inner { padding-right:25px; }
+#main-content-inner .grid16-16 .content-group-inner { padding-right: 8px; }
 
 
 /* This region only appears on full node pages. It's useful for ads or other  content between the body of the node and its comments */
@@ -2232,8 +2232,13 @@ div.joinnow-button a {
 	line-height: 18px;
 	margin: 0 0 4px;
 	padding: 2px 2px;
-	width: 99%;
-  max-width: 99%;
+/* These next two lines SHOULD inherit 95% from Commons Roots, but I (Jay) can't
+ * figure out how to shift the Submit button below it to the left (which would
+ * be needed with the narrower width. I also adjusted the width to fix the too-wide
+ * input field.
+ */
+	width: 97%;
+	max-width: 97%;
 }
 
 .page-home .shoutbox-add-form input.form-text {
@@ -2926,6 +2931,23 @@ div#block-og_views-0 h2.title {
 #views-exposed-form-og-search-default .views-exposed-widget.views-exposed-submit {
 	max-width: none;
 	width: auto;
+/* The Submit button here should inherit float:right from Roots; but it doesn't and
+ * I don't have time to sort out why. So this forces the float, and adds a couple of
+ * px of margin to make the right side of the button line up with the right of the
+ * text field.
+ * -jb
+ */
+	float: right;
+	margin-right: 2px;
+}
+
+
+/* Again, this should come from Roots somehow, but it comes in un-aligned with the Group Search block
+ * so this forces the search text field to be wider
+ * -jay
+ */
+#views-exposed-form-og-search-default input#edit-keys.form-text {
+  width: 95%;
 }
 
 #views-exposed-form-og-search-default .views-exposed-widget.views-exposed-submit .form-submit,
@@ -3524,7 +3546,7 @@ a.feed-icon img {
 .view-upcoming-events .views-field-field-date-value {float: left;}
 .view-upcoming-events .views-field-title,
 .view-upcoming-events .views-field-group-nid,
-.view-upcoming-events .views-field-field-location-value {float: right; width: 180px;}
+.view-upcoming-events .views-field-field-location-value {float: right; width: 80%;}
 
 .view-profile-user-groups .views-field-field-group-image-fid {float: left;}
 .view-profile-user-groups .views-field-title,
@@ -3596,10 +3618,10 @@ a.feed-icon img {
 .view-group-block-blog-latest-comments .views-field-name {float: right; width: 180px;}
 
 .view-recent-notices .views-field-picture {float: left;}
-.view-recent-notices .views-field-title,
-.view-recent-notices .views-field-created,
-.view-recent-notices .views-field-timestamp,
-.view-recent-notices .views-field-name {float: right; width: 180px;}
+#block-views-recent_notices-block_1 .views-field-title,
+#block-views-recent_notices-block_1 .views-field-created,
+#block-views-recent_notices-block_1 .views-field-timestamp,
+#block-views-recent_notices-block_1 .views-field-name {float: right; width: 180px;}
 
 .view-groups-my-groups-listing ul li { clear:left;}
 .view-groups-my-groups-listing .views-field-field-group-image-fid {float: left; margin-right:15px;}
@@ -3739,12 +3761,8 @@ body.page-user-1 #main-inner #sidebar-first #sidebar-first-inner{ width:90%}
 	height:22px;
 	width:170px;
 }
-#edit-node-type-wrapper.form-item{
-	width:175px;
-	margin-left:2px;
-    padding-top: 2px;
-    vertical-align: middle;
-}
+/* moved #edit-node-type-wrapper.form-item to Roots */
+
 .group-members-link{
 background: url("../images/gray-arrow-right.png") no-repeat scroll right top transparent;
     clear: both;

@@ -2,6 +2,18 @@
   padding: 0;
 }
 
+/* @group Forms */
+
+#og-features-feature-form tr.odd .form-item, 
+#og-features-feature-form tr.even .form-item {
+  /* This overrides a system.css style that should always be knocked out.
+     I'm making this selector extemely specific to prevent destroying anything
+     that might rely on the white-space: nowrap declaration. Please make this
+     generic in future updates - jessebeach */
+  white-space: normal;
+}
+
+/* @end */
 
 /* Header Region which floats to the right of the site info */
 
@@ -191,7 +203,33 @@
   margin: 0 0 0px 0;
   padding: 0 0 0 0px;
   text-indent: 0;
-  display: block !important;
+  display: inline;
+  display: inline-block;
+}
+
+.block .content .item-list li,
+.page-user .block .content .links li {
+  display: list-item;
+}
+
+.block .content .item-list .pager li {
+  display: inline;
+  display: inline-block;
+}
+
+.block .content ul li.views-row {
+  display: block;
+}
+
+.block .content ul li.views-row:after {
+  clear:both;
+  display:block;
+  visibility:hidden;
+  overflow:hidden;
+  height:0 !important;
+  line-height:0;
+  font-size:xx-large;
+  content:" x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x ";
 }
 
 /* User page - Find new friends block*/
@@ -464,3 +502,54 @@ div.beat-item blockquote {
 .view-groups-most-active .views-field-title, .view-groups-most-active .views-field-members-count, .view-groups-most-active .views-field-posts-count {
   margin-left: 40px;
 }
+
+/* Added by Jay to generalize the Search Group field & button */
+#views-exposed-form-og-search-default .views-exposed-widget.views-exposed-submit .form-submit, #views-exposed-form-og-search-page-1 .views-exposed-widget.views-exposed-submit .form-submit {
+  float: right;
+  padding: 6px 7px 9px 7px;
+}
+
+#views-exposed-form-og-search-default input#edit-keys.form-text {
+  width: 90%;
+}
+
+/* A couple of shoutbox generalizations. -jay */
+.shoutbox-add-form fieldset {
+  margin: 5px 0;
+  padding: 10px;
+}
+
+#shoutbox-add-form input.form-text {
+  width: 95%;
+  max-width: 95%;
+}
+
+/* An attempt to generalize the node type dropdown & "create" button, though as of
+ * release 1.6, all 3 themes need _some_ tweaking of one element or another.
+ * -jay
+ */
+#edit-node-type-wrapper.form-item {
+  width: 65%;
+  margin-left: 2px;
+  padding-top: 2px;
+  vertical-align: middle;
+}
+
+#edit-submit.form-submit {
+  float: right;
+  margin: 0 12px 0;
+}
+
+/* gotta make the dashboard view of recent content look decent
+ * This MIGHT get moved to Roots...
+ */
+.view-dashboard-recent-content .views-field-picture {float: left;}
+.view-dashboard-recent-content .views-field-title,
+.view-dashboard-recent-content .views-field-created,
+.view-dashboard-recent-content .views-field-name,
+.view-dashboard-recent-content .views-field-group-nid,
+.view-dashboard-recent-content .views-field-tid,
+.view-dashboard-recent-content .views-field-comment-count {margin-left: 40px;  width: 80%; }
+
+.view-dashboard-recent-content .views-field-timestamp {float: right;}
+
