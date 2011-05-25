@@ -6,7 +6,14 @@ Track Drupal Commons development on GitHub!
 Drupal Commons 1.6, 2010-05-25
 ------------------------------------
 NOTES:
-- New themes have been added. If you would like to use them, navigate to
+- This is both a feature release, as well as updating Drupal core with
+  the latest security update.
+- The key features of this release are 2 new themes, page layouts updated for
+  improved usability, more capabilities being moved into individual (Drupal)
+  Features, the ability to enable (/disable) Features on a per-group basis,
+  a change from using Context+Panels to using Context (only), along with
+  other minor changes.
+- 2 new themes have been added. If you would like to use them, navigate to
   the theme administration page to enable them. Make sure that Fusion remains
   enabled, as well as Commons Roots, a new Commons base theme.
 - The panels module and all previously included panels have been removed
@@ -19,13 +26,19 @@ NOTES:
   in your database.
 - Context is now being used to render all of the previously mentioned pages,
   as well as all other pages.
-- Admin menu has been replaced by Admin. Admin contains a very useful in-place
-  editor for the Context module. When viewing any page, click the wrench icon
-  on the top-right corner of the page and click on "Context editor". From
-  there, you can edit the blocks and their layout for every page.
+- The Admin Menu module has been replaced by the Admin module. This provides
+  several benefits: it eliminates the nuiscance of menus dropping down and
+  interfering with usability; and it contains an editor for the Context module,
+  which is required in order to control the vertical ordering of blocks on a
+  page when being controlled by Context. Click the wrench icon in the top-right
+  corner of any page to view both the Context editor as well as the normal
+  "Admin" functions previously found in the Admin Menu.  To edit Contexts,
+  click on "Context editor" in that sidebar; from there, you can edit the
+  blocks and their layout for every page.
 - OG Features has been added to the distribution. This allows admins and 
   group managers to turn off groups of features within each individual
-  group. A "Features" tab will appear within the groups.
+  group. Group Admins will now see a "Features" tab beside the Edit tab on
+  the group home page where these can be controlled.
 - All of the Features within the distribution have been rebuilt, leading
   to most of the exports (views, contexts, etc) being renamed and redesigned.
   If you have altered and saved any of the previous exports, they will 
@@ -37,10 +50,12 @@ NOTES:
  - Commons Shoutbox: Contains the Shoutbox components from Commons Core,
    making it possible to now completely disable Shoutbox from Commons,
    if desired.
- - Commons Invite: Contains functionality to allow site users to invite other
-   people to your site 
+ - Commons Invite: Provides functionality to allow site users to invite other
+   people to your site.
 ------------------------------------
 UPGRADING TO 1.6:
+NOTE: THIS IS A SIGNIFICANT UPGRADE.  You should NOT install it directly on
+a live site without first testing it on a staging site.
 1. Carefully review the NOTES above
 2. Backup your code and database
 3. Turn on maintenance mode (admin/settings/site-maintenance)
