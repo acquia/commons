@@ -5,3 +5,8 @@
 $(document).bind('heartbeatBeforePoll', function(event, post) {
   post.group_nid = Drupal.settings.group_nid;
 });
+
+$(document).bind('heartbeatBeforeOlderMessages', function(event, post) {
+  post.group_nid = Drupal.settings.group_nid;
+});
+

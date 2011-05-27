@@ -1,5 +1,4 @@
 <?php
-// $Id: token.api.php,v 1.1.2.2 2010/09/23 01:04:12 davereid Exp $
 
 /**
  * @file

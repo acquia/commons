@@ -1,5 +1,4 @@
 <?php
-// $Id: flag_heartbeat.module,v 1.1.2.1.2.11 2010/06/09 21:17:44 stalski Exp $
 // by Stalski (Jochen Stals) - Menhir - www.menhir.be
 
 /**
@@ -55,7 +54,19 @@ function flags_widget($attachments, $message) {
   if (!empty($flags)) {
     foreach ($flags as $flagname) {
       if (!empty($flagname) && !is_numeric($flagname)) {
-        $widgetfields[] = flag_create_link($flagname, $message->uaid);
+
+        // Two possibilities.
+        // 1. with a persistent rendered flag message.
+        //$flag = flag_get_flag($flagname);
+        //$widgetfield = $flag->theme($flag->is_flagged($message->uaid) ? 'unflag' : 'flag', $message->uaid, TRUE);
+
+        // 2. showing the link and the count separately.
+        $widgetfield = flag_create_link($flagname, $message->uaid);
+        // $counts = flag_get_counts('heartbeat_message', $message->uaid);
+        // $widgetfield .= ' ' . t('@count users like this', array('@count' => (isset($counts[$flagname]) ? $counts[$flagname] : 0)));
+
+        // Solution is coming up from Drupal7 version.
+        $widgetfields[] = $widgetfield;
       }
     }
   }

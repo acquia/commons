@@ -1,5 +1,4 @@
 <?php
-// $Id: wikitools.admin.inc,v 1.1.2.2 2009/06/18 03:57:33 cwgordon7 Exp $
 
 /**
  * @file
@@ -10,16 +9,12 @@
  * Callback for wikitools settings form.
  */
 function wikitools_admin_settings() {
-  $form = array();
-
-  list($select_query, $count_query, $arguments) = _wikitools_duplicate_nodes_query();
-  if ($count_query) {
-    $duplicates_exist = db_result(db_query($count_query, $arguments));
-    if ($duplicates_exist) {
-      drupal_set_message(t('Nodes with duplicate titles exist in your wiki. To clear up this issue, visit the <a href="!url">duplicate titles</a> page.', 
-        array('!url' => url('admin/content/wikitools'))), 'warning');
-    }
+  if (!module_exists('search')) {
+    drupal_set_message(t('You will not be able to select the "Node Search" or "Link to search" options until you <a href="!url">enable</a> the search module.',
+      array('!url' => url('admin/modules'))), 'warning');
   }
+
+  $form = array();
 
   $form['wikitools_path'] = array(
     '#type' => 'textfield',
@@ -37,7 +32,7 @@ function wikitools_admin_settings() {
   $form['wikitools_node_types'] = array(
     '#type' => 'checkboxes',
     '#title' => t('Wiki node types'),
-    '#options' => node_get_types('names'),
+    '#options' => array_map('filter_xss', node_get_types('names')),
     '#default_value' => wikitools_node_types(),
     '#multiple' => TRUE,
     '#description' => t('Select the node types which will be affected by the specified options. If you select multiple node types, all nodes of these types will be searched for when a wikipath is entered. If a wikipage doesn\'t exist, an option to create any of these types will be given.'),
@@ -151,18 +146,18 @@ function _wikitools_duplicate_nodes_query() {
     $n1_title = 'n1.title';
     $n2_title = 'n2.title';
     if (wikitools_treat_underscore_as_space()) {
-      $n1_title = 'REPLACE('. $n1_title .', "_", " ")';
-      $n2_title = 'REPLACE('. $n2_title .', "_", " ")';
+      $n1_title = "REPLACE($n1_title, '_', ' ')";
+      $n2_title = "REPLACE($n2_title, '_', ' ')";
     }
     if (wikitools_treat_dash_as_space()) {
-      $n1_title = 'REPLACE('. $n1_title .', "-", " ")';
-      $n2_title = 'REPLACE('. $n2_title .', "-", " ")';
+      $n1_title = "REPLACE($n1_title, '-', ' ')";
+      $n2_title = "REPLACE($n2_title, '-', ' ')";
     }
 
     // Grab all nodes that have the same title
     $node_types_placeholders = db_placeholders($node_types, 'varchar');
     $from_part = 'FROM {node} n1, {node} n2 WHERE LOWER('. $n1_title .') = LOWER('. $n2_title .') AND n1.nid != n2.nid AND n1.type IN('. $node_types_placeholders .') AND n2.type IN('. $node_types_placeholders .')';
-    $select_query = 'SELECT DISTINCT(n1.nid) ' . $from_part . ' ORDER BY n1.title ASC';
+    $select_query = 'SELECT DISTINCT(n1.nid), n1.title ' . $from_part . ' ORDER BY n1.title ASC';
     $count_query = 'SELECT COUNT(DISTINCT(n1.nid)) ' . $from_part;
     return array($select_query, $count_query, array_merge($node_types, $node_types));
   }

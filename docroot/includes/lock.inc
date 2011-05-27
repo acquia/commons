@@ -1,5 +1,4 @@
 <?php
-// $Id: lock.inc,v 1.1.2.4 2010/05/11 09:30:20 goba Exp $
 
 /**
  * @file

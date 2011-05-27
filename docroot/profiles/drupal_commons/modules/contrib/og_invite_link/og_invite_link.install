@@ -1,0 +1,92 @@
+<?php
+
+/**
+ * @file
+ *   Install file for og_invite_link module
+ */
+
+/**
+ * Implementation of hook_schema();
+ */
+function og_invite_link_schema() {
+  $schema['og_invite'] = array(
+    'description' => 'Stores the requests for invited members into organic groups.',
+    'fields' => array(
+      'iid' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE
+      ),
+      'uid' => array(
+        'description' => 'The uid of the invited user.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE
+      ),
+      'group_nid' => array(
+        'description' => 'The group node id into which the user has been invited.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE
+      ),
+      'sender' => array(
+        'description' => 'The uid of the invite sender.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE
+      ),
+      'moderated' => array(
+        'description' => 'Boolean indication for if the invitation results in a moderated group acceptance.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0
+      ),
+      'invite_key' => array(
+        'description' => 'A key used to generate a token that will be used in the invitation link sent on the mail.',
+        'type' => 'varchar',
+        'length' => 10,
+        'not null' => TRUE,
+        'default' => ''
+      ),
+      'token' => array(
+        'description' => 'The generated token used in the invite links.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => ''
+      ),
+      'timestamp' => array(
+        'description' => 'The UNIX timestamp of when the invitation has been issued.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE
+      ),
+      'accepted_timestamp' => array(
+        'description' => 'The UNIX timestamp of when the invitation has been accepted.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE
+      ),
+    ),
+    'indexes' => array(
+      'uid_group_nid' => array('uid', 'group_nid'),
+    ),
+    'primary key' => array('iid'),
+  );
+  return $schema;
+}
+
+/**
+ * Implementation of hook_install();
+ */
+function og_invite_link_install() {
+  drupal_install_schema('og_invite_link');
+}
+
+/**
+ * Implementation of hook_uninstall();
+ */
+function og_invite_link_uninstall() {
+  drupal_uninstall_schema('og_invite_link');
+}

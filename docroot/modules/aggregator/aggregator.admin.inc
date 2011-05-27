@@ -1,5 +1,4 @@
 <?php
-// $Id: aggregator.admin.inc,v 1.7.2.1 2008/04/25 21:11:57 goba Exp $
 
 /**
  * @file

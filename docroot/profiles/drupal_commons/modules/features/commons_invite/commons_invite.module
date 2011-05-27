@@ -1,0 +1,11 @@
+<?php
+
+include_once('commons_invite.features.inc');
+
+/**
+ * Implementation of hook_form_FORM_ID_alter()
+ */
+function commons_invite_form_invite_form_alter(&$form, &$form_state) {
+  // Improve the invitation message
+  $form['invite']['#value'] = t('Want friends to join?<br/>Send them an email invitation!');
+}

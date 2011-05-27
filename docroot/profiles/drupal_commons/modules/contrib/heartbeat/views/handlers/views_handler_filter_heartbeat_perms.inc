@@ -1,5 +1,4 @@
 <?php
-// $Id: views_handler_filter_heartbeat_perms.inc,v 1.1.2.1.2.3 2010/02/21 22:45:26 stalski Exp $
 
 /**
  * @file

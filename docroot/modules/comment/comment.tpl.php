@@ -1,5 +1,4 @@
 <?php
-// $Id: comment.tpl.php,v 1.4.2.1 2008/03/21 21:58:28 goba Exp $
 
 /**
  * @file comment.tpl.php

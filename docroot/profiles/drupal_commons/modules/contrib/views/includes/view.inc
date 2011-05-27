@@ -584,7 +584,6 @@ class view extends views_db_object {
 
     // Let the handlers interact with each other if they really want.
     $this->_pre_query();
-
     if ($this->display_handler->uses_exposed()) {
       $this->exposed_widgets = $this->render_exposed_form();
       if (form_set_error() || !empty($this->build_info['abort'])) {

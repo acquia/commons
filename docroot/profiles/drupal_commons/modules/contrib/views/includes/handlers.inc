@@ -312,38 +312,140 @@ class views_handler extends views_object {
    * There is no need for this function to actually store the data.
    */
   function extra_options_submit($form, &$form_state) { }
-
+  
   /**
    * Set new exposed option defaults when exposed setting is flipped
    * on.
    */
   function expose_options() { }
+  
   /**
-   * Render our chunk of the exposed filter form when selecting
+   * Get information about the exposed form for the form renderer.
+   */
+  function exposed_info() { }
+  
+  /**
+   * Render our chunk of the exposed handler form when selecting
    */
   function exposed_form(&$form, &$form_state) { }
 
   /**
-   * Validate the exposed filter form
+   * Validate the exposed handler form
    */
   function exposed_validate(&$form, &$form_state) { }
 
   /**
-   * Submit the exposed filter form
+   * Submit the exposed handler form
    */
   function exposed_submit(&$form, &$form_state) { }
 
   /**
-   * Get information about the exposed form for the form renderer.
+   * Overridable form for exposed handler options.
    *
-   * @return
-   *   An array with the following keys:
-   *   - operator: The $form key of the operator. Set to NULL if no operator.
-   *   - value: The $form key of the value. Set to NULL if no value.
-   *   - label: The label to use for this piece.
+   * If overridden, it is best to call the parent or re-implement
+   * the stuff here.
+   *
+   * Many handlers will need to override this in order to provide options
+   * that are nicely tailored to the given filter.
    */
-  function exposed_info() { }
+  function expose_form(&$form, &$form_state) {
+    $form['expose']['start_left'] = array(
+      '#value' => '<div class="views-left-50">',
+    );
 
+    $this->expose_form_left($form, $form_state);
+
+    $form['expose']['end_left'] = array(
+      '#value' => '</div>',
+    );
+
+    $form['expose']['start_checkboxes'] = array(
+      '#value' => '<div class="form-checkboxes views-left-40 clear-block">',
+    );
+
+    $this->expose_form_right($form, $form_state);
+
+    $form['expose']['end_checkboxes'] = array(
+      '#value' => '</div>',
+    );
+  }
+
+  function expose_form_left(&$form, &$form_state) { }
+  
+  function expose_form_right(&$form, &$form_state){ }
+
+  /**
+   * Validate the options form.
+   */
+  function expose_validate($form, &$form_state) { }
+
+  /**
+   * Perform any necessary changes to the form exposes prior to storage.
+   * There is no need for this function to actually store the data.
+   */
+  function expose_submit($form, &$form_state) { }
+ 
+    /**
+   * Shortcut to display the expose/hide button.
+   */
+  function show_expose_button(&$form, &$form_state) {
+    $form['expose_button'] = array(
+      '#prefix' => '<div class="views-expose clear-block">',
+      '#suffix' => '</div>',
+    );
+    if (empty($this->options['exposed'])) {
+      $form['expose_button']['button'] = array(
+        '#type' => 'submit',
+        '#value' => t('Expose'),
+        '#submit' => array('views_ui_config_item_form_expose'),
+      );
+      $form['expose_button']['markup'] = array(
+        '#prefix' => '<div class="description">',
+        '#value' => t('This item is currently not exposed. If you <strong>expose</strong> it, users will be able to change the filter as they view it.'),
+        '#suffix' => '</div>',
+      );
+    }
+    else {
+      $form['expose_button']['button'] = array(
+        '#type' => 'submit',
+        '#value' => t('Hide'),
+        '#submit' => array('views_ui_config_item_form_expose'),
+      );
+      $form['expose_button']['markup'] = array(
+        '#prefix' => '<div class="description">',
+        '#value' => t('This item is currently exposed. If you <strong>hide</strong> it, users will not be able to change the filter as they view it.'),
+        '#suffix' => '</div>',
+      );
+    }
+  }
+    
+  /**
+   * Shortcut to display the exposed options form.
+   */
+  function show_expose_form(&$form, &$form_state) {
+    if (empty($this->options['exposed'])) {
+      return;
+    }
+
+    $form['expose'] = array(
+      '#prefix' => '<div class="views-expose-options clear-block">',
+      '#suffix' => '</div>',
+    );
+    $this->expose_form($form, $form_state);
+
+    // When we click the expose button, we add new gadgets to the form but they
+    // have no data in $_POST so their defaults get wiped out. This prevents
+    // these defaults from getting wiped out. This setting will only be TRUE
+    // during a 2nd pass rerender.
+    if (!empty($form_state['force_expose_options'])) {
+      foreach (element_children($form['expose']) as $id) {
+        if (isset($form['expose'][$id]['#default_value']) && !isset($form['expose'][$id]['#value'])) {
+          $form['expose'][$id]['#value'] = $form['expose'][$id]['#default_value'];
+        }
+      }
+    }
+  }
+  
   /**
    * Determine if a handler can be exposed.
    */
@@ -444,7 +546,7 @@ class views_handler extends views_object {
   }
 
   /**
-   * Take input from exposed filters and assign to this handler, if necessary.
+   * Take input from exposed handlers and assign to this handler, if necessary.
    */
   function accept_exposed_input($input) { return TRUE; }
 

@@ -48,6 +48,15 @@ function commons_core_user_default_permissions() {
     ),
   );
 
+  // Exported permission: access user activity
+  $permissions['access user activity'] = array(
+    'name' => 'access user activity',
+    'roles' => array(
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
+    ),
+  );
+
   // Exported permission: access user profiles
   $permissions['access user profiles'] = array(
     'name' => 'access user profiles',
@@ -59,14 +68,6 @@ function commons_core_user_default_permissions() {
   // Exported permission: administer actions
   $permissions['administer actions'] = array(
     'name' => 'administer actions',
-    'roles' => array(
-      '0' => 'site admin',
-    ),
-  );
-
-  // Exported permission: administer advanced pane settings
-  $permissions['administer advanced pane settings'] = array(
-    'name' => 'administer advanced pane settings',
     'roles' => array(
       '0' => 'site admin',
     ),
@@ -163,41 +164,17 @@ function commons_core_user_default_permissions() {
     ),
   );
 
+  // Exported permission: administer og features
+  $permissions['administer og features'] = array(
+    'name' => 'administer og features',
+    'roles' => array(
+      '0' => 'site admin',
+    ),
+  );
+
   // Exported permission: administer organic groups
   $permissions['administer organic groups'] = array(
     'name' => 'administer organic groups',
-    'roles' => array(
-      '0' => 'site admin',
-    ),
-  );
-
-  // Exported permission: administer page manager
-  $permissions['administer page manager'] = array(
-    'name' => 'administer page manager',
-    'roles' => array(
-      '0' => 'site admin',
-    ),
-  );
-
-  // Exported permission: administer pane access
-  $permissions['administer pane access'] = array(
-    'name' => 'administer pane access',
-    'roles' => array(
-      '0' => 'site admin',
-    ),
-  );
-
-  // Exported permission: administer pane visibility
-  $permissions['administer pane visibility'] = array(
-    'name' => 'administer pane visibility',
-    'roles' => array(
-      '0' => 'site admin',
-    ),
-  );
-
-  // Exported permission: administer panels layouts
-  $permissions['administer panels layouts'] = array(
-    'name' => 'administer panels layouts',
     'roles' => array(
       '0' => 'site admin',
     ),
@@ -222,22 +199,6 @@ function commons_core_user_default_permissions() {
   // Exported permission: administer search
   $permissions['administer search'] = array(
     'name' => 'administer search',
-    'roles' => array(
-      '0' => 'site admin',
-    ),
-  );
-
-  // Exported permission: administer shoutbox
-  $permissions['administer shoutbox'] = array(
-    'name' => 'administer shoutbox',
-    'roles' => array(
-      '0' => 'site admin',
-    ),
-  );
-
-  // Exported permission: administer shoutbox_group
-  $permissions['administer shoutbox_group'] = array(
-    'name' => 'administer shoutbox_group',
     'roles' => array(
       '0' => 'site admin',
     ),
@@ -429,19 +390,20 @@ function commons_core_user_default_permissions() {
     ),
   );
 
-  // Exported permission: delete own shouts
-  $permissions['delete own shouts'] = array(
-    'name' => 'delete own shouts',
-    'roles' => array(
-      '0' => 'community manager',
-    ),
-  );
-
   // Exported permission: delete revisions
   $permissions['delete revisions'] = array(
     'name' => 'delete revisions',
     'roles' => array(
       '0' => 'authenticated user',
+    ),
+  );
+
+  // Exported permission: edit all group features
+  $permissions['edit all group features'] = array(
+    'name' => 'edit all group features',
+    'roles' => array(
+      '0' => 'community manager',
+      '1' => 'site admin',
     ),
   );
 
@@ -531,6 +493,14 @@ function commons_core_user_default_permissions() {
     ),
   );
 
+  // Exported permission: edit own group features
+  $permissions['edit own group features'] = array(
+    'name' => 'edit own group features',
+    'roles' => array(
+      '0' => 'authenticated user',
+    ),
+  );
+
   // Exported permission: edit own notice content
   $permissions['edit own notice content'] = array(
     'name' => 'edit own notice content',
@@ -542,14 +512,6 @@ function commons_core_user_default_permissions() {
   // Exported permission: edit own page content
   $permissions['edit own page content'] = array(
     'name' => 'edit own page content',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: edit own shouts
-  $permissions['edit own shouts'] = array(
-    'name' => 'edit own shouts',
     'roles' => array(
       '0' => 'authenticated user',
     ),
@@ -588,14 +550,6 @@ function commons_core_user_default_permissions() {
     ),
   );
 
-  // Exported permission: moderate shoutbox
-  $permissions['moderate shoutbox'] = array(
-    'name' => 'moderate shoutbox',
-    'roles' => array(
-      '0' => 'community manager',
-    ),
-  );
-
   // Exported permission: post comments
   $permissions['post comments'] = array(
     'name' => 'post comments',
@@ -607,30 +561,6 @@ function commons_core_user_default_permissions() {
   // Exported permission: post comments without approval
   $permissions['post comments without approval'] = array(
     'name' => 'post comments without approval',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: post shouts
-  $permissions['post shouts'] = array(
-    'name' => 'post shouts',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: post shouts in all groups
-  $permissions['post shouts in all groups'] = array(
-    'name' => 'post shouts in all groups',
-    'roles' => array(
-      '0' => 'community manager',
-    ),
-  );
-
-  // Exported permission: post shouts without approval
-  $permissions['post shouts without approval'] = array(
-    'name' => 'post shouts without approval',
     'roles' => array(
       '0' => 'authenticated user',
     ),
@@ -855,15 +785,6 @@ function commons_core_user_default_permissions() {
     'name' => 'view revisions',
     'roles' => array(
       '0' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: view shouts
-  $permissions['view shouts'] = array(
-    'name' => 'view shouts',
-    'roles' => array(
-      '0' => 'anonymous user',
-      '1' => 'authenticated user',
     ),
   );
 

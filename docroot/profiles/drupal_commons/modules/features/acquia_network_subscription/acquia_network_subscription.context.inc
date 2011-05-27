@@ -8,7 +8,7 @@ function acquia_network_subscription_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-search';
+  $context->name = 'search';
   $context->description = 'Apache solr blocks';
   $context->tag = 'Search';
   $context->conditions = array(
@@ -67,6 +67,6 @@ function acquia_network_subscription_context_default_contexts() {
   t('Apache solr blocks');
   t('Search');
 
-  $export['context_ui-search'] = $context;
+  $export['search'] = $context;
   return $export;
 }

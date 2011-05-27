@@ -1,0 +1,84 @@
+; $Id: fusion_starter.info 7101 2010-04-08 06:51:41Z chris $
+
+name = Commons Connect
+description = A modern rework of classic Drupal design elements. Works with Drupal Commons. Requires <a href="http://drupal.org/project/fusion">Fusion Core</a> & Commons Roots. By <a href="http://brightlemon.com">BrightLemon</a>. 
+base theme = commons_roots
+core = 6.x
+engine = phptemplate
+
+stylesheets[all][] = css/commons_connect-style.css
+
+plugins[panels][layouts] = panels
+api[panels][styles][version] = 2
+
+regions[sidebar_first] = sidebar first
+regions[sidebar_last] = sidebar last
+regions[header_top] = header top
+regions[header] = header
+regions[preface_top] = preface top
+regions[preface_bottom] = preface bottom
+regions[content_top] = content top
+regions[content] = content
+regions[content_bottom] = content bottom
+regions[postscript_top] = postscript top
+regions[postscript_bottom] = postscript bottom
+regions[footer] = footer
+regions[node_top] = node top
+regions[node_bottom] = node bottom
+
+features[] = logo
+features[] = name
+features[] = slogan
+features[] = node_user_picture
+features[] = comment_user_picture
+features[] = search
+features[] = favicon
+features[] = primary_links
+features[] = secondary_links
+
+; Default theme settings
+// settings[theme_grid] = grid16-fluid
+settings[theme_grid_options][] = grid16-960
+// settings[theme_grid_options][] = grid16-fluid
+// settings[fluid_grid_width] = fluid-85
+settings[theme_font_size] = font-size-12
+settings[sidebar_layout] = sidebars-split
+settings[sidebar_first_width] = 4
+settings[sidebar_last_width] = 5
+
+; Inherit Skinr styles from Fusion Core
+skinr[options][inherit_skins] = true
+
+; Disable 12 column grid block widths inherited from fusion_core
+skinr[grid12-width] =
+
+; Stackable list/menu styles
+skinr[fusion-list-styles][title] = List/menu styles
+skinr[fusion-list-styles][type] = checkboxes
+skinr[fusion-list-styles][features][] = block
+skinr[fusion-list-styles][features][] = panels_display
+skinr[fusion-list-styles][features][] = panels_pane
+skinr[fusion-list-styles][features][] = panels_panel
+skinr[fusion-list-styles][features][] = views_view
+skinr[fusion-list-styles][options][1][label] = <span class="preview-text">Bottom border (no bullets) <span class="preview-icon" id="list-styles-bottom-border"></span></span>
+skinr[fusion-list-styles][options][1][class] = fusion-list-bottom-border
+skinr[fusion-list-styles][options][2][label] = <span class="preview-text">Extra vertical spacing (no bullets) <span class="preview-icon" id="list-styles-extra-vertical-spacing"></span></span>
+skinr[fusion-list-styles][options][2][class] = fusion-list-vertical-spacing
+skinr[fusion-list-styles][options][3][label] = Circle bullets
+skinr[fusion-list-styles][options][3][class] = commons-list-circle-bullets
+
+; Drupal Commons Colors 
+skinr[commons-colors][title] = Drupal Commons Colors (main color/highlight color)
+skinr[commons-colors][type] = select
+skinr[commons-colors][features][] = block
+skinr[commons-colors][features][] = panels_display
+skinr[commons-colors][features][] = panels_pane
+skinr[commons-colors][features][] = panels_panel
+skinr[commons-colors][features][] = views_view
+skinr[commons-colors][options][1][label] = Gray/Light Blue
+skinr[commons-colors][options][1][class] = commons-colors-grayblue
+skinr[commons-colors][options][2][label] = Orange/Dark Blue
+skinr[commons-colors][options][2][class] = commons-colors-orangeblue
+skinr[commons-colors][options][3][label] = Light Blue/Dark Blue
+skinr[commons-colors][options][3][class] = commons-colors-blueblue
+

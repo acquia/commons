@@ -6,12 +6,12 @@
 function commons_event_menu_default_menu_links() {
   $menu_links = array();
 
-  // Exported menu link: primary-links:content/calendar
-  $menu_links['primary-links:content/calendar'] = array(
+  // Exported menu link: primary-links:content/events
+  $menu_links['primary-links:content/events'] = array(
     'menu_name' => 'primary-links',
-    'link_path' => 'content/calendar',
-    'router_path' => 'content/calendar',
-    'link_title' => 'Calendar',
+    'link_path' => 'content/events',
+    'router_path' => 'content/events',
+    'link_title' => 'Events',
     'options' => array(),
     'module' => 'commons',
     'hidden' => '0',
@@ -23,7 +23,7 @@ function commons_event_menu_default_menu_links() {
   );
   // Translatables
   // Included for use with string extractors like potx.
-  t('Calendar');
+  t('Events');
 
 
   return $menu_links;

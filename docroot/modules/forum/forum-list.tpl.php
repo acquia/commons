@@ -1,5 +1,4 @@
 <?php
-// $Id: forum-list.tpl.php,v 1.4 2007/08/30 18:58:12 goba Exp $
 
 /**
  * @file forum-list.tpl.php

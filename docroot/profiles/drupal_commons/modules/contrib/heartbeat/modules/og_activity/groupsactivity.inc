@@ -1,5 +1,4 @@
 <?php
-// $Id: groupsactivity.inc,v 1.1.2.5 2010/12/13 21:51:36 stalski Exp $
 
 /**
  * @file

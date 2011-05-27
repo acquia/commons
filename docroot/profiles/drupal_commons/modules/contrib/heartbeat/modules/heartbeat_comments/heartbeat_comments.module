@@ -1,5 +1,4 @@
 <?php
-// $Id: heartbeat_comments.module,v 1.1.2.45 2011/01/21 00:53:09 stalski Exp $
 
 /**
  * @file
@@ -537,8 +536,10 @@ function heartbeat_comments_form_submit($form = array(), &$form_state = array())
   $authorid = db_result(db_query("SELECT uid FROM {heartbeat_activity} WHERE uaid = %d", $uaid));
   $author = heartbeat_user_load($authorid);
 
-  // Let rules know there has been a shout event
-  if (module_exists('rules')) {
+  module_invoke_all('heartbeat_comment_post', $user, $saved, $author);
+
+  // Let rules know there is a comment event.
+  if (!$node_comment && module_exists('rules')) {
     rules_invoke_event('heartbeat_comment_post', $user, $saved, $author);
 
     // For actions on related users

@@ -1,5 +1,4 @@
 <?php
-// $Id: filefield_meta.token.inc,v 1.2 2010/12/06 01:28:08 quicksketch Exp $
 
 /**
  * @file

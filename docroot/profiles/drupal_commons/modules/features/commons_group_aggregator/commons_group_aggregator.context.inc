@@ -8,27 +8,30 @@ function commons_group_aggregator_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-group-aggregator';
-  $context->description = 'RSS aggregation';
-  $context->tag = 'Group';
+  $context->name = 'aggregator-group';
+  $context->description = 'The group aggregator pages';
+  $context->tag = 'Aggregator';
   $context->conditions = array(
-    'context_og_condition_group_type' => array(
+    'path' => array(
       'values' => array(
-        'group' => 'group',
-      ),
-      'options' => array(
-        'node_form' => 1,
+        'node/*/aggregator*' => 'node/*/aggregator*',
       ),
     ),
   );
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'og_aggregator-0' => array(
-          'module' => 'og_aggregator',
-          'delta' => '0',
+        'commons_core-group_menu' => array(
+          'module' => 'commons_core',
+          'delta' => 'group_menu',
           'region' => 'sidebar_last',
-          'weight' => 4,
+          'weight' => 0,
+        ),
+        'commons_core-group_members' => array(
+          'module' => 'commons_core',
+          'delta' => 'group_members',
+          'region' => 'sidebar_last',
+          'weight' => 1,
         ),
       ),
     ),
@@ -37,9 +40,9 @@ function commons_group_aggregator_context_default_contexts() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Group');
-  t('RSS aggregation');
+  t('Aggregator');
+  t('The group aggregator pages');
 
-  $export['context_ui-group-aggregator'] = $context;
+  $export['aggregator-group'] = $context;
   return $export;
 }

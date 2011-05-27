@@ -1,5 +1,4 @@
 <?php
-// $Id: install.pgsql.inc,v 1.6 2007/10/22 15:22:39 dries Exp $
 
 // PostgreSQL specific install functions
 

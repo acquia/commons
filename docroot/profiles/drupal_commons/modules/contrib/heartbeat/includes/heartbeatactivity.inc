@@ -1,5 +1,4 @@
 <?php
-// $Id: heartbeatactivity.inc,v 1.1.2.1.2.45 2011/01/21 00:53:09 stalski Exp $
 
 /**
  * @file
@@ -87,8 +86,14 @@ class HeartbeatActivity {
     }
     else {
       $account = new stdClass();
+      $message_actor_data = unserialize($data['data']);
+      unset($data['data']);
+      $account->data = $message_actor_data;
+      $account->heartbeat_activity_settings = $message_actor_data['heartbeat_activity_settings'];
       foreach (user_fields() as $field)  {
-        $account->$field = $data[$field];
+        if (isset($data[$field])) {
+          $account->$field = $data[$field];
+        }
       }
       $this->actor = $account;
     }
@@ -305,7 +310,7 @@ class HeartbeatActivity {
       }
     }
     if (!empty($this->nid_target)) {
-      $node_target = node_load($this->nid);
+      $node_target = node_load($this->nid_target);
       // Add extra node access information for nid_target.
       $this->nid_target_info = array(
         'uid' => $node_target->uid,

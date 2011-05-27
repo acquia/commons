@@ -17,34 +17,56 @@ function commons_notifications_menu() {
 }
 
 /**
- * Implementation of hook_og_links_alter()
- */
-function commons_notifications_og_links_alter(&$links) {
-  global $user;
-  
-  // Detect the group context
-  if ($group = commons_core_get_group_context()) {
-    // Check if the user can subscribe to the group
-    if (commons_notifications_group_access($group)) {
-      // Determine if the user has subscriptions for the current group
-      if (commons_notifications_is_group_subscribed($group)) {
-        // Provide a link to unsubscribe
-        $links['commons_notifications-unsubscribe'] = l(t('Stop getting notifications'), "notifications/group/{$group->nid}/unsubscribe");
-      }
-      else {
-        // Provide a link to subscribe
-        $links['commons_notifications-subscribe'] = l(t('Get notifications'), "user/{$user->uid}/notifications/add/grouptype", array('query' => "gid={$group->nid}&destination=node/{$group->nid}"));
-      }
-    }
-  }
-}
-
-/**
  * Implementation of hook_menu_alter()
  */
 function commons_notifications_menu_alter(&$items) {
   // Move Broadcast menu tab to far right
   $items['node/%node/broadcast']['weight'] = 25;
+  
+  // Remove local task type from OG broadcast
+  $items['node/%node/broadcast']['type'] = MENU_CALLBACK;
+}
+
+/**
+ * Implementation of hook_form_FORM_ID_alter()
+ * 
+ * Alter the OG broadcast form
+ */
+function commons_notifications_form_og_broadcast_form_alter(&$form, &$form_state) {
+  // Extract the group from the form
+  $group = $form['#parameters'][2];
+  
+  // Set a breadcrumb back to the group
+  $breadcrumb = array();
+  $breadcrumb[] = l(t('Home'), '<front>');
+  $breadcrumb[] = l(t('Groups'), 'groups');
+  $breadcrumb[] = l($group->title, "node/{$group->nid}");
+  drupal_set_breadcrumb($breadcrumb);
+}
+
+/**
+ * Implementation of hook_og_links_alter()
+ */
+function commons_notifications_og_links_alter(&$links, $group) {
+  global $user;
+  
+  // Check if the user can subscribe to the group
+  if (commons_notifications_group_access($group)) {
+    // Determine if the user has subscriptions for the current group
+    if (commons_notifications_is_group_subscribed($group)) {
+      // Provide a link to unsubscribe
+      $links['commons_notifications-unsubscribe'] = l(t('Stop getting notifications'), "notifications/group/{$group->nid}/unsubscribe");
+    }
+    else {
+      // Provide a link to subscribe
+      $links['commons_notifications-subscribe'] = l(t('Get notifications'), "user/{$user->uid}/notifications/add/grouptype", array('query' => "gid={$group->nid}&destination=node/{$group->nid}"));
+    }
+  }
+  
+  // Check if the user can broadcast
+  if (og_broadcast_access($group)) {
+    $links['broadcast'] = l(t('Broadcast message'), "node/{$group->nid}/broadcast");
+  }
 }
 
 /**
@@ -153,3 +175,33 @@ function commons_notifications_group_access($group, $user = NULL) {
   
   return FALSE;
 }
+
+/**
+ * Implementation of hook_commons_profile_action_links_alter()
+ */
+function commons_notifications_commons_profile_action_links_alter(&$links, $account) {
+  global $user;
+  
+  // If we're viewing our own profile
+  if ($user->uid == $account->uid) {
+    // Add a link to view notification messages
+    if (messaging_simple_access($account)) {
+      // Count the available messages for this account
+      $sql = "SELECT COUNT(uid) FROM {messaging_store} WHERE uid = %d";
+      $count = db_result(db_query($sql, $account->uid));
+      $links['notification_messages'] = array(
+        'title' => t('Messages') . (($count > 0) ? " ($count)" : ''),
+        'href' => "user/{$account->uid}/messages",
+      );
+    }
+    
+    // Add a link to edit notification settings
+    if (notifications_access_user($account)) {
+      $links['notification_settings'] = array(
+        'title' => t('Notification settings'),
+        'href' => "user/{$account->uid}/notifications",
+      );
+    }
+  }
+}
+  

@@ -1,5 +1,4 @@
 <?php
-// $Id: xmlrpc.inc,v 1.47.2.6 2010/06/02 12:22:02 goba Exp $
 
 /**
  * @file

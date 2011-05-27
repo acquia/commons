@@ -1,4 +1,3 @@
-/* $Id: README.txt,v 1.1.2.1.2.36 2010/07/25 16:16:46 pwolanin Exp $ */
 
 This module integrates Drupal with the Apache Solr search platform. Solr search
 can be used as a replacement for core content search and boasts both extra
@@ -6,8 +5,8 @@ features and better performance. Among the extra features is the ability to have
 faceted search on facets ranging from content author to taxonomy to arbitrary
 CCK fields.
 
-The module comes with a schema.xml and solrconfig.xml file which should be used
-in your Solr installation.
+The module comes with a schema.xml, solrconfig.xml, and protwords.txt file which
+must be used in your Solr installation.
 
 This module depends on the search framework in core. However, you may not want
 the core searches and only want Solr search. If that is the case, you want to
@@ -30,7 +29,12 @@ Before enabling it, you must also do the following:
 
 Get the PHP library from the external project. The project is
 found at:  http://code.google.com/p/solr-php-client/
-From the apachesolr module directory, run this command:
+
+If you use drush make, run this command from the apachesolr module directory:
+
+drush make --no-core -y  --contrib-destination=. apachesolr.make
+
+Otherwise, from the apachesolr module directory, run this command:
 
 svn checkout -r22 http://solr-php-client.googlecode.com/svn/trunk/ SolrPhpClient
 
@@ -69,7 +73,7 @@ download, which includes all the items which are not in Drupal.org CVS due to
 CVS use policy. See the download link here: 
 http://acquia.com/documentation/acquia-search/activation
 
-Download Solr 1.4 from:
+Download the latest Solr 1.4.x release (e.g. 1.4.1) from:
 http://www.apache.org/dyn/closer.cgi/lucene/solr/
 
 Unpack the tarball somewhere not visible to the web (not in your apache docroot
@@ -77,18 +81,32 @@ and not inside of your drupal directory).
 
 The Solr download comes with an example application that you can use for
 testing, development, and even for smaller production sites. This
-application is found at apache-solr-nightly/example.
+application is found at apache-solr-1.4.1/example.
 
-Move apache-solr-nightly/example/solr/conf/schema.xml and rename it to
+Move apache-solr-1.4.1/example/solr/conf/schema.xml and rename it to
 something like schema.bak. Then move the schema.xml that comes with the
 ApacheSolr Drupal module to take its place.
 
-Similarly, move apache-solr-nightly/example/solr/conf/solrconfig.xml and rename
+Similarly, move apache-solr-1.4.1/example/solr/conf/solrconfig.xml and rename
 it like solrconfig.bak. Then move the solrconfig.xml that comes with the
 ApacheSolr Drupal module to take its place.
 
+Finally, move apache-solr-1.4.1/example/solr/conf/protwords.txt and rename
+it like protwords.bak. Then move the protwords.txt that comes with the
+ApacheSolr Drupal module to take its place.
+
+Make sure that the conf directory includes the following files - the Solr core
+may not load if you don't have at least an empty file present:
+solrconfig.xml
+schema.xml
+elevate.xml
+mapping-ISOLatin1Accent.txt
+protwords.txt
+stopwords.txt
+synonyms.txt
+
 Now start the solr application by opening a shell, changing directory to
-apache-solr-nightly/example, and executing the command java -jar start.jar
+apache-solr-1.4.1/example, and executing the command java -jar start.jar
 
 Test that your solr server is now available by visiting
 http://localhost:8983/solr/admin/
@@ -131,8 +149,10 @@ behavior:
  - apachesolr_tags_to_index: the list of HTML tags that the module will index
    (see apachesolr_add_tags_to_document()).
 
- - apachesolr_exclude_comments_types: an array of node types.  Any type listed
-   will have any attached comments excluded from the index.
+ - apachesolr_exclude_nodeapi_types: an array of node types each of which is
+   an array of one or more module names, such as 'comment'.  Any type listed
+   will have any listed modules' nodeapi 'update_index' implementation skipped
+   when indexing. This can be useful for excluding comments or taxonomy links.
 
  - apachesolr_ping_timeout: the timeout (in seconds) after which the module will
    consider the Apache Solr server unavailable.
@@ -230,6 +250,11 @@ hook_apachesolr_cck_fields_alter(&$mappings)
   or
 
     $mappings['per-field']['field_model_price'] = array('callback' => '', 'index_type' => 'float');
+
+  If a custom field needs to be searchable but does not need to be faceted you can change the 'facets'
+  parameter to FALSE, like:
+
+    $mappings['number_integer']['number'] = array('callback' => '', 'index_type' => 'integer', 'facets' => FALSE);
 
 hook_apachesolr_types_exclude($namespace)
 

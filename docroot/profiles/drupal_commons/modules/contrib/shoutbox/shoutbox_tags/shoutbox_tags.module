@@ -1,5 +1,4 @@
 <?php
-// $Id: shoutbox_tags.module,v 1.1.2.4 2010/12/08 00:38:10 mikestefff Exp $
 
 /**
  * Implementation of hook_menu()
@@ -24,9 +23,10 @@ function shoutbox_tags_shoutbox($op, &$shout, &$a1 = NULL, $form_state = NULL) {
   switch ($op) {
     case 'insert':
       // Extract the tags
-      $tags = shoutbox_tags_extract($shout);
-      // Save the tags
-      shoutbox_tags_save($shout, $tags);
+      if ($tags = shoutbox_tags_extract($shout)) {
+        // Save the tags
+        shoutbox_tags_save($shout, $tags);
+      }
       break;
       
     case 'edit':
@@ -46,19 +46,10 @@ function shoutbox_tags_shoutbox($op, &$shout, &$a1 = NULL, $form_state = NULL) {
       shoutbox_tags_to_links($shout);
       break;
       
-    case 'query':
+    case 'context':
       // If we're viewing a tag, only returned shouts that have the tag
       if ($tag = shoutbox_tags_is_page()) {
-        $a1 = "
-          SELECT s.* FROM {shoutbox} s 
-          INNER JOIN {shoutbox_tags} t 
-          ON s.shout_id = t.shout_id 
-          WHERE t.tag = '$tag' 
-          ORDER BY s.created DESC
-          ";
-          
-        // Set the title
-        drupal_set_title(t('Shout tag: %tag', array('%tag' => $tag)));
+        $a1['shoutbox_tags'] = $tag;
       }
       break;
     
@@ -76,6 +67,18 @@ function shoutbox_tags_shoutbox($op, &$shout, &$a1 = NULL, $form_state = NULL) {
         $a1 = array();
       }
       break;
+  }
+}
+
+/**
+ * Implementation of hook_db_rewrite_sql()
+ */
+function shoutbox_tags_db_rewrite_sql($query, $table, $primary, $contexts){
+  if ($table == 'shoutbox' && isset($contexts['shoutbox_tags'])) {
+    return array(
+      'join' => "INNER JOIN {shoutbox_tags} shoutbox_tags ON shoutbox_tags.shout_id = shoutbox.shout_id",
+      'where' => "shoutbox_tags.tag = '{$contexts['shoutbox_tags']}'",
+    );
   }
 }
 

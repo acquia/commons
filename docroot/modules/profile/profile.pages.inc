@@ -1,5 +1,4 @@
 <?php
-// $Id: profile.pages.inc,v 1.2 2007/12/08 14:06:22 goba Exp $
 
 /**
  * @file

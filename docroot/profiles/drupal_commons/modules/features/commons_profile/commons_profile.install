@@ -1,0 +1,44 @@
+<?php
+
+/**
+ * Implementation of hook_install()
+ */
+function commons_profile_install() {
+  // Weight the module to ensure hooks fire towards the end
+  db_query("UPDATE {system} SET weight = %d WHERE name = 'commons_profile'", 15);
+  
+  // Build the profile fields
+  _commons_profile_build_profile_fields();
+}
+
+/**
+ * Insert the core profile fields
+ */
+function _commons_profile_build_profile_fields() {
+  // Fetch the fields
+  module_load_include('inc', 'commons_profile', 'commons_profile.profile');
+  $fields = commons_profile_profile_fields();
+  
+  // Iterate each field
+  foreach ($fields as $key => $field) {
+    // Make sure the field doesn't exist yet
+    if (!_commons_profile_field_exists($key)) {
+      // Insert the field
+      drupal_write_record('profile_fields', $field);
+    }
+  }
+}
+
+/**
+ * Check if a given profile field already exists
+ * 
+ * @param $field
+ *   The field ID
+ * @return
+ *   TRUE if the field already exists, otherwise FALSE
+ */
+function _commons_profile_field_exists($field) {
+  $sql = "SELECT fid FROM {profile_fields} WHERE name = '%s'";
+  $result = db_result(db_query($sql, $field));
+  return $result ? TRUE : FALSE;
+}

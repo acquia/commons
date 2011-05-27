@@ -1,4 +1,3 @@
-// $Id: farbtastic.js,v 1.4.2.1 2008/06/25 09:34:17 goba Exp $
 // Farbtastic 1.2
 
 jQuery.fn.farbtastic = function (callback) {

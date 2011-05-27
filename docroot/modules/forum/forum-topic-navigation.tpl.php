@@ -1,5 +1,4 @@
 <?php
-// $Id: forum-topic-navigation.tpl.php,v 1.2 2007/08/07 08:39:35 goba Exp $
 
 /**
  * @file forum-topic-navigation.tpl.php

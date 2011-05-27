@@ -1,5 +1,4 @@
 <?php
-// $Id: openid.inc,v 1.8.2.3 2010/03/01 11:06:41 goba Exp $
 
 /**
  * @file

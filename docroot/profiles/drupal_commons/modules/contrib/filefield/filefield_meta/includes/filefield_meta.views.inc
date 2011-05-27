@@ -1,5 +1,4 @@
 <?php
-// $Id: filefield_meta.views.inc,v 1.4 2010/12/06 03:44:38 quicksketch Exp $
 /**
  * @file
  * Provide views data for filefield_meta.module.

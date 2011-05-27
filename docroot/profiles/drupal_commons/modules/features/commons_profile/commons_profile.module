@@ -1,0 +1,150 @@
+<?php
+
+include_once('commons_profile.features.inc');
+
+/**
+ * Implementation of hook_menu()
+ */
+function commons_profile_menu() {
+  $items = array();
+  $items['user/findfriends/autocomplete'] = array(
+    'title' => 'Find friends autocomplete', 
+    'page callback' => 'commons_profile_find_friends_autocomplete', 
+    'access callback' => 'user_access', 
+    'access arguments' => array('access user profiles'), 
+    'type' => MENU_CALLBACK, 
+    'file' => 'commons_profile.pages.inc',
+  );
+  return $items; 
+}
+
+/**
+ * Implementation of hook_menu_alter()
+ */
+function commons_profile_menu_alter(&$items) {
+  // Alter the profile tab title
+  $items['user/%user/view']['title'] = t('Recent activity');
+  
+  // Hide certain profile tabs 
+  foreach ($items as $key => $item) {
+    switch ($key) {
+      case 'user/%/badges';
+      case 'user/%user/messages';
+      case 'user/%user_category/edit';
+      case 'user/%user/messages';
+      case 'user/%user/notifications';
+      case 'user/%views_arg/bookmarks';
+      case 'user/%user/invites';
+      case 'user/%user/contact';
+        $items[$key]['type'] = MENU_CALLBACK;
+        break;
+    }  
+  }
+}
+
+/**
+ * Implementation of hook_block()
+ */
+function commons_profile_block($op = 'list', $delta = 0, $edit = array()) {
+  module_load_include('inc', 'commons_profile', 'commons_profile.blocks');
+  return _commons_profile_block($op, $delta, $edit);
+}
+
+/**
+ * Implementation of hook_theme()
+ */
+function commons_profile_theme() {
+  $registry = array(
+    'commons_profile_image_action_links_block' => array(
+      'arguments' => array('picture' => NULL, 'links' => NULL, 'account' => NULL),
+    ),
+    'commons_profile_friend_autocomplete_item' => array(
+      'arguments' => array('name' => NULL, 'picture' => NULL),
+    ),
+  );
+  
+  // Iterate the registry to add the theme template file
+  foreach ($registry as $key => $item) {
+    $registry[$key]['file'] = 'commons_profile.theme.inc'; 
+  }
+  
+  return $registry;
+}  
+
+/**
+ * Implementation of hook_init()
+ */
+function commons_profile_init() {
+  // Redirect core /profile which lists users to our new list of users
+  if (arg(0) == 'profile' && !arg(1)) {
+    drupal_goto('users');
+  }
+}
+
+/**
+ * Implementation of hook_user()
+ */
+function commons_profile_user($op, &$edit, &$account, $category = NULL) {    
+  switch ($op) {
+    case 'view':
+      // Remove the core profile fields, as we'll be providing our
+      // own content via Context
+      $account->content = array();
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_views_pre_render()
+ */
+function commons_profile_views_pre_render(&$view) {
+  global $user;
+  
+  // When viewing the "About" profile tab
+  if ($view->name == 'profile_about_page') {
+    // Determine if the user is viewing their own profile so the
+    // correct context can be set
+    if ($user->uid == arg(1)) {
+      context_set('context', 'profile-about-me', context_load('profile-about-me'));      
+    }
+    else {
+      context_set('context', 'profile-about-other', context_load('profile-about-other'));
+    }
+  }
+}
+
+/**
+ * Implementation of hook_views_pre_view()
+ */
+function commons_profile_views_pre_view(&$view) {
+  // When viewing the "Friends" block
+  if ($view->name == 'profile_friends') {
+    // Get the current user being viewed
+    if ($account = _commons_profile_get_current_user()) {
+      // Get the set title
+      $title = $view->display_handler->get_option('title');
+    
+      // Fetch the user's friends count
+      $friends = user_relationships_load(array('user' => $account->uid, 'approved' => TRUE), array('count' => TRUE));
+
+      // Add a friend count to the block
+      $title .= " ({$friends})";
+
+      // Set the new title
+      $view->display_handler->set_option('title', $title);
+    }
+  }
+}
+
+/**
+ * Helper function to get the current user being viewed
+ */
+function _commons_profile_get_current_user() {
+  static $account = FALSE;
+  if (!$account) {
+    if (arg(0) == 'user' && is_numeric(arg(1))) {
+      $account = user_load(arg(1));
+    }
+  }
+  return $account;
+}

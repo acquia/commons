@@ -54,8 +54,11 @@ function wikitools_handle_request() {
   // Don't do anything if no node types are active or no page name is available
   $node_types = wikitools_node_types();
   if (count($node_types) && $page_name) {
-    // Try to find the current page with this name.
-    $result = db_query("SELECT nid, type FROM {node} WHERE LOWER(title) = LOWER('%s')", $page_name);
+    $page_name = check_plain($page_name);
+    // Try to find the current page with this name, limit the query by node types
+    $params = $node_types;
+    $params[] = $page_name;
+    $result = db_query(db_rewrite_sql("SELECT n.nid, n.type FROM {node} n WHERE n.type IN (". db_placeholders($node_types, 'varchar') .") AND LOWER(n.title) = LOWER('%s')"), $params);
     $found_nodes = array();
     while ($node = db_fetch_object($result)) {
       if (wikitools_type_affected($node->type)) {
@@ -79,7 +82,7 @@ function wikitools_handle_request() {
     }
     else {
       // No match for title. Try to find an old page with this name
-      $result = db_query("SELECT n.nid, n.type, n.title FROM {node} n LEFT JOIN {node_revisions} r ON n.nid = r.nid WHERE LOWER(r.title) = LOWER('%s') ORDER BY n.vid DESC", $page_name);
+      $result = db_query(db_rewrite_sql("SELECT n.nid, n.type, n.title FROM {node} n LEFT JOIN {node_revisions} r ON n.nid = r.nid WHERE LOWER(r.title) = LOWER('%s') ORDER BY n.vid DESC"), $page_name);
       $moved_nodes = array();
       while ($node = db_fetch_object($result)) {
         if (wikitools_type_affected($node->type)) {
@@ -149,6 +152,7 @@ function theme_wikitools_page_does_not_exist($page_name) {
   if (!empty($settings['Creation form'])) {
     $output .= theme('wikitools_create', $page_name);
   }
+  drupal_set_header('HTTP/1.1 404 Not Found');
   return $output;
 }
 

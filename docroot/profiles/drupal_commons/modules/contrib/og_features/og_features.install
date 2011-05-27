@@ -1,0 +1,47 @@
+<?php
+
+/**
+ * Implementation of hook_install()
+ */
+function og_features_install() {
+  drupal_install_schema('og_features');
+  
+  // Set the module weight above all others
+  db_query("UPDATE {system} SET weight = 100 WHERE name = 'og_features'");
+}
+
+/**
+ * Implementation of hook_uninstall()
+ */
+function og_features_uninstall() {
+  drupal_uninstall_schema('og_features');
+  
+  // Fetch all node-type variables
+  $sql = "SELECT name FROM {variable} WHERE name LIKE = 'og_features_%'";
+  $result = db_query($sql);
+  while ($var = db_fetch_object($result)) {
+    variable_del($var->name);
+  }
+}
+
+function og_features_schema() {
+  $schema['og_features'] = array(
+    'fields' => array(
+      'nid' => array(
+        'type' => 'int',
+        'size' => 'normal',
+        'not null' => TRUE,
+      ),
+      'disabled' => array(
+        'type' => 'blob', 
+        'size' => 'big', 
+        'not null' => TRUE, 
+        'serialize' => TRUE, 
+        'object default' => array()
+      ),
+    ),
+    'primary key' => array('nid'),
+  );
+  
+  return $schema;
+}

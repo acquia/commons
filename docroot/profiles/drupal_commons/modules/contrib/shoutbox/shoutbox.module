@@ -1,5 +1,4 @@
 <?php
-// $Id: shoutbox.module,v 1.31.2.41 2011/01/18 15:55:08 mikestefff Exp $
 
 /**
  * @file
@@ -13,6 +12,7 @@
  */
 function shoutbox_menu() {
   $items = array();
+  $file = 'shoutbox.pages.inc';
 
   $items['shoutbox'] = array(
     'title' => 'Shout box',
@@ -33,30 +33,34 @@ function shoutbox_menu() {
     'access callback' => '_shoutbox_user_access',
     'access arguments' => array('edit own shouts', 1),
     'type' => MENU_CALLBACK,
+    'file' => $file,
   );
   $items['shout/%shoutbox/delete'] = array(
     'title' => 'Delete shout',
-    'page callback' => 'theme',
+    'page callback' => 'drupal_get_form',
     'page arguments' => array('shoutbox_delete_form', 1),
     'access callback' => '_shoutbox_user_access',
     'access arguments' => array('delete own shouts', 1),
     'type' => MENU_CALLBACK,
+    'file' => $file,
   );
   $items['shout/%shoutbox/publish'] = array(
     'title' => 'Publish shout',
-    'page callback' => 'theme',
+    'page callback' => 'drupal_get_form',
     'page arguments' => array('shoutbox_publish_form', 1),
     'access callback' => '_shoutbox_user_access',
     'access arguments' => array('moderate shoutbox'),
     'type' => MENU_CALLBACK,
+    'file' => $file,
   );
   $items['shout/%shoutbox/unpublish'] = array(
     'title' => 'Unpublish shout',
-    'page callback' => 'theme',
+    'page callback' => 'drupal_get_form',
     'page arguments' => array('shoutbox_unpublish_form', 1),
     'access callback' => '_shoutbox_user_access',
     'access arguments' => array('moderate shoutbox'),
     'type' => MENU_CALLBACK,
+    'file' => $file,
   );
   $items['admin/settings/shoutbox'] = array(
     'title' => 'Shout box',
@@ -65,12 +69,18 @@ function shoutbox_menu() {
     'page arguments' => array('shoutbox_admin_settings'),
     'access arguments' => array('administer shoutbox'),
     'type' => MENU_NORMAL_ITEM,
+    'file' => $file,
   );
   return $items;
 }
 
 /**
- * Implementation of hook_load().
+ * Load a shout by shout id
+ * 
+ * @param shout_id
+ *   The shout ID
+ * @return
+ *   The shout object, or FALSE is none
  */
 function shoutbox_load($shout_id) {
   if (is_numeric($shout_id)) {
@@ -303,7 +313,8 @@ function shoutbox_get_user_link($shout) {
  * Implementation of hook_theme().
  */
 function shoutbox_theme() {
-  return array(
+  // Create the theme registry
+  $registry = array(
     'shoutbox_links' => array(),
     'shoutbox_post_forbidden' => array(),
     'shoutbox_interval_message' => array(),
@@ -315,363 +326,15 @@ function shoutbox_theme() {
     'shoutbox_page' => array(
       'arguments' => array('output' => NULL),
     ),
-    'shoutbox_delete_form' => array(
-      'arguments' => array('shout' => NULL),
-      'file' => 'shoutbox.pages.inc',
-    ),
-    'shoutbox_publish_form' => array(
-      'arguments' => array('shout' => NULL),
-      'file' => 'shoutbox.pages.inc',
-    ),
-    'shoutbox_unpublish_form' => array(
-      'arguments' => array('shout' => NULL),
-      'file' => 'shoutbox.pages.inc',
-    ),
-  );
-}
-
-/**
- * Load external files (JS & CSS)
- */
-function theme_shoutbox_external_files() {
-  drupal_add_css(drupal_get_path('module', 'shoutbox') .'/shoutbox.css');
-  drupal_add_js('misc/jquery.form.js');
-  drupal_add_js(drupal_get_path('module', 'shoutbox') .'/shoutbox-form.js', 'module');  
-}
-
-/**
- * Theme function of shoutbox actions. Actions are edit, delete, promote
- * and demote. NOTE: Function does not return html but rather an array
- * with the actions as keys. See code.
- */
-function theme_shoutbox_links() {
-  $links['edit']['action'] = 'edit';
-  $links['edit']['title'] = 'Edit Shout';
-  $links['edit']['img'] = base_path() . drupal_get_path('module', 'shoutbox') .'/images/icon_edit.png';
-  $links['edit']['img_width'] = 15;
-  $links['edit']['img_height'] = 15;
-  $links['delete']['action'] = 'delete';
-  $links['delete']['title'] = 'Delete Shout';
-  $links['delete']['img'] = base_path() . drupal_get_path('module', 'shoutbox') .'/images/icon_delete.png';
-  $links['delete']['img_width'] = 15;
-  $links['delete']['img_height'] = 15;
-  $links['publish']['action'] = 'publish';
-  $links['publish']['title'] = 'Publish';
-  $links['publish']['img'] = base_path() . drupal_get_path('module', 'shoutbox') .'/images/thumb_up.png';
-  $links['publish']['img_width'] = 15;
-  $links['publish']['img_height'] = 15;
-  $links['unpublish']['action'] = 'unpublish';
-  $links['unpublish']['title'] = 'Unpublish';
-  $links['unpublish']['img'] = base_path() . drupal_get_path('module', 'shoutbox') .'/images/thumb_down.png';
-  $links['unpublish']['img_width'] = 15;
-  $links['unpublish']['img_height'] = 15;
-
-  return $links;
-}
-
-/**
- * Theme function for shoutbox posts.
- *
- * @param shout
- *   The shout to be themed.
- * @param links
- *   Links of possible actions that can be performed on this shout
- *   by the current user.
- */
-function theme_shoutbox_post($shout, $links = array()) {
-  global $user;
-  
-  // Gather moderation links
-  if ($links) {
-    foreach ($links as $link) {
-      $linkattributes = $link['linkattributes'];
-      $link_html = '<img src="'. $link['img'] .'"  width="'. $link['img_width'] .'" height="'. $link['img_height'] .'" alt="'. $link['title'] .'" class="shoutbox-imglink"/>';
-      $link_url = 'shout/'. $shout->shout_id .'/'. $link['action'];
-      $img_links = l($link_html, $link_url, array('html' => TRUE, 'query' => array('destination' => drupal_get_path_alias($_GET['q'])))) . $img_links;
-    }
-  }
-  
-  // Generate user name with link
-  $user_name = shoutbox_get_user_link($shout);
-
-  // Generate title attribute
-  $title = t('Posted !date at !time by !name', array('!date' => format_date($shout->created, 'custom', 'm/d/y'), '!time' => format_date($shout->created, 'custom', 'h:ia'), '!name' => $shout->nick));
-
-  // Add to the shout classes
-  $shout_classes = array();
-  $shout_classes[] = 'shoutbox-msg';
-
-  // Check for moderation
-  if ($shout->moderate == 1) {
-    $shout_classes[] = 'shoutbox-unpublished';
-    $approval_message = '&nbsp;(' . t('This shout is waiting for approval by a moderator.') . ')';
-  }
-  
-  // Check for specific user class
-  $user_classes = array();
-  $user_classes[] = 'shoutbox-user-name';
-  if ($shout->uid == $user->uid) {
-    $user_classes[] = 'shoutbox-current-user-name';
-  }
-  else if ($shout->uid == 0) {
-    $user_classes[] = 'shoutbox-anonymous-user';  
-  }
-  
-  // Build the post
-  $post = '';
-  $post .= '<div class="' . implode(' ', $shout_classes) . '" title="' . $title . '">';
-  $post .= '<div class="shoutbox-admin-links">' . $img_links . '</div>';
-  $post .= '<span class="' . implode(' ', $user_classes) . '">' . $user_name . '</span>:&nbsp;';
-  $post .= '<span class="shoutbox-shout">' . $shout->shout . $approval_message . '</span>';
-  $post .= '<span class="shoutbox-msg-time">';
-  $format = variable_get('shoutbox_time_format', 'ago');
-  switch ($format) {
-    case 'ago';
-      $post .=  t('!interval ago', array('!interval' => format_interval(time() - $shout->created)));
-      break;
-    case 'small':
-    case 'medium':
-    case 'large':
-      $post .= format_date($shout->created, $format);
-      break;
-  }
-  $post .= '</span>';
-  $post .= '</div>' . "\n";
-
-  return $post;
-}
-
-/**
- * Theme function for displaying the shoutbox page.
- *
- * @param $output
- *   The shout output data. See shoutbox_display_posts() 
- * @return
- *   String containing HTML formatted page.
- */
-function theme_shoutbox_page($output) {
-  $shouts = $output['rows'];
-  
-  if (!empty($shouts)) {
-    $shouts = theme('table', NULL, $shouts); 
-  }
-  else {
-    $shouts = t('There are currently no shouts');
-  } 
-  
-  return "<div id=\"shoutbox-body\">\n" . $shouts . "</div>\n";
-}
-
-/**
- * Theme function for displaying the access denied message.
- *
- * @return
- *   String containing HTML formatted access denied message.
- */
-function theme_shoutbox_post_forbidden() {
-  return '<div class="shoutbox-msg">' . t('You\'re not permitted to post shouts.') . '</div>';
-}
-
-/**
- * Theme the link on the bottom of the block pointing to the shout page
- * 
- * @param $page_path
- *     Path to the shout page
- */
-function theme_shoutbox_block_page_link($page_path) {
-  return '<div class="shoutbox-all-shouts">' . l(t('All shouts'), $page_path) . '</div>';
-}
-
-/**
- * Theme the block message regarding auto-update interval
- * 
- * @param $interval
- *     The number of seconds the shouts auto-refresh
- */
-function theme_shoutbox_interval_message($interval) {
-  // Check if autoupdate is enabled
-  if ($interval) {
-    return '<div class="shoutbox-interval-msg">' . t('Shouts automatically update every !interval seconds', array('!interval' => $interval)) . '</div>';  
-  }  
-}
-
-/**
- * Form for admin/settings/shoutox page.
- */
-function shoutbox_admin_settings() {
-  $form['display_settings'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Display settings'),
-    '#collapsible' => TRUE,
-  );
-  $form['display_settings']['shoutbox_max_length'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Maximum amount of characters in a shout'),
-    '#default_value' => variable_get('shoutbox_max_length', 255),
-    '#size' => 5,
-    '#required' => TRUE,
-    '#description' => t('Set the amount of allowed characters per shout. Enter 0 for no limit. This will not affect existing shouts.'),
-  );
-  $form['display_settings']['shoutbox_showamount_block'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Number of posts to show in the block'),
-    '#default_value' => variable_get('shoutbox_showamount_block', 10),
-    '#size' => 4,
-    '#maxlength' => 4,
-    '#required' => TRUE,
-    '#description' => t('Set the number of shoutbox posts to show in the block.'),
-  );
-  $form['display_settings']['shoutbox_showamount_page'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Number of posts to show on the page'),
-    '#default_value' => variable_get('shoutbox_showamount_page', 30),
-    '#size' => 4,
-    '#maxlength' => 4,
-    '#required' => TRUE,
-    '#description' => t('Set the number of shoutbox posts to show on the page.'),
-  );
-  $form['display_settings']['shoutbox_ascending'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Post newest shouts on top'),
-    '#default_value' => variable_get('shoutbox_ascending', 1),
-    '#description' => t('When checked, new shouts will appear on the top instead of the bottom.'),
-  );
-  $form['display_settings']['shoutbox_widget_type'] = array(
-    '#type' => 'radios',
-    '#title' => t('Input form type'),
-    '#default_value' => variable_get('shoutbox_widget_type', 'textfield'),
-    '#description' => t('Choose the type of form widget used for entering a shout.'),
-    '#options' => array(
-      'textfield' => t('Textfield'),
-      'textarea' => t('Textarea'),
-    ),
-  );
-  $form['display_settings']['shoutbox_time_format'] = array(
-    '#type' => 'select',
-    '#title' => t('Time format'),
-    '#default_value' => variable_get('shoutbox_time_format', 'ago'),
-    '#description' => t('Choose the format which shout times will be rendered in.'),
-    '#options' => array(
-      'ago' => t('Time ago (1 hour 15 minutes ago)'),
-      'small' => t('Small !time', array('!time' => '(' . format_date(time(), 'small') . ')')),
-      'medium' => t('Medium !time', array('!time' => '(' . format_date(time(), 'medium') . ')')),
-      'large' => t('Large !time', array('!time' => '(' . format_date(time(), 'large') . ')')),
-    ),
-  );
-  $form['display_settings']['shoutbox_restrict_general_shouts'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Restrict general shouts'),
-    '#default_value' => variable_get('shoutbox_restrict_general_shouts', 1),
-    '#description' => t('When checked, shoutboxes outside of specific contexts will be restricted to general shouts. There are modules that utilize the Shoutbox API, such as Shoutbox group, that will enter shouts meant to only be displayed in certain locations. Checking this will insure that those shouts are only displayed by the modules responsible for creating them.'),
   );
   
-  // Generate choices for profile fields
-  if (module_exists('profile')) {
-    $choices = array();
-    $fields = db_query("SELECT name FROM {profile_fields} ORDER BY name ASC");
-    while ($field = db_fetch_object($fields)) {
-      $choices[$field->name] = $field->name;
-    }
-  
-    $form['display_settings']['shoutbox_profile_name'] = array(
-      '#type' => 'select',
-      '#title' => t('Use profile field for user name'),
-      '#options' => array(0 => '- None -') + $choices,
-      '#default_value' => variable_get('shoutbox_profile_name', 0),
-      '#description' => t('Select an existing custom profile field to use as the user name.'),
-    );
-  }
-  else {
-    $form['display_settings']['shoutbox_profile_name'] = array(
-      '#type' => 'item',
-      '#title' => t('Use profile field for user name'),
-      '#description' => t('Enable the profile module to allow Shoutbox to use the user\'s real name instead of the username.'),
-    );
-  }
-
-  $form['shoutbox_filter_format'] = _shoutbox_filter_form();
-  $form['shoutbox_filter_format']['#collapsed'] = FALSE;
-  $form['shoutbox_filter_format']['shoutbox_escape_html'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Escape all HTML & formatting'),
-    '#default_value' => variable_get('shoutbox_escape_html', 1),
-    '#description' => '<strong>' . t('Checking this will ignore the input format selected below, and escape all HTML from the shouts.') . '</strong>',
-    '#weight' => -10,
-  );
-
-  $form['time_settings'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Time settings'),
-    '#collapsible' => TRUE,
-    '#collapsed' => FALSE,
-  );
-  $form['time_settings']['shoutbox_refresh'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Auto refresh (in seconds)'),
-    '#default_value' => shoutbox_get_refresh_rate(),
-    '#size' => 4,
-    '#maxlength' => 4,
-    '#description' => t('Shoutbox can be set to automatically refresh every x number of seconds.  Set to 0 to turn off the auto refresh.'),
-  );
-  $form['time_settings']['shoutbox_anonymous_timeout'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Number of minutes for which anonymous users may edit or delete their own posts'),
-    '#default_value' => variable_get('shoutbox_anonymous_timeout', 20),
-    '#size' => 4,
-    '#maxlength' => 4,
-    '#description' => t('Anonymous users can edit or delete their post within this amount of time from it being posted, as long as they have the same IP address as when they posted it.  If you don\'t want shout editing and/or deleting, remove these permissions from Drupal\'s anonymous users role. Set 0 for no limit.'),
-  );
-  $form['time_settings']['shoutbox_registered_timeout'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Number of minutes for which registered users may edit or delete their own posts'),
-    '#default_value' => variable_get('shoutbox_registered_timeout', 0),
-    '#size' => 4,
-    '#maxlength' => 4,
-    '#description' => t('Registered users can edit or delete their post within this amount of time from it being posted.  If you don\'t want editing and/or deleting, remove these permissions from Drupal\'s authenticated users role. Set 0 for no limit.'),
-  );
-  $form['time_settings']['shoutbox_expire'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Number of days after which shouts will be purged from the database'),
-    '#default_value' => variable_get('shoutbox_expire', 0),
-    '#size' => 4,
-    '#maxlength' => 4,
-    '#description' => t('Shouts will be permanently deleted after the number of days specified.  Shouts will never expire when this is set to 0.'),
-  );
-
-  return system_settings_form($form);
-}
-
-/**
- * Validate the admin settings
- */
-function shoutbox_admin_settings_validate($form, &$form_state) {
-  if (!is_numeric($form_state['values']['shoutbox_showamount_block'])) {
-    form_set_error('shoutbox_showamount_block', t('Block amount must be numeric'));
+  // Add the theme file to each
+  $file = 'shoutbox.theme.inc';
+  foreach ($registry as $key => $entry) {
+    $registry[$key]['file'] = $file;
   }
   
-  if (!is_numeric($form_state['values']['shoutbox_showamount_page'])) {
-    form_set_error('shoutbox_showamount_page', t('Page amount must be numeric'));
-  }
-  
-  if (!is_numeric($form_state['values']['shoutbox_max_length'])) {
-    form_set_error('shoutbox_max_length', t('Shoutbox length must be numeric'));
-  }
-  
-  if (!is_numeric($form_state['values']['shoutbox_refresh'])) {
-    form_set_error('shoutbox_refresh', t('Refresh setting must be a numeric value'));
-  }
-  
-  if (!is_numeric($form_state['values']['shoutbox_anonymous_timeout'])) {
-    form_set_error('shoutbox_anonymous_timeout', t('Anonymous timeout setting must be a numeric value'));
-  }
-  
-  if (!is_numeric($form_state['values']['shoutbox_registered_timeout'])) {
-    form_set_error('shoutbox_registered_timeout', t('Registered timeout setting must be a numeric value'));
-  }
-  
-  if (!is_numeric($form_state['values']['shoutbox_expire'])) {
-    form_set_error('shoutbox_expire', t('Expiration setting must be a numeric value'));
-  }
+  return $registry;
 }
 
 /**
@@ -760,117 +423,6 @@ function shoutbox_add_form() {
 }
 
 /**
- * Form for editing shouts.
- *
- * @param shout_id
- *   The shout id of the shout being edited.
- */
-function shoutbox_edit_form(&$form_state, $shout) {
-  global $user;
-  
-  $form[] = array(
-    '#type' => 'item',
-    '#title' => t('Author'),
-    '#value' => l($shout->nick, 'user/' . $shout->uid),
-  );
-  $form[] = array(
-    '#type' => 'item',
-    '#title' => t('Created'),
-    '#value' => date('m/d/y h:i:sa', $shout->created),
-  );
-  $form[] = array(
-    '#type' => 'item',
-    '#title' => t('Changed'),
-    '#value' => date('m/d/y h:i:sa', $shout->changed),
-  );
-  
-  if (_shoutbox_user_access('administer shoutbox') || _shoutbox_user_access('moderate shoutbox')) {
-    $form['moderate'] = array(
-      '#type' => 'radios',
-      '#title' => t('Moderation status'),
-      '#default_value' => $shout->moderate,
-      '#options' => array('published', 'not published'),
-    );
-  }  
-    
-  if (_shoutbox_user_access('edit own shouts', $shout)) {
-    $max = variable_get('shoutbox_max_length', 255);
-    $form['shout'] = array(
-      '#type' => variable_get('shoutbox_widget_type', 'textfield'),
-      '#title' => t('Shout'),
-      '#default_value' => $shout->shout,
-      '#cols' => 13,
-      '#required' => TRUE,
-      '#rows' => 7,
-      '#maxlength' => $max ? $max : NULL,
-    );
-
-    $form['shout_id'] = array(
-      '#type' => 'value',
-      '#value' => $shout->shout_id,
-    );
-  }
-
-  $form = confirm_form($form, '', $_GET['destination'], '', t('Update'), t('Cancel'));
-  return $form;
-}
-
-/**
- * Displays a "Are you sure message ?" with a Yes and Cancel
- * option.
- *
- * @param shout_id
- *   The shout id of the shout being edited.
- */
-function shoutbox_delete_form(&$form_state, $shout) {
-  theme('shoutbox_external_files');
-  $form['shout_id'] = array(
-    '#type' => 'value',
-    '#value' => $shout->shout_id,
-  );
-  $form = confirm_form($form, t('Are you sure you want to delete this shout?'), $_GET['destination']);
-  return $form;
-}
-
-/**
- * Displays a "Are you sure message ?" with a Yes and Cancel
- * option.
- *
- * @param shout_id
- *   The shout id of the shout being published.
- */
-function shoutbox_publish_form(&$form_state, $shout) {
-  theme('shoutbox_external_files');
-  $form['shout_id'] = array(
-    '#type' => 'value',
-    '#value' => $shout->shout_id,
-  );
-  $form = confirm_form($form, t('Are you sure you want to publish this shout?'), $_GET['destination']);
-  return $form;
-}
-
-/**
- * Displays a "Are you sure message ?" with a Yes and Cancel
- * option.
- *
- * @param shout_id
- *   The shout id of the shout being unpublished.
- */
-function shoutbox_unpublish_form(&$form_state, $shout) {
-  theme('shoutbox_external_files');
-  $form['shout_id'] = array(
-    '#type' => 'value',
-    '#value' => $shout->shout_id,
-  );
-  
-  $form = confirm_form($form, t('Are you sure you want to unpublish this shout?'), $_GET['destination']);
-  return $form;
-}
-
-
-//  FORM SUBMITS.
-
-/**
  * Handles submission of a shout.
  * Handles both ajax submission and regular form submission.
  */
@@ -921,79 +473,6 @@ function shoutbox_add_form_submit($form, &$form_state) {
 }
 
 /**
- * Handle the edit form submission.
- *
- * @param $form_id
- *   The form ID of the form.
- * @param $form_values
- *   Form values.
- */
-function shoutbox_edit_form_submit($form, &$form_state) {
-  if (is_numeric($form_state['values']['shout_id'])) {
-    // Load the existing shout
-    $shout = shoutbox_load($form_state['values']['shout_id']);
-  
-    // Edit the shout object
-    $shout->shout = $form_state['values']['shout'];
-    $shout->moderate = $form_state['values']['moderate'];
-    $shout->changed = time();
-    
-    // Alert other modules about the update
-    shoutbox_invoke('edit', $shout, $a1 = NULL, $form_state);
-    
-    // Update the shout
-    db_query("UPDATE {shoutbox} SET shout = '%s', moderate = %d, changed = %d WHERE shout_id = %d", $shout->shout, $shout->moderate, $shout->changed, $shout->shout_id);
-    
-    drupal_set_message(t('Your shout has been saved.'));
-    $form_state['redirect'] = '';
-  }
-  else {
-    return drupal_not_found();
-  }
-}
-
-/**
- * Handle the delete form submission.
- */
-function shoutbox_delete_form_submit($form, &$form_state) {
-  if ($form_state['clicked_button']['#value'] == t('Confirm')) {
-    if (is_numeric($form_state['values']['shout_id'])) {
-      //  Load the shout
-      $shout = shoutbox_load($form_state['values']['shout_id']);
-      
-      //  Delete the shout
-      shoutbox_delete_shout($shout);
-      
-      drupal_set_message(t('Your shout was deleted.'));
-      $form_state['redirect'] = '';
-    }
-    else {
-      return drupal_not_found();
-    }
-  }
-}
-
-/**
- * Handle the publish form submission.
- */
-function shoutbox_publish_form_submit($form, &$form_state) {
-  if ($form_state['clicked_button']['#value'] == t('Confirm')) {
-    $form_state['redirect'] = '';
-    return shoutbox_moderate_shout($form_state['values']['shout_id'], FALSE);
-  }
-}
-
-/**
- * Handle the unpublish form submission.
- */
-function shoutbox_unpublish_form_submit($form, &$form_state) {
-  if ($form_state['clicked_button']['#value'] == t('Confirm')) {
-    $form_state['redirect'] = '';
-    return shoutbox_moderate_shout($form_state['values']['shout_id'], TRUE);
-  }
-}
-
-/**
  * Makes sure uses don't submit default values.
  *
  * @param $form_id
@@ -1040,18 +519,12 @@ function shoutbox_display_posts($show_amount, $wrap = TRUE, $pager = FALSE) {
   // Figure out if we should display it in ascending or descending order.
   $ascending = variable_get('shoutbox_ascending', TRUE);
 
-  if (variable_get('shoutbox_restrict_general_shouts', 1)) {
-    // Restrict to general shouts only
-    $query = "SELECT * FROM {shoutbox} WHERE module = 'shoutbox' ORDER BY created DESC";
-  }
-  else {
-    // Show any shouts available
-    $query = "SELECT * FROM {shoutbox} ORDER BY created DESC";
-  }
+  // Determine the shout context
+  shoutbox_invoke('context', $blank, $contexts);
 
   // Allow other modules to alter the query
-  shoutbox_invoke('query', $shout = NULL, $query);
-  
+  $query = db_rewrite_sql("SELECT shoutbox.* FROM {shoutbox} shoutbox ORDER BY created DESC", 'shoutbox', 'shout_id', $contexts);
+
   if (!$pager) {
     $result = db_query_range($query, 0, $show_amount);
   }
@@ -1099,6 +572,20 @@ function shoutbox_display_posts($show_amount, $wrap = TRUE, $pager = FALSE) {
   $output_data['rows'] = $rows;
   $output_data['raw'] = $raw;
   return $output_data;
+}
+
+/**
+ * Implementation of hook_db_rewrite_sql()
+ */
+function shoutbox_db_rewrite_sql($query, $table, $primary, $contexts){
+  if ($table == 'shoutbox') {
+    // If there are no contexts, and general shouts should be restricted, do so
+    if (variable_get('shoutbox_restrict_general_shouts', 1) && empty($contexts)) {
+      return array(
+        'where' => "shoutbox.module = 'shoutbox'",
+      );
+    }
+  }
 }
 
 /**
@@ -1282,10 +769,10 @@ function shoutbox_moderate_shout($shout_id, $moderate) {
   }
 }
 
-/*
+/**
  * Helper function to invoke modules that implement hook_shoutbox
  * This is required to preserve the reference of variables
- * See API.txt for more details
+ * See shoutbox.api.php for more details
  */
 function shoutbox_invoke($op, &$shout, &$a1 = NULL, $form_state = NULL) {
   $hook = 'shoutbox';

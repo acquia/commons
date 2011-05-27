@@ -1,4 +1,3 @@
-// $Id: tabledrag.js,v 1.13.2.5 2009/06/18 12:24:24 goba Exp $
 
 /**
  * Drag and drop table rows with field manipulation.

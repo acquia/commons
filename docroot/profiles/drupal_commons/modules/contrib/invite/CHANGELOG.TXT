@@ -1,0 +1,216 @@
+
+Invite 6.x-2.x, xxxx-xx-xx
+--------------------------
+by smk-ka: Cleaned up README.
+#496894 by seutje, smk-ka: Increased size of e-mail subject field.
+#871090 by smk-ka: Fixed registration message appears on password reset form.
+#870930 by jcmarco: Added support for Vertical Tabs.
+by smk-ka: Easier access to permissions page from invite settings.
+
+
+Invite 6.x-2.0-BETA2, 2010-08-01
+--------------------------------
+#324945 by andypost, Barrett, neilnz: Fixed mass email not possible.
+
+
+Invite 6.x-2.0-BETA1, 2010-08-01
+--------------------------------
+by smk-ka: Fixed invite stats don't display rank.
+#489898 by hefox: Respect destination URL on withdraw invite confirmation page.
+#790138 by rjbrown99: Fixed case-insensitive validation of e-mails.
+#651264 by fuerst, ositoblanco: Added configurable path to registration page.
+#695034 by smk-ka: Added a new permission to restrict access to administrative
+  pages.
+#364971 by jaydub: Fixed administrative overview query for PostgreSQL.
+#322748: Fixed only administrator can send invitations on multilingual
+  installation.
+#374869 by webchick, smk-ka: Denying access to the user registration form at
+  the menu callback level, not at the form level, for better compatibility with
+  other modules.
+#467486 by neilnz: Grammar fix.
+#633280 by tobiasb: Removed t() in schema definitions.
+#330233 by Bevan, smk-ka: Fixed escalation to target role failed.
+#124906 by tobiasb: Updated and improved German translation.
+
+
+Invite 6.x-2.0-ALPHA-1, 2009-04-19
+----------------------------------
+#310775 by Barrett, sun: Fixed SQL error when no emails are left after filtering
+  out registered users.
+#323661 by tcconway: Removed "Track" from local task title "Track Invitations".
+#214426 by barako: Updated French translation.
+
+New features:
+- #219266 by jcfiala, wojtha, smk-ka: Port to D6.
+- Added administrator interface showing invite history.
+- Moved the user-specific tracking page to the user profile.
+- #162570: Added a resend button.
+- #134997: Withdrawn invites are now flagged instead of being physically
+  deleted. This gives administrators a complete history of who has been invited
+  and who did or didn't join.
+- #98765: Allowing multiple invites to the same e-mail address.
+- #207419 by Andrew Young: Look up invitation for new users who didn't use
+  invitation link.
+- #214426 by Olivier Tavard: Added french translation.
+- Refactored notification system to be less resource intensive.
+- invite_stats() has been renamed to invite_count() and returns now a specific
+  count.
+
+Bugs fixed:
+- #171765: Enhanced compatibility with LoginToboggan.
+- #197198: Fixed misleading error message when no permissions have been set up.
+- #196877: Prevent caching of user/register page (better approach).
+- #229803 by will_in_wi: Restored capability for admins to create users when
+  operating in "by invitation only" mode.
+- #317552 by Stella: Use UTF8-safe string functions and other minor changes.
+
+
+Invite 5.x-1.13, 2007-12-01
+---------------------------
+New features:
+- Added Invite Statistics helper module.
+- Added Cancel User Accounts helper module that allow users to terminate user
+  accounts by withdrawing their invitation.
+- Moved Invite to its own package namespace.
+- #183018: Extract only the e-mail part when processing the submitted e-mails
+  to allow e-mails that contain a display name
+  (eg. Some Name <foo@example.com>).
+
+Bugs fixed:
+- #196472: Fixed Access denied error after redirecting.
+- #186570 by dldege: Fixed Access denied error after sending an invitation if
+  the user doen't have the track invitations permission.
+- #182914: Fixed a caching issue for the register form where the e-mail address
+  of a previously invited user was displayed.
+
+Invite 5.x-1.12, 2007-10-17
+---------------------------
+New features:
+- Added 'track invitations' permission to be able to hide the invitation
+  overview from anonymous users.
+- #175786: Fixed up ui by 1) separating invite overviews using tabs and 2)
+  using a pager.
+- #178652 by Gwen Park: Pass invite code to hook_invite($op = 'invite').
+- Added delete invitation confirmation dialog.
+
+Bugs fixed:
+- #182017: Tried to produce XHTML (or XML in this case) compliant output.
+- #176983: Fixed bogus email header.
+- Fixed queries for counting pending and expired invites had swapped comparison
+  logic.
+
+Invite 5.x-1.11, 2007-09-13
+---------------------------
+Bugs fixed:
+- #175025: Fixed maxlength set for textareas on mass invitations.
+
+Invite 5.x-1.10, 2007-09-13
+---------------------------
+New features:
+- #165977: Added a multi-functional block showing the top inviters of the site
+  or - when on a user profile - the rank among the other users.
+- #168252: Print invitation statistics on the user profile page.
+- Added support for Personalized E-mail (http://drupal.org/project/pmail).
+- Reorganized the settings page. Moved settings for limit per turn and allow
+  deletion of joined user's invitations to the permissions table. Changed
+  expiry period presets.
+- Added a delete confirm form.
+- Restructured the module's functions in a more logical way.
+
+Bugs fixed:
+- #169916: Fixed Invite and Role Signup modules not working together. This has
+  been solved this by registering a new custom join url (instead of using
+  user/register/123), saving the invite code in a session variable, and then
+  redirecting to the registration page.
+- #171851 by matrixfighter: Fixed a bad link in Invite block.
+
+Invite 5.x-1.9, 2007-07-25
+--------------------------
+Bugs fixed:
+- #161829: Blank sender on invite email.
+- Prevent emails from looking like spam to SPF-enabled MTAs.
+- Fixed sending invites for anonymous users (they don't have an email address).
+
+Invite 5.x-1.8, 2007-07-23
+--------------------------
+Note:
+Invite 1.8 requires you to have the token module installed.
+
+New features:
+- #157494 by MarcoR: Show message preview to inviting user.
+- #120248: Added token support.
+- #100360: Added an invite block.
+- #151617 by knseibert, smk-ka: Display only roles on the settings page which
+  have "send invitations" permission set. Only take those into account when
+  escalating the roles for the invitees and checking the send limitations.
+- #160969: Delete invite when a user is deleted. To prevent fraud, this will
+  only happen when "Allow deletion of joined users" is enabled.
+- #145271 by thierry_gd: Added hook_uninstall().
+- #134867 Auto-approve invited users' accounts.
+- Added hook_disable().
+- Added customizable email subject.
+- Got rid of the disabled form in case the invitations limit was hit by
+  redirecting to the new invitation listing page.
+- Added Italian translation, contributed by Mr.Bittertooth.
+
+Bugs fixed:
+- #137495: Notifing other modules of role change.
+- #143373: Don't escape quotation marks and other special characters in plain
+  text e-mails.
+- #135345 BLOB/TEXT column 'message' can't have a default value (MySQL 5).
+- Fixed From and Reply-To header generation.
+- Check that there is at least one valid email remaining after filtering out
+  dupes to prevent the form from resetting.
+
+Invite 5.x-1.7, 2007-04-01
+--------------------------
+New features:
+- #84120 by knseibert: Added multiple invites option to the invite form.
+- #126231: Prepopulate registration form with email from invitation.
+- #54935: Persist individual message that gets mailed.
+- #124711: Displaying a message with a link to the user's profile when trying
+  to invite a user that's already registered.
+- #124906 by ray007 and MarcoR: Added german translations.
+- New validation system and error messages to better handle large amounts of
+  emails (based on the patch by knseibert).
+
+Bugs fixed:
+- Invitation accepted message a) is no more shown to anonymous users to reduce
+  db load, and b) is only shown when the user has been approved.
+- #127681: Fixed deleting of pending invites.
+- #128939 by mailleux: Fixed PostgreSQL support.
+- Added (non-critical) permission checks at several locations.
+- #129979 by NathanRAFT, knseibert: Fixed email displayed in
+  _invite_check_messages().
+- #125589: Prevent poedit from whining.
+- #132828: Prevent array_merge() from whining.
+
+Invite 5.x-1.6, 2007-03-12
+--------------------------
+New features:
+- #86875: Deleting invites of users that are about to be deleted. Orphaned
+  invites will be cleared out when visiting http://www.example.com/update.php.
+- #118823 Invite API: Add inviter to API arguments when deleting an invitation.
+- Reusing user_password() for invite code generation.
+
+Bugs fixed:
+- #118849: Fixed missing delete link, despite "Allow deletion of joined users"
+  is enabled (only true for deleted user accounts).
+- #110795: Fixed the possibility for a maliscious user to reuse one invitation
+  code over and over again.
+- #106962: Fixed misleading watchdog error 'Registration code failed'.
+- #106962 by knseibert: Fixed changed form_id for user settings form (5.x only).
+- #118826: Verifying the user that tries to delete an invite. Previously it was
+  possible to delete arbitrary invites if you knew its email address (or by
+  using brute-force methods).
+- Fixed several missing checks for an expired invitation code when a user tries
+  to register.
+- Fixed doubled expiration time calculation on invites page.
+- Fixed unblocking of new user accounts, which was not limited to invite only
+  mode. This broke sites where administrator approval for new user accounts is
+  required.
+- Fixed the notification that is displayed for the inviter when an invited user
+  registers.
+- Fixed queries for PostgreSQL.
+- Fire 'invite' API event only if send was successful.
+- Updated the database scheme to be more performant.

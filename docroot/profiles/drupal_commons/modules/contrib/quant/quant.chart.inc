@@ -1,5 +1,4 @@
 <?php
-// $Id: quant.chart.inc,v 1.1.2.4 2010/09/16 15:40:33 mikestefff Exp $
 
 /**
  * @file

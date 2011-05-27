@@ -1,9 +1,17 @@
-Dev:
+12 APR 2011:
+-------------
+* Critical mismatch in shoutbox_group menu link
+
+09 APR 2011:
 -------------
 * Added permission check before adding Shoutbox link in OG menu
 * Added Shoutbox rules module (contributed by nmclain)
 * Fixed javascript issues revealed by Ajax load; the auto-update timer should
   only be activated when an unprocessed shout form is discovered
+* Removed $op == 'query' from hook_shoutbox
+  - hook_db_rewrite_sql() will now be used with $op == 'context' (see API doc)
+* Added Shoutbox domain
+* Minor performance and coding tweaks
 
 05 JAN 2011:
 -------------

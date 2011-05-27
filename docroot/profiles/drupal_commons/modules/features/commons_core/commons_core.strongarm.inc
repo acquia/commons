@@ -120,6 +120,7 @@ function commons_core_strongarm() {
         'page_pager_ajax' => 1,
         'num_load_max' => 30,
         'page_disabled' => 0,
+        'skip_active_user' => 0,
       ),
       'poll_messages' => 0,
     ),
@@ -143,6 +144,7 @@ function commons_core_strongarm() {
         'page_pager_ajax' => 1,
         'num_load_max' => 30,
         'page_disabled' => 0,
+        'skip_active_user' => 0,
       ),
       'poll_messages' => 0,
     ),
@@ -166,6 +168,7 @@ function commons_core_strongarm() {
         'page_pager_ajax' => 1,
         'num_load_max' => 30,
         'page_disabled' => 0,
+        'skip_active_user' => 0,
       ),
       'poll_messages' => 0,
     ),
@@ -189,6 +192,7 @@ function commons_core_strongarm() {
         'page_pager_ajax' => 1,
         'num_load_max' => 30,
         'page_disabled' => 0,
+        'skip_active_user' => 0,
       ),
       'poll_messages' => 0,
     ),
@@ -212,6 +216,7 @@ function commons_core_strongarm() {
         'page_pager_ajax' => 1,
         'num_load_max' => 30,
         'page_disabled' => 0,
+        'skip_active_user' => 0,
       ),
       'poll_messages' => 0,
     ),
@@ -235,6 +240,7 @@ function commons_core_strongarm() {
         'page_pager_ajax' => 1,
         'num_load_max' => 30,
         'page_disabled' => 0,
+        'skip_active_user' => 0,
       ),
       'poll_messages' => 0,
     ),
@@ -258,6 +264,7 @@ function commons_core_strongarm() {
         'page_pager_ajax' => 1,
         'num_load_max' => 30,
         'page_disabled' => 0,
+        'skip_active_user' => 0,
       ),
       'poll_messages' => 0,
     ),
@@ -361,10 +368,31 @@ function commons_core_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'og_statistics_include_unapproved_members';
+  $strongarm->value = '0';
+
+  $export['og_statistics_include_unapproved_members'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'og_visibility';
   $strongarm->value = '2';
 
   $export['og_visibility'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'quant_height';
+  $strongarm->value = '175';
+
+  $export['quant_height'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'quant_width';
+  $strongarm->value = '425';
+
+  $export['quant_width'] = $strongarm;
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
@@ -468,6 +496,13 @@ function commons_core_strongarm() {
   $strongarm->value = '1';
 
   $export['user_pictures'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'user_relationships_notifications_disabled';
+  $strongarm->value = 1;
+
+  $export['user_relationships_notifications_disabled'] = $strongarm;
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
@@ -678,6 +713,9 @@ function commons_core_strongarm() {
     'sup' => array(
       'style' => array(),
     ),
+    'u' => array(
+      'style' => array(),
+    ),
     'ul' => array(
       'style' => array(),
     ),
@@ -692,7 +730,7 @@ function commons_core_strongarm() {
 a[!href|target<_blank|title],
 p[align<center?justify?left?right],
 img[!src|alt|title|style],
-br, em, strong, cite, sub, sup, span, blockquote, code, ul, ol, li, dl, dt, dd, pre, address, h2, h3, h4, h5, h6';
+br, em, strong, cite, sub, sup, span, blockquote, code, ul, ol, li, dl, dt, dd, pre, address, h2, h3, h4, h5, h6, u';
 
   $export['wysiwyg_filter_valid_elements_raw_1'] = $strongarm;
   return $export;

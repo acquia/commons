@@ -1,0 +1,555 @@
+.not-front .main .main-inner, .front .content-content {
+  padding: 0;
+}
+
+/* @group Forms */
+
+#og-features-feature-form tr.odd .form-item, 
+#og-features-feature-form tr.even .form-item {
+  /* This overrides a system.css style that should always be knocked out.
+     I'm making this selector extemely specific to prevent destroying anything
+     that might rely on the white-space: nowrap declaration. Please make this
+     generic in future updates - jessebeach */
+  white-space: normal;
+}
+
+/* @end */
+
+/* Header Region which floats to the right of the site info */
+
+.header-region-inner {
+  
+}
+
+.header-region {
+  float: right;
+  margin-bottom: 0px;
+/*  padding-top: 12px; */
+  width: auto;
+}
+
+.nav-group {
+  border-radius: 0 0 10px 10px;
+  clear: both;
+  float: none;
+  margin-bottom: 0;
+  overflow: visible;
+  padding: 0 10px;
+  position: relative;
+  z-index: 10;
+}
+
+
+
+/* Site Info-------------------------------------------------------------- */
+.header-site-info {
+  float: left;
+  width: auto;
+}
+
+/* Header - Search-------------------------------------------------------------- */
+.search-box {
+  float: right;
+  margin: 0;
+  min-width: 220px;
+  padding: 5px 0 4px 0;
+  width: auto;
+}
+
+.search-box-inner {
+  
+}
+
+.search-box-inner form#search-theme-form {
+  
+}
+
+/* Wrapper around logo, site name, and slogan */
+
+.header-site-info span {
+  display: block;
+}
+
+/* Add float here to put logo and site name side by side, also add margins as  needed */
+
+#logo {
+  float: left;
+  margin: 0 12px 0 0;
+  vertical-align: middle;
+  width: auto;
+}
+
+#logo a {
+  display: block;
+}
+
+/* Primary Menu   TODO: add default colours/-------------------------------------------------------------- */
+
+/* Add general styles for primary menu here, such as typography, borders, floats,  or spacing above/below */
+
+.primary-menu {
+  float: left;
+  margin: 0;
+  width: auto;
+  position: relative;
+  z-index: 20;
+}
+
+#primary-menu-inner {
+  margin-left: 0px;
+}
+
+/* styles for Superfish primary menu */
+
+.primary-menu-inner ul.sf-menu {
+  
+}
+
+.primary-menu-inner ul.sf-menu li {
+  margin-bottom: 0px;
+}
+
+.not-front .main .main-inner,
+.front .main .main-inner {
+  padding: 14px 0px;
+}
+
+/* User Meta - logout/account links in header w/ profile pic */
+
+.view-user-meta {
+  float: right;
+  width: 180px;
+  font-family: "Helvetical Neue",Helvetica,Arial,Sans-serif;
+  margin-top: 10px;
+}
+
+.view-user-meta .views-field-name span {
+  display: block;
+  font-size: 1.1em;
+  line-height: 1.2em;
+  text-align: right;
+}
+
+.view-user-meta .views-field-name span.username a {
+  color: #69c;
+  font-weight: bold;
+}
+
+.view-user-meta .views-field-name span.full-name {
+  font-size: .9em;
+  font-style: normal;
+}
+
+.view-user-meta .views-field-picture {
+  float: right;
+  margin: 0 0 2px 12px;
+}
+
+.view-user-meta .views-field-nothing,
+.view-user-meta .views-field-nothing-1 {
+  float: right;
+  margin-bottom: 2px;
+  margin-top: 2px;
+  padding: 0;
+}
+
+.view-user-meta .views-field-nothing a,
+.view-user-meta .views-field-nothing-1 a {
+  color: #333;
+  font-size: 11px;
+  line-height: 13px;
+  padding: 0;
+}
+
+.view-user-meta .views-field-nothing {
+  border-left: 1px solid #666;
+  clear: both;
+  margin-left: 8px;
+  padding-left: 8px;
+}
+
+.view-user-meta .views-field-name {
+  font-size: .9em;
+  line-height: 1em;
+}
+
+.view-user-meta .views-field-name a {
+  color: #333;
+}
+
+.view-user-meta .views-field-nothing {
+  margin-right: 6px;
+  padding-right: 6px;
+}
+
+.view-user-meta .views-field-points {
+  clear: both;
+  text-align: right;
+}
+
+.view-user-meta .views-row span.views-field-picture {
+  display: block;
+  float: right;
+}
+
+
+
+.node .inner ul li,
+.panel-pane .inner ul li,
+.block .content ul li {
+  border: none;
+  list-style-image: none;
+  list-style: none;
+  margin: 0 0 0px 0;
+  padding: 0 0 0 0px;
+  text-indent: 0;
+  display: inline;
+  display: inline-block;
+}
+
+.block .content .item-list li,
+.page-user .block .content .links li {
+  display: list-item;
+}
+
+.block .content .item-list .pager li {
+  display: inline;
+  display: inline-block;
+}
+
+.block .content ul li.views-row {
+  display: block;
+}
+
+.block .content ul li.views-row:after {
+  clear:both;
+  display:block;
+  visibility:hidden;
+  overflow:hidden;
+  height:0 !important;
+  line-height:0;
+  font-size:xx-large;
+  content:" x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x ";
+}
+
+/* User page - Find new friends block*/
+.block#block-commons_profile-find_new_friends {
+	overflow: visible;
+}
+
+/* Blocks */
+/* Used in profile blocks */
+#block-commons_profile-profile_image_links ul.links li {
+  border: medium none;
+  display: block;
+  padding: 0 6px 0 12px;
+  width: 90%;
+}
+
+#block-commons_profile-profile_image_links ul.links li.userpoints, #block-commons_profile-profile_image_links ul.links li.user_badges  {
+  background: none;	
+}
+
+
+.node .inner ul,
+.panel-pane .inner ul,
+.block .inner ul {
+  margin-left: 0;
+}
+
+/* used in right side blocks */
+.sidebar-last .block-views .content .view .view-content .item-list ul li {
+  background: none repeat scroll 0 0 transparent;
+  border-bottom: 0 none;
+  margin-bottom: 0;
+  padding: 0 0 10px;
+  clear: both;
+}
+
+.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-field-group-image-fid, .sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-picture,
+.sidebar-last .block-views .content .view .view-content .views-row .views-field-picture {
+  float: left;
+  margin-right: 10px;
+  width: 30px;
+}
+
+/* User profile about page */
+.view-profile-about-page label {
+  font-weight: bold;
+  background: #f2f2f2;
+  padding: 5px;
+  display: inline-block;
+  border-bottom: 1px solid #ddd;
+  width: 30%;
+}
+
+.view-profile-about-page span.field-content {
+  padding-left: 5px;
+  display: inline-block;
+}
+
+/* Tab Menus   TODO: tab styles?/-------------------------------------------------------------- */
+
+#content-tabs {
+  background-color: transparent;
+  float: none;
+  margin: 15px 0 22px; 
+  padding: 0;
+}
+
+#breadcrumbs + #content-tabs,
+h1 + #content-tabs {
+  margin-top: 0;
+}
+
+#content-tabs-inner {
+  margin: 0;
+}
+
+#content-tabs ul.primary,
+#content-tabs ul.secondary {
+  border-bottom: 2px solid #d1d1d1;
+  clear: both;
+  float: none;   
+}
+
+#content-tabs ul.primary:after,
+#content-tabs ul.secondary:after{
+	clear: both;
+	content: ".";
+	display: block;
+	height: 0;
+	visibility: hidden;
+}
+
+
+#content-tabs ul.primary li,
+#content-tabs ul.secondary li {
+  border-style: none;
+  display: inline;
+  float: left;
+  font-size: .9em;
+  font-weight: normal;
+  list-style: none;
+  margin: 0 0px;
+  padding: 0;
+}
+
+#content-tabs ul.primary li a:link,
+#content-tabs ul.primary li a:visited {
+  cursor: pointer;
+  float: left;
+  margin: 0 2px -2px 0;
+  padding: 4px 6px 4px 6px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+#content-tabs ul.secondary li {
+  margin: 0 8px;
+}
+
+/* Used in homepage */
+
+#block-boxes-homepage_info_box a.intro-morebutton {
+  display: block;
+  clear: both;
+  text-align: right;
+  margin-right: 3%;
+  font-size: 1.4em;
+  line-height: 18px;
+  padding: 9px 40px;
+  font-weight:bold;
+} 
+
+.intro-textblock {
+  width: 30%;
+  float: left;
+  margin-right: 3%;
+}
+
+/* group listing */
+#block-views-groups_featured_groups-block_1 .content .views-row .views-field-field-group-image-fid {
+  float: left;
+  margin-right: 10px;
+  width: 140px;
+}
+
+#block-views-group_node-block_1 .view-content .views-field-field-group-image-fid {
+  float: left;
+  margin: 0 10px 10px 0;
+}
+
+/* Heartbeat Module */
+
+.heartbeat-message-block .beat-item .heartbeat-buttons {
+	display: none;
+}
+
+.heartbeat-message-block .beat-item:hover .heartbeat-buttons {
+	background-color: #eee;
+	display: block;
+	position: absolute;
+	right:0px;
+}
+
+.heartbeat-message-block .beat-item:after {
+	clear: both;
+	content: ".";
+	display: block;
+	height: 0;
+	visibility: hidden;
+}
+
+.heartbeat-message-block .beat-item .beat-item-info {
+	float: left;
+	padding-right: 10px;
+	width: 50px;
+	line-height: 1em;
+}
+
+.heartbeat-message-block .beat-item .beat-item-info a {
+	color: #323232;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 9px;
+	font-style: normal;
+	line-height: 1em;	
+}
+
+.heartbeat-message-block .beat-item .beat-item-info img {
+	display: block;
+}
+
+.heartbeat-older-messages {
+	font-size: 1em;
+	margin: 0;
+	text-align: right;
+}
+
+div.beat-item blockquote {
+	background-image: none;
+	font-style: italic;
+	padding: 0;
+}
+
+/* event calendar icon */
+
+.dateblock {
+	float:left;
+	font-weight:bold;
+	margin-right:10px;
+	padding-bottom:7px;
+	width:30px;
+}
+.dateblock .month {
+	background-color:#555;
+	color:#FFFFFF;
+	float:left;
+	font-size:11px;
+	line-height:1.1em;
+	text-align:center;
+	text-transform:capitalize;
+	width:30px;
+}
+.dateblock .day {
+	background-color:#dadee1;
+	color:#000000;
+	float:left;
+	font-size:14px;
+	font-weight: bold;
+	line-height:1.1em;
+	text-align:center;
+	width:30px;
+	padding:2px 0px;
+}
+.dateblock .year { display:none; }
+
+.submitted img.imagecache-user_picture_meta {
+  float: left;
+  margin: 0.5em 1em 0 0;
+}
+
+.submitted .user_badges {
+  display: inline-block;
+  padding: 0 0 0 2px;
+}
+
+.submitted .user_badges img {
+  vertical-align: middle;
+}
+
+.submitted .submitted-on {
+  display: block;
+}
+
+.view .view-content .item-list li.views-row .views-field-picture {
+  float: left;
+  margin: 0 10px 10px 0;
+}
+
+.view-groups-main-listing .view-content .item-list ul li .views-field-field-group-image-fid {
+  float:left;
+  width:68px;
+  margin-right:10px;
+}
+
+.view-groups-main-listing .view-content .item-list ul li .views-field-field-group-image-fid img {
+  width:66px;
+  height:66px;
+  border:solid 1px #c2c2c2;
+}
+
+.view-groups-most-active .views-field-title, .view-groups-most-active .views-field-members-count, .view-groups-most-active .views-field-posts-count {
+  margin-left: 40px;
+}
+
+/* Added by Jay to generalize the Search Group field & button */
+#views-exposed-form-og-search-default .views-exposed-widget.views-exposed-submit .form-submit, #views-exposed-form-og-search-page-1 .views-exposed-widget.views-exposed-submit .form-submit {
+  float: right;
+  padding: 6px 7px 9px 7px;
+}
+
+#views-exposed-form-og-search-default input#edit-keys.form-text {
+  width: 90%;
+}
+
+/* A couple of shoutbox generalizations. -jay */
+.shoutbox-add-form fieldset {
+  margin: 5px 0;
+  padding: 10px;
+}
+
+#shoutbox-add-form input.form-text {
+  width: 95%;
+  max-width: 95%;
+}
+
+/* An attempt to generalize the node type dropdown & "create" button, though as of
+ * release 1.6, all 3 themes need _some_ tweaking of one element or another.
+ * -jay
+ */
+#edit-node-type-wrapper.form-item {
+  width: 65%;
+  margin-left: 2px;
+  padding-top: 2px;
+  vertical-align: middle;
+}
+
+#edit-submit.form-submit {
+  float: right;
+  margin: 0 12px 0;
+}
+
+/* gotta make the dashboard view of recent content look decent
+ * This MIGHT get moved to Roots...
+ */
+.view-dashboard-recent-content .views-field-picture {float: left;}
+.view-dashboard-recent-content .views-field-title,
+.view-dashboard-recent-content .views-field-created,
+.view-dashboard-recent-content .views-field-name,
+.view-dashboard-recent-content .views-field-group-nid,
+.view-dashboard-recent-content .views-field-tid,
+.view-dashboard-recent-content .views-field-comment-count {margin-left: 40px;  width: 80%; }
+
+.view-dashboard-recent-content .views-field-timestamp {float: right;}
+

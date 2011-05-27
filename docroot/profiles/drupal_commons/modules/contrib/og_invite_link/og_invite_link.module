@@ -1,0 +1,322 @@
+<?php
+
+/**
+ * Implementation of hook_menu();
+ */
+function og_invite_link_menu() {
+  $items['og/users/%node/invite'] = array(
+    'title' => 'Invite members',
+    'access callback' => 'og_invite_link_invite_access',
+    'access arguments' => array(2),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('og_invite_link_invite_page_form', 2),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'og_invite_link.pages.inc',
+    'weight' => 8,
+  );
+  $items['group/%node/join/%user/%'] = array(
+    'title' => 'Join to group',
+    'access callback' => 'og_invite_link_join_access',
+    'access arguments' => array(1, 3, 4),
+    'page callback' => 'og_invite_link_join',
+    'page arguments' => array(1, 3, 4),
+    'type' => MENU_CALLBACK,
+    'file' => 'og_invite_link.pages.inc',
+  );
+  $items['og_invite_link/autocomplete'] = array(
+    'title' => 'Autocomplete OG invite link',
+    'page callback' => 'og_invite_link_autocomplete',
+    'access arguments' => array('access user profiles'), //is this the right permission?
+    'type' => MENU_CALLBACK,
+    'file' => 'og_invite_link.pages.inc',
+  );
+  $items['admin/og/og_invite_link'] = array(
+    'title' => 'Organic groups invitations',
+    'description' => 'Configure group invitation settings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('og_invite_link_admin'),
+    'access arguments' => array('administer organic groups'),
+    'file' => 'og_invite_link.admin.inc',
+  );
+  return $items;
+}
+
+/**
+ * Implementation of hook_menu_alter();
+ */
+function og_invite_link_menu_alter(&$items) {
+  // Remove OG's invite page
+  unset($items['og/invite/%node']);
+}
+
+/**
+ * Implementation of hook_og_links_alter();
+ */
+function og_invite_link_og_links_alter(&$links) {
+  global $user;
+
+  // Remove link to OG's invite page
+  unset($links['invite']);
+
+  // Check if the user has access to the invite form
+  if ($group = og_get_group_context()) {
+    if (og_invite_link_invite_access()) {
+      $links['invite'] = l(t('Invite members'), "og/users/{$group->nid}/invite");
+    }
+  }
+}
+
+/**
+ * Access callback for the invite form page
+ *
+ * @param $group
+ *   Optionally supply the group object, otherwise attempt to detect
+ *   the current group
+ * @param $user
+ *   Optionally supply the user, otherwise use the current user
+ * @return
+ *   TRUE if the user can access the groups invite page, otherwise FALSE
+ */
+function og_invite_link_invite_access($group = NULL, $user = NULL) {
+  // If needed, get the current user
+  if (!$user) {
+    global $user;
+  }
+
+  // If needed, get the current group
+  if (!$group) {
+    if (!($group = og_get_group_context())) {
+      return FALSE;
+    }
+  }
+
+  // Check that the group is a group
+  if (!og_is_group_type($group->type)) {
+    return FALSE;
+  }
+
+  // See if the user is an admin of this group
+  if (og_is_group_admin($group, $user)) {
+    // Admins always have access
+    return TRUE;
+  }
+
+  // Provide access depending on the group type
+  switch ($group->og_selective) {
+    case OG_OPEN:
+    case OG_MODERATED:
+    case OG_INVITE_ONLY:
+      // Members can access the form for these group typess
+      if (og_is_group_member($group->nid, FALSE)) {
+        return TRUE;
+      }
+      break;
+    case OG_CLOSED:
+      // Admins were granted access prior to this
+      break;
+  }
+
+  return FALSE;
+}
+
+/**
+ * Check if the user has accesss to the join group callback
+ *
+ * @param object $node
+ *   The group node object.
+ * @param object $account
+ *   The user object.
+ * @param string $token
+ *   The token that has to be validated.
+ */
+function og_invite_link_join_access($node, $account, $token) {
+  global $user;
+
+  // If user is logged in, and doesn't match the UID in the URL
+  // then deny access
+  if ($user->uid && $user->uid != $account->uid) {
+    return FALSE;
+  }
+
+  // All other cases will be checked on the page callback, to allow us
+  // to print helpful messages, rather than give an access denied
+
+  return TRUE;
+}
+
+/**
+ * Implementation of hook_mail();
+ */
+function og_invite_link_mail($key, &$message, $params) {
+  switch ($key) {
+    case 'invite_to_group': {
+      $variables = array(
+        '@group' => check_plain($params['group']->title),
+        '@site' => variable_get('site_name', 'Drupal'),
+        '@description' => check_plain($params['group']->og_description),
+        '@body' => $params['additional_message'],
+        '!group_url' => url('group/' . $params['group']->nid . '/join/' . $params['account']->uid . '/' . $params['invitation']->token, array('absolute' => TRUE)),
+      );
+      $message['subject'] = _og_mail_text('og_invite_user_subject', $variables, $message['language']);
+      $message['body'] = _og_mail_text('og_invite_user_body', $variables, $message['language']);
+      break;
+    }
+  }
+}
+
+/**
+ * Implementation of hook_user();
+ */
+function og_invite_link_user($op, &$edit, &$account, $category = NULL) {
+  switch ($op) {
+    case 'delete':
+      // Remove all invitations for this user
+      db_query("DELETE FROM {og_invite} WHERE uid = %d", $account->uid);
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_nodeapi();
+ */
+function og_invite_link_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
+  switch ($op) {
+    case 'delete':
+      // Remove all invitations for this group
+      if (og_is_group_type($node->type)) {
+        db_query("DELETE FROM {og_invite} WHERE group_nid = %d", $node->nid);
+      }
+      break;
+  }
+}
+
+/**
+ * Generates a token (a hash) used on invite links
+ *
+ * @param object $invitation
+ *   The invitation object
+ * @return
+ *   A token string
+ */
+function og_invite_link_generate_token($invitation) {
+  return md5(md5($invitation->invite_key) . md5($invitation->group_nid . '-' . $invitation->uid . '-' . $invitation->timestamp));
+}
+
+/**
+ * Sends invitation mails to a set of users for a group.
+ *
+ * @param $user
+ *   A user object or user ID
+ * @param object $group
+ *   The group node object.
+ * @param string $additional_message
+ *   The additional message to be put in the mail.
+ */
+function og_invite_link_send_invite($user, $group, $additional_message = NULL) {
+  // Load the user account, if necessary
+  $account = is_numeric($user) ? user_load($user) : $user;
+
+  // Make sure we have a valid user
+  if (!is_object($account) || !$account->uid) {
+    return FALSE;
+  }
+
+  // Make sure we have a valid group
+  if (!og_is_group_type($group->type)) {
+    return FALSE;
+  }
+
+  // Create an invitation
+  $invitation = og_invite_link_create_invitation($account, $group);
+
+  // Send the mail
+  $mail_params = array(
+    'group' => $group,
+    'account' => $account,
+    'additional_message' => $additional_message,
+    'invitation' => $invitation
+  );
+  drupal_mail('og_invite_link', 'invite_to_group', $account->mail, user_preferred_language($account), $mail_params);
+
+  // Store an entry in watchdog
+  watchdog('og_invite_link', 'Group invite sent to !mail (user id: !user_id) for group !group', array('!mail' => $account->mail, '!user_id' => $account->uid, '!group' => $group->title), WATCHDOG_INFO);
+}
+
+/**
+ * Creates an invitation that is stored in the database
+ *
+ * @param $account
+ *   The ID of the user being invited, or the user object
+ * @param $group
+ *   The ID of the group the user is being invited to, or the group object
+ * @return
+ *   The invitation object, if sucessful, or FALSE, if not
+ */
+function og_invite_link_create_invitation($account, $group) {
+  global $user;
+
+  // Load the group, if needed
+  $group = is_numeric($group) ? node_load($group) : $group;
+
+  // Create the invitation
+  $invitation = new stdClass();
+  // Store the group id
+  $invitation->group_nid = $group->nid;
+  // Store the user id of the invited user
+  $invitation->uid = is_object($account) ? $account->uid : $account;
+  // Store the user id of the sender
+  $invitation->sender = $user->uid;
+  // Store the time of creation
+  $invitation->timestamp = $_SERVER['REQUEST_TIME'];
+  // Use user_password() to generate a random key
+  $invitation->invite_key = user_password();
+  // Generate the token
+  $invitation->token = og_invite_link_generate_token($invitation);
+  // If the user sending the invite is the group admin
+  // the invite is not moderated, meaning the invitee will
+  // automatically be accepted regardless of the group type
+  $invitation->moderated = og_is_group_admin($group, $user) ? 0 : 1;
+
+  // Save it to the database
+  $success = drupal_write_record('og_invite', $invitation);
+
+  return $success ? $invitation : FALSE;
+}
+
+/**
+ * Implementation of hook_cron();
+ */
+function og_invite_link_cron() {
+  // Purge old pending invitations.
+  if ($expiration_days = variable_get('og_invite_link_expiration', 30)) {
+    db_query("DELETE FROM {og_invite} WHERE accepted_timestamp = 0 AND timestamp < %d", $_SERVER['REQUEST_TIME'] - ($expiration_days * 86400));
+  }
+}
+
+/**
+ * Load an invitation that matches a token
+ *
+ * @param $token
+ *   The invitation token
+ * @return
+ *   An invitation object
+ */
+function og_invite_link_get_invitation_by_token($token) {
+  $sql = "SELECT * from {og_invite} WHERE token = '%s'";
+  $invitation = db_fetch_object(db_query($sql, $token));
+  return $invitation ? $invitation : FALSE;
+}
+
+/**
+ * Checks if an user is already invited into a group.
+ *
+ * @param int $user_id
+ *   The user id to be checked.
+ * @param int $group_nid
+ *   The group id to be checked.
+ */
+function og_invite_link_user_is_invited($user_id, $group_nid) {
+  $sql = "SELECT uid FROM {og_invite} WHERE uid = %d AND group_nid = %d";
+  $invitation = db_fetch_object(db_query($sql, $user_id, $group_nid));
+  return $invitation ? TRUE : FALSE;
+}

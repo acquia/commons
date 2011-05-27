@@ -1,5 +1,4 @@
 <?php
-// $Id: imagerotate.inc,v 1.3.4.5 2010/10/17 17:58:07 drewish Exp $
 
 /**
  * @file

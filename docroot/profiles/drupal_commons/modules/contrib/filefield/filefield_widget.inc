@@ -1,5 +1,4 @@
 <?php
-// $Id: filefield_widget.inc,v 1.105 2010/12/08 21:57:49 quicksketch Exp $
 
 /**
  * @file
@@ -235,11 +234,12 @@ function filefield_widget_value($element, $edit = FALSE) {
     }
 
     // Load file if the FID has changed so that it can be saved by CCK.
-    $file = field_file_load($item['fid']);
+    $file = isset($item['fid']) ? field_file_load($item['fid']) : NULL;
 
     // If the file entry doesn't exist, don't save anything.
     if (empty($file)) {
       $item = array();
+      $file = array();
     }
 
     // Checkboxes loose their value when empty.
@@ -560,7 +560,7 @@ function filefield_node_form_validate($form, &$form_state) {
       }
     }
 
-    if (!$valid && $field['required'] && filefield_edit_access($field['type_name'], $field_name)) {
+    if (!$valid && $field['required'] && filefield_edit_access($field['type_name'], $field_name, $form['#node'])) {
       form_set_error($field_name, t('%title field is required.', array('%title' => $field['widget']['label'])));
     }
     $max_filesize = parse_size($field['widget']['max_filesize_per_node']);

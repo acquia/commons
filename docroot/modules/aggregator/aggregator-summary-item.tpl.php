@@ -1,5 +1,4 @@
 <?php
-// $Id: aggregator-summary-item.tpl.php,v 1.1 2007/09/13 08:02:38 goba Exp $
 
 /**
  * @file aggregator-summary-item.tpl.php

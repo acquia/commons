@@ -1,5 +1,4 @@
 <?php
-// $Id: shouts.rules_defaults.inc,v 1.1.2.2.2.6 2010/04/12 20:10:14 stalski Exp $
 
 /**
  * @file

@@ -1,4 +1,3 @@
-// $Id: system.js,v 1.14.2.2 2009/07/21 08:59:12 goba Exp $
 
 /**
  * Internal function to check using Ajax if clean URLs can be enabled on the

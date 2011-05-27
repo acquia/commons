@@ -1,4 +1,3 @@
-// $Id: insert.js,v 1.6.2.4 2011/01/20 23:11:35 quicksketch Exp $
 
 (function ($) {
 
@@ -36,15 +35,25 @@ Drupal.behaviors.insert = function(context) {
     var wrapper = $(this).parents(settings.wrapper).filter(':first').get(0);
     var style = $('.insert-style', wrapper).val();
     var content = $('input.insert-template[name$="[' + style + ']"]', wrapper).val();
+    var filename = $('input.insert-filename', wrapper).val();
 
     // Update replacements.
     for (var fieldName in settings.fields) {
       var fieldValue = $(settings.fields[fieldName], wrapper).val();
-      var fieldRegExp = new RegExp('__' + fieldName + '__', 'g');
       if (fieldValue) {
+        var fieldRegExp = new RegExp('__' + fieldName + '(_or_filename)?__', 'g');
         content = content.replace(fieldRegExp, fieldValue);
       }
+      else {
+        var fieldRegExp = new RegExp('__' + fieldName + '_or_filename__', 'g');
+        content = content.replace(fieldRegExp, filename);
+      }
     }
+
+    // File name replacement.
+    var fieldRegExp = new RegExp('__filename__', 'g');
+    content = content.replace(fieldRegExp, filename);
+
     // Cleanup unused replacements.
     content = content.replace(/__([a-z0-9_]+)__/g, '');
 

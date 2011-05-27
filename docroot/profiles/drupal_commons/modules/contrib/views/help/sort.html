@@ -22,4 +22,7 @@ This is because these fields sort purely by characters, and not numeric value. i
 </dd>
 <dt>Date fields</dt>
 <dd>Date fields often can have a 'granularity', which is a way of making similar dates actually be the same date. Take two dates that are close to each other: <strong>May 1, 2007 5:30 am</strong> and <strong>May 1, 2007 9:45am</strong>. Without granularity, the two dates are compared and the first date comes before the second date. However, if the granularity is set to 'day' it only looks at the parts of the date up to the day: <strong>May 1, 2007</strong> and <strong>May 1, 2007</strong>. At that point, they are the same, and the sort would move on to the next sort criterion.</dd>
+
+<dt>Exposed Sorts</dt>
+<dd>If you expose a sort, users can define how will be sorted the view through a form element. Not all kind of sorts can be exposed. When you expose sorts is important the order in Views UI. If an exposed sort is by default unordered, only will be applied if users selects Ascendant or Descendent.</dd>
 </dl>

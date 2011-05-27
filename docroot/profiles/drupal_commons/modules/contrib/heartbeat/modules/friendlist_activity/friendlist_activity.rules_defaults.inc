@@ -1,5 +1,4 @@
 <?php
-// $Id: friendlist_activity.rules_defaults.inc,v 1.1.2.2.2.14 2010/04/05 23:18:42 stalski Exp $
 
 /**
  * @file

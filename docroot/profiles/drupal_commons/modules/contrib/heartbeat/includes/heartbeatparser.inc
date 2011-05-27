@@ -1,5 +1,4 @@
 <?php
-// $Id: heartbeatparser.inc,v 1.1.2.3.2.33 2011/01/21 00:53:09 stalski Exp $
 
 /**
  * @file
@@ -47,7 +46,7 @@ class heartbeatParser {
       // then skip it with an incrementation of the frequency
       // of the message. Eg: a node or comment has been edited several times
       // in a too small timespan, then we only show the last one
-      if ($message->nid > 0 || $message->nid_target > 0) {
+      if ($message->template->concat_args['type'] != 'single' && ($message->nid > 0 || $message->nid_target > 0)) {
         $id = $message->message_id .'-'. $message->uid .'-'. $message->uid_target .'-'. $message->nid .'-'. $message->nid_target;
         if (in_array($id, $holder)) {
           $message_set[array_search($id, $holder)]->count++;
@@ -124,7 +123,6 @@ class heartbeatParser {
       if (!$message->nid_access || !$message->nid_target_access || !$message->uid_access) {
         continue;
       }
-
       $type = isset($message->template->concat_args['type']) ? $message->template->concat_args['type'] : 'single';
 
       // Create a gap id, which is a unique id per time gap

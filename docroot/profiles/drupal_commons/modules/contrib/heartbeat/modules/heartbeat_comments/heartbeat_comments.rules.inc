@@ -1,5 +1,4 @@
 <?php
-// $Id: heartbeat_comments.rules.inc,v 1.1.2.4 2010/05/30 18:11:40 stalski Exp $
 
 /**
  * @file

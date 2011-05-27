@@ -1,5 +1,4 @@
 <?php
-// $Id: common.inc,v 1.756.2.106 2010/12/15 21:11:22 goba Exp $
 
 /**
  * @file
@@ -194,7 +193,7 @@ function drupal_get_feeds($delimiter = "\n") {
 }
 
 /**
- * @name HTTP handling
+ * @defgroup http_handling HTTP handling
  * @{
  * Functions to properly handle HTTP responses.
  */
@@ -646,7 +645,7 @@ function drupal_error_handler($errno, $message, $filename, $line, $context) {
       }
     }
 
-    $entry = $types[$errno] .': '. $message .' in '. $filename .' on line '. $line .'.';
+    $entry = check_plain($types[$errno]) .': '. filter_xss($message) .' in '. check_plain($filename) .' on line '. check_plain($line) .'.';
 
     // Force display of error messages in update.php.
     if (variable_get('error_level', 1) == 1 || strstr($_SERVER['SCRIPT_NAME'], 'update.php')) {
@@ -1420,6 +1419,11 @@ function format_date($timestamp, $type = 'medium', $format = '', $timezone = NUL
  *   A string containing a URL to the given path.
  */
 function url($path = NULL, $options = array()) {
+  // Prevent misuse caused by sending in an absolute path.
+  if (isset($path)) {
+    $path = ltrim($path, '/');
+  }
+
   // Merge in defaults.
   $options += array(
     'fragment' => '',
@@ -1637,7 +1641,8 @@ function drupal_page_footer() {
  *   A linear array.
  * @param $function
  *   A name of a function to apply to all values before output.
- * @result
+ *
+ * @return
  *   An associative array.
  */
 function drupal_map_assoc($array, $function = NULL) {

@@ -1,0 +1,41 @@
+<?php
+
+/**
+ * Implementation of hook_schema()
+ */
+function shoutbox_domain_schema() {
+  $schema['shoutbox_domain'] = array(
+    'description' => 'Link shouts to their respected domains.',
+    'fields' => array(
+      'shout_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'The shout id',
+      ),
+      'domain_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'The domain id',
+      ),
+    ),
+    'primary key' => array('shout_id'),
+  ); 
+  return $schema;            
+}
+
+/**
+ * Implementation of hook_install()
+ */
+function shoutbox_domain_install() {
+  drupal_install_schema('shoutbox_domain');
+}
+
+/**
+ * Implementation of hook_uninstall()
+ */
+function shoutbox_domain_uninstall() {
+  drupal_uninstall_schema('shoutbox_domain');
+}
+

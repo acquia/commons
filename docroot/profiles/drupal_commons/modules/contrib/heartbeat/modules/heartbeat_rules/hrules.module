@@ -1,5 +1,4 @@
 <?php
-// $Id: hrules.module,v 1.1.2.14 2011/01/05 12:49:46 stalski Exp $
 //
 
 /**
@@ -148,7 +147,7 @@ function hrules_token_values($type, $object = NULL, $options = array()) {
     case 'user':
       if ($object->uid) {
         $name = check_plain($object->name);
-        $values['user-name-url'] = l($name, 'user/'. $object->uid, array('attributes' => array('class' => 'user')));
+        $values['user-name-url'] = l($name, 'user/'. $object->uid, array('alias' => 'TRUE',	'attributes' => array('class' => 'user')));
         $values['user-profile-url'] =  l($name, 'profile/'. $object->name, array('attributes' => array('class' => 'user')));
         $values['heartbeat-user-picture'] = l(theme('user_picture', $object), 'user/' . $object->uid, array('html' => TRUE));
       }

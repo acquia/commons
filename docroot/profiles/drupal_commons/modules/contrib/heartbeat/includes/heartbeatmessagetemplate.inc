@@ -1,5 +1,4 @@
 <?php
-// $Id: heartbeatmessagetemplate.inc,v 1.1.2.6 2010/02/21 22:45:26 stalski Exp $
 
 /**
  * @file

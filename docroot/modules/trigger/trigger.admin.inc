@@ -1,5 +1,4 @@
 <?php
-// $Id: trigger.admin.inc,v 1.5.2.1 2010/08/11 20:35:48 goba Exp $
 
 /**
  * @file

@@ -1,5 +1,4 @@
 <?php
-// $Id: search-block-form.tpl.php,v 1.1 2007/10/31 18:06:38 dries Exp $
 
 /**
  * @file search-block-form.tpl.php

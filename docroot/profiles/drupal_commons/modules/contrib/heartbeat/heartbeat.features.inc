@@ -1,5 +1,4 @@
 <?php
-// $Id: heartbeat.features.inc,v 1.1.2.5 2011/01/15 20:49:55 stalski Exp $
 
 /**
  * @file

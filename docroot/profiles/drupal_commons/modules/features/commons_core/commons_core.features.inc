@@ -8,9 +8,6 @@ function commons_core_ctools_plugin_api() {
   if ($module == "context" && $api == "context") {
     return array("version" => 3);
   }
-  elseif ($module == "page_manager" && $api == "pages_default") {
-    return array("version" => 1);
-  }
   elseif ($module == "strongarm" && $api == "strongarm") {
     return array("version" => 1);
   }
@@ -42,6 +39,8 @@ function commons_core_heartbeat_message_info() {
         1 => '0',
         2 => '0',
       ),
+      'merge_separator_t' => '0',
+      'merge_end_separator_t' => '0',
     ),
     'description' => 'User joins a group, save user activity',
     'perms' => '1',
@@ -73,6 +72,8 @@ function commons_core_heartbeat_message_info() {
         1 => '0',
         2 => '0',
       ),
+      'merge_separator_t' => '0',
+      'merge_end_separator_t' => '0',
     ),
     'description' => 'User leaves a group, save user activity',
     'perms' => '1',
@@ -104,6 +105,8 @@ function commons_core_heartbeat_message_info() {
         1 => '0',
         2 => '0',
       ),
+      'merge_separator_t' => '0',
+      'merge_end_separator_t' => '0',
     ),
     'description' => 'User flagged content, save user activity',
     'perms' => '1',
@@ -136,6 +139,8 @@ function commons_core_heartbeat_message_info() {
         1 => '0',
         2 => '0',
       ),
+      'merge_separator_t' => '0',
+      'merge_end_separator_t' => '0',
     ),
     'description' => 'User is created, log activity',
     'perms' => '1',
@@ -166,6 +171,8 @@ function commons_core_heartbeat_message_info() {
         1 => '0',
         2 => '0',
       ),
+      'merge_separator_t' => '0',
+      'merge_end_separator_t' => '0',
     ),
     'description' => 'User account is deleted, save activity',
     'perms' => '1',
@@ -196,6 +203,8 @@ function commons_core_heartbeat_message_info() {
         1 => '0',
         2 => '0',
       ),
+      'merge_separator_t' => '0',
+      'merge_end_separator_t' => '0',
     ),
     'description' => 'User deleted content item, save activity',
     'perms' => '1',
@@ -229,6 +238,8 @@ function commons_core_heartbeat_message_info() {
         1 => '0',
         2 => '0',
       ),
+      'merge_separator_t' => '0',
+      'merge_end_separator_t' => '0',
     ),
     'description' => 'User deletes a comment, save activity',
     'perms' => '1',
@@ -261,6 +272,8 @@ function commons_core_heartbeat_message_info() {
         1 => '0',
         2 => '0',
       ),
+      'merge_separator_t' => '0',
+      'merge_end_separator_t' => '0',
     ),
     'description' => 'Two users are no longer friends',
     'perms' => '1',
@@ -348,6 +361,80 @@ function commons_core_imagecache_default_presets() {
         ),
       ),
     ),
+    'group_images_featured' => array(
+      'presetname' => 'group_images_featured',
+      'actions' => array(
+        '0' => array(
+          'weight' => '0',
+          'module' => 'imagecache',
+          'action' => 'imagecache_scale_and_crop',
+          'data' => array(
+            'width' => '136',
+            'height' => '136',
+          ),
+        ),
+        '1' => array(
+          'weight' => '0',
+          'module' => 'imagecache_canvasactions',
+          'action' => 'canvasactions_definecanvas',
+          'data' => array(
+            'RGB' => array(
+              'HEX' => '',
+            ),
+            'under' => 1,
+            'exact' => array(
+              'width' => '136',
+              'height' => '136',
+              'xpos' => 'center',
+              'ypos' => 'center',
+            ),
+            'relative' => array(
+              'leftdiff' => '',
+              'rightdiff' => '',
+              'topdiff' => '',
+              'bottomdiff' => '',
+            ),
+          ),
+        ),
+      ),
+    ),
+    'group_images_medium' => array(
+      'presetname' => 'group_images_medium',
+      'actions' => array(
+        '0' => array(
+          'weight' => '-10',
+          'module' => 'imagecache',
+          'action' => 'imagecache_scale_and_crop',
+          'data' => array(
+            'width' => '66',
+            'height' => '66',
+          ),
+        ),
+        '1' => array(
+          'weight' => '-9',
+          'module' => 'imagecache_canvasactions',
+          'action' => 'canvasactions_definecanvas',
+          'data' => array(
+            'RGB' => array(
+              'HEX' => '',
+            ),
+            'under' => 1,
+            'exact' => array(
+              'width' => '66',
+              'height' => '66',
+              'xpos' => 'center',
+              'ypos' => 'center',
+            ),
+            'relative' => array(
+              'leftdiff' => '',
+              'rightdiff' => '',
+              'topdiff' => '',
+              'bottomdiff' => '',
+            ),
+          ),
+        ),
+      ),
+    ),
     'group_images_showcase' => array(
       'presetname' => 'group_images_showcase',
       'actions' => array(
@@ -368,34 +455,10 @@ function commons_core_imagecache_default_presets() {
         '0' => array(
           'weight' => '0',
           'module' => 'imagecache',
-          'action' => 'imagecache_scale',
+          'action' => 'imagecache_scale_and_crop',
           'data' => array(
-            'width' => '24',
-            'height' => '24',
-            'upscale' => 1,
-          ),
-        ),
-        '1' => array(
-          'weight' => '0',
-          'module' => 'imagecache_canvasactions',
-          'action' => 'canvasactions_definecanvas',
-          'data' => array(
-            'RGB' => array(
-              'HEX' => '',
-            ),
-            'under' => 1,
-            'exact' => array(
-              'width' => '24',
-              'height' => '24',
-              'xpos' => 'left',
-              'ypos' => 'center',
-            ),
-            'relative' => array(
-              'leftdiff' => '',
-              'rightdiff' => '',
-              'topdiff' => '',
-              'bottomdiff' => '',
-            ),
+            'width' => '30',
+            'height' => '30',
           ),
         ),
       ),
@@ -422,8 +485,8 @@ function commons_core_imagecache_default_presets() {
           'module' => 'imagecache',
           'action' => 'imagecache_scale_and_crop',
           'data' => array(
-            'width' => '150',
-            'height' => '150',
+            'width' => '186',
+            'height' => '186',
           ),
         ),
       ),

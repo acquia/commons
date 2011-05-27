@@ -1,0 +1,43 @@
+<?php
+
+/**
+ * Implementation of hook_shoutbox()
+ */
+function shoutbox_domain_shoutbox($op, &$shout, &$a1 = NULL, $form_state = NULL) {
+  global $_domain;
+  switch ($op) {
+    case 'insert':
+      if (isset($_domain['domain_id'])) {
+        $record = new stdClass;
+        $record->shout_id = $shout->shout_id;
+        $record->domain_id = $_domain['domain_id'];
+        drupal_write_record('shoutbox_domain', $record);
+      }
+      break;
+    
+    case 'presave':
+      if (isset($_domain['domain_id'])) {
+        $shout->module = 'shoutbox_domain';
+      }
+      break;
+          
+    case 'delete':
+      db_query("DELETE FROM {shoutbox_domain} WHERE shout_id = %d", $shout->shout_id);  
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_db_rewrite_sql()
+ */
+function shoutbox_domain_db_rewrite_sql($query, $table, $primary, $contexts){
+  global $_domain;
+  if ($table == 'shoutbox' && isset($_domain['domain_id'])) {
+    $domain_id = (int) $_domain['domain_id'];
+    return array(
+      'join' => "INNER JOIN {shoutbox_domain} shoutbox_domain ON shoutbox.shout_id = shoutbox_domain.shout_id \r\n",
+      'where' => "shoutbox_domain.domain_id = " . (int)$domain_id,
+    );
+  }
+}
+

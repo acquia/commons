@@ -1,5 +1,4 @@
 <?php
-// $Id: custom.heartbeat_filters.inc,v 1.1.2.3 2010/08/19 17:00:02 stalski Exp $
 
 /**
  * @file

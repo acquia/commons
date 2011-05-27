@@ -1,5 +1,4 @@
 <?php
-// $Id: heartbeat.pages.inc,v 1.1.2.27 2011/01/20 20:37:04 stalski Exp $
 
 /**
  * @file
@@ -39,7 +38,7 @@ function heartbeat_messages_page($access_type, $offset_time = 0, $account = NULL
   // profile page, we want to show the account requested.
   if (is_numeric($account) && $account > 0) {
     if (!$page) {
-      if (variable_get('heartbeat_show_user_profile_messages_'. $access_type, 0)) {
+      if (variable_get('heartbeat_show_user_profile_messages_'. $access_type, 1)) {
         $account = heartbeat_user_load($account);
       }
     }
@@ -128,13 +127,12 @@ function heartbeat_activity_poll() {
   if (!isset($context)) {
     return drupal_json(array('status' => TRUE, 'data' => ''));
   }
-
   $heartbeataccess = $context->getState();
   $heartbeataccess->stream->latest_uaid = $latest_uaid;
 
   // change the language with the post value
   if (isset($_REQUEST['language'])) {
-    $heartbeataccess->stream->language = $_REQUEST['language'];
+    //$heartbeataccess->stream->language = $_REQUEST['language'];
   }
 
   $context->updateState($heartbeataccess);

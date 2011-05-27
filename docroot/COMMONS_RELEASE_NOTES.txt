@@ -3,6 +3,146 @@ Track Drupal Commons development on GitHub!
  - https://github.com/acquia/commons/
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Drupal Commons 1.6, 2010-05-25
+------------------------------------
+NOTES:
+- This is both a feature release, as well as updating Drupal core with
+  the latest security update.
+- The key features of this release are 2 new themes, page layouts updated for
+  improved usability, more capabilities being moved into individual (Drupal)
+  Features, the ability to enable (/disable) Features on a per-group basis,
+  a change from using Context+Panels to using Context (only), along with
+  other minor changes.
+- 2 new themes have been added. If you would like to use them, navigate to
+  the theme administration page to enable them. Make sure that Fusion remains
+  enabled, as well as Commons Roots, a new Commons base theme.
+- The panels module and all previously included panels have been removed
+  from the distribution. In previous versions, the home page, user profile,
+  and group home page were rendered by Panels. If you'd like to continue 
+  using panels, you must download the module separately and place it in your
+  sites/all/modules directory. Since the panel exports that came with Commons 
+  are now gone, in order to continue using them, you must save a copy of 
+  them from within the panels UI prior to upgrading to 1.6, so they remain
+  in your database.
+- Context is now being used to render all of the previously mentioned pages,
+  as well as all other pages.
+- The Admin Menu module has been replaced by the Admin module. This provides
+  several benefits: it eliminates the nuiscance of menus dropping down and
+  interfering with usability; and it contains an editor for the Context module,
+  which is required in order to control the vertical ordering of blocks on a
+  page when being controlled by Context. Click the wrench icon in the top-right
+  corner of any page to view both the Context editor as well as the normal
+  "Admin" functions previously found in the Admin Menu.  To edit Contexts,
+  click on "Context editor" in that sidebar; from there, you can edit the
+  blocks and their layout for every page.
+- OG Features has been added to the distribution. This allows admins and 
+  group managers to turn off groups of features within each individual
+  group. Group Admins will now see a "Features" tab beside the Edit tab on
+  the group home page where these can be controlled.
+- All of the Features within the distribution have been rebuilt, leading
+  to most of the exports (views, contexts, etc) being renamed and redesigned.
+  If you have altered and saved any of the previous exports, they will 
+  persist within your database. It is important that you carefully review
+  any of these depreciated components and disable or remove them to they 
+  do not interfere with the new ones.
+  (See: http://commons.acquia.com/wiki/feature-components-removed-commons-16) 
+- There are also two new Features available:
+ - Commons Shoutbox: Contains the Shoutbox components from Commons Core,
+   making it possible to now completely disable Shoutbox from Commons,
+   if desired.
+ - Commons Invite: Provides functionality to allow site users to invite other
+   people to your site.
+------------------------------------
+UPGRADING TO 1.6:
+NOTE: THIS IS A SIGNIFICANT UPGRADE.  You should NOT install it directly on
+a live site without first testing it on a staging site.
+1. Carefully review the NOTES above
+2. Backup your code and database
+3. Turn on maintenance mode (admin/settings/site-maintenance)
+4. Replace your codebase (excluding the sites directory) with the contents of this archive.
+ - It is important that you do not *merge* the new codebase, as a number of modules were
+   remove or relocated!
+5. Update your site via /update.php
+ - Ignore any errors about missing Panels files
+6. Make sure the Page manager module is disabled. Or, if you wish to continue
+  using it, delete any pages using the path "/home", the Node template, and
+  the User profile template, which may be leftover from a previous version 
+  of Commons.
+7. Navigate to the admin theme page (admin/build/themes)
+ - Ensure that Fusion Core and Commons Roots (both base themes) are enabled
+ - Ensure that at least one Commons-supported theme is enabled, and choose
+   your desired default theme (if not already set)
+ - The original Acquia Commons theme is now named Commons Origins
+8. View the status report (admin/reports/status) to see if there are any
+  errors to tend to
+9. Take the time to delete or disable any of the components listed at:
+   http://commons.acquia.com/wiki/feature-components-removed-commons-16
+  - This is extremely important!
+  - Once done, navigate to all areas of your site, making sure there is 
+    no remaining strange or duplicate behavior of any kind.
+10. Navigate to the Features admin page (admin/build/features)
+ - Determine which features are overridden
+ - Click on the overridden link for each feature to review what the 
+   the overrides are for each component inside the given feature
+ - If possible, revert as many components as possible, remembering that
+   reverting a component will remove any customizations you've made to
+   the given item
+11. A bug revealed in Heartbeat led to the need for an additional permission
+  to be created (access user activity). Users will need this permission
+  in order to see the activity streams on group home pages. Commons comes
+  with this permission given to anonymous and authenticated users by default,
+  but you may have to either revert the Commons Core feature, or assigned
+  the permissions manually, if upgrading.
+12. Because of the introduction of Commons Profile (Feature) to handle
+  the profile aspects of Commons, if you have deleted any profile fields
+  that came with Commons initially, they will be restored after the upgrade.
+  You must go in (admin/user/profile) and remove them once again.
+13. If no issues have arisen, it is recommended that you make another backup
+  of your codebase and database, then you may turn off maintenance mode.
+------------------------------------
+CHANGELOG:
+- Added: New themes and replaced original theme
+  - Commons roots (base theme)
+  - Commons origins (original theme)
+  - Commons connect
+  - Commons environs
+- Added: Theme selection form on site installation
+- Removed: commons_core_node_add_link() in favor of content-selection block
+- Added: Views slideshow
+- Rebuilt/redesigned groups directory page
+- Fixed: Comment permission issues
+- Added: Commons profile (feature); removed all profile-related components
+  from Commons core and the installation profile
+- Added: Commons invite (feature); send site invitations via the profile
+- Added: OG features (per-group features)
+- Rebuilt group content features for the new UX
+- Updated: Shoutbox
+- Updated: Wikitools
+- Added: OG invite link
+- Removed: Panels (and all panel page exports)
+- Added: Commons shoutbox (feature); extract shoutbox components from core
+- Removed: Admin menu
+- Added: Admin
+- Fixed: Group member count statistics; include managers, exclude unapproved
+- Updated: Wysiwyg
+- Updated: Filefield
+- Updated: Imagefield
+- Updated: Insert
+- Updated: Quant
+- Updated: Heartbeat
+- Updated: Imagecache
+- Updated: ImageAPI
+- Updated: Token
+- Updated: Apache Solr
+- Fixed: Sort users on Members page by Last Name ascending
+- Removed: Dependence on PHP module
+- Fixed: User meta block translation issues (Views templates used to 
+  properly wrap strings in t())
+- Added: Body field to poll nodes
+- Removed: Devel
+- Updated: Drupal core (6.22)
+
+
 Drupal Commons 1.5, 2011-03-17
 ------------------------------------
 NOTES:

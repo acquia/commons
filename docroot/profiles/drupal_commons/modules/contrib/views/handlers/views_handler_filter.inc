@@ -188,98 +188,6 @@ class views_handler_filter extends views_handler {
   function value_submit($form, &$form_state) { }
 
   /**
-   * Shortcut to display the expose/hide button.
-   */
-  function show_expose_button(&$form, &$form_state) {
-    $form['expose_button'] = array(
-      '#prefix' => '<div class="views-expose clear-block">',
-      '#suffix' => '</div>',
-    );
-    if (empty($this->options['exposed'])) {
-      $form['expose_button']['button'] = array(
-        '#type' => 'submit',
-        '#value' => t('Expose'),
-        '#submit' => array('views_ui_config_item_form_expose'),
-      );
-      $form['expose_button']['markup'] = array(
-        '#prefix' => '<div class="description">',
-        '#value' => t('This item is currently not exposed. If you <strong>expose</strong> it, users will be able to change the filter as they view it.'),
-        '#suffix' => '</div>',
-      );
-    }
-    else {
-      $form['expose_button']['button'] = array(
-        '#type' => 'submit',
-        '#value' => t('Hide'),
-        '#submit' => array('views_ui_config_item_form_expose'),
-      );
-      $form['expose_button']['markup'] = array(
-        '#prefix' => '<div class="description">',
-        '#value' => t('This item is currently exposed. If you <strong>hide</strong> it, users will not be able to change the filter as they view it.'),
-        '#suffix' => '</div>',
-      );
-    }
-  }
-
-  /**
-   * Shortcut to display the exposed options form.
-   */
-  function show_expose_form(&$form, &$form_state) {
-    if (empty($this->options['exposed'])) {
-      return;
-    }
-
-    $form['expose'] = array(
-      '#prefix' => '<div class="views-expose-options clear-block">',
-      '#suffix' => '</div>',
-    );
-    $this->expose_form($form, $form_state);
-
-    // When we click the expose button, we add new gadgets to the form but they
-    // have no data in $_POST so their defaults get wiped out. This prevents
-    // these defaults from getting wiped out. This setting will only be TRUE
-    // during a 2nd pass rerender.
-    if (!empty($form_state['force_expose_options'])) {
-      foreach (element_children($form['expose']) as $id) {
-        if (isset($form['expose'][$id]['#default_value']) && !isset($form['expose'][$id]['#value'])) {
-          $form['expose'][$id]['#value'] = $form['expose'][$id]['#default_value'];
-        }
-      }
-    }
-  }
-
-  /**
-   * Overridable form for exposed filter options.
-   *
-   * If overridden, it is best to call the parent or re-implement
-   * the stuff here.
-   *
-   * Many filters will need to override this in order to provide options
-   * that are nicely tailored to the given filter.
-   */
-  function expose_form(&$form, &$form_state) {
-    $form['expose']['start_left'] = array(
-      '#value' => '<div class="views-left-50">',
-    );
-
-    $this->expose_form_left($form, $form_state);
-
-    $form['expose']['end_left'] = array(
-      '#value' => '</div>',
-    );
-
-    $form['expose']['start_checkboxes'] = array(
-      '#value' => '<div class="form-checkboxes views-left-40 clear-block">',
-    );
-
-    $this->expose_form_right($form, $form_state);
-
-    $form['expose']['end_checkboxes'] = array(
-      '#value' => '</div>',
-    );
-  }
-
-  /**
    * Handle the 'left' side fo the exposed options form.
    */
   function expose_form_left(&$form, &$form_state) {
@@ -368,12 +276,6 @@ class views_handler_filter extends views_handler {
       form_error($form['expose']['identifier'], t('This identifier is used by another handler.'));
     }
   }
-
-  /**
-   * Perform any necessary changes to the form exposes prior to storage.
-   * There is no need for this function to actually store the data.
-   */
-  function expose_submit($form, &$form_state) { }
 
   /**
    * Provide default options for exposed filters.
@@ -475,6 +377,12 @@ class views_handler_filter extends views_handler {
   /**
    * Tell the renderer about our exposed form. This only needs to be
    * overridden for particularly complex forms. And maybe not even then.
+   *
+   * @return
+   *   An array with the following keys:
+   *   - operator: The $form key of the operator. Set to NULL if no operator.
+   *   - value: The $form key of the value. Set to NULL if no value.
+   *   - label: The label to use for this piece.
    */
   function exposed_info() {
     if (empty($this->options['exposed'])) {

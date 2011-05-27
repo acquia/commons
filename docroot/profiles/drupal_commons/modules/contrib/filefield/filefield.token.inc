@@ -1,5 +1,4 @@
 <?php
-// $Id: filefield.token.inc,v 1.7 2010/12/06 03:46:09 quicksketch Exp $
 
 /**
  * @file
@@ -18,6 +17,7 @@ function filefield_token_list($type = 'all') {
     $tokens['file']['filefield-description']        = t('File description');
     $tokens['file']['filefield-filename']           = t('File name');
     $tokens['file']['filefield-filepath']           = t('File path');
+    $tokens['file']['filefield-fileurl']            = t('File URL');
     $tokens['file']['filefield-filemime']           = t('File MIME type');
     $tokens['file']['filefield-filesize']           = t('File size (in bytes)');
     $tokens['file']['filefield-filesize_formatted'] = t('File size (pretty printed)');
@@ -41,6 +41,7 @@ function filefield_token_values($type, $object = NULL) {
     $tokens['filefield-description']        = isset($item['data']['description']) ? check_plain($item['data']['description']) : '';
     $tokens['filefield-filename']           = check_plain($item['filename']);
     $tokens['filefield-filepath']           = check_plain($item['filepath']);
+    $tokens['filefield-fileurl']            = file_create_url($item['filepath']);
     $tokens['filefield-filemime']           = $item['filemime'];
     $tokens['filefield-filesize']           = $item['filesize'];
     $tokens['filefield-filesize_formatted'] = format_size($item['filesize']);

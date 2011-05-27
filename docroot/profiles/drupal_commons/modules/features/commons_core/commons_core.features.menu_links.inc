@@ -73,18 +73,14 @@ function commons_core_menu_default_menu_links() {
     'weight' => '-50',
     'parent_path' => 'community',
   );
-  // Exported menu link: primary-links:groups/my
-  $menu_links['primary-links:groups/my'] = array(
+  // Exported menu link: primary-links:groups/mine
+  $menu_links['primary-links:groups/mine'] = array(
     'menu_name' => 'primary-links',
-    'link_path' => 'groups/my',
-    'router_path' => 'groups/my',
+    'link_path' => 'groups/mine',
+    'router_path' => 'groups/mine',
     'link_title' => 'My groups',
-    'options' => array(
-      'attributes' => array(
-        'title' => '',
-      ),
-    ),
-    'module' => 'commons',
+    'options' => array(),
+    'module' => 'menu',
     'hidden' => '0',
     'external' => '0',
     'has_children' => '0',
@@ -155,26 +151,10 @@ function commons_core_menu_default_menu_links() {
     'expanded' => '1',
     'weight' => '20',
   );
-  // Exported menu link: primary-links:users
-  $menu_links['primary-links:users'] = array(
-    'menu_name' => 'primary-links',
-    'link_path' => 'users',
-    'router_path' => 'users',
-    'link_title' => 'Members',
-    'options' => array(),
-    'module' => 'commons',
-    'hidden' => '0',
-    'external' => '0',
-    'has_children' => '0',
-    'expanded' => '0',
-    'weight' => '20',
-    'parent_path' => 'community',
-  );
   // Translatables
   // Included for use with string extractors like potx.
   t('Community');
   t('Groups');
-  t('Members');
   t('My bookmarks');
   t('My content');
   t('My friends');

@@ -1,5 +1,4 @@
 <?php
-// $Id: heartbeatstream.inc,v 1.1.2.14 2010/11/21 12:33:36 stalski Exp $
 
 /**
  * @file
@@ -68,6 +67,9 @@ class HeartbeatStream {
 
   // Limit the number of messages by oldest time
   public $oldest_date = 604800;
+
+  // Skips the active user
+  public $skip_active_user = FALSE;
 
   // Limit the number of messages by maximum messages to load
   public $num_load_max = 100;

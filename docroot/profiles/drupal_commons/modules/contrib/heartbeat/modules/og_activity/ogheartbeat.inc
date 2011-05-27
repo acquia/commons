@@ -1,5 +1,4 @@
 <?php
-// $Id: ogheartbeat.inc,v 1.1.2.10 2010/12/13 23:03:32 stalski Exp $
 
 /**
  * @file
@@ -44,8 +43,7 @@ class OgHeartbeat extends HeartbeatAccess {
    */
   protected function hasAccess() {
 
-    // if the user has access to this node (member or public group)
-    //og_set_group_context($this->group);
+    // If the user has access to this node (member or public group).
     if (isset($this->group) && (og_is_group_member($this->group) || $this->group->og_private == 0)) {
       $this->_group_access = TRUE;
     }
@@ -58,6 +56,13 @@ class OgHeartbeat extends HeartbeatAccess {
   }
 
   /**
+   * getGroup
+   */
+  public function getGroup() {
+    return $this->group;
+  }
+
+  /**
    * setGroup
    *
    * Sets the group for a given node ID.
@@ -66,32 +71,55 @@ class OgHeartbeat extends HeartbeatAccess {
    */
   private function setGroup($nid = 0) {
 
+    // Set the group by nid argument.
     if ($nid != 0) {
       $this->_gid = $nid;
       $this->group = node_load($nid);
       return;
     }
-    if(module_exists('spaces_og')) {
-      if($space = spaces_get_space()) {
-        if($space->type == 'og') {
+    elseif (!empty($_REQUEST['group_nid'])) {
+
+      $this->_gid = $_REQUEST['group_nid'];
+      $this->group = node_load($this->_gid);
+
+    }
+
+    // Set the group from the space.
+    if (module_exists('spaces_og')) {
+      if ($space = spaces_get_space()) {
+        if ($space->type == 'og') {
           $this->_gid = $space->id;
           $this->group = $space->group;
           return;
         }
       }
     }
+
+    // Set the group via current group context.
+    if ($group = og_get_group_context()) {
+      $this->_gid = $group->nid;
+      $this->group = $group;
+      return;
+    }
+
+    // Try to set the group from the node ID.
     if (arg(0) == 'node' && is_numeric(arg(1))) {
 
-      $node = node_load(arg(1));
+      if ($node = node_load(arg(1))) {
 
-      if (og_is_group_type($node->type)) {
-        $this->_gid = arg(1);
-        $this->group = $node;
+        if (og_is_group_type($node->type)) {
+          $this->_gid = $node->nid;
+          $this->group = $node;
+          return;
+        }
+        elseif (og_is_group_post_type($node->type)) {
+          $this->_gid = current($node->og_groups);
+          $this->group = node_load($this->_gid);
+          return;
+        }
+
       }
-      elseif (og_is_group_post_type($node->type)) {
-        $this->_gid = current($node->og_groups);
-        $this->group = node_load($this->_gid);
-      }
+
     }
 
   }

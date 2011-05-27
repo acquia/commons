@@ -1,5 +1,4 @@
 <?php
-// $Id: views_plugin_row_heartbeat_rss.inc,v 1.1.2.5 2010/02/21 22:45:27 stalski Exp $
 
 /**
  * @file

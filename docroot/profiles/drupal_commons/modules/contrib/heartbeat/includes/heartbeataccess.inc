@@ -1,5 +1,4 @@
 <?php
-// $Id: heartbeataccess.inc,v 1.1.2.2.2.35 2010/12/13 21:51:36 stalski Exp $
 
 /**
  * @file
@@ -75,7 +74,8 @@ abstract class HeartbeatAccess {
    * your own activity.
    */
   public function skipActiveUser() {
-    return $this->_whoisuser_type == self::TYPE_USER_PROFILE ? FALSE : TRUE;
+    $skip = $this->_whoisuser_type == self::TYPE_USER_PROFILE ? FALSE : (empty($this->stream->skip_active_user) ? FALSE : $this->stream->skip_active_user);
+    return $skip;
   }
 
   /**
@@ -269,6 +269,11 @@ abstract class HeartbeatAccess {
       AND (ua_target_users.uid = 0 OR ua_target_users.status = 1)
     ";
 
+    // Skip the first user if configured that way.
+    if (variable_get('heartbeat_skip_admin', 0) == 1) {
+      $this->stream->sql_start .= "AND ua.uid != 1 ";
+    }
+
     // Calls with an offset uaid will fetch newer messages
     if ($this->stream->latest_uaid > 0) {
       $this->stream->sql_start .= "AND (ua.uaid > %d ) ";
@@ -297,7 +302,7 @@ abstract class HeartbeatAccess {
    *
    * @return HeartbeatParser object
    */
-  final protected function createHeartbeatParser() {
+  protected function createHeartbeatParser() {
     $heartbeat = HeartbeatParser::instantiate($this->getAccess());
     return $heartbeat;
   }

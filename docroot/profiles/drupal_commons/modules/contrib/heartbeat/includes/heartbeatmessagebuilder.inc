@@ -1,5 +1,4 @@
 <?php
-// $Id: heartbeatmessagebuilder.inc,v 1.1.2.5.2.36 2011/01/20 20:37:04 stalski Exp $
 
 /**
  * @file
@@ -165,7 +164,7 @@ class HeartbeatMessageBuilder {
 
       // Remove messages set private by site administrator
       // and remove messages set private by user profile setting.
-      $private = $message->template->perms == HEARTBEAT_PRIVATE || $message->access == HEARTBEAT_PRIVATE;
+      $private = $message->template->perms === HEARTBEAT_PRIVATE || (int)$message->access === HEARTBEAT_PRIVATE;
       if ($private && $user->uid != $message->actor->uid) {
         unset($heartbeat->raw_messages[$key]);
         $this->addError('Activity message #'. $message->uaid . ' is filtered from display, because it was blocked by administrator or the owner of the message.');
@@ -214,9 +213,14 @@ class HeartbeatMessageBuilder {
       // but only if the administrator did not overrule this setting
       if (variable_get('heartbeat_context_perm', 0) == 0) {
 
-        if (!user_access('access user profiles', $user)) {
+        if (!user_access('access user activity')) {
           $heartbeat->raw_messages[$key]->uid_access = FALSE;
           $this->addError('Activity message #'. $message->uaid . ' is filtered from display, because this message is blocked by profile access.');
+        }
+
+        // if user can't access profiles, change the link for the user name only.
+        if (!user_access('access user profiles')) {
+          $heartbeat->raw_messages[$key]->message = str_replace($heartbeat->raw_messages[$key]->variables['@username'], $heartbeat->raw_messages[$key]->actor->name, $heartbeat->raw_messages[$key]->message);
         }
 
         $this->checkNodeAccess($heartbeat->raw_messages[$key], $user);

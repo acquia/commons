@@ -1,5 +1,4 @@
 <?php
-// $Id: connectedheartbeat.inc,v 1.1.2.4 2010/12/13 18:38:09 stalski Exp $
 
 /**
  * @file

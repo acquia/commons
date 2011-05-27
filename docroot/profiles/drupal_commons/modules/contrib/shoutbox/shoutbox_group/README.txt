@@ -1,4 +1,3 @@
-// $Id: README.txt,v 1.1.2.1 2010/07/16 00:36:48 mikestefff Exp $
 
 SHOUTBOX GROUP
 ===================

@@ -8,24 +8,23 @@ function commons_core_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-content-global_content';
-  $context->description = 'Various blocks to show on the global content views';
-  $context->tag = 'Global content';
+  $context->name = 'bookmarks';
+  $context->description = 'The bookmarks page';
+  $context->tag = 'Bookmarks';
   $context->conditions = array(
     'path' => array(
       'values' => array(
-        'content/*' => 'content/*',
-        'featured' => 'featured',
-        'notices' => 'notices',
+        'bookmarks' => 'bookmarks',
+        'user/*/bookmarks' => 'user/*/bookmarks',
       ),
     ),
   );
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'views-tag_cloud-block_1' => array(
+        'views-most_bookmarked-block_1' => array(
           'module' => 'views',
-          'delta' => 'tag_cloud-block_1',
+          'delta' => 'most_bookmarked-block_1',
           'region' => 'sidebar_last',
           'weight' => 0,
         ),
@@ -36,14 +35,14 @@ function commons_core_context_default_contexts() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Global content');
-  t('Various blocks to show on the global content views');
+  t('Bookmarks');
+  t('The bookmarks page');
 
-  $export['context_ui-content-global_content'] = $context;
+  $export['bookmarks'] = $context;
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-global-global';
+  $context->name = 'global';
   $context->description = 'Show on every page';
   $context->tag = 'Sitewide';
   $context->conditions = array(
@@ -62,15 +61,15 @@ function commons_core_context_default_contexts() {
           'region' => 'header',
           'weight' => 0,
         ),
-        'commons_core-3' => array(
+        'commons_core-header_login' => array(
           'module' => 'commons_core',
-          'delta' => '3',
+          'delta' => 'header_login',
           'region' => 'header',
           'weight' => 1,
         ),
-        'commons_core-2' => array(
+        'commons_core-commons_info' => array(
           'module' => 'commons_core',
-          'delta' => '2',
+          'delta' => 'commons_info',
           'region' => 'footer',
           'weight' => 0,
         ),
@@ -84,12 +83,12 @@ function commons_core_context_default_contexts() {
   t('Show on every page');
   t('Sitewide');
 
-  $export['context_ui-global-global'] = $context;
+  $export['global'] = $context;
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-group-group';
-  $context->description = 'Various group blocks';
+  $context->name = 'group-context';
+  $context->description = 'The context of a group';
   $context->tag = 'Group';
   $context->conditions = array(
     'context_og_condition_group_type' => array(
@@ -97,36 +96,18 @@ function commons_core_context_default_contexts() {
         'group' => 'group',
       ),
       'options' => array(
-        'node_form' => 1,
+        'node_form' => 0,
       ),
     ),
   );
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'commons_core-5' => array(
+        'commons_core-group_create_content' => array(
           'module' => 'commons_core',
-          'delta' => 5,
+          'delta' => 'group_create_content',
           'region' => 'sidebar_last',
-          'weight' => 0,
-        ),
-        'og_views-0' => array(
-          'module' => 'og_views',
-          'delta' => 0,
-          'region' => 'sidebar_last',
-          'weight' => 1,
-        ),
-        'views-og_members_custom_block-block_1' => array(
-          'module' => 'views',
-          'delta' => 'og_members_custom_block-block_1',
-          'region' => 'sidebar_last',
-          'weight' => 2,
-        ),
-        'views-og_tag_cloud-block_1' => array(
-          'module' => 'views',
-          'delta' => 'og_tag_cloud-block_1',
-          'region' => 'sidebar_last',
-          'weight' => 3,
+          'weight' => -1,
         ),
       ),
     ),
@@ -136,38 +117,56 @@ function commons_core_context_default_contexts() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Group');
-  t('Various group blocks');
+  t('The context of a group');
 
-  $export['context_ui-group-group'] = $context;
+  $export['group-context'] = $context;
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-profile-profile';
-  $context->description = 'User profile';
-  $context->tag = 'Profile';
+  $context->name = 'group-home';
+  $context->description = 'The group home page';
+  $context->tag = 'Group';
   $context->conditions = array(
-    'user_page' => array(
+    'node' => array(
       'values' => array(
-        'view' => 'view',
+        'group' => 'group',
       ),
       'options' => array(
-        'mode' => 'all',
+        'node_form' => '0',
       ),
     ),
   );
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'views-og_profile_user_groups-block_1' => array(
-          'module' => 'views',
-          'delta' => 'og_profile_user_groups-block_1',
+        'commons_core-group_menu' => array(
+          'module' => 'commons_core',
+          'delta' => 'group_menu',
           'region' => 'sidebar_last',
           'weight' => 0,
         ),
-        'user_relationship_blocks-user-1' => array(
-          'module' => 'user_relationship_blocks',
-          'delta' => 'user-1',
+        'commons_core-group_members' => array(
+          'module' => 'commons_core',
+          'delta' => 'group_members',
           'region' => 'sidebar_last',
+          'weight' => 1,
+        ),
+        'og_views-0' => array(
+          'module' => 'og_views',
+          'delta' => 0,
+          'region' => 'sidebar_last',
+          'weight' => 2,
+        ),
+        'views-group_node-block_1' => array(
+          'module' => 'views',
+          'delta' => 'group_node-block_1',
+          'region' => 'content',
+          'weight' => 0,
+        ),
+        'commons_core-group_activity' => array(
+          'module' => 'commons_core',
+          'delta' => 'group_activity',
+          'region' => 'content',
           'weight' => 1,
         ),
       ),
@@ -177,43 +176,55 @@ function commons_core_context_default_contexts() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Profile');
-  t('User profile');
+  t('Group');
+  t('The group home page');
 
-  $export['context_ui-profile-profile'] = $context;
+  $export['group-home'] = $context;
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-users-user_browser';
-  $context->description = 'Various block to show on the user browser page';
-  $context->tag = 'User browser';
+  $context->name = 'group-listing';
+  $context->description = 'The list of available groups on the site';
+  $context->tag = '';
   $context->conditions = array(
     'views' => array(
       'values' => array(
-        'user_directory' => 'user_directory',
+        'groups_main_listing' => 'groups_main_listing',
       ),
     ),
   );
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'commons_core-0' => array(
+        'commons_core-create_group' => array(
           'module' => 'commons_core',
-          'delta' => '0',
+          'delta' => 'create_group',
           'region' => 'sidebar_last',
           'weight' => 0,
         ),
-        'views-users_online-block_1' => array(
+        'views-groups_my_groups-block_1' => array(
           'module' => 'views',
-          'delta' => 'users_online-block_1',
+          'delta' => 'groups_my_groups-block_1',
           'region' => 'sidebar_last',
           'weight' => 1,
         ),
-        'views-newest_users-block_1' => array(
+        'views-groups_most_active-block_1' => array(
           'module' => 'views',
-          'delta' => 'newest_users-block_1',
+          'delta' => 'groups_most_active-block_1',
+          'region' => 'sidebar_last',
+          'weight' => 2,
+        ),
+        'views-groups_newest_groups-block_1' => array(
+          'module' => 'views',
+          'delta' => 'groups_newest_groups-block_1',
           'region' => 'sidebar_last',
           'weight' => 3,
+        ),
+        'views-groups_featured_groups-block_1' => array(
+          'module' => 'views',
+          'delta' => 'groups_featured_groups-block_1',
+          'region' => 'content_top',
+          'weight' => 0,
         ),
       ),
     ),
@@ -222,9 +233,52 @@ function commons_core_context_default_contexts() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('User browser');
-  t('Various block to show on the user browser page');
+  t('The list of available groups on the site');
 
-  $export['context_ui-users-user_browser'] = $context;
+  $export['group-listing'] = $context;
+  $context = new stdClass;
+  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
+  $context->api_version = 3;
+  $context->name = 'group-listing-mine';
+  $context->description = 'A listing of your groups';
+  $context->tag = '';
+  $context->conditions = array(
+    'views' => array(
+      'values' => array(
+        'groups_my_groups_listing:page_1' => 'groups_my_groups_listing:page_1',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'commons_core-create_group' => array(
+          'module' => 'commons_core',
+          'delta' => 'create_group',
+          'region' => 'sidebar_last',
+          'weight' => 0,
+        ),
+        'views-groups_newest_groups-block_1' => array(
+          'module' => 'views',
+          'delta' => 'groups_newest_groups-block_1',
+          'region' => 'sidebar_last',
+          'weight' => 1,
+        ),
+        'views-groups_most_active-block_1' => array(
+          'module' => 'views',
+          'delta' => 'groups_most_active-block_1',
+          'region' => 'sidebar_last',
+          'weight' => 2,
+        ),
+      ),
+    ),
+  );
+  $context->condition_mode = 0;
+
+  // Translatables
+  // Included for use with string extractors like potx.
+  t('A listing of your groups');
+
+  $export['group-listing-mine'] = $context;
   return $export;
 }

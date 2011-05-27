@@ -37,7 +37,12 @@ Drupal.heartbeat.doneWaiting = function() {
  */
 Drupal.heartbeat.getOlderMessages = function(element, page) {
   Drupal.heartbeat.wait(element, '.heartbeat-more-messages-wrapper');
-  $.post(element.href, {block: page ? 0 : 1, ajax: 1}, Drupal.heartbeat.appendMessages);
+  var post = {
+    block: page ? 0 : 1,
+    ajax: 1
+  };
+  $.event.trigger('heartbeatBeforeOlderMessages', [post]); 
+  $.post(element.href, post, Drupal.heartbeat.appendMessages);
 }
 
 /**
@@ -50,7 +55,7 @@ Drupal.heartbeat.pollMessages = function(stream) {
   var stream_selector = '#heartbeat-stream-' + stream;
   
   if ($(stream_selector).length > 0) {
-    var href = Drupal.settings.basePath + 'heartbeat/js/poll';
+    var href = Drupal.settings.basePath + (Drupal.settings.heartbeat_language_prefix == '' ? '' : Drupal.settings.heartbeat_language_prefix + '/') + 'heartbeat/js/poll';
     var uaids = new Array();
     var beats = $(stream_selector + ' .beat-item');
     var firstUaid = 0;
@@ -87,11 +92,12 @@ Drupal.heartbeat.appendMessages = function(data) {
   
   var wrapper = Drupal.heartbeat.moreLink.parents('.heartbeat-messages-wrapper');
   Drupal.heartbeat.moreLink.remove();
-  wrapper.append(result['data']);
+  var data = $(result['data']);
+  wrapper.append(data);
   Drupal.heartbeat.doneWaiting();
     
   // Reattach behaviors for new added html
-  Drupal.attachBehaviors($('.heartbeat-messages-wrapper'));
+  Drupal.attachBehaviors(data);
   
 }
 
@@ -115,9 +121,10 @@ Drupal.heartbeat.prependMessages = function(data) {
 
   // Append the messages
   if (result['data'] != '') {
-    $(stream_selector + ' .heartbeat-messages-wrapper').prepend(result['data']);
+    var data = $(result['data']);
+    $(stream_selector + ' .heartbeat-messages-wrapper').prepend(data);
     // Reattach behaviors for new added html
-    Drupal.attachBehaviors($(stream_selector + ' .heartbeat-messages-wrapper'));
+    Drupal.attachBehaviors(data);
   }
 }
 

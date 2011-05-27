@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 // Define the forced ID of the free-tagging vocabulary
 define('DRUPAL_COMMONS_TAG_ID', 2);
@@ -8,7 +7,7 @@ define('DRUPAL_COMMONS_TAG_ID', 2);
 define('DRUPAL_COMMONS_EDITOR', 'ckeditor');
 
 // Define the default theme
-define('DRUPAL_COMMONS_THEME', 'acquia_commons');
+define('DRUPAL_COMMONS_DEFAULT_THEME', 'commons_origins');
 
 /**
  * Return an array of the modules to be enabled when this profile is installed.
@@ -27,9 +26,6 @@ function drupal_commons_profile_modules() {
     
     // CTools
     'ctools', 
-    
-    // Panels
-    'page_manager', 'panels', 
     
     // Context
     'context',
@@ -68,7 +64,7 @@ function drupal_commons_profile_modules() {
  *   language-specific profiles.
  */
 function drupal_commons_profile_details() {
-  $logo = '<a href="http://drupal.org/project/commons" target="_blank"><img alt="Drupal Commons" title="Drupal Commons" src="./profiles/drupal_commons/images/logo.png' . '"></img></a>';
+  $logo = '<a href="http://drupal.org/project/commons" target="_blank"><img alt="Drupal Commons" title="Drupal Commons" src="./profiles/drupal_commons/images/logo.png"></img></a>';
   $description = st('Select this profile to install the Drupal Commons distribution for powering your community website. Drupal Commons provides provides blogging, discussions, user profiles, and other useful community features for both private communities (e.g. an Intranet), or public communities (e.g. a customer community).');
   $description .= '<br/>' . $logo;
   
@@ -89,7 +85,8 @@ function drupal_commons_profile_details() {
  */
 function drupal_commons_profile_task_list() {
   $tasks = array();
-  $tasks['configure-commons'] = st('Configure Drupal Commons');
+  $tasks['configure-features'] = st('Select features');
+  $tasks['configure-theme'] = st('Select theme');
   $tasks['install-commons'] = st('Install Drupal Commons');
   return $tasks;
 }
@@ -111,39 +108,25 @@ function drupal_commons_profile_task_list() {
 function drupal_commons_profile_tasks(&$task, $url) {
   // Skip to the configure task
   if ($task == 'profile') {
-    $task = 'configure-commons';  
+    $task = 'configure-features';  
+  }
+  
+  // If we're using Drush to install, skip the forms
+  if (defined('DRUSH_BASE_PATH')) {
+    drupal_commons_include('drush');
+    _drupal_commons_drush_tasks($task);
   }
   
   // Provide a form to choose features
-  if ($task == 'configure-commons') {
-    // If we're using Drush to install, skip the form and install
-    // all the available features
-    if (defined('DRUSH_BASE_PATH')) {
-      $features = array(
-        'commons_core',
-        'commons_home',
-        'commons_blog',
-        'commons_discussion',
-        'commons_document',
-        'commons_wiki',
-        'commons_poll',
-        'commons_event',
-        'commons_dashboard',
-        'commons_notifications',
-        'commons_reputation',
-        'commons_group_aggregator',
-        'commons_admin',
-        'commons_seo'
-      );
-      variable_set('commons_selected_features', $features);
+  if ($task == 'configure-features') {
+    drupal_commons_include('form');
+    $output = drupal_get_form('drupal_commons_features_form', $url);
+  }
   
-      // Initiate the next installation step
-      $task = 'install-commons';
-      variable_set('install_task', $task);
-    }
-    else {
-      $output = drupal_get_form('drupal_commons_features_form', $url);
-    }
+  // Provide a form to choose the theme
+  if ($task == 'configure-theme') {
+    drupal_commons_include('form');
+    $output = drupal_get_form('drupal_commons_theme_form', $url);
   }
   
   // Installation batch process
@@ -162,15 +145,12 @@ function drupal_commons_profile_tasks(&$task, $url) {
     }
 
     // Post-installation operations
-    $operations[] = array('drupal_commons_config_profile', array());
     $operations[] = array('drupal_commons_config_filter', array());
     $operations[] = array('drupal_commons_config_password', array());
     $operations[] = array('drupal_commons_config_wysiwyg', array());
     $operations[] = array('drupal_commons_config_ur', array());
     $operations[] = array('drupal_commons_config_heartbeat', array());
-    $operations[] = array('drupal_commons_config_ctools', array());
     $operations[] = array('drupal_commons_config_views', array());
-    $operations[] = array('drupal_commons_config_theme', array());
     $operations[] = array('drupal_commons_config_images', array());
     $operations[] = array('drupal_commons_config_vars', array());
   
@@ -195,194 +175,6 @@ function drupal_commons_profile_tasks(&$task, $url) {
   }
   
   return $output;
-}
-
-/**
- * Provide a form to choose which features to enable
- */
-function drupal_commons_features_form($form_state, $url) {
-  $form = array();
-  drupal_set_title(st('Choose from available features'));
-  
-  // Homebox, which is included in the Commons dashboard feature
-  // requires PHP 5.2, so we need to check that to avoid allowing
-  // the user to install it
-  module_load_include('module', 'homebox');
-  $php5_2 = _homebox_check_php();
-  
-  // Help message
-  $form['message'] = array(
-    '#type' => 'item',
-    '#value' => st('The selected features will be enabled after the installation has completed. At any time, you can turn the available features on or off.'),
-  );
-  
-  // Required features
-  $form['required'] = array(
-    '#type' => 'fieldset',
-    '#title' => st('Required'),
-    '#description' => t('These features are required for Drupal Commons to operate.'),
-  );
-  $form['required']['feature-commons_core'] = array(
-    '#type' => 'checkbox',
-    '#title' => st('Core'),
-    '#default_value' => 1,
-    '#disabled' => 1,
-    '#required' => TRUE,
-    '#value' => 1,
-    '#description' => st('Provides the essential components for Drupal Commons'),
-  );
-  $form['required']['feature-commons_home'] = array(
-    '#type' => 'checkbox',
-    '#title' => st('Home page'),
-    '#default_value' => 1,
-    '#disabled' => 1,
-    '#required' => TRUE,
-    '#value' => 1,
-    '#description' => st('Provides a community-driven home page.'),
-  );
-  
-  // Content-related features
-  $form['content'] = array(
-    '#type' => 'fieldset',
-    '#title' => st('Content'),
-    '#description' => t('Select which content types you wish Drupal Commons to make available to members of Drupal Commons groups. Note: If you de-select any of these, you can always enable them again after installation.'),
-  );
-  $form['content']['feature-commons_blog'] = array(
-    '#type' => 'checkbox',
-    '#title' => st('Blogs'),
-    '#default_value' => 1,
-    '#description' => t('Used by individuals to create personal blog posts within a group.'),
-  );
-  $form['content']['feature-commons_discussion'] = array(
-    '#type' => 'checkbox',
-    '#title' => st('Discussions'),
-    '#default_value' => 1,
-    '#description' => st('Used to create threaded topical discussions within a group.'),
-  );
-  $form['content']['feature-commons_document'] = array(
-    '#type' => 'checkbox',
-    '#title' => st('Documents'),
-    '#default_value' => 1,
-    '#description' => st('Used as a container for attaching documents, images, and other digital files useful to a group.'),
-  );
-  $form['content']['feature-commons_wiki'] = array(
-    '#type' => 'checkbox',
-    '#title' => st('Wikis'),
-    '#default_value' => 1,
-    '#description' => st('A type of page that is editable by all members in a group (vs. editable only its original author).'),
-  );
-  $form['content']['feature-commons_poll'] = array(
-    '#type' => 'checkbox',
-    '#title' => st('Polls'),
-    '#default_value' => 1,
-    '#description' => st('Used to create polls within a group.'),
-  );
-  $form['content']['feature-commons_event'] = array(
-    '#type' => 'checkbox',
-    '#title' => st('Events & calendars'),
-    '#default_value' => 1,
-    '#description' => st('Used to create an event calendar for a group.'),
-  );
-  
-  // Misc features
-  $form['misc'] = array(
-    '#type' => 'fieldset',
-    '#title' => st('Other functions'),
-    '#description' => st('Select which functions you wish to provide in Drupal Commons. Again, if you de-select any of these, you can enable them again after installation.'),
-  );
-  $form['misc']['feature-commons_dashboard'] = array(
-    '#type' => 'checkbox',
-    '#title' => st('Dashboard'),
-    '#default_value' => $php5_2 ? 1 : 0,
-    '#disabled' => !$php5_2,
-    '#description' => st('A feature that provides a unique-per-user, user-customizable dashboard of recent relevant site activity.'),
-  );
-  if (!$php5_2) {
-    $form['misc']['feature-commons_dashboard']['#value'] = 0;
-    $form['misc']['feature-commons_dashboard']['#description'] .= '<span style="color:red;"> ' . st('Your server must have PHP 5.2 or higher in order to active this feature.') . '</span>';
-  }
-  $form['misc']['feature-commons_notifications'] = array(
-    '#type' => 'checkbox',
-    '#title' => st('Notifications'),
-    '#default_value' => 1,
-    '#description' => st('A feature that allows users to subscribe to email & site-based notifications of site activity & new content.'),
-  );
-  $form['misc']['feature-commons_reputation'] = array(
-    '#type' => 'checkbox',
-    '#title' => st('User awards'),
-    '#default_value' => 1,
-    '#description' => st('Award users points and badges for performing community-related actions.'),
-  );
-  $form['misc']['feature-commons_group_aggregator'] = array(
-    '#type' => 'checkbox',
-    '#title' => st('Content aggregator'),
-    '#default_value' => 1,
-    '#description' => st('Provides a way for group administrators to pull RSS content into a group from other sources.'),
-  );
-  $form['misc']['feature-commons_admin'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Admin assist'),
-    '#default_value' => 1,
-    '#description' => st('Bundles a variety of administrative interface tools in one place. (Bundled as a single feature so administrators who wish to use alternate admin interface tools can turn off the defaults easily.).'),
-  );
-  $form['misc']['feature-commons_seo'] = array(
-    '#type' => 'checkbox',
-    '#title' => st('SEO'),
-    '#default_value' => 1,
-    '#description' => st('Bundles all SEO-oriented capabilities in a module separate from Drupal Commons Core (for ease of administration).'),
-  );
-  
-  // Acquia features
-  $form['acquia'] = array(
-    '#type' => 'fieldset',
-    '#title' => st('Acquia'),
-    '#description' => st('The !an can supplement the functionality of Drupal Commons by providing enhanced site search (faceted search, content recommendations, content biasing, multi-site search, and others using the Apache Solr service), spam protection (using the Mollom service), and more.  A free 30-day trial is available.', array('!an' => l(t('Acquia Network'), 'http://acquia.com/products-services/acquia-network', array('attributes' => array('target' => '_blank'))))),
-  );
-  $form['acquia']['feature-acquia_network_subscription'] = array(
-    '#type' => 'checkbox',
-    '#title' => st('Acquia Network'),
-    '#default_value' => 0,
-    '#description' => st('Select this either if you wish to try a free trial of the Acquia Network or want to enter the keys for your existing Acquia Network subscription.'),
-  );
-  
-  // Redirect URL to remain inside the installation after submission
-  $form['url'] = array(
-    '#type' => 'value',
-    '#value' => $url,
-  );
-  
-  $form['submit'] = array(
-    '#type' => 'submit',
-    '#value' => st('Continue'),
-  );
-  
-  return $form;
-}
-
-/**
- * Submit handler for the feature choice form
- */
-function drupal_commons_features_form_submit(&$form, &$form_state) {
-  // Build an array of chosen features
-  $features = array();
-  
-  // Extract the selected features from the form
-  foreach ($form_state['values'] as $key => $value) {
-    if (substr($key, 0, 8) == 'feature-') {
-      if ($value == 1) {
-        $features[] = substr($key, 8);
-      }
-    }
-  }
-  
-  // Store a temporary variable to access later
-  variable_set('commons_selected_features', $features);
-  
-  // Initiate the next installation step
-  variable_set('install_task', 'install-commons');
-  
-  // Redirect back to the installation page
-  drupal_goto($form_state['values']['url']);
 }
 
 /**
@@ -426,147 +218,33 @@ function drupal_commons_config_taxonomy() {
 }
 
 /**
- * Configure profile
- * 
- * Add custom profile fields
- */
-function drupal_commons_config_profile() {
-  $fields = array();
-
-  // Personal Information
-  
-  // First name
-  $field = new stdClass;
-  $field->title = st('First name');
-  $field->name = 'profile_name';
-  $field->explanation = st('Enter your first name.');
-  $field->category = st('Personal information');
-  $field->type = 'textfield';
-  $field->weight = -10;
-  $field->required = 1;
-  $field->register = 1;
-  $field->visibility = 2;
-  $field->autocomplete = 0;
-  $fields[] = $field;
-  
-  // Last name
-  $field = new stdClass;
-  $field->title = st('Last name');
-  $field->name = 'profile_last_name';
-  $field->explanation = st('Enter your last name.');
-  $field->category = st('Personal information');
-  $field->type = 'textfield';
-  $field->weight = -9;
-  $field->required = 1;
-  $field->register = 1;
-  $field->visibility = 2;
-  $field->autocomplete = 0;
-  $fields[] = $field;
-  
-  // Location
-  $field = new stdClass;
-  $field->title = st('Location');
-  $field->name = 'profile_location';
-  $field->explanation = st('Where are you location?');
-  $field->category = st('Personal information');
-  $field->type = 'textfield';
-  $field->weight = -8;
-  $field->required = 0;
-  $field->register = 0;
-  $field->visibility = 2;
-  $field->autocomplete = 0;
-  $fields[] = $field;
-  
-  // My interests
-  $field = new stdClass;
-  $field->title = st('My interests');
-  $field->name = 'profile_interests';
-  $field->explanation = st('What are your interests, hobbies, etc?');
-  $field->category = st('Personal information');
-  $field->type = 'textarea';
-  $field->weight = -7;
-  $field->required = 0;
-  $field->register = 0;
-  $field->visibility = 2;
-  $field->autocomplete = 0;
-  $fields[] = $field;
-  
-  // About me
-  $field = new stdClass;
-  $field->title = st('About me');
-  $field->name = 'profile_aboutme';
-  $field->explanation = st('Explain a little about yourself.');
-  $field->category = st('Personal information');
-  $field->type = 'textarea';
-  $field->weight = -6;
-  $field->required = 0;
-  $field->register = 0;
-  $field->visibility = 2;
-  $field->autocomplete = 0;
-  $fields[] = $field;
-  
-  // Work Information
-  
-  // Job title
-  $field = new stdClass;
-  $field->title = st('Job title');
-  $field->name = 'profile_job';
-  $field->explanation = st('What is your job title?');
-  $field->category = st('Work information');
-  $field->type = 'textfield';
-  $field->weight = -10;
-  $field->required = 0;
-  $field->register = 1;
-  $field->visibility = 2;
-  $field->autocomplete = 0;
-  $fields[] = $field;
-  
-  // Organization
-  $field = new stdClass;
-  $field->title = st('Organization');
-  $field->name = 'profile_organization';
-  $field->explanation = st('Which organization or department are you a part of?');
-  $field->category = st('Work information');
-  $field->type = 'textfield';
-  $field->weight = -9;
-  $field->required = 0;
-  $field->register = 1;
-  $field->visibility = 2;
-  $field->autocomplete = 0;
-  $fields[] = $field;
-  
-  // Save the fields
-  foreach ($fields as $field) {
-    drupal_write_record('profile_fields', $field);
-  }
-}
-
-/**
  * Configure input filters
  */
 function drupal_commons_config_filter() {
   // Force filter format and filter IDs
+  $filters_sql = "UPDATE {filters} f INNER JOIN {filter_formats} ff ON f.format = ff.format SET f.format = %d WHERE ff.name = '%s'";
+  $filter_formats = "UPDATE {filter_formats} SET format = %d WHERE name = '%s'";
   
   // Filtered HTML
-  db_query("UPDATE {filters} f INNER JOIN {filter_formats} ff ON f.format = ff.format SET f.format = 1 WHERE ff.name = 'Filtered HTML'");
-  db_query("UPDATE {filter_formats} SET format = 1 WHERE name = 'Filtered HTML'");
+  db_query($filters_sql, 1, 'Filtered HTML');
+  db_query($filter_formats, 1, 'Filtered HTML');
   
   // Full HTML
-  db_query("UPDATE {filters} f INNER JOIN {filter_formats} ff ON f.format = ff.format SET f.format = 2 WHERE ff.name = 'Full HTML'");
-  db_query("UPDATE {filter_formats} SET format = 2 WHERE name = 'Full HTML'");
+  db_query($filters_sql, 2, 'Full HTML');
+  db_query($filter_formats, 2, 'Full HTML');
   
   // PHP code
-  db_query("UPDATE {filters} f INNER JOIN {filter_formats} ff ON f.format = ff.format SET f.format = 3 WHERE ff.name = 'PHP code'");
-  db_query("UPDATE {filter_formats} SET format = 3 WHERE name = 'PHP code'");
+  db_query($filters_sql, 3, 'PHP code');
+  db_query($filter_formats, 3, 'PHP code');
   
   // Messaging
-  db_query("UPDATE {filters} f INNER JOIN {filter_formats} ff ON f.format = ff.format SET f.format = 4 WHERE ff.name = 'Messaging plain text'");
-  db_query("UPDATE {filter_formats} SET format = 4 WHERE name = 'Messaging plain text'");
+  db_query($filters_sql, 4, 'Messaging plain text');
+  db_query($filter_formats, 4, 'Messaging plain text');
   
   // Let community and content manager role use Full HTML
   db_query("UPDATE {filter_formats} SET roles = ',3,4,' WHERE name = 'Full HTML'");
     
-  // Create a "links-only" filter format that Shoutbox will use
+  // Create a "links-only" filter format
   $format = new stdClass;
   $format->format = 5;
   $format->name = st('Links only');
@@ -644,7 +322,7 @@ function drupal_commons_config_password() {
  */
 function drupal_commons_config_wysiwyg() {
   // Load external file containing editor settings
-  require_once('drupal_commons.editor.inc'); 
+  drupal_commons_include('editor'); 
   
   $settings = drupal_commons_editor_settings();
   
@@ -722,34 +400,6 @@ function drupal_commons_config_heartbeat() {
 }
 
 /**
- * Configure ctools
- */
-function drupal_commons_config_ctools() {
-  ctools_include('context');
-  ctools_include('plugins');
-  
-  // Enable node view override (variants imported via Features)
-  $page = page_manager_get_page_cache('node_view');
-  if ($function = ctools_plugin_get_function($page->subtask, 'enable callback')) {
-    $result = $function($page, FALSE);
-
-    if (!empty($page->changed)) {
-      page_manager_set_page_cache($page);
-    }
-  }
-  
-  // Enable profile view override (variant imported via Features) 
-  $page = page_manager_get_page_cache('user_view');
-  if ($function = ctools_plugin_get_function($page->subtask, 'enable callback')) {
-    $result = $function($page, FALSE);
-
-    if (!empty($page->changed)) {
-      page_manager_set_page_cache($page);
-    }
-  }
-}
-
-/**
  * Configure views
  * 
  * Disable unneeded views to avoid confusion
@@ -767,27 +417,6 @@ function drupal_commons_config_views() {
   // Disable views and update the cache
   variable_set('views_defaults', $disabled);
   views_invalidate_cache();
-}
-  
-/**
- * Configure theme
- */
-function drupal_commons_config_theme() {
-  // Disable garland
-  db_query("UPDATE {system} SET status = 0 WHERE type = 'theme' and name = '%s'", 'garland');
-  
-  // Enable Fusion
-  db_query("UPDATE {system} SET status = 1 WHERE type = 'theme' and name = '%s'", 'fusion_core');
-  
-  // Enable Commons theme
-  db_query("UPDATE {system} SET status = 1 WHERE type = 'theme' and name = '%s'", DRUPAL_COMMONS_THEME);
-  
-  // Set Commons theme as the default
-  variable_set('theme_default', DRUPAL_COMMONS_THEME);
-  
-  // Refresh registry
-  list_themes(TRUE);
-  drupal_rebuild_theme_registry();
 }
 
 /**
@@ -858,12 +487,6 @@ function drupal_commons_config_images() {
  * These should be set but not enforced by Strongarm
  */
 function drupal_commons_config_vars() {
-  // Some Shoutbox tweaks
-  variable_set('shoutbox_filter_format', 5);
-  variable_set('shoutbox_escape_html', 0);
-  variable_set('shoutbox_expire', 120);
-  variable_set('shoutbox_showamount_block', 8);
-  
   // Show large amount of tags on tag cloud page
   variable_set('tagadelic_page_amount', 500);
   
@@ -882,50 +505,16 @@ function drupal_commons_config_vars() {
  * Create an initial group with a discussion
  */
 function drupal_commons_create_group() {
-  module_load_include('inc', 'node', 'node.pages');
+  drupal_commons_include('node');
   
   // Create the group
-  $group = new stdClass;
-  $group->type = 'group';
-  node_object_prepare($group);
-  $group->uid = 1;
-  $group->status = 1;
-  $group->format = 1;
-  $group->revision = 0;
-  $group->title = st('Our Community');
-  $group->body = st('Drupal Commons provides the software; but we the people need to work out the human aspects of helping this community to succeed. Let&#39;s collaborate on that using this group.');
-  $group->teaser = node_teaser($group->body);
-  $group->created = time();
-  $group->field_featured_group = array(
-    0 => array(
-      'value' => 'Featured',
-    ),
-  );
-  $group->og_description = st('A group for collaborating to make this community site successful');
-  $group->taxonomy['tags'][2] = st('community');
-  $group->og_private = 0;
-  $group->og_directory = 1;
-  $group->og_register = 0;
-  $group->og_selective = 0;
+  $group = _drupal_commons_default_group_node();
   node_save($group);
   
   // Check if discussion nodes were enabled
   if (in_array('commons_discussion', variable_get('commons_selected_features', array()))) {
     // Create the discussion
-    $node = new stdClass;
-    $node->type = 'discussion';
-    node_object_prepare($node);
-    $node->uid = 1;
-    $node->status = 1;
-    $node->format = 1;
-    $node->revision = 0;
-    $node->title = st('Jumpstarting our community');
-    $node->body = st('<p>In Drupal Commons, all content is all created within the context of a &quot;Group&quot;. Start exploring how to use your site by:</p><ul><li>' . l(t('Viewing a list of all the groups'), 'groups') . ' on this site. (Note: Only this demonstration group exists by default.)</li><li>' . l(t('Creating a new group'), 'node/add/group') . ' of your own. Before you do, you might find an image / graphic for identification use on the group home page. Perhaps a logo, or ..?</li></ul><p>Once you&#39;ve created your group, start building your community by creating various kinds of content. &nbsp;Drupal Commons lets members of a group create:</p><ul><li>Blog posts. These are just what you think: personal notes from individuals. &nbsp;Note that other users can comment on these posts.</li><li>Documents. If you want to store attached documents that are useful for a group, create a Document page, describe the attachment in the body of the page, and then attach the files you want.</li><li>Discussions. &nbsp;A discussion is just that: Somebody starts by creating a page with a thought, idea, or question. Others can then comment on the initial post. Comments are &quot;threaded&quot; so you can comment on a comment.</li><li>Wikis. All the three posts above work the same: The initial author of a blog/document/discussion is the only person who can edit the &quot;body&quot; of the page. In contrast, any member of a group can edit the body of a Wiki page. &nbsp;That&#39;s what makes Wiki pages special - anybody can edit the content.</li><li>Events. If you have a special thing happening on a given day/time, create an &quot;Event&quot; describing it. These events will show up on the Calendar tab of a group home page.</li><li>Group RSS feed. If there is interesting content coming from outside this site that you want your group to track, pull that content in as an RSS feed to the site.</li></ul><p>There&#39;s more to building a community than the technology; it&#39;s the people &amp; participation that makes a community work. This set of content types should give you all the choices you need to jump-start this community.</p>');
-    $node->teaser = node_teaser($node->body);
-    $node->created = time();
-    $node->field_featured_content[0]['value'] = 'Featured';
-    $node->taxonomy['tags'][2] = st('content types, getting started, groups, jumpstart');
-    $node->og_public = 1;
+    $node = _drupal_commons_default_discussion_node();
     $node->og_groups = array($group->nid => $group->nid);
     node_save($node);
   }
@@ -992,6 +581,18 @@ function drupal_commons_cleanup() {
   
   // Finish the installation
   variable_set('install_task', 'profile-finished');
+}
+
+/**
+ * Helper function to load include files
+ * 
+ * @param $name
+ *   The file name without the .inc extension
+ * @param $dir
+ *   The directory containing the include file
+ */
+function drupal_commons_include($name, $dir = 'includes') {
+  require_once("profiles/drupal_commons/{$dir}/{$name}.inc");
 }
 
 /**

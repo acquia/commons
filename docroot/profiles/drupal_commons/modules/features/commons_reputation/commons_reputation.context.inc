@@ -8,42 +8,7 @@ function commons_reputation_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'context_ui-content-most_active_users';
-  $context->description = 'Show the most active users';
-  $context->tag = 'Global content';
-  $context->conditions = array(
-    'path' => array(
-      'values' => array(
-        'content/*' => 'content/*',
-        'featured' => 'featured',
-        'notices' => 'notices',
-      ),
-    ),
-  );
-  $context->reactions = array(
-    'block' => array(
-      'blocks' => array(
-        'views-most_active_users-block_1' => array(
-          'module' => 'views',
-          'delta' => 'most_active_users-block_1',
-          'region' => 'sidebar_last',
-          'weight' => 1,
-        ),
-      ),
-    ),
-  );
-  $context->condition_mode = 0;
-
-  // Translatables
-  // Included for use with string extractors like potx.
-  t('Global content');
-  t('Show the most active users');
-
-  $export['context_ui-content-most_active_users'] = $context;
-  $context = new stdClass;
-  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
-  $context->api_version = 3;
-  $context->name = 'context_ui-users-most_active';
+  $context->name = 'user-browser-most_active_users';
   $context->description = 'Display the most active users in the community';
   $context->tag = 'User browser';
   $context->conditions = array(
@@ -72,6 +37,42 @@ function commons_reputation_context_default_contexts() {
   t('Display the most active users in the community');
   t('User browser');
 
-  $export['context_ui-users-most_active'] = $context;
+  $export['user-browser-most_active_users'] = $context;
+  $context = new stdClass;
+  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
+  $context->api_version = 3;
+  $context->name = 'profile-me-most_active_users';
+  $context->description = 'Add the most active users to your profile';
+  $context->tag = 'Profile';
+  $context->conditions = array(
+    'user_page' => array(
+      'values' => array(
+        'view' => 'view',
+      ),
+      'options' => array(
+        'mode' => 'current',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'views-most_active_users-block_1' => array(
+          'module' => 'views',
+          'delta' => 'most_active_users-block_1',
+          'region' => 'sidebar_last',
+          'weight' => 2,
+        ),
+      ),
+    ),
+  );
+  $context->condition_mode = 0;
+
+  // Translatables
+  // Included for use with string extractors like potx.
+  t('Add the most active users to your profile');
+  t('Profile');
+
+  $export['profile-me-most_active_users'] = $context;
   return $export;
 }

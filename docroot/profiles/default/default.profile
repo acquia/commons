@@ -1,5 +1,4 @@
 <?php
-// $Id: default.profile,v 1.22 2007/12/17 12:43:34 goba Exp $
 
 /**
  * Return an array of the modules to be enabled when this profile is installed.

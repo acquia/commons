@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * @file
+ * Allows your users to terminate user accounts by withdrawing their
+ * invitation.
+ */
+
+/**
+ * Implementation of hook_invite().
+ *
+ * Withdrawing an invitation leads to termination of invited user's account.
+ */
+function invite_cancel_account_invite($op, $args) {
+  switch ($op) {
+    case 'cancel':
+      if (user_access('withdraw accepted invitations')) {
+        if ($account = user_load(array('mail' => $args['email']))) {
+          user_delete(array(), $account->uid);
+        }
+      }
+      break;
+  }
+}
+

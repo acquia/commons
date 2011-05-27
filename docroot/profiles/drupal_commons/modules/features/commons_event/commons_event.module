@@ -3,23 +3,31 @@
 include_once('commons_event.features.inc');
 
 /**
- * Implementation of hook_views_pre_view()
+ * Implementation of hook_og_features_registry()
  */
-function commons_event_views_pre_view(&$view, &$display_id, &$args) {
-  switch ($view->name) {
-    case 'og_calendar':
-    case 'content_global_calendar':
-      $view->display_handler->override_option('header', commons_core_node_add_link('event'));
-      break;
-      
-    case 'og_upcoming_events':
-      if ($group = commons_core_get_group_context()) {
-        $view->display_handler->override_option('footer', l(t('View events on calendar'), "node/{$group->nid}/content/calendar"));
-      }
-      break;
-      
-    case 'upcoming_events':
-      $view->display_handler->override_option('footer', l(t('View events on calendar'), 'content/calendar'));
-      break;
-  }
+function commons_event_og_features_registry() {
+  $registry = array();
+  
+  // Feature: commons_event
+  $feature = new stdClass;
+  $feature->id = 'commons_event';
+  $feature->name = t('Events');
+  $feature->description = t('Enable your group members to announce events associated with your group, and display them on calendars & sidebar blocks.');
+  $feature->components = array(
+    'views' => array(
+      'group_tab_events',
+      'group_event_calendar',
+    ),
+    'node' => array(
+      'event',
+    ),
+    'context' => array(
+      'group-home-events',
+      'group-event-node',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+  
+  return $registry;
 }
+

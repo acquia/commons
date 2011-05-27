@@ -2,27 +2,6 @@
 
 include_once('commons_core.features.inc');
 
-/** 
- * HOOKS ======================================================
- */
-
-/**
- * Implementation of hook_content_default_fields_alter()
- * 
- * Alter the default cck fields right before they are cached into the database.
- *
- * @param &$fields
- *   By reference. The fields that have been declared by another feature.
- */
-function commons_core_content_default_fields_alter(&$fields) {
-  // Dynamically set the group default image path to the
-  // current files directory
-  if (isset($fields['group-field_group_image'])) {
-    $fields['group-field_group_image']['widget']['default_image']['filepath'] = file_directory_path() . '/default-group.png';
-    $fields['group-field_group_image']['widget']['default_image']['destination'] = file_directory_path() . '/default-group.png';
-  }
-}
-
 /**
  * Implementation of hook_perm()
  */
@@ -45,7 +24,8 @@ function commons_core_menu() {
     'community' => array(
       'title' => 'Community',
       'description' => 'View the groups in the community',
-      'page callback' => 'commons_core_community_redirect',
+      'page callback' => 'drupal_goto',
+      'page arguments' => array('groups'),
       'access arguments' => array('access content'),
       'type' => MENU_CALLBACK,
     ),
@@ -55,6 +35,7 @@ function commons_core_menu() {
       'page callback' => 'drupal_get_form',
       'page arguments' => array('commons_core_admin_settings'),
       'access arguments' => array('administer site configuration'),
+      'file' => 'commons_core.admin.inc',
       'type' => MENU_NORMAL_ITEM,
     ),
   );
@@ -64,223 +45,181 @@ function commons_core_menu() {
  * Implementation of hook_menu_alter()
  */
 function commons_core_menu_alter(&$items) {
+  $path = drupal_get_path('module', 'commons_core');
+  
+  // Override the node view callback in order to handle group home pages
+  $items['node/%node']['page callback'] = 'commons_core_node_page_view';
+  $items['node/%node']['file'] = 'commons_core.overrides.inc';
+  $items['node/%node']['file path'] = $path;
+  
   // Override group node tab title from 'View' to 'Home'
   $items['node/%node/view']['title callback'] = 'commons_core_set_node_tab_title';
   $items['node/%node/view']['title arguments'] = array(1);
   
   // (Optionally) override comment edit permissions
   $items['comment/edit']['page callback'] = 'commons_core_comment_edit';
-}
-
-/**
- * Implementation of hook_og_links_alter()
- */
-function commons_core_og_links_alter(&$links, &$node) {
-  // Optionally hide the shoutbox link
-  if (variable_get('commons_hide_shoutbox_link', 1)) {
-    unset($links['shoutbox']);
-  }
-  
-  // Change the Manager item to a link to our managers page
-  if (isset($links['manager'])) {
-    $group = commons_core_get_group_context();
-    $links['manager'] = l(t('Group managers'), "og/users/{$group->nid}/managers");
-  }
+  $items['comment/edit']['file'] = 'commons_core.overrides.inc';
+  $items['comment/edit']['file path'] = $path;
 }
 
 /**
  * Implementation of hook_block()
  */
 function commons_core_block($op = 'list', $delta = 0, $edit = array()) {
-  if ($op == 'list') {
-    $blocks[0] = array(
-      'info' => t('User statistics'),
-      'cache' => BLOCK_CACHE_GLOBAL,
-    );
-    $blocks[1] = array(
-      'info' => t('Jumpstart your community!'),
-      'cache' => BLOCK_CACHE_GLOBAL,
-    );
-    $blocks[2] = array(
-      'info' => t('Drupal Commons information'),
-      'cache' => BLOCK_CACHE_GLOBAL,
-    );
-    $blocks[3] = array(
-      'info' => t('Header login block'),
-      'cache' => BLOCK_CACHE_GLOBAL,
-    );
-    $blocks[4] = array(
-      'info' => t('Join & learn more'),
-      'cache' => BLOCK_CACHE_GLOBAL,
-    );
-    $blocks[5] = array(
-      'info' => t('Group actions'),
-      'cache' => BLOCK_CACHE_GLOBAL,
-    );
-    $blocks[6] = array(
-      'info' => t('Subscribe to user being viewed'),
-      'cache' => BLOCK_CACHE_GLOBAL,
-    );
-
-    return $blocks;
-  }
-  else if ($op == 'configure') {
-    switch ($delta) {
-      case 0:
-        $form['commons_recent_join_interval'] = array(
-          '#type' => 'select',
-          '#title' => t('Recent joins time-frame'),
-          '#default_value' => variable_get('commons_recent_join_interval', t('3 months')),
-          '#options' => array(
-            '3 days' => t('3 days'),
-            '1 week' => t('1 week'),
-            '2 weeks' => t('2 weeks'),
-            '1 month' => t('1 month'),
-            '3 months' => t('3 months'),
-            '6 months' => t('6 months'),
-          ),
-          '#description' => t('The !user_directory contains a block that indicates the amount of recently joined members. Select the time-frame to be used to calculate this value.', array('!user_directory' => l(t('user directory'), 'users'))),
-        );
-        return $form;
-    }
-  }
-  else if ($op == 'save') {
-    switch ($delta) {
-      case 0:
-        variable_set('commons_recent_join_interval', $edit['commons_recent_join_interval']);
-        break;
-    }
-  }
-  else if ($op == 'view') {
-    switch($delta) {
-      case 0:
-        $block = array(
-          'subject' => t('User statistics'),
-          'content' => _commons_core_user_stats_block()
-        );
-        break;
-      case 1:
-        $block = array(
-          'subject' => t('Jumpstart your community!'),
-          'content' => _commons_core_jumpstart_community_block()
-        );
-        break;
-      case 2:
-        $block = array(
-          'subject' => '',
-          'content' => theme('commons_core_info_block')
-        );
-        break;
-      case 3:
-        $block = array(
-          'subject' => '',
-          'content' => _commons_core_header_login_block()
-        );
-        break;
-      case 4:
-        $block = array(
-          'subject' => t('Join & learn more'),
-          'content' => _commons_core_join_block()
-        );
-        break;
-      case 5:
-        // Detect group context
-        if ($group = commons_core_get_group_context()) {
-          // Get the standard group details block
-          $details = og_block_details();
-          if (isset($details['content'])) {
-            $block = array(
-              'subject' => l(t('Actions'), "node/{$group->nid}", array('attributes' => array('title' => t('Return to !group', array('!group' => $group->title))))),
-              'content' => $details['content']
-            );
-          }
-        }
-        break;
-      case 6:
-        $block = array(
-          'subject' => '',
-          'content' => _commons_core_subscribe_to_user_profile_block()
-        );
-        break;
-    }
-    return $block;
-  }  
+  module_load_include('inc', 'commons_core', 'commons_core.blocks');
+  return _commons_core_block($op, $delta, $edit);
 }
 
 /**
  * Implementation of hook_form_alter()
  */
 function commons_core_form_alter(&$form, &$form_state, $form_id) {
-  // A node is being added or edited
-  if (strstr($form_id, 'node_form')) {
-    // Load the node
-    $node = $form['#node'];
-    
-    // Remove default "Promoted to Front Page" option
-    unset($form['options']['promote']);
-  
-    // Check if this is a group type
-    if (module_exists('og')) {
-      if (og_is_group_type($node->type)) {
-        // Make user's aware of the max length
-        $maxlength = $form['og_description']['#maxlength'];
-        $form['og_description']['#description'] = $form['og_description']['#description'] . ' (' . t('!maxlength characters allowed', array('!maxlength' => $maxlength)) . ')'; 
-      
-        // Groups don't have titles, they have names
-        $form['title']['#title'] = t('Name');
-        
-        // Add og options to a fieldset
-        $form['og_options'] = array(
-          '#type' => 'fieldset',
-          '#title' => t('Group options'),
-        );
-        
-        $form['og_options']['og_selective'] = $form['og_selective'];
-        $form['og_options']['og_directory'] = $form['og_directory'];
-        $form['og_options']['og_private'] = $form['og_private'];
-        $form['og_options']['og_register'] = $form['og_register'];
-        unset($form['og_selective']);
-        unset($form['og_directory']);
-        unset($form['og_register']);
-        unset($form['og_private']);
-      }
-    }
-  }
+  module_load_include('inc', 'commons_core', 'commons_core.form');
 
-  // Optionally restrict voting only to members of the group
-  // that the poll is in
-  if ($form_id == 'poll_view_voting') {
-    // Check the variable
-    if (variable_get('commons_group_prevent_open_voting', 0)) { 
-      // Extract the poll node itself
-      $poll = $form['#node'];
-        
-      commons_core_group_restrict_form($poll, $form, t('vote'), array('vote'));
-    }
+  // A node is being added or edited
+  if ($form['#id'] == 'node-form') {
+    commons_core_node_form_alter($form, $form_state);
   }
-  
-  // Optionally restrict commenting only to members of the group that
-  // the node is in
-  if ($form_id == 'comment_form') {
-    // Check the variable
-    if (variable_get('commons_group_prevent_open_commenting', 0)) { 
-      // Determine the node
-      // The node ID is either located at node/id or comment/reply/id
-      $node = (arg(0) == 'node') ? node_load(arg(1)) : node_load(arg(2));  
-        
-      // Make sure the node loaded correctly
-      if ($node) {
-        commons_core_group_restrict_form($node, $form, t('comment'));
-      }
-    }
-  }
-  
   // Views bulk operations form
   // Use strstr() because the form_id contains a suffix
-  if (strstr($form_id, 'views_bulk_operations_form')) {
-    // Move operation controls above the content
-    $form['submit']['#weight'] = -100; 
+  else if (strstr($form_id, 'views_bulk_operations_form')) {
+    commons_core_views_bulk_operations_form_alter($form, $form_state);
   }
+  // Invoke our own form ID hooks
+  else {
+    $hook = "commons_core_form_{$form_id}_alter";
+    if (function_exists($hook)) {
+      $hook($form, $form_state);
+    }
+  }
+}
+
+/**
+ * Implementation of hook_mail()
+ */
+function commons_core_mail($key, &$message, $params) {
+  switch ($key) {
+    case 'og user delete':
+      $message['subject'] = t('You have been removed from !group', array('!group' => $params['group']->title));
+      $message['body'] = t('A manager from !group has removed you from the group.', array('!group' => $params['group']->title));
+      break;
+    
+    case 'og user insert':
+      global $base_url;
+      $link = $base_url . '/' . ($params['group']->path ? $params['group']->path : ('node/' . $params['group']->nid));
+      $message['subject'] = t('You have been added to !group', array('!group' => $params['group']->title));
+      $message['body'] = t('A manager from !group has added you to the group.', array('!group' => $params['group']->title));
+      $message['body'] .= "\n\n\n";
+      $message['body'] .= t('The group is located at !link', array('!link' => $link));
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_init()
+ */
+function commons_core_init() {
+  // Optionally force a user to login before proceeding
+  commons_core_force_login();
+  
+  // We've overridden /og with a custom view, so redirect
+  if (arg(0) == 'og' && !arg(1)) {
+    drupal_goto('groups');
+  }
+  
+  // We've overridden /og/my with a custom view, so redirect
+  if (arg(0) == 'og' && arg(1) == 'my') {
+    drupal_goto('groups/mine');
+  }
+  
+  // Notify group admins of any pending requests on group home page
+  if (arg(0) == 'node' && is_numeric(arg(1)) && !arg(2)) {
+    // Load the current user
+    global $user;
+    
+    // Check to see if user is logged in
+    if ($user->uid) {
+      // Load the current node
+      $node = node_load(arg(1));
+      // Determine if this is a group
+      if (og_is_group_type($node->type)) {
+        // Check if current member is an admin
+        if (og_is_group_admin($node, $user)) {
+          // Check if there are pending requests
+          $sql = "SELECT COUNT(uid) FROM {og_uid} WHERE nid = %d AND is_active = 0";
+          $count = db_result(db_query($sql, $node->nid));
+            
+          if ($count) {
+            drupal_set_message(t('There are currently !count pending membership requests. Click !here to view them.', array('!count' => $count, '!here' => l('here', 'og/users/' . $node->nid))));
+          }
+        }
+      }
+    }
+  }
+  
+  // Set the breadcrumbs
+  commons_core_set_breadcrumb($_GET['q']);
+}
+
+/**
+ * Implementation of hook_nodeapi()
+ */
+function commons_core_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
+  switch ($op) {
+    case 'validate':
+      // Make sure the "group sticky" field was used correctly
+      _commons_core_check_group_sticky($node);
+      
+      // Make sure group titles are unique
+      _commons_core_check_group_title($node);
+      
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_link_alter()
+ */
+function commons_core_link_alter(&$links, $node, $comment = NULL) {
+  global $user;
+  
+  // Only act on comment links
+  if ($comment) {
+    // Only check if the edit link is missing
+    if (!isset($links['comment_edit'])) {
+      // Check if user can edit the comment
+      if (comment_access('edit', $comment) || _commons_core_can_admin_comment($comment)) {
+        // Provide an edit link
+        $link['comment_edit'] = array(
+          'title' => t('edit'),
+          'href' => 'comment/edit/' . $comment->cid,
+        );
+        
+        // Add link to the beginning
+        $links = $link + $links;
+      }
+    }
+  }
+}
+
+/**
+ * Implementation of hook_theme()
+ */
+function commons_core_theme() {
+  $registry = array(
+    'commons_core_user_stats_block' => array(),
+    'commons_core_info_block' => array(),
+    'commons_core_group_members_block' => array(
+      'arguments' => array('managers' => NULL, 'members' => NULL, 'link' => NULL),
+    ),
+  );
+  
+  // Add the theme file to each
+  foreach ($registry as $key => $entry) {
+    $registry[$key]['file'] = 'commons_core.theme.inc';
+  }
+  
+  return $registry;
 }
 
 /**
@@ -321,23 +260,38 @@ function commons_core_og($op, $gid, $uid, $args) {
 }
 
 /**
- * Implementation of hook_mail()
+ * Implementation of hook_og_links_alter()
  */
-function commons_core_mail($key, &$message, $params) {
-  switch ($key) {
-    case 'og user delete':
-      $message['subject'] = t('You have been removed from !group', array('!group' => $params['group']->title));
-      $message['body'] = t('A manager from !group has removed you from the group.', array('!group' => $params['group']->title));
-      break;
-    
-    case 'og user insert':
-      global $base_url;
-      $link = $base_url . '/' . ($params['group']->path ? $params['group']->path : ('node/' . $params['group']->nid));
-      $message['subject'] = t('You have been added to !group', array('!group' => $params['group']->title));
-      $message['body'] = t('A manager from !group has added you to the group.', array('!group' => $params['group']->title));
-      $message['body'] .= "\n\n\n";
-      $message['body'] .= t('The group is located at !link', array('!link' => $link));
-      break;
+function commons_core_og_links_alter(&$links, $node) {  
+  // Remove the Manager item and members item because our
+  // group manager and members block provides this information
+  // in a much better way
+  unset($links['manager']);
+  unset($links['subscribers']);
+
+  // Remove content creation links because the group content
+  // create selector will be displaying them
+  foreach ($links as $key => $link) {
+    if (substr($key, 0, 7) == 'create_') {
+      unset($links[$key]);
+    }
+  }
+}
+
+/**
+ * Implementation of hook_content_default_fields_alter()
+ * 
+ * Alter the default cck fields right before they are cached into the database.
+ *
+ * @param &$fields
+ *   By reference. The fields that have been declared by another feature.
+ */
+function commons_core_content_default_fields_alter(&$fields) {
+  // Dynamically set the group default image path to the
+  // current files directory
+  if (isset($fields['group-field_group_image'])) {
+    $fields['group-field_group_image']['widget']['default_image']['filepath'] = file_directory_path() . '/default-group.png';
+    $fields['group-field_group_image']['widget']['default_image']['destination'] = file_directory_path() . '/default-group.png';
   }
 }
 
@@ -350,7 +304,7 @@ function commons_core_field_access($op, $field, $account = NULL, $node = NULL) {
       case 'view':
       case 'edit':
         // If on node add form, determine group
-        if (arg(0) == 'node' && arg(1) == 'add' && ($group = commons_core_get_group_context())) {
+        if (arg(0) == 'node' && arg(1) == 'add' && ($group = og_features_get_group_context())) {
           // hook_nodeapi() validates group admin status if additional
           // groups are selected
           
@@ -415,47 +369,6 @@ function commons_core_tagging_suggestions($vid, $node) {
 }
 
 /**
- * Implementation of hook_form_tagging_admin_settings_alter()
- */
-function commons_core_form_tagging_admin_settings_alter(&$form, &$form_state) {
-  // Remove checkbox
-  unset($form['tagging_show_suggestion_example']);
-  
-  // Add a field to supply static suggestions
-  $form['commons_tag_suggestions'] = array(
-    '#type' => 'textarea',
-    '#title' => t('Static tag suggestions'),
-    '#description' => t('Enter a comma-separated list of terms that will show up as tag suggestions when creating content items.'),
-    '#weight' => -5,
-    '#default_value' => variable_get('commons_tag_suggestions', ''),
-  );
-}
-
-/**
- * Implementation of hook_theme()
- */
-function commons_core_theme() {
-  return array(
-    'commons_core_user_stats_block' => array(),
-    'commons_core_info_block' => array(),
-    'commons_core_node_add_link' => array(
-      'arguments' => array('link' => NULL),
-    ),
-  );
-}
-
-/**
- * Implementation of hook_user()
- */
-function commons_core_user($op, &$edit, &$account, $category = NULL) {
-  if ($op == 'view' ) {
-    // Remove the "subscribe to" link because we're providing
-    // a custom block for that to be placed elsewhere
-    unset($account->content['summary']['notifications']);
-  }
-}
-
-/**
  * Implementation of hook_action_info().
  */
 function commons_core_action_info() {
@@ -484,88 +397,10 @@ function commons_core_action_info() {
 }
 
 /**
- * Implementation of hook_init()
- */
-function commons_core_init() {
-  // Optionally force a user to login before proceeding
-  commons_core_force_login();
-  
-  // We've overridden /og with a custom view, so redirect
-  if (arg(0) == 'og' && !arg(1)) {
-    drupal_goto('groups');
-  }
-  
-  // We've overridden /og/my with a custom view, so redirect
-  if (arg(0) == 'og' && arg(1) == 'my') {
-    drupal_goto('groups/my');
-  }
-  
-  // Redirect core /profile which lists users to our new list of users
-  if (arg(0) == 'profile' && !arg(1)) {
-    drupal_goto('users');
-  }
-  
-  // Notify group admins of any pending requests on group home page
-  if (arg(0) == 'node' && is_numeric(arg(1)) && !arg(2)) {
-    // Load the current user
-    global $user;
-    
-    // Check to see if user is logged in
-    if ($user->uid) {
-      // Load the current node
-      $node = node_load(arg(1));
-      // Determine if this is a group
-      if (og_is_group_type($node->type)) {
-        // Check if current member is an admin
-        if (og_is_group_admin($node, $user)) {
-          // Check if there are pending requests
-          $count = db_result(db_query("
-            SELECT COUNT(uid) FROM {og_uid} 
-            WHERE nid = %d AND is_active = 0", $node->nid));
-            
-          if ($count) {
-            drupal_set_message(t('There are currently !count pending membership requests. Click !here to view them.', array('!count' => $count, '!here' => l('here', 'og/users/' . $node->nid))));
-          }
-        }
-      }
-    }
-  }
-  
-  // Set the breadcrumbs
-  commons_core_set_breadcrumb($_GET['q']);
-}
-
-/**
- * Implementation of hook_nodeapi()
- */
-function commons_core_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
-  switch ($op) {
-    case 'validate':
-      // Make sure the "group sticky" field was used correctly
-      commons_core_check_group_sticky($node);
-      
-      // Make sure group titles are unique
-      commons_core_check_group_title($node);
-      
-      break;
-  }
-}
-
-/**
  * Implementation of hook_views_pre_view()
  */
 function commons_core_views_pre_view(&$view, &$display_id, &$args) {
   switch ($view->name) {
-    case 'og_my_groups':
-    case 'og_all':
-    case 'og_most_active':
-      $view->display_handler->override_option('header', commons_core_node_add_link('group'));
-      break;
-      
-    case 'recent_notices':
-      $view->display_handler->override_option('header', commons_core_node_add_link('notice'));
-      break;
-      
     case 'tag_cloud':
       $view->display_handler->override_option('footer', l(t('View more'), 'tagadelic'));
       break;
@@ -573,61 +408,23 @@ function commons_core_views_pre_view(&$view, &$display_id, &$args) {
     case 'recent_featured_stream':
       $view->display_handler->override_option('footer', l(t('View all featured content'), 'featured'));
       break;
+      
+    case 'recent_notices':
+      if (node_access('create', 'notice')) {
+        $view->display_handler->override_option('header', l(t('Create a notice'), 'node/add/notice'));
+      }
   }
 }
 
 /**
- * Implementation of hook_form_views_exposed_form_alter()
+ * Implementation of hook_wysiwyg_editor_settings_alter()
  */
-function commons_core_form_views_exposed_form_alter(&$form, &$form_state) {
-  switch ($form['#id']) {
-    // The "My unread" tab on the "My content" section
-    case 'views-exposed-form-og-my-content-page-2':
-    // The "All Content" tab on the "My content" section
-    case 'views-exposed-form-og-my-content-page-1':
-    // The "Recent group content" block found on group home pages
-    case 'views-exposed-form-og-content-tracker-panel-pane-1':
-      // The exposed filter for node type contains all nodes on the site
-      // We want to limit it to group post types only
-      if (isset($form['type'])) {
-        foreach ($form['type']['#options'] as $type => $name) {
-          if ($type != 'All' && !og_is_group_post_type($type)) {
-            unset($form['type']['#options'][$type]);
-          }
-        }
-      }
-      break;
+function commons_core_wysiwyg_editor_settings_alter(&$settings, $context) {
+  if ($context['editor']['name'] == 'ckeditor') {
+    // Lower the width to avoid overflow
+    $settings['width'] = '95%';
   }
 }
-
-/**
- * Implementation of hook_link_alter()
- */
-function commons_core_link_alter(&$links, $node, $comment = NULL) {
-  global $user;
-  
-  // Only act on comment links
-  if ($comment) {
-    // Only check if the edit link is missing
-    if (!isset($links['comment_edit'])) {
-      // Check if user can edit the comment
-      if (commons_core_can_edit_comment($comment)) {
-        // Provide an edit link
-        $link['comment_edit'] = array(
-          'title' => t('edit'),
-          'href' => 'comment/edit/' . $comment->cid,
-        );
-        
-        // Add link to the beginning
-        $links = $link + $links;
-      }
-    }
-  }
-}
-
-/** 
- * MISC ===================================================
- */
  
 /**
  * Callback to optionally force a login
@@ -702,403 +499,6 @@ function commons_core_set_node_tab_title($node) {
 }
 
 /**
- * Display a block with global user statistics
- */
-function _commons_core_user_stats_block() {
-  $data = array();
-  
-  // Determine total users on the site
-  $total = db_result(db_query("SELECT COUNT(uid) FROM {users} WHERE status = 1"));
-  $data[] = format_plural($total, '1 user', '@count users');
-  
-  // Determine recently joined users
-  $total = db_result(db_query("SELECT COUNT(uid) FROM {users} WHERE status = 1 AND created > %d", strtotime('-' . variable_get('commons_recent_join_interval', '3 months'), time())));
-  $data[] = format_plural($total, '1 recently joined member', '@count recently joined members');
-  
-  return theme('commons_core_user_stats_block', $data);
-}
-
-/**
- * Display "jumpstart" block
- */
-function _commons_core_jumpstart_community_block() {
-  return t('!view, or !create new groups to start creating your community!', array('!view' => l(t('View'), 'groups'), '!create' => l(t('create'), 'node/add/group')));
-}
-
-/**
- * Display our custom login block for the header
- */
-function _commons_core_header_login_block() {
-  global $user;
-  
-  // Only anonymous users can log in
-  if ($user->uid) {
-    return NULL;
-  }
-  
-  // No login needed if we're on the login page
-  if (arg(0) == 'user') {
-    return NULL;
-  }
-  
-  // Determine if we're on the front page
-  if (drupal_is_front_page()) {
-    // Only provide a link
-    return t('Already a member? !login', array('!login' => l(t('Login'), 'user')));
-  }
-  
-  // Render the standard login form
-  return drupal_get_form('user_login_block');
-}
-
-/**
- * The "Join & learn more" registration block callback
- */
-function _commons_core_join_block() {
-  // Check access
-  if (!user_register_access()) {
-    return NULL;
-  }
-  
-  return drupal_get_form('commons_core_join_form');
-}
-
-/**
- * The "Join & learn more" registration form
- */
-function commons_core_join_form() {
-  $form = array();
-  
-  // Pull the standard user registration form
-  $rform = user_register();
-  
-  // Extract required profile fields
-  foreach ($rform as $key => $profile) {
-    if (is_array($profile)) {
-      foreach ($profile as $pkey => $pfield) {
-        if (substr($pkey, 0, 8) == 'profile_') {
-          if ($pfield['#required']) {
-            // Remove description
-            unset($pfield['#description']);
-            // Add to our form
-            $form[$pkey] = $pfield;
-          }
-          unset($rform[$key][$pkey]);
-        }
-      }
-    }
-  } 
-  
-  // Extract needed account elements
-  foreach ($rform['account'] as $key => $field) {
-    if (is_array($field) && $field['#required']) {
-      // Remove the description
-      unset($field['#description']);
-      // Add to our form
-      $form[$key] = $field;
-    }
-  }
-  unset($rform['account']);
-  
-  // Shorten the email field (if available)
-  if (isset($form['mail'])) {
-    $form['mail']['#title'] = t('Email');
-  }
-  
-  // Copy the registration validators
-  $form['#validate'] = $rform['#validate'];
-  
-  // Attach the registration submit callback
-  $form['#submit'] = array('user_register_submit');
-  
-  // Add the submit button
-  $form['submit'] = array(
-    '#type' => 'submit',
-    '#value' => t('Join our community'),
-  );
-  
-  return $form;
-}
-
-/**
- * Provide a block that contains a link to subscribe to the
- * user being viewed
- */
-function _commons_core_subscribe_to_user_profile_block() {
-  global $user;
-  
-  // Current user must be logged in
-  if ($user->uid) {
-    // Must be viewing a user who is not the currnet user
-    if (arg(0) == 'user' && is_numeric(arg(1)) && $user->uid != arg(1) && $account = user_load(arg(1))) {
-      // Notifications UI must be enabled
-      if (module_exists('notifications_ui')) {
-        // Check notification settings
-        if (notifications_ui_account_options('links') && ($options = notifications_ui_subscribe_options($user, 'user', $account))) {
-          $links = notifications_ui_build_links($options);
-          return theme('links', $links, array('class' => 'item-list'));
-        }
-      }
-    }
-  }
-}
-
-/**
- * Helper function to provide node add links
- * 
- * @param $type
- *   The machine-name of the node
- * @return
- *   A link to add a new node, if permissions allow
- */
-function commons_core_node_add_link($type) {
-  global $user;
-  
-  // Determine the name of the node type, and see if it's valid
-  if (!($name = node_get_types('name', $type))) {
-    return NULL;
-  }
-  
-  // First detect normal node permissions
-  if (!node_access('create', $type)) {
-    return NULL;
-  }
-  
-  // Detect a group context
-  if (og_is_group_post_type($type)) {
-    if ($group = commons_core_get_group_context()) {
-      // No access if the user is not logged in
-      if (!$user->uid) {
-        return NULL;
-      }
-      // No access if the user is not a member
-      else if (!og_is_group_member($group->nid, TRUE, $user->uid)) {
-        // Unless they are a community manager
-        if (!commons_core_is_community_manager($user)) {
-          return NULL;
-        }
-      }
-    }
-  }
-  
-  // Build the link
-  $link = array();
-  $link['title'] = t('Add a new !name', array('!name' => $name));
-  $link['href'] = "node/add/$type";
-  
-  // Add group URL query, if needed
-  if ($group) {
-    $link['options'] = array(
-      'query' => "gids[]={$group->nid}",
-    );
-  }
-  
-  // Generate the link
-  $link = l($link['title'], $link['href'], isset($link['options']) ? $link['options'] : array());
-  
-  return theme('commons_core_node_add_link', $link);
-}
-
-/**
- * Admin settings form
- */
-function commons_core_admin_settings() {
-  $form = array();
-  
-  $form['login_settings'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Login settings'),
-    '#collapsible' => TRUE,
-    '#collapsed' => FALSE,
-  );
-  
-  $form['login_settings']['commons_force_login'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Force users to login'),
-    '#default_value' => variable_get('commons_force_login', 0),
-    '#description' => t('If checked, anonymous users will be redirected from all pages to a log in page. Select this setting if your Drupal Commons site must be closed to the public, such as a company intranet.'),
-  );
-  
-  $form['login_settings']['commons_force_login_allowed_paths'] = array(
-    '#type' => 'textarea',
-    '#title' => t('Allowed paths'),
-    '#default_value' => variable_get('commons_force_login_allowed_paths', ''),
-    '#description' => t('If users are forced to login (by checking the previous checkbox), you may specify a list of paths which will not redirect to a login page. Use internal addresses, such as, node/123. Enter each path on a new line.'),
-  );
-  
-  $form['group_settings'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Group settings'),
-    '#collapsible' => TRUE,
-    '#collapsed' => FALSE,
-  );
-  
-  $form['group_settings']['commons_group_tab_title'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Group homepage tab'),
-    '#default_value' => variable_get('commons_group_tab_title', 'Home'),
-    '#description' => t('Specify what the group homepage tab title should be. If left empty, the tab title will be <i>View</i>.'),
-  );
-  
-  $form['group_settings']['commons_force_unique_groups'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Force unique group names'),
-    '#default_value' => variable_get('commons_force_unique_groups', 1),
-    '#description' => t('If checked, group names must be unique. This will not affect existing groups.'),
-  );
-  
-  $form['group_settings']['commons_hide_shoutbox_link'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Remove Shoutbox link'),
-    '#default_value' => variable_get('commons_hide_shoutbox_link', 1),
-    '#description' => t('If checked, the Shoutbox link will be removed from the Group details menu.'),
-  );
-  
-  $form['group_settings']['commons_email_selective_group'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Alert users when added to a selective group'),
-    '#default_value' => variable_get('commons_email_selective_group', 1),
-    '#description' => t('If checked, an email alert will be sent to users that are added to groups that are marked as either invite-only or closed.'),
-  );
-  
-  $form['group_settings']['commons_group_admin_edit_comments'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Allow group admins to edit all group comments'),
-    '#default_value' => variable_get('commons_group_admin_edit_comments', 0),
-    '#description' => t('If checked, group admins will have the ability to edit any comments on content items inside their groups.'),
-  );
-  
-  $form['group_settings']['commons_group_prevent_open_voting'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Restrict voting to group members'),
-    '#default_value' => variable_get('commons_group_prevent_open_voting', 0),
-    '#description' => t('If checked, only group members will be able to vote on polls that are part of a given group.'),
-  );
-  
-  $form['group_settings']['commons_group_prevent_open_commenting'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Restrict commenting to group members'),
-    '#default_value' => variable_get('commons_group_prevent_open_commenting', 0),
-    '#description' => t('If checked, only group members will be able to comment on nodes that are part of a given group.'),
-  );
-
-  return system_settings_form($form); 
-}
-
-/**
- * Detect a group context
- * This function is more robust than just og_get_group_context()
- *
- * @param $node
- *   Optionally specify a node being viewed
- * @return
- *   A group object if available, otherwise NULL
- */
-function commons_core_get_group_context($node = NULL) {
-  static $group = FALSE;
-  
-  if ($group === FALSE) { 
-    // Get group context
-    if (!($group = og_get_group_context())) {
-      // If group context not yet set, see if we can get it from the URL
-      if (is_numeric(arg(1))) {
-        $node = $node ? $node : node_load(arg(1));
-        if ($node) {
-          if (!og_is_group_type($node->type)) {
-            // If we pulled a node that isn't a group, see if the node is
-            // inside a group
-            if ($groups = og_get_node_groups($node)) {
-              // Use the first group
-              $group = node_load(key($groups));
-            }
-          }
-          else {
-            $group = $node;
-          }
-        }
-      }
-      // The node add form URL queries might help
-      else if (arg(0) == 'node' && arg(1) == 'add' && arg(2)) {
-        $gids = $_GET['gids'];
-        if (is_array($gids)) {
-          $gid = $gids[0];
-          if (is_numeric($gid)) {
-            if ($node = node_load($gid)) {
-              if (og_is_group_type($node->type)) {
-                $group = $node;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-
-  return $group;
-}
-
-/**
- * Alter a form based on the current user's group membership status
- * 
- * If the current user is not a member of any of the given group(s)
- * associated with the $node, then remove $elements from the form
- * 
- * @param $node
- *   The group post node
- * @param $form
- *   The form to alter, passed in as reference
- * @param $action
- *   A string representing the action that is being prevented (Eg, comment)
- * @param $elements
- *   The form element identified to remove. If omitted, the entire form will be
- *   removed
- */
-function commons_core_group_restrict_form($node, &$form, $action, $elements = array()) {
-  // Make sure OG is enabled  
-  if (!module_exists('og')) {
-    return; 
-  }
-  
-  //Determine which groups the poll belongs to
-  $groups = og_get_node_groups($node);
-        
-  // Only act if this poll is part of a group
-  if (count($groups)) {
-    $access = FALSE;
-          
-    // Iterate through the groups, checking for membership
-    foreach ($groups as $id => $name) {
-      if (og_is_group_member($id)) {
-        // Indicate that the user is a member of at least one group
-        $access = TRUE;
-        break; 
-      }
-    }
-        
-    // If the user isn't a member of any of the groups, they can't
-    // vote on this poll
-    if (!$access) {
-      // Unset the specified elements
-      if (empty($elements)) {
-        // If non specified, remove the whole form
-        $form = '';
-      }
-      else {
-        foreach ($elements as $element) {
-          unset($form[$element]);
-        }
-      }
-      
-      //Let user know why they can't act
-      $form['denied_message'] = array(
-        '#type' => 'item',
-        '#value' => t('You must be a member of the group to !action', array('!action' => $action)),
-      );
-    } 
-  }
-}
-
-/**
  * Determine if a user is a community manager, which is a role
  * provided by this feature
  * 
@@ -1118,7 +518,7 @@ function commons_core_is_community_manager($user = NULL) {
 /**
  * Dynamically set the breadcrumbs
  * 
- * Commons ships with a large amount of panels, views,
+ * Commons ships with a large amount of views,
  * and dynamic content. This result in missing or incorrect
  * breadcrumbs.
  * 
@@ -1215,17 +615,6 @@ function commons_core_profile_redirect() {
 }
 
 /**
- * Menu callback helper to provide a menu item which redirects to the
- * communities page.
- * 
- * We need this because Features can't export sublinks on a menu if a
- * sublink has the same path as the menu root
- */
-function commons_core_community_redirect() {
-  drupal_goto("groups");
-}
-
-/**
  * Enforce the rules of the "group sticky" field
  * 
  * This function is called when validating a node. If the "group sticky'
@@ -1236,7 +625,7 @@ function commons_core_community_redirect() {
  * @param $node
  *   The node being validated
  */
-function commons_core_check_group_sticky($node) {
+function _commons_core_check_group_sticky($node) {
   global $user;
   
   // Only act if the node was toggled as sticky
@@ -1271,13 +660,13 @@ function commons_core_check_group_sticky($node) {
   }
 }
 
-/*
+/**
  * Force unique group titles
  * 
  * @param $node
  *   The node being validated
  */
-function commons_core_check_group_title($node) {
+function _commons_core_check_group_title($node) {
   // Check if we're enforcing unique group titles 
   if (variable_get('commons_force_unique_groups', 1)) {
     // Check that this is a group node
@@ -1329,213 +718,8 @@ function commons_core_nodeunread_action(&$node) {
   }     
 }
 
-/** 
- * COMMENT OVERRIDES ================================================
- */
-
 /**
- * Minor override and alteration of comment_edit()
- * 
- * Allows group admins to edit comments in their group
- */
-function commons_core_comment_edit($cid) {
-  global $user;
-
-  $comment = db_fetch_object(db_query('SELECT c.*, u.uid, u.name AS registered_name, u.data FROM {comments} c INNER JOIN {users} u ON c.uid = u.uid WHERE c.cid = %d', $cid));
-  $comment = drupal_unpack($comment);
-  $comment->name = $comment->uid ? $comment->registered_name : $comment->name;
-  
-  // See if the user can edit the comment
-  if (commons_core_can_edit_comment($comment)) {
-    // We need to use our own comment form now
-    return theme('box', NULL, drupal_get_form('commons_core_comment_form', (array)$comment, NULL));  
-  }
-  
-  // If none of the above, fall back on what comment.module normally uses
-  if (comment_access('edit', $comment)) {
-    return comment_form_box((array)$comment);
-  }
-  else {
-    drupal_access_denied();
-  }
-}
-
-/*
- * Copied from comment_form()
- * 
- * We need to remove the check for administer comments permissions
- * because at this point, the current user is the group admin for the
- * node being comment on. We want to allow full edit access.
- */
-function commons_core_comment_form(&$form_state, $edit, $title = NULL) {
-  global $user;
-
-  $op = isset($_POST['op']) ? $_POST['op'] : '';
-  $node = node_load($edit['nid']);
-
-  if (!$user->uid && variable_get('comment_anonymous_'. $node->type, COMMENT_ANONYMOUS_MAYNOT_CONTACT) != COMMENT_ANONYMOUS_MAYNOT_CONTACT) {
-    drupal_add_js(drupal_get_path('module', 'comment') .'/comment.js');
-  }
-  $edit += array('name' => '', 'mail' => '', 'homepage' => '');
-  if ($user->uid) {
-    // The check for administer comments was removed from here
-    // We must trust the user if they've reached this form
-    if (!empty($edit['cid'])) {
-      if (!empty($edit['author'])) {
-        $author = $edit['author'];
-      }
-      elseif (!empty($edit['name'])) {
-        $author = $edit['name'];
-      }
-      else {
-        $author = $edit['registered_name'];
-      }
-
-      if (!empty($edit['status'])) {
-        $status = $edit['status'];
-      }
-      else {
-        $status = 0;
-      }
-
-      if (!empty($edit['date'])) {
-        $date = $edit['date'];
-      }
-      else {
-        $date = format_date($edit['timestamp'], 'custom', 'Y-m-d H:i O');
-      }
-
-      $form['admin'] = array(
-        '#type' => 'fieldset',
-        '#title' => t('Administration'),
-        '#collapsible' => TRUE,
-        '#collapsed' => TRUE,
-        '#weight' => -2,
-      );
-
-      if ($edit['registered_name'] != '') {
-        // The comment is by a registered user
-        $form['admin']['author'] = array(
-          '#type' => 'textfield',
-          '#title' => t('Authored by'),
-          '#size' => 30,
-          '#maxlength' => 60,
-          '#autocomplete_path' => 'user/autocomplete',
-          '#default_value' => $author,
-          '#weight' => -1,
-        );
-      }
-      else {
-        // The comment is by an anonymous user
-        $form['is_anonymous'] = array(
-          '#type' => 'value',
-          '#value' => TRUE,
-        );
-        $form['admin']['name'] = array(
-          '#type' => 'textfield',
-          '#title' => t('Authored by'),
-          '#size' => 30,
-          '#maxlength' => 60,
-          '#default_value' => $author,
-          '#weight' => -1,
-        );
-        $form['admin']['mail'] = array(
-          '#type' => 'textfield',
-          '#title' => t('E-mail'),
-          '#maxlength' => 64,
-          '#size' => 30,
-          '#default_value' => $edit['mail'],
-          '#description' => t('The content of this field is kept private and will not be shown publicly.'),
-        );
-
-        $form['admin']['homepage'] = array(
-          '#type' => 'textfield',
-          '#title' => t('Homepage'),
-          '#maxlength' => 255,
-          '#size' => 30,
-          '#default_value' => $edit['homepage'],
-        );
-      }
-
-      $form['admin']['date'] = array('#type' => 'textfield', '#parents' => array('date'), '#title' => t('Authored on'), '#size' => 20, '#maxlength' => 25, '#default_value' => $date, '#weight' => -1);
-
-      $form['admin']['status'] = array('#type' => 'radios', '#parents' => array('status'), '#title' => t('Status'), '#default_value' =>  $status, '#options' => array(t('Published'), t('Not published')), '#weight' => -1);
-
-    }
-    else {
-      $form['_author'] = array('#type' => 'item', '#title' => t('Your name'), '#value' => theme('username', $user)
-      );
-      $form['author'] = array('#type' => 'value', '#value' => $user->name);
-    }
-  }
-  else if (variable_get('comment_anonymous_'. $node->type, COMMENT_ANONYMOUS_MAYNOT_CONTACT) == COMMENT_ANONYMOUS_MAY_CONTACT) {
-    $form['name'] = array('#type' => 'textfield', '#title' => t('Your name'), '#maxlength' => 60, '#size' => 30, '#default_value' => $edit['name'] ? $edit['name'] : variable_get('anonymous', t('Anonymous'))
-    );
-
-    $form['mail'] = array('#type' => 'textfield', '#title' => t('E-mail'), '#maxlength' => 64, '#size' => 30, '#default_value' => $edit['mail'], '#description' => t('The content of this field is kept private and will not be shown publicly.')
-    );
-
-    $form['homepage'] = array('#type' => 'textfield', '#title' => t('Homepage'), '#maxlength' => 255, '#size' => 30, '#default_value' => $edit['homepage']);
-  }
-  else if (variable_get('comment_anonymous_'. $node->type, COMMENT_ANONYMOUS_MAYNOT_CONTACT) == COMMENT_ANONYMOUS_MUST_CONTACT) {
-    $form['name'] = array('#type' => 'textfield', '#title' => t('Your name'), '#maxlength' => 60, '#size' => 30, '#default_value' => $edit['name'] ? $edit['name'] : variable_get('anonymous', t('Anonymous')), '#required' => TRUE);
-
-    $form['mail'] = array('#type' => 'textfield', '#title' => t('E-mail'), '#maxlength' => 64, '#size' => 30, '#default_value' => $edit['mail'], '#description' => t('The content of this field is kept private and will not be shown publicly.'), '#required' => TRUE);
-
-    $form['homepage'] = array('#type' => 'textfield', '#title' => t('Homepage'), '#maxlength' => 255, '#size' => 30, '#default_value' => $edit['homepage']);
-  }
-
-  if (variable_get('comment_subject_field_'. $node->type, 1) == 1) {
-    $form['subject'] = array('#type' => 'textfield', '#title' => t('Subject'), '#maxlength' => 64, '#default_value' => !empty($edit['subject']) ? $edit['subject'] : '');
-  }
-
-  if (!empty($edit['comment'])) {
-    $default = $edit['comment'];
-  }
-  else {
-    $default = '';
-  }
-
-  $form['comment_filter']['comment'] = array(
-    '#type' => 'textarea',
-    '#title' => t('Comment'),
-    '#rows' => 15,
-    '#default_value' => $default,
-    '#required' => TRUE,
-  );
-  if (!isset($edit['format'])) {
-    $edit['format'] = FILTER_FORMAT_DEFAULT;
-  }
-  $form['comment_filter']['format'] = filter_form($edit['format']);
-
-  $form['cid'] = array('#type' => 'value', '#value' => !empty($edit['cid']) ? $edit['cid'] : NULL);
-  $form['pid'] = array('#type' => 'value', '#value' => !empty($edit['pid']) ? $edit['pid'] : NULL);
-  $form['nid'] = array('#type' => 'value', '#value' => $edit['nid']);
-  $form['uid'] = array('#type' => 'value', '#value' => !empty($edit['uid']) ? $edit['uid'] : 0);
-
-  // Only show save button if preview is optional or if we are in preview mode.
-  // We show the save button in preview mode even if there are form errors so that
-  // optional form elements (e.g., captcha) can be updated in preview mode.
-  if (!form_get_errors() && ((variable_get('comment_preview_'. $node->type, COMMENT_PREVIEW_REQUIRED) == COMMENT_PREVIEW_OPTIONAL) || ($op == t('Preview')) || ($op == t('Save')))) {
-    $form['submit'] = array('#type' => 'submit', '#value' => t('Save'), '#weight' => 19);
-  }
-
-  $form['preview'] = array('#type' => 'button', '#value' => t('Preview'), '#weight' => 20);
-  $form['#token'] = 'comment'. $edit['nid'] . (isset($edit['pid']) ? $edit['pid'] : '');
-
-  if ($op == t('Preview')) {
-    $form['#after_build'] = array('comment_form_add_preview');
-  }
-
-  if (empty($edit['cid']) && empty($edit['pid'])) {
-    $form['#action'] = url('comment/reply/'. $edit['nid']);
-  }
-
-  return $form;
-}
-
-/**
- * Determine whether a user can edit a comment
+ * Determine whether a user can admin a comment
  * 
  * This is determined by the checking the group which the comment
  * belongs to via it's parent node. If the current user is an admin
@@ -1546,7 +730,7 @@ function commons_core_comment_form(&$form_state, $edit, $title = NULL) {
  * @return
  *   TRUE if the user is allowed to edit, otherwise FALSE
  */
-function commons_core_can_edit_comment($comment) {
+function _commons_core_can_admin_comment($comment) {
   global $user;
   
   // Are we allowing group admins to edit comments?
@@ -1563,57 +747,4 @@ function commons_core_can_edit_comment($comment) {
   }
   
   return FALSE;
-}
-
-/** 
- * THEME ================================================
- */
-
-/**
- * Theme handler for node add links
- */
-function theme_commons_core_node_add_link($link) {
-  return '<span class="addnew">' . $link . '</span>';
-}
-
-/**
- * Theme handler for user stats block
- */
-function theme_commons_core_user_stats_block($data) {
-  $content = '<ul>';
-  foreach($data as $item) {
-    $content .= '<li>' . $item . '</li>';
-  }
-  $content .= '</ul>';
-  
-  return $content;
-}
-
-/**
- * Display the Commons information block
- * 
- * This is used in the footer to link back to acquia.com
- */
-function theme_commons_core_info_block() {
-  $content = '';
-  
-  $content .= '<div id="acquia-footer-message">';
-
-  $content .= '<a href="http://acquia.com/drupalcommons" title="Drupal Commons social business software">';
-  $content .= theme('image', 'profiles/drupal_commons/images/commons_droplet.png', t('Drupal Commons social business software'), t('Drupal Commons social business software'));
-  $content .= '</a>';
-  $content .= '<span>';
-  $content .= t('A !dc Community, powered by', array('!dc' => l(t('Drupal Commons'), 'http://acquia.com/drupalcommons', array('attributes' => array('title' => t('A Drupal Commons social business software')))))) . '&nbsp;';
-  $content .= l(t('Acquia'), 'http://acquia.com', array('attributes' => array('title' => t('Acquia'))));
-  $content .= '</span>';
-  $content .= '</div>';
-  
-  $content .= '<div id="fusion-footer-message">';
-  $content .= t('Theme by') . '&nbsp;';
-  $content .= '<a href="http://www.topnotchthemes.com" title="Drupal Themes by TopNotchThemes">TopNotchThemes</a>';
-  $content .= ', ' . t('powered by') . '&nbsp;';
-  $content .= '<a href="http://fusiondrupalthemes.com" title="Premium Drupal themes powered by Fusion">Fusion</a>.';
-  $content .= '</div>';
-  
-  return $content;
 }
