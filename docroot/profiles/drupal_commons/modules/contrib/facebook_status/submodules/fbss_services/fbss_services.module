@@ -1,0 +1,129 @@
+<?php
+
+/**
+ * @file
+ *   Integrates Services with Facebook-style Statuses.
+ */
+
+/**
+ * Implementation of hook_services_resources().
+ */
+function fbss_services_services_resources() {
+  return array(
+    'status' => array(
+      'file' => array('type' => 'inc', 'module' => 'fbss_services'),
+      'create' => array(
+        'help' => 'Creates a status message.',
+        'callback' => 'fbss_services_create',
+        'access callback' => '_fbss_services_access',
+        'access arguments' => array('create'),
+        'access arguments append' => TRUE,
+        'args' => array(
+          array(
+            'name' => 'recipient',
+            'type' => 'int',
+            'description' => 'The ID of the recipient of the status message.',
+            'optional' => FALSE,
+            'source' => 'data',
+          ),
+          array(
+            'name' => 'type',
+            'type' => 'string',
+            'description' => 'The type of the recipient of the status message.',
+            'optional' => FALSE,
+            'source' => 'data',
+          ),
+          array(
+            'name' => 'message',
+            'type' => 'string',
+            'description' => 'The status message.',
+            'optional' => FALSE,
+            'source' => 'data',
+            'default value' => '',
+          ),
+        ),
+      ),
+      'retrieve' => array(
+        'help' => 'Retrieves a status message.',
+        'callback' => 'fbss_services_retrieve',
+        'access callback' => '_fbss_services_access',
+        'access arguments' => array('retrieve'),
+        'access arguments append' => TRUE,
+        'args' => array(
+          array(
+            'name' => 'sid',
+            'type' => 'int',
+            'description' => 'The status ID.',
+            'optional' => FALSE,
+            'source' => array('path' => 0),
+          ),
+        ),
+      ),
+      'update' => array(
+        'help' => 'Updates a status message.',
+        'callback' => 'fbss_services_update',
+        'access callback' => '_fbss_services_access',
+        'access arguments' => array('update'),
+        'access arguments append' => TRUE,
+        'args' => array(
+          array(
+            'name' => 'sid',
+            'type' => 'int',
+            'description' => 'The status ID.',
+            'optional' => FALSE,
+            'source' => array('path' => 0),
+          ),
+          array(
+            'name' => 'message',
+            'type' => 'string',
+            'description' => 'The new status message.',
+            'optional' => FALSE,
+            'source' => 'data',
+            'default value' => '',
+          ),
+        ),
+      ),
+      'delete' => array(
+        'help' => 'Deletes a status message.',
+        'callback' => 'fbss_services_delete',
+        'access callback' => '_fbss_services_access',
+        'access arguments' => array('delete'),
+        'access arguments append' => TRUE,
+        'args' => array(
+          array(
+            'name' => 'sid',
+            'type' => 'int',
+            'description' => 'The status ID.',
+            'optional' => FALSE,
+            'source' => array('path' => 0),
+          ),
+        ),
+      ),
+      'index' => array(
+        'help' => 'Lists status messages in pages of 20.',
+        'callback' => 'fbss_services_index',
+        'access callback' => '_fbss_services_access',
+        'access arguments' => array('index'),
+        'access arguments append' => TRUE,
+        'args' => array(
+          array(
+            'name' => 'page',
+            'type' => 'int',
+            'description' => 'The zero-based index of the page to get (defaults to 0).',
+            'optional' => TRUE,
+            'source' => array('param' => 'page'),
+            'default value' => 0,
+          ),
+          array(
+            'name' => 'parameters',
+            'type' => 'array',
+            'description' => 'An array of options by which to filter the results. Valid parameters include recipient, type, and sender.',
+            'optional' => TRUE,
+            'source' => array('param' => 'parameters'),
+            'default value' => array(),
+          ),
+        ),
+      ),
+    ),
+  );
+}

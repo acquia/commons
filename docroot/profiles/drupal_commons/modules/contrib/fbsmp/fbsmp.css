@@ -1,0 +1,193 @@
+
+/* General Styling */
+
+.fbss_attachment {
+  display: block;
+  padding: 1em;
+}
+
+.fbsmp-icon-list input {
+  margin: 0;
+  padding: 0;
+}
+
+.fbsmp-wrapper-outer {
+  display: block;
+  clear: left;  
+  float: left;
+  min-width: 300px;
+}
+
+.fbsmp-inner-collapsed {
+  min-height: 30px;
+  margin-top: 5px;  
+}
+
+.fbsmp-inner-expanded {
+  border: 1px solid #CCC;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.link-message, .photo-message, .video-message, .slideshare-message {
+  float: left;  
+}
+
+/* Cancel button */
+input.fbsmp-cancel-button {
+  float: right;
+  margin: 0px;
+  padding: 2px 3px;
+  background-color: #D1CFCA;
+  border: 1px solid #B8B6B1;
+  -moz-border-radius: 2px 2px 2px 2px;
+  border-radius: 2px;
+}
+
+input.fbsmp-cancel-button: hover {
+  background-color: #ABB1AD;
+  border: 1px solid #949A96;
+}
+
+/* Form header styling */
+
+.fbsmp-link-header, .fbsmp-photo-header, .fbsmp-video-header, .fbsmp-slideshare-header {
+  margin-bottom: 10px;
+  min-height: 15px;
+  border-bottom: 1px solid #CCCCCC;
+  padding-bottom: 8px;
+}
+
+/* Plugin icons and attach text */
+
+.fbsmp-plugin-icon {
+  position: relative;
+  z-index: 19;
+  float: left;
+}
+
+.fbsmp-attach-text {
+  float: left;
+  margin-right: 5px;  
+  margin-top: 2px;
+  color: #999;
+  font-size: 11px;
+}
+
+/* Attachment edit form*/
+.fbsmp-edit-wrapper-outer {
+  border: 1px solid #CCC;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  padding: 5px;
+  clear: left;
+  display: block;
+  float: left;
+}
+
+.fbsmp-edit-text {
+  display: none;
+}
+
+.fbsmp-edit-plugin-header{
+  margin-top: 10px;
+  clear: left;
+  text-transform: capitalize;
+  text-decoration: underline;
+  font-style: italic;
+  font-weight: bold;
+  color: #999;
+}
+
+.fbsmp-edit-form-box {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+/* Tool tip for plugin icons */
+
+div.fbsmp-plugin-tool-tip {
+   display: none;
+}
+
+.fbsmp-plugin-icon: hover div.fbsmp-plugin-tool-tip  {
+  position: absolute;
+  display: block;
+  bottom: 100%;
+  left: 0;
+  background: url(images/icon_tool_arrow.png) no-repeat scroll left bottom transparent;
+  padding-bottom: 4px;
+}
+
+span.fbsmp-plugin-tool-tip-text {
+  background-color: #222222;
+  color: #fff;
+  font-weight: bold;
+  display: block;
+  font-size: 11px;
+  line-height: 14px;
+  padding: 4px 8px;
+  white-space: nowrap;
+}
+
+/* Hover effect for plugin icons, awesome work by pribeh */
+
+input.fbsmp-plugin-icon-button {
+  background: none;
+  border-color: #FFFFFF;
+  border-style: solid;
+  border-width: 1px;
+  padding: 1px 4px;
+  display: block;
+}
+
+input.fbsmp-plugin-icon-button: hover {
+  background: url(images/button.gif) repeat-x scroll 0 0 #DDDDDD;
+  border-color: #BBBBBB #BBBBBB #999999;
+}
+
+/* Link plugin */
+.fbsmp-link-thumbnail {
+  float: left;
+  margin-right: 0.5em;
+}
+
+.fbsmp-link-details-wrapper {
+  display: table-cell;
+}
+
+.fbsmp-link-url-field-processed {
+  color: #999999;
+}
+
+.fbsmp-link-title-text-editable, .fbsmp-link-description-text-editable {
+  text-align: left;
+  direction: ltr;
+  max-width: 400px;
+  display: inline-block;
+}
+
+.fbsmp-link-title-text-editable: hover, .fbsmp-link-description-text-editable: hover {
+  background-color: #ffffa0;
+}
+
+.fbsmp-link-description {
+  color: #999999;
+}
+
+.fbsmp-link-title {
+  font-size: 1.5em;
+  line-height: 1.5em;
+  margin: 0.5em;
+}
+
+/* SlideShare plugin */
+#edit-fbsmp-slideshare-title-wrapper {
+  margin-bottom: 5px;  
+}
+
+#edit-fbsmp-slideshare-title-wrapper label {
+  float: left;
+  margin-right: 2px;  
+}

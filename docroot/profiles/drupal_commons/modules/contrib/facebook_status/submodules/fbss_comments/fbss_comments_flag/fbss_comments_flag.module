@@ -1,0 +1,65 @@
+<?php
+
+/**
+ * @file
+ *   Integrates Flag with Facebook-style Statuses Comments.
+ */
+
+/**
+ * Implementation of hook_facebook_status_delete().
+ */
+function fbss_comments_flag_facebook_status_delete($status) {
+  db_query("DELETE FROM {flag_content} WHERE content_type = 'fbss_comment' AND content_id IN (SELECT cid FROM {fbss_comments} WHERE sid = %d)", $status->sid);
+  db_query("DELETE FROM {flag_counts} WHERE content_type = 'fbss_comment' AND content_id IN (SELECT cid FROM {fbss_comments} WHERE sid = %d)", $status->sid);
+}
+
+/**
+ * Implementation of hook_fbss_comments_delete().
+ */
+function fbss_comments_flag_fbss_comments_delete($cid) {
+  db_query("DELETE FROM {flag_content} WHERE content_type = 'fbss_comment' AND content_id = %s", $cid);
+  db_query("DELETE FROM {flag_counts} WHERE content_type = 'fbss_comment' AND content_id = %s", $cid);
+}
+
+/**
+ * Implementation of hook_flag_definitions().
+ */
+function fbss_comments_flag_flag_definitions() {
+  return array(
+    'fbss_comment' => array(
+      'title' => 'Facebook-style Statuses Comment',
+      'description' => t('Comments on status updates.'),
+      'handler' => 'fbss_comments_flag',
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_flag_default_flags().
+ */
+function fbss_comments_flag_flag_default_flags() {
+  $flags = array();
+  $flags[] = array(
+    'content_type' => 'fbss_comment',
+    'name' => 'like_comments',
+    'title' => t('Like'),
+    'roles' => array('2'),
+    'global' => FALSE,
+    'types' => array('page'),
+    'flag_short' => t('Like'),
+    'flag_long' => '',
+    'flag_message' => '',
+    'unflag_short' => t('Un-like'),
+    'unflag_long' => '',
+    'unflag_message' => '',
+    'show_on_page' => FALSE,
+    'show_on_teaser' => FALSE,
+    'show_on_form' => FALSE,
+    'status' => TRUE,
+    'locked' => array('name', 'global', 'types', 'show_on_page', 'show_on_teaser', 'show_on_form', 'status'),
+  );
+  return $flags;
+}
+
+//This is here because the Flag module does not support magic include files.
+module_load_include('inc', 'fbss_comments_flag', 'fbss_comments_flag.flag');

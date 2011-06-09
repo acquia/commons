@@ -1,0 +1,121 @@
+<?php
+
+/**
+ * @file
+ *   Converts @usernames to themed usernames and #hashtags to themed taxonomy
+ *   terms on Facebook-style Statuses.
+ */
+
+/**
+ * Implementation of hook_schema().
+ */
+function facebook_status_tags_schema() {
+  $schema = array();
+  $schema['facebook_status_tags'] = array(
+    'description' => 'Stores term-to-status relationships.',
+    'fields' => array(
+      'sid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Status ID',
+      ),
+      'rid' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'default' => 0,
+        'description' => 'Reference ID (Term ID or User ID)',
+      ),
+      'type' => array(
+        'type' => 'varchar',
+        'length' => 40,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Reference type',
+      ),
+      'name' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Reference name',
+      ),
+    ),
+    'indexes' => array(
+      'sid' => array('sid'),
+      'rid' => array('rid'),
+    ),
+  );
+  return $schema;
+}
+
+/**
+ * Implementation of hook_install().
+ */
+function facebook_status_tags_install() {
+  drupal_install_schema('facebook_status_tags');
+
+  if (module_exists('taxonomy')) {
+    // Check to see if the vocabulary already existed (i.e. from a previous installation).
+    $already_exists = db_fetch_object(db_query("SELECT vid, name FROM {vocabulary} WHERE module = 'facebook_status_tags'"));
+    if ($already_exists !== FALSE) {
+      variable_set('facebook_status_tags_vid', $already_exists->vid);
+      drupal_set_message(st('The vocabulary "@name" has been configured for use with the Facebook-style Statuses Tags module.', array('@name' => $already_exists->name)));
+      return;
+    }
+    // Create a default vocabulary for use with hashtags.
+    $vocab = array(
+      'name' => st('Hashtags'),
+      'description' => st('Contains #hashtags used in Facebook-style Statuses.'),
+      'multiple' => '1',
+      'required' => '0',
+      'hierarchy' => '0',
+      'relations' => '0',
+      'tags' => '1',
+      'module' => 'facebook_status_tags',
+      'help' => '',
+    );
+    taxonomy_save_vocabulary($vocab);
+    $vid = db_result(db_query("SELECT vid FROM {vocabulary} WHERE name = '%s' AND module = 'facebook_status_tags'", st('Hashtags')));
+    variable_set('facebook_status_tags_vid', $vid);
+    drupal_set_message(st('The vocabulary "Hashtags" has been created and configured for use with the Facebook-style Statuses Tags module.'));
+  }
+  else {
+    drupal_set_message(st('Facebook-style Statuses Tags only allows using #hashtags when the Taxonomy module is installed.'));
+  }
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function facebook_status_tags_uninstall() {
+  drupal_uninstall_schema('facebook_status_tags');
+
+  if (variable_get('facebook_status_tags_vid', -1) != -1) {
+    $vocabulary = taxonomy_vocabulary_load(variable_get('facebook_status_tags_vid', -1));
+    if (isset($vocabulary->nodes) && count($vocabulary->nodes) == 0) {
+      drupal_set_message(
+        st('The Facebook-style Statuses Tags module has been uninstalled.') .' '.
+        st(
+          'However, the vocabulary "@name," which was used to store #hashtags for the Facebook-style Statuses Tags module, has not been deleted.',
+          array('@name' => $vocabulary->name)
+        ) .' '.
+        st(
+          'This vocabulary was not used for any other purpose, so <a href="!delete_url">deleting it</a> is recommended.',
+          array('!delete_url' => url('admin/content/taxonomy/edit/vocabulary/2', array('absolute' => TRUE)))
+        )
+      );
+    }
+  }
+
+  variable_del('facebook_status_tags_url');
+  variable_del('facebook_status_tags_vid');
+  variable_del('facebook_status_tags_time');
+  variable_del('facebook_status_tags_count');
+  // Although not deleting this leaves an unnecessary row in the variable
+  // table, it's a PITA for site admin to change its value, so it stays in case
+  // FBSST is ever installed again.
+  //variable_del('facebook_status_tags_alt_pattern');
+}

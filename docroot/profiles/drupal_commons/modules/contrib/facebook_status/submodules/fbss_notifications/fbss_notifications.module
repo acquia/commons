@@ -1,0 +1,310 @@
+<?php
+
+/**
+ * @file
+ *   Integrates Notifications with Facebook-style Statuses.
+ */
+
+/**
+ * Implementation of hook_perm().
+ */
+function fbss_notifications_perm() {
+  return array(
+    "subscribe to a user's status updates",   // self updates and sent to others
+    "subscribe to an entity's status stream", // self updates and received from others
+    "subscribe to statuses by stream type",   // all updates within a certain context
+  );
+}
+
+/**
+ * Implementation of hook_facebook_status_delete().
+ */
+function fbss_notifications_facebook_status_delete($status) {
+  //
+}
+
+/**
+ * Implementation of hook_facebook_status_save().
+ */
+function fbss_notifications_facebook_status_save($status, $context, $edit, $options) {
+  if (empty($options['has attachment'])) {
+    $self = ($status->type == 'user' && $status->sender == $status->recipient);
+    if ($edit) {
+      if ($self) {
+        //
+      }
+      else {
+        //
+      }
+    }
+    else {
+      if ($self) {
+        //
+      }
+      else {
+        //
+      }
+    }
+  }
+}
+
+/**
+ * Implementation of hook_notifications().
+ */
+function fbss_notifications_notifications($op, &$arg0 = NULL, $arg1 = NULL, $arg2 = NULL) {
+
+  switch ($op) {
+    case 'subscription types':
+      // Some types may be globally disabled (for all content types), mark as such
+      $disabled = !variable_get('notifications_content_per_type', 0); // TODO
+      $types['sender'] = array(
+        'event_type' => 'facebook_status',
+        'title' => t('Status sender'),
+        'access' => "subscribe to a user's status updates",
+        'page callback' => 'fbss_notifications_sender_page', // TODO
+        'user page' => 'user/%user/notifications/status-sender', // TODO
+        'fields' => array('sender'),
+        'description' => t('Subscribe to status updates and messages by or from this user.'),
+        'disabled' => $disabled && !notifications_content_type_enabled(NULL, 'thread'), // TODO
+      );
+      $types['recipient'] = array(
+        'event_type' => 'facebook_status',
+        'title' => t('Status recipient'),
+        'access' => "subscribe to an entity's status stream",
+        'page callback' => 'fbss_notifications_recipient_page', // TODO
+        'user page' => 'user/%user/notifications/status-recipient', // TODO
+        'fields' => array('recipient', 'type'),
+        'description' => t('Subscribe to status updates and messages by or from this user.'),
+        'disabled' => $disabled && !notifications_content_type_enabled(NULL, 'thread'), // TODO
+      );
+      $types['stream-type'] = array(
+        'event_type' => 'facebook_status',
+        'title' => t('Status type'),
+        'access' => "subscribe to statuses by stream type",
+        'page callback' => 'fbss_notifications_type_page', // TODO
+        'user page' => 'user/%user/notifications/status-type', // TODO
+        'fields' => array('type'),
+        'description' => t('Subscribe to all status messages of this type.'),
+        'disabled' => $disabled && !notifications_content_type_enabled(NULL, 'thread'), // TODO
+      );
+      break;
+    case 'names':
+      $subs = &$arg0;
+      if ($subs->event_type == 'facebook_status') {
+        $subs->type_name = t('Statuses'),
+        if (!empty($subs->fields['sender'])) {
+          $sender = _facebook_status_user_load($subs->fields['sender']);
+          $subs->names['sender'] = t('Status sender: @name', array('@name' => $sender->name));
+        }
+        if (!empty($subs->fields['recipient']) && !empty($subs->fields['type'])) {
+          $context = facebook_status_determine_context($subs->fields['type']);
+          $recipient = $context['handler']->load_recipient($subs->fields['recipient']);
+          $subs->names['recipient'] = t('Status recipient: @name', array('@name' => $context['handler']->recipient_name($recipient)));
+        }
+        if (!empty($subs->fields['type'])) {
+          $context = facebook_status_determine_context($subs->fields['type']);
+          $subs->names['type'] = t('Statuses of type: @name', array('@name' => $context['title']));
+        }
+      }
+      break;
+    case 'subscription fields':
+      $fields = array();
+      $fields['sender'] = array(
+        'name' => t('Sender'),
+        'field' => 'sender',
+        'type' => 'int',
+        'autocomplete path' => 'fbss_notifications',
+      );
+      $fields['recipient'] = array(
+      );
+      $fields['type'] = array(
+      );
+      return $fields;
+    case 'node options':
+      ...
+      break;
+    case 'digest methods':
+      ...
+      break;
+    case 'event types':
+      ...
+      break;
+    case 'event trigger':
+      ...
+      break;
+    case 'event queued':
+      ...
+      break;
+    case 'event load':
+      ...
+      break;
+    case 'access':
+      ...
+      break;
+    case 'query':
+      ...
+      break;
+    case 'insert':
+      ...
+      break;
+    case 'update':
+      ...
+      break;
+    default:
+      break;
+}
+
+/**
+ * Implementation of hook_messaging().
+ */
+function fbss_notifications_messaging($op, $arg1 = NULL, $arg2 = NULL) {
+  switch ($op) {
+
+    case 'message groups':
+      $info = array();
+      $info['fbss_notifications-event-save-self'] = array(
+        'module' => 'fbss_notifications',
+        'name' => t("Notifications for saving individual users' status updates"),
+        'description' => t('Notifications produced when a user saves a new status.'),
+        'fallback' => 'notifications-event',
+      );
+      $info['fbss_notifications-event-save-other'] = array(
+        'module' => 'fbss_notifications',
+        'name' => t('Notifications for saving status messages'),
+        'description' => t('Notifications produced when a new status message is sent.'),
+        'fallback' => 'notifications-event',
+      );
+      $info['fbss_notifications-event-edit-self'] = array(
+        'module' => 'fbss_notifications',
+        'name' => t("Notifications for editing individual users' status updates"),
+        'description' => t('Notifications produced when a user edits one of their status updates.'),
+        'fallback' => 'notifications-event',
+      );
+      $info['fbss_notifications-event-edit-other'] = array(
+        'module' => 'fbss_notifications',
+        'name' => t('Notifications for editing status messages'),
+        'description' => t('Notifications produced when a status message is edited.'),
+        'fallback' => 'notifications-event',
+      );
+      $info['fbss_notifications-digest-sender'] = array(
+        'module' => 'fbss_notifications',
+        'name' => t('Group digests per status message sender'),
+        'description' => t('Group of events digested for each status sender.'),
+        'fallback' => 'notifications-event',
+      );
+      $info['fbss_notifications-digest-recipient'] = array(
+        'module' => 'fbss_notifications',
+        'name' => t('Group digests per status message recipient'),
+        'description' => t('Group of events digested for each status stream.'),
+        'fallback' => 'notifications-event',
+      );
+      $info['fbss_notifications-digest-status-type'] = array(
+        'module' => 'fbss_notifications',
+        'name' => t('Group digests per status stream context type'),
+        'description' => t('Group of events digested for each type of status.'),
+        'fallback' => 'notifications-event',
+      );
+      return $info;
+      break;
+
+    case 'message keys':
+      switch($arg1) {
+        case 'fbss_notifications-event-save-self':
+        case 'fbss_notifications-event-save-other':
+        case 'fbss_notifications-event-edit-self':
+        case 'fbss_notifications-event-edit-other':
+          return array(
+            'subject' => t('Subject'),
+            'main' => t('Content'),
+            'digest' => t('Digest line'),
+          );
+        case 'fbss_notifications-digest-sender':
+        case 'fbss_notifications-digest-recipient':
+        case 'fbss_notifications-digest-status-type':
+          return array(
+            'title' => t('Group title'),
+            'closing' => t('Group footer'),
+          );
+      }
+      break;
+     
+    case 'messages':
+      switch($arg1) {
+        case 'fbss_notifications-event-save-self':
+          return array(
+            'subject' => t('[sender-name-raw] has a new status: [message-raw]'),
+            'main' => array(
+              t('[sender-name-raw] has a new status update:'),
+              '[status-themed]'
+              t('Read more and respond at [status-url]'),
+            ),
+            'digest' => array(
+              '[status-themed]',
+              t('Read more at [status-url]'),
+            ),
+          );
+        case 'fbss_notifications-event-save-other':
+          return array(
+            //"\xC2\xBB" is the unicode escape sequence for the HTML entity &raquo; (a double right angle bracket)
+            'subject' => t('[sender-name-raw] \xC2\xBB [recipient-name-raw]: [message-raw]'),
+            'main' => array(
+              t('[sender-name-raw] sent a new status message to [recipient-name-raw]:'),
+              '[status-themed]'
+              t('Read more and respond at [status-url]'),
+            ),
+            'digest' => array(
+              '[status-themed]',
+              t('Read more at [status-url]'),
+            ),
+          );
+        case 'fbss_notifications-event-edit-self':
+          return array(
+            'subject' => t('[sender-name-raw] edited their status: [message-raw]'),
+            'main' => array(
+              t('[sender-name-raw] edited their status:'),
+              '[status-themed]'
+              t('Read more and respond at [status-url]'),
+            ),
+            'digest' => array(
+              '[status-themed]',
+              t('Read more at [status-url]'),
+            ),
+          );
+        case 'fbss_notifications-event-edit-other':
+          return array(
+            'subject' => t('[sender-name-raw] edited a status message to [recipient-name-raw]'),
+            'main' => array(
+              t('[sender-name-raw] edited their status message to [recipient-name-raw]:'),
+              '[status-themed]'
+              t('Read more and respond at [status-url]'),
+            ),
+            'digest' => array(
+              '[status-themed]',
+              t('Read more at [status-url]'),
+            ),
+          );
+        case 'fbss_notifications-digest-sender':
+          return array(
+            'title' => t('Updates for [sender-name-raw]'),
+            'closing' => t('Read more at [sender-themed]'),
+          );
+        case 'fbss_notifications-digest-recipient':
+          return array(
+            'title' => t('Updates for [recipient-name-raw]'),
+            'closing' => t('Read more at [recipient-link]'),
+          );
+        case 'fbss_notifications-digest-status-type':
+          return array(
+            'title' => t('Updates for [recipient-type-title]'),
+            'closing' => '',
+          );
+      }
+      break;
+
+    case 'tokens':
+      return array('facebook_status');
+      break;
+
+    default:
+      break;
+}
