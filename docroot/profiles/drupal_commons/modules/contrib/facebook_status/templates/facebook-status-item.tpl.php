@@ -42,7 +42,7 @@
  * Other modules may add additional variables.
  */
 ?>
-<div id="facebook-status-item-<?php echo $sid; ?>" class="facebook-status-item facebook-status-type-<?php echo $type; ?><?php if ($self): ?> facebook-status-self-update<?php endif; ?><?php if ($page): ?> facebook-status-page<?php endif; ?>">
+<div id="facebook-status-item-<?php echo $sid; ?>" class="facebook-status-item facebook-status-type-<?php echo $type; ?><?php if ($self): ?> facebook-status-self-update<?php endif; ?><?php if ($page): ?> facebook-status-page<?php endif; ?><?php if ($private): ?> facebook-status-private<?php endif; ?>">
   <?php if ($sender_picture): ?>
     <div class="facebook-status-sender-picture"><?php echo $sender_picture; ?></div>
   <?php endif; ?>
