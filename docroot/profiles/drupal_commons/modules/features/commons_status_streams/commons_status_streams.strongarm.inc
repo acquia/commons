@@ -22,6 +22,13 @@ function commons_status_streams_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'facebook_status_length';
+  $strongarm->value = '0';
+
+  $export['facebook_status_length'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'facebook_status_nl2br';
   $strongarm->value = 1;
 
