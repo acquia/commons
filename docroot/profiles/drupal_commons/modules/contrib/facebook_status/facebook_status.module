@@ -173,7 +173,7 @@ function facebook_status_block($op = 'list', $delta = 0, $edit = NULL) {
     if (!variable_get('facebook_status_block_view', 0) && !empty($context['view'])) {
       unset($context['view']);
     }
-    $block['subject'] = t('Status');
+    $block['subject'] = '';
     $block['content'] = theme('facebook_status_form_display', $context);
     return $block;
   }
