@@ -213,6 +213,21 @@ function facebook_status_admin_contexts(&$form_state) {
       '#value' => isset($values['in_db']) ? $values['in_db'] : FALSE,
     );
   }
+  // The user context has 2 views.
+  $self = $options[isset($data['user']['view']) ? $data['user']['view'] : ''];
+  $other = variable_get('facebook_status_user_other_view', 'facebook_status_stream');
+  if ($self != $other) {
+    $form['components']['user']['view'] = array(
+      '#value' => t('%self and %other - view configuration to change', array(
+        '%self' => $self,
+        '%other' => $other,
+      )),
+    );
+  }
+  $form['components']['user']['view_value'] = array(
+    '#type' => 'hidden',
+    '#value' => $self,
+  );
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Save'),
@@ -224,7 +239,18 @@ function facebook_status_admin_contexts(&$form_state) {
  * The submit callback for the stream context configuration form.
  */
 function facebook_status_admin_contexts_submit($form, &$form_state) {
-  foreach ($form_state['values']['components'] as $item) {
+  $self = $form_state['values']['components']['user']['view_value'];
+  $other = variable_get('facebook_status_user_other_view', 'facebook_status_stream');
+  // If we are using the same view for the user "self" and "other" cases, save any changes to both places.
+  if ($self == $other) {
+    variable_set('facebook_status_user_other_view', $form_state['values']['components']['user']['view']);
+  }
+  // If not, we didn't expose the view option in the form, so make sure nothing changes.
+  else {
+    $form_state['values']['components']['user']['view'] = $self;
+  }
+  // Save the usual data.
+  foreach ($form_state['values']['components'] as $type => $item) {
     $record = array(
       'type' => $item['type'],
       'weight' => intval($item['weight']),
@@ -291,12 +317,23 @@ function facebook_status_admin_context_settings($form_state, $context) {
     }
   }
   $form['view'] = array(
-    '#title' => t('View'),
     '#type' => 'select',
+    '#title' => t('View'),
+    '#description' => t('Show this view for !type streams.', array('@type' => $context['title'])) .' '. t('The "default" display will be used.'),
     '#default_value' => isset($context['view']) ? $context['view'] : '',
     '#options' => $options,
-    '#description' => t('Show this view for streams of this type. The "default" display will be used.'),
   );
+  if ($type == 'user') {
+    $form['view']['#title'] = t('View for "my stream"');
+    $form['view']['#description'] = t('Show this view for user streams when a user is looking at their own stream.') .' '. t('The "default" display will be used.');
+    $form['other_view'] = array(
+      '#type' => 'select',
+      '#title' => t("View for others users' streams"),
+      '#description' => t("Show this view for user streams when a user is looking at another user's stream.") .' '. t('The "default" display will be used.'),
+      '#default_value' => variable_get('facebook_status_user_other_view', 'facebook_status_stream'),
+      '#options' => $options,
+    );
+  }
 
   $form['selectors'] = array(
     '#type' => 'textarea',
@@ -414,6 +451,9 @@ function facebook_status_admin_context_settings_submit($form, &$form_state) {
   }
   else {
     drupal_write_record('facebook_status_contexts', $record);
+  }
+  if (isset($v['other_view'])) {
+    variable_set('facebook_status_user_other_view', $v['other_view']);
   }
   drupal_set_message(t('The configuration options have been saved.'));
 }

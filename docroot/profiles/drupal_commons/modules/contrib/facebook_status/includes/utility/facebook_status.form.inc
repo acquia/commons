@@ -52,6 +52,10 @@ function theme_facebook_status_form_display($context = NULL, $type = NULL, $view
   }
   if (empty($view) && isset($context['view'])) {
     $view = $context['view'];
+    // Special case, user context has 2 default views
+    if ($type == 'user' && $user->uid != $context['handler']->recipient_id($recipient)) {
+      $view = variable_get('facebook_status_user_other_view', 'facebook_status_stream');
+    }
   }
   $selectors = module_invoke_all('facebook_status_refresh_selectors', $recipient, $type) + explode("\n", $context['selectors']);
   $conversation = (arg(0) == 'statuses' && arg(1) == 'conversation' && $type == 'user');

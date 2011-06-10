@@ -14,7 +14,7 @@ function facebook_status_views_data() {
   $data['facebook_status']['table']['join'] = array(
     'users' => array(
       'left_field' => 'uid',
-      'field' => 'sender',
+      'field' => 'recipient',
       'type' => 'INNER',
     ),
   );
@@ -325,6 +325,16 @@ function facebook_status_views_data() {
     ),
   );
 
+  // Expose data from a user's friends AND that user.
+  $data['user_relationships']['rels_and_me'] = array(
+    'title' => t('Requestee or Requester or Argument user'),
+    'help' => t('Filters results to show content for the requestee, requester, or argument user.'),
+    'argument' => array(
+      'field' => 'requestee_id',
+      'handler' => 'facebook_status_views_handler_argument_rels_and_me',
+    ),
+  );
+
   return $data;
 }
 
@@ -341,6 +351,9 @@ function facebook_status_views_handlers() {
         'parent' => 'views_handler_argument',
       ),
       'facebook_status_views_handler_argument_participant' => array(
+        'parent' => 'views_handler_argument',
+      ),
+      'facebook_status_views_handler_argument_rels_and_me' => array(
         'parent' => 'views_handler_argument',
       ),
       'facebook_status_views_handler_field_created' => array(

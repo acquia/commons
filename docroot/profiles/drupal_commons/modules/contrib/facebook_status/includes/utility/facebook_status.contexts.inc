@@ -240,7 +240,8 @@ class facebook_status_og_context extends facebook_status_node_context {
     return 'node/'. $recipient->nid;
   }
   function access_add($recipient, $sender) {
-    return parent::access_add($recipient, $sender) ||
+    // Only group members can add content of any kind.
+    return parent::access_add($recipient, $sender) &&
       og_is_group_member($recipient->nid, TRUE, $sender->uid);
   }
   function access_delete($status, $account) {
@@ -248,12 +249,14 @@ class facebook_status_og_context extends facebook_status_node_context {
       og_is_group_admin($this->load_recipient($status->recipient), $account);
   }
   function access_view($status, $account) {
-    return parent::access_view($status, $account) ||
-      og_is_group_member($status->recipient, TRUE, $account->uid);
+    // Only group members can view group statuses if the group is private.
+    return parent::access_view($status, $account) &&
+      (og_is_group_member($status->recipient, TRUE, $account->uid) || empty($this->load_recipient($status->recipient)->og_private));
   }
   function access_stream($recipient, $account) {
-    return parent::access_stream($recipient, $account) ||
-      og_is_group_member($recipient->nid, TRUE, $account->uid);
+    // Only group members can view group statuses if the group is private.
+    return parent::access_stream($recipient, $account) &&
+      (og_is_group_member($recipient->nid, TRUE, $account->uid) || empty($recipient->og_private));
   }
 }
 

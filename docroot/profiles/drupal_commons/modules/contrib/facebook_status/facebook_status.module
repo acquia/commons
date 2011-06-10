@@ -1004,7 +1004,7 @@ function facebook_status_facebook_status_context_info() {
       'description' => t('If a profile is currently being viewed, then the stream belongs to the owner of that profile.') .' '.
         t('Otherwise, the stream belongs to the current user.'),
       'handler' => 'facebook_status_user_context',
-      'view' => 'facebook_status_stream',
+      'view' => module_exists('user_relationships_api') ? 'fbss_ur_stream' : 'facebook_status_stream',
       'weight' => 999,
       'file' => $path .'/includes/utility/facebook_status.contexts.inc',
     ),
@@ -1234,6 +1234,20 @@ function facebook_status_views_api() {
 function facebook_status_display_user_picture($account) {
   drupal_add_css(drupal_get_path('module', 'facebook_status') .'/resources/facebook_status.css');
   return theme('user_picture', $account);
+}
+
+/**
+ * Implementation of hook_views_query_alter().
+ */
+function facebook_status_views_query_alter(&$view, &$query) {
+  if ($view->base_table == 'users') {
+    foreach ($query->table_queue as $alias => $info) {
+      if ($info['table'] == 'facebook_status') {
+        $query->add_groupby($info['alias'] .'.sid');
+        return;
+      }
+    }
+  }
 }
 
 //============================

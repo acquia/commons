@@ -1135,5 +1135,11 @@ function facebook_status_views_default_views() {
   $handler->override_option('block_caching', -1);
   $views[$view->name] = $view;
 
+  if (module_exists('user_relationships_api')) {
+    module_load_include('inc', 'facebook_status', 'includes/views/fbss_user_relationships.views_default');
+    $ur_views = fbss_user_relationships_views_default_views();
+    $views = array_merge($views, $ur_views);
+  }
+
   return $views;
 }
