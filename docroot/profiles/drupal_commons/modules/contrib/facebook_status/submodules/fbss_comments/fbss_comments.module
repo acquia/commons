@@ -563,7 +563,7 @@ function _fbss_comments_user_picture($account) {
   $output = '';
   if (variable_get('user_pictures', 0)) {
     if (!empty($account->picture) && file_exists($account->picture)) {
-      $picture = file_create_url($account->picture);
+      $picture = $account->picture;
     }
     else if (variable_get('user_picture_default', '')) {
       $picture = variable_get('user_picture_default', '');
