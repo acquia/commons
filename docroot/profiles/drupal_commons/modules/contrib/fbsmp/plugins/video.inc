@@ -496,7 +496,7 @@ function fbsmp_video_render_thumbnail_select($image_url, $current, $images_count
   
   $attributes['class'] = "fbsmp-video-thumbnail-select";
   $output .= theme('image', $image_url, '', '', $attributes, FALSE);  
-  $images_path = drupal_get_path('module', 'fbsmp') . '/plugins/images';
+  $images_path = _fbsmp_get_image_dir() .'/plugins/images';
   
   $output .= theme('image', $images_path .'/previous.png', t('Previous'), '', array('class' => 'fbsmp-video-previous-button'), FALSE);
   $output .= theme('image', $images_path .'/next.png', t('Next'), '', array('class' => 'fbsmp-video-next-button'), FALSE);

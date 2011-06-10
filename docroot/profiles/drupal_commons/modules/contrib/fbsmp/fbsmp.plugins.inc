@@ -10,12 +10,13 @@
  */
 function _fbsmp_fbsmp_plugins() {
   $path = drupal_get_path('module', 'fbsmp') .'/plugins';
+  $image_path = _fbsmp_get_image_dir() .'/plugins';
   $info = array();
   $info['link'] = array(
     'name' => t('Link'),
     'file' => 'link.inc',
     'path' => $path,
-    'icon' => $path .'/images/link.png',
+    'icon' => $image_path .'/images/link.png',
     'description' => t('Lets users publish links with their statuses.'),
     'admin_settings_form' => 'fbsmp_link_fbsmp_admin_settings_form',
     'admin_settings_form_validate' => 'fbsmp_link_fbsmp_admin_settings_form_validate',
@@ -41,7 +42,7 @@ function _fbsmp_fbsmp_plugins() {
     'name' => t('Photo'),
     'file' => 'photo.inc',
     'path' => $path,
-    'icon' => $path .'/images/photo.png',
+    'icon' => $image_path .'/images/photo.png',
     'widget_form' => 'fbsmp_photo_fbsmp_widget_form',
     'widget_form_validate' => 'fbsmp_photo_fbsmp_widget_form_validate',
     'admin_settings_form' => 'fbsmp_photo_fbsmp_admin_settings_form',
@@ -61,7 +62,7 @@ function _fbsmp_fbsmp_plugins() {
     'name' => t('Video'),
     'file' => 'video.inc',
     'path' => $path,
-    'icon' => $path .'/images/video.png',
+    'icon' => $image_path .'/images/video.png',
     'widget_form' => 'fbsmp_video_fbsmp_widget_form',
     'widget_form_validate' => 'fbsmp_video_fbsmp_widget_form_validate',
     'admin_settings_form' => 'fbsmp_video_fbsmp_admin_settings_form',
@@ -78,7 +79,7 @@ function _fbsmp_fbsmp_plugins() {
     'name' => t('Document'),
     'file' => 'slideshare.inc',
     'path' => $path,
-    'icon' => $path .'/images/document.png',
+    'icon' => $image_path .'/images/document.png',
     'widget_form' => 'fbsmp_slideshare_fbsmp_widget_form',
     'widget_form_validate' => 'fbsmp_slideshare_fbsmp_widget_form_validate',
     'admin_settings_form' => 'fbsmp_slideshare_fbsmp_admin_settings_form',

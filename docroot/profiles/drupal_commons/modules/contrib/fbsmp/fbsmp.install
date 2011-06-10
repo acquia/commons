@@ -91,7 +91,7 @@ function fbsmp_uninstall() {
   // Remove tables.
   drupal_uninstall_schema('fbsmp');
 
-  //Remove variables.
+  // Remove variables.
   variable_del('fbsmp_disabled_plugins');
   variable_del('fbsmp_ignore_sdefault');
   variable_del('fbsmp_plugin_photo');
@@ -99,6 +99,7 @@ function fbsmp_uninstall() {
   variable_del('fbsmp_plugin_video');
   variable_del('fbsmp_videos_processed');
   variable_del('fbsmp_plugin_slideshare');
+  variable_del('fbsmp_image_dir');
 }
 
 /**

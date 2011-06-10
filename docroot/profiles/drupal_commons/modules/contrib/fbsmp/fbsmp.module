@@ -267,9 +267,7 @@ function fbsmp_delete_status($sid, $alerts = array()) {
     'rules' => TRUE,
     'trigger' => TRUE,
     'userpoints' => TRUE,
-    'facebook_status' => array(
-      'has attachment' => TRUE,  //Disables alerts to other modules sent by FBSS.
-    ),
+    'facebook_status' => FALSE, //Disables alerts to other modules sent by FBSS.
   );
 
   //Invokes hook_fbsmp_delete_alerts_alter(&$alerts, $status).
@@ -295,7 +293,7 @@ function fbsmp_delete_status($sid, $alerts = array()) {
   }
   
   //TODO: Disable alerts for FBSS
-  facebook_status_delete_status($sid, $alerts['facebook_status']);
+  facebook_status_delete_status($sid); //, $alerts['facebook_status']);
   db_query("DELETE FROM {fbsmp} WHERE sid = %d", $sid);
 
   //DELETE POSSIBLE ACTIVITY 2 RECORDS
@@ -728,6 +726,13 @@ function _fbsmp_get_fbss_alerts() {
   return $alerts;
 }
 
+/**
+ * Get the directory where images are stored.
+ */
+function _fbsmp_get_image_dir() {
+  return variable_get('fbsmp_image_dir', drupal_get_path('module', 'fbsmp'));
+}
+
 //=============
 // FBSS HOOKS.
 //=============
@@ -932,7 +937,7 @@ function fbsmp_form_facebook_status_box_alter(&$form, &$form_state) {
     
     $form['fbsmp']['cancel'] = array(
       '#type' => 'image_button',
-      '#src' => $path .'/images/cancel.png',
+      '#src' => _fbsmp_get_image_dir() .'/images/cancel.png',
       '#title' => t('Cancel'),
       '#validate' => array(),
       '#submit' => array('fbsmp_clear_attachment_form'),

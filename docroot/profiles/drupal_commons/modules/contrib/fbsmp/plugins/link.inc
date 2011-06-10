@@ -674,7 +674,7 @@ function fbsmp_link_render_form_thumbnail($image_url, $settings = array()) {
 function fbsmp_link_render_form_thumbnail_select($current, $images_count) {
   $output = '';
   
-  $images_path = drupal_get_path('module', 'fbsmp') . '/plugins/images';
+  $images_path = _fbsmp_get_image_dir() . '/plugins/images';
   $output .= theme('image', $images_path .'/previous.png', t('Previous'), '', array('class' => 'fbsmp-link-previous-button'), FALSE);
   $output .= theme('image', $images_path .'/next.png', t('Next'), '', array('class' => 'fbsmp-link-next-button'), FALSE);
   
