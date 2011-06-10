@@ -179,6 +179,12 @@ function facebook_status_box(&$form_state, $recipient, $type = 'user') {
       '#weight' => -45,
     );
   }
+  if (variable_get('facebook_status_length', 140) > 0) {
+    $form['chars'] = array(
+      '#value' => '<span class="facebook-status-chars">'. t('%chars characters allowed', array('%chars' => variable_get('facebook_status_length', 140))) .'</span>',
+      '#weight' => -41,
+    );
+  }
   $form['fbss-status'] = array(
     '#type' => 'textarea',
     '#rows' => variable_get('facebook_status_box_rows', 2),
@@ -187,12 +193,6 @@ function facebook_status_box(&$form_state, $recipient, $type = 'user') {
     '#resizable' => FALSE,
     '#weight' => -40,
   );
-  if (variable_get('facebook_status_length', 140) > 0) {
-    $form['chars'] = array(
-      '#value' => '<span class="facebook-status-chars">'. t('%chars characters allowed', array('%chars' => variable_get('facebook_status_length', 140))) .'</span>',
-      '#weight' => -35,
-    );
-  }
   $form['fbss-submit'] = array(
     '#type' => 'submit',
     '#value' => t('Share'),

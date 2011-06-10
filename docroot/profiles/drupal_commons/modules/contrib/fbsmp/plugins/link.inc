@@ -316,7 +316,7 @@ function fbsmp_link_fbsmp_widget_form(&$form_state) {
     }
     
     $form['fbsmp_link_details_wrapper_close'] = array(
-      '#value' => '</div>',
+      '#value' => '</div><div class="clearfix">&nbsp;</div>',
     );
     
     $form['fbsmp_link_data'] = array(

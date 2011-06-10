@@ -39,7 +39,9 @@ function fbss_privacy_form_facebook_status_box_alter(&$form, &$form_state) {
     '#type' => 'checkbox',
     '#title' => t('Private'),
     '#default_value' => 0,
-    '#weight' => -30,
+    '#weight' => -24,
+    '#prefix' => '<div class="facebook-status-private-box">',
+    '#suffix' => '</div>',
   );
   $form['fbss-submit']['#submit'][] = 'fbss_privacy_facebook_status_box_submit';
 }

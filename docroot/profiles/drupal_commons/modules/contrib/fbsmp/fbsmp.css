@@ -15,18 +15,17 @@
   display: block;
   clear: left;  
   float: left;
-  min-width: 300px;
+  min-width: 200px;
+  width: 100%;
 }
 
 .fbsmp-inner-collapsed {
   min-height: 30px;
-  margin-top: 5px;  
 }
 
 .fbsmp-inner-expanded {
   border: 1px solid #CCC;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin: 0.5em 0;
   padding: 10px;
 }
 
@@ -35,10 +34,12 @@
 }
 
 /* Cancel button */
-input.fbsmp-cancel-button {
+form .fbsmp-inner-expanded input.fbsmp-cancel-button {
   float: right;
+  height: 1em;
   margin: 0px;
   padding: 2px 3px;
+  width: 1em;
   background-color: #D1CFCA;
   border: 1px solid #B8B6B1;
   -moz-border-radius: 2px 2px 2px 2px;
@@ -153,8 +154,25 @@ input.fbsmp-plugin-icon-button: hover {
   margin-right: 0.5em;
 }
 
+.fbsmp-link-images {
+  float: left;
+  padding: 0 1em 1em 0;
+}
+
 .fbsmp-link-details-wrapper {
-  display: table-cell;
+  /* display: table-cell; */
+}
+
+.fbsmp-link-details-wrapper textarea {
+  width: 97%;
+}
+
+#edit-fbsmp-link-no-thumbnail-wrapper {
+  float: right;
+}
+
+.fbsmp-inner-expanded .form-item label {
+  display: inline;
 }
 
 .fbsmp-link-url-field-processed {
@@ -165,11 +183,15 @@ input.fbsmp-plugin-icon-button: hover {
   text-align: left;
   direction: ltr;
   max-width: 400px;
-  display: inline-block;
+  /* display: inline-block; */
 }
 
 .fbsmp-link-title-text-editable: hover, .fbsmp-link-description-text-editable: hover {
   background-color: #ffffa0;
+}
+
+.fbsmp-link-chars {
+  padding-left: 0.5em;
 }
 
 .fbsmp-link-description {
