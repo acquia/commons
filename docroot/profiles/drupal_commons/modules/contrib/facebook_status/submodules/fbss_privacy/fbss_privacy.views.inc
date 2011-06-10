@@ -9,10 +9,15 @@
  * Implementation of hook_views_query_alter().
  */
 function fbss_privacy_views_query_alter(&$view, &$query) {
+  global $user;
   // Alter any view that shows status updates and exclude private statuses (unless we've already set a related filter).
   foreach ($query->table_queue as $table) {
     if ($table['table'] == 'facebook_status' && !isset($query->where['fbss_privacy']) && !user_access('view all private status messages')) {
-      $query->add_where('fbss_privacy', $table['alias'] .'.private = 0');
+      $query->add_where('fbss_privacy',
+        $table['alias'] .'.private = 0 OR '.
+        $table['alias'] .'.sender = %d OR ('.
+          $table['alias'] .".type = 'user' AND ". $table['alias'] .".recipient = %d)",
+        $user->uid, $user->uid);
       break;
     }
   }

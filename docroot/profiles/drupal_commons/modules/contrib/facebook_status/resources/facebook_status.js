@@ -24,7 +24,7 @@ Drupal.behaviors.facebookStatus = function (context) {
     $facebook_status_field.focus();
   }
   if (Drupal.settings.facebook_status.noautoclear || Drupal.settings.facebook_status.autofocus) {
-    if ($facebook_status_field.val() && $facebook_status_field.val().length != 0) {
+    if ($facebook_status_field.val() && $facebook_status_field.val().length != 0 && fbss_maxlen != 0) {
       fbss_print_remaining(fbss_maxlen - facebook_status_original_value.length, $facebook_status_field.parent().next());
     }
   }
@@ -37,7 +37,9 @@ Drupal.behaviors.facebookStatus = function (context) {
       var th = $(this);
       if (th.val() == facebook_status_original_value) {
         th.val('');
-        fbss_print_remaining(fbss_maxlen, th.parent().next());
+        if (fbss_maxlen != 0) {
+          fbss_print_remaining(fbss_maxlen, th.parent().next());
+        }
       }
       th.removeClass('facebook-status-faded');
     });
@@ -117,16 +119,20 @@ Drupal.behaviors.facebookStatus = function (context) {
     var te = th.next().find('.facebook-status-text');
     if (te.val() == '') {
       te.val(facebook_status_original_value);
-      fbss_print_remaining(fbss_maxlen - facebook_status_original_value.length, th.parents('.facebook-status-update').find('.facebook-status-chars'));
+      if (fbss_maxlen != 0) {
+        fbss_print_remaining(fbss_maxlen - facebook_status_original_value.length, th.parents('.facebook-status-update').find('.facebook-status-chars'));
+      }
     }
   });
-  // Count remaining characters.
-  ctxt.find('.facebook-status-text').bind('keydown keyup', function(fbss_key) {
-    var th = $(this);
-    var thCC = th.parents('.facebook-status-update').find('.facebook-status-chars');
-    var fbss_remaining = fbss_maxlen - th.val().length;
-    fbss_print_remaining(fbss_remaining, thCC);
-  });
+  if (fbss_maxlen != 0) {
+    // Count remaining characters.
+    ctxt.find('.facebook-status-text').bind('keydown keyup', function(fbss_key) {
+      var th = $(this);
+      var thCC = th.parents('.facebook-status-update').find('.facebook-status-chars');
+      var fbss_remaining = fbss_maxlen - th.val().length;
+      fbss_print_remaining(fbss_remaining, thCC);
+    });
+  }
 }
 // Change remaining character count.
 function fbss_print_remaining(fbss_remaining, where) {

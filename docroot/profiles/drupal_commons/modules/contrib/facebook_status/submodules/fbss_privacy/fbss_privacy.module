@@ -118,6 +118,9 @@ function fbss_privacy_views_default_views_alter(&$views) {
         'field' => 'private',
         'relationship' => 'none',
       );
+    }
+    // Add the Private field.
+    if ($view->tag == 'Facebook-style Statuses') {
       $private = array(
         'label' => '',
         'alter' => array(
@@ -153,7 +156,8 @@ function fbss_privacy_views_default_views_alter(&$views) {
       $view->display['default']->display_options['fields']['nothing'] = $nothing;
       // Add the Private token to the Global: Nothing field.
       $t = $view->display['default']->display_options['fields']['nothing']['alter']['text'];
-      $t = str_replace('[name] [message]', '[name] [private] [message]', $t);
+      $t = str_replace('[name] [message]', '[name] [private] [message]', $t); // All non-FBSST Views
+      $t = str_replace('[user_contextual_pic] [message]', '[user_contextual_pic] [private] [message]', $t); // FBSST Views
       $view->display['default']->display_options['fields']['nothing']['alter']['text'] = $t;
     }
   }
