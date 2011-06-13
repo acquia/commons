@@ -97,8 +97,8 @@ function fbss_user_relationships_views_default_views() {
     'name' => array(
       'label' => '',
       'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
+        'alter_text' => 1,
+        'text' => '<span class="facebook-status-sender">[name]</span>',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
@@ -274,42 +274,13 @@ function fbss_user_relationships_views_default_views() {
       'field' => 'repost',
       'relationship' => 'none',
     ),
-    'respond' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'exclude' => 1,
-      'id' => 'respond',
-      'table' => 'facebook_status',
-      'field' => 'respond',
-      'relationship' => 'none',
-    ),
     'nothing' => array(
       'label' => '',
       'alter' => array(
         'text' => '<div>[picture] [name] [message]</div>
   
   
-  <div class="facebook-status-details">[created] [edit] [delete] [respond] [repost]</div>',
+  <div class="facebook-status-details">[created] [edit] [delete] [repost]</div>',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',

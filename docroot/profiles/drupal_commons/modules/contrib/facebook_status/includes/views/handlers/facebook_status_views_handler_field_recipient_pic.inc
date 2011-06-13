@@ -48,7 +48,7 @@ class facebook_status_views_handler_field_recipient_pic extends views_handler_fi
       if (isset($options['imagecache_preset']) && $options['imagecache_preset']) {
         $account->imagecache_preset = $options['imagecache_preset'];
       }
-      return facebook_status_display_user_picture($account);
+      return '<span class="facebook-status-recipient-picture">'. facebook_status_display_user_picture($account) .'</span>';
     }
   }
 }

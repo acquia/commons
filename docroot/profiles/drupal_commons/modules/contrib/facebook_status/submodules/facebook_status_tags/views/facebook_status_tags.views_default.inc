@@ -17,7 +17,7 @@ function facebook_status_tags_views_default_views() {
   $view->base_table = 'facebook_status';
   $view->is_cacheable = FALSE;
   $view->api_version = 2;
-  $view->disabled = !module_exists('taxonomy');
+  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Tag Reference', 'default');
   $handler->override_option('fields', array(
     'sid' => array(
@@ -123,10 +123,100 @@ function facebook_status_tags_views_default_views() {
       'field' => 'created',
       'relationship' => 'none',
     ),
+    'edit' => array(
+      'label' => '',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'exclude' => 1,
+      'id' => 'edit',
+      'table' => 'facebook_status',
+      'field' => 'edit',
+      'relationship' => 'none',
+    ),
+    'delete' => array(
+      'label' => '',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'exclude' => 1,
+      'id' => 'delete',
+      'table' => 'facebook_status',
+      'field' => 'delete',
+      'relationship' => 'none',
+    ),
+    'repost' => array(
+      'label' => '',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'repost_text' => 'Share',
+      'exclude' => 1,
+      'id' => 'repost',
+      'table' => 'facebook_status',
+      'field' => 'repost',
+      'relationship' => 'none',
+    ),
     'nothing' => array(
       'label' => '',
       'alter' => array(
-        'text' => '<div>[user_contextual_pic] [message] [created]</div>',
+        'text' => '<div>[user_contextual_pic] [message]</div>
+  
+  <div class="facebook-status-details">[created] [edit] [delete] [repost]</div>',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
@@ -153,13 +243,6 @@ function facebook_status_tags_views_default_views() {
     ),
   ));
   $handler->override_option('sorts', array(
-    'created' => array(
-      'order' => 'DESC',
-      'id' => 'created',
-      'table' => 'facebook_status',
-      'field' => 'created',
-      'relationship' => 'none',
-    ),
     'sid' => array(
       'order' => 'DESC',
       'id' => 'sid',
@@ -208,7 +291,7 @@ function facebook_status_tags_views_default_views() {
       'validate_argument_node_access' => 0,
       'validate_argument_nid_type' => 'nid',
       'validate_argument_vocabulary' => array(
-        variable_get('facebook_status_tags_vid', -1) .'' => variable_get('facebook_status_tags_vid', -1),
+        '2' => '2',
       ),
       'validate_argument_type' => 'name',
       'validate_argument_transform' => 0,
@@ -220,9 +303,13 @@ function facebook_status_tags_views_default_views() {
     'type' => 'perm',
     'perm' => 'view all statuses',
   ));
+  $handler->override_option('cache', array(
+    'type' => 'none',
+  ));
   $handler->override_option('title', 'Tags');
   $handler->override_option('use_ajax', TRUE);
   $handler->override_option('use_pager', 'mini');
+  $handler->override_option('distinct', 1);
   $handler->override_option('style_plugin', 'table');
   $handler->override_option('style_options', array(
     'grouping' => '',
@@ -263,6 +350,7 @@ function facebook_status_tags_views_default_views() {
     'title' => '',
     'description' => '',
     'weight' => 0,
+    'name' => 'navigation',
   ));
   $handler = $view->new_display('feed', 'Feed', 'feed_1');
   $handler->override_option('style_plugin', 'rss');
@@ -301,7 +389,7 @@ function facebook_status_tags_views_default_views() {
   $view->base_table = 'facebook_status';
   $view->is_cacheable = FALSE;
   $view->api_version = 2;
-  $view->disabled = FALSE;
+  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'User Reference', 'default');
   $handler->override_option('fields', array(
     'sid' => array(
@@ -407,10 +495,100 @@ function facebook_status_tags_views_default_views() {
       'field' => 'created',
       'relationship' => 'none',
     ),
+    'delete' => array(
+      'label' => '',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'exclude' => 1,
+      'id' => 'delete',
+      'table' => 'facebook_status',
+      'field' => 'delete',
+      'relationship' => 'none',
+    ),
+    'edit' => array(
+      'label' => '',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'exclude' => 1,
+      'id' => 'edit',
+      'table' => 'facebook_status',
+      'field' => 'edit',
+      'relationship' => 'none',
+    ),
+    'repost' => array(
+      'label' => '',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'repost_text' => 'Share',
+      'exclude' => 1,
+      'id' => 'repost',
+      'table' => 'facebook_status',
+      'field' => 'repost',
+      'relationship' => 'none',
+    ),
     'nothing' => array(
       'label' => '',
       'alter' => array(
-        'text' => '<div>[user_contextual_pic] [message] [created]</div>',
+        'text' => '<div>[user_contextual_pic] [message]</div>
+  
+  <div class="facebook-status-details">[created] [edit] [delete] [repost]</div>',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
@@ -437,13 +615,6 @@ function facebook_status_tags_views_default_views() {
     ),
   ));
   $handler->override_option('sorts', array(
-    'created' => array(
-      'order' => 'DESC',
-      'id' => 'created',
-      'table' => 'facebook_status',
-      'field' => 'created',
-      'relationship' => 'none',
-    ),
     'sid' => array(
       'order' => 'DESC',
       'id' => 'sid',
@@ -501,11 +672,15 @@ function facebook_status_tags_views_default_views() {
     'type' => 'perm',
     'perm' => 'view all statuses',
   ));
+  $handler->override_option('cache', array(
+    'type' => 'none',
+  ));
   $handler->override_option('title', 'User Mentions');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
   $handler->override_option('use_pager', 'mini');
   $handler->override_option('use_more', 0);
+  $handler->override_option('distinct', 1);
   $handler->override_option('style_plugin', 'table');
   $handler->override_option('style_options', array(
     'grouping' => '',
@@ -547,6 +722,7 @@ function facebook_status_tags_views_default_views() {
     'title' => '',
     'description' => '',
     'weight' => 0,
+    'name' => 'navigation',
   ));
   $handler = $view->new_display('block', 'Block', 'block_1');
   $handler->override_option('arguments', array(

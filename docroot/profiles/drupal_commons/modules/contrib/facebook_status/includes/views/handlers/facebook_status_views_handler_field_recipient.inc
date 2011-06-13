@@ -34,8 +34,8 @@ class facebook_status_views_handler_field_recipient extends views_handler_field_
     $context = facebook_status_determine_context($type);
     $recipient = $context['handler']->load_recipient($recipient_id);
     if (!empty($this->options['link_to'])) {
-      return $context['handler']->recipient_link($recipient);
+      return '<span class="facebook-status-recipient">'. $context['handler']->recipient_link($recipient) .'</span>';
     }
-    return check_plain($context['handler']->recipient_name($recipient));
+    return '<span class="facebook-status-recipient">'. check_plain($context['handler']->recipient_name($recipient)) .'</span>';
   }
 }

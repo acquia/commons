@@ -31,12 +31,12 @@ class facebook_status_views_handler_field_respond extends views_handler_field {
     }
     elseif ($type != 'user' || ($sender->uid == $recipient->uid && $sender->uid != $user->uid)) {
       $s = '@'. $sender->name .' ';
-      //Properly reference tags with word-break characters in them.
+      // Properly reference tags with word-break characters in them.
       if (preg_match('/.+\b.+/', $sender->name)) {
         $s = '[@'. $sender->name .'] ';
       }
       if (variable_get('facebook_status_reply_type', 'at') == 'at') {
-        //Evidently url() sanitizes query strings itself, so we don't have to use check_plain() here.
+        // Evidently url() sanitizes query strings itself, so we don't have to use check_plain() here.
         $options['query'] = array('s' => $s, 'rsid' => $values->{$this->aliases['sid']}, 'destination' => $_GET['q']);
         return l(t('Respond'), 'statuses/share', $options);
       }

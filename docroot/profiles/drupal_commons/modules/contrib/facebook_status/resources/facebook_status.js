@@ -25,7 +25,7 @@ Drupal.behaviors.facebookStatus = function (context) {
   }
   if (Drupal.settings.facebook_status.noautoclear || Drupal.settings.facebook_status.autofocus) {
     if ($facebook_status_field.val() && $facebook_status_field.val().length != 0 && fbss_maxlen != 0) {
-      fbss_print_remaining(fbss_maxlen - facebook_status_original_value.length, $facebook_status_field.parent().next());
+      fbss_print_remaining(fbss_maxlen - facebook_status_original_value.length, $facebook_status_field.parents('.facebook-status-update').find('.facebook-status-chars'));
     }
   }
   else {
@@ -38,7 +38,7 @@ Drupal.behaviors.facebookStatus = function (context) {
       if (th.val() == facebook_status_original_value) {
         th.val('');
         if (fbss_maxlen != 0) {
-          fbss_print_remaining(fbss_maxlen, th.parent().next());
+          fbss_print_remaining(fbss_maxlen, th.parents('.facebook-status-update').find('.facebook-status-chars'));
         }
       }
       th.removeClass('facebook-status-faded');
@@ -116,7 +116,7 @@ Drupal.behaviors.facebookStatus = function (context) {
   // Restore original status text if the field is blank and the slider is clicked.
   ctxt.find('.facebook-status-intro').click(function() {
     var th = $(this);
-    var te = th.next().find('.facebook-status-text');
+    var te = th.parents('.facebook-status-update').find('.facebook-status-text');
     if (te.val() == '') {
       te.val(facebook_status_original_value);
       if (fbss_maxlen != 0) {

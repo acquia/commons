@@ -26,8 +26,8 @@ class facebook_status_views_handler_field_cross extends views_handler_field {
       $context = facebook_status_determine_context($type);
       $recipient = $context['handler']->load_recipient($recipient_id);
       $args = array(
-        '!sender' => theme('username', _facebook_status_user_load($sender_id)),
-        '!recipient' => $context['handler']->recipient_link($recipient),
+        '!sender' => '<span class="facebook-status-sender">'. theme('username', _facebook_status_user_load($sender_id)) .'</span>',
+        '!recipient' => '<span class="facebook-status-recipient">'. $context['handler']->recipient_link($recipient) .'</span>',
       );
       return t('!sender &raquo; !recipient', $args);
     }

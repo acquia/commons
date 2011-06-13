@@ -198,35 +198,6 @@ function fbss_flag_views_default_views() {
       'field' => 'created',
       'relationship' => 'none',
     ),
-    'respond' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'exclude' => 1,
-      'id' => 'respond',
-      'table' => 'facebook_status',
-      'field' => 'respond',
-      'relationship' => 'none',
-    ),
     'repost' => array(
       'label' => '',
       'alter' => array(
@@ -262,7 +233,7 @@ function fbss_flag_views_default_views() {
       'alter' => array(
         'text' => '<div>[user_contextual_pic] [message]</div>
 
-<div class="facebook-status-details">[created] [edit] [delete] [respond] [repost]</div>',
+<div class="facebook-status-details">[created] [edit] [delete] [repost]</div>',
         'make_link' => 0,
         'make_link' => 0,
         'path' => '',
@@ -290,13 +261,6 @@ function fbss_flag_views_default_views() {
     ),
   ));
   $handler->override_option('sorts', array(
-    'created' => array(
-      'order' => 'DESC',
-      'id' => 'created',
-      'table' => 'facebook_status',
-      'field' => 'created',
-      'relationship' => 'none',
-    ),
     'sid' => array(
       'order' => 'DESC',
       'id' => 'sid',
