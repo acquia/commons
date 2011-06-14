@@ -740,7 +740,7 @@ function facebook_status_delete_status($status, $meta = array()) {
  *   are the defaults, used if no option is specified for the relevant keys:
  *   array(
  *     'discard duplicates' => TRUE,
- *     'timed override' => TRUE,
+ *     'timed override' => FALSE,
  *     'discard blank statuses' => TRUE,
  *   );
  * @return
@@ -755,7 +755,7 @@ function facebook_status_save_status($recipient, $type, $message, $sender = NULL
   // Merge in defaults.
   $options += array(
     'discard duplicates' => TRUE,
-    'timed override' => TRUE,
+    'timed override' => FALSE,
     'discard blank statuses' => TRUE,
   );
   // Calls hook_facebook_status_save_options_alter(&$options, $edit).
