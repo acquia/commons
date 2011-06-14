@@ -75,7 +75,7 @@ function facebook_status_rules_defaults() {
         '#type' => 'rule',
         '#set' => 'event_facebook_status_delete',
         '#label' => 'Delete Facebook-style Status',
-        '#active' => 1,
+        '#active' => 0,
         '#weight' => '0',
         '#categories' =>
         array(
