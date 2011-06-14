@@ -477,14 +477,10 @@ function commons_core_force_login() {
       }
     }
     
+    // Redirect to the login
     // If the user was trying to reach a certain page,
     // try to preserve the redirection after login
-    if ($path) {
-      $query = "destination={$path}";
-    }
-    
-    // Redirect to the login
-    drupal_goto('user', $query);
+    drupal_goto('user', $path ? "destination={$path}" : NULL);
   }
 }
 
