@@ -460,10 +460,11 @@ function commons_core_force_login() {
   // Avoid endless redirect and allow for user registration/creation/login
   // Checking arg(1) for numeric value prevents /user/# path
   if (arg(0) != 'user' || is_numeric(arg(1))) {
+    // Store the path
+    $path = filter_xss($_GET['q']);
+      
     // Check the allowed pages
     if ($allowed = variable_get('commons_force_login_allowed_paths', FALSE)) {
-      // Store the path
-      $path = $_GET['q'];
       // Store the path alias
       $path_alias = drupal_get_path_alias($path);
       // Check if the path is allowed
