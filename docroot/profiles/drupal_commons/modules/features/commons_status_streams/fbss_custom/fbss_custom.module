@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ *   Customizations of FBSS.
+ */
+
+/**
+ * Implementation of hook_form_FORM_ID_alter().
+ */
+function fbss_custom_form_facebook_status_box_alter(&$form, $form_state) {
+  $form['fbsmp']['link_icon']['#src'] = drupal_get_path('module', 'fbss_custom') .'/clear.gif';
+  $form['fbsmp']['photo_icon']['#src'] = drupal_get_path('module', 'fbss_custom') .'/clear.gif';
+  $form['fbsmp']['cancel']['#src'] = drupal_get_path('module', 'fbss_custom') .'/clear.gif';
+}
