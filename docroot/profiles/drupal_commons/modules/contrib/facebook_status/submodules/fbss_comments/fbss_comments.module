@@ -539,16 +539,7 @@ function _fbss_comments_get_thread_author($sid) {
  * Adds the Autogrow jQuery extension.
  */
 function _fbss_comments_use_autogrow() {
-  if (module_exists('libraries')) {
-    drupal_add_js(libraries_get_path('autogrow') .'/jquery.autogrow.js');
-    return;
-  }
-  if (file_exists('sites/all/libraries/jquery.autogrow.js')) {
-    drupal_add_js('sites/all/libraries/jquery.autogrow.js');
-  }
-  elseif (file_exists('libraries/jquery.autogrow.js')) {
-    drupal_add_js('libraries/jquery.autogrow.js');
-  }
+  _facebook_status_use_autogrow();
 }
 
 /**
@@ -752,6 +743,28 @@ function fbss_comments_preprocess_facebook_status_item(&$vars) {
   if ($vars['options']['extras']) {
     $vars['comments'] = theme('fbss_comments_form_display', $vars['status']->sid, FALSE, FALSE);
   }
+}
+
+/**
+ * Implementation of hook_form_FORM_ID_alter().
+ */
+function fbss_comments_form_facebook_status_box_alter(&$form) {
+  // Add the comments JS when the status form is displayed so that all the necessary resources are loaded when the first status is submitted on a page.
+  $path = drupal_get_path('module', 'fbss_comments');
+  drupal_add_css($path .'/fbss_comments.css');
+  drupal_add_js($path .'/fbss_comments.js');
+  // Defer execution so that it runs after ajax_view.js
+  drupal_add_js($path .'/fbss_comments_views_ahah.js', 'module', 'header', TRUE);
+  if (variable_get('fbss_comments_enter', 0)) {
+    drupal_add_js($path .'/fbss_comments_enter.js');
+  }
+  /*
+  // Don't add settings twice (it merges recursively, so we'll end up with an array, which messes things up).
+  drupal_add_js(array('fbss_comments' => array(
+    'ahah_enabled' => (bool) variable_get('fbss_comments_ahah', 1)
+  )), 'setting');
+   */
+  _fbss_comments_use_autogrow();
 }
 
 /**
