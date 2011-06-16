@@ -1,4 +1,3 @@
-// $Id: tinymce-3.js,v 1.17.2.5 2010/10/17 20:52:54 twod Exp $
 (function($) {
 
 /**

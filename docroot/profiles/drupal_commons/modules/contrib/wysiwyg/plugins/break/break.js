@@ -1,4 +1,3 @@
-// $Id: break.js,v 1.6.2.1 2010/02/13 23:58:41 sun Exp $
 (function ($) {
 
 // @todo Array syntax required; 'break' is a predefined token in JavaScript.

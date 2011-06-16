@@ -1,5 +1,4 @@
 <?php
-// $Id: jwysiwyg.inc,v 1.4.2.1 2010/04/02 14:05:54 sun Exp $
 
 /**
  * @file
