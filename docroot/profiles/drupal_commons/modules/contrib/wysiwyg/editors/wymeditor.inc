@@ -1,5 +1,4 @@
 <?php
-// $Id: wymeditor.inc,v 1.4.2.5 2010/11/13 18:31:25 sun Exp $
 
 /**
  * @file
