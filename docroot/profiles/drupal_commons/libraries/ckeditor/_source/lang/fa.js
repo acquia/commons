@@ -34,8 +34,8 @@ CKEDITOR.lang['fa'] =
 	editorTitle : 'Rich text editor, %1, press ALT 0 for help.', // MISSING
 
 	// ARIA descriptions.
-	toolbar	: 'Toolbar', // MISSING
-	editor	: 'Rich Text Editor', // MISSING
+	toolbars	: 'Editor toolbars', // MISSING
+	editor		: 'Rich Text Editor', // MISSING
 
 	// Toolbar buttons without dialogs.
 	source			: 'منبع',
@@ -121,6 +121,8 @@ CKEDITOR.lang['fa'] =
 		alignBottom		: 'پائین',
 		invalidHeight	: 'Height must be a number.', // MISSING
 		invalidWidth	: 'Width must be a number.', // MISSING
+		invalidCssLength	: 'Value specified for the "%1" field must be a positive number with or without a valid CSS measurement unit (px, %, in, cm, mm, em, ex, pt, or pc).', // MISSING
+		invalidHtmlLength	: 'Value specified for the "%1" field must be a positive number with or without a valid HTML measurement unit (px or %).', // MISSING
 
 		// Put the voice-only part of the label in the span.
 		unavailable		: '%1<span class="cke_accessibility">, unavailable</span>' // MISSING
@@ -175,18 +177,19 @@ CKEDITOR.lang['fa'] =
 		langDirRTL		: 'راست به چپ (RTL)',
 		acccessKey		: 'کلید دستیابی',
 		name			: 'نام',
-		langCode		: 'جهتنمای زبان',
-		tabIndex		: 'نمایهٴ دسترسی با Tab',
-		advisoryTitle	: 'عنوان کمکی',
+		langCode			: 'جهتنمای زبان',
+		tabIndex			: 'نمایهٴ دسترسی با Tab',
+		advisoryTitle		: 'عنوان کمکی',
 		advisoryContentType	: 'نوع محتوای کمکی',
 		cssClasses		: 'کلاسهای شیوهنامه(Stylesheet)',
 		charset			: 'نویسهگان منبع ِپیوندشده',
 		styles			: 'شیوه(style)',
-		selectAnchor	: 'یک لنگر برگزینید',
+		rel			: 'Relationship', // MISSING
+		selectAnchor		: 'یک لنگر برگزینید',
 		anchorName		: 'با نام لنگر',
-		anchorId		: 'با شناسهٴ المان',
-		emailAddress	: 'نشانی پست الکترونیکی',
-		emailSubject	: 'موضوع پیام',
+		anchorId			: 'با شناسهٴ المان',
+		emailAddress		: 'نشانی پست الکترونیکی',
+		emailSubject		: 'موضوع پیام',
 		emailBody		: 'متن پیام',
 		noAnchors		: '(در این سند لنگری دردسترس نیست)',
 		noUrl			: 'لطفا URL پیوند را بنویسید',
@@ -200,7 +203,8 @@ CKEDITOR.lang['fa'] =
 		menu		: 'ویژگیهای لنگر',
 		title		: 'ویژگیهای لنگر',
 		name		: 'نام لنگر',
-		errorName	: 'لطفا نام لنگر را بنویسید'
+		errorName	: 'لطفا نام لنگر را بنویسید',
+		remove		: 'Remove Anchor' // MISSING
 	},
 
 	// List style dialog
@@ -270,8 +274,8 @@ CKEDITOR.lang['fa'] =
 		invalidBorder	: 'Border size must be a number.', // MISSING
 		invalidWidth	: 'Table width must be a number.', // MISSING
 		invalidHeight	: 'Table height must be a number.', // MISSING
-		invalidCellSpacing	: 'Cell spacing must be a number.', // MISSING
-		invalidCellPadding	: 'Cell padding must be a number.', // MISSING
+		invalidCellSpacing	: 'Cell spacing must be a positive number.', // MISSING
+		invalidCellPadding	: 'Cell padding must be a positive number.', // MISSING
 
 		cell :
 		{
@@ -412,7 +416,6 @@ CKEDITOR.lang['fa'] =
 		upload		: 'انتقال به سرور',
 		alt			: 'متن جایگزین',
 		lockRatio	: 'قفلکردن ِنسبت',
-		unlockRatio	: 'Unlock Ratio', // MISSING
 		resetSize	: 'بازنشانی اندازه',
 		border		: 'لبه',
 		hSpace		: 'فاصلهٴ افقی',
@@ -714,6 +717,8 @@ CKEDITOR.lang['fa'] =
 	{
 		title		: 'About CKEditor', // MISSING
 		dlgTitle	: 'About CKEditor', // MISSING
+		help	: 'Check $1 for help.', // MISSING
+		userGuide : 'CKEditor User\'s Guide', // MISSING
 		moreInfo	: 'For licensing information please visit our web site:', // MISSING
 		copy		: 'Copyright &copy; $1. All rights reserved.' // MISSING
 	},
@@ -744,9 +749,64 @@ CKEDITOR.lang['fa'] =
 	toolbarCollapse	: 'Collapse Toolbar', // MISSING
 	toolbarExpand	: 'Expand Toolbar', // MISSING
 
+	toolbarGroups :
+	{
+		document : 'Document', // MISSING
+		clipboard : 'Clipboard/Undo', // MISSING
+		editing : 'Editing', // MISSING
+		forms : 'Forms', // MISSING
+		basicstyles : 'Basic Styles', // MISSING
+		paragraph : 'Paragraph', // MISSING
+		links : 'Links', // MISSING
+		insert : 'Insert', // MISSING
+		styles : 'Styles', // MISSING
+		colors : 'Colors', // MISSING
+		tools : 'Tools' // MISSING
+	},
+
 	bidi :
 	{
 		ltr : 'Text direction from left to right', // MISSING
 		rtl : 'Text direction from right to left' // MISSING
+	},
+
+	docprops :
+	{
+		label : 'ویژگیهای سند',
+		title : 'ویژگیهای سند',
+		design : 'Design', // MISSING
+		meta : 'فراداده',
+		chooseColor : 'Choose', // MISSING
+		other : '<سایر>',
+		docTitle :	'عنوان صفحه',
+		charset : 	'رمزگذاری نویسهگان',
+		charsetOther : 'رمزگذاری نویسهگان دیگر',
+		charsetASCII : 'ASCII', // MISSING
+		charsetCE : 'اروپای مرکزی',
+		charsetCT : 'چینی رسمی (Big5)',
+		charsetCR : 'سیریلیک',
+		charsetGR : 'یونانی',
+		charsetJP : 'ژاپنی',
+		charsetKR : 'کرهای',
+		charsetTR : 'ترکی',
+		charsetUN : 'یونیکُد (UTF-8)',
+		charsetWE : 'اروپای غربی',
+		docType : 'عنوان نوع سند',
+		docTypeOther : 'عنوان نوع سند دیگر',
+		xhtmlDec : 'شامل تعاریف XHTML',
+		bgColor : 'رنگ پسزمینه',
+		bgImage : 'URL تصویر پسزمینه',
+		bgFixed : 'پسزمینهٴ پیمایشناپذیر',
+		txtColor : 'رنگ متن',
+		margin : 'حاشیههای صفحه',
+		marginTop : 'بالا',
+		marginLeft : 'چپ',
+		marginRight : 'راست',
+		marginBottom : 'پایین',
+		metaKeywords : 'کلیدواژگان نمایهگذاری سند (با کاما جدا شوند)',
+		metaDescription : 'توصیف سند',
+		metaAuthor : 'نویسنده',
+		metaCopyright : 'کپیرایت',
+		previewHtml : '<p>This is some <strong>sample text</strong>. You are using <a href="javascript:void(0)">CKEditor</a>.</p>' // MISSING
 	}
 };

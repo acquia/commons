@@ -1,0 +1,39 @@
+diff --git a/og.install b/og.install
+index 4c388c6..ca34b9e 100644
+--- a/og.install
++++ b/og.install
+@@ -123,6 +123,9 @@ function og_schema() {
+       ),
+     ),
+     'primary key'       => array('nid', 'uid'),
++    'indexes' => array(
++      'uid' => array('uid'),
++    ),
+   );
+   $schema['og_ancestry'] = array(
+     'description'     => '',
+@@ -431,6 +434,24 @@ function og_update_6203() {
+   return $ret;
+ }
+ 
++/**
++ * Add an index to og_uid.uid.
++ */
++function og_update_6204() {
++  $ret = array();
++
++  switch ($GLOBALS['db_type']) {
++    case 'mysql':
++    case 'mysqli':
++      $ret[] = update_sql("ALTER TABLE {og_uid} ADD KEY (uid)");
++      break;
++    case 'pgsql':
++      $ret[] = update_sql("CREATE INDEX {og_uid}_uid_idx ON {og_uid} (uid)");
++      break;
++  }
++  return $ret;
++}
++
+ // end updates //
+ 
+ function og_uninstall() {

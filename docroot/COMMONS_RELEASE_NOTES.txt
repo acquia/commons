@@ -3,6 +3,30 @@ Track Drupal Commons development on GitHub!
  - https://github.com/acquia/commons/
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Drupal Commons 1.7, 2010-06-17
+------------------------------------
+NOTES:
+- This release was built in response to a security issue that arose in
+  the CKEditor library (See: http://drupal.org/node/1189632)
+------------------------------------
+UPGRADING TO 1.7
+1. Backup your code and database
+2. Turn on maintenance mode (admin/settings/site-maintenance)
+3. Replace your codebase (excluding the sites directory) with the contents 
+  of this archive.
+4. Update your site via /update.php
+5. View the status report (admin/reports/status) to see if there are any
+  errors to tend to
+6. If no issues have arisen, then you may turn off maintenance mode.
+------------------------------------
+CHANGELOG:
+- Fixed: Forced-login not registering destination 
+- Updated: CKEditor (Security issue)
+- Updated: Wysiwyg
+- Patched: OG to add an index to the og_uid table (by msonnabaum)
+- Fixed: Various theme issues
+
+
 Drupal Commons 1.6, 2010-05-25
 ------------------------------------
 NOTES:

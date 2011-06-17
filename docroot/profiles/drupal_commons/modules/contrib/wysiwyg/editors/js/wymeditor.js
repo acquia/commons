@@ -1,4 +1,3 @@
-// $Id: wymeditor.js,v 1.2.2.2 2010/02/13 23:58:41 sun Exp $
 (function($) {
 
 /**

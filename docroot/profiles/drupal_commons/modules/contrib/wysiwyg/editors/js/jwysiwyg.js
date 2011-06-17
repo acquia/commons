@@ -1,4 +1,3 @@
-// $Id: jwysiwyg.js,v 1.3.4.1 2010/02/13 23:58:41 sun Exp $
 (function($) {
 
 /**

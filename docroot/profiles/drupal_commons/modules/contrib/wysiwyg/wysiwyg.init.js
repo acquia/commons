@@ -1,4 +1,3 @@
-// $Id: wysiwyg.init.js,v 1.3.2.1 2010/11/13 18:53:22 sun Exp $
 
 jQuery.support = jQuery.support || {}; // D6- only.
 

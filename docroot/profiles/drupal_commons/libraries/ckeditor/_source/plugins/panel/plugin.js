@@ -16,7 +16,7 @@ CKEDITOR.plugins.add( 'panel',
  * @constant
  * @example
  */
-CKEDITOR.UI_PANEL = 2;
+CKEDITOR.UI_PANEL = 'panel';
 
 CKEDITOR.ui.panel = function( document, definition )
 {
@@ -380,11 +380,12 @@ CKEDITOR.ui.panel.block = CKEDITOR.tools.createClass(
 					return false;
 
 				case 'click' :
+				case 'mouseup' :
 					index = this._.focusIndex;
 					link = index >= 0 && this.element.getElementsByTag( 'a' ).getItem( index );
 
 					if ( link )
-						link.$.click ? link.$.click() : link.$.onclick();
+						link.$[ keyAction ] ? link.$[ keyAction ]() : link.$[ 'on' + keyAction ]();
 
 					return false;
 			}
