@@ -10,7 +10,14 @@ NOTES:
   the CKEditor library (See: http://drupal.org/node/1189632)
 ------------------------------------
 UPGRADING TO 1.7
-- There are no upgrade notes for version 1.7
+1. Backup your code and database
+2. Turn on maintenance mode (admin/settings/site-maintenance)
+3. Replace your codebase (excluding the sites directory) with the contents 
+  of this archive.
+4. Update your site via /update.php
+5. View the status report (admin/reports/status) to see if there are any
+  errors to tend to
+6. If no issues have arisen, then you may turn off maintenance mode.
 ------------------------------------
 CHANGELOG:
 - Fixed: Forced-login not registering destination 
