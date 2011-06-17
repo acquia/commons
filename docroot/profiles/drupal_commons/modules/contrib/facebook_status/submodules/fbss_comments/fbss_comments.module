@@ -539,6 +539,7 @@ function _fbss_comments_get_thread_author($sid) {
  * Adds the Autogrow jQuery extension.
  */
 function _fbss_comments_use_autogrow() {
+  module_load_include('inc', 'facebook_status', 'includes/utility/facebook_status.form');
   _facebook_status_use_autogrow();
 }
 
