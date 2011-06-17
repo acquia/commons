@@ -26,8 +26,14 @@ class facebook_status_views_handler_field_repost extends views_handler_field {
       '#default_value' => $this->options['repost_text'],
     );
   }
+  function construct() {
+    parent::construct();
+    $this->additional_fields['sender'] = 'sender';
+  }
   function render($values) {
-    if (facebook_status_user_access('add')) {
+    $sender_uid = $values->{$this->aliases['sender']};
+    // Don't allow sharing your own status.
+    if (facebook_status_user_access('add') && $sender_uid != $GLOBALS['user']->uid) {
       drupal_add_css(drupal_get_path('module', 'facebook_status') .'/resources/facebook_status.css');
       $options = array(
         'attributes' => array('class' => 'facebook-status-repost'),
