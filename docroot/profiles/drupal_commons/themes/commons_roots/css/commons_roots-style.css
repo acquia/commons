@@ -60,10 +60,6 @@
   
 }
 
-.search-box-inner form#search-theme-form {
-  
-}
-
 /* Wrapper around logo, site name, and slogan */
 
 .header-site-info span {
@@ -262,14 +258,17 @@
   background: none repeat scroll 0 0 transparent;
   border-bottom: 0 none;
   margin-bottom: 0;
-  padding: 0 0 10px;
+  padding: 0 0 10px 40px;
+  position: relative;
   clear: both;
 }
 
-.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-field-group-image-fid, .sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-picture,
+.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-field-group-image-fid,
+.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-picture,
 .sidebar-last .block-views .content .view .view-content .views-row .views-field-picture {
-  float: left;
-  margin-right: 10px;
+  left: 0;
+  margin: 0;
+  position: absolute;
   width: 30px;
 }
 
@@ -499,10 +498,6 @@ div.beat-item blockquote {
   border:solid 1px #c2c2c2;
 }
 
-.view-groups-most-active .views-field-title, .view-groups-most-active .views-field-members-count, .view-groups-most-active .views-field-posts-count {
-  margin-left: 40px;
-}
-
 /* Added by Jay to generalize the Search Group field & button */
 #views-exposed-form-og-search-default .views-exposed-widget.views-exposed-submit .form-submit, #views-exposed-form-og-search-page-1 .views-exposed-widget.views-exposed-submit .form-submit {
   float: right;
@@ -535,11 +530,6 @@ div.beat-item blockquote {
   vertical-align: middle;
 }
 
-#edit-submit.form-submit {
-  float: right;
-  margin: 0 12px 0;
-}
-
 /* gotta make the dashboard view of recent content look decent
  * This MIGHT get moved to Roots...
  */
@@ -553,3 +543,16 @@ div.beat-item blockquote {
 
 .view-dashboard-recent-content .views-field-timestamp {float: right;}
 
+.cke_skin_kama .cke_toolbar .cke_button a,
+.cke_skin_kama .cke_toolbar .cke_button a:hover,
+.cke_skin_kama .cke_toolbar .cke_button a:focus,
+.cke_skin_kama .cke_toolbar .cke_button a:active,
+.cke_skin_kama .cke_toolbar .cke_button a.cke_off,
+.cke_skin_kama .cke_toolbar .cke_button a.cke_on:hover,
+.cke_skin_kama .cke_toolbar .cke_button a.cke_on:focus,
+.cke_skin_kama .cke_toolbar .cke_button a.cke_on:active,
+.cke_skin_kama .cke_toolbar .cke_button a.cke_off:hover,
+.cke_skin_kama .cke_toolbar .cke_button a.cke_off:focus,
+.cke_skin_kama .cke_toolbar .cke_button a.cke_off:active{
+  padding: 2px 3px;
+}
