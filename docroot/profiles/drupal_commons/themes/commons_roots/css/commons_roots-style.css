@@ -262,14 +262,17 @@
   background: none repeat scroll 0 0 transparent;
   border-bottom: 0 none;
   margin-bottom: 0;
-  padding: 0 0 10px;
+  padding: 0 0 10px 40px;
+  position: relative;
   clear: both;
 }
 
-.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-field-group-image-fid, .sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-picture,
+.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-field-group-image-fid,
+.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-picture,
 .sidebar-last .block-views .content .view .view-content .views-row .views-field-picture {
-  float: left;
-  margin-right: 10px;
+  left: 0;
+  margin: 0;
+  position: absolute;
   width: 30px;
 }
 
@@ -497,10 +500,6 @@ div.beat-item blockquote {
   width:66px;
   height:66px;
   border:solid 1px #c2c2c2;
-}
-
-.view-groups-most-active .views-field-title, .view-groups-most-active .views-field-members-count, .view-groups-most-active .views-field-posts-count {
-  margin-left: 40px;
 }
 
 /* Added by Jay to generalize the Search Group field & button */
