@@ -267,7 +267,9 @@ function fbsmp_delete_status($sid, $alerts = array()) {
     'rules' => TRUE,
     'trigger' => TRUE,
     'userpoints' => TRUE,
-    'facebook_status' => FALSE, //Disables alerts to other modules sent by FBSS.
+    'facebook_status' => array(
+      'has attachment' => TRUE,  //Disables alerts to other modules sent by FBSS.
+    ),
   );
 
   //Invokes hook_fbsmp_delete_alerts_alter(&$alerts, $status).
@@ -292,8 +294,7 @@ function fbsmp_delete_status($sid, $alerts = array()) {
     rules_invoke_event('fbsmp_delete_status', $status, $status->attachment);
   }
   
-  //TODO: Disable alerts for FBSS
-  facebook_status_delete_status($sid); //, $alerts['facebook_status']);
+  facebook_status_delete_status($sid, $alerts['facebook_status']);
   db_query("DELETE FROM {fbsmp} WHERE sid = %d", $sid);
 
   //DELETE POSSIBLE ACTIVITY 2 RECORDS
@@ -966,6 +967,11 @@ function fbsmp_form_facebook_status_box_alter(&$form, &$form_state) {
     unset($form['fbss-submit']['#submit'][$key]);
     $form['fbss-submit']['#submit'][] = 'fbsmp_'. $form_load .'_submit';
     
+    if (module_exists('fbss_twitter')) {
+      $key = array_search('fbss_twitter_facebook_status_box_submit', $form['fbss-submit']['#submit']);
+      unset($form['fbss-submit']['#submit'][$key]);
+    }
+    
     if ($ac_plugin == 'photo' || $ac_plugin == 'video') {
       $form['#attributes']['enctype'] = 'multipart/form-data';
     }
@@ -1060,6 +1066,14 @@ function fbsmp_status_form_submit(&$form, &$form_state, $attachment_data = '') {
 
   $status = fbsmp_save_status($recipient, $type, $new_status, $ac_plugin, $attachment_data, NULL, _fbsmp_get_fbss_alerts());
   
+  if (module_exists('fbss_twitter') && !empty($form_state['values']['twitter'])) {
+    $options = array(
+      'add URL' => TRUE,
+      'sid' => $status->sid,
+    );
+    fbss_twitter_post_to_twitter($GLOBALS['user'], $new_status, $options);
+  }
+
   $form_state['facebook_status'] = array(
     'type' => $type,
     'recipient' => $rid,
@@ -1507,11 +1521,26 @@ function fbsmp_views_default_views_alter(&$views) {
       $view->display['default']->display_options['fields']['nothing'] = $nothing;
       // Add the Attachment token to the Global: Nothing field.
       $t = $view->display['default']->display_options['fields']['nothing']['alter']['text'];
-      // Takes care of all default views except facebook_status_mentions and facebook_status_tags
-      $t = str_replace("[message]</div>", "[message]</div>\n\n<div>[attachment]</div>\n\n", $t);
-      // Takes care of facebook_status_mentions and facebook_status_tags
-      $t = str_replace("[message] [created]", "[message]</div>\n\n<div>[attachment]</div>\n\n<div class=\"facebook-status-details\">[created]", $t);
+      $t = str_replace("[message]</div>", "[message]</div>\n\n<div>[attachment]</div>", $t);
       $view->display['default']->display_options['fields']['nothing']['alter']['text'] = $t;
+
+      // Replace the "no empty statuses" filter with the "no empty statuses with no attachment" filter.
+      $nesf = array(
+        'operator' => '=',
+        'value' => '1',
+        'group' => '0',
+        'exposed' => FALSE,
+        'expose' => array(
+          'operator' => FALSE,
+          'label' => '',
+        ),
+        'id' => 'empty_status_attachment',
+        'table' => 'fbsmp',
+        'field' => 'empty_status_attachment',
+        'relationship' => 'none',
+      );
+      unset($view->display['default']->display_options['filters']['message']);
+      $view->display['default']->display_options['filters']['empty_status_attachment'] = $nesf;
     }
   }
 }
