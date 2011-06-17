@@ -64,7 +64,7 @@ function fbss_user_relationships_views_default_views() {
       'field' => 'sid',
       'relationship' => 'none',
     ),
-    'picture' => array(
+    'user_contextual_pic' => array(
       'label' => '',
       'alter' => array(
         'alter_text' => 0,
@@ -89,41 +89,9 @@ function fbss_user_relationships_views_default_views() {
       'empty_zero' => 0,
       'imagecache_preset' => 'user_picture_meta',
       'exclude' => 1,
-      'id' => 'picture',
-      'table' => 'users',
-      'field' => 'picture',
-      'relationship' => 'none',
-    ),
-    'name' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 1,
-        'text' => '<span class="facebook-status-sender">[name]</span>',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'link_to_user' => 1,
-      'overwrite_anonymous' => 0,
-      'anonymous_text' => '',
-      'exclude' => 1,
-      'id' => 'name',
-      'table' => 'users',
-      'field' => 'name',
+      'id' => 'user_contextual_pic',
+      'table' => 'facebook_status',
+      'field' => 'user_contextual_pic',
       'relationship' => 'none',
     ),
     'message' => array(
@@ -277,10 +245,9 @@ function fbss_user_relationships_views_default_views() {
     'nothing' => array(
       'label' => '',
       'alter' => array(
-        'text' => '<div>[picture] [name] [message]</div>
-  
-  
-  <div class="facebook-status-details">[created] [edit] [delete] [repost]</div>',
+        'text' => '<div>[user_contextual_pic] [message]</div>
+
+<div class="facebook-status-details">[created] [edit] [delete] [repost]</div>',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
