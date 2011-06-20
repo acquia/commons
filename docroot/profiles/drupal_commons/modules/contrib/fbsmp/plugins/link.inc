@@ -384,6 +384,38 @@ function fbsmp_link_fbsmp_widget_form_validate(&$form, &$form_state) {
  * Implementation of hook_fbsmp_widget_form_save().
  */
 function fbsmp_link_fbsmp_widget_form_save($form, $form_state) {
+  // The Share button was clicked but the Attach button was never clicked.
+  if (!isset($form_state['values']['fbsmp_link_data'])) {
+    $rebuild = $form_state['rebuild'];
+    fbsmp_link_attach_submit($form, $form_state);
+    $form_state['rebuild'] = $rebuild;
+    $settings = fbsmp_load_plugin_settings('link');
+    $data = $form_state['fbsmp_link']['data'];
+
+    $show_images = isset($data['images']) && is_array($data['images']) && count($data['images']) > 0;
+    if ($show_images) {
+      $form_state['values']['fbsmp_link_thumbnail_1'] = array_shift(array_keys($data['images']));
+      $form_state['values']['fbsmp_link_current_thumbnail'] = 1;
+      $form_state['values']['fbsmp_link_no_thumbnail'] = 0;
+    }
+
+    $title = $form_state['fbsmp_link']['data']['title'];
+    $description = $form_state['fbsmp_link']['data']['description'];
+    // "\xE2\x80\xA6" is the UTF8 character sequence for the ellipsis, which must be enclosed in double quotes.
+    // Neither the literal binary character (?) nor the HTML entity (&hellip;) work on all operating systems. 
+    if (drupal_strlen($title) > $settings['max_title_length']) {
+      $title = drupal_substr($title, 0, $settings['max_title_length'] - 3) ."\xE2\x80\xA6";
+    }
+    if (drupal_strlen($description) > $settings['max_description_length']) {
+      $description = drupal_substr($description, 0, $settings['max_description_length'] - 3) ."\xE2\x80\xA6";
+    }
+    $form_state['values']['fbsmp_link_title'] = $title;
+    if (!$settings['hide_empty_description'] || $description) {
+      $form_state['values']['fbsmp_link_description'] = $description;
+    }
+
+    $form_state['values']['fbsmp_link_data'] = $form_state['fbsmp_link'];
+  }
   $record = array();
   $record['page_url'] = $form_state['values']['fbsmp_link_data']['page_url'];
   $delta = $form_state['values']['fbsmp_link_current_thumbnail'];
