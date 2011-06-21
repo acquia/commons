@@ -40,7 +40,7 @@ function commons_profile_profile_fields() {
   $field = new stdClass;
   $field->title = t('Location');
   $field->name = 'profile_location';
-  $field->explanation = t('Where are you location?');
+  $field->explanation = t('Where are you located?');
   $field->category = t('Personal information');
   $field->type = 'textfield';
   $field->weight = -8;
