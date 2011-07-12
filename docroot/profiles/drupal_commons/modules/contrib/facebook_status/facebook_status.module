@@ -312,9 +312,10 @@ function facebook_status_link($type, $status) {
     );
   }
   // If not self update by current user (because if it is a self update by the current user, there is no need for a response)
-  if ($status->type != 'user' || $status->recipient != $status->sender || $status->sender != $user->uid) {
+  if ($status->type == 'user' && ($status->recipient != $status->sender || $status->sender != $user->uid)) {
     // If permission to respond
     if (facebook_status_user_access('add', _facebook_status_user_load($status->sender), 'user', $user)) {
+      $second_uid = $user->uid;
       // If to current user (not a self update)
       if ($status->type == 'user' && $status->recipient == $user->uid) {
         $title = t('reply');
@@ -326,13 +327,10 @@ function facebook_status_link($type, $status) {
       // If from one user to another and the current user is not the recipient
       elseif ($status->type == 'user') {
         $title = t('view conversation');
-      }
-      // If not to a user
-      else {
-        $title = t('discuss');
+        $second_uid = $status->recipient;
       }
       $links['respond'] = array(
-        'href' => 'statuses/conversation/'. $status->sender .','. $user->uid,
+        'href' => 'statuses/conversation/'. $status->sender .','. $second_uid,
         'title' => $title,
         'attributes' => array('class' => 'facebook-status-respond facebook-status-action-link'),
         'weight' => 3,
@@ -752,6 +750,9 @@ function facebook_status_save_status($recipient, $type, $message, $sender = NULL
   $recipient_id = $context['handler']->recipient_id($recipient);
   $time = time();
   $message = trim($message);
+  if (module_exists('og') && arg(0) == 'facebook_status' && arg(1) == 'js') {
+    og_set_group_context($recipient);
+  }
   // Merge in defaults.
   $options += array(
     'discard duplicates' => TRUE,

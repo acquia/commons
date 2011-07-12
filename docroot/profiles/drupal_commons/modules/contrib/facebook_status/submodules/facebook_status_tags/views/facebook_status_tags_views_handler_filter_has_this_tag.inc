@@ -36,6 +36,12 @@ class facebook_status_tags_views_handler_filter_has_this_tag extends views_handl
       '#default_value' => $options['facebook_status_tags_type'],
     );
   }
+  function value_form(&$form, &$form_state) {
+    parent::value_form($form, $form_state);
+    if (variable_get('facebook_status_tags_vid', -1) != -1) {
+      $form['value']['#autocomplete_path'] = 'taxonomy/autocomplete/'. variable_get('facebook_status_tags_vid', -1);
+    }
+  }
   function query() {
     $this->ensure_my_table();
     $field = "$this->table_alias.$this->real_field";

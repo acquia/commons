@@ -381,6 +381,12 @@ h1 + #content-tabs {
 
 /* Facebook-style Statuses */
 
+.facebook-status-details .facebook-status-links ul.links li { /* fix vertically stacked links */
+    border-right: 0 none !important;
+    display: inline !important;
+    padding: 0 !important;
+}
+
 /* The default width is 100% but sidebar-right overlaps a little in that case. */
 textarea.fbss-comments-textarea,
 textarea.facebook-status-text {

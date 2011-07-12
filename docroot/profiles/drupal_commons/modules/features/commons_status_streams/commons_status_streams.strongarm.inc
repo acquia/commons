@@ -22,13 +22,6 @@ function commons_status_streams_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'facebook_status_filter';
-  $strongarm->value = '5';
-
-  $export['facebook_status_filter'] = $strongarm;
-  $strongarm = new stdClass;
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
   $strongarm->name = 'facebook_status_length';
   $strongarm->value = '0';
 
@@ -71,34 +64,6 @@ function commons_status_streams_strongarm() {
   );
 
   $export['fbsmp_disabled_plugins'] = $strongarm;
-  $strongarm = new stdClass;
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'fbsmp_ignore_sdefault';
-  $strongarm->value = 1;
-
-  $export['fbsmp_ignore_sdefault'] = $strongarm;
-  $strongarm = new stdClass;
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'fbsmp_plugin_link';
-  $strongarm->value = array(
-    'max_title_length' => '100',
-    'max_description_length' => '300',
-    'class' => '',
-    'width' => '200',
-    'height' => '0',
-    'hide_empty_description' => 1,
-    'max_imagesize' => '',
-    'min_imagesize' => '',
-    'external' => '0',
-    'nofollow' => '0',
-    'url_stub' => 'http://',
-    'cache_duration' => '9676800',
-    'timeout' => '10',
-  );
-
-  $export['fbsmp_plugin_link'] = $strongarm;
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;

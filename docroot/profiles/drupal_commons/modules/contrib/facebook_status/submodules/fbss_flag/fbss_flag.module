@@ -31,6 +31,17 @@ function fbss_flag_facebook_status_delete($status) {
 }
 
 /**
+ * Implementation of hook_form_FORM_ID_alter().
+ */
+function fbss_flag_form_facebook_status_box_alter(&$form, $form_state) {
+  // Make sure the necessary resources are loaded when the list of status updates is empty.
+  // Otherwise, when the first status is posted, flagging an item will refresh the page.
+  $path = drupal_get_path('module', 'flag') .'/theme';
+  drupal_add_css($path .'/flag.css');
+  drupal_add_js($path .'/flag.js');
+}
+
+/**
  * Implementation of hook_views_api().
  */
 function fbss_flag_views_api() {

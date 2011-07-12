@@ -3,29 +3,6 @@
 include_once('commons_status_streams.features.inc');
 
 /**
- * Implementation of hook_menu().
- */
-function commons_status_streams_menu() {
-  $items = array();
-  $items['all-activity'] = array(
-    'title' => 'All activity',
-    'page callback' => 'commons_status_streams_all_activity_page',
-    'access arguments' => array('view all statuses'),
-    'description' => 'Shows all activity on the site.',
-    'type' => MENU_SUGGESTED_ITEM,
-  );
-  return $items;
-}
-
-/**
- * Shows all activity on the site.
- */
-function commons_status_streams_all_activity_page() {
-  // TODO: switch this to the main activity stream when that's ready
-  return theme('facebook_status_form_display', NULL, NULL, 'facebook_status_all');
-}
-
-/**
  * Implementation of hook_context_default_contexts_alter().
  */
 function commons_status_streams_context_default_contexts_alter(&$contexts) {

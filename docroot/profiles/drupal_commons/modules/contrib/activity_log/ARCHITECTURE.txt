@@ -1,0 +1,84 @@
+Administrators can specify what kind of activity gets logged by setting up
+Rules that will log activity messages. This is done by adding the "Log
+Activity" action to a Rule. When this action configuration form is saved, we
+save a record in the database containing information about the templates used
+to display logged messages.
+
+When the rule actually gets triggered, we store information about the entities
+involved in that event and group related events into messages. When the
+message is displayed, we load the relevant template and entity information for
+each event related to the message and then use the entity information to
+evaluate the template.
+
+The trickiest part in all of this is obtaining the information we need to store
+at each stage. Rules is a very powerful module with a thoroughly abstract
+architecture. It tries to expose the minimum useful amount of information to
+developers in order to simplify developers' lives and not expose them to the
+magic that powers it all. However, we actually need the information that Rules
+is hiding from us, so we have to resort to some tricks. The explanation below
+explains these tricks as part of the lifecycle of a logged activity, which
+occurs in four stages. The module is also organized this way, with the first
+three stages in order (and noted as such) in activity_log.rules.inc and the
+last stage taking up most of activity_log.module.
+
+In the first stage -- building and saving the Rules action form where the user
+enters template information -- we alter the form to add our own submit and
+validate callbacks that need to execute at the right phase of the form building
+process. In these callbacks we save and update information that is tied to the
+templates. Additionally, we concatenate a special string to the beginning of
+the version of the template that gets stored with the Rule itself. We do this
+because Activity Log defines an input evaluator that runs in the second and
+third steps, and that input evaluator needs to know that it should only run on
+activity templates.
+
+In the second stage, we have to utilize this input evaluator to figure out what
+objects are relevant to that event. When the input evaluator runs, it builds an
+array of these objects and appends a serialized version to the template so that
+we can retrieve it later when the action callback runs. (Thanks to our work in
+the first stage, this information is *only* appended to the template.) The
+input evaluator runs when the Rule is actually triggered, but this happens
+before our action callback is executed.
+
+In the third stage, our action callback is executed (after the Rule is
+triggered and the input evaluator runs). At this point we can collect all the
+information we've gathered and save it in the database as an event. Then we
+check to see if there are any similar events and aggregate those into the final
+message objects that will be used in the actual displayed activity stream.
+(Note that we "aggregate" events into messages even if there is only one event
+to aggregate so that we have exactly one row in the database table for each
+message that will get displayed.)
+
+To resolve the fact that one message can correspond to multiple events, the
+"aids" column contains a comma-separated list of event IDs [the "aid" column in
+the events table]. So in the fourth stage, when the messages are finally
+rendered, we use this list to pull in all the relevant event IDs. Then we
+evaluate the templates using the information gathered in the first stage
+combined with the entities we know are relevant from the second and third
+stages. However the second and third stages (when the message is recorded)
+likely happened a significant amount of time before the fourth stage (when the
+message is viewed) so the information we have about these entities may be out
+of date. In order to make sure we use the current versions of the entities in
+question, we identify the Rules data corresponding to the relevant objects and
+use the load() property of those data types. Armed with the latest entities and
+the template information, we then execute the Rules input evaluators on the
+templates to produce the final rendered message.
+
+To avoid the overhead of rendering the message on every display, we do our best
+to cache the rendered message as intelligently as possible, selectively
+flushing the cache when necessary and making sure all required resources get
+included. This method achieves a dynamic activity stream that updates to
+reflect changes in the objects it shows, while still avoiding the potential
+performance drain of dynamically rendering every message in the stream every
+time the stream is viewed.
+
+Additionally, we have managed to put the entire administrator interface for
+setting up what kinds of activity appear in the stream into a single, highly-
+configurable Rules action. The user-facing user interface is exposed via Views,
+which allows for serious flexibility. Radioactivity integration is also
+provided to allow sorting activity streams by what content is interesting and
+relevant.
+
+Finally, users have the ability to specify what kinds of activity they want to
+see in their stream by editing their profile settings. Administrators can
+choose whether users may or may not disable any given activity type from their
+streams in the Rules action used to record that type of activity.

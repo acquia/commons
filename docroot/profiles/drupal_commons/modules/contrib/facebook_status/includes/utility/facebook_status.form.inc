@@ -84,7 +84,13 @@ function theme_facebook_status_form_display($context = NULL, $type = NULL, $view
     }
   }
   elseif (!empty($view) && facebook_status_user_access('view_stream', $recipient, $type, $user)) {
-    $output .= views_embed_view($view, $display, $context['handler']->recipient_id($recipient), $type);
+    if ($view == 'activity_log_stream') {
+      $al_type = ($type == 'og' ? 'node' : ($type == 'term' ? 'taxonomy_term' : $type));
+      $output .= views_embed_view($view, $display, $al_type, $context['handler']->recipient_id($recipient));
+    }
+    else {
+      $output .= views_embed_view($view, $display, $context['handler']->recipient_id($recipient), $type);
+    }
     $selectors[] = '.view-id-'. $view;
   }
   if (!empty($selectors)) {

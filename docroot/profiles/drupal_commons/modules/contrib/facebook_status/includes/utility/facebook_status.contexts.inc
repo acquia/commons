@@ -17,8 +17,6 @@ class facebook_status_context {
 
   /**
    * The context type.
-   * Used to automatically determine several values, but not required by
-   * subclasses if those values are overridden.
    */
   function type() {
     return '';
@@ -162,12 +160,8 @@ class facebook_status_user_context extends facebook_status_context {
     return _facebook_status_user_load($id);
   }
   function load_random_recipient() {
-    $uids = devel_get_users();
-    if (!empty($uids)) {
-      $uid = $uids[array_rand($uids)];
-      return $this->load_recipient($uid);
-    }
-    return user_load(0);
+    $uid = db_result(db_query_range("SELECT uid FROM {users} WHERE status = 1 ORDER BY RAND() ASC", 0, 1));
+    return $this->load_recipient($uid);
   }
   function recipient_link($recipient) {
     return theme('username', $recipient);

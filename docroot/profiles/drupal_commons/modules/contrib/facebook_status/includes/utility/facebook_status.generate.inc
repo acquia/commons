@@ -59,7 +59,7 @@ function facebook_status_generate_form($form_state) {
  */
 function facebook_status_generate_form_validate($form, &$form_state) {
   $n = $form_state['values']['num'];
-  //A user might want to "generate" 0 statuses if they really just want to delete everything.
+  // A user might want to "generate" 0 statuses if they really just want to delete everything.
   if (!is_numeric($n) || $n < 0 || $n != round($n)) {
     form_set_error('num', t('You must generate at least 0 statuses.'));
   }
@@ -152,8 +152,8 @@ function facebook_status_generate_status($time, $types, $tags, &$context) {
   }
 
   $text = '';
-  //Mentions.
-  if (module_exists('facebook_status_tags') && $tags && $type == 'user' && $uid == $recipient->uid && mt_rand(0, 1)) {
+  // Mentions.
+  if (module_exists('facebook_status_tags') && $tags && $type == 'user' && mt_rand(0, 1)) {
     $rid = 0;
     while ($rid == 0 || $rid == $uid) {
       $rid = $uids[array_rand($uids)];
@@ -167,7 +167,7 @@ function facebook_status_generate_status($time, $types, $tags, &$context) {
 
   $mtext = devel_create_greeking(mt_rand(2, variable_get('facebook_status_length', 140) / 7));
   $text .= drupal_substr($mtext, 0, variable_get('facebook_status_length', 140) - drupal_strlen($text));
-  //Hashtags.
+  // Hashtags.
   if (module_exists('facebook_status_tags') && $tags && variable_get('facebook_status_tags_vid', -1) != -1 && mt_rand(0, 2) > 0) {
     $word = devel_generate_word(mt_rand(3, 7));
     if (drupal_strlen($text . $word) + 2 <= variable_get('facebook_status_length', 140)) {
@@ -216,7 +216,7 @@ function facebook_status_generate_finished($success, $results, $operations) {
     ));
   }
   if ($success && $results['num']) {
-    $message = t('Finished creating @num statuses successfully.', array('@num' => $results['num']));
+    $message = format_plural($results['num'], 'Finished creating 1 status successfully.', 'Finished creating @count statuses successfully.');
   }
   elseif ($success) {
     $message = t('Finished processing 0 statuses.');

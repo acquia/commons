@@ -18,7 +18,7 @@
  * @return
  *   TRUE if access to the given action is permitted; FALSE otherwise.
  */
-function _fbss_services_access($action) {
+function fbss_services_access($action) {
   $args = func_get_args();
   $args = $args[1];
   if ($action == 'create') {

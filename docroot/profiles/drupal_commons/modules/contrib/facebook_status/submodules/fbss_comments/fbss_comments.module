@@ -742,7 +742,7 @@ function fbss_comments_facebook_status_delete($status) {
  */
 function fbss_comments_preprocess_facebook_status_item(&$vars) {
   if ($vars['options']['extras']) {
-    $vars['comments'] = theme('fbss_comments_form_display', $vars['status']->sid, FALSE, FALSE);
+    $vars['comments'] = theme('fbss_comments_form_display', $vars['status']->sid, !$vars['options']['page'], !$vars['options']['page']);
   }
 }
 
