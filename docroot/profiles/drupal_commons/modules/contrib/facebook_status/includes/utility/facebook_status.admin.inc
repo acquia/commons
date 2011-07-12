@@ -140,6 +140,19 @@ function facebook_status_admin_advanced($form_state) {
     ),
     '#weight' => -20,
   );
+  if (module_exists('imagecache_profiles')) {
+    $presets = imagecache_presets();
+    $opt = array('' => t('Default (let Imagecache Profiles choose)'));
+    foreach ($presets as $preset) {
+      $opt[$preset['presetname']] = check_plain($preset['presetname']);
+    }
+    $form['facebook_status_imagecache_preset'] = array(
+      '#type' => 'select',
+      '#title' => t('Default Imagecache preset for user pictures'),
+      '#default_value' => variable_get('facebook_status_imagecache_preset', variable_get('user_picture_imagecache_profiles_default', '')),
+      '#options' => $opt,
+    );
+  }
   $form['facebook_status_ahah'] = array(
     '#type' => 'checkbox',
     '#title' => t('Use AHAH to refresh the status update form without refreshing the page'),

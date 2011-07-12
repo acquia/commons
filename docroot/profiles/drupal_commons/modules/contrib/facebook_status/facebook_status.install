@@ -381,6 +381,7 @@ function facebook_status_update_6303() {
  */
 function facebook_status_uninstall() {
   drupal_uninstall_schema('facebook_status');
+  variable_del('facebook_status_imagecache_preset');
   variable_del('facebook_status_user_other_view');
   variable_del('facebook_status_default_text');
   variable_del('facebook_status_hide_length');
