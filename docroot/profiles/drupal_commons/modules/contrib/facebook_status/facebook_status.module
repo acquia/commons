@@ -1005,7 +1005,7 @@ function facebook_status_facebook_status_context_info() {
       'description' => t('If a profile is currently being viewed, then the stream belongs to the owner of that profile.') .' '.
         t('Otherwise, the stream belongs to the current user.'),
       'handler' => 'facebook_status_user_context',
-      'view' => module_exists('user_relationships_api') ? 'fbss_ur_stream' : 'facebook_status_stream',
+      'view' => module_exists('activity_log') ? 'activity_log_stream' : (module_exists('user_relationships_api') ? 'fbss_ur_stream' : 'facebook_status_stream'),
       'weight' => 999,
       'file' => $path .'/includes/utility/facebook_status.contexts.inc',
     ),
@@ -1023,7 +1023,7 @@ function facebook_status_facebook_status_context_info() {
       'handler' => 'facebook_status_og_context',
       'parent' => 'node',
       'dependencies' => array('og'),
-      'view' => 'facebook_status_stream',
+      'view' => module_exists('activity_log') ? 'activity_log_stream' : 'facebook_status_stream',
       'weight' => -50,
       'file' => $path .'/includes/utility/facebook_status.contexts.inc',
     ),
