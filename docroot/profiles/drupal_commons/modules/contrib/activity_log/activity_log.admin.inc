@@ -87,7 +87,7 @@ function activity_log_admin_regenerate($form_state) {
   }
   $form['events'] = array(
     '#type' => 'checkboxes',
-    '#title' => t('Rules to execute'),
+    '#title' => t('Events to trigger'),
     '#description' => t('Activity Log will trigger the selected event for each related entity it can find.') .' '.
       t('This will trigger every Rule for that event and every action for each triggered Rule.') .' '.
       t('The events shown all have associated Rules with Activity Log actions.') .' '.
@@ -105,7 +105,7 @@ function activity_log_admin_regenerate($form_state) {
   );
   $form['submit'] = array(
     '#type' => 'submit',
-    '#title' => t('Regenerate'),
+    '#value' => t('Regenerate'),
   );
   return $form;
 }
@@ -115,7 +115,7 @@ function activity_log_admin_regenerate($form_state) {
  */
 function activity_log_admin_regenerate_validate($form, $form_state) {
   $v = $form_state['values']['age'];
-  if (!is_numeric($v) || $v < 0) {
+  if ($v && (!is_numeric($v) || $v < 0)) {
     form_set_error('age', t('The oldest content to regenerate setting must have a nonnegative numeric value.'));
   }
 }

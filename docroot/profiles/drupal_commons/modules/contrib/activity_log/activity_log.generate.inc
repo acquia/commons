@@ -20,31 +20,31 @@ function activity_log_activity_log_regenerate_info() {
     'node_insert' => array(
       'callback' => 'activity_log_regenerate_nodes',
       'file' => $path,
-    );
+    ),
     'taxonomy_term_insert' => array(
       'callback' => 'activity_log_regenerate_taxonomy_terms',
       'file' => $path,
-    );
+    ),
     'user_insert' => array(
       'callback' => 'activity_log_regenerate_users',
       'file' => $path,
-    );
+    ),
     'facebook_status_tags_user_was_tagged' => array(
       'callback' => 'activity_log_regenerate_fbss_mentions',
       'file' => $path,
-    );
+    ),
     'fbss_comments_save' => array(
       'callback' => 'activity_log_regenerate_fbss_comments',
       'file' => $path,
-    );
+    ),
     'facebook_status_save' => array(
       'callback' => 'activity_log_regenerate_statuses',
       'file' => $path,
-    );
+    ),
     'og_user_insert' => array(
       'callback' => 'activity_log_regenerate_og_join',
       'file' => $path,
-    );
+    ),
   );
   if (module_exists('flag')) {
     foreach (flag_get_flags() as $flag) {
