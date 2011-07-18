@@ -20,7 +20,14 @@
  *   The themed activity message.
  */
 function theme_activity_log_item($record, $reset = FALSE) {
-  if ($reset || empty($record->cached) || empty($record->cacheable)) {
+  static $user_lang = user_preferred_language($GLOBALS['user'])->language;
+  if ($reset || empty($record->cacheable) || empty($record->cached) || empty($record->cached[$user_lang])) {
+    if (empty($record->template)) {
+      // If we can't find the template, make sure we have all of them available.
+      _activity_log_rebuild_templates();
+      watchdog('activity_log', 'The Activity Log templates were rebuilt for missing template ID @id', array('@id' => $record->tid), WATCHDOG_WARNING);
+      return;
+    }
     $classes = array();
     $classes[] = 'activity-log-rule-'. $record->rule;
     $classes[] = 'activity-log-action-'. drupal_strtolower(preg_replace('%[^\w\-]%', '', str_replace(' ', '_', $record->action_label)));
@@ -30,8 +37,9 @@ function theme_activity_log_item($record, $reset = FALSE) {
     else {
       $classes[] = 'activity-message-grouped';
     }
-    $message = '<div class="activity-message '. implode(' ', $classes) .'">'. activity_log_evaluate_record($record) .'</div>';
-    db_query("UPDATE {activity_log_messages} SET cached = '%s' WHERE mid = %d", $message, $record->mid);
+    $message = '<div id="activity-log-item-'. $record->mid .'" class="activity-log-message '. implode(' ', $classes) .'">'. activity_log_evaluate_record($record) .'</div>';
+    $record->cached[$user_lang] = $message;
+    db_query("UPDATE {activity_log_messages} SET cached = '%s' WHERE mid = %d", serialize($record->cached), $record->mid);
     return $message;
   }
   else {
@@ -205,11 +213,13 @@ function activity_log_evaluate_record($record) {
   if (count($record->events) === 1) {
     return $template;
   }
+  $collection = array_unique($collection);
   return str_replace(
-    array('[names]', '[collection]'),
+    array('[names]', '[collection]', '[count]'),
     array(
       theme('activity_log_collapse', array_unique($names)),
-      theme('activity_log_collapse', array_unique($collection), $record->collapse_method)
+      theme('activity_log_collapse', $collection, $record->collapse_method),
+      count($collection)
     ),
     $group_template
   );

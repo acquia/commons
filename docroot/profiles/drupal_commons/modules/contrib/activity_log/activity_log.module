@@ -26,6 +26,21 @@ function activity_log_menu() {
     'description' => 'Allows administrators to adjust settings for Activity Log.',
     'file' => 'activity_log.admin.inc',
   );
+  $items['admin/settings/activity_log'] = array(
+    'title' => 'Settings',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'access arguments' => array('administer site configuration'),
+    'weight' => -1,
+  );
+  $items['admin/settings/activity_log/regenerate'] = array(
+    'title' => 'Regenerate activity',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('activity_log_admin_regenerate'),
+    'access arguments' => array('administer site configuration'),
+    'description' => 'Allows administrators to regenerate activity for Activity Log.',
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'activity_log.admin.inc',
+  );
   $items['activity_log/autocomplete/public_name'] = array(
     'title' => 'Autocomplete Activity Log Public Name',
     'page callback' => 'activity_log_autocomplete_public_name',
@@ -120,6 +135,7 @@ function activity_log_load($mid) {
   ", $mid));
   $record->eval_input = unserialize($record->eval_input);
   $record->resources = unserialize($record->resources);
+  $record->cached = empty($record->cached) ? '' : unserialize($record->cached);
   $record->aids = array_filter(explode(',', $record->aids));
   $record->events = array();
   $result = db_query("
@@ -228,6 +244,80 @@ function activity_log_element_sort($a, $b) {
     return 0;
   }
   return ($a_weight < $b_weight) ? -1 : 1;
+}
+
+/** 
+ * Clear the cache for all messages or a specific message.
+ *
+ * @param $mid
+ *   The ID of the message whose cache to clear. If not specified, all message
+ *   caches are cleared.
+ */
+function activity_log_clear_message_cache($mid = NULL) {
+  if (!empty($mid)) {
+    db_query("UPDATE {activity_log_messages} SET cached = '' WHERE mid = %d", $mid);
+  }
+  else {
+    db_query("UPDATE {activity_log_messages} SET cached = ''");
+  }
+}
+
+/**
+ * Rebuilds the templates and action_names tables from existing Rules.
+ */
+function _activity_log_rebuild_templates() {
+  module_load_include('inc', 'activity_log', 'activity_log.rules');
+  // Extract the relevant information from the list of all Rules.
+  $rules = $names = array();
+  foreach (_rules_get_rule_sets() as $key => $event) {
+    if (strpos($key, 'event_') === 0) {
+      foreach ($event['rules'] as $name => $info) {
+        foreach ($info['#actions'] as $action) {
+          if ($action['#name'] == 'activity_log_log_action' && isset($action['#settings']['tid'])) {
+            $rules[$action['#settings']['tid']] = $action['#settings'] + array('rule' => $name, 'action_label' => $info['#label']);
+            if (!isset($names[$action['#settings']['public_name']])) {
+              $names[$action['#settings']['public_name']] = array();
+            }
+            $names[$action['#settings']['public_name']][] = $action['#settings']['tid'];
+          }
+        }
+      }
+    }
+  }
+  // Rebuild the action_names table.
+  db_query("TRUNCATE {activity_log_action_names}");
+  foreach ($names as $name => $tids) {
+    $record = (object) array('public_name' => $name);
+    drupal_write_record('activity_log_action_names', $record); 
+    foreach ($tids as $tid) {
+      $rules[$tid]['pid'] = $record->pid;
+    }
+  }
+  // Rebuild the templates table.
+  db_query("TRUNCATE {activity_log_templates}");
+  ksort($rules);
+  foreach ($rules as $v) {
+    $resources = _activity_log_determine_resources($v['templates'], $v['grouping']['templates'], $v['grouping']['group_summary'], $v['cache']['resources']);
+    $record = array(
+      'tid' => $v['tid'],
+      'rule' => $v['rule'],
+      'action_label' => $v['action_label'],
+      'template' => serialize($v['templates']),
+      'group_template' => serialize($v['grouping']['templates']),
+      'group_summary' => $v['grouping']['group_summary'],
+      'collapse_method' => $v['grouping']['collapse_method'],
+      'pid' => $v['pid'],
+      'eval_input' => serialize($v['#eval input']),
+      'resources' => serialize($resources),
+      'cacheable' => $v['cache']['cache'] && !_activity_log_has_uncacheable_tokens($v['templates'], $v['grouping']['templates'], $v['grouping']['group_summary']),
+    );
+    db_query("
+      INSERT INTO {activity_log_templates}
+        (tid, rule, action_label, template, group_template, group_summary, collapse_method, pid, eval_input, resources, cacheable)
+      VALUES (%d, '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s', %d)
+    ", $record);
+  }
+  return count($rules);
 }
 
 //=====================

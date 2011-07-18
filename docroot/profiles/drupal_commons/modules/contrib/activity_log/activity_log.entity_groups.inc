@@ -39,15 +39,20 @@ function activity_log_entity_groups($stream_owner = TRUE) {
     ),
   );
   if ($og) {
-    $groups['active groups'] = array(
-      'items callback' => 'activity_log_eg_active_groups',
-      'title' => t('Active groups'),
+    $groups['active group'] = array(
+      'items callback' => 'activity_log_eg_active_group',
+      'title' => t('The active group'),
       'weight' => -85,
     );
-    $groups['active groups members'] = array(
-      'items callback' => 'activity_log_eg_active_groups_members',
-      'title' => t('Active group members'),
+    $groups['active group members'] = array(
+      'items callback' => 'activity_log_eg_active_group_members',
+      'title' => t('Members of the active group'),
       'weight' => -80,
+    );
+    $groups['active group admin'] = array(
+      'items callback' => 'activity_log_eg_active_group_admin',
+      'title' => t('Administrators of the active group'),
+      'weight' => -78,
     );
   }
   if ($ur) {
@@ -82,29 +87,29 @@ function activity_log_entity_groups($stream_owner = TRUE) {
     }
   }
   if ($og && $ur) {
-    $groups['active groups relationships acting user'] = array(
-      'items callback' => 'activity_log_eg_active_groups_rels_acting_user',
-      'title' => t('Members of active groups who have a relationship with the acting user'),
+    $groups['active group relationships acting user'] = array(
+      'items callback' => 'activity_log_eg_active_group_rels_acting_user',
+      'title' => t('Members of the active group who have a relationship with the acting user'),
       'expose fields' => array('acting_uid'),
       'weight' => -55,
     );
-    $groups['active groups relationships custom user'] = array(
-      'items callback' => 'activity_log_eg_active_groups_rels_custom_user',
-      'title' => t('Members of active groups who have a relationship with a custom user'),
+    $groups['active group relationships custom user'] = array(
+      'items callback' => 'activity_log_eg_active_group_rels_custom_user',
+      'title' => t('Members of the active group who have a relationship with a custom user'),
       'expose fields' => array('id'),
       'weight' => -50,
     );
     foreach ($ur_types as $type) {
-      $groups['active groups relationships '. $type->rtid .' acting user'] = array(
-        'items callback' => 'activity_log_eg_active_groups_rels_type_acting_user',
-        'title' => t('Members of active groups who have a %type relationship with the acting user', array('%type' => $type->name)),
+      $groups['active group relationships '. $type->rtid .' acting user'] = array(
+        'items callback' => 'activity_log_eg_active_group_rels_type_acting_user',
+        'title' => t('Members of the active group who have a %type relationship with the acting user', array('%type' => $type->name)),
         'expose fields' => array('acting_uid'),
         'additional arguments' => array($type),
         'weight' => -45,
       );
-      $groups['active groups relationships '. $type->rtid .' custom user'] = array(
-        'items callback' => 'activity_log_eg_active_groups_rels_type_custom_user',
-        'title' => t('Members of active groups who have a %type relationship with a custom user', array('%type' => $type->name)),
+      $groups['active group relationships '. $type->rtid .' custom user'] = array(
+        'items callback' => 'activity_log_eg_active_group_rels_type_custom_user',
+        'title' => t('Members of the active group who have a %type relationship with a custom user', array('%type' => $type->name)),
         'expose fields' => array('id'),
         'additional arguments' => array($type),
         'weight' => -40,
@@ -115,6 +120,7 @@ function activity_log_entity_groups($stream_owner = TRUE) {
     $groups['node commenters'] = array(
       'items callback' => 'activity_log_eg_node_commenters',
       'title' => t('Other people who have commented on this node (including the node author)'),
+      'data types' => array('node'),
       'weight' => -35,
     );
   }
@@ -122,13 +128,15 @@ function activity_log_entity_groups($stream_owner = TRUE) {
     $groups['node terms'] = array(
       'items callback' => 'activity_log_eg_node_terms',
       'title' => t('The taxonomy terms used in a node'),
+      'data types' => array('node'),
       'weight' => -30,
     );
   }
   if ($fc) {
     $groups['status commenters'] = array(
       'items callback' => 'activity_log_eg_status_commenters',
-      'title' => t('Other people who have commented on this status (including the sender and recipient)'),
+      'title' => t('Other people who have commented on this status (including the sender)'),
+      'data types' => array('fbss_comment'),
       'weight' => -25,
     );
   }
@@ -136,21 +144,35 @@ function activity_log_entity_groups($stream_owner = TRUE) {
     $groups['mentioned users'] = array(
       'items callback' => 'activity_log_eg_mentioned_users',
       'title' => t('The users @mentioned in a status'),
+      'data types' => array('facebook_status'),
       'weight' => -20,
     );
     $groups['hashtag terms'] = array(
       'items callback' => 'activity_log_eg_hashtag_terms',
       'title' => t('The taxonomy terms corresponding to the #hashtags in a status'),
+      'data types' => array('facebook_status'),
       'weight' => -15,
     );
   }
   if (!$stream_owner) {
-    unset($groups['active groups'], $groups['hashtag terms'], $groups['node terms'], $groups['custom']['expose fields'][1]);
+    unset($groups['active group'], $groups['hashtag terms'], $groups['node terms'], $groups['custom']['expose fields'][1]);
     $groups['target entity']['title'] = t('The user on which the action was performed, if applicable');
     $groups['everyone'] = array(
       'items callback' => 'activity_log_eg_everyone',
       'title' => t('Everyone'),
       'weight' => -105,
+    );
+    $groups['everyone_except_active'] = array(
+      'items callback' => 'activity_log_eg_everyone_except_active',
+      'title' => t('Everyone except the active user'),
+      'expose fields' => array('acting_uid'),
+      'weight' => -103,
+    );
+    $groups['everyone_except_custom'] = array(
+      'items callback' => 'activity_log_eg_everyone_except_custom',
+      'title' => t('Everyone except a custom user'),
+      'expose fields' => array('id'),
+      'weight' => -102,
     );
   }
   return $groups;
@@ -160,6 +182,12 @@ function activity_log_entity_groups($stream_owner = TRUE) {
  * Returns the entitity IDs for the Custom group.
  */
 function activity_log_eg_custom($event, $settings, $id, $type = 'user') {
+  if ($type == 'user' && module_exists('og') && og_get_group_context()->og_private) {
+    $members = _activity_log_get_active_group_members();
+    if (!in_array($id, $members)) {
+      return;
+    }
+  }
   return array($type => array($id));
 }
 
@@ -180,9 +208,9 @@ function activity_log_eg_target_entity($event, $settings, $stream_owner) {
 }
 
 /**
- * Returns the entitity IDs for the Active groups group.
+ * Returns the ID of the active group.
  */
-function activity_log_eg_active_groups($event, $settings) {
+function activity_log_eg_active_group($event, $settings) {
   if (module_exists('og')) {
     // Also look at og_get_node_groups($node).
     return array('node' => array(og_get_group_context()->nid));
@@ -190,11 +218,21 @@ function activity_log_eg_active_groups($event, $settings) {
 }
 
 /**
- * Returns the entitity IDs for the Active groups' members group.
+ * Returns the IDs of the active group's members.
  */
-function activity_log_eg_active_groups_members($event, $settings) {
+function activity_log_eg_active_group_members($event, $settings) {
   if (module_exists('og')) {
     return array('user' => _activity_log_get_active_group_members());
+  }
+}
+
+/**
+ * Returns the IDs of the active group's administrators.
+ * Does not include site administrators.
+ */
+function activity_log_eg_active_group_admin($event, $settings) {
+  if (module_exists('og')) {
+    return array('user' => _activity_log_get_active_group_members(TRUE));
   }
 }
 
@@ -203,7 +241,12 @@ function activity_log_eg_active_groups_members($event, $settings) {
  */
 function activity_log_eg_acting_user_rels($event, $settings, $acting_uid) {
   if (module_exists('user_relationships_api')) {
-    return array('user' => _activity_log_get_user_relationships($acting_uid));
+    $rels = _activity_log_get_user_relationships($acting_uid);
+    if (module_exists('og') && og_get_group_context()->og_private) {
+      $members = _activity_log_get_active_group_members();
+      $rels = array_intersect($rels, $members);
+    }
+    return array('user' => $rels);
   }
 }
 
@@ -212,7 +255,12 @@ function activity_log_eg_acting_user_rels($event, $settings, $acting_uid) {
  */
 function activity_log_eg_custom_user_rels($event, $settings, $id) {
   if (module_exists('user_relationships_api')) {
-    return array('user' => _activity_log_get_user_relationships($id));
+    $rels = _activity_log_get_user_relationships($id);
+    if (module_exists('og') && og_get_group_context()->og_private) {
+      $members = _activity_log_get_active_group_members();
+      $rels = array_intersect($rels, $members);
+    }
+    return array('user' => $rels);
   }
 }
 
@@ -221,7 +269,12 @@ function activity_log_eg_custom_user_rels($event, $settings, $id) {
  */
 function activity_log_eg_acting_user_rels_type($event, $settings, $acting_uid, $ur_type) {
   if (module_exists('user_relationships_api')) {
-    return array('user' => _activity_log_get_user_relationships($acting_uid, $ur_type->rtid));
+    $rels = _activity_log_get_user_relationships($acting_uid, $ur_type->rtid);
+    if (module_exists('og') && og_get_group_context()->og_private) {
+      $members = _activity_log_get_active_group_members();
+      $rels = array_intersect($rels, $members);
+    }
+    return array('user' => $rels);
   }
 }
 
@@ -230,15 +283,20 @@ function activity_log_eg_acting_user_rels_type($event, $settings, $acting_uid, $
  */
 function activity_log_eg_custom_user_rels_type($event, $settings, $id, $ur_type) {
   if (module_exists('user_relationships_api')) {
-    return array('user' => _activity_log_get_user_relationships($id, $ur_type->rtid));
+    $rels = _activity_log_get_user_relationships($id, $ur_type->rtid);
+    if (module_exists('og') && og_get_group_context()->og_private) {
+      $members = _activity_log_get_active_group_members();
+      $rels = array_intersect($rels, $members);
+    }
+    return array('user' => $rels);
   }
 }
 
 /**
- * Returns the entitity IDs for the members of the active groups who have a
- * relationship with the acting user.
+ * Returns the IDs of the members of the active group who have a relationship
+ * with the acting user.
  */
-function activity_log_eg_active_groups_rels_acting_user($event, $settings, $acting_uid) {
+function activity_log_eg_active_group_rels_acting_user($event, $settings, $acting_uid) {
   if (module_exists('user_relationships_api') && module_exists('og')) {
     $members = _activity_log_get_active_group_members();
     $rels = _activity_log_get_user_relationships($acting_uid);
@@ -247,10 +305,10 @@ function activity_log_eg_active_groups_rels_acting_user($event, $settings, $acti
 }
 
 /**
- * Returns the entitity IDs for the members of the active groups who have a
- * relationship with a custom user.
+ * Returns the IDs of the members of the active group who have a relationship
+ * with a custom user.
  */
-function activity_log_eg_active_groups_rels_custom_user($event, $settings, $id) {
+function activity_log_eg_active_group_rels_custom_user($event, $settings, $id) {
   if (module_exists('user_relationships_api') && module_exists('og')) {
     $members = _activity_log_get_active_group_members();
     $rels = _activity_log_get_user_relationships($id);
@@ -259,10 +317,10 @@ function activity_log_eg_active_groups_rels_custom_user($event, $settings, $id) 
 }
 
 /**
- * Returns the entitity IDs for the members of the active groups who have a
- * %type relationship with the acting user.
+ * Returns the IDs of the members of the active group who have a %type
+ * relationship with the acting user.
  */
-function activity_log_eg_active_groups_rels_type_acting_user($event, $settings, $acting_uid, $ur_type) {
+function activity_log_eg_active_group_rels_type_acting_user($event, $settings, $acting_uid, $ur_type) {
   if (module_exists('user_relationships_api') && module_exists('og')) {
     $members = _activity_log_get_active_group_members();
     $rels = _activity_log_get_user_relationships($acting_uid, $ur_type->rtid);
@@ -271,10 +329,10 @@ function activity_log_eg_active_groups_rels_type_acting_user($event, $settings, 
 }
 
 /**
- * Returns the entitity IDs for the members of the active groups who have a
- * %type relationship with a custom user.
+ * Returns the IDs of the members of the active group who have a %type
+ * relationship with a custom user.
  */
-function activity_log_eg_active_groups_rels_type_custom_user($event, $settings, $id, $ur_type) {
+function activity_log_eg_active_group_rels_type_custom_user($event, $settings, $id, $ur_type) {
   if (module_exists('user_relationships_api') && module_exists('og')) {
     $members = _activity_log_get_active_group_members();
     $rels = _activity_log_get_user_relationships($id, $ur_type->rtid);
@@ -302,8 +360,8 @@ function activity_log_eg_node_commenters($event, $settings) {
  */
 function activity_log_eg_status_commenters($event, $settings) {
   if ($event->target_type == 'facebook_status' && module_exists('facebook_status')) {
-    $status = db_fetch_object(db_query("SELECT sender, recipient FROM {facebook_status} WHERE sid = %d", $event->target_id));
-    $uids = array($status->sender, $status->recipient);
+    $status = db_fetch_object(db_query("SELECT sender FROM {facebook_status} WHERE sid = %d", $event->target_id));
+    $uids = array($status->sender);
     $result = db_query("SELECT uid FROM {fbss_comments} WHERE uid <> 0 AND sid = %d", $event->target_id);
     while ($account = db_fetch_object($result)) {
       $uids[] = $account->uid;
@@ -354,14 +412,44 @@ function activity_log_eg_node_terms($event, $settings) {
  * Returns the entitity IDs for the Everyone group.
  */
 function activity_log_eg_everyone($event, $settings) {
+  if (module_exists('og') && og_get_group_context()->og_private) {
+    return array('user' => _activity_log_get_active_group_members());
+  }
   return array('user' => array(0));
 }
 
 /**
- * Gets an array of UIDs of members of the currently active group.
+ * Returns the ID for the "everyone except the active user" group.
  */
-function _activity_log_get_active_group_members() {
-  $result = db_query("SELECT uid FROM {og_uid} WHERE is_active = 1 AND nid = %d", og_get_group_context()->nid);
+function activity_log_eg_everyone_except_active($event, $settings, $acting_uid) {
+  if (module_exists('og') && og_get_group_context()->og_private) {
+    return array('user' => array_diff(_activity_log_get_active_group_members(), array($acting_uid)));
+  }
+  return array('user' => array(-$acting_uid));
+}
+
+/**
+ * Returns the ID for the "everyone except a custom user" group.
+ */
+function activity_log_eg_everyone_except_custom($event, $settings, $id) {
+  if (module_exists('og') && og_get_group_context()->og_private) {
+    return array('user' => array_diff(_activity_log_get_active_group_members(), array($id)));
+  }
+  return array('user' => array(-$id));
+}
+
+/**
+ * Gets an array of UIDs of members of the currently active group.
+ *
+ * @param $admin
+ *   If TRUE, returns group administrators. Otherwise, returns all members.
+ */
+function _activity_log_get_active_group_members($admin = FALSE) {
+  $query = "SELECT uid FROM {og_uid} WHERE is_active = 1 AND nid = %d";
+  if ($admin) {
+    $query .= " AND is_admin = 1";
+  }
+  $result = db_query($query, og_get_group_context()->nid);
   $uids = array();
   while ($account = db_fetch_object($result)) {
     $uids[] = $account->uid;
@@ -381,27 +469,28 @@ function _activity_log_get_active_group_members() {
  *   An array of UIDs of the given user's relationships.
  */
 function _activity_log_get_user_relationships($uid, $rtid = 0) {
-  if (!$rtid) {
-    $result = db_query("
-      SELECT ur.requester_id, ur.requestee_id
-      FROM user_relationships ur
-      INNER JOIN user_relationship_types urt
-        ON ur.rtid = urt.rtid
-      WHERE (ur.requester_id = %d OR ur.requestee_id = %d) AND (ur.approved = 1 OR urt.is_oneway = 0)
-    ", $uid, $uid);
-  }
-  else {
-    $result = db_query("
-      SELECT ur.requester_id, ur.requestee_id
-      FROM user_relationships ur
-      INNER JOIN user_relationship_types urt
-        ON ur.rtid = urt.rtid
-      WHERE (ur.requester_id = %d OR ur.requestee_id = %d) AND (ur.approved = 1 OR urt.is_oneway = 0) AND ur.rtid = %d
-    ", $uid, $uid, $rtid);
+  $query = "
+    SELECT ur.requester_id, ur.requestee_id, urt.is_oneway
+    FROM user_relationships ur
+    INNER JOIN user_relationship_types urt
+      ON ur.rtid = urt.rtid
+    WHERE (ur.requester_id = %d OR ur.requestee_id = %d) AND (ur.approved = 1 OR urt.is_oneway = 0)
+  ";
+  $args = array($uid, $uid);
+  if ($rtid) {
+    $query .= " AND ur.rtid = %d";
+    $args[] = $rtid;
   }
   $uids = array();
   while ($rel = db_fetch_object($result)) {
-    $uids[] = ($rel->requester_id == $uid) ? $rel->requestee_id : $rel->requester_id;
+    if ($rel->is_oneway) {
+      if ($rel->requester_id != $uid) {
+        $uids[] = $rel->requester_id;
+      }
+    }
+    else {
+      $uids[] = ($rel->requester_id == $uid) ? $rel->requestee_id : $rel->requester_id;
+    }
   }
   return $uids;
 }

@@ -202,7 +202,7 @@ function activity_log_schema() {
       ),
       'viewer_id' => array(
         'type' => 'int',
-        'unsigned' => TRUE,
+        'unsigned' => FALSE, // Negative numbers are flags. Range -/+ 2,147,483,647
         'not null' => TRUE,
         'default' => 0,
         'description' => 'The ID of the user to whom this message will appear.',
@@ -296,8 +296,24 @@ function activity_log_schema() {
  */
 function activity_log_install() {
   drupal_install_schema('activity_log');
-  drupal_set_message(st('The Activity Log module was successfully installed.') .' '.
-    st('To begin recording activity messages, <a href="@rules">create a Rule</a> that executes the "Log Activity" action.', array('@rules' => url('admin/rules/trigger')))
+
+  if (function_exists('_activity_log_rebuild_templates')) {
+    $default_rule_count = _activity_log_rebuild_templates();
+    if ($default_rule_count) {
+      drupal_set_message(st('Finished building !count default Activity Log templates.', array('!count' => $default_rule_count)));
+    }
+  }
+
+  drupal_set_message(st('The Activity Log module has finished installing.') .' '.
+    empty($default_rule_count) ?
+    st('To begin recording activity messages, <a href="!rules">create a Rule</a> that executes the "Log Activity" action.',
+      array('!rules' => url('admin/rules/trigger'))
+    ) .' '. st('Once you have your Rules configured, you can use the <a href="!activities">Activities view</a> to see activity on your site.',
+      array('!activities' => url('activities'))
+    ) : st('Default activity message templates have already been installed.') .' '.
+    st('Activity Log uses Rules to define its templates, so you can change which ones to use by <a href="!rules">configuring Rules</a>.',
+      array('!rules' => url('admin/rules/trigger'))
+    )
   );
 }
 
@@ -307,6 +323,7 @@ function activity_log_install() {
 function activity_log_uninstall() {
   drupal_uninstall_schema('activity_log');
   variable_del('activity_log_max_age');
+  variable_del('activity_log_comments_bump');
   if (db_table_exists('radioactivity')) {
     db_query("DELETE FROM {radioactivity} WHERE class='act_log'");
   }

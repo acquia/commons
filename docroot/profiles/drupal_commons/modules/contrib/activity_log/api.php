@@ -81,11 +81,67 @@ function hook_activity_log_event($event, $group, $settings) {
  *     array().
  *   - additional arguments: (Optional) Extra arguments to pass to the items
  *     callback.
+ *   - data types: (Optional) An array containing names of Rules data types for
+ *     which this group is valid. If not specified, this group is assumed to be
+ *     valid for all Rules data types. Valid data types that can be specified
+ *     here include anything returned by
+ *     activity_log_get_rules_data_types(array('stream owner types' => 'all)).
  *   - file: (Optional) The file where the items callback exists.
  */
 function hook_activity_log_entity_groups($stream_owner = TRUE) {
   module_load_include('inc', 'activity_log', 'activity_log.entity_groups');
   return activity_log_entity_groups($stream_owner);
+}
+
+/**
+ * Implementation of hook_activity_log_regenerate_info().
+ *
+ * Returns an associative array describing Rules events for which we support
+ * regenerating activity messages. The keys are the Rules event machine name
+ * (valid values can be found using array_keys(rules_get_events())) and the
+ * values are associative arrays with the following elements:
+ *
+ * - callback: A function that triggers the relevant event once for each
+ *   relevant entity.
+ * - arguments: An array of additional arguments to pass to the count and
+ *   generate callbacks. Useful for events with conditional names.
+ * - file: (Optional) A file to include before the callbacks are executed.
+ *
+ * The callback's parameters include:
+ *
+ * - $age: Content created after this timestamp should have activity messages
+ *   generated.
+ * - $context: The return value of the previous time that callback was invoked.
+ *   The first time the callback is invoked, the value of this argument is
+ *   FALSE. You can use the last return value to keep track of an "offset,"
+ *   e.g. so you can only process a limited number of entities in one batch
+ *   request and you know where to pick up on the next request.
+ * - Any arguments passed via the "arguments" key.
+ *
+ * The callback will be invoked repeatedly until it returns something that
+ * evaluates to FALSE.
+ */
+function hook_activity_log_regenerate_info() {
+  $path = drupal_get_path('module', 'activity_log') .'/activity_log.generate.inc';
+  $items = array(
+    'comment_insert' => array(
+      'callback' => 'activity_log_regenerate_comments',
+      'file' => $path,
+    ),
+    'node_insert' => array(
+      'callback' => 'activity_log_regenerate_nodes',
+      'file' => $path,
+    );
+    'taxonomy_term_insert' => array(
+      'callback' => 'activity_log_regenerate_taxonomy_terms',
+      'file' => $path,
+    );
+    'user_insert' => array(
+      'callback' => 'activity_log_regenerate_users',
+      'file' => $path,
+    );
+  );
+  return $items;
 }
 
 /**

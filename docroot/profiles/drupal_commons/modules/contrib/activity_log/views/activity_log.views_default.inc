@@ -114,8 +114,8 @@ function activity_log_views_default_views() {
       'break_phrase' => 0,
       'not' => 0,
       'include' => array(
-        'og' => 'og',
-        'ur' => 'ur',
+        'og' => 0,
+        'ur' => 0,
       ),
       'id' => 'stream_owner_id',
       'table' => 'activity_log_messages',

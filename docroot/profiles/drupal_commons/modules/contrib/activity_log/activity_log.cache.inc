@@ -20,7 +20,8 @@
  *   An array of additional arguments corresponding to the %-placeholders in
  *   the $extra_where parameter.
  */
-function _activity_log_update_related($id, $type, $extra_where = array(), $extra_args = array()) {
+function _activity_log_update_related($id, $type, $extra_where = array(), $extra_args = array(), $timestamp = NULL) {
+  $bump = variable_get('activity_log_comments_bump', array('status' => 'status'));
   $query = "SELECT aid FROM {activity_log_events} WHERE (target_id = %d AND target_type = '%s')";
   $args = array($id, $type);
   foreach ($extra_where as $clause) {
@@ -30,6 +31,12 @@ function _activity_log_update_related($id, $type, $extra_where = array(), $extra
   $query = "UPDATE {activity_log_messages} SET cached = ''";
   $where = array("(stream_owner_id = %d AND stream_owner_type = '%s')");
   $args = array($id, $type);
+  if (!empty($timestamp)) {
+    if (($type == 'facebook_status' && !empty($bump['status'])) || ($type == 'node' && !empty($bump['node']))) {
+      $query .= " AND last_updated = %d";
+      $args[] = $timestamp;
+    }
+  }
   while ($row = db_fetch_object($result)) {
     $where[] = "aids LIKE '%%,%d,%%'";
     $args[] = $row->aid;
@@ -133,7 +140,7 @@ function activity_log_taxonomy($op, $type, $array = NULL) {
 function activity_log_comment($a1, $op) {
   $comment = (object) $a1;
   if ($op == 'insert') {
-    _activity_log_update_related($comment->nid, 'node');
+    _activity_log_update_related($comment->nid, 'node', $comment->timestamp);
   }
   elseif ($op == 'update') {
     _activity_log_update_related($comment->cid, 'comment');
@@ -173,7 +180,7 @@ function activity_log_fbss_comments_after_save($comment, $edit) {
     _activity_log_update_related($comment->cid, 'fbss_comment');
   }
   else {
-    _activity_log_update_related($comment->sid, 'facebook_status');
+    _activity_log_update_related($comment->sid, 'facebook_status', $comment->created);
   }
 }
 

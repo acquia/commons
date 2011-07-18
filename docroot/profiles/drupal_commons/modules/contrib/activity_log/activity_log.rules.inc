@@ -168,12 +168,14 @@ function activity_log_log_action_form($settings, &$form) {
       '#description' => '<p>'. t('The format of the grouped message.') .' '.
         t('The token <em>[names]</em> will be replaced with the names of the users who took this action.') .' '.
         '<span class="activity-log-admin-description">'.
-          t('Additionally, the token <em>[collection]</em> will be replaced with summaries of the target objects formatted according to the "Grouped item name" setting above.')
+          t('Additionally, the token <em>[collection]</em> will be replaced with summaries of the target objects formatted according to the "Grouped item name" setting above,') .' '.
+          t('and the token <em>[count]</em> will be replaced with the number of items in this summary.')
         .'</span> '.
         t('For example, the template "[names] like the [node:type] [node:title]" might produce something like "Jack and Jill like the page Slippery Slopes."') .'</p>',
     );
   }
   $groups = module_invoke_all('activity_log_entity_groups');
+  uasort($groups, 'activity_log_element_sort');
   $options = array();
   $expose_fields = array();
   foreach ($groups as $name => $group) {
@@ -182,7 +184,6 @@ function activity_log_log_action_form($settings, &$form) {
       $expose_fields[$name] = $group['expose fields'];
     }
   }
-  uasort($options, 'activity_log_element_sort');
   drupal_add_js(array('activity_log' => array('stream_owner_expose_fields' => $expose_fields)), 'setting');
   $form['settings']['visibility'] = array(
     '#type' => 'fieldset',
@@ -215,6 +216,7 @@ function activity_log_log_action_form($settings, &$form) {
     '#options' => activity_log_get_rules_data_types(),
   );
   $groups = module_invoke_all('activity_log_entity_groups', FALSE);
+  uasort($groups, 'activity_log_element_sort');
   $options = array();
   $expose_fields = array();
   foreach ($groups as $name => $group) {
@@ -223,7 +225,6 @@ function activity_log_log_action_form($settings, &$form) {
       $expose_fields[$name] = $group['expose fields'];
     }
   }
-  uasort($options, 'activity_log_element_sort');
   drupal_add_js(array('activity_log' => array('viewer_expose_fields' => $expose_fields)), 'setting');
   $form['settings']['visibility']['viewer_entity_group'] = array(
     '#type' => 'checkboxes',
@@ -264,6 +265,7 @@ function activity_log_log_action_form($settings, &$form) {
     '#rows' => 2,
     '#disabled' => user_access('administer loading arbitrary CSS and JS files for cached messages'),
   );
+  $form['#old_resources'] = $settings['cache']['resources'];
   $form['settings']['acting_uid'] = array(
     '#type' => 'textfield',
     '#title' => t('Acting user'),
@@ -293,6 +295,11 @@ function activity_log_log_action_validate($form, $form_state) {
       }
     }
   }
+  if (!user_access('administer loading arbitrary CSS and JS files for cached messages')) {
+    if ($form_state['values']['settings']['cache']['resources'] != $form['#old_resources']) {
+      form_set_error('settings][cache][resources', t('Invalid submission detected: you do not have permission to edit the CSS and JS files that must be loaded with this activity.'));
+    }
+  }
 }
 
 /**
@@ -308,23 +315,28 @@ function activity_log_log_action_validate($form, $form_state) {
 function activity_log_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'rules_admin_form_edit' || $form_id == 'rules_admin_form_add') {
     if ($form_state['storage']['element']['#name'] == 'activity_log_log_action') {
+      // Hide stream owner / viewer entity groups that are not applicable to this rule.
+      $rules = _rules_get_rule_sets();
+      $stream_owner_groups = module_invoke_all('activity_log_entity_groups');
+      $viewer_groups = module_invoke_all('activity_log_entity_groups', FALSE);
+      foreach ($rules[$form_state['proxy']->_rule['#set']]['info']['arguments'] as $key => $info) {
+        foreach (array('stream_owner', 'viewer') as $type) {
+          $options = array();
+          foreach ($form['settings']['visibility'][$type .'_entity_group']['#options'] as $callback => $name) {
+            if (!isset($stream_owner_groups[$callback]['data types']) || in_array($info['type'], $stream_owner_groups[$callback]['data types'])) {
+              $options[$callback] = $name;
+            }
+          }
+          $form['settings']['visibility'][$type .'_entity_group']['#options'] = $options;
+        }
+      }
       // Run our custom submit hooks.
       array_unshift($form['submit']['#submit'], 'activity_log_rules_admin_form_submit_before');
       if ($form_id == 'rules_admin_form_add') {
         array_push($form['submit']['#submit'], 'activity_log_rules_admin_form_submit_eval_after');
       }
       else {
-        // Get the language templates.
-        $templates = array();
-        $group_templates = array();
-        foreach ($form['settings']['templates'] as $lang => $info) {
-          if (strpos($lang, '#') !== 0) {
-            $templates[$lang] = array('template' => $info['template']['#default_value']);
-            $group_templates[$lang] = array('template' => $form['settings']['grouping']['templates'][$lang]['template']['#default_value']);
-          }
-        }
-        $form['#old_templates'] = serialize($templates);
-        $form['#old_group_templates'] = serialize($templates);
+        $form['#tid'] = $form_state['element']['#settings']['tid'];
       }
       array_push($form['submit']['#submit'], 'activity_log_rules_admin_form_submit_label_after');
       // Undo the prefix we added so the input evaluator knows this is the placeholder.
@@ -355,20 +367,15 @@ function activity_log_rules_admin_form_submit_before($form, &$form_state) {
   $rule = $form_state['proxy']->_rule_name;
   $pid = 0;
   $name = new stdClass();
-  if (!empty($form['#old_templates'])) {
-    $tid = db_result(db_query("
-      SELECT tid FROM {activity_log_templates} WHERE rule = '%s' AND template = '%s' AND group_template = '%s'
-    ", $rule, $form['#old_templates'], $form['#old_group_templates']));
-    if (!empty($tid)) {
+  if (!empty($form['#tid'])) {
       $name = db_fetch_object(db_query("
         SELECT n.*
         FROM {activity_log_templates} t
         LEFT JOIN {activity_log_action_names} n
           ON t.pid = n.pid
         WHERE tid = %d
-      ", $tid));
+      ", $form['#tid']));
       $pid = $name->pid;
-    }
   }
   // If this is a new action or we changed the public name, check if the new name exists. If it doesn't, save the new value.
   if (empty($name) || $name->public_name != $v['public_name']) {
@@ -380,16 +387,7 @@ function activity_log_rules_admin_form_submit_before($form, &$form_state) {
     }
   }
   // Determine the resources that need to be loaded for cached messages.
-  $files = explode("\n", $v['cache']['resources']);
-  $resources = _activity_log_determine_resources($v['templates'], $v['grouping']['templates'], $v['grouping']['group_summary']);
-  foreach ($files as $file) {
-    $extension = drupal_substr($file, strrpos($file, '.')+1);
-    if (file_exists($file)) {
-      $resources[$extension][] = $file;
-    }
-  }
-  $resources['css'] = empty($resources['css']) ? array() : array_unique($resources['css']);
-  $resources['js'] = empty($resources['js']) ? array() : array_unique($resources['js']);
+  $resources = _activity_log_determine_resources($v['templates'], $v['grouping']['templates'], $v['grouping']['group_summary'], $v['cache']['resources']);
   // Save the template.
   $record = (object) array(
     'rule' => $rule,
@@ -402,8 +400,8 @@ function activity_log_rules_admin_form_submit_before($form, &$form_state) {
     'resources' => serialize($resources),
     'cacheable' => $v['cache']['cache'] && !_activity_log_has_uncacheable_tokens($v['templates'], $v['grouping']['templates'], $v['grouping']['group_summary']),
   );
-  if (!empty($tid)) {
-    $record->tid = $tid;
+  if (!empty($form['#tid'])) {
+    $record->tid = $form['#tid'];
     drupal_write_record('activity_log_templates', $record, array('tid'));
   }
   else {
@@ -466,26 +464,10 @@ function activity_log_rules_admin_form_submit_label_after($form, $form_state) {
  */
 function activity_log_rules_admin_form_delete($form, $form_state) {
   if (!empty($form['#parameters'][3])) {
-    $v = $form['#parameters'][3]['#settings'];
-    // Get the language templates.
-    $templates = array();
-    $group_templates = array();
-    foreach ($v['templates'] as $lang => $info) {
-      $templates[$lang] = array('template' => $info['template']);
-      $group_templates[$lang] = array('template' => $v['grouping']['templates'][$lang]['template']);
-    }
-    $templates = serialize($templates);
-    $group_templates = serialize($templates);
-    $rule = $form_state['proxy']->_rule_name;
-    db_query("
-      DELETE FROM {activity_log_events} WHERE tid IN (SELECT tid FROM {activity_log_templates} WHERE rule = '%s' AND template = '%s' AND group_template = '%s')
-    ", $rule, $templates, $group_templates);
-    db_query("
-      DELETE FROM {activity_log_messages} WHERE tid IN (SELECT tid FROM {activity_log_templates} WHERE rule = '%s' AND template = '%s' AND group_template = '%s')
-    ", $rule, $templates, $group_templates);
-    db_query("
-      DELETE FROM {activity_log_templates} WHERE rule = '%s' AND template = '%s' AND group_template = '%s'
-    ", $rule, $templates, $group_templates);
+    $tid = $form['#parameters'][3]['#settings']['tid'];
+    db_query("DELETE FROM {activity_log_messages} WHERE tid = %d", $tid);
+    db_query("DELETE FROM {activity_log_events} WHERE tid = %d", $tid);
+    db_query("DELETE FROM {activity_log_templates} WHERE tid = %d", $tid);
   }
 }
 
@@ -506,11 +488,22 @@ function activity_log_autocomplete_public_name($string = '') {
 /**
  * Determines which CSS and JS resources are required for a template.
  */
-function _activity_log_determine_resources($templates, $group_templates, $group_summary) {
+function _activity_log_determine_resources($templates, $group_templates, $group_summary, $extra) {
   $resources = array();
   foreach (module_invoke_all('activity_log_token_resources') as $token => $sources) {
     if (_activity_log_has_token($token, $templates, $group_templates, $group_summary)) {
       $resources = array_merge_recursive($resources, $sources);
+    }
+  }
+  // Determine the resources that need to be loaded for cached messages.
+  $files = explode("\n", $extra);
+  foreach ($files as $file) {
+    $extension = drupal_substr($file, strrpos($file, '.')+1);
+    if (file_exists($file)) {
+      if (!isset($resources[$extension])) {
+        $resources[$extension] = array();
+      }
+      $resources[$extension][] = $file;
     }
   }
   return $resources;
