@@ -421,14 +421,12 @@ function activity_log_eg_hashtag_terms($event, $settings) {
  * Returns the entity ID for the status recipient.
  */
 function activity_log_eg_status_recipient($event, $settings, $stream_owner) {
-  if (module_exists('facebook_status')) {
-    $context = facebook_status_determine_context();
-    $recipient = $context['handler']->find_recipient();
-    $recipient_id = $context['handler']->recipient_id($recipient);
-    $type = $context['handler']->type();
-    if ($type == 'user' || !$stream_owner) {
+  if ($event->target_type == 'facebook_status' && module_exists('facebook_status')) {
+    $status = facebook_status_load($event->target_id);
+    $type = $status->type;
+    if ($type == 'user' || $stream_owner) {
       $type = ($type == 'og' ? 'node' : ($type == 'term' ? 'taxonomy_term' : $type));
-      return array($type => array($recipient_id));
+      return array($type => array($status->recipient));
     }
   }
 }

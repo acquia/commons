@@ -50,21 +50,7 @@ class activity_log_views_handler_field_message extends views_handler_field {
     foreach ($this->aliases as $name => $alias) {
       $record->$name = $values->$alias;
     }
-    $record->eval_input = unserialize($record->eval_input);
-    $record->resources = unserialize($record->resources);
-    $record->cached = empty($record->cached) ? '' : unserialize($record->cached);
-    $record->aids = array_filter(explode(',', $record->aids));
-    $record->events = array();
-    if (!empty($record->aids)) {
-      $result = db_query("
-        SELECT * FROM {activity_log_events} WHERE aid IN (". db_placeholders($record->aids) .")
-      ", $record->aids);
-      rules_include('rules');
-      while ($event = db_fetch_object($result)) {
-        $event->id_map = unserialize($event->id_map);
-        $record->events[$event->aid] = $event;
-      }
-    }
+    activity_log_record_unpack($record);
     return $record;
   }
 }

@@ -80,13 +80,15 @@ function activity_log_theme($existing, $type, $theme, $path) {
   return array(
     'activity_log_item' => array(
       'arguments' => array(
-        'aid' => NULL,
+        'record' => NULL,
+        'reset' => FALSE,
       ),
       'file' => 'activity_log.theme.inc',
     ),
     'activity_log_collapse' => array(
       'arguments' => array(
         'collection' => array(),
+        'method' => 'activity_log_collapse_inline',
       ),
       'file' => 'activity_log.theme.inc',
     ),
@@ -133,8 +135,18 @@ function activity_log_load($mid) {
       ON m.tid = t.tid
     WHERE mid = %d
   ", $mid));
+  activity_log_record_unpack($record);
+  return $record;
+}
+
+/**
+ * Unserialize and add all the relevant information to an activity message.
+ */
+function activity_log_record_unpack(&$record) {
   $record->eval_input = unserialize($record->eval_input);
   $record->resources = unserialize($record->resources);
+  $record->template = unserialize($record->template);
+  $record->group_template = unserialize($record->group_template);
   $record->cached = empty($record->cached) ? '' : unserialize($record->cached);
   $record->aids = array_filter(explode(',', $record->aids));
   $record->events = array();
@@ -146,7 +158,6 @@ function activity_log_load($mid) {
     $event->id_map = unserialize($event->id_map);
     $record->events[$event->aid] = $event;
   }
-  return $record;
 }
 
 /**

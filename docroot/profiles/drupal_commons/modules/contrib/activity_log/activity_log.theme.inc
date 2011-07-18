@@ -56,7 +56,7 @@ function theme_activity_log_item($record, $reset = FALSE) {
         drupal_add_js($resource);
       }
     }
-    return $record->cached;
+    return $record->cached[$user_lang];
   }
 }
 
@@ -174,13 +174,13 @@ function activity_log_evaluate_record($record) {
     'placeholder' => '',
     'grouping' => array(
       'group_summary' => $record->group_summary,
-      'templates' => unserialize($record->group_template),
+      'templates' => $record->group_template,
     ),
     'visibility' => array(
       'stream_owner_id' => '',
       'viewer_id' => '',
     ),
-    'templates' => unserialize($record->template),
+    'templates' => $record->template,
     'acting_uid' => '',
     'tid' => $record->tid,
     '#eval input' => $record->eval_input,

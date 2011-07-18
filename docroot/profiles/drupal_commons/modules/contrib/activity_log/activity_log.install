@@ -304,6 +304,8 @@ function activity_log_install() {
     }
   }
 
+  variable_set('facebook_status_user_other_view', 'activity_log_stream');
+
   drupal_set_message(st('The Activity Log module has finished installing.') .' '.
     empty($default_rule_count) ?
     st('To begin recording activity messages, <a href="!rules">create a Rule</a> that executes the "Log Activity" action.',
@@ -326,5 +328,8 @@ function activity_log_uninstall() {
   variable_del('activity_log_comments_bump');
   if (db_table_exists('radioactivity')) {
     db_query("DELETE FROM {radioactivity} WHERE class='act_log'");
+  }
+  if (!module_exists('facebook_status')) {
+    variable_del('facebook_status_user_other_view');
   }
 }
