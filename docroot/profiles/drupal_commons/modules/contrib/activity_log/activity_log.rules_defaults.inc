@@ -15,7 +15,7 @@ function activity_log_rules_defaults() {
     $rules += activity_log_rules_defaults_node_insert_og();
     $rules += activity_log_rules_defaults_og_join();
   }
-  if (module_exists('facebook_status_rules')) {
+  if (module_exists('fbss_rules')) {
     $rules += activity_log_rules_defaults_facebook_status_insert_user_self();
     $rules += activity_log_rules_defaults_facebook_status_insert_other();
     if (module_exists('fbsmp')) {
