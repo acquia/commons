@@ -20,7 +20,10 @@
  *   The themed activity message.
  */
 function theme_activity_log_item($record, $reset = FALSE) {
-  static $user_lang = user_preferred_language($GLOBALS['user'])->language;
+  static $user_lang;
+  if (!isset($user_lang)) {
+    $user_lang = user_preferred_language($GLOBALS['user'])->language;
+  }
   if ($reset || empty($record->cacheable) || empty($record->cached) || empty($record->cached[$user_lang])) {
     if (empty($record->template)) {
       // If we can't find the template, make sure we have all of them available.

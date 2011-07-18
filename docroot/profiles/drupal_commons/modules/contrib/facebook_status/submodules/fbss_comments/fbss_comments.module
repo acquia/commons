@@ -652,7 +652,7 @@ function fbss_comments_box(&$form_state, $sid, $delay_load = TRUE, $hide_submit 
     '#value' => t('Comment'),
     '#attributes' => array('class' => 'fbss-comments-submit'),
     '#prefix' => '<div class="'. ($hide_submit ? 'fbss-comments-hide' : '') .' fbss-comments-replace-'. $sid .'-inner">',
-    '#suffix' => '</div>',
+    '#suffix' => '<div class="clearfix"></div></div>',
     '#submit' => array('fbss_comments_box_submit'),
   );
   if (variable_get('fbss_comments_ahah', 1)) {
@@ -664,7 +664,7 @@ function fbss_comments_box(&$form_state, $sid, $delay_load = TRUE, $hide_submit 
     );
   }
   $form['#sid'] = $sid;
-  if ($form_state['fbss_comments']['sid']) {
+  if (!empty($form_state['fbss_comments']['sid'])) {
     $form['#sid'] = $form_state['fbss_comments']['sid'];
   }
   $form['#attributes'] = array('class' => 'fbss-comments-comment-form');

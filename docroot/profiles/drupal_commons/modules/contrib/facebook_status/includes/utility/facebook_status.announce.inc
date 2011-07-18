@@ -10,9 +10,7 @@
  */
 function facebook_status_announce_admin(&$form_state) {
   $form = array();
-  $form['info'] = array(
-    '#value' => t('Warning: this can be very slow on sites with lots of users.'),
-  );
+  drupal_set_message(t('<span class="error">Warning</span>: this can be very slow on sites with lots of users.'), 'warning');
   $form['from'] = array(
     '#type' => 'textfield',
     '#title' => t('Sender'),

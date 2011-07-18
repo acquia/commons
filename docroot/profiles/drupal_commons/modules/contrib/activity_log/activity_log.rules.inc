@@ -319,16 +319,16 @@ function activity_log_form_alter(&$form, &$form_state, $form_id) {
       $rules = _rules_get_rule_sets();
       $stream_owner_groups = module_invoke_all('activity_log_entity_groups');
       $viewer_groups = module_invoke_all('activity_log_entity_groups', FALSE);
-      foreach ($rules[$form_state['proxy']->_rule['#set']]['info']['arguments'] as $key => $info) {
-        foreach (array('stream_owner', 'viewer') as $type) {
-          $options = array();
-          foreach ($form['settings']['visibility'][$type .'_entity_group']['#options'] as $callback => $name) {
+      foreach (array('stream_owner', 'viewer') as $type) {
+        $options = array();
+        foreach ($form['settings']['visibility'][$type .'_entity_group']['#options'] as $callback => $name) {
+          foreach ($rules[$form_state['proxy']->_rule['#set']]['info']['arguments'] as $key => $info) {
             if (!isset($stream_owner_groups[$callback]['data types']) || in_array($info['type'], $stream_owner_groups[$callback]['data types'])) {
               $options[$callback] = $name;
             }
           }
-          $form['settings']['visibility'][$type .'_entity_group']['#options'] = $options;
         }
+        $form['settings']['visibility'][$type .'_entity_group']['#options'] = $options;
       }
       // Run our custom submit hooks.
       array_unshift($form['submit']['#submit'], 'activity_log_rules_admin_form_submit_before');
@@ -841,6 +841,15 @@ function activity_log_log_action($settings) {
     foreach ($owners as $type => $ids) {
       foreach (array_unique($ids) as $id) {
         foreach ($viewers as $viewer) {
+          if (!is_numeric($viewer) && $type != 'user') {
+            continue;
+          }
+          elseif ($viewer == 'stream owner') {
+            $viewer = $id;
+          }
+          elseif ($viewer == 'not stream owner') {
+            $viewer = -$id;
+          }
           $message = (object) array(
             'tid' => $event->tid,
             'aids' => ','. $event->aid .',',
