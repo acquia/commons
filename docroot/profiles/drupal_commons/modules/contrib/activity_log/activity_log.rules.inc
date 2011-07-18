@@ -844,10 +844,10 @@ function activity_log_log_action($settings) {
           if (!is_numeric($viewer) && $type != 'user') {
             continue;
           }
-          elseif ($viewer == 'stream owner') {
+          elseif ($viewer === 'stream owner') {
             $viewer = $id;
           }
-          elseif ($viewer == 'not stream owner') {
+          elseif ($viewer === 'not stream owner') {
             $viewer = -$id;
           }
           $message = (object) array(
