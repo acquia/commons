@@ -71,7 +71,13 @@ function digests_theme($existing, $type, $theme, $path) {
  * Override the CSS handling if we have custom CSS set.
  */
 function digests_preprocess_mimemail_message(&$vars) {
-  if ($vars['mailkey'] == 'mail-digests' && $css = variable_get('digests_css', '')) {
+  if ($vars['mailkey'] == 'mail-digests') {
+    $css = '';
+    $path = drupal_get_path('module', 'digests') .'/css/digests.css';
+    if (file_exists($path)) {
+      $css .= file_get_contents($path);
+    }
+    $css .= "\n". variable_get('digests_css', '');
     module_load_include('inc', 'mimemail', 'theme/mimemail.theme');
     // Regexp to match comment blocks.
     $comment     = '/\*[^*]*\*+(?:[^/*][^*]*\*+)*/';
