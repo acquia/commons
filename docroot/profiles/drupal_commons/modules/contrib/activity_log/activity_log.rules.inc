@@ -714,6 +714,7 @@ function activity_log_rules_action_info() {
  */
 function activity_log_log_action($settings) {
   global $user;
+  static $pairs = array();
   $time = time();
   // Get the value of the settings set via the UI.
   $pos = strrpos($settings['placeholder'], ACTIVITY_LOG_DELIMITER);
@@ -850,21 +851,24 @@ function activity_log_log_action($settings) {
           elseif ($viewer === 'not stream owner') {
             $viewer = -$id;
           }
-          $message = (object) array(
-            'tid' => $event->tid,
-            'aids' => ','. $event->aid .',',
-            'created' => $event->created,
-            'last_updated' => $event->created,
-            'stream_owner_id' => $id,
-            'stream_owner_type' => $type,
-            'viewer_id' => $viewer,
-            'target_id' => $event->target_id,
-            'target_type' => $event->target_type,
-            'acting_uid' => $event->acting_uid,
-            'cached' => '',
-          );
-          drupal_write_record('activity_log_messages', $message);
-          $messages[] = $message;
+          if (!in_array("$id $viewer", $pairs)) {
+            $pairs[] = "$id $viewer";
+            $message = (object) array(
+              'tid' => $event->tid,
+              'aids' => ','. $event->aid .',',
+              'created' => $event->created,
+              'last_updated' => $event->created,
+              'stream_owner_id' => $id,
+              'stream_owner_type' => $type,
+              'viewer_id' => $viewer,
+              'target_id' => $event->target_id,
+              'target_type' => $event->target_type,
+              'acting_uid' => $event->acting_uid,
+              'cached' => '',
+            );
+            drupal_write_record('activity_log_messages', $message);
+            $messages[] = $message;
+          }
         }
       }
     }

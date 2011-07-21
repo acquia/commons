@@ -108,7 +108,6 @@ function activity_log_rules_defaults_node_insert() {
               'en' => 
               array (
                 'template' => '<div class="activity-log-content">[author:user] added the [node:type-name] [node:title-link]</div>
-<div class="activity-log-teaser">[node:node-teaser]</div>
 <div class="activity-log-time"><a href="[node:node-url]">[node:since] ago</a></div>',
               ),
             ),
@@ -242,7 +241,6 @@ function activity_log_rules_defaults_node_insert() {
               'en' => 
               array (
                 'template' => '<div class="activity-log-content">[author:user] added the [node:type-name] [node:title-link]</div>
-<div class="activity-log-teaser">[node:node-teaser]</div>
 <div class="activity-log-time"><a href="[node:node-url]">[node:since] ago</a></div>',
               ),
             ),
@@ -815,7 +813,6 @@ function activity_log_rules_defaults_node_insert_og() {
               'en' => 
               array (
                 'template' => '<div class="activity-log-content">[author:user] added the [node:type-name] [node:title-link]</div>
-<div class="activity-log-teaser">[node:node-teaser]</div>
 <div class="activity-log-time"><a href="[node:node-url]">[node:since] ago</a></div>',
               ),
             ),
@@ -1112,7 +1109,6 @@ function activity_log_rules_defaults_node_insert_og() {
               'en' => 
               array (
                 'template' => '<div class="activity-log-content">[author:user] added the [node:type-name] [node:title-link] in [node:ogname-title-link]</div>
-<div class="activity-log-teaser">[node:node-teaser]</div>
 <div class="activity-log-time"><a href="[node:node-url]">[node:since] ago</a></div>',
               ),
             ),

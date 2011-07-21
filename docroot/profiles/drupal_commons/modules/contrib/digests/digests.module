@@ -1,0 +1,97 @@
+<?php
+
+/**
+ * @file
+ *   Sends digests of user activity at configurable intervals.
+ */
+
+/**
+ * Implementation of hook_menu().
+ */
+function digests_menu() {
+  $items = array();
+  $items['admin/settings/digests'] = array(
+    'title' => 'Activity Log Digests',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('digests_admin'),
+    'access arguments' => array('administer site configuration'),
+    'description' => 'Allows administrators to adjust settings for Activity Log Digests.',
+    'file' => 'digests.admin.inc',
+  );
+  return $items;
+}
+
+/**
+ * Implementation of hook_perm().
+ */
+function digests_perm() {
+  return array('receive digests', 'set custom CSS for digests');
+}
+
+/**
+ * Implementation of hook_cron().
+ */
+function digests_cron() {
+  module_load_include('inc', 'digests', 'digests.cron');
+  _digests_cron();
+}
+
+/**
+ * Implementation of hook_user().
+ */
+function digests_user($op, &$edit, &$account, $category = NULL) {
+  if ($op == 'form' && $category == 'account') {
+    module_load_include('inc', 'digests', 'digests.user_settings');
+    return _digests_user_form($account->uid);
+  }
+  elseif ($op == 'update' && isset($edit['digests_interval'])) {
+    module_load_include('inc', 'digests', 'digests.user_settings');
+    _digests_user_update($edit, $account->uid);
+  }
+}
+
+/**
+ * Implementation of hook_theme().
+ */
+function digests_theme($existing, $type, $theme, $path) {
+  return array(
+    'digests_email' => array(
+      'arguments' => array(
+        'account' => NULL,
+        'messages' => array(),
+        'now' => time(),
+      ),
+      'template' => 'digests-email',
+      'file' => 'digests.cron.inc',
+    ),
+  );
+}
+
+/**
+ * Override the CSS handling if we have custom CSS set.
+ */
+function digests_preprocess_mimemail_message(&$vars) {
+  if ($vars['mailkey'] == 'mail-digests' && $css = variable_get('digests_css', '')) {
+    module_load_include('inc', 'mimemail', 'theme/mimemail.theme');
+    // Regexp to match comment blocks.
+    $comment     = '/\*[^*]*\*+(?:[^/*][^*]*\*+)*/';
+    // Regexp to match double quoted strings.
+    $double_quot = '"[^"\\\\]*(?:\\\\.[^"\\\\]*)*"';
+    // Regexp to match single quoted strings.
+    $single_quot = "'[^'\\\\]*(?:\\\\.[^'\\\\]*)*'";
+    // Perform some safe CSS optimizations. (derived from core CSS aggregation)
+    $css = preg_replace_callback(
+      "<$double_quot|$single_quot|$comment>Sus",  // Match all comment blocks along
+      "_mimemail_process_comment",                // with double/single quoted strings
+      $css);                                      // and feed them to _mimemail_process_comment().
+    $css = preg_replace(
+      '<\s*([@{}:;,]|\)\s|\s\()\s*[^\n\S]>S',  // Remove whitespace around separators,
+      '\1',                                    // but keep space around parentheses
+      $css);                                   // and new lines between definitions.
+    // End with a new line.
+    $css .= "\n";
+    // Wordwrap to adhere to RFC821
+    $css = wordwrap($css, 700);
+    $vars['css'] = $css;
+  }
+}
