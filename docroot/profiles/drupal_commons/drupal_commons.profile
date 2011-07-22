@@ -347,12 +347,12 @@ function drupal_commons_config_wysiwyg() {
 function drupal_commons_config_ur() {
   // Add initial relationship type 'Friend'
   $relationship = new stdClass;
-  $relationship->name = st('Friend');
-  $relationship->plural_name = st('Friends');
-  $relationship->requires_approval = 1;
+  $relationship->name = st('follower');
+  $relationship->plural_name = st('users you follow');
+  $relationship->requires_approval = 0;
   $relationship->expires_val = 0;
-  $relationship->is_oneway = 0;
-  $relationship->is_reciprocal = 0; 
+  $relationship->is_oneway = 1;
+  $relationship->is_reciprocal = 1; 
   $type = 'insert';
   
   // Save relationship
