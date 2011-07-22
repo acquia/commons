@@ -3,13 +3,32 @@ Track Drupal Commons development on GitHub!
  - https://github.com/acquia/commons/
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Drupal Commons 1.x-dev, 2010-06-20
+Drupal Commons 2.0-beta1, 2011-07-25
+------------------------------------
+NOTES:
+- We strongly recommend that if you are still using the default "Friend"
+  relationship installed with Commons that you change it to a one-way "follow"
+  relationship instead. This is because the new activity stream feature in 2.0
+  allows you to see your friends' activity. However, it is more natural to
+  "follow" someone to see their activity than to require someone to "friend"
+  you back before you can see their activity. To make this change, visit
+  admin/user/relationships and click "edit" next to the "Friend" relationship.
+  On the "Edit type" page that will appear, change the "Name" and "Plural name"
+  fields to "follower" and "users you follow," respectively. Then un-check the
+  "Requires Approval" box, and check the "This is a one-way relationship" box.
+  A new box will appear labeled "This one-way relationship can be
+  reciprocated," and you should check that as well. Then click the "Submit"
+  button at the bottom of the page.
+  
+
+
+Drupal Commons 1.x-dev, 2011-06-20
 ------------------------------------
 CHANGELOG:
 - Fixed: Typo in profile location field definition
 
 
-Drupal Commons 1.7, 2010-06-17
+Drupal Commons 1.7, 2011-06-17
 ------------------------------------
 NOTES:
 - This release was built in response to a security issue that arose in
@@ -33,7 +52,7 @@ CHANGELOG:
 - Fixed: Various theme issues
 
 
-Drupal Commons 1.6, 2010-05-25
+Drupal Commons 1.6, 2011-05-25
 ------------------------------------
 NOTES:
 - This is both a feature release, as well as updating Drupal core with
