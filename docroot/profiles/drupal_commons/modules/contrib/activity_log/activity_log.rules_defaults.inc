@@ -1365,7 +1365,7 @@ function activity_log_rules_defaults_facebook_status_insert_user_self() {
             ),
             'cache' => 
             array (
-              'cache' => 1,
+              'cache' => 0,
               'resources' => '',
             ),
             'acting_uid' => '[status:sender-uid]',
@@ -1741,7 +1741,7 @@ function activity_log_rules_defaults_facebook_status_insert_other() {
             ),
             'cache' => 
             array (
-              'cache' => 1,
+              'cache' => 0,
               'resources' => '',
             ),
             'acting_uid' => '[status:sender-uid]',
@@ -2229,7 +2229,7 @@ function activity_log_rules_defaults_fbsmp_insert_user_self() {
             ),
             'cache' => 
             array (
-              'cache' => 1,
+              'cache' => 0,
               'resources' => '',
             ),
             'acting_uid' => '[status:sender-uid]',
@@ -2583,7 +2583,7 @@ function activity_log_rules_defaults_fbsmp_insert_other() {
             ),
             'cache' => 
             array (
-              'cache' => 1,
+              'cache' => 0,
               'resources' => '',
             ),
             'acting_uid' => '[status:sender-uid]',

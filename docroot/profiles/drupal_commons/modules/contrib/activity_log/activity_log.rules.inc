@@ -851,8 +851,8 @@ function activity_log_log_action($settings) {
           elseif ($viewer === 'not stream owner') {
             $viewer = -$id;
           }
-          if (!in_array("$id $viewer", $pairs)) {
-            $pairs[] = "$id $viewer";
+          if (!in_array("$id $type $viewer", $pairs)) {
+            $pairs[] = "$id $type $viewer";
             $message = (object) array(
               'tid' => $event->tid,
               'aids' => ','. $event->aid .',',
