@@ -177,3 +177,16 @@ function hook_activity_log_uncacheable_tokens() {
     ':userpoints]',
   );
 }
+
+/**
+ * Implementation of hook_activity_log_display_types().
+ *
+ * Returns an associative array of locations where activity messages can be
+ * displayed. The keys are the machine names and the values are the translated
+ * human-friendly names of the destinations.
+ */
+function hook_activity_log_display_types() {
+  return array(
+    'web' => t('Web stream'),
+  );
+}

@@ -321,6 +321,7 @@ function _activity_log_rebuild_templates() {
       'eval_input' => serialize($v['#eval input']),
       'resources' => serialize($resources),
       'cacheable' => $v['cache']['cache'] && !_activity_log_has_uncacheable_tokens($v['templates'], $v['grouping']['templates'], $v['grouping']['group_summary']),
+      'display_type' => $v['display_type'],
     );
     db_query("
       INSERT INTO {activity_log_templates}
@@ -352,6 +353,15 @@ function activity_log_activity_log_collapse_methods() {
 function activity_log_activity_log_entity_groups($stream_owner = TRUE) {
   module_load_include('inc', 'activity_log', 'activity_log.entity_groups');
   return activity_log_entity_groups($stream_owner);
+}
+
+/**
+ * Implementation of hook_activity_log_display_types().
+ */
+function activity_log_activity_log_display_types() {
+  return array(
+    'web' => t('Web stream'),
+  );
 }
 
 //====================

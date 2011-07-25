@@ -4936,7 +4936,7 @@ function commons_core_views_default_views() {
   $handler->override_option('title', 'Latest notices');
   $handler->override_option('header_format', '1');
   $handler->override_option('header_empty', 1);
-  $handler->override_option('empty', 'No notices have been created yet.');
+  $handler->override_option('empty', '');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
   $handler->override_option('items_per_page', 5);

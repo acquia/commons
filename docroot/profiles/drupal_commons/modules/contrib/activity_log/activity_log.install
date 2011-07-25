@@ -80,6 +80,13 @@ function activity_log_schema() {
         'default' => 0,
         'description' => 'Whether messages saved with this template should be cached.',
       ),
+      'display_type' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'default' => 'web',
+        'description' => 'Where messages generated using this template should be displayed. Typical values are "web," "email," and "alert." There may also be a use for "mobile," "print," etc. but there is not a default implementation for these.',
+      ),
     ),
     'indexes' => array(
       'pid' => array('pid'),

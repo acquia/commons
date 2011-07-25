@@ -39,6 +39,9 @@ function activity_log_views_handlers() {
       'activity_log_views_handler_field_message' => array(
         'parent' => 'views_handler_field',
       ),
+      'activity_log_views_handler_filter_display_type' => array(
+        'parent' => 'views_handler_filter',
+      ),
       'activity_log_views_handler_filter_owner_type' => array(
         'parent' => 'views_handler_filter',
       ),
@@ -198,6 +201,14 @@ function activity_log_views_data() {
     'field' => array(
       'handler' => 'views_handler_field',
       'click sortable' => 'true',
+    ),
+  );
+
+  $data['activity_log_templates']['display_type'] = array(
+    'title' => t('Display type'),
+    'help' => t('The location where the activity messages will be displayed'),
+    'filter' => array(
+      'handler' => 'activity_log_views_handler_filter_display_type',
     ),
   );
 

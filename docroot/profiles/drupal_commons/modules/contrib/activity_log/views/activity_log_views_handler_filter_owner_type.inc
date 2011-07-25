@@ -10,11 +10,12 @@
  */
 class activity_log_views_handler_filter_owner_type extends views_handler_filter {
   function value_form(&$form, &$form_state) {
+    dsm($this);
     $form['value'] = array(
       '#type' => 'select',
       '#title' => t('Stream type'),
       '#description' => t('The type of entity on whose stream the activity is intended to appear.'),
-      '#default_value' => $this->options['type'],
+      '#default_value' => isset($this->value) ? $this->value : 'user',
       '#options' => activity_log_get_rules_data_types(),
       '#required' => TRUE,
     );

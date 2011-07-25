@@ -40,6 +40,7 @@ function activity_log_log_action_form($settings, &$form) {
       'cache' => TRUE,
     ),
     'acting_uid' => '',
+    'display_type' => 'web',
   );
   $form['settings']['placeholder'] = array(
     '#type' => 'value',
@@ -272,6 +273,22 @@ function activity_log_log_action_form($settings, &$form) {
     '#description' => t('Enter the ID of the user taking the action. If not specified, defaults to the current user at the time the action occurred.'),
     '#default_value' => $settings['acting_uid'],
   );
+  $display_types = module_invoke_all('activity_log_display_types');
+  if (count($display_types) === 1) {
+    $form['settings']['display_type'] = array(
+      '#type' => 'value',
+      '#value' => drupal_map_assoc(array_keys($display_types)),
+    );
+  }
+  else {
+    $form['settings']['display_type'] = array(
+      '#type' => 'select',
+      '#title' => t('Display type'),
+      '#default_value' => $settings['display_type'],
+      '#required' => TRUE,
+      '#options' => $display_types,
+    );
+  }
 }
 
 /**
@@ -399,6 +416,7 @@ function activity_log_rules_admin_form_submit_before($form, &$form_state) {
     'eval_input' => empty($form_state['element']['#settings']['#eval input']) ? '' : serialize($form_state['element']['#settings']['#eval input']),
     'resources' => serialize($resources),
     'cacheable' => $v['cache']['cache'] && !_activity_log_has_uncacheable_tokens($v['templates'], $v['grouping']['templates'], $v['grouping']['group_summary']),
+    'display_type' => $v['display_type'],
   );
   if (!empty($form['#tid'])) {
     $record->tid = $form['#tid'];
