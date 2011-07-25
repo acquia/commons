@@ -6,6 +6,9 @@ Track Drupal Commons development on GitHub!
 Drupal Commons 2.0-beta1, 2011-07-25
 ------------------------------------
 UPGRADING TO 2.0-beta1
+NOTE: This upgrade adds or changes some significant functionality, so we
+   strongly recommend that you test the upgrade on a staging site before
+   performing the upgrade on a live site.
 1. Back up your code (everything in your Drupal root directory) and your
    database
 2. Turn on maintenance mode (admin/settings/site-maintenance)
@@ -29,7 +32,7 @@ UPGRADING TO 2.0-beta1
    these pages, we strongly recommend that you revert your changes in the
    Commons Core feature so that you can use the latest updates and make any
    further changes afterwards as necessary.
-10. If no issues have arisen, then you may turn off maintenance mode.
+10.If no issues have arisen, then you may turn off maintenance mode.
 ------------------------------------
 NOTES:
 - This release changes the default behavior of Notifications. Previously users
@@ -77,6 +80,13 @@ NOTES:
   - Facebook-style Statuses has experimental Domain Access integration, but
     there is no upgrade path for Domain Access support from Shoutbox because
     the way Domain Access is integrated seems to be different.
+  - If you used the Heartbeat Shouts module (which is different than the
+    Shoutbox module) then follow the instructions at | in order to upgrade to
+    Facebook-style Statuses.
+  - If you used the Heartbeat Comments module, upgrading to Activity Log is not
+    yet supported. (You can upgrade without problems, but comments on activity
+    will be lost.) This is not the same as the core Comments module, which is
+    fully supported.
 - We strongly recommend that if you are still using the default "Friend"
   relationship installed with Commons that you change it to a one-way "follow"
   relationship instead. This is because the new activity stream feature in 2.0
