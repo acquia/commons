@@ -38,10 +38,6 @@ function _commons_profile_block_list() {
     'info' => t('Profile image and action links'),
     'cache' => BLOCK_NO_CACHE,
   );
-  $blocks['recent_activity'] = array(
-    'info' => t('Profile recent activity'),
-    'cache' => BLOCK_NO_CACHE,
-  );
   return $blocks;
 }
 
@@ -144,21 +140,4 @@ function _commons_profile_image_links_block_view() {
     'subject' => '',
     'content' => theme('commons_profile_image_action_links_block', $picture, $links, $account),
   );
-}
-
-/**
- * Render the recent activity block for the profile
- */
-function _commons_profile_recent_activity_block_view() {
-  // Gather the activity from Heartbeat
-  $block = heartbeat_block('view', 'privateheartbeat');
-  
-  if (isset($block['content'])) {
-    return array(
-      'subject' => '',
-      'content' => $block['content'],
-    );
-  }
-  
-  return NULL;
 }
