@@ -77,9 +77,12 @@ NOTES:
     Facebook-style Statuses and Activity Log. However, the Commons Activity
     Streams feature provides default Rules that should work well for most
     sites.
-  - Facebook-style Statuses has experimental Domain Access integration, but
-    there is no upgrade path for Domain Access support from Shoutbox because
-    the way Domain Access is integrated seems to be different.
+  - Facebook-style Statuses has support for general shouts (i.e. shouts posted
+    to the site rather than a user or group) but there is not an upgrade path
+    for these shouts because they are not exposed anywhere in the Commons
+    interface. The same situation applies to shouts that use Domain Access. If
+    you need to port this data and you write an upgrade path for it, please
+    contribute it back at http://drupal.org/node/1228504
   - If you used the Heartbeat Shouts module (which is different than the
     Shoutbox module) then follow the instructions at | in order to upgrade to
     Facebook-style Statuses.
