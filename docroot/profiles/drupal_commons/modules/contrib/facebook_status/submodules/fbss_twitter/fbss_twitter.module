@@ -171,7 +171,7 @@ function fbss_twitter_post_to_twitter($account, $message, $options = array()) {
   // Try to fit the message into a tweet.
   $message_length = drupal_strlen($message);
   if ((!empty($options['sid']) && $message_length > 140) || $options['add URL']) {
-    $url = url('statuses/'. $options['sid']);
+    $url = url('statuses/'. $options['sid'], array('absolute' => TRUE));
     if (module_exists('shorten')) {
       $url = shorten_url($url);
     }

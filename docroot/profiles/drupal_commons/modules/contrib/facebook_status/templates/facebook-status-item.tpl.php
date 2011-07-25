@@ -55,7 +55,7 @@
   <?php endif; ?>
   <span class="facebook-status-content"><?php echo $message; ?></span>
   <?php if ($attachment): ?>
-    <div class="fbsmp"><?php echo $attachment; ?></div>
+    <div class="fbsmp clearfix"><?php echo $attachment; ?></div>
   <?php endif; ?>
   <div class="facebook-status-details">
     <span class="facebook-status-time"><?php echo $created; ?></span>

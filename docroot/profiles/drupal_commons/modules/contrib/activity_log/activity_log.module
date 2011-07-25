@@ -39,7 +39,7 @@ function activity_log_menu() {
     'access arguments' => array('administer site configuration'),
     'description' => 'Allows administrators to regenerate activity for Activity Log.',
     'type' => MENU_LOCAL_TASK,
-    'file' => 'activity_log.admin.inc',
+    'file' => 'activity_log.generate.inc',
   );
   $items['activity_log/autocomplete/public_name'] = array(
     'title' => 'Autocomplete Activity Log Public Name',

@@ -377,10 +377,19 @@ function facebook_status_update_6303() {
 }
 
 /**
+ * Implementation of hook_update_N().
+ */
+function facebook_status_update_6304() {
+  variable_set('facebook_status_default_text_other', variable_get('facebook_status_default_text', ''));
+  return array();
+}
+
+/**
  * Implementation of hook_uninstall().
  */
 function facebook_status_uninstall() {
   drupal_uninstall_schema('facebook_status');
+  variable_del('facebook_status_default_text_other');
   variable_del('facebook_status_imagecache_preset');
   variable_del('facebook_status_user_other_view');
   variable_del('facebook_status_default_text');

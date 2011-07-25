@@ -126,7 +126,7 @@ function facebook_status_box(&$form_state, $recipient, $type = 'user') {
     $rid = $context['handler']->recipient_id($recipient);
   }
 
-  $default = variable_get('facebook_status_default_text', '');
+  $default = variable_get('facebook_status_default_text'. ($type == 'user' && $user->uid == $recipient->uid ? '' : '_other'), '');
   $intro = '';
   if (arg(0) == 'statuses' && (arg(1) == 'share' || arg(1) == 'conversation')) {
     // This page is autofocused. We don't want default text there since the user would have to manually remove it.

@@ -482,6 +482,10 @@ function _fbss_comments_can_view($comment, $account) {
  *   TRUE if the user can post the comment; FALSE otherwise.
  */
 function _fbss_comments_can_post($status, $account = NULL) {
+  if (module_exists('og') && $status->type == 'og') {
+    return user_access('post status comment', $account) &&
+      og_is_group_member($status->recipient, FALSE, empty($account) ? $GLOBALS['user']->uid : $account->uid);
+  }
   return user_access('post status comment', $account);
 }
 
@@ -651,7 +655,7 @@ function fbss_comments_box(&$form_state, $sid, $delay_load = TRUE, $hide_submit 
     '#type' => 'submit',
     '#value' => t('Comment'),
     '#attributes' => array('class' => 'fbss-comments-submit'),
-    '#prefix' => '<div class="'. ($hide_submit ? 'fbss-comments-hide' : '') .' fbss-comments-replace-'. $sid .'-inner">',
+    '#prefix' => '<div class="'. ($hide_submit ? 'fbss-comments-hide' : '') .' fbss-comments-replace-'. $sid .'-inner clearfix">',
     '#suffix' => '<div class="clearfix"></div></div>',
     '#submit' => array('fbss_comments_box_submit'),
   );

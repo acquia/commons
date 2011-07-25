@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * @file
+ *   Integrates Facebook-style Statuses with the Domain Access module.
+ */
+
+/**
+ * Implementation of hook_facebook_status_save().
+ */
+function fbss_domain_facebook_status_save($status, $context, $edit, $options) {
+  if (!$edit) {
+    $domain = domain_get_domain();
+    $record = (object) array('sid' => $status->sid, 'domain_id' => $domain['domain_id']);
+    drupal_write_record('fbss_domain', $record);
+  }
+}
+
+/**
+ * Implementation of hook_facebook_status_delete().
+ */
+function fbss_domain_facebook_status_delete($status, $meta) {
+  db_query("DELETE FROM {fbss_domain} WHERE sid = %d", $status->sid);
+}
+
+/**
+ * Implementation of hook_views_api().
+ */
+function fbss_domain_views_api() {
+  return array(
+    'api' => 2,
+    'path' => drupal_get_path('module', 'fbss_domain'),
+  );
+}

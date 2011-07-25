@@ -157,9 +157,12 @@ function _digests_cron() {
  */
 function template_preprocess_digests_email(&$vars) {
   $output = '';
+  $count = 0;
   foreach ($vars['messages'] as $message) {
+    $count++;
     activity_log_record_unpack($message);
-    $output .= '<div class="digests-message">'. theme('activity_log_item', $message) ."</div>\n";
+    $html_message = theme('activity_log_item', $message);
+    $output .= '<tr><td class="digests-message" style="border-bottom: 1px solid #EEEEEE;'. ($count === 1 ? ' border-top: 1px solid #EEEEEE; ' : ' ') .'padding: 12px 0;">'. $html_message ."</td></tr>\n";
   }
   $vars['stream'] = $output;
   $account = $vars['account'];
@@ -186,8 +189,8 @@ function template_preprocess_digests_email(&$vars) {
   }
   $vars['header'] = filter_xss_admin($header);
   $vars['footer'] = filter_xss_admin($footer);
-  $vars['unsubscribe'] = '<p>'. t('<a href="!unsub">Edit your settings</a> to unsubscribe from activity emails from @site.', array(
+  $vars['unsubscribe'] = t('<a href="!unsub">Edit your settings</a> to unsubscribe from activity emails from @site.', array(
     '!unsub' => url('user/'. $account->uid .'/edit', array('absolute' => TRUE)),
     '@site' => variable_get('site_name', 'Drupal'),
-  )) .'</p>';
+  ));
 }

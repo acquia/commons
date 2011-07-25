@@ -107,7 +107,7 @@ function activity_log_views_default_views() {
       'wildcard_substitution' => 'All',
       'title' => '',
       'breadcrumb' => '',
-      'default_argument_type' => 'fixed',
+      'default_argument_type' => 'current_user',
       'default_argument' => '',
       'validate_type' => 'none',
       'validate_fail' => 'not found',

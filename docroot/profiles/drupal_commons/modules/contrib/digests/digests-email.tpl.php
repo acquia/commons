@@ -18,17 +18,28 @@
  * - $header: The email header set by the administrator
  * - $footer: The email footer set by the administrator
  * - $unsubscribe: Instructions on how to unsubscribe from digest emails
+ *
+ * NOTE:
+ * HTML and CSS do not work the same way in emails as they do in web pages.
+ * The most consistent way to style emails is to use tables for the structure.
+ * Additionally, only inline styles will have any effect in some clients (most
+ * notably Gmail).
  */
 ?>
 <div id="digests">
+  <?php if ($logo) {
+    print $logo;
+  } ?>
   <?php if ($header): ?>
     <div id="digests-header">
       <?php print $header; ?>
     </div>
   <?php endif; ?>
-  <div id="digests-stream">
-    <?php print $stream; ?>
-  </div>
+  <table id="digests-stream" style="border: 1px solid #CCCCCC; margin: 12px 24px; max-width: 800px; min-width: 480px; padding: 18px 30px">
+    <tbody>
+      <?php print $stream; ?>
+    </tbody>
+  </table>
   <?php if ($footer): ?>
     <div id="digests-footer">
       <?php print $footer; ?>

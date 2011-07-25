@@ -50,6 +50,12 @@ function digests_install() {
   drupal_install_schema('digests');
   // Run after Notifications so we can change its user settings form fieldset title.
   db_query("UPDATE {system} SET weight = 1 WHERE type = 'module' AND name = 'digests'");
+  drupal_set_message(
+    st('The Activity Log Digests module has been installed.') .' '.
+    st('You will probably want to <a href="!configure">configure the digest email settings</a>.', array(
+      '!configure' => url('admin/settings/digests')
+    ))
+  );
 }
 
 /**

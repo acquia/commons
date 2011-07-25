@@ -124,11 +124,19 @@ function facebook_status_admin_advanced($form_state) {
   );
   $form['facebook_status_default_text'] = array(
     '#type' => 'textfield',
-    '#title' => t('Default text'),
-    '#description' => t('The text that appears by default in the status update box.') .' '.
+    '#title' => t('Default text for personal status updates'),
+    '#description' => t('The text that appears by default in the status update box for a personal status update.') .' '.
       t('This will be automatically cleared when a user clicks in (or focuses on) the status update box.'),
     '#default_value' => variable_get('facebook_status_default_text', ''),
     '#weight' => -30,
+  );
+  $form['facebook_status_default_text_other'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Default text when sending status messages'),
+    '#description' => t('The text that appears by default in the status update box when sending a status message to another entity.') .' '.
+      t('This will be automatically cleared when a user clicks in (or focuses on) the status update box.'),
+    '#default_value' => variable_get('facebook_status_default_text_other', ''),
+    '#weight' => -29,
   );
   $form['facebook_status_reply_type'] = array(
     '#type' => 'select',

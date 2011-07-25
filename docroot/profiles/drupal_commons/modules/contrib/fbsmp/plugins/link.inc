@@ -273,14 +273,6 @@ function fbsmp_link_fbsmp_widget_form(&$form_state) {
     $title = $form_state['fbsmp_link']['data']['title'];
     $description = $form_state['fbsmp_link']['data']['description'];
     
-    //"\xE2\x80\xA6" is the UTF8 character sequence for the ellipsis, which must be enclosed in double quotes.
-    //Neither the literal binary character (?) nor the HTML entity (&hellip;) work on all operating systems. 
-    if (drupal_strlen($title) > $settings['max_title_length']) {
-      $title = drupal_substr($title, 0, $settings['max_title_length'] - 3) ."\xE2\x80\xA6";
-    }
-    if (drupal_strlen($description) > $settings['max_description_length']) {
-      $description = drupal_substr($description, 0, $settings['max_description_length'] - 3) ."\xE2\x80\xA6";
-    }
     $form['fbsmp_link_title'] = array(
       '#title' => t('Title'),
       '#type' => 'textfield',
@@ -374,18 +366,12 @@ function fbsmp_link_fbsmp_repost_form(&$form_state, $attachment) {
  * Implementation of hook_fbsmp_widget_form_validate().
  */
 function fbsmp_link_fbsmp_widget_form_validate(&$form, &$form_state) {
-  //Set 'fbsmp_link' in case validation error happens,
-  //we would need to rebuild the form and will need these values.
-  $form_state['fbsmp_link'] = $form_state['values']['fbsmp_link_data'];
-  $form_state['fbsmp_link']['current_thumbnail'] = $form_state['values']['fbsmp_link_current_thumbnail'];
-}
-
-/**
- * Implementation of hook_fbsmp_widget_form_save().
- */
-function fbsmp_link_fbsmp_widget_form_save($form, $form_state) {
-  // The Share button was clicked but the Attach button was never clicked.
+  //Share button clicked without attaching the link, check if there is 
+  //a valid URL on the form and attach it otherwise set error.
   if (!isset($form_state['values']['fbsmp_link_data'])) {
+    if (!fbsmp_link_attach_validate($form, $form_state)) {
+      return;
+    }
     $rebuild = $form_state['rebuild'];
     fbsmp_link_attach_submit($form, $form_state);
     $form_state['rebuild'] = $rebuild;
@@ -399,23 +385,21 @@ function fbsmp_link_fbsmp_widget_form_save($form, $form_state) {
       $form_state['values']['fbsmp_link_no_thumbnail'] = 0;
     }
 
-    $title = $form_state['fbsmp_link']['data']['title'];
-    $description = $form_state['fbsmp_link']['data']['description'];
-    // "\xE2\x80\xA6" is the UTF8 character sequence for the ellipsis, which must be enclosed in double quotes.
-    // Neither the literal binary character (?) nor the HTML entity (&hellip;) work on all operating systems. 
-    if (drupal_strlen($title) > $settings['max_title_length']) {
-      $title = drupal_substr($title, 0, $settings['max_title_length'] - 3) ."\xE2\x80\xA6";
-    }
-    if (drupal_strlen($description) > $settings['max_description_length']) {
-      $description = drupal_substr($description, 0, $settings['max_description_length'] - 3) ."\xE2\x80\xA6";
-    }
-    $form_state['values']['fbsmp_link_title'] = $title;
-    if (!$settings['hide_empty_description'] || $description) {
-      $form_state['values']['fbsmp_link_description'] = $description;
-    }
-
+    $form_state['values']['fbsmp_link_title'] = $form_state['fbsmp_link']['data']['title'];
+    $form_state['values']['fbsmp_link_description'] = $form_state['fbsmp_link']['data']['description'];
     $form_state['values']['fbsmp_link_data'] = $form_state['fbsmp_link'];
   }
+  
+  //Set 'fbsmp_link' in case validation error happens,
+  //we would need to rebuild the form and will need these values.
+  $form_state['fbsmp_link'] = $form_state['values']['fbsmp_link_data'];
+  $form_state['fbsmp_link']['current_thumbnail'] = $form_state['values']['fbsmp_link_current_thumbnail'];
+}
+
+/**
+ * Implementation of hook_fbsmp_widget_form_save().
+ */
+function fbsmp_link_fbsmp_widget_form_save($form, $form_state) {
   $record = array();
   $record['page_url'] = $form_state['values']['fbsmp_link_data']['page_url'];
   $delta = $form_state['values']['fbsmp_link_current_thumbnail'];
@@ -806,7 +790,7 @@ function fbsmp_link_request_contents($url, $options = array()) {
 
   $data = array(
     'images' => array(), 
-    'title' => t('Title'),
+    'title' => $url,
     'description' => '',
   );
   $emfield = array(
@@ -859,58 +843,70 @@ function fbsmp_link_request_contents($url, $options = array()) {
   $page_url = $url;
   if (in_array($result->redirect_code, array(301, 302, 307))) {
     $page_url = $result->redirect_url;
+    $data['title'] = $page_url;
   }
   
-  _fbsmp_link_detect_charset($result->data);
-  
-  $document = new DOMDocument();
-  if (@$document->loadHTML($result->data) === FALSE) {
-    fbsmp_log_error(t("Could not parse the content on @url", array('@url' => $url)));
-    return $data;
-  }
-  
-  $xpath         = new DOMXPath($document);
-  
-  //Get title of the page.
-  $titles        = @$xpath->evaluate("//title");
-  $data['title'] = trim($titles->length > 0 ? $titles->item(0)->nodeValue : $data['title']);
-  //Get description of the page.
-  $descriptions  = @$xpath->evaluate("//meta[@name='description']");
-  $data['description'] = trim($descriptions->length > 0 ? $descriptions->item(0)->getAttribute('content') : $data['description']);
-  
-  if (!$emfield['emvideo_valid'] && !$emfield['emaudio_valid']) {
-    $hrefs         = @$xpath->evaluate("/html/body//img");
+  if (stripos($result->headers['Content-Type'], 'image') !== FALSE) {
     $images = array();
+    if (($imagesize = _fbsmp_link_validate_filesize($page_url, $options['max_imagesize'], $options['min_imagesize'], ($options['timeout'] - timer_read(__FUNCTION__) / 1000))) != -1) {
+      $images[$page_url] = $imagesize;
+    }
     
-    if (!fbsmp_include_library('url_to_absolute.inc', 'url_to_absolute')) {
-      fbsmp_log_error(t("Could not find url_to_absolute.inc file in the libraries folder"));
-      return $data;
-    }
-  
-    for ($i = 0; $i < $hrefs->length; $i++) {
-      $image_url = $hrefs->item($i)->getAttribute('src');
-      if (!isset($image_url) || empty($image_url)) {
-        continue;
-      }
-      $abs_url = url_to_absolute($page_url, $image_url);
-      if ($abs_url && ($imagesize = _fbsmp_link_validate_filesize($abs_url, $options['max_imagesize'], $options['min_imagesize'], ($options['timeout'] - timer_read(__FUNCTION__) / 1000))) != -1) {
-        $images[$abs_url] = $imagesize;
-      }   
-      if (($options['timeout'] - timer_read(__FUNCTION__) / 1000) <= 0) {
-        fbsmp_log_error(t("Request timed out for @url", array('@url' => $url)));
-        break;
-      }
-    }
-    asort($images);
-    $images = array_reverse($images, TRUE);
     $data['images'] = $images;
   }
+  else {
+    _fbsmp_link_detect_charset($result->data);
+    
+    $document = new DOMDocument();
+    if (@$document->loadHTML($result->data) === FALSE) {
+      fbsmp_log_error(t("Could not parse the content on @url", array('@url' => $url)));
+      return $data;
+    }
+    
+    $xpath         = new DOMXPath($document);
+    
+    //Get title of the page.
+    $titles        = @$xpath->evaluate("//title");
+    $data['title'] = trim($titles->length > 0 ? $titles->item(0)->nodeValue : $data['title']);
+    //Get description of the page.
+    $descriptions  = @$xpath->evaluate("//meta[@name='description']");
+    $data['description'] = trim($descriptions->length > 0 ? $descriptions->item(0)->getAttribute('content') : $data['description']);
+    
+    if (!$emfield['emvideo_valid'] && !$emfield['emaudio_valid']) {
+      $hrefs         = @$xpath->evaluate("/html/body//img");
+      $images = array();
+      
+      if (!fbsmp_include_library('url_to_absolute.inc', 'url_to_absolute')) {
+        fbsmp_log_error(t("Could not find url_to_absolute.inc file in the libraries folder"));
+        return $data;
+      }
+    
+      for ($i = 0; $i < $hrefs->length; $i++) {
+        $image_url = $hrefs->item($i)->getAttribute('src');
+        if (!isset($image_url) || empty($image_url)) {
+          continue;
+        }
+        $abs_url = url_to_absolute($page_url, $image_url);
+        if ($abs_url && ($imagesize = _fbsmp_link_validate_filesize($abs_url, $options['max_imagesize'], $options['min_imagesize'], ($options['timeout'] - timer_read(__FUNCTION__) / 1000))) != -1) {
+          $images[$abs_url] = $imagesize;
+        }   
+        if (($options['timeout'] - timer_read(__FUNCTION__) / 1000) <= 0) {
+          fbsmp_log_error(t("Request timed out for @url", array('@url' => $url)));
+          break;
+        }
+      }
+      asort($images);
+      $images = array_reverse($images, TRUE);
+      $data['images'] = $images;
+    }
+  }
+  
   //Cache the results.
   if ($options['cached']) {
     cache_set($arghash, $data, 'cache', time() + $options['cache_duration']);
   }
   
-  return ($emfield['emvideo_valid'] || $emfield['emaudio_valid']) ? array_merge($data, $emfield): $data;  
+  return ($emfield['emvideo_valid'] || $emfield['emaudio_valid']) ? array_merge($data, $emfield): $data;
 }
 
 /**

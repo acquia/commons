@@ -732,17 +732,6 @@ function activity_log_log_action($settings) {
   if (empty($settings['visibility']['viewer_id'])) {
     $settings['visibility']['viewer_id'] = $user->uid;
   }
-  // Store the event record.
-  $event = (object) array(
-    'tid' => $settings['tid'],
-    'created' => $time,
-    'acting_uid' => $settings['acting_uid'],
-    'target_id' => $target['id'],
-    'target_type' => $target['type'],
-    'target_class' => $target['class'],
-    'id_map' => $map_serialized,
-  );
-  drupal_write_record('activity_log_events', $event);
   // Determine who the stream owners and viewers are.
   $stream_owner_entity_groups = module_invoke_all('activity_log_entity_groups');
   $viewer_entity_groups = module_invoke_all('activity_log_entity_groups', FALSE);
@@ -775,6 +764,9 @@ function activity_log_log_action($settings) {
       $results[$type] = array_merge_recursive($results[$type], (array) call_user_func_array($group['items callback'], $args));
     }
   }
+  if (empty($results['stream_owner'])) {
+    return;
+  }
   foreach ($results['stream_owner'] as $owner_type => $ids) {
     $results['stream_owner'][$owner_type] = array_unique($ids);
   }
@@ -784,6 +776,17 @@ function activity_log_log_action($settings) {
   if (in_array(0, $viewers)) {
     $viewers = array(0);
   }
+  // Store the event record.
+  $event = (object) array(
+    'tid' => $settings['tid'],
+    'created' => $time,
+    'acting_uid' => $settings['acting_uid'],
+    'target_id' => $target['id'],
+    'target_type' => $target['type'],
+    'target_class' => $target['class'],
+    'id_map' => $map_serialized,
+  );
+  drupal_write_record('activity_log_events', $event);
   // Find similar events based on the grouping method.
   $group_method = $settings['grouping']['group_method'];
   if ($group_method != 'none') {

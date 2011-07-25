@@ -36,16 +36,6 @@ function digests_admin($form_state) {
     '#size' => 11,
     '#maxlength' => 15,
   );
-  $form['digests_css'] = array(
-    '#type' => 'textarea',
-    '#title' => t('CSS to include in digest emails'),
-    '#description' => t('If this field is empty, Mime Mail will use its default CSS handling.') .' '.
-      t('This behavior is to look for a mail.css file in your default theme.') .' '.
-      t('If no mail.css is found, all CSS files in your default theme will be used.'),
-    '#rows' => 8,
-    '#default_value' => variable_get('digests_css', ''),
-    '#access' => user_access('set custom CSS for digests'),
-  );
   $form['digests_logo'] = array(
     '#type' => 'textfield',
     '#title' => t('Logo image'),

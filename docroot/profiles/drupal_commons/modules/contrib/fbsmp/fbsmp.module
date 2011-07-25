@@ -928,7 +928,7 @@ function fbsmp_form_facebook_status_box_alter(&$form, &$form_state) {
     $info = fbsmp_get_plugin($ac_plugin);
     $name = isset($info['name']) ? $info['name'] : $ac_plugin;
     $form['fbsmp']['openpluginform'] = array(
-      '#value' => '<div class="fbsmp-inner-expanded">',
+      '#value' => '<div class="fbsmp-inner-expanded clearfix">',
     );
     
     $form['fbsmp']['ac_message'] = array(
@@ -1077,6 +1077,7 @@ function fbsmp_status_form_submit(&$form, &$form_state, $attachment_data = '') {
   $form_state['facebook_status'] = array(
     'type' => $type,
     'recipient' => $rid,
+    'sid' => $status->sid,
   );
   
   $form_state['rebuild'] = TRUE;
@@ -1561,9 +1562,11 @@ function fbsmp_link_attach_validate(&$form, &$form_state) {
   }
   if (!valid_url($url, TRUE)) {
     form_set_error('fbsmp_link_url', t('Enter a valid url to share.'));
+    return false;
   }
   else {
     form_set_value($form['fbsmp']['fbsmp_link_url'], $url, $form_state);
+    return true;
   }
 }
 
@@ -1578,6 +1581,8 @@ function fbsmp_link_attach_submit(&$form, &$form_state) {
     'timeout' => $settings['timeout'],
     'max_imagesize' => $settings['max_imagesize'],
     'min_imagesize' => $settings['min_imagesize'],
+    'max_title_length' => $settings['max_title_length'],
+    'max_description_length' => $settings['max_description_length'],
   );
   $options['cached'] = FALSE;
   $options['hash_extra'] = 'fbsmp_link';
@@ -1606,11 +1611,45 @@ function fbsmp_link_attach_submit(&$form, &$form_state) {
   }
   
   $data = fbsmp_link_request_contents($url, $options);
+  _fbsmp_link_sanitize_request_data($data, $options);
   $form_state['fbsmp_link']['data'] = $data;
   $form_state['fbsmp_link']['step'] = 2;
   $form_state['fbsmp_link']['page_url'] = $url;
   $form_state['fbsmp_link']['current_thumbnail'] = 1;
   $form_state['rebuild'] = TRUE;
+}
+
+/**
+ * Sanitize the data requested from the URL according to the options provided.
+ *
+ * @param $request_data
+ *   the request data to sanitize
+ * @param $options
+ *   - max_title_length
+ *     Maximum title length for the link. Defaults to zero, for no truncation.
+ *   - max_description_length
+ *     Maximum description length for the link. Defaults to zero, for no truncation.
+ *
+ * @return
+ *   The sanitized data.
+ */
+function _fbsmp_link_sanitize_request_data(&$data, $options = array()) {
+  //Merge the default options.
+  $options += array(
+    'max_title_length' => 0,
+    'max_description_length' => 0,
+  );
+
+  //"\xE2\x80\xA6" is the UTF8 character sequence for the ellipsis, which must be enclosed in double quotes.
+  //Neither the literal binary character (?) nor the HTML entity (&hellip;) work on all operating systems. 
+  if ($options['max_title_length'] > 0 && drupal_strlen($data['title']) > $options['max_title_length']) {
+    $data['title'] = drupal_substr($data['title'], 0, $options['max_title_length'] - 3) ."\xE2\x80\xA6";
+  }
+  if ($options['max_description_length'] > 0 && drupal_strlen($data['description']) > $options['max_description_length']) {
+    $data['description'] = drupal_substr($data['description'], 0, $options['max_description_length'] - 3) ."\xE2\x80\xA6";
+  }
+  
+  return $data; 
 }
 
 /**

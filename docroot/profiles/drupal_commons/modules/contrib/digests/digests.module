@@ -68,36 +68,10 @@ function digests_theme($existing, $type, $theme, $path) {
 }
 
 /**
- * Override the CSS handling if we have custom CSS set.
+ * Override the crazy custom CSS that Mime Mail tries to do.
  */
 function digests_preprocess_mimemail_message(&$vars) {
   if ($vars['mailkey'] == 'mail-digests') {
-    $css = '';
-    $path = drupal_get_path('module', 'digests') .'/css/digests.css';
-    if (file_exists($path)) {
-      $css .= file_get_contents($path);
-    }
-    $css .= "\n". variable_get('digests_css', '');
-    module_load_include('inc', 'mimemail', 'theme/mimemail.theme');
-    // Regexp to match comment blocks.
-    $comment     = '/\*[^*]*\*+(?:[^/*][^*]*\*+)*/';
-    // Regexp to match double quoted strings.
-    $double_quot = '"[^"\\\\]*(?:\\\\.[^"\\\\]*)*"';
-    // Regexp to match single quoted strings.
-    $single_quot = "'[^'\\\\]*(?:\\\\.[^'\\\\]*)*'";
-    // Perform some safe CSS optimizations. (derived from core CSS aggregation)
-    $css = preg_replace_callback(
-      "<$double_quot|$single_quot|$comment>Sus",  // Match all comment blocks along
-      "_mimemail_process_comment",                // with double/single quoted strings
-      $css);                                      // and feed them to _mimemail_process_comment().
-    $css = preg_replace(
-      '<\s*([@{}:;,]|\)\s|\s\()\s*[^\n\S]>S',  // Remove whitespace around separators,
-      '\1',                                    // but keep space around parentheses
-      $css);                                   // and new lines between definitions.
-    // End with a new line.
-    $css .= "\n";
-    // Wordwrap to adhere to RFC821
-    $css = wordwrap($css, 700);
-    $vars['css'] = $css;
+    $vars['css'] = '';
   }
 }

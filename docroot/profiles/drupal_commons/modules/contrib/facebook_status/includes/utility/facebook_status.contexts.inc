@@ -236,7 +236,7 @@ class facebook_status_og_context extends facebook_status_node_context {
   function access_add($recipient, $sender) {
     // Only group members can add content of any kind.
     return parent::access_add($recipient, $sender) &&
-      og_is_group_member($recipient->nid, TRUE, $sender->uid);
+      og_is_group_member($recipient->nid, FALSE, $sender->uid);
   }
   function access_delete($status, $account) {
     return parent::access_delete($status, $account) ||
@@ -245,12 +245,12 @@ class facebook_status_og_context extends facebook_status_node_context {
   function access_view($status, $account) {
     // Only group members can view group statuses if the group is private.
     return parent::access_view($status, $account) &&
-      (og_is_group_member($status->recipient, TRUE, $account->uid) || empty($this->load_recipient($status->recipient)->og_private));
+      (og_is_group_member($status->recipient, FALSE, $account->uid) || empty($this->load_recipient($status->recipient)->og_private));
   }
   function access_stream($recipient, $account) {
     // Only group members can view group statuses if the group is private.
     return parent::access_stream($recipient, $account) &&
-      (og_is_group_member($recipient->nid, TRUE, $account->uid) || empty($recipient->og_private));
+      (og_is_group_member($recipient->nid, FALSE, $account->uid) || empty($recipient->og_private));
   }
 }
 
@@ -288,5 +288,48 @@ class facebook_status_term_context extends facebook_status_context {
   }
   function access_stream($recipient, $account) {
     return parent::access_stream($recipient, $account) || user_access('administer taxonomy', $account);
+  }
+}
+
+/**
+ * The "site" context.
+ *
+ * Lets FBSS work like a site guestbook, letting users post statuses to the
+ * site itself. Integrates with Domain Access to allow posting to specific
+ * domains.
+ */
+class facebook_status_domain_context extends facebook_status_context {
+  function type() {
+    return 'domain';
+  }
+  function is_applicable() {
+    return TRUE;
+  }
+  function find_recipient() {
+    if (module_exists('fbss_domain')) {
+      $domain = domain_get_domain();
+      return $domain['domain_id'];
+    }
+    return 0;
+  }
+  function load_random_recipient() {
+    return 0;
+  }
+  function recipient_id($recipient) {
+    return isset($recipient['domain_id']) ? $recipient['domain_id'] : 0;
+  }
+  function recipient_url($recipient) {
+    if (module_exists('fbss_domain')) {
+      $domain = domain_get_domain();
+      return url(domain_url_encode($domain['subdomain']));
+    }
+    return url('<front>');
+  }
+  function recipient_name($recipient) {
+    if (module_exists('fbss_domain')) {
+      $domain = domain_get_domain();
+      return $domain['sitename'];
+    }
+    return variable_get('site_name', 'Drupal');
   }
 }

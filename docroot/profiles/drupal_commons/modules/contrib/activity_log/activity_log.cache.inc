@@ -140,7 +140,7 @@ function activity_log_taxonomy($op, $type, $array = NULL) {
 function activity_log_comment($a1, $op) {
   $comment = (object) $a1;
   if ($op == 'insert') {
-    _activity_log_update_related($comment->nid, 'node', $comment->timestamp);
+    _activity_log_update_related($comment->nid, 'node', array(), array(), $comment->timestamp);
   }
   elseif ($op == 'update') {
     _activity_log_update_related($comment->cid, 'comment');
@@ -180,7 +180,7 @@ function activity_log_fbss_comments_after_save($comment, $edit) {
     _activity_log_update_related($comment->cid, 'fbss_comment');
   }
   else {
-    _activity_log_update_related($comment->sid, 'facebook_status', $comment->created);
+    _activity_log_update_related($comment->sid, 'facebook_status', array(), array(), $comment->created);
   }
 }
 
