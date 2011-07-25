@@ -29,6 +29,13 @@ function commons_status_streams_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'facebook_status_filter';
+  $strongarm->value = '5';
+
+  $export['facebook_status_filter'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'facebook_status_hide_length';
   $strongarm->value = '500';
 
@@ -36,8 +43,15 @@ function commons_status_streams_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'facebook_status_imagecache_preset';
+  $strongarm->value = 'user_picture_meta';
+
+  $export['facebook_status_imagecache_preset'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'facebook_status_length';
-  $strongarm->value = '0';
+  $strongarm->value = '10000';
 
   $export['facebook_status_length'] = $strongarm;
   $strongarm = new stdClass;
@@ -50,10 +64,31 @@ function commons_status_streams_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'facebook_status_profile';
+  $strongarm->value = 0;
+
+  $export['facebook_status_profile'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'facebook_status_reply_type';
   $strongarm->value = 'convo';
 
   $export['facebook_status_reply_type'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'facebook_status_share_view';
+  $strongarm->value = 'activity_log_stream';
+
+  $export['facebook_status_share_view'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'facebook_status_user_other_view';
+  $strongarm->value = 'activity_log_stream';
+
+  $export['facebook_status_user_other_view'] = $strongarm;
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;

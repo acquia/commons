@@ -3,6 +3,22 @@
 include_once('commons_status_streams.features.inc');
 
 /**
+ * Implementation of hook_menu().
+ */
+function commons_status_streams_menu() {
+  $items = array();
+  $items['stream'] = array(
+    'title' => 'Activity stream',
+    'page callback' => 'theme',
+    'page arguments' => array('facebook_status_form_display', NULL, NULL, 'activity_log_stream'),
+    'access callback' => 'facebook_status_user_access',
+    'access arguments' => array('view_stream'),
+    'description' => 'An activity dashboard page.',
+  );
+  return $items;
+}
+
+/**
  * Implementation of hook_context_default_contexts_alter().
  */
 function commons_status_streams_context_default_contexts_alter(&$contexts) {
