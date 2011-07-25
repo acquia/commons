@@ -54,10 +54,6 @@ function _commons_core_block_list() {
     'info' => t('Group create content selector'),
     'cache' => BLOCK_NO_CACHE,
   );
-  $blocks['group_activity'] = array(
-    'info' => t('Group activity'),
-    'cache' => BLOCK_NO_CACHE,
-  );
   $blocks['group_members'] = array(
     'info' => t('Group members and admins'),
     'cache' => BLOCK_NO_CACHE,
@@ -220,22 +216,6 @@ function _commons_core_group_create_content_block_view() {
     'subject' => '',
     'content' => drupal_get_form('commons_core_group_create_content_block_form'),
   );
-}
-
-/**
- * Display the recent group activity block
- */
-function _commons_core_group_activity_block_view() {
-  // Gather the activity from Heartbeat
-  $block = heartbeat_block('view', 'ogheartbeat');
-  
-  if (isset($block['content'])) {
-    // Alter the title
-    $block['subject'] = t('Latest group activity');
-    return $block;
-  }
-  
-  return NULL;
 }
 
 /**

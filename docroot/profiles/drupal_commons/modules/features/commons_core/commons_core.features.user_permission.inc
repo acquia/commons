@@ -711,14 +711,6 @@ function commons_core_user_default_permissions() {
     ),
   );
 
-  // Exported permission: view personal heartbeat activity
-  $permissions['view personal heartbeat activity'] = array(
-    'name' => 'view personal heartbeat activity',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
   // Exported permission: view revisions
   $permissions['view revisions'] = array(
     'name' => 'view revisions',
