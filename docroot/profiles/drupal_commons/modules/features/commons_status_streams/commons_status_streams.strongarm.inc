@@ -22,6 +22,13 @@ function commons_status_streams_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'facebook_status_default_text_other';
+  $strongarm->value = 'Write something...';
+
+  $export['facebook_status_default_text_other'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'facebook_status_hide_length';
   $strongarm->value = '500';
 
