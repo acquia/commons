@@ -104,17 +104,12 @@ function drupal_commons_features_form(&$form_state, $url) {
     '#default_value' => 1,
     '#description' => st('A feature that extends Drupal\'s simple profiles to include a variety of additional profile fields useful for community sites, plus various important user listings. (Strongly recommended.)'),
   );
-  $form['misc']['feature-commons_dashboard'] = array(
+  $form['misc']['feature-commons_status_streams'] = array(
     '#type' => 'checkbox',
-    '#title' => st('Dashboard'),
-    '#default_value' => $php5_2 ? 1 : 0,
-    '#disabled' => !$php5_2,
-    '#description' => st('A feature that provides a unique-per-user, user-customizable dashboard of recent relevant site activity.'),
+    '#title' => st('Activity streams'),
+    '#default_value' => 1,
+    '#description' => st('A feature that adds status updates and activity streams to users and groups.'),
   );
-  if (!$php5_2) {
-    $form['misc']['feature-commons_dashboard']['#value'] = 0;
-    $form['misc']['feature-commons_dashboard']['#description'] .= '<span style="color:red;"> ' . st('Your server must have PHP 5.2 or higher in order to active this feature.') . '</span>';
-  }
   $form['misc']['feature-commons_notifications'] = array(
     '#type' => 'checkbox',
     '#title' => st('Notifications'),
@@ -132,12 +127,6 @@ function drupal_commons_features_form(&$form_state, $url) {
     '#title' => st('Community invitations'),
     '#default_value' => 1,
     '#description' => st('Enable users to send invitations to join the site to external people.'),
-  );
-  $form['misc']['feature-commons_shoutbox'] = array(
-    '#type' => 'checkbox',
-    '#title' => st('Shoutbox'),
-    '#default_value' => 1,
-    '#description' => st('A feature that lets users post short messages to each other, with (almost) live updates to other users. If enabled, this is provided on group home pages for group users.'),
   );
   $form['misc']['feature-commons_group_aggregator'] = array(
     '#type' => 'checkbox',

@@ -236,3 +236,58 @@ function commons_core_update_6008() {
   variable_set('theme_default', 'commons_origins');
   return array();
 }
+
+/**
+ * Enable activity streams and disable things it makes obsolete.
+ */
+function commons_core_update_6009() {
+  // Install activity streams.
+  features_install_modules(array('commons_status_streams'));
+
+  // Port data.
+  module_load_include('inc', 'activity_log', 'activity_log.generate');
+  activity_log_regenerate();
+  // TODO: port data from shoutbox to FBSS
+
+  // Disable user_relationship_elaborations (it's pointless with one-way relationships)
+  module_disable(array('user_relationship_elaborations'));
+
+  // Disable dashboard.
+  $dashboard_modules = array(
+    'commons_dashboard',
+    'homebox_example',
+    'homebox_og',
+    'homebox',
+  );
+  if (!module_exists('commons_event')) {
+    $dashboard_modules[] = 'jquery_ui';
+  }
+  module_disable($dashboard_modules);
+
+  // Disable shoutbox.
+  $shoutbox_modules = array(
+    'commons_shoutbox',
+    'shoutbox_domain',
+    'shoutbox_group',
+    'shoutbox_points',
+    'shoutbox_rules',
+    'shoutbox_tags',
+    'shoutbox_user',
+    'shoutbox',
+  );
+  module_disable($shoutbox_modules);
+
+  // Disable heartbeat.
+  $heartbeat_modules = array(
+    'flag_heartbeat',
+    'friendlist_activity',
+    'hds',
+    'heartbeat_comments',
+    'heartbeat_example',
+    'hrules',
+    'og_activity',
+    'shouts',
+    'heartbeat',
+  );
+  module_disable($heartbeat_modules);
+}
