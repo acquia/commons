@@ -81,6 +81,13 @@ function commons_status_streams_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'fbsmp_ignore_sdefault';
+  $strongarm->value = 1;
+
+  $export['fbsmp_ignore_sdefault'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'fbss_comments_user_pictures';
   $strongarm->value = 'user_picture_meta';
 
