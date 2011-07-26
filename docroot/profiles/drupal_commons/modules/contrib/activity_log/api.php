@@ -106,6 +106,10 @@ function hook_activity_log_entity_groups($stream_owner = TRUE) {
  * - arguments: An array of additional arguments to pass to the count and
  *   generate callbacks. Useful for events with conditional names.
  * - file: (Optional) A file to include before the callbacks are executed.
+ * - target_type: (Optional) The Rules data type of the entity for which your
+ *   event regenerates activity messages. Existing activity messages that use
+ *   this data type will be deleted before activity is regenerated to avoid
+ *   duplicates.
  *
  * The callback's parameters include:
  *
@@ -127,18 +131,22 @@ function hook_activity_log_regenerate_info() {
     'comment_insert' => array(
       'callback' => 'activity_log_regenerate_comments',
       'file' => $path,
+      'target_type' => 'comment',
     ),
     'node_insert' => array(
       'callback' => 'activity_log_regenerate_nodes',
       'file' => $path,
+      'target_type' => 'node',
     );
     'taxonomy_term_insert' => array(
       'callback' => 'activity_log_regenerate_taxonomy_terms',
       'file' => $path,
+      'target_type' => 'taxonomy_term',
     );
     'user_insert' => array(
       'callback' => 'activity_log_regenerate_users',
       'file' => $path,
+      'target_type' => 'user',
     );
   );
   return $items;

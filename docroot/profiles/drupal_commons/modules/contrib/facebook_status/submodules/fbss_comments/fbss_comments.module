@@ -126,6 +126,12 @@ function fbss_comments_theme($existing, $type, $theme, $path) {
         'destination' => '',
       ),
     ),
+    'fbss_comments_items_email' => array(
+      'arguments' => array(
+        'comments' => array(),
+        'destination' => '',
+      ),
+    ),
     'fbss_comments_form_display' => array(
       'arguments' => array(
         'sid' => NULL,
@@ -200,6 +206,49 @@ function theme_fbss_comments_item($comment, $classes = array(), $destination = '
   if (module_exists('modalframe')) {
     modalframe_parent_js();
   }
+  return $output;
+}
+
+/**
+ * Displays a status comment thread with inline styles suitable for email.
+ *
+ * @param $comments
+ *   An array of comment objects to display.
+ * @param $destination
+ *   The destination query string for edit and delete links. Usually the current
+ *   page unless this function is called from a JavaScript callback page.
+ * @return
+ *   Themed HTML for the status comments.
+ */
+function theme_fbss_comments_items_email($comments, $destination = '') {
+  $count = count($comments);
+  if (!$count) {
+    return;
+  }
+  $output = '<table style="background-color: #EEEEEE; border: 1px solid #CCCCCC; margin-left: 20px;"><tbody>';
+  $rendered = 0;
+  foreach ($comments as $key => $comment) {
+    if (!fbss_comments_can('view', $comment)) {
+        continue;
+    }
+    $author = _facebook_status_user_load($comment->uid);
+    $output .= '<tr><td style="'. ($key == 0 ? '' : 'border-top: 1px solid #CCCCCC; ') .'padding: 10px;">';
+    if (variable_get('fbss_comments_user_pictures', 0)) {
+      $output .= '<table><tbody><tr><td>'. _fbss_comments_user_picture($author) .'</td><td>';
+    }
+    $output .= '<div>'. theme('username', $author) .' ';
+    $comment_text = _facebook_status_run_filter($comment->comment);
+    $comment_text = nl2br($comment_text);
+    $output .= $comment_text;
+    $output .= '</div><div>';
+    $output .= '<span style="color: #666666">'. format_date($comment->created) .'</span>';
+    $output .= l(t('Reply'), $destination) .'</div>';
+    if (variable_get('fbss_comments_user_pictures', 0)) {
+      $output .= '</td></tr></tbody></table>';
+    }
+    $output .= '</td></tr>';
+  }
+  $output .= '</tbody></table>';
   return $output;
 }
 

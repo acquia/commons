@@ -144,6 +144,22 @@ function activity_log_views_default_views() {
       'validate_argument_php' => '',
     ),
   ));
+  $handler->override_option('filters', array(
+    'display_type' => array(
+      'operator' => '=',
+      'value' => 'web',
+      'group' => '0',
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'id' => 'display_type',
+      'table' => 'activity_log_templates',
+      'field' => 'display_type',
+      'relationship' => 'none',
+    ),
+  ));
   $handler->override_option('access', array(
     'type' => 'perm',
     'perm' => 'view all activity messages',
@@ -152,6 +168,7 @@ function activity_log_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('use_ajax', TRUE);
+  $handler->override_option('items_per_page', 20);
   $handler->override_option('use_pager', '1');
   $handler = $view->new_display('page', 'Page', 'page_1');
   $handler->override_option('path', 'activities');

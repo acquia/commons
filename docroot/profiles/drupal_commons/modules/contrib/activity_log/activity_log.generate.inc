@@ -5,7 +5,7 @@
  *   Provides functions that regenerate activity messages.
  */
 
-define('ACTIVITY_LOG_GENERATE_COUNT', 50);
+define('ACTIVITY_LOG_GENERATE_COUNT', 1);
 
 //================
 // ADMINISTRATION
@@ -32,8 +32,9 @@ function activity_log_admin_regenerate($form_state) {
     '#description' => t('Activity Log will trigger the selected event for each related entity it can find.') .' '.
       t('This will trigger every Rule for that event and every action for each triggered Rule.') .' '.
       t('The events shown all have associated Rules with Activity Log actions.') .' '.
-      t('However, you may want to temporarily disable any Rules that log activities so that they are not executed while regenerating activity messages.'),
-    '#required' => TRUE,
+      t('However, you may want to temporarily disable any Rules that log activities so that they are not executed while regenerating activity messages.') .' '.
+      t('Also note that existing activity for regenerated events will be deleted during this process.') .' '.
+      t('If you select no events above, activity will be regenerated for all events.'),
     '#options' => $events,
   );
   $form['age'] = array(
@@ -42,7 +43,6 @@ function activity_log_admin_regenerate($form_state) {
     '#description' => t('The greatest number of days old that content can be for it to have an activity message generated.') .' '.
       t('Leave blank or enter 0 to regenerate activity messages for all content.'),
     '#field_suffix' => t('days'),
-    '#default_value' => 7,
   );
   $form['submit'] = array(
     '#type' => 'submit',
@@ -78,16 +78,18 @@ function activity_log_admin_regenerate_submit($form, $form_state) {
  * Get a list of events that have associated Rules with Activity Log actions.
  */
 function activity_log_get_rules_activity_events() {
-  $regenerate = array_keys(module_invoke_all('activity_log_regenerate_info'));
-  $events = array();
-  foreach (_rules_get_rule_sets() as $key => $event) {
-    if (strpos($key, 'event_') === 0 && in_array(drupal_substr($key, 6), $regenerate)) {
-      foreach ($event['rules'] as $name => $info) {
-        if ($info['#active']) {
-          foreach ($info['#actions'] as $action) {
-            if ($action['#name'] == 'activity_log_log_action') {
-              $events[drupal_substr($key, 6)] = $event['info']['label'];
-              break;
+  static $events = array();
+  if (empty($events)) {
+    $regenerate = array_keys(module_invoke_all('activity_log_regenerate_info'));
+    foreach (_rules_get_rule_sets() as $key => $event) {
+      if (strpos($key, 'event_') === 0 && in_array(drupal_substr($key, 6), $regenerate)) {
+        foreach ($event['rules'] as $name => $info) {
+          if ($info['#active']) {
+            foreach ($info['#actions'] as $action) {
+              if ($action['#name'] == 'activity_log_log_action') {
+                $events[drupal_substr($key, 6)] = $event['info']['label'];
+                break;
+              }
             }
           }
         }
@@ -107,7 +109,7 @@ function activity_log_regenerate($events = array(), $age = 0) {
   }
   $batch = array(
     'operations' => array(
-      array('activity_log_regenerate_prepare', array($age)),
+      array('activity_log_regenerate_prepare', array($events, $age)),
       array('activity_log_regenerate_process', array($events, $age)),
     ),
     'finished' => 'activity_log_regenerate_batch_finished',
@@ -120,14 +122,22 @@ function activity_log_regenerate($events = array(), $age = 0) {
 /**
  * Delete activity messages created within the specified period.
  */
-function activity_log_regenerate_prepare($age, &$context) {
-  if ($age == 0) {
-    db_query("TRUNCATE TABLE {activity_log_events}");
-    db_query("TRUNCATE TABLE {activity_log_messages}");
+function activity_log_regenerate_prepare($events, $age, &$context) {
+  $regenerate = module_invoke_all('activity_log_regenerate_info');
+  foreach ($regenerate as $event => $info) {
+    if (isset($events[$event]) && isset($info['target_type'])) {
+      $events[$event] = $info['target_type'];
+    }
   }
-  else {
-    db_query("DELETE FROM {activity_log_events} WHERE created > %d", $age);
-    db_query("DELETE FROM {activity_log_messages} WHERE created > %d", $age);
+  if (!empty($events)) {
+    if ($age == 0) {
+      db_query("DELETE FROM {activity_log_events} WHERE target_type IN (". db_placeholders($events, 'text') .")", $events);
+      db_query("DELETE FROM {activity_log_messages} WHERE target_type IN (". db_placeholders($events, 'text') .")", $events);
+    }
+    else {
+      db_query("DELETE FROM {activity_log_events} WHERE target_type IN (". db_placeholders($events, 'text') .") AND created > %d", $events, $age);
+      db_query("DELETE FROM {activity_log_messages} WHERE target_type IN (". db_placeholders($events, 'text') .") AND created > %d", $events, $age);
+    }
   }
   $context['finished'] = 1;
 }
@@ -136,38 +146,58 @@ function activity_log_regenerate_prepare($age, &$context) {
  * Regenerate activity messages.
  */
 function activity_log_regenerate_process($events, $age, &$context) {
+  $c = &$context['sandbox'];
   $regenerate = module_invoke_all('activity_log_regenerate_info');
-  if (!isset($context['sandbox']['progress'])) {
-    $context['sandbox']['progress'] = 0;
-    $context['sandbox']['max'] = count($events);
+  if (!isset($c['progress'])) {
+    $c['events'] = $events;
+    $c['progress'] = -1;
+    $c['max'] = count($c['events']);
   }
-  if (!empty($events) && $context['sandbox']['progress'] < $context['sandbox']['max']) {
-    if (empty($context['sandbox']['last_result'])) {
-      $context['sandbox']['last_result'] = FALSE;
-      $event = array_shift($events);
-      $context['sandbox']['event'] = $event;
-      $context['sandbox']['progress']++;
+  if (!empty($c['events']) || !empty($c['last_result'])) {
+    if (empty($c['last_result'])) {
+      $c['last_result'] = FALSE;
+      if (!empty($c['events'])) {
+        $event = array_shift($c['events']);
+        $c['event'] = $event;
+        $context['results'][] = $c['event'];
+      }
+      $c['progress']++;
     }
-    $info = $regenerate[$context['sandbox']['event']];
+    $info = $regenerate[$c['event']];
     if (isset($info['file']) && file_exists($info['file'])) {
       include_once $info['file'];
     }
     if (!isset($info['arguments'])) {
       $info['arguments'] = array();
     }
-    $context['sandbox']['last_result'] = call_user_func_array($info['callback'],
-      array_merge(array($age), array($context['sandbox']['last_result']), $info['arguments'])
+    $c['last_result'] = call_user_func_array($info['callback'],
+      array_merge(array($age), array($c['last_result']), $info['arguments'])
     );
+    if (!is_numeric($c['last_result'])) {
+      $context['message'] = t('Processing Rules for event %event (@current of @total)',
+        array(
+          '%event' => $c['event'],
+          '@current' => $c['progress']+1,
+          '@total' => $c['max'],
+        )
+      );
+    }
+    else {
+      $context['message'] = format_plural($c['last_result'], 
+        'Processing Rules for event %event (@current of @total events) &ndash; activity messages generated for 1 entity',
+        'Processing Rules for event %event (@current of @total events) &ndash; activity messages generated for @count entities',
+        array(
+          '%event' => $c['event'],
+          '@current' => $c['progress']+1,
+          '@total' => $c['max'],
+        )
+      );
+    }
   }
-  $context['message'] = t('Processing Rules for event %event (@current of @total)',
-    array(
-      '%event' => $context['sandbox']['event'],
-      '@current' => $context['sandbox']['progress'],
-      '@total' => $context['sandbox']['max'],
-    )
-  );
-  $context['results'][] = $context['sandbox']['event'];
-  $context['finished'] = $context['sandbox']['progress'] / $context['sandbox']['max'];
+  else {
+    $c['progress']++;
+  }
+  $context['finished'] = $c['progress'] / $c['max'];
 }
 
 /**
@@ -195,18 +225,22 @@ function activity_log_activity_log_regenerate_info() {
     'comment_insert' => array(
       'callback' => 'activity_log_regenerate_comments',
       'file' => $path,
+      'target_type' => 'comment',
     ),
     'node_insert' => array(
       'callback' => 'activity_log_regenerate_nodes',
       'file' => $path,
+      'target_type' => 'node',
     ),
     'taxonomy_term_insert' => array(
       'callback' => 'activity_log_regenerate_taxonomy_terms',
       'file' => $path,
+      'target_type' => 'taxonomy_term',
     ),
     'user_insert' => array(
       'callback' => 'activity_log_regenerate_users',
       'file' => $path,
+      'target_type' => 'user',
     ),
     'facebook_status_tags_user_was_tagged' => array(
       'callback' => 'activity_log_regenerate_fbss_mentions',
@@ -215,10 +249,12 @@ function activity_log_activity_log_regenerate_info() {
     'fbss_comments_save' => array(
       'callback' => 'activity_log_regenerate_fbss_comments',
       'file' => $path,
+      'target_type' => 'fbss_comment',
     ),
     'facebook_status_save' => array(
       'callback' => 'activity_log_regenerate_statuses',
       'file' => $path,
+      'target_type' => 'facebook_status',
     ),
     'og_user_insert' => array(
       'callback' => 'activity_log_regenerate_og_join',
@@ -290,7 +326,8 @@ function activity_log_regenerate_fbss_comments($age, $offset) {
  * Triggers the facebook_status_save Rules event for each relevant status.
  */
 function activity_log_regenerate_statuses($age, $offset) {
-  return _activity_log_regenerate_object('facebook_status_save', "SELECT * FROM {facebook_status} WHERE created > %d", $age, $offset);
+  $val = _activity_log_regenerate_object('facebook_status_save', "SELECT * FROM {facebook_status} WHERE created > %d", $age, $offset);
+  return $val;
 }
 
 /**
@@ -317,6 +354,7 @@ function activity_log_regenerate_flag($age, $offset, $flag) {
  * Trigger events for historical data.
  */
 function _activity_log_regenerate_object($event, $query, $age, $offset, $timeless_query = NULL) {
+  $events = activity_log_get_rules_activity_events();
   if (!$age && $timeless_query) {
     $result = db_query_range($timeless_query, $offset, ACTIVITY_LOG_GENERATE_COUNT);
   }
@@ -348,60 +386,10 @@ function _activity_log_regenerate_object($event, $query, $age, $offset, $timeles
       $offset + $count,
       'One activity message generated for the event %event.',
       '@count activity messages generated for the event %event.',
-      array('%event' => $event)
+      array('%event' => $events[$event])
     ));
   }
   elseif ($count == ACTIVITY_LOG_GENERATE_COUNT) {
     return $offset + ACTIVITY_LOG_GENERATE_COUNT;
   }
 }
-
-//====================================================
-// IMPORT DIRECTLY FROM OTHER ACTIVITY STREAM MODULES
-//====================================================
-
-/*
-function activity_log_import() {
-  // Import data directly from Heartbeat.
-  if (db_table_exists('heartbeat_activity')) {
-    db_query("INSERT INTO activity_log_templates SET tid = 0, cacheable = 1");
-    db_query("
-      INSERT INTO activity_log_messages
-        (tid, created, last_updated, stream_owner_id, stream_owner_type, cached)
-      SELECT 0, timestamp, timestamp, uid, 'user', message
-      FROM heartbeat_activity
-      WHERE nid = 0
-    ");
-    db_query("
-      INSERT INTO activity_log_messages
-        (tid, created, last_updated, stream_owner_id, stream_owner_type, cached)
-      SELECT 0, timestamp, timestamp, nid, 'node', message
-      FROM heartbeat_activity
-      WHERE nid <> 0
-    ");
-    drupal_set_message(t('Heartbeat activity has been ported to Activity Log.') .' '.
-      t('You can now uninstall the Heartbeat module.')
-    );
-  }
-
-  // Import data directly from Activity.
-  if (db_table_exists('activity_messages')) {
-    db_query("INSERT IGNORE INTO activity_log_templates SET tid = 0, cacheable = 1");
-    db_query("
-      INSERT INTO activity_log_messages
-        (tid, created, last_updated, stream_owner_id, stream_owner_type, viewer_id, cached)
-      SELECT 0, created, created, value, 'user', at.uid, message
-      FROM activity_access aa
-      LEFT JOIN activity a
-        ON aa.aid = a.aid
-      LEFT JOIN activity_targets at
-        ON aa.aid = at.aid
-      LEFT JOIN activity_messages am
-        ON at.amid = am.amid
-    ");
-    drupal_set_message(t('Activity has been ported to Activity Log.') .' '.
-      t('You can now uninstall the Activity module.')
-    );
-  }
-}
- */

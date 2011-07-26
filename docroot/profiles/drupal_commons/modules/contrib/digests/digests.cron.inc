@@ -60,7 +60,7 @@ function _digests_cron() {
 
   // Step 2: For each selected user, collect all activity that has been updated between 6PM 2 days ago and 6PM yesterday
   while ($account = db_fetch_object($result)) {
-    if (empty($account) || empty($account->uid)) {
+    if (empty($account) || empty($account->uid) || !valid_email_address($account->mail)) {
       continue;
     }
     $account = drupal_unpack($account);
@@ -90,6 +90,7 @@ function _digests_cron() {
       LEFT JOIN {activity_log_templates} t
         ON m.tid = t.tid
       WHERE
+        display_type = 'email' AND
         stream_owner_type = 'user' AND
         stream_owner_id = %d AND
         last_updated > %d /* 2 days ago */ AND

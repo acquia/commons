@@ -8,23 +8,23 @@
 /**
  * Implementation of hook_rules_defaults().
  */
-function activity_log_rules_defaults() {
+function digests_rules_defaults() {
   $rules = array();
-  $rules += activity_log_rules_defaults_node_insert();
+  $rules += digests_rules_defaults_node_insert();
   if (module_exists('og')) {
-    $rules += activity_log_rules_defaults_node_insert_og();
-    $rules += activity_log_rules_defaults_og_join();
+    $rules += digests_rules_defaults_node_insert_og();
+    $rules += digests_rules_defaults_og_join();
   }
   if (module_exists('fbss_rules')) {
-    $rules += activity_log_rules_defaults_facebook_status_insert_user_self();
-    $rules += activity_log_rules_defaults_facebook_status_insert_other();
+    $rules += digests_rules_defaults_facebook_status_insert_user_self();
+    $rules += digests_rules_defaults_facebook_status_insert_other();
     if (module_exists('fbsmp')) {
-      $rules += activity_log_rules_defaults_fbsmp_insert_user_self();
-      $rules += activity_log_rules_defaults_fbsmp_insert_other();
+      $rules += digests_rules_defaults_fbsmp_insert_user_self();
+      $rules += digests_rules_defaults_fbsmp_insert_other();
     }
   }
   if (module_exists('user_relationships_rules')) {
-    $rules += activity_log_rules_defaults_ur_request();
+    $rules += digests_rules_defaults_ur_request();
   }
   return array('rules' => $rules);
 }
@@ -34,19 +34,20 @@ function activity_log_rules_defaults() {
  *
  * Modified from export: #label, #conditions
  */
-function activity_log_rules_defaults_node_insert() {
+function digests_rules_defaults_node_insert() {
   $ret = array(
-    'rules_activity_log_node_insert' => 
+    'rules_activity_log_digests_node_insert' => 
     array (
       '#type' => 'rule',
       '#set' => 'event_node_insert',
-      '#label' => 'Log activity when a node is created'. (module_exists('og') ? ' (not in a group)' : ''),
+      '#label' => 'Email: Log activity when a node is created'. (module_exists('og') ? ' (not in a group)' : ''),
       '#active' => 1,
       '#weight' => '0',
       '#categories' => 
       array (
         0 => 'activity_log',
         1 => 'node',
+        2 => 'digests',
       ),
       '#status' => 'custom',
       '#conditions' =>
@@ -177,8 +178,8 @@ function activity_log_rules_defaults_node_insert() {
               'resources' => '',
             ),
             'acting_uid' => '[author:uid]',
-            'display_type' => 'web',
-            'tid' => '4',
+            'display_type' => 'email',
+            'tid' => '15',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -311,8 +312,8 @@ function activity_log_rules_defaults_node_insert() {
               'resources' => '',
             ),
             'acting_uid' => '',
-            'display_type' => 'web',
-            'tid' => '8',
+            'display_type' => 'email',
+            'tid' => '16',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -477,8 +478,8 @@ function activity_log_rules_defaults_node_insert() {
               'resources' => '',
             ),
             'acting_uid' => '',
-            'display_type' => 'web',
-            'tid' => '9',
+            'display_type' => 'email',
+            'tid' => '17',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -533,7 +534,7 @@ function activity_log_rules_defaults_node_insert() {
     ),
   );
   if (module_exists('og')) {
-    $ret['rules_activity_log_node_insert']['#conditions'][] = array (
+    $ret['rules_activity_log_digests_node_insert']['#conditions'][] = array (
       '#type' => 'condition',
       '#settings' => 
       array (
@@ -566,13 +567,13 @@ function activity_log_rules_defaults_node_insert() {
 /**
  * Node creation in a group
  */
-function activity_log_rules_defaults_node_insert_og() {
+function digests_rules_defaults_node_insert_og() {
   return array(
-    'rules_activity_log_node_insert_og' => 
+    'rules_activity_log_digests_node_insert_og' => 
     array (
       '#type' => 'rule',
       '#set' => 'event_node_insert',
-      '#label' => 'Log activity when a node is created in a group',
+      '#label' => 'Email: Log activity when a node is created in a group',
       '#active' => 1,
       '#weight' => '0',
       '#categories' => 
@@ -580,6 +581,7 @@ function activity_log_rules_defaults_node_insert_og() {
         0 => 'activity_log',
         1 => 'node',
         2 => 'og',
+        3 => 'digests',
       ),
       '#status' => 'custom',
       '#conditions' => 
@@ -737,8 +739,8 @@ function activity_log_rules_defaults_node_insert_og() {
               'resources' => '',
             ),
             'acting_uid' => '[author:uid]',
-            'display_type' => 'web',
-            'tid' => '4',
+            'display_type' => 'email',
+            'tid' => '15',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -886,8 +888,8 @@ function activity_log_rules_defaults_node_insert_og() {
               'resources' => '',
             ),
             'acting_uid' => '',
-            'display_type' => 'web',
-            'tid' => '5',
+            'display_type' => 'email',
+            'tid' => '18',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -1020,8 +1022,8 @@ function activity_log_rules_defaults_node_insert_og() {
               'resources' => '',
             ),
             'acting_uid' => '',
-            'display_type' => 'web',
-            'tid' => '6',
+            'display_type' => 'email',
+            'tid' => '19',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -1184,8 +1186,8 @@ function activity_log_rules_defaults_node_insert_og() {
               'resources' => '',
             ),
             'acting_uid' => '',
-            'display_type' => 'web',
-            'tid' => '7',
+            'display_type' => 'email',
+            'tid' => '20',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -1245,19 +1247,20 @@ function activity_log_rules_defaults_node_insert_og() {
 /**
  * Self status update
  */
-function activity_log_rules_defaults_facebook_status_insert_user_self() {
+function digests_rules_defaults_facebook_status_insert_user_self() {
   return array(
-    'rules_activity_log_facebook_status_insert_user_self' => 
+    'rules_activity_log_digests_facebook_status_insert_user_self' => 
     array (
       '#type' => 'rule',
       '#set' => 'event_facebook_status_save',
-      '#label' => 'Log activity when a user saves a personal status update',
+      '#label' => 'Email: Log activity when a user saves a personal status update',
       '#active' => 1,
       '#weight' => '0',
       '#categories' => 
       array (
         0 => 'activity_log',
         1 => 'facebook_status',
+        2 => 'digests',
       ),
       '#status' => 'custom',
       '#conditions' => 
@@ -1303,7 +1306,13 @@ function activity_log_rules_defaults_facebook_status_insert_user_self() {
             array (
               'en' => 
               array (
-                'template' => '[status:status-themed]',
+                'template' => '<table style="border-bottom: 1px solid #CCCCCC;"><tr>
+<td style="vertical-align: top;">[status:sender-picture]</td>
+<td>
+<div>[status:sender-themed] [status:message-formatted]</div>
+<div><span style="color: #666666;">[status:created-small]</span> <a href="[status:status-url]">Reply</a></div>
+</td>
+</table></tr>',
               ),
             ),
             'grouping' => 
@@ -1376,8 +1385,8 @@ function activity_log_rules_defaults_facebook_status_insert_user_self() {
               'resources' => '',
             ),
             'acting_uid' => '[status:sender-uid]',
-            'display_type' => 'web',
-            'tid' => '1',
+            'display_type' => 'email',
+            'tid' => '21',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -1472,7 +1481,13 @@ function activity_log_rules_defaults_facebook_status_insert_user_self() {
             array (
               'en' => 
               array (
-                'template' => '[status:status-themed]',
+                'template' => '<table style="border-bottom: 1px solid #CCCCCC;"><tr>
+<td style="vertical-align: top;">[status:sender-picture]</td>
+<td>
+<div>[status:sender-themed] [status:message-formatted]</div>
+<div><span style="color: #666666;">[status:created-small]</span> <a href="[status:status-url]">Reply</a></div>
+</td>
+</table></tr>',
               ),
             ),
             'grouping' => 
@@ -1545,8 +1560,8 @@ function activity_log_rules_defaults_facebook_status_insert_user_self() {
               'resources' => '',
             ),
             'acting_uid' => '[status:sender-uid]',
-            'display_type' => 'web',
-            'tid' => '2',
+            'display_type' => 'email',
+            'tid' => '22',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -1605,19 +1620,20 @@ function activity_log_rules_defaults_facebook_status_insert_user_self() {
 /**
  * Other status update
  */
-function activity_log_rules_defaults_facebook_status_insert_other() {
+function digests_rules_defaults_facebook_status_insert_other() {
   return array (
-    'rules_activity_log_facebook_status_insert_other' => 
+    'rules_activity_log_digests_facebook_status_insert_other' => 
     array (
       '#type' => 'rule',
       '#set' => 'event_facebook_status_save',
-      '#label' => 'Log activity when a user sends a status message',
+      '#label' => 'Email: Log activity when a user sends a status message',
       '#active' => 1,
       '#weight' => '0',
       '#categories' => 
       array (
         0 => 'activity_log',
         1 => 'facebook_status',
+        2 => 'digests',
       ),
       '#status' => 'custom',
       '#conditions' => 
@@ -1681,7 +1697,13 @@ function activity_log_rules_defaults_facebook_status_insert_other() {
             array (
               'en' => 
               array (
-                'template' => '[status:status-themed]',
+                'template' => '<table style="border-bottom: 1px solid #CCCCCC;"><tr>
+<td style="vertical-align: top;">[status:sender-picture]</td>
+<td>
+<div>[status:sender-themed] &raquo; [status:recipient-link] [status:message-formatted]</div>
+<div><span style="color: #666666;">[status:created-small]</span> <a href="[status:status-url]">Reply</a></div>
+</td>
+</table></tr>',
               ),
             ),
             'grouping' => 
@@ -1754,8 +1776,8 @@ function activity_log_rules_defaults_facebook_status_insert_other() {
               'resources' => '',
             ),
             'acting_uid' => '[status:sender-uid]',
-            'display_type' => 'web',
-            'tid' => '1',
+            'display_type' => 'email',
+            'tid' => '21',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -1892,8 +1914,8 @@ function activity_log_rules_defaults_facebook_status_insert_other() {
               'resources' => '',
             ),
             'acting_uid' => '[status:sender-uid]',
-            'display_type' => 'web',
-            'tid' => '2',
+            'display_type' => 'email',
+            'tid' => '22',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -1987,7 +2009,13 @@ function activity_log_rules_defaults_facebook_status_insert_other() {
             array (
               'en' => 
               array (
-                'template' => '[status:status-themed]',
+                'template' => '<table style="border-bottom: 1px solid #CCCCCC;"><tr>
+<td style="vertical-align: top;">[status:sender-picture]</td>
+<td>
+<div>[status:sender-themed] &raquo; [status:recipient-link] [status:message-formatted]</div>
+<div><span style="color: #666666;">[status:created-small]</span> <a href="[status:status-url]">Reply</a></div>
+</td>
+</table></tr>',
               ),
             ),
             'grouping' => 
@@ -2060,8 +2088,8 @@ function activity_log_rules_defaults_facebook_status_insert_other() {
               'resources' => '',
             ),
             'acting_uid' => '',
-            'display_type' => 'web',
-            'tid' => '3',
+            'display_type' => 'email',
+            'tid' => '23',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -2119,19 +2147,20 @@ function activity_log_rules_defaults_facebook_status_insert_other() {
 /**
  * Self status update with attachment
  */
-function activity_log_rules_defaults_fbsmp_insert_user_self() {
+function digests_rules_defaults_fbsmp_insert_user_self() {
   return array(
-    'rules_activity_log_fbsmp_insert_user_self' => 
+    'rules_activity_log_digests_fbsmp_insert_user_self' => 
     array (
       '#type' => 'rule',
       '#set' => 'event_fbsmp_add_status',
-      '#label' => 'Log activity when a user saves a personal status update with an attachment',
+      '#label' => 'Email: Log activity when a user saves a personal status update with an attachment',
       '#active' => 1,
       '#weight' => '0',
       '#categories' => 
       array (
         0 => 'activity_log',
         1 => 'fbsmp',
+        2 => 'digests',
       ),
       '#status' => 'custom',
       '#conditions' => 
@@ -2177,7 +2206,13 @@ function activity_log_rules_defaults_fbsmp_insert_user_self() {
             array (
               'en' => 
               array (
-                'template' => '[status:status-themed]',
+                'template' => '<table style="border-bottom: 1px solid #CCCCCC;"><tr>
+<td style="vertical-align: top;">[status:sender-picture]</td>
+<td>
+<div>[status:sender-themed] [status:message-formatted]</div>
+<div><span style="color: #666666;">[status:created-small]</span> <a href="[status:status-url]">Reply</a></div>
+</td>
+</table></tr>',
               ),
             ),
             'grouping' => 
@@ -2245,8 +2280,8 @@ function activity_log_rules_defaults_fbsmp_insert_user_self() {
               'resources' => '',
             ),
             'acting_uid' => '[status:sender-uid]',
-            'display_type' => 'web',
-            'tid' => '1',
+            'display_type' => 'email',
+            'tid' => '21',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -2341,7 +2376,13 @@ function activity_log_rules_defaults_fbsmp_insert_user_self() {
             array (
               'en' => 
               array (
-                'template' => '[status:status-themed]',
+                'template' => '<table style="border-bottom: 1px solid #CCCCCC;"><tr>
+<td style="vertical-align: top;">[status:sender-picture]</td>
+<td>
+<div>[status:sender-themed] [status:message-formatted]</div>
+<div><span style="color: #666666;">[status:created-small]</span> <a href="[status:status-url]">Reply</a></div>
+</td>
+</table></tr>',
               ),
             ),
             'grouping' => 
@@ -2409,8 +2450,8 @@ function activity_log_rules_defaults_fbsmp_insert_user_self() {
               'resources' => '',
             ),
             'acting_uid' => '[status:sender-uid]',
-            'display_type' => 'web',
-            'tid' => '2',
+            'display_type' => 'email',
+            'tid' => '22',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -2469,19 +2510,20 @@ function activity_log_rules_defaults_fbsmp_insert_user_self() {
 /**
  * Other status update with attachment
  */
-function activity_log_rules_defaults_fbsmp_insert_other() {
+function digests_rules_defaults_fbsmp_insert_other() {
   return array(
-    'rules_activity_log_fbsmp_insert_other' => 
+    'rules_activity_log_digests_fbsmp_insert_other' => 
     array (
       '#type' => 'rule',
       '#set' => 'event_fbsmp_add_status',
-      '#label' => 'Log activity when a user sends a status message with an attachment',
+      '#label' => 'Email: Log activity when a user sends a status message with an attachment',
       '#active' => 1,
       '#weight' => '0',
       '#categories' => 
       array (
         0 => 'activity_log',
         1 => 'fbsmp',
+        2 => 'digests',
       ),
       '#status' => 'custom',
       '#conditions' => 
@@ -2528,7 +2570,13 @@ function activity_log_rules_defaults_fbsmp_insert_other() {
             array (
               'en' => 
               array (
-                'template' => '[status:status-themed]',
+                'template' => '<table style="border-bottom: 1px solid #CCCCCC;"><tr>
+<td style="vertical-align: top;">[status:sender-picture]</td>
+<td>
+<div>[status:sender-themed] &raquo; [status:recipient-link] [status:message-formatted]</div>
+<div><span style="color: #666666;">[status:created-small]</span> <a href="[status:status-url]">Reply</a></div>
+</td>
+</table></tr>',
               ),
             ),
             'grouping' => 
@@ -2601,8 +2649,8 @@ function activity_log_rules_defaults_fbsmp_insert_other() {
               'resources' => '',
             ),
             'acting_uid' => '[status:sender-uid]',
-            'display_type' => 'web',
-            'tid' => '1',
+            'display_type' => 'email',
+            'tid' => '21',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -2767,8 +2815,8 @@ function activity_log_rules_defaults_fbsmp_insert_other() {
               'resources' => '',
             ),
             'acting_uid' => '[status:sender-uid]',
-            'display_type' => 'web',
-            'tid' => '2',
+            'display_type' => 'email',
+            'tid' => '22',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -2830,7 +2878,13 @@ function activity_log_rules_defaults_fbsmp_insert_other() {
             array (
               'en' => 
               array (
-                'template' => '[status:status-themed]',
+                'template' => '<table style="border-bottom: 1px solid #CCCCCC;"><tr>
+<td style="vertical-align: top;">[status:sender-picture]</td>
+<td>
+<div>[status:sender-themed] &raquo; [status:recipient-link] [status:message-formatted]</div>
+<div><span style="color: #666666;">[status:created-small]</span> <a href="[status:status-url]">Reply</a></div>
+</td>
+</table></tr>',
               ),
             ),
             'grouping' => 
@@ -2903,8 +2957,8 @@ function activity_log_rules_defaults_fbsmp_insert_other() {
               'resources' => '',
             ),
             'acting_uid' => '',
-            'display_type' => 'web',
-            'tid' => '3',
+            'display_type' => 'email',
+            'tid' => '23',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -2979,19 +3033,20 @@ function activity_log_rules_defaults_fbsmp_insert_other() {
 /**
  * Join group
  */
-function activity_log_rules_defaults_og_join() {
+function digests_rules_defaults_og_join() {
   return array(
-    'rules_activity_log_og_join' => 
+    'rules_activity_log_digests_og_join' => 
     array (
       '#type' => 'rule',
       '#set' => 'event_og_user_insert',
-      '#label' => 'Log activity when a user joins a group',
+      '#label' => 'Email: Log activity when a user joins a group',
       '#active' => 1,
       '#weight' => '0',
       '#categories' => 
       array (
         0 => 'activity_log',
         1 => 'og',
+        2 => 'digests',
       ),
       '#status' => 'custom',
       '#conditions' => 
@@ -3079,8 +3134,8 @@ function activity_log_rules_defaults_og_join() {
               'resources' => '',
             ),
             'acting_uid' => '[account:uid]',
-            'display_type' => 'web',
-            'tid' => '10',
+            'display_type' => 'email',
+            'tid' => '24',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -3246,8 +3301,8 @@ function activity_log_rules_defaults_og_join() {
               'resources' => '',
             ),
             'acting_uid' => '[account:uid]',
-            'display_type' => 'web',
-            'tid' => '11',
+            'display_type' => 'email',
+            'tid' => '25',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -3398,8 +3453,8 @@ function activity_log_rules_defaults_og_join() {
               'resources' => '',
             ),
             'acting_uid' => '',
-            'display_type' => 'web',
-            'tid' => '12',
+            'display_type' => 'email',
+            'tid' => '26',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -3457,19 +3512,20 @@ function activity_log_rules_defaults_og_join() {
 /**
  * Request relationship
  */
-function activity_log_rules_defaults_ur_request() {
+function digests_rules_defaults_ur_request() {
   return array(
-    'rules_activity_log_ur_request' => 
+    'rules_activity_log_digests_ur_request' => 
     array (
       '#type' => 'rule',
       '#set' => 'event_user_relationships_request',
-      '#label' => 'Log activity when a user creates a relationship',
+      '#label' => 'Email: Log activity when a user creates a relationship',
       '#active' => 1,
       '#weight' => '0',
       '#categories' => 
       array (
         0 => 'activity_log',
         1 => 'user_relationships',
+        2 => 'digests',
       ),
       '#status' => 'custom',
       '#conditions' => 
@@ -3556,8 +3612,8 @@ function activity_log_rules_defaults_ur_request() {
               'resources' => '',
             ),
             'acting_uid' => '[requester:uid]',
-            'display_type' => 'web',
-            'tid' => '13',
+            'display_type' => 'email',
+            'tid' => '27',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -3725,8 +3781,8 @@ function activity_log_rules_defaults_ur_request() {
               'resources' => '',
             ),
             'acting_uid' => '[requester:uid]',
-            'display_type' => 'web',
-            'tid' => '14',
+            'display_type' => 'email',
+            'tid' => '28',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 

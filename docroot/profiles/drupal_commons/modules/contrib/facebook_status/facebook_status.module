@@ -1150,6 +1150,7 @@ function facebook_status_token_list($type = 'all') {
       'sender-name' => t('The safe name of the user who posted the status message.'),
       'sender-name-raw' => t('The raw name of the user who posted the status message. WARNING: raw user input.'),
       'sender-uid' => t('The User ID of the user who posted the status message.'),
+      'sender-picture' => t('The profile picture of the user who posted the status message.'),
       'recipient-type-name' => t('The machine name of the stream type of the recipient.'),
       'recipient-type-title' => t('The readable name of the stream type of the recipient.'),
       'recipient-link' => t('A link to the recipient.'),
@@ -1168,6 +1169,7 @@ function facebook_status_token_list($type = 'all') {
     );
     if (module_exists('fbss_comments')) {
       $tokens['facebook_status']['status-comment-count'] = t('The number of comments on the status.');
+      $tokens['facebok_status']['comments-email'] = t('The comments with inline styling suitable for emails.');
     }
     $tokens['facebook_status'] += token_get_date_token_info(t('The status created'), 'created-');
     return $tokens;
@@ -1198,11 +1200,14 @@ function facebook_status_token_values($type, $data = NULL, $options = array()) {
   }
   $sender = _facebook_status_user_load($status->sender);
   $recipient = $context['handler']->load_recipient($status->recipient);
+  $sender->imagecache_preset = variable_get('facebook_status_imagecache_preset', variable_get('user_picture_imagecache_profiles_default', ''));
+  $url = url('statuses/'. $status->sid, array('absolute' => TRUE));
   $values = array(
     'sender-themed' => theme('username', $sender),
     'sender-name' => check_plain($sender->name),
     'sender-name-raw' => $sender->name,
     'sender-uid' => $sender->uid,
+    'sender-picture' => theme('user_picture', $sender),
     'recipient-type-name' => $status->type,
     'recipient-type-title' => $context['title'],
     'recipient-link' => $context['handler']->recipient_link($recipient),
@@ -1214,10 +1219,11 @@ function facebook_status_token_values($type, $data = NULL, $options = array()) {
     'message-raw' => $status->message,
     'status-themed' => facebook_status_show($status),
     'status-id' => $status->sid,
-    'status-url' => url('statuses/'. $status->sid, array('absolute' => TRUE)),
+    'status-url' => $url,
     'status-edit' => $edit,
     'status-delete' => $delete,
     'status-comment-count' => (module_exists('fbss_comments')) ? fbss_comments_count_comments($status->sid) : 0,
+    'comments-email' => theme('fbss_comments_items_email', fbss_comments_get_comments($sid, TRUE), $url),
     'created' => format_date($status->created, 'small'),
   );
   $values += token_get_date_token_values($status->created, 'created-');

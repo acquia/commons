@@ -75,3 +75,12 @@ function digests_preprocess_mimemail_message(&$vars) {
     $vars['css'] = '';
   }
 }
+
+/**
+ * Implementation of hook_activity_log_display_types().
+ */
+function digests_activity_log_display_types() {
+  return array(
+    'email' => t('Email digests'),
+  );
+}

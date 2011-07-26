@@ -325,8 +325,8 @@ function _activity_log_rebuild_templates() {
     );
     db_query("
       INSERT INTO {activity_log_templates}
-        (tid, rule, action_label, template, group_template, group_summary, collapse_method, pid, eval_input, resources, cacheable)
-      VALUES (%d, '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s', %d)
+        (tid, rule, action_label, template, group_template, group_summary, collapse_method, pid, eval_input, resources, cacheable, display_type)
+      VALUES (%d, '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s', %d, '%s')
     ", $record);
   }
   return count($rules);

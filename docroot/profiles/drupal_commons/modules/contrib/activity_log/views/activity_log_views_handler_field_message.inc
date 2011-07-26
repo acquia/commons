@@ -37,6 +37,7 @@ class activity_log_views_handler_field_message extends views_handler_field {
       'eval_input',
       'resources',
       'cacheable',
+      'display_type',
     );
     foreach ($fields as $field) {
       $this->additional_fields[$field] = array('table' => 'activity_log_templates', 'field' => $field);
