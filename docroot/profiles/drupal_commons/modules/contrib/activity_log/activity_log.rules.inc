@@ -788,6 +788,16 @@ function activity_log_log_action($settings) {
       if (isset($group['file']) && file_exists($group['file'])) {
         require_once $group['file'];
       }
+      // Load the group context. We can't just use og_get_group_context() because that doesn't work during cron and when regenerating.
+      if (module_exists('og') && $target['type'] == 'node' && $target['id']) {
+        $node = node_load(array('nid' => $target['id']));
+        // OG attempts to choose a group the user is a member of. When creating the node this will be $user; otherwise we try to use the node author.
+        $account = ($node->uid == $user->uid ? $user : activity_log_user_load($node->uid));
+        $og = og_determine_context_get_group($node, $account = NULL);
+        if (!empty($og) && !empty($og->nid)) {
+          $event->og = $og;
+        }
+      }
       $args = array($event, $settings);
       if (isset($group['expose fields'])) {
         while ($item = array_shift($group['expose fields'])) {
@@ -821,6 +831,9 @@ function activity_log_log_action($settings) {
     $viewers = array(0);
   }
   // Store the event record.
+  if (isset($event->og)) {
+    unset($event->og);
+  }
   drupal_write_record('activity_log_events', $event);
   // Find similar events based on the grouping method.
   $group_method = $settings['grouping']['group_method'];

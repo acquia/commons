@@ -48,6 +48,15 @@ function drupal_commons_features_form(&$form_state, $url) {
     '#value' => 1,
     '#description' => st('Provides a community-driven home page.'),
   );
+  $form['required']['feature-commons_status_streams'] = array(
+    '#type' => 'checkbox',
+    '#title' => st('Activity streams'),
+    '#default_value' => 1,
+    '#description' => st('A feature that adds status updates and activity streams to users and groups.'),
+    '#required' => TRUE,
+    '#disabled' => 1,
+    '#value' => 1,
+  );
   
   // Content-related features
   $form['content'] = array(
@@ -103,12 +112,6 @@ function drupal_commons_features_form(&$form_state, $url) {
     '#title' => st('Social profiles'),
     '#default_value' => 1,
     '#description' => st('A feature that extends Drupal\'s simple profiles to include a variety of additional profile fields useful for community sites, plus various important user listings. (Strongly recommended.)'),
-  );
-  $form['misc']['feature-commons_status_streams'] = array(
-    '#type' => 'checkbox',
-    '#title' => st('Activity streams'),
-    '#default_value' => 1,
-    '#description' => st('A feature that adds status updates and activity streams to users and groups.'),
   );
   $form['misc']['feature-commons_notifications'] = array(
     '#type' => 'checkbox',
