@@ -1,5 +1,4 @@
 <?php
-// $Id: diff.theme.inc,v 1.1.2.3 2010/08/12 16:34:08 yhahn Exp $
 
 /**
  * @file
@@ -295,7 +294,7 @@ function theme_diff_inline_metadata($node) {
   $output .= "<label>". t('Legend') ."</label>";
   $output .= theme('diff_inline_chunk', t('Added'), 'add');
   $output .= theme('diff_inline_chunk', t('Changed'), 'change');
-  $output .= theme('diff_inline_chunk', t('Deleted'), 'relete');
+  $output .= theme('diff_inline_chunk', t('Deleted'), 'delete');
   $output .= "</div>";
   $output .= "</div>";
   return $output;

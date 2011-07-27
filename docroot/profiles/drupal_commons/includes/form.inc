@@ -12,12 +12,6 @@ function drupal_commons_features_form(&$form_state, $url) {
   $form = array();
   drupal_set_title(st('Choose from available features'));
   
-  // Homebox, which is included in the Commons dashboard feature
-  // requires PHP 5.2, so we need to check that to avoid allowing
-  // the user to install it
-  module_load_include('module', 'homebox');
-  $php5_2 = _homebox_check_php();
-  
   // Help message
   $form['message'] = array(
     '#type' => 'item',
@@ -52,7 +46,7 @@ function drupal_commons_features_form(&$form_state, $url) {
     '#type' => 'checkbox',
     '#title' => st('Activity streams'),
     '#default_value' => 1,
-    '#description' => st('A feature that adds status updates and activity streams to users and groups.'),
+    '#description' => st('Add status updates and activity streams to users and groups.'),
     '#required' => TRUE,
     '#disabled' => 1,
     '#value' => 1,
@@ -111,13 +105,19 @@ function drupal_commons_features_form(&$form_state, $url) {
     '#type' => 'checkbox',
     '#title' => st('Social profiles'),
     '#default_value' => 1,
-    '#description' => st('A feature that extends Drupal\'s simple profiles to include a variety of additional profile fields useful for community sites, plus various important user listings. (Strongly recommended.)'),
+    '#description' => st('Extend Drupal\'s simple profiles to include a variety of additional profile fields useful for community sites, plus various important user listings. (Strongly recommended.)'),
+  );
+  $form['misc']['feature-commons_subgroups'] = array(
+    '#type' => 'checkbox',
+    '#title' => st('Subgroups'),
+    '#default_value' => 1,
+    '#description' => st('Enables groups to be arranged into a hierarchy, optionally propagating content & members up and down the hierarchy.'),
   );
   $form['misc']['feature-commons_notifications'] = array(
     '#type' => 'checkbox',
     '#title' => st('Notifications'),
     '#default_value' => 1,
-    '#description' => st('A feature that allows users to subscribe to email & site-based notifications of site activity & new content.'),
+    '#description' => st('Allow users to subscribe to email & site-based notifications of site activity & new content.'),
   );
   $form['misc']['feature-commons_reputation'] = array(
     '#type' => 'checkbox',

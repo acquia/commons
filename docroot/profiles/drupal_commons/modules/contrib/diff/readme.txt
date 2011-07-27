@@ -1,4 +1,3 @@
-$Id: readme.txt,v 1.5.4.1.2.2 2010/08/12 16:28:59 yhahn Exp $
 
 Diff 2.x for Drupal 6.x
 -----------------------

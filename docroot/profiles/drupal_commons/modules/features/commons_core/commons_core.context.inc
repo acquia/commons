@@ -155,7 +155,7 @@ function commons_core_context_default_contexts() {
           'module' => 'og_views',
           'delta' => 0,
           'region' => 'sidebar_last',
-          'weight' => 2,
+          'weight' => 3,
         ),
         'views-group_node-block_1' => array(
           'module' => 'views',

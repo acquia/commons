@@ -117,7 +117,7 @@ function commons_document_context_default_contexts() {
           'module' => 'views',
           'delta' => '363c36ed99d1c774fcc13d74a03dad8b',
           'region' => 'sidebar_last',
-          'weight' => 8,
+          'weight' => 9,
         ),
       ),
     ),

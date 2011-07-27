@@ -1,5 +1,4 @@
 <?php
-// $Id: diff.pages.inc,v 1.1.2.9 2010/08/12 16:34:08 yhahn Exp $
 
 /**
  * @file
@@ -245,6 +244,7 @@ function diff_diffs_show($node, $old_vid, $new_vid) {
  */
 function _diff_body_rows($old_node, $new_node) {
   drupal_add_css(drupal_get_path('module', 'diff') .'/diff.css', 'module', 'all', FALSE);
+
   module_load_include('inc', 'diff', 'includes/node');
   if (module_exists('taxonomy')) {
     module_load_include('inc', 'diff', 'includes/taxonomy');
@@ -308,6 +308,7 @@ function _diff_body_rows($old_node, $new_node) {
       array('data' => ''),
     );
   }
+
   return $rows;
 }
 

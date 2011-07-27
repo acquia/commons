@@ -29,6 +29,9 @@ INSTALLATION
 this patch to chart: http://drupal.org/files/issues/chart-fix-division-by-zero.patch
 Or, if you'd like to download a pre-patched version of Chart, try here:
 http://drupal.org/node/904478#comment-3419284
+--
+If you're using chart-6.x-1.3, it is highly recommended that you apply
+this patch to chart: http://drupal.org/files/issues/chart-division-by-zero-594202.patch
 3. Enable both modules
 4. If you plan to use jquery_ui, add it to your site's module directory
 and enable it
@@ -48,6 +51,8 @@ User shouts (requires shoutbox)
 User point transactions (requires userpoints)
 Group creation (requires organic groups)
 Group joins (requires organic groups)
+Invites sent (requires invite)
+Invites accepted (requires invite)
 
 ~~~
 

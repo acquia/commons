@@ -28,7 +28,7 @@ function commons_shoutbox_context_default_contexts() {
           'module' => 'shoutbox',
           'delta' => 0,
           'region' => 'sidebar_last',
-          'weight' => 3,
+          'weight' => 4,
         ),
       ),
     ),
