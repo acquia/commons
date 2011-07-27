@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ *   Form-building functions
+ */
+
+/**
  * Provide a simple form to change time periods
  */
 function quant_time_form() {
@@ -9,7 +14,7 @@ function quant_time_form() {
   // If jQuery UI, load some javascript for datepicker
   if (module_exists('jquery_ui')) {
     jquery_ui_add(array('ui.datepicker'));
-    drupal_add_css(drupal_get_path('module', 'quant') . '/themes/datepicker.css');
+    drupal_add_css(drupal_get_path('module', 'quant') . '/theme/datepicker.css');
     drupal_add_js("
       $(document).ready(function() {
         $('#edit-custom-to').datepicker();
@@ -44,7 +49,7 @@ function quant_time_form() {
       'period' => '',
       'custom' => '',
     ),
-    '#default_value' => $_GET['option'] ? filter_xss($_GET['option']) : 'period',
+    '#default_value' => isset($_GET['option']) ? filter_xss($_GET['option']) : 'period',
   );
   
   $form['period'] = array(
@@ -56,13 +61,13 @@ function quant_time_form() {
   $form['custom_from'] = array(
     '#type' => 'textfield',
     '#size' => 10,
-    '#default_value' => $_GET['from'] ? filter_xss($_GET['from']) : '',
+    '#default_value' => isset($_GET['from']) ? filter_xss($_GET['from']) : '',
   );
   
   $form['custom_to'] = array(
     '#type' => 'textfield',
     '#size' => 10,
-    '#default_value' => $_GET['to'] ? filter_xss($_GET['to']) : '',
+    '#default_value' => isset($_GET['to']) ? filter_xss($_GET['to']) : '',
   );
 
   $form['submit'] = array(
@@ -134,37 +139,10 @@ function quant_time_form_submit(&$form, $form_state) {
 }
 
 /**
- * Theme callback for quant_time_form()
- */
-function theme_quant_time_form($form) {
-  $output = '';
-  
-  $output .= '<fieldset>';
-  $output .= '<div class="description">';
-  $output .= drupal_render($form['message']);
-  $output .= '</div>';
-  $output .= '<div class="quant-option-row">';
-  $output .= drupal_render($form['option']['period']);
-  $output .= drupal_render($form['period']);
-  $output .= '</div>';
-  $output .= '<div class="quant-option-row">';
-  $output .= drupal_render($form['option']['custom']);
-  $output .= '<span class="description">From:</span>';
-  $output .= drupal_render($form['custom_from']);
-  $output .= '<span class="description">To:</span>';
-  $output .= drupal_render($form['custom_to']);
-  $output .= '<span class="description"><i>Format MM/DD/YYYY</i></span>';
-  $output .= '</div>';
-  $output .= drupal_render($form);
-  $output .= '</fieldset>';
-  
-  return $output;
-}
-
-/**
  * Provide admin settings form
  */
 function quant_admin_settings() {
+  quant_include('chart');
   $form = array();
   
   $form['view'] = array(
@@ -180,7 +158,7 @@ function quant_admin_settings() {
   
   // Get available quants
   $options = array();
-  $quants = quant_get();
+  $quants = quant_get_quants();
   foreach ($quants as $quant) {
     $options[$quant->id] = $quant->label;
   }
@@ -206,7 +184,7 @@ function quant_admin_settings() {
     '#title' => t('Show analytics for the following site items'),
     '#default_value' => $default,
     '#options' => $options,
-    '#description' => t('The checked objects will be shown on the analytics page.'),
+    '#description' => t('The checked objects will be shown on the analytics page. If a quant object is missing from this list, try clearing the cache.'),
   );
   $form['display']['quant_width'] = array(
     '#type' => 'textfield',
@@ -228,13 +206,13 @@ function quant_admin_settings() {
   );
   
   // Generate the color palette
-  $palette = quant_load_palette();
+  $palette = _quant_load_palette();
   
   $form['color'] = array(
     '#type' => 'fieldset',
     '#title' => t('Color settings'),
     '#collapsible' => TRUE,
-    '#collapsed' => FALSE,
+    '#collapsed' => TRUE,
     '#description' => t('Specify the colors that the charts will be rendered in.'),
   );
   

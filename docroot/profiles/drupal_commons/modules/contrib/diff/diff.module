@@ -1,5 +1,4 @@
 <?php
-// $Id: diff.module,v 1.23.2.3.2.20 2010/08/12 16:34:08 yhahn Exp $
 
 /**
  * @file
@@ -68,7 +67,7 @@ function diff_menu() {
     'page callback' => 'diff_latest',
     'page arguments' => array(1),
     'type' => MENU_LOCAL_TASK,
-    'access callback' => 'diff_node_revision_access',
+    'access callback' => '_node_revision_access',
     'access arguments' => array(1),
     'tab_parent' => 'node/%/revisions/view',
     'file' => 'diff.pages.inc',
@@ -97,10 +96,6 @@ function diff_menu_alter(&$callbacks) {
   $callbacks['node/%node/revisions/%/revert']['tab_parent'] = 'node/%/revisions/%/view';
   $callbacks['node/%node/revisions/%/delete']['tab_parent'] = 'node/%/revisions/%/view';
 
-  $callbacks['node/%node/revisions']['access callback'] =
-  $callbacks['node/%node/revisions/%/view']['access callback'] =
-  $callbacks['node/%node/revisions/%/revert']['access callback'] =
-  $callbacks['node/%node/revisions/%/delete']['access callback'] = 'diff_node_revision_access';
   return;
 }
 
@@ -138,8 +133,7 @@ function diff_nodeapi(&$node, $op, $teaser, $page) {
     // Ugly but cheap way to check that we are viewing a node's revision page.
     if (arg(2) === 'revisions' && arg(3) === $node->vid) {
       module_load_include('inc', 'diff', 'diff.pages');
-      $old_vid = _diff_get_previous_vid(node_revision_list($node), $node->vid);
-      $node->content = array('#value' => diff_inline_show($node, $old_vid));
+      $node->content = array('#value' => diff_inline_show($node, $node->vid));
     }
     $node->content['#prefix'] = isset($node->content['#prefix']) ? "<div id='diff-inline-{$node->nid}'>" . $node->content['#prefix'] : "<div id='diff-inline-{$node->nid}'>";
     $node->content['#suffix'] = isset($node->content['#suffix']) ? $node->content['#suffix'] . "</div>" : "</div>";
@@ -238,7 +232,7 @@ function diff_theme() {
       'file' => 'diff.theme.inc',
     ),
     'diff_inline_metadata' => array(
-      'arguments' => array(),
+      'arguments' => array('node' => NULL),
       'file' => 'diff.theme.inc',
     ),
     'diff_inline_chunk' => array(
@@ -262,6 +256,9 @@ function diff_theme() {
  *   Array of rows usable with theme('table').
  */
 function diff_get_rows($a, $b, $show_header = FALSE) {
+  $a = is_array($a) ? $a : explode("\n", $a);
+  $b = is_array($b) ? $b : explode("\n", $b);
+
   module_load_include('php', 'diff', 'DiffEngine');
   $formatter = new DrupalDiffFormatter();
   $formatter->show_header = $show_header;
@@ -308,7 +305,7 @@ function diff_inline_form($form_state, $node, $revisions) {
   foreach ($revisions as $revision) {
     $form['revision']['#options'][$revision->vid] = t('@revision by @name', array(
       '@revision' => format_date($revision->timestamp, 'small'),
-      '@name' => $revision->name,
+      '@name' => theme('username', $revision, array('plain' => TRUE)),
     ));
   }
   $form['submit'] = array(

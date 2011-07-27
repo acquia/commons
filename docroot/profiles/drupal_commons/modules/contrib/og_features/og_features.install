@@ -24,6 +24,9 @@ function og_features_uninstall() {
   }
 }
 
+/**
+ * Implementation of hook_schema()
+ */
 function og_features_schema() {
   $schema['og_features'] = array(
     'fields' => array(
@@ -32,7 +35,7 @@ function og_features_schema() {
         'size' => 'normal',
         'not null' => TRUE,
       ),
-      'disabled' => array(
+      'settings' => array(
         'type' => 'blob', 
         'size' => 'big', 
         'not null' => TRUE, 
@@ -44,4 +47,44 @@ function og_features_schema() {
   );
   
   return $schema;
+}
+
+/**
+ * Update the schema to no longer track just disabled features
+ */
+function og_features_update_6000() {
+  $ret = array();
+  
+  switch ($GLOBALS['db_type']) {
+    case 'mysql':
+    case 'mysqli':
+      $ret[] = update_sql("ALTER TABLE {og_features} CHANGE disabled settings LONGBLOB");
+      break;
+    case 'pgsql':
+      $ret[] = update_sql("ALTER TABLE {og_features} RENAME disabled TO settings");
+      break;
+  }
+  
+  // Update the records to include all features, not just disabled, 
+  // with their statuses for the group
+  $registry = og_features_get_registry();
+  $results = db_query("SELECT * FROM {og_features}");
+  while ($result = db_fetch_object($results)) {
+    // Unserialize
+    $result->settings = unserialize($result->settings);
+    // Mark disabled features as disabled
+    foreach ($result->settings as $key => $value) {
+      $result->settings[$key] = OG_FEATURES_FEATURE_DISABLED;
+    }
+    // Mark enabled features as enabled
+    foreach ($registry as $key => $feature) {
+      if (!isset($result->settings[$key])) {
+        $result->settings[$key] = OG_FEATURES_FEATURE_ENABLED;
+      }
+    }
+    // Save the new settings format
+    drupal_write_record('og_features', $result, 'nid');
+  }
+  
+  return $ret;
 }

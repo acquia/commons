@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ *   Provide our quant objects
+ */
+
+/**
  * Implementation of hook_quants()
  * 
  * Provide quant objects to be rendered as charts
@@ -37,7 +42,7 @@ function _quant_quants() {
   $quant->field = 'created';
   $quant->dataType = 'single';
   $quant->chartType = 'line';
-  $quants[] = $quant;
+  $quants[$quant->id] = $quant;
   
   // Content Creation
   $quant = new stdClass;
@@ -50,7 +55,7 @@ function _quant_quants() {
   $quant->queryCustom = quant_node_query(array(), TRUE);
   $quant->dataType = 'single';
   $quant->chartType = 'line';
-  $quants[] = $quant;
+  $quants[$quant->id] = $quant;
   
   // Comment Creation
   if (module_exists('comment')) {
@@ -62,7 +67,7 @@ function _quant_quants() {
     $quant->field = 'timestamp';
     $quant->dataType = 'single';
     $quant->chartType = 'line';
-    $quants[] = $quant;
+    $quants[$quant->id] = $quant;
   }
   
   // Content Creation by Type
@@ -77,7 +82,7 @@ function _quant_quants() {
   $quant->queryCustom = quant_node_query(array($quant->group), TRUE);
   $quant->dataType = 'multiple'; // See $quant->group
   $quant->chartType = 'line';
-  $quants[] = $quant;
+  $quants[$quant->id] = $quant;
   
   // Aggregate Content Creation by Type
   $quant = new stdClass;
@@ -89,7 +94,7 @@ function _quant_quants() {
   $quant->count = 'type'; // Which db field to we want to count
   $quant->dataType = 'count';
   $quant->chartType = 'pie';
-  $quants[] = $quant;
+  $quants[$quant->id] = $quant;
   
   // User Points - Uses transactions only, not point amount
   if (module_exists('userpoints')) {
@@ -101,7 +106,7 @@ function _quant_quants() {
     $quant->field = 'time_stamp';
     $quant->dataType = 'single';
     $quant->chartType = 'line';
-    $quants[] = $quant;
+    $quants[$quant->id] = $quant;
   }
   
   // Organic Groups
@@ -115,7 +120,7 @@ function _quant_quants() {
     $quant->field = 'created'; // Which table field holds the timestamp
     $quant->dataType = 'single'; // We're just dealing with one item
     $quant->chartType = 'line';
-    $quants[] = $quant;  
+    $quants[$quant->id] = $quant;  
     
     // Group Creation
     $quant = new stdClass;
@@ -132,7 +137,7 @@ function _quant_quants() {
     $quant->field = 'created';
     $quant->dataType = 'single';
     $quant->chartType = 'line';
-    $quants[] = $quant;
+    $quants[$quant->id] = $quant;
   }
   
   // User Shouts
@@ -145,7 +150,7 @@ function _quant_quants() {
     $quant->field = 'created';
     $quant->dataType = 'single';
     $quant->chartType = 'line';
-    $quants[] = $quant;
+    $quants[$quant->id] = $quant;
   }
   
   // Invites
@@ -159,7 +164,7 @@ function _quant_quants() {
     $quant->field = 'created';
     $quant->dataType = 'single';
     $quant->chartType = 'line';
-    $quants[] = $quant;
+    $quants[$quant->id] = $quant;
     
     // Invites accepted
     $quant = new stdClass;
@@ -174,7 +179,7 @@ function _quant_quants() {
     $quant->field = 'created';
     $quant->dataType = 'single';
     $quant->chartType = 'line';
-    $quants[] = $quant;
+    $quants[$quant->id] = $quant;
   }
   
   return $quants;
@@ -210,7 +215,7 @@ function quant_node_query($additional_fields = array(), $custom = FALSE) {
   }
   
   if (count($omit)) {
-    $query = "SELECT " . implode(', ', $additional_fields) . " FROM {node} WHERE created >= %d" . ($custom ? " AND created <= %d " : " ") . "AND type NOT LIKE '" . implode('\', \'', $omit) . "' ORDER BY created DESC";
+    $query = "SELECT " . implode(', ', $additional_fields) . " FROM {node} WHERE created >= %d" . ($custom ? " AND created <= %d " : " ") . "AND type NOT IN ('" . implode('\', \'', $omit) . "') ORDER BY created DESC";
   }
   else {
     $query = "SELECT " . implode(', ', $additional_fields) . " FROM {node} WHERE created >= %d" . ($custom ? " AND created <= %d " : " ") . "ORDER BY created DESC";

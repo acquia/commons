@@ -76,11 +76,12 @@ function hook_og_features_registry_alter(&$registry) {
  * 
  * @param $group
  *   The group that toggled features
- * @param $disabled
- *   An array of features that were disabled inside the group
+ * @param $features
+ *   An array, keyed by feature name, with a value of their status
+ *   inside the group
  */
-function hook_og_features_toggle($group, $disabled) {
-  if (in_array('my_feature', $disabled)) {
+function hook_og_features_toggle($group, $features) {
+  if (!$features['my_feature']) {
     db_query("DELETE FROM {og_things} WHERE nid = %d", $group->nid);
   }
 }
@@ -97,8 +98,8 @@ function hook_og_features_toggle($group, $disabled) {
  *   The group being loaded
  */
 function hook_og_features_disabled_alter(&$disabled, $group) {
-  // Force-enable a feature for a given group
-  if ($group->nid == SPECIAL_GROUP_ID) {
+  // Force-disable a feature for all but a given group
+  if ($group->nid != variable_get('special_group_nid', 0)) {
     $disabled['special_feature'] = 'special_feature';
   }
 }

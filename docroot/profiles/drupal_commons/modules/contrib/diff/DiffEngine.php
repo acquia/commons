@@ -1,5 +1,4 @@
 <?php
-// $Id: DiffEngine.php,v 1.4.2.1.2.4 2010/08/12 16:34:08 yhahn Exp $
 
 /**
  * @file

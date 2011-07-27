@@ -60,9 +60,10 @@ function og_features_admin_settings() {
         '#type' => 'radios',
         '#title' => $feature->name,
         '#description' => $feature->description,
-        '#default_value' => isset($defaults[$id]) ? $defaults[$id] : OG_FEATURES_ADMIN_TOGGLE,
+        '#default_value' => isset($defaults[$id]) ? $defaults[$id] : OG_FEATURES_ADMIN_TOGGLE_ENABLED,
         '#options' => array(
-          OG_FEATURES_ADMIN_TOGGLE => t('Toggle'),
+          OG_FEATURES_ADMIN_TOGGLE_ENABLED => t('Toggle (Enabled by default)'),
+          OG_FEATURES_ADMIN_TOGGLE_DISABLED => t('Toggle (Disabled by default)'),
           OG_FEATURES_ADMIN_ENABLED => t('Always enabled'),
           OG_FEATURES_ADMIN_DISABLED => t('Always disabled'),
         ),
