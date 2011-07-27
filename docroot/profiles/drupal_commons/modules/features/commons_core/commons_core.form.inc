@@ -35,10 +35,10 @@ function commons_core_form_og_features_feature_form_alter(&$form, &$form_state) 
       case 'feature-commons_group_aggregator';
         $form[$key]['#weight'] = -40;
         break;
-      case 'feature-commons_shoutbox';
+      case 'feature-commons_status_streams';
         $form[$key]['#weight'] = -30;
         break;
-    } 
+    }
   }
 }
 

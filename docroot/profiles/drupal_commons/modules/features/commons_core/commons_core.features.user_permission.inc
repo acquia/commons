@@ -48,15 +48,6 @@ function commons_core_user_default_permissions() {
     ),
   );
 
-  // Exported permission: access user activity
-  $permissions['access user activity'] = array(
-    'name' => 'access user activity',
-    'roles' => array(
-      '0' => 'anonymous user',
-      '1' => 'authenticated user',
-    ),
-  );
-
   // Exported permission: access user profiles
   $permissions['access user profiles'] = array(
     'name' => 'access user profiles',
@@ -284,22 +275,6 @@ function commons_core_user_default_permissions() {
     ),
   );
 
-  // Exported permission: configure heartbeat
-  $permissions['configure heartbeat'] = array(
-    'name' => 'configure heartbeat',
-    'roles' => array(
-      '0' => 'site admin',
-    ),
-  );
-
-  // Exported permission: configure heartbeat messages
-  $permissions['configure heartbeat messages'] = array(
-    'name' => 'configure heartbeat messages',
-    'roles' => array(
-      '0' => 'site admin',
-    ),
-  );
-
   // Exported permission: create group content
   $permissions['create group content'] = array(
     'name' => 'create group content',
@@ -348,29 +323,11 @@ function commons_core_user_default_permissions() {
     ),
   );
 
-  // Exported permission: delete heartbeat activity logs
-  $permissions['delete heartbeat activity logs'] = array(
-    'name' => 'delete heartbeat activity logs',
-    'roles' => array(
-      '0' => 'community manager',
-      '1' => 'site admin',
-    ),
-  );
-
   // Exported permission: delete own group content
   $permissions['delete own group content'] = array(
     'name' => 'delete own group content',
     'roles' => array(
       '0' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: delete own heartbeat activity logs
-  $permissions['delete own heartbeat activity logs'] = array(
-    'name' => 'delete own heartbeat activity logs',
-    'roles' => array(
-      '0' => 'community manager',
-      '1' => 'site admin',
     ),
   );
 
@@ -522,15 +479,6 @@ function commons_core_user_default_permissions() {
     'name' => 'flush imagecache',
     'roles' => array(
       '0' => 'site admin',
-    ),
-  );
-
-  // Exported permission: maintain own activity
-  $permissions['maintain own activity'] = array(
-    'name' => 'maintain own activity',
-    'roles' => array(
-      '0' => 'community manager',
-      '1' => 'site admin',
     ),
   );
 
@@ -691,15 +639,6 @@ function commons_core_user_default_permissions() {
     ),
   );
 
-  // Exported permission: view heartbeat messages
-  $permissions['view heartbeat messages'] = array(
-    'name' => 'view heartbeat messages',
-    'roles' => array(
-      '0' => 'anonymous user',
-      '1' => 'authenticated user',
-    ),
-  );
-
   // Exported permission: view imagecache Featured
   $permissions['view imagecache Featured'] = array(
     'name' => 'view imagecache Featured',
@@ -769,14 +708,6 @@ function commons_core_user_default_permissions() {
     'roles' => array(
       '0' => 'anonymous user',
       '1' => 'authenticated user',
-    ),
-  );
-
-  // Exported permission: view personal heartbeat activity
-  $permissions['view personal heartbeat activity'] = array(
-    'name' => 'view personal heartbeat activity',
-    'roles' => array(
-      '0' => 'authenticated user',
     ),
   );
 

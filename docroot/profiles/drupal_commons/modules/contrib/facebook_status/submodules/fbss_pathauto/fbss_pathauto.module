@@ -1,0 +1,124 @@
+<?php
+
+/**
+ * @file
+ *   Integrates Pathauto with Facebook-style Statuses.
+ */
+
+/**
+ * Implementation of hook_facebook_status_delete().
+ */
+function fbss_pathauto_facebook_status_delete($status) {
+  db_query("DELETE FROM {url_alias} WHERE src = 'statuses/%d'", $status->sid);
+}
+
+/**
+ * Implementation of hook_facebook_status_save().
+ */
+function fbss_pathauto_facebook_status_save($status, $context, $edit = FALSE) {
+  $op = $edit ? 'update' : 'insert';
+  module_load_include('inc', 'pathauto');
+  $placeholders = pathauto_get_placeholders('facebook_status', $status);
+  $src = 'statuses/'. $status->sid;
+  if ($context['type'] == 'user') {
+    $type = ($context['recipient']->{$context['recipient_id']} == $sender->uid) ? 'self' : 'other';
+  }
+  else {
+    $type = $context['type'];
+  }
+  pathauto_create_alias('fbss_pathauto', $op, $placeholders, $src, $type);
+}
+
+/**
+ * Implementation of hook_pathauto().
+ */
+function fbss_pathauto_pathauto($op) {
+  if ($op != 'settings') {
+    return;
+  }
+  $tokens = token_get_list('facebook_status');
+  $placeholders = array();
+  foreach ($tokens as $type => $set) {
+    if ($type != 'global') {
+      foreach ($set as $pattern => $description) {
+        $placeholders["[$pattern]"] = $description;
+      }
+    }
+  }
+  $patternitems = array();
+  foreach (facebook_status_all_contexts() as $type => $context) {
+    $patternitems[$type] = t('Status messages to a @title stream', array('@title' => $context['title']));
+  }
+  // Special case for the user type.
+  unset($patternitems['user']);
+  $patternitems['other'] = t('Status messages to other users');
+  $patternitems['self'] = t('Own status updates');
+  return (object) array(
+    'module' => 'fbss_pathauto',
+    'token_type' => 'facebook_status',
+    'groupheader' => t('Facebook-style Statuses settings'),
+    'patterndefault' => '', // No aliases should be generated
+    'patterndescr' => t('Default path pattern (applies to all status types with blank patterns below)'),
+    'placeholders' => $placeholders,
+    'patternitems' => $patternitems,
+    'bulkname' => t('Bulk update status paths'),
+    'bulkdescr' => t('Generate aliases for all existing statuses which do not already have aliases.'),
+  );
+}
+
+/**
+ * Implementation of hook_pathauto_bulkupdate().
+ * Inspired by the node implementation in pathauto_node.inc.
+ */
+function fbss_pathauto_pathauto_bulkupdate() {
+  // Only generate aliases for types with patterns defined.
+  $pattern_types = array();
+  foreach (facebook_status_all_contexts() as $type => $context) {
+    $pattern_types[$type] = $type;
+  }
+  // Special case for the user type.
+  unset($pattern_types['user']);
+  $pattern_types['self'] = 'self';
+  $pattern_types['other'] = 'other';
+  // Check for generic pattern.
+  if (!trim(variable_get('pathauto_fbss_pathauto_pattern', ''))) {
+    foreach ($pattern_types as $type) {
+      if (!trim(variable_get('pathauto_fbss_pathauto_'. $type .'_pattern', ''))) {
+        unset($pattern_types[$type]);
+      }
+    }
+  }
+  $count = 0;
+  if (count($pattern_types)) {
+    $query = "SELECT fbss.*, alias.src, alias.dst
+      FROM {facebook_status} fbss
+      LEFT JOIN {url_alias} alias
+        ON CONCAT('statuses/', CAST(fbss.sid AS CHAR)) = alias.src
+      WHERE alias.src IS NULL";
+    $result = db_query_range($query, 0, variable_get('pathauto_max_bulk_update', 50));
+    $placeholders = array();
+    while ($status = db_fetch_object($result)) {
+      // pathauto.inc should already be included.
+      $placeholders = pathauto_get_placeholders('facebook_status', $status);
+      $source = 'statuses/'. $status->sid;
+      $type = ($status->type == 'user' ? (($status->sender == $status->recipient) ? 'self' : 'other') : $status->type);
+      if (in_array($type, $pattern_types)) {
+        if (pathauto_create_alias('fbss_pathauto', 'bulkupdate', $placeholders, $source, $type)) {
+          $count++;
+        }
+      }
+    }
+  }
+  drupal_set_message(format_plural($count,
+    'Bulk generation of aliases for status messages completed: one alias generated.',
+    'Bulk generation of aliases for status messages completed: @count aliases generated.'));
+}
+
+/**
+ * Implementation of hook_path_alias_types().
+ */
+function fbss_pathauto_path_alias_types() {
+  return array(
+    'statuses/' => t('Status updates'),
+  );
+}

@@ -138,12 +138,6 @@ function commons_profile_context_default_contexts() {
           'region' => 'sidebar_last',
           'weight' => 0,
         ),
-        'commons_profile-recent_activity' => array(
-          'module' => 'commons_profile',
-          'delta' => 'recent_activity',
-          'region' => 'content',
-          'weight' => 0,
-        ),
       ),
     ),
   );
@@ -197,12 +191,6 @@ function commons_profile_context_default_contexts() {
           'delta' => 'profile_friends-block_1',
           'region' => 'sidebar_last',
           'weight' => 1,
-        ),
-        'commons_profile-recent_activity' => array(
-          'module' => 'commons_profile',
-          'delta' => 'recent_activity',
-          'region' => 'content',
-          'weight' => 0,
         ),
       ),
     ),

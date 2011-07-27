@@ -1,0 +1,86 @@
+<?php
+
+/**
+ * @file
+ *   Sends digests of user activity at configurable intervals.
+ */
+
+/**
+ * Implementation of hook_menu().
+ */
+function digests_menu() {
+  $items = array();
+  $items['admin/settings/digests'] = array(
+    'title' => 'Activity Log Digests',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('digests_admin'),
+    'access arguments' => array('administer site configuration'),
+    'description' => 'Allows administrators to adjust settings for Activity Log Digests.',
+    'file' => 'digests.admin.inc',
+  );
+  return $items;
+}
+
+/**
+ * Implementation of hook_perm().
+ */
+function digests_perm() {
+  return array('receive digests', 'set custom CSS for digests');
+}
+
+/**
+ * Implementation of hook_cron().
+ */
+function digests_cron() {
+  module_load_include('inc', 'digests', 'digests.cron');
+  _digests_cron();
+}
+
+/**
+ * Implementation of hook_user().
+ */
+function digests_user($op, &$edit, &$account, $category = NULL) {
+  if ($op == 'form' && $category == 'account') {
+    module_load_include('inc', 'digests', 'digests.user_settings');
+    return _digests_user_form($account->uid);
+  }
+  elseif ($op == 'update' && isset($edit['digests_interval'])) {
+    module_load_include('inc', 'digests', 'digests.user_settings');
+    _digests_user_update($edit, $account->uid);
+  }
+}
+
+/**
+ * Implementation of hook_theme().
+ */
+function digests_theme($existing, $type, $theme, $path) {
+  return array(
+    'digests_email' => array(
+      'arguments' => array(
+        'account' => NULL,
+        'messages' => array(),
+        'now' => time(),
+      ),
+      'template' => 'digests-email',
+      'file' => 'digests.cron.inc',
+    ),
+  );
+}
+
+/**
+ * Override the crazy custom CSS that Mime Mail tries to do.
+ */
+function digests_preprocess_mimemail_message(&$vars) {
+  if ($vars['mailkey'] == 'mail-digests') {
+    $vars['css'] = '';
+  }
+}
+
+/**
+ * Implementation of hook_activity_log_display_types().
+ */
+function digests_activity_log_display_types() {
+  return array(
+    'email' => t('Email digests'),
+  );
+}

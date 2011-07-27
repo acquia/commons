@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * @file
+ *   (Un)installs the Commons Status Streams feature.
+ */
+
+/**
+ * Implementation of hook_install().
+ */
+function commons_status_streams_install() {
+  db_query("UPDATE {blocks} SET title = '<none>' WHERE module = 'facebook_status' AND delta = 'facebook_status'");
+  variable_set('fbsmp_image_dir', drupal_get_path('module', 'commons_status_streams') .'/fbsmp');
+}

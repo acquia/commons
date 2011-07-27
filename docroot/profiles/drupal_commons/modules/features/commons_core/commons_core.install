@@ -236,3 +236,105 @@ function commons_core_update_6008() {
   variable_set('theme_default', 'commons_origins');
   return array();
 }
+
+/**
+ * Enable activity streams and disable things it makes obsolete.
+ */
+function commons_core_update_6009() {
+  // Install activity streams.
+  features_install_modules(array('commons_status_streams'));
+
+  // Port shouts to Facebook-style Statuses.
+  if (db_table_exists('shoutbox')) {
+    $max_sid = (int) db_result(db_query("SELECT MAX(sid) FROM {facebook_status}"));
+    if (db_table_exists('shoutbox_groups')) {
+      db_query("
+        INSERT INTO {facebook_status} (sender, recipient, type, created, message)
+        SELECT s.uid, g.nid, 'og', s.created, s.shout
+        FROM {shoutbox_groups} g
+        INNER JOIN {shoutbox} s
+          ON g.shout_id = s.shout_id
+        WHERE s.module = 'shoutbox_group'
+      ");
+    }
+    if (db_table_exists('shoutbox_user')) {
+      db_query("
+        INSERT INTO {facebook_status} (sender, recipient, type, created, message)
+        SELECT s.uid, u.uid, 'user', s.created, s.shout
+        FROM {shoutbox_user} u
+        INNER JOIN {shoutbox} s
+          ON u.shout_id = s.shout_id
+        WHERE s.module = 'shoutbox_user'
+      ");
+    }
+    if (db_table_exists('shoutbox_tags')) {
+      module_load_include('module', 'facebook_status_tags');
+      $result = db_query("SELECT sid, message FROM {facebook_status} WHERE sid > %d", $max_sid);
+      while ($status = db_fetch_object($result)) {
+        $matches = _facebook_status_tags_filter($status->message, TRUE);
+        $old_matches = array();
+        foreach ($matches['#'] as $term) {
+          $term = (object) $term;
+          if (!in_array($term->tid, $old_matches)) {
+            $array = array(
+              'sid' => $status->sid,
+              'rid' => $term->tid,
+              'type' => 'term',
+              'name' => $term->name,
+            );
+            drupal_write_record('facebook_status_tags', $array);
+            $old_matches[] = $term->tid;
+          }
+        }
+      }
+    }
+  }
+
+  // Port activity data into Activity Log.
+  module_load_include('inc', 'activity_log', 'activity_log.generate');
+  activity_log_regenerate();
+
+  // Disable user_relationship_elaborations (it's pointless with one-way relationships)
+  module_disable(array('user_relationship_elaborations'));
+
+  // Disable dashboard.
+  $dashboard_modules = array(
+    'commons_dashboard',
+    'homebox_example',
+    'homebox_og',
+    'homebox',
+  );
+  if (!module_exists('commons_event')) {
+    $dashboard_modules[] = 'jquery_ui';
+  }
+  module_disable($dashboard_modules);
+
+  // Disable shoutbox.
+  $shoutbox_modules = array(
+    'commons_shoutbox',
+    'shoutbox_domain',
+    'shoutbox_group',
+    'shoutbox_points',
+    'shoutbox_rules',
+    'shoutbox_tags',
+    'shoutbox_user',
+    'shoutbox',
+  );
+  module_disable($shoutbox_modules);
+
+  // Disable heartbeat.
+  $heartbeat_modules = array(
+    'flag_heartbeat',
+    'friendlist_activity',
+    'hds',
+    'heartbeat_comments',
+    'heartbeat_example',
+    'hrules',
+    'og_activity',
+    'shouts',
+    'heartbeat',
+  );
+  module_disable($heartbeat_modules);
+
+  return array();
+}

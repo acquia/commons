@@ -45,18 +45,6 @@ function commons_dashboard_homebox() {
         'title' => '',
         'weight' => -63,
       ),
-      'heartbeat_connectedheartbeat' => 
-      array (
-        'module' => 'heartbeat',
-        'delta' => 'connectedheartbeat',
-        'region' => 1,
-        'movable' => 1,
-        'status' => 1,
-        'open' => 1,
-        'closable' => 1,
-        'title' => 'Recent activity',
-        'weight' => -62,
-      ),
       'views_users_online-block_1' => 
       array (
         'module' => 'views',

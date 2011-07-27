@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * @file
+ *   Integrates Rules with Facebook-style Statuses.
+ */
+
+/**
+ * Implementation of hook_facebook_status_delete().
+ */
+function fbss_rules_facebook_status_delete($status, $meta = array()) {
+  if (empty($meta['has attachment'])) {
+    rules_invoke_event('facebook_status_delete', $status);
+  }
+}
+
+/**
+ * Implementation of hook_facebook_status_save().
+ */
+function fbss_rules_facebook_status_save($status, $context, $edit, $options) {
+  if (empty($options['has attachment'])) {
+    if ($edit) {
+      rules_invoke_event('facebook_status_edit', $status/*, $context*/);
+    }
+    else {
+      rules_invoke_event('facebook_status_save', $status/*, $context*/);
+    }
+  }
+}

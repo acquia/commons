@@ -163,12 +163,6 @@ function commons_core_context_default_contexts() {
           'region' => 'content',
           'weight' => 0,
         ),
-        'commons_core-group_activity' => array(
-          'module' => 'commons_core',
-          'delta' => 'group_activity',
-          'region' => 'content',
-          'weight' => 1,
-        ),
       ),
     ),
   );
