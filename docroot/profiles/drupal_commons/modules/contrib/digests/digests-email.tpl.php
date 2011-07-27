@@ -26,54 +26,28 @@
  * notably Gmail).
  */
 ?>
-<table id="digests">
-  <?php if (!empty($logo)) : ?>
-    <tr>
-      <td>
-        <?php print $logo; ?>
-      </td>
-    </tr>
-  <?php endif; ?>
+<div id="digests">
+  <?php if ($logo) {
+    print $logo;
+  } ?>
   <?php if ($header): ?>
-    <tr>
-      <td>
-        <div id="digests-header">
-          <?php print $header; ?>
-        </div>
-      </td>
-    </tr>
+    <div id="digests-header">
+      <?php print $header; ?>
+    </div>
   <?php endif; ?>
-  <?php if(!empty($stream)) : ?>
-    <tr>
-      <td>
-        <table id="digests-stream">
-          <tbody>
-            <tr>
-              <td>
-                <?php print $stream; ?>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </td>
-    </tr>
-  <?php endif; ?>
+  <table id="digests-stream" style="border: 1px solid #CCCCCC; margin: 12px 24px; max-width: 800px; min-width: 480px; padding: 18px 30px">
+    <tbody>
+      <?php print $stream; ?>
+    </tbody>
+  </table>
   <?php if ($footer): ?>
-    <tr>
-      <td>
-        <div id="digests-footer">
-          <?php print $footer; ?>
-        </div>
-      </td>
-    </tr>
+    <div id="digests-footer">
+      <?php print $footer; ?>
+    </div>
   <?php endif; ?>
   <?php if ($unsubscribe): ?>
-    <tr>
-      <td>
-        <div id="digests-unsubscribe">
-          <?php print $unsubscribe; ?>
-        </div>
-      </td>
-    </tr>
+    <div id="digests-unsubscribe">
+      <?php print $unsubscribe; ?>
+    </div>
   <?php endif; ?>
-</table>
+</div>
