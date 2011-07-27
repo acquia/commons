@@ -241,6 +241,9 @@ function commons_core_update_6008() {
  * Enable activity streams and disable things it makes obsolete.
  */
 function commons_core_update_6009() {
+  // Try to avoid errors from og_features when it overrides all the menu access callbacks.
+  db_query("DELETE FROM `cache_menu` WHERE cid LIKE '%homebox%'");
+
   // Install activity streams.
   features_install_modules(array('commons_status_streams'));
 
