@@ -28,6 +28,7 @@ function commons_status_streams_form_system_site_information_settings_alter(&$fo
     '#description' => t('If enabled, users who get to the front page by clicking your site name or logo or who are directed to the front page by Drupal will be redirected to their activity stream at <code>/stream</code> if they are logged in. Users can still visit the "normal" front page that anonymous users see by visiting its path directly or by clicking on the "Home" link in the menu.'),
     '#default_value' => variable_get('commons_status_streams_auth_frontpage', 1),
   );
+  $form['buttons']['#weight'] = 10;
 }
 
 /**
