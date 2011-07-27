@@ -382,7 +382,7 @@ function activity_log_views_api() {
 // TOKEN INTEGRATION.
 //====================
 
-// TODO: Remove this after http://drupal.org/node/1202648 lands.
+// TODO: Remove the flag tokens after http://drupal.org/node/1202648 lands.
 
 /**
  * Implementation of hook_token_list().
@@ -397,6 +397,9 @@ function activity_log_token_list($type = 'all') {
       }
     }
   }
+  if ($type == 'node' && module_exists('og')) {
+    $tokens['node']['og-url'] = t("The absolute URL of the node's primary group, if applicable.");
+  }
   return $tokens;
 }
 
@@ -404,12 +407,16 @@ function activity_log_token_list($type = 'all') {
  * Implementation of hook_token_values().
  */
 function activity_log_token_values($type, $object = NULL, $options = array()) {
+  $values = array();
   if (in_array($type, flag_get_types())) {
-    $values = array();
     $flags = flag_get_flags($type);
     foreach ($flags as $flag) {
       $values['flag-'. str_replace('_', '-', $flag->name) .'-link'] = flag_create_link($flag->name, $flag->get_content_id($object));
     }
-    return $values;
   }
+  if ($type == 'node' && module_exists('og') && !empty($object->og_groups) && is_array($object->og_groups)) {
+    $gids = array_keys(array_filter($object->og_groups));
+    $values['og-url'] = url('node/'. $gids[0], array('absolute' => TRUE));
+  }
+  return $values;
 }

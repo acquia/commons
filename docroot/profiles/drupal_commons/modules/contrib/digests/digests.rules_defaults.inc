@@ -109,7 +109,7 @@ function digests_rules_defaults_node_insert() {
               'en' => 
               array (
                 'template' => '<div class="activity-log-content">[author:user] added the [node:type-name] <a href="[node:node-url]">[node:title]</a></div>
-<div class="activity-log-time"><a href="[node:node-url]">[node:since] ago</a></div>',
+<div class="activity-log-time"><a href="[node:node-url]">[node:small] ago</a></div>',
               ),
             ),
             'grouping' => 
@@ -243,7 +243,7 @@ function digests_rules_defaults_node_insert() {
               'en' => 
               array (
                 'template' => '<div class="activity-log-content">[author:user] added the [node:type-name] <a href="[node:node-url]">[node:title]</a></div>
-<div class="activity-log-time"><a href="[node:node-url]">[node:since] ago</a></div>',
+<div class="activity-log-time"><a href="[node:node-url]">[node:small] ago</a></div>',
               ),
             ),
             'grouping' => 
@@ -409,7 +409,7 @@ function digests_rules_defaults_node_insert() {
               'en' => 
               array (
                 'template' => '<div class="activity-log-content">[author:user] added the [node:type-name] <a href="[node:node-url]">[node:title]</a></div>
-<div class="activity-log-time"><a href="[node:node-url]">[node:since] ago</a></div>',
+<div class="activity-log-time"><a href="[node:node-url]">[node:small] ago</a></div>',
               ),
             ),
             'grouping' => 
@@ -669,8 +669,8 @@ function digests_rules_defaults_node_insert_og() {
             array (
               'en' => 
               array (
-                'template' => '<div class="activity-log-content">[author:user] added the [node:type-name] <a href="[node:node-url]">[node:title]</a> in [node:ogname-title-link]</div>
-<div class="activity-log-time"><a href="[node:node-url]">[node:since] ago</a></div>',
+                'template' => '<div class="activity-log-content">[author:user] added the [node:type-name] <a href="[node:node-url]">[node:title]</a> in <a href="[node:og-url]">[node:ogname]</a></div>
+<div class="activity-log-time"><a href="[node:node-url]">[node:small] ago</a></div>',
               ),
             ),
             'grouping' => 
@@ -819,7 +819,7 @@ function digests_rules_defaults_node_insert_og() {
               'en' => 
               array (
                 'template' => '<div class="activity-log-content">[author:user] added the [node:type-name] <a href="[node:node-url]">[node:title]</a></div>
-<div class="activity-log-time"><a href="[node:node-url]">[node:since] ago</a></div>',
+<div class="activity-log-time"><a href="[node:node-url]">[node:small] ago</a></div>',
               ),
             ),
             'grouping' => 
@@ -952,8 +952,8 @@ function digests_rules_defaults_node_insert_og() {
             array (
               'en' => 
               array (
-                'template' => '<div class="activity-log-content">[author:user] added the [node:type-name] <a href="[node:node-url]">[node:title]</a> in [node:ogname-title-link]</div>
-<div class="activity-log-time"><a href="[node:node-url]">[node:since] ago</a></div>',
+                'template' => '<div class="activity-log-content">[author:user] added the [node:type-name] <a href="[node:node-url]">[node:title]</a> in <a href="[node:og-url]">[node:ogname]</a></div>
+<div class="activity-log-time"><a href="[node:node-url]">[node:small] ago</a></div>',
               ),
             ),
             'grouping' => 
@@ -1116,8 +1116,8 @@ function digests_rules_defaults_node_insert_og() {
             array (
               'en' => 
               array (
-                'template' => '<div class="activity-log-content">[author:user] added the [node:type-name] <a href="[node:node-url]">[node:title]</a> in [node:ogname-title-link]</div>
-<div class="activity-log-time"><a href="[node:node-url]">[node:since] ago</a></div>',
+                'template' => '<div class="activity-log-content">[author:user] added the [node:type-name] <a href="[node:node-url]">[node:title]</a> in <a href="[node:og-url]">[node:ogname]</a></div>
+<div class="activity-log-time"><a href="[node:node-url]">[node:small] ago</a></div>',
               ),
             ),
             'grouping' => 
@@ -3065,7 +3065,7 @@ function digests_rules_defaults_og_join() {
             array (
               'en' => 
               array (
-                'template' => '<div class="activity-log-content">[account:user] joined the group [group:title-link]</div>',
+                'template' => '<div class="activity-log-content">[account:user] joined the group <a href="[group:node-url]">[group:title]</a></div>',
               ),
             ),
             'grouping' => 
@@ -3073,7 +3073,7 @@ function digests_rules_defaults_og_join() {
               'group_method' => 'user_action',
               'group_interval' => '259200',
               'group_max' => '10',
-              'group_summary' => '[group:title-link]',
+              'group_summary' => '<a href="[group:node-url]">[group:title]</a>',
               'collapse_method' => 'activity_log_collapse_inline',
               'templates' => 
               array (
@@ -3232,7 +3232,7 @@ function digests_rules_defaults_og_join() {
             array (
               'en' => 
               array (
-                'template' => '<div class="activity-log-content">[account:user] joined the group [group:title-link]</div>',
+                'template' => '<div class="activity-log-content">[account:user] joined the group <a href="[group:node-url]">[group:title]</a></div>',
               ),
             ),
             'grouping' => 
@@ -3240,7 +3240,7 @@ function digests_rules_defaults_og_join() {
               'group_method' => 'user_action',
               'group_interval' => '259200',
               'group_max' => '10',
-              'group_summary' => '[group:title-link]',
+              'group_summary' => '<a href="[group:node-url]">[group:title]</a>',
               'collapse_method' => 'activity_log_collapse_inline',
               'templates' => 
               array (
