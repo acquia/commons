@@ -28,7 +28,7 @@ function commons_subgroups_context_default_contexts() {
           'module' => 'og_subgroups',
           'delta' => 'hierarchy',
           'region' => 'sidebar_last',
-          'weight' => 0,
+          'weight' => 2,
         ),
       ),
     ),
