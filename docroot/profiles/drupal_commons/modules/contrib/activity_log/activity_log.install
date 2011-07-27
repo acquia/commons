@@ -304,6 +304,7 @@ function activity_log_schema() {
 function activity_log_install() {
   drupal_install_schema('activity_log');
 
+  module_load_include('module', 'activity_log');
   if (function_exists('_activity_log_rebuild_templates')) {
     $default_rule_count = _activity_log_rebuild_templates();
     if ($default_rule_count) {

@@ -49,6 +49,10 @@ function activity_log_admin($form_state) {
  * Submit callback for the "clear caches" button.
  */
 function activity_log_admin_clear_caches() {
-  drupal_set_message(t('Message caches cleared.'));
+  $default_rule_count = _activity_log_rebuild_templates();
+  if ($default_rule_count) {
+    drupal_set_message(t('Finished building !count default Activity Log templates.', array('!count' => $default_rule_count)));
+  }
   activity_log_clear_message_cache();
+  drupal_set_message(t('Message caches cleared.'));
 }
