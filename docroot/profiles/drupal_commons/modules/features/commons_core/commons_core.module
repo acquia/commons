@@ -48,9 +48,21 @@ function commons_core_menu_alter(&$items) {
   $path = drupal_get_path('module', 'commons_core');
   
   // Override the node view callback in order to handle group home pages
-  $items['node/%node']['page callback'] = 'commons_core_node_page_view';
-  $items['node/%node']['file'] = 'commons_core.overrides.inc';
-  $items['node/%node']['file path'] = $path;
+  // For legacy support, do not override the node view if page manager
+  // is already doing so
+  $skip_node_override = FALSE;
+  if (module_exists('page_manager')) {
+    if ($task = page_manager_get_task('node_view')) {
+      if (isset($task['disabled']) && !$task['disabled']) {
+        $skip_node_override = TRUE;
+      }
+    }
+  }
+  if (!$skip_node_override) {
+    $items['node/%node']['page callback'] = 'commons_core_node_page_view';
+    $items['node/%node']['file'] = 'commons_core.overrides.inc';
+    $items['node/%node']['file path'] = $path;
+  }
   
   // Override group node tab title from 'View' to 'Home'
   $items['node/%node/view']['title callback'] = 'commons_core_set_node_tab_title';
