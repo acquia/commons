@@ -1169,7 +1169,7 @@ function facebook_status_token_list($type = 'all') {
     );
     if (module_exists('fbss_comments')) {
       $tokens['facebook_status']['status-comment-count'] = t('The number of comments on the status.');
-      $tokens['facebok_status']['comments-email'] = t('The comments with inline styling suitable for emails.');
+      $tokens['facebook_status']['comments-email'] = t('The comments with inline styling suitable for emails.');
     }
     $tokens['facebook_status'] += token_get_date_token_info(t('The status created'), 'created-');
     return $tokens;

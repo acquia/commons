@@ -1312,7 +1312,9 @@ function digests_rules_defaults_facebook_status_insert_user_self() {
 <div>[status:sender-themed] [status:message-formatted]</div>
 <div><span style="color: #666666;">[status:created-small]</span> <a href="[status:status-url]">Reply</a></div>
 </td>
-</table></tr>',
+</tr>
+<tr><td>[status:comments-email]</td></tr>
+</table>',
               ),
             ),
             'grouping' => 
@@ -1487,7 +1489,9 @@ function digests_rules_defaults_facebook_status_insert_user_self() {
 <div>[status:sender-themed] [status:message-formatted]</div>
 <div><span style="color: #666666;">[status:created-small]</span> <a href="[status:status-url]">Reply</a></div>
 </td>
-</table></tr>',
+</tr>
+<tr><td>[status:comments-email]</td></tr>
+</table>',
               ),
             ),
             'grouping' => 
@@ -1703,7 +1707,9 @@ function digests_rules_defaults_facebook_status_insert_other() {
 <div>[status:sender-themed] &raquo; [status:recipient-link] [status:message-formatted]</div>
 <div><span style="color: #666666;">[status:created-small]</span> <a href="[status:status-url]">Reply</a></div>
 </td>
-</table></tr>',
+</tr>
+<tr><td>[status:comments-email]</td></tr>
+</table>',
               ),
             ),
             'grouping' => 
@@ -2015,7 +2021,9 @@ function digests_rules_defaults_facebook_status_insert_other() {
 <div>[status:sender-themed] &raquo; [status:recipient-link] [status:message-formatted]</div>
 <div><span style="color: #666666;">[status:created-small]</span> <a href="[status:status-url]">Reply</a></div>
 </td>
-</table></tr>',
+</tr>
+<tr><td>[status:comments-email]</td></tr>
+</table>',
               ),
             ),
             'grouping' => 
@@ -2212,7 +2220,10 @@ function digests_rules_defaults_fbsmp_insert_user_self() {
 <div>[status:sender-themed] [status:message-formatted]</div>
 <div><span style="color: #666666;">[status:created-small]</span> <a href="[status:status-url]">Reply</a></div>
 </td>
-</table></tr>',
+</tr>
+<tr><td>[attachment:attachment-themed]</td></tr>
+<tr><td>[status:comments-email]</td></tr>
+</table>',
               ),
             ),
             'grouping' => 
@@ -2382,7 +2393,10 @@ function digests_rules_defaults_fbsmp_insert_user_self() {
 <div>[status:sender-themed] [status:message-formatted]</div>
 <div><span style="color: #666666;">[status:created-small]</span> <a href="[status:status-url]">Reply</a></div>
 </td>
-</table></tr>',
+</tr>
+<tr><td>[attachment:attachment-themed]</td></tr>
+<tr><td>[status:comments-email]</td></tr>
+</table>',
               ),
             ),
             'grouping' => 
@@ -2576,7 +2590,10 @@ function digests_rules_defaults_fbsmp_insert_other() {
 <div>[status:sender-themed] &raquo; [status:recipient-link] [status:message-formatted]</div>
 <div><span style="color: #666666;">[status:created-small]</span> <a href="[status:status-url]">Reply</a></div>
 </td>
-</table></tr>',
+</tr>
+<tr><td>[attachment:attachment-themed]</td></tr>
+<tr><td>[status:comments-email]</td></tr>
+</table>',
               ),
             ),
             'grouping' => 
@@ -2884,7 +2901,10 @@ function digests_rules_defaults_fbsmp_insert_other() {
 <div>[status:sender-themed] &raquo; [status:recipient-link] [status:message-formatted]</div>
 <div><span style="color: #666666;">[status:created-small]</span> <a href="[status:status-url]">Reply</a></div>
 </td>
-</table></tr>',
+</tr>
+<tr><td>[attachment:attachment-themed]</td></tr>
+<tr><td>[status:comments-email]</td></tr>
+</table>',
               ),
             ),
             'grouping' => 

@@ -220,12 +220,19 @@ function theme_fbss_comments_item($comment, $classes = array(), $destination = '
  * @return
  *   Themed HTML for the status comments.
  */
-function theme_fbss_comments_items_email($comments, $destination = '') {
-  $count = count($comments);
+function theme_fbss_comments_items_email($c, $destination = '') {
+  $count = count($c);
   if (!$count) {
     return;
   }
+  $comments = array_pop($c);
+  if ($count > 1) {
+    array_unshift($comments, array_pop($c));
+  }
   $output = '<table style="background-color: #EEEEEE; border: 1px solid #CCCCCC; margin-left: 20px;"><tbody>';
+  if ($count > 2) {
+    $output .= '<tr><td>'. l(t('View all !count comments', array('!count' => $count)), 'statuses/'. $comments[0]->sid) .'</td></tr>';
+  }
   $rendered = 0;
   foreach ($comments as $key => $comment) {
     if (!fbss_comments_can('view', $comment)) {
