@@ -1,0 +1,146 @@
+<?php
+
+/**
+ * Implementation of hook_ctools_plugin_api()
+ */
+function og_subgroups_context_ctools_plugin_api($module, $api) {
+  if ($module == 'context' && $api == 'plugins') {
+    return array('version' => 3);
+  }
+}
+
+/**
+ * Implementation of hook_context_plugins()
+ */
+function og_subgroups_context_context_plugins() {
+  $path = drupal_get_path('module', 'og_subgroups_context') . '/plugins';
+  $plugins = array();
+  $plugins['og_subgroups_context_condition_node_below_og'] = array(
+    'handler' => array(
+      'path' => $path,
+      'file' => 'og_subgroups_context_condition_node_below_og.inc',
+      'class' => 'og_subgroups_context_condition_node_below_og',
+      'parent' => 'context_condition',
+    ),
+  );
+  $plugins['og_subgroups_context_condition_has_children'] = array(
+    'handler' => array(
+      'path' => $path,
+      'file' => 'og_subgroups_context_condition_has_children.inc',
+      'class' => 'og_subgroups_context_condition_has_children',
+      'parent' => 'context_condition',
+    ),
+  );
+  $plugins['og_subgroups_context_condition_has_siblings'] = array(
+    'handler' => array(
+      'path' => $path,
+      'file' => 'og_subgroups_context_condition_has_siblings.inc',
+      'class' => 'og_subgroups_context_condition_has_siblings',
+      'parent' => 'context_condition',
+    ),
+  );
+  $plugins['og_subgroups_context_condition_has_parent'] = array(
+    'handler' => array(
+      'path' => $path,
+      'file' => 'og_subgroups_context_condition_has_parent.inc',
+      'class' => 'og_subgroups_context_condition_has_parent',
+      'parent' => 'context_condition',
+    ),
+  );
+  return $plugins;
+}
+
+/**
+ * Implementation of hook_context_registry()
+ */
+function og_subgroups_context_context_registry() {
+  return array(
+    'conditions' => array(
+      'og_subgroups_context_condition_node_below_og' => array(
+        'title' => t('OG subgroups: below'),
+        'description' => t("Set this context when the current group is a child of the selected groups."),
+        'plugin' => 'og_subgroups_context_condition_node_below_og',
+      ),
+      'og_subgroups_context_condition_has_children' => array(
+        'title' => t('OG subgroups: children'),
+        'description' => t("Set this context based on whether or not the current group has children."),
+        'plugin' => 'og_subgroups_context_condition_has_children',
+      ),
+      'og_subgroups_context_condition_has_siblings' => array(
+        'title' => t('OG subgroups: siblings'),
+        'description' => t("Set this context based on whether or not the current group has siblings."),
+        'plugin' => 'og_subgroups_context_condition_has_siblings',
+      ),
+      'og_subgroups_context_condition_has_parent' => array(
+        'title' => t('OG subgroups: parent'),
+        'description' => t("Set this context based on whether or not the current group has a parent."),
+        'plugin' => 'og_subgroups_context_condition_has_parent',
+      ),
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_init()
+ */
+function og_subgroups_context_init() {
+  $contexts = array_keys(og_subgroups_context_context_plugins());
+  
+  // Execute the context conditions
+  foreach ($contexts as $context) {
+    $plugin = context_get_plugin('condition', $context);
+    if ($plugin) {
+      $plugin->execute();
+    }
+  }
+}
+
+/**
+ * Implementation of hook_enable()
+ */
+function og_subgroups_context_enable() {
+  context_invalidate_cache();
+}
+
+/**
+ * Determine the current group we're in
+ */
+function og_subgroups_context_current_group() {
+  static $group = FALSE;
+  
+  // See if we haven't registered a group yet
+  if (!$group) {
+    // Attempt to get the group from OG's context
+    if (!($group = og_get_group_context())) {
+      // Try to get the nid from the URL
+      $nid = 0;
+      if (arg(0) == 'node') {
+        if (arg(1) == 'add' && arg(2) && isset($_GET['gids'][0])) {
+          $nid = $_GET['gids'][0];
+        }
+        else if (is_numeric(arg(1))) {
+          $nid = arg(1);
+        }
+      }
+      else if (arg(0) == 'og') {
+        if ((arg(1) == 'users' || arg(1) == 'manage') && is_numeric(arg(2))) {
+          $nid = arg(2);
+        }
+      }
+      
+      // See if we have registered an nid to test
+      if ($nid) {
+        // Attempt to load the node
+        if ($node = node_load($nid)) {
+          // See if this is a group type
+          if (og_is_group_type($node->type)) {
+            // Set this node as our group
+            $group = $node;
+          }
+        }
+      }
+    }
+  }
+  
+  return $group;
+}

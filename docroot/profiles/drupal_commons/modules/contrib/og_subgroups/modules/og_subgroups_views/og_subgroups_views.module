@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * Implementation of hook_views_api().
+ */
+function og_subgroups_views_views_api() {
+  return array(
+    'api' => 2,
+//    'path' => drupal_get_path('module', 'og_subgroups_views') .'/includes/views.inc',
+  );
+}
+
+/**
+ * Implementation of hook_views_data_alter().
+ */
+function og_subgroups_views_views_data_alter(&$data) {
+  $data['og_ancestry']['group_nid']['filter']['handler'] = 'og_subgroups_views_handler_filter_og_group_nid_override';
+}

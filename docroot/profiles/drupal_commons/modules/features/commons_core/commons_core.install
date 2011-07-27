@@ -341,3 +341,11 @@ function commons_core_update_6009() {
 
   return array();
 }
+
+/**
+ * Install subgroups feature
+ */
+function commons_core_update_6010() {
+  features_install_modules(array('commons_subgroups'));
+  return array();
+}
