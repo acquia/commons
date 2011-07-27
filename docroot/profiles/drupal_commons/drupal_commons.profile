@@ -149,7 +149,6 @@ function drupal_commons_profile_tasks(&$task, $url) {
     $operations[] = array('drupal_commons_config_password', array());
     $operations[] = array('drupal_commons_config_wysiwyg', array());
     $operations[] = array('drupal_commons_config_ur', array());
-    $operations[] = array('drupal_commons_config_heartbeat', array());
     $operations[] = array('drupal_commons_config_views', array());
     $operations[] = array('drupal_commons_config_images', array());
     $operations[] = array('drupal_commons_config_vars', array());
@@ -364,39 +363,6 @@ function drupal_commons_config_ur() {
     $function = $module .'_'. $hook;
     $function($type, $relationship);
   }
-}
-
-/**
- * Configure heartbeat
- */
-function drupal_commons_config_heartbeat() {
-  // Refresh all available heartbeat streams
-  // This registers the relational activity stream
-  heartbeat_check_access_types();
-  
-  // Rebuild all available heartbeat message templates
-  heartbeat_messages_rebuild();
-  
-  // Disable stream tabs on user profiles
-  $streams = variable_get('heartbeat_stream_data', '');
-  
-  if ($streams) {
-    foreach ($streams as $key => $value) {
-      $streams[$key]['profile'] = 0;
-    }
-  }
-  else {
-    $streams = array(
-      'privateheartbeat' => array(
-        'profile' => 0
-      ), 
-      'publicheartbeat' => array(
-        'profile' => 0
-      )
-    );
-  }
-  
-  variable_set('heartbeat_stream_data', $streams);
 }
 
 /**
