@@ -33,12 +33,6 @@ function commons_status_streams_context_default_contexts() {
           'region' => 'sidebar_last',
           'weight' => 1,
         ),
-        'userpoints-0' => array(
-          'module' => 'userpoints',
-          'delta' => 0,
-          'region' => 'sidebar_last',
-          'weight' => 2,
-        ),
         'views-recent_notices-block_1' => array(
           'module' => 'views',
           'delta' => 'recent_notices-block_1',
