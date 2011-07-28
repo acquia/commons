@@ -26,7 +26,7 @@
  * notably Gmail).
  */
 ?>
-<div id="digests">
+<div id="digests" style="border:1px solid #f0f0f0;max-width:800px;min-width:480px;padding-top:15px;padding-right:12px;padding-bottom:15px;padding-left:12px;font-family:'Lucida Grande',Verdana,Arial,Helvetica,sans-serif;font-size:small;">
   <?php if ($logo) {
     print $logo;
   } ?>
@@ -35,7 +35,7 @@
       <?php print $header; ?>
     </div>
   <?php endif; ?>
-  <table id="digests-stream" style="border: 1px solid #CCCCCC; margin: 12px 24px; max-width: 800px; min-width: 480px; padding: 18px 30px">
+  <table id="digests-stream" style="margin-top:15px;margin-bottom:15px;width:100%;border-collapse:collapse;font-family:'Lucida Grande',Verdana,Arial,Helvetica,sans-serif;font-size:small;" cellpadding="0" cellspacing="0">
     <tbody>
       <?php print $stream; ?>
     </tbody>

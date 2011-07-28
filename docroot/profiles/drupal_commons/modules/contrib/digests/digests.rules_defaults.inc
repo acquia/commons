@@ -1306,14 +1306,14 @@ function digests_rules_defaults_facebook_status_insert_user_self() {
             array (
               'en' => 
               array (
-                'template' => '<table style="border-bottom: 1px solid #CCCCCC;"><tr>
-<td style="vertical-align: top;">[status:sender-picture]</td>
+                'template' => '<table style="font-size:small;"><tr>
+<td style="vertical-align:top;padding-right:12px;">[status:sender-picture]</td>
 <td>
 <div>[status:sender-themed] [status:message-formatted]</div>
 <div><span style="color: #666666;">[status:created-small]</span> <a href="[status:status-url]">Reply</a></div>
 </td>
 </tr>
-<tr><td>[status:comments-email]</td></tr>
+<tr><td colspan="2">[status:comments-email]</td></tr>
 </table>',
               ),
             ),
@@ -1483,14 +1483,14 @@ function digests_rules_defaults_facebook_status_insert_user_self() {
             array (
               'en' => 
               array (
-                'template' => '<table style="border-bottom: 1px solid #CCCCCC;"><tr>
-<td style="vertical-align: top;">[status:sender-picture]</td>
+                'template' => '<table style="font-size:small;"><tr>
+<td style="vertical-align:top;padding-right:12px;">[status:sender-picture]</td>
 <td>
 <div>[status:sender-themed] [status:message-formatted]</div>
 <div><span style="color: #666666;">[status:created-small]</span> <a href="[status:status-url]">Reply</a></div>
 </td>
 </tr>
-<tr><td>[status:comments-email]</td></tr>
+<tr><td colspan="2">[status:comments-email]</td></tr>
 </table>',
               ),
             ),
@@ -1701,14 +1701,14 @@ function digests_rules_defaults_facebook_status_insert_other() {
             array (
               'en' => 
               array (
-                'template' => '<table style="border-bottom: 1px solid #CCCCCC;"><tr>
-<td style="vertical-align: top;">[status:sender-picture]</td>
+                'template' => '<table style="font-size:small;"><tr>
+<td style="vertical-align:top;padding-right:12px;">[status:sender-picture]</td>
 <td>
 <div>[status:sender-themed] &raquo; [status:recipient-link] [status:message-formatted]</div>
 <div><span style="color: #666666;">[status:created-small]</span> <a href="[status:status-url]">Reply</a></div>
 </td>
 </tr>
-<tr><td>[status:comments-email]</td></tr>
+<tr><td colspan="2">[status:comments-email]</td></tr>
 </table>',
               ),
             ),
@@ -2015,14 +2015,14 @@ function digests_rules_defaults_facebook_status_insert_other() {
             array (
               'en' => 
               array (
-                'template' => '<table style="border-bottom: 1px solid #CCCCCC;"><tr>
-<td style="vertical-align: top;">[status:sender-picture]</td>
+                'template' => '<table style="font-size:small;"><tr>
+<td style="vertical-align:top;padding-right:12px;">[status:sender-picture]</td>
 <td>
 <div>[status:sender-themed] &raquo; [status:recipient-link] [status:message-formatted]</div>
 <div><span style="color: #666666;">[status:created-small]</span> <a href="[status:status-url]">Reply</a></div>
 </td>
 </tr>
-<tr><td>[status:comments-email]</td></tr>
+<tr><td colspan="2">[status:comments-email]</td></tr>
 </table>',
               ),
             ),
@@ -2214,15 +2214,15 @@ function digests_rules_defaults_fbsmp_insert_user_self() {
             array (
               'en' => 
               array (
-                'template' => '<table style="border-bottom: 1px solid #CCCCCC;"><tr>
-<td style="vertical-align: top;">[status:sender-picture]</td>
+                'template' => '<table style="font-size:small;"><tr>
+<td style="vertical-align:top;padding-right:12px;">[status:sender-picture]</td>
 <td>
 <div>[status:sender-themed] [status:message-formatted]</div>
 <div><span style="color: #666666;">[status:created-small]</span> <a href="[status:status-url]">Reply</a></div>
 </td>
 </tr>
-<tr><td>[attachment:attachment-themed]</td></tr>
-<tr><td>[status:comments-email]</td></tr>
+<tr><td colspan="2">[attachment:attachment-themed]</td></tr>
+<tr><td colspan="2">[status:comments-email]</td></tr>
 </table>',
               ),
             ),
@@ -2387,15 +2387,15 @@ function digests_rules_defaults_fbsmp_insert_user_self() {
             array (
               'en' => 
               array (
-                'template' => '<table style="border-bottom: 1px solid #CCCCCC;"><tr>
-<td style="vertical-align: top;">[status:sender-picture]</td>
+                'template' => '<table style="font-size:small;"><tr>
+<td style="vertical-align:top;padding-right:12px;">[status:sender-picture]</td>
 <td>
 <div>[status:sender-themed] [status:message-formatted]</div>
 <div><span style="color: #666666;">[status:created-small]</span> <a href="[status:status-url]">Reply</a></div>
 </td>
 </tr>
-<tr><td>[attachment:attachment-themed]</td></tr>
-<tr><td>[status:comments-email]</td></tr>
+<tr><td colspan="2">[attachment:attachment-themed]</td></tr>
+<tr><td colspan="2">[status:comments-email]</td></tr>
 </table>',
               ),
             ),
@@ -2584,15 +2584,15 @@ function digests_rules_defaults_fbsmp_insert_other() {
             array (
               'en' => 
               array (
-                'template' => '<table style="border-bottom: 1px solid #CCCCCC;"><tr>
-<td style="vertical-align: top;">[status:sender-picture]</td>
+                'template' => '<table style="font-size:small;"><tr>
+<td style="vertical-align:top;padding-right:12px;">[status:sender-picture]</td>
 <td>
 <div>[status:sender-themed] &raquo; [status:recipient-link] [status:message-formatted]</div>
 <div><span style="color: #666666;">[status:created-small]</span> <a href="[status:status-url]">Reply</a></div>
 </td>
 </tr>
-<tr><td>[attachment:attachment-themed]</td></tr>
-<tr><td>[status:comments-email]</td></tr>
+<tr><td colspan="2">[attachment:attachment-themed]</td></tr>
+<tr><td colspan="2">[status:comments-email]</td></tr>
 </table>',
               ),
             ),
@@ -2895,15 +2895,15 @@ function digests_rules_defaults_fbsmp_insert_other() {
             array (
               'en' => 
               array (
-                'template' => '<table style="border-bottom: 1px solid #CCCCCC;"><tr>
-<td style="vertical-align: top;">[status:sender-picture]</td>
+                'template' => '<table style="font-size:small;"><tr>
+<td style="vertical-align:top;padding-right:12px;">[status:sender-picture]</td>
 <td>
 <div>[status:sender-themed] &raquo; [status:recipient-link] [status:message-formatted]</div>
 <div><span style="color: #666666;">[status:created-small]</span> <a href="[status:status-url]">Reply</a></div>
 </td>
 </tr>
-<tr><td>[attachment:attachment-themed]</td></tr>
-<tr><td>[status:comments-email]</td></tr>
+<tr><td colspan="2">[attachment:attachment-themed]</td></tr>
+<tr><td colspan="2">[status:comments-email]</td></tr>
 </table>',
               ),
             ),
