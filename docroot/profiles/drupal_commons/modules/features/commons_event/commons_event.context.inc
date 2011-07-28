@@ -321,7 +321,7 @@ function commons_event_context_default_contexts() {
           'module' => 'views',
           'delta' => 'upcoming_events-block_2',
           'region' => 'sidebar_last',
-          'weight' => 2,
+          'weight' => 5,
         ),
       ),
     ),
