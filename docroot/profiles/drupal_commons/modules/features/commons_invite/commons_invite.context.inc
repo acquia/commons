@@ -28,7 +28,7 @@ function commons_invite_context_default_contexts() {
           'module' => 'invite',
           'delta' => '0',
           'region' => 'sidebar_last',
-          'weight' => 5,
+          'weight' => 4,
         ),
       ),
     ),
