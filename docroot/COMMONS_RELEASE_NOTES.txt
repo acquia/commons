@@ -20,6 +20,11 @@ NOTE: This upgrade adds or changes some significant functionality, so we
 4. Replace your code (everything in your Drupal root directory except the sites
    directory) with the contents of this archive
 5. Run the update script at /update.php
+5a.It is likely in this Beta release that running update.php will fail with
+   the following message:
+   "Unable to regenerate activity messages because no Rules events were found.
+    Try regnerating activity messages again.", with the second sentence being
+   a hyperlink.  YOU SHOULD click that link and regenerate activity messages.
 6. View the status report (admin/reports/status) to see if there are any
    errors that must be addressed
 7. If you had custom Rules or Contexts from step 3, you should re-create them
@@ -128,6 +133,31 @@ CHANGELOG:
 - Updated: OG features
 - Fixed: Page manager node page view override conflict [#1181850]
 - Fixed: Recent comment blocks show node author rather than comment author
+------------------------------------
+KNOWN ISSUES (note: probably not exhaustive):
+- SP-736: Content in the Event block listing is shifted too-far right
+- SP-737: Activity messages contain "in" at the end if the content type
+          isn't a group post, or if the content item wasn't posted
+          into a group.
+- SP-738: In the Environs theme, the Primary Links dropdown drops
+          behind the node body in some cases
+- SP-739: Email logo appears in daily digest email messages even when
+          nothing was entered into the logo box
+- SP-740: There are no avatars next to node messages in digest emails
+- SP-741: Avatars in digest emails have way too much room
+- SP-742: Anonymous users can visit the /stream page, but they see
+          no activity
+- SP-743: Activity posts must be posted to all the groups that a node
+          is in, not just the current context
+- SP-744: Personal status update in digest emails are theme wrong
+          (shows me twice, e.g. me > me)
+- SP-745: Some generated messages for status updates created using
+          Devel Generate are showing up blank
+- SP-746: The 1.7 to 2.0 upgrade (during update.php) fails to properly
+          regenerate activity log entries to be usable by the new
+          Activity Stream module; admins must manually regnerate these
+          post upgrade.
+          
 
 Drupal Commons 1.x-dev, 2011-06-20
 ------------------------------------
