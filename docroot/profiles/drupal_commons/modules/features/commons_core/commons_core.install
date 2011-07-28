@@ -295,7 +295,7 @@ function commons_core_update_6009() {
 
   // Port activity data into Activity Log.
   module_load_include('inc', 'activity_log', 'activity_log.generate');
-  activity_log_regenerate();
+  activity_log_regenerate(array(), time() - 604800);
 
   // Disable user_relationship_elaborations (it's pointless with one-way relationships)
   module_disable(array('user_relationship_elaborations'));
