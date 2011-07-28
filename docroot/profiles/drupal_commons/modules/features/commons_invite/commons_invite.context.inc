@@ -26,9 +26,9 @@ function commons_invite_context_default_contexts() {
       'blocks' => array(
         'invite-0' => array(
           'module' => 'invite',
-          'delta' => 0,
-          'region' => 'sidebar_first',
-          'weight' => 3,
+          'delta' => '0',
+          'region' => 'sidebar_last',
+          'weight' => 5,
         ),
       ),
     ),
