@@ -238,12 +238,9 @@ function commons_core_update_6008() {
 }
 
 /**
- * Enable activity streams and disable things it makes obsolete.
+ * Enable activity streams
  */
 function commons_core_update_6009() {
-  // Try to avoid errors from og_features when it overrides all the menu access callbacks.
-  db_query("DELETE FROM {cache_menu} WHERE cid LIKE '%homebox%'");
-
   // Install activity streams.
   features_install_modules(array('commons_status_streams'));
 
@@ -294,58 +291,60 @@ function commons_core_update_6009() {
   }
 
   // Port activity data into Activity Log.
+  rules_clear_cache();
   module_load_include('inc', 'activity_log', 'activity_log.generate');
   activity_log_regenerate(array(), time() - 604800);
 
+  return array();
+}
+
+/**
+ * Disable depreciated modules
+ */
+function commons_core_update_6010() {
+  $disable = array();
+  
+  // Try to avoid errors from og_features when it overrides all the menu access callbacks.
+  db_query("DELETE FROM {cache_menu} WHERE cid LIKE '%homebox%'");
+  
   // Disable user_relationship_elaborations (it's pointless with one-way relationships)
-  module_disable(array('user_relationship_elaborations'));
+  $disable[] = 'user_relationship_elaborations';
 
   // Disable dashboard.
-  $dashboard_modules = array(
-    'commons_dashboard',
-    'homebox_example',
-    'homebox_og',
-    'homebox',
-  );
-  if (!module_exists('commons_event')) {
-    $dashboard_modules[] = 'jquery_ui';
-  }
-  module_disable($dashboard_modules);
+  $disable[] = 'commons_dashboard';
+  $disable[] = 'homebox_example';
+  $disable[] = 'homebox_og';
+  $disable[] = 'homebox';
 
   // Disable shoutbox.
-  $shoutbox_modules = array(
-    'commons_shoutbox',
-    'shoutbox_domain',
-    'shoutbox_group',
-    'shoutbox_points',
-    'shoutbox_rules',
-    'shoutbox_tags',
-    'shoutbox_user',
-    'shoutbox',
-  );
-  module_disable($shoutbox_modules);
+  $disable[] = 'commons_shoutbox';
+  $disable[] = 'shoutbox_domain';
+  $disable[] = 'shoutbox_group';
+  $disable[] = 'shoutbox_points';
+  $disable[] = 'shoutbox_rules';
+  $disable[] = 'shoutbox_tags';
+  $disable[] = 'shoutbox_user';
+  $disable[] = 'shoutbox';
 
   // Disable heartbeat.
-  $heartbeat_modules = array(
-    'flag_heartbeat',
-    'friendlist_activity',
-    'hds',
-    'heartbeat_comments',
-    'heartbeat_example',
-    'hrules',
-    'og_activity',
-    'shouts',
-    'heartbeat',
-  );
-  module_disable($heartbeat_modules);
-
+  $disable[] = 'flag_heartbeat';
+  $disable[] = 'friendlist_activity';
+  $disable[] = 'hds';
+  $disable[] = 'heartbeat_comments';
+  $disable[] = 'heartbeat_example';
+  $disable[] = 'hrules';
+  $disable[] = 'og_activity';
+  $disable[] = 'shouts';
+  $disable[] = 'heartbeat';
+  
+  module_disable($disable);
   return array();
 }
 
 /**
  * Install subgroups feature
  */
-function commons_core_update_6010() {
+function commons_core_update_6011() {
   features_install_modules(array('commons_subgroups'));
   return array();
 }
