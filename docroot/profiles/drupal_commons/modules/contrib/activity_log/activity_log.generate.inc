@@ -5,6 +5,13 @@
  *   Provides functions that regenerate activity messages.
  */
 
+/**
+ * The number of pieces of content for which to generate activity messages
+ * at the same time.
+ *
+ * This is 1 because higher values can sometimes lead to Activity Log screening
+ * some messages as duplicate.
+ */
 define('ACTIVITY_LOG_GENERATE_COUNT', 1);
 
 //================
@@ -103,6 +110,9 @@ function activity_log_get_rules_activity_events() {
 // PROCESSING
 //============
 
+/**
+ * Regenerate activity messages.
+ */
 function activity_log_regenerate($events = array(), $age = 0) {
   if (empty($events)) {
     $events = drupal_map_assoc(array_keys(activity_log_get_rules_activity_events()));
@@ -144,16 +154,38 @@ function activity_log_regenerate_prepare($events, $age, &$context) {
 
 /**
  * Regenerate activity messages.
+ *
+ * Batch operations (like this one) get run until $context['finished'] === 1.
+ * If 0 <= $context['finished'] <= 1, the progress bar will show as the %
+ * complete corresponding to that decimal. We take advantage of this to run
+ * this function repeatedly until all activity messages are generated.
+ *
+ * $events is an array of Rules events that need to be triggered in order to
+ * regenerate activity. If this is called from the admin UI, $events is chosen
+ * by the administrator. This function invokes each of these events once for
+ * each piece of content for which activity messages should be generated.
+ *
+ * @param $events
+ *   An array of Rules events. Valid events are those returned by
+ *   activity_log_get_rules_activity_events().
+ * @param $age
+ *   The UNIX timestamp representing the oldest content can be for it to have
+ *   activity messages (re)generated.
  */
 function activity_log_regenerate_process($events, $age, &$context) {
+  // Store values persistently across the many calls to this function.
   $c = &$context['sandbox'];
+  // Gather the information we need to invoke the Rules events.
   $regenerate = module_invoke_all('activity_log_regenerate_info');
+  // The first time this function runs, initialize values we will use to keep track of where we are.
   if (!isset($c['progress'])) {
     $c['events'] = $events;
     $c['progress'] = -1;
     $c['max'] = count($c['events']);
   }
+  // If there are Rules we haven't processed yet or we still have content to process for this rule, let's do the processing.
   if (!empty($c['events']) || !empty($c['last_result'])) {
+    // If the last time we invoked the Rules event we got nothing back, let's move on to the next event.
     if (empty($c['last_result'])) {
       $c['last_result'] = FALSE;
       if (!empty($c['events'])) {
@@ -163,6 +195,7 @@ function activity_log_regenerate_process($events, $age, &$context) {
       }
       $c['progress']++;
     }
+    // Call the function that is going to invoke the Rules event.
     $info = $regenerate[$c['event']];
     if (isset($info['file']) && file_exists($info['file'])) {
       include_once $info['file'];
@@ -170,9 +203,11 @@ function activity_log_regenerate_process($events, $age, &$context) {
     if (!isset($info['arguments'])) {
       $info['arguments'] = array();
     }
+    // Keep track of the return value so we can see if we need to move on to the next event next time.
     $c['last_result'] = call_user_func_array($info['callback'],
       array_merge(array($age), array($c['last_result']), $info['arguments'])
     );
+    // Show the user (running this from the UI) how many events and pieces of content we've processed.
     if (!is_numeric($c['last_result'])) {
       $context['message'] = t('Processing Rules for event %event (@current of @total)',
         array(
@@ -197,6 +232,7 @@ function activity_log_regenerate_process($events, $age, &$context) {
   else {
     $c['progress']++;
   }
+  // Update the progress bar to show how many events we've processed. When we've processed all events, this operation will end.
   $context['finished'] = $c['progress'] / $c['max'];
 }
 
