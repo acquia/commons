@@ -495,6 +495,10 @@ function drupal_commons_cleanup() {
   
   // Rebuild node types
   node_types_rebuild();
+
+  // Rebuild Activity Log templates
+  module_load_include('module', 'activity_log');
+  _activity_log_rebuild_templates();
   
   // Clear drupal message queue for non-warning/errors
   drupal_get_messages('status', TRUE);
