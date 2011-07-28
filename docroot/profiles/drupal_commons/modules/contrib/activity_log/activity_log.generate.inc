@@ -117,16 +117,23 @@ function activity_log_regenerate($events = array(), $age = 0) {
   if (empty($events)) {
     $events = drupal_map_assoc(array_keys(activity_log_get_rules_activity_events()));
   }
-  $batch = array(
-    'operations' => array(
-      array('activity_log_regenerate_prepare', array($events, $age)),
-      array('activity_log_regenerate_process', array($events, $age)),
-    ),
-    'finished' => 'activity_log_regenerate_batch_finished',
-    'title' => t('Generating activity messages'),
-    'file' => drupal_get_path('module', 'activity_log') .'/activity_log.generate.inc',
-  );
-  batch_set($batch);
+  if (empty($events)) {
+    drupal_set_message(t('Unable to regenerate activity messages because no Rules events were found.') .' '.
+      t('<a href="!regen">Try regenerating activity messages again</a>.', array('!regen' => url('admin/settings/activity_log/regenerate'))),
+    'warning');
+  }
+  else {
+    $batch = array(
+      'operations' => array(
+        array('activity_log_regenerate_prepare', array($events, $age)),
+        array('activity_log_regenerate_process', array($events, $age)),
+      ),
+      'finished' => 'activity_log_regenerate_batch_finished',
+      'title' => t('Generating activity messages'),
+      'file' => drupal_get_path('module', 'activity_log') .'/activity_log.generate.inc',
+    );
+    batch_set($batch);
+  }
 }
 
 /**
