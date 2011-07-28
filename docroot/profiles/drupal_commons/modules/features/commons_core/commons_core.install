@@ -294,6 +294,9 @@ function commons_core_update_6009() {
   rules_clear_cache();
   module_load_include('inc', 'activity_log', 'activity_log.generate');
   activity_log_regenerate(array(), time() - 604800);
+  
+  // Clear the menu cache
+  menu_cache_clear_all();
 
   return array();
 }
@@ -303,6 +306,12 @@ function commons_core_update_6009() {
  */
 function commons_core_update_6010() {
   $disable = array();
+  
+  // Rebuild the module cache
+  module_rebuild_cache();
+
+  // Clear out all the caches
+  drupal_flush_all_caches();
   
   // Try to avoid errors from og_features when it overrides all the menu access callbacks.
   db_query("DELETE FROM {cache_menu} WHERE cid LIKE '%homebox%'");
