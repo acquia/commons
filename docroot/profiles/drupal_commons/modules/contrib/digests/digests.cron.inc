@@ -162,7 +162,7 @@ function template_preprocess_digests_email(&$vars) {
     $count++;
     activity_log_record_unpack($message);
     $html_message = theme('activity_log_item', $message);
-    $output .= '<tr><td class="digests-message" style="border-bottom: 1px solid #EEEEEE;'. ($count === 1 ? ' border-top: 1px solid #EEEEEE; ' : ' ') .'padding: 12px 0;">'. $html_message ."</td></tr>\n";
+    $output .= '<tr><td class="digests-message" style="border-bottom:1px solid #f0f0f0;'. ($count === 1 ? ' border-top: 1px solid #f0f0f0; ' : ' ') .'padding-top:12px;padding-bottom:12px;">'. $html_message ."</td></tr>\n";
   }
   $vars['stream'] = $output;
   $account = $vars['account'];
