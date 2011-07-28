@@ -20,19 +20,18 @@ function _digests_cron() {
   // Step 1: Get users for whom it is after 6PM in their timezone but who have not had a digest sent for this interval.
   $default = $now > $send_time + $default_tz || $now < $send_time + $default_tz - 43200; // whether it's past send_time in the site's default timezone
   $query = "
-    SELECT *
+    SELECT d.*, u.* /* We need the digests table first here, otherwise users with no digests row have uid = NULL in the results */
     FROM {users} u
     LEFT JOIN {digests} d
       ON u.uid = d.uid
     WHERE
       status = 1 AND (                                                  /* user is not blocked */
         send_interval IS NULL OR                                        /* user has not set their interval */
-        send_interval = 86400".                                         /* user's interval is daily */
-        (date('w') == 0 ? ' OR send_interval = 604800' : '') ."         /* user's interval is weekly, and it's Sunday */
-      ) AND (
-        %d > last_sent + (COALESCE(send_interval, 86400) - 43200) OR /* it's been at least (interval - 12 hours) since the last digest email */
-        last_sent IS NULL                                            /* the user has never been sent a digest email */
-      )";
+        send_interval = 86400                                           /* user's interval is daily */
+        ". (date('w') == 0 ? 'OR send_interval = 604800' : '') ."       /* user's interval is weekly, and it's Sunday */
+      ) AND
+      %d > COALESCE(last_sent, created) + (COALESCE(send_interval, 86400) - 43200) /* it's been at least (interval - 12 hours) since the last digest email */
+  ";
   if (variable_get('digests_local', 'local') == 'local') {
     $query .= " AND (
         %d /* NOW */ > %d /* SEND */ + timezone OR      /* it's after send_time today */
@@ -65,7 +64,7 @@ function _digests_cron() {
     }
     $account = drupal_unpack($account);
     $account->roles = array();
-    $user->roles[DRUPAL_AUTHENTICATED_RID] = 'authenticated user';
+    $account->roles[DRUPAL_AUTHENTICATED_RID] = 'authenticated user';
     $rresult = db_query('SELECT r.rid, r.name FROM {role} r INNER JOIN {users_roles} ur ON ur.rid = r.rid WHERE ur.uid = %d', $account->uid);
     while ($role = db_fetch_object($rresult)) {
       $account->roles[$role->rid] = $role->name;
