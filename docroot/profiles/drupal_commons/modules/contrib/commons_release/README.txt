@@ -1,4 +1,3 @@
-
 COMMONS RELEASE
 ============================
 
@@ -16,3 +15,4 @@ this module from Drupal.org. You may download the latest version of
 Drupal Commons from:
 
 http://acquia.com/products-services/drupal-commons
+

@@ -1,7 +1,7 @@
 <?php
 
 // The version of Drupal Commons
-define('DRUPAL_COMMONS_VERSION', 1.7);
+define('DRUPAL_COMMONS_VERSION', '2.0-beta1');
 
 /**
  * Implementation of hook_requirements()
@@ -61,6 +61,7 @@ function _commons_release_included_modules() {
   return array(    
     'acquia_connector',
     'acquia_search',
+    'activity_log',
     'admin',
     'ajax_load',
     'apachesolr',
@@ -74,7 +75,10 @@ function _commons_release_included_modules() {
     'date',
     'devel',
     'diff',
+    'digests',
     'editablefields',
+    'facebook_status',
+    'fbsmp',
     'features',
     'filefield',
     'flag',
@@ -93,6 +97,7 @@ function _commons_release_included_modules() {
     'jquery_ui',
     'link',
     'messaging',
+    'mimemail',
     'mollom',
     'notifications',
     'og',
@@ -100,6 +105,7 @@ function _commons_release_included_modules() {
     'og_features',
     'og_invite_link',
     'og_statistics',
+    'og_subgroups',
     'password_policy',
     'pathauto',
     'quant',
