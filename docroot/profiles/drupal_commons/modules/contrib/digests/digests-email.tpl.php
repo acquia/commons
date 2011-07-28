@@ -41,12 +41,12 @@
     </tbody>
   </table>
   <?php if ($footer): ?>
-    <div id="digests-footer">
+    <div id="digests-footer" style="font-family:'Lucida Grande',Verdana,Arial,Helvetica,sans-serif;font-size:small;">
       <?php print $footer; ?>
     </div>
   <?php endif; ?>
   <?php if ($unsubscribe): ?>
-    <div id="digests-unsubscribe">
+    <div id="digests-unsubscribe" style="font-family:'Lucida Grande',Verdana,Arial,Helvetica,sans-serif;font-size:x-small;">
       <?php print $unsubscribe; ?>
     </div>
   <?php endif; ?>
