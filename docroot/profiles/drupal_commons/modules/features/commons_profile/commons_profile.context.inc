@@ -130,7 +130,7 @@ function commons_profile_context_default_contexts() {
           'module' => 'views',
           'delta' => 'profile_friends-block_1',
           'region' => 'sidebar_last',
-          'weight' => 3,
+          'weight' => 2,
         ),
       ),
     ),
