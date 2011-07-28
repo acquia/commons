@@ -1142,10 +1142,10 @@ function commons_wiki_views_default_views() {
       'relationship' => 'none',
     ),
     'name' => array(
-      'label' => '',
+      'label' => 'by',
       'alter' => array(
-        'alter_text' => 1,
-        'text' => 'by [name]',
+        'alter_text' => 0,
+        'text' => '',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
@@ -1165,16 +1165,11 @@ function commons_wiki_views_default_views() {
       'hide_empty' => 0,
       'empty_zero' => 0,
       'link_to_user' => 1,
-      'overwrite_anonymous' => 0,
-      'anonymous_text' => '',
       'exclude' => 0,
       'id' => 'name',
-      'table' => 'users',
+      'table' => 'comments',
       'field' => 'name',
-      'relationship' => 'nid',
-      'override' => array(
-        'button' => 'Override',
-      ),
+      'relationship' => 'none',
     ),
   ));
   $handler->override_option('sorts', array(
@@ -2056,10 +2051,10 @@ function commons_wiki_views_default_views() {
       'relationship' => 'none',
     ),
     'name' => array(
-      'label' => '',
+      'label' => 'by',
       'alter' => array(
-        'alter_text' => 1,
-        'text' => 'by [name]',
+        'alter_text' => 0,
+        'text' => '',
         'make_link' => 0,
         'path' => '',
         'link_class' => '',
@@ -2079,16 +2074,11 @@ function commons_wiki_views_default_views() {
       'hide_empty' => 0,
       'empty_zero' => 0,
       'link_to_user' => 1,
-      'overwrite_anonymous' => 0,
-      'anonymous_text' => '',
       'exclude' => 0,
       'id' => 'name',
-      'table' => 'users',
+      'table' => 'comments',
       'field' => 'name',
-      'relationship' => 'nid',
-      'override' => array(
-        'button' => 'Override',
-      ),
+      'relationship' => 'none',
     ),
     'group_nid' => array(
       'label' => 'Groups',
