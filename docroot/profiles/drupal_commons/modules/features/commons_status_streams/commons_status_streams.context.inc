@@ -21,23 +21,23 @@ function commons_status_streams_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
+        'views-recent_notices-block_1' => array(
+          'module' => 'views',
+          'delta' => 'recent_notices-block_1',
+          'region' => 'sidebar_last',
+          'weight' => 0,
+        ),
         'views-stream_recent_content-block_2' => array(
           'module' => 'views',
           'delta' => 'stream_recent_content-block_2',
           'region' => 'sidebar_last',
-          'weight' => 0,
+          'weight' => 1,
         ),
         'views-profile_user_groups-block_1' => array(
           'module' => 'views',
           'delta' => 'profile_user_groups-block_1',
           'region' => 'sidebar_last',
-          'weight' => 1,
-        ),
-        'views-recent_notices-block_1' => array(
-          'module' => 'views',
-          'delta' => 'recent_notices-block_1',
-          'region' => 'content_top',
-          'weight' => 0,
+          'weight' => 2,
         ),
       ),
     ),
