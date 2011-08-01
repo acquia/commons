@@ -17,13 +17,17 @@ function commons_status_streams_user_default_permissions() {
   // Exported permission: administer loading arbitrary CSS and JS files for cached messages
   $permissions['administer loading arbitrary CSS and JS files for cached messages'] = array(
     'name' => 'administer loading arbitrary CSS and JS files for cached messages',
-    'roles' => array(),
+    'roles' => array(
+      '0' => 'site admin',
+    ),
   );
 
   // Exported permission: configure preferences for which activity types appear in activity streams
   $permissions['configure preferences for which activity types appear in activity streams'] = array(
     'name' => 'configure preferences for which activity types appear in activity streams',
-    'roles' => array(),
+    'roles' => array(
+      '0' => 'authenticated user',
+    ),
   );
 
   // Exported permission: delete all status comments
@@ -173,15 +177,16 @@ function commons_status_streams_user_default_permissions() {
   // Exported permission: view all activity messages
   $permissions['view all activity messages'] = array(
     'name' => 'view all activity messages',
-    'roles' => array(),
+    'roles' => array(
+      '0' => 'authenticated user',
+    ),
   );
 
   // Exported permission: view all private status messages
   $permissions['view all private status messages'] = array(
     'name' => 'view all private status messages',
     'roles' => array(
-      '0' => 'community manager',
-      '1' => 'site admin',
+      '0' => 'site admin',
     ),
   );
 
@@ -206,7 +211,9 @@ function commons_status_streams_user_default_permissions() {
   // Exported permission: view own activity messages
   $permissions['view own activity messages'] = array(
     'name' => 'view own activity messages',
-    'roles' => array(),
+    'roles' => array(
+      '0' => 'authenticated user',
+    ),
   );
 
   // Exported permission: view own status comments
