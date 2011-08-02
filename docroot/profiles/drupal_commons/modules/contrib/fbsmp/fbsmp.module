@@ -862,7 +862,7 @@ function fbsmp_form_facebook_status_box_alter(&$form, &$form_state) {
   drupal_add_css($path .'/fbsmp.css');
 
   $form['fbsmp'] = array(
-    '#weight' => -25.1,
+    '#weight' => -20,
   );
   $form['fbsmp']['open'] = array(
     '#value' => '<div class="fbsmp-wrapper-outer" id="fbsmp-wrapper-replace">',

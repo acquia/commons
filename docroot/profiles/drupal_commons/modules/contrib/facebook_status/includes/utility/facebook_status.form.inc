@@ -198,8 +198,6 @@ function facebook_status_box(&$form_state, $recipient, $type = 'user') {
     '#attributes' => array('class' => 'facebook-status-text facebook-status-text-main'),
     '#resizable' => FALSE,
     '#weight' => -40,
-    '#prefix' => '<div style="clear: both;">',
-    '#suffix' => '</div>',
   );
   $form['fbss-submit'] = array(
     '#type' => 'submit',
