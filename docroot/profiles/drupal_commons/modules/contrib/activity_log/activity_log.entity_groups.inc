@@ -538,15 +538,14 @@ function activity_log_eg_not_stream_owner($event, $settings) {
  *   If TRUE, returns group administrators. Otherwise, returns all members.
  */
 function _activity_log_get_active_group_members($admin = FALSE) {
-  $node = $event->og;
-  if (empty($node)) {
+  if (empty($event->og)) {
     return array();
   }
   $query = "SELECT uid FROM {og_uid} WHERE is_active = 1 AND nid = %d";
   if ($admin) {
     $query .= " AND is_admin = 1";
   }
-  $result = db_query($query, $node->nid);
+  $result = db_query($query, $event->og->nid);
   $uids = array();
   while ($account = db_fetch_object($result)) {
     $uids[] = $account->uid;
@@ -578,6 +577,7 @@ function _activity_log_get_user_relationships($uid, $rtid = 0) {
     $query .= " AND ur.rtid = %d";
     $args[] = $rtid;
   }
+  $result = db_query($query, $args);
   $uids = array();
   while ($rel = db_fetch_object($result)) {
     if ($rel->is_oneway) {
