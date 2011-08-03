@@ -1,3 +1,16 @@
+/* @group Forms */
+
+input[type=submit] {
+  border: 0 none;
+}
+
+form input.form-submit {
+  font-weight: normal; /* Forced by Fusion */
+  margin: 0;
+}
+
+/* @end */
+
 .not-front .main .main-inner, .front .content-content {
   padding: 0;
 }
@@ -418,8 +431,13 @@ a:active .facebook-status-time {
   color: #666666;
 }
 
-form input.fbsmp-plugin-icon-button { /* Forced by Fusion */
-  padding: 3px 12px 3px 24px;
+form input.fbsmp-plugin-icon-button,
+form input.facebook-status-submit { /* Forced by Fusion */
+  padding: 7px 14px;
+}
+
+form input.fbsmp-plugin-icon-button {
+  padding-left: 26px;
 }
 
 .fbsmp-plugin-icon-button {
@@ -429,25 +447,29 @@ form input.fbsmp-plugin-icon-button { /* Forced by Fusion */
   background-repeat: no-repeat;
 }
 
+.fbsmp-plugin-icon-button:hover {
+  cursor: pointer;
+}
+
 .fbsmp-link-icon-button {
-  background-position: left 8px;
+  background-position: 6px 1px;
 }
 
 .fbsmp-link-icon-button:hover,
 .fbsmp-link-icon-button.hover,
 .fbsmp-link-icon-button:focus,
 .fbsmp-link-icon-button:active {
-  background-position: left -23px;
+  background-position: 6px -30px;
 }
 
 .fbsmp-photo-icon-button {
-  background-position: left -139px;
+  background-position: 6px -145px;
 }
 .fbsmp-photo-icon-button:hover,
 .fbsmp-photo-icon-button.hover,
 .fbsmp-photo-icon-button:focus,
 .fbsmp-photo-icon-button:active {
-  background-position: left -179px;
+  background-position: 6px -185px;
 }
 
 .fbsmp-inner-expanded div .fbsmp-cancel-button {
