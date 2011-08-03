@@ -285,7 +285,7 @@ function _activity_log_rebuild_templates() {
       foreach ($event['rules'] as $name => $info) {
         foreach ($info['#actions'] as $action) {
           if ($action['#name'] == 'activity_log_log_action' && isset($action['#settings']['tid'])) {
-            $rules[$action['#settings']['tid']] = $action['#settings'] + array('rule' => $name, 'action_label' => $info['#label']);
+            $rules[$action['#settings']['tid']] = $action['#settings'] + array('rule' => $name, 'action_label' => $action['#info']['label']);
             if (!isset($names[$action['#settings']['public_name']])) {
               $names[$action['#settings']['public_name']] = array();
             }

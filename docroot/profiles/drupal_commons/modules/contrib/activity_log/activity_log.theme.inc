@@ -35,7 +35,7 @@ function theme_activity_log_item($record, $reset = FALSE) {
     $classes[] = 'activity-log-display-type-'. $record->display_type;
     $classes[] = 'activity-log-template-'. $record->tid;
     $classes[] = 'activity-log-rule-'. $record->rule;
-    //$classes[] = 'activity-log-action-'. drupal_strtolower(preg_replace('%[^\w\-]%', '', str_replace(' ', '_', $record->action_label)));
+    $classes[] = 'activity-log-action-'. drupal_strtolower(preg_replace('%[^\w\-]%', '', str_replace(' ', '_', $record->action_label)));
     if (count($record->events) === 1) {
       $classes[] = 'activity-message-single';
     }
