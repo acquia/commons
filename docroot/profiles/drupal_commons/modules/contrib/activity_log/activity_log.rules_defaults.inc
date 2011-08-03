@@ -108,7 +108,7 @@ function activity_log_rules_defaults_node_insert() {
               'en' => 
               array (
                 'template' => '<div class="activity-log-content">[author:user] added the [node:type-name] <a href="[node:node-url]">[node:title]</a></div>
-<div class="activity-log-time"><a href="[node:node-url]">[node:small] ago</a></div>',
+<div class="activity-log-time"><a href="[node:node-url]">[node:small]</a></div>',
               ),
             ),
             'grouping' => 
@@ -178,7 +178,7 @@ function activity_log_rules_defaults_node_insert() {
             ),
             'acting_uid' => '[author:uid]',
             'display_type' => 'web',
-            'tid' => '4',
+            'tid' => '1',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -242,7 +242,7 @@ function activity_log_rules_defaults_node_insert() {
               'en' => 
               array (
                 'template' => '<div class="activity-log-content">[author:user] added the [node:type-name] <a href="[node:node-url]">[node:title]</a></div>
-<div class="activity-log-time"><a href="[node:node-url]">[node:small] ago</a></div>',
+<div class="activity-log-time"><a href="[node:node-url]">[node:small]</a></div>',
               ),
             ),
             'grouping' => 
@@ -312,7 +312,7 @@ function activity_log_rules_defaults_node_insert() {
             ),
             'acting_uid' => '',
             'display_type' => 'web',
-            'tid' => '8',
+            'tid' => '2',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -408,7 +408,7 @@ function activity_log_rules_defaults_node_insert() {
               'en' => 
               array (
                 'template' => '<div class="activity-log-content">[author:user] added the [node:type-name] <a href="[node:node-url]">[node:title]</a></div>
-<div class="activity-log-time"><a href="[node:node-url]">[node:small] ago</a></div>',
+<div class="activity-log-time"><a href="[node:node-url]">[node:small]</a></div>',
               ),
             ),
             'grouping' => 
@@ -478,7 +478,7 @@ function activity_log_rules_defaults_node_insert() {
             ),
             'acting_uid' => '',
             'display_type' => 'web',
-            'tid' => '9',
+            'tid' => '3',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -668,7 +668,7 @@ function activity_log_rules_defaults_node_insert_og() {
               'en' => 
               array (
                 'template' => '<div class="activity-log-content">[author:user] added the [node:type-name] <a href="[node:node-url]">[node:title]</a> in <a href="[node:og-url]">[node:ogname]</a></div>
-<div class="activity-log-time"><a href="[node:node-url]">[node:small] ago</a></div>',
+<div class="activity-log-time"><a href="[node:node-url]">[node:small]</a></div>',
               ),
             ),
             'grouping' => 
@@ -817,7 +817,7 @@ function activity_log_rules_defaults_node_insert_og() {
               'en' => 
               array (
                 'template' => '<div class="activity-log-content">[author:user] added the [node:type-name] <a href="[node:node-url]">[node:title]</a></div>
-<div class="activity-log-time"><a href="[node:node-url]">[node:small] ago</a></div>',
+<div class="activity-log-time"><a href="[node:node-url]">[node:small]</a></div>',
               ),
             ),
             'grouping' => 
@@ -951,7 +951,7 @@ function activity_log_rules_defaults_node_insert_og() {
               'en' => 
               array (
                 'template' => '<div class="activity-log-content">[author:user] added the [node:type-name] <a href="[node:node-url]">[node:title]</a> in <a href="[node:og-url]">[node:ogname]</a></div>
-<div class="activity-log-time"><a href="[node:node-url]">[node:small] ago</a></div>',
+<div class="activity-log-time"><a href="[node:node-url]">[node:small]</a></div>',
               ),
             ),
             'grouping' => 
@@ -1115,7 +1115,7 @@ function activity_log_rules_defaults_node_insert_og() {
               'en' => 
               array (
                 'template' => '<div class="activity-log-content">[author:user] added the [node:type-name] <a href="[node:node-url]">[node:title]</a> in <a href="[node:og-url]">[node:ogname]</a></div>
-<div class="activity-log-time"><a href="[node:node-url]">[node:small] ago</a></div>',
+<div class="activity-log-time"><a href="[node:node-url]">[node:small]</a></div>',
               ),
             ),
             'grouping' => 
@@ -1377,7 +1377,7 @@ function activity_log_rules_defaults_facebook_status_insert_user_self() {
             ),
             'acting_uid' => '[status:sender-uid]',
             'display_type' => 'web',
-            'tid' => '1',
+            'tid' => '8',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -1546,7 +1546,7 @@ function activity_log_rules_defaults_facebook_status_insert_user_self() {
             ),
             'acting_uid' => '[status:sender-uid]',
             'display_type' => 'web',
-            'tid' => '2',
+            'tid' => '9',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -1755,7 +1755,7 @@ function activity_log_rules_defaults_facebook_status_insert_other() {
             ),
             'acting_uid' => '[status:sender-uid]',
             'display_type' => 'web',
-            'tid' => '1',
+            'tid' => '10',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -1893,7 +1893,7 @@ function activity_log_rules_defaults_facebook_status_insert_other() {
             ),
             'acting_uid' => '[status:sender-uid]',
             'display_type' => 'web',
-            'tid' => '2',
+            'tid' => '11',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -2061,7 +2061,7 @@ function activity_log_rules_defaults_facebook_status_insert_other() {
             ),
             'acting_uid' => '',
             'display_type' => 'web',
-            'tid' => '3',
+            'tid' => '12',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -2246,7 +2246,7 @@ function activity_log_rules_defaults_fbsmp_insert_user_self() {
             ),
             'acting_uid' => '[status:sender-uid]',
             'display_type' => 'web',
-            'tid' => '1',
+            'tid' => '13',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -2410,7 +2410,7 @@ function activity_log_rules_defaults_fbsmp_insert_user_self() {
             ),
             'acting_uid' => '[status:sender-uid]',
             'display_type' => 'web',
-            'tid' => '2',
+            'tid' => '14',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -2602,7 +2602,7 @@ function activity_log_rules_defaults_fbsmp_insert_other() {
             ),
             'acting_uid' => '[status:sender-uid]',
             'display_type' => 'web',
-            'tid' => '1',
+            'tid' => '15',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -2768,7 +2768,7 @@ function activity_log_rules_defaults_fbsmp_insert_other() {
             ),
             'acting_uid' => '[status:sender-uid]',
             'display_type' => 'web',
-            'tid' => '2',
+            'tid' => '16',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -2904,7 +2904,7 @@ function activity_log_rules_defaults_fbsmp_insert_other() {
             ),
             'acting_uid' => '',
             'display_type' => 'web',
-            'tid' => '3',
+            'tid' => '17',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -3080,7 +3080,7 @@ function activity_log_rules_defaults_og_join() {
             ),
             'acting_uid' => '[account:uid]',
             'display_type' => 'web',
-            'tid' => '10',
+            'tid' => '18',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -3247,7 +3247,7 @@ function activity_log_rules_defaults_og_join() {
             ),
             'acting_uid' => '[account:uid]',
             'display_type' => 'web',
-            'tid' => '11',
+            'tid' => '19',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -3399,7 +3399,7 @@ function activity_log_rules_defaults_og_join() {
             ),
             'acting_uid' => '',
             'display_type' => 'web',
-            'tid' => '12',
+            'tid' => '20',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -3557,7 +3557,7 @@ function activity_log_rules_defaults_ur_request() {
             ),
             'acting_uid' => '[requester:uid]',
             'display_type' => 'web',
-            'tid' => '13',
+            'tid' => '21',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -3726,7 +3726,7 @@ function activity_log_rules_defaults_ur_request() {
             ),
             'acting_uid' => '[requester:uid]',
             'display_type' => 'web',
-            'tid' => '14',
+            'tid' => '22',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 

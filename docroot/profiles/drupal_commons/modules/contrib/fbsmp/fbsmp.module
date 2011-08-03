@@ -67,7 +67,7 @@ function fbsmp_save_status($recipient, $type, $status_text, $attach_type, $attac
       'discard duplicates' => FALSE,
       'timed override' => FALSE,
       'discard blank statuses' => FALSE,
-      'has attachment' => TRUE,
+      'has attachment' => !empty($attach_data),
     ),
   );
 
@@ -105,7 +105,7 @@ function fbsmp_save_status($recipient, $type, $status_text, $attach_type, $attac
 
   //Rules integration.  
   if (module_exists('rules') && $alerts['rules']) {
-    rules_invoke_event('fbsmp_add_status', $status, $status->attachement);
+    rules_invoke_event('fbsmp_add_status', $status, $status->attachment);
   }
 
   return $status;

@@ -534,6 +534,8 @@ function activity_log_eg_not_stream_owner($event, $settings) {
 /**
  * Gets an array of UIDs of members of the currently active group.
  *
+ * @param $event
+ *   The event object.
  * @param $admin
  *   If TRUE, returns group administrators. Otherwise, returns all members.
  */
@@ -568,8 +570,8 @@ function _activity_log_get_active_group_members($event, $admin = FALSE) {
 function _activity_log_get_user_relationships($uid, $rtid = 0) {
   $query = "
     SELECT ur.requester_id, ur.requestee_id, urt.is_oneway
-    FROM user_relationships ur
-    INNER JOIN user_relationship_types urt
+    FROM {user_relationships} ur
+    INNER JOIN {user_relationship_types} urt
       ON ur.rtid = urt.rtid
     WHERE (ur.requester_id = %d OR ur.requestee_id = %d) AND (ur.approved = 1 OR urt.is_oneway = 0)
   ";

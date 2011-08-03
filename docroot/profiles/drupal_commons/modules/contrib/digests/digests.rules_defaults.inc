@@ -179,7 +179,7 @@ function digests_rules_defaults_node_insert() {
             ),
             'acting_uid' => '[author:uid]',
             'display_type' => 'email',
-            'tid' => '15',
+            'tid' => '23',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -313,7 +313,7 @@ function digests_rules_defaults_node_insert() {
             ),
             'acting_uid' => '',
             'display_type' => 'email',
-            'tid' => '16',
+            'tid' => '24',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -479,7 +479,7 @@ function digests_rules_defaults_node_insert() {
             ),
             'acting_uid' => '',
             'display_type' => 'email',
-            'tid' => '17',
+            'tid' => '25',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -740,7 +740,7 @@ function digests_rules_defaults_node_insert_og() {
             ),
             'acting_uid' => '[author:uid]',
             'display_type' => 'email',
-            'tid' => '15',
+            'tid' => '26',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -889,7 +889,7 @@ function digests_rules_defaults_node_insert_og() {
             ),
             'acting_uid' => '',
             'display_type' => 'email',
-            'tid' => '18',
+            'tid' => '27',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -1023,7 +1023,7 @@ function digests_rules_defaults_node_insert_og() {
             ),
             'acting_uid' => '',
             'display_type' => 'email',
-            'tid' => '19',
+            'tid' => '28',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -1187,7 +1187,7 @@ function digests_rules_defaults_node_insert_og() {
             ),
             'acting_uid' => '',
             'display_type' => 'email',
-            'tid' => '20',
+            'tid' => '29',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -1388,7 +1388,7 @@ function digests_rules_defaults_facebook_status_insert_user_self() {
             ),
             'acting_uid' => '[status:sender-uid]',
             'display_type' => 'email',
-            'tid' => '21',
+            'tid' => '30',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -1565,7 +1565,7 @@ function digests_rules_defaults_facebook_status_insert_user_self() {
             ),
             'acting_uid' => '[status:sender-uid]',
             'display_type' => 'email',
-            'tid' => '22',
+            'tid' => '31',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -1783,7 +1783,7 @@ function digests_rules_defaults_facebook_status_insert_other() {
             ),
             'acting_uid' => '[status:sender-uid]',
             'display_type' => 'email',
-            'tid' => '21',
+            'tid' => '32',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -1921,7 +1921,7 @@ function digests_rules_defaults_facebook_status_insert_other() {
             ),
             'acting_uid' => '[status:sender-uid]',
             'display_type' => 'email',
-            'tid' => '22',
+            'tid' => '33',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -2097,7 +2097,7 @@ function digests_rules_defaults_facebook_status_insert_other() {
             ),
             'acting_uid' => '',
             'display_type' => 'email',
-            'tid' => '23',
+            'tid' => '34',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -2292,7 +2292,7 @@ function digests_rules_defaults_fbsmp_insert_user_self() {
             ),
             'acting_uid' => '[status:sender-uid]',
             'display_type' => 'email',
-            'tid' => '21',
+            'tid' => '35',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -2465,7 +2465,7 @@ function digests_rules_defaults_fbsmp_insert_user_self() {
             ),
             'acting_uid' => '[status:sender-uid]',
             'display_type' => 'email',
-            'tid' => '22',
+            'tid' => '36',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -2667,7 +2667,7 @@ function digests_rules_defaults_fbsmp_insert_other() {
             ),
             'acting_uid' => '[status:sender-uid]',
             'display_type' => 'email',
-            'tid' => '21',
+            'tid' => '37',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -2833,7 +2833,7 @@ function digests_rules_defaults_fbsmp_insert_other() {
             ),
             'acting_uid' => '[status:sender-uid]',
             'display_type' => 'email',
-            'tid' => '22',
+            'tid' => '38',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -2978,7 +2978,7 @@ function digests_rules_defaults_fbsmp_insert_other() {
             ),
             'acting_uid' => '',
             'display_type' => 'email',
-            'tid' => '23',
+            'tid' => '39',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -3155,7 +3155,7 @@ function digests_rules_defaults_og_join() {
             ),
             'acting_uid' => '[account:uid]',
             'display_type' => 'email',
-            'tid' => '24',
+            'tid' => '40',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -3322,7 +3322,7 @@ function digests_rules_defaults_og_join() {
             ),
             'acting_uid' => '[account:uid]',
             'display_type' => 'email',
-            'tid' => '25',
+            'tid' => '41',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -3474,7 +3474,7 @@ function digests_rules_defaults_og_join() {
             ),
             'acting_uid' => '',
             'display_type' => 'email',
-            'tid' => '26',
+            'tid' => '42',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -3633,7 +3633,7 @@ function digests_rules_defaults_ur_request() {
             ),
             'acting_uid' => '[requester:uid]',
             'display_type' => 'email',
-            'tid' => '27',
+            'tid' => '43',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
@@ -3802,7 +3802,7 @@ function digests_rules_defaults_ur_request() {
             ),
             'acting_uid' => '[requester:uid]',
             'display_type' => 'email',
-            'tid' => '28',
+            'tid' => '44',
             '#eval input' => 
             array (
               'token_rules_input_evaluator' => 
