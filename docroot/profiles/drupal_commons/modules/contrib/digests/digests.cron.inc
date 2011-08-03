@@ -50,10 +50,10 @@ function _digests_cron() {
   }
   elseif ($default) {
     if (variable_get('digests_limit', 250)) {
-      $result = db_query_range($query, 0, variable_get('digests_limit', 250));
+      $result = db_query_range($query, $now, 0, variable_get('digests_limit', 250));
     }
     else {
-      $result = db_query($query);
+      $result = db_query($query, $now);
     }
   }
 
