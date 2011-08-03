@@ -789,11 +789,25 @@ function activity_log_log_action($settings) {
         require_once $group['file'];
       }
       // Load the group context. We can't just use og_get_group_context() because that doesn't work during cron and when regenerating.
-      if (module_exists('og') && $target['type'] == 'node' && $target['id']) {
-        $node = node_load(array('nid' => $target['id']));
-        // OG attempts to choose a group the user is a member of. When creating the node this will be $user; otherwise we try to use the node author.
-        $account = ($node->uid == $user->uid ? $user : activity_log_user_load($node->uid));
-        $og = og_determine_context_get_group($node, $account = NULL);
+      if (module_exists('og')) {
+        if ($target['type'] == 'node' && $target['id']) {
+          $node = node_load(array('nid' => $target['id']));
+          // OG attempts to choose a group the acting user is a member of. When creating the node this will be $user; otherwise we try to use the node author.
+          $account = ($node->uid == $user->uid ? $user : activity_log_user_load($node->uid));
+          $og = og_determine_context_get_group($node, $account);
+        }
+        elseif ($target['type'] == 'facebook_status') {
+          $status = facebook_status_load($target['id']);
+          if ($status->type == 'og') {
+            $node = node_load(array('nid' => $status->recipient));
+            // OG attempts to choose a group the acting user is a member of. When creating the status this will be $user; otherwise we try to use the status sender.
+            $account = ($status->sender == $user->uid ? $user : activity_log_user_load($status->sender));
+            $og = og_determine_context_get_group($node, $account);
+          }
+        }
+        if (empty($og)) {
+          $og = og_get_group_context();
+        }
         if (!empty($og) && !empty($og->nid)) {
           $event->og = $og;
         }

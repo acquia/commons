@@ -205,7 +205,7 @@ function activity_log_eg_custom($event, $settings, $id, $type = 'user') {
   if ($id) {
     if ($type == 'user' && module_exists('og') && $node = $event->og) {
       if ($node->og_private) {
-        $members = _activity_log_get_active_group_members();
+        $members = _activity_log_get_active_group_members($event);
         if (!in_array($id, $members)) {
           return;
         }
@@ -246,7 +246,7 @@ function activity_log_eg_active_group($event, $settings) {
  * Returns the IDs of the active group's members.
  */
 function activity_log_eg_active_group_members($event, $settings) {
-  if (module_exists('og') && $members = _activity_log_get_active_group_members()) {
+  if (module_exists('og') && $members = _activity_log_get_active_group_members($event)) {
     return array('user' => $members);
   }
 }
@@ -256,7 +256,7 @@ function activity_log_eg_active_group_members($event, $settings) {
  * Does not include site administrators.
  */
 function activity_log_eg_active_group_admin($event, $settings) {
-  if (module_exists('og') && $members = _activity_log_get_active_group_members(TRUE)) {
+  if (module_exists('og') && $members = _activity_log_get_active_group_members($event, TRUE)) {
     return array('user' => $members);
   }
 }
@@ -268,7 +268,7 @@ function activity_log_eg_acting_user_rels($event, $settings, $acting_uid) {
   if (module_exists('user_relationships_api') && $acting_uid && $rels = _activity_log_get_user_relationships($acting_uid)) {
     if (module_exists('og') && $node = $event->og) {
       if ($node->og_private) {
-        $members = _activity_log_get_active_group_members();
+        $members = _activity_log_get_active_group_members($event);
         $rels = array_intersect($rels, $members);
       }
     }
@@ -285,7 +285,7 @@ function activity_log_eg_custom_user_rels($event, $settings, $id) {
   if (module_exists('user_relationships_api') && $id && $rels = _activity_log_get_user_relationships($id)) {
     if (module_exists('og') && $node = $event->og) {
       if ($node->og_private) {
-        $members = _activity_log_get_active_group_members();
+        $members = _activity_log_get_active_group_members($event);
         $rels = array_intersect($rels, $members);
       }
     }
@@ -302,7 +302,7 @@ function activity_log_eg_acting_user_rels_type($event, $settings, $acting_uid, $
   if (module_exists('user_relationships_api') && $acting_uid && $rels = _activity_log_get_user_relationships($acting_uid, $ur_type->rtid)) {
     if (module_exists('og') && $node = $event->og) {
       if ($node->og_private) {
-        $members = _activity_log_get_active_group_members();
+        $members = _activity_log_get_active_group_members($event);
         $rels = array_intersect($rels, $members);
       }
     }
@@ -319,7 +319,7 @@ function activity_log_eg_custom_user_rels_type($event, $settings, $id, $ur_type)
   if (module_exists('user_relationships_api') && $id && $rels = _activity_log_get_user_relationships($id, $ur_type->rtid)) {
     if (module_exists('og') && $node = $event->og) {
       if ($node->og_private) {
-        $members = _activity_log_get_active_group_members();
+        $members = _activity_log_get_active_group_members($event);
         $rels = array_intersect($rels, $members);
       }
     }
@@ -335,7 +335,7 @@ function activity_log_eg_custom_user_rels_type($event, $settings, $id, $ur_type)
  */
 function activity_log_eg_active_group_rels_acting_user($event, $settings, $acting_uid) {
   if (module_exists('user_relationships_api') && module_exists('og') && $acting_uid) {
-    $members = _activity_log_get_active_group_members();
+    $members = _activity_log_get_active_group_members($event);
     $rels = _activity_log_get_user_relationships($acting_uid);
     if ($uids = array_intersect($members, $rels)) {
       return array('user' => $uids);
@@ -349,7 +349,7 @@ function activity_log_eg_active_group_rels_acting_user($event, $settings, $actin
  */
 function activity_log_eg_active_group_rels_custom_user($event, $settings, $id) {
   if (module_exists('user_relationships_api') && module_exists('og') && $id) {
-    $members = _activity_log_get_active_group_members();
+    $members = _activity_log_get_active_group_members($event);
     $rels = _activity_log_get_user_relationships($id);
     if ($uids = array_intersect($members, $rels)) {
       return array('user' => $uids);
@@ -363,7 +363,7 @@ function activity_log_eg_active_group_rels_custom_user($event, $settings, $id) {
  */
 function activity_log_eg_active_group_rels_type_acting_user($event, $settings, $acting_uid, $ur_type) {
   if (module_exists('user_relationships_api') && module_exists('og') && $acting_uid) {
-    $members = _activity_log_get_active_group_members();
+    $members = _activity_log_get_active_group_members($event);
     $rels = _activity_log_get_user_relationships($acting_uid, $ur_type->rtid);
     if ($uids = array_intersect($members, $rels)) {
       return array('user' => $uids);
@@ -377,7 +377,7 @@ function activity_log_eg_active_group_rels_type_acting_user($event, $settings, $
  */
 function activity_log_eg_active_group_rels_type_custom_user($event, $settings, $id, $ur_type) {
   if (module_exists('user_relationships_api') && module_exists('og') && $id) {
-    $members = _activity_log_get_active_group_members();
+    $members = _activity_log_get_active_group_members($event);
     $rels = _activity_log_get_user_relationships($id, $ur_type->rtid);
     if ($uids = array_intersect($members, $rels)) {
       return array('user' => $uids);
@@ -483,7 +483,7 @@ function activity_log_eg_node_terms($event, $settings) {
 function activity_log_eg_everyone($event, $settings) {
   if (module_exists('og') && $node = $event->og) {
     if ($node->og_private) {
-      return array('user' => _activity_log_get_active_group_members());
+      return array('user' => _activity_log_get_active_group_members($event));
     }
   }
   return array('user' => array(0));
@@ -495,7 +495,7 @@ function activity_log_eg_everyone($event, $settings) {
 function activity_log_eg_everyone_except_active($event, $settings, $acting_uid) {
   if ($acting_uid) {
     if (module_exists('og') && $node = $event->og) {
-      if ($node->og_private && $uids = array_diff(_activity_log_get_active_group_members(), array($acting_uid))) {
+      if ($node->og_private && $uids = array_diff(_activity_log_get_active_group_members($event), array($acting_uid))) {
         return array('user' => $uids);
       }
     }
@@ -509,7 +509,7 @@ function activity_log_eg_everyone_except_active($event, $settings, $acting_uid) 
 function activity_log_eg_everyone_except_custom($event, $settings, $id) {
   if ($id) {
     if (module_exists('og') && $node = $event->og) {
-      if ($node->og_private && $uids = array_diff(_activity_log_get_active_group_members(), array($id))) {
+      if ($node->og_private && $uids = array_diff(_activity_log_get_active_group_members($event), array($id))) {
         return array('user' => $uids);
       }
     }
@@ -537,15 +537,16 @@ function activity_log_eg_not_stream_owner($event, $settings) {
  * @param $admin
  *   If TRUE, returns group administrators. Otherwise, returns all members.
  */
-function _activity_log_get_active_group_members($admin = FALSE) {
-  if (empty($event->og)) {
+function _activity_log_get_active_group_members($event, $admin = FALSE) {
+  $node = $event->og;
+  if (empty($node)) {
     return array();
   }
   $query = "SELECT uid FROM {og_uid} WHERE is_active = 1 AND nid = %d";
   if ($admin) {
     $query .= " AND is_admin = 1";
   }
-  $result = db_query($query, $event->og->nid);
+  $result = db_query($query, $node->nid);
   $uids = array();
   while ($account = db_fetch_object($result)) {
     $uids[] = $account->uid;
