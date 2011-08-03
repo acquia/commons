@@ -6,22 +6,16 @@
   padding: 1em;
 }
 
+.fbsmp-icon-list {
+  float: right;
+}
+
 .fbsmp-icon-list input {
   margin: 0;
   padding: 0;
 }
 
-.fbsmp-wrapper-outer {
-  display: block;
-  clear: left;  
-  float: left;
-  min-width: 200px;
-  width: 65%;
-}
-
-.fbsmp-inner-collapsed {
-  min-height: 30px;
-}
+.fbsmp-inner-collapsed {}
 
 .fbsmp-inner-expanded {
   border: 1px solid #CCC;
@@ -29,12 +23,15 @@
   padding: 10px;
 }
 
-.link-message, .photo-message, .video-message, .slideshare-message {
+.link-message, 
+.photo-message, 
+.video-message, 
+.slideshare-message {
   float: left;  
 }
 
 /* Cancel button */
-form .fbsmp-inner-expanded input.fbsmp-cancel-button {
+.fbsmp-inner-expanded .fbsmp-cancel-button {
   float: right;
   height: 1em;
   margin: 0px;
@@ -53,7 +50,10 @@ input.fbsmp-cancel-button:hover {
 
 /* Form header styling */
 
-.fbsmp-link-header, .fbsmp-photo-header, .fbsmp-video-header, .fbsmp-slideshare-header {
+.fbsmp-link-header, 
+.fbsmp-photo-header, 
+.fbsmp-video-header, 
+.fbsmp-slideshare-header {
   margin-bottom: 10px;
   min-height: 15px;
   border-bottom: 1px solid #CCCCCC;
@@ -61,6 +61,10 @@ input.fbsmp-cancel-button:hover {
 }
 
 /* Plugin icons and attach text */
+
+.fbsmp-plugin-icon-button {
+  border: 0 none;
+}
 
 .fbsmp-plugin-icon {
   position: relative;
@@ -103,48 +107,6 @@ input.fbsmp-cancel-button:hover {
 .fbsmp-edit-form-box {
   margin-top: 10px;
   margin-bottom: 10px;
-}
-
-/* Tool tip for plugin icons */
-
-div.fbsmp-plugin-tool-tip {
-   display: none;
-}
-
-.fbsmp-plugin-icon:hover div.fbsmp-plugin-tool-tip  {
-  position: absolute;
-  display: block;
-  bottom: 100%;
-  left: 0;
-  background: url(images/icon_tool_arrow.png) no-repeat scroll left bottom transparent;
-  padding-bottom: 4px;
-}
-
-span.fbsmp-plugin-tool-tip-text {
-  background-color: #222222;
-  color: #fff;
-  font-weight: bold;
-  display: block;
-  font-size: 11px;
-  line-height: 14px;
-  padding: 4px 8px;
-  white-space: nowrap;
-}
-
-/* Hover effect for plugin icons, awesome work by pribeh */
-
-input.fbsmp-plugin-icon-button {
-  background: none;
-  border-color: #FFFFFF;
-  border-style: solid;
-  border-width: 1px;
-  padding: 1px 4px;
-  display: block;
-}
-
-input.fbsmp-plugin-icon-button:hover {
-  background: url(images/button.gif) repeat-x scroll 0 0 #DDDDDD;
-  border-color: #BBBBBB #BBBBBB #999999;
 }
 
 /* Link plugin */

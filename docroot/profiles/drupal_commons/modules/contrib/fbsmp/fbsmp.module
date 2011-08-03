@@ -862,7 +862,7 @@ function fbsmp_form_facebook_status_box_alter(&$form, &$form_state) {
   drupal_add_css($path .'/fbsmp.css');
 
   $form['fbsmp'] = array(
-    '#weight' => -25.1,
+    '#weight' => -20,
   );
   $form['fbsmp']['open'] = array(
     '#value' => '<div class="fbsmp-wrapper-outer" id="fbsmp-wrapper-replace">',
@@ -895,19 +895,19 @@ function fbsmp_form_facebook_status_box_alter(&$form, &$form_state) {
   if (!($ac_plugin = _fbsmp_get_active_plugin($form_state)) || !($widget_func = fbsmp_load_function($ac_plugin, $form_load))) {
     $form['fbsmp']['openiconlist'] = array(
       '#prefix' => '<div class="fbsmp-inner-collapsed">',
-      '#value' => '<span class="fbsmp-attach-text">'. t('Attach:') .'</span><div class="fbsmp-icon-list">',
+      '#value' => '<span class="fbsmp-attach-text"></span><div class="fbsmp-icon-list clearfix">',
     );
 
     foreach ($plugins as $key => $info) {
       $name = $info['name'] ? $info['name'] : $key;
       $form['fbsmp'][$key .'_icon'] = array(
         '#name' => $key,
-        '#type' => 'image_button',
-        '#src' => $info['icon'],
+        '#type' => 'submit',
         '#prefix' => '<div class="fbsmp-'. $key .'-icon fbsmp-plugin-icon">',
-        '#suffix' => '<div class="fbsmp-plugin-tool-tip"><span class="fbsmp-plugin-tool-tip-text">'. $name .'</span></div></div>',
+        '#suffix' => '</div>',
         '#submit' => array('fbsmp_activate_plugin'),
         '#validate' => array(),
+        '#value' => $name,
         '#attributes' => array(
           'alt' => $name,
           'class' => 'fbsmp-'. $key . '-icon-button' . ' fbsmp-plugin-icon-button'

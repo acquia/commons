@@ -1,3 +1,16 @@
+/* @group Forms */
+
+input[type=submit] {
+  border: 0 none;
+}
+
+form input.form-submit {
+  font-weight: normal; /* Forced by Fusion */
+  margin: 0;
+}
+
+/* @end */
+
 .not-front .main .main-inner, .front .content-content {
   padding: 0;
 }
@@ -418,40 +431,54 @@ a:active .facebook-status-time {
   color: #666666;
 }
 
-form .fbsmp-icon-list input.form-submit,
-form .fbsmp-icon-list input.form-submit:hover,
-form .fbsmp-icon-list input.form-submit.hover,
-form .fbsmp-icon-list input.form-submit:focus {
-  background: none repeat scroll 0 0 transparent;
-  border: medium none;
-  box-shadow: 0;
+form input.fbsmp-plugin-icon-button,
+form input.facebook-status-submit { /* Forced by Fusion */
+  padding: 7px 14px;
 }
 
-form .fbsmp-icon-list .fbsmp-link-icon input.form-submit {
-  background: url('../images/link.png') no-repeat;
-}
-form .fbsmp-icon-list .fbsmp-link-icon input.form-submit:hover,
-form .fbsmp-icon-list .fbsmp-link-icon input.form-submit.hover,
-form .fbsmp-icon-list .fbsmp-link-icon input.form-submit:focus {
-  background: url('../images/link-hover.png') no-repeat;
+form input.fbsmp-plugin-icon-button {
+  padding-left: 26px;
 }
 
-form .fbsmp-icon-list .fbsmp-photo-icon input.form-submit {
-  background: url('../images/photo.png') no-repeat;
-}
-form .fbsmp-icon-list .fbsmp-photo-icon input.form-submit:hover,
-form .fbsmp-icon-list .fbsmp-photo-icon input.form-submit.hover,
-form .fbsmp-icon-list .fbsmp-photo-icon input.form-submit:focus {
-  background: url('../images/photo-hover.png') no-repeat;
+.fbsmp-plugin-icon-button {
+  background-attachment: scroll;
+  background-image: url('../images/icon-sprite.png');
+  background-position: left top;
+  background-repeat: no-repeat;
 }
 
-form .fbsmp-inner-expanded div input.fbsmp-cancel-button {
+.fbsmp-plugin-icon-button:hover {
+  cursor: pointer;
+}
+
+.fbsmp-link-icon-button {
+  background-position: 6px 1px;
+}
+
+.fbsmp-link-icon-button:hover,
+.fbsmp-link-icon-button.hover,
+.fbsmp-link-icon-button:focus,
+.fbsmp-link-icon-button:active {
+  background-position: 6px -30px;
+}
+
+.fbsmp-photo-icon-button {
+  background-position: 6px -145px;
+}
+.fbsmp-photo-icon-button:hover,
+.fbsmp-photo-icon-button.hover,
+.fbsmp-photo-icon-button:focus,
+.fbsmp-photo-icon-button:active {
+  background-position: 6px -185px;
+}
+
+.fbsmp-inner-expanded div .fbsmp-cancel-button {
   background: url('../images/close.png') no-repeat;
   border: medium none;
 }
-form .fbsmp-inner-expanded div input.fbsmp-cancel-button:hover,
-form .fbsmp-inner-expanded div input.fbsmp-cancel-button.hover,
-form .fbsmp-inner-expanded div input.fbsmp-cancel-button:focus {
+.fbsmp-inner-expanded div .fbsmp-cancel-button:hover,
+.fbsmp-inner-expanded div .fbsmp-cancel-button.hover,
+.fbsmp-inner-expanded div .fbsmp-cancel-button:focus {
   background: url('../images/close-hover.png') no-repeat;
   border: medium none;
 }

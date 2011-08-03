@@ -1115,29 +1115,51 @@ ul.pager li a:focus {
 
 /* Typography and backgrounds for all form buttons */
 
-form input.form-submit,
-.views-exposed-form .views-exposed-widget input.form-submit {
-	background-color: #6699cc;
-	border: 1px solid #868686;
-	color: #fff;
-	font-family: Georgia, times, serif;
-	font-size: 14px;
-	font-weight: bold;
-	height: 24px;
-	line-height: 22px;
-	margin: 2px;
-	padding: 0 8px;
+.form-submit,
+.views-exposed-form .views-exposed-widget .form-submit {
+	background-color: #DDE9F4;
+ color: #69c;
+	font-family: "Helvetica Neue", Helvetica,Arial, Sans-serif;
+	font-size: 12px;
+	line-height: 1;
 }
 
-.views-exposed-form .views-exposed-widget input.form-submit {
+form input.facebook-status-submit {
+  padding-bottom: 8px;
+  padding-top: 8px;
+}
+
+.facebook-status-submit {
+  background-color: #69c;
+  color: white;
+}
+
+form input.form-submit {
+  font-weight: normal; /* Forced by Fusion */
+  margin: 0;
+}
+
+.fbsmp-icon-list {
+  border: 1px solid #c2c2c2;
+}
+
+.fbsmp-plugin-icon {
+  border-left: 1px solid #c2c2c2;
+}
+
+.fbsmp-plugin-icon:first-child {
+  border-left: 0 none;
+}
+
+.views-exposed-form .views-exposed-widget .form-submit {
 	margin-top: 18px;
 }
 
 /* Hover style for form buttons */
 
-form input.form-submit:hover,
-form input.form-submit.hover,
-form input.form-submit:focus {
+.form-submit:hover,
+.form-submit.hover,
+.form-submit:focus {
 	
 }
 
@@ -1145,15 +1167,14 @@ form input.form-submit:focus {
 
 .form-item input,
 .form-item textarea {
-	background: #fff url(../images/inner-shadow.png) no-repeat 0 0;
-	border: 1px inset #969696;
 	font-size: 14px;
 	line-height: 1em;
-	padding: 2px 4px;
 }
 
-.form-item select {
-	
+.form-item input {
+ background: #fff url(../images/inner-shadow.png) no-repeat 0 0;
+ border: 1px inset #969696;
+ padding: 2px 4px;
 }
 
 /* Remove backgrounds and border on radios and checkboxes */
