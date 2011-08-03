@@ -172,7 +172,7 @@ function template_preprocess_digests_email(&$vars) {
   $vars['date_small'] = format_date($now, 'small');
   $vars['date_medium'] = format_date($now, 'medium');
   $vars['date_large'] = format_date($now, 'large');
-  $vars['logo'] = variable_get('digests_logo', '') ? '' : theme(
+  $vars['logo'] = empty(variable_get('digests_logo', '')) ? '' : theme(
     'image',
     url(variable_get('digests_logo', ''), array('absolute' => TRUE)),
     variable_get('site_name', 'Drupal'),
