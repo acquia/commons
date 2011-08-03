@@ -114,5 +114,12 @@ function commons_notifications_strongarm() {
   );
 
   $export['notifications_ui_user'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'og_notifications_autosubscribe';
+  $strongarm->value = 0;
+
+  $export['og_notifications_autosubscribe'] = $strongarm;
   return $export;
 }
