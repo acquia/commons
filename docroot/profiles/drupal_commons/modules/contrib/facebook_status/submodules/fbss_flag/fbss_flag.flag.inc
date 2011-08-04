@@ -1,7 +1,7 @@
 <?php
 
 /**
- @file
+ * @file
  *   Includes a class that extends the Flag module for Facebook-style Statuses.
  */
 

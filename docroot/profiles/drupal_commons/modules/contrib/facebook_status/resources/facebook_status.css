@@ -22,15 +22,11 @@
   margin-bottom: 0;
 }
 
-.facebook-status-edit,
-.facebook-status-delete,
-.facebook-status-respond,
-.facebook-status-repost,
-.facebook-status-share,
-.facebook-status-details .flag-wrapper {
-  font-size: 90%;
-  margin-left: 0.5em;
-}
+/* @group Textareas
+ * 
+ * Make textareas fit in their boxes by bubbling borders and padding up
+ * to a wrapper element.
+ */
 
 .facebook-status-textarea-wrapper {
   border-style: solid;
@@ -43,8 +39,9 @@
   margin-top: 0;
 }
 
-.facebook-status-text {
+.facebook-status-textarea-wrapper textarea {
   border: 0 none;
+  display: block;
   line-height: 1.5em;
   width: 100%;
 }
@@ -52,6 +49,8 @@
 .facebook-status-faded {
   color: #999999;
 }
+
+/* @end */
 
 .facebook-status-submit {
   background-color: transparent;
@@ -67,10 +66,47 @@
   margin: 0.5em;
 }
 
-/* Fix weird picture formatting from Garland and other themes. */
-.view .picture {
-  clear: none;
-  display: inline;
-  float: none;
-  padding-left: 0;
+/* @group Entry items */
+
+.facebook-status-media > .user-picture {
+  float: left; /* LTR */
+  margin-right: 10px; /* LTR */
 }
+
+.facebook-status-media > .content {
+  overflow: hidden;
+}
+
+.facebook-status-media > .content > * {
+  margin-top: 0.25em;
+}
+
+.facebook-status-media > .content > :first-child {
+  margin-top: 0;
+}
+
+.facebook-status-media .links {
+  float: right;
+}
+
+.facebook-status-media .links li {
+  padding: 0;
+}
+
+.facebook-status-media .links li + li {
+  margin: 0 0 0 0.5em;
+}
+
+/* @group Comments */
+
+.facebook-status-comments {
+  padding: 0 0.75em;
+}
+
+.facebook-status-media > .content .facebook-status-comments {
+  margin-top: 1em;
+}
+
+/* @end */
+
+/* @end */

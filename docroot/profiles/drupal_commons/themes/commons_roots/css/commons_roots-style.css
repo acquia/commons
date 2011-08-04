@@ -212,15 +212,9 @@ form input.form-submit { /* Forced by Fusion */
 
 /* @end */
 
-.node .inner ul li,
-.panel-pane .inner ul li,
-.block .content ul li {
-  border: none;
-  list-style-image: none;
-  list-style: none;
-  margin: 0 0 0px 0;
-  padding: 0 0 0 0px;
-  text-indent: 0;
+.node .inner li,
+.panel-pane .inner li,
+.block .content li {
   display: inline;
   display: inline-block;
 }
@@ -405,7 +399,7 @@ h1 + #content-tabs {
   margin: 0 10px 10px 0;
 }
 
-/* @group Facebook-style statuses */
+/* @group Status forms */
 
 .facebook-status-textarea-wrapper {
   border: 1px solid #cccccc;
@@ -417,12 +411,6 @@ h1 + #content-tabs {
 
 .facebook-status-update-main {
   width: 100%;
-}
-
-.facebook-status-details .facebook-status-links ul.links li { /* fix vertically stacked links */
-  border-right: 0 none !important;
-  display: inline !important;
-  padding: 0 !important;
 }
 
 .fbsmp-link-title {
@@ -460,6 +448,14 @@ form input.fbsmp-plugin-icon-button {
 form input.fbsmp-cancel-button { /* Forced by Fusion */
   padding: 0;
 }
+
+/* @group Status items */
+
+.facebook-status-links ul li + li { /* Force by Fusion */
+  margin-left: 0.5em;
+}
+
+/* @end */
 
 /* @group Heartbeat Module */
 

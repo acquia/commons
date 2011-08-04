@@ -167,11 +167,13 @@ function theme_fbss_comments_item($comment, $classes = array(), $destination = '
   drupal_add_css(drupal_get_path('module', 'fbss_comments') .'/fbss_comments.css');
   $author = _facebook_status_user_load($comment->uid);
   array_unshift($classes, 'fbss-comments-comment');
+  array_unshift($classes, 'facebook-status-media');
   $classes = implode(' ', $classes);
   $output = '<div class="'. $classes .'">';
   if (variable_get('fbss_comments_user_pictures', 0)) {
-    $output .= '<div class="fbss-comments-author-picture">'. _fbss_comments_user_picture($author) .'</div>';
+    $output .= '<div class="fbss-comments-author-picture user-picture">'. _fbss_comments_user_picture($author) .'</div>';
   }
+  $output .= '<div class="content">';
   $output .= '<div class="fbss-comments-author">'. theme('username', $author) .'</div>';
   $comment_text = _facebook_status_run_filter($comment->comment);
   $comment_text = nl2br($comment_text);
@@ -202,7 +204,7 @@ function theme_fbss_comments_item($comment, $classes = array(), $destination = '
       }
     }
   }
-  $output .= '</div></div>';
+  $output .= '</div></div></div>';
   if (module_exists('modalframe')) {
     modalframe_parent_js();
   }
@@ -248,7 +250,7 @@ function theme_fbss_comments_items_email($c, $destination = '') {
     $comment_text = nl2br($comment_text);
     $output .= $comment_text;
     $output .= '</div><div>';
-    $output .= '<span style="color: #666666">'. format_date($comment->created) .'</span>';
+    $output .= '<span>'. format_date($comment->created) .'</span>';
     $output .= l(t('Reply'), $destination) .'</div>';
     if (variable_get('fbss_comments_user_pictures', 0)) {
       $output .= '</td></tr></tbody></table>';
@@ -700,6 +702,8 @@ function fbss_comments_box(&$form_state, $sid, $delay_load = TRUE, $hide_submit 
   $form['status-comment'] = array(
     '#type' => 'textarea',
     '#rows' => 1,
+    '#prefix' => '<div class="facebook-status-textarea-wrapper">',
+    '#suffix' => '</div>',
     '#attributes' => array('class' => 'fbss-comments-textarea'),
     '#resizable' => FALSE,
   );
