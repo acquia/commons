@@ -1,21 +1,13 @@
 /* @group Forms */
 
-input[type=submit] {
-  border: 0 none;
-}
-
-form input.form-submit {
-  font-weight: normal; /* Forced by Fusion */
+form input.form-submit { /* Forced by Fusion */
+  font-weight: normal;
   margin: 0;
 }
-
-/* @end */
 
 .not-front .main .main-inner, .front .content-content {
   padding: 0;
 }
-
-/* @group Forms */
 
 #og-features-feature-form tr.odd .form-item, 
 #og-features-feature-form tr.even .form-item {
@@ -28,16 +20,11 @@ form input.form-submit {
 
 /* @end */
 
-/* Header Region which floats to the right of the site info */
-
-.header-region-inner {
-  
-}
+/* @group Header Region which floats to the right of the site info */
 
 .header-region {
   float: right;
   margin-bottom: 0px;
-/*  padding-top: 12px; */
   width: auto;
 }
 
@@ -51,8 +38,6 @@ form input.form-submit {
   position: relative;
   z-index: 10;
 }
-
-
 
 /* Site Info-------------------------------------------------------------- */
 .header-site-info {
@@ -92,7 +77,9 @@ form input.form-submit {
   display: block;
 }
 
-/* Primary Menu   TODO: add default colours/-------------------------------------------------------------- */
+/* @end */
+
+/* @group Primary Menu */
 
 /* Add general styles for primary menu here, such as typography, borders, floats,  or spacing above/below */
 
@@ -123,7 +110,9 @@ form input.form-submit {
   padding: 14px 0px;
 }
 
-/* User Meta - logout/account links in header w/ profile pic */
+/* @end */
+
+/* @group User Meta - logout/account links in header w/ profile pic */
 
 .view-user-meta {
   float: right;
@@ -201,6 +190,8 @@ form input.form-submit {
   float: right;
 }
 
+/* @end */
+
 .node .inner ul li,
 .panel-pane .inner ul li,
 .block .content ul li {
@@ -247,7 +238,7 @@ fixed holistically later */
 	overflow: visible;
 }
 
-/* Blocks */
+/* @group Blocks */
 /* Used in profile blocks */
 #block-commons_profile-profile_image_links ul.links li {
   border: medium none;
@@ -260,6 +251,7 @@ fixed holistically later */
   background: none;	
 }
 
+/* @end */
 
 .node .inner ul,
 .panel-pane .inner ul,
@@ -393,27 +385,32 @@ h1 + #content-tabs {
   margin: 0 10px 10px 0;
 }
 
-/* Facebook-style Statuses */
+/* @group Facebook-style statuses */
+
+.facebook-status-textarea-wrapper {
+  border: 1px solid #cccccc;
+  -moz-box-shadow: 1px 1px 0 rgba(0,0,0,0.4) inset, 2px 2px 2px rgba(0,0,0,0.3) inset;
+  -o-box-shadow: 1px 1px 0 rgba(0,0,0,0.4) inset, 2px 2px 2px rgba(0,0,0,0.3) inset;
+  -webkit-box-shadow: 1px 1px 0 rgba(0,0,0,0.4) inset, 2px 2px 2px rgba(0,0,0,0.3) inset;
+  box-shadow: 1px 1px 0 rgba(0,0,0,0.4) inset, 2px 2px 2px rgba(0,0,0,0.3) inset;
+}
+
+.facebook-status-update-main {
+  width: 100%;
+}
 
 .facebook-status-details .facebook-status-links ul.links li { /* fix vertically stacked links */
-    border-right: 0 none !important;
-    display: inline !important;
-    padding: 0 !important;
+  border-right: 0 none !important;
+  display: inline !important;
+  padding: 0 !important;
 }
 
-/* The default width is 100% but sidebar-right overlaps a little in that case. */
-textarea.fbss-comments-textarea,
-textarea.facebook-status-text {
-  line-height: 1em;
-  width: 97%;
-}
-
-div.fbsmp-link-title {
+.fbsmp-link-title {
   font-size: 1.1em;
   font-weight: bold;
 }
 
-form.fbss-comments-form .form-submit {
+.fbss-comments-form .form-submit {
   float: right;
   margin: 0 0.25em;
 }
@@ -437,53 +434,10 @@ form input.facebook-status-submit { /* Forced by Fusion */
 }
 
 form input.fbsmp-plugin-icon-button {
-  padding-left: 26px;
+  padding-left: 34px;
 }
 
-.fbsmp-plugin-icon-button {
-  background-attachment: scroll;
-  background-image: url('../images/icon-sprite.png');
-  background-position: left top;
-  background-repeat: no-repeat;
-}
-
-.fbsmp-plugin-icon-button:hover {
-  cursor: pointer;
-}
-
-.fbsmp-link-icon-button {
-  background-position: 6px 1px;
-}
-
-.fbsmp-link-icon-button:hover,
-.fbsmp-link-icon-button.hover,
-.fbsmp-link-icon-button:focus,
-.fbsmp-link-icon-button:active {
-  background-position: 6px -30px;
-}
-
-.fbsmp-photo-icon-button {
-  background-position: 6px -145px;
-}
-.fbsmp-photo-icon-button:hover,
-.fbsmp-photo-icon-button.hover,
-.fbsmp-photo-icon-button:focus,
-.fbsmp-photo-icon-button:active {
-  background-position: 6px -185px;
-}
-
-.fbsmp-inner-expanded div .fbsmp-cancel-button {
-  background: url('../images/close.png') no-repeat;
-  border: medium none;
-}
-.fbsmp-inner-expanded div .fbsmp-cancel-button:hover,
-.fbsmp-inner-expanded div .fbsmp-cancel-button.hover,
-.fbsmp-inner-expanded div .fbsmp-cancel-button:focus {
-  background: url('../images/close-hover.png') no-repeat;
-  border: medium none;
-}
-
-/* Heartbeat Module */
+/* @group Heartbeat Module */
 
 .heartbeat-message-block .beat-item .heartbeat-buttons {
 	display: none;
@@ -535,7 +489,9 @@ div.beat-item blockquote {
 	padding: 0;
 }
 
-/* event calendar icon */
+/* @end */
+
+/* @group event calendar icon */
 
 .dateblock {
 	float:left;
@@ -567,6 +523,10 @@ div.beat-item blockquote {
 }
 .dateblock .year { display:none; }
 
+/* @end */
+
+/* @group Submitted */
+
 .submitted img.imagecache-user_picture_meta {
   float: left;
   margin: 0.5em 1em 0 0;
@@ -584,6 +544,8 @@ div.beat-item blockquote {
 .submitted .submitted-on {
   display: block;
 }
+
+/* @end */
 
 .view .view-content .item-list li.views-row .views-field-picture {
   float: left;
@@ -612,7 +574,7 @@ div.beat-item blockquote {
   width: 90%;
 }
 
-/* A couple of shoutbox generalizations. -jay */
+/* @group A couple of shoutbox generalizations. -jay */
 .shoutbox-add-form fieldset {
   margin: 5px 0;
   padding: 10px;
@@ -622,6 +584,8 @@ div.beat-item blockquote {
   width: 95%;
   max-width: 95%;
 }
+
+/* @end */
 
 /* An attempt to generalize the node type dropdown & "create" button, though as of
  * release 1.6, all 3 themes need _some_ tweaking of one element or another.
@@ -634,9 +598,8 @@ div.beat-item blockquote {
   vertical-align: middle;
 }
 
-/* gotta make the dashboard view of recent content look decent
- * This MIGHT get moved to Roots...
- */
+/* @group Dashboard */
+
 .view-dashboard-recent-content .views-field-picture {float: left;}
 .view-dashboard-recent-content .views-field-title,
 .view-dashboard-recent-content .views-field-created,
@@ -660,3 +623,13 @@ div.beat-item blockquote {
 .cke_skin_kama .cke_toolbar .cke_button a.cke_off:active{
   padding: 2px 3px;
 }
+
+/* @end */
+
+/* @group Overrides */
+
+.block { /* Forced by Fusion */
+  float: none;
+}
+
+/* @end */

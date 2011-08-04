@@ -176,7 +176,7 @@ function facebook_status_box(&$form_state, $recipient, $type = 'user') {
   $form = array('#cache' => TRUE);
   // Form elements between ['opendiv'] and ['closediv'] will be refreshed via AHAH on form submission.
   $form['opendiv'] = array(
-    '#value' => '<div id="facebook-status-replace">',
+    '#value' => '<div id="facebook-status-replace" class="facebook-status-form">',
     '#weight' => -50,
   );
   if (!empty($intro)) {
@@ -197,6 +197,8 @@ function facebook_status_box(&$form_state, $recipient, $type = 'user') {
     '#default_value' => $default,
     '#attributes' => array('class' => 'facebook-status-text facebook-status-text-main'),
     '#resizable' => FALSE,
+    '#prefix' => '<div class="facebook-status-textarea-wrapper">',
+    '#suffix' => '</div>',
     '#weight' => -40,
   );
   $form['fbss-submit'] = array(

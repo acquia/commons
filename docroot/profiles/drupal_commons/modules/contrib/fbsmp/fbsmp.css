@@ -6,46 +6,11 @@
   padding: 1em;
 }
 
-.fbsmp-icon-list {
-  float: right;
-}
-
-.fbsmp-icon-list input {
-  margin: 0;
-  padding: 0;
-}
-
-.fbsmp-inner-collapsed {}
-
-.fbsmp-inner-expanded {
-  border: 1px solid #CCC;
-  margin: 0.5em 0;
-  padding: 10px;
-}
-
 .link-message, 
 .photo-message, 
 .video-message, 
 .slideshare-message {
   float: left;  
-}
-
-/* Cancel button */
-.fbsmp-inner-expanded .fbsmp-cancel-button {
-  float: right;
-  height: 1em;
-  margin: 0px;
-  padding: 2px 3px;
-  width: 1em;
-  background-color: #D1CFCA;
-  border: 1px solid #B8B6B1;
-  -moz-border-radius: 2px 2px 2px 2px;
-  border-radius: 2px;
-}
-
-input.fbsmp-cancel-button:hover {
-  background-color: #ABB1AD;
-  border: 1px solid #949A96;
 }
 
 /* Form header styling */
@@ -60,10 +25,21 @@ input.fbsmp-cancel-button:hover {
   padding-bottom: 8px;
 }
 
-/* Plugin icons and attach text */
+/* @group Plugins and attach text */
 
-.fbsmp-plugin-icon-button {
-  border: 0 none;
+.fbsmp-icon-list {
+  float: right;
+}
+
+.fbsmp-icon-list input {
+  margin: 0;
+  padding: 0;
+}
+
+.fbsmp-inner-expanded {
+  border-style: solid;
+  border-width: 1px;
+  padding: 9px;
 }
 
 .fbsmp-plugin-icon {
@@ -80,7 +56,16 @@ input.fbsmp-cancel-button:hover {
   font-size: 11px;
 }
 
-/* Attachment edit form*/
+/* @end */
+
+/* @group Attachment edit form*/
+
+.fbsmp-wrapper-outer {
+  background-color: white;
+  position: relative;
+  z-index: 10;
+}
+
 .fbsmp-edit-wrapper-outer {
   border: 1px solid #CCC;
   margin: 10px 5px 5px 0;
@@ -108,6 +93,72 @@ input.fbsmp-cancel-button:hover {
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
+/* @end */
+
+/* @group Buttons */
+
+form input.fbsmp-plugin-icon-button,
+form input.facebook-status-submit { /* Forced by Fusion */
+  padding: 7px 14px;
+}
+
+form input.fbsmp-plugin-icon-button {
+  padding-left: 34px;
+}
+
+.fbsmp-plugin-icon-button {
+  background-attachment: scroll;
+  background-color: transparent;
+  background-image: url('images/icon-sprite.png');
+  background-position: left top;
+  background-repeat: no-repeat;
+  border-style: solid;
+  border-width: 0 0 1px 1px;
+}
+
+.fbsmp-plugin-icon-button:hover {
+  cursor: pointer;
+}
+
+.fbsmp-link-icon-button {
+  background-position: 14px 1px;
+}
+
+.fbsmp-link-icon-button:hover,
+.fbsmp-link-icon-button.hover,
+.fbsmp-link-icon-button:focus,
+.fbsmp-link-icon-button:active {
+  background-position: 14px -30px;
+}
+
+.fbsmp-photo-icon-button {
+  background-position: 14px -145px;
+}
+.fbsmp-photo-icon-button:hover,
+.fbsmp-photo-icon-button.hover,
+.fbsmp-photo-icon-button:focus,
+.fbsmp-photo-icon-button:active {
+  background-position: 14px -185px;
+}
+
+.fbsmp-cancel-button {
+  background: url('images/icon-sprite.png') 1px -230px no-repeat scroll;
+  border: medium none;
+  height: 18px;
+  position: absolute;
+  right: 4px;
+  width: 18px;
+  top: 4px;
+}
+.fbsmp-cancel-button:hover,
+.fbsmp-cancel-button.hover,
+.fbsmp-cancel-button:focus,
+.fbsmp-cancel-button:active {
+  background-position: center -200px;
+}
+
+/* @end */
 
 /* Link plugin */
 .fbsmp-link-thumbnail {
