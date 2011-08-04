@@ -21,19 +21,17 @@
 .fbsmp-slideshare-header {
   margin-bottom: 10px;
   min-height: 15px;
-  border-bottom: 1px solid #CCCCCC;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
   padding-bottom: 8px;
 }
 
 /* @group Plugins and attach text */
 
 .fbsmp-icon-list {
+  border-style: solid;
+  border-width: 0 0 1px 1px;
   float: right;
-}
-
-.fbsmp-icon-list input {
-  margin: 0;
-  padding: 0;
 }
 
 .fbsmp-inner-expanded {
@@ -52,7 +50,6 @@
   float: left;
   margin-right: 5px;  
   margin-top: 2px;
-  color: #999;
   font-size: 11px;
 }
 
@@ -67,7 +64,8 @@
 }
 
 .fbsmp-edit-wrapper-outer {
-  border: 1px solid #CCC;
+  border-style: style;
+  border-width: 1px;
   margin: 10px 5px 5px 0;
   padding: 5px;
   clear: left;
@@ -86,7 +84,6 @@
   text-decoration: underline;
   font-style: italic;
   font-weight: bold;
-  color: #999;
 }
 
 .fbsmp-edit-form-box {
@@ -98,12 +95,21 @@
 
 /* @group Buttons */
 
+.fbsmp-plugin-icon {
+  border-style: solid;
+  border-width: 0 0 0 1px;
+}
+
+.fbsmp-plugin-icon:first-child {
+  border-left: 0 none;
+}
+
 form input.fbsmp-plugin-icon-button,
 form input.facebook-status-submit { /* Forced by Fusion */
   padding: 7px 14px;
 }
 
-form input.fbsmp-plugin-icon-button {
+form input.fbsmp-plugin-icon-button { /* Forced by Fusion */
   padding-left: 34px;
 }
 
@@ -113,8 +119,7 @@ form input.fbsmp-plugin-icon-button {
   background-image: url('images/icon-sprite.png');
   background-position: left top;
   background-repeat: no-repeat;
-  border-style: solid;
-  border-width: 0 0 1px 1px;
+  border: 0 none;
 }
 
 .fbsmp-plugin-icon-button:hover {
@@ -144,18 +149,18 @@ form input.fbsmp-plugin-icon-button {
 
 .fbsmp-cancel-button {
   background: url('images/icon-sprite.png') 1px -230px no-repeat scroll;
-  border: medium none;
+  border: 0 none;
   height: 18px;
   position: absolute;
   right: 4px;
   width: 18px;
-  top: 4px;
+  top: 5px;
 }
 .fbsmp-cancel-button:hover,
 .fbsmp-cancel-button.hover,
 .fbsmp-cancel-button:focus,
 .fbsmp-cancel-button:active {
-  background-position: center -200px;
+  background-position: 1px -272px;
 }
 
 /* @end */
@@ -171,14 +176,6 @@ form input.fbsmp-plugin-icon-button {
   padding: 0 1em 1em 0;
 }
 
-.fbsmp-link-details-wrapper {
-  /* display: table-cell; */
-}
-
-.fbsmp-link-details-wrapper textarea {
-  width: 97%;
-}
-
 #edit-fbsmp-link-no-thumbnail-wrapper {
   float: right;
 }
@@ -187,15 +184,10 @@ form input.fbsmp-plugin-icon-button {
   display: inline;
 }
 
-.fbsmp-link-url-field-processed {
-  color: #999999;
-}
-
 .fbsmp-link-title-text-editable, .fbsmp-link-description-text-editable {
   text-align: left;
   direction: ltr;
   max-width: 400px;
-  /* display: inline-block; */
 }
 
 .fbsmp-link-title-text-editable:hover, .fbsmp-link-description-text-editable:hover {
@@ -204,10 +196,6 @@ form input.fbsmp-plugin-icon-button {
 
 .fbsmp-link-chars {
   padding-left: 0.5em;
-}
-
-.fbsmp-link-description {
-  color: #999999;
 }
 
 .fbsmp-link-title {
