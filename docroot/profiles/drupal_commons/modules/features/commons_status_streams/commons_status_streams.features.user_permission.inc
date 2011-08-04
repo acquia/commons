@@ -178,7 +178,8 @@ function commons_status_streams_user_default_permissions() {
   $permissions['view all activity messages'] = array(
     'name' => 'view all activity messages',
     'roles' => array(
-      '0' => 'authenticated user',
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
     ),
   );
 
@@ -212,7 +213,8 @@ function commons_status_streams_user_default_permissions() {
   $permissions['view own activity messages'] = array(
     'name' => 'view own activity messages',
     'roles' => array(
-      '0' => 'authenticated user',
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
     ),
   );
 
