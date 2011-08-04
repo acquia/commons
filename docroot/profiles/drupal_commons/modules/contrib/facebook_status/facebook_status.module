@@ -343,7 +343,7 @@ function facebook_status_link($type, $status) {
     $links['share'] = array(
       'href' => 'statuses/share',
       'title' => t('Share'),
-      'query' => array('sid' => $status->mid, 'destination' => $_GET['q']),
+      'query' => array('sid' => $status->sid, 'destination' => $_GET['q']),
       'attributes' => array('class' => 'facebook-status-share facebook-status-action-link'),
       'weight' => 5,
     );
