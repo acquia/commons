@@ -86,9 +86,9 @@ blockquote p:last-child {
 	margin-left: 20px;
 }
 
-.node .inner ul li,
-.panel-pane .inner ul li,
-.block .content ul li {
+.node .inner .item-list li,
+.panel-pane .inner .item-list li,
+.block .content .item-list li {
 	background: transparent url(../images/gray-arrow-right.png) no-repeat 0 4px;
 	list-style-image: none;
 	list-style: none;
@@ -793,26 +793,23 @@ h2.title a:active {
 /* Links for nodes (taxonomy, commenting, read more, etc) */
 
 .node .groups,
-.node ul.links,
+.node .links,
 .node .meta {
 	clear: both;
 }
 
-ul.links li,
-.node .inner ul.links li,
-.block .content ul.links li,
-.panel-pane .inner ul.links li {
-	background-image: none;
-	border-right: 1px solid #ccc;
-	display: inline-block;
+ul.links li {
 	margin: 0;
 	padding: 0 6px 0 6px;
 }
 
-ul.links li.last,
-.node .inner ul.links li.last,
-.block .content ul.links li.last,
-.panel-pane .inner ul.links li.last {
+.links li {
+	background-image: none;
+	display: inline-block;
+	border-right: 1px solid #ccc;
+}
+
+.links .last {
 	border: none;
 }
 
@@ -1115,23 +1112,26 @@ ul.pager li a:focus {
 
 /* Typography and backgrounds for all form buttons */
 
-.form-submit,
-.views-exposed-form .views-exposed-widget .form-submit {
+.button {
 	background-color: #DDE9F4;
- color: #69c;
+	border: 0 none;
+  color: #69c;
 	font-family: "Helvetica Neue", Helvetica,Arial, Sans-serif;
 	font-size: 12px;
 	line-height: 1;
 }
 
-form input.facebook-status-submit {
-  padding-bottom: 8px;
-  padding-top: 8px;
+.button.primary {
+  background-color: #69c;
+  border-color: #69c;
+  border-style: solid;
+  border-width: 0 1px 1px 0;
+  color: white;
 }
 
-.facebook-status-submit {
-  background-color: #69c;
-  color: white;
+.button,
+.fbsmp-plugin-icon {
+  border-color: #c2c2c2;
 }
 
 form input.form-submit {
@@ -1140,14 +1140,10 @@ form input.form-submit {
 }
 
 .fbsmp-icon-list {
-  border: 1px solid #c2c2c2;
+  border-color: #c2c2c2;
 }
 
-.fbsmp-plugin-icon {
-  border-left: 1px solid #c2c2c2;
-}
-
-.fbsmp-plugin-icon:first-child {
+.fbsmp-icon-list .button:first-child {
   border-left: 0 none;
 }
 
@@ -1429,6 +1425,54 @@ div.comment ul.links a {
 .comment-wrapper .picture img {
 	
 }
+
+/* @group Facebook */
+
+.facebook-status-item .links li {
+  border: 0 none;
+}
+
+/* @group Comments */
+
+.facebook-status-comments {
+  border: 1px solid #DDD;
+}
+
+.facebook-status-comments.no-comments {
+  border: 0 none;
+}
+
+.facebook-status-subitem {
+  background-color: #eee;
+  padding: 0.75em;
+}
+
+.facebook-status-subitem {
+  border-top: 4px solid white;
+}
+
+
+.fbss-comments .facebook-status-subitem:first-child,
+.facebook-status-comments :first-child,
+.facebook-status-subitem.form-piece {
+  border-top: 0 none;
+}
+
+.fbss-comments + .facebook-status-subitem {
+  padding-bottom: 0;
+}
+
+.fbss-comments + .facebook-status-subitem .fbss-comments-show-comment-form-inner { /* This is so messy. The DOM structure needs to be cleaned up */
+  padding-bottom: 0.75em;
+}
+
+.facebook-status-subitem.form-piece {
+  padding-top: 0;
+}
+
+/* @end */
+
+/* @end */
 
 /* Forum/-------------------------------------------------------------- */
 

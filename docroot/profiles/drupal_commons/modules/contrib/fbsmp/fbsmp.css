@@ -6,46 +6,11 @@
   padding: 1em;
 }
 
-.fbsmp-icon-list {
-  float: right;
-}
-
-.fbsmp-icon-list input {
-  margin: 0;
-  padding: 0;
-}
-
-.fbsmp-inner-collapsed {}
-
-.fbsmp-inner-expanded {
-  border: 1px solid #CCC;
-  margin: 0.5em 0;
-  padding: 10px;
-}
-
 .link-message, 
 .photo-message, 
 .video-message, 
 .slideshare-message {
   float: left;  
-}
-
-/* Cancel button */
-.fbsmp-inner-expanded .fbsmp-cancel-button {
-  float: right;
-  height: 1em;
-  margin: 0px;
-  padding: 2px 3px;
-  width: 1em;
-  background-color: #D1CFCA;
-  border: 1px solid #B8B6B1;
-  -moz-border-radius: 2px 2px 2px 2px;
-  border-radius: 2px;
-}
-
-input.fbsmp-cancel-button:hover {
-  background-color: #ABB1AD;
-  border: 1px solid #949A96;
 }
 
 /* Form header styling */
@@ -56,14 +21,21 @@ input.fbsmp-cancel-button:hover {
 .fbsmp-slideshare-header {
   margin-bottom: 10px;
   min-height: 15px;
-  border-bottom: 1px solid #CCCCCC;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
   padding-bottom: 8px;
 }
 
-/* Plugin icons and attach text */
+/* @group Plugins and attach text */
 
-.fbsmp-plugin-icon-button {
-  border: 0 none;
+.fbsmp-icon-list {
+  float: right;
+}
+
+.fbsmp-inner-expanded {
+  border-style: solid;
+  border-width: 1px;
+  padding: 9px;
 }
 
 .fbsmp-plugin-icon {
@@ -76,13 +48,22 @@ input.fbsmp-cancel-button:hover {
   float: left;
   margin-right: 5px;  
   margin-top: 2px;
-  color: #999;
   font-size: 11px;
 }
 
-/* Attachment edit form*/
+/* @end */
+
+/* @group Attachment edit form*/
+
+.fbsmp-wrapper-outer {
+  background-color: white;
+  position: relative;
+  z-index: 10;
+}
+
 .fbsmp-edit-wrapper-outer {
-  border: 1px solid #CCC;
+  border-style: style;
+  border-width: 1px;
   margin: 10px 5px 5px 0;
   padding: 5px;
   clear: left;
@@ -101,13 +82,77 @@ input.fbsmp-cancel-button:hover {
   text-decoration: underline;
   font-style: italic;
   font-weight: bold;
-  color: #999;
 }
 
 .fbsmp-edit-form-box {
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
+/* @end */
+
+/* @group Buttons */
+
+form input.fbsmp-plugin-icon-button,
+form input.facebook-status-submit { /* Forced by Fusion */
+  padding: 7px 14px;
+}
+
+form input.fbsmp-plugin-icon-button { /* Forced by Fusion */
+  padding-left: 34px;
+}
+
+.fbsmp-plugin-icon-button {
+  background-attachment: scroll;
+  background-color: transparent;
+  background-image: url('images/icon-sprite.png');
+  background-position: left top;
+  background-repeat: no-repeat;
+  border: 0 none;
+}
+
+.fbsmp-plugin-icon-button:hover {
+  cursor: pointer;
+}
+
+.fbsmp-link-icon-button {
+  background-position: 14px 1px;
+}
+
+.fbsmp-link-icon-button:hover,
+.fbsmp-link-icon-button.hover,
+.fbsmp-link-icon-button:focus,
+.fbsmp-link-icon-button:active {
+  background-position: 14px -30px;
+}
+
+.fbsmp-photo-icon-button {
+  background-position: 14px -145px;
+}
+.fbsmp-photo-icon-button:hover,
+.fbsmp-photo-icon-button.hover,
+.fbsmp-photo-icon-button:focus,
+.fbsmp-photo-icon-button:active {
+  background-position: 14px -185px;
+}
+
+.fbsmp-cancel-button {
+  background: url('images/icon-sprite.png') 1px -230px no-repeat scroll;
+  border: 0 none;
+  height: 18px;
+  position: absolute;
+  right: 4px;
+  width: 18px;
+  top: 5px;
+}
+.fbsmp-cancel-button:hover,
+.fbsmp-cancel-button.hover,
+.fbsmp-cancel-button:focus,
+.fbsmp-cancel-button:active {
+  background-position: 1px -272px;
+}
+
+/* @end */
 
 /* Link plugin */
 .fbsmp-link-thumbnail {
@@ -120,14 +165,6 @@ input.fbsmp-cancel-button:hover {
   padding: 0 1em 1em 0;
 }
 
-.fbsmp-link-details-wrapper {
-  /* display: table-cell; */
-}
-
-.fbsmp-link-details-wrapper textarea {
-  width: 97%;
-}
-
 #edit-fbsmp-link-no-thumbnail-wrapper {
   float: right;
 }
@@ -136,15 +173,10 @@ input.fbsmp-cancel-button:hover {
   display: inline;
 }
 
-.fbsmp-link-url-field-processed {
-  color: #999999;
-}
-
 .fbsmp-link-title-text-editable, .fbsmp-link-description-text-editable {
   text-align: left;
   direction: ltr;
   max-width: 400px;
-  /* display: inline-block; */
 }
 
 .fbsmp-link-title-text-editable:hover, .fbsmp-link-description-text-editable:hover {
@@ -153,10 +185,6 @@ input.fbsmp-cancel-button:hover {
 
 .fbsmp-link-chars {
   padding-left: 0.5em;
-}
-
-.fbsmp-link-description {
-  color: #999999;
 }
 
 .fbsmp-link-title {

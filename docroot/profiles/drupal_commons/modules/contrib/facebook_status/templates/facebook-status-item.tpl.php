@@ -23,7 +23,6 @@
  * - $created: The themed message created time
  * - $message: The themed status message
  * - $links: Status links (edit/delete/respond/share)
- * - $status_url: The URL of the status message
  * - $status: The status object
  * - $context: The context array
  *
@@ -43,39 +42,39 @@
  * Other modules may add additional variables.
  */
 ?>
-<div id="facebook-status-item-<?php echo $sid; ?>" class="facebook-status-item facebook-status-type-<?php echo $type; ?><?php if ($self): ?> facebook-status-self-update<?php endif; ?><?php if ($page): ?> facebook-status-page<?php endif; ?><?php if ($private): ?> facebook-status-private<?php endif; ?>">
-  <?php if ($sender_picture): ?>
-    <div class="facebook-status-sender-picture"><?php echo $sender_picture; ?></div>
+<div id="facebook-status-item-<?php echo $sid; ?>" class="facebook-status-item facebook-status-media facebook-status-type-<?php echo $type; ?><?php if ($self): ?> facebook-status-self-update<?php endif; ?><?php if ($page): ?> facebook-status-page<?php endif; ?><?php if ($private): ?> facebook-status-private<?php endif; ?>">
+  <?php if (!empty($sender_picture)) : ?>
+    <div class="facebook-status-sender-picture user-picture"><?php echo $sender_picture; ?></div>
   <?php endif; ?>
-  <span class="facebook-status-sender"><?php echo $sender_link; ?></span>
-  <?php if ($type == 'user' && !$self): ?>
-    &raquo; <span class="facebook-status-recipient"><?php echo $recipient_link; ?></span>
-  <?php endif; ?>
-  <?php if ($private): ?>
-    <span class="facebook-status-private-text"><?php echo $private_text; ?></span>
-  <?php endif; ?>
-  <span class="facebook-status-content"><?php echo $message; ?></span>
-  <?php if ($attachment): ?>
-    <div class="fbsmp clearfix"><?php echo $attachment; ?></div>
-  <?php endif; ?>
-  <div class="facebook-status-details">
-    <span class="facebook-status-time">
-      <?php if (!$page): ?>
-        <a href="<?php echo $status_url; ?>">
+    <div class="content">
+      <?php if (!empty($sender_link)) : ?>
+        <div class="facebook-status-sender"><?php echo $sender_link; ?></div>
       <?php endif; ?>
-      <?php echo $created; ?>
-      <?php if (!$page): ?>
-        </a>
+      <?php if ($type == 'user' && !$self): ?>
+        &raquo; <span class="facebook-status-recipient"><?php echo $recipient_link; ?></span>
       <?php endif; ?>
-    </span>
-    <?php if ($meta): ?>
-      <span class="facebook-status-meta"><?php echo $meta; ?></span>
-    <?php endif; ?>
-    <?php if ($links): ?>
-      <span class="facebook-status-links"><?php echo $links; ?></span>
-    <?php endif; ?>
-  </div>
-  <?php if (!empty($comments)): ?>
-    <div class="facebook-status-comments"><?php echo $comments; ?></div>
-  <?php endif; ?>
+      <?php if (!empty($private)) : ?>
+        <div class="facebook-status-private-text"><?php echo $private_text; ?></div>
+      <?php endif; ?>
+      <div class="facebook-status-content"><?php echo $message; ?></div>
+      <?php if (!empty($attachment)) : ?>
+        <div class="fbsmp clearfix"><?php echo $attachment; ?></div>
+      <?php endif; ?>
+      <?php if (!empty($created) || !empty($meta) || !empty($links)) : ?>
+        <div class="facebook-status-details">
+          <?php if (!empty($links)) : ?>
+            <div class="facebook-status-links"><?php echo $links; ?></div>
+          <?php endif; ?>
+          <?php if (!empty($created)) : ?>
+            <div class="facebook-status-time"><?php echo $created; ?></div>
+          <?php endif; ?>
+          <?php if (!empty($meta)) : ?>
+            <div class="facebook-status-meta"><?php echo $meta; ?></div>
+          <?php endif; ?>
+        </div>
+      <?php endif; ?>
+      <?php if (!empty($comments)) : ?>
+        <div class="facebook-status-comments"><?php echo $comments; ?></div>
+      <?php endif; ?>
+    </div>
 </div>

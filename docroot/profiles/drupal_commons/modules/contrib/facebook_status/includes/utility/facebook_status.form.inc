@@ -178,7 +178,7 @@ function facebook_status_box(&$form_state, $recipient, $type = 'user') {
   drupal_add_css($path .'/facebook_status.css');
   // Form elements between ['opendiv'] and ['closediv'] will be refreshed via AHAH on form submission.
   $form['opendiv'] = array(
-    '#value' => '<div id="facebook-status-replace">',
+    '#value' => '<div id="facebook-status-replace" class="facebook-status-form">',
     '#weight' => -50,
   );
   if (!empty($intro)) {
@@ -199,13 +199,15 @@ function facebook_status_box(&$form_state, $recipient, $type = 'user') {
     '#default_value' => $default,
     '#attributes' => array('class' => 'facebook-status-text facebook-status-text-main'),
     '#resizable' => FALSE,
+    '#prefix' => '<div class="facebook-status-textarea-wrapper">',
+    '#suffix' => '</div>',
     '#weight' => -40,
   );
   $form['fbss-submit'] = array(
     '#type' => 'submit',
     '#value' => t('Share'),
     '#submit' => array('facebook_status_box_submit'),
-    '#attributes' => array('class' => 'facebook-status-submit'),
+    '#attributes' => array('class' => 'facebook-status-submit button primary'),
     '#weight' => -25,
   );
   if (variable_get('facebook_status_ahah', 1)) {
