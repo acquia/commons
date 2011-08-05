@@ -142,7 +142,7 @@ function _commons_core_header_login_block_view() {
   }
   
   // No login needed if we're on the login page
-  if (arg(0) == 'user') {
+  if (arg(0) == 'user' && !is_numeric(arg(1))) {
     return NULL;
   }
   
