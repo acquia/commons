@@ -22,7 +22,6 @@ function facebook_status_edit(&$form_state, $status) {
   if ($status->type == 'user' && $status->sender == $status->recipient) {
     $self = ' facebook-status-form-self-update';
   }
-  $form = array('#cache' => TRUE);
   $form['intro'] = array(
     '#value' => '<div class="clear-block facebook-status-update facebook-status-form-type-'. $status->type . $self .'">'.
       '<span class="facebook-status-intro">'. $intro .'</span>',

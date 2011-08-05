@@ -1,9 +1,8 @@
-
 The Facebook-style Statuses module allows posting messages to "streams"
 attached to various entities, just like Facebook's "walls."
 
-Extensive admin documentation is available at http://drupal.org/node/421128
-Thorough API/developer documentation is at http://drupal.org/node/421336
+Extensive admin documentation is available at http://drupal.org/node/1135246
+Thorough API/developer documentation is at http://drupal.org/node/1161064
 Visit the project page at http://drupal.org/project/facebook_status
 Check out the issue queue at http://drupal.org/project/issues/facebook_status
 

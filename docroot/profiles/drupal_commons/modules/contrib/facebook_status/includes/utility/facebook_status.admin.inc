@@ -122,6 +122,13 @@ function facebook_status_admin_advanced($form_state) {
     '#default_value' => variable_get('facebook_status_profile', 1),
     '#weight' => -40,
   );
+  $form['facebook_status_enter'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Submit the status update form with Shift+Enter'),
+    '#description' => t('Enable this setting to allow submitting the status update form by pressing Shift+Enter in the status update box.'),
+    '#default_value' => variable_get('facebook_status_enter', 0),
+    '#weight' => -35,
+  );
   $form['facebook_status_default_text'] = array(
     '#type' => 'textfield',
     '#title' => t('Default text for personal status updates'),
@@ -159,6 +166,7 @@ function facebook_status_admin_advanced($form_state) {
       '#title' => t('Default Imagecache preset for user pictures'),
       '#default_value' => variable_get('facebook_status_imagecache_preset', variable_get('user_picture_imagecache_profiles_default', '')),
       '#options' => $opt,
+      '#weight' => -15,
     );
   }
   $form['facebook_status_ahah'] = array(

@@ -49,10 +49,10 @@ function hook_activity_log_event($event, $group, $settings) {
     module_load_include('inc', 'radioactivity');
     $aids = explode(',', $group->aids);
     if (count($aids) > 1) {
-      radioactivity_add_energy($group->mid, 'act_log', 'group:'. $record->tid);
+      radioactivity_add_energy($group->mid, 'act_log', 'group:'. $event->tid);
     }
     else {
-      radioactivity_add_energy($group->mid, 'act_log', 'event:'. $record->tid);
+      radioactivity_add_energy($group->mid, 'act_log', 'event:'. $event->tid);
     }
   }
 }
@@ -137,17 +137,17 @@ function hook_activity_log_regenerate_info() {
       'callback' => 'activity_log_regenerate_nodes',
       'file' => $path,
       'target_type' => 'node',
-    );
+    ),
     'taxonomy_term_insert' => array(
       'callback' => 'activity_log_regenerate_taxonomy_terms',
       'file' => $path,
       'target_type' => 'taxonomy_term',
-    );
+    ),
     'user_insert' => array(
       'callback' => 'activity_log_regenerate_users',
       'file' => $path,
       'target_type' => 'user',
-    );
+    ),
   );
   return $items;
 }
@@ -162,10 +162,10 @@ function hook_activity_log_token_resources() {
   return array(
     '[:global:token]' => array(
       'css' => array(
-        drupal_get_path('module', 'hook') .'/hook.css';
+        drupal_get_path('module', 'hook') .'/hook.css',
       ),
       'js' => array(
-        drupal_get_path('module', 'hook') .'/hook.js';
+        drupal_get_path('module', 'hook') .'/hook.js',
       ),
     ),
   );

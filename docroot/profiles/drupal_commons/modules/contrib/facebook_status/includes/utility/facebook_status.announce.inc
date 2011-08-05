@@ -60,7 +60,7 @@ function facebook_status_announce_admin_submit($form, &$form_state) {
     ),
     'finished' => 'facebook_status_announce_batch_finished',
     'title' => t('Sending message to all users'),
-    'file' => drupal_get_path('module', 'facebook_status') .'/facebook_status.announce.inc',
+    'file' => drupal_get_path('module', 'facebook_status') .'includes/utility/facebook_status.announce.inc',
   );
   batch_set($batch);
 }

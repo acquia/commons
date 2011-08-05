@@ -23,6 +23,7 @@
  * - $created: The themed message created time
  * - $message: The themed status message
  * - $links: Status links (edit/delete/respond/share)
+ * - $status_url: The URL of the status message
  * - $status: The status object
  * - $context: The context array
  *
@@ -58,7 +59,15 @@
     <div class="fbsmp clearfix"><?php echo $attachment; ?></div>
   <?php endif; ?>
   <div class="facebook-status-details">
-    <span class="facebook-status-time"><?php echo $created; ?></span>
+    <span class="facebook-status-time">
+      <?php if (!$page): ?>
+        <a href="<?php echo $status_url; ?>">
+      <?php endif; ?>
+      <?php echo $created; ?>
+      <?php if (!$page): ?>
+        </a>
+      <?php endif; ?>
+    </span>
     <?php if ($meta): ?>
       <span class="facebook-status-meta"><?php echo $meta; ?></span>
     <?php endif; ?>

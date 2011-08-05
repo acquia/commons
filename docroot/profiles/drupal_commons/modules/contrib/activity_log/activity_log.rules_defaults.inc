@@ -542,16 +542,16 @@ function activity_log_rules_defaults_node_insert() {
           'group' => 'node',
         ),
       ),
-      '#name' => 'og_rules_condition_content_is_group_post',
+      '#name' => 'og_rules_condition_posted_in_group',
       '#info' => 
       array (
-        'label' => 'Content is a group post',
+        'label' => 'Content was posted in a group',
         'arguments' => 
         array (
-          'group' => 
+          'node' => 
           array (
             'type' => 'node',
-            'label' => 'Group post',
+            'label' => 'Group content',
           ),
         ),
         'module' => 'Organic groups',
@@ -620,16 +620,16 @@ function activity_log_rules_defaults_node_insert_og() {
               'group' => 'node',
             ),
           ),
-          '#name' => 'og_rules_condition_content_is_group_post',
+          '#name' => 'og_rules_condition_posted_in_group',
           '#info' => 
           array (
-            'label' => 'Content is a group post',
+            'label' => 'Content was posted in a group',
             'arguments' => 
             array (
-              'group' => 
+              'node' => 
               array (
                 'type' => 'node',
-                'label' => 'Group post',
+                'label' => 'Group content',
               ),
             ),
             'module' => 'Organic groups',

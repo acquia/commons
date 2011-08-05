@@ -838,9 +838,6 @@ function activity_log_log_action($settings) {
       $results[$type] = array_merge_recursive($results[$type], (array) call_user_func_array($group['items callback'], $args));
     }
   }
-  if (empty($results['stream_owner'])) {
-    return;
-  }
   foreach ($results['stream_owner'] as $owner_type => $ids) {
     $results['stream_owner'][$owner_type] = array_unique($ids);
   }
@@ -849,6 +846,35 @@ function activity_log_log_action($settings) {
   // If "everyone" is a valid viewer, we don't need to save records for specific users.
   if (in_array(0, $viewers)) {
     $viewers = array(0);
+  }
+  // If we're working with a private status, only show it to the sender and recipient.
+  if ($target['type'] == 'facebook_status' && module_exists('fbss_privacy')) {
+    $status = facebook_status_load($target['id']);
+    if ($status->private) {
+      $o = array();
+      foreach ($owners['user'] as $uid) {
+        if ($uid == $status->sender || ($uid == $status->recipient && $status->type == 'user')) {
+          $o[] = $uid;
+        }
+      }
+      $owners = array('user' => $o);
+      $v = array();
+      foreach ($viewers as $uid) {
+        if ($uid == $status->sender || ($uid == $status->recipient && $status->type == 'user')) {
+          $v[] = $uid;
+        }
+        elseif ($uid === 0) {
+          $v[] = $status->sender;
+          if ($status->type == 'user') {
+            $v[] = $status->recipient;
+          }
+        }
+      }
+      $viewers = $v;
+    }
+  }
+  if (empty($owners) || empty($viewers)) {
+    return;
   }
   // Store the event record.
   if (isset($event->og)) {
@@ -946,4 +972,38 @@ function activity_log_log_action($settings) {
   }
   // Invokes hook_activity_log_event($event, $messages, $settings).
   module_invoke_all('activity_log_event', $event, $messages, $settings);
+}
+
+//=======================================
+// CONDITION: NODE WAS POSTED IN A GROUP
+//=======================================
+// TODO: REMOVE THIS ONCE http://drupal.org/node/1239888 LANDS
+
+/**
+ * Implementation of hook_rules_condition_info_alter().
+ */
+function activity_log_rules_condition_info_alter(&$conditions) {
+  if (isset($conditions['og_rules_condition_content_is_group_post'])) {
+    $conditions['og_rules_condition_content_is_group_post']['label'] = t('Content type can be a group post');
+    $conditions['og_rules_condition_content_is_group_post']['help'] = t('Evaluates to TRUE if content of this type can be posted in a group.');
+  }
+  if (!isset($conditions['og_rules_condition_posted_in_group'])) {
+    $conditions['og_rules_condition_posted_in_group'] = array(
+      'label' => t('Content was posted in a group'),
+      'arguments' => array(
+        'node' => array(
+          'type' => 'node',
+          'label' => t('Group content'),
+        ),
+      ),
+      'help' => t('Evaluates to TRUE if the content was posted in a group.'),
+      'module' => 'Organic groups',
+    );
+  }
+}
+
+if (!function_exists('og_rules_condition_posted_in_group') && function_exists('og_get_node_groups')) {
+  function og_rules_condition_posted_in_group($node, $settings) {
+    return count(og_get_node_groups($node)) > 0;
+  }
 }

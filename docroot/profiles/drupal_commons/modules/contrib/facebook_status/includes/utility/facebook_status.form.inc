@@ -171,9 +171,11 @@ function facebook_status_box(&$form_state, $recipient, $type = 'user') {
 
   $path = drupal_get_path('module', 'facebook_status') .'/resources';
   drupal_add_js($path .'/facebook_status.js');
+  if (variable_get('facebook_status_enter', 0)) {
+    drupal_add_js($path .'/facebook_status_enter.js');
+  }
   drupal_add_js($path .'/facebook_status_ahah.js', 'module', 'footer');
   drupal_add_css($path .'/facebook_status.css');
-  $form = array('#cache' => TRUE);
   // Form elements between ['opendiv'] and ['closediv'] will be refreshed via AHAH on form submission.
   $form['opendiv'] = array(
     '#value' => '<div id="facebook-status-replace">',
@@ -252,7 +254,9 @@ function facebook_status_box_validate($form, &$form_state) {
   if ($len > $maxlen && $maxlen != 0) {
     form_set_error('status',
       t('You may use a maximum of %maxchars characters, but you are using %chars characters.',
-      array('%maxchars' => $maxlen, '%chars' => $len)));
+        array('%maxchars' => $maxlen, '%chars' => $len)
+      )
+    );
   }
 }
 
@@ -269,7 +273,7 @@ function facebook_status_box_submit($form, &$form_state) {
   $form_state['facebook_status'] = array();
   // Don't save the status if it wasn't changed from the default.
   if ($new_status != $default) {
-    $new_status_obj = facebook_status_save_status($recipient, $type, $new_status);
+    $new_status_obj = facebook_status_save_status($recipient, $type, $new_status, $GLOBALS['user'], array('form_state' => $form_state));
     if (isset($new_status_obj->sid)) {
       $form_state['facebook_status']['sid'] = $new_status_obj->sid;
     }

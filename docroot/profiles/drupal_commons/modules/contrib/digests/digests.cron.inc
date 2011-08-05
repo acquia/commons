@@ -118,13 +118,13 @@ function _digests_cron() {
     if ($interval == 86400) {
       $subject = t('Your @site activity for @date', array(
         '@site' => variable_get('site_name', 'Drupal'),
-        '@date' => date('l, F j'),
+        '@date' => date('l, F j', $now - $interval),
       ));
     }
     elseif ($interval == 604800) {
       $subject = t('Your @site activity for the week of @date', array(
         '@site' => variable_get('site_name', 'Drupal'),
-        '@date' => date('F j'),
+        '@date' => date('F j', $now - $interval),
       ));
     }
     mimemail(
@@ -172,7 +172,8 @@ function template_preprocess_digests_email(&$vars) {
   $vars['date_small'] = format_date($now, 'small');
   $vars['date_medium'] = format_date($now, 'medium');
   $vars['date_large'] = format_date($now, 'large');
-  $vars['logo'] = empty(variable_get('digests_logo', '')) ? '' : theme(
+  $logo = variable_get('digests_logo', '');
+  $vars['logo'] = empty($logo) ? '' : theme(
     'image',
     url(variable_get('digests_logo', ''), array('absolute' => TRUE)),
     variable_get('site_name', 'Drupal'),

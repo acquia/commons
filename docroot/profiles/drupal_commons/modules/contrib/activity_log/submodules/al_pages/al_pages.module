@@ -111,7 +111,7 @@ function al_pages_token_values($type, $object = NULL, $options = array()) {
     $tokens = array(
       'activity-id' => $object->mid,
       'activity-objects' => $activity_objects,
-      'activity-template-id' => $activity->tid,
+      'activity-template-id' => $object->tid,
       'activity-stream-id' => $object->stream_owner_id,
       'activity-stream-type' => $object->stream_owner_type,
       'activity-message' => $message,

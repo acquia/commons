@@ -773,6 +773,9 @@ function facebook_status_save_status($recipient, $type, $message, $sender = NULL
     'recipient' => $recipient_id,
     'type' => $type,
   );
+  if (isset($options['form_state']) && module_exists('fbss_privacy') && !empty($options['form_state']['values']['private'])) {
+    $object->private = $options['form_state']['values']['private'];
+  }
   if ($message != $status->message || $type != $status->type || $recipient_id != $status->recipient || !$options['discard duplicates']) {
     $edit = FALSE;
     // If a new status is submitted on one's own profile within
