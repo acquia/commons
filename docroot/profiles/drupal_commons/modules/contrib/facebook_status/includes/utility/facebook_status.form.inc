@@ -205,7 +205,7 @@ function facebook_status_box(&$form_state, $recipient, $type = 'user') {
     '#type' => 'submit',
     '#value' => t('Share'),
     '#submit' => array('facebook_status_box_submit'),
-    '#attributes' => array('class' => 'facebook-status-submit'),
+    '#attributes' => array('class' => 'facebook-status-submit button primary'),
     '#weight' => -25,
   );
   if (variable_get('facebook_status_ahah', 1)) {

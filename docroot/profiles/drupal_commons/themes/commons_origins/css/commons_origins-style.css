@@ -1112,18 +1112,26 @@ ul.pager li a:focus {
 
 /* Typography and backgrounds for all form buttons */
 
-.form-submit,
-.views-exposed-form .views-exposed-widget .form-submit {
+.button {
 	background-color: #DDE9F4;
+	border: 0 none;
   color: #69c;
 	font-family: "Helvetica Neue", Helvetica,Arial, Sans-serif;
 	font-size: 12px;
 	line-height: 1;
 }
 
-.facebook-status-submit {
+.button.primary {
   background-color: #69c;
+  border-color: #69c;
+  border-style: solid;
+  border-width: 0 1px 1px 0;
   color: white;
+}
+
+.button,
+.fbsmp-plugin-icon {
+  border-color: #c2c2c2;
 }
 
 form input.form-submit {
@@ -1131,15 +1139,11 @@ form input.form-submit {
   margin: 0;
 }
 
-.fbsmp-plugin-icon {
+.fbsmp-icon-list {
   border-color: #c2c2c2;
 }
 
-.facebook-status-submit {
-  border-color: #69c;
-}
-
-.fbsmp-plugin-icon:first-child {
+.fbsmp-icon-list .button:first-child {
   border-left: 0 none;
 }
 
@@ -1427,6 +1431,46 @@ div.comment ul.links a {
 .facebook-status-item .links li {
   border: 0 none;
 }
+
+/* @group Comments */
+
+.facebook-status-comments {
+  border: 1px solid #DDD;
+}
+
+.facebook-status-comments.no-comments {
+  border: 0 none;
+}
+
+.facebook-status-subitem {
+  background-color: #eee;
+  padding: 0.75em;
+}
+
+.facebook-status-subitem {
+  border-top: 4px solid white;
+}
+
+
+.fbss-comments .facebook-status-subitem:first-child,
+.facebook-status-comments :first-child,
+.facebook-status-subitem.form-piece {
+  border-top: 0 none;
+}
+
+.fbss-comments + .facebook-status-subitem {
+  padding-bottom: 0;
+}
+
+.fbss-comments + .facebook-status-subitem .fbss-comments-show-comment-form-inner { /* This is so messy. The DOM structure needs to be cleaned up */
+  padding-bottom: 0.75em;
+}
+
+.facebook-status-subitem.form-piece {
+  padding-top: 0;
+}
+
+/* @end */
 
 /* @end */
 

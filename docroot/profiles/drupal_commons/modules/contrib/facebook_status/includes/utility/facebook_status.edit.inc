@@ -50,7 +50,7 @@ function facebook_status_edit(&$form_state, $status) {
   $form['fbss-submit'] = array(
     '#type' => 'submit',
     '#value' => t('Save'),
-    '#attributes' => array('class' => 'facebook-status-submit'),
+    '#attributes' => array('class' => 'facebook-status-submit button primary'),
     '#suffix' => '</div>',
     '#weight' => -25,
   );

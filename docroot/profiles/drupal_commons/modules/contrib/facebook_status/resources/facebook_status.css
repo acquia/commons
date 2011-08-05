@@ -66,7 +66,11 @@
   margin: 0.5em;
 }
 
-/* @group Entry items */
+/* @group Entry items
+ *
+ * Media is a generic class for any presentation that includes a user image to one side
+ * and content to the other.
+ */
 
 .facebook-status-media > .user-picture {
   float: left; /* LTR */
@@ -99,14 +103,16 @@
 
 /* @group Comments */
 
-.facebook-status-comments {
-  padding: 0 0.75em;
-}
-
 .facebook-status-media > .content .facebook-status-comments {
   margin-top: 1em;
 }
 
 /* @end */
+
+/* @group Links */
+
+.facebook-status-item .links {
+  margin-bottom: 0;
+}
 
 /* @end */
