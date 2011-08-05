@@ -843,6 +843,12 @@ ul.links li.comment_add a,
 	text-indent: 0;
 }
 
+/* Facebook status item lists */
+.content .facebook-status-links ul.links.inline li,
+.content .facebook-status-comments ul.links.inline li {
+  border: 0 none;
+}
+
 /* Only more/read more links */
 
 div.node .read-more a,
@@ -1613,6 +1619,50 @@ div.poll .total { text-align:left;}
 .profile dd .item-list li {
 	background-image: none;
 }
+
+/* @group Facebook */
+
+.facebook-status-item .links li {
+  border: 0 none;
+}
+
+/* @group Comments */
+
+.facebook-status-comments.no-comments {
+  border: 0 none;
+}
+
+.facebook-status-subitem {
+  background-color: #eee;
+  padding: 0.75em;
+}
+
+.facebook-status-subitem {
+  border-top: 4px solid white;
+}
+
+
+.fbss-comments .facebook-status-subitem:first-child,
+.facebook-status-comments :first-child,
+.facebook-status-subitem.form-piece {
+  border-top: 0 none;
+}
+
+.fbss-comments + .facebook-status-subitem {
+  padding-bottom: 0;
+}
+
+.fbss-comments + .facebook-status-subitem .fbss-comments-show-comment-form-inner { /* This is so messy. The DOM structure needs to be cleaned up */
+  padding-bottom: 0.75em;
+}
+
+.facebook-status-subitem.form-piece {
+  padding-top: 0;
+}
+
+/* @end */
+
+/* @end */
 
 /* Ubercart - catalog/-------------------------------------------------------------- */
 

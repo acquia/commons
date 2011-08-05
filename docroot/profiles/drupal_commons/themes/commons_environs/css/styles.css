@@ -887,6 +887,54 @@ span.heartbeat_times img {
   clear: left;
 }
 
+/* @group Facebook */
+
+.facebook-status-item .links li {
+  border: 0 none;
+}
+
+/* @group Comments */
+
+.facebook-status-comments {
+  border: 1px solid #eee;
+}
+
+.facebook-status-comments.no-comments {
+  border: 0 none;
+}
+
+.facebook-status-subitem {
+  background-color: #fafaf9;
+  padding: 0.75em;
+}
+
+.facebook-status-subitem {
+  border-top: 4px solid white;
+}
+
+
+.fbss-comments .facebook-status-subitem:first-child,
+.facebook-status-comments :first-child,
+.facebook-status-subitem.form-piece {
+  border-top: 0 none;
+}
+
+.fbss-comments + .facebook-status-subitem {
+  padding-bottom: 0;
+}
+
+.fbss-comments + .facebook-status-subitem .fbss-comments-show-comment-form-inner { /* This is so messy. The DOM structure needs to be cleaned up */
+  padding-bottom: 0.75em;
+}
+
+.facebook-status-subitem.form-piece {
+  padding-top: 0;
+}
+
+/* @end */
+
+/* @end */
+
 /*Shout box*/
 .shoutbox-add-form fieldset {
   border: 0px;
@@ -1100,28 +1148,34 @@ span.heartbeat_times img {
   margin-top: 10px;
 }
 
-ul.links.inline {
+.link.inline {
   display: block;
   overflow: hidden;
   margin-top: 0.25em;
 }
 
-ul.links.inline li {
+.link.inline li {
   display: block;
   float: left;
   padding: 0 0.25em 0 0;
 }
 
-ul.links.inline li + li {
+.link.inline li + li {
   border-left: 1px solid #8AC559;
   padding-left: 0.25em;
 }
 
-ul.links.inline li a {
+.facebook-status-links li + li {
+  border: 0 none;
+}
+
+.link.inline li a {
   padding: 2px 4px;
 }
 
-ul.links.inline a:hover, ul.links.inline a:focus, ul.links.inline a:active {
+.link.inline a:hover, 
+.link.inline a:focus, 
+.link.inline a:active {
   color: #fff;
   background-color: #29ABE2;
   text-decoration: none;
