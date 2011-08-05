@@ -784,10 +784,16 @@ function activity_log_log_action($settings) {
     $results[$type] = array();
     $groups = $type == 'viewer' ? $viewer_entity_groups : $stream_owner_entity_groups;
     foreach (array_filter($settings['visibility'][$type .'_entity_group']) as $name) {
-      $group = $groups[$name];
+      if (isset($groups[$name])) {
+        $group = $groups[$name];
+      }
+      else {
+        continue;
+      }
       if (isset($group['file']) && file_exists($group['file'])) {
         require_once $group['file'];
       }
+      $event->og = NULL;
       // Load the group context. We can't just use og_get_group_context() because that doesn't work during cron and when regenerating.
       if (module_exists('og')) {
         if ($target['type'] == 'node' && $target['id']) {
@@ -917,7 +923,7 @@ function activity_log_log_action($settings) {
             $viewer = -$id;
           }
           if (!in_array("$event->tid $event->target_id $event->target_type $id $type $viewer", $pairs)) {
-            $pairs[] = "$id $type $viewer";
+            $pairs[] = "$event->tid $event->target_id $event->target_type $id $type $viewer";
             $message = (object) array(
               'tid' => $event->tid,
               'aids' => ','. $event->aid .',',
