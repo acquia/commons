@@ -103,6 +103,18 @@ function _commons_profile_image_links_block_view() {
     );
   }
   else {
+    // Provide relationship links/messages
+    if (user_access('maintain own relationships')) {
+      $actions = _user_relationships_ui_actions_between($user, $account);
+      foreach ($actions as $key => $action) {
+        $links["ur_action"] = array(
+          'title' => $action,
+          // No href because this is the best that UR can offer
+          'html' => TRUE,
+        );
+      }
+    }
+
     // If the current user has access to, provide a link
     // to edit the viewed user's profile
     if (user_access('administer users')) {
@@ -110,18 +122,6 @@ function _commons_profile_image_links_block_view() {
         'title' => t('Edit !user\'s profile', array('!user' => $account->name)),
         'href' => "user/{$account->uid}/edit",
       );
-    }
-    
-    // Provide relationship links/messages
-    if (user_access('maintain own relationships')) {
-      $actions = _user_relationships_ui_actions_between($user, $account);
-      foreach ($actions as $key => $action) {
-        $links["ur_action_{$key}"] = array(
-          'title' => $action,
-          // No href because this is the best that UR can offer
-          'html' => TRUE,
-        );
-      }
     }
     
     // Provide link to contact the user

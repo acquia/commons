@@ -49,16 +49,21 @@ function theme_user_relationships_request_relationship_direct_link($relate_to, $
 /**
  * Remove relationship link
  */
-function theme_user_relationships_remove_link($uid, $rid) {
-  return l(
+function theme_user_relationships_remove_link($viewer, $relationship) {
+  $link = l(
     t('Remove'),
-    "user/{$uid}/relationships/{$rid}/remove",
+    "user/{$viewer->uid}/relationships/{$relationship->rid}/remove",
     array(
       'title' => array('title' => t('Remove')),
       'query' => drupal_get_destination(),
       'attributes' => array('class' => 'user_relationships_popup_link'),
     )
   );
+
+  return t('%relationship_name (!remove_link)', array(
+    '%relationship_name'  => ur_tt("user_relationships:rtid:$relationship->rtid:name", $relationship->name) . ($relationship->is_oneway ? ($relationship->requester_id == $viewer->uid ? t(' (You to Them)') : t(' (Them to You)')) : NULL),
+    '!remove_link'        => $link
+  ));
 }
 
 /**
