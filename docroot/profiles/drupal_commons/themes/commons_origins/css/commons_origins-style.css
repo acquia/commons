@@ -80,15 +80,11 @@ blockquote p:last-child {
 
 /*content lists*/
 
-.node .inner ul.krumo-node ul,
-.panel-pane .inner ul.krumo-node ul,
-.block .inner ul.krumo-node ul{
+ul.krumo-node ul{
 	margin-left: 20px;
 }
 
-.node .inner .item-list li,
-.panel-pane .inner .item-list li,
-.block .content .item-list li {
+.item-list ul li {
 	background: transparent url(../images/gray-arrow-right.png) no-repeat 0 4px;
 	list-style-image: none;
 	list-style: none;
@@ -97,15 +93,15 @@ blockquote p:last-child {
 	text-indent: 0;
 }
 
-.node .inner .links ul li > a {
+.node .inner .links li > a {
 	color: #669acc;
 }
 
-.node .inner .links ul li.comment_add {
+.node .inner .links .comment_add {
 	background-color: #669acc;
 }
 
-.node .inner .links ul li.comment_add a{
+.node .inner .links .comment_add a{
 	color: #fff;
 }
 /* HTML Elements-------------------------------------------------------------- */
