@@ -36,9 +36,19 @@ function digests_admin($form_state) {
     '#size' => 11,
     '#maxlength' => 15,
   );
-  $form['digests_logo'] = array(
-    '#type' => 'textfield',
+  $form['logo'] = array(
+    '#type' => 'fieldset',
     '#title' => t('Logo image'),
+  );
+  $form['logo']['digests_logo_use_theme'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use theme logo'),
+    '#description' => t('If checked, the current theme\'s logo will be used.'),
+    '#default_value' => variable_get('digests_logo_use_theme', 1),
+  );
+  $form['logo']['digests_logo'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Logo path'),
     '#description' => t('The path to your logo image from your Drupal root.') .' '.
       t('If you use this, the logo will appear at the top of digest emails.'),
     '#default_value' => variable_get('digests_logo', ''),
