@@ -192,13 +192,6 @@ form input.form-submit { /* Forced by Fusion */
 
 /* @end */
 
-.node .inner li,
-.panel-pane .inner li,
-.block .content li {
-  display: inline;
-  display: inline-block;
-}
-
 .sidebar-first .links li,
 .sidebar-last .links li {
   border: 0 none;
@@ -252,13 +245,17 @@ form input.form-submit { /* Forced by Fusion */
 }
 
 /* used in right side blocks */
-.sidebar-last .block-views .content .view .view-content .item-list ul li {
+.sidebar-last .block-views .view-content .item-list ul li {
   background: none repeat scroll 0 0 transparent;
   border-bottom: 0 none;
   margin-bottom: 0;
   padding: 0 0 10px 40px;
   position: relative;
   clear: both;
+}
+
+.sidebar-last .block-views .view-group-block-events-latest .item-list ul li { /* This is a hack. The pattern for media items in views is broken */
+  padding-left: 0;
 }
 
 .sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-field-group-image-fid,
