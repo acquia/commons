@@ -1,0 +1,102 @@
+diff --git a/docroot/profiles/drupal_commons/modules/contrib/digests/digests.admin.inc b/docroot/profiles/drupal_commons/modules/contrib/digests/digests.admin.inc
+index 70aaeb3..2ea4012 100644
+--- a/docroot/profiles/drupal_commons/modules/contrib/digests/digests.admin.inc
++++ b/docroot/profiles/drupal_commons/modules/contrib/digests/digests.admin.inc
+@@ -36,9 +36,19 @@ function digests_admin($form_state) {
+     '#size' => 11,
+     '#maxlength' => 15,
+   );
+-  $form['digests_logo'] = array(
+-    '#type' => 'textfield',
++  $form['logo'] = array(
++    '#type' => 'fieldset',
+     '#title' => t('Logo image'),
++  );
++  $form['logo']['digests_logo_use_theme'] = array(
++    '#type' => 'checkbox',
++    '#title' => t('Use theme logo'),
++    '#description' => t('If checked, the current theme\'s logo will be used.'),
++    '#default_value' => variable_get('digests_logo_use_theme', 1),
++  );
++  $form['logo']['digests_logo'] = array(
++    '#type' => 'textfield',
++    '#title' => t('Logo path'),
+     '#description' => t('The path to your logo image from your Drupal root.') .' '.
+       t('If you use this, the logo will appear at the top of digest emails.'),
+     '#default_value' => variable_get('digests_logo', ''),
+diff --git a/docroot/profiles/drupal_commons/modules/contrib/digests/digests.cron.inc b/docroot/profiles/drupal_commons/modules/contrib/digests/digests.cron.inc
+index c7d8707..37c34d8 100644
+--- a/docroot/profiles/drupal_commons/modules/contrib/digests/digests.cron.inc
++++ b/docroot/profiles/drupal_commons/modules/contrib/digests/digests.cron.inc
+@@ -172,15 +172,7 @@ function template_preprocess_digests_email(&$vars) {
+   $vars['date_small'] = format_date($now, 'small');
+   $vars['date_medium'] = format_date($now, 'medium');
+   $vars['date_large'] = format_date($now, 'large');
+-  $logo = variable_get('digests_logo', '');
+-  $vars['logo'] = empty($logo) ? '' : theme(
+-    'image',
+-    url(variable_get('digests_logo', ''), array('absolute' => TRUE)),
+-    variable_get('site_name', 'Drupal'),
+-    variable_get('site_name', 'Drupal'),
+-    NULL,
+-    FALSE
+-  );
++  $vars['logo'] = _digests_get_logo();
+   $header = variable_get('digests_header', '');
+   $footer = variable_get('digests_footer', '');
+   if (module_exists('token')) {
+@@ -195,3 +187,42 @@ function template_preprocess_digests_email(&$vars) {
+     '@site' => variable_get('site_name', 'Drupal'),
+   ));
+ }
++
++/**
++ * Helper function to generate a logo for the digest email
++ */
++function _digests_get_logo() {
++  $theme = variable_get('theme_default', NULL);
++  $path = '';
++  
++  // Use the theme's logo
++  if (variable_get('digests_logo_use_theme', TRUE)) {
++    // Fetch the theme settings
++    $settings = theme_get_settings($theme);
++    // We don't use theme_get_setting('logo') because if the logo
++    // is disabled for the site, it will return empty
++    if ($settings['default_logo']) {
++      $path = drupal_get_path('theme', $theme) . '/logo.png';
++    }
++    elseif ($settings['logo_path']) {
++      $path = $settings['logo_path'];
++    }
++  }
++  // Use a custom logo provided
++  else {
++    $path = variable_get('digests_logo', '');
++  }
++  
++  if ($path) {
++    return theme(
++      'image',
++      url($path, array('absolute' => TRUE)),
++      variable_get('site_name', 'Drupal'),
++      variable_get('site_name', 'Drupal'),
++      NULL,
++      FALSE
++    );
++  }
++  
++  return NULL;
++}
+diff --git a/docroot/profiles/drupal_commons/modules/contrib/digests/digests.install b/docroot/profiles/drupal_commons/modules/contrib/digests/digests.install
+index 5fdfc2b..df03956 100644
+--- a/docroot/profiles/drupal_commons/modules/contrib/digests/digests.install
++++ b/docroot/profiles/drupal_commons/modules/contrib/digests/digests.install
+@@ -68,6 +68,7 @@ function digests_uninstall() {
+   variable_del('digests_limit');
+   variable_del('digests_css');
+   variable_del('digests_logo');
++  variable_del('digests_logo_use_theme');
+   variable_del('digests_header');
+   variable_del('digests_footer');
+ }
