@@ -701,29 +701,23 @@ function fbss_comments_box(&$form_state, $sid, $delay_load = TRUE, $hide_submit 
   $form['before'] = array('#value' => '<div id="fbss-comments-replace-'. $sid .'">');
   $form['comments'] = array('#value' => theme('fbss_comments_items', $comments, $delay_load, $form['#qu']));
   $form['comment-entry-wrapper'] = array('#value' => '<div class="facebook-status-subitem">',);
-  if (count($comments) && $hide_submit) {
-    $form['start-hide'] = array('#value' => '<div class="fbss-comments-show-comment-form-inner" id="fbss-comments-inner-toggle-'. $sid .'">'.
-      l(t('Comment'), 'statuses/'. $sid, array('attributes' => array('class' => 'fbss-comments-show-comment-inner-form-link')))
-      .'</div><div class="fbss-comments-hide fbss-comments-replace-'. $sid .'-inner">');
-  }
+
   $form['status-comment'] = array(
     '#type' => 'textarea',
-    '#rows' => 1,
+    '#rows' => 2,
     '#prefix' => '<div class="facebook-status-textarea-wrapper">',
     '#suffix' => '</div>',
     '#attributes' => array('class' => 'fbss-comments-textarea'),
     '#resizable' => FALSE,
   );
-  if (count($comments) && $hide_submit) {
-    $form['end-hide'] = array('#value' => '</div>');
-  }
+
   $form['end-comment-entry-wrapper'] = array('#value' => '</div>',);
   $form['after'] = array('#value' => '</div>');
   $form['save-'. $sid] = array(
     '#type' => 'submit',
     '#value' => t('Comment'),
     '#attributes' => array('class' => 'fbss-comments-submit button primary'),
-    '#prefix' => '<div class="'. ($hide_submit ? 'fbss-comments-hide' : '') .' facebook-status-subitem form-piece fbss-comments-replace-'. $sid .'-inner clearfix">',
+    '#prefix' => '<div class="'. ($hide_submit ? '' : '') .' facebook-status-subitem form-piece fbss-comments-replace-'. $sid .'-inner clearfix">',
     '#suffix' => '</div>',
     '#submit' => array('fbss_comments_box_submit'),
   );
