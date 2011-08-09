@@ -1554,10 +1554,8 @@ function commons_core_views_default_views() {
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_pager', '1');
   $handler->override_option('distinct', 1);
-  $handler->override_option('style_plugin', 'list');
   $handler->override_option('style_options', array(
     'grouping' => '',
-    'type' => 'ul',
   ));
   $handler = $view->new_display('feed', 'Feed', 'feed');
   $handler->override_option('sorts', array(
@@ -4936,7 +4934,6 @@ function commons_core_views_default_views() {
   $handler->override_option('title', 'Latest notices');
   $handler->override_option('header_format', '1');
   $handler->override_option('header_empty', 1);
-  $handler->override_option('empty', '');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
   $handler->override_option('items_per_page', 5);

@@ -10,6 +10,15 @@ class og_subgroups_views_handler_field_children extends views_handler_field_prer
   function query() {
     $this->add_additional_fields();
   }
+  
+  function options_form(&$form, &$form_state) {
+    parent::options_form($form, $form_state);
+    $form['link'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Link to the child groups'),
+      '#default_value' => isset($this->options['link']) ? $this->options['link'] : 1,
+    );
+  }
 
   function pre_render($values) {
     og_subgroups_include('tree');
@@ -18,7 +27,7 @@ class og_subgroups_views_handler_field_children extends views_handler_field_prer
     foreach ($values as $value) {
       $children = og_subgroups_get_group_children($value, FALSE);
       foreach ($children as $nid => $child) {
-        $this->items[$value->nid][$child->nid] = l($child->title, "node/{$child->nid}");
+        $this->items[$value->nid][$child->nid] = $this->options['link'] ? l($child->title, "node/{$child->nid}") : $child->title;
       }
     }
   }

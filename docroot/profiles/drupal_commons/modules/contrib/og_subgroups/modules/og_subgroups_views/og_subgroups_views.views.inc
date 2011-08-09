@@ -28,6 +28,9 @@ function og_subgroups_views_views_handlers() {
       'og_subgroups_views_handler_field_children' => array(
         'parent' => 'views_handler_field_prerender_list',
       ),
+      'og_subgroups_views_handler_field_child_count' => array(
+        'parent' => 'views_handler_field',
+      ),
       'og_subgroups_views_handler_field_siblings' => array(
         'parent' => 'views_handler_field_prerender_list',
       ),
@@ -78,6 +81,15 @@ function og_subgroups_views_views_data() {
       'title' => t('Hierarchy order'),
       'help' => t('Sort the groups by the order in which they appear in the subgroup tree.'),
       'handler' => 'og_subgroups_views_handler_sort_hierarchy',
+    ),
+  );
+  
+  $data['og_subgroups']['child_count'] = array(
+    'title' => t('Child count'),
+    'field' => array(
+      'title' => t('Child count'),
+      'help' => t('Provide a count of the number of child groups.'),
+      'handler' => 'og_subgroups_views_handler_field_child_count',
     ),
   );
 

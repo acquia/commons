@@ -1,3 +1,34 @@
 <?php
 
 include_once('commons_subgroups.features.inc');
+
+/**
+ * Implementation of hook_views_pre_view()
+ */
+function commons_subgroups_views_pre_view(&$view, &$display_id, &$args) {
+  // Viewing a listing of subgroups
+  if ($view->name == 'subgroups_main_listing' && $display_id == 'page_2') {
+    og_subgroups_include('tree');
+    // Extract the parent group nid
+    $parent = $args[0];
+    // Fetch the tree for the parent in the argument
+    $tree = og_subgroups_get_group_tree((object) array('nid' => $parent));
+    // Flatten the tree so we can easily iterate
+    $tree = og_subgroups_flatten_tree($tree);
+    // Create a string of parents
+    $parents = array();
+    foreach ($tree as $nid => $group) {
+      $parents[] = '<em>' . l(check_plain($group->title), "node/{$group->nid}") . '</em>';
+      // If we're at the parent group, stop iterating
+      if ($parent == $nid) {
+        break; 
+      }
+    }
+    if (!empty($parents)) {
+      // Format a breadcrumb for the view header
+      $header = t('<strong>Parent groups:</strong> !parents', array('!parents' => implode('&nbsp;&nbsp;>&nbsp;&nbsp;', $parents)));
+      // Override the header
+      $view->display_handler->override_option('header', $header);
+    }
+  }
+}

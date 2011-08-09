@@ -12,3 +12,12 @@ function commons_subgroups_ctools_plugin_api() {
     return array("version" => 1);
   }
 }
+
+/**
+ * Implementation of hook_views_api().
+ */
+function commons_subgroups_views_api() {
+  return array(
+    'api' => '2',
+  );
+}

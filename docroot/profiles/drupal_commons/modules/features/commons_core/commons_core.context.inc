@@ -181,9 +181,9 @@ function commons_core_context_default_contexts() {
   $context->description = 'The list of available groups on the site';
   $context->tag = '';
   $context->conditions = array(
-    'views' => array(
+    'path' => array(
       'values' => array(
-        'groups_main_listing' => 'groups_main_listing',
+        'groups' => 'groups',
       ),
     ),
   );
