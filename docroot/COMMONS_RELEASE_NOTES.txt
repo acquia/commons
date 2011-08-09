@@ -6,12 +6,30 @@ Track Commons development on GitHub!
 Drupal Commons 2.0-beta2, 2011-08-09
 ------------------------------------
 CHANGELOG:
+- Fixed: Many theme enhancements & issues
 - Fixed: Header login block should show on user profile pages [#1196714]
 - Fixed: Authenticated users should have permission to view activity streams
 - Fixed: Activity streams should show activity of people you follow and groups you're in
 - Fixed: Status messages used the wrong template in digest emails
 - Fixed: Digest emails use default theme's logo
 - Added: Subgroups-optimized view for listing groups (/groups)
+And lots of other enhancements and fixes.  The complete listing is at
+https://github.com/acquia/commons/commits/master
+
+UPGRADING TO 2.0-beta2
+As indicated in the Release notes for Beta 1 below, there IS NO
+officially-supported upgrade path from Beta1 to Beta2.
+There should be no major issues, but there are no guarantees.
+Beta 1 users may simply install Beta 2 on top of Beta 1.
+- If activity or status entries are NOT appearing on your /status page
+  or on a group home page, you may need to clear the activity log cache by
+  visiting /admin/settings/activity_log and clicking "Clear all message caches"
+
+NOTES:
+1) As with Beta 1 > 2, there will be no upgrade path from 2 > N.
+2) As with Beta 1, we do not recommend this be used on a production site,
+   nor should you upgrade a production site from a prior release to the 2.0
+   path before the GA (Generally Available) release of version 2.0
 
 
 Drupal Commons 2.0-beta1, 2011-07-25
