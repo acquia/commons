@@ -319,3 +319,49 @@ function commons_roots_boxes_box($block) {
   $output .= '</div>';
   return $output;
 }
+
+function commons_roots_user_relationships_request_relationship_direct_link($relate_to, $relationship_type) {
+  $string = t("Become %name's %rel_name", array('%name' => $relate_to->name, '%rel_name' => ur_tt("user_relationships:rtid:$relationship_type->rtid:name", $relationship_type->name), '%rel_plural_name' => ur_tt("user_relationships:rtid:$relationship_type->rtid:plural_name", $relationship_type->plural_name)));
+  $class = 'user_relationships_popup_link';
+  if ($relationship_type->name == 'follower') {
+    $string = t('Follow');
+    $class .= ' follow-link';
+  }
+  
+  return l(
+    $string,
+    "relationship/{$relate_to->uid}/request/{$relationship_type->rtid}",
+    array(
+      'query' => drupal_get_destination(),
+      'html'  => TRUE,
+      'attributes' => array('class' => $class),
+    )
+  );
+}
+
+function commons_roots_user_relationships_remove_link($viewer, $relationship) {
+  $path = "user/{$viewer->uid}/relationships/{$relationship->rid}/remove";
+  $options = array(
+    'title' => array('title' => t('Remove')),
+    'query' => drupal_get_destination(),
+    'attributes' => array('class' => 'user_relationships_popup_link'),
+  );
+  
+  if ($relationship->name == 'follower') {
+    $options['attributes']['class'] .= ' follow-link';
+    $output = l(
+      t('Unfollow'),
+      $path,
+      $options);
+  } else {
+    $output = t('%relationship_name (!remove_link)', array(
+      '%relationship_name'  => ur_tt("user_relationships:rtid:$relationship->rtid:name", $relationship->name) . ($relationship->is_oneway ? ($relationship->requester_id == $viewer->uid ? t(' (You to Them)') : t(' (Them to You)')) : NULL),
+      '!remove_link'        => l(
+        t('Remove'),
+        $path,
+        $options),
+    ));
+  }
+
+  return $output;
+}

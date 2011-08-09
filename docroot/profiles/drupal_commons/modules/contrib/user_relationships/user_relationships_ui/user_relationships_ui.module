@@ -267,10 +267,7 @@ function _user_relationships_ui_actions_between(&$viewer, &$viewed, $action_type
     $relationships = user_relationships_load(array('between' => array($viewer->uid, $viewed->uid)));
     foreach ($relationships as $relationship) {
       if ($relationship->approved && !isset($list[$relationship->rid])) {
-        $list[$relationship->rid] = t('%relationship_name (!remove_link)', array(
-          '%relationship_name'  => ur_tt("user_relationships:rtid:$relationship->rtid:name", $relationship->name) . ($relationship->is_oneway ? ($relationship->requester_id == $viewer->uid ? t(' (You to Them)') : t(' (Them to You)')) : NULL),
-          '!remove_link'        => theme('user_relationships_remove_link', $viewer->uid, $relationship->rid)
-        ));
+        $list[$relationship->rid] = theme('user_relationships_remove_link', $viewer, $relationship);
       }
     }
   }
@@ -761,7 +758,7 @@ function user_relationships_ui_theme() {
     ),
 
     'user_relationships_remove_link' => array(
-      'arguments' => array('uid' => NULL, 'rid' => NULL)
+      'arguments' => array('viwer' => NULL, 'relationship' => NULL)
     ),
 
     'user_relationships_pending_request_approve_link' => array(

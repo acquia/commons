@@ -68,7 +68,7 @@ form input.form-submit { /* Forced by Fusion */
 
 #logo {
   float: left;
-  margin: 0 12px 0 0;
+  margin-right: 10px;
   vertical-align: middle;
   width: auto;
 }
@@ -236,12 +236,28 @@ form input.form-submit { /* Forced by Fusion */
   background: none;	
 }
 
+.block.block-commons_profile .links .ur_action {
+  border: none;
+  display: block;
+  padding: 0;
+  text-align: center;
+}
+
+.block.block-commons_profile .links .ur_action a {
+  display: inline-block;
+  padding: 4px 8px;
+}
+
 /* @end */
 
 .node .inner ul,
 .panel-pane .inner ul,
 .block .inner ul {
   margin-left: 0;
+}
+
+.node .content ul {
+  padding-left: 15px;
 }
 
 /* used in right side blocks */

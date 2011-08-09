@@ -71,6 +71,12 @@ blockquote p:last-child { margin-bottom: 0px;}
 	margin-left: 20px;
 }
 
+.node .inner ul,
+.panel-pane .inner ul,
+.block .content ul {
+  padding-left: 0;
+}
+
 .node .inner ul li,
 .panel-pane .inner ul li,
 .block .content ul li {
@@ -1618,6 +1624,19 @@ div.poll .total { text-align:left;}
 
 .profile dd .item-list li {
 	background-image: none;
+}
+
+.block.block-commons_profile .links .ur_action a {
+  background: url("../images/button_bkgd.gif") repeat-x scroll left bottom #228BC8;
+  border: 1px solid #228BC8;
+  color: #FFFFFF;
+  font-size: 12px;
+  margin: 10px 0;
+}
+
+.block.block-commons_profile .links .ur_action a:hover,
+.block.block-commons_profile .links .ur_action a:active {
+  text-decoration: none;
 }
 
 /* @group Facebook */

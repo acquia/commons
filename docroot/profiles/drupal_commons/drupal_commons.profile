@@ -39,9 +39,6 @@ function drupal_commons_profile_modules() {
     // Misc
     'vertical_tabs', 'transliteration', 'password_policy',
     
-    // Theme
-    'skinr',
-    
     // Strongarm
     'strongarm', 
     
