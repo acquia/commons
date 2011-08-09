@@ -24,11 +24,25 @@ function commons_subgroups_views_pre_view(&$view, &$display_id, &$args) {
         break; 
       }
     }
+    
+    // Format the parents into a breadcrumb
     if (!empty($parents)) {
       // Format a breadcrumb for the view header
       $header = t('<strong>Parent groups:</strong> !parents', array('!parents' => implode('&nbsp;&nbsp;>&nbsp;&nbsp;', $parents)));
-      // Override the header
-      $view->display_handler->override_option('header', $header);
     }
+    // If no parents are available, that means there is no family tree,
+    // meaning a user clicked on a (0), so load the node and provide a link
+    // back
+    else {
+      if ($parent = node_load($parent)) {
+        // Just in case..
+        if (og_is_group_type($parent->type)) {
+          $header = t('<strong>Parent groups:</strong> !parents', array('!parents' => l($parent->title, "node/{$parent->nid}")));
+        }
+      }
+    }
+    
+    // Override the header
+    $view->display_handler->override_option('header', $header);
   }
 }
