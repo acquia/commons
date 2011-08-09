@@ -305,6 +305,23 @@ function commons_status_streams_views_default_views() {
       'field' => 'status',
       'relationship' => 'none',
     ),
+    'uid' => array(
+      'operator' => '=',
+      'value' => '1',
+      'group' => '0',
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'id' => 'uid',
+      'table' => 'og_uid',
+      'field' => 'uid',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
   ));
   $handler->override_option('access', array(
     'type' => 'perm',
