@@ -207,7 +207,7 @@ form input.form-submit { /* Forced by Fusion */
   display: block;
 }
 
-.block .content ul li.views-row:after {
+.block .content .views-row:after {
   clear:both;
   display:block;
   visibility:hidden;
@@ -253,11 +253,12 @@ form input.form-submit { /* Forced by Fusion */
 .node .inner ul,
 .panel-pane .inner ul,
 .block .inner ul {
+  padding-left: 15px;
   margin-left: 0;
 }
 
-.node .content ul {
-  padding-left: 15px;
+#primary-menu.block ul {
+  padding-left: 0;
 }
 
 /* used in right side blocks */
@@ -274,8 +275,8 @@ form input.form-submit { /* Forced by Fusion */
   padding-left: 0;
 }
 
-.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-field-group-image-fid,
-.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-picture,
+.sidebar-last .block-views .content .view .view-content .views-field-field-group-image-fid,
+.sidebar-last .block-views .content .view .view-content .views-field-picture,
 .sidebar-last .block-views .content .view .view-content .views-row .views-field-picture {
   left: 0;
   margin: 0;
@@ -552,18 +553,20 @@ div.beat-item blockquote {
 
 /* @end */
 
-.view .view-content .item-list li.views-row .views-field-picture {
+.view .view-content .views-row .views-field-picture {
   float: left;
   margin: 0 10px 10px 0;
 }
 
-.view-groups-main-listing .view-content .item-list ul li .views-field-field-group-image-fid {
+.view-groups-main-listing .view-content .views-field-field-group-image-fid,
+.view-subgroups-main-listing .view-content .views-field-field-group-image-fid {
   float:left;
   width:68px;
   margin-right:10px;
 }
 
-.view-groups-main-listing .view-content .item-list ul li .views-field-field-group-image-fid img {
+.view-groups-main-listing .view-content .views-field-field-group-image-fid img,
+.view-subgroups-main-listing .view-content .views-field-field-group-image-fid img {
   width:66px;
   height:66px;
   border:solid 1px #c2c2c2;
