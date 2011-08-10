@@ -365,3 +365,15 @@ function commons_roots_user_relationships_remove_link($viewer, $relationship) {
 
   return $output;
 }
+
+/**
+ * This handles the logic of whether or not there should be a recipient link so
+ * that non-user recipient_links will be displayed.
+ */
+function commons_roots_preprocess_facebook_status_item(&$vars) {
+  $status = $vars['status'];
+  // Remove the recipient link if it is the recipient is the sender.
+  if ($status->type == 'user' && $status->sender == $status->recipient) {
+    unset($vars['recipient_link']);
+  }
+}
