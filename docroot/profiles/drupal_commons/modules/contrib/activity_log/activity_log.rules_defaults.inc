@@ -18,9 +18,15 @@ function activity_log_rules_defaults() {
   if (module_exists('fbss_rules')) {
     $rules += activity_log_rules_defaults_facebook_status_insert_user_self();
     $rules += activity_log_rules_defaults_facebook_status_insert_other();
+    if ($privacy = module_exists('fbss_privacy')) {
+      $rules += activity_log_rules_defaults_facebook_status_insert_private();
+    }
     if (module_exists('fbsmp')) {
       $rules += activity_log_rules_defaults_fbsmp_insert_user_self();
       $rules += activity_log_rules_defaults_fbsmp_insert_other();
+      if ($privacy) {
+        $rules += activity_log_rules_defaults_fbsmp_insert_private();
+      }
     }
   }
   if (module_exists('user_relationships_rules')) {
@@ -1606,7 +1612,7 @@ function activity_log_rules_defaults_facebook_status_insert_user_self() {
  * Other status update
  */
 function activity_log_rules_defaults_facebook_status_insert_other() {
-  return array (
+  return array(
     'rules_activity_log_facebook_status_insert_other' => 
     array (
       '#type' => 'rule',
@@ -1624,9 +1630,6 @@ function activity_log_rules_defaults_facebook_status_insert_other() {
       array (
         0 => 
         array (
-          '#negate' => 1,
-          '#weight' => 0,
-          '#type' => 'condition',
           '#settings' => 
           array (
             '#argument map' => 
@@ -1634,7 +1637,26 @@ function activity_log_rules_defaults_facebook_status_insert_other() {
               'status' => 'status',
             ),
           ),
-          '#name' => 'fbss_rules_is_self',
+          '#type' => 'condition',
+          '#name' => 'fbss_privacy_is_private',
+          '#info' => 
+          array (
+            'label' => 'Status was posted as private',
+            'arguments' => 
+            array (
+              'status' => 
+              array (
+                'type' => 'facebook_status',
+                'label' => 'The status',
+              ),
+            ),
+            'module' => 'Facebook-style Statuses',
+          ),
+          '#weight' => 0,
+          '#negate' => 1,
+        ),
+        1 => 
+        array (
           '#info' => 
           array (
             'label' => 'User updated their own status',
@@ -1649,30 +1671,24 @@ function activity_log_rules_defaults_facebook_status_insert_other() {
             ),
             'module' => 'Facebook-style Statuses',
           ),
+          '#weight' => 0,
+          '#name' => 'fbss_rules_is_self',
+          '#settings' => 
+          array (
+            '#argument map' => 
+            array (
+              'status' => 'status',
+            ),
+          ),
+          '#negate' => 1,
+          '#type' => 'condition',
         ),
       ),
       '#actions' => 
       array (
         0 => 
         array (
-          '#weight' => 0,
-          '#info' => 
-          array (
-            'label' => 'Log activity for the recipient and @mentioned users',
-            'label callback' => false,
-            'module' => 'Activity Log',
-            'eval input' => 
-            array (
-              0 => 'placeholder',
-              1 => 'grouping|group_summary',
-              2 => 'visibility|stream_owner_id',
-              3 => 'visibility|viewer_id',
-              4 => 'acting_uid',
-              5 => 'templates|en|template',
-              6 => 'grouping|templates|en|template',
-            ),
-          ),
-          '#name' => 'activity_log_log_action',
+          '#type' => 'action',
           '#settings' => 
           array (
             'placeholder' => '#!ACTIVITY_LOG_DELIMITER:',
@@ -1804,12 +1820,44 @@ function activity_log_rules_defaults_facebook_status_insert_other() {
               ),
             ),
           ),
-          '#type' => 'action',
+          '#name' => 'activity_log_log_action',
+          '#info' => 
+          array (
+            'label' => 'Log activity for the recipient and @mentioned users',
+            'label callback' => false,
+            'module' => 'Activity Log',
+            'eval input' => 
+            array (
+              0 => 'placeholder',
+              1 => 'grouping|group_summary',
+              2 => 'visibility|stream_owner_id',
+              3 => 'visibility|viewer_id',
+              4 => 'acting_uid',
+              5 => 'templates|en|template',
+              6 => 'grouping|templates|en|template',
+            ),
+          ),
+          '#weight' => 0,
         ),
         1 => 
         array (
-          '#weight' => 0,
-          '#type' => 'action',
+          '#info' => 
+          array (
+            'label' => 'Log activity for the acting user',
+            'label callback' => false,
+            'module' => 'Activity Log',
+            'eval input' => 
+            array (
+              0 => 'placeholder',
+              1 => 'grouping|group_summary',
+              2 => 'visibility|stream_owner_id',
+              3 => 'visibility|viewer_id',
+              4 => 'acting_uid',
+              5 => 'templates|en|template',
+              6 => 'grouping|templates|en|template',
+            ),
+          ),
+          '#name' => 'activity_log_log_action',
           '#settings' => 
           array (
             'placeholder' => '#!ACTIVITY_LOG_DELIMITER:',
@@ -1941,44 +1989,12 @@ function activity_log_rules_defaults_facebook_status_insert_other() {
               ),
             ),
           ),
-          '#name' => 'activity_log_log_action',
-          '#info' => 
-          array (
-            'label' => 'Log activity for the acting user',
-            'label callback' => false,
-            'module' => 'Activity Log',
-            'eval input' => 
-            array (
-              0 => 'placeholder',
-              1 => 'grouping|group_summary',
-              2 => 'visibility|stream_owner_id',
-              3 => 'visibility|viewer_id',
-              4 => 'acting_uid',
-              5 => 'templates|en|template',
-              6 => 'grouping|templates|en|template',
-            ),
-          ),
+          '#type' => 'action',
+          '#weight' => 0,
         ),
         2 => 
         array (
-          '#weight' => 0,
-          '#info' => 
-          array (
-            'label' => 'Log activity for members of the active group',
-            'label callback' => false,
-            'module' => 'Activity Log',
-            'eval input' => 
-            array (
-              0 => 'placeholder',
-              1 => 'grouping|group_summary',
-              2 => 'visibility|stream_owner_id',
-              3 => 'visibility|viewer_id',
-              4 => 'acting_uid',
-              5 => 'templates|en|template',
-              6 => 'grouping|templates|en|template',
-            ),
-          ),
-          '#name' => 'activity_log_log_action',
+          '#type' => 'action',
           '#settings' => 
           array (
             'placeholder' => '#!ACTIVITY_LOG_DELIMITER:',
@@ -2108,7 +2124,24 @@ function activity_log_rules_defaults_facebook_status_insert_other() {
               ),
             ),
           ),
-          '#type' => 'action',
+          '#name' => 'activity_log_log_action',
+          '#info' => 
+          array (
+            'label' => 'Log activity for members of the active group',
+            'label callback' => false,
+            'module' => 'Activity Log',
+            'eval input' => 
+            array (
+              0 => 'placeholder',
+              1 => 'grouping|group_summary',
+              2 => 'visibility|stream_owner_id',
+              3 => 'visibility|viewer_id',
+              4 => 'acting_uid',
+              5 => 'templates|en|template',
+              6 => 'grouping|templates|en|template',
+            ),
+          ),
+          '#weight' => 0,
         ),
       ),
       '#version' => 6003,
@@ -2488,10 +2521,10 @@ function activity_log_rules_defaults_fbsmp_insert_other() {
       array (
         0 => 
         array (
-          '#name' => 'fbss_rules_is_self',
+          '#name' => 'fbss_privacy_is_private',
           '#info' => 
           array (
-            'label' => 'User updated their own status',
+            'label' => 'User posted a private status',
             'label callback' => false,
             'arguments' => 
             array (
@@ -2514,12 +2547,57 @@ function activity_log_rules_defaults_fbsmp_insert_other() {
           '#weight' => 0,
           '#negate' => 1,
         ),
+        1 => 
+        array (
+          '#weight' => 0,
+          '#negate' => 1,
+          '#type' => 'condition',
+          '#settings' => 
+          array (
+            '#argument map' => 
+            array (
+              'status' => 'status',
+            ),
+          ),
+          '#info' => 
+          array (
+            'label' => 'User updated their own status',
+            'label callback' => false,
+            'arguments' => 
+            array (
+              'status' => 
+              array (
+                'type' => 'facebook_status',
+                'label' => 'The status',
+              ),
+            ),
+            'module' => 'Facebook-style Statuses',
+          ),
+          '#name' => 'fbss_rules_is_self',
+        ),
       ),
       '#actions' => 
       array (
         0 => 
         array (
-          '#type' => 'action',
+          '#weight' => 0,
+          '#info' => 
+          array (
+            'label' => 'Log activity for the recipient and @mentioned users',
+            'label callback' => false,
+            'module' => 'Activity Log',
+            'eval input' => 
+            array (
+              0 => 'placeholder',
+              1 => 'grouping|group_summary',
+              2 => 'visibility|stream_owner_id',
+              3 => 'visibility|viewer_id',
+              4 => 'acting_uid',
+              5 => 'templates|en|template',
+              6 => 'grouping|templates|en|template',
+            ),
+          ),
+          '#name' => 'activity_log_log_action',
           '#settings' => 
           array (
             'placeholder' => '#!ACTIVITY_LOG_DELIMITER:',
@@ -2651,45 +2729,11 @@ function activity_log_rules_defaults_fbsmp_insert_other() {
               ),
             ),
           ),
-          '#name' => 'activity_log_log_action',
-          '#info' => 
-          array (
-            'label' => 'Log activity for the recipient and @mentioned users',
-            'label callback' => false,
-            'module' => 'Activity Log',
-            'eval input' => 
-            array (
-              0 => 'placeholder',
-              1 => 'grouping|group_summary',
-              2 => 'visibility|stream_owner_id',
-              3 => 'visibility|viewer_id',
-              4 => 'acting_uid',
-              5 => 'templates|en|template',
-              6 => 'grouping|templates|en|template',
-            ),
-          ),
-          '#weight' => 0,
+          '#type' => 'action',
         ),
         1 => 
         array (
-          '#weight' => 0,
-          '#info' => 
-          array (
-            'label' => 'Log activity for the acting user',
-            'label callback' => false,
-            'module' => 'Activity Log',
-            'eval input' => 
-            array (
-              0 => 'placeholder',
-              1 => 'grouping|group_summary',
-              2 => 'visibility|stream_owner_id',
-              3 => 'visibility|viewer_id',
-              4 => 'acting_uid',
-              5 => 'templates|en|template',
-              6 => 'grouping|templates|en|template',
-            ),
-          ),
-          '#name' => 'activity_log_log_action',
+          '#type' => 'action',
           '#settings' => 
           array (
             'placeholder' => '#!ACTIVITY_LOG_DELIMITER:',
@@ -2817,11 +2861,45 @@ function activity_log_rules_defaults_fbsmp_insert_other() {
               ),
             ),
           ),
-          '#type' => 'action',
+          '#name' => 'activity_log_log_action',
+          '#info' => 
+          array (
+            'label' => 'Log activity for the acting user',
+            'label callback' => false,
+            'module' => 'Activity Log',
+            'eval input' => 
+            array (
+              0 => 'placeholder',
+              1 => 'grouping|group_summary',
+              2 => 'visibility|stream_owner_id',
+              3 => 'visibility|viewer_id',
+              4 => 'acting_uid',
+              5 => 'templates|en|template',
+              6 => 'grouping|templates|en|template',
+            ),
+          ),
+          '#weight' => 0,
         ),
         2 => 
         array (
-          '#type' => 'action',
+          '#weight' => 0,
+          '#info' => 
+          array (
+            'label' => 'Log activity for members of the active group',
+            'label callback' => false,
+            'module' => 'Activity Log',
+            'eval input' => 
+            array (
+              0 => 'placeholder',
+              1 => 'grouping|group_summary',
+              2 => 'visibility|stream_owner_id',
+              3 => 'visibility|viewer_id',
+              4 => 'acting_uid',
+              5 => 'templates|en|template',
+              6 => 'grouping|templates|en|template',
+            ),
+          ),
+          '#name' => 'activity_log_log_action',
           '#settings' => 
           array (
             'placeholder' => '#!ACTIVITY_LOG_DELIMITER:',
@@ -2951,24 +3029,7 @@ function activity_log_rules_defaults_fbsmp_insert_other() {
               ),
             ),
           ),
-          '#name' => 'activity_log_log_action',
-          '#info' => 
-          array (
-            'label' => 'Log activity for members of the active group',
-            'label callback' => false,
-            'module' => 'Activity Log',
-            'eval input' => 
-            array (
-              0 => 'placeholder',
-              1 => 'grouping|group_summary',
-              2 => 'visibility|stream_owner_id',
-              3 => 'visibility|viewer_id',
-              4 => 'acting_uid',
-              5 => 'templates|en|template',
-              6 => 'grouping|templates|en|template',
-            ),
-          ),
-          '#weight' => 0,
+          '#type' => 'action',
         ),
       ),
       '#version' => 6003,
@@ -3780,6 +3841,479 @@ function activity_log_rules_defaults_ur_request() {
             ),
           ),
           '#type' => 'action',
+        ),
+      ),
+      '#version' => 6003,
+    ),
+  );
+}
+
+/**
+ * Private fbss rule
+ */
+function activity_log_rules_defaults_facebook_status_insert_private() {
+  return array (
+    'rules_activity_log_facebook_status_insert_private' => 
+    array (
+      '#type' => 'rule',
+      '#set' => 'event_facebook_status_save',
+      '#label' => 'Log activity when a user sends a private message',
+      '#active' => 1,
+      '#weight' => '0',
+      '#categories' => 
+      array (
+        0 => 'activity_log',
+        1 => 'facebook_status',
+      ),
+      '#status' => 'custom',
+      '#conditions' => 
+      array (
+        0 => 
+        array (
+          '#weight' => 0,
+          '#info' => 
+          array (
+            'label' => 'Status was posted as private',
+            'arguments' => 
+            array (
+              'status' => 
+              array (
+                'type' => 'facebook_status',
+                'label' => 'The status',
+              ),
+            ),
+            'module' => 'Facebook-style Statuses',
+          ),
+          '#name' => 'fbss_privacy_is_private',
+          '#type' => 'condition',
+          '#settings' => 
+          array (
+            '#argument map' => 
+            array (
+              'status' => 'status',
+            ),
+          ),
+        ),
+        1 => 
+        array (
+          '#type' => 'condition',
+          '#negate' => 1,
+          '#settings' => 
+          array (
+            '#argument map' => 
+            array (
+              'status' => 'status',
+            ),
+          ),
+          '#name' => 'fbss_rules_is_self',
+          '#info' => 
+          array (
+            'label' => 'User updated their own status',
+            'label callback' => false,
+            'arguments' => 
+            array (
+              'status' => 
+              array (
+                'type' => 'facebook_status',
+                'label' => 'The status',
+              ),
+            ),
+            'module' => 'Facebook-style Statuses',
+          ),
+          '#weight' => 0,
+        ),
+      ),
+      '#actions' => 
+      array (
+        0 => 
+        array (
+          '#weight' => 0,
+          '#info' => 
+          array (
+            'label' => 'Log activity for the sender and recipient',
+            'label callback' => false,
+            'module' => 'Activity Log',
+            'eval input' => 
+            array (
+              0 => 'placeholder',
+              1 => 'grouping|group_summary',
+              2 => 'visibility|stream_owner_id',
+              3 => 'visibility|viewer_id',
+              4 => 'acting_uid',
+              5 => 'templates|en|template',
+              6 => 'grouping|templates|en|template',
+            ),
+          ),
+          '#name' => 'activity_log_log_action',
+          '#settings' => 
+          array (
+            'placeholder' => '#!ACTIVITY_LOG_DELIMITER:',
+            'public_name' => '',
+            'templates' => 
+            array (
+              'en' => 
+              array (
+                'template' => '[status:status-themed]',
+              ),
+            ),
+            'grouping' => 
+            array (
+              'group_method' => 'none',
+              'group_interval' => '86400',
+              'group_max' => '100',
+              'group_summary' => '',
+              'collapse_method' => 'activity_log_collapse_inline',
+              'templates' => 
+              array (
+                'en' => 
+                array (
+                  'template' => '',
+                ),
+              ),
+            ),
+            'visibility' => 
+            array (
+              'stream_owner_entity_group' => 
+              array (
+                'acting user' => 'acting user',
+                'status recipient' => 'status recipient',
+                'custom' => 0,
+                'target entity' => 0,
+                'active group' => 0,
+                'active group members' => 0,
+                'active group admin' => 0,
+                'acting user relationships' => 0,
+                'custom user relationships' => 0,
+                'acting user relationships 1' => 0,
+                'custom user relationships 1' => 0,
+                'active group relationships acting user' => 0,
+                'active group relationships custom user' => 0,
+                'active group relationships 1 acting user' => 0,
+                'active group relationships 1 custom user' => 0,
+                'mentioned users' => 0,
+                'hashtag terms' => 0,
+              ),
+              'stream_owner_id' => '[status:recipient-id]',
+              'stream_owner_type' => 'user',
+              'viewer_entity_group' => 
+              array (
+                'acting user' => 'acting user',
+                'status recipient' => 'status recipient',
+                'everyone' => 0,
+                'everyone_except_active' => 0,
+                'everyone_except_custom' => 0,
+                'custom' => 0,
+                'target entity' => 0,
+                'stream_owner' => 0,
+                'not_stream_owner' => 0,
+                'active group members' => 0,
+                'active group admin' => 0,
+                'acting user relationships' => 0,
+                'custom user relationships' => 0,
+                'acting user relationships 1' => 0,
+                'custom user relationships 1' => 0,
+                'active group relationships acting user' => 0,
+                'active group relationships custom user' => 0,
+                'active group relationships 1 acting user' => 0,
+                'active group relationships 1 custom user' => 0,
+                'mentioned users' => 0,
+              ),
+              'viewer_id' => '',
+            ),
+            'cache' => 
+            array (
+              'cache' => 0,
+              'resources' => '',
+            ),
+            'acting_uid' => '[status:sender-uid]',
+            'display_type' => 'web',
+            'tid' => '10',
+            '#eval input' => 
+            array (
+              'token_rules_input_evaluator' => 
+              array (
+                'placeholder' => 
+                array (
+                  0 => ':global',
+                ),
+                'grouping|group_summary' => 
+                array (
+                  0 => ':global',
+                ),
+                'visibility|stream_owner_id' => 
+                array (
+                  0 => 'status',
+                  1 => ':global',
+                ),
+                'visibility|viewer_id' => 
+                array (
+                  0 => ':global',
+                ),
+                'acting_uid' => 
+                array (
+                  0 => 'status',
+                  1 => ':global',
+                ),
+                'templates|en|template' => 
+                array (
+                  0 => 'status',
+                  1 => ':global',
+                ),
+                'grouping|templates|en|template' => 
+                array (
+                  0 => ':global',
+                ),
+              ),
+              'activity_log_input_evaluator_process' => 
+              array (
+                'placeholder' => true,
+                'grouping|group_summary' => true,
+                'visibility|stream_owner_id' => true,
+                'visibility|viewer_id' => true,
+                'acting_uid' => true,
+                'templates|en|template' => true,
+                'grouping|templates|en|template' => true,
+              ),
+            ),
+          ),
+          '#type' => 'action',
+        ),
+      ),
+      '#version' => 6003,
+    ),
+  );
+}
+
+/**
+ * Private fbsmp rule.
+ */
+function activity_log_rules_defaults_fbsmp_insert_private() {
+  return array (
+    'rules_log_activity_when_a_user_sends_a_private_message_with_an_attachment' => 
+    array (
+      '#type' => 'rule',
+      '#set' => 'event_fbsmp_add_status',
+      '#label' => 'Log activity when a user sends a private message with an attachment',
+      '#active' => 1,
+      '#weight' => '0',
+      '#categories' => 
+      array (
+        0 => 'activity_log',
+        1 => 'fbsmp',
+      ),
+      '#status' => 'custom',
+      '#conditions' => 
+      array (
+        0 => 
+        array (
+          '#weight' => 0,
+          '#type' => 'condition',
+          '#settings' => 
+          array (
+            '#argument map' => 
+            array (
+              'status' => 'status',
+            ),
+          ),
+          '#info' => 
+          array (
+            'label' => 'User posted a private status',
+            'label callback' => false,
+            'arguments' => 
+            array (
+              'status' => 
+              array (
+                'type' => 'facebook_status',
+                'label' => 'The status',
+              ),
+            ),
+            'module' => 'Facebook-style Statuses',
+          ),
+          '#name' => 'fbss_privacy_is_private',
+        ),
+        1 => 
+        array (
+          '#info' => 
+          array (
+            'label' => 'User updated their own status',
+            'label callback' => false,
+            'arguments' => 
+            array (
+              'status' => 
+              array (
+                'type' => 'facebook_status',
+                'label' => 'The status',
+              ),
+            ),
+            'module' => 'Facebook-style Statuses',
+          ),
+          '#name' => 'fbss_rules_is_self',
+          '#settings' => 
+          array (
+            '#argument map' => 
+            array (
+              'status' => 'status',
+            ),
+          ),
+          '#type' => 'condition',
+          '#negate' => 1,
+          '#weight' => 0,
+        ),
+      ),
+      '#actions' => 
+      array (
+        0 => 
+        array (
+          '#type' => 'action',
+          '#settings' => 
+          array (
+            'placeholder' => '#!ACTIVITY_LOG_DELIMITER:',
+            'public_name' => '',
+            'templates' => 
+            array (
+              'en' => 
+              array (
+                'template' => '[status:status-themed]',
+              ),
+            ),
+            'grouping' => 
+            array (
+              'group_method' => 'none',
+              'group_interval' => '86400',
+              'group_max' => '100',
+              'group_summary' => '',
+              'collapse_method' => 'activity_log_collapse_inline',
+              'templates' => 
+              array (
+                'en' => 
+                array (
+                  'template' => '',
+                ),
+              ),
+            ),
+            'visibility' => 
+            array (
+              'stream_owner_entity_group' => 
+              array (
+                'acting user' => 'acting user',
+                'status recipient' => 'status recipient',
+                'custom' => 0,
+                'target entity' => 0,
+                'active group' => 0,
+                'active group members' => 0,
+                'active group admin' => 0,
+                'acting user relationships' => 0,
+                'custom user relationships' => 0,
+                'acting user relationships 1' => 0,
+                'custom user relationships 1' => 0,
+                'active group relationships acting user' => 0,
+                'active group relationships custom user' => 0,
+                'active group relationships 1 acting user' => 0,
+                'active group relationships 1 custom user' => 0,
+                'mentioned users' => 0,
+                'hashtag terms' => 0,
+              ),
+              'stream_owner_id' => '[status:recipient-id]',
+              'stream_owner_type' => 'user',
+              'viewer_entity_group' => 
+              array (
+                'acting user' => 'acting user',
+                'status recipient' => 'status recipient',
+                'everyone' => 0,
+                'everyone_except_active' => 0,
+                'everyone_except_custom' => 0,
+                'custom' => 0,
+                'target entity' => 0,
+                'stream_owner' => 0,
+                'not_stream_owner' => 0,
+                'active group members' => 0,
+                'active group admin' => 0,
+                'acting user relationships' => 0,
+                'custom user relationships' => 0,
+                'acting user relationships 1' => 0,
+                'custom user relationships 1' => 0,
+                'active group relationships acting user' => 0,
+                'active group relationships custom user' => 0,
+                'active group relationships 1 acting user' => 0,
+                'active group relationships 1 custom user' => 0,
+                'mentioned users' => 0,
+              ),
+              'viewer_id' => '',
+            ),
+            'cache' => 
+            array (
+              'cache' => 0,
+              'resources' => '',
+            ),
+            'acting_uid' => '[status:sender-uid]',
+            'display_type' => 'web',
+            'tid' => '15',
+            '#eval input' => 
+            array (
+              'token_rules_input_evaluator' => 
+              array (
+                'placeholder' => 
+                array (
+                  0 => ':global',
+                ),
+                'grouping|group_summary' => 
+                array (
+                  0 => ':global',
+                ),
+                'visibility|stream_owner_id' => 
+                array (
+                  0 => 'status',
+                  1 => ':global',
+                ),
+                'visibility|viewer_id' => 
+                array (
+                  0 => ':global',
+                ),
+                'acting_uid' => 
+                array (
+                  0 => 'status',
+                  1 => ':global',
+                ),
+                'templates|en|template' => 
+                array (
+                  0 => 'status',
+                  1 => ':global',
+                ),
+                'grouping|templates|en|template' => 
+                array (
+                  0 => ':global',
+                ),
+              ),
+              'activity_log_input_evaluator_process' => 
+              array (
+                'placeholder' => true,
+                'grouping|group_summary' => true,
+                'visibility|stream_owner_id' => true,
+                'visibility|viewer_id' => true,
+                'acting_uid' => true,
+                'templates|en|template' => true,
+                'grouping|templates|en|template' => true,
+              ),
+            ),
+          ),
+          '#name' => 'activity_log_log_action',
+          '#info' => 
+          array (
+            'label' => 'Log activity for the sender and recipient',
+            'label callback' => false,
+            'module' => 'Activity Log',
+            'eval input' => 
+            array (
+              0 => 'placeholder',
+              1 => 'grouping|group_summary',
+              2 => 'visibility|stream_owner_id',
+              3 => 'visibility|viewer_id',
+              4 => 'acting_uid',
+              5 => 'templates|en|template',
+              6 => 'grouping|templates|en|template',
+            ),
+          ),
+          '#weight' => 0,
         ),
       ),
       '#version' => 6003,
