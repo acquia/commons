@@ -42,6 +42,7 @@ function theme_activity_log_item($record, $reset = FALSE) {
     else {
       $classes[] = 'activity-message-grouped';
     }
+    $classes[] = 'clearfix';
     $message = '<div id="activity-log-item-'. $record->mid .'" class="activity-log-message '. implode(' ', $classes) .'">'. activity_log_evaluate_record($record) .'</div>';
     $record->cached[$user_lang] = $message;
     db_query("UPDATE {activity_log_messages} SET cached = '%s' WHERE mid = %d", serialize($record->cached), $record->mid);

@@ -400,6 +400,9 @@ function activity_log_token_list($type = 'all') {
   if ($type == 'node' && module_exists('og')) {
     $tokens['node']['og-url'] = t("The absolute URL of the node's primary group, if applicable.");
   }
+  if ($type == 'user' || $type == 'all') {
+    $tokens['user']['picture'] = t("The user's picture");
+  }
   return $tokens;
 }
 
@@ -418,5 +421,15 @@ function activity_log_token_values($type, $object = NULL, $options = array()) {
     $gids = array_keys(array_filter($object->og_groups));
     $values['og-url'] = url('node/'. $gids[0], array('absolute' => TRUE));
   }
+  if ($type == 'user') {
+    if (!empty($object)) {
+      $account = $object;
+    }
+    else {
+      $account = user_load(array('uid' => $GLOBALS['user']->uid));
+    }
+    $values['picture'] = theme('user_picture', $account);
+  }
+  
   return $values;
 }
