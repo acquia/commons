@@ -552,7 +552,7 @@ Works well with inline login or inline menu block style */
 form#search-theme-form { background:transparent url(../images/search_box.gif) no-repeat 0px 7px; width:250px; padding-bottom:6px;}
 #edit-search-theme-form-1-wrapper label { display:none;}
 #edit-search-theme-form-1-wrapper .form-item { margin:0px; }
-#search.container-inline div { float:left; width:216px;}
+#search.container-inline div:first-child { float:left; width:216px;}
 #edit-search-theme-form-1-wrapper input  {
 	border: solid 1px #fff;
 	margin-left:2px;
@@ -566,12 +566,61 @@ form#search-theme-form input.form-submit {
 	margin-left:0px;
 	margin-right:0px;
 }
+.contextual-search-wrapper {
+  margin-top: -9px;
+}
+.contextual-search-wrapper .contextual-search-launcher,
+.contextual-search-processed .contextual-search-wrapper ul.contextual-search-list {
+  background-color: #ccc;
+  background-image: url('../images/dropdown.png');
+  -moz-border-radius: 0 0 5px 5px;
+  -webkit-border-radius: 0 0 5px 5px;
+  border-radius: 0 0 5px 5px;
+  margin-right: 5px;
+  padding-bottom: 2px;
+  padding-top: 2px;
+}
+
+.contextual-search-wrapper .contextual-search-launcher,
+.contextual-search-processed .contextual-search-wrapper ul.contextual-search-list li a {
+  color: #464646;
+}
+
+.contextual-search-processed .contextual-search-wrapper ul.contextual-search-list li a {
+  margin-left: -7px;
+  margin-right: -7px;
+  padding-left: 7px;
+  padding-right: 7px;
+}
+
+.contextual-search-processed .contextual-search-wrapper ul.contextual-search-list li a.first {
+  margin-top: -2px;
+  padding-top: 2px;
+}
+
+.contextual-search-processed .contextual-search-wrapper ul.contextual-search-list li a.last {
+  -moz-border-radius: 0 0 5px 5px;
+  -webkit-border-radius: 0 0 5px 5px;
+  border-radius: 0 0 5px 5px;
+  margin-bottom: -2px;
+  padding-bottom: 2px;
+}
+
+.contextual-search-wrapper .contextual-search-launcher:hover,
+.contextual-search-processed .contextual-search-wrapper ul.contextual-search-list li a:hover {
+  background-color: #bbb;
+  text-decoration: none;
+}
+
 /*  Preface Regions-------------------------------------------------------------- */
 
 /* The Preface Top region sits between the header and the Main Area (columns, sidebars, and main content).  The Preface Bottom region is inside the Main Area. */
 
-.preface-top-wrapper {}
-.preface-top { overflow: hidden; background:transparent url(../images/rightbar_shadow.gif) repeat-y top right; }
+.preface-top-wrapper {
+  position: relative;
+  z-index: 3;
+}
+.preface-top { overflow: visible; background:transparent url(../images/rightbar_shadow.gif) repeat-y top right; }
 .preface-top-inner {}
 .preface-bottom {}
 .preface-bottom-inner {}
