@@ -3,6 +3,20 @@
 include_once('commons_subgroups.features.inc');
 
 /**
+ * Implementation of hook_form_FORM_ID_alter()
+ * 
+ * Alter the commons_core create group block
+ */
+function commons_subgroups_form_commons_core_create_group_form_alter(&$form, &$form_state) {
+  // See if we're inside a subgroup list
+  if (arg(0) == 'groups' && arg(1) == 'sub' && is_numeric(arg(2))) {
+    // Append a URL query to set the default parent to the one
+    // we're viewing subgroups for
+    $form['#action'] .= '?og_parent=' . arg(2);
+  }
+}
+
+/**
  * Implementation of hook_views_pre_view()
  */
 function commons_subgroups_views_post_render(&$view, &$output, &$cache) {
