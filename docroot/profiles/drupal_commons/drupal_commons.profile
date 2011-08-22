@@ -563,6 +563,16 @@ function drupal_commons_include($name, $dir = 'includes') {
 }
 
 /**
+ * Alter the install profile selection form
+ */
+function system_form_install_select_profile_form_alter(&$form, $form_state) {
+  foreach($form['profile'] as $key => $element) {
+    // Set Commons as the default
+    $form['profile'][$key]['#value'] = 'drupal_commons';
+  }
+}
+
+/**
  * Alter the install profile configuration
  */
 function system_form_install_configure_form_alter(&$form, $form_state) {
