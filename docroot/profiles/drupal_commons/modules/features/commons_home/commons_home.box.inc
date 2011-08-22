@@ -13,7 +13,7 @@ function commons_home_default_box() {
   $box->title = 'Community Powered Innovation';
   $box->description = 'Homepage Commons information';
   $box->options = array(
-    'body' => '<p>Welcome to your Drupal Commons installation, your ready-to-use solution for communities of all types - from intranets to customer community sites and more. Next, you may want to:</p>
+    'body' => '<p>Welcome to your Commons installation, your ready-to-use solution for communities of all types - from intranets to customer community sites and more. Next, you may want to:</p>
 
 <div class="intro-textblock">
 <h3>Customize your site</h3>

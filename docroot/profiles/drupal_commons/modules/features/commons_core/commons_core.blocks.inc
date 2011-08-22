@@ -35,7 +35,7 @@ function _commons_core_block_list() {
     'cache' => BLOCK_CACHE_GLOBAL,
   );
   $blocks['commons_info'] = array(
-    'info' => t('Drupal Commons information'),
+    'info' => t('Commons information'),
     'cache' => BLOCK_CACHE_GLOBAL,
   );
   $blocks['header_login'] = array(
