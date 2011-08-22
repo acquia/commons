@@ -118,7 +118,7 @@ function commons_profile_views_pre_render(&$view) {
  */
 function commons_profile_views_pre_view(&$view) {
   // When viewing the "Friends" block
-  if ($view->name == 'profile_friends') {
+  if ($view->name == 'profile_following') {
     // Get the current user being viewed
     if ($account = _commons_profile_get_current_user()) {
       // Get the set title
