@@ -18,7 +18,7 @@ function commons_subgroups_views_pre_view(&$view, &$display_id, &$args) {
     // Create a string of parents
     $parents = array();
     foreach ($tree as $nid => $group) {
-      $parents[] = '<em>' . l(check_plain($group->title), "node/{$group->nid}") . '</em>';
+      $parents[] = '<em>' . l(check_plain($group->title), "groups/sub/{$group->nid}") . '</em>';
       // If we're at the parent group, stop iterating
       if ($parent == $nid) {
         break; 
@@ -28,7 +28,7 @@ function commons_subgroups_views_pre_view(&$view, &$display_id, &$args) {
     // Format the parents into a breadcrumb
     if (!empty($parents)) {
       // Format a breadcrumb for the view header
-      $header = t('<strong>Parent groups:</strong> !parents', array('!parents' => implode('&nbsp;&nbsp;>&nbsp;&nbsp;', $parents)));
+      $header = t('<strong>Parent group(s):</strong> !parents', array('!parents' => implode('&nbsp;&nbsp;>&nbsp;&nbsp;', $parents)));
     }
     // If no parents are available, that means there is no family tree,
     // meaning a user clicked on a (0), so load the node and provide a link
@@ -37,7 +37,7 @@ function commons_subgroups_views_pre_view(&$view, &$display_id, &$args) {
       if ($parent = node_load($parent)) {
         // Just in case..
         if (og_is_group_type($parent->type)) {
-          $header = t('<strong>Parent groups:</strong> !parents', array('!parents' => l($parent->title, "node/{$parent->nid}")));
+          $header = t('<strong>Parent group(s):</strong> !parent', array('!parent' => l($parent->title, "groups/sub/{$parent->nid}")));
         }
       }
     }

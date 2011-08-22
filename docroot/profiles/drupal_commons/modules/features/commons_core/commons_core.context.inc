@@ -184,6 +184,7 @@ function commons_core_context_default_contexts() {
     'path' => array(
       'values' => array(
         'groups' => 'groups',
+        'groups/*' => 'groups/*',
       ),
     ),
   );
