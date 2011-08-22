@@ -5,10 +5,9 @@
  * Breadcrumb themeing
  */
 function commons_connect_breadcrumb($breadcrumb) {
-  $breadcrumb[] = drupal_get_title();
   if (!empty($breadcrumb)) {
     $html = '<div class="crumbtitle">' . t('You are here:') . '</div>';
-	$html .= '<div class="breadcrumb">'. implode(' &raquo; ', $breadcrumb) .'</div>';
+	  $html .= '<div class="breadcrumb">'. implode(' &raquo; ', $breadcrumb) .'</div>';
     return $html;
   }
 }
