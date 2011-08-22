@@ -30,7 +30,7 @@ function commons_status_streams_install() {
       $sids[] = $result->sid;
     }
     if (!empty($sids)) {
-      $placeholders = $placeholders = db_placeholders($sids);
+      $placeholders = db_placeholders($sids);
       foreach (array('notifications_fields', 'notifications_queue', 'notifications') as $table) {
         db_query('DELETE FROM {' . $table . '} WHERE sid IN (' . $placeholders . ')', $sids);
       }
