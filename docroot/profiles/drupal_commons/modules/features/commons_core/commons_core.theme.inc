@@ -28,7 +28,7 @@ function theme_commons_core_info_block() {
   
   $content .= '<div id="acquia-footer-message">';
 
-  $content .= '<a href="http://acquia.com/drupalcommons" title="Commons social business software">';
+  $content .= '<a href="http://acquia.com/drupalcommons" title="' . t('Commons social business software') . '">';
   $content .= theme('image', 'profiles/drupal_commons/images/commons_droplet.png', t('Commons social business software'), t('Commons social business software'));
   $content .= '</a>';
   $content .= '<span>';
@@ -39,9 +39,9 @@ function theme_commons_core_info_block() {
   
   $content .= '<div id="fusion-footer-message">';
   $content .= t('Theme by') . '&nbsp;';
-  $content .= '<a href="http://www.topnotchthemes.com" title="Drupal Themes by TopNotchThemes">TopNotchThemes</a>';
+  $content .= '<a href="http://www.topnotchthemes.com" title="' . t('Drupal Themes by TopNotchThemes') . '">' . t('TopNotchThemes') . '</a>';
   $content .= ', ' . t('powered by') . '&nbsp;';
-  $content .= '<a href="http://fusiondrupalthemes.com" title="Premium Drupal themes powered by Fusion">Fusion</a>.';
+  $content .= '<a href="http://fusiondrupalthemes.com" title="' . t('Premium Drupal themes powered by Fusion') . '">' . t('Fusion') . '</a>.';
   $content .= '</div>';
   
   return $content;
