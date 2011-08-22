@@ -151,9 +151,9 @@ function commons_core_context_default_contexts() {
           'region' => 'sidebar_last',
           'weight' => 1,
         ),
-        'og_views-0' => array(
-          'module' => 'og_views',
-          'delta' => 0,
+        'views-24dcb59a56254e5a470ee2f23590eed2' => array(
+          'module' => 'views',
+          'delta' => '24dcb59a56254e5a470ee2f23590eed2',
           'region' => 'sidebar_last',
           'weight' => 3,
         ),

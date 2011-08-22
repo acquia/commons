@@ -157,9 +157,9 @@ function commons_core_menu_default_menu_links() {
   t('Groups');
   t('My bookmarks');
   t('My content');
-  t('My relationships');
   t('My groups');
   t('My profile');
+  t('My relationships');
   t('My stuff');
   t('Site analytics');
 

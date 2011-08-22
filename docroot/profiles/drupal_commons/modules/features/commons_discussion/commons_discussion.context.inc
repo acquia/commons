@@ -97,42 +97,6 @@ function commons_discussion_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'group-home-discussions';
-  $context->description = 'Discussion block for the group home page';
-  $context->tag = 'Discussion';
-  $context->conditions = array(
-    'node' => array(
-      'values' => array(
-        'group' => 'group',
-      ),
-      'options' => array(
-        'node_form' => '1',
-      ),
-    ),
-  );
-  $context->reactions = array(
-    'block' => array(
-      'blocks' => array(
-        'views-7c1e1568b7392470cbb8406f05742e0e' => array(
-          'module' => 'views',
-          'delta' => '7c1e1568b7392470cbb8406f05742e0e',
-          'region' => 'sidebar_last',
-          'weight' => 7,
-        ),
-      ),
-    ),
-  );
-  $context->condition_mode = 0;
-
-  // Translatables
-  // Included for use with string extractors like potx.
-  t('Discussion');
-  t('Discussion block for the group home page');
-
-  $export['group-home-discussions'] = $context;
-  $context = new stdClass;
-  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
-  $context->api_version = 3;
   $context->name = 'group-tab-discussions';
   $context->description = 'The discussion tab on a group';
   $context->tag = 'Discussion';

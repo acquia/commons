@@ -97,42 +97,6 @@ function commons_blog_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'group-home-blogs';
-  $context->description = 'Blog posts block for the group home page';
-  $context->tag = 'Blog';
-  $context->conditions = array(
-    'node' => array(
-      'values' => array(
-        'group' => 'group',
-      ),
-      'options' => array(
-        'node_form' => '1',
-      ),
-    ),
-  );
-  $context->reactions = array(
-    'block' => array(
-      'blocks' => array(
-        'views-group_block_blog_latest-block_1' => array(
-          'module' => 'views',
-          'delta' => 'group_block_blog_latest-block_1',
-          'region' => 'sidebar_last',
-          'weight' => 7,
-        ),
-      ),
-    ),
-  );
-  $context->condition_mode = 0;
-
-  // Translatables
-  // Included for use with string extractors like potx.
-  t('Blog');
-  t('Blog posts block for the group home page');
-
-  $export['group-home-blogs'] = $context;
-  $context = new stdClass;
-  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
-  $context->api_version = 3;
   $context->name = 'group-tab-blogs';
   $context->description = 'The blog tab on a group';
   $context->tag = 'Blog';
