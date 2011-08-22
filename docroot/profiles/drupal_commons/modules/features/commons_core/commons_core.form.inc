@@ -370,7 +370,7 @@ function commons_core_group_create_content_block_form(&$form_state) {
 /**
  * Submit handler for the group create content selector
  */
-function commons_core_group_create_content_block_form_submit(&$form, $form_state) {
+function commons_core_group_create_content_block_form_submit(&$form, &$form_state) {
   // Extract the group
   $group = $form_state['values']['group'];
   
@@ -389,7 +389,7 @@ function commons_core_group_create_content_block_form_submit(&$form, $form_state
   }
   
   // Redirect to the node form
-  drupal_goto("node/add/{$type}", $options);
+  $form_state['redirect'] = array("node/add/{$type}", $options);
 }
 
 /**
