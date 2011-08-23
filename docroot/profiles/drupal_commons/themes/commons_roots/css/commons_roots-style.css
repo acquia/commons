@@ -257,33 +257,6 @@ form input.form-submit { /* Forced by Fusion */
   margin-left: 0;
 }
 
-#primary-menu.block ul {
-  padding-left: 0;
-}
-
-/* used in right side blocks */
-.sidebar-last .block-views .view-content .item-list ul li {
-  background: none repeat scroll 0 0 transparent;
-  border-bottom: 0 none;
-  margin-bottom: 0;
-  padding: 0 0 10px 40px;
-  position: relative;
-  clear: both;
-}
-
-.sidebar-last .block-views .view-group-block-events-latest .item-list ul li { /* This is a hack. The pattern for media items in views is broken */
-  padding-left: 0;
-}
-
-.sidebar-last .block-views .content .view .view-content .views-field-field-group-image-fid,
-.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-picture,
-.sidebar-last .block-views .content .view .view-content .views-row .views-field-picture {
-  left: 0;
-  margin: 0;
-  position: absolute;
-  width: 30px;
-}
-
 .block .item-list ul,
 .view .item-list ul {
   padding: 0;
@@ -293,6 +266,73 @@ form input.form-submit { /* Forced by Fusion */
 .view .item-list ul li {
   list-style-position: inside;
 }
+
+#primary-menu.block ul {
+  padding-left: 0;
+}
+
+/* @group Sidebar blocks */
+
+.sidebar-last .block-views .views-row > span {
+  /* Some Views print the fields in spans instead of divs, so we need to 
+   * set these spans to display as block in order for the left margin to apply
+   * correctly. But we don't want all spans, just the children of the li */
+  display: block;
+}
+
+.sidebar-last .block-views .view-content .item-list ul li {
+  background: none repeat scroll 0 0 transparent;
+  border-bottom: 0 none;
+  margin-bottom: 0;
+  padding-bottom: 10px;
+  position: relative;
+  clear: both;
+}
+
+.sidebar-last .block-views .views-field-field-group-image-fid,
+.sidebar-last .block-views .views-field-picture,
+.sidebar-last .block-views .views-field-field-date-value { 
+  float: left;
+  margin-right: 10px; /* Largely unnecessary, but makes IE6 look better. */
+  width: 30px;
+}
+
+.sidebar-last .block-views .views-field-field-group-image-fid img,
+.sidebar-last .block-views .views-field-picture img {
+  width: 100%;
+  max-width: 100%;
+  height: auto; 
+}
+
+.sidebar-last .block-views .views-field-field-group-image-fid ~ *,
+.sidebar-last .block-views .views-field-picture ~ *,
+.sidebar-last .block-views .views-field-field-date-value ~ * {
+  /* This produces the left alignment of all text items after an image using
+   * the general sibling selector ~. When an image isn't present, the images
+   * shift to the left and no margin is applied. */
+  margin-left: 40px;
+}
+
+/* @group Sidebar block content adjustments */
+
+.sidebar-last .block-views .view-content p {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.sidebar-last .block ul {
+  padding-left: 0;
+}
+
+.sidebar-last .block ul li {
+  list-style: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* @end */
+
+/* @end */
 
 /* User profile about page */
 .view-profile-about-page label {
