@@ -88,9 +88,13 @@ ul.krumo-node ul{
 	background: transparent url(../images/gray-arrow-right.png) no-repeat 0 4px;
 	list-style-image: none;
 	list-style: none;
-	margin: 0 0 8px 0;
-	padding: 0 0 0 22px;
+	margin-bottom: 8px;
+	padding-left: 22px;
 	text-indent: 0;
+}
+
+.sidebar-last .item-list ul li {
+  padding-left: 0;
 }
 
 .node .inner .links li > a {
@@ -113,8 +117,8 @@ body {
 /*force the front page to be 960px wide*/
 .front .grid16-16 {
 	width: 960px;
-	max-width: 960px; !important
-	margin:  0 auto;
+	max-width: 960px;
+	margin: 0 auto;
 }
 
 
@@ -939,6 +943,8 @@ div.content-help-inner div.warning {
 .marker,
 .form-required {
 	color: #aa1144;
+}
+.form-required {
 	padding-left: .5em;
 }
 
