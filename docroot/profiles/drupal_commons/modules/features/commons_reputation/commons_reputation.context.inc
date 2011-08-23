@@ -37,7 +37,7 @@ function commons_reputation_context_default_contexts() {
   t('Activity');
   t('Adds the "Most active users" block to the activity stream page');
 
-  $export['activity_userpoints'] = $context;
+  $export['activity-stream-most_active_users'] = $context;
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
