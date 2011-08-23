@@ -18,7 +18,7 @@ function commons_profile_menu_default_menu_links() {
     'external' => '0',
     'has_children' => '0',
     'expanded' => '0',
-    'weight' => '20',
+    'weight' => '30',
     'parent_path' => 'community',
   );
   // Translatables

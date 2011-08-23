@@ -8,11 +8,14 @@ include_once('commons_status_streams.features.inc');
 function commons_status_streams_menu() {
   $items = array();
   $items['stream'] = array(
-    'title' => 'Activity stream',
-    'page callback' => 'theme',
-    'page arguments' => array('facebook_status_form_display', NULL, NULL, 'activity_log_stream'),
-    'access arguments' => array('view all activity messages'),
+    'title' => 'Stream',
+    'page callback' => 'commons_status_streams_stream_page',
+    'access callback' => TRUE,
     'description' => 'An activity dashboard page.',
+    'file' => 'commons_status_streams.pages.inc',
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 1,
+    'menu_name' => 'primary-links',
   );
   return $items;
 }
@@ -31,6 +34,14 @@ function commons_status_streams_form_system_site_information_settings_alter(&$fo
 }
 
 /**
+ * Implements hook_facebook_status_link_alter().
+ */
+function commons_status_streams_facebook_status_link_alter(&$links, $status) {
+  // Disable reply links on all status upates.
+  unset($links['respond']); 
+}
+
+/**
  * Implementation of hook_init().
  */
 function commons_status_streams_init() {
@@ -41,3 +52,4 @@ function commons_status_streams_init() {
     }
   }
 }
+

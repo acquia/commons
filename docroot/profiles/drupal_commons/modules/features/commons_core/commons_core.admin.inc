@@ -22,7 +22,7 @@ function commons_core_admin_settings() {
     '#type' => 'checkbox',
     '#title' => t('Force users to login'),
     '#default_value' => variable_get('commons_force_login', 0),
-    '#description' => t('If checked, anonymous users will be redirected from all pages to a log in page. Select this setting if your Drupal Commons site must be closed to the public, such as a company intranet.'),
+    '#description' => t('If checked, anonymous users will be redirected from all pages to a log in page. Select this setting if your Commons site must be closed to the public, such as a company intranet.'),
   );
   
   $form['login_settings']['commons_force_login_allowed_paths'] = array(

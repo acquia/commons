@@ -231,7 +231,8 @@ function theme_fbss_comments_items_email($c, $destination = '') {
   if (!$count) {
     return;
   }
-  $comments = array_pop($c);
+  $comments = array();
+  $comments[] = array_pop($c);
   if ($count > 1) {
     array_unshift($comments, array_pop($c));
   }

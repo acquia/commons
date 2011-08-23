@@ -88,9 +88,13 @@ ul.krumo-node ul{
 	background: transparent url(../images/gray-arrow-right.png) no-repeat 0 4px;
 	list-style-image: none;
 	list-style: none;
-	margin: 0 0 8px 0;
-	padding: 0 0 0 22px;
+	margin-bottom: 8px;
+	padding-left: 22px;
 	text-indent: 0;
+}
+
+.sidebar-last .item-list ul li {
+  padding-left: 0;
 }
 
 .node .inner .links li > a {
@@ -113,8 +117,8 @@ body {
 /*force the front page to be 960px wide*/
 .front .grid16-16 {
 	width: 960px;
-	max-width: 960px; !important
-	margin:  0 auto;
+	max-width: 960px;
+	margin: 0 auto;
 }
 
 
@@ -519,12 +523,15 @@ body {
 
 .contextual-search-processed .contextual-search-wrapper ul.contextual-search-list li a {
   margin-left: -7px;
-  margin-right: -7px;
+  margin-right: -17px;
   padding-left: 7px;
-  padding-right: 7px;
+  padding-right: 17px;
 }
 
 .contextual-search-processed .contextual-search-wrapper ul.contextual-search-list li a.first {
+  background-image: url('../images/dropdown.png');
+  background-position: right 10px;
+  background-repeat: no-repeat;
   margin-top: -4px;
   padding-top: 4px;
 }
@@ -980,6 +987,8 @@ div.content-help-inner div.warning {
 .marker,
 .form-required {
 	color: #aa1144;
+}
+.form-required {
 	padding-left: .5em;
 }
 
@@ -1999,7 +2008,7 @@ panels-pane.commons-colors-grayblue .inner {
 	color: #23295c;
 }
 
-/* Drupal Commons * Styling for Drupal Commons specific elements/-------------------------------------------------------------- */
+/* Commons * Styling for Commons specific elements/-------------------------------------------------------------- */
 
 /* User relationships module */
 textarea#edit-elaboration {

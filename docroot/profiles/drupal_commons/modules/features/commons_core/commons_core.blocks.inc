@@ -35,7 +35,7 @@ function _commons_core_block_list() {
     'cache' => BLOCK_CACHE_GLOBAL,
   );
   $blocks['commons_info'] = array(
-    'info' => t('Drupal Commons information'),
+    'info' => t('Commons information'),
     'cache' => BLOCK_CACHE_GLOBAL,
   );
   $blocks['header_login'] = array(
@@ -60,6 +60,10 @@ function _commons_core_block_list() {
   );
   $blocks['create_group'] = array(
     'info' => t('Create a group'),
+    'cache' => BLOCK_CACHE_GLOBAL,
+  );
+  $blocks['create_notice'] = array(
+    'info' => t('Create a notice'),
     'cache' => BLOCK_CACHE_GLOBAL,
   );
   return $blocks;
@@ -261,11 +265,27 @@ function _commons_core_group_members_block_view() {
  */
 function _commons_core_create_group_block_view() {
   // Check permissions
-  if (user_access('create group content')) {
+  if (node_access('create', 'group')) {
     module_load_include('inc', 'commons_core', 'commons_core.form');
     return array(
       'subject' => '',
       'content' => drupal_get_form('commons_core_create_group_form'),
+    );
+  }
+
+  return NULL;
+}
+
+/**
+ * Display the "create a notice" block
+ */
+function _commons_core_create_notice_block_view() {
+  // Check permissions
+  if (node_access('create', 'notice')) {
+    module_load_include('inc', 'commons_core', 'commons_core.form');
+    return array(
+      'subject' => '',
+      'content' => drupal_get_form('commons_core_create_notice_form'),
     );
   }
 

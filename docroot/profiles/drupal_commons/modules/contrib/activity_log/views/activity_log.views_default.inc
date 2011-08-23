@@ -167,6 +167,8 @@ function activity_log_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
+  $handler->override_option('empty', 'There are no visible status updates.');
+  $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
   $handler->override_option('items_per_page', 20);
   $handler->override_option('use_pager', '1');

@@ -21,9 +21,9 @@ function commons_profile_context_default_contexts() {
           'region' => 'sidebar_first',
           'weight' => 0,
         ),
-        'views-profile_friends-block_1' => array(
+        'views-profile_following-block_1' => array(
           'module' => 'views',
-          'delta' => 'profile_friends-block_1',
+          'delta' => 'profile_following-block_1',
           'region' => 'sidebar_first',
           'weight' => 1,
         ),
@@ -78,9 +78,9 @@ function commons_profile_context_default_contexts() {
           'region' => 'sidebar_last',
           'weight' => 0,
         ),
-        'views-profile_friends-block_1' => array(
+        'views-profile_following-block_1' => array(
           'module' => 'views',
-          'delta' => 'profile_friends-block_1',
+          'delta' => 'profile_following-block_1',
           'region' => 'sidebar_last',
           'weight' => 1,
         ),
@@ -126,9 +126,9 @@ function commons_profile_context_default_contexts() {
           'region' => 'sidebar_last',
           'weight' => 1,
         ),
-        'views-profile_friends-block_1' => array(
+        'views-profile_following-block_1' => array(
           'module' => 'views',
-          'delta' => 'profile_friends-block_1',
+          'delta' => 'profile_following-block_1',
           'region' => 'sidebar_last',
           'weight' => 2,
         ),
@@ -180,9 +180,9 @@ function commons_profile_context_default_contexts() {
           'region' => 'sidebar_last',
           'weight' => 2,
         ),
-        'views-profile_friends-block_1' => array(
+        'views-profile_following-block_1' => array(
           'module' => 'views',
-          'delta' => 'profile_friends-block_1',
+          'delta' => 'profile_following-block_1',
           'region' => 'sidebar_last',
           'weight' => 3,
         ),
@@ -224,9 +224,9 @@ function commons_profile_context_default_contexts() {
           'region' => 'sidebar_last',
           'weight' => 0,
         ),
-        'views-profile_friends-block_1' => array(
+        'views-profile_following-block_1' => array(
           'module' => 'views',
-          'delta' => 'profile_friends-block_1',
+          'delta' => 'profile_following-block_1',
           'region' => 'sidebar_last',
           'weight' => 1,
         ),
