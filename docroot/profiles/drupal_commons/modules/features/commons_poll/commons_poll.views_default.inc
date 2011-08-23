@@ -1053,6 +1053,17 @@ function commons_poll_views_default_views() {
       ),
       'relationship' => 'none',
     ),
+    'uid' => array(
+      'label' => 'Comment Author',
+      'required' => 0,
+      'id' => 'uid',
+      'table' => 'comments',
+      'field' => 'uid',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
   ));
   $handler->override_option('fields', array(
     'picture' => array(
@@ -1083,7 +1094,7 @@ function commons_poll_views_default_views() {
       'id' => 'picture',
       'table' => 'users',
       'field' => 'picture',
-      'relationship' => 'nid',
+      'relationship' => 'uid',
       'override' => array(
         'button' => 'Override',
       ),
@@ -1181,9 +1192,12 @@ function commons_poll_views_default_views() {
       'link_to_user' => 1,
       'exclude' => 0,
       'id' => 'name',
-      'table' => 'comments',
+      'table' => 'users',
       'field' => 'name',
-      'relationship' => 'none',
+      'relationship' => 'uid',
+      'override' => array(
+        'button' => 'Override',
+      ),
     ),
   ));
   $handler->override_option('sorts', array(
@@ -2362,6 +2376,17 @@ function commons_poll_views_default_views() {
       ),
       'relationship' => 'none',
     ),
+    'uid' => array(
+      'label' => 'Comment Author',
+      'required' => 0,
+      'id' => 'uid',
+      'table' => 'comments',
+      'field' => 'uid',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
   ));
   $handler->override_option('fields', array(
     'picture' => array(
@@ -2392,7 +2417,7 @@ function commons_poll_views_default_views() {
       'id' => 'picture',
       'table' => 'users',
       'field' => 'picture',
-      'relationship' => 'nid',
+      'relationship' => 'uid',
       'override' => array(
         'button' => 'Override',
       ),
@@ -2490,9 +2515,12 @@ function commons_poll_views_default_views() {
       'link_to_user' => 1,
       'exclude' => 0,
       'id' => 'name',
-      'table' => 'comments',
+      'table' => 'users',
       'field' => 'name',
-      'relationship' => 'none',
+      'relationship' => 'uid',
+      'override' => array(
+        'button' => 'Override',
+      ),
     ),
     'group_nid' => array(
       'label' => 'Groups',

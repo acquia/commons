@@ -109,6 +109,47 @@ function _digests_cron() {
     while ($record = db_fetch_object($mresult)) {
       $messages[] = $record;
     }
+    // Remove activity from $messages if the viewing user doesn't have permission to view the associated node.
+    // We use db_rewrite_sql() instead of running node_access() on each node for performance.
+    if (!empty($messages)) {
+      $aids = array();
+      $aid_to_result_key_map = array();
+      foreach ($messages as $key => $result) {
+        if ($result->target_type == 'node') {
+          $result_aids = array_filter(explode(',', $result->aids));
+          $aids = array_merge($aids, $result_aids);
+          foreach ($result_aids as $aid) {
+            $aid_to_result_key_map[$aid] = $key;
+          }
+        }
+      }
+      if (empty($aids)) {
+        continue;
+      }
+      $nids_result = db_query("SELECT aid, target_id AS nid FROM {activity_log_events} WHERE aid IN (". db_placeholders($aids) .")", $aids);
+      $nids = array();
+      while ($node = db_fetch_object($nids_result)) {
+        $nids[$node->aid] = $node->nid;
+      }
+      // If we're not dealing with any nodes, we don't need to check node access.
+      if (empty($nids)) {
+        continue;
+      }
+      // Reduce the list of nids returned by the view to those which the user has permission to view.
+      $nids_visible = array();
+      $query_restricted = db_query(db_rewrite_sql("SELECT DISTINCT(n.nid) FROM {node} n WHERE nid IN (". db_placeholders($nids) .")"), array_values($nids));
+      while ($result_restricted = db_fetch_object($query_restricted)) {
+        $nids_visible[$result_restricted->nid] = $result_restricted->nid;
+      }
+      $nids_to_remove = array_diff($nids, $nids_visible); // preserves keys
+      // Remove the activity from $messages that use events related to restricted nodes.
+      $result_keys_to_remove = array();
+      foreach ($nids_to_remove as $aid => $nid) {
+        $key = $aid_to_result_key_map[$aid];
+        $result_keys_to_remove[$key] = $key;
+      }
+      $messages = array_diff_key($messages, $result_keys_to_remove);
+    }
     if (empty($messages)) {
       continue;
     }

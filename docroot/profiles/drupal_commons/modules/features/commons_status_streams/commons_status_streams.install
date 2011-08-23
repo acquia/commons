@@ -7,12 +7,37 @@
 
 /**
  * Implementation of hook_install().
+ *   Status streams provide a digest that deprecates the digest functionality
+ *   by Notifications as well as the need to provide notifications on comments
+ *   by default.
  */
 function commons_status_streams_install() {
   db_query("UPDATE {blocks} SET title = '<none>' WHERE module = 'facebook_status' AND delta = 'facebook_status'");
   variable_set('fbsmp_image_dir', drupal_get_path('module', 'commons_status_streams') .'/fbsmp');
-}
+  if (module_exists('notifications')) {
+    // Remove all non-immediate nofications options.
+    $intervals = notifications_send_intervals();
+    // Preserve existing custom labels for immediate notifications. 
+    $new_intervals = array(0 => $intervals[0]);
+    variable_set('notifications_send_intervals', $new_intervals);
 
+    // Disable notification of new commments by default.
+    variable_set('notifications_default_auto', 0);
+
+    // Remmove all notifications that do not have an "Immediate" interval.
+    $query = db_query("SELECT sid FROM {notifications} WHERE send_interval > 0");
+    while ($result = db_fetch_object($query)) {
+      $sids[] = $result->sid;
+    }
+    if (!empty($sids)) {
+      $placeholders = db_placeholders($sids);
+      foreach (array('notifications_fields', 'notifications_queue', 'notifications') as $table) {
+        db_query('DELETE FROM {' . $table . '} WHERE sid IN (' . $placeholders . ')', $sids);
+      }
+      drupal_set_message(t('Deleted existing digest subscriptions deprecated by new Facebook-style status update functionality.'));
+    }
+  }
+}
 /**
  * Implementation of hook_uninstall().
  */

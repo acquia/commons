@@ -22,7 +22,7 @@ function drupal_commons_features_form(&$form_state, $url) {
   $form['required'] = array(
     '#type' => 'fieldset',
     '#title' => st('Required'),
-    '#description' => t('These features are required for Drupal Commons to operate.'),
+    '#description' => t('These features are required for Commons to operate.'),
   );
   $form['required']['feature-commons_core'] = array(
     '#type' => 'checkbox',
@@ -31,7 +31,7 @@ function drupal_commons_features_form(&$form_state, $url) {
     '#disabled' => 1,
     '#required' => TRUE,
     '#value' => 1,
-    '#description' => st('Provides the essential components for Drupal Commons'),
+    '#description' => st('Provides the essential components for Commons'),
   );
   $form['required']['feature-commons_home'] = array(
     '#type' => 'checkbox',
@@ -56,7 +56,7 @@ function drupal_commons_features_form(&$form_state, $url) {
   $form['content'] = array(
     '#type' => 'fieldset',
     '#title' => st('Content'),
-    '#description' => t('Select which content types you wish Drupal Commons to make available to members of Drupal Commons groups. Note: If you de-select any of these, you can always enable them again after installation.'),
+    '#description' => t('Select which content types you wish Commons to make available to members of Commons groups. Note: If you de-select any of these, you can always enable them again after installation.'),
   );
   $form['content']['feature-commons_blog'] = array(
     '#type' => 'checkbox',
@@ -99,7 +99,7 @@ function drupal_commons_features_form(&$form_state, $url) {
   $form['misc'] = array(
     '#type' => 'fieldset',
     '#title' => st('Other functions'),
-    '#description' => st('Select which functions you wish to provide in Drupal Commons. Again, if you de-select any of these, you can enable them again after installation.'),
+    '#description' => st('Select which functions you wish to provide in Commons. Again, if you de-select any of these, you can enable them again after installation.'),
   );
   $form['misc']['feature-commons_profile'] = array(
     '#type' => 'checkbox',
@@ -147,14 +147,14 @@ function drupal_commons_features_form(&$form_state, $url) {
     '#type' => 'checkbox',
     '#title' => st('SEO'),
     '#default_value' => 1,
-    '#description' => st('Bundles all SEO-oriented capabilities in a module separate from Drupal Commons Core (for ease of administration).'),
+    '#description' => st('Bundles all SEO-oriented capabilities in a module separate from Commons Core (for ease of administration).'),
   );
   
   // Acquia features
   $form['acquia'] = array(
     '#type' => 'fieldset',
     '#title' => st('Acquia'),
-    '#description' => st('The !an can supplement the functionality of Drupal Commons by providing enhanced site search (faceted search, content recommendations, content biasing, multi-site search, and others using the Apache Solr service), spam protection (using the Mollom service), and more.  A free 30-day trial is available.', array('!an' => l(t('Acquia Network'), 'http://acquia.com/products-services/acquia-network', array('attributes' => array('target' => '_blank'))))),
+    '#description' => st('The !an can supplement the functionality of Commons by providing enhanced site search (faceted search, content recommendations, content biasing, multi-site search, and others using the Apache Solr service), spam protection (using the Mollom service), and more.  A free 30-day trial is available.', array('!an' => l(t('Acquia Network'), 'http://acquia.com/products-services/acquia-network', array('attributes' => array('target' => '_blank'))))),
   );
   $form['acquia']['feature-acquia_network_subscription'] = array(
     '#type' => 'checkbox',

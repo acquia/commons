@@ -882,9 +882,9 @@ function commons_profile_views_default_views() {
 
   $views[$view->name] = $view;
 
-  // Exported view: profile_friends
+  // Exported view: profile_following
   $view = new view;
-  $view->name = 'profile_friends';
+  $view->name = 'profile_following';
   $view->description = '';
   $view->tag = '';
   $view->view_php = '';
@@ -1068,7 +1068,7 @@ function commons_profile_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Friends');
+  $handler->override_option('title', 'Following');
   $handler->override_option('use_ajax', TRUE);
   $handler->override_option('items_per_page', 12);
   $handler->override_option('use_pager', 'mini');

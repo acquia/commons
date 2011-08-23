@@ -123,7 +123,7 @@ function commons_core_menu_default_menu_links() {
     'menu_name' => 'primary-links',
     'link_path' => 'relationships',
     'router_path' => 'relationships',
-    'link_title' => 'My friends',
+    'link_title' => 'My relationships',
     'options' => array(),
     'module' => 'commons',
     'hidden' => '0',
@@ -157,9 +157,9 @@ function commons_core_menu_default_menu_links() {
   t('Groups');
   t('My bookmarks');
   t('My content');
-  t('My friends');
   t('My groups');
   t('My profile');
+  t('My relationships');
   t('My stuff');
   t('Site analytics');
 

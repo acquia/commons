@@ -1,6 +1,6 @@
 <?php
 
-// The version of Drupal Commons
+// The version of Commons
 define('DRUPAL_COMMONS_VERSION', '2.0-beta2');
 
 /**
@@ -10,7 +10,7 @@ function commons_release_requirements($phase) {
   if ($phase == 'runtime') {
     return array(
       array(
-        'title' => t('Drupal Commons'),
+        'title' => t('Commons'),
         'value' => DRUPAL_COMMONS_VERSION,
         'severity' => REQUIREMENT_INFO,
       )
@@ -22,13 +22,13 @@ function commons_release_requirements($phase) {
  * Implementation of hook_update_status_alter()
  */
 function commons_release_update_status_alter(&$projects) {
-  // Remove the modules that come with Drupal Commons
+  // Remove the modules that come with Commons
   foreach (_commons_release_included_modules() as $module) {
     unset($projects[$module]);
   }
   
   // Alter the information for this module
-  $projects['commons_release']['title'] = t('Drupal Commons');
+  $projects['commons_release']['title'] = t('Commons');
 }
 
 /**
@@ -37,7 +37,7 @@ function commons_release_update_status_alter(&$projects) {
 function commons_release_update_projects_alter(&$projects) {
   $includes = array();
   
-  // Remove the modules that come with Drupal Commons
+  // Remove the modules that come with Commons
   foreach (_commons_release_included_modules() as $module) {
     if (isset($projects[$module])) {
       // Compile all included modules that we hide
@@ -55,7 +55,7 @@ function commons_release_update_projects_alter(&$projects) {
 }
 
 /**
- * The modules that come with Drupal Commons
+ * The modules that come with Commons
  */
 function _commons_release_included_modules() {
   return array(    
