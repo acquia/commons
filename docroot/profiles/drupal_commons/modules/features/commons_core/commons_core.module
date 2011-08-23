@@ -422,7 +422,7 @@ function commons_core_views_pre_view(&$view, &$display_id, &$args) {
       break;
       
     case 'recent_notices':
-      if (node_access('create', 'notice')) {
+      if (node_access('create', 'notice') && strstr($display_id, 'block')) {
         $view->display_handler->override_option('header', l(t('Create a notice'), 'node/add/notice'));
       }
   }

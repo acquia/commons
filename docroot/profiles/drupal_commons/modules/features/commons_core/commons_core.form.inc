@@ -229,11 +229,26 @@ function commons_core_group_restrict_form($node, &$form, $action, $elements = ar
  * Provide the form for the "create a group" block
  */
 function commons_core_create_group_form() {
+  // Permissions should be check before renderings this form
   $form = array();
   $form['#action'] = url('node/add/group');
   $form['create'] = array(
     '#type' => 'submit',
     '#value' => t('Create a group'),
+  );
+  return $form;
+}
+
+/**
+ * Provide the form for the "create a notice" block
+ */
+function commons_core_create_notice_form() {
+  // Permissions should be check before renderings this form
+  $form = array();
+  $form['#action'] = url('node/add/notice');
+  $form['create'] = array(
+    '#type' => 'submit',
+    '#value' => t('Create a notice'),
   );
   return $form;
 }

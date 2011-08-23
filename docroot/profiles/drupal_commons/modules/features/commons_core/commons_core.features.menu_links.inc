@@ -176,6 +176,7 @@ function commons_core_menu_default_menu_links() {
   t('My profile');
   t('My relationships');
   t('My stuff');
+  t('Notices');
   t('Site analytics');
 
 
