@@ -466,6 +466,14 @@ function commons_core_join_form() {
   return $form;
 }
 
+/**
+ * Override the search box to provide contextual options for
+ *  - Entire site
+ *  - People
+ *  - Current group (if available)
+ * 
+ * This allows users to have three searches available in one form
+ */
 function commons_core_form_search_theme_form_alter(&$form, &$form_state) {
   $path = drupal_get_path('module', 'commons_core');
   drupal_add_js($path . '/js/commons_core.js');
@@ -476,7 +484,7 @@ function commons_core_form_search_theme_form_alter(&$form, &$form_state) {
   $form_state['solr'] = module_exists('apachesolr_search');
   $menu_item = menu_get_item($_GET['q']);
   
-  if($form_state['group'] = og_features_get_group_context()) {
+  if ($form_state['group'] = og_features_get_group_context()) {
     // If a node is being viewed, add the nodes type within the group as a search
     // context option.
     if (is_array($menu_item['load_functions']) && $key = array_search('node_load', $menu_item['load_functions'])) {
@@ -509,9 +517,18 @@ function commons_core_form_search_theme_form_alter(&$form, &$form_state) {
   $form['submit'] = $submit;
   
   $form['search_theme_form']['#title'] = t('Search');
-  $form['#submit'][] = 'commons_core_search_submit';
+  
+  // Replace the core search submit handler with our own
+  foreach ($form['#submit'] as $key => $callback) {
+    if ($callback == 'search_box_form_submit') {
+      $form['#submit'][$key] = 'commons_core_search_submit';
+    }
+  }
 }
 
+/**
+ * Custom submit handler for the search box
+ */
 function commons_core_search_submit($form, &$form_state) {
   // Copied from search_box_form_submit().
   if (isset($_REQUEST['destination'])) {
@@ -523,36 +540,36 @@ function commons_core_search_submit($form, &$form_state) {
 
   $form_id = $form['form_id']['#value'];
   $terms = trim($form_state['values'][$form_id]);
+  $query = array();
   
+  // Build a path and query based on the input and options
   switch ($form_state['values']['refine']) {
     case 'type':
       if ($form_state['solr']) {
         $path = 'search/apachesolr_search/' . $terms;
-        $query = array('filters' => 'group:' . $form_state['group']->nid . ' type:' . $form_state['node']->type);
+        $query['filters'] = 'group:' . $form_state['group']->nid . ' type:' . $form_state['node']->type;
       }
       break;
     
     case 'group':
       if ($form_state['solr']) {
         $path = 'search/apachesolr_search/' . $terms;
-        $query = array('filters' => 'group:' . $form_state['group']->nid);
-      } else {
+        $query['filters'] = 'group:' . $form_state['group']->nid;
+      } 
+      else {
         $path = 'og/search/' . $form_state['group']->nid;
-        $query = array('keys' => str_replace(' ', '+', $terms));
+        $query['keys'] = str_replace(' ', '+', $terms);
       }
       break;
     
     case 'users':
       $path = 'search/user/' . $terms;
-      $query = '';
       break;
 
     default:
       $path = 'search/node/' . $terms;
-      $query = '';
       break;
   }
   
-  unset($form_state['redirect']);
-  drupal_goto($path, $query);
+  $form_state['redirect'] = array($path, $query);
 }
