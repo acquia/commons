@@ -243,7 +243,7 @@ function commons_connect_preprocess_block($variables) {
 }
 
 function commons_connect_search_theme_form($form) {
-	$form['search_theme_form']['#value']= 'Search...';
+	$form['search_theme_form']['#value']= t('Search...');
 	$form['submit']['#type'] = 'image_button';
 	$form['submit']['#src'] = drupal_get_path('theme', 'commons_connect') . '/images/search_icon.gif';
 	$form['submit']['#attributes']['class'] = 'btn';
@@ -255,7 +255,7 @@ function commons_connect_commons_core_info_block() {
   
   $content .= '<div id="acquia-footer-message">';
 
-  $content .= '<a href="http://acquia.com/drupalcommons" title="Commons social business software">';
+  $content .= '<a href="http://acquia.com/drupalcommons" title="' . t('Commons social business software') . '">';
   $content .= theme('image', 'profiles/drupal_commons/images/commons_droplet.png', t('Commons social business software'), t('Commons social business software'));
   $content .= '</a>';
   $content .= '<span>';
@@ -266,9 +266,9 @@ function commons_connect_commons_core_info_block() {
   
   $content .= '<div id="fusion-footer-message">';
   $content .= t('Theme by') . '&nbsp;';
-  $content .= '<a href="http://www.brightlemon.com" title="Drupal Themes by BrightLemon">BrightLemon</a>';
+  $content .= '<a href="http://www.brightlemon.com" title="' . t('Drupal Themes by BrightLemon') . '">' . t('BrightLemon') . '</a>';
   $content .= ', ' . t('powered by') . '&nbsp;';
-  $content .= '<a href="http://fusiondrupalthemes.com" title="Premium Drupal themes powered by Fusion">Fusion</a>.';
+  $content .= '<a href="http://fusiondrupalthemes.com" title="' . t('Premium Drupal themes powered by Fusion') . '">' . t('Fusion') . '</a>.';
   $content .= '</div>';
 
   return $content;
