@@ -450,3 +450,94 @@ function commons_core_join_form() {
   
   return $form;
 }
+
+function commons_core_form_search_theme_form_alter(&$form, &$form_state) {
+  $path = drupal_get_path('module', 'commons_core');
+  drupal_add_js($path . '/js/commons_core.js');
+  drupal_add_css($path . '/css/commons_core.css');
+  
+  $options = array();
+  $group = NULL;
+  $form_state['solr'] = module_exists('apachesolr_search');
+  $menu_item = menu_get_item($_GET['q']);
+  
+  if($form_state['group'] = og_features_get_group_context()) {
+    // If a node is being viewed, add the nodes type within the group as a search
+    // context option.
+    if (isset($menu_item['load_functions']) && $key = array_search('node_load', $menu_item['load_functions'])) {
+      $form_state['node'] = $menu_item['map'][$key];
+      if ($form_state['solr'] && $form_state['node'] != $form_state['group']) {
+        $options['type'] = t('@type posts in @group', array('@type' => ucfirst($form_state['node']->type), '@group' => $form_state['group']->title));
+      }
+    }
+    // Add the group as a possible search context.
+    $options['group'] = $form_state['group']->title;
+  }
+
+  $options['site'] = t('Entire site');
+  $options['users'] = t('People');
+  
+  $form['refine'] = array(
+    '#type' => 'select',
+    '#title' => t('within'),
+    '#options' => $options,
+    '#weight' => 1,
+  );
+  
+  if (!isset($form_state['group']) && isset($menu_item['map'])) {
+    $form['refine']['#default_value'] = in_array('user', $menu_item['map']) ? 'user' : 'site';
+  }
+  
+  $form['submit']['#weight'] = 2;
+  $submit = $form['submit'];
+  unset($form['submit']);
+  $form['submit'] = $submit;
+  
+  $form['search_theme_form']['#title'] = t('Search');
+  $form['#submit'][] = 'commons_core_search_submit';
+}
+
+function commons_core_search_submit($form, &$form_state) {
+  // Copied from search_box_form_submit().
+  if (isset($_REQUEST['destination'])) {
+    unset($_REQUEST['destination']);
+  }
+  if (isset($_REQUEST['edit']['destination'])) {
+    unset($_REQUEST['edit']['destination']);
+  }
+
+  $form_id = $form['form_id']['#value'];
+  $terms = trim($form_state['values'][$form_id]);
+  
+  switch ($form_state['values']['refine']) {
+    case 'type':
+      if ($form_state['solr']) {
+        $path = 'search/apachesolr_search/' . $terms;
+        $query = array('filters' => 'group:' . $form_state['group']->nid . ' type:' . $form_state['node']->type);
+      }
+      break;
+    
+    case 'group':
+      if ($form_state['solr']) {
+        $path = 'search/apachesolr_search/' . $terms;
+        $query = array('filters' => 'group:' . $form_state['group']->nid);
+      } else {
+        $path = 'og/search/' . $form_state['group']->nid;
+        $query = array('keys' => str_replace(' ', '+', $terms));
+      }
+      break;
+    
+    case 'users':
+      $path = 'search/user/' . $terms;
+      $query = '';
+      break;
+
+    default:
+      $path = 'search/node/' . $terms;
+      $query = '';
+      break;
+  }
+  
+  unset($form_state['redirect']);
+  drupal_goto($path, $query);
+}
