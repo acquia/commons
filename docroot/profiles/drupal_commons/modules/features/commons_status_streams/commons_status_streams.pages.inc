@@ -4,6 +4,11 @@
  * The page callback for the main stream page
  */
 function commons_status_streams_stream_page() {
+  // Set the title
+  // We do this here because we want the tab title and page title
+  // to do different
+  drupal_set_title(t('Activity stream'));
+  
   // If the user is anonymous, prompt them to login or register
   if (user_is_anonymous()) {
     $prompt = array();
