@@ -464,7 +464,7 @@ function commons_core_form_search_theme_form_alter(&$form, &$form_state) {
   if($form_state['group'] = og_features_get_group_context()) {
     // If a node is being viewed, add the nodes type within the group as a search
     // context option.
-    if (isset($menu_item['load_functions']) && $key = array_search('node_load', $menu_item['load_functions'])) {
+    if (is_array($menu_item['load_functions']) && $key = array_search('node_load', $menu_item['load_functions'])) {
       $form_state['node'] = $menu_item['map'][$key];
       if ($form_state['solr'] && $form_state['node'] != $form_state['group']) {
         $options['type'] = t('@type posts in @group', array('@type' => ucfirst($form_state['node']->type), '@group' => $form_state['group']->title));
