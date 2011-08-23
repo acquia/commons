@@ -84,17 +84,16 @@ ul.krumo-node ul{
 	margin-left: 20px;
 }
 
-.item-list ul li {
-	background: transparent url(../images/gray-arrow-right.png) no-repeat 0 4px;
-	list-style-image: none;
-	list-style: none;
-	margin-bottom: 8px;
-	padding-left: 22px;
-	text-indent: 0;
-}
-
-.sidebar-last .item-list ul li {
-  padding-left: 0;
+.item-list ul li,
+.node .inner ul li,
+.panel-pane .inner ul li,
+.block .content ul li {
+  background: transparent url(../images/gray-arrow-right.png) no-repeat 0 4px;
+  list-style-image: none;
+  list-style: none;
+  margin-bottom: 8px;
+  padding-left: 22px;
+  text-indent: 0;
 }
 
 .node .inner .links li > a {
