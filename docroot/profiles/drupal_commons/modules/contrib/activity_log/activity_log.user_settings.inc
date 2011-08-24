@@ -15,7 +15,7 @@
  */
 function _activity_log_user_form($account) {
   $form = array();
-  $result = db_query("SELECT * FROM {activity_log_action_names}");
+  $result = db_query("SELECT * FROM {activity_log_action_names} WHERE public_name <> ''");
   $types = array();
   $default_values = array();
   while ($row = db_fetch_object($result)) {

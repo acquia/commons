@@ -298,10 +298,12 @@ function _activity_log_rebuild_templates() {
   // Rebuild the action_names table.
   db_query("TRUNCATE {activity_log_action_names}");
   foreach ($names as $name => $tids) {
-    $record = (object) array('public_name' => $name);
-    drupal_write_record('activity_log_action_names', $record); 
-    foreach ($tids as $tid) {
-      $rules[$tid]['pid'] = $record->pid;
+    if (!empty($name)) {
+      $record = (object) array('public_name' => $name);
+      drupal_write_record('activity_log_action_names', $record); 
+      foreach ($tids as $tid) {
+        $rules[$tid]['pid'] = $record->pid;
+      }
     }
   }
   // Rebuild the templates table.
