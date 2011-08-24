@@ -149,6 +149,14 @@ function commons_status_streams_user_default_permissions() {
       '0' => 'authenticated user',
     ),
   );
+  
+  // Exported permission: receive digests
+  $permissions['receive digests'] = array(
+    'name' => 'receive digests',
+    'roles' => array(
+      '0' => 'authenticated user',
+    ),
+  );
 
   // Exported permission: send messages to all users at once
   $permissions['send messages to all users at once'] = array(
