@@ -229,11 +229,26 @@ function commons_core_group_restrict_form($node, &$form, $action, $elements = ar
  * Provide the form for the "create a group" block
  */
 function commons_core_create_group_form() {
+  // Permissions should be check before renderings this form
   $form = array();
   $form['#action'] = url('node/add/group');
   $form['create'] = array(
     '#type' => 'submit',
     '#value' => t('Create a group'),
+  );
+  return $form;
+}
+
+/**
+ * Provide the form for the "create a notice" block
+ */
+function commons_core_create_notice_form() {
+  // Permissions should be check before renderings this form
+  $form = array();
+  $form['#action'] = url('node/add/notice');
+  $form['create'] = array(
+    '#type' => 'submit',
+    '#value' => t('Create a notice'),
   );
   return $form;
 }
@@ -334,7 +349,8 @@ function commons_core_group_create_content_block_form(&$form_state) {
         // If numeric, try to load the nid to determine the node type
         // currently being viewed
         if (is_numeric($arg)) {
-          if ($node = node_load($arg)) {
+          $node = menu_get_object('node');
+          if (is_object($node) && !og_is_group_type($node->type)) {
             $form['node_type']['#default_value'] = $node->type;
             break;
           }
@@ -370,7 +386,7 @@ function commons_core_group_create_content_block_form(&$form_state) {
 /**
  * Submit handler for the group create content selector
  */
-function commons_core_group_create_content_block_form_submit(&$form, $form_state) {
+function commons_core_group_create_content_block_form_submit(&$form, &$form_state) {
   // Extract the group
   $group = $form_state['values']['group'];
   
@@ -389,7 +405,7 @@ function commons_core_group_create_content_block_form_submit(&$form, $form_state
   }
   
   // Redirect to the node form
-  drupal_goto("node/add/{$type}", $options);
+  $form_state['redirect'] = array("node/add/{$type}", $options);
 }
 
 /**
@@ -449,4 +465,117 @@ function commons_core_join_form() {
   );
   
   return $form;
+}
+
+/**
+ * Override the search box to provide contextual options for
+ *  - Entire site
+ *  - People
+ *  - Current group (if available)
+ * 
+ * This allows users to have three searches available in one form
+ */
+function commons_core_form_search_theme_form_alter(&$form, &$form_state) {
+  $path = drupal_get_path('module', 'commons_core');
+  drupal_add_js($path . '/js/commons_core.js');
+  drupal_add_css($path . '/css/commons_core.css');
+  
+  $options = array();
+  $group = NULL;
+  $form_state['solr'] = module_exists('apachesolr_search');
+  $menu_item = menu_get_item($_GET['q']);
+  
+  if ($form_state['group'] = og_features_get_group_context()) {
+    // If a node is being viewed, add the nodes type within the group as a search
+    // context option.
+    if (is_array($menu_item['load_functions']) && $key = array_search('node_load', $menu_item['load_functions'])) {
+      $form_state['node'] = $menu_item['map'][$key];
+      if ($form_state['solr'] && $form_state['node'] != $form_state['group']) {
+        $options['type'] = t('@type posts in @group', array('@type' => ucfirst($form_state['node']->type), '@group' => $form_state['group']->title));
+      }
+    }
+    // Add the group as a possible search context.
+    $options['group'] = check_plain($form_state['group']->title);
+    // Truncate the title, if needed
+    $limit = variable_get('commons_search_group_title_length', 30);
+    if ($limit && strlen($options['group']) > $limit) {
+      $options['group'] = substr($options['group'], 0, $limit) . '...';
+    }
+  }
+
+  $options['site'] = t('Entire site');
+  $options['users'] = t('People');
+  
+  $form['refine'] = array(
+    '#type' => 'select',
+    '#title' => t('within'),
+    '#options' => $options,
+    '#weight' => 1,
+  );
+  
+  if (!isset($form_state['group']) && isset($menu_item['map'])) {
+    $form['refine']['#default_value'] = in_array('user', $menu_item['map']) ? 'user' : 'site';
+  }
+  
+  $form['submit']['#weight'] = 2;
+  $submit = $form['submit'];
+  unset($form['submit']);
+  $form['submit'] = $submit;
+  
+  $form['search_theme_form']['#title'] = t('Search');
+  
+  // Replace the core search submit handler with our own
+  foreach ($form['#submit'] as $key => $callback) {
+    if ($callback == 'search_box_form_submit') {
+      $form['#submit'][$key] = 'commons_core_search_submit';
+    }
+  }
+}
+
+/**
+ * Custom submit handler for the search box
+ */
+function commons_core_search_submit($form, &$form_state) {
+  // Copied from search_box_form_submit().
+  if (isset($_REQUEST['destination'])) {
+    unset($_REQUEST['destination']);
+  }
+  if (isset($_REQUEST['edit']['destination'])) {
+    unset($_REQUEST['edit']['destination']);
+  }
+
+  $form_id = $form['form_id']['#value'];
+  $terms = trim($form_state['values'][$form_id]);
+  $query = array();
+  
+  // Build a path and query based on the input and options
+  switch ($form_state['values']['refine']) {
+    case 'type':
+      if ($form_state['solr']) {
+        $path = 'search/apachesolr_search/' . $terms;
+        $query['filters'] = 'group:' . $form_state['group']->nid . ' type:' . $form_state['node']->type;
+      }
+      break;
+    
+    case 'group':
+      if ($form_state['solr']) {
+        $path = 'search/apachesolr_search/' . $terms;
+        $query['filters'] = 'group:' . $form_state['group']->nid;
+      } 
+      else {
+        $path = 'og/search/' . $form_state['group']->nid;
+        $query['keys'] = str_replace(' ', '+', $terms);
+      }
+      break;
+    
+    case 'users':
+      $path = 'search/user/' . $terms;
+      break;
+
+    default:
+      $path = 'search/node/' . $terms;
+      break;
+  }
+  
+  $form_state['redirect'] = array($path, $query);
 }

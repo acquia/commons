@@ -30,8 +30,8 @@ function commons_core_menu() {
       'type' => MENU_CALLBACK,
     ),
     'admin/settings/commons' => array(
-      'title' => 'Drupal Commons',
-      'description' => 'Configure settings for the Drupal Commons environment',
+      'title' => 'Commons',
+      'description' => 'Configure settings for the Commons environment',
       'page callback' => 'drupal_get_form',
       'page arguments' => array('commons_core_admin_settings'),
       'access arguments' => array('administer site configuration'),
@@ -422,7 +422,7 @@ function commons_core_views_pre_view(&$view, &$display_id, &$args) {
       break;
       
     case 'recent_notices':
-      if (node_access('create', 'notice')) {
+      if (node_access('create', 'notice') && strstr($display_id, 'block')) {
         $view->display_handler->override_option('header', l(t('Create a notice'), 'node/add/notice'));
       }
   }
@@ -575,20 +575,35 @@ function commons_core_set_breadcrumb($path) {
       break;
       
     case 'node':
-      if (is_numeric($path[1])) {
-        switch ($path[2]) {
-          case 'content':
-          case 'aggregator':
-            $group = node_load($path[1]);
+      if (isset($path[1]) && is_numeric($path[1])) {
+        if ($node = menu_get_object('node')) {
+          if (og_is_group_type($node->type)) {
             $breadcrumb[] = l(t('Groups'), 'groups');
-            $breadcrumb[] = l($group->title, 'node/' . $group->nid);
-            break;
+          }
+          else {
+            switch ($node->type) {
+              case 'notice':
+                $breadcrumb[] = l(t('Notices'), 'notices');
+                break; 
+            }
+          }
+        }
+        
+        if (isset($path[2])) {
+          switch ($path[2]) {
+            case 'content':
+            case 'aggregator':
+              $group = node_load($path[1]);
+              $breadcrumb[] = l(t('Groups'), 'groups');
+              $breadcrumb[] = l($group->title, 'node/' . $group->nid);
+              break;
+          }
         }
       }
       break;
       
     case 'og':
-      if (is_numeric($path[2])) {
+      if (isset($path[2]) && is_numeric($path[2])) {
         switch ($path[1]) {
           case 'users':
           case 'search':

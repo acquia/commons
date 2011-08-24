@@ -84,13 +84,16 @@ ul.krumo-node ul{
 	margin-left: 20px;
 }
 
-.item-list ul li {
-	background: transparent url(../images/gray-arrow-right.png) no-repeat 0 4px;
-	list-style-image: none;
-	list-style: none;
-	margin: 0 0 8px 0;
-	padding: 0 0 0 22px;
-	text-indent: 0;
+.item-list ul li,
+.node .inner ul li,
+.panel-pane .inner ul li,
+.block .content ul li {
+  background: transparent url(../images/gray-arrow-right.png) no-repeat 0 4px;
+  list-style-image: none;
+  list-style: none;
+  margin-bottom: 8px;
+  padding-left: 22px;
+  text-indent: 0;
 }
 
 .node .inner .links li > a {
@@ -113,8 +116,8 @@ body {
 /*force the front page to be 960px wide*/
 .front .grid16-16 {
 	width: 960px;
-	max-width: 960px; !important
-	margin:  0 auto;
+	max-width: 960px;
+	margin: 0 auto;
 }
 
 
@@ -472,7 +475,7 @@ body {
 
 /* Header - Search-------------------------------------------------------------- */
 
-.search-box-inner input#edit-search-theme-form-header {
+.search-box-inner input[name=search_theme_form] {
 	background: #ccc url(../images/inner-shadow.png) no-repeat 0 0;
 	border-right: 0px;
 	border: 1px inset #a9a9a9;
@@ -486,7 +489,7 @@ body {
 	padding: 2px 4px;
 }
 
-.search-box-inner input#search_header {
+.search-box-inner input[type=submit] {
 	background: #3a3a3a url(../images/search-submit.png) repeat-x 0 0;
 	border: 1px solid #3a3a3a;
 	color: #ddd;
@@ -500,6 +503,50 @@ body {
 	margin: 0;
 	padding: 2px 6px;
 	text-transform: uppercase;
+}
+
+.contextual-search-wrapper .contextual-search-launcher,
+.contextual-search-processed .contextual-search-wrapper ul.contextual-search-list {
+  background-color: #666;
+  background-image: url('../images/dropdown.png');
+  background-position: right 10px;
+  -moz-border-radius: 0 0 5px 5px;
+  -webkit-border-radius: 0 0 5px 5px;
+  border-radius: 0 0 5px 5px;
+}
+
+.contextual-search-wrapper .contextual-search-launcher,
+.contextual-search-processed .contextual-search-wrapper ul.contextual-search-list li a {
+  color: #fff;
+}
+
+.contextual-search-processed .contextual-search-wrapper ul.contextual-search-list li a {
+  margin-left: -7px;
+  margin-right: -17px;
+  padding-left: 7px;
+  padding-right: 17px;
+}
+
+.contextual-search-processed .contextual-search-wrapper ul.contextual-search-list li a.first {
+  background-image: url('../images/dropdown.png');
+  background-position: right 10px;
+  background-repeat: no-repeat;
+  margin-top: -4px;
+  padding-top: 4px;
+}
+
+.contextual-search-processed .contextual-search-wrapper ul.contextual-search-list li a.last {
+  -moz-border-radius: 0 0 5px 5px;
+  -webkit-border-radius: 0 0 5px 5px;
+  border-radius: 0 0 5px 5px;
+  margin-bottom: -4px;
+  padding-bottom: 4px;
+}
+
+.contextual-search-wrapper .contextual-search-launcher:hover,
+.contextual-search-processed .contextual-search-wrapper ul.contextual-search-list li a:hover {
+  background-color: #777;
+  text-decoration: none;
 }
 
 /*  Preface Regions-------------------------------------------------------------- */
@@ -939,6 +986,8 @@ div.content-help-inner div.warning {
 .marker,
 .form-required {
 	color: #aa1144;
+}
+.form-required {
 	padding-left: .5em;
 }
 
@@ -1428,8 +1477,12 @@ div.comment ul.links a {
 
 /* @group Facebook */
 
-.facebook-status-item .links li {
+.facebook-status-item .facebook-status-links ul.links li {
+  background: none;
   border: 0 none;
+  display: inline-block;
+  list-style: none;
+  padding-left: 0;
 }
 
 /* @group Comments */
@@ -1958,7 +2011,7 @@ panels-pane.commons-colors-grayblue .inner {
 	color: #23295c;
 }
 
-/* Drupal Commons * Styling for Drupal Commons specific elements/-------------------------------------------------------------- */
+/* Commons * Styling for Commons specific elements/-------------------------------------------------------------- */
 
 /* User relationships module */
 textarea#edit-elaboration {

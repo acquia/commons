@@ -145,37 +145,37 @@ label {
   padding: 12px 0 4px 0;
 }
 
-.search-box-inner input#edit-search-theme-form-header {
+.search-box-inner input[name=search_theme_form] {
   background: #fff url(../images/bg-input.png) no-repeat 0 0;
   border: 1px solid #ccc;
-  border-right: none;
   display: block;
   float: left;
   font-size: 11px;
   height: 19px;
   line-height: 14px;
-  margin: 0;
+  margin: 3px;
   width: 240px;
-  padding: 2px 4px;
+  padding: 2px 5px;
   color: #b3b3b3;
 }
 
-.search-box-inner input#search_header {
-  width: 24px;
-  background: #3A3A3A url(../images/btn-search.png) no-repeat 0 0;
+.search-box-inner input[type=submit] {
   border: none;
-  color: #DDD;
   display: block;
   float: left;
-  font-family: Tahoma, Verdana, sans-serif;
-  font-size: 0px;
-  height: 25px;
   letter-spacing: .1em;
   line-height: 16px;
   margin: 0;
-  padding: 2px 6px;
+  padding: 6px 7px;
   text-transform: uppercase;
   cursor: pointer;
+}
+
+.contextual-search-wrapper .contextual-search-launcher,
+.contextual-search-processed .contextual-search-wrapper ul.contextual-search-list {
+  background-color: #fff;
+  background-image: url('../images/dropdown.png');
+  background-position: right 9px;
 }
 
 .header-region {
@@ -495,6 +495,10 @@ label {
   border-radius: 16px;
   border: 2px solid #fbb03b;
   overflow: hidden;
+}
+
+.content-content .fbsmp-wrapper-outer {
+  z-index: 9;
 }
 
 .page-dashboard .content-content {
@@ -891,8 +895,22 @@ span.heartbeat_times img {
 
 /* @group Facebook */
 
-.facebook-status-item .links li {
+.facebook-status-item .facebook-status-links ul.links li {
+  background: none;
   border: 0 none;
+  display: inline-block;
+  list-style: none;
+  padding-left: 0;
+}
+
+
+form input.fbsmp-cancel-button,
+form input.fbsmp-cancel-button:hover {
+  background-image: url('../images/cancel.png');
+  background-position: center center;
+  background-repeat: no-repeat;
+  height: 9px;
+  width: 9px;
 }
 
 /* @group Comments */
@@ -1265,13 +1283,6 @@ ul.pager a, ul.pager li.pager-current {
 #edit-submit.form-submit {
   margin: 9px 3px 0 0;
 }
-
-/* added to get proper alignment for upcoming events in the sidebar -jay */
-.view-upcoming-events .views-field-field-date-value {float: left;}
-.view-upcoming-events .views-field-title,
-.view-upcoming-events .views-field-group-nid,
-.view-upcoming-events .views-field-field-location-value {float: right; width: 180px;}
-
 
 .block.block-commons_profile .links .ur_action a {
   background: none repeat scroll 0 0 #29ABE2;

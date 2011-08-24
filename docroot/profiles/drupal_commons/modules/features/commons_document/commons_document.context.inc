@@ -97,42 +97,6 @@ function commons_document_context_default_contexts() {
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
-  $context->name = 'group-home-documents';
-  $context->description = 'Documents block for the group home page';
-  $context->tag = 'Document';
-  $context->conditions = array(
-    'node' => array(
-      'values' => array(
-        'group' => 'group',
-      ),
-      'options' => array(
-        'node_form' => '1',
-      ),
-    ),
-  );
-  $context->reactions = array(
-    'block' => array(
-      'blocks' => array(
-        'views-363c36ed99d1c774fcc13d74a03dad8b' => array(
-          'module' => 'views',
-          'delta' => '363c36ed99d1c774fcc13d74a03dad8b',
-          'region' => 'sidebar_last',
-          'weight' => 9,
-        ),
-      ),
-    ),
-  );
-  $context->condition_mode = 0;
-
-  // Translatables
-  // Included for use with string extractors like potx.
-  t('Document');
-  t('Documents block for the group home page');
-
-  $export['group-home-documents'] = $context;
-  $context = new stdClass;
-  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
-  $context->api_version = 3;
   $context->name = 'group-tab-documents';
   $context->description = 'The document tab on a group';
   $context->tag = 'Document';

@@ -7,6 +7,16 @@ Drupal.behaviors.fbsmpLink = function (context) {
       $(this).removeClass('fbsmp-link-url-field-processed');
     })
   });
+
+  // Attach the link instead of submitting the form when pressing Enter in the Link textfield
+  $(context).find('.fbsmp-link-url-field').keydown(function(e) {
+    var $element = $(this).parents('form').find('.facebook-status-submit');
+    var id = $element[0].id;
+    if (e.which == 13 && Drupal.settings.ahah && Drupal.settings.ahah[id]) {
+      e.preventDefault();
+      $(context).find('#edit-fbsmp-link-attach').trigger(Drupal.settings.ahah[id].event);
+    }
+  });
   
   //Inline editing of the title and description field.
   $('.fbsmp-link-title-field:not(.fbsmp-link-title-field-processed)').addClass('fbsmp-link-title-field-processed').each(function() {    

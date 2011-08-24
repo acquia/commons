@@ -324,8 +324,10 @@ function commons_status_streams_views_default_views() {
     ),
   ));
   $handler->override_option('access', array(
-    'type' => 'perm',
-    'perm' => 'access content',
+    'type' => 'role',
+    'role' => array(
+      '2' => 2,
+    ),
   ));
   $handler->override_option('cache', array(
     'type' => 'none',

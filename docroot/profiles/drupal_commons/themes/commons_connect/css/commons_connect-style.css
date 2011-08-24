@@ -552,7 +552,7 @@ Works well with inline login or inline menu block style */
 form#search-theme-form { background:transparent url(../images/search_box.gif) no-repeat 0px 7px; width:250px; padding-bottom:6px;}
 #edit-search-theme-form-1-wrapper label { display:none;}
 #edit-search-theme-form-1-wrapper .form-item { margin:0px; }
-#search.container-inline div { float:left; width:216px;}
+#search.container-inline div:first-child { float:left; width:216px;}
 #edit-search-theme-form-1-wrapper input  {
 	border: solid 1px #fff;
 	margin-left:2px;
@@ -566,12 +566,64 @@ form#search-theme-form input.form-submit {
 	margin-left:0px;
 	margin-right:0px;
 }
+.contextual-search-wrapper {
+  margin-top: -9px;
+}
+.contextual-search-wrapper .contextual-search-launcher,
+.contextual-search-processed .contextual-search-wrapper ul.contextual-search-list {
+  background-color: #ccc;
+  background-image: url('../images/dropdown.png');
+  -moz-border-radius: 0 0 5px 5px;
+  -webkit-border-radius: 0 0 5px 5px;
+  border-radius: 0 0 5px 5px;
+  margin-right: 5px;
+  padding-bottom: 2px;
+  padding-top: 2px;
+}
+
+.contextual-search-wrapper .contextual-search-launcher,
+.contextual-search-processed .contextual-search-wrapper ul.contextual-search-list li a {
+  color: #464646;
+}
+
+.contextual-search-processed .contextual-search-wrapper ul.contextual-search-list li a {
+  margin-left: -7px;
+  margin-right: -17px;
+  padding-left: 7px;
+  padding-right: 17px;
+}
+
+.contextual-search-processed .contextual-search-wrapper ul.contextual-search-list li a.first {
+  background-image: url('../images/dropdown.png');
+  background-position: right 6px;
+  background-repeat: no-repeat;
+  margin-top: -2px;
+  padding-top: 2px;
+}
+
+.contextual-search-processed .contextual-search-wrapper ul.contextual-search-list li a.last {
+  -moz-border-radius: 0 0 5px 5px;
+  -webkit-border-radius: 0 0 5px 5px;
+  border-radius: 0 0 5px 5px;
+  margin-bottom: -2px;
+  padding-bottom: 2px;
+}
+
+.contextual-search-wrapper .contextual-search-launcher:hover,
+.contextual-search-processed .contextual-search-wrapper ul.contextual-search-list li a:hover {
+  background-color: #bbb;
+  text-decoration: none;
+}
+
 /*  Preface Regions-------------------------------------------------------------- */
 
 /* The Preface Top region sits between the header and the Main Area (columns, sidebars, and main content).  The Preface Bottom region is inside the Main Area. */
 
-.preface-top-wrapper {}
-.preface-top { overflow: hidden; background:transparent url(../images/rightbar_shadow.gif) repeat-y top right; }
+.preface-top-wrapper {
+  position: relative;
+  z-index: 3;
+}
+.preface-top { overflow: visible; background:transparent url(../images/rightbar_shadow.gif) repeat-y top right; }
 .preface-top-inner {}
 .preface-bottom {}
 .preface-bottom-inner {}
@@ -853,6 +905,17 @@ ul.links li.comment_add a,
 .content .facebook-status-links ul.links.inline li,
 .content .facebook-status-comments ul.links.inline li {
   border: 0 none;
+}
+
+.facebook-status-update form input.fbsmp-cancel-button,
+.facebook-status-update form input.fbsmp-cancel-button:hover {
+  background-image: url('../images/cancel.png');
+  background-position: center center;
+  background-repeat: no-repeat;
+  height: 16px;
+  right: 1px;
+  top: 1px;
+  width: 10px;
 }
 
 /* Only more/read more links */
@@ -2137,6 +2200,13 @@ dl.search-results .search-result p.search-info {
 	visibility: hidden;
 }
 
+#block-commons_profile-image_links li {
+  border: 0 none;
+  display: list-item;
+  padding-left: 0;
+  padding-right: 0;
+}
+
 /*Decorative Bullet*/
 
 .commons-list-circle-bullets .content ul {
@@ -2252,7 +2322,7 @@ panels-pane.commons-colors-grayblue .inner {
 	color: #23295c;
 }
 
-/* Drupal Commons * Styling for Drupal Commons specific elements/-------------------------------------------------------------- */
+/* Commons * Styling for Commons specific elements/-------------------------------------------------------------- */
 
 /* User relationships module */
 textarea#edit-elaboration {
@@ -3548,156 +3618,26 @@ a.feed-icon img {
  
 
 /* side blocks */
-.sidebar-last .block-views .content .view .view-content .item-list ul li { background:none; margin-bottom:0px; border-bottom:0px;}
-.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-field-group-image-fid,
-.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-picture{ float:left; width:30px; margin-right:10px;}
-/*.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-picture{ float:right; width:30px; margin-left:10px;}*/
 
-.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-field-group-image-fid img,
-.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-picture img{ width:28px; height:28px; border:solid 1px #c2c2c2;}
+.sidebar-last .block-views .view-content .item-list ul li .views-field-field-group-image-fid img,
+.sidebar-last .block-views .view-content .item-list ul li .views-field-picture img{
+  border:solid 1px #c2c2c2;
+}
 
-/*.sidebar-last .block-views .content .view .view-content .item-list ul li .small { font-size:11px;}
-.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-post-count-new,
-.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-posts-count,
-.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-description,
-.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-comment-count{ overflow:hidden;} 
-
-.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-post-count-new a,*/
-.sidebar-last .block-views .content .view .view-content .item-list ul li .views-field-title { font-weight:bold;}
+.sidebar-last .block-views .view-content .item-list ul li .views-field-title {
+  font-weight: bold;
+}
 
 /*****************************************/
 /*          Block text alignment         */
 /*****************************************/
 
-.view-groups-most-active .views-field-field-group-image-fid{float: left;}
-/*.view-groups-most-active .views-field-title,
-.view-groups-most-active .views-field-members-count,
-.view-groups-most-active .views-field-posts-count {float:right; width: 180px;}*/
-
-.view-groups-my-groups .views-field-field-group-image-fid{float: left;}
-.view-groups-my-groups .views-field-title,
-.view-groups-my-groups .views-field-post-count-new {float:right; width: 180px;}
-
-.view-groups-newest-groups .views-field-field-group-image-fid{float: left;}
-.view-groups-newest-groups .views-field-title,
-.view-groups-newest-groups .views-field-description {float:right; width: 180px;}
 .view-groups-newest-groups .views-field-description .field-content p {margin:0;}
-.view-group-block-events-upcoming .views-field-field-date-value {float: left;}
-.view-group-block-events-upcoming .views-field-title,
-.view-group-block-events-upcoming .views-field-field-location-value {float: right; width: 180px;}
-
-.view-homepage-recent-featured .views-field-picture {float: left;}
-.view-homepage-recent-featured .views-field-created,
-.view-homepage-recent-featured .views-field-name {float: right; width: 180px;}
-
-.view-group-block-discussion-latest .views-field-picture {float: left;}
-.view-group-block-discussion-latest .views-field-title,
-.view-group-block-discussion-latest .views-field-timestamp, 
-.view-group-block-discussion-latest .views-field-created,
-.view-group-block-discussion-latest .views-field-name,
-.view-group-block-discussion-latest .views-field-comment-count {float: right; width: 180px;}
-
-.view-group-block-document-latest .views-field-picture {float: left;}
-.view-group-block-document-latest .views-field-title,
-.view-group-block-document-latest .views-field-timestamp,
-.view-group-block-document-latest .views-field-created,
-.view-group-block-document-latest .views-field-name,
-.view-group-block-document-latest .views-field-comment-count {float: right; width: 180px;}
-
-.view-group-block-blog-latest .views-field-picture {float: left;}
-.view-group-block-blog-latest .views-field-title,
-.view-group-block-blog-latest .views-field-timestamp,
-.view-group-block-blog-latest .views-field-created,
-.view-group-block-blog-latest .views-field-name,
-.view-group-block-blog-latest .views-field-comment-count {float: right; width: 180px;}
-
-.view-upcoming-events .views-field-field-date-value {float: left;}
-.view-upcoming-events .views-field-title,
-.view-upcoming-events .views-field-group-nid,
-.view-upcoming-events .views-field-field-location-value {float: right; width: 80%;}
-
-.view-profile-user-groups .views-field-field-group-image-fid {float: left;}
-.view-profile-user-groups .views-field-title,
-.view-profile-user-groups .views-field-post-count-new {float: right; width: 180px;}
-
-.view-group-block-wiki-latest .views-field-picture {float: left;}
-.view-group-block-wiki-latest .views-field-timestamp,
-.view-group-block-wiki-latest .views-field-created,
-.view-group-block-wiki-latest .views-field-name,
-.view-group-block-wiki-latest .views-field-comment-count {float: right; width: 180px;}
-
-.view-group-block-wiki-latest-comments .views-field-timestamp,
-.view-group-block-wiki-latest-comments .views-field-name,
-.view-group-block-wiki-latest-comments  .views-field-subject{float: right; width: 180px;}
-
-.view-event-latest .views-field-field-date-value {float: left;}
-.view-event-latest .views-field-group-nid,
-.view-event-latest .views-field-field-location-value, 
-.view-event-latest .views-field-title {float: right; width: 180px;}
-
-.view-event-past-events .views-field-field-date-value {float: left;}
-.view-event-past-events .views-field-group-nid,
-.view-event-past-events .views-field-field-location-value, 
-.view-event-past-events .views-field-title {float: right; width: 180px;}
-
-.view-event-latest-comments .views-field-picture {float: left;}
-.view-event-latest-comments .views-field-subject,
-.view-event-latest-comments .views-field-timestamp,
-.view-event-latest-comments .views-field-name {float: right; width: 180px;}
-
-.view-wiki-latest-comments .views-field-picture {float: left;}
-.view-wiki-latest-comments .views-field-subject,
-.view-wiki-latest-comments .views-field-timestamp,
-.view-wiki-latest-comments .views-field-name {float: right; width: 180px;}
-
-.view-group-block-evt-latest-comments .views-field-picture {float: left;}
-.view-group-block-evt-latest-comments .views-field-subject,
-.view-group-block-evt-latest-comments .views-field-timestamp,
-.view-group-block-evt-latest-comments .views-field-name {float: right; width: 180px;}
-
-.view-discussion-latest-comments .views-field-picture {float: left;}
-.view-discussion-latest-comments .views-field-subject,
-.view-discussion-latest-comments .views-field-timestamp,
-.view-discussion-latest-comments .views-field-name {float: right; width: 180px;}
-
-.view-group-block-disc-latest-comments  .views-field-picture {float: left;}
-.view-group-block-disc-latest-comments .views-field-subject,
-.view-group-block-disc-latest-comments .views-field-timestamp,
-.view-group-block-disc-latest-comments .views-field-name {float: right; width: 180px;}
-
-.view-document-latest-comments .views-field-picture {float: left;}
-.view-document-latest-comments .views-field-subject,
-.view-document-latest-comments .views-field-timestamp,
-.view-document-latest-comments .views-field-name {float: right; width: 180px;}
-
-.view-group-block-doc-latest-comments .views-field-picture {float: left;}
-.view-group-block-doc-latest-comments .views-field-subject,
-.view-group-block-doc-latest-comments .views-field-timestamp,
-.view-group-block-doc-latest-comments .views-field-name {float: right; width: 180px;}
-
-.view-blog-latest-comments .views-field-picture {float: left;}
-.view-blog-latest-comments .views-field-subject,
-.view-blog-latest-comments .views-field-timestamp,
-.view-blog-latest-comments .views-field-name {float: right; width: 180px;}
-
-.view-group-block-blog-latest-comments .views-field-picture {float: left;}
-.view-group-block-blog-latest-comments .views-field-subject,
-.view-group-block-blog-latest-comments .views-field-timestamp,
-.view-group-block-blog-latest-comments .views-field-name {float: right; width: 180px;}
-
-.view-recent-notices .views-field-picture {float: left;}
-#block-views-recent_notices-block_1 .views-field-title,
-#block-views-recent_notices-block_1 .views-field-created,
-#block-views-recent_notices-block_1 .views-field-timestamp,
-#block-views-recent_notices-block_1 .views-field-name {float: right; width: 180px;}
 
 .view-groups-my-groups-listing ul li { clear:left;}
 .view-groups-my-groups-listing .views-field-field-group-image-fid {float: left; margin-right:15px;}
 .view-groups-my-groups-listing .views-field-description {float: left; width: 60%;}
 .view-groups-my-groups-listing .views-field-leave-group {float:right;}
-
-.view-group-block-events-latest .views-field-field-location-value,
-.view-group-block-events-past .views-field-field-location-value {float: right; width: 180px;}
 
 .view-most-bookmarked  .views-field-name {float: right; width: 180px;}
 

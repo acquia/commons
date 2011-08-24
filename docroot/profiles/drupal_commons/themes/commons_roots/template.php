@@ -377,3 +377,7 @@ function commons_roots_preprocess_facebook_status_item(&$vars) {
     unset($vars['recipient_link']);
   }
 }
+
+function commons_roots_search_theme_form($form) {
+  return '<div id="search" class="container-inline">' . drupal_render($form) . '</div>';
+}

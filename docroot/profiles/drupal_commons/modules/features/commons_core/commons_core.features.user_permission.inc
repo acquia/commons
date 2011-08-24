@@ -211,14 +211,6 @@ function commons_core_user_default_permissions() {
     ),
   );
 
-  // Exported permission: administer skinr
-  $permissions['administer skinr'] = array(
-    'name' => 'administer skinr',
-    'roles' => array(
-      '0' => 'site admin',
-    ),
-  );
-
   // Exported permission: administer taxonomy
   $permissions['administer taxonomy'] = array(
     'name' => 'administer taxonomy',

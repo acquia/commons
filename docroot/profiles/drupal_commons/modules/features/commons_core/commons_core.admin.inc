@@ -22,7 +22,7 @@ function commons_core_admin_settings() {
     '#type' => 'checkbox',
     '#title' => t('Force users to login'),
     '#default_value' => variable_get('commons_force_login', 0),
-    '#description' => t('If checked, anonymous users will be redirected from all pages to a log in page. Select this setting if your Drupal Commons site must be closed to the public, such as a company intranet.'),
+    '#description' => t('If checked, anonymous users will be redirected from all pages to a log in page. Select this setting if your Commons site must be closed to the public, such as a company intranet.'),
   );
   
   $form['login_settings']['commons_force_login_allowed_paths'] = array(
@@ -44,6 +44,13 @@ function commons_core_admin_settings() {
     '#title' => t('Group homepage tab'),
     '#default_value' => variable_get('commons_group_tab_title', 'Home'),
     '#description' => t('Specify what the group homepage tab title should be. If left empty, the tab title will be <i>View</i>.'),
+  );
+  
+  $form['group_settings']['commons_search_group_title_length'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Line length limit for search widget'),
+    '#default_value' => variable_get('commons_search_group_title_length', 30),
+    '#description' => t('This value is used to truncate group names when being displayed in the site search widget, so that the search widget is no wider than the search field itself. If your theme has a narrower or wider search widget, you may wish to adjust the value in this field. If set to zero, there will be no limit.'),
   );
   
   $form['group_settings']['commons_force_unique_groups'] = array(
@@ -82,4 +89,14 @@ function commons_core_admin_settings() {
   );
 
   return system_settings_form($form); 
+}
+
+/**
+ * Validate the admin settings form
+ */
+function commons_core_admin_settings_validate(&$form, &$form_state) {
+  // Make sure the group search title max length is numeric
+  if (!is_numeric($form_state['values']['commons_search_group_title_length'])) {
+    form_set_error('commons_search_group_title_length', t('The maximum title length must be a numeric value.'));
+  }
 }

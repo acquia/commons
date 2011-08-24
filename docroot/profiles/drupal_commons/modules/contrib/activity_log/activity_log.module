@@ -99,11 +99,11 @@ function activity_log_theme($existing, $type, $theme, $path) {
  * Implementation of hook_user().
  */
 function activity_log_user($op, &$edit, &$account, $category = NULL) {
-  if ($op == 'form' && user_access('configure preferences for which activity types appear in activity streams', $account)) {
+  if ($op == 'form' && $category == 'account' && user_access('configure preferences for which activity types appear in activity streams', $account)) {
     module_load_include('inc', 'activity_log', 'activity_log.user_settings');
     return _activity_log_user_form($account);
   }
-  elseif ($op == 'update') {
+  elseif ($op == 'update' && $category == 'account') {
     if (user_access('configure preferences for which activity types appear in activity streams', $account)) {
       module_load_include('inc', 'activity_log', 'activity_log.user_settings');
       _activity_log_user_form_submit($edit);
@@ -298,10 +298,12 @@ function _activity_log_rebuild_templates() {
   // Rebuild the action_names table.
   db_query("TRUNCATE {activity_log_action_names}");
   foreach ($names as $name => $tids) {
-    $record = (object) array('public_name' => $name);
-    drupal_write_record('activity_log_action_names', $record); 
-    foreach ($tids as $tid) {
-      $rules[$tid]['pid'] = $record->pid;
+    if (!empty($name)) {
+      $record = (object) array('public_name' => $name);
+      drupal_write_record('activity_log_action_names', $record); 
+      foreach ($tids as $tid) {
+        $rules[$tid]['pid'] = $record->pid;
+      }
     }
   }
   // Rebuild the templates table.
@@ -330,6 +332,44 @@ function _activity_log_rebuild_templates() {
     ", $record);
   }
   return count($rules);
+}
+
+/**
+ * Get or set the timestamp for the current activity message.
+ */
+function _activity_log_action_timestamp($value = NULL) {
+  static $timestamp;
+  if (is_null($value)) {
+    if (empty($timestamp)) {
+      $timestamp = time();
+    }
+    return $timestamp;
+  }
+  $timestamp = $value;
+}
+
+/**
+ * Attempt to extract the timestamp of an object.
+ *
+ * We need to do this rather than relying on time() because we need to know the
+ * time the entity was created when regenerating activity.
+ *
+ * @param $data
+ *   The object for which a timestamp should be retrieved.
+ * @param $event
+ *   The Rules event which will be executed, if any.
+ * @return
+ *   A best guess at the timestamp for the relevant object.
+ */
+function activity_log_get_timestamp($data, $event = '') {
+  // Practically everything uses either "timestamp" or "created." User Relationships uses created_at and Userpoints uses time_stamp.
+  foreach (array('timestamp', 'created', 'created_at', 'time_stamp') as $key) {
+    if (isset($data->$key)) {
+      return $data->$key;
+    }
+  }
+  // If we don't find anything, return the current time.
+  return time();
 }
 
 //=====================

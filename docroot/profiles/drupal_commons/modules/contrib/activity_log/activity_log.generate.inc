@@ -406,6 +406,7 @@ function _activity_log_regenerate_object($event, $query, $age, $offset, $timeles
   }
   $count = 0;
   while ($object = db_fetch_object($result)) {
+    _activity_log_action_timestamp(activity_log_get_timestamp($object, $event));
     if ($event == 'user_insert') {
       $object = array('account' => $object);
     }
