@@ -105,7 +105,7 @@ function commons_status_streams_disable_deprecated_notifications() {
       foreach (array('notifications_fields', 'notifications_queue', 'notifications') as $table) {
         db_query('DELETE FROM {' . $table . '} WHERE sid IN (' . $placeholders . ')', $sids);
       }
-      drupal_set_message(t('Deleted existing digest subscriptions deprecated by new Facebook-style status update functionality.'));
+      drupal_set_message(t('Deleted existing digest subscriptions deprecated by new Facebook-style Statuses update functionality.'));
     }
   }
 }
