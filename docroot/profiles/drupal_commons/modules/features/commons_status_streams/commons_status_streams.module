@@ -53,3 +53,32 @@ function commons_status_streams_init() {
   }
 }
 
+/**
+ * Implementation of hook_rules_defaults_alter()
+ */
+function commons_status_streams_rules_defaults_alter(&$rules) {
+  // Fix faulty HTML in activity_log and digest templates
+  // Also default the language to something that matches
+  // our user relationship type, and make sure the avatars
+  // are in there
+  // @see http://drupal.org/node/1255980
+  // @see http://drupal.org/node/1256722
+ 
+  // Activity log digests: rules_activity_log_digests_ur_request
+  $actions = &$rules['rules']['rules_activity_log_digests_ur_request']['#actions'];
+  $template_standard = '<div class="activity-log-picture">[requester:picture]</div><div class="activity-log-indent"></div><div class="activity-log-content">[requester:user] is now following [requestee:user]</div>'; 
+  $template_grouping = '<div class="activity-log-picture">[requester:picture]</div><div class="activity-log-indent"></div><div class="activity-log-content">[requester:user] is now following [collection]</div>';
+  $actions[0]['#settings']['templates']['en']['template'] = $template_standard;
+  $actions[1]['#settings']['templates']['en']['template'] = $template_standard;
+  $actions[0]['#settings']['grouping']['templates']['en']['template'] = $template_grouping;
+  $actions[1]['#settings']['grouping']['templates']['en']['template'] = $template_grouping;
+  
+  // Activity log: rules_activity_log_ur_request
+  $actions = &$rules['rules']['rules_activity_log_ur_request']['#actions'];
+  $template_standard = '<div class="activity-log-picture">[requester:picture]</div><div class="activity-log-indent"></div><div class="activity-log-content">[requester:user] is now following [requestee:user]</div>'; 
+  $template_grouping = '<div class="activity-log-picture">[requester:picture]</div><div class="activity-log-indent"></div><div class="activity-log-content">[requester:user] is now following [collection]</div>';
+  $actions[0]['#settings']['templates']['en']['template'] = $template_standard;
+  $actions[1]['#settings']['templates']['en']['template'] = $template_standard;
+  $actions[0]['#settings']['grouping']['templates']['en']['template'] = $template_grouping;
+  $actions[1]['#settings']['grouping']['templates']['en']['template'] = $template_grouping;
+}
