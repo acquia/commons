@@ -577,10 +577,15 @@ function commons_core_set_breadcrumb($path) {
     case 'node':
       if (isset($path[1]) && is_numeric($path[1])) {
         if ($node = menu_get_object('node')) {
-          switch ($node->type) {
-            case 'notice':
-              $breadcrumb[] = l(t('Notices'), 'notices');
-              break; 
+          if (og_is_group_type($node->type)) {
+            $breadcrumb[] = l(t('Groups'), 'groups');
+          }
+          else {
+            switch ($node->type) {
+              case 'notice':
+                $breadcrumb[] = l(t('Notices'), 'notices');
+                break; 
+            }
           }
         }
         
