@@ -575,20 +575,30 @@ function commons_core_set_breadcrumb($path) {
       break;
       
     case 'node':
-      if (is_numeric($path[1])) {
-        switch ($path[2]) {
-          case 'content':
-          case 'aggregator':
-            $group = node_load($path[1]);
-            $breadcrumb[] = l(t('Groups'), 'groups');
-            $breadcrumb[] = l($group->title, 'node/' . $group->nid);
-            break;
+      if (isset($path[1]) && is_numeric($path[1])) {
+        if ($node = menu_get_object('node')) {
+          switch ($node->type) {
+            case 'notice':
+              $breadcrumb[] = l(t('Notices'), 'notices');
+              break; 
+          }
+        }
+        
+        if (isset($path[2])) {
+          switch ($path[2]) {
+            case 'content':
+            case 'aggregator':
+              $group = node_load($path[1]);
+              $breadcrumb[] = l(t('Groups'), 'groups');
+              $breadcrumb[] = l($group->title, 'node/' . $group->nid);
+              break;
+          }
         }
       }
       break;
       
     case 'og':
-      if (is_numeric($path[2])) {
+      if (isset($path[2]) && is_numeric($path[2])) {
         switch ($path[1]) {
           case 'users':
           case 'search':
