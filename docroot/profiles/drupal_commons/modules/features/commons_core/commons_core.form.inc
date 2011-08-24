@@ -349,7 +349,8 @@ function commons_core_group_create_content_block_form(&$form_state) {
         // If numeric, try to load the nid to determine the node type
         // currently being viewed
         if (is_numeric($arg)) {
-          if ($node = node_load($arg) && !og_is_group_type($node->type)) {
+          $node = menu_get_object('node');
+          if (is_object($node) && !og_is_group_type($node->type)) {
             $form['node_type']['#default_value'] = $node->type;
             break;
           }
