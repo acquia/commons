@@ -46,6 +46,13 @@ function commons_core_admin_settings() {
     '#description' => t('Specify what the group homepage tab title should be. If left empty, the tab title will be <i>View</i>.'),
   );
   
+  $form['group_settings']['commons_search_group_title_length'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Line length limit for search widget'),
+    '#default_value' => variable_get('commons_search_group_title_length', 30),
+    '#description' => t('This value is used to truncate group names when being displayed in the site search widget, so that the search widget is no wider than the search field itself. If your theme has a narrower or wider search widget, you may wish to adjust the value in this field. If set to zero, there will be no limit.'),
+  );
+  
   $form['group_settings']['commons_force_unique_groups'] = array(
     '#type' => 'checkbox',
     '#title' => t('Force unique group names'),
@@ -82,4 +89,14 @@ function commons_core_admin_settings() {
   );
 
   return system_settings_form($form); 
+}
+
+/**
+ * Validate the admin settings form
+ */
+function commons_core_admin_settings_validate(&$form, &$form_state) {
+  // Make sure the group search title max length is numeric
+  if (!is_numeric($form_state['values']['commons_search_group_title_length'])) {
+    form_set_error('commons_search_group_title_length', t('The maximum title length must be a numeric value.'));
+  }
 }

@@ -495,7 +495,12 @@ function commons_core_form_search_theme_form_alter(&$form, &$form_state) {
       }
     }
     // Add the group as a possible search context.
-    $options['group'] = $form_state['group']->title;
+    $options['group'] = check_plain($form_state['group']->title);
+    // Truncate the title, if needed
+    $limit = variable_get('commons_search_group_title_length', 30);
+    if ($limit && strlen($options['group']) > $limit) {
+      $options['group'] = substr($options['group'], 0, $limit) . '...';
+    }
   }
 
   $options['site'] = t('Entire site');
