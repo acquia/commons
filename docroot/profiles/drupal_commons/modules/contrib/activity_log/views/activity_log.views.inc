@@ -64,7 +64,7 @@ function activity_log_views_pre_render(&$view) {
     }
     // Reduce the list of nids returned by the view to those which the user has permission to view.
     $nids_visible = array();
-    $query_restricted = db_query(db_rewrite_sql("SELECT DISTINCT(n.nid) FROM {node} n WHERE nid IN (". db_placeholders($nids) .")"), array_values($nids));
+    $query_restricted = db_query(db_rewrite_sql("SELECT DISTINCT(n.nid) FROM {node} n WHERE n.nid IN (". db_placeholders($nids) .")"), array_values($nids));
     while ($result_restricted = db_fetch_object($query_restricted)) {
       $nids_visible[$result_restricted->nid] = $result_restricted->nid;
     }
