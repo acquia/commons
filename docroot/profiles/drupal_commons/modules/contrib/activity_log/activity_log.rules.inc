@@ -662,7 +662,6 @@ function activity_log_input_evaluator_process_apply($string, $data = NULL, &$sta
         'id' => activity_log_get_id($info->data->_data),
         'type' => $info->info['type'],
         'class' => (empty($info->data->_data->class) ? 'rules_data_type_'. $info->info['type'] : $info->data->_data->class),
-        'timestamp' => activity_log_get_timestamp($info->data->_data),
       );
     }
   }
@@ -697,23 +696,6 @@ function activity_log_get_id($data) {
       return $value;
     }
   }
-}
-
-/**
- * Attempt to extract the timestamp of an object.
- *
- * We need to do this rather than relying on time() because we need to know the
- * time the entity was created when regenerating activity.
- */
-function activity_log_get_timestamp($data) {
-  // Practically everything uses either "timestamp" or "created." User Relationships uses created_at and Userpoints uses time_stamp.
-  foreach (array('timestamp', 'created', 'created_at', 'time_stamp') as $key) {
-    if (isset($data->$key)) {
-      return $data->$key;
-    }
-  }
-  // If we don't find anything, return the current time. This will be accurate except when regenerating activity.
-  return time();
 }
 
 /**
@@ -769,7 +751,7 @@ function activity_log_log_action($settings) {
   }
   $event = (object) array(
     'tid' => $settings['tid'],
-    'created' => $target['timestamp'],
+    'created' => _activity_log_action_timestamp(),
     'acting_uid' => $settings['acting_uid'],
     'target_id' => $target['id'],
     'target_type' => $target['type'],

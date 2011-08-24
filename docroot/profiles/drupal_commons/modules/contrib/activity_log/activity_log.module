@@ -334,6 +334,44 @@ function _activity_log_rebuild_templates() {
   return count($rules);
 }
 
+/**
+ * Get or set the timestamp for the current activity message.
+ */
+function _activity_log_action_timestamp($value = NULL) {
+  static $timestamp;
+  if (is_null($value)) {
+    if (empty($timestamp)) {
+      $timestamp = time();
+    }
+    return $timestamp;
+  }
+  $timestamp = $value;
+}
+
+/**
+ * Attempt to extract the timestamp of an object.
+ *
+ * We need to do this rather than relying on time() because we need to know the
+ * time the entity was created when regenerating activity.
+ *
+ * @param $data
+ *   The object for which a timestamp should be retrieved.
+ * @param $event
+ *   The Rules event which will be executed, if any.
+ * @return
+ *   A best guess at the timestamp for the relevant object.
+ */
+function activity_log_get_timestamp($data, $event = '') {
+  // Practically everything uses either "timestamp" or "created." User Relationships uses created_at and Userpoints uses time_stamp.
+  foreach (array('timestamp', 'created', 'created_at', 'time_stamp') as $key) {
+    if (isset($data->$key)) {
+      return $data->$key;
+    }
+  }
+  // If we don't find anything, return the current time.
+  return time();
+}
+
 //=====================
 // ACTIVITY LOG HOOKS.
 //=====================
