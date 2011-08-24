@@ -68,7 +68,15 @@
             <div class="facebook-status-links"><?php echo $links; ?></div>
           <?php endif; ?>
           <?php if (!empty($created)) : ?>
-            <div class="facebook-status-time"><?php echo $created; ?></div>
+            <div class="facebook-status-time">
+              <?php if (!$page): ?>
+                <a href="<?php echo $status_url; ?>">
+              <?php endif; ?>
+              <?php echo $created; ?>
+              <?php if (!$page): ?>
+                </a>
+              <?php endif; ?>
+            </div>
           <?php endif; ?>
         </div>
       <?php endif; ?>
