@@ -15,7 +15,7 @@
 function _digests_cron() {
   $default_tz = variable_get('date_default_timezone', 0);
   $now = time();
-  $send_time = mktime(variable_get('digests_send_time', 18), 0, 0);
+  $send_time = gmmktime(variable_get('digests_send_time', 18), 0, 0);
 
   // Step 1: Get users for whom it is after 6PM in their timezone but who have not had a digest sent for this interval.
   $default = $now > $send_time + $default_tz || $now < $send_time + $default_tz - 43200; // whether it's past send_time in the site's default timezone
