@@ -22,7 +22,7 @@ Add your own look &amp; feel, configure how it works, or extend it by installing
 
 <div class="intro-textblock">
 <h3>Link in the Network</h3>
-Enable your free trial to add content recommendations, advanced site search &amp; other features to your site.</div>
+Enable your free Acquia Network trial to add content recommendations, advanced site search &amp; other features to your site.</div>
 
 <div class="intro-textblock">
 <h3>Get help</h3>
