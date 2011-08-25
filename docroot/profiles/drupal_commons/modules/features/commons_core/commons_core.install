@@ -244,7 +244,7 @@ function commons_core_update_6008() {
 function commons_core_update_6009() {
   // Install activity streams.
   features_install_modules(array('commons_status_streams'));
-
+  commons_status_streams_disable_deprecated_notifications();
   // Port shouts to Facebook-style Statuses.
   if (db_table_exists('shoutbox')) {
     $max_sid = (int) db_result(db_query("SELECT MAX(sid) FROM {facebook_status}"));

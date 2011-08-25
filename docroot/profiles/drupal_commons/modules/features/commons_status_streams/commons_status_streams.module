@@ -93,6 +93,7 @@ function commons_status_streams_disable_deprecated_notifications() {
 
     // Disable notification of new commments by default.
     variable_set('notifications_default_auto', 0);
+    variable_set('og_notifications_autosubscribe', 0);
 
     // Remmove all notifications that do not have an "Immediate" interval.
     $query = db_query("SELECT sid FROM {notifications} WHERE send_interval > 0");
@@ -100,11 +101,11 @@ function commons_status_streams_disable_deprecated_notifications() {
       $sids[] = $result->sid;
     }
     if (!empty($sids)) {
-      $placeholders = $placeholders = db_placeholders($sids);
+      $placeholders = db_placeholders($sids);
       foreach (array('notifications_fields', 'notifications_queue', 'notifications') as $table) {
         db_query('DELETE FROM {' . $table . '} WHERE sid IN (' . $placeholders . ')', $sids);
       }
-      drupal_set_message(t('Deleted existing digest subscriptions deprecated by new Facebook-style status update functionality.'));
+      drupal_set_message(t('Deleted existing digest subscriptions deprecated by new Facebook-style Statuses update functionality.'));
     }
   }
 }
