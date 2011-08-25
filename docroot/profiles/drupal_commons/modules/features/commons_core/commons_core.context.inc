@@ -185,6 +185,7 @@ function commons_core_context_default_contexts() {
       'values' => array(
         'groups' => 'groups',
         'groups/*' => 'groups/*',
+        '~groups/mine' => '~groups/mine',
       ),
     ),
   );

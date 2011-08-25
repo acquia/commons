@@ -514,14 +514,10 @@ function commons_core_form_search_theme_form_alter(&$form, &$form_state) {
   );
   
   if (!isset($form_state['group']) && isset($menu_item['map'])) {
-    $form['refine']['#default_value'] = in_array('user', $menu_item['map']) ? 'user' : 'site';
+    $form['refine']['#default_value'] = (in_array('user', $menu_item['map']) || in_array('users', $menu_item['map'])) ? 'users' : 'site';
   }
   
   $form['submit']['#weight'] = 2;
-  $submit = $form['submit'];
-  unset($form['submit']);
-  $form['submit'] = $submit;
-  
   $form['search_theme_form']['#title'] = t('Search');
   
   // Replace the core search submit handler with our own

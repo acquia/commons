@@ -597,7 +597,7 @@ function commons_event_views_default_views() {
     ),
   ));
   $handler->override_option('fields', array(
-    'picture' => array(
+    'field_date_value' => array(
       'label' => '',
       'alter' => array(
         'alter_text' => 0,
@@ -614,17 +614,31 @@ function commons_event_views_default_views() {
         'max_length' => '',
         'word_boundary' => 1,
         'ellipsis' => 1,
-        'strip_tags' => 0,
         'html' => 0,
+        'strip_tags' => 0,
       ),
       'empty' => '',
       'hide_empty' => 0,
       'empty_zero' => 0,
-      'imagecache_preset' => 'user_picture_meta',
+      'link_to_node' => 0,
+      'label_type' => 'none',
+      'format' => 'default',
+      'multiple' => array(
+        'multiple_number' => '',
+        'multiple_from' => '',
+        'multiple_to' => '',
+        'group' => '',
+      ),
+      'repeat' => array(
+        'show_repeat_rule' => '',
+      ),
+      'fromto' => array(
+        'fromto' => 'both',
+      ),
       'exclude' => 0,
-      'id' => 'picture',
-      'table' => 'users',
-      'field' => 'picture',
+      'id' => 'field_date_value',
+      'table' => 'node_data_field_date',
+      'field' => 'field_date_value',
       'override' => array(
         'button' => 'Override',
       ),
@@ -692,53 +706,6 @@ function commons_event_views_default_views() {
       'id' => 'timestamp',
       'table' => 'history_user',
       'field' => 'timestamp',
-      'override' => array(
-        'button' => 'Override',
-      ),
-      'relationship' => 'none',
-    ),
-    'field_date_value' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'link_to_node' => 0,
-      'label_type' => 'none',
-      'format' => 'default',
-      'multiple' => array(
-        'multiple_number' => '',
-        'multiple_from' => '',
-        'multiple_to' => '',
-        'group' => '',
-      ),
-      'repeat' => array(
-        'show_repeat_rule' => '',
-      ),
-      'fromto' => array(
-        'fromto' => 'both',
-      ),
-      'exclude' => 0,
-      'id' => 'field_date_value',
-      'table' => 'node_data_field_date',
-      'field' => 'field_date_value',
       'override' => array(
         'button' => 'Override',
       ),
@@ -1204,10 +1171,10 @@ function commons_event_views_default_views() {
   ));
   $handler->override_option('row_options', array(
     'inline' => array(
-      'picture' => 'picture',
+      'title' => 'title',
+      'timestamp' => 'timestamp',
       'created' => 'created',
       'name' => 'name',
-      'timestamp' => 'timestamp',
     ),
     'separator' => '',
     'hide_empty' => 0,
@@ -4569,7 +4536,7 @@ function commons_event_views_default_views() {
     ),
   ));
   $handler->override_option('fields', array(
-    'picture' => array(
+    'field_date_value' => array(
       'label' => '',
       'alter' => array(
         'alter_text' => 0,
@@ -4586,17 +4553,31 @@ function commons_event_views_default_views() {
         'max_length' => '',
         'word_boundary' => 1,
         'ellipsis' => 1,
-        'strip_tags' => 0,
         'html' => 0,
+        'strip_tags' => 0,
       ),
       'empty' => '',
       'hide_empty' => 0,
       'empty_zero' => 0,
-      'imagecache_preset' => 'user_picture_meta',
+      'link_to_node' => 0,
+      'label_type' => 'none',
+      'format' => 'default',
+      'multiple' => array(
+        'multiple_number' => '',
+        'multiple_from' => '',
+        'multiple_to' => '',
+        'group' => '',
+      ),
+      'repeat' => array(
+        'show_repeat_rule' => '',
+      ),
+      'fromto' => array(
+        'fromto' => 'both',
+      ),
       'exclude' => 0,
-      'id' => 'picture',
-      'table' => 'users',
-      'field' => 'picture',
+      'id' => 'field_date_value',
+      'table' => 'node_data_field_date',
+      'field' => 'field_date_value',
       'override' => array(
         'button' => 'Override',
       ),
@@ -4664,53 +4645,6 @@ function commons_event_views_default_views() {
       'id' => 'timestamp',
       'table' => 'history_user',
       'field' => 'timestamp',
-      'override' => array(
-        'button' => 'Override',
-      ),
-      'relationship' => 'none',
-    ),
-    'field_date_value' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'link_to_node' => 0,
-      'label_type' => 'none',
-      'format' => 'default',
-      'multiple' => array(
-        'multiple_number' => '',
-        'multiple_from' => '',
-        'multiple_to' => '',
-        'group' => '',
-      ),
-      'repeat' => array(
-        'show_repeat_rule' => '',
-      ),
-      'fromto' => array(
-        'fromto' => 'both',
-      ),
-      'exclude' => 0,
-      'id' => 'field_date_value',
-      'table' => 'node_data_field_date',
-      'field' => 'field_date_value',
       'override' => array(
         'button' => 'Override',
       ),
@@ -5191,10 +5125,10 @@ function commons_event_views_default_views() {
   ));
   $handler->override_option('row_options', array(
     'inline' => array(
-      'picture' => 'picture',
+      'title' => 'title',
+      'timestamp' => 'timestamp',
       'created' => 'created',
       'name' => 'name',
-      'timestamp' => 'timestamp',
     ),
     'separator' => '',
     'hide_empty' => 0,
