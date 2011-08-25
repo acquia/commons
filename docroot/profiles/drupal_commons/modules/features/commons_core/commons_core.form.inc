@@ -518,10 +518,6 @@ function commons_core_form_search_theme_form_alter(&$form, &$form_state) {
   }
   
   $form['submit']['#weight'] = 2;
-  $submit = $form['submit'];
-  unset($form['submit']);
-  $form['submit'] = $submit;
-  
   $form['search_theme_form']['#title'] = t('Search');
   
   // Replace the core search submit handler with our own
