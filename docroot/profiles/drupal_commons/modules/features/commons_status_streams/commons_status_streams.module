@@ -89,8 +89,7 @@ function commons_status_streams_rules_defaults_alter(&$rules) {
 function commons_status_streams_views_default_views_alter(&$views) {
   // Fix for http://drupal.org/node/1259862
   // Determine the vid of the "hashtags" vocabulary
-  $vid = db_result(db_query("SELECT vid FROM {vocabulary} WHERE module = 'facebook_status_tags'"));
-  if ($vid) {
+  if ($vid = variable_get('facebook_status_tags_vid', FALSE)) {
     // Iterate the displays
     foreach ($views['facebook_status_tags']->display as $id => $display) {
       // Set the right vocabulary id
