@@ -3,63 +3,19 @@ Track Commons development on GitHub!
  - https://github.com/acquia/commons/
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Commons 2.0-dev, 2011-08-26
+Commons 2.0, 2011-08-26 (Release candidate)
 ------------------------------------
-CHANGELOG:
-- Changed: "My friends" menu link title to "My relationships"
-- Fixed: "Friends" block now titled as "Following"
-- Changed: Renamed "Drupal Commons" to just "Commons"
-- Added: "Featured groups" block to appear on all subgroup listings
-- Fixed: Remove deprecated daily digest functionality [#1249984]
-- Fixed: Provide empty text for empty status streams [#1247898]
-- Fixed: Use comment authors thumbnail on recent comment views
-- Fixed: Use $form_state['redirect'] instead of drupal_goto() on content 
-  add form
-- Replaced: Individual content-type blocks on group home page with a
-  single "Recent content" block for group content
-- Fixed: Various untranslatable strings
-- Added: Notices page on the Community menu. Also contains block for recent
-  notice comments.
-- Added: Contextual options on the site search form for entire site, people
-  and current group
-- Patched: Rules to allow for hook_rules_defaults_alter() [#978620]
-- Fixed: Force-settings the "Tags" vocabulary ID [#1071198]
+GENERAL INFORMATION
+This release provides a powerful new way for site users to interact: It changes an authenticated user's default page to be a page showing an stream of activities & status updates from people users follow. A similar activity stream is shown on group home pages. It follows the usability pattern in use by other leading consumer social sites, but adapts it to business-type use, and as well as adapting it to the groups-style information architecture used in Commons.
 
-Commons 2.0-beta2, 2011-08-09
-------------------------------------
-CHANGELOG:
-- Fixed: Many theme enhancements & issues
-- Fixed: Header login block should show on user profile pages [#1196714]
-- Fixed: Authenticated users should have permission to view activity streams
-- Fixed: Activity streams should show activity of people you follow and groups you're in
-- Fixed: Status messages used the wrong template in digest emails
-- Fixed: Digest emails use default theme's logo
-- Added: Subgroups-optimized view for listing groups (/groups)
-And lots of other enhancements and fixes.  The complete listing is at
-https://github.com/acquia/commons/commits/master
+This upgrade adds or changes some significant functionality, so we strongly recommend that you test the upgrade on a staging site before performing the upgrade on a live site.
+The official name of this distribution is changing from Drupal Commons to (just) Commons. This change is not fully implemented throughout the distribution; it may take several releases to gradually change all aspects and avoid breakage.
 
-UPGRADING TO 2.0-beta2
-As indicated in the Release notes for Beta 1 below, there IS NO
-officially-supported upgrade path from Beta1 to Beta2.
-There should be no major issues, but there are no guarantees.
-Beta 1 users may simply install Beta 2 on top of Beta 1.
-- If activity or status entries are NOT appearing on your /status page
-  or on a group home page, you may need to clear the activity log cache by
-  visiting /admin/settings/activity_log and clicking "Clear all message caches"
-
-NOTES:
-1) As with Beta 1 > 2, there will be no upgrade path from 2 > N.
-2) As with Beta 1, we do not recommend this be used on a production site,
-   nor should you upgrade a production site from a prior release to the 2.0
-   path before the GA (Generally Available) release of version 2.0
-
-
-Commons 2.0-beta1, 2011-07-25
-------------------------------------
-UPGRADING TO 2.0-beta1
-NOTE: This upgrade adds or changes some significant functionality, so we
-   strongly recommend that you test the upgrade on a staging site before
-   performing the upgrade on a live site.
+UPGRADING TO 2.0
+** This upgrade adds or changes some significant functionality, so we
+** strongly recommend that you test the upgrade on a staging site before
+** performing the upgrade on a live site. Be sure to read the NOTES 
+** above before proceeding
 1. Back up your code (everything in your Drupal root directory) and your
    database
 2. Turn on maintenance mode (admin/settings/site-maintenance)
@@ -71,26 +27,49 @@ NOTE: This upgrade adds or changes some significant functionality, so we
 4. Replace your code (everything in your Drupal root directory except the sites
    directory) with the contents of this archive
 5. Run the update script at /update.php
-5a.It is likely in this Beta release that running update.php will fail with
-   the following message:
-   "Unable to regenerate activity messages because no Rules events were found.
-    Try regnerating activity messages again.", with the second sentence being
-   a hyperlink.  YOU SHOULD click that link and regenerate activity messages.
-6. View the status report (admin/reports/status) to see if there are any
+   - Ignore all errors related to the heartbeat module that pertain to 
+     required files being unable to load. This is because that module has
+     been removed and those files no longer exist.
+   - It is likely that update.php will report the following message:
+       "Unable to regenerate activity messages because no Rules events were found.
+        Try regnerating activity messages again."
+     Click the link inside that message. This will take you to the Activity Log
+    administration page, on the Regenerate Activity tab.
+6. After following that link, click the "Regenerate" button and allow the
+   operation to finish. You do not need to set any of the options provided on that
+   page; simply click Regenerate.
+7. On that same page (Activity Log administration), click on the "Settings" tab,
+    then press the "Clear all message caches" button.
+8. Change the default user relationship from (two-way) "Friend" to (one-way) Follow.
+    (This is because the new activity stream feature in 2.0 allows you to see your
+    friends' activity as a one-way activity, a'la Twitter). To do this, go to
+    /admin/user/relationships and click "edit" next to the "Friend" relationship.
+    On the "Edit type" page that will appear, change the "Name" and "Plural name"
+    fields to "follower" and "users you follow," respectively. Then un-check the
+    "Requires Approval" box, and check the "This is a one-way relationship" box.
+    A new box will appear labeled "This one-way relationship can be
+    reciprocated," and you should check that as well. Then click the "Submit"
+    button at the bottom of the page.
+9. View the status report (admin/reports/status) to see if there are any
    errors that must be addressed
-7. If you had custom Rules or Contexts from step 3, you should re-create them
-   now for the Facebook-style Statuses and Activity Log modules.
-8. The Dashboard feature will be disabled during the upgrade. If you still want
-   to use it, you can re-enable it. However, keep in mind that it will probably
-   be deprecated in upcoming releases of Commons.
-9. This release re-organizes some of the blocks on user profile pages and group
-   home pages. If you have overridden the Contexts that provide the layout on
-   these pages, we strongly recommend that you revert your changes in the
-   Commons Core feature so that you can use the latest updates and make any
-   further changes afterwards as necessary.
-10.If no issues have arisen, then you may turn off maintenance mode.
-------------------------------------
+10. If you had custom Rules or Contexts from step 3, you should re-create them
+   now for the Facebook-style Statuses and Activity Log modules. If you're
+   unsure what this step is referring to, then you do not have to do anything.
+11. Given the new interface additions in this release, you may need to add new
+    CSS styling to the theme for your site if you have built a custom theme for
+    your common-based site.
+11. The Dashboard feature will be disabled during the upgrade. If you still want
+    to use it, you can re-enable it. However, keep in mind that it will probably
+    be deprecated in upcoming releases of Commons.
+12. This release re-organizes some of the blocks on user profile pages and group
+    home pages. If you have overridden the Contexts that provide the layout on
+    these pages, we strongly recommend that you revert your changes in the
+    Commons Core feature so that you can use the latest updates and make any
+    further changes afterwards as necessary.
+13. If no issues have arisen, then you may turn off maintenance mode.
+
 NOTES:
+
 - This release changes the default behavior of Notifications. Previously users
   were automatically subscribed to content they created or commented on,
   and they then received an email every time someone else commented on that
@@ -101,7 +80,18 @@ NOTES:
   the new activity streams on the site. Users can choose to receive this email
   weekly instead of daily, or disable it altogether. Administrators can
   customize the email format at admin/settings/digests.
-- This release switches from the Shoutbox module to the Facebook-style Statuses
+
+- The Dashboard feature will be disabled during the upgrade to 2.0. You can
+  re-enable it if you want to, but keep in mind that it will probably be
+  deprecated and eventually removed in upcoming Commons releases.
+
+- This release re-organizes some of the blocks on user profile pages and group
+  home pages. If you have overridden the Contexts that provide the layout on
+  these pages, we strongly recommend that you revert your changes in the
+  Commons Core feature so that you can use the latest updates and make any
+  further changes afterwards as necessary.
+
+ - This release switches from the Shoutbox module to the Facebook-style Statuses
   module and from the Heartbeat module to the Activity Log module. (When you
   upgrade from a previous version, the Commons Shoutbox feature will be
   disabled and the Commons Activity Stream feature will be enabled in its
@@ -146,27 +136,7 @@ NOTES:
     yet supported. (You can upgrade without problems, but comments on activity
     will be lost.) This is not the same as the core Comments module, which is
     fully supported.
-- We strongly recommend that if you are still using the default "Friend"
-  relationship installed with Commons that you change it to a one-way "follow"
-  relationship instead. This is because the new activity stream feature in 2.0
-  allows you to see your friends' activity. However, it is more natural to
-  "follow" someone to see their activity than to require someone to "friend"
-  you back before you can see their activity. To make this change, visit
-  admin/user/relationships and click "edit" next to the "Friend" relationship.
-  On the "Edit type" page that will appear, change the "Name" and "Plural name"
-  fields to "follower" and "users you follow," respectively. Then un-check the
-  "Requires Approval" box, and check the "This is a one-way relationship" box.
-  A new box will appear labeled "This one-way relationship can be
-  reciprocated," and you should check that as well. Then click the "Submit"
-  button at the bottom of the page.
-- The Dashboard feature will be disabled during the upgrade to 2.0. You can
-  re-enable it if you want to, but keep in mind that it will probably be
-  deprecated and eventually removed in upcoming Commons releases.
-- This release re-organizes some of the blocks on user profile pages and group
-  home pages. If you have overridden the Contexts that provide the layout on
-  these pages, we strongly recommend that you revert your changes in the
-  Commons Core feature so that you can use the latest updates and make any
-  further changes afterwards as necessary.
+
 ------------------------------------
 CHANGELOG:
 - Added: OG Subgroups
@@ -176,7 +146,7 @@ CHANGELOG:
   - Digests (daily or weekly emails of site activity)
 - Disabled: Commons Dashboard
 - Disabled: Commons Shoutbox
-- Disabled: Heartbeat
+- Removed: Heartbeat
 - Rebuilt: User profile pages (some blocks were rearranged)
 - Rebuilt: Group home pages (some blocks were rearranged)
 - Updated: Diff
@@ -184,36 +154,26 @@ CHANGELOG:
 - Updated: OG features
 - Fixed: Page manager node page view override conflict [#1181850]
 - Fixed: Recent comment blocks show node author rather than comment author
-------------------------------------
-KNOWN ISSUES (note: probably not exhaustive):
-- SP-736: Content in the Event block listing is shifted too-far right
-- SP-737: Activity messages contain "in" at the end if the content type
-          isn't a group post, or if the content item wasn't posted
-          into a group.
-- SP-738: In the Environs theme, the Primary Links dropdown drops
-          behind the node body in some cases
-- SP-739: Email logo appears in daily digest email messages even when
-          nothing was entered into the logo box
-- SP-740: There are no avatars next to node messages in digest emails
-- SP-741: Avatars in digest emails have way too much room
-- SP-742: Anonymous users can visit the /stream page, but they see
-          no activity
-- SP-743: Activity posts must be posted to all the groups that a node
-          is in, not just the current context
-- SP-744: Personal status update in digest emails are theme wrong
-          (shows me twice, e.g. me > me)
-- SP-745: Some generated messages for status updates created using
-          Devel Generate are showing up blank
-- SP-746: The 1.7 to 2.0 upgrade (during update.php) fails to properly
-          regenerate activity log entries to be usable by the new
-          Activity Stream module; admins must manually regnerate these
-          post upgrade.
-          
-
-Commons 1.x-dev, 2011-06-20
-------------------------------------
-CHANGELOG:
 - Fixed: Typo in profile location field definition
+- Changed: "My friends" menu link title to "My relationships"
+- Fixed: "Friends" block now titled as "Following"
+- Changed: Renamed "Drupal Commons" to just "Commons"
+- Added: "Featured groups" block to appear on all subgroup listings
+- Fixed: Remove deprecated daily digest functionality [#1249984]
+- Fixed: Use comment authors thumbnail on recent comment views
+- Fixed: Use $form_state['redirect'] instead of drupal_goto() on content 
+  add form
+- Replaced: Individual content-type blocks on group home page with a
+  single "Recent content" block for group content
+- Fixed: Various untranslatable strings
+- Added: Notices page on the Community menu. Also contains block for recent
+  notice comments.
+- Added: Contextual options on the site search form for entire site, people
+  and current group
+- Patched: Rules to allow for hook_rules_defaults_alter() [#978620]
+- Fixed: Force-settings the "Tags" vocabulary ID [#1071198]
+- Added: Subgroups-optimized view for listing groups (/groups)
+
 
 
 Commons 1.7, 2011-06-17
