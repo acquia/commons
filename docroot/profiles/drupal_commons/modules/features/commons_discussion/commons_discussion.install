@@ -30,14 +30,8 @@ function commons_discussion_add_flag() {
  * Add taxonomy to discussion nodes
  */
 function commons_discussion_add_taxonomy() {
-  require_once('profiles/drupal_commons/drupal_commons.profile');
-  
-  $check_sql = "SELECT vid FROM {vocabulary_node_types} WHERE vid = %d and type = '%s'";
-  
-  if (!db_result(db_query($check_sql, DRUPAL_COMMONS_TAG_ID, 'discussion'))) {
-    $taxonomy = new stdClass;
-    $taxonomy->vid = DRUPAL_COMMONS_TAG_ID;
-    $taxonomy->type = 'discussion';
-    drupal_write_record('vocabulary_node_types', $taxonomy);
-  }
+  $taxonomy = new stdClass;
+  $taxonomy->vid = variable_get('commons_tags_vid', 1);
+  $taxonomy->type = 'discussion';
+  drupal_write_record('vocabulary_node_types', $taxonomy);
 }

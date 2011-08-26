@@ -33,14 +33,8 @@ function commons_document_add_flag() {
  * Add taxonomy to document nodes
  */
 function commons_document_add_taxonomy() {
-  require_once('profiles/drupal_commons/drupal_commons.profile');
-  
-  $check_sql = "SELECT vid FROM {vocabulary_node_types} WHERE vid = %d and type = '%s'";
-  
-  if (!db_result(db_query($check_sql, DRUPAL_COMMONS_TAG_ID, 'document'))) {
-    $taxonomy = new stdClass;
-    $taxonomy->vid = DRUPAL_COMMONS_TAG_ID;
-    $taxonomy->type = 'document';
-    drupal_write_record('vocabulary_node_types', $taxonomy);
-  }
+  $taxonomy = new stdClass;
+  $taxonomy->vid = variable_get('commons_tags_vid', 1);
+  $taxonomy->type = 'document';
+  drupal_write_record('vocabulary_node_types', $taxonomy);
 }

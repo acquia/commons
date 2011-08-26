@@ -335,15 +335,6 @@ function commons_core_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'user_terms_vocabs';
-  $strongarm->value = array(
-    2 => '2',
-  );
-
-  $export['user_terms_vocabs'] = $strongarm;
-  $strongarm = new stdClass;
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
   $strongarm->name = 'wysiwyg_filter_styles_border-1_1';
   $strongarm->value = array(
     'border' => 'border',

@@ -1,8 +1,5 @@
 <?php
 
-// Define the forced ID of the free-tagging vocabulary
-define('DRUPAL_COMMONS_TAG_ID', 2);
-
 // Define the default WYSIWYG editor
 define('DRUPAL_COMMONS_EDITOR', 'ckeditor');
 
@@ -205,12 +202,8 @@ function drupal_commons_config_taxonomy() {
   );
   taxonomy_save_vocabulary($vocab); 
   
-  // Force free-tagging vocabulary to a certain ID
-  // This is needed for bundled views to work
-  db_query("UPDATE {vocabulary} SET vid = %d WHERE name = '%s'",
-    DRUPAL_COMMONS_TAG_ID,
-    st('Tags')
-  );
+  // Store the vocabulary id
+  variable_set('commons_tags_vid', $vocab['vid']);
 }
 
 /**
@@ -462,6 +455,10 @@ function drupal_commons_config_vars() {
   
   // Don't restrict user profile image upload size
   variable_set('user_picture_file_size', '');
+  
+  // Set user terms to use the "tags" vocabulary we created
+  $vid = variable_get('commons_tags_vid', 1);
+  variable_set('user_terms_vocabs', array($vid => $vid));
 }
 
 /**

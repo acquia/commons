@@ -429,6 +429,62 @@ function commons_core_views_pre_view(&$view, &$display_id, &$args) {
 }
 
 /**
+ * Implementation of hook_views_default_views_alter()
+ */
+function commons_core_views_default_views_alter(&$views) {
+  // Being that vocabularies don't use a machine-name and rely
+  // on an auto-incrementing numeric id, the views exports
+  // contain a vocabulary id for our "Tags" vocabulary that
+  // might not match the id on all installations
+  // Here, we override the default views to match the id
+  // that it's currently set to
+  // @see http://drupal.org/node/1071198
+  
+  // Fetch the "tags" vid
+  $vid = variable_get('commons_tags_vid', 1);
+  // Fetch feature information
+  $modules = features_get_info('module');
+  // Determine all of the views provided by Commons
+  $commons_views = array();
+  foreach ($modules as $name => $module) {
+    // Check if this is a Commons module/feature
+    if (substr($name, 0, 8) == 'commons_') {
+      if (isset($module->info['features']['views'])) {
+        $commons_views = array_merge($commons_views, $module->info['features']['views']);
+      }
+    }
+  }
+  
+  // Iterate the views to fix potential vocabulary
+  foreach ($views as $name => $view) {
+    // See if this view comes from Commons
+    if (in_array($name, $commons_views)) {
+      // Only alter node-based views
+      if ($view->base_table == 'node') {
+        // Iterate each display
+        foreach ($view->display as $did => $display) {
+          // We could add support for taxonomy arguments and the 
+          // various other taxonomy filters, but Commons is not
+          // using them, so no reason to add them yet.
+            
+          // Check for the presence of a taxonomy filter
+          if (isset($display->display_options['filters']['tid'])) {
+            // Set the vocabulary to use the "tags" vocabulary
+            $views[$name]->display[$did]->display_options['filters']['tid']['vid'] = $vid;
+          }
+          
+          // Check for the presence of a vocabulary filter
+          if (isset($display->display_options['filters']['vid'])) {
+            // Set the vocabulary to use the "tags" vocabulary
+            $views[$name]->display[$did]->display_options['filters']['vid']['value'] = array($vid => $vid);
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
  * Implementation of hook_wysiwyg_editor_settings_alter()
  */
 function commons_core_wysiwyg_editor_settings_alter(&$settings, $context) {

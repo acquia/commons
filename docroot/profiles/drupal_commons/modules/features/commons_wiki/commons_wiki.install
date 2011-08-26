@@ -56,14 +56,8 @@ function commons_wiki_add_flag() {
  * Add taxonomy to wiki nodes
  */
 function commons_wiki_add_taxonomy() {
-  require_once('profiles/drupal_commons/drupal_commons.profile');
-  
-  $check_sql = "SELECT vid FROM {vocabulary_node_types} WHERE vid = %d and type = '%s'";
-  
-  if (!db_result(db_query($check_sql, DRUPAL_COMMONS_TAG_ID, 'wiki'))) {
-    $taxonomy = new stdClass;
-    $taxonomy->vid = DRUPAL_COMMONS_TAG_ID;
-    $taxonomy->type = 'wiki';
-    drupal_write_record('vocabulary_node_types', $taxonomy);
-  }
+  $taxonomy = new stdClass;
+  $taxonomy->vid = variable_get('commons_tags_vid', 1);
+  $taxonomy->type = 'wiki';
+  drupal_write_record('vocabulary_node_types', $taxonomy);
 }
