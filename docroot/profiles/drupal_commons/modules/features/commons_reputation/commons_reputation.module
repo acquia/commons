@@ -16,6 +16,17 @@ function commons_reputation_views_pre_view(&$view, &$display_id, &$args) {
 }
 
 /**
+ * Implementation of hook_enable()
+ */
+function commons_reputation_enable() {
+  // See if user points is enabled
+  if (module_exists('facebook_status')) {
+    // Enable the integration between status streams and userpoints
+    drupal_install_modules(array('fbss_userpoints'));
+  }
+}
+
+/**
  * Implementation of hook_commons_profile_action_links_alter()
  */
 function commons_reputation_commons_profile_action_links_alter(&$links, $account) {

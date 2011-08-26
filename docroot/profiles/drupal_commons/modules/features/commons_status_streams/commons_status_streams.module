@@ -54,6 +54,17 @@ function commons_status_streams_init() {
 }
 
 /**
+ * Implementation of hook_enable()
+ */
+function commons_status_streams_enable() {
+  // See if user points is enabled
+  if (module_exists('userpoints')) {
+    // Enable the integration between status streams and userpoints
+    drupal_install_modules(array('fbss_userpoints'));
+  }
+}
+
+/**
  * Implementation of hook_rules_defaults_alter()
  */
 function commons_status_streams_rules_defaults_alter(&$rules) {
