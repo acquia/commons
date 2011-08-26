@@ -182,6 +182,19 @@ function _quant_quants() {
     $quants[$quant->id] = $quant;
   }
   
+  // Status shares (Facebook-style statuses)
+  if (module_exists('facebook_status')) {
+    $quant = new stdClass;
+    $quant->id = 'facebook_status';
+    $quant->label = t('Statuses shared');
+    $quant->labelsum = TRUE;
+    $quant->table = '';
+    $quant->field = 'created';
+    $quant->dataType = 'single';
+    $quant->chartType = 'line';
+    $quants[$quant->id] = $quant;
+  }
+  
   return $quants;
 }
 
