@@ -91,10 +91,12 @@ function commons_status_streams_views_default_views_alter(&$views) {
   // Determine the vid of the "hashtags" vocabulary
   if ($vid = variable_get('facebook_status_tags_vid', FALSE)) {
     // Iterate the displays
-    foreach ($views['facebook_status_tags']->display as $id => $display) {
-      // Set the right vocabulary id
-      if (isset($views['facebook_status_tags']->display[$id]->display_options['arguments']['has-specific-tag'])) {
-        $views['facebook_status_tags']->display[$id]->display_options['arguments']['has-specific-tag']['validate_argument_vocabulary'] = array($vid => $vid);
+    if (isset($views['facebook_status_tags'])) {
+      foreach ($views['facebook_status_tags']->display as $id => $display) {
+        // Set the right vocabulary id
+        if (isset($views['facebook_status_tags']->display[$id]->display_options['arguments']['has-specific-tag'])) {
+          $views['facebook_status_tags']->display[$id]->display_options['arguments']['has-specific-tag']['validate_argument_vocabulary'] = array($vid => $vid);
+        }
       }
     }
   }
