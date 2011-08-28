@@ -213,6 +213,7 @@ projects[digests][subdir] = "contrib"
 projects[facebook_status][download][type] = "git"
 projects[facebook_status][download][url] = "http://git.drupal.org/project/facebook_status.git"
 projects[facebook_status][download][revision] = "6.x-3.x"
+projects[facebook_status][subdir] = "contrib"
 
 ; Themes
 
