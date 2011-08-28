@@ -190,174 +190,32 @@ projects[wysiwyg][version] = "2.x-dev"
 projects[wysiwyg_filter][subdir] = "contrib"
 projects[wysiwyg_filter][version] = "1.5"
 
-; Themes
-projects[fusion][version] = "1.0"
 
-
-
-; Please fill the following out. Type may be one of get, cvs, git, bzr or svn,
-; and url is the url of the download.
 projects[activity_log][download][type] = "git"
 projects[activity_log][download][url] = "http://git.drupal.org/project/activity_log.git"
 projects[activity_log][download][version] = "6.x-2.x"
-
 projects[activity_log][type] = "module"
+projects[activity_log][subdir] = "contrib"
 
-; Please fill the following out. Type may be one of get, cvs, git, bzr or svn,
-; and url is the url of the download.
-projects[al_pages][download][type] = ""
-projects[al_pages][download][url] = ""
-projects[al_pages][type] = "module"
 
-; Please fill the following out. Type may be one of get, cvs, git, bzr or svn,
-; and url is the url of the download.
-projects[al_radioactivity][download][type] = ""
-projects[al_radioactivity][download][url] = ""
-projects[al_radioactivity][type] = "module"
-
-; Please fill the following out. Type may be one of get, cvs, git, bzr or svn,
-; and url is the url of the download.
 projects[commons_features][download][type] = "git"
 projects[commons_features][download][revision] = "6.x-2.x"
 projects[commons_features][download][url] = "http://git.drupal.org/sandbox/ezrag/1262136.git"
 projects[commons_features][type] = "module"
 
-; Please fill the following out. Type may be one of get, cvs, git, bzr or svn,
-; and url is the url of the download.
-projects[digests][download][type] = ""
-projects[digests][download][url] = ""
+
+projects[digests][download][type] = "git"
+projects[digests][download][url] = "http://git.drupal.org/project/digests.git"
+projects[digests][download][revision] = "6.x-1.x"
 projects[digests][type] = "module"
+projects[digests][subdir] = "contrib"
 
-; Please fill the following out. Type may be one of get, cvs, git, bzr or svn,
-; and url is the url of the download.
-projects[facebook_status][download][type] = ""
-projects[facebook_status][download][url] = ""
-projects[facebook_status][type] = "module"
-
-; Please fill the following out. Type may be one of get, cvs, git, bzr or svn,
-; and url is the url of the download.
-projects[facebook_status_tags][download][type] = ""
-projects[facebook_status_tags][download][url] = ""
-projects[facebook_status_tags][type] = "module"
-
-; Please fill the following out. Type may be one of get, cvs, git, bzr or svn,
-; and url is the url of the download.
-projects[fbsmp][download][type] = ""
-projects[fbsmp][download][url] = ""
-projects[fbsmp][type] = "module"
-
-; Please fill the following out. Type may be one of get, cvs, git, bzr or svn,
-; and url is the url of the download.
-projects[fbss_activity][download][type] = ""
-projects[fbss_activity][download][url] = ""
-projects[fbss_activity][type] = "module"
-
-; Please fill the following out. Type may be one of get, cvs, git, bzr or svn,
-; and url is the url of the download.
-projects[fbss_comments][download][type] = ""
-projects[fbss_comments][download][url] = ""
-projects[fbss_comments][type] = "module"
-
-; Please fill the following out. Type may be one of get, cvs, git, bzr or svn,
-; and url is the url of the download.
-projects[fbss_comments_flag][download][type] = ""
-projects[fbss_comments_flag][download][url] = ""
-projects[fbss_comments_flag][type] = "module"
-
-; Please fill the following out. Type may be one of get, cvs, git, bzr or svn,
-; and url is the url of the download.
-projects[fbss_comments_rules][download][type] = ""
-projects[fbss_comments_rules][download][url] = ""
-projects[fbss_comments_rules][type] = "module"
-
-; Please fill the following out. Type may be one of get, cvs, git, bzr or svn,
-; and url is the url of the download.
-projects[fbss_custom][download][type] = ""
-projects[fbss_custom][download][url] = ""
-projects[fbss_custom][type] = "module"
-
-; Please fill the following out. Type may be one of get, cvs, git, bzr or svn,
-; and url is the url of the download.
-projects[fbss_domain][download][type] = ""
-projects[fbss_domain][download][url] = ""
-projects[fbss_domain][type] = "module"
-
-; Please fill the following out. Type may be one of get, cvs, git, bzr or svn,
-; and url is the url of the download.
-projects[fbss_flag][download][type] = ""
-projects[fbss_flag][download][url] = ""
-projects[fbss_flag][type] = "module"
-
-; Please fill the following out. Type may be one of get, cvs, git, bzr or svn,
-; and url is the url of the download.
-projects[fbss_mollom][download][type] = ""
-projects[fbss_mollom][download][url] = ""
-projects[fbss_mollom][type] = "module"
-
-; Please fill the following out. Type may be one of get, cvs, git, bzr or svn,
-; and url is the url of the download.
-projects[fbss_notifications][download][type] = ""
-projects[fbss_notifications][download][url] = ""
-projects[fbss_notifications][type] = "module"
-
-; Please fill the following out. Type may be one of get, cvs, git, bzr or svn,
-; and url is the url of the download.
-projects[fbss_pathauto][download][type] = ""
-projects[fbss_pathauto][download][url] = ""
-projects[fbss_pathauto][type] = "module"
-
-; Please fill the following out. Type may be one of get, cvs, git, bzr or svn,
-; and url is the url of the download.
-projects[fbss_privacy][download][type] = ""
-projects[fbss_privacy][download][url] = ""
-projects[fbss_privacy][type] = "module"
-
-; Please fill the following out. Type may be one of get, cvs, git, bzr or svn,
-; and url is the url of the download.
-projects[fbss_rules][download][type] = ""
-projects[fbss_rules][download][url] = ""
-projects[fbss_rules][type] = "module"
-
-; Please fill the following out. Type may be one of get, cvs, git, bzr or svn,
-; and url is the url of the download.
-projects[fbss_services][download][type] = ""
-projects[fbss_services][download][url] = ""
-projects[fbss_services][type] = "module"
-
-; Please fill the following out. Type may be one of get, cvs, git, bzr or svn,
-; and url is the url of the download.
-projects[fbss_twitter][download][type] = ""
-projects[fbss_twitter][download][url] = ""
-projects[fbss_twitter][type] = "module"
-
-; Please fill the following out. Type may be one of get, cvs, git, bzr or svn,
-; and url is the url of the download.
-projects[fbss_userpoints][download][type] = ""
-projects[fbss_userpoints][download][url] = ""
-projects[fbss_userpoints][type] = "module"
+projects[facebook_status][download][type] = "git"
+projects[facebook_status][download][url] = "http://git.drupal.org/project/facebook_status.git"
+projects[facebook_status][download][revision] = "6.x-3.x"
 
 ; Themes
-; Please fill the following out. Type may be one of get, cvs, git, bzr or svn,
-; and url is the url of the download.
-projects[commons_roots][download][type] = ""
-projects[commons_roots][download][url] = ""
-projects[commons_roots][type] = "theme"
 
-; Please fill the following out. Type may be one of get, cvs, git, bzr or svn,
-; and url is the url of the download.
-projects[commons_origins][download][type] = ""
-projects[commons_origins][download][url] = ""
-projects[commons_origins][type] = "theme"
-
-; Please fill the following out. Type may be one of get, cvs, git, bzr or svn,
-; and url is the url of the download.
-projects[commons_environs][download][type] = ""
-projects[commons_environs][download][url] = ""
-projects[commons_environs][type] = "theme"
-
-; Please fill the following out. Type may be one of get, cvs, git, bzr or svn,
-; and url is the url of the download.
-projects[commons_connect][download][type] = ""
-projects[commons_connect][download][url] = ""
-projects[commons_connect][type] = "theme"
+projects[fusion][version] = "1.0"
+; @TODO: Create contrib project(s) for Commons-specific themes.
 
