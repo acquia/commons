@@ -12,186 +12,185 @@ projects[drupal_commons][download][revision] = "6.x-2.x"
 projects[drupal_commons][type] = "profile"
 
 ; Modules
-projects[views_bulk_operations][subdir] = "profiles/drupal_commons/modules/contrib/views_bulk_operations"
+projects[views_bulk_operations][subdir] = "contrib/views_bulk_operations"
 projects[views_bulk_operations][version] = "1.10"
 
-projects[admin][subdir] = "profiles/drupal_commons/modules/contrib/admin"
+projects[admin][subdir] = "contrib"
 projects[admin][version] = "2.0"
 
-projects[ajax_load][subdir] = "profiles/drupal_commons/modules/contrib/ajax_load"
+projects[ajax_load][subdir] = "contrib"
 projects[ajax_load][version] = "1.x-dev"
 
-projects[boxes][subdir] = "profiles/drupal_commons/modules/contrib/boxes"
+projects[boxes][subdir] = "contrib"
 projects[boxes][version] = "1.0"
 
-projects[ctools][subdir] = "profiles/drupal_commons/modules/contrib/ctools"
+projects[ctools][subdir] = "contrib"
 projects[ctools][version] = "1.8"
 
-projects[calendar][subdir] = "profiles/drupal_commons/modules/contrib/calendar"
+projects[calendar][subdir] = "contrib"
 projects[calendar][version] = "2.4"
 
-projects[chart][subdir] = "profiles/drupal_commons/modules/contrib/chart"
+projects[chart][subdir] = "contrib"
 projects[chart][version] = "1.3"
 
 
-projects[cck][subdir] = "profiles/drupal_commons/modules/contrib/cck"
+projects[cck][subdir] = "contrib"
 projects[cck][version] = "2.9"
 
-projects[context][subdir] = "profiles/drupal_commons/modules/contrib/context"
+projects[context][subdir] = "contrib"
 projects[context][version] = "3.0"
 
-projects[context_og][subdir] = "profiles/drupal_commons/modules/contrib/context_og"
+projects[context_og][subdir] = "contrib"
 projects[context_og][version] = "3.0"
 
-projects[date][subdir] = "profiles/drupal_commons/modules/contrib/date"
+projects[date][subdir] = "contrib"
 projects[date][version] = "2.7"
 
-projects[diff][subdir] = "profiles/drupal_commons/modules/contrib/diff"
+projects[diff][subdir] = "contrib"
 projects[diff][version] = "2.2"
 
-projects[tagging][subdir] = "profiles/drupal_commons/modules/contrib/tagging"
+projects[tagging][subdir] = "contrib"
 projects[tagging][version] = "2.5"
 
-projects[editablefields][subdir] = "profiles/drupal_commons/modules/contrib/editablefields"
+projects[editablefields][subdir] = "contrib"
 projects[editablefields][version] = "2.0"
 
-projects[features][subdir] = "profiles/drupal_commons/modules/contrib/features"
+projects[features][subdir] = "contrib"
 projects[features][version] = "1.0"
 
-projects[filefield][subdir] = "profiles/drupal_commons/modules/contrib/filefield"
+projects[filefield][subdir] = "contrib"
 projects[filefield][version] = "3.10"
 
-projects[flag][subdir] = "profiles/drupal_commons/modules/contrib/flag"
+projects[flag][subdir] = "contrib"
 projects[flag][version] = "1.3"
 
-projects[freelinking][subdir] = "profiles/drupal_commons/modules/contrib/freelinking"
+projects[freelinking][subdir] = "contrib"
 projects[freelinking][version] = "1.10"
 
-projects[getid3][subdir] = "profiles/drupal_commons/modules/contrib/getid3"
+projects[getid3][subdir] = "contrib"
 projects[getid3][version] = "1.4"
 
-projects[imageapi][subdir] = "profiles/drupal_commons/modules/contrib/imageapi"
+projects[imageapi][subdir] = "contrib"
 projects[imageapi][version] = "1.10"
 
-projects[imagecache][subdir] = "profiles/drupal_commons/modules/contrib/imagecache"
+projects[imagecache][subdir] = "contrib"
 projects[imagecache][version] = "2.0-beta12"
 
-projects[imagecache_actions][subdir] = "profiles/drupal_commons/modules/contrib/imagecache_actions"
+projects[imagecache_actions][subdir] = "contrib"
 projects[imagecache_actions][version] = "1.8"
 
-projects[imagecache_profiles][subdir] = "profiles/drupal_commons/modules/contrib/imagecache_profiles"
+projects[imagecache_profiles][subdir] = "contrib"
 projects[imagecache_profiles][version] = "1.3"
 
-projects[imagefield][subdir] = "profiles/drupal_commons/modules/contrib/imagefield"
+projects[imagefield][subdir] = "contrib"
 projects[imagefield][version] = "3.10"
 
-projects[insert][subdir] = "profiles/drupal_commons/modules/contrib/insert"
+projects[insert][subdir] = "contrib"
 projects[insert][version] = "1.1"
 
-projects[invite][subdir] = "profiles/drupal_commons/modules/contrib/invite"
+projects[invite][subdir] = "contrib"
 projects[invite][version] = "2.0-beta3"
 
-projects[jquery_ui][subdir] = "profiles/drupal_commons/modules/contrib/jquery_ui"
+projects[jquery_ui][subdir] = "contrib"
 projects[jquery_ui][version] = "1.4"
 
-projects[link][subdir] = "profiles/drupal_commons/modules/contrib/link"
+projects[link][subdir] = "contrib"
 projects[link][version] = "2.9"
 
-projects[messaging][subdir] = "profiles/drupal_commons/modules/contrib/messaging"
+projects[messaging][subdir] = "contrib"
 projects[messaging][version] = "2.4"
 
-projects[mimemail][subdir] = "profiles/drupal_commons/modules/contrib/mimemail"
+projects[mimemail][subdir] = "contrib"
 projects[mimemail][version] = "1.0-beta2"
 
-projects[notifications][subdir] = "profiles/drupal_commons/modules/contrib/notifications"
+projects[notifications][subdir] = "contrib"
 projects[notifications][version] = "2.3"
 
-projects[og][subdir] = "profiles/drupal_commons/modules/contrib/og"
+projects[og][subdir] = "contrib"
 projects[og][version] = "2.1"
 
-projects[og_aggregator][subdir] = "profiles/drupal_commons/modules/contrib/og_aggregator"
+projects[og_aggregator][subdir] = "contrib"
 projects[og_aggregator][version] = "1.4"
 
-projects[og_features][subdir] = "profiles/drupal_commons/modules/contrib/og_features"
+projects[og_features][subdir] = "contrib"
 projects[og_features][version] = "1.1"
 
-projects[og_invite_link][subdir] = "profiles/drupal_commons/modules/contrib/og_invite_link"
+projects[og_invite_link][subdir] = "contrib"
 projects[og_invite_link][version] = "1.0"
 
-projects[og_statistics][subdir] = "profiles/drupal_commons/modules/contrib/og_statistics"
+projects[og_statistics][subdir] = "contrib"
 projects[og_statistics][version] = "1.0-rc5"
 
-projects[og_subgroups][subdir] = "profiles/drupal_commons/modules/contrib/og_subgroups"
+projects[og_subgroups][subdir] = "contrib"
 projects[og_subgroups][version] = "1.0-beta3"
 
-projects[password_policy][subdir] = "profiles/drupal_commons/modules/contrib/password_policy"
+projects[password_policy][subdir] = "contrib"
 projects[password_policy][version] = "1.0-beta1"
 
-projects[pathauto][subdir] = "profiles/drupal_commons/modules/contrib/pathauto"
+projects[pathauto][subdir] = "contrib"
 projects[pathauto][version] = "1.5"
 
-projects[quant][subdir] = "profiles/drupal_commons/modules/contrib/quant"
+projects[quant][subdir] = "contrib"
 projects[quant][version] = "1.x-dev"
 
-projects[rules][subdir] = "profiles/drupal_commons/modules/contrib/rules"
+projects[rules][subdir] = "contrib"
 projects[rules][version] = "1.4"
 
-projects[strongarm][subdir] = "profiles/drupal_commons/modules/contrib/strongarm"
+projects[strongarm][subdir] = "contrib"
 projects[strongarm][version] = "2.0"
 
-projects[tagadelic][subdir] = "profiles/drupal_commons/modules/contrib/tagadelic"
+projects[tagadelic][subdir] = "contrib"
 projects[tagadelic][version] = "1.3"
 
-projects[tagadelic_views][subdir] = "profiles/drupal_commons/modules/contrib/tagadelic_views"
+projects[tagadelic_views][subdir] = "contrib"
 projects[tagadelic_views][version] = "1.2"
 
-projects[token][subdir] = "profiles/drupal_commons/modules/contrib/token"
+projects[token][subdir] = "contrib"
 projects[token][version] = "1.16"
 
-projects[transliteration][subdir] = "profiles/drupal_commons/modules/contrib/transliteration"
+projects[transliteration][subdir] = "contrib"
 projects[transliteration][version] = "3.0"
 
-projects[userpoints_contrib][subdir] = "profiles/drupal_commons/modules/contrib/userpoints_contrib"
+projects[userpoints_contrib][subdir] = "contrib"
 projects[userpoints_contrib][version] = "1.x-dev"
 
-projects[user_badges][subdir] = "profiles/drupal_commons/modules/contrib/user_badges"
+projects[user_badges][subdir] = "contrib"
 projects[user_badges][version] = "1.6"
 
-projects[user_relationships][subdir] = "profiles/drupal_commons/modules/contrib/user_relationships"
+projects[user_relationships][subdir] = "contrib"
 projects[user_relationships][version] = "1.0"
 
-projects[user_terms][subdir] = "profiles/drupal_commons/modules/contrib/user_terms"
+projects[user_terms][subdir] = "contrib"
 projects[user_terms][version] = "1.0"
 
-projects[userpoints][subdir] = "profiles/drupal_commons/modules/contrib/userpoints"
+projects[userpoints][subdir] = "contrib"
 projects[userpoints][version] = "1.2"
 
-projects[userpoints_nc][subdir] = "profiles/drupal_commons/modules/contrib/userpoints_nc"
+projects[userpoints_nc][subdir] = "contrib"
 projects[userpoints_nc][version] = "1.1"
 
-projects[userpoints_user_picture][subdir] = "profiles/drupal_commons/modules/contrib/userpoints_user_picture"
+projects[userpoints_user_picture][subdir] = "contrib"
 projects[userpoints_user_picture][version] = "1.2"
 
-projects[vertical_tabs][subdir] = "profiles/drupal_commons/modules/contrib/vertical_tabs"
+projects[vertical_tabs][subdir] = "contrib"
 projects[vertical_tabs][version] = "1.0-rc1"
 
-projects[views][subdir] = "profiles/drupal_commons/modules/contrib/views"
+projects[views][subdir] = "contrib"
 projects[views][version] = "2.12"
 
-projects[views_slideshow][subdir] = "profiles/drupal_commons/modules/contrib/views_slideshow"
+projects[views_slideshow][subdir] = "contrib"
 projects[views_slideshow][version] = "2.3"
 
-projects[wikitools][subdir] = "profiles/drupal_commons/modules/contrib/wikitools"
+projects[wikitools][subdir] = "contrib"
 projects[wikitools][version] = "1.3"
 
-projects[wysiwyg][subdir] = "profiles/drupal_commons/modules/contrib/wysiwyg"
+projects[wysiwyg][subdir] = "contrib"
 projects[wysiwyg][version] = "2.x-dev"
 
-projects[wysiwyg_filter][subdir] = "profiles/drupal_commons/modules/contrib/wysiwyg_filter"
+projects[wysiwyg_filter][subdir] = "contrib"
 projects[wysiwyg_filter][version] = "1.5"
 
 ; Themes
-projects[fusion][subdir] = "profiles/drupal_commons/themes/fusion_core"
 projects[fusion][version] = "1.0"
 
 
