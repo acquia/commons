@@ -335,6 +335,28 @@ function commons_status_streams_views_default_views() {
       ),
       'relationship' => 'group_nid',
     ),
+    'changed' => array(
+      'operator' => '>=',
+      'value' => array(
+        'type' => 'offset',
+        'value' => '-14 days',
+        'min' => '',
+        'max' => '',
+      ),
+      'group' => '0',
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'id' => 'changed',
+      'table' => 'node',
+      'field' => 'changed',
+      'override' => array(
+        'button' => 'Override',
+      ),
+      'relationship' => 'none',
+    ),
   ));
   $handler->override_option('access', array(
     'type' => 'role',
@@ -346,7 +368,7 @@ function commons_status_streams_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'Recent content');
-  $handler->override_option('empty', 'No content has been added yet');
+  $handler->override_option('empty', 'No content has been added in the last 2 weeks.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
   $handler->override_option('items_per_page', 5);
