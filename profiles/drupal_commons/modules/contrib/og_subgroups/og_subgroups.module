@@ -1,0 +1,524 @@
+<?php
+
+/**
+ * @file
+ * Maintains a hierarchy of groups created by the orgainc groups module.
+ */
+
+/**
+ * Implementation of hook_perm().
+ */
+function og_subgroups_perm() {
+  return array('administer groups hierarchy', 'edit groups hierarchy');
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function og_subgroups_menu() {
+  $items['subgroups/tree/%node'] = array(
+    'description' => 'JS callback to generate a group hierarchy tree',
+    'page callback' => 'og_subgroups_group_tree_json', 
+    'page arguments' => array(2),
+    'access arguments' => array('access content'), // Should we make a custom perm?
+    'file' => 'json.inc',
+    'file path' => drupal_get_path('module', 'og_subgroups'). '/includes',
+  );
+  $items['admin/og/subgroups'] = array(
+    'title' => 'Subgroups configuration',
+    'description' => 'Enable and configure groups to be posted inside groups',
+    'page callback' => 'drupal_get_form', 
+    'page arguments' => array('og_subgroups_settings'),
+    'access arguments' => array('administer groups hierarchy'),
+    'weight' => 0,
+    'file' => 'admin.inc',
+    'file path' => drupal_get_path('module', 'og_subgroups'). '/includes',
+  );
+  $items['admin/og/subgroups/settings'] = array(
+    'title' => 'Settings',
+    'weight' => 0,
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+
+  return $items;
+}
+
+/**
+ * Implenentation of hook_form_alter().
+ */
+function og_subgroups_form_alter(&$form, &$form_state, $form_id) {
+  // If on a node form
+  if ($form['#id'] == 'node-form') {
+    // Extract the node
+    if ($node = $form['#node']) {
+      // Include our form functions
+      og_subgroups_include('form');
+        
+      // See if this is a group
+      if (og_is_group_type($node->type)) {
+        // Add the subgroup fields to the node form
+        og_subgroups_add_group_select_form($form, $node);
+      }
+      
+      // See if this is a group post
+      if (og_is_group_post_type($node->type)) {
+        // Override the default group audience select list to show hierarchy
+        if (is_array($form['og_nodeapi']['visible']['og_groups']['#options'])) {
+          // Fetch the list of available groups indented with hierarchy
+          $groups = og_subgroups_group_select_options();
+          // Remove the unneeded default option
+          unset($groups[0]);
+          // Replace the groups with our list
+          $form['og_nodeapi']['visible']['og_groups']['#options'] = $groups;
+        }
+      }
+    }
+  }
+}
+
+/** 
+ * Set the parent of a given group
+ * 
+ * @param $node
+ *   The node object, or node id
+ * @param $parent
+ *   The parent node object, or node id. If set to 0 or omitted, any
+ *   existing parent for the node will be removed
+ * @return 
+ *   Boolean indication if operation preformed was successful
+ */
+function og_subgroups_set_parent($node, $parent = NULL) {
+  // Either objects or node ids can be passed in
+  $nid = is_object($node) ? $node->nid : $node;
+  $pid = is_object($parent) ? $parent->nid : $parent;
+
+  // Make sure we have at least a valid nid
+  // We don't check $pid because it could be NULL or zero
+  if (is_numeric($nid) && !($nid > 0)) {
+    return FALSE;
+  }
+
+  // Be safe and make sure we don't have the same node
+  if ($nid == $pid) {
+    return FALSE;
+  }
+
+  // Remove any existing parent for this group
+  $success = db_query("DELETE FROM {og_subgroups} WHERE gid = %d", $nid);
+
+  // Only save a new setting if a parent was specified
+  if ($success && $pid) {
+    // Save the new parent
+    $record = new stdClass;
+    $record->gid = $nid;
+    $record->parent = $pid;
+    $success = drupal_write_record('og_subgroups', $record); 
+  }
+  
+  return $success ? TRUE : FALSE;
+}
+
+/**
+ * Force all children of a group to be private
+ * 
+ * This function will check if the admin settings call for this behavior
+ * It will also check to see if the group provided is private itself,
+ * before continuing. Both checks can be skipped by provided the argument
+ * to do so.
+ * 
+ * @param $group
+ *   The group node object whos children will be set private
+ * @param $force
+ *   TRUE if both admin and node settings should be ignored, resulting
+ *   in the forced-privacy (default to FALSE)
+ */
+function og_subgroups_force_private_children($node, $force = FALSE) {
+  og_subgroups_include('tree');
+  
+  // Avoid recursion from the node saves
+  if (isset($node->og_subgroups_force_private_ignore)) {
+    return;
+  }
+  
+  // Check admin settings
+  if ($force || variable_get('og_subgroups_inherit_privacy', 0)) {
+    // Check to see if the group if private
+    if ($force || $node->og_private == 1) {
+      // Gather the children
+      $children = og_subgroups_get_group_children($node, FALSE);
+      // Force each child to be private
+      foreach ($children as $child) {
+        // Only force if the group is not already private
+        if ($child->og_private == 0) {
+          // Load the child completely
+          $child = node_load($child->nid);
+          // Set to private
+          $child->og_private = 1;
+          // Flag the node to avoid this function running recursively
+          $child->og_subgroups_force_private_ignore = 1;
+          // Save the node
+          node_save($child);
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Handle the deletion of a group
+ * 
+ * If the group is inside a hierarchy, we need to remove the relationship
+ * for the groups parents. We also need to reassign the groups immediate 
+ * children to become children of the groups parent.
+ * 
+ * @param $group
+ *   The group node object
+ */
+function og_subgroups_delete_group($group) {
+  og_subgroups_include('tree');
+  
+  // Determine the parent of this group
+  $parent = og_subgroups_get_group_parent($group);
+  
+  // Determine the immediate children of this group
+  if ($children = og_subgroups_get_group_children($group)) {
+    // Iterate the children, assigning them to the groups parent
+    foreach ($children as $child_id => $child) {
+      og_subgroups_set_parent($child, isset($parent->nid) ? $parent->nid : 0);
+    }
+  }
+     
+  // Remove the relationship with the parent from the group
+  db_query("DELETE FROM {og_subgroups} WHERE gid = %d", $group->nid);
+}
+
+/**
+ * Implementation of hook_help().
+ */
+function og_subgroups_help($path, $arg) {
+  switch ($path) {
+    case 'admin/og/subgroups':
+    case 'admin/og/subgroups/settings':
+      return t('<p>The OG subgroups module allows priviliged users to build group hierarchies.</p> ');
+  }
+}
+
+/**
+ * Implementation of hook_block().
+ *
+ * Displays the book table of contents in a block when the current page is a
+ * single-node view inside a group context.
+ */
+function og_subgroups_block($op = 'list', $delta = 0) {
+  if ($op == 'list') {
+    $blocks = array();
+    $blocks['hierarchy']['info'] = t('Subgroups');
+    return $blocks;
+  }
+  else if ($op == 'view') {
+    switch ($delta) {
+      case 'hierarchy':
+        $block = _og_subgroups_hierarchy_block();
+        break; 
+    }
+    return $block;
+  }
+}
+
+/**
+ * Generate the group hierarchy block
+ */
+function _og_subgroups_hierarchy_block() {
+  // Only generate the block if we're inside a group
+  if ($group = og_get_group_context()) {
+    // See if we have a tree for this group
+    if ($menu_tree = theme('og_subgroups_menu_tree', $group)) {
+      // Return the constructed block
+      return array(
+        'subject' => t('Subgroups'), 
+        'content' => $menu_tree,
+      );
+    }
+  }
+  
+  return NULL;
+}
+
+/**
+ * Implementation of hook_nodeapi().
+ */
+function og_subgroups_nodeapi($node, $op, $teaser = NULL, $page = NULL) {
+  og_subgroups_include('tree');
+  
+  switch ($op) {
+    case 'load':
+      // Check if this is a group
+      if (og_is_group_type($node->type)) {
+        // Attach the group's parent group, if one
+        $parent = og_subgroups_get_group_parent($node);
+        $node->og_parent = $parent ? $parent : NULL;
+      }
+      break;
+      
+    case 'insert':
+    case 'update':
+      // Check if this is a group
+      if (og_is_group_type($node->type)) {
+        // Save the node parent, if one
+        og_subgroups_set_parent($node, $node->og_parent);
+        // Optionally force children to be private
+        og_subgroups_force_private_children($node);
+      }
+      break;
+      
+    case 'delete':
+      if (og_is_group_type($node->type)) {
+        og_subgroups_delete_group($node);
+      }
+  }
+  
+  // Switch again just to clear hierarchy cache
+  switch ($op) {
+    case 'insert':
+    case 'update':
+    case 'delete':
+      if (og_is_group_type($node->type)) {
+        cache_clear_all('og_subgroups', 'cache', TRUE);
+      }
+  }
+}
+
+/**
+ * Implementation of hook_og_create_links()
+ */
+function og_subgroups_og_create_links($group) {
+  $links = array();
+  // See if the user is a group member
+  if (og_is_group_member($group->nid)) {
+    // Fetch all available node types
+    foreach (node_get_types() as $id => $type) {
+      // Check if this is a group type
+      if (og_is_group_type($id)) {
+        // Check if the user has permission to create this type
+        if (og_subgroups_can_edit_hierarchy($id) && node_access('create', $id)) {
+          $title = t('Create !name', array('!name' => $type->name));
+          $href = "node/add/". str_replace('_', '-', $id);
+          $options = array('query' => "og_parent={$group->nid}");
+          $links["create_{$id}"] = l($title, $href, $options);
+        }
+      }
+    }
+  }
+  return $links;
+}
+
+/**
+ * Determine if a node type has subgroups enabled
+ * 
+ * This currently is not in use!
+ * 
+ * @param $type
+ *   The node type to check
+ * @return
+ *   Boolean indication or whether or not subgroups are enabled for
+ *   the given type
+ */
+function og_subgroups_is_subgroup_type($type) {
+  return variable_get("og_subgroups_node_type_enabled_{$type}", 0);
+}
+
+/**
+ * Access handler to check if the current user can edit
+ * the hierarchy of a given group, or group type
+ * 
+ * @param $group
+ *   The group node object, or group type
+ * @return
+ *   TRUE if the user can edit the hierarchy of the given group,
+ *   or group type, otherwise FALSE
+ */
+function og_subgroups_can_edit_hierarchy($group) {
+  og_subgroups_include('tree');
+  
+  // Either a group node or type can be passed in
+  $type = is_object($group) ? $group->type : $group;
+  
+  // Check that this is a group type
+  if (og_is_group_type($type)) {
+    // Check basic user permissions
+    if (user_access('edit groups hierarchy')) {
+      // Check that the user is a group admin, if we have a group yet
+      if ($group->nid && !og_is_group_admin($group)) {  
+        return FALSE;
+      }
+      
+      // Check that this type has hierarchy enabled
+      if (og_subgroups_is_subgroup_type($type)) {
+        return TRUE;
+      }
+      // If this type does not have hierarchy enabled, we need to check 
+      // for the presence of an existing hierarchy because it's possible 
+      // that a site admin has disabled this group type from having
+      // subgroups, but we still need a way to edit/remove the hierarchy
+      else if ($group->nid && og_subgroups_get_group_tree($group)) {
+        return TRUE;
+      }
+    }
+  }
+  
+  return FALSE;
+}
+
+/**
+ * Mask a group title based on og privacy and node status
+ * 
+ * If the group is unpublished, and the current user can't view it,
+ * the title will be changed to <Hidden>.
+ * 
+ * If the group is private, and the current user is not a member,
+ * the title will be changed to <Private>
+ * 
+ * If $member is TRUE, and the current user is not a member, regardless
+ * of privacy options, the title will be changed to <Private>
+ * 
+ * @param &$group
+ *   The group object
+ * @param $member
+ *   If TRUE, the user must be a member of the group in order to not
+ *   have it masked, otherwise the user only has to be a member if the
+ *   group is private
+ * @return
+ *   TRUE if the group title was masked, otherwise FALSE
+ */
+function og_subgroups_mask_group(&$group, $member = FALSE) {
+  $title = '';
+  
+  // If the user can administer nodes, no access checking needed
+  if (!user_access('administer nodes')) {
+    // If the group is unpublished, or the user can't view content, hide it
+    if (!$group->status || !user_access('access content')) {
+      $title = '&lt;' . t('Hidden') . '&gt;';
+    }
+    // If the group is private and/or we are checking for membership
+    else if ($group->og_private || $member) {
+      // If the user is not a member, hide it
+      if (!og_is_group_member($group->nid)) {
+        $title = '&lt;' . t('Private') . '&gt;';
+      }
+    }
+  }
+  
+  // See if we've specified a new title
+  if ($title) {
+    $group->title = $title;
+    return TRUE;
+  }
+  
+  return FALSE;
+}
+
+/**
+ * Validate the group node form
+ */
+function og_subgroups_node_form_validate(&$form, &$form_state) {
+  if (isset($form_state['values']['nid']) && isset($form_state['values']['og_parent'])) {
+    og_subgroups_include('tree');
+    
+    // Extract the node id
+    $node = new stdClass;
+    $node->nid = $form_state['values']['nid'];
+    
+    // Extract the selected parent
+    $parent = new stdClass;
+    $parent->nid = $form_state['values']['og_parent'];
+
+    // Make sure the chosen parent is not the node we're editing
+    if ($node->nid == $parent->nid) {
+      form_set_error('og_parent', t('You cannot set the parent of this group to be the group itself.'));
+    }
+    
+    // Make sure the selected parent is not a child of the node we're editing
+    if ($parent->nid && og_subgroups_group_is_child($node, $parent)) {
+      form_set_error('og_parent', t('You cannot set a child of this group to be the parent.'));
+    }
+    
+    // Check if forced-privacy is enabled
+    if (variable_get('og_subgroups_inherit_privacy', 0)) {
+      // Only check if this group is not set to private
+      if (!$form_state['values']['og_private']) {
+        // See if the parent group is private
+        $sql = "SELECT og_private FROM {og} WHERE nid = %d";
+        $is_private = db_result(db_query($sql, $parent->nid));
+        if ($is_private) {
+          // This group must be private
+          form_set_error('og_private', t('The selected parent for this group is a private group. This group must also be private.'));
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implementation of hook_theme()
+ */
+function og_subgroups_theme() {
+  $registry = array(
+    'og_subgroups_menu_tree' => array(
+      'arguments' => array('group' => NULL)
+    ),
+    'og_subgroups_menu_tree_branch' => array(
+      'arguments' => array('group' => NULL, 'branch' => NULL, 'parents' => NULL)
+    ),
+    'og_subgroups_menu_tree_link' => array(
+      'arguments' => array('current' => NULL, 'group' => NULL, 'access' => NULL)
+    ),
+  );
+  
+  // Add the theme file to each
+  $file = 'theme.inc';
+  $path = drupal_get_path('module', 'og_subgroups') . '/includes';
+  foreach ($registry as $key => $entry) {
+    $registry[$key]['file'] = $file;
+    $registry[$key]['path'] = $path;
+  }
+  
+  return $registry;
+}
+
+/**
+ * Implementation of hook_token_values().
+ */
+function og_subgroups_token_values($type, $object = NULL, $options = array()) {
+  og_subgroups_include('token');
+  return _og_subgroups_token_values($type, $object, $options);
+}
+
+/**
+ * Implementation of hook_token_list().
+ */
+function og_subgroups_token_list($type = 'all') {
+  og_subgroups_include('token');
+  return _og_subgroups_token_list($type);
+}
+
+/**
+ * Include .inc files
+ * Similar to ctools_include()
+ * 
+ * @param $file
+ *   The base file name to be included.
+ * @param $module
+ *   Optional module containing the include.
+ * @param $dir
+ *   Optional subdirectory containing the include file.
+ */
+function og_subgroups_include($file, $module = 'og_subgroups', $dir = 'includes') {
+  static $used = array();
+
+  $dir = '/' . ($dir ? $dir . '/' : '');
+
+  if (!isset($used[$module][$dir][$file])) {
+    require_once './' . drupal_get_path('module', $module) . "$dir$file.inc";
+    $used[$module][$dir][$file] = TRUE;
+  }
+}

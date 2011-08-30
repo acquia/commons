@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * Enable og_notifications
+ */
+function commons_notifications_update_6000() {
+  drupal_install_modules(array('og_notifications'));
+  return array();
+}
+
+function commons_notifications_enable() {
+  if (module_exists('commons_status_streams')) {    
+    commons_status_streams_disable_deprecated_notifications();
+  }
+}

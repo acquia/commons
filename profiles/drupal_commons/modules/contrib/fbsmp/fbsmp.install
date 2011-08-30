@@ -1,0 +1,173 @@
+<?php
+
+/**
+ * @file
+ *   Schema definitions and install/update/uninstall hooks for FBSMP.
+ */
+
+/**
+ * Implementation of hook_schema().
+ */
+function fbsmp_schema() {
+  $schema = array();
+
+  $schema['fbsmp'] = array(
+    'description' => 'Provides a place to record attachments to statuses.',
+    'fields' => array(
+      'sid' => array(
+        'description' => 'Foreign key to the {facebook_status} table.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+      ),
+      'type' => array(
+        'description' => 'The type of attachment being acted upon (link, photo, etc.).',
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => TRUE,
+      ),
+      'data' => array(
+        'description' => 'The attachment data stored by the plugins.',
+        'type' => 'text',
+        'not null' => TRUE,
+        'serialize' => TRUE,
+        'size' => 'medium',
+      ),
+    ),
+    'primary key' => array('sid'),
+  );
+  
+  $schema['fbsmp_videos'] = array(
+    'description' => 'Provides a place to record video conversion status for video plugin.',
+    'fields' => array(
+      'fid' => array(
+        'description' => 'Foreign key to the {files} table.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+      ),
+      'sid' => array(
+        'description' => 'Foreign key to the {facebook_status} table.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+      ),
+      'status' => array(
+        'description' => 'The conversion status of the video file.',
+        'type' => 'text',
+        'not null' => TRUE,
+        'serialize' => TRUE,
+      ),
+      'cid' => array(
+        'description' => 'The fid of the converted file.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+      ),
+    ),
+    'primary key' => array('fid'),
+  );
+  
+  return $schema;
+}
+
+/**
+ * Implementation of hook_install().
+ */
+function fbsmp_install() {
+  // Create tables.
+  drupal_install_schema('fbsmp');
+  drupal_load('module', 'fbsmp');
+  fbsmp_notify('install', array('photo', 'link', 'video', 'slideshare'));
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function fbsmp_uninstall() {
+  drupal_load('module', 'fbsmp');
+  fbsmp_notify('uninstall', array('photo', 'link', 'video', 'slideshare'));
+  
+  // Remove tables.
+  drupal_uninstall_schema('fbsmp');
+
+  // Remove variables.
+  variable_del('fbsmp_disabled_plugins');
+  variable_del('fbsmp_ignore_sdefault');
+  variable_del('fbsmp_plugin_photo');
+  variable_del('fbsmp_plugin_link');
+  variable_del('fbsmp_plugin_video');
+  variable_del('fbsmp_videos_processed');
+  variable_del('fbsmp_plugin_slideshare');
+  variable_del('fbsmp_image_dir');
+}
+
+/**
+ * Implementation of hook_enable().
+ */
+function fbsmp_enable() {
+  drupal_load('module', 'fbsmp');
+  fbsmp_notify('enable', array('photo', 'link', 'video', 'slideshare'));
+}
+
+/**
+ * Implementation of hook_disable().
+ */
+function fbsmp_disable() {
+  drupal_load('module', 'fbsmp');
+  fbsmp_notify('disable', array('photo', 'link', 'video', 'slideshare'));
+}
+
+/**
+ * Implementation of hook_update_N().
+ */
+function fbsmp_update_6100() {
+  $schema['fbsmp_videos'] = array(
+    'description' => 'Provides a place to record video conversion status for video plugin.',
+    'fields' => array(
+      'fid' => array(
+        'description' => 'Foreign key to the {files} table.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+      ),
+      'sid' => array(
+        'description' => 'Foreign key to the {facebook_status} table.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+      ),
+      'status' => array(
+        'description' => 'The conversion status of the video file.',
+        'type' => 'text',
+        'not null' => TRUE,
+        'serialize' => TRUE,
+      ),
+      'cid' => array(
+        'description' => 'The fid of the converted file.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+      ),
+    ),
+    'primary key' => array('fid'),
+  );
+  $ret = array();
+  db_create_table($ret, 'fbsmp_videos', $schema['fbsmp_videos']);
+  return $ret;
+}
+
+/**
+ * Implementation of hook_update_N().
+ */
+function fbsmp_update_6101() {
+  $ret = array();
+  $field_data = array(
+    'type' => 'text',
+    'not null' => TRUE,
+    'serialize' => TRUE,
+    'size' => 'medium',
+  );
+  db_change_field($ret, 'fbsmp', 'data', 'data', $field_data);
+  return $ret;
+}

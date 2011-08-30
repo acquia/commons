@@ -1,0 +1,16 @@
+Index: rules/rules.module
+===================================================================
+RCS file: /cvs/drupal-contrib/contributions/modules/rules/rules/Attic/rules.module,v
+retrieving revision 1.1.2.75
+diff -u -p -r1.1.2.75 rules.module
+--- rules/rules.module	25 Nov 2010 11:14:52 -0000	1.1.2.75
++++ rules/rules.module	29 Nov 2010 01:26:23 -0000
+@@ -53,7 +53,7 @@ function rules_get_data_types($key = 'al
+  */
+ function rules_get_item_defaults($item_type = 'rules') {
+   rules_include('rules_defaults');
+-  $defaults = rules_gather_data('rules_defaults', 'all', FALSE);
++  $defaults = rules_gather_data('rules_defaults', 'all');
+   if ($item_type == 'rules' && isset($defaults[$item_type])) {
+     // Apply the rule format upgrade to each rule if necessary.
+     $items = array_map('rules_rule_format_upgrade', $defaults[$item_type]);

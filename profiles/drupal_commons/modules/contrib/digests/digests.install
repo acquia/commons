@@ -1,0 +1,74 @@
+<?php
+
+/**
+ * @file
+ *   (Un)installs the Digests module.
+ */
+
+/**
+ * Implementation of hook_schema().
+ */
+function digests_schema() {
+  $schema = array();
+  $schema['digests'] = array(
+    'description' => 'Stores log templates.',
+    'fields' => array(
+      'uid' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'default' => 0,
+        'description' => 'The public name ID.',
+      ),
+      'send_interval' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'default' => 0,
+        'description' => 'The public name ID.',
+      ),
+      'last_sent' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'default' => 0,
+        'description' => 'The public name ID.',
+      ),
+    ),
+    'indexes' => array(
+      'last_sent' => array('last_sent'),
+    ),
+    'primary key' => array('uid'),
+  );
+  return $schema;
+}
+
+/**
+ * Implementation of hook_install().
+ */
+function digests_install() {
+  drupal_install_schema('digests');
+  // Run after Notifications so we can change its user settings form fieldset title.
+  db_query("UPDATE {system} SET weight = 1 WHERE type = 'module' AND name = 'digests'");
+  drupal_set_message(
+    st('The Activity Log Digests module has been installed.') .' '.
+    st('You will probably want to <a href="!configure">configure the digest email settings</a>.', array(
+      '!configure' => url('admin/settings/digests')
+    ))
+  );
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function digests_uninstall() {
+  drupal_uninstall_schema('digests');
+  variable_del('digests_send_time');
+  variable_del('digests_local');
+  variable_del('digests_limit');
+  variable_del('digests_css');
+  variable_del('digests_logo');
+  variable_del('digests_logo_use_theme');
+  variable_del('digests_header');
+  variable_del('digests_footer');
+}

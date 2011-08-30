@@ -1,0 +1,379 @@
+<?php
+
+/**
+ * Implementation of hook_install()
+ */
+function commons_core_install() {
+  // Link vocabulary to nodes
+  commons_core_add_taxonomy();
+  
+  // Set module weight
+  commons_core_set_weight();
+}
+
+/**
+ * Add taxonomy to nodes
+ */
+function commons_core_add_taxonomy() {
+  // Link free-tagging vocabulary to node types
+  foreach (array('group', 'notice', 'page') as $type) {
+    $record = new stdClass;
+    $record->vid = variable_get('commons_tags_vid', 1);
+    $record->type = $type;
+    drupal_write_record('vocabulary_node_types', $record);
+  }
+}
+
+/**
+ * Set the module weight so it can act after most
+ */
+function commons_core_set_weight() {
+  db_query("UPDATE {system} SET weight = 5 WHERE name = 'commons_core'");
+}
+
+/**
+ * Implementation of hook_uninstall()
+ */
+function commons_core_uninstall() {
+  // Remove variables
+  variable_del('commons_force_login');
+  variable_del('commons_force_login_allowed_paths');
+  variable_del('commons_force_unique_groups');
+  variable_del('commons_hide_shoutbox_link');
+  variable_del('commons_group_prevent_open_voting');
+  variable_del('commons_group_prevent_open_commenting');
+  variable_del('commons_email_selective_group');
+  variable_del('commons_group_admin_edit_comments');
+  variable_del('commons_search_group_title_length');
+}
+
+/**
+ * Upgrade Commons to v1.3
+ */
+function commons_core_update_6000() {
+  // Rebuild the module cache
+  module_rebuild_cache();
+
+  // Clear out all the caches
+  drupal_flush_all_caches();
+
+  // Clear out the rules cache
+  rules_clear_cache();
+
+  // Remove custom primary menu items added by Commons
+  db_query("DELETE FROM {menu_links} WHERE menu_name = 'primary-links' AND module = 'commons'");
+  
+  // Disable better_formats (to avoid node permissiono issues with Full HTML)
+  module_disable(array('better_formats'));
+  drupal_uninstall_module('better_formats');
+  
+  // Enable wysiwyg filter, views_bulk_operations, and commons_release
+  drupal_install_modules(array('wysiwyg_filter', 'views_bulk_operations', 'commons_release'));
+  
+  // Replace HTML filter with WYSIWYG filter for the Filtered HTML format
+  db_query("DELETE FROM {filters} WHERE format = 1 AND module = 'filter' AND delta = 0");
+  db_query("INSERT INTO {filters} (format, module, delta, weight) VALUES (1, 'wysiwyg_filter', 0, -8)");
+  db_query("UPDATE {filters} SET weight = -7 WHERE module = 'filter' AND delta = 3");
+  
+  // Disable the old home page
+  ctools_include('context');
+  ctools_include('plugins');
+  $page = page_manager_get_page_cache('page-Home');
+  if ($function = ctools_plugin_get_function($page->subtask, 'enable callback')) {
+    $result = $function($page, TRUE);
+
+    if (!empty($page->changed)) {
+      page_manager_set_page_cache($page);
+    }
+  }
+  
+  // Disable the old dashboard page
+  ctools_include('export-ui');
+  if ($page = page_manager_get_page_cache('page-user_dashboard')) {
+    if ($function = ctools_plugin_get_function($page->subtask, 'enable callback')) {
+      $result = $function($page, TRUE);
+
+      if (!empty($page->changed)) {
+        page_manager_set_page_cache($page);
+      }
+    }
+  }
+  
+  // Delete the old dashboard context
+  $context = ctools_export_ui_load('context_ui-dashboard-dashboard', 'context');
+  if ($context) {
+    context_delete($context);
+  }
+  
+  // Add a 'site admin' role
+  if (!db_result(db_query("SELECT rid FROM {role} WHERE name = '%s'", t('site admin')))) {
+    db_query("INSERT INTO {role} (name) VALUES ('%s')", t('site admin'));
+  }
+  
+  // Enable new features
+  $features = array(
+    'commons_admin',
+    'commons_seo',
+    'commons_home',
+    'commons_wiki',
+    'commons_blog',
+    'commons_document',
+    'commons_discussion',
+    'commons_event',
+    'commons_poll',
+    'commons_group_aggregator',
+    'commons_reputation',
+  );
+  
+  // Homebox, which is included in the Commons dashboard feature
+  // requires PHP 5.2, so we need to check that before installing
+  module_load_include('module', 'homebox');
+  if (_homebox_check_php()) {
+    $features[] = 'commons_dashboard';
+  }
+  
+  features_install_modules($features);
+  
+  return array();
+}
+
+/**
+ * Set the module weight above others
+ */
+function commons_core_update_6001() {
+  commons_core_set_weight();
+  return array(); 
+}
+
+/**
+ * Removed unused variable for community manager role
+ */
+function commons_core_update_6002() {
+  variable_del('commons_manager_role');
+  return array();
+}
+
+/**
+ * Install commons_profile feature and disable components we no longer
+ * want enabled
+ */
+function commons_core_update_6003() {
+  // Install the commons_profile feature
+  features_install_modules(array('commons_profile'));
+  
+  // Disable the old profile panel page
+  ctools_include('export-ui');
+  if ($page = page_manager_get_page_cache('user_view')) {
+    if ($function = ctools_plugin_get_function($page->subtask, 'enable callback')) {
+      $result = $function($page, TRUE);
+
+      if (!empty($page->changed)) {
+        page_manager_set_page_cache($page);
+      }
+    }
+  }
+  
+  // Delete the old profile context
+  $context = ctools_export_ui_load('context_ui-profile-profile', 'context');
+  if ($context) {
+    context_delete($context);
+  }
+  
+  // Disable page manager
+  module_disable(array('page_manager'));
+  
+  // Disable views_content
+  module_disable(array('views_content'));
+  
+  return array();
+}
+
+/**
+ * Install commons_invite feature
+ */
+function commons_core_update_6004() {
+  features_install_modules(array('commons_invite'));
+  return array();
+}
+
+/**
+ * Install og_features
+ */
+function commons_core_update_6005() {
+  drupal_install_modules(array('og_features'));
+  return array();
+}
+
+/**
+ * Install og_invite_link
+ */
+function commons_core_update_6006() {
+  drupal_install_modules(array('og_invite_link'));
+  return array();
+}
+
+/**
+ * Remove shoutbox admin setting variable
+ * Install commons_shoutbox
+ */
+function commons_core_update_6007() {
+  variable_del('commons_hide_shoutbox_link');
+  features_install_modules(array('commons_shoutbox'));
+  return array();
+}
+
+/**
+ * Enable the new themes
+ */
+function commons_core_update_6008() {
+  $sql = "UPDATE {system} SET status = 1 WHERE name = '%s'";
+  system_theme_data();
+  db_query($sql, 'fusion_core');
+  db_query($sql, 'commons_roots');
+  db_query($sql, 'commons_origins');
+  db_query($sql, 'commons_connect');
+  db_query($sql, 'commons_environs');
+  variable_set('theme_default', 'commons_origins');
+  return array();
+}
+
+/**
+ * Enable activity streams
+ */
+function commons_core_update_6009() {
+  // Install activity streams.
+  features_install_modules(array('commons_status_streams'));
+  commons_status_streams_disable_deprecated_notifications();
+  // Port shouts to Facebook-style Statuses.
+  if (db_table_exists('shoutbox')) {
+    $max_sid = (int) db_result(db_query("SELECT MAX(sid) FROM {facebook_status}"));
+    if (db_table_exists('shoutbox_groups')) {
+      db_query("
+        INSERT INTO {facebook_status} (sender, recipient, type, created, message)
+        SELECT s.uid, g.nid, 'og', s.created, s.shout
+        FROM {shoutbox_groups} g
+        INNER JOIN {shoutbox} s
+          ON g.shout_id = s.shout_id
+        WHERE s.module = 'shoutbox_group'
+      ");
+    }
+    if (db_table_exists('shoutbox_user')) {
+      db_query("
+        INSERT INTO {facebook_status} (sender, recipient, type, created, message)
+        SELECT s.uid, u.uid, 'user', s.created, s.shout
+        FROM {shoutbox_user} u
+        INNER JOIN {shoutbox} s
+          ON u.shout_id = s.shout_id
+        WHERE s.module = 'shoutbox_user'
+      ");
+    }
+    if (db_table_exists('shoutbox_tags')) {
+      module_load_include('module', 'facebook_status_tags');
+      $result = db_query("SELECT sid, message FROM {facebook_status} WHERE sid > %d", $max_sid);
+      while ($status = db_fetch_object($result)) {
+        $matches = _facebook_status_tags_filter($status->message, TRUE);
+        $old_matches = array();
+        foreach ($matches['#'] as $term) {
+          $term = (object) $term;
+          if (!in_array($term->tid, $old_matches)) {
+            $array = array(
+              'sid' => $status->sid,
+              'rid' => $term->tid,
+              'type' => 'term',
+              'name' => $term->name,
+            );
+            drupal_write_record('facebook_status_tags', $array);
+            $old_matches[] = $term->tid;
+          }
+        }
+      }
+    }
+  }
+
+  // Port activity data into Activity Log.
+  rules_clear_cache();
+  module_load_include('inc', 'activity_log', 'activity_log.generate');
+  activity_log_regenerate(array(), time() - 604800);
+  
+  // Clear the menu cache
+  menu_cache_clear_all();
+
+  return array();
+}
+
+/**
+ * Disable depreciated modules
+ */
+function commons_core_update_6010() {
+  $disable = array();
+  
+  // Rebuild the module cache
+  module_rebuild_cache();
+
+  // Clear out all the caches
+  drupal_flush_all_caches();
+  
+  // Try to avoid errors from og_features when it overrides all the menu access callbacks.
+  db_query("DELETE FROM {cache_menu} WHERE cid LIKE '%homebox%'");
+  
+  // Disable user_relationship_elaborations (it's pointless with one-way relationships)
+  $disable[] = 'user_relationship_elaborations';
+
+  // Disable dashboard.
+  $disable[] = 'commons_dashboard';
+  $disable[] = 'homebox_example';
+  $disable[] = 'homebox_og';
+  $disable[] = 'homebox';
+
+  // Disable shoutbox.
+  $disable[] = 'commons_shoutbox';
+  $disable[] = 'shoutbox_domain';
+  $disable[] = 'shoutbox_group';
+  $disable[] = 'shoutbox_points';
+  $disable[] = 'shoutbox_rules';
+  $disable[] = 'shoutbox_tags';
+  $disable[] = 'shoutbox_user';
+  $disable[] = 'shoutbox';
+
+  // Disable heartbeat.
+  $disable[] = 'flag_heartbeat';
+  $disable[] = 'friendlist_activity';
+  $disable[] = 'hds';
+  $disable[] = 'heartbeat_comments';
+  $disable[] = 'heartbeat_example';
+  $disable[] = 'heartbeat_views';
+  $disable[] = 'hrules';
+  $disable[] = 'og_activity';
+  $disable[] = 'shouts';
+  $disable[] = 'heartbeat';
+  
+  module_disable($disable);
+  return array();
+}
+
+/**
+ * Install subgroups feature
+ */
+function commons_core_update_6011() {
+  features_install_modules(array('commons_subgroups'));
+  return array();
+}
+
+/**
+ * Put the "Tags" vocabulary ID in a variable
+ */
+function commons_core_update_6012() {
+  // The default is 2, since we used to force that vid during
+  // site installation
+  $vid = 2;
+  
+  // Just in case, try to see if there is a "Tags" vocabulary, to
+  // see if the vid has changed
+  $result = db_result(db_query("SELECT vid FROM {vocabulary} WHERE name = 'Tags'"));
+  if ($result && $result != $vid) {
+    $vid = $result;
+  }
+  
+  variable_set('commons_tags_vid', $vid);
+  return array();
+}

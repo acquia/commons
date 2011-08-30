@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * @file
+ *   (Un)installs the Facebook-style Statuses Private Statuses module.
+ */
+
+/**
+ * Implementation of hook_install().
+ */
+function fbss_privacy_install() {
+  $ret = array();
+  db_add_field($ret, 'facebook_status', 'private', array(
+    'type' => 'int',
+    'size' => 'tiny',
+    'unsigned' => TRUE,
+    'not null' => TRUE,
+    'default' => 0,
+    'description' => 'Whether the status is private (1) or not (0).',
+  ));
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function fbss_privacy_uninstall() {
+  $ret = array();
+  db_drop_field($ret, 'facebook_status', 'private');
+}

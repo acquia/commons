@@ -1,0 +1,150 @@
+<?php
+
+/**
+ * @file
+ *   Sends digests of user activity at configurable intervals.
+ */
+
+/**
+ * Implementation of hook_menu().
+ */
+function digests_menu() {
+  $items = array();
+  $items['admin/settings/digests'] = array(
+    'title' => 'Activity Log Digests',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('digests_admin'),
+    'access arguments' => array('administer site configuration'),
+    'description' => 'Allows administrators to adjust settings for Activity Log Digests.',
+    'file' => 'digests.admin.inc',
+  );
+  return $items;
+}
+
+/**
+ * Implementation of hook_perm().
+ */
+function digests_perm() {
+  return array('receive digests', 'set custom CSS for digests');
+}
+
+/**
+ * Implementation of hook_cron().
+ */
+function digests_cron() {
+  module_load_include('inc', 'digests', 'digests.cron');
+  _digests_cron();
+}
+
+/**
+ * Implementation of hook_user().
+ */
+function digests_user($op, &$edit, &$account, $category = NULL) {
+  if ($op == 'form' && $category == 'account') {
+    module_load_include('inc', 'digests', 'digests.user_settings');
+    return _digests_user_form($account->uid);
+  }
+  elseif ($op == 'update' && isset($edit['digests_interval'])) {
+    module_load_include('inc', 'digests', 'digests.user_settings');
+    _digests_user_update($edit, $account->uid);
+  }
+}
+
+/**
+ * Implementation of hook_activity_log_display_types().
+ */
+function digests_activity_log_display_types() {
+  return array(
+    'email' => t('Email digests'),
+  );
+}
+
+/**
+ * Implementation of hook_theme().
+ */
+function digests_theme($existing, $type, $theme, $path) {
+  return array(
+    'digests_email' => array(
+      'arguments' => array(
+        'account' => NULL,
+        'messages' => array(),
+        'now' => time(),
+      ),
+      'template' => 'digests-email',
+      'file' => 'digests.cron.inc',
+    ),
+  );
+}
+
+/**
+ * Override the crazy custom CSS that Mime Mail tries to do.
+ */
+function digests_preprocess_mimemail_message(&$vars) {
+  if ($vars['mailkey'] == 'mail-digests') {
+/*
+The boilerplate CSS styles below are copyright (c) 2010-2011 Sean Powell,
+The Engage Group, under the MIT license (included below). The MIT license is
+explicitly considered to be a GPL-compatible license by the Drupal.org
+Licensing FAQ, so the inclusion of this code should be in compliance with
+Drupal.org policies: http://drupal.org/licensing/faq#q10
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+ */
+    $vars['css'] = <<<CSS
+/* Client-specific Styles */
+#outlook a { padding: 0; } /* Force Outlook to provide a "view in browser" button. */
+body { width: 100% !important; } .ReadMsgBody { width: 100%; } .ExternalClass { width: 100%; } /* Force Hotmail to display emails at full width */
+body { -webkit-text-size-adjust: none; -ms-text-size-adjust: none; } /* Prevent Webkit and Windows Mobile platforms from changing default font sizes. */
+
+/* Reset Styles */
+body { margin: 0; padding: 0; }
+img { height: auto; line-height: 100%; outline: none; text-decoration: none; }
+#backgroundTable { height: 100% !important; margin: 0; padding: 0; width: 100% !important; }
+
+p {
+   margin: 1em 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+   color: black !important;
+   line-height: 100% !important;
+}
+
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+   color: blue !important;
+}
+
+h1 a:active, h2 a:active,  h3 a:active, h4 a:active, h5 a:active, h6 a:active {
+   color: red !important; /* Preferably not the same color as the normal header link color. Support for psuedo classes in email clients is limited. */
+}
+
+h1 a:visited, h2 a:visited,  h3 a:visited, h4 a:visited, h5 a:visited, h6 a:visited {
+   color: purple !important; /* Preferably not the same color as the normal header link color. Support for psuedo classes in email clients is limited. */
+}
+
+table td {
+   border-collapse: collapse;
+}
+
+.yshortcuts, .yshortcuts a, .yshortcuts a:link,.yshortcuts a:visited, .yshortcuts a:hover, .yshortcuts a span {
+  color: black; text-decoration: none !important; border-bottom: none !important; background: none !important;
+} /* Body text color for the New Yahoo. Sets the font of Yahoo's Shortcuts to black. */ 
+CSS;
+  }
+}

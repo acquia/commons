@@ -1,0 +1,199 @@
+<?php
+
+/**
+ * @file
+ *   Creates a page (with pathauto integration) for each activity message.
+ */
+
+//============================
+// CORE HOOK IMPLEMENTATIONS.
+//============================
+
+/**
+ * Implementation of hook_menu().
+ */
+function al_pages_menu() {
+  $items = array();
+  $items['activity/%activity_log'] = array(
+    'title callback' => 'al_pages_title_callback',
+    'title arguments' => array(1),
+    'description' => 'Displays an activity message.',
+    'page callback' => 'theme',
+    'page arguments' => array('activity_log_item', 1),
+    'access callback' => 'al_pages_access_item',
+    'access arguments' => array(1),
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+//=================
+// MENU CALLBACKS.
+//=================
+
+/**
+ * Determines the title to display on an individual activity page.
+ *
+ * @param $record
+ *   A fully qualified activity record.
+ * @return
+ *   A string for the title of an activity page.
+ */
+function al_pages_title_callback($record) {
+  $message = t('Activity');
+  if ($record->stream_owner_type == 'user') {
+    $account = user_load($record->stream_owner_id);
+    $message = t("Activity in @name's stream", array('@name' => $account->name));
+  }
+  elseif ($record->stream_owner_type == 'node') {
+    $node = node_load($record->stream_owner_id);
+    $message = t("Activity in @name's stream", array('@name' => $node->title));
+  }
+  return $message;
+}
+
+/**
+ * Determines whether the current user has access to view this activity record.
+ *
+ * @param $record
+ *   The activity record to which access is requested.
+ * @param $account
+ *   (Optional) The account of the user requesting access. Defaults to the
+ *   current user.
+ * @return
+ *   TRUE if access is permitted; FALSE otherwise.
+ */
+function al_pages_access_item($record, $account = NULL) {
+  // Default to the current user.
+  if (empty($account)) {
+    $account = $GLOBALS['user'];
+  }
+  // Grant access to the intended stream owner and administrators.
+  return ($record->stream_owner_type == 'user' && $record->stream_owner_id == $account->uid && user_access('view own activity messages', $account)) ||
+    user_access('view all activity messages', $account);
+}
+
+//====================
+// TOKEN INTEGRATION.
+//====================
+
+/**
+ * Implementation of hook_token_list().
+ */
+function al_pages_token_list($type = 'all') {
+  if ($type == 'activity_log') {
+    $tokens = array(
+      'activity_log' => array(
+        'activity-id' => t('The ID of the logged activity'),
+        'activity-objects' => t('A comma-separated list of the types of objects the activity is about.'),
+        'activity-template-id' => t('The ID of the template used to generate the activity message.'),
+        'activity-stream-id' => t('The ID of the entity in whose stream the activity message appears.'),
+        'activity-stream-type' => t('The type of the entity in whose stream the activity message appears.'),
+        'activity-message' => t('The full activity message.'),
+        'activity-message-clean' => t('The activity message with no HTML tags. Useful in URLs.'),
+        'activity-message-clean-40' => t('The activity message with no HTML tags, cut off at 40 characters. Useful in URLs.'),
+      ),
+    );
+    return $tokens;
+  }
+}
+
+/**
+ * Implementation of hook_token_values().
+ */
+function al_pages_token_values($type, $object = NULL, $options = array()) {
+  if ($type == 'activity_log') {
+    $event = array_shift($object->events);
+    $keys = array_keys($event->id_map);
+    array_pop($keys); // Remove the "state" key
+    $activity_objects = implode(',', $keys);
+    $message = activity_log_evaluate_record($object);
+    $tokens = array(
+      'activity-id' => $object->mid,
+      'activity-objects' => $activity_objects,
+      'activity-template-id' => $object->tid,
+      'activity-stream-id' => $object->stream_owner_id,
+      'activity-stream-type' => $object->stream_owner_type,
+      'activity-message' => $message,
+      'activity-message-clean' => strip_tags($message),
+      'activity-message-clean-40' => drupal_substr(strip_tags($message), 0, 40),
+    );
+    $tokens += token_get_date_token_values($object->created, 'last_updated-');
+    return $tokens;
+  }
+}
+
+//=======================
+// PATHAUTO INTEGRATION.
+//=======================
+
+/**
+ * Implementation of hook_pathauto().
+ */
+function al_pages_pathauto($op) {
+  if ($op != 'settings') {
+    return;
+  }
+  $tokens = token_get_list('activity_log');
+  $placeholders = array();
+  foreach ($tokens as $type => $set) {
+    if ($type != 'global') {
+      foreach ($set as $pattern => $description) {
+        $placeholders["[$pattern]"] = $description;
+      }
+    }
+  }
+  return (object) array(
+    'module' => 'al_pages',
+    'token_type' => 'activity_log',
+    'groupheader' => t('Activity Log settings'),
+    'patterndefault' => '', // No aliases should be generated by default.
+    'patterndescr' => t('Default path pattern'),
+    'placeholders' => $placeholders,
+    'bulkname' => t('Bulk update Activity Log paths'),
+    'bulkdescr' => t('Generate aliases for all existing activity records which do not already have aliases.'),
+  );
+}
+
+/**
+ * Implementation of hook_pathauto_bulkupdate().
+ * Inspired by the node implementation in pathauto_node.inc.
+ */
+function al_pages_pathauto_bulkupdate() {
+  // Get all activity records that have no path alias.
+  $result = db_query_range("
+    SELECT alm.mid, alias.src, alias.dst
+    FROM {activity_log_messages} alm
+    LEFT JOIN {url_alias} alias
+      ON CONCAT('activity/', CAST(alm.mid AS CHAR)) = alias.src
+    WHERE alias.src IS NULL
+  ", 0, variable_get('pathauto_max_bulk_update', 50));
+  // Set an alias for these records.
+  $count = 0;
+  $placeholders = array();
+  while ($activity_log = db_fetch_object($result)) {
+    $record = activity_log_load($activity_log->mid);
+    $record->src = $activity_log->src;
+    $record->dst = $activity_log->dst;
+    // We can call this function because pathauto.inc should already be included.
+    $placeholders = pathauto_get_placeholders('activity_log', $record);
+    $source = 'activity/'. $record->mid;
+    if (pathauto_create_alias('al_pages', 'bulkupdate', $placeholders, $source, $record->mid)) {
+      $count++;
+    }
+  }
+  // Report what we just did.
+  drupal_set_message(format_plural($count,
+    'Bulk generation of aliases for activity logs completed: one alias generated.',
+    'Bulk generation of aliases for activity logs completed: @count aliases generated.'
+  ));
+}
+
+/**
+ * Implementation of hook_path_alias_types().
+ */
+function al_pages_path_alias_types() {
+  return array(
+    'activity/' => t('Activity message'),
+  );
+}

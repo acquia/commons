@@ -1,0 +1,280 @@
+<?php
+
+// Date formats
+define('QUANT_DATE_DAY_FORMAT', 'M j'); // Month Day (Feb 12)
+define('QUANT_DATE_MONTH_FORMAT', 'M y'); // Month Year (Jun 09) 
+
+// Number of allowed colors
+define('QUANT_PALETTE_AMOUNT', 25);
+
+/**
+ * Implementation of hook_perm()
+ */
+function quant_perm() {
+  return array('administer quant', 'view analytics page'); 
+}
+
+/**
+ * Implementation of hook_menu()
+ */
+function quant_menu() {
+  $path = drupal_get_path('module', 'quant') . '/includes';
+  $items = array();
+ 
+  // Main analytics page
+  $items['analytics'] = array(
+    'title' => 'Site analytics',
+    'description' => 'View charts depicting action over time for many Drupal components.',
+    'page callback' => 'quant_page',
+    'access arguments' => array('view analytics page'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'pages.inc',
+    'file path' => $path,
+  );
+
+  // Also provide an analytics link in the admin reports
+  $items['admin/reports/analytics'] = $items['analytics'];
+  
+  // Settings page
+  $items['admin/settings/quant'] = array(
+    'title' => 'Quant configuration (analytics)',
+    'description' => 'Configure the quantitative analytics page',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('quant_admin_settings'),
+    'access arguments' => array('administer quant'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'forms.inc',
+    'file path' => $path,
+  );
+  
+  return $items;
+}
+
+/**
+ * Implementation of hook_theme()
+ */
+function quant_theme() {
+  $path = drupal_get_path('module', 'quant') . '/includes';
+  $items = array();
+  $items['quant_page'] = array(
+    'arguments' => array('form' => NULL, 'charts' => NULL),
+    'file' => 'theme.inc',
+    'path' => $path,
+  );
+  $items['quant_time_form'] = array(
+    'arguments' => array('form' => NULL),
+    'file' => 'theme.inc',
+    'path' => $path,
+  );
+  return $items; 
+}
+
+/**
+ * Implementation of hook_quants()
+ */
+function quant_quants() {
+  quant_include('quants');
+  return _quant_quants(); 
+}
+
+/**
+ * Fetch all available quants
+ */
+function quant_get_quants() {
+  static $quants = array();
+  
+  // Act if the static cache is not yet populated
+  if (empty($quants)) {
+    // Check the cache table next
+    $cache_key = 'quants';
+    $cache = cache_get($cache_key);
+    // See if the cache has data
+    if (isset($cache->data)) {
+      // Use the cached tree
+      $quants = $cache->data;
+    }
+    // Nothing cached, so generate new data
+    else {
+      // Invoke the hooks
+      $quants = module_invoke_all('quants');
+      // Allow modules to alter the quants
+      drupal_alter('quants', $quants);
+      // Cache the quants
+      cache_set($cache_key, $quants);
+    }
+  }
+
+  return $quants;
+}
+
+/**
+ * Retrieve the time period or interval from the URL
+ * 
+ * @param $period
+ *   If the set option is a period, the return value will
+ *   be a single timestamp representing how far to go back
+ *   in time from the current. If the set option is custom,
+ *   the return value will be an array representing a given
+ *   time interval. The first value will be the "from" timestamp
+ *   and the second value will be the "to" timestamp. If neither
+ *   can be determined, FALSE will be returned. If no queries are
+ *   in the URL, a timestamp for a 1 month period will be returned.
+ */
+function _quant_get_time_from_url() {
+  // Get the option
+  switch ($_GET['option']) {
+    case '':
+      return strtotime('-1 month');
+      
+    case 'custom':
+      $from = strtotime($_GET['from']);
+      $to = strtotime($_GET['to']);
+      if (is_numeric($from) && is_numeric($to)) {
+        // Move the 'to' date to 1 second before midnight
+        return array($from, $to + 86399);
+      }
+      break;
+    
+    case 'period':
+      $period = strtotime('-' . str_replace('_', ' ', filter_xss($_GET['period'])));
+      if (is_numeric($period)) {
+        return $period; 
+      }
+  }
+  
+  return FALSE;
+}
+
+/**
+ * Process quants and convert them to charts with data plotted
+ * 
+ * @param &$quant
+ *   A quant object
+ * @param $period
+ *   A timestamp representing a date in which data should reach back to, 
+ *   can also be an accepted format for strtotime(), or an array with
+ *   the first value being a timestamp representing the 'from' date
+ *   and the second value being a timestamp representing the 'to' date.
+ *   If an array of two values is given, accept formats for strtotime()
+ *   can be used in place of timestamps.
+ * @return
+ *   A complete chart ready for display
+ */
+function quant_process(&$quant, $period) {
+  quant_include('chart');
+  $chart = '';
+  
+  // Check if period is in string form
+  if (is_string($period)) {
+    // Convert to a timestamp
+    $period = strtotime($period);
+    
+    // Make sure the format was correct
+    if (!is_numeric($period)) {
+      return FALSE; 
+    }
+  }
+  // Check if period is numeric
+  else if (is_numeric($period)) {
+    // Determine the amount of days in period
+    $days = ceil((time() - $period) / 86400);
+  }
+  // Check if period is an array
+  else if (is_array($period)) {
+    // Check if the values are strings
+    foreach ($period as $i => $date) {
+      if (is_string($date)) {
+        // If they are, try to convert to timestamps
+        $date = strtotime($date);
+        if (!is_numeric($date)) {
+          // Invalid format, end here
+          return FALSE;
+        }
+        else {
+          $period[$i] = $date; 
+        }
+      }
+    }
+    
+    // Determine the amount of days in period
+    $days = ceil(($period[1] - $period[0]) / 86400);
+  }
+
+  // Add the information we need to the quant
+  $quant->period = $period;
+  $quant->days = $days;
+  // Generate and execute a database query
+  quant_execute_query($quant);
+  // Build the data for the chart
+  quant_build_data($quant);
+  // Generate the chart
+  quant_generate_chart($quant);
+    
+  return $quant->render ? $quant->render : FALSE;
+}
+
+/**
+ * Perform a database query based on quant data for calculating
+ * time-based trends
+ * 
+ * @param &$quant
+ *   A quant object
+ */
+function quant_execute_query(&$quant) {
+  // Extract the period of time
+  $period = $quant->period;
+  // Generate if a query wasn't supplied
+  if (!$quant->query) {
+    // Generate a count query, if needed
+    if ($quant->dataType == 'count') {
+      $query = "SELECT COUNT({$quant->count}), {$quant->count} FROM {{$quant->table}}";
+      $query .= " WHERE {$quant->field} >= %d" . (is_array($period) ? " AND {$quant->field} <= %d" : ""); 
+      $query .= " GROUP BY {$quant->count}";
+    }
+    else {
+      $query = "SELECT " .  ($quant->dataType == 'multiple' ? "{$quant->group}, " : '') . "{$quant->field}";
+      $query .= " FROM {{$quant->table}}";
+      $query .= " WHERE {$quant->field} >= %d" . (is_array($period) ? " AND {$quant->field} <= %d" : ""); 
+      $query .= " ORDER BY {$quant->field} DESC";
+    }
+    // Add the generated query to the object
+    $quant->query = $query;
+  }
+  else {
+    $query = is_array($period) ? $quant->queryCustom : $quant->query;
+  }
+  
+  $quant->items = is_array($period) ? db_query($query, $period[0], $period[1]) : db_query($query, $period);
+}
+
+/**
+ * Wrapper for data building functions
+ * 
+ * @param &$quant
+ *   A quant object
+ */
+function quant_build_data(&$quant) {
+  quant_include('data');
+  $function = "_quant_build_data_{$quant->dataType}";
+  $function($quant);
+}
+
+/**
+ * Include .inc files
+ * Similar to ctools_include()
+ * 
+ * @param $file
+ *   The base file name to be included.
+ * @param $module
+ *   Optional module containing the include.
+ * @param $dir
+ *   Optional subdirectory containing the include file.
+ */
+function quant_include($file, $module = 'quant', $dir = 'includes') {
+  static $used = array();
+  $dir = '/' . ($dir ? $dir . '/' : '');
+  if (!isset($used[$module][$dir][$file])) {
+    require_once './' . drupal_get_path('module', $module) . "$dir$file.inc";
+    $used[$module][$dir][$file] = TRUE;
+  }
+}

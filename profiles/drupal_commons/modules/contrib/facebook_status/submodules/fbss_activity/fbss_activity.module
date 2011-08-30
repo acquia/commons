@@ -1,0 +1,173 @@
+<?php
+
+/**
+ * @file
+ *   Integrates Activity 2 with Facebook-style Statuses.
+ */
+
+/**
+ * Implementation of hook_facebook_status_delete().
+ */
+function fbss_activity_facebook_status_delete($status) {
+  $result = db_query("SELECT aid FROM {activity} WHERE type = 'facebook_status' AND op NOT LIKE 'fbss_deleted%' AND eid = %d", $status->sid);
+  $records = array();
+  while ($record = db_fetch_object($result)) {
+    $records[] = $record->aid;
+  }
+  if (!empty($records)) {
+    activity_delete($records);
+  }
+}
+
+//=====================================================================================
+// Hooks below this line are implemented on behalf of the main facebook_status module.
+//=====================================================================================
+
+/**
+ * Implementation of hook_activity_info().
+ */
+function facebook_status_activity_info() {
+  $info = new stdClass();
+  $info->api = 2;
+  $info->name = 'facebook_status';
+  $info->object_type = 'facebook_status';
+  $info->eid_field = 'sid';
+  $info->objects = array('Recipient' => 'facebook_status', 'Sender' => 'sender');
+  $hooks = array(
+    'fbss_deleted',
+    'fbss_deleted_user_self',
+    'fbss_deleted_user_other',
+    'fbss_edited',
+    'fbss_edited_user_self',
+    'fbss_edited_user_other',
+    'fbss_submitted',
+    'fbss_submitted_user_self',
+    'fbss_submitted_user_other'
+  );
+  foreach (facebook_status_all_contexts() as $type => $details) {
+    if ($type != 'user') {
+      $hooks[] = 'fbss_deleted_'. $type;
+      $hooks[] = 'fbss_edited_'. $type;
+      $hooks[] = 'fbss_submitted_'. $type;
+    }
+  }
+  sort($hooks);
+  $info->hooks = array('facebook_status' => $hooks);
+  $info->realms = array('facebook_status_sender' => 'Facebook-style Statuses Sender', 'facebook_status_recipient' => 'Facebook-style Statuses Recipient');
+  return $info;
+}
+
+/**
+ * Implementation of hook_activity_grants().
+ */
+function facebook_status_activity_grants($activity) {
+  $realms = array();
+  if ($activity->type == 'facebook_status') {
+    $realms['facebook_status_sender'] = array($activity->uid);
+    $result = db_fetch_object(db_query("SELECT recipient FROM {facebook_status} WHERE sid = %d", $activity->eid));
+    $realms['facebook_status_recipient'] = array($result->recipient);
+  }
+  return $realms;
+}
+
+/**
+ * Implementation of hook_activity_access_grants().
+ */
+function facebook_status_activity_access_grants($account) {
+  return array(
+    'facebook_status_sender' => array($account->uid),
+    'facebook_status_recipient' => array($account->uid),
+  );
+}
+
+/**
+ * Implementation of hook_list_activity_actions().
+ */
+function facebook_status_list_activity_actions($hook, $op, $max_age) {
+  $actions = array();
+  if (!empty($max_age)) {
+    $min_time = time() - $max_age;
+  }
+  else {
+    $min_time = 0;
+  }
+
+  if ($op == 'fbss_submitted_user_self') {
+    $result = db_query(
+      "SELECT sid as id, created, sender as actor FROM {facebook_status} WHERE created > %d AND type = 'user' AND sender = recipient",
+      $min_time
+    );
+  }
+  elseif ($op == 'fbss_submitted_user_other') {
+    $result = db_query(
+      "SELECT sid as id, created, sender as actor FROM {facebook_status} WHERE created > %d AND type = 'user' AND sender <> recipient",
+      $min_time
+    );
+  }
+  elseif (strpos($op, 'fbss_submitted_') === 0) {
+    foreach (facebook_status_all_contexts() as $type => $details) {
+      if ($op == 'fbss_submitted_'. $type) {
+        $result = db_query(
+          "SELECT sid as id, created, sender as actor FROM {facebook_status} WHERE created > %d AND type = '%s'",
+          $min_time,
+          $type
+        );
+        break;
+      }
+    }
+  }
+
+  if (isset($result)) {
+    while ($row = db_fetch_array($result)) {
+      $actions[] = $row;
+    }
+  }
+
+  return $actions;
+}
+
+/**
+ * Implementation of hook_load_activity_context().
+ */
+function facebook_status_load_activity_context($hook, $op, $id) {
+  $status = facebook_status_load($id);
+  $activity_context = array();
+
+  if (!empty($status)) {
+    $context = facebook_status_determine_context($status->type);
+    $recipient = $context['handler']->load_recipient($status->recipient);
+    $sender = _facebook_status_user_load($status->sender);
+
+    // Reduce the amount of recalculation we will need to do later.
+    $sender->facebook_status = $status;
+    $sender->context = $context;
+
+    $activity_context = array(
+      'hook' => 'facebook_status',
+      'op' => $op,
+      'sender' => $sender,
+      'recipient' => $recipient,
+      'type' => $status->type,
+      'facebook_status' => $status,
+      'context' => $context,
+    );
+  }
+
+  return $activity_context;
+}
+
+/**
+ * Implementation of hook_form_FORM_ID_alter().
+ * Activity 2.
+*/
+function facebook_status_form_activity_form_alter(&$form, &$form_state) {
+  if ($form_state['storage']['values']['triggers']['hook'] == 'facebook_status') {
+    $op = $form_state['storage']['values']['operations']['operation'];
+    // Remove the "Recipient" field unless this is for a user posting a message to another user.
+    if ($op != 'fbss_submitted_user_other' && $op != 'fbss_edited_user_other' && $op != 'fbss_deleted_user_other') {
+      foreach (activity_enabled_languages() as $id => $language) {
+        unset($form[$id .'_fieldset']['facebook_status-pattern-'. $id]);
+      }
+    }
+  }
+}

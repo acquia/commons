@@ -1,0 +1,141 @@
+.facebook-status-negative {
+  color: #800000;
+}
+
+.facebook-status-chars {
+  float: right;
+}
+
+#facebook-status-edit .facebook-status-chars {
+  float: none;
+}
+
+.facebook-status-profile-category .profile {
+  clear: none;
+}
+
+.facebook-status-update {
+  margin-bottom: 1em;
+}
+
+.facebook-status-update #facebook-status-box {
+  margin-bottom: 0;
+}
+
+/* @group Textareas
+ * 
+ * Make textareas fit in their boxes by bubbling borders and padding up
+ * to a wrapper element.
+ */
+
+.facebook-status-textarea-wrapper {
+  border-style: solid;
+  border-width: 1px;
+  padding: 4px 2px 2px 4px;
+}
+
+.facebook-status-textarea-wrapper .form-item {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.facebook-status-textarea-wrapper textarea {
+  border: 0 none;
+  display: block;
+  line-height: 1.5em;
+  width: 100%;
+}
+
+.facebook-status-faded {
+  color: #999999;
+}
+
+/* @end */
+
+/* @group Buttons */
+
+.facebook-status-update .button {
+  border-style: solid;
+  border-width: 0 1px 1px 0;
+}
+
+.facebook-status-update .fbsmp-plugin-icon:first-child .button,
+.facebook-status-submit {
+  border-left-width: 1px;
+}
+
+form input.fbsmp-plugin-icon-button,
+form input.facebook-status-submit { /* Forced by Fusion */
+  padding: 7px 14px;
+}
+
+form input.fbsmp-plugin-icon-button { /* Forced by Fusion */
+  padding-left: 34px;
+}
+
+.facebook-status-submit {
+  background-color: transparent;
+  border-style: solid;
+  border-width: 0 1px 1px 1px;
+  float: right;
+  margin: 0;
+  padding: 0;
+}
+
+.facebook-status-back {
+  float: right;
+  margin: 0.5em;
+}
+
+/* @end */
+
+/* @group Entry items
+ *
+ * Media is a generic class for any presentation that includes a user image to one side
+ * and content to the other.
+ */
+
+.facebook-status-media > .user-picture {
+  float: left; /* LTR */
+  margin-right: 10px; /* LTR */
+}
+
+.facebook-status-media > .content {
+  overflow: hidden;
+}
+
+.facebook-status-media > .content > * {
+  margin-top: 0.25em;
+}
+
+.facebook-status-media > .content > :first-child {
+  margin-top: 0;
+}
+
+.facebook-status-media .links {
+  float: right;
+}
+
+.facebook-status-media .links li {
+  padding: 0;
+}
+
+.facebook-status-media .links li + li {
+  margin: 0 0 0 0.5em;
+}
+
+/* @group Comments */
+
+.facebook-status-media > .content .facebook-status-comments {
+  margin-top: 1em;
+}
+
+/* @end */
+
+/* @group Links */
+
+.facebook-status-item .links {
+  margin-bottom: 0;
+}
+
+/* @end */

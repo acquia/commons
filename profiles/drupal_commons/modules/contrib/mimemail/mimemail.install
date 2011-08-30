@@ -1,0 +1,33 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Mime Mail module.
+ */
+
+/**
+ * Implementation of hook_disable().
+ */
+function mimemail_disable() {
+  if (strpos(variable_get('smtp_library', ''), 'mimemail') !== FALSE) {
+    variable_del('smtp_library');
+  }
+}
+
+/**
+ * Implementation of hook_uninstall()
+ */
+function mimemail_uninstall() {
+  $variables = array(
+    'mimemail_alter',
+    'mimemail_crlf',
+    'mimemail_engine',
+    'mimemail_incoming',
+    'mimemail_key',
+    'mimemail_textonly',
+    'mimemail_sitestyle',
+  );
+  foreach ($variables as $variable) {
+    variable_del($variable);
+  }
+}

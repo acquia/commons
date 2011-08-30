@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * @file
+ *   (Un)installs the Facebook-style Statuses Notifications module.
+ */
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function fbss_notifications_uninstall() {
+  variable_del('fbss_notifications_type');
+  variable_del('fbss_notifications_link');
+}

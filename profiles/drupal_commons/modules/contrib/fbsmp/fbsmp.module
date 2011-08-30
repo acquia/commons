@@ -1,0 +1,1673 @@
+<?php
+
+/**
+ * @file
+ *   Allows users to easily publish various kinds of content (links, photos, videos, etc) in a stream like on Facebook.
+ */
+
+//======
+// API.
+//======
+
+/**
+ * Saves a status with an attachment into the database.
+ * 
+ * @param $recipient
+ *   The object representing the recipient of the status.
+ * @param $type
+ *   The status stream type.
+ * @param $status_text
+ *   The status text to be saved.
+ * @param $attach_type
+ *   The type of the attachment.
+ * @param $attach_data
+ *   The attachment data.
+ * @param $sender
+ *   The user object representing the sender of the status. Defaults to the
+ *   current user.
+ * @param $alerts
+ *   An array specifying which alerts to call. These are the defaults:
+ *   array(
+ *    'hook_fbsmp_save' => TRUE,
+ *    'rules' => TRUE,
+ *    'trigger' => TRUE,
+ *    'twitter' => FALSE,
+ *    'userpoints' => TRUE,
+ *    'facebook_status' => array(
+ *      'discard duplicates' => FALSE,
+ *      'timed override' => FALSE,
+ *      'discard blank statuses' => FALSE,
+ *    ),
+ *  );
+ *
+ * @return
+ *   The saved status object, containing the 
+ *   sid, sender, recipient, created, message, type (stream context e.g. 'user'), 
+ *   attachment->type, attachment->data.
+ */
+function fbsmp_save_status($recipient, $type, $status_text, $attach_type, $attach_data, $sender = NULL, $alerts = array()) {
+  $sender = (empty($sender) ? $GLOBALS['user'] : $sender);
+  $context = facebook_status_determine_context($type);
+  $recipient_id = $context['handler']->recipient_id($recipient);
+  
+  $plugins = fbsmp_get_plugins();
+  if (!in_array($attach_type, array_keys($plugins))) {
+    return FALSE;
+  }
+  $plugin_name = isset($plugins[$attach_type]['name']) ? $plugins[$attach_type]['name'] : $attach_type;
+
+  //Merge the default options.
+  $alerts += array(
+    'hook_fbsmp_save' => TRUE,
+    'rules' => TRUE,
+    'trigger' => TRUE,
+    'twitter' => TRUE,
+    'userpoints' => TRUE,
+    'facebook_status' => array(
+      'discard duplicates' => FALSE,
+      'timed override' => FALSE,
+      'discard blank statuses' => FALSE,
+      'has attachment' => !empty($attach_data),
+    ),
+  );
+
+  //Calls hook_fbsmp_save_alerts_alter(&alerts, $attach_type).
+  drupal_alter('fbsmp_save_alerts', $alerts, $attach_type);
+
+  //Save status in FBSS.
+  $status = facebook_status_save_status($recipient, $type, $status_text, $sender, $alerts['facebook_status']);
+
+  $record = new stdClass();
+  $record->type = $attach_type;
+  $record->data = $attach_data;
+  $record->sid = $status->sid;
+
+  drupal_write_record('fbsmp', $record, array('sid'));
+  if (!db_affected_rows()) {
+    drupal_write_record('fbsmp', $record);
+  }
+
+  _fbsmp_merge_status($status, $record);
+
+  //Invokes hook_fbsmp_save($status).
+  if ($alerts['hook_fbsmp_save']) {
+    module_invoke_all('fbsmp_save', $status);
+  }
+
+  //TRIGGER INTEGRATION
+  if (module_exists('trigger') && $alerts['trigger']) {
+    $op = 'fbsmp_'. $status->attachment->type .'_submitted_'. $type;
+    if ($type == 'user') {
+      $op .= ($recipient_id == $sender->uid ? '_self' : '_other');
+    }
+    module_invoke_all('fbsmp', $op, $status);
+  }
+
+  //Rules integration.  
+  if (module_exists('rules') && $alerts['rules']) {
+    rules_invoke_event('fbsmp_add_status', $status, $status->attachment);
+  }
+
+  return $status;
+}
+
+/**
+ * Update a status with a new attachment or message.
+ *
+ * @param $status_old
+ *   The status object to be edited.
+ * @param $new_message
+ *   The new text of the status.
+ * @param $new_attachment
+ *   The new attachment object.
+ * @param $alerts
+ *   An array specifying which alerts to call. These are the defaults:
+ *   array(
+ *    'hook_fbsmp_save' => TRUE,
+ *    'rules' => TRUE,
+ *    'trigger' => TRUE,
+ *    'twitter' => FALSE,
+ *    'userpoints' => TRUE,
+ *    'facebook_status' => array(
+ *      'discard duplicates' => FALSE,
+ *      'timed override' => FALSE,
+ *      'discard blank statuses' => FALSE,
+ *    ),
+ *  );
+ *
+ */
+function fbsmp_edit_status($status_old, $new_message, $new_attachment, $alerts) {
+  if (!is_object($status_old)) {
+    $status_old = facebook_status_load($status_old);
+  }
+  
+  // Merge default alerts.
+  $alerts += array(
+    'hook_fbsmp_save' => TRUE,
+    'rules' => TRUE,
+    'trigger' => TRUE,
+    'twitter' => TRUE,
+    'userpoints' => TRUE,
+    'facebook_status' => array(
+      'discard duplicates' => FALSE,
+      'timed override' => FALSE,
+      'discard blank statuses' => FALSE,
+      'has attachment' => TRUE,
+    ),
+  );
+  
+  facebook_status_edit_status($status_old, $new_message, $alerts['facebook_status']);
+
+  if ($new_attachment->data !== FALSE) {
+    drupal_write_record('fbsmp', $new_attachment, array('sid'));
+  }
+  
+  $status_old->attachment = $new_attachment;
+  
+   //Invokes hook_fbsmp_save($status, $edit).
+  if ($alerts['hook_fbsmp_save']) {
+    module_invoke_all('fbsmp_save', $status_old, TRUE);
+  }
+    
+  //Trigger integration.
+  if (module_exists('trigger') && $alerts['trigger']) {
+    $op = 'fbsmp_'. $status_old->attachment->type .'_edited_'. $status_old->type;
+    if ($status_old->type == 'user') {
+      $op .= ($status_old->recipient == $status_old->sender ? '_self' : '_other');
+    }
+    module_invoke_all('fbsmp', $op, $status_old);
+  }
+  
+  //Rules integration.
+  if (module_exists('rules') && $alerts['rules']) {
+    rules_invoke_event('fbsmp_edit_status', $status_old, $status_old->attachment);
+  }
+}
+
+/**
+ * Load the attachment for a particular status.
+ *
+ * @param $sid
+ *   The SID of the status.
+ *
+ * @return
+ *   An attachment object containing sid, type and data.
+ */
+function fbsmp_load($sid) {
+  $attachment = db_fetch_object(db_query("SELECT sid, type, data FROM {fbsmp}
+                WHERE sid = %d", $sid));
+  if ($attachment) {
+    $attachment->data = unserialize($attachment->data);
+  }
+  return $attachment;
+}
+
+/**
+ * Load a status with an attachment.
+ *
+ * @param $sid
+ *   The SID of the status.
+ *
+ * @return
+ *   The status object, containing the sid, uid, 
+ *   pid, status_time, status, attachment->type, attachment->data.
+ */
+function fbsmp_load_status($sid) {
+  $status = facebook_status_load($sid);
+  $attachment = fbsmp_load($sid);
+  if (!is_object($status) || !is_object($attachment)) {
+    return FALSE;
+  }
+  return _fbsmp_merge_status($status, $attachment);
+}
+
+/**
+ * Determines whether a status has attachment.
+ *
+ * @param $sid
+ *   The SID of the status.
+ *
+ * @return
+ *   The number of attachments for each status (0 or 1).
+ */
+function fbsmp_status_has_attachment($sid) {
+  return db_result(db_query("SELECT COUNT(sid) FROM {fbsmp} WHERE sid = %d", $sid));  
+}
+
+/**
+ * Delete a status with an attachment from the database.
+ *
+ * @param $sid
+ *   The SID of the status or a status object.
+ * @param $alerts
+ *   An array specifying which alerts to call. These are the defaults:
+ *   array(
+ *     'activity2' => TRUE,
+ *     'hook_fbsmp_delete' => TRUE,
+ *     'rules' => TRUE,
+ *     'trigger' => TRUE,
+ *     'userpoints' => TRUE,
+ *   );
+ */
+function fbsmp_delete_status($sid, $alerts = array()) {
+  if (is_object($sid)) {
+    $status = $sid;
+    $sid = $status->sid;
+  }
+  else {
+    $status = fbsmp_load_status($sid);
+  }
+  if (!$status) {
+    return FALSE;
+  }
+
+  $alerts += array(
+    'activity2' => TRUE,
+    'hook_fbsmp_delete' => TRUE,
+    'rules' => TRUE,
+    'trigger' => TRUE,
+    'userpoints' => TRUE,
+    'facebook_status' => array(
+      'has attachment' => TRUE,  //Disables alerts to other modules sent by FBSS.
+    ),
+  );
+
+  //Invokes hook_fbsmp_delete_alerts_alter(&$alerts, $status).
+  drupal_alter('fbsmp_delete_alerts', $alerts, $status);
+
+  //Invokes hook_fbsmp_delete($status).
+  if ($alerts['hook_fbsmp_delete']) {
+    module_invoke_all('fbsmp_delete', $status);
+  }
+
+  //TRIGGER INTEGRATION
+  if (module_exists('trigger') && $alerts['trigger']) {
+    $op = 'fbsmp_'. $status->attachment->type .'_deleted_'. $status->type;
+    if ($status->type == 'user') {
+      $op .= ($status->recipient == $status->sender ? '_self' : '_other');
+    }
+    module_invoke_all('fbsmp', $op, $status);
+  }
+
+  //Rules integration.
+  if (module_exists('rules') && $alerts['rules']) {
+    rules_invoke_event('fbsmp_delete_status', $status, $status->attachment);
+  }
+  
+  facebook_status_delete_status($sid, $alerts['facebook_status']);
+  db_query("DELETE FROM {fbsmp} WHERE sid = %d", $sid);
+
+  //DELETE POSSIBLE ACTIVITY 2 RECORDS
+  if (module_exists('activity') && function_exists('activity_help') && $alerts['activity2']) {
+    $result = db_query("SELECT aid FROM {activity} WHERE type = 'fbsmp' AND eid = %d", $sid);
+    $records = array();
+    while ($record = db_fetch_object($result)) {
+      $records[] = $record->aid;
+    }
+    if (!empty($records)) {
+      activity_delete($records);
+    }
+  }
+}
+
+/**
+ * Include a library file.
+ *
+ * @param $file
+ *   The name of the file to load.
+ * @param $library
+ *   The name of the library. If libraries module is installed,
+ *   fbsmp_include_library() will look for libraries with this name managed by
+ *   the libraries module.
+ *
+ * @return
+ *   TRUE on success, FALSE if file does not exist.
+ */
+function fbsmp_include_library($file, $library) {
+  if (module_exists('libraries') && file_exists(libraries_get_path($library) ."/$file")) {
+    require_once libraries_get_path($library) ."/$file";
+  }
+  elseif (file_exists(drupal_get_path('module', 'fbsmp') ."/libraries/$file")) {
+    require_once './'. drupal_get_path('module', 'fbsmp') ."/libraries/$file";
+  }
+  else {
+    return FALSE;
+  }
+  return TRUE;
+}
+
+/**
+ * Logs an error into the database.
+ *
+ * @param $error
+ *   The error string to store into the WATCHDOG table.
+ */
+function fbsmp_log_error($error) {
+  watchdog('fbsmp', '!error', array('!error' => $error), WATCHDOG_WARNING);
+}
+
+/**
+ * Modules notify FBSMP module when installed, disabled, etc.
+ *
+ * @param $op
+ *   The operation taking place: install, uninstall, enable, disable.
+ * @param $plugins
+ *   An array of plugins which are implemented by the notifying module.
+ */
+function fbsmp_notify($op, $plugins = array()) {
+  switch ($op) {
+    case 'uninstall':
+      foreach ($plugins as $plugin) {
+        fbsmp_plugin_delete($plugin);
+      }
+    case 'install':
+    case 'enable':
+    case 'disable':
+      _fbsmp_clear_cache();
+      menu_rebuild();
+  }
+}
+
+/**
+ * Delete all data related to a plugin.
+ *
+ * @param $plugin
+ *   The plugin for which all the data is to be deleted.
+ */
+function fbsmp_plugin_delete($plugin) {
+  if (db_table_exists('fbsmp')) {
+    $results = db_query("SELECT sid FROM {fbsmp} WHERE type = '%s'", $plugin);
+    $alerts = array(
+      'activity2' => TRUE,
+      'hook_fbsmp_delete' => TRUE,
+      'rules' => FALSE,
+      'trigger' => FALSE,
+      'userpoints' => FALSE,
+    );
+    while ($attachment = db_fetch_array($results)) {
+      fbsmp_delete_status($attachment['sid'], $alerts);
+    }
+  }
+}
+
+/**
+ * Formats the attachment.
+ *
+ * @param $attachment
+ *   The attachment object or the sid of the status attachment.
+ *
+ * @return
+ *   The HTML to display the themed attachment.
+ */
+function fbsmp_render_attachment($attachment) {
+  if (!is_object($attachment)) {
+    $attachment = fbsmp_load($attachment);
+  }
+  $output = '';
+  if ($attachment) {
+    $function = fbsmp_load_function($attachment->type, 'themed attachment');
+    if ($function) {
+      $output = $function($attachment);
+    }
+    
+    //Invoke the hook_fbsmp_render_attachment_alter().
+    drupal_alter('fbsmp_render_attachment', $output, $attachment);
+  }
+  
+  return $output;
+}
+
+//===================
+// HELPER FUNCTIONS.
+//===================
+
+/**
+ * Get all available enabled plugins.
+ *
+ * @param $disabled
+ *   A boolean indicating whether to include disabled plugins.
+ *
+ * @return
+ *   An array where the keys are the plugin types and the values
+ *   are the plugin info arrays as defined in hook_fbsmp_plugins().
+ */
+function fbsmp_get_plugins($disabled = FALSE) {
+  ctools_include('plugins');
+  $plugins = ctools_get_plugins('fbsmp', 'plugins');
+  
+  if (!$disabled) {
+    $disabled_plugins = variable_get('fbsmp_disabled_plugins', array());
+    foreach ($disabled_plugins as $key) {
+      unset($plugins[$key]);
+    }
+  }
+  return $plugins;
+}
+
+/**
+ * Get information about a plugin
+ *
+ * @param $plugin
+ *   The type of plugin that will be loaded.
+ *
+ * @return
+ *   An array containing the information for this plugin or FALSE if the plugin
+ *   does not exist.
+ */
+function fbsmp_get_plugin($plugin) {
+  ctools_include('plugins');
+  return ctools_get_plugins('fbsmp', 'plugins', $plugin);
+}
+
+/**
+ * Implementation of hook_ctools_plugin_api().
+ */
+function fbsmp_ctools_plugin_api($owner, $api) {
+  if ($owner == 'fbsmp' && $api == 'plugins') {
+    return array('version' => 1);
+  }
+}
+
+/**
+ * Implementation of hook_ctools_plugin_plugins().
+ *
+ * Psuedo hook defintion plugin system options and defaults.
+ */
+function fbsmp_ctools_plugin_plugins() {
+  return array(
+    'cache' => TRUE,
+    'use hooks' => TRUE,
+  );
+}
+
+/**
+ * Adds attachment information to the FBSS status object.
+ *
+ * @param $status
+ *   The status object with which the attachment will be merged.
+ * @param $attachment
+ *   The attachment to merge with the status object.
+ */
+function _fbsmp_merge_status(&$status, $attachment) {
+  $status->attachment = $attachment;
+  return $status;
+}
+
+/**
+ * Get all available hooks for the plugins supporting trigger integration.
+ *
+ * @param $context_type
+ *   The context stream for which hooks are required. Defauts to FALSE (all available streams).
+ *
+ * @return
+ *   An array where the values are the name of the hooks.
+ */
+function fbsmp_get_hooks($context_type = FALSE) {
+  $plugins = fbsmp_get_plugins();
+  $hooks = array();
+  
+  $contexts = facebook_status_all_contexts();
+  if ($context_type != FALSE) {
+    $contexts = array_intersect_key($contexts, array($context_type => $context_type));
+  }
+  
+  foreach ($plugins as $key => $info) {
+    $temp = 'fbsmp_'. $key;
+    foreach ($contexts as $type => $details) {
+      if ($type == 'user') {
+        $hooks[] = $temp .'_submitted_user_self';
+        $hooks[] = $temp .'_submitted_user_other';
+        $hooks[] = $temp .'_deleted_user_self';
+        $hooks[] = $temp .'_deleted_user_other';
+        $hooks[] = $temp .'_edited_user_self';
+        $hooks[] = $temp .'_edited_user_other';
+      }
+      else {
+        $hooks[] = $temp .'_submitted_'. $type;     
+        $hooks[] = $temp .'_deleted_'. $type;
+        $hooks[] = $temp .'_edited_'. $type;
+      }
+    }
+
+  }
+  return $hooks;
+}
+
+/**
+ * Determines if the current user can edit or delete the relevant status.
+ *
+ * @param $status
+ *   A status object to check for edit/delete permissions.
+ * @param $delete
+ *   If TRUE, checks for delete permissions; otherwise, checks for edit perms.
+ *
+ * @return
+ *   TRUE if the current user can edit or delete the status; FALSE otherwise.
+ */
+function _fbsmp_status_can_edit($status, $delete = FALSE) {
+  return facebook_status_user_access($delete ? 'delete' : 'edit', $status);
+}
+
+/**
+ * Loads a function of the plugin.
+ *
+ * @param $attachment_type
+ *   The plugin/attachment type.
+ * @param $dfn_name
+ *   The function to load.
+ *
+ * @return
+ *   The function if it was loaded properly, otherwise FALSE.
+ */
+function fbsmp_load_function($attachment_type, $fn_name) {
+  ctools_include('plugins');
+  return ctools_plugin_load_function('fbsmp', 'plugins', $attachment_type, $fn_name);
+}
+
+/**
+ * Save global settings for each plugin.
+ *
+ * @param $settings
+ *   The array of settings to save for this plugin.
+ * @param $plugin
+ *   The plugin type to process.
+ */
+function fbsmp_save_plugin_settings($settings, $plugin) {  
+  variable_set('fbsmp_plugin_'. $plugin, $settings);
+}
+
+/**
+ * Returns global settings for each plugin.
+ *
+ * @param $plugin
+ *   The plugin type to process.
+ *
+ * @return
+ *   The array of settings for this plugin.
+ */
+function fbsmp_load_plugin_settings($plugin) {
+  $settings = variable_get('fbsmp_plugin_'. $plugin, array());
+  
+  //Merge with default settings.
+  switch ($plugin) {
+    case 'link':
+      $settings += array(
+        'max_title_length' => 100,
+        'max_description_length' => 300,
+        'class' => '',
+        'width' => 200,
+        'height' => 0,
+        'max_imagesize' => '',
+        'min_imagesize' => '',
+        'external' => 0,
+        'nofollow' => 0,
+        'url_stub' => 'http://',
+        'cache_duration' => 9676800,
+        'timeout' => 10,
+        'enable_emvideo' => 1,
+        'emvideo_providers' => array(),
+        'emvideo_width' => 435,
+        'default_emvideo_width' => 435,
+        'emvideo_height' => 350,
+        'default_emvideo_height' => 350,
+        'emvideo_autoplay' => 1,
+        'emvideo_inline_video_replacement' => 1,
+        'enable_emaudio' => 1,
+        'emaudio_providers' => array(),
+        'emaudio_width' => 435,
+        'default_emaudio_width' => 435,
+        'emaudio_height' => 350,
+        'default_emaudio_height' => 350,
+        'emaudio_autoplay' => 0,
+        'hide_empty_description' => 0,
+      );
+      break;
+    case 'photo':
+      $settings += array(
+        'file_extensions' => 'png gif jpg jpeg',
+        'max_filesize' => '',
+        'min_resolution' => 0,
+        'max_resolution' => 0,
+        'imagecache_preset' => 0,
+        'file_path' => '',
+        'width' => 0,
+        'height' => 0,
+        'alt' => '',
+        'class' => '',
+      );
+      break;
+    case 'video':
+      $settings += array(
+        'file_extensions' => '',
+        'max_filesize' => '',
+        'file_path' => '',
+        'player_width' => 435,
+        'player_height' => 350,
+        'use_default_thumbnail' => 0,
+        'default_thumbnail' => '',
+        'ffmpeg_path' => '/usr/bin/ffmpeg',
+        'enable_thumbnails' => 0,
+        'thumbnails_count' => 5,
+        'thumbnails_command' => '',
+        'enable_video' => 0,
+        'show_original_video' => 0,
+        'ffmpeg_output_format' => 'flv',
+        'ffmpeg_output_ext' => 'flv',
+        'ffmpeg_audio_ar' => 22050,
+        'ffmpeg_audio_ab' => '64k',
+        'ffmpeg_video_size' => '',
+        'ffmpeg_video_br' => '200k',
+        'ffmpeg_video_fps' => 25,
+        'ffmpeg_truncate_time' => '',
+        'convert_command' => '',
+        'thumbnails_path' => '',
+        'convert_video_path' => '',
+        'total_jobs' => 5,
+        'process_interval' => 86400,
+        'autoplay' => 0,
+      );
+      break;
+    case 'slideshare':
+      $settings += array(
+        'file_extensions' => '',
+        'max_filesize' => '',
+        'file_path' => '',
+        'cache_duration' => 9676800,
+        'slideshare_api_key' => '',
+        'slideshare_secret' => '',
+        'slideshare_username' => '',
+        'slideshare_password' => '',
+      );
+      break;
+  }
+  return $settings;
+}
+
+/**
+ *  Invokes hook_fbsmp_subtheme() on plugins.
+ */
+function fbsmp_plugin_themes($plugin = FALSE) {
+  $themes = array();
+  if ($plugin && $function = fbsmp_load_function($plugin, 'subtheme')) {
+    $themes += $function();
+  }
+  else {
+    $plugins = fbsmp_get_plugins();
+    foreach ($plugins as $plugin => $info) {
+      if ($plugin && $function = fbsmp_load_function($plugin, 'subtheme')) {
+        $themes += $function();
+      }
+    }
+  }
+  
+  return $themes;
+}
+
+/**
+ * Clear the cache.
+ */
+function _fbsmp_clear_cache() {
+  if (module_exists('views')) {
+    module_load_include('module', 'views');
+    views_invalidate_cache();
+  }
+}
+
+/**
+ * Alerts to trigger based on FBSS sub-modules.
+ */
+function _fbsmp_get_fbss_alerts() {
+  $alerts = array(
+    'activity2' => module_exists('fbss_activity'),
+    'rules' => module_exists('fbss_rules'),
+    'userpoints' => module_exists('fbss_userpoints'),
+    'twitter' => module_exists('fbss_twitter'),
+  );
+  
+  return $alerts;
+}
+
+/**
+ * Get the directory where images are stored.
+ */
+function _fbsmp_get_image_dir() {
+  return variable_get('fbsmp_image_dir', drupal_get_path('module', 'fbsmp'));
+}
+
+//=============
+// FBSS HOOKS.
+//=============
+
+/**
+ * Implementation of hook_form_FORM_ID_alter().
+ */
+function fbsmp_form__facebook_status_delete_alter(&$form, &$form_state) {
+  $attachment = fbsmp_load($form['status-sid']['#value']);
+  if ($attachment) {
+    $key = array_search('_facebook_status_delete_confirm', $form['confirm']['#submit']);
+    unset($form['confirm']['#submit'][$key]);
+    $form['confirm']['#submit'][] = 'fbsmp_delete_confirm';
+  }
+}
+
+/**
+ * Deletes a status.
+ */
+function fbsmp_delete_confirm($form, &$form_state) {
+  fbsmp_delete_status($form_state['values']['status-sid'], _fbsmp_get_fbss_alerts());
+  if (isset($_GET['destination'])) {
+    $form_state['redirect'] = $_GET['destination'];
+  }
+  else {
+    $form_state['redirect'] = 'user';
+  }
+}
+
+/**
+ * Implementation of hook_form_FORM_ID_alter().
+ */
+function fbsmp_form_facebook_status_edit_alter(&$form, &$form_state) {
+  if ($attachment = fbsmp_load($form['sid']['#value'])) {
+    if ($function = fbsmp_load_function($attachment->type, 'edit_form')) {
+      
+      drupal_add_css(drupal_get_path('module', 'fbsmp') .'/fbsmp.css');
+      
+      $info = fbsmp_get_plugin($attachment->type);
+      $name = $info['name'] ? $info['name'] : $attachment->type;
+      
+      $form['fbsmp'] = array(
+        '#weight' => -25.1,
+      );
+      $form['fbsmp']['open'] = array(
+        '#value' => '<div class="fbsmp-edit-wrapper-outer"><div class="fbsmp-edit-text">'. t('Attachment:') .'</div><div class="fbsmp-edit-plugin-header fbsmp-edit-'. 
+                      $attachment->type .'-header">'. $name .'</div><div class="fbsmp-edit-form-box">',
+      );
+      $form['fbsmp'] += $function($attachment, $form, $form_state);
+      $form['fbsmp']['attachment'] = array(
+        '#type' => 'value',
+        '#value' => $attachment,
+      );
+      $form['fbsmp']['close'] = array(
+        '#value' => '</div></div>',
+      );
+
+      $form['#validate'][] = 'fbsmp_edit_status_validate';
+
+      $key = array_search('facebook_status_edit_submit', $form['#submit']);
+      unset($form['#submit'][$key]);
+      $form['#submit'][] = 'fbsmp_edit_status_submit';      
+    }
+    else {
+      $form['fbsmp_message'] = array(
+        '#value' => '<strong>'. t('The attachment to this status cannot be edited.') .'</strong>',
+      );
+    }
+  }
+}
+
+/**
+ * Validate function for the edit form.
+ */
+function fbsmp_edit_status_validate(&$form, &$form_state) {
+  $attachment = $form_state['values']['attachment'];
+  $ac_plugin = $attachment->type;
+  if ($func = fbsmp_load_function($ac_plugin, 'edit_form_validate')) {
+    $func($attachment, $form, $form_state);
+  }
+}
+
+/**
+ * Submit function for the edit form.
+ */
+function fbsmp_edit_status_submit(&$form, &$form_state) {
+  $attachment = $form_state['values']['attachment'];
+  $ac_plugin = $attachment->type;
+  $function = fbsmp_load_function($ac_plugin, 'edit_form_submit');
+  $attachment_data = FALSE;
+  if ($function) {
+    $attachment_data = $function($attachment, $form, $form_state);
+  }
+  $status_old = facebook_status_load($form_state['values']['sid']);
+  $account = user_load(array('uid' => $status_old->uid));
+  $new_status_text = trim($form_state['values']['fbss-status']);
+  
+  $attachment->data = $attachment_data;
+  fbsmp_edit_status($status_old, $new_status_text, $attachment, _fbsmp_get_fbss_alerts());
+  
+  if (isset($_GET['destination'])) {
+    $form_state['redirect'] = array($_GET['destination']);
+  }
+  else {
+    $form_state['redirect'] = array('share-status');
+  }
+  drupal_set_message(t('Status has been successfully edited.'));  
+}
+
+/**
+ * Implementation of hook_preprocess_facebook_status_item().
+ */
+function fbsmp_preprocess_facebook_status_item(&$vars) {
+  $output = fbsmp_render_attachment($vars['status']->sid);
+  if ($output) {
+    $vars['attachment'] = $output;
+  }
+}
+
+/**
+ * Implementation of hook_form_FORM_ID_alter().
+ */
+function fbsmp_form_facebook_status_box_alter(&$form, &$form_state) {
+  $path = drupal_get_path('module', 'fbsmp');
+  drupal_add_js($path .'/plugins/link.js');
+  drupal_add_css($path .'/fbsmp.css');
+
+  $form['fbsmp'] = array(
+    '#weight' => -20,
+  );
+  $form['fbsmp']['open'] = array(
+    '#value' => '<div class="fbsmp-wrapper-outer" id="fbsmp-wrapper-replace">',
+  );
+  
+  $plugins = fbsmp_get_plugins();
+  
+  $form_load = 'widget_form';
+  $default_attachment = FALSE;
+  if (is_numeric($_GET['sid'])) {
+    $default_attachment = fbsmp_load($_GET['sid']);
+    if ($default_attachment && in_array($default_attachment->type, array_keys($plugins))) {
+      $form_load = 'repost_form';
+      $form_state['values']['active_plugin'] = $default_attachment->type;
+    }
+  }
+  
+  $url_keys = array_keys($_GET);
+  foreach ($plugins as $key => $info) {
+    if ($url_param_func = fbsmp_load_function($key, 'supported_url_params')) {
+      $supported_params = $url_param_func();
+      if (array_intersect($supported_params, $url_keys)) {
+        $form_load = 'url_param_form';
+        $form_state['values']['active_plugin'] = $key;
+        break;
+      }
+    }    
+  }
+  
+  if (!($ac_plugin = _fbsmp_get_active_plugin($form_state)) || !($widget_func = fbsmp_load_function($ac_plugin, $form_load))) {
+    $form['fbsmp']['openiconlist'] = array(
+      '#prefix' => '<div class="fbsmp-inner-collapsed">',
+      '#value' => '<span class="fbsmp-attach-text"></span><div class="fbsmp-icon-list clearfix">',
+    );
+
+    foreach ($plugins as $key => $info) {
+      $name = $info['name'] ? $info['name'] : $key;
+      $form['fbsmp'][$key .'_icon'] = array(
+        '#name' => $key,
+        '#type' => 'submit',
+        '#prefix' => '<div class="fbsmp-'. $key .'-icon fbsmp-plugin-icon">',
+        '#suffix' => '</div>',
+        '#submit' => array('fbsmp_activate_plugin'),
+        '#validate' => array(),
+        '#value' => $name,
+        '#attributes' => array(
+          'alt' => $name,
+          'class' => 'fbsmp-'. $key . '-icon-button' . ' fbsmp-plugin-icon-button icon-button button'
+        ),
+        '#ahah' => array(
+          'path' => 'fbsmp/js',
+          'wrapper' => 'fbsmp-wrapper-replace',
+        ),
+      );    
+    }
+    
+    $form['fbsmp']['closeiconlist'] = array(
+      '#prefix' => '</div>',
+      '#value' => '</div>'
+    );
+  }
+  else {
+    $info = fbsmp_get_plugin($ac_plugin);
+    $name = isset($info['name']) ? $info['name'] : $ac_plugin;
+    $form['fbsmp']['openpluginform'] = array(
+      '#value' => '<div class="fbsmp-inner-expanded clearfix">',
+    );
+    
+    $form['fbsmp']['ac_message'] = array(
+      '#prefix' => '<div class="fbsmp-'. $ac_plugin .'-header">',
+      '#value' => '<div class="'. $ac_plugin .'-message">'. $name .'</div>',
+    );  
+    
+    $form['fbsmp']['cancel'] = array(
+      '#type' => 'image_button',
+      '#src' => _fbsmp_get_image_dir() .'/images/cancel.png',
+      '#title' => t('Cancel'),
+      '#validate' => array(),
+      '#submit' => array('fbsmp_clear_attachment_form'),
+      '#attributes' => array('class' => 'fbsmp-cancel-button'),
+      '#suffix' => '</div>',
+      '#ahah' => array(
+        'path' => 'fbsmp/js',
+        'wrapper' => 'fbsmp-wrapper-replace',
+      ),
+    );
+    
+    $form['fbsmp'] += $form_load != 'repost_form' ? $widget_func($form_state) : $widget_func($form_state, $default_attachment);
+    
+    $form['fbsmp']['active_plugin'] = array(
+      '#type' => 'value',
+      '#value' => $ac_plugin,
+    );
+    $form['fbsmp']['closepluginform'] = array(
+      '#value' => '</div>',
+    );
+    
+    $form['fbss-submit']['#validate'][] = 'fbsmp_'. $form_load .'_validate';
+    $form['fbss-submit']['#validate'][] = 'facebook_status_box_validate';
+
+    $key = array_search('facebook_status_box_submit', $form['fbss-submit']['#submit']);
+    unset($form['fbss-submit']['#submit'][$key]);
+    $form['fbss-submit']['#submit'][] = 'fbsmp_'. $form_load .'_submit';
+    
+    if (module_exists('fbss_twitter')) {
+      $key = array_search('fbss_twitter_facebook_status_box_submit', $form['fbss-submit']['#submit']);
+      unset($form['fbss-submit']['#submit'][$key]);
+    }
+    
+    if ($ac_plugin == 'photo' || $ac_plugin == 'video') {
+      $form['#attributes']['enctype'] = 'multipart/form-data';
+    }
+  }
+  $form['fbsmp']['close'] = array(
+    '#value' => '</div>',
+  );
+}
+
+/**
+ * Validation callback for the widget form.
+ */
+function fbsmp_widget_form_validate(&$form, &$form_state) {
+  $ac_plugin = _fbsmp_get_active_plugin($form_state);
+  if ($func = fbsmp_load_function($ac_plugin, 'widget_form_validate')) {
+    $func($form, $form_state);
+  }
+}
+
+/**
+ * Validation callback for the repost form.
+ */
+function fbsmp_repost_form_validate(&$form, &$form_state) {
+  $ac_plugin = _fbsmp_get_active_plugin($form_state);
+  if ($func = fbsmp_load_function($ac_plugin, 'repost_form_validate')) {
+    $func($form, $form_state);
+  }
+}
+
+/**
+ * Validation callback for the url parameters form.
+ */
+function fbsmp_url_param_form_validate(&$form, &$form_state) {
+  $ac_plugin = _fbsmp_get_active_plugin($form_state);
+  if ($func = fbsmp_load_function($ac_plugin, 'url_param_form_validate')) {
+    $func($form, $form_state);
+  }
+}
+
+/**
+ * Submit callback for the widget form.
+ */
+function fbsmp_widget_form_submit(&$form, &$form_state) {
+  $ac_plugin = _fbsmp_get_active_plugin($form_state);
+  $func = fbsmp_load_function($ac_plugin, 'widget_form_save');
+  $attachment_data = $func ? $func($form, $form_state) : '';
+  
+  fbsmp_status_form_submit($form, $form_state, $attachment_data);
+}
+
+/**
+ * Submit callback for the repost form.
+ */
+function fbsmp_repost_form_submit(&$form, &$form_state) {
+  $ac_plugin = _fbsmp_get_active_plugin($form_state);
+  $func = fbsmp_load_function($ac_plugin, 'repost_form_submit');
+  $attachment_data = $func ? $func($form, $form_state) : '';
+  
+  fbsmp_status_form_submit($form, $form_state, $attachment_data);
+}
+
+/**
+ * Submit callback for the url parameters form.
+ */
+function fbsmp_url_param_form_submit(&$form, &$form_state) {
+  $ac_plugin = _fbsmp_get_active_plugin($form_state);
+  $func = fbsmp_load_function($ac_plugin, 'url_param_form_submit');
+  $attachment_data = $func ? $func($form, $form_state) : '';
+  
+  fbsmp_status_form_submit($form, $form_state, $attachment_data);
+}
+
+
+/**
+ * Submit callback for submitting the status form along with the 
+ * attachment data.
+ */
+function fbsmp_status_form_submit(&$form, &$form_state, $attachment_data = '') {
+  $ac_plugin = _fbsmp_get_active_plugin($form_state);
+  
+  $type = $form_state['values']['type'];
+  $rid = $form_state['values']['recipient'];
+  $context = facebook_status_determine_context($type);
+  $recipient = $context['handler']->load_recipient($rid);
+  $new_status = trim($form_state['values']['fbss-status']);
+  $default = $form_state['values']['sdefault'];
+  
+  //Don't save the status_text if it wasn't changed from the default.
+  if (variable_get('fbsmp_ignore_sdefault', 0) && $new_status == $default) {
+    $new_status = '';
+  }
+
+  $status = fbsmp_save_status($recipient, $type, $new_status, $ac_plugin, $attachment_data, NULL, _fbsmp_get_fbss_alerts());
+  
+  if (module_exists('fbss_twitter') && !empty($form_state['values']['twitter'])) {
+    $options = array(
+      'add URL' => TRUE,
+      'sid' => $status->sid,
+    );
+    fbss_twitter_post_to_twitter($GLOBALS['user'], $new_status, $options);
+  }
+
+  $form_state['facebook_status'] = array(
+    'type' => $type,
+    'recipient' => $rid,
+    'sid' => $status->sid,
+  );
+  
+  $form_state['rebuild'] = TRUE;
+
+  if (!variable_get('facebook_status_ahah', 1)) {
+    $form_state['redirect'] = array($_GET['q']);
+    $form_state['rebuild'] = FALSE;
+  }
+
+  _fbsmp_deactivate_plugin($form_state);
+}
+
+/**
+ * Activates the current plugin.
+ */
+function fbsmp_activate_plugin(&$form, &$form_state) {
+  $form_state['values']['active_plugin'] = $form_state['clicked_button']['#name'];
+  $form_state['rebuild'] = TRUE;
+}
+
+/**
+ * Deactivates the current plugin.
+ */
+function _fbsmp_deactivate_plugin(&$form_state) {
+  unset($form_state['values']['active_plugin']);
+}
+
+/**
+ * Gets the active plugin.
+ */
+function _fbsmp_get_active_plugin($form_state) {
+  if (isset($form_state['values']['active_plugin'])) {
+    return $form_state['values']['active_plugin'];
+  }
+  return FALSE;
+}
+
+/**
+ * Clears the plugin attachment form.
+ */
+function fbsmp_clear_attachment_form(&$form, &$form_state) {
+  _fbsmp_deactivate_plugin($form_state);
+  $form_state['rebuild'] = TRUE;
+}
+
+/**
+ * Implementation of hook_facebook_status_form_ahah_alter().
+ */
+function fbsmp_facebook_status_form_ahah_alter(&$new_form, $form) {
+  $new_form['fbsmp'] = $form['fbsmp'];
+}
+
+/**
+ * The JavaScript form callback.
+ */
+function fbsmp_form_js() {
+  $form_state = array('storage' => NULL, 'submitted' => FALSE);
+  $form_build_id = $_POST['form_build_id'];
+  $form = form_get_cache($form_build_id, $form_state);
+  $form_state['post'] = $form['#post'] = $_POST;
+  $form['#programmed'] = $form['#redirect'] = FALSE;
+  $args = $form['#parameters'];
+  //This happens if someone goes directly to the JS processing page.
+  if (!is_array($args) && !$args) {
+    watchdog('fbsmp', 'Someone tried to access the JavaScript processing page for Facebook-style Statuses Micropublisher directly.',
+      array(), WATCHDOG_DEBUG);
+    drupal_goto('user');
+    return;
+  }
+  $form_id = array_shift($args);
+  drupal_process_form($form_id, $form, $form_state);
+  $form = drupal_rebuild_form($form_id, $form_state, $args, $form_build_id);
+
+  //Get HTML for the replacement form. Only these elements will be AHAH-refreshed.
+  $new_form['fbsmp'] = $form['fbsmp'];
+  //Remove the opening and closing tag from the form, as everything in between is to be refreshed.
+  unset($new_form['fbsmp']['open']);
+  unset($new_form['fbsmp']['close']);
+  
+  $javascript = drupal_add_js(NULL, NULL, 'header');
+  $output = theme('status_messages') . drupal_render($new_form);
+  $GLOBALS['devel_shutdown'] = FALSE;
+  print drupal_to_js(array('status' => TRUE, 'data' => $output, 'settings' => call_user_func_array('array_merge_recursive', $javascript['setting'])));
+  exit;
+}
+
+//==============
+// FBSMP HOOKS.
+//==============
+
+/**
+ * Implementation of hook_fbsmp_plugins().
+ */
+function fbsmp_fbsmp_plugins() {
+  module_load_include('inc', 'fbsmp', 'fbsmp.plugins');
+  return _fbsmp_fbsmp_plugins();
+}
+
+function fbsmp_fbsmp_save($status) {
+  if ($status->attachment->type == 'video') {
+    db_query("UPDATE {fbsmp_videos} SET sid = %d WHERE fid = %d", $status->sid, $status->attachment->data['fid']);
+  }
+}
+
+//===============
+// DRUPAL HOOKS.
+//===============
+
+/**
+ * Implementation of hook_menu().
+ */
+function fbsmp_menu() {
+  $items = array();
+  $items['admin/settings/fbsmp'] = array(
+    'title' => 'Facebook-style Micropublisher',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('fbsmp_admin'),
+    'access arguments' => array('administer site configuration'),
+    'description' => 'Configure options for content publishing plugins and integration with other modules.',
+    'file' => 'fbsmp.admin.inc',
+  );
+  $items['fbsmp/js'] = array(
+    'page callback' => 'fbsmp_form_js',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'file' => '/includes/utility/facebook_status.form.inc',
+    'file path' => drupal_get_path('module', 'facebook_status'),
+  );
+  
+  foreach (fbsmp_get_plugins(TRUE) as $plugin => $info) {
+    $name = isset($info['name']) ? $info['name'] : $key;
+    $items['admin/settings/fbsmp/plugins/'. $plugin] = array(
+      'title' => $name,
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('fbsmp_admin_plugin_form', $plugin),
+      'access arguments' => array('administer site configuration'),
+      'file' => 'fbsmp.admin.inc',
+      'type' => MENU_CALLBACK,
+    );
+  }
+  
+  $items['fbsmp/link/emvideo'] = array(
+    'page callback' => 'fbsmp_link_emvideo_video_replace',
+    'access arguments' => array('view all statuses'),
+    'type' => MENU_CALLBACK,
+    'file' => 'plugins/link.emvideo.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implementation of hook_help().
+ */
+function fbsmp_help($path, $arg) {
+  if ($path == 'admin/help#fbsmp') {
+    return t('Allows users to easily publish various kinds of content (links, photos, videos, documents, etc) in a stream like on Facebook. Please see the <a href="http://drupal.org/project/fbsmp" rel="nofollow">project page</a> for more information.');
+  }
+}
+
+/**
+ * Implementation of hook_theme().
+ */
+function fbsmp_theme() {
+  $themes = array(
+    'fbsmp_admin_plugins_overview' => array(
+      'file' => 'fbsmp.admin.inc',
+    ),
+  );
+  $themes += fbsmp_plugin_themes();
+
+  return $themes;
+}
+
+/**
+ * Implementation of hook_user().
+ */
+function fbsmp_user($op, &$edit, &$account, $category = NULL) {
+  if ($op == 'delete') {
+    $results = db_query("
+      SELECT p.sid
+      FROM {fbsmp} p
+      INNER JOIN {facebook_status} f
+      ON p.sid = f.sid
+      WHERE (f.sender = %d OR f.recipient = %d)
+      ", $account->uid, $account->uid);
+    $alerts = array(
+      'activity2' => TRUE,
+      'hook_fbsmp_delete' => TRUE,
+      'rules' => FALSE,
+      'trigger' => FALSE,
+      'userpoints' => FALSE,
+    );
+    while ($attachment = db_fetch_array($results)) {
+      fbsmp_delete_status($attachment['sid'], $alerts);
+    }
+  }
+}
+
+/**
+ * Implementation of hook_cron().
+ */
+function fbsmp_cron() {
+  $disabled_plugins = variable_get('fbsmp_disabled_plugins', array());
+  if (in_array('video', $disabled_plugins)) return;
+
+  $last_process = variable_get('fbsmp_videos_processed', 0);
+  $settings = fbsmp_load_plugin_settings('video');
+
+  if ($last_process + $settings['process_interval'] < time()) {
+    module_load_include('inc', 'fbsmp', 'plugins/video');
+    fbsmp_video_process_queue($settings['total_jobs'], $settings);
+    variable_set('fbsmp_videos_processed', time());
+  }
+}
+
+//======================
+// TRIGGER INTEGRATION.
+//======================
+
+/**
+ * Implementation of hook_hook_info().
+ */
+function fbsmp_hook_info() {
+  $plugins = fbsmp_get_plugins();
+  $triggers = array();
+  
+  foreach ($plugins as $key => $info) {
+    $name = isset($info['name']) ? $info['name'] : $key;
+    $temp = 'fbsmp_'. $key;
+    foreach (facebook_status_all_contexts() as $type => $details) {
+      if ($type == 'user') {
+        $triggers[$temp .'_submitted_user_self'] = array(
+          'runs when' => t('A user has posted a !pluginobject on their own profile.', array('!pluginobject' => $name)),
+        );
+        $triggers[$temp .'_submitted_user_other'] = array(
+          'runs when' => t('A user has posted a !pluginobject on another user\'s profile.', array('!pluginobject' => $name)),
+        );
+        $triggers[$temp .'_deleted_user_self'] = array(
+          'runs when' => t('A user has deleted a !pluginobject from their own profile.', array('!pluginobject' => $name)),
+        );
+        $triggers[$temp .'_deleted_user_other'] = array(
+          'runs when' => t('A user has deleted a !pluginobject from another user\'s profile.', array('!pluginobject' => $name)),
+        );
+        $triggers[$temp .'_edited_user_self'] = array(
+          'runs when' => t('A user has edited a !pluginobject in their own profile.', array('!pluginobject' => $name)),
+        );
+        $triggers[$temp .'_edited_user_other'] = array(
+          'runs when' => t('A user has edited a !pluginobject in another user\'s profile.', array('!pluginobject' => $name)),
+        );        
+      }
+      else {
+        $triggers[$temp .'_submitted_'. $type] = array(
+          'runs when' => t('A user has posted a !pluginobject to a stream of type %type.', array('!pluginobject' => $name, '%type' => $type)),
+        );
+        $triggers[$temp .'_deleted_'. $type] = array(
+          'runs when' => t('A user has deleted a !pluginobject from a stream of type %type.', array('!pluginobject' => $name, '%type' => $type)),
+        );
+        $triggers[$temp .'_edited_'. $type] = array(
+          'runs when' => t('A user has edited a !pluginobject in a stream of type %type.', array('!pluginobject' => $name, '%type' => $type)),
+        );
+      }
+    }
+  }
+
+  return array(
+    'fbsmp' => array(
+      'fbsmp' => $triggers,
+    ),  
+  );
+}
+
+/**
+ * Implementation of hook_fbsmp().
+ * or
+ * Implementation of hook_trigger_name().
+ */
+function fbsmp_fbsmp($op, $status) {
+  $hooks = fbsmp_get_hooks();
+  if (!in_array($op, $hooks)) {
+    return;
+  }
+
+  $aids = _trigger_get_hook_aids('fbsmp', $op);
+  $attachment = $status->attachment;
+  
+  $attachment->uid = $status->sender; //Activity records messages for the sender.
+  if ($status->type = 'user') {
+    $status->uid = $status->recipient;
+  }
+  
+  $context = array(
+    'hook' => 'fbsmp',
+    'op' => $op,
+    'facebook_status' => $status,
+    'fbsmp' => $attachment,
+  );
+
+  actions_do(array_keys($aids), $poster, $context);
+}
+
+//======================
+// ACTIVITY INTEGRATION.
+//======================
+
+/**
+ * Implementation of hook_activity_info().
+ */
+function fbsmp_activity_info() {
+  $hooks = fbsmp_get_hooks();
+  if (!function_exists('activity_help') || !count($hooks)) {
+    return;
+  }
+  $info              = new stdClass();
+  $info->api         = 2;
+  $info->name        = 'fbsmp';
+  $info->object_type = 'fbsmp';
+  $info->eid_field   = 'sid';
+  $info->objects     = array('Recipient' => 'facebook_status', 'Sender' => 'fbsmp');  
+  $info->hooks       = array('fbsmp' => $hooks);
+  return $info;
+}
+
+/**
+ * Implementation of hook_form_FORM_ID_alter().
+ */
+function fbsmp_form_activity_form_alter(&$form, &$form_state) {
+  if ($form_state['storage']['values']['triggers']['hook'] == 'fbsmp') {
+    $op = $form_state['storage']['values']['operations']['operation'];
+    if (strpos($op, '_submitted_user_other') === FALSE  && strpos($op, '_edited_user_other') === FALSE && strpos($op, '_deleted_user_other') === FALSE) {
+      foreach (activity_enabled_languages() as $id => $language) {
+        unset($form["{$id}_fieldset"]['fbsmp-pattern-'. $id]);
+      }
+    }
+  }
+}
+
+//======================
+// TOKEN INTEGRATION.
+//======================
+
+/**
+ * Implementation of hook_token_list().
+ */
+function fbsmp_token_list($type = 'all') {
+  if ($type == 'fbsmp' || $type == 'all') {
+    $tokens = array(
+      'attachment-type' => t('The type of the attachment for this status.'),
+      'attachment-data' => t('The raw serialized attachment data.'),
+      'attachment-themed' => t('The themed attachment.'),
+    );
+    
+    foreach (fbsmp_get_plugins() as $plugin => $info) {
+      if ($function = fbsmp_load_function($plugin, 'token list')) {
+        $tokens = array_merge($tokens, $function());
+      }
+    }
+
+    return array(
+      'fbsmp' => $tokens
+    );
+  }
+}
+
+/**
+ * Implementation of hook_token_values().
+ */
+function fbsmp_token_values($type, $attachment = NULL, $options = array()) {
+  if ($type == 'fbsmp' && !empty($attachment)) {
+    $themed_attachment = fbsmp_render_attachment($attachment);
+
+    $values = array(
+      'attachment-type' => $attachment->type,
+      'attachment-data' => serialize($attachment->data),
+      'attachment-themed' => $themed_attachment,
+    );
+
+    $status = fbsmp_load_status($attachment->sid);
+    
+    foreach (fbsmp_get_plugins() as $plugin => $info) {
+      if ($function = fbsmp_load_function($plugin, 'token values')) {
+        $values = array_merge($values, $function($attachment));
+      }
+    }
+    return $values;
+  }
+}
+
+//==================
+//VIEWS INTEGRATION.
+//==================
+
+/**
+ * Implementation of hook_views_api().
+ */
+function fbsmp_views_api() {
+  return array('api' => 2);
+}
+
+/**
+ * Implementation of hook_views_default_views_alter().
+ *
+ * Add the attachment field to FBSS default Views.
+ */
+function fbsmp_views_default_views_alter(&$views) {
+  // This whole function only applies to default Views, not overridden ones.
+  foreach ($views as $view) {
+    if ($view->tag == 'Facebook-style Statuses') {
+      // Set up the "Facebook-style Micropublisher: Themed attachment" field.
+      $attach = array(
+        'label' => '',
+        'alter' => array(
+          'alter_text' => 0,
+          'text' => '',
+          'make_link' => 0,
+          'path' => '',
+          'link_class' => '',
+          'alt' => '',
+          'prefix' => '',
+          'suffix' => '',
+          'target' => '',
+          'help' => '',
+          'trim' => 0,
+          'max_length' => '',
+          'word_boundary' => 1,
+          'ellipsis' => 1,
+          'html' => 0,
+          'strip_tags' => 0,
+        ),
+        'empty' => '',
+        'hide_empty' => 0,
+        'empty_zero' => 0,
+        'exclude' => 1,
+        'id' => 'attachment',
+        'table' => 'fbsmp',
+        'field' => 'attachment',
+        'relationship' => 'none',
+      );
+      // Add the Themed attachment field above the Global: Nothing field so we can use it as a token.
+      $nothing = array_pop($view->display['default']->display_options['fields']);
+      $view->display['default']->display_options['fields']['attachment'] = $attach;
+      $view->display['default']->display_options['fields']['nothing'] = $nothing;
+      // Add the Attachment token to the Global: Nothing field.
+      $t = $view->display['default']->display_options['fields']['nothing']['alter']['text'];
+      $t = str_replace("[message]</div>", "[message]</div>\n\n<div>[attachment]</div>", $t);
+      $view->display['default']->display_options['fields']['nothing']['alter']['text'] = $t;
+
+      // Replace the "no empty statuses" filter with the "no empty statuses with no attachment" filter.
+      $nesf = array(
+        'operator' => '=',
+        'value' => '1',
+        'group' => '0',
+        'exposed' => FALSE,
+        'expose' => array(
+          'operator' => FALSE,
+          'label' => '',
+        ),
+        'id' => 'empty_status_attachment',
+        'table' => 'fbsmp',
+        'field' => 'empty_status_attachment',
+        'relationship' => 'none',
+      );
+      unset($view->display['default']->display_options['filters']['message']);
+      $view->display['default']->display_options['filters']['empty_status_attachment'] = $nesf;
+    }
+  }
+}
+
+//======================
+// PLUGINS INTEGRATION.
+//======================
+
+/**
+ * Validation callback for the 'link' widget form.
+ */
+function fbsmp_link_attach_validate(&$form, &$form_state) {
+  $url = trim($form_state['values']['fbsmp_link_url']);
+  $parts = @parse_url($url);
+
+  if (empty($parts['scheme']) || $parts['scheme'] == '') {
+    $url = 'http://'. $url;
+  }
+  if (!valid_url($url, TRUE)) {
+    form_set_error('fbsmp_link_url', t('Enter a valid url to share.'));
+    return false;
+  }
+  else {
+    form_set_value($form['fbsmp']['fbsmp_link_url'], $url, $form_state);
+    return true;
+  }
+}
+
+/**
+ * Submit callback for the 'link' widget form.
+ */
+function fbsmp_link_attach_submit(&$form, &$form_state) {
+  $url = $form_state['values']['fbsmp_link_url'];
+  $settings = $form['fbsmp']['fbsmp_link_url']['#settings'];
+  module_load_include('inc', 'fbsmp', 'plugins/link');
+  $options = array(
+    'timeout' => $settings['timeout'],
+    'max_imagesize' => $settings['max_imagesize'],
+    'min_imagesize' => $settings['min_imagesize'],
+    'max_title_length' => $settings['max_title_length'],
+    'max_description_length' => $settings['max_description_length'],
+  );
+  $options['cached'] = FALSE;
+  $options['hash_extra'] = 'fbsmp_link';
+  if ($settings['cache_duration'] > 0) {
+    $options['cached'] = TRUE;
+    $options['cache_duration'] = $settings['cache_duration'];
+  }
+  if (module_exists('emvideo') && $settings['enable_emvideo']) {
+    $options['emvideo_providers'] = $settings['emvideo_providers'];
+    $options['emvideo_width'] = $settings['emvideo_width'];
+    $options['emvideo_height'] = $settings['emvideo_height'];
+    $options['default_emvideo_width'] = $settings['default_emvideo_width'];
+    $options['default_emvideo_height'] = $settings['default_emvideo_height'];
+    $options['emvideo_autoplay'] = $settings['emvideo_autoplay'];
+    $options['enable_emvideo'] = $settings['enable_emvideo'];
+  }
+  
+  if (module_exists('emaudio') && $settings['enable_emaudio']) {
+    $options['emaudio_providers'] = $settings['emaudio_providers'];
+    $options['emaudio_width'] = $settings['emaudio_width'];
+    $options['emaudio_height'] = $settings['emaudio_height'];
+    $options['default_emaudio_width'] = $settings['default_emaudio_width'];
+    $options['default_emaudio_height'] = $settings['default_emaudio_height'];
+    $options['emaudio_autoplay'] = $settings['emaudio_autoplay'];
+    $options['enable_emaudio'] = $settings['enable_emaudio'];
+  }
+  
+  $data = fbsmp_link_request_contents($url, $options);
+  _fbsmp_link_sanitize_request_data($data, $options);
+  $form_state['fbsmp_link']['data'] = $data;
+  $form_state['fbsmp_link']['step'] = 2;
+  $form_state['fbsmp_link']['page_url'] = $url;
+  $form_state['fbsmp_link']['current_thumbnail'] = 1;
+  $form_state['rebuild'] = TRUE;
+}
+
+/**
+ * Sanitize the data requested from the URL according to the options provided.
+ *
+ * @param $request_data
+ *   the request data to sanitize
+ * @param $options
+ *   - max_title_length
+ *     Maximum title length for the link. Defaults to zero, for no truncation.
+ *   - max_description_length
+ *     Maximum description length for the link. Defaults to zero, for no truncation.
+ *
+ * @return
+ *   The sanitized data.
+ */
+function _fbsmp_link_sanitize_request_data(&$data, $options = array()) {
+  //Merge the default options.
+  $options += array(
+    'max_title_length' => 0,
+    'max_description_length' => 0,
+  );
+
+  //"\xE2\x80\xA6" is the UTF8 character sequence for the ellipsis, which must be enclosed in double quotes.
+  //Neither the literal binary character (?) nor the HTML entity (&hellip;) work on all operating systems. 
+  if ($options['max_title_length'] > 0 && drupal_strlen($data['title']) > $options['max_title_length']) {
+    $data['title'] = drupal_substr($data['title'], 0, $options['max_title_length'] - 3) ."\xE2\x80\xA6";
+  }
+  if ($options['max_description_length'] > 0 && drupal_strlen($data['description']) > $options['max_description_length']) {
+    $data['description'] = drupal_substr($data['description'], 0, $options['max_description_length'] - 3) ."\xE2\x80\xA6";
+  }
+  
+  return $data; 
+}
+
+/**
+ * Implementation of hook_fbsmp_delete().
+ */
+function fbsmp_fbsmp_delete($status) {
+  switch ($status->attachment->type) {
+    case 'photo':
+      module_load_include('inc', 'fbsmp', 'plugins/photo');
+      fbsmp_photo_fbsmp_delete($status);
+      break;
+    case 'video':
+      module_load_include('inc', 'fbsmp', 'plugins/video');
+      fbsmp_video_fbsmp_delete($status);
+      break;
+    case 'slideshare':
+      module_load_include('inc', 'fbsmp', 'plugins/slideshare');
+      fbsmp_slideshare_fbsmp_delete($status);
+      break;
+  }
+}

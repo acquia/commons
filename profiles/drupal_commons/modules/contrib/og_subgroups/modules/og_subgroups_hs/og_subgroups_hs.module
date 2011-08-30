@@ -1,0 +1,263 @@
+<?php
+
+/**
+ * @file
+ * Implementation of the Hierarchical Select API for the OG Subgroups module.
+ */
+
+define('OG_SUBGROUPS_HS_ANY_OPTION', 'Any');
+
+//----------------------------------------------------------------------------
+// Drupal core hooks.
+
+/**
+ * Implementation of hook_menu().
+ */
+function og_subgroups_hs_menu() {
+  $items = array();
+
+  // Taken from the hs_taxonomy_views module
+  $items['og_subgroups_hs_views_json/%/%'] = array(
+    'page callback'   => 'og_subgroups_hs_views_json',
+    'page arguments'   => array(1, 2),
+    'type'            => MENU_CALLBACK,
+    'access callback' => TRUE,
+  );
+
+  return $items;
+}
+
+/**
+ * Menu callback; wrapper around hierarchical_select_json
+ *
+ * @see hs_taxonomy_views_json
+ */
+function og_subgroups_hs_views_json($view_name, $display_id) {
+  $view = views_get_view($view_name);
+
+  if ($view != NULL) {
+    $view->execute_display($display_id);
+    views_set_current_view($view);
+  }
+
+  return hierarchical_select_json();
+}
+
+
+//----------------------------------------------------------------------------
+// Hierarchical Select hooks.
+
+/**
+ * Implementation of hook_hierarchical_select_params().
+ */
+function og_subgroups_hs_hierarchical_select_params() {
+  $params = array(
+    'nid',      // The id of the group.
+    'optional', // Do we display an "All" option?
+  );
+  return $params;
+}
+
+
+/**
+ * Implementation of hook_hierarchical_select_root_level().
+ */
+function og_subgroups_hs_hierarchical_select_root_level($params) {
+  og_subgroups_include('tree');
+  og_subgroups_include('form');
+  
+  $root = ($params['optional']) ? array(OG_SUBGROUPS_HS_ANY_OPTION => '<'. t('Any') .'>') : array();
+  
+  // Get the tree 
+  if ($tree = og_subgroups_get_tree()) {
+    // Iterate the tree and only get the root elements
+    foreach ($tree as $branch) {
+      // Check access to use this group
+      if (!og_subgroups_mask_group($branch, TRUE)) {
+        // Add the initial group as an option
+        $root[$branch->nid] = $branch->title;
+      }
+    }
+  }
+  
+  // Add the groups that don't have children
+  $root += _og_subgroups_group_select_options_without_family();
+
+  // Don't include the given group in the hierarchy!
+  unset($root[$params['nid']]);
+
+  return $root;
+}
+
+
+/**
+ * Implementation of hook_hierarchical_select_children().
+ */
+function og_subgroups_hs_hierarchical_select_children($parent, $params) {
+  og_subgroups_include('tree');
+  $children = array();
+
+  if (!isset($params['nid'])) {
+    $params = array(
+      'nid' => 0,
+    );
+  }
+
+  // Don't bother getting the children for the group we are viewing
+  // or if the ANY option was seleted
+  if ($parent !== $params['nid'] && $parent != OG_SUBGROUPS_HS_ANY_OPTION) {   
+    // Create a group object
+    $group = new stdClass();
+    $group->nid = $parent;
+    
+    // Format the children into an array
+    $child_groups = og_subgroups_get_group_children($group);
+    foreach ($child_groups as $gid => $child) {
+      // Make sure this group can be added as an option
+      if (!og_subgroups_mask_group($child, TRUE)) {
+        $children[$child->nid] = $child->title;
+      }
+    }
+  }
+
+  return $children;
+}
+
+
+/**
+ * Implementation of hook_hierarchical_select_lineage().
+ */
+function og_subgroups_hs_hierarchical_select_lineage($item, $params) {
+  og_subgroups_include('tree');
+  if ($item == OG_SUBGROUPS_HS_ANY_OPTION) {
+    return array($item);
+  }
+ 
+  // create a group object
+  $group = new stdClass();
+  $group->nid = $item;
+  $parents = array_reverse(og_subgroups_get_group_parents($group));
+ 
+  // Append the $group to the end of the lineage
+  array_push($parents, $group);
+ 
+  // Build the linage in propper array format
+  $lineage = array();
+  foreach ($parents as $parent) {
+    $lineage[] = $parent->nid;
+  }
+ 
+  return (empty($lineage) ? array($item) : $lineage);
+}
+
+/**
+ * Implementation of hook_hierarchical_select_valid_item().
+ */
+function og_subgroups_hs_hierarchical_select_valid_item($item, $params) {
+  if($item == OG_SUBGROUPS_HS_ANY_OPTION) {
+    return TRUE;
+  }
+
+  if (!is_numeric($item) || $item < 0) {
+    return FALSE;
+  }
+
+  // Item 0 corresponds to the <top-level page> option.
+  if ($item == 0) {
+    return TRUE;
+  }
+
+  // Fetch the tree
+  og_subgroups_include('tree');
+  $tree = og_subgroups_get_tree();
+  // Flatten the tree
+  $valid_groups = og_subgroups_flatten_tree($tree);
+  // Append groups that don't have a family
+  $valid_groups += og_subgroups_get_groups_without_family();
+
+  return in_array($item, array_keys($valid_groups));
+}
+
+/**
+ * Implementation of hook_hierarchical_select_item_get_label().
+ */
+function og_subgroups_hs_hierarchical_select_item_get_label($item, $params) {
+  if ($item == OG_SUBGROUPS_HS_ANY_OPTION) {
+    return '<'. t('Any') .'>';
+  }
+  
+  static $labels = array();
+
+  if (!isset($labels[$item])) {
+    // Fetch the tree
+    og_subgroups_include('tree');
+    $tree = og_subgroups_get_tree();
+    // Flatten the tree
+    $groups = og_subgroups_flatten_tree($tree);
+    // Get the label
+    $labels[$item] = $groups[$item]->title;
+  }
+
+  return $labels[$item];
+}
+
+/**
+ * Implementation of hook_hierarchical_select_entity_count().
+ */
+function og_subgroups_hs_hierarchical_select_entity_count($item, $params) {
+  og_subgroups_include('tree');
+  
+  // Build the group object
+  $group = new stdClass();
+  $group->nid = $item;
+  
+  // Get the children of the group
+  $children = og_subgroups_get_group_children($group);
+  
+  return count($children);
+}
+
+/**
+ * Implementation of hook_hierarchical_select_implementation_info().
+ */
+function og_subgroups_hs_hierarchical_select_implementation_info() {
+  return array(
+    'hierarchy type' => t('OG Subgroups'),
+    'entity type'    => t('Node'),
+    'entity'         => t('Group'),
+    'context type'   => t('Node form'),
+    'context'        => '',
+  );
+}
+
+/**
+ * Implementation of hook_hierarchical_select_config_info().
+ */
+function og_subgroups_hs_hierarchical_select_config_info() {
+  $config_info['og_subgroups'] = array(
+    'config_id'      => 'og_subgroups',
+    'hierarchy type' => t('OG Subgroups'),
+    'hierarchy'      => '',
+    'entity type'    => t('Node'),
+    'entity'         => t('Group'),
+    'context type'   => t('Node Form'),
+    'context'        => '',
+    'edit link'      => NULL,
+  );
+
+  return  $config_info;
+}
+
+//----------------------------------------------------------------------------
+// Custom Functions.
+
+/**
+ * Get the name of the views display
+ *
+ * @see _hs_taxonomy_views_get_display_id_for_filter()
+ */
+function _og_subgroup_hs_get_display_id_for_filter($view, $filter_id) {
+  $current_display = $view->current_display;
+  $current_display_filters = $view->display[$current_display]->display_options['filters'];
+  return (isset($current_display_filters[$filter_id])) ? $current_display : 'default';
+}

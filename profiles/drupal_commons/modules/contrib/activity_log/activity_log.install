@@ -1,0 +1,343 @@
+<?php
+
+/**
+ * @file
+ *   (Un)installs the Rules Activity Logging module.
+ */
+
+/**
+ * Implementation of hook_schema().
+ */
+function activity_log_schema() {
+  $schema = array();
+  $schema['activity_log_templates'] = array(
+    'description' => 'Stores log templates.',
+    'fields' => array(
+      'tid' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'description' => 'The template ID.',
+      ),
+      'rule' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The rule with which this template is associated.',
+      ),
+      'action_label' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The label of the action with which this template is associated.',
+      ),
+      'template' => array(
+        'type' => 'text',
+        'not null' => TRUE,
+        'description' => 'The template.',
+      ),
+      'group_template' => array(
+        'type' => 'text',
+        'not null' => TRUE,
+        'description' => 'The grouped message template.',
+      ),
+      'group_summary' => array(
+        'type' => 'text',
+        'not null' => TRUE,
+        'description' => 'The short template summary for grouped messages.',
+      ),
+      'collapse_method' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The method used to combine action summaries if applicable.',
+      ),
+      'pid' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'default' => 0,
+        'description' => 'The public name ID.',
+      ),
+      'eval_input' => array(
+        'type' => 'text',
+        'not null' => TRUE,
+        'description' => 'An array of the input evaluators to run over the template.',
+      ),
+      'resources' => array(
+        'type' => 'text',
+        'not null' => TRUE,
+        'description' => 'The CSS and JS resources required by this template.',
+      ),
+      'cacheable' => array(
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'default' => 0,
+        'description' => 'Whether messages saved with this template should be cached.',
+      ),
+      'display_type' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'default' => 'web',
+        'description' => 'Where messages generated using this template should be displayed. Typical values are "web," "email," and "alert." There may also be a use for "mobile," "print," etc. but there is not a default implementation for these.',
+      ),
+    ),
+    'indexes' => array(
+      'pid' => array('pid'),
+    ),
+    'primary key' => array('tid'),
+  );
+  $schema['activity_log_events'] = array(
+    'description' => 'Stores activity records.',
+    'fields' => array(
+      'aid' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'description' => 'The activity ID.',
+      ),
+      'tid' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'default' => 0,
+        'description' => 'The template ID.',
+      ),
+      'created' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'default' => 0,
+        'description' => 'The time the activity occurred.',
+      ),
+      'acting_uid' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'default' => 0,
+        'description' => 'The ID of the user who took the action.',
+      ),
+      'target_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'The ID of the entity this action is about.',
+      ),
+      'target_type' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The type of the entity this action is about.',
+      ),
+      'target_class' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The Rules data type class of the entity this action is about.',
+      ),
+      'id_map' => array(
+        'type' => 'text',
+        'not null' => TRUE,
+        'description' => 'Data used to generate tokens to interpret the message.',
+      ),
+    ),
+    'indexes' => array(
+      'tid' => array('tid'),
+      'created' => array('created'),
+      'acting_uid' => array('acting_uid'),
+      'target_id' => array('target_id'),
+    ),
+    'primary key' => array('aid'),
+  );
+  $schema['activity_log_messages'] = array(
+    'description' => 'Stores the information used to build the actual streams, including grouped events.',
+    'fields' => array(
+      'mid' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'description' => 'The message ID.',
+      ),
+      'tid' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'default' => 0,
+        'description' => 'The template ID.',
+      ),
+      'aids' => array(
+        'type' => 'text',
+        'not null' => TRUE,
+        'description' => 'A comma-separated list of activity record IDs (foreign keys to the events table).',
+      ),
+      'created' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'default' => 0,
+        'description' => 'The time the first event in the group occurred.',
+      ),
+      'last_updated' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'default' => 0,
+        'description' => 'The time the most recent event was added to this group.',
+      ),
+      'stream_owner_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'The ID of the entity in whose stream this record should appear.',
+      ),
+      'stream_owner_type' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The entity type of the stream owner.',
+      ),
+      'viewer_id' => array(
+        'type' => 'int',
+        'unsigned' => FALSE, // Negative numbers are flags. Range -/+ 2,147,483,647
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'The ID of the user to whom this message will appear.',
+      ),
+      'target_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'The ID of the entity this action is about.',
+      ),
+      'target_type' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The type of the entity this action is about.',
+      ),
+      'acting_uid' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'default' => 0,
+        'description' => 'The ID of the user who took the action.',
+      ),
+      'cached' => array(
+        'type' => 'text',
+        'not null' => TRUE,
+        'description' => 'The cached message HTML, fully evaluated.',
+      ),
+    ),
+    'indexes' => array(
+      'tid' => array('tid'),
+      'last_updated' => array('last_updated'),
+      'stream_owner_id' => array('stream_owner_id'),
+      'viewer_id' => array('viewer_id'),
+      'target_id' => array('target_id'),
+      'acting_uid' => array('acting_uid'),
+    ),
+    'primary key' => array('mid'),
+  );
+  $schema['activity_log_disabled_types'] = array(
+    'description' => 'Stores log templates.',
+    'fields' => array(
+      'uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'The ID of the user who disabled this type.',
+      ),
+      'pid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'The activity type the user does not want included in their stream.',
+      ),
+    ),
+    'indexes' => array(
+      'uid' => array('uid'),
+    ),
+  );
+  $schema['activity_log_action_names'] = array(
+    'description' => 'Stores activity records.',
+    'fields' => array(
+      'pid' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'description' => 'The name ID.',
+      ),
+      'public_name' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The title of the activity type that is shown to users who have the option to enable/disable activity types.',
+      ),
+    ),
+    'unique keys' => array(
+      'public_name' => array('public_name'),
+    ),
+    'primary key' => array('pid'),
+  );
+  return $schema;
+}
+
+/**
+ * Implementation of hook_install().
+ */
+function activity_log_install() {
+  drupal_install_schema('activity_log');
+
+  module_load_include('module', 'activity_log');
+  if (function_exists('_activity_log_rebuild_templates')) {
+    $default_rule_count = _activity_log_rebuild_templates();
+    if ($default_rule_count) {
+      drupal_set_message(st('Finished building !count default Activity Log templates.', array('!count' => $default_rule_count)));
+    }
+  }
+
+  variable_set('facebook_status_user_other_view', 'activity_log_stream');
+
+  drupal_set_message(st('The Activity Log module has finished installing.') .' '.
+    empty($default_rule_count) ?
+    st('To begin recording activity messages, <a href="!rules">create a Rule</a> that executes the "Log Activity" action.',
+      array('!rules' => url('admin/rules/trigger'))
+    ) .' '. st('Once you have your Rules configured, you can use the <a href="!activities">Activities view</a> to see activity on your site.',
+      array('!activities' => url('activities'))
+    ) : st('Default activity message templates have already been installed.') .' '.
+    st('Activity Log uses Rules to define its templates, so you can change which ones to use by <a href="!rules">configuring Rules</a>.',
+      array('!rules' => url('admin/rules/trigger'))
+    )
+  );
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function activity_log_uninstall() {
+  drupal_uninstall_schema('activity_log');
+  variable_del('activity_log_max_age');
+  variable_del('activity_log_comments_bump');
+  if (db_table_exists('radioactivity')) {
+    db_query("DELETE FROM {radioactivity} WHERE class='act_log'");
+  }
+  if (!module_exists('facebook_status')) {
+    variable_del('facebook_status_user_other_view');
+  }
+}
