@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * Implementation of hook_uninstall()
+ */
+function og_subgroups_prop_uninstall() {
+  // Delete variables
+  $variables = array(
+    'og_subgroups_propagate_content',
+    'og_subgroups_propagate_members',
+    'og_subgroups_propagate_members_unsubscribe',
+  );
+  
+  foreach ($variables as $variable) {
+    variable_del($variable);
+  }
+}
+

@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ *   (Un)installs the Commons Status Streams feature.
+ */
+
+/**
+ * Implementation of hook_install().
+ *   Status streams provide a digest that deprecates the digest functionality
+ *   by Notifications as well as the need to provide notifications on comments
+ *   by default.
+ */
+function commons_status_streams_install() {
+  db_query("UPDATE {blocks} SET title = '<none>' WHERE module = 'facebook_status' AND delta = 'facebook_status'");
+}
+/**
+ * Implementation of hook_uninstall().
+ */
+function commons_status_streams_uninstall() {
+  variable_del('commons_status_streams_auth_frontpage');
+}

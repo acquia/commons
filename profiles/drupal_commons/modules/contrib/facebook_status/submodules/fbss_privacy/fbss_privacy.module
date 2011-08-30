@@ -1,0 +1,166 @@
+<?php
+
+/**
+ * @file
+ *   Allows statuses between two users to be designated as private.
+ *
+ * Ultimately, this module could be modified to support choosing specific
+ * entities which are allowed to see a specific status update. This would be
+ * done by adding a table like { sid | eid | type } where each record indicates
+ * that the specified entity has access to the specified status. Then there
+ * would have to be options added to the status update form to make choosing
+ * specific observers possible.
+ */
+
+//============
+// CORE HOOKS
+//============
+
+/**
+ * Implementation of hook_perm().
+ */
+function fbss_privacy_perm() {
+  return array('send private status messages', 'view all private status messages');
+}
+
+//============
+// FBSS HOOKS
+//============
+
+/**
+ * Implementation of hook_form_FORM_ID_alter().
+ */
+function fbss_privacy_form_facebook_status_box_alter(&$form, &$form_state) {
+  if ($form['recipient']['#value'] == $GLOBALS['user']->uid || $form['type']['#value'] != 'user' || !user_access('send private status messages')) {
+    return;
+  }
+  drupal_add_css(drupal_get_path('module', 'fbss_privacy') .'/fbss_privacy.css');
+  $form['private'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Private'),
+    '#default_value' => 0,
+    '#weight' => -24,
+    '#prefix' => '<div class="facebook-status-private-box">',
+    '#suffix' => '</div>',
+  );
+  $form['fbss-submit']['#submit'][] = 'fbss_privacy_facebook_status_box_submit';
+}
+
+/**
+ * Submit callback for the Privacy checkbox.
+ */
+function fbss_privacy_facebook_status_box_submit($form, $form_state) {
+  if (!empty($form_state['values']['private']) && user_access('send private status messages')) {
+    db_query("UPDATE {facebook_status} SET private = %d WHERE sid = %d", $form_state['values']['private'], $form_state['facebook_status']['sid']);
+  }
+}
+
+/**
+ * Implementation of hook_facebook_status_form_ahah_alter().
+ */
+function fbss_privacy_facebook_status_form_ahah_alter(&$new_form, $old_form) {
+  $new_form['private'] = $old_form['private'];
+}
+
+/**
+ * Implementation of hook_facebook_status_user_access_alter().
+ */
+function fbss_privacy_facebook_status_user_access_alter(&$allow, $op, $args) {
+  if ($op == 'view') {
+    $status = $args[0];
+    global $user;
+    // If the status is private and the user is not a participant and the user does not have admin access, then the user does not have access to view the status
+    if ($status->private && $user->uid != $status->sender && !($user->uid == $status->recipient && $status->type == 'user') && !user_access('send private status messages')) {
+      $allow = FALSE;
+    }
+  }
+}
+
+/**
+ * Implementation of hook_preprocess_facebook_status_item().
+ */
+function fbss_privacy_preprocess_facebook_status_item(&$vars) {
+  $vars['private'] = (bool) $vars['status']->private;
+  $vars['private_text'] = $vars['private'] ? t('(Private)') : t('Public');
+  drupal_add_css(drupal_get_path('module', 'fbss_privacy') .'/fbss_privacy.css');
+}
+
+//=============
+// VIEWS HOOKS
+//=============
+
+/**
+ * Implementation of hook_views_api().
+ */
+function fbss_privacy_views_api() {
+  return array(
+    'api' => 2,
+    'path' => drupal_get_path('module', 'fbss_privacy'),
+  );
+}
+
+/**
+ * Implementation of hook_views_default_views_alter().
+ */
+function fbss_privacy_views_default_views_alter(&$views) {
+  foreach ($views as $view) {
+    // Show private messages in the conversation view.
+    if ($view->name == 'facebook_status_conversation') {
+      $view->display['default']->display_options['filters']['private'] = array(
+        'operator' => '=',
+        'value' => 'all',
+        'group' => '0',
+        'exposed' => FALSE,
+        'expose' => array(
+          'operator' => FALSE,
+          'label' => '',
+        ),
+        'id' => 'private',
+        'table' => 'facebook_status',
+        'field' => 'private',
+        'relationship' => 'none',
+      );
+    }
+    // Add the Private field.
+    if ($view->tag == 'Facebook-style Statuses') {
+      $private = array(
+        'label' => '',
+        'alter' => array(
+          'alter_text' => 0,
+          'text' => '',
+          'make_link' => 0,
+          'path' => '',
+          'link_class' => '',
+          'alt' => '',
+          'prefix' => '',
+          'suffix' => '',
+          'target' => '',
+          'help' => '',
+          'trim' => 0,
+          'max_length' => '',
+          'word_boundary' => 1,
+          'ellipsis' => 1,
+          'html' => 0,
+          'strip_tags' => 0,
+        ),
+        'empty' => '',
+        'hide_empty' => 0,
+        'empty_zero' => 0,
+        'exclude' => 1,
+        'id' => 'private',
+        'table' => 'facebook_status',
+        'field' => 'private',
+        'relationship' => 'none',
+      );
+      // Add the Private field above the Global: Nothing field so we can use it as a token.
+      $nothing = array_pop($view->display['default']->display_options['fields']);
+      $view->display['default']->display_options['fields']['private'] = $private;
+      $view->display['default']->display_options['fields']['nothing'] = $nothing;
+      // Add the Private token to the Global: Nothing field.
+      $t = $view->display['default']->display_options['fields']['nothing']['alter']['text'];
+      $t = str_replace('[name] [message]', '[name] [private] [message]', $t); // context-based Views
+      $t = str_replace('[user_contextual_pic] [message]', '[user_contextual_pic] [private] [message]', $t); // all context Views
+      $view->display['default']->display_options['fields']['nothing']['alter']['text'] = $t;
+    }
+  }
+}

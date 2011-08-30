@@ -1,0 +1,255 @@
+<?php
+
+/**
+ * Implementation of hook_menu()
+ */
+function og_subgroups_prop_menu() {
+  $items = array();
+  $items['admin/og/subgroups/propagation'] = array(
+    'title' => 'Propagation',
+    'page callback' => 'drupal_get_form', 
+    'page arguments' => array('og_subgroups_prop_settings'),
+    'access arguments' => array('administer groups hierarchy'),
+    'weight' => 1,
+    'file' => 'admin.inc',
+    'file path' => drupal_get_path('module', 'og_subgroups_prop'). '/includes',
+    'type' => MENU_LOCAL_TASK,
+  );
+  return $items;
+}
+
+/**
+ * Implementation of hook_help().
+ */
+function og_subgroups_prop_help($path, $arg) {
+  switch ($path) {
+    case 'admin/og/subgroups/propagation':
+      return t('<p>Use the settings below to configure the propagation of content and users along the subgroup tree. 
+                Propagation can happen up the tree (parents), down the tree (children), or sidways (siblings)</p>');
+  }
+}
+
+/**
+ * Implementation of hook_nodeapi()
+ */
+function og_subgroups_prop_nodeapi($node, $op, $teaser = NULL, $page = NULL) {
+  switch ($op) {
+    case 'presave':
+      if (og_is_group_post_type($node->type)) {
+        og_subgroups_prop_propagate_content($node);
+      }
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_menu_alter()
+ */
+function og_subgroups_prop_menu_alter($items) {
+  // Override OG's unsubscribe confirm form
+  $items['og/unsubscribe/%node/%user']['page arguments'][0] = 'og_subgroups_prop_confirm_unsubscribe';
+  $items['og/unsubscribe/%node/%user']['file'] = 'pages.inc';
+  $items['og/unsubscribe/%node/%user']['file path'] = drupal_get_path('module', 'og_subgroups_prop'). '/includes';
+}
+
+/**
+ * Implementation of hook_og()
+ */
+function og_subgroups_prop_og($op, $gid, $uid, $args = array()) {
+  // Don't propgate in the middle of propagation action.
+  if (!$args['og_subgroups']) {
+    switch ($op) {
+      case 'user insert':
+        og_subgroups_prop_propagate_user('subscribe', $gid, $uid, $args); 
+        break;
+      case 'user delete': 
+        og_subgroups_prop_propagate_user('unsubscribe', $gid, $uid, $args); 
+        break;
+    }
+  }
+}
+
+/**
+ * Propagate user memberships along a groups tree
+ * 
+ * @param $op
+ *   The operation to execute (subscribe, unsubscribe)
+ * @param $gid
+ *   The group nid
+ * @param uid
+ *   The user uid
+ * @param $args
+ *   Any passed arguments from hook_og()
+ */
+function og_subgroups_prop_propagate_user($op, $gid, $uid, $args = array()) {
+  og_subgroups_include('tree');
+  
+  // Determine the desired member propagation directions based on
+  // the selected operation
+  switch ($op) {
+    case 'subscribe':
+      $directions = variable_get('og_subgroups_propagate_members', array());
+      break;
+    case 'unsubscribe':
+      $directions = variable_get('og_subgroups_propagate_members_unsubscribe', array());
+      break;
+    default:
+      return FALSE;
+  }
+  
+  // Load the group
+  $group = node_load($gid);
+  
+  // Load the user
+  $user = user_load($uid);
+ 
+  // Iterate the directions
+  foreach ($directions as $direction) {
+    if ($direction) {
+      // Iterate the groups
+      foreach (_og_subgroups_prop_groups_by_direction($group, $direction) as $member) {
+        // Execute the propagation function
+        $propfunc = "_og_subgroups_prop_propagate_user_{$op}";
+        $propfunc($member, $user, $args);
+      }
+    }
+  }
+}
+
+/**
+ * User propagation callback to subscribe users along the tree
+ */
+function _og_subgroups_prop_propagate_user_subscribe($group, $user, $args) {
+  // Make sure user isn't already a member
+  if (!isset($user->og_groups[$group->nid])) {
+    // Make sure the group isn't invite-only or closed
+    if ($group->og_selective != OG_INVITE_ONLY && $group->og_selective != OG_CLOSED) {
+      // Determine if the membership should be active or not
+      $is_active = ($group->og_selective == OG_OPEN) ? 1 : 0;
+      // Save the user's subscription to the group
+      og_save_subscription($group->nid, $user->uid, array('og_subgroups' => TRUE, 'is_active' => $is_active));
+    
+      return TRUE;
+    }
+  }
+  
+  return FALSE;
+}
+
+/**
+ * User propagation callback to unsubscribe users along the tree
+ */
+function _og_subgroups_prop_propagate_user_unsubscribe($group, $user, $args) {
+  // Make sure the user can unsubscribe first
+  if (!og_subgroups_prop_can_unsubscribe($group, $user)) {
+    return FALSE;
+  }
+  
+  // Add the indication that we're propagating
+  $args['og_subgroups'] = TRUE;
+  
+  // Delete the group subscription
+  og_delete_subscription($group->nid, $user->uid, $args);
+  
+  return TRUE;
+}
+
+/**
+ * Determine whether or not a user can unsubscribe from a given group
+ * 
+ * @param $group
+ *   The group node object
+ * @param $user
+ *   The user object. If omitted, the current user will be used.
+ * @return
+ *   TRUE if the user can unsubscribe from the group, otherwise FALSE
+ */
+function og_subgroups_prop_can_unsubscribe($group, $user = NULL) {
+  // Load the current user, if none provided
+  if (!$user) {
+    global $user;
+  }
+  
+  // Group owners (not managers) cannot leave groups
+  if ($group->uid == $user->uid) {
+    return FALSE; 
+  }
+  
+  // If this group is closed, and the user isn't an admin, they can't leave
+  if ($group->og_selective == OG_CLOSED && !og_is_group_admin($group, $user)) {
+    return FALSE;
+  }
+  
+  return TRUE;
+}
+
+/**
+ * Propagates content along the subgroups tree.
+ * 
+ * @param &$node
+ *   The node object that needs to be propagated
+ * @return
+ *   TRUE if the node has been altered
+ */
+function og_subgroups_prop_propagate_content(&$node) {
+  og_subgroups_include('tree');
+  
+  // Track if the node has been changed
+  $changed = FALSE;
+  
+  // Determine the directions to move along the tree
+  $directions = variable_get('og_subgroups_propagate_content', array());
+  
+  // Make sure at least one group has been selected
+  if (isset($node->og_groups) && !empty($node->og_groups)) {
+    // Iterate each selected group
+    foreach ($node->og_groups as $gid) {
+      // Propagate across each direction
+      foreach ($directions as $direction) {
+        if ($direction) {
+          // Create a group object to pass along
+          $group = new stdClass;
+          $group->nid = $gid;
+          
+          // Fetch the tree and interate the groups
+          foreach (_og_subgroups_prop_groups_by_direction($group, $direction) as $member) {
+            // Make sure the user can post in here
+            if (!og_subgroups_mask_group($member, TRUE)) {
+              // Add this group to the node
+              $node->og_groups[$member->nid] = $member->nid;
+              $node->og_initial_groups[$member->nid] = $member->nid;
+              $changed = TRUE;
+            }
+          }
+        }
+      }
+    }
+  }
+ 
+  return $changed;
+}
+
+/**
+ * Retrieve all groups from the hierarchy of a given group 
+ * in a given direction 
+ * 
+ * @param $group
+ *   The group object, or group ID
+ * @param $direction
+ *   The direction to move along the tree (parents, children, siblings)
+ * @return
+ *   An array of groups located in the desired direction in the tree
+ */
+function _og_subgroups_prop_groups_by_direction($group, $direction) {
+  // Load tree functions
+  og_subgroups_include('tree');
+  // Determine necessary function to use
+  $function = "og_subgroups_get_group_{$direction}";
+  // Make sure the function exists
+  if (function_exists($function)) {
+    // Retrieve the tree in the given direction
+    $groups = $function($group, FALSE);
+  }
+  
+  return $groups ? $groups : array();
+}

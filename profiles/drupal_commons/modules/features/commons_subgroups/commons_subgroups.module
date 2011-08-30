@@ -1,0 +1,67 @@
+<?php
+
+include_once('commons_subgroups.features.inc');
+
+/**
+ * Implementation of hook_form_FORM_ID_alter()
+ * 
+ * Alter the commons_core create group block
+ */
+function commons_subgroups_form_commons_core_create_group_form_alter(&$form, &$form_state) {
+  // See if we're inside a subgroup list
+  if (arg(0) == 'groups' && arg(1) == 'sub' && is_numeric(arg(2))) {
+    // Append a URL query to set the default parent to the one
+    // we're viewing subgroups for
+    $form['#action'] .= '?og_parent=' . arg(2);
+  }
+}
+
+/**
+ * Implementation of hook_views_pre_view()
+ */
+function commons_subgroups_views_post_render(&$view, &$output, &$cache) {
+  // Viewing a listing of subgroups
+  if ($view->name == 'subgroups_main_listing' && $view->current_display == 'page_2') {
+    og_subgroups_include('tree');
+    
+    // Start the breadcrumb
+    $breadcrumb = array();
+    $breadcrumb[] = l(t('Home'), '<front>');
+    $breadcrumb[] = l(t('Groups'), 'groups');
+    
+    // Extract the parent group nid
+   $parent = $view->args[0];
+    
+    // Fetch the tree for the parent in the argument
+    $tree = og_subgroups_get_group_tree((object) array('nid' => $parent));
+    
+    if ($tree) {
+      // Flatten the tree so we can easily iterate
+      $tree = og_subgroups_flatten_tree($tree);
+      foreach ($tree as $nid => $group) {
+        // If we're at the parent group, provide a non-link crumb, and stop here
+        if ($parent == $nid) {
+          $breadcrumb[] = check_plain($group->title);
+          break; 
+        }
+        else {
+          $breadcrumb[] = l(check_plain($group->title), "groups/sub/{$group->nid}");
+        }
+      }
+    }
+    // If no parents are available, that means there is no family tree,
+    // meaning a user clicked on a (0), so load the node and provide a link
+    // back
+    else {
+      if ($parent = node_load($parent)) {
+        // Just in case..
+        if (og_is_group_type($parent->type)) {
+          $breadcrumb[] = $parent->title;
+        }
+      }
+    }
+    
+    // Override the breadcrumb
+    drupal_set_breadcrumb($breadcrumb);
+  }
+}

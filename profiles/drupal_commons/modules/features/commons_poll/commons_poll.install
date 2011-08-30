@@ -1,0 +1,37 @@
+<?php
+
+/**
+ * Implementation of hook_install()
+ */
+function commons_poll_install() {
+  commons_poll_add_flag();
+  commons_poll_add_taxonomy();
+}
+
+/**
+ * Add the bookmark flag to poll nodes
+ */
+function commons_poll_add_flag() {
+  $fid = db_result(db_query("SELECT fid FROM {flags} WHERE name = '%s'", 'bookmarks'));
+  
+  if ($fid) {
+    $check_sql = "SELECT fid FROM {flag_types} WHERE type = 'poll' AND fid = %d";
+  
+    if (!db_result(db_query($check_sql, $fid))) {
+      $flag = new stdClass;
+      $flag->fid = $fid;
+      $flag->type = 'poll';
+      drupal_write_record('flag_types', $flag);
+    }
+  }
+}
+
+/**
+ * Add taxonomy to poll nodes
+ */
+function commons_poll_add_taxonomy() {
+  $taxonomy = new stdClass;
+  $taxonomy->vid = variable_get('commons_tags_vid', 1);
+  $taxonomy->type = 'poll';
+  drupal_write_record('vocabulary_node_types', $taxonomy);
+}

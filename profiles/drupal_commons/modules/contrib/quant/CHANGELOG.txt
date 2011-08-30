@@ -1,0 +1,32 @@
+6.x-1.1: JUL 06 2011:
+------------------------------------
+* Fixed [#888426]: Incorrect use of t()
+* Fixed [#880372]: Additional link to analytics page in admin section.
+* Fixed foreach error in theme_quant_page().
+* Fixed [#887948]: Minor theme issues.
+* Added support for custom dateranges, instead of fixed time periods.
+* Added jQuery datepicker support for dateranges.
+* quant_process() takes timestamps, strings, array periods.
+* Added charts for Invites sent and accepted (required Invite module).
+* Changed module name from "Site quant" to "Quant".
+* Fixed [#1119444]: Quant node-type query to properly exclude group node types. 
+ (by rahulbile)
+* Added hook_quants_alter() hook.
+* Major code overhaul, organization, cleanup.
+* All functions pass quant objects by reference now, additional information
+ becomes attached.
+* Added documentation for patching Chart 6.x-1.3.
+
+
+6.x-1.0: SEPT 16 2010:
+------------------------------------
+* Added custom timerange for charts
+* Added support for datepicker (jquery ui)
+* Added queryCustom to quant objects in hook_quants()
+* quant_process() can now take a single timestamp, a single timestring,
+  or an array with two of either for a custom range
+* Added link to analytics page via admin/reports and admin/settings/quant
+* Fixed translation issues
+* Imported .pot and contributed Russian translation
+* Switch module name from "Site quant" to "Quant"
+* Update/fixed CSS

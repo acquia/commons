@@ -1,0 +1,95 @@
+<?php
+
+/**
+ * @file
+ * Installs and updates the necessary tables required by the OG Subgroups module.
+ */
+
+/**
+ * Implementation of hook_schema()
+ */
+function og_subgroups_schema() {
+  $schema['og_subgroups'] = array(
+    'description' => t('Handles the hierarchy of og'),
+    'fields' => array(
+      'gid' => array(
+        'description' => t('The ID for a group.'),
+        'type' => 'int',
+        'not null' => TRUE
+      ),
+      'parent' => array(
+        'description' => t('The gid of the parent group.'),
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0
+      ),
+    ),
+    'primary key' => array('gid', 'parent'),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implementation of hook_install()
+ */
+function og_subgroups_install() {
+  drupal_install_schema('og_subgroups');
+}
+
+/**
+ * Implementation of hook_uninstall()
+ */
+function og_subgroups_uninstall() {
+  drupal_uninstall_schema('og_subgroups');
+  
+  // Remove general variables
+  variable_del('og_subgroups_block_use_treeview');
+  variable_del('og_subgroups_block_use_treeview_controls');
+  variable_del('og_subgroups_block_use_treeview_ajax');
+  variable_del('og_subgroups_inherit_privacy');
+  
+  // Remove variables for enabled node types
+  $vars = db_query("SELECT name FROM {variable} WHERE name LIKE 'og_subgroups_node_type_enabled_%'");
+  while ($var = db_fetch_object($vars)) {
+    variable_del($var->name);
+  }
+}
+
+/**
+ * Convert existing propagation variables
+ */
+function og_subgroups_update_6000() {
+  // The propagation portion of this package has been moved
+  // to a separate submodule
+  // The variable values have also changed, so to be safe, we
+  // need to check for existing values and modify them accordingly
+  $vars = array(
+    'og_subgroups_propagate_content',
+    'og_subgroups_propagate_members',
+    'og_subgroups_propagate_demote',
+  );
+  
+  foreach ($vars as $var) {
+    if ($setting = variable_get($var, NULL)) {
+      $new_setting = array();
+      foreach ($setting as $key => $value) {
+        switch ($key) {
+          case 'up':
+            $new_setting['parents'] = 'parents';
+            break;
+          case 'down':
+            $new_setting['children'] = 'children';
+            break;
+          case 'side':
+            $new_setting['siblings'] = 'siblings';
+            break;
+        }
+      }
+      variable_set($var, $new_setting);
+    }
+  }
+  
+  // Remove variable no longer in use
+  variable_del('og_subgroups_propagate_demote');
+}

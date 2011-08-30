@@ -1,0 +1,1136 @@
+<?php
+
+/**
+ * @file
+ *   Allows comments on Facebook-style Statuses.
+ * @todo
+ *   - Integrations:
+ *       + activity (trigger/actions, token)
+ *       + flag
+ *       + rules
+ *       + userpoints
+ *       + devel generate
+ *       + popups api
+ *       + sms framework
+ *       + views bulk operations
+ *       + notifications
+ *   - Turn the comment theme functions into templates.
+ *   - Make Views integration good enough that we can use it for comment lists.
+ */
+
+//===============
+// DRUPAL HOOKS.
+//===============
+
+/**
+ * Implementation of hook_menu().
+ */
+function fbss_comments_menu() {
+  $items = array();
+  $items['admin/settings/facebook_status/fbss_comments'] = array(
+    'title' => 'Comments',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('fbss_comments_admin'),
+    'access arguments' => array('administer Facebook-style Statuses settings'),
+    'description' => 'Allows administrators to adjust settings for Facebook-style Statuses Comments.',
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'fbss_comments.pages.inc',
+  );
+  $items['statuses/comment/%fbss_comments/edit'] = array(
+    'title' => 'Edit status comment',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('fbss_comments_edit', 2),
+    'access callback' => 'fbss_comments_can',
+    'access arguments' => array('edit', 2),
+    'type' => MENU_CALLBACK,
+    'file' => 'fbss_comments.pages.inc',
+  );
+  $items['statuses/comment/%fbss_comments/delete'] = array(
+    'title' => 'Delete status comment',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('fbss_comments_delete', 2),
+    'access callback' => 'fbss_comments_can',
+    'access arguments' => array('delete', 2),
+    'type' => MENU_CALLBACK,
+    'file' => 'fbss_comments.pages.inc',
+  );
+  $items['fbss_comments/js/refresh'] = array(
+    'title' => 'Save status comment form',
+    'page callback' => 'fbss_comments_save_js',
+    'access arguments' => array('post status comment'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['fbss_comments/js/modalframe/%'] = array(
+    'title' => 'Refresh a list of comments',
+    'page callback' => 'fbss_comments_modalframe_refresh',
+    'page arguments' => array(3),
+    'access arguments' => array('view own status comments'),
+    'type' => MENU_CALLBACK,
+  );
+  if (module_exists('devel_generate')) {
+    $items['admin/generate/fbss_comments'] = array(
+      'title' => 'Generate status comments',
+      'description' => 'Generate a given number of status comments. Optionally delete current items.',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('fbss_comments_generate_form'),
+      'access callback' => 'facebook_status_user_access',
+      'access arguments' => array('generate'),
+      'file' => 'fbss_comments.generate.inc',
+    );
+  }
+  return $items;
+}
+
+/**
+ * Implementation of hook_user().
+ */
+function fbss_comments_user($op, &$edit, &$account, $category = NULL) {
+  if ($op == 'delete') {
+    db_query("DELETE FROM {fbss_comments} WHERE uid = %d", $account->uid);
+  }
+}
+
+/**
+ * Implementation of hook_perm().
+ */
+function fbss_comments_perm() {
+  return array(
+    'delete all status comments',
+    'delete own status comments',
+    'delete comments on own statuses',
+    'edit all status comments',
+    'edit own status comments',
+    'edit comments on own statuses',
+    'post status comment',
+    'view all status comments',
+    'view own status comments',
+  );
+}
+
+/**
+ * Implementation of hook_theme().
+ */
+function fbss_comments_theme($existing, $type, $theme, $path) {
+  return array(
+    'fbss_comments_item' => array(
+      'arguments' => array(
+        'comment' => NULL,
+        'classes' => array(),
+        'destination' => '',
+      ),
+    ),
+    'fbss_comments_items' => array(
+      'arguments' => array(
+        'comments' => array(),
+        'delay_load' => TRUE,
+        'destination' => '',
+      ),
+    ),
+    'fbss_comments_items_email' => array(
+      'arguments' => array(
+        'comments' => array(),
+        'destination' => '',
+      ),
+    ),
+    'fbss_comments_form_display' => array(
+      'arguments' => array(
+        'sid' => NULL,
+        'delay_load_form' => TRUE,
+        'delay_load_comments' => TRUE,
+      ),
+    ),
+  );
+}
+
+//==================
+// THEME FUNCTIONS.
+//==================
+
+/**
+ * Formats a comment.
+ *
+ * @param $comment
+ *   The comment object.
+ * @param $classes
+ *   An array of extra classes to include in the comment status wrapper div.
+ * @param $destination
+ *   The destination query string for edit and delete links. Usually the current
+ *   page unless this function is called from a JavaScript callback page.
+ * @return
+ *   The fully themed status comment or FALSE if the current user does not have
+ *   permission to view the comment.
+ */
+function theme_fbss_comments_item($comment, $classes = array(), $destination = '') {
+  if (!fbss_comments_can('view', $comment)) {
+      return FALSE;
+  }
+  drupal_add_css(drupal_get_path('module', 'fbss_comments') .'/fbss_comments.css');
+  $author = _facebook_status_user_load($comment->uid);
+  array_unshift($classes, 'fbss-comments-comment');
+  array_unshift($classes, 'facebook-status-media');
+  array_unshift($classes, 'facebook-status-subitem');
+  $classes = implode(' ', $classes);
+  $output = '<div class="'. $classes .'">';
+  if (variable_get('fbss_comments_user_pictures', 0)) {
+    $output .= '<div class="fbss-comments-author-picture user-picture">'. _fbss_comments_user_picture($author) .'</div>';
+  }
+  $output .= '<div class="content">';
+  $output .= '<div class="fbss-comments-author">'. theme('username', $author) .'</div>';
+  $comment_text = _facebook_status_run_filter($comment->comment);
+  $comment_text = nl2br($comment_text);
+  $output .= '<div class="fbss-comments-text">'. $comment_text .'</div>';
+  $output .= '<div class="fbss-comments-closure">';
+  $output .= '<span class="fbss-comments-created">'. theme('facebook_status_time', $comment->created) .'</span>';
+  $q = $_GET['q'];
+  if ($destination) {
+    $q = $destination;
+  }
+  elseif (strpos($q, 'fbss_comments/js/refresh') !== FALSE) {
+    $q = '<front>';
+  }
+  // The following links output should ideally be created with theme_links. But since the query property
+  // is not supported by theme_links, we have to build the output structure by hand at the moment.
+  $output .= '<ul class="links inline">';
+  if (fbss_comments_can('edit', $comment)) {
+    $output .= '<li class="fbss-comments-edit-delete">'.
+      l(t('Edit'), 'statuses/comment/'. $comment->cid .'/edit', array('query' => array('destination' => $q)))
+      .'</li>';
+  }
+  if (fbss_comments_can('delete', $comment)) {
+    $output .= '<li class="fbss-comments-edit-delete">'.
+      l(t('Delete'), 'statuses/comment/'. $comment->cid .'/delete', array('query' => array('destination' => $q)))
+      .'</li>';
+  }
+  if (module_exists('fbss_comments_flag')) {
+    foreach (flag_get_flags() as $name => $info) {
+      if ($info->content_type == 'fbss_comment') {
+        $output .= '<li>' . flag_create_link($name, $comment->cid) . '</li>';
+      }
+    }
+  }
+  $output .= '</ul></div></div></div>';
+  if (module_exists('modalframe')) {
+    modalframe_parent_js();
+  }
+  return $output;
+}
+
+/**
+ * Displays a status comment thread with inline styles suitable for email.
+ *
+ * @param $comments
+ *   An array of comment objects to display.
+ * @param $destination
+ *   The destination query string for edit and delete links. Usually the current
+ *   page unless this function is called from a JavaScript callback page.
+ * @return
+ *   Themed HTML for the status comments.
+ */
+function theme_fbss_comments_items_email($c, $destination = '') {
+  $count = count($c);
+  if (!$count) {
+    return;
+  }
+  $comments = array();
+  $comments[] = array_pop($c);
+  if ($count > 1) {
+    array_unshift($comments, array_pop($c));
+  }
+  $output = '<table style="background-color: #EEEEEE; border: 1px solid #CCCCCC; margin-left: 20px;"><tbody>';
+  if ($count > 2) {
+    $output .= '<tr><td>'. l(t('View all !count comments', array('!count' => $count)), 'statuses/'. $comments[0]->sid) .'</td></tr>';
+  }
+  $rendered = 0;
+  foreach ($comments as $key => $comment) {
+    if (!fbss_comments_can('view', $comment)) {
+        continue;
+    }
+    $author = _facebook_status_user_load($comment->uid);
+    $output .= '<tr><td style="'. ($key == 0 ? '' : 'border-top: 1px solid #CCCCCC; ') .'padding: 10px;">';
+    if (variable_get('fbss_comments_user_pictures', 0)) {
+      $output .= '<table><tbody><tr><td>'. _fbss_comments_user_picture($author) .'</td><td>';
+    }
+    $output .= '<div>'. theme('username', $author) .' ';
+    $comment_text = _facebook_status_run_filter($comment->comment);
+    $comment_text = nl2br($comment_text);
+    $output .= $comment_text;
+    $output .= '</div><div>';
+    $output .= '<span>'. format_date($comment->created) .'</span>';
+    $output .= l(t('Reply'), $destination) .'</div>';
+    if (variable_get('fbss_comments_user_pictures', 0)) {
+      $output .= '</td></tr></tbody></table>';
+    }
+    $output .= '</td></tr>';
+  }
+  $output .= '</tbody></table>';
+  return $output;
+}
+
+/**
+ * Displays a status comment thread.
+ *
+ * @param $comments
+ *   An array of comment objects to display.
+ * @param $delay_load
+ *   If TRUE and there are no comments on the relevant status, a "show all
+ *   comments" link will be displayed instead of the full list of comments. When
+ *   clicked, the full list of comments will be shown for users with JavaScript
+ *   enabled. Users with JavaScript disabled will be redirected to the status
+ *   thread page. If FALSE the "comment" link (with the comment form hidden)
+ *   will be used instead of just showing the comment form.
+ * @param $destination
+ *   The destination query string for edit and delete links. Usually the current
+ *   page unless this function is called from a JavaScript callback page.
+ * @return
+ *   Themed HTML for the status comments.
+ */
+function theme_fbss_comments_items($comments, $delay_load = TRUE, $destination = '') {
+  $count = count($comments);
+  if (!$count) {
+    return;
+  }
+  drupal_add_js(drupal_get_path('module', 'fbss_comments') .'/fbss_comments.js');
+  $output = '<div class="fbss-comments">';
+  if ($count > variable_get('fbss_comments_hide_small', 3) && $delay_load) {
+    $options = array('attributes' => array('class' => 'fbss-comments-show-comments-link fbss-comments-show-comments', 'id' => 'fbss-comments-toggle-'. $comments[0]->sid));
+    if ($count >= variable_get('fbss_comments_show_all', 10)) {
+      $options['attributes']['class'] = 'fbss-comments-show-comments-link';
+    }
+    $options['attributes']['class'] .= ' facebook-status-subitem';
+    $output .= l(t('Show all @count comments', array('@count' => $count)), 'statuses/'. $comments[0]->sid, $options);
+  }
+  $rendered = 0;
+  foreach ($comments as $key => $comment) {
+    $classes = array();
+    if ($key == 0) {
+      $classes[] = 'first';
+    }
+    if ($key == $count - 1) {
+      $classes[] = 'last';
+    }
+    if ($key % 2 == 0) {
+      $classes[] = 'odd';
+    }
+    else {
+      $classes[] = 'even';
+    }
+    if ($count > variable_get('fbss_comments_hide_small', 3) && $key <= $count - variable_get('fbss_comments_hide_small', 3) && $delay_load) {
+      $classes[] = 'fbss-comments-hide';
+      $classes[] = 'facebook-status-subitem';
+    }
+    if (!$delay_load || $count < variable_get('fbss_comments_show_all', 10) || $key > $count - variable_get('fbss_comments_hide_small', 3)) {
+      $result = theme('fbss_comments_item', $comment, $classes, $destination);
+      if (!empty($result)) {
+        $output .= $result;
+        $rendered++;
+      }
+    }
+  }
+  $output .= '</div>';
+  if ($rendered > 0) {
+    return $output;
+  }
+}
+
+/**
+ * Displays the status comment form.
+ *
+ * @param $sid
+ *   The Status ID of the comment thread.
+ * @param $delay_load_form
+ *   If TRUE and there are no comments on the relevant status, a "comment" link
+ *   will be displayed instead of the comment form. When clicked, the form will
+ *   be revealed for users with JavaScript enabled. Users with JavaScript
+ *   disabled will be redirected to the status thread page. If FALSE the
+ *   "comment" link will not be used and the comment form will not be initially
+ *   hidden.
+ * @param $delay_load_comments
+ *   If TRUE and there are no comments on the relevant status, a "show all
+ *   comments" link will be displayed instead of the full list of comments. When
+ *   clicked, the full list of comments will be shown for users with JavaScript
+ *   enabled. Users with JavaScript disabled will be redirected to the status
+ *   thread page. If FALSE the "comment" link (with the comment form hidden)
+ *   will be used instead of just showing the comment form.
+ * @return
+ *   The themed HTML for the status form, or if the user does not have
+ *   permission to post a comment, then the list of comments.
+ */
+function theme_fbss_comments_form_display($sid, $delay_load_form = TRUE, $delay_load_comments = TRUE) {
+  if (fbss_comments_can('post', facebook_status_load($sid))) {
+    $output = '';
+    if ($delay_load_form && !fbss_comments_count_comments($sid, TRUE)) {
+      $output = '<div class="fbss-comments-show-comment-form" id="fbss-comments-toggle-'. $sid .'">'.
+        l(t('Comment'), 'statuses/'. $sid, array('attributes' => array('class' => 'fbss-comments-show-comment-form-link')))
+        .'</div>';
+        return $output .'<div class="fbss-comments-hide facebook-status-subitem fbss-comments-form">'. drupal_get_form('fbss_comments_box_'. $sid, $sid, $delay_load_comments) .'</div>';
+    }
+    return '<div class="fbss-comments-form">'. drupal_get_form('fbss_comments_box_'. $sid, $sid, $delay_load_comments, $delay_load_form) .'</div>';
+  }
+  else if (user_access('view all status comments')) {
+    return theme('fbss_comments_items', fbss_comments_get_comments($sid, TRUE), $delay_load_comments, $_GET['q']);
+  }
+}
+
+//================
+// API FUNCTIONS.
+//================
+
+/**
+ * Loads a status comment.
+ *
+ * @param $cid
+ *   The status comment ID.
+ * @return
+ *   A full status comment object.
+ */
+function fbss_comments_load($cid) {
+  if (!is_numeric($cid)) {
+    return;
+  }
+  return db_fetch_object(db_query("SELECT * FROM {fbss_comments} WHERE cid = %d", $cid));
+}
+
+/**
+ * Retrieves the comments from a thread.
+ *
+ * @param $sid
+ *   The Status ID of the thread for which to retrieve comments.
+ * @param $filter_view_access
+ *   If TRUE, only comments which the user has permission to view will be
+ *   returned. Otherwise, all relevant comments will be returned.
+ * @return
+ *   An array of comment objects for the relative thread.
+ */
+function fbss_comments_get_comments($sid, $filter_view_access = FALSE) {
+  $result = db_query("SELECT * FROM {fbss_comments} WHERE sid = %d ORDER BY created ASC, cid ASC", $sid);
+  $results = array();
+  while ($comment = db_fetch_object($result)) {
+    if (!$filter_view_access || fbss_comments_can('view', $comment)) {
+      $results[] = $comment;
+    }
+  }
+  return $results;
+}
+
+/**
+ * Saves a status comment.
+ *
+ * @param $sid
+ *   The ID of the status on which the comment was saved.
+ * @param $comment
+ *   The status comment text.
+ * @param $uid
+ *   The ID of the user who saved the comment.
+ * @return
+ *   The saved status comment object.
+ */
+function fbss_comments_save_comment($sid, $comment, $uid = NULL) {
+  if (!$uid) {
+    $uid = $GLOBALS['user']->uid;
+  }
+  $c = (object) array('sid' => $sid, 'uid' => $uid, 'created' => time(), 'comment' => $comment);
+  drupal_write_record('fbss_comments', $c);
+  module_invoke_all('fbss_comments_after_save', $c, FALSE);
+  if (module_exists('trigger')) {
+    module_invoke_all('fbss_comments', 'fbss_comments_saved', $c);
+  }
+  return $c;
+}
+
+/**
+ * Deletes a status comment.
+ *
+ * @param $cid
+ *   The comment ID.
+ */
+function fbss_comments_delete_comment($cid) {
+  module_invoke_all('fbss_comments_delete', $cid);
+  if (module_exists('trigger')) {
+    module_invoke_all('fbss_comments', 'fbss_comments_deleted', fbss_comments_load($comment));
+  }
+  db_query("DELETE FROM {fbss_comments} WHERE cid = %d", $cid);
+}
+
+/**
+ * Counts the number of comments on a status.
+ *
+ * @param $sid
+ *   The ID of the status whose comments should be counted.
+ * @param $filter_view_access
+ *   If TRUE, the count will be of comments that the current user has
+ *   permission to view. Otherwise, will count all relevant comments.
+ * @return
+ *   The number of comments on the specified status.
+ */
+function fbss_comments_count_comments($sid, $filter_view_access = FALSE) {
+  if ($filter_view_access) {
+    $result = db_query("SELECT * FROM {fbss_comments} WHERE sid = %d", $sid);
+    $count = 0;
+    while ($comment = db_fetch_object($result)) {
+      if (fbss_comments_can('view', $comment)) {
+        $count++;
+      }
+    }
+    return $count;
+  }
+  return db_result(db_query("SELECT COUNT(cid) FROM {fbss_comments} WHERE sid = %d", $sid));
+}
+
+/**
+ * Determines whether a user has commented on this status.
+ *
+ * @param $sid
+ *   The Status ID of the thread for which to retrieve comments.
+ * @param $uid
+ *   The User ID of the user for whom to check participation. Defaults to the
+ *   current user.
+ * @return
+ *   TRUE if the user has commented on this status; FALSE otherwise.
+ */
+function fbss_comments_has_commented($sid, $uid = NULL) {
+  if (!$uid) {
+    $uid = $GLOBALS['user']->uid;
+  }
+  $result = db_result(db_query("SELECT COUNT(cid) FROM {fbss_comments} WHERE sid = %d and uid = %d", $sid, $uid));
+  return $result > 0;
+}
+
+/**
+ * Determines whether a user has permission to take an action on a comment.
+ *
+ * @param $op
+ *   The action to take. One of view, post, edit, delete.
+ * @param $comment
+ *   The comment object.
+ * @param $account
+ *   The $user object of the user whose access will be checked. Defaults to the
+ *   current user.
+ * @return
+ *   TRUE if the user can take the specified action; FALSE otherwise.
+ */
+function fbss_comments_can($op, $comment, $account = NULL) {
+  if (empty($account)) {
+    $account = $GLOBALS['user'];
+  }
+  $result = call_user_func('_fbss_comments_can_'. $op, $comment, $account);
+  $allow = TRUE;
+  drupal_alter('fbss_comments_has_permission', $allow, $op, $comment, $account);
+  return $allow && $result;
+}
+
+//===================
+// HELPER FUNCTIONS.
+//===================
+
+/**
+ * Determines whether a user can view the relevant status.
+ *
+ * @param $comment
+ *   The comment object.
+ * @param $account
+ *   The $user object of the user whose access will be checked.
+ * @return
+ *   TRUE if the user can view the comment; FALSE otherwise.
+ */
+function _fbss_comments_can_view($comment, $account) {
+  return user_access('view all status comments', $account) || (user_access('view own status comments') && $comment->uid == $account->uid);
+}
+
+/**
+ * Determines whether a user can post a comment on the relevant status.
+ *
+ * @param $status
+ *   The status object.
+ * @param $account
+ *   The $user object of the user whose access will be checked.
+ * @return
+ *   TRUE if the user can post the comment; FALSE otherwise.
+ */
+function _fbss_comments_can_post($status, $account = NULL) {
+  if (module_exists('og') && $status->type == 'og') {
+    return user_access('post status comment', $account) &&
+      og_is_group_member($status->recipient, FALSE, empty($account) ? $GLOBALS['user']->uid : $account->uid);
+  }
+  return user_access('post status comment', $account);
+}
+
+/**
+ * Determines whether a user can edit a comment on the relevant status.
+ *
+ * @param $comment
+ *   The comment object.
+ * @param $account
+ *   The $user object of the user whose access will be checked.
+ * @return
+ *   TRUE if the user can edit the comment; FALSE otherwise.
+ */
+function _fbss_comments_can_edit($comment, $account = NULL) {
+  // This is in two separate statements (instead of one big return statement)
+  // so that the SQL in _fbss_comments_get_thread_author() does not usually need to be run.
+  if (user_access('edit all status comments', $account) || (user_access('edit own status comments', $account) && $account->uid == $comment->uid)) {
+    return TRUE;
+  }
+  return user_access('edit comments on own statuses', $account) && $account->uid == _fbss_comments_get_thread_author($comment->sid);
+}
+
+/**
+ * Determines whether a user can delete a comment on the relevant status.
+ *
+ * @param $comment
+ *   The comment object.
+ * @param $account
+ *   The $user object of the user whose access will be checked.
+ * @return
+ *   TRUE if the user can delete the comment; FALSE otherwise.
+ */
+function _fbss_comments_can_delete($comment, $account = NULL) {
+  // This is in two separate statements (instead of one big return statement)
+  // so that the SQL in _fbss_comments_get_thread_author() does not usually need to be run.
+  if (user_access('delete all status comments', $account) || (user_access('delete own status comments', $account) && $account->uid == $comment->uid)) {
+    return TRUE;
+  }
+  return user_access('delete comments on own statuses', $account) && $account->uid == _fbss_comments_get_thread_author($comment->sid);
+}
+
+/**
+ * Determines the author of a status.
+ *
+ * @param $sid
+ *   The Status ID of the thread in question.
+ * @return
+ *   The User ID of the author of the relevant status.
+ */
+function _fbss_comments_get_thread_author($sid) {
+  return db_result(db_query("SELECT sender FROM {facebook_status} WHERE sid = %d", $sid));
+}
+
+/**
+ * Adds the Autogrow jQuery extension.
+ */
+function _fbss_comments_use_autogrow() {
+  //module_load_include('inc', 'facebook_status', 'includes/utility/facebook_status.form');
+  //_facebook_status_use_autogrow();
+}
+
+/**
+ * Renders a user's profile picture.
+ *
+ * @see template_preprocess_user_picture()
+ */
+function _fbss_comments_user_picture($account) {
+  if (!module_exists('imagecache_profiles')) {
+    return theme('user_picture', $account);
+  }
+  $output = '';
+  if (variable_get('user_pictures', 0)) {
+    if (!empty($account->picture) && file_exists($account->picture)) {
+      $picture = $account->picture;
+    }
+    else if (variable_get('user_picture_default', '')) {
+      $picture = variable_get('user_picture_default', '');
+    }
+    if (isset($picture)) {
+      $alt = t("@user's picture", array('@user' => $account->name ? $account->name : variable_get('anonymous', t('Anonymous'))));
+      $output = theme('imagecache', variable_get('fbss_comments_user_pictures', 0), $picture, $alt, $alt, NULL, FALSE);
+      if (!empty($account->uid) && user_access('access user profiles')) {
+        $attributes = array(
+          'attributes' => array('title' => t('View user profile.')),
+          'html' => TRUE,
+        );
+        $output = l($output, "user/$account->uid", $attributes);
+      }
+    }
+  }
+  return $output;
+}
+
+//=================
+// FORM FUNCTIONS.
+//=================
+
+/**
+ * Implementation of hook_forms().
+ */
+function fbss_comments_forms($form_id, $args) {
+  if (strpos($form_id, 'fbss_comments_box') === 0) {
+    return array(
+      $form_id => array(
+        'callback' => 'fbss_comments_box',
+      ),
+    );
+  }
+}
+
+/**
+ * The status comment form.
+ *
+ * @param $sid
+ *   The Status ID of the thread.
+ * @param $delay_load
+ *   If TRUE and there are no comments on the relevant status, a "show all
+ *   comments" link will be displayed instead of the full list of comments. When
+ *   clicked, the full list of comments will be shown for users with JavaScript
+ *   enabled. Users with JavaScript disabled will be redirected to the status
+ *   thread page. If FALSE the "comment" link with delayed comment form loading
+ *   will not be used.
+ */
+function fbss_comments_box(&$form_state, $sid, $delay_load = TRUE, $hide_submit = TRUE) {
+  $path = drupal_get_path('module', 'fbss_comments');
+  drupal_add_css($path .'/fbss_comments.css');
+  drupal_add_js($path .'/fbss_comments.js');
+  // Defer execution so that it runs after ajax_view.js
+  drupal_add_js($path .'/fbss_comments_views_ahah.js', 'module', 'header', TRUE);
+  if (variable_get('fbss_comments_enter', 0)) {
+    drupal_add_js($path .'/fbss_comments_enter.js');
+  }
+  drupal_add_js(array('fbss_comments' => array(
+    'ahah_enabled' => (bool) variable_get('fbss_comments_ahah', 1)
+  )), 'setting');
+  _fbss_comments_use_autogrow();
+  $form = array();
+  if (!isset($form_state['fbss_comments']['q'])) {
+    $form['#qu'] = $_GET['q'];
+  }
+  else {
+    $form['#qu'] = $form_state['fbss_comments']['q'];
+  }
+  if (isset($_GET['view_path'])) {
+    $form['#qu'] = $_GET['view_path'];
+    //$form['#action'] = url($_GET['view_path']);
+  }
+  $comments = fbss_comments_get_comments($sid, TRUE);
+  $form['before'] = array('#value' => '<div id="fbss-comments-replace-'. $sid .'">');
+  $form['comments'] = array('#value' => theme('fbss_comments_items', $comments, $delay_load, $form['#qu']));
+  $form['comment-entry-wrapper'] = array('#value' => '<div class="facebook-status-subitem">',);
+
+  $form['status-comment'] = array(
+    '#type' => 'textarea',
+    '#rows' => 2,
+    '#prefix' => '<div class="facebook-status-textarea-wrapper">',
+    '#suffix' => '</div>',
+    '#attributes' => array('class' => 'fbss-comments-textarea'),
+    '#resizable' => FALSE,
+  );
+
+  $form['end-comment-entry-wrapper'] = array('#value' => '</div>',);
+  $form['after'] = array('#value' => '</div>');
+  $form['save-'. $sid] = array(
+    '#type' => 'submit',
+    '#value' => t('Comment'),
+    '#attributes' => array('class' => 'fbss-comments-submit button primary'),
+    '#prefix' => '<div class="'. ($hide_submit ? '' : '') .' facebook-status-subitem form-piece fbss-comments-replace-'. $sid .'-inner clearfix">',
+    '#suffix' => '</div>',
+    '#submit' => array('fbss_comments_box_submit'),
+  );
+  if (variable_get('fbss_comments_ahah', 1)) {
+    $form['save-'. $sid]['#ahah'] = array(
+      'path' => 'fbss_comments/js/refresh',
+      'wrapper' => 'fbss-comments-replace-'. $sid,
+      'effect' => 'fade',
+      'method' => 'replace',
+    );
+  }
+  $form['#sid'] = $sid;
+  if (!empty($form_state['fbss_comments']['sid'])) {
+    $form['#sid'] = $form_state['fbss_comments']['sid'];
+  }
+  $form['#attributes'] = array('class' => 'fbss-comments-comment-form');
+  return $form;
+}
+
+/**
+ * The submit handler for the status comment form.
+ */
+function fbss_comments_box_submit($form, &$form_state) {
+  $form_state['fbss_comments']['q'] = $form['#qu'];
+  $form_state['fbss_comments']['sid'] = $form['#sid'];
+  // Don't save empty comments, but fail silently instead of using the default "required" handling.
+  if (!empty($form_state['values']['status-comment'])) {
+    fbss_comments_save_comment($form['#sid'], $form_state['values']['status-comment']);
+  }
+  if (variable_get('fbss_comments_ahah', 1)) {
+    $form_state['rebuild'] = TRUE;
+  }
+}
+
+/**
+ * Saves status comments via AHAH.
+ */
+function fbss_comments_save_js() {
+  $form_state = array('storage' => NULL, 'submitted' => FALSE);
+  $form_build_id = $_POST['form_build_id'];
+  $form = form_get_cache($form_build_id, $form_state);
+  $form_state['post'] = $form['#post'] = $_POST;
+  $form['#programmed'] = $form['#redirect'] = FALSE;
+  $args = $form['#parameters'];
+  // This happens if someone goes directly to the JS processing page.
+  if (!is_array($args) && !$args) {
+    drupal_goto('user');
+    watchdog('facebook_status',
+      'Someone tried to access the JavaScript processing page for Facebook-style Statuses Comments directly.', array(), WATCHDOG_DEBUG);
+    return;
+  }
+  $form_id = array_shift($args);
+  drupal_process_form($form_id, $form, $form_state);
+  $form = drupal_rebuild_form($form_id, $form_state, $args, $form_build_id);
+  // Get HTML for the replacement form. Only these elements will be AHAH-refreshed.
+  $new_form['comment-entry-wrapper']     = $form['comment-entry-wrapper'];
+  $new_form['comments']                  = $form['comments'];
+  $new_form['end-comment-entry-wrapper'] = $form['end-comment-entry-wrapper'];
+  $new_form['status-comment']            = $form['status-comment'];
+  //$new_form['save']           = $form['save'];
+  $output = theme('status_messages') . drupal_render($new_form);
+  // Return the results.
+  drupal_json(array('status' => TRUE, 'data' => $output));
+}
+
+//===============
+// INTEGRATIONS.
+//===============
+
+/**
+ * Implementation of hook_facebook_status_delete().
+ */
+function fbss_comments_facebook_status_delete($status) {
+  db_query("DELETE FROM {fbss_comments} WHERE sid = %d", $status->sid);
+
+  if (module_exists('activity')) {
+    $result = db_query("SELECT aid FROM {activity} WHERE type = 'fbss_comments' AND eid IN (SELECT sid FROM {fbss_comments} WHERE cid = %d)", $status->sid);
+    $records = array();
+    while ($record = db_fetch_object($result)) {
+      $records[] = $record->aid;
+    }
+    if (!empty($records)) {
+      activity_delete($records);
+    }
+  }
+}
+
+/**
+ * Implementation of hook_preprocess_facebook_status_item().
+ */
+function fbss_comments_preprocess_facebook_status_item(&$vars) {
+  if ($vars['options']['extras']) {
+    $vars['comments'] = theme('fbss_comments_form_display', $vars['status']->sid, !$vars['options']['page'], !$vars['options']['page']);
+  }
+}
+
+/**
+ * Implementation of hook_form_FORM_ID_alter().
+ */
+function fbss_comments_form_facebook_status_box_alter(&$form) {
+  // Add the comments JS when the status form is displayed so that all the necessary resources are loaded when the first status is submitted on a page.
+  $path = drupal_get_path('module', 'fbss_comments');
+  drupal_add_css($path .'/fbss_comments.css');
+  drupal_add_js($path .'/fbss_comments.js');
+  // Defer execution so that it runs after ajax_view.js
+  drupal_add_js($path .'/fbss_comments_views_ahah.js', 'module', 'header', TRUE);
+  if (variable_get('fbss_comments_enter', 0)) {
+    drupal_add_js($path .'/fbss_comments_enter.js');
+  }
+  /*
+  // Don't add settings twice (it merges recursively, so we'll end up with an array, which messes things up).
+  drupal_add_js(array('fbss_comments' => array(
+    'ahah_enabled' => (bool) variable_get('fbss_comments_ahah', 1)
+  )), 'setting');
+   */
+  _fbss_comments_use_autogrow();
+}
+
+/**
+ * The JS callback for the Modalframe submit callback.
+ */
+function fbss_comments_modalframe_refresh($sid) {
+  drupal_set_header('Content-Type: text/html; charset: utf-8');
+  echo theme('fbss_comments_items', fbss_comments_get_comments($sid, TRUE));
+}
+
+/**
+ * Implementation of hook_views_bulk_operations_object_info().
+ */
+function fbss_comments_views_bulk_operations_object_info() {
+  return array(
+    'fbss_comments' => array(
+      'type' => 'fbss_comment',
+      'base_table' => 'fbss_comments',
+      'load' => 'fbss_comments_load',
+      'title' => 'comment',
+    ),
+  );
+}
+
+//====================
+// VIEWS INTEGRATION.
+//====================
+
+/**
+ * Implementation of hook_views_api().
+ */
+function fbss_comments_views_api() {
+  return array('api' => 2);
+}
+
+/**
+ * Implementation of hook_views_default_views_alter().
+ */
+function fbss_comments_views_default_views_alter(&$views) {
+  foreach ($views as $view) {
+    // We can't use the base_table property because some FBSS views are based on the {users} table.
+    if ($view->tag == 'Facebook-style Statuses') {
+      // Do some trickery to make sure the comment box comes before the global:nothing field so that it's available as a token.
+      $s = $view->display['default']->display_options['fields']['nothing'];
+      unset($view->display['default']->display_options['fields']['nothing']);
+      // This won't work anywhere fields are overridden in the default views.
+      $view->display['default']->display_options['fields']['comment-box'] = array(
+        'label' => '',
+        'alter' => array(
+          'alter_text' => 0,
+          'text' => '',
+          'make_link' => 0,
+          'path' => '',
+          'link_class' => '',
+          'alt' => '',
+          'prefix' => '',
+          'suffix' => '',
+          'target' => '',
+          'help' => '',
+          'trim' => 0,
+          'max_length' => '',
+          'word_boundary' => 1,
+          'ellipsis' => 1,
+          'strip_tags' => 0,
+          'html' => 0,
+        ),
+        'empty' => '',
+        'hide_empty' => 0,
+        'empty_zero' => 0,
+        'exclude' => 1,
+        'id' => 'comment-box',
+        'table' => 'facebook_status',
+        'field' => 'comment-box',
+        'relationship' => 'none',
+        'override' => array(
+          'button' => 'Override',
+        ),
+      );
+      $view->display['default']->display_options['fields']['nothing'] = $s;
+      $t = $view->display['default']->display_options['fields']['nothing']['alter']['text'];
+      if (drupal_substr($t, -6) == '</div>') {
+        $t = drupal_substr($t, 0, -6) . ' [comment-box]</div>';
+      }
+      else {
+        $t .= "\n\n<div>[comment-box]</div>";
+      }
+      $view->display['default']->display_options['fields']['nothing']['alter']['text'] = $t;
+    }
+  }
+}
+
+//======================
+// TRIGGER INTEGRATION.
+//======================
+
+/**
+ * Implementation of hook_hook_info().
+ */
+function fbss_comments_hook_info() {
+  return array(
+    'fbss_comments' => array(
+      'fbss_comments' => array(
+        'fbss_comments_deleted' => array(
+          'runs when' => t('A status comment has been deleted'),
+        ),
+        'fbss_comments_edited' => array(
+          'runs when' => t('A user has edited a status comment'),
+        ),
+        'fbss_comments_saved' => array(
+          'runs when' => t('A user has saved a new status comment'),
+        ),
+      ),
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_facebook_status().
+ * or
+ * Implementation of hook_trigger_name().
+ */
+function fbss_comments_fbss_comments($op, $comment, $account = NULL) {
+  if (strpos($op, 'fbss_comments_') !== 0) {
+    return;
+  }
+  $aids = _trigger_get_hook_aids('fbss_comments', $op);
+  $account = empty($account) ? $GLOBALS['user'] : $account;
+  $context = array(
+    'hook' => 'fbss_comments',
+    'op' => $op,
+    'fbss_comment' => $comment,
+    'account' => $account,
+  );
+  actions_do(array_keys($aids), $account, $context);
+}
+
+//====================
+// TOKEN INTEGRATION.
+//====================
+
+/**
+ * Implementation of hook_token_list().
+ */
+function fbss_comments_token_list($type = 'all') {
+  if ($type == 'fbss_comment') {
+    $tokens['fbss_comment'] = array(
+      'commenter-themed' => t('The themed name of the user who posted the status message.'),
+      'commenter-name' => t('The safe name of the user who posted the status message.'),
+      'commenter-name-raw' => t('The raw name of the user who posted the status message. WARNING: raw user input.'),
+      'commenter-uid' => t('The User ID of the user who posted the status message.'),
+      'message-unformatted' => t('The comment text, with HTML escaped but no filters run over it.'),
+      'message-formatted' => t('The formatted comment text.'),
+      'message-raw' => t('The completely unfiltered comment text. WARNING: raw user input.'),
+      'comment-themed' => t('The new status completely themed, including usernames and times.'),
+      'comment-id' => t('The Comment ID.'),
+      'comment-status-id' => t('The Status ID.'),
+      'comment-status-url' => t('The URL of the related status message.'),
+      'comment-edit' => t('Edit comment link.'),
+      'comment-delete' => t('Delete comment link.'),
+      'comment-created' => t('The themed time the comment was submitted.'),
+    );
+    $tokens['fbss_comment'] += token_get_date_token_info(t('The comment created'), 'comment-created-');
+    return $tokens;
+  }
+}
+
+/**
+ * Implementation of hook_token_values().
+ */
+function fbss_comments_token_values($type, $data = NULL, $options = array()) {
+  if ($type != 'fbss_comment' || empty($data)) {
+    return;
+  }
+  $comment = $data;
+  $account = _facebook_status_user_load($comment->uid);
+  $edit = '';
+  $delete = '';
+  if (fbss_comments_can('edit', $comment)) {
+    $edit = '<span class="fbss-comments-edit-delete">'.
+      l(t('Edit'), 'statuses/comment/'. $comment->cid .'/edit', array('query' => array('destination' => $_GET['q'])))
+      .'</span>';
+  }
+  if (fbss_comments_can('delete', $comment)) {
+    $delete = '<span class="fbss-comments-edit-delete">'.
+      l(t('Delete'), 'statuses/comment/'. $comment->cid .'/delete', array('query' => array('destination' => $_GET['q'])))
+      .'</span>';
+  }
+  $values = array(
+    'commenter-themed' => theme('username', $account),
+    'commenter-name' => check_plain($account->name),
+    'commenter-name-raw' => $account->name,
+    'commenter-uid' => $account->uid,
+    'message-unformatted' => check_plain($comment->comment),
+    'message-formatted' => nl2br(_facebook_status_run_filter($comment->comment)),
+    'message-raw' => $comment->comment,
+    'comment-themed' => theme('fbss_comments_item', $comment, array(), $_GET['q']),
+    'comment-id' => $comment->cid,
+    'comment-status-id' => $comment->sid,
+    'comment-status-url' => url('statuses/'. $comment->sid, array('absolute' => TRUE)),
+    'comment-edit' => $edit,
+    'comment-delete' => $delete,
+    'comment-created' => format_date($comment->created, 'small'),
+  );
+  $values += token_get_date_token_values($comment->created, 'created-');
+  return $values;
+}
+
+//=======================
+// ACTIVITY INTEGRATION.
+//=======================
+
+/**
+ * Implementation of hook_fbss_comments_delete().
+ */
+function fbss_comments_fbss_comments_delete($cid) {
+  if (module_exists('activity')) {
+    $result = db_query("SELECT aid FROM {activity} WHERE type = 'fbss_comments' AND op <> 'fbss_comments_deleted' AND eid = %d", $cid);
+    $records = array();
+    while ($record = db_fetch_object($result)) {
+      $records[] = $record->aid;
+    }
+    if (!empty($records)) {
+      activity_delete($records);
+    }
+  }
+}
+
+/**
+ * Implementation of hook_activity_info().
+ */
+function fbss_comments_activity_info() {
+  $info = new stdClass();
+  $info->api = 2;
+  $info->name = 'fbss_comments';
+  $info->object_type = 'fbss_comment';
+  $info->eid_field = 'cid';
+  $info->objects = array('Comment author' => 'fbss_comment');
+  $info->hooks = array('fbss_comments' => array('fbss_comments_deleted', 'fbss_comments_edited', 'fbss_comments_saved'));
+  $info->realms = array('fbss_comments_author' => 'Comment author');
+  return $info;
+}
+
+/**
+ * Implementation of hook_activity_grants().
+ */
+function fbss_comments_activity_grants($activity) {
+  $realms = array();
+  if ($activity->type == 'fbss_comments') {
+    $realms['fbss_comments_author'] = array($activity->uid);
+  }
+  return $realms;
+}
+
+/**
+ * Implementation of hook_activity_access_grants().
+ */
+function fbss_comments_activity_access_grants($account) {
+  return array(
+    'facebook_status_sender' => array($account->uid),
+  );
+}
+
+/**
+ * Implementation of hook_list_activity_actions().
+ */
+function fbss_comments_list_activity_actions($hook, $op, $max_age) {
+  $actions = array();
+  if (!empty($max_age)) {
+    $min_time = time() - $max_age;
+  }
+  else {
+    $min_time = 0;
+  }
+
+  $result = db_query("SELECT cid as id, created, uid as actor FROM {fbss_comments} WHERE created > %d", $min_time);
+  while ($row = db_fetch_array($result)) {
+    $actions[] = $row;
+  }
+
+  return $actions;
+}
+
+/**
+ * Implementation of hook_load_activity_context().
+ */
+function fbss_comments_load_activity_context($hook, $op, $id) {
+  $comment = fbss_comments_load($id);
+  $activity_context = array();
+
+  if (!empty($comment)) {
+    $activity_context = array(
+      'hook' => 'fbss_comments',
+      'op' => $op,
+      'comment' => $comment,
+    );
+  }
+
+  return $activity_context;
+}

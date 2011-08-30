@@ -1,0 +1,90 @@
+<?php
+
+/**
+ * Implementation of hook_install()
+ */
+function og_features_install() {
+  drupal_install_schema('og_features');
+  
+  // Set the module weight above all others
+  db_query("UPDATE {system} SET weight = 100 WHERE name = 'og_features'");
+}
+
+/**
+ * Implementation of hook_uninstall()
+ */
+function og_features_uninstall() {
+  drupal_uninstall_schema('og_features');
+  
+  // Fetch all node-type variables
+  $sql = "SELECT name FROM {variable} WHERE name LIKE = 'og_features_%'";
+  $result = db_query($sql);
+  while ($var = db_fetch_object($result)) {
+    variable_del($var->name);
+  }
+}
+
+/**
+ * Implementation of hook_schema()
+ */
+function og_features_schema() {
+  $schema['og_features'] = array(
+    'fields' => array(
+      'nid' => array(
+        'type' => 'int',
+        'size' => 'normal',
+        'not null' => TRUE,
+      ),
+      'settings' => array(
+        'type' => 'blob', 
+        'size' => 'big', 
+        'not null' => TRUE, 
+        'serialize' => TRUE, 
+        'object default' => array()
+      ),
+    ),
+    'primary key' => array('nid'),
+  );
+  
+  return $schema;
+}
+
+/**
+ * Update the schema to no longer track just disabled features
+ */
+function og_features_update_6000() {
+  $ret = array();
+  
+  switch ($GLOBALS['db_type']) {
+    case 'mysql':
+    case 'mysqli':
+      $ret[] = update_sql("ALTER TABLE {og_features} CHANGE disabled settings LONGBLOB");
+      break;
+    case 'pgsql':
+      $ret[] = update_sql("ALTER TABLE {og_features} RENAME disabled TO settings");
+      break;
+  }
+  
+  // Update the records to include all features, not just disabled, 
+  // with their statuses for the group
+  $registry = og_features_get_registry();
+  $results = db_query("SELECT * FROM {og_features}");
+  while ($result = db_fetch_object($results)) {
+    // Unserialize
+    $result->settings = unserialize($result->settings);
+    // Mark disabled features as disabled
+    foreach ($result->settings as $key => $value) {
+      $result->settings[$key] = OG_FEATURES_FEATURE_DISABLED;
+    }
+    // Mark enabled features as enabled
+    foreach ($registry as $key => $feature) {
+      if (!isset($result->settings[$key])) {
+        $result->settings[$key] = OG_FEATURES_FEATURE_ENABLED;
+      }
+    }
+    // Save the new settings format
+    drupal_write_record('og_features', $result, 'nid');
+  }
+  
+  return $ret;
+}

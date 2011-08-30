@@ -1,0 +1,136 @@
+<?php
+
+// The version of Drupal Commons
+define('DRUPAL_COMMONS_VERSION', '2.0');
+
+/**
+ * Implementation of hook_requirements()
+ */
+function commons_release_requirements($phase) {
+  if ($phase == 'runtime') {
+    return array(
+      array(
+        'title' => t('Drupal Commons'),
+        'value' => DRUPAL_COMMONS_VERSION,
+        'severity' => REQUIREMENT_INFO,
+      )
+    );
+  }
+}
+
+/**
+ * Implementation of hook_update_status_alter()
+ */
+function commons_release_update_status_alter(&$projects) {
+  // Remove the modules that come with Drupal Commons
+  foreach (_commons_release_included_modules() as $module) {
+    unset($projects[$module]);
+  }
+  
+  // Alter the information for this module
+  $projects['commons_release']['title'] = t('Drupal Commons');
+}
+
+/**
+ * Implementation of hook_update_projects_alter()
+ */
+function commons_release_update_projects_alter(&$projects) {
+  $includes = array();
+  
+  // Remove the modules that come with Drupal Commons
+  foreach (_commons_release_included_modules() as $module) {
+    if (isset($projects[$module])) {
+      // Compile all included modules that we hide
+      if (is_array($projects[$module]['includes'])) {
+        foreach ($projects[$module]['includes'] as $include) {
+          $includes[] = $include;
+        }
+      }
+      unset($projects[$module]);
+    }
+  }
+  
+  // Alter the information for this module
+  $projects['commons_release']['includes'] = $includes;
+}
+
+/**
+ * The modules that come with Drupal Commons
+ */
+function _commons_release_included_modules() {
+  return array(    
+    'acquia_connector',
+    'acquia_search',
+    'activity_log',
+    'admin',
+    'ajax_load',
+    'apachesolr',
+    'boxes',
+    'calendar',
+    'chart',
+    'cck',
+    'context',
+    'context_og',
+    'ctools',
+    'date',
+    'devel',
+    'diff',
+    'digests',
+    'editablefields',
+    'facebook_status',
+    'fbsmp',
+    'features',
+    'filefield',
+    'flag',
+    'freelinking',
+    'getid3',
+    'homebox',
+    'image',
+    'imageapi',
+    'imagecache',
+    'imagecache_actions',
+    'imagecache_profiles',
+    'imagefield',
+    'insert',
+    'invite',
+    'jquery_ui',
+    'link',
+    'messaging',
+    'mimemail',
+    'mollom',
+    'notifications',
+    'og',
+    'og_aggregator',
+    'og_features',
+    'og_invite_link',
+    'og_statistics',
+    'og_subgroups',
+    'password_policy',
+    'pathauto',
+    'quant',
+    'rules',
+    'shoutbox',
+    'skinr',
+    'strongarm',
+    'tagadelic',
+    'tagadelic_views',
+    'tagging',
+    'token',
+    'transliteration',
+    'user_badges',
+    'user_relationships',
+    'user_terms',
+    'userpoints',
+    'userpoints_contrib',
+    'userpoints_nc',
+    'userpoints_user_picture',
+    'vertical_tabs',
+    'views',
+    'views_bulk_operations',
+    'views_slideshow',
+    'wikitools',
+    'wysiwyg',
+    'wysiwyg_filter',
+    'fusion',
+  );
+}

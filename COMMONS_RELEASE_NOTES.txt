@@ -1,0 +1,602 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Track Commons development on GitHub!
+ - https://github.com/acquia/commons/
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Commons 2.0, 2011-08-30
+------------------------------------
+For the formatted, online version of the release notes see:
+ * http://network.acquia.com/documentation/commons/upgrade
+------------------------------------
+GENERAL INFORMATION:
+This release provides a powerful new way for site users to interact: 
+ It changes an authenticated user's default page to be a page showing an 
+ stream of activities & status updates from people users follow. A 
+ similar activity stream is shown on group home pages. It follows the 
+ usability pattern in use by other leading consumer social sites, but 
+ adapts it to business-type use, and as well as adapting it to the 
+ groups-style information architecture used in Commons.
+
+This upgrade adds or changes some significant functionality, so we 
+strongly recommend that you test the upgrade on a staging site before 
+performing the upgrade on a live site.
+
+The official name of this distribution is changing from Drupal Commons 
+to (just) Commons. This change is not fully implemented throughout the 
+distribution; it may take several releases to gradually change all 
+aspects and avoid breakage.
+------------------------------------
+NOTES:
+- This release changes the default behavior of Notifications. Previously users
+  were automatically subscribed to content they created or commented on,
+  and they then received an email every time someone else commented on that
+  content. This release disables that behavior by default, although existing
+  users' preferences will not be changed and new users can still choose to
+  enable that behavior. Instead, by default users will receive a daily email
+  of all activity on the site that is relevant to them just like they see in
+  the new activity streams on the site. Users can choose to receive this email
+  weekly instead of daily, or disable it altogether. Administrators can
+  customize the email format at admin/settings/digests.
+
+- The Dashboard feature will be disabled during the upgrade to 2.0. You can
+  re-enable it if you want to, but keep in mind that it will probably be
+  deprecated and eventually removed in upcoming Commons releases.
+
+- This release re-organizes some of the blocks on user profile pages and group
+  home pages. If you have overridden the Contexts that provide the layout on
+  these pages, we strongly recommend that you revert your changes in the
+  Commons Core feature so that you can use the latest updates and make any
+  further changes afterwards as necessary.
+
+ - This release switches from the Shoutbox module to the Facebook-style Statuses
+  module and from the Heartbeat module to the Activity Log module. (When you
+  upgrade from a previous version, the Commons Shoutbox feature will be
+  disabled and the Commons Activity Stream feature will be enabled in its
+  place). Much functionality is gained in this transition, but some features
+  have changed or are no longer supported:
+  - Shoutbox natively supports only showing shouts if an administrator has
+    manually approved them. This is strongly discouraged. If you still want to
+    do this with Facebook-style Statuses, you must create a new "Approve" Flag
+    and set statuses to only appear if they have been approved. This requires
+    the following steps:
+    - Go to admin/build/flags/add. Choose a name for your flag, and select
+      "Facebook-style Statuses" from the list. Click the "Submit" button and
+      then fill out the required details on the following page. Be sure to make
+      your flag "global."
+    - Go to admin/rules/trigger. You will need to disable each of the following
+      rules, and create new equivalent Rules to log activity when a status has
+      been flagged as Approved instead of when it is created:
+      - "Log activity when a user saves a personal status update"
+      - "Log activity when a user sends a status message"
+      - "Log activity when a user saves a personal status update with an
+        attachment"
+      - "Log activity when a user sends a status message with an attachment"
+    - Add the Facebook-style Statuses: All Statuses page to an administrative
+      menu so that moderators can find it easily (statuses/all).
+    - Follow the instructions at http://drupal.org/node/1135266#flag to add
+      your "Approve" flag to the All Statuses view.
+  - Any custom Rules or Contexts that you created or modified for Shoutbox or
+    Heartbeat and that you want to preserve must be recreated for
+    Facebook-style Statuses and Activity Log. However, the Commons Activity
+    Streams feature provides default Rules that should work well for most
+    sites.
+  - Facebook-style Statuses has support for general shouts (i.e. shouts posted
+    to the site rather than a user or group) but there is not an upgrade path
+    for these shouts because they are not exposed anywhere in the Commons
+    interface. The same situation applies to shouts that use Domain Access. If
+    you need to port this data and you write an upgrade path for it, please
+    contribute it back at http://drupal.org/node/1228504
+  - If you used the Heartbeat Shouts module (which is different than the
+    Shoutbox module) then follow the instructions at | in order to upgrade to
+    Facebook-style Statuses.
+  - If you used the Heartbeat Comments module, upgrading to Activity Log is not
+    yet supported. (You can upgrade without problems, but comments on activity
+    will be lost.) This is not the same as the core Comments module, which is
+    fully supported.
+------------------------------------
+UPGRADING TO 2.0
+** This upgrade adds or changes some significant functionality, so we
+** strongly recommend that you test the upgrade on a staging site before
+** performing the upgrade on a live site. Be sure to read the NOTES 
+** above before proceeding
+1. Back up your code (everything in your Drupal root directory) and your
+   database
+2. Turn on maintenance mode (admin/settings/site-maintenance)
+3. If you have custom Rules or Contexts for the Shoutbox or Heartbeat modules,
+   make a note of them (you may want to export them as well). Shoutbox and
+   Heartbeat will be disabled during the upgrade and replaced with the new
+   Facebook-style Statuses and Activity Log modules. You can re-enable them
+   afterwards if you want, but that is strongly discouraged.
+4. Replace your code (everything in your Drupal root directory except the sites
+   directory) with the contents of this archive
+5. Run the update script at /update.php
+   - Ignore all errors related to the heartbeat module that pertain to 
+     required files being unable to load. This is because that module has
+     been removed and those files no longer exist.
+   - It is likely that update.php will report the following message:
+       "Unable to regenerate activity messages because no Rules events were found.
+        Try regnerating activity messages again."
+     Click the link inside that message. This will take you to the Activity Log
+    administration page, on the Regenerate Activity tab.
+6. After following that link, click the "Regenerate" button and allow the
+   operation to finish. You do not need to set any of the options provided on that
+   page; simply click Regenerate.
+7. On that same page (Activity Log administration), click on the "Settings" tab,
+    then press the "Clear all message caches" button.
+8. Change the default user relationship from (two-way) "Friend" to (one-way) Follow.
+    (This is because the new activity stream feature in 2.0 allows you to see your
+    friends' activity as a one-way activity, a'la Twitter). To do this, go to
+    /admin/user/relationships and click "edit" next to the "Friend" relationship.
+    On the "Edit type" page that will appear, change the "Name" and "Plural name"
+    fields to "follower" and "users you follow," respectively. Then un-check the
+    "Requires Approval" box, and check the "This is a one-way relationship" box.
+    A new box will appear labeled "This one-way relationship can be
+    reciprocated," and you should check that as well. Then click the "Submit"
+    button at the bottom of the page.
+9. View the status report (admin/reports/status) to see if there are any
+   errors that must be addressed
+10. If you had custom Rules or Contexts from step 3, you should re-create them
+   now for the Facebook-style Statuses and Activity Log modules. If you're
+   unsure what this step is referring to, then you do not have to do anything.
+11. Given the new interface additions in this release, you may need to add new
+    CSS styling to the theme for your site if you have built a custom theme for
+    your common-based site.
+11. The Dashboard feature will be disabled during the upgrade. If you still want
+    to use it, you can re-enable it. However, keep in mind that it will probably
+    be deprecated in upcoming releases of Commons.
+12. This release re-organizes some of the blocks on user profile pages and group
+    home pages. If you have overridden the Contexts that provide the layout on
+    these pages, we strongly recommend that you revert your changes in the
+    Commons Core feature so that you can use the latest updates and make any
+    further changes afterwards as necessary.
+13. If no issues have arisen, then you may turn off maintenance mode.
+------------------------------------
+CHANGELOG:
+- Added: OG Subgroups
+- Added: Commons Activity Streams
+  - Facebook-style Statuses (status updates)
+  - Activity Log (activity streams)
+  - Digests (daily or weekly emails of site activity)
+- Disabled: Commons Dashboard
+- Disabled: Commons Shoutbox
+- Removed: Heartbeat
+- Rebuilt: User profile pages (some blocks were rearranged)
+- Rebuilt: Group home pages (some blocks were rearranged)
+- Updated: Diff
+- Updated: Quant  
+- Updated: OG features
+- Fixed: Page manager node page view override conflict [#1181850]
+- Fixed: Recent comment blocks show node author rather than comment author
+- Fixed: Typo in profile location field definition
+- Changed: "My friends" menu link title to "My relationships"
+- Fixed: "Friends" block now titled as "Following"
+- Changed: Renamed "Drupal Commons" to just "Commons"
+- Added: "Featured groups" block to appear on all subgroup listings
+- Fixed: Remove deprecated daily digest functionality [#1249984]
+- Fixed: Use comment authors thumbnail on recent comment views
+- Fixed: Use $form_state['redirect'] instead of drupal_goto() on content 
+  add form
+- Replaced: Individual content-type blocks on group home page with a
+  single "Recent content" block for group content
+- Fixed: Various untranslatable strings
+- Added: Notices page on the Community menu. Also contains block for recent
+  notice comments.
+- Added: Contextual options on the site search form for entire site, people
+  and current group
+- Patched: Rules to allow for hook_rules_defaults_alter() [#978620]
+- Fixed: Force-settings the "Tags" vocabulary ID [#1071198]
+- Added: Subgroups-optimized view for listing groups (/groups)
+
+
+Commons 1.7, 2011-06-17
+------------------------------------
+NOTES:
+- This release was built in response to a security issue that arose in
+  the CKEditor library (See: http://drupal.org/node/1189632)
+------------------------------------
+UPGRADING TO 1.7
+1. Backup your code and database
+2. Turn on maintenance mode (admin/settings/site-maintenance)
+3. Replace your codebase (excluding the sites directory) with the contents 
+  of this archive.
+4. Update your site via /update.php
+5. View the status report (admin/reports/status) to see if there are any
+  errors to tend to
+6. If no issues have arisen, then you may turn off maintenance mode.
+------------------------------------
+CHANGELOG:
+- Fixed: Forced-login not registering destination 
+- Updated: CKEditor (Security issue)
+- Updated: Wysiwyg
+- Patched: OG to add an index to the og_uid table (by msonnabaum)
+- Fixed: Various theme issues
+
+
+Commons 1.6, 2011-05-25
+------------------------------------
+NOTES:
+- This is both a feature release, as well as updating Drupal core with
+  the latest security update.
+- The key features of this release are 2 new themes, page layouts updated for
+  improved usability, more capabilities being moved into individual (Drupal)
+  Features, the ability to enable (/disable) Features on a per-group basis,
+  a change from using Context+Panels to using Context (only), along with
+  other minor changes.
+- 2 new themes have been added. If you would like to use them, navigate to
+  the theme administration page to enable them. Make sure that Fusion remains
+  enabled, as well as Commons Roots, a new Commons base theme.
+- The panels module and all previously included panels have been removed
+  from the distribution. In previous versions, the home page, user profile,
+  and group home page were rendered by Panels. If you'd like to continue 
+  using panels, you must download the module separately and place it in your
+  sites/all/modules directory. Since the panel exports that came with Commons 
+  are now gone, in order to continue using them, you must save a copy of 
+  them from within the panels UI prior to upgrading to 1.6, so they remain
+  in your database.
+- Context is now being used to render all of the previously mentioned pages,
+  as well as all other pages.
+- The Admin Menu module has been replaced by the Admin module. This provides
+  several benefits: it eliminates the nuiscance of menus dropping down and
+  interfering with usability; and it contains an editor for the Context module,
+  which is required in order to control the vertical ordering of blocks on a
+  page when being controlled by Context. Click the wrench icon in the top-right
+  corner of any page to view both the Context editor as well as the normal
+  "Admin" functions previously found in the Admin Menu.  To edit Contexts,
+  click on "Context editor" in that sidebar; from there, you can edit the
+  blocks and their layout for every page.
+- OG Features has been added to the distribution. This allows admins and 
+  group managers to turn off groups of features within each individual
+  group. Group Admins will now see a "Features" tab beside the Edit tab on
+  the group home page where these can be controlled.
+- All of the Features within the distribution have been rebuilt, leading
+  to most of the exports (views, contexts, etc) being renamed and redesigned.
+  If you have altered and saved any of the previous exports, they will 
+  persist within your database. It is important that you carefully review
+  any of these depreciated components and disable or remove them to they 
+  do not interfere with the new ones.
+  (See: http://commons.acquia.com/wiki/feature-components-removed-commons-16) 
+- There are also two new Features available:
+ - Commons Shoutbox: Contains the Shoutbox components from Commons Core,
+   making it possible to now completely disable Shoutbox from Commons,
+   if desired.
+ - Commons Invite: Provides functionality to allow site users to invite other
+   people to your site.
+------------------------------------
+UPGRADING TO 1.6:
+NOTE: THIS IS A SIGNIFICANT UPGRADE.  You should NOT install it directly on
+a live site without first testing it on a staging site.
+1. Carefully review the NOTES above
+2. Backup your code and database
+3. Turn on maintenance mode (admin/settings/site-maintenance)
+4. Replace your codebase (excluding the sites directory) with the contents of this archive.
+ - It is important that you do not *merge* the new codebase, as a number of modules were
+   remove or relocated!
+5. Update your site via /update.php
+ - Ignore any errors about missing Panels files
+6. Make sure the Page manager module is disabled. Or, if you wish to continue
+  using it, delete any pages using the path "/home", the Node template, and
+  the User profile template, which may be leftover from a previous version 
+  of Commons.
+7. Navigate to the admin theme page (admin/build/themes)
+ - Ensure that Fusion Core and Commons Roots (both base themes) are enabled
+ - Ensure that at least one Commons-supported theme is enabled, and choose
+   your desired default theme (if not already set)
+ - The original Acquia Commons theme is now named Commons Origins
+8. View the status report (admin/reports/status) to see if there are any
+  errors to tend to
+9. Take the time to delete or disable any of the components listed at:
+   http://commons.acquia.com/wiki/feature-components-removed-commons-16
+  - This is extremely important!
+  - Once done, navigate to all areas of your site, making sure there is 
+    no remaining strange or duplicate behavior of any kind.
+10. Navigate to the Features admin page (admin/build/features)
+ - Determine which features are overridden
+ - Click on the overridden link for each feature to review what the 
+   the overrides are for each component inside the given feature
+ - If possible, revert as many components as possible, remembering that
+   reverting a component will remove any customizations you've made to
+   the given item
+11. A bug revealed in Heartbeat led to the need for an additional permission
+  to be created (access user activity). Users will need this permission
+  in order to see the activity streams on group home pages. Commons comes
+  with this permission given to anonymous and authenticated users by default,
+  but you may have to either revert the Commons Core feature, or assigned
+  the permissions manually, if upgrading.
+12. Because of the introduction of Commons Profile (Feature) to handle
+  the profile aspects of Commons, if you have deleted any profile fields
+  that came with Commons initially, they will be restored after the upgrade.
+  You must go in (admin/user/profile) and remove them once again.
+13. If no issues have arisen, it is recommended that you make another backup
+  of your codebase and database, then you may turn off maintenance mode.
+------------------------------------
+CHANGELOG:
+- Added: New themes and replaced original theme
+  - Commons roots (base theme)
+  - Commons origins (original theme)
+  - Commons connect
+  - Commons environs
+- Added: Theme selection form on site installation
+- Removed: commons_core_node_add_link() in favor of content-selection block
+- Added: Views slideshow
+- Rebuilt/redesigned groups directory page
+- Fixed: Comment permission issues
+- Added: Commons profile (feature); removed all profile-related components
+  from Commons core and the installation profile
+- Added: Commons invite (feature); send site invitations via the profile
+- Added: OG features (per-group features)
+- Rebuilt group content features for the new UX
+- Updated: Shoutbox
+- Updated: Wikitools
+- Added: OG invite link
+- Removed: Panels (and all panel page exports)
+- Added: Commons shoutbox (feature); extract shoutbox components from core
+- Removed: Admin menu
+- Added: Admin
+- Fixed: Group member count statistics; include managers, exclude unapproved
+- Updated: Wysiwyg
+- Updated: Filefield
+- Updated: Imagefield
+- Updated: Insert
+- Updated: Quant
+- Updated: Heartbeat
+- Updated: Imagecache
+- Updated: ImageAPI
+- Updated: Token
+- Updated: Apache Solr
+- Fixed: Sort users on Members page by Last Name ascending
+- Removed: Dependence on PHP module
+- Fixed: User meta block translation issues (Views templates used to 
+  properly wrap strings in t())
+- Added: Body field to poll nodes
+- Removed: Devel
+- Updated: Drupal core (6.22)
+
+
+Commons 1.5, 2011-03-17
+------------------------------------
+NOTES:
+- This release was built in response to a security issue that arose in
+  the Tagadelic module (See: http://drupal.org/node/1095030)
+------------------------------------
+UPGRADING TO 1.5
+- There are no upgrade notes for version 1.5
+- If you are upgrading from a version prior to 1.4, be sure to read
+  the upgrade steps outlined for the versions leading up to 1.5.
+------------------------------------
+CHANGELOG:
+- Updated: Shoutbox
+- Updated: Tagadelic (Security release)
+
+
+Commons 1.4, 2011-02-18
+------------------------------------
+NOTES:
+- This release was built in response to a security issue that arose in
+  the Messaging module (See: http://drupal.org/node/1064024)
+------------------------------------
+UPGRADING TO 1.4
+- If you are upgrading from 1.3, repeat upgrade steps 1-4 in the 1.3 
+  section below
+- If you are upgrading from a version prior to 1.3, follow all the steps
+  in the 1.3 section below
+------------------------------------
+CHANGELOG:
+- Fixed: Infinite loop during installation via Aegir (#1060250, by skwashd)
+- Fixed: Base path issue in installation profile (#1045778, by skwashd)
+- Fixed: Moved Broadcast menu tab to far right on group homepages
+- Added: Ability to specify paths which do not force a login (if set)
+- Removed: Admin option to set the community manager role (stored in features now)
+- Fixed: Moved settings for user statistics block to the block configure form 
+- Updated: Messaging (Security release)
+- Updated: Minor theme updates, including updated node-type icons
+- Updated: Imagecache Actions
+- Fixed: Missing translation issue for user statistics block
+- Updated: Ajax load
+- Fixed: Blank email sending on adding user to private group (#1065768, by sergiu.popa)
+
+
+Commons 1.3, 2011-02-04
+------------------------------------
+NOTES:
+ - Excluded module updates:
+  * User terms
+    - Commons 1.0 contained a large patch which introduced free-tagging to
+      user terms. Until we re-evaluate exactly what functionality we want
+      for user tagging, we will continue to use the version that we started
+      with.
+ - Commons Dashboard [new feature] requires PHP 5.2.x (or higher)
+  * This is because of the Homebox module, which uses functions introduced
+    in PHP 5.2.
+  * If you do not have PHP 5.2.x (or higher) installed, this feature will
+    not be enabled during a site upgrade, and will not be available during
+    site installation. If you upgrade to an adequate version of PHP at a
+    later time, you can enable this feature via the Features admin interface.
+------------------------------------
+UPGRADING TO 1.3:
+1. Backup your code and database
+2. Turn on maintenance mode (admin/settings/site-maintenance)
+3. Replace your codebase (excluding the sites directory) with the contents of this archive.
+ - It is important that you do not *merge* the new codebase, as a number of modules were
+   remove or relocated!
+4. Update your site via /update.php
+5. Ignore any errors about missing included/required files 
+ - Those are caused by some modules changing location
+ - Ignore SQL errors from Context and/or Rules
+6. View the status of the features (admin/build/features)
+7. If any features are overridden, view the components of the feature that are overridden
+ - It's recommended that you revert all the overridden components, but be aware that
+   this will revert any custom changes you've made to those components
+8. Review the available Contexts (admin/build/context)
+ - Delete or disable context_ui-dashboard-dashboard, as it's no longer used by Commons
+   but may still be saved in your database
+9. Review the available Pages (admin/build/pages)
+ - Delete or disable page-Home, as it's no longer used by Commons but may
+   still be saved in your database
+ - Being that Commons 1.2 now comes with a new home page, you may want to review
+   it and make any changes you deem necessary
+10. Review your input format and filters. WYSIWYG Filter has been set to be used
+  in place of HTML Filter (for the Filtered HTML format)
+11. Review the user permissions and roles
+12. Clear the cache (admin/settings/performance)
+13. Ensure the rest of your site is functioning as expected
+14. Check the status report for any errors. Address them, if needed. 
+------------------------------------
+CHANGELOG:
+- Updated: Context
+- Updated: CCK
+- Updated: Context OG
+- Updated: Heartbeat
+- Updated: Quant
+- Updated: Admin menu
+- Updated: Acquia Commons (Theme)
+- Updated: CKEditor (Library)
+- Updated: Devel
+- Updated: Diff
+- Updated: getId3
+- Updated: Insert
+- Updated: Token
+- Updated: Pathauto
+- Updated: FileField
+- Updated: ImageField
+- Updated: Insert
+- Updated: Calendar
+- Updated: Acquia search
+- Updated: Acquia connector
+- Updated: ImageAPI
+- Updated: Tagging
+- Updated: jQuery UI
+- Updated: Date
+- Updated: Rules
+- Updated: Chart
+- Updated: Skinr
+- Updated: User points picture
+- Updated: User relationships
+- Updated: Messaging
+- Updated: Notifications
+- Updated: Shoutbox
+- Updated: Wysiwyg
+- Updated: Tagedelic views
+- Updated: User relationships
+- Updated: Userpoints (Security release)
+- Updated: Userpoints user picture
+- Moved: User relationship rules (now included in User relationships)
+- Added: Commons SEO (Feature) [Extracted pathauto components from Commons Core]
+- Added: Commons Admin (Feature) [Extracted admin UI and admin menu modules from Commons Core]
+- Added: Commons Home (Feature) [Extracted home page components from Commons Core]
+- Redesigned: Home page panel
+- Added: Commons Dashboard (Feature) [Extracted dashboard components from Commons Core]
+- Added: Commons Wiki (Feature) [Extracted wiki components from Commons Core]
+- Added: Commons Blog (Feature) [Extracted blog components from Commons Core]
+- Added: Commons Document (Feature) [Extracted document components from Commons Core]
+- Added: Commons Discussion (Feature) [Extracted discussion components from Commons Core]
+- Added: Commons Event (Feature) [Extracted event/calendar components from Commons Core]
+- Added: Commons Poll (Feature) [Extracted poll components from Commons Core]
+- Added: Commons Group Aggregator (Feature) [Extracted og_rss components from Commons Core]
+- Added: Commons Reputation (Feature) [Extracted userpoint components from Commons Core]
+- Added: User badges
+- Added: User points contrib
+- Added: Homebox
+- Fixed: Added custom drop-down menus to Features to fix menu deletion bug
+- Fixed: Group node aliases from groups/%title to group/%title
+- Fixed: Use theme_image for displaying Commons images in commons.module and drupal_commons.profile
+- Removed: Better formats (included, but not installed, updating to 1.2 will disable the module)
+- Fixed: Userpoints node delete operation label (http://drupal.org/node/875140)
+- Added: 'My groups' to the 'My stuff' menu
+- Removed: Dependence of PHP input filter inside various views
+- Fixed: Create content links in Views (Added access check) 
+- Added: Form to determine which features are enabled during installation
+- Added: Batch process of post-installation tasks (to avoid PHP timeout)
+- Fixed: Lowered install profile module dependencies (to avoid PHP timeout)
+- Moved: Permissions to respective sub-features
+- Added: Teaser break button to default WYSIWYG settings
+- Added: Context to control Acquia Search/Solr facet blocks
+- Added: WYSIWYG Filter (Set to Filtered HTML in place of the default HTML filter)
+- Fixed: Added filters in group lists to exclude private and non-directory-listed groups
+- Replaced: 'My unread' section with 'My content' section, containing bulk operations to mark 
+  content as un/read
+- Fixed: Malformed links on group calendar week regions
+- Added: RSS feeds for global content views (check permission 'view content rss feeds')
+- Added: RSS feed for group content (check permission 'view group content rss feeds')
+- Fixed: Translation issues
+- Added: Manager tab on group members directory
+- Changed: Group details block to altered Group actions block
+- Removed: Group admins block from group sidebar
+- Added: Commons release (version controller and update checker for the distribution)
+- Fixed: Calendar off by one day bug
+- Added: 'Site admin' user role
+- Moved: All roles and permissions to features
+- Fixed: Commons Core feature always overridden issue (Heartbeat.module)
+- Added: Default taxonomy integration with Acquia Search
+- Added: Default permission to view heartbeat messages for anonymous users
+- Added: 'Join now' image button on the group directory 
+- Fixed: Removed node type restrictions from recent group content exposed filter
+- Fixed: Dynamically remove non-group-post node types from exposed node type filters 
+  in group content views
+- Fixed: Display post information not following theme settings (#1031338)
+- Added: Pathauto pattern for page nodes 
+- Updated: Shoutbox post template override for new version of shoutbox
+- Fixed: Comment theme to allow for full-width without text overlap
+- Added: Access check for user profiles before linking user pictures to profiles 
+  on comments and node submission information
+- Added: Default permission for anonymous viewing of shouts
+- Fixed: Panel WSOD caused by missing panels style version in theme info
+- Fixed: Patched user badges for (#964546)
+- Fixed: Theme template PHP notices
+- Fixed: User badges undefined constant error (#986822)
+- Fixed: PHP errors from user role detection for node add links
+- Added: Support for group notifications in commons_notifications
+- Fixed: Various og_notifications bugs (#835030)
+- Moved: Group options on node form inside vertical tab fieldset
+- Fixed: Patched Context to display theme regions on core block page (#916194)
+- Fixed: (Repatched) OG aggregator to hide block if no items are avaiable (#768958)
+- Fixed: Theme setting handling of node and comment user pictures
+- Fixed: Site footer message themeing
+- Added: Simple links in the group action block to (un)subscribe to group notifications
+- Fixed: Missing form widget labels on grouptype subscription add form
+- Added: Ability to specify forced-login during site installation
+
+
+Commons 1.2, 2011-01-13 [Security release]
+------------------------------------
+NOTES: This release was built for the sole purpose of providing fixes
+to all security issues that have arose from the modules included in this
+distribution. There are no functional changes introduced by this release.
+All other modules not listed below have not been updated and do not pose
+any security issues.
+------------------------------------
+UPGRADING TO 1.2:
+ - Follow standard procedures for updating a Drupal site
+   - Back up code and database
+   - Put site into maintainance mode
+   - Run update.php
+------------------------------------
+CHANGELOG:
+- Updated Drupal (Security update)
+- Updated Panels (Security update)
+- Updated Views (Security update)
+- Updated Image (Security update)
+- Updated Mollom (Security update)
+- Updated cTools
+- Updated Features
+- Updated Strongarm
+- Rebuilt features to work with newer modules
+
+
+Commons 1.1, 2010-08-16 [Security release]
+------------------------------------
+NOTES: This release was built for the sole purpose of providing fixes
+to all security issues that have arose from the modules included in this
+distribution. There are no functional changes introduced by this release.
+All other modules not listed below have not been updated and do not pose
+any security issues.
+------------------------------------
+UPGRADING TO 1.1:
+ - Follow standard procedures for updating a Drupal site
+   - Back up code and database
+   - Put site into maintainance mode
+   - Run update.php
+------------------------------------
+- Updated Drupal (Security update)
+- Updated CCK (Security update)
+- Updated Pathauto (Security update)
+- Updated Devel to (Security update)

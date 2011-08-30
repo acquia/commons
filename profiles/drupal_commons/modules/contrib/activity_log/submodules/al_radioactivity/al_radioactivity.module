@@ -1,0 +1,100 @@
+<?php
+
+/**
+ * @file
+ *   Integrates the Radioactivity module with Activity Log.
+ */
+
+/**
+ * Implementation of hook_form_FORM_ID_alter().
+ */
+function al_radioactivity_form_radioactivity_admin_profile_form_alter(&$form, $form_state) {
+  if (isset($form['energy']['act_log']['no_sources'])) {
+    $form['energy']['act_log']['no_sources']['#value'] = t('You must create a Rule that logs activity before you can assign energy to activities.');
+  }
+}
+
+/**
+ * Implementation of hook_radioactivity_info().
+ *
+ * We have to use "act_log" instead of "activity_log" because the Radioactivity
+ * module restricts the "class" column of the {radioactivity} table to 7
+ * characters. Issue http://drupal.org/node/1209648
+ */
+function al_radioactivity_radioactivity_info() {
+  $rules = rules_get_configured_items();
+  $info = array('sources' => array('act_log' => array()), 'targets' => array('act_log' => array()));
+  $result = db_query("SELECT tid, rule, action_label FROM {activity_log_templates}");
+  while ($template = db_fetch_object($result)) {
+    // The title_placeholder eventually gets run through check_plain().
+    $info['sources']['act_log']['event:'. $template->tid] = array(
+      'title_placeholder' => 'triggered event - '. $rules[$template->rule]['#label'] .' - '. $template->action_label,
+      'description' => 'Energy for an event triggered by the action <em>'. $template->action_label .'</em> in the rule <em>'. $rules[$template->rule]['#label'] .'</em>.',
+    );
+    $info['sources']['act_log']['group:'. $template->tid] = array(
+      'title_placeholder' => 'event added to group - '. $rules[$template->rule]['#label'] .' - '. $template->action_label,
+      'description' => 'Energy for an event triggered by the action <em>'. $template->action_label .'</em> in the rule <em>'. $rules[$template->rule]['#label'] .'</em>. '.
+        'Note that this is <em>instead of (not in addition to)</em> the "triggered event" energy for this action.',
+    );
+  }
+  if (module_exists('fbss_comments')) {
+    $info['sources']['act_log']['fbss_comments'] = array(
+      'title_placeholder' => 'status update - commented',
+      'description' => 'Energy for the activity message about the commented status',
+    );
+  }
+  if (module_exists('flag')) {
+    $types = flag_get_types();
+    foreach ($types as $type) {
+      if (!in_array($type, array('comment', 'fbss_comment'))) {
+        foreach (flag_get_flags($type) as $name => $details) {
+          $info['sources']['act_log']['flag:'. $name] = array(
+            'title_placeholder' => 'flagged - '. $name,
+            'description' => 'Energy for the activity message about the flagged entity',
+          );
+        }
+      }
+    }
+  }
+  return $info;
+}
+
+/**
+ * Implementation of hook_activity_log_event().
+ */
+function al_radioactivity_activity_log_event($event, $messages, $settings) {
+  module_load_include('inc', 'radioactivity');
+  foreach ($messages as $message) {
+    $aids = array_filter(explode(',', $message->aids));
+    if (count($aids) > 1) {
+      radioactivity_add_energy($message->mid, 'act_log', 'group:'. $message->tid);
+    }
+    else {
+      radioactivity_add_energy($message->mid, 'act_log', 'event:'. $message->tid);
+    }
+  }
+}
+
+/**
+ * Implementation of hook_fbss_comments_after_save().
+ */
+function al_radioactivity_fbss_comments_after_save($comment, $edit) {
+  module_load_include('inc', 'radioactivity');
+  $result = db_query("SELECT mid FROM {activity_log_messages} WHERE target_type = 'facebook_status' AND target_id = %d", $comment->sid);
+  while ($message = db_fetch_object($result)) {
+    radioactivity_add_energy($message->mid, 'act_log', 'fbss_comments');
+  }
+}
+
+/**
+ * Implementation of hook_flag().
+ */
+function al_radioactivity_flag($event, $flag, $content_id, $account) {
+  if (!in_array($flag->content_type, array('comment', 'fbss_comment'))) {
+    module_load_include('inc', 'radioactivity');
+    $result = db_query("SELECT mid FROM {activity_log_messages} WHERE target_type = '%s' AND target_id = %d", $flag->content_type, $content_id);
+    while ($message = db_fetch_object($result)) {
+      radioactivity_add_energy($message->mid, 'act_log', 'flag:'. $flag->name);
+    }
+  }
+}

@@ -1,0 +1,409 @@
+<?php
+
+/**
+ * @file
+ *   (Un)installs the Facebook-style Statuses module.
+ */
+
+/**
+ * Implementation of hook_schema().
+ */
+function facebook_status_schema() {
+  $schema = array();
+  $schema['facebook_status'] = array(
+    'description' => 'Stores statuses.',
+    'fields' => array(
+      'sid' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'description' => 'The Status ID.',
+      ),
+      'sender' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'The User ID of the user who created the status message.',
+      ),
+      'recipient' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'The ID of the entity that received the status message.',
+      ),
+      'type' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The stream context type.',
+      ),
+      'created' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'The time the status message was saved.',
+      ),
+      'message' => array(
+        'type' => 'text',
+        'not null' => TRUE,
+        'description' => 'The status message.',
+      ),
+    ),
+    'indexes' => array(
+      'sender' => array('sender'),
+      'recipient' => array('recipient'),
+      'type' => array('type'),
+      'created' => array('created'),
+    ),
+    'primary key' => array('sid'),
+  );
+  $schema += _facebook_status_contexts_schema();
+  return $schema;
+}
+
+/**
+ * Specifies the schema for the contexts table.
+ */
+function _facebook_status_contexts_schema() {
+  $schema = array();
+  $schema['facebook_status_contexts'] = array(
+    'description' => 'Stores stream context configurations.',
+    'fields' => array(
+      'type' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The stream context type.',
+      ),
+      'weight' => array(
+        'type' => 'int',
+        'unsigned' => FALSE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'The weight of the component.',
+      ),
+      'view' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The view used as the stream.',
+      ),
+      'selectors' => array(
+        'type' => 'text',
+        'not null' => TRUE,
+        'description' => 'Additional DOM selectors representing sections of the page that should be automatically refreshed via AJAX when a status is saved.',
+      ),
+      'visibility' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => -1,
+        'size' => 'tiny',
+        'description' => 'Flag to indicate how to apply contexts on pages. '.
+          '(-1 = Use module default settings, 0 = Show on all pages except listed pages, 1 = Show only on listed pages, 2 = Use custom PHP code to determine visibility, 3 = use a Context)',
+      ),
+      'pages' => array(
+        'type' => 'text',
+        'not null' => TRUE,
+        'description' => 'Contains either a list of paths on which to include/exclude the context or PHP code, depending on "visibility" setting.',
+      ),
+      'context' => array(
+        'description' => 'The primary identifier for a context.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'indexes' => array(
+      'weight' => array('weight'),
+    ),
+    'primary key' => array('type'),
+  );
+  return $schema;
+}
+
+/**
+ * Implementation of hook_install().
+ */
+function facebook_status_install() {
+  drupal_install_schema('facebook_status');
+}
+
+/**
+ * Implementation of hook_update_N().
+ */
+function facebook_status_update_6300() {
+  // Remove old variables.
+  variable_del('facebook_status_profile_view');
+  variable_del('facebook_status_special_user');
+  variable_del('facebook_status_hide_status');
+  variable_del('facebook_status_flag_update');
+  variable_del('facebook_status_flood_user');
+  variable_del('facebook_status_hide_blank');
+  variable_del('facebook_status_size_long');
+  variable_del('facebook_status_default');
+  variable_del('facebook_status_exclude');
+  variable_del('facebook_status_concat');
+  variable_del('facebook_status_legacy');
+  variable_del('facebook_status_size');
+  variable_del('facebook_status_type');
+
+  $ret = array();
+
+  // Drop current indexes.
+  db_drop_index($ret, 'facebook_status', 'uid');
+  db_drop_index($ret, 'facebook_status', 'pid');
+  db_drop_index($ret, 'facebook_status', 'status_time');
+
+  // Rename fields and add 'type'.
+  db_change_field($ret, 'facebook_status', 'uid', 'recipient', array(
+    'type' => 'int',
+    'unsigned' => TRUE,
+    'not null' => TRUE,
+    'default' => 0,
+    'description' => 'The ID of the entity that received the status message.',
+  ));
+  db_change_field($ret, 'facebook_status', 'pid', 'sender', array(
+    'type' => 'int',
+    'unsigned' => TRUE,
+    'not null' => TRUE,
+    'default' => 0,
+    'description' => 'The User ID of the user who created the status message.',
+  ));
+  db_change_field($ret, 'facebook_status', 'status_time', 'created', array(
+    'type' => 'int',
+    'unsigned' => TRUE,
+    'not null' => TRUE,
+    'default' => 0,
+    'description' => 'The time the status message was saved.',
+  ));
+  db_change_field($ret, 'facebook_status', 'status', 'message', array(
+    'type' => 'text',
+    'not null' => TRUE,
+    'description' => 'The status message.',
+  ));
+  db_add_field($ret, 'facebook_status', 'type', array(
+    'type' => 'varchar',
+    'length' => 255,
+    'not null' => TRUE,
+    'default' => '',
+    'description' => 'The stream context type.',
+  ));
+
+  // Add indexes again.
+  db_add_index($ret, 'facebook_status', 'recipient', array('recipient'));
+  db_add_index($ret, 'facebook_status', 'sender', array('sender'));
+  db_add_index($ret, 'facebook_status', 'created', array('created'));
+  db_add_index($ret, 'facebook_status', 'type', array('type'));
+
+  // Update the type field in existing records.
+  $ret[] = update_sql("UPDATE {facebook_status} SET type = 'user'");
+
+  // Create the contexts table.
+  if (!db_table_exists('facebook_status_contexts')) {
+    $schema = _facebook_status_contexts_schema();
+    db_create_table($ret, 'facebook_status_contexts', $schema['facebook_status_contexts']);
+  }
+
+  // Update tokens used in Pathauto.
+  $old = array(
+    '[owner]',
+    '[owner-name]',
+    '[owner-name-raw]',
+    '[owner-id]',
+    '[poster]',
+    '[poster-name]',
+    '[poster-name-raw]',
+    '[poster-id]',
+    '[status-unformatted]',
+    '[status-formatted]',
+    '[status-raw]',
+    '[status-themed]',
+    '[status-id]',
+    '[status-edit]',
+    '[status-delete]',
+    '[status-time]',
+  );
+  $new = array(
+    '[sender-themed]',
+    '[sender-name]',
+    '[sender-name-raw]',
+    '[sender-uid]',
+    '[recipient-link]',
+    '[recipient-name]',
+    '[recipient-name-raw]',
+    '[recipient-id]',
+    '[message-unformatted]',
+    '[message-formatted]',
+    '[message-raw]',
+    '[status-themed]',
+    '[status-id]',
+    '[status-edit]',
+    '[status-delete]',
+    '[created]',
+  );
+  $result = db_query("SELECT name FROM {variable} WHERE name LIKE 'pathauto\\_facebook\\_status\\_%%'");
+  while ($variable = db_fetch_object($result)) { 
+    $name = $variable->name;
+    if ($value = variable_get($name, NULL)) {
+      $value = str_replace($old, $new, $value);
+      variable_del($name);
+      $name = str_replace('facebook_status', 'fbss_pathauto', $name);
+      variable_set($name, $value);
+    }
+  }
+
+  // If the legacy fbssc module exists, upgrade it to the fbss_comments module.
+  if (module_exists('fbssc') && !module_exists('fbss_comments')) {
+    module_disable(array('fbssc'));
+    drupal_install_modules(array('fbss_comments'));
+  }
+
+  $modules_to_install = array();
+  // If the Activity integration was in use in the 2.x branch, enable the fbss_activity submodule.
+  if (module_exists('activity') && !module_exists('fbss_activity')) {
+    $count = db_result(db_query("SELECT COUNT(*) FROM {activity} WHERE type = 'facebook_status'"));
+    if ($count > 0) {
+      $modules_to_install[] = 'fbss_activity';
+    }
+  }
+
+  // If the Flag integration was in use in the 2.x branch, enable the fbss_flag submodule.
+  if (module_exists('flag') && !module_exists('fbss_flag')) {
+    $count = db_result(db_query("SELECT COUNT(*) FROM {flags} WHERE content_type = 'facebook_status'"));
+    if ($count > 0) {
+      $modules_to_install[] = 'fbss_flag';
+    }
+  }
+
+  // If the Mollom integration was in use in the 2.x branch, enable the fbss_mollom submodule.
+  if (module_exists('mollom') && db_table_exists('mollom_form') && !module_exists('fbss_mollom')) {
+    $count = db_result(db_query("SELECT COUNT(*) FROM {mollom_form} WHERE module = 'facebook_status'"));
+    if ($count > 0) {
+      $modules_to_install[] = 'fbss_mollom';
+    }
+  }
+
+  // If the Pathauto integration was in use in the 2.x branch, enable the fbss_pathauto submodule.
+  if (module_exists('pathauto') && !module_exists('fbss_pathauto')) {
+    // We check variables named with "fbss_pathauto" instead of "facebook_status" because we already converted them above.
+    $count = db_result(db_query("SELECT COUNT(*) FROM {variable} WHERE name LIKE 'pathauto\\_fbss\\_pathauto\\_%%'"));
+    if ($count > 0) {
+      $modules_to_install[] = 'fbss_pathauto';
+    }
+  }
+
+  // If the Rules integration was in use in the 2.x branch, enable the fbss_rules submodule.
+  if (module_exists('rules') && !module_exists('fbss_rules')) {
+    $count = (int) db_result(db_query("SELECT COUNT(*) FROM {rules_rules} WHERE name LIKE 'facebook\\_status%%'"));
+    $count += (int) db_result(db_query("SELECT COUNT(*) FROM {rules_sets} WHERE name LIKE 'facebook\\_status%%'"));
+    if ($count > 0) {
+      $modules_to_install[] = 'fbss_rules';
+    }
+  }
+
+  // There is no good way to detect whether the Twitter integration was in use in the 2.x branch.
+  // However, since it would have been available by default, let's just enable it.
+  if (module_exists('twitter') && module_exists('oauth') && !module_exists('fbss_twitter')) {
+    $modules_to_install[] = 'fbss_twitter';
+  }
+
+  // If the Userpoints integration was in use in the 2.x branch, enable the fbss_userpoints submodule.
+  if (module_exists('userpoints') && !module_exists('fbss_userpoints')) {
+    $count = db_result(db_query("SELECT COUNT(*) FROM {userpoints_txn} WHERE operation LIKE 'facebook\\_status%%'"));
+    if ($count > 0) {
+      $modules_to_install[] = 'fbss_userpoints';
+    }
+  }
+
+  drupal_install_modules($modules_to_install);
+  return $ret;
+}
+
+/**
+ * Implementation of hook_update_N().
+ */
+function facebook_status_update_6301() {
+  $text = variable_get('facebook_status_repost', 'Re: @name @message ');
+  $text = str_replace('@status', '@message', $text);
+  variable_set('facebook_status_repost', $text);
+  return array();
+}
+
+/**
+ * Implementation of hook_update_N().
+ */
+function facebook_status_update_6302() {
+  $ret = array();
+  if (!db_column_exists('facebook_status_contexts', 'visibility')) {
+    db_add_field($ret, 'facebook_status_contexts', 'visibility', array(
+      'type' => 'int',
+      'not null' => TRUE,
+      'default' => -1,
+      'size' => 'tiny',
+      'description' => 'Flag to indicate how to apply contexts on pages. (-1 = Use module default settings, 0 = Show on all pages except listed pages, 1 = Show only on listed pages, 2 = Use custom PHP code to determine visibility)',
+    ));
+  }
+  if (!db_column_exists('facebook_status_contexts', 'pages')) {
+    db_add_field($ret, 'facebook_status_contexts', 'pages', array(
+      'type' => 'text',
+      'not null' => TRUE,
+      'description' => 'Contains either a list of paths on which to include/exclude the context or PHP code, depending on "visibility" setting.',
+    ));
+  }
+  return $ret;
+}
+
+/**
+ * Implementation of hook_update_N().
+ */
+function facebook_status_update_6303() {
+  $ret = array();
+  if (!db_column_exists('facebook_status_contexts', 'context')) {
+    db_add_field($ret, 'facebook_status_contexts', 'context', array(
+      'description' => 'The primary identifier for a context.',
+      'type' => 'varchar',
+      'length' => 255,
+      'not null' => TRUE,
+      'default' => '',
+    ));
+  }
+  return $ret;
+}
+
+/**
+ * Implementation of hook_update_N().
+ */
+function facebook_status_update_6304() {
+  variable_set('facebook_status_default_text_other', variable_get('facebook_status_default_text', ''));
+  return array();
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function facebook_status_uninstall() {
+  drupal_uninstall_schema('facebook_status');
+  variable_del('facebook_status_default_text_other');
+  variable_del('facebook_status_imagecache_preset');
+  variable_del('facebook_status_user_other_view');
+  variable_del('facebook_status_default_text');
+  variable_del('facebook_status_hide_length');
+  variable_del('facebook_status_block_view');
+  variable_del('facebook_status_reply_type');
+  variable_del('facebook_status_share_view');
+  variable_del('facebook_status_box_rows');
+  variable_del('facebook_status_profile');
+  variable_del('facebook_status_refresh');
+  variable_del('facebook_status_filter');
+  variable_del('facebook_status_length');
+  variable_del('facebook_status_repost');
+  variable_del('facebook_status_enter');
+  variable_del('facebook_status_nl2br');
+  variable_del('facebook_status_ahah');
+}

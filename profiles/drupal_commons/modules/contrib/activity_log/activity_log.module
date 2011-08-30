@@ -1,0 +1,475 @@
+<?php
+
+/**
+ * @file
+ *   Logs activity using Rules.
+ */
+
+define('ACTIVITY_LOG_DELIMITER', '#!ACTIVITY_LOG_DELIMITER:');
+
+module_load_include('inc', 'activity_log', 'activity_log.cache');
+
+//===================================
+// CORE SYSTEM HOOK IMPLEMENTATIONS.
+//===================================
+
+/**
+ * Implementation of hook_menu().
+ */
+function activity_log_menu() {
+  $items = array();
+  $items['admin/settings/activity_log'] = array(
+    'title' => 'Activity Log',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('activity_log_admin'),
+    'access arguments' => array('administer site configuration'),
+    'description' => 'Allows administrators to adjust settings for Activity Log.',
+    'file' => 'activity_log.admin.inc',
+  );
+  $items['admin/settings/activity_log/config'] = array(
+    'title' => 'Settings',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'access arguments' => array('administer site configuration'),
+    'weight' => -1,
+  );
+  $items['admin/settings/activity_log/regenerate'] = array(
+    'title' => 'Regenerate activity',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('activity_log_admin_regenerate'),
+    'access arguments' => array('administer site configuration'),
+    'description' => 'Allows administrators to regenerate activity for Activity Log.',
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'activity_log.generate.inc',
+  );
+  $items['activity_log/autocomplete/public_name'] = array(
+    'title' => 'Autocomplete Activity Log Public Name',
+    'page callback' => 'activity_log_autocomplete_public_name',
+    'access arguments' => array('view own activity messages'),
+    'file' => 'activity_log.rules.inc',
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+/**
+ * Implementation of hook_perm().
+ */
+function activity_log_perm() {
+  return array(
+    'administer loading arbitrary CSS and JS files for cached messages',
+    'configure preferences for which activity types appear in activity streams',
+    'view all activity messages',
+    'view own activity messages',
+  );
+}
+
+/**
+ * Implementation of hook_cron().
+ */
+function activity_log_cron() {
+  // Delete event logs.
+  $time = time() - (86400 * variable_get('activity_log_maxage', 30));
+  db_query("DELETE FROM {activity_log_events} WHERE created < %d", $time);
+  db_query("DELETE FROM {activity_log_messages} WHERE last_updated < %d", $time);
+}
+
+/**
+ * Implementation of hook_theme().
+ */
+function activity_log_theme($existing, $type, $theme, $path) {
+  return array(
+    'activity_log_item' => array(
+      'arguments' => array(
+        'record' => NULL,
+        'reset' => FALSE,
+      ),
+      'file' => 'activity_log.theme.inc',
+    ),
+    'activity_log_collapse' => array(
+      'arguments' => array(
+        'collection' => array(),
+        'method' => 'activity_log_collapse_inline',
+      ),
+      'file' => 'activity_log.theme.inc',
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_user().
+ */
+function activity_log_user($op, &$edit, &$account, $category = NULL) {
+  if ($op == 'form' && $category == 'account' && user_access('configure preferences for which activity types appear in activity streams', $account)) {
+    module_load_include('inc', 'activity_log', 'activity_log.user_settings');
+    return _activity_log_user_form($account);
+  }
+  elseif ($op == 'update' && $category == 'account') {
+    if (user_access('configure preferences for which activity types appear in activity streams', $account)) {
+      module_load_include('inc', 'activity_log', 'activity_log.user_settings');
+      _activity_log_user_form_submit($edit);
+    }
+    _activity_log_user_update($account->uid);
+  }
+  elseif ($op == 'delete') {
+    _activity_log_user_delete($account->uid);
+  }
+}
+
+//===================
+// USEFUL FUNCTIONS.
+//===================
+
+/**
+ * Loads an activity log record.
+ *
+ * @param $mid
+ *   The ID of the activity message to load.
+ * @return
+ *   A full Activity record.
+ */
+function activity_log_load($mid) {
+  $record = db_fetch_object(db_query("
+    SELECT *
+    FROM {activity_log_messages} m
+    LEFT JOIN {activity_log_templates} t
+      ON m.tid = t.tid
+    WHERE mid = %d
+  ", $mid));
+  activity_log_record_unpack($record);
+  return $record;
+}
+
+/**
+ * Unserialize and add all the relevant information to an activity message.
+ */
+function activity_log_record_unpack(&$record) {
+  $record->eval_input = unserialize($record->eval_input);
+  $record->resources = unserialize($record->resources);
+  $record->template = unserialize($record->template);
+  $record->group_template = unserialize($record->group_template);
+  $record->cached = empty($record->cached) ? '' : unserialize($record->cached);
+  $record->aids = array_filter(explode(',', $record->aids));
+  $record->events = array();
+  $result = db_query("
+    SELECT * FROM {activity_log_events} WHERE aid IN (". db_placeholders($record->aids) .")
+  ", $record->aids);
+  rules_include('rules');
+  while ($event = db_fetch_object($result)) {
+    $event->id_map = unserialize($event->id_map);
+    $record->events[$event->aid] = $event;
+  }
+}
+
+/**
+ * Wraps user_load() so it can be statically cached.
+ *
+ * @param $uid
+ *   A User ID.
+ * @return
+ *   A $user object.
+ */
+function activity_log_user_load($uid) {
+  static $accounts = array();
+  if (!isset($accounts[$uid])) {
+    $accounts[$uid] = user_load(array('uid' => $uid));
+  }
+  return $accounts[$uid];
+}
+
+/**
+ * Retrieves a list of Rules data types, which Activity Log uses to identify
+ * the data type of stream owners and target objects.
+ *
+ * @param $options
+ *   An array of options controlling what gets returned. Options include:
+ *   - short taxonomy: Whether to change "taxonomy_term" to just "term" and
+ *     taxonomy_vocab to just "vocab." Defaults to FALSE.
+ *   - stream owner types: How to restrict the returned values to just those
+ *     that can be used as stream owner types. Can be one of these values
+ *     (defaults to "normal"):
+ *     - normal: Returns the node, taxonomy term, and user types.
+ *     - adventurous: Same as normal, plus any non-default types (not including
+ *       the fbss_comment type). May require manual restriction if this is used
+ *       since stream owner types should generally be limited to those with
+ *       individual pages dedicated to each instance of them, where it makes
+ *       sense to show activity related to that instance.
+ *     - all: Show all Rules data types.
+ *   - exclude stream owner types: An array of types to exclude from the
+ *     returned list. Not applicable if "stream owner types" is "normal."
+ * @return
+ *   An array of Rules data types that can be used as the value of the #options
+ *   parameter in a form element. The keys of the array are the machine names,
+ *   and the values are the translated, human-friendly names.
+ */
+function activity_log_get_rules_data_types($options = array()) {
+  $options += array(
+    'short taxonomy' => FALSE,
+    'stream owner types' => 'normal',
+    'exclude stream owner types' => array(),
+  );
+  if ($options['stream owner types'] == 'normal' || !module_exists('rules_admin')) {
+    return array(
+      'node' => t('Content'),
+      ($options['short taxonomy'] ? 'term' : 'taxonomy_term') => t('Taxonomy term'),
+      'user' => t('User'),
+    );
+  }
+  module_load_include('inc', 'rules_admin');
+  // Get a list of Rules data types we know about. @see _rules_admin_form_argument()
+  $types = rules_extract_property(array_filter(rules_get_data_types(), 'rules_admin_element_filter'), 'label');
+  $types = array_map('drupal_ucfirst', $options);
+  if ($options['stream owner types'] == 'adventurous') {
+    unset(
+      $types['comment'],
+      $types['date'],
+      $types['fbsmp'],
+      $types['fbss_comment'],
+      $types['flag'],
+      $types['number'],
+      $types['string'],
+      $types['taxonomy_vocab'],
+      $types['boolean'],
+      $types['global'],
+      $types['decay_profile']
+    );
+  }
+  if ($options['short taxonomy'] && module_exists('taxonomy')) {
+    $types['term'] = $types['taxonomy_term'];
+    $types['vocab'] = $types['taxonomy_vocab'];
+    unset($types['taxonomy_term'], $types['taxonomy_vocab']);
+  }
+  foreach ($options['exclude stream owner types'] as $type) {
+    unset($types[$type]);
+  }
+  asort($types);
+  return $types;
+}
+
+/**
+ * Callback for uasort() to sort arrays by weight and maintain index association.
+ */
+function activity_log_element_sort($a, $b) {
+  $a_weight = (is_array($a) && isset($a['weight'])) ? $a['weight'] : 0;
+  $b_weight = (is_array($b) && isset($b['weight'])) ? $b['weight'] : 0;
+  if ($a_weight == $b_weight) {
+    return 0;
+  }
+  return ($a_weight < $b_weight) ? -1 : 1;
+}
+
+/** 
+ * Clear the cache for all messages or a specific message.
+ *
+ * @param $mid
+ *   The ID of the message whose cache to clear. If not specified, all message
+ *   caches are cleared.
+ */
+function activity_log_clear_message_cache($mid = NULL) {
+  if (!empty($mid)) {
+    db_query("UPDATE {activity_log_messages} SET cached = '' WHERE mid = %d", $mid);
+  }
+  else {
+    db_query("UPDATE {activity_log_messages} SET cached = ''");
+  }
+}
+
+/**
+ * Rebuilds the templates and action_names tables from existing Rules.
+ */
+function _activity_log_rebuild_templates() {
+  module_load_include('inc', 'activity_log', 'activity_log.rules');
+  // Extract the relevant information from the list of all Rules.
+  $rules = $names = array();
+  foreach (_rules_get_rule_sets() as $key => $event) {
+    if (strpos($key, 'event_') === 0) {
+      foreach ($event['rules'] as $name => $info) {
+        foreach ($info['#actions'] as $action) {
+          if ($action['#name'] == 'activity_log_log_action' && isset($action['#settings']['tid'])) {
+            $rules[$action['#settings']['tid']] = $action['#settings'] + array('rule' => $name, 'action_label' => $action['#info']['label']);
+            if (!isset($names[$action['#settings']['public_name']])) {
+              $names[$action['#settings']['public_name']] = array();
+            }
+            $names[$action['#settings']['public_name']][] = $action['#settings']['tid'];
+          }
+        }
+      }
+    }
+  }
+  // Rebuild the action_names table.
+  db_query("TRUNCATE {activity_log_action_names}");
+  foreach ($names as $name => $tids) {
+    if (!empty($name)) {
+      $record = (object) array('public_name' => $name);
+      drupal_write_record('activity_log_action_names', $record); 
+      foreach ($tids as $tid) {
+        $rules[$tid]['pid'] = $record->pid;
+      }
+    }
+  }
+  // Rebuild the templates table.
+  db_query("TRUNCATE {activity_log_templates}");
+  ksort($rules);
+  foreach ($rules as $v) {
+    $resources = _activity_log_determine_resources($v['templates'], $v['grouping']['templates'], $v['grouping']['group_summary'], $v['cache']['resources']);
+    $record = array(
+      'tid' => $v['tid'],
+      'rule' => $v['rule'],
+      'action_label' => $v['action_label'],
+      'template' => serialize($v['templates']),
+      'group_template' => serialize($v['grouping']['templates']),
+      'group_summary' => $v['grouping']['group_summary'],
+      'collapse_method' => $v['grouping']['collapse_method'],
+      'pid' => $v['pid'],
+      'eval_input' => serialize($v['#eval input']),
+      'resources' => serialize($resources),
+      'cacheable' => $v['cache']['cache'] && !_activity_log_has_uncacheable_tokens($v['templates'], $v['grouping']['templates'], $v['grouping']['group_summary']),
+      'display_type' => $v['display_type'],
+    );
+    db_query("
+      INSERT INTO {activity_log_templates}
+        (tid, rule, action_label, template, group_template, group_summary, collapse_method, pid, eval_input, resources, cacheable, display_type)
+      VALUES (%d, '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s', %d, '%s')
+    ", $record);
+  }
+  return count($rules);
+}
+
+/**
+ * Get or set the timestamp for the current activity message.
+ */
+function _activity_log_action_timestamp($value = NULL) {
+  static $timestamp;
+  if (is_null($value)) {
+    if (empty($timestamp)) {
+      $timestamp = time();
+    }
+    return $timestamp;
+  }
+  $timestamp = $value;
+}
+
+/**
+ * Attempt to extract the timestamp of an object.
+ *
+ * We need to do this rather than relying on time() because we need to know the
+ * time the entity was created when regenerating activity.
+ *
+ * @param $data
+ *   The object for which a timestamp should be retrieved.
+ * @param $event
+ *   The Rules event which will be executed, if any.
+ * @return
+ *   A best guess at the timestamp for the relevant object.
+ */
+function activity_log_get_timestamp($data, $event = '') {
+  // Practically everything uses either "timestamp" or "created." User Relationships uses created_at and Userpoints uses time_stamp.
+  foreach (array('timestamp', 'created', 'created_at', 'time_stamp') as $key) {
+    if (isset($data->$key)) {
+      return $data->$key;
+    }
+  }
+  // If we don't find anything, return the current time.
+  return time();
+}
+
+//=====================
+// ACTIVITY LOG HOOKS.
+//=====================
+
+/**
+ * Implementation of hook_activity_log_collapse_methods().
+ */
+function activity_log_activity_log_collapse_methods() {
+  return array(
+    'activity_log_collapse_inline' => t('Inline (A, B, and 3 others)'),
+    'activity_log_collapse_list_horizontal' => t('Horizontal list (A B C D)'),
+    'activity_log_collapse_list_vertical' => t('Vertical list (each item on its own line)'),
+  );
+}
+
+/**
+ * Implementation of hook_activity_log_entity_groups().
+ */
+function activity_log_activity_log_entity_groups($stream_owner = TRUE) {
+  module_load_include('inc', 'activity_log', 'activity_log.entity_groups');
+  return activity_log_entity_groups($stream_owner);
+}
+
+/**
+ * Implementation of hook_activity_log_display_types().
+ */
+function activity_log_activity_log_display_types() {
+  return array(
+    'web' => t('Web stream'),
+  );
+}
+
+//====================
+// VIEWS INTEGRATION.
+//====================
+
+/**
+ * Implementation of hook_views_api().
+ */
+function activity_log_views_api() {
+  return array(
+    'api' => 2,
+    'path' => drupal_get_path('module', 'activity_log') . '/views',
+  );
+}
+
+//====================
+// TOKEN INTEGRATION.
+//====================
+
+// TODO: Remove the flag tokens after http://drupal.org/node/1202648 lands.
+
+/**
+ * Implementation of hook_token_list().
+ */
+function activity_log_token_list($type = 'all') {
+  $tokens = array();
+  foreach (flag_get_types() as $flag_type) {
+    if ($type == $flag_type || $type == 'all') {
+      $flags = flag_get_flags($flag_type);
+      foreach ($flags as $flag) {
+        $tokens[$flag_type]['flag-'. str_replace('_', '-', $flag->name) .'-link'] = t('(Un)flag link for the "@flag" flag.', array('@flag' => $flag->get_title()));
+      }
+    }
+  }
+  if ($type == 'node' && module_exists('og')) {
+    $tokens['node']['og-url'] = t("The absolute URL of the node's primary group, if applicable.");
+  }
+  if ($type == 'user' || $type == 'all') {
+    $tokens['user']['picture'] = t("The user's picture");
+  }
+  return $tokens;
+}
+
+/**
+ * Implementation of hook_token_values().
+ */
+function activity_log_token_values($type, $object = NULL, $options = array()) {
+  $values = array();
+  if (in_array($type, flag_get_types())) {
+    $flags = flag_get_flags($type);
+    foreach ($flags as $flag) {
+      $values['flag-'. str_replace('_', '-', $flag->name) .'-link'] = flag_create_link($flag->name, $flag->get_content_id($object));
+    }
+  }
+  if ($type == 'node' && module_exists('og') && !empty($object->og_groups) && is_array($object->og_groups)) {
+    $gids = array_keys(array_filter($object->og_groups));
+    $values['og-url'] = url('node/'. $gids[0], array('absolute' => TRUE));
+  }
+  if ($type == 'user') {
+    if (!empty($object)) {
+      $account = $object;
+    }
+    else {
+      $account = user_load(array('uid' => $GLOBALS['user']->uid));
+    }
+    $values['picture'] = theme('user_picture', $account);
+  }
+  
+  return $values;
+}

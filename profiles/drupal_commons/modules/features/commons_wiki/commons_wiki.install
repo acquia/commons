@@ -1,0 +1,63 @@
+<?php
+
+/**
+ * Implementation of hook_install()
+ */
+function commons_wiki_install() {
+  commons_wiki_add_freelinking();
+  commons_wiki_add_flag();
+  commons_wiki_add_taxonomy();
+}
+
+/**
+ * Add wiki-style freelinking to both default formats
+ */
+function commons_wiki_add_freelinking() {
+  $check_sql = "SELECT format FROM {filters} WHERE format = %d AND module = 'freelinking'";
+  
+  if (!db_result(db_query($check_sql, 1))) {
+    $filter = new stdClass;
+    $filter->format = 1;  // Filtered HTML
+    $filter->module = 'freelinking';
+    $filter->delta = 0;
+    $filter->weight = 10;
+    drupal_write_record('filters', $filter);
+  }
+  
+  if (!db_result(db_query($check_sql, 2))) {
+    $filter = new stdClass;
+    $filter->format = 2;  // Full HTML
+    $filter->module = 'freelinking';
+    $filter->delta = 0;
+    $filter->weight = 10;
+    drupal_write_record('filters', $filter);
+  }
+}
+
+/**
+ * Add the bookmark flag to wiki nodes
+ */
+function commons_wiki_add_flag() {
+  $fid = db_result(db_query("SELECT fid FROM {flags} WHERE name = '%s'", 'bookmarks'));
+  
+  if ($fid) {
+    $check_sql = "SELECT fid FROM {flag_types} WHERE type = 'wiki' AND fid = %d";
+  
+    if (!db_result(db_query($check_sql, $fid))) {
+      $flag = new stdClass;
+      $flag->fid = $fid;
+      $flag->type = 'wiki';
+      drupal_write_record('flag_types', $flag);
+    }
+  }
+}
+
+/**
+ * Add taxonomy to wiki nodes
+ */
+function commons_wiki_add_taxonomy() {
+  $taxonomy = new stdClass;
+  $taxonomy->vid = variable_get('commons_tags_vid', 1);
+  $taxonomy->type = 'wiki';
+  drupal_write_record('vocabulary_node_types', $taxonomy);
+}

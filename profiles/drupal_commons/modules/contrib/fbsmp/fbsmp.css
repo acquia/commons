@@ -1,0 +1,204 @@
+
+/* General Styling */
+
+.fbss_attachment {
+  display: block;
+  padding: 1em;
+}
+
+.link-message, 
+.photo-message, 
+.video-message, 
+.slideshare-message {
+  float: left;  
+}
+
+/* Form header styling */
+
+.fbsmp-link-header, 
+.fbsmp-photo-header, 
+.fbsmp-video-header, 
+.fbsmp-slideshare-header {
+  margin-bottom: 10px;
+  min-height: 15px;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  padding-bottom: 8px;
+}
+
+/* @group Plugins and attach text */
+
+.fbsmp-icon-list {
+  float: right;
+}
+
+.fbsmp-inner-expanded {
+  border-style: solid;
+  border-width: 1px;
+  padding: 9px;
+}
+
+.fbsmp-plugin-icon {
+  position: relative;
+  z-index: 19;
+  float: left;
+}
+
+.fbsmp-attach-text {
+  float: left;
+  margin-right: 5px;  
+  margin-top: 2px;
+  font-size: 11px;
+}
+
+/* @end */
+
+/* @group Attachment edit form*/
+
+.fbsmp-wrapper-outer {
+  background-color: white;
+  overflow: hidden;
+  position: relative;
+  z-index: 10;
+}
+
+.fbsmp-edit-wrapper-outer {
+  border-style: style;
+  border-width: 1px;
+  margin: 10px 5px 5px 0;
+  padding: 5px;
+  clear: left;
+  display: block;
+  float: left;
+}
+
+.fbsmp-edit-text {
+  display: none;
+}
+
+.fbsmp-edit-plugin-header{
+  margin-top: 10px;
+  clear: left;
+  text-transform: capitalize;
+  text-decoration: underline;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.fbsmp-edit-form-box {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+/* @end */
+
+/* @group Buttons */
+
+form input.fbsmp-plugin-icon-button,
+form input.facebook-status-submit { /* Forced by Fusion */
+  padding: 7px 14px;
+}
+
+form input.fbsmp-plugin-icon-button { /* Forced by Fusion */
+  padding-left: 34px;
+}
+
+.fbsmp-plugin-icon-button {
+  background-attachment: scroll;
+  background-color: transparent;
+  background-image: url('images/icon-sprite.png');
+  background-position: left top;
+  background-repeat: no-repeat;
+  border: 0 none;
+}
+
+.fbsmp-plugin-icon-button:hover {
+  cursor: pointer;
+}
+
+.fbsmp-link-icon-button {
+  background-position: 14px 1px;
+}
+
+.fbsmp-link-icon-button:hover,
+.fbsmp-link-icon-button.hover,
+.fbsmp-link-icon-button:focus,
+.fbsmp-link-icon-button:active {
+  background-position: 14px -30px;
+}
+
+.fbsmp-photo-icon-button {
+  background-position: 14px -145px;
+}
+.fbsmp-photo-icon-button:hover,
+.fbsmp-photo-icon-button.hover,
+.fbsmp-photo-icon-button:focus,
+.fbsmp-photo-icon-button:active {
+  background-position: 14px -185px;
+}
+
+.fbsmp-cancel-button {
+  background: url('images/icon-sprite.png') 1px -230px no-repeat scroll;
+  border: 0 none;
+  height: 18px;
+  position: absolute;
+  right: 4px;
+  width: 18px;
+  top: 5px;
+}
+.fbsmp-cancel-button:hover,
+.fbsmp-cancel-button.hover,
+.fbsmp-cancel-button:focus,
+.fbsmp-cancel-button:active {
+  background-position: 1px -272px;
+}
+
+/* @end */
+
+/* Link plugin */
+.fbsmp-link-thumbnail {
+  float: left;
+  margin-right: 0.5em;
+}
+
+.fbsmp-link-images {
+  float: left;
+  padding: 0 1em 1em 0;
+}
+
+#edit-fbsmp-link-no-thumbnail-wrapper {
+  float: right;
+}
+
+.fbsmp-inner-expanded .form-item label {
+  display: inline;
+}
+
+.fbsmp-link-title-text-editable, .fbsmp-link-description-text-editable {
+  text-align: left;
+  direction: ltr;
+  max-width: 400px;
+}
+
+.fbsmp-link-title-text-editable:hover, .fbsmp-link-description-text-editable:hover {
+  background-color: #ffffa0;
+}
+
+.fbsmp-link-chars {
+  padding-left: 0.5em;
+}
+
+.fbsmp-link-title {
+  font-size: 1.5em;
+  line-height: 1.5em;
+}
+
+/* SlideShare plugin */
+#edit-fbsmp-slideshare-title-wrapper {
+  margin-bottom: 5px;  
+}
+
+#edit-fbsmp-slideshare-title-wrapper label {
+  float: left;
+  margin-right: 2px;  
+}

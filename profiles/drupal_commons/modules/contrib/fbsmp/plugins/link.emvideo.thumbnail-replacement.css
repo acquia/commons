@@ -1,0 +1,23 @@
+
+/**
+ * @file
+ *   CSS to overlay the play icon over the top left corner of the video thumbnail.
+ *   Work of pribeh (http://drupal.org/user/167047)
+ */
+
+a.fbsmp-link-emvideo-thumbnail-replacement {
+position:relative;
+display:block;
+}
+
+a.fbsmp-link-emvideo-thumbnail-replacement span {
+background-image: url(images/play.png);
+background-repeat: no-repeat;
+background-position: right bottom;
+position:absolute;
+left:0;
+top:0;
+z-index:99;
+width:25px;
+height:20px;
+}

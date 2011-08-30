@@ -1,0 +1,36 @@
+
+html.js #search-theme-form label,
+html.js #search-theme-form select[name=refine],
+.contextual-search-wrapper ul.contextual-search-list {
+  display: none;
+}
+
+.block.search-box {
+  overflow: visible;
+}
+
+.contextual-search-wrapper {
+  clear: both;
+  position: absolute;
+  right: 0;
+  top: 100%;
+}
+
+.contextual-search-wrapper .contextual-search-inner {
+  position: relative;
+}
+
+.contextual-search-wrapper .contextual-search-launcher,
+.contextual-search-wrapper .contextual-search-list a {
+  display: block;
+  white-space: nowrap;
+}
+
+.contextual-search-processed .contextual-search-wrapper ul.contextual-search-list {
+  list-style: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 10;
+}
+
