@@ -123,6 +123,24 @@ function commons_status_streams_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'fbsmp_plugin_photo';
+  $strongarm->value = array(
+    'file_extensions' => 'png gif jpg jpeg',
+    'max_filesize' => '',
+    'min_resolution' => '0',
+    'max_resolution' => '0',
+    'imagecache_preset' => 'Status_picture:imagelink',
+    'file_path' => '',
+    'width' => '0',
+    'height' => '0',
+    'alt' => '',
+    'class' => '',
+  );
+
+  $export['fbsmp_plugin_photo'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'fbss_comments_user_pictures';
   $strongarm->value = 'user_picture_meta';
 
