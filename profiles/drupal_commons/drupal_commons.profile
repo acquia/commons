@@ -455,10 +455,6 @@ function drupal_commons_config_vars() {
   
   // Don't restrict user profile image upload size
   variable_set('user_picture_file_size', '');
-  
-  // Set user terms to use the "tags" vocabulary we created
-  $vid = variable_get('commons_tags_vid', 1);
-  variable_set('user_terms_vocabs', array($vid => $vid));
 }
 
 /**
