@@ -3,73 +3,27 @@ Track Commons development on GitHub!
  - https://github.com/acquia/commons/
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Commons 2.0, 2011-08-26 (Release candidate)
+Commons 2.0, 2011-08-30
 ------------------------------------
-GENERAL INFORMATION
-This release provides a powerful new way for site users to interact: It changes an authenticated user's default page to be a page showing an stream of activities & status updates from people users follow. A similar activity stream is shown on group home pages. It follows the usability pattern in use by other leading consumer social sites, but adapts it to business-type use, and as well as adapting it to the groups-style information architecture used in Commons.
+GENERAL INFORMATION:
+This release provides a powerful new way for site users to interact: 
+ It changes an authenticated user's default page to be a page showing an 
+ stream of activities & status updates from people users follow. A 
+ similar activity stream is shown on group home pages. It follows the 
+ usability pattern in use by other leading consumer social sites, but 
+ adapts it to business-type use, and as well as adapting it to the 
+ groups-style information architecture used in Commons.
 
-This upgrade adds or changes some significant functionality, so we strongly recommend that you test the upgrade on a staging site before performing the upgrade on a live site.
-The official name of this distribution is changing from Drupal Commons to (just) Commons. This change is not fully implemented throughout the distribution; it may take several releases to gradually change all aspects and avoid breakage.
+This upgrade adds or changes some significant functionality, so we 
+strongly recommend that you test the upgrade on a staging site before 
+performing the upgrade on a live site.
 
-UPGRADING TO 2.0
-** This upgrade adds or changes some significant functionality, so we
-** strongly recommend that you test the upgrade on a staging site before
-** performing the upgrade on a live site. Be sure to read the NOTES 
-** above before proceeding
-1. Back up your code (everything in your Drupal root directory) and your
-   database
-2. Turn on maintenance mode (admin/settings/site-maintenance)
-3. If you have custom Rules or Contexts for the Shoutbox or Heartbeat modules,
-   make a note of them (you may want to export them as well). Shoutbox and
-   Heartbeat will be disabled during the upgrade and replaced with the new
-   Facebook-style Statuses and Activity Log modules. You can re-enable them
-   afterwards if you want, but that is strongly discouraged.
-4. Replace your code (everything in your Drupal root directory except the sites
-   directory) with the contents of this archive
-5. Run the update script at /update.php
-   - Ignore all errors related to the heartbeat module that pertain to 
-     required files being unable to load. This is because that module has
-     been removed and those files no longer exist.
-   - It is likely that update.php will report the following message:
-       "Unable to regenerate activity messages because no Rules events were found.
-        Try regnerating activity messages again."
-     Click the link inside that message. This will take you to the Activity Log
-    administration page, on the Regenerate Activity tab.
-6. After following that link, click the "Regenerate" button and allow the
-   operation to finish. You do not need to set any of the options provided on that
-   page; simply click Regenerate.
-7. On that same page (Activity Log administration), click on the "Settings" tab,
-    then press the "Clear all message caches" button.
-8. Change the default user relationship from (two-way) "Friend" to (one-way) Follow.
-    (This is because the new activity stream feature in 2.0 allows you to see your
-    friends' activity as a one-way activity, a'la Twitter). To do this, go to
-    /admin/user/relationships and click "edit" next to the "Friend" relationship.
-    On the "Edit type" page that will appear, change the "Name" and "Plural name"
-    fields to "follower" and "users you follow," respectively. Then un-check the
-    "Requires Approval" box, and check the "This is a one-way relationship" box.
-    A new box will appear labeled "This one-way relationship can be
-    reciprocated," and you should check that as well. Then click the "Submit"
-    button at the bottom of the page.
-9. View the status report (admin/reports/status) to see if there are any
-   errors that must be addressed
-10. If you had custom Rules or Contexts from step 3, you should re-create them
-   now for the Facebook-style Statuses and Activity Log modules. If you're
-   unsure what this step is referring to, then you do not have to do anything.
-11. Given the new interface additions in this release, you may need to add new
-    CSS styling to the theme for your site if you have built a custom theme for
-    your common-based site.
-11. The Dashboard feature will be disabled during the upgrade. If you still want
-    to use it, you can re-enable it. However, keep in mind that it will probably
-    be deprecated in upcoming releases of Commons.
-12. This release re-organizes some of the blocks on user profile pages and group
-    home pages. If you have overridden the Contexts that provide the layout on
-    these pages, we strongly recommend that you revert your changes in the
-    Commons Core feature so that you can use the latest updates and make any
-    further changes afterwards as necessary.
-13. If no issues have arisen, then you may turn off maintenance mode.
-
+The official name of this distribution is changing from Drupal Commons 
+to (just) Commons. This change is not fully implemented throughout the 
+distribution; it may take several releases to gradually change all 
+aspects and avoid breakage.
+------------------------------------
 NOTES:
-
 - This release changes the default behavior of Notifications. Previously users
   were automatically subscribed to content they created or commented on,
   and they then received an email every time someone else commented on that
@@ -136,7 +90,63 @@ NOTES:
     yet supported. (You can upgrade without problems, but comments on activity
     will be lost.) This is not the same as the core Comments module, which is
     fully supported.
-
+------------------------------------
+UPGRADING TO 2.0
+** This upgrade adds or changes some significant functionality, so we
+** strongly recommend that you test the upgrade on a staging site before
+** performing the upgrade on a live site. Be sure to read the NOTES 
+** above before proceeding
+1. Back up your code (everything in your Drupal root directory) and your
+   database
+2. Turn on maintenance mode (admin/settings/site-maintenance)
+3. If you have custom Rules or Contexts for the Shoutbox or Heartbeat modules,
+   make a note of them (you may want to export them as well). Shoutbox and
+   Heartbeat will be disabled during the upgrade and replaced with the new
+   Facebook-style Statuses and Activity Log modules. You can re-enable them
+   afterwards if you want, but that is strongly discouraged.
+4. Replace your code (everything in your Drupal root directory except the sites
+   directory) with the contents of this archive
+5. Run the update script at /update.php
+   - Ignore all errors related to the heartbeat module that pertain to 
+     required files being unable to load. This is because that module has
+     been removed and those files no longer exist.
+   - It is likely that update.php will report the following message:
+       "Unable to regenerate activity messages because no Rules events were found.
+        Try regnerating activity messages again."
+     Click the link inside that message. This will take you to the Activity Log
+    administration page, on the Regenerate Activity tab.
+6. After following that link, click the "Regenerate" button and allow the
+   operation to finish. You do not need to set any of the options provided on that
+   page; simply click Regenerate.
+7. On that same page (Activity Log administration), click on the "Settings" tab,
+    then press the "Clear all message caches" button.
+8. Change the default user relationship from (two-way) "Friend" to (one-way) Follow.
+    (This is because the new activity stream feature in 2.0 allows you to see your
+    friends' activity as a one-way activity, a'la Twitter). To do this, go to
+    /admin/user/relationships and click "edit" next to the "Friend" relationship.
+    On the "Edit type" page that will appear, change the "Name" and "Plural name"
+    fields to "follower" and "users you follow," respectively. Then un-check the
+    "Requires Approval" box, and check the "This is a one-way relationship" box.
+    A new box will appear labeled "This one-way relationship can be
+    reciprocated," and you should check that as well. Then click the "Submit"
+    button at the bottom of the page.
+9. View the status report (admin/reports/status) to see if there are any
+   errors that must be addressed
+10. If you had custom Rules or Contexts from step 3, you should re-create them
+   now for the Facebook-style Statuses and Activity Log modules. If you're
+   unsure what this step is referring to, then you do not have to do anything.
+11. Given the new interface additions in this release, you may need to add new
+    CSS styling to the theme for your site if you have built a custom theme for
+    your common-based site.
+11. The Dashboard feature will be disabled during the upgrade. If you still want
+    to use it, you can re-enable it. However, keep in mind that it will probably
+    be deprecated in upcoming releases of Commons.
+12. This release re-organizes some of the blocks on user profile pages and group
+    home pages. If you have overridden the Contexts that provide the layout on
+    these pages, we strongly recommend that you revert your changes in the
+    Commons Core feature so that you can use the latest updates and make any
+    further changes afterwards as necessary.
+13. If no issues have arisen, then you may turn off maintenance mode.
 ------------------------------------
 CHANGELOG:
 - Added: OG Subgroups
@@ -173,7 +183,6 @@ CHANGELOG:
 - Patched: Rules to allow for hook_rules_defaults_alter() [#978620]
 - Fixed: Force-settings the "Tags" vocabulary ID [#1071198]
 - Added: Subgroups-optimized view for listing groups (/groups)
-
 
 
 Commons 1.7, 2011-06-17
