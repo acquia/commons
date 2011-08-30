@@ -14,6 +14,28 @@ function commons_core_ctools_plugin_api() {
 }
 
 /**
+ * Implementation of hook_strongarm_alter().
+ */
+function commons_core_strongarm_alter(&$items) {
+  $commons_tags_vid = variable_get('commons_tags_vid', 1);
+  // If these variables are set but the Commons tags vid isn't 1,
+  // changing the value isn't sufficient: we need to 
+  // create a different variable for each one.
+  if (isset($items['tagging_inject_1']) && $commons_tags_vid != 1) {
+    $new_item = $items['tagging_inject_1'];
+    unset($items['tagging_inject_1']);
+    $new_item->name = 'tagging_inject_' . $commons_tags_vid;
+    $items['tagging_inject_' . $commons_tags_vid] = $new_item;
+  }
+  if (isset($items['tagadelic_block_tags_1']) && $commons_tags_vid !=1) {
+    $new_item = $items['tagadelic_block_tags_1'];
+    unset($items['tagadelic_block_tags_1']);
+    $new_item->name = 'tagadelic_block_tags_' . $commons_tags_vid;
+    $items['tagadelic_block_tags_' . $commons_tags_vid] = $new_item;
+  }
+}
+
+/**
  * Implementation of hook_imagecache_default_presets().
  */
 function commons_core_imagecache_default_presets() {

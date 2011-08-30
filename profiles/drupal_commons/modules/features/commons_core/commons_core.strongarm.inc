@@ -204,10 +204,10 @@ function commons_core_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'tagadelic_block_tags_2';
+  $strongarm->name = 'tagadelic_block_tags_1';
   $strongarm->value = '20';
 
-  $export['tagadelic_block_tags_2'] = $strongarm;
+  $export['tagadelic_block_tags_1'] = $strongarm;
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
@@ -218,10 +218,10 @@ function commons_core_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'tagging_inject_2';
+  $strongarm->name = 'tagging_inject_1';
   $strongarm->value = 1;
 
-  $export['tagging_inject_2'] = $strongarm;
+  $export['tagging_inject_1'] = $strongarm;
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
