@@ -108,6 +108,8 @@ projects[notifications][version] = "2.3"
 
 projects[og][subdir] = "contrib"
 projects[og][version] = "2.1"
+; http://drupal.org/node/881380
+projects[og][patch][] = "http://drupal.org/files/issues/og-DRUPAL-6--2.views-constants.0.patch"
 
 projects[og_aggregator][subdir] = "contrib"
 projects[og_aggregator][version] = "1.4"
