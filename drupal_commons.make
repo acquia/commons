@@ -139,7 +139,8 @@ projects[rules][subdir] = "contrib"
 projects[rules][version] = "1.4"
 
 projects[strongarm][subdir] = "contrib"
-projects[strongarm][version] = "2.0"
+projects[strongarm][download][type] = "git"
+projects[strongarm][download][revision] = "709178e"
 
 projects[tagadelic][subdir] = "contrib"
 projects[tagadelic][version] = "1.3"
