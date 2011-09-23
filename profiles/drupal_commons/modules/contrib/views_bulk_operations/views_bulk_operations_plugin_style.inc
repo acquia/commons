@@ -1,51 +1,60 @@
 <?php
-// $Id: views_bulk_operations_plugin_style.inc,v 1.1.2.60 2010/08/29 23:55:00 kratib Exp $
 
 class views_bulk_operations_plugin_style extends views_plugin_style_table {
 
   var $all_operations = array();
 
+  /**
+   * Implementation of views_plugin::init().
+   */
+  function init(&$view, &$display, $options = NULL) {
+    parent::init($view, $display, $options);
+
+    $this->populate_operations();
+  }
+
+  /**
+   * Implementation of views_plugin::option_definition().
+   */
   function option_definition() {
     $options = parent::option_definition();
 
-    $options['selected_operations'] = array('default' => array());
+    $options['operations'] = array('default' => array());
     $options['execution_type'] = array('default' => VBO_EXECUTION_DIRECT);
+    $options['max_performance'] = array('default' => 0);
     $options['display_type'] = array('default' => 0);
-    $options['skip_confirmation'] = array('default' => FALSE);
     $options['display_result'] = array('default' => TRUE);
     $options['merge_single_action'] = array('default' => TRUE);
-    $options['hide_select_all'] = array('default' => FALSE);
+    $options['hide_selector'] = array('default' => FALSE);
+    $options['preserve_selection'] = array('default' => TRUE);
 
-    // Per-action settings.
-    $this->populate_operations();
-    foreach ($this->all_operations as $key => $operation) {
-      $form_function = $operation['callback'] . '_views_bulk_operations_form_options';
-      if (function_exists($form_function)) {
-        $options[$key] = call_user_func($form_function);
-        array_walk($options[$key], create_function('&$value, $option', '
-          $value = array(\'default\' => $value);
-        '));
-      }
-    }
-  
-    return $options; 
+    return $options;
   }
 
+  /**
+   * Implementation of views_plugin::options_form().
+   */
   function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
-    
+
     $execution = array(
       VBO_EXECUTION_DIRECT => t('Invoke them directly'),
       VBO_EXECUTION_BATCH => t('Use Batch API'),
     );
-    if (module_exists('job_queue')) {
-      $execution[VBO_EXECUTION_QUEUE] = t('Use <a href="@jobqueue">Job Queue</a>', array('@jobqueue' => url('http://drupal.org/project/job_queue'))); 
+    if (module_exists('drupal_queue')) {
+      $execution[VBO_EXECUTION_QUEUE] = t('Use <a href="@drupalqueue">Drupal Queue</a>', array('@drupalqueue' => url('http://drupal.org/project/drupal_queue')));
     }
     $form['execution_type'] = array(
       '#type' => 'radios',
       '#title' => t('To execute operations'),
       '#default_value' => $this->options['execution_type'],
       '#options' => $execution,
+    );
+    $form['max_performance'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Maximize Batch API performance'),
+      '#description' => t('If checked, each batch process will execute as many rows as possible within the server resource limits.'),
+      '#default_value' => $this->options['max_performance'],
     );
     $form['display_type'] = array(
       '#type' => 'radios',
@@ -56,17 +65,17 @@ class views_bulk_operations_plugin_style extends views_plugin_style_table {
         t('Each action as a separate button'),
       ),
     );
-    $form['hide_select_all'] = array(
+    $form['hide_selector'] = array(
       '#type' => 'checkbox',
-      '#title' => t('Hide select all checkbox'),
-      '#description' => t('Check this box to hide the "select all" checkbox and associated "select across all pages" button.'),
-      '#default_value' => $this->options['hide_select_all'],
+      '#title' => t('Hide selector dropdown'),
+      '#description' => t('Check this box to hide the selector dropdown.'),
+      '#default_value' => $this->options['hide_selector'],
     );
-    $form['skip_confirmation'] = array(
+    $form['preserve_selection'] = array(
       '#type' => 'checkbox',
-      '#title' => t('Skip confirmation step'),
-      '#description' => t('Check this box to skip the confirmation page on this view and directly execute the operation.'),
-      '#default_value' => $this->options['skip_confirmation'],
+      '#title' => t('Preserve selection across pages'),
+      '#description' => t('Check this box to preserve item selection across multiple pages. Requires JavaScript.'),
+      '#default_value' => $this->options['preserve_selection'],
     );
     $form['display_result'] = array(
       '#type' => 'checkbox',
@@ -76,62 +85,102 @@ class views_bulk_operations_plugin_style extends views_plugin_style_table {
     );
     $form['merge_single_action'] = array(
       '#type' => 'checkbox',
-      '#title' => t('Merge single action\'s form with node selection view'),
-      '#description' => t('In case only one action is selected *and* this action is configurable, display its action form along with the node selection view.'),
+      '#title' => t('Merge single action\'s form with item selection view'),
+      '#description' => t('In case only one action is selected *and* this action is configurable, display its action form along with the item selection view.'),
       '#default_value' => $this->options['merge_single_action'],
     );
-    $form['selected_operations'] = array(
-      '#type' => 'checkboxes',
-      '#title' => t('Selected operations'),
-      '#options' => $this->get_operations_options(), 
-      '#default_value' => $this->options['selected_operations'],
-    );
 
-    // Per-action settings form.
-    $object_info = _views_bulk_operations_object_info_for_view($this->view);
-    foreach ($this->all_operations as $key => $operation) {
-      if ($operation['type'] != $object_info['type'] && $operation['type'] != 'system' && !in_array($object_info['hook'], (array) $operation['hooks'])) continue;
-      $form_function = $operation['callback'] . '_views_bulk_operations_form';
+    // Display operations and their settings.
+    $form['operations'] = array(
+      '#tree' => TRUE,
+      '#type' => 'fieldset',
+      '#title' => t('Selected operations'),
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
+    );
+    foreach ($this->get_operations_options() as $key => $label) {
+      $dom_id = 'edit-style-options-operations-' . str_replace('_', '-', $key) . '-selected';
+      $form['operations'][$key]['selected'] = array(
+        '#type' => 'checkbox',
+        '#title' => $label,
+        '#default_value' => @$this->options['operations'][$key]['selected'],
+      );
+      $form['operations'][$key]['skip_confirmation'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Skip confirmation step'),
+        '#default_value' => @$this->options['operations'][$key]['skip_confirmation'],
+        '#process' => array('views_process_dependency'),
+        '#dependency' => array(
+          $dom_id => array(1),
+        ),
+      );
+      $form['operations'][$key]['label'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Override label'),
+        '#default_value' => @$this->options['operations'][$key]['label'],
+        '#process' => array('views_process_dependency'),
+        '#dependency' => array(
+          $dom_id => array(1),
+        ),
+      );
+      $form_function = $this->all_operations[$key]['callback'] . '_views_bulk_operations_form';
       if (function_exists($form_function)) {
-        $form[$key] = array(
-          '#tree' => TRUE,
-          '#type' => 'fieldset',
-          '#title' => $operation['label'],
-          '#collapsible' => TRUE,
-          '#collapsed' => TRUE,
-        );
-        $form[$key] += call_user_func($form_function, $this->options[$key]);
+        $form_settings = call_user_func($form_function, @$this->options['operations'][$key]['settings']);
+        foreach (element_children($form_settings) as $child) {
+          $form_settings[$child] += array(
+            '#process' => array('views_process_dependency'),
+            '#dependency' => array(
+              $dom_id => array(1),
+            ),
+          );
+        }
+        $form['operations'][$key]['settings'] = $form_settings;
       }
     }
   }
 
+  /**
+   * Implementation of views_plugin::options_validate().
+   */
   function options_validate(&$form, &$form_state) {
-    foreach (array_filter($form_state['values']['style_options']['selected_operations']) as $selected_operation) {
-      if (!isset($form_state['values']['style_options'][$selected_operation])) continue;
-      $operation = $this->all_operations[$selected_operation];
+    foreach ($form_state['values']['style_options']['operations'] as $key => &$options) {
+      if (empty($options['selected'])) continue;
+      if (!isset($options['settings'])) continue;
+      $operation = $this->all_operations[$key];
       $form_function = $operation['callback'] . '_views_bulk_operations_form_validate';
       if (function_exists($form_function)) {
-        $form_state['values']['style_options'][$selected_operation]['_error_element_base'] = 'style_options][' . $selected_operation . '][';
-        call_user_func($form_function, $form, array('values' => $form_state['values']['style_options'][$selected_operation]));
+        $options['settings']['_error_element_base'] = 'style_options][operations][' . $key . '][settings][';
+        call_user_func($form_function, $form, array('values' => $options['settings']));
       }
     }
   }
 
+  /**
+   * Implementation of views_plugin::options_submit().
+   */
   function options_submit(&$form, &$form_state) {
-    foreach (array_filter($form_state['values']['style_options']['selected_operations']) as $selected_operation) {
-      if (!isset($form_state['values']['style_options'][$selected_operation])) continue;
-      $operation = $this->all_operations[$selected_operation];
+    foreach ($form_state['values']['style_options']['operations'] as $key => $options) {
+      if (empty($options['selected'])) continue;
+      if (!isset($options['settings'])) continue;
+      $operation = $this->all_operations[$key];
       $form_function = $operation['callback'] . '_views_bulk_operations_form_submit';
       if (function_exists($form_function)) {
-        call_user_func($form_function, $form, array('values' => $form_state['values']['style_options'][$selected_operation]));
+        call_user_func($form_function, $form, array('values' => $options['settings']));
       }
     }
   }
 
+  /**
+   * Implementation of views_plugin::render().
+   */
   function render() {
+    // Client code might flag to skip rendering if we just want to build complete results.
+    if (!empty($this->view->skip_render)) {
+      return;
+    }
+
     // We build the groups here to pass them to the node_selector function through the form.
-    $sets = $this->render_grouping($this->view->result, $this->options['grouping']);
-    $this->sets = $sets;
+    $this->sets = $this->render_grouping($this->view->result, $this->options['grouping']);
 
     // Append suffix to avoid clashing between multiple VBOs on same page.
     static $form_suffix;
@@ -141,12 +190,38 @@ class views_bulk_operations_plugin_style extends views_plugin_style_table {
     else {
       $form_suffix = 1;
     }
-    return drupal_get_form('views_bulk_operations_form__' . $form_suffix, $this);
+    $this->form_id = 'views_bulk_operations_form__' . $form_suffix;
+
+    // Populate hashed results for selection.
+    $this->result = array();
+    foreach ($this->view->result as $row) {
+      $this->result[_views_bulk_operations_hash_object($row)] = $row;
+    }
+    if ($this->options['preserve_selection']) {
+      $view_id = _views_bulk_operations_view_id($this->view);
+      $view_name = $this->view->name;
+      if (empty($_SESSION['vbo_values'][$view_name][$view_id]['result'])) {
+        $_SESSION['vbo_values'][$view_name][$view_id]['result'] = array();
+      }
+      $_SESSION['vbo_values'][$view_name][$view_id]['result'] += $this->result;
+    }
+
+    // Copy the plugin globally because we might need it during form validation.
+    global $vbo_plugins;
+    $vbo_plugins[$this->form_id] = $this;
+
+    // Rendering the plugin as a form.
+    return drupal_get_form($this->form_id, $this);
   }
 
+  /**
+   * API function to get list of selected operations.
+   */
   function get_selected_operations() {
     $selected = array();
-    foreach (array_filter($this->options['selected_operations']) as $key) {
+    foreach ($this->options['operations'] as $key => $options) {
+      if (empty($options['selected'])) continue;
+      if (empty($this->all_operations[$key])) continue;
       if (module_exists('actions_permissions')) {
         $perm = actions_permissions_get_perm($this->all_operations[$key]['label'], $this->all_operations[$key]['callback']);
         if (!user_access($perm)) continue;
@@ -154,30 +229,42 @@ class views_bulk_operations_plugin_style extends views_plugin_style_table {
       if (!empty($this->all_operations[$key]['permissions'])) foreach ($this->all_operations[$key]['permissions'] as $perm) {
         if (!user_access($perm)) continue 2;
       }
-      if (isset($this->all_operations[$key])) {
-        $selected[$key] = $this->all_operations[$key]['label'];
-      }
+      $selected[$key] = !empty($this->options['operations'][$key]['label']) ? t($this->options['operations'][$key]['label']) : $this->all_operations[$key]['label'];
     }
     return $selected;
   }
 
+  /**
+   * API function to get operation information.
+   */
   function get_operation_info($key) {
-    return $this->all_operations[$key];
+    if (empty($this->all_operations[$key])) {
+      return NULL;
+    }
+    $operation = $this->all_operations[$key];
+    $operation['perm label'] = $operation['label'];
+    if (!empty($this->options['operations'][$key]['label'])) {
+      $operation['label'] = t($this->options['operations'][$key]['label']);
+    }
+    $operation['options'] = $this->options['operations'][$key] + array('settings' => NULL);
+    return $operation;
   }
 
-  private function get_operations_options() {
-    $options = array();
-    $object_info = _views_bulk_operations_object_info_for_view($this->view);
-    if (!$object_info) return $options;
-    foreach ($this->all_operations as $key => $operation) {
-      if ($operation['type'] == $object_info['type'] || $operation['type'] == 'system' || in_array($object_info['hook'], (array) $operation['hooks'])) {
-        $options[$key] = $operation['label'] .' ('. $key .')'; 
+  function get_operations_options() {
+    static $options = array();
+    if (empty($options)) {
+      $object_info = _views_bulk_operations_object_info_for_view($this->view);
+      if (!$object_info) return $options;
+      foreach ($this->all_operations as $key => $operation) {
+        if ($operation['type'] == $object_info['type'] || $operation['type'] == 'system' || in_array($object_info['hook'], (array) $operation['hooks'])) {
+          $options[$key] = $operation['label'] .' ('. $key .')';
+        }
       }
     }
     return $options;
   }
 
-  private function populate_operations() {
+  function populate_operations() {
     module_load_include('inc', 'node', 'node.admin');
 
     $operations = array();
@@ -185,7 +272,7 @@ class views_bulk_operations_plugin_style extends views_plugin_style_table {
       $hook_name = $object_type .'_operations';
       foreach (module_invoke_all($hook_name) as $operation) {
         if (empty($operation['callback'])) continue;
-        $key = $operation['callback'] . (empty($operation['callback arguments']) ? '' : ':'. md5(serialize($operation['callback arguments'])));
+        $key = $operation['callback'] . (empty($operation['callback arguments']) ? '' : '-'. md5(serialize($operation['callback arguments'])));
         if (!isset($operation['behavior'])) { // assume operations modify nodes by default
           $operation['behavior'] = array('changes_node_property');
         }
@@ -229,7 +316,7 @@ class views_bulk_operations_plugin_style extends views_plugin_style_table {
     $this->all_operations = $operations;
   }
 
-  private function get_access_op($operation) {
+  function get_access_op($operation) {
     $access_op = 0;
     if (isset($operation['behavior'])) {
       if (in_array('views_node_property', $operation['behavior'])) {
@@ -248,7 +335,7 @@ class views_bulk_operations_plugin_style extends views_plugin_style_table {
     return $access_op;
   }
 
-  private function get_custom_actions() {
+  function get_custom_actions() {
     $actions = array();
     $static_actions = actions_list();
     $result = db_query("SELECT * FROM {actions} WHERE parameters > ''");
@@ -259,7 +346,7 @@ class views_bulk_operations_plugin_style extends views_plugin_style_table {
         'type' => $action->type,
         'configurable' => FALSE,
         'parameters' => $parameters,
-        'key' => $action->callback . (empty($parameters) ? '' : ':'. md5($action->parameters)),
+        'key' => $action->callback . (empty($parameters) ? '' : '-'. md5($action->parameters)),
       );
       foreach (array('callback', 'behavior', 'aggregate', 'permissions', 'hooks', 'form properties') as $attribute) {
         if (isset($static_actions[$action->callback][$attribute])) $actions[$action->aid][$attribute] = $static_actions[$action->callback][$attribute];
@@ -270,27 +357,4 @@ class views_bulk_operations_plugin_style extends views_plugin_style_table {
     }
     return $actions;
   }
-
-  function get_operation_settings($operation) {
-    return (isset($this->options[$operation['key']]) ? $this->options[$operation['key']] : NULL);
-  }
-
-  function strip_view() {
-    if (isset($this->view->query->pager)) {
-      $this->view->pager_original = $this->view->query->pager;
-      $this->view->query->pager = NULL;
-    }
-    else {
-      $this->view->pager_original = $this->view->pager;
-      $this->view->set_use_pager(FALSE);
-    }
-    $this->view->exposed_widgets = NULL;
-    $this->view->display_handler->set_option('header', '');
-    $this->view->display_handler->set_option('footer', '');
-    $this->view->display_handler->set_option('use_pager', FALSE);
-    $this->view->attachment_before = '';
-    $this->view->attachment_after = '';
-    $this->view->feed_icon = NULL;
-  }
 }
-

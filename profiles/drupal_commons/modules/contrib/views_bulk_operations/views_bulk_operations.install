@@ -1,10 +1,17 @@
 <?php
-// $Id: views_bulk_operations.install,v 1.1.2.6 2010/03/23 00:07:29 kratib Exp $
 
 /**
  * @file
  * Installation and update functions.
  */
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function views_bulk_operations_uninstall() {
+  variable_del('views_bulk_operations_actions');
+  actions_synchronize(actions_list(), TRUE);
+}
 
 /**
  * Implementation of hook_update_N().
@@ -42,7 +49,7 @@ function views_bulk_operations_update_6000() {
       $display_options = &$view->display[$display]->display_options;
       if (isset($display_options['style_plugin']) && $display_options['style_plugin'] == 'bulk') {
         $changed = TRUE;
-        $selected_operations = isset($display_options['style_options']['selected_operations']) && is_array($display_options['style_options']['selected_operations']) ? 
+        $selected_operations = isset($display_options['style_options']['selected_operations']) && is_array($display_options['style_options']['selected_operations']) ?
           array_filter($display_options['style_options']['selected_operations']) : array();
         $display_options['style_options']['selected_operations'] = array();
         if (!empty($selected_operations)) foreach ($selected_operations as $operation) {
@@ -60,3 +67,66 @@ function views_bulk_operations_update_6000() {
   return array();
 }
 
+/**
+ * Implementation of hook_update_N().
+ *
+ * Update VBO settings to latest version.
+ */
+function views_bulk_operations_update_6001() {
+  drupal_load('module', 'views');
+  drupal_load('module', 'views_bulk_operations');
+  views_include('cache');
+
+  foreach (views_get_all_views() as $name => $view) {
+    $changed = FALSE;
+    foreach (array_keys($view->display) as $display) {
+      $display_options = &$view->display[$display]->display_options;
+      if (isset($display_options['style_plugin']) && $display_options['style_plugin'] == 'bulk') {
+        $changed = TRUE;
+
+        if (!empty($display_options['style_options']['selected_operations'])) foreach (array_filter($display_options['style_options']['selected_operations']) as $key) {
+          // Adjust operation key.
+          $new_key = str_replace(':', '-', $key);
+
+          // Move selected operations.
+          $display_options['style_options']['operations'][$new_key]['selected'] = TRUE;
+
+          // Move operation labels.
+          if (isset($display_options['style_options']['labels'][$key])) {
+            $display_options['style_options']['operations'][$new_key]['label'] = $display_options['style_options']['labels'][$key];
+          }
+
+          // Move operations settings.
+          if (isset($display_options['style_options'][$key])) {
+            $display_options['style_options']['operations'][$new_key]['settings'] = $display_options['style_options'][$key];
+            unset($display_options['style_options'][$key]);
+          }
+
+          // Move skip confirmation.
+          $display_options['style_options']['operations'][$new_key]['skip_confirmation'] = $display_options['style_options']['skip_confirmation'];
+        }
+
+        // Unset old values.
+        unset($display_options['style_options']['selected_operations']);
+        unset($display_options['style_options']['labels']);
+        unset($display_options['style_options']['skip_confirmation']);
+      }
+    }
+    if ($changed) {
+      $view->save();
+      views_object_cache_clear('view', $name);
+    }
+  }
+  cache_clear_all('*', 'cache_views');
+  return array();
+}
+
+/**
+ * Implementation of hook_update_N().
+ *
+ * Delete variable views_bulk_operations_actions to pick up new actions.
+ */
+function views_bulk_operations_update_6002() {
+  variable_del('views_bulk_operations_actions');
+  return array();
+}

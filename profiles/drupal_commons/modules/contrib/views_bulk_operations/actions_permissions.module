@@ -1,5 +1,4 @@
 <?php
-// $Id: actions_permissions.module,v 1.1.2.3 2009/06/09 21:02:20 kratib Exp $
 
 /**
  * Implementation of hook_perm().
@@ -8,7 +7,7 @@ function actions_permissions_perm() {
   $perms = array();
   $actions = actions_list() + _actions_permissions_get_custom_actions();
   foreach ($actions as $callback => $action) {
-    $perms[] = actions_permissions_get_perm($action['description'], $callback);
+    $perms[] = actions_permissions_get_perm($action['description'], empty($action['callback']) ? $callback : $action['callback']);
   }
   module_load_include('inc', 'node', 'node.admin');
   foreach (array('node', 'user') as $type) {
@@ -47,7 +46,7 @@ function actions_permissions_get_perm($label, $callback) {
 function rt($string) {
   global $language;
   $langcode = $language->language;
-  
+
   // 1. Lookup custom strings.
   static $custom_strings;
   if (!isset($custom_strings[$langcode])) {
@@ -75,4 +74,3 @@ function rt($string) {
     return $source ? $source : $string;
   }
 }
-

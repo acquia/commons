@@ -1,16 +1,179 @@
 <?php
-// $Id: views_bulk_operations.module,v 1.29.2.9.2.154 2010/10/06 15:34:41 kratib Exp $
 
 /**
- * @file 
+ * @file
  * Allows operations to be performed on items selected in a view.
+ *
+ * Table of contents:
+ * - API functions
+ * - Drupal hooks and callbacks
+ * - Helper functions
  */
 
+/**
+ * API function to programmatically invoke a VBO.
+ */
+function views_bulk_operations_execute($vid, $operation_callback, $operation_arguments = array(), $view_exposed_input = array(), $view_arguments = array(), $respect_limit = FALSE) {
+  $view = views_get_view($vid);
+  if (!is_object($view)) {
+    watchdog('views bulk operations', 'Could not find view %vid.', array('%vid' => $vid), WATCHDOG_ERROR);
+    return;
+  }
+  $vd = new views_bulk_operations_destructor($view); // this will take care of calling $view->destroy() on exit.
+
+  // Find the view display that has the VBO style.
+  $found = FALSE;
+  foreach (array_keys($view->display) as $display) {
+    $display_options = &$view->display[$display]->display_options;
+    if (isset($display_options['style_plugin']) && $display_options['style_plugin'] == 'bulk') {
+      $view->set_display($display);
+      $found = TRUE;
+      break;
+    }
+  }
+  if (!$found) {
+    watchdog('views bulk operations', 'Could not find a VBO display in view %vid.', array('%vid' => $vid), WATCHDOG_ERROR);
+    return;
+  }
+
+  // Execute the view.
+  $view->set_exposed_input($view_exposed_input);
+  $view->set_arguments($view_arguments);
+  $view->set_items_per_page($respect_limit ? $display_options['items_per_page'] : 0);
+  $view->execute();
+  if (empty($view->result)) {
+    watchdog('views bulk operations', 'No results for view %vid.', array('%vid' => $vid), WATCHDOG_WARNING);
+    return;
+  }
+
+  // Find the selected operation.
+  $plugin = $view->style_plugin;
+  $operations = $plugin->get_selected_operations();
+  if (!isset($operations[$operation_callback])) {
+    watchdog('views bulk operations', 'Could not find operation %operation in view %vid.', array('%operation' => $operation_callback, '%vid' => $vid), WATCHDOG_ERROR);
+    return;
+  }
+  $operation = $plugin->get_operation_info($operation_callback);
+
+  // Execute the operation on the view results.
+  $execution_type = $plugin->options['execution_type'];
+  if ($execution_type == VBO_EXECUTION_BATCH) {
+    $execution_type = VBO_EXECUTION_DIRECT; // we don't yet support Batch API here
+  }
+  _views_bulk_operations_execute(
+    $view,
+    $view->result,
+    $operation,
+    $operation_arguments,
+    array(
+      'execution_type' => $execution_type,
+      'display_result' => $plugin->options['display_result'],
+      'max_performance' => $plugin->options['max_performance'],
+      'settings' => $operation['options']['settings'],
+    )
+  );
+}
+
+/**
+ * API function to add actions to a VBO.
+ */
+function views_bulk_operations_add_actions($vid, $actions) {
+  $view = views_get_view($vid);
+  if (!is_object($view)) {
+    watchdog('views bulk operations', 'Could not find view %vid.', array('%vid' => $vid), WATCHDOG_ERROR);
+    return;
+  }
+
+  // Find the view display that has the VBO style.
+  $found = FALSE;
+  foreach (array_keys($view->display) as $display) {
+    $display_options = &$view->display[$display]->display_options;
+    if (isset($display_options['style_plugin']) && $display_options['style_plugin'] == 'bulk') {
+      $found = TRUE;
+      break;
+    }
+  }
+  if (!$found) {
+    watchdog('views bulk operations', 'Could not find a VBO display in view %vid.', array('%vid' => $vid), WATCHDOG_ERROR);
+    return;
+  }
+
+  // Iterate on the desired actions.
+  $operations = $display_options['style_options']['operations'];
+  $ignored = $added = array();
+  if (!empty($actions)) foreach ($actions as $action) {
+    $modified = FALSE;
+    if (is_numeric($action)) { // aid
+      $action_object = db_fetch_object(db_query("SELECT * FROM {actions} WHERE aid = %d", $action));
+      if (is_object($action_object)) {
+        $parameters = unserialize($action_object->parameters);
+        $key = $action_object->callback . (empty($parameters) ? '' : '-'. md5($action_object->parameters));
+        if (isset($operations[$key])) { // available for this view
+          $display_options['style_options']['operations'][$key]['selected'] = TRUE;
+          $modified = TRUE;
+        }
+      }
+    }
+    else { // callback or title
+      if (isset($operations[$action])) { // callback and available for this view
+        $display_options['style_options']['operations'][$action]['selected'] = TRUE;
+        $modified = TRUE;
+      }
+      else { // try the title
+        $action_object = db_fetch_object(db_query("SELECT * FROM {actions} WHERE description LIKE '%s'", db_escape_string($action)));
+        if (is_object($action_object)) {
+          $parameters = unserialize($action_object->parameters);
+          $key = $action_object->callback . (empty($parameters) ? '' : '-'. md5($action_object->parameters));
+          if (isset($operations[$key])) { // available for this view
+            $display_options['style_options']['operations'][$key]['selected'] = TRUE;
+            $modified = TRUE;
+          }
+        }
+      }
+    }
+    if ($modified) {
+      $added[] = $action;
+    } else {
+      $ignored[] = $action;
+    }
+  }
+
+  // Save the view if anything was changed.
+  if (!empty($added)) {
+    $view->save();
+    views_object_cache_clear('view', $vid);
+
+    if (empty($ignored)) {
+      watchdog(
+        'views bulk operations',
+        'View %vid was successfully modified. The following actions were added: %added.',
+        array('%vid' => $vid, '%added' => implode(', ', $added)),
+        WATCHDOG_INFO
+      );
+    } else {
+      watchdog(
+        'views bulk operations',
+        'View %vid was modified. The following actions were added: %added. The following actions were ignored: %ignored.',
+        array('%vid' => $vid, '%added' => implode(', ', $added), '%ignored' => implode(', ', $ignored)),
+        WATCHDOG_WARNING
+      );
+    }
+  }
+  else {
+    watchdog(
+      'views bulk operations',
+      'View %vid was NOT modified. The following actions were ignored: %ignored.',
+      array('%vid' => $vid, '%ignored' => implode(', ', $ignored)),
+      WATCHDOG_ERROR
+    );
+  }
+}
+
 // Define the steps in the multistep form that executes operations.
-define('VIEWS_BULK_OPS_STEP_VIEW', 1);
-define('VIEWS_BULK_OPS_STEP_CONFIG', 2);
-define('VIEWS_BULK_OPS_STEP_CONFIRM', 3);
-define('VIEWS_BULK_OPS_STEP_SINGLE', 4);
+define('VBO_STEP_VIEW',    1);
+define('VBO_STEP_CONFIG',  2);
+define('VBO_STEP_CONFIRM', 3);
+define('VBO_STEP_SINGLE',  4);
 
 // Types of bulk execution.
 define('VBO_EXECUTION_DIRECT',    1);
@@ -27,6 +190,28 @@ define('VBO_ACCESS_OP_VIEW',      0x01);
 define('VBO_ACCESS_OP_UPDATE',    0x02);
 define('VBO_ACCESS_OP_CREATE',    0x04);
 define('VBO_ACCESS_OP_DELETE',    0x08);
+
+// Item selectors.
+define('VBO_SELECTOR_ALL',        1);
+define('VBO_SELECTOR_ALL_PAGES',  2);
+define('VBO_SELECTOR_NONE',       3);
+
+// Some handlers still respond to hook_views_pre_render() when they should really
+// respond to hook_views_post_execute(). Until they're fixed, we can't depend
+// on the latter.
+define('VBO_SKIP_POST_EXECUTE',   TRUE);
+
+/**
+ * Implementation of hook_cron_queue_info().
+ */
+function views_bulk_operations_cron_queue_info() {
+  return array(
+    'views_bulk_operations' => array(
+      'worker callback' => '_views_bulk_operations_execute_queue',
+      'time' => 30,
+    ),
+  );
+}
 
 /**
  * Implementation of hook_views_api().
@@ -50,28 +235,53 @@ function views_bulk_operations_elements() {
 }
 
 /**
- * Process the views_node_selector element defined earlier.
- * 
+ * Process function for views_node_selector element.
+ *
  * @see views_bulk_operations_elements()
  */
 function views_node_selector_process($element, $edit) {
-  $element['#tree'] = TRUE;
-  if (!isset($element['#value'])) {
-    $element['#value'] = array('selection' => array(), 'select_all' => FALSE);
-  }
-
   $view = $element['#view'];
-  $options = array();
-  foreach ($view->result as $num => $object) {
-    $options[$num+1] = '';
-  }
-  $element['selection']['#options'] = $options;
-  $element['selection']['#value'] = $element['#value']['select_all'] ? $options : $element['#value']['selection'];
-  $element['selection']['#attributes'] = array('class' => 'vbo-select');
+  $view_id = _views_bulk_operations_view_id($view);
+  $view_name = $view->name;
+
+  // Gather options.
+  $result = $view->style_plugin->options['preserve_selection'] ? $_SESSION['vbo_values'][$view_name][$view_id]['result'] : $view->style_plugin->result;
+  $options = array_fill_keys(array_keys($result), '');
+
+  // Fix default value.
+  $element['#default_value'] += array('selection' => array(), 'selectall' => FALSE);
+  $element['#default_value']['selection'] =
+    $element['#default_value']['selectall'] ?
+    array_diff_key($options, array_filter($element['#default_value']['selection'], '_views_bulk_operations_filter_invert')) :
+    array_intersect_key($options, array_filter($element['#default_value']['selection']));
+
+  // Create selection FAPI elements.
+  $element['#tree'] = TRUE;
+  $element['selection'] = array(
+    '#options' => $options,
+    '#value' => $element['#default_value']['selection'],
+    '#attributes' => array('class' => 'vbo-select'),
+  );
   $element['selection'] = expand_checkboxes($element['selection']);
-  
-  $element['select_all'] = array('#type' => 'hidden', '#default_value' => $element['#value']['select_all']);
-  return $element; 
+  $element['selectall'] = array(
+    '#type' => 'hidden',
+    '#default_value' => $element['#default_value']['selectall']
+  );
+
+  // Create selector FAPI element.
+  $options = array(
+    0 => t('Select...'),
+    VBO_SELECTOR_ALL => t('All (this page)'),
+    VBO_SELECTOR_ALL_PAGES => t('All (all pages)'),
+    VBO_SELECTOR_NONE => t('None'),
+  );
+  $element['selector'] = array(
+    '#type' => 'select',
+    '#options' => $options,
+    '#attributes' => array('class' => 'views-bulk-operations-selector'),
+    '#default_value' => $element['#default_value']['selectall'] ? VBO_SELECTOR_ALL_PAGES : 0,
+  );
+  return $element;
 }
 
 /**
@@ -83,13 +293,15 @@ function views_bulk_operations_theme() {
       'arguments' => array('element' => NULL),
     ),
     'views_bulk_operations_confirmation' => array(
-      'arguments' => array('objects' => NULL, 'view' => NULL),
+      'arguments' => array('objects' => NULL, 'invert' => FALSE, 'view' => NULL),
+    ),
+    'views_bulk_operations_table' => array(
+      'arguments' => array('header' => array(), 'rows' => array(), 'attributes' => array(), 'title' => NULL, 'view' => NULL),
+      'template' => 'views-bulk-operations-table',
     ),
   );
-  $files = file_scan_directory(drupal_get_path('module', 'views_bulk_operations'), '(.*).action.inc$');
-  if ($files) foreach ($files as $file) {
-    require_once($file->filename);
-    $action_theme_fn = 'views_bulk_operations_'. str_replace('.', '_', basename($file->filename, '.inc')).'_theme';
+  foreach (_views_bulk_operations_load_actions() as $file) {
+    $action_theme_fn = 'views_bulk_operations_'. $file .'_action_theme';
     if (function_exists($action_theme_fn)) {
       $themes += call_user_func($action_theme_fn);
     }
@@ -98,11 +310,35 @@ function views_bulk_operations_theme() {
 }
 
 /**
- * Provide the ability to select items in a view using checkboxes.
+ * Template preprocessor for theme function 'views_bulk_operations_table'.
+ */
+function template_preprocess_views_bulk_operations_table(&$vars, $hook) {
+  $view = $vars['view'];
+
+  $count = 0;
+  foreach ($vars['rows'] as $num => $row) {
+    $vars['row_classes'][$num][] = ($count++ % 2 == 0) ? 'odd rowclick' : 'even rowclick';
+  }
+
+  $vars['row_classes'][0][] = 'views-row-first';
+  $vars['row_classes'][count($vars['row_classes']) - 1][] = 'views-row-last';
+
+  $vars['class'] = 'views-bulk-operations-table';
+  if ($view->style_plugin->options['sticky']) {
+    drupal_add_js('misc/tableheader.js');
+    $vars['class'] .= ' sticky-enabled';
+  }
+  $vars['class'] .= ' cols-'. count($vars['rows']);
+  $vars['class'] .= ' views-table';
+}
+
+
+/**
+ * Theme function for views_node_selector element.
  */
 function theme_views_node_selector($element) {
-  require_once(drupal_get_path('module', 'views') . '/theme/theme.inc');
-  
+  module_load_include('inc', 'views', 'theme/theme');
+
   $output = '';
   $view = $element['#view'];
   $sets = $element['#sets'];
@@ -115,73 +351,56 @@ function theme_views_node_selector($element) {
 
     // template_preprocess_views_view_table() expects the raw data in 'rows'.
     $vars['rows'] = $records;
-      
-    // Render the view as table. Function from views/theme/theme.inc
-    template_preprocess_views_view_table($vars);
-    
+
+    // Render the view as table. Use the hook from from views/theme/theme.inc
+    // and allow overrides using the same algorithm as the theme system will
+    // do calling the theme() function.
+    $hook = 'views_view_table';
+    $hooks = theme_get_registry();
+    if (!isset($hooks[$hook])) {
+      return '';
+    }
+    $args = array(&$vars, $hook);
+    foreach ($hooks[$hook]['preprocess functions'] as $func) {
+      if (function_exists($func)) {
+        call_user_func_array($func, $args);
+      }
+    }
+
     // Add checkboxes to the header and the rows.
-    $hide_select_all = @$view->display['default']->display_options['style_options']['hide_select_all'];
-    if (!$hide_select_all) {
-      $headers[] = theme('table_select_header_cell');
+    if (empty($view->style_plugin->options['hide_selector'])) {
+      $headers['select'] = theme('select', $element['selector']);
     }
     else {
-      $headers[] = array('class' => 'no_select_all');
+      $headers['select'] = '';
     }
     foreach ($vars['header'] as $field => $label) {
-      $headers[] = array('data' => $label, 'class' => "views-field views-field-{$vars['fields'][$field]}");
+      $headers[$field] = $label;
     }
     $rows = array();
     foreach ($records as $num => $object) {
-      $row = array('class' => 'rowclick', 'data' => array());
-      $row['data'][] =  theme('checkbox', $element['selection'][$num + 1]);
+      $row['select'] =  theme('checkbox', $element['selection'][_views_bulk_operations_hash_object($object)]);
       foreach ($vars['rows'][$num] as $field => $content) {
-        $row['data'][] = array('data' => $content, 'class' => "views-field views-field-{$vars['fields'][$field]}");
+        $row[$field] = $content;
       }
       $rows[] = $row;
     }
-    // Add the first row as option to select all records across all pages.
-    $items_per_page = method_exists($view, 'get_items_per_page') ? $view->get_items_per_page() : (isset($view->pager) ? $view->pager['items_per_page'] : 0);
-    if ($items_per_page && $view->total_rows > $items_per_page) {
-      $group = count($sets) > 1 ? t('set') : t('page');
-      $row = array(
-        array(
-          'data' => '<span id="vbo-this-page">'. t('All <strong>!objects</strong> rows in this !group are selected.', array('!objects' => count($records), '!group' => $group))
-            .'&nbsp;<input type="button" id="vbo-select-all-pages" value="'. t('Select all !objects rows in this view.', array('!objects' => $view->total_rows)) .'" /></span>'
-            .'<span id="vbo-all-pages" style="display: none">'. t('All <strong>!objects</strong> rows in this view are selected.', array('!objects' => $view->total_rows))
-            .'&nbsp;<input type="button" id="vbo-select-this-page" value="'. t('Select only !objects rows in this !group.', array('!objects' => count($records), '!group' => $group)) .'" /></span>',
-          'class' => 'view-field view-field-select-all',
-          'colspan' => count($headers) + 1,
-        ),
-      );
-      array_unshift($rows, $row);
-    }
 
-    $output .= theme('table', $headers, $rows, array('class' => $vars['class']), $title);
-    $output .= theme('hidden', $element['select_all']);
+    $output .= theme('views_bulk_operations_table', $headers, $rows, array('class' => $vars['class']), $title, $view);
+    $output .= theme('hidden', $element['selectall']);
   }
   return theme('form_element', $element, $output);
 }
 
 /**
- * Implementation of hook_init().
+ * Form implementation for main VBO multistep form.
  */
-function views_bulk_operations_init() {
-  // Reset selection if we're not in the view anymore.
-  if ($_GET['q'] != 'views-bulk-operations/js/pager' && isset($_SESSION['vbo_values']) && !isset($_SESSION['vbo_values'][$_GET['q']])) {
-    unset($_SESSION['vbo_values']);
+function views_bulk_operations_form($form_state, $form_id, $plugin) {
+  // Erase the form parameters from $_REQUEST for a clean pager.
+  if (!empty($form_state['post'])) {
+    $_REQUEST = array_diff($_REQUEST, $form_state['post']);
   }
 
-  // Automatically include the action files.
-  $files = file_scan_directory(drupal_get_path('module', 'views_bulk_operations'), '(.*).action.inc$');
-  if ($files) foreach ($files as $file) {
-    require_once($file->filename);
-  }
-}
-
-/**
- * Define multistep form for selecting and executing an operation.
- */
-function views_bulk_operations_form($form_state, $plugin) {
   // Force browser to reload the page if Back is hit.
   if (preg_match('/msie/i', $_SERVER['HTTP_USER_AGENT'])) {
     drupal_set_header("Cache-Control: no-cache"); // works for IE6+
@@ -190,71 +409,59 @@ function views_bulk_operations_form($form_state, $plugin) {
     drupal_set_header("Cache-Control: no-store"); // works for Firefox and other browsers
   }
 
-  // Add the JS files.
-  drupal_add_js('misc/tableselect.js');
-  drupal_add_js(drupal_get_path('module', 'views_bulk_operations') . '/views_bulk_operations.js');
-  drupal_add_css(drupal_get_path('module', 'views_bulk_operations') . '/views_bulk_operations.css', 'module');
-  static $once = FALSE;
-  if (!$once) { // We can be called here twice.
-    drupal_add_js(array('vbo' => array('url' => $_GET['q'])), 'setting');
-    $once = TRUE;
-  }
-
-  // If there's a session variable on this view, pre-load the old values.
-  if (isset($_SESSION['vbo_values'][$_GET['q']])) {
-    $objects = $_SESSION['vbo_values'][$_GET['q']]['objects'];
-    $page = isset($_GET['page']) ? $_GET['page'] : 0;
-    if (isset($objects['pages'][$page])) {
-      $default_objects['selection'] = $objects['pages'][$page]; 
-    }
-    else if (isset($objects['selection'])) {
-      $default_objects['selection'] = array_filter($objects['selection']); 
-    }
-    $default_objects['select_all'] = $objects['select_all'];
-    $default_operation = $_SESSION['vbo_values'][$_GET['q']]['operation'];
-  }
-  else {
-    $default_objects = array('selection' => NULL, 'select_all' => FALSE);
-    $default_operation = NULL;
-  }
-
-  if (!isset($form_state['storage']['step'])) {
-    if (count($plugin->get_selected_operations()) == 1 && $plugin->options['merge_single_action']) {
-      $step = VIEWS_BULK_OPS_STEP_SINGLE;
-    }
-    else {
-      $step = VIEWS_BULK_OPS_STEP_VIEW;
-    }
-    $form['exposed_input'] = array(
-      '#type' => 'value',
-      '#value' => $plugin->view->get_exposed_input(),
-    );
-    $form['arguments'] = array(
-      '#type' => 'value',
-      '#value' => $plugin->view->args,
-    );
+  // Which step is this?
+  if (empty($form_state['storage']['step'])) {
 
     // If empty view, render the empty text.
-    if (!$plugin->view->result) {
+    if (empty($plugin->view->result)) {
       $form['empty'] = array('#value' => $plugin->view->display_handler->render_empty());
       return $form;
     }
-  } 
+
+    // If there's a session variable on this view, pre-load the old values.
+    $view_id = _views_bulk_operations_view_id($plugin->view);
+    $view_name = $plugin->view->name;
+    if (isset($_SESSION['vbo_values'][$view_name][$view_id]) && $plugin->options['preserve_selection']) {
+      // Avoid PHP warnings.
+      $_SESSION['vbo_values'][$view_name][$view_id] += array(
+        'selection' => array(),
+        'selectall' => FALSE,
+        'operation' => NULL,
+      );
+
+      $default_objects = array(
+        'selection' => $_SESSION['vbo_values'][$view_name][$view_id]['selection'],
+        'selectall' => $_SESSION['vbo_values'][$view_name][$view_id]['selectall'],
+      );
+      $default_operation = $_SESSION['vbo_values'][$view_name][$view_id]['operation'];
+    }
+    else {
+      $default_objects = array('selection' => array(), 'selectall' => FALSE);
+      $default_operation = NULL;
+    }
+
+    if (count($plugin->get_selected_operations()) == 1 && $plugin->options['merge_single_action']) {
+      $step = VBO_STEP_SINGLE;
+    }
+    else {
+      $step = VBO_STEP_VIEW;
+    }
+  }
   else {
-    $plugin->strip_view();
+    _views_bulk_operations_strip_view($plugin->view);
     switch ($form_state['storage']['step']) {
-      case VIEWS_BULK_OPS_STEP_VIEW:
-        $operation = $plugin->get_operation_info($form_state['storage'][VIEWS_BULK_OPS_STEP_VIEW]['operation']);
+      case VBO_STEP_VIEW:
+        $operation = $form_state['storage']['operation'];
         if ($operation['configurable']) {
-          $step = VIEWS_BULK_OPS_STEP_CONFIG;
+          $step = VBO_STEP_CONFIG;
         }
         else {
-          $step = VIEWS_BULK_OPS_STEP_CONFIRM;
+          $step = VBO_STEP_CONFIRM;
         }
         break;
-      case VIEWS_BULK_OPS_STEP_SINGLE:
-      case VIEWS_BULK_OPS_STEP_CONFIG:
-        $step = VIEWS_BULK_OPS_STEP_CONFIRM;
+      case VBO_STEP_SINGLE:
+      case VBO_STEP_CONFIG:
+        $step = VBO_STEP_CONFIRM;
         break;
       }
   }
@@ -263,20 +470,20 @@ function views_bulk_operations_form($form_state, $plugin) {
     '#value' => $step
   );
   $form['#plugin'] = $plugin;
-  
+
   switch ($step) {
-    case VIEWS_BULK_OPS_STEP_VIEW:
+    case VBO_STEP_VIEW:
       $form['select'] = array(
         '#type' => 'fieldset',
         '#title' => t('Bulk operations'),
         '#prefix' => '<div id="views-bulk-operations-select">',
-        '#suffix' => '</div>',             
+        '#suffix' => '</div>',
       );
       $form['objects'] = array(
         '#type' => 'views_node_selector',
         '#view' => $plugin->view,
         '#sets' => $plugin->sets,
-        '#value' => $default_objects,
+        '#default_value' => $default_objects,
         '#prefix' => '<div class="views-node-selector">',
         '#suffix' => '</div>',
       );
@@ -287,13 +494,13 @@ function views_bulk_operations_form($form_state, $plugin) {
           '#options' => array(0 => t('- Choose an operation -')) + $plugin->get_selected_operations(),
           '#default_value' => $default_operation,
           '#prefix' => '<div id="views-bulk-operations-dropdown">',
-          '#suffix' => '</div>',             
+          '#suffix' => '</div>',
         );
         $form['select']['submit'] = array(
           '#type' => 'submit',
           '#value' => t('Execute'),
           '#prefix' => '<div id="views-bulk-operations-submit">',
-          '#suffix' => '</div>',             
+          '#suffix' => '</div>',
         );
       }
       else {
@@ -307,98 +514,97 @@ function views_bulk_operations_form($form_state, $plugin) {
         }
       }
       break;
-  
-    case VIEWS_BULK_OPS_STEP_SINGLE:
-      $ops = array_keys($plugin->get_selected_operations());
-      $operation = $plugin->get_operation_info($ops[0]);
-      $form['operation'] = array('#type' => 'value', '#value' => $ops[0]);
+
+    case VBO_STEP_SINGLE:
+      $operation_keys = array_keys($plugin->get_selected_operations());
+      $operation = $plugin->get_operation_info($operation_keys[0]);
+      $form['operation'] = array('#type' => 'value', '#value' => $operation_keys[0]);
       if ($operation['configurable']) {
-        $form += _views_bulk_operations_action_form($operation, $plugin->view, $plugin->view->result, $plugin->get_operation_settings($operation));
+        $form += _views_bulk_operations_action_form(
+          $operation,
+          $plugin->view,
+          $plugin->view->result,
+          $operation['options']['settings']
+        );
       }
-      $form['objects'] = array(
-        '#type' => 'views_node_selector',
-        '#view' => $plugin->view,
-        '#sets' => $plugin->sets,
-        '#value' => $default_objects,
-        '#prefix' => '<div class="views-node-selector">',
-        '#suffix' => '</div>',
-      );
       $form['submit'] = array(
         '#type' => 'submit',
         '#value' => $operation['label'],
         '#prefix' => '<div id="views-bulk-operations-submit">',
-        '#suffix' => '</div>',             
+        '#suffix' => '</div>',
+      );
+      $form['objects'] = array(
+        '#type' => 'views_node_selector',
+        '#view' => $plugin->view,
+        '#sets' => $plugin->sets,
+        '#default_value' => $default_objects,
+        '#prefix' => '<div class="views-node-selector">',
+        '#suffix' => '</div>',
       );
       break;
-    
-    case VIEWS_BULK_OPS_STEP_CONFIG:
-      $operation = $plugin->get_operation_info($form_state['storage'][VIEWS_BULK_OPS_STEP_VIEW]['operation']);
-      $form['operation'] = array('#type' => 'value', '#value' => $operation);
+
+    case VBO_STEP_CONFIG:
+      $operation = $form_state['storage']['operation'];
       $form += _views_bulk_operations_action_form(
-        $operation, 
-        $plugin->view, 
-        array_filter($form_state['storage'][VIEWS_BULK_OPS_STEP_VIEW]['objects']['selection']), 
-        $plugin->get_operation_settings($operation)
+        $operation,
+        $plugin->view,
+        $form_state['storage']['selection'],
+        $operation['options']['settings']
       );
       $form['execute'] = array(
         '#type' => 'submit',
         '#value' => t('Next'),
         '#weight' => 98,
       );
-      $query = drupal_query_string_encode($form_state['storage'][VIEWS_BULK_OPS_STEP_VIEW]['exposed_input']);
+      $query = drupal_query_string_encode($plugin->view->get_exposed_input());
       $form['cancel'] = array(
         '#type' => 'markup',
-        '#value' => t('<a href="@view">Cancel</a>', array('@view' => url($_GET['q'], array('query' => $query)))),
+        '#value' => l('Cancel', $_GET['q'], array('query' => $query)),
         '#weight' => 99,
       );
       drupal_set_title(t('Set parameters for %action', array('%action' => $operation['label'])));
       break;
-    
-    case VIEWS_BULK_OPS_STEP_CONFIRM:
-      $operation = $plugin->get_operation_info($form_state['storage'][VIEWS_BULK_OPS_STEP_VIEW]['operation']);
-      $query = drupal_query_string_encode($form_state['storage'][VIEWS_BULK_OPS_STEP_VIEW]['exposed_input']);
-      $objects = $form_state['storage'][VIEWS_BULK_OPS_STEP_VIEW]['objects']['selection'];
+
+    case VBO_STEP_CONFIRM:
+      $operation = $form_state['storage']['operation'];
+      $query = drupal_query_string_encode($plugin->view->get_exposed_input());
       $form = confirm_form($form,
         t('Are you sure you want to perform %action on selected rows?', array('%action' => $operation['label'])),
         array('path' => $_GET['q'], 'query' => $query),
-        theme('views_bulk_operations_confirmation', $objects, $plugin->view)
-      ); 
+        theme('views_bulk_operations_confirmation', $form_state['storage']['selection'], $form_state['storage']['selectall'], $plugin->view)
+      );
       break;
   }
- 
+
   // Use views_bulk_operations_form_submit() for form submit, regardless of form_id.
   $form['#submit'][] = 'views_bulk_operations_form_submit';
   $form['#validate'][] = 'views_bulk_operations_form_validate';
-  $form['#cache'] = TRUE;
+  $form['#attributes']['class'] = 'views-bulk-operations-form views-bulk-operations-form-step-' . $step;
   return $form;
 }
 
 /**
  * Implementation of hook_form_alter().
- *
- * Usability improvements to standard "Send e-mail" action.
  */
-function views_bulk_operations_form_alter(&$form, $form_state, $form_id) {
-  if (strpos($form_id, 'views_bulk_operations_form') === 0) {
-    if (isset($form['operation']) && ($form['operation']['#value']['callback'] == 'system_send_email_action' || $form['operation']['#value'] == 'system_send_email_action')) {
-      // Hide recipient field, as we have already chosen it from user list.
-      $form['recipient']['#default_value'] = '%author';
-      $form['recipient']['#type'] = 'hidden';
-    }
+function views_bulk_operations_form_alter(&$form, &$form_state) {
+  // Get the form ID here to add the JS settings.
+  if (!empty($form['form_id']) && strpos($form['form_id']['#value'], 'views_bulk_operations_form') === 0 && !empty($form['#plugin'])) {
+    _views_bulk_operations_add_js($form['#plugin'], $form['#id'], $form['form_id']['#value']);
   }
 }
 
 /**
- * Validate the selected operation.
- * 
- * @see views_bulk_operations_form()
+ * Form validate function for views_bulk_operations_form().
  */
 function views_bulk_operations_form_validate($form, &$form_state) {
-  switch ($form_state['values']['step']) {
-    case VIEWS_BULK_OPS_STEP_VIEW:
-      $_SESSION['vbo_values'][$_GET['q']] = $form_state['values'];
+  $form_id = $form_state['values']['form_id'];
+  $plugin = $form['#plugin'];
+  $view_id = _views_bulk_operations_view_id($plugin->view);
+  $view_name = $plugin->view->name;
 
-      if (!array_filter($form_state['values']['objects']['selection'])) { // If all 0, no row selected
+  switch ($form_state['values']['step']) {
+    case VBO_STEP_VIEW:
+      if (!array_filter($form_state['values']['objects']['selection']) && (empty($_SESSION['vbo_values'][$view_name][$view_id]) || !array_filter($_SESSION['vbo_values'][$view_name][$view_id]['selection']))) {
         form_set_error('objects', t('No row selected. Please select one or more rows.'));
       }
       if (!empty($form_state['clicked_button']['#hash'])) {
@@ -407,601 +613,192 @@ function views_bulk_operations_form_validate($form, &$form_state) {
       if (!$form_state['values']['operation']) { // No action selected
         form_set_error('operation', t('No operation selected. Please select an operation to perform.'));
       }
+      if (form_get_errors()) {
+        _views_bulk_operations_add_js($plugin, $form['#id'], $form_id);
+      }
       break;
 
-    case VIEWS_BULK_OPS_STEP_SINGLE:
-      $_SESSION['vbo_values'][$_GET['q']] = $form_state['values'];
-
-      if (!array_filter($form_state['values']['objects']['selection'])) { // If all 0, no row selected
+    case VBO_STEP_SINGLE:
+      if (!array_filter($form_state['values']['objects']['selection']) && (empty($_SESSION['vbo_values'][$view_name][$view_id]) || !array_filter($_SESSION['vbo_values'][$view_name][$view_id]['selection']))) {
         form_set_error('objects', t('No row selected. Please select one or more rows.'));
       }
-      $plugin = $form['#plugin'];
       $operation = $plugin->get_operation_info($form_state['values']['operation']);
       if ($operation['configurable']) {
         _views_bulk_operations_action_validate($operation, $form, $form_state);
       }
-      break;
-
-    case VIEWS_BULK_OPS_STEP_CONFIG:
-      $plugin = $form['#plugin'];
-      $operation = $plugin->get_operation_info($form_state['storage'][VIEWS_BULK_OPS_STEP_VIEW]['operation']);
-      _views_bulk_operations_action_validate($operation, $form, $form_state);
-      break;
-  }
-}
-
-/**
- * Helper function to adjust the selected set of nodes based on different situations.
- */ 
-function _views_bulk_operations_adjust_selection(&$selection, $select_all, $exposed_input, $arguments, $plugin) {
-  if ($select_all) {
-    // Adjust selection to select all nodes across pages.
-    $view = views_get_view($plugin->view->vid ? $plugin->view->vid : $plugin->view->name);
-    $view->set_items_per_page(0);
-    $view->set_exposed_input($exposed_input);
-    $view->set_arguments($arguments);
-
-    // HACK for date_api_filter_handler: set $_GET with the exposed_input.
-    $_GET += $exposed_input;
-
-    $view->execute($plugin->view->current_display);
-    $selection = array();
-    foreach ($view->result as $num => $result) {
-      $selection[$num + 1] = $result;
-    }
-  }
-  else {
-    // Adjust selection to filter out previous selections.
-    $results = array();
-    if (!empty($plugin->view->result)) foreach ($plugin->view->result as $num => $result) {
-      if ($selection[$num + 1]) {
-        $results[$num + 1] = $result;
+      if (form_get_errors()) {
+        _views_bulk_operations_add_js($plugin, $form['#id'], $form_id);
       }
-    }
-    $selection = $results;
+      break;
+
+    case VBO_STEP_CONFIG:
+      $operation = $form_state['storage']['operation'];
+      _views_bulk_operations_action_validate($operation, $form, $form_state);
+
+      // If the action validation fails, Form API will bring us back to this step.
+      // We need to strip the view here because the form function will not be called.
+      // Also, the $plugin variable above was carried over from last submission, so it
+      // does not represent the current instance of the plugin.
+      // That's why we had to store instances of the plugin in this global array.
+      if (form_get_errors()) {
+        global $vbo_plugins;
+        if (isset($vbo_plugins[$form_id])) {
+          _views_bulk_operations_strip_view($vbo_plugins[$form_id]->view);
+        }
+      }
+      break;
   }
-    
-  // Adjust sticky selection accordingly.
-  $_SESSION['vbo_values'][$_GET['q']]['objects'] = array('selection' => $selection, 'select_all' => $select_all);
 }
 
 /**
- * Submit handler for the selected operation.
- * 
- * @see views_bulk_operations_form()
+ * Form submit function for views_bulk_operations_form().
  */
 function views_bulk_operations_form_submit($form, &$form_state) {
+  $form_id = $form_state['values']['form_id'];
   $plugin = $form['#plugin'];
-  
-  switch ($form_state['values']['step']) {
-    case VIEWS_BULK_OPS_STEP_VIEW:
-      $form_state['storage']['step'] = $form_state['values']['step'];
-      $form_state['storage'][VIEWS_BULK_OPS_STEP_VIEW] = $form_state['values'];
-      _views_bulk_operations_adjust_selection(
-        $form_state['storage'][VIEWS_BULK_OPS_STEP_VIEW]['objects']['selection'], 
-        $form_state['storage'][VIEWS_BULK_OPS_STEP_VIEW]['objects']['select_all'], 
-        $form_state['storage'][VIEWS_BULK_OPS_STEP_VIEW]['exposed_input'], 
-        $form_state['storage'][VIEWS_BULK_OPS_STEP_VIEW]['arguments'], 
-        $plugin
-      );
-      $operation = $plugin->get_operation_info($form_state['storage'][VIEWS_BULK_OPS_STEP_VIEW]['operation']);
-      if (!$operation['configurable'] && $plugin->options['skip_confirmation']) {
+  $view = $plugin->view;
+
+  $form_state['storage']['step'] = $step = $form_state['values']['step'];
+  switch ($step) {
+    case VBO_STEP_VIEW:
+      $form_state['storage']['selection'] = _views_bulk_operations_get_selection($plugin, $form_state, $form_id);
+      $form_state['storage']['selectall'] = $form_state['values']['objects']['selectall'];
+      $form_state['storage']['operation'] = $operation = $plugin->get_operation_info($form_state['values']['operation']);
+      if (!$operation['configurable'] && !empty($operation['options']['skip_confirmation'])) {
         break; // Go directly to execution
       }
       return;
 
-    case VIEWS_BULK_OPS_STEP_SINGLE:
-      $form_state['storage']['step'] = $form_state['values']['step'];
-      $form_state['storage'][VIEWS_BULK_OPS_STEP_VIEW] = $form_state['values'];
-      $form_state['storage'][VIEWS_BULK_OPS_STEP_CONFIG] = $form_state['values']; // we're not taking any chances
-      _views_bulk_operations_adjust_selection(
-        $form_state['storage'][VIEWS_BULK_OPS_STEP_VIEW]['objects']['selection'], 
-        $form_state['storage'][VIEWS_BULK_OPS_STEP_VIEW]['objects']['select_all'], 
-        $form_state['storage'][VIEWS_BULK_OPS_STEP_VIEW]['exposed_input'], 
-        $form_state['storage'][VIEWS_BULK_OPS_STEP_VIEW]['arguments'], 
-        $plugin
-      );
-      $operation = $plugin->get_operation_info($form_state['storage'][VIEWS_BULK_OPS_STEP_VIEW]['operation']);
+    case VBO_STEP_SINGLE:
+      $form_state['storage']['selection'] = _views_bulk_operations_get_selection($plugin, $form_state, $form_id);
+      $form_state['storage']['selectall'] = $form_state['values']['objects']['selectall'];
+      $form_state['storage']['operation'] = $operation = $plugin->get_operation_info($form_state['values']['operation']);
       if ($operation['configurable']) {
         $form_state['storage']['operation_arguments'] = _views_bulk_operations_action_submit($operation, $form, $form_state);
       }
-      if ($plugin->options['skip_confirmation']) {
+      if (!empty($operation['options']['skip_confirmation'])) {
         break; // Go directly to execution
       }
       return;
 
-    case VIEWS_BULK_OPS_STEP_CONFIG:
-      $form_state['storage']['step'] = $form_state['values']['step'];
-      $form_state['storage'][VIEWS_BULK_OPS_STEP_CONFIG] = $form_state['values'];
-      $operation = $plugin->get_operation_info($form_state['storage'][VIEWS_BULK_OPS_STEP_VIEW]['operation']);
+    case VBO_STEP_CONFIG:
+      $operation = $form_state['storage']['operation'];
       $form_state['storage']['operation_arguments'] = _views_bulk_operations_action_submit($operation, $form, $form_state);
-      if ($plugin->options['skip_confirmation']) {
+      if (!empty($operation['options']['skip_confirmation'])) {
         break; // Go directly to execution
       }
-      return; 
+      return;
 
-    case VIEWS_BULK_OPS_STEP_CONFIRM:
+    case VBO_STEP_CONFIRM:
       break;
   }
 
   // Clean up unneeded SESSION variables.
-  unset($_SESSION['vbo_values'][$_GET['q']]);
+  $view_name = $view->name;
+  unset($_SESSION['vbo_values'][$view_name]);
+
+  // Get the objects from the view if selectall was chosen.
+  if ($form_state['storage']['selectall']) {
+    $view_copy = $view->clone_view();
+    $view_copy->set_exposed_input($view->exposed_input);
+    $view_copy->set_arguments($view->args);
+    $view_copy->set_items_per_page(0);
+    $view_copy->skip_render = TRUE; // signal our plugin to skip the rendering
+    $view_copy->render($view->current_display);
+    $objects = array();
+    foreach ($view_copy->result as $row) {
+      $objects[_views_bulk_operations_hash_object($row)] = $row;
+    }
+    $view_copy->destroy();
+    $objects = array_diff_key($objects, $form_state['storage']['selection']);
+  }
+  else {
+    $objects = $form_state['storage']['selection'];
+  }
 
   // Execute the VBO.
-  $operation = $plugin->get_operation_info($form_state['storage'][VIEWS_BULK_OPS_STEP_VIEW]['operation']);
+  $operation = $form_state['storage']['operation'];
   $operation_arguments = array();
   if ($operation['configurable']) {
-    $form_state['values'] += $form_state['storage'][VIEWS_BULK_OPS_STEP_CONFIG];
     $operation_arguments = $form_state['storage']['operation_arguments'];
   }
   _views_bulk_operations_execute(
-    $plugin->view, 
-    $form_state['storage'][VIEWS_BULK_OPS_STEP_VIEW]['objects']['selection'], 
-    $operation, 
+    $view,
+    $objects,
+    $operation,
     $operation_arguments,
-    array('execution_type' => $plugin->options['execution_type'], 'display_result' => $plugin->options['display_result'], 'settings' => $plugin->get_operation_settings($operation))
+    array(
+      'execution_type' => $plugin->options['execution_type'],
+      'display_result' => $plugin->options['display_result'],
+      'max_performance' => $plugin->options['max_performance'],
+      'settings' => $operation['options']['settings'],
+    )
   );
 
   // Clean up the form.
+  $exposed_input = $view->get_exposed_input();
+  $form_state['redirect'] = isset($exposed_input['destination']) ? $exposed_input['destination'] : $_GET['q'];
   unset($form_state['storage']);
-  $form_state['redirect'] = isset($form_state['values']['exposed_input']['destination']) ? $form_state['values']['exposed_input']['destination'] : $_GET['q'];
 }
 
 /**
- * Helper function to execute the chosen action upon selected objects.
+ * Compute the selection based on the settings.
  */
-function _views_bulk_operations_execute($view, $objects, $operation, $operation_arguments, $options) {
-  // Get the object info we're dealing with.
-  $object_info = _views_bulk_operations_object_info_for_view($view);
-  if (!$object_info) return;
-
-  // Add action arguments.
-  $params = array();
-  if ($operation['configurable'] && is_array($operation_arguments)) {
-    $params += $operation_arguments;
+function _views_bulk_operations_get_selection($plugin, $form_state, $form_id) {
+  $result = $plugin->result;
+  $selection = $form_state['values']['objects']['selection'];
+  if ($plugin->options['preserve_selection']) {
+    $view_id = _views_bulk_operations_view_id($plugin->view);
+    $view_name = $plugin->view->name;
+    $result = $_SESSION['vbo_values'][$view_name][$view_id]['result'];
+    $selection = $_SESSION['vbo_values'][$view_name][$view_id]['selection'];
   }
-  // Add static callback arguments. Note that in the case of actions, static arguments
-  // are picked up from the database in actions_do().
-  if (isset($operation['callback arguments'])) {
-    $params += $operation['callback arguments'];
-  }
-  // Add this view as parameter.
-  $params['view'] = array(
-    'vid' => !empty($view->vid) ? $view->vid : $view->name,
-    'exposed_input' => $view->get_exposed_input(),
-    'arguments' => $view->args,
-  );
-  // Add static settings to the params.
-  if (!empty($options['settings'])) {
-    $params['settings'] = $options['settings'];
-  }
-
-  if (version_compare(VERSION, '6.10', '<')) {
-    // Hack to force actions_do() to process any number of invocations. 
-    // Check http://drupal.org/node/290282 to understand more.
-    // This was fixed as of D6.10: http://cvs.drupal.org/viewvc.py/drupal/drupal/includes/actions.inc?view=log&pathrev=DRUPAL-6-10
-    variable_set('actions_max_stack', 10000000);
-  }
-  if ($operation['aggregate'] != VBO_AGGREGATE_FORCED && $options['execution_type'] == VBO_EXECUTION_BATCH) {
-    $operations = array();
-    foreach ($objects as $num => $row) {
-      $oid = $row->{$view->base_field};
-      $operations[] = array('_views_bulk_operations_batch_process', array($oid, $row));
-    }
-
-    // Save the options in the session because Batch API doesn't give a way to 
-    // send a parameter to the finished callback.
-    $_SESSION['vbo_options']['display_result'] = $options['display_result'];
-    $_SESSION['vbo_options']['operation'] = $operation;
-    $_SESSION['vbo_options']['params'] = $params;
-    $_SESSION['vbo_options']['object_info'] = $object_info;
-
-    $batch = array(
-      'operations' => $operations,
-      'finished' => '_views_bulk_operations_batch_finished',
-      'title' => t('Performing %action on selected rows...', array('%action' => $operation['label'])),
-    );  
-    batch_set($batch);
-  }
-  else if ($operation['aggregate'] != VBO_AGGREGATE_FORCED && module_exists('job_queue') && $options['execution_type'] == VBO_EXECUTION_QUEUE) {
-    global $user;
-    foreach ($objects as $row) {
-      $oid = $row->{$view->base_field};
-      job_queue_add('_views_bulk_operations_queue_process', 
-        t('Perform %action on @type %oid.', array(
-          '%action' => $operation['label'],
-          '@type' => t($object_info['type']),
-          '%oid' => $oid
-        )), 
-        array($oid, $row, $operation, $params, $user->uid, $options['display_result'], $object_info)
-      );
-      $oids[] = $oid;
-    }
-    if ($options['display_result']) {
-      drupal_set_message(t('Enqueued %action on @types %oid. Check the <a href="@queue">queued jobs page</a>.', array(
-        '%action' => $operation['label'], 
-        '@types' => format_plural(count($objects), $object_info['type'], $object_info['type'] . 's'),
-        '%oid' => implode(', ', $oids), 
-        '@queue' => url('admin/reports/job_queue')
-      )));
-    }
-  }
-  else /*if ($options['execution_type'] == VBO_EXECUTION_DIRECT)*/ {
-    @set_time_limit(0);
-    
-    $context['results']['rows'] = 0;
-    $context['results']['time'] = microtime(TRUE);
-
-    _views_bulk_operations_direct_process($view, $operation, $objects, $params, $object_info, $context);
-    _views_bulk_operations_direct_finished(TRUE, $context['results'], array(), $options['display_result']);
-  }
-}
-
-/**
- * Helper function to handle Job queue operations.
- */
-function _views_bulk_operations_queue_process($oid, $row, $operation, $params, $uid, $display_result, $object_info) {
-  module_load_include('inc', 'node', 'node.admin');
-
-  $object = call_user_func($object_info['load'], $oid);
-  if (!$object) {
-    watchdog('views bulk operations', 'Skipped %action on @type id %oid.', array(
-      '%action' => $operation['label'],
-      '@type' => t($operation['type']),
-      '%oid' => $oid,
-    ), WATCHDOG_ALERT);
-    return;
-  }
-
-  $account = user_load(array('uid' => $uid));
-  if (!_views_bulk_operations_object_permission($operation, $object, $object_info, $account)) {
-    watchdog('views bulk operations', 'Skipped %action on @type %title due to insufficient permissions.', array(
-      '%action' => $operation['label'], 
-      '@type' => t($object_info['type']),
-      '%title' => $object->{$object_info['title']},
-    ), WATCHDOG_ALERT);
-    return;
-  }
-
-  _views_bulk_operations_action_do($operation, $oid, $object, $row, $params, $object_info, $account);
-
-  if ($display_result) {
-    watchdog('views bulk operations', 'Performed %action on @type %title.', array(
-      '%action' => $operation['label'], 
-      '@type' => t($object_info['type']),
-      '%title' => $object->{$object_info['title']},
-    ), WATCHDOG_INFO);
-  }
-}
-
-/**
- * Helper function to handle Batch API operations.
- */
-function _views_bulk_operations_batch_process($oid, $row, &$context) {
-  module_load_include('inc', 'node', 'node.admin');
-
-  $operation = $_SESSION['vbo_options']['operation'];
-  $params = $_SESSION['vbo_options']['params'];
-  $object_info = $_SESSION['vbo_options']['object_info'];
-
-  if (!isset($context['results']['time'])) {
-    $context['results']['time'] = microtime(TRUE);
-  }
-
-  $object = call_user_func($object_info['load'], $oid);
-  if (!$object) {
-    $context['results']['log'][] = t('Skipped %action on @type id %oid.', array(
-      '%action' => $operation['label'],
-      '@type' => t($operation['type']),
-      '%oid' => $oid,  
-    ));
-    continue;
-  }
-
-  if (!_views_bulk_operations_object_permission($operation, $object, $object_info)) {
-    $context['results']['log'][] = t('Skipped %action on @type %title due to insufficient permissions.', array(
-      '%action' => $operation['label'], 
-      '@type' => t($object_info['type']),
-      '%title' => $object->{$object_info['title']},
-    ));
-    return;
-  }
-
-  _views_bulk_operations_action_do($operation, $oid, $object, $row, $params, $object_info);
-
-  $context['results']['log'][] = t('Performed %action on @type %title.', array(
-    '%action' => $operation['label'], 
-    '@type' => t($object_info['type']),
-    '%title' => $object->{$object_info['title']},
-  ));
-  if (isset($context['results']['rows'])) {
-    $context['results']['rows'] += 1;
-  }
-  else {
-    $context['results']['rows'] = 1;
-  }
-}
-
-/**
- * Helper function to cleanup Batch API operations.
- */
-function _views_bulk_operations_batch_finished($success, $results, $operations, $display_result = NULL) {
-  if ($success) {
-    if ($results['rows'] > 0) {
-      $message = t('!results rows processed in about !time ms:', array('!results' => $results['rows'], '!time' => round((microtime(TRUE) - $results['time']) * 1000)));
-    }
-    else {
-      $message = t('No rows were processed:');
-    }
-    $message .= "\n". theme('item_list', $results['log']);
-  }
-  else {
-    // An error occurred.
-    // $operations contains the operations that remained unprocessed.
-    $error_operation = reset($operations);
-    $message = t('An error occurred while processing @operation with arguments: @arguments', 
-      array('@operation' => $error_operation[0], '@arguments' => print_r($error_operation[0], TRUE)));
-  }
-  if (version_compare(VERSION, '6.10', '<')) {
-    // See http://cvs.drupal.org/viewvc.py/drupal/drupal/includes/actions.inc?view=log&pathrev=DRUPAL-6-10
-    variable_set('actions_max_stack', 35);
-  }
-  if ($display_result || @$_SESSION['vbo_options']['display_result']) {
-    _views_bulk_operations_log($message);
-  }
-  unset($_SESSION['vbo_options']); // unset the options which were used for just one invocation
-}
-
-/**
- * Helper function for direct execution operations.
- */
-function _views_bulk_operations_direct_process($view, $operation, $objects, $params, $object_info, &$context) {
-  if ($operation['aggregate'] != VBO_AGGREGATE_FORBIDDEN) {
-    foreach ($objects as $num => $row) {
-      $oid = $row->{$view->base_field};
-      if (isset($object_info['access'])) {
-        $object = call_user_func($object_info['load'], $oid);
-        if (!$object) {
-          unset($objects[$num]);
-          $context['results']['log'][] = t('Skipped %action on @type id %oid.', array(
-            '%action' => $operation['label'],
-            '@type' => t($operation['type']),
-            '%oid' => $oid,
-          ));
-          continue;
-        }
-        if (!_views_bulk_operations_object_permission($operation, $object, $object_info)) {
-          unset($objects[$num]);
-          $context['results']['log'][] = t('Skipped %action on @type %title due to insufficient permissions.', array(
-            '%action' => $operation['label'], 
-            '@type' => t($object_info['type']),
-            '%title' => $object->{$object_info['title']},
-          ));
-          continue;
-        }
-      }
-      $oids[] = $oid;
-    }
-
-    if (!empty($objects)) {
-      _views_bulk_operations_action_aggregate_do($operation, $oids, $objects, $params, $object_info);
-
-      $context['results']['log'][] = t('Performed aggregate %action on @types %oids.', array(
-        '%action' => $operation['label'], 
-        '@types' => format_plural(count($objects), $object_info['type'], $object_info['type'] . 's'),
-        '%oids' => implode(',', $oids),
-      ));
-      $context['results']['rows'] += count($objects);
-    }
-  }
-  else foreach ($objects as $num => $row) {
-    $oid = $row->{$view->base_field};
-    $object = call_user_func($object_info['load'], $oid);
-    if (!$object) {
-      $context['results']['log'][] = t('Skipped %action on @type id %oid.', array(
-        '%action' => $operation['label'],
-        '@type' => t($operation['type']),
-        '%oid' => $oid,
-      ));
-      continue;
-    }
-    if (!_views_bulk_operations_object_permission($operation, $object, $object_info)) {
-      $context['results']['log'][] = t('Skipped %action on @type %title due to insufficient permissions.', array(
-        '%action' => $operation['label'], 
-        '@type' => t($object_info['type']),
-        '%title' => $object->{$object_info['title']},
-      ));
-      continue;
-    }
-   
-    _views_bulk_operations_action_do($operation, $oid, $object, $row, $params, $object_info);
-    
-    $context['results']['log'][] = t('Performed %action on @type %title.', array(
-      '%action' => $operation['label'], 
-      '@type' => t($object_info['type']),
-      '%title' => $object->{$object_info['title']},
-    ));
-    $context['results']['rows'] += 1;
-  }
-}
-
-/**
- * Helper function to cleanup direct execution operations.
- */
-function _views_bulk_operations_direct_finished($success, $results, $operations, $display_result) {
-  _views_bulk_operations_batch_finished($success, $results, $operations, $display_result);
-}
-
-/**
- * Helper function to execute one operation.
- */
-function _views_bulk_operations_action_do($operation, $oid, $object, $row, $params, $object_info, $account = NULL) {
-  _views_bulk_operations_action_permission($operation, $account);
-
-  // Add the object to the context.
-  if (isset($object_info['context'])) {
-    $params[$object_info['context']] = $object;
-  }
-  else {
-    $params[$object_info['type']] = $object;
-  }
-  // If the operation type is different from the view type, normalize the context first.
-  $actual_object = $object;
-  if ($object_info['type'] != $operation['type']) {
-    if (isset($object_info['normalize']) && function_exists($object_info['normalize'])) {
-      $actual_object = call_user_func($object_info['normalize'], $operation['type'], $object);
-    }
-    $params['hook'] = $object_info['hook'];
-  }
-  if (is_null($actual_object)) { // Normalize function can return NULL: we don't want that
-    $actual_object = $object;
-  }
-  $params['row'] = $row; // Expose the original view row to the action
-
-  if ($operation['source'] == 'action') {
-    actions_do($operation['callback'], $actual_object, $params);
-    if ($operation['type'] == 'node' && ($operation['access op'] & VBO_ACCESS_OP_UPDATE)) { // Save nodes explicitly if needed
-      $node_options = variable_get('node_options_'. $actual_object->type, array('status', 'promote'));
-      if (in_array('revision', $node_options) && !isset($actual_object->revision)) {
-        $actual_object->revision = TRUE;
-        $actual_object->log = '';
-      }
-      node_save($actual_object);
-    }
-  }
-  else { // source == 'operation'
-    $args = array_merge(array(array($oid)), $params);
-    call_user_func_array($operation['callback'], $args);
-  }
-}
-
-/**
- * Helper function to execute an aggregate operation.
- */
-function _views_bulk_operations_action_aggregate_do($operation, $oids, $objects, $params, $object_info) {
-  _views_bulk_operations_action_permission($operation);
-
-  $params[$operation['type']] = $objects;
-  if ($operation['source'] == 'action') {
-    actions_do($operation['callback'], $oids, $params);
-  }
-  else {
-    $args = array_merge(array($oids), $params);
-    call_user_func_array($operation['callback'], $args);
-  }
-}
-
-/**
- * Helper function to verify access permission to execute operation.
- */
-function _views_bulk_operations_action_permission($operation, $account = NULL) {
-  if (module_exists('actions_permissions')) {
-    $perm = actions_permissions_get_perm($operation['label'], $operation['callback']);
-    if (!user_access($perm, $account)) {
-      global $user;
-      watchdog('actions permissions', 'An attempt by user %user to !perm was blocked due to insufficient permissions.', 
-        array('!perm' => $perm, '%user' => isset($account) ? $account->name : $user->name), WATCHDOG_ALERT);
-      drupal_access_denied(); 
-    }
-  }
-
-  // Check against additional permissions.
-  if (!empty($operation['permissions'])) foreach ($operation['permissions'] as $perm) {
-    if (!user_access($perm, $account)) {
-      global $user;
-      watchdog('actions permissions', 'An attempt by user %user to !perm was blocked due to insufficient permissions.', 
-        array('!perm' => $perm, '%user' => isset($account) ? $account->name : $user->name), WATCHDOG_ALERT);
-      drupal_access_denied(); 
-    }
-  }
-}
-
-/**
- * Helper function to verify access permission to operate on object.
- */
-function _views_bulk_operations_object_permission($operation, $object, $object_info, $account = NULL) {
-  // Check against object access permissions.
-  if (!isset($object_info['access'])) return TRUE;
-
-  $access_ops = array(
-    VBO_ACCESS_OP_VIEW => 'view',
-    VBO_ACCESS_OP_UPDATE => 'update',
-    VBO_ACCESS_OP_CREATE => 'create',
-    VBO_ACCESS_OP_DELETE => 'delete',
-  );
-  foreach ($access_ops as $bit => $op) {
-    if ($operation['access op'] & $bit) {
-      if (!call_user_func($object_info['access'], $op, $object, $account)) {
-        return FALSE;
-      }
-    }
-  }
-
-  return TRUE;
-}
-
-/**
- * Helper function to let the configurable action provide its configuration form.
- */
-function _views_bulk_operations_action_form($action, $view, $selection, $settings, $context = array()) {
-  $action_form = $action['callback'] . '_form';
-  $context = array_merge($context, array('view' => $view, 'selection' => $selection, 'settings' => $settings));
-  if (isset($action['callback arguments'])) {
-    $context = array_merge($context, $action['callback arguments']);
-  }
-  $form = call_user_func($action_form, $context);
-  return is_array($form) ? $form : array();
-}
-
-/**
- * Helper function to let the configurable action validate the form if it provides a validator.
- */
-function _views_bulk_operations_action_validate($action, $form, $form_values) {
-  $action_validate = $action['callback'] . '_validate';
-  if (function_exists($action_validate)) {
-    call_user_func($action_validate, $form, $form_values);
-  }
-}
-
-/**
- * Helper function to let the configurable action process the configuration form.
- */
-function _views_bulk_operations_action_submit($action, $form, &$form_state) {
-  $action_submit = $action['callback'] . '_submit';
-  return call_user_func($action_submit, $form, $form_state);
+  return $form_state['values']['objects']['selectall'] ?
+    array_intersect_key($result, array_filter($selection, '_views_bulk_operations_filter_invert')) :
+    array_intersect_key($result, array_filter($selection));
 }
 
 /**
  * Theme function to show the confirmation page before executing the action.
  */
-function theme_views_bulk_operations_confirmation($objects, $view) {
-  $object_info = _views_bulk_operations_object_info_for_view($view);
-  $items = array();
-  $items_per_page = isset($view->pager_original) ? (method_exists($view->pager_original, 'get_items_per_page') ? $view->pager_original->get_items_per_page() : $view->pager_original['items_per_page']) : 0;
-  foreach ($objects as $num => $row) {
-    $oid = $row->{$view->base_field};
-    if ($items_per_page && count($items) >= $items_per_page) {
-      $items[] = t('...and <strong>!count</strong> more.', array('!count' => count($objects) - count($items)));
-      break;
-    }
-    if ($object = call_user_func($object_info['load'], $oid)) {
-      $items[] = check_plain((string)$object->{$object_info['title']});
-    }
+function theme_views_bulk_operations_confirmation($objects, $invert, $view) {
+  $selectall = $invert ? (count($objects) == 0) : (count($objects) == $view->total_rows);
+  if ($selectall) {
+    $output = format_plural(
+      $view->total_rows,
+      'You selected the only row in this view.',
+      'You selected all <strong>@count</strong> rows in this view.'
+    );
   }
-  $count = count($objects);
-  $output = theme('item_list', $items, 
-    format_plural(
-      $count, 
-      'You selected the following <strong>1</strong> row:', 
-      'You selected the following <strong>@count</strong> rows:'
-    )
-  );
+  else {
+    $object_info = _views_bulk_operations_object_info_for_view($view);
+    $items = array();
+    foreach ($objects as $row) {
+      $oid = $row->{$view->base_field};
+      if ($object = call_user_func($object_info['load'], $oid)) {
+        $items[] = check_plain((string)$object->{$object_info['title']});
+      }
+    }
+    $output = theme('item_list', $items,
+      $invert ?
+      format_plural(
+        count($objects),
+        'You selected all ' . $view->total_rows . ' but the following <strong>1</strong> row:',
+        'You selected all ' . $view->total_rows . ' but the following <strong>@count</strong> rows:'
+      ) :
+      format_plural(
+        count($objects),
+        'You selected the following <strong>1</strong> row:',
+        'You selected the following <strong>@count</strong> rows:'
+      )
+    );
+  }
   return $output;
 }
 
 /**
  * Implementation of hook_forms().
- * 
+ *
  * Force each instance of function to use the same callback.
  */
 function views_bulk_operations_forms() {
@@ -1013,7 +810,10 @@ function views_bulk_operations_forms() {
   if (strpos($form_id, 'views_bulk_operations_form') === 0) {
     // Let the forms API know where to get the form data corresponding
     // to this form id.
-    $forms[$form_id] = array('callback' => 'views_bulk_operations_form');
+    $forms[$form_id] = array(
+      'callback' => 'views_bulk_operations_form',
+      'callback arguments' => array($form_id),
+    );
   }
   return $forms;
 }
@@ -1024,7 +824,7 @@ function views_bulk_operations_forms() {
  * Hook used by VBO to be able to handle different objects as does Views 2 and the Drupal core action system.
  *
  * The array returned for each object type contains:
- *  'type' (required) => the object type name, should be the same as 'type' field in hook_action_info(). 
+ *  'type' (required) => the object type name, should be the same as 'type' field in hook_action_info().
  *  'context' (optional) => the context name that should receive the object, defaults to the value of 'type' above.
  *  'base_table' (required) => the Views 2 table name corresponding to that object type, should be the same as the $view->base_table attribute.
  *  'oid' (currently unused) => an attribute on the object that returns the unique object identifier (should be the same as $view->base_field).
@@ -1034,9 +834,9 @@ function views_bulk_operations_forms() {
  *
  * The following attributes allow VBO to show actions on view types different than the action's type:
  *  'hook' (optional) => the name of the hook supported by this object type, as defined in the 'hooks' attribute of hook_action_info().
- *  'normalize' (optional) => a function($type, $object) that takes an object type and the object instance, returning additional context information for cross-type 
+ *  'normalize' (optional) => a function($type, $object) that takes an object type and the object instance, returning additional context information for cross-type
  *
- *  e.g., an action declaring hooks => array('user') while of type 'system' will be shown on user views, and VBO will call the user's 'normalize' function to 
+ *  e.g., an action declaring hooks => array('user') while of type 'system' will be shown on user views, and VBO will call the user's 'normalize' function to
  *        prepare the action to fit the user context.
  */
 function views_bulk_operations_views_bulk_operations_object_info() {
@@ -1078,6 +878,12 @@ function views_bulk_operations_views_bulk_operations_object_info() {
       'title' => 'name',
       'hook' => 'taxonomy',
     ),
+    'node_revision' => array(
+      'type' => 'node_revision',
+      'base_table' => 'node_revisions',
+      'load' => '_views_bulk_operations_node_revision_load',
+      'title' => 'name',
+    ),
     'file' => array(
       'type' => 'file',
       'base_table' => 'files',
@@ -1101,6 +907,14 @@ function _views_bulk_operations_node_load($nid) {
  */
 function _views_bulk_operations_file_load($fid) {
   return db_fetch_object(db_query("SELECT * FROM {files} WHERE fid = %d", $fid));
+}
+
+/**
+ * Load function for node revisions.
+ */
+function _views_bulk_operations_node_revision_load($vid) {
+  $nid = db_result(db_query("SELECT nid FROM {node_revisions} WHERE vid = %d", $vid));
+  return node_load($nid, $vid, TRUE);
 }
 
 /**
@@ -1162,28 +976,11 @@ function _views_bulk_operations_normalize_user_context($type, $account) {
 }
 
 /**
- * Helper function to return all object info.
+ * Implementation of hook_init().
  */
-function _views_bulk_operations_get_object_info($reset = FALSE) {
-  static $object_info = array();
-  if ($reset || empty($object_info)) {
-    $object_info = module_invoke_all('views_bulk_operations_object_info');
-  }
-  drupal_alter('views_bulk_operations_object_info', $object_info);
-  return $object_info;
-}
-
-/**
- * Helper function to return object info for a given view.
- */
-function _views_bulk_operations_object_info_for_view($view) {
-  foreach (_views_bulk_operations_get_object_info() as $object_info) {
-    if ($object_info['base_table'] == $view->base_table) {
-      return $object_info;
-    }
-  }
-  watchdog('views bulk operations', 'Could not find object info for view table @table.', array('@table' => $view->base_table), WATCHDOG_ERROR);
-  return NULL;
+function views_bulk_operations_init() {
+  // Make sure our actions are loaded.
+  _views_bulk_operations_load_actions();
 }
 
 /**
@@ -1191,12 +988,12 @@ function _views_bulk_operations_object_info_for_view($view) {
  */
 function views_bulk_operations_action_info() {
   $actions = array();
-  $files = file_scan_directory(drupal_get_path('module', 'views_bulk_operations'), '(.*).action.inc$');
-  if ($files) foreach ($files as $file) {
-    require_once($file->filename);
-    $action_info_fn = 'views_bulk_operations_'. str_replace('.', '_', basename($file->filename, '.inc')).'_info';
+  foreach (_views_bulk_operations_load_actions() as $file) {
+    $action_info_fn = 'views_bulk_operations_'. $file .'_action_info';
     $action_info = call_user_func($action_info_fn);
-    if (is_array($action_info)) $actions += $action_info;
+    if (is_array($action_info)) {
+      $actions += $action_info;
+    }
   }
 
   // Add VBO's own programmatic action.
@@ -1222,10 +1019,10 @@ function views_bulk_operations_menu() {
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
-  $items['views-bulk-operations/js/pager'] = array(
-    'title' => 'VBO pager handler',
-    'description' => 'AJAX callback to store selection when using Views pager.',
-    'page callback' => 'views_bulk_operations_pager',
+  $items['views-bulk-operations/js/select'] = array(
+    'title' => 'VBO select handler',
+    'description' => 'AJAX callback to update selection.',
+    'page callback' => 'views_bulk_operations_select',
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
@@ -1233,19 +1030,33 @@ function views_bulk_operations_menu() {
 }
 
 /**
- * AJAX callback to store selection when using Views pager.
- */ 
-function views_bulk_operations_pager() {
-  $url = $_REQUEST['url'];
-  $select_all = $_REQUEST['select_all'];
-  $selection = $_REQUEST['selection'];
-  $page = $_REQUEST['page'];
-
-  $_SESSION['vbo_values'][$url]['objects']['select_all'] = $select_all;
-  if (!empty($selection)) {
-    $_SESSION['vbo_values'][$url]['objects']['pages'][$page] = array_fill_keys(explode(',', $selection), TRUE);
+ * AJAX callback to update selection.
+ */
+function views_bulk_operations_select() {
+  $view_id = $_REQUEST['view_id'];
+  $view_name = $_REQUEST['view_name'];
+  foreach (json_decode($_REQUEST['selection'], TRUE) as $selection => $value) {
+    switch ($selection) {
+    case 'operation':
+      $_SESSION['vbo_values'][$view_name][$view_id]['operation'] = $value;
+      break;
+    case 'selectall':
+      $_SESSION['vbo_values'][$view_name][$view_id]['selectall'] = $value > 0;
+      if ($value == -1) {
+        $_SESSION['vbo_values'][$view_name][$view_id]['selection'] = array();
+      }
+      break;
+    default:
+      if ($value) {
+        $_SESSION['vbo_values'][$view_name][$view_id]['selection'][$selection] = TRUE;
+      }
+      else {
+        $_SESSION['vbo_values'][$view_name][$view_id]['selection'][$selection] = FALSE;
+      }
+      break;
+    }
   }
-  exit();
+  exit;
 }
 
 /**
@@ -1265,45 +1076,38 @@ function views_bulk_operations_action_form($context) {
   // Distinguish between overridden and default views to simplify export.
   $views[0] = t('- Choose a view -');
   $operations[0] = t('- Choose an operation -');
-  $all_views = array();
   foreach (views_get_all_views() as $name => $view) {
-    $all_views[$name] = $view;
-    $default_view = views_get_default_view($name);
-    if (!empty($default_view)) {
-      $default_view->type = t('Default');
-      $all_views[$name . '_default'] = $default_view;
-    }
-  }
-  foreach ($all_views as $name => $view) {
     foreach (array_keys($view->display) as $display) {
       $display_options = &$view->display[$display]->display_options;
       if (isset($display_options['style_plugin']) && $display_options['style_plugin'] == 'bulk') {
-        $vid = empty($view->vid) ? $view->name : $view->vid;
-        $views[$vid] = $view->name . ' (' . $view->type . ')' . (!empty($view->description) ? ': ' . $view->description : '');
+        $vid = $view->name;
+        $views[$vid] = $view->name . (!empty($view->description) ? ': ' . $view->description : '');
 
+        $view_clone = clone($view);
         $style_plugin = views_get_plugin('style', $display_options['style_plugin']);
-        $style_plugin->init($view, $view->display[$display], $display_options['style_options']);
+        $style_plugin->init($view_clone, $view_clone->display[$display], $display_options['style_options']);
         if (isset($context['view_vid']) && $vid == $context['view_vid']) {
           $form['#plugin'] = $style_plugin;
         }
+        unset($view_clone);
 
-        foreach (array_filter($display_options['style_options']['selected_operations']) as $key) {
-          $views_operations[$vid][$key] = $style_plugin->all_operations[$key]['label'];
-          $operations[$key] = $style_plugin->all_operations[$key]['label'];
-          if (isset($context['operation_key']) && $key == $context['operation_key']) {
-            $form['#operation'] = $style_plugin->all_operations[$key];
+        if (!empty($display_options['style_options']['operations'])) foreach ($display_options['style_options']['operations'] as $key => $options) {
+          if (empty($options['selected'])) continue;
+          $operations[$key] = $views_operations[$vid][$key] = $style_plugin->all_operations[$key]['label'];
+          if (isset($context['operation_key']) && isset($context['view_vid']) && $key == $context['operation_key'] && $vid == $context['view_vid']) {
+            $form['#operation'] = $style_plugin->get_operation_info($key);
           }
         }
       }
     }
   }
-  
+
   if (!empty($errors)) foreach ($errors as $name => $message) {
     form_set_error($name, $message);
   }
 
   drupal_add_js(array('vbo' => array('action' => array('views_operations' => $views_operations))), 'setting');
-  drupal_add_js(drupal_get_path('module', 'views_bulk_operations') . '/views_bulk_operations.action.js');
+  drupal_add_js(drupal_get_path('module', 'views_bulk_operations') . '/js/views_bulk_operations.action.js');
 
   $form['view_vid'] = array(
     '#type' => 'select',
@@ -1338,12 +1142,12 @@ function views_bulk_operations_action_form($context) {
     '#prefix' => '<div id="vbo-operation-wrapper">',
     '#suffix' => '</div>',
   );
-  if (isset($form['#operation']) && $form['#operation']['configurable']) {
+  if (isset($form['#operation']) && $form['#operation']['configurable'] && isset($form['#plugin'])) {
     $form['operation_arguments']['wrapper']['operation_form'] = _views_bulk_operations_action_form(
-      $form['#operation'], 
-      $form['#plugin']->view, 
-      NULL, 
-      $form['#plugin']->get_operation_settings($form['#operation']),
+      $form['#operation'],
+      $form['#plugin']->view,
+      NULL,
+      $form['#operation']['options']['settings'],
       $context
     );
     if (!empty($form['#operation']['form properties'])) foreach ($form['#operation']['form properties'] as $property) {
@@ -1355,7 +1159,7 @@ function views_bulk_operations_action_form($context) {
       '#type' => 'textarea',
       '#title' => t('Operation arguments'),
       '#description' => t('Enter PHP script that will assemble the operation arguments (and will override the arguments above).
-                           These arguments should be of the form: <code>return array(\'argument1\' => \'value1\', ...);</code> 
+                           These arguments should be of the form: <code>return array(\'argument1\' => \'value1\', ...);</code>
                            and they should correspond to the values returned by the action\'s form submit function.
                            The variables <code>&$object</code> and <code>$context</code> are available to this script.
                           '),
@@ -1373,7 +1177,7 @@ function views_bulk_operations_action_form($context) {
     '#type' => 'textarea',
     '#title' => t('View exposed input'),
     '#description' => t('Enter PHP script that will assemble the view exposed input (if the view accepts exposed input).
-                         These inputs should be of the form: <code>return array(\'input1\' => \'value1\', ...);</code> 
+                         These inputs should be of the form: <code>return array(\'input1\' => \'value1\', ...);</code>
                          and they should correspond to the query values used on the view URL when exposed filters are applied.
                          The variables <code>&$object</code> and <code>$context</code> are available to this script.
                         '),
@@ -1383,17 +1187,22 @@ function views_bulk_operations_action_form($context) {
     '#type' => 'textarea',
     '#title' => t('View arguments'),
     '#description' => t('Enter PHP script that will assemble the view arguments (if the view accepts arguments).
-                         These arguments should be of the form: <code>return array(\'value1\', ...);</code> 
+                         These arguments should be of the form: <code>return array(\'value1\', ...);</code>
                          and they should correspond to the arguments defined in the view.
                          The variables <code>&$object</code> and <code>$context</code> are available to this script.
                         '),
     '#default_value' => @$context['view_arguments'],
   );
+  $form['respect_limit'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Respect the view\'s item limit'),
+    '#default_value' => @$context['respect_limit'],
+  );
   return $form;
 }
 
 /**
- * AHAH generic callback to manipulate a form.
+ * Generic AHAH callback to manipulate a form.
  */
 function views_bulk_operations_form_ahah($callback) {
   $form_state = array('submitted' => FALSE);
@@ -1427,6 +1236,7 @@ function views_bulk_operations_form_ahah($callback) {
 function& views_bulk_operations_action_form_operation(&$form, $form_state) {
   // TODO: Replace this with autoloading of style plugin and view definitions to use $form['#plugin'].
   $view = views_get_view($form_state['values']['view_vid']);
+  $vd = new views_bulk_operations_destructor($view); // this will take care of calling $view->destroy() on exit.
   foreach (array_keys($view->display) as $display) {
     $display_options = &$view->display[$display]->display_options;
     if (isset($display_options['style_plugin']) && $display_options['style_plugin'] == 'bulk') {
@@ -1444,10 +1254,10 @@ function& views_bulk_operations_action_form_operation(&$form, $form_state) {
       '#suffix' => '</div>',
     );
     $form['operation_arguments']['wrapper']['operation_form'] = _views_bulk_operations_action_form(
-      $form['#operation'], 
-      $plugin->view, 
-      NULL, 
-      $plugin->get_operation_settings($form['#operation'])
+      $form['#operation'],
+      $plugin->view,
+      NULL,
+      $form['#operation']['options']['settings']
     );
     if (!empty($form['#operation']['form properties'])) foreach ($form['#operation']['form properties'] as $property) {
       if (isset($form['operation_arguments']['wrapper']['operation_form'][$property])) {
@@ -1458,7 +1268,7 @@ function& views_bulk_operations_action_form_operation(&$form, $form_state) {
       '#type' => 'textarea',
       '#title' => t('Operation arguments'),
       '#description' => t('Enter PHP script that will assemble the operation arguments (and will override the operation form above).
-                           These arguments should be of the form: <code>return array(\'argument1\' => \'value1\', ...);</code> 
+                           These arguments should be of the form: <code>return array(\'argument1\' => \'value1\', ...);</code>
                            and they should correspond to the values returned by the action\'s form submit function.
                            The variables <code>&$object</code> and <code>$context</code> are available to this script.
                           '),
@@ -1485,7 +1295,8 @@ function views_bulk_operations_action_validate($form, $form_state) {
     form_set_error('operation_callback', t('You must choose an operation to be executed.'));
   }
   if ($form['#operation']) {
-    _views_bulk_operations_action_validate($form_state['#operation'], $form, $form_state);
+    module_invoke_all('action_info'); // some validate functions are created dynamically...
+    _views_bulk_operations_action_validate($form['#operation'], $form, $form_state);
   }
 }
 
@@ -1499,8 +1310,9 @@ function views_bulk_operations_action_submit($form, $form_state) {
     'operation_arguments' => $form_state['values']['operation_arguments'],
     'view_exposed_input' => $form_state['values']['view_exposed_input'],
     'view_arguments' => $form_state['values']['view_arguments'],
+    'respect_limit' => $form_state['values']['respect_limit'],
   );
-  if ($form['#operation']) {
+  if ($form['#operation'] && function_exists($form['#operation']['callback'] . '_submit')) {
     $submit = array_merge($submit, _views_bulk_operations_action_submit($form['#operation'], $form, $form_state));
   }
   return $submit;
@@ -1527,174 +1339,692 @@ function views_bulk_operations_action(&$object, $context) {
       unset($operation_arguments[$key]);
     }
   }
-  views_bulk_operations_execute($context['view_vid'], $context['operation_key'], $operation_arguments, $view_exposed_input, $view_arguments);
+  views_bulk_operations_execute($context['view_vid'], $context['operation_key'], $operation_arguments, $view_exposed_input, $view_arguments, $context['respect_limit']);
 }
 
 /**
- * API function to programmatically invoke a VBO.
+ * Helper function to execute the chosen action upon selected objects.
  */
-function views_bulk_operations_execute($vid, $operation_callback, $operation_arguments = array(), $view_exposed_input = array(), $view_arguments = array()) {
-  $view = views_get_view($vid);
-  if (!is_object($view)) {
-    _views_bulk_operations_report_error('Could not find view %vid.', array('%vid' => $vid));
-    return;
-  }
+function _views_bulk_operations_execute($view, $objects, $operation, $operation_arguments, $options) {
+  global $user;
 
-  // Find the view display that has the VBO style.
-  $found = FALSE;
-  foreach (array_keys($view->display) as $display) {
-    $display_options = &$view->display[$display]->display_options;
-    if (isset($display_options['style_plugin']) && $display_options['style_plugin'] == 'bulk') {
-      $view->set_display($display);
-      $found = TRUE;
-      break;
-    }
-  }
-  if (!$found) {
-    _views_bulk_operations_report_error('Could not find a VBO display in view %vid.', array('%vid' => $vid));
-    return;
-  }
+  // Get the object info we're dealing with.
+  $object_info = _views_bulk_operations_object_info_for_view($view);
+  if (!$object_info) return;
 
-  // Execute the view.
-  $view->set_exposed_input($view_exposed_input);
-  $view->set_arguments($view_arguments);
-  $view->set_items_per_page(0);
-  $view->execute();
-  $plugin = $view->style_plugin;
-  if (empty($view->result)) {
-    if ($plugin->options['display_result']) {
-      _views_bulk_operations_log(t('No results for view %vid.', array('%vid' => $vid)));
-    }
-    return;
+  // Add action arguments.
+  $params = array();
+  if ($operation['configurable'] && is_array($operation_arguments)) {
+    $params += $operation_arguments;
   }
-
-  // Find the selected operation.
-  $operations = $plugin->get_selected_operations();
-  if (!isset($operations[$operation_callback])) {
-    _views_bulk_operations_report_error('Could not find operation %operation in view %vid.', array('%operation' => $operation_callback, '%vid' => $vid));
-    return;
+  // Add static callback arguments. Note that in the case of actions, static arguments
+  // are picked up from the database in actions_do().
+  if (isset($operation['callback arguments'])) {
+    $params += $operation['callback arguments'];
   }
-  $operation = $plugin->get_operation_info($operation_callback);
-
-  // Execute the operation on the view results.
-  $objects = array();
-  foreach ($view->result as $num => $result) {
-    $objects[$num + 1] = $result;
-  }
-  $execution_type = $plugin->options['execution_type'];
-  if ($execution_type == VBO_EXECUTION_BATCH) {
-    $execution_type = VBO_EXECUTION_DIRECT; // we don't yet support Batch API here
-  }
-  _views_bulk_operations_execute(
-    $view, 
-    $objects, 
-    $operation, 
-    $operation_arguments,
-    array('execution_type' => $execution_type, 'display_result' => $plugin->options['display_result'], 'settings' => $plugin->get_operation_settings($operation))
+  // Add this view as parameter.
+  $params['view'] = array(
+    'vid' => !empty($view->vid) ? $view->vid : $view->name,
+    'exposed_input' => $view->get_exposed_input(),
+    'arguments' => $view->args,
   );
-}
+  // Add static settings to the params.
+  if (!empty($options['settings'])) {
+    $params['settings'] = $options['settings'];
+  }
+  // Add object info to the params.
+  $params['object_info'] = $object_info;
 
-/**
- * Helper function to report an error.
- */
-function _views_bulk_operations_report_error($msg, $arg) {
-  watchdog('views bulk operations', $msg, $arg, WATCHDOG_ERROR);
-  if (function_exists('drush_set_error')) {
-    drush_set_error('VIEWS_BULK_OPERATIONS_EXECUTION_ERROR', strip_tags(dt($msg, $arg)));
+  if ($operation['aggregate'] != VBO_AGGREGATE_FORCED && $options['execution_type'] == VBO_EXECUTION_BATCH) {
+    // Save the options in the session because Batch API doesn't give a way to
+    // send a parameter to the finished callback.
+    $_SESSION['vbo_options']['display_result'] = $options['display_result'];
+    $_SESSION['vbo_options']['operation'] = $operation;
+    $_SESSION['vbo_options']['params'] = $params;
+    $_SESSION['vbo_options']['object_info'] = $object_info;
+
+    $batch = array(
+      'title' => t('Performing %action on selected rows...', array('%action' => $operation['label'])),
+      'finished' => '_views_bulk_operations_execute_finished',
+    );
+    // If they have max performance checked, use the high performant batch process.
+    if ($options['max_performance']) {
+      $batch += array(
+        'operations' => array(
+          array('_views_bulk_operations_execute_multiple', array($view->base_field, $operation, $objects, $params, $object_info, TRUE)),
+        ),
+      );
+    }
+    else {
+      $operations = array();
+      foreach ($objects as $num => $row) {
+        $oid = $row->{$view->base_field};
+        $operations[] = array('_views_bulk_operations_execute_single', array($oid, $row));
+      }
+      $batch += array(
+        'operations' => $operations,
+      );
+    }
+    batch_set($batch);
+  }
+  else if ($operation['aggregate'] != VBO_AGGREGATE_FORCED && module_exists('drupal_queue') && $options['execution_type'] == VBO_EXECUTION_QUEUE) {
+    drupal_queue_include();
+    foreach ($objects as $row) {
+      $oid = $row->{$view->base_field};
+      $job = array(
+        'description' => t('Perform %action on @type %oid.', array(
+          '%action' => $operation['label'],
+          '@type' => t($object_info['type']),
+          '%oid' => $oid
+        )),
+        'arguments' => array($oid, $row, $operation, $params, $user->uid, $options['display_result'], $object_info),
+      );
+      $queue = DrupalQueue::get('views_bulk_operations');
+      $queue->createItem($job);
+      $oids[] = $oid;
+    }
+    if ($options['display_result']) {
+      drupal_set_message(t('Enqueued %action on @types %oid.', array(
+        '%action' => $operation['label'],
+        '@types' => format_plural(count($objects), $object_info['type'], $object_info['type'] . 's'),
+        '%oid' => implode(', ', $oids),
+      )));
+    }
+  }
+  else /*if ($options['execution_type'] == VBO_EXECUTION_DIRECT)*/ {
+    @set_time_limit(0);
+
+    $context['results']['rows'] = 0;
+    $context['results']['time'] = microtime(TRUE);
+
+    _views_bulk_operations_execute_multiple($view->base_field, $operation, $objects, $params, $object_info, FALSE, $context);
+    _views_bulk_operations_execute_finished(TRUE, $context['results'], array(), $options + array('operation' => $operation, 'params' => $params));
   }
 }
 
 /**
- * Helper function to log an information.
+ * Helper function to handle Drupal Queue operations.
  */
-function _views_bulk_operations_log($msg) {
-  if (function_exists('drush_log')) {
-    drush_log(strip_tags($msg), 'ok');
-  }
-  else {
-    drupal_set_message($msg);
-  }
-}
+function _views_bulk_operations_execute_queue($data) {
+  module_load_include('inc', 'node', 'node.admin');
 
-/**
- * API function to add actions to a VBO.
- */
-function views_bulk_operations_add_actions($vid, $actions) {
-  $view = views_get_view($vid);
-  if (!is_object($view)) {
-    _views_bulk_operations_report_error('Could not find view %vid.', array('%vid' => $vid));
+  list($oid, $row, $operation, $params, $uid, $display_result, $object_info)  = $data['arguments'];
+  $object = call_user_func($object_info['load'], $oid);
+  if (!$object) {
+    watchdog('views bulk operations', 'Skipped %action on @type id %oid because it was not found.', array(
+      '%action' => $operation['label'],
+      '@type' => t($operation['type']),
+      '%oid' => $oid,
+    ), WATCHDOG_ALERT);
     return;
   }
 
-  // Find the view display that has the VBO style.
-  $found = FALSE;
-  foreach (array_keys($view->display) as $display) {
-    $display_options = &$view->display[$display]->display_options;
-    if (isset($display_options['style_plugin']) && $display_options['style_plugin'] == 'bulk') {
-      $found = TRUE;
-      break;
-    }
-  }
-  if (!$found) {
-    _views_bulk_operations_report_error('Could not find a VBO display in view %vid.', array('%vid' => $vid));
+  $account = user_load(array('uid' => $uid));
+  if (!_views_bulk_operations_object_permission($operation, $object, $object_info, $account)) {
+    watchdog('views bulk operations', 'Skipped %action on @type %title due to insufficient permissions.', array(
+      '%action' => $operation['label'],
+      '@type' => t($object_info['type']),
+      '%title' => $object->{$object_info['title']},
+    ), WATCHDOG_ALERT);
     return;
   }
 
-  // Iterate on the desired actions.
-  $selected_operations = $display_options['style_options']['selected_operations'];
-  $ignored = array();
-  if (!empty($actions)) foreach ($actions as $action) {
-    $modified = FALSE;
-    if (is_numeric($action)) { // aid
-      $action_object = db_fetch_object(db_query("SELECT * FROM {actions} WHERE aid = %d", $action));
-      if (is_object($action_object)) {
-        $parameters = unserialize($action_object->parameters);
-        $key = $action_object->callback . (empty($parameters) ? '' : ':'. md5($action_object->parameters));
-        if (isset($selected_operations[$key])) { // available for this view
-          $display_options['style_options']['selected_operations'][$key] = $key;
-          $modified = TRUE;
-        }
-      }
-    }
-    else { // callback or title
-      if (isset($selected_operations[$action])) { // callback and available for this view
-        $display_options['style_options']['selected_operations'][$action] = $action;
-        $modified = TRUE;
-      }
-      else { // try the title
-        $action_object = db_fetch_object(db_query("SELECT * FROM {actions} WHERE UPPER(description) = '%s'", strtoupper(db_escape_string($action))));
-        if (is_object($action_object)) {
-          $parameters = unserialize($action_object->parameters);
-          $key = $action_object->callback . (empty($parameters) ? '' : ':'. md5($action_object->parameters));
-          if (isset($selected_operations[$key])) { // available for this view
-            $display_options['style_options']['selected_operations'][$key] = $key;
-            $modified = TRUE;
-          }
-        }
-      }
-    }
-    if (!$modified) {
-      $ignored[] = $action;
-    }
+  _views_bulk_operations_action_do($operation, $oid, $object, $row, $params, $object_info, $account);
+
+  if ($display_result) {
+    watchdog('views bulk operations', 'Performed %action on @type %title.', array(
+      '%action' => $operation['label'],
+      '@type' => t($object_info['type']),
+      '%title' => $object->{$object_info['title']},
+    ), WATCHDOG_INFO);
+  }
+}
+
+/**
+ * Helper function to handle Batch API operations.
+ */
+function _views_bulk_operations_execute_single($oid, $row, &$context) {
+  module_load_include('inc', 'node', 'node.admin');
+
+  $operation = $_SESSION['vbo_options']['operation'];
+  $params = $_SESSION['vbo_options']['params'];
+  $object_info = $_SESSION['vbo_options']['object_info'];
+
+  if (!isset($context['results']['time'])) {
+    $context['results']['time'] = microtime(TRUE);
+    $context['results']['rows'] = 0;
   }
 
-  // Save the view if anything was changed.
-  if (count($actions) > count($ignored)) {
-    $view->save();
-    views_object_cache_clear('view', $vid);
+  $object = call_user_func($object_info['load'], $oid);
+  if (!$object) {
+    $context['results']['log'][] = t('Skipped %action on @type id %oid because it was not found.', array(
+      '%action' => $operation['label'],
+      '@type' => t($operation['type']),
+      '%oid' => $oid,
+    ));
+    return;
+  }
 
-    $msg = t('View %vid was successfully modified.', array('%vid' => $vid));
-    if (!empty($ignored)) {
-      $msg .= ' ' . t('The following actions were ignored: %ignored.', array('%ignored' => implode(', ', $ignored)));
+  if (!_views_bulk_operations_object_permission($operation, $object, $object_info)) {
+    $context['results']['log'][] = t('Skipped %action on @type %title due to insufficient permissions.', array(
+      '%action' => $operation['label'],
+      '@type' => t($object_info['type']),
+      '%title' => $object->{$object_info['title']},
+    ));
+    return;
+  }
+
+  _views_bulk_operations_action_do($operation, $oid, $object, $row, $params, $object_info);
+
+  $context['results']['log'][] = $context['message'] = t('Performed %action on @type %title.', array(
+    '%action' => $operation['label'],
+    '@type' => t($object_info['type']),
+    '%title' => $object->{$object_info['title']},
+  ));
+
+  $context['results']['rows'] += 1;
+}
+
+/**
+ * Gets the next item in the loop taking into consideration server limits for high performance batching.
+ *
+ * @return - The next object in the objects array.
+ */
+function _views_bulk_operations_execute_next($index, $objects, $batch) {
+  static $loop = 0, $last_mem = -1, $last_time = 0, $memory_limit = 0, $time_limit = 0;
+
+  // Early return if we're done.
+  if ($index >= count($objects)) {
+    return FALSE;
+  }
+
+  // Get the array keys.
+  $keys = array_keys($objects);
+
+  if ($batch) {
+    // Keep track of how many loops we have taken.
+    $loop++;
+
+    // Memory limit in bytes.
+    $memory_limit = $memory_limit ? $memory_limit : ((int)preg_replace('/[^\d\s]/', '', ini_get('memory_limit'))) * 1048576;
+
+    // Max time execution limit.
+    $time_limit = $time_limit ? $time_limit : (int)ini_get('max_execution_time');
+
+    // Current execution time in seconds.
+    $current_time = time() - $_SERVER['REQUEST_TIME'];
+    $time_left = $time_limit - $current_time;
+
+    if ($loop == 1) {
+      $last_time = $current_time;
+      // Never break the first loop.
+      return $objects[$keys[$index]];
+    }
+
+    // Break when current free memory past threshold.  Default to 32 MB.
+    if (($memory_limit - memory_get_usage()) < variable_get('batch_free_memory_threshold', 33554432)) {
+      return FALSE;
+    }
+
+    // Break when peak free memory past threshold.  Default to 8 MB.
+    if (($memory_limit - memory_get_peak_usage()) < variable_get('batch_peak_free_memory_threshold', 8388608)) {
+      return $objects[$keys[$index]];
+    }
+
+    // Break when execution time remaining past threshold.  Default to 15 sec.
+    if (($time_limit - $current_time) < variable_get('batch_time_remaining_threshold', 15)) {
+      return FALSE;
+    }
+
+    $last_time = $current_time;
+    return $objects[$keys[$index]];
+  }
+  else {
+    return $objects[$keys[$index]];
+  }
+}
+
+/**
+ * Helper function for multiple execution operations.
+ */
+function _views_bulk_operations_execute_multiple($base_field, $operation, $objects, $params, $object_info, $batch, &$context) {
+  // Setup our batch process.
+  if (empty($context['sandbox'])) {
+    $context['sandbox']['progress'] = 0;
+    $context['sandbox']['max'] = count($objects);
+  }
+  if (empty($context['results']['time'])) {
+    $context['results']['time'] = microtime(TRUE);
+    $context['results']['rows'] = 0;
+  }
+
+  if ($operation['aggregate'] != VBO_AGGREGATE_FORBIDDEN) {
+    $oids = array();
+    while ($row = _views_bulk_operations_execute_next($context['sandbox']['progress'], $objects, $batch)) {
+      $context['sandbox']['progress']++;
+      $oid = $row->{$base_field};
+      if (isset($object_info['access'])) {
+        $object = call_user_func($object_info['load'], $oid);
+        if (!$object) {
+          unset($objects[$num]);
+          $context['results']['log'][] = t('Skipped %action on @type %oid because it was not found.', array(
+            '%action' => $operation['label'],
+            '@type' => t($operation['type']),
+            '%oid' => $oid,
+          ));
+          continue;
+        }
+        if (!_views_bulk_operations_object_permission($operation, $object, $object_info)) {
+          unset($objects[$num]);
+          $context['results']['log'][] = t('Skipped %action on @type %title due to insufficient permissions.', array(
+            '%action' => $operation['label'],
+            '@type' => t($object_info['type']),
+            '%title' => $object->{$object_info['title']},
+          ));
+          continue;
+        }
+      }
+      $oids[] = $oid;
+    }
+
+    if (!empty($objects)) {
+      _views_bulk_operations_action_aggregate_do($operation, $oids, $objects, $params, $object_info);
+
+      $context['results']['log'][] = t('Performed aggregate %action on @types %oids.', array(
+        '%action' => $operation['label'],
+        '@types' => format_plural(count($objects), $object_info['type'], $object_info['type'] . 's'),
+        '%oids' => implode(',', $oids),
+      ));
+      $context['message'] = t('Performed aggregate %action on !count @types.', array(
+        '%action' => $operation['label'],
+        '!count' => count($objects),
+        '@types' => format_plural(count($objects), $object_info['type'], $object_info['type'] . 's'),
+      ));
+      $context['results']['rows'] += count($objects);
     }
   }
   else {
-    $msg = t('View %vid was not modified, because all actions were ignored.', array('%vid' => $vid));
+    $oids = array();
+    while ($row = _views_bulk_operations_execute_next($context['sandbox']['progress'], $objects, $batch)) {
+      $context['sandbox']['progress']++;
+      $oid = $row->{$base_field};
+      $object = call_user_func($object_info['load'], $oid);
+      if (!$object) {
+        $context['results']['log'][] = t('Skipped %action on @type id %oid because it was not found.', array(
+          '%action' => $operation['label'],
+          '@type' => t($operation['type']),
+          '%oid' => $oid,
+        ));
+        continue;
+      }
+      if (!_views_bulk_operations_object_permission($operation, $object, $object_info)) {
+        $context['results']['log'][] = t('Skipped %action on @type %title due to insufficient permissions.', array(
+          '%action' => $operation['label'],
+          '@type' => t($object_info['type']),
+          '%title' => $object->{$object_info['title']},
+        ));
+        continue;
+      }
+
+      _views_bulk_operations_action_do($operation, $oid, $object, $row, $params, $object_info);
+
+      $context['results']['log'][] = t('Performed %action on @type %title.', array(
+        '%action' => $operation['label'],
+        '@type' => t($object_info['type']),
+        '%title' => $object->{$object_info['title']},
+      ));
+      $context['results']['rows'] += 1;
+      $oids[] = $oid;
+    }
+
+    $context['message'] = t('Performed %action on !count @types.', array(
+      '%action' => $operation['label'],
+      '!count' => count($oids),
+      '@types' => format_plural(count($oids), $object_info['type'], $object_info['type'] . 's'),
+    ));
   }
-  _views_bulk_operations_log($msg);
+
+  // Update batch progress.
+  $context['finished'] = empty($context['sandbox']['max']) ? 1 : ($context['sandbox']['progress'] / $context['sandbox']['max']);
 }
 
+/**
+ * Helper function to cleanup operations.
+ */
+function _views_bulk_operations_execute_finished($success, $results, $operations, $options = NULL) {
+  if ($success) {
+    if ($results['rows'] > 0) {
+      $message = t('!results rows processed in about !time ms:', array('!results' => $results['rows'], '!time' => round((microtime(TRUE) - $results['time']) * 1000)));
+    }
+    else {
+      $message = t('No rows were processed:');
+    }
+    $message .= "\n". theme('item_list', $results['log']);
+  }
+  else {
+    // An error occurred.
+    // $operations contains the operations that remained unprocessed.
+    $error_operation = reset($operations);
+    $message = t('An error occurred while processing @operation with arguments: @arguments',
+      array('@operation' => $error_operation[0], '@arguments' => print_r($error_operation[0], TRUE)));
+  }
+  if (empty($options)) {
+    $options = $_SESSION['vbo_options'];
+  }
+
+  // Inform other modules that VBO has finished executing.
+  module_invoke_all('views_bulk_operations_finish', $options['operation'], $options['params'], array('results' => $results));
+
+  if (!empty($options['display_result'])) {
+    drupal_set_message($message);
+  }
+  unset($_SESSION['vbo_options']); // unset the options which were used for just one invocation
+}
+
+/**
+ * Helper function to execute one operation.
+ */
+function _views_bulk_operations_action_do($operation, $oid, $object, $row, $params, $object_info, $account = NULL) {
+  _views_bulk_operations_action_permission($operation, $account);
+
+  // Add the object to the context.
+  if (!empty($object_info['context'])) {
+    $params[$object_info['context']] = $object;
+  }
+  else {
+    $params[$object_info['type']] = $object;
+  }
+  // If the operation type is different from the view type, normalize the context first.
+  $actual_object = $object;
+  if ($object_info['type'] != $operation['type']) {
+    if (isset($object_info['normalize']) && function_exists($object_info['normalize'])) {
+      $actual_object = call_user_func($object_info['normalize'], $operation['type'], $object);
+    }
+    $params['hook'] = $object_info['hook'];
+  }
+  if (is_null($actual_object)) { // Normalize function can return NULL: we don't want that
+    $actual_object = $object;
+  }
+  $params['row'] = $row; // Expose the original view row to the action
+
+  if ($operation['source'] == 'action') {
+    actions_do($operation['callback'], $actual_object, $params);
+    if ($operation['type'] == 'node' && ($operation['access op'] & VBO_ACCESS_OP_UPDATE)) { // Save nodes explicitly if needed
+      $node_options = variable_get('node_options_'. $actual_object->type, array('status', 'promote'));
+      if (in_array('revision', $node_options) && !isset($actual_object->revision)) {
+        $actual_object->revision = TRUE;
+        $actual_object->log = '';
+      }
+      node_save($actual_object);
+    }
+  }
+  else { // source == 'operation'
+    $args = array_merge(array(array($oid)), $params);
+    call_user_func_array($operation['callback'], $args);
+  }
+}
+
+/**
+ * Helper function to execute an aggregate operation.
+ */
+function _views_bulk_operations_action_aggregate_do($operation, $oids, $objects, $params, $object_info) {
+  _views_bulk_operations_action_permission($operation);
+
+  $params[$operation['type']] = $objects;
+  if ($operation['source'] == 'action') {
+    actions_do($operation['callback'], $oids, $params);
+  }
+  else {
+    $args = array_merge(array($oids), $params);
+    call_user_func_array($operation['callback'], $args);
+  }
+}
+
+/**
+ * Helper function to verify access permission to execute operation.
+ */
+function _views_bulk_operations_action_permission($operation, $account = NULL) {
+  if (module_exists('actions_permissions')) {
+    $perm = actions_permissions_get_perm($operation['perm label'], $operation['callback']);
+    if (!user_access($perm, $account)) {
+      global $user;
+      watchdog('actions permissions', 'An attempt by user %user to !perm was blocked due to insufficient permissions.',
+        array('!perm' => $perm, '%user' => isset($account) ? $account->name : $user->name), WATCHDOG_ALERT);
+      drupal_access_denied();
+      exit();
+    }
+  }
+
+  // Check against additional permissions.
+  if (!empty($operation['permissions'])) foreach ($operation['permissions'] as $perm) {
+    if (!user_access($perm, $account)) {
+      global $user;
+      watchdog('actions permissions', 'An attempt by user %user to !perm was blocked due to insufficient permissions.',
+        array('!perm' => $perm, '%user' => isset($account) ? $account->name : $user->name), WATCHDOG_ALERT);
+      drupal_access_denied();
+      exit();
+    }
+  }
+}
+
+/**
+ * Helper function to verify access permission to operate on object.
+ */
+function _views_bulk_operations_object_permission($operation, $object, $object_info, $account = NULL) {
+  // Check against object access permissions.
+  if (!isset($object_info['access'])) return TRUE;
+
+  $access_ops = array(
+    VBO_ACCESS_OP_VIEW => 'view',
+    VBO_ACCESS_OP_UPDATE => 'update',
+    VBO_ACCESS_OP_CREATE => 'create',
+    VBO_ACCESS_OP_DELETE => 'delete',
+  );
+  foreach ($access_ops as $bit => $op) {
+    if ($operation['access op'] & $bit) {
+      if (!call_user_func($object_info['access'], $op, $object, $account)) {
+        return FALSE;
+      }
+    }
+  }
+
+  return TRUE;
+}
+
+/**
+ * Helper function to let the configurable action provide its configuration form.
+ */
+function _views_bulk_operations_action_form($action, $view, $selection, $settings, $context = array()) {
+  $action_form = $action['callback'] . '_form';
+  $context = array_merge($context, array('view' => $view, 'selection' => $selection, 'settings' => $settings, 'object_info' => _views_bulk_operations_object_info_for_view($view)));
+  if (isset($action['callback arguments'])) {
+    $context = array_merge($context, $action['callback arguments']);
+  }
+
+  $form = call_user_func($action_form, $context);
+  return is_array($form) ? $form : array();
+}
+
+/**
+ * Helper function to let the configurable action validate the form if it provides a validator.
+ */
+function _views_bulk_operations_action_validate($action, $form, $form_values) {
+  $action_validate = $action['callback'] . '_validate';
+  if (function_exists($action_validate)) {
+    call_user_func($action_validate, $form, $form_values);
+  }
+}
+
+/**
+ * Helper function to let the configurable action process the configuration form.
+ */
+function _views_bulk_operations_action_submit($action, $form, &$form_state) {
+  $action_submit = $action['callback'] . '_submit';
+  return call_user_func($action_submit, $form, $form_state);
+}
+
+/**
+ * Helper function to return all object info.
+ */
+function _views_bulk_operations_get_object_info($reset = FALSE) {
+  static $object_info = array();
+  if ($reset || empty($object_info)) {
+    $object_info = module_invoke_all('views_bulk_operations_object_info');
+  }
+  drupal_alter('views_bulk_operations_object_info', $object_info);
+  return $object_info;
+}
+
+/**
+ * Helper function to return object info for a given view.
+ */
+function _views_bulk_operations_object_info_for_view($view) {
+  foreach (_views_bulk_operations_get_object_info() as $object_info) {
+    if ($object_info['base_table'] == $view->base_table) {
+      return $object_info + array(
+        'context' => '',
+        'oid' => '',
+        'access' => NULL,
+        'hook' => '',
+        'normalize' => NULL,
+      );
+    }
+  }
+  watchdog('views bulk operations', 'Could not find object info for view table @table.', array('@table' => $view->base_table), WATCHDOG_ERROR);
+  return NULL;
+}
+
+/**
+ * Helper to include all action files.
+ */
+function _views_bulk_operations_load_actions() {
+  static $files = NULL;
+  if (!empty($files)) {
+    return $files;
+  }
+  $files = unserialize(variable_get('views_bulk_operations_actions', NULL));
+  if (empty($files)) {
+    foreach (file_scan_directory(drupal_get_path('module', 'views_bulk_operations') . '/actions', '\.action\.inc$') as $file) {
+      list($files[],) = explode('.', $file->name);
+    }
+    variable_set('views_bulk_operations_actions', serialize($files));
+  }
+  foreach ($files as $file) {
+    module_load_include('inc', 'views_bulk_operations', "actions/$file.action");
+  }
+  return $files;
+}
+
+/**
+ * Helper callback for array_walk().
+ */
 function _views_bulk_operations_get_oid($row, $base_field) {
   return $row->$base_field;
 }
 
+/**
+ * Helper callback for array_filter().
+ */
+function _views_bulk_operations_filter_invert($item) {
+  return empty($item);
+}
+
+/**
+ * Helper to add needed JavaScript files to VBO.
+ */
+function _views_bulk_operations_add_js($plugin, $form_dom_id, $form_id) {
+  static $views = NULL;
+  if (!isset($views[$form_id])) {
+    drupal_add_js(drupal_get_path('module', 'views_bulk_operations') . '/js/views_bulk_operations.js');
+    drupal_add_js(drupal_get_path('module', 'views_bulk_operations') . '/js/json2.js');
+    drupal_add_css(drupal_get_path('module', 'views_bulk_operations') . '/js/views_bulk_operations.css', 'module');
+    drupal_add_js(array('vbo' => array($form_dom_id => array(
+      'form_id' => $form_id,
+      'view_name' => $plugin->view->name,
+      'view_id' => _views_bulk_operations_view_id($plugin->view),
+      'options' => $plugin->options,
+      'ajax_select' => url('views-bulk-operations/js/select'),
+    ))), 'setting');
+    $views[$form_id] = TRUE;
+  }
+}
+
+/**
+ * Implement hook_ajax_data_alter().
+ */
+function views_bulk_operations_ajax_data_alter(&$object, $type, $view) {
+  if ($type == 'views' && $view->display_handler->get_option('style_plugin') == 'bulk') {
+    $object->vbo = array(
+      'view_id' => _views_bulk_operations_view_id($view),
+      'form_id' => $view->style_plugin->form_id,
+    );
+    $object->__callbacks[] = 'Drupal.vbo.ajaxViewResponse';
+  }
+}
+
+/**
+ * Helper function to calculate hash of an object or array, excluding embedded arrays and objects.
+ */
+function _views_bulk_operations_hash_object($object) {
+  return md5(serialize($object));
+}
+
+/**
+ * Helper function to strip of a view of all decorations.
+ */
+function _views_bulk_operations_strip_view($view) {
+  if (isset($view->query->pager)) {
+    $view->query->pager = NULL;
+  }
+  else {
+    $view->set_use_pager(FALSE);
+  }
+  $view->exposed_widgets = NULL;
+  $view->display_handler->set_option('header', '');
+  $view->display_handler->set_option('footer', '');
+  $view->display_handler->set_option('use_pager', FALSE);
+  $view->attachment_before = '';
+  $view->attachment_after = '';
+  $view->feed_icon = NULL;
+}
+
+/**
+ * Helper function to get a unique ID for a view, taking arguments and exposed filters into consideration.
+ */
+function _views_bulk_operations_view_id($view) {
+  // Normalize exposed input.
+  $exposed_input = array();
+  foreach ($view->filter as $filter) {
+    if (!empty($filter->options['exposed']) && isset($view->exposed_input[ $filter->options['expose']['identifier'] ])) {
+      $exposed_input[ $filter->options['expose']['identifier'] ] = $view->exposed_input[ $filter->options['expose']['identifier'] ];
+    }
+  }
+  $exposed_input = array_filter($exposed_input);
+  return md5(serialize(array($view->name, $view->args, $exposed_input)));
+}
+
+/**
+ * Helper function to identify VBO displays for a view.
+ */
+function _views_bulk_operations_displays($view) {
+  $displays = array();
+  foreach ($view->display as $display_id => $display) {
+    if ($display->get_option('style_plugin') == 'bulk') {
+      $displays[] = $display_id;
+    }
+  }
+  return $displays;
+}
+
+/**
+ * Functor to destroy view on exit.
+ */
+class views_bulk_operations_destructor {
+  function __construct($view) {
+    $this->view = $view;
+  }
+  function __destruct() {
+    $this->view->destroy();
+  }
+  private $view;
+}
