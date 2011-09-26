@@ -8,6 +8,19 @@ Commons 2.1, 2011-09-23
 Commons 2.1 includes an updated version of the Views Bulk Operations module
 that fixes a security vulnerability: http://drupal.org/node/1286844.
 
+Updating to Commons 2.1 is relatively straighforward using the steps below:
+
+Update instructions:
+
+1. Back up your code (everything in your Drupal root directory) and your
+   database.
+2. Log in as user 1 and enable maintenance mode (admin/settings/site-maintenance)
+3. Extract the new Commons tarball and copy the contents into your document root.
+4. Visit update.php and follow the prompts to "Update".
+5. Visit admin/build/features/commons_core, select the "Views" component and click "Revert components"
+6. Bring the site out of maintenance mode (admin/settings/site-maintenance).
+ 
+
 Commons 2.0, 2011-08-30
 ------------------------------------
 For the formatted, online version of the release notes see:
