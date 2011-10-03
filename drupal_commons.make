@@ -19,7 +19,7 @@ projects[admin][subdir] = "contrib"
 projects[admin][version] = "2.0"
 
 projects[ajax_load][subdir] = "contrib"
-projects[ajax_load][version] = "1.x-dev"
+projects[ajax_load][version] = "081711f550dbe705fda3c9838604ebce81df98a4"
 
 projects[boxes][subdir] = "contrib"
 projects[boxes][version] = "1.0"
@@ -155,7 +155,8 @@ projects[transliteration][subdir] = "contrib"
 projects[transliteration][version] = "3.0"
 
 projects[userpoints_contrib][subdir] = "contrib"
-projects[userpoints_contrib][version] = "1.x-dev"
+; Based on 5ae09b723a8197f29d9ee7f562777ef221cb16de from the GitHub Acquia Commons repo.
+projects[userpoints_contrib][version] = "0359e9497882d98080b5854b19ebc1bd34a7c24a"
 
 projects[user_badges][subdir] = "contrib"
 projects[user_badges][version] = "1.6"
@@ -188,7 +189,7 @@ projects[wikitools][subdir] = "contrib"
 projects[wikitools][version] = "1.3"
 
 projects[wysiwyg][subdir] = "contrib"
-projects[wysiwyg][version] = "2.x-dev"
+projects[wysiwyg][version] = "f01af84e0230f6b3a351778c3a89902a7fc92506"
 
 projects[wysiwyg_filter][subdir] = "contrib"
 projects[wysiwyg_filter][version] = "1.5"
@@ -214,5 +215,4 @@ projects[facebook_status][subdir] = "contrib"
 ; Themes
 
 projects[fusion][version] = "1.0"
-; @TODO: Create contrib project(s) for Commons-specific themes.
 
