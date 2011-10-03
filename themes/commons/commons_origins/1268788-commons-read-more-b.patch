@@ -1,0 +1,36 @@
+diff --git a/profiles/drupal_commons/themes/commons_origins/css/commons_origins-style.css b/profiles/drupal_commons/themes/commons_origins/css/commons_origins-style.css
+index 63f3aa5..2510527 100644
+--- a/profiles/drupal_commons/themes/commons_origins/css/commons_origins-style.css
++++ b/profiles/drupal_commons/themes/commons_origins/css/commons_origins-style.css
+@@ -88,7 +88,7 @@ ul.krumo-node ul{
+ .node .inner ul li,
+ .panel-pane .inner ul li,
+ .block .content ul li {
+-  background: transparent url(../images/gray-arrow-right.png) no-repeat 0 4px;
++  background: transparent url(../images/gray-arrow-right.png) no-repeat left center;
+   list-style-image: none;
+   list-style: none;
+   margin-bottom: 8px;
+@@ -893,13 +893,20 @@ ul.links li {
+ 
+ .node .inner ul.menu li a,
+ .block .content ul.menu li a,
+-.panel-pane .inner ul.menu li aa {
+-	background: transparent url(../images/gray-arrow-right.png) no-repeat 0 1px;
++.panel-pane .inner ul.menu li a {
++	background: transparent url(../images/gray-arrow-right.png) no-repeat left center;
+ 	list-style-image: none;
+ 	list-style: none;
+ 	margin: 0 0 8px 0;
+ 	padding: 0 0 0 22px;
+ 	text-indent: 0;
++	whitespace: no-wrap;
++}
++
++.node .inner ul.menu,
++.block .content ul.menu,
++.panel-pane .inner ul.menu {
++  margin-left: 0;
+ }
+ 
+ /* Only more/read more links */

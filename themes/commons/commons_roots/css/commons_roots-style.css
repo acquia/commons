@@ -1,0 +1,701 @@
+/* @group Forms */
+
+form input.form-submit { /* Forced by Fusion */
+  font-weight: normal;
+  margin: 0;
+}
+
+.not-front .main .main-inner, .front .content-content {
+  padding: 0;
+}
+
+#og-features-feature-form tr.odd .form-item, 
+#og-features-feature-form tr.even .form-item {
+  /* This overrides a system.css style that should always be knocked out.
+     I'm making this selector extemely specific to prevent destroying anything
+     that might rely on the white-space: nowrap declaration. Please make this
+     generic in future updates - jessebeach */
+  white-space: normal;
+}
+
+/* @end */
+
+/* @group Header Region which floats to the right of the site info */
+
+.header-region {
+  float: right;
+  margin-bottom: 0px;
+  width: auto;
+}
+
+.nav-group {
+  border-radius: 0 0 10px 10px;
+  clear: both;
+  float: none;
+  margin-bottom: 0;
+  overflow: visible;
+  padding: 0 10px;
+  position: relative;
+  z-index: 10;
+}
+
+/* Site Info-------------------------------------------------------------- */
+.header-site-info {
+  float: left;
+  width: auto;
+}
+
+/* Header - Search-------------------------------------------------------------- */
+.search-box {
+  float: right;
+  margin: 0;
+  min-width: 220px;
+  padding: 5px 0 4px 0;
+  width: auto;
+}
+
+.contextual-search-wrapper .contextual-search-launcher,
+.contextual-search-processed .contextual-search-wrapper ul.contextual-search-list {
+  background-image: url('../images/dropdown.png');
+  background-position: right 6px;
+  background-repeat: no-repeat;
+  padding: 4px 17px 4px 7px;
+}
+
+/* Wrapper around logo, site name, and slogan */
+
+.header-site-info span {
+  display: block;
+}
+
+/* Add float here to put logo and site name side by side, also add margins as  needed */
+
+#logo {
+  float: left;
+  margin-right: 10px;
+  vertical-align: middle;
+  width: auto;
+}
+
+#logo a {
+  display: block;
+}
+
+/* @end */
+
+/* @group Primary Menu */
+
+/* Add general styles for primary menu here, such as typography, borders, floats,  or spacing above/below */
+
+.primary-menu {
+  float: left;
+  margin: 0;
+  width: auto;
+  position: relative;
+  z-index: 20;
+}
+
+#primary-menu-inner {
+  margin-left: 0px;
+}
+
+/* styles for Superfish primary menu */
+
+.primary-menu-inner ul.sf-menu {
+  
+}
+
+.primary-menu-inner ul.sf-menu li {
+  margin-bottom: 0px;
+}
+
+.not-front .main .main-inner,
+.front .main .main-inner {
+  padding: 14px 0px;
+}
+
+/* @end */
+
+/* @group User Meta - logout/account links in header w/ profile pic */
+
+.view-user-meta {
+  float: right;
+  width: 180px;
+  font-family: "Helvetical Neue",Helvetica,Arial,Sans-serif;
+  margin-top: 10px;
+}
+
+.view-user-meta .views-field-name span {
+  display: block;
+  font-size: 1.1em;
+  line-height: 1.2em;
+  text-align: right;
+}
+
+.view-user-meta .views-field-name span.username a {
+  color: #69c;
+  font-weight: bold;
+}
+
+.view-user-meta .views-field-name span.full-name {
+  font-size: .9em;
+  font-style: normal;
+}
+
+.view-user-meta .views-field-picture {
+  float: right;
+  margin: 0 0 2px 12px;
+}
+
+.view-user-meta .views-field-nothing,
+.view-user-meta .views-field-nothing-1 {
+  float: right;
+  margin-bottom: 2px;
+  margin-top: 2px;
+  padding: 0;
+}
+
+.view-user-meta .views-field-nothing a,
+.view-user-meta .views-field-nothing-1 a {
+  color: #333;
+  font-size: 11px;
+  line-height: 13px;
+  padding: 0;
+}
+
+.view-user-meta .views-field-nothing {
+  border-left: 1px solid #666;
+  clear: both;
+  margin-left: 8px;
+  padding-left: 8px;
+}
+
+.view-user-meta .views-field-name {
+  font-size: .9em;
+  line-height: 1em;
+}
+
+.view-user-meta .views-field-name a {
+  color: #333;
+}
+
+.view-user-meta .views-field-nothing {
+  margin-right: 6px;
+  padding-right: 6px;
+}
+
+.view-user-meta .views-field-points {
+  clear: both;
+  text-align: right;
+}
+
+.view-user-meta .views-row span.views-field-picture {
+  display: block;
+  float: right;
+}
+
+/* @end */
+
+.sidebar-first .links li,
+.sidebar-last .links li {
+  border: 0 none;
+  display: list-item;
+}
+
+.block .content .item-list .pager li {
+  display: inline;
+  display: inline-block;
+}
+
+.block .content ul li.views-row {
+  display: block;
+}
+
+.block .content .views-row:after {
+  clear:both;
+  display:block;
+  visibility:hidden;
+  overflow:hidden;
+  height:0 !important;
+  line-height:0;
+  font-size:xx-large;
+  content:" x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x ";
+}
+
+/* User page - Find new friends block*/
+.block#block-commons_profile-find_new_friends {
+	overflow: visible;
+}
+
+/* @group Blocks */
+/* Used in profile blocks */
+#block-commons_profile-profile_image_links ul.links li {
+  border: medium none;
+  display: block;
+  padding: 0 6px 0 12px;
+  width: 90%;
+}
+
+#block-commons_profile-profile_image_links ul.links li.userpoints, #block-commons_profile-profile_image_links ul.links li.user_badges  {
+  background: none;	
+}
+
+.block.block-commons_profile .links .ur_action {
+  border: none;
+  display: block;
+  padding: 0;
+  text-align: center;
+}
+
+.block.block-commons_profile .links .ur_action a {
+  display: inline-block;
+  padding: 4px 8px;
+}
+
+/* @end */
+
+.node .inner ul,
+.panel-pane .inner ul,
+.block .inner ul {
+  padding-left: 15px;
+  margin-left: 0;
+}
+
+.block .item-list ul,
+.view .item-list ul {
+  padding: 0;
+}
+
+.block .item-list ul li,
+.view .item-list ul li {
+  list-style-position: inside;
+}
+
+#primary-menu.block ul {
+  padding-left: 0;
+}
+
+/* @group Sidebar blocks */
+
+.sidebar-last .block-views .views-row > span {
+  /* Some Views print the fields in spans instead of divs, so we need to 
+   * set these spans to display as block in order for the left margin to apply
+   * correctly. But we don't want all spans, just the children of the li */
+  display: block;
+}
+
+.sidebar-last .block-views .view-content .item-list ul li {
+  background: none repeat scroll 0 0 transparent;
+  border-bottom: 0 none;
+  margin-bottom: 0;
+  padding-bottom: 10px;
+  padding-left: 0;
+  position: relative;
+  clear: both;
+}
+
+.sidebar-last .block-views .views-field-field-group-image-fid,
+.sidebar-last .block-views .views-field-picture,
+.sidebar-last .block-views .views-field-field-date-value { 
+  float: left;
+  margin-right: 10px; /* Largely unnecessary, but makes IE6 look better. */
+  width: 30px;
+}
+
+.sidebar-last .block-views .views-field-field-group-image-fid img,
+.sidebar-last .block-views .views-field-picture img {
+  width: 100%;
+  max-width: 100%;
+  height: auto; 
+}
+
+.sidebar-last .block-views .views-field-field-group-image-fid ~ *,
+.sidebar-last .block-views .views-field-picture ~ *,
+.sidebar-last .block-views .views-field-field-date-value ~ * {
+  /* This produces the left alignment of all text items after an image using
+   * the general sibling selector ~. When an image isn't present, the images
+   * shift to the left and no margin is applied. */
+  margin-left: 40px;
+}
+
+/* @group Sidebar block content adjustments */
+
+.sidebar-last .block-views .view-content p {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.sidebar-last .block ul {
+  padding-left: 0;
+}
+
+.sidebar-last .block ul li {
+  list-style: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* @end */
+
+/* @end */
+
+/* User profile about page */
+.view-profile-about-page label {
+  font-weight: bold;
+  background: #f2f2f2;
+  padding: 5px;
+  display: inline-block;
+  border-bottom: 1px solid #ddd;
+  width: 30%;
+}
+
+.view-profile-about-page span.field-content {
+  padding-left: 5px;
+  display: inline-block;
+}
+
+/* Tab Menus   TODO: tab styles?/-------------------------------------------------------------- */
+
+#content-tabs {
+  background-color: transparent;
+  float: none;
+  margin: 15px 0 22px; 
+  padding: 0;
+}
+
+#breadcrumbs + #content-tabs,
+h1 + #content-tabs {
+  margin-top: 0;
+}
+
+#content-tabs-inner {
+  margin: 0;
+}
+
+#content-tabs ul.primary,
+#content-tabs ul.secondary {
+  border-bottom: 2px solid #d1d1d1;
+  clear: both;
+  float: none;   
+}
+
+#content-tabs ul.primary:after,
+#content-tabs ul.secondary:after{
+	clear: both;
+	content: ".";
+	display: block;
+	height: 0;
+	visibility: hidden;
+}
+
+
+#content-tabs ul.primary li,
+#content-tabs ul.secondary li {
+  border-style: none;
+  display: inline;
+  float: left;
+  font-size: .9em;
+  font-weight: normal;
+  list-style: none;
+  margin: 0 0px;
+  padding: 0;
+}
+
+#content-tabs ul.primary li a:link,
+#content-tabs ul.primary li a:visited {
+  cursor: pointer;
+  float: left;
+  margin: 0 2px -2px 0;
+  padding: 4px 6px 4px 6px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+#content-tabs ul.secondary li {
+  margin: 0 8px;
+}
+
+/* Used in homepage */
+
+#block-boxes-homepage_info_box a.intro-morebutton {
+  display: block;
+  clear: both;
+  text-align: right;
+  margin-right: 3%;
+  font-size: 1.4em;
+  line-height: 18px;
+  padding: 9px 40px;
+  font-weight:bold;
+} 
+
+.intro-textblock {
+  width: 30%;
+  float: left;
+  margin-right: 3%;
+}
+
+/* group listing */
+#block-views-groups_featured_groups-block_1 .content .views-row .views-field-field-group-image-fid {
+  float: left;
+  margin-right: 10px;
+  width: 140px;
+}
+
+#block-views-group_node-block_1 .view-content .views-field-field-group-image-fid {
+  float: left;
+  margin: 0 10px 10px 0;
+}
+
+/* @group Status forms */
+
+.facebook-status-textarea-wrapper {
+  border: 1px solid #cccccc;
+  -moz-box-shadow: 1px 1px 0 rgba(0,0,0,0.4) inset, 2px 2px 2px rgba(0,0,0,0.3) inset;
+  -o-box-shadow: 1px 1px 0 rgba(0,0,0,0.4) inset, 2px 2px 2px rgba(0,0,0,0.3) inset;
+  -webkit-box-shadow: 1px 1px 0 rgba(0,0,0,0.4) inset, 2px 2px 2px rgba(0,0,0,0.3) inset;
+  box-shadow: 1px 1px 0 rgba(0,0,0,0.4) inset, 2px 2px 2px rgba(0,0,0,0.3) inset;
+}
+
+.facebook-status-update-main {
+  width: 100%;
+}
+
+.fbsmp-link-title {
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+.facebook-status-back {
+  float: right;
+  margin: 0.5em;
+}
+
+a .facebook-status-time,
+a:link .facebook-status-time,
+a:hover .facebook-status-time,
+a:focus .facebook-status-time,
+a:active .facebook-status-time {
+  color: #666666;
+}
+
+form input.button { /* Forced by Fusion */
+  padding: 7px 14px;
+}
+
+form input.fbsmp-plugin-icon-button {
+  padding-left: 34px;
+}
+
+form input.fbsmp-cancel-button { /* Forced by Fusion */
+  padding: 0;
+}
+
+/* @group Status items */
+
+.facebook-status-links ul li + li { /* Force by Fusion */
+  margin-left: 0.5em;
+}
+
+/* @end */
+
+/* @group Heartbeat Module */
+
+.heartbeat-message-block .beat-item .heartbeat-buttons {
+	display: none;
+}
+
+.heartbeat-message-block .beat-item:hover .heartbeat-buttons {
+	background-color: #eee;
+	display: block;
+	position: absolute;
+	right:0px;
+}
+
+.heartbeat-message-block .beat-item:after {
+	clear: both;
+	content: ".";
+	display: block;
+	height: 0;
+	visibility: hidden;
+}
+
+.heartbeat-message-block .beat-item .beat-item-info {
+	float: left;
+	padding-right: 10px;
+	width: 50px;
+	line-height: 1em;
+}
+
+.heartbeat-message-block .beat-item .beat-item-info a {
+	color: #323232;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 9px;
+	font-style: normal;
+	line-height: 1em;	
+}
+
+.heartbeat-message-block .beat-item .beat-item-info img {
+	display: block;
+}
+
+.heartbeat-older-messages {
+	font-size: 1em;
+	margin: 0;
+	text-align: right;
+}
+
+div.beat-item blockquote {
+	background-image: none;
+	font-style: italic;
+	padding: 0;
+}
+
+/* @end */
+
+/* @group event calendar icon */
+
+.dateblock {
+	float:left;
+	font-weight:bold;
+	margin-right:10px;
+	padding-bottom:7px;
+	width:30px;
+}
+.dateblock .month {
+	background-color:#555;
+	color:#FFFFFF;
+	float:left;
+	font-size:11px;
+	line-height:1.1em;
+	text-align:center;
+	text-transform:capitalize;
+	width:30px;
+}
+.dateblock .day {
+	background-color:#dadee1;
+	color:#000000;
+	float:left;
+	font-size:14px;
+	font-weight: bold;
+	line-height:1.1em;
+	text-align:center;
+	width:30px;
+	padding:2px 0px;
+}
+.dateblock .year { display:none; }
+
+/* @end */
+
+/* @group Submitted */
+
+.submitted img.imagecache-user_picture_meta {
+  float: left;
+  margin: 0.5em 1em 0 0;
+}
+
+.submitted .user_badges {
+  display: inline-block;
+  padding: 0 0 0 2px;
+}
+
+.submitted .user_badges img {
+  vertical-align: middle;
+}
+
+.submitted .submitted-on {
+  display: block;
+}
+
+/* @end */
+
+.view .view-content .views-row .views-field-picture {
+  float: left;
+  margin: 0 10px 10px 0;
+}
+
+.view-groups-main-listing .view-content .views-field-field-group-image-fid,
+.view-subgroups-main-listing .view-content .views-field-field-group-image-fid {
+  float:left;
+  width:68px;
+  margin-right:10px;
+}
+
+.view-groups-main-listing .view-content .views-field-field-group-image-fid img,
+.view-subgroups-main-listing .view-content .views-field-field-group-image-fid img {
+  width:66px;
+  height:66px;
+  border:solid 1px #c2c2c2;
+}
+
+.views-field-subscribe,
+.views-field-leave-group {
+  float: right;
+  margin-left: 8px;
+}
+
+.view-groups-main-listing .views-field-description,
+.view-subgroups-main-listing .views-field-description {
+  overflow: hidden;
+}
+
+/* Added by Jay to generalize the Search Group field & button */
+#views-exposed-form-og-search-default .views-exposed-widget.views-exposed-submit .form-submit, #views-exposed-form-og-search-page-1 .views-exposed-widget.views-exposed-submit .form-submit {
+  float: right;
+  padding: 6px 7px 9px 7px;
+}
+
+#views-exposed-form-og-search-default input#edit-keys.form-text {
+  width: 90%;
+}
+
+/* @group A couple of shoutbox generalizations. -jay */
+.shoutbox-add-form fieldset {
+  margin: 5px 0;
+  padding: 10px;
+}
+
+#shoutbox-add-form input.form-text {
+  width: 95%;
+  max-width: 95%;
+}
+
+/* @end */
+
+/* An attempt to generalize the node type dropdown & "create" button, though as of
+ * release 1.6, all 3 themes need _some_ tweaking of one element or another.
+ * -jay
+ */
+#edit-node-type-wrapper.form-item {
+  width: 65%;
+  margin-left: 2px;
+  padding-top: 2px;
+  vertical-align: middle;
+}
+
+/* @group Dashboard */
+
+.view-dashboard-recent-content .views-field-picture {float: left;}
+.view-dashboard-recent-content .views-field-title,
+.view-dashboard-recent-content .views-field-created,
+.view-dashboard-recent-content .views-field-name,
+.view-dashboard-recent-content .views-field-group-nid,
+.view-dashboard-recent-content .views-field-tid,
+.view-dashboard-recent-content .views-field-comment-count {margin-left: 40px;  width: 80%; }
+
+.view-dashboard-recent-content .views-field-timestamp {float: right;}
+
+.cke_skin_kama .cke_toolbar .cke_button a,
+.cke_skin_kama .cke_toolbar .cke_button a:hover,
+.cke_skin_kama .cke_toolbar .cke_button a:focus,
+.cke_skin_kama .cke_toolbar .cke_button a:active,
+.cke_skin_kama .cke_toolbar .cke_button a.cke_off,
+.cke_skin_kama .cke_toolbar .cke_button a.cke_on:hover,
+.cke_skin_kama .cke_toolbar .cke_button a.cke_on:focus,
+.cke_skin_kama .cke_toolbar .cke_button a.cke_on:active,
+.cke_skin_kama .cke_toolbar .cke_button a.cke_off:hover,
+.cke_skin_kama .cke_toolbar .cke_button a.cke_off:focus,
+.cke_skin_kama .cke_toolbar .cke_button a.cke_off:active{
+  padding: 2px 3px;
+}
+
+/* @end */
