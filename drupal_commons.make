@@ -12,7 +12,7 @@ projects[drupal_commons][download][revision] = "6.x-2.x"
 projects[drupal_commons][type] = "profile"
 
 ; Modules
-projects[views_bulk_operations][subdir] = "contrib/views_bulk_operations"
+projects[views_bulk_operations][subdir] = "contrib"
 projects[views_bulk_operations][version] = "1.10"
 
 projects[admin][subdir] = "contrib"
@@ -282,7 +282,7 @@ projects[wikitools][subdir] = "contrib"
 projects[wikitools][version] = "1.3"
 
 projects[wysiwyg][subdir] = "contrib"
-projects[wysiwyg][download][type] = git
+projects[wysiwyg][download][type] = "git"
 projects[wysiwyg][download][url] = "http://git.drupal.org/project/wysiwyg.git"
 projects[wysiwyg][version] = "f01af84e0230f6b3a351778c3a89902a7fc92506"
 
