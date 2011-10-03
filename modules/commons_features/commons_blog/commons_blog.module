@@ -1,0 +1,32 @@
+<?php
+
+include_once('commons_blog.features.inc');
+
+/**
+ * Implementation of hook_og_features_registry()
+ */
+function commons_blog_og_features_registry() {
+  $registry = array();
+  
+  // Feature: commons_blog
+  $feature = new stdClass;
+  $feature->id = 'commons_blog';
+  $feature->name = t('Blogs');
+  $feature->description = t('Enable your group members to create blog entries relevant to your group.');
+  $feature->components = array(
+    'views' => array(
+      'group_tab_blogs',
+    ),
+    'node' => array(
+      'blog',
+    ),
+    'context' => array(
+      'group-home-blogs',
+      'group-tab-blogs',
+      'group-blog-node',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+  
+  return $registry;
+}

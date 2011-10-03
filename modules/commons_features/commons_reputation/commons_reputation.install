@@ -1,0 +1,106 @@
+<?php
+
+/**
+ * Implementation of hook_install()
+ */
+function commons_reputation_install() {
+  // Fetch the default badges
+  module_load_include('inc', 'commons_reputation', 'commons_reputation.badges');
+  $badges = commons_reputation_default_badges();
+  
+  // Insert the user badges
+  commons_reputation_insert_badges($badges);
+  
+  // Set a default badge for authenticated users
+  commons_reputation_set_auth_badge($badges);
+  
+  // Set userpoint thresholds for badges
+  commons_reputation_set_point_thresholds($badges);
+  
+  // Add userpoints vocabulary
+  commons_reputation_insert_vocabulary();
+}
+
+/**
+ * Insert the default badges
+ */
+function commons_reputation_insert_badges($badges) {
+  $sql = "INSERT INTO {user_badges_badges} (name, image, weight, fixedweight) VALUES ('%s', '%s', %d, %d)";
+  foreach ($badges as $badge) {
+    // drupal_write_record() is not working here
+    db_query($sql, $badge->name, $badge->image, $badge->weight, $badge->fixedweight);
+  }
+}
+
+/**
+ * Set the default badge for authenticated users
+ */
+function commons_reputation_set_auth_badge($badges) {
+  // Fetch the badge
+  $badge = db_fetch_object(db_query("SELECT * FROM {user_badges_badges} WHERE name = '%s' AND image = '%s'", $badges['user']->name, $badges['user']->image));
+
+  // Set badge for authenticated role
+  if ($badge->bid) {
+    $sql = "INSERT INTO {user_badges_roles} (bid, rid) VALUES (%d, %d)";
+    // drupal_write_record() is not working here
+    db_query($sql, $badge->bid, 2);
+  }
+}
+
+/**
+ * Set userpoint thresholds for badges
+ */
+function commons_reputation_set_point_thresholds($badges) {
+  // Insert SQL
+  $sql = "INSERT INTO {userpoints_badges} (bid, userpoints_goal) VALUES (%d, %d)";
+  
+  // Set the point values
+  foreach ($badges as $key => $badge) {
+    // Determine the bid
+    $bid = db_result(db_query("SELECT bid FROM {user_badges_badges} WHERE name = '%s'", $badge->name));
+    
+    // Determine the point value
+    switch ($key) {
+      case 'super_contributor':
+        $points = 1500;
+        break;
+      case 'frequent_contributor':
+        $points = 1000;
+        break;
+      case 'regular_contributor':
+        $points = 1000;
+        break;
+      case 'contributor':
+        $points = 50;
+        break;
+      case 'member':
+        $points = 2;
+        break;
+      default:
+        $points = 0;
+        break;
+    }
+    
+    if ($bid && $points) {
+      // drupal_write_record() is not working here
+      db_query($sql, $bid, $points);
+    }
+  }
+}
+
+/**
+ * Add a vocabulary for userpoints
+ */
+function commons_reputation_insert_vocabulary() {
+  // Add vocabulary for Userpoints.module
+  $vocab = array(
+    'name' => t('Userpoints'),
+    'description' => st('Automatically created by the userpoints module'),
+    'multiple' => '0',
+    'required' => '0',
+    'hierarchy' => '1',
+    'relations' => '0',
+    'module' => 'userpoints',
+  );
+  taxonomy_save_vocabulary($vocab);
+}

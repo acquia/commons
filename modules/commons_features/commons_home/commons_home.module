@@ -1,0 +1,35 @@
+<?php
+
+include_once('commons_home.features.inc');
+
+/**
+ * Implementation of hook_menu()
+ */
+function commons_home_menu() {
+  $items = array();
+  $items['home'] = array(
+    'title' => 'Home',
+    'description' => 'The community homepage',
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 0,
+    'menu_name' => 'primary-links',
+    'page callback' => 'commons_home_homepage',
+    'access callback' => TRUE,
+    'file' => 'commons_home.pages.inc',
+  );
+  return $items;
+}
+
+/**
+ * Implementation of hook_views_pre_view()
+ */
+function commons_home_views_pre_view(&$view) {
+  // When viewing the "Group showcase" block
+  if ($view->name == 'homepage_group_showcase') {
+    // Get the set title
+    $title = $view->display_handler->get_option('title');
+    
+    // Set the new title, replacing the %site-name token
+    $view->display_handler->set_option('title', t($title, array('%site-name' => variable_get('site_name', ''))));
+  }
+}

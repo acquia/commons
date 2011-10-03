@@ -1,0 +1,33 @@
+<?php
+
+include_once('commons_event.features.inc');
+
+/**
+ * Implementation of hook_og_features_registry()
+ */
+function commons_event_og_features_registry() {
+  $registry = array();
+  
+  // Feature: commons_event
+  $feature = new stdClass;
+  $feature->id = 'commons_event';
+  $feature->name = t('Events');
+  $feature->description = t('Enable your group members to announce events associated with your group, and display them on calendars & sidebar blocks.');
+  $feature->components = array(
+    'views' => array(
+      'group_tab_events',
+      'group_event_calendar',
+    ),
+    'node' => array(
+      'event',
+    ),
+    'context' => array(
+      'group-home-events',
+      'group-event-node',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+  
+  return $registry;
+}
+

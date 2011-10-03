@@ -1,0 +1,63 @@
+<?php
+
+include_once('commons_reputation.features.inc');
+
+/**
+ * Implementation of hook_views_pre_view()
+ */
+function commons_reputation_views_pre_view(&$view, &$display_id, &$args) {
+  switch ($view->name) {
+    case 'most_active_users':
+      if (user_access('view userpoints')) {
+        $view->display_handler->override_option('footer', l(t('View all users'), 'userpoints'));
+      }
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_enable()
+ */
+function commons_reputation_enable() {
+  // See if user points is enabled
+  if (module_exists('facebook_status')) {
+    // Enable the integration between status streams and userpoints
+    drupal_install_modules(array('fbss_userpoints'));
+  }
+}
+
+/**
+ * Implementation of hook_commons_profile_action_links_alter()
+ */
+function commons_reputation_commons_profile_action_links_alter(&$links, $account) {
+  global $user;
+  
+  // Fetch the user's point total
+  $points = userpoints_get_current_points($account->uid, 'all');
+
+  // Add the user's points
+  $links['userpoints'] = array(
+    'title' => t('Points: !points', array('!points' => $points)),
+  );
+  
+  // Fetch the user's badges
+  // It's possible the account hasn't been fully loaded
+  if (!isset($account->badges)) {
+    $edit = array();
+    user_badges_user('load', $edit, $account);
+  }
+  
+  // Move all the badges into a single variable
+  $badges = '';
+  foreach ($account->badges as $badge) {
+    $badges .= theme('user_badge', $badge, $account);
+  }
+  
+  // If we have badges to show, add them
+  if ($badges) {
+    $links['user_badges'] = array(
+      'title' => $badges,
+      'html' => TRUE,
+    );
+  }
+}

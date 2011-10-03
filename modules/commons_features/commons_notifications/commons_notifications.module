@@ -1,0 +1,207 @@
+<?php
+
+include_once('commons_notifications.features.inc');
+
+/**
+ * Implementation of hook_menu()
+ */
+function commons_notifications_menu() {
+  return array(
+    'notifications/group/%node/unsubscribe' => array(
+      'page callback' => 'commons_notifications_group_unsubscribe',
+      'page arguments' => array(2),
+      'access callback' => 'commons_notifications_group_access',
+      'access arguments' => array(2),
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_menu_alter()
+ */
+function commons_notifications_menu_alter(&$items) {
+  // Move Broadcast menu tab to far right
+  $items['node/%node/broadcast']['weight'] = 25;
+  
+  // Remove local task type from OG broadcast
+  $items['node/%node/broadcast']['type'] = MENU_CALLBACK;
+}
+
+/**
+ * Implementation of hook_form_FORM_ID_alter()
+ * 
+ * Alter the OG broadcast form
+ */
+function commons_notifications_form_og_broadcast_form_alter(&$form, &$form_state) {
+  // Extract the group from the form
+  $group = $form['#parameters'][2];
+  
+  // Set a breadcrumb back to the group
+  $breadcrumb = array();
+  $breadcrumb[] = l(t('Home'), '<front>');
+  $breadcrumb[] = l(t('Groups'), 'groups');
+  $breadcrumb[] = l($group->title, "node/{$group->nid}");
+  drupal_set_breadcrumb($breadcrumb);
+}
+
+/**
+ * Implementation of hook_og_links_alter()
+ */
+function commons_notifications_og_links_alter(&$links, $group) {
+  global $user;
+  
+  // Check if the user can subscribe to the group
+  if (commons_notifications_group_access($group)) {
+    // Determine if the user has subscriptions for the current group
+    if (commons_notifications_is_group_subscribed($group)) {
+      // Provide a link to unsubscribe
+      $links['commons_notifications-unsubscribe'] = l(t('Stop getting notifications'), "notifications/group/{$group->nid}/unsubscribe");
+    }
+    else {
+      // Provide a link to subscribe
+      $links['commons_notifications-subscribe'] = l(t('Get notifications'), "user/{$user->uid}/notifications/add/grouptype", array('query' => "gid={$group->nid}&destination=node/{$group->nid}"));
+    }
+  }
+  
+  // Check if the user can broadcast
+  if (og_broadcast_access($group)) {
+    $links['broadcast'] = l(t('Broadcast message'), "node/{$group->nid}/broadcast");
+  }
+}
+
+/**
+ * Determine if a user has any subscriptions for a given group
+ * 
+ * @param $group
+ *   The group object
+ * @param $user
+ *   Optionally supply the user, otherwise use current
+ * @return
+ *   TRUE if the user has at least one subscription to the given group,
+ *   otherwise FALSE
+ */
+function commons_notifications_is_group_subscribed($group, $user = NULL) {
+  // If user not provided, load the current
+  if (!$user) {
+    global $user;
+  }
+  
+  // Just in case, to avoid false-positives
+  if (!$group->nid) {
+    return FALSE;
+  }
+  
+  // Build subscription query information for notifications
+  $params = array(
+    'type' => 'grouptype',
+    'uid' => $user->uid,
+  );
+  $conditions = array(
+    array(
+      'type' => 'group',
+      'value' => $group->nid,
+    )
+  );
+  
+  // Fetch the subscriptions for the given group
+  $subscriptions = notifications_get_subscriptions($params, $conditions, FALSE, 'sid');
+  
+  return !empty($subscriptions);
+}
+
+/**
+ * Menu callback to remove all subscriptions of a current user
+ * to the given group
+ * 
+ * @param $group
+ *   The group object
+ */
+function commons_notifications_group_unsubscribe($group) {
+  global $user;
+  
+  // Build subscription query information for notifications
+  $params = array(
+    'type' => 'grouptype',
+    'uid' => $user->uid,
+  );
+  $conditions = array(
+    array(
+      'type' => 'group',
+      'value' => $group->nid,
+    )
+  );
+  
+  // Remove the group subscriptions
+  notifications_delete_subscriptions($params, $conditions);
+  
+  // Show a success message
+  drupal_set_message(t('Notifications for %group have been stopped', array('%group' => $group->title)));
+  
+  // Redirect to the group homepage
+  drupal_goto("node/{$group->nid}");
+}
+
+
+/**
+ * Access callback to determine whether a user can subcribe for
+ * notifications for a given group
+ * 
+ * @param $group
+ *   The group object being subscribed to
+ * @param $user
+ *   Optionally supply the user, otherwise use current
+ * @return
+ *   TRUE if the user can subscribe to the group, otherwise FALSE
+ */
+function commons_notifications_group_access($group, $user = NULL) {
+  // If user not provided, load the current
+  if (!$user) {
+    global $user;
+  }
+  
+  // Make sure the group is a group
+  if (og_is_group_type($group->type)) {
+    // Make sure the user is a member of the group
+    if (og_is_group_member($group->nid, TRUE, $user->uid)) {
+      // Check notification permissions
+      if (user_access('maintain own subscriptions', $user)) {
+        // Check og_notifications permissions
+        if (user_access('subscribe to content in groups', $user)) {
+          return TRUE;
+        }
+      }
+    }
+  }
+  
+  return FALSE;
+}
+
+/**
+ * Implementation of hook_commons_profile_action_links_alter()
+ */
+function commons_notifications_commons_profile_action_links_alter(&$links, $account) {
+  global $user;
+  
+  // If we're viewing our own profile
+  if ($user->uid == $account->uid) {
+    // Add a link to view notification messages
+    if (messaging_simple_access($account)) {
+      // Count the available messages for this account
+      $sql = "SELECT COUNT(uid) FROM {messaging_store} WHERE uid = %d";
+      $count = db_result(db_query($sql, $account->uid));
+      $links['notification_messages'] = array(
+        'title' => t('Messages') . (($count > 0) ? " ($count)" : ''),
+        'href' => "user/{$account->uid}/messages",
+      );
+    }
+    
+    // Add a link to edit notification settings
+    if (notifications_access_user($account)) {
+      $links['notification_settings'] = array(
+        'title' => t('Notification settings'),
+        'href' => "user/{$account->uid}/notifications",
+      );
+    }
+  }
+}
+  

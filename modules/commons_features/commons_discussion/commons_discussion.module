@@ -1,0 +1,32 @@
+<?php
+
+include_once('commons_discussion.features.inc');
+
+/**
+ * Implementation of hook_og_features_registry()
+ */
+function commons_discussion_og_features_registry() {
+  $registry = array();
+  
+  // Feature: commons_discussion
+  $feature = new stdClass;
+  $feature->id = 'commons_discussion';
+  $feature->name = t('Discussions');
+  $feature->description = t('Enable collaborative (threaded) discussions among your group members.');
+  $feature->components = array(
+    'views' => array(
+      'group_tab_discussions',
+    ),
+    'node' => array(
+      'discussion',
+    ),
+    'context' => array(
+      'group-home-discussions',
+      'group-tab-discussions',
+      'group-discussion-node',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+  
+  return $registry;
+}

@@ -1,0 +1,31 @@
+<?php
+
+include_once('commons_wiki.features.inc');
+
+/**
+ * Implementation of hook_og_features_registry()
+ */
+function commons_wiki_og_features_registry() {
+  $registry = array();
+  
+  // Feature: commons_wiki
+  $feature = new stdClass;
+  $feature->id = 'commons_wiki';
+  $feature->name = t('Wikis');
+  $feature->description = t('Enable a type of page where the body of the page can be edited by any group member, and which lets members use Wiki-style syntax.');
+  $feature->components = array(
+    'views' => array(
+      'group_tab_wikis',
+    ),
+    'node' => array(
+      'wiki',
+    ),
+    'context' => array(
+      'group-tab-wikis',
+      'group-wiki-node',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+  
+  return $registry;
+}

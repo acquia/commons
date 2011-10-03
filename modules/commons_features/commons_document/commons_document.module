@@ -1,0 +1,32 @@
+<?php
+
+include_once('commons_document.features.inc');
+
+/**
+ * Implementation of hook_og_features_registry()
+ */
+function commons_document_og_features_registry() {
+  $registry = array();
+  
+  // Feature: commons_document
+  $feature = new stdClass;
+  $feature->id = 'commons_document';
+  $feature->name = t('Documents');
+  $feature->description = t('Create document content inside your group');
+  $feature->components = array(
+    'views' => array(
+      'group_tab_documents',
+    ),
+    'node' => array(
+      'document',
+    ),
+    'context' => array(
+      'group-home-documents',
+      'group-tab-documents',
+      'group-document-node',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+  
+  return $registry;
+}

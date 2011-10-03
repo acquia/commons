@@ -1,0 +1,34 @@
+<?php
+
+include_once('commons_group_aggregator.features.inc');
+
+/**
+ * Implementation of hook_menu_alter()
+ */
+function commons_group_aggregator_menu_alter(&$items) {
+  // Move OG_Aggregator menu tab to far right
+  $items['node/%node/aggregator']['weight'] = 20;
+  // Rename the tab to "Feeds"
+  $items['node/%node/aggregator']['title'] = t('Feeds');
+}
+
+/**
+ * Implementation of hook_og_features_registry()
+ */
+function commons_group_aggregator_og_features_registry() {
+  $registry = array();
+  
+  // Feature: commons_group_aggregator
+  $feature = new stdClass;
+  $feature->id = 'commons_group_aggregator';
+  $feature->name = t('Feed aggregator');
+  $feature->description = t('Pull in articles from external RSS feeds that are relevant to your group via subscriptions to those feed sources.');
+  $feature->components = array(
+    'path' => array(
+      'node/%node/aggregator',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+  
+  return $registry;
+}

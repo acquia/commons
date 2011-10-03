@@ -1,0 +1,40 @@
+<?php
+
+/**
+ * Implementation of hook_install()
+ */
+function commons_document_install() {
+  commons_document_add_flag();
+  commons_document_add_taxonomy();
+  
+  // Tell getid3 where the library is
+  variable_set('getid3_path', 'profiles/drupal_commons/libraries/getid3/getid3');
+}
+
+/**
+ * Add the bookmark flag to document nodes
+ */
+function commons_document_add_flag() {
+  $fid = db_result(db_query("SELECT fid FROM {flags} WHERE name = '%s'", 'bookmarks'));
+  
+  if ($fid) {
+    $check_sql = "SELECT fid FROM {flag_types} WHERE type = 'document' AND fid = %d";
+  
+    if (!db_result(db_query($check_sql, $fid))) {
+      $flag = new stdClass;
+      $flag->fid = $fid;
+      $flag->type = 'document';
+      drupal_write_record('flag_types', $flag);
+    }
+  }
+}
+
+/**
+ * Add taxonomy to document nodes
+ */
+function commons_document_add_taxonomy() {
+  $taxonomy = new stdClass;
+  $taxonomy->vid = variable_get('commons_tags_vid', 1);
+  $taxonomy->type = 'document';
+  drupal_write_record('vocabulary_node_types', $taxonomy);
+}

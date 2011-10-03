@@ -1,0 +1,44 @@
+<?php
+
+include_once('commons_poll.features.inc');
+
+/**
+ * Implementation of hook_nodeapi()
+ */
+function commons_poll_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
+  switch ($op) {
+    case 'view':
+      // Push the voting widgets to the top
+      $node->content['body']['#weight'] = -100;
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_og_features_registry()
+ */
+function commons_poll_og_features_registry() {
+  $registry = array();
+  
+  // Feature: commons_poll
+  $feature = new stdClass;
+  $feature->id = 'commons_poll';
+  $feature->name = t('Topic polls');
+  $feature->description = t('Enable your group members to create multiple-choice polls that other group members can vote on.');
+  $feature->components = array(
+    'views' => array(
+      'group_tab_polls',
+    ),
+    'node' => array(
+      'poll',
+    ),
+    'context' => array(
+      'group-home-poll',
+      'group-tab-polls',
+      'group-poll-node',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+  
+  return $registry;
+}

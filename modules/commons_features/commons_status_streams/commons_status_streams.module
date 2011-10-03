@@ -1,0 +1,141 @@
+<?php
+
+include_once('commons_status_streams.features.inc');
+
+/**
+ * Implementation of hook_menu().
+ */
+function commons_status_streams_menu() {
+  $items = array();
+  $items['stream'] = array(
+    'title' => 'Stream',
+    'page callback' => 'commons_status_streams_stream_page',
+    'access callback' => TRUE,
+    'description' => 'An activity dashboard page.',
+    'file' => 'commons_status_streams.pages.inc',
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 1,
+    'menu_name' => 'primary-links',
+  );
+  return $items;
+}
+
+/**
+ * Implementation of hook_form_FORM_ID_alter().
+ */
+function commons_status_streams_form_system_site_information_settings_alter(&$form, $form_state) {
+  $form['commons_status_streams_auth_frontpage'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use the activity stream as the front page for authenticated users'),
+    '#description' => t('If enabled, users who get to the front page by clicking your site name or logo or who are directed to the front page by Drupal will be redirected to their activity stream at <code>/stream</code> if they are logged in. Users can still visit the "normal" front page that anonymous users see by visiting its path directly or by clicking on the "Home" link in the menu.'),
+    '#default_value' => variable_get('commons_status_streams_auth_frontpage', 1),
+  );
+  $form['buttons']['#weight'] = 10;
+}
+
+/**
+ * Implements hook_facebook_status_link_alter().
+ */
+function commons_status_streams_facebook_status_link_alter(&$links, $status) {
+  // Disable reply links on all status upates.
+  unset($links['respond']); 
+}
+
+/**
+ * Implementation of hook_init().
+ */
+function commons_status_streams_init() {
+  if (variable_get('commons_status_streams_auth_frontpage', 1) && !user_is_anonymous()) {
+    // example.com requested, but not example.com/home
+    if (!str_replace(base_path(), '', $_SERVER['REQUEST_URI'])) {
+      drupal_goto('stream');
+    }
+  }
+}
+
+/**
+ * Implementation of hook_enable()
+ */
+function commons_status_streams_enable() {
+  // See if user points is enabled
+  if (module_exists('userpoints')) {
+    // Enable the integration between status streams and userpoints
+    drupal_install_modules(array('fbss_userpoints'));
+  }
+}
+
+/**
+ * Implementation of hook_rules_defaults_alter()
+ */
+function commons_status_streams_rules_defaults_alter(&$rules) {
+  // Fix faulty HTML in activity_log and digest templates
+  // Also default the language to something that matches
+  // our user relationship type, and make sure the avatars
+  // are in there
+  // @see http://drupal.org/node/1255980
+  // @see http://drupal.org/node/1256722
+ 
+  // Activity log digests: rules_activity_log_digests_ur_request
+  $actions = &$rules['rules']['rules_activity_log_digests_ur_request']['#actions'];
+  $template_standard = '<div class="activity-log-picture">[requester:picture]</div><div class="activity-log-indent"></div><div class="activity-log-content">[requester:user] is now following [requestee:user]</div>'; 
+  $template_grouping = '<div class="activity-log-picture">[requester:picture]</div><div class="activity-log-indent"></div><div class="activity-log-content">[requester:user] is now following [collection]</div>';
+  $actions[0]['#settings']['templates']['en']['template'] = $template_standard;
+  $actions[1]['#settings']['templates']['en']['template'] = $template_standard;
+  $actions[0]['#settings']['grouping']['templates']['en']['template'] = $template_grouping;
+  $actions[1]['#settings']['grouping']['templates']['en']['template'] = $template_grouping;
+  
+  // Activity log: rules_activity_log_ur_request
+  $actions = &$rules['rules']['rules_activity_log_ur_request']['#actions'];
+  $template_standard = '<div class="activity-log-picture">[requester:picture]</div><div class="activity-log-indent"></div><div class="activity-log-content">[requester:user] is now following [requestee:user]</div>'; 
+  $template_grouping = '<div class="activity-log-picture">[requester:picture]</div><div class="activity-log-indent"></div><div class="activity-log-content">[requester:user] is now following [collection]</div>';
+  $actions[0]['#settings']['templates']['en']['template'] = $template_standard;
+  $actions[1]['#settings']['templates']['en']['template'] = $template_standard;
+  $actions[0]['#settings']['grouping']['templates']['en']['template'] = $template_grouping;
+  $actions[1]['#settings']['grouping']['templates']['en']['template'] = $template_grouping;
+}
+
+/**
+ * Implementation of hook_views_defaults_alter()
+ */
+function commons_status_streams_views_default_views_alter(&$views) {
+  // Fix for http://drupal.org/node/1259862
+  // Determine the vid of the "hashtags" vocabulary
+  if ($vid = variable_get('facebook_status_tags_vid', FALSE)) {
+    // Iterate the displays
+    if (isset($views['facebook_status_tags'])) {
+      foreach ($views['facebook_status_tags']->display as $id => $display) {
+        // Set the right vocabulary id
+        if (isset($views['facebook_status_tags']->display[$id]->display_options['arguments']['has-specific-tag'])) {
+          $views['facebook_status_tags']->display[$id]->display_options['arguments']['has-specific-tag']['validate_argument_vocabulary'] = array($vid => $vid);
+        }
+      }
+    }
+  }
+}
+
+function commons_status_streams_disable_deprecated_notifications() {
+  if (module_exists('notifications')) {
+    // Remove all non-immediate nofications options.
+    $intervals = notifications_send_intervals();
+    // Preserve existing custom labels for immediate notifications. 
+    $new_intervals = array(0 => $intervals[0]);
+    variable_set('notifications_send_intervals', $new_intervals);
+
+    // Disable notification of new commments by default.
+    variable_set('notifications_default_auto', 0);
+    variable_set('og_notifications_autosubscribe', 0);
+
+    // Remmove all notifications that do not have an "Immediate" interval.
+    $query = db_query("SELECT sid FROM {notifications} WHERE send_interval > 0");
+    while ($result = db_fetch_object($query)) {
+      $sids[] = $result->sid;
+    }
+    if (!empty($sids)) {
+      $placeholders = db_placeholders($sids);
+      foreach (array('notifications_fields', 'notifications_queue', 'notifications') as $table) {
+        db_query('DELETE FROM {' . $table . '} WHERE sid IN (' . $placeholders . ')', $sids);
+      }
+      drupal_set_message(t('Deleted existing digest subscriptions deprecated by new Facebook-style Statuses update functionality.'));
+    }
+  }
+}
