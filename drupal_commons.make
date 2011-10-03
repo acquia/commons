@@ -8,7 +8,7 @@ projects[drupal][version] = "6.22"
 ; and url is the url of the download.
 projects[drupal_commons][download][type] = "git"
 projects[drupal_commons][download][url] = "http://git.drupal.org/sandbox/ezrag/1262660.git"
-projects[drupal_commons][download][revision] = "6.x-2.x"
+projects[drupal_commons][download][revision] = "test-1"
 projects[drupal_commons][type] = "profile"
 
 ; Modules
@@ -201,10 +201,10 @@ projects[activity_log][type] = "module"
 projects[activity_log][subdir] = "contrib"
 
 
-projects[commons_features][download][type] = "git"
-projects[commons_features][download][revision] = "6.x-2.x"
-projects[commons_features][download][url] = "http://git.drupal.org/sandbox/ezrag/1262136.git"
-projects[commons_features][type] = "module"
+;projects[commons_features][download][type] = "git"
+;projects[commons_features][download][revision] = "6.x-2.x"
+;projects[commons_features][download][url] = "http://git.drupal.org/sandbox/ezrag/1262136.git"
+;projects[commons_features][type] = "module"
 
 
 projects[digests][download][type] = "git"
