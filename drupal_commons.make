@@ -202,7 +202,7 @@ projects[pathauto][version] = "1.5"
 
 projects[quant][download][type] = "git"
 projects[quant][download][url] = "http://git.drupal.org/project/quant.git"
-projects[quant][download][revision] = "fda41efa3ce405842873d22a8aa52419b722fa42"
+projects[quant][download][revision] = "2d204b2"
 projects[quant][subdir] = "contrib"
 
 projects[rules][subdir] = "contrib"
@@ -226,7 +226,7 @@ projects[transliteration][version] = "3.0"
 projects[userpoints_contrib][subdir] = "contrib"
 projects[userpoints_contrib][download][type] = "git"
 projects[userpoints_contrib][download][url] = "http://git.drupal.org/project/userpoints.git"
-projects[userpoints_contrib][download][revision] = "e436f2507ffe381e3eac6e3ffc4ba59729764cbd"
+projects[userpoints_contrib][download][revision] = "0359e9497882d98080b5854b19ebc1bd34a7c24a"
 
 ; Based on the date of 5ae09b723a8197f29d9ee7f562777ef221cb16de from the GitHub Acquia Commons repo.
 projects[userpoints_contrib][download][type] = git
@@ -274,13 +274,15 @@ projects[vertical_tabs][version] = "1.0-rc1"
 
 projects[views][subdir] = "contrib"
 projects[views][version] = "2.12"
+
 ; Views patches in PATCHES.txt from Acquia Commons GitHub repo
 ; http://drupal.org/node/571234#comment-3122678
-projects[views][patch][]  = "http://drupal.org/files/issues/views-executed.patch"
+projects[views][patch][] = "http://drupal.org/files/issues/views-executed.patch"
 
 ; http://drupal.org/node/228510#comment-3426202
-; Does not apply but Committed upstream:
+; Does not apply via Drush but Committed upstream. Can be mostly applied manually patch -p0 (3 hunks fail). 
 ; projects[views][patch][]  = "http://drupal.org/files/issues/228510.patch"
+
 
 projects[views_slideshow][subdir] = "contrib"
 projects[views_slideshow][version] = "2.3"
