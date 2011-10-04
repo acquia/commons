@@ -167,10 +167,10 @@ projects[og_aggregator][patch][] = "http://drupal.org/files/issues/og_aggregator
 ; Does not apply.
 projects[og_aggregator][patch][] = "http://drupal.org/files/issues/og_aggregator-fix-context-check-768958.patch"
 
-Issue: http://drupal.org/node/854246
+; Issue: http://drupal.org/node/854246
 projects[og_aggregator][patch][] = "http://drupal.org/files/issues/og_aggregator-fix-titlecase.patch"
 
-Issue: http://drupal.org/node/854248
+; Issue: http://drupal.org/node/854248
 projects[og_aggregator][patch][] = "http://drupal.org/files/issues/og_aggregator-fix-wsod.patch"
 
 projects[og_features][subdir] = "contrib"
