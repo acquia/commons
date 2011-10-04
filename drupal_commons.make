@@ -291,7 +291,7 @@ projects[wikitools][version] = "1.3"
 projects[wysiwyg][download][type] = "git"
 projects[wysiwyg][download][url] = "http://git.drupal.org/project/wysiwyg.git"
 projects[wysiwyg][download][revision] = "f01af84e0230f6b3a351778c3a89902a7fc92506"
-
+projects[wysiwyg][subdir] = "contrib"
 
 projects[wysiwyg_filter][subdir] = "contrib"
 projects[wysiwyg_filter][version] = "1.5"
