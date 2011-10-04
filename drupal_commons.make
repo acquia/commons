@@ -207,6 +207,8 @@ projects[quant][subdir] = "contrib"
 
 projects[rules][subdir] = "contrib"
 projects[rules][version] = "1.4"
+; http://drupal.org/node/978620#comment-3763720
+projects[rules][patch][] = "http://drupal.org/files/issues/rules.rules_defaults_alter_0.patch"
 
 projects[strongarm][subdir] = "contrib"
 projects[strongarm][download][version] = "6.x-2.0"
