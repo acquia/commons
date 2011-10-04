@@ -18,9 +18,11 @@ projects[views_bulk_operations][version] = "1.11"
 projects[admin][subdir] = "contrib"
 projects[admin][version] = "2.0"
 
-projects[ajax_load][subdir] = "contrib"
+
 projects[ajax_load][download][type] = "git"
-projects[ajax_load][version] = "8b0921252fcf599e7b15276bd815bcf81521eb27"
+projects[ajax_load][download][url] = "http://git.drupal.org/project/ajax_load.git" 
+projects[ajax_load][download][revision] = "8b0921252fcf599e7b15276bd815bcf81521eb27"
+projects[ajax_load][subdir] = "contrib"
 
 projects[boxes][subdir] = "contrib"
 projects[boxes][version] = "1.0"
