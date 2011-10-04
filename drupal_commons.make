@@ -20,7 +20,7 @@ projects[admin][version] = "2.0"
 
 projects[ajax_load][subdir] = "contrib"
 projects[ajax_load][download][type] = "git"
-projects[ajax_load][version] = "081711f550dbe705fda3c9838604ebce81df98a4"
+projects[ajax_load][version] = "8b0921252fcf599e7b15276bd815bcf81521eb27"
 
 projects[boxes][subdir] = "contrib"
 projects[boxes][version] = "1.0"
@@ -197,15 +197,16 @@ projects[password_policy][version] = "1.0-beta1"
 projects[pathauto][subdir] = "contrib"
 projects[pathauto][version] = "1.5"
 
+projects[quant][download][type] = "git"
+projects[quant][download][url] = "http://git.drupal.org/project/quant.git"
+projects[quant][download][revision] = "fda41efa3ce405842873d22a8aa52419b722fa42"
 projects[quant][subdir] = "contrib"
-projects[quant][version] = "1.x-dev"
 
 projects[rules][subdir] = "contrib"
 projects[rules][version] = "1.4"
 
 projects[strongarm][subdir] = "contrib"
-projects[strongarm][download][type] = "git"
-projects[strongarm][download][revision] = "709178e"
+projects[strongarm][download][version] = "6.x-2.0"
 
 projects[tagadelic][subdir] = "contrib"
 projects[tagadelic][version] = "1.3"
@@ -220,6 +221,9 @@ projects[transliteration][subdir] = "contrib"
 projects[transliteration][version] = "3.0"
 
 projects[userpoints_contrib][subdir] = "contrib"
+projects[userpoints_contrib][download][type] = "git"
+projects[userpoints_contrib][download][url] = "http://git.drupal.org/project/userpoints.git"
+projects[userpoints_contrib][download][revision] = "e436f2507ffe381e3eac6e3ffc4ba59729764cbd"
 
 ; Based on the date of 5ae09b723a8197f29d9ee7f562777ef221cb16de from the GitHub Acquia Commons repo.
 projects[userpoints_contrib][download][type] = git
