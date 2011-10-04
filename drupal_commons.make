@@ -300,19 +300,22 @@ projects[wysiwyg_filter][version] = "1.5"
 
 projects[activity_log][download][type] = "git"
 projects[activity_log][download][url] = "http://git.drupal.org/project/activity_log.git"
-projects[activity_log][download][version] = "6.x-2.x"
+; Based on on https://github.com/acquia/commons/commit/fbf4b41f12aacc4762627d6c2c418fe5c4e74955.
+projects[activity_log][download][revision] = "7891fa4af86f0cf323e534410fa66e2ddc8cf1f3"
 projects[activity_log][type] = "module"
 projects[activity_log][subdir] = "contrib"
 
 projects[digests][download][type] = "git"
 projects[digests][download][url] = "http://git.drupal.org/project/digests.git"
-projects[digests][download][revision] = "6.x-1.x"
+; Based on 93a98a3d7b45a5934f5604c9452046e8e8e0c474 from Commons GitHub Repo
+projects[digests][download][revision] = "91412517706a08e41c27961b4f003e5df3e5b47e"
 projects[digests][type] = "module"
 projects[digests][subdir] = "contrib"
 
 projects[facebook_status][download][type] = "git"
 projects[facebook_status][download][url] = "http://git.drupal.org/project/facebook_status.git"
-projects[facebook_status][download][revision] = "6.x-3.x"
+; Based on Commons GitHub ec26466cb3c4b51a5bc52a77a74f4c90e153fb9e
+projects[facebook_status][download][revision] = "383c837fc0a42fc181c54f666e20def93480d154"
 projects[facebook_status][subdir] = "contrib"
 
 ; Themes
