@@ -157,7 +157,8 @@ projects[og_aggregator][version] = "1.4"
 ; projects[og_aggregator][patch][] = "http://drupal.org/files/issues/og_aggregator-fix-context-check-768958.patch"
 
 ; http://drupal.org/node/854246
-projects[og_aggregator][patch][] = "http://drupal.org/files/issues/og_aggregator-fix-titlecase.patch"
+; Does not apply but committed upstream.
+; projects[og_aggregator][patch][] = "http://drupal.org/files/issues/og_aggregator-fix-titlecase.patch"
 
 ; http://drupal.org/node/854248
 ; Does not apply to og_aggregator 1.4 but has been committed upstream.
