@@ -13,7 +13,7 @@ projects[drupal_commons][type] = "profile"
 
 ; Modules
 projects[views_bulk_operations][subdir] = "contrib"
-projects[views_bulk_operations][version] = "1.10"
+projects[views_bulk_operations][version] = "1.11"
 
 projects[admin][subdir] = "contrib"
 projects[admin][version] = "2.0"
