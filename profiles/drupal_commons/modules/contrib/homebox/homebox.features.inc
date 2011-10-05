@@ -1,5 +1,4 @@
 <?php
-// $Id: homebox.features.inc,v 1.1.2.5 2010/08/11 00:12:34 mikestefff Exp $
 
 /**
  * @file
@@ -90,5 +89,7 @@ function homebox_features_revert($module = NULL) {
     foreach ($pages as $name => $settings) {
       homebox_delete_page($name);
     }
+
+    drupal_flush_all_caches();
   }
 }

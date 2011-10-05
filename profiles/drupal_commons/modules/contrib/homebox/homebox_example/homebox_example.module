@@ -1,27 +1,26 @@
 <?php
-// $Id: homebox_example.module,v 1.1.2.12 2010/08/11 00:12:34 mikestefff Exp $
 
 /*
  * Implementation of hook_homebox()
- * 
+ *
  * @return
  *   An array of homebox page settings arrays.
- *   The machine name is specified in the array key. 
+ *   The machine name is specified in the array key.
  *   The machine name and path MUST not be in use.
  *   Both name and path registered by first-come
- * 
+ *
  * --------------------------------------------------
- *   The menu might need to be rebuilt / cache cleared in order for 
+ *   The menu might need to be rebuilt / cache cleared in order for
  *   pages in code to show on the Homebox admin page and become
  *   accessible via the specified path.
- * 
+ *
  *   Once an admin saves settings for a page in code, it resides
  *   in the database, and the code is no longer read, until it's
  *   reverted/deleted.
  */
 function homebox_example_homebox() {
   $pages = array();
-  
+
   $pages['testbox'] = array(        // Keyed with the unique machine-name
     'title' => 'Test Homebox',     // The title of the Homebox page
     'path' => 'testbox',            // The path of the Homebox (URL)
@@ -106,6 +105,6 @@ function homebox_example_homebox() {
       ),
     ),
   );
-  
-  return $pages; 
+
+  return $pages;
 }

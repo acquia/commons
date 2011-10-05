@@ -3,6 +3,33 @@ Track Commons development on GitHub!
  - https://github.com/acquia/commons/
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Commons 2.2, 2011-10-05
+
+Commons 2.2 includes an updated version of the OG_Features and Homebox modules that address critical security issues:
+- http://drupal.org/node/1300642
+- http://drupal.org/node/1300552
+
+Update steps are relatively straighforrward and users are strongly encouraged to apply this update.
+
+To upgrade your server to Commons 2.1 from an earlier version of Commons 2.x, complete the following steps:
+
+1. Back up your code (everything in your Drupal root directory) and your database.
+2. Open a web browser, and then log in to your site as the main administrator account.
+3. Place the site in "Off-line" mode. This allows database updates to run without interruption, and without displaying errors to visitors of your site. To change the mode, complete the following steps:
+  a) In your web browser, open http://[example]/admin/settings/site-maintenance, where [example] is the URL of your Commons server.
+  b) Select the Off-line option.
+  c) Click Save configuration.
+4. Extract the new Commons tarball and copy the contents into your document root.
+5. In your web browser, open http://[example]/update.php.
+6. Follow the prompts to "Update" your server.
+7. In your web browser, open http://[example]/admin/settings/performance
+8. Click the "Clear cached data" button.
+9. Allow your visitors to access your web site by returning your site to "Online" mode:
+  a) In your web browser, open http://[example]/admin/settings/site-maintenance.
+  b) Select the Online option.
+  b) Click Save configuration.
+
+---
 Commons 2.1, 2011-09-23
 
 Commons 2.1 includes an updated version of the Views Bulk Operations module

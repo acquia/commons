@@ -1,4 +1,3 @@
-// $Id: CHANGELOG.txt,v 1.2.2.5 2010/08/11 00:12:34 mikestefff Exp $
 
 CHANGELOG for Homebox for Drupal
 
@@ -6,6 +5,8 @@ CHANGELOG for Homebox for Drupal
   o Fixed warning during install
   o Added a condition on hook_views_pre_execute() to prevent user_save from firing when not on a homebox context
   o README.txt update
+  o by brianV: Make homebox_admin_page() E_ALL compliant.
+  o by StewX: check if $block->bid is set before checking if there is a title for that bid in the database.
 
 6.x-1.x-dev - 2009/05/19
   o Fixed uninstall procedure to delete url aliases from url_alias table
@@ -61,8 +62,8 @@ CHANGELOG for Homebox for Drupal
   o New: slightly improved JS for a better drag'n'drop behaviour, hope it fixes some tricky dragging!
   o jQuery 1.3.2 seems to works pretty well with http://drupal.org/project/jquery_update 6.x-2.0-alpha1 (i.e jQuery 1.3.2)
   o and hope I didn't forget anything
-  
-6.x-2.0-dev - 2010/07/02
+
+6.x-2.0 2010/07/02
   o New #794728: Removed incrementing page IDs
   o New #794728: Introduced page machine identifier names
   o New #794728: Removed use and dependance of block IDs
@@ -98,3 +99,35 @@ CHANGELOG for Homebox for Drupal
   o New #794728: Custom user-entered blocks
   o New #794728: Indication of unsaved changes on the page
   o New #794728: Admin option to flush user settings per page
+
+6.x-2.1 2010/08/10
+  o Updated feature integration to work with the latest changes in the features module.
+  o Many other minor improvements, fixes, and name-space changes.
+  o Look for the next version to contain a more extensive API
+
+6.x-2.x-dev 2011/02/02
+  o Lots of updates to support drupal.org usage after redesign.
+  o by brianV: Whitespace fixes and CHANGELOG.txt updates.
+  o by brianV: Match column widths with case-insensitive regex rather than exact match in homebox.js due to IE irregularity.
+  
+6.x-3.0-beta1 2011/02/17
+  o Moved 6.x-2.x-dev branch to 6.x-3.x since 6.x-2.x-dev is not compatible with 6.x-2.1 release do to drupal.org redesign-related updates.
+  o #1063928 by drumm: Fix equalizeColumnHeight() JS function, which fixes the block landing zones.
+
+6.x-3.0-beta2 2011/02/17
+  o by brianV: fix autosave
+  
+6.x-3.0-beta3 2011/10/04
+  o by brianV: revert #1063928 to remove 100% width columns from the maximum-height check.
+  o #946206 by rv0 | flecus: Fixed Changed the color of the block is not saved.
+  o Filter and validate homebox titles.
+  
+6.x-3.0-beta4 2011/10/05
+  o Fix syntax error.
+
+6.x-3.0-beta5 2011/10/05
+  o #1236848 by catch: Fixed _homebox_check_views_block_access() looks unnecessary.
+  o #1287550 by vectoroc: Changed notice in homebox_prepare_block().
+  o Fix syntax error.
+  
+6.x-3.x-dev xxxx/xx/xx
