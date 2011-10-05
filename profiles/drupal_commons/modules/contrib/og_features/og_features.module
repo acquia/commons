@@ -62,19 +62,37 @@ function og_features_menu() {
 function og_features_menu_alter(&$items) {   
   // Iterate every menu item and hijack the access callback
   foreach ($items as $key => $item) {
+    // If there is no access callback and no access arguments
+    // this is most likely a local task, and will default to the root
+    if (!isset($items[$key]['access arguments']) && !isset($items[$key]['access callback'])) {
+      // Skip this
+      continue;
+    }
+    
     // Initialize the access arguments, if needed
     if (!isset($items[$key]['access arguments'])) {
       $items[$key]['access arguments'] = array();
+    }
+    // Some modules do not implement hook_menu() correctly, 
+    // and provide a non-array for access arguments
+    else if (is_bool($items[$key]['access arguments'])) {
+      $items[$key]['access arguments'] = array($items[$key]['access arguments']);
     }
     
     // Prepend the path to the array of access arguments
     array_unshift($items[$key]['access arguments'], $key);
     
     // Prepend the module to the access arguments
-    if (!isset($items[$key]['module']) && isset($items[$key]['page callback']) && $items[$key]['page callback'] == 'views_page') {
+    if (!isset($items[$key]['module'])) {
       // This is needed because Views that come in Features won't have a
       // module specified
-      $items[$key]['module'] = 'views';
+      if (isset($items[$key]['page callback']) && $items[$key]['page callback'] == 'views_page') {
+        $items[$key]['module'] = 'views';
+      }
+      // Oddly, some menu items don't have a module attached to it
+      else {
+        $items[$key]['module'] = NULL;
+      }
     } 
     array_unshift($items[$key]['access arguments'], $items[$key]['module']);
     

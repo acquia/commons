@@ -1,5 +1,4 @@
 <?php
-// $Id: homebox-admin-display-form.tpl.php,v 1.1.4.2 2010/06/17 23:19:07 mikestefff Exp $
 
 /**
  * @file

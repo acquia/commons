@@ -1,8 +1,6 @@
-/* $Id: homebox.css,v 1.1.4.25 2010/07/02 19:49:39 mikestefff Exp $ */
-
-/*
-** Administrative interface
-*/
+#homebox {
+  position: relative;
+}
 #homebox-admin-display-form .roles {
   font-size: 86%;
 }
@@ -112,7 +110,7 @@
   z-index: 10; /* IE is terrible */
   position: relative; /* IE is terrible */
 }
-.portlet-settings {
+.portlet-header .portlet-settings {
   background: url(images/settings.gif);
 }
 .portlet-plus {
@@ -134,7 +132,7 @@
 /*
 ** Closed box/portlet class
 */
-.homebox-portlet-closed {
+#homebox .homebox-portlet-closed {
   display: none;
 }
 
@@ -176,33 +174,47 @@ div.homebox-colors {
 }
 
 /* Page configure UI */
-#homebox-settings {
-  background: url(images/stripe.png) repeat;
-  padding: 0;
+#homebox-add {
+  margin: 10px 0;
+}
+#homebox-add ul {
   margin: 0;
-  overflow-y: auto;
+  padding: 0;
 }
-#homebox-settings ul {
-  padding: 3px;
-}
-#homebox-settings li {
+#homebox-add li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: block;
+  background: none;
   float: left;
-  border: 1px solid #DDD;
-  margin: 2px;
-  padding: 3px 6px;
-  background: #FFF;
+  margin: 0 10px 10px 0;
 }
-#homebox-buttons {
-  margin: 5px 0;
+#homebox-add .last {
+  margin: 0;
 }
-#homebox-buttons button {
-  background: #F6F6F6;
-  border: 1px solid #CCCCCC;
-  color: #1C94C4;
-  cursor: pointer;
-  margin-right: 2px;
-  padding: 4px 6px;
+#homebox-add a {
+  display: block;
+  width: 130px;
+  height: 40px;
+  background: #f4f4f4 url("images/stripe.png");
+  padding: 5px;
+  overflow: hidden;
+  border-top: 1px solid transparent;
+  outline: 1px solid transparent;
+}
+#homebox .used {
+  background: #F0F0F0;
+  border-top: 1px solid #FFFFFF;
+  outline: 1px solid #DDDDDD;
+}
+#homebox .restore {
+  background: none;
+  border-top: none;
+  outline: none;
+}
+.homebox-msg {
+  margin-right: 10px;
 }
 #homebox-minimize-to-save {
   font-size: 90%;
@@ -217,50 +229,27 @@ div.homebox-colors {
   font-style: italic;
   display: none;
 }
-.homebox-delete-custom-link,
-.homebox-edit-custom-link {
-  font-size: 85%;
-  border: none;
-  color: #1C94C4;
-  cursor: pointer;
-  background: #FFF;
-}
-
-/* Form Components */
-#homebox-add-form form, 
-#homebox-edit-form form {
-  margin: 0;
-}
-#homebox-add-form-status,
-#homebox-edit-form-status {
-  background: #FEF1EC;
-  border: 1px solid #CD0A0A;
-  color: #CD0A0A;
-  padding: 8px;
+#homebox-add {
   display: none;
-  margin-bottom: 5px;
-  width: 450px;
 }
-#homebox-add-form-title,
-#homebox-edit-form-title {
-  margin-bottom: 6px;
-  width: 450px;
+#homebox-add a {
+  font-weight: bold;
 }
-#homebox-add-form-content,
-#homebox-edit-form-content {
-  width: 450px;
-  height: 135px;
+#homebox-add a.used,
+#homebox-add a.restore {
+  font-weight: normal;
 }
-
-/* 
- * jQuery UI 
- * 
- * Until Drupal get's an updated jQuery UI
- * and theme support
- */
-
-.ui-dialog-overlay { 
-  background: #aaaaaa url(images/overlay.png) 50% 50% repeat-x; 
-  opacity: .30;
-  filter:Alpha(Opacity=30); 
+#center #homebox-save-form {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+#homebox-buttons .form-submit {
+  margin: 0;
+  cursor: pointer;
+}
+.homebox-auto-save #homebox-save-form {
+  display: none;
 }

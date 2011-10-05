@@ -1,10 +1,9 @@
-// $Id: README.txt,v 1.2.2.7 2010/08/11 00:12:34 mikestefff Exp $
- _                          _                  ____  
-| |__   ___  _ __ ___   ___| |__   ___ __  __ |___ \ 
+ _                          _                  ____
+| |__   ___  _ __ ___   ___| |__   ___ __  __ |___ \
 | '_ \ / _ \| '_ ` _ \ / _ \ '_ \ / _ \\ \/ /   __) |
-| | | | (_) | | | | | |  __/ |_) | (_) |>  <   / __/ 
+| | | | (_) | | | | | |  __/ |_) | (_) |>  <   / __/
 |_| |_|\___/|_| |_| |_|\___|_.__/ \___//_/\_\ |_____|
-                                                     
+
 
 Welcome to Homebox 2.
 
@@ -68,7 +67,7 @@ CONTROLLING ACCESS TO HOME BOX PAGES
 
 Access controls for Homebox pages (not the admin interface) are no longer located in the standard
 Drupal permissions table. When creating/editing each Homebox page, you can choose which roles are
-allowed to view the page. Unlike other Drupal components, if you do not choose any roles, then only 
+allowed to view the page. Unlike other Drupal components, if you do not choose any roles, then only
 admins can view the page. So, choose at least one role. For obvious reasons, anonymous users will
 not be able to save pages or add custom items.
 
@@ -77,7 +76,7 @@ CREATING PANELS-LIKE HOME BOX LAYOUTS
 -------------------------------------
 
 One of Homebox 2's new features, is the ability to easily create panels-like layouts. After creating
-a new Homebox page, click the 'Settings' link. Under the 'Custom column widths' fieldset, you can 
+a new Homebox page, click the 'Settings' link. Under the 'Custom column widths' fieldset, you can
 specify the width percentage of each region. If you wanted to create a layout like:
 
 [-----top----]
@@ -95,7 +94,7 @@ Each Homebox page has the option to turn this on or off. If set on, users can en
 blocks as they like - supplying a block title and body (full HTML allowed). This is useful if they want
 to paste code for an external widget.
 
- 
+
 PROFILE INTEGRATION
 -------------------
 
@@ -109,7 +108,9 @@ ORGANIC GROUPS INTEGRATION
 
 Similar to the previously mentioned, Homebox integrates with the Organic Groups module. You have the option
 to have a Homebox page reside as a group homepage tab, or become the new group homepage itself. You must
-enable the homebox_og module then navigate to admin/og/homebox.
+enable the homebox_og module then navigate to admin/og/homebox. If your site is using Panels and you set
+a Homebox page to act as a group homepage, it will automatically disable any Panels that override node
+views.
 
 
 FEATURES INTEGRATION
