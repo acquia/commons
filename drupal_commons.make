@@ -130,6 +130,10 @@ projects[og][patch][] = "http://drupal.org/files/issues/og-DRUPAL-6--2.views-con
 
 ; OG patches in PATCHES.txt from Acquia Commons GitHub repo:
 
+; http://drupal.org/node/1051258
+; Does not apply:
+projects[og][patch][] = "http://drupal.org/files/issues/og_notifications-add-form-labels.patch"
+
 ; http://drupal.org/node/333072#comment-3264980
 ; This patch is incorrectly rolled against an OG subdirectory, so it doesn't apply.
 ;projects[og][patch][] = "http://drupal.org/files/issues/og_views-fix-search-view.patch"
@@ -137,9 +141,7 @@ projects[og][patch][] = "http://drupal.org/files/issues/og-DRUPAL-6--2.views-con
 ; http://drupal.org/node/835030
 projects[og][patch][] = "http://drupal.org/files/issues/og_notifications-subscriptions-not-saving-835030.patch"
 
-; http://drupal.org/node/1051258
-; Does not apply:
-;projects[og][patch][] = "http://drupal.org/files/issues/og_notifications-add-form-labels.patch"
+
 
 ; http://drupal.org/node/1128492
 projects[og][patch][] = "http://drupal.org/files/issues/og_views-add-leave-group-field.patch"
@@ -282,7 +284,7 @@ projects[views][version] = "2.12"
 projects[views][patch][] = "http://drupal.org/files/issues/views-executed.patch"
 
 ; http://drupal.org/node/228510#comment-3426202
-; Does not apply via Drush but Committed upstream. Can be mostly applied manually patch -p0 (3 hunks fail). 
+; Does not apply via Drush but Committed upstream to Views 3.x. Can be mostly applied manually patch -p0 (3 hunks fail). 
 ; projects[views][patch][]  = "http://drupal.org/files/issues/228510.patch"
 
 
