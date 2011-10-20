@@ -377,3 +377,19 @@ function commons_core_update_6012() {
   variable_set('commons_tags_vid', $vid);
   return array();
 }
+
+/**
+ * Delete Rules deprecated by http://drupal.org/node/1297308.
+ */
+function commons_core_update_6013() {
+  $deprecated_rules = array(
+    'rules_activity_log_facebook_status_insert_private',
+    'rules_log_activity_when_a_user_sends_a_private_message_with_an_attachment',
+    'rules_email_log_activity_when_a_user_sends_a_private_message',
+    'rules_email_log_activity_when_a_user_sends_a_private_message_with_an_attachment',
+  );
+  foreach ($deprecated_rules as $rule) {
+    rules_item_delete('rules', $rule);
+  }
+  return array();
+}
