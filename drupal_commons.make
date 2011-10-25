@@ -40,7 +40,6 @@ projects[chart][version] = "1.3"
 
 ; http://drupal.org/node/594202#comment-3943160
 projects[chart][patch][] = "http://drupal.org/files/issues/chart-division-by-zero-594202.patch"
-  
 
 projects[cck][subdir] = "contrib"
 projects[cck][version] = "2.9"
@@ -139,15 +138,14 @@ projects[og][patch][] = "http://drupal.org/files/issues/og_notifications-add-for
 ;projects[og][patch][] = "http://drupal.org/files/issues/og_views-fix-search-view.patch"
 
 ; http://drupal.org/node/835030
-projects[og][patch][] = "http://drupal.org/files/issues/og_notifications-subscriptions-not-saving-835030.patch"
-
-
+;projects[og][patch][] = "http://drupal.org/files/issues/og_notifications-subscriptions-not-saving-835030.patch"
 
 ; http://drupal.org/node/1128492
 projects[og][patch][] = "http://drupal.org/files/issues/og_views-add-leave-group-field.patch"
 
 ; http://drupal.org/node/793588
 projects[og][patch][] = "http://drupal.org/files/issues/793588-og_uid-add-index-3.patch"
+
 
 projects[og_aggregator][subdir] = "contrib"
 projects[og_aggregator][version] = "1.4"
@@ -307,7 +305,7 @@ projects[wysiwyg_filter][version] = "1.5"
 projects[activity_log][download][type] = "git"
 projects[activity_log][download][url] = "http://git.drupal.org/project/activity_log.git"
 ; Based on on https://github.com/acquia/commons/commit/fbf4b41f12aacc4762627d6c2c418fe5c4e74955.
-projects[activity_log][download][revision] = "7891fa4af86f0cf323e534410fa66e2ddc8cf1f3"
+projects[activity_log][download][revision] = "7891fa4af86f0cf323e534410fa66e2ddc8cf1f"
 projects[activity_log][type] = "module"
 projects[activity_log][subdir] = "contrib"
 
@@ -321,7 +319,7 @@ projects[digests][subdir] = "contrib"
 projects[facebook_status][download][type] = "git"
 projects[facebook_status][download][url] = "http://git.drupal.org/project/facebook_status.git"
 ; Based on Commons GitHub ec26466cb3c4b51a5bc52a77a74f4c90e153fb9e
-projects[facebook_status][download][revision] = "383c837fc0a42fc181c54f666e20def93480d154"
+projects[facebook_status][download][revision] = "c10c6e3805fb2d702ba294c7a1d3da6217407a81"
 projects[facebook_status][subdir] = "contrib"
 
 ; Themes
