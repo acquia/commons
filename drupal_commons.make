@@ -122,7 +122,6 @@ projects[og][patch][] = "http://drupal.org/files/issues/og-DRUPAL-6--2.views-con
 ; OG patches in PATCHES.txt from Acquia Commons GitHub repo:
 
 ; http://drupal.org/node/1051258
-; Does not apply:
 projects[og][patch][] = "http://drupal.org/files/issues/og_notifications-add-form-labels.patch"
 
 ; http://drupal.org/node/333072#comment-3264980
@@ -145,7 +144,7 @@ projects[og_aggregator][version] = "1.4"
 ; OG_Aggregator patches in PATCHES.txt from Acquia Commons GitHub repo:
 
 ; http://drupal.org/node/768958
-; Does not apply:
+; Apparently committed upstream:
 ; projects[og_aggregator][patch][] = "http://drupal.org/files/issues/og_aggregator-fix-context-check-768958.patch"
 
 ; http://drupal.org/node/854246
