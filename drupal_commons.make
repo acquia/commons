@@ -160,12 +160,6 @@ projects[og_aggregator][version] = "1.4"
 ; Does not apply.
 projects[og_aggregator][patch][] = "http://drupal.org/files/issues/og_aggregator-fix-context-check-768958.patch"
 
-; Issue: http://drupal.org/node/854246
-projects[og_aggregator][patch][] = "http://drupal.org/files/issues/og_aggregator-fix-titlecase.patch"
-
-; Issue: http://drupal.org/node/854248
-projects[og_aggregator][patch][] = "http://drupal.org/files/issues/og_aggregator-fix-wsod.patch"
-
 projects[og_features][subdir] = "contrib"
 projects[og_features][version] = "1.1"
 
@@ -273,7 +267,8 @@ projects[views][version] = "2.12"
 projects[views][patch][] = "http://drupal.org/files/issues/views-executed.patch"
 
 ; http://drupal.org/node/228510#comment-3426202
-; Does not apply via Drush but Committed upstream to Views 3.x. Can be mostly applied manually patch -p0 (3 hunks fail). 
+; Committed to Views 3.x but will not be committed to 2.x and no longer applies.
+; See http://drupal.org/node/1302984 for workarounds in Commons.
 ; projects[views][patch][]  = "http://drupal.org/files/issues/228510.patch"
 
 
