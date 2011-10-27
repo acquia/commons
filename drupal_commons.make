@@ -211,7 +211,6 @@ projects[rules][version] = "1.4"
 projects[rules][patch][] = "http://drupal.org/files/issues/rules.rules_defaults_alter_0.patch"
 
 projects[strongarm][subdir] = "contrib"
-projects[strongarm][download][version] = "6.x-2.0"
 
 projects[tagadelic][subdir] = "contrib"
 projects[tagadelic][version] = "1.3"
@@ -321,6 +320,10 @@ projects[facebook_status][download][url] = "http://git.drupal.org/project/facebo
 ; Based on Commons GitHub ec26466cb3c4b51a5bc52a77a74f4c90e153fb9e
 projects[facebook_status][download][revision] = "c10c6e3805fb2d702ba294c7a1d3da6217407a81"
 projects[facebook_status][subdir] = "contrib"
+
+projects[fbsmp][subdir] = "contrib"
+
+projects[commons_release][subdir] = "contrib"
 
 ; Themes
 
