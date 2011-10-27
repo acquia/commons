@@ -2,14 +2,12 @@ core = 6.x
 
 api = 2
 
-
 ; Modules
 projects[views_bulk_operations][subdir] = "contrib"
 projects[views_bulk_operations][version] = "1.11"
 
 projects[admin][subdir] = "contrib"
 projects[admin][version] = "2.0"
-
 
 projects[ajax_load][download][type] = "git"
 projects[ajax_load][download][url] = "http://git.drupal.org/project/ajax_load.git" 
@@ -227,7 +225,12 @@ projects[user_badges][patch][] = "http://drupal.org/files/issues/user_badges-for
 projects[user_badges][patch][] = "http://drupal.org/files/issues/user_badges-undefined-constant-986822.patch"
 
 projects[user_relationships][subdir] = "contrib"
-projects[user_relationships][version] = "1.0"
+projects[user_relationships][download][type] = "git"
+; UR's last release was ~1 year ago with some non-trivial commits since then.
+projects[user_relationships][download][revision] = "6.x-1.x"
+
+; http://drupal.org/node/1322858#comment-5171120
+projects[user_relationships][patch][] = "http://drupal.org/files/ur_alter_remove_links.patch"
 
 ; User_relationships patches in PATCHES.txt from Acquia Commons GitHub repo:
 ; http://drupal.org/node/1121038#comment-4322488

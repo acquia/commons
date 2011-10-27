@@ -403,6 +403,20 @@ function commons_core_tagging_suggestions($vid, $node) {
 }
 
 /**
+ * Implementation of hook_user_relationships_remove_link_alter().
+ */
+function commons_core_user_relationships_remove_link_alter(&$list, $args) {
+  // Remove extra markup around the "remove" link so that it can be styled
+  // as a button.
+  foreach ($args[3] as $rid => $relationship) {
+    // TODO: Consider having a constant for the relationship ID.
+    if ($relationship->rtid == 1) {
+      $list[$relationship->rid] = theme('user_relationships_remove_link', $args[0]->uid, $relationship->rid); 
+    }
+  }
+}
+
+/**
  * Implementation of hook_action_info().
  */
 function commons_core_action_info() {
