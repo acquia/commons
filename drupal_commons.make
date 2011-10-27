@@ -1,15 +1,7 @@
 core = 6.x
 
 api = 2
-projects[drupal][version] = "6.22"
 
-; Profiles
-; Please fill the following out. Type may be one of get, cvs, git, bzr or svn,
-; and url is the url of the download.
-projects[drupal_commons][download][type] = "git"
-projects[drupal_commons][download][url] = "http://git.drupal.org/sandbox/ezrag/1262660.git"
-projects[drupal_commons][download][revision] = "6.x-2.x"
-projects[drupal_commons][type] = "profile"
 
 ; Modules
 projects[views_bulk_operations][subdir] = "contrib"
