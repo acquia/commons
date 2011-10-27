@@ -156,9 +156,6 @@ projects[og_aggregator][version] = "1.4"
 ; Does not apply to og_aggregator 1.4 but has been committed upstream.
 ; projects[og_aggregator][patch][] = "http://drupal.org/files/issues/og_aggregator-fix-wsod.patch
 
-; http://drupal.org/node/768958
-; Does not apply.
-projects[og_aggregator][patch][] = "http://drupal.org/files/issues/og_aggregator-fix-context-check-768958.patch"
 
 projects[og_features][subdir] = "contrib"
 projects[og_features][version] = "1.1"
