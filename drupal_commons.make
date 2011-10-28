@@ -289,8 +289,7 @@ projects[wysiwyg_filter][version] = "1.5"
 
 projects[activity_log][download][type] = "git"
 projects[activity_log][download][url] = "http://git.drupal.org/project/activity_log.git"
-; Based on on https://github.com/acquia/commons/commit/fbf4b41f12aacc4762627d6c2c418fe5c4e74955.
-projects[activity_log][download][revision] = "7891fa4af86f0cf323e534410fa66e2ddc8cf1f"
+projects[activity_log][download][version] = "6.x-2.x"
 projects[activity_log][type] = "module"
 projects[activity_log][subdir] = "contrib"
 
