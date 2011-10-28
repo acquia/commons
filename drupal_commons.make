@@ -295,13 +295,13 @@ projects[activity_log][subdir] = "contrib"
 
 projects[digests][download][type] = "git"
 projects[digests][download][url] = "http://git.drupal.org/project/digests.git"
-projects[digests][download][version] = "6.x-1.x"
+projects[digests][download][revision] = "6.x-1.x"
 projects[digests][type] = "module"
 projects[digests][subdir] = "contrib"
 
 projects[facebook_status][download][type] = "git"
 projects[facebook_status][download][url] = "http://git.drupal.org/project/facebook_status.git"
-projects[facebook_status][download][version] = "6.x-3.x"
+projects[facebook_status][download][revision] = "6.x-3.x"
 projects[facebook_status][subdir] = "contrib"
 
 projects[fbsmp][subdir] = "contrib"
