@@ -155,7 +155,7 @@ projects[og_aggregator][version] = "1.4"
 
 
 projects[og_features][subdir] = "contrib"
-projects[og_features][version] = "1.1"
+projects[og_features][version] = "1.2"
 
 projects[og_invite_link][subdir] = "contrib"
 projects[og_invite_link][version] = "1.0"
@@ -296,18 +296,19 @@ projects[activity_log][subdir] = "contrib"
 
 projects[digests][download][type] = "git"
 projects[digests][download][url] = "http://git.drupal.org/project/digests.git"
-; Based on 93a98a3d7b45a5934f5604c9452046e8e8e0c474 from Commons GitHub Repo
-projects[digests][download][revision] = "91412517706a08e41c27961b4f003e5df3e5b47e"
+projects[digests][download][version] = "6.x-1.x"
 projects[digests][type] = "module"
 projects[digests][subdir] = "contrib"
 
 projects[facebook_status][download][type] = "git"
 projects[facebook_status][download][url] = "http://git.drupal.org/project/facebook_status.git"
-; Based on Commons GitHub ec26466cb3c4b51a5bc52a77a74f4c90e153fb9e
-projects[facebook_status][download][revision] = "c10c6e3805fb2d702ba294c7a1d3da6217407a81"
+projects[facebook_status][download][version] = "6.x-3.x"
 projects[facebook_status][subdir] = "contrib"
 
 projects[fbsmp][subdir] = "contrib"
+projects[fbsmp][download][type] = "git"
+projects[fbsmp][download][url] = "http://git.drupal.org/project/fbsmp.git"
+projects[fbsmp][download][revision] = 6.x-2.x
 
 projects[commons_release][subdir] = "contrib"
 
