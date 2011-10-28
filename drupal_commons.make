@@ -289,7 +289,7 @@ projects[wysiwyg_filter][version] = "1.5"
 
 projects[activity_log][download][type] = "git"
 projects[activity_log][download][url] = "http://git.drupal.org/project/activity_log.git"
-projects[activity_log][download][version] = "6.x-2.x"
+projects[activity_log][download][revision] = "6.x-2.x"
 projects[activity_log][type] = "module"
 projects[activity_log][subdir] = "contrib"
 
