@@ -13,10 +13,10 @@ projects[admin][version] = "2.0"
 ; Leaving it there to simplify the upgrade process.
 projects[acquia_connector][subdir] = "acquia"
 
+projects[acquia_search][type] = "module"
 projects[acquia_search][download][type] = "get"
 projects[acquia_search][download][url] = "http://network.acquia.com/files/downloads/acquia-search-current.tar.gz"
-projects[acquia_search][project][type] = "module"
-projects[acquia_search][subdir] = "contrib"
+projects[acquia_search][subdir] = "acquia"
 
 projects[ajax_load][download][type] = "git"
 projects[ajax_load][download][url] = "http://git.drupal.org/project/ajax_load.git" 
@@ -357,5 +357,5 @@ projects[image][subdir] = "contrib"
 ; Themes
 
 projects[fusion][version] = "1.12"
-projects[fusion][project][type] = theme
+projects[fusion][type] = "theme"
 
