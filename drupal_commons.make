@@ -4,7 +4,6 @@ api = 2
 
 ; Modules
 projects[views_bulk_operations][subdir] = "contrib"
-projects[views_bulk_operations][version] = "1.11"
 
 projects[admin][subdir] = "contrib"
 projects[admin][version] = "2.0"
@@ -60,7 +59,7 @@ projects[date][subdir] = "contrib"
 projects[date][version] = "2.7"
 
 projects[diff][subdir] = "contrib"
-projects[diff][version] = "2.2"
+
 
 projects[tagging][subdir] = "contrib"
 projects[tagging][version] = "2.5"
@@ -73,7 +72,6 @@ Issue: http://drupal.org/node/777870
 projects[editablefields][patch][] = "http://drupal.org/files/issues/editablefields-removeFocus.patch"
 
 projects[features][subdir] = "contrib"
-projects[features][version] = "1.0"
 
 projects[filefield][subdir] = "contrib"
 projects[filefield][version] = "3.10"
@@ -85,7 +83,7 @@ projects[freelinking][subdir] = "contrib"
 projects[freelinking][version] = "1.10"
 
 projects[getid3][subdir] = "contrib"
-projects[getid3][version] = "1.4"
+
 
 libraries[getid3][download][type] = "get"
 libraries[getid3][destination] = "libraries"
@@ -116,7 +114,6 @@ projects[invite][subdir] = "contrib"
 projects[invite][version] = "2.0-beta3"
 
 projects[jquery_ui][subdir] = "contrib"
-projects[jquery_ui][version] = "1.4"
 
 libraries[jquery_ui][download][type] = "get"
 libraries[jquery_ui][destination] = "modules/contrib/jquery_ui"
@@ -204,10 +201,9 @@ projects[og_subgroups][subdir] = "contrib"
 projects[og_subgroups][version] = "1.0-beta3"
 
 projects[password_policy][subdir] = "contrib"
-projects[password_policy][version] = "1.0-beta1"
+projects[password_policy][version] = "1.1"
 
 projects[pathauto][subdir] = "contrib"
-projects[pathauto][version] = "1.5"
 
 projects[quant][download][type] = "git"
 projects[quant][download][url] = "http://git.drupal.org/project/quant.git"
@@ -228,7 +224,6 @@ projects[tagadelic_views][subdir] = "contrib"
 projects[tagadelic_views][version] = "1.2"
 
 projects[token][subdir] = "contrib"
-projects[token][version] = "1.16"
 
 projects[transliteration][subdir] = "contrib"
 projects[transliteration][version] = "3.0"
@@ -266,10 +261,6 @@ projects[user_relationships][patch][] = "http://drupal.org/files/ur_alter_remove
 projects[user_relationships][patch][] = "http://drupal.org/files/issues/user_relationships_disable_notifications_0_0.patch"
 
 projects[user_terms][subdir] = "contrib"
-projects[user_terms][version] = "1.0"
-; User_terms patches in PATCHES.txt from Acquia Commons GitHub repo:
-; http://drupal.org/node/617088#comment-2901188
-projects[user_terms][patch][] = "http://drupal.org/files/issues/user_terms-freeTagging.patch"
 
 projects[userpoints][subdir] = "contrib"
 projects[userpoints][version] = "1.2"
