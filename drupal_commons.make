@@ -305,7 +305,7 @@ projects[facebook_status][download][revision] = "6.x-3.x"
 projects[facebook_status][subdir] = "contrib"
 
 ; http://drupal.org/node/1327504
-projects[facebook_status][patches][] = "http://drupal.org/files/facebook_status_tags_alter.patch"
+projects[facebook_status][patch][] = "http://drupal.org/files/facebook_status_tags_alter.patch"
 
 projects[fbsmp][subdir] = "contrib"
 projects[fbsmp][download][type] = "git"
