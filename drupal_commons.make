@@ -351,8 +351,9 @@ projects[homebox][subdir] = "contrib"
 projects[shoutbox][subdir] = "contrib"
 projects[image][subdir] = "contrib"
 
-; Themes
+; Themes:
 
 projects[fusion][version] = "1.12"
 projects[fusion][type] = "theme"
+
 
