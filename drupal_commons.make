@@ -9,10 +9,21 @@ projects[views_bulk_operations][version] = "1.11"
 projects[admin][subdir] = "contrib"
 projects[admin][version] = "2.0"
 
+; Historically Commons placed Acquia connector in the Acquia subdirectory.
+; Leaving it there to simplify the upgrade process.
+projects[acquia_connector][subdir] = "acquia"
+
+projects[acquia_search][download][type] = "get"
+projects[acquia_search][download][url] = "http://network.acquia.com/files/downloads/acquia-search-current.tar.gz"
+projects[acquia_search][project][type] = "module"
+projects[acquia_search][subdir] = "contrib"
+
 projects[ajax_load][download][type] = "git"
 projects[ajax_load][download][url] = "http://git.drupal.org/project/ajax_load.git" 
 projects[ajax_load][download][revision] = "8b0921252fcf599e7b15276bd815bcf81521eb27"
 projects[ajax_load][subdir] = "contrib"
+
+projects[better_formats][subdir] = "contrib"
 
 projects[boxes][subdir] = "contrib"
 projects[boxes][version] = "1.0"
@@ -76,6 +87,13 @@ projects[freelinking][version] = "1.10"
 projects[getid3][subdir] = "contrib"
 projects[getid3][version] = "1.4"
 
+libraries[getid3][download][type] = "get"
+libraries[getid3][destination] = "libraries"
+libraries[getid3][download][url] = "http://downloads.sourceforge.net/project/getid3/getID3%28%29%201.x/1.7.9/getid3-1.7.9.zip?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fgetid3%2Ffiles%2FgetID3%2528%2529%25201.x%2F1.7.9%2F&ts=1320092815"
+libraries[getid3][directory_name] = "getid
+
+
+
 projects[imageapi][subdir] = "contrib"
 projects[imageapi][version] = "1.10"
 
@@ -100,6 +118,11 @@ projects[invite][version] = "2.0-beta3"
 projects[jquery_ui][subdir] = "contrib"
 projects[jquery_ui][version] = "1.4"
 
+libraries[jquery_ui][download][type] = "get"
+libraries[jquery_ui][destination] = "modules/contrib/jquery_ui"
+libraries[jquery_ui][download][url] = "http://jquery-ui.googlecode.com/files/jquery.ui-1.6.zip"
+libraries[jquery_ui][directory_name] = "jquery.ui"
+
 projects[link][subdir] = "contrib"
 projects[link][version] = "2.9"
 
@@ -108,6 +131,12 @@ projects[messaging][version] = "2.4"
 
 projects[mimemail][subdir] = "contrib"
 projects[mimemail][version] = "1.0-beta2"
+
+; Historically Commons placed Mollom in the Acquia subdirectory.
+; Leaving it there to simplify the upgrade process.
+
+projects[mollom][subdir] = "acquia"
+
 
 projects[notifications][subdir] = "contrib"
 projects[notifications][version] = "2.3"
@@ -283,9 +312,14 @@ projects[wysiwyg][download][url] = "http://git.drupal.org/project/wysiwyg.git"
 projects[wysiwyg][download][revision] = "ddfaf684a45eb2ba3e4f866e5e5e6e1c10c8c020"
 projects[wysiwyg][subdir] = "contrib"
 
+libraries[ckeditor][download][type] = "get"
+libraries[ckeditor][destination] = "libraries"
+libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%203.6.2/ckeditor_3.6.2.tar.gz"
+libraries[ckeditor][directory_name] = "ckeditor"
+
+
 projects[wysiwyg_filter][subdir] = "contrib"
 projects[wysiwyg_filter][version] = "1.5"
-
 
 projects[activity_log][download][type] = "git"
 projects[activity_log][download][url] = "http://git.drupal.org/project/activity_log.git"
@@ -314,8 +348,14 @@ projects[fbsmp][download][revision] = 6.x-2.x
 
 projects[commons_release][subdir] = "contrib"
 
+; Modules no longer in use, to be removed in a future release:
+
+projects[homebox][subdir] = "contrib"
+projects[shoutbox][subdir] = "contrib"
+projects[image][subdir] = "contrib"
+
 ; Themes
 
-projects[fusion][version] = "1.0"
+projects[fusion][version] = "1.12"
 projects[fusion][project][type] = theme
 
