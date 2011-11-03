@@ -3,6 +3,60 @@ Track Commons development on GitHub!
  - https://github.com/acquia/commons/
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Commons 2.3, 2011-11-03
+
+Users are strongly encouraged to apply this security update.
+
+Fixed issues
+
+Commons 2.3 includes a patched version of the Views module that addresses the
+following security issue: http://drupal.org/node/1329898 .
+
+IMPORTANT: If you're upgrading to Commons 2.3 from a previous version of
+Commons, be sure to use the upgrade process for your currently installed
+version of Commons.
+
+Upgrading from Commons 2.2
+
+To upgrade your server to Commons 2.3 from Commons 2.2, complete the following steps:
+
+1) Back up your code (everything in your Drupal root directory) and your database.
+2) Open a web browser, and then log in to your site as the main administrator account.
+3) Place the site in "Off-line" mode. To change the mode, complete the following steps:
+4) In your web browser, open http://[example]/admin/settings/site-maintenance, where [example] is the URL of your Commons server.
+5) Select the Off-line option.
+6) Click Save configuration.
+7) Extract the new Commons tarball and copy the contents into your document root.
+8) Allow your visitors to access your web site by returning your site to "Online" mode:
+9) In your web browser, open http://[example]/admin/settings/site-maintenance.
+10) Select the Online option.
+11) Click Save configuration.
+
+Upgrading from Commons 2.0
+
+To upgrade your server to Commons 2.3 from Commons 2.0, complete the following steps:
+
+1) Back up your code (everything in your Drupal root directory) and your database.
+2) Open a web browser, and then log in to your site as the main administrator account.
+3) Place the site in "Off-line" mode. This allows database updates to run without interruption,
+4) and without displaying errors to visitors of your site. To change the mode, complete the following steps:
+5) In your web browser, open http://[example]/admin/settings/site-maintenance, where [example] is the URL of your Commons server.
+6) Select the Off-line option.
+7) Click Save configuration.
+8) Extract the new Commons tarball and copy the contents into your document root.
+9) In your web browser, open http://[example]/update.php.
+10) Follow the prompts to "Update" your server.
+11) In your web browser, open http://[example]/admin/settings/performance.
+12) Click Clear cached data.
+13) Allow your visitors to access your web site by returning your site to "Online" mode:
+14) In your web browser, open http://[example]/admin/settings/site-maintenance.
+15) Select the Online option.
+16) Click Save configuration.
+
+Upgrading from Commons 1.7
+
+To upgrade your server to Commons 2.3 from Commons 1.7, see the instructions in Upgrading to Commons 2.x from version 1.7: http://network.acquia.com/documentation/commons/upgrade.
+
 Commons 2.2, 2011-10-05
 
 Commons 2.2 includes an updated version of the OG_Features and Homebox modules that address critical security issues:
