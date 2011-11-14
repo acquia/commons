@@ -41,9 +41,7 @@ function drupal_commons_profile_modules() {
     
     // Features
     'features',
-    
-    // Commons update tracker
-    'commons_release',
+
   );
 
   return $modules;
