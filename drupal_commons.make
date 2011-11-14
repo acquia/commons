@@ -87,9 +87,10 @@ projects[getid3][subdir] = "contrib"
 
 libraries[getid3][download][type] = "get"
 libraries[getid3][destination] = "libraries"
-libraries[getid3][download][url] = "http://downloads.sourceforge.net/project/getid3/getID3%28%29%201.x/1.7.9/getid3-1.7.9.zip?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fgetid3%2Ffiles%2FgetID3%2528%2529%25201.x%2F1.7.9%2F&ts=1320092815"
+libraries[getid3][download][url] = "http://downloads.sourceforge.net/project/getid3/getID3%28%29%201.x/1.9.1/getid3-1.9.1-20110810.zip?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fgetid3%2Ffiles%2FgetID3%2528%2529%25201.x%2F1.9.1%2F&ts=1320871534"
 libraries[getid3][directory_name] = "getid3"
-
+; http://drupal.org/node/1336886
+libraries[getid3][patch][] = "http://drupal.org/files/getid3-remove-demos-1.9.1.patch"
 
 
 projects[imageapi][subdir] = "contrib"
