@@ -280,17 +280,6 @@ projects[vertical_tabs][subdir] = "contrib"
 projects[vertical_tabs][version] = "1.0-rc1"
 
 projects[views][subdir] = "contrib"
-projects[views][version] = "2.12"
-
-; Views patches in PATCHES.txt from Acquia Commons GitHub repo
-; http://drupal.org/node/571234#comment-3122678
-projects[views][patch][] = "http://drupal.org/files/issues/views-executed.patch"
-
-; http://drupal.org/node/228510#comment-3426202
-; Committed to Views 3.x but will not be committed to 2.x and no longer applies.
-; See http://drupal.org/node/1302984 for workarounds in Commons.
-; projects[views][patch][]  = "http://drupal.org/files/issues/228510.patch"
-
 
 projects[views_slideshow][subdir] = "contrib"
 projects[views_slideshow][version] = "2.3"
