@@ -105,12 +105,25 @@ function _commons_profile_image_links_block_view() {
   else {
     // Provide relationship links/messages
     if (user_access('maintain own relationships')) {
+      // For the Commons "Follower" relatinoship, hide controls to 
+      // make another user unfollow the present user.
       $actions = _user_relationships_ui_actions_between($user, $account);
+      static $rids_exclude;
+      if (empty($rids_exclude[$user->uid])) {
+        $query = db_query("SELECT rid FROM {user_relationships} WHERE rtid = 1 AND requester_id != %d AND requestee_id = %d", $user->uid, $user->uid);
+        while ($result = db_fetch_object($query)) {
+          $rids_exclude[$user->uid][$result->rid] = $result->rid;
+        }  
+      }
       foreach ($actions as $key => $action) {
-        $links["ur_action"] = array(
+        if (in_array($key, $rids_exclude[$user->uid])) {
+          continue;
+        }
+        $links["ur_action_$key"] = array(
           'title' => $action,
           // No href because this is the best that UR can offer
           'html' => TRUE,
+          'attributes' => array('class' => 'ur_action'),
         );
       }
     }

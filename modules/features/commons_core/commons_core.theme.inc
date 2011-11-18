@@ -65,3 +65,18 @@ function theme_commons_core_group_members_block($managers, $members, $link) {
   }
   return $content;
 }
+
+/**
+ * Remove relationship link
+ */
+function theme_commons_core_unfollow_link($uid, $rid) {
+  return l(
+    t('Unfollow'),
+    "user/{$uid}/relationships/{$rid}/remove",
+    array(
+      'title' => array('title' => t('Unfollow')),
+      'query' => drupal_get_destination(),
+      'attributes' => array('class' => 'user_relationships_popup_link'),
+    )
+  );
+}

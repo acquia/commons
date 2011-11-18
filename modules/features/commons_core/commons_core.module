@@ -224,6 +224,9 @@ function commons_core_theme() {
     'commons_core_group_members_block' => array(
       'arguments' => array('managers' => NULL, 'members' => NULL, 'link' => NULL),
     ),
+    'commons_core_unfollow_link' => array(
+      'arguments' => array('uid' => NULL , 'rid' => NULL),
+    ),
   );
   
   // Add the theme file to each
@@ -411,7 +414,7 @@ function commons_core_user_relationships_remove_link_alter(&$list, $args) {
   foreach ($args[3] as $rid => $relationship) {
     // TODO: Consider having a constant for the relationship ID.
     if ($relationship->rtid == 1) {
-      $list[$relationship->rid] = theme('user_relationships_remove_link', $args[0]->uid, $relationship->rid); 
+      $list[$relationship->rid] = theme('commons_core_unfollow_link', $args[0]->uid, $relationship->rid); 
     }
   }
 }
