@@ -144,7 +144,8 @@ function drupal_commons_profile_tasks(&$task, $url) {
     $operations[] = array('drupal_commons_config_views', array());
     $operations[] = array('drupal_commons_config_images', array());
     $operations[] = array('drupal_commons_config_vars', array());
-  
+    $operations[] = array('drupal_commons_config_tidy_node_links', array());
+
     // Build the batch process
     $batch = array(
       'operations' => $operations,
@@ -457,6 +458,16 @@ function drupal_commons_config_vars() {
   // Set user terms to use the "tags" vocabulary we created
   $vid = variable_get('commons_tags_vid', 1);
   variable_set('user_terms_vocabs', array($vid => $vid));
+}
+
+/**
+ * Configure tidy node links
+ */
+function drupal_commons_config_tidy_node_links() {
+  $theme = variable_get('theme_default','garland');
+  if ($theme == 'commons_origins') {
+    drupal_install_modules(array('tidy_node_links'));
+  }
 }
 
 /**

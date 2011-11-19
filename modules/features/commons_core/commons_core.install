@@ -402,3 +402,14 @@ function commons_core_update_6014() {
   module_disable(array('commons_release'));
   drupal_uninstall_module('commons_release');
 }
+
+/**
+ * Install tidy_node_links module
+ */
+function commons_core_update_6015() {
+  $theme = variable_get('theme_default','garland');
+  if ($theme == 'commons_origins') {
+    drupal_install_modules(array('tidy_node_links'));
+  }
+  return array();
+}
