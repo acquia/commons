@@ -204,6 +204,9 @@ projects[og_subgroups][version] = "1.0-beta3"
 projects[password_policy][subdir] = "contrib"
 projects[password_policy][version] = "1.1"
 
+; http://drupal.org/node/1174748#comment-5162550
+projects[password_policy][patch][] = "http://drupal.org/files/1174748-false-failures-on-updates-9.patch"
+
 projects[pathauto][subdir] = "contrib"
 
 projects[quant][download][type] = "git"

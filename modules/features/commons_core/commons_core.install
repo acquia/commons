@@ -401,6 +401,7 @@ function commons_core_update_6013() {
 function commons_core_update_6014() {
   module_disable(array('commons_release'));
   drupal_uninstall_module('commons_release');
+  return array();
 }
 
 /**
