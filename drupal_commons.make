@@ -128,7 +128,6 @@ projects[messaging][subdir] = "contrib"
 projects[messaging][version] = "2.4"
 
 projects[mimemail][subdir] = "contrib"
-projects[mimemail][version] = "1.0-beta2"
 
 ; Historically Commons placed Mollom in the Acquia subdirectory.
 ; Leaving it there to simplify the upgrade process.
@@ -202,7 +201,6 @@ projects[og_subgroups][subdir] = "contrib"
 projects[og_subgroups][version] = "1.0-beta3"
 
 projects[password_policy][subdir] = "contrib"
-projects[password_policy][version] = "1.1"
 
 ; http://drupal.org/node/1174748#comment-5162550
 projects[password_policy][patch][] = "http://drupal.org/files/1174748-false-failures-on-updates-9.patch"
@@ -280,7 +278,6 @@ projects[userpoints_user_picture][subdir] = "contrib"
 projects[userpoints_user_picture][version] = "1.2"
 
 projects[vertical_tabs][subdir] = "contrib"
-projects[vertical_tabs][version] = "1.0-rc1"
 
 projects[views][subdir] = "contrib"
 
