@@ -308,17 +308,11 @@ projects[activity_log][download][revision] = "6.x-2.x"
 projects[activity_log][type] = "module"
 projects[activity_log][subdir] = "contrib"
 
-; http://drupal.org/node/1348768
-projects[activity_log][patch][] = "http://drupal.org/files/activity-log-rules-defaults.patch"
-
 projects[digests][download][type] = "git"
 projects[digests][download][url] = "http://git.drupal.org/project/digests.git"
 projects[digests][download][revision] = "6.x-1.x"
 projects[digests][type] = "module"
 projects[digests][subdir] = "contrib"
-
-; http://drupal.org/node/1348770
-projects[digests][patch][] = "http://drupal.org/files/digests-rules-defaults.patch"
 
 projects[tidy_node_links][download][type] = "git"
 projects[tidy_node_links][download][url] = "http://git.drupal.org/sandbox/ezrag/1344006.git"
