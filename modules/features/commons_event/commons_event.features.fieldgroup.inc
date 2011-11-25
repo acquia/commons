@@ -35,7 +35,7 @@ function commons_event_fieldgroup_default_groups() {
         'description' => '',
       ),
     ),
-    'weight' => '-2',
+    'weight' => '-4',
     'fields' => array(
       '0' => 'field_date',
       '1' => 'field_location',
@@ -83,7 +83,7 @@ function commons_event_fieldgroup_default_groups() {
         ),
       ),
     ),
-    'weight' => '-1',
+    'weight' => '-2',
     'fields' => array(
       '0' => 'field_content_images',
     ),

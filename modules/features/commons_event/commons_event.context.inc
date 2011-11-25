@@ -5,6 +5,7 @@
  */
 function commons_event_context_default_contexts() {
   $export = array();
+
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
@@ -54,8 +55,8 @@ function commons_event_context_default_contexts() {
   // Included for use with string extractors like potx.
   t('Event');
   t('The event calendar');
-
   $export['content-event-calendar'] = $context;
+
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
@@ -111,8 +112,8 @@ function commons_event_context_default_contexts() {
   // Included for use with string extractors like potx.
   t('Event');
   t('The event page');
-
   $export['content-event-page'] = $context;
+
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
@@ -167,8 +168,8 @@ function commons_event_context_default_contexts() {
   // Included for use with string extractors like potx.
   t('An event node inside a group');
   t('Event');
-
   $export['group-event-node'] = $context;
+
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
@@ -203,8 +204,8 @@ function commons_event_context_default_contexts() {
   // Included for use with string extractors like potx.
   t('Event');
   t('Events block for the group home page');
-
   $export['group-home-events'] = $context;
+
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
@@ -254,8 +255,8 @@ function commons_event_context_default_contexts() {
   // Included for use with string extractors like potx.
   t('Event');
   t('The event tab on a group');
-
   $export['group-tab-events'] = $context;
+
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
@@ -299,8 +300,8 @@ function commons_event_context_default_contexts() {
   // Included for use with string extractors like potx.
   t('Event');
   t('The event calendar for a group');
-
   $export['group-tab-events-calendar'] = $context;
+
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
@@ -332,7 +333,7 @@ function commons_event_context_default_contexts() {
   // Included for use with string extractors like potx.
   t('Add events listings to user profiles when viewing your own profile');
   t('Event');
-
   $export['profile-me-events'] = $context;
+
   return $export;
 }
