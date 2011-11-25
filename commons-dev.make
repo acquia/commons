@@ -8,8 +8,6 @@ core = 6.x
 api = 2
 
 projects[drupal][version] = "6.22"
-; http://drupal.org/node/557542#comment-5274510
-projects[drupal][patch][] = "http://drupal.org/files/557542-module_implements-cache-178-D6.patch"
 
 projects[drupal_commons][type] = "profile"
 projects[drupal_commons][download][type] = "git"
