@@ -1347,6 +1347,12 @@ tr.first.last td {
 	border-bottom: 1px dotted #ccc;
 }
 
+/* Remove border-bottom from group subscribe buttons */
+
+table tr td.views-field-subscribe {
+border-bottom: none;
+}
+
 table tr td.active {
 	background-color: #fafafa;
 }
@@ -3391,4 +3397,12 @@ a.feed-icon img {
     margin: 2px;
     padding: 1px 5px 2px;
     text-transform: uppercase;
+    text-align: center;
+    width: 80px;
+}
+
+.view-subgroups-main-listing .views-field-subscribe,
+.view-subgroups-main-listing .views-field-leave-group {
+  float: none;
+  margin-left: 0;
 }
