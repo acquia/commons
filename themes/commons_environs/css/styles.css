@@ -592,6 +592,26 @@ form input.form-submit, .views-exposed-form .views-exposed-widget input.form-sub
   height: auto;
   font-family: Arial, "Lucida Grande", Verdana, sans-serif;
 }
+
+form .facebook-status-form input.form-submit {
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  -moz-border-radius: 0px 0px 0px 0px;
+  -webkit-border-radius: 0px 0px 0px 0px;
+  border-radius: 0px 0px 0px 0px;
+}
+
+form .facebook-status-form input.facebook-status-submit {
+  -moz-border-radius: 0px 0px 4px 0px;
+  -webkit-border-radius: 0px 0px 4px 0px;
+  border-radius: 0px 0px 4px 0px;
+}
+
+form .fbsmp-icon-list input.form-submit {
+  color: #736357;
+}
+
 /* moved OG search field & button to Roots to generalize it -jay */
 
 /* dashboard */
@@ -1140,6 +1160,28 @@ form input.fbsmp-cancel-button:hover {
   -moz-box-shadow: inset -2px -2px 0px 1px #008f4e;
   -webkit-box-shadow: inset -2px -2px 0px 1px #008f4e;
   box-shadow: inset -2px -2px 0px 1px #008f4e;
+}
+
+.not-front.og-context form input.form-submit.facebook-status-submit {
+  background: #8bc558;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  border-top: 1px solid #8bc558;
+}
+
+.not-front.og-context .fbsmp-link-icon input.button {
+  background: #eee 8px center no-repeat;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.not-front.og-context .fbsmp-photo-icon input.button {
+  background: #eee 8px center no-repeat;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
 }
 
 .not-front.og-context .primary-menu-inner ul.sf-menu > li.active-trail > a, .not-front.og-context .primary-menu-inner ul.sf-menu > li.active-trail > a:visited, .page-groups .primary-menu-inner ul.sf-menu > li.active-trail > a, .page-groups .primary-menu-inner ul.sf-menu > li.active-trail > a:visited {
