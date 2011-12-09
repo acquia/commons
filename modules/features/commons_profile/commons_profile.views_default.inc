@@ -11,10 +11,9 @@ function commons_profile_views_default_views() {
   $view->name = 'profile_about';
   $view->description = '';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'users';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('fields', array(
@@ -356,10 +355,10 @@ function commons_profile_views_default_views() {
       'field' => 'uid',
       'validate_user_argument_type' => 'either',
       'validate_user_roles' => array(
-        '2' => 0,
-        '3' => 0,
-        '4' => 0,
-        '5' => 0,
+        2 => 0,
+        3 => 0,
+        4 => 0,
+        5 => 0,
       ),
       'relationship' => 'none',
       'default_options_div_prefix' => '',
@@ -380,8 +379,8 @@ function commons_profile_views_default_views() {
       'validate_argument_node_access' => 0,
       'validate_argument_nid_type' => 'nid',
       'validate_argument_vocabulary' => array(
-        '2' => 0,
-        '3' => 0,
+        2 => 0,
+        3 => 0,
       ),
       'validate_argument_type' => 'tid',
       'validate_argument_transform' => 0,
@@ -421,10 +420,9 @@ function commons_profile_views_default_views() {
   $view->name = 'profile_about_page';
   $view->description = 'The about page on the user profile';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'users';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('fields', array(
@@ -808,10 +806,10 @@ function commons_profile_views_default_views() {
       'field' => 'uid',
       'validate_user_argument_type' => 'either',
       'validate_user_roles' => array(
-        '2' => 0,
-        '3' => 0,
-        '4' => 0,
-        '5' => 0,
+        2 => 0,
+        3 => 0,
+        4 => 0,
+        5 => 0,
       ),
       'relationship' => 'none',
       'default_options_div_prefix' => '',
@@ -832,8 +830,8 @@ function commons_profile_views_default_views() {
       'validate_argument_node_access' => 0,
       'validate_argument_nid_type' => 'nid',
       'validate_argument_vocabulary' => array(
-        '2' => 0,
-        '3' => 0,
+        2 => 0,
+        3 => 0,
       ),
       'validate_argument_type' => 'tid',
       'validate_argument_transform' => 0,
@@ -887,10 +885,9 @@ function commons_profile_views_default_views() {
   $view->name = 'profile_following';
   $view->description = '';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'users';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('relationships', array(
@@ -983,10 +980,10 @@ function commons_profile_views_default_views() {
       'field' => 'requester_id',
       'validate_user_argument_type' => 'uid',
       'validate_user_roles' => array(
-        '2' => 0,
-        '3' => 0,
-        '4' => 0,
-        '5' => 0,
+        2 => 0,
+        3 => 0,
+        4 => 0,
+        5 => 0,
       ),
       'relationship' => 'none',
       'default_options_div_prefix' => '',
@@ -1007,8 +1004,8 @@ function commons_profile_views_default_views() {
       'validate_argument_node_access' => 0,
       'validate_argument_nid_type' => 'nid',
       'validate_argument_vocabulary' => array(
-        '2' => 0,
-        '3' => 0,
+        2 => 0,
+        3 => 0,
       ),
       'validate_argument_type' => 'tid',
       'validate_argument_transform' => 0,
@@ -1090,10 +1087,9 @@ function commons_profile_views_default_views() {
   $view->name = 'profile_image';
   $view->description = '';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'users';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('fields', array(
@@ -1148,10 +1144,10 @@ function commons_profile_views_default_views() {
       'field' => 'uid',
       'validate_user_argument_type' => 'either',
       'validate_user_roles' => array(
-        '2' => 0,
-        '3' => 0,
-        '4' => 0,
-        '5' => 0,
+        2 => 0,
+        3 => 0,
+        4 => 0,
+        5 => 0,
       ),
       'relationship' => 'none',
       'default_options_div_prefix' => '',
@@ -1172,8 +1168,8 @@ function commons_profile_views_default_views() {
       'validate_argument_node_access' => 0,
       'validate_argument_nid_type' => 'nid',
       'validate_argument_vocabulary' => array(
-        '2' => 0,
-        '3' => 0,
+        2 => 0,
+        3 => 0,
       ),
       'validate_argument_type' => 'tid',
       'validate_argument_transform' => 0,
@@ -1212,10 +1208,9 @@ function commons_profile_views_default_views() {
   $view->name = 'profile_user_groups';
   $view->description = 'Show the groups that the user being viewed belongs to';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('relationships', array(
@@ -1377,10 +1372,10 @@ function commons_profile_views_default_views() {
       'field' => 'uid',
       'validate_user_argument_type' => 'either',
       'validate_user_roles' => array(
-        '2' => 0,
-        '3' => 0,
-        '4' => 0,
-        '5' => 0,
+        2 => 0,
+        3 => 0,
+        4 => 0,
+        5 => 0,
       ),
       'relationship' => 'none',
       'default_options_div_prefix' => '',
@@ -1401,8 +1396,8 @@ function commons_profile_views_default_views() {
       'validate_argument_node_access' => 0,
       'validate_argument_nid_type' => 'nid',
       'validate_argument_vocabulary' => array(
-        '2' => 0,
-        '3' => 0,
+        2 => 0,
+        3 => 0,
       ),
       'validate_argument_type' => 'tid',
       'validate_argument_transform' => 0,
@@ -1578,10 +1573,10 @@ function commons_profile_views_default_views() {
       'field' => 'uid',
       'validate_user_argument_type' => 'either',
       'validate_user_roles' => array(
-        '2' => 0,
-        '3' => 0,
-        '4' => 0,
-        '5' => 0,
+        2 => 0,
+        3 => 0,
+        4 => 0,
+        5 => 0,
       ),
       'relationship' => 'none',
       'default_options_div_prefix' => '',
@@ -1602,8 +1597,8 @@ function commons_profile_views_default_views() {
       'validate_argument_node_access' => 0,
       'validate_argument_nid_type' => 'nid',
       'validate_argument_vocabulary' => array(
-        '2' => 0,
-        '3' => 0,
+        2 => 0,
+        3 => 0,
       ),
       'validate_argument_type' => 'tid',
       'validate_argument_transform' => 0,
@@ -1634,10 +1629,9 @@ function commons_profile_views_default_views() {
   $view->name = 'user_directory';
   $view->description = 'A directory page to show all users';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'users';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('fields', array(
@@ -2126,7 +2120,8 @@ function commons_profile_views_default_views() {
     ),
   ));
   $handler->override_option('access', array(
-    'type' => 'none',
+    'type' => 'perm',
+    'perm' => 'access user profiles',
   ));
   $handler->override_option('cache', array(
     'type' => 'none',
@@ -2165,10 +2160,9 @@ function commons_profile_views_default_views() {
   $view->name = 'users_online';
   $view->description = 'A block showing online users';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'users';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('fields', array(
