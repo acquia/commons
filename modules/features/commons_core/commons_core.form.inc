@@ -152,6 +152,8 @@ function commons_core_node_form_alter(&$form, &$form_state) {
       unset($form['og_directory']);
       unset($form['og_register']);
       unset($form['og_private']);
+      // Prevent key Group fields from being hidden in vertical tabs.
+      $form += array('#vertical_tabs'  => array('og_options' => FALSE, 'group_attributes' => FALSE, 'group_promote_content' => FALSE, 'themes' => 1));
     }
   }
 }

@@ -31,3 +31,10 @@ function commons_event_og_features_registry() {
   return $registry;
 }
 
+/**
+ * Implementation of hook_form_FORM_ID_alter().
+ */
+function commons_event_form_event_node_form_alter(&$form, &$form_state) {
+  // Prevent the event details fieldset from being hidden in vertical tabs.
+  $form += array('#vertical_tabs'  => array('group_event_details' => FALSE));
+}
