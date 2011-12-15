@@ -62,7 +62,6 @@ projects[diff][subdir] = "contrib"
 
 
 projects[tagging][subdir] = "contrib"
-projects[tagging][version] = "2.5"
 
 projects[editablefields][subdir] = "contrib"
 projects[editablefields][version] = "2.0"

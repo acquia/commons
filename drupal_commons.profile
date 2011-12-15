@@ -29,9 +29,6 @@ function drupal_commons_profile_modules() {
     
     // Date
     'date_api', 'date_timezone',
-
-    // Taxonomy
-    'tagging',
     
     // Misc
     'vertical_tabs', 'transliteration', 'password_policy',
