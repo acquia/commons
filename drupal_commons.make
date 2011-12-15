@@ -148,9 +148,8 @@ projects[og][patch][] = "http://drupal.org/files/issues/og-DRUPAL-6--2.views-con
 ; http://drupal.org/node/1051258
 projects[og][patch][] = "http://drupal.org/files/issues/og_notifications-add-form-labels.patch"
 
-; http://drupal.org/node/333072#comment-3264980
-; This patch is incorrectly rolled against an OG subdirectory, so it doesn't apply.
-;projects[og][patch][] = "http://drupal.org/files/issues/og_views-fix-search-view.patch"
+; http://drupal.org/node/333072#comment-5368430
+projects[og][patch][] = "http://drupal.org/files/og_views-fix-search-view-333072-2.patch"
 
 ; http://drupal.org/node/835030
 ;projects[og][patch][] = "http://drupal.org/files/issues/og_notifications-subscriptions-not-saving-835030.patch"
