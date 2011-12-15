@@ -11,10 +11,9 @@ function commons_reputation_views_default_views() {
   $view->name = 'most_active_users';
   $view->description = 'Show the most active users on the site';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'users';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('fields', array(
@@ -145,7 +144,9 @@ function commons_reputation_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('cache', array(
-    'type' => 'none',
+    'type' => 'time',
+    'results_lifespan' => '1800',
+    'output_lifespan' => '1800',
   ));
   $handler->override_option('title', 'Most active users');
   $handler->override_option('footer_format', '1');
@@ -153,7 +154,7 @@ function commons_reputation_views_default_views() {
   $handler->override_option('empty', 'No users have received any points yet.');
   $handler->override_option('empty_format', '1');
   $handler->override_option('items_per_page', 5);
-  $handler->override_option('distinct', 1);
+  $handler->override_option('distinct', 0);
   $handler->override_option('style_plugin', 'table');
   $handler = $view->new_display('block', 'Block', 'block_1');
   $handler->override_option('block_description', 'Most active users');

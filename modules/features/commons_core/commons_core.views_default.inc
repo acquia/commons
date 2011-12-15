@@ -11,10 +11,9 @@ function commons_core_views_default_views() {
   $view->name = 'group_block_latest_content';
   $view->description = 'The latest group posts block';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('relationships', array(
@@ -272,10 +271,10 @@ function commons_core_views_default_views() {
       'field' => 'group_nid',
       'validate_user_argument_type' => 'uid',
       'validate_user_roles' => array(
-        '2' => 0,
-        '3' => 0,
-        '4' => 0,
-        '5' => 0,
+        2 => 0,
+        3 => 0,
+        4 => 0,
+        5 => 0,
       ),
       'override' => array(
         'button' => 'Override',
@@ -299,8 +298,8 @@ function commons_core_views_default_views() {
       'validate_argument_node_access' => 0,
       'validate_argument_nid_type' => 'nid',
       'validate_argument_vocabulary' => array(
-        '2' => 0,
-        '3' => 0,
+        2 => 0,
+        3 => 0,
       ),
       'validate_argument_type' => 'tid',
       'validate_argument_transform' => 0,
@@ -392,10 +391,9 @@ function commons_core_views_default_views() {
   $view->name = 'group_block_members';
   $view->description = 'A helper view to provide the block of group members and admins';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'users';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('fields', array(
@@ -466,10 +464,10 @@ function commons_core_views_default_views() {
       'field' => 'nid',
       'validate_user_argument_type' => 'uid',
       'validate_user_roles' => array(
-        '2' => 0,
-        '3' => 0,
-        '4' => 0,
-        '5' => 0,
+        2 => 0,
+        3 => 0,
+        4 => 0,
+        5 => 0,
       ),
       'override' => array(
         'button' => 'Override',
@@ -493,8 +491,8 @@ function commons_core_views_default_views() {
       'validate_argument_node_access' => 0,
       'validate_argument_nid_type' => 'nid',
       'validate_argument_vocabulary' => array(
-        '2' => 0,
-        '3' => 0,
+        2 => 0,
+        3 => 0,
       ),
       'validate_argument_type' => 'tid',
       'validate_argument_transform' => 0,
@@ -516,7 +514,7 @@ function commons_core_views_default_views() {
     'is_admin' => array(
       'operator' => 'in',
       'value' => array(
-        '1' => '1',
+        1 => '1',
       ),
       'group' => '0',
       'exposed' => FALSE,
@@ -590,7 +588,7 @@ function commons_core_views_default_views() {
     'is_admin' => array(
       'operator' => 'not in',
       'value' => array(
-        '1' => '1',
+        1 => '1',
       ),
       'group' => '0',
       'exposed' => FALSE,
@@ -652,10 +650,9 @@ function commons_core_views_default_views() {
   $view->name = 'group_node';
   $view->description = 'Group profile';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('fields', array(
@@ -786,11 +783,11 @@ function commons_core_views_default_views() {
       'link_to_taxonomy' => 1,
       'limit' => 0,
       'vids' => array(
-        '5' => 0,
-        '2' => 0,
-        '3' => 0,
-        '6' => 0,
-        '4' => 0,
+        5 => 0,
+        2 => 0,
+        3 => 0,
+        6 => 0,
+        4 => 0,
       ),
       'exclude' => 0,
       'id' => 'tid',
@@ -895,10 +892,10 @@ function commons_core_views_default_views() {
       'field' => 'nid',
       'validate_user_argument_type' => 'uid',
       'validate_user_roles' => array(
-        '2' => 0,
-        '3' => 0,
-        '4' => 0,
-        '5' => 0,
+        2 => 0,
+        3 => 0,
+        4 => 0,
+        5 => 0,
       ),
       'relationship' => 'none',
       'default_options_div_prefix' => '',
@@ -919,8 +916,8 @@ function commons_core_views_default_views() {
       'validate_argument_node_access' => 0,
       'validate_argument_nid_type' => 'nid',
       'validate_argument_vocabulary' => array(
-        '2' => 0,
-        '3' => 0,
+        2 => 0,
+        3 => 0,
       ),
       'validate_argument_type' => 'tid',
       'validate_argument_transform' => 0,
@@ -1021,10 +1018,10 @@ function commons_core_views_default_views() {
       'field' => 'group_nid',
       'validate_user_argument_type' => 'uid',
       'validate_user_roles' => array(
-        '2' => 0,
-        '3' => 0,
-        '4' => 0,
-        '5' => 0,
+        2 => 0,
+        3 => 0,
+        4 => 0,
+        5 => 0,
       ),
       'override' => array(
         'button' => 'Use default',
@@ -1048,8 +1045,8 @@ function commons_core_views_default_views() {
       'validate_argument_node_access' => 1,
       'validate_argument_nid_type' => 'nid',
       'validate_argument_vocabulary' => array(
-        '2' => 0,
-        '3' => 0,
+        2 => 0,
+        3 => 0,
       ),
       'validate_argument_type' => 'tid',
       'validate_argument_transform' => 0,
@@ -1130,10 +1127,9 @@ function commons_core_views_default_views() {
   $view->name = 'groups_featured_groups';
   $view->description = 'A block displaying the featured groups';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('fields', array(
@@ -1304,11 +1300,11 @@ function commons_core_views_default_views() {
       'link_to_taxonomy' => 1,
       'limit' => 0,
       'vids' => array(
-        '2' => 0,
-        '3' => 0,
-        '5' => 0,
-        '6' => 0,
-        '4' => 0,
+        2 => 0,
+        3 => 0,
+        5 => 0,
+        6 => 0,
+        4 => 0,
       ),
       'exclude' => 1,
       'id' => 'tid',
@@ -1491,10 +1487,9 @@ function commons_core_views_default_views() {
   $view->name = 'groups_main_listing';
   $view->description = 'The main listing of all groups';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('fields', array(
@@ -1600,11 +1595,11 @@ function commons_core_views_default_views() {
       'link_to_taxonomy' => 1,
       'limit' => 0,
       'vids' => array(
-        '5' => 0,
-        '2' => 0,
-        '3' => 0,
-        '6' => 0,
-        '4' => 0,
+        5 => 0,
+        2 => 0,
+        3 => 0,
+        6 => 0,
+        4 => 0,
       ),
       'exclude' => 1,
       'id' => 'tid',
@@ -2106,10 +2101,9 @@ function commons_core_views_default_views() {
   $view->name = 'groups_most_active';
   $view->description = 'A block displaying the most active groups';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('fields', array(
@@ -2364,10 +2358,9 @@ function commons_core_views_default_views() {
   $view->name = 'groups_my_groups';
   $view->description = 'A block displaying the current user\'s groups';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('relationships', array(
@@ -2565,7 +2558,7 @@ function commons_core_views_default_views() {
   $handler->override_option('access', array(
     'type' => 'role',
     'role' => array(
-      '2' => 2,
+      2 => 2,
     ),
   ));
   $handler->override_option('cache', array(
@@ -2591,10 +2584,9 @@ function commons_core_views_default_views() {
   $view->name = 'groups_my_groups_listing';
   $view->description = 'The page listing of my groups';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('fields', array(
@@ -2700,11 +2692,11 @@ function commons_core_views_default_views() {
       'link_to_taxonomy' => 1,
       'limit' => 0,
       'vids' => array(
-        '5' => 0,
-        '2' => 0,
-        '3' => 0,
-        '6' => 0,
-        '4' => 0,
+        5 => 0,
+        2 => 0,
+        3 => 0,
+        6 => 0,
+        4 => 0,
       ),
       'exclude' => 1,
       'id' => 'tid',
@@ -2909,7 +2901,7 @@ function commons_core_views_default_views() {
   $handler->override_option('access', array(
     'type' => 'role',
     'role' => array(
-      '2' => 2,
+      2 => 2,
     ),
   ));
   $handler->override_option('cache', array(
@@ -2951,10 +2943,9 @@ function commons_core_views_default_views() {
   $view->name = 'groups_newest_groups';
   $view->description = 'A block displaying the newest groups';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('fields', array(
@@ -3146,7 +3137,9 @@ function commons_core_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('cache', array(
-    'type' => 'none',
+    'type' => 'time',
+    'results_lifespan' => '1800',
+    'output_lifespan' => '1800',
   ));
   $handler->override_option('title', 'Newest groups');
   $handler->override_option('empty', 'No groups have been created yet');
@@ -3155,7 +3148,7 @@ function commons_core_views_default_views() {
   $handler->override_option('items_per_page', 5);
   $handler->override_option('use_pager', 'mini');
   $handler->override_option('pager_element', 3);
-  $handler->override_option('distinct', 1);
+  $handler->override_option('distinct', 0);
   $handler->override_option('style_plugin', 'list');
   $handler = $view->new_display('block', 'Block', 'block_1');
   $handler->override_option('block_description', 'Newest groups');
@@ -3168,10 +3161,9 @@ function commons_core_views_default_views() {
   $view->name = 'most_bookmarked';
   $view->description = 'The most bookmarked nodes';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('relationships', array(
@@ -3401,10 +3393,9 @@ function commons_core_views_default_views() {
   $view->name = 'my_recent_items';
   $view->description = 'Items I\'ve recently created';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('relationships', array(
@@ -3692,10 +3683,9 @@ function commons_core_views_default_views() {
   $view->name = 'my_unread_items';
   $view->description = 'Recently updated item\'s I\'ve comment on';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('relationships', array(
@@ -3990,10 +3980,9 @@ function commons_core_views_default_views() {
   $view->name = 'newest_users';
   $view->description = 'Show the newest users on the site';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'users';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('fields', array(
@@ -4113,10 +4102,9 @@ function commons_core_views_default_views() {
   $view->name = 'notice_latest_comments';
   $view->description = 'The latest comments on all notices';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'comments';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('relationships', array(
@@ -4381,10 +4369,9 @@ function commons_core_views_default_views() {
   $view->name = 'og_my_content';
   $view->description = 'Shows your content across your groups';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('relationships', array(
@@ -4646,9 +4633,9 @@ function commons_core_views_default_views() {
       'field' => 'uid_touch',
       'validate_user_argument_type' => 'uid',
       'validate_user_roles' => array(
-        '2' => 0,
-        '3' => 0,
-        '4' => 0,
+        2 => 0,
+        3 => 0,
+        4 => 0,
       ),
       'override' => array(
         'button' => 'Override',
@@ -4672,8 +4659,8 @@ function commons_core_views_default_views() {
       'validate_argument_node_access' => 0,
       'validate_argument_nid_type' => 'nid',
       'validate_argument_vocabulary' => array(
-        '2' => 0,
-        '1' => 0,
+        2 => 0,
+        1 => 0,
       ),
       'validate_argument_type' => 'tid',
       'validate_argument_transform' => 0,
@@ -4771,7 +4758,7 @@ function commons_core_views_default_views() {
   $handler->override_option('access', array(
     'type' => 'role',
     'role' => array(
-      '2' => 2,
+      2 => 2,
     ),
   ));
   $handler->override_option('cache', array(
@@ -5668,10 +5655,9 @@ function commons_core_views_default_views() {
   $view->name = 'recent_notices';
   $view->description = 'Show the latest notice node types';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('fields', array(
@@ -6327,10 +6313,9 @@ function commons_core_views_default_views() {
   $view->name = 'tag_cloud';
   $view->description = 'Popular tag cloud';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('sorts', array(
@@ -6366,7 +6351,7 @@ function commons_core_views_default_views() {
     'vid' => array(
       'operator' => 'in',
       'value' => array(
-        '1' => '1',
+        1 => '1',
       ),
       'group' => '0',
       'exposed' => FALSE,
@@ -6413,10 +6398,9 @@ function commons_core_views_default_views() {
   $view->name = 'user_meta';
   $view->description = 'User meta info block';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'users';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('fields', array(
