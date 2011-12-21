@@ -276,6 +276,9 @@ projects[vertical_tabs][subdir] = "contrib"
 
 projects[views][subdir] = "contrib"
 
+; http://drupal.org/node/402944#comment-4650020
+projects[views][patch][] = "http://drupal.org/files/issues/views-402944-31.patch"
+
 projects[views_slideshow][subdir] = "contrib"
 projects[views_slideshow][version] = "2.3"
 
