@@ -67,7 +67,7 @@ projects[editablefields][subdir] = "contrib"
 projects[editablefields][version] = "2.0"
 
 ; Editable fields patches in PATCHES.txt from Acquia Commons GitHub repo:
-Issue: http://drupal.org/node/777870
+; Issue: http://drupal.org/node/777870
 projects[editablefields][patch][] = "http://drupal.org/files/issues/editablefields-removeFocus.patch"
 
 projects[features][subdir] = "contrib"
