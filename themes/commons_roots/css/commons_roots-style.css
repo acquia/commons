@@ -452,7 +452,7 @@ h1 + #content-tabs {
   display: none;
 }
 
-.js .show-controls .fbsmp-wrapper-outer, .js .show-controls .facebook-status-submit, .js .show-controls .facebook-status-private-box {
+.js .show-controls .fbsmp-wrapper-outer, .js .show-controls .facebook-status-submit, .js #facebook-status-edit .facebook-status-submit, .js .show-controls .facebook-status-private-box {
   display: block;
 }
 
@@ -532,6 +532,13 @@ a:active .facebook-status-time {
   background-image: -o-linear-gradient(top, #1879B1, #126698); 
   background-image: linear-gradient(top, #1879B1, #126698);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#1879B1', EndColorStr='#126698'); 
+}
+
+#facebook-status-edit .facebook-status-update .facebook-status-submit {
+  border-left: 4px solid #ddd;
+  -webkit-border-radius: 0px 0px 4px 4px; 
+  -moz-border-radius: 0px 0px 4px 4px; 
+  border-radius: 0px 0px 4px 4px; 
 }
 
 #edit-photo-icon, #edit-link-icon {
