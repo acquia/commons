@@ -1088,7 +1088,7 @@ function commons_event_views_default_views() {
       'expose' => array(
         'use_operator' => 0,
         'operator' => 'uid_1_op',
-        'identifier' => 'uid_1',
+        'identifier' => 'uid',
         'label' => 'Author',
         'optional' => 1,
         'remember' => 0,
@@ -1136,7 +1136,7 @@ function commons_event_views_default_views() {
       'exposed' => TRUE,
       'expose' => array(
         'operator' => '',
-        'identifier' => 'uid',
+        'identifier' => 'uid_1',
         'label' => 'My groups',
         'optional' => 1,
         'remember' => 0,
@@ -1147,7 +1147,7 @@ function commons_event_views_default_views() {
       'override' => array(
         'button' => 'Override',
       ),
-      'relationship' => 'none',
+      'relationship' => 'group_nid',
     ),
   ));
   $handler->override_option('access', array(
