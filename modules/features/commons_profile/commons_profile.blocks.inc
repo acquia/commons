@@ -110,6 +110,7 @@ function _commons_profile_image_links_block_view() {
       $actions = _user_relationships_ui_actions_between($user, $account);
       static $rids_exclude;
       if (empty($rids_exclude[$user->uid])) {
+        $rids_exclude[$user->uid] = array();
         $query = db_query("SELECT rid FROM {user_relationships} WHERE rtid = 1 AND requester_id != %d AND requestee_id = %d", $user->uid, $user->uid);
         while ($result = db_fetch_object($query)) {
           $rids_exclude[$user->uid][$result->rid] = $result->rid;
