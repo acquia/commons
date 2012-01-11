@@ -747,33 +747,40 @@ function commons_core_profile_redirect() {
 function _commons_core_check_group_sticky($node) {
   global $user;
   
-  // Only act if the node was toggled as sticky
+  // Only act if the node was toggled as sticky.
   if ($node->field_group_sticky[0]['value'] == 'Sticky') {
     $selected_groups = array();
     
-    // Gather checked group ids, if any
+    // Gather checked group ids, if any.
     if (isset($node->og_groups)) {
       foreach ($node->og_groups as $gid) {
-        // Capture only checked groups
+        // Capture only checked groups.
         if ($gid) {
           $selected_groups[] = $gid;
         }
       }
     }
-
-    // Check if any group options were checked
-    if (!empty($selected_groups)) {
-      // If inadequate permissions & roles, then check for group admin status in each group
-      if (!user_access('administer nodes') && !commons_core_is_community_manager($user)) {
-        foreach ($selected_groups as $gid) {
-          if (!og_is_group_admin(node_load($gid), $user)) {
-            form_set_error('og_groups', t('You can only make posts sticky for the groups that you are an admin for.')); 
+      
+    // Load the node as it is before this save attempt.
+    $old_node = node_load($node->nid);
+    
+    // Only continue with validation if the node is now becoming sticky.
+    if ($old_node->field_group_sticky[0]['value'] != 'Sticky') {
+      // Check if any group options were checked
+      if (!empty($selected_groups)) {
+        // If inadequate permissions & roles, then check for group admin status in each group.
+        if (!user_access('administer nodes') && !commons_core_is_community_manager($user)) {
+          foreach ($selected_groups as $gid) {
+            if (!og_is_group_admin(node_load($gid), $user)) {
+              form_set_error('og_groups', t('You can only make posts sticky for the groups that you are an admin for.')); 
+            }
           }
         }
       }
     }
-    else {
-      // No groups were selected
+    
+    // No groups were selected
+    if (empty($selected_groups)) {
       form_set_error('field_group_sticky', t('You must specify a group in order to make this post group sticky.')); 
     }
   }
