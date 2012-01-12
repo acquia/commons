@@ -145,6 +145,13 @@ function commons_wiki_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'remove_markup_default_wiki';
+  $strongarm->value = 1;
+
+  $export['remove_markup_default_wiki'] = $strongarm;
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'wikitools_404_type';
   $strongarm->value = array(
     'Link to creation' => 'Link to creation',

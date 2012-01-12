@@ -104,6 +104,12 @@ function commons_event_strongarm() {
   $strongarm->name = 'og_content_type_usage_event';
   $strongarm->value = 'group_post_standard';
   $export['og_content_type_usage_event'] = $strongarm;
-
+  
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'remove_markup_default_event';
+  $strongarm->value = 1;
+  $export['remove_markup_default_event'] = $strongarm;
   return $export;
 }

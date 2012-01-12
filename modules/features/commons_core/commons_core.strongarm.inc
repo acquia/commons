@@ -187,6 +187,27 @@ function commons_core_strongarm() {
   $strongarm->name = 'og_visibility';
   $strongarm->value = '2';
   $export['og_visibility'] = $strongarm;
+  
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'remove_markup_default_group';
+  $strongarm->value = 1;
+  $export['remove_markup_default_group'] = $strongarm;
+  
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'remove_markup_default_notice';
+  $strongarm->value = 1;
+  $export['remove_markup_default_notice'] = $strongarm;
+  
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'remove_markup_default_page';
+  $strongarm->value = 1;
+  $export['remove_markup_default_page'] = $strongarm;
 
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
