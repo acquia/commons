@@ -46,6 +46,14 @@ function commons_poll_user_default_permissions() {
     ),
   );
 
+  // Exported permission: edit field_poll_body
+  $permissions['edit field_poll_body'] = array(
+    'name' => 'edit field_poll_body',
+    'roles' => array(
+      '0' => 'authenticated user',
+    ),
+  );
+
   // Exported permission: edit own poll content
   $permissions['edit own poll content'] = array(
     'name' => 'edit own poll content',
@@ -59,6 +67,15 @@ function commons_poll_user_default_permissions() {
     'name' => 'inspect all votes',
     'roles' => array(
       '0' => 'authenticated user',
+    ),
+  );
+
+  // Exported permission: view field_poll_body
+  $permissions['view field_poll_body'] = array(
+    'name' => 'view field_poll_body',
+    'roles' => array(
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
     ),
   );
 
