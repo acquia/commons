@@ -56,7 +56,7 @@ projects[context_og][subdir] = "contrib"
 projects[context_og][version] = "3.0"
 
 projects[date][subdir] = "contrib"
-projects[date][version] = "2.7"
+
 
 projects[diff][subdir] = "contrib"
 projects[diff][download][type] = "git"
@@ -101,10 +101,10 @@ projects[imageapi][subdir] = "contrib"
 projects[imageapi][version] = "1.10"
 
 projects[imagecache][subdir] = "contrib"
-projects[imagecache][version] = "2.0-beta12"
+
 
 projects[imagecache_actions][subdir] = "contrib"
-projects[imagecache_actions][version] = "1.8"
+
 
 projects[imagecache_profiles][subdir] = "contrib"
 projects[imagecache_profiles][version] = "1.3"
@@ -113,7 +113,7 @@ projects[imagefield][subdir] = "contrib"
 projects[imagefield][version] = "3.10"
 
 projects[insert][subdir] = "contrib"
-projects[insert][version] = "1.1"
+
 
 projects[invite][subdir] = "contrib"
 projects[invite][version] = "2.0-beta3"
@@ -126,7 +126,7 @@ libraries[jquery_ui][download][url] = "http://jquery-ui.googlecode.com/files/jqu
 libraries[jquery_ui][directory_name] = "jquery.ui"
 
 projects[link][subdir] = "contrib"
-projects[link][version] = "2.9"
+
 
 projects[messaging][subdir] = "contrib"
 projects[messaging][version] = "2.4"
@@ -187,7 +187,7 @@ projects[og_features][subdir] = "contrib"
 projects[og_features][version] = "1.2"
 
 projects[og_invite_link][subdir] = "contrib"
-projects[og_invite_link][version] = "1.0"
+
 
 projects[og_statistics][subdir] = "contrib"
 projects[og_statistics][version] = "1.0-rc5"
@@ -201,7 +201,7 @@ projects[og_statistics][patch][] = "http://drupal.org/files/issues/og_statistics
 projects[og_statistics][patch][] = "http://drupal.org/files/issues/og_statistics-proper-determination-of-unapproved-1162928_0.patch"
 
 projects[og_subgroups][subdir] = "contrib"
-projects[og_subgroups][version] = "1.0-beta3"
+
 
 projects[password_policy][subdir] = "contrib"
 
@@ -350,7 +350,6 @@ projects[image][subdir] = "contrib"
 
 ; Themes:
 
-projects[fusion][version] = "1.12"
 projects[fusion][type] = "theme"
 
 
