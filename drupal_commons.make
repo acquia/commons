@@ -156,8 +156,8 @@ projects[og][patch][] = "http://drupal.org/files/issues/og_notifications-add-for
 ; http://drupal.org/node/1128492
 projects[og][patch][] = "http://drupal.org/files/issues/og_views-add-leave-group-field.patch"
 
-; http://drupal.org/node/793588
-projects[og][patch][] = "http://drupal.org/files/issues/793588-og_uid-add-index-3.patch"
+; http://drupal.org/node/793588#comment-5304624
+projects[og][patch][] = "http://drupal.org/files/add_uid_index_to_og_uid-793588-4-D6.patch"
 
 
 projects[og_aggregator][subdir] = "contrib"
