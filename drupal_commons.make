@@ -143,17 +143,12 @@ projects[notifications][subdir] = "contrib"
 projects[notifications][version] = "2.3"
 
 projects[og][subdir] = "contrib"
-projects[og][version] = "2.1"
-; http://drupal.org/node/881380
-projects[og][patch][] = "http://drupal.org/files/issues/og-DRUPAL-6--2.views-constants.0.patch"
+projects[og][version] = "2.2"
 
 ; OG patches in PATCHES.txt from Acquia Commons GitHub repo:
 
 ; http://drupal.org/node/1051258
 projects[og][patch][] = "http://drupal.org/files/issues/og_notifications-add-form-labels.patch"
-
-; http://drupal.org/node/333072#comment-5368430
-projects[og][patch][] = "http://drupal.org/files/og_views-fix-search-view-333072-2.patch"
 
 ; http://drupal.org/node/835030
 ;projects[og][patch][] = "http://drupal.org/files/issues/og_notifications-subscriptions-not-saving-835030.patch"
