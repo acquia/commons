@@ -126,7 +126,7 @@ function commons_profile_views_pre_view(&$view) {
     
       // Fetch the user's friends count
       //user_relationships_load isn't used because with 'user' option it would also return requestees matching $account->uid
-      $friends = db_result(db_query('SELECT count(DISTINCT rid) FROM {user_relationships} ur WHERE ur.requester_id = %d AND ur.approved = 1 and ur.rtid = 1', array($account->uid)));
+      $friends = db_result(db_query('SELECT count(rid) FROM {user_relationships} ur WHERE ur.requester_id = %d AND ur.approved = 1 and ur.rtid = 1', array($account->uid)));
             
       // Add a friend count to the block
       $title .= " ({$friends})";
