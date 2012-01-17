@@ -4373,6 +4373,20 @@ function commons_core_views_default_views() {
         'button' => 'Override',
       ),
     ),
+    'nid' => array(
+      'operator' => '=',
+      'value' => '',
+      'group' => '0',
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'id' => 'nid',
+      'table' => 'node_access',
+      'field' => 'nid',
+      'relationship' => 'nid',
+    ),
   ));
   $handler->override_option('access', array(
     'type' => 'perm',

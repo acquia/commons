@@ -11,10 +11,9 @@ function commons_wiki_views_default_views() {
   $view->name = 'content_wiki_page';
   $view->description = 'A global view of all site wikis';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('relationships', array(
@@ -290,8 +289,8 @@ function commons_wiki_views_default_views() {
       'link_to_taxonomy' => 1,
       'limit' => 0,
       'vids' => array(
-        '2' => 0,
-        '3' => 0,
+        2 => 0,
+        3 => 0,
       ),
       'exclude' => 0,
       'id' => 'tid',
@@ -451,7 +450,7 @@ function commons_wiki_views_default_views() {
       ),
       'type' => 'textfield',
       'limit' => TRUE,
-      'vid' => '2',
+      'vid' => '1',
       'id' => 'tid',
       'table' => 'term_node',
       'field' => 'tid',
@@ -621,10 +620,9 @@ function commons_wiki_views_default_views() {
   $view->name = 'group_block_wiki_latest';
   $view->description = 'The latest group wikis block';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('relationships', array(
@@ -882,10 +880,10 @@ function commons_wiki_views_default_views() {
       'field' => 'group_nid',
       'validate_user_argument_type' => 'uid',
       'validate_user_roles' => array(
-        '2' => 0,
-        '3' => 0,
-        '4' => 0,
-        '5' => 0,
+        2 => 0,
+        3 => 0,
+        4 => 0,
+        5 => 0,
       ),
       'override' => array(
         'button' => 'Override',
@@ -909,8 +907,8 @@ function commons_wiki_views_default_views() {
       'validate_argument_node_access' => 0,
       'validate_argument_nid_type' => 'nid',
       'validate_argument_vocabulary' => array(
-        '2' => 0,
-        '3' => 0,
+        2 => 0,
+        3 => 0,
       ),
       'validate_argument_type' => 'tid',
       'validate_argument_transform' => 0,
@@ -1021,10 +1019,9 @@ function commons_wiki_views_default_views() {
   $view->name = 'group_block_wiki_latest_comments';
   $view->description = 'The latest comments on group wikis';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'comments';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('relationships', array(
@@ -1220,10 +1217,10 @@ function commons_wiki_views_default_views() {
       'relationship' => 'nid',
       'validate_user_argument_type' => 'uid',
       'validate_user_roles' => array(
-        '2' => 0,
-        '3' => 0,
-        '4' => 0,
-        '5' => 0,
+        2 => 0,
+        3 => 0,
+        4 => 0,
+        5 => 0,
       ),
       'override' => array(
         'button' => 'Override',
@@ -1246,8 +1243,8 @@ function commons_wiki_views_default_views() {
       'validate_argument_node_access' => 0,
       'validate_argument_nid_type' => 'nid',
       'validate_argument_vocabulary' => array(
-        '2' => 0,
-        '3' => 0,
+        2 => 0,
+        3 => 0,
       ),
       'validate_argument_type' => 'tid',
       'validate_argument_transform' => 0,
@@ -1336,6 +1333,20 @@ function commons_wiki_views_default_views() {
         'button' => 'Override',
       ),
     ),
+    'nid' => array(
+      'operator' => '=',
+      'value' => '',
+      'group' => '0',
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'id' => 'nid',
+      'table' => 'node_access',
+      'field' => 'nid',
+      'relationship' => 'nid',
+    ),
   ));
   $handler->override_option('access', array(
     'type' => 'perm',
@@ -1375,10 +1386,9 @@ function commons_wiki_views_default_views() {
   $view->name = 'group_tab_wikis';
   $view->description = 'Show a tab for group wikis';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('relationships', array(
@@ -1662,8 +1672,8 @@ function commons_wiki_views_default_views() {
       'link_to_taxonomy' => 1,
       'limit' => 0,
       'vids' => array(
-        '2' => 0,
-        '3' => 0,
+        2 => 0,
+        3 => 0,
       ),
       'exclude' => 0,
       'id' => 'tid',
@@ -1723,10 +1733,10 @@ function commons_wiki_views_default_views() {
       'field' => 'group_nid',
       'validate_user_argument_type' => 'uid',
       'validate_user_roles' => array(
-        '2' => 0,
-        '3' => 0,
-        '4' => 0,
-        '5' => 0,
+        2 => 0,
+        3 => 0,
+        4 => 0,
+        5 => 0,
       ),
       'override' => array(
         'button' => 'Override',
@@ -1750,8 +1760,8 @@ function commons_wiki_views_default_views() {
       'validate_argument_node_access' => 0,
       'validate_argument_nid_type' => 'nid',
       'validate_argument_vocabulary' => array(
-        '2' => 0,
-        '3' => 0,
+        2 => 0,
+        3 => 0,
       ),
       'validate_argument_type' => 'tid',
       'validate_argument_transform' => 0,
@@ -1879,7 +1889,7 @@ function commons_wiki_views_default_views() {
       ),
       'type' => 'textfield',
       'limit' => TRUE,
-      'vid' => '2',
+      'vid' => '1',
       'id' => 'tid',
       'table' => 'term_node',
       'field' => 'tid',
@@ -1944,10 +1954,9 @@ function commons_wiki_views_default_views() {
   $view->name = 'wiki_latest_comments';
   $view->description = 'The latest comments on all wikis';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'comments';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('relationships', array(
@@ -2205,6 +2214,20 @@ function commons_wiki_views_default_views() {
       'override' => array(
         'button' => 'Override',
       ),
+    ),
+    'nid' => array(
+      'operator' => '=',
+      'value' => '',
+      'group' => '0',
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'id' => 'nid',
+      'table' => 'node_access',
+      'field' => 'nid',
+      'relationship' => 'nid',
     ),
   ));
   $handler->override_option('access', array(

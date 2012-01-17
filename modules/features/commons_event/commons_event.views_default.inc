@@ -11,10 +11,9 @@ function commons_event_views_default_views() {
   $view->name = 'content_event_calendar';
   $view->description = 'A multi-dimensional calendar view with back/next navigation.';
   $view->tag = 'Calendar';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('relationships', array(
@@ -132,8 +131,8 @@ function commons_event_views_default_views() {
       'validate_argument_node_access' => 0,
       'validate_argument_nid_type' => 'nid',
       'validate_argument_vocabulary' => array(
-        '2' => 0,
-        '1' => 0,
+        2 => 0,
+        1 => 0,
       ),
       'validate_argument_type' => 'tid',
       'validate_argument_php' => '',
@@ -143,8 +142,8 @@ function commons_event_views_default_views() {
       'default_options_div_prefix' => '',
       'validate_user_argument_type' => 'uid',
       'validate_user_roles' => array(
-        '2' => 0,
-        '3' => 0,
+        2 => 0,
+        3 => 0,
       ),
       'validate_argument_transform' => 0,
       'validate_user_restrict_roles' => 0,
@@ -290,7 +289,7 @@ function commons_event_views_default_views() {
     'name' => 'navigation',
   ));
   $handler->override_option('calendar_colors', array(
-    '0' => array(),
+    0 => array(),
   ));
   $handler->override_option('calendar_colors_vocabulary', array());
   $handler->override_option('calendar_colors_taxonomy', array());
@@ -577,10 +576,9 @@ function commons_event_views_default_views() {
   $view->name = 'content_event_page';
   $view->description = 'A global calendar for all site events';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('relationships', array(
@@ -952,8 +950,8 @@ function commons_event_views_default_views() {
       'link_to_taxonomy' => 1,
       'limit' => 0,
       'vids' => array(
-        '2' => 0,
-        '3' => 0,
+        2 => 0,
+        3 => 0,
       ),
       'exclude' => 0,
       'id' => 'tid',
@@ -1309,10 +1307,9 @@ function commons_event_views_default_views() {
   $view->name = 'event_latest';
   $view->description = 'Global recently created events';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('relationships', array(
@@ -1567,10 +1564,9 @@ function commons_event_views_default_views() {
   $view->name = 'event_latest_comments';
   $view->description = 'The latest comments on all events';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'comments';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('relationships', array(
@@ -1829,6 +1825,20 @@ function commons_event_views_default_views() {
         'button' => 'Override',
       ),
     ),
+    'nid' => array(
+      'operator' => '=',
+      'value' => '',
+      'group' => '0',
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'id' => 'nid',
+      'table' => 'node_access',
+      'field' => 'nid',
+      'relationship' => 'nid',
+    ),
   ));
   $handler->override_option('access', array(
     'type' => 'perm',
@@ -1868,10 +1878,9 @@ function commons_event_views_default_views() {
   $view->name = 'event_my_upcoming_events';
   $view->description = 'My upcoming events';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('fields', array(
@@ -2256,10 +2265,9 @@ function commons_event_views_default_views() {
   $view->name = 'event_past_events';
   $view->description = 'Past events';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('relationships', array(
@@ -2552,10 +2560,9 @@ function commons_event_views_default_views() {
   $view->name = 'group_block_events_latest';
   $view->description = 'Recently created events for groups';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('relationships', array(
@@ -2727,10 +2734,10 @@ function commons_event_views_default_views() {
       'field' => 'group_nid',
       'validate_user_argument_type' => 'uid',
       'validate_user_roles' => array(
-        '2' => 0,
-        '3' => 0,
-        '4' => 0,
-        '5' => 0,
+        2 => 0,
+        3 => 0,
+        4 => 0,
+        5 => 0,
       ),
       'override' => array(
         'button' => 'Override',
@@ -2754,8 +2761,8 @@ function commons_event_views_default_views() {
       'validate_argument_node_access' => 0,
       'validate_argument_nid_type' => 'nid',
       'validate_argument_vocabulary' => array(
-        '2' => 0,
-        '3' => 0,
+        2 => 0,
+        3 => 0,
       ),
       'validate_argument_type' => 'tid',
       'validate_argument_transform' => 0,
@@ -2848,10 +2855,9 @@ function commons_event_views_default_views() {
   $view->name = 'group_block_events_past';
   $view->description = 'Past events for groups';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('relationships', array(
@@ -3023,10 +3029,10 @@ function commons_event_views_default_views() {
       'field' => 'group_nid',
       'validate_user_argument_type' => 'uid',
       'validate_user_roles' => array(
-        '2' => 0,
-        '3' => 0,
-        '4' => 0,
-        '5' => 0,
+        2 => 0,
+        3 => 0,
+        4 => 0,
+        5 => 0,
       ),
       'override' => array(
         'button' => 'Override',
@@ -3050,8 +3056,8 @@ function commons_event_views_default_views() {
       'validate_argument_node_access' => 0,
       'validate_argument_nid_type' => 'nid',
       'validate_argument_vocabulary' => array(
-        '2' => 0,
-        '3' => 0,
+        2 => 0,
+        3 => 0,
       ),
       'validate_argument_type' => 'tid',
       'validate_argument_transform' => 0,
@@ -3182,10 +3188,9 @@ function commons_event_views_default_views() {
   $view->name = 'group_block_events_upcoming';
   $view->description = 'Upcoming events for groups';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('relationships', array(
@@ -3357,10 +3362,10 @@ function commons_event_views_default_views() {
       'field' => 'group_nid',
       'validate_user_argument_type' => 'uid',
       'validate_user_roles' => array(
-        '2' => 0,
-        '3' => 0,
-        '4' => 0,
-        '5' => 0,
+        2 => 0,
+        3 => 0,
+        4 => 0,
+        5 => 0,
       ),
       'override' => array(
         'button' => 'Override',
@@ -3384,8 +3389,8 @@ function commons_event_views_default_views() {
       'validate_argument_node_access' => 0,
       'validate_argument_nid_type' => 'nid',
       'validate_argument_vocabulary' => array(
-        '2' => 0,
-        '3' => 0,
+        2 => 0,
+        3 => 0,
       ),
       'validate_argument_type' => 'tid',
       'validate_argument_transform' => 0,
@@ -3515,10 +3520,9 @@ function commons_event_views_default_views() {
   $view->name = 'group_block_evt_latest_comments';
   $view->description = 'The latest comments on group events';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'comments';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('relationships', array(
@@ -3714,10 +3718,10 @@ function commons_event_views_default_views() {
       'relationship' => 'nid',
       'validate_user_argument_type' => 'uid',
       'validate_user_roles' => array(
-        '2' => 0,
-        '3' => 0,
-        '4' => 0,
-        '5' => 0,
+        2 => 0,
+        3 => 0,
+        4 => 0,
+        5 => 0,
       ),
       'override' => array(
         'button' => 'Override',
@@ -3740,8 +3744,8 @@ function commons_event_views_default_views() {
       'validate_argument_node_access' => 0,
       'validate_argument_nid_type' => 'nid',
       'validate_argument_vocabulary' => array(
-        '2' => 0,
-        '3' => 0,
+        2 => 0,
+        3 => 0,
       ),
       'validate_argument_type' => 'tid',
       'validate_argument_transform' => 0,
@@ -3830,6 +3834,20 @@ function commons_event_views_default_views() {
         'button' => 'Override',
       ),
     ),
+    'nid' => array(
+      'operator' => '=',
+      'value' => '',
+      'group' => '0',
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'id' => 'nid',
+      'table' => 'node_access',
+      'field' => 'nid',
+      'relationship' => 'nid',
+    ),
   ));
   $handler->override_option('access', array(
     'type' => 'perm',
@@ -3869,10 +3887,9 @@ function commons_event_views_default_views() {
   $view->name = 'group_event_calendar';
   $view->description = 'Show a tab for a group event calendar';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('fields', array(
@@ -3963,8 +3980,8 @@ function commons_event_views_default_views() {
       'field' => 'group_nid',
       'validate_user_argument_type' => 'uid',
       'validate_user_roles' => array(
-        '2' => 0,
-        '3' => 0,
+        2 => 0,
+        3 => 0,
       ),
       'relationship' => 'none',
       'default_options_div_prefix' => '',
@@ -3985,8 +4002,8 @@ function commons_event_views_default_views() {
       'validate_argument_node_access' => 0,
       'validate_argument_nid_type' => 'nid',
       'validate_argument_vocabulary' => array(
-        '2' => 0,
-        '1' => 0,
+        2 => 0,
+        1 => 0,
       ),
       'validate_argument_type' => 'tid',
       'validate_argument_transform' => 0,
@@ -4045,8 +4062,8 @@ function commons_event_views_default_views() {
       'validate_argument_node_access' => 0,
       'validate_argument_nid_type' => 'nid',
       'validate_argument_vocabulary' => array(
-        '2' => 0,
-        '1' => 0,
+        2 => 0,
+        1 => 0,
       ),
       'validate_argument_type' => 'tid',
       'validate_argument_php' => '',
@@ -4056,8 +4073,8 @@ function commons_event_views_default_views() {
       'default_options_div_prefix' => '',
       'validate_user_argument_type' => 'uid',
       'validate_user_roles' => array(
-        '2' => 0,
-        '3' => 0,
+        2 => 0,
+        3 => 0,
       ),
       'validate_argument_transform' => 0,
       'validate_user_restrict_roles' => 0,
@@ -4182,7 +4199,7 @@ function commons_event_views_default_views() {
     'name' => 'navigation',
   ));
   $handler->override_option('calendar_colors', array(
-    '0' => array(),
+    0 => array(),
   ));
   $handler->override_option('calendar_colors_vocabulary', array());
   $handler->override_option('calendar_colors_taxonomy', array());
@@ -4210,10 +4227,10 @@ function commons_event_views_default_views() {
       'field' => 'group_nid',
       'validate_user_argument_type' => 'uid',
       'validate_user_roles' => array(
-        '2' => 0,
-        '3' => 0,
-        '4' => 0,
-        '5' => 0,
+        2 => 0,
+        3 => 0,
+        4 => 0,
+        5 => 0,
       ),
       'relationship' => 'none',
       'default_options_div_prefix' => '',
@@ -4234,8 +4251,8 @@ function commons_event_views_default_views() {
       'validate_argument_node_access' => 0,
       'validate_argument_nid_type' => 'nid',
       'validate_argument_vocabulary' => array(
-        '2' => 0,
-        '3' => 0,
+        2 => 0,
+        3 => 0,
       ),
       'validate_argument_type' => 'tid',
       'validate_argument_transform' => 0,
@@ -4294,8 +4311,8 @@ function commons_event_views_default_views() {
       'validate_argument_node_access' => 0,
       'validate_argument_nid_type' => 'nid',
       'validate_argument_vocabulary' => array(
-        '2' => 0,
-        '1' => 0,
+        2 => 0,
+        1 => 0,
       ),
       'validate_argument_type' => 'tid',
       'validate_argument_php' => '',
@@ -4305,8 +4322,8 @@ function commons_event_views_default_views() {
       'default_options_div_prefix' => '',
       'validate_user_argument_type' => 'uid',
       'validate_user_roles' => array(
-        '2' => 0,
-        '3' => 0,
+        2 => 0,
+        3 => 0,
       ),
       'validate_argument_transform' => 0,
       'validate_user_restrict_roles' => 0,
@@ -4516,10 +4533,9 @@ function commons_event_views_default_views() {
   $view->name = 'group_tab_events';
   $view->description = 'Show a tab for group events';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('relationships', array(
@@ -4858,8 +4874,8 @@ function commons_event_views_default_views() {
       'link_to_taxonomy' => 1,
       'limit' => 0,
       'vids' => array(
-        '2' => 0,
-        '3' => 0,
+        2 => 0,
+        3 => 0,
       ),
       'exclude' => 0,
       'id' => 'tid',
@@ -4904,10 +4920,10 @@ function commons_event_views_default_views() {
       'field' => 'group_nid',
       'validate_user_argument_type' => 'uid',
       'validate_user_roles' => array(
-        '2' => 0,
-        '3' => 0,
-        '4' => 0,
-        '5' => 0,
+        2 => 0,
+        3 => 0,
+        4 => 0,
+        5 => 0,
       ),
       'override' => array(
         'button' => 'Override',
@@ -4931,8 +4947,8 @@ function commons_event_views_default_views() {
       'validate_argument_node_access' => 0,
       'validate_argument_nid_type' => 'nid',
       'validate_argument_vocabulary' => array(
-        '2' => 0,
-        '3' => 0,
+        2 => 0,
+        3 => 0,
       ),
       'validate_argument_type' => 'tid',
       'validate_argument_transform' => 0,
@@ -5157,10 +5173,9 @@ function commons_event_views_default_views() {
   $view->name = 'upcoming_events';
   $view->description = 'Upcoming events';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('fields', array(
