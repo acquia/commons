@@ -159,8 +159,8 @@ function drupal_commons_features_form(&$form_state, $url) {
   $form['acquia']['feature-acquia_network_subscription'] = array(
     '#type' => 'checkbox',
     '#title' => st('Acquia Network'),
-    '#default_value' => 0,
-    '#description' => st('Select this either if you wish to try a free trial of the Acquia Network or want to enter the keys for your existing Acquia Network subscription.'),
+    '#default_value' => 1,
+    '#description' => st('Leave this enabled to use the Acquia Network with your existing subscription or with a free 30 day trial.'),
   );
   
   // Redirect URL to remain inside the installation after submission
