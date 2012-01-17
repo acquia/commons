@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * Implementation of hook_install()
+ */
+function acquia_network_subscription_install() {
+  // Removed forced facets and allow strongarm to control this 
+  variable_del('apachesolr_enabled_facets');
+  
+  // Disable blocks enabled by acquia search
+  acquia_network_subscription_disable_blocks();
+}
+
+/**
+ * Disable blocks enabled by acquia search
+ * 
+ * We execute this so Context can handle our blocks
+ */
+function acquia_network_subscription_disable_blocks() {
+  db_query("UPDATE {blocks} SET status = 0 WHERE module LIKE '%%solr%%'");
+}
+
+/**
+ * Disable blocks set manually
+ */
+function acquia_network_subscription_update_6000() {
+  acquia_network_subscription_disable_blocks();
+}
