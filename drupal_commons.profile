@@ -194,7 +194,6 @@ function drupal_commons_config_taxonomy() {
     'relations' => '1',
     'tags' => '1',
     'module' => 'taxonomy',
-    'help' => st('Press enter or click !plus between tags.', array('!plus' => '\',\'')),
   );
   taxonomy_save_vocabulary($vocab); 
   
