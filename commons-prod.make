@@ -9,7 +9,4 @@ api = 2
 
 projects[drupal][version] = "6.22"
 
-projects[drupal_commons][type] = "profile"
-projects[drupal_commons][download][type] = "git"
-projects[drupal_commons][download][url] = "http://git.drupal.org/project/commons.git"
-projects[drupal_commons][download][revision] = "6.x-2.4"
+projects[commons][type] = "profile"
