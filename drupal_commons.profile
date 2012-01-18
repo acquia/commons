@@ -129,6 +129,14 @@ function drupal_commons_profile_tasks(&$task, $url) {
     
     // Feature installation operations
     $features = variable_get('commons_selected_features', array());
+    // The Acquia Network feature module is deprecated
+    // per http://drupal.org/node/1408284.
+    if (in_array('acquia_network_subscription', $features)) {
+      unset($features['feature-acquia_network_subscription']);
+      drupal_install_modules(array('acquia_agent', 'acquia_spi'));
+    }
+    
+
     foreach ($features as $feature) {
       $operations[] = array('features_install_modules', array(array($feature)));
     }
@@ -527,7 +535,6 @@ function drupal_commons_cleanup() {
     'commons_home' => array('page_manager_pages'),
     'commons_reputation' => array('menu_links'),
     'commons_admin' => array('user_permission'),
-    'acquia_network_subscription' => array('user_permission')
   );
   
   // Make sure we only try to revert features we've enabled
