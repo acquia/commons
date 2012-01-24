@@ -22,6 +22,42 @@ projects[ajax_load][download][url] = "http://git.drupal.org/project/ajax_load.gi
 projects[ajax_load][download][revision] = "8b0921252fcf599e7b15276bd815bcf81521eb27"
 projects[ajax_load][subdir] = "contrib"
 
+; Commons Answers dependencies:
+projects[answers][download][type] = "git"
+projects[answers][download][url] = "http://git.drupal.org/project/answers.git" 
+projects[answers][download][revision] = "6.x-2.x"
+projects[answers][subdir] ="contrib"
+
+; http://drupal.org/node/1411798#comment-5494504
+projects[answers][patch][] = "http://drupal.org/files/1411798-link-to-question-2.patch"
+
+; http://drupal.org/node/1414914
+projects[answers][patch][] = "http://drupal.org/files/answers-menu-links-overridden.patch"
+
+projects[vote_up_down][download][type] = "git"
+projects[vote_up_down][download][url] = "http://git.drupal.org/project/vote_up_down.git"
+projects[vote_up_down][download][revision] = "6.x-3.x"
+projects[vote_up_down][subdir] = "contrib"
+
+; http://drupal.org/node/1016804#comment-5463316
+projects[vote_up_down][patch][]  = "http://drupal.org/files/thumbs_up_down_widget-1016804-14.patch"
+; http://drupal.org/node/1398942#comment-5449496
+projects[vote_up_down][patch][] = "http://drupal.org/files/1398942-vote_up_down_node_widget_alter.patch"
+
+
+projects[views_attach][download][type] = "git"
+projects[views_attach][download][url] = "http://git.drupal.org/project/views_attach.git"
+projects[views_attach][download][revision] = 6.x-2.x
+projects[views_attach][subdir] = "contrib"
+
+; http://drupal.org/node/1409556#comment-5489412
+projects[views_attach][][patch][] = "http://drupal.org/files/1409556-attach-empty-b.patch"
+
+projects[votingapi][subdir] = "contrib"
+projects[nodereference_count][subdir] = "contrib"
+projects[nodereference_url][subdir] = "contrib"
+; End Commons Answers dependencies
+
 projects[better_formats][subdir] = "contrib"
 
 projects[boxes][subdir] = "contrib"

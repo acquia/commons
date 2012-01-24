@@ -33,6 +33,8 @@ function commons_roots_preprocess_node(&$vars) {
     $submitted .= t('Submitted by !name', array('!name' => theme('username', $author)));
     $submitted .= '</span>';
     
+    $vars['submitted_name'] = theme('username', $author);
+    
     // User points
     if ($author->uid && module_exists('userpoints')) {
       $points = userpoints_get_current_points($author->uid);

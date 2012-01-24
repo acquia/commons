@@ -535,10 +535,12 @@ function drupal_commons_cleanup() {
     'commons_home' => array('page_manager_pages'),
     'commons_reputation' => array('menu_links'),
     'commons_admin' => array('user_permission'),
+    'commons_answers' => array('user_permission'),
   );
   
   // Make sure we only try to revert features we've enabled
   $enabled = variable_get('commons_selected_features', array('commons_core'));
+  
   foreach ($revert as $feature => $value) {
     if (!in_array($feature, $enabled)) {
       unset($revert[$feature]);

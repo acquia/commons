@@ -70,6 +70,12 @@ function drupal_commons_features_form(&$form_state, $url) {
     '#default_value' => 1,
     '#description' => st('Used to create threaded topical discussions within a group.'),
   );
+  $form['content']['feature-commons_answers'] = array(
+    '#type' => 'checkbox',
+    '#title' => st('Answers'),
+    '#default_value' => 1,
+    '#description' => t('Allows users to submit questions and answers, and vote for the best answer.'),
+  );
   $form['content']['feature-commons_document'] = array(
     '#type' => 'checkbox',
     '#title' => st('Documents'),

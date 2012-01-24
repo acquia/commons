@@ -532,6 +532,9 @@ a:active .facebook-status-time {
   background-image: -o-linear-gradient(top, #1879B1, #126698); 
   background-image: linear-gradient(top, #1879B1, #126698);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#1879B1', EndColorStr='#126698'); 
+  -webkit-box-shadow: none; 
+  -moz-box-shadow: none; 
+  box-shadow: none;
 }
 
 #facebook-status-edit .facebook-status-update .facebook-status-submit {
@@ -547,6 +550,13 @@ a:active .facebook-status-time {
 
 .fbsmp-icon-list #edit-photo-icon, .fbsmp-icon-list #edit-link-icon {
   display: block;
+  -webkit-border-radius: 0; 
+  -moz-border-radius: 0; 
+  border-radius: 0; 
+  -webkit-box-shadow: none; 
+  -moz-box-shadow: none; 
+  box-shadow: none;
+  color: #69C;
 }
 
 .js .controls-expanded .facebook-status-private-box {
@@ -817,3 +827,124 @@ div.beat-item blockquote {
 }
 
 /* @end */
+
+/* commons answers */
+div.node-type-question h1.title {
+  margin-left: 0;
+}
+
+div.node-type-question p {
+  font-size: 1.3em;
+}
+
+div.node-type-question .view .view-content .views-row {
+  border-bottom: none;
+}
+
+.node-type-answer {
+  border: 1px solid #CCCCCC;
+  min-height: 115px;
+}
+
+html #content-content .node-type-answer .inner {
+  margin: 20px;
+}
+
+.node-type-answer .content {
+  padding-right: 130px;
+}
+
+.answer-by {
+  margin-top: -0.5em;
+  display: block;
+  font-size: 1em;
+}
+
+.answer-by a {
+  font-weight: bold;
+}
+
+.answer-by a.answer-time-date {
+  font-size: 0.9em;
+  font-weight: normal;
+}
+
+.vud-widget {
+  float: none;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  margin: 0;
+  font-size: 0.8em;
+}
+
+.num-of-answers {
+  font-weight: bold;
+}
+
+.node .content .meta img {
+  padding: 0;
+}
+
+#commons-answers-add-answer-form {
+  border: 1px solid #CCCCCC;
+  padding: 20px;
+  overflow: hidden;
+}
+
+#commons-answers-add-answer-form .form-item {
+  margin-top: 0;
+}
+
+#commons-answers-add-answer-form .form-item label {
+  font-size: 1.5em;
+  margin-bottom: 8px;
+}
+
+#commons-answers-add-answer-form .resizable-textarea {
+  width: 100%;
+}
+
+#commons-answers-add-answer-form #edit-submit {
+  display: block;
+  font-weight: bold;
+  padding: 8px;
+  float: right;
+  height: auto;
+}
+
+.node-type-answer .links {
+  margin-top: 15px;
+}
+
+html .node .inner .links .answer-add-comment {
+  background: none;
+  border: none;
+  padding: 0;
+  font-weight: bold;
+}
+
+html .node .inner .links .answer-add-comment a {
+  color: #58b;
+  font-size: 1.3em;
+}
+
+html .node .inner .links .answer-comment-count {
+  margin-left: 10px;
+  background: none;
+  border: none;
+  padding: 0;
+  border-left: 1px solid #999;
+  padding-left: 10px;
+  font-weight: bold;
+}
+
+html .node .inner .links .answer-comment-count a {
+  color: #58b;
+  font-size: 1.3em;
+}
+
+.view-all-questions fieldset legend {
+  font-size: 1.5em;
+  font-weight: bold;
+}
