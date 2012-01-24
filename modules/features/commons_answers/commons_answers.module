@@ -74,10 +74,10 @@ function commons_answers_views_default_views_alter(&$views) {
   // 'small' date format.
   foreach (array('all_questions', 'user_questions') as $view_id) {
     if (!empty($views[$view_id])) {
-      $views[$view_id]->default->display_options['fields']['created']['date_format'] = 'small';
-      $views[$view_id]->default->display_options['fields']['field_answer_count_value']['empty'] = '0';
-      $views[$view_id]->default->display_options['fields']['field_answer_count_value']['empty_zero'] = 0;
-      $views[$view_id]->default->display_options['fields']['field_answer_count_value']['hide_alter_empty'] = 0;
+      $views[$view_id]->display['default']->display_options['fields']['created']['date_format'] = 'small';
+      $views[$view_id]->display['default']->display_options['fields']['field_answer_count_value']['empty'] = '0';
+      $views[$view_id]->display['default']->display_options['fields']['field_answer_count_value']['empty_zero'] = 0;
+      $views[$view_id]->display['default']->display_options['fields']['field_answer_count_value']['hide_alter_empty'] = 0;
     }
   }
 }
