@@ -51,7 +51,7 @@ projects[views_attach][download][revision] = 6.x-2.x
 projects[views_attach][subdir] = "contrib"
 
 ; http://drupal.org/node/1409556#comment-5489412
-projects[views_attach][][patch][] = "http://drupal.org/files/1409556-attach-empty-b.patch"
+projects[views_attach][][patch] = "http://drupal.org/files/1409556-attach-empty-b.patch"
 
 projects[votingapi][subdir] = "contrib"
 projects[nodereference_count][subdir] = "contrib"
