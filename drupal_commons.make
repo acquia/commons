@@ -28,9 +28,6 @@ projects[answers][download][url] = "http://git.drupal.org/project/answers.git"
 projects[answers][download][revision] = "6.x-2.x"
 projects[answers][subdir] ="contrib"
 
-; http://drupal.org/node/1411798#comment-5507286
-projects[answers][patch][] = "http://drupal.org/files/1411798-link-to-question-c.patch"
-
 ; http://drupal.org/node/1414914
 projects[answers][patch][] = "http://drupal.org/files/answers-menu-links-overridden.patch"
 
