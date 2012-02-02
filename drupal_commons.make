@@ -50,7 +50,13 @@ projects[views_attach][subdir] = "contrib"
 ; http://drupal.org/node/1409556#comment-5489412
 projects[views_attach][][patch] = "http://drupal.org/files/1409556-attach-empty-b.patch"
 
+; Temporarily grab VotingAPI from the 6.x-2.x
+; branch per http://drupal.org/node/1418000
 projects[votingapi][subdir] = "contrib"
+projects[votingapi][download][type] = "git"
+projects[votingapi][download][url] = "http://git.drupal.org/project/votingapi.git"
+projects[votingapi][download][revision] = '6.x-2.x'
+
 projects[nodereference_count][subdir] = "contrib"
 projects[nodereference_url][subdir] = "contrib"
 ; End Commons Answers dependencies
