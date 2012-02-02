@@ -7,7 +7,7 @@
 core = 6.x
 api = 2
 
-projects[drupal][version] = "6.22"
+projects[drupal][version] = "6.24"
 
 projects[drupal_commons][type] = "profile"
 projects[drupal_commons][download][type] = "git"
