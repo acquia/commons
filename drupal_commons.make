@@ -38,9 +38,6 @@ projects[vote_up_down][subdir] = "contrib"
 
 ; http://drupal.org/node/1016804#comment-5463316
 projects[vote_up_down][patch][]  = "http://drupal.org/files/thumbs_up_down_widget-1016804-14.patch"
-; http://drupal.org/node/1398942#comment-5449496
-projects[vote_up_down][patch][] = "http://drupal.org/files/1398942-vote_up_down_node_widget_alter.patch"
-
 
 projects[views_attach][download][type] = "git"
 projects[views_attach][download][url] = "http://git.drupal.org/project/views_attach.git"
