@@ -20,13 +20,14 @@
   * the view is modified.
   */
   
-$time = strtotime($row->{$field->field_alias});
+date_default_timezone_set('UTC');
+$time = format_date(strtotime($row->{$field->field_alias}), 'custom', 'U');
 ?>
 <?php if ($variables['view']->plugin_name != 'calendar_style'): ?>
   <div class="dateblock">
-    <span class="month"><?php echo date('M', $time); ?></span>
-    <span class="day"><?php echo date('j', $time) ?></span>
-    <span class="year"><?php echo date('Y', $time) ?></span>
+    <span class="month"><?php echo format_date($time, 'custom', 'M'); ?></span>
+    <span class="day"><?php echo format_date($time, 'custom', 'j') ?></span>
+    <span class="year"><?php echo format_date($time, 'custom', 'Y') ?></span>
   </div>
 <?php else: ?>
   <?php print $output; ?>
