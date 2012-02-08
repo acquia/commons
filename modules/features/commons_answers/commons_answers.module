@@ -236,12 +236,11 @@ function commons_answers_add_answer_form(&$form_state, $question_nid) {
 }
 
 function commons_answers_add_answer_form_submit($form, &$form_state) { 
-  
   global $user;
   $account = $user;
   $question_nid = $form_state['values']['question_nid']; 
+  $question_node = node_load($question_nid);
   $answer = $form_state['values']['answer'];
-
   $node = new stdClass();
   // Provide a human-readable title for listings where the title
   // may be displayed, such as admin/content/node or a listing of answers.
@@ -263,8 +262,15 @@ function commons_answers_add_answer_form_submit($form, &$form_state) {
   $node->status = 1;
   $node->uid= $account->uid;
   $node->field_answer_question[0]['nid'] = $question_nid;
+  if (!empty($question_node->og_groups)) {
+    $node->og_groups = $question_node->og_groups;
+    $node->og_public = $question_node->og_public;  
+  }
   node_save($node);
-  $form_state['redirect'] = array('node/' . $question_nid, '', 'node-' . $node->nid);
+
+  if (!empty($node->nid)) {
+    $form_state['redirect'] = array('node/' . $question_nid, '', 'node-' . $node->nid);  
+  }
 }
 
 /**
