@@ -68,6 +68,11 @@
       <span class="submitted"><?php print $submitted ?></span>
     </div>
     <?php endif; ?>
+    
+    <?php if ($node->og_groups && $page) {
+        print '<div class="groups">'. t('Groups'). ': ';
+        print '<div class="links">'.  $og_links['view']. '</div></div>';
+    } ?>
 
     <div class="content clearfix">
     <?php if ($page == 0): ?>
@@ -75,16 +80,12 @@
     <?php endif; ?>
     <?php if ($terms): ?>
     <div class="terms">
-      <?php print $terms; ?>
+      Terms: <?php print $terms; ?>
     </div>
     <?php endif;?>
     
       <?php print $content ?>
     </div>
-<?php if ($node->og_groups && $page) {
-        print '<div class="groups">'. t('Groups'). ': ';
-        print '<div class="links">'.  $og_links['view']. '</div></div>';
- } ?>
 
     <?php if ($links && $page == 1): ?>
     <div class="links">

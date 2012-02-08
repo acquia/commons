@@ -187,27 +187,6 @@ function commons_core_strongarm() {
   $strongarm->name = 'og_visibility';
   $strongarm->value = '2';
   $export['og_visibility'] = $strongarm;
-  
-  $strongarm = new stdClass;
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'remove_markup_default_group';
-  $strongarm->value = 1;
-  $export['remove_markup_default_group'] = $strongarm;
-  
-  $strongarm = new stdClass;
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'remove_markup_default_notice';
-  $strongarm->value = 1;
-  $export['remove_markup_default_notice'] = $strongarm;
-  
-  $strongarm = new stdClass;
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'remove_markup_default_page';
-  $strongarm->value = 1;
-  $export['remove_markup_default_page'] = $strongarm;
 
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -222,6 +201,27 @@ function commons_core_strongarm() {
   $strongarm->name = 'quant_width';
   $strongarm->value = '425';
   $export['quant_width'] = $strongarm;
+
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'remove_markup_default_group';
+  $strongarm->value = 1;
+  $export['remove_markup_default_group'] = $strongarm;
+
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'remove_markup_default_notice';
+  $strongarm->value = 1;
+  $export['remove_markup_default_notice'] = $strongarm;
+
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'remove_markup_default_page';
+  $strongarm->value = 1;
+  $export['remove_markup_default_page'] = $strongarm;
 
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -287,6 +287,13 @@ function commons_core_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'user_pictures';
+  $strongarm->value = '1';
+  $export['user_pictures'] = $strongarm;
+
+  $strongarm = new stdClass;
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'user_picture_dimensions';
   $strongarm->value = '';
   $export['user_picture_dimensions'] = $strongarm;
@@ -318,13 +325,6 @@ function commons_core_strongarm() {
   $strongarm->name = 'user_picture_path';
   $strongarm->value = 'pictures';
   $export['user_picture_path'] = $strongarm;
-
-  $strongarm = new stdClass;
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'user_pictures';
-  $strongarm->value = '1';
-  $export['user_pictures'] = $strongarm;
 
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */

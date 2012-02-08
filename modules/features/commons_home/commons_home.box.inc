@@ -5,6 +5,7 @@
  */
 function commons_home_default_box() {
   $export = array();
+
   $box = new stdClass;
   $box->disabled = FALSE; /* Edit this to true to make a default box disabled initially */
   $box->api_version = 1;
@@ -32,7 +33,7 @@ Find a consultant to add new features, get support for what\'s there, or learn h
 <p><a class="intro-morebutton" href="http://commons.acquia.com/get-started" target="_blank">Learn more</a></p>',
     'format' => '2',
   );
-
   $export['homepage_info_box'] = $box;
+
   return $export;
 }

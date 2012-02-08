@@ -414,3 +414,24 @@ function commons_core_update_6015() {
   }
   return array();
 }
+
+/**
+** 
+** Enable dependencies and update configuration for the new Commons homepage
+** implemented at http://drupal.org/node/1411684.
+** 
+*/
+function commons_core_update_6016() {
+  // Enable new dependencies of the Commons core module.
+  module_enable(array('views_field_view', 'views_content_cache'));
+  // Don't intercept requests to frontpage and redirect them away.
+  // See http://drupal.org/node/1411684 for more.
+  variable_set('commons_status_streams_auth_frontpage', 0);
+  // We've increased the size of the user_picture_meta preset. Revert it.
+  features_revert(array('commons_core' => array('imagecache')));
+  // Flush the user_picture_meta cache so that the new preset takes effect.
+  // We could revert all features but prefer to do a targeted revert here so
+  // that folks can examine their configurations before reverting manually.
+  imagecache_preset_flush('user_picture_meta');
+  return array();
+}

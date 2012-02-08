@@ -231,6 +231,9 @@ projects[og_statistics][patch][] = "http://drupal.org/files/issues/og_statistics
 ; http://drupal.org/node/1162928#comment-4491270
 projects[og_statistics][patch][] = "http://drupal.org/files/issues/og_statistics-proper-determination-of-unapproved-1162928_0.patch"
 
+; http://drupal.org/node/1430246#comment-5566234
+projects[og_statistics][patch][] = "http://drupal.org/files/1430246-og_statistics-filter-group-posts-d.patch"
+
 projects[og_subgroups][subdir] = "contrib"
 
 
@@ -314,6 +317,15 @@ projects[views][subdir] = "contrib"
 
 ; http://drupal.org/node/402944#comment-4650020
 projects[views][patch][] = "http://drupal.org/files/issues/views-402944-31.patch"
+
+; The dev branch has a revised UI for determining cache criteria.
+projects[views_content_cache][subdir] = "contrib"
+projects[views_content_cache][download][type] = "git"
+projects[views_content_cache][download][url] = ""http://git.drupal.org/project/views_content_cache.git""
+projects[views_content_cache][download][version] = "6.x-2.x"
+
+projects[views_field_view][subdir] = "contrib"
+
 
 projects[views_slideshow][subdir] = "contrib"
 projects[views_slideshow][version] = "2.3"

@@ -66,9 +66,20 @@ function _commons_core_block_list() {
     'info' => t('Create a notice'),
     'cache' => BLOCK_CACHE_GLOBAL,
   );
+  $blocks['your_content'] = array(
+    'info' => t('Your content'),
+    'cache' => BLOCK_CACHE_GLOBAL,
+  );
   return $blocks;
 }
 
+function _commons_core_your_content_block_view() {
+  $block = array();
+  $block['subject'] = t('Your content');
+  $block['content'] = l(t('Your posts and comments'), 'mycontent/mine', array('attributes' => array('class' => 'my-content')));
+  $block['content'] .= l(t('Your bookmarks'), 'bookmarks', array('attributes' => array('class' => 'my-bookmarks')));
+  return $block;
+}
 /**
  * Display a block with global user statistics
  */

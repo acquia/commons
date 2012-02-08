@@ -5,6 +5,7 @@
  */
 function commons_core_context_default_contexts() {
   $export = array();
+
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
@@ -37,8 +38,8 @@ function commons_core_context_default_contexts() {
   // Included for use with string extractors like potx.
   t('Bookmarks');
   t('The bookmarks page');
-
   $export['bookmarks'] = $context;
+
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
@@ -82,8 +83,8 @@ function commons_core_context_default_contexts() {
   // Included for use with string extractors like potx.
   t('Show on every page');
   t('Sitewide');
-
   $export['global'] = $context;
+
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
@@ -118,8 +119,8 @@ function commons_core_context_default_contexts() {
   // Included for use with string extractors like potx.
   t('Group');
   t('The context of a group');
-
   $export['group-context'] = $context;
+
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
@@ -172,8 +173,8 @@ function commons_core_context_default_contexts() {
   // Included for use with string extractors like potx.
   t('Group');
   t('The group home page');
-
   $export['group-home'] = $context;
+
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
@@ -230,8 +231,8 @@ function commons_core_context_default_contexts() {
   // Translatables
   // Included for use with string extractors like potx.
   t('The list of available groups on the site');
-
   $export['group-listing'] = $context;
+
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
@@ -274,8 +275,8 @@ function commons_core_context_default_contexts() {
   // Translatables
   // Included for use with string extractors like potx.
   t('A listing of your groups');
-
   $export['group-listing-mine'] = $context;
+
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
@@ -321,7 +322,7 @@ function commons_core_context_default_contexts() {
   // Included for use with string extractors like potx.
   t('Notice listing and nodes');
   t('Notices');
-
   $export['notices'] = $context;
+
   return $export;
 }

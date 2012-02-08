@@ -222,8 +222,8 @@ function commons_core_imagecache_default_presets() {
           'module' => 'imagecache',
           'action' => 'imagecache_scale_and_crop',
           'data' => array(
-            'width' => '30',
-            'height' => '30',
+            'width' => '50',
+            'height' => '50',
           ),
         ),
       ),

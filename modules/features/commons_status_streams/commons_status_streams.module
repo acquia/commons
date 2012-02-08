@@ -28,7 +28,7 @@ function commons_status_streams_form_system_site_information_settings_alter(&$fo
     '#type' => 'checkbox',
     '#title' => t('Use the activity stream as the front page for authenticated users'),
     '#description' => t('If enabled, users who get to the front page by clicking your site name or logo or who are directed to the front page by Drupal will be redirected to their activity stream at <code>/stream</code> if they are logged in. Users can still visit the "normal" front page that anonymous users see by visiting its path directly or by clicking on the "Home" link in the menu.'),
-    '#default_value' => variable_get('commons_status_streams_auth_frontpage', 1),
+    '#default_value' => variable_get('commons_status_streams_auth_frontpage', 0),
   );
   $form['buttons']['#weight'] = 10;
 }
@@ -45,7 +45,7 @@ function commons_status_streams_facebook_status_link_alter(&$links, $status) {
  * Implementation of hook_init().
  */
 function commons_status_streams_init() {
-  if (variable_get('commons_status_streams_auth_frontpage', 1) && !user_is_anonymous()) {
+  if (variable_get('commons_status_streams_auth_frontpage', 0) && !user_is_anonymous()) {
     // example.com requested, but not example.com/home
     if (!str_replace(base_path(), '', $_SERVER['REQUEST_URI'])) {
       drupal_goto('stream');

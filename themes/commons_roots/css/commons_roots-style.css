@@ -277,12 +277,6 @@ form input.form-submit { /* Forced by Fusion */
 
 /* @group Sidebar blocks */
 
-.sidebar-last .block-views .views-row > span {
-  /* Some Views print the fields in spans instead of divs, so we need to 
-   * set these spans to display as block in order for the left margin to apply
-   * correctly. But we don't want all spans, just the children of the li */
-  display: block;
-}
 
 .sidebar-last .block-views .view-content .item-list ul li {
   background: none repeat scroll 0 0 transparent;
@@ -427,6 +421,60 @@ h1 + #content-tabs {
   padding: 9px 40px;
   font-weight:bold;
 } 
+
+#block-commons_core-your_content {
+  margin-bottom: 25px;  
+}
+
+a.my-content, a.my-bookmarks {
+  display: block;
+  clear: both;
+  font-weight: bold;
+  padding-top: 4px;
+}
+
+div #block-views-new_your_groups-block_1 {
+  padding: 0 15px;
+  width: auto;
+}
+
+#block-views-new_your_groups-block_1 .views-field-title {
+  font-size: 1.8em;
+  margin-bottom: 20px;
+}
+
+#block-views-new_your_groups-block_1 .views-field-view .view-new-groups-field .views-field-title {
+  font-size: 1.3em;
+  margin-bottom: 2px;
+}
+
+#block-views-new_your_groups-block_1 .views-field-name {
+  padding-right: 15px;
+}
+
+#block-views-new_your_groups-block_1 .views-field-created {
+  padding-right: 15px;
+}
+
+#block-views-new_your_groups-block_1 .block-title {
+  font-size: 2.4em;
+  color: #1E587C;
+  padding-bottom: 15px;
+}
+
+#block-views-new_your_groups-block_1 h3 {
+  font-size: 1.6em;
+  font-weight: normal;
+}
+#block-views-new_your_groups-block_1 .view-new-groups-field .item-list .views-row {
+  background: none;
+  padding-left: 0px;
+  border-bottom: none;
+}
+
+#block-views-new_your_groups-block_1 .view-new-groups-field ul {
+  border-bottom: 1px solid #ddd;
+}
 
 .intro-textblock {
   width: 30%;
@@ -709,7 +757,8 @@ div.beat-item blockquote {
 
 .submitted img.imagecache-user_picture_meta {
   float: left;
-  margin: 0.5em 1em 0 0;
+  margin: 0 1em 0 0;
+  border: 1px solid #999;
 }
 
 .submitted .user_badges {
@@ -729,7 +778,7 @@ div.beat-item blockquote {
 
 .view .view-content .views-row .views-field-picture {
   float: left;
-  margin: 0 10px 10px 0;
+  margin: 0 18px 10px 0;
 }
 
 .view-groups-main-listing .view-content .views-field-field-group-image-fid,

@@ -85,12 +85,24 @@ ul.krumo-node ul{
 .node .inner ul li,
 .panel-pane .inner ul li,
 .block .content ul li {
-  background: transparent url(../images/gray-arrow-right.png) no-repeat 3px 3px;
+  background: transparent url(../images/list-bullet-green.png) no-repeat left 7px;
   list-style-image: none;
   list-style: none;
   margin-bottom: 8px;
-  padding-left: 22px;
+  padding-left: 11px;
   text-indent: 0;
+}
+
+.node .inner .terms ul {
+  padding: 0;
+}
+
+.node .inner .terms ul li {
+  background: none;
+  padding: 0 5px 0 2px;
+}
+
+.node .inner .terms ul li.first {
 }
 
 .node .inner .links ul {
@@ -1090,16 +1102,25 @@ h2.title a:active {
   border-color: #eee;
 }
 
+
 .submitted {
   color: #777;
-  background: #f5f5f5;
-  border: 1px solid #ddd;
-  padding: 3px 7px 2px;
+  padding: 7px 7px 7px 11px;
+  margin-bottom: 10px;
   display: block;
   max-width: 700px;
-  -moz-border-radius: 7px;
-  -webkit-border-radius: 7px;
+  overflow: hidden;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  -webkit-box-shadow: 0px 0px 5px #ccc;
+  -moz-box-shadow: 0px 0px 5px #ccc;
+  box-shadow: 0px 0px 5px #ccc;
 }
+
 
 .submitted .userpoints-value {
   font-style: italic;
@@ -1128,6 +1149,10 @@ h2.title a:active {
 	clear: both;
 }
 
+.node .groups {
+  font-size: 95%;
+}
+
 ul.links li {
 	margin: 0;
 	padding: 0 6px 0 6px;
@@ -1141,6 +1166,11 @@ ul.links li {
 
 .links .last {
 	border: none;
+}
+
+.node ul.links li {
+  background: none;
+  padding: 0 5px 0 2px;
 }
 
 .node ul.links li.last {
@@ -1345,22 +1375,21 @@ h2.block-title {
 	text-transform: lowercase;
 }
 
-#content-tabs ul.primary li, #content-tabs ul.secondary li {
-  padding: 5px 3px;
-}
-
 #content-tabs ul.primary li a:link,
 #content-tabs ul.primary li a:visited {
-	-moz-border-radius: 99px;
-	-webkit-border-radius: 99px;
+	-moz-border-radius-topleft: 4px;
+	-moz-border-radius-topright: 4px;
+	-webkit-border-top-left-radius: 4px;
+	-webkit-border-top-right-radius: 4px;
 	background-color: #d1d1d1;
-	border-radius: 99px;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
 	border: 1px solid #d1d1d1;
 	color: #323232;
 	cursor: pointer;
 	float: left;/* LTR */
-  margin: 0;
-	padding: 6px 16px;
+margin: 0 2px -2px 0;
+	padding: 4px 6px 4px 6px;
 	text-decoration: none;
 	white-space: nowrap;
 }
@@ -1391,6 +1420,7 @@ h2.block-title {
 #content-tabs ul.primary li a.active:link,
 #content-tabs ul.primary li a.active:visited {
 	background-color: #fff;
+	border-bottom: 1px solid #fff;
 }
 
 #content-tabs ul.secondary li a.active:link,
@@ -3035,14 +3065,6 @@ table.views-view-grid td {
 	vertical-align: top;
 }
 
-.view-id-og_members_faces table.col-5 td {
-  width: 20%;
-}
-
-.view-group-block-members table.col-6 td {
-  width: 16.66%
-}
-
 /*views admin links */
 
 .views-admin-links {
@@ -3612,6 +3634,10 @@ margin: 0px 10px 10px;
 	display: block;
 	float: right;
 	margin-right: 10px;
+}
+
+.view-content .views-row .views-field-picture img {
+  border: 1px solid #999;
 }
 
 /*taxonomy pages list of nodes*/
