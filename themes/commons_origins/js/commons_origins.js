@@ -41,6 +41,6 @@ Drupal.behaviors.equal_height = function (context) {
     }
   });
   
-  elements.height(height);
+  elements.css('min-height',height + 'px');
 
 };
