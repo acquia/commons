@@ -214,7 +214,7 @@ projects[og_aggregator][version] = "1.4"
 
 
 projects[og_features][subdir] = "contrib"
-projects[og_features][version] = "1.2"
+projects[og_features][version] = "1.x-dev"
 
 projects[og_invite_link][subdir] = "contrib"
 
