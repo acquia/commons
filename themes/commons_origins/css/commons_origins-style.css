@@ -831,7 +831,6 @@ body .search-box .search-box-inner {
 }
 
 #main-content-inner {
-  display: table;
 }
 
 
@@ -845,10 +844,9 @@ body .search-box .search-box-inner {
 	overflow: hidden;
 }
 
-#sidebar-first.nested, #sidebar-last.nested, div.superfish {
+div.superfish {
   display: table-cell;
   vertical-align: top;
-  border-left: 1px solid #D0D0D0;
   -moz-box-shadow: inset 3px 0px 10px #cc5c55;
   -webkit-box-shadow: inset 3px 0px 10px #c5c5c5;
   box-shadow: inset 3px 0px 10px #c5c5c5;
@@ -857,6 +855,29 @@ body .search-box .search-box-inner {
   -moz-border-radius: 0px 8px 8px 0px; 
   border-radius: 0px 8px 8px 0px; 
   -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box;
+  background: #ffffff;
+  background: -moz-radial-gradient(center, ellipse cover,  #ffffff 0%, #f8f8f8 100%);
+  background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#ffffff), color-stop(100%,#f8f8f8));
+  background: -webkit-radial-gradient(center, ellipse cover,  #ffffff 0%,#f8f8f8 100%);
+  background: -o-radial-gradient(center, ellipse cover,  #ffffff 0%,#f8f8f8 100%);
+  background: -ms-radial-gradient(center, ellipse cover,  #ffffff 0%,#f8f8f8 100%);
+  background: radial-gradient(center, ellipse cover,  #ffffff 0%,#f8f8f8 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f8f8f8',GradientType=1 );
+}
+
+#sidebar-first.nested {
+  
+}
+
+#sidebar-last.nested {
+  vertical-align: top;
+  -webkit-border-radius: 0px 8px 8px 0px; 
+  -moz-border-radius: 0px 8px 8px 0px; 
+  border-radius: 0px 8px 8px 0px;
+  -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box;
+  -moz-box-shadow: inset 3px 0px 10px #cc5c55;
+  -webkit-box-shadow: inset 3px 0px 10px #c5c5c5;
+  box-shadow: inset 3px 0px 10px #c5c5c5;
   background: #ffffff;
   background: -moz-radial-gradient(center, ellipse cover,  #ffffff 0%, #f8f8f8 100%);
   background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#ffffff), color-stop(100%,#f8f8f8));
@@ -887,11 +908,9 @@ body .search-box .search-box-inner {
 
 /* Content Regions-------------------------------------------------------------- */
 
-.content-group {
+#content-group-inner {
   margin-top: 14px;
-  display: table-cell;
   vertical-align: top;
-  float: none;
 }
 
 .content-top {

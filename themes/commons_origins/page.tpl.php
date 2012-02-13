@@ -73,8 +73,10 @@
         </div><!-- /header-group -->
       </div><!-- /header-group-wrapper -->
       
-      <div class="breadcrumbs-wrapper <?php print $grid_width; ?>">
-        <?php print $pre_breadcrumb; ?>
+      <div class="breadcrumbs-wrapper full-width">
+        <div class="breadcrumbs-content row <?php print $grid_width; ?>">
+          <?php print $pre_breadcrumb; ?>
+        </div>
       </div>
      
 

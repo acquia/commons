@@ -28,3 +28,19 @@ Drupal.behaviors.user_dropdown = function (context) {
   }
 
 };
+
+Drupal.behaviors.equal_height = function (context) {
+  
+  var height = 0;
+  
+  var elements = $('#sidebar-first, #sidebar-last, #content-group');
+  
+  elements.each(function(){
+    if ($(this).height() > height) {
+      height = $(this).height();
+    }
+  });
+  
+  elements.height(height);
+
+};
