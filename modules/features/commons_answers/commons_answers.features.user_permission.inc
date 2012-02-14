@@ -32,6 +32,56 @@ function commons_answers_user_default_permissions() {
     ),
   );
 
+  // Exported permission: create answer content
+  $permissions['create answer content'] = array(
+    'name' => 'create answer content',
+    'roles' => array(
+      '0' => 'authenticated user',
+    ),
+  );
+
+  // Exported permission: create question content
+  $permissions['create question content'] = array(
+    'name' => 'create question content',
+    'roles' => array(
+      '0' => 'authenticated user',
+    ),
+  );
+
+  // Exported permission: delete any answer content
+  $permissions['delete any answer content'] = array(
+    'name' => 'delete any answer content',
+    'roles' => array(
+      '0' => 'content manager',
+    ),
+  );
+
+  // Exported permission: delete any question content
+  $permissions['delete any question content'] = array(
+    'name' => 'delete any question content',
+    'roles' => array(
+      '0' => 'content manager',
+    ),
+  );
+
+  // Exported permission: edit any answer content
+  $permissions['edit any answer content'] = array(
+    'name' => 'edit any answer content',
+    'roles' => array(
+      '0' => 'community manager',
+      '1' => 'content manager',
+    ),
+  );
+
+  // Exported permission: edit any question content
+  $permissions['edit any question content'] = array(
+    'name' => 'edit any question content',
+    'roles' => array(
+      '0' => 'community manager',
+      '1' => 'content manager',
+    ),
+  );
+
   // Exported permission: reset vote up/down votes
   $permissions['reset vote up/down votes'] = array(
     'name' => 'reset vote up/down votes',
