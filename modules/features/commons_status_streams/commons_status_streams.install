@@ -1,11 +1,6 @@
 <?php
 
 /**
- * @file
- *   (Un)installs the Commons Status Streams feature.
- */
-
-/**
  * Implementation of hook_install().
  *   Status streams provide a digest that deprecates the digest functionality
  *   by Notifications as well as the need to provide notifications on comments
@@ -19,4 +14,14 @@ function commons_status_streams_install() {
  */
 function commons_status_streams_uninstall() {
   variable_del('commons_status_streams_auth_frontpage');
+}
+
+/*
+* Set the group status stream context following updates to the group
+* landing pages (http://drupal.org/node/1419150).
+*/
+
+function commons_status_streams_update_6001() {
+  commons_status_streams_setup_group_context();
+  return array();
 }

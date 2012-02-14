@@ -44,6 +44,21 @@ function commons_origins_preprocess_page(&$variables) {
   $variables['pre_postscript_top'] = theme('grid_row', $variables['postscript_top'], 'postscript-top', 'nested');
   $variables['pre_postscript_bottom'] = theme('grid_row', $variables['postscript_bottom'], 'postscript-bottom', 'full-width', $variables['grid_width']);
   $variables['pre_footer'] = theme('grid_row', $variables['footer'] . $variables['footer_message'], 'footer', 'full-width', $variables['grid_width']);
+  
+  //show group description if group node present
+  if (isset($variables['node'])) {
+    $node = $variables['node'];
+    if (og_is_group_type($node->type)) {
+      $variables['group_header_image'] = content_format('field_group_image', $node->field_group_image[0], 'user_picture_meta_default');
+      
+      if (!empty($node->body)) {
+        $variables['group_header_text'] = check_markup($node->body, $node->format);  
+      }
+      else {
+        $variables['group_header_text'] = check_plain($node->og_description);
+      }
+    }
+  }  
 }
 
 function commons_origins_preprocess_node(&$variables) {

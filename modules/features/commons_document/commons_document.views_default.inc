@@ -2243,7 +2243,7 @@ function commons_document_views_default_views() {
   $handler = $view->new_display('page', 'Page', 'page_1');
   $handler->override_option('path', 'node/%/content/documents');
   $handler->override_option('menu', array(
-    'type' => 'tab',
+    'type' => 'none',
     'title' => 'Documents',
     'description' => 'View the group documents',
     'weight' => '10',

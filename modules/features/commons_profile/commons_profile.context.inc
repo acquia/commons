@@ -5,6 +5,7 @@
  */
 function commons_profile_context_default_contexts() {
   $export = array();
+
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
@@ -48,8 +49,8 @@ function commons_profile_context_default_contexts() {
   // Included for use with string extractors like potx.
   t('Profile');
   t('User profile when viewing your about page');
-
   $export['profile-about-me'] = $context;
+
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
@@ -93,8 +94,8 @@ function commons_profile_context_default_contexts() {
   // Included for use with string extractors like potx.
   t('Profile');
   t('User profile about page when viewing another user');
-
   $export['profile-about-other'] = $context;
+
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
@@ -141,8 +142,8 @@ function commons_profile_context_default_contexts() {
   // Included for use with string extractors like potx.
   t('Profile');
   t('User profile when viewing yourself');
-
   $export['profile-me'] = $context;
+
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
@@ -195,8 +196,8 @@ function commons_profile_context_default_contexts() {
   // Included for use with string extractors like potx.
   t('Profile');
   t('User profile when viewing another user');
-
   $export['profile-other'] = $context;
+
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
@@ -239,8 +240,8 @@ function commons_profile_context_default_contexts() {
   // Included for use with string extractors like potx.
   t('Profile');
   t('The user profile track page');
-
   $export['profile-track'] = $context;
+
   $context = new stdClass;
   $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
   $context->api_version = 3;
@@ -284,7 +285,7 @@ function commons_profile_context_default_contexts() {
   // Included for use with string extractors like potx.
   t('User browser');
   t('Various block to show on the user browser page');
-
   $export['user-browser'] = $context;
+
   return $export;
 }

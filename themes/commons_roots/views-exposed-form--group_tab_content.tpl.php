@@ -28,15 +28,14 @@ drupal_add_js('misc/collapse.js');
     print $q;
   ?>
 <?php endif; ?>
-<fieldset class="views-exposed-form collapsible collapsed">
-<legend><?php print(t("Filter")); ?></legend>
+<fieldset id="views-exposed-form-group-search" class="views-exposed-form">
   <div class="views-exposed-wrapper clear-block">
-  <div class="views-exposed-widgets clear-block">
+  <div class="views-exposed-widgets-group-search clear-block">
     <?php foreach($widgets as $id => $widget): ?>
-      <div class="views-exposed-widget">
+      <div class="views-exposed-widget-group-search views-widget-group-search-<?php print $id; ?>">
         <?php if (!empty($widget->label)): ?>
           <label for="<?php print $widget->id; ?>">
-            <?php print $widget->label; ?>
+            <?php print $widget->label;?>
           </label>
         <?php endif; ?>
         <?php if (!empty($widget->operator)): ?>

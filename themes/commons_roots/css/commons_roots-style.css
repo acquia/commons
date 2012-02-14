@@ -279,7 +279,6 @@ form input.form-submit { /* Forced by Fusion */
 
 
 .sidebar-last .block-views .view-content .item-list ul li {
-  background: none repeat scroll 0 0 transparent;
   border-bottom: 0 none;
   margin-bottom: 0;
   padding-bottom: 10px;
@@ -303,14 +302,6 @@ form input.form-submit { /* Forced by Fusion */
   height: auto; 
 }
 
-.sidebar-last .block-views .views-field-field-group-image-fid ~ *,
-.sidebar-last .block-views .views-field-picture ~ *,
-.sidebar-last .block-views .views-field-field-date-value ~ * {
-  /* This produces the left alignment of all text items after an image using
-   * the general sibling selector ~. When an image isn't present, the images
-   * shift to the left and no margin is applied. */
-  margin-left: 40px;
-}
 
 /* @group Sidebar block content adjustments */
 
@@ -353,7 +344,7 @@ form input.form-submit { /* Forced by Fusion */
 #content-tabs {
   background-color: transparent;
   float: none;
-  margin: 15px 0 22px; 
+  margin: 15px 0px 0px 0px; 
   padding: 0;
 }
 
@@ -434,7 +425,6 @@ a.my-content, a.my-bookmarks {
 }
 
 div #block-views-new_your_groups-block_1 {
-  padding: 0 15px;
   width: auto;
 }
 
@@ -996,4 +986,8 @@ html .node .inner .links .answer-comment-count a {
 .view-all-questions fieldset legend {
   font-size: 1.5em;
   font-weight: bold;
+}
+
+#views-exposed-form-group-search {
+    margin: 0px 0px 15px 0px;
 }

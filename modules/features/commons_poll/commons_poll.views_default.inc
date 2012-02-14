@@ -2346,7 +2346,7 @@ function commons_poll_views_default_views() {
   $handler = $view->new_display('page', 'Page', 'page_1');
   $handler->override_option('path', 'node/%/content/polls');
   $handler->override_option('menu', array(
-    'type' => 'tab',
+    'type' => 'none',
     'title' => 'Polls',
     'description' => 'View the group polls',
     'weight' => '12',

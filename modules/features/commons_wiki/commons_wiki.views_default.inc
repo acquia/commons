@@ -1933,7 +1933,7 @@ function commons_wiki_views_default_views() {
   $handler = $view->new_display('page', 'Page', 'page_1');
   $handler->override_option('path', 'node/%/content/wikis');
   $handler->override_option('menu', array(
-    'type' => 'tab',
+    'type' => 'none',
     'title' => 'Wikis',
     'description' => 'View the group wikis',
     'weight' => '8',

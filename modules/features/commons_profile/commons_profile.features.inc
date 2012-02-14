@@ -21,15 +21,3 @@ function commons_profile_views_api() {
     'api' => '2',
   );
 }
-
-/**
- * Implementation of hook_strongarm_alter().
- */
-function commons_profile_strongarm_alter(&$items) {
-  // Ensure that the user_terms vocabularies variable refers to
-  // the correct vid.
-  if (isset($items['user_terms_vocabs'])) {
-    $commons_tags_vid = variable_get('commons_tags_vid', 1);
-    $items['user_terms_vocabs']->value = array($commons_tags_vid => $commons_tags_vid);
-  }
-}

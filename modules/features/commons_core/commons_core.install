@@ -435,3 +435,15 @@ function commons_core_update_6016() {
   imagecache_preset_flush('user_picture_meta');
   return array();
 }
+
+/**
+* Revert Commons_core ImageCache presets and flush the 'group_images' preset,
+* which used to set an incorrect image attribute. This was removed as part of
+* the new group homepage implementation at http://drupal.org/node/1419150.
+*/
+
+function commons_core_update_6017() {
+  features_revert(array('commons_core' => array('imagecache')));
+  imagecache_preset_flush('group_images');
+  return array();
+}

@@ -17,9 +17,23 @@ function commons_status_streams_menu() {
     'weight' => 1,
     'menu_name' => 'primary-links',
   );
+  $items['node/%node/group-activity'] = array(
+    'title' => 'Group Activity',
+    'page callback' => 'commons_status_streams_stream_page',
+    'page arguments' => array(1),
+    'access callback' => 'commons_status_streams_group_activity_access',
+    'access arguments' => array(1),
+    'description' => 'An activity dashboard page.',
+    'file' => 'commons_status_streams.pages.inc',
+    'type' => MENU_LOCAL_TASK,
+    'weight' => -1,
+  );
   return $items;
 }
 
+function commons_status_streams_group_activity_access($node) {
+  return (og_is_group_type($node->type) && node_access('view', $node));
+}
 /**
  * Implementation of hook_form_FORM_ID_alter().
  */
@@ -62,6 +76,7 @@ function commons_status_streams_enable() {
     // Enable the integration between status streams and userpoints
     drupal_install_modules(array('fbss_userpoints'));
   }
+  commons_status_streams_setup_group_context();
 }
 
 /**
@@ -113,6 +128,21 @@ function commons_status_streams_views_default_views_alter(&$views) {
   }
 }
 
+/**
+*  The Facebook style statuses module has a context system that is separate
+*  from that of the Context module and is not exportable. We need to configure
+*  that context to use the Context module's group-home-status-box context to
+*  provide the group activity stream at node/%node/group-activity.
+*/
+function commons_status_streams_setup_group_context() {
+  $fbss_og_context = array();
+  $fbss_og_context['context'] = 'group-home-status-box';
+  $fbss_og_context['view'] = 'activity_log_stream';
+  $fbss_og_context['visibility'] = 3;
+  $fbss_og_context['type'] = 'og';
+  $fbss_og_context['weight'] = -50;
+  drupal_write_record('facebook_status_contexts', $fbss_og_context, 'type');
+}
 function commons_status_streams_disable_deprecated_notifications() {
   if (module_exists('notifications')) {
     // Remove all non-immediate nofications options.

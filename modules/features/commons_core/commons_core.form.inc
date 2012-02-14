@@ -96,6 +96,12 @@ function commons_core_form_views_exposed_form_alter(&$form, &$form_state) {
         }
       }
       break;
+    case 'views-exposed-form-group-tab-content-block-1':
+      $form['#action'] = url($_GET['q']);
+      // Modify the group filter form so that everything can fit in one line.
+      $form['keys']['#size'] = 25;
+      $form['uid']['#size'] = 20;
+      $form['uid']['#description'] = '';
   }
 }
 

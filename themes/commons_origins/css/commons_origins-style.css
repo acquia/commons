@@ -203,6 +203,34 @@ overflow: inherit;
 	position: relative;
 }
 
+.group-header {
+  font-size: 1.4em;  
+  font-style: italic;
+  padding: 10px 10px 10px 10px;
+  border-top: 4px solid #d1d1d1;
+  border-bottom: 4px solid #d1d1d1;
+  overflow: hidden;
+}
+
+.group-header img {
+  float: left;
+  margin: 1em;
+}
+
+.group-header-text {
+  margin-left: 90px;
+  font-family: Georgia, serif;
+  font-style: italic;
+
+}
+
+
+/**
+- container around text
+- floatimage left
+- margin-left: > image width;
+*/
+
 .header-group {
 	position: relative;
 	z-index: 10;
@@ -921,6 +949,10 @@ div.superfish {
 	
 }
 
+.content-inner-inner {
+padding: 12px 10px 0px 10px;  
+}
+
 .page-admin .content-inner-inner {
 	padding-bottom: 80px;
 	z-index: 0;
@@ -1396,6 +1428,9 @@ h2.block-title {
 	color: #00669F;
 }
 
+#content-tabs ul.primary, #content-tabs ul.secondary  {
+  border-bottom: none;
+}
 #content-tabs ul.secondary {
 	border-bottom: 1px solid #d1d1d1;
 	margin-top: 10px;
@@ -1403,7 +1438,7 @@ h2.block-title {
 }
 
 #content-tabs ul.primary li, #content-tabs ul.secondary li {
-  padding: 5px 3px;
+  padding: 5px 3px;;
 }
 
 #content-tabs ul.primary li a:link,
@@ -1469,6 +1504,9 @@ h2.block-title {
 	padding-bottom: 2px;
 }
 
+#content-tabs ul.tabs {
+  padding-left: 0px;
+}
 /* Pagers-------------------------------------------------------------- */
 
 ul.pager {
@@ -2647,6 +2685,74 @@ body#pid-dashboard h1.title, body#pid-dashboard #breadcrumbs {
   -webkit-border-radius: 0px;
 }
 
+.block#block-commons_core-group_create_content form {
+  padding-top: 10px;
+}
+.block#block-commons_core-group_create_content select {
+  font-size: 1.3em;
+  background: transparent;
+  width: 100%;
+  padding: 0;
+}
+
+.block#block-commons_core-group_create_content input {
+  font-size: 1.3em;
+  margin: 5px 24px 0 0;
+}
+
+
+#edit-submit-group-tab-content {
+  width: auto;
+  font-size: 14px;
+  color: #10354D;
+  background-color: #A5D3FE;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#A5D3FE), to(#7BC2F6));
+  background-image: -webkit-linear-gradient(top, #A5D3FE, #7BC2F6);
+  background-image: -moz-linear-gradient(top, #A5D3FE, #7BC2F6);
+  background-image: -ms-linear-gradient(top, #A5D3FE, #7BC2F6);
+  background-image: -o-linear-gradient(top, #A5D3FE, #7BC2F6);
+  background-image: linear-gradient(top, #A5D3FE, #7BC2F6);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+
+#block-views-group_tab_content-block_1 .view-content .item-list ul li {
+  padding: 14px 0px 20px 0px;
+}
+.view-group-tab-content .views-field-title {
+  font-size: 1.8em;
+  margin-bottom: 12px;
+}
+
+.view-group-tab-content span.views-field-name, .view-group-tab-content .views-field-tid, .view-group-tab-content .views-field-created {
+  font-size: 1.2em;
+}
+
+.view-group-tab-content .views-field-teaser {
+  font-size: 1.4em;
+}
+.sidebar-last .block {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.sidebar-last .block-views .view-content .item-list ul li {
+  border-bottom: 0 none;
+  margin-bottom: 0;
+  padding-bottom: 4px;
+  padding-left: 10px;
+  position: relative;
+  clear: both;
+}
+
+.view-id-group_block_events_upcoming .item-list ul li, #block-views-group_tab_content-block_1 .item-list ul li, #block-views-groups_my_groups-block_1 .item-list ul li, #block-views-groups_most_active-block_1 .item-list ul li, #block-views-groups_newest_groups-block_1 ul li{
+  background-image: none;
+}
+
+#block-views-deb9ea35a724682175e6d2c990e7009c .views-field-field-location-value {
+  font-weight: normal;
+}
 #block-commons_core-group_create_content form .form-item {
 	float: left;
 	margin-top: 0px;
@@ -2660,18 +2766,7 @@ body#pid-dashboard h1.title, body#pid-dashboard #breadcrumbs {
 }
 
 #block-commons_core-group_create_content form .form-item select {
-	width: 100%;
- 	padding: 0;
-}
 
-#block-commons_core-group_create_content form .form-submit {
-/* More tweaks to fix inheritance from roots problems
- * -jb
- */
-/*	float: left; */
-	height: 24px;
-	margin: 5px 24px 0 0;
-/*	width: 27%; */
 }
 
 /*My Groups list */

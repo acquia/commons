@@ -2234,7 +2234,7 @@ function commons_blog_views_default_views() {
   $handler = $view->new_display('page', 'Page', 'page_1');
   $handler->override_option('path', 'node/%/content/blogs');
   $handler->override_option('menu', array(
-    'type' => 'tab',
+    'type' => 'none',
     'title' => 'Blogs',
     'description' => 'View the group blog posts',
     'weight' => '4',

@@ -5,6 +5,7 @@
  */
 function commons_profile_strongarm() {
   $export = array();
+
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
@@ -12,7 +13,7 @@ function commons_profile_strongarm() {
   $strongarm->value = array(
     1 => '1',
   );
-
   $export['user_terms_vocabs'] = $strongarm;
+
   return $export;
 }

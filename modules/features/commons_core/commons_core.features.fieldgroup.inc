@@ -19,10 +19,6 @@ function commons_core_fieldgroup_default_groups() {
       ),
       'display' => array(
         'weight' => '3',
-        '4' => array(
-          'format' => 'fieldset',
-          'exclude' => 1,
-        ),
         'label' => 'hidden',
         'teaser' => array(
           'format' => 'simple',
@@ -31,6 +27,10 @@ function commons_core_fieldgroup_default_groups() {
         'full' => array(
           'format' => 'simple',
           'exclude' => 0,
+        ),
+        '4' => array(
+          'format' => 'fieldset',
+          'exclude' => 1,
         ),
         'description' => '',
         '2' => array(
@@ -63,10 +63,6 @@ function commons_core_fieldgroup_default_groups() {
       ),
       'display' => array(
         'weight' => '4',
-        '4' => array(
-          'format' => 'fieldset',
-          'exclude' => 1,
-        ),
         'label' => 'above',
         'teaser' => array(
           'format' => 'fieldset_collapsed',
@@ -75,6 +71,10 @@ function commons_core_fieldgroup_default_groups() {
         'full' => array(
           'format' => 'fieldset_collapsed',
           'exclude' => 0,
+        ),
+        '4' => array(
+          'format' => 'fieldset',
+          'exclude' => 1,
         ),
         'description' => '',
         '2' => array(

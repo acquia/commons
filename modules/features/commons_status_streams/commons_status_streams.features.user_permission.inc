@@ -149,7 +149,7 @@ function commons_status_streams_user_default_permissions() {
       '0' => 'authenticated user',
     ),
   );
-  
+
   // Exported permission: receive digests
   $permissions['receive digests'] = array(
     'name' => 'receive digests',

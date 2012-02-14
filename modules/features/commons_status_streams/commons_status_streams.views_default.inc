@@ -11,10 +11,9 @@ function commons_status_streams_views_default_views() {
   $view->name = 'stream_recent_content';
   $view->description = 'Show all of the recent content';
   $view->tag = '';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('relationships', array(
@@ -31,36 +30,6 @@ function commons_status_streams_views_default_views() {
     ),
   ));
   $handler->override_option('fields', array(
-    'picture' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'strip_tags' => 0,
-        'html' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'imagecache_preset' => 'user_picture_meta',
-      'exclude' => 0,
-      'id' => 'picture',
-      'table' => 'users',
-      'field' => 'picture',
-      'relationship' => 'none',
-    ),
     'type' => array(
       'label' => '',
       'alter' => array(
@@ -263,8 +232,10 @@ function commons_status_streams_views_default_views() {
         'text' => '',
         'make_link' => 0,
         'path' => '',
+        'absolute' => 0,
         'link_class' => '',
         'alt' => '',
+        'rel' => '',
         'prefix' => '',
         'suffix' => '',
         'target' => '',
@@ -279,17 +250,24 @@ function commons_status_streams_views_default_views() {
       'empty' => '0',
       'hide_empty' => 1,
       'empty_zero' => 1,
+      'hide_alter_empty' => 1,
       'set_precision' => FALSE,
       'precision' => 0,
       'decimal' => '.',
       'separator' => ',',
+      'format_plural' => 1,
+      'format_plural_singular' => '1 reply',
+      'format_plural_plural' => '@count replies',
       'prefix' => '',
-      'suffix' => ' replies',
+      'suffix' => '',
       'exclude' => 0,
       'id' => 'comment_count',
       'table' => 'node_comment_statistics',
       'field' => 'comment_count',
       'relationship' => 'none',
+      'override' => array(
+        'button' => 'Override',
+      ),
     ),
   ));
   $handler->override_option('sorts', array(
@@ -361,7 +339,7 @@ function commons_status_streams_views_default_views() {
   $handler->override_option('access', array(
     'type' => 'role',
     'role' => array(
-      '2' => 2,
+      2 => 2,
     ),
   ));
   $handler->override_option('cache', array(

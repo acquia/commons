@@ -120,7 +120,15 @@
                             <?php if ($title && !$is_front): ?>
                                 <h1 class="title"><?php print $title; ?></h1>
                                 <?php endif; ?>
-                            <?php print $pre_tabs; ?>
+                                <?php if  (!empty($group_header_image)): ?>
+                                  <div id="group-header" class="group-header">
+                                    <?php print $group_header_image; ?>
+                                    <div class="group-header-text">
+                                    <?php print $group_header_text;?>
+                                    </div> <!-- /group-header-text -->
+                                  </div><!-- /group-header -->
+                                <?php endif; ?>                                
+                                <?php print $pre_tabs; ?>
                                 <?php if ($content): ?>
                                 <div id="content-content" class="content-content">
                                   <?php print $content; ?>

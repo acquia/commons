@@ -3,11 +3,17 @@
 /**
  * The page callback for the main stream page
  */
-function commons_status_streams_stream_page() {
+function commons_status_streams_stream_page($group_node = NULL) {
   // Set the title
   // We do this here because we want the tab title and page title
-  // to do different
-  drupal_set_title(t('Activity stream'));
+  // to be different.
+  if (!empty($group_node->title)) {
+    drupal_set_title($group_node->title);
+  }
+  else {
+    drupal_set_title(t('Activity stream'));  
+  }
+  
   
   // If the user is anonymous, prompt them to login or register
   if (user_is_anonymous()) {

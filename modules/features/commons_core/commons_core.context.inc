@@ -108,7 +108,31 @@ function commons_core_context_default_contexts() {
           'module' => 'commons_core',
           'delta' => 'group_create_content',
           'region' => 'sidebar_last',
-          'weight' => -1,
+          'weight' => -5,
+        ),
+        'commons_core-group_menu' => array(
+          'module' => 'commons_core',
+          'delta' => 'group_menu',
+          'region' => 'sidebar_last',
+          'weight' => 1,
+        ),
+        'views-24dcb59a56254e5a470ee2f23590eed2' => array(
+          'module' => 'views',
+          'delta' => '24dcb59a56254e5a470ee2f23590eed2',
+          'region' => 'sidebar_last',
+          'weight' => 2,
+        ),
+        'views-bookmarks_your_group-block_1' => array(
+          'module' => 'views',
+          'delta' => 'bookmarks_your_group-block_1',
+          'region' => 'sidebar_last',
+          'weight' => 3,
+        ),
+        'commons_core-group_members' => array(
+          'module' => 'commons_core',
+          'delta' => 'group_members',
+          'region' => 'sidebar_last',
+          'weight' => 4,
         ),
       ),
     ),
@@ -140,32 +164,15 @@ function commons_core_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'commons_core-group_menu' => array(
-          'module' => 'commons_core',
-          'delta' => 'group_menu',
-          'region' => 'sidebar_last',
-          'weight' => 0,
-        ),
-        'commons_core-group_members' => array(
-          'module' => 'commons_core',
-          'delta' => 'group_members',
-          'region' => 'sidebar_last',
-          'weight' => 1,
-        ),
-        'views-24dcb59a56254e5a470ee2f23590eed2' => array(
+        'views-group_tab_content-block_1' => array(
           'module' => 'views',
-          'delta' => '24dcb59a56254e5a470ee2f23590eed2',
-          'region' => 'sidebar_last',
-          'weight' => 3,
-        ),
-        'views-group_node-block_1' => array(
-          'module' => 'views',
-          'delta' => 'group_node-block_1',
+          'delta' => 'group_tab_content-block_1',
           'region' => 'content',
           'weight' => 0,
         ),
       ),
     ),
+    'breadcrumb' => 'groups',
   );
   $context->condition_mode = 0;
 

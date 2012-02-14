@@ -16,7 +16,7 @@ function commons_core_node_page_view($node) {
     // Make context aware of the node view since hook_nodeapi() won't
     // be triggered here
     context_node_condition($node, 'view');
-    
+    drupal_set_title(check_plain($node->title));
     // Return nothing, allowing context to handle the content
     return '';
   }

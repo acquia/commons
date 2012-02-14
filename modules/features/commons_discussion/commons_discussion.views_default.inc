@@ -2232,7 +2232,7 @@ function commons_discussion_views_default_views() {
   $handler = $view->new_display('page', 'Page', 'page_1');
   $handler->override_option('path', 'node/%/content/discussions');
   $handler->override_option('menu', array(
-    'type' => 'tab',
+    'type' => 'none',
     'title' => 'Discussions',
     'description' => 'View the group discussions',
     'weight' => '6',

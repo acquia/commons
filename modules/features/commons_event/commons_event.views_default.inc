@@ -3501,7 +3501,7 @@ function commons_event_views_default_views() {
   $handler->override_option('footer_empty', 0);
   $handler->override_option('empty_format', '1');
   $handler->override_option('use_ajax', TRUE);
-  $handler->override_option('items_per_page', 3);
+  $handler->override_option('items_per_page', 5);
   $handler->override_option('use_pager', 'mini');
   $handler->override_option('pager_element', 41);
   $handler->override_option('distinct', 1);
@@ -5152,7 +5152,7 @@ function commons_event_views_default_views() {
   $handler = $view->new_display('page', 'Page', 'page_1');
   $handler->override_option('path', 'node/%/content/events');
   $handler->override_option('menu', array(
-    'type' => 'tab',
+    'type' => 'none',
     'title' => 'Events',
     'description' => 'View the group events',
     'weight' => '14',
