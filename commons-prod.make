@@ -11,6 +11,6 @@ projects[drupal][version] = "6.22"
 
 projects[drupal_commons][type] = "profile"
 projects[drupal_commons][download][type] = "file"
-projects[drupal_commons][download][url] = "http://ftp.drupal.org/files/projects/commons-6.x-2.4.tar.gz"
+projects[drupal_commons][download][url] = "http://ftp.drupal.org/files/projects/commons-6.x-2.5.tar.gz"
 
   
