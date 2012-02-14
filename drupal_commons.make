@@ -317,7 +317,7 @@ projects[views][patch][] = "http://drupal.org/files/issues/views-402944-31.patch
 projects[views_content_cache][subdir] = "contrib"
 projects[views_content_cache][download][type] = "git"
 projects[views_content_cache][download][url] = "http://git.drupal.org/project/views_content_cache.git"
-projects[views_content_cache][download][version] = "6.x-2.x"
+projects[views_content_cache][download][revision] = "6.x-2.x"
 
 projects[views_field_view][subdir] = "contrib"
 
