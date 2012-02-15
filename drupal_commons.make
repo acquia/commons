@@ -351,9 +351,6 @@ projects[activity_log][subdir] = "contrib"
 ; http://drupal.org/node/1306252#comment-5412352
 projects[activity_log][patch][] = "http://drupal.org/files/1306252-activity_log_node_og_dupes-b.patch"
 
-; http://drupal.org/node/1426576#comment-5596988
-projects[activity_log][patch][] = "http://drupal.org/files/1426576-activity-log-avatar-resize.patch"
-
 projects[digests][version] = 1.x-dev
 projects[digests][download][type] = "git"
 projects[digests][download][revision] = "6.x-1.x"
