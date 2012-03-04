@@ -36,9 +36,6 @@ projects[vote_up_down][download][type] = "git"
 projects[vote_up_down][download][revision] = "6.x-3.x"
 projects[vote_up_down][subdir] = "contrib"
 
-; http://drupal.org/node/1016804#comment-5463316
-projects[vote_up_down][patch][]  = "http://drupal.org/files/thumbs_up_down_widget-1016804-14.patch"
-
 projects[views_attach][version] = 2.x-dev
 projects[views_attach][download][type] = "git"
 projects[views_attach][download][revision] = 6.x-2.x
