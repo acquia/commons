@@ -28,9 +28,6 @@ projects[answers][download][type] = "git"
 projects[answers][download][revision] = "6.x-2.x"
 projects[answers][subdir] ="contrib"
 
-; http://drupal.org/node/1414914
-projects[answers][patch][] = "http://drupal.org/files/answers-menu-links-overridden.patch"
-
 projects[vote_up_down][version] = 3.x-dev
 projects[vote_up_down][download][type] = "git"
 projects[vote_up_down][download][revision] = "6.x-3.x"
