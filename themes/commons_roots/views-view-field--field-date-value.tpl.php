@@ -21,7 +21,7 @@
   */
   
 date_default_timezone_set('UTC');
-$time = format_date(strtotime($row->{$field->field_alias}), 'custom', 'U');
+$time = strtotime($row->{$field->field_alias});
 ?>
 <?php if ($variables['view']->plugin_name != 'calendar_style'): ?>
   <div class="dateblock">
