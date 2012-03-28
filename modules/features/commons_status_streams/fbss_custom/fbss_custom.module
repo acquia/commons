@@ -24,9 +24,12 @@ function fbss_custom_form_facebook_status_box_alter(&$form, $form_state) {
   $form['fbsmp']['photo_icon']['#value'] = 'Photo';
   $form['fbsmp']['photo_icon']['#attributes']['class'] = $form['fbsmp']['photo_icon']['#attributes']['class'] . ' button';
   
-  // remove the tool-tips
+  // Remove the tool tips provided by FBSMP since Commons uses button text
+  // rather than images, making the tool tips redundant.
   foreach (fbsmp_get_plugins() as $key => $info) {
     $name = $info['name'] ? $info['name'] : $key;
-    $form['fbsmp'][$key .'_icon']['#suffix'] = '</div>';
+    if (!empty($form['fbsmp'][$key .'_icon']['#suffix'])) {
+      $form['fbsmp'][$key .'_icon']['#suffix'] = '</div>';
+    }
   }
 }
