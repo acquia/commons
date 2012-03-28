@@ -58,7 +58,6 @@ projects[boxes][subdir] = "contrib"
 projects[boxes][version] = "1.0"
 
 projects[ctools][subdir] = "contrib"
-projects[ctools][version] = "1.8"
 
 projects[calendar][subdir] = "contrib"
 projects[calendar][version] = "2.4"
@@ -172,22 +171,15 @@ projects[notifications][subdir] = "contrib"
 projects[notifications][version] = "2.3"
 
 projects[og][subdir] = "contrib"
-projects[og][version] = "2.2"
+projects[og][version] = "2.3"
 
 ; OG patches in PATCHES.txt from Acquia Commons GitHub repo:
-
-; http://drupal.org/node/1051258
-projects[og][patch][] = "http://drupal.org/files/issues/og_notifications-add-form-labels.patch"
 
 ; http://drupal.org/node/835030
 ;projects[og][patch][] = "http://drupal.org/files/issues/og_notifications-subscriptions-not-saving-835030.patch"
 
 ; http://drupal.org/node/1128492
 projects[og][patch][] = "http://drupal.org/files/issues/og_views-add-leave-group-field.patch"
-
-; http://drupal.org/node/793588#comment-5304624
-projects[og][patch][] = "http://drupal.org/files/add_uid_index_to_og_uid-793588-4-D6.patch"
-
 
 projects[og_aggregator][subdir] = "contrib"
 projects[og_aggregator][version] = "1.4"
