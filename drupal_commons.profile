@@ -502,10 +502,6 @@ function drupal_commons_cleanup() {
   
   // Rebuild node types
   node_types_rebuild();
-
-  // Rebuild Activity Log templates
-  module_load_include('module', 'activity_log');
-  _activity_log_rebuild_templates();
   
   // Clear drupal message queue for non-warning/errors
   drupal_get_messages('status', TRUE);
@@ -553,7 +549,8 @@ function drupal_commons_cleanup() {
   
   // Create a test group which contains a node
   drupal_commons_create_group();
-  
+  // Rebuild Activity Log templates.
+  activity_log_rebuild_everything();
   // Remove the feature choices
   variable_del('commons_selected_features');
   
