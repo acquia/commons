@@ -55,7 +55,6 @@ projects[nodereference_url][subdir] = "contrib"
 projects[better_formats][subdir] = "contrib"
 
 projects[boxes][subdir] = "contrib"
-projects[boxes][version] = "1.0"
 
 projects[ctools][subdir] = "contrib"
 
@@ -200,7 +199,6 @@ projects[og_aggregator][version] = "1.4"
 
 
 projects[og_features][subdir] = "contrib"
-projects[og_features][version] = "1.x-dev"
 
 projects[og_invite_link][subdir] = "contrib"
 
@@ -309,7 +307,6 @@ projects[views_field_view][subdir] = "contrib"
 
 
 projects[views_slideshow][subdir] = "contrib"
-projects[views_slideshow][version] = "2.3"
 
 projects[wikitools][subdir] = "contrib"
 projects[wikitools][version] = "1.3"
@@ -375,5 +372,3 @@ projects[image][subdir] = "contrib"
 ; Themes:
 
 projects[fusion][type] = "theme"
-
-
