@@ -633,10 +633,8 @@ function commons_core_is_community_manager($user = NULL) {
  */
 function commons_core_set_breadcrumb($path) {
   $breadcrumb = array();
-  
   // Break the path into pieces
   $path = explode('/', $path);
-  
   switch ($path[0]) {
     case 'taxonomy':
       $breadcrumb[] = l(t('Tags'), 'tagadelic');
@@ -674,10 +672,12 @@ function commons_core_set_breadcrumb($path) {
     case 'node':
       if (isset($path[1]) && is_numeric($path[1])) {
         if ($node = menu_get_object('node')) {
-          // Make 'Community' the active menu item.
-          $item = menu_get_item();
-          $item['href'] = 'community';
-          menu_set_item(NULL, $item);
+          if (!empty($node->og_groups)) {
+            // Make 'Community' the active menu item.
+            $item = menu_get_item();
+            $item['href'] = 'community';
+            menu_set_item(NULL, $item);
+          }
           if (og_is_group_type($node->type)) {
             $breadcrumb[] = l(t('Groups'), 'groups');
           }
@@ -721,7 +721,6 @@ function commons_core_set_breadcrumb($path) {
   if (!empty($breadcrumb)) {
     // If so, add a frontpage link to the beginning
     array_unshift($breadcrumb, l(t('Home'), '<front>'));
-    
     // And set them
     drupal_set_breadcrumb($breadcrumb);
   }
