@@ -306,7 +306,7 @@ projects[views_content_cache][download][revision] = "6.x-2.x"
 projects[views_field_view][subdir] = "contrib"
 
 projects[views_slideshow][subdir] = "contrib"
-projects[views_slideshow][version] = "6.x-2.4"
+projects[views_slideshow][version] = "2.4"
 
 projects[wikitools][subdir] = "contrib"
 projects[wikitools][version] = "1.3"
