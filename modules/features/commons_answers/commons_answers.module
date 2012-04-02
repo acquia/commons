@@ -34,8 +34,10 @@ function commons_answers_strongarm_alter(&$items) {
  * Implementation of hook_vud_node_widget_alter().
  */
 function commons_answers_vud_node_widget_alter(&$widget, $node) {
-  // Selectively alter the thumbs widget to use our green/red up/down arrows.
+  // Use the thumbs widget for the Anwser content type
+  // and alter the widget to use Commons' green/red up/down arrows.
   if ($node->type == 'answer') {
+    $widget = 'thumbs';
     drupal_add_css(drupal_get_path('module', 'commons_answers') . '/css/commons_answers.css', 'theme');
   }
 }
