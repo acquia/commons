@@ -13,8 +13,6 @@ projects[admin][version] = "2.0"
 projects[acquia_connector][subdir] = "acquia"
 
 projects[acquia_search][type] = "module"
-projects[acquia_search][download][type] = "get"
-projects[acquia_search][download][url] = "http://network.acquia.com/files/downloads/acquia-search-current.tar.gz"
 projects[acquia_search][subdir] = "acquia"
 
 projects[ajax_load][version] = 1.x-dev
