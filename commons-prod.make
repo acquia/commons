@@ -1,4 +1,4 @@
-; This Drush make script assembles a development version of the Acquia Commons distribution.
+; This Drush make script assembles a development version of the Drupal Commons distribution.
 ; To package Commons using this script, install Drush make (http://drupal.org/project/drush_make).
 ; Packaging with the --working-copy flag is recommended for developers since
 ; it reduces the effort necessary to roll a patch against Commons components
