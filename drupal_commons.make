@@ -219,10 +219,11 @@ projects[password_policy][subdir] = "contrib"
 
 projects[pathauto][subdir] = "contrib"
 
-projects[quant][version] = 1.x-dev
-projects[quant][download][type] = "git"
-projects[quant][download][revision] = "2d204b2"
 projects[quant][subdir] = "contrib"
+projects[quant][download][type] = "git"
+projects[quant][version] = 1.x-dev
+
+
 
 projects[rules][subdir] = "contrib"
 projects[rules][version] = "1.4"
