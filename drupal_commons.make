@@ -155,6 +155,9 @@ projects[messaging][version] = "2.4"
 
 projects[mimemail][subdir] = "contrib"
 
+; http://drupal.org/node/1128354#comment-4783142
+projects[mimemail][patch][] = "http://drupal.org/files/issues/mimemail_1128354_03.patch"
+
 ; Historically Commons placed Mollom in the Acquia subdirectory.
 ; Leaving it there to simplify the upgrade process.
 
