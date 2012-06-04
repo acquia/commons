@@ -88,6 +88,8 @@ projects[diff][subdir] = "contrib"
 projects[diff][download][type] = "git"
 projects[diff][download][revision] = "6.x-2.x"
 
+projects[tagging][subdir] = "contrib"
+
 projects[editablefields][subdir] = "contrib"
 projects[editablefields][version] = "2.0"
 
@@ -283,8 +285,6 @@ projects[userpoints_nc][patch][] = "http://drupal.org/files/issues/userpoints_nc
 
 projects[userpoints_user_picture][subdir] = "contrib"
 projects[userpoints_user_picture][version] = "1.2"
-; http://drupal.org/node/1075668#comment-5926324
-projects[userpoints_user_picture][patch][] = "http://drupal.org/files/userpoints_user_picture_undefined_index_fix_1075668_7.patch"
 
 projects[vertical_tabs][subdir] = "contrib"
 
