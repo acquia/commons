@@ -88,8 +88,6 @@ projects[diff][subdir] = "contrib"
 projects[diff][download][type] = "git"
 projects[diff][download][revision] = "6.x-2.x"
 
-projects[tagging][subdir] = "contrib"
-
 projects[editablefields][subdir] = "contrib"
 projects[editablefields][version] = "2.0"
 

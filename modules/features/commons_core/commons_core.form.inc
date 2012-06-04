@@ -106,25 +106,6 @@ function commons_core_form_views_exposed_form_alter(&$form, &$form_state) {
 }
 
 /**
- * Implementation of hook_form_FORM_ID_alter()
- * 
- * Alter the Tagging admin settings form
- */
-function commons_core_form_tagging_admin_settings_alter(&$form, &$form_state) {
-  // Remove checkbox
-  unset($form['tagging_show_suggestion_example']);
-  
-  // Add a field to supply static suggestions
-  $form['commons_tag_suggestions'] = array(
-    '#type' => 'textarea',
-    '#title' => t('Static tag suggestions'),
-    '#description' => t('Enter a comma-separated list of terms that will show up as tag suggestions when creating content items.'),
-    '#weight' => -5,
-    '#default_value' => variable_get('commons_tag_suggestions', ''),
-  );
-}
-
-/**
  * Alter a node form
  */
 function commons_core_node_form_alter(&$form, &$form_state) {

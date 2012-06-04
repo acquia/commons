@@ -245,15 +245,6 @@ function commons_core_theme() {
 **/
 function commons_core_strongarm_alter(&$items) {
   $commons_tags_vid = variable_get('commons_tags_vid', 1);
-  // If these variables are set but the Commons tags vid isn't 1,
-  // changing the value isn't sufficient: we need to 
-  // create a different variable for each one.
-  if (isset($items['tagging_inject_1']) && $commons_tags_vid != 1) {
-    $new_item = $items['tagging_inject_1'];
-    unset($items['tagging_inject_1']);
-    $new_item->name = 'tagging_inject_' . $commons_tags_vid;
-    $items['tagging_inject_' . $commons_tags_vid] = $new_item;
-  }
   if (isset($items['tagadelic_block_tags_1']) && $commons_tags_vid !=1) {
     $new_item = $items['tagadelic_block_tags_1'];
     unset($items['tagadelic_block_tags_1']);
@@ -389,24 +380,6 @@ function commons_core_field_access($op, $field, $account = NULL, $node = NULL) {
   }
 }
 
-/**
- * Implementation of hook_tagging_suggestions()
- */
-function commons_core_tagging_suggestions($vid, $node) {
-  $suggestions = array();
-  
-  // Check if there are suggestions stored
-  if ($tags = variable_get('commons_tag_suggestions', '')) {
-    $tags = array_reverse(explode(',', $tags));
-    foreach ($tags as $tag) {
-      $suggestions[] = array(
-        '#name' => trim($tag),
-      );
-    }
-  }
-
-  return $suggestions;
-}
 
 /**
  * Implementation of hook_user_relationships_remove_link_alter().
