@@ -973,6 +973,194 @@ function commons_core_views_default_views() {
 
   $views[$view->name] = $view;
 
+  // Exported view: group_links
+  $view = new view;
+  $view->name = 'group_links';
+  $view->description = 'Links specified by group admins as being valuable to the group.';
+  $view->tag = '';
+  $view->base_table = 'node';
+  $view->core = 6;
+  $view->api_version = '2';
+  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+  $handler = $view->new_display('default', 'Defaults', 'default');
+  $handler->override_option('fields', array(
+    'field_grouplink_url' => array(
+      'label' => '',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'absolute' => 0,
+        'link_class' => '',
+        'alt' => '',
+        'rel' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => 'This group has no group-specific links. ',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'hide_alter_empty' => 0,
+      'link_to_node' => 0,
+      'label_type' => 'none',
+      'format' => 'default',
+      'multiple' => array(
+        'group' => 0,
+        'multiple_number' => '',
+        'multiple_from' => '',
+        'multiple_reversed' => 0,
+      ),
+      'exclude' => 0,
+      'id' => 'field_grouplink_url',
+      'table' => 'node_data_field_grouplink',
+      'field' => 'field_grouplink_url',
+      'relationship' => 'none',
+      'override' => array(
+        'button' => 'Override',
+      ),
+    ),
+  ));
+  $handler->override_option('arguments', array(
+    'nid' => array(
+      'default_action' => 'default',
+      'style_plugin' => 'default_summary',
+      'style_options' => array(),
+      'wildcard' => 'all',
+      'wildcard_substitution' => 'All',
+      'title' => 'Group links',
+      'breadcrumb' => '',
+      'default_argument_type' => 'og_group_node',
+      'default_argument' => '',
+      'validate_type' => 'none',
+      'validate_fail' => 'not found',
+      'break_phrase' => 0,
+      'not' => 0,
+      'id' => 'nid',
+      'table' => 'node',
+      'field' => 'nid',
+      'validate_user_argument_type' => 'uid',
+      'validate_user_roles' => array(
+        2 => 0,
+        16 => 0,
+        6 => 0,
+        7 => 0,
+        8 => 0,
+        5 => 0,
+        11 => 0,
+        12 => 0,
+        26 => 0,
+        9 => 0,
+        21 => 0,
+      ),
+      'relationship' => 'none',
+      'default_options_div_prefix' => '',
+      'default_taxonomy_tid_term_page' => 0,
+      'default_taxonomy_tid_node' => 0,
+      'default_taxonomy_tid_limit' => 0,
+      'default_taxonomy_tid_vids' => array(
+        3 => 0,
+        4 => 0,
+        11 => 0,
+        5 => 0,
+        2 => 0,
+        6 => 0,
+        7 => 0,
+      ),
+      'default_argument_user' => 0,
+      'default_argument_fixed' => '',
+      'default_argument_activity_log_stream_owner_type' => 'user',
+      'default_argument_image_size' => '_original',
+      'default_argument_php' => '',
+      'validate_argument_node_type' => array(
+        'blog' => 0,
+        'poll' => 0,
+        'answer' => 0,
+        'question' => 0,
+        'image' => 0,
+        'discussion' => 0,
+        'document' => 0,
+        'event' => 0,
+        'wiki' => 0,
+        'client_report' => 0,
+        'employee_contact_info' => 0,
+        'escalation' => 0,
+        'mockup' => 0,
+        'rsa' => 0,
+        'rsa_credentials' => 0,
+        'forum' => 0,
+        'group' => 0,
+        'notice' => 0,
+        'page' => 0,
+        'bio' => 0,
+        'book' => 0,
+        'magic_slate' => 0,
+        'profile' => 0,
+        'pspartner' => 0,
+        'psproduct' => 0,
+        'psproject' => 0,
+        'release_notes' => 0,
+        'webform' => 0,
+      ),
+      'validate_argument_node_access' => 0,
+      'validate_argument_nid_type' => 'nid',
+      'validate_argument_vocabulary' => array(
+        3 => 0,
+        4 => 0,
+        11 => 0,
+        5 => 0,
+        2 => 0,
+        6 => 0,
+        7 => 0,
+      ),
+      'validate_argument_type' => 'tid',
+      'validate_argument_transform' => 0,
+      'validate_user_restrict_roles' => 0,
+      'validate_argument_node_flag_name' => '*relationship*',
+      'validate_argument_node_flag_test' => 'flaggable',
+      'validate_argument_node_flag_id_type' => 'id',
+      'validate_argument_user_flag_name' => '*relationship*',
+      'validate_argument_user_flag_test' => 'flaggable',
+      'validate_argument_user_flag_id_type' => 'id',
+      'image_size' => array(
+        '_original' => '_original',
+        'thumbnail' => 'thumbnail',
+        'preview' => 'preview',
+      ),
+      'validate_argument_is_member' => '0',
+      'validate_argument_group_node_type' => array(
+        'group' => 0,
+      ),
+      'validate_argument_php' => '',
+    ),
+  ));
+  $handler->override_option('access', array(
+    'type' => 'none',
+  ));
+  $handler->override_option('cache', array(
+    'type' => 'none',
+  ));
+  $handler->override_option('title', 'Group links');
+  $handler->override_option('empty_format', '1');
+  $handler->override_option('style_plugin', 'list');
+  $handler->override_option('style_options', array(
+    'grouping' => '',
+    'type' => 'ul',
+  ));
+  $handler = $view->new_display('block', 'Block', 'block_1');
+  $handler->override_option('block_description', '');
+  $handler->override_option('block_caching', -1);
+
+  $views[$view->name] = $view;
+
   // Exported view: group_node
   $view = new view;
   $view->name = 'group_node';

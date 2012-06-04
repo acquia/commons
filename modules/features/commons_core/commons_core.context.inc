@@ -164,6 +164,12 @@ function commons_core_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
+        'views-group_links-block_1' => array(
+          'module' => 'views',
+          'delta' => 'group_links-block_1',
+          'region' => 'sidebar_last',
+          'weight' => 0,
+        ),
         'views-group_tab_content-block_1' => array(
           'module' => 'views',
           'delta' => 'group_tab_content-block_1',
