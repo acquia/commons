@@ -209,9 +209,6 @@ projects[og_statistics][patch][] = "http://drupal.org/files/issues/og_statistics
 ; http://drupal.org/node/1162928#comment-4491270
 projects[og_statistics][patch][] = "http://drupal.org/files/issues/og_statistics-proper-determination-of-unapproved-1162928_0.patch"
 
-; http://drupal.org/node/1430246#comment-5566234
-projects[og_statistics][patch][] = "http://drupal.org/files/1430246-og_statistics-filter-group-posts-d.patch"
-
 projects[og_subgroups][subdir] = "contrib"
 
 
@@ -240,7 +237,7 @@ projects[tagadelic_views][version] = "1.2"
 projects[token][subdir] = "contrib"
 
 projects[transliteration][subdir] = "contrib"
-projects[transliteration][version] = "3.0"
+projects[transliteration][version] = "3.1"
 
 projects[userpoints_contrib][version] = 1.x-dev
 projects[userpoints_contrib][subdir] = "contrib"
