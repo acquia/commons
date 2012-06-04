@@ -1608,7 +1608,7 @@ function commons_core_views_default_views() {
         'max_length' => '210',
         'word_boundary' => 1,
         'ellipsis' => 1,
-        'html' => 0,
+        'html' => 1,
         'strip_tags' => 0,
       ),
       'empty' => '',
