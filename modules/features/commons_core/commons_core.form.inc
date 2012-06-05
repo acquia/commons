@@ -465,7 +465,6 @@ function commons_core_join_form() {
  * This allows users to have three searches available in one form
  */
 function commons_core_form_search_theme_form_alter(&$form, &$form_state) {
-
   $path = drupal_get_path('module', 'commons_core');
   drupal_add_js($path . '/js/commons_core.js');
   drupal_add_css($path . '/css/commons_core.css');  
@@ -481,22 +480,24 @@ function commons_core_form_search_theme_form_alter(&$form, &$form_state) {
   );
 
 
-  if ($form_state['group'] = og_features_get_group_context()) {
+  if ($form_state['group'] = og_get_group_context()) {
     // If a node is being viewed, add the nodes type within the group as a search
     // context option.
+
+    $group_title = $form_state['group']->title;
+    // Truncate the title, if needed
+    $limit = variable_get('commons_search_group_title_length', 20);
+    if ($limit && drupal_strlen($group_title) > $limit) {
+      $group_title = truncate_utf8($group_title, $limit, TRUE, TRUE);
+    }
     if (is_array($menu_item['load_functions']) && $key = array_search('node_load', $menu_item['load_functions'])) {
       $form_state['node'] = $menu_item['map'][$key];
       if ($form_state['solr'] && $form_state['node'] != $form_state['group']) {
-        $options['type'] = t('@type posts in @group', array('@type' => ucfirst($form_state['node']->type), '@group' => $form_state['group']->title));
+        $options['type'] = t('@type posts in @group', array('@type' => ucfirst($form_state['node']->type), '@group' => $group_title));
       }
     }
     // Add the group as a possible search context.
-    $options['group'] = check_plain($form_state['group']->title);
-    // Truncate the title, if needed
-    $limit = variable_get('commons_search_group_title_length', 30);
-    if ($limit && strlen($options['group']) > $limit) {
-      $options['group'] = substr($options['group'], 0, $limit) . '...';
-    }
+    $options['group'] = check_plain($group_title);
   }
 
   $options['site'] = t('Entire site');
