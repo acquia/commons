@@ -508,6 +508,28 @@ function commons_core_wysiwyg_editor_settings_alter(&$settings, $context) {
     $settings['width'] = '95%';
   }
 }
+
+/**
+ * Implementation of hook_mollom_form_list().
+ */
+function commons_core_mollom_form_list() {
+  // "Join & learn more" block form
+  $forms['commons_core_join_form'] = array(
+    'title' => t('Join & learn more form'),
+    'entity' => 'user',
+  );
+  return $forms;
+}
+
+/**
+ * Implementation of hook_mollom_form_info().
+ */
+function commons_core_mollom_form_info($form_id) {
+  switch ($form_id) {
+    case 'commons_core_join_form':
+      return user_mollom_form_info('user_register');
+  }
+}
  
 /**
  * Callback to optionally force a login
