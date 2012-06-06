@@ -163,7 +163,7 @@ projects[notifications][subdir] = "contrib"
 projects[notifications][version] = "2.3"
 
 projects[og][subdir] = "contrib"
-projects[og][version] = "2.3"
+projects[og][version] = "2.4"
 
 ; OG patches in PATCHES.txt from Acquia Commons GitHub repo:
 
