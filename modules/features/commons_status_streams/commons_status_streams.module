@@ -35,6 +35,14 @@ function commons_status_streams_group_activity_access($node) {
   return (og_is_group_type($node->type) && node_access('view', $node));
 }
 /**
+ * Implementation of hook_menu_alter().
+ */
+function commons_status_streams_menu_alter(&$items) {
+  // Alter the profile tab title
+  $items['user/%user/view']['title'] = t('Activity stream');
+}
+
+/**
  * Implementation of hook_form_FORM_ID_alter().
  */
 function commons_status_streams_form_system_site_information_settings_alter(&$form, $form_state) {

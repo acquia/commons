@@ -21,10 +21,7 @@ function commons_profile_menu() {
 /**
  * Implementation of hook_menu_alter()
  */
-function commons_profile_menu_alter(&$items) {
-  // Alter the profile tab title
-  $items['user/%user/view']['title'] = t('Activity stream');
-  
+function commons_profile_menu_alter(&$items) { 
   // Hide certain profile tabs 
   foreach ($items as $key => $item) {
     switch ($key) {
