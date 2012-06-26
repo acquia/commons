@@ -222,12 +222,12 @@ function commons_answers_add_question_form_submit($form, &$form_state) {
 function commons_answers_add_answer_form(&$form_state, $question_nid) {
   $form['answer'] = array(
     '#type' => 'textarea',
-    '#title' => 'Add answer',
+    '#title' => t('Add answer'),
     '#required' => TRUE,
   );
   $form['submit'] = array(
     '#type' => 'submit',
-    '#value' => 'Add answer',
+    '#value' => t('Add answer'),
   );
   $form['question_nid'] = array(
     '#type' => 'value',

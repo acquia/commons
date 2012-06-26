@@ -267,7 +267,7 @@ function commons_core_group_create_content_block_form(&$form_state) {
         // Load the node type
         if ($type = node_get_types('type', $type)) {
           // Add the type
-          $types[$type->type] = $type->name;
+          $types[$type->type] = t($type->name);
         }
       }
     }
@@ -279,7 +279,7 @@ function commons_core_group_create_content_block_form(&$form_state) {
       if (og_is_group_post_type($id)) {
         // Check create permissions
         if (node_access('create', $id)) {
-          $types[$id] = $type->name;
+          $types[$id] = t($type->name);
         } 
       }
     }
@@ -415,6 +415,7 @@ function commons_core_join_form() {
             // Remove description
             unset($pfield['#description']);
             // Add to our form
+            $pfield['#title'] = t($pfield['#title']);
             $form[$pkey] = $pfield;
           }
           unset($rform[$key][$pkey]);

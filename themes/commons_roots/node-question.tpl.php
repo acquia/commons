@@ -27,7 +27,7 @@
     <div class="content clearfix">
       <?php print $node->content['body']['#value']; ?>
       <?php if ($submitted_name): ?>
-        <span>Submitted by <?php print $submitted_name ?> on <?php print $date; ?></span>
+        <span><?php print t('Submitted by !username on !datetime', array('!username'=>$submitted_name,'!datetime'=>$date)); ?></span>
       <?php endif; ?>
       <p class="num-of-answers"><?php print format_plural($node->content['field_answer_count']['field']['#children'], '1 answer', '@count answers'); ?>
       <?php if(!$logged_in): ?>
