@@ -264,7 +264,10 @@ function commons_roots_item_list($items = array(), $title = NULL, $type = 'ul', 
           $attributes['class'] = empty($attributes['class']) ? 'last' : ($attributes['class'] .' last');
         }
         
-        $attributes['class'] .= ' ' . ($c % 2 ? 'even' : 'odd');
+        $nth = ($c % 2 ? 'even' : 'odd');
+    
+        $attributes['class'] = empty($attributes['class']) ? $nth : ($attributes['class'] . ' ' . $nth);
+        
         $output .= '<li'. drupal_attributes($attributes) .'>'. $data ."</li>\n";
       } 
       else {
@@ -278,7 +281,10 @@ function commons_roots_item_list($items = array(), $title = NULL, $type = 'ul', 
           $attributes['class'] = empty($attributes['class']) ? 'last' : ($attributes['class'] .' last');
         }
         
-        $attributes['class'] .= ' ' . ($i % 2 ? 'even' : 'odd');
+        $nth = ($i % 2 ? 'even' : 'odd');
+        
+        $attributes['class'] = empty($attributes['class']) ? $nth : ($attributes['class'] . ' ' . $nth);
+        
         $output .= '<li'. drupal_attributes($attributes) .'>'. $data ."</li>\n";
       }
     }
