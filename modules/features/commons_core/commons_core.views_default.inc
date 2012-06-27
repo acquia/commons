@@ -157,8 +157,9 @@ function commons_core_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('title', 'Your Bookmarks');
-  $handler->override_option('empty', 'You have not yet bookmarked any content. Click the "Bookmark this" link when viewing a piece of content to add it to this list.');
+  $handler->override_option('title', 'Your Bookmarks in this Group');
+  $handler->override_option('empty', 'You have not yet bookmarked any content in this group. Click the "Bookmark this" link when viewing a piece of content to add it to this list.');
+  $handler->override_option('empty_format', '1');
   $handler->override_option('items_per_page', '25');
   $handler->override_option('use_pager', TRUE);
   $handler->override_option('use_more', 1);
@@ -196,22 +197,6 @@ function commons_core_views_default_views() {
         'sortable' => TRUE,
       ),
     ),
-  ));
-  $handler = $view->new_display('page', 'Page', 'page');
-  $handler->override_option('path', 'bookmarks');
-  $handler->override_option('menu', array(
-    'type' => 'normal',
-    'title' => 'My bookmarks',
-    'description' => '',
-    'weight' => '0',
-    'name' => 'navigation',
-  ));
-  $handler->override_option('tab_options', array(
-    'type' => 'none',
-    'title' => NULL,
-    'description' => '',
-    'weight' => NULL,
-    'name' => 'navigation',
   ));
   $handler = $view->new_display('block', 'Block', 'block_1');
   $handler->override_option('fields', array(
