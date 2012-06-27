@@ -88,6 +88,16 @@ function commons_status_streams_enable() {
 }
 
 /**
+* Implementation of hook_user().
+*/
+function commons_status_streams_user($op, &$edit, &$account, $category = NULL) {
+  if ($op == 'view') {
+    foreach (array_keys($account->content) as $key) {
+      $account->content[$key]['#access'] = FALSE;
+    }
+  }
+}
+/**
  * Implementation of hook_rules_defaults_alter()
  */
 function commons_status_streams_rules_defaults_alter(&$rules) {

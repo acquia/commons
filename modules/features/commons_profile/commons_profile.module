@@ -84,9 +84,13 @@ function commons_profile_init() {
 function commons_profile_user($op, &$edit, &$account, $category = NULL) {    
   switch ($op) {
     case 'view':
-      // Remove the core profile fields, as we'll be providing our
-      // own content via Context
-      $account->content = array();
+      // Hide user profile and related information that
+      // is displayed via commons_profile_block().
+      $account->content[t('Personal information')]['#access'] = FALSE;
+      $account->content['user_relationships_ui']['#access'] = FALSE;
+      $account->content['user_picture']['#access'] = FALSE;
+      $account->content['userpoints']['#access'] = FALSE;
+      $account->content['user_badges']['#access'] = FALSE;
       break;
   }
 }
