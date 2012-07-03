@@ -1,0 +1,24 @@
+
+@import "base.scss";
+
+/* ---------- Color Module Styles ----------- */
+
+body {
+  color: $gray_dark;
+}
+
+#header {
+  background-color: #48a9e4;
+
+  h1, a {
+    color: $white;
+  }
+}
+
+a {
+  color: $blue;
+
+  &:hover, &:focus, &:active {
+    color: $blue_dark;
+  }
+}

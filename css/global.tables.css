@@ -1,0 +1,92 @@
+/**
+ * @file
+ * Tables
+ */
+/* line 9, ../sass/global.tables.scss */
+table {
+  border: 1px solid;
+  border-spacing: 0;
+  border-collapse: collapse;
+  font-size: inherit;
+  font: 100%;
+  margin: 10px 0;
+  padding: 0;
+  width: 100%;
+  border-color: #ccc;
+}
+
+/* line 26, ../sass/global.tables.scss */
+thead,
+tbody,
+tr,
+th,
+td {
+  border-color: #ccc;
+}
+
+/* line 31, ../sass/global.tables.scss */
+table {
+  vertical-align: middle;
+}
+/* line 34, ../sass/global.tables.scss */
+table.sticky-header {
+  z-index: 10;
+}
+
+/* line 42, ../sass/global.tables.scss */
+td,
+th {
+  vertical-align: middle;
+}
+
+/* line 49, ../sass/global.tables.scss */
+caption,
+th,
+td {
+  text-align: left;
+}
+
+/* line 54, ../sass/global.tables.scss */
+thead th {
+  color: #494949;
+  font-weight: 700;
+}
+
+/* line 61, ../sass/global.tables.scss */
+td,
+th {
+  border-bottom: 0;
+  margin: 0;
+  padding: 5px 7px;
+}
+
+/* line 73, ../sass/global.tables.scss */
+tr.even {
+  border-bottom: 0;
+  background-color: #fff;
+}
+/* line 80, ../sass/global.tables.scss */
+tr.info, tr.odd, tr:nth-child(2n+1) {
+  border-bottom: 0;
+  background-color: #f5f5f5;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+/* line 90, ../sass/global.tables.scss */
+tr.odd td.active {
+  background-color: #eee;
+}
+/* line 94, ../sass/global.tables.scss */
+tr.even td.active {
+  background-color: #f7f7f7;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* line 113, ../sass/global.tables.scss */
+#forum td .created,
+#forum td .posts,
+#forum td .topics,
+#forum td .last-reply,
+#forum td .replies,
+#forum td .pager {
+  white-space: normal;
+}
