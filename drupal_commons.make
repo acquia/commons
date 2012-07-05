@@ -1,5 +1,4 @@
 core = 6.x
-
 api = 2
 
 ; Modules
@@ -259,12 +258,13 @@ projects[user_relationships][download][type] = "git"
 ; UR's last release was ~1 year ago with some non-trivial commits since then.
 projects[user_relationships][download][revision] = "6.x-1.x"
 
+; User_relationships patches in PATCHES.txt from Acquia Commons GitHub repo:
+; http://drupal.org/node/1121038#comment-6198978
+projects[user_relationships][patch][] = "http://drupal.org/files/1121038-user-relationships-disable-notifications-8.patch"
+
 ; http://drupal.org/node/1322858#comment-5171120
 projects[user_relationships][patch][] = "http://drupal.org/files/ur_alter_remove_links.patch"
 
-; User_relationships patches in PATCHES.txt from Acquia Commons GitHub repo:
-; http://drupal.org/node/1121038#comment-4322488
-projects[user_relationships][patch][] = "http://drupal.org/files/issues/user_relationships_disable_notifications_0_0.patch"
 
 projects[user_terms][subdir] = "contrib"
 
