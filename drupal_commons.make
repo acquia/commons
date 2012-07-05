@@ -13,6 +13,7 @@ projects[acquia_connector][subdir] = "acquia"
 
 projects[apachesolr][type] = "module"
 projects[apachesolr][subdir] = "acquia/acquia_search"
+projects[apachesolr][version] = "1.6"
 
 projects[acquia_search][type] = "module"
 projects[acquia_search][subdir] = "acquia"
