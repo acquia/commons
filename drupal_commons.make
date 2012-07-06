@@ -16,6 +16,8 @@ projects[apachesolr][subdir] = "acquia/acquia_search"
 projects[apachesolr][version] = "1.6"
 
 projects[acquia_search][type] = "module"
+projects[acquia_search][download_type] = "git"
+projects[acquia_search][revision] = "6.x-1.x"
 projects[acquia_search][subdir] = "acquia"
 
 projects[ajax_load][version] = 1.x-dev
