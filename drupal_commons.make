@@ -12,8 +12,8 @@ projects[admin][version] = "2.0"
 projects[acquia_connector][subdir] = "acquia"
 
 projects[apachesolr][type] = "module"
-projects[apachesolr][revision] = "6.x-1.x"
 projects[apachesolr][download][type] = "git"
+projects[apachesolr][download][revision] = "6.x-1.x"
 projects[apachesolr][subdir] = "acquia/acquia_search"
 
 projects[acquia_search][type] = "module"
