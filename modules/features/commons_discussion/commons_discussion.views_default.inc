@@ -881,6 +881,23 @@ function commons_discussion_views_default_views() {
         'button' => 'Override',
       ),
     ),
+    'nid' => array(
+      'operator' => '=',
+      'value' => '',
+      'group' => '0',
+      'exposed' => FALSE,
+      'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'id' => 'nid',
+      'table' => 'node_access',
+      'field' => 'nid',
+      'relationship' => 'nid',
+      'override' => array(
+        'button' => 'Override',
+      ),
+    ),
   ));
   $handler->override_option('access', array(
     'type' => 'perm',
