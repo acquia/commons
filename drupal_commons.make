@@ -335,6 +335,7 @@ projects[tidy_node_links][type] = "module"
 projects[tidy_node_links][subdir] = "contrib"
 
 projects[facebook_status][subdir] = "contrib"
+projects[facebook_status][version] = "3.1"
 
 projects[fbsmp][version] = 2.x-dev
 projects[fbsmp][subdir] = "contrib"
