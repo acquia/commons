@@ -25,14 +25,8 @@ projects[ajax_load][download][revision] = "8b0921252fcf599e7b15276bd815bcf81521e
 projects[ajax_load][subdir] = "contrib"
 
 ; Commons Answers dependencies:
-projects[answers][version] = 2.x-dev
-projects[answers][download][type] = "git"
-projects[answers][download][revision] = "6.x-2.x"
 projects[answers][subdir] ="contrib"
 
-projects[vote_up_down][version] = 3.x-dev
-projects[vote_up_down][download][type] = "git"
-projects[vote_up_down][download][revision] = "6.x-3.x"
 projects[vote_up_down][subdir] = "contrib"
 
 projects[views_attach][version] = 2.x-dev
@@ -340,9 +334,6 @@ projects[tidy_node_links][download][revision] = "6.x-1.x"
 projects[tidy_node_links][type] = "module"
 projects[tidy_node_links][subdir] = "contrib"
 
-projects[facebook_status][version] = 3.x-dev
-projects[facebook_status][download][type] = "git"
-projects[facebook_status][download][revision] = "6.x-3.x"
 projects[facebook_status][subdir] = "contrib"
 
 projects[fbsmp][version] = 2.x-dev
