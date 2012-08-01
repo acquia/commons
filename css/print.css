@@ -3,7 +3,9 @@
  * Print Styles
  * This probably needs work, but it's a good starting point.
  */
-/* line 11, ../sass/print.scss */
+/*
+ * Body
+ */
 body {
   width: 100% !important;
   margin: 0 !important;
@@ -17,20 +19,23 @@ body {
   font-size: 11pt;
 }
 
-/* line 26, ../sass/print.scss */
+/*
+ * Links
+ */
 a {
   background: transparent;
   font-weight: 700;
   text-decoration: underline;
   color: #0000ee;
 }
-/* line 34, ../sass/print.scss */
 a[href^="http://"]:after, a[href^="http://"]:visited:after {
   content: "(" attr(href) ")";
   font-size: 10pt;
 }
 
-/* line 67, ../sass/print.scss */
+/*
+ * Strip background from likely candidates
+ */
 div[id*="wrapper"],
 [class*="title"],
 [class*="inner"],
@@ -60,7 +65,9 @@ table * {
   background: none !important;
 }
 
-/* line 88, ../sass/print.scss */
+/*
+ * Hide various bits of the page
+ */
 .sidebar,
 #breadcrumb,
 .nav,
@@ -80,23 +87,28 @@ ul.links,
   display: none;
 }
 
-/* line 94, ../sass/print.scss */
+/*
+ * Ensure the display the main content region
+ */
 #content {
   display: block !important;
 }
 
-/* line 99, ../sass/print.scss */
+/*
+ * Layout
+ */
 #header {
   margin-bottom: 20px;
 }
 
-/* line 104, ../sass/print.scss */
 .content-inner {
   margin: 0 !important;
   padding: 0 !important;
 }
 
-/* line 116, ../sass/print.scss */
+/*
+ * HTML elements
+ */
 h1,
 h2,
 h3,
@@ -109,29 +121,24 @@ h6 {
   line-height: 1;
 }
 
-/* line 124, ../sass/print.scss */
 h1 {
   font-size: 14pt;
 }
 
-/* line 129, ../sass/print.scss */
 h2 {
   font-size: 13pt;
 }
 
-/* line 134, ../sass/print.scss */
 h3 {
   font-size: 12pt;
 }
 
-/* line 141, ../sass/print.scss */
 h4,
 h5,
 h6 {
   font-size: 11pt;
 }
 
-/* line 152, ../sass/print.scss */
 h1 a,
 h2 a,
 h3 a,
@@ -144,17 +151,14 @@ h6 a,
   color: #333333;
 }
 
-/* line 160, ../sass/print.scss */
 hgroup a:link, hgroup a:visited {
   text-decoration: none;
 }
 
-/* line 166, ../sass/print.scss */
 #page-title {
   margin-top: 20px;
 }
 
-/* line 176, ../sass/print.scss */
 pre,
 code,
 tt,
@@ -165,7 +169,6 @@ var {
   font-family: Consolas, "Lucida Console", Menlo, Monaco, "DejaVu Sans Mono", monospace, sans-serif;
 }
 
-/* line 182, ../sass/print.scss */
 blockquote {
   margin: 20px;
   padding: 10px;
@@ -174,96 +177,97 @@ blockquote {
   background: #eeeeee;
 }
 
-/* line 191, ../sass/print.scss */
 hr {
   background-color: #666666;
 }
 
-/* line 197, ../sass/print.scss */
+/*
+ * Header, Logo, Site name
+ */
 #header {
   padding-bottom: 20px;
 }
 
-/* line 202, ../sass/print.scss */
 #logo img {
   padding: 0 10px 0 0;
   margin: 0 !important;
   float: none !important;
 }
 
-/* line 210, ../sass/print.scss */
+/*
+ * Images
+ */
 img {
   float: left;
   margin: 4px 20px 10px 0;
   page-break-inside: avoid;
 }
 
-/* line 217, ../sass/print.scss */
 a img {
   border: none;
 }
 
-/* line 223, ../sass/print.scss */
+/*
+ * Tables
+ */
 table {
   margin: 1px;
   text-align: left;
 }
 
-/* line 229, ../sass/print.scss */
 th {
   border-bottom: 1px solid #333333;
   font-weight: 700;
 }
 
-/* line 235, ../sass/print.scss */
 td {
   border-bottom: 1px solid #333333;
 }
 
-/* line 241, ../sass/print.scss */
 th,
 td {
   padding: 4px 10px 4px 0;
 }
 
-/* line 246, ../sass/print.scss */
 tfoot {
   font-style: italic;
 }
 
-/* line 251, ../sass/print.scss */
 caption {
   margin-bottom: 10px;
   text-align: left;
 }
 
-/* line 257, ../sass/print.scss */
 thead {
   display: table-header-group;
 }
 
-/* line 262, ../sass/print.scss */
 tr {
   page-break-inside: avoid;
 }
 
-/* line 268, ../sass/print.scss */
+/*
+ * Forms
+ */
 form {
   margin-bottom: 10px;
 }
 
-/* line 276, ../sass/print.scss */
+/*
+ * Poll module
+ */
 .poll .text,
 .poll .percent,
 .poll .total {
   text-align: left;
 }
-/* line 279, ../sass/print.scss */
 .poll form {
   margin-bottom: 0;
 }
 
-/* line 287, ../sass/print.scss */
+/*
+ * Articles
+ */
 .node,
 .comment {
   margin-bottom: 20px;
@@ -271,7 +275,6 @@ form {
   page-break-inside: avoid;
 }
 
-/* line 293, ../sass/print.scss */
 .submitted {
   color: #666666;
   text-decoration: none;
@@ -280,7 +283,6 @@ form {
   margin: 0;
   padding: 0;
 }
-/* line 301, ../sass/print.scss */
 .submitted a {
   color: #666666;
   text-decoration: none;

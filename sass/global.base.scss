@@ -1,116 +1,26 @@
 
-@import "base.scss";
+// _base.scss imports _custom.scss and other partials.
+@import "base";
 
-//
-// global.base.scss
-// This is a big reset for html elements to set up global defaults.
-//
+/*
+ * @file
+ * global.base
+ *
+ * - normalize with small modifications for Drupal and AT: http://necolas.github.com/normalize.css/
+ * - Gutter widths, see $gutter-width in _custom.scss
+ * - Default container alignment.
+ * - Flexible images and media declarations.
+ * - Copies of the SCSS mixins for reference, which includes an improved
+ *   element-invisible and focusable styles.
+ */
 
-//
-// Fonts
-//
-// By default there is no global font size is reset. A common
-// method is to reset it to 62.5%, or 10px. This makes it very
-// easy to calculate the required font sizes in em, for example:
-//
-// 1.6em = 16px
-// 2.4em = 24px
-//
-// In Adaptivetheme this should be applied to the HTML element,
-// so it will play nicely with the theme settings. If you use
-// the body element or #page wrapper you will get unpredicable
-// font scaling issues.
-//
-// Font size chart from http://pxtoem.com/
-//
-// 6px	 0.6em	 60%	 5pt
-// 7px	 0.7em	 70%	 5pt
-// 8px	 0.8em	 80%	 6pt
-// 9px	 0.9em	 90%	 7pt
-// 10px	 1em	   100%	 8pt
-// 11px	 1.1em	 110%	 8pt
-// 12px	 1.2em	 120%	 9pt
-// 13px	 1.3em	 130%	 10pt
-// 14px	 1.4em	 140%	 11pt
-// 15px	 1.5em	 150%	 11pt
-// 16px	 1.6em	 160%	 12pt
-// 17px	 1.7em	 170%	 13pt
-// 18px	 1.8em	 180%	 14pt
-// 19px	 1.9em	 190%	 14pt
-// 20px	 2em	   200%	 15pt
-// 21px	 2.1em	 210%	 16pt
-// 22px	 2.2em	 220%	 17pt
-// 23px	 2.3em	 230%	 17pt
-// 24px	 2.4em	 240%	 18pt
-//
-//
-// Font Theme Settings
-//
-// Adaptivetheme includes powerful theme settings for adding
-// webfonts and setting font sizes - you can enable these
-// under "Site Tweaks", simply enable the Fonts setting and
-// start using them. You can choose from standard websafe font
-// stacks, Google fonts, add your own custom stacks, and if you
-// have @font-your-face module installed just set the font to
-// "-- add selector in theme CSS --" and the font will automatically
-// be available to you in theme settings.
-// @see http://drupal.org/project/fontyourface
-//
-//
-// Font Stacks
-//
-// These are the font stacks that used for the websafe fonts
-// in theme settings (if you enabled the Fonts feature). They are
-// included here for easy reference if you prefer to set your fonts
-// in CSS.
-//
-// font-family: 'Trebuchet MS', 'Helvetica Neue', Arial, Helvetica, sans-serif;
-// font-family: Verdana, Geneva, 'DejaVu Sans', Arial, Helvetica, sans-serif;
-// font-family: Arial, Helvetica, sans-serif;
-// font-family: Calibri, Candara, Arial, Helvetica, sans-serif;
-// font-family: Segoe UI', 'Myriad Pro', Myriad, Arial, Helvetica, sans-serif;
-// font-family: 'Lucida Sans Unicode', 'Lucida Sans', 'Lucida Grande', Verdana, Geneva, sans-serif;
-// font-family: Impact, Haettenschweiler, 'Franklin Gothic Bold', Charcoal, 'Helvetica Inserat', 'Bitstream Vera Sans Bold', 'Arial Black', sans-serif;
-// font-family: Garamond, Perpetua, 'Times New Roman', serif;
-// font-family: Georgia, Baskerville, Palatino, 'Palatino Linotype', 'Book Antiqua', 'Times New Roman', serif;
-// font-family: Consolas, Monaco, 'Courier New', Courier, monospace, sans-serif;
-//
+/* =============================================================================
+    HTML5 display definitions
+   ========================================================================== */
 
-
-// Always apply your global font size the the HTML element, not body or #page
-html {
-  line-height: 1.5;
-  height: 100%;
-  overflow-y: scroll;
-  font-family: $sans-serif-small;
-  font-size: 81.3%;
-  -webkit-text-size-adjust: 100%;
-  -moz-text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%;
-}
-
-
-body {
-  min-height: 100%;
-  -webkit-font-smoothing: antialiased;
-  font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-
-
-h1, h2, h3, h4, h5, h6,
-h1 img, h2 img, h3 img, h4 img, h5 img, h6 img,
-em, dfn, del, ins,
-a, tbody, tfoot, thead, tr,
-ul, li,
-label, legend,
-figure, figcaption {
-  margin: 0;
-  padding: 0;
-}
-
-
-// Reset HTML5 elements
+/*
+ * Corrects block display not defined in IE6/7/8/9 & FF3
+ */
 article,
 aside,
 details,
@@ -119,210 +29,16 @@ figure,
 footer,
 header,
 hgroup,
-menu,
 nav,
-section {
+section,
+summary {
   display: block;
 }
 
 
-// Default font sizes for headings, can be overridden in theme settings or set them here
-h1 {}
-h2 {}
-h3 {}
-h4 {}
-h5, h6 {}
-
-
-img,
-a img {
-  border: 0;
-}
-
-
-p {
-  margin: 0 0 1.5em;
-  padding: 0;
-}
-
-
-em,
-dfn {
-  font-style: italic;
-}
-
-
-ins {
-  border-bottom: none;
-  text-decoration: none;
-}
-
-
-pre,
-code,
-tt,
-samp,
-kbd,
-var {
-  font-size: 1em;
-  font-family: Consolas, "Lucida Console", Menlo, Monaco, "DejaVu Sans Mono", monospace, sans-serif; // sans-serif Safari hack
-}
-
-
-blockquote,
-q {
-  font-style: italic;
-  quotes: "" "";
-  &:before, &:after {
-    content: "";
-  }
-}
-
-
-blockquote {
-  margin: 0 0 1.5em;
-  padding: 0 0 0 40px;
-
-  p {
-    margin: 0;
-  }
-}
-
-
-strong,
-dfn,
-caption,
-th {
-  font-weight: 700;
-}
-
-
-ul,
-ol {
-  margin: 0 0 1.5em 40px;
-  padding: 0;
-}
-
-
-.item-list {
-
-  ul, ol {
-    margin: 0 0 0 15px;
-    padding: 0;
-  }
-
-  ul li {
-    margin: 0;
-    padding: 0;
-  }
-}
-
-
-ul, ol {
-
-  ul, ol {
-    &, .block &, .item-list & {
-      margin-bottom: 0;
-    }
-  }
-}
-
-
-ul {
-  list-style-type: disc;
-
-  ul ul {
-    list-style-type: square;
-  }
-}
-
-
-ol {
-  list-style-type: decimal;
-
-  ol {
-
-    list-style-type: lower-alpha;
-
-    ol {
-      list-style-type: lower-roman;
-    }
-  }
-}
-
-
-ul ul {
-  list-style-type: circle;
-
-  ul ul {
-    list-style-type: circle;
-  }
-}
-
-
-dt {
-  font-weight: 700;
-}
-
-
-dd {
-  margin: 0 0 1.5em 40px;
-}
-
-
-//
-// Flexible Media and Cross browser improvements
-// - This can cause issues in table cells where no width is set on the column,
-//   only in some versions of webkit and IE 7/8.
-// - declaring the width attribute on image elements and using max-width causes
-//   the "dissappering images" bug in IE8.
-// - Google maps break also, see below for fixes.
-//
-img {
-  max-width: 100%;
-  height: auto;
-  -ms-interpolation-mode: bicubic;
-}
-
-
-// Ethan Marcotte - http://front.ie/l8rJaA
-embed,
-object,
-video {
-  max-width: 100%;
-}
-
-
-// Disable flexiblity for IE8 and below
-.lt-ie9 {
-  img,
-  object,
-  embed,
-  video {
-    max-width: none;
-  }
-}
-
-
-// Override max-width 100% for map displays, as much as possible anyway...
-#map img,
-.gmap img,
-.view-gmap img,
-.openlayers-map img,
-#getlocations_map_canvas img,
-#locationmap_map img,
-.geofieldMap img {
-  max-width: none !important;
-}
-
-
-// Improve IE's resizing of images
-svg:not(:root) {
-  overflow: hidden;
-}
-
-
-// Corrects inline-block display not defined in IE6/7/8/9 & FF3
+/*
+ * Corrects inline-block display not defined in IE6/7/8/9 & FF3
+ */
 audio,
 canvas,
 video {
@@ -332,13 +48,576 @@ video {
 }
 
 
-// Prevents modern browsers from displaying 'audio' without controls
+/*
+ * Prevents modern browsers from displaying 'audio' without controls
+ * Remove excess height in iOS5 devices
+ */
 audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+
+
+/*
+ * Addresses styling for 'hidden' attribute not present in IE7/8/9, FF3, S4
+ * Known issue: no IE6 support
+ */
+[hidden] {
   display: none;
 }
 
 
-// Prevent overflowing content
+/* =============================================================================
+    Base
+   ========================================================================== */
+
+/*
+ * If you are using the themes Responsive JS feature (media_queries.js) do not
+ * set a font-family on the html element, use body.
+ *
+ * 1. Corrects text resizing oddly in IE6/7 when body font-size is set using em units
+ *    http://clagnut.com/blog/348/#c790
+ * 2. Prevents iOS text size adjust after orientation change, without disabling user zoom
+ *    www.456bereastreet.com/archive/201012/controlling_text_size_in_safari_for_ios_without_disabling_user_zoom/
+ */
+html {
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+  line-height: 1.5;
+  height: 100%;
+  overflow-y: scroll;
+}
+
+
+/*
+ * 1 . Addresses margins handled incorrectly in IE6/7
+ */
+body {
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  text-rendering: optimizeLegibility\9; /* Only IE, can mess with Android */
+}
+
+
+/*
+ * Addresses font-family inconsistency between 'textarea' and other form elements.
+ */
+button,
+input,
+select,
+textarea {
+  font-family: sans-serif;
+}
+
+
+/* =============================================================================
+    Links
+   ========================================================================== */
+
+/*
+ * Addresses outline displayed oddly in Chrome
+ */
+a:focus {
+  outline: thin dotted;
+}
+
+
+/*
+ * Improves readability when focused and also mouse hovered in all browsers
+ * people.opera.com/patrickl/experiments/keyboard/test
+ */
+a:hover,
+a:active {
+  outline: 0;
+}
+
+
+/* =============================================================================
+    Typography
+   ========================================================================== */
+
+/*
+ * Headings
+ *
+ * Addresses font sizes and margins set differently in IE6/7
+ * Addresses font sizes within 'section' and 'article' in FF4+, Chrome, S5
+ */
+
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+
+h2 {
+  font-size: 1.5em;
+  margin: 0.83em 0;
+}
+
+
+h3 {
+  font-size: 1.17em;
+  margin: 1em 0;
+}
+
+
+h4 {
+  font-size: 1em;
+  margin: 1.33em 0;
+}
+
+
+h5 {
+  font-size: 0.83em;
+  margin: 1.67em 0;
+}
+
+
+h6 {
+  font-size: 0.75em;
+  margin: 2.33em 0;
+}
+
+
+/*
+ * Addresses styling not present in IE7/8/9, S5, Chrome
+ */
+abbr[title] {
+  border-bottom: 1px dotted;
+}
+
+
+/*
+ * Addresses style set to 'bolder' in FF3+, S4/5, Chrome
+ */
+b,
+strong {
+  font-weight: bold;
+}
+
+
+blockquote {
+  margin: 1em 40px;
+}
+
+
+/*
+ * Addresses styling not present in S5, Chrome
+ */
+dfn {
+  font-style: italic;
+}
+
+
+/*
+ * Addresses styling not present in IE6/7/8/9
+ */
+mark {
+  background: #ff0;
+  color: #000;
+}
+
+
+/*
+ * Addresses margins set differently in IE6/7
+ */
+p,
+pre {
+  margin: 0 0 1.5em;
+}
+
+
+/*
+ * Corrects font family set oddly in IE6, S4/5, Chrome
+ * en.wikipedia.org/wiki/User:Davidgothberg/Test59
+ */
+pre,
+code,
+kbd,
+samp {
+  font-family: monospace, serif;
+  _font-family: 'courier new', monospace;
+  font-size: 1em;
+}
+
+
+/*
+ * Improves readability of pre-formatted text in all browsers
+ */
+pre {
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+
+/*
+ * 1. Addresses CSS quotes not supported in IE6/7
+ * 2. Addresses quote property not supported in S4
+ */
+
+q {
+  quotes: none;
+}
+
+
+q:before,
+q:after {
+  content: '';
+  content: none;
+}
+
+
+small {
+  font-size: 75%;
+}
+
+
+/*
+ * Prevents sub and sup affecting line-height in all browsers
+ * gist.github.com/413930
+ */
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+
+sup {
+  top: -0.5em;
+}
+
+
+sub {
+  bottom: -0.25em;
+}
+
+
+/* =============================================================================
+    Lists
+   ========================================================================== */
+
+/*
+ * Addresses margins set differently in IE6/7
+ */
+dl,
+menu,
+ol,
+ul {
+  margin: 1em 0;
+}
+
+
+dd {
+  margin: 0 0 0 40px;
+}
+
+
+/*
+ * Addresses paddings set differently in IE6/7
+ */
+menu,
+ol,
+ul {
+  padding: 0 0 0 40px;
+}
+
+
+/*
+ * Corrects list images handled incorrectly in IE7
+ */
+nav ul,
+nav ol {
+  list-style: none;
+  list-style-image: none;
+}
+
+
+/* =============================================================================
+    Embedded content
+   ========================================================================== */
+
+/*
+ * 1. Remove border when inside 'a' element in IE6/7/8/9, FF3
+ * 2. Improves image quality when scaled in IE7
+ *    code.flickr.com/blog/2008/11/12/on-ui-quality-the-little-things-client-side-image-resizing/
+ */
+img {
+  /* border: 0; */  /* Drupal core already does this, uncomment if you need it */
+  -ms-interpolation-mode: bicubic;
+}
+
+
+/*
+ * Corrects overflow displayed oddly in IE9
+ */
+svg:not(:root) {
+  overflow: hidden;
+}
+
+
+/* =============================================================================
+    Figures
+   ========================================================================== */
+
+/*
+ * Addresses margin not present in IE6/7/8/9, S5, O11
+ */
+figure {
+  margin: 0;
+}
+
+
+/* =============================================================================
+    Forms
+   ========================================================================== */
+
+/*
+ * Corrects margin displayed oddly in IE6/7
+ */
+form {
+  margin: 0;
+}
+
+
+/*
+ * Define consistent margin, and padding
+ */
+fieldset {
+  margin: 0 2px;
+  padding: 0.35em 0.625em 0.75em;
+}
+
+
+/*
+ * 1. Corrects color not being inherited in IE6/7/8/9
+ * 2. Corrects text not wrapping in FF3
+ * 3. Corrects alignment displayed oddly in IE6/7
+ */
+legend {
+  border: 0;
+  padding: 0;
+  white-space: normal;
+  *margin-left: -7px;
+}
+
+
+/*
+ * 1. Corrects font size not being inherited in all browsers
+ * 2. Addresses margins set differently in IE6/7, FF3+, S5, Chrome
+ * 3. Improves appearance and consistency in all browsers
+ */
+button,
+input,
+select,
+textarea {
+  font-size: 100%;
+  margin: 0;
+  vertical-align: baseline;
+  *vertical-align: middle;
+}
+
+
+/*
+ * Addresses FF3/4 setting line-height on 'input' using !important in the UA stylesheet
+ */
+button,
+input {
+  line-height: normal;
+}
+
+
+/*
+ * 1. Improves usability and consistency of cursor style between image-type 'input' and others
+ * 2. Corrects inability to style clickable 'input' types in iOS
+ * 3. Removes inner spacing in IE7 without affecting normal text inputs
+ *    Known issue: inner spacing remains in IE6
+ */
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+  cursor: pointer;
+  -webkit-appearance: button;
+  *overflow: visible;
+}
+
+
+/*
+ * Re-set default cursor for disabled elements
+ */
+button[disabled],
+input[disabled] {
+  cursor: default;
+}
+
+
+/*
+ * 1. Addresses box sizing set to content-box in IE8/9
+ * 2. Removes excess padding in IE8/9
+ * 3. Removes excess padding in IE7
+ *    Known issue: excess padding remains in IE6
+ */
+input[type="checkbox"],
+input[type="radio"] {
+  box-sizing: border-box;
+  padding: 0;
+  *height: 13px;
+  *width: 13px;
+}
+
+
+/*
+ * 1. Addresses appearance set to searchfield in S5, Chrome
+ * 2. Addresses box-sizing set to border-box in S5, Chrome (include -moz to future-proof)
+ */
+input[type="search"] {
+  -webkit-appearance: textfield;
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
+
+/*
+ * Removes inner padding and search cancel button in S5, Chrome on OS X
+ */
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
+
+/*
+ * Removes inner padding and border in FF3+
+ * www.sitepen.com/blog/2008/05/14/the-devils-in-the-details-fixing-dojos-toolbar-buttons/
+ */
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+
+/*
+ * 1. Removes default vertical scrollbar in IE6/7/8/9
+ * 2. Improves readability and alignment in all browsers
+ */
+textarea {
+  overflow: auto;
+  vertical-align: top;
+}
+
+
+/* =============================================================================
+    Tables
+   ========================================================================== */
+
+/*
+ * 1. Remove most spacing between table cells
+ */
+table {
+  border: 1px solid;
+  border-spacing: 0;
+  border-collapse: collapse;
+  font-size: inherit;
+  font: 100%;
+}
+
+
+/* =============================================================================
+    Gutters
+   ========================================================================== */
+
+/*
+ * If gutters are set in theme settings they will override these values,
+ * see Extensions > Modify Output > Design
+ * $gutter-width is set in _base.scss
+ */
+#main-content,
+.block-inner,
+.pane-inner,
+.menu-wrapper,
+.branding-elements,
+.breadcrumb-wrapper,
+.attribution,
+.at-panel .rounded-corner,
+div.messages {
+  margin-left: $gutter-width;
+  margin-right: $gutter-width;
+}
+
+/*
+ * Panel pages need negative margin equal to the gutter width applied to #content,
+ * this is taken care of in theme settings as per above for normal gutters
+ */
+#content .panel-display,
+#content .panel-flexible {
+  margin-left: -$gutter-width;
+  margin-right: -$gutter-width;
+}
+
+
+/* =============================================================================
+    Flexible Media and Cross browser improvements
+   ========================================================================== */
+
+/*
+ * - This can cause issues in table cells where no width is set on the column,
+ *   only in some versions of webkit and IE 7/8.
+ * - declaring the width attribute on image elements and using max-width causes
+ *   the "dissappering images" bug in IE8.
+ * - Mapping services such as Google Maps may break also, see below for fixes.
+ */
+
+img {
+  height: auto;
+  -ms-interpolation-mode: bicubic;
+}
+
+
+/* Ethan Marcotte - http://front.ie/l8rJaA */
+img,
+embed,
+object,
+video {
+  max-width: 100%;
+}
+
+
+/* Disable flexiblity for IE8 and below */
+.lt-ie9 img,
+.lt-ie9 object,
+.lt-ie9 embed,
+.lt-ie9 video {
+  max-width: none;
+}
+
+
+/* Override max-width 100% for map displays */
+#map img,
+.gmap img,
+.view-gmap img,
+.openlayers-map img,
+#getlocations_map_canvas img,
+#locationmap_map img,
+.geofieldMap img,
+.views_horizontal_slider img {
+  max-width: none !important;
+}
+
+
+/* =============================================================================
+    Misc helpers, Accessibility classes etc
+   ========================================================================== */
+
+/* Prevent overflowing content */
 header[role=banner],
 .content-inner,
 .nav,
@@ -352,29 +631,59 @@ header[role=banner],
 }
 
 
-// Helpful classes for hiding content
+/**
+ * General classes for hiding content. These are all included as SASS mixins.
+ * @SEE: sass/_custom.scss
+ */
+
+/**
+ * Image replacement
+ * Kellum Method: http://www.zeldman.com/2012/03/01/replacing-the-9999px-hack-new-image-replacement
+ * Additional helpers from http://html5boilerplate.com/docs/css/
+ */
+.ir {
+  /* Kellum Method */
+  display: block !important;
+  text-indent: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  /* Remove the default border from elements like button */
+  border: 0;
+  /* Crush the text down to take up no space */
+  font: 0/0 a;
+  /* Remove any text shadows */
+  text-shadow: none;
+  /* Hide any residual text in Safari 4 and any mobile devices that may need it */
+  color: transparent;
+  /* Hide the default background color on elements like button */
+  background-color: transparent;
+}
+
+
+/* More robust element-invisible and element-focuable classes */
 .element-invisible {
   border: 0;
-  clip: rect(1px 1px 1px 1px); // IE6, IE7
+  clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
   clip: rect(1px, 1px, 1px, 1px);
   height: 1px;
-  margin: -1px;
   overflow: hidden;
   padding: 0;
-  position: absolute !important;
+  position: absolute;
   width: 1px;
 }
+
 
 .element-invisible.element-focusable:active,
 .element-invisible.element-focusable:focus {
   clip: auto;
   height: auto;
-  margin: 0;
   overflow: visible;
-  position: static !important;
+  position: static;
   width: auto;
 }
 
+
+/* Shift content offscreen, can be usefull when you reall need to do this */
 .offscreen {
   position: absolute;
   top: -99999em;
@@ -384,6 +693,8 @@ header[role=banner],
   outline: 0;
 }
 
+
+/* Hide content from all users */
 .element-hidden {
   display: none;
 }
