@@ -45,7 +45,7 @@ html {
 body {
   font-family: $sans-serif-small; // Set from _custom.scss font variables
   font-size: 87.5%;
-  color: #333333;
+  color: $dark_gray;
 }
 
 
@@ -53,18 +53,40 @@ body {
  *   HTML Elements
  * ========================================================================== */
 
-h1 {}
+h1 {
+  font-size: 30px;
+  line-height: 30px;
+  font-weight: normal;
+  color: $white;
+  @include text-shadow(#000 1px 1px 4px);
+
+  a {
+    color: $white;
+
+    :hover {
+      text-decoration: none;
+    }
+  }
+}
 
 
 h2 {
   color: $dark_blue;
-  font-size: 54px;
+  font-weight: normal;
+  font-size: 48px;
+  line-height: 48px;
 }
 
 
 h3 {
   color: $light_blue;
+  font-weight: normal;
   font-size: 20px;
+  line-height: 20px;
+
+  .sidebar & {
+    color: $dark_gray;
+  }
 }
 
 
@@ -158,6 +180,7 @@ var {
  * Main wrapper in page.tpl.php, the .container class sets the width of the page, do not add width to it!
  */
 #page  {
+  margin-top: -92px;
   .container {}
 }
 
@@ -165,7 +188,32 @@ var {
 /*
  * Wraps all header elements - branding and .region-header
  */
-#header {}
+#header {
+  height: 95px;
+  color: $white;
+  
+  a {
+    color: $white;
+  }
+}
+
+.header-color-row-one {
+  height: 64px;
+  background-color: $dark_blue;
+  border-top: 4px solid darken($dark_blue, 50%);
+
+  .boxshadow & {
+    @include box-shadow($dark_blue 0px -1px 0px);
+    margin-top: 1px;
+  }
+}
+
+.header-color-row-two {
+  background-color: $light_blue;
+  height: 26px;
+  border-top: 1px solid lighten($light_blue, 10%);
+  border-bottom: 1px solid darken($light_blue, 10%);
+}
 
 
 /*
@@ -304,14 +352,17 @@ var {
 /*
  * Wraps all the branding elements, logo, name and slogan
  */
-#branding {}
+#branding {
+  display: inline-block;
+}
 
 
 /*
  * Logo
  */
 #logo {
-  padding: 10px 0;
+  display: inline-block;
+  padding: 0 10px 0 0;
 
   img {
     vertical-align: bottom;
@@ -322,7 +373,11 @@ var {
 /*
  * Wrapper for the site name and slogan (hgroup)
  */
-#name-and-slogan {}
+#name-and-slogan {
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 14px;
+}
 
 
 /*
@@ -340,7 +395,7 @@ var {
 
     &:hover,
     &:focus {
-      text-decoration: underline;
+      text-decoration: none;
     }
   }
 }
@@ -457,7 +512,9 @@ ul.links {
 /*
  * Header region, embedded in the #header
  */
-.region-header {}
+.region-header {
+  display: inline-block;
+}
 
 
 /*
@@ -538,6 +595,10 @@ a {
 /* =============================================================================
  *   Primary, Secondary and Menu Bar region menus
  * ========================================================================== */
+
+#primary-menu-bar {
+  display: inline-block;
+}
 
 /*
  * Use one of the following id's for granular control:
