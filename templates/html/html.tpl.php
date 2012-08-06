@@ -61,8 +61,8 @@
 <?php print $head; ?>
 <title><?php print $head_title; ?></title>
 <?php print $styles; ?>
-<link rel="stylesheet" href="/sites/all/themes/commons_origins/css/global.base.css">
-<link rel="stylesheet" href="/sites/all/themes/commons_origins/css/global.styles.css">
+<link rel="stylesheet" href="<?php print drupal_get_path('theme', 'commons_origins'); ?>/css/global.base.css">
+<link rel="stylesheet" href="<?php print drupal_get_path('theme', 'commons_origins'); ?>/css/global.styles.css">
 <?php print $scripts; ?>
 <?php print $polyfills; ?>
 </head>
