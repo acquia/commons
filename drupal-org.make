@@ -11,10 +11,6 @@ projects[ctools][version] = "1.0"
 projects[ctools][type] = "module"
 projects[ctools][subdir] = "contrib"
 
-projects[features][version] = "1.x-dev"
-projects[features][type] = "module"
-projects[features][subdir] = "contrib"
-
 projects[devel][version] = "1.x-dev"
 projects[devel][type] = "module"
 projects[devel][subdir] = "contrib"
@@ -26,6 +22,14 @@ projects[diff][subdir] = "contrib"
 projects[entity][version] = "1.0-rc3"
 projects[entity][type] = "module"
 projects[entity][subdir] = "contrib"
+
+projects[entityreference][version] = "1.x-dev"
+projects[entityreference][type] = "module"
+projects[entityreference][subdir] = "contrib"
+
+projects[features][version] = "1.x-dev"
+projects[features][type] = "module"
+projects[features][subdir] = "contrib"
 
 projects[flag][version] = "2.0-beta8"
 projects[flag][type] = "module"
@@ -47,10 +51,6 @@ projects[message_notify][download][url] = "http://git.drupal.org/project/message
 projects[message_notify][download][branch] = "7.x-2.x"
 projects[message_notify][subdir] = "contrib"
 
-projects[og][version] = "2.x-dev"
-projects[og][type] = "module"
-projects[og][subdir] = "contrib"
-
 projects[oauth][version] = "3.x-dev"
 projects[oauth][type] = "module"
 projects[oauth][subdir] = "contrib"
@@ -58,6 +58,10 @@ projects[oauth][subdir] = "contrib"
 projects[oauthconnector][version] = "1.x-dev"
 projects[oauthconnector][type] = "module"
 projects[oauthconnector][subdir] = "contrib"
+
+projects[og][version] = "2.x-dev"
+projects[og][type] = "module"
+projects[og][subdir] = "contrib"
 
 projects[panels][version] = "3.2"
 projects[panels][type] = "module"
@@ -70,7 +74,6 @@ projects[radioactivity][subdir] = "contrib"
 projects[rules][version] = "2.2"
 projects[rules][type] = "module"
 projects[rules][subdir] = "contrib"
-
 
 projects[strongarm][version] = "2.x-dev"
 projects[strongarm][type] = "module"
@@ -89,6 +92,7 @@ projects[votingapi][type] = "module"
 projects[votingapi][subdir] = "contrib"
 
 ; Contributed themes.
+
 projects[adaptivetheme][version] = "3.0"
 projects[adaptivetheme][type] = "theme"
 projects[adaptivetheme][subdir] = "contrib"
