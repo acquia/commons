@@ -91,6 +91,14 @@ projects[votingapi][version] = "2.6"
 projects[votingapi][type] = "module"
 projects[votingapi][subdir] = "contrib"
 
+; Commons-specific modules:
+
+projects[commons_groups][type] = "module"
+projects[commons_groups][subdir] = "contrib"
+projects[commons_groups][download][type] = "git"
+projects[commons_groups][download][url] = "http://git.drupal.org/project/commons_groups.git"
+projects[commons_groups][download][branch] = "7.x-3.x"
+
 ; Contributed themes.
 
 projects[adaptivetheme][version] = "3.0"
