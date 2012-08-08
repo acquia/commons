@@ -1,0 +1,49 @@
+<?php
+/**
+ * @file
+ * Code for the Commons Groups feature.
+ */
+
+include_once 'commons_groups.features.inc';
+
+/**
+* Implements hook_node_update().
+*/
+function commons_groups_node_update($node) {
+  $account = user_load($node->uid);
+  commons_groups_first_contribution($account, $node); 
+}
+
+/**
+* Implements hook_node_insert().
+*/
+function commons_groups_node_insert($node) {
+  $account = user_load($node->uid);
+  commons_groups_first_contribution($account, $node); 
+}
+
+/**
+* When a user first creates content within a group,
+* grant her the contributor role within that group.
+*/
+function commons_groups_first_contribution($account, $node) {
+  // Find the groups that this piece of content belongs to.
+  $groups = og_get_entity_groups('node', $node);
+  if (!empty($groups)) {
+    $node_groups = array_values($groups['node']);
+    // Find the groups that the node author belongs to.
+    $account_groups = og_get_groups_by_user($account, 'node');
+    if (!$account_groups) {
+      $account_groups = array();
+    }
+    // For groups where this user is not already a member, add her to the group.
+    $new_groups = array_diff($node_groups, $account_groups);
+    if (!empty($new_groups)) {
+      foreach ($new_groups as $new_group_nid) {
+        $values = array('state' => OG_STATE_ACTIVE);
+        $new_membership = og_membership_create('node', $new_group_nid, 'user', $account->uid, 'og_user_group_ref', $values);
+        $new_membership->save();
+      }  
+    }
+  }
+}
