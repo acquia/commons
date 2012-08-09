@@ -1,0 +1,43 @@
+<?php
+/**
+ * Implementation of hook_ctools_plugin_directory().
+ */
+function commons_bw_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'ctools' && $plugin == 'content_types') {
+    return 'plugins/' . $plugin;
+  }
+}
+
+/**
+* Get a list of modules that add content to a particular type of widget.
+* The only currently supported widget type is 'group', but this
+* could be extended to support other entities.
+*/ 
+function commons_bw_get_tab_definitions($widget_type = 'group') {
+  $tabs = array();
+  $hook_name = 'commons_bw_' . $widget_type . '_widget';
+  foreach (module_implements($hook_name) as $module) {
+    $function = $module . '_' . $hook_name;
+    $tabs = array_merge($tabs, $function());
+  }
+  return $tabs;
+}
+
+
+
+
+/**
+* Generate a renderable group widget.
+*/
+
+function commons_bw_generate_group_widget($group) {
+  // Load the default tab definitinos.
+  $tabs = commons_bw_get_tab_definitions('group');
+  // Populate the group argument.
+  foreach ($tabs as $key => $tab) {
+    $tabs[$key]['args'] = $group->nid;
+  }
+  $settings = array('style' => 'mac', 'ajax' => FALSE);
+  // Generate the Quicktabs instance.
+  return quicktabs_build_quicktabs('commons_bw', $settings, $tabs);
+}
