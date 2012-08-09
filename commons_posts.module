@@ -1,0 +1,27 @@
+<?php
+/**
+ * @file
+ * Code for the Commons Posts feature.
+ */
+
+include_once 'commons_posts.features.inc';
+
+function commons_posts_commons_bw_group_widget() {
+  return array(
+    'commons_posts' => array(
+      'title' => 'Posts',
+      'type' => 'view',
+      'vid' => 'commons_bw_posts',
+      'display' => 'page_1',
+      'weight' => 5,
+    ),
+  );
+}
+
+function commons_posts_views_pre_render(&$view) {
+  if ($view->name == 'commons_bw_posts' && user_access('Post: Create new content')) {
+    $group_id = $view->args[0];
+
+    $view->attachment_before = l('Create a post', 'node/add/post', array('query' => array('og_group_ref' => $group_id)));
+  }  
+ }
