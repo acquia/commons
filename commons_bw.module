@@ -16,10 +16,7 @@ function commons_bw_ctools_plugin_directory($module, $plugin) {
 function commons_bw_get_tab_definitions($widget_type = 'group') {
   $tabs = array();
   $hook_name = 'commons_bw_' . $widget_type . '_widget';
-  foreach (module_implements($hook_name) as $module) {
-    $function = $module . '_' . $hook_name;
-    $tabs = array_merge($tabs, $function());
-  }
+  $tabs = module_invoke_all($hook_name);
   return $tabs;
 }
 
