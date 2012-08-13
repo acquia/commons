@@ -353,7 +353,9 @@ var {
  * Wraps all the branding elements, logo, name and slogan
  */
 #branding {
-  display: inline-block;
+  // display: inline-block;
+  float: left;
+  vertical-align: top;
 }
 
 
@@ -507,13 +509,16 @@ ul.links {
  * Regions can be nested, such as when using Panels
  */
 .region-inner .region-inner {}
-
+// 
 
 /*
  * Header region, embedded in the #header
  */
 .region-header {
-  display: inline-block;
+  // display: inline-block;
+  float: left;
+  @extend .divider-left;
+  height: 64px;
 }
 
 
@@ -608,9 +613,11 @@ a {
  * You can target all of these with .nav or div[id$="menu-bar"]
  */
 
-.nav {
-  clear: both;
-  margin: 10px 0;
+#menu-bar.nav {
+  // display: inline-block;
+  // margin-right: -3px;
+  float: left;
+  vertical-align: top;
 
   ul,
   ul.menu {
@@ -620,27 +627,49 @@ a {
 
   li,
   ul.menu li {
-    display: inline;
+    display: inline-block;
     float: left;
     list-style: none;
     margin: 0;
     padding: 0;
+
+    &:hover, &.active-trail {
+      background: image-url('main-nav-hover.png') repeat-x left top;
+    }
   }
 
   li a,
   ul.menu li a {
     display: block;
     white-space: nowrap;
-    padding: 0 10px;
+    padding: 31px 13px 0px 13px;
+    height: 33px;
+    text-transform: uppercase;
+    text-shadow: black 1px 1px 4px;
+    @extend .divider-left;
     
     &:visited {}
     
     &:hover,
-    &:focus {}
+    &:focus {
+      text-decoration: none;
+    }
   }
 
   .block {
-    margin-bottom: 0;
+    margin: 0;
+  }
+
+  .main-menu-home {
+    background: image-url('icons/icon-home.png') no-repeat center 10px;
+  }
+
+  .main-menu-groups {
+    background: image-url('icons/icon-groups.png') no-repeat center 10px;
+  }
+
+  .main-menu-events {
+    background: image-url('icons/icon-events.png') no-repeat center 10px;
   }
 }
 

@@ -127,7 +127,6 @@
 
     <!-- Navigation elements -->
     <?php print render($page['menu_bar']); ?>
-    <?php if ($primary_navigation): print $primary_navigation; endif; ?>
 
     <!-- region: Header -->
     <?php print render($page['header']); ?>
