@@ -3,3 +3,67 @@
  * @file
  * Drupal Commons Events feature.
  */
+
+/**
+ * Implements hook_theme().
+ */
+function commons_events_theme($existing, $type, $theme, $path) {
+  return array(
+    'commons_events_attending_event' => array(
+      'variables' => array(
+        'event' => NULL,
+      ),
+      'file' => '/includes/commons_events.theme.inc',
+    ),
+  );
+}
+
+/**
+ * Implements hook_entity_view_alter().
+ */
+function commons_events_entity_view_alter(&$build, $type) {
+  if ($type == 'node' && $build['#node']->type == 'event') {
+    $build['attending'] = array(
+      0 => theme('commons_events_attending_event', array('event' => $build['#node'])),
+    );
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter();
+ */
+function commons_events_form_node_form_alter(&$form, &$form_state) {
+  if ($form_state['node']->type == 'event') {
+    // Remove the '-None-' option from all the dropdowns.
+    unset($form['field_country'][$form['field_country']['#language']]['#options']['_none']);
+    unset($form['field_location'][$form['field_location']['#language']]['#options']['_none']);
+    unset($form['field_registration_type'][$form['field_registration_type']['#language']]['#options']['_none']);
+    unset($form['field_status'][$form['field_status']['#language']]['#options']['_none']);
+    unset($form['field_number_of_attendees'][$form['field_number_of_attendees']['#language']]['#options']['_none']);
+    // Hide the Registration type field.
+    $form['field_registration']['#type'] = 'hidden';
+    // All address fields should be hidden if event is only online.
+    $form['field_country']['#states'] = array(
+      'invisible' => array(
+        ':input[name^="field_location"]' => array('value' => 'online'),
+      ),
+    );
+    $form['field_state_province']['#states'] = $form['field_country']['#states'];
+    $form['field_city']['#states'] = $form['field_country']['#states'];
+    $form['field_postal_code']['#states'] = $form['field_country']['#states'];
+    $form['field_address']['#states'] = $form['field_country']['#states'];
+    // Status and attendee limit are shown if registration is onsite.
+    $form['field_status']['#states'] = array(
+      'visible' => array(
+        ':input[name^="field_registration_type"]' => array('value' => 'onsite'),
+      ),
+    );
+    $form['field_number_of_attendees']['#states'] = $form['field_status']['#states'];
+    // URL field shown if registration is offsite only.
+    $form['field_offsite_url']['#states'] = array(
+      'visible' => array(
+        ':input[name^="field_registration_type"]' => array('value' => 'external'),
+      ),
+    ); 
+  }
+}
