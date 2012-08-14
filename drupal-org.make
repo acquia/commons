@@ -67,6 +67,9 @@ projects[panels][version] = "3.2"
 projects[panels][type] = "module"
 projects[panels][subdir] = "contrib"
 
+projects[quicktabs][type] = "module"
+projects[quicktabs][subdir] = "contrib"
+
 projects[radioactivity][version] = "2.6"
 projects[radioactivity][type] = "module"
 projects[radioactivity][subdir] = "contrib"
