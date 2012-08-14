@@ -43,7 +43,7 @@ html {
 }
 
 body {
-  font-family: $sans-serif-small; // Set from _custom.scss font variables
+  font-family: $base-font; // Set from _custom.scss font variables
   font-size: 87.5%;
   color: $dark_gray;
 }
@@ -72,9 +72,10 @@ h1 {
 
 h2 {
   color: $dark_blue;
-  font-weight: normal;
-  font-size: 48px;
-  line-height: 48px;
+  font-weight: lighter;
+  font-size: 54px;
+  line-height: 54px;
+  font-family: $alt-font;
 }
 
 
@@ -85,7 +86,7 @@ h3 {
   line-height: 20px;
 
   .sidebar & {
-    color: $dark_gray;
+    color: $gray;
   }
 }
 
@@ -428,6 +429,9 @@ var {
   margin: 0;
 }
 
+#page-top {
+  margin: 20px 0px;
+}
 
 /* =============================================================================
  *   Misc Global Styles
@@ -549,7 +553,17 @@ ul.links {
 /*
  * Sidebars - targets both
  */
-.sidebar {}
+.sidebar {
+  .block {
+    background-color: $white;
+    @include border-radius(3px);
+    @include box-shadow($light_gray 1px 1px 4px);
+
+    .block-inner {
+      padding: 10px;
+    }
+  }
+}
 
 
 /*

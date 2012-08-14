@@ -140,6 +140,43 @@
   <?php print render($page['secondary_content']); ?>
 
   <div id="columns" class="columns clearfix">
+
+    <div id="page-top">
+      <!-- Breadcrumbs -->
+      <?php if ($breadcrumb): print $breadcrumb; endif; ?>
+
+      <?php print render($title_prefix); // Does nothing by default in D7 core ?>
+
+      <?php if ($title || $primary_local_tasks || $secondary_local_tasks || $action_links = render($action_links)): ?>
+        <header<?php print $content_header_attributes; ?>>
+
+          <?php if ($title): ?>
+            <h2 id="page-title">
+              <?php print $title; ?>
+            </h2>
+          <?php endif; ?>
+
+          <?php if ($primary_local_tasks || $secondary_local_tasks || $action_links): ?>
+            <div id="tasks">
+
+              <?php if ($primary_local_tasks): ?>
+                <ul class="tabs primary clearfix"><?php print render($primary_local_tasks); ?></ul>
+              <?php endif; ?>
+
+              <?php if ($secondary_local_tasks): ?>
+                <ul class="tabs secondary clearfix"><?php print render($secondary_local_tasks); ?></ul>
+              <?php endif; ?>
+
+              <?php if ($action_links = render($action_links)): ?>
+                <ul class="action-links clearfix"><?php print $action_links; ?></ul>
+              <?php endif; ?>
+
+            </div>
+          <?php endif; ?>
+
+        </header>
+      <?php endif; ?>
+    </div>
     <div id="content-column" class="content-column" role="main">
       <div class="content-inner">
 
@@ -147,41 +184,6 @@
         <?php print render($page['highlighted']); ?>
 
         <<?php print $tag; ?> id="main-content">
-
-          <!-- Breadcrumbs -->
-          <?php if ($breadcrumb): print $breadcrumb; endif; ?>
-
-          <?php print render($title_prefix); // Does nothing by default in D7 core ?>
-
-          <?php if ($title || $primary_local_tasks || $secondary_local_tasks || $action_links = render($action_links)): ?>
-            <header<?php print $content_header_attributes; ?>>
-
-              <?php if ($title): ?>
-                <h2 id="page-title">
-                  <?php print $title; ?>
-                </h2>
-              <?php endif; ?>
-
-              <?php if ($primary_local_tasks || $secondary_local_tasks || $action_links): ?>
-                <div id="tasks">
-
-                  <?php if ($primary_local_tasks): ?>
-                    <ul class="tabs primary clearfix"><?php print render($primary_local_tasks); ?></ul>
-                  <?php endif; ?>
-
-                  <?php if ($secondary_local_tasks): ?>
-                    <ul class="tabs secondary clearfix"><?php print render($secondary_local_tasks); ?></ul>
-                  <?php endif; ?>
-
-                  <?php if ($action_links = render($action_links)): ?>
-                    <ul class="action-links clearfix"><?php print $action_links; ?></ul>
-                  <?php endif; ?>
-
-                </div>
-              <?php endif; ?>
-
-            </header>
-          <?php endif; ?>
 
           <!-- region: Main Content -->
           <?php if ($content = render($page['content'])): ?>
