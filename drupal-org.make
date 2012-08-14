@@ -93,6 +93,12 @@ projects[votingapi][subdir] = "contrib"
 
 ; Commons contrib modules:
 
+projects[commons_bw][type] = "module"
+projects[commons_bw][subdir] = "contrib"
+projects[commons_bw][download][type] = "git"
+projects[commons_bw][download][url] = "http://git.drupal.org/project/commons_bw.git"
+projects[commons_bw][download][branch] = "7.x-3.x"
+
 projects[commons_groups][type] = "module"
 projects[commons_groups][subdir] = "contrib"
 projects[commons_groups][download][type] = "git"
