@@ -55,6 +55,10 @@ projects[oauth][version] = "3.x-dev"
 projects[oauth][type] = "module"
 projects[oauth][subdir] = "contrib"
 
+projects[registration][version] = "1.x-dev"
+projects[registration][type] = "module"
+projects[registration][subdir] = "contrib"
+
 projects[oauthconnector][version] = "1.x-dev"
 projects[oauthconnector][type] = "module"
 projects[oauthconnector][subdir] = "contrib"
