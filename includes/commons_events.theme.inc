@@ -60,8 +60,9 @@ function theme_commons_events_event_attendees($variables = array()) {
     $row = 0;
     $count = 1;
     foreach ($registrations as $registration_id => $registration) {
+      $user_uri = entity_uri('user', $registration->user);
       $rows[$row][] = array(
-        'data' => $registration->user->name,
+        'data' => l($registration->user->name, $user_uri['path']),
         'width' => '25%',
       );
       $count++;

@@ -38,6 +38,12 @@ function commons_events_entity_view_alter(&$build, $type) {
         '#markup' => theme('commons_events_event_attendees', array('event_nid' => $build['#node']->nid)),
       ),
     );
+    // Don't show the address if the event location is only online.
+    $field_location = field_view_field('node', $build['#node'], 'field_location');
+    $field_location = $field_location['#items']['0']['value'];
+    if ($field_location == 'online') {
+      unset($build['field_address']);
+    }
   }
 }
 
