@@ -28,3 +28,58 @@ function theme_commons_events_attending_event($variables = array()) {
   );
   return $content;
 }
+
+/**
+ * Theme the event attendees list.
+ */
+function theme_commons_events_event_attendees($variables = array()) {
+  $event_nid = $variables['event_nid'];
+  $attendeesQuery = new EntityFieldQuery();
+  $attendeesQuery->entityCondition('entity_type', 'registration')
+    ->propertyCondition('entity_id', $event_nid)
+    ->propertyCondition('entity_type', 'node')
+    ->range(0, 12);
+  $attendees = $attendeesQuery->execute();
+  if (isset($attendees['registration'])) {
+    $tableData = array(
+      'attributes' => array(),
+      'caption' => NULL,
+      'colgroups' => array(),
+      'sticky' => FALSE,
+      'empty' => NULL,
+      'header' => array(
+        0 => array(
+          'colspan' => 4,
+          'data' => t('Attendees'),
+        ),
+      ),
+      'rows' => array(),
+    );
+    $rows = &$tableData['rows'];
+    $registrations = entity_load('registration', array_keys($attendees['registration']));
+    $row = 0;
+    $count = 1;
+    foreach ($registrations as $registration_id => $registration) {
+      $rows[$row][] = array(
+        'data' => $registration->user->name,
+        'width' => '25%',
+      );
+      $count++;
+      if ($count >= 4) {
+        $row++;
+        $count = 1;
+      }
+    }
+    $rows[] = array(
+      0 => array(
+        'data' => l('See all attendees', 'node/' . $event_nid . '/attendees'),
+        'colspan' => 4,
+        'class' => array('all-attendees-link'),
+      ),
+    );
+    return theme_table($tableData);
+  }
+  else {
+    return "";
+  }
+}

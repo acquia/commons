@@ -4,8 +4,6 @@
  * Drupal Commons Events feature.
  */
 
-include_once 'includes/commons_events.features.inc';
-
 /**
  * Implements hook_theme().
  */
@@ -14,6 +12,12 @@ function commons_events_theme($existing, $type, $theme, $path) {
     'commons_events_attending_event' => array(
       'variables' => array(
         'event' => NULL,
+      ),
+      'file' => '/includes/commons_events.theme.inc',
+    ),
+    'commons_events_event_attendees' => array(
+      'variables' => array(
+        'event_nid' => NULL,
       ),
       'file' => '/includes/commons_events.theme.inc',
     ),
@@ -27,6 +31,12 @@ function commons_events_entity_view_alter(&$build, $type) {
   if ($type == 'node' && $build['#node']->type == 'event') {
     $build['attending'] = array(
       0 => theme('commons_events_attending_event', array('event' => $build['#node'])),
+      '#weight' => -10,
+    );
+    $build['attendees'] = array(
+      0 => array(
+        '#markup' => theme('commons_events_event_attendees', array('event_nid' => $build['#node']->nid)),
+      ),
     );
   }
 }
@@ -48,6 +58,11 @@ function commons_events_form_node_form_alter(&$form, &$form_state) {
       ),
     );
     // Status and attendee limit are shown if registration is onsite.
+    $node_registration_status = 1;
+    if (isset($form_state['node']->nid)) {
+      $settings = registration_entity_settings('node', $form_state['node']->nid);
+      $node_registration_status = $settings['status'];
+    }
     $form['field_status'] = array(
       '#type' => 'select',
       '#title' => t('Status'),
@@ -55,7 +70,7 @@ function commons_events_form_node_form_alter(&$form, &$form_state) {
         1 => t('Open to new attendees'),
         0 => t('Closed'),
       ),
-      '#default_value' => 1,
+      '#default_value' => $node_registration_status,
       '#states' => array(
         'visible' => array(
           ':input[name^="field_registration_type"]' => array('value' => 'onsite'),
@@ -74,7 +89,6 @@ function commons_events_form_node_form_alter(&$form, &$form_state) {
     );
     $form['#validate'] = array_merge(array('commons_events_node_form_validate'), $form['#validate']);
     $form['#submit'][] = 'commons_events_node_form_submit';
-    dsm($form);
   }
 }
 
@@ -87,9 +101,8 @@ function commons_events_node_form_validate($form, &$form_state) {
     case 'onsite':
       // Max attendees must be entered if the registration status is open and
       // registration is done onsite.
-      if ($form_state['values']['field_status'] == 1
-        && (empty($form_state['values']['field_number_of_attendees'][$lng]['0']['value'])
-        || !is_numeric($form_state['values']['field_number_of_attendees'][$lng]['0']['value']))) {
+      if ((int) $form_state['values']['field_status'] == 1
+        && (!is_numeric($form_state['values']['field_number_of_attendees'][$lng]['0']['value']))) {
           form_set_error('field_number_of_attendees',
             t('Maximum number of attendees must be set for registrations to be accepted.'));
           return FALSE;
@@ -112,9 +125,15 @@ function commons_events_node_form_validate($form, &$form_state) {
  */
 function commons_events_node_form_submit($form, $form_state) {
   $node = $form_state['node'];
-  dsm($form_state);
-  drupal_set_message('submit fired');
+  $lng = (isset($form_state['language']) ? $form_state['language'] : LANGUAGE_NONE);
   if (isset($node->nid)) {
-    //registration_entity_update_settings('node', $node, $settings);
+    $settings = registration_entity_settings('node', $node->nid);
+    $settings['status'] = (int) $form_state['values']['field_status'];
+    if (!empty($form_state['values']['field_number_of_attendees'][$lng]['0']['value'])
+      && is_numeric($form_state['values']['field_number_of_attendees'][$lng]['0']['value'])) {
+      $settings['capacity'] = (int) $form_state['values']['field_number_of_attendees'][$lng]['0']['value'];
+    }
+    $settings['settings'] = serialize($settings['settings']);
+    registration_update_entity_settings('node', $node->nid, $settings);
   }
 }
