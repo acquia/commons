@@ -4,6 +4,8 @@
  * Drupal Commons Events feature.
  */
 
+include_once 'includes/commons_events.features.inc';
+
 /**
  * Implements hook_theme().
  */
@@ -35,35 +37,84 @@ function commons_events_entity_view_alter(&$build, $type) {
 function commons_events_form_node_form_alter(&$form, &$form_state) {
   if ($form_state['node']->type == 'event') {
     // Remove the '-None-' option from all the dropdowns.
-    unset($form['field_country'][$form['field_country']['#language']]['#options']['_none']);
     unset($form['field_location'][$form['field_location']['#language']]['#options']['_none']);
     unset($form['field_registration_type'][$form['field_registration_type']['#language']]['#options']['_none']);
-    unset($form['field_status'][$form['field_status']['#language']]['#options']['_none']);
-    unset($form['field_number_of_attendees'][$form['field_number_of_attendees']['#language']]['#options']['_none']);
     // Hide the Registration type field.
     $form['field_registration']['#type'] = 'hidden';
-    // All address fields should be hidden if event is only online.
-    $form['field_country']['#states'] = array(
+    // Address field should be hidden if event is only online.
+    $form['field_address']['#states'] = array(
       'invisible' => array(
         ':input[name^="field_location"]' => array('value' => 'online'),
       ),
     );
-    $form['field_state_province']['#states'] = $form['field_country']['#states'];
-    $form['field_city']['#states'] = $form['field_country']['#states'];
-    $form['field_postal_code']['#states'] = $form['field_country']['#states'];
-    $form['field_address']['#states'] = $form['field_country']['#states'];
     // Status and attendee limit are shown if registration is onsite.
-    $form['field_status']['#states'] = array(
-      'visible' => array(
-        ':input[name^="field_registration_type"]' => array('value' => 'onsite'),
+    $form['field_status'] = array(
+      '#type' => 'select',
+      '#title' => t('Status'),
+      '#options' => array(
+        1 => t('Open to new attendees'),
+        0 => t('Closed'),
       ),
+      '#default_value' => 1,
+      '#states' => array(
+        'visible' => array(
+          ':input[name^="field_registration_type"]' => array('value' => 'onsite'),
+        ),
+      ),
+      '#weight' => 10,
     );
     $form['field_number_of_attendees']['#states'] = $form['field_status']['#states'];
+    $form['field_number_of_attendees']['#weight'] = 11;
+    $form['field_topics']['#weight'] = 12;
     // URL field shown if registration is offsite only.
     $form['field_offsite_url']['#states'] = array(
       'visible' => array(
         ':input[name^="field_registration_type"]' => array('value' => 'external'),
       ),
-    ); 
+    );
+    $form['#validate'] = array_merge(array('commons_events_node_form_validate'), $form['#validate']);
+    $form['#submit'][] = 'commons_events_node_form_submit';
+    dsm($form);
+  }
+}
+
+/**
+ * Custom node form validation handler.
+ */
+function commons_events_node_form_validate($form, &$form_state) {
+  $lng = (isset($form_state['language']) ? $form_state['language'] : LANGUAGE_NONE);
+  switch ($form_state['values']['field_registration_type'][$lng]['0']['value']) {
+    case 'onsite':
+      // Max attendees must be entered if the registration status is open and
+      // registration is done onsite.
+      if ($form_state['values']['field_status'] == 1
+        && (empty($form_state['values']['field_number_of_attendees'][$lng]['0']['value'])
+        || !is_numeric($form_state['values']['field_number_of_attendees'][$lng]['0']['value']))) {
+          form_set_error('field_number_of_attendees',
+            t('Maximum number of attendees must be set for registrations to be accepted.'));
+          return FALSE;
+        }
+      break;
+    case 'external':
+      // Must have entered a URL to the offsite registration page.
+      if (empty($form_state['values']['field_offsite_url'][$lng]['0']['value'])
+        || !valid_url($form_state['values']['field_offsite_url'][$lng]['0']['value'])) {
+        form_set_error('field_offsite_url', t('A valid URL is required for offsite registration.'));
+        return FALSE;
+      }
+      break;
+  }
+  return TRUE;
+}
+
+/**
+ * Custom node form submit handler.
+ */
+function commons_events_node_form_submit($form, $form_state) {
+  $node = $form_state['node'];
+  dsm($form_state);
+  drupal_set_message('submit fired');
+  if (isset($node->nid)) {
+    //registration_entity_update_settings('node', $node, $settings);
   }
 }

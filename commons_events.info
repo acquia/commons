@@ -1,8 +1,51 @@
 name = Commons Events
-description = Provide events functionality
+description = Provides the Event features for Drupal Commons.
 core = 7.x
-
+package = Commons
+version = 7.x-3.0-alpha0
+project = commons_events
+dependencies[] = addressfield
+dependencies[] = commons_groups
+dependencies[] = date
+dependencies[] = date_api
+dependencies[] = entityreference
+dependencies[] = features
+dependencies[] = image
+dependencies[] = list
 dependencies[] = registration
+dependencies[] = strongarm
+dependencies[] = taxonomy
+
+features[ctools][] = strongarm:strongarm:1
+features[features_api][] = api:1
+features[field][] = node-event-body
+features[field][] = node-event-field_address
+features[field][] = node-event-field_audience
+features[field][] = node-event-field_date
+features[field][] = node-event-field_location
+features[field][] = node-event-field_logo
+features[field][] = node-event-field_number_of_attendees
+features[field][] = node-event-field_offsite_url
+features[field][] = node-event-field_registration
+features[field][] = node-event-field_registration_type
+features[field][] = node-event-field_topics
+features[node][] = event
+features[registration_type][] = event
+features[taxonomy][] = tags
+features[variable][] = comment_anonymous_event
+features[variable][] = comment_default_mode_event
+features[variable][] = comment_default_per_page_event
+features[variable][] = comment_event
+features[variable][] = comment_form_location_event
+features[variable][] = comment_preview_event
+features[variable][] = comment_subject_field_event
+features[variable][] = field_bundle_settings_node__event
+features[variable][] = menu_options_event
+features[variable][] = menu_parent_event
+features[variable][] = node_options_event
+features[variable][] = node_preview_event
+features[variable][] = node_submitted_event
+
 
 files[] = includes/commons_events.forms.inc
 files[] = includes/commons_events.theme.inc
