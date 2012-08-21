@@ -37,8 +37,10 @@ function theme_commons_events_event_attendees($variables = array()) {
   $attendeesQuery = new EntityFieldQuery();
   $attendeesQuery->entityCondition('entity_type', 'registration')
     ->propertyCondition('entity_id', $event_nid)
-    ->propertyCondition('entity_type', 'node')
-    ->range(0, 12);
+    ->propertyCondition('entity_type', 'node');
+  if ($variables['display'] == 'teaser') {
+    $attendeesQuery->range(0, 12);
+  }
   $attendees = $attendeesQuery->execute();
   if (isset($attendees['registration'])) {
     $tableData = array(
@@ -61,8 +63,16 @@ function theme_commons_events_event_attendees($variables = array()) {
     $count = 1;
     foreach ($registrations as $registration_id => $registration) {
       $user_uri = entity_uri('user', $registration->user);
+      $picture = $registration->user->picture;
+      $display_text = $registration->user->name;
+      $options = array();
+      if (!empty($picture)) {
+        $display_text = "<img class='attendee-profile-picture' src='" . image_style_url('thumbnail', $picture->uri)
+          . "' alt='" . $display_text . "' />" . $display_text;
+        $options['html'] = TRUE;
+      }
       $rows[$row][] = array(
-        'data' => l($registration->user->name, $user_uri['path']),
+        'data' => l($display_text, $user_uri['path'], $options),
         'width' => '25%',
       );
       $count++;
@@ -71,13 +81,15 @@ function theme_commons_events_event_attendees($variables = array()) {
         $count = 1;
       }
     }
-    $rows[] = array(
-      0 => array(
-        'data' => l('See all attendees', 'node/' . $event_nid . '/attendees'),
-        'colspan' => 4,
-        'class' => array('all-attendees-link'),
-      ),
-    );
+    if ($variables['display'] != 'full') {
+      $rows[] = array(
+        0 => array(
+          'data' => l('See all attendees', 'node/' . $event_nid . '/attendees'),
+          'colspan' => 4,
+          'class' => array('all-attendees-link'),
+        ),
+      );
+    }
     return theme_table($tableData);
   }
   else {

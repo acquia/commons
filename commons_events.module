@@ -5,6 +5,32 @@
  */
 
 /**
+ * Implements hook_menu().
+ */
+function commons_events_menu() {
+  $items = array();
+  $items['node/%node/attendees'] = array(
+    'title' => 'Attendees',
+    'page callback' => 'commons_events_event_attendees_page',
+    'page arguments' => array(1),
+    'access callback' => TRUE,
+    'type' => MENU_LOCAL_TASK,
+  );
+  return $items;
+}
+
+/**
+ * Page callback for full event attendee listing.
+ */
+function commons_events_event_attendees_page($event_node) {
+  return theme('commons_events_event_attendees',
+    array(
+      'event_nid' => $event_node->nid,
+      'display' => 'full',
+    ));
+}
+
+/**
  * Implements hook_theme().
  */
 function commons_events_theme($existing, $type, $theme, $path) {
@@ -17,6 +43,7 @@ function commons_events_theme($existing, $type, $theme, $path) {
     ),
     'commons_events_event_attendees' => array(
       'variables' => array(
+        'display' => NULL,
         'event_nid' => NULL,
       ),
       'file' => '/includes/commons_events.theme.inc',
@@ -35,7 +62,11 @@ function commons_events_entity_view_alter(&$build, $type) {
     );
     $build['attendees'] = array(
       0 => array(
-        '#markup' => theme('commons_events_event_attendees', array('event_nid' => $build['#node']->nid)),
+        '#markup' => theme('commons_events_event_attendees',
+          array(
+            'event_nid' => $build['#node']->nid,
+            'display' => 'teaser',
+          )),
       ),
     );
     // Don't show the address if the event location is only online.
