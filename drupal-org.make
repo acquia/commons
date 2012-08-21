@@ -116,7 +116,7 @@ projects[commons_events][type] = "module"
 projects[commons_events][subdir] = "contrib"
 projects[commons_events][download][type] = "git"
 projects[commons_events][download][url] = "http://git.drupal.org/project/commons_events.git"
-projects[commons_events][download][branch] = "7.x-1.x"
+projects[commons_events][download][branch] = "7.x-3.x"
 
 projects[commons_follow_group][type] = "module"
 projects[commons_follow_group][subdir] = "contrib"
