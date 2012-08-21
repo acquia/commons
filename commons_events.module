@@ -13,10 +13,21 @@ function commons_events_menu() {
     'title' => 'Attendees',
     'page callback' => 'commons_events_event_attendees_page',
     'page arguments' => array(1),
-    'access callback' => TRUE,
+    'access callback' => 'commons_events_attendee_access',
+    'access arguments' => array(1),
     'type' => MENU_LOCAL_TASK,
   );
   return $items;
+}
+
+/**
+ * Access callback for showing the Attendees tab.
+ */
+function commons_events_attendee_access($event_node) {
+  if ($event_node->type == 'event') {
+    return TRUE;
+  }
+  return FALSE;
 }
 
 /**
