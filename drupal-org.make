@@ -10,7 +10,6 @@ projects[connector][version] = "1.x-dev"
 projects[connector][type] = "module"
 projects[connector][subdir] = "contrib"
 
-projects[ctools][version] = "1.0"
 projects[ctools][type] = "module"
 projects[ctools][subdir] = "contrib"
 
@@ -28,7 +27,6 @@ projects[diff][subdir] = "contrib"
 projects[email_registration][type] = "module"
 projects[email_registration][subdir] = "contrib"
 
-projects[entity][version] = "1.0-rc3"
 projects[entity][type] = "module"
 projects[entity][subdir] = "contrib"
 
@@ -40,7 +38,6 @@ projects[features][version] = "1.x-dev"
 projects[features][type] = "module"
 projects[features][subdir] = "contrib"
 
-projects[flag][version] = "2.0-beta8"
 projects[flag][type] = "module"
 projects[flag][subdir] = "contrib"
 
@@ -80,18 +77,16 @@ projects[og][version] = "2.x-dev"
 projects[og][type] = "module"
 projects[og][subdir] = "contrib"
 
-projects[panels][version] = "3.2"
 projects[panels][type] = "module"
 projects[panels][subdir] = "contrib"
 
 projects[quicktabs][type] = "module"
 projects[quicktabs][subdir] = "contrib"
 
-projects[radioactivity][version] = "2.6"
 projects[radioactivity][type] = "module"
 projects[radioactivity][subdir] = "contrib"
 
-projects[rules][version] = "2.2"
+
 projects[rules][type] = "module"
 projects[rules][subdir] = "contrib"
 
@@ -99,15 +94,14 @@ projects[strongarm][version] = "2.x-dev"
 projects[strongarm][type] = "module"
 projects[strongarm][subdir] = "contrib"
 
-projects[views][version] = "3.3"
+
 projects[views][type] = "module"
 projects[views][subdir] = "contrib"
 
-projects[views_bulk_operations][version] = "3.0-rc1"
+
 projects[views_bulk_operations][type] = "module"
 projects[views_bulk_operations][subdir] = "contrib"
 
-projects[votingapi][version] = "2.6"
 projects[votingapi][type] = "module"
 projects[votingapi][subdir] = "contrib"
 
@@ -163,7 +157,6 @@ projects[commons_profile_base][download][branch] = "7.x-3.x"
 
 ; Contributed themes.
 
-projects[adaptivetheme][version] = "3.0"
 projects[adaptivetheme][type] = "theme"
 projects[adaptivetheme][subdir] = "contrib"
 
