@@ -3,6 +3,9 @@ core = 7.x
 
 ; Contributed modules.
 
+projects[addressfield][type] = "module"
+projects[addressfield][subdir] = "contrib"
+
 projects[connector][version] = "1.x-dev"
 projects[connector][type] = "module"
 projects[connector][subdir] = "contrib"
@@ -10,6 +13,9 @@ projects[connector][subdir] = "contrib"
 projects[ctools][version] = "1.0"
 projects[ctools][type] = "module"
 projects[ctools][subdir] = "contrib"
+
+projects[date][type] = "module"
+projects[date][subdir] = "contrib"
 
 projects[devel][version] = "1.x-dev"
 projects[devel][type] = "module"
