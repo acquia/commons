@@ -25,6 +25,9 @@ projects[diff][version] = "2.0"
 projects[diff][type] = "module"
 projects[diff][subdir] = "contrib"
 
+projects[email_registration][type] = "module"
+projects[email_registration][subdir] = "contrib"
+
 projects[entity][version] = "1.0-rc3"
 projects[entity][type] = "module"
 projects[entity][subdir] = "contrib"
@@ -60,6 +63,10 @@ projects[message_notify][subdir] = "contrib"
 projects[oauth][version] = "3.x-dev"
 projects[oauth][type] = "module"
 projects[oauth][subdir] = "contrib"
+
+
+projects[realname][type] = "module"
+projects[realname][subdir] = "contrib"
 
 projects[registration][version] = "1.x-dev"
 projects[registration][type] = "module"
@@ -147,6 +154,12 @@ projects[commons_follow_users][subdir] = "contrib"
 projects[commons_follow_users][download][type] = "git"
 projects[commons_follow_users][download][url] = "http://git.drupal.org/project/commons_follow_users.git"
 projects[commons_follow_users][download][branch] = "7.x-3.x"
+
+projects[commons_profile_base][type] = "module"
+projects[commons_profile_base][subdir] = "contrib"
+projects[commons_profile_base][download][type] = "git"
+projects[commons_profile_base][download][url] = "http://git.drupal.org/project/commons_profile_base.git"
+projects[commons_profile_base][download][branch] = "7.x-3.x"
 
 ; Contributed themes.
 
