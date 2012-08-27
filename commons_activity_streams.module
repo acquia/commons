@@ -1,0 +1,53 @@
+<?php
+
+/**
+ * Implements hook_node_insert().
+ */
+function commons_activity_streams_node_insert($node) {
+  // Create a message when a user creates a new node.
+  // Borrowed from message_example.module:
+  // Save the message and assign it to the user realm. Since another user,
+  // usually an admin might create the node, but populate the author field
+  // with another user, we make sure the user realm is populated with the
+  // node's author, instead of the acting user (although in most cases it
+  // would be the same user).
+  // The following example demonstrates that we don't need to explicitly set
+  // the realm to the user, since if no realms are provided then the message
+  // is automatically assigned to the user passed in the function, or if no
+  // user object is provided, then to the acting user.
+  $account = user_load($node->uid);
+
+  $message = message_create('commons_activity_streams_node_created', array('uid' => $account->uid));
+  // Save reference to the node in the node reference field, and the
+  $wrapper = entity_metadata_wrapper('message', $message);
+  // We use a multiple value field in case we wish to use the same
+  // field for grouping messages in the future
+  // (eg http://drupal.org/node/1757060).
+  $wrapper->field_target_nodes[] = $node;
+  $wrapper->save();
+}
+
+/**
+ * Implements hook_comment_insert().
+ */
+function commons_activity_streams_comment_insert($comment) {
+  $account = user_load($comment->uid);
+  $node = node_load($comment->nid);
+
+  $message = message_create('commons_activity_streams_comment_created', array(), $account);
+  // Save reference to the node in the node reference field, and the
+  // "publish" state (i.e. if the node is published or unpublished).
+  $wrapper = entity_metadata_wrapper('message', $message);
+  $wrapper->field_target_nodes[] = $node;
+  $wrapper->field_target_comments[] = $comment;
+
+  // The message should be published only if the node and the comment are
+  // both published.
+  // @todo: Deal with message publishing/unpublishing.
+  /*
+  $published = $node->status && $comment->status;
+  $wrapper->field_published->set($published);
+  */
+  $wrapper->save();
+}
+
