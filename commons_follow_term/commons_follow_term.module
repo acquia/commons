@@ -1,0 +1,16 @@
+<?php
+/**
+ * @file
+ * Code for the Commons Follow (Taxonomy terms) feature.
+ */
+
+include_once 'commons_follow_term.features.inc';
+
+/**
+* Implements hook_node_view_alter().
+*/
+function commons_follow_term_node_view_alter(&$build) {
+  // TODO: 
+  // If the user is already subscribed to terms covering this node, 
+  // deny her the ability to subscribe to the individual node.
+}
