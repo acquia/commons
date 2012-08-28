@@ -33,66 +33,11 @@ function theme_commons_events_attending_event($variables = array()) {
  * Theme the event attendees list.
  */
 function theme_commons_events_event_attendees($variables = array()) {
+  $title = '<p class="commons-events-attendees-title">' . t('Attendees') . '</p>';
   $event_nid = $variables['event_nid'];
-  $attendeesQuery = new EntityFieldQuery();
-  $attendeesQuery->entityCondition('entity_type', 'registration')
-    ->propertyCondition('entity_id', $event_nid)
-    ->propertyCondition('entity_type', 'node');
-  if ($variables['display'] == 'teaser') {
-    $attendeesQuery->range(0, 12);
+  if (!isset($variables['display'])
+    || $variables['display'] != 'full') {
+    return $title . views_embed_view('commons_events_event_attendee_list', 'default', 'node', $event_nid) . '<p class="commons-events-all-attendees"><a href="/node/' . $event_nid . '/attendees">' . t('See all attendees') . '</a></p>';
   }
-  $attendees = $attendeesQuery->execute();
-  if (isset($attendees['registration'])) {
-    $tableData = array(
-      'attributes' => array(),
-      'caption' => NULL,
-      'colgroups' => array(),
-      'sticky' => FALSE,
-      'empty' => NULL,
-      'header' => array(
-        0 => array(
-          'colspan' => 4,
-          'data' => t('Attendees'),
-        ),
-      ),
-      'rows' => array(),
-    );
-    $rows = &$tableData['rows'];
-    $registrations = entity_load('registration', array_keys($attendees['registration']));
-    $row = 0;
-    $count = 1;
-    foreach ($registrations as $registration_id => $registration) {
-      $user_uri = entity_uri('user', $registration->user);
-      $picture = $registration->user->picture;
-      $display_text = $registration->user->name;
-      $options = array();
-      if (!empty($picture)) {
-        $display_text = "<img class='attendee-profile-picture' src='" . image_style_url('thumbnail', $picture->uri)
-          . "' alt='" . $display_text . "' />" . $display_text;
-        $options['html'] = TRUE;
-      }
-      $rows[$row][] = array(
-        'data' => l($display_text, $user_uri['path'], $options),
-        'width' => '25%',
-      );
-      $count++;
-      if ($count >= 4) {
-        $row++;
-        $count = 1;
-      }
-    }
-    if ($variables['display'] != 'full') {
-      $rows[] = array(
-        0 => array(
-          'data' => l('See all attendees', 'node/' . $event_nid . '/attendees'),
-          'colspan' => 4,
-          'class' => array('all-attendees-link'),
-        ),
-      );
-    }
-    return theme_table($tableData);
-  }
-  else {
-    return "";
-  }
+  return $title . views_embed_view('commons_events_event_attendee_list', 'commons_events_full_attendee_list', 'node', $event_nid);
 }
