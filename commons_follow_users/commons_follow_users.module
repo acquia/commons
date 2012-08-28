@@ -1,0 +1,45 @@
+<?php
+/**
+ * @file
+ * Code for the Commons Follow (Users) feature.
+ */
+
+include_once 'commons_follow_users.features.inc';
+
+/**
+ * Implements hook_flag().
+ */
+function commons_follow_users_flag($op, $flag, $content_id, $account, $fcid) {
+  // Display an activity stream message when a user follows another user.
+  if ($flag->name == 'commons_follow_user' && $op == 'flag') {
+    $followed_user = user_load($content_id);
+    // Don't generate a message for flagging blocked users.
+    if (!$followed_user->status) {
+      return;
+    }
+    if (commons_follow_users_existing_follow_message($account->uid, array($followed_user->uid))) {
+      // If this user previously followed the target user, don't generate a duplicate message.
+      return;
+    }
+    $message = message_create('commons_follow_users_user_followed', array(), $account);
+    $wrapper = entity_metadata_wrapper('message', $message);
+    $wrapper->field_target_users[] = $followed_user;
+
+    $wrapper->save();
+  }
+}
+
+/**
+* Indicate whether there is an existing message about a given user following
+* a target user.
+*/
+function commons_follow_users_existing_follow_message($acting_uid, $target_uids) {
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'message', '=')
+   ->propertyCondition('uid', $acting_uid)
+   ->propertyCondition('type', 'commons_follow_users_user_followed', '=')
+   ->fieldCondition('field_target_users', 'target_id', $target_uids, 'IN')
+   ->execute();
+
+   return !empty($query->ordered_results);
+}

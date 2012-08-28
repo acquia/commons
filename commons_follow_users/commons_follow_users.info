@@ -1,0 +1,14 @@
+name = Commons Follow (Users)
+description = Lets users follow other users.
+core = 7.x
+package = Commons
+php = 5.2.4
+project = commons_follow_users
+dependencies[] = entityreference
+dependencies[] = flag
+dependencies[] = message
+datestamp = 1345573856
+features[features_api][] = api:1
+features[field][] = message-commons_follow_users_user_followed-field_target_users
+features[flag][] = commons_follow_user
+features[message_type][] = commons_follow_users_user_followed
