@@ -1,0 +1,11 @@
+<?php
+
+/**
+ * Implementation of hook_views_api().
+ */
+function commons_follow_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'commons_follow') . '/includes/views',
+  );
+}
