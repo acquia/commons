@@ -1,17 +1,17 @@
 <?php
 /**
  * @file
- * commons_follow_users.features.field.inc
+ * commons_follow_user.features.field.inc
  */
 
 /**
  * Implements hook_field_default_fields().
  */
-function commons_follow_users_field_default_fields() {
+function commons_follow_user_field_default_fields() {
   $fields = array();
 
-  // Exported field: 'message-commons_follow_users_user_followed-field_target_users'.
-  $fields['message-commons_follow_users_user_followed-field_target_users'] = array(
+  // Exported field: 'message-commons_follow_user_user_followed-field_target_users'.
+  $fields['message-commons_follow_user_user_followed-field_target_users'] = array(
     'field_config' => array(
       'active' => '1',
       'cardinality' => '-1',
@@ -59,7 +59,7 @@ function commons_follow_users_field_default_fields() {
       'type' => 'entityreference',
     ),
     'field_instance' => array(
-      'bundle' => 'commons_follow_users_user_followed',
+      'bundle' => 'commons_follow_user_user_followed',
       'default_value' => NULL,
       'deleted' => '0',
       'description' => '',

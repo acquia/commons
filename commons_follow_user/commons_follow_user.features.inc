@@ -7,7 +7,7 @@
 /**
  * Implements hook_flag_default_flags().
  */
-function commons_follow_users_flag_default_flags() {
+function commons_follow_user_flag_default_flags() {
   $flags = array();
   // Exported flag: "Commons Follow (Users)".
   $flags['commons_follow_user'] = array(
@@ -36,7 +36,7 @@ function commons_follow_users_flag_default_flags() {
     'access_author' => '',
     'show_on_profile' => 1,
     'access_uid' => 'others',
-    'module' => 'commons_follow_users',
+    'module' => 'commons_follow_user',
     'locked' => array(
       0 => 'name',
     ),
@@ -48,11 +48,11 @@ function commons_follow_users_flag_default_flags() {
 /**
  * Implements hook_default_message_type().
  */
-function commons_follow_users_default_message_type() {
+function commons_follow_user_default_message_type() {
   $items = array();
-  $items['commons_follow_users_user_followed'] = entity_import('message_type', '{
-    "name" : "commons_follow_users_user_followed",
-    "description" : "commons_follow_users_user_followed",
+  $items['commons_follow_user_user_followed'] = entity_import('message_type', '{
+    "name" : "commons_follow_user_user_followed",
+    "description" : "commons_follow_user_user_followed",
     "argument_keys" : [],
     "argument" : [],
     "category" : "message_type",

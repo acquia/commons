@@ -9,3 +9,56 @@ function commons_follow_views_api() {
     'path' => drupal_get_path('module', 'commons_follow') . '/includes/views',
   );
 }
+
+function commons_follow_get_flags() {
+  $flags = flag_get_flags();
+  foreach ($flags as $key => $flag) {
+    if (substr($key, 0, 14) != 'commons_follow') {
+      unset($flags[$key]);
+    }
+  }
+  return $flags;
+}
+
+function commons_follow_get_flag_ids() {
+  $flag_ids = array();
+  $flags = commons_follow_get_flags();
+  foreach ($flags as $key => $flag) {
+    $flag_ids[$flag->fid] = $key;
+  }
+  return $flag_ids;
+}
+/**
+ * Get all content that a user is following.
+ * @return
+ *  An array keyed on the flag name with values corresponding to the IDs
+ *  of the flagged entities.
+ */
+function commons_follow_get_followed_content($account = array()) {
+  if (empty($account)) {
+    global $user;
+    $account = $user;
+  }
+  $results = array();
+  $flag_ids = commons_follow_get_flag_ids();
+  $flags = commons_follow_get_flags();
+  // Get a list of everything that the user is following.
+  $result = db_query("SELECT fid, content_id FROM {flag_content} WHERE fid IN (:fids) AND uid = :uid", array(':fids' => array_keys($flag_ids), ':uid' => $account->uid));
+
+  foreach ($result as $this_result) {
+    $results[$flag_ids[$this_result->fid]][] = $this_result->content_id;
+  }
+  return $results;
+}
+
+function commons_follow_get_followed_message_ids($account = NULL) {
+  // Allow the module defining the flag
+  $followed_content = commons_follow_get_followed_content($account);
+  foreach ($followed_content as $key => $content) {
+    $function = $key . '_get_message_ids';
+    if (function_exists($function)) {
+      $followd_mids[$key] = $function($followed_content);  
+    }
+    
+  }
+}
