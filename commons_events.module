@@ -93,6 +93,12 @@ function commons_events_entity_view_alter(&$build, $type) {
  */
 function commons_events_form_node_form_alter(&$form, &$form_state) {
   if ($form_state['node']->type == 'event') {
+    $form['#attached']['css'] = array(
+      drupal_get_path('module', 'commons_events') . '/css/commons_events.css',
+    );
+    $form['#attached']['js'] = array(
+      drupal_get_path('module', 'commons_events') . '/js/commons_events.js',
+    );
     // Remove the '-None-' option from all the dropdowns.
     unset($form['field_location'][$form['field_location']['#language']]['#options']['_none']);
     unset($form['field_registration_type'][$form['field_registration_type']['#language']]['#options']['_none']);
@@ -103,6 +109,18 @@ function commons_events_form_node_form_alter(&$form, &$form_state) {
       'invisible' => array(
         ':input[name^="field_location"]' => array('value' => 'online'),
       ),
+    );
+    $form['field_registration_type'][$form['field_registration_type']['#language']]['#ajax'] = array(
+      'callback' => 'commons_events_update_type_legend',
+      'wrapper' => 'legend-registration-type',
+      'method' => 'text',
+      'event' => 'change',
+    );
+    $form['field_topics'][$form['field_topics']['#language']]['#ajax'] = array(
+      'callback' => 'commons_events_update_topics_legend',
+      'wrapper' => 'legend-event-topics',
+      'method' => 'val',
+      'event' => 'change',
     );
     // Status and attendee limit are shown if registration is onsite.
     $node_registration_status = 1;
@@ -124,8 +142,17 @@ function commons_events_form_node_form_alter(&$form, &$form_state) {
         ),
       ),
       '#weight' => 10,
+      '#ajax' => array(
+        'callback' => 'commons_events_update_status_legend',
+        'wrapper' => 'legend-registration-status',
+        'method' => 'text',
+        'event' => 'change',
+      ),
     );
     $form['field_number_of_attendees']['#states'] = $form['field_status']['#states'];
+    $form['field_number_of_attendees']['#states']['invisible'][':input[name="field_status"]'] = array(
+      'value' => 0,
+    );
     $form['field_number_of_attendees']['#weight'] = 11;
     $form['field_topics']['#weight'] = 12;
     // URL field shown if registration is offsite only.
@@ -136,7 +163,53 @@ function commons_events_form_node_form_alter(&$form, &$form_state) {
     );
     $form['#validate'] = array_merge(array('commons_events_node_form_validate'), $form['#validate']);
     $form['#submit'][] = 'commons_events_node_form_submit';
+    // Create a container for registration settings, topics, and revision info.
+    $form['events_sidebar'] = array(
+      '#type' => 'container',
+    );
+    // Move registration settings into a fieldset so we can move the group.
+    $form['events_sidebar']['event_registration_settings'] = array(
+      '#type' => 'fieldset',
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
+      '#title' => t('Registration settings'),
+    );
+    $form['events_sidebar']['event_registration_settings']['field_registration_type'] = $form['field_registration_type'];
+    $form['events_sidebar']['event_registration_settings']['field_status'] = $form['field_status'];
+    $form['events_sidebar']['event_registration_settings']['field_number_of_attendees'] = $form['field_number_of_attendees'];
+    $form['events_sidebar']['event_topics'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Topics'),
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
+    );
+    $form['events_sidebar']['event_topics']['field_topics'] = $form['field_topics'];
+    unset($form['field_topics']);
+    unset($form['field_registration_type']);
+    unset($form['field_status']);
+    unset($form['field_number_of_attendees']);
   }
+}
+
+/**
+ * AJAX callback to update registration status legend.
+ */
+function commons_events_update_status_legend($form, $form_state) {
+  return $form['events_sidebar']['event_registration_settings']['field_status']['#options'][$form_state['values']['field_status']];
+}
+
+/**
+ * AJAX callback to update registration type legend.
+ */
+function commons_events_update_type_legend($form, $form_state) {
+  return $form['events_sidebar']['event_registration_settings']['field_registration_type']['#options'][$form_state['values']['field_registration_type'][$form['events_sidebar']['event_registration_settings']['field_registration_type']['#language']][0]['value']];
+}
+
+/**
+ * AJAX callback to update event topics legend.
+ */
+function commons_events_update_topics_legend($form, $form_state) {
+  return "";
 }
 
 /**
