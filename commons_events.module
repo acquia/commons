@@ -66,7 +66,8 @@ function commons_events_theme($existing, $type, $theme, $path) {
  * Implements hook_entity_view_alter().
  */
 function commons_events_entity_view_alter(&$build, $type) {
-  if ($type == 'node' && $build['#node']->type == 'event') {
+  if ($type == 'node' && $build['#node']->type == 'event'
+    && $build['#view_mode'] == 'full') {
     $build['attending'] = array(
       0 => theme('commons_events_attending_event', array('event' => $build['#node'])),
       '#weight' => -10,
