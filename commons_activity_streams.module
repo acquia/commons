@@ -19,7 +19,7 @@ function commons_activity_streams_node_insert($node) {
   // user object is provided, then to the acting user.
   $account = user_load($node->uid);
 
-  $message = message_create('commons_activity_streams_node_created', array('uid' => $account->uid));
+  $message = message_create('commons_activity_streams_node_created', array('uid' => $account->uid, 'timestamp' => $node->created));
   // Save reference to the node in the node reference field, and the
   $wrapper = entity_metadata_wrapper('message', $message);
   // We use a multiple value field in case we wish to use the same
@@ -36,7 +36,7 @@ function commons_activity_streams_comment_insert($comment) {
   $account = user_load($comment->uid);
   $node = node_load($comment->nid);
 
-  $message = message_create('commons_activity_streams_comment_created', array(), $account);
+  $message = message_create('commons_activity_streams_comment_created', array('uid' => $account->uid, 'timestamp' => $comment->created));
   // Save reference to the node in the node reference field, and the
   // "publish" state (i.e. if the node is published or unpublished).
   $wrapper = entity_metadata_wrapper('message', $message);
