@@ -5,3 +5,17 @@
  */
 
 include_once 'commons_follow_group.features.inc';
+
+/**
+* Implements hook_node_view_alter().
+*/
+function commons_follow_group_node_view_alter(&$build) {
+  // Prevent users from following group nodes under the
+  // commons_follow_node flag.
+  // Instead, they should be followed using the commons_follow_group flag.
+  if (og_is_group_type('node', $build['#node']->type)) {
+    if (!empty($build['links']['flag']['#links']['flag-commons_follow_node'])) {
+      unset($build['links']['flag']['#links']['flag-commons_follow_node']);
+    }
+  }
+}
