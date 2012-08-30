@@ -10,9 +10,23 @@
       if ($('#legend-event-topics').length == 0) {
         $('#edit-event-topics .summary').append("<span id='legend-event-topics'></span>");
       }
-      $('#legend-event-topics').text($(':input[name^="field_topics"]').val());
-      $('#legend-registration-type').text($(':input[name^="field_registration_type"] :selected').text());
-      $('#legend-registration-status').text($(':input[name="field_status"] :selected').text());
+      $(':input[name^="field_topics"]').change(function() {
+        if ($(':input[name^="field_topics"]').val() == "") {
+          $('#legend-event-topics').text("No topics");
+        }
+        else {
+          $('#legend-event-topics').text($(':input[name^="field_topics"]').val());
+        }
+      });
+      $(':input[name^="field_registration_type"]').change(function() {
+        $('#legend-registration-type').text($(':input[name^="field_registration_type"] :selected').text());
+      });
+      $(':input[name^="field_status"]').change(function() {
+        $('#legend-registration-status').text($(':input[name="field_status"] :selected').text());
+      });
+      $(':input[name^="field_topics"]').change();
+      $(':input[name^="field_registration_type"]').change();
+      $(':input[name^="field_status"]').change();
     }
   };
 })(jQuery);
