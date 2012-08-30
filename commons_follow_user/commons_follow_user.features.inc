@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * commons_follow_users.features.inc
+ * commons_follow_user.features.inc
  */
 
 /**
