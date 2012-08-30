@@ -1,5 +1,7 @@
 <?php
 
+include_once 'commons_activity_streams.features.inc';
+
 /**
  * Implements hook_node_insert().
  */
@@ -50,4 +52,6 @@ function commons_activity_streams_comment_insert($comment) {
   */
   $wrapper->save();
 }
+
+
 
