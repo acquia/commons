@@ -58,7 +58,6 @@ function commons_follow_get_followed_message_ids($account = NULL) {
   foreach ($followed_content as $key => $content) {
     $function = $key . '_get_message_ids';
     if (function_exists($function)) {
-      dpm("calling $function");
       $function($followed_mids, $followed_content);  
     }    
   }

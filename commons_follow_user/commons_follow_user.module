@@ -44,7 +44,7 @@ function commons_follow_user_existing_follow_message($acting_uid, $target_uids) 
    return !empty($query->ordered_results);
 }
 
-/*
+
 function commons_follow_user_get_message_ids(&$followed_mids, $followed_content = array()) {
   // Generate a list of message IDs where message.uid OR any of the referenced
   // target users are ones that the current user is following.
@@ -53,4 +53,3 @@ function commons_follow_user_get_message_ids(&$followed_mids, $followed_content 
     $followed_mids[] = $this_result->mid;
   }
 }
-*/

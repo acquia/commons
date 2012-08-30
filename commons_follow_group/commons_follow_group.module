@@ -22,7 +22,6 @@ function commons_follow_group_node_view_alter(&$build) {
 
 
 function commons_follow_group_get_message_ids(&$followed_mids, $followed_content = array()) {
-  dpm($followed_content);
   // Generate a list of message IDs where the target nodes are followed by
   // the current user.
   $result = db_query("SELECT m.mid AS mid FROM {message} m INNER JOIN {field_data_field_target_nodes} tn ON m.mid=tn.entity_id INNER JOIN {og_membership} om ON tn.field_target_nodes_target_id=om.etid WHERE om.entity_type = 'node' AND om.gid IN (:gids)", array(':gids' => array_values($followed_content['commons_follow_group'])));
@@ -30,6 +29,3 @@ function commons_follow_group_get_message_ids(&$followed_mids, $followed_content
     $followed_mids[] = $this_result->mid;
   }
 }
-
-// WHERE target_nodes are in a group
-
