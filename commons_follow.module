@@ -41,7 +41,6 @@ function commons_follow_get_followed_content($account = array()) {
   }
   $results = array();
   $flag_ids = commons_follow_get_flag_ids();
-  $flags = commons_follow_get_flags();
   // Get a list of everything that the user is following.
   $result = db_query("SELECT fid, content_id FROM {flag_content} WHERE fid IN (:fids) AND uid = :uid", array(':fids' => array_keys($flag_ids), ':uid' => $account->uid));
 
@@ -52,14 +51,16 @@ function commons_follow_get_followed_content($account = array()) {
 }
 
 function commons_follow_get_followed_message_ids($account = NULL) {
+  $followed_mids = array();
   // Allow the module defining the flag
   $followed_content = commons_follow_get_followed_content($account);
+  $followed_mids = array(-1);
   foreach ($followed_content as $key => $content) {
     $function = $key . '_get_message_ids';
     if (function_exists($function)) {
-      $followd_mids[$key] = $function($followed_content);  
-    }
-    
+      dpm("calling $function");
+      $function($followed_mids, $followed_content);  
+    }    
   }
-  dpm($followd_mids, 'so we end up with followd_mids');
+  return $followed_mids;
 }

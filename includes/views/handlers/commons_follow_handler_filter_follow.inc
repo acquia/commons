@@ -11,9 +11,7 @@ class commons_follow_handler_filter_follow extends views_handler_filter {
     //@Todo: Allow other modules to return a list of mids to include for "The user is following."
     // Provide an API that lets other modules define these OR detect them automagically.
     // Query for NIDs, UIDs, and TIDs that the user is following based on what they have flagged.
-    $mids = commons_follow_user_get_message_ids();
-    $mids = $mids['commons_follow_user'];
-    $this->query->add_where_expression($this->options['group'], "$table.mid IN (:mids)", array(':mids' => $mids));
+    $this->query->add_where_expression($this->options['group'], "$table.mid IN (:mids)", array(':mids' => commons_follow_get_followed_message_ids()));
   }
 }
 
