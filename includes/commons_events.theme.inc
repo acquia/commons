@@ -24,7 +24,8 @@ function theme_commons_events_attending_event($variables = array()) {
     return drupal_get_form('commons_events_attend_event_form', $event, $registration);
   }
   $content['attending'] = array(
-    '#markup' => '<p class="attendee">' . t('You are attending.') . '</p>',
+    '#markup' => '<p class="attendee">' . t('You are attending.')
+      . '<span class="attendee-cancel"><a href="#">' . t('cancel') . '</a></p>',
   );
   return $content;
 }
@@ -37,7 +38,13 @@ function theme_commons_events_event_attendees($variables = array()) {
   $event_nid = $variables['event_nid'];
   if (!isset($variables['display'])
     || $variables['display'] != 'full') {
-    return $title . views_embed_view('commons_events_event_attendee_list', 'default', 'node', $event_nid) . '<p class="commons-events-all-attendees"><a href="/node/' . $event_nid . '/attendees">' . t('See all attendees') . '</a></p>';
+    return $title . views_embed_view('commons_events_event_attendee_list', 'default', 'node', $event_nid)
+      . '<p class="commons-events-all-attendees"><a href="/node/' . $event_nid . '/attendees">'
+      . t('See all attendees') . '</a></p>';
   }
-  return $title . views_embed_view('commons_events_event_attendee_list', 'commons_events_full_attendee_list', 'node', $event_nid);
+  return $title . views_embed_view(
+    'commons_events_event_attendee_list',
+    'commons_events_full_attendee_list',
+    'node',
+    $event_nid);
 }
