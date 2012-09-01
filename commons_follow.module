@@ -62,7 +62,8 @@ function commons_follow_get_followed_content($account = array()) {
 */
 function commons_follow_get_followed_message_ids($account = NULL) {
   $followed_mids = array();
-  // Allow the module defining the flag
+  // Allow the module with this flag namespace to return a list of
+  // followed MIDs.
   $followed_content = commons_follow_get_followed_content($account);
   $followed_mids = array(-1);
   foreach ($followed_content as $key => $content) {
@@ -72,4 +73,13 @@ function commons_follow_get_followed_message_ids($account = NULL) {
     }    
   }
   return $followed_mids;
+}
+
+function commons_follow_get_following_uids(&$following_uids = array(), $message) {
+  $following_uids = array();
+  foreach (module_implements('commons_follow_get_following_uids') as $module) {
+    $function = $module . '_commons_follow_get_following_uids';
+    $function($following_uids, $message);
+  }
+  //Todo: Somebody probably wants to drupal_alter() this.
 }

@@ -22,3 +22,21 @@ function commons_follow_users_to_notify($message) {
   //Return the appropriate query depending on message type...
   //$result = db_query("SELECT fc.uid FROM {flag_content} fc WHERE fc.content_type = 'node" AND fc.content_id = :nid;
 }
+
+/**
+* Implements hook_commons_follow_get_following_uids().
+*/
+function commons_follow_node_commons_follow_get_following_uids(&$following_uids, $message) {
+  // We only care about target nodes.
+  if (empty($message->field_target_nodes)) {
+    return;
+  }
+  foreach ($message->field_target_nodes[LANGUAGE_NONE] as $field) {
+    $target_nids[] = $field['target_id'];
+  }
+  // Find the UIDs who are following the target nodes.
+  $result = db_query("SELECT fc.uid FROM {flag_content} fc WHERE fc.content_type = 'node' AND fc.content_id IN(:target_nids)", array(':target_nids' => array_values($target_nids)));
+  foreach ($result as $this_result) {
+    $following_uids[$this_result->uid] = $this_result->uid;
+  }
+}
