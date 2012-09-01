@@ -81,5 +81,6 @@ function commons_follow_get_following_uids(&$following_uids = array(), $message)
     $function = $module . '_commons_follow_get_following_uids';
     $function($following_uids, $message);
   }
+  dpm($following_uids,'following uids');
   //Todo: Somebody probably wants to drupal_alter() this.
 }
