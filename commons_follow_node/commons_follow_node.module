@@ -16,3 +16,9 @@ function commons_follow_node_get_message_ids(&$followed_mids, $followed_content 
   }
 }
 
+// When Commons Notify is enabled, return a list of UIDs that shuld be notified
+// about a particular message.
+function commons_follow_users_to_notify($message) {
+  //Return the appropriate query depending on message type...
+  //$result = db_query("SELECT fc.uid FROM {flag_content} fc WHERE fc.content_type = 'node" AND fc.content_id = :nid;
+}

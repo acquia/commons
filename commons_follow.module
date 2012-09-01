@@ -10,6 +10,9 @@ function commons_follow_views_api() {
   );
 }
 
+/**
+* Returns a list of Commons Follow Flag objects.
+*/
 function commons_follow_get_flags() {
   $flags = flag_get_flags();
   foreach ($flags as $key => $flag) {
@@ -20,6 +23,9 @@ function commons_follow_get_flags() {
   return $flags;
 }
 
+/**
+* Returns an array of Commons Follow flags keyed on the numeric flag ID.
+*/
 function commons_follow_get_flag_ids() {
   $flag_ids = array();
   $flags = commons_follow_get_flags();
@@ -29,7 +35,7 @@ function commons_follow_get_flag_ids() {
   return $flag_ids;
 }
 /**
- * Get all content that a user is following.
+ * Get a list of all content that a user is following.
  * @return
  *  An array keyed on the flag name with values corresponding to the IDs
  *  of the flagged entities.
@@ -50,6 +56,10 @@ function commons_follow_get_followed_content($account = array()) {
   return $results;
 }
 
+/**
+* Find a list of message IDs that correspond to events that the current user
+* is following.
+*/
 function commons_follow_get_followed_message_ids($account = NULL) {
   $followed_mids = array();
   // Allow the module defining the flag
