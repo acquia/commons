@@ -1,2 +1,39 @@
 <?php
 
+
+function commons_notify_associated_message_type($message_type) {
+  $mapping = commons_notify_message_type_mapping();
+  $return = isset($mapping[$message_type]) ? $mapping[$message_type] : FALSE;
+  return $return;
+}
+/**
+* Return an array of keyed on message types where the values correspond to
+* the corresponding notificiation message types.
+*/
+function commons_notify_message_type_mapping() {
+  $mapping = array();
+  // Allow other modules to alter the mapping.
+  // Making this alterable allows modules defining message types
+  // (such as commons_activity_streams) to define the mapping
+  // with a simple array.
+  // @Todo: Expose this via configuration.
+  drupal_alter('commons_notify_message_type_mapping', $mapping);
+  return $mapping;
+}
+
+/**
+* Implements hook_entity_insert().
+*/
+function commons_notify_entity_insert($entity, $type) {
+  // Detect when an associated message type is created,
+  if ($type == 'message' && $entity->is_new && commons_notify_associated_message_type($entity->type)) {
+    commons_notify_process_message($entity);    
+  }
+}
+
+// Identify the subscribed users and queue messages for sending.
+function commons_notify_process_message($entity) {
+  // Queue the message for processing:
+  // A) Who should we notify?
+  // B) Individual queue events to send the messages
+}
