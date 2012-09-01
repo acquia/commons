@@ -32,7 +32,9 @@ function commons_notify_entity_insert($entity, $type) {
 }
 
 // Identify the subscribed users and queue messages for sending.
-function commons_notify_process_message($entity) {
+function commons_notify_process_message($message) {
+  $following_uids = array();
+  commons_follow_get_following_uids($following_uids, $message);
   // Queue the message for processing:
   // A) Who should we notify?
   // B) Individual queue events to send the messages
