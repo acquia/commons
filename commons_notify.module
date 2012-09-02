@@ -18,6 +18,7 @@ function commons_notify_message_type_mapping() {
   // with a simple array.
   // @Todo: Expose this via configuration.
   drupal_alter('commons_notify_message_type_mapping', $mapping);
+  // Todo: Throw an error if there are no mapped message types.
   return $mapping;
 }
 
@@ -27,15 +28,48 @@ function commons_notify_message_type_mapping() {
 function commons_notify_entity_insert($entity, $type) {
   // Detect when an associated message type is created,
   if ($type == 'message' && $entity->is_new && commons_notify_associated_message_type($entity->type)) {
-    commons_notify_process_message($entity);    
+    commons_notify_process_source_message($entity);    
   }
 }
 
 // Identify the subscribed users and queue messages for sending.
-function commons_notify_process_message($message) {
+function commons_notify_process_source_message($source_message, $commons_notify_message_type = NULL) {
+  // Build a list of users who are following a referenced entity or property
+  // of this message.
   $following_uids = array();
-  commons_follow_get_following_uids($following_uids, $message);
-  // Queue the message for processing:
-  // A) Who should we notify?
-  // B) Individual queue events to send the messages
+  commons_follow_get_following_uids($following_uids, $source_message);
+
+  // Find the Commons_notify message type associated with the original message.
+  if (empty($commons_notify_message_type)) {
+    $commons_notify_message_type = commons_notify_associated_message_type($source_message->type);
+  }
+  // If there are no recipients, there's nothing to do.
+  if (empty($following_uids)) {
+    return;
+  }
+
+  // Generate a message for each recipient and queue it for mailing.
+  foreach ($following_uids as $key => $uid) {
+
+    // Prepare the message_notify message that will generate
+    // an email to each user.
+    $message = message_create($commons_notify_message_type, array('uid' => $uid, 'timestamp' => $source_message->timestamp));
+    $wrapper = entity_metadata_wrapper('message', $message);
+    foreach (array('field_target_users', 'field_target_nodes') as $field_name) {
+      if (!empty($source_message->$field_name)) {
+        $message->$field_name = $source_message->$field_name;    
+
+      }
+    }
+    // Let message-notify deliver the email.
+    // We pass in the options the field names, that will be used to capture
+    // the rendered message, and provide an email log.
+    $options = array(
+      'rendered fields' => array(
+        'message_notify_email_subject' => 'field_message_rendered_subject',      'message_notify_email_body' => 'field_message_rendered_body',
+      ),
+    );
+    message_notify_send_message($message, $options);
+  }
 }
+
