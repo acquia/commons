@@ -20,8 +20,10 @@ function commons_follow_group_node_view_alter(&$build) {
   }
 }
 
-
-function commons_follow_group_get_message_ids(&$followed_mids, $followed_content = array()) {
+/**
+* Implements hook_commons_follow_get_message_ids().
+*/
+function commons_follow_group_commons_follow_get_message_ids(&$followed_mids, $followed_content = array()) {
   // Generate a list of message IDs where the target nodes are followed by
   // the current user.
   $result = db_query("SELECT m.mid AS mid FROM {message} m INNER JOIN {field_data_field_target_nodes} tn ON m.mid=tn.entity_id INNER JOIN {og_membership} om ON tn.field_target_nodes_target_id=om.etid WHERE om.entity_type = 'node' AND om.gid IN (:gids)", array(':gids' => array_values($followed_content['commons_follow_group'])));
@@ -33,7 +35,7 @@ function commons_follow_group_get_message_ids(&$followed_mids, $followed_content
 /**
 * Implements hook_commons_follow_get_following_uids().
 */
-function commons_follow_node_commons_follow_get_following_uids(&$following_uids, $message) {
+function commons_follow_group_commons_follow_get_following_uids(&$following_uids, $message) {
   // We only care about target nodes.
   if (empty($message->field_target_nodes)) {
     return;
@@ -42,7 +44,7 @@ function commons_follow_node_commons_follow_get_following_uids(&$following_uids,
     $target_nids[] = $field['target_id'];
   }
   // Find Groups associated with these target Nodes:
-  
+
   // Find the UIDs who are following the target groups.
   $result = db_query("SELECT fc.uid FROM {flag_content} fc WHERE fc.content_type = 'node' AND fc.content_id IN(:target_nids) AND fc.fid IN (:commons_follow_flag_ids)", array(':target_nids' => array_values($target_nids), ':commons_follow_flag_ids' => array_keys(commons_follow_get_flag_ids())));
   foreach ($result as $this_result) {

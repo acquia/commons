@@ -67,7 +67,7 @@ function commons_follow_get_followed_message_ids($account = NULL) {
   $followed_content = commons_follow_get_followed_content($account);
   $followed_mids = array(-1);
   foreach ($followed_content as $key => $content) {
-    $function = $key . '_get_message_ids';
+    $function = $key . '_commons_follow_get_message_ids';
     if (function_exists($function)) {
       $function($followed_mids, $followed_content);  
     }    
@@ -81,6 +81,5 @@ function commons_follow_get_following_uids(&$following_uids = array(), $message)
     $function = $module . '_commons_follow_get_following_uids';
     $function($following_uids, $message);
   }
-  dpm($following_uids,'following uids');
   //Todo: Somebody probably wants to drupal_alter() this.
 }

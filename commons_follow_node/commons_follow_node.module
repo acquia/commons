@@ -6,8 +6,10 @@
 
 include_once 'commons_follow_node.features.inc';
 
-
-function commons_follow_node_get_message_ids(&$followed_mids, $followed_content = array()) {
+/**
+* Implements hook_commons_follow_get_message_ids().
+*/
+function commons_follow_node_commons_follow_get_message_ids(&$followed_mids, $followed_content = array()) {
   // Generate a list of message IDs where the target nodes are followed by
   // the current user.
   $result = db_query("SELECT m.mid AS mid FROM {message} m INNER JOIN {field_data_field_target_nodes} tn ON m.mid=tn.entity_id WHERE tn.field_target_nodes_target_id IN (:nids)", array(':nids' => array_values($followed_content['commons_follow_node'])));
