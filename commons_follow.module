@@ -40,6 +40,7 @@ function commons_follow_get_flag_ids() {
 */
 function commons_follow_get_flag_id($name) {
   $flag = flag_get_flag($name);
+  $return = $flag->fid;
   return $flag->fid;
 }
 /**
@@ -57,10 +58,10 @@ function commons_follow_get_followed_content($account = array()) {
   $flag_ids = commons_follow_get_flag_ids();
   // Get a list of everything that the user is following.
   $result = db_query("SELECT fid, content_id FROM {flag_content} WHERE fid IN (:fids) AND uid = :uid", array(':fids' => array_keys($flag_ids), ':uid' => $account->uid));
-
   foreach ($result as $this_result) {
     $results[$flag_ids[$this_result->fid]][] = $this_result->content_id;
   }
+
   return $results;
 }
 
