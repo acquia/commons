@@ -27,26 +27,35 @@ function commons_follow_group_commons_follow_get_message_ids(&$followed_mids, $f
   // Generate a list of message IDs where the target nodes are followed by
   // the current user.
   $result = db_query("SELECT m.mid AS mid FROM {message} m INNER JOIN {field_data_field_target_nodes} tn ON m.mid=tn.entity_id INNER JOIN {og_membership} om ON tn.field_target_nodes_target_id=om.etid WHERE om.entity_type = 'node' AND om.gid IN (:gids)", array(':gids' => array_values($followed_content['commons_follow_group'])));
-  while ($result = $this_result) {
+  foreach ($result as $this_result) {
     $followed_mids[] = $this_result->mid;
   }
 }
 
 /**
 * Implements hook_commons_follow_get_following_uids().
+* Return a list of users who are following groups that this message's
+* target_nids belong to.
 */
 function commons_follow_group_commons_follow_get_following_uids(&$following_uids, $message) {
   // We only care about target nodes.
   if (empty($message->field_target_nodes)) {
     return;
   }
+  // Assemble a list of target nodes.
   foreach ($message->field_target_nodes[LANGUAGE_NONE] as $field) {
     $target_nids[] = $field['target_id'];
   }
-  // Find Groups associated with these target Nodes:
+  // Generate a list of groups associated with those nodes.
 
+  // Are any of the target nodes members of groups that this user follows?
+  $groups_result = db_query("SELECT gid FROM {og_membership} WHERE entity_type = 'node' AND id IN (:target_nids) AND state = 1");
+  foreach ($groups_result as $gid) {
+    $groups[] = $gid->gid;
+  }
   // Find the UIDs who are following the target groups.
-  $result = db_query("SELECT fc.uid FROM {flag_content} fc WHERE fc.content_type = 'node' AND fc.content_id IN(:target_nids) AND fc.fid IN (:commons_follow_flag_ids)", array(':target_nids' => array_values($target_nids), ':commons_follow_flag_ids' => array_keys(commons_follow_get_flag_ids())));
+  $result = db_query("SELECT fc.uid FROM {flag_content} fc WHERE fc.content_type = 'node' AND fc.content_id IN(:groups) AND fc.fid = :fid)",
+    array(':target_nids' => array_values($target_nids),':fid' => commons_follow_get_flag_id('commons_follow_group')));
   foreach ($result as $this_result) {
     $following_uids[$this_result->uid] = $this_result->uid;
   }

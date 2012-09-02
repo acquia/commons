@@ -34,6 +34,14 @@ function commons_follow_get_flag_ids() {
   }
   return $flag_ids;
 }
+
+/**
+* Returns a single flag ID based on a flag machine name.
+*/
+function commons_follow_get_flag_id($name) {
+  $flag = flag_get_flag($name);
+  return $flag->fid;
+}
 /**
  * Get a list of all content that a user is following.
  * @return
