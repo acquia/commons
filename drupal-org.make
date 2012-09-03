@@ -80,6 +80,9 @@ projects[og][subdir] = "contrib"
 projects[panels][type] = "module"
 projects[panels][subdir] = "contrib"
 
+projects[queue_mail][type] = "module"
+projects[queue_mail][subdir] = "contrib"
+
 projects[quicktabs][type] = "module"
 projects[quicktabs][subdir] = "contrib"
 
@@ -107,6 +110,12 @@ projects[votingapi][subdir] = "contrib"
 
 ; Commons contrib modules:
 
+projects[commons_activity_streams][type] = "module"
+projects[commons_activity_streams][subdir] = "contrib"
+projects[commons_activity_streams][download][type] = "git"
+projects[commons_activity_streams][download][url] = "http://git.drupal.org/project/commons_activity_streams.git"
+projects[commons_activity_streams][download][branch] = "7.x-3.x"
+
 projects[commons_bw][type] = "module"
 projects[commons_bw][subdir] = "contrib"
 projects[commons_bw][download][type] = "git"
@@ -126,10 +135,16 @@ projects[commons_events][download][url] = "http://git.drupal.org/project/commons
 projects[commons_events][download][branch] = "7.x-3.x"
 
 projects[commons_follow][type] = "module"
-projects[commons_follow[subdir] = "contrib"
+projects[commons_follow][subdir] = "contrib"
 projects[commons_follow][download][type] = "git"
 projects[commons_follow][download][url] = "http://git.drupal.org/project/commons_follow.git"
-projects[commons_follow[download][branch] = "7.x-3.x"
+projects[commons_follow][download][branch] = "7.x-3.x"
+
+projects[commons_notify][type] = "module"
+projects[commons_notify][subdir] = "contrib"
+projects[commons_notify][download][type] = "git"
+projects[commons_notify][download][url] = "http://git.drupal.org/project/commons_notify.git"
+projects[commons_notify][download][branch] = "7.x-3.x"
 
 projects[commons_profile_base][type] = "module"
 projects[commons_profile_base][subdir] = "contrib"
