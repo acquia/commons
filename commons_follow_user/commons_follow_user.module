@@ -56,7 +56,6 @@ function commons_follow_user_commons_follow_get_message_ids(&$followed_mids, $fo
   // target users are ones that the current user is following.
   $result = db_query("SELECT m.mid AS mid FROM {message} m INNER JOIN {field_data_field_target_users} tu ON m.mid=tu.entity_id WHERE (tu.field_target_users_target_id IN(:uids)) OR m.uid IN (:uids)", array(':uids' => array_values($followed_content['commons_follow_user'])));
   foreach ($result as $this_result) {
-    dpm($result, 'got a result');
     $followed_mids[] = $this_result->mid;
   }
 }
