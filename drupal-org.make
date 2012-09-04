@@ -61,14 +61,6 @@ projects[oauth][version] = "3.x-dev"
 projects[oauth][type] = "module"
 projects[oauth][subdir] = "contrib"
 
-
-projects[realname][type] = "module"
-projects[realname][subdir] = "contrib"
-
-projects[registration][version] = "1.x-dev"
-projects[registration][type] = "module"
-projects[registration][subdir] = "contrib"
-
 projects[oauthconnector][version] = "1.x-dev"
 projects[oauthconnector][type] = "module"
 projects[oauthconnector][subdir] = "contrib"
@@ -89,6 +81,12 @@ projects[quicktabs][subdir] = "contrib"
 projects[radioactivity][type] = "module"
 projects[radioactivity][subdir] = "contrib"
 
+projects[realname][type] = "module"
+projects[realname][subdir] = "contrib"
+
+projects[registration][version] = "1.x-dev"
+projects[registration][type] = "module"
+projects[registration][subdir] = "contrib"
 
 projects[rules][type] = "module"
 projects[rules][subdir] = "contrib"
@@ -97,6 +95,8 @@ projects[strongarm][version] = "2.x-dev"
 projects[strongarm][type] = "module"
 projects[strongarm][subdir] = "contrib"
 
+projects[token][type] = "module"
+projects[token][subdir] = "contrib"
 
 projects[views][type] = "module"
 projects[views][subdir] = "contrib"
