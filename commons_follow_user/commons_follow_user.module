@@ -23,8 +23,7 @@ function commons_follow_user_flag($op, $flag, $content_id, $account, $fcid) {
     }
     $message = message_create('commons_follow_user_user_followed', array(), $account);
     $wrapper = entity_metadata_wrapper('message', $message);
-    $wrapper->field_target_users[] = $followed_user;
-
+    $wrapper->field_target_users[] = $followed_user->uid;
     $wrapper->save();
   }
 }
@@ -38,7 +37,7 @@ function commons_follow_user_existing_follow_message($acting_uid, $target_uids) 
   $query->entityCondition('entity_type', 'message', '=')
    ->propertyCondition('uid', $acting_uid)
    ->propertyCondition('type', 'commons_follow_user_user_followed', '=')
-   ->fieldCondition('field_target_user', 'target_id', $target_uids, 'IN')
+   ->fieldCondition('field_target_users', 'target_id', $target_uids, 'IN')
    ->execute();
 
    return !empty($query->ordered_results);
@@ -49,10 +48,15 @@ function commons_follow_user_existing_follow_message($acting_uid, $target_uids) 
 * Implements hook_commons_follow_get_message_ids().
 */
 function commons_follow_user_commons_follow_get_message_ids(&$followed_mids, $followed_content = array()) {
+  // If the user isn't following any other users, we've nothing to do here.
+  if (empty($followed_content['commons_follow_user'])) {
+    return;
+  }
   // Generate a list of message IDs where message.uid OR any of the referenced
   // target users are ones that the current user is following.
-  $result = db_query("SELECT m.mid AS mid FROM {message} m INNER JOIN {field_data_field_target_users} tu ON m.mid=tu.entity_id WHERE (tu.field_target_users_target_id IN (:uids)) OR (m.uid in (:uids))", array(':uids' => array_values($followed_content['commons_follow_user'])));
+  $result = db_query("SELECT m.mid AS mid FROM {message} m INNER JOIN {field_data_field_target_users} tu ON m.mid=tu.entity_id WHERE (tu.field_target_users_target_id IN(:uids)) OR m.uid IN (:uids)", array(':uids' => array_values($followed_content['commons_follow_user'])));
   foreach ($result as $this_result) {
+    dpm($result, 'got a result');
     $followed_mids[] = $this_result->mid;
   }
 }
