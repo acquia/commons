@@ -25,3 +25,19 @@ function commons_posts_views_pre_render(&$view) {
     $view->attachment_before = l('Create a post', 'node/add/post', array('query' => array('og_group_ref' => $group_id)));
   }  
  }
+
+/**
+* Implements hook_strongarm_alter().
+*   Expose the Post content type for 'liking' via the Commons_likem module
+*   by altering the configuration for the Rate.module widget that it provides.
+*/
+ function commons_posts_strongarm_alter(&$items) {
+  if (!empty($items['rate_widgets']->value)) {
+    foreach($items['rate_widgets']->value as $key => $widget) {
+      if ($widget->name == 'commons_like') {
+        $items['rate_widgets']->value[$key]->node_types[] = 'post';
+        $items['rate_widgets']->value[$key]->comment_types[] = 'post';
+      }
+    }
+  }
+}
