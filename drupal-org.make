@@ -38,6 +38,10 @@ projects[features][version] = "1.x-dev"
 projects[features][type] = "module"
 projects[features][subdir] = "contrib"
 
+; Separate fields from field instances.
+; http://drupal.org/node/1064472#comment-6438406
+projects[features][patch][] = "http://drupal.org/files/1064472_features_field_split_23.patch"
+
 projects[flag][type] = "module"
 projects[flag][subdir] = "contrib"
 
@@ -100,7 +104,6 @@ projects[token][subdir] = "contrib"
 
 projects[views][type] = "module"
 projects[views][subdir] = "contrib"
-
 
 projects[views_bulk_operations][type] = "module"
 projects[views_bulk_operations][subdir] = "contrib"
