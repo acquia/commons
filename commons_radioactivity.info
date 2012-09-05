@@ -1,0 +1,14 @@
+name = Commons Radioactivity
+description = Helps to identify interesting content by automatically determining a decaying radioactivity value for individual pieces of conte
+core = 7.x
+package = Commons
+php = 5.2.4
+version = 7.x-3.0-alpha1
+project = commons_radioactivity
+dependencies[] = ctools
+dependencies[] = features
+dependencies[] = radioactivity
+features[ctools][] = radioactivity:radioactivity_decay_profile:1
+features[features_api][] = api:1
+features[field_base][] = field_radioactivity
+features[radioactivity_decay_profile][] = commons_ra_node

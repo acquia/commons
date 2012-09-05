@@ -1,0 +1,54 @@
+<?php
+/**
+ * @file
+ * Code for the Commons Radioactivity feature.
+ */
+
+include_once 'commons_radioactivity.features.inc';
+
+
+
+/**
+* Implements hook_comment_insert().
+*   Add Radioactivity when a node recieves a comment.
+*/
+function commons_radioactivity_comment_insert($comment) {
+  // Moderated comments should not add radioactivity.
+  if (!$comment->status) {
+    return;
+  }
+  $node = node_load($comment->nid);
+  // A user's comment on her own node should not add radioactivity.
+  if ($node->uid == $comment->uid) {
+    return;
+  }
+  commons_radioactivity_incident($node, 4);
+  field_cache_clear();  
+}
+
+/**
+* Implements hook_votingapi_insert().
+*   Add Radioactivity when a node receives a "Like."
+*/
+function commons_radioactivity_votingapi_insert($votes) {
+  if ($votes[0]['tag'] == 'commons_like' && $votes[0]['entity_type'] == 'node') {
+    $node = node_load($votes[0]['entity_id']);
+    if ($node->uid != $votes[0]['uid']) {
+      commons_radioactivity_incident($node, 2);
+    }
+  }
+}
+
+function commons_radioactivity_votingapi_delete($votes, $vids) {
+  dpm($vote, 'deleting votes');
+}
+
+/**
+* Helper function to create Radioactivity incidents for nodes.
+*/
+function commons_radioactivity_incident($node, $value) {
+  $profile = radioactivity_get_field_profile('node', $node->type, 'field_radioactivity_activity');
+    if ($profile && $profile->storageObject) {
+      $profile->storageObject->addIncident(new RadioactivityIncident('node', $node->type, 'field_radioactivity_activity', LANGUAGE_NONE, $node->nid, $value, time()));
+    }
+}
