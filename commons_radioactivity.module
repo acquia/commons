@@ -4,6 +4,13 @@
  * Code for the Commons Radioactivity feature.
  */
 
+
+// Define constants for Commons Radioactivity incidents.
+// These could be changed to variables and made more configurable.
+
+define('COMMONS_RADIOACTIVITY_LIKE', 4);
+define('COMMONS_RADIOACTIVITY_COMMENT', 2);
+
 include_once 'commons_radioactivity.features.inc';
 
 
@@ -22,7 +29,7 @@ function commons_radioactivity_comment_insert($comment) {
   if ($node->uid == $comment->uid) {
     return;
   }
-  commons_radioactivity_incident($node, 4);
+  commons_radioactivity_incident($node, COMMONS_RADIOACTIVITY_COMMENT);
   field_cache_clear();  
 }
 
@@ -31,16 +38,18 @@ function commons_radioactivity_comment_insert($comment) {
 *   Add Radioactivity when a node receives a "Like."
 */
 function commons_radioactivity_votingapi_insert($votes) {
-  if ($votes[0]['tag'] == 'commons_like' && $votes[0]['entity_type'] == 'node') {
-    $node = node_load($votes[0]['entity_id']);
-    if ($node->uid != $votes[0]['uid']) {
-      commons_radioactivity_incident($node, 2);
-    }
+  foreach ($votes as $vote) {
+    if ($vote['tag'] == 'commons_like' && $vote['entity_type'] == 'node') {
+      $node = node_load($vote['entity_id']);
+      if ($node->uid != $votes['uid']) {
+        commons_radioactivity_incident($node, COMMONS_RADIOACTIVITY_vote);
+      }
+    }  
   }
+  
 }
 
-function commons_radioactivity_votingapi_delete($votes, $vids) {
-  dpm($vote, 'deleting votes');
+function commons_radioactivity_votingapi_delete($votes) {
 }
 
 /**
