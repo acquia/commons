@@ -72,11 +72,11 @@ function commons_radioactivity_comment_update($comment) {
     $node = node_load($comment->nid);
     switch ($comment->status) {
       // The comment is being unpublished.
-      case: 0
+      case 0:
         commons_radioactivity_comment_delete($comment);
         break;
       // The comment is being published.
-      case: 1
+      case 1;
         commons_radioactivity_comment_insert($comment);
         break;
     }
