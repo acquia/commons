@@ -13,11 +13,20 @@ define('COMMONS_RADIOACTIVITY_COMMENT', 2);
 
 include_once 'commons_radioactivity.features.inc';
 
+/**
+* Helper function to create Radioactivity incidents for nodes.
+*/
+function commons_radioactivity_incident($node, $value) {
+  $profile = radioactivity_get_field_profile('node', $node->type, 'field_radioactivity_activity');
+  if ($profile && $profile->storageObject) {
+    $profile->storageObject->addIncident(new RadioactivityIncident('node', $node->type, 'field_radioactivity_activity', LANGUAGE_NONE, $node->nid, $value, time()));
+  }
+}
 
 
 /**
 * Implements hook_comment_insert().
-*   Add Radioactivity when a node recieves a comment.
+*   Increase Radioactivity when a node recieves a comment.
 */
 function commons_radioactivity_comment_insert($comment) {
   // Moderated comments should not add radioactivity.
@@ -30,34 +39,79 @@ function commons_radioactivity_comment_insert($comment) {
     return;
   }
   commons_radioactivity_incident($node, COMMONS_RADIOACTIVITY_COMMENT);
-  field_cache_clear();  
+}
+
+/**
+* Implements hook_comment_insert().
+*   Increase Radioactivity when a node recieves a comment.
+*/
+function commons_radioactivity_comment_delete($comment) {
+  // Deleting a comment that wasn't published shouldn't affect radioactivity.
+  if (!$comment->status) {
+    return;
+  }
+  $node = node_load($comment->nid);
+  // This comment didn't add radioactivity originally, so we don't need to
+  // offset any with its deletion.
+  if ($node->uid == $comment->uid) {
+    return;
+  }
+  commons_radioactivity_incident($node, -1 * COMMONS_RADIOACTIVITY_COMMENT);
+}
+
+/**
+* Implements hook_comment_update().
+*   Change radioactivity when a comment is published or unpuiblished.
+*/
+function commons_radioactivity_comment_update($comment) {
+  // $comment_change will be equal to 1 if we're changing the publishing status
+  // of the comment.
+  $comment_change = $comment->status + $original->status;
+  // Is this comment's published status changing?
+  if ($comment_change == 1) {
+    $node = node_load($comment->nid);
+    switch ($comment->status) {
+      // The comment is being unpublished.
+      case: 0
+        commons_radioactivity_comment_delete($comment);
+        break;
+      // The comment is being published.
+      case: 1
+        commons_radioactivity_comment_insert($comment);
+        break;
+    }
+  }
 }
 
 /**
 * Implements hook_votingapi_insert().
-*   Add Radioactivity when a node receives a "Like."
+*   Increase Radioactivity when a node receives a "Like."
 */
 function commons_radioactivity_votingapi_insert($votes) {
   foreach ($votes as $vote) {
     if ($vote['tag'] == 'commons_like' && $vote['entity_type'] == 'node') {
       $node = node_load($vote['entity_id']);
+      // A user's vote on her own node should not increase radioactivity.
       if ($node->uid != $votes['uid']) {
-        commons_radioactivity_incident($node, COMMONS_RADIOACTIVITY_vote);
+        commons_radioactivity_incident($node, COMMONS_RADIOACTIVITY_VOTE);
       }
     }  
   }
-  
-}
-
-function commons_radioactivity_votingapi_delete($votes) {
 }
 
 /**
-* Helper function to create Radioactivity incidents for nodes.
+* Implements hook_votingapi_insert().
+*   Decrease Radioactivity when a "Like" is cancelled.
 */
-function commons_radioactivity_incident($node, $value) {
-  $profile = radioactivity_get_field_profile('node', $node->type, 'field_radioactivity_activity');
-    if ($profile && $profile->storageObject) {
-      $profile->storageObject->addIncident(new RadioactivityIncident('node', $node->type, 'field_radioactivity_activity', LANGUAGE_NONE, $node->nid, $value, time()));
-    }
+function commons_radioactivity_votingapi_delete($votes) {
+  foreach ($votes as $vote) {
+    if ($vote['tag'] == 'commons_like' && $vote['entity_type'] == 'node') {
+      $node = node_load($vote['entity_id']);
+      // A user's vote on her own node did not increase radioactivity, so
+      // we don't need to offset it when the vote is deleted.
+      if ($node->uid != $votes['uid']) {
+        commons_radioactivity_incident($node, -1 * COMMONS_RADIOACTIVITY_VOTE);
+      }
+    }  
+  }
 }
