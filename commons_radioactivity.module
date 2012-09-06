@@ -29,7 +29,7 @@ function commons_radioactivity_incident_node($node, $value) {
     $profile->storageObject->addIncident(new RadioactivityIncident('node', $node->type, 'field_radioactivity', LANGUAGE_NONE, $node->nid, $value, time()));
   }
   // If this node is a member of groups, generate an incident for each group.
-  if (!empty($node->field_og_group_ref)) {
+  if (!empty($node->og_group_ref)) {
     commons_radioactivity_incident_groups($node, $value);
   }
 }
@@ -39,7 +39,7 @@ function commons_radioactivity_incident_node($node, $value) {
 * to which a node belongs.
 */
 function commons_radioactivity_incident_groups($node, $value) {
-  foreach ($node->field_og_group_ref as $field) {
+  foreach ($node->og_group_ref as $field) {
    $gids[] = $field['target_id'];
   }
   // @Todo: We may wish to instead simply select the types of these groups.
@@ -49,11 +49,46 @@ function commons_radioactivity_incident_groups($node, $value) {
   }
 }
 
+/**
+* When a node is moved between groups, create incidents that offset
+* the change in radioactivity for the former and newly containing groups.
+*/
 
-function commons_radioactivity_process_changed_group_membership($node) {
+function commons_radioactivity_process_node_group_membership_change($node) {
   $groups_removed = array();
   $groups_added = array();
+  // Collect any gids from the original node.
+  if (!empty($node->original->og_group_ref[LANGUAGE_NONE])) {
+    foreach ($node->original->og_group_ref[LANGUAGE_NONE] as $key => $field) {
+      $gids_original[] = $field['target_id'];
+    }
+  }
+  // Collect any gids from the updated node.
+  if (!empty($node->og_group_ref[LANGUAGE_NONE])) {
+    foreach ($node->og_group_ref[LANGUAGE_NONE] as $key => $field) {
+      $gids_updated[] = $field['target_id'];
+    }
+  }
 
-  $groups_removed = array_diff($groups_original, $groups_new);
-  $groups_added = array_diff($groups_new, $groups_original);
+  // Find the gids that are being removed from the node with this update.
+  $gids_removed = array_diff($gids_original, $gids_updated);
+  // Find the gids that are being added to the node with this update.
+  $gids_added = array_diff($gids_updated, $gids_original);
+
+  if (!empty($gids_removed)) {
+    $groups_removed = entity_load_multiple_by_name('node', $gids_removed);
+    // Add negative incidents for groups that are no longer associated
+    // with this node.
+    foreach ($groups_removed as $key => $group) {
+      // We create an incident equal to the negative current value of this node.
+      commons_radioactivity_incident_node($group, -1 * $node->radioactivity[LANGUAGE_NONE][0]['radioactivity_energy']);
+    }
+  }
+  // Add positive incidents for groups that are newly associated with this node.
+  if (!empty($gids_added)) {
+    $groups_added = entity_load_multiple_by_name('node', $gids_added);
+    foreach ($groups_added as $key => $group) {
+      commons_radioactivity_incident_node($group, COMMONS_RADIOACTIVITY_NODE_IN_GROUP);
+    }
+  }
 }
