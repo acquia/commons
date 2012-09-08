@@ -19,6 +19,69 @@ define('COMMONS_RADIOACTIVITY_LIKE', 4);
 define('COMMONS_RADIOACTIVITY_NODE_IN_GROUP', 4);
 define('COMMONS_RADIOACTIVITY_FLAG_NODE', 6);
 
+/**
+* Implements hook_field_default_field_instances_alter().
+*/
+function commons_radioactivity_field_default_field_instances_alter(&$field_instances) {
+  // Get a list of content types that should have the Radioactivity field added.
+  $types_needing_radioactivity_field = module_invoke_all('commons_radioactivity_field');
+
+  if (!empty($types_needing_radioactivity_field)) {
+    foreach($types_needing_radioactivity_field as $key => $type) {
+      commons_radioactivity_field_definition($field_instances, $type);
+    }
+  }
+}
+
+function commons_radioactivity_field_definition(&$field_instances, $bundle) {
+  $field_instances["node-$bundle-field_radioactivity"] = array(
+  'bundle' => $bundle,
+  'default_value' => array(
+    0 => array(
+      'radioactivity_energy' => '0',
+    ),
+  ),
+  'deleted' => '0',
+  'description' => '',
+  'display' => array(
+    'default' => array(
+      'label' => 'above',
+      'module' => 'radioactivity',
+      'settings' => array(
+        'energy' => 10,
+        'type' => 'none',
+      ),
+      'type' => 'radioactivity_combo_formatter',
+      'weight' => 3,
+    ),
+    'teaser' => array(
+      'label' => 'above',
+      'settings' => array(),
+      'type' => 'hidden',
+      'weight' => 0,
+    ),
+  ),
+  'entity_type' => 'node',
+  'field_name' => 'field_radioactivity',
+  'label' => 'Radioactivity',
+  'required' => 0,
+  'settings' => array(
+    'profile' => 'commons_ra_node',
+    'user_register_form' => FALSE,
+  ),
+  'widget' => array(
+    'active' => 0,
+    'module' => 'radioactivity',
+    'settings' => array(),
+    'type' => 'radioactivity_basic_widget',
+    'weight' => '3',
+  ));
+}
+
+function commons_radioactivity_features_export_alter(&$export, $module_name) {
+ 
+}
+
 
 /**
 * Helper function to create Radioactivity incidents for nodes.
