@@ -74,6 +74,7 @@ function commons_groups_field_default_field_bases() {
       'handler_submit' => 'Change handler',
       'target_type' => 'node',
     ),
+    'target_type' => 'node',
     'translatable' => '0',
     'type' => 'entityreference',
   );
