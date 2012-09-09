@@ -13,11 +13,14 @@ function commons_radioactivity_field_default_field_instances() {
   $commons_radioactivity_entity_types = variable_get('commons_radioactivity_entity_types', array());
   if (!empty($commons_radioactivity_entity_types['node'])) {
     $field_instances = array();
-    foreach($commons_radioactivity_entity_types['node'] as $key => $type) {
-      commons_radioactivity_field_definition($field_instances, $type);
+    foreach($commons_radioactivity_entity_types['node'] as $type => $status) {
+      if ($status) {
+        commons_radioactivity_field_definition($field_instances, $type);  
+      }
     }
+    return $field_instances;  
   }
-  return $field_instances;  
+  
 }
 
 /**
