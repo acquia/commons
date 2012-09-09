@@ -63,7 +63,7 @@ function commons_groups_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'commons_groups_entity_types';
-  $strongarm->value = '';
+  $strongarm->value = array();
   $export['commons_groups_entity_types'] = $strongarm;
 
   $strongarm = new stdClass();
