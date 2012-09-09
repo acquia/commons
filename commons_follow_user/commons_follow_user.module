@@ -7,11 +7,22 @@
 include_once 'commons_follow_user.features.inc';
 
 /**
+* Implements hook_system_info_alter().
+*/
+function commons_follow_user_system_info_alter(&$info, $file, $type) {
+  // If Message.module is enabled, we'll define our "User follows another user"
+  // message type and will need to add to it an instance of field_target_users.
+  if ($file->name == 'commons_follow_user' && module_exists('message')) {
+    $info['features']['field_instance'][] = 'message-commons_follow_user_user_followed-field_target_users';
+    $info['features']['message_type'][] = 'commons_follow_user_user_followed';
+  }
+}
+
+/**
  * Implements hook_flag().
  */
 function commons_follow_user_flag($op, $flag, $content_id, $account, $fcid) {
   // Display an activity stream message when a user follows another user.
-
   if (module_exists('commons_activity_streams') && $flag->name == 'commons_follow_user' && $op == 'flag') {
     $followed_user = user_load($content_id);
     // Don't generate a message for flagging blocked users.
