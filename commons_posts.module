@@ -27,10 +27,10 @@ function commons_posts_views_pre_render(&$view) {
 
 /**
 * Implements hook_strongarm_alter().
-*   Expose the Post content type for 'liking' via the Commons_likem module
-*   by altering the configuration for the Rate.module widget that it provides.
 */
  function commons_posts_strongarm_alter(&$items) {
+  // Expose the Post content type for 'liking' via the Commons_like module
+  // by altering the configuration for the Rate.module widget that it provides.
   if (!empty($items['rate_widgets']->value)) {
     foreach($items['rate_widgets']->value as $key => $widget) {
       if ($widget->name == 'commons_like') {
@@ -39,12 +39,8 @@ function commons_posts_views_pre_render(&$view) {
       }
     }
   }
-}
-
-/**
-* Implements hook_commons_radioactivity_field().
-*   Add field_radioactivity to the Post content type.
-*/
-function commons_posts_commons_radioactivity_field() {
-  return 'post';
+  // Expose the post content type for integration with Commons Radioactivity.
+  if (isset($items['commons_radioactivity_entity_types'])) {
+    $items['commons_radioactivity_entity_types']->value['node'][] = 'post';
+  }
 }
