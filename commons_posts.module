@@ -39,8 +39,11 @@ function commons_posts_views_pre_render(&$view) {
       }
     }
   }
-  // Expose the post content type for integration with Commons Radioactivity.
-  if (isset($items['commons_radioactivity_entity_types'])) {
-    $items['commons_radioactivity_entity_types']->value['node'][] = 'post';
+  // Expose the post content type for integration with Commons Radioactivity
+  // and Commons Groups.  
+  foreach (array('commons_radioactivity_entity_types', 'commons_groups_entity_types') as $key) {
+    if (isset($items[$key])) {  
+      $items[$key]->value['node'][] = 'post';
+    }
   }
 }
