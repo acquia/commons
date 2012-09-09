@@ -11,12 +11,14 @@ include_once 'commons_follow_user.features.inc';
  */
 function commons_follow_user_flag($op, $flag, $content_id, $account, $fcid) {
   // Display an activity stream message when a user follows another user.
-  if ($flag->name == 'commons_follow_user' && $op == 'flag') {
+
+  if (module_exists('commons_activity_streams') && $flag->name == 'commons_follow_user' && $op == 'flag') {
     $followed_user = user_load($content_id);
     // Don't generate a message for flagging blocked users.
     if (!$followed_user->status) {
       return;
     }
+    // Todo: Check module_exists() before creating the message.
     if (commons_follow_user_existing_follow_message($account->uid, array($followed_user->uid))) {
       // If this user previously followed the target user, don't generate a duplicate message.
       return;
