@@ -1,0 +1,208 @@
+<?php
+/**
+ * @file
+ * commons_activity_streams.features.field_instance.inc
+ */
+
+/**
+ * Implements hook_field_default_field_instances().
+ */
+function commons_activity_streams_field_default_field_instances() {
+  $field_instances = array();
+
+  // Exported field_instance: 'message-commons_activity_streams_comment_created-field_target_comments'
+  $field_instances['message-commons_activity_streams_comment_created-field_target_comments'] = array(
+    'bundle' => 'commons_activity_streams_comment_created',
+    'default_value' => NULL,
+    'deleted' => '0',
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => '0',
+      ),
+      'message_notify_email_body' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'message_notify_email_subject' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'message',
+    'field_name' => 'field_target_comments',
+    'label' => 'Target comment',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'entityreference',
+      'settings' => array(
+        'match_operator' => 'CONTAINS',
+        'path' => '',
+        'size' => '60',
+      ),
+      'type' => 'entityreference_autocomplete',
+      'weight' => '1',
+    ),
+  );
+
+  // Exported field_instance: 'message-commons_activity_streams_comment_created-field_target_nodes'
+  $field_instances['message-commons_activity_streams_comment_created-field_target_nodes'] = array(
+    'bundle' => 'commons_activity_streams_comment_created',
+    'default_value' => NULL,
+    'deleted' => '0',
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => '1',
+      ),
+      'message_notify_email_body' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'message_notify_email_subject' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'message',
+    'field_name' => 'field_target_nodes',
+    'label' => 'Target nodes',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'entityreference',
+      'settings' => array(
+        'match_operator' => 'CONTAINS',
+        'path' => '',
+        'size' => '60',
+      ),
+      'type' => 'entityreference_autocomplete',
+      'weight' => '3',
+    ),
+  );
+
+  // Exported field_instance: 'message-commons_activity_streams_node_created-field_target_nodes'
+  $field_instances['message-commons_activity_streams_node_created-field_target_nodes'] = array(
+    'bundle' => 'commons_activity_streams_node_created',
+    'default_value' => NULL,
+    'deleted' => '0',
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => '2',
+      ),
+      'message_notify_email_body' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'message_notify_email_subject' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'message',
+    'field_name' => 'field_target_nodes',
+    'label' => 'Target nodes',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'entityreference',
+      'settings' => array(
+        'match_operator' => 'CONTAINS',
+        'path' => '',
+        'size' => '60',
+      ),
+      'type' => 'entityreference_autocomplete',
+      'weight' => '3',
+    ),
+  );
+
+  // Exported field_instance: 'message-commons_like_user_likes_node-field_target_nodes'
+  $field_instances['message-commons_like_user_likes_node-field_target_nodes'] = array(
+    'bundle' => 'commons_like_user_likes_node',
+    'default_value' => NULL,
+    'deleted' => '0',
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 0,
+      ),
+      'message_notify_email_body' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'message_notify_email_subject' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'message',
+    'field_name' => 'field_target_nodes',
+    'label' => 'Target nodes',
+    'required' => FALSE,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'module' => 'entityreference',
+      'settings' => array(
+        'match_operator' => 'CONTAINS',
+        'path' => '',
+        'size' => 60,
+      ),
+      'type' => 'entityreference_autocomplete',
+      'weight' => '2',
+    ),
+  );
+
+  // Translatables
+  // Included for use with string extractors like potx.
+  t('Target comment');
+  t('Target nodes');
+
+  return $field_instances;
+}
