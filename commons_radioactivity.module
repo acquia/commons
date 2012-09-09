@@ -19,39 +19,7 @@ define('COMMONS_RADIOACTIVITY_LIKE', 4);
 define('COMMONS_RADIOACTIVITY_NODE_IN_GROUP', 4);
 define('COMMONS_RADIOACTIVITY_FLAG_NODE', 6);
 
-/**
-* Implements hook_field_default_field_instances_alter().
-*/
-/*
-function commons_radioactivity_field_default_field_instances_alter(&$field_instances) {
-  $a = func_get_args();
-  dpm($a, 'field def args');
-  // Get a list of content types that should have the Radioactivity field added.
-  $types_needing_radioactivity_field = module_invoke_all('commons_radioactivity_field');
 
-  if (!empty($types_needing_radioactivity_field)) {
-    foreach($types_needing_radioactivity_field as $key => $type) {
-      commons_radioactivity_field_definition($field_instances, $type);
-    }
-  }
-}
-*/
-
-
-function commons_radioactivity_field_default_field_instances() {
-  //dpm("Default field instances called");
-  // Get a list of content types that should have the Radioactivity field added.
-  $types_needing_radioactivity_field = module_invoke_all('commons_radioactivity_field');
-  $field_instances = array();
-  if (!empty($types_needing_radioactivity_field)) {
-    foreach($types_needing_radioactivity_field as $key => $type) {
-    //  dpm($type, 'processing type');
-      commons_radioactivity_field_definition($field_instances, $type);
-    }
-  }
-  //dpm($field_instances, "defining these instances: ");
-  return $field_instances;
-}
 
 
 function commons_radioactivity_field_definition(&$field_instances, $bundle) {
@@ -154,6 +122,7 @@ function commons_radioactivity_incident_groups($node, $value) {
 * When a node is moved between groups, create incidents that offset
 * the change in radioactivity for the former and newly containing groups.
 */
+
 
 function commons_radioactivity_process_node_group_membership_change($node) {
   $groups_removed = array();
