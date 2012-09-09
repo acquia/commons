@@ -25,7 +25,6 @@ function commons_radioactivity_field_default_field_instances() {
 * across content types.
 */
 function commons_radioactivity_field_definition(&$field_instances, $bundle) {
-
   $field_instances["node-$bundle-field_radioactivity"] = array(
   'bundle' => $bundle,
   'default_value' => array(
