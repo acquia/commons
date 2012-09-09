@@ -42,7 +42,7 @@ function commons_groups_field_default_field_bases() {
         ),
         'membership_type' => 'og_membership_type_default',
         'primary_field' => FALSE,
-        'reference_type' => 'my_groups',
+        'reference_type' => 'all_groups',
         'target_bundles' => array(),
       ),
       'handler_submit' => 'Change handler',
