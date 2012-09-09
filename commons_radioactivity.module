@@ -19,9 +19,6 @@ define('COMMONS_RADIOACTIVITY_LIKE', 4);
 define('COMMONS_RADIOACTIVITY_NODE_IN_GROUP', 4);
 define('COMMONS_RADIOACTIVITY_FLAG_NODE', 6);
 
-
-
-
 function commons_radioactivity_field_definition(&$field_instances, $bundle) {
 
   $field_instances["node-$bundle-field_radioactivity"] = array(
@@ -122,8 +119,6 @@ function commons_radioactivity_incident_groups($node, $value) {
 * When a node is moved between groups, create incidents that offset
 * the change in radioactivity for the former and newly containing groups.
 */
-
-
 function commons_radioactivity_process_node_group_membership_change($node) {
   $groups_removed = array();
   $groups_added = array();

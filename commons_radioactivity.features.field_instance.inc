@@ -9,7 +9,7 @@
  */
 function commons_radioactivity_field_default_field_instances() {
   // Get a list of content types that should have the Radioactivity field added.
-  //$types_needing_radioactivity_field = module_invoke_all('commons_radioactivity_field');
+  // Modules can alter this list by implementing hook_strongarm_alter().
   $commons_radioactivity_entity_types = variable_get('commons_radioactivity_entity_types', array());
   if (!empty($commons_radioactivity_entity_types['node'])) {
     $field_instances = array();
