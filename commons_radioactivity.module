@@ -22,7 +22,10 @@ define('COMMONS_RADIOACTIVITY_FLAG_NODE', 6);
 /**
 * Implements hook_field_default_field_instances_alter().
 */
+/*
 function commons_radioactivity_field_default_field_instances_alter(&$field_instances) {
+  $a = func_get_args();
+  dpm($a, 'field def args');
   // Get a list of content types that should have the Radioactivity field added.
   $types_needing_radioactivity_field = module_invoke_all('commons_radioactivity_field');
 
@@ -32,8 +35,27 @@ function commons_radioactivity_field_default_field_instances_alter(&$field_insta
     }
   }
 }
+*/
+
+
+function commons_radioactivity_field_default_field_instances() {
+  //dpm("Default field instances called");
+  // Get a list of content types that should have the Radioactivity field added.
+  $types_needing_radioactivity_field = module_invoke_all('commons_radioactivity_field');
+  $field_instances = array();
+  if (!empty($types_needing_radioactivity_field)) {
+    foreach($types_needing_radioactivity_field as $key => $type) {
+    //  dpm($type, 'processing type');
+      commons_radioactivity_field_definition($field_instances, $type);
+    }
+  }
+  //dpm($field_instances, "defining these instances: ");
+  return $field_instances;
+}
+
 
 function commons_radioactivity_field_definition(&$field_instances, $bundle) {
+
   $field_instances["node-$bundle-field_radioactivity"] = array(
   'bundle' => $bundle,
   'default_value' => array(
@@ -78,8 +100,24 @@ function commons_radioactivity_field_definition(&$field_instances, $bundle) {
   ));
 }
 
-function commons_radioactivity_features_export_alter(&$export, $module_name) {
- 
+/**
+* Implements hook_system_info_alter().
+*/
+function commons_radioactivity_system_info_alter(&$info, $file, $type) {
+  // Commons Radioactivity dynamically adds field_radioactivity to
+  // content types that implement commons_radioactivity_field.
+  // We must add a corresponding line for each field instance
+  // to commons_radioactivity.info so that Features is aware of the instance
+  // and can sucessfully revert the field_instance component back
+  // to its default state.
+  if ($file->name == 'commons_radioactivity') {
+    $types_needing_radioactivity_field = module_invoke_all('commons_radioactivity_field');
+    if (!empty($types_needing_radioactivity_field)) {
+      foreach ($types_needing_radioactivity_field as $key => $type) {
+        $info['features']['field_instance'][] = "node-$type-field_radioactivity";    
+      }
+    }
+  }
 }
 
 
