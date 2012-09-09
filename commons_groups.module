@@ -21,8 +21,10 @@ function commons_groups_system_info_alter(&$info, $file, $type) {
   if ($file->name == 'commons_groups') {
     $commons_groups_entity_types = variable_get('commons_groups_entity_types', array());
     if (!empty($commons_groups_entity_types['node'])) {
-      foreach ($commons_groups_entity_types['node'] as $key => $type) {
-        $info['features']['field_instance'][] = "node-$type-og_group_ref";    
+      foreach ($commons_groups_entity_types['node'] as $type => $status) {
+        if (!$status) {
+          $info['features']['field_instance'][] = "node-$type-og_group_ref";
+        }
       }
     }
   }
