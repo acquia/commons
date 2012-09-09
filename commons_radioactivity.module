@@ -32,9 +32,9 @@ function commons_radioactivity_system_info_alter(&$info, $file, $type) {
   // and can sucessfully revert the field_instance component back
   // to its default state.
   if ($file->name == 'commons_radioactivity') {
-    $types_needing_radioactivity_field = module_invoke_all('commons_radioactivity_field');
-    if (!empty($types_needing_radioactivity_field)) {
-      foreach ($types_needing_radioactivity_field as $key => $type) {
+    $commons_radioactivity_entity_types = variable_get('commons_radioactivity_entity_types', array());
+    if (!empty($commons_radioactivity_entity_types['node'])) {
+      foreach ($commons_radioactivity_entity_types['node'] as $key => $type) {
         $info['features']['field_instance'][] = "node-$type-field_radioactivity";    
       }
     }
