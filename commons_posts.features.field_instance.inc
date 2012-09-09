@@ -53,55 +53,7 @@ function commons_posts_field_default_field_instances() {
       'weight' => '2',
     ),
   );
-  if (module_exists('commons_radioactivity')) {
-
-    // Exported field_instance: 'node-post-field_radioactivity'
-    $field_instances['node-post-field_radioactivity'] = array(
-      'bundle' => 'post',
-      'default_value' => array(
-        0 => array(
-          'radioactivity_energy' => '0',
-          'radioactivity_timestamp' => '1346856092',
-        ),
-      ),
-      'deleted' => '0',
-      'description' => '',
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => 'radioactivity',
-          'settings' => array(
-            'energy' => 10,
-            'type' => 'none',
-          ),
-          'type' => 'radioactivity_combo_formatter',
-          'weight' => 3,
-        ),
-        'teaser' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-      ),
-      'entity_type' => 'node',
-      'field_name' => 'field_radioactivity',
-      'label' => 'Radioactivity',
-      'required' => 0,
-      'settings' => array(
-        'profile' => 'commons_ra_node',
-        'user_register_form' => FALSE,
-      ),
-      'widget' => array(
-        'active' => 0,
-        'module' => 'radioactivity',
-        'settings' => array(),
-        'type' => 'radioactivity_basic_widget',
-        'weight' => '3',
-      ),
-    );
-  }
-
+  
   // Exported field_instance: 'node-post-og_group_ref'
   $field_instances['node-post-og_group_ref'] = array(
     'bundle' => 'post',
@@ -168,7 +120,7 @@ function commons_posts_field_default_field_instances() {
   // Included for use with string extractors like potx.
   t('Body');
   t('Groups audience');
-  t('Radioactivity');
+  
 
   return $field_instances;
 }

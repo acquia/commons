@@ -21,7 +21,6 @@ function commons_posts_commons_bw_group_widget() {
 function commons_posts_views_pre_render(&$view) {
   if ($view->name == 'commons_bw_posts' && user_access('Post: Create new content')) {
     $group_id = $view->args[0];
-
     $view->attachment_before = l('Create a post', 'node/add/post', array('query' => array('og_group_ref' => $group_id)));
   }  
  }
@@ -40,4 +39,12 @@ function commons_posts_views_pre_render(&$view) {
       }
     }
   }
+}
+
+/**
+* Implements hook_commons_radioactivity_field().
+*   Add field_radioactivity to the Post content type.
+*/
+function commons_posts_commons_radioactivity_field() {
+  return 'post';
 }
