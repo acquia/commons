@@ -32,7 +32,7 @@ function commons_radioactivity_field_definition(&$field_instances, $bundle) {
   'bundle' => $bundle,
   'default_value' => array(
     0 => array(
-      'radioactivity_energy' => '0',
+      'radioactivity_energy' => '8',
     ),
   ),
   'deleted' => '0',

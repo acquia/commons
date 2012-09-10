@@ -48,8 +48,10 @@ function commons_radioactivity_system_info_alter(&$info, $file, $type) {
 * Helper function to create Radioactivity incidents for nodes.
 */
 function commons_radioactivity_incident_node($node, $value) {
+  dpm($node, 'got node');
   $profile = radioactivity_get_field_profile('node', $node->type, 'field_radioactivity');
   if ($profile && $profile->storageObject) {
+    dpm($profile, 'profile');
     $profile->storageObject->addIncident(new RadioactivityIncident('node', $node->type, 'field_radioactivity', LANGUAGE_NONE, $node->nid, $value, time()));
   }
   // If this node is a member of groups, generate an incident for each group.
@@ -63,8 +65,8 @@ function commons_radioactivity_incident_node($node, $value) {
 * to which a node belongs.
 */
 function commons_radioactivity_incident_groups($node, $value) {
-  foreach ($node->og_group_ref as $field) {
-   $gids[] = $field['target_id'];
+  foreach ($node->og_group_ref[LANGUAGE_NONE] as $field) {
+    $gids[] = $field['target_id'];
   }
   // @Todo: We may wish to instead simply select the types of these groups.
   $groups = node_load_multiple($gids);
