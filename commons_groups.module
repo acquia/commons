@@ -30,6 +30,16 @@ function commons_groups_system_info_alter(&$info, $file, $type) {
   }
 }
 
+/**
+* Implements hook_strongarm_alter().
+*/
+ function commons_groups_strongarm_alter(&$items) {
+  // Expose the Group content type for integration with Commons Radioactivity.
+  if (isset($items['commons_radioactivity_entity_types'])) {  
+    $items['commons_radioactivity_entity_types']->value['node']['group'] = 1;
+  }
+}
+
  function commons_groups_default_rules_configuration_alter(&$configs) {
   // Disable default OG new content notifications.
   // The language doesn't correspond to Commons' open groups model and we use
