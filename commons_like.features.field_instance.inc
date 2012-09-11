@@ -19,11 +19,7 @@ function commons_like_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'hidden',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'type' => 'hidden',
         'weight' => 0,
       ),
       'message_notify_email_body' => array(
