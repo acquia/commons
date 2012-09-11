@@ -1,0 +1,14 @@
+name = Commons Group Homepages
+description = Provides a default home page for groups
+core = 7.x
+package = Commons - Landing Pages
+version = 7.x-1.0-alpha1
+project = commons_group_homepages
+dependencies[] = commons_activity_streams
+dependencies[] = commons_bw
+dependencies[] = commons_follow_group
+dependencies[] = ctools
+dependencies[] = panelizer
+features[ctools][] = panelizer:panelizer:1
+features[features_api][] = api:1
+features[panelizer_defaults][] = node:group:default

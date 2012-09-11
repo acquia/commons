@@ -1,0 +1,13 @@
+name = Commons Group Directory
+description = The site-wide directory of groups
+core = 7.x
+package = Commons - Landing pages
+version = 7.x-3.0-alpha1
+project = commons_group_directory
+dependencies[] = ctools
+dependencies[] = page_manager
+dependencies[] = commons_activity_streams_groups
+dependencies[] = commons_radioactivity_groups
+features[ctools][] = page_manager:pages_default:1
+features[features_api][] = api:1
+features[page_manager_pages][] = groups_directory
