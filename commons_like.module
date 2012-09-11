@@ -14,7 +14,7 @@ function commons_like_votingapi_insert($votes) {
   foreach ($votes as $vote) {
     if ($vote['tag'] == 'commons_like' && $vote['entity_type'] == 'node') {
       $node = node_load($vote['entity_id']);
-      $message = message_create('commons_like_user_likes_node', array('uid' => $vote->uid, 'timestamp' => $comment->created));
+      $message = message_create('commons_like_user_likes_node', array('uid' => $vote['uid'], 'timestamp' => $vote['timestamp']));
       $wrapper = entity_metadata_wrapper('message', $message);
       $wrapper->field_target_nodes[] = $node;
       $wrapper->save();
@@ -29,8 +29,8 @@ function commons_like_votingapi_insert($votes) {
 function commons_like_votingapi_delete($votes) {
   foreach ($votes as $vote) {
     if ($vote['tag'] == 'commons_like' && $vote['entity_type'] == 'node') {
-      if (module_exists('message') && commons_like_existing_node_like_message($vote['uid'], array($vote['entity_nid']))) {
-        //@Todo: Actually delete the existing message.
+      if (module_exists('commons_activity_streams') && $mids = commons_like_existing_node_like_messages($vote['uid'], array($vote['entity_id']))) {
+        message_delete_multiple($mids);
       }
     }  
   }
@@ -40,14 +40,20 @@ function commons_like_votingapi_delete($votes) {
 * Indicate whether there is an existing message about a given user
 * liking a specific node.
 */
-function commons_like_existing_node_like_message($acting_uid, $target_nids) {
+function commons_like_existing_node_like_messages($acting_uid, $target_nids) {
   $query = new EntityFieldQuery();
   $query->entityCondition('entity_type', 'message', '=')
    ->propertyCondition('uid', $acting_uid)
    ->propertyCondition('type', 'commons_like_user_likes_node', '=')
-   ->fieldCondition('field_target_nodes', 'target_id', $nids, 'IN')
+   ->fieldCondition('field_target_nodes', 'target_id', $target_nids, 'IN')
    ->execute();
 
-   return !empty($query->ordered_results);
+  if (!empty($query->ordered_results)) {
+    $mids = array();
+    foreach($query->ordered_results as $result) {
+      $mids[] = $result->entity_id;
+    }
+    return $mids;
+  }
+  return FALSE;
 }
-
