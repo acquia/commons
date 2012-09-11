@@ -1,0 +1,12 @@
+name = Commons Activity Streams Groups
+description = Contains Organic Groups integration for Commons Activity Streams
+core = 7.x
+package = Commons - Building blocks
+version = 7.x-3.0-alpha1
+project = commons_activity_streams_groups
+dependencies[] = entity
+dependencies[] = views
+dependencies[] = views_content
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:1
+features[views_view][] = activity_group
