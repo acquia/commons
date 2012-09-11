@@ -53,6 +53,38 @@ function commons_activity_streams_comment_insert($comment) {
   $wrapper->save();
 }
 
+/**
+ * Implements hook_comment_delete().
+ */
+function commons_activity_streams_comment_delete($comment) {
+  // Delete the activity stream message created when this comment
+  // was posted.
+  if ($mids = commons_activity_streams_existing_messages($comment->uid, array($comment->cid), 'field_target_comments', 'commons_activity_streams_comment_created')) {
+    message_delete_multiple($mids);
+  }
+}
+
+
+/**
+* Find existing messages that match certain parameters.
+*/
+function commons_activity_streams_existing_messages($acting_uid, $target_ids, $target_field, $message_type) {
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'message', '=')
+   ->propertyCondition('uid', $acting_uid)
+   ->propertyCondition('type', $message_type, '=')
+   ->fieldCondition($target_field, 'target_id', $target_ids, 'IN')
+   ->execute();
+
+  if (!empty($query->ordered_results)) {
+    $mids = array();
+    foreach($query->ordered_results as $result) {
+      $mids[] = $result->entity_id;
+    }
+    return $mids;
+  }
+  return FALSE;
+}
 
 
 /**
