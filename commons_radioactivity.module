@@ -48,10 +48,8 @@ function commons_radioactivity_system_info_alter(&$info, $file, $type) {
 * Helper function to create Radioactivity incidents for nodes.
 */
 function commons_radioactivity_incident_node($node, $value) {
-  dpm($node, 'got node');
   $profile = radioactivity_get_field_profile('node', $node->type, 'field_radioactivity');
   if ($profile && $profile->storageObject) {
-    dpm($profile, 'profile');
     $profile->storageObject->addIncident(new RadioactivityIncident('node', $node->type, 'field_radioactivity', LANGUAGE_NONE, $node->nid, $value, time()));
   }
   // If this node is a member of groups, generate an incident for each group.
@@ -106,7 +104,7 @@ function commons_radioactivity_process_node_group_membership_change($node) {
     // with this node.
     foreach ($groups_removed as $key => $group) {
       // We create an incident equal to the negative current value of this node.
-      commons_radioactivity_incident_node($group, -1 * $node->radioactivity[LANGUAGE_NONE][0]['radioactivity_energy']);
+      commons_radioactivity_incident_node($group, -1 * $node->field_radioactivity[LANGUAGE_NONE][0]['radioactivity_energy']);
     }
   }
   // Add positive incidents for groups that are newly associated with this node.
