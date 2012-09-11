@@ -20,7 +20,7 @@ function commons_group_homepages_panelizer_defaults() {
   $panelizer->no_blocks = FALSE;
   $panelizer->css_id = '';
   $panelizer->css = '';
-  $panelizer->pipeline = 'standard';
+  $panelizer->pipeline = 'ipe';
   $panelizer->contexts = array();
   $panelizer->relationships = array();
   $panelizer->access = array();
@@ -48,19 +48,19 @@ function commons_group_homepages_panelizer_defaults() {
     $pane->pid = 'new-1';
     $pane->panel = 'left';
     $pane->type = 'entity_field';
-    $pane->subtype = 'node:group_group';
+    $pane->subtype = 'node:body';
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array(
-      'label' => 'above',
-      'formatter' => 'og_group_subscribe',
+      'label' => 'hidden',
+      'formatter' => 'text_default',
       'delta_limit' => 0,
       'delta_offset' => '0',
       'delta_reversed' => FALSE,
-      'formatter_settings' => array(
-        'field_name' => FALSE,
-      ),
+      'formatter_settings' => array(),
       'context' => 'panelizer',
+      'override_title' => 0,
+      'override_title_text' => '',
     );
     $pane->cache = array();
     $pane->style = array(
@@ -74,6 +74,31 @@ function commons_group_homepages_panelizer_defaults() {
     $display->panels['left'][0] = 'new-1';
     $pane = new stdClass();
     $pane->pid = 'new-2';
+    $pane->panel = 'left';
+    $pane->type = 'node_links';
+    $pane->subtype = 'node_links';
+    $pane->shown = TRUE;
+    $pane->access = array();
+    $pane->configuration = array(
+      'override_title' => 0,
+      'override_title_text' => '',
+      'build_mode' => 'full',
+      'identifier' => '',
+      'link' => 0,
+      'context' => 'panelizer',
+    );
+    $pane->cache = array();
+    $pane->style = array(
+      'settings' => NULL,
+    );
+    $pane->css = array();
+    $pane->extras = array();
+    $pane->position = 1;
+    $pane->locks = array();
+    $display->content['new-2'] = $pane;
+    $display->panels['left'][1] = 'new-2';
+    $pane = new stdClass();
+    $pane->pid = 'new-3';
     $pane->panel = 'left';
     $pane->type = 'commons_bw_group';
     $pane->subtype = 'commons_bw_group';
@@ -89,12 +114,12 @@ function commons_group_homepages_panelizer_defaults() {
     );
     $pane->css = array();
     $pane->extras = array();
-    $pane->position = 1;
+    $pane->position = 2;
     $pane->locks = array();
-    $display->content['new-2'] = $pane;
-    $display->panels['left'][1] = 'new-2';
+    $display->content['new-3'] = $pane;
+    $display->panels['left'][2] = 'new-3';
     $pane = new stdClass();
-    $pane->pid = 'new-3';
+    $pane->pid = 'new-4';
     $pane->panel = 'right';
     $pane->type = 'views_panes';
     $pane->subtype = 'activity_group-panel_pane_1';
@@ -114,10 +139,32 @@ function commons_group_homepages_panelizer_defaults() {
     $pane->extras = array();
     $pane->position = 0;
     $pane->locks = array();
-    $display->content['new-3'] = $pane;
-    $display->panels['right'][0] = 'new-3';
+    $display->content['new-4'] = $pane;
+    $display->panels['right'][0] = 'new-4';
+    $pane = new stdClass();
+    $pane->pid = 'new-5';
+    $pane->panel = 'right';
+    $pane->type = 'views_panes';
+    $pane->subtype = 'commons_radioactivity_groups_active_in_group-panel_pane_1';
+    $pane->shown = TRUE;
+    $pane->access = array();
+    $pane->configuration = array(
+      'arguments' => array(
+        'gid' => '%node:nid',
+      ),
+    );
+    $pane->cache = array();
+    $pane->style = array(
+      'settings' => NULL,
+    );
+    $pane->css = array();
+    $pane->extras = array();
+    $pane->position = 1;
+    $pane->locks = array();
+    $display->content['new-5'] = $pane;
+    $display->panels['right'][1] = 'new-5';
   $display->hide_title = PANELS_TITLE_FIXED;
-  $display->title_pane = 'new-1';
+  $display->title_pane = '0';
   $panelizer->display = $display;
   $export['node:group:default'] = $panelizer;
 
