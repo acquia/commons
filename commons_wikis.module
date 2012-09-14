@@ -10,14 +10,19 @@ include_once 'commons_wikis.features.inc';
  * Implements hook_menu_alter().
  */
 function commons_wikis_menu_alter(&$items) {
-  //dsm($items);
+  $items['node/%node/revisions']['access callback'] = 'commons_wikis_user_revision_access';
 }
 
 /**
  * Custom access callback for viewing revision info.
  */
-function commons_wikis_user_access() {
-  
+function commons_wikis_user_revision_access($node) {
+  if ($node->type == 'wiki') {
+    return TRUE;
+  }
+  else {
+    return user_access('view revisions');
+  }
 }
 
 /**
