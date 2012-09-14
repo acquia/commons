@@ -5,3 +5,32 @@
  */
 
 include_once 'commons_wikis.features.inc';
+
+/**
+ * Implements hook_menu_alter().
+ */
+function commons_wikis_menu_alter(&$items) {
+  //dsm($items);
+}
+
+/**
+ * Custom access callback for viewing revision info.
+ */
+function commons_wikis_user_access() {
+  
+}
+
+/**
+ * Implements hook_commons_bw_group_widget().
+ */
+function commons_wikis_commons_bw_group_widget() {
+  return array(
+    'commons_wikis' => array(
+      'title' => t('Wikis'),
+      'type' => 'view',
+      'vid' => '',
+      'display' => '',
+      'weight' => 8,
+    ),
+  );
+}
