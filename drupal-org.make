@@ -73,6 +73,10 @@ projects[og][version] = "2.x-dev"
 projects[og][type] = "module"
 projects[og][subdir] = "contrib"
 
+projects[panelizer][type] = "module"
+projects[panelizer][version] = "3.x-dev"
+projects[panelizer][subdir] = "contrib"
+
 projects[panels][type] = "module"
 projects[panels][subdir] = "contrib"
 
