@@ -119,6 +119,12 @@ projects[commons_activity_streams][download][type] = "git"
 projects[commons_activity_streams][download][url] = "http://git.drupal.org/project/commons_activity_streams.git"
 projects[commons_activity_streams][download][branch] = "7.x-3.x"
 
+projects[commons_body][type] = "module"
+projects[commons_body][subdir] = "contrib"
+projects[commons_body][download][type] = "git"
+projects[commons_body][download][url] = "http://git.drupal.org/project/commons_body.git"
+projects[commons_body][download][branch] = "7.x-3.x"
+
 projects[commons_bw][type] = "module"
 projects[commons_bw][subdir] = "contrib"
 projects[commons_bw][download][type] = "git"
