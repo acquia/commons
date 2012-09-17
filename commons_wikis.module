@@ -10,18 +10,27 @@ include_once 'commons_wikis.features.inc';
  * Implements hook_menu_alter().
  */
 function commons_wikis_menu_alter(&$items) {
-  $items['node/%node/revisions']['access callback'] = 'commons_wikis_user_revision_access';
+  // Find all menu items that are related to viewing a revision and change the
+  // access callback to our custom one.
+  foreach ($items as $route => $info) {
+    if (strpos($route, 'revisions') !== FALSE
+      && strpos($route, 'revert') === FALSE
+      && strpos($route, 'delete') === FALSE) {
+      $items[$route]['access callback'] = 'commons_wikis_user_revision_access';
+    }
+  }
 }
 
 /**
  * Custom access callback for viewing revision info.
  */
-function commons_wikis_user_revision_access($node) {
+function commons_wikis_user_revision_access($node = NULL) {
+  global $user;
   if ($node->type == 'wiki') {
     return TRUE;
   }
   else {
-    return user_access('view revisions');
+    return user_access('view revisions', $user);
   }
 }
 
@@ -33,8 +42,8 @@ function commons_wikis_commons_bw_group_widget() {
     'commons_wikis' => array(
       'title' => t('Wikis'),
       'type' => 'view',
-      'vid' => '',
-      'display' => '',
+      'vid' => 'commons_bw_wikis',
+      'display' => 'default',
       'weight' => 8,
     ),
   );

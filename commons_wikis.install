@@ -1,0 +1,20 @@
+<?php
+/**
+ * @file
+ * Commons Wikis install file.
+ */
+
+/**
+ * Implements hook_module_enable().
+ */
+function commons_wikis_module_enable() {
+  // Update the Commons Wikis module weight.
+  // This makes sure that the our hook_menu_alter is called after others so
+  // that all the revision access callback changes are saved properly.
+  db_update('system', 's')
+    ->fields(array(
+      'weight' => '2',
+    ))
+    ->condition('name', 'commons_wikis')
+    ->execute();
+}
