@@ -1,0 +1,12 @@
+name = Commons Radioactivity Groups
+description = Views integration for Group radioactivity
+core = 7.x
+package = Commons - Building Blocks
+version = 7.x-3.0-alpha1
+project = commons_radioactivity_groups
+dependencies[] = commons_radioactivity
+dependencies[] = og
+dependencies[] = views_content
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:1
+features[views_view][] = commons_radioactivity_groups_most_active
