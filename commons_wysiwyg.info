@@ -1,0 +1,12 @@
+name = Commons WYSIWYG
+description = Provides a rich text editor for content creation.
+core = 7.x
+package = Commons - Building blocks
+dependencies[] = aloha
+dependencies[] = features
+dependencies[] = strongarm
+features[ctools][] = strongarm:strongarm:1
+features[features_api][] = api:1
+features[filter][] = filtered_html
+features[filter][] = full_html
+features[variable][] = jquery_update_jquery_version
