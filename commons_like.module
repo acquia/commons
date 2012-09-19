@@ -57,3 +57,44 @@ function commons_like_existing_node_like_messages($acting_uid, $target_nids) {
   }
   return FALSE;
 }
+
+/**
+ * Implements hook_theme().
+ */
+function commons_like_theme() {
+  return array(
+    'rate_template_commons_like' => array(
+      'variables' => array('links' => NULL, 'results' => NULL, 'mode' => NULL, 'just_voted' => FALSE, 'content_type' => NULL, 'content_id' => NULL, 'display_options' => NULL),
+      'template' => 'commons-like',
+    ),
+  );
+}
+
+/**
+ * Implements hook_rate_templates().
+ */
+function commons_like_rate_templates() {
+  $templates = array();
+
+  $templates['commons_like'] = new stdClass();
+  $templates['commons_like']->value_type = 'points';
+  $templates['commons_like']->options = array(
+    array(1, 'like'),
+  );
+  $templates['commons_like']->theme = 'rate_template_commons_like';
+  $templates['commons_like']->css = drupal_get_path('module', 'commons_like') . '/commons-like.css';
+  $templates['commons_like']->customizable = FALSE;
+  $templates['commons_like']->translate = TRUE;
+  $templates['commons_like']->template_title = t('Commons like');
+
+  return $templates;
+}
+
+/**
+ * Preprocess function for the commons_like template.
+ */
+function commons_like_preprocess_rate_template_commons_like(&$variables) {
+  extract($variables);
+dpm($variables);
+  $variables['like_button'] = theme('rate_button', array('text' => $links[0]['text'], 'href' => $links[0]['href'], 'class' => 'rate-commons-like-btn'));
+}

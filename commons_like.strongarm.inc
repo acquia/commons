@@ -22,15 +22,14 @@ function commons_like_strongarm() {
       'node_types' => array(
       ),
       'comment_types' => array(
-        0 => 'post',
       ),
       'options' => array(
         0 => array(
-          0 => '1',
+          0 => 1,
           1 => 'like',
         ),
       ),
-      'template' => 'custom',
+      'template' => 'commons_like',
       'node_display' => '2',
       'teaser_display' => FALSE,
       'comment_display' => '2',
@@ -49,7 +48,9 @@ function commons_like_strongarm() {
       'description_in_compact' => TRUE,
       'delete_vote_on_second_click' => '1',
       'value_type' => 'points',
-      'translate' => FALSE,
+      'theme' => 'rate_template_commons_like',
+      'css' => 'sites/all/modules/commons_like/commons-like.css',
+      'translate' => TRUE,
     ),
   );
   $export['rate_widgets'] = $strongarm;
