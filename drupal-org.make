@@ -6,6 +6,10 @@ core = 7.x
 projects[addressfield][type] = "module"
 projects[addressfield][subdir] = "contrib"
 
+projects[aloha][version] = "2.x-dev"
+projects[aloha][type] = "module"
+projects[aloha][subdir] = "contrib"
+
 projects[connector][version] = "1.x-dev"
 projects[connector][type] = "module"
 projects[connector][subdir] = "contrib"
@@ -48,6 +52,14 @@ projects[flag][subdir] = "contrib"
 projects[http_client][version] = "2.x-dev"
 projects[http_client][type] = "module"
 projects[http_client][subdir] = "contrib"
+
+projects[iconfonts][version] = "1.x-dev"
+projects[iconfonts][type] = "module"
+projects[iconfonts][subdir] = "contrib"
+
+projects[jquery_update][version] = "2.x-dev"
+projects[jquery_update][type] = "module"
+projects[jquery_update][subdir] = "contrib"
 
 projects[message][type] = "module"
 projects[message][download][type] = "git"
@@ -170,6 +182,12 @@ projects[commons_profile_base][subdir] = "contrib"
 projects[commons_profile_base][download][type] = "git"
 projects[commons_profile_base][download][url] = "http://git.drupal.org/project/commons_profile_base.git"
 projects[commons_profile_base][download][branch] = "7.x-3.x"
+
+projects[commons_wysiwyg][type] = "module"
+projects[commons_wysiwyg][subdir] = "contrib"
+projects[commons_wysiwyg][download][type] = "git"
+projects[commons_wysiwyg][download][url] = "http://git.drupal.org/project/commons_wysiwyg.git"
+projects[commons_wysiwyg][download][branch] = "7.x-3.x"
 
 ; Contributed themes.
 
