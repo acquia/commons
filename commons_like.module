@@ -94,7 +94,5 @@ function commons_like_rate_templates() {
  * Preprocess function for the commons_like template.
  */
 function commons_like_preprocess_rate_template_commons_like(&$variables) {
-  extract($variables);
-dpm($variables);
-  $variables['like_button'] = theme('rate_button', array('text' => $links[0]['text'], 'href' => $links[0]['href'], 'class' => 'rate-commons-like-btn'));
+  $variables['like_button'] = theme('rate_button', array('text' => $variables['links'][0]['text'], 'href' => $variables['links'][0]['href'], 'class' => 'rate-commons-like-btn'));
 }
