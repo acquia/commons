@@ -189,6 +189,12 @@ projects[commons_wysiwyg][download][type] = "git"
 projects[commons_wysiwyg][download][url] = "http://git.drupal.org/project/commons_wysiwyg.git"
 projects[commons_wysiwyg][download][branch] = "7.x-3.x"
 
+projects[commons_topics][type] = "module"
+projects[commons_topics][subdir] = "contrib"
+projects[commons_topics][download][type] = "git"
+projects[commons_topics][download][url] = "http://git.drupal.org/project/commons_topics.git"
+projects[commons_topics][download][branch] = "7.x-3.x"
+
 ; Contributed themes.
 
 projects[adaptivetheme][type] = "theme"
