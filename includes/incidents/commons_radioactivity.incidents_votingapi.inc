@@ -10,7 +10,7 @@ function commons_radioactivity_votingapi_insert($votes) {
       $node = node_load($vote['entity_id']);
       // A user's vote on her own node should not increase radioactivity.
       if ($node->uid != $vote['uid']) {
-        commons_radioactivity_incident_node($node, COMMONS_RADIOACTIVITY_VOTE);
+        commons_radioactivity_incident_node($node, COMMONS_RADIOACTIVITY_LIKE);
       }
     }  
   }
@@ -27,7 +27,7 @@ function commons_radioactivity_votingapi_delete($votes) {
       // A user's vote on her own node did not increase radioactivity, so
       // we don't need to offset it when the vote is deleted.
       if ($node->uid != $vote['uid']) {
-        commons_radioactivity_incident_node($node, -1 * COMMONS_RADIOACTIVITY_VOTE);
+        commons_radioactivity_incident_node($node, -1 * COMMONS_RADIOACTIVITY_LIKE);
       }
     }  
   }
