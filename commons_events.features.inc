@@ -41,8 +41,7 @@ function commons_events_default_registration_type() {
     "label" : "Event",
     "locked" : "0",
     "weight" : "0",
-    "data" : null,
-    "rdf_mapping" : []
+    "data" : null
   }');
   return $items;
 }
