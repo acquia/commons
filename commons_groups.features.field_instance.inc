@@ -14,8 +14,11 @@ function commons_groups_field_default_field_instances() {
   $commons_groups_entity_types = variable_get('commons_groups_entity_types', array());
   if (!empty($commons_groups_entity_types['node'])) {
     $field_instances = array();
-    foreach($commons_groups_entity_types['node'] as $key => $type) {
-      commons_groups_field_definition($field_instances, $type);
+    foreach($commons_groups_entity_types['node'] as $type => $enabled) {
+      if ($enabled) {
+        commons_groups_field_definition($field_instances, $type);  
+      }
+      
     }
   }
 
