@@ -86,3 +86,19 @@ function commons_groups_first_contribution($account, $node) {
     }
   }
 }
+
+/**
+* Implements hook_commons_bw_group_widget().
+*/
+function commons_groups_commons_bw_group_widget() {
+  return array(
+    'commons_all' => array(
+      'title' => 'All',
+      'type' => 'view',
+      'vid' => 'commons_bw_all',
+      'display' => 'page_1',
+      'weight' => -10,
+      'default' => 1,
+    ),
+  );
+}
