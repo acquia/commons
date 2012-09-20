@@ -183,6 +183,12 @@ projects[commons_profile_base][download][type] = "git"
 projects[commons_profile_base][download][url] = "http://git.drupal.org/project/commons_profile_base.git"
 projects[commons_profile_base][download][branch] = "7.x-3.x"
 
+projects[commons_radioactivity][type] = "module"
+projects[commons_radioactivity][subdir] = "contrib"
+projects[commons_radioactivity][download][type] = "git"
+projects[commons_radioactivity][download][url] = "http://git.drupal.org/project/commons_radioactivity.git"
+projects[commons_radioactivity][download][branch] = "7.x-3.x"
+
 projects[commons_wysiwyg][type] = "module"
 projects[commons_wysiwyg][subdir] = "contrib"
 projects[commons_wysiwyg][download][type] = "git"
