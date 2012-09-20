@@ -85,13 +85,13 @@ function commons_documents_field_default_field_instances() {
       'user_register_form' => FALSE,
     ),
     'widget' => array(
-      'module' => 'options',
+      'module' => 'entityreference',
       'settings' => array(
         'match_operator' => 'CONTAINS',
         'path' => '',
         'size' => 60,
       ),
-      'type' => 'options_select',
+      'type' => 'entityreference_autocomplete_tags',
       'weight' => '4',
     ),
   );
