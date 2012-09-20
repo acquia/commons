@@ -126,8 +126,8 @@ function commons_groups_field_default_field_instances() {
 
 function commons_groups_field_definition(&$field_instances, $type) {
  // Exported field_instance: 'node-post-og_group_ref'
-  $field_instances['node-post-og_group_ref'] = array(
-    'bundle' => 'post',
+  $field_instances["node-$type-og_group_ref"] = array(
+    'bundle' => $type,
     'default_value' => NULL,
     'default_value_function' => 'entityreference_prepopulate_field_default_value',
     'deleted' => '0',
