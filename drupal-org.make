@@ -153,6 +153,12 @@ projects[commons_bw][download][type] = "git"
 projects[commons_bw][download][url] = "http://git.drupal.org/project/commons_bw.git"
 projects[commons_bw][download][branch] = "7.x-3.x"
 
+projects[commons_documents][type] = "module"
+projects[commons_documents][subdir] = "contrib"
+projects[commons_documents][download][type] = "git"
+projects[commons_documents][download][url] = "http://git.drupal.org/project/commons_documents.git"
+projects[commons_documents][download][branch] = "7.x-3.x"
+
 projects[commons_groups][type] = "module"
 projects[commons_groups][subdir] = "contrib"
 projects[commons_groups][download][type] = "git"
