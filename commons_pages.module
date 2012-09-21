@@ -5,3 +5,13 @@
  */
 
 include_once 'commons_pages.features.inc';
+
+/**
+ * Implements hook_strongarm_alter().
+ */
+function commons_pages_strongarm_alter(&$items) {
+  // Expose the Page content type for integration with Commons Groups.
+  if (isset($items['commons_groups_entity_types'])) {
+    $items['commons_groups_entity_types']->value['node']['page'] = 1;
+  }
+}
