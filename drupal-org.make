@@ -76,6 +76,9 @@ projects[message_notify][download][url] = "http://git.drupal.org/project/message
 projects[message_notify][download][branch] = "7.x-2.x"
 projects[message_notify][subdir] = "contrib"
 
+projects[module_filter][type] = "module"
+projects[module_filter][subdir] = "contrib"
+
 projects[oauth][version] = "3.x-dev"
 projects[oauth][type] = "module"
 projects[oauth][subdir] = "contrib"
