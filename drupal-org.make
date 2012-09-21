@@ -212,9 +212,6 @@ projects[commons_topics][download][branch] = "7.x-3.x"
 projects[adaptivetheme][type] = "theme"
 projects[adaptivetheme][subdir] = "contrib"
 
-projects[sky][type] = "theme"
-projects[sky][subdir] = "contrib"
-
 projects[commons_origins][type] = "theme"
 projects[commons_origins][download][type] = "git"
 projects[commons_origins][download][url] = "http://git.drupal.org/project/commons_origins.git"
