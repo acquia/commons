@@ -20,7 +20,7 @@ function commons_notices_ctools_plugin_api() {
 function commons_notices_node_info() {
   $items = array(
     'notice' => array(
-      'name' => t('Community notice'),
+      'name' => t('Notice'),
       'base' => 'node_content',
       'description' => '',
       'has_title' => '1',
