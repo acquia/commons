@@ -15,6 +15,13 @@ function commons_notices_ctools_plugin_api() {
 }
 
 /**
+ * Implements hook_views_api().
+ */
+function commons_notices_views_api() {
+  return array("version" => "3.0");
+}
+
+/**
  * Implements hook_node_info().
  */
 function commons_notices_node_info() {
