@@ -189,6 +189,12 @@ projects[commons_notify][download][type] = "git"
 projects[commons_notify][download][url] = "http://git.drupal.org/project/commons_notify.git"
 projects[commons_notify][download][branch] = "7.x-3.x"
 
+projects[commons_pages][type] = "module"
+projects[commons_pages][subdir] = "contrib"
+projects[commons_pages][download][type] = "git"
+projects[commons_pages][download][url] = "http://git.drupal.org/project/commons_pages.git"
+projects[commons_pages][download][branch] = "7.x-3.x"
+
 projects[commons_posts][type] = "module"
 projects[commons_posts][subdir] = "contrib"
 projects[commons_posts][download][type] = "git"
