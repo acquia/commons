@@ -17,11 +17,9 @@ function commons_bw_get_tab_definitions($widget_type = 'group') {
   $tabs = array();
   $hook_name = 'commons_bw_' . $widget_type . '_widget';
   $tabs = module_invoke_all($hook_name);
+  drupal_alter($hook_name, $tabs);
   return $tabs;
 }
-
-
-
 
 /**
 * Generate a renderable group widget.
