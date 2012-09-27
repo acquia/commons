@@ -14,10 +14,56 @@ function commons_groups_field_default_field_instances() {
   $commons_groups_entity_types = variable_get('commons_groups_entity_types', array());
   if (!empty($commons_groups_entity_types['node'])) {
     $field_instances = array();
-    foreach($commons_groups_entity_types['node'] as $key => $type) {
-      commons_groups_field_definition($field_instances, $type);
+    foreach($commons_groups_entity_types['node'] as $type => $enabled) {
+      if ($enabled) {
+        commons_groups_field_definition($field_instances, $type);  
+      }
+      
     }
   }
+
+
+  // Exported field_instance: 'node-group-body'
+  $field_instances['node-group-body'] = array(
+    'bundle' => 'group',
+    'default_value' => NULL,
+    'deleted' => '0',
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 3,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'body',
+    'label' => 'Body',
+    'required' => 0,
+    'settings' => array(
+      'display_summary' => 0,
+      'text_processing' => '1',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'rows' => '20',
+        'summary_rows' => 5,
+      ),
+      'type' => 'text_textarea_with_summary',
+      'weight' => '4',
+    ),
+  );
 
   // Exported field_instance: 'node-group-group_group'
   $field_instances['node-group-group_group'] = array(
