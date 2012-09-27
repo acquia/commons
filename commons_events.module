@@ -96,7 +96,6 @@ function commons_events_entity_view_alter(&$build, $type) {
  */
 function commons_events_form_node_form_alter(&$form, &$form_state) {
   if ($form_state['node']->type == 'event') {
-    dsm($form);
     $form['#attached']['css'] = array(
       drupal_get_path('module', 'commons_events') . '/css/commons_events.css',
     );
