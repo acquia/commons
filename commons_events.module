@@ -221,13 +221,3 @@ function commons_events_node_form_submit($form, $form_state) {
     registration_update_entity_settings('node', $node->nid, $settings);
   }
 }
-
-/**
- * Implements hook_views_api().
- */
-function commons_events_views_api() {
-  return array(
-    'api' => 3,
-    'path' => drupal_get_path('module', 'commons_events') . '/includes/views',
-  );
-}
