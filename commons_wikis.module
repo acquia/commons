@@ -16,6 +16,7 @@ function commons_wikis_menu_alter(&$items) {
     if (strpos($route, 'revisions') !== FALSE
       && strpos($route, 'revert') === FALSE
       && strpos($route, 'delete') === FALSE) {
+      $items[$route]['access arguments'][] = $items[$route]['access callback'];
       $items[$route]['access callback'] = 'commons_wikis_user_revision_access';
     }
   }
@@ -24,13 +25,12 @@ function commons_wikis_menu_alter(&$items) {
 /**
  * Custom access callback for viewing revision info.
  */
-function commons_wikis_user_revision_access($node = NULL) {
-  global $user;
+function commons_wikis_user_revision_access($node = NULL, $old_callback = '_node_revision_access') {
   if ($node->type == 'wiki') {
     return TRUE;
   }
   else {
-    return user_access('view revisions', $user);
+    return $old_callback($node, 'view');
   }
 }
 
@@ -47,4 +47,41 @@ function commons_wikis_commons_bw_group_widget() {
       'weight' => 8,
     ),
   );
+}
+
+/**
+* Implements hook_views_pre_render().
+*/
+function commons_wikis_views_pre_render(&$view) {
+  if ($view->name == 'commons_bw_wikis' && user_access('Wiki: Create new content')) {
+    $group_id = $view->args[0];
+    $view->attachment_before = l('Create a wiki', 'node/add/wiki', array('query' => array('og_group_ref' => $group_id)));
+  }  
+ }
+
+/**
+* Implements hook_strongarm_alter().
+*/
+ function commons_wikis_strongarm_alter(&$items) {
+  // Expose the Post content type for 'liking' via the Commons_like module
+  // by altering the configuration for the Rate.module widget that it provides.
+  if (!empty($items['rate_widgets']->value)) {
+    foreach($items['rate_widgets']->value as $key => $widget) {
+      if ($widget->name == 'commons_like') {
+        if (!in_array('wiki', $items['rate_widgets']->value[$key]->node_types)) {
+          $items['rate_widgets']->value[$key]->node_types[] = 'wiki';  
+        }       
+        if (!in_array('wiki', $items['rate_widgets']->value[$key]->comment_types)) {
+          $items['rate_widgets']->value[$key]->comment_types[] = 'wiki';  
+        }
+      }
+    }
+  }
+  // Expose the post content type for integration with Commons Radioactivity
+  // and Commons Groups.  
+  foreach (array('commons_radioactivity_entity_types', 'commons_groups_entity_types') as $key) {
+    if (isset($items[$key])) {  
+      $items[$key]->value['node']['wiki'] = 1;
+    }
+  }
 }
