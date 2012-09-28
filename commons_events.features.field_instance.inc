@@ -262,7 +262,7 @@ function commons_events_field_default_field_instances() {
   // Exported field_instance: 'node-event-field_number_of_attendees'
   $field_instances['node-event-field_number_of_attendees'] = array(
     'bundle' => 'event',
-    'default_value' => NULL,
+    'default_value' => 0,
     'deleted' => '0',
     'description' => 'Enter 0 for unlimited',
     'display' => array(
@@ -282,7 +282,7 @@ function commons_events_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_number_of_attendees',
     'label' => 'Maximum number of attendees',
-    'required' => 0,
+    'required' => 1,
     'settings' => array(
       'text_processing' => '0',
       'user_register_form' => FALSE,

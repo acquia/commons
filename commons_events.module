@@ -114,7 +114,7 @@ function commons_events_form_node_form_alter(&$form, &$form_state) {
       ),
     );
     // Status and attendee limit are shown if registration is onsite.
-    $node_registration_status = 1;
+    $node_registration_status = 0;
     if (isset($form_state['node']->nid)) {
       $settings = registration_entity_settings('node', $form_state['node']->nid);
       $node_registration_status = $settings['status'];
