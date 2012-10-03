@@ -53,11 +53,11 @@ function commons_wikis_commons_bw_group_widget() {
 * Implements hook_views_pre_render().
 */
 function commons_wikis_views_pre_render(&$view) {
-  if ($view->name == 'commons_bw_wikis' && user_access('Wiki: Create new content')) {
+  if ($view->name == 'commons_bw_wikis' && node_access('create', 'wiki')) {
     $group_id = $view->args[0];
     $view->attachment_before = l('Create a wiki', 'node/add/wiki', array('query' => array('og_group_ref' => $group_id)));
   }  
- }
+}
 
 /**
 * Implements hook_strongarm_alter().

@@ -102,7 +102,6 @@ function commons_wikis_views_default_views() {
   $handler->display->display_options['filters']['type']['value'] = array(
     'wiki' => 'wiki',
   );
-
   $export['commons_bw_wikis'] = $view;
 
   $view = new view();
@@ -206,7 +205,6 @@ function commons_wikis_views_default_views() {
       'label' => 'Content: Nid',
     ),
   );
-  
   $export['commons_wikis_contributor_list'] = $view;
 
   return $export;
