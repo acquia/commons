@@ -17,3 +17,10 @@ function commons_site_homepage_ctools_plugin_api() {
     return array("version" => "1");
   }
 }
+
+/**
+ * Implements hook_views_api().
+ */
+function commons_site_homepage_views_api() {
+  return array("version" => "3.0");
+}
