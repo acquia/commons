@@ -7,7 +7,6 @@
 // Include files contain hook implementations for the corresponding modules.
 include_once 'commons_radioactivity.features.inc';
 include_once 'includes/incidents/commons_radioactivity.incidents_comment.inc';
-include_once 'includes/incidents/commons_radioactivity.incidents_node.inc';
 include_once 'includes/incidents/commons_radioactivity.incidents_flag.inc';
 include_once 'includes/incidents/commons_radioactivity.incidents_votingapi.inc';
 
@@ -111,7 +110,7 @@ function commons_radioactivity_process_node_group_membership_change($node) {
   if (!empty($gids_added)) {
     $groups_added = entity_load_multiple_by_name('node', $gids_added);
     foreach ($groups_added as $key => $group) {
-      commons_radioactivity_incident_node($group, COMMONS_RADIOACTIVITY_NODE_IN_GROUP);
+      commons_radioactivity_incident_node($group, $node->field_radioactivity[LANGUAGE_NONE][0]['radioactivity_energy']);
     }
   }
 }
