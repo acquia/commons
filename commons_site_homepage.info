@@ -1,0 +1,15 @@
+name = Commons Site Homepage
+description = Provides a homepage for the site for anonymous and authenticated users
+core = 7.x
+package = Commons - Landing pages
+php = 5.2.4
+version = 7.x-3.0-alpha1
+project = commons_site_homepage
+dependencies[] = ctools
+dependencies[] = page_manager
+dependencies[] = strongarm
+features[ctools][] = page_manager:pages_default:1
+features[ctools][] = strongarm:strongarm:1
+features[features_api][] = api:1
+features[page_manager_pages][] = commons_home
+features[variable][] = site_frontpage
