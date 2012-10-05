@@ -8,6 +8,8 @@
  * Implements hook_views_default_views().
  */
 function commons_activity_streams_views_default_views() {
+  $export = array();
+
   $view = new view();
   $view->name = 'commons_activity_streams_activity';
   $view->description = '';
@@ -63,7 +65,7 @@ function commons_activity_streams_views_default_views() {
   $handler = $view->new_display('panel_pane', 'Activity - Full view', 'panel_pane_3');
   $handler->display->display_options['defaults']['title'] = FALSE;
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-
   $export['commons_activity_streams_activity'] = $view;
+
   return $export;
 }

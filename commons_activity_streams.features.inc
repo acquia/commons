@@ -4,7 +4,6 @@
  * commons_activity_streams.features.inc
  */
 
-
 /**
  * Implements hook_views_api().
  */
@@ -30,12 +29,12 @@ function commons_activity_streams_default_message_type() {
         {
           "value" : "[message:user:picture]",
           "format" : "filtered_html",
-          "safe_value" : "\\u003Cp\\u003E[message:user:picture]\\u003C\\/p\\u003E\\n"
+          "safe_value" : "[message:user:picture]"
         },
         {
           "value" : "\\u003Ca href=\\u0022[message:user:url:absolute]\\u0022\\u003E@{message:user:name}\\u003C\\/a\\u003E commented on \\u003Ca href=\\u0022[message:field-target-nodes:0:url]\\u0022\\u003E[message:field-target-nodes:0:title]\\u003C\\/a\\u003E",
           "format" : "filtered_html",
-          "safe_value" : "\\u003Cp\\u003E\\u003Ca href=\\u0022absolute]\\u0022\\u003E@{message:user:name}\\u003C\\/a\\u003E commented on \\u003Ca href=\\u0022url]\\u0022\\u003E[message:field-target-nodes:0:title]\\u003C\\/a\\u003E\\u003C\\/p\\u003E\\n"
+          "safe_value" : "\\u003Ca href=\\u0022absolute]\\u0022\\u003E@{message:user:name}\\u003C\\/a\\u003E commented on \\u003Ca href=\\u0022url]\\u0022\\u003E[message:field-target-nodes:0:title]\\u003C\\/a\\u003E"
         }
       ]
     }
@@ -53,12 +52,12 @@ function commons_activity_streams_default_message_type() {
         {
           "value" : "[message:user:picture]",
           "format" : "filtered_html",
-          "safe_value" : "\\u003Cp\\u003E[message:user:picture]\\u003C\\/p\\u003E\\n"
+          "safe_value" : "[message:user:picture]"
         },
         {
           "value" : "\\u003Ca href=\\u0022[message:user:url:absolute]\\u0022\\u003E@{message:user:name}\\u003C\\/a\\u003E created \\u003Ca href=\\u0022[message:field-target-nodes:0:url]\\u0022\\u003E[message:field-target-nodes:0:title]\\u003C\\/a\\u003E",
           "format" : "filtered_html",
-          "safe_value" : "\\u003Cp\\u003E\\u003Ca href=\\u0022absolute]\\u0022\\u003E@{message:user:name}\\u003C\\/a\\u003E created \\u003Ca href=\\u0022url]\\u0022\\u003E[message:field-target-nodes:0:title]\\u003C\\/a\\u003E\\u003C\\/p\\u003E\\n"
+          "safe_value" : "\\u003Ca href=\\u0022absolute]\\u0022\\u003E@{message:user:name}\\u003C\\/a\\u003E created \\u003Ca href=\\u0022url]\\u0022\\u003E[message:field-target-nodes:0:title]\\u003C\\/a\\u003E"
         }
       ]
     }

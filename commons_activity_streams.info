@@ -1,6 +1,6 @@
 name = Commons Activity Streams
 core = 7.x
-package = "Commons - Building blocks"
+package = Commons - Building blocks
 php = 5.2.4
 version = 7.x-3.0-alpha1
 project = commons_activity_streams
@@ -10,6 +10,8 @@ dependencies[] = entityreference
 dependencies[] = features
 dependencies[] = message
 dependencies[] = token
+dependencies[] = views_content
+features[ctools][] = views:views_default:3.0
 features[features_api][] = api:1
 features[field_instance][] = message-commons_activity_streams_comment_created-field_target_comments
 features[field_instance][] = message-commons_activity_streams_comment_created-field_target_nodes

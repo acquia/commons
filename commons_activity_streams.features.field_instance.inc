@@ -111,6 +111,7 @@ function commons_activity_streams_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'hidden',
+        'settings' => array(),
         'type' => 'hidden',
         'weight' => '2',
       ),
