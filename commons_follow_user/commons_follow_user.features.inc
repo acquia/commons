@@ -5,6 +5,13 @@
  */
 
 /**
+ * Implements hook_views_api().
+ */
+function commons_follow_user_views_api() {
+  return array("version" => "3.0");
+}
+
+/**
  * Implements hook_flag_default_flags().
  */
 function commons_follow_user_flag_default_flags() {
