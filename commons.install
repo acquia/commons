@@ -12,12 +12,5 @@
  *
  * @see system_install()
  */
-function commons_install() { 
-  theme_enable(array('adaptivetheme', 'sky'));
-  variable_set('theme_default', 'sky');
-  // Enable user picture support and set the default to a square thumbnail option.
-  variable_set('user_pictures', '1');
-  variable_set('user_picture_dimensions', '1024x1024');
-  variable_set('user_picture_file_size', '800');
-  variable_set('user_picture_style', 'thumbnail');
+function commons_install() {
 }
