@@ -37,7 +37,7 @@ function commons_wikis_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'body',
     'label' => 'Body',
-    'required' => FALSE,
+    'required' => TRUE,
     'settings' => array(
       'display_summary' => TRUE,
       'text_processing' => 1,
@@ -120,7 +120,7 @@ function commons_wikis_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'og_group_ref',
     'label' => 'Groups audience',
-    'required' => FALSE,
+    'required' => TRUE,
     'settings' => array(
       'user_register_form' => FALSE,
     ),
