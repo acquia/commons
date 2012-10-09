@@ -127,6 +127,9 @@ projects[token][subdir] = "contrib"
 projects[views][type] = "module"
 projects[views][subdir] = "contrib"
 
+projects[views_field_view][type] = "module"
+projects[views_field_view][subdir] = "contrib"
+
 projects[views_bulk_operations][type] = "module"
 projects[views_bulk_operations][subdir] = "contrib"
 
@@ -207,11 +210,30 @@ projects[commons_profile_base][download][type] = "git"
 projects[commons_profile_base][download][url] = "http://git.drupal.org/project/commons_profile_base.git"
 projects[commons_profile_base][download][branch] = "7.x-3.x"
 
+projects[commons_profile_social][type] = "module"
+projects[commons_profile_social][subdir] = "contrib"
+projects[commons_profile_social][download][type] = "git"
+projects[commons_profile_social][download][url] = "http://git.drupal.org/project/commons_profile_social.git"
+projects[commons_profile_social][download][branch] = "7.x-3.x"
+
 projects[commons_radioactivity][type] = "module"
 projects[commons_radioactivity][subdir] = "contrib"
 projects[commons_radioactivity][download][type] = "git"
 projects[commons_radioactivity][download][url] = "http://git.drupal.org/project/commons_radioactivity.git"
 projects[commons_radioactivity][download][branch] = "7.x-3.x"
+
+projects[commons_site_homepage][type] = "module"
+projects[commons_site_homepage][subdir] = "contrib"
+projects[commons_site_homepage][download][type] = "git"
+projects[commons_site_homepage][download][url] = "http://git.drupal.org/project/commons_site_homepage.git"
+projects[commons_site_homepage][download][branch] = "7.x-3.x"
+
+projects[commons_user_profile_pages][type] = "module"
+projects[commons_user_profile_pages][subdir] = "contrib"
+projects[commons_user_profile_pages][download][type] = "git"
+projects[commons_user_profile_pages][download][url] = "http://git.drupal.org/project/commons_user_profile_pages.git"
+projects[commons_user_profile_pages][download][branch] = "7.x-3.x"
+
 
 projects[commons_wysiwyg][type] = "module"
 projects[commons_wysiwyg][subdir] = "contrib"
