@@ -15,7 +15,7 @@ function commons_follow_user_views_default_views() {
   $view->description = 'Display a list of users that are following a particular user.';
   $view->tag = 'Commons';
   $view->base_table = 'users';
-  $view->human_name = 'commons_follow_user_followers';
+  $view->human_name = 'Commons Follow - User\'s followers';
   $view->core = 7;
   $view->api_version = '3.0';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
@@ -86,14 +86,20 @@ function commons_follow_user_views_default_views() {
   $handler->display->display_options['filters']['status']['value'] = '1';
   $handler->display->display_options['filters']['status']['group'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+
+  /* Display: Content pane */
+  $handler = $view->new_display('panel_pane', 'Content pane', 'panel_pane_1');
+  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['pane_category']['name'] = 'Commons';
+  $handler->display->display_options['pane_category']['weight'] = '0';
   $export['commons_follow_user_followers'] = $view;
 
   $view = new view();
   $view->name = 'commons_follow_user_following';
   $view->description = 'A list of users followed by a particular user.';
-  $view->tag = 'commons_follow';
+  $view->tag = 'Commons_follow';
   $view->base_table = 'users';
-  $view->human_name = 'commons_follow_user_following';
+  $view->human_name = 'Commons Follow - Users that a particular user is following';
   $view->core = 7;
   $view->api_version = '3.0';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
@@ -171,6 +177,8 @@ function commons_follow_user_views_default_views() {
   /* Display: Content pane */
   $handler = $view->new_display('panel_pane', 'Content pane', 'panel_pane_1');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['pane_category']['name'] = 'Commons';
+  $handler->display->display_options['pane_category']['weight'] = '0';
   $export['commons_follow_user_following'] = $view;
 
   return $export;
