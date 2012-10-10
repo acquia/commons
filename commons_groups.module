@@ -19,7 +19,7 @@ function commons_groups_system_info_alter(&$info, $file, $type) {
   // and can sucessfully revert the field_instance component back
   // to its default state.
   if ($file->name == 'commons_groups') {
-    $commons_groups_entity_types = variable_get('commons_groups_entity_types', array());
+    $commons_groups_entity_types = commons_groups_get_entity_types();
     if (!empty($commons_groups_entity_types['node'])) {
       foreach ($commons_groups_entity_types['node'] as $type => $status) {
         if (!$status) {
@@ -61,6 +61,26 @@ function commons_groups_node_update($node) {
 function commons_groups_node_insert($node) {
   $account = user_load($node->uid);
   commons_groups_first_contribution($account, $node); 
+}
+
+/**
+* Returns an array of entity types that are enabled via Commons Groups.
+*/
+function commons_groups_get_entity_types() {
+  $commons_groups_entity_types = variable_get('commons_groups_entity_types', array());
+  if (!empty($commons_groups_entity_types['node'])) {
+    foreach ($commons_groups_entity_types['node'] as $type_name => $enabled) {
+      $type = node_type_get_type($type_name);
+      // If the module defining this content type has been disabled, don't add
+      // a field on its behalf in order to prevent the
+      // Commons Groups og_group_ref field component from appearing
+      // to be overidden.
+      if ($enabled && !module_exists($type->module)) {       
+        $commons_groups_entity_types['node'][$type_name] = 0;
+      }
+    }
+  }
+  return $commons_groups_entity_types;
 }
 
 /**

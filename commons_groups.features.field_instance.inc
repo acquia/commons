@@ -11,7 +11,8 @@ function commons_groups_field_default_field_instances() {
   $field_instances = array();
    // Get a list of content types that should have the og_groups_ref field added.
   // Modules can alter this list by implementing hook_strongarm_alter().
-  $commons_groups_entity_types = variable_get('commons_groups_entity_types', array());
+  $commons_groups_entity_types = commons_groups_get_entity_types();
+
   if (!empty($commons_groups_entity_types['node'])) {
     $field_instances = array();
     foreach($commons_groups_entity_types['node'] as $type => $enabled) {
