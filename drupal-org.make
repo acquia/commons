@@ -56,9 +56,9 @@ projects[http_client][version] = "2.x-dev"
 projects[http_client][type] = "module"
 projects[http_client][subdir] = "contrib"
 
-projects[iconfonts][version] = "1.x-dev"
-projects[iconfonts][type] = "module"
-projects[iconfonts][subdir] = "contrib"
+projects[admin_icons][version] = "1.x-dev"
+projects[admin_icons][type] = "module"
+projects[admin_icons][subdir] = "contrib"
 
 projects[jquery_update][version] = "2.x-dev"
 projects[jquery_update][type] = "module"
