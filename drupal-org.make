@@ -129,7 +129,7 @@ projects[token][subdir] = "contrib"
 
 projects[views][type] = "module"
 projects[views][subdir] = "contrib"
-projects[views][version] = "2.x-dev"
+projects[views][version] = "3.x-dev"
 
 projects[views_field_view][type] = "module"
 projects[views_field_view][subdir] = "contrib"
