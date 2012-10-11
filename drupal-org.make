@@ -134,6 +134,9 @@ projects[views][version] = "2.x-dev"
 projects[views_field_view][type] = "module"
 projects[views_field_view][subdir] = "contrib"
 
+projects[views_load_more][type] = "module"
+projects[views_load_more][subdir] = "contrib"
+
 projects[views_bulk_operations][type] = "module"
 projects[views_bulk_operations][subdir] = "contrib"
 
