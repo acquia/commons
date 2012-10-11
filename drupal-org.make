@@ -181,6 +181,12 @@ projects[commons_events][download][type] = "git"
 projects[commons_events][download][url] = "http://git.drupal.org/project/commons_events.git"
 projects[commons_events][download][branch] = "7.x-3.x"
 
+projects[commons_featured][type] = "module"
+projects[commons_featured][subdir] = "contrib"
+projects[commons_featured][download][type] = "git"
+projects[commons_featured][download][url] = "http://git.drupal.org/project/commons_featured.git"
+projects[commons_featured][download][branch] = "7.x-3.x"
+
 projects[commons_follow][type] = "module"
 projects[commons_follow][subdir] = "contrib"
 projects[commons_follow][download][type] = "git"
