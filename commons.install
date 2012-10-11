@@ -13,4 +13,15 @@
  * @see system_install()
  */
 function commons_install() {
+  // Place main menu in the menu_bar region.
+  $menu_block = array(
+    'module' => 'system',
+    'delta' => 'main-menu',
+    'theme' => 'sky',
+    'visibility' => 0,
+    'region' => 'menu_bar',
+    'status' => 1,
+    'pages' => '',
+  );
+  drupal_write_record('block', $menu_block);
 }
