@@ -26,7 +26,7 @@ function commons_bw_get_tab_definitions($widget_type = 'group') {
 */
 
 function commons_bw_generate_group_widget($group) {
-  $settings = array('style' => 'mac', 'ajax' => FALSE);
+  $settings = array('style' => 'Excel', 'ajax' => FALSE);
   // Load the default tab definitinos.
   $tabs = commons_bw_get_tab_definitions('group');
   foreach ($tabs as $key => $tab) {
