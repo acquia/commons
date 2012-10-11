@@ -64,6 +64,9 @@ projects[jquery_update][version] = "2.x-dev"
 projects[jquery_update][type] = "module"
 projects[jquery_update][subdir] = "contrib"
 
+projects[link][type] = "module"
+projects[link][subdir] = "contrib"
+
 projects[message][type] = "module"
 projects[message][download][type] = "git"
 projects[message][download][url] = "http://git.drupal.org/project/message.git"
