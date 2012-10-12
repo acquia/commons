@@ -74,9 +74,9 @@ function commons_follow_user_default_message_type() {
           "safe_value" : "[message:user:picture]"
         },
         {
-          "value" : "\\u003Ca href=\\u0022[message:user:url]\\u0022\\u003E@{message:user:name}\\u003C\\/a\\u003E is now following \\u003Ca href=\\u0022[message:field-target-users:0:url]\\u0022\\u003E[message:field-target-users:0:name]\\u003C\\/a\\u003E",
-          "format" : "filtered_html",
-          "safe_value" : "\\u003Ca href=\\u0022url]\\u0022\\u003E@{message:user:name}\\u003C\\/a\\u003E is now following \\u003Ca href=\\u0022url]\\u0022\\u003E[message:field-target-users:0:name]\\u003C\\/a\\u003E"
+          "value" : "\\u003Ca href=\\u0022[message:user:url:absolute]\\u0022\\u003E@{message:user:name}\\u003C\\/a\\u003E is now following \\u003Ca href=\\u0022[message:field-target-users:0:url]\\u0022\\u003E[message:field-target-users:0:name]\\u003C\\/a\\u003E",
+          "format" : "full_html",
+          "safe_value" : "\\u003Ca href=\\u0022[message:user:url:absolute]\\u0022\\u003E@{message:user:name}\\u003C\\/a\\u003E is now following \\u003Ca href=\\u0022[message:field-target-users:0:url]\\u0022\\u003E[message:field-target-users:0:name]\\u003C\\/a\\u003E"
         }
       ]
     }
