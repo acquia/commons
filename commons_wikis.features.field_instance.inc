@@ -94,64 +94,9 @@ function commons_wikis_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-wiki-og_group_ref'
-  $field_instances['node-wiki-og_group_ref'] = array(
-    'bundle' => 'wiki',
-    'default_value' => NULL,
-    'deleted' => '0',
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'inline',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => 1,
-        ),
-        'type' => 'entityreference_label',
-        'weight' => '1',
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'og_group_ref',
-    'label' => 'Groups audience',
-    'required' => TRUE,
-    'settings' => array(
-      'user_register_form' => FALSE,
-    ),
-    'view modes' => array(
-      'full' => array(
-        'custom settings' => FALSE,
-        'label' => 'Full',
-        'type' => 'og_list_default',
-      ),
-      'teaser' => array(
-        'custom settings' => FALSE,
-        'label' => 'Teaser',
-        'type' => 'og_list_default',
-      ),
-    ),
-    'widget' => array(
-      'module' => 'entityreference',
-      'settings' => array(
-        'match_operator' => 'CONTAINS',
-        'path' => '',
-        'size' => 60,
-      ),
-      'type' => 'entityreference_autocomplete_tags',
-      'weight' => '2',
-    ),
-  );
-
   // Translatables
   // Included for use with string extractors like potx.
   t('Body');
-  t('Groups audience');
   t('Topics');
 
   return $field_instances;
