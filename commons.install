@@ -13,6 +13,9 @@
  * @see system_install()
  */
 function commons_install() {
+  // Enable the Skye theme and set it as the default theme.
+  theme_enable(array('adaptivetheme', 'sky'));
+  variable_set('theme_default', 'sky');
   // Place main menu in the menu_bar region.
   $menu_block = array(
     'module' => 'system',
