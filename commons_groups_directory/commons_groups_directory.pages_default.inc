@@ -26,7 +26,7 @@ function commons_groups_directory_default_page_manager_pages() {
       'type' => 'none',
       'title' => '',
       'name' => 'navigation',
-      'weight' => '0',
+      'weight' => '-1',
     ),
   );
   $page->arguments = array();
