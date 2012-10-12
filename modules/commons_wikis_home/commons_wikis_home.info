@@ -1,10 +1,15 @@
 name = Commons Wikis Home
 description = Provides the wiki panels for Commons Wikis
 core = 7.x
-package = Commons - Landing page
+package = Commons - Landing pages
 php = 5.2.4
 version = 7.x-3.0-alpha0
+project = commons_wikis_home
 dependencies[] = commons_wikis
+dependencies[] = strongarm
 features[ctools][] = panelizer:panelizer:1
+features[ctools][] = strongarm:strongarm:1
 features[features_api][] = api:1
-features[panelizer_defaults][] = node:wiki:default
+features[variable][] = panelizer_defaults_node_wiki
+features[variable][] = panelizer_node:wiki_allowed_layouts
+features[variable][] = panelizer_node:wiki_default
