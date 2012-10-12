@@ -7,6 +7,19 @@
 include_once 'commons_wikis.features.inc';
 
 /**
+* Implements hook_module_implements_alter().
+*/
+function commons_wikis_module_implements_alter(&$implementations, $hook) {
+  // We need to override access control for revision view callbacks 
+  // in order to give all users permission to view wiki node revisions.
+  if ($hook == 'menu_alter') {
+    $group = $implementations['commons_wikis'];
+    unset($implementations['commons_wikis']);
+    $implementations['commons_wikis'] = $group;
+  }
+}
+
+/**
  * Implements hook_menu_alter().
  */
 function commons_wikis_menu_alter(&$items) {
@@ -30,7 +43,7 @@ function commons_wikis_user_revision_access($node = NULL, $old_callback = '_node
     return TRUE;
   }
   else {
-    return $old_callback($node, 'view');
+    return node_acces('view', $node) && $old_callback($node, 'view');
   }
 }
 
