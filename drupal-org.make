@@ -247,6 +247,11 @@ projects[commons_user_profile_pages][download][type] = "git"
 projects[commons_user_profile_pages][download][url] = "http://git.drupal.org/project/commons_user_profile_pages.git"
 projects[commons_user_profile_pages][download][branch] = "7.x-3.x"
 
+projects[commons_wikis][type] = "module"
+projects[commons_wikis][subdir] = "contrib"
+projects[commons_wikis][download][type] = "git"
+projects[commons_wikis][download][url] = "http://git.drupal.org/project/commons_wysiwyg.git"
+projects[commons_wikis][download][branch] = "7.x-3.x"
 
 projects[commons_wysiwyg][type] = "module"
 projects[commons_wysiwyg][subdir] = "contrib"
