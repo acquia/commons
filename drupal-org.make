@@ -193,6 +193,12 @@ projects[commons_follow][download][type] = "git"
 projects[commons_follow][download][url] = "http://git.drupal.org/project/commons_follow.git"
 projects[commons_follow][download][branch] = "7.x-3.x"
 
+projects[commons_misc][type] = "module"
+projects[commons_misc][subdir] = "contrib"
+projects[commons_misc][download][type] = "git"
+projects[commons_misc][download][url] = "http://git.drupal.org/project/commons_misc.git"
+projects[commons_misc][download][branch] = "7.x-3.x"
+
 projects[commons_notices][type] = "module"
 projects[commons_notices][subdir] = "contrib"
 projects[commons_notices][download][type] = "git"
