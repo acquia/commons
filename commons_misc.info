@@ -1,0 +1,9 @@
+name = Commons Miscellaneous Configuration
+description = Various suggested bits of configuration for Commons sites.
+core = 7.x
+package = Features
+dependencies[] = features
+dependencies[] = node
+features[features_api][] = api:1
+features[user_permission][] = access content
+features[user_permission][] = view own unpublished content
