@@ -98,3 +98,20 @@ function commons_wikis_views_pre_render(&$view) {
     }
   }
 }
+
+/**
+ * Implements hook_node_update().
+ */
+function commons_wikis_node_update($node) {
+  if ($node->type == 'wiki') {
+    $account = user_load($node->uid);
+    $message = message_create('commons_wikis_wiki_updated', array('uid' => $account->uid, 'timestamp' => $node->updated));
+    $wrapper = entity_metadata_wrapper('message', $message);
+    // Save reference to the node in the node reference field.
+    // We use a multiple value field in case we wish to use the same
+    // field for grouping messages in the future
+    // (eg http://drupal.org/node/1757060).
+    $wrapper->field_target_nodes[] = $node;
+    $wrapper->save();
+  }
+}
