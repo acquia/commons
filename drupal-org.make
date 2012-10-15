@@ -16,6 +16,9 @@ projects[connector][subdir] = "contrib"
 
 projects[ctools][type] = "module"
 projects[ctools][subdir] = "contrib"
+; http://drupal.org/node/1494860#comment-6204438
+projects[ctools][patch][] = "http://drupal.org/files/ctools-dependent-js-broken-with-jquery-1.7-1494860-30.patch"
+
 
 projects[date][type] = "module"
 projects[date][subdir] = "contrib"
