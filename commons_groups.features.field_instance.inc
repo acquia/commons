@@ -172,8 +172,8 @@ function commons_groups_field_default_field_instances() {
 
 
 function commons_groups_field_definition(&$field_instances, $type) {
- // Exported field_instance: 'node-post-og_group_ref'
-  $field_instances["node-$type-og_group_ref"] = array(
+  // Exported field_instance: 'node-post-og_group_ref'
+   $field_instances["node-$type-og_group_ref"] = array(
     'bundle' => $type,
     'default_value' => NULL,
     'default_value_function' => 'entityreference_prepopulate_field_default_value',
@@ -185,7 +185,7 @@ function commons_groups_field_definition(&$field_instances, $type) {
         'module' => 'og_ui',
         'settings' => array(),
         'type' => 'og_list_default',
-        'weight' => 0,
+        'weight' => 11,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -200,10 +200,20 @@ function commons_groups_field_definition(&$field_instances, $type) {
     'required' => 0,
     'settings' => array(
       'behaviors' => array(
+        'og_widget' => array(
+          'admin' => array(
+            'widget_type' => 'entityreference_autocomplete_tags',
+          ),
+          'default' => array(
+            'widget_type' => 'entityreference_autocomplete_tags',
+          ),
+          'status' => TRUE,
+        ),
         'prepopulate' => array(
-          'action' => 'disable',
+          'action' => 'none',
           'fallback' => 'none',
-          'skip_perm' => 'administer blocks',
+          'og_context' => 0,
+          'skip_perm' => '0',
           'status' => 1,
         ),
       ),
@@ -222,18 +232,13 @@ function commons_groups_field_definition(&$field_instances, $type) {
       ),
     ),
     'widget' => array(
-      'active' => 1,
-      'module' => 'entityreference',
-      'settings' => array(
-        'match_operator' => 'CONTAINS',
-        'path' => '',
-        'size' => '60',
-      ),
-      'type' => 'entityreference_autocomplete_tags',
-      'weight' => '0',
+      'active' => 0,
+      'module' => 'og',
+      'settings' => array(),
+      'type' => 'og_complex',
+      'weight' => 0,
     ),
   );
-
   // Translatables
   // Included for use with string extractors like potx.
   t('Groups audience');
