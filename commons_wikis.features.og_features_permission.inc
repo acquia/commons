@@ -15,6 +15,7 @@ function commons_wikis_og_features_default_permissions() {
     'roles' => array(
       'administrator member' => 'administrator member',
       'member' => 'member',
+      'non-member' => 'non-member',
     ),
   );
 
