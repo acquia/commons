@@ -7,6 +7,417 @@
   box-shadow: #0f4363 -1px 0px 0px;
 }
 
+/* line 10, ../sass/_formalize.scss */
+.input_tiny {
+  width: 50px;
+}
+
+/* line 14, ../sass/_formalize.scss */
+.input_small {
+  width: 100px;
+}
+
+/* line 18, ../sass/_formalize.scss */
+.input_medium {
+  width: 150px;
+}
+
+/* line 22, ../sass/_formalize.scss */
+.input_large {
+  width: 200px;
+}
+
+/* line 26, ../sass/_formalize.scss */
+.input_xlarge {
+  width: 250px;
+}
+
+/* line 30, ../sass/_formalize.scss */
+.input_xxlarge {
+  width: 300px;
+}
+
+/* line 34, ../sass/_formalize.scss */
+.input_full {
+  width: 100%;
+}
+
+/* line 41, ../sass/_formalize.scss */
+.input_full_wrap {
+  display: block;
+  padding-right: 8px;
+}
+
+/* line 49, ../sass/_formalize.scss */
+input[type="search"]::-webkit-search-decoration {
+  display: none;
+}
+
+/* line 60, ../sass/_formalize.scss */
+input:invalid,
+button:invalid,
+a.button:invalid,
+select:invalid,
+textarea:invalid {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+/* line 64, ../sass/_formalize.scss */
+input:focus,
+button:focus,
+a.button:focus,
+select:focus,
+textarea:focus {
+  -webkit-box-shadow: #0066ff 0 0 5px 0;
+  -moz-box-shadow: #0066ff 0 0 5px 0;
+  box-shadow: #0066ff 0 0 5px 0;
+  z-index: 1;
+}
+
+/* line 75, ../sass/_formalize.scss */
+input[type="file"]:focus, input[type="file"]:active,
+input[type="radio"]:focus,
+input[type="radio"]:active,
+input[type="checkbox"]:focus,
+input[type="checkbox"]:active {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+/* line 84, ../sass/_formalize.scss */
+button,
+a.button,
+input[type="reset"],
+input[type="submit"],
+input[type="button"] {
+  -webkit-appearance: none;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-background-clip: padding;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+  background: #dddddd url('../images/button.png?1350408709') repeat-x;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #dddddd));
+  background-image: -webkit-linear-gradient(#ffffff, #dddddd);
+  background-image: -moz-linear-gradient(#ffffff, #dddddd);
+  background-image: -o-linear-gradient(#ffffff, #dddddd);
+  background-image: linear-gradient(#ffffff, #dddddd);
+  border: 1px solid;
+  border-color: #dddddd #bbbbbb #999999;
+  cursor: pointer;
+  color: #333333;
+  display: inline-block;
+  font: bold 12px/1.3 "Helvetica Neue", Arial, "Liberation Sans", FreeSans, sans-serif;
+  outline: 0;
+  overflow: visible;
+  margin: 0;
+  padding: 3px 10px;
+  text-shadow: white 0 1px 1px;
+  text-decoration: none;
+  vertical-align: top;
+  width: auto;
+  *padding-top: 2px;
+  *padding-bottom: 0;
+}
+/* line 106, ../sass/_formalize.scss */
+button:hover,
+a.button:hover,
+input[type="reset"]:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover {
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(1px, #eeeeee), color-stop(100%, #cccccc));
+  background-image: -webkit-linear-gradient(#ffffff, #eeeeee 1px, #cccccc);
+  background-image: -moz-linear-gradient(#ffffff, #eeeeee 1px, #cccccc);
+  background-image: -o-linear-gradient(#ffffff, #eeeeee 1px, #cccccc);
+  background-image: linear-gradient(#ffffff, #eeeeee 1px, #cccccc);
+}
+/* line 109, ../sass/_formalize.scss */
+button:active,
+a.button:active,
+input[type="reset"]:active,
+input[type="submit"]:active,
+input[type="button"]:active {
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(1px, #dddddd), color-stop(100%, #eeeeee));
+  background-image: -webkit-linear-gradient(#ffffff, #dddddd 1px, #eeeeee);
+  background-image: -moz-linear-gradient(#ffffff, #dddddd 1px, #eeeeee);
+  background-image: -o-linear-gradient(#ffffff, #dddddd 1px, #eeeeee);
+  background-image: linear-gradient(#ffffff, #dddddd 1px, #eeeeee);
+  -webkit-box-shadow: inset rgba(0, 0, 0, 0.25) 0 1px 2px 0;
+  -moz-box-shadow: inset rgba(0, 0, 0, 0.25) 0 1px 2px 0;
+  box-shadow: inset rgba(0, 0, 0, 0.25) 0 1px 2px 0;
+  border-color: #999999 #bbbbbb #dddddd;
+}
+/* line 119, ../sass/_formalize.scss */
+button::-moz-focus-inner,
+a.button::-moz-focus-inner,
+input[type="reset"]::-moz-focus-inner,
+input[type="submit"]::-moz-focus-inner,
+input[type="button"]::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+/* line 125, ../sass/_formalize.scss */
+a.button {
+  *padding-bottom: 3px;
+}
+
+/* line 130, ../sass/_formalize.scss */
+button {
+  *padding-top: 1px;
+  *padding-bottom: 1px;
+}
+
+/* line 150, ../sass/_formalize.scss */
+textarea,
+select,
+input[type="date"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="email"],
+input[type="month"],
+input[type="number"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="text"],
+input[type="time"],
+input[type="url"],
+input[type="week"] {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-background-clip: padding;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  -o-border-radius: 0;
+  border-radius: 0;
+  -webkit-appearance: none;
+  background-color: white;
+  border: 1px solid;
+  border-color: #848484 #c1c1c1 #e1e1e1;
+  color: black;
+  outline: 0;
+  margin: 0;
+  padding: 2px 3px;
+  text-align: left;
+  font-size: 13px;
+  font-family: Arial, "Liberation Sans", FreeSans, sans-serif;
+  height: 1.8em;
+  vertical-align: top;
+  *padding-top: 2px;
+  *padding-bottom: 1px;
+  *height: auto;
+}
+/* line 173, ../sass/_formalize.scss */
+textarea[disabled],
+select[disabled],
+input[type="date"][disabled],
+input[type="datetime"][disabled],
+input[type="datetime-local"][disabled],
+input[type="email"][disabled],
+input[type="month"][disabled],
+input[type="number"][disabled],
+input[type="password"][disabled],
+input[type="search"][disabled],
+input[type="tel"][disabled],
+input[type="text"][disabled],
+input[type="time"][disabled],
+input[type="url"][disabled],
+input[type="week"][disabled] {
+  background-color: #eeeeee;
+}
+
+/* line 184, ../sass/_formalize.scss */
+button[disabled],
+input[disabled],
+select[disabled],
+select[disabled] option,
+select[disabled] optgroup,
+textarea[disabled],
+a.button_disabled {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  -moz-user-select: -moz-none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
+  color: #888888;
+  cursor: default;
+}
+
+/* line 198, ../sass/_formalize.scss */
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+  color: #888888;
+}
+
+/* line 203, ../sass/_formalize.scss */
+input:-moz-placeholder,
+textarea:-moz-placeholder {
+  color: #888888;
+}
+
+/* line 208, ../sass/_formalize.scss */
+input.placeholder_text,
+textarea.placeholder_text {
+  color: #888888;
+}
+
+/* line 214, ../sass/_formalize.scss */
+textarea,
+select[size],
+select[multiple] {
+  height: auto;
+}
+
+/* line 221, ../sass/_formalize.scss */
+select[size="0"],
+select[size="1"] {
+  height: 1.8em;
+  *height: auto;
+}
+
+@media (-webkit-min-device-pixel-ratio: 0) {
+  /* line 231, ../sass/_formalize.scss */
+  select[size],
+  select[multiple],
+  select[multiple][size] {
+    background-image: none;
+    padding-right: 3px;
+  }
+
+  /* line 237, ../sass/_formalize.scss */
+  select,
+  select[size="0"],
+  select[size="1"] {
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+    border-radius: 3px;
+    background-image: url(data:image/png;base64,R0lGODlhDQAEAIAAAAAAAP8A/yH5BAEHAAEALAAAAAANAAQAAAILhA+hG5jMDpxvhgIAOw==);
+    background-repeat: no-repeat;
+    background-position: right center;
+    padding-right: 20px;
+  }
+
+  /* line 245, ../sass/_formalize.scss */
+  ::-webkit-validation-bubble-message {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #666666), color-stop(1, black));
+    border: 1px solid;
+    border-color: #747474 #5e5e5e #4f4f4f;
+    color: white;
+    font: 13px/17px "Lucida Grande", Arial, "Liberation Sans", FreeSans, sans-serif;
+    overflow: hidden;
+    padding: 15px 15px 17px;
+    text-shadow: black 0 0 1px;
+    height: 16px;
+  }
+
+  /* line 260, ../sass/_formalize.scss */
+  ::-webkit-validation-bubble-arrow,
+  ::-webkit-validation-bubble-top-outer-arrow,
+  ::-webkit-validation-bubble-top-inner-arrow {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    background: #666666;
+    border: 0;
+  }
+}
+/* line 268, ../sass/_formalize.scss */
+textarea {
+  min-height: 40px;
+  overflow: auto;
+  resize: vertical;
+  width: 100%;
+}
+
+/* line 275, ../sass/_formalize.scss */
+optgroup {
+  color: black;
+  font-style: normal;
+  font-weight: normal;
+  font-family: Arial, "Liberation Sans", FreeSans, sans-serif;
+}
+/* line 283, ../sass/_formalize.scss */
+optgroup::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+/* line 314, ../sass/_formalize.scss */
+.ie6_button,
+* html button,
+* html a.button {
+  background: #dddddd url('../images/button.png?1350408709') repeat-x;
+  border: 1px solid;
+  border-color: #dddddd #bbbbbb #999999;
+  cursor: pointer;
+  color: #333333;
+  font: bold 12px/1.2 Arial, sans-serif;
+  padding: 2px 10px 0px;
+  text-decoration: none;
+  overflow: visible;
+  vertical-align: top;
+  width: auto;
+}
+
+/* line 328, ../sass/_formalize.scss */
+* html a.button {
+  position: relative;
+  top: 3px;
+  padding-bottom: 2px;
+}
+
+/* line 334, ../sass/_formalize.scss */
+* html button {
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+
+/* line 341, ../sass/_formalize.scss */
+.ie6_input,
+* html textarea,
+* html select {
+  background: white;
+  border: 1px solid;
+  border-color: #848484 #c1c1c1 #e1e1e1;
+  color: black;
+  padding: 2px 3px 1px;
+  font-size: 13px;
+  font-family: Arial, sans-serif;
+  vertical-align: top;
+}
+
+/* line 352, ../sass/_formalize.scss */
+* html select {
+  margin-top: 1px;
+}
+
+/* line 358, ../sass/_formalize.scss */
+.placeholder_text,
+.ie6_input_disabled,
+.ie6_button_disabled {
+  color: #888888;
+}
+
+/* line 362, ../sass/_formalize.scss */
+.ie6_input_disabled {
+  background: #eeeeee;
+}
+
 /*
  * @file
  * global.styles
@@ -465,7 +876,7 @@ a:hover, a:focus {
 #menu-bar.nav li:hover, #menu-bar.nav li.active-trail,
 #menu-bar.nav ul.menu li:hover,
 #menu-bar.nav ul.menu li.active-trail {
-  background: url('../images/main-nav-hover.png?1344886726') repeat-x left top;
+  background: url('../images/main-nav-hover.png?1350408709') repeat-x left top;
 }
 /* line 656, ../sass/global.styles.scss */
 #menu-bar.nav li a,
@@ -489,15 +900,15 @@ a:hover, a:focus {
 }
 /* line 677, ../sass/global.styles.scss */
 #menu-bar.nav .main-menu-home {
-  background: url('../images/icons/icon-home.png?1344884489') no-repeat center 10px;
+  background: url('../images/icons/icon-home.png?1350408709') no-repeat center 10px;
 }
 /* line 681, ../sass/global.styles.scss */
 #menu-bar.nav .main-menu-groups {
-  background: url('../images/icons/icon-groups.png?1344884515') no-repeat center 10px;
+  background: url('../images/icons/icon-groups.png?1350408709') no-repeat center 10px;
 }
 /* line 685, ../sass/global.styles.scss */
 #menu-bar.nav .main-menu-events {
-  background: url('../images/icons/icon-events.png?1344884539') no-repeat center 10px;
+  background: url('../images/icons/icon-events.png?1350408709') no-repeat center 10px;
 }
 
 /* =============================================================================
@@ -744,7 +1155,7 @@ ul.primary li {
 }
 /* line 1040, ../sass/global.styles.scss */
 ul.primary li a {
-  background-color: #f5f5f5;
+  background-color: whitesmoke;
   border-color: #cccccc;
   margin-right: 1px;
   padding: 0 10px;
@@ -1193,21 +1604,73 @@ a.button {
   margin: 0;
 }
 
+/* line 1799, ../sass/global.styles.scss */
+input[type="text"] {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  border: 1px solid #B2B2B2;
+}
+
+/* line 1806, ../sass/global.styles.scss */
+button,
+input[type="submit"] {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #ececec;
+  *zoom: 1;
+  filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#FFECECEC', endColorstr='#FFE6E6E6');
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ececec), color-stop(22%, #e6e6e6), color-stop(100%, #e6e6e6));
+  background-image: -webkit-linear-gradient(top, #ececec 0%, #e6e6e6 22%, #e6e6e6 100%);
+  background-image: -moz-linear-gradient(top, #ececec 0%, #e6e6e6 22%, #e6e6e6 100%);
+  background-image: -o-linear-gradient(top, #ececec 0%, #e6e6e6 22%, #e6e6e6 100%);
+  background-image: linear-gradient(top, #ececec 0%, #e6e6e6 22%, #e6e6e6 100%);
+  border: 1px solid #BBBBBB;
+  font-weight: normal;
+  margin: 0 10px 0 0;
+}
+
+/* line 1817, ../sass/global.styles.scss */
+#edit-submit {
+  background-color: #6eca5d;
+  *zoom: 1;
+  filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#FF6ECA5D', endColorstr='#FF45BB2F');
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #6eca5d), color-stop(22%, #45bb2f), color-stop(100%, #45bb2f));
+  background-image: -webkit-linear-gradient(top, #6eca5d 0%, #45bb2f 22%, #45bb2f 100%);
+  background-image: -moz-linear-gradient(top, #6eca5d 0%, #45bb2f 22%, #45bb2f 100%);
+  background-image: -o-linear-gradient(top, #6eca5d 0%, #45bb2f 22%, #45bb2f 100%);
+  background-image: linear-gradient(top, #6eca5d 0%, #45bb2f 22%, #45bb2f 100%);
+  border: 1px solid #249125;
+  color: #FFFFFF;
+  margin: 0 10px 0 0;
+}
+
+/* line 1827, ../sass/global.styles.scss */
+#edit-field-topics-und {
+  border-top: 2px groove #8A8A8A;
+  border-left: 2px groove #8A8A8A;
+}
+
 /* =============================================================================
  *   Tables
  * ========================================================================== */
-/* line 1803, ../sass/global.styles.scss */
+/* line 1837, ../sass/global.styles.scss */
 table {
   margin: 10px 0;
   padding: 0;
   width: 100%;
 }
-/* line 1808, ../sass/global.styles.scss */
+/* line 1842, ../sass/global.styles.scss */
 table.sticky-header {
   z-index: 10;
 }
 
-/* line 1819, ../sass/global.styles.scss */
+/* line 1853, ../sass/global.styles.scss */
 table,
 thead,
 tbody,
@@ -1217,27 +1680,27 @@ td {
   border-color: #cccccc;
 }
 
-/* line 1826, ../sass/global.styles.scss */
+/* line 1860, ../sass/global.styles.scss */
 table,
 td,
 th {
   vertical-align: middle;
 }
 
-/* line 1833, ../sass/global.styles.scss */
+/* line 1867, ../sass/global.styles.scss */
 caption,
 th,
 td {
   text-align: left;
 }
 
-/* line 1838, ../sass/global.styles.scss */
+/* line 1872, ../sass/global.styles.scss */
 thead tr {
   font-weight: 700;
   background-color: #e5e5e5;
 }
 
-/* line 1845, ../sass/global.styles.scss */
+/* line 1879, ../sass/global.styles.scss */
 td,
 th {
   border-bottom: 0;
@@ -1245,29 +1708,29 @@ th {
   padding: 5px 7px;
 }
 
-/* line 1855, ../sass/global.styles.scss */
+/* line 1889, ../sass/global.styles.scss */
 tbody tr {
   border-top: 1px solid #cccccc;
 }
 
-/* line 1860, ../sass/global.styles.scss */
+/* line 1894, ../sass/global.styles.scss */
 tr {
   /* Table row striping */
 }
-/* line 1862, ../sass/global.styles.scss */
+/* line 1896, ../sass/global.styles.scss */
 tr.odd {
   background: #e6e6e6;
 }
-/* line 1869, ../sass/global.styles.scss */
+/* line 1903, ../sass/global.styles.scss */
 tr.info, tr.even, tr:nth-child(2n+2) {
   border-bottom: 0;
-  background-color: #f5f5f5;
+  background-color: whitesmoke;
 }
-/* line 1878, ../sass/global.styles.scss */
+/* line 1912, ../sass/global.styles.scss */
 tr.odd td.active {
   background-color: #eeeeee;
 }
-/* line 1882, ../sass/global.styles.scss */
+/* line 1916, ../sass/global.styles.scss */
 tr.even td.active {
   background-color: #ebebeb;
 }
@@ -1276,7 +1739,7 @@ tr.even td.active {
  * Forum tables
  * Core sets white-space to nowrap, which makes no sense
  */
-/* line 1910, ../sass/global.styles.scss */
+/* line 1944, ../sass/global.styles.scss */
 #forum td .created,
 #forum td .posts,
 #forum td .topics,
@@ -1289,12 +1752,12 @@ tr.even td.active {
 /* =============================================================================
  *   Messages
  * ========================================================================== */
-/* line 1921, ../sass/global.styles.scss */
+/* line 1955, ../sass/global.styles.scss */
 div.messages {
   margin-bottom: 10px;
   margin-top: 10px;
 }
-/* line 1926, ../sass/global.styles.scss */
+/* line 1960, ../sass/global.styles.scss */
 div.messages ul {
   margin-top: 0;
   margin-bottom: 0;
@@ -1303,7 +1766,7 @@ div.messages ul {
 /*
  * Unpublished nodes
  */
-/* line 1967, ../sass/global.styles.scss */
+/* line 2001, ../sass/global.styles.scss */
 .node-unpublished p.unpublished,
 .comment-unpublished p.unpublished {
   color: pink;
@@ -1329,28 +1792,28 @@ div.messages ul {
 /* =============================================================================
  *    Maintenance pages
  * ========================================================================== */
-/* line 1978, ../sass/global.styles.scss */
+/* line 2012, ../sass/global.styles.scss */
 .maintenance-page .container {
   padding: 40px 0;
 }
-/* line 1983, ../sass/global.styles.scss */
+/* line 2017, ../sass/global.styles.scss */
 .maintenance-page #site-name,
 .maintenance-page #page-title {
   margin: 0;
 }
 
-/* line 1990, ../sass/global.styles.scss */
+/* line 2024, ../sass/global.styles.scss */
 .db-offline .container {
   margin: 0 auto;
   padding: 40px 0;
   width: 100%;
   max-width: 960px;
 }
-/* line 1997, ../sass/global.styles.scss */
+/* line 2031, ../sass/global.styles.scss */
 .db-offline div.messages {
   margin: 20px 0 0;
 }
-/* line 2001, ../sass/global.styles.scss */
+/* line 2035, ../sass/global.styles.scss */
 .db-offline #content {
   padding: 20px 0;
 }
@@ -1361,7 +1824,7 @@ div.messages ul {
 /*
  * Admin menu overrides
  */
-/* line 2014, ../sass/global.styles.scss */
+/* line 2048, ../sass/global.styles.scss */
 #admin-menu {
   margin: 0;
   padding: 0;
@@ -1370,7 +1833,7 @@ div.messages ul {
 /*
  * Devel Module
  */
-/* line 2023, ../sass/global.styles.scss */
+/* line 2057, ../sass/global.styles.scss */
 .dev-query {
   background: #eeeeee;
   padding: 30px;
@@ -1379,11 +1842,11 @@ div.messages ul {
 /*
  * Styleguide module tweaks
  */
-/* line 2032, ../sass/global.styles.scss */
+/* line 2066, ../sass/global.styles.scss */
 #styleguide-header {
   padding: 0 10px;
 }
-/* line 2035, ../sass/global.styles.scss */
+/* line 2069, ../sass/global.styles.scss */
 #styleguide-header .item-list {
   font-family: inherit;
   margin: 0 20px 20px 0;

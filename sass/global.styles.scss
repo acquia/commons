@@ -1796,6 +1796,40 @@ a.button {
 }
 
 
+input[type="text"] {
+  @include border-radius(3px);
+  border: 1px solid #B2B2B2;
+}
+
+
+button,
+input[type="submit"] {
+  @include border-radius(3px);
+  background-color: #ececec; // Old browsers
+  @include filter-gradient(#ececec, #e6e6e6, vertical); // IE6-9
+  @include background-image(linear-gradient(top,  #ececec 0%,#e6e6e6 22%,#e6e6e6 100%));
+  border: 1px solid #BBBBBB;
+  font-weight: normal;
+  margin: 0 10px 0 0;
+}
+
+
+#edit-submit {
+  background-color: #6eca5d; // Old browsers
+  @include filter-gradient(#6eca5d, #45bb2f, vertical); // IE6-9
+  @include background-image(linear-gradient(top,  #6eca5d 0%,#45bb2f 22%,#45bb2f 100%));
+  border: 1px solid #249125;
+  color: #FFFFFF;
+  margin: 0 10px 0 0;
+}
+
+
+#edit-field-topics-und {
+  border-top: 2px groove #8A8A8A;
+  border-left: 2px groove #8A8A8A;
+}
+
+
 /* =============================================================================
  *   Tables
  * ========================================================================== */
