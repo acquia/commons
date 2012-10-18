@@ -553,17 +553,7 @@ ul.links {
 /*
  * Sidebars - targets both
  */
-.panels-ipe-portlet-wrapper {
-  background-color: $white;
-  @include border-radius(3px);
-  @include box-shadow($light_gray 1px 1px 4px);
-  margin-right: 20px;
-  margin-bottom: 20px;
-
-  .panels-ipe-portlet-content {
-    padding: 10px;
-  }
-}
+.sidebar {}
 
 
 /*
@@ -1300,6 +1290,29 @@ ul.action-links {
   margin: 5px 0 15px 20px;
 }
 
+/* =============================================================================
+ *   Panels Styling
+ * ========================================================================== */
+
+.panels-ipe-portlet-wrapper {
+  @extend %pod;
+}
+
+.panels-ipe-portlet-content {
+  @extend %pod-content;
+}
+
+/* =============================================================================
+ *   Views Styling
+ * ========================================================================== */
+
+.view-display-id-commons_events_upcoming_page .views-row {
+  @extend %pod;
+
+  article {
+    @extend %pod-content;
+  }
+}
 
 
 /* =============================================================================
