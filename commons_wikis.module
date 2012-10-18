@@ -67,10 +67,12 @@ function commons_wikis_commons_bw_group_widget() {
 */
 function commons_wikis_views_pre_render(&$view) {
   // Add a "Create a wiki" link for users who have access.
-  $gid = $view->argument['gid']->value[0];
-  if ($view->name == 'commons_bw_wikis' && og_user_access('node', $gid, 'create wiki content') && node_access('create', 'wiki')) {
-    $group_id = $view->args[0];
-    $view->attachment_before = l('Create a wiki', 'node/add/wiki', array('query' => array('og_group_ref' => $group_id)));
+  if ($view->name == 'commons_bw_wikis') {
+    $gid = $view->argument['gid']->value[0];
+    if (og_user_access('node', $gid, 'create wiki content') && node_access('create', 'wiki')) {
+      $group_id = $view->args[0];
+      $view->attachment_before = l('Create a wiki', 'node/add/wiki', array('query' => array('og_group_ref' => $group_id)));
+    }
   }  
 }
 
