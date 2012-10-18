@@ -553,15 +553,15 @@ ul.links {
 /*
  * Sidebars - targets both
  */
-.sidebar {
-  .block {
-    background-color: $white;
-    @include border-radius(3px);
-    @include box-shadow($light_gray 1px 1px 4px);
+.panels-ipe-portlet-wrapper {
+  background-color: $white;
+  @include border-radius(3px);
+  @include box-shadow($light_gray 1px 1px 4px);
+  margin-right: 20px;
+  margin-bottom: 20px;
 
-    .block-inner {
-      padding: 10px;
-    }
+  .panels-ipe-portlet-content {
+    padding: 10px;
   }
 }
 
