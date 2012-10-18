@@ -262,7 +262,11 @@ function commons_events_field_default_field_instances() {
   // Exported field_instance: 'node-event-field_number_of_attendees'
   $field_instances['node-event-field_number_of_attendees'] = array(
     'bundle' => 'event',
-    'default_value' => 0,
+    'default_value' => array(
+      0 => array(
+        'value' => '0',
+      ),
+    ),
     'deleted' => '0',
     'description' => 'Enter 0 for unlimited',
     'display' => array(

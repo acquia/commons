@@ -1,6 +1,17 @@
 (function ($) {
+  $.fn.changeElementType = function(newType) {
+    var attrs = {};
+    $.each(this[0].attributes, function(idx, attr) {
+      attrs[attr.nodeName] = attr.nodeValue;
+    });
+    this.replaceWith(function() {
+      return $("<" + newType + "/>", attrs).append($(this).contents());
+    });
+  }
   Drupal.behaviors.commons_events_update_registration_settings_legend = {
     attach: function (context, settings) {
+      $("#edit-event-registration-settings .summary").changeElementType("div");
+      $("#edit-event-topics .summary").changeElementType("div");
       if ($('#legend-registration-type').length == 0) {
         $('#edit-event-registration-settings .summary').append("<span id='legend-registration-type'></span>");
       }
