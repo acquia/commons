@@ -48,6 +48,24 @@ function commons_wikis_user_revision_access($node = NULL, $old_callback = '_node
 }
 
 /**
+* Implements hook_og_user_access_alter().
+*/
+function commons_wikis_og_user_access_alter(&$temp_perm, $context) {
+  // Grant access to non-group members to be able to edit wiki nodes.
+  // where the group node is public and content is public within the group.
+  $commons_groups_enabled_node_types = commons_groups_get_enabled_node_types();
+  $group_content_restricted = (bool) ($context['group']->group_content_access[LANGUAGE_NONE][0]['value'] == 2);
+  // @TODO: Consider using a static here.
+  $user_is_member = (bool)og_is_member('node', $context['group']->nid, 'user', $context['account']);
+  foreach ($commons_groups_enabled_node_types as $type => $status) {
+    if ($context['string'] == "update any wiki content" && (!$group_content_restricted || $user_is_member)) {
+      $temp_perm["update any wiki content"] = TRUE;
+    }
+  }
+}
+
+
+/**
  * Implements hook_commons_bw_group_widget().
  */
 function commons_wikis_commons_bw_group_widget() {
