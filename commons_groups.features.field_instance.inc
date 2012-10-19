@@ -176,7 +176,7 @@ function commons_groups_field_definition(&$field_instances, $type) {
    $field_instances["node-$type-og_group_ref"] = array(
     'bundle' => $type,
     'default_value' => NULL,
-    'default_value_function' => 'entityreference_prepopulate_field_default_value',
+    'default_value_function' => 'commons_groups_entityreference_default_value',
     'deleted' => '0',
     'description' => '',
     'display' => array(

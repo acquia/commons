@@ -7,6 +7,23 @@
 include_once 'commons_groups.features.inc';
 
 
+
+/**
+* Implements hook_form_alter().
+*/
+function commons_groups_form_alter(&$form, &$form_state, $form_id) {
+  if (in_array($form_id, array('og_ui_admin_global_permissions', 'og_ui_admin_permissions'))) {
+    $enabled_node_types = commons_groups_get_enabled_node_types();
+    if (!empty($enabled_node_types)) {
+      // @TODO: Improve this message to be more specific and/or
+      // reflect these changes in the checkboxes.
+      $message = 'In addition to the permissions listed here, the Commons Groups module grants non-group members the ability to post content into groups where content in the group is public.';
+      drupal_set_message(t($message), 'warning');
+    }
+  }
+}
+
+
 /**
 * Implements hook_system_info_alter().
 */
@@ -28,6 +45,59 @@ function commons_groups_system_info_alter(&$info, $file, $type) {
       }
     }
   }
+}
+
+/**
+* Implements hook_og_user_access_alter().
+*/
+function commons_groups_og_user_access_alter(&$temp_perm, $context) {
+  // Grant access to non-group members to be able to post into groups
+  // where the group node is public and content is public within the group.
+  $commons_groups_enabled_node_types = commons_groups_get_enabled_node_types();
+  $group_content_restricted = (bool) ($context['group']->group_content_access[LANGUAGE_NONE][0]['value'] == 2);
+  // @TODO: Consider using a static here.
+  $user_is_member = (bool)og_is_member('node', $context['group']->nid, 'user', $context['account']);
+  foreach ($commons_groups_enabled_node_types as $type => $status) {
+    if ($context['string'] == "create $type content" && (!$group_content_restricted || $user_is_member)) {
+      $temp_perm["create $type content"] = TRUE;
+    }
+  }
+}
+
+/**
+* Default value function for the og_group_ref reference field.
+* This function is assigned to the field with the default_value_function
+* property defined in our instances of the og_group_ref field,
+* which takes place in commons_groups_field_definition().
+*/
+function commons_groups_entityreference_default_value($entity_type, $entity, $field, $instance, $langcode) {
+  $field_name = $field['field_name'];
+
+  if (empty($_GET[$field_name]) || !is_string($_GET[$field_name])) {
+    return;
+  }
+
+  if (empty($instance['settings']['behaviors']['prepopulate']['status'])) {
+    return;
+  }
+
+  $ids = explode(',', $_GET[$field_name]);
+
+  // Check access to the provided entities.
+  $target_type = $field['settings']['target_type'];
+  entity_load($target_type, $ids);
+  // Remove group nodes hidden by the node access system.
+  $items = array();
+  foreach ($ids as $target_id) {
+    $target = entity_load_single($target_type, $target_id);
+    if (entity_access('view', $target_type, $target)
+      && og_is_group_type($target_type, $target->type)
+      && (og_user_access($target_type, $target_id, "create $entity->type content") || og_user_access($target_type, $id, "update any $entity->type content"))) {
+        $items[]= array('target_id' => $target_id);
+    }
+  }
+
+  return $items;
 }
 
 /**
@@ -83,6 +153,16 @@ function commons_groups_get_entity_types() {
   return $commons_groups_entity_types;
 }
 
+/**
+* Helper function for commons_groups_get_entity_types() to return
+* only those node types that are configured as enabled.
+*/
+function commons_groups_get_enabled_node_types() {
+  $commons_groups_entity_types = commons_groups_get_entity_types();
+  if (!empty($commons_groups_entity_types['node'])) {
+    return array_filter($commons_groups_entity_types['node']);
+  }
+}
 /**
 * When a user first creates content within a group,
 * grant her the contributor role within that group.
