@@ -47,6 +47,15 @@ function commons_groups_system_info_alter(&$info, $file, $type) {
   }
 }
 
+function commons_groups_default_message_type_alter(&$defaults) {
+  foreach (array('commons_activity_streams_comment_created', 'commons_activity_streams_node_created') as $name) {
+    if (!empty($defaults[$name])) {
+      $defaults[$name]->message_text[LANGUAGE_NONE][2] = commons_groups_message_partial_default();
+    }
+  }
+}
+
+
 /**
 * Implements hook_og_user_access_alter().
 */
@@ -63,6 +72,121 @@ function commons_groups_og_user_access_alter(&$temp_perm, $context) {
     }
   }
 }
+
+
+/**
+ * Implements of hook_token_info().
+ */
+function commons_groups_token_info() {
+  $types = array();
+  $tokens = array();
+
+  // Commons Groups tokens.
+  $types['commons-groups'] = array(
+    'name' => t('Commons Groups'),
+    'description' => t('Tokens related to the Groups functionality in Drupal Commons.'),
+    'needs-data' => 'node',
+  );
+  $tokens['commons-groups']['in-groups-text'] = array(
+    'name' => t('"In groups" text'),
+    'description' => t('The text (starting with "in the groups") indicating which groups a peice of content belongs to.'),
+  );
+
+  return array(
+    'types' => $types,
+    'tokens' => $tokens,
+  );
+}
+
+
+
+/**
+ * Implements hook_tokens().
+ */
+function commons_groups_tokens($type, $tokens, $data = array(), $options = array()) {
+  $replacements = array();
+  if ($type == 'commons-groups') {
+    if (!empty($tokens['in-groups-text']))  {
+      // Build a list of groups associated with this message.
+      $text = '';
+      $target_nids = array();
+      $related_groups = array();
+      $related_gids = array();
+      // First, build an array of target nodes associated with the message.
+      foreach ($data['message']->field_target_nodes[LANGUAGE_NONE] as $key => $value) {
+        $target_nids[] = $value['target_id'];
+      }
+      // If there are no target nodes, the in-groups-text token should be empty.
+      if (empty($target_nids)) {
+        $replacements['[commons-groups:in-groups-text]'] = $text;
+        return $replacements;
+      }
+      // Build a list of groups associated with the target nodes.
+      // For now, we assume that the group type is node.
+      foreach ($target_nids as $key => $nid) {
+        $og_memberships_this_target = og_get_entity_groups('node', $nid);
+        if (!empty($og_memberships_this_target['node'])) {
+          $og_memberships_this_target = $og_memberships_this_target['node'];
+          foreach ($og_memberships_this_target as $membership_id => $gid) {
+            $related_gids[] = $gid;
+          }
+        }
+      }
+      // If no groups are associated with any of the targett nodes,
+      // then we have no "in the groups" text.
+      if (empty($related_gids)) {
+        $replacements['[commons-groups:in-groups-text]'] = '';
+        return $replacements;
+      }
+      
+      $related_groups = entity_load('node', $related_gids);
+      // Key the array of groups in a predictable way.
+      $related_groups = array_values($related_groups);
+      // Generate the appropriate text depending on the number of groups
+      // associated with the message:
+
+      // In 1 group: "in the x group"
+      if (count($related_groups) == 1) {
+        $text = t(' in the !group group', array('!group' => l($related_groups[0]->title, 'node/' . $related_groups[0]->nid))) ;
+        $replacements['[commons-groups:in-groups-text]'] = $text;
+      }
+
+      // In 2 groups: "in the x and y groups"
+      if (count($related_groups) == 2) {
+        $text = t(' in the !group-0 and !group-1 groups', array('!group-0' => l($related_groups[0]->title, 'node/' . $related_groups[0]->nid), '!group-1' => l($related_groups[1]->title, 'node/' . $related_groups[1]->nid)));
+      }
+
+      // In more than 2 groups: "in the x, y and z groups"
+      if (count($related_groups) > 2) {
+        // Separate the last group.
+        $last_group = array_pop($related_groups);
+        $text = ' in the ';
+        // Prepare tokens for t() for each of the other groups.
+        foreach ($related_groups as $key => $this_group) {
+          $text .= "!group-$key, ";
+          $t_args["!group-$key"] = l($this_group->title, 'node/' . $this_group->nid);
+        }
+        // Prepare the last group token.
+        $text .= " and !group-$last_group->nid groups.";
+        $t_args["!group-$last_group->nid"] = l($last_group->title, 'node/' . $last_group->nid);
+        // Prepare the full text with all of the groups and their tokens:
+        $text = t($text, $t_args);
+      }
+      $replacements['[commons-groups:in-groups-text]'] = $text;
+    }
+  }
+  return $replacements;
+}
+
+function commons_groups_message_partial_default() {
+  $partial = array(
+    'value' => '[commons-groups:in-groups-text]',
+    'format' => 'full_html',
+    'safe_value' => '[commons-groups:in-groups-text]',
+  );
+  return $partial;
+}
+
 
 /**
 * Default value function for the og_group_ref reference field.
