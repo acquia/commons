@@ -10,12 +10,12 @@
 function commons_activity_streams_groups_views_default_views() {
   $export = array();
 
-  $view = new view();
+ $view = new view();
   $view->name = 'activity_group';
   $view->description = '';
   $view->tag = 'Commons';
   $view->base_table = 'message';
-  $view->human_name = 'Group Activity';
+  $view->human_name = 'Group Activity Stream';
   $view->core = 7;
   $view->api_version = '3.0';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
@@ -32,7 +32,7 @@ function commons_activity_streams_groups_views_default_views() {
   $handler->display->display_options['pager']['options']['items_per_page'] = '4';
   $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['style_plugin'] = 'default';
-  $handler->display->display_options['row_plugin'] = 'entity';
+  $handler->display->display_options['row_plugin'] = 'fields';
   /* Relationship: Entity Reference: Referenced Entity */
   $handler->display->display_options['relationships']['field_target_nodes_target_id']['id'] = 'field_target_nodes_target_id';
   $handler->display->display_options['relationships']['field_target_nodes_target_id']['table'] = 'field_data_field_target_nodes';
@@ -44,10 +44,22 @@ function commons_activity_streams_groups_views_default_views() {
   $handler->display->display_options['relationships']['og_membership_rel']['field'] = 'og_membership_rel';
   $handler->display->display_options['relationships']['og_membership_rel']['relationship'] = 'field_target_nodes_target_id';
   $handler->display->display_options['relationships']['og_membership_rel']['required'] = TRUE;
-  /* Field: Message: Message ID */
-  $handler->display->display_options['fields']['mid']['id'] = 'mid';
-  $handler->display->display_options['fields']['mid']['table'] = 'message';
-  $handler->display->display_options['fields']['mid']['field'] = 'mid';
+  /* Field: Message: Rendered Message */
+  $handler->display->display_options['fields']['rendered_entity']['id'] = 'rendered_entity';
+  $handler->display->display_options['fields']['rendered_entity']['table'] = 'views_entity_message';
+  $handler->display->display_options['fields']['rendered_entity']['field'] = 'rendered_entity';
+  $handler->display->display_options['fields']['rendered_entity']['label'] = '';
+  $handler->display->display_options['fields']['rendered_entity']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['rendered_entity']['link_to_entity'] = 0;
+  $handler->display->display_options['fields']['rendered_entity']['display'] = 'view';
+  $handler->display->display_options['fields']['rendered_entity']['view_mode'] = 'full';
+  /* Field: Message: Timestamp */
+  $handler->display->display_options['fields']['timestamp']['id'] = 'timestamp';
+  $handler->display->display_options['fields']['timestamp']['table'] = 'message';
+  $handler->display->display_options['fields']['timestamp']['field'] = 'timestamp';
+  $handler->display->display_options['fields']['timestamp']['label'] = '';
+  $handler->display->display_options['fields']['timestamp']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['timestamp']['date_format'] = 'time_ago_dynamic';
   /* Sort criterion: Message: Timestamp */
   $handler->display->display_options['sorts']['timestamp']['id'] = 'timestamp';
   $handler->display->display_options['sorts']['timestamp']['table'] = 'message';
@@ -88,6 +100,7 @@ function commons_activity_streams_groups_views_default_views() {
       'label' => 'OG membership: Group ID',
     ),
   );
+
   $export['activity_group'] = $view;
 
   return $export;
