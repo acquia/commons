@@ -58,7 +58,7 @@ h1 {
   line-height: 30px;
   font-weight: normal;
   color: $white;
-  @include text-shadow(#000 1px 1px 4px);
+//  @include text-shadow(#000 1px 1px 4px);
 
   a {
     color: $white;
@@ -388,6 +388,8 @@ var {
  */
 #site-name {
   margin: 0;
+  font-family:'Trebuchet MS';
+  font-weight:700;
 
   a {
 
@@ -498,7 +500,6 @@ ul.links {
 
 h1.node-title {
   color:$dark_blue;
-  text-shadow:none;
   font-size:20px;
   a {
     text-decoration:none;
@@ -513,11 +514,23 @@ h1.node-title {
  * User picture wrapping and shadow
  */
 .user-picture {
-  img {
-    background:$white;
-    padding:4px;
-    @include border-radius(3px);
-    @include box-shadow($light_gray 1px 1px 4px);
+  float:left;
+  margin:0 20px 0 0;
+  background:$white;
+  padding:4px;
+  @include border-radius(3px);
+  @include box-shadow($light_gray 1px 1px 4px);
+  position:relative;
+  display:block;
+  line-height:0;
+  &:after {
+    content:"";
+    width:5px;
+    height:8px;
+    position:absolute;
+    right:-5px;
+    top:10px;
+    background:image-url('user_img_arrow.png');
   }
 }
 /*
@@ -656,6 +669,7 @@ a {
   // margin-right: -3px;
   float: left;
   vertical-align: top;
+  margin:0 0 0 80px;
 
   ul,
   ul.menu {
@@ -683,7 +697,7 @@ a {
     padding: 31px 13px 0px 13px;
     height: 33px;
     text-transform: uppercase;
-    text-shadow: black 1px 1px 4px;
+    @include text-shadow(#000 1px 1px 4px);
     background-position:center 10px;
     @extend .divider-left;
     &:visited {}
@@ -2140,7 +2154,6 @@ body.front {
       color:$dark_gray;
       font-size:40px;
       font-weight:700;
-      text-shadow:none;
       line-height:50px;
     }
     .commons_home-welcome-image {
