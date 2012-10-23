@@ -493,6 +493,23 @@ ul.links {
 }
 
 /*
+ * H1 Node title
+ */
+
+h1.node-title {
+  color:$dark_blue;
+  text-shadow:none;
+  font-size:20px;
+  a {
+    text-decoration:none;
+    color:$dark_blue;
+    &:hover {
+      text-decoration:underline;
+    }
+  }
+}
+
+/*
  * User picture wrapping and shadow
  */
 .user-picture {
@@ -577,33 +594,13 @@ ul.links {
  * First sidebar
  */
 .region-sidebar-first {}
-.region-two-66-33-first {
-  h1 {
-    color:$dark_blue;
-    text-shadow:none;
-    font-size:20px;
-    a {
-      text-decoration:none;
-      color:$dark_blue;
-      &:hover {
-        text-decoration:underline;
-      }
-    }
-  }
-}
+.region-two-66-33-first {}
 
 /*
  * Second sidebar
  */
 .region-sidebar-second {}
-.region-two-66-33-second {
-  h2 {
-    font:{
-      size:20px;
-    }
-    color:$gray;
-  }
-}
+.region-two-66-33-second {}
 
 /*
  * Tertiary content
@@ -687,10 +684,9 @@ a {
     height: 33px;
     text-transform: uppercase;
     text-shadow: black 1px 1px 4px;
+    background-position:center 10px;
     @extend .divider-left;
-    
     &:visited {}
-    
     &:hover,
     &:focus {
       text-decoration: none;
@@ -1331,11 +1327,19 @@ ul.action-links {
  *   Panels Styling
  * ========================================================================== */
 
-.panels-ipe-portlet-wrapper {
+.pane-views-panes,
+.pane-views {
   @extend %pod;
+  h2 {
+    font:{
+      size:20px;
+    }
+    color:$gray;
+  }
 }
 
-.panels-ipe-portlet-content {
+.pane-views-panes .block-inner,
+.pane-views .block-inner {
   @extend %pod-content;
 }
 
@@ -2121,5 +2125,26 @@ tr.error {
     margin: 0 20px 20px 0;
     min-height: 260px;
     width: auto;
+  }
+}
+
+/* =============================================================================
+ *   Front Page specific
+ * ========================================================================== */
+
+body.front {
+  .region-three-33-top {
+    font-size:24px;
+    font-weight:300;
+    h1 {
+      color:$dark_gray;
+      font-size:40px;
+      font-weight:700;
+      text-shadow:none;
+      line-height:50px;
+    }
+    .commons_home-welcome-image {
+      float:right;
+    }
   }
 }
