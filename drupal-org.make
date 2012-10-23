@@ -127,6 +127,16 @@ projects[strongarm][version] = "2.x-dev"
 projects[strongarm][type] = "module"
 projects[strongarm][subdir] = "contrib"
 
+projects[timeago][type] = "module"
+projects[timeago][subdir] = "contrib"
+projects[timeago][download][type] = "git"
+projects[timeago][download][url] = "http://git.drupal.org/project/timeago.git"
+projects[timeago][download][branch] = "7.x-2.x"
+
+; Provide a dedicated date type:
+; http://drupal.org/node/1427226#comment-6638836
+projects[timeago][patch][] = "http://drupal.org/files/1427226-timeago-date-type.patch"
+
 projects[token][type] = "module"
 projects[token][subdir] = "contrib"
 
