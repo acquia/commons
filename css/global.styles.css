@@ -101,11 +101,12 @@ input[type="button"] {
   -webkit-background-clip: padding;
   -moz-background-clip: padding;
   background-clip: padding-box;
-  background: #dddddd url('../images/button.png?1349964182') repeat-x;
+  background: #dddddd url('../images/button.png?1351002995') repeat-x;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #dddddd));
   background-image: -webkit-linear-gradient(#ffffff, #dddddd);
   background-image: -moz-linear-gradient(#ffffff, #dddddd);
   background-image: -o-linear-gradient(#ffffff, #dddddd);
+  background-image: -ms-linear-gradient(#ffffff, #dddddd);
   background-image: linear-gradient(#ffffff, #dddddd);
   border: 1px solid;
   border-color: #dddddd #bbbbbb #999999;
@@ -134,6 +135,7 @@ input[type="button"]:hover {
   background-image: -webkit-linear-gradient(#ffffff, #eeeeee 1px, #cccccc);
   background-image: -moz-linear-gradient(#ffffff, #eeeeee 1px, #cccccc);
   background-image: -o-linear-gradient(#ffffff, #eeeeee 1px, #cccccc);
+  background-image: -ms-linear-gradient(#ffffff, #eeeeee 1px, #cccccc);
   background-image: linear-gradient(#ffffff, #eeeeee 1px, #cccccc);
 }
 /* line 109, ../sass/_formalize.scss */
@@ -146,6 +148,7 @@ input[type="button"]:active {
   background-image: -webkit-linear-gradient(#ffffff, #dddddd 1px, #eeeeee);
   background-image: -moz-linear-gradient(#ffffff, #dddddd 1px, #eeeeee);
   background-image: -o-linear-gradient(#ffffff, #dddddd 1px, #eeeeee);
+  background-image: -ms-linear-gradient(#ffffff, #dddddd 1px, #eeeeee);
   background-image: linear-gradient(#ffffff, #dddddd 1px, #eeeeee);
   -webkit-box-shadow: inset rgba(0, 0, 0, 0.25) 0 1px 2px 0;
   -moz-box-shadow: inset rgba(0, 0, 0, 0.25) 0 1px 2px 0;
@@ -361,7 +364,7 @@ optgroup::-moz-focus-inner {
 .ie6_button,
 * html button,
 * html a.button {
-  background: #dddddd url('../images/button.png?1349964182') repeat-x;
+  background: #dddddd url('../images/button.png?1351002995') repeat-x;
   border: 1px solid;
   border-color: #dddddd #bbbbbb #999999;
   cursor: pointer;
@@ -779,6 +782,31 @@ ul.links li {
   margin: 0;
 }
 
+/*
+ * User picture wrapping and shadow
+ */
+/* line 499, ../sass/global.styles.scss */
+.user-picture img {
+  background: white;
+  padding: 4px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: #a5a5a5 1px 1px 4px;
+  -moz-box-shadow: #a5a5a5 1px 1px 4px;
+  box-shadow: #a5a5a5 1px 1px 4px;
+}
+
+/*
+ * Author/Submit line
+ */
+/* line 509, ../sass/global.styles.scss */
+.author-datetime {
+  color: #a5a5a5;
+}
+
 /* =============================================================================
  *   Regions
  * ========================================================================== */
@@ -794,7 +822,7 @@ ul.links li {
 /*
  * Header region, embedded in the #header
  */
-/* line 521, ../sass/global.styles.scss */
+/* line 538, ../sass/global.styles.scss */
 .region-header {
   float: left;
   height: 64px;
@@ -818,9 +846,31 @@ ul.links li {
 /*
  * First sidebar
  */
+/* line 581, ../sass/global.styles.scss */
+.region-two-66-33-first h1 {
+  color: #336699;
+  text-shadow: none;
+  font-size: 20px;
+}
+/* line 585, ../sass/global.styles.scss */
+.region-two-66-33-first h1 a {
+  text-decoration: none;
+  color: #336699;
+}
+/* line 588, ../sass/global.styles.scss */
+.region-two-66-33-first h1 a:hover {
+  text-decoration: underline;
+}
+
 /*
  * Second sidebar
  */
+/* line 600, ../sass/global.styles.scss */
+.region-two-66-33-second h2 {
+  font-size: 20px;
+  color: #666666;
+}
+
 /*
  * Tertiary content
  */
@@ -830,12 +880,12 @@ ul.links li {
 /* =============================================================================
  *   Links
  * ========================================================================== */
-/* line 587, ../sass/global.styles.scss */
+/* line 624, ../sass/global.styles.scss */
 a {
   text-decoration: none;
   color: #2783b9;
 }
-/* line 598, ../sass/global.styles.scss */
+/* line 635, ../sass/global.styles.scss */
 a:hover, a:focus {
   text-decoration: underline;
 }
@@ -843,7 +893,7 @@ a:hover, a:focus {
 /* =============================================================================
  *   Primary, Secondary and Menu Bar region menus
  * ========================================================================== */
-/* line 608, ../sass/global.styles.scss */
+/* line 645, ../sass/global.styles.scss */
 #primary-menu-bar {
   display: inline-block;
 }
@@ -855,18 +905,18 @@ a:hover, a:focus {
  *  - #secondary-menu (secondary/user menu)
  * You can target all of these with .nav or div[id$="menu-bar"]
  */
-/* line 620, ../sass/global.styles.scss */
+/* line 657, ../sass/global.styles.scss */
 #menu-bar.nav {
   float: left;
   vertical-align: top;
 }
-/* line 627, ../sass/global.styles.scss */
+/* line 664, ../sass/global.styles.scss */
 #menu-bar.nav ul,
 #menu-bar.nav ul.menu {
   margin: 0;
   padding: 0;
 }
-/* line 633, ../sass/global.styles.scss */
+/* line 670, ../sass/global.styles.scss */
 #menu-bar.nav li,
 #menu-bar.nav ul.menu li {
   display: inline-block;
@@ -875,13 +925,13 @@ a:hover, a:focus {
   margin: 0;
   padding: 0;
 }
-/* line 640, ../sass/global.styles.scss */
+/* line 677, ../sass/global.styles.scss */
 #menu-bar.nav li:hover, #menu-bar.nav li.active-trail,
 #menu-bar.nav ul.menu li:hover,
 #menu-bar.nav ul.menu li.active-trail {
-  background: url('../images/main-nav-hover.png?1344886726') repeat-x left top;
+  background: url('../images/main-nav-hover.png?1351002995') repeat-x left top;
 }
-/* line 646, ../sass/global.styles.scss */
+/* line 683, ../sass/global.styles.scss */
 #menu-bar.nav li a,
 #menu-bar.nav ul.menu li a {
   display: block;
@@ -891,37 +941,37 @@ a:hover, a:focus {
   text-transform: uppercase;
   text-shadow: black 1px 1px 4px;
 }
-/* line 658, ../sass/global.styles.scss */
+/* line 695, ../sass/global.styles.scss */
 #menu-bar.nav li a:hover, #menu-bar.nav li a:focus,
 #menu-bar.nav ul.menu li a:hover,
 #menu-bar.nav ul.menu li a:focus {
   text-decoration: none;
 }
-/* line 663, ../sass/global.styles.scss */
+/* line 700, ../sass/global.styles.scss */
 #menu-bar.nav .block {
   margin: 0;
 }
-/* line 667, ../sass/global.styles.scss */
+/* line 704, ../sass/global.styles.scss */
 #menu-bar.nav .main-menu-home {
-  background: url('../images/icons/icon-home.png?1344884489') no-repeat center 10px;
+  background: url('../images/icons/icon-home.png?1351002995') no-repeat center 10px;
 }
-/* line 671, ../sass/global.styles.scss */
+/* line 708, ../sass/global.styles.scss */
 #menu-bar.nav .main-menu-groups {
-  background: url('../images/icons/icon-groups.png?1344884515') no-repeat center 10px;
+  background: url('../images/icons/icon-groups.png?1351002995') no-repeat center 10px;
 }
-/* line 675, ../sass/global.styles.scss */
+/* line 712, ../sass/global.styles.scss */
 #menu-bar.nav .main-menu-events {
-  background: url('../images/icons/icon-events.png?1344884539') no-repeat center 10px;
+  background: url('../images/icons/icon-events.png?1351002995') no-repeat center 10px;
 }
 
 /* =============================================================================
  *   Superfish
  * ========================================================================== */
-/* line 685, ../sass/global.styles.scss */
+/* line 722, ../sass/global.styles.scss */
 ul.sf-menu {
   margin-bottom: 0;
 }
-/* line 688, ../sass/global.styles.scss */
+/* line 725, ../sass/global.styles.scss */
 ul.sf-menu a {
   border-left: 0;
   border-top: 0;
@@ -930,11 +980,11 @@ ul.sf-menu a {
   height: 2.5em;
   line-height: 2.5em;
 }
-/* line 702, ../sass/global.styles.scss */
+/* line 739, ../sass/global.styles.scss */
 ul.sf-menu li:hover, ul.sf-menu li.sfHover {
   outline: 0;
 }
-/* line 710, ../sass/global.styles.scss */
+/* line 747, ../sass/global.styles.scss */
 ul.sf-menu a:focus, ul.sf-menu a:hover, ul.sf-menu a:active {
   outline: 0;
 }
@@ -942,12 +992,12 @@ ul.sf-menu a:focus, ul.sf-menu a:hover, ul.sf-menu a:active {
 /*
  * Superfish blocks
  */
-/* line 724, ../sass/global.styles.scss */
+/* line 761, ../sass/global.styles.scss */
 .block-superfish ul {
   margin: 0 !important;
   padding: 0 !important;
 }
-/* line 735, ../sass/global.styles.scss */
+/* line 772, ../sass/global.styles.scss */
 .block-superfish li {
   margin: 0 !important;
   padding: 0 !important;
@@ -956,22 +1006,22 @@ ul.sf-menu a:focus, ul.sf-menu a:hover, ul.sf-menu a:active {
 /*
  * Vertical style
  */
-/* line 745, ../sass/global.styles.scss */
+/* line 782, ../sass/global.styles.scss */
 .sf-vertical {
   width: 100%;
 }
-/* line 748, ../sass/global.styles.scss */
+/* line 785, ../sass/global.styles.scss */
 .sf-vertical li {
   width: 100%;
 }
-/* line 754, ../sass/global.styles.scss */
+/* line 791, ../sass/global.styles.scss */
 .sf-vertical li:hover ul, .sf-vertical li.sfHover ul {
   left: 100%;
   top: 0;
   margin: 0;
   padding: 0;
 }
-/* line 761, ../sass/global.styles.scss */
+/* line 798, ../sass/global.styles.scss */
 .sf-vertical li a {
   padding: 0 10px;
 }
@@ -979,7 +1029,7 @@ ul.sf-menu a:focus, ul.sf-menu a:hover, ul.sf-menu a:active {
 /*
  * Navbar style
  */
-/* line 771, ../sass/global.styles.scss */
+/* line 808, ../sass/global.styles.scss */
 .sf-navbar {
   padding-bottom: 0 !important;
 }
@@ -987,7 +1037,7 @@ ul.sf-menu a:focus, ul.sf-menu a:hover, ul.sf-menu a:active {
 /*
  * Sensible padding for the default style
  */
-/* line 779, ../sass/global.styles.scss */
+/* line 816, ../sass/global.styles.scss */
 .sf-menu.sf-style-default a {
   padding: 0 10px;
 }
@@ -995,21 +1045,21 @@ ul.sf-menu a:focus, ul.sf-menu a:hover, ul.sf-menu a:active {
 /* =============================================================================
  *   Menus, usually blocks
  * ========================================================================== */
-/* line 788, ../sass/global.styles.scss */
+/* line 825, ../sass/global.styles.scss */
 ul.menu {
   padding-left: 15px;
 }
-/* line 791, ../sass/global.styles.scss */
+/* line 828, ../sass/global.styles.scss */
 ul.menu ul {
   padding-left: 15px;
 }
-/* line 799, ../sass/global.styles.scss */
+/* line 836, ../sass/global.styles.scss */
 ul.menu li {
   margin: 0;
 }
 
 /* If li.content exists it's a problem, so reset the padding */
-/* line 828, ../sass/global.styles.scss */
+/* line 865, ../sass/global.styles.scss */
 .block .menu li.content {
   padding: 0;
 }
@@ -1017,13 +1067,13 @@ ul.menu li {
 /* =============================================================================
  *   Book navigation menu
  * ========================================================================== */
-/* line 845, ../sass/global.styles.scss */
+/* line 882, ../sass/global.styles.scss */
 .book-navigation .page-up {
   /* Prevent text wrapping to a new line, assumes English "up" is used (two characters) */
   min-width: 2em;
   white-space: nowrap;
 }
-/* line 851, ../sass/global.styles.scss */
+/* line 888, ../sass/global.styles.scss */
 .book-navigation .menu {
   margin-left: 0;
 }
@@ -1031,31 +1081,31 @@ ul.menu li {
 /* =============================================================================
  *   Breadcrumbs
  * ========================================================================== */
-/* line 861, ../sass/global.styles.scss */
+/* line 898, ../sass/global.styles.scss */
 #breadcrumb {
   margin: 10px 0;
   /* If the label is set to show in theme settings the label class is added */
 }
-/* line 865, ../sass/global.styles.scss */
+/* line 902, ../sass/global.styles.scss */
 #breadcrumb .breadcrumb-label {
   font-size: 1em;
   display: inline;
   padding-right: 10px;
 }
-/* line 870, ../sass/global.styles.scss */
+/* line 907, ../sass/global.styles.scss */
 #breadcrumb .breadcrumb-label:after {
   content: ":";
 }
-/* line 875, ../sass/global.styles.scss */
+/* line 912, ../sass/global.styles.scss */
 #breadcrumb ol {
   margin: 0;
   padding: 0;
 }
-/* line 880, ../sass/global.styles.scss */
+/* line 917, ../sass/global.styles.scss */
 #breadcrumb .with-breadcrumb-label ol {
   display: inline;
 }
-/* line 884, ../sass/global.styles.scss */
+/* line 921, ../sass/global.styles.scss */
 #breadcrumb li {
   list-style: none;
   display: inline;
@@ -1064,31 +1114,31 @@ ul.menu li {
 /* =============================================================================
  *   Pagers
  * ========================================================================== */
-/* line 911, ../sass/global.styles.scss */
+/* line 948, ../sass/global.styles.scss */
 ul.pager {
   clear: both;
   margin: 0;
   text-align: center;
 }
 
-/* line 918, ../sass/global.styles.scss */
+/* line 955, ../sass/global.styles.scss */
 .item-list ul.pager li {
   margin: 0;
 }
 
-/* line 923, ../sass/global.styles.scss */
+/* line 960, ../sass/global.styles.scss */
 ul.pager li {
   background-image: none;
   display: inline;
   list-style-type: none;
   padding: .5em;
 }
-/* line 929, ../sass/global.styles.scss */
+/* line 966, ../sass/global.styles.scss */
 ul.pager li.pager-current {
   font-weight: 700;
 }
 
-/* line 935, ../sass/global.styles.scss */
+/* line 972, ../sass/global.styles.scss */
 .block ul.pager li {
   margin: 0;
 }
@@ -1099,7 +1149,7 @@ ul.pager li.pager-current {
 /* =============================================================================
  *   Skip Navigation
  * ========================================================================== */
-/* line 972, ../sass/global.styles.scss */
+/* line 1009, ../sass/global.styles.scss */
 #skip-link {
   left: 50%;
   margin-left: -6.5em;
@@ -1109,7 +1159,7 @@ ul.pager li.pager-current {
   width: 12em;
   z-index: 50;
 }
-/* line 981, ../sass/global.styles.scss */
+/* line 1018, ../sass/global.styles.scss */
 #skip-link a {
   background: #444;
   background: rgba(0, 0, 0, 0.6);
@@ -1120,7 +1170,7 @@ ul.pager li.pager-current {
   text-align: center;
   text-decoration: none;
 }
-/* line 992, ../sass/global.styles.scss */
+/* line 1029, ../sass/global.styles.scss */
 #skip-link a:link, #skip-link a:visited {
   background: #444;
   background: rgba(0, 0, 0, 0.6);
@@ -1131,7 +1181,7 @@ ul.pager li.pager-current {
   text-align: center;
   text-decoration: none;
 }
-/* line 1004, ../sass/global.styles.scss */
+/* line 1041, ../sass/global.styles.scss */
 #skip-link a:hover, #skip-link a:focus, #skip-link a:active {
   outline: 0;
 }
@@ -1139,24 +1189,24 @@ ul.pager li.pager-current {
 /* =============================================================================
  *   Tabs (local tasks)
  * ========================================================================== */
-/* line 1015, ../sass/global.styles.scss */
+/* line 1052, ../sass/global.styles.scss */
 #tasks {
   margin-bottom: 15px;
 }
 
-/* line 1020, ../sass/global.styles.scss */
+/* line 1057, ../sass/global.styles.scss */
 ul.primary {
   border-bottom-color: #cccccc;
   margin: 20px 0;
   padding: 0 0 0 5px;
 }
-/* line 1025, ../sass/global.styles.scss */
+/* line 1062, ../sass/global.styles.scss */
 ul.primary li {
   display: block;
   float: left;
   margin: 0 1px -1px;
 }
-/* line 1030, ../sass/global.styles.scss */
+/* line 1067, ../sass/global.styles.scss */
 ul.primary li a {
   background-color: whitesmoke;
   border-color: #cccccc;
@@ -1167,12 +1217,12 @@ ul.primary li a {
   height: 1.5em;
   line-height: 1.5em;
 }
-/* line 1041, ../sass/global.styles.scss */
+/* line 1078, ../sass/global.styles.scss */
 ul.primary li a:hover, ul.primary li a:focus {
   background-color: #eeeeee;
   border-color: #cccccc;
 }
-/* line 1051, ../sass/global.styles.scss */
+/* line 1088, ../sass/global.styles.scss */
 ul.primary li.active a,
 ul.primary li.active a:hover,
 ul.primary li.active a:focus {
@@ -1180,19 +1230,19 @@ ul.primary li.active a:focus {
   border-bottom-color: #e6e6e6;
 }
 
-/* line 1059, ../sass/global.styles.scss */
+/* line 1096, ../sass/global.styles.scss */
 ul.secondary {
   border-bottom: 1px solid #cccccc;
   margin: 1em 0 0;
   padding: 0 .3em 1em;
 }
-/* line 1064, ../sass/global.styles.scss */
+/* line 1101, ../sass/global.styles.scss */
 ul.secondary li {
   border-right: 0;
   list-style: none;
   padding: 0 10px 0 0;
 }
-/* line 1071, ../sass/global.styles.scss */
+/* line 1108, ../sass/global.styles.scss */
 ul.secondary li a:hover, ul.secondary li a.active {
   border-bottom: none;
   text-decoration: underline;
@@ -1201,7 +1251,7 @@ ul.secondary li a:hover, ul.secondary li a.active {
 /* =============================================================================
  *   Action links
  * ========================================================================== */
-/* line 1084, ../sass/global.styles.scss */
+/* line 1121, ../sass/global.styles.scss */
 ul.action-links {
   margin: 20px 0 0;
   list-style: none;
@@ -1222,7 +1272,7 @@ ul.action-links {
 /*
  * Labels are h2 in Adaptivetheme. Use a strong selector to mitigate unwanted ineritance issues
  */
-/* line 1117, ../sass/global.styles.scss */
+/* line 1154, ../sass/global.styles.scss */
 .field-label {
   font-size: 1em;
   font-weight: 700;
@@ -1240,17 +1290,17 @@ ul.action-links {
 /*
  * Taxonomy
  */
-/* line 1146, ../sass/global.styles.scss */
+/* line 1183, ../sass/global.styles.scss */
 .field-type-taxonomy-term-reference {
   /* The same bottom margin as p, blockquote, ul, ol and dl */
   margin-bottom: 1.5em;
 }
-/* line 1151, ../sass/global.styles.scss */
+/* line 1188, ../sass/global.styles.scss */
 .field-type-taxonomy-term-reference.field-label-inline .field-items {
   margin: 0;
   padding: 0;
 }
-/* line 1156, ../sass/global.styles.scss */
+/* line 1193, ../sass/global.styles.scss */
 .field-type-taxonomy-term-reference.field-label-inline .field-item {
   display: inline;
   list-style: none;
@@ -1308,7 +1358,7 @@ ul.action-links {
 /*
  * Float left setting
  */
-/* line 1271, ../sass/global.styles.scss */
+/* line 1308, ../sass/global.styles.scss */
 .ia-l .field-type-image figure,
 .iat-l .field-type-image figure {
   margin: 5px 20px 15px 0;
@@ -1317,7 +1367,7 @@ ul.action-links {
 /*
  * Centered setting
  */
-/* line 1280, ../sass/global.styles.scss */
+/* line 1317, ../sass/global.styles.scss */
 .ia-c .field-type-image figure,
 .iat-c .field-type-image figure {
   margin: 5px auto 15px;
@@ -1326,7 +1376,7 @@ ul.action-links {
 /*
  * Float right setting
  */
-/* line 1289, ../sass/global.styles.scss */
+/* line 1326, ../sass/global.styles.scss */
 .ia-r .field-type-image figure,
 .iat-r .field-type-image figure {
   margin: 5px 0 15px 20px;
@@ -1344,7 +1394,7 @@ ul.action-links {
 /*
  * Main wrapper for most blocks, block_system_main does not have it
  */
-/* line 1325, ../sass/global.styles.scss */
+/* line 1362, ../sass/global.styles.scss */
 .block {
   margin-bottom: 20px;
 }
@@ -1367,7 +1417,7 @@ ul.action-links {
 /*
  * Block title
  */
-/* line 1363, ../sass/global.styles.scss */
+/* line 1400, ../sass/global.styles.scss */
 .block-title {
   margin: 0;
 }
@@ -1378,12 +1428,12 @@ ul.action-links {
 /*
  * Match item list and block menu margin and padding
  */
-/* line 1380, ../sass/global.styles.scss */
+/* line 1417, ../sass/global.styles.scss */
 .block-content ul,
 .block-content ol {
   padding: 0 0 0 15px;
 }
-/* line 1384, ../sass/global.styles.scss */
+/* line 1421, ../sass/global.styles.scss */
 .block-content li {
   margin: 0;
   padding: 0;
@@ -1473,11 +1523,11 @@ ul.action-links {
 /* =============================================================================
  *   Node Styling
  * ========================================================================== */
-/* line 1557, ../sass/global.styles.scss */
+/* line 1594, ../sass/global.styles.scss */
 .node {
   margin-bottom: 20px;
 }
-/* line 1574, ../sass/global.styles.scss */
+/* line 1611, ../sass/global.styles.scss */
 .node .node-title {
   margin: 0;
 }
@@ -1493,15 +1543,15 @@ ul.action-links {
 /*
  * Wrapper for the list of comments and its titles
  */
-/* line 1632, ../sass/global.styles.scss */
+/* line 1669, ../sass/global.styles.scss */
 #comments {
   margin: 1.5em 0;
 }
-/* line 1636, ../sass/global.styles.scss */
+/* line 1673, ../sass/global.styles.scss */
 #comments h2.comment-title {
   margin: 0;
 }
-/* line 1640, ../sass/global.styles.scss */
+/* line 1677, ../sass/global.styles.scss */
 #comments h2.comment-form {
   margin: 0;
 }
@@ -1509,7 +1559,7 @@ ul.action-links {
 /*
  * Wrapper for a single comment
  */
-/* line 1650, ../sass/global.styles.scss */
+/* line 1687, ../sass/global.styles.scss */
 .comment {
   margin-bottom: 20px;
 }
@@ -1517,7 +1567,7 @@ ul.action-links {
 /*
  * Comment title
  */
-/* line 1681, ../sass/global.styles.scss */
+/* line 1718, ../sass/global.styles.scss */
 .comment-title {
   margin: 0;
 }
@@ -1531,7 +1581,7 @@ ul.action-links {
 /*
  * "New" marker for comments that are new for the current user
  */
-/* line 1713, ../sass/global.styles.scss */
+/* line 1750, ../sass/global.styles.scss */
 .new {
   color: #cc0000;
 }
@@ -1539,7 +1589,7 @@ ul.action-links {
 /*
  * Nested comments are indented
  */
-/* line 1721, ../sass/global.styles.scss */
+/* line 1758, ../sass/global.styles.scss */
 .indented {
   margin-left: 40px;
 }
@@ -1550,17 +1600,17 @@ ul.action-links {
 /*
  * Wrapper for a form element (or group of form elements) and its label
  */
-/* line 1737, ../sass/global.styles.scss */
+/* line 1774, ../sass/global.styles.scss */
 .form-item input.error,
 .form-item textarea.error,
 .form-item select.error {
   border: 1px solid #cc0000;
 }
-/* line 1741, ../sass/global.styles.scss */
+/* line 1778, ../sass/global.styles.scss */
 .form-item label {
   font-weight: 700;
 }
-/* line 1748, ../sass/global.styles.scss */
+/* line 1785, ../sass/global.styles.scss */
 .form-item .description {
   font-size: 0.85em;
 }
@@ -1568,7 +1618,7 @@ ul.action-links {
 /*
  * Highlight marks and form required mark
  */
-/* line 1762, ../sass/global.styles.scss */
+/* line 1799, ../sass/global.styles.scss */
 .marker,
 .form-required {
   color: #cc0000;
@@ -1577,7 +1627,7 @@ ul.action-links {
 /*
  * The submit button
  */
-/* line 1776, ../sass/global.styles.scss */
+/* line 1813, ../sass/global.styles.scss */
 .container-inline div,
 .container-inline label {
   display: inline;
@@ -1586,7 +1636,7 @@ ul.action-links {
 /*
  * Define consistent borders
  */
-/* line 1784, ../sass/global.styles.scss */
+/* line 1821, ../sass/global.styles.scss */
 fieldset {
   border: 1px solid #cccccc;
 }
@@ -1597,7 +1647,7 @@ fieldset {
 /*
  * Buttons used by contrib modules like Media
  */
-/* line 1798, ../sass/global.styles.scss */
+/* line 1835, ../sass/global.styles.scss */
 a.button {
   -webkit-appearance: button;
   -moz-appearance: button;
@@ -1607,13 +1657,13 @@ a.button {
 /*
  * Password confirmation
  */
-/* line 1807, ../sass/global.styles.scss */
+/* line 1844, ../sass/global.styles.scss */
 .password-parent,
 .confirm-parent {
   margin: 0;
 }
 
-/* line 1812, ../sass/global.styles.scss */
+/* line 1849, ../sass/global.styles.scss */
 input[type="text"] {
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
@@ -1623,7 +1673,7 @@ input[type="text"] {
   border: 1px solid #B2B2B2;
 }
 
-/* line 1819, ../sass/global.styles.scss */
+/* line 1856, ../sass/global.styles.scss */
 button,
 input[type="submit"] {
   -webkit-border-radius: 3px;
@@ -1638,13 +1688,14 @@ input[type="submit"] {
   background-image: -webkit-linear-gradient(top, #ececec 0%, #e6e6e6 22%, #e6e6e6 100%);
   background-image: -moz-linear-gradient(top, #ececec 0%, #e6e6e6 22%, #e6e6e6 100%);
   background-image: -o-linear-gradient(top, #ececec 0%, #e6e6e6 22%, #e6e6e6 100%);
+  background-image: -ms-linear-gradient(top, #ececec 0%, #e6e6e6 22%, #e6e6e6 100%);
   background-image: linear-gradient(top, #ececec 0%, #e6e6e6 22%, #e6e6e6 100%);
   border: 1px solid #BBBBBB;
   font-weight: normal;
   margin: 0 10px 0 0;
 }
 
-/* line 1830, ../sass/global.styles.scss */
+/* line 1867, ../sass/global.styles.scss */
 #edit-submit {
   background-color: #6eca5d;
   *zoom: 1;
@@ -1653,13 +1704,14 @@ input[type="submit"] {
   background-image: -webkit-linear-gradient(top, #6eca5d 0%, #45bb2f 22%, #45bb2f 100%);
   background-image: -moz-linear-gradient(top, #6eca5d 0%, #45bb2f 22%, #45bb2f 100%);
   background-image: -o-linear-gradient(top, #6eca5d 0%, #45bb2f 22%, #45bb2f 100%);
+  background-image: -ms-linear-gradient(top, #6eca5d 0%, #45bb2f 22%, #45bb2f 100%);
   background-image: linear-gradient(top, #6eca5d 0%, #45bb2f 22%, #45bb2f 100%);
   border: 1px solid #249125;
   color: #FFFFFF;
   margin: 0 10px 0 0;
 }
 
-/* line 1840, ../sass/global.styles.scss */
+/* line 1877, ../sass/global.styles.scss */
 #edit-field-topics-und {
   border-top: 2px groove #8A8A8A;
   border-left: 2px groove #8A8A8A;
@@ -1668,18 +1720,18 @@ input[type="submit"] {
 /* =============================================================================
  *   Tables
  * ========================================================================== */
-/* line 1850, ../sass/global.styles.scss */
+/* line 1887, ../sass/global.styles.scss */
 table {
   margin: 10px 0;
   padding: 0;
   width: 100%;
 }
-/* line 1855, ../sass/global.styles.scss */
+/* line 1892, ../sass/global.styles.scss */
 table.sticky-header {
   z-index: 10;
 }
 
-/* line 1866, ../sass/global.styles.scss */
+/* line 1903, ../sass/global.styles.scss */
 table,
 thead,
 tbody,
@@ -1689,27 +1741,27 @@ td {
   border-color: #cccccc;
 }
 
-/* line 1873, ../sass/global.styles.scss */
+/* line 1910, ../sass/global.styles.scss */
 table,
 td,
 th {
   vertical-align: middle;
 }
 
-/* line 1880, ../sass/global.styles.scss */
+/* line 1917, ../sass/global.styles.scss */
 caption,
 th,
 td {
   text-align: left;
 }
 
-/* line 1885, ../sass/global.styles.scss */
+/* line 1922, ../sass/global.styles.scss */
 thead tr {
   font-weight: 700;
   background-color: #e5e5e5;
 }
 
-/* line 1892, ../sass/global.styles.scss */
+/* line 1929, ../sass/global.styles.scss */
 td,
 th {
   border-bottom: 0;
@@ -1717,29 +1769,29 @@ th {
   padding: 5px 7px;
 }
 
-/* line 1902, ../sass/global.styles.scss */
+/* line 1939, ../sass/global.styles.scss */
 tbody tr {
   border-top: 1px solid #cccccc;
 }
 
-/* line 1907, ../sass/global.styles.scss */
+/* line 1944, ../sass/global.styles.scss */
 tr {
   /* Table row striping */
 }
-/* line 1909, ../sass/global.styles.scss */
+/* line 1946, ../sass/global.styles.scss */
 tr.odd {
   background: #e6e6e6;
 }
-/* line 1916, ../sass/global.styles.scss */
+/* line 1953, ../sass/global.styles.scss */
 tr.info, tr.even, tr:nth-child(2n+2) {
   border-bottom: 0;
   background-color: whitesmoke;
 }
-/* line 1925, ../sass/global.styles.scss */
+/* line 1962, ../sass/global.styles.scss */
 tr.odd td.active {
   background-color: #eeeeee;
 }
-/* line 1929, ../sass/global.styles.scss */
+/* line 1966, ../sass/global.styles.scss */
 tr.even td.active {
   background-color: #ebebeb;
 }
@@ -1748,7 +1800,7 @@ tr.even td.active {
  * Forum tables
  * Core sets white-space to nowrap, which makes no sense
  */
-/* line 1957, ../sass/global.styles.scss */
+/* line 1994, ../sass/global.styles.scss */
 #forum td .created,
 #forum td .posts,
 #forum td .topics,
@@ -1761,12 +1813,12 @@ tr.even td.active {
 /* =============================================================================
  *   Messages
  * ========================================================================== */
-/* line 1968, ../sass/global.styles.scss */
+/* line 2005, ../sass/global.styles.scss */
 div.messages {
   margin-bottom: 10px;
   margin-top: 10px;
 }
-/* line 1973, ../sass/global.styles.scss */
+/* line 2010, ../sass/global.styles.scss */
 div.messages ul {
   margin-top: 0;
   margin-bottom: 0;
@@ -1775,7 +1827,7 @@ div.messages ul {
 /*
  * Unpublished nodes
  */
-/* line 2014, ../sass/global.styles.scss */
+/* line 2051, ../sass/global.styles.scss */
 .node-unpublished p.unpublished,
 .comment-unpublished p.unpublished {
   color: pink;
@@ -1801,28 +1853,28 @@ div.messages ul {
 /* =============================================================================
  *    Maintenance pages
  * ========================================================================== */
-/* line 2025, ../sass/global.styles.scss */
+/* line 2062, ../sass/global.styles.scss */
 .maintenance-page .container {
   padding: 40px 0;
 }
-/* line 2030, ../sass/global.styles.scss */
+/* line 2067, ../sass/global.styles.scss */
 .maintenance-page #site-name,
 .maintenance-page #page-title {
   margin: 0;
 }
 
-/* line 2037, ../sass/global.styles.scss */
+/* line 2074, ../sass/global.styles.scss */
 .db-offline .container {
   margin: 0 auto;
   padding: 40px 0;
   width: 100%;
   max-width: 960px;
 }
-/* line 2044, ../sass/global.styles.scss */
+/* line 2081, ../sass/global.styles.scss */
 .db-offline div.messages {
   margin: 20px 0 0;
 }
-/* line 2048, ../sass/global.styles.scss */
+/* line 2085, ../sass/global.styles.scss */
 .db-offline #content {
   padding: 20px 0;
 }
@@ -1833,7 +1885,7 @@ div.messages ul {
 /*
  * Admin menu overrides
  */
-/* line 2061, ../sass/global.styles.scss */
+/* line 2098, ../sass/global.styles.scss */
 #admin-menu {
   margin: 0;
   padding: 0;
@@ -1842,7 +1894,7 @@ div.messages ul {
 /*
  * Devel Module
  */
-/* line 2070, ../sass/global.styles.scss */
+/* line 2107, ../sass/global.styles.scss */
 .dev-query {
   background: #eeeeee;
   padding: 30px;
@@ -1851,11 +1903,11 @@ div.messages ul {
 /*
  * Styleguide module tweaks
  */
-/* line 2079, ../sass/global.styles.scss */
+/* line 2116, ../sass/global.styles.scss */
 #styleguide-header {
   padding: 0 10px;
 }
-/* line 2082, ../sass/global.styles.scss */
+/* line 2119, ../sass/global.styles.scss */
 #styleguide-header .item-list {
   font-family: inherit;
   margin: 0 20px 20px 0;

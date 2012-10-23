@@ -492,6 +492,23 @@ ul.links {
   margin: 0;
 }
 
+/*
+ * User picture wrapping and shadow
+ */
+.user-picture {
+  img {
+    background:$white;
+    padding:4px;
+    @include border-radius(3px);
+    @include box-shadow($light_gray 1px 1px 4px);
+  }
+}
+/*
+ * Author/Submit line
+ */
+.author-datetime {
+  color:$light_gray;
+}
 
 /* =============================================================================
  *   Regions
@@ -560,13 +577,33 @@ ul.links {
  * First sidebar
  */
 .region-sidebar-first {}
-
+.region-two-66-33-first {
+  h1 {
+    color:$dark_blue;
+    text-shadow:none;
+    font-size:20px;
+    a {
+      text-decoration:none;
+      color:$dark_blue;
+      &:hover {
+        text-decoration:underline;
+      }
+    }
+  }
+}
 
 /*
  * Second sidebar
  */
 .region-sidebar-second {}
-
+.region-two-66-33-second {
+  h2 {
+    font:{
+      size:20px;
+    }
+    color:$gray;
+  }
+}
 
 /*
  * Tertiary content
