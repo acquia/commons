@@ -63,7 +63,7 @@ function commons_groups_og_user_access_alter(&$temp_perm, $context) {
   // Grant access to non-group members to be able to post into groups
   // where the group node is public and content is public within the group.
   $commons_groups_enabled_node_types = commons_groups_get_enabled_node_types();
-  $group_content_restricted = (bool) ($context['group']->group_content_access[LANGUAGE_NONE][0]['value'] == 2);
+  $group_content_restricted = (bool) (isset($context['group']->group_content_access[LANGUAGE_NONE][0]['value']) && $context['group']->group_content_access[LANGUAGE_NONE][0]['value'] == 2);
   // @TODO: Consider using a static here.
   $user_is_member = (bool)og_is_member('node', $context['group']->nid, 'user', $context['account']);
   foreach ($commons_groups_enabled_node_types as $type => $status) {
@@ -138,7 +138,7 @@ function commons_groups_tokens($type, $tokens, $data = array(), $options = array
         $replacements['[commons-groups:in-groups-text]'] = '';
         return $replacements;
       }
-      
+
       $related_groups = entity_load('node', $related_gids);
       // Key the array of groups in a predictable way.
       $related_groups = array_values($related_groups);
@@ -229,7 +229,7 @@ function commons_groups_entityreference_default_value($entity_type, $entity, $fi
 */
  function commons_groups_strongarm_alter(&$items) {
   // Expose the Group content type for integration with Commons Radioactivity.
-  if (isset($items['commons_radioactivity_entity_types'])) {  
+  if (isset($items['commons_radioactivity_entity_types'])) {
     $items['commons_radioactivity_entity_types']->value['node']['group'] = 1;
   }
 }
@@ -246,7 +246,7 @@ function commons_groups_entityreference_default_value($entity_type, $entity, $fi
 */
 function commons_groups_node_update($node) {
   $account = user_load($node->uid);
-  commons_groups_first_contribution($account, $node); 
+  commons_groups_first_contribution($account, $node);
 }
 
 /**
@@ -254,7 +254,7 @@ function commons_groups_node_update($node) {
 */
 function commons_groups_node_insert($node) {
   $account = user_load($node->uid);
-  commons_groups_first_contribution($account, $node); 
+  commons_groups_first_contribution($account, $node);
 }
 
 /**
@@ -269,7 +269,7 @@ function commons_groups_get_entity_types() {
       // a field on its behalf in order to prevent the
       // Commons Groups og_group_ref field component from appearing
       // to be overidden.
-      if ($enabled && !module_exists($type->module)) {       
+      if ($enabled && !module_exists($type->module)) {
         $commons_groups_entity_types['node'][$type_name] = 0;
       }
     }
@@ -306,7 +306,7 @@ function commons_groups_first_contribution($account, $node) {
     if (!empty($new_groups)) {
       foreach ($new_groups as $new_group_nid) {
          og_group('node', $new_group_nid, array('entity' => $account->uid));
-      }  
+      }
     }
   }
 }
