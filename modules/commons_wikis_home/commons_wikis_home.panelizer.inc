@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * commons_wikis.panelizer.inc
+ * commons_wikis_home.panelizer.inc
  */
 
 /**
  * Implements hook_panelizer_defaults().
  */
-function commons_wikis_panelizer_defaults() {
+function commons_wikis_home_panelizer_defaults() {
   $export = array();
 
   $panelizer = new stdClass();
@@ -54,15 +54,14 @@ function commons_wikis_panelizer_defaults() {
     $pane->access = array();
     $pane->configuration = array(
       'links' => 1,
-      'page' => 1,
       'no_extras' => 0,
       'override_title' => 0,
       'override_title_text' => '',
       'identifier' => '',
       'link' => 0,
       'leave_node_title' => 0,
-      'context' => 'panelizer',
       'build_mode' => 'full',
+      'context' => 'panelizer',
     );
     $pane->cache = array();
     $pane->style = array(
@@ -71,7 +70,7 @@ function commons_wikis_panelizer_defaults() {
     $pane->css = array();
     $pane->extras = array();
     $pane->position = 0;
-    $pane->locks = '';
+    $pane->locks = array();
     $display->content['new-1'] = $pane;
     $display->panels['two_66_33_first'][0] = 'new-1';
     $pane = new stdClass();
@@ -106,8 +105,8 @@ function commons_wikis_panelizer_defaults() {
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array(
-      'arguments' => array(
-        'nid' => '%node:nid',
+      'context' => array(
+        0 => 'panelizer',
       ),
     );
     $pane->cache = array();
@@ -117,9 +116,9 @@ function commons_wikis_panelizer_defaults() {
     $pane->css = array();
     $pane->extras = array();
     $pane->position = 0;
-    $pane->locks = '';
+    $pane->locks = array();
     $display->content['new-3'] = $pane;
-    $display->panels['two_66_33_first'][0] = 'new-3';
+    $display->panels['two_66_33_second'][0] = 'new-3';
   $display->hide_title = PANELS_TITLE_FIXED;
   $display->title_pane = '0';
   $panelizer->display = $display;
