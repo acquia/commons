@@ -144,6 +144,11 @@ projects[views][type] = "module"
 projects[views][subdir] = "contrib"
 projects[views][version] = "3.x-dev"
 
+; http://drupal.org/node/1822440
+; "Content access" filter should check for node_grants implementations before adding node access grant queries
+projects[views][patch][] = "http://drupal.org/files/views-content-access-node-grants.patch"
+
+
 projects[views_field_view][type] = "module"
 projects[views_field_view][subdir] = "contrib"
 
