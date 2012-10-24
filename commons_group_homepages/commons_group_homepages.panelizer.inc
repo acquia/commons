@@ -29,7 +29,7 @@ function commons_group_homepages_panelizer_defaults() {
   $panelizer->title_element = 'H2';
   $panelizer->link_to_entity = TRUE;
   $display = new panels_display();
-  $display->layout = 'twocol_stacked';
+  $display->layout = 'two_66_33';
   $display->layout_settings = array();
   $display->panel_settings = array(
     'style_settings' => array(
@@ -38,6 +38,10 @@ function commons_group_homepages_panelizer_defaults() {
       'left' => NULL,
       'right' => NULL,
       'bottom' => NULL,
+      'two_66_33_top' => NULL,
+      'two_66_33_first' => NULL,
+      'two_66_33_second' => NULL,
+      'two_66_33_bottom' => NULL,
     ),
   );
   $display->cache = array();
@@ -46,7 +50,7 @@ function commons_group_homepages_panelizer_defaults() {
   $display->panels = array();
     $pane = new stdClass();
     $pane->pid = 'new-1';
-    $pane->panel = 'left';
+    $pane->panel = 'two_66_33_first';
     $pane->type = 'entity_field';
     $pane->subtype = 'node:body';
     $pane->shown = TRUE;
@@ -71,10 +75,10 @@ function commons_group_homepages_panelizer_defaults() {
     $pane->position = 0;
     $pane->locks = array();
     $display->content['new-1'] = $pane;
-    $display->panels['left'][0] = 'new-1';
+    $display->panels['two_66_33_first'][0] = 'new-1';
     $pane = new stdClass();
     $pane->pid = 'new-2';
-    $pane->panel = 'left';
+    $pane->panel = 'two_66_33_first';
     $pane->type = 'node_links';
     $pane->subtype = 'node_links';
     $pane->shown = TRUE;
@@ -96,10 +100,10 @@ function commons_group_homepages_panelizer_defaults() {
     $pane->position = 1;
     $pane->locks = array();
     $display->content['new-2'] = $pane;
-    $display->panels['left'][1] = 'new-2';
+    $display->panels['two_66_33_first'][1] = 'new-2';
     $pane = new stdClass();
     $pane->pid = 'new-3';
-    $pane->panel = 'left';
+    $pane->panel = 'two_66_33_first';
     $pane->type = 'commons_bw_group';
     $pane->subtype = 'commons_bw_group';
     $pane->shown = TRUE;
@@ -117,10 +121,10 @@ function commons_group_homepages_panelizer_defaults() {
     $pane->position = 2;
     $pane->locks = array();
     $display->content['new-3'] = $pane;
-    $display->panels['left'][2] = 'new-3';
+    $display->panels['two_66_33_first'][2] = 'new-3';
     $pane = new stdClass();
     $pane->pid = 'new-4';
-    $pane->panel = 'right';
+    $pane->panel = 'two_66_33_second';
     $pane->type = 'views_panes';
     $pane->subtype = 'activity_group-panel_pane_1';
     $pane->shown = TRUE;
@@ -140,10 +144,10 @@ function commons_group_homepages_panelizer_defaults() {
     $pane->position = 0;
     $pane->locks = array();
     $display->content['new-4'] = $pane;
-    $display->panels['right'][0] = 'new-4';
+    $display->panels['two_66_33_second'][0] = 'new-4';
     $pane = new stdClass();
     $pane->pid = 'new-5';
-    $pane->panel = 'right';
+    $pane->panel = 'two_66_33_second';
     $pane->type = 'views_panes';
     $pane->subtype = 'commons_radioactivity_groups_active_in_group-panel_pane_1';
     $pane->shown = TRUE;
@@ -151,6 +155,9 @@ function commons_group_homepages_panelizer_defaults() {
     $pane->configuration = array(
       'arguments' => array(
         'gid' => '%node:nid',
+      ),
+      'context' => array(
+        0 => 'panelizer',
       ),
     );
     $pane->cache = array();
@@ -162,7 +169,7 @@ function commons_group_homepages_panelizer_defaults() {
     $pane->position = 1;
     $pane->locks = array();
     $display->content['new-5'] = $pane;
-    $display->panels['right'][1] = 'new-5';
+    $display->panels['two_66_33_second'][1] = 'new-5';
   $display->hide_title = PANELS_TITLE_FIXED;
   $display->title_pane = '0';
   $panelizer->display = $display;
