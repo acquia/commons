@@ -54,7 +54,7 @@ function commons_groups_directory_default_page_manager_pages() {
     'relationships' => array(),
   );
   $display = new panels_display();
-  $display->layout = 'twocol_stacked';
+  $display->layout = 'two_66_33';
   $display->layout_settings = array();
   $display->panel_settings = array(
     'style_settings' => array(
@@ -71,7 +71,7 @@ function commons_groups_directory_default_page_manager_pages() {
   $display->panels = array();
     $pane = new stdClass();
     $pane->pid = 'new-1';
-    $pane->panel = 'left';
+    $pane->panel = 'two_66_33_first';
     $pane->type = 'views_panes';
     $pane->subtype = 'commons_groups_directory-panel_pane_1';
     $pane->shown = TRUE;
@@ -86,10 +86,10 @@ function commons_groups_directory_default_page_manager_pages() {
     $pane->position = 0;
     $pane->locks = array();
     $display->content['new-1'] = $pane;
-    $display->panels['left'][0] = 'new-1';
+    $display->panels['two_66_33_first'][0] = 'new-1';
     $pane = new stdClass();
     $pane->pid = 'new-2';
-    $pane->panel = 'right';
+    $pane->panel = 'two_66_33_second';
     $pane->type = 'views_panes';
     $pane->subtype = 'commons_radioactivity_groups_most_active-panel_pane_1';
     $pane->shown = TRUE;
@@ -102,7 +102,7 @@ function commons_groups_directory_default_page_manager_pages() {
     $pane->position = 0;
     $pane->locks = array();
     $display->content['new-2'] = $pane;
-    $display->panels['right'][0] = 'new-2';
+    $display->panels['two_66_33_second'][0] = 'new-2';
   $display->hide_title = PANELS_TITLE_FIXED;
   $display->title_pane = 'new-1';
   $handler->conf['display'] = $display;
