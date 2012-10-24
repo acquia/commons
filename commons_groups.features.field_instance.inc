@@ -158,7 +158,6 @@ function commons_groups_field_default_field_instances() {
     ),
   );
 
-
   // Translatables
   // Included for use with string extractors like potx.
   t('Determine if this is an OG group.');
@@ -166,7 +165,7 @@ function commons_groups_field_default_field_instances() {
   t('Group membership');
   t('Request message');
   t('This is the text a user may send to the group administrators.');
-
+  t('Group Logo');
   return $field_instances;
 }
 
@@ -239,7 +238,54 @@ function commons_groups_field_definition(&$field_instances, $type) {
       'weight' => 0,
     ),
   );
-  // Translatables
-  // Included for use with string extractors like potx.
-  t('Groups audience');
+
+  // Exported field_instance: 'node-group-field_group_logo'
+  $field_instances['node-group-field_group_logo'] = array(
+    'bundle' => 'group',
+    'deleted' => '0',
+    'description' => '',
+    'display' => array(
+     'default' => array(
+       'label' => 'above',
+       'module' => 'image',
+       'settings' => array(
+         'image_link' => '',
+         'image_style' => '',
+       ),
+       'type' => 'image',
+       'weight' => 4,
+     ),
+     'teaser' => array(
+       'label' => 'above',
+       'settings' => array(),
+       'type' => 'hidden',
+       'weight' => 0,
+     ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_group_logo',
+    'label' => 'Group Logo',
+    'required' => 0,
+    'settings' => array(
+     'alt_field' => 0,
+     'default_image' => 0,
+     'file_directory' => '',
+     'file_extensions' => 'png gif jpg jpeg',
+     'max_filesize' => '20mb',
+     'max_resolution' => '',
+     'min_resolution' => '30x30',
+     'title_field' => 0,
+     'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+     'active' => 1,
+     'module' => 'image',
+     'settings' => array(
+       'preview_image_style' => 'thumbnail',
+       'progress_indicator' => 'throbber',
+     ),
+     'type' => 'image_image',
+     'weight' => '5',
+    ),
+  );
 }

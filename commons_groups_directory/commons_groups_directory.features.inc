@@ -13,10 +13,3 @@ function commons_groups_directory_ctools_plugin_api() {
     return array("version" => "1");
   }
 }
-
-/**
- * Implements hook_views_api().
- */
-function commons_groups_directory_views_api() {
-  return array("version" => "3.0");
-}
