@@ -10,7 +10,7 @@ include_once 'commons_wikis.features.inc';
 * Implements hook_module_implements_alter().
 */
 function commons_wikis_module_implements_alter(&$implementations, $hook) {
-  // We need to override access control for revision view callbacks 
+  // We need to override access control for revision view callbacks
   // in order to give all users permission to view wiki node revisions.
   if ($hook == 'menu_alter') {
     $group = $implementations['commons_wikis'];
@@ -54,7 +54,7 @@ function commons_wikis_og_user_access_alter(&$temp_perm, $context) {
   // Grant access to non-group members to be able to edit wiki nodes.
   // where the group node is public and content is public within the group.
   $commons_groups_enabled_node_types = commons_groups_get_enabled_node_types();
-  $group_content_restricted = (bool) ($context['group']->group_content_access[LANGUAGE_NONE][0]['value'] == 2);
+  $group_content_restricted = (bool) (isset($context['group']->group_content_access[LANGUAGE_NONE][0]['value']) && $context['group']->group_content_access[LANGUAGE_NONE][0]['value'] == 2);
   // @TODO: Consider using a static here.
   $user_is_member = (bool)og_is_member('node', $context['group']->nid, 'user', $context['account']);
   foreach ($commons_groups_enabled_node_types as $type => $status) {
@@ -91,7 +91,7 @@ function commons_wikis_views_pre_render(&$view) {
       $group_id = $view->args[0];
       $view->attachment_before = l('Create a wiki', 'node/add/wiki', array('query' => array('og_group_ref' => $group_id)));
     }
-  }  
+  }
 }
 
 /**
@@ -104,18 +104,18 @@ function commons_wikis_views_pre_render(&$view) {
     foreach($items['rate_widgets']->value as $key => $widget) {
       if ($widget->name == 'commons_like') {
         if (!in_array('wiki', $items['rate_widgets']->value[$key]->node_types)) {
-          $items['rate_widgets']->value[$key]->node_types[] = 'wiki';  
-        }       
+          $items['rate_widgets']->value[$key]->node_types[] = 'wiki';
+        }
         if (!in_array('wiki', $items['rate_widgets']->value[$key]->comment_types)) {
-          $items['rate_widgets']->value[$key]->comment_types[] = 'wiki';  
+          $items['rate_widgets']->value[$key]->comment_types[] = 'wiki';
         }
       }
     }
   }
   // Expose the post content type for integration with Commons Radioactivity
-  // and Commons Groups.  
+  // and Commons Groups.
   foreach (array('commons_radioactivity_entity_types', 'commons_groups_entity_types') as $key) {
-    if (isset($items[$key])) {  
+    if (isset($items[$key])) {
       $items[$key]->value['node']['wiki'] = 1;
     }
   }
