@@ -26,6 +26,10 @@ function commons_events_attend_event_form($form, &$form_state, $event_node, $reg
     '#type' => 'submit',
     '#value' => t('Attend'),
   );
+  $form['#attached']['css'] = array(
+    drupal_get_path('module', 'commons_events') . '/css/commons_events.css',
+  );
+  $form['#attributes'] = array('class' => array('commons-events-form-float'));
   return $form;
 }
 
@@ -63,4 +67,23 @@ function commons_events_attend_event_form_submit($form, $form_state) {
   else {
     drupal_set_message(t('There was an error saving your registration.'));
   }
+}
+
+/**
+ * Form to cancel a registration for an event.
+ */
+function commons_events_cancel_event_form($form, &$form_state, $event) {
+  $form['#attributes'] = array('class' => array('commons-events-form-float'));
+  $form['#attached']['css'] = array(
+    drupal_get_path('module', 'commons_events') . '/css/commons_events.css',
+  );
+  $form['attending'] = array(
+    '#markup' => t('You are attending.'),
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Cancel'),
+  );
+  $form['submit']['#attributes']['class'][] = 'commons-events-button';
+  return $form;
 }

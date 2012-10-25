@@ -16,18 +16,14 @@ function theme_commons_events_attending_event($variables = array()) {
     'entity_id' => $event->nid,
     'type' => $registration_type,
   ));
-  $registration->user_uid = $user->uid;
+  if (!function_exists('commons_events_attend_event_form')
+    || !function_exists('commons_events_cancel_event_form')) {
+    module_load_include('inc', 'commons_events', 'includes/commons_events.forms');
+  }
   if (!registration_is_registered($registration, NULL, $user->uid)) {
-    if (!function_exists('commons_events_attend_event_form')) {
-      module_load_include('inc', 'commons_events', 'includes/commons_events.forms');
-    }
     return drupal_get_form('commons_events_attend_event_form', $event, $registration);
   }
-  $content['attending'] = array(
-    '#markup' => '<p class="attendee">' . t('You are attending.')
-      . '<span class="attendee-cancel"><a href="#">' . t('cancel') . '</a></p>',
-  );
-  return $content;
+  return drupal_get_form('commons_events_cancel_event_form', $event);
 }
 
 /**

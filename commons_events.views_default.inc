@@ -35,42 +35,30 @@ function commons_events_views_default_views() {
   $handler->display->display_options['pager']['options']['quantity'] = '4';
   $handler->display->display_options['style_plugin'] = 'grid';
   $handler->display->display_options['row_plugin'] = 'fields';
-  /* Relationship: Broken/missing handler */
-  $handler->display->display_options['relationships']['user']['id'] = 'user';
-  $handler->display->display_options['relationships']['user']['table'] = 'registration';
-  $handler->display->display_options['relationships']['user']['field'] = 'user';
-  $handler->display->display_options['relationships']['user']['required'] = TRUE;
   /* Relationship: Registration: Registration to Node */
   $handler->display->display_options['relationships']['registration_related_node']['id'] = 'registration_related_node';
   $handler->display->display_options['relationships']['registration_related_node']['table'] = 'registration';
   $handler->display->display_options['relationships']['registration_related_node']['field'] = 'registration_related_node';
-  /* Field: User: Name */
-  $handler->display->display_options['fields']['name']['id'] = 'name';
-  $handler->display->display_options['fields']['name']['table'] = 'users';
-  $handler->display->display_options['fields']['name']['field'] = 'name';
-  $handler->display->display_options['fields']['name']['relationship'] = 'user';
-  $handler->display->display_options['fields']['name']['label'] = '';
-  $handler->display->display_options['fields']['name']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['name']['element_label_colon'] = FALSE;
+  /* Relationship: Registration: User_uid */
+  $handler->display->display_options['relationships']['user_uid']['id'] = 'user_uid';
+  $handler->display->display_options['relationships']['user_uid']['table'] = 'registration';
+  $handler->display->display_options['relationships']['user_uid']['field'] = 'user_uid';
+  $handler->display->display_options['relationships']['user_uid']['required'] = TRUE;
   /* Field: User: Picture */
   $handler->display->display_options['fields']['picture']['id'] = 'picture';
   $handler->display->display_options['fields']['picture']['table'] = 'users';
   $handler->display->display_options['fields']['picture']['field'] = 'picture';
-  $handler->display->display_options['fields']['picture']['relationship'] = 'user';
+  $handler->display->display_options['fields']['picture']['relationship'] = 'user_uid';
   $handler->display->display_options['fields']['picture']['label'] = '';
   $handler->display->display_options['fields']['picture']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['picture']['empty'] = '<img src="/profiles/commons/modules/contrib/commons_events/profile_empty.png" height="60" width="60" /><br />[name]';
-  $handler->display->display_options['fields']['picture']['hide_alter_empty'] = FALSE;
-  /* Contextual filter: Global: Null */
-  $handler->display->display_options['arguments']['null']['id'] = 'null';
-  $handler->display->display_options['arguments']['null']['table'] = 'views';
-  $handler->display->display_options['arguments']['null']['field'] = 'null';
-  $handler->display->display_options['arguments']['null']['default_action'] = 'default';
-  $handler->display->display_options['arguments']['null']['default_argument_type'] = 'fixed';
-  $handler->display->display_options['arguments']['null']['default_argument_options']['argument'] = 'node';
-  $handler->display->display_options['arguments']['null']['summary']['number_of_records'] = '0';
-  $handler->display->display_options['arguments']['null']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['null']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['fields']['picture']['image_style'] = 'thumbnail';
+  /* Field: User: Name */
+  $handler->display->display_options['fields']['name']['id'] = 'name';
+  $handler->display->display_options['fields']['name']['table'] = 'users';
+  $handler->display->display_options['fields']['name']['field'] = 'name';
+  $handler->display->display_options['fields']['name']['relationship'] = 'user_uid';
+  $handler->display->display_options['fields']['name']['label'] = '';
+  $handler->display->display_options['fields']['name']['element_label_colon'] = FALSE;
   /* Contextual filter: Content: Nid */
   $handler->display->display_options['arguments']['nid']['id'] = 'nid';
   $handler->display->display_options['arguments']['nid']['table'] = 'node';
@@ -81,11 +69,6 @@ function commons_events_views_default_views() {
   $handler->display->display_options['arguments']['nid']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['nid']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['nid']['summary_options']['items_per_page'] = '25';
-  /* Filter criterion: Registration: Host entity type */
-  $handler->display->display_options['filters']['entity_type']['id'] = 'entity_type';
-  $handler->display->display_options['filters']['entity_type']['table'] = 'registration';
-  $handler->display->display_options['filters']['entity_type']['field'] = 'entity_type';
-  $handler->display->display_options['filters']['entity_type']['value'] = 'node';
 
   /* Display: Full Attendee List Block */
   $handler = $view->new_display('block', 'Full Attendee List Block', 'commons_events_full_attendee_list');
@@ -264,7 +247,7 @@ function commons_events_views_default_views() {
   $handler->display->display_options['row_plugin'] = 'fields';
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Content: Groups audience (og_group_ref) */
+  /* Contextual filter: : og_group_ref (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'field_data_og_group_ref';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
