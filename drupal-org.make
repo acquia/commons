@@ -311,7 +311,3 @@ projects[commons_origins][subdir] = "contrib"
 
 ; Libraries.
 ; NOTE: These need to be listed in http://drupal.org/packaging-whitelist.
-
-libraries[timeago][download][type] = "get"
-libraries[timeago][destination] = "modules/contrib/timeago"
-libraries[timeago][download][url] = "http://timeago.yarp.com/jquery.timeago.js"
