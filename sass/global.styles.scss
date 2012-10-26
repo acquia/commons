@@ -532,6 +532,9 @@ h1.node-title {
     top:10px;
     background:image-url('user_img_arrow.png');
   }
+  img {
+    width:50px;
+  }
 }
 /*
  * Author/Submit line
@@ -1357,6 +1360,30 @@ ul.action-links {
   @extend %pod-content;
 }
 
+// move padding to views-row for full stretch borders
+.pane-commons-activity-streams-activity-panel-pane-1,
+.pane-commons-featured-panel-pane-1,
+.pane-commons-events-upcoming {
+  .block-inner {
+    padding:0;
+    margin:0;
+    .pane-title {
+      padding:20px 20px 0 20px;
+      line-height:20px;
+    }
+    .views-row{
+      padding:10px 20px 10px 20px;
+      border-bottom:1px solid #eee;
+    }
+    .views-row-last {
+      border-bottom:none;
+    }
+    .more-link {
+      padding:10px 20px;
+    }
+  }
+}
+
 /* =============================================================================
  *   Views Styling
  * ========================================================================== */
@@ -1369,6 +1396,8 @@ ul.action-links {
   }
 }
 
+
+.view-id-commons_activity_streams_activity {}
 
 /* =============================================================================
  *   Block Styling
@@ -2158,6 +2187,28 @@ body.front {
     }
     .commons_home-welcome-image {
       float:right;
+    }
+  }
+}
+
+body.front.logged-in {
+  .pane-commons-homepage-content-panel-pane-1 {
+    background-color:transparent;
+    @include border-radius(0px);
+    @include box-shadow($light_gray 0px 0px 0px);
+    margin-right: 0px;
+    margin-bottom: 0px;
+    .views-row {
+      border-top:1px solid $white;
+      border-bottom:1px solid #ccc;
+      padding:10px 0 0 0;
+    }
+    .views-row-first {
+      border-top:none;
+    }
+    .item-list {
+      border-top:1px solid $white;
+      padding:10px 0 0 0;      
     }
   }
 }
