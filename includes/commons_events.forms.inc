@@ -39,12 +39,13 @@ function commons_events_attend_event_form($form, &$form_state, $event_node, $reg
  * didn't fill up after the page load.
  */
 function commons_events_attend_event_form_validate($form, &$form_state) {
+  global $user;
   if (!registration_status('node', $form_state['event_node']->nid, TRUE)
     || !registration_has_room('node', $form_state['event_node']->nid)) {
     form_set_error('submit', t('The event you are registering for is unavailable.'));
     return FALSE;
   }
-  else if (registration_is_registered($form_state['registration'])) {
+  else if (registration_is_registered($form_state['registration'], NULL, $user->uid)) {
     form_set_error('submit', t('You are already registered for this event.'));
     return FALSE;
   }
@@ -73,6 +74,7 @@ function commons_events_attend_event_form_submit($form, $form_state) {
  * Form to cancel a registration for an event.
  */
 function commons_events_cancel_event_form($form, &$form_state, $event) {
+  $form_state['event'] = $event;
   $form['#attributes'] = array('class' => array('commons-events-form-float'));
   $form['#attached']['css'] = array(
     drupal_get_path('module', 'commons_events') . '/css/commons_events.css',
@@ -86,4 +88,22 @@ function commons_events_cancel_event_form($form, &$form_state, $event) {
   );
   $form['submit']['#attributes']['class'][] = 'commons-events-button';
   return $form;
+}
+
+/**
+ * Event cancel attendance form submit handler.
+ */
+function commons_events_cancel_event_form_submit($form, $form_state) {
+  global $user;
+  $event = $form_state['event'];
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'registration')
+    ->propertyCondition('user_uid', $user->uid)
+    ->propertyCondition('entity_id', $event->nid)
+    ->propertyCondition('entity_type', 'node');
+  $result = $query->execute();
+  if (isset($result['registration'])) {
+    registration_delete_multiple(array_keys($result['registration']));
+    drupal_set_message(t('Your registration has been cancelled.'));
+  }
 }

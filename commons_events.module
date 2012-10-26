@@ -215,3 +215,29 @@ function commons_events_node_form_submit($form, $form_state) {
     registration_update_entity_settings('node', $node->nid, $settings);
   }
 }
+
+/**
+ * Implements hook_token_info().
+ */
+function commons_events_token_info_alter(&$tokens) {
+  $tokens['tokens']['node']['attend-form'] = array(
+    'name' => t('Attending event form'),
+    'description' => t('Displays the appropriate form for attending or cancelling event attendance'),
+  );
+}
+
+/**
+ * Implements hook_tokens().
+ */
+function commons_events_tokens($type, $tokens, array $data = array(), array $options = array()) {
+  $replacements = array();
+  if ($type == 'node' && !empty($data['node'])) {
+    $event = $data['node'];
+    foreach ($tokens as $name => $original) {
+      if ($name == 'attend-form') {
+        $replacements[$original] = theme('commons_events_attending_event', array('event' => $event));
+      }
+    }
+  }
+  return $replacements;
+}

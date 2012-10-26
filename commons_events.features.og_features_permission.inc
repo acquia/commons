@@ -11,19 +11,13 @@ function commons_events_og_features_default_permissions() {
   $permissions = array();
 
   // Exported og permission: 'node:group:create event content'
-  $permissions['node:group:create event content'] = array(
-    'roles' => array(),
-  );
+  $permissions['node:group:create event content'] = array();
 
   // Exported og permission: 'node:group:delete own event content'
-  $permissions['node:group:delete own event content'] = array(
-    'roles' => array(),
-  );
+  $permissions['node:group:delete own event content'] = array();
 
   // Exported og permission: 'node:group:update own event content'
-  $permissions['node:group:update own event content'] = array(
-    'roles' => array(),
-  );
+  $permissions['node:group:update own event content'] = array();
 
   return $permissions;
 }
