@@ -513,6 +513,7 @@ h1.node-title {
 /*
  * User picture wrapping and shadow
  */
+
 .user-picture {
   float:left;
   margin:0 20px 0 0;
@@ -536,11 +537,13 @@ h1.node-title {
     width:50px;
   }
 }
+
 /*
  * Author/Submit line
  */
 .author-datetime {
   color:$light_gray;
+  font-size:0.85em;
 }
 
 /* =============================================================================
@@ -1647,7 +1650,11 @@ ul.action-links {
 
   &.node-by-viewer {}
 
-  &.node-teaser {}
+  &.node-teaser {
+    .links {
+      font-size:0.85em;
+    }
+  }
 
   &.node-full {}
 
@@ -2202,6 +2209,16 @@ body.front.logged-in {
       border-top:1px solid $white;
       border-bottom:1px solid #ccc;
       padding:10px 0 0 0;
+      display:table;
+      .node-header {
+        margin:0 0 0 78px;
+      }
+      .node-content {
+        display:table;
+      }
+      footer .user-picture {
+        margin:-30px 20px 0 0;
+      }
     }
     .views-row-first {
       border-top:none;
