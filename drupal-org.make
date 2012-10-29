@@ -70,6 +70,9 @@ projects[jquery_update][subdir] = "contrib"
 projects[link][type] = "module"
 projects[link][subdir] = "contrib"
 
+projects[menu_attributes][type] = "module"
+projects[menu_attributes][subdir] = "contrib"
+
 projects[message][type] = "module"
 projects[message][download][type] = "git"
 projects[message][download][url] = "http://git.drupal.org/project/message.git"
