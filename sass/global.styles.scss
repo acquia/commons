@@ -1384,6 +1384,15 @@ ul.action-links {
     .more-link {
       padding:10px 20px;
     }
+    .views-field-field-date,
+    .views-field-field-location,
+    .views-field-comment-count {
+      font-size:0.85em;
+    }
+    .views-field-field-location,
+    .views-field-comment-count {
+      color:$light_gray;
+    }
   }
 }
 
@@ -1400,7 +1409,14 @@ ul.action-links {
 }
 
 
-.view-id-commons_activity_streams_activity {}
+.view-id-commons_activity_streams_activity {
+  .view-content {
+    .views-field-timestamp {
+      color:$light_gray;
+      font-size:0.85em;
+    }
+  }
+}
 
 /* =============================================================================
  *   Block Styling
@@ -1653,6 +1669,7 @@ ul.action-links {
   &.node-teaser {
     .links {
       font-size:0.85em;
+      margin:0 0 0 78px;
     }
   }
 
@@ -2209,12 +2226,11 @@ body.front.logged-in {
       border-top:1px solid $white;
       border-bottom:1px solid #ccc;
       padding:10px 0 0 0;
-      display:table;
       .node-header {
         margin:0 0 0 78px;
       }
       .node-content {
-        display:table;
+        margin:0 0 0 78px;
       }
       footer .user-picture {
         margin:-30px 20px 0 0;
