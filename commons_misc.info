@@ -1,9 +1,15 @@
 name = Commons Miscellaneous Configuration
 description = Various suggested bits of configuration for Commons sites.
 core = 7.x
-package = Features
+package = Commons - Building blocks
+php = 5.2.4
+project = commons_misc
 dependencies[] = features
-dependencies[] = node
+dependencies[] = strongarm
+datestamp = 1351531227
+features[ctools][] = strongarm:strongarm:1
 features[features_api][] = api:1
 features[user_permission][] = access content
 features[user_permission][] = view own unpublished content
+features[variable][] = theme_adaptivetheme_settings
+features[variable][] = theme_commons_origins_settings
