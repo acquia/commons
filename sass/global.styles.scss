@@ -546,6 +546,32 @@ h1.node-title {
   font-size:0.85em;
 }
 
+/*
+ * Featured/New Tags
+ */
+
+.tag.featured {
+  width:58px;
+  height:22px;
+  display:inline-block;
+  background: {
+    image:image-url('tag-featured.png');
+    repeat:no-repeat;
+  }
+  margin:6px 0 0 5px;
+}
+
+.tag.new {
+  width:27px;
+  height:22px;
+  display:inline-block;
+  background: {
+    image:image-url('tag-new.png');
+    repeat:no-repeat;
+  }
+  margin:4px 0 0 5px;
+}
+
 /* =============================================================================
  *   Regions
  * ========================================================================== */
@@ -2226,14 +2252,23 @@ body.front.logged-in {
       border-top:1px solid $white;
       border-bottom:1px solid #ccc;
       padding:10px 0 0 0;
+      position:relative;
       .node-header {
         margin:0 0 0 78px;
+        a {
+          float:left;
+        }
       }
       .node-content {
         margin:0 0 0 78px;
       }
       footer .user-picture {
-        margin:-30px 20px 0 0;
+        position:absolute;
+        left:0;
+        top:10px;
+      }
+      .author-datetime {
+        margin:0 0 1.5em 78px;
       }
     }
     .views-row-first {
