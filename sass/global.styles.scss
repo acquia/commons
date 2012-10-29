@@ -39,7 +39,7 @@
  */
 
 html {
-  background: $page;
+  background:$page;
 }
 
 body {
@@ -719,6 +719,18 @@ a {
 
     &:hover, &.active-trail {
       background: image-url('main-nav-hover.png') repeat-x left top;
+      .arrow {
+        background:image-url('main-nav-arrow.png');
+      }
+    }
+    &.menu-item-193 a {
+      background-image:image-url('icons/icon-home.png');
+    }
+    &.menu-item-194 a {
+      background-image:image-url('icons/icon-groups.png');
+    }
+    &.menu-item-195 a {
+      background-image:image-url('icons/icon-events.png');
     }
   }
 
@@ -731,11 +743,21 @@ a {
     text-transform: uppercase;
     @include text-shadow(#000 1px 1px 4px);
     background-position:center 10px;
+    background-repeat:no-repeat;
+    position:relative;
     @extend .divider-left;
     &:visited {}
     &:hover,
     &:focus {
       text-decoration: none;
+    }
+    .arrow {
+      width:17px;
+      height:9px;
+      position:absolute;
+      left:50%;
+      bottom:-1px;
+      margin:0 0 0 -8px;
     }
   }
 
@@ -2269,6 +2291,7 @@ body.front.logged-in {
       }
       .author-datetime {
         margin:0 0 1.5em 78px;
+        clear:both;
       }
     }
     .views-row-first {
