@@ -465,7 +465,19 @@ var {
 /*
  * Generic styles for the more link
  */
-.more-link {}
+.more-link {
+  background-image:image-url('icons/icon-more.png');
+  background-repeat:no-repeat;
+  height:14px;
+  padding:0 0 0 17px;
+  float:right;
+  font-size:0.85em;
+  line-height:14px;
+  margin:10px;
+  a {
+    color:$light_gray;
+  }
+}
 
 
 /*
@@ -1406,7 +1418,7 @@ ul.action-links {
 .pane-commons-featured-panel-pane-1,
 .pane-commons-events-upcoming {
   .block-inner {
-    padding:0;
+    padding:0 0 15px 0;
     margin:0;
     .pane-title {
       padding:20px 20px 0 20px;
@@ -1418,9 +1430,6 @@ ul.action-links {
     }
     .views-row-last {
       border-bottom:none;
-    }
-    .more-link {
-      padding:10px 20px;
     }
     .views-field-field-date,
     .views-field-field-location,
@@ -1486,6 +1495,26 @@ ul.action-links {
     article,
     form {
       @extend %pod-content;
+    }
+  }
+  .view-filters {
+    .views-widget,
+    label {
+      display:inline-block;
+    }
+    label {
+      color:$dark_gray;
+      font-size:0.85em;
+      font-weight:normal;
+      margin:0 15px 0 0;
+    }
+    .form-text {
+      width:400px;
+      @include box-shadow($light_gray 1px 1px 2px inset);
+      border-color:#c2c2c2;
+    }
+    .form-submit {
+      margin-top:1px;
     }
   }
 }
@@ -1740,7 +1769,6 @@ ul.action-links {
   &.node-teaser {
     .links {
       font-size:0.85em;
-      margin:0 0 0 78px;
     }
   }
 
@@ -2310,6 +2338,9 @@ body.front {
     .commons_home-welcome-image {
       float:right;
     }
+  }
+  .node-teaser .links {
+     margin:0 0 0 78px;
   }
 }
 
