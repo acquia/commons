@@ -13,13 +13,6 @@ function commons_misc_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'theme_adaptivetheme_files_directory';
-  $strongarm->value = 'public://adaptivetheme/adaptivetheme_files';
-  $export['theme_adaptivetheme_files_directory'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
   $strongarm->name = 'theme_adaptivetheme_settings';
   $strongarm->value = array(
     'toggle_logo' => 1,
@@ -163,20 +156,6 @@ function commons_misc_strongarm() {
     'at_core' => '7.x-3.x',
   );
   $export['theme_adaptivetheme_settings'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'theme_at_core_settings';
-  $strongarm->value = array();
-  $export['theme_at_core_settings'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'theme_commons_origins_files_directory';
-  $strongarm->value = 'public://adaptivetheme/commons_origins_files';
-  $export['theme_commons_origins_files_directory'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
