@@ -1,0 +1,34 @@
+<?php
+/**
+ * commons_search.module
+ */
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function commons_search_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'form_alter') {
+    // We move commons_search to the end so it gets processed last.
+    $group = $implementations['commons_search'];
+    unset($implementations['commons_search']);
+    $implementations['commons_search'] = $group;
+  }
+}
+
+/**
+ * Custom search form that switches between Core and Solr depending on which is
+ * the enabled search module.
+ */
+function commons_search_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'search_block_form') {
+    // Move the textfield to after the drop down.
+    $form['search_block_form']['#weight'] = 1;
+    // Remove all content options.
+    unset($form['custom_search_types']['#options']['Content']);
+    // Add search options for Site and User search.
+    $form['custom_search_types']['#options'] = array(
+      'c-all' => t('Site'),
+      'o-user' => t('Users'),
+    );
+  }
+}
