@@ -1,7 +1,10 @@
 <?php
 /**
  * commons_search.module
+ * Code for the Commons Search feature.
  */
+
+include_once 'commons_search.features.inc';
 
 /**
  * Implements hook_module_implements_alter().
@@ -20,7 +23,7 @@ function commons_search_module_implements_alter(&$implementations, $hook) {
  * the enabled search module.
  */
 function commons_search_form_alter(&$form, &$form_state, $form_id) {
-  if ($form_id == 'search_block_form') {
+  if ($form_id == 'search_block_form_blah') {
     // Move the textfield to after the drop down.
     $form['search_block_form']['#weight'] = 1;
     // Remove all content options.
