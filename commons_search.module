@@ -23,15 +23,18 @@ function commons_search_module_implements_alter(&$implementations, $hook) {
  * the enabled search module.
  */
 function commons_search_form_alter(&$form, &$form_state, $form_id) {
-  if ($form_id == 'search_block_form_blah') {
+  if ($form_id == 'search_block_form') {
     // Move the textfield to after the drop down.
     $form['search_block_form']['#weight'] = 1;
-    // Remove all content options.
-    unset($form['custom_search_types']['#options']['Content']);
-    // Add search options for Site and User search.
-    $form['custom_search_types']['#options'] = array_merge(
-      array('c-all' => t('Site')),
-      $form['custom_search_types']['#options']
-    );
+    if (!module_exists('apachesolr_search')) {
+      // Only if we are using core search should we modify the options.
+      // Remove all content options.
+      unset($form['custom_search_types']['#options']['Content']);
+      // Add search options for Site and User search.
+      $form['custom_search_types']['#options'] = array_merge(
+        array('c-all' => t('Site')),
+        $form['custom_search_types']['#options']
+      );
+    }
   }
 }
