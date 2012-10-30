@@ -103,7 +103,6 @@ function commons_content_moderation_flag_default_flags() {
       0 => 'name',
     ),
   );
-dpm("actually returning flags");
   return $flags;
 
 }
