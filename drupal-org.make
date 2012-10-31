@@ -185,7 +185,6 @@ projects[commons_content_moderation][download][type] = "git"
 projects[commons_content_moderation][download][url] = "http://git.drupal.org/project/commons_content_moderation.git"
 projects[commons_content_moderation][download][branch] = "7.x-3.x"
 
-
 projects[commons_documents][type] = "module"
 projects[commons_documents][subdir] = "contrib"
 projects[commons_documents][download][type] = "git"
@@ -304,6 +303,12 @@ projects[commons_topics][download][branch] = "7.x-3.x"
 
 projects[adaptivetheme][type] = "theme"
 projects[adaptivetheme][subdir] = "contrib"
+projects[adaptivetheme][download][type] = "git"
+projects[adaptivetheme][download][url] = "http://git.drupal.org/project/adaptivetheme.git"
+projects[adaptivetheme][download][branch] = "7.x-3.x"
+; Refactor require_once() instances into discrete functions:
+; http://drupal.org/node/1776730#comment-6673566
+projects[adaptivetheme][patch][] = "http://drupal.org/files/1776730-adaptivetheme-refactor-require-into-discrete-functions-13.patch"
 
 projects[sky][type] = "theme"
 projects[sky][subdir] = "contrib"

@@ -14,17 +14,37 @@
  */
 function commons_install() {
   // Enable the Skye theme and set it as the default theme.
-  theme_enable(array('adaptivetheme', 'sky'));
-  variable_set('theme_default', 'sky');
-  // Place main menu in the menu_bar region.
+  theme_enable(array('adaptivetheme', 'commons_origins'));
+  variable_set('theme_default', 'commons_origins');
+  // Place main menu and site search blocks.
   $menu_block = array(
     'module' => 'system',
     'delta' => 'main-menu',
-    'theme' => 'sky',
+    'theme' => 'commons_origins',
     'visibility' => 0,
     'region' => 'menu_bar',
     'status' => 1,
     'pages' => '',
   );
   drupal_write_record('block', $menu_block);
+  $search_block = array(
+    'module' => 'search',
+    'theme' => 'commons_origins',
+    'visibility' => 0,
+    'region' => 'header',
+    'status' => 1,
+    'pages' => '',
+  );
+  drupal_write_record('block', $search_block);
+  // AdaptiveTheme requires that the system theme settings form
+  // be submitted in order for its themes' settings to be properly set
+  // and the resulting css files generated.
+  // For more background, see http://drupal.org/node/1776730.
+  module_load_include('inc', 'system', 'system.admin');
+  foreach (array('adaptivetheme', 'commons_origins') as $theme_name) {
+    $form_state = form_state_defaults();
+    $form_state['build_info']['args'][0] = $theme_name;
+    $form_state['values'] = array();
+    drupal_form_submit('system_theme_settings', $form_state);
+  }
 }
