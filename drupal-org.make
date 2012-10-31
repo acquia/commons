@@ -55,6 +55,15 @@ projects[features][patch][] = "http://drupal.org/files/1064472_features_field_sp
 projects[flag][type] = "module"
 projects[flag][subdir] = "contrib"
 
+projects[flag_abuse][type] = "module"
+projects[flag_abuse][subdir] = "contrib"
+projects[flag_abuse][download][type] = "git"
+projects[flag_abuse][download][url] = "http://git.drupal.org/project/flag_abuse.git"
+projects[flag_abuse][download][branch] = "7.x-1.x"
+; Remove "Reset" functionality
+; http://drupal.org/node/1194566#comment-6650348
+projects[flag_abuse][patch][] = "http://drupal.org/files/flag-abuse-remove-reset.patch"
+
 projects[http_client][version] = "2.x-dev"
 projects[http_client][type] = "module"
 projects[http_client][subdir] = "contrib"
