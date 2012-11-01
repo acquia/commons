@@ -333,4 +333,6 @@ projects[commons_origins][subdir] = "contrib"
 
 libraries[timeago][download][type] = "get"
 libraries[timeago][destination] = "modules/contrib"
-libraries[timeago][download][url] = "http://timeago.yarp.com/jquery.timeago.js"
+; We'd like to switch to a specific commit hash,
+; pending http://drupal.org/node/1821996#comment-6678062.
+libraries[timeago][download][url] = "https://raw.github.com/rmm5t/jquery-timeago/master/jquery.timeago.js"
