@@ -21,7 +21,7 @@ function commons_groups_directory_default_page_manager_pages() {
     'type' => 'normal',
     'title' => 'Groups',
     'name' => 'main-menu',
-    'weight' => '0',
+    'weight' => '-1',
     'parent' => array(
       'type' => 'none',
       'title' => '',
