@@ -6,6 +6,66 @@
 
 include_once 'commons_follow_user.features.inc';
 
+
+
+/**
+ * Implements hook_commons_follow_get_nids().
+ */
+function commons_follow_user_commons_follow_get_nids($account, $options) {
+  // Get all flaggings from flags that belong to Message-subscribe, that
+  // reference the node entity-type.
+
+  // Get subscribe flag IDs.
+  $flag_ids = commons_follow_get_subscription_flags_ids('user');
+
+  if (empty($flag_ids)) {
+    return array();
+  }
+
+  // Get flagged user IDs.
+  $query = db_select('flag_content', 'f');
+  $result = $query
+    ->condition('fid', $flag_ids, 'IN')
+    ->condition('uid', $account->uid, '=')
+    ->condition('content_type', 'user', '=')
+    ->fields('f',array('content_id'))
+    ->execute()
+    ->fetchAll();
+
+  if (empty($result)) {
+    // No user flags.
+    return array();
+  }
+
+  $uids = array();
+  foreach($result as $row) {
+    $uids[] = (integer) $row->content_id;
+  }
+
+  // Get the user's node IDs.
+  $query = new EntityFieldQuery();
+
+  if (!empty($options['range'])) {
+    $query->range(0, $options['range']);
+  }
+
+  $result = $query
+    ->entityCondition('entity_type', 'node')
+    ->propertyCondition('uid', $uids, 'IN')
+    ->execute();
+
+  $nids = array();
+  foreach ($result['node'] as $nid => $row) {
+    $nids[] = $nid;
+  }
+
+  return $nids;
+}
+
+
+///////////////
+
+
 /**
 * Implements hook_system_info_alter().
 */
@@ -67,9 +127,9 @@ function commons_follow_user_commons_follow_get_message_ids(&$followed_mids, $fo
   }
   // Generate a list of message IDs where message.uid OR any of the referenced
   // target users are ones that the current user is following.
-  $result = db_query("SELECT m.mid AS mid 
-    FROM {message} m 
-    LEFT JOIN {field_data_field_target_users} tu ON m.mid=tu.entity_id 
+  $result = db_query("SELECT m.mid AS mid
+    FROM {message} m
+    LEFT JOIN {field_data_field_target_users} tu ON m.mid=tu.entity_id
     WHERE tu.field_target_users_target_id IN(:uids)
     OR m.uid IN (:uids)",
     array(':uids' => array_values($followed_content['commons_follow_user'])));
@@ -92,7 +152,7 @@ function commons_follow_user_commons_follow_get_following_uids(&$following_uids,
       $target_uids[] = $field['target_id'];
     }
   }
-  
+
   $result = db_query("SELECT fc.uid FROM {flag_content} fc WHERE fc.content_type = 'user' AND fc.content_id IN(:target_uids) AND fc.fid IN (:commons_follow_flag_ids)", array(':target_uids' => array_keys($target_uids), ':commons_follow_flag_ids' => array_keys(commons_follow_get_flag_ids())));
   foreach ($result as $this_result) {
     $following_uids[$this_result->uid] = $this_result->uid;

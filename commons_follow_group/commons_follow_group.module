@@ -7,6 +7,67 @@
 include_once 'commons_follow_group.features.inc';
 
 /**
+ * Implements hook_commons_follow_get_nids().
+ */
+function commons_follow_group_commons_follow_get_nids($account, $options) {
+  // Get all group content from a followed group.
+  $gids = og_get_entity_groups('user', $account);
+  if (empty($gids['node'])) {
+    return;
+  }
+
+  // Get subscribe flag IDs.
+  $flag_ids = commons_follow_get_subscription_flags_ids('node');
+
+  $query = db_select('flag_content', 'f');
+  if (!empty($options['range'])) {
+    $query->range(0, $options['range']);
+  }
+
+  $result = $query
+    ->addTag('node_access')
+    ->condition('fid', $flag_ids, 'IN')
+    ->condition('uid', $account->uid, '=')
+    ->condition('content_type', 'node', '=')
+    ->condition('content_id', $gids['node'], 'IN')
+    ->fields('f',array('content_id'))
+    ->execute()
+    ->fetchAll();
+
+  if (empty($result)) {
+    return array();
+  }
+
+  $nids = array();
+  foreach($result as $row) {
+    $nids[] = $row->content_id;
+  }
+
+  // Get the groups' content IDs.
+  $query = new EntityFieldQuery();
+  $result = $query
+    ->entityCondition('entity_type', 'og_membership')
+    ->propertyCondition('group_type', 'node')
+    ->propertyCondition('gid', $nids, 'IN')
+    ->propertyCondition('entity_type', 'node', '=')
+    ->execute();
+
+  if (empty($result['og_membership'])) {
+    return array();
+  }
+
+  // Keep array structure.
+  $nids = array();
+  $og_memberships = og_membership_load_multiple(array_keys($result['og_membership']));
+  foreach ($og_memberships as $og_membership) {
+    $nid = $og_membership->etid;
+    $nids[$nid] = $nid;
+  }
+
+  return $nids;
+}
+
+/**
 * Implements hook_node_view_alter().
 */
 function commons_follow_group_node_view_alter(&$build) {
