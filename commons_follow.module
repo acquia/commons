@@ -1,73 +1,6 @@
 <?php
 
 /**
- * Get all node IDs relevant to what the user ordered.
- *
- * @param $account
- *   The user being checked. Defaults to the current user.
- * @param $options
- *   Array. Includes options to alter the query. Options available are used
- *   within the hook implementations.
- *
- * @return
- *   Array of node IDs.
- */
-function commons_follow_get_nids($account = NULL, $options = array()) {
-  if (empty($account)) {
-    global $user;
-    $account = clone $user;
-  }
-
-  $nids = array();
-  // We don't use module_invoke_all() is we want to retain the array keys,
-  // which are the user IDs.
-  foreach (module_implements('commons_follow_get_nids') as $module) {
-    $function = $module . '_commons_follow_get_nids';
-    $result = $function($account, $options);
-    foreach ($result as $nid) {
-      $nids[$nid] = $nid;
-    }
-  }
-  return $nids;
-}
-
-
-
-/**
- * Get subscriptions flag IDs.
- *
- * @param $content_type
- *   Optional. The type of content for which to load the flags. Usually 'node'.
- * @param $content_subtype
- *   Optional. The node type for which to load the flags.
- * @param $account
- *   Optional. The user accont to filter available flags. If not set, all
- *   flags for will this node will be returned.
- * @param $reset
- *   Optional. Reset the internal query cache.
- *
- * @return $flags
- *   An array of the structure [fid] = flag_object.
- *
- * @see flag_get_flags()
- */
-function commons_follow_get_subscription_flags_ids($content_type = NULL, $content_subtype = NULL, $account = NULL, $reset = FALSE) {
-  if (!module_exists('message_subscribe')) {
-    // Requires message_subscribe module.
-    return;
-  }
-  $flags = message_subscribe_flag_get_flags($content_type, $content_subtype, $account, $reset);
-
-  $flag_ids = array();
-  foreach ($flags as $flag) {
-    $flag_ids[] = $flag->fid;
-  }
-  return $flag_ids;
-}
-
-///////////////////
-
-/**
  * Implementation of hook_views_api().
  */
 function commons_follow_views_api() {
@@ -145,8 +78,8 @@ function commons_follow_get_followed_message_ids($account = NULL) {
   foreach ($followed_content as $key => $content) {
     $function = $key . '_commons_follow_get_message_ids';
     if (function_exists($function)) {
-      $function($followed_mids, $followed_content);
-    }
+      $function($followed_mids, $followed_content);  
+    }    
   }
   return $followed_mids;
 }

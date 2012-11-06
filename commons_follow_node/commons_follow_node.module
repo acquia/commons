@@ -6,50 +6,6 @@
 
 include_once 'commons_follow_node.features.inc';
 
-
-
-/**
- * Implements hook_commons_follow_get_nids().
- */
-function commons_follow_node_commons_follow_get_nids($account, $options) {
-  // Get all flaggings from flags that belong to Message-subscribe, that
-  // reference the node entity-type.
-
-  // Get subscribe flag IDs.
-  $flag_ids = commons_follow_get_subscription_flags_ids('node');
-
-  if (empty($flag_ids)) {
-    return array();
-  }
-
-  $query = db_select('flag_content', 'f');
-
-  if (!empty($options['range'])) {
-    $query->range(0, $options['range']);
-  }
-
-  $result = $query
-    ->addTag('node_access')
-    ->condition('fid', $flag_ids, 'IN')
-    ->condition('uid', $account->uid, '=')
-    ->condition('content_type', 'node', '=')
-    ->fields('f',array('content_id'))
-    ->execute()
-    ->fetchAll();
-
-  $nids = array();
-  foreach($result as $row) {
-    $nids[] = (integer) $row->content_id;
-  }
-
-  return $nids;
-}
-
-
-///////////////
-
-
-
 /**
 * Implements hook_commons_follow_get_message_ids().
 */
