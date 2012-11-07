@@ -1,5 +1,8 @@
 <?php
 
+include_once 'commons_follow.features.inc';
+
+
 /**
  * Get all node IDs relevant to what the user ordered.
  *
@@ -141,7 +144,7 @@ function commons_follow_get_followed_message_ids($account = NULL) {
   // Allow the module with this flag namespace to return a list of
   // followed MIDs.
   $followed_content = commons_follow_get_followed_content($account);
-  $followed_mids = array(-1);
+  $followed_mids = array();
   foreach ($followed_content as $key => $content) {
     $function = $key . '_commons_follow_get_message_ids';
     if (function_exists($function)) {

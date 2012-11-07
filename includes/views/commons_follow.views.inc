@@ -1,20 +1,5 @@
 <?php
 
-/**
-* Implements hook_views_data_alter().
-*/
-function commons_follow_views_data_alter(&$data) {
-  $data['message']['mid_follow'] = array(
-    'title' => 'Message id Follow',
-    'help' => 'Filter messages based on what the current user is following.',
-    'filter' => array(
-      'handler' => 'commons_follow_handler_filter_follow',
-      'real field' => 'mid',
-    ),
-  );
-}
-
-
 
 /**
  * Implements hook_views_plugins().
@@ -26,6 +11,10 @@ function commons_follow_views_plugins() {
       'commons_follow_node' => array(
         'title' => t('The node IDs the user is subscribed to'),
         'handler' => 'commons_follow_plugin_argument_default_node',
+      ),
+      'commons_follow_message' => array(
+        'title' => t('The message IDs the user is subscribed to'),
+        'handler' => 'commons_follow_plugin_argument_default_message',
       ),
     ),
   );
@@ -42,6 +31,18 @@ function commons_follow_views_data() {
      // Information for displaying a title as a field
     'filter' => array(
       'handler' => 'commons_follow_user_follow_filter',
+      'label' => t('Following'),
+      'type' => 'yes-no',
+    ),
+  );
+
+  $data['message']['cf_user_follow_message'] = array(
+    'title' => t('User Follow'), // The item it appears as on the UI,
+    'help' => t('Whether the user is following items related to this message.'), // The help that appears on the UI,
+    'real field' => 'mid',
+     // Information for displaying a title as a field
+    'filter' => array(
+      'handler' => 'commons_follow_user_follow_filter_message',
       'label' => t('Following'),
       'type' => 'yes-no',
     ),
