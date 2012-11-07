@@ -16,7 +16,10 @@ function commons_site_homepage_default_page_manager_pages() {
   $page->admin_title = 'Home';
   $page->admin_description = 'Site home page for anonymous and authenticated users.';
   $page->path = 'home';
-  $page->access = array();
+  $page->access = array(
+    'type' => 'none',
+    'settings' => NULL,
+  );
   $page->menu = array(
     'type' => 'normal',
     'title' => 'Home',

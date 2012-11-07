@@ -5,3 +5,22 @@
  */
 
 include_once 'commons_site_homepage.features.inc';
+
+/**
+* Implements hook_form_alter().
+*/
+function commons_site_homepage_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'views_exposed_form' && $form['#id'] == 'views-exposed-form-commons-homepage-content-panel-pane-1') {
+    // We customize the text inside the exposed filter form elements
+    // to allow for them to form a sentence, such as:
+    // "Show Groups I'm following sorted by last updated first"
+    $form['following']['#options'][1] = t('following');
+    $form['following']['#options'][0] = t('not following');
+    $form['type']['#options']['All'] = t('All content');
+    foreach ($form['type']['#options'] as $type => $name) {
+      if ($type != 'All') {
+        $form['type']['#options'][$type] = t($name . 's');
+      }
+    }
+  }
+}
