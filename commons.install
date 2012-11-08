@@ -47,4 +47,9 @@ function commons_install() {
     $form_state['values'] = array();
     drupal_form_submit('system_theme_settings', $form_state);
   }
+  // Revert Features components to ensure that they are in their default states.
+  $revert = array(
+    'commons_groups' => array('field_instance'),
+  );
+  features_revert($revert);
 }
