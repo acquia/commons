@@ -14,11 +14,17 @@ projects[connector][version] = "1.x-dev"
 projects[connector][type] = "module"
 projects[connector][subdir] = "contrib"
 
+
 projects[ctools][type] = "module"
 projects[ctools][subdir] = "contrib"
 ; http://drupal.org/node/1494860#comment-6204438
 projects[ctools][patch][] = "http://drupal.org/files/ctools-dependent-js-broken-with-jquery-1.7-1494860-30.patch"
 
+projects[custom_search][type] = "module"
+projects[custom_search][subdir] = "contrib"
+projects[custom_search][download][type] = "git"
+projects[custom_search][download][url] = "http://git.drupal.org/project/custom_search.git"
+projects[custom_search][download][branch] = "7.x-1.x"
 
 projects[date][type] = "module"
 projects[date][subdir] = "contrib"
@@ -283,6 +289,13 @@ projects[commons_radioactivity][subdir] = "contrib"
 projects[commons_radioactivity][download][type] = "git"
 projects[commons_radioactivity][download][url] = "http://git.drupal.org/project/commons_radioactivity.git"
 projects[commons_radioactivity][download][branch] = "7.x-3.x"
+
+
+projects[commons_search][type] = "module"
+projects[commons_search][subdir] = "contrib"
+projects[commons_search][download][type] = "git"
+projects[commons_search][download][url] = "http://git.drupal.org/project/commons_search.git"
+projects[commons_search][download][branch] = "7.x-3.x"
 
 projects[commons_site_homepage][type] = "module"
 projects[commons_site_homepage][subdir] = "contrib"
