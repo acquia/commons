@@ -316,8 +316,8 @@ projects[adaptivetheme][download][type] = "git"
 projects[adaptivetheme][download][url] = "http://git.drupal.org/project/adaptivetheme.git"
 projects[adaptivetheme][download][branch] = "7.x-3.x"
 ; Refactor require_once() instances into discrete functions:
-; http://drupal.org/node/1776730#comment-6673566
-projects[adaptivetheme][patch][] = "http://drupal.org/files/1776730-adaptivetheme-refactor-require-into-discrete-functions-13.patch"
+; http://drupal.org/node/1776730#comment-6705274
+projects[adaptivetheme][patch][] = "http://drupal.org/files/1776730-adaptivetheme-refactor-require-into-discrete-functions-21.patch"
 
 projects[sky][type] = "theme"
 projects[sky][subdir] = "contrib"
@@ -333,4 +333,6 @@ projects[commons_origins][subdir] = "contrib"
 
 libraries[timeago][download][type] = "get"
 libraries[timeago][destination] = "modules/contrib"
-libraries[timeago][download][url] = "http://timeago.yarp.com/jquery.timeago.js"
+; We'd like to switch to a specific commit hash,
+; pending http://drupal.org/node/1821996#comment-6678062.
+libraries[timeago][download][url] = "https://raw.github.com/rmm5t/jquery-timeago/master/jquery.timeago.js"
