@@ -94,6 +94,12 @@ projects[message_notify][download][url] = "http://git.drupal.org/project/message
 projects[message_notify][download][branch] = "7.x-2.x"
 projects[message_notify][subdir] = "contrib"
 
+projects[message_subscribe][type] = "module"
+projects[message_subscribe][download][type] = "git"
+projects[message_subscribe][download][url] = "http://git.drupal.org/project/message_subscribe.git"
+projects[message_subscribe][download][branch] = "7.x-1.x"
+projects[message_subscribe][subdir] = "contrib"
+
 projects[module_filter][type] = "module"
 projects[module_filter][subdir] = "contrib"
 
