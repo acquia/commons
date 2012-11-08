@@ -17,6 +17,7 @@ function commons_site_homepage_form_alter(&$form, &$form_state, $form_id) {
     $form['following']['#options'][1] = t('following');
     $form['following']['#options'][0] = t('not following');
     $form['type']['#options']['All'] = t('All content');
+    $form['sort_by']['#title'] = t('sorted by');
     foreach ($form['type']['#options'] as $type => $name) {
       if ($type != 'All') {
         $form['type']['#options'][$type] = t($name . 's');
