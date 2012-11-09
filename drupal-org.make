@@ -136,6 +136,9 @@ projects[quicktabs][subdir] = "contrib"
 
 projects[radioactivity][type] = "module"
 projects[radioactivity][subdir] = "contrib"
+; Notice error for accessing an undefined array element
+; http://drupal.org/node/1816252#comment-6617208
+projects[radioactivity][patch][] = "http://drupal.org/files/undefined_array-1816252-1.patch"
 
 projects[realname][type] = "module"
 projects[realname][subdir] = "contrib"
