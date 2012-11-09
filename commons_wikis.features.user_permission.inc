@@ -14,23 +14,17 @@ function commons_wikis_user_default_permissions() {
   $permissions['create wiki content'] = array(
     'name' => 'create wiki content',
     'roles' => array(
-      0 => 'authenticated user',
+      'authenticated user' => 'authenticated user',
     ),
     'module' => 'node',
   );
 
-  // Exported permission: delete own wiki content.
-  $permissions['delete own wiki content'] = array(
-    'name' => 'delete own wiki content',
-    'roles' => array(),
-    'module' => 'node',
-  );
 
   // Exported permission: edit any wiki content.
   $permissions['edit any wiki content'] = array(
     'name' => 'edit any wiki content',
     'roles' => array(
-      0 => 'authenticated user',
+      'authenticated user' => 'authenticated user',
     ),
     'module' => 'node',
   );
@@ -39,7 +33,7 @@ function commons_wikis_user_default_permissions() {
   $permissions['edit own wiki content'] = array(
     'name' => 'edit own wiki content',
     'roles' => array(
-      0 => 'authenticated user',
+      'authenticated user' => 'authenticated user',
     ),
     'module' => 'node',
   );
