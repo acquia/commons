@@ -50,7 +50,7 @@ projects[entityreference][subdir] = "contrib"
 projects[entityreference_prepopulate][type] = "module"
 projects[entityreference_prepopulate][subdir] = "contrib"
 
-projects[features][version] = "1.x-dev"
+projects[features][version] = "2.x-dev"
 projects[features][type] = "module"
 projects[features][subdir] = "contrib"
 
