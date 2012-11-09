@@ -27,10 +27,31 @@ function commons_install_tasks() {
       'display' => TRUE,
       'type' => 'form',
       'function' => 'commons_anonymous_welcome_text_form'
-    )
+    ),
+    'commons_revert_features' => array(
+      'display' => FALSE,
+    ),
   );
 }
 
+/*
+ * Revert Features after the installation.
+ */
+function commons_revert_features() {
+  // These features must be twice in a row in order to
+  // fully revert.
+  $i = 0;
+  while ($i < 2 ) {
+   // Revert Features components to ensure that they are in their default states.
+    $revert = array(
+      'commons_groups' => array('field_instance'),
+      'commons_wikis' => array('og_features_permission'),
+    );
+    features_revert($revert);
+    $i++;
+  }
+
+}
 /**
  * Configuration form to set welcome text for the anonymous site homepage.
  */
