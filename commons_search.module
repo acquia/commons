@@ -39,7 +39,6 @@ function commons_search_form_alter(&$form, &$form_state, $form_id) {
     if (strpos($node, 'node/') !== FALSE
       && is_numeric(substr($node, strpos($node, '/')+1))) {
       $node = node_load(substr($node, strpos($node, '/')+1));
-      dsm($node);
       if (property_exists($node, 'og_group_ref')) {
         $group = TRUE;
       }
