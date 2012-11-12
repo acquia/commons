@@ -117,9 +117,6 @@ projects[oauthconnector][subdir] = "contrib"
 projects[og][version] = "2.x-dev"
 projects[og][type] = "module"
 projects[og][subdir] = "contrib"
-; Importing roles at og permissions feature revert causes an error
-; http://drupal.org/node/1800964#comment-6547670
-projects[og][patch][] = "http://drupal.org/files/fix-role-creation-on-feature-import-1800964-1.patch"
 
 projects[panelizer][type] = "module"
 projects[panelizer][version] = "3.x-dev"
