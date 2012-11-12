@@ -3,6 +3,17 @@
 include_once 'commons_activity_streams.features.inc';
 
 /**
+ * Implements hook_form_alter().
+ */
+function commons_activity_streams_form_alter(&$form, &$form_state, $form_id) {
+  // Customize the text on the filter for Activity landing page.
+  if ($form_id == 'views_exposed_form' && $form['#id'] == 'views-exposed-form-commons-activity-streams-activity-panel-pane-3') {
+    $form['following']['#options'][0] = t("activity I'm not following");
+    $form['following']['#options'][1] = t("activity I'm following");
+  }
+}
+
+/**
  * Implements hook_node_insert().
  */
 function commons_activity_streams_node_insert($node) {

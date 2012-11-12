@@ -23,6 +23,7 @@ function commons_activity_streams_views_default_views() {
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
   $handler->display->display_options['title'] = 'Recent site activity';
+  $handler->display->display_options['use_ajax'] = TRUE;
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['link_display'] = 'custom_url';
   $handler->display->display_options['access']['type'] = 'none';
@@ -36,6 +37,13 @@ function commons_activity_streams_views_default_views() {
   $handler->display->display_options['pager']['options']['quantity'] = '9';
   $handler->display->display_options['style_plugin'] = 'default';
   $handler->display->display_options['row_plugin'] = 'fields';
+  /* No results behavior: Global: Text area */
+  $handler->display->display_options['empty']['area']['id'] = 'area';
+  $handler->display->display_options['empty']['area']['table'] = 'views';
+  $handler->display->display_options['empty']['area']['field'] = 'area';
+  $handler->display->display_options['empty']['area']['empty'] = TRUE;
+  $handler->display->display_options['empty']['area']['content'] = 'No activity matched the filters you selected.';
+  $handler->display->display_options['empty']['area']['format'] = 'filtered_html';
   /* Relationship: Entity Reference: Referenced Entity */
   $handler->display->display_options['relationships']['field_target_nodes_target_id']['id'] = 'field_target_nodes_target_id';
   $handler->display->display_options['relationships']['field_target_nodes_target_id']['table'] = 'field_data_field_target_nodes';
@@ -88,7 +96,7 @@ function commons_activity_streams_views_default_views() {
   $handler->display->display_options['filters']['cf_user_follow_message']['value'] = '0';
   $handler->display->display_options['filters']['cf_user_follow_message']['exposed'] = TRUE;
   $handler->display->display_options['filters']['cf_user_follow_message']['expose']['operator_id'] = '';
-  $handler->display->display_options['filters']['cf_user_follow_message']['expose']['label'] = 'Following';
+  $handler->display->display_options['filters']['cf_user_follow_message']['expose']['label'] = 'Show';
   $handler->display->display_options['filters']['cf_user_follow_message']['expose']['operator'] = 'cf_user_follow_message_op';
   $handler->display->display_options['filters']['cf_user_follow_message']['expose']['identifier'] = 'following';
   $handler->display->display_options['filters']['cf_user_follow_message']['expose']['required'] = TRUE;
@@ -96,7 +104,6 @@ function commons_activity_streams_views_default_views() {
   $handler->display->display_options['filters']['cf_user_follow_message']['expose']['remember_roles'] = array(
     2 => '2',
     1 => 0,
-    3 => 0,
   );
 
   /* Display: Activity (Sidebar) */
@@ -113,18 +120,10 @@ function commons_activity_streams_views_default_views() {
   $handler->display->display_options['pager']['type'] = 'some';
   $handler->display->display_options['pager']['options']['items_per_page'] = '5';
   $handler->display->display_options['pager']['options']['offset'] = '0';
+  $handler->display->display_options['defaults']['relationships'] = FALSE;
+  $handler->display->display_options['defaults']['arguments'] = FALSE;
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: Content access: Access */
-  $handler->display->display_options['filters']['nid']['id'] = 'nid';
-  $handler->display->display_options['filters']['nid']['table'] = 'node_access';
-  $handler->display->display_options['filters']['nid']['field'] = 'nid';
-  $handler->display->display_options['filters']['nid']['relationship'] = 'field_target_nodes_target_id';
-  /* Filter criterion: Content: Published or admin */
-  $handler->display->display_options['filters']['status_extra']['id'] = 'status_extra';
-  $handler->display->display_options['filters']['status_extra']['table'] = 'node';
-  $handler->display->display_options['filters']['status_extra']['field'] = 'status_extra';
-  $handler->display->display_options['filters']['status_extra']['relationship'] = 'field_target_nodes_target_id';
   $handler->display->display_options['pane_category']['name'] = 'Commons';
   $handler->display->display_options['pane_category']['weight'] = '0';
 
@@ -134,6 +133,7 @@ function commons_activity_streams_views_default_views() {
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['pane_category']['name'] = 'Commons';
   $handler->display->display_options['pane_category']['weight'] = '0';
+  $handler->display->display_options['inherit_panels_path'] = '1';
   $export['commons_activity_streams_activity'] = $view;
 
   $view = new view();
