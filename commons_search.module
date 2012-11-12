@@ -25,16 +25,60 @@ function commons_search_module_implements_alter(&$implementations, $hook) {
 function commons_search_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'search_block_form') {
     // Move the textfield to after the drop down.
+    $site_key = 'c-all';
     $form['search_block_form']['#weight'] = 1;
-    if (!module_exists('apachesolr_search')) {
-      // Only if we are using core search should we modify the options.
-      // Remove all content options.
-      unset($form['custom_search_types']['#options']['Content']);
-      // Add search options for Site and User search.
-      $form['custom_search_types']['#options'] = array_merge(
-        array('c-all' => t('Site')),
-        $form['custom_search_types']['#options']
-      );
+    if (module_exists('apachesolr_search')) {
+      $site_key = 'o-solr';
     }
+    $form['custom_search_types']['#options'] = array(
+      $site_key => t('Site'),
+      'c-user' => t('Users'),
+    );
+    $group = FALSE;
+    $node = current_path();
+    if (strpos($node, 'node/') !== FALSE
+      && is_numeric(substr($node, strpos($node, '/')+1))) {
+      $node = node_load(substr($node, strpos($node, '/')+1));
+      dsm($node);
+      if (property_exists($node, 'og_group_ref')) {
+        $group = TRUE;
+      }
+    }
+    if ($group) {
+      $form['custom_search_types']['#options']['c-group'] = t('Group');
+    }
+  }
+}
+
+/**
+ * Implements hook_search_info().
+ */
+function commons_search_search_info() {
+  return array(
+    'title' => t('Commons Search - Group Search'),
+    'path' => '',
+    'conditions_callback' => 'commons_search_conditions',
+  );
+}
+
+/**
+ * Return search conditions to search within the current group.
+ */
+function commons_search_conditions($keys) {
+  if (module_exists('apachesolr_search')) {
+    $conditions['fq'] = '';
+  }
+  return $conditions;
+}
+
+/**
+ * Implements hook_search_execute().
+ */
+function commons_search_search_execute($keys = NULL, $conditions = NULL) {
+  if (module_exists('apachesolr_search')) {
+    return apachesolr_search_search_execute($keys, $conditions);
+  }
+  else {
+    return search_search_execute($keys, $conditions);
   }
 }
