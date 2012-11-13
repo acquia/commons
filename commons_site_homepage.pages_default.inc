@@ -324,16 +324,13 @@ function commons_site_homepage_default_page_manager_pages() {
     $pane = new stdClass();
     $pane->pid = 'new-10';
     $pane->panel = 'three_33_top';
-    $pane->type = 'custom';
-    $pane->subtype = 'custom';
+    $pane->type = 'block';
+    $pane->subtype = 'commons_site_homepage-commons_site_homepage';
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array(
-      'admin_title' => 'Anonymous homepage welcome text',
-      'title' => variable_get('commons_anonymous_welcome_title', 'The open-source alternative for enterprise-scale business software'),
-      'body' => variable_get('commons_anonymous_welcome_body', 'Enable social networking to create productive interactions. Whether your community is public or private, Commons does it!'),
-      'format' => 'filtered_html',
-      'substitute' => TRUE,
+      'override_title' => 0,
+      'override_title_text' => '',
     );
     $pane->cache = array();
     $pane->style = array(
@@ -353,10 +350,10 @@ function commons_site_homepage_default_page_manager_pages() {
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array(
-      'admin_title' => 'Hero image',
-      'title' => '',
-      'body' => '<img class="commons-hero" src="profiles/commons/images/commons_default_hero.png" alt="Commons hero image"</img>',
-      'format' => 'full_html',
+      'admin_title' => 'Anonymous homepage welcome text',
+      'title' => variable_get('commons_anonymous_welcome_title', 'The open-source alternative for enterprise-scale business software'),
+      'body' => variable_get('commons_anonymous_welcome_body', 'Enable social networking to create productive interactions. Whether your community is public or private, Commons does it!'),
+      'format' => 'filtered_html',
       'substitute' => TRUE,
     );
     $pane->cache = array();
@@ -369,6 +366,30 @@ function commons_site_homepage_default_page_manager_pages() {
     $pane->locks = array();
     $display->content['new-11'] = $pane;
     $display->panels['three_33_top'][1] = 'new-11';
+    $pane = new stdClass();
+    $pane->pid = 'new-12';
+    $pane->panel = 'three_33_top';
+    $pane->type = 'custom';
+    $pane->subtype = 'custom';
+    $pane->shown = TRUE;
+    $pane->access = array();
+    $pane->configuration = array(
+      'admin_title' => 'Hero image',
+      'title' => '',
+      'body' => '<img class="commons-hero" src="profiles/commons/images/commons_default_hero.png" alt="Commons hero image"</img>',
+      'format' => 'full_html',
+      'substitute' => TRUE,
+    );
+    $pane->cache = array();
+    $pane->style = array(
+      'settings' => NULL,
+    );
+    $pane->css = array();
+    $pane->extras = array();
+    $pane->position = 2;
+    $pane->locks = array();
+    $display->content['new-12'] = $pane;
+    $display->panels['three_33_top'][2] = 'new-12';
   $display->hide_title = PANELS_TITLE_NONE;
   $display->title_pane = '0';
   $handler->conf['display'] = $display;

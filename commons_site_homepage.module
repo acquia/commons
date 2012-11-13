@@ -25,3 +25,29 @@ function commons_site_homepage_form_alter(&$form, &$form_state, $form_id) {
     }
   }
 }
+
+/**
+ * Implements hook_block_info().
+ */
+function commons_site_homepage_block_info() {
+  $blocks['commons_site_homepage'] = array(
+    'info' => t('Commons anonymous homepage Sign up/login buttons'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ *  Defines a simple "Signup or Login" block for use
+ *  on the anonymous site homepage.
+ */
+function commons_site_homepage_block_view() {
+  $block['content'] = '';
+  if (variable_get('user_register', USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL)) {
+    $block['content'] .= l(t('Signup'), 'user/register', array('attributes' => array('title' => t('Sign up')))) . ' ';
+  }
+  $block['content'] .= l(t('Login'), 'user/login');
+  $block['subject'] = '';
+  return $block;
+}
