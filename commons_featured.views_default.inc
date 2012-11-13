@@ -22,7 +22,7 @@ function commons_featured_views_default_views() {
 
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'Featured';
+  $handler->display->display_options['title'] = 'Featured on this site';
   $handler->display->display_options['use_more'] = TRUE;
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['access']['type'] = 'perm';
@@ -152,6 +152,7 @@ function commons_featured_views_default_views() {
     'default' => 'default',
     'page' => 'page',
   );
+  $handler->display->display_options['sitename_title'] = 1;
 
   /* Display: Featured content */
   $handler = $view->new_display('panel_pane', 'Featured content', 'panel_pane_1');
