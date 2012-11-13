@@ -429,10 +429,11 @@ var {
  */
 #page-title {
   margin: 0 0 0 6px;
+  font-weight:300;
 }
 
 #page-top {
-  margin: 20px 0px;
+  margin: 20px 0;
 }
 
 /* =============================================================================
@@ -1539,6 +1540,57 @@ ul.action-links {
     }
   }
 }
+
+.view-id-commons_featured {
+  .views-field-title .field-content {
+    background-repeat:no-repeat;
+  }
+  .views-field-field-date, .views-field-field-address {
+    margin:0 0 0 18px;
+  }
+  .type-Event {
+    background-image:image-url('icons/icon-gray-event.png');
+    background-position:left 1px;
+    padding:0 0 0 18px;
+  }
+  .type-Post {
+    background-image:image-url('icons/icon-gray-post.png');
+    background-position:left 1px;
+    padding:0 0 0 18px;
+  }
+}
+
+.views-exposed-widgets {
+  margin-bottom:1.5em;
+  .views-exposed-widget {
+    padding:0;
+    .form-select {
+      border:none !important;
+      background:transparent !important;
+      color:$light_blue;
+      cursor:pointer;
+      padding-right:0;
+      padding:0 0.5em;
+      
+    }
+    label {
+      float:left;
+      font-weight:normal;
+      color:$light_gray;
+      padding:1px 0 0 0;
+    }  
+  }
+  .views-widget {
+    float:left;
+  }
+  .views-submit-button {
+    padding:0;
+    .form-submit {
+      margin-top:0;
+    }
+  }
+}
+
 /* =============================================================================
  *   Block Styling
  * ========================================================================== */
@@ -2424,6 +2476,10 @@ body.front.logged-in {
         text-decoration:none;
       }
     }
+  }
+  .views-exposed-widgets {
+    margin-top:-20px;
+    margin-left:-10px;
   }
 }
 
