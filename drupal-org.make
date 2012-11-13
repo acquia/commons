@@ -143,6 +143,9 @@ projects[realname][subdir] = "contrib"
 projects[registration][version] = "1.x-dev"
 projects[registration][type] = "module"
 projects[registration][subdir] = "contrib"
+; The "slots used" Views field should be a child of views_handler_field_numeric
+; http://drupal.org/node/1838930
+projects[registration][patch][] = "http://drupal.org/files/registration-slots-used-views-handler-field-numeric.patch"
 
 projects[rules][type] = "module"
 projects[rules][subdir] = "contrib"
