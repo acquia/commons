@@ -18,5 +18,5 @@ function commons_groups_directory_ctools_plugin_api() {
  * Implements hook_views_api().
  */
 function commons_groups_directory_views_api() {
-  return array("version" => "3.0");
+  return array("api" => "3.0");
 }

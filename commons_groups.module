@@ -6,12 +6,38 @@
 
 include_once 'commons_groups.features.inc';
 
+/**
+ * Implements hook_block_info().
+ */
+function commons_groups_block_info() {
+   $blocks['commons_groups_create_group'] = array(
+    'info' => t('"Create a group" call to action'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  return $blocks;
+}
 
+/**
+ * Implements hook_block_view().
+ */
+function commons_groups_block_view() {
+  $block['subject'] = '';
+  if (node_access('create', 'group')) {
+    $block['content'] = l(t('Create a group'), 'node/add/group');
+  }
+  else {
+    $block['content'] = '';
+  }
+  return $block;
+}
 
 /**
 * Implements hook_form_alter().
 */
 function commons_groups_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'group_node_form' && is_null($form['nid']['#value']) && $node->status == 0) {
+    $form['actions']['submit']['#submit'][] = 'commons_groups_group_submission_message';
+  }
   if (in_array($form_id, array('og_ui_admin_global_permissions', 'og_ui_admin_permissions'))) {
     $enabled_node_types = commons_groups_get_enabled_node_types();
     if (!empty($enabled_node_types)) {
@@ -187,6 +213,9 @@ function commons_groups_message_partial_default() {
   return $partial;
 }
 
+function commons_groups_group_submission_message() {
+  drupal_set_message(t('Thanks for your group submission! This group has entered the moderation queue and will be reviewed shortly.'));
+}
 
 /**
 * Default value function for the og_group_ref reference field.
