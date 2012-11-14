@@ -38,6 +38,12 @@ function commons_groups_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'group_node_form' && is_null($form['nid']['#value']) && $node->status == 0) {
     $form['actions']['submit']['#submit'][] = 'commons_groups_group_submission_message';
   }
+  if (isset($form['#node'])) {
+    $enabled_node_types = commons_groups_get_enabled_node_types();
+    if (isset($enabled_node_types[$form['#node']->type])) {
+      $form['actions']['submit']['#submit'][] = 'commons_groups_node_in_group_submit';
+    }
+  }
   if (in_array($form_id, array('og_ui_admin_global_permissions', 'og_ui_admin_permissions'))) {
     $enabled_node_types = commons_groups_get_enabled_node_types();
     if (!empty($enabled_node_types)) {
@@ -49,7 +55,15 @@ function commons_groups_form_alter(&$form, &$form_state, $form_id) {
   }
 }
 
-
+/**
+ * Submit handler called if the form is for a node enabled as group content.
+ */
+function commons_groups_node_in_group_submit(&$form, &$form_state) {
+  if (isset($form_state['values']['og_group_ref'][LANGUAGE_NONE][0])) {
+    $group = $form_state['values']['og_group_ref'][LANGUAGE_NONE][0]['target_id'];
+    $form_state['redirect'] = 'node/' . $group;
+  }
+}
 /**
 * Implements hook_system_info_alter().
 */
