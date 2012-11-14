@@ -262,6 +262,29 @@ function commons_user_profile_pages_default_page_manager_handlers() {
     $pane->locks = array();
     $display->content['new-9'] = $pane;
     $display->panels['three_33_top'][4] = 'new-9';
+    $pane = new stdClass();
+    $pane->pid = 'new-10';
+    $pane->panel = 'three_33_top';
+    $pane->type = 'token';
+    $pane->subtype = 'user:flag-commons-follow-user-link';
+    $pane->shown = TRUE;
+    $pane->access = array();
+    $pane->configuration = array(
+      'sanitize' => 1,
+      'context' => 'argument_entity_id:user_1',
+      'override_title' => 1,
+      'override_title_text' => '',
+    );
+    $pane->cache = array();
+    $pane->style = array(
+      'settings' => NULL,
+    );
+    $pane->css = array();
+    $pane->extras = array();
+    $pane->position = 5;
+    $pane->locks = array();
+    $display->content['new-10'] = $pane;
+    $display->panels['three_33_top'][5] = 'new-10';
   $display->hide_title = PANELS_TITLE_FIXED;
   $display->title_pane = '0';
   $handler->conf['display'] = $display;
