@@ -39,12 +39,10 @@ function commons_search_form_alter(&$form, &$form_state, $form_id) {
     if (strpos($node, 'node/') !== FALSE
       && is_numeric(substr($node, strpos($node, '/')+1))) {
       $node = node_load(substr($node, strpos($node, '/')+1));
-      if (property_exists($node, 'og_group_ref')) {
-        $group = TRUE;
-      }
+      $group = ($node->type == 'group');
     }
     if ($group) {
-      $form['custom_search_types']['#options']['c-group'] = t('Group');
+      $form['custom_search_types']['#options']['o-commons_search'] = t('Group');
     }
   }
 }
@@ -54,8 +52,8 @@ function commons_search_form_alter(&$form, &$form_state, $form_id) {
  */
 function commons_search_search_info() {
   return array(
-    'title' => t('Commons Search - Group Search'),
-    'path' => '',
+    'title' => t('Group'),
+    'path' => 'group',
     'conditions_callback' => 'commons_search_conditions',
   );
 }
@@ -64,8 +62,18 @@ function commons_search_search_info() {
  * Return search conditions to search within the current group.
  */
 function commons_search_conditions($keys) {
-  if (module_exists('apachesolr_search')) {
-    $conditions['fq'] = '';
+  $conditions = array();
+  $gnid = FALSE;
+  $node = current_path();
+  if (strpos($node, 'node/') !== FALSE
+    && is_numeric(substr($node, strpos($node, '/')+1))) {
+    $node = node_load(substr($node, strpos($node, '/')+1));
+    if (property_exists($node, 'og_group_ref')) {
+      $gnid = reset($node->og_group_ref);
+    }
+  }
+  if (module_exists('apachesolr_search') && $gnid !== FALSE) {
+    $conditions['fq'] = 'sm_og_group_ref:"node:' . $gnid . '"';
   }
   return $conditions;
 }
