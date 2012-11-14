@@ -57,6 +57,13 @@ function commons_follow_user_views_default_views() {
   $handler->display->display_options['relationships']['uid']['field'] = 'uid';
   $handler->display->display_options['relationships']['uid']['relationship'] = 'flag_content_rel';
   $handler->display->display_options['relationships']['uid']['required'] = TRUE;
+  /* Field: User: Name */
+  $handler->display->display_options['fields']['name']['id'] = 'name';
+  $handler->display->display_options['fields']['name']['table'] = 'users';
+  $handler->display->display_options['fields']['name']['field'] = 'name';
+  $handler->display->display_options['fields']['name']['relationship'] = 'uid';
+  $handler->display->display_options['fields']['name']['label'] = '';
+  $handler->display->display_options['fields']['name']['element_label_colon'] = FALSE;
   /* Field: User: Picture */
   $handler->display->display_options['fields']['picture']['id'] = 'picture';
   $handler->display->display_options['fields']['picture']['table'] = 'users';
@@ -74,11 +81,14 @@ function commons_follow_user_views_default_views() {
   $handler->display->display_options['arguments']['content_id']['table'] = 'flag_content';
   $handler->display->display_options['arguments']['content_id']['field'] = 'content_id';
   $handler->display->display_options['arguments']['content_id']['relationship'] = 'flag_content_rel';
-  $handler->display->display_options['arguments']['content_id']['default_action'] = 'empty';
-  $handler->display->display_options['arguments']['content_id']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['content_id']['default_action'] = 'default';
+  $handler->display->display_options['arguments']['content_id']['default_argument_type'] = 'user';
+  $handler->display->display_options['arguments']['content_id']['default_argument_options']['user'] = FALSE;
   $handler->display->display_options['arguments']['content_id']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['content_id']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['content_id']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['content_id']['specify_validation'] = TRUE;
+  $handler->display->display_options['arguments']['content_id']['validate']['type'] = 'flag_flaggable_user';
   /* Filter criterion: User: Active */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'users';
@@ -161,11 +171,13 @@ function commons_follow_user_views_default_views() {
   $handler->display->display_options['arguments']['uid']['table'] = 'flag_content';
   $handler->display->display_options['arguments']['uid']['field'] = 'uid';
   $handler->display->display_options['arguments']['uid']['relationship'] = 'flag_content_rel';
-  $handler->display->display_options['arguments']['uid']['default_action'] = 'empty';
-  $handler->display->display_options['arguments']['uid']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['uid']['default_action'] = 'default';
+  $handler->display->display_options['arguments']['uid']['default_argument_type'] = 'user';
+  $handler->display->display_options['arguments']['uid']['default_argument_options']['user'] = FALSE;
   $handler->display->display_options['arguments']['uid']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['uid']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['uid']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['uid']['validate']['type'] = 'user';
   /* Filter criterion: User: Active */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'users';
