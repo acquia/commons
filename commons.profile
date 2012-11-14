@@ -12,6 +12,20 @@
 function commons_form_install_configure_form_alter(&$form, $form_state) {
   // Pre-populate the site name with the server name.
   $form['site_information']['site_name']['#default_value'] = $_SERVER['SERVER_NAME'];
+
+  $form['admin_account']['field_name_first'] = array(
+    '#type' => 'textfield',
+    '#title' => 'First name',
+    '#weight' => -10,
+  );
+
+  $form['admin_account']['field_name_last'] = array(
+    '#type' => 'textfield',
+    '#title' => 'Last name',
+    '#weight' => -9,
+  );
+
+  $form['#submit'][] = 'commons_admin_save_fullname';
 }
 
 /**
@@ -37,7 +51,7 @@ function commons_install_tasks() {
       'display' => FALSE,
       'type' => '',
       'run' => $demo_content ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
-    )
+    ),
   );
 }
 
@@ -57,8 +71,21 @@ function commons_revert_features() {
     features_revert($revert);
     $i++;
   }
-
 }
+
+/**
+ * Save the full name of the first user.
+ */
+function commons_admin_save_fullname($form_id, &$form_state) {
+  $values = $form_state['values'];
+    if (!empty($values['field_name_first']) || !empty($values['field_name_last'])) {
+    $account = user_load(1);
+    $account->field_name_first[LANGUAGE_NONE][0]['value'] = $values['field_name_first'];
+    $account->field_name_last[LANGUAGE_NONE][0]['value'] = $values['field_name_last'];
+    user_save($account);
+  }
+}
+
 /**
  * Configuration form to set welcome text for the anonymous site homepage.
  */
