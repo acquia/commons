@@ -29,6 +29,7 @@ function commons_install() {
   drupal_write_record('block', $menu_block);
   $search_block = array(
     'module' => 'search',
+    'delta' => 'form',
     'theme' => 'commons_origins',
     'visibility' => 0,
     'region' => 'header',
