@@ -43,6 +43,20 @@ function commons_search_form_alter(&$form, &$form_state, $form_id) {
     }
     if ($group) {
       $form['custom_search_types']['#options']['o-commons_search'] = t('Group');
+      $form_state['search_group_id'] = $node->nid;
+      $form['#submit'][] = 'commons_search_search_form_submit';
+    }
+  }
+}
+
+/**
+ * Search form submit handler.
+ * Add group id filter if appropriate.
+ */
+function commons_search_search_form_submit($form, &$form_state) {
+  if (isset($form_state['search_group_id'])) {
+    if (module_exists('apachesolr_search')) {
+      $form_state['redirect'] .= '&f[1]=sm_og_group_ref:node:' . $form_state['search_group_id'];
     }
   }
 }
@@ -64,18 +78,16 @@ function commons_search_search_info() {
 function commons_search_conditions($keys) {
   $conditions = array();
   $gnid = FALSE;
-  $node = current_path();
-  if (strpos($node, 'node/') !== FALSE
-    && is_numeric(substr($node, strpos($node, '/')+1))) {
-    $node = node_load(substr($node, strpos($node, '/')+1));
-    if (property_exists($node, 'og_group_ref')) {
-      $gnid = reset($node->og_group_ref);
-    }
-  }
-  if (module_exists('apachesolr_search') && $gnid !== FALSE) {
-    $conditions['fq'] = 'sm_og_group_ref:"node:' . $gnid . '"';
-  }
   return $conditions;
+}
+
+/**
+ * Implements hook_query_alter().
+ */
+function commons_search_query_alter(QueryAlterableInterface $query) {
+  if ($query->hasTag('node_access')) {
+    // alter query to add og group ref id requirement
+  }
 }
 
 /**
