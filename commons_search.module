@@ -25,7 +25,7 @@ function commons_search_module_implements_alter(&$implementations, $hook) {
 function commons_search_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'search_block_form') {
     // Move the textfield to after the drop down.
-    $site_key = 'c-all';
+    $site_key = 'o-search_facetapi';
     $form['search_block_form']['#weight'] = 1;
     if (module_exists('apachesolr_search')) {
       $site_key = 'o-solr';
@@ -36,15 +36,19 @@ function commons_search_form_alter(&$form, &$form_state, $form_id) {
     );
     $group = FALSE;
     $node = current_path();
-    if (strpos($node, 'node/') !== FALSE
-      && is_numeric(substr($node, strpos($node, '/')+1))) {
-      $node = node_load(substr($node, strpos($node, '/')+1));
+    if ((strrpos($node, 'node/') !== FALSE || strrpos($node, 'group/') !== FALSE)
+      && is_numeric(substr($node, strrpos($node, '/')+1))) {
+      $node = node_load(substr($node, strrpos($node, '/')+1));
       $group = ($node->type == 'group');
     }
     if ($group) {
       $form['custom_search_types']['#options']['o-commons_search'] = t('Group');
+      $form['custom_search_types']["#default_value"] = 'o-commons_search';
       $form_state['search_group_id'] = $node->nid;
       $form['#submit'][] = 'commons_search_search_form_submit';
+    }
+    if (isset($_REQUEST['keys'])) {
+      $form['search_block_form']['#default_value'] = check_plain($_REQUEST['keys']);
     }
   }
 }
@@ -55,11 +59,19 @@ function commons_search_form_alter(&$form, &$form_state, $form_id) {
  */
 function commons_search_search_form_submit($form, &$form_state) {
   if (isset($form_state['search_group_id'])) {
-    if (module_exists('apachesolr_search')) {
+    $keys = $form_state['values']['search_block_form'];
+    if (module_exists('commons_search_solr')) {
       $form_state['redirect'] .= '&f[1]=sm_og_group_ref:node:' . $form_state['search_group_id'];
     }
     else {
-      $form_state['redirect'] = 'search/group/' . $form_state['search_group_id'];
+      drupal_goto('search/group/' . $form_state['search_group_id'], array('query' => array('keys' => $keys)));
     }
   }
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function commons_search_views_api() {
+  return array("api" => "3.0");
 }

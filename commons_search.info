@@ -1,12 +1,14 @@
 name = Commons Search
 description = Provide the global search block.
 core = 7.x
-package = Commons - Building blocks
+package = Commons - Search
 version = 7.x-3.0-alpha1
 project = commons_search
 dependencies[] = ctools
 dependencies[] = strongarm
 dependencies[] = custom_search
+dependencies[] = views
+dependencies[] = views_load_more
 features[ctools][] = strongarm:strongarm:1
 features[features_api][] = api:1
 features[variable][] = custom_search_any_force
@@ -52,5 +54,6 @@ features[variable][] = custom_search_type_selector
 features[variable][] = custom_search_type_selector_all
 features[variable][] = custom_search_type_selector_label
 features[variable][] = custom_search_type_selector_label_visibility
+features[views_view][] = group_search
 
 stylesheets[all][] = css/commons_search.css
