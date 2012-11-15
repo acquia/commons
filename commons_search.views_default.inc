@@ -7,7 +7,7 @@
 /**
  * Implements hook_views_default_views().
  */
-function commons_search_core_views_default_views() {
+function commons_search_views_default_views() {
   $export = array();
 
   $view = new view();
