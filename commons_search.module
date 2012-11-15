@@ -25,11 +25,19 @@ function commons_search_module_implements_alter(&$implementations, $hook) {
 function commons_search_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'search_block_form') {
     // Move the textfield to after the drop down.
-    $site_key = 'o-search_facetapi';
+    $site_key = 'c-all';
     $form['search_block_form']['#weight'] = 1;
-    if (module_exists('apachesolr_search')) {
+    if (module_exists('commons_search_core')) {
+      // We're using faceted core search, so change Site search key to reflect
+      // the change of search engines.
+      $site_key = 'o-search_facetapi';
+    }
+    else if (module_exists('commons_search_solr')) {
+      // Are we using Apache Solr? If so change the Site search key to reflect
+      // the change of search engines.
       $site_key = 'o-solr';
     }
+    // Overwrite all options so we only have 3 (at most).
     $form['custom_search_types']['#options'] = array(
       $site_key => t('Site'),
       'c-user' => t('Users'),
@@ -38,16 +46,22 @@ function commons_search_form_alter(&$form, &$form_state, $form_id) {
     $node = current_path();
     if ((strrpos($node, 'node/') !== FALSE || strrpos($node, 'group/') !== FALSE)
       && is_numeric(substr($node, strrpos($node, '/')+1))) {
+      // If we're on a page that looks like a group node, see if it is actually
+      // a group node.
       $node = node_load(substr($node, strrpos($node, '/')+1));
       $group = ($node->type == 'group');
     }
     if ($group) {
+      // Current page is a group node, so add group search option to the
+      // dropdown menu and set the current group id.
       $form['custom_search_types']['#options']['o-commons_search'] = t('Group');
       $form['custom_search_types']["#default_value"] = 'o-commons_search';
       $form_state['search_group_id'] = $node->nid;
       $form['#submit'][] = 'commons_search_search_form_submit';
     }
     if (isset($_REQUEST['keys'])) {
+      // If we've already searched, refill the search box with the current
+      // search keywords.
       $form['search_block_form']['#default_value'] = check_plain($_REQUEST['keys']);
     }
   }
@@ -61,9 +75,13 @@ function commons_search_search_form_submit($form, &$form_state) {
   if (isset($form_state['search_group_id'])) {
     $keys = $form_state['values']['search_block_form'];
     if (module_exists('commons_search_solr')) {
+      // Add on a filter to the solr query to only list results within the
+      // specified group.
       $form_state['redirect'] .= '&f[1]=sm_og_group_ref:node:' . $form_state['search_group_id'];
     }
     else {
+      // Using core search to search within a group doesn't work, so we simply
+      // use a view with exposed search terms to do the searching.
       drupal_goto('search/group/' . $form_state['search_group_id'], array('query' => array('keys' => $keys)));
     }
   }
