@@ -35,7 +35,7 @@ function commons_groups_block_view() {
 * Implements hook_form_alter().
 */
 function commons_groups_form_alter(&$form, &$form_state, $form_id) {
-  if ($form_id == 'group_node_form' && is_null($form['nid']['#value']) && $node->status == 0) {
+  if ($form_id == 'group_node_form' && is_null($form['nid']['#value'])) {
     $form['actions']['submit']['#submit'][] = 'commons_groups_group_submission_message';
   }
   if (isset($form['#node'])) {
@@ -227,8 +227,10 @@ function commons_groups_message_partial_default() {
   return $partial;
 }
 
-function commons_groups_group_submission_message() {
-  drupal_set_message(t('Thanks for your group submission! This group has entered the moderation queue and will be reviewed shortly.'));
+function commons_groups_group_submission_message($form, &$form_state) {
+  if ($form_state['values']['status'] !== 1) {
+    drupal_set_message(t('Thanks for your group submission! This group has entered the moderation queue and will be reviewed shortly.'));
+  }
 }
 
 /**
