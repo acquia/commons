@@ -124,7 +124,7 @@ function commons_wikis_views_pre_render(&$view) {
  * Implements hook_node_update().
  */
 function commons_wikis_node_update($node) {
-  if ($node->type == 'wiki') {
+  if ($node->type == 'wiki' && module_exists('message')) {
     $account = user_load($node->uid);
     $message = message_create('commons_wikis_wiki_updated', array('uid' => $account->uid, 'timestamp' => REQUEST_TIME));
     $wrapper = entity_metadata_wrapper('message', $message);
