@@ -124,6 +124,9 @@ projects[panelizer][subdir] = "contrib"
 
 projects[panels][type] = "module"
 projects[panels][subdir] = "contrib"
+; Fatal error: Call to undefined function panels_get_layouts()
+; http://drupal.org/node/1828684#comment-6694732
+projects[panels][patch][] = "http://drupal.org/node/1828684#comment-6694732"
 
 projects[queue_mail][type] = "module"
 projects[queue_mail][subdir] = "contrib"
