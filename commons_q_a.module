@@ -42,6 +42,7 @@ function commons_q_a_commons_bw_group_widget() {
   foreach (array('commons_radioactivity_entity_types', 'commons_groups_entity_types') as $key) {
     if (isset($items[$key])) {
       $items[$key]->value['node']['question'] = 1;
+      // @Todo: Submitting an answer should redirect to the Question page with a permalink to the answer rather than to the group homepage.
       $items[$key]->value['node']['answer'] = 1;
     }
   }
