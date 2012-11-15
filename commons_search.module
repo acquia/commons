@@ -58,46 +58,8 @@ function commons_search_search_form_submit($form, &$form_state) {
     if (module_exists('apachesolr_search')) {
       $form_state['redirect'] .= '&f[1]=sm_og_group_ref:node:' . $form_state['search_group_id'];
     }
-  }
-}
-
-/**
- * Implements hook_search_info().
- */
-function commons_search_search_info() {
-  return array(
-    'title' => t('Group'),
-    'path' => 'group',
-    'conditions_callback' => 'commons_search_conditions',
-  );
-}
-
-/**
- * Return search conditions to search within the current group.
- */
-function commons_search_conditions($keys) {
-  $conditions = array();
-  $gnid = FALSE;
-  return $conditions;
-}
-
-/**
- * Implements hook_query_alter().
- */
-function commons_search_query_alter(QueryAlterableInterface $query) {
-  if ($query->hasTag('node_access')) {
-    // alter query to add og group ref id requirement
-  }
-}
-
-/**
- * Implements hook_search_execute().
- */
-function commons_search_search_execute($keys = NULL, $conditions = NULL) {
-  if (module_exists('apachesolr_search')) {
-    return apachesolr_search_search_execute($keys, $conditions);
-  }
-  else {
-    return search_search_execute($keys, $conditions);
+    else {
+      $form_state['redirect'] = 'search/group/' . $form_state['search_group_id'];
+    }
   }
 }
