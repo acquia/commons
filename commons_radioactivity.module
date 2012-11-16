@@ -18,8 +18,17 @@ define('COMMONS_RADIOACTIVITY_LIKE', 4);
 define('COMMONS_RADIOACTIVITY_NODE_IN_GROUP', 4);
 define('COMMONS_RADIOACTIVITY_FLAG_NODE', 6);
 
-
-
+/**
+* Implements hook_form_alter().
+*/
+function commons_radioactivity_form_alter(&$form, &$form_state, $form_id) {
+  if (isset($form['#node_edit_form']) && isset($form['field_radioactivity'])) {
+    $form['field_radioactivity']['#type'] = 'fieldset';
+    $form['field_radioactivity']['#title'] = t('Radioactivity energy');
+    $form['field_radioactivity']['#collapsed'] = TRUE;
+    $form['field_radioactivity']['#group'] = 'additional_settings';
+  }
+}
 /**
 * Implements hook_system_info_alter().
 */
