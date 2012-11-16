@@ -184,7 +184,7 @@ function commons_demo_content() {
   node_object_prepare($boston_group);
 
   $boston_group->title = 'Boston';
-  $boston_group->body = commons_veggie_ipsum();
+  $boston_group->body[LANGUAGE_NONE][0]['value'] = commons_veggie_ipsum();
   $boston_group->uid = $demo_users['Lou White']->uid;
   $boston_group->language = LANGUAGE_NONE;
   $boston_group->created = time() - 604800;
@@ -197,7 +197,7 @@ function commons_demo_content() {
   node_object_prepare($nyc_group);
 
   $nyc_group->title = 'New York City';
-  $nyc_group->body = commons_veggie_ipsum();
+  $nyc_group->body[LANGUAGE_NONE][0]['value'] = commons_veggie_ipsum();
   $nyc_group->uid = $demo_users['Lou White']->uid;
   $nyc_group->language = LANGUAGE_NONE;
   $nyc_group->status = 1;
