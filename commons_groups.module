@@ -7,6 +7,15 @@
 include_once 'commons_groups.features.inc';
 
 /**
+ * Implements hook_menu_alter().
+ */
+function commons_groups_menu_alter(&$items) {
+  // Provide a more informative title.
+  if (isset($items['node/%/group'])) {
+    $items['node/%/group']['title'] = t('Administer group');
+  }
+}
+/**
  * Implements hook_block_info().
  */
 function commons_groups_block_info() {
