@@ -25,11 +25,13 @@ function commons_posts_commons_bw_group_widget() {
 * Implements hook_views_pre_render().
 */
 function commons_posts_views_pre_render(&$view) {
-  if ($view->name == 'commons_bw_posts' && user_access('Post: Create new content')) {
+  if ($view->name == 'commons_bw_posts') {
     $group_id = $view->args[0];
-    $view->attachment_before = l('Create a post', 'node/add/post', array('query' => array('og_group_ref' => $group_id)));
-  }  
- }
+    if (og_user_access('node', $group_id, 'create post content')) {
+      $view->attachment_before = l('Create a post', 'node/add/post', array('query' => array('og_group_ref' => $group_id)));
+    }
+  }
+}
 
 /**
 * Implements hook_strongarm_alter().
@@ -41,18 +43,18 @@ function commons_posts_views_pre_render(&$view) {
     foreach($items['rate_widgets']->value as $key => $widget) {
       if ($widget->name == 'commons_like') {
         if (!in_array('post', $items['rate_widgets']->value[$key]->node_types)) {
-          $items['rate_widgets']->value[$key]->node_types[] = 'post';  
-        }       
+          $items['rate_widgets']->value[$key]->node_types[] = 'post';
+        }
         if (!in_array('post', $items['rate_widgets']->value[$key]->comment_types)) {
-          $items['rate_widgets']->value[$key]->comment_types[] = 'post';  
+          $items['rate_widgets']->value[$key]->comment_types[] = 'post';
         }
       }
     }
   }
   // Expose the post content type for integration with Commons Radioactivity
-  // and Commons Groups.  
+  // and Commons Groups.
   foreach (array('commons_radioactivity_entity_types', 'commons_groups_entity_types') as $key) {
-    if (isset($items[$key])) {  
+    if (isset($items[$key])) {
       $items[$key]->value['node']['post'] = 1;
     }
   }
