@@ -123,6 +123,9 @@ projects[oauthconnector][subdir] = "contrib"
 projects[og][version] = "2.x-dev"
 projects[og][type] = "module"
 projects[og][subdir] = "contrib"
+; Language tweak for 'user has been added to [group]'
+; http://drupal.org/node/1842830
+projects[og][patch][] = "http://drupal.org/files/og-add-group-message.patch"
 
 projects[panelizer][type] = "module"
 projects[panelizer][version] = "3.x-dev"
