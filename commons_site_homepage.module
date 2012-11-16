@@ -10,6 +10,10 @@ include_once 'commons_site_homepage.features.inc';
 * Implements hook_form_alter().
 */
 function commons_site_homepage_form_alter(&$form, &$form_state, $form_id) {
+  // Redirect users to the site homepage after login or registration.
+  if ($form_id == 'user_register_form' || $form_id == 'user_login') {
+    $form['#submit'][] = 'commons_homepage_user_register_login_submit';
+  }
   if ($form_id == 'views_exposed_form' && $form['#id'] == 'views-exposed-form-commons-homepage-content-panel-pane-1') {
     // We customize the text inside the exposed filter form elements
     // to allow for them to form a sentence, such as:
@@ -24,6 +28,10 @@ function commons_site_homepage_form_alter(&$form, &$form_state, $form_id) {
       }
     }
   }
+}
+
+function commons_homepage_user_register_login_submit($form, &$form_state) {
+  $form_state['redirect'] = 'home';
 }
 
 /**
