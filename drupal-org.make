@@ -49,8 +49,8 @@ projects[entityreference][subdir] = "contrib"
 
 projects[edit_profile][type] = "module"
 projects[edit_profile][subdir] = "contrib"
-projects[edit_profile][download_type] = "git"
-projects[edit_profile][url] = "http://git.drupal.org/project/edit_profile.git"
+projects[edit_profile][download][type] = "git"
+projects[edit_profile][download][url] = "http://git.drupal.org/project/edit_profile.git"
 projects[edit_profile][download][branch] = "7.x-1.x"
 
 projects[entityreference_prepopulate][type] = "module"
