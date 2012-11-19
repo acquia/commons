@@ -28,6 +28,19 @@ function commons_form_install_configure_form_alter(&$form, $form_state) {
   $form['#submit'][] = 'commons_admin_save_fullname';
 }
 
+
+/**
+ * Implements hook_update_projects_alter().
+ */
+function commons_update_projects_alter(&$projects) {
+  // Enable update status for the Commons profile.
+  $modules = system_rebuild_module_data();
+  // The module object is shared in the request, so we need to clone it here.
+  $commons = clone $modules['commons'];
+  $commons->info['hidden'] = FALSE;
+  _update_process_info_list($projects, array('commons' => $commons), 'module', TRUE);
+}
+
 /**
  * Implements hook_install_tasks().
  *
