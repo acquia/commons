@@ -47,7 +47,9 @@ function commons_groups_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'group_node_form' && is_null($form['nid']['#value'])) {
     $form['actions']['submit']['#submit'][] = 'commons_groups_group_submission_message';
   }
-  if (isset($form['#node'])) {
+  // Redirect the user back to the group homepage after submitting
+  // a node within a group.
+  if (isset($form['#node']) && substr($form_id, -10) == '_node_form') {
     $enabled_node_types = commons_groups_get_enabled_node_types();
     if (isset($enabled_node_types[$form['#node']->type])) {
       $form['actions']['submit']['#submit'][] = 'commons_groups_node_in_group_submit';
