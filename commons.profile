@@ -65,7 +65,68 @@ function commons_install_tasks() {
       'type' => '',
       'run' => $demo_content ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
     ),
+    'commons_create_first_group' => array(
+      'display_name' => st('Create the first group'),
+      'display' => TRUE,
+      'type' => 'form',
+    ),
   );
+}
+
+/**
+ * Let the admin user create the first group as part of the installation process
+ */
+function commons_create_first_group() {
+  $form['commons_first_group_explanation'] = array(
+    '#markup' => '<h2>' . st('Create the first group in your new community.') . '</h2>' . st("Commons uses groups to collect community members and content related to a particular interest, working goal or geographic area."),
+    '#weight' => -1,
+  );
+
+  $form['commons_fist_group_example'] = array(
+    '#markup' => theme('image', array('path' => 'profiles/commons/images/commons_group_description_sample.png', 'alt' => 'Group description page example', 'alt' => 'Group description example')),
+    '#weight' => 0,
+  );
+
+  $form['commons_first_group_title'] = array(
+    '#type' => 'textfield',
+    '#title' => st("Group name"),
+    '#description' => st('For example: "Boston food lovers" or "Engineering team."'),
+    '#required' => TRUE,
+  );
+
+  $form['commons_first_group_body'] = array(
+    '#type' => 'textarea',
+    '#title' => st('Group description'),
+    '#description' => st("This text will appear on the group's homepage and helps new contirbutors to become familiar with the purpose of the group. You can always change this text or add another group later."),
+    '#required' => TRUE,
+  );
+
+  $form['commons_first_group_submit'] = array(
+    '#type'  => 'submit',
+    '#value' => st('Save and continue')
+  );
+
+  return $form;
+}
+
+/**
+ * Save the first group form
+ *
+ * @see commons_create_first_group().
+ */
+function commons_create_first_group_submit($form_id, &$form_state) {
+  $values = $form_state['values'];
+
+  $first_group = new stdClass();
+  $first_group->type = 'group';
+  node_object_prepare($first_group);
+
+  $first_group->title = $values['commons_first_group_title'];
+  $first_group->body[LANGUAGE_NONE][0]['value'] = $values['commons_first_group_body'];
+  $first_group->uid = 1;
+  $first_group->language = LANGUAGE_NONE;
+  $first_group->status = 1;
+  node_save($first_group);
 }
 
 /*
