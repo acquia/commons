@@ -17,9 +17,9 @@ function commons_groups_field_default_field_instances() {
     $field_instances = array();
     foreach($commons_groups_entity_types['node'] as $type => $enabled) {
       if ($enabled) {
-        commons_groups_field_definition($field_instances, $type);  
+        commons_groups_field_definition($field_instances, $type);
       }
-      
+
     }
   }
 
@@ -155,6 +155,46 @@ function commons_groups_field_default_field_instances() {
       ),
       'type' => 'text_textarea',
       'weight' => 0,
+    ),
+  );
+
+  // Exported field_instance: 'node-post-field_topics'
+  $field_instances['node-group-field_topics'] = array(
+    'bundle' => 'group',
+    'default_value' => NULL,
+    'deleted' => '0',
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'taxonomy',
+        'settings' => array(),
+        'type' => 'taxonomy_term_reference_link',
+        'weight' => 4,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_topics',
+    'label' => 'Topics',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'taxonomy',
+      'settings' => array(
+        'autocomplete_path' => 'taxonomy/autocomplete',
+        'size' => 60,
+      ),
+      'type' => 'taxonomy_autocomplete',
+      'weight' => '6',
     ),
   );
 
