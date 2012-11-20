@@ -5,22 +5,18 @@ package = Commons - Building blocks
 php = 5.2.4
 project = commons_follow
 dependencies[] = commons_follow
-dependencies[] = entityreference
 dependencies[] = flag
 dependencies[] = message
+dependencies[] = views
 dependencies[] = views_content
-datestamp = 1348251874
+datestamp = 1353338060
 features[ctools][] = views:views_default:3.0
 features[features_api][] = api:1
 features[field_instance][] = message-commons_follow_user_user_followed-field_target_users
 features[flag][] = commons_follow_user
+features[flag][] = email_user
 features[message_type][] = commons_follow_user_user_followed
+features[views_view][] = commons_follow_user
 features[views_view][] = commons_follow_user_followers
 features[views_view][] = commons_follow_user_following
-
-
-; Information added by drush on 2012-11-08
-version = ""
-project = "commons_follow"
-datestamp = "1352387638"
 

@@ -5,14 +5,21 @@
  */
 
 /**
+ * Implements hook_views_api().
+ */
+function commons_follow_term_views_api() {
+  return array("api" => "3.0");
+}
+
+/**
  * Implements hook_flag_default_flags().
  */
 function commons_follow_term_flag_default_flags() {
   $flags = array();
-  // Exported flag: "Commons Follow (Taxonomy term)".
+  // Exported flag: "Topics you follow".
   $flags['commons_follow_term'] = array(
     'content_type' => 'taxonomy_term',
-    'title' => 'Commons Follow (Taxonomy term)',
+    'title' => 'Topics you follow',
     'global' => '0',
     'types' => array(
       0 => 'topics',
@@ -33,15 +40,47 @@ function commons_follow_term_flag_default_flags() {
         0 => '2',
       ),
     ),
-    'weight' => 0,
+    'weight' => '-8',
     'show_on_entity' => 1,
     'show_on_form' => 0,
     'access_author' => '',
-    'api_version' => 2,
     'module' => 'commons_follow_term',
     'locked' => array(
       0 => 'name',
     ),
+    'api_version' => 2,
   );
+
+  // Exported flag: "Commons Follow (Topics - Email)".
+  $flags['email_term'] = array(
+    'content_type' => 'taxonomy_term',
+    'title' => 'Commons Follow (Topics - Email)',
+    'global' => '0',
+    'types' => array(
+      0 => 'topics',
+    ),
+    'flag_short' => 'Send email updates',
+    'flag_long' => '',
+    'flag_message' => '',
+    'unflag_short' => 'Don\'t send email updates',
+    'unflag_long' => '',
+    'unflag_message' => '',
+    'unflag_denied_text' => '',
+    'link_type' => 'toggle',
+    'roles' => array(
+      'flag' => array(
+        0 => '2',
+      ),
+      'unflag' => array(
+        0 => '2',
+      ),
+    ),
+    'weight' => '-7',
+    'show_on_entity' => 1,
+    'show_on_form' => 0,
+    'access_author' => '',
+    'api_version' => 2,
+  );
+
   return $flags;
 }

@@ -8,11 +8,6 @@
  * Implements hook_field_default_field_instances().
  */
 function commons_follow_user_field_default_field_instances() {
-  // If the Message module doesn't exist, neither will our message type,
-  // so we can't add a field to it.
-  if (!module_exists('message')) {
-    return;
-  }
   $field_instances = array();
 
   // Exported field_instance: 'message-commons_follow_user_user_followed-field_target_users'
