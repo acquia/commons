@@ -291,7 +291,7 @@ projects[commons_posts][download][branch] = "7.x-3.x"
 
 projects[commons_profile_base][type] = "module"
 projects[commons_profile_base][subdir] = "contrib"
-projects[commons_profile_base][version] = "2.x-dev"
+projects[commons_profile_base][version] = "3.x-dev"
 
 projects[commons_profile_social][type] = "module"
 projects[commons_profile_social][subdir] = "contrib"
