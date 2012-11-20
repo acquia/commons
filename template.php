@@ -21,6 +21,13 @@
  * 2. Uncomment the required function to use.
  */
 
+function commons_origins_css_alter(&$css) {
+  $exclude = array(
+    'profiles/commons/modules/contrib/quicktabs/quicktabs_tabstyles/tabstyles/excel/excel.css' => FALSE,
+  );
+  $css = array_diff_key($css, $exclude);
+}
+
 
 /**
  * Preprocess variables for the html template.
