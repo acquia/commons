@@ -146,6 +146,7 @@ projects[queue_mail][subdir] = "contrib"
 
 projects[quicktabs][type] = "module"
 projects[quicktabs][subdir] = "contrib"
+projects[quicktabs][version] = "3.x-dev"
 
 projects[radioactivity][type] = "module"
 projects[radioactivity][subdir] = "contrib"
