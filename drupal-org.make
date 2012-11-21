@@ -318,6 +318,12 @@ projects[commons_site_homepage][download][type] = "git"
 projects[commons_site_homepage][download][url] = "http://git.drupal.org/project/commons_site_homepage.git"
 projects[commons_site_homepage][download][branch] = "7.x-3.x"
 
+projects[commons_utility_links][type] = "module"
+projects[commons_utility_links][subdir] = "contrib"
+projects[commons_utility_links][download][type] = "git"
+projects[commons_utility_links][download][url] = "http://git.drupal.org/project/commons_utility_links.git"
+projects[commons_utility_links][download][branch] = "7.x-3.x"
+
 projects[commons_user_profile_pages][type] = "module"
 projects[commons_user_profile_pages][subdir] = "contrib"
 projects[commons_user_profile_pages][download][type] = "git"
