@@ -43,7 +43,7 @@ function commons_follow_ui_menu() {
 function commons_follow_ui_commons_utility_links_alter(&$links) {
   global $user;
   $account = $user;
-  $links['notification_setting']= array(
+  $links['settings']= array(
     'href' => 'user/' . $account->uid . '/notification-settings',
     'title' => t('Notification settings'),
   );
