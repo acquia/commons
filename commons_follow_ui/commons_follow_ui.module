@@ -38,24 +38,15 @@ function commons_follow_ui_menu() {
 }
 
 /**
- * Implements hook_form_alter().
+ * Implements hook_commons_utility_links().
  */
-function commons_follow_ui_form_alter(&$form, &$form_state, $form_id) {
+function commons_follow_ui_commons_utility_links_alter(&$links) {
   global $user;
   $account = $user;
-  if ($form_id == 'search_block_form') {
-    if (!isset($form['utility_links'])) {
-      $form['utility_links'] = array(
-        '#type' => 'container',
-        '#weight' => -10,
-      );
-    }
-    $form['utility_links']['notification_settings_link'] = array(
-      '#type' => 'markup',
-      '#markup' => l('Settings', 'user/' . $account->uid . '/notification-settings'),
-      '#weight' => 4,
-    );
-  }
+  $links['notification_setting']= array(
+    'href' => 'user/' . $account->uid . '/notification-settings',
+    'title' => t('Notification settings'),
+  );
 }
 
 function commons_follow_ui_notification_settings_form($form, &$form_state, $account) {
