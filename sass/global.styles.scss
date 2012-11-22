@@ -1400,7 +1400,7 @@ ul.action-links {
 
 .pane-views-panes,
 .pane-views {
-  @extend %pod;
+  // @extend %pod;
   h2 {
     font:{
       size:20px;
@@ -1409,10 +1409,10 @@ ul.action-links {
   }
 }
 
-.pane-views-panes .block-inner,
-.pane-views .block-inner {
-  @extend %pod-content;
-}
+// .pane-views-panes .block-inner,
+// .pane-views .block-inner {
+//   @extend %pod-content;
+// }
 
 // move padding to views-row for full stretch borders
 .pane-commons-activity-streams-activity-panel-pane-1,
@@ -1459,6 +1459,13 @@ ul.action-links {
   }
 }
 
+.panels-ipe-portlet-wrapper {
+  @extend %pod;
+}
+
+.panels-ipe-portlet-content {
+  @extend %pod-content;
+}
 
 /* =============================================================================
  *   Views Styling
@@ -1564,28 +1571,24 @@ ul.action-links {
   margin-bottom:1.5em;
   .views-exposed-widget {
     padding:0;
-
     .form-select {
-      border:none;
-      background:transparent;
+      border:none !important;
+      background:transparent !important;
       color:$light_blue;
       cursor:pointer;
       padding-right:0;
+      padding:0 0.5em;
       display:block;
-      width: 120%;
-      @include appearance(none);
-      @include border-radius(0);
     }
-
     label {
-      display: inline-block;
+      float:left;
       font-weight:normal;
       color:$light_gray;
       padding:1px 0 0 0;
     }  
   }
   .views-widget {
-    display: inline-block;
+    float:left;
   }
   .views-submit-button {
     padding:0;
@@ -1776,9 +1779,6 @@ ul.action-links {
     background-position:right center;
     padding-right:10px;
     margin:3px 0 0 5px;
-    width: 120%;
-    @include appearance(none);
-    @include border-radius(0);
   }
   .form-text {
     color:$white;
@@ -2077,15 +2077,6 @@ ul.action-links {
 
   &.form-checkboxes ,
   &.form-radios {
-  }
-}
-
-.form-select-wrapper {
-  overflow: hidden;
-  display: inline-block;
-
-  .container-inline & {
-    display: inline-block;
   }
 }
 
@@ -2551,8 +2542,14 @@ body.front.logged-in {
     }
   }
   .views-exposed-widgets {
-    margin-top:-20px;
+    margin-top:-65px;
     margin-left:-10px;
+  }
+}
+
+.front {
+  .region-two-66-33-first, .region-two-66-33-second {
+    margin-top: 40px;
   }
 }
 
