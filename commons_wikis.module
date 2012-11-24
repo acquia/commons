@@ -53,14 +53,12 @@ function commons_wikis_user_revision_access($node = NULL, $old_callback = '_node
 function commons_wikis_og_user_access_alter(&$temp_perm, $context) {
   // Grant access to non-group members to be able to edit wiki nodes.
   // where the group node is public and content is public within the group.
-  $commons_groups_enabled_node_types = commons_groups_get_enabled_node_types();
+  $commons_groups_entity_types = commons_groups_get_group_content_entity_types();
   $group_content_restricted = (bool) (isset($context['group']->group_content_access[LANGUAGE_NONE][0]['value']) && $context['group']->group_content_access[LANGUAGE_NONE][0]['value'] == 2);
   // @TODO: Consider using a static here.
   $user_is_member = (bool)og_is_member('node', $context['group']->nid, 'user', $context['account']);
-  foreach ($commons_groups_enabled_node_types as $type => $status) {
-    if ($context['string'] == "update any wiki content" && (!$group_content_restricted || $user_is_member)) {
+  if ($context['string'] == "update any wiki content" && (!$group_content_restricted || $user_is_member)) {
       $temp_perm["update any wiki content"] = TRUE;
-    }
   }
 }
 
@@ -94,31 +92,17 @@ function commons_wikis_views_pre_render(&$view) {
 }
 
 /**
-* Implements hook_strongarm_alter().
-*/
- function commons_wikis_strongarm_alter(&$items) {
-  // Expose the Post content type for 'liking' via the Commons_like module
-  // by altering the configuration for the Rate.module widget that it provides.
-  if (!empty($items['rate_widgets']->value)) {
-    foreach($items['rate_widgets']->value as $key => $widget) {
-      if ($widget->name == 'commons_like') {
-        if (!in_array('wiki', $items['rate_widgets']->value[$key]->node_types)) {
-          $items['rate_widgets']->value[$key]->node_types[] = 'wiki';
-        }
-        if (!in_array('wiki', $items['rate_widgets']->value[$key]->comment_types)) {
-          $items['rate_widgets']->value[$key]->comment_types[] = 'wiki';
-        }
-      }
-    }
-  }
-  // Expose the post content type for integration with Commons Radioactivity
-  // and Commons Groups.
-  foreach (array('commons_radioactivity_entity_types', 'commons_groups_entity_types') as $key) {
-    if (isset($items[$key])) {
-      $items[$key]->value['node']['wiki'] = 1;
-    }
-  }
+ * Implements hook_commons_entity_integration.
+ */
+function commons_wikis_commons_entity_integration() {
+  return array(
+    'node' => array(
+      'wiki' => array(
+      ),
+    ),
+  );
 }
+
 
 /**
  * Implements hook_node_update().
