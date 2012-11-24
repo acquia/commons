@@ -28,32 +28,18 @@ function commons_documents_views_pre_render(&$view) {
   if ($view->name == 'commons_bw_documents' && user_access('Document: Create new content')) {
     $group_id = $view->args[0];
     $view->attachment_before = l('Create a document', 'node/add/document', array('query' => array('og_group_ref' => $group_id)));
-  }  
+  }
  }
 
+
 /**
-* Implements hook_strongarm_alter().
-*/
- function commons_documents_strongarm_alter(&$items) {
-  // Expose the Document content type for 'liking' via the Commons_like module
-  // by altering the configuration for the Rate.module widget that it provides.
-  if (!empty($items['rate_widgets']->value)) {
-    foreach($items['rate_widgets']->value as $key => $widget) {
-      if ($widget->name == 'commons_like') {
-        if (!in_array('document', $items['rate_widgets']->value[$key]->node_types)) {
-          $items['rate_widgets']->value[$key]->node_types[] = 'document';  
-        }       
-        if (!in_array('document', $items['rate_widgets']->value[$key]->comment_types)) {
-          $items['rate_widgets']->value[$key]->comment_types[] = 'document';  
-        }
-      }
-    }
-  }
-  // Expose the document content type for integration with Commons Radioactivity
-  // and Commons Groups.  
-  foreach (array('commons_radioactivity_entity_types', 'commons_groups_entity_types') as $key) {
-    if (isset($items[$key])) {  
-      $items[$key]->value['node']['document'] = 1;
-    }
-  }
+ * Implements hook_commons_entity_integration.
+ */
+function commons_documents_commons_entity_integration() {
+  return array(
+    'node' => array(
+      'document' => array(
+      ),
+    ),
+  );
 }
