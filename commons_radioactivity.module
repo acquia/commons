@@ -40,11 +40,11 @@ function commons_radioactivity_system_info_alter(&$info, $file, $type) {
   // and can sucessfully revert the field_instance component back
   // to its default state.
   if ($file->name == 'commons_radioactivity') {
-    $commons_radioactivity_entity_types = variable_get('commons_radioactivity_entity_types', array());
-    if (!empty($commons_radioactivity_entity_types['node'])) {
-      foreach ($commons_radioactivity_entity_types['node'] as $type => $status) {
-        if ($status) {
-          $info['features']['field_instance'][] = "node-$type-field_radioactivity";
+    $commons_radioactivity_entity_types = commons_radioactivity_get_radioactive_entity_types();
+    if (!empty($commons_radioactivity_entity_types)) {
+      foreach ($commons_radioactivity_entity_types as $entity_type => $bundles) {
+        foreach(array_keys($bundles) as $bundle) {
+          $info['features']['field_instance'][] = "$entity_type-$bundle-field_radioactivity";
         }
       }
     }
@@ -52,6 +52,31 @@ function commons_radioactivity_system_info_alter(&$info, $file, $type) {
 }
 
 
+/**
+* Returns an array of entity types that are enabled via Commons Radioactivity.
+*/
+function commons_radioactivity_get_radioactive_entity_types() {
+  // Find all Commons Entity integrations.
+  $commons_entity_integrations = module_invoke_all('commons_entity_integration');
+  if (empty($commons_entity_integrations)) {
+    return array();
+  }
+
+  foreach ($commons_entity_integrations as $entity_type => $integration) {
+    foreach ($integration as $bundle => $options) {
+      if (isset($options['radioactivity_exclude']) && $options['radioactivity_exclude'] == TRUE) {
+        unset($commons_entity_integrations[$entity_type][$bundle]);
+      }
+    }
+    // If an entity type has no integrations, don't return it.
+    if (empty($commons_entity_integrations[$entity_type])) {
+      unset($commons_entity_integrations[$entity_type]);
+    }
+  }
+
+  return $commons_entity_integrations;
+
+}
 /**
 * Helper function to create Radioactivity incidents for nodes.
 */

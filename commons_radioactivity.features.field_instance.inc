@@ -9,26 +9,23 @@
  */
 function commons_radioactivity_field_default_field_instances() {
   // Get a list of content types that should have the Radioactivity field added.
-  // Modules can alter this list by implementing hook_strongarm_alter().
-  $commons_radioactivity_entity_types = variable_get('commons_radioactivity_entity_types', array());
-  if (!empty($commons_radioactivity_entity_types['node'])) {
-    $field_instances = array();
-    foreach($commons_radioactivity_entity_types['node'] as $type => $status) {
-      if ($status) {
-        commons_radioactivity_field_definition($field_instances, $type);  
+  $commons_radioactivity_entity_types = commons_radioactivity_get_radioactive_entity_types();
+  if (!empty($commons_radioactivity_entity_types)) {
+    foreach ($commons_radioactivity_entity_types as $entity_type => $bundles) {
+      foreach (array_keys($bundles) as $bundle) {
+        commons_radioactivity_field_definition($field_instances, $entity_type, $bundle);
       }
     }
-    return $field_instances;  
   }
-  
+  return $field_instances;
 }
 
 /**
 * Contains a field definition export for the Radioactivity field for re-use
 * across content types.
 */
-function commons_radioactivity_field_definition(&$field_instances, $bundle) {
-  $field_instances["node-$bundle-field_radioactivity"] = array(
+function commons_radioactivity_field_definition(&$field_instances, $entity_type, $bundle) {
+  $field_instances["$entity_type-$bundle-field_radioactivity"] = array(
   'bundle' => $bundle,
   'default_value' => array(
     0 => array(
@@ -55,12 +52,12 @@ function commons_radioactivity_field_definition(&$field_instances, $bundle) {
       'weight' => 0,
     ),
   ),
-  'entity_type' => 'node',
+  'entity_type' => $entity_type,
   'field_name' => 'field_radioactivity',
   'label' => 'Radioactivity',
   'required' => 0,
   'settings' => array(
-    'profile' => 'commons_ra_node',
+    'profile' => "commons_ra_$entity_type",
     'user_register_form' => FALSE,
   ),
   'widget' => array(
