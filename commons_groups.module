@@ -50,14 +50,15 @@ function commons_groups_form_alter(&$form, &$form_state, $form_id) {
   // Redirect the user back to the group homepage after submitting
   // a node within a group.
   if (isset($form['#node']) && substr($form_id, -10) == '_node_form') {
-    $enabled_node_types = commons_groups_get_enabled_node_types();
-    if (isset($enabled_node_types[$form['#node']->type])) {
+    $group_content_entity_types = commons_groups_get_group_content_entity_types();
+    if (isset($group_content_entity_types['node'][$form['#node']->type])) {
       $form['actions']['submit']['#submit'][] = 'commons_groups_node_in_group_submit';
+      $form['og_group_ref'][LANGUAGE_NONE][0]['admin']['#access'] = FALSE;
     }
   }
   if (in_array($form_id, array('og_ui_admin_global_permissions', 'og_ui_admin_permissions'))) {
-    $enabled_node_types = commons_groups_get_enabled_node_types();
-    if (!empty($enabled_node_types)) {
+    $group_content_entity_types = commons_groups_get_group_content_entity_types();
+    if (!empty($group_content_entity_types)) {
       // @TODO: Improve this message to be more specific and/or
       // reflect these changes in the checkboxes.
       $message = 'In addition to the permissions listed here, the Commons Groups module grants non-group members the ability to post content into groups where content in the group is public.';
@@ -87,11 +88,11 @@ function commons_groups_system_info_alter(&$info, $file, $type) {
   // and can sucessfully revert the field_instance component back
   // to its default state.
   if ($file->name == 'commons_groups') {
-    $commons_groups_entity_types = commons_groups_get_entity_types();
-    if (!empty($commons_groups_entity_types['node'])) {
-      foreach ($commons_groups_entity_types['node'] as $type => $status) {
-        if ($status && !in_array("node-$type-og_group_ref", $info['features']['field_instance'])) {
-          $info['features']['field_instance'][] = "node-$type-og_group_ref";
+    $group_content_entity_types = commons_groups_get_group_content_entity_types();
+    if (!empty($group_content_entity_types)) {
+      foreach ($group_content_entity_types as $entity_type => $bundles) {
+        foreach(array_keys($bundles) as $bundle) {
+          $info['features']['field_instance'][] = "$entity_type-$bundle-og_group_ref";
         }
       }
     }
@@ -113,11 +114,11 @@ function commons_groups_default_message_type_alter(&$defaults) {
 function commons_groups_og_user_access_alter(&$temp_perm, $context) {
   // Grant access to non-group members to be able to post into groups
   // where the group node is public and content is public within the group.
-  $commons_groups_enabled_node_types = commons_groups_get_enabled_node_types();
+  $commons_groups_entity_types = commons_groups_get_group_content_entity_types();
   $group_content_restricted = (bool) (isset($context['group']->group_content_access[LANGUAGE_NONE][0]['value']) && $context['group']->group_content_access[LANGUAGE_NONE][0]['value'] == 2);
   // @TODO: Consider using a static here.
   $user_is_member = (bool)og_is_member('node', $context['group']->nid, 'user', $context['account']);
-  foreach ($commons_groups_enabled_node_types as $type => $status) {
+  foreach ($commons_groups_entity_types['node'] as $type => $options) {
     if ($context['string'] == "create $type content" && (!$group_content_restricted || $user_is_member)) {
       $temp_perm["create $type content"] = TRUE;
     }
@@ -163,6 +164,7 @@ function commons_groups_tokens($type, $tokens, $data = array(), $options = array
       $target_nids = array();
       $related_groups = array();
       $related_gids = array();
+
       // First, build an array of target nodes associated with the message.
       foreach ($data['message']->field_target_nodes[LANGUAGE_NONE] as $key => $value) {
         $target_nids[] = $value['target_id'];
@@ -224,9 +226,9 @@ function commons_groups_tokens($type, $tokens, $data = array(), $options = array
         $text = t($text, $t_args);
       }
       $replacements['[commons-groups:in-groups-text]'] = $text;
+      return $replacements;
     }
   }
-  return $replacements;
 }
 
 function commons_groups_message_partial_default() {
@@ -316,33 +318,29 @@ function commons_groups_node_insert($node) {
 /**
 * Returns an array of entity types that are enabled via Commons Groups.
 */
-function commons_groups_get_entity_types() {
-  $commons_groups_entity_types = variable_get('commons_groups_entity_types', array());
-  if (!empty($commons_groups_entity_types['node'])) {
-    foreach ($commons_groups_entity_types['node'] as $type_name => $enabled) {
-      $type = node_type_get_type($type_name);
-      // If the module defining this content type has been disabled, don't add
-      // a field on its behalf in order to prevent the
-      // Commons Groups og_group_ref field component from appearing
-      // to be overidden.
-      if ($enabled && !module_exists($type->module)) {
-        $commons_groups_entity_types['node'][$type_name] = 0;
+function commons_groups_get_group_content_entity_types() {
+  // Find all Commons Entity integrations.
+  $commons_entity_integrations = module_invoke_all('commons_entity_integration');
+  if (empty($commons_entity_integrations)) {
+    return array();
+  }
+
+  foreach ($commons_entity_integrations as $entity_type => $integration) {
+    foreach ($integration as $bundle => $options) {
+      if (isset($options['is_group_content']) && $options['is_group_content'] == FALSE) {
+        unset($commons_entity_integrations[$entity_type][$bundle]);
       }
     }
+    // If an entity type has no integrations, don't return it.
+    if (empty($commons_entity_integrations[$entity_type])) {
+      unset($commons_entity_integrations[$entity_type]);
+    }
   }
-  return $commons_groups_entity_types;
+
+  return $commons_entity_integrations;
+
 }
 
-/**
-* Helper function for commons_groups_get_entity_types() to return
-* only those node types that are configured as enabled.
-*/
-function commons_groups_get_enabled_node_types() {
-  $commons_groups_entity_types = commons_groups_get_entity_types();
-  if (!empty($commons_groups_entity_types['node'])) {
-    return array_filter($commons_groups_entity_types['node']);
-  }
-}
 /**
 * When a user first creates content within a group,
 * grant her the contributor role within that group.
