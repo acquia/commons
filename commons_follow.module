@@ -3,6 +3,33 @@
 include_once 'commons_follow.features.inc';
 
 
+function commons_follow_flag_alter(&$flag) {
+  $commons_entity_integrations = module_invoke_all('commons_entity_integration');
+  // Find Commons node types that should have follow integration and alter
+  // the commons_follow_node flag to allow following these node types.
+  // This is currently hard-coded to node entities and the
+  // commons_follow_node flag, but could be expanded to add the ability
+  // to follow other entities.
+  // The Commons follow flags for user, term and group already have the
+  // appropriate content types in their flag exports, whereas
+  // $flag->types for commons_follow_node is more likely
+  // to change between sites.
+  if ($flag->name == 'commons_follow_node') {
+    if (!empty($commons_entity_integrations['node'])) {
+      // Exclude bundles that users should not be able to follow:
+      foreach ($commons_entity_integrations['node'] as $bundle => $options) {
+        if (isset($options['exclude_commons_follow']) && $options['exclude_commons_follow'] == TRUE) {
+          unset($commons_entity_integrations['node'][$bundle]);
+        }
+      }
+      // Add the remaining bundles as flaggable options
+      if (!empty($commons_entity_integrations['node'])) {
+        $flag->types += array_keys($commons_entity_integrations['node']);
+      }
+    }
+  }
+}
+
 /**
  * Get all node IDs relevant to what the user ordered.
  *
