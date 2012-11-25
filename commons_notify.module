@@ -1,75 +1,62 @@
 <?php
-
-
-function commons_notify_associated_message_type($message_type) {
-  $mapping = commons_notify_message_type_mapping();
-  $return = isset($mapping[$message_type]) ? $mapping[$message_type] : FALSE;
-  return $return;
-}
 /**
-* Return an array of keyed on message types where the values correspond to
-* the corresponding notificiation message types.
-*/
-function commons_notify_message_type_mapping() {
-  $mapping = array();
-  // Allow other modules to alter the mapping.
-  // Making this alterable allows modules defining message types
-  // (such as commons_activity_streams) to define the mapping
-  // with a simple array.
-  // @Todo: Expose this via configuration.
-  drupal_alter('commons_notify_message_type_mapping', $mapping);
-  // Todo: Throw an error if there are no mapped message types.
-  return $mapping;
-}
+ * @file
+ * Code for the Commons Notify feature.
+ */
+
+include_once 'commons_notify.features.inc';
 
 /**
-* Implements hook_entity_insert().
-*/
-function commons_notify_entity_insert($entity, $type) {
-  // Detect when an associated message type is created,
-  if ($type == 'message' && $entity->is_new && commons_notify_associated_message_type($entity->type)) {
-    commons_notify_process_source_message($entity);    
-  }
+ * Define default message type category configurations.
+ *
+ * @return
+ *   An array of default message type categories, keyed by machine names.
+ *
+ * @see hook_default_message_type_category_alter()
+ */
+function commons_notify_default_message_type_category() {
+  $defaults['commons_notify'] = entity_create('message_type_category', array(
+    'description' => "Commons Notify",
+    'language' => LANGUAGE_NONE,
+  ));
+  return $defaults;
 }
 
-// Identify the subscribed users and queue messages for sending.
-function commons_notify_process_source_message($source_message, $commons_notify_message_type = NULL) {
-  // Build a list of users who are following a referenced entity or property
-  // of this message.
-  $following_uids = array();
-  commons_follow_get_following_uids($following_uids, $source_message);
+/**
+ * Implements hook_node_insert().
+ */
+function commons_notify_node_insert($node) {
+  // Create a message when a user creates a new node.
+  // Borrowed from message_example.module:
+  // Save the message and assign it to the user realm. Since another user,
+  // usually an admin might create the node, but populate the author field
+  // with another user, we make sure the user realm is populated with the
+  // node's author, instead of the acting user (although in most cases it
+  // would be the same user).
+  // The following example demonstrates that we don't need to explicitly set
+  // the realm to the user, since if no realms are provided then the message
+  // is automatically assigned to the user passed in the function, or if no
+  // user object is provided, then to the acting user.
 
-  // Find the Commons_notify message type associated with the original message.
-  if (empty($commons_notify_message_type)) {
-    $commons_notify_message_type = commons_notify_associated_message_type($source_message->type);
-  }
-  // If there are no recipients, there's nothing to do.
-  if (empty($following_uids)) {
-    return;
-  }
+  $message_type = 'commons_notify_node_created';
 
-  // Generate a message for each recipient and queue it for mailing.
-  foreach ($following_uids as $key => $uid) {
-
-    // Prepare the message_notify message that will generate
-    // an email to each user.
-    $message = message_create($commons_notify_message_type, array('uid' => $uid, 'timestamp' => $source_message->timestamp));
-    $wrapper = entity_metadata_wrapper('message', $message);
-    foreach (array('field_target_users', 'field_target_nodes') as $field_name) {
-      if (!empty($source_message->$field_name)) {
-        $message->$field_name = $source_message->$field_name;    
-
-      }
-    }
-    // Let message-notify deliver the email.
-    // We pass in the options the field names, that will be used to capture
-    // the rendered message, and provide an email log.
-    $options = array(
-      'rendered fields' => array(
-        'message_notify_email_subject' => 'field_message_rendered_subject',      'message_notify_email_body' => 'field_message_rendered_body',
-      ),
-    );
-    message_notify_send_message($message, $options);
-  }
+  // Allow other modules to specify an alternative messagge type to use.
+  $hook = 'node_insert';
+  drupal_alter('commons_notify_message_selection', $message_type, $hook, $node);
+  $account = user_load($node->uid);
+  $message = message_create($message_type, array('uid' => $account->uid, 'timestamp' => $node->created));
+  // Save reference to the node in the node reference field.
+  $wrapper = entity_metadata_wrapper('message', $message);
+  // We use a multiple value field in case we wish to use the same
+  // field for grouping messages in the future
+  // (eg http://drupal.org/node/1757060).
+  $wrapper->field_target_nodes[] = $node;
+  $wrapper->save();
+  $options = array(
+    'rendered fields' => array(
+      'message_notify_email_subject' => 'field_message_rendered_subject',
+      'message_notify_email_body' => 'field_message_rendered_body',
+    ),
+  );
+  message_subscribe_process_message('node', $node, $message, array('email' => $options));
 }
-
