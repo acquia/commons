@@ -6,22 +6,6 @@
 
 include_once 'commons_notify.features.inc';
 
-/**
- * Define default message type category configurations.
- *
- * @return
- *   An array of default message type categories, keyed by machine names.
- *
- * @see hook_default_message_type_category_alter()
- */
-function commons_notify_default_message_type_category() {
-  $defaults['commons_notify'] = entity_create('message_type_category', array(
-    'category' => 'commons_notify',
-    'description' => "Commons Notify",
-    'language' => LANGUAGE_NONE,
-  ));
-  return $defaults;
-}
 
 /**
  * Implements hook_node_insert().

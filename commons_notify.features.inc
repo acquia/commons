@@ -5,6 +5,18 @@
  */
 
 /**
+ * Implements hook_default_message_type_category().
+ */
+function commons_notify_default_message_type_category() {
+  $defaults['commons_notify'] = entity_create('message_type_category', array(
+    'category' => 'commons_notify',
+    'description' => "Commons Notify",
+    'language' => LANGUAGE_NONE,
+  ));
+  return $defaults;
+}
+
+/**
  * Implements hook_default_message_type().
  */
 function commons_notify_default_message_type() {
