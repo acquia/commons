@@ -152,8 +152,8 @@ function commons_notify_field_default_field_instances() {
   );
 
   // Exported field_instance: 'message_type-message_type-message_text'
-  $field_instances['message_type-message_type-message_text'] = array(
-    'bundle' => 'message_type',
+  $field_instances['message_type-commons_notify-message_text'] = array(
+    'bundle' => 'commons_notify',
     'default_value' => NULL,
     'deleted' => '0',
     'description' => 'This is the text of all messages of this type.',
@@ -173,6 +173,7 @@ function commons_notify_field_default_field_instances() {
     'settings' => array(
       'text_processing' => 1,
       'user_register_form' => FALSE,
+      'message_text' => TRUE,
     ),
     'widget' => array(
       'module' => 'text',
