@@ -6,7 +6,6 @@
 
 include_once 'commons_notify.features.inc';
 
-
 /**
  * Implements hook_node_insert().
  */
@@ -24,7 +23,9 @@ function commons_notify_node_insert($node) {
   // user object is provided, then to the acting user.
 
   $message_type = 'commons_notify_node_created';
-
+  // We need to clear the static loading cache so that the node body will be
+  // ready in time for token replacement for the  message.
+  entity_get_controller('node')->resetCache(array($node->nid));
   // Allow other modules to specify an alternative messagge type to use.
   $hook = 'node_insert';
   drupal_alter('commons_notify_message_selection', $message_type, $hook, $node);
