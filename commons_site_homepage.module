@@ -24,7 +24,7 @@ function commons_site_homepage_form_alter(&$form, &$form_state, $form_id) {
     $form['sort_by']['#title'] = t('sorted by');
     foreach ($form['type']['#options'] as $type => $name) {
       if ($type != 'All') {
-        $form['type']['#options'][$type] = t(lcfirst($name . 's'));
+        $form['type']['#options'][$type] = t(strtolower(substr($name, 0, 1)) . substr($name,1) . 's');
       }
     }
   }
