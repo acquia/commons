@@ -385,9 +385,48 @@ function commons_notify_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'user-user-message_subscribe_email'
+  $field_instances['user-user-message_subscribe_email'] = array(
+    'bundle' => 'user',
+    'default_value' => array(
+      0 => array(
+        'value' => 1,
+      ),
+    ),
+    'deleted' => '0',
+    'description' => 'Email option will be checked automatically when subscribing to something.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 9,
+      ),
+    ),
+    'display_label' => 1,
+    'entity_type' => 'user',
+    'field_name' => 'message_subscribe_email',
+    'label' => 'Email subscriptions',
+    'required' => FALSE,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'module' => 'options',
+      'settings' => array(
+        'display_label' => 0,
+      ),
+      'type' => 'options_onoff',
+      'weight' => 0,
+    ),
+  );
+
   // Translatables
   // Included for use with string extractors like potx.
   t('Body');
+  t('Email option will be checked automatically when subscribing to something.');
+  t('Email subscriptions');
   t('Message text');
   t('Subject');
   t('Target comment');
