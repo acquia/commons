@@ -43,13 +43,19 @@ function commons_follow_ui_menu() {
 function commons_follow_ui_commons_utility_links_alter(&$links) {
   global $user;
   $account = $user;
-  $links['settings']= array(
-    'href' => 'user/' . $account->uid . '/notification-settings',
-    'title' => t('Notification settings'),
-  );
+  if ($account->uid > 0) {
+    $links['settings']= array(
+      'href' => 'user/' . $account->uid . '/notification-settings',
+      'title' => t('Notification settings'),
+    );
+  }
 }
 
 function commons_follow_ui_notification_settings_form($form, &$form_state, $account) {
+  if (empty($account)) {
+    global $user;
+    $account = $user;
+  }
   drupal_set_title(t('Notification settings'));
   $form['#submit'][] = 'commons_follow_message_subscribe_email_setting_submit';
   $form['uid'] = array(
@@ -68,7 +74,7 @@ function commons_follow_ui_notification_settings_form($form, &$form_state, $acco
     '#ajax' => array(
       'callback' => 'commons_follow_message_subscribe_email_setting_submit',
     ),
-    '#default_value' => $account->message_subscribe_email[LANGUAGE_NONE][0]['value'],
+    '#default_value' => isset($account->message_subscribe_email[LANGUAGE_NONE][0]['value']) ? $account->message_subscribe_email[LANGUAGE_NONE][0]['value'] : FALSE,
     '#weight' => 1,
   );
 
