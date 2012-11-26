@@ -109,7 +109,7 @@ function commons_q_a_views_default_views() {
   $handler->display->display_options['sorts']['created']['table'] = 'node';
   $handler->display->display_options['sorts']['created']['field'] = 'created';
   $handler->display->display_options['sorts']['created']['order'] = 'DESC';
-  /* Contextual filter: Content: Related Question (field_related_question) */
+  /* Contextual filter: Broken/missing handler */
   $handler->display->display_options['arguments']['field_related_question_target_id']['id'] = 'field_related_question_target_id';
   $handler->display->display_options['arguments']['field_related_question_target_id']['table'] = 'field_data_field_related_question';
   $handler->display->display_options['arguments']['field_related_question_target_id']['field'] = 'field_related_question_target_id';
@@ -123,7 +123,6 @@ function commons_q_a_views_default_views() {
   $handler->display->display_options['arguments']['field_related_question_target_id']['validate_options']['types'] = array(
     'question' => 'question',
   );
-  $handler->display->display_options['arguments']['field_related_question_target_id']['break_phrase'] = TRUE;
   /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
