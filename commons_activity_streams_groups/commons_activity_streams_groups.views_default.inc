@@ -85,6 +85,13 @@ function commons_activity_streams_groups_views_default_views() {
   $handler->display->display_options['filters']['status_extra']['table'] = 'node';
   $handler->display->display_options['filters']['status_extra']['field'] = 'status_extra';
   $handler->display->display_options['filters']['status_extra']['relationship'] = 'field_target_nodes_target_id';
+  /* Filter criterion: Message: Message category */
+  $handler->display->display_options['filters']['type_category']['id'] = 'type_category';
+  $handler->display->display_options['filters']['type_category']['table'] = 'message';
+  $handler->display->display_options['filters']['type_category']['field'] = 'type_category';
+  $handler->display->display_options['filters']['type_category']['value'] = array(
+    'message_type' => 'message_type',
+  );
 
   /* Display: Content pane */
   $handler = $view->new_display('panel_pane', 'Content pane', 'panel_pane_1');
