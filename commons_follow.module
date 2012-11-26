@@ -14,7 +14,7 @@ function commons_follow_flag_alter(&$flag) {
   // appropriate content types in their flag exports, whereas
   // $flag->types for commons_follow_node is more likely
   // to change between sites.
-  if ($flag->name == 'commons_follow_node') {
+  if (in_array($flag->name, array('commons_follow_node', 'email_node'))) {
     if (!empty($commons_entity_integrations['node'])) {
       // Exclude bundles that users should not be able to follow:
       foreach ($commons_entity_integrations['node'] as $bundle => $options) {
