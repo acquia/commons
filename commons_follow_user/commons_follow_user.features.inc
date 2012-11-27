@@ -50,7 +50,6 @@ function commons_follow_user_flag_default_flags() {
     'api_version' => 2,
   );
 
-  $flags = array();
   // Exported flag: "Commons Follow (Users - Email)".
   $flags['email_user'] = array(
     'content_type' => 'user',
