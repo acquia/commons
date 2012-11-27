@@ -55,7 +55,7 @@ function commons_follow_get_nids($account = NULL, $options = array()) {
     $function = $module . '_commons_follow_get_nids';
     $result = $function($account, $options);
     if (empty($result)) {
-      return $nids;
+      continue;
     }
     foreach ($result as $nid) {
       $nids[$nid] = $nid;
