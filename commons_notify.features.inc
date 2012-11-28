@@ -20,7 +20,7 @@ function commons_notify_default_message_type() {
     "arguments" : null,
     "message_text" : { "und" : [
         {
-          "value" : "New comment on [message:field-target-nodes:0:title] in [message:field-target-nodes:0:og-group-ref:0:title]",
+          "value" : "New comment on [message:field-target-nodes:0:title] in [message:field-target-nodes:0:og-group-ref:0:title]: [message:field-target-nodes:0:title]",
           "format" : "plain_text",
           "safe_value" : "\\u003Cp\\u003ENew comment on [message:field-target-nodes:0:title] in [message:field-target-nodes:0:og-group-ref:0:title]\\u003C\\/p\\u003E\\n"
         },
