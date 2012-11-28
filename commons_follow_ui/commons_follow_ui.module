@@ -101,6 +101,7 @@ function commons_follow_message_subscribe_email_setting_submit($form, &$form_sta
   if ($form_state['values']['message_subscribe_email'] != $form['message_subscribe_email']['#default_value']) {
     $account = user_load($form_state['values']['uid']);
     $account->message_subscribe_email[LANGUAGE_NONE][0]['value'] = $form_state['values']['message_subscribe_email'];
+    user_save($account);
   }
 }
 
