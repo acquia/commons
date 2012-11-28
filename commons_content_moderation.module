@@ -15,14 +15,14 @@ function commons_content_moderation_action_info() {
       'type' => 'node',
       'label' => t("Delete content and block author's account."),
       'configurable' => FALSE,
-      'behavior' => array('changes_property'),
+      'behavior' => array(''),
       'triggers' => array(''),
     ),
     'commons_content_moderation_delete_comment_block_user' => array(
       'type' => 'comment',
       'label' => t("Delete comment and block author's account."),
       'configurable' => FALSE,
-      'behavior' => array('changes_property'),
+      'behavior' => array(''),
       'triggers' => array(''),
     ),
   );
@@ -33,7 +33,7 @@ function commons_content_moderation_delete_node_block_user(&$entity, $context = 
   // Block users other than the anonymous user and UID 1.
   if ($entity->uid > 1) {
     $author = user_load($entity->uid);
-    if ($entity->status) {
+    if ($author->status) {
       $author = user_save($author, array('status' => 0));
       watchdog('action', 'Blocked user %name.', array('%name' => $author->name));
     }
@@ -41,7 +41,7 @@ function commons_content_moderation_delete_node_block_user(&$entity, $context = 
   // If the Mollom module is enabled and configured, report
   // the content to Mollom.
   if (module_exists('mollom') && _mollom_status()) {
-    $mollom_return = mollom_data_report('node', $node->nid, 'spam');
+    $mollom_return = mollom_data_report('node', $entity->nid, 'spam');
   }
   // We're done with this node. We can delete it.
   node_delete($entity->nid);
