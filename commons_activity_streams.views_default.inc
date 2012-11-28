@@ -105,6 +105,13 @@ function commons_activity_streams_views_default_views() {
     2 => '2',
     1 => 0,
   );
+  /* Filter criterion: Message: Message category */
+  $handler->display->display_options['filters']['type_category']['id'] = 'type_category';
+  $handler->display->display_options['filters']['type_category']['table'] = 'message';
+  $handler->display->display_options['filters']['type_category']['field'] = 'type_category';
+  $handler->display->display_options['filters']['type_category']['value'] = array(
+    'message_type' => 'message_type',
+  );
 
   /* Display: Activity (Sidebar) */
   $handler = $view->new_display('panel_pane', 'Activity (Sidebar)', 'panel_pane_1');
