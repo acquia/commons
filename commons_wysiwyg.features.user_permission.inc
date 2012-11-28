@@ -14,8 +14,8 @@ function commons_wysiwyg_user_default_permissions() {
   $permissions['use text format filtered_html'] = array(
     'name' => 'use text format filtered_html',
     'roles' => array(
-      0 => 'anonymous user',
-      1 => 'authenticated user',
+      'anonymous user' => 'anonymous user',
+      'authenticated user' => 'authenticated user',
     ),
     'module' => 'filter',
   );
