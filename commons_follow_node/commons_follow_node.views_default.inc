@@ -54,7 +54,7 @@ function commons_follow_node_views_default_views() {
   $handler->display->display_options['empty']['area']['table'] = 'views';
   $handler->display->display_options['empty']['area']['field'] = 'area';
   $handler->display->display_options['empty']['area']['empty'] = TRUE;
-  $handler->display->display_options['empty']['area']['content'] = 'You are not subscribed to any item.';
+  $handler->display->display_options['empty']['area']['content'] = "You're not following anything of this type.";
   $handler->display->display_options['empty']['area']['format'] = 'filtered_html';
   /* Relationship: Flags: commons_follow_node */
   $handler->display->display_options['relationships']['flag_content_rel']['id'] = 'flag_content_rel';
