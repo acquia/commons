@@ -108,9 +108,6 @@ projects[message_subscribe][download][type] = "git"
 projects[message_subscribe][download][url] = "http://git.drupal.org/project/message_subscribe.git"
 projects[message_subscribe][download][branch] = "7.x-1.x"
 projects[message_subscribe][subdir] = "contrib"
-; Email relationship not set in UI tab
-; http://drupal.org/node/1845110#comment-6779038
-projects[message_subscribe][patch][] = "http://drupal.org/files/1845110-message-subscribe-relationship-4.patch"
 
 projects[module_filter][type] = "module"
 projects[module_filter][subdir] = "contrib"
