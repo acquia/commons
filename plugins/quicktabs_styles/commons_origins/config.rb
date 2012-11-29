@@ -4,10 +4,13 @@
 http_path = "/"
 css_dir = "/"
 sass_dir = "/"
+images_dir = "images"
 
 # output_style = :expanded or :nested or :compact or :compressed
 output_style = :expanded
 environment = :production
+
+relative_assets = true
 
 # To enable relative paths to assets via compass helper functions. Uncomment:
 # relative_assets = true

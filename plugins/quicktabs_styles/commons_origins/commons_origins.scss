@@ -1,5 +1,21 @@
 @import 'compass';
 
+$icons: sprite-map('icons/*.png', $spacing: 20px);
+
+@mixin sprite_url_height_width($sprite_name, $image_name) {
+  background: sprite($sprite_name, $image_name) no-repeat;
+  width: image-width(sprite-file($sprite_name, $image_name));
+  height: image-height(sprite-file($sprite_name, $image_name));
+  display: inline-block;
+  margin-right: 3px;
+  position: relative;
+  top: 1px;
+}
+
+@mixin sprite_url_position($sprite_name, $image_name) {
+  background-position: sprite-position($sprite_name, $image_name);
+}
+
 $link_color: #a5a3a3;
 
 ul.quicktabs-tabs {
@@ -55,5 +71,61 @@ ul.quicktabs-tabs {
         color: #fff;
       }
     }
+  }
+}
+
+.commons-bw-tab-all {
+  @include sprite_url_height_width($icons, all);
+
+  ul.quicktabs-style-commons-origins li.active & {
+    @include sprite_url_position($icons, all-active);
+  }
+}
+
+.commons-bw-tab-posts {
+  @include sprite_url_height_width($icons, posts);
+
+  ul.quicktabs-style-commons-origins li.active & {
+    @include sprite_url_position($icons, posts-active);
+  }
+}
+
+.commons-bw-tab-docs {
+  @include sprite_url_height_width($icons, docs);
+
+  ul.quicktabs-style-commons-origins li.active & {
+    @include sprite_url_position($icons, docs-active);
+  }
+}
+
+.commons-bw-tab-qa {
+  @include sprite_url_height_width($icons, qa);
+
+  ul.quicktabs-style-commons-origins li.active & {
+    @include sprite_url_position($icons, qa-active);
+  }
+}
+
+.commons-bw-tab-ideas {
+  @include sprite_url_height_width($icons, ideas);
+
+  ul.quicktabs-style-commons-origins li.active & {
+    @include sprite_url_position($icons, ideas-active);
+  }
+}
+
+.commons-bw-tab-wikis {
+  @include sprite_url_height_width($icons, wikis);
+
+  ul.quicktabs-style-commons-origins li.active & {
+    @include sprite_url_position($icons, wikis-active);
+  }
+}
+
+.commons-bw-tab-polls {
+  @include sprite_url_height_width($icons, polls);
+
+  ul.quicktabs-style-commons-origins li.active & {
+    @include sprite_url_position($icons, polls-active);
   }
 }
