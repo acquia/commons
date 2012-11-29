@@ -37,7 +37,6 @@ function commons_posts_views_default_views() {
   $handler->display->display_options['header']['area']['table'] = 'views';
   $handler->display->display_options['header']['area']['field'] = 'area';
   $handler->display->display_options['header']['area']['empty'] = TRUE;
-  $handler->display->display_options['header']['area']['content'] = '';
   $handler->display->display_options['header']['area']['format'] = 'plain_text';
   /* No results behavior: Global: Text area */
   $handler->display->display_options['empty']['area']['id'] = 'area';
@@ -92,11 +91,6 @@ function commons_posts_views_default_views() {
   /* Display: Block */
   $handler = $view->new_display('block', 'Block', 'block_2');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-
-  /* Display: Page */
-  $handler = $view->new_display('page', 'Page', 'page_1');
-  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-  $handler->display->display_options['path'] = 'test';
   $export['commons_bw_posts'] = $view;
 
   return $export;
