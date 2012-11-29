@@ -356,8 +356,8 @@ projects[adaptivetheme][download][type] = "git"
 projects[adaptivetheme][download][url] = "http://git.drupal.org/project/adaptivetheme.git"
 projects[adaptivetheme][download][branch] = "7.x-3.x"
 ; Refactor require_once() instances into discrete functions:
-; http://drupal.org/node/1776730#comment-6705274
-projects[adaptivetheme][patch][] = "http://drupal.org/files/1776730-adaptivetheme-refactor-require-into-discrete-functions-21.patch"
+; http://drupal.org/node/1776730#comment-6790592
+projects[adaptivetheme][patch][] = "http://drupal.org/files/1776730-adaptivetheme-refactor-require-into-discrete-functions-24.patch"
 
 projects[sky][type] = "theme"
 projects[sky][subdir] = "contrib"
