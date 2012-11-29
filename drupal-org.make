@@ -43,6 +43,9 @@ projects[email_registration][subdir] = "contrib"
 projects[entity][type] = "module"
 projects[entity][subdir] = "contrib"
 
+projects[entitycache][type] = "module"
+projects[entitycache][subdir] = "contrib"
+
 projects[entityreference][version] = "1.x-dev"
 projects[entityreference][type] = "module"
 projects[entityreference][subdir] = "contrib"
