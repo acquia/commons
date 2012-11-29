@@ -33,6 +33,19 @@ function commons_events_attendee_access($event_node) {
 }
 
 /**
+ * Implements hook_views_default_views_alter().
+ */
+function commons_events_views_default_views_alter(&$views) {
+  // Events aren't meant to display on the group browswing widget because
+  // they have their own landing page.
+  $views['commons_bw_all']->display['default']->display_options['filters']['type']['id'] = 'type';
+  $views['commons_bw_all']->display['default']->display_options['filters']['type']['table'] = 'node';
+  $views['commons_bw_all']->display['default']->display_options['filters']['type']['field'] = 'type';
+  $views['commons_bw_all']->display['default']->display_options['filters']['type']['operator'] = 'not in';
+  $views['commons_bw_all']->display['default']->display_options['filters']['type']['value'] = array('event' => 'event');
+}
+
+/**
  * Page callback for full event attendee listing.
  */
 function commons_events_event_attendees_page($event_node) {
