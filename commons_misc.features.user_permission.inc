@@ -20,11 +20,21 @@ function commons_misc_user_default_permissions() {
     'module' => 'node',
   );
 
+  // Exported permission: access user profiles.
+  $permissions['access user profiles'] = array(
+    'name' => 'access user profiles',
+    'roles' => array(
+      'anonymous user' => 'anonymous user',
+      'authenticated user' => 'authenticated user',
+    ),
+    'module' => 'user',
+  );
+
   // Exported permission: view own unpublished content.
   $permissions['view own unpublished content'] = array(
     'name' => 'view own unpublished content',
     'roles' => array(
-      'anonymous user' => 'authenticated user',
+      'authenticated user' => 'authenticated user',
     ),
     'module' => 'node',
   );
