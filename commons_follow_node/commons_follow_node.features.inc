@@ -52,18 +52,17 @@ function commons_follow_node_flag_default_flags() {
     ),
     'api_version' => 2,
   );
-
-  // Exported flag: "Commons Follow (Individual nodes - Email)".
+  // Exported flag: "Email content".
   $flags['email_node'] = array(
     'content_type' => 'node',
-    'title' => 'Commons Follow (Individual nodes - Email)',
+    'title' => 'Email content',
     'global' => '0',
     'types' => array(
     ),
-    'flag_short' => 'Send email updates',
+    'flag_short' => 'Send Email',
     'flag_long' => '',
     'flag_message' => '',
-    'unflag_short' => 'Don\'t send email updates',
+    'unflag_short' => 'Don\'t send Email',
     'unflag_long' => '',
     'unflag_message' => '',
     'unflag_denied_text' => '',
@@ -76,15 +75,19 @@ function commons_follow_node_flag_default_flags() {
         0 => '2',
       ),
     ),
-    'weight' => '-9',
+    'weight' => 0,
     'show_on_form' => 0,
     'access_author' => '',
     'show_on_page' => 0,
     'show_on_teaser' => 0,
-    'show_contextual_link' => FALSE,
+    'show_contextual_link' => 0,
     'i18n' => 0,
+    'module' => 'commons_follow_node',
     'api_version' => 2,
+    'locked' => array(
+      0 => 'name',
+    ),
   );
-
   return $flags;
+
 }

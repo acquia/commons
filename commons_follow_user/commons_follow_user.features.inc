@@ -49,17 +49,16 @@ function commons_follow_user_flag_default_flags() {
     ),
     'api_version' => 2,
   );
-
-  // Exported flag: "Commons Follow (Users - Email)".
+  // Exported flag: "Email user".
   $flags['email_user'] = array(
     'content_type' => 'user',
-    'title' => 'Commons Follow (Users - Email)',
+    'title' => 'Email user',
     'global' => '0',
     'types' => array(),
-    'flag_short' => 'Send email updates',
+    'flag_short' => 'Send Email',
     'flag_long' => '',
     'flag_message' => '',
-    'unflag_short' => 'Don\'t send email updates',
+    'unflag_short' => 'Don\'t send Email',
     'unflag_long' => '',
     'unflag_message' => '',
     'unflag_denied_text' => '',
@@ -72,15 +71,19 @@ function commons_follow_user_flag_default_flags() {
         0 => '2',
       ),
     ),
-    'weight' => '-13',
+    'weight' => 0,
     'show_on_form' => 0,
     'access_author' => '',
-    'show_on_profile' => TRUE,
+    'show_on_profile' => 0,
     'access_uid' => '',
+    'module' => 'commons_follow_user',
     'api_version' => 2,
+    'locked' => array(
+      0 => 'name',
+    ),
   );
-
   return $flags;
+
 }
 
 /**

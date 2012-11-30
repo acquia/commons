@@ -19,7 +19,7 @@ function commons_follow_group_ctools_plugin_api() {
  */
 function commons_follow_group_flag_default_flags() {
   $flags = array();
-  // Exported flag: "Commons Follow (Groups)".
+  // Exported flag: "Groups".
   $flags['commons_follow_group'] = array(
     'content_type' => 'node',
     'title' => 'Groups',
@@ -56,7 +56,6 @@ function commons_follow_group_flag_default_flags() {
     ),
     'api_version' => 2,
   );
-
   // Exported flag: "Commons Follow (Groups - Email)".
   $flags['email_group'] = array(
     'content_type' => 'node',
@@ -88,9 +87,12 @@ function commons_follow_group_flag_default_flags() {
     'show_on_teaser' => 0,
     'show_contextual_link' => FALSE,
     'i18n' => 0,
+    'module' => 'commons_follow_group',
     'api_version' => 2,
+    'locked' => array(
+      0 => 'name',
+    ),
   );
-
   return $flags;
 
 }

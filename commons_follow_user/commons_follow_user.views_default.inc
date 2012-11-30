@@ -49,7 +49,7 @@ function commons_follow_user_views_default_views() {
   $handler->display->display_options['empty']['area']['table'] = 'views';
   $handler->display->display_options['empty']['area']['field'] = 'area';
   $handler->display->display_options['empty']['area']['empty'] = TRUE;
-  $handler->display->display_options['empty']['area']['content'] = "You aren't following anyone.";
+  $handler->display->display_options['empty']['area']['content'] = 'You aren\'t following anyone.';
   $handler->display->display_options['empty']['area']['format'] = 'filtered_html';
   /* Relationship: Flags: commons_follow_user */
   $handler->display->display_options['relationships']['flag_content_rel']['id'] = 'flag_content_rel';
