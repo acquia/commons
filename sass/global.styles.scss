@@ -613,7 +613,7 @@ h1.node-title {
 .region-header {
   // display: inline-block;
   float: left;
-  @extend .divider-left;
+  @extend %divider-left;
   height: 64px;
 }
 
@@ -748,7 +748,7 @@ a {
     background-position:center 10px;
     background-repeat:no-repeat;
     position:relative;
-    @extend .divider-left;
+    @extend %divider-left;
     &:visited {}
     &:hover,
     &:focus {
@@ -778,6 +778,45 @@ a {
 
   .main-menu-events {
     background: image-url('icons/icon-events.png') no-repeat center 10px;
+  }
+}
+
+#block-commons-utility-links-utility-links {
+  margin: 0;
+
+  .block-inner {
+    margin: 0;
+  }
+}
+
+ul.commons-utility-links {
+  list-style: none;
+  text-align: right;
+  margin: 4px 0 7px 0;
+  padding: 0;
+  font-size: 11px;
+  line-height: 11px;
+
+  .block-content & {
+    padding: 0;
+  }
+
+  li {
+    display: inline-block;
+
+    &.first {
+      margin-right: 17px;
+      font-weight: bold;
+    }
+
+    &.last {
+      border-left: 1px solid $light_blue;
+      margin-left: 9px;
+
+      a {
+        margin-left: 9px;
+      }
+    }
   }
 }
 
@@ -1765,7 +1804,8 @@ ul.action-links {
   background-repeat:no-repeat;
   width:304px;
   height:30px;
-  margin:10px 0 0 10px;
+  margin:0 0 0 10px;
+  position: relative;
   .block-inner {
     margin-left:0;
     margin-right:0;
@@ -1785,7 +1825,7 @@ ul.action-links {
     background:transparent;
     border:none;
     margin:3px 0 0 0;
-    width:212px;
+    width:200px;
   }
   .form-submit {
     background-color:transparent !important;
@@ -1796,6 +1836,17 @@ ul.action-links {
     text-indent:-9999px !important;
     padding:0 !important;
     margin:8px !important;
+  }
+
+  .form-item-search-block-form label {
+    position: absolute;
+    left: 0px;
+    top: -17px;
+    color: lighten($light_blue, 40%);
+    font-size: 11px;
+    line-height: 11px;
+    font-weight: normal;
+    display: block;
   }
 }
 

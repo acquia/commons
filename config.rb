@@ -6,15 +6,16 @@ sass_dir = "sass"
 images_dir = "images"
 javascripts_dir = "scripts"
 
+# output_style = :expanded or :nested or :compact or :compressed
 output_style = :expanded
+environment = :production
 
 relative_assets = true
 
 # To disable debugging comments that display the original location of your selectors. Uncomment:
 # line_comments = false
-line_comments = true
 
 
-sass_options = {
-  :debug_info => true
-}
+# sass_options = {
+#   :debug_info => true
+# }
