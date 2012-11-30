@@ -40,7 +40,7 @@ function commons_bw_generate_group_widget($group) {
       }
       $view->set_arguments(array($group->nid));
       $view->execute();
-      $tabs[$key]['title'] = '<span class="commons-bw-tab-' . drupal_html_class($tabs[$key]['title']) . '"></span>' . t($tabs[$key]['title']) . ' <span class="commons-bw-result-count">'. count($view->result) . '</span>';
+      $tabs[$key]['title'] = t($tabs[$key]['title']) . ' <span class="commons-bw-result-count">'. count($view->result) . '</span>';
     }
     // Set the default tab.
     if (isset($tabs[$key]['default']) && $tabs[$key]['default']) {

@@ -74,58 +74,79 @@ ul.quicktabs-tabs {
   }
 }
 
-.commons-bw-tab-all {
-  @include sprite_url_height_width($icons, all);
+#quicktabs-tab-commons_bw-commons_all {
+  &:before {
+    content: '';
+    @include sprite_url_height_width($icons, all);
 
-  ul.quicktabs-style-commons-origins li.active & {
-    @include sprite_url_position($icons, all-active);
+    ul.quicktabs-style-commons-origins li.active & {
+      @include sprite_url_position($icons, all-active);
+    }
   }
 }
 
-.commons-bw-tab-posts {
-  @include sprite_url_height_width($icons, posts);
+#quicktabs-tab-commons_bw-commons_posts {
+  &:before {
+    content: '';
+    @include sprite_url_height_width($icons, posts);
 
-  ul.quicktabs-style-commons-origins li.active & {
-    @include sprite_url_position($icons, posts-active);
+    ul.quicktabs-style-commons-origins li.active & {
+      @include sprite_url_position($icons, posts-active);
+    }
   }
 }
 
-.commons-bw-tab-docs {
-  @include sprite_url_height_width($icons, docs);
+#quicktabs-tab-commons_bw-commons_documents {
+  &:before {
+    content: '';
+    @include sprite_url_height_width($icons, docs);
 
-  ul.quicktabs-style-commons-origins li.active & {
-    @include sprite_url_position($icons, docs-active);
+    ul.quicktabs-style-commons-origins li.active & {
+      @include sprite_url_position($icons, docs-active);
+    }
   }
 }
 
-.commons-bw-tab-qa {
-  @include sprite_url_height_width($icons, qa);
+#quicktabs-tab-commons_bw-commons_q_a {
+  &:before {
+    content: '';
+    @include sprite_url_height_width($icons, qa);
 
-  ul.quicktabs-style-commons-origins li.active & {
-    @include sprite_url_position($icons, qa-active);
+    ul.quicktabs-style-commons-origins li.active & {
+      @include sprite_url_position($icons, qa-active);
+    }
   }
 }
 
-.commons-bw-tab-ideas {
-  @include sprite_url_height_width($icons, ideas);
+#quicktabs-tab-commons_bw-commons_ideas {
+  &:before {
+    content: '';
+    @include sprite_url_height_width($icons, ideas);
 
-  ul.quicktabs-style-commons-origins li.active & {
-    @include sprite_url_position($icons, ideas-active);
+    ul.quicktabs-style-commons-origins li.active & {
+      @include sprite_url_position($icons, ideas-active);
+    }
   }
 }
 
-.commons-bw-tab-wikis {
-  @include sprite_url_height_width($icons, wikis);
+#quicktabs-tab-commons_bw-commons_wikis {
+  &:before {
+    content: '';
+    @include sprite_url_height_width($icons, wikis);
 
-  ul.quicktabs-style-commons-origins li.active & {
-    @include sprite_url_position($icons, wikis-active);
+    ul.quicktabs-style-commons-origins li.active & {
+      @include sprite_url_position($icons, wikis-active);
+    }
   }
 }
 
-.commons-bw-tab-polls {
-  @include sprite_url_height_width($icons, polls);
+#quicktabs-tab-commons_bw-commons_polls {
+  &:before {
+    content: '';
+    @include sprite_url_height_width($icons, polls);
 
-  ul.quicktabs-style-commons-origins li.active & {
-    @include sprite_url_position($icons, polls-active);
+    ul.quicktabs-style-commons-origins li.active & {
+      @include sprite_url_position($icons, polls-active);
+    }
   }
 }
