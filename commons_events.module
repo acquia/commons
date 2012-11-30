@@ -184,6 +184,18 @@ function commons_events_form_node_form_alter(&$form, &$form_state) {
 }
 
 /**
+ * Implements hook_commons_entity_integration.
+ */
+function commons_events_commons_entity_integration() {
+  return array(
+    'node' => array(
+      'event' => array(
+      ),
+    ),
+  );
+}
+
+/**
  * Custom node form validation handler.
  */
 function commons_events_node_form_validate($form, &$form_state) {
