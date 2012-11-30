@@ -44,9 +44,6 @@ function commons_follow_field_default_field_bases() {
           ),
         ),
         'sort' => array(
-          'direction' => 'ASC',
-          'field' => 'comment_body:value',
-          'property' => 'nid',
           'type' => 'none',
         ),
         'target_bundles' => array(),
@@ -92,9 +89,6 @@ function commons_follow_field_default_field_bases() {
           ),
         ),
         'sort' => array(
-          'direction' => 'ASC',
-          'field' => 'body:value',
-          'property' => 'nid',
           'type' => 'none',
         ),
         'target_bundles' => array(),
