@@ -32,7 +32,7 @@ function commons_search_form_alter(&$form, &$form_state, $form_id) {
       // the change of search engines.
       $site_key = 'o-search_facetapi';
     }
-    else if (module_exists('commons_search_solr')) {
+    else if (module_exists('apachesolr_search')) {
       // Are we using Apache Solr? If so change the Site search key to reflect
       // the change of search engines.
       $site_key = 'o-solr';
@@ -72,9 +72,10 @@ function commons_search_form_alter(&$form, &$form_state, $form_id) {
  * Add group id filter if appropriate.
  */
 function commons_search_search_form_submit($form, &$form_state) {
-  if (isset($form_state['search_group_id'])) {
+  if ($form_state['values']['custom_search_types'] == 'o-commons_search'
+    && isset($form_state['search_group_id'])) {
     $keys = $form_state['values']['search_block_form'];
-    if (module_exists('commons_search_solr')) {
+    if (module_exists('apachesolr_search')) {
       // Add on a filter to the solr query to only list results within the
       // specified group.
       $form_state['redirect'] .= '&f[1]=sm_og_group_ref:node:' . $form_state['search_group_id'];

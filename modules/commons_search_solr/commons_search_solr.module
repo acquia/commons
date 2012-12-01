@@ -1,11 +1,7 @@
 <?php
 /**
  * @file
- * Commons Search Solr module.
+ * Code for the Commons Search Solr feature.
  */
 
-function commons_search_solr_form_alter($form, &$form_state, $form_id) {
-  if ($form_id == 'search_block_form') {
-    
-  }
-}
+include_once 'commons_search_solr.features.inc';
