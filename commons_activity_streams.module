@@ -18,19 +18,12 @@ function commons_activity_streams_form_alter(&$form, &$form_state, $form_id) {
  */
 function commons_activity_streams_node_insert($node) {
   // Create a message when a user creates a new node.
-  // Borrowed from message_example.module:
-  // Save the message and assign it to the user realm. Since another user,
-  // usually an admin might create the node, but populate the author field
-  // with another user, we make sure the user realm is populated with the
-  // node's author, instead of the acting user (although in most cases it
-  // would be the same user).
-  // The following example demonstrates that we don't need to explicitly set
-  // the realm to the user, since if no realms are provided then the message
-  // is automatically assigned to the user passed in the function, or if no
-  // user object is provided, then to the acting user.
   $account = user_load($node->uid);
-
-  $message = message_create('commons_activity_streams_node_created', array('uid' => $account->uid, 'timestamp' => $node->created));
+  // Allow other modules to change the message type used for this event.
+  $hook = 'node_insert';
+  $message_type = 'commons_activity_streams_node_created';
+  drupal_alter('commons_activity_streams_message_selection', $message_type, $hook, $node);
+  $message = message_create($message_type, array('uid' => $account->uid, 'timestamp' => $node->created));
   // Save reference to the node in the node reference field, and the
   $wrapper = entity_metadata_wrapper('message', $message);
   // We use a multiple value field in case we wish to use the same
