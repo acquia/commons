@@ -21,6 +21,39 @@ function commons_q_a_commons_bw_group_widget() {
   );
 }
 
+/**
+* Implements hook_views_pre_render().
+*/
+function commons_q_a_views_pre_render(&$view) {
+  if ($view->name == 'commons_q_a_questions_in_a_group') {
+    $group_id = $view->args[0];
+    if (og_user_access('node', $group_id, 'create question content')) {
+      $view->attachment_before = l(t('Ask a question'), 'node/add/question', array('query' => array('og_group_ref' => $group_id)));
+    }
+  }
+}
+
+/**
+* Implements hook_form_alter().
+*/
+function commons_q_a_form_alter(&$form, &$form_state, $form_id) {
+  // Unset the groups audience field. Answers programatically inherit
+  // the group membership of their respective questions.
+  if ($form_id == 'answer_node_form') {
+    $form['og_group_ref']['#access'] = FALSE;
+  }
+}
+
+/**
+ * Implements hook_field_attach_submit().
+ */
+function commons_q_a_field_attach_submit($entity_type, &$entity, $form, &$form_state) {
+  // Questions should inherit the group membership of the related question.
+  if ($entity_type == 'node' && $entity->type == 'answer' && empty($entity->nid)) {
+    $question = node_load($entity->field_related_question[LANGUAGE_NONE][0]['target_id']);
+    $entity->og_group_ref[LANGUAGE_NONE] = $question->og_group_ref[LANGUAGE_NONE];
+  }
+}
 
 /**
  * Implements hook_commons_entity_integration.
