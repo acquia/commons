@@ -17,6 +17,13 @@ function commons_events_og_features_default_permissions() {
       'member' => 'member',
     ),
   );
+  // Exported og permission: 'node:group:create event content'
+  $permissions['node:group:create event content'] = array(
+    'roles' => array(
+      'administrator member' => 'administrator member',
+      'member' => 'member',
+    ),
+  );
 
   // Exported og permission: 'node:group:update own event content'
   $permissions['node:group:update own event content'] = array(
@@ -25,4 +32,6 @@ function commons_events_og_features_default_permissions() {
       'member' => 'member',
     ),
   );
+
+  return $permissions;
 }
