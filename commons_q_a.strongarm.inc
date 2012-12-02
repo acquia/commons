@@ -134,7 +134,7 @@ function commons_q_a_strongarm() {
     'extra_fields' => array(
       'form' => array(
         'title' => array(
-          'weight' => '-5',
+          'weight' => '0',
         ),
       ),
       'display' => array(),
@@ -190,7 +190,7 @@ function commons_q_a_strongarm() {
   $strongarm->name = 'node_options_question';
   $strongarm->value = array(
     0 => 'status',
-    1 => 'promote',
+    1 => 'revision',
   );
   $export['node_options_question'] = $strongarm;
 
