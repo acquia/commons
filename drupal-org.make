@@ -10,6 +10,10 @@ projects[aloha][version] = "2.x-dev"
 projects[aloha][type] = "module"
 projects[aloha][subdir] = "contrib"
 
+projects[apachesolr_og][version] = "1.x-dev"
+projects[apachesolr_og][type] = "module"
+projects[apachesolr_og][subdir] = "contrib"
+
 projects[connector][version] = "1.x-dev"
 projects[connector][type] = "module"
 projects[connector][subdir] = "contrib"
@@ -166,6 +170,12 @@ projects[registration][subdir] = "contrib"
 
 projects[rules][type] = "module"
 projects[rules][subdir] = "contrib"
+
+projects[search_facetapi][type] = "module"
+projects[search_facetapi][subdir] = "contrib"
+
+projects[facetapi][type] = "module"
+projects[facetapi][subdir] = "contrib"
 
 projects[strongarm][version] = "2.x-dev"
 projects[strongarm][type] = "module"
