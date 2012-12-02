@@ -247,15 +247,6 @@ function commons_search_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'custom_search_other';
-  $strongarm->value = array(
-    'user' => 'user',
-  );
-  $export['custom_search_other'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
   $strongarm->name = 'custom_search_paths';
   $strongarm->value = '';
   $export['custom_search_paths'] = $strongarm;

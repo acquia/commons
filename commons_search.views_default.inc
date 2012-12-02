@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * commons_search_core.views_default.inc
+ * commons_search.views_default.inc
  */
 
 /**

@@ -38,7 +38,6 @@ function commons_search_solr_strongarm() {
   $strongarm->value = array(
     'apachesolr_search' => 'apachesolr_search',
     'user' => 'user',
-    'node' => 0,
   );
   $export['search_active_modules'] = $strongarm;
 
