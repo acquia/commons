@@ -55,9 +55,12 @@ function commons_follow_user_commons_follow_get_nids($account, $options) {
     ->execute();
 
   $nids = array();
-  foreach ($result['node'] as $nid => $row) {
-    $nids[] = $nid;
+  if (!empty($result['node'])) {
+    foreach ($result['node'] as $nid => $row) {
+      $nids[] = $nid;
+    }
   }
+
 
   return $nids;
 }
