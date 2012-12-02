@@ -230,7 +230,7 @@ function commons_groups_field_definition(&$field_instances, $entity_type, $bundl
     ),
     'entity_type' => 'node',
     'field_name' => 'og_group_ref',
-    'label' => 'Groups audience',
+    'label' => 'Audience',
     'required' => 0,
     'settings' => array(
       'behaviors' => array(
@@ -270,7 +270,7 @@ function commons_groups_field_definition(&$field_instances, $entity_type, $bundl
       'module' => 'og',
       'settings' => array(),
       'type' => 'og_complex',
-      'weight' => 0,
+      'weight' => 5,
     ),
   );
 
