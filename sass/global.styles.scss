@@ -1488,12 +1488,16 @@ ul.action-links {
 
 .pane-views-panes,
 .pane-views {
-  // @extend %pod;
+  @extend %pod;
   h2 {
     font:{
       size:20px;
     }
     color:$gray;
+  }
+
+  > div {
+    @extend %pod-content;
   }
 }
 
