@@ -385,7 +385,7 @@ function commons_events_field_default_field_instances() {
           'open' => '',
         ),
         'settings' => array(
-          'from_address' => 'jpontani@gmail.com',
+          'from_address' => 'admin@example.com',
           'multiple_registrations' => 0,
         ),
         'status' => 1,
@@ -488,7 +488,6 @@ function commons_events_field_default_field_instances() {
   t('Maximum number of attendees');
   t('Registration');
   t('Registration type');
-  t('Topics');
   t('URL');
 
   return $field_instances;
