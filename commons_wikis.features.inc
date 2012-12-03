@@ -41,9 +41,19 @@ function commons_wikis_default_message_type() {
     "arguments" : null,
     "message_text" : { "und" : [
         {
-          "value" : "[current-user:name] has updated the wiki [message:field-target-nodes:1].\\u003Ca\\u003E\\u003C\\/a\\u003E\\u003Ca\\u003E\\u003C\\/a\\u003E",
+          "value" : "\\u003Ca\\u003E\\u003C\\/a\\u003E\\u003Ca\\u003E\\u003C\\/a\\u003E\\u003Cbr\\u003E",
           "format" : "filtered_html",
-          "safe_value" : "[current-user:name] has updated the wiki [message:field-target-nodes:1].\\u003Ca\\u003E\\u003C\\/a\\u003E\\u003Ca\\u003E\\u003C\\/a\\u003E"
+          "safe_value" : "\\u003Ca\\u003E\\u003C\\/a\\u003E\\u003Ca\\u003E\\u003C\\/a\\u003E\\u003Cbr\\u003E"
+        },
+        {
+          "value" : "\\u003Ca href=\\u0022[current-user:url]\\u0022 class=\\u0022aloha-link-text\\u0022\\u003E\\u003C\\/a\\u003E\\u003Cbr style=\\u0022\\u0022\\u003E",
+          "format" : "full_html",
+          "safe_value" : "\\u003Ca href=\\u0022[current-user:url]\\u0022 class=\\u0022aloha-link-text\\u0022\\u003E\\u003C\\/a\\u003E\\u003Cbr style=\\u0022\\u0022\\u003E"
+        },
+        {
+          "value" : "\\u003Ca href=\\u0022[current-user:url]\\u0022\\u003E@{message:user:name}\\u003C\\/a\\u003E has updated the wiki page \\u003Ca href=\\u0022[message:field-target-nodes:0:url]\\u0022 class=\\u0022aloha-link-text\\u0022\\u003E[message:field-target-nodes:0]\\u003C\\/a\\u003E.",
+          "format" : "full_html",
+          "safe_value" : "\\u003Ca href=\\u0022[current-user:url]\\u0022\\u003E@{message:user:name}\\u003C\\/a\\u003E has updated the wiki page \\u003Ca href=\\u0022[message:field-target-nodes:0:url]\\u0022 class=\\u0022aloha-link-text\\u0022\\u003E[message:field-target-nodes:0]\\u003C\\/a\\u003E."
         }
       ]
     }
