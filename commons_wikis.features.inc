@@ -22,7 +22,33 @@ function commons_wikis_ctools_plugin_api() {
  * Implements hook_views_api().
  */
 function commons_wikis_views_api() {
-  return array("version" => "3.0");
+  return array("api" => "3.0");
+}
+
+/**
+ * Implements hook_default_message_type().
+ */
+function commons_wikis_default_message_type() {
+  $items = array();
+  $items['commons_wikis_wiki_updated'] = entity_import('message_type', '{
+    "name" : "commons_wikis_wiki_updated",
+    "description" : "commons_wikis_wiki_updated",
+    "argument_keys" : [],
+    "argument" : [],
+    "category" : "message_type",
+    "data" : { "purge" : { "override" : 0, "enabled" : 0, "quota" : "", "days" : "" } },
+    "language" : "",
+    "arguments" : null,
+    "message_text" : { "und" : [
+        {
+          "value" : "[current-user:name] has updated the wiki [message:field-target-nodes:1].\\u003Ca\\u003E\\u003C\\/a\\u003E\\u003Ca\\u003E\\u003C\\/a\\u003E",
+          "format" : "filtered_html",
+          "safe_value" : "[current-user:name] has updated the wiki [message:field-target-nodes:1].\\u003Ca\\u003E\\u003C\\/a\\u003E\\u003Ca\\u003E\\u003C\\/a\\u003E"
+        }
+      ]
+    }
+  }');
+  return $items;
 }
 
 /**

@@ -19,6 +19,12 @@ function commons_wikis_user_default_permissions() {
     'module' => 'node',
   );
 
+  // Exported permission: delete own wiki content.
+  $permissions['delete own wiki content'] = array(
+    'name' => 'delete own wiki content',
+    'roles' => array(),
+    'module' => 'node',
+  );
 
   // Exported permission: edit any wiki content.
   $permissions['edit any wiki content'] = array(

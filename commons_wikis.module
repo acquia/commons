@@ -109,8 +109,9 @@ function commons_wikis_commons_entity_integration() {
  */
 function commons_wikis_node_update($node) {
   if ($node->type == 'wiki' && module_exists('message')) {
-    $account = user_load($node->uid);
-    $message = message_create('commons_wikis_wiki_updated', array('uid' => $account->uid, 'timestamp' => REQUEST_TIME));
+    global $user;
+    commons_groups_first_contribution($user, $node); 
+    $message = message_create('commons_wikis_wiki_updated', array('uid' => $user->uid, 'timestamp' => REQUEST_TIME));
     $wrapper = entity_metadata_wrapper('message', $message);
     // Save reference to the node in the node reference field.
     // We use a multiple value field in case we wish to use the same

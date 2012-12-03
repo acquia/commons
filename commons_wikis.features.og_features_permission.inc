@@ -13,8 +13,8 @@ function commons_wikis_og_features_default_permissions() {
   // Exported og permission: 'node:group:create wiki content'
   $permissions['node:group:create wiki content'] = array(
     'roles' => array(
-      'administrator member' => 'administrator member',
       'member' => 'member',
+      'administrator member' => 'administrator member',
     ),
   );
 
@@ -44,8 +44,8 @@ function commons_wikis_og_features_default_permissions() {
   // Exported og permission: 'node:group:update own wiki content'
   $permissions['node:group:update own wiki content'] = array(
     'roles' => array(
-      'administrator member' => 'administrator member',
       'member' => 'member',
+      'administrator member' => 'administrator member',
     ),
   );
 
