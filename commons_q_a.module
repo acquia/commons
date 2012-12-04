@@ -31,6 +31,37 @@ function commons_q_a_views_pre_render(&$view) {
       $view->attachment_before = l(t('Ask a question'), 'node/add/question', array('query' => array('og_group_ref' => $group_id)));
     }
   }
+  if ($view->name == 'commons_question_answers' && !empty($view->args[0])) {
+    // If the user has access to post into any of the groups associated
+    // with the question, embed a simplified answer node form.
+    $question_nid = $view->args[0];
+    $question = node_load($question_nid);
+    foreach ($question->og_group_ref[LANGUAGE_NONE] as $key => $value) {
+      if (og_user_access('node', $value['target_id'], 'create answer content')) {
+        module_load_include('inc', 'node', 'node.pages');
+        global $user;
+        $types = node_type_get_types();
+        $node = (object) array('uid' => $user->uid, 'name' => (isset($user->name) ? $user->name : ''), 'type' => 'answer', 'language' => LANGUAGE_NONE);
+        // Prepopulate the Related question field
+        // with Entityreference Prepopulate, which looks strictly at $_GET.
+        $_GET['field_related_question'] = '20';
+        $answer_form = drupal_get_form('answer_node_form', $node);
+        $answer_form['header'] = array(
+          '#markup' => '<h3>' . t('Add a new answer') . '</h3>',
+          '#weight' => -10,
+        );
+        // Hide any vertical tabs that might be present.
+        $answer_form['additional_settings']['#access'] = FALSE;
+        // Hide the Related question field.
+        $answer_form['field_related_question']['#access'] = FALSE;
+        // Add the form to the attachment_after part of the view,
+        $view->attachment_after .= drupal_render($answer_form);
+        // We only need to add the form once if the user has access to
+        // post questions into any of the groups associated with the parent.
+        return;
+      }
+    }
+  }
 }
 
 /**
