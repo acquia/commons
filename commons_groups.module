@@ -53,6 +53,7 @@ function commons_groups_commons_entity_integration() {
     ),
   );
 }
+
 /**
 * Implements hook_form_alter().
 */
@@ -63,10 +64,18 @@ function commons_groups_form_alter(&$form, &$form_state, $form_id) {
   // Redirect the user back to the group homepage after submitting
   // a node within a group.
   if (isset($form['#node']) && substr($form_id, -10) == '_node_form') {
+    // Set a human-friendly page title.
+    if (empty($form['#node']->nid)) {
+      $types = node_type_get_types();
+      $type = $form['#node']->type;
+      // Use 'a' or 'an' appropriately.
+      $verb = strtolower($type[0]) == 'a' ? 'Create an' : 'Create a';
+      drupal_set_title(t("$verb @name", array('@name' => $types[$type]->name)), PASS_THROUGH);
+    }
+    // Customizations to the node form for entitites that are group content.
     $group_content_entity_types = commons_groups_get_group_content_entity_types();
     if (isset($group_content_entity_types['node'][$form['#node']->type])) {
       $form['actions']['submit']['#submit'][] = 'commons_groups_node_in_group_submit';
-      $form['og_group_ref'][LANGUAGE_NONE][0]['admin']['#access'] = FALSE;
     }
   }
   if (in_array($form_id, array('og_ui_admin_global_permissions', 'og_ui_admin_permissions'))) {
@@ -277,7 +286,6 @@ function commons_groups_entityreference_default_value($entity_type, $entity, $fi
   }
 
   $ids = explode(',', $_GET[$field_name]);
-
   // Check access to the provided entities.
   $target_type = $field['settings']['target_type'];
   entity_load($target_type, $ids);
@@ -291,7 +299,6 @@ function commons_groups_entityreference_default_value($entity_type, $entity, $fi
         $items[]= array('target_id' => $target_id);
     }
   }
-
   return $items;
 }
 
