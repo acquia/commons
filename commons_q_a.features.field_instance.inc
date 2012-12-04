@@ -244,7 +244,7 @@ function commons_q_a_field_default_field_instances() {
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => '2',
+      'weight' => '1',
     ),
   );
 
@@ -289,7 +289,7 @@ function commons_q_a_field_default_field_instances() {
       'module' => 'radioactivity',
       'settings' => array(),
       'type' => 'radioactivity_basic_widget',
-      'weight' => '3',
+      'weight' => '2',
     ),
   );
 
