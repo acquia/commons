@@ -42,6 +42,9 @@ function commons_q_a_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'answer_node_form') {
     $form['og_group_ref']['#access'] = FALSE;
   }
+  if ($form_id == 'question_node_form' && empty($form['node']->nid)) {
+    drupal_set_title(t('Ask a question'));
+  }
 }
 
 /**
