@@ -18,57 +18,60 @@ $icons: sprite-map('icons/*.png', $spacing: 20px);
 
 $link_color: #a5a3a3;
 
-ul.quicktabs-tabs {
-  margin: 0 0 30px 0;
-  padding: 0;
+.quicktabs-style-commons-origins {
 
-  .block-content & {
+  ul.quicktabs-tabs {
+    margin: 0 0 30px 0;
     padding: 0;
-  }
 
-  li {
-    display: inline-block;
-    padding: 0;
-    margin: 0 12px 0 0;
-
-    a {
-      background-color: #f1f1f1;
-      @include border-radius(3px);
-      padding: 3px 10px 3px 6px;
-      display: block;
-      color: $link_color;
-
-      &:hover {
-        text-decoration: none;
-      }
-
-      span {
-        color: darken($link_color, 40%);
-        font-size: .7em;
-      }
+    .block-content & {
+      padding: 0;
     }
 
-    &.active a {
-      background-color: #00568c;
-      color: #fff;
-      position: relative;
+    li {
+      display: inline-block;
+      padding: 0;
+      margin: 0 12px 0 0;
 
-      &:after {
-        content: '';
-        width: 0px;
-        height: 0px;
+      a {
+        background-color: #f1f1f1;
+        @include border-radius(3px);
+        padding: 3px 10px 3px 6px;
         display: block;
-        border-style: solid;
-        border-width: 5px 7.5px 0 7.5px;
-        border-color: #00568c transparent transparent transparent;
-        position: absolute;
-        top: 100%;
-        left: 50%;
-        margin-left: -7.5px;
+        color: $link_color;
+
+        &:hover {
+          text-decoration: none;
+        }
+
+        span {
+          color: darken($link_color, 40%);
+          font-size: .7em;
+        }
       }
 
-      span {
+      &.active a {
+        background-color: #00568c;
         color: #fff;
+        position: relative;
+
+        &:after {
+          content: '';
+          width: 0px;
+          height: 0px;
+          display: block;
+          border-style: solid;
+          border-width: 5px 7.5px 0 7.5px;
+          border-color: #00568c transparent transparent transparent;
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          margin-left: -7.5px;
+        }
+
+        span {
+          color: #fff;
+        }
       }
     }
   }
