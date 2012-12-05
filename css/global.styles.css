@@ -6,8 +6,8 @@
   box-shadow: #0f4363 -1px 0px 0px;
 }
 
-.pane-views-panes,
-.pane-views, .panels-ipe-portlet-wrapper, .view-display-id-commons_events_upcoming_page .views-row, .view-id-commons_groups_directory .views-row,
+.front.not-logged-in .pane-views-panes, .front.not-logged-in
+.pane-views, .pane-commons-radioactivity-groups-most-active-panel-pane-1, .node-type-group .panels-ipe-portlet-wrapper, #panels-ipe-display-panel-context-page-commons-home-page-commons-home-panel-context .panels-ipe-portlet-wrapper, .view-display-id-commons_events_upcoming_page .views-row, .view-id-commons_groups_directory .views-row,
 .view-id-commons_groups_directory .view-filters {
   background-color: white;
   -webkit-border-radius: 3px;
@@ -22,8 +22,8 @@
   margin-bottom: 20px;
 }
 
-.pane-views-panes > div,
-.pane-views > div, .panels-ipe-portlet-content, .view-display-id-commons_events_upcoming_page .views-row article, .view-id-commons_groups_directory .views-row article,
+.front.not-logged-in .pane-views-panes > div, .front.not-logged-in
+.pane-views > div, .pane-commons-radioactivity-groups-most-active-panel-pane-1 > .block-inner, .node-type-group .panels-ipe-portlet-wrapper > .panels-ipe-portlet-content, #panels-ipe-display-panel-context-page-commons-home-page-commons-home-panel-context .panels-ipe-portlet-content, .view-display-id-commons_events_upcoming_page .views-row article, .view-id-commons_groups_directory .views-row article,
 .view-id-commons_groups_directory .views-row form,
 .view-id-commons_groups_directory .view-filters article,
 .view-id-commons_groups_directory .view-filters form {
@@ -1049,29 +1049,25 @@ ul.action-links {
 
 .pane-commons-activity-streams-activity-panel-pane-1 .block-inner,
 .pane-commons-featured-panel-pane-1 .block-inner,
-.pane-commons-events-upcoming .block-inner,
-.pane-commons-radioactivity-groups-most-active-panel-pane-1 .block-inner {
+.pane-commons-events-upcoming .block-inner {
   padding: 0 0 15px 0;
   margin: 0;
 }
 .pane-commons-activity-streams-activity-panel-pane-1 .block-inner .pane-title,
 .pane-commons-featured-panel-pane-1 .block-inner .pane-title,
-.pane-commons-events-upcoming .block-inner .pane-title,
-.pane-commons-radioactivity-groups-most-active-panel-pane-1 .block-inner .pane-title {
+.pane-commons-events-upcoming .block-inner .pane-title {
   padding: 20px 20px 0 20px;
   line-height: 20px;
 }
 .pane-commons-activity-streams-activity-panel-pane-1 .block-inner .views-row,
 .pane-commons-featured-panel-pane-1 .block-inner .views-row,
-.pane-commons-events-upcoming .block-inner .views-row,
-.pane-commons-radioactivity-groups-most-active-panel-pane-1 .block-inner .views-row {
+.pane-commons-events-upcoming .block-inner .views-row {
   padding: 10px 20px 10px 20px;
   border-bottom: 1px solid #eee;
 }
 .pane-commons-activity-streams-activity-panel-pane-1 .block-inner .views-row-last,
 .pane-commons-featured-panel-pane-1 .block-inner .views-row-last,
-.pane-commons-events-upcoming .block-inner .views-row-last,
-.pane-commons-radioactivity-groups-most-active-panel-pane-1 .block-inner .views-row-last {
+.pane-commons-events-upcoming .block-inner .views-row-last {
   border-bottom: none;
 }
 .pane-commons-activity-streams-activity-panel-pane-1 .block-inner .views-field-field-date,
@@ -1082,10 +1078,7 @@ ul.action-links {
 .pane-commons-featured-panel-pane-1 .block-inner .views-field-comment-count,
 .pane-commons-events-upcoming .block-inner .views-field-field-date,
 .pane-commons-events-upcoming .block-inner .views-field-field-location,
-.pane-commons-events-upcoming .block-inner .views-field-comment-count,
-.pane-commons-radioactivity-groups-most-active-panel-pane-1 .block-inner .views-field-field-date,
-.pane-commons-radioactivity-groups-most-active-panel-pane-1 .block-inner .views-field-field-location,
-.pane-commons-radioactivity-groups-most-active-panel-pane-1 .block-inner .views-field-comment-count {
+.pane-commons-events-upcoming .block-inner .views-field-comment-count {
   font-size: 0.85em;
 }
 .pane-commons-activity-streams-activity-panel-pane-1 .block-inner .views-field-field-location,
@@ -1093,10 +1086,42 @@ ul.action-links {
 .pane-commons-featured-panel-pane-1 .block-inner .views-field-field-location,
 .pane-commons-featured-panel-pane-1 .block-inner .views-field-comment-count,
 .pane-commons-events-upcoming .block-inner .views-field-field-location,
-.pane-commons-events-upcoming .block-inner .views-field-comment-count,
-.pane-commons-radioactivity-groups-most-active-panel-pane-1 .block-inner .views-field-field-location,
-.pane-commons-radioactivity-groups-most-active-panel-pane-1 .block-inner .views-field-comment-count {
+.pane-commons-events-upcoming .block-inner .views-field-comment-count {
   color: #a5a5a5;
+}
+
+.view-commons-radioactivity-groups-most-active .type-Wiki:before {
+  content: '';
+  background: url('../images/icons-s16561be884.png') 0 -212px no-repeat;
+  width: 13px;
+  height: 13px;
+  display: inline-block;
+  margin-right: 3px;
+  position: relative;
+  top: 1px;
+  margin-right: 6px;
+}
+.view-commons-radioactivity-groups-most-active .type-Event:before {
+  content: '';
+  background: url('../images/icons-s16561be884.png') 0 -370px no-repeat;
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  margin-right: 3px;
+  position: relative;
+  top: 1px;
+  margin-right: 6px;
+}
+.view-commons-radioactivity-groups-most-active .type-Post:before {
+  content: '';
+  background: url('../images/icons-s16561be884.png') 0 -594px no-repeat;
+  width: 11px;
+  height: 11px;
+  display: inline-block;
+  margin-right: 3px;
+  position: relative;
+  top: 1px;
+  margin-right: 6px;
 }
 
 .pane-commons-groups-directory-panel-pane-1 {
@@ -1123,7 +1148,7 @@ ul.action-links {
   text-align: right;
 }
 .pane-commons-groups-commons-groups-create-group a:before {
-  background: url('../images/icons-se3d1e20cf1.png') 0 -109px no-repeat;
+  background: url('../images/icons-s16561be884.png') 0 -109px no-repeat;
   width: 15px;
   height: 15px;
   display: inline-block;

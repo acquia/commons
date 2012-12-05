@@ -1474,7 +1474,7 @@ ul.action-links {
 
 .pane-views-panes,
 .pane-views {
-  @extend %pod;
+  
   h2 {
     font:{
       size:20px;
@@ -1482,8 +1482,12 @@ ul.action-links {
     color:$gray;
   }
 
-  > div {
-    @extend %pod-content;
+  .front.not-logged-in & {
+    @extend %pod;
+
+    > div {
+      @extend %pod-content;
+    }
   }
 }
 
@@ -1495,8 +1499,7 @@ ul.action-links {
 // move padding to views-row for full stretch borders
 .pane-commons-activity-streams-activity-panel-pane-1,
 .pane-commons-featured-panel-pane-1,
-.pane-commons-events-upcoming,
-.pane-commons-radioactivity-groups-most-active-panel-pane-1 {
+.pane-commons-events-upcoming {
   .block-inner {
     padding:0 0 15px 0;
     margin:0;
@@ -1523,6 +1526,50 @@ ul.action-links {
   }
 }
 
+.pane-commons-radioactivity-groups-most-active-panel-pane-1 {
+  @extend %pod;
+
+  > .block-inner {
+    @extend %pod-content;
+  }
+}
+
+.node-type-group {
+  .panels-ipe-portlet-wrapper {
+    @extend %pod;
+
+    > .panels-ipe-portlet-content {
+      @extend %pod-content;
+    }
+  }
+}
+
+.view-commons-radioactivity-groups-most-active {
+  .type-Wiki {
+    &:before {
+      content: '';
+      @include sprite_url_height_width($icons, wikis);
+      margin-right: 6px;
+    }
+  }
+
+  .type-Event {
+    &:before {
+      content: '';
+      @include sprite_url_height_width($icons, events);
+      margin-right: 6px;
+    }
+  }
+
+  .type-Post {
+    &:before {
+      content: '';
+      @include sprite_url_height_width($icons, posts);
+      margin-right: 6px;
+    }
+  }
+}
+
 .pane-commons-groups-directory-panel-pane-1 {
   background-color:transparent;
   @include border-radius(0px);
@@ -1537,12 +1584,14 @@ ul.action-links {
   }
 }
 
-.panels-ipe-portlet-wrapper {
-  @extend %pod;
-}
+#panels-ipe-display-panel-context-page-commons-home-page-commons-home-panel-context {
+  .panels-ipe-portlet-wrapper {
+    @extend %pod;
+  }
 
-.panels-ipe-portlet-content {
-  @extend %pod-content;
+  .panels-ipe-portlet-content {
+    @extend %pod-content;
+  }
 }
 
 .pane-commons-groups-commons-groups-create-group {
