@@ -83,6 +83,18 @@ $gutter-width: 10px;
 
 // global chunck of code for importing
 
+$icons: sprite-map('icons/*.png', $spacing: 20px);
+
+@mixin sprite_url_height_width($sprite_name, $image_name) {
+  background: sprite($sprite_name, $image_name) no-repeat;
+  width: image-width(sprite-file($sprite_name, $image_name));
+  height: image-height(sprite-file($sprite_name, $image_name));
+  display: inline-block;
+  margin-right: 3px;
+  position: relative;
+  top: 1px;
+}
+
 
 //
 // Markup free clearing

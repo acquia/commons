@@ -1546,8 +1546,16 @@ ul.action-links {
 }
 
 .pane-commons-groups-commons-groups-create-group {
+  text-align: right;
+  
   a {
     @extend %btn-green;
+
+    &:before {
+      @include sprite_url_height_width($icons, icon-groups-small);
+      content: '';
+      top: 3px;
+    }
   }
 }
 
