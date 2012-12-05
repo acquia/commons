@@ -161,6 +161,9 @@ projects[radioactivity][subdir] = "contrib"
 ; http://drupal.org/node/1816252#comment-6617208
 projects[radioactivity][patch][] = "http://drupal.org/files/undefined_array-1816252-1.patch"
 
+projects[rate][type] = "module"
+projects[rate][subdir] = "contrib"
+
 projects[realname][type] = "module"
 projects[realname][subdir] = "contrib"
 
@@ -318,6 +321,11 @@ projects[commons_radioactivity][download][type] = "git"
 projects[commons_radioactivity][download][url] = "http://git.drupal.org/project/commons_radioactivity.git"
 projects[commons_radioactivity][download][branch] = "7.x-3.x"
 
+projects[commons_like][type] = "module"
+projects[commons_like][subdir] = "contrib"
+projects[commons_like][download][type] = "git"
+projects[commons_like][download][url] = "http://git.drupal.org/project/commons_like.git"
+projects[commons_like][download][branch] = "7.x-3.x"
 
 projects[commons_search][type] = "module"
 projects[commons_search][subdir] = "contrib"
