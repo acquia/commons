@@ -140,7 +140,7 @@ function commons_follow_ui_generate_tabs() {
       'contents' => array('#markup' => message_subscribe_ui_tab($account, $flag_name)),
     );
   }
-  $settings = array('style' => 'Excel', 'ajax' => FALSE, 'html' => TRUE, 'title' => 'test', 'default_tab' => 'commons_follow_group');
+  $settings = array('style' => 'Commons Tabs', 'ajax' => FALSE, 'html' => TRUE, 'title' => 'test', 'default_tab' => 'commons_follow_group');
   $built_tabs = quicktabs_build_quicktabs('commons_follow_ui', $settings, $tabs);
   return $built_tabs;
 }
