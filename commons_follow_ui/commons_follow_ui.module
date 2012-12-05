@@ -1,4 +1,4 @@
-<?php
+  <?php
 
 
 /**
@@ -105,13 +105,38 @@ function commons_follow_message_subscribe_email_setting_submit($form, &$form_sta
   }
 }
 
+/**
+ * Generates the QuickTab title for the subscription UI.
+ * Replaces message_subscribe_tab_title().
+ */
+function commons_follow_ui_tab_title($account, $flag_name = NULL) {
+  global $user;
+
+  if (!$flag_name) {
+    // We are inside /message-subscribe so get the first flag.
+    $flag_name = key(message_subscribe_flag_get_flags());
+  }
+
+  $flag = flag_get_flag($flag_name);
+  $flaggings = flag_get_user_flags($flag->content_type, NULL, $account->uid);
+
+  $count = !empty($flaggings[$flag_name]) ? count($flaggings[$flag_name]) : 0;
+  $params = array(
+    '@flag' => $flag->title,
+    '@count' => $count,
+    '@name' => format_username($account),
+  );
+  return $account->uid == $user->uid ? t('@flag you follow <span class="user-follow-count">@count</span>', $params) : t('@flag @name follows <span class="user-follow-count">@count</span>', $params);
+}
+
+
 function commons_follow_ui_generate_tabs() {
   global $user;
   $account = $user;
   $tabs = array();
   foreach (array_keys(message_subscribe_flag_get_flags()) as $flag_name) {
     $tabs[$flag_name] = array(
-      'title' => message_subscribe_ui_tab_title($account, $flag_name),
+      'title' => commons_follow_ui_tab_title($account, $flag_name),
       'contents' => array('#markup' => message_subscribe_ui_tab($account, $flag_name)),
     );
   }
