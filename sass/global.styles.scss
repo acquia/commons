@@ -1547,7 +1547,7 @@ ul.action-links {
 
 .pane-commons-groups-commons-groups-create-group {
   text-align: right;
-  
+
   a {
     @extend %btn-green;
 
@@ -2271,8 +2271,11 @@ form.commons-events-form-float {
   @extend %btn-green;
   padding: 5px 20px;
   margin:0;
-}
 
+  &.js-hide {
+    display: none;
+  }
+}
 
 #edit-field-topics-und {
   border-top: 2px groove #8A8A8A;
