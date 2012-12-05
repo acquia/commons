@@ -19,7 +19,7 @@ function commons_follow_user_flag_default_flags() {
   // Exported flag: "People you follow".
   $flags['commons_follow_user'] = array(
     'content_type' => 'user',
-    'title' => 'People you follow',
+    'title' => 'People',
     'global' => '0',
     'types' => array(),
     'flag_short' => 'Follow',

@@ -19,7 +19,7 @@ function commons_follow_node_flag_default_flags() {
   // Exported flag: "Other content you follow".
   $flags['commons_follow_node'] = array(
     'content_type' => 'node',
-    'title' => 'Other content you follow',
+    'title' => 'Other content',
     'global' => '0',
     'types' => array(
     ),

@@ -19,7 +19,7 @@ function commons_follow_term_flag_default_flags() {
   // Exported flag: "Topics you follow".
   $flags['commons_follow_term'] = array(
     'content_type' => 'taxonomy_term',
-    'title' => 'Topics you follow',
+    'title' => 'Topics',
     'global' => '0',
     'types' => array(
       0 => 'topics',
