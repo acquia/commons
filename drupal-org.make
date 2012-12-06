@@ -116,6 +116,9 @@ projects[message_subscribe][download][url] = "http://git.drupal.org/project/mess
 projects[message_subscribe][download][branch] = "7.x-1.x"
 projects[message_subscribe][subdir] = "contrib"
 
+projects[memcache][type] = "module"
+projects[memcache][subdir] = "contrib"
+
 projects[module_filter][type] = "module"
 projects[module_filter][subdir] = "contrib"
 
@@ -160,6 +163,9 @@ projects[radioactivity][subdir] = "contrib"
 ; Notice error for accessing an undefined array element
 ; http://drupal.org/node/1816252#comment-6617208
 projects[radioactivity][patch][] = "http://drupal.org/files/undefined_array-1816252-1.patch"
+; Radioactivity not compatible with Memcache module
+; http://drupal.org/node/1860216
+projects[radioactivity][patch][] = "http://drupal.org/files/radioactivity-memcache.patch"
 
 projects[rate][type] = "module"
 projects[rate][subdir] = "contrib"
