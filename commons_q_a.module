@@ -104,9 +104,89 @@ function commons_q_a_commons_entity_integration() {
 }
 
 function commons_q_a_commons_activity_streams_message_selection_alter(&$message_type, $hook, $node) {
-  //$a = func_get_args();
-  //dpm($a, 'and args');
-  if ($hook == 'node_insert' && $node->type == 'question') {
+    if ($hook == 'node_insert' && $node->type == 'question') {
     $message_type = 'commons_q_a_question_asked';
   }
+}
+
+
+/**
+ * Implements hook_rate_templates().
+ */
+function commons_q_a_rate_templates() {
+  $templates = array();
+
+  $templates['commons_thumbs_up_down'] = new stdClass();
+  $templates['commons_thumbs_up_down']->value_type = 'points';
+  $templates['commons_thumbs_up_down']->options = array(
+    array(1, 'up'),
+    array(-1, 'down'),
+  );
+  $templates['commons_thumbs_up_down']->theme = 'commons_template_commons_thumbs_up_down';
+  $templates['commons_thumbs_up_down']->css = drupal_get_path('module', 'commons_q_a') . '/templates/commons_thumbs_up_down/commons-thumbs-up-down.css';
+  $templates['commons_thumbs_up_down']->customizable = FALSE;
+  $templates['commons_thumbs_up_down']->translate = TRUE;
+  $templates['commons_thumbs_up_down']->template_title = t('Commons Thumbs up / down');
+
+  return $templates;
+}
+
+/**
+ * Implements hook_strongarm_alter().
+ */
+ function commons_q_a_strongarm_alter(&$items) {
+  // Add Rate module widget configuration used for thumbs up/down
+  // rating of answers.
+  if (!empty($items['rate_widgets']->value)) {
+    $items['rate_widgets']->value[] = commons_q_a_rate_widget();
+  }
+}
+
+
+/**
+ * Return a Rate module widget configuration used for thumbs up/down
+ * rating of answers.
+ */
+function commons_q_a_rate_widget() {
+  return (object) array(
+    'name' => 'commons_answer',
+    'tag' => 'commons_thumbs_up_down',
+    'title' => 'Answer',
+    'node_types' => array(
+      0 => 'answer',
+    ),
+    'comment_types' => array(),
+    'options' => array(
+      0 => array(
+        0 => 1,
+        1 => 'up',
+      ),
+      1 => array(
+        0 => -1,
+        1 => 'down',
+      ),
+    ),
+    'template' => 'commons_thumbs_up_down',
+    'node_display' => '2',
+    'teaser_display' => FALSE,
+    'comment_display' => '2',
+    'node_display_mode' => '1',
+    'teaser_display_mode' => '1',
+    'comment_display_mode' => '1',
+    'roles' => array(
+      2 => '2',
+      1 => 0,
+    ),
+    'allow_voting_by_author' => 1,
+    'noperm_behaviour' => '1',
+    'displayed' => '1',
+    'displayed_just_voted' => '2',
+    'description' => '',
+    'description_in_compact' => TRUE,
+    'delete_vote_on_second_click' => '1',
+    'value_type' => 'points',
+    'theme' => 'commons_template_commons_thumbs_up_down',
+    'css' => 'profiles/commons/modules/contrib/commons_q_a/templates/commons_thumbs_up_down/commons-thumbs-up-down.css',
+    'translate' => TRUE,
+  );
 }
