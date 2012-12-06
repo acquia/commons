@@ -6,6 +6,24 @@
 
 include_once 'commons_groups.features.inc';
 
+
+/**
+ * Implements hook_entity_view().
+ */
+function commons_groups_entity_view($entity, $type, $view_mode, $langcode) {
+  // Set a breadcrumb for nodes in groups. We currently assume that
+  // nodes are groups.
+  if ($view_mode == 'full' && !empty($entity->og_group_ref[LANGUAGE_NONE][0]['target_id']) && $type != 'user') {
+    $breadcrumb = array();
+    $breadcrumb[] = l(t('Home'), NULL);
+    $breadcrumb[] = l(t('Groups'), 'groups');
+    $group = node_load($entity->og_group_ref[LANGUAGE_NONE][0]['target_id']);
+    if (node_access('view', $group)) {
+      $breadcrumb[] = l($group->title, 'node/' . $group->nid);
+    }
+    drupal_set_breadcrumb($breadcrumb);
+  }
+}
 /**
  * Implements hook_menu_alter().
  */
