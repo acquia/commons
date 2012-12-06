@@ -499,6 +499,10 @@ ul.links {
   }
 }
 
+ul.primary.tabs li a {
+  @include border-radius(3px 3px 0px 0px);
+}
+
 
 /*
  * Search results are an ordered list so reset the margin
@@ -1605,6 +1609,16 @@ ul.action-links {
       content: '';
       top: 3px;
     }
+  }
+}
+
+.page-search {
+  .panels-ipe-region {
+    @extend %pod;
+  }
+
+  .panels-ipe-sort-container {
+    @extend %pod-content;
   }
 }
 
