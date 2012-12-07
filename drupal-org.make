@@ -160,6 +160,10 @@ projects[quicktabs][version] = "3.x-dev"
 
 projects[radioactivity][type] = "module"
 projects[radioactivity][subdir] = "contrib"
+projects[radioactivity][download][type] = "git"
+projects[radioactivity][download][branch] = "7.x-2.x"
+projects[radioactivity][download][url] = "http://git.drupal.org/project/radioactivity.git"
+
 ; Notice error for accessing an undefined array element
 ; http://drupal.org/node/1816252#comment-6617208
 projects[radioactivity][patch][] = "http://drupal.org/files/undefined_array-1816252-1.patch"
