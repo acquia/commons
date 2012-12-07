@@ -8,7 +8,7 @@ javascripts_dir = "scripts"
 
 # output_style = :expanded or :nested or :compact or :compressed
 output_style = :expanded
-environment = :production
+environment = :development
 
 relative_assets = true
 

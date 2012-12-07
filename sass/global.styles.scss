@@ -430,6 +430,10 @@ var {
 #page-title {
   margin: 0 0 0 6px;
   font-weight:300;
+
+  .page-node & {
+    margin-bottom: 20px;
+  }
 }
 
 #page-top {
@@ -1539,10 +1543,10 @@ ul.action-links {
 }
 
 .node-type-group {
-  .panels-ipe-portlet-wrapper {
+  .panel-pane {
     @extend %pod;
 
-    > .panels-ipe-portlet-content {
+    > .block-inner {
       @extend %pod-content;
     }
   }
@@ -1585,16 +1589,6 @@ ul.action-links {
     .pane-title {
       display:none;
     }
-  }
-}
-
-#panels-ipe-display-panel-context-page-commons-home-page-commons-home-panel-context {
-  .panels-ipe-portlet-wrapper {
-    @extend %pod;
-  }
-
-  .panels-ipe-portlet-content {
-    @extend %pod-content;
   }
 }
 
@@ -2649,12 +2643,20 @@ body.front.not-logged-in {
 }
 
 body.front.logged-in {
+  .panel-pane {
+    @extend %pod;
+
+    > .block-inner {
+      @extend %pod-content;
+    }
+  }
+
   .pane-commons-homepage-content-panel-pane-1 {
-    background-color:transparent;
-    @include border-radius(0px);
-    @include box-shadow($light_gray 0px 0px 0px);
-    margin-right: 0px;
-    margin-bottom: 0px;
+    // background-color:transparent;
+    // @include border-radius(0px);
+    // @include box-shadow($light_gray 0px 0px 0px);
+    // margin-right: 0px;
+    // margin-bottom: 0px;
     .views-row {
       border-top:1px solid $white;
       border-bottom:1px solid #ccc;

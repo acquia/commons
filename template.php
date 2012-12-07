@@ -55,8 +55,14 @@ function commons_origins_process_html(&$vars) {
 /**
  * Override or insert variables for the page templates.
  */
-/* -- Delete this line if you want to use these functions
 function commons_origins_preprocess_page(&$vars) {
+  if (module_exists('page_manager')) {
+    $p = page_manager_get_current_page();
+
+    if (isset($p['name']) && $p['name'] == 'node_view') {
+      $vars['node']->title = '';
+    }
+  }
 }
 function commons_origins_process_page(&$vars) {
 }
@@ -66,8 +72,12 @@ function commons_origins_process_page(&$vars) {
 /**
  * Override or insert variables into the node templates.
  */
-/* -- Delete this line if you want to use these functions
 function commons_origins_preprocess_node(&$vars) {
+  //dpm($vars);
+
+  if ($vars['promote']) {
+    $vars['title'] .= ' <span>' . t('Featured @type', array('@type' => $vars['type'])) . '</span>';
+  }
 }
 function commons_origins_process_node(&$vars) {
 }
