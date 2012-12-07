@@ -82,7 +82,7 @@ function commons_follow_term_node_view_alter(&$build) {
 function commons_follow_term_commons_follow_get_message_ids(&$followed_mids, $followed_content = array()) {
   // Generate a list of message IDs where the target nodes are followed by
   // the current user.
-  $result = db_query("SELECT m.mid AS mid FROM {message} m INNER JOIN {field_data_field_target_nodes} tn ON m.mid=tn.entity_id INNER JOIN {field_data_field_topics} ft ON ft.entity_id=tn.field_target_nodes_target_id WHERE ft.field_topics_tid IN (:tids) AND tn.entity_type = 'node'", array(':nids' => array_values($followed_content['commons_follow_term'])));
+  $result = db_query("SELECT m.mid AS mid FROM {message} m INNER JOIN {field_data_field_target_nodes} tn ON m.mid=tn.entity_id INNER JOIN {field_data_field_topics} ft ON ft.entity_id=tn.field_target_nodes_target_id WHERE ft.field_topics_tid IN (:tids) AND tn.entity_type = 'node'", array(':tids' => array_values($followed_content['commons_follow_term'])));
   foreach ($result as $this_result) {
     $followed_mids[] = $this_result->mid;
   }
