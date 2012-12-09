@@ -167,9 +167,14 @@ projects[radioactivity][download][url] = "http://git.drupal.org/project/radioact
 ; Notice error for accessing an undefined array element
 ; http://drupal.org/node/1816252#comment-6617208
 projects[radioactivity][patch][] = "http://drupal.org/files/undefined_array-1816252-1.patch"
+
 ; Radioactivity not compatible with Memcache module
 ; http://drupal.org/node/1860216
 projects[radioactivity][patch][] = "http://drupal.org/files/radioactivity-memcache.patch"
+
+; Radioactivity_cron() prints field names into the page request
+; http://drupal.org/node/1862146#comment-6825464
+projects[radioactivity][patch][] = "http://drupal.org/files/1862146-radioactivity-cron-print.patch"
 
 projects[rate][type] = "module"
 projects[rate][subdir] = "contrib"
