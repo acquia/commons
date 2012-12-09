@@ -352,6 +352,98 @@ function commons_notify_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'message-commons_notify_node_created_no_groups-field_message_rendered_body'
+  $field_instances['message-commons_notify_node_created_no_groups-field_message_rendered_body'] = array(
+    'bundle' => 'commons_notify_node_created_no_groups',
+    'default_value' => NULL,
+    'deleted' => '0',
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 1,
+      ),
+      'message_notify_email_body' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'message_notify_email_subject' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'message',
+    'field_name' => 'field_message_rendered_body',
+    'label' => 'Body',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => '0',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'rows' => '5',
+      ),
+      'type' => 'text_textarea',
+      'weight' => '4',
+    ),
+  );
+
+  // Exported field_instance: 'message-commons_notify_node_created_no_groups-field_message_rendered_subject'
+  $field_instances['message-commons_notify_node_created_no_groups-field_message_rendered_subject'] = array(
+    'bundle' => 'commons_notify_node_created_no_groups',
+    'default_value' => NULL,
+    'deleted' => '0',
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 2,
+      ),
+      'message_notify_email_body' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'message_notify_email_subject' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'message',
+    'field_name' => 'field_message_rendered_subject',
+    'label' => 'Subject',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => '0',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => '60',
+      ),
+      'type' => 'text_textfield',
+      'weight' => '6',
+    ),
+  );
+
   // Exported field_instance: 'message-commons_notify_node_created_no_groups-field_target_nodes'
   $field_instances['message-commons_notify_node_created_no_groups-field_target_nodes'] = array(
     'bundle' => 'commons_notify_node_created_no_groups',
