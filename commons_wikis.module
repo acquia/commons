@@ -20,6 +20,24 @@ function commons_wikis_module_implements_alter(&$implementations, $hook) {
 }
 
 /**
+ * Implements hook_commons_bw_create_all_widget().
+ */
+function commons_wikis_commons_bw_create_all_widget($group) {
+   if (og_user_access('node', $group->nid, 'create wiki content')) {
+      $link = l('Start a wiki','node/add/wiki',
+      array('attributes' => array('class' => 'commons-wikis-create'), 'query' => array('og_group_ref' => $group->nid))
+    );
+    return array(
+      'commons_wikis' => array(
+        'link' => $link,
+        'text' => t('Collaborate on a document'),
+        '#weight' => 8,
+      ),
+    );
+  }
+}
+
+/**
  * Implements hook_menu_alter().
  */
 function commons_wikis_menu_alter(&$items) {
@@ -110,7 +128,7 @@ function commons_wikis_commons_entity_integration() {
 function commons_wikis_node_update($node) {
   if ($node->type == 'wiki' && module_exists('message')) {
     global $user;
-    commons_groups_first_contribution($user, $node); 
+    commons_groups_first_contribution($user, $node);
     $message = message_create('commons_wikis_wiki_updated', array('uid' => $user->uid, 'timestamp' => REQUEST_TIME));
     $wrapper = entity_metadata_wrapper('message', $message);
     // Save reference to the node in the node reference field.
