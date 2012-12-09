@@ -25,7 +25,6 @@ function commons_follow_group_commons_follow_get_nids($account, $options) {
   }
 
   $result = $query
-    ->addTag('node_access')
     ->condition('fid', $flag_ids, 'IN')
     ->condition('uid', $account->uid, '=')
     ->condition('content_type', 'node', '=')
