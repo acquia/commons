@@ -217,6 +217,9 @@ function commons_anonymous_welcome_text_form_submit($form_id, &$form_state) {
  */
 function commons_demo_content() {
 
+  // Reset the Flag cache.
+  flag_get_flags(NULL, NULL, NULL, TRUE);
+
   // Create demo Users
   $demo_users = array(
     'Lou White' => 'Lou White',
