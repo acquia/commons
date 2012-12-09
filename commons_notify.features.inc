@@ -55,6 +55,29 @@ function commons_notify_default_message_type() {
       ]
     }
   }');
+  $items['commons_notify_node_created_no_groups'] = entity_import('message_type', '{
+    "name" : "commons_notify_node_created_no_groups",
+    "description" : "The notification sent when a user creates a node that is not in any groups",
+    "argument_keys" : [],
+    "argument" : [],
+    "category" : "commons_notify",
+    "data" : { "purge" : { "override" : 0, "enabled" : 0, "quota" : "", "days" : "" } },
+    "language" : "",
+    "arguments" : null,
+    "message_text" : { "und" : [
+        {
+          "value" : "New [message:field-target-nodes:0:content-type] on [site:name]: [message:field-target-nodes:0:title]",
+          "format" : "plain_text",
+          "safe_value" : "\\u003Cp\\u003ENew [message:field-target-nodes:0:content-type] on [site:name]: [message:field-target-nodes:0:title]\\u003C\\/p\\u003E\\n"
+        },
+        {
+          "value" : "Hi [message:user:name],\\r\\n\\r\\n[message:field-target-nodes:0:author] created the [message:field-target-nodes:0:content-type] \\u201c[message:field-target-nodes:0:title]\\u201d on [site:name] [commons-groups:in-groups-text] on [message:field-target-nodes:0:created]:\\r\\n\\r\\n[message:field-target-nodes:0:body]\\r\\n\\r\\n\\r\\nPermalink: [message:field-target-nodes:0:url]\\r\\nAdd a comment at [message:field-target-nodes:0:url]#comment-form\\r\\n\\r\\nChange email notifications at [site:url]user\\/[message:user:uid]\\/notification-settings",
+          "format" : "plain_text",
+          "safe_value" : "\\u003Cp\\u003EHi [message:user:name],\\u003C\\/p\\u003E\\n\\u003Cp\\u003E[message:field-target-nodes:0:author] created the [message:field-target-nodes:0:content-type] \\u201c[message:field-target-nodes:0:title]\\u201d on [site:name] [commons-groups:in-groups-text] on [message:field-target-nodes:0:created]:\\u003C\\/p\\u003E\\n\\u003Cp\\u003E[message:field-target-nodes:0:body]\\u003C\\/p\\u003E\\n\\u003Cp\\u003EPermalink: [message:field-target-nodes:0:url]\\u003Cbr \\/\\u003E\\nAdd a comment at [message:field-target-nodes:0:url]#comment-form\\u003C\\/p\\u003E\\n\\u003Cp\\u003EChange email notifications at [site:url]user\\/[message:user:uid]\\/notification-settings\\u003C\\/p\\u003E\\n"
+        }
+      ]
+    }
+  }');
   return $items;
 }
 
