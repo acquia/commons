@@ -92,6 +92,7 @@ function commons_create_first_group() {
     '#title' => st("Group name"),
     '#description' => st('For example: "Boston food lovers" or "Engineering team."'),
     '#required' => TRUE,
+    '#default_value' => st('Engineering team'),
   );
 
   $form['commons_first_group_body'] = array(
@@ -99,6 +100,7 @@ function commons_create_first_group() {
     '#title' => st('Group description'),
     '#description' => st("This text will appear on the group's homepage and helps new contirbutors to become familiar with the purpose of the group. You can always change this text or add another group later."),
     '#required' => TRUE,
+    '#default_value' => st('The online home for our Engineering team'),
   );
 
   $form['commons_first_group_submit'] = array(
@@ -178,6 +180,7 @@ function commons_anonymous_welcome_text_form() {
     '#title' => st('Welcome headline'),
     '#description' => st('A short description of the community that visitors can understand at a glance.'),
     '#required' => TRUE,
+    '#default_value' => st('Welcome to our community'),
   );
 
   $form['commons_anonymous_welcome_body'] = array(
@@ -185,6 +188,7 @@ function commons_anonymous_welcome_text_form() {
     '#title' => st('Welcome body text'),
     '#description' => st('Enter a couple of sentences elborating about your community.'),
     '#required' => TRUE,
+    '#default_value' => st('Share your thoughts, find answers to your questions.'),
   );
 
   $form['commons_install_demo_content'] = array(
