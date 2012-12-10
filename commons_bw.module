@@ -48,6 +48,7 @@ function commons_bw_create_all_widget($group) {
       $default = $item;
     }
   }
+  $output = '';
   if (!empty($default)) {
     $output .= $default['link'] . '<a class="commons-bw-create-choose"><span></span></a>';
   }
