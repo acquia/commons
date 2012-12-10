@@ -49,9 +49,9 @@ function commons_bw_create_all_widget($group) {
     }
   }
   if (!empty($default)) {
-    $output .= $default['link'] . '<a class="commons-bw-create-choose"></a>';
+    $output .= $default['link'] . '<a class="commons-bw-create-choose"><span></span></a>';
   }
-  $output .= theme('item_list', array('items' => $links, 'type' => 'ul', 'attributes' => array('class' => 'commons-bw-create-all-widget-types')));
+  $output .= '<div class="commons-bw-create-choose-bg"></div><div class="commons-bw-create-choose-holder">' . theme('item_list', array('items' => $links, 'type' => 'ul', 'attributes' => array('class' => 'commons-bw-create-all-widget-types'))) . '</div>';
   return $output;
 }
 
