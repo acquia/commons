@@ -73,10 +73,10 @@ function commons_origins_process_page(&$vars) {
  * Override or insert variables into the node templates.
  */
 function commons_origins_preprocess_node(&$vars) {
-  //dpm($vars);
+  // dpm($vars);
 
   if ($vars['promote']) {
-    $vars['title'] .= ' <span>' . t('Featured @type', array('@type' => $vars['type'])) . '</span>';
+    $vars['submitted'] .= ' <span class="featured-node-tooltip">' . t('Featured') . ' ' . $vars['type'] . '</span>';
   }
 }
 function commons_origins_process_node(&$vars) {
