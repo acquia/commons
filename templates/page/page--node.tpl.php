@@ -182,7 +182,7 @@
           <!-- region: Main Content -->
           <?php if ($content = render($page['content'])): ?>
             <div id="content" class="region">
-              <?php if ($title): ?>
+              <?php if ($title && !isset($hide_panelized_title)): ?>
                 <h2 id="page-title">
                   <?php print $title; ?>
                 </h2>

@@ -60,9 +60,10 @@ function commons_origins_preprocess_page(&$vars) {
     $p = page_manager_get_current_page();
 
     if (isset($p['name']) && $p['name'] == 'node_view') {
-      $vars['node']->title = '';
+      $vars['hide_panelized_title'] = 1;
     }
   }
+  // dpm($vars);
 }
 function commons_origins_process_page(&$vars) {
 }
