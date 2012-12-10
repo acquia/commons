@@ -2169,7 +2169,21 @@ ul.action-links {
 .node {
   margin-bottom: 20px;
 
-  &.node-promoted {}
+  &.node-promoted {
+    background: image-url('node-promoted-star.png') top right no-repeat;
+
+    .front.logged-in & {
+      padding: 10px;
+      @include border-radius(3px);
+      background-color: darken($white, 3%);
+    }
+
+    .view-commons-bw-all & {
+      padding: 10px;
+      @include border-radius(3px);
+      background-color: darken($white, 3%);
+    }
+  }
 
   &.node-sticky {}
 
@@ -2786,11 +2800,16 @@ body.front.logged-in {
     // @include box-shadow($light_gray 0px 0px 0px);
     // margin-right: 0px;
     // margin-bottom: 0px;
-    .views-row {
-      border-top:1px solid $white;
+    .article.node {
+      // border-top:1px solid $white;
       border-bottom:1px solid #ccc;
-      padding:10px 0 0 0;
+      padding:10px 0 20px 0;
       position:relative;
+
+      &.node-promoted {
+        border-bottom: none;
+        padding:10px;
+      }
       .node-header {
         margin:0 90px 0 78px;
         a {
