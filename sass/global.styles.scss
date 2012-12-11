@@ -1578,8 +1578,10 @@ ul.action-links {
   }
 }
 
-.view-commons-radioactivity-groups-most-active {
+.view-commons-radioactivity-groups-most-active, .view-commons-groups-recent-content {
   .type-Wiki {
+    font-size: 12px;
+
     &:before {
       content: '';
       @include sprite_url_height_width($icons, wikis);
@@ -1588,6 +1590,8 @@ ul.action-links {
   }
 
   .type-Event {
+    font-size: 12px;
+
     &:before {
       content: '';
       @include sprite_url_height_width($icons, events);
@@ -1596,6 +1600,8 @@ ul.action-links {
   }
 
   .type-Post {
+    font-size: 12px;
+
     &:before {
       content: '';
       @include sprite_url_height_width($icons, posts);
@@ -1604,11 +1610,25 @@ ul.action-links {
   }
 
   .type-Question, .type-Answer {
+    font-size: 12px;
+
     &:before {
       content: '';
       @include sprite_url_height_width($icons, qa);
       margin-right: 6px;
     }
+  }
+}
+
+.view-commons-radioactivity-groups-most-active > .view-content > .views-row {
+  border-bottom: 1px solid $lighter_gray;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+
+  &.views-row-last {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
   }
 }
 
@@ -1700,16 +1720,32 @@ ul.action-links {
     background:none;
   }
 }
-.view-id-commons_groups_directory {
+
+.pager a {
+  @extend %btn-gray;
+  padding: 5px 20px;
+}
+
+.view-commons-groups-directory {
+
+  h2 {
+    font-size: 26px;
+    line-height: 1em;
+    margin: 10px 0 5px 0;
+  }
 
   > .view-content > .views-row, > .view-filters {
     @extend %pod;
+    position: relative;
 
     > .node-teaser, form {
       @extend %pod-content;
     }
   }
   .view-filters {
+    .views-exposed-widgets {
+      margin-bottom: 0;
+    }
     .views-widget,
     label {
       display:inline-block;
@@ -1733,11 +1769,25 @@ ul.action-links {
   .pane-commons-groups-recent-content {
     width: 50%;
     float: left;
+    margin-bottom: 0;
+
+    .pane-title {
+      display: block;
+      font-size: 16px;
+      line-height: 1em;
+    }
   }
 
   .pane-commons-contributors-group-panel-pane-1 {
     width: 50%;
     float: left;
+    margin-bottom: 0;
+
+    .pane-title {
+      display: block;
+      font-size: 16px;
+      line-height: 1em;
+    }
 
     table, tbody {
       margin: 0;
@@ -1775,7 +1825,7 @@ ul.action-links {
           padding: 5px 8px;
           color: $white;
           @include border-radius(4px);
-          z-index: 10;
+          z-index: 15;
 
           &:after {
             content: '';
@@ -1802,6 +1852,31 @@ ul.action-links {
         }
       }
     }
+  }
+}
+
+.pane-node-commons-groups-group-contributors-count-topics {
+  font-size: 11px;
+}
+
+.pane-node-flag-commons-follow-group-link {
+  position: absolute;
+  right: 5px;
+  top: 22px;
+
+  .flag-action {
+    @extend %btn-gray;
+
+    &:before {
+      content: '';
+      @include sprite_url_height_width($icons, icon-gray-follow);
+      top: 0;
+      margin-right: 5px;
+    }
+  }
+
+  .unflag-action {
+    @extend %btn-gray-flat;
   }
 }
 
@@ -2989,22 +3064,22 @@ body.front.logged-in {
       border-top:1px solid $white;
       padding:10px 0 0 0;      
     }
-    .pager a {
-      display:inline-block;
-      color:$dark_gray;
-      font-size:0.85em;
-      padding:4px 20px;
-      @include border-radius(3px);
-      background-color: #ececec; // Old browsers
-      @include filter-gradient(#ececec, #e6e6e6, vertical); // IE6-9
-      @include background-image(linear-gradient(top,  #ececec 0%,#e6e6e6 22%,#e6e6e6 100%));
-      border: 1px solid #BBBBBB;
-      font-weight: normal;
-      margin: 0 10px 0 0;
-      &:hover {
-        text-decoration:none;
-      }
-    }
+    // .pager a {
+    //   display:inline-block;
+    //   color:$dark_gray;
+    //   font-size:0.85em;
+    //   padding:4px 20px;
+    //   @include border-radius(3px);
+    //   background-color: #ececec; // Old browsers
+    //   @include filter-gradient(#ececec, #e6e6e6, vertical); // IE6-9
+    //   @include background-image(linear-gradient(top,  #ececec 0%,#e6e6e6 22%,#e6e6e6 100%));
+    //   border: 1px solid #BBBBBB;
+    //   font-weight: normal;
+    //   margin: 0 10px 0 0;
+    //   &:hover {
+    //     text-decoration:none;
+    //   }
+    // }
   }
   .views-exposed-widgets {
     margin-top:-65px;
