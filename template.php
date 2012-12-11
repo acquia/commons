@@ -12,7 +12,7 @@
  * used as an alternative to directly editing or adding code to templates. Its
  * worth spending some time to learn more about these functions - they are a
  * powerful way to easily modify the output of any template variable.
- * 
+ *
  * Preprocess and Process Functions SEE: http://drupal.org/node/254940#variables-processor
  * 1. Rename each function and instance of "commons_origins" to match
  *    your subthemes name, e.g. if your theme name is "footheme" then the function
@@ -32,7 +32,7 @@ function commons_origins_preprocess_html(&$vars) {
   global $theme_key;
 
   // Two examples of adding custom classes to the body.
-  
+
   // Add a body class for the active theme name.
   // $vars['classes_array'][] = drupal_html_class($theme_key);
 
@@ -58,12 +58,13 @@ function commons_origins_process_html(&$vars) {
 function commons_origins_preprocess_page(&$vars) {
   if (module_exists('page_manager')) {
     $p = page_manager_get_current_page();
-
     if (isset($p['name']) && $p['name'] == 'node_view') {
-      $vars['hide_panelized_title'] = 1;
+      $node = $p['contexts']['argument_entity_id:node_1']->data;
+      if (module_exists('og') && !og_is_group('node', $node)) {
+        $vars['hide_panelized_title'] = 1;
+      }
     }
   }
-  // dpm($vars);
 }
 function commons_origins_process_page(&$vars) {
 }
