@@ -535,27 +535,53 @@ h1.node-title {
  * User picture wrapping and shadow
  */
 
-.user-picture {
-  float:left;
-  margin:0 20px 0 0;
-  background:$white;
-  padding:4px;
-  @include border-radius(3px);
-  @include box-shadow($light_gray 1px 1px 4px);
-  position:relative;
-  display:block;
-  line-height:0;
-  &:after {
-    content:"";
-    width:5px;
-    height:8px;
-    position:absolute;
-    right:-5px;
-    top:10px;
-    background:image-url('user_img_arrow.png');
+.view-commons-homepage-content, .view-commons-activity-streams-activity {
+  .user-picture {
+    float:left;
+    margin:0 20px 0 0;
+    background:$white;
+    padding:4px;
+    @include border-radius(3px);
+    @include box-shadow($light_gray 1px 1px 4px);
+    position:relative;
+    display:block;
+    line-height:0;
+
+    &:after {
+      content:"";
+      width:5px;
+      height:8px;
+      position:absolute;
+      right:-5px;
+      top:10px;
+      background:image-url('user_img_arrow.png');
+    }
+
+    img {
+      width:50px;
+    }
   }
-  img {
-    width:50px;
+}
+
+.view-commons-groups-contributors {
+  .user-picture {
+    float:left;
+    margin:0;
+    background:$white;
+    padding:4px;
+    @include border-radius(3px);
+    @include box-shadow($light_gray 1px 1px 4px);
+    position:relative;
+    display:block;
+    line-height:0;
+
+    img {
+      width:40px;
+    }
+  }
+
+  tbody tr {
+    background-color: transparent;
   }
 }
 
@@ -1675,11 +1701,11 @@ ul.action-links {
   }
 }
 .view-id-commons_groups_directory {
-  .views-row,
-  .view-filters {
+
+  > .view-content > .views-row, > .view-filters {
     @extend %pod;
-    article,
-    form {
+
+    > .node-teaser, form {
       @extend %pod-content;
     }
   }
@@ -1701,6 +1727,33 @@ ul.action-links {
     }
     .form-submit {
       margin-top:1px;
+    }
+  }
+
+  .pane-commons-groups-recent-content {
+    width: 50%;
+    float: left;
+  }
+
+  .pane-commons-contributors-group-panel-pane-1 {
+    width: 50%;
+    float: left;
+
+    table, tbody {
+      margin: 0;
+      border: none;
+    }
+
+    tr {
+      background-color: transparent;
+      border: none;
+    }
+
+    td {
+      padding: 0;
+      margin: 0 1px 1px 0;
+      float: left;
+      line-height: 0;
     }
   }
 }
@@ -2185,6 +2238,7 @@ ul.action-links {
   @include border-radius(3px);
   display: none;
   margin-left: 5px;
+  z-index: 1;
   // @include opacity(0);
   // @include transition(opacity 0.5s, z-index 0.1s 0.5s);
   // z-index: -1;
