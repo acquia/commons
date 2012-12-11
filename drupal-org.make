@@ -10,8 +10,8 @@ projects[aloha][version] = "2.x-dev"
 projects[aloha][type] = "module"
 projects[aloha][subdir] = "contrib"
 
-projects[apachesolr_search][type] = "module"
-projects[apachesolr_search][subdir] = "contrib"
+projects[apachesolr][type] = "module"
+projects[apachesolr][subdir] = "contrib"
 
 projects[apachesolr_og][version] = "1.x-dev"
 projects[apachesolr_og][type] = "module"
