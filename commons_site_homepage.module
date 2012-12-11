@@ -53,9 +53,9 @@ function commons_site_homepage_block_info() {
 function commons_site_homepage_block_view() {
   $block['content'] = '';
   if (variable_get('user_register', USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL)) {
-    $block['content'] .= l(t('Signup'), 'user/register', array('attributes' => array('title' => t('Sign up')))) . ' ';
+    $block['content'] .= l(t('Signup'), 'user/register', array('attributes' => array('class' => 'commons-sign-up', 'title' => t('Sign up')))) . ' ';
   }
-  $block['content'] .= l(t('Login'), 'user/login');
+  $block['content'] .= l(t('Login'), 'user/login', array('attributes' => array('class' => 'commons-login')));
   $block['subject'] = '';
   return $block;
 }
