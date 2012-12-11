@@ -10,6 +10,9 @@ projects[aloha][version] = "2.x-dev"
 projects[aloha][type] = "module"
 projects[aloha][subdir] = "contrib"
 
+projects[apachesolr_search][type] = "module"
+projects[apachesolr_search][subdir] = "contrib"
+
 projects[apachesolr_og][version] = "1.x-dev"
 projects[apachesolr_og][type] = "module"
 projects[apachesolr_og][subdir] = "contrib"
@@ -150,6 +153,9 @@ projects[panels][patch][] = "http://drupal.org/files/1828684-layout-fix-6.patch"
 ; PHP 5.3.9 Strict Warning on Panels Empty Value
 ; http://drupal.org/node/1632898#comment-6412840
 projects[panels][patch][] = "http://drupal.org/files/panels-n1632898-15.patch"
+
+projects[pm_existing_pages][type] = "module"
+projects[pm_existing_pages][subdir] = "contrib"
 
 projects[queue_mail][type] = "module"
 projects[queue_mail][subdir] = "contrib"
