@@ -1576,6 +1576,14 @@ ul.action-links {
       margin-right: 6px;
     }
   }
+
+  .type-Question, .type-Answer {
+    &:before {
+      content: '';
+      @include sprite_url_height_width($icons, qa);
+      margin-right: 6px;
+    }
+  }
 }
 
 .pane-commons-groups-directory-panel-pane-1 {
@@ -2169,7 +2177,7 @@ ul.action-links {
 .featured-node-tooltip {
   position: absolute;
   left: 100%;
-  top: 5px;
+  top: 1px;
   background-color: rgba(#000, 0.85);
   white-space: nowrap;
   padding: 3px 5px;
@@ -2854,11 +2862,13 @@ body.front.logged-in {
         }
       }
       .node-content {
-        margin:0 90px 0 78px;
+        margin:0 0 0 78px;
         form {
-          position:absolute;
-          right:0;
-          top:10px;
+          
+        }
+
+        .field-name-body {
+          margin-right: 90px;
         }
       }
       footer .user-picture {
