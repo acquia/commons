@@ -79,14 +79,14 @@ function commons_events_cancel_event_form($form, &$form_state, $event) {
   $form['#attached']['css'] = array(
     drupal_get_path('module', 'commons_events') . '/css/commons_events.css',
   );
-  $form['attending'] = array(
-    '#markup' => t('You are attending.'),
-  );
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Cancel'),
   );
   $form['submit']['#attributes']['class'][] = 'commons-events-button';
+  $form['attending'] = array(
+    '#markup' => t('You are attending.'),
+  );
   return $form;
 }
 
