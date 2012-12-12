@@ -27,9 +27,14 @@
 /**
  * Preprocess variables for the html template.
  */
-/* -- Delete this line to enable.
 function commons_origins_preprocess_html(&$vars) {
   global $theme_key;
+
+  $site_name = variable_get('site_name', 'Commons');
+
+  if (strlen($site_name) > 18) {
+    $vars['classes_array'][] = 'site-name-long';
+  }
 
   // Two examples of adding custom classes to the body.
 
@@ -40,7 +45,7 @@ function commons_origins_preprocess_html(&$vars) {
   // $vars['classes_array'][] = css_browser_selector();
 
 }
-// */
+// 
 
 
 /**
