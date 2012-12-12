@@ -32,7 +32,9 @@ function commons_origins_preprocess_html(&$vars) {
 
   $site_name = variable_get('site_name', 'Commons');
 
-  if (strlen($site_name) > 18) {
+  if (strlen($site_name) > 23) {
+    $vars['classes_array'][] = 'site-name-long-2-lines';
+  } else if (strlen($site_name) > 15) {
     $vars['classes_array'][] = 'site-name-long';
   }
 
