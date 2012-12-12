@@ -31,4 +31,6 @@ jQuery(document).ready(function($){
   $('.commons-bw-create-choose-bg').click(function(){
     $('body').removeClass('create-choose-open');
   });
+
+  $('#views-exposed-form-commons-homepage-content-panel-pane-1 select').selectBox();
 });
