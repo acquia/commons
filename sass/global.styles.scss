@@ -1758,6 +1758,23 @@ ul.action-links {
     display: none;
   }
 
+  .pane-node-field-group-logo {
+    float: left;
+    margin-bottom: 3px;
+    margin-top: 3px;
+
+    .field-name-field-group-logo a {
+      display: block;
+      border: 3px solid $white;
+      @include border-radius(2px);
+      box-shadow: 1px 1px 3px $gray;
+
+      img {
+        display: block;
+      }
+    }
+  }
+
   > .view-content > .views-row, > .view-filters {
     @extend %pod;
     position: relative;
