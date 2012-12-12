@@ -496,10 +496,11 @@ optgroup::-moz-focus-inner {
   -webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   overflow: auto;
+  width: auto !important;
 }
 
 /* Inline control */
-/* line 93, ../sass/_selectBox.scss */
+/* line 97, ../sass/_selectBox.scss */
 .selectBox-inline {
   min-width: 150px;
   outline: none;
@@ -512,13 +513,13 @@ optgroup::-moz-focus-inner {
   overflow: auto;
 }
 
-/* line 105, ../sass/_selectBox.scss */
+/* line 109, ../sass/_selectBox.scss */
 .selectBox-inline:focus {
   border-color: #666;
 }
 
 /* Options */
-/* line 113, ../sass/_selectBox.scss */
+/* line 117, ../sass/_selectBox.scss */
 .selectBox-options,
 .selectBox-options LI,
 .selectBox-options LI A {
@@ -529,7 +530,7 @@ optgroup::-moz-focus-inner {
   margin: 0;
 }
 
-/* line 121, ../sass/_selectBox.scss */
+/* line 125, ../sass/_selectBox.scss */
 .selectBox-options LI A {
   line-height: 1.5;
   padding: 0 .5em;
@@ -538,23 +539,23 @@ optgroup::-moz-focus-inner {
   background: 6px center no-repeat;
 }
 
-/* line 129, ../sass/_selectBox.scss */
+/* line 133, ../sass/_selectBox.scss */
 .selectBox-options LI.selectBox-hover A {
   background-color: #EEE;
 }
 
-/* line 133, ../sass/_selectBox.scss */
+/* line 137, ../sass/_selectBox.scss */
 .selectBox-options LI.selectBox-disabled A {
   color: #888;
   background-color: transparent;
 }
 
-/* line 138, ../sass/_selectBox.scss */
+/* line 142, ../sass/_selectBox.scss */
 .selectBox-options LI.selectBox-selected A {
   background-color: #C8DEF4;
 }
 
-/* line 142, ../sass/_selectBox.scss */
+/* line 146, ../sass/_selectBox.scss */
 .selectBox-options .selectBox-optgroup {
   color: #666;
   background: #EEE;
@@ -565,24 +566,24 @@ optgroup::-moz-focus-inner {
 }
 
 /* Disabled state */
-/* line 153, ../sass/_selectBox.scss */
+/* line 157, ../sass/_selectBox.scss */
 .selectBox.selectBox-disabled {
   color: #888 !important;
 }
 
-/* line 157, ../sass/_selectBox.scss */
+/* line 161, ../sass/_selectBox.scss */
 .selectBox-dropdown.selectBox-disabled .selectBox-arrow {
   opacity: .5;
   filter: alpha(opacity=50);
   border-color: #666;
 }
 
-/* line 163, ../sass/_selectBox.scss */
+/* line 167, ../sass/_selectBox.scss */
 .selectBox-inline.selectBox-disabled {
   color: #888 !important;
 }
 
-/* line 167, ../sass/_selectBox.scss */
+/* line 171, ../sass/_selectBox.scss */
 .selectBox-inline.selectBox-disabled .selectBox-options A {
   background-color: transparent !important;
 }
