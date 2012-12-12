@@ -45,7 +45,7 @@ function commons_origins_preprocess_html(&$vars) {
   // $vars['classes_array'][] = css_browser_selector();
 
 }
-// 
+//
 
 
 /**
@@ -56,6 +56,56 @@ function commons_origins_process_html(&$vars) {
 }
 // */
 
+/**
+ * Implements theme_menu_link().
+ */
+function commons_origins_menu_link($vars) {
+  $output = '';
+  $path_to_at_core = drupal_get_path('theme', 'adaptivetheme');
+
+  include_once($path_to_at_core . '/inc/get.inc');
+
+  global $theme_key;
+  $theme_name = $theme_key;
+
+  $element = $vars['element'];
+  commons_origins_menu_link_class($element);
+  $sub_menu = '';
+
+  if ($element['#below']) {
+    $sub_menu = drupal_render($element['#below']);
+  }
+
+  if (at_get_setting('extra_menu_classes', $theme_name) == 1 && !empty($element['#original_link'])) {
+    if (!empty($element['#original_link']['depth'])) {
+      $element['#attributes']['class'][] = 'menu-depth-' . $element['#original_link']['depth'];
+    }
+    if (!empty($element['#original_link']['mlid'])) {
+      $element['#attributes']['class'][] = 'menu-item-' . $element['#original_link']['mlid'];
+    }
+  }
+
+  if (at_get_setting('menu_item_span_elements', $theme_name) == 1 && !empty($element['#title'])) {
+    $element['#title'] = '<span>' . $element['#title'] . '</span>';
+    $element['#localized_options']['html'] = TRUE;
+  }
+
+  if (at_get_setting('unset_menu_titles', $theme_name) == 1 && !empty($element['#localized_options']['attributes']['title'])) {
+    unset($element['#localized_options']['attributes']['title']);
+  }
+
+  $output = l($element['#title'], $element['#href'], $element['#localized_options']);
+  return '<li' . drupal_attributes($element['#attributes']) . '>' . $output . $sub_menu . "</li>";
+}
+
+/**
+ * Helper function to examine menu links and return the appropriate class.
+ */
+function commons_origins_menu_link_class(&$element)  {
+  if ($element['#original_link']['menu_name'] == 'main-menu') {
+    $element['#attributes']['class'][] = drupal_html_class($element['#original_link']['menu_name'] . '-' . $element['#original_link']['router_path']);
+  }
+}
 
 /**
  * Override or insert variables for the page templates.
