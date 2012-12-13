@@ -11,7 +11,7 @@ projects[aloha][type] = "module"
 projects[aloha][subdir] = "contrib"
 
 projects[apachesolr][type] = "module"
-projects[apachesolr][subdir] = "contrib"
+projects[apachesolrw][subdir] = "contrib"
 
 projects[apachesolr_og][version] = "1.x-dev"
 projects[apachesolr_og][type] = "module"
@@ -20,7 +20,6 @@ projects[apachesolr_og][subdir] = "contrib"
 projects[connector][version] = "1.x-dev"
 projects[connector][type] = "module"
 projects[connector][subdir] = "contrib"
-
 
 projects[ctools][type] = "module"
 projects[ctools][subdir] = "contrib"
@@ -82,6 +81,9 @@ projects[flag_abuse][subdir] = "contrib"
 projects[flag_abuse][download][type] = "git"
 projects[flag_abuse][download][url] = "http://git.drupal.org/project/flag_abuse.git"
 projects[flag_abuse][download][branch] = "7.x-2.x"
+
+projects[redirect][type] = "module"
+projects[redirect][subdir] = "contrib"
 
 projects[http_client][version] = "2.x-dev"
 projects[http_client][type] = "module"
@@ -153,6 +155,9 @@ projects[panels][patch][] = "http://drupal.org/files/1828684-layout-fix-6.patch"
 ; PHP 5.3.9 Strict Warning on Panels Empty Value
 ; http://drupal.org/node/1632898#comment-6412840
 projects[panels][patch][] = "http://drupal.org/files/panels-n1632898-15.patch"
+
+projects[pathauto][type] = "module"
+projects[pathauto][subdir] = "contrib"
 
 projects[pm_existing_pages][type] = "module"
 projects[pm_existing_pages][subdir] = "contrib"
