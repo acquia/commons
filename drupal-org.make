@@ -187,6 +187,9 @@ projects[radioactivity][patch][] = "http://drupal.org/files/radioactivity-memcac
 ; http://drupal.org/node/1862146#comment-6825464
 projects[radioactivity][patch][] = "http://drupal.org/files/1862146-radioactivity-cron-print.patch"
 
+projects[r4032login][type] = "module"
+projects[r4032login][subdir] = "contrib"
+
 projects[rate][type] = "module"
 projects[rate][subdir] = "contrib"
 
