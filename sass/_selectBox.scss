@@ -22,6 +22,18 @@
   display: inline-block;
   cursor: default;
 
+  .block-search & {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    min-width: auto;
+    // width: auto !important;
+    color: $white;
+    line-height: 1;
+    margin-top: 5px;
+    margin-left: -6px;
+  }
+
   #views-exposed-form-commons-homepage-content-panel-pane-1 & {
     background: $page;
     border: none;
@@ -53,6 +65,11 @@
   white-space: nowrap;
   overflow: hidden;
 
+  .block-search & {
+    width: auto !important;
+    padding: 2px 0 2px 16px;
+  }
+
   #views-exposed-form-commons-homepage-content-panel-pane-1 & {
     width: auto !important;
     padding: 2px 4px;
@@ -67,6 +84,12 @@
   height: 100%;
   background: image-url('jquery.selectBox-arrow.gif') 50% center no-repeat;
   border-left: solid 1px #BBB;
+
+  .block-search & {
+    border-left: none;
+    background-image: image-url('icons/ico_arrow_wht.png');
+    display: inline-block;
+  }
 
   #views-exposed-form-commons-homepage-content-panel-pane-1 & {
     display: none;

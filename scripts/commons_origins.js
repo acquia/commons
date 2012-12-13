@@ -33,4 +33,5 @@ jQuery(document).ready(function($){
   });
 
   $('#views-exposed-form-commons-homepage-content-panel-pane-1 select').selectBox();
+  $('#edit-custom-search-types').selectBox();
 });

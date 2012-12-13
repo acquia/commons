@@ -428,6 +428,17 @@ optgroup::-moz-focus-inner {
   cursor: default;
 }
 /* line 25, ../sass/_selectBox.scss */
+.block-search .selectBox-dropdown {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  min-width: auto;
+  color: white;
+  line-height: 1;
+  margin-top: 5px;
+  margin-left: -6px;
+}
+/* line 37, ../sass/_selectBox.scss */
 #views-exposed-form-commons-homepage-content-panel-pane-1 .selectBox-dropdown {
   background: #e6e6e6;
   border: none;
@@ -438,13 +449,13 @@ optgroup::-moz-focus-inner {
   line-height: 1;
 }
 
-/* line 37, ../sass/_selectBox.scss */
+/* line 49, ../sass/_selectBox.scss */
 .selectBox-dropdown:focus,
 .selectBox-dropdown:focus .selectBox-arrow {
   border-color: #666;
 }
 
-/* line 41, ../sass/_selectBox.scss */
+/* line 53, ../sass/_selectBox.scss */
 .selectBox-dropdown.selectBox-menuShowing {
   -moz-border-radius-bottomleft: 0;
   -moz-border-radius-bottomright: 0;
@@ -454,20 +465,25 @@ optgroup::-moz-focus-inner {
   border-bottom-right-radius: 0;
 }
 
-/* line 50, ../sass/_selectBox.scss */
+/* line 62, ../sass/_selectBox.scss */
 .selectBox-dropdown .selectBox-label {
   padding: 2px 8px;
   display: inline-block;
   white-space: nowrap;
   overflow: hidden;
 }
-/* line 56, ../sass/_selectBox.scss */
+/* line 68, ../sass/_selectBox.scss */
+.block-search .selectBox-dropdown .selectBox-label {
+  width: auto !important;
+  padding: 2px 0 2px 16px;
+}
+/* line 73, ../sass/_selectBox.scss */
 #views-exposed-form-commons-homepage-content-panel-pane-1 .selectBox-dropdown .selectBox-label {
   width: auto !important;
   padding: 2px 4px;
 }
 
-/* line 62, ../sass/_selectBox.scss */
+/* line 79, ../sass/_selectBox.scss */
 .selectBox-dropdown .selectBox-arrow {
   position: absolute;
   top: 0;
@@ -477,13 +493,19 @@ optgroup::-moz-focus-inner {
   background: url('../images/jquery.selectBox-arrow.gif?1353005330') 50% center no-repeat;
   border-left: solid 1px #BBB;
 }
-/* line 71, ../sass/_selectBox.scss */
+/* line 88, ../sass/_selectBox.scss */
+.block-search .selectBox-dropdown .selectBox-arrow {
+  border-left: none;
+  background-image: url('../images/icons/ico_arrow_wht.png?1355157111');
+  display: inline-block;
+}
+/* line 94, ../sass/_selectBox.scss */
 #views-exposed-form-commons-homepage-content-panel-pane-1 .selectBox-dropdown .selectBox-arrow {
   display: none;
 }
 
 /* Dropdown menu */
-/* line 78, ../sass/_selectBox.scss */
+/* line 101, ../sass/_selectBox.scss */
 .selectBox-dropdown-menu {
   position: absolute;
   z-index: 99999;
@@ -500,7 +522,7 @@ optgroup::-moz-focus-inner {
 }
 
 /* Inline control */
-/* line 97, ../sass/_selectBox.scss */
+/* line 120, ../sass/_selectBox.scss */
 .selectBox-inline {
   min-width: 150px;
   outline: none;
@@ -513,13 +535,13 @@ optgroup::-moz-focus-inner {
   overflow: auto;
 }
 
-/* line 109, ../sass/_selectBox.scss */
+/* line 132, ../sass/_selectBox.scss */
 .selectBox-inline:focus {
   border-color: #666;
 }
 
 /* Options */
-/* line 117, ../sass/_selectBox.scss */
+/* line 140, ../sass/_selectBox.scss */
 .selectBox-options,
 .selectBox-options LI,
 .selectBox-options LI A {
@@ -530,7 +552,7 @@ optgroup::-moz-focus-inner {
   margin: 0;
 }
 
-/* line 125, ../sass/_selectBox.scss */
+/* line 148, ../sass/_selectBox.scss */
 .selectBox-options LI A {
   line-height: 1.5;
   padding: 0 .5em;
@@ -539,23 +561,23 @@ optgroup::-moz-focus-inner {
   background: 6px center no-repeat;
 }
 
-/* line 133, ../sass/_selectBox.scss */
+/* line 156, ../sass/_selectBox.scss */
 .selectBox-options LI.selectBox-hover A {
   background-color: #EEE;
 }
 
-/* line 137, ../sass/_selectBox.scss */
+/* line 160, ../sass/_selectBox.scss */
 .selectBox-options LI.selectBox-disabled A {
   color: #888;
   background-color: transparent;
 }
 
-/* line 142, ../sass/_selectBox.scss */
+/* line 165, ../sass/_selectBox.scss */
 .selectBox-options LI.selectBox-selected A {
   background-color: #C8DEF4;
 }
 
-/* line 146, ../sass/_selectBox.scss */
+/* line 169, ../sass/_selectBox.scss */
 .selectBox-options .selectBox-optgroup {
   color: #666;
   background: #EEE;
@@ -566,24 +588,24 @@ optgroup::-moz-focus-inner {
 }
 
 /* Disabled state */
-/* line 157, ../sass/_selectBox.scss */
+/* line 180, ../sass/_selectBox.scss */
 .selectBox.selectBox-disabled {
   color: #888 !important;
 }
 
-/* line 161, ../sass/_selectBox.scss */
+/* line 184, ../sass/_selectBox.scss */
 .selectBox-dropdown.selectBox-disabled .selectBox-arrow {
   opacity: .5;
   filter: alpha(opacity=50);
   border-color: #666;
 }
 
-/* line 167, ../sass/_selectBox.scss */
+/* line 190, ../sass/_selectBox.scss */
 .selectBox-inline.selectBox-disabled {
   color: #888 !important;
 }
 
-/* line 171, ../sass/_selectBox.scss */
+/* line 194, ../sass/_selectBox.scss */
 .selectBox-inline.selectBox-disabled .selectBox-options A {
   background-color: transparent !important;
 }
