@@ -127,7 +127,7 @@ function commons_group_homepages_panelizer_defaults() {
     $pane->pid = 'new-4';
     $pane->panel = 'two_66_33_second';
     $pane->type = 'views_panes';
-    $pane->subtype = 'commons_contributors_group-panel_pane_2';
+    $pane->subtype = 'commons_events_upcoming-panel_pane_1';
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array(
@@ -148,42 +148,6 @@ function commons_group_homepages_panelizer_defaults() {
     $pane = new stdClass();
     $pane->pid = 'new-5';
     $pane->panel = 'two_66_33_second';
-    $pane->type = 'views';
-    $pane->subtype = 'commons_events_upcoming';
-    $pane->shown = TRUE;
-    $pane->access = array();
-    $pane->configuration = array(
-      'override_pager_settings' => 0,
-      'use_pager' => 0,
-      'nodes_per_page' => '5',
-      'pager_id' => '0',
-      'offset' => '0',
-      'more_link' => 0,
-      'feed_icons' => 0,
-      'panel_args' => 1,
-      'link_to_view' => 0,
-      'args' => '',
-      'url' => '',
-      'display' => 'commons_events_upcoming_group_block',
-      'context' => array(
-        0 => 'panelizer.nid',
-      ),
-      'override_title' => 0,
-      'override_title_text' => '',
-    );
-    $pane->cache = array();
-    $pane->style = array(
-      'settings' => NULL,
-    );
-    $pane->css = array();
-    $pane->extras = array();
-    $pane->position = 1;
-    $pane->locks = array();
-    $display->content['new-5'] = $pane;
-    $display->panels['two_66_33_second'][1] = 'new-5';
-    $pane = new stdClass();
-    $pane->pid = 'new-6';
-    $pane->panel = 'two_66_33_second';
     $pane->type = 'views_panes';
     $pane->subtype = 'activity_group-panel_pane_1';
     $pane->shown = TRUE;
@@ -200,12 +164,12 @@ function commons_group_homepages_panelizer_defaults() {
     );
     $pane->css = array();
     $pane->extras = array();
-    $pane->position = 2;
+    $pane->position = 1;
     $pane->locks = array();
-    $display->content['new-6'] = $pane;
-    $display->panels['two_66_33_second'][2] = 'new-6';
+    $display->content['new-5'] = $pane;
+    $display->panels['two_66_33_second'][1] = 'new-5';
     $pane = new stdClass();
-    $pane->pid = 'new-7';
+    $pane->pid = 'new-6';
     $pane->panel = 'two_66_33_second';
     $pane->type = 'views_panes';
     $pane->subtype = 'commons_radioactivity_groups_active_in_group-panel_pane_1';
@@ -220,6 +184,34 @@ function commons_group_homepages_panelizer_defaults() {
       ),
     );
     $pane->cache = array();
+    $pane->style = array(
+      'settings' => NULL,
+    );
+    $pane->css = array();
+    $pane->extras = array();
+    $pane->position = 2;
+    $pane->locks = array();
+    $display->content['new-6'] = $pane;
+    $display->panels['two_66_33_second'][2] = 'new-6';
+    $pane = new stdClass();
+    $pane->pid = 'new-7';
+    $pane->panel = 'two_66_33_second';
+    $pane->type = 'views_panes';
+    $pane->subtype = 'commons_contributors_group-panel_pane_2';
+    $pane->shown = TRUE;
+    $pane->access = array();
+    $pane->configuration = array(
+      'context' => array(
+        0 => 'panelizer',
+      ),
+    );
+    $pane->cache = array(
+      'method' => 'simple',
+      'settings' => array(
+        'lifetime' => '15',
+        'granularity' => 'context',
+      ),
+    );
     $pane->style = array(
       'settings' => NULL,
     );
