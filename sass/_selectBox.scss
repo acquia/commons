@@ -31,7 +31,7 @@
     color: $white;
     line-height: 1;
     margin-top: 5px;
-    margin-left: -6px;
+    margin-left: 9px;
   }
 
   #views-exposed-form-commons-homepage-content-panel-pane-1 &, #views-exposed-form-commons-bw-all-page-1 & {
@@ -71,7 +71,15 @@
 
   .block-search & {
     width: auto !important;
-    padding: 2px 0 2px 16px;
+    padding: 2px 8px 2px 0;
+    // left: 8px;
+    // position: relative;
+
+    &:after {
+      content: '';
+      @include sprite_url_height_width($icons, 'ico_arrow_wht');
+      margin-left: 5px;
+    }
   }
 
   #views-exposed-form-commons-homepage-content-panel-pane-1 &, #views-exposed-form-commons-bw-all-page-1 & {
@@ -90,9 +98,7 @@
   border-left: solid 1px #BBB;
 
   .block-search & {
-    border-left: none;
-    background-image: image-url('icons/ico_arrow_wht.png');
-    display: inline-block;
+    display: none;
   }
 
   #views-exposed-form-commons-homepage-content-panel-pane-1 &, #views-exposed-form-commons-bw-all-page-1 & {

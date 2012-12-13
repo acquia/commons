@@ -436,7 +436,7 @@ optgroup::-moz-focus-inner {
   color: white;
   line-height: 1;
   margin-top: 5px;
-  margin-left: -6px;
+  margin-left: 9px;
 }
 /* line 37, ../sass/_selectBox.scss */
 #views-exposed-form-commons-homepage-content-panel-pane-1 .selectBox-dropdown, #views-exposed-form-commons-bw-all-page-1 .selectBox-dropdown {
@@ -479,15 +479,27 @@ optgroup::-moz-focus-inner {
 /* line 72, ../sass/_selectBox.scss */
 .block-search .selectBox-dropdown .selectBox-label {
   width: auto !important;
-  padding: 2px 0 2px 16px;
+  padding: 2px 8px 2px 0;
 }
-/* line 77, ../sass/_selectBox.scss */
+/* line 78, ../sass/_selectBox.scss */
+.block-search .selectBox-dropdown .selectBox-label:after {
+  content: '';
+  background: url('../images/icons-s16561be884.png') 0 -689px no-repeat;
+  width: 8px;
+  height: 10px;
+  display: inline-block;
+  margin-right: 3px;
+  position: relative;
+  top: 1px;
+  margin-left: 5px;
+}
+/* line 85, ../sass/_selectBox.scss */
 #views-exposed-form-commons-homepage-content-panel-pane-1 .selectBox-dropdown .selectBox-label, #views-exposed-form-commons-bw-all-page-1 .selectBox-dropdown .selectBox-label {
   width: auto !important;
   padding: 2px 4px;
 }
 
-/* line 83, ../sass/_selectBox.scss */
+/* line 91, ../sass/_selectBox.scss */
 .selectBox-dropdown .selectBox-arrow {
   position: absolute;
   top: 0;
@@ -497,19 +509,17 @@ optgroup::-moz-focus-inner {
   background: url('../images/jquery.selectBox-arrow.gif?1353005330') 50% center no-repeat;
   border-left: solid 1px #BBB;
 }
-/* line 92, ../sass/_selectBox.scss */
+/* line 100, ../sass/_selectBox.scss */
 .block-search .selectBox-dropdown .selectBox-arrow {
-  border-left: none;
-  background-image: url('../images/icons/ico_arrow_wht.png?1355157111');
-  display: inline-block;
+  display: none;
 }
-/* line 98, ../sass/_selectBox.scss */
+/* line 104, ../sass/_selectBox.scss */
 #views-exposed-form-commons-homepage-content-panel-pane-1 .selectBox-dropdown .selectBox-arrow, #views-exposed-form-commons-bw-all-page-1 .selectBox-dropdown .selectBox-arrow {
   display: none;
 }
 
 /* Dropdown menu */
-/* line 105, ../sass/_selectBox.scss */
+/* line 111, ../sass/_selectBox.scss */
 .selectBox-dropdown-menu {
   position: absolute;
   z-index: 99999;
@@ -526,7 +536,7 @@ optgroup::-moz-focus-inner {
 }
 
 /* Inline control */
-/* line 124, ../sass/_selectBox.scss */
+/* line 130, ../sass/_selectBox.scss */
 .selectBox-inline {
   min-width: 150px;
   outline: none;
@@ -539,13 +549,13 @@ optgroup::-moz-focus-inner {
   overflow: auto;
 }
 
-/* line 136, ../sass/_selectBox.scss */
+/* line 142, ../sass/_selectBox.scss */
 .selectBox-inline:focus {
   border-color: #666;
 }
 
 /* Options */
-/* line 144, ../sass/_selectBox.scss */
+/* line 150, ../sass/_selectBox.scss */
 .selectBox-options,
 .selectBox-options LI,
 .selectBox-options LI A {
@@ -556,7 +566,7 @@ optgroup::-moz-focus-inner {
   margin: 0;
 }
 
-/* line 152, ../sass/_selectBox.scss */
+/* line 158, ../sass/_selectBox.scss */
 .selectBox-options LI A {
   line-height: 1.5;
   padding: 0 .5em;
@@ -565,23 +575,23 @@ optgroup::-moz-focus-inner {
   background: 6px center no-repeat;
 }
 
-/* line 160, ../sass/_selectBox.scss */
+/* line 166, ../sass/_selectBox.scss */
 .selectBox-options LI.selectBox-hover A {
   background-color: #EEE;
 }
 
-/* line 164, ../sass/_selectBox.scss */
+/* line 170, ../sass/_selectBox.scss */
 .selectBox-options LI.selectBox-disabled A {
   color: #888;
   background-color: transparent;
 }
 
-/* line 169, ../sass/_selectBox.scss */
+/* line 175, ../sass/_selectBox.scss */
 .selectBox-options LI.selectBox-selected A {
   background-color: #C8DEF4;
 }
 
-/* line 173, ../sass/_selectBox.scss */
+/* line 179, ../sass/_selectBox.scss */
 .selectBox-options .selectBox-optgroup {
   color: #666;
   background: #EEE;
@@ -592,24 +602,24 @@ optgroup::-moz-focus-inner {
 }
 
 /* Disabled state */
-/* line 184, ../sass/_selectBox.scss */
+/* line 190, ../sass/_selectBox.scss */
 .selectBox.selectBox-disabled {
   color: #888 !important;
 }
 
-/* line 188, ../sass/_selectBox.scss */
+/* line 194, ../sass/_selectBox.scss */
 .selectBox-dropdown.selectBox-disabled .selectBox-arrow {
   opacity: .5;
   filter: alpha(opacity=50);
   border-color: #666;
 }
 
-/* line 194, ../sass/_selectBox.scss */
+/* line 200, ../sass/_selectBox.scss */
 .selectBox-inline.selectBox-disabled {
   color: #888 !important;
 }
 
-/* line 198, ../sass/_selectBox.scss */
+/* line 204, ../sass/_selectBox.scss */
 .selectBox-inline.selectBox-disabled .selectBox-options A {
   background-color: transparent !important;
 }
