@@ -121,6 +121,7 @@ function commons_q_a_field_default_field_instances() {
         'label' => 'above',
         'module' => 'radioactivity',
         'settings' => array(
+          'accuracy' => '100',
           'energy' => 10,
           'type' => 'none',
         ),
@@ -263,6 +264,7 @@ function commons_q_a_field_default_field_instances() {
         'label' => 'above',
         'module' => 'radioactivity',
         'settings' => array(
+          'accuracy' => '100',
           'energy' => 10,
           'type' => 'none',
         ),

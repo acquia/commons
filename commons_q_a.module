@@ -34,6 +34,7 @@ function commons_q_a_views_pre_render(&$view) {
   if ($view->name == 'commons_question_answers' && !empty($view->args[0])) {
     // If the user has access to post into any of the groups associated
     // with the question, embed a simplified answer node form.
+    dpm($view, 'view');
     $question_nid = $view->args[0];
     $question = node_load($question_nid);
     foreach ($question->og_group_ref[LANGUAGE_NONE] as $key => $value) {
@@ -44,7 +45,7 @@ function commons_q_a_views_pre_render(&$view) {
         $node = (object) array('uid' => $user->uid, 'name' => (isset($user->name) ? $user->name : ''), 'type' => 'answer', 'language' => LANGUAGE_NONE);
         // Prepopulate the Related question field
         // with Entityreference Prepopulate, which looks strictly at $_GET.
-        $_GET['field_related_question'] = '20';
+        $_GET['field_related_question'] = $view->args[0];
         $answer_form = drupal_get_form('answer_node_form', $node);
         $answer_form['header'] = array(
           '#markup' => '<h3>' . t('Add a new answer') . '</h3>',
