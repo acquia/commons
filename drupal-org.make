@@ -124,6 +124,12 @@ projects[message_subscribe][subdir] = "contrib"
 projects[memcache][type] = "module"
 projects[memcache][subdir] = "contrib"
 
+projects[metatag][type] = "module"
+projects[metatag][subdir] = "contrib"
+; Support for rel=author link in head
+; http://drupal.org/node/1865228#comment-6839604
+projects[metatag][patch][] = "http://drupal.org/files/metatag-n1865228-3.patch"
+
 projects[module_filter][type] = "module"
 projects[module_filter][subdir] = "contrib"
 
