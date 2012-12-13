@@ -189,10 +189,6 @@ projects[radioactivity][patch][] = "http://drupal.org/files/undefined_array-1816
 ; http://drupal.org/node/1860216
 projects[radioactivity][patch][] = "http://drupal.org/files/radioactivity-memcache.patch"
 
-; Radioactivity_cron() prints field names into the page request
-; http://drupal.org/node/1862146#comment-6825464
-projects[radioactivity][patch][] = "http://drupal.org/files/1862146-radioactivity-cron-print.patch"
-
 projects[r4032login][type] = "module"
 projects[r4032login][subdir] = "contrib"
 
