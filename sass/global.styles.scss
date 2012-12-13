@@ -555,10 +555,14 @@ h1.node-title {
  * User picture wrapping and shadow
  */
 
-.view-commons-homepage-content, .view-commons-activity-streams-activity {
+.view-commons-homepage-content, .view-commons-activity-streams-activity, .view-activity-group {
+  .content, .views-field-timestamp {
+    margin-left: 70px;
+  }
+
   .user-picture {
     float:left;
-    margin:0 20px 0 0;
+    margin:3px 0 0 -70px;
     background:$white;
     padding:4px;
     @include border-radius(3px);
@@ -1891,6 +1895,41 @@ ul.action-links {
         span {
           display: block;
         }
+      }
+    }
+  }
+}
+
+.view-commons-contributors-group {
+  table, tbody {
+    margin: 0;
+    border: none;
+  }
+
+  tbody tr {
+    background-color: transparent;
+    border: none;
+  }
+
+  td {
+    padding: 0;
+    // margin: 0 5px 5px 0;
+    // float: left;
+    line-height: 0;
+
+    &.col-last a {
+      margin-right: 0;
+    }
+
+    a {
+      display: block;
+      border: 3px solid $white;
+      @include border-radius(2px);
+      box-shadow: 1px 1px 3px $gray;
+      margin: 0 10px 10px 0;
+
+      img {
+        display: block;
       }
     }
   }
