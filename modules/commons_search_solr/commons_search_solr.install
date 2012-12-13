@@ -1,0 +1,21 @@
+<?php
+/**
+ * Installation file for Commons Search Solr feature.
+ */
+
+/**
+ * Implements hook_enable().
+ */
+function commons_search_solr_enable() {
+  // Disable Core search module upon enabling this module.
+  if (module_exists('commons_search_core')) {
+    module_disable(array('commons_search_core'), FALSE);
+  }
+  // Set active search modules to be only Solr and User.
+  variable_set('search_active_modules', array(
+    'apachesolr_search' => 'apachesolr_search',
+    'user' => 'user',
+  ));
+  // Set default search module for Solr.
+  variable_set('search_default_module', 'apachesolr_search');
+}

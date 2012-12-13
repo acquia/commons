@@ -48,5 +48,15 @@ function commons_search_solr_strongarm() {
   $strongarm->value = 'apachesolr_search';
   $export['search_default_module'] = $strongarm;
 
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'custom_search_other';
+  $strongarm->value = array(
+    'apachesolr_search' => 'apachesolr_search',
+    'user' => 'user',
+  );
+  $export['custom_search_other'] = $strongarm;
+
   return $export;
 }
