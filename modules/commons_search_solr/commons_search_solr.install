@@ -16,6 +16,12 @@ function commons_search_solr_enable() {
     'apachesolr_search' => 'apachesolr_search',
     'user' => 'user',
   ));
+  // Set custom search active search modules.
+  variable_set('custom_search_other', array(
+    'apachesolr_search' => 'apachesolr_search',
+    'user' => 'user',
+  ));
   // Set default search module for Solr.
   variable_set('search_default_module', 'apachesolr_search');
+  cache_clear_all();
 }
