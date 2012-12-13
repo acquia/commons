@@ -57,7 +57,7 @@ function commons_misc_default_page_manager_handlers() {
       'no_extras' => 0,
       'override_title' => 0,
       'override_title_text' => '',
-      'identifier' => '',
+      'identifier' => 'fallback',
       'link' => 0,
       'leave_node_title' => 1,
       'build_mode' => 'full',
