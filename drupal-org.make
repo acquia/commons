@@ -409,11 +409,8 @@ projects[adaptivetheme][type] = "theme"
 projects[adaptivetheme][subdir] = "contrib"
 projects[adaptivetheme][download][type] = "git"
 projects[adaptivetheme][download][url] = "http://git.drupal.org/project/adaptivetheme.git"
-projects[adaptivetheme][download][branch] = "7.x-3.x"
+projects[adaptivetheme][download][version] = "8e46acc"
 
-; Undefined function and theme settings not detected
-; http://drupal.org/node/1865974#comment-6842250
-projects[adaptivetheme][patch][] = "http://drupal.org/files/1865974.adaptivetheme.undefined_function_error.1.patch"
 
 projects[sky][type] = "theme"
 projects[sky][subdir] = "contrib"
