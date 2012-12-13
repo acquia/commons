@@ -1,0 +1,11 @@
+<?php
+/**
+ * Installation file for Commons Events Solr feature.
+ */
+
+/**
+ * Implements hook_enable().
+ */
+function commons_events_solr_enable() {
+  cache_clear_all();
+}
