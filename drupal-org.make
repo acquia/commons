@@ -35,6 +35,9 @@ projects[custom_search][download][branch] = "7.x-1.x"
 projects[date][type] = "module"
 projects[date][subdir] = "contrib"
 
+projects[date_facets][type] = "module"
+projects[date_facets][subdir] = "contrib"
+
 projects[devel][version] = "1.x-dev"
 projects[devel][type] = "module"
 projects[devel][subdir] = "contrib"
