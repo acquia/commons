@@ -52,7 +52,7 @@ function commons_content_moderation_delete_comment_block_user(&$entity, $context
  // Block users other than the anonymous user and UID 1.
   if ($entity->uid > 1) {
     $author = user_load($entity->uid);
-    if ($entity->status) {
+    if ($author->status) {
       $author = user_save($author, array('status' => 0));
       watchdog('action', 'Blocked user %name.', array('%name' => $author->name));
     }

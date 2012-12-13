@@ -18,7 +18,7 @@ function commons_content_moderation_ctools_plugin_api() {
  * Implements hook_views_api().
  */
 function commons_content_moderation_views_api() {
-  return array("version" => "3.0");
+  return array("api" => "3.0");
 }
 
 /**
@@ -31,11 +31,19 @@ function commons_content_moderation_flag_default_flags() {
     'content_type' => 'comment',
     'title' => 'Comment inappropriate',
     'global' => '0',
-    'types' => array(),
-    'flag_short' => 'Flag as inappropriate',
-    'flag_long' => 'Flag this content as inappropriate.',
+    'types' => array(
+      0 => 'comment_node_answer',
+      1 => 'comment_node_event',
+      2 => 'comment_node_group',
+      3 => 'comment_node_page',
+      4 => 'comment_node_post',
+      5 => 'comment_node_question',
+      6 => 'comment_node_wiki',
+    ),
+    'flag_short' => 'Report as inappropriate',
+    'flag_long' => 'Report this comment as inappropriate.',
     'flag_message' => '',
-    'unflag_short' => 'Flag as non-inappropriate',
+    'unflag_short' => 'Cancel report as inappropriate',
     'unflag_long' => 'Cancel reporting as inappropriate.',
     'unflag_message' => '',
     'unflag_denied_text' => '',
@@ -50,15 +58,15 @@ function commons_content_moderation_flag_default_flags() {
     ),
     'weight' => 0,
     'show_on_form' => 0,
-    'access_author' => '',
+    'access_author' => 'comment_others',
     'show_on_comment' => 1,
-    'flag_confirmation' => 'Are you sure you want to report this content as inappropriate?',
-    'unflag_confirmation' => 'Are you sure you want to cancel reporting this content as inappropriate?',
-    'api_version' => 2,
+    'flag_confirmation' => 'Are you sure you want to report this comment as inappropriate?',
+    'unflag_confirmation' => 'Are you sure you want to cancel reporting this comment as inappropriate?',
     'module' => 'commons_content_moderation',
     'locked' => array(
       0 => 'name',
     ),
+    'api_version' => 2,
   );
   // Exported flag: "Node inappropriate".
   $flags['inappropriate_node'] = array(
@@ -97,11 +105,11 @@ function commons_content_moderation_flag_default_flags() {
     'i18n' => 0,
     'flag_confirmation' => 'Are you sure you want to report this content as inappropriate?',
     'unflag_confirmation' => 'Are you sure you want cancel reporting this content as inappropriate?',
-    'api_version' => 2,
     'module' => 'commons_content_moderation',
     'locked' => array(
       0 => 'name',
     ),
+    'api_version' => 2,
   );
   return $flags;
 
