@@ -34,7 +34,6 @@ function commons_q_a_views_pre_render(&$view) {
   if ($view->name == 'commons_question_answers' && !empty($view->args[0])) {
     // If the user has access to post into any of the groups associated
     // with the question, embed a simplified answer node form.
-    dpm($view, 'view');
     $question_nid = $view->args[0];
     $question = node_load($question_nid);
     foreach ($question->og_group_ref[LANGUAGE_NONE] as $key => $value) {
