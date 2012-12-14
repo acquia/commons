@@ -22,6 +22,26 @@ function commons_q_a_commons_bw_group_widget() {
 }
 
 /**
+ * Implements hook_views_default_views_alter().
+ */
+function commons_q_a_views_default_views_alter(&$views) {
+  if (isset($views['commons_bw_all'])) {
+    // Answers aren't meant to display on the group browswing widget because
+    // they appear on question landing pages.
+    $views['commons_bw_all']->display['default']->display_options['filters']['type']['id'] = 'type';
+    $views['commons_bw_all']->display['default']->display_options['filters']['type']['table'] = 'node';
+    $views['commons_bw_all']->display['default']->display_options['filters']['type']['field'] = 'type';
+    $views['commons_bw_all']->display['default']->display_options['filters']['type']['operator'] = 'not in';
+    if (!isset($views['commons_bw_all']->display['default']->display_options['filters']['type']['value'])) {
+      $views['commons_bw_all']->display['default']->display_options['filters']['type']['value'] = array('answer' => 'answer');
+    }
+    else {
+      $views['commons_bw_all']->display['default']->display_options['filters']['type']['value']['answer'] = 'answer';
+    }
+  }
+}
+
+/**
 * Implements hook_views_pre_render().
 */
 function commons_q_a_views_pre_render(&$view) {
