@@ -7,6 +7,18 @@ function commons_bw_ctools_plugin_directory($module, $plugin) {
     return 'plugins/' . $plugin;
   }
 }
+
+/**
+* Implements hook_form_alter().
+*/
+function commons_bw_form_alter(&$form, &$form_state, $form_id) {
+  // Implements tweaks to exposed filters and sorts per the Commons designs.
+  if ($form_id == 'views_exposed_form' && strpos($form['#id'],'views-exposed-form-commons-bw') === 0) {
+    // Remove the sort order (eg, descending vs ascending).
+    $form['sort_order']['#access'] = FALSE;
+  }
+}
+
 /**
 * Implements hook_views_pre_render().
 */
