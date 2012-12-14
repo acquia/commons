@@ -599,7 +599,7 @@ h1.node-title {
   }
 }
 
-.view-commons-bw-all {
+.view-commons-bw-all, #comments {
   .content, .views-field-timestamp {
     margin-left: 70px;
   }
@@ -732,7 +732,29 @@ h1.node-title {
     }
 
     .user-picture {
-      margin-top: -20px;
+      float:left;
+      margin: -20px 0 0 -70px;
+      background:$white;
+      padding:4px;
+      @include border-radius(3px);
+      @include box-shadow($light_gray 1px 1px 4px);
+      position:relative;
+      display:block;
+      line-height:0;
+
+      &:after {
+        content:"";
+        width:5px;
+        height:8px;
+        position:absolute;
+        right:-5px;
+        top:10px;
+        background:image-url('user_img_arrow.png');
+      }
+
+      img {
+        width:50px;
+      }
     }
 
     .comment {
