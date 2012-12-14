@@ -90,9 +90,6 @@ function commons_groups_views_default_views() {
     'answer' => 'answer',
   );
 
-  /* Display: Block */
-  $handler = $view->new_display('block', 'Block', 'block_2');
-  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $export['commons_bw_all'] = $view;
 
   $view = new view();
