@@ -409,7 +409,7 @@ projects[adaptivetheme][type] = "theme"
 projects[adaptivetheme][subdir] = "contrib"
 projects[adaptivetheme][download][type] = "git"
 projects[adaptivetheme][download][url] = "http://git.drupal.org/project/adaptivetheme.git"
-projects[adaptivetheme][download][version] = "8e46acc"
+projects[adaptivetheme][download][revision] = "8e46acc"
 
 
 projects[sky][type] = "theme"
