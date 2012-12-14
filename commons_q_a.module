@@ -14,7 +14,7 @@ function commons_q_a_commons_bw_group_widget() {
     'commons_q_a' => array(
       'title' => 'Q & A',
       'type' => 'view',
-      'vid' => 'commons_q_a_questions_in_a_group',
+      'vid' => 'commons_bw_q_a',
       'display' => 'default',
       'weight' => 5,
     ),
@@ -45,7 +45,7 @@ function commons_q_a_views_default_views_alter(&$views) {
 * Implements hook_views_pre_render().
 */
 function commons_q_a_views_pre_render(&$view) {
-  if ($view->name == 'commons_q_a_questions_in_a_group') {
+  if ($view->name == 'commons_bw_q_a') {
     $group_id = $view->args[0];
     if (og_user_access('node', $group_id, 'create question content')) {
       $view->attachment_before = l(t('Ask a question'), 'node/add/question', array('query' => array('og_group_ref' => $group_id)));

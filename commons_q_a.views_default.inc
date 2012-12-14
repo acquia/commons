@@ -11,7 +11,7 @@ function commons_q_a_views_default_views() {
   $export = array();
 
   $view = new view();
-  $view->name = 'commons_q_a_questions_in_a_group';
+  $view->name = 'commons_bw_q_a';
   $view->description = '';
   $view->tag = 'default';
   $view->base_table = 'node';
@@ -81,7 +81,7 @@ function commons_q_a_views_default_views() {
   $handler->display->display_options['filters']['type']['value'] = array(
     'question' => 'question',
   );
-  $export['commons_q_a_questions_in_a_group'] = $view;
+  $export['commons_bw_q_a'] = $view;
 
   $view = new view();
   $view->name = 'commons_question_answers';
