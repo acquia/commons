@@ -771,24 +771,28 @@ h1.node-title {
   display: inline-block;
 
   a {
-    @extend %btn-gray;
-    font-size: 0;
-    width: 59px;
-    height: 20px;
     position: relative;
-    padding: 0;
 
     &:before {
       content: '';
       @include sprite_url_height_width($icons, follow-large);
-      position: absolute;
-      left: 22px;
-      top: 5px;
+    }
+
+    &.flag-action {
+      @extend %btn-gray;
+    }
+
+    &.unflag-action {
+      @extend %btn-gray-flat;
     }
   }
 
   .flag-throbber {
     display: inline-block;
+  }
+
+  span {
+    display: none !important;
   }
 }
 
