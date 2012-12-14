@@ -555,7 +555,7 @@ h1.node-title {
  * User picture wrapping and shadow
  */
 
-.view-commons-homepage-content, .view-commons-activity-streams-activity, .view-activity-group {
+.view-commons-homepage-content, .view-commons-activity-streams-activity, .view-activity-group, .view-commons-activity-streams-user-activity {
   .content, .views-field-timestamp {
     margin-left: 70px;
   }
@@ -865,6 +865,77 @@ h1.node-title {
     repeat:no-repeat;
   }
   margin:4px 0 0 5px;
+}
+
+.page-user {
+  .pane-user-picture {
+    display: inline-block;
+
+    .user-picture {
+      background: $white;
+      padding: 10px;
+      @include border-radius(6px);
+      @include box-shadow($light_gray 1px 1px 4px);
+
+      img {
+        display: block;
+      }
+    }
+  }
+
+  .pane-user-field-bio {
+    
+  }
+
+  .pane-user-field-facebook-url {
+
+    a {
+      display: inline-block;
+
+      &:before {
+        content: '';
+        @include sprite_url_height_width($icons, facebook);
+        margin-right: 7px;
+        top: 7px;
+      }
+    }
+  }
+
+  .pane-user-field-linkedin-url {
+
+    a {
+      display: inline-block;
+
+      &:before {
+        content: '';
+        @include sprite_url_height_width($icons, linkedin);
+        margin-right: 7px;
+        top: 7px;
+      }
+    }
+  }
+
+  .pane-user-field-twitter-url {
+
+    a {
+      display: inline-block;
+
+      &:before {
+        content: '';
+        @include sprite_url_height_width($icons, twitter);
+        margin-right: 7px;
+        top: 7px;
+      }
+    }
+  }
+
+  .pane-views-panes {
+    @extend %pod;
+
+    .block-inner {
+      @extend %pod-content;
+    }
+  }
 }
 
 /* =============================================================================
@@ -2595,7 +2666,7 @@ ul.action-links {
     background-image:image-url('icons/ico_search_wht.png') !important;
     text-indent:-9999px !important;
     padding:0 !important;
-    margin:8px !important;
+    margin:10px 2px !important;
   }
 
   .form-item-search-block-form label {
