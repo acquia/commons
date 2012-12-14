@@ -6,6 +6,7 @@
 /*
  * Body
  */
+/* line 14, ../sass/print.scss */
 body {
   width: 100% !important;
   margin: 0 !important;
@@ -22,12 +23,14 @@ body {
 /*
  * Links
  */
+/* line 31, ../sass/print.scss */
 a {
   background: transparent;
   font-weight: 700;
   text-decoration: underline;
   color: #0000ee;
 }
+/* line 39, ../sass/print.scss */
 a[href^="http://"]:after, a[href^="http://"]:visited:after {
   content: "(" attr(href) ")";
   font-size: 10pt;
@@ -36,6 +39,7 @@ a[href^="http://"]:after, a[href^="http://"]:visited:after {
 /*
  * Strip background from likely candidates
  */
+/* line 74, ../sass/print.scss */
 div[id*="wrapper"],
 [class*="title"],
 [class*="inner"],
@@ -68,6 +72,7 @@ table * {
 /*
  * Hide various bits of the page
  */
+/* line 97, ../sass/print.scss */
 .sidebar,
 #breadcrumb,
 .nav,
@@ -90,6 +95,7 @@ ul.links,
 /*
  * Ensure the display the main content region
  */
+/* line 105, ../sass/print.scss */
 #content {
   display: block !important;
 }
@@ -97,10 +103,12 @@ ul.links,
 /*
  * Layout
  */
+/* line 113, ../sass/print.scss */
 #header {
   margin-bottom: 20px;
 }
 
+/* line 118, ../sass/print.scss */
 .content-inner {
   margin: 0 !important;
   padding: 0 !important;
@@ -109,6 +117,7 @@ ul.links,
 /*
  * HTML elements
  */
+/* line 132, ../sass/print.scss */
 h1,
 h2,
 h3,
@@ -121,24 +130,29 @@ h6 {
   line-height: 1;
 }
 
+/* line 140, ../sass/print.scss */
 h1 {
   font-size: 14pt;
 }
 
+/* line 145, ../sass/print.scss */
 h2 {
   font-size: 13pt;
 }
 
+/* line 150, ../sass/print.scss */
 h3 {
   font-size: 12pt;
 }
 
+/* line 157, ../sass/print.scss */
 h4,
 h5,
 h6 {
   font-size: 11pt;
 }
 
+/* line 168, ../sass/print.scss */
 h1 a,
 h2 a,
 h3 a,
@@ -151,14 +165,17 @@ h6 a,
   color: #333333;
 }
 
+/* line 176, ../sass/print.scss */
 hgroup a:link, hgroup a:visited {
   text-decoration: none;
 }
 
+/* line 182, ../sass/print.scss */
 #page-title {
   margin-top: 20px;
 }
 
+/* line 192, ../sass/print.scss */
 pre,
 code,
 tt,
@@ -169,6 +186,7 @@ var {
   font-family: Consolas, "Lucida Console", Menlo, Monaco, "DejaVu Sans Mono", monospace, sans-serif;
 }
 
+/* line 198, ../sass/print.scss */
 blockquote {
   margin: 20px;
   padding: 10px;
@@ -177,6 +195,7 @@ blockquote {
   background: #eeeeee;
 }
 
+/* line 207, ../sass/print.scss */
 hr {
   background-color: #666666;
 }
@@ -184,10 +203,12 @@ hr {
 /*
  * Header, Logo, Site name
  */
+/* line 215, ../sass/print.scss */
 #header {
   padding-bottom: 20px;
 }
 
+/* line 220, ../sass/print.scss */
 #logo img {
   padding: 0 10px 0 0;
   margin: 0 !important;
@@ -197,12 +218,14 @@ hr {
 /*
  * Images
  */
+/* line 230, ../sass/print.scss */
 img {
   float: left;
   margin: 4px 20px 10px 0;
   page-break-inside: avoid;
 }
 
+/* line 237, ../sass/print.scss */
 a img {
   border: none;
 }
@@ -210,38 +233,46 @@ a img {
 /*
  * Tables
  */
+/* line 245, ../sass/print.scss */
 table {
   margin: 1px;
   text-align: left;
 }
 
+/* line 251, ../sass/print.scss */
 th {
   border-bottom: 1px solid #333333;
   font-weight: 700;
 }
 
+/* line 257, ../sass/print.scss */
 td {
   border-bottom: 1px solid #333333;
 }
 
+/* line 263, ../sass/print.scss */
 th,
 td {
   padding: 4px 10px 4px 0;
 }
 
+/* line 268, ../sass/print.scss */
 tfoot {
   font-style: italic;
 }
 
+/* line 273, ../sass/print.scss */
 caption {
   margin-bottom: 10px;
   text-align: left;
 }
 
+/* line 279, ../sass/print.scss */
 thead {
   display: table-header-group;
 }
 
+/* line 284, ../sass/print.scss */
 tr {
   page-break-inside: avoid;
 }
@@ -249,6 +280,7 @@ tr {
 /*
  * Forms
  */
+/* line 292, ../sass/print.scss */
 form {
   margin-bottom: 10px;
 }
@@ -256,11 +288,13 @@ form {
 /*
  * Poll module
  */
+/* line 302, ../sass/print.scss */
 .poll .text,
 .poll .percent,
 .poll .total {
   text-align: left;
 }
+/* line 305, ../sass/print.scss */
 .poll form {
   margin-bottom: 0;
 }
@@ -268,6 +302,7 @@ form {
 /*
  * Articles
  */
+/* line 315, ../sass/print.scss */
 .node,
 .comment {
   margin-bottom: 20px;
@@ -275,6 +310,7 @@ form {
   page-break-inside: avoid;
 }
 
+/* line 321, ../sass/print.scss */
 .submitted {
   color: #666666;
   text-decoration: none;
@@ -283,6 +319,7 @@ form {
   margin: 0;
   padding: 0;
 }
+/* line 329, ../sass/print.scss */
 .submitted a {
   color: #666666;
   text-decoration: none;

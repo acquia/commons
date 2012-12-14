@@ -599,6 +599,182 @@ h1.node-title {
   }
 }
 
+.page-node {
+  .node-content {
+    margin-left: 70px;
+
+    .rate-widget-commons_like {
+      @extend %like-btn;
+    }
+
+    .user-picture {
+      float:left;
+      margin:3px 0 0 -70px;
+      background:$white;
+      padding:4px;
+      @include border-radius(3px);
+      @include box-shadow($light_gray 1px 1px 4px);
+      position:relative;
+      display:block;
+      line-height:0;
+
+      &:after {
+        content:"";
+        width:5px;
+        height:8px;
+        position:absolute;
+        right:-5px;
+        top:10px;
+        background:image-url('user_img_arrow.png');
+      }
+
+      img {
+        width:50px;
+      }
+    }
+  }
+
+  #comments article > * {
+    margin-left: 70px;
+  }
+
+  .field .field-label {
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 26px;
+    color: $dark_gray;
+  }
+
+  .field-name-field-topics, .field-name-og-group-ref {
+    float: left;
+    width: 50%;
+
+    ul {
+      margin: 0;
+      list-style: none;
+      padding: 0;
+
+      li {
+        float: left;
+      }
+    }
+  }
+
+  .field-name-field-topics {
+    .field-item:before {
+      content: '';
+      @include sprite_url_height_width($icons, tags);
+      top: -1px;
+    }
+  }
+
+  .field-name-og-group-ref {
+    .field-item:before {
+      content: '';
+      @include sprite_url_height_width($icons, groups);
+      top: -1px;
+    }
+  }
+
+  #comments {
+    margin: 0;
+
+    h2 {
+      color: $dark_gray;
+
+      &.comment-title {
+        margin-bottom: 25px;
+
+        &:before {
+          content: '';
+          @include sprite_url_height_width($icons, comments-large);
+        }
+      }
+
+      &.comment-form {
+        margin-bottom: 0;
+        &:before {
+          display: none;
+        }
+      }
+    }
+
+    .user-picture {
+      margin-top: -20px;
+    }
+
+    .comment {
+      border-bottom: 1px solid $lighter_gray;
+      padding-bottom: 20px;
+      position: relative;
+    }
+
+    #edit-preview {
+      @extend %btn-gray;
+      padding: 5px 20px;
+      margin-left: 10px;
+    }
+
+    .comment-reply {
+      float: right;
+
+      &:before {
+        content: '';
+        @include sprite_url_height_width($icons, comments);
+        margin-right: 8px;
+        top: 3px;
+      }
+    }
+
+    .rate-widget-commons_like {
+      @extend %like-btn;
+      position: absolute;
+      right: 5px;
+      top: 15px;
+    }
+  }
+}
+
+.page-node .flag-commons-follow-node, .page-node .flag-commons-follow-group {
+  display: inline-block;
+
+  a {
+    @extend %btn-gray;
+    font-size: 0;
+    width: 59px;
+    height: 20px;
+    position: relative;
+    padding: 0;
+
+    &:before {
+      content: '';
+      @include sprite_url_height_width($icons, follow-large);
+      position: absolute;
+      left: 22px;
+      top: 5px;
+    }
+  }
+
+  .flag-throbber {
+    display: inline-block;
+  }
+}
+
+.flag-inappropriate-node {
+  @include opacity(0);
+  @include transition(opacity 0.5s);
+
+  &:before {
+    content: '';
+    top: 0;
+    @include sprite_url_height_width($icons, spam);
+  }
+
+  .page-node .node:hover &, .pane-node-links:hover & {
+    @include opacity(1);
+  }
+}
+
 .view-commons-groups-contributors {
   .user-picture {
     float:left;
@@ -1507,6 +1683,12 @@ ul.action-links {
  *   Panels Styling
  * ========================================================================== */
 
+.commons-pod {
+  @extend %pod;
+  padding: 10px 10px 20px 10px;
+  margin-right: 0;
+}
+
 .commons-sign-up {
   @extend %btn-green;
   padding: 0 10px;
@@ -1611,6 +1793,17 @@ ul.action-links {
     > .block-inner {
       @extend %pod-content;
     }
+  }
+
+  .node-teaser {
+    position: relative;
+  }
+
+  .comment-add a {
+    @extend %btn-green;
+    position: absolute;
+    right: 0;
+    top: 5px;
   }
 }
 
@@ -2498,7 +2691,9 @@ ul.action-links {
   margin-bottom: 20px;
 
   &.node-promoted {
-    background: image-url('node-promoted-star.png') top right no-repeat;
+    background-image: image-url('node-promoted-star.png');
+    background-position: top right;
+    background-repeat: no-repeat;
     position: relative;
 
     .front.logged-in & {
@@ -2507,7 +2702,7 @@ ul.action-links {
       background-color: darken($white, 3%);
     }
 
-    .view-commons-bw-all & {
+    #quicktabs-commons_bw & {
       padding: 10px;
       @include border-radius(3px);
       background-color: darken($white, 3%);
@@ -2558,6 +2753,22 @@ ul.action-links {
     li.print-html a {}
     li.print-email a {}
     li.print-pdf a {}
+  }
+}
+
+body.page-node {
+  h2 {
+    font-size: 26px;
+    line-height: 38px;
+    font-weight: normal;
+  }
+}
+
+body.page-node.node-type-group {
+  h2#page-title {
+    font-size: 54px;
+    line-height: 54px;
+    font-weight: normal;
   }
 }
 
