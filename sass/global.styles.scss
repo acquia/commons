@@ -3123,14 +3123,21 @@ form.commons-events-form-float {
   }
 }
 
-#content-column #edit-submit {
-  @extend %btn-green;
+.form-actions input[type="submit"] {
+  @extend %btn-gray;
   padding: 5px 20px;
-  margin:0;
+  margin:0 15px 0 0;
+  box-shadow: 0 3px 3px rgba(#000, 0.09);
 
   &.js-hide {
     display: none;
   }
+}
+
+#content-column #edit-submit {
+  @extend %btn-green;
+  margin:0 15px 0 0;
+  padding: 5px 20px;
 }
 
 #edit-field-topics-und {
