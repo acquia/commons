@@ -62,7 +62,7 @@ function commons_groups_views_default_views() {
   $handler->display->display_options['sorts']['created']['field'] = 'created';
   $handler->display->display_options['sorts']['created']['order'] = 'DESC';
   $handler->display->display_options['sorts']['created']['exposed'] = TRUE;
-  $handler->display->display_options['sorts']['created']['expose']['label'] = 'Post date';
+  $handler->display->display_options['sorts']['created']['expose']['label'] = 'most recent';
   /* Contextual filter: OG membership: Group ID */
   $handler->display->display_options['arguments']['gid']['id'] = 'gid';
   $handler->display->display_options['arguments']['gid']['table'] = 'og_membership';
@@ -87,16 +87,12 @@ function commons_groups_views_default_views() {
   $handler->display->display_options['filters']['type']['operator'] = 'not in';
   $handler->display->display_options['filters']['type']['value'] = array(
     'event' => 'event',
+    'answer' => 'answer',
   );
 
   /* Display: Block */
   $handler = $view->new_display('block', 'Block', 'block_2');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-
-  /* Display: Page */
-  $handler = $view->new_display('page', 'Page', 'page_1');
-  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-  $handler->display->display_options['path'] = 'test';
   $export['commons_bw_all'] = $view;
 
   $view = new view();
