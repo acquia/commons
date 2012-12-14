@@ -405,8 +405,15 @@ function commons_create_topic($topic_name = '') {
   $term = new stdClass();
   $term->name = $topic_name;
   $term->vid = 1;
-
+  // Pathauto aliasing can cause a menu_rebuild(), causing the request to
+  // exceeed the max execution time. Specify a manual alias instead.
+  // http://drupal.org/node/1867172.
+  $term->path['pathauto'] = FALSE;
   taxonomy_term_save($term);
-
+  $path = array(
+    'source' => 'taxonomy/term/' . $term->tid,
+    'alias' => 'topics/' . drupal_html_class($topic_name),
+  );
+  path_save($path);
   return $term->tid;
 }
