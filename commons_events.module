@@ -43,7 +43,12 @@ function commons_events_views_default_views_alter(&$views) {
     $views['commons_bw_all']->display['default']->display_options['filters']['type']['table'] = 'node';
     $views['commons_bw_all']->display['default']->display_options['filters']['type']['field'] = 'type';
     $views['commons_bw_all']->display['default']->display_options['filters']['type']['operator'] = 'not in';
-    $views['commons_bw_all']->display['default']->display_options['filters']['type']['value'] = array('event' => 'event');
+    if (!isset($views['commons_bw_all']->display['default']->display_options['filters']['type']['value'])) {
+      $views['commons_bw_all']->display['default']->display_options['filters']['type']['value'] = array('event' => 'event');
+    }
+    else {
+      $views['commons_bw_all']->display['default']->display_options['filters']['type']['value']['event'] = 'event';
+    }
   }
 }
 
