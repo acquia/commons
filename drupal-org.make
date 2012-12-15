@@ -214,6 +214,9 @@ projects[rules][subdir] = "contrib"
 projects[search_facetapi][type] = "module"
 projects[search_facetapi][subdir] = "contrib"
 
+projects[sharethis][type] = "module"
+projects[sharethis][subdir] = "contrib"
+
 projects[facetapi][type] = "module"
 projects[facetapi][subdir] = "contrib"
 
@@ -351,6 +354,12 @@ projects[commons_profile_social][subdir] = "contrib"
 projects[commons_profile_social][download][type] = "git"
 projects[commons_profile_social][download][url] = "http://git.drupal.org/project/commons_profile_social.git"
 projects[commons_profile_social][download][branch] = "7.x-3.x"
+
+projects[commons_q_a][type] = "module"
+projects[commons_q_a][subdir] = "contrib"
+projects[commons_q_a][download][type] = "git"
+projects[commons_q_a][download][url] = "http://git.drupal.org/project/commons_q_a.git"
+projects[commons_q_a][download][branch] = "7.x-3.x"
 
 projects[commons_radioactivity][type] = "module"
 projects[commons_radioactivity][subdir] = "contrib"
