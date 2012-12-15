@@ -6,6 +6,9 @@ core = 7.x
 projects[addressfield][type] = "module"
 projects[addressfield][subdir] = "contrib"
 
+projects[acquia_connector][type] = "module"
+projects[acquia_connector][subdir] = "contrib"
+
 projects[aloha][version] = "2.x-dev"
 projects[aloha][type] = "module"
 projects[aloha][subdir] = "contrib"

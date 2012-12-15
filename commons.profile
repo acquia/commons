@@ -24,8 +24,41 @@ function commons_form_install_configure_form_alter(&$form, $form_state) {
     '#title' => 'Last name',
     '#weight' => -9,
   );
+    // Acquia features
+  $form['server_settings']['acquia_description'] = array(
+    '#type' => 'fieldset',
+    '#title' => st('Acquia'),
+    '#description' => st('The !an can supplement the functionality of Commons by providing enhanced site search (faceted search, content recommendations, content biasing, multi-site search, and others using the Apache Solr service), spam protection (using the Mollom service), and more.  A free 30-day trial is available.', array('!an' => l(t('Acquia Network'), 'http://acquia.com/products-services/acquia-network', array('attributes' => array('target' => '_blank'))))),
+  );
+  $form['server_settings']['enable_acquia_connector'] = array(
+    '#type' => 'checkbox',
+    '#title' => 'Use Acquia Network Connector',
+    '#default_value' => 1,
+    '#weight' => -10,
+    '#return_value' => 1,
+  );
+  $form['server_settings']['acquia_connector_modules'] = array(
+    '#type' => 'checkboxes',
+    '#title' => 'Acquia Network Connector Modules',
+    '#options' => array(
+      'acquia_agent' => 'Acquia Agent',
+      'acquia_search' => 'Acquia Search',
+      'acquia_spi' => 'Acquia SPI',
+    ),
+    '#default_value' => array(
+      'acquia_agent',
+      'acquia_spi',
+    ),
+    '#weight' => -9,
+    '#states' => array(
+      'visible' => array(
+        ':input[name="enable_acquia_connector"]' => array('checked' => TRUE),
+      ),
+    ),
+  );
 
   $form['#submit'][] = 'commons_admin_save_fullname';
+  $form['#submit'][] = 'commons_check_acquia_connector';
 }
 
 
@@ -49,8 +82,14 @@ function commons_update_projects_alter(&$projects) {
 function commons_install_tasks() {
 
   $demo_content = variable_get('commons_install_demo_content', FALSE);
+  $acquia_connector = variable_get('commons_install_acquia_connector', FALSE);
 
   return array(
+    'commons_acquia_connector_enable' => array(
+      'display' => FALSE,
+      'type' => '',
+      'run' => $acquia_connector ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
+    ),
     'commons_anonymous_message_homepage' => array(
       'display_name' => st('Enter Homepage welcome text'),
       'display' => TRUE,
@@ -159,6 +198,18 @@ function commons_admin_save_fullname($form_id, &$form_state) {
     $account->field_name_first[LANGUAGE_NONE][0]['value'] = $values['field_name_first'];
     $account->field_name_last[LANGUAGE_NONE][0]['value'] = $values['field_name_last'];
     user_save($account);
+  }
+}
+
+/**
+ * Check if the Acquia Connector box was selected.
+ */
+function commons_check_acquia_connector($form_id, &$form_state) {
+  $values = $form_state['values'];
+  if (isset($values['enable_acquia_connector']) && $values['enable_acquia_connector'] == 1) {
+    $options = $values['acquia_connector_modules'];
+    variable_set('commons_install_acquia_connector', TRUE);
+    variable_set('commons_install_acquia_modules', array_keys($options));
   }
 }
 
@@ -416,4 +467,14 @@ function commons_create_topic($topic_name = '') {
   );
   path_save($path);
   return $term->tid;
+}
+
+/**
+ * Enable Acquia Connector module if selected on site configuration step.
+ */
+function commons_acquia_connector_enable() {
+  $modules = variable_get('commons_install_acquia_modules', array());
+  if (!empty($modules)) {
+    module_enable($modules, TRUE);
+  }
 }
