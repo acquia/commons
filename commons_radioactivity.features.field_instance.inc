@@ -41,6 +41,7 @@ function commons_radioactivity_field_definition(&$field_instances, $entity_type,
       'settings' => array(
         'energy' => 10,
         'type' => 'none',
+        'accuracy' => '100',
       ),
       'type' => 'radioactivity_combo_formatter',
       'weight' => 3,
