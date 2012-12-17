@@ -10,20 +10,23 @@
  *
  */
 function commons_group_privacy_features_pipe_alter(&$pipe, $data, $export) {
+  $group_access_fields = array(
+    'group_content_access', 'og_roles_permissions', 'group_access',
+  );
   // Prevent Commons Group privacy fields from being piped in features
   // when a content type includes those fields.
   if (!empty($pipe['field_instance'])) {
     foreach ($pipe['field_instance'] as $delta => $value) {
       $args = explode('-', $value);
       $field_name = $args[2];
-      if ($field_name == 'group_content_access') {
+      if (in_array($field_name, $group_access_fields)) {
         unset($pipe['field_instance'][$delta]);
       }
     }
   }
   if (!empty($pipe['field_base'])) {
     foreach ($pipe['field_base'] as $delta => $value) {
-      if ($delta == 'group_content_access') {
+      if (in_array($delta, $group_access_fields)) {
         unset($pipe['field_base'][$delta]);
       }
     }
