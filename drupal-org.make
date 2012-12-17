@@ -250,6 +250,9 @@ projects[views_load_more][subdir] = "contrib"
 projects[views_bulk_operations][type] = "module"
 projects[views_bulk_operations][subdir] = "contrib"
 
+projects[views_litepager][type] = "module"
+projects[views_litepager][subdir] = "contrib"
+
 projects[votingapi][type] = "module"
 projects[votingapi][subdir] = "contrib"
 
