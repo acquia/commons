@@ -9,8 +9,8 @@ projects[addressfield][subdir] = "contrib"
 projects[acquia_connector][type] = "module"
 projects[acquia_connector][subdir] = "contrib"
 
-projects[advanced_queue][type] = "module"
-projects[advanced_queue][subdir] = "contrib"
+projects[advancedqueue][type] = "module"
+projects[advancedqueue][subdir] = "contrib"
 
 projects[aloha][version] = "2.x-dev"
 projects[aloha][type] = "module"
@@ -131,7 +131,7 @@ projects[message_subscribe][download][branch] = "7.x-1.x"
 projects[message_subscribe][subdir] = "contrib"
 ; Email relationship not set in UI tab.
 ; http://drupal.org/node/1845110#comment-6854312
-projects[message_subscribe][patch][] = "http://drupal.org/files/1845110-message-subscribe-email-flag-6.patch"
+projects[message_subscribe][patch][] = "http://drupal.org/files/1845110-message-subscribe-email-flag-7.patch"
 
 
 projects[memcache][type] = "module"
