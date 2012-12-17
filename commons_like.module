@@ -111,6 +111,7 @@ function commons_like_rate_templates() {
   $templates['commons_like']->css = drupal_get_path('module', 'commons_like') . '/commons-like.css';
   $templates['commons_like']->customizable = FALSE;
   $templates['commons_like']->translate = TRUE;
+  $templates['commons_like']->use_source_translation = TRUE;
   $templates['commons_like']->template_title = t('Commons like');
 
   return $templates;
