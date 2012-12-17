@@ -228,7 +228,7 @@ function commons_groups_field_definition(&$field_instances, $entity_type, $bundl
         'weight' => 0,
       ),
     ),
-    'entity_type' => 'node',
+    'entity_type' => $entity_type,
     'field_name' => 'og_group_ref',
     'label' => 'Groups',
     'required' => 0,
