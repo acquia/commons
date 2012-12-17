@@ -4,18 +4,16 @@ core = 7.x
 package = Commons - Landing pages
 php = 5.2.4
 project = commons_site_homepage
+dependencies[] = commons_follow
 dependencies[] = commons_activity_streams
 dependencies[] = commons_events
 dependencies[] = commons_featured
-dependencies[] = commons_follow
 dependencies[] = commons_radioactivity_groups
-dependencies[] = ctools
 dependencies[] = entity
 dependencies[] = page_manager
-dependencies[] = strongarm
-dependencies[] = views_content
-dependencies[] = views_load_more
-datestamp = 1352750070
+dependencies[] = views
+dependencies[] = views_litepager
+datestamp = 1354747296
 features[ctools][] = page_manager:pages_default:1
 features[ctools][] = strongarm:strongarm:1
 features[ctools][] = views:views_default:3.0
@@ -23,10 +21,4 @@ features[features_api][] = api:1
 features[page_manager_pages][] = commons_home
 features[variable][] = site_frontpage
 features[views_view][] = commons_homepage_content
-
-
-; Information added by drush on 2012-12-05
-version = ""
-project = "commons_site_homepage"
-datestamp = "1354747296"
-
+features_exclude[dependencies][views_content] = views_content
