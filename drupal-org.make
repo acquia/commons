@@ -9,6 +9,9 @@ projects[addressfield][subdir] = "contrib"
 projects[acquia_connector][type] = "module"
 projects[acquia_connector][subdir] = "contrib"
 
+projects[advanced_queue][type] = "module"
+projects[advanced_queue][subdir] = "contrib"
+
 projects[aloha][version] = "2.x-dev"
 projects[aloha][type] = "module"
 projects[aloha][subdir] = "contrib"
@@ -177,9 +180,6 @@ projects[pathauto][subdir] = "contrib"
 
 projects[pm_existing_pages][type] = "module"
 projects[pm_existing_pages][subdir] = "contrib"
-
-projects[queue_mail][type] = "module"
-projects[queue_mail][subdir] = "contrib"
 
 projects[quicktabs][type] = "module"
 projects[quicktabs][subdir] = "contrib"
