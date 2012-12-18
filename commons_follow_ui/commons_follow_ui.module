@@ -38,6 +38,17 @@ function commons_follow_ui_menu() {
 }
 
 /**
+* Implements hook_form_alter().
+*/
+function commons_follow_ui_form_alter(&$form, &$form_state, $form_id) {
+  // We have a dedicated form for the "Send email by default" checkbox.
+  // Hide it from the user profile edit form.
+  if ($form_id == 'edit_profile_user_profile_form') {
+    $form['message_subscribe_email']['#access'] = FALSE;
+  }
+}
+
+/**
  * Implements hook_commons_utility_links().
  */
 function commons_follow_ui_commons_utility_links_alter(&$links) {
