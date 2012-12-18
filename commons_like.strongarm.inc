@@ -51,6 +51,7 @@ function commons_like_strongarm() {
       'theme' => 'rate_template_commons_like',
       'css' => 'sites/all/modules/commons_like/commons-like.css',
       'translate' => TRUE,
+      'use_source_translation' => TRUE,
     ),
   );
   $export['rate_widgets'] = $strongarm;
