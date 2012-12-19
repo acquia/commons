@@ -12,8 +12,8 @@ function commons_search_solr_apachesolr_environments() {
 
   $environment = new stdClass();
   $environment->api_version = 1;
-  $environment->env_id = 'solr';
-  $environment->name = 'localhost server';
+  $environment->env_id = 'local_solr';
+  $environment->name = 'Default local Solr server';
   $environment->url = 'http://localhost:8983/solr';
   $environment->service_class = '';
   $environment->conf = array(

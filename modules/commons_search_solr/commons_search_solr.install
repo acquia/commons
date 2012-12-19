@@ -24,4 +24,5 @@ function commons_search_solr_enable() {
   // Set default search module for Solr.
   variable_set('search_default_module', 'apachesolr_search');
   cache_clear_all();
+  commons_search_solr_create_facets();
 }

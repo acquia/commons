@@ -18,7 +18,7 @@ function commons_search_solr_apachesolr_search_default_searchers() {
   $searcher->description = 'Core Search';
   $searcher->search_path = 'search/site';
   $searcher->page_title = 'Site';
-  $searcher->env_id = 'solr';
+  $searcher->env_id = apachesolr_default_environment();
   $searcher->settings = array(
     'fq' => array(),
     'apachesolr_search_custom_enable' => 0,

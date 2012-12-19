@@ -49,7 +49,7 @@ function commons_search_solr_default_page_manager_handlers() {
     $pane->pid = 'new-1';
     $pane->panel = 'two_33_66_first';
     $pane->type = 'block';
-    $pane->subtype = 'facetapi-CpjIe0iO04QY4VGdG5PfZfBQqRWCmc4G';
+    $pane->subtype = commons_search_solr_panel_facet_subtype(commons_search_solr_search_environment() . ':block:sm_og_group_ref');
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array(
@@ -70,7 +70,7 @@ function commons_search_solr_default_page_manager_handlers() {
     $pane->pid = 'new-2';
     $pane->panel = 'two_33_66_first';
     $pane->type = 'block';
-    $pane->subtype = 'facetapi-R3lWVKZ0loVbYjsmiQUwPYESeoFz9xTm';
+    $pane->subtype = commons_search_solr_panel_facet_subtype(commons_search_solr_search_environment() . ':block:im_field_topics');
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array(
@@ -91,7 +91,7 @@ function commons_search_solr_default_page_manager_handlers() {
     $pane->pid = 'new-3';
     $pane->panel = 'two_33_66_first';
     $pane->type = 'block';
-    $pane->subtype = 'facetapi-GiIy4zr9Gu0ZSa0bumw1Y9qIIpIDf1wu';
+    $pane->subtype = commons_search_solr_panel_facet_subtype(commons_search_solr_search_environment() . ':block:bundle');
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array(
@@ -112,7 +112,7 @@ function commons_search_solr_default_page_manager_handlers() {
     $pane->pid = 'new-4';
     $pane->panel = 'two_33_66_first';
     $pane->type = 'block';
-    $pane->subtype = 'facetapi-wWWinJ0eOefOtAMbjo2yl86Mnf1rO12j';
+    $pane->subtype = commons_search_solr_panel_facet_subtype(commons_search_solr_search_environment() . ':block:author');
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array(
@@ -133,7 +133,7 @@ function commons_search_solr_default_page_manager_handlers() {
     $pane->pid = 'new-5';
     $pane->panel = 'two_33_66_first';
     $pane->type = 'block';
-    $pane->subtype = 'facetapi-n18E4x0qRRaIP7nV6I0SDYiCJsq77HCB';
+    $pane->subtype = commons_search_solr_panel_facet_subtype(commons_search_solr_search_environment() . ':block:created');
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array(
@@ -154,7 +154,7 @@ function commons_search_solr_default_page_manager_handlers() {
     $pane->pid = 'new-6';
     $pane->panel = 'two_33_66_first';
     $pane->type = 'block';
-    $pane->subtype = 'facetapi-WtseAVugB1EhxGslwR3XIwoa0sVTttYt';
+    $pane->subtype = commons_search_solr_panel_facet_subtype(commons_search_solr_search_environment() . ':block:changed');
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array(
