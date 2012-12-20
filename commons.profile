@@ -5,6 +5,24 @@
  */
 
 /**
+ * Implements hook_install_tasks_alter().
+ */
+function commons_install_tasks_alter(&$tasks, $install_state) {
+  global $install_state;
+
+  // Skip profile selection step.
+  $tasks['install_select_profile']['display'] = FALSE;
+
+  // Skip language selection install step and default language to English.
+  $tasks['install_select_locale']['display'] = FALSE;
+  $tasks['install_select_locale']['run'] = INSTALL_TASK_SKIP;
+  $install_state['parameters']['locale'] = 'en';
+
+  // Override "install_finished" task to redirect people to home page.
+  $tasks['install_finished']['function'] = 'commons_install_finished';
+}
+
+/**
  * Implements hook_form_FORM_ID_alter() for install_configure_form().
  *
  * Allows the profile to alter the site configuration form.
@@ -81,7 +99,7 @@ function commons_update_projects_alter(&$projects) {
  */
 function commons_install_tasks() {
 
-  $demo_content = variable_get('commons_install_demo_content', FALSE);
+  $demo_content = variable_get('commons_install_example_content', FALSE);
   $acquia_connector = variable_get('commons_install_acquia_connector', FALSE);
 
   return array(
@@ -174,18 +192,12 @@ function commons_create_first_group_submit($form_id, &$form_state) {
  * Revert Features after the installation.
  */
 function commons_revert_features() {
-  // These features must be twice in a row in order to
-  // fully revert.
-  $i = 0;
-  while ($i < 2 ) {
-   // Revert Features components to ensure that they are in their default states.
-    $revert = array(
-      'commons_groups' => array('field_instance'),
-      'commons_wikis' => array('og_features_permission'),
-    );
-    features_revert($revert);
-    $i++;
-  }
+  // Revert Features components to ensure that they are in their default states.
+  $revert = array(
+    'commons_groups' => array('field_instance'),
+    'commons_wikis' => array('og_features_permission'),
+  );
+  features_revert($revert);
 }
 
 /**
@@ -207,7 +219,7 @@ function commons_admin_save_fullname($form_id, &$form_state) {
 function commons_check_acquia_connector($form_id, &$form_state) {
   $values = $form_state['values'];
   if (isset($values['enable_acquia_connector']) && $values['enable_acquia_connector'] == 1) {
-    $options = $values['acquia_connector_modules'];
+    $options = array_filter($values['acquia_connector_modules']);
     variable_set('commons_install_acquia_connector', TRUE);
     variable_set('commons_install_acquia_modules', array_keys($options));
   }
@@ -242,10 +254,10 @@ function commons_anonymous_welcome_text_form() {
     '#default_value' => st('Share your thoughts, find answers to your questions.'),
   );
 
-  $form['commons_install_demo_content'] = array(
+  $form['commons_install_example_content'] = array(
     '#type' => 'checkbox',
-    '#title' => st('Install demo content'),
-    '#description' => st('Install Commons with example content so that you can get a sense of what your site will look like once it becomes more active.'),
+    '#title' => st('Install example content'),
+    '#description' => st('Install Commons with example content so that you can get a sense of what your site will look like once it becomes more active. Example content includes a group, a few users and content for that group. Example content can be modified or deleted like normal content.'),
     '#default_value' => TRUE
   );
 
@@ -264,7 +276,7 @@ function commons_anonymous_welcome_text_form() {
 function commons_anonymous_welcome_text_form_submit($form_id, &$form_state) {
   variable_set('commons_anonymous_welcome_title', $form_state['values']['commons_anonymous_welcome_title']);
   variable_set('commons_anonymous_welcome_body', $form_state['values']['commons_anonymous_welcome_body']);
-  variable_set('commons_install_demo_content', $form_state['values']['commons_install_demo_content']);
+  variable_set('commons_install_example_content', $form_state['values']['commons_install_example_content']);
 }
 
 /**
@@ -433,7 +445,7 @@ function commons_demo_content() {
 
 
   // Delete the demo content variable
-  variable_del('commons_install_demo_content');
+  variable_del('commons_install_example_content');
 }
 
 /**
@@ -476,5 +488,55 @@ function commons_acquia_connector_enable() {
   $modules = variable_get('commons_install_acquia_modules', array());
   if (!empty($modules)) {
     module_enable($modules, TRUE);
+  }
+}
+
+/**
+ * Override of install_finished() without the useless text.
+ */
+function commons_install_finished(&$install_state) {
+  // BEGIN copy/paste from install_finished().
+  // Flush all caches to ensure that any full bootstraps during the installer
+  // do not leave stale cached data, and that any content types or other items
+  // registered by the installation profile are registered correctly.
+  drupal_flush_all_caches();
+
+  // Remember the profile which was used.
+  variable_set('install_profile', drupal_get_profile());
+
+  // Installation profiles are always loaded last
+  db_update('system')
+    ->fields(array('weight' => 1000))
+    ->condition('type', 'module')
+    ->condition('name', drupal_get_profile())
+    ->execute();
+
+  // Cache a fully-built schema.
+  drupal_get_schema(NULL, TRUE);
+
+  // Run cron to populate update status tables (if available) so that users
+  // will be warned if they've installed an out of date Drupal version.
+  // Will also trigger indexing of profile-supplied content or feeds.
+  drupal_cron_run();
+  // END copy/paste from install_finished().
+
+  if (isset($messages['error'])) {
+    $output = '<p>' . (isset($messages['error']) ? st('Review the messages above before visiting <a href="@url">your new site</a>.', array('@url' => url(''))) : st('<a href="@url">Visit your new site</a>.', array('@url' => url('')))) . '</p>';
+    return $output;
+  }
+  else {
+    // Since any module can add a drupal_set_message, this can bug the user
+    // when we redirect him to the front page. For a better user experience,
+    // remove all the message that are only "notifications" message.
+    drupal_get_messages('status', TRUE);
+    drupal_get_messages('completed', TRUE);
+    // Migrate adds its messages under the wrong type, see #1659150.
+    drupal_get_messages('ok', TRUE);
+
+    // If we don't install drupal using Drush, redirect the user to the front
+    // page.
+    if (!drupal_is_cli()) {
+      drupal_goto('');
+    }
   }
 }
