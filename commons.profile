@@ -374,7 +374,7 @@ function commons_demo_content() {
   $wiki = new stdClass();
   $wiki->type = 'wiki';
   node_object_prepare($wiki);
-  $group->created = time() - 604800;
+  $wiki->created = time() - 604800;
   $wiki->title = 'How to create a veggie burger';
   $wiki->uid = $demo_users['Matt Edmunds']->uid;
   $wiki->language = LANGUAGE_NONE;
