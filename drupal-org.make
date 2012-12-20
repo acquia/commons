@@ -142,6 +142,9 @@ projects[metatag][patch][] = "http://drupal.org/files/metatag-n1865228-3.patch"
 projects[module_filter][type] = "module"
 projects[module_filter][subdir] = "contrib"
 
+projects[mollom][type] = "module"
+projects[mollom][subdir] = "contrib"
+
 projects[oauth][version] = "3.x-dev"
 projects[oauth][type] = "module"
 projects[oauth][subdir] = "contrib"
