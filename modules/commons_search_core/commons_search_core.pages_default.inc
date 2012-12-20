@@ -191,17 +191,19 @@ function commons_search_core_default_page_manager_handlers() {
     $pane->access = array();
     $pane->configuration = array(
       'type' => 'search_facetapi',
-      'form' => 'advanced',
-      'path_type' => 'same',
+      'form' => 'simple',
+      'path_type' => 'default',
       'path' => '',
       'override_prompt' => 0,
       'prompt' => '',
-      'context' => 'empty',
+      'context' => 'argument_string_1',
       'override_title' => 0,
       'override_title_text' => '',
     );
     $pane->cache = array();
-    $pane->style = array();
+    $pane->style = array(
+      'settings' => NULL,
+    );
     $pane->css = array();
     $pane->extras = array();
     $pane->position = 0;
