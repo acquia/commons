@@ -24,4 +24,5 @@ function commons_search_core_enable() {
   ));
   // Set default search module for Core.
   variable_set('search_default_module', 'search_facetapi');
+  cache_clear_all('*', 'cache_block', TRUE);
 }
