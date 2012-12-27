@@ -92,6 +92,7 @@ function commons_q_a_form_alter(&$form, &$form_state, $form_id) {
   // the group membership of their respective questions.
   if ($form_id == 'answer_node_form') {
     $form['og_group_ref']['#access'] = FALSE;
+    $form['actions']['submit']['#submit'][] = 'commons_q_a_answer_submit';
   }
   if ($form_id == 'question_node_form' && empty($form['node']->nid)) {
     drupal_set_title(t('Ask a question'));
@@ -141,7 +142,21 @@ function commons_q_a_commons_entity_integration() {
   );
 }
 
+
+/**
+ * Submit handler for the submit button on the answer node form.
+ */
+function commons_q_a_answer_submit($form, &$form_state) {
+  // Redirect the user back to the related question.
+  $form_state['redirect'] = 'node/' . $form_state['values']['field_related_question'][LANGUAGE_NONE][0]['target_id'];
+}
+
+/**
+ * Implements commons_activity_streams_message_selection_alter().
+ */
 function commons_q_a_commons_activity_streams_message_selection_alter(&$message_type, $hook, $node) {
+    // Provide a special message type that uses "User asked the question"
+    // phrasing when a new question node is created.
     if ($hook == 'node_insert' && $node->type == 'question') {
     $message_type = 'commons_q_a_question_asked';
   }
