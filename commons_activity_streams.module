@@ -89,14 +89,3 @@ function commons_activity_streams_existing_messages($acting_uid, $target_ids, $t
   }
   return FALSE;
 }
-
-
-/**
-* Implements hook_commons_notify_message_type_mapping_alter().
-*/
-function commons_activity_streams_commons_notify_message_type_mapping_alter(&$mapping) {
-  $cas_mapping = array(
-    'commons_activity_streams_comment_created' => 'commons_notify_comment_created',
-  );
-  $mapping = array_merge($mapping, $cas_mapping);
-}
