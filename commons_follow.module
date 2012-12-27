@@ -8,7 +8,7 @@ include_once 'commons_follow.features.inc';
  * Implements hook_features_pipe_alter().
  *
  */
-function commons_follow_privacy_features_pipe_alter(&$pipe, $data, $export) {
+function commons_follow_features_pipe_alter(&$pipe, $data, $export) {
   $commons_follow_fields = array(
     'field_target_users', 'field_target_nodes', 'field_target_comments',
   );
