@@ -6,8 +6,6 @@
 
 include_once 'commons_follow_node.features.inc';
 
-
-
 /**
  * Implements hook_commons_follow_get_nids().
  */
@@ -42,11 +40,6 @@ function commons_follow_node_commons_follow_get_nids($account, $options) {
   return $nids;
 }
 
-
-///////////////
-
-
-
 /**
 * Implements hook_commons_follow_get_message_ids().
 */
@@ -56,31 +49,6 @@ function commons_follow_node_commons_follow_get_message_ids(&$followed_mids, $fo
   $result = db_query("SELECT m.mid AS mid FROM {message} m INNER JOIN {field_data_field_target_nodes} tn ON m.mid=tn.entity_id WHERE tn.field_target_nodes_target_id IN (:nids)", array(':nids' => array_values($followed_content['commons_follow_node'])));
   foreach ($result as $this_result) {
     $followed_mids[] = $this_result->mid;
-  }
-}
-
-// When Commons Notify is enabled, return a list of UIDs that shuld be notified
-// about a particular message.
-function commons_follow_users_to_notify($message) {
-  //Return the appropriate query depending on message type...
-  //$result = db_query("SELECT fc.uid FROM {flag_content} fc WHERE fc.content_type = 'node" AND fc.content_id = :nid;
-}
-
-/**
-* Implements hook_commons_follow_get_following_uids().
-*/
-function commons_follow_node_commons_follow_get_following_uids(&$following_uids, $message) {
-  // We only care about target nodes.
-  if (empty($message->field_target_nodes)) {
-    return;
-  }
-  foreach ($message->field_target_nodes[LANGUAGE_NONE] as $field) {
-    $target_nids[] = $field['target_id'];
-  }
-  // Find the UIDs who are following the target nodes.
-  $result = db_query("SELECT fc.uid FROM {flag_content} fc WHERE fc.content_type = 'node' AND fc.content_id IN(:target_nids) AND fc.fid IN (:commons_follow_flag_ids)", array(':target_nids' => array_values($target_nids), ':commons_follow_flag_ids' => array_keys(commons_follow_get_flag_ids())));
-  foreach ($result as $this_result) {
-    $following_uids[$this_result->uid] = $this_result->uid;
   }
 }
 

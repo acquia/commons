@@ -212,12 +212,3 @@ function commons_follow_get_followed_message_ids($account = NULL) {
   }
   return $followed_mids;
 }
-
-function commons_follow_get_following_uids(&$following_uids = array(), $message) {
-  $following_uids = array();
-  foreach (module_implements('commons_follow_get_following_uids') as $module) {
-    $function = $module . '_commons_follow_get_following_uids';
-    $function($following_uids, $message);
-  }
-  //Todo: Somebody probably wants to drupal_alter() this.
-}

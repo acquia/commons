@@ -65,10 +65,6 @@ function commons_follow_user_commons_follow_get_nids($account, $options) {
   return $nids;
 }
 
-
-///////////////
-
-
 /**
 * Implements hook_system_info_alter().
 */
@@ -138,26 +134,5 @@ function commons_follow_user_commons_follow_get_message_ids(&$followed_mids, $fo
     array(':uids' => array_values($followed_content['commons_follow_user'])));
   foreach ($result as $this_result) {
     $followed_mids[] = $this_result->mid;
-  }
-}
-
-
-/**
-* Implements hook_commons_follow_get_following_uids().
-*/
-function commons_follow_user_commons_follow_get_following_uids(&$following_uids, $message) {
-  // Find users who are either following the target users or the acting user
-  // for this message.
-  $target_uids = array();
-  $target_uids[] = $message->uid;
-  if (!empty($message->field_target_users)) {
-    foreach ($message->field_target_users[LANGUAGE_NONE] as $field) {
-      $target_uids[] = $field['target_id'];
-    }
-  }
-
-  $result = db_query("SELECT fc.uid FROM {flag_content} fc WHERE fc.content_type = 'user' AND fc.content_id IN(:target_uids) AND fc.fid IN (:commons_follow_flag_ids)", array(':target_uids' => array_keys($target_uids), ':commons_follow_flag_ids' => array_keys(commons_follow_get_flag_ids())));
-  foreach ($result as $this_result) {
-    $following_uids[$this_result->uid] = $this_result->uid;
   }
 }
