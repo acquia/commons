@@ -237,6 +237,9 @@ projects[timeago][download][branch] = "7.x-2.x"
 ; http://drupal.org/node/1427226#comment-6638836
 projects[timeago][patch][] = "http://drupal.org/files/1427226-timeago-date-type.patch"
 
+projects[title][type] = "module"
+projects[title][subdir] = "contrib"
+
 projects[token][type] = "module"
 projects[token][subdir] = "contrib"
 
