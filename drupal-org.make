@@ -354,6 +354,12 @@ projects[commons_posts][download][type] = "git"
 projects[commons_posts][download][url] = "http://git.drupal.org/project/commons_posts.git"
 projects[commons_posts][download][branch] = "7.x-3.x"
 
+projects[commons_polls][type] = "module"
+projects[commons_polls][subdir] = "contrib"
+projects[commons_polls][download][type] = "git"
+projects[commons_polls][download][url] = "http://git.drupal.org/project/commons_polls.git"
+projects[commons_polls][download][branch] = "7.x-3.x"
+
 projects[commons_profile_base][type] = "module"
 projects[commons_profile_base][subdir] = "contrib"
 projects[commons_profile_base][version] = "3.x-dev"
