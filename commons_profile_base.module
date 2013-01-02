@@ -14,7 +14,9 @@ function commons_profile_base_form_user_register_form_alter(&$form, &$form_state
   drupal_set_title(t('Sign up'));
   $form['field_name_first']['#weight'] = -100;
   $form['field_name_last']['#weight'] = -99;
-  $form['actions']['submit']['#value'] = t('Sign up');
+  if (empty($form['administer_users']['#value'])) {
+    $form['actions']['submit']['#value'] = t('Sign up');
+  }
 }
 
 /**
