@@ -202,6 +202,8 @@ var {
 #header {
   height: 95px;
   color: $white;
+  text-align: right;
+  margin-right: 8px;
   
   a {
     color: $white;
@@ -367,7 +369,8 @@ var {
   // display: inline-block;
   float: left;
   vertical-align: top;
-  width: 395px;
+  // width: 395px;
+  text-align: left;
 }
 
 
@@ -980,11 +983,12 @@ h1.node-title {
  * Header region, embedded in the #header
  */
 .region-header {
-  // display: inline-block;
-  float: left;
-  @extend %divider-left;
+  display: inline-block;
+  // float: left;
+  // @extend %divider-left;
   height: 64px;
   width: 270px;
+  text-align: left;
 }
 
 
@@ -1080,11 +1084,12 @@ a {
  */
 
 #menu-bar.nav {
-  // display: inline-block;
+  display: inline-block;
   // margin-right: -3px;
-  float: left;
+  // float: left;
   vertical-align: top;
   margin:0;
+  @extend %divider-right;
 
   ul,
   ul.menu {
@@ -1137,16 +1142,24 @@ a {
   .block {
     margin: 0;
   }
+}
 
-  .main-menu-home a {
-    background: image-url('icons/icon-home.png') no-repeat center 10px;
-  }
+.main-menu-home a {
+  background: image-url('icons/icon-home.png') no-repeat center 10px;
+}
 
-  .main-menu-groups a {
-    background: image-url('icons/icon-groups.png') no-repeat center 10px;
-  }
+.main-menu-groups a {
+  background: image-url('icons/icon-groups.png') no-repeat center 10px;
+}
 
-  .main-menu-events a {
+.main-menu-events a {
+  background: image-url('icons/icon-events.png') no-repeat center 10px;
+}
+
+#menu-bar.nav ul.menu li.main-menu-search {
+  display: none;
+
+  a {
     background: image-url('icons/icon-events.png') no-repeat center 10px;
   }
 }
