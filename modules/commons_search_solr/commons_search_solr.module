@@ -371,7 +371,7 @@ function commons_search_solr_facet_definitions() {
     ),
   );
 
-  // Node field_location facet.
+  // Node group reference facet.
   $facets[] = array(
     'name' => ':block:sm_og_group_ref',
     'searcher' => commons_search_solr_search_environment(),
@@ -420,6 +420,9 @@ function commons_search_solr_form_apachesolr_environment_edit_form_alter(&$form,
   $form['actions']['save']['#submit'][] = 'commons_search_solr_environment_form_submit';
 }
 
+/**
+ * When the environment changes, create facets for that environment.
+ */
 function commons_search_solr_environment_form_submit($form, $form_state) {
   if ($form_state['values']['make_default'] == 1) {
     commons_search_solr_create_facets('apachesolr@' . $form_state['build_info']['args']['0']['env_id']);
