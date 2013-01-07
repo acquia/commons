@@ -26,6 +26,7 @@ function commons_events_solr_enable() {
 function commons_events_solr_disable() {
   $view = views_get_view('commons_events_upcoming');
   if (!isset($view->display['commons_events_upcoming_page'])) {
+    menu_link_delete(NULL, 'events');
     $handler = $view->new_display('page', t('Page'), 'commons_events_upcoming_page');
     $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
     $handler->display->display_options['defaults']['style_plugin'] = FALSE;
