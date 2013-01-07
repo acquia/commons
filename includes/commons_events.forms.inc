@@ -64,6 +64,7 @@ function commons_events_attend_event_form_submit($form, $form_state) {
   $registration->count = 1;
   if (registration_save($registration)) {
     drupal_set_message(t('Your registration was saved.'));
+    commons_follow_node_follow_node($registration->entity_id, 'event', $user->uid);
   }
   else {
     drupal_set_message(t('There was an error saving your registration.'));

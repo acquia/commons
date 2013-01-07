@@ -50,7 +50,7 @@ function commons_events_solr_default_page_manager_handlers() {
     $pane->pid = 'new-1';
     $pane->panel = 'three_25_50_25_first';
     $pane->type = 'block';
-    $pane->subtype = 'facetapi-7oR1MA2IRPe8Qlx15Lno4wnSBlZPO1MW';
+    $pane->subtype = commons_events_solr_panel_facet_subtype('sm_field_location');
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array(
@@ -71,7 +71,7 @@ function commons_events_solr_default_page_manager_handlers() {
     $pane->pid = 'new-2';
     $pane->panel = 'three_25_50_25_first';
     $pane->type = 'block';
-    $pane->subtype = 'facetapi-1vx93wKyU7HoAzs6sa0PMm14kMgfBQ1d';
+    $pane->subtype = commons_events_solr_panel_facet_subtype('dm_field_date');
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array(
@@ -92,7 +92,7 @@ function commons_events_solr_default_page_manager_handlers() {
     $pane->pid = 'new-3';
     $pane->panel = 'three_25_50_25_first';
     $pane->type = 'block';
-    $pane->subtype = 'facetapi-R3lWVKZ0loVbYjsmiQUwPYESeoFz9xTm';
+    $pane->subtype = commons_events_solr_panel_facet_subtype('im_field_topics');
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array(
@@ -113,7 +113,7 @@ function commons_events_solr_default_page_manager_handlers() {
     $pane->pid = 'new-4';
     $pane->panel = 'three_25_50_25_first';
     $pane->type = 'block';
-    $pane->subtype = 'facetapi-CpjIe0iO04QY4VGdG5PfZfBQqRWCmc4G';
+    $pane->subtype = commons_events_solr_panel_facet_subtype('sm_og_group_ref');
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array(
@@ -215,4 +215,23 @@ function commons_events_solr_default_page_manager_handlers() {
   $export['pm_existing_pages_solr_events_search_panel_context'] = $handler;
 
   return $export;
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function commons_events_solr_form_apachesolr_environment_edit_form_alter(&$form, &$form_state) {
+  $form['actions']['save']['#submit'][] = 'commons_events_solr_environment_form_submit';
+}
+
+/**
+ * When the environment changes, create facets for that environment.
+ */
+function commons_events_solr_environment_form_submit($form, $form_state) {
+  if ($form_state['values']['make_default'] == 1) {
+    commons_events_solr_create_facets('apachesolr@' . $form_state['build_info']['args']['0']['env_id']);
+    // Need to clear caches so we can rebuild block definitions.
+    cache_clear_all('*', 'cache_block', TRUE);
+    cache_clear_all('*', 'cache_apachesolr', TRUE);
+  }
 }
