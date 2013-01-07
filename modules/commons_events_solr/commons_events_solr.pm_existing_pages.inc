@@ -15,7 +15,7 @@ function commons_events_solr_pm_existing_pages_info() {
   $pm_existing_page->name = 'solr_events_search';
   $pm_existing_page->label = 'Solr Events Search';
   $pm_existing_page->context = '';
-  $pm_existing_page->paths = 'search/events';
+  $pm_existing_page->paths = 'events';
   $export['solr_events_search'] = $pm_existing_page;
 
   return $export;

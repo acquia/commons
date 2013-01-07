@@ -16,7 +16,7 @@ function commons_events_solr_apachesolr_search_default_searchers() {
   $searcher->page_id = 'solr_events';
   $searcher->label = 'Solr Events';
   $searcher->description = '';
-  $searcher->search_path = 'search/events';
+  $searcher->search_path = 'events';
   $searcher->page_title = 'Events';
   $searcher->env_id = apachesolr_default_environment();
   $searcher->settings = array(

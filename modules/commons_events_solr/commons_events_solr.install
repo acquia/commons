@@ -7,5 +7,37 @@
  * Implements hook_enable().
  */
 function commons_events_solr_enable() {
-  cache_clear_all();
+  $view = views_get_view('commons_events_upcoming');
+  if (isset($view->display['commons_events_upcoming_page'])) {
+    unset($view->display['commons_events_upcoming_page']);
+    $view->save();
+    $link = array(
+      'link_path' => drupal_get_normal_path('events'),
+      'link_title' => t('Events'),
+      'menu_name' => 'main-menu',
+    );
+    menu_link_save($link);
+  }
+}
+
+/**
+ * Implements hook_disable().
+ */
+function commons_events_solr_disable() {
+  $view = views_get_view('commons_events_upcoming');
+  if (!isset($view->display['commons_events_upcoming_page'])) {
+    $handler = $view->new_display('page', t('Page'), 'commons_events_upcoming_page');
+    $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+    $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+    $handler->display->display_options['style_plugin'] = 'default';
+    $handler->display->display_options['defaults']['style_options'] = FALSE;
+    $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+    $handler->display->display_options['row_plugin'] = 'node';
+    $handler->display->display_options['defaults']['row_options'] = FALSE;
+    $handler->display->display_options['path'] = 'events';
+    $handler->display->display_options['menu']['type'] = 'normal';
+    $handler->display->display_options['menu']['title'] = t('Events');
+    $handler->display->display_options['menu']['name'] = 'main-menu';
+    $view->save();
+  }
 }
