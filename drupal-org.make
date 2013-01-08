@@ -108,7 +108,7 @@ projects[menu_attributes][subdir] = "contrib"
 
 projects[message][type] = "module"
 projects[message][subdir] = "contrib"
-projects[message][download][version] = "1.x-dev"
+projects[message][version] = "1.x-dev"
 
 
 projects[message_notify][type] = "module"
