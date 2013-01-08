@@ -269,6 +269,19 @@ function commons_events_views_default_views() {
       'label' => 'OG membership: Group ID',
     ),
   );
+  /* Display: Page */
+  $handler = $view->new_display('page', 'Page', 'commons_events_upcoming_page');
+  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'default';
+  $handler->display->display_options['defaults']['style_options'] = FALSE;
+  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['row_plugin'] = 'node';
+  $handler->display->display_options['defaults']['row_options'] = FALSE;
+  $handler->display->display_options['path'] = 'events';
+  $handler->display->display_options['menu']['type'] = 'normal';
+  $handler->display->display_options['menu']['title'] = t('Events');
+  $handler->display->display_options['menu']['name'] = 'main-menu';
   $export['commons_events_upcoming'] = $view;
 
   $view = new view();
