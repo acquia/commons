@@ -174,7 +174,7 @@ function commons_events_field_default_field_instances() {
     'bundle' => 'event',
     'default_value' => array(
       0 => array(
-        'value' => 'online_physial',
+        'value' => 'online_physical',
       ),
     ),
     'deleted' => '0',

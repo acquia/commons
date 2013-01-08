@@ -59,7 +59,7 @@ function commons_events_field_default_field_bases() {
       'allowed_values' => array(
         'physical' => 'Physical Address',
         'online' => 'Online',
-        'online_physial' => 'Online and Physical Address',
+        'online_physical' => 'Online and Physical Address',
       ),
       'allowed_values_function' => '',
     ),
