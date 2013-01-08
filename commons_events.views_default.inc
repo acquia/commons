@@ -239,6 +239,10 @@ function commons_events_views_default_views() {
   $handler->display->display_options['defaults']['style_options'] = FALSE;
   $handler->display->display_options['defaults']['row_plugin'] = FALSE;
   $handler->display->display_options['row_plugin'] = 'fields';
+  $handler->display->display_options['row_options']['inline'] = array(
+    'capacity_used' => 'capacity_used',
+    'comment_count' => 'comment_count',
+  );
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['relationships'] = FALSE;
   /* Relationship: OG membership: OG membership from Node */
@@ -246,6 +250,43 @@ function commons_events_views_default_views() {
   $handler->display->display_options['relationships']['og_membership_rel']['table'] = 'node';
   $handler->display->display_options['relationships']['og_membership_rel']['field'] = 'og_membership_rel';
   $handler->display->display_options['relationships']['og_membership_rel']['required'] = TRUE;
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = '';
+  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+  /* Field: Content: Date */
+  $handler->display->display_options['fields']['field_date']['id'] = 'field_date';
+  $handler->display->display_options['fields']['field_date']['table'] = 'field_data_field_date';
+  $handler->display->display_options['fields']['field_date']['field'] = 'field_date';
+  $handler->display->display_options['fields']['field_date']['label'] = '';
+  $handler->display->display_options['fields']['field_date']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_date']['settings'] = array(
+    'format_type' => 'long',
+    'fromto' => 'both',
+    'multiple_number' => '',
+    'multiple_from' => '',
+    'multiple_to' => '',
+  );
+  /* Field: Registration Settings: Slots Used */
+  $handler->display->display_options['fields']['capacity_used']['id'] = 'capacity_used';
+  $handler->display->display_options['fields']['capacity_used']['table'] = 'node';
+  $handler->display->display_options['fields']['capacity_used']['field'] = 'capacity_used';
+  $handler->display->display_options['fields']['capacity_used']['label'] = '';
+  $handler->display->display_options['fields']['capacity_used']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['capacity_used']['separator'] = '';
+  $handler->display->display_options['fields']['capacity_used']['suffix'] = ' attendees,';
+  /* Field: Content: Comment count */
+  $handler->display->display_options['fields']['comment_count']['id'] = 'comment_count';
+  $handler->display->display_options['fields']['comment_count']['table'] = 'node_comment_statistics';
+  $handler->display->display_options['fields']['comment_count']['field'] = 'comment_count';
+  $handler->display->display_options['fields']['comment_count']['label'] = '';
+  $handler->display->display_options['fields']['comment_count']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['comment_count']['alter']['text'] = '[comment_count] comments';
+  $handler->display->display_options['fields']['comment_count']['element_label_colon'] = FALSE;
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   /* Contextual filter: OG membership: Group ID */
   $handler->display->display_options['arguments']['gid']['id'] = 'gid';
@@ -269,6 +310,7 @@ function commons_events_views_default_views() {
       'label' => 'OG membership: Group ID',
     ),
   );
+
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'commons_events_upcoming_page');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
@@ -280,7 +322,7 @@ function commons_events_views_default_views() {
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['path'] = 'events';
   $handler->display->display_options['menu']['type'] = 'normal';
-  $handler->display->display_options['menu']['title'] = t('Events');
+  $handler->display->display_options['menu']['title'] = 'Events';
   $handler->display->display_options['menu']['name'] = 'main-menu';
   $export['commons_events_upcoming'] = $view;
 
