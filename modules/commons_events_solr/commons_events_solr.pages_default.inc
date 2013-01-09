@@ -158,11 +158,17 @@ function commons_events_solr_default_page_manager_handlers() {
     $pane = new stdClass();
     $pane->pid = 'new-6';
     $pane->panel = 'three_25_50_25_third';
-    $pane->type = 'views_panes';
-    $pane->subtype = 'commons_events_user_upcoming_events-panel_pane_1';
+    $pane->type = 'custom';
+    $pane->subtype = 'custom';
     $pane->shown = TRUE;
     $pane->access = array();
-    $pane->configuration = array();
+    $pane->configuration = array(
+      'admin_title' => 'Add Event link',
+      'title' => '',
+      'body' => '<a href="/node/add/event" class="event-create-link">List an event</a>',
+      'format' => 'filtered_html',
+      'substitute' => TRUE,
+    );
     $pane->cache = array();
     $pane->style = array(
       'settings' => NULL,
@@ -177,7 +183,7 @@ function commons_events_solr_default_page_manager_handlers() {
     $pane->pid = 'new-7';
     $pane->panel = 'three_25_50_25_third';
     $pane->type = 'views_panes';
-    $pane->subtype = 'commons_events_user_upcoming_events-panel_pane_2';
+    $pane->subtype = 'commons_events_user_upcoming_events-panel_pane_1';
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array();
@@ -190,12 +196,12 @@ function commons_events_solr_default_page_manager_handlers() {
     $pane->position = 1;
     $pane->locks = array();
     $display->content['new-7'] = $pane;
-    $display->panels['three_25_50_25_third'][1] = 'new-7';
+    $display->panels['three_25_50_25_third'][0] = 'new-7';
     $pane = new stdClass();
     $pane->pid = 'new-8';
     $pane->panel = 'three_25_50_25_third';
     $pane->type = 'views_panes';
-    $pane->subtype = 'commons_events_user_upcoming_events-panel_pane_3';
+    $pane->subtype = 'commons_events_user_upcoming_events-panel_pane_2';
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array();
@@ -208,7 +214,25 @@ function commons_events_solr_default_page_manager_handlers() {
     $pane->position = 2;
     $pane->locks = array();
     $display->content['new-8'] = $pane;
-    $display->panels['three_25_50_25_third'][2] = 'new-8';
+    $display->panels['three_25_50_25_third'][1] = 'new-8';
+    $pane = new stdClass();
+    $pane->pid = 'new-9';
+    $pane->panel = 'three_25_50_25_third';
+    $pane->type = 'views_panes';
+    $pane->subtype = 'commons_events_user_upcoming_events-panel_pane_3';
+    $pane->shown = TRUE;
+    $pane->access = array();
+    $pane->configuration = array();
+    $pane->cache = array();
+    $pane->style = array(
+      'settings' => NULL,
+    );
+    $pane->css = array();
+    $pane->extras = array();
+    $pane->position = 3;
+    $pane->locks = array();
+    $display->content['new-9'] = $pane;
+    $display->panels['three_25_50_25_third'][2] = 'new-9';
   $display->hide_title = PANELS_TITLE_NONE;
   $display->title_pane = 'new-5';
   $handler->conf['display'] = $display;
