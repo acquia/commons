@@ -22,7 +22,7 @@ function commons_events_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => '4',
+        'weight' => '5',
       ),
       'teaser' => array(
         'label' => 'hidden',
@@ -112,7 +112,7 @@ function commons_events_field_default_field_instances() {
         ),
       ),
       'type' => 'addressfield_standard',
-      'weight' => '5',
+      'weight' => '6',
     ),
   );
 
@@ -165,7 +165,7 @@ function commons_events_field_default_field_instances() {
         'year_range' => '-3:+3',
       ),
       'type' => 'date_popup',
-      'weight' => '3',
+      'weight' => '4',
     ),
   );
 
@@ -184,7 +184,7 @@ function commons_events_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => '7',
+        'weight' => '9',
       ),
       'teaser' => array(
         'label' => 'above',
@@ -205,7 +205,7 @@ function commons_events_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => '4',
+      'weight' => '5',
     ),
   );
 
@@ -255,7 +255,7 @@ function commons_events_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => '6',
+      'weight' => '8',
     ),
   );
 
@@ -274,7 +274,7 @@ function commons_events_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => '9',
+        'weight' => '8',
       ),
       'teaser' => array(
         'label' => 'above',
@@ -288,16 +288,17 @@ function commons_events_field_default_field_instances() {
     'label' => 'Maximum number of attendees',
     'required' => 1,
     'settings' => array(
-      'text_processing' => '0',
+      'max' => '',
+      'min' => '0',
+      'prefix' => '',
+      'suffix' => '',
       'user_register_form' => FALSE,
     ),
     'widget' => array(
-      'active' => 1,
-      'module' => 'text',
-      'settings' => array(
-        'size' => '60',
-      ),
-      'type' => 'text_textfield',
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
       'weight' => '11',
     ),
   );
@@ -314,7 +315,7 @@ function commons_events_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => '3',
+        'weight' => '4',
       ),
       'teaser' => array(
         'label' => 'above',
@@ -357,7 +358,7 @@ function commons_events_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => '8',
+        'weight' => '10',
       ),
       'teaser' => array(
         'label' => 'above',
@@ -412,7 +413,7 @@ function commons_events_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => '10',
+        'weight' => '11',
       ),
       'teaser' => array(
         'label' => 'above',
@@ -449,7 +450,7 @@ function commons_events_field_default_field_instances() {
         'module' => 'taxonomy',
         'settings' => array(),
         'type' => 'taxonomy_term_reference_link',
-        'weight' => '5',
+        'weight' => '6',
       ),
       'teaser' => array(
         'label' => 'above',

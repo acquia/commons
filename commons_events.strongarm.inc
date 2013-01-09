@@ -80,11 +80,23 @@ function commons_events_strongarm() {
       'search_result' => array(
         'custom_settings' => FALSE,
       ),
+      'token' => array(
+        'custom_settings' => FALSE,
+      ),
     ),
     'extra_fields' => array(
       'form' => array(
         'title' => array(
           'weight' => '0',
+        ),
+        'metatags' => array(
+          'weight' => '15',
+        ),
+        'path' => array(
+          'weight' => '14',
+        ),
+        'redirect' => array(
+          'weight' => '13',
         ),
       ),
       'display' => array(),
