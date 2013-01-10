@@ -218,14 +218,6 @@ function commons_events_node_form_validate($form, &$form_state) {
           return FALSE;
         }
       break;
-    case 'external':
-      // Must have entered a URL to the offsite registration page.
-      if (empty($form_state['values']['field_offsite_url'][$lng]['0']['value'])
-        || !valid_url($form_state['values']['field_offsite_url'][$lng]['0']['value'])) {
-        form_set_error('field_offsite_url', t('A valid URL is required for offsite registration.'));
-        return FALSE;
-      }
-      break;
   }
   return TRUE;
 }
@@ -239,6 +231,9 @@ function commons_events_node_form_submit($form, $form_state) {
   if (isset($node->nid)) {
     $settings = registration_entity_settings('node', $node->nid);
     $settings['status'] = (int) $form_state['values']['field_status'];
+    if ($form_state['values']['field_registration_type'][$lng]['0']['value'] == 'external') {
+      $settings['status'] = 0;
+    }
     if (!empty($form_state['values']['field_number_of_attendees'][$lng]['0']['value'])
       && is_numeric($form_state['values']['field_number_of_attendees'][$lng]['0']['value'])) {
       $settings['capacity'] = (int) $form_state['values']['field_number_of_attendees'][$lng]['0']['value'];
