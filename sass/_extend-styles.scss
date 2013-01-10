@@ -1,11 +1,31 @@
 %divider-left {
-  border-left: 1px solid #4082A7;
-  @include box-shadow(#0F4363 -1px 0px 0px);
+  border-left: 1px solid darken($light_blue, 3%);
+  @include box-shadow(darken($dark_blue, 13%) -1px 0px 0px);
+
+  .palette-red & {
+    border-left: 1px solid darken($red, 3%);
+    @include box-shadow(darken($dark_red, 13%) -1px 0px 0px);
+  }
+
+  .palette-green & {
+    border-left: 1px solid darken($green, 3%);
+    @include box-shadow(darken($dark_green, 13%) -1px 0px 0px);
+  }
 }
 
 %divider-right {
-  border-right: 1px solid #0F4363;
-  @include box-shadow(#4082A7 1px 0px 0px);
+  border-right: 1px solid darken($dark_blue, 13%);
+  @include box-shadow(darken($light_blue, 3%) 1px 0px 0px);
+
+  .palette-red & {
+    border-right: 1px solid darken($dark_red, 13%);
+    @include box-shadow(darken($red, 3%) 1px 0px 0px);
+  }
+
+  .palette-green & {
+    border-right: 1px solid darken($dark_green, 13%);
+    @include box-shadow(darken($green, 3%) 1px 0px 0px);
+  }
 }
 
 %pod {
