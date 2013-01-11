@@ -2703,6 +2703,10 @@ body.page-node .pane-views-panes {
   margin:0 0 0 10px;
   position: relative;
 
+  .not-logged-in & {
+    margin-top: 15px;
+  }
+
   .palette-red & {
     background-color: darken($dark_red, 12%); // Old browsers
     @include filter-gradient(darken($dark_red, 12%), darken($dark_red, 6%), vertical); // IE6-9
