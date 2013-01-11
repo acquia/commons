@@ -54,7 +54,7 @@ function commons_search_form_alter(&$form, &$form_state, $form_id) {
     if ($group) {
       // Current page is a group node, so add group search option to the
       // dropdown menu and set the current group id.
-      $form['custom_search_types']['#options']['o-commons_search'] = t('Group');
+      $form['custom_search_types']['#options']['o-commons_search'] = t('This group');
       $form['custom_search_types']["#default_value"] = 'o-commons_search';
       $form_state['search_group_id'] = $node->nid;
       $form['#submit'][] = 'commons_search_search_form_submit';
@@ -78,7 +78,8 @@ function commons_search_search_form_submit($form, &$form_state) {
     if (module_exists('apachesolr_search')) {
       // Add on a filter to the solr query to only list results within the
       // specified group.
-      $form_state['redirect'] .= '&f[1]=sm_og_group_ref:node:' . $form_state['search_group_id'];
+      $qm = (strpos($form_state['redirect'], '?') !== FALSE ? '' : '?');
+      $form_state['redirect'] .= $qm . '&f[1]=sm_og_group_ref:node:' . $form_state['search_group_id'];
     }
     else {
       // Using core search to search within a group doesn't work, so we simply
@@ -86,4 +87,27 @@ function commons_search_search_form_submit($form, &$form_state) {
       drupal_goto('search/group/' . $form_state['search_group_id'], array('query' => array('keys' => $keys)));
     }
   }
+}
+
+/**
+ * Implements hook_preprocess_hook().
+ */
+function commons_search_preprocess_search_results(&$variables) {
+  $variables['result_count'] = count($variables['results']);
+  $title = t('Search results');
+  if (isset($variables['response'])
+    && isset($variables['response']->request)
+    && preg_match('/sm_og_group_ref:"node:([0-9]+)"&/', urldecode($variables['response']->request), $match)) {
+    $group = node_load($match[1]);
+    $title = t('Search within !group', array('!group' => '<em>' . $group->title . '</em>'));
+  }
+  $variables['search_title'] = $title;
+}
+
+/**
+ * Implements hook_theme_registry_alter().
+ */
+function commons_search_theme_registry_alter(&$theme_registry) {
+  $theme_registry['search_results']['path'] = drupal_get_path('module', 'commons_search') . '/theme';
+  $theme_registry['search_results']['template'] = 'commons_search__search_results';
 }
