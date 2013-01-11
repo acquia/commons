@@ -286,3 +286,33 @@ function commons_events_tokens($type, $tokens, array $data = array(), array $opt
   }
   return $replacements;
 }
+
+/**
+ * Generates the 'more' link for upcoming events in a specific group.
+ */
+function commons_events_upcoming_more_link($group_id) {
+  if (module_exists('commons_events_solr')) {
+    $options = array(
+      'query' => array(
+        'f[1]' => 'sm_og_group_ref:node:' . $group_id,
+      ),
+    );
+    return l('more', 'events', $options);
+  }
+  $options = array(
+    'query' => array(
+      'gid' => $group_id,
+    ),
+  );
+  return l('more', 'events', $options);
+}
+
+/**
+ * Implements hook_views_post_execute().
+ */
+function commons_events_views_post_execute(&$view) {
+  if ($view->name == 'commons_events_upcoming'
+    && $view->current_display == 'panel_pane_1') {
+    $view->attachment_after = '<div class="more-link">' . commons_events_upcoming_more_link($view->args[0]) . '</div>';
+  }
+}
