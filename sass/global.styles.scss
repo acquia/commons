@@ -264,7 +264,14 @@ var {
 /*
  * Wraps the sidebars the content column
  */
-#columns {}
+#columns {
+
+  .page-user-login & {
+    @extend %pod;
+    @extend %pod-content;
+    margin-top: 50px;
+  }
+}
 
 
 /*
