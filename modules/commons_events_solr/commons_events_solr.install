@@ -12,7 +12,7 @@ function commons_events_solr_enable() {
     unset($view->display['commons_events_upcoming_page']);
     $view->save();
     $link = array(
-      'link_path' => drupal_get_normal_path('events'),
+      'link_path' => 'events',
       'link_title' => t('Events'),
       'menu_name' => 'main-menu',
     );
