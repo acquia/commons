@@ -52,7 +52,94 @@ function commons_events_default_registration_type() {
     "label" : "Event",
     "locked" : "0",
     "weight" : "0",
-    "data" : null
+    "data" : null,
+    "rdf_mapping" : []
   }');
   return $items;
+}
+
+/**
+ * Implements hook_rdf_default_mappings().
+ */
+function commons_events_rdf_default_mappings() {
+  $schemaorg = array();
+
+  // Exported RDF mapping: event
+  $schemaorg['node']['event'] = array(
+    'rdftype' => array(
+      0 => 'schema:Event',
+      1 => 'sioc:Item',
+      2 => 'foaf:Document',
+    ),
+    'title' => array(
+      'predicates' => array(
+        0 => 'schema:name',
+      ),
+    ),
+    'created' => array(
+      'predicates' => array(
+        0 => 'dc:date',
+        1 => 'dc:created',
+      ),
+      'datatype' => 'xsd:dateTime',
+      'callback' => 'date_iso8601',
+    ),
+    'changed' => array(
+      'predicates' => array(
+        0 => 'dc:modified',
+      ),
+      'datatype' => 'xsd:dateTime',
+      'callback' => 'date_iso8601',
+    ),
+    'body' => array(
+      'predicates' => array(
+        0 => 'content:encoded',
+      ),
+    ),
+    'uid' => array(
+      'predicates' => array(
+        0 => 'sioc:has_creator',
+      ),
+      'type' => 'rel',
+    ),
+    'name' => array(
+      'predicates' => array(
+        0 => 'schema:name',
+      ),
+    ),
+    'comment_count' => array(
+      'predicates' => array(
+        0 => 'sioc:num_replies',
+      ),
+      'datatype' => 'xsd:integer',
+    ),
+    'last_activity' => array(
+      'predicates' => array(
+        0 => 'sioc:last_activity_date',
+      ),
+      'datatype' => 'xsd:dateTime',
+      'callback' => 'date_iso8601',
+    ),
+    'field_date' => array(
+      'predicates' => array(
+        0 => 'schema:startDate',
+      ),
+    ),
+    'url' => array(
+      'predicates' => array(
+        0 => 'schema:url',
+      ),
+      'type' => 'rel',
+    ),
+    'field_location' => array(
+      'predicates' => array(),
+    ),
+    'field_address' => array(
+      'predicates' => array(
+        0 => 'schema:location',
+      ),
+    ),
+  );
+
+  return $schemaorg;
 }
