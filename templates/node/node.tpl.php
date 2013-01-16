@@ -107,7 +107,7 @@
 hide($content['comments']);
 hide($content['links']);
 ?>
-<article id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
+<article id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix commons-pod"<?php print $attributes; ?>>
   <?php print render($title_prefix); ?>
 
   <?php if ($title && !$page): ?>
@@ -120,14 +120,14 @@ hide($content['links']);
     </header>
   <?php endif; ?>
 
-  <?php if(!empty($user_picture) || $display_submitted): ?>
+  <?php //if(!empty($user_picture) || $display_submitted): ?>
     <footer<?php print $footer_attributes; ?>>
       <p class="author-datetime"><?php print $submitted; ?></p>
-      <?php print $user_picture; ?>
     </footer>
-  <?php endif; ?>
+  <?php //endif; ?>
 
   <div<?php print $content_attributes; ?>>
+    <?php print $user_picture; ?>
     <?php print render($content); ?>
   </div>
 
@@ -135,7 +135,9 @@ hide($content['links']);
     <nav<?php print $links_attributes; ?>><?php print $links; ?></nav>
   <?php endif; ?>
 
-  <?php print render($content['comments']); ?>
-
-  <?php print render($title_suffix); ?>
 </article>
+
+<div class="commons-pod commons-pod-comments">
+  <?php print render($content['comments']); ?>
+  <?php print render($title_suffix); ?>
+</div>

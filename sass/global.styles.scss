@@ -1863,10 +1863,18 @@ ul.action-links {
  *   Panels Styling
  * ========================================================================== */
 
-.commons-pod {
+.page-node .commons-pod {
   @extend %pod;
   padding: 10px 10px 20px 10px;
   margin-right: 0;
+}
+
+.commons-pod-comments {
+  display: none;
+
+  .page-node & {
+    display: block;
+  }
 }
 
 .commons-sign-up {
@@ -3235,7 +3243,7 @@ form.commons-events-form-float {
   }
 }
 
-#content-column #edit-submit {
+#content-column .view-content input[type="submit"] {
   @extend %btn-green;
   margin:0 15px 0 0;
   padding: 5px 20px;
@@ -3549,6 +3557,15 @@ body.front.not-logged-in {
   }
 }
 
+.commons-events-form-float {
+  float: right;
+  margin-left: 15px;
+
+  input {
+    margin: 0;
+  }
+}
+
 body.front.logged-in {
 
   .view-commons-homepage-content {
@@ -3594,7 +3611,7 @@ body.front.logged-in {
           margin-right: 90px;
         }
       }
-      footer .user-picture {
+      .user-picture {
         position:absolute;
         left:0;
         top:10px;
@@ -3628,9 +3645,20 @@ body.front.logged-in {
     //   }
     // }
   }
-  .views-exposed-widgets {
+  #views-exposed-form-commons-homepage-content-panel-pane-1 .views-exposed-widgets {
     margin-top:-45px;
     // margin-left:-10px;
+    padding: 10px;
+
+    &.widgets-active {
+      @extend %pod;
+      @extend %pod-content;
+      padding-bottom: 10px;
+
+      .selectBox-dropdown {
+        background-color: $white;
+      }
+    }
   }
 }
 

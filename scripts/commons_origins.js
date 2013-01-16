@@ -14,14 +14,18 @@ jQuery(document).ready(function($){
 //    var selectwidth = $('#edit-following option:selected').textWidth();
 //    console.log(selectwidth);
 
-var attach_selectBox = function(){
-  $('#views-exposed-form-commons-homepage-content-panel-pane-1 select, #edit-custom-search-types, #quicktabs-commons_bw select').selectBox();
-};
+  var attach_selectBox = function(){
+    $('#views-exposed-form-commons-homepage-content-panel-pane-1 select, #edit-custom-search-types, #quicktabs-commons_bw select').selectBox();
+  };
 
   $('.views-exposed-widgets .form-select, .custom-search-selector').wrap('<div class="form-select-wrapper" />');
 
   $(document).on('change', '.views-exposed-widgets .form-select', function() {
     $('.views-exposed-widgets .views-submit-button').fadeIn(300);
+  });
+
+  $(document).on('click', '.views-exposed-widgets .form-select', function() {
+    $('.views-exposed-widgets').addClass('widgets-active');
   });
 
   //placeholder functionality
