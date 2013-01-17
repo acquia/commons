@@ -316,3 +316,29 @@ function commons_events_views_post_execute(&$view) {
     $view->attachment_after = '<div class="more-link">' . commons_events_upcoming_more_link($view->args[0]) . '</div>';
   }
 }
+
+/**
+ * Implements hook_block_info().
+ */
+function commons_events_block_info() {
+  $blocks = array(
+    'commons_events_create_event_link' => array(
+      'info' => t('"Create an event" call to action'),
+      'cache' => DRUPAL_CACHE_GLOBAL,
+    ),
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function commons_events_block_view($delta = '') {
+  if ($delta == 'commons_events_create_event_link'
+    && user_access('create event content')) {
+    return array(
+      'subject' => NULL,
+      'content' => l(t('List an event'), 'node/add/event'),
+    );
+  }
+}
