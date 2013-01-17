@@ -31,6 +31,7 @@
       });
       $(':input[name^="field_registration_type"]').change(function() {
         $('#legend-registration-type').text($(':input[name^="field_registration_type"] :selected').text());
+        $(':input[name^="field_status"]').val('0').change();
       });
       $(':input[name^="field_status"]').change(function() {
         $('#legend-registration-status').text($(':input[name="field_status"] :selected').text());

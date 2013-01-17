@@ -149,8 +149,8 @@ function commons_events_form_node_form_alter(&$form, &$form_state) {
       '#weight' => 10,
     );
     $form['field_number_of_attendees']['#states'] = $form['field_status']['#states'];
-    $form['field_number_of_attendees']['#states']['invisible'][':input[name="field_status"]'] = array(
-      'value' => 0,
+    $form['field_number_of_attendees']['#states']['visible'][':input[name="field_status"]'] = array(
+      'value' => 1,
     );
     $form['field_number_of_attendees']['#weight'] = 11;
     $form['field_topics']['#weight'] = 12;
