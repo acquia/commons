@@ -158,16 +158,13 @@ function commons_events_solr_default_page_manager_handlers() {
     $pane = new stdClass();
     $pane->pid = 'new-6';
     $pane->panel = 'three_25_50_25_third';
-    $pane->type = 'custom';
-    $pane->subtype = 'custom';
+    $pane->type = 'block';
+    $pane->subtype = 'commons_events-commons_events_create_event_link';
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array(
-      'admin_title' => 'Add Event link',
-      'title' => '',
-      'body' => '<a href="/node/add/event" class="event-create-link">List an event</a>',
-      'format' => 'filtered_html',
-      'substitute' => TRUE,
+      'override_title' => 0,
+      'override_title_text' => '',
     );
     $pane->cache = array();
     $pane->style = array(
@@ -196,7 +193,7 @@ function commons_events_solr_default_page_manager_handlers() {
     $pane->position = 1;
     $pane->locks = array();
     $display->content['new-7'] = $pane;
-    $display->panels['three_25_50_25_third'][0] = 'new-7';
+    $display->panels['three_25_50_25_third'][1] = 'new-7';
     $pane = new stdClass();
     $pane->pid = 'new-8';
     $pane->panel = 'three_25_50_25_third';
@@ -214,7 +211,7 @@ function commons_events_solr_default_page_manager_handlers() {
     $pane->position = 2;
     $pane->locks = array();
     $display->content['new-8'] = $pane;
-    $display->panels['three_25_50_25_third'][1] = 'new-8';
+    $display->panels['three_25_50_25_third'][2] = 'new-8';
     $pane = new stdClass();
     $pane->pid = 'new-9';
     $pane->panel = 'three_25_50_25_third';
@@ -232,30 +229,11 @@ function commons_events_solr_default_page_manager_handlers() {
     $pane->position = 3;
     $pane->locks = array();
     $display->content['new-9'] = $pane;
-    $display->panels['three_25_50_25_third'][2] = 'new-9';
+    $display->panels['three_25_50_25_third'][3] = 'new-9';
   $display->hide_title = PANELS_TITLE_NONE;
   $display->title_pane = 'new-5';
   $handler->conf['display'] = $display;
   $export['pm_existing_pages_solr_events_search_panel_context'] = $handler;
 
   return $export;
-}
-
-/**
- * Implements hook_form_alter().
- */
-function commons_events_solr_form_apachesolr_environment_edit_form_alter(&$form, &$form_state) {
-  $form['actions']['save']['#submit'][] = 'commons_events_solr_environment_form_submit';
-}
-
-/**
- * When the environment changes, create facets for that environment.
- */
-function commons_events_solr_environment_form_submit($form, $form_state) {
-  if ($form_state['values']['make_default'] == 1) {
-    commons_events_solr_create_facets('apachesolr@' . $form_state['build_info']['args']['0']['env_id']);
-    // Need to clear caches so we can rebuild block definitions.
-    cache_clear_all('*', 'cache_block', TRUE);
-    cache_clear_all('*', 'cache_apachesolr', TRUE);
-  }
 }

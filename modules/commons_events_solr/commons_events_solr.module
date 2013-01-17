@@ -244,3 +244,22 @@ function commons_events_solr_preprocess_search_results(&$variables) {
     $variables['search_title'] = format_plural(count($variables['results']), '1 event', '@count events');
   }
 }
+
+/**
+ * Implements hook_form_alter().
+ */
+function commons_events_solr_form_apachesolr_environment_edit_form_alter(&$form, &$form_state) {
+  $form['actions']['save']['#submit'][] = 'commons_events_solr_environment_form_submit';
+}
+
+/**
+ * When the environment changes, create facets for that environment.
+ */
+function commons_events_solr_environment_form_submit($form, $form_state) {
+  if ($form_state['values']['make_default'] == 1) {
+    commons_events_solr_create_facets('apachesolr@' . $form_state['build_info']['args']['0']['env_id']);
+    // Need to clear caches so we can rebuild block definitions.
+    cache_clear_all('*', 'cache_block', TRUE);
+    cache_clear_all('*', 'cache_apachesolr', TRUE);
+  }
+}
