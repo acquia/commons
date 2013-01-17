@@ -1869,6 +1869,15 @@ ul.action-links {
   margin-right: 0;
 }
 
+.node-type-group.page-node .commons-pod {
+  padding: 0;
+  background-color: transparent;
+  @include border-radius(0);
+  @include box-shadow(none);
+  margin-right: 0;
+  margin-bottom: 0;
+}
+
 .commons-pod-comments {
   display: none;
 
@@ -2551,6 +2560,10 @@ body.page-node .pane-views-panes {
         padding: 0 7px;
       }
     }
+  }
+
+  .form-submit {
+    margin-top: 0;
   }
 }
 
