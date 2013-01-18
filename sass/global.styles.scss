@@ -829,6 +829,36 @@ h1.node-title {
   }
 }
 
+.node-type-event {
+  .node-content {
+    margin-left: 0;
+
+    .field-name-field-logo {
+      float:left;
+      margin:3px 15px 15px 0;
+      background:$white;
+      padding:4px;
+      @include border-radius(3px);
+      @include box-shadow($light_gray 1px 1px 4px);
+      position:relative;
+      display:block;
+      line-height:0;
+
+      img {
+        width:72px;
+      }
+    }
+
+    // .field-name-field-offsite-url {
+    //   float: right;
+    // }
+
+    .field-name-body {
+      clear: left;
+    }
+  }
+}
+
 .page-node .flag-commons-follow-node, .page-node .flag-commons-follow-group {
   display: inline-block;
 
@@ -3272,7 +3302,7 @@ form.commons-events-form-float {
   padding:0;
   border:none;
   border-radius:0;
-  input {
+  input, input:hover {
     margin:0;
     background-color: #6eca5d; // Old browsers
     @include filter-gradient(#6eca5d, #45bb2f, vertical); // IE6-9
