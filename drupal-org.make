@@ -23,6 +23,9 @@ projects[apachesolr_og][version] = "1.x-dev"
 projects[apachesolr_og][type] = "module"
 projects[apachesolr_og][subdir] = "contrib"
 
+projects[apachesolr_proximity][type] = "module"
+projects[apachesolr_proximity][subdir] = "contrib"
+
 projects[connector][version] = "1.x-dev"
 projects[connector][type] = "module"
 projects[connector][subdir] = "contrib"
