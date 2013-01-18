@@ -136,8 +136,9 @@ hide($content['links']);
   <?php endif; ?>
 
 </article>
-
+<?php if (isset($content['comments']['comments'])): ?>
 <div class="commons-pod commons-pod-comments">
   <?php print render($content['comments']); ?>
   <?php print render($title_suffix); ?>
 </div>
+<?php endif; ?>
