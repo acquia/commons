@@ -1,0 +1,25 @@
+<?php
+/**
+ * @file
+ * Commons Events Solr install script.
+ */
+
+/**
+ * Implements hook_enable().
+ */
+function commons_events_solr_enable() {
+  module_load_include('inc', 'page_manager', 'plugins/tasks/page');
+  $page = page_manager_page_load('views_events_landing_page');
+  $page->disabled = TRUE;
+  page_manager_page_save($page);
+}
+
+/**
+ * Implements hook_disable().
+ */
+function commons_events_solr_disable() {
+  module_load_include('inc', 'page_manager', 'plugins/tasks/page');
+  $page = page_manager_page_load('views_events_landing_page');
+  $page->disabled = FALSE;
+  page_manager_page_save($page);
+}

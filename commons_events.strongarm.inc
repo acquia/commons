@@ -151,13 +151,13 @@ function commons_events_strongarm() {
     'status' => 1,
     'view modes' => array(
       'page_manager' => array(
-        'status' => 0,
-        'default' => 0,
+        'status' => 1,
+        'default' => 1,
         'choice' => 0,
       ),
       'default' => array(
-        'status' => 1,
-        'default' => 1,
+        'status' => 0,
+        'default' => 0,
         'choice' => 0,
       ),
       'teaser' => array(

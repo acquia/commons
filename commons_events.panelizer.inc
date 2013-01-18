@@ -13,22 +13,22 @@ function commons_events_panelizer_defaults() {
   $panelizer = new stdClass();
   $panelizer->disabled = FALSE; /* Edit this to true to make a default panelizer disabled initially */
   $panelizer->api_version = 1;
-  $panelizer->name = 'node:event:default:default';
+  $panelizer->name = 'node:event:default';
   $panelizer->title = 'Default';
   $panelizer->panelizer_type = 'node';
   $panelizer->panelizer_key = 'event';
   $panelizer->no_blocks = FALSE;
   $panelizer->css_id = '';
   $panelizer->css = '';
-  $panelizer->pipeline = 'ipe';
+  $panelizer->pipeline = 'standard';
   $panelizer->contexts = array();
   $panelizer->relationships = array();
   $panelizer->access = array();
-  $panelizer->view_mode = 'default';
+  $panelizer->view_mode = 'page_manager';
   $panelizer->css_class = '';
   $panelizer->title_element = 'H2';
-  $panelizer->link_to_entity = FALSE;
-  $panelizer->extra = '';
+  $panelizer->link_to_entity = TRUE;
+  $panelizer->extra = array();
   $display = new panels_display();
   $display->layout = 'two_66_33';
   $display->layout_settings = array();
@@ -78,7 +78,7 @@ function commons_events_panelizer_defaults() {
     $pane->configuration = array(
       'use_pager' => 1,
       'pager_id' => '0',
-      'items_per_page' => '12',
+      'items_per_page' => '20',
       'offset' => '0',
       'context' => array(
         0 => 'panelizer',
@@ -97,7 +97,7 @@ function commons_events_panelizer_defaults() {
   $display->hide_title = PANELS_TITLE_PANE;
   $display->title_pane = '0';
   $panelizer->display = $display;
-  $export['node:event:default:default'] = $panelizer;
+  $export['node:event:default'] = $panelizer;
 
   return $export;
 }
