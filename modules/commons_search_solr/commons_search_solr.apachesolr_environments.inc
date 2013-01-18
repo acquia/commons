@@ -29,7 +29,7 @@ function commons_search_solr_apachesolr_environments() {
       4 => 'wiki',
     ),
   );
-  $export['solr'] = $environment;
+  $export['local_solr'] = $environment;
 
   return $export;
 }
