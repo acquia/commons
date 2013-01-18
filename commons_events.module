@@ -335,7 +335,7 @@ function commons_events_block_info() {
  */
 function commons_events_block_view($delta = '') {
   if ($delta == 'commons_events_create_event_link'
-    && user_access('create event content')) {
+    && node_access('create', 'event')) {
     return array(
       'subject' => NULL,
       'content' => l(t('List an event'), 'node/add/event'),
