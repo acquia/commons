@@ -20,7 +20,7 @@ function commons_events_panelizer_defaults() {
   $panelizer->no_blocks = FALSE;
   $panelizer->css_id = '';
   $panelizer->css = '';
-  $panelizer->pipeline = 'standard';
+  $panelizer->pipeline = 'ipe';
   $panelizer->contexts = array();
   $panelizer->relationships = array();
   $panelizer->access = array();
@@ -48,15 +48,20 @@ function commons_events_panelizer_defaults() {
     $pane = new stdClass();
     $pane->pid = 'new-1';
     $pane->panel = 'two_66_33_first';
-    $pane->type = 'entity_view';
-    $pane->subtype = 'node';
+    $pane->type = 'node_content';
+    $pane->subtype = 'node_content';
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array(
-      'view_mode' => 'full',
-      'context' => 'panelizer',
+      'links' => 1,
+      'no_extras' => 0,
       'override_title' => 0,
       'override_title_text' => '',
+      'identifier' => '',
+      'link' => 0,
+      'leave_node_title' => 1,
+      'build_mode' => 'full',
+      'context' => 'panelizer',
     );
     $pane->cache = array();
     $pane->style = array(
@@ -94,7 +99,7 @@ function commons_events_panelizer_defaults() {
     $pane->locks = array();
     $display->content['new-2'] = $pane;
     $display->panels['two_66_33_second'][0] = 'new-2';
-  $display->hide_title = PANELS_TITLE_PANE;
+  $display->hide_title = PANELS_TITLE_NONE;
   $display->title_pane = '0';
   $panelizer->display = $display;
   $export['node:event:default'] = $panelizer;
