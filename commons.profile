@@ -28,6 +28,8 @@ function commons_install_tasks_alter(&$tasks, $install_state) {
  * Allows the profile to alter the site configuration form.
  */
 function commons_form_install_configure_form_alter(&$form, $form_state) {
+  // Flush all 'notification' messages, no need to show them to the user.
+  commons_clear_messages();
   // Pre-populate the site name with the server name.
   $form['site_information']['site_name']['#default_value'] = $_SERVER['SERVER_NAME'];
 
@@ -529,15 +531,21 @@ function commons_install_finished(&$install_state) {
     // Since any module can add a drupal_set_message, this can bug the user
     // when we redirect him to the front page. For a better user experience,
     // remove all the message that are only "notifications" message.
-    drupal_get_messages('status', TRUE);
-    drupal_get_messages('completed', TRUE);
-    // Migrate adds its messages under the wrong type, see #1659150.
-    drupal_get_messages('ok', TRUE);
-
+    commons_clear_messages();
     // If we don't install drupal using Drush, redirect the user to the front
     // page.
     if (!drupal_is_cli()) {
       drupal_goto('');
     }
   }
+}
+
+/**
+ * Clear all 'notification' type messages that may have been set.
+ */
+function commons_clear_messages() {
+  drupal_get_messages('status', TRUE);
+  drupal_get_messages('completed', TRUE);
+  // Migrate adds its messages under the wrong type, see #1659150.
+  drupal_get_messages('ok', TRUE);
 }
