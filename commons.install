@@ -64,12 +64,4 @@ function commons_install() {
     $form_state['values'] = array();
     drupal_form_submit('system_theme_settings', $form_state);
   }
-
-  // Commons WYSIWYG requires php 5.3.0 or newer
-  if (version_compare(phpversion(), '5.3.0') >= 0) {
-    module_enable(array('commons_wysiwyg'));
-  }
-  else {
-    drupal_set_message(t("The Commons WYSIWYG module was not enabled because your server's version of PHP is older than 5.3.0."), 'warning');
-  }
 }

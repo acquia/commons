@@ -196,6 +196,7 @@ function commons_revert_features() {
   $revert = array(
     'commons_groups' => array('field_instance'),
     'commons_wikis' => array('og_features_permission'),
+    'commons_wysiwyg' => array('user_permission', 'ckeditor_profile'),
   );
   features_revert($revert);
 }

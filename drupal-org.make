@@ -12,10 +12,6 @@ projects[acquia_connector][subdir] = "contrib"
 projects[advancedqueue][type] = "module"
 projects[advancedqueue][subdir] = "contrib"
 
-projects[aloha][version] = "2.x-dev"
-projects[aloha][type] = "module"
-projects[aloha][subdir] = "contrib"
-
 projects[apachesolr][type] = "module"
 projects[apachesolr][subdir] = "contrib"
 
@@ -29,6 +25,15 @@ projects[apachesolr_proximity][subdir] = "contrib"
 projects[connector][version] = "1.x-dev"
 projects[connector][type] = "module"
 projects[connector][subdir] = "contrib"
+
+projects[ckeditor][type] = "module"
+projects[ckeditor][subdir] = "contrib"
+projects[ckeditor][download][type] = "git"
+projects[ckeditor][download][url] = "http://git.drupal.org/project/ckeditor.git"
+; Use Libraries API for ckeditor
+; http://drupal.org/node/1063482#comment-6964504
+projects[ckeditor][download][branch] = "7.x-1.x"
+projects[ckeditor][revision] = "f6abbda"
 
 projects[ctools][type] = "module"
 projects[ctools][subdir] = "contrib"
@@ -68,7 +73,6 @@ projects[entityreference][subdir] = "contrib"
 
 projects[edit_profile][type] = "module"
 projects[edit_profile][subdir] = "contrib"
-projects[edit_profile][version] = "1.x-dev"
 
 projects[entityreference_prepopulate][type] = "module"
 projects[entityreference_prepopulate][subdir] = "contrib"
@@ -99,9 +103,8 @@ projects[admin_icons][version] = "1.x-dev"
 projects[admin_icons][type] = "module"
 projects[admin_icons][subdir] = "contrib"
 
-projects[jquery_update][version] = "2.x-dev"
-projects[jquery_update][type] = "module"
-projects[jquery_update][subdir] = "contrib"
+projects[libraries][type] = "module"
+projects[libraries][subdir] = "contrib"
 
 projects[link][type] = "module"
 projects[link][subdir] = "contrib"
@@ -315,9 +318,12 @@ projects[commons_pages][type] = "module"
 projects[commons_pages][subdir] = "contrib"
 projects[commons_pages][version] = "3.x-dev"
 
-projects[commons_posts][type] = "module"
 projects[commons_posts][subdir] = "contrib"
-projects[commons_posts][version] = "3.x-dev"
+projects[commons_posts][type] = "module"
+projects[commons_posts][download][type] = "git"
+projects[commons_posts][download][url] = "http://git.drupal.org/project/commons_posts.git"
+projects[commons_posts][download][branch] = "7.x-3.x"
+
 
 projects[commons_polls][type] = "module"
 projects[commons_polls][subdir] = "contrib"
@@ -365,7 +371,6 @@ projects[commons_wikis][version] = "3.x-dev"
 
 projects[commons_wysiwyg][type] = "module"
 projects[commons_wysiwyg][subdir] = "contrib"
-projects[commons_wysiwyg][version] = "3.x-dev"
 
 projects[commons_topics][type] = "module"
 projects[commons_topics][subdir] = "contrib"
@@ -390,8 +395,12 @@ projects[commons_origins][subdir] = "contrib"
 ; Libraries.
 ; NOTE: These need to be listed in http://drupal.org/packaging-whitelist.
 
+libraries[ckeditor][download][type] = "get"
+libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.0/ckeditor_4.0_standard.tar.gz"
+libraries[ckeditor][type] = "libraries"
+
 libraries[timeago][download][type] = "get"
-libraries[timeago][destination] = "modules/contrib"
+libraries[timeago][type] = "libraries"
 ; We'd like to switch to a specific commit hash,
 ; pending http://drupal.org/node/1821996#comment-6678062.
 libraries[timeago][download][url] = "https://raw.github.com/rmm5t/jquery-timeago/master/jquery.timeago.js"
