@@ -90,6 +90,10 @@ h2 {
   .palette-orange-red & {
     color: $palette_orange_red_red;
   }
+
+  .palette-magenta-blue & {
+    color: $palette_magenta_blue_dark;
+  }
 }
 
 
@@ -233,6 +237,16 @@ var {
       margin-top: 1px;
     }
   }
+
+  .palette-magenta-blue & {
+    background-color: $palette_magenta_blue_dark;
+    border-top: 4px solid darken($palette_magenta_blue_dark, 50%);
+
+    .boxshadow & {
+      @include box-shadow($palette_magenta_blue_dark 0px -1px 0px);
+      margin-top: 1px;
+    }
+  }
 }
 
 .header-color-row-two {
@@ -245,6 +259,12 @@ var {
     background-color: $palette_orange_red_orange;
     border-top: 1px solid lighten($palette_orange_red_orange, 10%);
     border-bottom: 1px solid darken($palette_orange_red_orange, 10%);
+  }
+
+  .palette-magenta-blue & {
+    background-color: $palette_magenta_blue_light;
+    border-top: 1px solid lighten($palette_magenta_blue_light, 10%);
+    border-bottom: 1px solid darken($palette_magenta_blue_light, 10%);
   }
 }
 
@@ -598,6 +618,14 @@ h1.node-title {
 
     a {
       color: $palette_orange_red_orange;
+    }
+  }
+
+  .palette-magenta-blue & {
+    color: $palette_magenta_blue_light;
+
+    a {
+      color: $palette_magenta_blue_light;
     }
   }
 }
@@ -1155,6 +1183,10 @@ a {
   .palette-orange-red & {
     color: $palette_orange_red_orange;
   }
+
+  .palette-magenta-blue & {
+    color: $palette_magenta_blue_light;
+  }
 }
 
 
@@ -1232,6 +1264,16 @@ a {
 
           &:after {
             border-color: transparent transparent $palette_orange_red_orange transparent;
+          }
+        }
+
+        .palette-magenta-blue & {
+          &:before {
+            border-color: transparent transparent lighten($palette_magenta_blue_light, 10%) transparent;
+          }
+
+          &:after {
+            border-color: transparent transparent $palette_magenta_blue_light transparent;
           }
         }
       }
@@ -1327,6 +1369,10 @@ ul.commons-utility-links {
 
       .palette-orange-red & {
         border-left-color: $palette_orange_red_orange;
+      }
+
+      .palette-magenta-blue & {
+        border-left-color: $palette_magenta_blue_light;
       }
     }
   }
@@ -2658,11 +2704,19 @@ body.page-node .pane-views-panes {
   .palette-orange-red & {
     background-color: $palette_orange_red_red;
   }
+
+  .palette-magenta-blue & {
+    background-color: $palette_magenta_blue_dark;
+  }
 }
 
 .quicktabs-style-commons-pills ul.quicktabs-tabs li.active a:after {
   .palette-orange-red & {
     border-color: $palette_orange_red_red transparent transparent transparent;
+  }
+
+  .palette-magenta-blue & {
+    border-color: $palette_magenta_blue_dark transparent transparent transparent;
   }
 }
 
@@ -2850,6 +2904,12 @@ body.page-node .pane-views-panes {
     background-color: darken($palette_orange_red_orange, 12%); // Old browsers
     @include filter-gradient(darken($palette_orange_red_orange, 12%), darken($palette_orange_red_orange, 6%), vertical); // IE6-9
     @include background-image(linear-gradient(top,  darken($palette_orange_red_orange, 12%) 0%,darken($palette_orange_red_orange, 6%)100%));
+  }
+
+  .palette-magenta-blue & {
+    background-color: darken($palette_magenta_blue_light, 12%); // Old browsers
+    @include filter-gradient(darken($palette_magenta_blue_light, 12%), darken($palette_magenta_blue_light, 6%), vertical); // IE6-9
+    @include background-image(linear-gradient(top,  darken($palette_magenta_blue_light, 12%) 0%,darken($palette_magenta_blue_light, 6%)100%));
   }
 
   .block-inner {
