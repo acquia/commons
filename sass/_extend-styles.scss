@@ -2,29 +2,20 @@
   border-left: 1px solid darken($light_blue, 3%);
   @include box-shadow(darken($dark_blue, 13%) -1px 0px 0px);
 
-  .palette-red & {
-    border-left: 1px solid darken($red, 3%);
-    @include box-shadow(darken($dark_red, 13%) -1px 0px 0px);
+  .palette-orange-red & {
+    border-left: 1px solid lighten($palette_orange_red_red, 6%);
+    @include box-shadow(darken($palette_orange_red_red, 13%) -1px 0px 0px);
   }
 
-  .palette-green & {
-    border-left: 1px solid darken($green, 3%);
-    @include box-shadow(darken($dark_green, 13%) -1px 0px 0px);
-  }
 }
 
 %divider-right {
   border-right: 1px solid darken($dark_blue, 13%);
   @include box-shadow(darken($light_blue, 3%) 1px 0px 0px);
 
-  .palette-red & {
-    border-right: 1px solid darken($dark_red, 13%);
-    @include box-shadow(darken($red, 3%) 1px 0px 0px);
-  }
-
-  .palette-green & {
-    border-right: 1px solid darken($dark_green, 13%);
-    @include box-shadow(darken($green, 3%) 1px 0px 0px);
+  .palette-orange-red & {
+    border-right: 1px solid darken($palette_orange_red_red, 13%);
+    @include box-shadow(lighten($palette_orange_red_red, 6%) 1px 0px 0px);
   }
 }
 
@@ -56,6 +47,14 @@
 
   &:hover {
     text-decoration: none;
+  }
+
+  .palette-orange-red & {
+    box-shadow: 1px 1px 1px $palette_orange_red_btn_top inset, 0 3px 3px rgba(#000, 0.09);
+    background-color: $palette_orange_red_btn_top; // Old browsers
+    @include filter-gradient($palette_orange_red_btn_top, $palette_orange_red_btn_bottom, vertical); // IE6-9
+    @include background-image(linear-gradient(top,  $palette_orange_red_btn_top 0%, $palette_orange_red_btn_bottom 100%));
+    border: 1px solid $palette_orange_red_btn_bottom;
   }
 }
 
