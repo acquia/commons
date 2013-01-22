@@ -33,7 +33,7 @@ projects[ckeditor][download][url] = "http://git.drupal.org/project/ckeditor.git"
 ; Use Libraries API for ckeditor
 ; http://drupal.org/node/1063482#comment-6964504
 projects[ckeditor][download][branch] = "7.x-1.x"
-projects[ckeditor][revision] = "f6abbda"
+projects[ckeditor][download][revision] = "f6abbda"
 
 projects[ctools][type] = "module"
 projects[ctools][subdir] = "contrib"
