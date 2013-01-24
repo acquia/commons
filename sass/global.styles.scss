@@ -901,7 +901,7 @@ h1.node-title {
   }
 }
 
-.page-node .flag-commons-follow-node, .page-node .flag-commons-follow-group {
+.page-node .flag-commons-follow-node, .page-node .flag-commons-follow-group, .flag-commons-follow-user {
   display: inline-block;
 
   a {
@@ -1004,6 +1004,8 @@ h1.node-title {
 .page-user {
   .pane-user-picture {
     display: inline-block;
+    float: left;
+    width: 15%;
 
     .user-picture {
       background: $white;
@@ -1018,10 +1020,13 @@ h1.node-title {
   }
 
   .pane-user-field-bio {
-    
+    float: left;
+    width: 51%;
   }
 
   .pane-user-field-facebook-url {
+    float: right;
+    width: 33%;
 
     a {
       display: inline-block;
@@ -1036,6 +1041,8 @@ h1.node-title {
   }
 
   .pane-user-field-linkedin-url {
+    float: right;
+    width: 33%;
 
     a {
       display: inline-block;
@@ -1050,6 +1057,8 @@ h1.node-title {
   }
 
   .pane-user-field-twitter-url {
+    float: right;
+    width: 33%;
 
     a {
       display: inline-block;
@@ -1061,6 +1070,10 @@ h1.node-title {
         top: 7px;
       }
     }
+  }
+
+  .pane-user-flag-commons-follow-user-link {
+    clear: both;
   }
 
   .pane-views-panes {
