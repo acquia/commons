@@ -196,6 +196,9 @@ projects[r4032login][subdir] = "contrib"
 
 projects[rate][type] = "module"
 projects[rate][subdir] = "contrib"
+; Add widget to node/comment $links
+; http://drupal.org/node/947516#comment-6979780
+projects[rate][patch][] = "http://drupal.org/files/widget_to_link_d7-947516-13.patch"
 
 projects[realname][type] = "module"
 projects[realname][subdir] = "contrib"
