@@ -98,8 +98,9 @@ function commons_follow_ui_notification_settings_form($form, &$form_state, $acco
     '#weight' => 2,
   );
 
+  $tabs = commons_follow_ui_generate_tabs();
   $form['tabs'] = array(
-    '#markup' => drupal_render(commons_follow_ui_generate_tabs()),
+    '#markup' => drupal_render($tabs),
     '#weight' => 3,
   );
 
