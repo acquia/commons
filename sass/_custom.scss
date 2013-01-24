@@ -51,11 +51,7 @@ $light_blue: rgb(39,131,185);
 $orange: rgb(255,153,0);
 $lighter_gray: #eee;
 
-// Colors for other pallets
-$red: rgb(209, 69, 69);
-$dark_red: rgb(156, 52, 52);
-$green: rgb(97, 197, 92);
-$dark_green: rgb(85, 146, 82);
+// Colors for other palettes
 
 // Orange and Red
 $palette_orange_red_orange: #D54F1A;
@@ -68,6 +64,19 @@ $palette_magenta_blue_light: #E60074;
 $palette_magenta_blue_dark: #891746;
 $palette_magenta_blue_btn_top: #69C5EC;
 $palette_magenta_blue_btn_bottom: #0097BF;
+
+// Black and Green
+$palette_black_green_black: #2D3538;
+$palette_black_green_green: #81B453;
+$palette_black_green_btn_top: #4090BA;
+$palette_black_green_btn_bottom: #4090BA;
+
+// List of palettes and options that will be looped through to build the differnt color palettes.
+// This variable get called by an @each function in the partial _palettes.scss
+// the format is (<class name to trigger> <light color var> <dark color var> <button top color var> <button bottom color var>)
+$palettes: (palette-orange-red $palette_orange_red_orange $palette_orange_red_red $palette_orange_red_btn_top $palette_orange_red_btn_bottom)
+(palette-magenta-blue $palette_magenta_blue_light $palette_magenta_blue_dark $palette_magenta_blue_btn_top $palette_magenta_blue_btn_bottom)
+(palette-black-green $palette_black_green_green $palette_black_green_black $palette_black_green_btn_top $palette_black_green_btn_bottom);
 
 
 //
