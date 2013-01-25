@@ -208,11 +208,12 @@ function commons_revert_features() {
  */
 function commons_admin_save_fullname($form_id, &$form_state) {
   $values = $form_state['values'];
-    if (!empty($values['field_name_first']) || !empty($values['field_name_last'])) {
+  if (!empty($values['field_name_first']) || !empty($values['field_name_last'])) {
     $account = user_load(1);
     $account->field_name_first[LANGUAGE_NONE][0]['value'] = $values['field_name_first'];
     $account->field_name_last[LANGUAGE_NONE][0]['value'] = $values['field_name_last'];
     user_save($account);
+    realname_update($account);
   }
 }
 
