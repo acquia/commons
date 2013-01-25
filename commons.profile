@@ -502,6 +502,13 @@ function commons_install_finished(&$install_state) {
   // Flush all caches to ensure that any full bootstraps during the installer
   // do not leave stale cached data, and that any content types or other items
   // registered by the installation profile are registered correctly.
+
+  // Remove the bookmarks flag
+  $flag = flag_get_flag('bookmarks');
+  $flag->delete();
+  $flag->disable();
+  _flag_clear_cache();
+
   drupal_flush_all_caches();
 
   // Remember the profile which was used.
