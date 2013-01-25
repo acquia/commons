@@ -86,14 +86,6 @@ h2 {
   font-size: 54px;
   line-height: 54px;
   font-family: $alt-font;
-
-  // .palette-orange-red & {
-  //   color: $palette_orange_red_red;
-  // }
-
-  // .palette-magenta-blue & {
-  //   color: $palette_magenta_blue_dark;
-  // }
 }
 
 
@@ -227,26 +219,6 @@ var {
     @include box-shadow($dark_blue 0px -1px 0px);
     margin-top: 1px;
   }
-
-  // .palette-orange-red & {
-  //   background-color: $palette_orange_red_red;
-  //   border-top: 4px solid darken($palette_orange_red_red, 50%);
-
-  //   .boxshadow & {
-  //     @include box-shadow($palette_orange_red_red 0px -1px 0px);
-  //     margin-top: 1px;
-  //   }
-  // }
-
-  // .palette-magenta-blue & {
-  //   background-color: $palette_magenta_blue_dark;
-  //   border-top: 4px solid darken($palette_magenta_blue_dark, 50%);
-
-  //   .boxshadow & {
-  //     @include box-shadow($palette_magenta_blue_dark 0px -1px 0px);
-  //     margin-top: 1px;
-  //   }
-  // }
 }
 
 .header-color-row-two {
@@ -254,18 +226,6 @@ var {
   height: 26px;
   border-top: 1px solid lighten($light_blue, 10%);
   border-bottom: 1px solid darken($light_blue, 10%);
-
-  // .palette-orange-red & {
-  //   background-color: $palette_orange_red_orange;
-  //   border-top: 1px solid lighten($palette_orange_red_orange, 10%);
-  //   border-bottom: 1px solid darken($palette_orange_red_orange, 10%);
-  // }
-
-  // .palette-magenta-blue & {
-  //   background-color: $palette_magenta_blue_light;
-  //   border-top: 1px solid lighten($palette_magenta_blue_light, 10%);
-  //   border-bottom: 1px solid darken($palette_magenta_blue_light, 10%);
-  // }
 }
 
 
@@ -612,22 +572,6 @@ h1.node-title {
       text-decoration:underline;
     }
   }
-
-  // .palette-orange-red & {
-  //   color: $palette_orange_red_orange;
-
-  //   a {
-  //     color: $palette_orange_red_orange;
-  //   }
-  // }
-
-  // .palette-magenta-blue & {
-  //   color: $palette_magenta_blue_light;
-
-  //   a {
-  //     color: $palette_magenta_blue_light;
-  //   }
-  // }
 }
 
 /*
@@ -1192,14 +1136,6 @@ a {
   &:focus {
     text-decoration: underline;
   }
-
-  // .palette-orange-red & {
-  //   color: $palette_orange_red_orange;
-  // }
-
-  // .palette-magenta-blue & {
-  //   color: $palette_magenta_blue_light;
-  // }
 }
 
 
@@ -1267,26 +1203,6 @@ a {
           border-width: 0 6px 6px 6px;
           border-color: transparent transparent $light_blue transparent;
         }
-
-        // .palette-orange-red & {
-        //   &:before {
-        //     border-color: transparent transparent lighten($palette_orange_red_orange, 10%) transparent;
-        //   }
-
-        //   &:after {
-        //     border-color: transparent transparent $palette_orange_red_orange transparent;
-        //   }
-        // }
-
-        // .palette-magenta-blue & {
-        //   &:before {
-        //     border-color: transparent transparent lighten($palette_magenta_blue_light, 10%) transparent;
-        //   }
-
-        //   &:after {
-        //     border-color: transparent transparent $palette_magenta_blue_light transparent;
-        //   }
-        // }
       }
     }
   }
@@ -1377,14 +1293,6 @@ ul.commons-utility-links {
       a {
         margin-left: 9px;
       }
-
-      // .palette-orange-red & {
-      //   border-left-color: $palette_orange_red_orange;
-      // }
-
-      // .palette-magenta-blue & {
-      //   border-left-color: $palette_magenta_blue_light;
-      // }
     }
   }
 }
@@ -2710,27 +2618,6 @@ body.page-node .pane-views-panes {
   }
 }
 
-// // Quicktabs buttons styles
-// .quicktabs-style-commons-pills ul.quicktabs-tabs li.active a {
-//   .palette-orange-red & {
-//     background-color: $palette_orange_red_red;
-//   }
-
-//   .palette-magenta-blue & {
-//     background-color: $palette_magenta_blue_dark;
-//   }
-// }
-
-// .quicktabs-style-commons-pills ul.quicktabs-tabs li.active a:after {
-//   .palette-orange-red & {
-//     border-color: $palette_orange_red_red transparent transparent transparent;
-//   }
-
-//   .palette-magenta-blue & {
-//     border-color: $palette_magenta_blue_dark transparent transparent transparent;
-//   }
-// }
-
 /* =============================================================================
  *   Block Styling
  * ========================================================================== */
@@ -2911,18 +2798,6 @@ body.page-node .pane-views-panes {
     margin-top: 15px;
   }
 
-  // .palette-orange-red & {
-  //   background-color: darken($palette_orange_red_orange, 12%); // Old browsers
-  //   @include filter-gradient(darken($palette_orange_red_orange, 12%), darken($palette_orange_red_orange, 6%), vertical); // IE6-9
-  //   @include background-image(linear-gradient(top,  darken($palette_orange_red_orange, 12%) 0%,darken($palette_orange_red_orange, 6%)100%));
-  // }
-
-  // .palette-magenta-blue & {
-  //   background-color: darken($palette_magenta_blue_light, 12%); // Old browsers
-  //   @include filter-gradient(darken($palette_magenta_blue_light, 12%), darken($palette_magenta_blue_light, 6%), vertical); // IE6-9
-  //   @include background-image(linear-gradient(top,  darken($palette_magenta_blue_light, 12%) 0%,darken($palette_magenta_blue_light, 6%)100%));
-  // }
-
   .block-inner {
     margin-left:0;
     margin-right:0;
@@ -2943,6 +2818,10 @@ body.page-node .pane-views-panes {
     border:none;
     margin:3px 0 0 0;
     // width:200px;
+
+    .node-type-group & {
+      width:120px;
+    }
   }
   .form-submit {
     background-color:transparent !important;
