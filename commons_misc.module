@@ -1,7 +1,16 @@
 <?php
 /**
  * @file
- * Drupal needs this blank file.
+ * Misc Commons functionality.
  */
 
 include_once 'commons_misc.features.inc';
+
+/**
+ * Implements hook_mail_alter();
+ */
+function commons_misc_mail_alter(&$message) {
+  if (strstr($message['to'], '@') == '@example.com') {
+    $message['send'] = FALSE;
+  }
+}
