@@ -91,3 +91,16 @@ function commons_follow_group_commons_follow_get_message_ids(&$followed_mids, $f
     $followed_mids[] = $this_result->mid;
   }
 }
+
+/**
+ * Implements hook_node_insert().
+ */
+function commons_follow_group_node_insert($node) {
+  if ($node->type != 'group') {
+    return;
+  }
+  // The owner of the content automatically follows the content
+  $account = user_load($node->uid);
+  $flag = flag_get_flag('commons_follow_group');
+  $flag->flag('flag', $node->nid, $account);
+}
