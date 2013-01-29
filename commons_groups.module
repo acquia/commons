@@ -367,14 +367,16 @@ function commons_groups_group_submission_message($form, &$form_state) {
 * which takes place in commons_groups_field_definition().
 */
 function commons_groups_entityreference_default_value($entity_type, $entity, $field, $instance, $langcode) {
+
+  $items = array();
   $field_name = $field['field_name'];
 
   if (empty($_GET[$field_name]) || !is_string($_GET[$field_name])) {
-    return;
+    return $items;
   }
 
   if (empty($instance['settings']['behaviors']['prepopulate']['status'])) {
-    return;
+    return $items;
   }
 
   $ids = explode(',', $_GET[$field_name]);
@@ -382,13 +384,13 @@ function commons_groups_entityreference_default_value($entity_type, $entity, $fi
   $target_type = $field['settings']['target_type'];
   entity_load($target_type, $ids);
   // Remove group nodes hidden by the node access system.
-  $items = array();
+
   foreach ($ids as $target_id) {
     $target = entity_load_single($target_type, $target_id);
     if (entity_access('view', $target_type, $target)
       && og_is_group_type($target_type, $target->type)
       && (og_user_access($target_type, $target_id, "create $entity->type content") || og_user_access($target_type, $id, "update any $entity->type content"))) {
-        $items[]= array('target_id' => $target_id);
+        $items[] = array('target_id' => $target_id);
     }
   }
   return $items;
