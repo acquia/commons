@@ -108,6 +108,11 @@ function commons_groups_group_contributors_count_topics($group) {
     $view->set_arguments(array($group->nid));
     $view->get_total_rows = TRUE;
     $view->execute();
+    // If there are no contributors with avatars, return an empty string
+    // rather than displaying '0 contributors'.
+    if (empty($view->total_rows)) {
+      return '';
+    }
     $contributors_count = $view->total_rows;
     $output .= l(t('@contributors_count @contributors', array('@contributors_count' => $contributors_count, '@contributors' => format_plural($contributors_count, 'contributor', 'contributors'))), 'node/' . $group->nid . '/contributors');
   }
