@@ -206,9 +206,6 @@ projects[realname][subdir] = "contrib"
 projects[registration][version] = "1.x-dev"
 projects[registration][type] = "module"
 projects[registration][subdir] = "contrib"
-; Registration module doesn't properly support entitycache
-; http://drupal.org/node/1867564
-projects[registration][patch][] = "http://drupal.org/files/registration_entity_cache_support_update.patch"
 
 projects[rules][type] = "module"
 projects[rules][subdir] = "contrib"
