@@ -1,0 +1,17 @@
+name = Commons Events Homepage
+description = Provides the panelized Event homepage.
+core = 7.x
+package = Commons - Landing pages
+php = 5.2.4
+version = 7.x-3.0-beta2
+project = commons_events_homepage
+dependencies[] = commons_events
+dependencies[] = panelizer
+datestamp = 1357735760
+features[ctools][] = panelizer:panelizer:1
+features[ctools][] = strongarm:strongarm:1
+features[features_api][] = api:1
+features[panelizer_defaults][] = node:event:default
+features[variable][] = panelizer_defaults_node_event
+files[] = commons_events_homepage.features.inc
+files[] = commons_events_homepage.strongarm.inc

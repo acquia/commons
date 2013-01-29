@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * commons_events.panelizer.inc
+ * commons_events_homepage.panelizer.inc
  */
 
 /**
  * Implements hook_panelizer_defaults().
  */
-function commons_events_panelizer_defaults() {
+function commons_events_homepage_panelizer_defaults() {
   $export = array();
 
   $panelizer = new stdClass();
