@@ -20,11 +20,11 @@ jQuery(document).ready(function($){
 
   $('.views-exposed-widgets .form-select, .custom-search-selector').wrap('<div class="form-select-wrapper" />');
 
-  $(document).on('change', '.views-exposed-widgets .form-select', function() {
+  $(document).delegate('.views-exposed-widgets .form-select', 'change', function() {
     $('.views-exposed-widgets .views-submit-button').fadeIn(300);
   });
 
-  $(document).on('click', '.views-exposed-widgets .form-select', function() {
+  $(document).delegate('.views-exposed-widgets .form-select', 'click', function() {
     $('.views-exposed-widgets').addClass('widgets-active');
   });
 
