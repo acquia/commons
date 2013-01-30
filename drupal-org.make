@@ -211,7 +211,7 @@ projects[registration][subdir] = "contrib"
 
 ; Entity isn't passed into registration_status
 ; http://drupal.org/node/1899384#comment-7001040
-projects[registration][patch][] = "http://drupalcode.org/project/registration.git/commitdiff_plain/267f05b"
+projects[registration][patch][] = "http://drupalcode.org/project/registration.git/patch/267f05b864a63e7c8a3324e51369d742e97bc951"
 
 ; Update Entity cache support
 ; http://drupal.org/files/entity_cache_support-1867564-4.patch
