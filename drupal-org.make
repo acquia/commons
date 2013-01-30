@@ -206,15 +206,15 @@ projects[rate][patch][] = "http://drupal.org/files/widget_to_link_d7-947516-13.p
 projects[realname][type] = "module"
 projects[realname][subdir] = "contrib"
 
-projects[registration][type] = "module"
 projects[registration][subdir] = "contrib"
-
-; Entity isn't passed into registration_status
-; http://drupal.org/node/1899384#comment-7001040
-projects[registration][patch][] = "http://drupalcode.org/project/registration.git/patch/267f05b864a63e7c8a3324e51369d742e97bc951"
+projects[registration][type] = "module"
+projects[registration][download][type] = "git"
+projects[registration][download][url] = "http://git.drupal.org/project/registration.git"
+projects[registration][download][branch] = "7.x-3.x"
+projects[registration][download][version] = "267f05b"
 
 ; Update Entity cache support
-; http://drupal.org/files/entity_cache_support-1867564-4.patch
+; http://drupal.org/node/1867564#comment-7001180
 projects[registration][patch][] = "http://drupal.org/files/entity_cache_support-1867564-4.patch"
 
 projects[rules][type] = "module"
