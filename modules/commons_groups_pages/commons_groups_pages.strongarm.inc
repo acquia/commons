@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * commons_group_homepages.strongarm.inc
+ * commons_groups_pages.strongarm.inc
  */
 
 /**
  * Implements hook_strongarm().
  */
-function commons_group_homepages_strongarm() {
+function commons_groups_pages_strongarm() {
   $export = array();
 
   $strongarm = new stdClass();

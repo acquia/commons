@@ -3,7 +3,7 @@
 /**
 * Implements hook_enable().
 */
-function commons_group_homepages_enable() {
+function commons_groups_pages_enable() {
   // We need Page Manager to respond to the node view menu callback.
   // Since all Panelized moduels need this variable set, we use variable_set
   // rather than exporting via Strongarm in order to avoid Features conflicts.
