@@ -35,6 +35,10 @@ projects[ckeditor][download][url] = "http://git.drupal.org/project/ckeditor.git"
 projects[ckeditor][download][branch] = "7.x-1.x"
 projects[ckeditor][download][revision] = "f6abbda"
 
+; Fatal error if Libraries module is enabled after CKEditor
+; http://drupal.org/node/1898294#comment-6980796
+projects[ckeditor][patch][] = "http://drupal.org/files/ckeditor-install-lib-1898294-2.patch"
+
 projects[ctools][type] = "module"
 projects[ctools][subdir] = "contrib"
 ; http://drupal.org/node/1494860#comment-6204438
