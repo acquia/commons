@@ -14,3 +14,13 @@ function commons_misc_mail_alter(&$message) {
     $message['send'] = FALSE;
   }
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter();
+ */
+function commons_misc_form_post_node_form_alter(&$form, &$form_state, $form_id) {
+  // Hide revision information when creating a node.
+  if (!isset($form_state['node']->nid)) {
+    $form['revision_information']['#access'] = FALSE;
+  }
+}
