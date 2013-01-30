@@ -446,7 +446,8 @@ function commons_demo_content() {
   $event->field_address[LANGUAGE_NONE][0]['locality'] = 'Boston';
   $event->og_group_ref[LANGUAGE_NONE][0]['target_id'] = $boston_group->nid;
   node_save($event);
-
+  // Don't display the 'registration settings have been saved' message.
+  commons_clear_messages();
 
   // Delete the demo content variable
   variable_del('commons_install_example_content');
