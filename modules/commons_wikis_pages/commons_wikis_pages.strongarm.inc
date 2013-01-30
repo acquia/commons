@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * commons_wikis_home.strongarm.inc
+ * commons_wikis_pages.strongarm.inc
  */
 
 /**
  * Implements hook_strongarm().
  */
-function commons_wikis_home_strongarm() {
+function commons_wikis_pages_strongarm() {
   $export = array();
 
   $strongarm = new stdClass();

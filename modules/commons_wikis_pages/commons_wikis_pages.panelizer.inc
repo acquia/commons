@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * commons_wikis_home.panelizer.inc
+ * commons_wikis_pages.panelizer.inc
  */
 
 /**
  * Implements hook_panelizer_defaults().
  */
-function commons_wikis_home_panelizer_defaults() {
+function commons_wikis_pages_panelizer_defaults() {
   $export = array();
 
   $panelizer = new stdClass();
