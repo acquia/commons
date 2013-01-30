@@ -160,7 +160,6 @@ projects[og][subdir] = "contrib"
 projects[og][patch][] = "http://drupal.org/files/og-add-group-message.patch"
 
 projects[panelizer][type] = "module"
-projects[panelizer][version] = "3.x-dev"
 projects[panelizer][subdir] = "contrib"
 
 projects[panels][type] = "module"
