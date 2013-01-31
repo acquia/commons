@@ -129,6 +129,9 @@ function commons_install_tasks() {
       'display' => TRUE,
       'type' => 'form',
     ),
+    'commons_admin_permissions' => array(
+      'display' => FALSE,
+    ),
   );
 }
 
@@ -201,6 +204,12 @@ function commons_revert_features() {
     'commons_wysiwyg' => array('user_permission', 'ckeditor_profile'),
   );
   features_revert($revert);
+}
+
+function commons_admin_permissions() {
+  //get the administrator role, we set this in the install file
+  $admin_role = user_role_load_by_name('administrator');
+  user_role_grant_permissions($admin_role->rid, array_keys(module_invoke_all('permission')));
 }
 
 /**
