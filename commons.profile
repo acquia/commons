@@ -234,7 +234,7 @@ function commons_check_acquia_connector($form_id, &$form_state) {
  */
 function commons_anonymous_welcome_text_form() {
   $form['commons_anonymous_welcome_explanation'] = array(
-    '#markup' => '<h2>' . st('Homepage welcome text') . '</h2>' . st("Below, enter text that will be shown on your community's homeage to help new visitors understand what your community is about and why they should join. The image below shows an example of how this text will appear. You can always change this text later."),
+    '#markup' => '<h2>' . st('Homepage welcome text') . '</h2>' . st("Below, enter text that will be shown on your community's homepage to help new visitors understand what your community is about and why they should join. The image below shows an example of how this text will appear. You can always change this text later."),
     '#weight' => -1,
   );
   $form['commons_anonymous_welcome_example'] = array(
@@ -253,7 +253,7 @@ function commons_anonymous_welcome_text_form() {
   $form['commons_anonymous_welcome_body'] = array(
     '#type' => 'textarea',
     '#title' => st('Welcome body text'),
-    '#description' => st('Enter a couple of sentences elborating about your community.'),
+    '#description' => st('Enter a couple of sentences elaborating about your community.'),
     '#required' => TRUE,
     '#default_value' => st('Share your thoughts, find answers to your questions.'),
   );
@@ -446,7 +446,8 @@ function commons_demo_content() {
   $event->field_address[LANGUAGE_NONE][0]['locality'] = 'Boston';
   $event->og_group_ref[LANGUAGE_NONE][0]['target_id'] = $boston_group->nid;
   node_save($event);
-
+  // Don't display the 'registration settings have been saved' message.
+  commons_clear_messages();
 
   // Delete the demo content variable
   variable_del('commons_install_example_content');

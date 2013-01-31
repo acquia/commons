@@ -35,6 +35,10 @@ projects[ckeditor][download][url] = "http://git.drupal.org/project/ckeditor.git"
 projects[ckeditor][download][branch] = "7.x-1.x"
 projects[ckeditor][download][revision] = "f6abbda"
 
+; Fatal error if Libraries module is enabled after CKEditor
+; http://drupal.org/node/1898294#comment-6980796
+projects[ckeditor][patch][] = "http://drupal.org/files/ckeditor-install-lib-1898294-2.patch"
+
 projects[ctools][type] = "module"
 projects[ctools][subdir] = "contrib"
 ; http://drupal.org/node/1494860#comment-6204438
@@ -156,7 +160,6 @@ projects[og][subdir] = "contrib"
 projects[og][patch][] = "http://drupal.org/files/og-add-group-message.patch"
 
 projects[panelizer][type] = "module"
-projects[panelizer][version] = "3.x-dev"
 projects[panelizer][subdir] = "contrib"
 
 projects[panels][type] = "module"
@@ -203,9 +206,16 @@ projects[rate][patch][] = "http://drupal.org/files/widget_to_link_d7-947516-13.p
 projects[realname][type] = "module"
 projects[realname][subdir] = "contrib"
 
-projects[registration][version] = "1.x-dev"
-projects[registration][type] = "module"
 projects[registration][subdir] = "contrib"
+projects[registration][type] = "module"
+projects[registration][download][type] = "git"
+projects[registration][download][url] = "http://git.drupal.org/project/registration.git"
+projects[registration][download][branch] = "7.x-1.x"
+projects[registration][download][version] = "267f05b"
+
+; Update Entity cache support
+; http://drupal.org/node/1867564#comment-7001180
+projects[registration][patch][] = "http://drupal.org/files/entity_cache_support-1867564-4.patch"
 
 projects[rules][type] = "module"
 projects[rules][subdir] = "contrib"
