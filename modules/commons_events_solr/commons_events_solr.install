@@ -5,6 +5,18 @@
  */
 
 /**
+ * Implements hook_install().
+ */
+function commons_events_solr_install() {
+  // Set module weight to be below rich_snippets, so we can disable snippeting
+  // on the Solr events landing page.
+  db_update('system', 's')
+    ->fields(array('weight' => 5))
+    ->condition('name', 'commons_events_solr')
+    ->execute();
+}
+
+/**
  * Implements hook_enable().
  */
 function commons_events_solr_enable() {

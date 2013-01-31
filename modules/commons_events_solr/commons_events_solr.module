@@ -230,25 +230,12 @@ function commons_events_solr_panel_facet_subtype($facet_name) {
  * Implements hook_theme_registry_alter().
  */
 function commons_events_solr_theme_registry_alter(&$theme_registry) {
-  $theme_registry['search_results']['preprocess functions'] = array_flip($theme_registry['search_results']['preprocess functions']);
-  unset($theme_registry['search_results']['preprocess functions']['commons_events_solr_preprocess_search_results']);
-  $theme_registry['search_result']['preprocess functions'] = array_flip($theme_registry['search_result']['preprocess functions']);
-  unset($theme_registry['search_result']['preprocess functions']['rich_snippets_preprocess_search_result']);
-  $theme_registry['search_result']['preprocess functions'] = array_flip($theme_registry['search_result']['preprocess functions']);
-  $theme_registry['search_results']['preprocess functions']['commons_events_solr_preprocess_search_results'] = 9;
-  $theme_registry['search_results']['preprocess functions'] = array_flip($theme_registry['search_results']['preprocess functions']);
 }
 
 /**
  * Implements hook_preprocess_hook().
  */
 function commons_events_solr_preprocess_search_result(&$variables) {
-  if ($variables['result']['bundle'] != 'event') {
-    rich_snippets_preprocess_search_result($variables);
-  }
-  else {
-    $variables['directory'] = drupal_get_path('module', 'apachesolr_search');
-  }
 }
 
 /**
@@ -256,7 +243,6 @@ function commons_events_solr_preprocess_search_result(&$variables) {
  */
 function commons_events_solr_preprocess_search_results(&$variables) {
   if ($variables['search_page']['page_id'] == 'solr_events') {
-    $variables['directory'] = drupal_get_path('module', 'apachesolr_search');
     $variables['search_title'] = format_plural(count($variables['results']), '1 event', '@count events');
   }
 }
