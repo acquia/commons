@@ -161,7 +161,7 @@ projects[og][patch][] = "http://drupal.org/files/og-add-group-message.patch"
 
 projects[panelizer][type] = "module"
 projects[panelizer][subdir] = "contrib"
-projects[panelizer][version] = "7.x-3.0"
+projects[panelizer][version] = "3.0"
 
 projects[panels][type] = "module"
 projects[panels][subdir] = "contrib"
