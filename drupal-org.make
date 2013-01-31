@@ -393,10 +393,7 @@ projects[commons_topics][version] = "3.x-dev"
 
 projects[adaptivetheme][type] = "theme"
 projects[adaptivetheme][subdir] = "contrib"
-projects[adaptivetheme][download][type] = "git"
-projects[adaptivetheme][download][url] = "http://git.drupal.org/project/adaptivetheme.git"
-projects[adaptivetheme][download][branch] = "7.x-3.x"
-projects[adaptivetheme][download][revision] = "8e46acc"
+projects[adaptivetheme][version] = "3.x-dev"
 
 projects[sky][type] = "theme"
 projects[sky][subdir] = "contrib"
