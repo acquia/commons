@@ -1,15 +1,4 @@
-var get_size = function(){
-  'use strict';
-
-  var curr_width = jQuery(window).width();
-  var html_elem = jQuery('html');
-
-  if (curr_width <= 480 && !html_elem.hasClass('lt-480')) {
-    html_elem.addClass('lt-480');
-  } else if (curr_width > 480 && html_elem.hasClass('lt-480')) {
-    html_elem.removeClass('lt-480');
-  }
-};
+syze.sizes(320, 480, 935);
 
 jQuery(document).ready(function($){
 
@@ -26,12 +15,6 @@ jQuery(document).ready(function($){
 
 //    var selectwidth = $('#edit-following option:selected').textWidth();
 //    console.log(selectwidth);
-
-  get_size();
-
-  $(window).resize(function(){
-    get_size();
-  });
 
   var attach_selectBox = function(){
     $('#views-exposed-form-commons-homepage-content-panel-pane-1 select, #edit-custom-search-types, #quicktabs-commons_bw select').selectBox();
