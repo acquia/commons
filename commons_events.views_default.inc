@@ -326,13 +326,6 @@ function commons_events_views_default_views() {
   $handler->display->display_options['row_plugin'] = 'node';
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['header'] = FALSE;
-  /* Header: Global: Result summary */
-  $handler->display->display_options['header']['result']['id'] = 'result';
-  $handler->display->display_options['header']['result']['table'] = 'views';
-  $handler->display->display_options['header']['result']['field'] = 'result';
-  $handler->display->display_options['header']['result']['label'] = 'Event count';
-  $handler->display->display_options['header']['result']['empty'] = TRUE;
-  $handler->display->display_options['header']['result']['content'] = '@total events';
   $handler->display->display_options['defaults']['sorts'] = FALSE;
   /* Sort criterion: Content: Date -  start date (field_date) */
   $handler->display->display_options['sorts']['field_date_value']['id'] = 'field_date_value';
