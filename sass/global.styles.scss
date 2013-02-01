@@ -837,17 +837,13 @@ h1.node-title {
     }
   }
 
-  #edit-body, .form-item-title ,.field-name-og-group-ref, .field-type-taxonomy-term-reference-form, .metatags-form  {
+  #edit-body, .form-item-title ,.field-name-og-group-ref, .field-type-taxonomy-term-reference-form {
     width: 66%;
     // float: left;
 
     input[type="text"] {
       width: 100%;
     }
-  }
-
-  .metatags-form {
-    padding: 0;
   }
 
   #edit-additional-settings {
@@ -866,6 +862,8 @@ h1.node-title {
 
       fieldset {
         border-bottom: 1px solid $border;
+        padding-left: 0;
+        padding-right: 0;
 
         &.collapsed {
           border-bottom: none;

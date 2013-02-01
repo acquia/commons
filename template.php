@@ -142,6 +142,15 @@ function commons_origins_process_node(&$vars) {
 }
 // */
 
+/**
+* Implements hook_form_alter().
+*/
+function commons_origins_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'post_node_form') {
+    $form['additional_settings']['#type'] = 'fieldset';
+  }
+}
+
 
 /**
  * Override or insert variables into the comment templates.
