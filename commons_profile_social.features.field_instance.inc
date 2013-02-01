@@ -16,7 +16,7 @@ function commons_profile_social_field_default_field_instances() {
     'default_value' => array(
       0 => array(
         'title' => '',
-        'url' => 'https://www.facebook.com/',
+        'url' => '',
       ),
     ),
     'deleted' => '0',
@@ -67,7 +67,7 @@ function commons_profile_social_field_default_field_instances() {
     'bundle' => 'user',
     'default_value' => array(
       0 => array(
-        'url' => 'http://www.linkedin.com/',
+        'url' => '',
       ),
     ),
     'deleted' => '0',
@@ -119,7 +119,7 @@ function commons_profile_social_field_default_field_instances() {
     'default_value' => array(
       0 => array(
         'title' => '',
-        'url' => 'https://www.twitter.com/',
+        'url' => '',
       ),
     ),
     'deleted' => '0',
