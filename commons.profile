@@ -516,9 +516,11 @@ function commons_install_finished(&$install_state) {
 
   // Remove the bookmarks flag
   $flag = flag_get_flag('bookmarks');
-  $flag->delete();
-  $flag->disable();
-  _flag_clear_cache();
+  if($flag) {
+    $flag->delete();
+    $flag->disable();
+    _flag_clear_cache();
+  }
 
   drupal_flush_all_caches();
 
