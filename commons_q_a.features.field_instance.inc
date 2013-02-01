@@ -106,52 +106,6 @@ function commons_q_a_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-answer-field_radioactivity'
-  $field_instances['node-answer-field_radioactivity'] = array(
-    'bundle' => 'answer',
-    'default_value' => array(
-      0 => array(
-        'radioactivity_energy' => '8',
-      ),
-    ),
-    'deleted' => '0',
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'radioactivity',
-        'settings' => array(
-          'accuracy' => '100',
-          'energy' => 10,
-          'type' => 'none',
-        ),
-        'type' => 'radioactivity_combo_formatter',
-        'weight' => 3,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_radioactivity',
-    'label' => 'Radioactivity',
-    'required' => 0,
-    'settings' => array(
-      'profile' => 'commons_ra_node',
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'radioactivity',
-      'settings' => array(),
-      'type' => 'radioactivity_basic_widget',
-      'weight' => '3',
-    ),
-  );
-
   // Exported field_instance: 'node-answer-field_related_question'
   $field_instances['node-answer-field_related_question'] = array(
     'bundle' => 'answer',
@@ -246,52 +200,6 @@ function commons_q_a_field_default_field_instances() {
       ),
       'type' => 'text_textarea_with_summary',
       'weight' => '1',
-    ),
-  );
-
-  // Exported field_instance: 'node-question-field_radioactivity'
-  $field_instances['node-question-field_radioactivity'] = array(
-    'bundle' => 'question',
-    'default_value' => array(
-      0 => array(
-        'radioactivity_energy' => '8',
-      ),
-    ),
-    'deleted' => '0',
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'radioactivity',
-        'settings' => array(
-          'accuracy' => '100',
-          'energy' => 10,
-          'type' => 'none',
-        ),
-        'type' => 'radioactivity_combo_formatter',
-        'weight' => 3,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_radioactivity',
-    'label' => 'Radioactivity',
-    'required' => 0,
-    'settings' => array(
-      'profile' => 'commons_ra_node',
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'radioactivity',
-      'settings' => array(),
-      'type' => 'radioactivity_basic_widget',
-      'weight' => '2',
     ),
   );
 
