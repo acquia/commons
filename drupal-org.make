@@ -212,7 +212,7 @@ projects[registration][type] = "module"
 projects[registration][download][type] = "git"
 projects[registration][download][url] = "http://git.drupal.org/project/registration.git"
 projects[registration][download][branch] = "7.x-1.x"
-projects[registration][download][version] = "267f05b"
+projects[registration][download][revision] = "267f05b"
 
 ; Update Entity cache support
 ; http://drupal.org/node/1867564#comment-7001180
