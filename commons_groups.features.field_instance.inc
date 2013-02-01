@@ -27,14 +27,14 @@ function commons_groups_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 3,
+        'weight' => 1,
       ),
       'teaser' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'settings' => array(),
         'type' => 'hidden',
         'weight' => 0,
@@ -61,7 +61,7 @@ function commons_groups_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-group-group_group'
+   // Exported field_instance: 'node-group-group_group'
   $field_instances['node-group-group_group'] = array(
     'bundle' => 'group',
     'default_value' => array(
@@ -74,12 +74,9 @@ function commons_groups_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'og_ui',
-        'settings' => array(
-          'field_name' => FALSE,
-        ),
-        'type' => 'og_group_subscribe',
-        'weight' => 0,
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => '3',
       ),
       'teaser' => array(
         'label' => 'above',
@@ -153,7 +150,7 @@ function commons_groups_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-post-field_topics'
+ // Exported field_instance: 'node-group-field_topics'
   $field_instances['node-group-field_topics'] = array(
     'bundle' => 'group',
     'default_value' => NULL,
@@ -165,7 +162,7 @@ function commons_groups_field_default_field_instances() {
         'module' => 'taxonomy',
         'settings' => array(),
         'type' => 'taxonomy_term_reference_link',
-        'weight' => 4,
+        'weight' => '2',
       ),
       'teaser' => array(
         'label' => 'above',
@@ -280,47 +277,47 @@ function commons_groups_field_definition(&$field_instances, $entity_type, $bundl
     'deleted' => '0',
     'description' => '',
     'display' => array(
-     'default' => array(
-       'label' => 'above',
-       'module' => 'image',
-       'settings' => array(
-         'image_link' => '',
-         'image_style' => '',
-       ),
-       'type' => 'image',
-       'weight' => 4,
-     ),
-     'teaser' => array(
-       'label' => 'above',
-       'settings' => array(),
-       'type' => 'hidden',
-       'weight' => 0,
-     ),
+      'default' => array(
+        'label' => 'hidden',
+        'module' => 'image',
+        'settings' => array(
+          'image_link' => '',
+          'image_style' => '50x50',
+        ),
+        'type' => 'image',
+        'weight' => '0',
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
     ),
     'entity_type' => 'node',
     'field_name' => 'field_group_logo',
     'label' => 'Group Logo',
     'required' => 0,
     'settings' => array(
-     'alt_field' => 0,
-     'default_image' => 0,
-     'file_directory' => '',
-     'file_extensions' => 'png gif jpg jpeg',
-     'max_filesize' => '20mb',
-     'max_resolution' => '',
-     'min_resolution' => '30x30',
-     'title_field' => 0,
-     'user_register_form' => FALSE,
+      'alt_field' => 0,
+      'default_image' => 0,
+      'file_directory' => '',
+      'file_extensions' => 'png gif jpg jpeg',
+      'max_filesize' => '20mb',
+      'max_resolution' => '',
+      'min_resolution' => '30x30',
+      'title_field' => 0,
+      'user_register_form' => FALSE,
     ),
     'widget' => array(
-     'active' => 1,
-     'module' => 'image',
-     'settings' => array(
-       'preview_image_style' => 'thumbnail',
-       'progress_indicator' => 'throbber',
-     ),
-     'type' => 'image_image',
-     'weight' => '5',
+      'active' => 1,
+      'module' => 'image',
+      'settings' => array(
+        'preview_image_style' => 'thumbnail',
+        'progress_indicator' => 'throbber',
+      ),
+      'type' => 'image_image',
+      'weight' => '5',
     ),
   );
 }
