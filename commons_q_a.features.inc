@@ -9,6 +9,10 @@
  */
 function commons_q_a_ctools_plugin_api() {
   list($module, $api) = func_get_args();
+  if ($module == "panelizer" && $api == "panelizer") {
+    return array("version" => "1");
+  }
+  list($module, $api) = func_get_args();
   if ($module == "strongarm" && $api == "strongarm") {
     return array("version" => "1");
   }
@@ -52,7 +56,8 @@ function commons_q_a_default_message_type() {
           "safe_value" : "[commons-groups:in-groups-text]"
         }
       ]
-    }
+    },
+    "rdf_mapping" : []
   }');
   return $items;
 }
