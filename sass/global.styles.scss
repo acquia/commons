@@ -812,20 +812,77 @@ h1.node-title {
 }
 
 .page-node-add {
-  #edit-body, .form-item-title {
-    width: 66%;
-    float: left;
+  .node-form {
+    position: relative;
   }
-  .field-name-og-group-ref, .field-type-taxonomy-term-reference-form {
-    float: right;
-    width: 33%;
 
-    input {
+  fieldset {
+    border: none;
+
+    &#edit-og-group-ref-und {
+      padding: 0;
+    }
+  }
+
+  #edit-body {
+    .ckeditor_links {
+      background-color: $white;
+      padding: 5px 15px 0 15px;
+      display: block;
+    }
+
+    fieldset {
+      background-color: $white;
+      @include border-radius(0 0 6px 6px);
+    }
+  }
+
+  #edit-body, .form-item-title ,.field-name-og-group-ref, .field-type-taxonomy-term-reference-form, .metatags-form  {
+    width: 66%;
+    // float: left;
+
+    input[type="text"] {
       width: 100%;
     }
   }
 
-  .vertical-tabs {
+  .metatags-form {
+    padding: 0;
+  }
+
+  #edit-additional-settings {
+    // float: right;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 33%;
+    margin-right: 0;
+    margin-left: 0;
+    padding: 0;
+    @extend %pod;
+
+    > div {
+      @extend %pod-content;
+
+      fieldset {
+        border-bottom: 1px solid $border;
+
+        &.collapsed {
+          border-bottom: none;
+        }
+
+        fieldset {
+          border-bottom: none;
+        }
+      }
+    }
+
+    input[type="text"] {
+      width: 100%;
+    }
+  }
+
+  #edit-actions {
     clear: both;
   }
 }
