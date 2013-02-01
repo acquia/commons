@@ -20,6 +20,22 @@ jQuery(document).ready(function($){
     $('#views-exposed-form-commons-homepage-content-panel-pane-1 select, #edit-custom-search-types, #quicktabs-commons_bw select').selectBox();
   };
 
+  var set_follow_checkboxes = function(){
+    $('#quicktabs-commons_follow_ui .flag-email-group a').each(function(){
+      var a_target = $(this);
+
+      if (a_target.children('span').length === 0) {
+        a_target.wrapInner('<span></span>');
+      }
+      
+      if (a_target.hasClass('flag-action') && a_target.children('input').length === 0) {
+        a_target.prepend('<input type="checkbox">');
+      } else if (a_target.children('input').length === 0) {
+        a_target.prepend('<input type="checkbox" checked>');
+      }
+    });
+  };
+
   $('.views-exposed-widgets .form-select, .custom-search-selector').wrap('<div class="form-select-wrapper" />');
 
   $(document).delegate('.views-exposed-widgets .form-select', 'change', function() {
@@ -43,8 +59,10 @@ jQuery(document).ready(function($){
   });
 
   attach_selectBox();
+  set_follow_checkboxes();
 
   $(document).ajaxComplete(function(){
     attach_selectBox();
+    set_follow_checkboxes();
   });
 });
