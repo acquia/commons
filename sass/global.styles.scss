@@ -2159,6 +2159,16 @@ body.page-node .pane-views-panes {
     }
   }
 
+  .type-Poll {
+    font-size: 12px;
+
+    &:before {
+      content: '';
+      @include sprite_url_height_width($icons, polls);
+      margin-right: 6px;
+    }
+  }
+
   .type-Post {
     font-size: 12px;
 
