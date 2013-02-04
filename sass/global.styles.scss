@@ -3934,5 +3934,33 @@ body.front.logged-in {
   
 }
 
+// Search
+
+.page-search {
+  .region-two-33-66-first {
+    @extend %pod;
+    
+    .region-inner {
+      @extend %pod-content;
+    }
+
+    h3 {
+      color: $gray;
+      font-size: 18px;
+    }
+
+    .panel-pane {
+      border-bottom: 1px solid #eee;
+      padding-bottom: 5px;
+      margin-bottom: 14px;
+    }
+  }
+
+  .search-results {
+    @extend %pod;
+    @extend %pod-content;
+  }
+}
+
 // Import the color palettes
 @import 'palettes';
