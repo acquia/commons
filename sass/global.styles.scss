@@ -1061,11 +1061,11 @@ h1.node-title {
 
   .pane-user-field-bio {
     float: left;
-    width: 51%;
+    width: 80%;
   }
 
   .pane-user-field-facebook-url {
-    float: right;
+    float: left;
     width: 26%;
 
     a {
@@ -1081,7 +1081,7 @@ h1.node-title {
   }
 
   .pane-user-field-linkedin-url {
-    float: right;
+    float: left;
     width: 26%;
 
     a {
@@ -1097,7 +1097,7 @@ h1.node-title {
   }
 
   .pane-user-field-twitter-url {
-    float: right;
+    float: left;
     width: 26%;
 
     a {
@@ -2926,8 +2926,8 @@ body.page-node .pane-views-panes {
     color:$white;
     background:transparent;
     border:none;
-    margin:3px 0 0 22px;
-    // width:200px;
+    margin:3px 0 0 0;
+    width:145px;
 
     .node-type-group & {
       width:120px;
@@ -3814,7 +3814,7 @@ body.front.logged-in {
   #views-exposed-form-commons-homepage-content-panel-pane-1 .views-exposed-widgets {
     margin-top:-45px;
     // margin-left:-10px;
-    padding: 10px;
+    padding: 0;
 
     &.widgets-active {
       @extend %pod;
@@ -3860,6 +3860,78 @@ body.front.logged-in {
   .menu-item-195 a {
     background-image:image-url('icons/icon-events.png');
   }
+}
+
+// Events Page
+
+.page-events {
+  .pane-commons-events-commons-events-create-event-link {
+    text-align: right;
+
+    .block-inner {
+      margin: 0;
+    }
+
+    a {
+      @extend %btn-green;
+      font-size: 1.1em;
+
+      &:before {
+        @include sprite_url_height_width($icons, icon-events);
+        content: '';
+        top: 2px;
+        margin-right: 6px;
+      }
+    }
+  }
+
+  .search-results-wrapper .search-result {
+    @extend %pod;
+    
+    .search-result-wrapper {
+      @extend %pod-content;
+    }
+  }
+
+  .region-three-25-50-25-first {
+    @extend %pod;
+    margin-right: 0;
+    
+    .region-inner {
+      @extend %pod-content;
+    }
+
+    h3 {
+      color: $gray;
+      font-size: 18px;
+    }
+
+    .panel-pane {
+      border-bottom: 1px solid #eee;
+      padding-bottom: 5px;
+      margin-bottom: 14px;
+    }
+  }
+
+  .region-three-25-50-25-third {
+    .pane-views-panes {
+      @extend %pod;
+      margin-right: 0;
+
+      .block-inner {
+        @extend %pod-content;
+      }
+    }
+  }
+
+  div.search-result-wrapper h3.title {
+    text-decoration: none;
+    
+    a {
+      color: $light_blue;
+    }
+  }
+  
 }
 
 // Import the color palettes
