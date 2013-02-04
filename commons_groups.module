@@ -139,10 +139,21 @@ function commons_groups_group_contributors_count_topics($group) {
   return $output;
 }
 
+/* set commons_Groups form alter to happen after views bulk operations */
+function commons_groups_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'form_alter') {
+    $group = $implementations['commons_groups'];
+    unset($implementations['commons_groups']);
+    $implementations['commons_groups'] = $group;
+  }
+}
 /**
 * Implements hook_form_alter().
 */
 function commons_groups_form_alter(&$form, &$form_state, $form_id) {
+  if((strstr($form_id, 'views_form_commons_group_moderation_page'))) {
+    $form['select']['action::views_bulk_operations_delete_item']['#weight'] = 9;
+  }
   if ($form_id == 'group_node_form' && is_null($form['nid']['#value'])) {
     $form['actions']['submit']['#submit'][] = 'commons_groups_group_submission_message';
   }
