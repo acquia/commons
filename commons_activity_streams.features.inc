@@ -52,7 +52,8 @@ function commons_activity_streams_default_message_type() {
           "safe_value" : "[commons-groups:in-groups-text]"
         }
       ]
-    }
+    },
+    "rdf_mapping" : []
   }');
   $items['commons_activity_streams_node_created'] = entity_import('message_type', '{
     "name" : "commons_activity_streams_node_created",
@@ -80,7 +81,32 @@ function commons_activity_streams_default_message_type() {
           "safe_value" : "[commons-groups:in-groups-text]"
         }
       ]
-    }
+    },
+    "rdf_mapping" : []
+  }');
+  $items['commons_activity_streams_user_profile_updated'] = entity_import('message_type', '{
+    "name" : "commons_activity_streams_user_profile_updated",
+    "description" : "commons_activity_streams_user_profile_updated",
+    "argument_keys" : [],
+    "argument" : [],
+    "category" : "message_type",
+    "data" : { "purge" : { "override" : 0, "enabled" : 0, "quota" : "", "days" : "" } },
+    "language" : "",
+    "arguments" : null,
+    "message_text" : { "und" : [
+        {
+          "value" : "[message:user:picture]",
+          "format" : "filtered_html",
+          "safe_value" : "[message:user:picture]"
+        },
+        {
+          "value" : "\u003Ca href=\u0022[message:user:url:absolute]\u0022\u003E@{message:user:name}\u003C\/a\u003E has an updated profile",
+          "format" : "full_html",
+          "safe_value" : "\u003Ca href=\u0022[message:user:url:absolute]\u0022\u003E@{message:user:name}\u003C\/a\u003E has an updated profile"
+        }
+      ]
+    },
+    "rdf_mapping" : []
   }');
   return $items;
 }

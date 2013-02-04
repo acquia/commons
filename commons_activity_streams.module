@@ -11,6 +11,20 @@ function commons_activity_streams_form_alter(&$form, &$form_state, $form_id) {
     $form['following']['#options'][0] = t("activity I'm not following");
     $form['following']['#options'][1] = t("activity I'm following");
   }
+
+  if ($form_id == 'edit_profile_user_profile_form') {
+    // Store default values in form state storage for change detection.
+    static $profile_form_state;
+    if (!isset($profile_form_state)) {
+      // Use a copy of $form and $form_state for prepare and process.
+      $profile_form = array_merge(array(), $form);
+      $profile_form_state = array_merge(array(), $form_state);
+      drupal_prepare_form('edit_profile_user_profile_form', $profile_form, $profile_form_state);
+      drupal_process_form('edit_profile_user_profile_form', $profile_form, $profile_form_state);
+      $form_state['storage']['values'] = $profile_form_state['values'];
+    }
+    $form['#submit'][] = 'commons_activity_streams_user_profile_submit';
+  }
 }
 
 /**
@@ -68,7 +82,6 @@ function commons_activity_streams_comment_delete($comment) {
   }
 }
 
-
 /**
 * Find existing messages that match certain parameters.
 */
@@ -88,4 +101,72 @@ function commons_activity_streams_existing_messages($acting_uid, $target_ids, $t
     return $mids;
   }
   return FALSE;
+}
+
+/**
+ * Create an activity stream message when a user updates her profile.
+ */
+function commons_activity_streams_user_profile_submit($form, &$form_state) {
+  global $user;
+
+  // Fields to ignore in $form_state['values'] when detecting changes.
+  $remove_keys = array(
+    'uid',
+    'name',
+    'pass',
+    'current_pass_required_values',
+    'current_pass',
+    'status',
+    'roles',
+    'notify',
+    'signature',
+    'picture_delete',
+    'message_subscribe_email',
+    'og_user_node',
+    'cancel',
+    'metatags',
+    'timezone',
+    'signature_format',
+    'form_token',
+    'form_id',
+    'form_build_id',
+    'picture_upload',
+    'submit'
+  );
+  $profile_values = array_diff_key($form_state['values'], array_flip($remove_keys));
+  ksort($profile_values);
+  $profile_data = serialize($profile_values);
+
+  $stored_profile_values = array_diff_key($form_state['storage']['values'], array_flip($remove_keys));
+  ksort($stored_profile_values);
+  $stored_profile_data = serialize($stored_profile_values);
+
+  // Do not generate a message if
+  //  - the user did not submit their own form
+  //  - no changes were detected
+  //  - a profile update message created within the last 15 minutes
+  $time_ago = time() - 900;
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'message')
+    ->propertyCondition('uid', $form_state['user']->uid)
+    ->propertyCondition('type', 'commons_activity_streams_user_profile_updated')
+    ->propertyCondition('timestamp', $time_ago, '>')
+    ->count();
+  $count = $query->execute();
+
+  if ($user->uid != $form_state['user']->uid ||
+    $profile_data == $stored_profile_data ||
+    $count > 0) {
+    return;
+  }
+
+  $account = $form_state['user'];
+  // Allow other modules to change the message type used for this event.
+  $hook = 'user_profile_update';
+  $message_type = 'commons_activity_streams_user_profile_updated';
+  drupal_alter('commons_activity_streams_message_selection', $message_type, $hook, $account);
+  $message = message_create($message_type, array('uid' => $account->uid, 'timestamp' => $_SERVER['REQUEST_TIME']));
+  // Save reference to the node in the node reference field, and the
+  $wrapper = entity_metadata_wrapper('message', $message);
+  $wrapper->save();
 }
