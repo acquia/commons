@@ -626,6 +626,24 @@ h1.node-title {
   }
 }
 
+.view-activity-group, .view-commons-activity-streams-activity, .view-commons-activity-streams-user-activity {
+  .views-row {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+
+    &.views-row-last {
+      border-bottom: none;
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+
+    h2 {
+      display: none;
+    }
+  }
+}
+
 .view-commons-bw-all, .view-commons-bw-posts, .view-commons-bw-q-a, .view-commons-bw-wikis, .view-commons-bw-polls, #comments {
   .content, .views-field-timestamp {
     margin-left: 70px;
