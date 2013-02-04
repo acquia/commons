@@ -20,8 +20,24 @@ function commons_like_strongarm() {
       'tag' => 'commons_like',
       'title' => 'Like',
       'node_types' => array(
+        0 => 'event',
+        1 => 'group',
+        2 => 'poll',
+        3 => 'post',
+        4 => 'question',
+        5 => 'answer',
+        6 => 'wiki',
+        7 => 'page',
       ),
       'comment_types' => array(
+        0 => 'event',
+        1 => 'group',
+        2 => 'poll',
+        3 => 'post',
+        4 => 'question',
+        5 => 'answer',
+        6 => 'wiki',
+        7 => 'page',
       ),
       'options' => array(
         0 => array(
