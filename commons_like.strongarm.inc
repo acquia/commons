@@ -49,7 +49,7 @@ function commons_like_strongarm() {
       'delete_vote_on_second_click' => '1',
       'value_type' => 'points',
       'theme' => 'rate_template_commons_like',
-      'css' => 'sites/all/modules/commons_like/commons-like.css',
+      'css' => 'profiles/commons/modules/contrib/commons_like/commons-like.css',
       'translate' => TRUE,
       'use_source_translation' => TRUE,
     ),
