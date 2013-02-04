@@ -16,7 +16,7 @@ function commons_follow_user_views_api() {
  */
 function commons_follow_user_flag_default_flags() {
   $flags = array();
-  // Exported flag: "People you follow".
+  // Exported flag: "People".
   $flags['commons_follow_user'] = array(
     'content_type' => 'user',
     'title' => 'People',
@@ -77,10 +77,10 @@ function commons_follow_user_flag_default_flags() {
     'show_on_profile' => 0,
     'access_uid' => '',
     'module' => 'commons_follow_user',
-    'api_version' => 2,
     'locked' => array(
       0 => 'name',
     ),
+    'api_version' => 2,
   );
   return $flags;
 
@@ -112,7 +112,8 @@ function commons_follow_user_default_message_type() {
           "safe_value" : "\\u003Ca href=\\u0022[message:user:url:absolute]\\u0022\\u003E@{message:user:name}\\u003C\\/a\\u003E is now following \\u003Ca href=\\u0022[message:field-target-users:0:url]\\u0022\\u003E[message:field-target-users:0:name]\\u003C\\/a\\u003E"
         }
       ]
-    }
+    },
+    "rdf_mapping" : []
   }');
   return $items;
 }
