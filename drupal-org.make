@@ -159,6 +159,10 @@ projects[og][subdir] = "contrib"
 ; http://drupal.org/node/1842830
 projects[og][patch][] = "http://drupal.org/files/og-add-group-message.patch"
 
+; og_group_ref field should respect og_user_access()
+; http://drupal.org/node/1902086#comment-7026516
+projects[og][patch][] = "http://drupal.org/files/1902086-og-ref-respect-og-user-access-3.patch"
+
 projects[panelizer][type] = "module"
 projects[panelizer][subdir] = "contrib"
 projects[panelizer][version] = "3.0"
