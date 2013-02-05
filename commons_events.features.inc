@@ -37,7 +37,7 @@ function commons_events_node_info() {
     'event' => array(
       'name' => t('Event'),
       'base' => 'node_content',
-      'description' => t('Used to list an Event in specified Groups.'),
+      'description' => t('An item that is used to provide details about an event. Events can be connected to multiple groups.'),
       'has_title' => '1',
       'title_label' => t('Event title'),
       'help' => '',
