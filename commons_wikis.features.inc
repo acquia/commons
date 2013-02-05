@@ -56,7 +56,8 @@ function commons_wikis_default_message_type() {
           "safe_value" : "[commons-groups:in-groups-text]"
         }
       ]
-    }
+    },
+    "rdf_mapping" : []
   }');
   return $items;
 }
