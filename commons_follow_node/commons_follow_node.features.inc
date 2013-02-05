@@ -16,18 +16,12 @@ function commons_follow_node_views_api() {
  */
 function commons_follow_node_flag_default_flags() {
   $flags = array();
-  // Exported flag: "Other content".
+  // Exported flag: "Other content you follow".
   $flags['commons_follow_node'] = array(
     'content_type' => 'node',
     'title' => 'Other content',
     'global' => '0',
     'types' => array(
-      0 => 'event',
-      1 => 'poll',
-      2 => 'post',
-      3 => 'question',
-      4 => 'answer',
-      5 => 'wiki',
     ),
     'flag_short' => 'Follow',
     'flag_long' => '',
@@ -64,12 +58,6 @@ function commons_follow_node_flag_default_flags() {
     'title' => 'Email content',
     'global' => '0',
     'types' => array(
-      0 => 'event',
-      1 => 'poll',
-      2 => 'post',
-      3 => 'question',
-      4 => 'answer',
-      5 => 'wiki',
     ),
     'flag_short' => 'Send Email',
     'flag_long' => '',
@@ -95,10 +83,10 @@ function commons_follow_node_flag_default_flags() {
     'show_contextual_link' => 0,
     'i18n' => 0,
     'module' => 'commons_follow_node',
+    'api_version' => 2,
     'locked' => array(
       0 => 'name',
     ),
-    'api_version' => 2,
   );
   return $flags;
 
