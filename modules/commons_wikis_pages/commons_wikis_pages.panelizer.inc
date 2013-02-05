@@ -28,6 +28,7 @@ function commons_wikis_pages_panelizer_defaults() {
   $panelizer->css_class = '';
   $panelizer->title_element = 'H2';
   $panelizer->link_to_entity = TRUE;
+  $panelizer->extra = '';
   $display = new panels_display();
   $display->layout = 'two_66_33';
   $display->layout_settings = array();
