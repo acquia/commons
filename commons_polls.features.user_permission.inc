@@ -14,6 +14,7 @@ function commons_polls_user_default_permissions() {
   $permissions['create poll content'] = array(
     'name' => 'create poll content',
     'roles' => array(
+      'administrator' => 'administrator',
       'authenticated user' => 'authenticated user',
     ),
     'module' => 'node',
@@ -32,6 +33,7 @@ function commons_polls_user_default_permissions() {
   $permissions['delete own poll content'] = array(
     'name' => 'delete own poll content',
     'roles' => array(
+      'administrator' => 'administrator',
       'authenticated user' => 'authenticated user',
     ),
     'module' => 'node',
@@ -50,6 +52,7 @@ function commons_polls_user_default_permissions() {
   $permissions['edit own poll content'] = array(
     'name' => 'edit own poll content',
     'roles' => array(
+      'administrator' => 'administrator',
       'authenticated user' => 'authenticated user',
     ),
     'module' => 'node',
