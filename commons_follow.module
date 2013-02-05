@@ -32,6 +32,22 @@ function commons_follow_features_pipe_alter(&$pipe, $data, $export) {
   }
 }
 
+
+/**
+ * Implements hook_flag_export_alter().
+ */
+function commons_follow_flag_export_alter(&$flag) {
+  // We export $flag->types as an array in code, then dynamically change
+  // the values in commons_follow_flag_alter(). Prevent that from being
+  // overwritten with the dynamic values.
+  if (in_array($flag['name'], array('commons_follow_node', 'email_node'))) {
+    $flag['types'] = array();
+  }
+}
+
+/**
+ * Implements hook_flag_alter().
+ */
 function commons_follow_flag_alter(&$flag) {
   $commons_entity_integrations = module_invoke_all('commons_entity_integration');
   // Find Commons node types that should have follow integration and alter
