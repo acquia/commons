@@ -2153,6 +2153,77 @@ body.page-node .pane-views-panes {
     right: 0;
     top: 5px;
   }
+
+  &.page-node {
+    .pane-node-content {
+      > .block-inner {
+        padding: 0;
+        margin: 0;
+      }
+
+      .node.node-promoted {
+        padding: 25px 10px 20px 10px;
+      }
+
+      footer.submitted {
+        display: none;
+      }
+
+      figure {
+        float:left;
+        margin:3px 10px 5px 0;
+        background:$white;
+        padding:4px;
+        @include border-radius(3px);
+        @include box-shadow($light_gray 1px 1px 4px);
+        position:relative;
+        display:block;
+        line-height:0;
+      }
+
+      .field-name-field-topics {
+        float: right;
+      }
+
+      nav {
+        float: left;
+        width: 50%;
+        margin-top: 20px;
+
+        ul {
+          float: left;
+        }
+
+        li {
+          float: left;
+
+          &.flag-inappropriate_node {
+            float: none;
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+          }
+
+          .flag-commons-follow-group a {
+            font-size: 0;
+            padding: 5px 27px;
+
+            &:before {
+              top: 0;
+            }
+          }
+        }
+      }
+    }
+
+    .node-content {
+      margin-left: 0;
+
+      .user-picture {
+        display: none;
+      }
+    }
+  }
 }
 
 .view-commons-radioactivity-groups-most-active, .view-commons-groups-recent-content, .view-commons-radioactivity-groups-active-in-group {
