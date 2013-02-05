@@ -159,6 +159,10 @@ projects[og][subdir] = "contrib"
 ; http://drupal.org/node/1842830
 projects[og][patch][] = "http://drupal.org/files/og-add-group-message.patch"
 
+; og_group_ref field should respect og_user_access()
+; http://drupal.org/node/1902086#comment-7026516
+projects[og][patch][] = "http://drupal.org/files/1902086-og-ref-respect-og-user-access-3.patch"
+
 projects[panelizer][type] = "module"
 projects[panelizer][subdir] = "contrib"
 projects[panelizer][version] = "3.0"
@@ -202,7 +206,7 @@ projects[rate][type] = "module"
 projects[rate][subdir] = "contrib"
 ; Add widget to node/comment $links
 ; http://drupal.org/node/947516#comment-6979780
-projects[rate][patch][] = "http://drupal.org/files/widget_to_link_d7-947516-13.patch"
+projects[rate][patch][] = "http://drupal.org/files/947516-rate-node-links-15.patch"
 
 projects[realname][type] = "module"
 projects[realname][subdir] = "contrib"
@@ -212,7 +216,7 @@ projects[registration][type] = "module"
 projects[registration][download][type] = "git"
 projects[registration][download][url] = "http://git.drupal.org/project/registration.git"
 projects[registration][download][branch] = "7.x-1.x"
-projects[registration][download][version] = "267f05b"
+projects[registration][download][revision] = "267f05b"
 
 ; Update Entity cache support
 ; http://drupal.org/node/1867564#comment-7001180

@@ -110,6 +110,12 @@ function commons_install_tasks() {
       'type' => '',
       'run' => $acquia_connector ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
     ),
+    'commons_installer_palette' => array(
+      'display_name' => st('Chose site color palette'),
+      'display' => TRUE,
+      'type' => 'form',
+      'function' => 'commons_installer_palette',
+    ),
     'commons_anonymous_message_homepage' => array(
       'display_name' => st('Enter Homepage welcome text'),
       'display' => TRUE,
@@ -135,6 +141,25 @@ function commons_install_tasks() {
   );
 }
 
+/**
+ * Allow users to select from a predefined list of color palettes during
+ * the commons installation.
+ */
+function commons_installer_palette() {
+  $form = array();
+  require_once('profiles/commons/themes/contrib/commons_origins/commons_origins.palettes.inc');
+
+  commons_origins_palettes_form($form);
+  $form['commons_origins_palette_fieldset']['#collapsible'] = FALSE;
+  $form['commons_origins_palette_fieldset']['#collapsed'] = FALSE;
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => st('Save color palette'),
+  );
+  drupal_add_css('profiles/commons/commons_installer.css');
+
+  return $form;
+}
 /**
  * Let the admin user create the first group as part of the installation process
  */
