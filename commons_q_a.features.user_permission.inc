@@ -14,6 +14,7 @@ function commons_q_a_user_default_permissions() {
   $permissions['create answer content'] = array(
     'name' => 'create answer content',
     'roles' => array(
+      'administrator' => 'administrator',
       'authenticated user' => 'authenticated user',
     ),
     'module' => 'node',
@@ -23,6 +24,7 @@ function commons_q_a_user_default_permissions() {
   $permissions['create question content'] = array(
     'name' => 'create question content',
     'roles' => array(
+      'administrator' => 'administrator',
       'authenticated user' => 'authenticated user',
     ),
     'module' => 'node',
@@ -50,6 +52,7 @@ function commons_q_a_user_default_permissions() {
   $permissions['delete own answer content'] = array(
     'name' => 'delete own answer content',
     'roles' => array(
+      'administrator' => 'administrator',
       'authenticated user' => 'authenticated user',
     ),
     'module' => 'node',
@@ -59,6 +62,7 @@ function commons_q_a_user_default_permissions() {
   $permissions['delete own question content'] = array(
     'name' => 'delete own question content',
     'roles' => array(
+      'administrator' => 'administrator',
       'authenticated user' => 'authenticated user',
     ),
     'module' => 'node',
@@ -86,6 +90,7 @@ function commons_q_a_user_default_permissions() {
   $permissions['edit own answer content'] = array(
     'name' => 'edit own answer content',
     'roles' => array(
+      'administrator' => 'administrator',
       'authenticated user' => 'authenticated user',
     ),
     'module' => 'node',
@@ -95,6 +100,7 @@ function commons_q_a_user_default_permissions() {
   $permissions['edit own question content'] = array(
     'name' => 'edit own question content',
     'roles' => array(
+      'administrator' => 'administrator',
       'authenticated user' => 'authenticated user',
     ),
     'module' => 'node',
