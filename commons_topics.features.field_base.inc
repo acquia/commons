@@ -46,4 +46,3 @@ function commons_topics_field_default_field_bases() {
 
   return $field_bases;
 }
-
