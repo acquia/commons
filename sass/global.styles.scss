@@ -25,7 +25,7 @@
  * See global.base also which includes normalize.css and some additional
  * helper classes and base styles.
  */
-
+  
 /* =============================================================================
  *   Base
  * ========================================================================== */
@@ -580,7 +580,7 @@ li.sharethis {
     position: absolute;
     left: 0;
     bottom: 100%;
-    display: none;
+    // display: none;
   }
 
   .sharethis-wrapper {
@@ -590,6 +590,28 @@ li.sharethis {
     @include border-radius(6px);
     padding: 10px 8px 3px 8px;
     margin-bottom: 10px;
+    position: relative;
+
+    &:before, &:after {
+      content: '';
+      width: 0;
+      height: 0;
+      border-style: solid;
+      position: absolute;
+      top: 100%;
+    }
+
+    &:before {
+      border-width: 6px 6px 0 6px;
+      border-color: $green transparent transparent transparent;
+      left: 10px;
+    }
+
+    &:after {
+      border-width: 5.5px 5.5px 0 5.5px;
+      border-color: $white transparent transparent transparent;
+      left: 11px;
+    }
   }
 }
 
@@ -3253,8 +3275,8 @@ body.page-node .pane-views-panes {
 
 body.page-node {
   h2 {
-    font-size: 26px;
-    line-height: 38px;
+    font-size: 54px;
+    line-height: 54px;
     font-weight: normal;
   }
 }
