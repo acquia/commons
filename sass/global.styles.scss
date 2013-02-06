@@ -554,6 +554,43 @@ ul.primary.tabs li a {
   @include border-radius(3px 3px 0px 0px);
 }
 
+li.sharethis {
+  @extend %btn-gray;
+  position: relative;
+  padding: 0 24px;
+  height: 20px;
+  margin: 0 7px;
+  cursor: pointer;
+
+  &:hover .sharethis-buttons {
+    display: block;
+  }
+
+  ul.inline & {
+    padding: 0 24px;
+  }
+
+  &:before {
+    content: '';
+    @include sprite_url_height_width($icons, share);
+  }
+
+  .sharethis-buttons {
+    position: absolute;
+    left: 0;
+    bottom: 100%;
+    display: none;
+  }
+
+  .sharethis-wrapper {
+    white-space: nowrap;
+    background: $white;
+    border: 1px solid $green;
+    @include border-radius(6px);
+    padding: 10px 8px 3px 8px;
+    margin-bottom: 10px;
+  }
+}
 
 /*
  * Search results are an ordered list so reset the margin
@@ -751,6 +788,38 @@ h1.node-title {
       content: '';
       @include sprite_url_height_width($icons, groups);
       top: -1px;
+    }
+  }
+
+  .node nav {
+    // float: left;
+    // width: 50%;
+    clear: both;
+    margin-top: 20px;
+
+    ul {
+      float: left;
+    }
+
+    li {
+      float: left;
+
+      &.flag-inappropriate_node {
+        float: none;
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+      }
+
+      .flag-commons-follow-group a {
+        font-size: 0;
+        padding: 3px 27px;
+        height: 14px;
+
+        &:before {
+          top: 0;
+        }
+      }
     }
   }
 
@@ -2182,38 +2251,10 @@ body.page-node .pane-views-panes {
       }
 
       .field-name-field-topics {
-        float: right;
+        // float: right;
       }
 
-      nav {
-        float: left;
-        width: 50%;
-        margin-top: 20px;
 
-        ul {
-          float: left;
-        }
-
-        li {
-          float: left;
-
-          &.flag-inappropriate_node {
-            float: none;
-            position: absolute;
-            bottom: 5px;
-            right: 5px;
-          }
-
-          .flag-commons-follow-group a {
-            font-size: 0;
-            padding: 5px 27px;
-
-            &:before {
-              top: 0;
-            }
-          }
-        }
-      }
     }
 
     .node-content {
