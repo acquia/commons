@@ -179,11 +179,14 @@ function commons_events_solr_default_page_manager_handlers() {
     $pane = new stdClass();
     $pane->pid = 'new-7';
     $pane->panel = 'three_25_50_25_third';
-    $pane->type = 'views_panes';
-    $pane->subtype = 'commons_events_user_upcoming_events-panel_pane_1';
+    $pane->type = 'block';
+    $pane->subtype = 'commons_events-commons_events_anonymous_login';
     $pane->shown = TRUE;
     $pane->access = array();
-    $pane->configuration = array();
+    $pane->configuration = array(
+      'override_title' => 0,
+      'override_title_text' => '',
+    );
     $pane->cache = array();
     $pane->style = array(
       'settings' => NULL,
@@ -198,7 +201,7 @@ function commons_events_solr_default_page_manager_handlers() {
     $pane->pid = 'new-8';
     $pane->panel = 'three_25_50_25_third';
     $pane->type = 'views_panes';
-    $pane->subtype = 'commons_events_user_upcoming_events-panel_pane_2';
+    $pane->subtype = 'commons_events_user_upcoming_events-panel_pane_1';
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array();
@@ -216,7 +219,7 @@ function commons_events_solr_default_page_manager_handlers() {
     $pane->pid = 'new-9';
     $pane->panel = 'three_25_50_25_third';
     $pane->type = 'views_panes';
-    $pane->subtype = 'commons_events_user_upcoming_events-panel_pane_3';
+    $pane->subtype = 'commons_events_user_upcoming_events-panel_pane_2';
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array();
@@ -230,6 +233,24 @@ function commons_events_solr_default_page_manager_handlers() {
     $pane->locks = array();
     $display->content['new-9'] = $pane;
     $display->panels['three_25_50_25_third'][3] = 'new-9';
+    $pane = new stdClass();
+    $pane->pid = 'new-10';
+    $pane->panel = 'three_25_50_25_third';
+    $pane->type = 'views_panes';
+    $pane->subtype = 'commons_events_user_upcoming_events-panel_pane_3';
+    $pane->shown = TRUE;
+    $pane->access = array();
+    $pane->configuration = array();
+    $pane->cache = array();
+    $pane->style = array(
+      'settings' => NULL,
+    );
+    $pane->css = array();
+    $pane->extras = array();
+    $pane->position = 4;
+    $pane->locks = array();
+    $display->content['new-10'] = $pane;
+    $display->panels['three_25_50_25_third'][4] = 'new-10';
   $display->hide_title = PANELS_TITLE_NONE;
   $display->title_pane = 'new-5';
   $handler->conf['display'] = $display;

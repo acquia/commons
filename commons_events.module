@@ -330,6 +330,10 @@ function commons_events_block_info() {
       'info' => t('"Create an event" call to action'),
       'cache' => DRUPAL_CACHE_GLOBAL,
     ),
+    'commons_events_anonymous_login' => array(
+      'info' => t('"Login to create an event" call to action'),
+      'cache' => DRUPAL_CACHE_GLOBAL,
+    ),
   );
   return $blocks;
 }
@@ -338,11 +342,19 @@ function commons_events_block_info() {
  * Implements hook_block_view().
  */
 function commons_events_block_view($delta = '') {
+  global $user;
   if ($delta == 'commons_events_create_event_link'
     && node_access('create', 'event')) {
     return array(
       'subject' => NULL,
       'content' => l(t('List an event'), 'node/add/event'),
+    );
+  }
+  else if ($delta == 'commons_events_anonymous_login'
+    && empty($user->uid)) {
+    return array(
+      'subject' => NULL,
+      'content' => t('You must !login first to list an event.', array('!login' => l(t('log in'), 'user'))),
     );
   }
 }
