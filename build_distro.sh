@@ -1,9 +1,9 @@
 #!/bin/bash
+repos=(commons_activity_streams commons_featured commons_notices commons_profile_social commons_user_profile_pages commons_body commons_follow commons_notify commons_q_a commons_utility_links commons_bw commons_groups commons_pages commons_radioactivity commons_wikis commons_content_moderation commons_like commons_polls commons_search commons_wysiwyg commons_documents commons_location commons_posts commons_site_homepage commons_events commons_misc commons_profile_base commons_topics)
+
 pull_git() {
     cd $BUILD_PATH/commons_profile
     git pull origin 7.x-3.x
-
-    repos=(commons_activity_streams commons_featured commons_notices commons_profile_social commons_user_profile_pages commons_body commons_follow commons_notify commons_q_a commons_utility_links commons_bw commons_groups commons_pages commons_radioactivity commons_wikis commons_content_moderation commons_like commons_polls commons_search commons_wysiwyg commons_documents commons_location commons_posts commons_site_homepage commons_events commons_misc commons_profile_base commons_topics)
 
     cd $BUILD_PATH/repos
     for i in "${repos[@]}"; do
@@ -12,6 +12,21 @@ pull_git() {
       git pull origin 7.x-3.x
       cd ..
     done
+}
+
+release_notes() {
+  OUTPUT="Release Notes for $RELEASE"
+  cd $BUILD_PATH/commons_profile
+  OUTPUT="$OUTPUT `drush rn --date $FROM_DATE $TO_DATE`"
+
+  cd $BUILD_PATH/repos
+  for i in "${repos[@]}"; do
+    echo $i
+    cd $i
+    OUTPUT="$OUTPUT `drush rn --date $FROM_DATE $TO_DATE`"
+    cd ..
+  done
+  echo $OUTPUT >> $BUILD_PATH/rn.txt
 }
 
 build_distro() {
@@ -57,4 +72,15 @@ case $1 in
       exit 1
     fi
     build_distro;;
+  rn)
+    if [[ -n $2 ]] && [[ -n $3 ]] && [[ -n $4 ]] && [[ -n $5 ]]; then
+      BUILD_PATH=$2
+      RELEASE=$3
+      FROM_DATE=$4
+      TO_DATE=$5
+    else
+      echo "Usage: build_distro.sh rn [build_path] [release] [from_date] [to_date]"
+      exit 1
+    fi
+    release_notes $BUILD_PATH $RELEASE $FROM_DATE $TO_DATE;;
 esac
