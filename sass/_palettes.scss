@@ -36,7 +36,7 @@
       }
     }
 
-    a {
+    a, .commons-bw-create-all-widget-types li a {
       color: $palette_color_light;
     }
 
@@ -67,6 +67,14 @@
       background-color: darken($palette_color_light, 12%); // Old browsers
       @include filter-gradient(darken($palette_color_light, 12%), darken($palette_color_light, 6%), vertical); // IE6-9
       @include background-image(linear-gradient(top,  darken($palette_color_light, 12%) 0%,darken($palette_color_light, 6%)100%));
+    }
+
+    .commons-bw-create-all-widget-types, li.sharethis .sharethis-wrapper {
+      border-color: $palette_color_light;
+    }
+
+    li.sharethis .sharethis-wrapper:before {
+      border-color: $palette_color_light transparent transparent transparent;
     }
 
     %divider-left {
@@ -118,7 +126,7 @@
     }
   }
 
-  a {
+  a, .commons-bw-create-all-widget-types li a {
     color: $palette_gray_light_gray_blue_btn_bottom;
   }
 
@@ -138,7 +146,7 @@
     color: $palette_black_white_red_btn_bottom;
   }
 
-  a {
+  a, .commons-bw-create-all-widget-types li a {
     color: $palette_black_white_red_btn_bottom;
   }
 
@@ -148,7 +156,7 @@
 }
 
 .palette-brown-burnt-orange {
-  a {
+  a, .commons-bw-create-all-widget-types li a {
     color: $palette_brown_burnt_orange_btn_bottom;
   }
 

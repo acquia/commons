@@ -569,6 +569,7 @@ li.sharethis {
   ul.inline & {
     padding: 0 24px;
     margin: 0 7px;
+    display: inline-block;
   }
 
   &:before {
@@ -2239,13 +2240,6 @@ body.page-node .pane-views-panes {
     position: relative;
   }
 
-  .comment-add a {
-    @extend %btn-green;
-    position: absolute;
-    right: 0;
-    top: 5px;
-  }
-
   &.page-node {
     .pane-node-content {
       > .block-inner {
@@ -2789,6 +2783,14 @@ body.page-node .pane-views-panes {
       padding: 10px 10px 10px 27px;
     }
 
+    .commons-polls-create:before {
+      @include sprite_url_height_width($icons, polls);
+      content: '';
+      position: absolute;
+      left: 10px;
+      top: 13px;
+    }
+
     .commons-posts-create:before {
       @include sprite_url_height_width($icons, posts);
       content: '';
@@ -2855,6 +2857,13 @@ body.page-node .pane-views-panes {
         padding: 0 7px;
       }
     }
+  }
+
+  .comment-add a {
+    @extend %btn-green;
+    position: absolute;
+    right: 0;
+    top: 5px;
   }
 
   article {
@@ -3564,14 +3573,8 @@ form.commons-events-form-float {
   border:none;
   border-radius:0;
   input, input:hover {
-    margin:0;
-    background-color: #6eca5d; // Old browsers
-    @include filter-gradient(#6eca5d, #45bb2f, vertical); // IE6-9
-    @include background-image(linear-gradient(top,  #6eca5d 0%,#45bb2f 22%,#45bb2f 100%));
-    border: 1px solid #249125;
-    color: #FFFFFF;
-    @include text-shadow(#000 1px 1px 1px);
-    font-size:1em;
+    @extend %btn-green;
+    padding: 3px 10px;
   }
 }
 
@@ -4003,25 +4006,6 @@ body.front.logged-in {
 // Events Page
 
 .page-events {
-  .pane-commons-events-commons-events-create-event-link {
-    text-align: right;
-
-    .block-inner {
-      margin: 0;
-    }
-
-    a {
-      @extend %btn-green;
-      font-size: 1.1em;
-
-      &:before {
-        @include sprite_url_height_width($icons, icon-events);
-        content: '';
-        top: 2px;
-        margin-right: 6px;
-      }
-    }
-  }
 
   .search-results-wrapper .search-result {
     @extend %pod;
@@ -4070,6 +4054,26 @@ body.front.logged-in {
     }
   }
   
+}
+
+.pane-commons-events-commons-events-create-event-link {
+  text-align: right;
+
+  .block-inner {
+    margin: 0;
+  }
+
+  a {
+    @extend %btn-green;
+    font-size: 1.1em;
+
+    &:before {
+      @include sprite_url_height_width($icons, icon-events);
+      content: '';
+      top: 2px;
+      margin-right: 6px;
+    }
+  }
 }
 
 // Search
