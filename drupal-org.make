@@ -191,10 +191,6 @@ projects[radioactivity][type] = "module"
 projects[radioactivity][subdir] = "contrib"
 projects[radioactivity][version] = "2.x-dev"
 
-; Notice error for accessing an undefined array element
-; http://drupal.org/node/1816252#comment-6617208
-projects[radioactivity][patch][] = "http://drupal.org/files/undefined_array-1816252-1.patch"
-
 ; Radioactivity not compatible with Memcache module
 ; http://drupal.org/node/1860216
 projects[radioactivity][patch][] = "http://drupal.org/files/radioactivity-memcache.patch"
