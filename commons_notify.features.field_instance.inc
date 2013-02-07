@@ -394,7 +394,7 @@ function commons_notify_field_default_field_instances() {
         'rows' => '5',
       ),
       'type' => 'text_textarea',
-      'weight' => '4',
+      'weight' => '2',
     ),
   );
 
@@ -440,7 +440,62 @@ function commons_notify_field_default_field_instances() {
         'size' => '60',
       ),
       'type' => 'text_textfield',
-      'weight' => '6',
+      'weight' => '3',
+    ),
+  );
+
+  // Exported field_instance: 'message-commons_notify_node_created_no_groups-field_target_comments'
+  $field_instances['message-commons_notify_node_created_no_groups-field_target_comments'] = array(
+    'bundle' => 'commons_notify_node_created_no_groups',
+    'default_value' => NULL,
+    'default_value_function' => '',
+    'deleted' => '0',
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 3,
+      ),
+      'message_notify_email_body' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'message_notify_email_subject' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'message',
+    'field_name' => 'field_target_comments',
+    'label' => 'Target comment',
+    'required' => 0,
+    'settings' => array(
+      'behaviors' => array(
+        'prepopulate' => array(
+          'status' => 0,
+        ),
+      ),
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'entityreference',
+      'settings' => array(
+        'match_operator' => 'CONTAINS',
+        'path' => '',
+        'size' => '60',
+      ),
+      'type' => 'entityreference_autocomplete',
+      'weight' => '1',
     ),
   );
 
@@ -495,7 +550,7 @@ function commons_notify_field_default_field_instances() {
         'size' => '60',
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => '2',
+      'weight' => '0',
     ),
   );
 
