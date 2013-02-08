@@ -46,9 +46,9 @@ function commons_q_a_default_message_type() {
           "safe_value" : "[message:user:picture]"
         },
         {
-          "value" : "\\u003Ca href=\\u0022[message:user:url:absolute]\\u0022 class=\\u0022aloha-link-text\\u0022\\u003E@{message:user:name}\\u003C\\/a\\u003E\\u0026nbsp;asked the question\\u0026nbsp;\\u003Ca href=\\u0022[message:field-target-nodes:0:url]\\u0022\\u003E[message:field-target-nodes:0:title]\\u003C\\/a\\u003E",
+          "value" : "\\u003Ca href=\\u0022[message:user:url:absolute]\\u0022 class=\\u0022aloha-link-text\\u0022\\u003E[message:user:name]\\u003C\\/a\\u003E\\u0026nbsp;asked the question\\u0026nbsp;\\u003Ca href=\\u0022[message:field-target-nodes:0:url]\\u0022\\u003E[message:field-target-nodes:0:title]\\u003C\\/a\\u003E",
           "format" : "full_html",
-          "safe_value" : "\\u003Ca href=\\u0022[message:user:url:absolute]\\u0022 class=\\u0022aloha-link-text\\u0022\\u003E@{message:user:name}\\u003C\\/a\\u003E\\u0026nbsp;asked the question\\u0026nbsp;\\u003Ca href=\\u0022[message:field-target-nodes:0:url]\\u0022\\u003E[message:field-target-nodes:0:title]\\u003C\\/a\\u003E"
+          "safe_value" : "\\u003Ca href=\\u0022[message:user:url:absolute]\\u0022 class=\\u0022aloha-link-text\\u0022\\u003E[message:user:name]\\u003C\\/a\\u003E\\u0026nbsp;asked the question\\u0026nbsp;\\u003Ca href=\\u0022[message:field-target-nodes:0:url]\\u0022\\u003E[message:field-target-nodes:0:title]\\u003C\\/a\\u003E"
         },
         {
           "value" : "[commons-groups:in-groups-text]",
