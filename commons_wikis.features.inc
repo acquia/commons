@@ -32,7 +32,7 @@ function commons_wikis_default_message_type() {
   $items = array();
   $items['commons_wikis_wiki_updated'] = entity_import('message_type', '{
     "name" : "commons_wikis_wiki_updated",
-    "description" : "commons_wikis_wiki_updated",
+    "description" : "Message when a wiki page has been updated.",
     "argument_keys" : [],
     "argument" : [],
     "category" : "message_type",
@@ -42,7 +42,7 @@ function commons_wikis_default_message_type() {
     "message_text" : { "und" : [
         {
           "value" : "[message:user:picture]",
-          "format" : "filtered_html",
+          "format" : "full_html",
           "safe_value" : "[message:user:picture]"
         },
         {
