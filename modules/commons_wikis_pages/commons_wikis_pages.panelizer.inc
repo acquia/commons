@@ -20,7 +20,7 @@ function commons_wikis_pages_panelizer_defaults() {
   $panelizer->no_blocks = FALSE;
   $panelizer->css_id = '';
   $panelizer->css = '';
-  $panelizer->pipeline = 'standard';
+  $panelizer->pipeline = 'ipe';
   $panelizer->contexts = array();
   $panelizer->relationships = array();
   $panelizer->access = '';
@@ -43,7 +43,7 @@ function commons_wikis_pages_panelizer_defaults() {
     ),
   );
   $display->cache = array();
-  $display->title = '';
+  $display->title = '%node:title';
   $display->content = array();
   $display->panels = array();
     $pane = new stdClass();
@@ -56,7 +56,7 @@ function commons_wikis_pages_panelizer_defaults() {
     $pane->configuration = array(
       'links' => 1,
       'no_extras' => 0,
-      'override_title' => 1,
+      'override_title' => 0,
       'override_title_text' => '',
       'identifier' => '',
       'link' => 0,
