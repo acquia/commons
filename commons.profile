@@ -49,6 +49,7 @@ function commons_form_install_configure_form_alter(&$form, $form_state) {
     '#type' => 'fieldset',
     '#title' => st('Acquia'),
     '#description' => st('The !an can supplement the functionality of Commons by providing enhanced site search (faceted search, content recommendations, content biasing, multi-site search, and others using the Apache Solr service), spam protection (using the Mollom service), and more.  A free 30-day trial is available.', array('!an' => l(t('Acquia Network'), 'http://acquia.com/products-services/acquia-network', array('attributes' => array('target' => '_blank'))))),
+    '#weight' => -11,
   );
   $form['server_settings']['enable_acquia_connector'] = array(
     '#type' => 'checkbox',
