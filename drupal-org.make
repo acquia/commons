@@ -367,6 +367,10 @@ projects[commons_search][type] = "module"
 projects[commons_search][subdir] = "contrib"
 projects[commons_search][version] = "3.x-dev"
 
+projects[commons_social_sharing][type] = "module"
+projects[commons_social_sharing][subdir] = "contrib"
+projects[commons_social_sharing][version] = "3.x-dev"
+
 projects[commons_site_homepage][type] = "module"
 projects[commons_site_homepage][subdir] = "contrib"
 projects[commons_site_homepage][version] = "3.x-dev"
