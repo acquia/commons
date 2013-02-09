@@ -179,6 +179,7 @@ function commons_q_a_rate_templates() {
   $templates['commons_thumbs_up_down']->css = drupal_get_path('module', 'commons_q_a') . '/templates/commons_thumbs_up_down/commons-thumbs-up-down.css';
   $templates['commons_thumbs_up_down']->customizable = FALSE;
   $templates['commons_thumbs_up_down']->translate = TRUE;
+  $templates['commons_thumbs_up_down']->use_source_translation = TRUE;
   $templates['commons_thumbs_up_down']->template_title = t('Commons Thumbs up / down');
 
   return $templates;
@@ -241,5 +242,6 @@ function commons_q_a_rate_widget() {
     'theme' => 'commons_template_commons_thumbs_up_down',
     'css' => 'profiles/commons/modules/contrib/commons_q_a/templates/commons_thumbs_up_down/commons-thumbs-up-down.css',
     'translate' => TRUE,
+    'use_source_translation' => TRUE,
   );
 }
