@@ -229,13 +229,8 @@ function commons_events_solr_panel_facet_subtype($facet_name) {
 /**
  * Implements hook_theme_registry_alter().
  */
-function commons_events_solr_theme_registry_alter(&$theme_registry) {
-}
-
-/**
- * Implements hook_preprocess_hook().
- */
-function commons_events_solr_preprocess_search_result(&$variables) {
+function commons_events_solr_theme_registry_alter(&$registry) {
+  $registry['apachesolr_search_noresults']['function'] = 'commons_events_solr_apachesolr_search_noresults';
 }
 
 /**
@@ -252,6 +247,23 @@ function commons_events_solr_preprocess_search_results(&$variables) {
  */
 function commons_events_solr_form_apachesolr_environment_edit_form_alter(&$form, &$form_state) {
   $form['actions']['save']['#submit'][] = 'commons_events_solr_environment_form_submit';
+}
+
+/**
+ * Friendlier empty text when there are no events.
+ */
+function commons_events_solr_apachesolr_search_noresults() {
+  $destination = drupal_get_destination();
+  if ($destination['destination'] != 'events') {
+    // Have to call the actual function since we overrode it to use the current
+    // function instead.
+    return theme_apachesolr_search_noresults();
+  }
+  $options = array('!create' => 'create one');
+  if (node_access('create', 'event')) {
+    $options['!create'] = l('create one', 'node/add/event');
+  }
+  return t('There are no events. Be the first to !create!', $options);
 }
 
 /**

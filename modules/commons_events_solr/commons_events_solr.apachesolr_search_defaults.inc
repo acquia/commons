@@ -25,10 +25,10 @@ function commons_events_solr_apachesolr_search_default_searchers() {
     ),
     'apachesolr_search_custom_enable' => 1,
     'apachesolr_search_search_type' => 'custom',
-    'apachesolr_search_search_box' => 1,
+    'apachesolr_search_search_box' => 0,
     'apachesolr_search_per_page' => '10',
-    'apachesolr_search_browse' => 'results',
-    'apachesolr_search_spellcheck' => 1,
+    'apachesolr_search_browse' => 'blocks',
+    'apachesolr_search_spellcheck' => 0,
     'apachesolr_search_allow_user_input' => 0,
   );
   $export['solr_events'] = $searcher;
