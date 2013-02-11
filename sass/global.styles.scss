@@ -550,8 +550,36 @@ ul.links {
   }
 }
 
-ul.primary.tabs li a {
-  @include border-radius(3px 3px 0px 0px);
+ul.primary.tabs {
+  border-bottom: none;
+
+  li {
+
+    a {
+      background-color: #d7d7d7;
+      @include border-radius(3px);
+      padding: 3px 10px;
+      display: block;
+      color: #a5a3a3;
+      border: none;
+
+      &:hover {
+        text-decoration: none;
+        background-color: #d7d7d7;
+        color: #a5a3a3;
+      }
+    }
+
+    &.active a {
+      background-color: $dark_blue;
+      border: none;
+      color: $white;
+
+      &:hover {
+        background-color: $dark_blue;
+      }
+    }
+  }
 }
 
 li.sharethis {
