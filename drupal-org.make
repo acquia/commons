@@ -86,8 +86,8 @@ projects[features][type] = "module"
 projects[features][subdir] = "contrib"
 
 ; Separate fields from field instances.
-; http://drupal.org/node/1064472#comment-6438406
-projects[features][patch][] = "http://drupal.org/files/1064472_features_field_split_23.patch"
+; http://drupal.org/node/1064472#comment-7042482
+projects[features][patch][] = "http://drupal.org/files/features-instances-1064472-59.patch"
 
 projects[flag][type] = "module"
 projects[flag][subdir] = "contrib"
@@ -366,6 +366,10 @@ projects[commons_like][version] = "3.x-dev"
 projects[commons_search][type] = "module"
 projects[commons_search][subdir] = "contrib"
 projects[commons_search][version] = "3.x-dev"
+
+projects[commons_social_sharing][type] = "module"
+projects[commons_social_sharing][subdir] = "contrib"
+projects[commons_social_sharing][version] = "3.x-dev"
 
 projects[commons_site_homepage][type] = "module"
 projects[commons_site_homepage][subdir] = "contrib"
