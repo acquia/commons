@@ -49,6 +49,7 @@ function commons_form_install_configure_form_alter(&$form, $form_state) {
     '#type' => 'fieldset',
     '#title' => st('Acquia'),
     '#description' => st('The !an can supplement the functionality of Commons by providing enhanced site search (faceted search, content recommendations, content biasing, multi-site search, and others using the Apache Solr service), spam protection (using the Mollom service), and more.  A free 30-day trial is available.', array('!an' => l(t('Acquia Network'), 'http://acquia.com/products-services/acquia-network', array('attributes' => array('target' => '_blank'))))),
+    '#weight' => -11,
   );
   $form['server_settings']['enable_acquia_connector'] = array(
     '#type' => 'checkbox',
@@ -545,10 +546,6 @@ function commons_acquia_connector_enable() {
  */
 function commons_install_finished(&$install_state) {
   // BEGIN copy/paste from install_finished().
-  // Flush all caches to ensure that any full bootstraps during the installer
-  // do not leave stale cached data, and that any content types or other items
-  // registered by the installation profile are registered correctly.
-
   // Remove the bookmarks flag
   $flag = flag_get_flag('bookmarks');
   if($flag) {
@@ -557,7 +554,35 @@ function commons_install_finished(&$install_state) {
     _flag_clear_cache();
   }
 
+  // Flush all caches to ensure that any full bootstraps during the installer
+  // do not leave stale cached data, and that any content types or other items
+  // registered by the installation profile are registered correctly.
   drupal_flush_all_caches();
+
+  // We make custom code for the footer here because we want people to be able to freely edit it if they wish.
+  $footer_body = '<h2>Drupal Commons</h2>
+  <p>A Commons Community, powered by Acquia &nbsp; &nbsp; &copy; '. date('o') . ' ' . variable_get('site_name', FALSE) . '</p>';
+
+  $footer_block_text = array(
+    'body' => st($footer_body),
+    'info' => st('Default Footer'),
+    'format' => 'filtered_html',
+  );
+
+  if(drupal_write_record('block_custom', $footer_block_text)) {
+    $footer_block = array(
+      'module' => 'block',
+      'delta' => $footer_block_text['bid'],
+      'theme' => 'commons_origins',
+      'visibility' => 0,
+      'region' => 'footer',
+      'status' => 1,
+      'pages' => 0,
+      'weight' => 1,
+      'title' => '<none>',
+    );
+    drupal_write_record('block', $footer_block);
+  }
 
   // Remember the profile which was used.
   variable_set('install_profile', drupal_get_profile());
