@@ -25,12 +25,12 @@
  * See global.base also which includes normalize.css and some additional
  * helper classes and base styles.
  */
-  
+
 /* =============================================================================
  *   Base
  * ========================================================================== */
 
-/* 
+/*
  * To preserve theme settings never apply font properties to the HTML element.
  * This is critically important if you are using the Responsive JavaScript
  * feature as this relies on being able to set a pseudo font family on the HTML
@@ -204,7 +204,7 @@ var {
   color: $white;
   text-align: right;
   margin-right: 8px;
-  
+
   a {
     color: $white;
   }
@@ -1237,7 +1237,7 @@ h1.node-title {
  * Regions can be nested, such as when using Panels
  */
 .region-inner .region-inner {}
-// 
+//
 
 /*
  * Header region, embedded in the #header
@@ -1638,10 +1638,10 @@ ul.menu {
 
 /* If li.content exists it's a problem, so reset the padding */
 .block .menu li.content {
-  padding: 0;   
+  padding: 0;
 }
 
- 
+
 /* =============================================================================
  *   Book navigation menu
  * ========================================================================== */
@@ -1659,7 +1659,7 @@ ul.menu {
     min-width: 2em;
     white-space: nowrap;
   }
-  
+
   .menu {
     margin-left: 0;
   }
@@ -2066,7 +2066,7 @@ ul.action-links {
 
 
 /*
- * Image Alignment Theme Settings - included here so you can easily override 
+ * Image Alignment Theme Settings - included here so you can easily override
  */
 
 /*
@@ -2167,7 +2167,7 @@ ul.action-links {
 .pane-views-panes,
 .pane-views,
 body.page-node .pane-views-panes {
-  
+
   h2 {
     font:{
       size:20px;
@@ -2546,7 +2546,7 @@ body.page-node .pane-views-panes {
     a {
       position: relative;
       display: block;
-      
+
       img {
         @include opacity(0.5);
       }
@@ -2703,7 +2703,7 @@ body.page-node .pane-views-panes {
       font-weight:normal;
       color:$light_gray;
       padding:1px 0 0 0;
-    }  
+    }
   }
   .views-widget {
     float:left;
@@ -3422,6 +3422,47 @@ body.page-node.node-type-group {
   margin-left: 40px;
 }
 
+.rate-widget-commons_thumbs_up_down {
+  float:right;
+  width:68px;
+  height:75px;
+  position:relative;
+  .item-list ul {
+    margin:0;
+    position:absolute;
+    bottom:0;
+    width:68px;
+    li {
+      margin:0;
+      list-style-type:none;
+      .rate-button {
+        display:block;
+        width:32px;
+        height:30px;
+        background-image:image-url('icons/updown.png');
+        text-indent:-9999px;
+      }
+      .rate-button[title="up"] {
+        background-position:left top;
+        float:left;
+      }
+      .rate-button[title="down"] {
+        background-position:right top;
+        float:right;
+      }
+    }
+  }
+  .rate-info {
+    position:absolute;
+    top:0;
+    width:52px;
+    height:36px;
+    padding:4px 8px;
+    background:image-url('icons/bkg_updown.png');
+    text-align:center;
+  }
+}
+
 
 /* =============================================================================
  *   Forms
@@ -3438,7 +3479,7 @@ body.page-node.node-type-group {
 /*
  * Wrapper for a form element (or group of form elements) and its label
  */
-.form-item { 
+.form-item {
 
   input.error,
   textarea.error,
@@ -3450,7 +3491,7 @@ body.page-node.node-type-group {
     font-weight: 700;
   }
 
-  label.option { 
+  label.option {
   }
 
   .description {
@@ -3475,7 +3516,7 @@ body.page-node.node-type-group {
 /*
  * The submit button
  */
-.form-submit { 
+.form-submit {
 }
 
 
@@ -3496,14 +3537,14 @@ fieldset {
 /*
  * Tips for Drupal's input formats
  */
-.tips { 
+.tips {
 }
 
 
 /*
  * Buttons used by contrib modules like Media
  */
-a.button { 
+a.button {
   @include appearance(button);
 }
 
@@ -3911,7 +3952,7 @@ body.front.logged-in {
       .node-content {
         margin:0 0 0 78px;
         form {
-          
+
         }
 
         .field-name-body {
@@ -3933,7 +3974,7 @@ body.front.logged-in {
     }
     .item-list {
       // border-top:1px solid $white;
-      padding:10px 0 0 0;      
+      padding:10px 0 0 0;
     }
     // .pager a {
     //   display:inline-block;
@@ -4009,7 +4050,7 @@ body.front.logged-in {
 
   .search-results-wrapper .search-result {
     @extend %pod;
-    
+
     .search-result-wrapper {
       @extend %pod-content;
     }
@@ -4018,7 +4059,7 @@ body.front.logged-in {
   .region-three-25-50-25-first {
     @extend %pod;
     margin-right: 0;
-    
+
     .region-inner {
       @extend %pod-content;
     }
@@ -4048,12 +4089,12 @@ body.front.logged-in {
 
   div.search-result-wrapper h3.title {
     text-decoration: none;
-    
+
     a {
       color: $light_blue;
     }
   }
-  
+
 }
 
 .pane-commons-events-commons-events-create-event-link {
@@ -4081,7 +4122,7 @@ body.front.logged-in {
 .page-search {
   .region-two-33-66-first {
     @extend %pod;
-    
+
     .region-inner {
       @extend %pod-content;
     }
