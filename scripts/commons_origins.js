@@ -58,6 +58,8 @@ jQuery(document).ready(function($){
     $('body').removeClass('create-choose-open');
   });
 
+  $('.page-node-add #edit-additional-settings').css('top', ($('.page-node-add .field-type-taxonomy-term-reference-form').height() + 15));
+
   attach_selectBox();
   set_follow_checkboxes();
 

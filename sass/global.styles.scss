@@ -980,9 +980,30 @@ h1.node-title {
     }
   }
 
-  #edit-body, .form-item-title ,.field-name-og-group-ref, .field-type-taxonomy-term-reference-form {
+  #edit-body, .form-item-title, .field-name-og-group-ref, #poll-choice-wrapper, .field-name-field-address-form {
     width: 66%;
-    // float: left;
+    float: none;
+
+    input[type="text"] {
+      width: 100%;
+    }
+  }
+
+  .field-type-taxonomy-term-reference-form {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 33%;
+    margin-right: 0;
+    margin-left: 0;
+    padding: 0;
+    @extend %pod;
+
+    > div {
+      @extend %pod-content;
+      padding: 5px 10px 10px 10px;
+      margin: 0;
+    }
 
     input[type="text"] {
       width: 100%;
@@ -993,7 +1014,7 @@ h1.node-title {
     // float: right;
     position: absolute;
     right: 0;
-    top: 0;
+    top: 80px;
     width: 33%;
     margin-right: 0;
     margin-left: 0;
