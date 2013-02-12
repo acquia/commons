@@ -552,8 +552,11 @@ ul.links {
 
 ul.primary.tabs {
   border-bottom: none;
+  padding: 0;
 
   li {
+    margin-bottom: 5px;
+    margin-top: 5px;
 
     a {
       background-color: #d7d7d7;
@@ -4208,6 +4211,13 @@ body.front.logged-in {
     label {
       margin-left: 20px;
     }
+  }
+}
+
+// Login & Signup Form
+#user-login, #user-register-form {
+  input[type="text"] {
+    width: 100%;
   }
 }
 
