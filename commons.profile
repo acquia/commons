@@ -158,7 +158,7 @@ function commons_install_tasks() {
  */
 function commons_installer_palette() {
   $form = array();
-  require_once('profiles/commons/themes/contrib/commons_origins/commons_origins.palettes.inc');
+  require_once(drupal_get_path('theme', 'commons_origins') . '/commons_origins.palettes.inc');
 
   commons_origins_palettes_form($form);
   $form['commons_origins_palette_fieldset']['#collapsible'] = FALSE;
