@@ -585,6 +585,14 @@ ul.primary.tabs {
   }
 }
 
+li.flag-commons_follow_group {
+  @extend %btn-gray;
+  a {
+    background:transparent !important;
+    padding:3px 17px !important;
+  }
+}
+
 li.sharethis {
   @extend %btn-gray;
   position: relative;
@@ -862,7 +870,7 @@ h1.node-title {
 
       &.flag-inappropriate_node {
         float: none;
-//        position: absolute;
+        position: absolute;
         bottom: 5px;
         right: 5px;
       }
