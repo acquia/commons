@@ -142,6 +142,10 @@ function commons_origins_preprocess_node(&$vars) {
   if ($vars['promote']) {
     $vars['submitted'] .= ' <span class="featured-node-tooltip">' . t('Featured') . ' ' . $vars['type'] . '</span>';
   }
+
+  if ($vars['elements']['#node']->picture == 0) {
+    $vars['classes_array'][] = 'no-user-picture';
+  }
 }
 function commons_origins_process_node(&$vars) {
 }

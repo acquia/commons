@@ -4069,6 +4069,14 @@ body.front.logged-in {
   }
 }
 
+body.front.logged-in .view-commons-homepage-content .article.node {
+  &.no-user-picture, &.node-page {
+    .node-header, .node-content, .author-datetime, .links {
+      margin-left: 0;
+    }
+  }
+}
+
 .front {
   .region-two-66-33-first, .region-two-66-33-second {
     margin-top: 40px;
