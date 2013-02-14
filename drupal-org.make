@@ -130,7 +130,7 @@ projects[message_subscribe][subdir] = "contrib"
 projects[message_subscribe][version] = "1.x-dev"
 ; Remove unnecessary Features lines from message_subscribe_info file
 ; http://drupal.org/node/1915364#comment-7067302
-projects[message_subscribe][patch[] = "http://drupal.org/files/1915364-message-subcsribe-remove-features-info-2.patch"
+projects[message_subscribe][patch][] = "http://drupal.org/files/1915364-message-subcsribe-remove-features-info-2.patch"
 
 projects[memcache][type] = "module"
 projects[memcache][subdir] = "contrib"
