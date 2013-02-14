@@ -505,14 +505,14 @@ function commons_demo_content() {
 function commons_add_user_avatar($account) {
   $uid = $account->uid;
 
-  $filepath = drupal_realpath('profiles/commons/images/avatars/avatar-' . $uid . '.png');
+  $filepath = 'profiles/commons/images/avatars/avatar-' . $uid . '.png';
   $image_info = image_get_info($filepath);
   // Create managed File object and associate with Image field.
   $file = new StdClass();
   $file->uid = $uid;
   $file->uri = $filepath;
   $file->filemime = $image_info['mime_type'];
-  $file->status = 0; // Set status to 0 in order to save temporary file.
+  $file->status = 1; // Set status to 0 in order to save temporary file.
   $file->filesize = $image_info['file_size'];
 
   // standard Drupal validators for user pictures
