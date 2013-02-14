@@ -338,12 +338,14 @@ function commons_demo_content() {
 
   // Create demo Users
   $demo_users = array(
-    'Lou White' => 'Lou White',
-    'George Foreman' => 'George Foreman',
-    'Cesar Ramirez' => 'Cesar Ramirez',
-    'Elinor Dashwood' => 'Elinor Dashwood',
-    'Matt Edmunds' => 'Matt Edmunds',
+    'Jeff Noyes' => 'Jeff Noyes',
+    'Drew Robertson' => 'Drew Robertson',
+    'Lisa Rex' => 'Lisa Rex',
+    'Katelyn Fogarty' => 'Katelyn Fogarty',
+    'Dharmesh Mistry' => 'Dharmesh Mistry',
+    'Erica Ligeski' => 'Erica Ligeski',
   );
+
 
   foreach ($demo_users as $name) {
     list($first_name, $last_name)  = explode(" ", $name);
@@ -365,8 +367,10 @@ function commons_demo_content() {
     $fields['field_name_first'][LANGUAGE_NONE][0]['value'] = $first_name;
     $fields['field_name_last'][LANGUAGE_NONE][0]['value'] = $last_name;
 
-
     $demo_users[$name] = user_save('', $fields);
+
+    // Add avatars to demo Users.
+    commons_add_user_avatar($demo_users[$name]);
   }
 
   // Demo Content.
@@ -378,7 +382,7 @@ function commons_demo_content() {
 
   $boston_group->title = 'Boston';
   $boston_group->body[LANGUAGE_NONE][0]['value'] = commons_veggie_ipsum();
-  $boston_group->uid = $demo_users['Lou White']->uid;
+  $boston_group->uid = $demo_users['Jeff Noyes']->uid;
   $boston_group->language = LANGUAGE_NONE;
   $boston_group->created = time() - 604800;
   $boston_group->status = 1;
@@ -391,7 +395,7 @@ function commons_demo_content() {
 
   $nyc_group->title = 'New York City';
   $nyc_group->body[LANGUAGE_NONE][0]['value'] = commons_veggie_ipsum();
-  $nyc_group->uid = $demo_users['Lou White']->uid;
+  $nyc_group->uid = $demo_users['Drew Robertson']->uid;
   $nyc_group->language = LANGUAGE_NONE;
   $nyc_group->status = 1;
   // Make the group 1 week old:
@@ -405,7 +409,7 @@ function commons_demo_content() {
   node_object_prepare($post);
 
   $post->title = 'Best brunch places in Cambridge';
-  $post->uid = $demo_users['George Foreman']->uid;
+  $post->uid = $demo_users['Lisa Rex']->uid;
   $post->language = LANGUAGE_NONE;
   // 1:30 ago.
   $post->created = time() - 5400;
@@ -437,7 +441,7 @@ function commons_demo_content() {
   node_object_prepare($wiki);
   $wiki->created = time() - 604800;
   $wiki->title = 'How to create a veggie burger';
-  $wiki->uid = $demo_users['Matt Edmunds']->uid;
+  $wiki->uid = $demo_users['Dharmesh Mistry']->uid;
   $wiki->language = LANGUAGE_NONE;
   $wiki->body[LANGUAGE_NONE][0]['value'] = "Celtuce quandong gumbo coriander avocado yarrow broccoli rabe parsnip nori mung bean watercress taro pea sprouts cress. Bush tomato water spinach radish green bean okra spinach garlic cress. Cucumber squash tigernut swiss chard celery cabbage beet greens nori groundnut grape melon seakale. Earthnut pea kakadu plum chicory potato plantain fennel gumbo chickweed gourd cauliflower wakame green bean epazote taro quandong. Celery turnip kombu lotus root lettuce sierra leone bologi kale cauliflower gumbo parsnip taro welsh onion melon asparagus green bean beet greens black-eyed pea jícama. Kohlrabi lentil turnip greens plantain bush tomato leek arugula courgette amaranth yarrow.";
   $wiki->body[LANGUAGE_NONE][0]['format'] = filter_default_format();
@@ -464,7 +468,7 @@ function commons_demo_content() {
   node_object_prepare($event);
 
   $event->title = 'Ribfest Boston 2012';
-  $event->uid = $demo_users['Elinor Dashwood']->uid;
+  $event->uid = $demo_users['Katelyn Fogarty']->uid;
   $event->language = LANGUAGE_NONE;
   $event->body[LANGUAGE_NONE][0]['value'] = "<strong>What ignited in 1999 as a community block party has exploded into one of Boston's most anticipated street festivals.</strong> Averaging 50,000 pounds of ribs and BBQ from more than 30 restaurants, Ribfest Boston 2013 is expected to draw more than 50,000 people. As a nationally recognized music festival, we host a hot blend of Indie, pop, Indie Roots, rock and alt country for one of the most unique band lineups in the city. Families can spend the whole weekend in Kids Square to enjoy live entertainment, inflatables, games and more.";
   $event->body[LANGUAGE_NONE][0]['format'] = filter_default_format();
@@ -496,6 +500,35 @@ function commons_demo_content() {
 
   // Delete the demo content variable
   variable_del('commons_install_example_content');
+}
+
+function commons_add_user_avatar($account) {
+  $uid = $account->uid;
+
+  $filepath = drupal_realpath('profiles/commons/images/avatars/avatar-' . $uid . '.png');
+  $image_info = image_get_info($filepath);
+  // Create managed File object and associate with Image field.
+  $file = new StdClass();
+  $file->uid = $uid;
+  $file->uri = $filepath;
+  $file->filemime = $image_info['mime_type'];
+  $file->status = 0; // Set status to 0 in order to save temporary file.
+  $file->filesize = $image_info['file_size'];
+
+  // standard Drupal validators for user pictures
+  $validators = array(
+    'file_validate_is_image' => array(),
+    'file_validate_image_resolution' => array(variable_get('user_picture_dimensions', '85x85')),
+    'file_validate_size' => array(variable_get('user_picture_file_size', '30') * 1024),
+  );
+
+  // attach photo to user's account.
+  $errors = file_validate($file, $validators);
+  if (empty($errors)) {
+    file_save($file);
+    $edit['picture'] = $file;
+    user_save($account, $edit);
+  }
 }
 
 /**
