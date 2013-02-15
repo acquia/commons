@@ -585,13 +585,13 @@ ul.primary.tabs {
   }
 }
 
-li.flag-commons_follow_group {
-  @extend %btn-gray;
-  a {
-    background:transparent !important;
-    padding:3px 17px !important;
-  }
-}
+// li.flag-commons_follow_group {
+//   @extend %btn-gray;
+//   a {
+//     background:transparent !important;
+//     padding:3px 17px !important;
+//   }
+// }
 
 li.sharethis {
   @extend %btn-gray;
@@ -1100,7 +1100,7 @@ h1.node-title {
   }
 }
 
-.page-node .flag-commons-follow-node, .page-node .flag-commons-follow-group, .flag-commons-follow-user {
+.flag-commons-follow-node, .flag-commons-follow-group, .flag-commons-follow-user {
   display: inline-block;
 
   a {
@@ -1126,6 +1126,49 @@ h1.node-title {
 
   span {
     display: none !important;
+  }
+}
+
+.flag-commons-follow-node a {
+  &.flag-action, &.unflag-action {
+    font-size: 0;
+    line-height: 0;
+    color: transparent;
+    padding: 3px 26px;
+    height: 14px;
+    position: relative;
+    top: 1px;
+
+    &:before {
+      top: 1px;
+    }
+  }
+}
+
+.view-commons-homepage-content {
+  .comment-add a {
+    @extend %btn-gray;
+    position: relative;
+    font-size: 0;
+    line-height: 0;
+    color: transparent;
+    padding: 3px 26px;
+    height: 14px;
+    top: 2px;
+
+    &:before {
+      content: '';
+      @include sprite_url_height_width($icons, comments-dark);
+    }
+  }
+
+  .node-readmore a {
+    @extend %btn-gray;
+    position: relative;
+    padding: 3px 12px;
+    height: 14px;
+    line-height: 14px;
+    top: 1px;
   }
 }
 
@@ -4003,7 +4046,7 @@ body.front.logged-in {
       border-bottom: 1px solid #ccc;
       padding-top: 10px;
       padding-bottom: 20px;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       position:relative;
 
       &.node-promoted {
@@ -4061,9 +4104,10 @@ body.front.logged-in {
     // }
   }
   #views-exposed-form-commons-homepage-content-panel-pane-1 .views-exposed-widgets {
-    margin-top:-45px;
+    // margin-top:-45px;
     // margin-left:-10px;
-    padding: 0;
+    padding: 10px 10px 10px 10px;
+    margin-bottom: 20px;
 
     &.widgets-active {
       @extend %pod;
@@ -4086,8 +4130,12 @@ body.front.logged-in .view-commons-homepage-content .article.node {
 }
 
 .front {
-  .region-two-66-33-first, .region-two-66-33-second {
-    margin-top: 40px;
+  .region-two-66-33-first {
+    margin-top: 18px;
+  }
+
+  .region-two-66-33-second {
+    margin-top: 80px;
   }
 }
 
