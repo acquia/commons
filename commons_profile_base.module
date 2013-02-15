@@ -7,7 +7,14 @@
 include_once 'commons_profile_base.features.inc';
 
 /**
-* Implements hook_form_alter().
+* Implements hook_form_FORM_ID_alter().
+*/
+function commons_profile_base_form_user_login_alter(&$form, &$form_state, $form_id) {
+  drupal_set_title(t('Log in'));
+}
+
+/**
+* Implements hook_form_FORM_ID_alter().
 */
 function commons_profile_base_form_user_register_form_alter(&$form, &$form_state, $form_id) {
   // Tweak the user registration form to match the Commons designs.
