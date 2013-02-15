@@ -60,8 +60,6 @@
 <head>
 <?php print $head; ?>
 <title><?php print $head_title; ?></title>
-<link rel="stylesheet" href="<?php print base_path() . drupal_get_path('theme', 'commons_origins'); ?>/css/global.base.css">
-<link rel="stylesheet" href="<?php print base_path() . drupal_get_path('theme', 'commons_origins'); ?>/css/global.styles.css">
 <?php print $styles; ?>
 <?php print $scripts; ?>
 <?php print $polyfills; ?>
