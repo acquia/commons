@@ -50,6 +50,7 @@ function commons_bw_get_tab_definitions($widget_type = 'group') {
  * tab of the group homepage browsing widget.
  */
 function commons_bw_create_all_widget($group) {
+  $links = array();
   // Collect definitions from implementing modules.
   $items = module_invoke_all('commons_bw_create_all_widget', $group);
   uasort($items, 'element_sort');
@@ -86,6 +87,7 @@ function commons_bw_generate_group_widget($group) {
         $view->set_display($tab['display']);
       }
       $view->set_arguments(array($group->nid));
+      $view->get_total_rows = TRUE;
       $view->execute();
       $tabs[$key]['title'] = t($tabs[$key]['title']) . ' <span class="commons-bw-result-count">'. $view->total_rows . '</span>';
     }
