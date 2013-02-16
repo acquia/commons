@@ -21,7 +21,7 @@ function commons_search_solr_apachesolr_search_default_searchers() {
   $searcher->env_id = apachesolr_default_environment();
   $searcher->settings = array(
     'apachesolr_search_search_type' => 'custom',
-    'apachesolr_search_per_page' => '10',
+    'apachesolr_search_per_page' => 10,
     'apachesolr_search_browse' => 'browse',
     'apachesolr_search_spellcheck' => TRUE,
     'apachesolr_search_not_removable' => TRUE,
