@@ -571,6 +571,7 @@ function commons_acquia_connector_enable() {
   $modules = variable_get('commons_install_acquia_modules', array());
   if (!empty($modules)) {
     module_enable($modules, TRUE);
+    commons_clear_messages();
   }
 }
 
