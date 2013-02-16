@@ -24,6 +24,9 @@ function commons_events_solr_enable() {
   $page = page_manager_page_load('views_events_landing_page');
   ctools_include('export');
   ctools_export_set_object_status($page, TRUE);
+  menu_cache_clear_all();
+  // Revert base Events feature so that the Events menu link is recreated.
+  features_revert(array('commons_events' => array('menu_links')));
 }
 
 /**
@@ -34,4 +37,7 @@ function commons_events_solr_disable() {
   $page = page_manager_page_load('views_events_landing_page');
   ctools_include('export');
   ctools_export_set_object_status($page, FALSE);
+  menu_cache_clear_all();
+  // Revert base Events feature so that the Events menu link is recreated.
+  features_revert(array('commons_events' => array('menu_links')));
 }
