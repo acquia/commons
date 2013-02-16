@@ -143,7 +143,7 @@ function commons_origins_preprocess_node(&$vars) {
     $vars['submitted'] .= ' <span class="featured-node-tooltip">' . t('Featured') . ' ' . $vars['type'] . '</span>';
   }
 
-  if ($vars['elements']['#node']->picture == 0) {
+  if (empty($vars['elements']['#node']->picture)) {
     $vars['classes_array'][] = 'no-user-picture';
   }
 }
