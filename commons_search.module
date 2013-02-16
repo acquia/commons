@@ -110,4 +110,8 @@ function commons_search_preprocess_search_results(&$variables) {
 function commons_search_theme_registry_alter(&$theme_registry) {
   $theme_registry['search_results']['path'] = drupal_get_path('module', 'commons_search') . '/theme';
   $theme_registry['search_results']['template'] = 'commons_search__search_results';
+  // Remove AT breadcrumb preprocess since it adds raw RDFa data into the title.
+  $theme_registry['breadcrumb']['preprocess functions'] = array_flip($theme_registry['breadcrumb']['preprocess functions']);
+  unset($theme_registry['breadcrumb']['preprocess functions']['adaptivetheme_preprocess_breadcrumb']);
+  $theme_registry['breadcrumb']['preprocess functions'] = array_flip($theme_registry['breadcrumb']['preprocess functions']);
 }

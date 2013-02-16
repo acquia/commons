@@ -431,13 +431,3 @@ function commons_search_solr_environment_form_submit($form, $form_state) {
     cache_clear_all('*', 'cache_apachesolr', TRUE);
   }
 }
-
-/**
- * Implements hook_theme_registry_alter().
- */
-function commons_search_solr_theme_registry_alter(&$theme) {
-  // Remove AT breadcrumb preprocess since it adds raw RDFa data into the title.
-  $theme['breadcrumb']['preprocess functions'] = array_flip($theme['breadcrumb']['preprocess functions']);
-  unset($theme['breadcrumb']['preprocess functions']['adaptivetheme_preprocess_breadcrumb']);
-  $theme['breadcrumb']['preprocess functions'] = array_flip($theme['breadcrumb']['preprocess functions']);
-}
