@@ -58,7 +58,6 @@ projects[devel][version] = "1.x-dev"
 projects[devel][type] = "module"
 projects[devel][subdir] = "contrib"
 
-projects[diff][version] = "2.0"
 projects[diff][type] = "module"
 projects[diff][subdir] = "contrib"
 
