@@ -118,7 +118,9 @@ projects[menu_attributes][subdir] = "contrib"
 projects[message][type] = "module"
 projects[message][subdir] = "contrib"
 projects[message][version] = "1.x-dev"
-
+; Make message access alterable.
+; http://drupal.org/node/1920560#comment-7080942
+projects[message][patch][] = "http://drupal.org/files/1920560-message-access-alterable.patch"
 
 projects[message_notify][type] = "module"
 projects[message_notify][subdir] = "contrib"
@@ -127,6 +129,11 @@ projects[message_notify][version] = "2.x-dev"
 projects[message_subscribe][type] = "module"
 projects[message_subscribe][subdir] = "contrib"
 projects[message_subscribe][version] = "1.x-dev"
+; Entity Access support
+; http://drupal.org/node/1918666#comment-7078400
+projects[message_subscribe][patch][] = "http://drupal.org/files/1918666-entity-access-1.patch"
+
+
 
 projects[memcache][type] = "module"
 projects[memcache][subdir] = "contrib"
