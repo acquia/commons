@@ -190,7 +190,7 @@ function commons_activity_streams_user_profile_submit($form, &$form_state) {
   $hook = 'user_profile_update';
   $message_type = 'commons_activity_streams_user_profile_updated';
   drupal_alter('commons_activity_streams_message_selection', $message_type, $hook, $account);
-  $message = message_create($message_type, array('uid' => $account->uid, 'timestamp' => $_SERVER['REQUEST_TIME']));
+  $message = message_create($message_type, array('uid' => $account->uid, 'timestamp' => REQUEST_TIME));
   // Save reference to the node in the node reference field, and the
   $wrapper = entity_metadata_wrapper('message', $message);
   $wrapper->save();
