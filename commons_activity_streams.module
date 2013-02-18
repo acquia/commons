@@ -2,6 +2,7 @@
 
 include_once 'commons_activity_streams.features.inc';
 
+
 /**
  * Implements hook_form_alter().
  */
@@ -79,6 +80,30 @@ function commons_activity_streams_comment_delete($comment) {
   // was posted.
   if ($mids = commons_activity_streams_existing_messages($comment->uid, array($comment->cid), 'field_target_comments', 'commons_activity_streams_comment_created')) {
     message_delete_multiple($mids);
+  }
+}
+
+/**
+ * Implements hook_message_access_alter().
+ */
+function commons_activity_streams_message_access_alter(&$access, $context) {
+  // We're only interested in the 'view' operation.
+  if ($context['op'] != 'view') {
+    return;
+  }
+
+  $message = $context['entity'];
+  // Verify view access to nodes referenced in the message.
+  if (isset($message->field_target_nodes)) {
+    foreach ($message->field_target_nodes[LANGUAGE_NONE] as $key => $value) {
+      $node = node_load($value['target_id']);
+      if (!node_access('view', $node, $context['account'])) {
+        // If the user cannot view any nodes in the message,
+        // deny access to the entire message;
+        $access = FALSE;
+        return;
+      }
+    }
   }
 }
 
