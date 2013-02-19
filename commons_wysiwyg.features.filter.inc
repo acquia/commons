@@ -22,7 +22,7 @@ function commons_wysiwyg_filter_default_formats() {
         'weight' => '1',
         'status' => '1',
         'settings' => array(
-          'allowed_html' => '<a> <em> <strong> <cite> <blockquote> <code> <ul> <ol> <li> <dl> <dt> <dd> <h4> <h5> <h6>  <p> <br> <img> <strike>',
+          'allowed_html' => '<a> <em> <strong> <u> <cite> <blockquote> <code> <ul> <ol> <li> <dl> <dt> <dd> <h4> <h5> <h6>  <p> <br> <img> <strike>',
           'filter_html_help' => 1,
           'filter_html_nofollow' => 0,
         ),
