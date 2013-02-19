@@ -329,6 +329,12 @@ function commons_anonymous_welcome_text_form_submit($form_id, &$form_state) {
 }
 
 /**
+ * Helper function to generate a machine name similar to the user's full name.
+ */
+function commons_normalize_name($name) {
+  return drupal_strtolower(str_replace(' ','_', $name));
+}
+/**
  * This function generate a demo content
  */
 function commons_demo_content() {
@@ -349,7 +355,7 @@ function commons_demo_content() {
 
   foreach ($demo_users as $name) {
     list($first_name, $last_name)  = explode(" ", $name);
-    $normalize_name = drupal_strtolower(str_replace(' ','_', $name));
+    $normalize_name = commons_normalize_name($name);
     $password = user_password(8);
 
 
@@ -505,7 +511,7 @@ function commons_demo_content() {
 function commons_add_user_avatar($account) {
   $uid = $account->uid;
 
-  $filepath = 'profiles/commons/images/avatars/avatar-' . $uid . '.png';
+  $filepath = 'profiles/commons/images/avatars/avatar-' . commons_normalize_name($account->name) . '.png';
   $image_info = image_get_info($filepath);
   // Create managed File object and associate with Image field.
   $file = new StdClass();
