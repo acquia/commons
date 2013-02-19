@@ -129,9 +129,6 @@ projects[message_notify][version] = "2.x-dev"
 projects[message_subscribe][type] = "module"
 projects[message_subscribe][subdir] = "contrib"
 projects[message_subscribe][version] = "1.x-dev"
-; Entity Access support
-; http://drupal.org/node/1918666#comment-7078400
-projects[message_subscribe][patch][] = "http://drupal.org/files/1918666-entity-access-1.patch"
 
 ; Remove "email" as default notifier
 ; http://drupal.org/node/1828184#comment-7081868
