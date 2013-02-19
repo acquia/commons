@@ -1,0 +1,12 @@
+<?php
+
+/**
+ * Update the Rate module settings for changes to the Up/Down widget.
+ */
+function commons_q_a_update_3100() {
+    $revert = array(
+      'commons_like' => array('variable'),
+  );
+  features_revert($revert);
+  return array();
+}

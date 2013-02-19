@@ -7,6 +7,19 @@
 include_once 'commons_q_a.features.inc';
 
 /**
+ * Implements hook_theme().
+ */
+function commons_q_a_theme() {
+  return array(
+    'rate_template_commons_thumbs_up_down' => array(
+      'variables' => array('links' => NULL, 'results' => NULL, 'mode' => NULL, 'just_voted' => FALSE, 'content_type' => NULL, 'content_id' => NULL, 'display_options' => NULL),
+      'template' => 'commons-thumbs-up-down',
+    ),
+  );
+}
+
+
+/**
 * Implements hook_commons_bw_group_widget().
 */
 function commons_q_a_commons_bw_group_widget() {
@@ -199,6 +212,53 @@ function commons_q_a_commons_activity_streams_message_selection_alter(&$message_
   }
 }
 
+/**
+ * Preprocess function for the commons_like template.
+ */
+function commons_q_a_preprocess_rate_template_commons_thumbs_up_down(&$variables) {
+  extract($variables);
+
+  $up_classes = 'rate-number-up-down-btn-up';
+  $down_classes = 'rate-number-up-down-btn-down';
+  if (isset($results['user_vote'])) {
+    switch ($results['user_vote']) {
+      case $links[0]['value']:
+        $up_classes .= ' rate-voted';
+        break;
+      case $links[1]['value']:
+        $down_classes .= ' rate-voted';
+        break;
+    }
+  }
+
+  $variables['up_button'] = theme('rate_button', array('text' => $links[0]['text'], 'href' => $links[0]['href'], 'class' => $up_classes));
+  $variables['down_button'] = theme('rate_button', array('text' => $links[1]['text'], 'href' => $links[1]['href'], 'class' => $down_classes));
+  if ($results['rating'] > 0) {
+    $score = $results['rating'];
+    $score_class = 'positive';
+  }
+  elseif ($results['rating'] < 0) {
+    $score = $results['rating'];
+    $score_class = 'negative';
+  }
+  else {
+    $score = 0;
+    $score_class = 'neutral';
+  }
+  $variables['score'] = $score;
+  $variables['score_class'] = $score_class;
+
+  $info = array();
+  if ($mode == RATE_CLOSED) {
+    $info[] = t('Voting is closed.');
+  }
+  if ($mode != RATE_COMPACT && $mode != RATE_COMPACT_DISABLED) {
+    if (isset($results['user_vote'])) {
+      $info[] = t('You voted \'@option\'.', array('@option' => $results['user_vote'] == 1 ? $links[0]['text'] : $links[1]['text']));
+    }
+  }
+  $variables['info'] = implode(' ', $info);
+}
 
 /**
  * Implements hook_rate_templates().
@@ -212,8 +272,8 @@ function commons_q_a_rate_templates() {
     array(1, 'up'),
     array(-1, 'down'),
   );
-  $templates['commons_thumbs_up_down']->theme = 'commons_template_commons_thumbs_up_down';
-  $templates['commons_thumbs_up_down']->css = drupal_get_path('module', 'commons_q_a') . '/templates/commons_thumbs_up_down/commons-thumbs-up-down.css';
+  $templates['commons_thumbs_up_down']->theme = 'rate_template_commons_thumbs_up_down';
+  $templates['commons_thumbs_up_down']->css = drupal_get_path('module', 'commons_q_a') . '/commons-thumbs-up-down.css';
   $templates['commons_thumbs_up_down']->customizable = FALSE;
   $templates['commons_thumbs_up_down']->translate = TRUE;
   $templates['commons_thumbs_up_down']->use_source_translation = TRUE;
@@ -269,15 +329,15 @@ function commons_q_a_rate_widget() {
       1 => 0,
     ),
     'allow_voting_by_author' => 1,
-    'noperm_behaviour' => '1',
+    'noperm_behaviour' => '3',
     'displayed' => '1',
     'displayed_just_voted' => '2',
     'description' => '',
     'description_in_compact' => TRUE,
     'delete_vote_on_second_click' => '1',
     'value_type' => 'points',
-    'theme' => 'commons_template_commons_thumbs_up_down',
-    'css' => 'profiles/commons/modules/contrib/commons_q_a/templates/commons_thumbs_up_down/commons-thumbs-up-down.css',
+    'theme' => 'rate_template_commons_thumbs_up_down',
+    'css' => 'profiles/commons/modules/contrib/commons_q_a/commons-thumbs-up-down.css',
     'translate' => TRUE,
     'use_source_translation' => TRUE,
   );

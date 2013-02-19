@@ -1,0 +1,51 @@
+@import "compass";
+
+.rate-widget-commons_thumbs_up_down {
+  width: 68px;
+  height: 75px;
+  position: relative;
+  ul {
+    margin: 0;
+    position: absolute;
+    bottom: 0;
+    width: 68px;
+    li {
+      margin: 0;
+      list-style-type:none;
+      .rate-button {
+        display:block;
+        width: 32px;
+        height: 30px;
+        background-image: image-url('updown.png');
+        text-indent: -9999px;
+      }
+      .rate-number-up-down-btn-up {
+        background-position: left top;
+        float:left;
+      }
+      .rate-number-up-down-btn-down {
+        background-position: right top;
+        float:right;
+      }
+      span {
+        @include opacity(.6);
+      }
+    }
+  }
+  .rate-info {
+    position: absolute;
+    top: 0;
+    width: 52px;
+    height: 36px;
+    padding: 4px 8px;
+    background: image-url('bkg_updown.png');
+    text-align: center;
+  }
+
+  .rate-info-value {
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 1em;
+  }
+}
