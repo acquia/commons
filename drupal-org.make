@@ -161,7 +161,6 @@ projects[oauthconnector][version] = "1.x-dev"
 projects[oauthconnector][type] = "module"
 projects[oauthconnector][subdir] = "contrib"
 
-projects[og][version] = "2.x-dev"
 projects[og][type] = "module"
 projects[og][subdir] = "contrib"
 ; Language tweak for 'user has been added to [group]'
@@ -174,7 +173,6 @@ projects[og][patch][] = "http://drupal.org/files/1902086-og-ref-respect-og-user-
 
 projects[panelizer][type] = "module"
 projects[panelizer][subdir] = "contrib"
-projects[panelizer][version] = "3.0"
 
 projects[panels][type] = "module"
 projects[panels][subdir] = "contrib"
