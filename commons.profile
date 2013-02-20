@@ -509,31 +509,39 @@ function commons_demo_content() {
 }
 
 function commons_add_user_avatar($account) {
-  $uid = $account->uid;
+  global $base_url;
 
-  $filepath = 'profiles/commons/images/avatars/avatar-' . commons_normalize_name($account->name) . '.png';
-  $image_info = image_get_info($filepath);
-  // Create managed File object and associate with Image field.
-  $file = new StdClass();
-  $file->uid = $uid;
-  $file->uri = $filepath;
-  $file->filemime = $image_info['mime_type'];
-  $file->status = 1; // Set status to 0 in order to save temporary file.
-  $file->filesize = $image_info['file_size'];
+  if ($account->uid) {
+    $picture_directory =  file_default_scheme() . '://' . variable_get('user_picture_path', 'pictures');
+    if(file_prepare_directory($picture_directory, FILE_CREATE_DIRECTORY)){
+      $picture_result = drupal_http_request($base_url . '/profiles/commons/images/avatars/avatar-' . commons_normalize_name($account->name) . '.png');
+      $picture_path = file_stream_wrapper_uri_normalize($picture_directory . '/picture-' . $account->uid . '-' . REQUEST_TIME . '.jpg');
+      $picture_file = file_save_data($picture_result->data, $picture_path, FILE_EXISTS_REPLACE);
 
-  // standard Drupal validators for user pictures
-  $validators = array(
-    'file_validate_is_image' => array(),
-    'file_validate_image_resolution' => array(variable_get('user_picture_dimensions', '85x85')),
-    'file_validate_size' => array(variable_get('user_picture_file_size', '30') * 1024),
-  );
+      // Check to make sure the picture isn't too large for the site settings.
+      $validators = array(
+        'file_validate_is_image' => array(),
+        'file_validate_image_resolution' => array(variable_get('user_picture_dimensions', '85x85')),
+        'file_validate_size' => array(variable_get('user_picture_file_size', '30') * 1024),
+      );
 
-  // attach photo to user's account.
-  $errors = file_validate($file, $validators);
-  if (empty($errors)) {
-    file_save($file);
-    $edit['picture'] = $file;
-    user_save($account, $edit);
+      // attach photo to user's account.
+      $errors = file_validate($picture_file, $validators);
+
+      if (empty($errors)) {
+        // Update the user record.
+        $picture_file->uid = $account->uid;
+        $picture_file = file_save($picture_file);
+        file_usage_add($picture_file, 'user', 'user', $account->uid);
+        db_update('users')
+          ->fields(array(
+          'picture' => $picture_file->fid,
+          ))
+          ->condition('uid', $account->uid)
+          ->execute();
+        $account->picture = $picture_file->fid;
+      }
+    }
   }
 }
 
