@@ -403,6 +403,7 @@ projects[commons_topics][version] = "3.x-dev"
 projects[adaptivetheme][type] = "theme"
 projects[adaptivetheme][subdir] = "contrib"
 projects[adaptivetheme][version] = "3.x-dev"
+projects[adaptivetheme][patch][] = "http://drupal.org/files/1918700.adaptivetheme.breadcrumb_rdf_fix.3.patch"
 
 projects[sky][type] = "theme"
 projects[sky][subdir] = "contrib"

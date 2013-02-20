@@ -19,13 +19,13 @@ pull_git() {
 release_notes() {
   OUTPUT="Release Notes for $RELEASE"
   cd $BUILD_PATH/commons_profile
-  OUTPUT="$OUTPUT \n `drush rn --date $FROM_DATE $TO_DATE`"
+  OUTPUT="$OUTPUT <h3>$i:</h3>  `drush rn --date $FROM_DATE $TO_DATE`"
 
   cd $BUILD_PATH/repos/modules
   for i in "${repos[@]}"; do
     echo $i
     cd $i
-    OUTPUT="$OUTPUT \n `drush rn --date $FROM_DATE $TO_DATE`"
+    OUTPUT="$OUTPUT <h3>$i:</h3> `drush rn --date $FROM_DATE $TO_DATE`"
     cd ..
   done
   echo $OUTPUT >> $BUILD_PATH/rn.txt
