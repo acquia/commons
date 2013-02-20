@@ -10,3 +10,15 @@ function commons_q_a_update_3100() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Disable comments on Question nodes. Don't feature answers by default
+ * (http://drupal.org/node/1921498).
+ */
+function commons_q_a_update_3101() {
+    $revert = array(
+      'commons_q_a' => array('variable'),
+  );
+  features_revert($revert);
+  return array();
+}
