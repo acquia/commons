@@ -86,6 +86,10 @@ function commons_events_cancel_event_form($form, &$form_state, $event) {
   );
   $form['submit']['#attributes']['class'][] = 'commons-events-button';
   $form['attending'] = array(
+    '#theme_wrappers' => array('container'),
+    '#attributes' => array(
+      'class' => array('commons-event-status'),
+    ),
     '#markup' => t('You are attending.'),
   );
   return $form;
