@@ -298,3 +298,21 @@ $icons: sprite-map('icons/*.png', $spacing: 20px);
     }
   }
 }
+
+//
+// Position a user picture.
+//
+@mixin place-picture($width: 50px, $extra-padding: 0) {
+  padding-left: $width + 15px + $extra-padding;
+
+  .user-picture {
+    position: absolute;
+    float: left;
+    margin-left: -($width + 15px);
+    top: 10px;
+
+    img {
+      width: $width;
+    }
+  }
+}
