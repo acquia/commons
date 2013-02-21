@@ -234,6 +234,8 @@ projects[sharethis][subdir] = "contrib"
 projects[facetapi][type] = "module"
 projects[facetapi][subdir] = "contrib"
 
+; Remove snippets from non-node type searches:
+; http://drupal.org/node/1923904#comment-7094488
 projects[rich_snippets][type] = "module"
 projects[rich_snippets][subdir] = "contrib"
 projects[rich_snippets][patch][] = "http://drupal.org/files/1923904-search-nodes-only.patch"
