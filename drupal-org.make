@@ -236,6 +236,7 @@ projects[facetapi][subdir] = "contrib"
 
 projects[rich_snippets][type] = "module"
 projects[rich_snippets][subdir] = "contrib"
+projects[rich_snippets][patch][] = "http://drupal.org/files/1923904-search-nodes-only.patch"
 
 projects[schemaorg][type] = "module"
 projects[schemaorg][subdir] = "contrib"
