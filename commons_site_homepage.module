@@ -20,6 +20,8 @@ function commons_site_homepage_form_alter(&$form, &$form_state, $form_id) {
     // "Show Groups I'm following sorted by last updated first"
     $form['following']['#options'][1] = t('following');
     $form['following']['#options'][0] = t('not following');
+    // Users should never be able to show groups in this listing.
+    unset($form['type']['#options']['group']);
     $form['type']['#options']['All'] = t('all content');
     $form['sort_by']['#title'] = t('sorted by');
     foreach ($form['type']['#options'] as $type => $name) {
