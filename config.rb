@@ -8,14 +8,13 @@ javascripts_dir = "scripts"
 
 # output_style = :expanded or :nested or :compact or :compressed
 output_style = :expanded
-environment = :production
 
 relative_assets = true
+ 
+# line_comments and debug_info can be activated by setting the environment
+# flag to "development"
+line_comments = (environment == :development) ? true : false
 
-# To disable debugging comments that display the original location of your selectors. Uncomment:
-# line_comments = false
-
-
-# sass_options = {
-#   :debug_info => true
-# }
+sass_options = {
+  :debug_info => (environment == :development) ? true : false
+}
