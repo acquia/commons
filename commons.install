@@ -86,3 +86,13 @@ function commons_install() {
     drupal_form_submit('system_theme_settings', $form_state);
   }
 }
+
+/**
+ * Enable the Origins theme and set it as the default. *
+ */
+function commons_update_3101() {
+  theme_enable(array('adaptivetheme_admin'));
+  variable_set('theme_default', 'commons_origins');
+  variable_set('node_admin_theme', FALSE);
+  return array();
+}
