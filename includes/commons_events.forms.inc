@@ -8,7 +8,7 @@
  * Form builder for Attend call to action on events, as long as registration
  * is available onsite.
  */
-function commons_events_attend_event_form($form, &$form_state, $event_node, $registration = NULL) {
+function commons_events_attend_event_form($form, &$form_state, $event_node, $registration = NULL, $attendee_count = 0) {
   $form_state['event_node'] = $event_node;
   if (!registration_status('node', $event_node->nid, TRUE)) {
     return array();
@@ -25,6 +25,13 @@ function commons_events_attend_event_form($form, &$form_state, $event_node, $reg
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Attend'),
+  );
+  $form['attending'] = array(
+    '#theme_wrappers' => array('container'),
+    '#attributes' => array(
+      'class' => array('commons-event-status'),
+    ),
+    '#markup' => format_plural($attendee_count, '<span class="commons-event-count">1</span> attendee', '<span class="commons-event-count">@count</span> attendees'),
   );
   $form['#attached']['css'] = array(
     drupal_get_path('module', 'commons_events') . '/css/commons_events.css',
