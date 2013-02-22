@@ -89,8 +89,16 @@ function commons_events_theme($existing, $type, $theme, $path) {
  */
 function commons_events_entity_view_alter(&$build, $type) {
   if ($build['#entity_type'] == 'node' && $build['#bundle'] == 'event') {
+    $attendee_count = db_select('registration', 'r')
+      ->fields('r')
+      ->condition('entity_id', $build['#node']->nid)
+      ->condition('entity_type', 'node')
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+    $build['attendee_count'] = $attendee_count;
     $build['attending'] = array(
-      0 => theme('commons_events_attending_event', array('event' => $build['#node'])),
+      0 => theme('commons_events_attending_event', array('event' => $build['#node'], 'attendee_count' => $attendee_count)),
       '#weight' => -10,
     );
     $vars = array(
@@ -102,14 +110,6 @@ function commons_events_entity_view_alter(&$build, $type) {
     if ($field_location == 'online') {
       unset($build['field_address']);
     }
-    $attendee_count = db_select('registration', 'r')
-      ->fields('r')
-      ->condition('entity_id', $build['#node']->nid)
-      ->condition('entity_type', 'node')
-      ->countQuery()
-      ->execute()
-      ->fetchField();
-    $build['attendee_count'] = $attendee_count;
   }
 }
 
