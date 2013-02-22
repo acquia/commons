@@ -169,11 +169,6 @@ function commons_groups_views_default_views() {
   $handler->display->display_options['filters']['status']['value'] = '1';
   $handler->display->display_options['filters']['status']['group'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
-  /* Filter criterion: User: Picture */
-  $handler->display->display_options['filters']['picture']['id'] = 'picture';
-  $handler->display->display_options['filters']['picture']['table'] = 'users';
-  $handler->display->display_options['filters']['picture']['field'] = 'picture';
-  $handler->display->display_options['filters']['picture']['value'] = '1';
 
   /* Display: group teaser */
   $handler = $view->new_display('panel_pane', 'group teaser', 'panel_pane_1');
@@ -253,6 +248,7 @@ function commons_groups_views_default_views() {
   $handler->display->display_options['fields']['picture']['field'] = 'picture';
   $handler->display->display_options['fields']['picture']['label'] = '';
   $handler->display->display_options['fields']['picture']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['picture']['image_style'] = '50x50';
   /* Field: OG membership: OG user roles in group */
   $handler->display->display_options['fields']['og_roles']['id'] = 'og_roles';
   $handler->display->display_options['fields']['og_roles']['table'] = 'og_membership';
@@ -853,6 +849,7 @@ function commons_groups_views_default_views() {
   $handler->display->display_options['fields']['picture']['field'] = 'picture';
   $handler->display->display_options['fields']['picture']['label'] = '';
   $handler->display->display_options['fields']['picture']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['picture']['image_style'] = '50x50';
   /* Sort criterion: User: Created date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'users';
@@ -865,11 +862,6 @@ function commons_groups_views_default_views() {
   $handler->display->display_options['filters']['status']['value'] = '1';
   $handler->display->display_options['filters']['status']['group'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
-  /* Filter criterion: User: Picture */
-  $handler->display->display_options['filters']['picture']['id'] = 'picture';
-  $handler->display->display_options['filters']['picture']['table'] = 'users';
-  $handler->display->display_options['filters']['picture']['field'] = 'picture';
-  $handler->display->display_options['filters']['picture']['value'] = '1';
 
   /* Display: Content pane */
   $handler = $view->new_display('panel_pane', 'Content pane', 'panel_pane_1');
