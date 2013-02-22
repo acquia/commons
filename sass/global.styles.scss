@@ -234,7 +234,6 @@ var {
  * Wraps the sidebars the content column
  */
 #columns {
-
   .page-user-login & {
     @extend %pod;
     @extend %pod-content;
@@ -530,6 +529,12 @@ var {
 
   .field-name-body {
     margin-bottom: 20px;
+  }
+
+  .comment-comments {
+    a {
+      @include count-btn('comments-dark'); 
+    }
   }
 }
 
@@ -1109,33 +1114,6 @@ h1.node-title {
     &:before {
       top: 1px;
     }
-  }
-}
-
-.view-commons-homepage-content {
-  .comment-add a {
-    @extend %btn-gray;
-    position: relative;
-    font-size: 0;
-    line-height: 0;
-    color: transparent;
-    padding: 3px 26px;
-    height: 14px;
-    top: 2px;
-
-    &:before {
-      content: '';
-      @include sprite_url_height_width($icons, comments-dark);
-    }
-  }
-
-  .node-readmore a {
-    @extend %btn-gray;
-    position: relative;
-    padding: 3px 12px;
-    height: 14px;
-    line-height: 14px;
-    top: 1px;
   }
 }
 
@@ -2260,13 +2238,26 @@ body.page-node .pane-views-panes {
   }
 }
 
-// .pane-views-panes .block-inner,
-// .pane-views .block-inner {
-//   @extend %pod-content;
-// }
+.pane-commons-events-user-upcoming-events-panel-pane-2,
+.pane-commons-events-user-upcoming-events-panel-pane-3,
+.pane-commons-events-upcoming-panel-pane-1,
+.pane-activity-group-panel-pane-1,
+.pane-commons-radioactivity-groups-active-in-group-panel-pane-1,
+.pane-commons-contributors-group-panel-pane-2,
+.pane-commons-wikis-contributor-list-commons-wikis-contributor-pane {
+  @extend %pod;
+  @extend %pod-content;
+}
 
-// move padding to views-row for full stretch borders
-// .pane-commons-activity-streams-activity-panel-pane-1,
+.page-events {
+  .view-commons-events-upcoming {
+    .view-content {
+      @extend %pod;
+      @extend %pod-content;
+    }
+  }
+}
+
 .pane-commons-featured-panel-pane-1,
 .pane-commons-events-upcoming {
   .block-inner {
@@ -2677,15 +2668,11 @@ body.page-node .pane-views-panes {
       margin-right: 0;
     }
 
-    a {
-      display: block;
-      border: 3px solid $white;
-      @include border-radius(2px);
-      box-shadow: 1px 1px 3px $gray;
-      margin: 0 10px 10px 0;
+    .user-picture {
+      margin-bottom: 10px;
 
       img {
-        display: block;
+        width: 40px;
       }
     }
   }

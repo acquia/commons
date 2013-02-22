@@ -137,14 +137,19 @@ function commons_origins_process_page(&$vars) {
  * Override or insert variables into the node templates.
  */
 function commons_origins_preprocess_node(&$vars) {
-  // dpm($vars);
-
   if ($vars['promote']) {
     $vars['submitted'] .= ' <span class="featured-node-tooltip">' . t('Featured') . ' ' . $vars['type'] . '</span>';
   }
 
   if (empty($vars['user_picture'])) {
     $vars['classes_array'][] = 'no-user-picture';
+  }
+
+  // Add classes to render the comment-comments link as a button with a number attached.
+  if (!empty($vars['content']['links']['comment']['#links']['comment-comments'])) {
+    $comments_link = &$vars['content']['links']['comment']['#links']['comment-comments'];
+    $comments_link['attributes']['class'][] = 'link-with-counter';
+    $comments_link['title'] = str_replace($vars['comment_count'], '<span class="counter">' . $vars['comment_count'] . '</span>', $comments_link['title']);
   }
 }
 function commons_origins_process_node(&$vars) {
