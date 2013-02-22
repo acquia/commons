@@ -23,6 +23,14 @@ function commons_events_menu() {
 }
 
 /**
+ * Implements hook_menu_alter().
+ */
+function commons_events_menu_alter(&$items) {
+  // Hide the "Register" tab since we expose an "Attend" button.
+  $items['node/%/register']['access callback'] = FALSE;
+}
+
+/**
  * Access callback for showing the Attendees tab.
  */
 function commons_events_attendee_access($event_node) {
