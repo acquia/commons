@@ -264,7 +264,7 @@ function commons_origins_links($variables) {
     $i = 1;
 
     foreach ($links as $key => $link) {
-      if ($link['#access'] !== FALSE) {
+      if (isset($link['#access']) && $link['#access'] !== FALSE) {
         $class = array($key);
 
         // Add first, last and active classes to the list of links to help out themers.
