@@ -5,6 +5,15 @@
  */
 
 /**
+ * Implements hook_admin_paths_alter().
+ */
+function commons_admin_paths_alter(&$paths) {
+  // Avoid switching between themes when users edit their account.
+  $paths['user'] = FALSE;
+  $paths['user/*'] = FALSE;
+}
+
+/**
  * Implements hook_install_tasks_alter().
  */
 function commons_install_tasks_alter(&$tasks, $install_state) {
