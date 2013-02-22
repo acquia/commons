@@ -57,13 +57,13 @@ function commons_search_form_alter(&$form, &$form_state, $form_id) {
       $form['custom_search_types']['#options']['o-commons_search'] = t('This group');
       $form['custom_search_types']["#default_value"] = 'o-commons_search';
       $form_state['search_group_id'] = $node->nid;
-      $form['#submit'][] = 'commons_search_search_form_submit';
     }
     if (isset($_REQUEST['keys'])) {
       // If we've already searched, refill the search box with the current
       // search keywords.
       $form['search_block_form']['#default_value'] = check_plain($_REQUEST['keys']);
     }
+    $form['#submit'][] = 'commons_search_search_form_submit';
   }
 }
 
@@ -86,6 +86,11 @@ function commons_search_search_form_submit($form, &$form_state) {
       // use a view with exposed search terms to do the searching.
       drupal_goto('search/group/' . $form_state['search_group_id'], array('query' => array('keys' => $keys)));
     }
+  }
+  else if ($form_state['values']['custom_search_types'] == 'c-user') {
+    // Force update the redirect on User search since Custom Search is weird.
+    $keys = check_plain($form_state['values']['search_block_form']);
+    $form_state['redirect'] = 'search/user/' . $keys;
   }
 }
 
