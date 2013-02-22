@@ -24,6 +24,10 @@
  * Smartphone sizes and down
  */
 @media only screen and (max-width: 480px) {
+  body.toolbar {
+    padding-top: 0 !important;
+  }
+
   /* 
    * Float Region blocks example:
    * In smaller screen sizes we can remove the float and widths so all blocks
@@ -64,6 +68,10 @@
     position: static;
   }
 
+  #toolbar {
+    position: static;
+  }
+
   #toolbar-user {
     position: absolute;
     height: 1px;
@@ -73,13 +81,8 @@
     clip: rect(1px, 1px, 1px, 1px);
   }
 
-  div.panels-ipe-pseudobutton-container a {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    width: 34px;
-    padding-right: 0;
-    overflow: hidden;
+  div#panels-ipe-control-container {
+    display: none !important;
   }
 }
 /*
