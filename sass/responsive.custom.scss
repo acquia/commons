@@ -82,6 +82,15 @@
     clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
     clip: rect(1px, 1px, 1px, 1px);
   }
+  
+  div.panels-ipe-pseudobutton-container {
+    a {
+      @include box-sizing(border-box);
+      width: 34px;
+      padding-right: 0;
+      overflow: hidden;
+    }
+  }
 }
 
 
