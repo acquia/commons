@@ -19,9 +19,7 @@ function commons_install() {
   // Set a default administrative theme:
   variable_set('admin_theme', 'adaptivetheme_admin');
   variable_set('node_admin_theme', FALSE);
-
-  // Set a default user avatar.
-  variable_set('user_picture_default', 'profiles/commons/images/avatars/user-avatar.png');
+  commons_set_default_avatar();
 
   // Place site blocks in the menu_bar and header regions.
   $menu_block = array(
