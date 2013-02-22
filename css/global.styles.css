@@ -57,6 +57,10 @@ body.page-node .pane-views-panes > div, .pane-commons-events-user-upcoming-event
   padding: 10px 10px 20px 10px;
 }
 
+.node.node-event > .node-content, .node.node-poll > .node-content, .node.node-question > .node-content, .node-teaser.node-promoted.node-event > .node-content, .node-teaser.node-promoted.node-poll > .node-content, .node-teaser.node-promoted.node-question > .node-content {
+  margin-right: 90px;
+}
+
 .commons-sign-up, .pane-commons-groups-commons-groups-create-group a, #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before > a, #quicktabs-container-commons_bw .quicktabs-tabpage .comment-add a, #content-column .view-content input[type="submit"], form.commons-events-form-float input, form.commons-events-form-float input:hover, .pane-commons-events-commons-events-create-event-link a {
   box-shadow: 1px 1px 1px #abe0a2 inset, 0 3px 3px rgba(0, 0, 0, 0.09);
   padding: 0 10px;
@@ -2776,6 +2780,13 @@ html.js input.form-autocomplete {
 html.js input.throbbing {
   background-position: 100% -15px;
   /* LTR */
+}
+
+/**
+ * Forms in tables.
+ */
+tr.odd .form-item, tr.even .form-item {
+  white-space: normal;
 }
 
 /*

@@ -3466,6 +3466,18 @@ body.page-node.node-type-group {
   background-position: 100% -15px; /* LTR */
 }
 
+/**
+ * Forms in tables.
+ */
+tr {
+  &.odd,
+  &.even {
+    .form-item {
+      white-space: normal;
+    }
+  }
+}
+
 /*
  * Wrapper for a form element (or group of form elements) and its label
  */
