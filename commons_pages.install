@@ -1,0 +1,12 @@
+<?php
+
+/**
+ * Disable summary on Page nodes.
+ */
+function commons_pages_update_7000() {
+    $revert = array(
+      'commons_pages' => array('field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}
