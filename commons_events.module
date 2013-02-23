@@ -26,9 +26,9 @@ function commons_events_menu() {
 /**
  * Implements hook_menu_alter().
  */
-function commons_events_menu_alter(&$menu) {
-  // Change Register tab to a callback so it is hidden.
-  $menu['node/%node/register']['type'] = MENU_CALLBACK;
+function commons_events_menu_alter(&$items) {
+  // Hide the "Register" tab since we expose an "Attend" button.
+  $items['node/%/register']['access callback'] = FALSE;
 }
 
 /**
