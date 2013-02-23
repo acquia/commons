@@ -151,15 +151,34 @@ function commons_wikis_views_default_views() {
   $handler->display->display_options['fields']['picture']['label'] = '';
   $handler->display->display_options['fields']['picture']['exclude'] = TRUE;
   $handler->display->display_options['fields']['picture']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['picture']['image_style'] = '35x35';
   /* Field: User: Name */
   $handler->display->display_options['fields']['name']['id'] = 'name';
   $handler->display->display_options['fields']['name']['table'] = 'users';
   $handler->display->display_options['fields']['name']['field'] = 'name';
   $handler->display->display_options['fields']['name']['relationship'] = 'uid';
   $handler->display->display_options['fields']['name']['label'] = '';
-  $handler->display->display_options['fields']['name']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['name']['alter']['text'] = '[picture]<br />[name]';
+  $handler->display->display_options['fields']['name']['exclude'] = TRUE;
   $handler->display->display_options['fields']['name']['element_label_colon'] = FALSE;
+  /* Field: User: Uid */
+  $handler->display->display_options['fields']['uid']['id'] = 'uid';
+  $handler->display->display_options['fields']['uid']['table'] = 'users';
+  $handler->display->display_options['fields']['uid']['field'] = 'uid';
+  $handler->display->display_options['fields']['uid']['relationship'] = 'uid';
+  $handler->display->display_options['fields']['uid']['label'] = '';
+  $handler->display->display_options['fields']['uid']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['uid']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['uid']['link_to_user'] = FALSE;
+  /* Field: Global: Custom text */
+  $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['table'] = 'views';
+  $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['label'] = '';
+  $handler->display->display_options['fields']['nothing']['alter']['text'] = '[picture]<span>[name]</span>';
+  $handler->display->display_options['fields']['nothing']['alter']['make_link'] = TRUE;
+  $handler->display->display_options['fields']['nothing']['alter']['path'] = 'user/[uid]';
+  $handler->display->display_options['fields']['nothing']['alter']['absolute'] = TRUE;
+  $handler->display->display_options['fields']['nothing']['element_label_colon'] = FALSE;
   /* Contextual filter: Content revision: Nid */
   $handler->display->display_options['arguments']['nid']['id'] = 'nid';
   $handler->display->display_options['arguments']['nid']['table'] = 'node_revision';
@@ -169,6 +188,12 @@ function commons_wikis_views_default_views() {
   $handler->display->display_options['arguments']['nid']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['nid']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['nid']['summary_options']['items_per_page'] = '25';
+  /* Filter criterion: User: Active */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'users';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['relationship'] = 'uid';
+  $handler->display->display_options['filters']['status']['value'] = '1';
 
   /* Display: Content pane */
   $handler = $view->new_display('panel_pane', 'Content pane', 'commons_wikis_contributor_pane');
