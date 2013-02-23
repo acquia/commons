@@ -18,8 +18,17 @@ function commons_events_menu() {
     'access callback' => 'commons_events_attendee_access',
     'access arguments' => array(1),
     'type' => MENU_LOCAL_TASK,
+    'weight' => 5,
   );
   return $items;
+}
+
+/**
+ * Implements hook_menu_alter().
+ */
+function commons_events_menu_alter(&$menu) {
+  // Change Register tab to a callback so it is hidden.
+  $menu['node/%node/register']['type'] = MENU_CALLBACK;
 }
 
 /**
