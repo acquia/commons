@@ -80,6 +80,7 @@
     position: static;
   }
 
+  // The toolbar should not be persitently in view on small screens.
   #toolbar {
     position: static;
   }
@@ -92,8 +93,33 @@
     clip: rect(1px, 1px, 1px, 1px);
   }
   
+  // Remove the panels adminstration controls on small screens.
   div#panels-ipe-control-container {
     display: none !important;
+  }
+
+  // Commons quicktab pills are distilled to only icons.
+  .quicktabs-style-commons-pills {
+    ul {
+      &.quicktabs-tabs {
+        li {
+          a {
+            font: 0/30px a;
+            color: transparent;
+            text-align: center;
+            @include box-sizing(border-box);
+            width: 30px;
+            height: 30px;
+            padding: 0;
+
+            &:before {
+              margin-right: 0;
+              vertical-align: middle;
+            }
+          }
+        }
+      }
+    }
   }
 }
 
