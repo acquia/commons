@@ -1,0 +1,12 @@
+<?php
+
+/**
+ * Disable summary on Wiki nodes.
+ */
+function commons_wikis_update_7000() {
+    $revert = array(
+      'commons_wikis' => array('field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}
