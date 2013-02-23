@@ -172,19 +172,26 @@ function commons_origins_preprocess_node(&$vars) {
     }
   }
 }
-/**
-function commons_origins_process_node(&$vars) {
-}
-// */
+
 
 /**
 * Implements hook_form_alter().
 */
 function commons_origins_form_alter(&$form, &$form_state, $form_id) {
-  // dpm($form_id);
-  if ($form_id == 'post_node_form' || $form_id == 'document_node_form' || $form_id == 'question_node_form' || $form_id == 'event_node_form' || $form_id == 'wiki_node_form' || $form_id == 'poll_node_form') {
+  if (isset($form['#node']) && substr($form_id, -10) == '_node_form') {
     $form['additional_settings']['#type'] = 'fieldset';
   }
+  // Description text on these fields is redundant.
+  if ($form_id == 'user_login') {
+    $form['name']['#description'] = '';
+    $form['pass']['#description'] = '';
+  }
+
+  if ($form_id == 'user_register_form') {
+    $form['account']['mail']['#description'] = t('Password reset and notification emails will be sent to this address.');
+  }
+
+  // Add the color palette selection form to the apperance settings form.
   if ($form_id == 'system_theme_settings') {
     require_once('commons_origins.palettes.inc');
     commons_origins_palettes_form($form);
