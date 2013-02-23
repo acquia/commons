@@ -91,7 +91,7 @@ function commons_q_a_field_default_field_instances() {
     'label' => 'Body',
     'required' => FALSE,
     'settings' => array(
-      'display_summary' => TRUE,
+      'display_summary' => FALSE,
       'text_processing' => 1,
       'user_register_form' => FALSE,
     ),
@@ -188,7 +188,7 @@ function commons_q_a_field_default_field_instances() {
     'label' => 'Body',
     'required' => FALSE,
     'settings' => array(
-      'display_summary' => TRUE,
+      'display_summary' => FALSE,
       'text_processing' => 1,
       'user_register_form' => FALSE,
     ),

@@ -22,3 +22,14 @@ function commons_q_a_update_3101() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Disable summary on Question/Answer nodes.
+ */
+function commons_q_a_update_3102() {
+    $revert = array(
+      'commons_q_a' => array('field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}
