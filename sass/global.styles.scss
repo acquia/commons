@@ -3245,9 +3245,6 @@ body.page-node .pane-views-panes {
   display: none;
   margin-left: 5px;
   z-index: 1;
-  // @include opacity(0);
-  // @include transition(opacity 0.5s, z-index 0.1s 0.5s);
-  // z-index: -1;
 
   &:before {
     content: '';
@@ -3263,10 +3260,8 @@ body.page-node .pane-views-panes {
     margin-top: -5px;
   }
 
-  .node-promoted:hover & {
+  .node-teaser.node-promoted:hover & {
     display: block;
-    // @include opacity(1);
-    // z-index: 1;
   }
 }
 
