@@ -1078,7 +1078,9 @@ h1.node-title {
   }
 }
 
-.flag-commons-follow-node, .flag-commons-follow-group, .flag-commons-follow-user {
+.node .flag-commons-follow-node,
+.node .flag-commons-follow-group,
+.pane-user-flag-commons-follow-user-link .flag-commons-follow-user {
   display: inline-block;
 
   a {
@@ -1107,7 +1109,7 @@ h1.node-title {
   }
 }
 
-.flag-commons-follow-node a {
+.node .flag-commons-follow-node a {
   &.flag-action, &.unflag-action {
     font-size: 0;
     line-height: 0;
@@ -4111,6 +4113,25 @@ body.front.logged-in .view-commons-homepage-content .article.node {
   .search-results {
     @extend %pod;
     @extend %pod-content;
+  }
+}
+
+// Notification settings
+
+.view-commons-follow-node,
+.view-commons-follow-user,
+.view-commons-follow-taxonomy-term {
+  .views-field-ops,
+  .views-field-ops-1 {
+    width: 20%;
+  }
+
+  .views-field-ops {
+    text-align: right;
+  }
+
+  .views-field-ops-1 {
+    text-align: center;
   }
 }
 

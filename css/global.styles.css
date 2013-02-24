@@ -87,7 +87,9 @@ body.page-node .pane-views-panes > div, .pane-commons-events-user-upcoming-event
   text-decoration: none;
 }
 
-.node .comment-comments a, li.sharethis, .flag-commons-follow-node a.flag-action, .flag-commons-follow-group a.flag-action, .flag-commons-follow-user a.flag-action, .pager a, .pane-node-flag-commons-follow-group-link .flag-action, .form-actions input[type="submit"] {
+.node .comment-comments a, li.sharethis, .node .flag-commons-follow-node a.flag-action,
+.node .flag-commons-follow-group a.flag-action,
+.pane-user-flag-commons-follow-user-link .flag-commons-follow-user a.flag-action, .pager a, .pane-node-flag-commons-follow-group-link .flag-action, .form-actions input[type="submit"] {
   padding: 0 10px;
   background-color: #fefefe;
   *zoom: 1;
@@ -107,11 +109,15 @@ body.page-node .pane-views-panes > div, .pane-commons-events-user-upcoming-event
   text-align: center;
   display: inline-block;
 }
-.node .comment-comments a:hover, li.sharethis:hover, .flag-commons-follow-node a.flag-action:hover, .flag-commons-follow-group a.flag-action:hover, .flag-commons-follow-user a.flag-action:hover, .pager a:hover, .pane-node-flag-commons-follow-group-link .flag-action:hover, .form-actions input[type="submit"]:hover {
+.node .comment-comments a:hover, li.sharethis:hover, .node .flag-commons-follow-node a.flag-action:hover,
+.node .flag-commons-follow-group a.flag-action:hover,
+.pane-user-flag-commons-follow-user-link .flag-commons-follow-user a.flag-action:hover, .pager a:hover, .pane-node-flag-commons-follow-group-link .flag-action:hover, .form-actions input[type="submit"]:hover {
   text-decoration: none;
 }
 
-.flag-commons-follow-node a.unflag-action, .flag-commons-follow-group a.unflag-action, .flag-commons-follow-user a.unflag-action, .pane-node-flag-commons-follow-group-link .unflag-action {
+.node .flag-commons-follow-node a.unflag-action,
+.node .flag-commons-follow-group a.unflag-action,
+.pane-user-flag-commons-follow-user-link .flag-commons-follow-user a.unflag-action, .pane-node-flag-commons-follow-group-link .unflag-action {
   padding: 0 10px;
   background-color: #f3f3f3;
   -webkit-border-radius: 3px;
@@ -124,7 +130,9 @@ body.page-node .pane-views-panes > div, .pane-commons-events-user-upcoming-event
   display: inline-block;
   border: 1px solid #f3f3f3;
 }
-.flag-commons-follow-node a.unflag-action:hover, .flag-commons-follow-group a.unflag-action:hover, .flag-commons-follow-user a.unflag-action:hover, .pane-node-flag-commons-follow-group-link .unflag-action:hover {
+.node .flag-commons-follow-node a.unflag-action:hover,
+.node .flag-commons-follow-group a.unflag-action:hover,
+.pane-user-flag-commons-follow-user-link .flag-commons-follow-user a.unflag-action:hover, .pane-node-flag-commons-follow-group-link .unflag-action:hover {
   text-decoration: none;
 }
 
@@ -1036,13 +1044,19 @@ h1.node-title a:hover {
   clear: left;
 }
 
-.flag-commons-follow-node, .flag-commons-follow-group, .flag-commons-follow-user {
+.node .flag-commons-follow-node,
+.node .flag-commons-follow-group,
+.pane-user-flag-commons-follow-user-link .flag-commons-follow-user {
   display: inline-block;
 }
-.flag-commons-follow-node a, .flag-commons-follow-group a, .flag-commons-follow-user a {
+.node .flag-commons-follow-node a,
+.node .flag-commons-follow-group a,
+.pane-user-flag-commons-follow-user-link .flag-commons-follow-user a {
   position: relative;
 }
-.flag-commons-follow-node a:before, .flag-commons-follow-group a:before, .flag-commons-follow-user a:before {
+.node .flag-commons-follow-node a:before,
+.node .flag-commons-follow-group a:before,
+.pane-user-flag-commons-follow-user-link .flag-commons-follow-user a:before {
   content: '';
   background: url('../images/icons-se7682cf316.png') 0 -939px no-repeat;
   width: 13px;
@@ -1052,14 +1066,18 @@ h1.node-title a:hover {
   position: relative;
   top: 1px;
 }
-.flag-commons-follow-node .flag-throbber, .flag-commons-follow-group .flag-throbber, .flag-commons-follow-user .flag-throbber {
+.node .flag-commons-follow-node .flag-throbber,
+.node .flag-commons-follow-group .flag-throbber,
+.pane-user-flag-commons-follow-user-link .flag-commons-follow-user .flag-throbber {
   display: inline-block;
 }
-.flag-commons-follow-node span, .flag-commons-follow-group span, .flag-commons-follow-user span {
+.node .flag-commons-follow-node span,
+.node .flag-commons-follow-group span,
+.pane-user-flag-commons-follow-user-link .flag-commons-follow-user span {
   display: none !important;
 }
 
-.flag-commons-follow-node a.flag-action, .flag-commons-follow-node a.unflag-action {
+.node .flag-commons-follow-node a.flag-action, .node .flag-commons-follow-node a.unflag-action {
   font-size: 0;
   line-height: 0;
   color: transparent;
@@ -1068,7 +1086,7 @@ h1.node-title a:hover {
   position: relative;
   top: 1px;
 }
-.flag-commons-follow-node a.flag-action:before, .flag-commons-follow-node a.unflag-action:before {
+.node .flag-commons-follow-node a.flag-action:before, .node .flag-commons-follow-node a.unflag-action:before {
   top: 1px;
 }
 
@@ -3264,6 +3282,25 @@ body.front.logged-in .view-commons-homepage-content .article.node.no-user-pictur
 }
 .page-search .region-two-33-66-second > div {
   padding-left: 15px;
+}
+
+.view-commons-follow-node .views-field-ops,
+.view-commons-follow-node .views-field-ops-1,
+.view-commons-follow-user .views-field-ops,
+.view-commons-follow-user .views-field-ops-1,
+.view-commons-follow-taxonomy-term .views-field-ops,
+.view-commons-follow-taxonomy-term .views-field-ops-1 {
+  width: 20%;
+}
+.view-commons-follow-node .views-field-ops,
+.view-commons-follow-user .views-field-ops,
+.view-commons-follow-taxonomy-term .views-field-ops {
+  text-align: right;
+}
+.view-commons-follow-node .views-field-ops-1,
+.view-commons-follow-user .views-field-ops-1,
+.view-commons-follow-taxonomy-term .views-field-ops-1 {
+  text-align: center;
 }
 
 #edit-commons-origins-palette .form-item-commons-origins-palette {
