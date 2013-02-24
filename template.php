@@ -171,6 +171,24 @@ function commons_origins_preprocess_node(&$vars) {
       }
     }
   }
+
+  // Replace the submitted text on nodes with something a bit more pertinent to
+  // the content type.
+  if (variable_get('node_submitted_' . $vars['node']->type, TRUE)) {
+    $placeholders = array(
+      '@type' => $vars['node']->type,
+      '!user' => $vars['name'],
+      '!date' => $vars['date'],
+    );
+
+    // Use proper grammar.
+    if (preg_match('/^[aeiou]|s\z/i', $vars['node']->type)) {
+      $vars['submitted'] = t('An @type was created by !user on !date', $placeholders);
+    }
+    else {
+      $vars['submitted'] = t('A @type was created by !user on !date', $placeholders);
+    }
+  }
 }
 
 
