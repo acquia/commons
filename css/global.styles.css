@@ -483,18 +483,6 @@ var {
 .node {
   position: relative;
 }
-.node .user-picture:after {
-  content: "";
-  width: 5px;
-  height: 8px;
-  position: absolute;
-  right: -5px;
-  top: 10px;
-  background: url('../images/user_img_arrow.png?1361722669');
-}
-.node .user-picture img {
-  width: 50px;
-}
 .node.node-answer, .node.node-event, .node.node-poll, .node.node-post, .node.node-question, .node.node-wiki.node-teaser {
   padding-left: 68px;
 }
@@ -569,6 +557,22 @@ var {
   -moz-box-shadow: #a5a5a5 1px 1px 4px;
   box-shadow: #a5a5a5 1px 1px 4px;
   line-height: 0;
+}
+.node .user-picture:after, .comment .user-picture:after, .node
+.views-field-picture:after, .comment
+.views-field-picture:after {
+  content: "";
+  width: 5px;
+  height: 8px;
+  position: absolute;
+  right: -5px;
+  top: 10px;
+  background: url('../images/user_img_arrow.png?1361722669');
+}
+.node .user-picture img, .comment .user-picture img, .node
+.views-field-picture img, .comment
+.views-field-picture img {
+  width: 50px;
 }
 
 /*
@@ -778,10 +782,6 @@ h1.node-title a:hover {
   width: 40px;
 }
 
-.view-commons-bw-all .content, .view-commons-bw-all .views-field-timestamp, .view-commons-bw-posts .content, .view-commons-bw-posts .views-field-timestamp, .view-commons-bw-q-a .content, .view-commons-bw-q-a .views-field-timestamp, .view-commons-bw-wikis .content, .view-commons-bw-wikis .views-field-timestamp, .view-commons-bw-polls .content, .view-commons-bw-polls .views-field-timestamp, #comments .content, #comments .views-field-timestamp {
-  margin-left: 70px;
-}
-
 .page-node .field .field-label {
   font-weight: normal;
   font-size: 16px;
@@ -850,16 +850,18 @@ h1.node-title a:hover {
 .page-node .node nav li .flag-commons-follow-group a:before {
   top: 0;
 }
-.page-node #comments {
+
+#comments {
   margin: 0;
 }
-.page-node #comments h2 {
+#comments h2 {
   color: #333333;
 }
-.page-node #comments h2.comment-title {
+#comments h2.comment-title {
   margin-bottom: 25px;
+  font-size: 2.2em;
 }
-.page-node #comments h2.comment-title:before {
+#comments h2.comment-title:before {
   content: '';
   background: url('../images/icons-se7682cf316.png') 0 -30px no-repeat;
   width: 31px;
@@ -869,24 +871,53 @@ h1.node-title a:hover {
   position: relative;
   top: 1px;
 }
-.page-node #comments h2.comment-form {
+#comments h2.comment-form {
   margin-bottom: 0;
 }
-.page-node #comments h2.comment-form:before {
+#comments h2.comment-form:before {
   display: none;
 }
-.page-node #comments .form-item-subject input {
+#comments .form-item-subject input {
   width: 100%;
 }
-.page-node #comments .comment {
+#comments .rate-widget-commons_like {
+  position: absolute;
+  right: 5px;
+  top: 15px;
+}
+
+.comment {
+  padding-left: 68px;
   border-bottom: 1px solid #eeeeee;
   padding-bottom: 20px;
   position: relative;
 }
-.page-node #comments .comment-reply {
+.comment .user-picture {
+  position: absolute;
+  float: left;
+  margin-left: -68px;
+  top: 0;
+}
+.comment .user-picture img {
+  width: 50px;
+}
+.comment .author-datetime {
+  margin-bottom: 1.4em;
+}
+
+.comment-title,
+.comment .author-datetime {
+  margin-right: 90px;
+}
+
+.comment-title {
+  margin-bottom: .2em;
+}
+
+.comment-reply {
   float: right;
 }
-.page-node #comments .comment-reply:before {
+.comment-reply:before {
   content: '';
   background: url('../images/icons-se7682cf316.png') 0 -1061px no-repeat;
   width: 13px;
@@ -898,10 +929,9 @@ h1.node-title a:hover {
   margin-right: 8px;
   top: 3px;
 }
-.page-node #comments .rate-widget-commons_like {
-  position: absolute;
-  right: 5px;
-  top: 15px;
+
+.comment-form .form-actions {
+  margin-bottom: 0;
 }
 
 .page-node-add .node-form {
@@ -2735,13 +2765,6 @@ body.page-node.node-type-group h2#page-title {
  */
 .comment {
   margin-bottom: 20px;
-}
-
-/*
- * Comment title
- */
-.comment-title {
-  margin: 0;
 }
 
 /*

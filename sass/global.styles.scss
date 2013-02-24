@@ -486,22 +486,6 @@ var {
 .node {
   position: relative;
 
-  .user-picture {
-    &:after {
-      content:"";
-      width:5px;
-      height:8px;
-      position:absolute;
-      right:-5px;
-      top:10px;
-      background:image-url('user_img_arrow.png');
-    }
-
-    img {
-      width: 50px;
-    }
-  }
-
   &.node-answer,
   &.node-event,
   &.node-poll,
@@ -572,6 +556,23 @@ var {
   @include border-radius(3px);
   @include box-shadow($light_gray 1px 1px 4px);
   line-height:0;
+
+  .node &,
+  .comment & {
+    &:after {
+      content:"";
+      width:5px;
+      height:8px;
+      position:absolute;
+      right:-5px;
+      top:10px;
+      background:image-url('user_img_arrow.png');
+    }
+
+    img {
+      width: 50px;
+    }
+  }
 }
 
 /*
@@ -798,16 +799,7 @@ h1.node-title {
   }
 }
 
-.view-commons-bw-all, .view-commons-bw-posts, .view-commons-bw-q-a, .view-commons-bw-wikis, .view-commons-bw-polls, #comments {
-  .content, .views-field-timestamp {
-    margin-left: 70px;
-  }
-}
-
 .page-node {
-  // .rate-widget-commons_like {
-  //   @extend %like-btn;
-  // }
   .field .field-label {
     font-weight: normal;
     font-size: 16px;
@@ -882,57 +874,80 @@ h1.node-title {
     }
   }
 
-  #comments {
-    margin: 0;
+}
 
-    h2 {
-      color: $dark_gray;
+#comments {
+  margin: 0;
 
-      &.comment-title {
-        margin-bottom: 25px;
+  h2 {
+    color: $dark_gray;
 
-        &:before {
-          content: '';
-          @include sprite_url_height_width($icons, comments-large);
-        }
-      }
-
-      &.comment-form {
-        margin-bottom: 0;
-        &:before {
-          display: none;
-        }
-      }
-    }
-
-    .form-item-subject input {
-      width: 100%;
-    }
-
-    .comment {
-      border-bottom: 1px solid $lighter_gray;
-      padding-bottom: 20px;
-      position: relative;
-    }
-
-    .comment-reply {
-      float: right;
+    &.comment-title {
+      margin-bottom: 25px;
+      font-size: 2.2em;
 
       &:before {
         content: '';
-        @include sprite_url_height_width($icons, comments);
-        margin-right: 8px;
-        top: 3px;
+        @include sprite_url_height_width($icons, comments-large);
       }
     }
 
-    .rate-widget-commons_like {
-      position: absolute;
-      right: 5px;
-      top: 15px;
+    &.comment-form {
+      margin-bottom: 0;
+      &:before {
+        display: none;
+      }
     }
   }
+
+  .form-item-subject input {
+    width: 100%;
+  }
+
+  .rate-widget-commons_like {
+    position: absolute;
+    right: 5px;
+    top: 15px;
+  }
 }
+
+.comment {
+  @include place-picture;
+  border-bottom: 1px solid $lighter_gray;
+  padding-bottom: 20px;
+  position: relative;
+
+  .author-datetime {
+    margin-bottom: 1.4em;
+  }
+}
+
+.comment-title,
+.comment .author-datetime {
+  margin-right: 90px;
+}
+
+.comment-title {
+  margin-bottom: .2em;
+}
+
+.comment-reply {
+  float: right;
+
+  &:before {
+    content: '';
+    @include sprite_url_height_width($icons, comments);
+    margin-right: 8px;
+    top: 3px;
+  }
+}
+
+.comment-form {
+  .form-actions {
+    margin-bottom: 0;
+  }
+}
+
 
 .page-node-add {
   .node-form {
@@ -3394,15 +3409,6 @@ body.page-node.node-type-group {
 
   ul.links {}
 }
-
-
-/*
- * Comment title
- */
-.comment-title {
-  margin: 0;
-}
-
 
 /*
  * Comment states

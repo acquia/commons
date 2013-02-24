@@ -60,12 +60,14 @@
  */
 ?>
 <div class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
-  <div class="submitted">
+  <h3 class="comment-title"><?php print $title; ?></h3>
+  <div class="author-datetime submitted">
     <?php print $submitted; ?>
     <?php if ($new): ?>
       <span class="new"><?php print $new ?></span>
     <?php endif; ?>
   </div>
+  <?php print $picture; ?>
 
   <div class="content"<?php print $content_attributes; ?>>
     <?php
