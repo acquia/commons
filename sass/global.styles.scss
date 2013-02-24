@@ -2878,12 +2878,19 @@ body.page-node .pane-views-panes {
 }
 
 #quicktabs-container-commons_bw .quicktabs-tabpage {
-  position: relative;
+  .view-filters,
+  .attachment-before {
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  .view-filters {
+    float: left;
+  }
 
   .attachment-before {
-    position: absolute;
-    right: 0;
-    top: 0;
+    float: right;
+    margin-bottom: 1.4em;
 
     > a {
       @extend %btn-green;
@@ -2899,6 +2906,10 @@ body.page-node .pane-views-panes {
         padding: 0 7px;
       }
     }
+  }
+
+  .view-content {
+    clear: both;
   }
 
   .comment-add a {

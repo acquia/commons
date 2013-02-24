@@ -2426,13 +2426,17 @@ body.page-node .pane-views-panes h2 {
   display: block;
 }
 
-#quicktabs-container-commons_bw .quicktabs-tabpage {
-  position: relative;
+#quicktabs-container-commons_bw .quicktabs-tabpage .view-filters,
+#quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before {
+  display: inline-block;
+  vertical-align: top;
+}
+#quicktabs-container-commons_bw .quicktabs-tabpage .view-filters {
+  float: left;
 }
 #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before {
-  position: absolute;
-  right: 0;
-  top: 0;
+  float: right;
+  margin-bottom: 1.4em;
 }
 #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before > a.commons-posts-create {
   -moz-border-radius-topright: 0;
@@ -2450,6 +2454,9 @@ body.page-node .pane-views-panes h2 {
   -webkit-border-bottom-left-radius: 0;
   border-bottom-left-radius: 0;
   padding: 0 7px;
+}
+#quicktabs-container-commons_bw .quicktabs-tabpage .view-content {
+  clear: both;
 }
 #quicktabs-container-commons_bw .quicktabs-tabpage .comment-add a {
   position: absolute;
