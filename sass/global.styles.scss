@@ -3598,7 +3598,6 @@ form.commons-events-form-float {
 
 #content-column .view-content input[type="submit"] {
   @extend %btn-green;
-  margin:0 15px 0 0;
   padding: 5px 20px;
 }
 
@@ -3616,12 +3615,10 @@ form.commons-events-form-float {
   max-width: 80px;
   margin-right: -90px;
   text-align: center;
+
   input, input:hover {
     @extend %btn-green;
     padding: 3px 10px;
-    #content-column & {
-      margin-right: 0;
-    }
   }
 }
 
@@ -3955,7 +3952,7 @@ body.front.logged-in {
   }
   #views-exposed-form-commons-homepage-content-panel-pane-1 .views-exposed-widgets {
     padding: 10px 10px 10px 10px;
-    margin-bottom: 20px;
+    margin-bottom: 0;
 
     &.widgets-active {
       @extend %pod;
@@ -3974,16 +3971,6 @@ body.front.logged-in .view-commons-homepage-content .article.node {
     .node-header, .node-content, .author-datetime, .links {
       margin-left: 0;
     }
-  }
-}
-
-.front {
-  .region-two-66-33-first {
-    margin-top: 18px;
-  }
-
-  .region-two-66-33-second {
-    margin-top: 80px;
   }
 }
 
