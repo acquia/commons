@@ -75,30 +75,6 @@ function commons_wikis_pages_panelizer_defaults() {
     $display->content['new-1'] = $pane;
     $display->panels['two_66_33_first'][0] = 'new-1';
     $pane = new stdClass();
-    $pane->pid = 'new-2';
-    $pane->panel = 'two_66_33_first';
-    $pane->type = 'node_comments';
-    $pane->subtype = 'node_comments';
-    $pane->shown = TRUE;
-    $pane->access = array();
-    $pane->configuration = array(
-      'mode' => '1',
-      'comments_per_page' => '30',
-      'context' => 'panelizer',
-      'override_title' => 1,
-      'override_title_text' => '',
-    );
-    $pane->cache = array();
-    $pane->style = array(
-      'settings' => NULL,
-    );
-    $pane->css = array();
-    $pane->extras = array();
-    $pane->position = 1;
-    $pane->locks = array();
-    $display->content['new-2'] = $pane;
-    $display->panels['two_66_33_first'][1] = 'new-2';
-    $pane = new stdClass();
     $pane->pid = 'new-3';
     $pane->panel = 'two_66_33_second';
     $pane->type = 'views_panes';
