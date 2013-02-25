@@ -70,7 +70,7 @@ function commons_q_a_node_info() {
     'answer' => array(
       'name' => t('Answer'),
       'base' => 'node_content',
-      'description' => '',
+      'description' => 'Use answers for responses to Question content, which can be rated by user votes.',
       'has_title' => '1',
       'title_label' => t('Title'),
       'help' => '',
@@ -78,7 +78,7 @@ function commons_q_a_node_info() {
     'question' => array(
       'name' => t('Question'),
       'base' => 'node_content',
-      'description' => '',
+      'description' => 'Ask a question to receive answers from other community members',
       'has_title' => '1',
       'title_label' => t('Title'),
       'help' => '',
