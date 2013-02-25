@@ -2444,16 +2444,6 @@ body.page-node .pane-views-panes {
   }
 }
 
-.page-search {
-  .panels-ipe-region {
-    @extend %pod;
-  }
-
-  .panels-ipe-sort-container {
-    @extend %pod-content;
-  }
-}
-
 /* =============================================================================
  *   Views Styling
  * ========================================================================== */
@@ -4122,9 +4112,56 @@ body.front.logged-in .view-commons-homepage-content .article.node {
     padding-left: 15px;
   }
 
+  .pane-search-form,
   .search-results {
     @extend %pod;
     @extend %pod-content;
+  }
+}
+
+.search-result {
+  border-bottom: 1px solid $light-gray;
+
+  .block-content & {
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  h2 {
+    font-size: 1.429em;
+    line-height: 1.2em;
+    margin: .5em 0 0;
+  }
+
+  .title {
+    margin-bottom: .2em;
+  }
+
+  .search-result-url {
+    color: $gray;
+    font-size: .85em;
+    margin-bottom: 1em;
+  }
+
+  .apachesolr_search-results & {
+    .title,
+    .search-result-url,
+    .search-result-date {
+      display: none;
+    }
+
+    .pane-node-flag-commons-follow-group-link {
+      position: static;
+      right: auto;
+      top: auto;
+      float: right;
+    }
   }
 }
 

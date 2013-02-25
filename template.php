@@ -212,12 +212,11 @@ function commons_origins_form_alter(&$form, &$form_state, $form_id) {
 /**
 * Implements hook_css_alter().
 */
-// function commons_origins_css_alter(&$css) {
-//   $exclude = array(
-//     'profiles/commons/modules/contrib/rich_snippets/rich_snippets.css' => FALSE,
-//   );
-//   $css = array_diff_key($css, $exclude);
-// }
+function commons_origins_css_alter(&$css) {
+  if (isset($css['profiles/commons/modules/contrib/rich_snippets/rich_snippets.css'])) {
+    unset($css['profiles/commons/modules/contrib/rich_snippets/rich_snippets.css']);
+  }
+}
 
 
 /**
