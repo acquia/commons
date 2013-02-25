@@ -859,18 +859,6 @@ h1.node-title {
         bottom: 5px;
         right: 5px;
       }
-
-      .flag-commons-follow-group a {
-        font-size: 0;
-        line-height: 0;
-        color: transparent;
-        padding: 3px 27px;
-        height: 14px;
-
-        &:before {
-          top: 0;
-        }
-      }
     }
   }
 
@@ -1080,23 +1068,29 @@ h1.node-title {
 
 .node .flag-commons-follow-node,
 .node .flag-commons-follow-group,
-.pane-user-flag-commons-follow-user-link .flag-commons-follow-user {
+.pane-user-flag-commons-follow-user-link .flag-commons-follow-user,
+.taxonomy-term .flag-commons-follow-term,
+.view-commons-follow-node .flag-commons-follow-group,
+.view-commons-follow-node .flag-commons-follow-node,
+.view-commons-follow-user .flag-commons-follow-user,
+.view-commons-follow-taxonomy-term .flag-commons-follow-term {
   display: inline-block;
 
   a {
     position: relative;
 
-    &:before {
-      content: '';
-      @include sprite_url_height_width($icons, follow-large);
-    }
-
     &.flag-action {
       @extend %btn-gray;
+
+      &:before {
+        content: '';
+        @include sprite_url_height_width($icons, follow-large);
+      }
     }
 
     &.unflag-action {
       @extend %btn-gray-flat;
+      height: 20px;
     }
   }
 
@@ -1109,18 +1103,24 @@ h1.node-title {
   }
 }
 
-.node .flag-commons-follow-node a {
-  &.flag-action, &.unflag-action {
-    font-size: 0;
-    line-height: 0;
-    color: transparent;
-    padding: 3px 26px;
-    height: 14px;
-    position: relative;
-    top: 1px;
-
-    &:before {
+.node .flag-commons-follow-node,
+.view-commons-follow-node .flag-commons-follow-group,
+.view-commons-follow-node .flag-commons-follow-node,
+.view-commons-follow-user .flag-commons-follow-user,
+.view-commons-follow-taxonomy-term .flag-commons-follow-term {
+  a {
+    &.flag-action {
+      font-size: 0;
+      line-height: 0;
+      color: transparent;
+      padding: 3px 26px;
+      height: 14px;
+      position: relative;
       top: 1px;
+
+      &:before {
+        top: 1px;
+      }
     }
   }
 }
@@ -2252,9 +2252,14 @@ body.page-node .pane-views-panes {
 .pane-activity-group-panel-pane-1,
 .pane-commons-radioactivity-groups-active-in-group-panel-pane-1,
 .pane-commons-contributors-group-panel-pane-2,
-.pane-commons-wikis-contributor-list-commons-wikis-contributor-pane {
+.pane-commons-wikis-contributor-list-commons-wikis-contributor-pane,
+.nodes {
   @extend %pod;
   @extend %pod-content;
+}
+
+.nodes {
+  margin-top: 1em;
 }
 
 .page-events {
