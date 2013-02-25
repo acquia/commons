@@ -82,7 +82,7 @@ function commons_groups_node_info() {
     'group' => array(
       'name' => t('Group'),
       'base' => 'node_content',
-      'description' => '',
+      'description' => 'Use groups to contain people and content related by a shared interest or purpose.',
       'has_title' => '1',
       'title_label' => t('Group name'),
       'help' => '',
