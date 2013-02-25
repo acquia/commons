@@ -362,9 +362,14 @@ function commons_events_block_view($delta = '') {
   global $user;
   if ($delta == 'commons_events_create_event_link'
     && node_access('create', 'event')) {
+    $options = array(
+      'query' => array(
+        'destination' => 'events',
+      ),
+    );
     return array(
       'subject' => NULL,
-      'content' => l(t('List an event'), 'node/add/event'),
+      'content' => l(t('List an event'), 'node/add/event', $options),
     );
   }
   else if ($delta == 'commons_events_anonymous_login'
