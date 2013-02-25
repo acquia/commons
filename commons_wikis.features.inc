@@ -70,7 +70,7 @@ function commons_wikis_node_info() {
     'wiki' => array(
       'name' => t('Wiki'),
       'base' => 'node_content',
-      'description' => '',
+      'description' => 'Create a collaborative document, allowing users to add, delete, or revise content. Provides document version controls.',
       'has_title' => '1',
       'title_label' => t('Title'),
       'help' => '',
