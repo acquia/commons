@@ -208,12 +208,6 @@ function commons_origins_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'user_register_form') {
     $form['account']['mail']['#description'] = t('Password reset and notification emails will be sent to this address.');
   }
-
-  // Add the color palette selection form to the apperance settings form.
-  if ($form_id == 'system_theme_settings') {
-    require_once('commons_origins.palettes.inc');
-    commons_origins_palettes_form($form);
-  }
 }
 
 /**
