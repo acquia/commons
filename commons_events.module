@@ -18,6 +18,7 @@ function commons_events_menu() {
     'access callback' => 'commons_events_attendee_access',
     'access arguments' => array(1),
     'type' => MENU_LOCAL_TASK,
+    'weight' => 5,
   );
   return $items;
 }
@@ -178,27 +179,27 @@ function commons_events_form_node_form_alter(&$form, &$form_state) {
     );
     $form['#validate'] = array_merge(array('commons_events_node_form_validate'), $form['#validate']);
     $form['#submit'][] = 'commons_events_node_form_submit';
-    // Create a container for registration settings, topics, and revision info.
-    $form['events_sidebar'] = array(
-      '#type' => 'container',
-    );
     // Move registration settings into a fieldset so we can move the group.
-    $form['events_sidebar']['event_registration_settings'] = array(
+    $form['event_registration_settings'] = array(
       '#type' => 'fieldset',
       '#collapsible' => TRUE,
       '#collapsed' => FALSE,
       '#title' => t('Registration settings'),
+      '#group' => 'additional_settings',
+      '#weight' => -10,
     );
-    $form['events_sidebar']['event_registration_settings']['field_registration_type'] = $form['field_registration_type'];
-    $form['events_sidebar']['event_registration_settings']['field_status'] = $form['field_status'];
-    $form['events_sidebar']['event_registration_settings']['field_number_of_attendees'] = $form['field_number_of_attendees'];
-    $form['events_sidebar']['event_topics'] = array(
+    $form['event_registration_settings']['field_registration_type'] = $form['field_registration_type'];
+    $form['event_registration_settings']['field_status'] = $form['field_status'];
+    $form['event_registration_settings']['field_number_of_attendees'] = $form['field_number_of_attendees'];
+    $form['event_topics'] = array(
       '#type' => 'fieldset',
       '#title' => t('Topics'),
       '#collapsible' => TRUE,
       '#collapsed' => FALSE,
+      '#group' => 'additional_settings',
+      '#weight' => -9,
     );
-    $form['events_sidebar']['event_topics']['field_topics'] = $form['field_topics'];
+    $form['event_topics']['field_topics'] = $form['field_topics'];
     unset($form['field_topics']);
     unset($form['field_registration_type']);
     unset($form['field_status']);
