@@ -193,5 +193,6 @@ function commons_activity_streams_user_profile_submit($form, &$form_state) {
   $message = message_create($message_type, array('uid' => $account->uid, 'timestamp' => REQUEST_TIME));
   // Save reference to the node in the node reference field, and the
   $wrapper = entity_metadata_wrapper('message', $message);
+  $wrapper->field_target_users[] = $account;
   $wrapper->save();
 }

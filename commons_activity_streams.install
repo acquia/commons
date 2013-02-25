@@ -1,0 +1,9 @@
+<?php
+
+/**
+* Update the "User follows user" message type.
+*/
+function commons_activity_streams_update_3101() {
+  features_revert(array('commons_activity_streams' => array('message_type', 'field_instance')));
+  return array();
+}

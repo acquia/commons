@@ -100,9 +100,9 @@ function commons_activity_streams_default_message_type() {
           "safe_value" : "[message:user:picture]"
         },
         {
-          "value" : "\u003Ca href=\u0022[message:user:url:absolute]\u0022\u003E[message:user:name]\u003C\/a\u003E has an updated profile",
+          "value" : "\\u003Ca href=\\u0022[message:user:url:absolute]\\u0022\\u003E[message:user:name]\\u003C\\/a\\u003E has an updated profile",
           "format" : "full_html",
-          "safe_value" : "\u003Ca href=\u0022[message:user:url:absolute]\u0022\u003E[message:user:name]\u003C\/a\u003E has an updated profile"
+          "safe_value" : "\\u003Ca href=\\u0022[message:user:url:absolute]\\u0022\\u003E[message:user:name]\\u003C\\/a\\u003E has an updated profile"
         }
       ]
     },
