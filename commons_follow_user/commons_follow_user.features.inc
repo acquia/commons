@@ -27,7 +27,7 @@ function commons_follow_user_flag_default_flags() {
     'flag_message' => '',
     'unflag_short' => 'Following',
     'unflag_long' => '',
-    'unflag_message' => 'Follow',
+    'unflag_message' => 'Not following',
     'unflag_denied_text' => '',
     'link_type' => 'toggle',
     'roles' => array(
