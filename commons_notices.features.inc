@@ -29,7 +29,7 @@ function commons_notices_node_info() {
     'notice' => array(
       'name' => t('Notice'),
       'base' => 'node_content',
-      'description' => '',
+      'description' => 'Display an administrative alert for your website users, such as planned system maintenance.',
       'has_title' => '1',
       'title_label' => t('Title'),
       'help' => '',
