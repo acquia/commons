@@ -217,6 +217,9 @@ function commons_groups_system_info_alter(&$info, $file, $type) {
   }
 }
 
+/**
+ * Implements hook_default_message_type_alter().
+ */
 function commons_groups_default_message_type_alter(&$defaults) {
   foreach (array('commons_activity_streams_comment_created', 'commons_activity_streams_node_created') as $name) {
     if (!empty($defaults[$name])) {
