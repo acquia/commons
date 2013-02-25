@@ -21,7 +21,7 @@ jQuery(document).ready(function($){
   };
 
   var set_follow_checkboxes = function(){
-    $('#quicktabs-commons_follow_ui .flag-email-group a').each(function(){
+    $('#quicktabs-commons_follow_ui .flag-email-group a, #quicktabs-commons_follow_ui .flag-email-node a, #quicktabs-commons_follow_ui .flag-email-user a, #quicktabs-commons_follow_ui .flag-email-term a').each(function(){
       var a_target = $(this);
 
       if (a_target.children('span').length === 0) {
