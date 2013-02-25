@@ -3361,11 +3361,11 @@ body.front.logged-in .view-commons-homepage-content .article.node.no-user-pictur
 }
 
 .search-result {
-  border-bottom: 1px solid #a5a5a5;
+  border-bottom: 1px solid #cccccc;
 }
 .block-content .search-result {
-  padding-bottom: 1em;
-  margin-bottom: 1em;
+  padding-bottom: 1.4em;
+  margin-bottom: 1.4em;
 }
 .block-content .search-result:last-child {
   border-bottom: none;
@@ -3387,8 +3387,14 @@ body.front.logged-in .view-commons-homepage-content .article.node.no-user-pictur
 }
 .apachesolr_search-results .search-result .title,
 .apachesolr_search-results .search-result .search-result-url,
-.apachesolr_search-results .search-result .search-result-date {
+.apachesolr_search-results .search-result .search-result-date,
+.apachesolr_search-results .search-result .search-result-snippet-info {
   display: none;
+}
+.apachesolr_search-results .search-result .node {
+  border: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
 }
 .apachesolr_search-results .search-result .pane-node-flag-commons-follow-group-link {
   position: static;

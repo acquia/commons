@@ -4120,11 +4120,11 @@ body.front.logged-in .view-commons-homepage-content .article.node {
 }
 
 .search-result {
-  border-bottom: 1px solid $light-gray;
+  border-bottom: 1px solid $border;
 
   .block-content & {
-    padding-bottom: 1em;
-    margin-bottom: 1em;
+    padding-bottom: 1.4em;
+    margin-bottom: 1.4em;
 
     &:last-child {
       border-bottom: none;
@@ -4152,8 +4152,15 @@ body.front.logged-in .view-commons-homepage-content .article.node {
   .apachesolr_search-results & {
     .title,
     .search-result-url,
-    .search-result-date {
+    .search-result-date,
+    .search-result-snippet-info {
       display: none;
+    }
+
+    .node {
+      border: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
     }
 
     .pane-node-flag-commons-follow-group-link {
