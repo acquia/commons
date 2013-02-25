@@ -1,0 +1,9 @@
+<?php
+
+/**
+* Don't display group node author's avatar on the group node.
+*/
+function commons_groups_update_3100() {
+  features_revert(array('commons_groups' => array('variable')));
+  return array();
+}
