@@ -29,7 +29,7 @@ function commons_documents_node_info() {
     'document' => array(
       'name' => t('Document'),
       'base' => 'node_content',
-      'description' => '',
+      'description' => 'Upload and display files or attachments to share with others.',
       'has_title' => '1',
       'title_label' => t('Title'),
       'help' => '',
