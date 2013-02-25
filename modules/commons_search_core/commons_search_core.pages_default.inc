@@ -19,7 +19,7 @@ function commons_search_core_default_page_manager_handlers() {
   $handler->handler = 'panel_context';
   $handler->weight = 0;
   $handler->conf = array(
-    'title' => 'Search',
+    'title' => '',
     'no_blocks' => 0,
     'pipeline' => 'ipe',
     'body_classes_to_remove' => '',
@@ -169,7 +169,7 @@ function commons_search_core_default_page_manager_handlers() {
       'no_key' => '',
       'no_key_format' => 'plain_text',
       'context' => 'argument_string_1',
-      'override_title' => 0,
+      'override_title' => 1,
       'override_title_text' => '',
     );
     $pane->cache = array();
@@ -210,7 +210,7 @@ function commons_search_core_default_page_manager_handlers() {
     $pane->locks = array();
     $display->content['new-7'] = $pane;
     $display->panels['two_33_66_top'][0] = 'new-7';
-  $display->hide_title = PANELS_TITLE_FIXED;
+  $display->hide_title = PANELS_TITLE_PANE;
   $display->title_pane = 'new-6';
   $handler->conf['display'] = $display;
   $export['search_search_facetapi_panel_context'] = $handler;
