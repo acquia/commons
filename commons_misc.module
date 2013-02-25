@@ -24,3 +24,17 @@ function commons_misc_form_post_node_form_alter(&$form, &$form_state, $form_id) 
     $form['revision_information']['#access'] = FALSE;
   }
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function commons_misc_form_system_theme_settings_alter(&$form, &$form_state, $form_id) {
+  $themes_list = list_themes(TRUE);
+  if (isset($themes_list['commons_origins'])
+    && $themes_list['commons_origins']->status == 1
+    && $form_state['build_info']['args'][0] == 'commons_origins') {
+    // Add the color palette selection form to the apperance settings form.
+    require_once(drupal_get_path('theme', 'commons_origins') . '/commons_origins.palettes.inc');
+    commons_origins_palettes_form($form);
+  }
+}
