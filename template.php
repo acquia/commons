@@ -191,12 +191,11 @@ function commons_origins_preprocess_node(&$vars) {
   }
 }
 
-
 /**
 * Implements hook_form_alter().
 */
 function commons_origins_form_alter(&$form, &$form_state, $form_id) {
-  if (isset($form['#node']) && substr($form_id, -10) == '_node_form') {
+  if (isset($form['#node']) && substr($form_id, -10) == '_node_form' && isset($form['additional_settings']) && $form['#node']->type != 'post') {
     $form['additional_settings']['#type'] = 'fieldset';
   }
   // Description text on these fields is redundant.
