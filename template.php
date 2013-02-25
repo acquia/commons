@@ -176,12 +176,12 @@ function commons_origins_preprocess_node(&$vars) {
   // the content type.
   if (variable_get('node_submitted_' . $vars['node']->type, TRUE)) {
     $placeholders = array(
-      '@type' => ucfirst($vars['node']->type),
+      '!type' => '<span class="node-content-type">' . ucfirst($vars['node']->type) . '</span>',
       '!user' => $vars['name'],
       '!date' => $vars['date'],
     );
 
-    $vars['submitted'] = t('@type was created by !user on !date', $placeholders);
+    $vars['submitted'] = t('!type created by !user on !date', $placeholders);
   }
 }
 
