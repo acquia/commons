@@ -234,6 +234,9 @@ var {
  * Wraps the sidebars the content column
  */
 #columns {
+  margin-right: $gutter-width;
+  margin-left: $gutter-width;
+
   .page-user-login & {
     @extend %pod;
     @extend %pod-content;
@@ -367,10 +370,9 @@ var {
  * Wraps all the branding elements, logo, name and slogan
  */
 #branding {
-  // display: inline-block;
   float: left;
+  margin-left: 10px;
   vertical-align: top;
-  // width: 395px;
   text-align: left;
 }
 
@@ -2172,6 +2174,18 @@ ul.action-links {
 /* =============================================================================
  *   Panels Styling
  * ========================================================================== */
+
+.panel-display {
+  min-width: 100%;
+  margin-right: -$gutter-width;
+  margin-left: -$gutter-width;
+
+  .region {
+    @include box-sizing(border-box);
+    padding-right: $gutter-width;
+    padding-left: $gutter-width;
+  }
+}
 
 .node-type-group.page-node .commons-pod {
   padding: 0;

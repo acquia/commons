@@ -79,7 +79,7 @@ input[type="button"] {
   -webkit-background-clip: padding;
   -moz-background-clip: padding;
   background-clip: padding-box;
-  background: #dddddd url('../images/button.png?1361802894') repeat-x;
+  background: #dddddd url('../images/button.png?1361893348') repeat-x;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #dddddd));
   background-image: -webkit-linear-gradient(#ffffff, #dddddd);
   background-image: -moz-linear-gradient(#ffffff, #dddddd);
@@ -313,7 +313,7 @@ optgroup::-moz-focus-inner {
 .ie6_button,
 * html button,
 * html a.button {
-  background: #dddddd url('../images/button.png?1361802894') repeat-x;
+  background: #dddddd url('../images/button.png?1361893348') repeat-x;
   border: 1px solid;
   border-color: #dddddd #bbbbbb #999999;
   cursor: pointer;
@@ -454,7 +454,7 @@ optgroup::-moz-focus-inner {
   right: 0;
   width: 23px;
   height: 100%;
-  background: url('../images/jquery.selectBox-arrow.gif?1361802894') 50% center no-repeat;
+  background: url('../images/jquery.selectBox-arrow.gif?1361893348') 50% center no-repeat;
   border-left: solid 1px #bbbbbb;
 }
 .block-search .selectBox-dropdown .selectBox-arrow {
@@ -632,7 +632,6 @@ html {
   font-size: 100%;
   -webkit-text-size-adjust: 100%;
   line-height: 1.5;
-  height: 100%;
   overflow-y: scroll;
 }
 
@@ -1025,37 +1024,6 @@ table {
   border-collapse: collapse;
   font-size: inherit;
   font: 100%;
-}
-
-/* =============================================================================
-    Gutters
-   ========================================================================== */
-/*
- * If gutters are set in theme settings they will override these values,
- * see Extensions > Modify Output > Design
- * $gutter-width is set in _base.scss
- */
-#main-content,
-.block-inner,
-.pane-inner,
-.menu-wrapper,
-.branding-elements,
-.breadcrumb-wrapper,
-.attribution,
-.at-panel .rounded-corner,
-div.messages {
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
-/*
- * Panel pages need negative margin equal to the gutter width applied to #content,
- * this is taken care of in theme settings as per above for normal gutters
- */
-#content .panel-display,
-#content .panel-flexible {
-  margin-left: -10px;
-  margin-right: -10px;
 }
 
 /* =============================================================================

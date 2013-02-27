@@ -32,22 +32,7 @@ body.page-node .pane-views-panes, .pane-commons-events-user-upcoming-events-pane
   -webkit-box-shadow: #858585 1px 1px 4px;
   -moz-box-shadow: #858585 1px 1px 4px;
   box-shadow: #858585 1px 1px 4px;
-  margin-right: 20px;
-  margin-bottom: 20px;
-}
-.lt480 .page-user-login #columns, .page-user-login .lt480 #columns, .lt480 .page-node-add .field-type-taxonomy-term-reference-form, .page-node-add .lt480 .field-type-taxonomy-term-reference-form, .lt480 .page-node-add #edit-additional-settings, .page-node-add .lt480 #edit-additional-settings, .lt480 .page-user .pane-views-panes, .page-user .lt480 .pane-views-panes, .lt480 .commons-pod-comments, .lt480 .front.not-logged-in .pane-views-panes, .front.not-logged-in .lt480 .pane-views-panes, .lt480 .front.not-logged-in .pane-views, .front.not-logged-in .lt480 .pane-views, .lt480 .front.not-logged-in
-body.page-node .pane-views-panes, .front.not-logged-in
-body.page-node .lt480 .pane-views-panes, .lt480 .pane-commons-events-user-upcoming-events-panel-pane-2,
-.lt480 .pane-commons-events-user-upcoming-events-panel-pane-3,
-.lt480 .pane-commons-events-upcoming-panel-pane-1,
-.lt480 .pane-activity-group-panel-pane-1,
-.lt480 .pane-commons-radioactivity-groups-active-in-group-panel-pane-1,
-.lt480 .pane-commons-contributors-group-panel-pane-2,
-.lt480 .pane-commons-wikis-contributor-list-commons-wikis-contributor-pane,
-.lt480 .nodes, .lt480 .page-events .view-commons-events-upcoming .view-content, .page-events .view-commons-events-upcoming .lt480 .view-content, .lt480 .pane-commons-radioactivity-groups-most-active-panel-pane-1, .lt480 .pane-commons-activity-streams-activity-panel-pane-1, .lt480 .pane-commons-featured-panel-pane-1, .lt480 .pane-commons-groups-contributors-panel-pane-1, .lt480 .pane-commons-bw-group, .lt480 .view-display-id-commons_events_upcoming_page .views-row, .view-display-id-commons_events_upcoming_page .lt480 .views-row, .lt480 .view-commons-groups-directory > .view-content > .views-row, .lt480 .view-commons-groups-directory > .view-filters, .lt480 .view-commons-homepage-content .node-teaser.node-group > .view-content > .views-row, .view-commons-homepage-content .lt480 .node-teaser.node-group > .view-content > .views-row, .lt480 .view-commons-homepage-content .node-teaser.node-group > .view-filters, .view-commons-homepage-content .lt480 .node-teaser.node-group > .view-filters, .lt480 body.front.logged-in .view-commons-homepage-content > .view-content, body.front.logged-in .lt480 .view-commons-homepage-content > .view-content, .lt480 body.front.logged-in #views-exposed-form-commons-homepage-content-panel-pane-1 .views-exposed-widgets.widgets-active, body.front.logged-in #views-exposed-form-commons-homepage-content-panel-pane-1 .lt480 .views-exposed-widgets.widgets-active, .lt480 .page-events .search-results-wrapper .search-result, .page-events .search-results-wrapper .lt480 .search-result, .lt480 .page-events .region-three-25-50-25-first, .page-events .lt480 .region-three-25-50-25-first, .lt480 .page-events .region-three-25-50-25-third .pane-views-panes, .page-events .region-three-25-50-25-third .lt480 .pane-views-panes, .lt480 .page-search .region-two-33-66-first, .page-search .lt480 .region-two-33-66-first, .lt480 .page-search .pane-search-form, .page-search .lt480 .pane-search-form,
-.lt480 .page-search .search-results,
-.page-search .lt480 .search-results {
-  margin-right: 0;
+  margin: 10px 0;
 }
 
 .page-user-login #columns, .page-node-add .field-type-taxonomy-term-reference-form > div, .page-node-add #edit-additional-settings > div, .page-user .pane-views-panes .block-inner, .commons-pod-comments .comment-wrapper, .front.not-logged-in .pane-views-panes > div, .front.not-logged-in
@@ -368,6 +353,10 @@ var {
 /*
  * Wraps the sidebars the content column
  */
+#columns {
+  margin-right: 10px;
+  margin-left: 10px;
+}
 .page-user-login #columns {
   margin-top: 50px;
 }
@@ -439,6 +428,7 @@ var {
  */
 #branding {
   float: left;
+  margin-left: 10px;
   vertical-align: top;
   text-align: left;
 }
@@ -555,7 +545,7 @@ var {
   margin-bottom: 0;
 }
 .node-teaser.node-promoted {
-  background-image: url('../images/node-promoted-star.png?1361802894');
+  background-image: url('../images/node-promoted-star.png?1361893348');
   background-position: top right;
   background-repeat: no-repeat;
   background-color: #f7f7f7;
@@ -605,7 +595,7 @@ var {
   position: absolute;
   right: -5px;
   top: 10px;
-  background: url('../images/user_img_arrow.png?1361802894');
+  background: url('../images/user_img_arrow.png?1361893348');
 }
 .node .user-picture img, .comment .user-picture img, .node
 .views-field-picture img, .comment
@@ -635,7 +625,7 @@ var {
  * Generic styles for the more link
  */
 .more-link {
-  background-image: url('../images/icons/icon-more.png?1361802894');
+  background-image: url('../images/icons/icon-more.png?1361893348');
   background-repeat: no-repeat;
   height: 14px;
   padding: 0 0 0 17px;
@@ -1211,7 +1201,7 @@ h1.node-title a:hover {
   width: 58px;
   height: 22px;
   display: inline-block;
-  background-image: url('../images/tag-featured.png?1361802894');
+  background-image: url('../images/tag-featured.png?1361893348');
   background-repeat: no-repeat;
   margin: 6px 0 0 5px;
 }
@@ -1220,7 +1210,7 @@ h1.node-title a:hover {
   width: 27px;
   height: 22px;
   display: inline-block;
-  background-image: url('../images/tag-new.png?1361802894');
+  background-image: url('../images/tag-new.png?1361893348');
   background-repeat: no-repeat;
   margin: 4px 0 0 5px;
 }
@@ -1406,7 +1396,7 @@ a:hover, a:focus {
   padding: 0;
 }
 #menu-bar.nav ul.menu li:hover, #menu-bar.nav ul.menu li.active-trail {
-  background: url('../images/main-nav-hover.png?1361802894') repeat-x left top;
+  background: url('../images/main-nav-hover.png?1361893348') repeat-x left top;
 }
 #menu-bar.nav ul.menu li:hover .arrow:before, #menu-bar.nav ul.menu li.active-trail .arrow:before {
   content: '';
@@ -1459,22 +1449,22 @@ a:hover, a:focus {
 }
 
 .main-menu-home a {
-  background: url('../images/icons/icon-home.png?1361802894') no-repeat center 10px;
+  background: url('../images/icons/icon-home.png?1361893348') no-repeat center 10px;
 }
 
 .main-menu-groups a {
-  background: url('../images/icons/icon-groups.png?1361802894') no-repeat center 10px;
+  background: url('../images/icons/icon-groups.png?1361893348') no-repeat center 10px;
 }
 
 .main-menu-events a {
-  background: url('../images/icons/icon-events.png?1361802894') no-repeat center 10px;
+  background: url('../images/icons/icon-events.png?1361893348') no-repeat center 10px;
 }
 
 #menu-bar.nav ul.menu li.main-menu-search {
   display: none;
 }
 #menu-bar.nav ul.menu li.main-menu-search a {
-  background: url('../images/icons/icon-search.png?1361802894') no-repeat center 10px;
+  background: url('../images/icons/icon-search.png?1361893348') no-repeat center 10px;
 }
 
 #block-commons-utility-links-utility-links {
@@ -1881,6 +1871,19 @@ ul.action-links {
 /* =============================================================================
  *   Panels Styling
  * ========================================================================== */
+.panel-display {
+  min-width: 100%;
+  margin-right: -10px;
+  margin-left: -10px;
+}
+.panel-display .region {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
 .node-type-group.page-node .commons-pod {
   padding: 0;
   background-color: transparent;
@@ -2142,7 +2145,7 @@ body.page-node .pane-views-panes h2 {
   margin: 0 0 0 18px;
 }
 .view-id-commons_events_upcoming .views-field-title {
-  background-image: url('../images/icons/icon-gray-event.png?1361802894');
+  background-image: url('../images/icons/icon-gray-event.png?1361893348');
   background-repeat: no-repeat;
   background-position: left 4px;
   margin: 0;
@@ -2372,12 +2375,12 @@ body.page-node .pane-views-panes h2 {
   margin: 0 0 0 18px;
 }
 .view-id-commons_featured .type-Event {
-  background-image: url('../images/icons/icon-gray-event.png?1361802894');
+  background-image: url('../images/icons/icon-gray-event.png?1361893348');
   background-position: left 1px;
   padding: 0 0 0 18px;
 }
 .view-id-commons_featured .type-Post {
-  background-image: url('../images/icons/icon-gray-post.png?1361802894');
+  background-image: url('../images/icons/icon-gray-post.png?1361893348');
   background-position: left 1px;
   padding: 0 0 0 18px;
 }
@@ -2727,7 +2730,7 @@ body.page-node .pane-views-panes h2 {
   border: none !important;
   width: 12px !important;
   height: 12px !important;
-  background-image: url('../images/icons/ico_search_wht.png?1361802894') !important;
+  background-image: url('../images/icons/ico_search_wht.png?1361893348') !important;
   text-indent: -9999px !important;
   padding: 0 !important;
   margin: 10px 2px !important;
@@ -3299,13 +3302,13 @@ body.front.logged-in .view-commons-homepage-content .article.node.no-user-pictur
  *  Placeholder styles
  */
 #menu-bar.nav .menu-item-193 a {
-  background-image: url('../images/icons/icon-home.png?1361802894');
+  background-image: url('../images/icons/icon-home.png?1361893348');
 }
 #menu-bar.nav .menu-item-194 a {
-  background-image: url('../images/icons/icon-groups.png?1361802894');
+  background-image: url('../images/icons/icon-groups.png?1361893348');
 }
 #menu-bar.nav .menu-item-195 a {
-  background-image: url('../images/icons/icon-events.png?1361802894');
+  background-image: url('../images/icons/icon-events.png?1361893348');
 }
 
 .page-events .region-three-25-50-25-first {
