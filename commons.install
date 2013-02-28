@@ -95,3 +95,36 @@ function commons_update_3101() {
   variable_set('node_admin_theme', FALSE);
   return array();
 }
+
+/**
+ * Reset the default avatar if the associated file doesn't exist in the file_managed table.
+ * Set the default OG role to be 'organizer' instead of administrator.
+ */
+function commons_update_3102() {
+  $reset_avatar = FALSE;
+  $file = variable_get('user_picture_default', '');
+  if(!$file) {
+    $reset_avatar = TRUE;
+  }
+  if(!$reset_avatar) {
+    $results = db_select('file_managed', 'f')
+      ->fields('f', array('fid'))
+      ->condition('filename', $file,'=')
+      ->execute()
+      ->fetchAll();
+    if(count($results) === 0) {
+      $reset_avatar = TRUE;
+    }
+  }
+  if($reset_avatar) {
+    commons_set_default_avatar();
+  }
+
+  // Change the OG adminstrator group to read 'Organizer'
+  $result = db_update('og_role')
+    ->fields(array('name' => 'Organizers'))
+    ->condition('rid', 3, '=')
+    ->execute();
+
+  return array();
+}

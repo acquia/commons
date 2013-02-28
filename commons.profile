@@ -651,6 +651,12 @@ function commons_install_finished(&$install_state) {
     ->condition('name', drupal_get_profile())
     ->execute();
 
+  // Change the OG adminstrator group to read 'Organizer'
+  $result = db_update('og_role')
+    ->fields(array('name' => 'Organizers'))
+    ->condition('rid', 3, '=')
+    ->execute();
+
   // Cache a fully-built schema.
   drupal_get_schema(NULL, TRUE);
 
