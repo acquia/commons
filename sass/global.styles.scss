@@ -342,6 +342,21 @@ var {
   .container {}
 }
 
+/*
+ * Generic pod wrappers
+ */
+ .commons-pod {
+  @extend %pod;
+  @extend %pod-content;
+
+  /* Prevent pod nesting. */
+  .commons-pod {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    @include box-shadow(none);
+  }
+}
 
 /*
  * Wraps the tertiary content/postfix region
@@ -810,17 +825,19 @@ h1.node-title {
   }
 
   .field-name-field-topics, .field-name-og-group-ref {
-    float: left;
-    width: 50%;
+    &.view-mode-full {
+      float: left;
+      width: 50%;
 
-    ul {
-      margin: 0;
-      list-style: none;
-      padding: 0;
+      ul {
+        margin: 0;
+        list-style: none;
+        padding: 0;
 
-      li {
-        float: left;
-        margin-right: 10px;
+        li {
+          float: left;
+          margin-right: 10px;
+        }
       }
     }
   }
@@ -938,104 +955,32 @@ h1.node-title {
   }
 }
 
+.primary-fields,
+.supplementary-fields {
+  @include inline-block;
+  @include box-sizing(border-box);
+  float: left;
 
-.page-node-add {
-  .node-form {
-    position: relative;
-  }
-
-  fieldset {
-    border: none;
-
-    &#edit-og-group-ref-und {
-      padding: 0;
-    }
-  }
-
-  #edit-body {
-    .ckeditor_links {
-      background-color: $white;
-      padding: 5px 15px 0 15px;
-      display: block;
-    }
-
-    fieldset {
-      background-color: $white;
-      @include border-radius(0 0 6px 6px);
-    }
-  }
-
-  #edit-body, .form-item-title, .field-name-og-group-ref, #poll-choice-wrapper, .field-name-field-address-form {
-    width: 66%;
+  .view-commons-question-answers & {
+    display: block;
     float: none;
-
-    input[type="text"] {
-      width: 100%;
-    }
-
-    .lt480 & {
-      width: 100%;
-    }
-  }
-
-  .field-type-taxonomy-term-reference-form {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 33%;
-    margin-right: 0;
-    margin-left: 0;
+    width: auto;
     padding: 0;
-    @extend %pod;
-
-    > div {
-      @extend %pod-content;
-      padding: 5px 10px 10px 10px;
-      margin: 0;
-    }
-
-    input[type="text"] {
-      width: 100%;
-    }
   }
+}
 
-  #edit-additional-settings {
-    // float: right;
-    position: absolute;
-    right: 0;
-    top: 80px;
-    width: 33%;
-    margin-right: 0;
-    margin-left: 0;
-    padding: 0;
-    @extend %pod;
+.primary-fields {
+  padding-right: $gutter-width;
+  width: 66.666%;
+}
 
-    > div {
-      @extend %pod-content;
+.supplementary-fields {
+  padding-left: $gutter-width;
+  width: 33.333%;
+}
 
-      fieldset {
-        border-bottom: 1px solid $border;
-        padding-left: 0;
-        padding-right: 0;
-
-        &.collapsed {
-          border-bottom: none;
-        }
-
-        fieldset {
-          border-bottom: none;
-        }
-      }
-    }
-
-    input[type="text"] {
-      width: 100%;
-    }
-  }
-
-  #edit-actions {
-    clear: both;
-  }
+.form-actions {
+  clear: both;
 }
 
 .node-type-event {
@@ -2185,15 +2130,6 @@ ul.action-links {
     padding-right: $gutter-width;
     padding-left: $gutter-width;
   }
-}
-
-.node-type-group.page-node .commons-pod {
-  padding: 0;
-  background-color: transparent;
-  @include border-radius(0);
-  @include box-shadow(none);
-  margin-right: 0;
-  margin-bottom: 0;
 }
 
 .commons-pod-comments {
@@ -3583,9 +3519,13 @@ a.button {
 }
 
 
-input[type="text"] {
+input[type="text"],
+textarea {
+  @include box-sizing(border-box);
   @include border-radius(3px);
   border: 1px solid #B2B2B2;
+  width: 100%;
+  max-width: 100%;
 }
 
 

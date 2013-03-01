@@ -22,6 +22,21 @@
  */
 
 
+/**
+ * Implements hook_theme().
+ */
+function commons_origins_theme($existing, $type, $theme, $path) {
+  return array(
+    // Register the newly added theme_form_content() hook so we can utilize
+    // theme hook suggestions.
+    // @see commons_origins_form_alter().
+    'form_content' => array(
+      'render element' => 'form',
+      'path' => drupal_get_path('theme', 'commons_origins') . '/templates/form',
+      'template' => 'form-content',
+    ),
+  );
+}
 
 
 /**
@@ -186,12 +201,85 @@ function commons_origins_preprocess_node(&$vars) {
 }
 
 /**
+ * Implements hook_preprocess_form().
+ *
+ * Since Commons Origins overrides the default theme_form() function, we will 
+ * need to perform some processing on attributes to make it work in a template.
+ */
+function commons_origins_preprocess_form(&$vars, $hook) {
+  // Bootstrap the with some of Drupal's default variables.
+  template_preprocess($vars, $hook);
+
+  $element = &$vars['element'];
+  if (isset($element['#action'])) {
+    $element['#attributes']['action'] = drupal_strip_dangerous_protocols($element['#action']);
+  }
+  element_set_attributes($element, array('method', 'id'));
+  if (empty($element['#attributes']['accept-charset'])) {
+    $element['#attributes']['accept-charset'] = "UTF-8";
+  }
+  $vars['attributes_array'] = $element['#attributes'];
+  
+  $form = &$vars['element'];
+}
+
+/**
+ * Implements hook_process_form().
+ *
+ * Since Commons Origins overrides the default theme_form() function, we will 
+ * need to perform some processing on attributes to make it work in a template.
+ */
+function commons_origins_process_form(&$vars, $hook) {
+  // Crunch down attribute arrays.
+  template_process($vars, $hook);
+}
+
+/**
+ * Implements hook_preprocess_form_content().
+ */
+function commons_origins_preprocess_form_content(&$vars, $hook) {
+  // Bootstrap the with some of Drupal's default variables.
+  template_preprocess($vars, $hook);
+
+  if (isset($vars['form']['columns'])) {
+    $vars['form']['columns']['#attributes']['class'][] = 'clearfix';
+  }
+
+  if (isset($vars['form']['columns']['supplementary_fields'])) {
+    foreach ($vars['form']['columns']['supplementary_fields'] as &$field) {
+      if (is_array($field) && isset($field['#theme_wrappers'])) {
+        $field['#theme_wrappers'][] = 'container';
+        $field['#attributes']['class'][] = 'commons-pod';
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_process_form_content().
+ */
+function commons_origins_process_form_content(&$vars, $hook) {
+  // Crunch down attribute arrays.
+  template_process($vars, $hook);
+}
+
+/**
 * Implements hook_form_alter().
 */
 function commons_origins_form_alter(&$form, &$form_state, $form_id) {
-  if (isset($form['#node']) && substr($form_id, -10) == '_node_form' && isset($form['additional_settings']) && $form['#node']->type != 'post') {
-    $form['additional_settings']['#type'] = 'fieldset';
+  // Give forms a common theme function so we do not have to declare every
+  // single form we want to override in hook_theme().
+  if (is_array($form['#theme'])) {
+    $hooks = array('form_content');
+    $form['#theme'] = array_merge($form['#theme'], $hooks);
   }
+  else {
+    $form['#theme'] = array(
+      $form['#theme'],
+      'form_content',
+    );
+  }
+
   // Description text on these fields is redundant.
   if ($form_id == 'user_login') {
     $form['name']['#description'] = '';
@@ -200,6 +288,88 @@ function commons_origins_form_alter(&$form, &$form_state, $form_id) {
 
   if ($form_id == 'user_register_form') {
     $form['account']['mail']['#description'] = t('Password reset and notification emails will be sent to this address.');
+  }
+
+  if (isset($form['#node_edit_form']) && $form['#node_edit_form']) {
+    // Vertical tabs muck things up, so things need to be shuffled to get rid of
+    // them.
+    $general_settings = array();
+    foreach ($form as $id => $field) {
+      if (is_array($field) && isset($field['#group']) && $field['#group'] == 'additional_settings') {
+        $general_settings[$id] = $field;
+        unset($general_settings[$id]['#group']);
+      }
+    }
+    if (!empty($general_settings)) {
+      $form['general_settings'] = array(
+        '#theme_wrappers' => array('container'),
+        '#attributes' => array(
+          'class' => array('general-settings'),
+        ),
+        '#weight' => 100,
+        'general_settings' => $general_settings,
+      );
+      $form['additional_settings']['#access'] = FALSE;
+    }
+
+    // Declare the fields to go into each column.
+    $columns = array(
+      'primary' => array(
+        'body',
+        'choice_wrapper',
+        'field_address',
+        'field_date',
+        'field_group_logo',
+        'field_location',
+        'field_logo',
+        'field_related_question',
+        'og_group_ref',
+        'settings',
+        'title',
+      ),
+      'supplementary' => array(
+        'event_topics',
+        'field_topics',
+        'general_settings',
+      )
+    );
+
+    // Use a counters to set the weight of items.
+    $column_counter = 0;
+    $form['columns'] = array(
+      '#theme_wrappers' => array('container'),
+      '#attributes' => array(
+        'class' => array('columns'),
+      ),
+    );
+    
+    foreach ($columns as $column => $fields) {
+      // Declare the field containers.
+      $form['columns'][$column . '_fields'] = array(
+        '#type' => 'container',
+        '#attributes' => array(
+          'class' => array(drupal_html_class($column . '-fields')),
+        ),
+        '#weight' => $column_counter,
+      );
+
+      // Increment the counter for the next column.
+      $column_counter++;
+
+      // $field_counter = 0;
+      
+      // Move the fields into the containers.
+      foreach ($fields as $field) {
+        if (isset($form[$field])) {
+          // Translate the field to the appropriate container.
+          $form['columns'][$column . '_fields'][$field] = $form[$field];
+
+          // Remove access to the old placement instead of unset() to maintain 
+          // the legacy information.
+          $form[$field]['#access'] = FALSE;
+        }
+      }
+    }
   }
 }
 
@@ -211,7 +381,6 @@ function commons_origins_css_alter(&$css) {
     unset($css['profiles/commons/modules/contrib/rich_snippets/rich_snippets.css']);
   }
 }
-
 
 /**
  * Override or insert variables into the comment templates.
@@ -240,10 +409,10 @@ function commons_origins_process_block(&$vars) {
  * This allows for the theme to set a link's #access argument to FALSE so it
  * will not render.
  */
-function commons_origins_links($variables) {
-  $links = $variables['links'];
-  $attributes = $variables['attributes'];
-  $heading = $variables['heading'];
+function commons_origins_links($vars) {
+  $links = $vars['links'];
+  $attributes = $vars['attributes'];
+  $heading = $vars['heading'];
   global $language_url;
   $output = '';
 
