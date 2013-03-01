@@ -83,6 +83,9 @@ function commons_content_moderation_views_default_views_alter(&$views) {
   * Implements hook_views_bulk_operations_form_alter().
   */
 function commons_content_moderation_views_bulk_operations_form_alter(&$form, $form_state, $vbo) {
+  if(!isset($vbo->options['vbo_operations']['action::commons_content_moderation_delete_node_block_user'])) {
+    return;
+  }
   if ($form_state['step'] == 'views_form_views_form' && $vbo->options['vbo_operations']['action::commons_content_moderation_delete_node_block_user']['selected'] == 1) {
     if (module_exists('mollom') && _mollom_status()) {
       $form['mollom_text'] = array(
@@ -94,6 +97,5 @@ function commons_content_moderation_views_bulk_operations_form_alter(&$form, $fo
         '#markup' => t('When the !mollom module is installed and configured, content deleted here will also be reported to Mollom.', array('!mollom' => l('Mollom', 'http://drupal.org/project/mollom'))),
       );
     }
-
   }
 }
