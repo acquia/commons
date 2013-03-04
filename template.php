@@ -241,12 +241,8 @@ function commons_origins_preprocess_form_content(&$vars, $hook) {
   // Bootstrap the with some of Drupal's default variables.
   template_preprocess($vars, $hook);
 
-  if (isset($vars['form']['columns'])) {
-    $vars['form']['columns']['#attributes']['class'][] = 'clearfix';
-  }
-
-  if (isset($vars['form']['columns']['supplementary_fields'])) {
-    foreach ($vars['form']['columns']['supplementary_fields'] as &$field) {
+  if (isset($vars['form']['supplementary'])) {
+    foreach ($vars['form']['supplementary'] as &$field) {
       if (is_array($field) && isset($field['#theme_wrappers'])) {
         $field['#theme_wrappers'][] = 'container';
         $field['#attributes']['class'][] = 'commons-pod';
@@ -291,8 +287,8 @@ function commons_origins_form_alter(&$form, &$form_state, $form_id) {
   }
 
   if (isset($form['#node_edit_form']) && $form['#node_edit_form']) {
-    // Vertical tabs muck things up, so things need to be shuffled to get rid of
-    // them.
+    // Vertical tabs muck things up, so things need to be shuffled to get rid
+    // of them.
     $general_settings = array();
     foreach ($form as $id => $field) {
       if (is_array($field) && isset($field['#group']) && $field['#group'] == 'additional_settings') {
@@ -313,61 +309,20 @@ function commons_origins_form_alter(&$form, &$form_state, $form_id) {
     }
 
     // Declare the fields to go into each column.
-    $columns = array(
-      'primary' => array(
-        'body',
-        'choice_wrapper',
-        'field_address',
-        'field_date',
-        'field_group_logo',
-        'field_location',
-        'field_logo',
-        'field_related_question',
-        'og_group_ref',
-        'settings',
-        'title',
-      ),
-      'supplementary' => array(
-        'event_topics',
-        'field_topics',
-        'general_settings',
-      )
+    $supplementary = array(
+      'event_topics',
+      'field_topics',
+      'general_settings',
     );
 
-    // Use a counters to set the weight of items.
-    $column_counter = 0;
-    $form['columns'] = array(
-      '#theme_wrappers' => array('container'),
-      '#attributes' => array(
-        'class' => array('columns'),
-      ),
-    );
-    
-    foreach ($columns as $column => $fields) {
-      // Declare the field containers.
-      $form['columns'][$column . '_fields'] = array(
-        '#type' => 'container',
-        '#attributes' => array(
-          'class' => array(drupal_html_class($column . '-fields')),
-        ),
-        '#weight' => $column_counter,
-      );
+    foreach ($supplementary as $field) {
+      if (isset($form[$field])) {
+        // Translate the field to the appropriate container.
+        $form['supplementary'][$field] = $form[$field];
 
-      // Increment the counter for the next column.
-      $column_counter++;
-
-      // $field_counter = 0;
-      
-      // Move the fields into the containers.
-      foreach ($fields as $field) {
-        if (isset($form[$field])) {
-          // Translate the field to the appropriate container.
-          $form['columns'][$column . '_fields'][$field] = $form[$field];
-
-          // Remove access to the old placement instead of unset() to maintain 
-          // the legacy information.
-          $form[$field]['#access'] = FALSE;
-        }
+        // Remove access to the old placement instead of unset() to maintain 
+        // the legacy information.
+        $form[$field]['#access'] = FALSE;
       }
     }
   }
