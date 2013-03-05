@@ -39,7 +39,7 @@ function commons_events_field_default_field_instances() {
     'label' => 'Description',
     'required' => 1,
     'settings' => array(
-      'display_summary' => 1,
+      'display_summary' => FALSE,
       'text_processing' => '1',
       'user_register_form' => FALSE,
     ),
