@@ -200,10 +200,11 @@ function commons_events_form_node_form_alter(&$form, &$form_state) {
       '#weight' => -9,
     );
     $form['event_topics']['field_topics'] = $form['field_topics'];
-    unset($form['field_topics']);
-    unset($form['field_registration_type']);
-    unset($form['field_status']);
-    unset($form['field_number_of_attendees']);
+    $form['field_topics'] = array('#language' => NULL);
+    $form['field_registration_type'] = array('#language' => NULL);
+    $form['field_status'] = array('#language' => NULL);
+    $form['field_number_of_attendees'] = array('#language' => NULL);
+    dsm($form);
   }
 }
 
