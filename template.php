@@ -278,6 +278,19 @@ function commons_origins_process_form_content(&$vars, $hook) {
 }
 
 /**
+ * Implements hook_preprocess_views_view_unformatted().
+ */
+function commons_origins_preprocess_views_view_unformatted(&$vars) {
+  // Prevent the avatars in the activity stream blocks from bleeding into the
+  // rows below them.
+  if ($vars['view']->name == 'commons_activity_streams_activity') {
+    foreach ($vars['classes_array'] as &$classes) {
+      $classes .= ' clearfix';
+    }
+  }
+}
+
+/**
 * Implements hook_form_alter().
 */
 function commons_origins_form_alter(&$form, &$form_state, $form_id) {
