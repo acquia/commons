@@ -152,12 +152,25 @@ function commons_origins_process_page(&$vars) {
  * Override or insert variables into the node templates.
  */
 function commons_origins_preprocess_node(&$vars) {
-  if ($vars['promote']) {
+  // Append a feature label to featured node teasers.
+  if ($vars['teaser'] && $vars['promote']) {
     $vars['submitted'] .= ' <span class="featured-node-tooltip">' . t('Featured') . ' ' . $vars['type'] . '</span>';
   }
 
-  if (empty($vars['user_picture'])) {
-    $vars['classes_array'][] = 'no-user-picture';
+  // Some content does not get a user image on the full node.
+  $no_avatar = array(
+    'event',
+    'group',
+    'page',
+    'wiki',
+  );
+  if (!$vars['teaser'] && in_array($vars['node']->type, $no_avatar)) {
+    $vars['user_picture'] = '';
+  }
+
+  // If there does happen to be a user image, add a class for styling purposes.
+  if (!empty($vars['user_picture'])) {
+    $vars['classes_array'][] = 'user-picture-available';
   }
 
   // Add classes to render the comment-comments link as a button with a number attached.
@@ -197,6 +210,11 @@ function commons_origins_preprocess_node(&$vars) {
     );
 
     $vars['submitted'] = t('!type created by !user on !date', $placeholders);
+  }
+
+  // Add a class to the node when there is a logo image.
+  if (!empty($vars['field_logo'])) {
+    $vars['classes_array'][] = 'logo-available';
   }
 }
 
@@ -437,6 +455,49 @@ function commons_origins_links($vars) {
 
     $output .= '</ul>';
   }
+
+  return $output;
+}
+
+function commons_origins_field__addressfield($variables) {
+  $output = '';
+
+  // Add Microformat classes to each address.
+  foreach($variables['items'] as &$address) {
+    $address['#theme_wrappers'][] = 'container';
+    $address['#attributes']['class'][] = 'adr';
+    if (!empty($address['street_block']['thoroughfare'])) {
+      $address['street_block']['thoroughfare']['#attributes']['class'][] ='street-address';
+    }
+    if (!empty($address['street_block']['premise'])) {
+      $address['street_block']['premise']['#attributes']['class'][] ='extended-address';
+    }
+    if (!empty($address['locality_block']['locality'])) {
+      $address['locality_block']['locality']['#suffix'] = ',';
+    }
+    if (!empty($address['locality_block']['administrative_area'])) {
+      $address['locality_block']['administrative_area']['#attributes']['class'][] ='region';
+    }
+    if (!empty($address['country'])) {
+      $address['country']['#attributes']['class'][] ='country-name';
+    }
+  }
+
+  // Render the label, if it's not hidden.
+  if (!$variables['label_hidden']) {
+    $output .= '<div class="field-label"' . $variables['title_attributes'] . '>' . $variables['label'] . ':&nbsp;</div>';
+  }
+
+  // Render the items.
+  $output .= '<div class="field-items"' . $variables['content_attributes'] . '>';
+  foreach ($variables['items'] as $delta => $item) {
+    $classes = 'field-item ' . ($delta % 2 ? 'odd' : 'even');
+    $output .= '<div class="' . $classes . '"' . $variables['item_attributes'][$delta] . '>' . drupal_render($item) . '</div>';
+  }
+  $output .= '</div>';
+
+  // Render the top-level DIV.
+  $output = '<div class="' . $variables['classes'] . '"' . $variables['attributes'] . '>' . $output . '</div>';
 
   return $output;
 }

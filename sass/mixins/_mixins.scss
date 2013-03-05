@@ -132,6 +132,14 @@
       width: $width;
     }
   }
+
+  @include respond(only-small) {
+    padding-left: $extra-padding;
+
+    .user-picture {
+      display: none;
+    }
+  }
 }
 
 @mixin count-btn($icon, $counter: 'counter') {

@@ -22,6 +22,10 @@
 %node-space-right {
   > .node-content {
     margin-right: 90px;
+
+    @include respond(small-medium) {
+      margin-right: 0;
+    }
   }
 }
 

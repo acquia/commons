@@ -503,12 +503,7 @@ var {
 .node {
   position: relative;
 
-  &.node-answer,
-  &.node-event,
-  &.node-poll,
-  &.node-post,
-  &.node-question,
-  &.node-wiki.node-teaser {
+  &.user-picture-available {
     @include place-picture;
   }
 
@@ -548,12 +543,7 @@ var {
     position: relative;
     @include border-radius(3px);
 
-    &.node-answer,
-    &.node-event,
-    &.node-poll,
-    &.node-post,
-    &.node-question,
-    &.node-wiki.node-teaser {
+    &.user-picture-available {
       @include place-picture(50px, 10px);
     }
 
@@ -984,31 +974,64 @@ h1.node-title {
 }
 
 .node-type-event {
-  .node-content {
-    margin-left: 0;
+  .field-name-field-logo {
+    float: left;
+    width: 90px;
+    margin: .5em 0 0 -90px;
+    position: relative;
+    left: 90px;
 
-    .field-name-field-logo {
-      float:left;
-      margin:3px 15px 15px 0;
-      background:$white;
-      padding:4px;
+    img {
+      display: block;
+      @include box-sizing(border-box);
+      margin-bottom: 1.7em;
+      padding: 4px;
       @include border-radius(3px);
       @include box-shadow($light_gray 1px 1px 4px);
-      position:relative;
-      display:block;
-      line-height:0;
-
-      img {
-        width:72px;
-      }
+      background: $white;
     }
 
-    // .field-name-field-offsite-url {
-    //   float: right;
-    // }
+    @include respond(only-small) {
+      display: none;
+    }
+  }
 
-    .field-name-body {
-      clear: left;
+  .logo-available {
+    .field-name-field-date,
+    .field-name-field-address,
+    .field-name-field-offsite-url {
+      margin-left: 105px;
+
+      @include respond(only-small) {
+        margin-left: 0;
+      }
+    }
+  }
+
+  .addressfield-container-inline {
+    &:after {
+      content: "";
+      clear: none;
+      display: none;
+    }
+  }
+
+  .field-name-body {
+    clear: both;
+    margin-top: 1.7em;
+  }
+}
+
+.field-name-field-date {
+  font-weight: bold;
+}
+
+.adr {
+  .region {
+    &,
+    .node-type-event & {
+      float: none;
+      padding: 0;
     }
   }
 }
@@ -2119,6 +2142,12 @@ ul.action-links {
 /* =============================================================================
  *   Panels Styling
  * ========================================================================== */
+
+.node-title,
+.pane-title {
+  font-weight: normal;
+  font-size: 1.6em;
+}
 
 .panel-display {
   min-width: 100%;
@@ -3290,7 +3319,6 @@ body.page-node.node-type-group {
   h2#page-title {
     font-size: 54px;
     line-height: 54px;
-    font-weight: normal;
   }
 }
 
@@ -3322,8 +3350,6 @@ body.page-node.node-type-group {
  * Wrapper for the list of comments and its titles
  */
 #comments {
-  margin: 1.5em 0;
-
   h2 {
     &.comment-title {
       margin: 0;
@@ -3585,6 +3611,18 @@ form.commons-events-form-float {
   input, input:hover {
     @extend %btn-green;
     padding: 3px 10px;
+  }
+
+  @include respond(small-medium) {
+    float: none;
+    margin: 1em 0;
+    max-width: inherit;
+    text-align: left;
+
+    .commons-event-status {
+      display: inline-block;
+      margin-left: 1em;
+    }
   }
 }
 
