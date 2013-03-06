@@ -216,6 +216,15 @@ function commons_origins_preprocess_node(&$vars) {
   if (!empty($vars['field_logo'])) {
     $vars['classes_array'][] = 'logo-available';
   }
+
+  // Move the answer link on question nodes to the top of the content.
+  if ($vars['node']->type == 'question' && !empty($vars['content']['links']['answer'])) {
+    $vars['content']['answer'] = $vars['content']['links']['answer'];
+    $vars['content']['answer']['#attributes']['class'][] = 'node-actions';
+    $vars['content']['answer']['#links']['answer-add']['attributes']['class'][] = 'button-alert';
+    $vars['content']['answer']['#weight'] = -100;
+    $vars['content']['links']['answer']['#access'] = FALSE;
+  }
 }
 
 /**
@@ -291,8 +300,8 @@ function commons_origins_preprocess_views_view_unformatted(&$vars) {
 }
 
 /**
-* Implements hook_form_alter().
-*/
+ * Implements hook_form_alter().
+ */
 function commons_origins_form_alter(&$form, &$form_state, $form_id) {
   // Give forms a common theme function so we do not have to declare every
   // single form we want to override in hook_theme().
@@ -360,8 +369,8 @@ function commons_origins_form_alter(&$form, &$form_state, $form_id) {
 }
 
 /**
-* Implements hook_css_alter().
-*/
+ * Implements hook_css_alter().
+ */
 function commons_origins_css_alter(&$css) {
   if (isset($css['profiles/commons/modules/contrib/rich_snippets/rich_snippets.css'])) {
     unset($css['profiles/commons/modules/contrib/rich_snippets/rich_snippets.css']);
@@ -472,6 +481,9 @@ function commons_origins_links($vars) {
   return $output;
 }
 
+/**
+ * Overrides theme_field__addressfield().
+ */
 function commons_origins_field__addressfield($variables) {
   $output = '';
 

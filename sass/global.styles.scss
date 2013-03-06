@@ -526,6 +526,30 @@ var {
   }
 }
 
+.node-actions {
+  float: right;
+  width: 90px;
+  list-style: none;
+  margin: .5em -90px 0 0;
+  text-align: right;
+
+  &,
+  .block-content & {
+    padding: 0;
+  }
+
+  @include respond(small-medium) {
+    float: none;
+    width: auto;
+    margin: 1.7em 0;
+    text-align: left;
+  }
+}
+
+.button-alert {
+  @extend %btn-green;
+}
+
 .node-teaser {
   border-bottom: 1px solid #ccc;
   padding-bottom: 20px;
@@ -820,6 +844,7 @@ h1.node-title {
     &.view-mode-full {
       float: left;
       width: 50%;
+      margin-bottom: 1.7em;
 
       ul {
         margin: 0;
