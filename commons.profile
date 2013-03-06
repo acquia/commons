@@ -117,8 +117,8 @@ function commons_install_tasks() {
   }
 
   //make sure we have more memory than 196M. if not lets try to increase it.
-  if (ini_get('max_execution_time') != '-1' && ini_get('max_execution_time') != '0' && ini_get('max_execution_time') <= '120') {
-    ini_set('max_execution_time', '120');
+  if ((int)ini_get('max_execution_time') != -1 && (int)ini_get('max_execution_time') != 0 && (int)ini_get('max_execution_time') <= 120) {
+    ini_set('max_execution_time', 120);
   }
 
   $demo_content = variable_get('commons_install_example_content', FALSE);
