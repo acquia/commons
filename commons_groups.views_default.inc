@@ -257,7 +257,7 @@ function commons_groups_views_default_views() {
   $handler->display->display_options['fields']['og_roles']['label'] = '';
   $handler->display->display_options['fields']['og_roles']['exclude'] = TRUE;
   $handler->display->display_options['fields']['og_roles']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['og_roles']['type'] = 'ul';
+  $handler->display->display_options['fields']['og_roles']['empty'] = 'Contributors';
   $handler->display->display_options['argument_input'] = array(
     'gid' => array(
       'type' => 'context',
@@ -884,7 +884,7 @@ function commons_groups_views_default_views() {
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
   $handler->display->display_options['title'] = 'Groups';
-  $handler->display->display_options['use_ajax'] = TRUE;
+  $handler->display->display_options['use_ajax'] = FALSE;
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['access']['type'] = 'perm';
   $handler->display->display_options['cache']['type'] = 'none';
