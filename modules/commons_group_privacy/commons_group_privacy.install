@@ -1,0 +1,10 @@
+<?php
+
+/**
+* Revert field instances for group content privacy,
+* which where not added per http://drupal.org/node/1936446.
+*/
+function commons_group_privacy_update_3100() {
+  features_revert(array('commons_group_privacy' => array('field_instance')));
+  return array();
+}

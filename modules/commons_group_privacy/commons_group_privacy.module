@@ -33,3 +33,25 @@ function commons_group_privacy_features_pipe_alter(&$pipe, $data, $export) {
   }
 }
 
+/**
+* Implements hook_system_info_alter().
+*/
+function commons_group_privacy_system_info_alter(&$info, $file, $type) {
+  // Commons Groups dynamically adds the og_group_ref field to
+  // content types that request it by altering the
+  // commons_groups_entity_types variable.
+  // We must add a corresponding line for each field instance
+  // to commons_groups.info so that Features is aware of the instance
+  // and can sucessfully revert the field_instance component back
+  // to its default state.
+  if ($file->name == 'commons_group_privacy') {
+    $group_content_entity_types = commons_groups_get_group_content_entity_types();
+    if (!empty($group_content_entity_types)) {
+      foreach ($group_content_entity_types as $entity_type => $bundles) {
+        foreach(array_keys($bundles) as $bundle) {
+          $info['features']['field_instance'][] = "$entity_type-$bundle-group_content_access";
+        }
+      }
+    }
+  }
+}

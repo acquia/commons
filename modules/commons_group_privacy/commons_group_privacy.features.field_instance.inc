@@ -11,12 +11,11 @@ function commons_group_privacy_field_default_field_instances() {
   $field_instances = array();
    // Get a list of content types that should have the og_groups_ref field added.
   // Modules can alter this list by implementing hook_strongarm_alter().
-  $commons_groups_entity_types = variable_get('commons_groups_entity_types', array());
-  if (!empty($commons_groups_entity_types['node'])) {
-    $field_instances = array();
-    foreach($commons_groups_entity_types['node'] as $type => $enabled) {
-      if ($enabled) {
-        commons_group_privacy_field_definition($field_instances, $type);
+  $commons_groups_entity_types = commons_groups_get_group_content_entity_types();
+  if (!empty($commons_groups_entity_types)) {
+    foreach ($commons_groups_entity_types as $entity_type => $bundles) {
+      foreach(array_keys($bundles) as $bundle) {
+        commons_group_privacy_field_definition($field_instances, $entity_type, $bundle);
       }
     }
   }
@@ -133,10 +132,10 @@ function commons_group_privacy_field_default_field_instances() {
   return $field_instances;
 }
 
-function commons_group_privacy_field_definition(&$field_instances, $type) {
+function commons_group_privacy_field_definition(&$field_instances, $entity_type, $bundle) {
   // Exported field_instance: 'node-TYPE-group_content_access'
-  $field_instances["node-$type-group_content_access"] = array(
-    'bundle' => $type,
+  $field_instances["$entity_type-$bundle-group_content_access"] = array(
+    'bundle' => $bundle,
     'default_value' => array(
       0 => array(
         'value' => 0,
@@ -159,7 +158,7 @@ function commons_group_privacy_field_definition(&$field_instances, $type) {
         'weight' => 0,
       ),
     ),
-    'entity_type' => 'node',
+    'entity_type' => $entity_type,
     'field_name' => 'group_content_access',
     'label' => 'Group content visibility',
     'required' => TRUE,
