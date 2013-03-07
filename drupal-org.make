@@ -86,6 +86,10 @@ projects[entity][type] = "module"
 projects[entity][subdir] = "contrib"
 projects[entity][version] = "1.0"
 
+; Force LANGUAGE_NONE entities to still display within rendered entities.
+; http://drupal.org/node/1782134
+projects[entity][patch][] = "http://drupal.org/files/entity-translatable_fields_not_overriding_und_with_empty_values.patch"
+
 projects[entitycache][type] = "module"
 projects[entitycache][subdir] = "contrib"
 projects[entitycache][version] = "1.1"
