@@ -98,7 +98,6 @@ function commons_update_3101() {
 
 /**
  * Reset the default avatar if the associated file doesn't exist in the file_managed table.
- * Set the default OG role to be 'organizer' instead of administrator.
  */
 function commons_update_3102() {
   $reset_avatar = FALSE;
@@ -119,12 +118,5 @@ function commons_update_3102() {
   if($reset_avatar) {
     commons_set_default_avatar();
   }
-
-  // Change the OG adminstrator group to read 'Organizer'
-  $result = db_update('og_role')
-    ->fields(array('name' => 'Organizers'))
-    ->condition('rid', 3, '=')
-    ->execute();
-
   return array();
 }
