@@ -637,12 +637,12 @@ var {
 .more-link {
   background-image:image-url('icons/icon-more.png');
   background-repeat:no-repeat;
-  height:14px;
-  padding:0 0 0 17px;
-  float:right;
-  font-size:0.85em;
-  line-height:14px;
-  margin:10px;
+  min-height: 14px;
+  padding: 0 0 0 1.7em;
+  float: right;
+  font-size: 0.85em;
+  line-height: 14px;
+  margin-top: 10px;
   a {
     color:$light_gray;
   }
@@ -792,6 +792,66 @@ h1.node-title {
     &:hover {
       text-decoration:underline;
     }
+  }
+}
+
+/*
+ * Main wrapper for most blocks, block_system_main does not have it
+ */
+.block {
+  margin-bottom: 20px;
+}
+
+/*
+ * Inner wrapper for most blocks, good for margin, padding and borders, block_system_main does not have it
+ */
+.block-inner {}
+
+/*
+ * The first block in the region
+ */
+.block.first {}
+
+/*
+ * The last block in the region
+ */
+.block.last {}
+
+/*
+ * Zebra striping for each block in the region
+ */
+.block.odd {}
+
+/*
+ * Zebra striping for each block in the region
+ */
+.block.even {}
+
+/*
+ * Block title
+ */
+.block-title {
+  margin: 0;
+}
+
+/*
+ * Block content wrapper
+ */
+.block-content {}
+
+/*
+ * Match item list and block menu margin and padding
+ */
+.block-content {
+
+  ul,
+  ol {
+    padding: 0 0 0 15px;
+  }
+
+  li {
+    margin: 0;
+    padding: 0;
   }
 }
 
@@ -2256,18 +2316,6 @@ body.page-node .pane-views-panes {
   }
 }
 
-.pane-commons-events-user-upcoming-events-panel-pane-2,
-.pane-commons-events-user-upcoming-events-panel-pane-3,
-.pane-commons-events-upcoming-panel-pane-1,
-.pane-activity-group-panel-pane-1,
-.pane-commons-radioactivity-groups-active-in-group-panel-pane-1,
-.pane-commons-contributors-group-panel-pane-2,
-.pane-commons-wikis-contributor-list-commons-wikis-contributor-pane,
-.nodes {
-  @extend %pod;
-  @extend %pod-content;
-}
-
 .nodes {
   margin-top: 1em;
 }
@@ -2284,36 +2332,22 @@ body.page-node .pane-views-panes {
 .pane-commons-featured-panel-pane-1,
 .pane-commons-events-upcoming {
   .block-inner {
-    // padding:0 0 15px 0;
-    margin:0;
-    .pane-title {
-      padding:20px 20px 0 20px;
-      line-height:20px;
-    }
-    .views-row{
-      padding:10px 20px 10px 20px;
-      border-bottom:1px solid #eee;
-    }
+    margin: 0;
+    
     .views-row-last {
-      border-bottom:none;
+      border-bottom: none;
     }
+
     .views-field-field-date,
     .views-field-field-location,
     .views-field-comment-count {
-      font-size:0.85em;
+      font-size: 0.85em;
     }
+
     .views-field-field-location,
     .views-field-comment-count {
-      color:$light_gray;
+      color: $light_gray;
     }
-  }
-}
-
-.pane-commons-radioactivity-groups-most-active-panel-pane-1, .pane-commons-activity-streams-activity-panel-pane-1, .pane-commons-featured-panel-pane-1, .pane-commons-groups-contributors-panel-pane-1 {
-  @extend %pod;
-
-  > .block-inner {
-    @extend %pod-content;
   }
 }
 
@@ -2495,13 +2529,17 @@ body.page-node .pane-views-panes {
 
 .view-id-commons_groups_contributors {
   table {
-    border:none;
+    border: none;
+    margin: 0;
   }
+  
   tbody tr {
-    border-top:none;
+    border-top: none;
+    background: none;
   }
-  .user-picture:after {
-    background:none;
+  
+  td {
+    padding: $gutter-width / 2;
   }
 }
 
@@ -2551,21 +2589,26 @@ body.page-node .pane-views-panes {
     .views-exposed-widgets {
       margin-bottom: 0;
     }
+
     .views-widget,
     label {
-      display:inline-block;
+      display: inline-block;
     }
+
     label {
-      color:$dark_gray;
-      font-size:0.85em;
-      font-weight:normal;
-      margin:0 15px 0 0;
+      color: $dark_gray;
+      font-size: 0.85em;
+      font-weight: normal;
+      margin: 0 15px 0 0;
+      line-height: 2em;
     }
+
     .form-text {
       width:400px;
       @include box-shadow($light_gray 1px 1px 2px inset);
       border-color:#c2c2c2;
     }
+
     .form-submit {
       margin-top:1px;
     }
@@ -2715,7 +2758,7 @@ body.page-node .pane-views-panes {
 
 .pane-node-flag-commons-follow-group-link {
   position: absolute;
-  right: 5px;
+  right: 10px;
   top: 22px;
 
   .flag-action {
@@ -2757,15 +2800,7 @@ body.page-node .pane-views-panes {
   margin-bottom:1.5em;
   .views-exposed-widget {
     padding:0;
-    .form-select {
-      // border:none !important;
-      // background:transparent !important;
-      // color:$light_blue;
-      // cursor:pointer;
-      // padding-right:0;
-      // padding:0 0.5em;
-      // display:block;
-    }
+
     label {
       float:left;
       font-weight:normal;
@@ -2958,75 +2993,6 @@ body.page-node .pane-views-panes {
 /* =============================================================================
  *   Block Styling
  * ========================================================================== */
-
-/*
- * Main wrapper for most blocks, block_system_main does not have it
- */
-.block {
-  margin-bottom: 20px;
-}
-
-
-/*
- * Inner wrapper for most blocks, good for margin, padding and borders, block_system_main does not have it
- */
-.block-inner {}
-
-
-/*
- * The first block in the region
- */
-.block.first {}
-
-
-/*
- * The last block in the region
- */
-.block.last {}
-
-
-/*
- * Zebra striping for each block in the region
- */
-.block.odd {}
-
-
-/*
- * Zebra striping for each block in the region
- */
-.block.even {}
-
-
-/*
- * Block title
- */
-.block-title {
-  margin: 0;
-}
-
-
-/*
- * Block content wrapper
- */
-.block-content {}
-
-
-/*
- * Match item list and block menu margin and padding
- */
-.block-content {
-
-  ul,
-  ol {
-    padding: 0 0 0 15px;
-  }
-
-  li {
-    margin: 0;
-    padding: 0;
-  }
-}
-
 
 /*
  * Block for the latest news items in the first category

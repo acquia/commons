@@ -228,6 +228,37 @@ function commons_origins_preprocess_node(&$vars) {
 }
 
 /**
+ * Implements hook_preprocess_panels_pane().
+ */
+function commons_origins_preprocess_panels_pane(&$vars, $hook) {
+  $pane = $vars['pane'];
+  
+  // Add pod styling to some of the panels panes.
+  $not_pods = array(
+    'commons_events-commons_events_create_event_link',
+  );
+  $content_pods = array(
+    'commons_question_answers-panel_pane_1',
+  );
+  if (($pane->panel == 'two_66_33_second' && !in_array($pane->subtype, $not_pods)) || in_array($pane->subtype, $content_pods)) {
+    $vars['attributes_array']['class'][] = 'commons-pod';
+  }
+}
+
+/**
+ * Implements hook_preprocess_views_view().
+ */
+function commons_origins_preprocess_views_view(&$vars, $hook) {
+  $view = $vars['view'];
+
+  // Wrap page views in pod styling.
+  if ($view->display_handler->plugin_name == 'page') {
+    $vars['classes_array'][] = 'commons-pod';
+    $vars['classes_array'][] = 'clearfix';
+  }
+}
+
+/**
  * Implements hook_preprocess_form().
  *
  * Since Commons Origins overrides the default theme_form() function, we will 
