@@ -4,8 +4,19 @@
  * Disable summary on Event nodes.
  */
 function commons_events_update_7000() {
-    $revert = array(
-      'commons_events' => array('field_instance'),
+  $revert = array(
+    'commons_events' => array('field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/**
+ * Switch attendee view to use 50x50 image style.
+ */
+function commons_events_update_7001() {
+  $revert = array(
+    'commons_events' => array('views'),
   );
   features_revert($revert);
   return array();

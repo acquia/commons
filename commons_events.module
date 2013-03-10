@@ -257,6 +257,27 @@ function commons_events_node_form_submit($form, $form_state) {
     }
     $settings['settings'] = serialize($settings['settings']);
     registration_update_entity_settings('node', $node->nid, $settings);
+    // Automatically register the node creator for the event.
+    $registration_type = registration_get_entity_registration_type('node', $node);
+    $registration = entity_get_controller('registration')->create(array(
+      'entity_type' => 'node',
+      'entity_id' => $node->nid,
+      'type' => $registration_type,
+    ));
+    if (!isset($node->uid)) {
+      global $user;
+      $uid = $user->uid;
+    }
+    else {
+      $uid = $node->uid;
+    }
+    if (!registration_is_registered($registration, NULL, $uid)) {
+      $registration->user_uid = $uid;
+      $registration->author_uid = $uid;
+      $registration->state = NULL;
+      $registration->count = 1;
+      registration_save($registration);
+    }
   }
 }
 
