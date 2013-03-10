@@ -12,11 +12,11 @@ function commons_events_update_7000() {
 }
 
 /**
- * Switch attendee view to use 50x50 image style.
+ * Switch attendee view and event logo to use 50x50 image style.
  */
 function commons_events_update_7001() {
   $revert = array(
-    'commons_events' => array('views'),
+    'commons_events' => array('views', 'node'),
   );
   features_revert($revert);
   return array();

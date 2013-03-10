@@ -231,6 +231,8 @@ function commons_events_solr_panel_facet_subtype($facet_name) {
  */
 function commons_events_solr_theme_registry_alter(&$registry) {
   $registry['apachesolr_search_noresults']['function'] = 'commons_events_solr_apachesolr_search_noresults';
+  $registry['search_results']['path'] = drupal_get_path('module', 'commons_events_solr');
+  $registry['search_results']['theme path'] = drupal_get_path('module', 'commons_events_solr');
 }
 
 function commons_events_solr_apachesolr_process_results(&$results, DrupalSolrQueryInterface $query) {
