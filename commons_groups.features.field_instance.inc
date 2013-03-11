@@ -209,7 +209,7 @@ function commons_groups_field_definition(&$field_instances, $entity_type, $bundl
     'default_value' => NULL,
     'default_value_function' => 'commons_groups_entityreference_default_value',
     'deleted' => '0',
-    'description' => '',
+    'description' => 'Separate group names with commas',
     'display' => array(
       'default' => array(
         'label' => 'above',

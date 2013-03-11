@@ -247,7 +247,7 @@ function commons_groups_og_user_access_alter(&$temp_perm, $context) {
 
     // First we need to do an anonymous check. Sometimes they're considered members of groups,
     // but we want to bypass that. Unless you explicitly set anons to post, they shouldn't.
-    if($context['string'] == "create $type content" && $context['account']->uid == 0 && !user_access("create $type content", $context['account'])) {
+    if ($context['string'] == "create $type content" && $context['account']->uid == 0 && !user_access("create $type content", $context['account'])) {
       $temp_perm["create $type content"] = FALSE;
       return;
     }
@@ -527,14 +527,17 @@ function commons_groups_commons_bw_group_widget() {
   );
 }
 
+/*
+ *
+ */
 function commons_groups_og_membership_insert(OgMembership $og_membership) {
-  if('user' == $og_membership->entity_type && is_numeric($og_membership->etid) && $og_membership->group_type == 'node'){
+  if ('user' == $og_membership->entity_type && is_numeric($og_membership->etid) && $og_membership->group_type == 'node') {
     $roles = og_roles('node', 'group', $og_membership->gid);
 
     $group = node_load($og_membership->gid);
     // When loading up a group for the first time, check to see if the user is also the creator of the group.
-    if($group->uid == $og_membership->etid) {
-      foreach($roles as $key => $value){
+    if ($group->uid == $og_membership->etid) {
+      foreach ($roles as $key => $value) {
         if ($value == 'Organizers') {
           og_role_grant('node', $og_membership->gid, $og_membership->etid, $key);
         }
