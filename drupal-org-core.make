@@ -3,7 +3,7 @@ core = 7.x
 
 ; Download Drupal core and apply core patches if needed.
 projects[drupal][type] = "core"
-projects[drupal][version] = "7.20"
+projects[drupal][version] = "7.21"
 
 ; Hide the profiles under /profiles, so Commons is the only one. This allows
 ; the installation to start at the Language selection screen, bypassing a
