@@ -112,7 +112,7 @@ function commons_events_field_default_field_instances() {
         ),
       ),
       'type' => 'addressfield_standard',
-      'weight' => '6',
+      'weight' => '8',
     ),
   );
 
@@ -165,7 +165,7 @@ function commons_events_field_default_field_instances() {
         'year_range' => '-3:+3',
       ),
       'type' => 'date_popup',
-      'weight' => '4',
+      'weight' => '5',
     ),
   );
 
@@ -205,7 +205,7 @@ function commons_events_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => '5',
+      'weight' => '7',
     ),
   );
 
@@ -251,11 +251,11 @@ function commons_events_field_default_field_instances() {
       'active' => 1,
       'module' => 'image',
       'settings' => array(
-        'preview_image_style' => 'thumbnail',
+        'preview_image_style' => '50x50',
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => '8',
+      'weight' => '9',
     ),
   );
 
@@ -299,7 +299,7 @@ function commons_events_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => '11',
+      'weight' => '12',
     ),
   );
 
@@ -339,6 +339,55 @@ function commons_events_field_default_field_instances() {
         'size' => '60',
       ),
       'type' => 'text_textfield',
+      'weight' => '3',
+    ),
+  );
+
+  // Exported field_instance: 'node-event-field_organizers'
+  $field_instances['node-event-field_organizers'] = array(
+    'bundle' => 'event',
+    'default_value' => NULL,
+    'default_value_function' => '',
+    'deleted' => '0',
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'hidden',
+        'weight' => 12,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_organizers',
+    'label' => 'Organizers',
+    'required' => 1,
+    'settings' => array(
+      'behaviors' => array(
+        'prepopulate' => array(
+          'status' => 0,
+        ),
+      ),
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'entityreference',
+      'settings' => array(
+        'match_operator' => 'CONTAINS',
+        'path' => '',
+        'size' => '60',
+      ),
+      'type' => 'entityreference_autocomplete_tags',
       'weight' => '2',
     ),
   );
@@ -398,7 +447,7 @@ function commons_events_field_default_field_instances() {
       'module' => 'registration',
       'settings' => array(),
       'type' => 'registration_select',
-      'weight' => '9',
+      'weight' => '10',
     ),
   );
 
@@ -434,7 +483,7 @@ function commons_events_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => '10',
+      'weight' => '11',
     ),
   );
 
@@ -474,7 +523,7 @@ function commons_events_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'taxonomy_autocomplete',
-      'weight' => '12',
+      'weight' => '13',
     ),
   );
 
@@ -487,6 +536,7 @@ function commons_events_field_default_field_instances() {
   t('Event logo');
   t('Location');
   t('Maximum number of attendees');
+  t('Organizers');
   t('Registration');
   t('Registration type');
   t('URL');

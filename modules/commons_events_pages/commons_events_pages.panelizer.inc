@@ -77,6 +77,28 @@ function commons_events_pages_panelizer_defaults() {
     $pane->pid = 'new-2';
     $pane->panel = 'two_66_33_second';
     $pane->type = 'views_panes';
+    $pane->subtype = 'commons_events_organizers-panel_pane_1';
+    $pane->shown = TRUE;
+    $pane->access = array();
+    $pane->configuration = array(
+      'context' => array(
+        0 => 'panelizer',
+      ),
+    );
+    $pane->cache = array();
+    $pane->style = array(
+      'settings' => NULL,
+    );
+    $pane->css = array();
+    $pane->extras = array();
+    $pane->position = 0;
+    $pane->locks = array();
+    $display->content['new-2'] = $pane;
+    $display->panels['two_66_33_second'][0] = 'new-2';
+    $pane = new stdClass();
+    $pane->pid = 'new-3';
+    $pane->panel = 'two_66_33_second';
+    $pane->type = 'views_panes';
     $pane->subtype = 'commons_events_event_attendee_list-panel_pane_1';
     $pane->shown = TRUE;
     $pane->access = array();
@@ -95,10 +117,10 @@ function commons_events_pages_panelizer_defaults() {
     );
     $pane->css = array();
     $pane->extras = array();
-    $pane->position = 0;
+    $pane->position = 1;
     $pane->locks = array();
-    $display->content['new-2'] = $pane;
-    $display->panels['two_66_33_second'][0] = 'new-2';
+    $display->content['new-3'] = $pane;
+    $display->panels['two_66_33_second'][1] = 'new-3';
   $display->hide_title = PANELS_TITLE_NONE;
   $display->title_pane = '0';
   $panelizer->display = $display;

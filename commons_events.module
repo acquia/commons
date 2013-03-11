@@ -188,6 +188,13 @@ function commons_events_form_node_form_alter(&$form, &$form_state) {
       '#group' => 'additional_settings',
       '#weight' => -10,
     );
+    if (empty($form['field_organizers'][$form['field_organizers']['#language']]['#default_value'])) {
+      global $user;
+      $user_wrapper = entity_metadata_wrapper('user', $user);
+      $name = $user_wrapper->field_name_first->value() . " " . $user_wrapper->field_name_last->value() . " (" . $user->uid . ")";
+      $form['field_organizers'][$form['field_organizers']['#language']]['#default_value'] = $name;
+    }
+    $form['event_registration_settings']['field_organizers'] = $form['field_organizers'];
     $form['event_registration_settings']['field_registration_type'] = $form['field_registration_type'];
     $form['event_registration_settings']['field_status'] = $form['field_status'];
     $form['event_registration_settings']['field_number_of_attendees'] = $form['field_number_of_attendees'];
@@ -199,6 +206,7 @@ function commons_events_form_node_form_alter(&$form, &$form_state) {
       '#group' => 'additional_settings',
       '#weight' => -9,
     );
+    $form['field_organizers'] = array('#language' => NULL);
     $form['event_topics']['field_topics'] = $form['field_topics'];
     $form['field_topics'] = array('#language' => NULL);
     $form['field_registration_type'] = array('#language' => NULL);
@@ -271,7 +279,8 @@ function commons_events_node_form_submit($form, $form_state) {
     else {
       $uid = $node->uid;
     }
-    if (!registration_is_registered($registration, NULL, $uid)) {
+    if ($settings['status'] == 1
+      && !registration_is_registered($registration, NULL, $uid)) {
       $registration->user_uid = $uid;
       $registration->author_uid = $uid;
       $registration->state = NULL;
