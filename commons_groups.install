@@ -7,3 +7,36 @@ function commons_groups_update_3100() {
   features_revert(array('commons_groups' => array('variable')));
   return array();
 }
+/**
+* Grant users the "group organizer" role after she's created a group.
+*/
+function commons_groups_update_3101() {
+  // Change the OG adminstrator role name to 'Organizer'.
+  $result = db_update('og_role')
+    ->fields(array('name' => 'Organizers'))
+    ->condition('rid', 3, '=')
+    ->execute();
+  // We've updated the og_group_manager_default_rids_node_group variable.
+  features_revert(array('commons_groups' => array('variable')));
+  return array();
+}
+
+/**
+* Ensure that the anonymous users is not listed as a group member,
+* per http://drupal.org/node/1910874.
+*/
+function commons_groups_update_3102() {
+  $delete = db_delete('og_users_roles')
+    ->condition('uid', 0, '=')
+    ->execute();
+  return array();
+}
+
+/**
+* Grant authenticated users permission to create group nodes
+* per http://drupal.org/node/1936714.
+*/
+function commons_groups_update_3103() {
+  features_revert(array('commons_groups' => array('user_permission')));
+  return array();
+}

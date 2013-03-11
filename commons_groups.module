@@ -217,6 +217,9 @@ function commons_groups_system_info_alter(&$info, $file, $type) {
   }
 }
 
+/**
+ * Implements hook_default_message_type_alter().
+ */
 function commons_groups_default_message_type_alter(&$defaults) {
   foreach (array('commons_activity_streams_comment_created', 'commons_activity_streams_node_created') as $name) {
     if (!empty($defaults[$name])) {
@@ -236,7 +239,6 @@ function commons_groups_og_user_access_alter(&$temp_perm, $context) {
   $group_content_restricted = (bool) (isset($context['group']->group_content_access[LANGUAGE_NONE][0]['value']) && $context['group']->group_content_access[LANGUAGE_NONE][0]['value'] == 2);
   // @TODO: Consider using a static here.
   $user_is_member = (bool)og_is_member('node', $context['group']->nid, 'user', $context['account']);
-
   foreach ($commons_groups_entity_types['node'] as $type => $options) {
     // We do a literal user_access() check on the create permission here
     // because we can't call node_access() without causing recursion.
@@ -438,12 +440,14 @@ function commons_groups_entityreference_default_value($entity_type, $entity, $fi
   }
 }
 
- function commons_groups_default_rules_configuration_alter(&$configs) {
+function commons_groups_default_rules_configuration_alter(&$configs) {
   // Disable default OG new content notifications.
   // The language doesn't correspond to Commons' open groups model and we use
   // commons_follow and commons_follow_notify for new content notifications.
-  $configs['rules_og_member_active']->active = FALSE;
- }
+  if (isset($configs['rules_og_member_active'])) {
+    $configs['rules_og_member_active']->active = FALSE;
+  }
+}
 
 /**
 * Implements hook_node_update().
@@ -527,13 +531,13 @@ function commons_groups_commons_bw_group_widget() {
   );
 }
 
-/*
- *
- */
+/**
+* Implements hook_og_membership_insert().
+*/
 function commons_groups_og_membership_insert(OgMembership $og_membership) {
+  // Ensure that the group creator is also listed as an organizer.
   if ('user' == $og_membership->entity_type && is_numeric($og_membership->etid) && $og_membership->group_type == 'node') {
     $roles = og_roles('node', 'group', $og_membership->gid);
-
     $group = node_load($og_membership->gid);
     // When loading up a group for the first time, check to see if the user is also the creator of the group.
     if ($group->uid == $og_membership->etid) {
