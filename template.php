@@ -231,9 +231,11 @@ function commons_origins_preprocess_node(&$vars) {
  * Implements hook_preprocess_two_33_66().
  */
 function commons_origins_preprocess_two_33_66(&$vars) {
+  $menu = menu_get_item();
+
   // Suggest a variant for the search page so the facets will be wrapped in pod
   // styling.
-  if ($vars['display']->stored_pane_title == 'Search results') {
+  if (strpos($menu['path'], 'search') === 0) {
     $vars['theme_hook_suggestions'][] = 'two_33_66__search';
   }
 }
