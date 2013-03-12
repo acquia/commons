@@ -228,17 +228,6 @@ function commons_origins_preprocess_node(&$vars) {
 }
 
 /**
- * Implements hook_preprocess_panels_ipe_region_wrapper().
- */
-function commons_origins_preprocess_panels_ipe_region_wrapper(&$vars, $hook) {
-  if ($vars['display']->stored_pane_title == 'Search results' && $vars['region_id'] == 'two_33_66_first') {
-    // This is horrible, and it should not need done, but until the markup is
-    // accessible to the theme, it is what has to be done.
-    // $vars['output'] = '<div class="search-filters commons-pod">' . $vars['output'] . '</div>';
-  }
-}
-
-/**
  * Implements hook_preprocess_two_33_66().
  */
 function commons_origins_preprocess_two_33_66(&$vars) {
