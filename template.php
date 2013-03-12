@@ -232,9 +232,20 @@ function commons_origins_preprocess_node(&$vars) {
  */
 function commons_origins_preprocess_panels_ipe_region_wrapper(&$vars, $hook) {
   if ($vars['display']->stored_pane_title == 'Search results' && $vars['region_id'] == 'two_33_66_first') {
-    // This is horrible, and it should not need done, but until the markup is 
+    // This is horrible, and it should not need done, but until the markup is
     // accessible to the theme, it is what has to be done.
-    $vars['output'] = '<div class="search-filters commons-pod">' . $vars['output'] . '</div>';
+    // $vars['output'] = '<div class="search-filters commons-pod">' . $vars['output'] . '</div>';
+  }
+}
+
+/**
+ * Implements hook_preprocess_two_33_66().
+ */
+function commons_origins_preprocess_two_33_66(&$vars) {
+  // Suggest a variant for the search page so the facets will be wrapped in pod
+  // styling.
+  if ($vars['display']->stored_pane_title == 'Search results') {
+    $vars['theme_hook_suggestions'][] = 'two_33_66__search';
   }
 }
 
@@ -243,7 +254,7 @@ function commons_origins_preprocess_panels_ipe_region_wrapper(&$vars, $hook) {
  */
 function commons_origins_preprocess_panels_pane(&$vars, $hook) {
   $pane = $vars['pane'];
-  
+
   // Add pod styling to some of the panels panes.
   $not_pods = array(
     'commons_events-commons_events_create_event_link',
@@ -281,7 +292,7 @@ function commons_origins_preprocess_views_view(&$vars, $hook) {
 /**
  * Implements hook_preprocess_form().
  *
- * Since Commons Origins overrides the default theme_form() function, we will 
+ * Since Commons Origins overrides the default theme_form() function, we will
  * need to perform some processing on attributes to make it work in a template.
  */
 function commons_origins_preprocess_form(&$vars, $hook) {
@@ -297,14 +308,14 @@ function commons_origins_preprocess_form(&$vars, $hook) {
     $element['#attributes']['accept-charset'] = "UTF-8";
   }
   $vars['attributes_array'] = $element['#attributes'];
-  
+
   $form = &$vars['element'];
 }
 
 /**
  * Implements hook_process_form().
  *
- * Since Commons Origins overrides the default theme_form() function, we will 
+ * Since Commons Origins overrides the default theme_form() function, we will
  * need to perform some processing on attributes to make it work in a template.
  */
 function commons_origins_process_form(&$vars, $hook) {
@@ -411,7 +422,7 @@ function commons_origins_form_alter(&$form, &$form_state, $form_id) {
         // Translate the field to the appropriate container.
         $form['supplementary'][$field] = $form[$field];
 
-        // Remove access to the old placement instead of unset() to maintain 
+        // Remove access to the old placement instead of unset() to maintain
         // the legacy information.
         $form[$field]['#access'] = FALSE;
       }
