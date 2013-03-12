@@ -521,7 +521,7 @@ var {
 
   .comment-comments {
     a {
-      @include count-btn('comments-dark'); 
+      @include count-btn('comments-dark');
     }
   }
 }
@@ -2333,7 +2333,7 @@ body.page-node .pane-views-panes {
 .pane-commons-events-upcoming {
   .block-inner {
     margin: 0;
-    
+
     .views-row-last {
       border-bottom: none;
     }
@@ -2532,12 +2532,12 @@ body.page-node .pane-views-panes {
     border: none;
     margin: 0;
   }
-  
+
   tbody tr {
     border-top: none;
     background: none;
   }
-  
+
   td {
     padding: $gutter-width / 2;
   }
@@ -4080,42 +4080,161 @@ body.front.logged-in .view-commons-homepage-content .article.node {
 }
 
 // Search
-
 .page-search {
-  .region-two-33-66-first {
-    @extend %pod;
-    margin-right: 0;
+  .two-33-66 {
+    > .region-two-33-66-first {
+      h3 {
+        margin-bottom: $gutter-width;
+        color: $gray;
+        font-size: 1.2em;
+      }
 
-    .region-inner {
-      @extend %pod-content;
+      .panel-pane {
+        margin: 0;
+      }
+
+      .panels-ipe-portlet-wrapper {
+        border-bottom: 1px solid #eee;
+        padding-bottom: 5px;
+        margin-bottom: 15px;
+
+        &:last-child {
+          margin-bottom: 0;
+          padding-bottom: 0;
+          border-bottom: none;
+        }
+      }
+
+      @include respond(only-small) {
+        &.filters-processed {
+          clear: none;
+          position: absolute;
+          right: 0;
+          float: right;
+          width: 0;
+          height: 0;
+          margin-top: $gutter-width;
+          padding: 0;
+          font-size: .88em;
+          background: white;
+          border: 1px solid $lighter_gray;
+          z-index: 1;
+
+          .commons-pod {
+            margin: 0;
+            padding: $gutter-width 0;
+            @include border-radius(0 0 0 3px);
+          }
+
+          .panel-pane {
+            display: none;
+          }
+        }
+
+        &.expanded {
+          margin-right: 0;
+          width: 75%;
+          height: auto;
+          opacity: 1;
+
+          .commons-pod {
+            padding: $gutter-width;
+          }
+
+          .panel-pane {
+            display: block;
+          }
+        }
+      }
     }
 
-    h3 {
-      color: $gray;
-      font-size: 18px;
+    .facetapi-processed {
+      margin-bottom: 0;
+      padding-left: 0;
+
+      li {
+        &.last {
+          margin-bottom: 0;
+        }
+      }
     }
-
-    .panel-pane {
-      border-bottom: 1px solid #eee;
-      padding-bottom: 5px;
-      margin-bottom: 14px;
-    }
-  }
-
-  .region-two-33-66-second > div {
-    padding-left: 15px;
-  }
-
-  .pane-search-form,
-  .search-results {
-    @extend %pod;
-    @extend %pod-content;
   }
 }
 
-.search-results-wrapper {
-  > h2 {
-    margin: 0 0 10px;
+.filter-trigger {
+  display: none;
+
+  @include respond(only-small) {
+    background: white;
+    display: block;
+    @include box-sizing(border-box);
+    padding: 5px;
+    position: absolute;
+    top: 0;
+    left: -40px;
+    width: 40px;
+    height: 40px;
+    border-right: none;
+    @include border-radius(3px 0 0 3px);
+    text-align: center;
+    font: 0/0 a;
+    line-height: 0;
+    color: transparent;
+    @include box-shadow($light_gray 1px 1px 4px);
+    cursor: pointer;
+    z-index: -1;
+
+    &:after {
+      content: "\2026";
+      display: block;
+      width: 30px;
+      height: 30px;
+      font-size: 20px;
+      font-weight: bold;
+      @include text-shadow(2px 2px .2 rgba(0, 0, 0, .5));
+      line-height: 20px;
+      background: $gray;
+      @include background(linear-gradient($light_gray, $gray));
+      color: white;
+      @include border-radius(3px);
+      @include box-shadow(inset 0 0 .4em rgba(0, 0, 0, .2), $light_gray 1px 1px 4px);
+    }
+
+    &.following {
+      position: fixed;
+      right: 0;
+      left: auto;
+    }
+  }
+}
+
+.filter-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: none;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  background: rgba(255, 255, 255, .8);
+
+  @include respond(only-small) {
+    &.expanded {
+      display: block;
+      width: 100%;
+      height: 100%;
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+
+.search-results {
+  &,
+  .block-content & {
+    padding: 0;
   }
 }
 
@@ -4140,6 +4259,7 @@ body.front.logged-in .view-commons-homepage-content .article.node {
   }
 
   .title {
+    margin-top: 0;
     margin-bottom: .2em;
   }
 

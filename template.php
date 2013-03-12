@@ -228,6 +228,17 @@ function commons_origins_preprocess_node(&$vars) {
 }
 
 /**
+ * Implements hook_preprocess_panels_ipe_region_wrapper().
+ */
+function commons_origins_preprocess_panels_ipe_region_wrapper(&$vars, $hook) {
+  if ($vars['display']->stored_pane_title == 'Search results' && $vars['region_id'] == 'two_33_66_first') {
+    // This is horrible, and it should not need done, but until the markup is 
+    // accessible to the theme, it is what has to be done.
+    $vars['output'] = '<div class="search-filters commons-pod">' . $vars['output'] . '</div>';
+  }
+}
+
+/**
  * Implements hook_preprocess_panels_pane().
  */
 function commons_origins_preprocess_panels_pane(&$vars, $hook) {
@@ -241,6 +252,15 @@ function commons_origins_preprocess_panels_pane(&$vars, $hook) {
     'commons_question_answers-panel_pane_1',
   );
   if (($pane->panel == 'two_66_33_second' && !in_array($pane->subtype, $not_pods)) || in_array($pane->subtype, $content_pods)) {
+    $vars['attributes_array']['class'][] = 'commons-pod';
+  }
+
+  $search = array(
+    'search_form',
+    'search_result',
+  );
+
+  if (in_array($pane->subtype, $search)) {
     $vars['attributes_array']['class'][] = 'commons-pod';
   }
 }

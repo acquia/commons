@@ -1,20 +1,8 @@
 syze.sizes(320, 480, 935);
 
-jQuery(document).ready(function($){
+(function ($) {
 
   'use strict';
-
-//    $.fn.textWidth = function(){
-//      var html_org = $(this).html();
-//      var html_calc = '<span>' + html_org + '</span>';
-//      $(this).html(html_calc);
-//      var width = $(this).find('span:first').width();
-//      $(this).html(html_org);
-//      return width;
-//    };
-
-//    var selectwidth = $('#edit-following option:selected').textWidth();
-//    console.log(selectwidth);
 
   var attach_selectBox = function(){
     $('#views-exposed-form-commons-homepage-content-panel-pane-1 select, #edit-custom-search-types, #quicktabs-commons_bw select').selectBox();
@@ -27,7 +15,7 @@ jQuery(document).ready(function($){
       if (a_target.children('span').length === 0) {
         a_target.wrapInner('<span></span>');
       }
-      
+
       if (a_target.hasClass('flag-action') && a_target.children('input').length === 0) {
         a_target.prepend('<input type="checkbox">');
       } else if (a_target.children('input').length === 0) {
@@ -67,4 +55,61 @@ jQuery(document).ready(function($){
     attach_selectBox();
     set_follow_checkboxes();
   });
-});
+
+  /**
+   * Make an item follow the page when an item is in view.
+   */
+  function triggerFollow(tracker, leader) {
+    var top = $(leader).offset().top,
+        bottom = $(leader).height() + top,
+        position = $(document).scrollTop();
+
+    if (top < position && !$(tracker).hasClass('following')) {
+      $(tracker).addClass('following');
+    }
+    else if (top > position && $(tracker).hasClass('following')) {
+      $(tracker).removeClass('following');
+    }
+  }
+
+  /**
+   * Collapse the filter options for search.
+   */
+  Drupal.behaviors.filterDrawer = {
+    attach: function (context, settings) {
+      $('.page-search .region-two-33-66-first', context).once('filterDrawer', function () {
+        var filters = $(this),
+            filterTrigger = $('<a/>', {href: '#filter-drawer', class: 'filter-trigger', id: 'filter-drawer'}).text(Drupal.t('Filter results')),
+            filterOverlay = $('<div/>', {class: 'filter-overlay'}),
+            results = $('.search-results');
+
+        // Add process flags and styling elements.
+        $(this).prepend(filterTrigger).addClass('filters-processed');
+        $('body').append(filterOverlay);
+
+        // Define the clickable areas to control the visibility of the filters.
+        $(filterTrigger).click(function () {
+          if ($(filterTrigger).hasClass('following')) {
+            $(filterTrigger).removeClass('following');
+          }
+          $(filters).toggleClass('expanded');
+          $(filterOverlay).toggleClass('expanded');
+        });
+        $(filterOverlay).click(function () {
+          $(filters).toggleClass('expanded');
+          $(filterOverlay).toggleClass('expanded');
+          triggerFollow(filterTrigger, results);
+        });
+
+        // Make the filterToggle follow the search results when scrolling and
+        // resizing.
+        $(document).scroll(function () {
+          triggerFollow(filterTrigger, results);
+        });
+        $(window).resize(function () {
+          triggerFollow(filterTrigger, results);
+        });
+      });
+    }
+  }
+})(jQuery);
