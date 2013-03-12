@@ -65,3 +65,14 @@ function commons_events_update_7002() {
   }
   return array();
 }
+
+/**
+ * Change event teaser display to show logo, date, and address.
+ */
+function commons_events_update_7003() {
+  $revert = array(
+    'commons_events' => array('field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}
