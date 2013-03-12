@@ -1,6 +1,6 @@
 syze.sizes(320, 480, 935);
 
-(function ($) {
+jQuery(document).ready(function($){
 
   'use strict';
 
@@ -55,7 +55,9 @@ syze.sizes(320, 480, 935);
     attach_selectBox();
     set_follow_checkboxes();
   });
+});
 
+(function ($) {
   /**
    * Make an item follow the page when an item is in view.
    */
