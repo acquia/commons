@@ -151,6 +151,11 @@ function commons_groups_module_implements_alter(&$implementations, $hook) {
 * Implements hook_form_alter().
 */
 function commons_groups_form_alter(&$form, &$form_state, $form_id) {
+  if($form_id == 'views_exposed_form' && strstr($form['#id'], 'views-exposed-form-commons-groups-directory')) {
+    $form['groups-keys']['#attributes'] = array(
+        'placeholder' => t('Separate keywords with commas'),
+      );
+  }
   if((strstr($form_id, 'views_form_commons_group_moderation_page'))) {
     $form['select']['action::views_bulk_operations_delete_item']['#weight'] = 9;
   }

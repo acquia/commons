@@ -40,3 +40,12 @@ function commons_groups_update_3103() {
   features_revert(array('commons_groups' => array('user_permission')));
   return array();
 }
+
+/**
+* Grant authenticated users permission to create group nodes
+* per http://drupal.org/node/1936714.
+*/
+function commons_groups_update_3104() {
+  features_revert(array('commons_groups' => array('field_base', 'field_instance')));
+  return array();
+}
