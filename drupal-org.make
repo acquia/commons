@@ -376,9 +376,10 @@ projects[views_litepager][type] = "module"
 projects[views_litepager][subdir] = "contrib"
 projects[views_litepager][version] = "3.0"
 
+; We have the version of voting api at the top so it doesn't get included in our dev make patch.
+projects[votingapi][version] = "2.10"
 projects[votingapi][type] = "module"
 projects[votingapi][subdir] = "contrib"
-projects[votingapi][version] = "2.10"
 
 ; Commons contrib modules:
 ; We don't tag a release here because want them to auto-increment.. and we are the ones who test it.
