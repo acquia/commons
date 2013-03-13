@@ -258,7 +258,7 @@ projects[quicktabs][subdir] = "contrib"
 projects[quicktabs][download][type] = "git"
 projects[quicktabs][download][url] = "http://git.drupal.org/project/quicktabs.git"
 projects[quicktabs][download][branch] = "7.x-3.x"
-projects[quicktabs][download][revision] = "be287733b355ff08df52aa45b88d6f8911fb9cc2"
+projects[quicktabs][download][revision] = "0788eba"
 
 projects[radioactivity][type] = "module"
 projects[radioactivity][subdir] = "contrib"
