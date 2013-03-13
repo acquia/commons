@@ -1054,40 +1054,6 @@ h1.node-title {
 }
 
 .node-type-event {
-  .field-name-field-logo {
-    float: left;
-    width: 90px;
-    margin: .5em 0 0 -90px;
-    position: relative;
-    left: 90px;
-
-    img {
-      display: block;
-      @include box-sizing(border-box);
-      margin-bottom: 1.7em;
-      padding: 4px;
-      @include border-radius(3px);
-      @include box-shadow($light_gray 1px 1px 4px);
-      background: $white;
-    }
-
-    @include respond(only-small) {
-      display: none;
-    }
-  }
-
-  .logo-available {
-    .field-name-field-date,
-    .field-name-field-address,
-    .field-name-field-offsite-url {
-      margin-left: 105px;
-
-      @include respond(only-small) {
-        margin-left: 0;
-      }
-    }
-  }
-
   .addressfield-container-inline {
     &:after {
       content: "";
@@ -1095,11 +1061,46 @@ h1.node-title {
       display: none;
     }
   }
+}
 
-  .field-name-body {
-    clear: both;
-    margin-top: 1.7em;
+.logo-available {
+  .field-name-field-date,
+  .field-name-field-address,
+  .field-name-field-offsite-url {
+    margin-left: 65px;
+
+    @include respond(only-small) {
+      margin-left: 0;
+    }
   }
+}
+
+.field-name-field-logo {
+  float: left;
+  width: 70px;
+  margin: .5em 0 0 -70px;
+  position: relative;
+  left: 70px;
+
+  img {
+    display: block;
+    @include box-sizing(border-box);
+    margin-bottom: 1.7em;
+    padding: 4px;
+    @include border-radius(3px);
+    @include box-shadow($light_gray 1px 1px 4px);
+    background: $white;
+  }
+
+  @include respond(only-small) {
+    display: none;
+  }
+}
+
+
+.field-name-body {
+  clear: both;
+  margin-top: 1.7em;
 }
 
 .field-name-field-date {
@@ -1109,7 +1110,8 @@ h1.node-title {
 .adr {
   .region {
     &,
-    .node-type-event & {
+    .node-type-event &,
+    .panel-display .region & {
       float: none;
       padding: 0;
     }

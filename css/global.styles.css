@@ -1087,14 +1087,33 @@ h1.node-title a:hover {
   clear: both;
 }
 
-.node-type-event .field-name-field-logo {
-  float: left;
-  width: 90px;
-  margin: 0.5em 0 0 -90px;
-  position: relative;
-  left: 90px;
+.node-type-event .addressfield-container-inline:after {
+  content: "";
+  clear: none;
+  display: none;
 }
-.node-type-event .field-name-field-logo img {
+
+.logo-available .field-name-field-date,
+.logo-available .field-name-field-address,
+.logo-available .field-name-field-offsite-url {
+  margin-left: 65px;
+}
+@media only screen and (max-width: 480px) {
+  .logo-available .field-name-field-date,
+  .logo-available .field-name-field-address,
+  .logo-available .field-name-field-offsite-url {
+    margin-left: 0;
+  }
+}
+
+.field-name-field-logo {
+  float: left;
+  width: 70px;
+  margin: 0.5em 0 0 -70px;
+  position: relative;
+  left: 70px;
+}
+.field-name-field-logo img {
   display: block;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -1112,28 +1131,12 @@ h1.node-title a:hover {
   background: white;
 }
 @media only screen and (max-width: 480px) {
-  .node-type-event .field-name-field-logo {
+  .field-name-field-logo {
     display: none;
   }
 }
-.node-type-event .logo-available .field-name-field-date,
-.node-type-event .logo-available .field-name-field-address,
-.node-type-event .logo-available .field-name-field-offsite-url {
-  margin-left: 105px;
-}
-@media only screen and (max-width: 480px) {
-  .node-type-event .logo-available .field-name-field-date,
-  .node-type-event .logo-available .field-name-field-address,
-  .node-type-event .logo-available .field-name-field-offsite-url {
-    margin-left: 0;
-  }
-}
-.node-type-event .addressfield-container-inline:after {
-  content: "";
-  clear: none;
-  display: none;
-}
-.node-type-event .field-name-body {
+
+.field-name-body {
   clear: both;
   margin-top: 1.7em;
 }
@@ -1142,7 +1145,7 @@ h1.node-title a:hover {
   font-weight: bold;
 }
 
-.adr .region, .node-type-event .adr .region {
+.adr .region, .node-type-event .adr .region, .panel-display .region .adr .region {
   float: none;
   padding: 0;
 }
