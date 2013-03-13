@@ -948,13 +948,6 @@ h1.node-title {
 
     li {
       float: left;
-
-      &.flag-inappropriate_node {
-        float: none;
-        position: absolute;
-        bottom: 5px;
-        right: 5px;
-      }
     }
   }
 
@@ -1183,17 +1176,12 @@ h1.node-title {
 }
 
 .flag-inappropriate-node {
-  @include opacity(0);
-  @include transition(opacity 0.5s);
-
+  display: block;
+  margin: $gutter-width 0;
   &:before {
     content: '';
     top: 0;
     @include sprite_url_height_width($icons, spam);
-  }
-
-  .page-node .node:hover &, .pane-node-links:hover & {
-    @include opacity(1);
   }
 }
 

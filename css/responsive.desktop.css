@@ -7,3 +7,20 @@
  *
  * - Read the _README file in this directory, it contains useful help and other information.
  */
+.flag-inappropriate-node {
+  float: none;
+  position: absolute;
+  margin: 0;
+  bottom: 5px;
+  right: 5px;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  -webkit-transition: opacity 0.5s;
+  -moz-transition: opacity 0.5s;
+  -o-transition: opacity 0.5s;
+  transition: opacity 0.5s;
+}
+.node:hover .flag-inappropriate-node {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+}

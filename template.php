@@ -173,15 +173,22 @@ function commons_origins_preprocess_node(&$vars) {
     $vars['classes_array'][] = 'user-picture-available';
   }
 
-  // Add classes to render the comment-comments link as a button with a number attached.
+  // Add classes to render the comment-comments link as a button with a number
+  // attached.
   if (!empty($vars['content']['links']['comment']['#links']['comment-comments'])) {
     $comments_link = &$vars['content']['links']['comment']['#links']['comment-comments'];
     $comments_link['attributes']['class'][] = 'link-with-counter';
     $comments_link['title'] = str_replace($vars['comment_count'], '<span class="counter">' . $vars['comment_count'] . '</span>', $comments_link['title']);
   }
 
-  // Hide some of the node links.
+  // Push the reporting link to the end.
+  if (!empty($vars['content']['links']['flag']['#links']['flag-inappropriate_node'])) {
+    $vars['content']['report_link'] = array('#markup' => $vars['content']['links']['flag']['#links']['flag-inappropriate_node']['title']);
+  }
+  // kpr(render($vars['content']['report_link']));
+
   if (!empty($vars['content']['links'])) {
+    // Hide some of the node links.
     $hidden_links = array(
       'node' => array(
         'node-readmore',
@@ -189,6 +196,9 @@ function commons_origins_preprocess_node(&$vars) {
       'comment' => array(
         'comment-add',
         'comment-new-comments'
+      ),
+      'flag' => array(
+        'flag-inappropriate_node',
       ),
     );
     foreach ($hidden_links as $element => $links) {
