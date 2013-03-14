@@ -246,19 +246,19 @@ function commons_groups_og_user_access_alter(&$temp_perm, $context) {
   $user_is_member = (bool)og_is_member('node', $context['group']->nid, 'user', $context['account']);
   foreach ($commons_groups_entity_types['node'] as $type => $options) {
     // We do a literal user_access() check on the create permission here
-    // because we can't call node_access() without causing recursion.
+    // because we can't call node_access() OR og_user_access without causing recursion.
     // The code flow is:
     // node_access()>og_node_access()=>og_user_access_entity=>og_user_access=>
     // og_user_access_alter()=>commons_groups_og_user_access_alter().
     // See also: http://drupal.org/node/1910874.
 
-    // First we need to do an anonymous check. Sometimes they're considered members of groups,
-    // but we want to bypass that. Unless you explicitly set anons to post, they shouldn't.
-    if ($context['string'] == "create $type content" && $context['account']->uid == 0 && !user_access("create $type content", $context['account'])) {
+    // In most cases users who don't have access to post content should already be false. But just in case they aren't, we'll set the permission here.
+    if ($context['string'] == "create $type content" && !user_access("create $type content", $context['account'])) {
       $temp_perm["create $type content"] = FALSE;
       return;
     }
 
+    // If a group is not restricted, or the user is a member, and the user can create content of a certain type, let them post temporarily
     if ($context['string'] == "create $type content" && (!$group_content_restricted || $user_is_member) && user_access("create $type content", $context['account'])) {
       $temp_perm["create $type content"] = TRUE;
       return;
@@ -511,6 +511,10 @@ function commons_groups_first_contribution($account, $node) {
       $account_groups = array();
     }
     // For groups where this user is not already a member, add her to the group.
+    // Anonymous users should never be added to a group automatically
+    if ($account->uid == 0) {
+      return;
+    }
     $new_groups = array_diff($node_groups, $account_groups);
     if (!empty($new_groups)) {
       foreach ($new_groups as $new_group_nid) {
