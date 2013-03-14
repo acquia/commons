@@ -3,12 +3,18 @@ repos=(commons_activity_streams commons_featured commons_notices commons_profile
 
 pull_git() {
     cd $BUILD_PATH/commons_profile
+    if [[ -n $RESET ]]; then
+      git reset --hard HEAD
+    fi
     git pull origin 7.x-3.x
 
     cd $BUILD_PATH/repos/modules
     for i in "${repos[@]}"; do
       echo $i
       cd $i
+      if [[ -n $RESET ]]; then
+        git reset --hard HEAD
+      fi
       git pull origin 7.x-3.x
       cd ..
     done
@@ -67,15 +73,41 @@ build_distro() {
     fi
 }
 
+# This allows users to build the most recent release from git and apply it to their directory. No-dev removes the symlinks and puts in real versions of the module.
+update() {
+    if [[ -d $BUILD_PATH ]]; then
+        cd $BUILD_PATH
+        # do we have the profile?
+        if [[ -d $BUILD_PATH/commons_profile ]]; then
+          if [[ $DEV == dev ]]; then
+            tar -czvf sites-tmp.tar.gz publish/sites/default
+            build_distro $BUILD_PATH
+            tar -zxvf sites-tmp.tar.gz
+          fi
+
+          if [[ $DEV == nodev ]]; then
+            drush make commons_profile/build-commons.make --no-cache --tar publish
+            tar -zxvf publish.tar.gz
+          fi
+        fi
+    else
+      echo "invalid build path"
+      exit 1
+    fi
+}
+
 case $1 in
   pull)
     if [[ -n $2 ]]; then
       BUILD_PATH=$2
+      if [[ -n $3 ]]; then
+       RESET=1
+      fi
     else
       echo "Usage: build_distro.sh pull [build_path]"
       exit 1
     fi
-    pull_git $BUILD_PATH;;
+    pull_git $BUILD_PATH $RESET;;
   build)
     if [[ -n $2 ]]; then
       BUILD_PATH=$2
@@ -84,6 +116,19 @@ case $1 in
       exit 1
     fi
     build_distro;;
+  update)
+    if [[ -n $2 ]]; then
+      BUILD_PATH=$2
+      if [[ $3 == 'dev' ]] || [[ $3 == 'nodev' ]]; then
+        DEV=$3
+      else
+        DEV='dev'
+      fi
+    else
+      echo "Usage: build_distro.sh update [build_path] [dev|nodev]"
+      exit 1
+    fi
+    update $BUILD_PATH $DEV;;
   rn)
     if [[ -n $2 ]] && [[ -n $3 ]] && [[ -n $4 ]] && [[ -n $5 ]]; then
       BUILD_PATH=$2
