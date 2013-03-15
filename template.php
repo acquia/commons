@@ -50,17 +50,6 @@ function commons_origins_preprocess_search_results(&$vars, $hook) {
   $vars['title_attributes_array']['class'][] = 'search-results-title';
   $vars['content_attributes_array']['class'][] = 'search-results-content';
   $vars['content_attributes_array']['class'][] = 'commons-pod';
-
-  kpr($vars);
-}
-
-function commons_origins_preprocess_search_results__search_facetapi(&$vars, $hook) {
-  $vars['classes_array'][] = 'search-results-wrapper';
-  $vars['title_attributes_array']['class'][] = 'search-results-title';
-  $vars['content_attributes_array']['class'][] = 'search-results-content';
-  $vars['content_attributes_array']['class'][] = 'commons-pod';
-
-  kpr($vars);
 }
 
 /**
@@ -294,13 +283,6 @@ function commons_origins_preprocess_panels_pane(&$vars, $hook) {
   $search = array(
     'search_result',
   );
-
-  // if (in_array($pane->subtype, $search)) {
-  //   // $vars['attributes_array']['class'][] = 'commons-pod';
-  //   $vars['content'] = str_replace('<ol', '<div class="commons-pod"><ol', $vars['content']);
-  //   $vars['content'] = str_replace('</ol>', '</ol></div>', $vars['content']);
-  //   kpr($vars);
-  // }
 }
 
 /**
