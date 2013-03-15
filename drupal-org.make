@@ -265,7 +265,7 @@ projects[radioactivity][subdir] = "contrib"
 projects[radioactivity][download][type] = "git"
 projects[radioactivity][download][url] = "http://git.drupal.org/project/radioactivity.git"
 projects[radioactivity][download][branch] = "7.x-2.x"
-projects[radioactivity][revision] = "5a93fbf7c88bfc0db35409fa3aa197fa44cc3d65"
+projects[radioactivity][download][revision] = "5a93fbf7c88bfc0db35409fa3aa197fa44cc3d65"
 
 ; Radioactivity not compatible with Memcache module
 ; http://drupal.org/node/1860216
