@@ -431,3 +431,14 @@ function commons_search_solr_environment_form_submit($form, $form_state) {
     cache_clear_all('*', 'cache_apachesolr', TRUE);
   }
 }
+
+/**
+ * Implements hook_modules_enabled().
+ */
+function commons_search_solr_modules_enabled($modules) {
+  if (in_array('acquia_search', $modules)) {
+    // If Acquia Search is enabled later, we need to force update our facets,
+    // otherwise our Events Solr page has no facets.
+    commons_search_solr_create_facets(ACQUIA_SEARCH_ENVIRONMENT_ID);
+  }
+}
