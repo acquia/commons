@@ -253,13 +253,23 @@ function commons_origins_preprocess_node(&$vars) {
 /**
  * Implements hook_preprocess_two_33_66().
  */
-function commons_origins_preprocess_two_33_66(&$vars) {
+function commons_origins_preprocess_two_33_66(&$vars, $hook) {
   $menu = menu_get_item();
 
   // Suggest a variant for the search page so the facets will be wrapped in pod
   // styling.
   if (strpos($menu['path'], 'search') === 0) {
     $vars['theme_hook_suggestions'][] = 'two_33_66__search';
+  }
+}
+
+function commons_origins_preprocess_three_25_50_25(&$vars, $hook) {
+  $menu = menu_get_item();
+
+  // Suggest a variant for the search page so the facets will be wrapped in pod
+  // styling.
+  if (isset($menu['page_arguments']) && $menu['page_arguments'][0] == 'solr_events') {
+    $vars['theme_hook_suggestions'][] = 'three_25_50_25__events';
   }
 }
 
@@ -279,10 +289,6 @@ function commons_origins_preprocess_panels_pane(&$vars, $hook) {
   if (($pane->panel == 'two_66_33_second' && !in_array($pane->subtype, $not_pods)) || in_array($pane->subtype, $content_pods)) {
     $vars['attributes_array']['class'][] = 'commons-pod';
   }
-
-  $search = array(
-    'search_result',
-  );
 }
 
 /**

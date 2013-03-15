@@ -63,19 +63,19 @@ jQuery(document).ready(function($){
    */
   function showWithElement(tracker, leader) {
     var top = $(leader).offset().top,
-        bottom = $(leader).height() + top,
-        trackerHeight = $(tracker).height();
+        bottom = $(leader).innerHeight() + top,
+        trackerHeight = $(tracker).innerHeight();
         position = $(document).scrollTop();
 
     // Make sure the tracker parent stays aligned with the leader.
     $(tracker).parent().css('top', top);
-    //alert(top - trackerHeight);
 
     // Keep the trigger visible when the leader is in view.
-    if ((top + trackerHeight) < position && !$(tracker).hasClass('following')) {
+    if (top < position && (bottom - trackerHeight) > position && !$(tracker).hasClass('following')) {
       $(tracker).addClass('following');
     }
-    else if (top >= position && $(tracker).hasClass('following')) {
+
+    if ((top >= position || (bottom - trackerHeight) <= position) && $(tracker).hasClass('following')) {
       $(tracker).removeClass('following');
     }
   }
@@ -85,7 +85,7 @@ jQuery(document).ready(function($){
    */
   Drupal.behaviors.filterDrawer = {
     attach: function (context, settings) {
-      $('.page-search .region-two-33-66-first', context).once('filterDrawer', function () {
+      $('.page-search .region-two-33-66-first, .page-events .region-three-25-50-25-first', context).once('filterDrawer', function () {
         var filters = $(this),
             filterTrigger = $('<a/>', {href: '#filter-drawer', class: 'filter-trigger', id: 'filter-drawer'}).text(Drupal.t('Filter results')),
             filterOverlay = $('<div/>', {class: 'filter-overlay'}),
