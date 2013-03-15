@@ -62,21 +62,22 @@ jQuery(document).ready(function($){
    * Make an item follow the page when an item is in view.
    */
   function showWithElement(tracker, leader) {
-    var top = $(leader).offset().top,
-        bottom = $(leader).innerHeight() + top,
-        trackerHeight = $(tracker).innerHeight();
-        position = $(document).scrollTop();
+    if ($(leader).length > 0) {
+      var top = $(leader).offset().top,
+          bottom = $(leader).innerHeight() + top,
+          trackerHeight = $(tracker).innerHeight();
+          position = $(document).scrollTop();
 
-    // Make sure the tracker parent stays aligned with the leader.
-    $(tracker).parent().css('top', top);
+      // Make sure the tracker parent stays aligned with the leader.
+      $(tracker).parent().css('top', top);
 
-    // Keep the trigger visible when the leader is in view.
-    if (top < position && (bottom - trackerHeight) > position && !$(tracker).hasClass('following')) {
-      $(tracker).addClass('following');
-    }
-
-    if ((top >= position || (bottom - trackerHeight) <= position) && $(tracker).hasClass('following')) {
-      $(tracker).removeClass('following');
+      // Keep the trigger visible when the leader is in view.
+      if (top < position && (bottom - trackerHeight) > position && !$(tracker).hasClass('following')) {
+        $(tracker).addClass('following').css('top', $('.region-page-top').offset().top);
+      }
+      else if ((top >= position || (bottom - trackerHeight) <= position) && $(tracker).hasClass('following')) {
+        $(tracker).removeClass('following').css('top', '');
+      }
     }
   }
 
@@ -90,14 +91,24 @@ jQuery(document).ready(function($){
             filterTrigger = $('<a/>', {href: '#filter-drawer', class: 'filter-trigger', id: 'filter-drawer'}).text(Drupal.t('Filter results')),
             filterOverlay = $('<div/>', {class: 'filter-overlay'}),
             results = $('.search-results-content');
-            size = $(window).width();
+            size = $(window).width(),
+            triggerWidth = '';
+
+        // Determine if the page is for search or events and set the target
+        // width.
+        if ($('.page-search', context).length > 0) {
+          triggerWidth = 480;
+        }
+        else if ($('.page-events', context).length > 0) {
+          triggerWidth = 768;
+        }
 
         // Add process flags and styling elements.
         $(this).prepend(filterTrigger).addClass('filters-processed');
         $('body').append(filterOverlay);
 
         // Make sure the trigger is in place on the initial page load.
-        if (size <= 480) {
+        if (size <= triggerWidth) {
           showWithElement(filterTrigger, results);
         }
 
@@ -111,7 +122,7 @@ jQuery(document).ready(function($){
 
           if ($(filters).hasClass('expanded')) {
             $('html, body').animate({
-              scrollTop: $(filterTrigger).offset().top
+              scrollTop: $(filterTrigger).offset().top - $('.region-page-top').offset().top
             }, 0);
           }
 
@@ -127,7 +138,7 @@ jQuery(document).ready(function($){
         // resizing.
         $(window).resize(function () {
           size = $(window).width();
-          if (size <= 480) {
+          if (size <= triggerWidth) {
             showWithElement(filterTrigger, results);
           }
           else {

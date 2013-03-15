@@ -609,53 +609,49 @@ var {
 }
 
 /*
- * Facet popouts
+ * Filter drawer accessories
  */
 
 .filter-trigger {
   display: none;
+  background: white;
+  @include box-sizing(border-box);
+  padding: 5px;
+  position: absolute;
+  top: 0;
+  left: -40px;
+  width: 40px;
+  height: 40px;
+  border-right: none;
+  @include border-radius(3px 0 0 3px);
+  text-align: center;
+  font: 0/0 a;
+  line-height: 0;
+  color: transparent;
+  @include box-shadow($light_gray 1px 1px 4px);
+  cursor: pointer;
+  z-index: -1;
 
-  @include respond(only-small) {
-    background: white;
+  &:after {
+    content: "\2026";
     display: block;
-    @include box-sizing(border-box);
-    padding: 5px;
-    position: absolute;
-    top: 0;
-    left: -40px;
-    width: 40px;
-    height: 40px;
-    border-right: none;
-    @include border-radius(3px 0 0 3px);
-    text-align: center;
-    font: 0/0 a;
-    line-height: 0;
-    color: transparent;
-    @include box-shadow($light_gray 1px 1px 4px);
-    cursor: pointer;
-    z-index: -1;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    font-weight: bold;
+    @include text-shadow(2px 2px .2 rgba(0, 0, 0, .5));
+    line-height: 20px;
+    background: $gray;
+    @include background(linear-gradient($light_gray, $gray));
+    color: white;
+    @include border-radius(3px);
+    @include box-shadow(inset 0 0 .4em rgba(0, 0, 0, .2), $light_gray 1px 1px 4px);
+  }
 
-    &:after {
-      content: "\2026";
-      display: block;
-      width: 30px;
-      height: 30px;
-      font-size: 20px;
-      font-weight: bold;
-      @include text-shadow(2px 2px .2 rgba(0, 0, 0, .5));
-      line-height: 20px;
-      background: $gray;
-      @include background(linear-gradient($light_gray, $gray));
-      color: white;
-      @include border-radius(3px);
-      @include box-shadow(inset 0 0 .4em rgba(0, 0, 0, .2), $light_gray 1px 1px 4px);
-    }
-
-    &.following {
-      position: fixed;
-      right: 0;
-      left: auto;
-    }
+  &.following {
+    position: fixed;
+    right: 0;
+    left: auto;
   }
 }
 
@@ -664,22 +660,10 @@ var {
   top: 0;
   left: 0;
   display: none;
-  width: 0;
-  height: 0;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
-  opacity: 0;
-  visibility: hidden;
   background: rgba(255, 255, 255, .8);
-
-  @include respond(only-small) {
-    &.expanded {
-      display: block;
-      width: 100%;
-      height: 100%;
-      opacity: 1;
-      visibility: visible;
-    }
-  }
 }
 
 /*
@@ -4097,11 +4081,14 @@ body.front.logged-in .view-commons-homepage-content .article.node {
       color: $light_blue;
     }
   }
+
   .three-25-50-25 {
-    > .region-three-25-50-25-first {
-      @extend %filter-drawer;
+    > {
+      @include filter-drawer(small-medium);
     }
   }
+
+  @include filter-overlay(small-medium);
 }
 
 .pane-commons-events-commons-events-create-event-link {
@@ -4127,20 +4114,22 @@ body.front.logged-in .view-commons-homepage-content .article.node {
 // Search
 .page-search {
   .two-33-66 {
-    > .region-two-33-66-first {
-      h3 {
-        margin-bottom: $gutter-width;
-        color: $gray;
-        font-size: 1.2em;
+    > {
+      .region-two-33-66-first {
+        h3 {
+          margin-bottom: $gutter-width;
+          color: $gray;
+          font-size: 1.2em;
+        }
+
+        .panel-pane {
+          border-bottom: 1px solid #eee;
+          padding-bottom: 5px;
+          margin-bottom: 15px;
+        }
       }
 
-      .panel-pane {
-        border-bottom: 1px solid #eee;
-        padding-bottom: 5px;
-        margin-bottom: 15px;
-      }
-
-      @extend %filter-drawer;
+      @include filter-drawer;
     }
 
     .facetapi-processed {
@@ -4154,6 +4143,8 @@ body.front.logged-in .view-commons-homepage-content .article.node {
       }
     }
   }
+
+  @include filter-overlay;
 }
 
 .search-results-title {

@@ -151,6 +151,65 @@
   }
 
   .#{$counter} {
-    @extend %btn-attach; 
+    @extend %btn-attach;
   }
 }
+
+@mixin filter-drawer($break: only-small) {
+  @include respond($break) {
+    .filters-processed {
+      clear: none;
+      position: absolute;
+      right: 0;
+      float: right;
+      width: 0;
+      height: 0;
+      margin: 0;
+      padding: 0;
+      font-size: .88em;
+      background: white;
+      border: 1px solid $lighter_gray;
+      z-index: 1;
+
+      .commons-pod {
+        margin: 0;
+        padding: $gutter-width 0;
+        @include border-radius(0 0 0 3px);
+      }
+
+      .panel-pane {
+        display: none;
+      }
+
+      .filter-trigger {
+        display: block;
+      }
+    }
+
+    .expanded {
+      margin-right: 0;
+      width: 75%;
+      height: auto;
+      opacity: 1;
+
+      .commons-pod {
+        padding: $gutter-width;
+      }
+
+      .panel-pane {
+        display: block;
+      }
+    }
+  }
+}
+
+@mixin filter-overlay($break: only-small) {
+  .filter-overlay {
+    @include respond($break) {
+      &.expanded {
+        display: block;
+      }
+    }
+  }
+}
+

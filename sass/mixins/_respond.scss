@@ -9,15 +9,15 @@ $screen-large: 768px !default;
     @media only screen and (max-width: $screen-small) { @content; }
   }
   @else if $media == small-medium {
-    @media only screen and (max-width: $screen-large - 1) { @content; }
+    @media only screen and (max-width: $screen-large) { @content; }
   }
   @else if $media == only-medium {
-    @media only screen and (min-width: $screen-small + 1) and (max-width: $screen-large - 1) { @content; }
+    @media only screen and (min-width: $screen-small + 1) and (max-width: $screen-large) { @content; }
   }
   @else if $media == medium {
     @media only screen and (min-width: $screen-small + 1) { @content; }
   }
   @else if $media == large {
-    @media only screen and (min-width: $screen-large) { @content; }
+    @media only screen and (min-width: $screen-large + 1) { @content; }
   }
 }
