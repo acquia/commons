@@ -61,15 +61,21 @@ jQuery(document).ready(function($){
   /**
    * Make an item follow the page when an item is in view.
    */
-  function triggerFollow(tracker, leader) {
+  function showWithElement(tracker, leader) {
     var top = $(leader).offset().top,
         bottom = $(leader).height() + top,
+        trackerHeight = $(tracker).height();
         position = $(document).scrollTop();
 
-    if (top < position && !$(tracker).hasClass('following')) {
+    // Make sure the tracker parent stays aligned with the leader.
+    $(tracker).parent().css('top', top);
+    //alert(top - trackerHeight);
+
+    // Keep the trigger visible when the leader is in view.
+    if ((top + trackerHeight) < position && !$(tracker).hasClass('following')) {
       $(tracker).addClass('following');
     }
-    else if (top > position && $(tracker).hasClass('following')) {
+    else if (top >= position && $(tracker).hasClass('following')) {
       $(tracker).removeClass('following');
     }
   }
@@ -83,11 +89,17 @@ jQuery(document).ready(function($){
         var filters = $(this),
             filterTrigger = $('<a/>', {href: '#filter-drawer', class: 'filter-trigger', id: 'filter-drawer'}).text(Drupal.t('Filter results')),
             filterOverlay = $('<div/>', {class: 'filter-overlay'}),
-            results = $('.search-results');
+            results = $('.search-results-content');
+            size = $(window).width();
 
         // Add process flags and styling elements.
         $(this).prepend(filterTrigger).addClass('filters-processed');
         $('body').append(filterOverlay);
+
+        // Make sure the trigger is in place on the initial page load.
+        if (size <= 480) {
+          showWithElement(filterTrigger, results);
+        }
 
         // Define the clickable areas to control the visibility of the filters.
         $(filterTrigger).click(function () {
@@ -96,20 +108,36 @@ jQuery(document).ready(function($){
           }
           $(filters).toggleClass('expanded');
           $(filterOverlay).toggleClass('expanded');
+
+          if ($(filters).hasClass('expanded')) {
+            $('html, body').animate({
+              scrollTop: $(filterTrigger).offset().top
+            }, 0);
+          }
+
+          return false;
         });
         $(filterOverlay).click(function () {
           $(filters).toggleClass('expanded');
           $(filterOverlay).toggleClass('expanded');
-          triggerFollow(filterTrigger, results);
+          showWithElement(filterTrigger, results);
         });
 
         // Make the filterToggle follow the search results when scrolling and
         // resizing.
-        $(document).scroll(function () {
-          triggerFollow(filterTrigger, results);
-        });
         $(window).resize(function () {
-          triggerFollow(filterTrigger, results);
+          size = $(window).width();
+          if (size <= 480) {
+            showWithElement(filterTrigger, results);
+          }
+          else {
+            $(filters).css('top', '');
+          }
+        });
+        $(document).scroll(function () {
+          if (!$(filters).hasClass('expanded')) {
+            showWithElement(filterTrigger, results);
+          }
         });
       });
     }

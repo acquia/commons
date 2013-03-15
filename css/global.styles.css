@@ -14,7 +14,7 @@
 
 .page-user-login #columns, .commons-pod, .page-user .pane-views-panes, .commons-pod-comments, .front.not-logged-in .pane-views-panes, .front.not-logged-in
 .pane-views, .front.not-logged-in
-body.page-node .pane-views-panes, .page-events .view-commons-events-upcoming .view-content, .pane-commons-bw-group, .view-display-id-commons_events_upcoming_page .views-row, .view-commons-groups-directory > .view-content > .views-row, .view-commons-groups-directory > .view-filters, .view-commons-homepage-content .node-teaser.node-group > .view-content > .views-row, .view-commons-homepage-content .node-teaser.node-group > .view-filters, body.front.logged-in .view-commons-homepage-content > .view-content, body.front.logged-in #views-exposed-form-commons-homepage-content-panel-pane-1 .views-exposed-widgets.widgets-active, .page-events .search-results-wrapper .search-result, .page-events .region-three-25-50-25-first, .page-events .region-three-25-50-25-third .pane-views-panes {
+body.page-node .pane-views-panes, .page-events .view-commons-events-upcoming .view-content, .pane-commons-bw-group, .view-display-id-commons_events_upcoming_page .views-row, .view-commons-groups-directory > .view-content > .views-row, .view-commons-groups-directory > .view-filters, .view-commons-homepage-content .node-teaser.node-group > .view-content > .views-row, .view-commons-homepage-content .node-teaser.node-group > .view-filters, body.front.logged-in .view-commons-homepage-content > .view-content, body.front.logged-in #views-exposed-form-commons-homepage-content-panel-pane-1 .views-exposed-widgets.widgets-active, .page-events .search-results-wrapper .search-result, .page-events .region-three-25-50-25-first, .page-events .region-three-25-50-25-third .pane-views-panes, .pane-search-result .block-content .search-results {
   background-color: white;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
@@ -29,7 +29,7 @@ body.page-node .pane-views-panes, .page-events .view-commons-events-upcoming .vi
 
 .page-user-login #columns, .commons-pod, .page-user .pane-views-panes .block-inner, .commons-pod-comments .comment-wrapper, .front.not-logged-in .pane-views-panes > div, .front.not-logged-in
 .pane-views > div, .front.not-logged-in
-body.page-node .pane-views-panes > div, .page-events .view-commons-events-upcoming .view-content, .pane-commons-bw-group > .block-inner, .view-display-id-commons_events_upcoming_page .views-row article, .view-commons-groups-directory > .view-content > .views-row > .node-teaser, .view-commons-groups-directory > .view-content > .views-row form, .view-commons-groups-directory > .view-filters > .node-teaser, .view-commons-groups-directory > .view-filters form, .view-commons-homepage-content .node-teaser.node-group > .view-content > .views-row > .node-teaser, .view-commons-homepage-content .node-teaser.node-group > .view-content > .views-row form, .view-commons-homepage-content .node-teaser.node-group > .view-filters > .node-teaser, .view-commons-homepage-content .node-teaser.node-group > .view-filters form, body.front.logged-in #views-exposed-form-commons-homepage-content-panel-pane-1 .views-exposed-widgets.widgets-active, .page-events .search-results-wrapper .search-result .search-result-wrapper, .page-events .region-three-25-50-25-first .region-inner, .page-events .region-three-25-50-25-third .pane-views-panes .block-inner {
+body.page-node .pane-views-panes > div, .page-events .view-commons-events-upcoming .view-content, .pane-commons-bw-group > .block-inner, .view-display-id-commons_events_upcoming_page .views-row article, .view-commons-groups-directory > .view-content > .views-row > .node-teaser, .view-commons-groups-directory > .view-content > .views-row form, .view-commons-groups-directory > .view-filters > .node-teaser, .view-commons-groups-directory > .view-filters form, .view-commons-homepage-content .node-teaser.node-group > .view-content > .views-row > .node-teaser, .view-commons-homepage-content .node-teaser.node-group > .view-content > .views-row form, .view-commons-homepage-content .node-teaser.node-group > .view-filters > .node-teaser, .view-commons-homepage-content .node-teaser.node-group > .view-filters form, body.front.logged-in #views-exposed-form-commons-homepage-content-panel-pane-1 .views-exposed-widgets.widgets-active, .page-events .search-results-wrapper .search-result .search-result-wrapper, .page-events .region-three-25-50-25-first .region-inner, .page-events .region-three-25-50-25-third .pane-views-panes .block-inner, .pane-search-result .block-content .search-results {
   padding: 10px;
 }
 
@@ -794,13 +794,6 @@ li.sharethis .sharethis-wrapper:after {
   border-width: 5.5px 5.5px 0 5.5px;
   border-color: white transparent transparent transparent;
   left: 11px;
-}
-
-/*
- * Search results are an ordered list so reset the margin
- */
-.search-results {
-  margin: 0;
 }
 
 /*
@@ -1865,7 +1858,7 @@ ul.action-links {
  * Field types (Core)
  */
 /*
- * Image fields use the <figure> and <figcaption> elements from HTML5
+ * Image fields use the  figure> and <figcaption> elements from HTML5
  */
 /*
  * Taxonomy
@@ -3403,17 +3396,9 @@ body.front.logged-in .view-commons-homepage-content .article.node.no-user-pictur
   font-size: 1.2em;
 }
 .page-search .two-33-66 > .region-two-33-66-first .panel-pane {
-  margin: 0;
-}
-.page-search .two-33-66 > .region-two-33-66-first .panels-ipe-portlet-wrapper {
   border-bottom: 1px solid #eeeeee;
   padding-bottom: 5px;
   margin-bottom: 15px;
-}
-.page-search .two-33-66 > .region-two-33-66-first .panels-ipe-portlet-wrapper:last-child {
-  margin-bottom: 0;
-  padding-bottom: 0;
-  border-bottom: none;
 }
 @media only screen and (max-width: 480px) {
   .page-search .two-33-66 > .region-two-33-66-first.filters-processed {
@@ -3423,7 +3408,7 @@ body.front.logged-in .view-commons-homepage-content .article.node.no-user-pictur
     float: right;
     width: 0;
     height: 0;
-    margin-top: 10px;
+    margin: 0;
     padding: 0;
     font-size: .88em;
     background: white;
@@ -3547,6 +3532,11 @@ body.front.logged-in .view-commons-homepage-content .article.node.no-user-pictur
     opacity: 1;
     visibility: visible;
   }
+}
+
+.search-results-title {
+  font-weight: 300;
+  margin: 20px 0;
 }
 
 .search-results, .block-content .search-results {

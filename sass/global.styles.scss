@@ -773,13 +773,6 @@ li.sharethis {
 }
 
 /*
- * Search results are an ordered list so reset the margin
- */
-.search-results {
-  margin: 0;
-}
-
-/*
  * H1 Node title
  */
 
@@ -2054,7 +2047,7 @@ ul.action-links {
  */
 
 /*
- * Image fields use the <figure> and <figcaption> elements from HTML5
+ * Image fields use the  figure> and <figcaption> elements from HTML5
  */
 .field-type-image {
 
@@ -4080,19 +4073,9 @@ body.front.logged-in .view-commons-homepage-content .article.node {
       }
 
       .panel-pane {
-        margin: 0;
-      }
-
-      .panels-ipe-portlet-wrapper {
         border-bottom: 1px solid #eee;
         padding-bottom: 5px;
         margin-bottom: 15px;
-
-        &:last-child {
-          margin-bottom: 0;
-          padding-bottom: 0;
-          border-bottom: none;
-        }
       }
 
       @include respond(only-small) {
@@ -4103,7 +4086,7 @@ body.front.logged-in .view-commons-homepage-content .article.node {
           float: right;
           width: 0;
           height: 0;
-          margin-top: $gutter-width;
+          margin: 0;
           padding: 0;
           font-size: .88em;
           background: white;
@@ -4221,10 +4204,29 @@ body.front.logged-in .view-commons-homepage-content .article.node {
   }
 }
 
+.search-results-title {
+  font-weight: 300;
+  margin: $gutter-width * 2 0;
+}
+
 .search-results {
   &,
+  /* The ol styling is a bit specific. */
   .block-content & {
     padding: 0;
+  }
+}
+
+// This is not optimal. Preferably, a class would be placed in the markup, but
+// ctools has hardcoded the output without the chance of override. The other
+// option is to use regex to force in wrappers.
+// @see http://drupal.org/node/1743402
+.pane-search-result {
+  .block-content {
+    .search-results {
+      @extend %pod;
+      @extend %pod-content;
+    }
   }
 }
 

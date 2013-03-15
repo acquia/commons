@@ -38,6 +38,30 @@ function commons_origins_theme($existing, $type, $theme, $path) {
   );
 }
 
+/**
+ * Implements hook_preprocess_search_results().
+ *
+ * Assemble attributes for styling that core does not do so we can keep the
+ * tpl files simpler and make maintaining it a bit less worrisome since there
+ * are 2 forms of search supported.
+ */
+function commons_origins_preprocess_search_results(&$vars, $hook) {
+  $vars['classes_array'][] = 'search-results-wrapper';
+  $vars['title_attributes_array']['class'][] = 'search-results-title';
+  $vars['content_attributes_array']['class'][] = 'search-results-content';
+  $vars['content_attributes_array']['class'][] = 'commons-pod';
+
+  kpr($vars);
+}
+
+function commons_origins_preprocess_search_results__search_facetapi(&$vars, $hook) {
+  $vars['classes_array'][] = 'search-results-wrapper';
+  $vars['title_attributes_array']['class'][] = 'search-results-title';
+  $vars['content_attributes_array']['class'][] = 'search-results-content';
+  $vars['content_attributes_array']['class'][] = 'commons-pod';
+
+  kpr($vars);
+}
 
 /**
  * Preprocess variables for the html template.
@@ -268,13 +292,15 @@ function commons_origins_preprocess_panels_pane(&$vars, $hook) {
   }
 
   $search = array(
-    'search_form',
     'search_result',
   );
 
-  if (in_array($pane->subtype, $search)) {
-    $vars['attributes_array']['class'][] = 'commons-pod';
-  }
+  // if (in_array($pane->subtype, $search)) {
+  //   // $vars['attributes_array']['class'][] = 'commons-pod';
+  //   $vars['content'] = str_replace('<ol', '<div class="commons-pod"><ol', $vars['content']);
+  //   $vars['content'] = str_replace('</ol>', '</ol></div>', $vars['content']);
+  //   kpr($vars);
+  // }
 }
 
 /**
@@ -310,7 +336,10 @@ function commons_origins_preprocess_form(&$vars, $hook) {
   }
   $vars['attributes_array'] = $element['#attributes'];
 
-  $form = &$vars['element'];
+  // Give the search form on the search page pod styling.
+  if (isset($element['#search_page']) || (isset($element['module']) && $element['module']['#value'] == 'search_facetapi')) {
+    $vars['attributes_array']['class'][] = 'commons-pod';
+  }
 }
 
 /**
