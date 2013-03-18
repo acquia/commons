@@ -345,6 +345,10 @@ projects[timeago][download][revision] = "21f26797fc3124bfe4128870d392d4a62770349
 ; http://drupal.org/node/1427226#comment-6638836
 projects[timeago][patch][] = "http://drupal.org/files/1427226-timeago-date-type.patch"
 
+; Redundant call to drupal_add_js() when Libraries module is enabled.
+; http://drupal.org/node/1945942
+projects[timeago][patch][] = "http://drupal.org/files/timeago-libraries-a.patch"
+
 projects[title][type] = "module"
 projects[title][subdir] = "contrib"
 projects[title][version] = "1.0-alpha5"
