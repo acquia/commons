@@ -339,7 +339,7 @@ projects[timeago][version] = "2.x-dev"
 projects[timeago][download][type] = "git"
 projects[timeago][download][url] = "http://git.drupal.org/project/timeago.git"
 projects[timeago][download][branch] = "7.x-2.x"
-projects[timeago][download][revision] = "21f26797fc3124bfe4128870d392d4a62770349c"
+projects[timeago][download][revision] = "768ea66"
 
 ; Provide a dedicated date type:
 ; http://drupal.org/node/1427226#comment-6638836
