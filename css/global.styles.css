@@ -362,7 +362,28 @@ var {
  * Footer wrapper
  */
 #footer {
+  border-top: 1px solid #cccccc;
+  -webkit-box-shadow: inset 0 1px 0 white;
+  -moz-box-shadow: inset 0 1px 0 white;
+  box-shadow: inset 0 1px 0 white;
   margin: 0 10px;
+}
+
+/*
+ * Default credit block
+ */
+#block-block-1 .block-title,
+#block-block-1 .block-content {
+  color: #858585;
+}
+#block-block-1 .block-title {
+  margin: 10px 0 5px;
+}
+#block-block-1 .block-content {
+  font-size: .88em;
+}
+#footer #block-block-1 {
+  margin-bottom: 0;
 }
 
 /*
@@ -422,14 +443,6 @@ var {
 /*
  * Wraps the tertiary content/postfix region
  */
-/*
- * Footer wrapper
- */
-#footer-wrapper {
-  /* Debug styles, is this working? */
-  background: rgba(255, 192, 203, 0.5);
-}
-
 /* =============================================================================
  *   Branding
  * ========================================================================== */
