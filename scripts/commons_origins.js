@@ -5,7 +5,7 @@ jQuery(document).ready(function($){
   'use strict';
 
   var attach_selectBox = function(){
-    $('#views-exposed-form-commons-homepage-content-panel-pane-1 select, #edit-custom-search-types, #quicktabs-commons_bw select').selectBox();
+    $('#views-exposed-form-commons-homepage-content-panel-pane-1 select, #edit-custom-search-types, #quicktabs-commons_bw select, .views-exposed-widgets select').selectBox();
   };
 
   var set_follow_checkboxes = function(){
