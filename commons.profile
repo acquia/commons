@@ -617,8 +617,7 @@ function commons_install_finished(&$install_state) {
   drupal_flush_all_caches();
 
   // We make custom code for the footer here because we want people to be able to freely edit it if they wish.
-  $footer_body = '<h3>'.variable_get('site_name', 'Drupal Commons').'</h3>
-  <p>'. st('A Commons Community, powered by <a href="@acquia">Acquia</a>', array('@acquia' => url('https://www.acquia.com/products-services/drupal-commons-social-business-software'))) . '</p>';
+  $footer_body = '<p>'. st('A Commons Community, powered by <a href="@acquia">Acquia</a>', array('@acquia' => url('https://www.acquia.com/products-services/drupal-commons-social-business-software'))) . '</p>';
 
   $footer_block_text = array(
     'body' => st($footer_body),
@@ -636,7 +635,7 @@ function commons_install_finished(&$install_state) {
       'status' => 1,
       'pages' => 0,
       'weight' => 1,
-      'title' => '<none>',
+      'title' => variable_get('site_name', 'Drupal Commons'),
     );
     drupal_write_record('block', $footer_block);
   }
