@@ -182,7 +182,7 @@ projects[message_subscribe][download][url] = "http://git.drupal.org/project/mess
 projects[message_subscribe][download][branch] = "7.x-1.x"
 projects[message_subscribe][download][revision] = "0063ab0fd922a5dbd2a052114a75a60e10e6ab07"
 
-; Remove "email" as default notifier
+; Remove "email" as default notifier.
 ; http://drupal.org/node/1828184#comment-7081868
 projects[message_subscribe][patch][] = "http://drupal.org/files/email-notifiers-1828184-15.patch"
 
