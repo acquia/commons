@@ -4147,7 +4147,8 @@ body.front.logged-in .view-commons-homepage-content .article.node {
   @include filter-overlay;
 }
 
-.search-results-title {
+.search-results-title,
+.search-results-wrapper > h2 {
   font-weight: 300;
   margin: $gutter-width * 2 0;
 }
@@ -4170,6 +4171,13 @@ body.front.logged-in .view-commons-homepage-content .article.node {
       @extend %pod;
       @extend %pod-content;
     }
+  }
+}
+
+.page-search-user, {
+  .user-results {
+    @extend %pod;
+    @extend %pod-content;
   }
 }
 

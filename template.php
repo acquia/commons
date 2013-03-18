@@ -325,7 +325,7 @@ function commons_origins_preprocess_form(&$vars, $hook) {
   $vars['attributes_array'] = $element['#attributes'];
 
   // Give the search form on the search page pod styling.
-  if (isset($element['#search_page']) || (isset($element['module']) && $element['module']['#value'] == 'search_facetapi')) {
+  if (isset($element['#search_page']) || (isset($element['module']) && ($element['module']['#value'] == 'search_facetapi' || $element['module']['#value'] == 'user'))) {
     $vars['attributes_array']['class'][] = 'commons-pod';
   }
 }
