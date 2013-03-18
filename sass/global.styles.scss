@@ -3375,6 +3375,17 @@ body.page-node.node-type-group {
 
 .node-poll {}
 
+/*
+ * Node forms
+ */
+
+ .node-form {
+  /* Polls have some bad, over specific, styles so this is what needs to be
+     done. */
+  #poll-choice-table .form-text {
+    width: 100%;
+  }
+ }
 
 /* =============================================================================
  *   Comment Styling - Comments, comment wrapper, comment form

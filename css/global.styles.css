@@ -2933,6 +2933,17 @@ body.page-node.node-type-group h2#page-title {
  * it is. If you create a new content type called "my-custom-type", it will
  * receive a "node-my-custom-type" class.
  */
+/*
+ * Node forms
+ */
+.node-form {
+  /* Polls have some bad, over specific, styles so this is what needs to be
+     done. */
+}
+.node-form #poll-choice-table .form-text {
+  width: 100%;
+}
+
 /* =============================================================================
  *   Comment Styling - Comments, comment wrapper, comment form
  * ========================================================================== */
