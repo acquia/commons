@@ -147,7 +147,7 @@ projects[admin_icons][download][revision] = "60d9f28801533fecc92216a60d444d89d80
 
 projects[libraries][type] = "module"
 projects[libraries][subdir] = "contrib"
-projects[libraries][version] = "2.0"
+projects[libraries][version] = "2.1"
 
 projects[link][type] = "module"
 projects[link][subdir] = "contrib"
