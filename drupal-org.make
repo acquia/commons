@@ -38,7 +38,7 @@ projects[ckeditor][type] = "module"
 projects[ckeditor][subdir] = "contrib"
 projects[ckeditor][download][type] = "git"
 projects[ckeditor][download][url] = "http://git.drupal.org/project/ckeditor.git"
-; Use Libraries API for ckeditor
+; Use Libraries API for ckeditor.
 ; http://drupal.org/node/1063482#comment-6964504
 projects[ckeditor][download][branch] = "7.x-1.x"
 projects[ckeditor][download][revision] = "f6abbda"
@@ -339,7 +339,7 @@ projects[timeago][version] = "2.x-dev"
 projects[timeago][download][type] = "git"
 projects[timeago][download][url] = "http://git.drupal.org/project/timeago.git"
 projects[timeago][download][branch] = "7.x-2.x"
-projects[timeago][download][revision] = "21f26797fc3124bfe4128870d392d4a62770349c"
+projects[timeago][download][revision] = "768ea66"
 
 ; Provide a dedicated date type:
 ; http://drupal.org/node/1427226#comment-6638836
@@ -481,7 +481,7 @@ projects[commons_topics][subdir] = "contrib"
 projects[adaptivetheme][type] = "theme"
 projects[adaptivetheme][subdir] = "contrib"
 projects[adaptivetheme][download][type] = "git"
-projects[adaptivetheme][download][url] = "http://git.drupal.org/project/adaptivetheme.git"
+projects[adaptivetheme][download][url] = "git://git.drupal.org/project/adaptivetheme.git"
 projects[adaptivetheme][download][branch] = "7.x-3.x"
 projects[adaptivetheme][download][revision] = "4e29d43"
 
