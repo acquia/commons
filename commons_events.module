@@ -7,23 +7,6 @@
 include_once 'commons_events.features.inc';
 
 /**
- * Implements hook_menu().
- */
-function commons_events_menu() {
-  $items = array();
-  $items['node/%node/attendees'] = array(
-    'title' => 'Attendees',
-    'page callback' => 'commons_events_event_attendees_page',
-    'page arguments' => array(1),
-    'access callback' => 'commons_events_attendee_access',
-    'access arguments' => array(1),
-    'type' => MENU_LOCAL_TASK,
-    'weight' => 5,
-  );
-  return $items;
-}
-
-/**
  * Implements hook_menu_alter().
  */
 function commons_events_menu_alter(&$items) {
