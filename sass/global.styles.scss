@@ -3147,16 +3147,11 @@ body.page-node .pane-views-panes {
  */
 .block-search {
   display:block;
-  // needs latest Compass, add '@import "compass"' to your scss
-  // background-color: #03416a; // Old browsers
-  // @include filter-gradient(#03416a, #00558b, vertical); // IE6-9
-  // @include background-image(linear-gradient(top,  #03416a 0%,#034b7b 19%,#034d7e 27%,#00558b 100%));
   background-color: darken($dark_blue, 12%); // Old browsers
   @include filter-gradient(darken($dark_blue, 12%), darken($dark_blue, 6%), vertical); // IE6-9
   @include background-image(linear-gradient(top,  darken($dark_blue, 12%) 0%,darken($dark_blue, 6%)100%));
   @include border-radius(4px);
   box-shadow: 1px 1px 2px #000 inset, 2px 3px 3px rgba(#fff, 0.09);
-  // width:100%;
   height:30px;
   margin:0 0 0 10px;
   position: relative;
@@ -3168,16 +3163,6 @@ body.page-node .pane-views-panes {
   .block-inner {
     margin-left:0;
     margin-right:0;
-  }
-  .form-select {
-    // background-color:transparent;
-    // color:$white;
-    // border:none;
-    // background-image:image-url('icons/ico_arrow_wht.png');
-    // background-repeat:no-repeat;
-    // background-position:right center;
-    // padding-right:10px;
-    // margin:3px 0 0 5px;
   }
   .form-text {
     color:$white;
