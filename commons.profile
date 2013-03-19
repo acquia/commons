@@ -131,7 +131,7 @@ function commons_install_tasks() {
       'run' => $acquia_connector ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
     ),
     'commons_installer_palette' => array(
-      'display_name' => st('Chose site color palette'),
+      'display_name' => st('Choose site color palette'),
       'display' => TRUE,
       'type' => 'form',
       'function' => 'commons_installer_palette',
