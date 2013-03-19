@@ -1396,6 +1396,16 @@ h1.node-title {
   }
 }
 
+/*
+ * Group nodes
+ */
+
+.node-group {
+  .field-name-body {
+    clear: none;
+  }
+}
+
 /* =============================================================================
  *   Regions
  * ========================================================================== */
@@ -2617,8 +2627,7 @@ body.page-node .pane-views-panes {
 
   .pane-node-field-group-logo {
     float: left;
-    margin-bottom: 3px;
-    margin-top: 3px;
+    margin: 0 $gutter-width $gutter-width 0;
 
     .field-name-field-group-logo a {
       display: block;
