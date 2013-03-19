@@ -348,6 +348,16 @@ function commons_origins_preprocess_form(&$vars, $hook) {
   if (isset($element['#search_page']) || (isset($element['module']) && ($element['module']['#value'] == 'search_facetapi' || $element['module']['#value'] == 'user'))) {
     $vars['attributes_array']['class'][] = 'commons-pod';
   }
+
+  $pods = array(
+    'user-login',
+    'user-pass',
+    'user-register-form',
+  );
+
+  if (in_array($element['#id'], $pods)) {
+    $vars['attributes_array']['class'][] = 'commons-pod';
+  }
 }
 
 /**
