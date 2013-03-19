@@ -302,6 +302,26 @@ function commons_origins_preprocess_views_view(&$vars, $hook) {
     $vars['classes_array'][] = 'commons-pod';
     $vars['classes_array'][] = 'clearfix';
   }
+
+  // Style some views without bottom borders and padding.
+  $plain = array(
+    'commons_bw_all' => array('default'),
+    'commons_bw_polls' => array('default'),
+    'commons_bw_posts' => array('default'),
+    'commons_bw_q_a' => array('default'),
+    'commons_bw_wikis' => array('default'),
+    'commons_events_upcoming' => array('panel_pane_2'),
+    'commons_featured' => array('panel_pane_1'),
+    'commons_groups_directory' => array('panel_pane_1'),
+    'commons_groups_recent_content' => array('block'),
+    'commons_groups_user_groups' => array('panel_pane_1'),
+    'commons_homepage_content' => array('panel_pane_1'),
+    'commons_radioactivity_groups_active_in_group' => array('panel_pane_1'),
+    'commons_radioactivity_groups_most_active' => array('panel_pane_1'),
+  );
+  if (isset($plain[$vars['name']]) && in_array($vars['display_id'], $plain[$vars['name']])) {
+    $vars['classes_array'][] = 'view-plain';
+  }
 }
 
 /**

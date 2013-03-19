@@ -514,7 +514,7 @@ var {
  * The main page title (h1)
  */
 #page-title {
-  margin: 0 0 10px 6px;
+  margin: 0 0 10px;
   font-weight: 300;
 }
 .page-node #page-title {
@@ -944,6 +944,29 @@ h1.node-title a:hover {
 /*
  * User picture wrapping and shadow
  */
+.views-row {
+  border-bottom: 1px solid #eeeeee;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  position: relative;
+}
+.views-row.views-row-last {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+.view-plain .views-row {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin: 0.3em 0;
+}
+.view-plain .views-row:first-child {
+  margin-top: 0;
+}
+.view-plain .views-row:last-child {
+  margin-bottom: 0;
+}
+
 .view-commons-homepage-content .content, .view-commons-homepage-content .views-field-timestamp, .view-commons-activity-streams-activity .content, .view-commons-activity-streams-activity .views-field-timestamp, .view-activity-group .content, .view-activity-group .views-field-timestamp, .view-commons-activity-streams-user-activity .content, .view-commons-activity-streams-user-activity .views-field-timestamp {
   padding-left: 58px;
 }
@@ -965,17 +988,6 @@ h1.node-title a:hover {
   }
 }
 
-.view-activity-group .views-row, .view-commons-activity-streams-activity .views-row, .view-commons-activity-streams-user-activity .views-row {
-  border-bottom: 1px solid #eeeeee;
-  padding-bottom: 5px;
-  margin-bottom: 5px;
-  position: relative;
-}
-.view-activity-group .views-row.views-row-last, .view-commons-activity-streams-activity .views-row.views-row-last, .view-commons-activity-streams-user-activity .views-row.views-row-last {
-  border-bottom: none;
-  padding-bottom: 0;
-  margin-bottom: 0;
-}
 .view-activity-group .views-row h2, .view-commons-activity-streams-activity .views-row h2, .view-commons-activity-streams-user-activity .views-row h2 {
   display: none;
 }
@@ -3404,11 +3416,8 @@ body.front.logged-in .view-commons-homepage-content .item-list {
   padding: 10px 0 0 0;
 }
 body.front.logged-in #views-exposed-form-commons-homepage-content-panel-pane-1 .views-exposed-widgets {
-  padding: 10px 10px 10px 10px;
+  padding: 10px 0;
   margin-bottom: 0;
-}
-body.front.logged-in #views-exposed-form-commons-homepage-content-panel-pane-1 .views-exposed-widgets.widgets-active {
-  padding-bottom: 10px;
 }
 body.front.logged-in #views-exposed-form-commons-homepage-content-panel-pane-1 .views-exposed-widgets.widgets-active .selectBox-dropdown {
   background-color: white;

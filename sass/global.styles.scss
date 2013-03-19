@@ -497,7 +497,7 @@ var {
  * The main page title (h1)
  */
 #page-title {
-  margin: 0 0 10px 6px;
+  margin: 0 0 10px;
   font-weight:300;
 
   .page-node & {
@@ -923,6 +923,32 @@ h1.node-title {
 /*
  * User picture wrapping and shadow
  */
+.views-row {
+  border-bottom: 1px solid #eee;
+  padding-bottom: $gutter-width;
+  margin-bottom: $gutter-width;
+  position: relative;
+
+  &.views-row-last {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  .view-plain & {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin: .3em 0;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
 
 .view-commons-homepage-content, .view-commons-activity-streams-activity, .view-activity-group, .view-commons-activity-streams-user-activity {
   .content, .views-field-timestamp {
@@ -932,17 +958,6 @@ h1.node-title {
 
 .view-activity-group, .view-commons-activity-streams-activity, .view-commons-activity-streams-user-activity {
   .views-row {
-    border-bottom: 1px solid #eee;
-    padding-bottom: 5px;
-    margin-bottom: 5px;
-    position: relative;
-
-    &.views-row-last {
-      border-bottom: none;
-      padding-bottom: 0;
-      margin-bottom: 0;
-    }
-
     h2 {
       display: none;
     }
@@ -4008,13 +4023,12 @@ body.front.logged-in {
     }
   }
   #views-exposed-form-commons-homepage-content-panel-pane-1 .views-exposed-widgets {
-    padding: 10px 10px 10px 10px;
+    padding: $gutter-width 0;
     margin-bottom: 0;
 
     &.widgets-active {
       @extend %pod;
       @extend %pod-content;
-      padding-bottom: 10px;
 
       .selectBox-dropdown {
         background-color: $white;
