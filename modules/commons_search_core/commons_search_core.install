@@ -26,3 +26,14 @@ function commons_search_core_enable() {
   variable_set('search_default_module', 'search_facetapi');
   cache_clear_all('*', 'cache_block', TRUE);
 }
+
+/**
+ * Revert the core search page to have a single column variant when no search
+ * has happened and the normal two column variant when a search has happened.
+ */
+function commons_search_core_update_7001() {
+  $revert = array(
+    'commons_search_core' => array('page_manager_handlers'),
+  );
+  features_revert($revert);
+}
