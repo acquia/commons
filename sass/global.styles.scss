@@ -2625,22 +2625,6 @@ body.page-node .pane-views-panes {
     display: none;
   }
 
-  .pane-node-field-group-logo {
-    float: left;
-    margin: 0 $gutter-width $gutter-width 0;
-
-    .field-name-field-group-logo a {
-      display: block;
-      border: 3px solid $white;
-      @include border-radius(2px);
-      box-shadow: 1px 1px 3px $gray;
-
-      img {
-        display: block;
-      }
-    }
-  }
-
   > .view-content > .views-row, > .view-filters {
     @extend %pod;
     position: relative;
@@ -2680,6 +2664,22 @@ body.page-node .pane-views-panes {
 
   .pane-node-body {
     margin-bottom: 0;
+  }
+}
+
+.pane-node-field-group-logo {
+  float: left;
+  margin: 0 $gutter-width $gutter-width 0;
+
+  .field-name-field-group-logo a {
+    display: block;
+    border: 3px solid $white;
+    @include border-radius(2px);
+    box-shadow: 1px 1px 3px $gray;
+
+    img {
+      display: block;
+    }
   }
 }
 
