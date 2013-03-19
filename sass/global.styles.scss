@@ -4166,19 +4166,23 @@ body.front.logged-in .view-commons-homepage-content .article.node {
       @include filter-drawer;
     }
 
-    .facetapi-processed {
-      margin-bottom: 0;
-      padding-left: 0;
-
-      li {
-        &.last {
-          margin-bottom: 0;
-        }
-      }
-    }
   }
 
   @include filter-overlay;
+}
+
+.facetapi-processed {
+  &,
+  .block-content & {
+    margin-bottom: 0;
+    padding-left: 0;
+
+    li {
+      &.last {
+        margin-bottom: 0;
+      }
+    }
+  }
 }
 
 .search-results-title,

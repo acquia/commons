@@ -3592,17 +3592,18 @@ body.front.logged-in .view-commons-homepage-content .article.node.no-user-pictur
     display: block;
   }
 }
-.page-search .two-33-66 .facetapi-processed {
-  margin-bottom: 0;
-  padding-left: 0;
-}
-.page-search .two-33-66 .facetapi-processed li.last {
-  margin-bottom: 0;
-}
 @media only screen and (max-width: 480px) {
   .page-search .filter-overlay.expanded {
     display: block;
   }
+}
+
+.facetapi-processed, .block-content .facetapi-processed {
+  margin-bottom: 0;
+  padding-left: 0;
+}
+.facetapi-processed li.last, .block-content .facetapi-processed li.last {
+  margin-bottom: 0;
 }
 
 .search-results-title,
