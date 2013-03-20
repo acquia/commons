@@ -231,8 +231,6 @@ function commons_events_solr_panel_facet_subtype($facet_name) {
  */
 function commons_events_solr_theme_registry_alter(&$registry) {
   $registry['apachesolr_search_noresults']['function'] = 'commons_events_solr_apachesolr_search_noresults';
-  $registry['search_results']['path'] = drupal_get_path('module', 'commons_events_solr');
-  $registry['search_results']['theme path'] = drupal_get_path('module', 'commons_events_solr');
 }
 
 function commons_events_solr_apachesolr_process_results(&$results, DrupalSolrQueryInterface $query) {
@@ -243,9 +241,9 @@ function commons_events_solr_apachesolr_process_results(&$results, DrupalSolrQue
 /**
  * Implements hook_preprocess_hook().
  */
-function commons_events_solr_preprocess_search_results(&$variables) {
+function commons_events_solr_process_search_results(&$variables) {
   if ($variables['search_page']['page_id'] == 'solr_events') {
-    $variables['search_title'] = format_plural(count($variables['results']), '1 event', '@count events');
+    $variables['title'] = format_plural(count($variables['results']), '1 event', '@count events');
   }
 }
 
