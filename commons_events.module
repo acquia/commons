@@ -154,12 +154,6 @@ function commons_events_form_node_form_alter(&$form, &$form_state) {
     );
     $form['field_number_of_attendees']['#weight'] = 11;
     $form['field_topics']['#weight'] = 12;
-    // URL field shown if registration is offsite only.
-    $form['field_offsite_url']['#states'] = array(
-      'visible' => array(
-        ':input[name^="field_registration_type"]' => array('value' => 'external'),
-      ),
-    );
     $form['#validate'] = array_merge(array('commons_events_node_form_validate'), $form['#validate']);
     $form['#submit'][] = 'commons_events_node_form_submit';
     // Move registration settings into a fieldset so we can move the group.
