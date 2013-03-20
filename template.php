@@ -599,24 +599,34 @@ function commons_origins_links($vars) {
 function commons_origins_field__addressfield($variables) {
   $output = '';
 
+  kpr($variables);
+
   // Add Microformat classes to each address.
   foreach($variables['items'] as &$address) {
-    $address['#theme_wrappers'][] = 'container';
-    $address['#attributes']['class'][] = 'adr';
-    if (!empty($address['street_block']['thoroughfare'])) {
-      $address['street_block']['thoroughfare']['#attributes']['class'][] ='street-address';
+    // Only display an address if it has been populated. We determine this by
+    // validating that the administrative area has been populated.
+    if ($address['#address']['administrative_area']) {
+      $address['#theme_wrappers'][] = 'container';
+      $address['#attributes']['class'][] = 'adr';
+      if (!empty($address['street_block']['thoroughfare'])) {
+        $address['street_block']['thoroughfare']['#attributes']['class'][] = 'street-address';
+      }
+      if (!empty($address['street_block']['premise'])) {
+        $address['street_block']['premise']['#attributes']['class'][] = 'extended-address';
+      }
+      if (!empty($address['locality_block']['locality'])) {
+        $address['locality_block']['locality']['#suffix'] = ',';
+      }
+      if (!empty($address['locality_block']['administrative_area'])) {
+        $address['locality_block']['administrative_area']['#attributes']['class'][] = 'region';
+      }
+      if (!empty($address['country'])) {
+        $address['country']['#attributes']['class'][] = 'country-name';
+      }
     }
-    if (!empty($address['street_block']['premise'])) {
-      $address['street_block']['premise']['#attributes']['class'][] ='extended-address';
-    }
-    if (!empty($address['locality_block']['locality'])) {
-      $address['locality_block']['locality']['#suffix'] = ',';
-    }
-    if (!empty($address['locality_block']['administrative_area'])) {
-      $address['locality_block']['administrative_area']['#attributes']['class'][] ='region';
-    }
-    if (!empty($address['country'])) {
-      $address['country']['#attributes']['class'][] ='country-name';
+    else {
+      // Deny access to incomplete addresses.
+      $address['#access'] = FALSE;
     }
   }
 
