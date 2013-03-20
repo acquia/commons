@@ -14,7 +14,7 @@
   </li>
 </ul>
 <?php
-print '<div class="rate-info"><span class="rate-info-value">' . $score . '</span> <span class="rate-info-label">' . format_plural($score, t('point'), t('points')) . '</span></div>';
+print '<div class="rate-info"><span class="rate-info-value">' . $results['rating'] . '</span> <span class="rate-info-label">' . format_plural($results['rating'], t('point'), t('points')) . '</span></div>';
 
 if ($display_options['description']) {
   print '<div class="rate-description">' . $display_options['description'] . '</div>';
