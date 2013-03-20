@@ -646,3 +646,30 @@ function commons_origins_field__addressfield($variables) {
 
   return $output;
 }
+
+/**
+ * Implements hook_preprocess_views_view_field().
+ */
+function commons_origins_preprocess_views_view_field(&$vars, $hook) {
+  // Make sure empty addresses are not displayed.
+  // Views does not use theme_field__addressfield(), so we need to process
+  // these implementations separately.
+  if (isset($vars['theme_hook_suggestion']) && $vars['theme_hook_suggestion'] == 'views_view_field__field_address') {
+    $needs_rebuild = FALSE;
+    foreach ($vars['row']->field_field_address as $key => $address) {
+      if (!$address['raw']['administrative_area']) {
+        // If an address is incomplete, remove it and tell the system a
+        // rebuild is needed.
+        unset($vars['row']->field_field_address[$key]);
+        $needs_rebuild = TRUE;
+      }
+    }
+
+    // Only spend the resources rebuilding if it is needed. Views already has
+    // the content rendered by the time it gets to this display, so the output
+    // needs rebuilt if anything has changed.
+    if ($needs_rebuild) {
+      $vars['output'] = $vars['field']->advanced_render($vars['row']);
+    }
+  }
+}
