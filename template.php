@@ -452,7 +452,7 @@ function commons_origins_form_alter(&$form, &$form_state, $form_id) {
     // of them.
     $general_settings = array();
     foreach ($form as $id => $field) {
-      if (is_array($field) && isset($field['#group']) && $field['#group'] == 'additional_settings') {
+      if (is_array($field) && isset($field['#group']) && $field['#group'] == 'additional_settings' && $field['#access']) {
         $general_settings[$id] = $field;
         $general_settings[$id]['#collapsible'] = TRUE;
         $general_settings[$id]['#collapsed'] = TRUE;
