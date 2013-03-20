@@ -599,8 +599,6 @@ function commons_origins_links($vars) {
 function commons_origins_field__addressfield($variables) {
   $output = '';
 
-  kpr($variables);
-
   // Add Microformat classes to each address.
   foreach($variables['items'] as &$address) {
     // Only display an address if it has been populated. We determine this by
