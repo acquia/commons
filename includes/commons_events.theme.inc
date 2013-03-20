@@ -19,6 +19,7 @@ function theme_commons_events_attending_event($variables = array()) {
     'entity_type' => 'node',
     'entity_id' => $event->nid,
     'type' => $registration_type,
+    'author' => $user->uid,
   ));
   if (!function_exists('commons_events_attend_event_form')
     || !function_exists('commons_events_cancel_event_form')) {
