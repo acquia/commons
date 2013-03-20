@@ -31,6 +31,18 @@ function commons_utility_links_block_view() {
       'title' => t('Logout'),
     );
   }
+  else {
+    if (variable_get('user_register', USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL)) {
+      $links['signup'] = array(
+        'href' => 'user/register',
+        'title' => t('Signup'),
+      );
+    }
+    $links['login'] = array(
+      'href' => 'user/login',
+      'title' => t('Login'),
+    );
+  }
   drupal_alter('commons_utility_links', $links);
   $block['content'] = theme('links', array('links' => $links, 'attributes' => array('class' => 'commons-utility-links')));
   return $block;
