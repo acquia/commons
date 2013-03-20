@@ -25,8 +25,10 @@
 ?>
 <div class="<?php print $classes; ?>"<?php print $attributes; ?>>
   <?php if ($search_results): ?>
-    <h2<?php print $title_attributes; ?>><?php print t('Search results');?></h2>
-     <div<?php print $content_attributes; ?>>
+    <?php if (!empty($title)): ?>
+      <h2<?php print $title_attributes; ?>><?php print $title; ?></h2>
+    <?php endif; ?>
+    <div<?php print $content_attributes; ?>>
       <ol class="search-results <?php print $module; ?>-results">
         <?php print $search_results; ?>
       </ol>

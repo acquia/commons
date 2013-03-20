@@ -53,6 +53,17 @@ function commons_origins_preprocess_search_results(&$vars, $hook) {
 }
 
 /**
+ * Implements hook_process_search_results().
+ */
+function commons_origins_process_search_results(&$vars, $hook) {
+  // Set the title in preprocess so that it can be overridden by modules
+  // further upstream.
+  if (empty($vars['title'])) {
+    $vars['title'] = t('Search results');
+  }
+}
+
+/**
  * Preprocess variables for the html template.
  */
 function commons_origins_preprocess_html(&$vars) {
