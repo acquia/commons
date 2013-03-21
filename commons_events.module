@@ -77,6 +77,65 @@ function commons_events_theme($existing, $type, $theme, $path) {
 }
 
 /**
+ * Implements hook_element_info_alter().
+ */
+function commons_events_element_info_alter(&$type) {
+  // Extend date_combo processing to alter the label text on the fields.
+  if (isset($type['date_combo'])) {
+    $type['date_combo']['#process'][] = 'commons_events_date_combo_element_process';
+  }
+
+  // Extend date_popup processing to remove the redundant descriptions on
+  // fields.
+  if (isset($type['date_popup'])) {
+    $type['date_popup']['#process'][] = 'commons_events_date_popup_element_process';
+  }
+}
+
+/**
+ * Process date_combo field output.
+ *
+ * This is an extension of the Date module's own processing.
+ *
+ * @see date_combo_element_process()
+ * @see commons_events_element_info_alter()
+ */
+function commons_events_date_combo_element_process($element, &$form_state, $form) {
+  $field = field_widget_field($element, $form_state);
+
+  // Change the labels for from and to dates to something more meaningful.
+  if (!empty($field['settings']['todate'])) {
+    $element['value']['#title'] = t('Start date');
+    $element['value2']['#title'] = t('End date');
+  }
+
+  return $element;
+}
+
+/**
+ * Process date_popup field output.
+ *
+ * This is an extension of the Date module's own processing.
+ *
+ * @see date_popup_element_process()
+ * @see commons_events_element_info_alter()
+ */
+function commons_events_date_popup_element_process($element, &$form_state, $form) {
+  // If a date_popup field is part of a larger range widget, simplify the
+  // output.
+  if (!empty($element['#field']['settings']['todate'])) {
+    foreach (array('date', 'time') as $type) {
+      if (!empty($element[$type])) {
+        // The description and title are unnecessary.
+        unset($element[$type]['#description']);
+        $element[$type]['#title'] = '';
+      }
+    }
+  }
+  return $element;
+}
+
+/**
  * Implements hook_entity_view_alter().
  */
 function commons_events_entity_view_alter(&$build, $type) {
