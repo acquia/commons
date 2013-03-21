@@ -1175,6 +1175,52 @@ h1.node-title a:hover {
   clear: both;
 }
 
+/* Format the date range form items. */
+.start-date-wrapper,
+.end-date-wrapper {
+  clear: none;
+  width: auto;
+  max-width: 49%;
+}
+.start-date-wrapper,
+.start-date-wrapper input,
+.start-date-wrapper .form-item .form-type-textfield,
+.start-date-wrapper .date-padding,
+.start-date-wrapper .form-type-textfield,
+.end-date-wrapper,
+.end-date-wrapper input,
+.end-date-wrapper .form-item .form-type-textfield,
+.end-date-wrapper .date-padding,
+.end-date-wrapper .form-type-textfield {
+  float: none;
+  display: inline-block;
+  min-width: inherit;
+}
+.start-date-wrapper .form-item input,
+.end-date-wrapper .form-item input {
+  margin-right: auto;
+}
+.start-date-wrapper .form-type-textfield,
+.end-date-wrapper .form-type-textfield {
+  max-width: 60%;
+}
+.start-date-wrapper .form-type-textfield:last-child,
+.end-date-wrapper .form-type-textfield:last-child {
+  max-width: 30%;
+}
+.start-date-wrapper .form-type-date-popup,
+.end-date-wrapper .form-type-date-popup {
+  margin: 0;
+}
+@media only screen and (max-width: 768px) {
+  .start-date-wrapper,
+  .end-date-wrapper {
+    display: block;
+    max-width: inherit;
+    margin: 10px auto;
+  }
+}
+
 .node-type-event .addressfield-container-inline:after {
   content: "";
   clear: none;

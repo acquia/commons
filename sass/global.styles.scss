@@ -1127,6 +1127,48 @@ h1.node-title {
   clear: both;
 }
 
+/* Format the date range form items. */
+.start-date-wrapper,
+.end-date-wrapper {
+  clear: none;
+  width: auto;
+  max-width: 49%;
+
+  &,
+  input,
+  .form-item .form-type-textfield,
+  .date-padding,
+  .form-type-textfield {
+    float: none;
+    display: inline-block;
+    min-width: inherit;
+  }
+
+  .form-item {
+    input {
+      margin-right: auto;
+    }
+  }
+
+  .form-type-textfield {
+    max-width: 60%;
+
+    &:last-child {
+      max-width: 30%;
+    }
+  }
+
+  .form-type-date-popup {
+    margin: 0;
+  }
+
+  @include respond(small-medium) {
+    display: block;
+    max-width: inherit;
+    margin: $gutter-width auto;
+  }
+}
+
 .node-type-event {
   .addressfield-container-inline {
     &:after {
