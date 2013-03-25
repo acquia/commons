@@ -33,3 +33,16 @@ function commons_q_a_update_3102() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Update the Commons Q&A widget per http://drupal.org/node/1940644.
+ */
+function commons_q_a_update_3103() {
+  // The Commons Q&A widget is defined via a hook_strongarm_alter()
+  // implementation altering rate_widgets variable, defined by commons_like.
+    $revert = array(
+      'commons_like' => array('variable'),
+  );
+  features_revert($revert);
+  return array();
+}
