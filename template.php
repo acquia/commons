@@ -209,7 +209,6 @@ function commons_origins_preprocess_node(&$vars) {
   if (!empty($vars['content']['links']['flag']['#links']['flag-inappropriate_node'])) {
     $vars['content']['report_link'] = array('#markup' => $vars['content']['links']['flag']['#links']['flag-inappropriate_node']['title']);
   }
-  // kpr(render($vars['content']['report_link']));
 
   if (!empty($vars['content']['links'])) {
     // Hide some of the node links.
@@ -258,6 +257,34 @@ function commons_origins_preprocess_node(&$vars) {
     $vars['content']['answer']['#links']['answer-add']['attributes']['class'][] = 'button-alert';
     $vars['content']['answer']['#weight'] = -100;
     $vars['content']['links']['answer']['#access'] = FALSE;
+  }
+
+  // Groups the related fields into their own container.
+  $related_information = array(
+    'og_group_ref',
+    'field_related_question',
+    'field_topics',
+  );
+  foreach($related_information as $field) {
+    if (!empty($vars[$field])) {
+      $vars['content']['related_information'][$field] = $vars['content'][$field];
+      hide($vars['content'][$field]);
+    }
+  }
+  if (!empty($vars['content']['related_information'])) {
+    $vars['content']['related_information'] += array(
+      '#theme_wrappers' => array('container'),
+      '#attributes' => array(
+        'class' => array('related-information', 'clearfix'),
+      ),
+      '#weight' => 1000,
+    );
+  }
+
+  // Add classes when there is a voting widget present.
+  if (!empty($vars['content']['rate_commons_answer'])) {
+    $vars['content_attributes_array']['class'][] = 'has-rate-widget';
+    $vars['content']['rate_commons_answer']['#weight'] = 999;
   }
 }
 

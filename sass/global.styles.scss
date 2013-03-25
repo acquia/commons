@@ -3535,13 +3535,38 @@ body.page-node.node-type-group {
   margin-left: 40px;
 }
 
-.rate-widget-commons_thumbs_up_down {
-  float: right;
-  ul {
-    padding: 0;
+
+.has-rate-widget {
+  margin-right: 6em;
+  position: relative;
+
+  @include respond(small-medium) {
+    margin-right: 0;
   }
 }
 
+.rate-widget-commons_thumbs_up_down {
+  float: right;
+  position: absolute;
+  top: 0;
+  right: -6em;
+  margin-top: 0;
+
+  @include respond(small-medium) {
+    position: static;
+    float: left;
+    margin: ($gutter-width * 2) auto;
+  }
+}
+
+.related-information {
+  clear: both;
+  margin: ($gutter-width * 2) 0;
+
+  .field {
+    float: left;
+  }
+}
 
 /* =============================================================================
  *   Forms
