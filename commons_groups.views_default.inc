@@ -119,7 +119,7 @@ function commons_groups_views_default_views() {
 
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'Contributors';
+  $handler->display->display_options['title'] = 'Group contributors';
   $handler->display->display_options['use_more'] = TRUE;
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['access']['type'] = 'perm';
@@ -172,6 +172,8 @@ function commons_groups_views_default_views() {
 
   /* Display: group teaser */
   $handler = $view->new_display('panel_pane', 'group teaser', 'panel_pane_1');
+  $handler->display->display_options['defaults']['title'] = FALSE;
+  $handler->display->display_options['title'] = 'Recent contributors';
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['defaults']['pager'] = FALSE;
   $handler->display->display_options['pager']['type'] = 'some';

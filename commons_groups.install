@@ -56,3 +56,15 @@ function commons_groups_update_3105() {
     ->execute();
   return array();
 }
+
+/**
+ * Update contributor view to show the titles per the interactive prototype.
+ * (http://drupal.org/node/1821808).
+ */
+function commons_groups_update_3106() {
+    $revert = array(
+      'commons_groups' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}
