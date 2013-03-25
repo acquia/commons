@@ -1,51 +1,128 @@
 @import "compass";
 
+$arrow-width: 1em;
+
 .rate-widget-commons_thumbs_up_down {
-  width: 68px;
-  height: 75px;
+  clear: both;
+  width: 4.5em;
+  margin: 1.7em 0;
+}
+
+.rate-info {
   position: relative;
-  ul {
-    margin: 0;
+  width: 100%;
+  height: 4.5em;
+  @include box-sizing(border-box);
+  margin-bottom: .4em;
+  padding: .5em 1em;
+  border: 1px solid #ccc;
+  @include border-radius(.3em);
+  font-size: .8em;
+  line-height: 1.2em;
+  text-align: center;
+  background: #fff;
+  color: #333;
+  z-index: 0;
+
+  &:before,
+  &:after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 0;
+    overflow: hidden;
     position: absolute;
-    bottom: 0;
-    width: 68px;
-    li {
-      margin: 0;
-      list-style-type:none;
-      .rate-button {
-        display:block;
-        width: 32px;
-        height: 30px;
-        background-image: image-url('updown.png');
-        text-indent: -9999px;
-      }
-      .rate-number-up-down-btn-up {
-        background-position: left top;
-        float:left;
-      }
-      .rate-number-up-down-btn-down {
-        background-position: right top;
-        float:right;
-      }
-      span {
-        @include opacity(.6);
-      }
-    }
-  }
-  .rate-info {
-    position: absolute;
-    top: 0;
-    width: 52px;
-    height: 36px;
-    padding: 4px 8px;
-    background: image-url('bkg_updown.png');
-    text-align: center;
+    bottom: -($arrow-width - .15);
+    left: 50%;
+    margin-left: -($arrow-width / 2);
+    border: ($arrow-width / 2) solid transparent;
   }
 
-  .rate-info-value {
+  &:before {
+    border-top-color: #ccc;
+    margin-bottom: -1px;
+  }
+
+  &:after {
+    border-top-color: #fff;
+  }
+}
+
+.rate-info-value {
+  display: block;
+  font-size: 2em;
+  font-weight: bold;
+  line-height: 1em;
+}
+
+.rate-info-label {
+  line-height: 1em;
+}
+
+.commons-q-a-rate-buttons {
+  margin: 0;
+}
+
+.commons-q-a-rate-trigger {
+  margin: 0;
+  width: 50%;
+  height: 2em;
+  @include box-sizing(border-box);
+  line-height: 2em;
+
+  .rate-button {
     display: block;
-    font-size: 18px;
-    font-weight: bold;
-    line-height: 1em;
+    height: 100%;
+    overflow: hidden;
+    @include box-sizing(border-box);
+    border: 1px solid #ccc;
+    @include border-radius(.3em);
+    color: transparent;
+    background: #fefefe;
+    @include background(linear-gradient(top, #fefefe, #e8e8e8));
+
+    &:before {
+      display: block;
+      width: 1em;
+      height: 1em;
+      margin: 0 auto;
+      text-align: center;
+      font-weight: bold;
+      font-size: 2em;
+      line-height: .8em;
+      color: #333;
+    }
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .rate-voted {
+    background: #f3f3f3;
+    border-color: #f3f3f3;
+    @include box-shadow(inset .1em .1em .1em rgba(0, 0, 0, .4));
+  }
+}
+
+.commons-q-a-rate-up {
+  float: left;
+  padding-right: .2em;
+}
+
+.commons-q-a-rate-down {
+  float: right;
+  padding-left: .2em;
+}
+
+.rate-number-up-down-btn-up {
+  &:before {
+    content: "+";
+  }
+}
+
+.rate-number-up-down-btn-down {
+  &:before {
+    content: "-";
   }
 }
