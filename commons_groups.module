@@ -559,3 +559,14 @@ function commons_groups_og_membership_insert(OgMembership $og_membership) {
     }
   }
 }
+
+/**
+ * Implements hook_preprocess_views_view_grid().
+ */
+function commons_groups_preprocess_views_view_grid(&$variables, $hook) {
+  // Change the displayed role name in the group contributors block to
+  // "Organizers".
+  if ($variables['view']->name == 'commons_contributors_group' && !empty($variables['title']) && $variables['view']->field['og_roles']->original_value == 'administrator member') {
+    $variables['title'] = t('Organizers');
+  }
+}
