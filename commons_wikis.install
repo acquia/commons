@@ -4,8 +4,19 @@
  * Disable summary on Wiki nodes.
  */
 function commons_wikis_update_7000() {
-    $revert = array(
-      'commons_wikis' => array('field_instance'),
+  $revert = array(
+    'commons_wikis' => array('field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/**
+ * Update Wiki message type to remove error messages.
+ */
+function commons_wikis_update_7001() {
+  $revert = array(
+    'commons_wikis' => array('message_type', 'variable'),
   );
   features_revert($revert);
   return array();
