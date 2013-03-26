@@ -733,6 +733,7 @@ ul.links {
   }
 }
 
+.quicktabs-style-commons-pills ul.quicktabs-tabs,
 ul.primary.tabs {
   border-bottom: none;
   padding: 0;
@@ -744,7 +745,7 @@ ul.primary.tabs {
     a {
       background-color: $tab_background;
       @include border-radius(3px);
-      padding: 3px 10px;
+      padding: .3em .8em;
       display: inline-block;
       color: $tab_text;
       border: none;
@@ -760,10 +761,10 @@ ul.primary.tabs {
       position: relative;
       background-color: $tab_active_background;
       border: none;
-      color: $tab_active_text;
 
-      &:hover {
-        background-color: $tab_active_background;
+      &,
+      span {
+        color: $tab_active_text;
       }
 
       &:after {
@@ -784,34 +785,9 @@ ul.primary.tabs {
   }
 }
 
-.quicktabs-style-commons-pills {
-  ul {
-    &.quicktabs-tabs {
-      li {
-        a {
-          color: $tab_text;
-          text-transform: uppercase;
-          font-size: .8em;
-
-          &:hover {
-            color: $tab_text_hover;
-          }
-        }
-
-        &.active {
-          a {
-            &:hover {
-              color: #fff;
-            }
-
-            &:after {
-              display: none;
-            }
-          }
-        }
-      }
-    }
-  }
+.quicktabs-style-commons-pills ul.quicktabs-tabs li {
+  text-transform: uppercase;
+  font-size: .8em;
 }
 
 li.sharethis {

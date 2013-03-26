@@ -56,21 +56,23 @@
 
     // Quicktabs buttons styles
 
-    .quicktabs-style-commons-pills ul.quicktabs-tabs li a, ul.primary.tabs li a {
-      color: $palette_color_light;
+    .quicktabs-style-commons-pills ul.quicktabs-tabs,
+    ul.primary.tabs {
+      li {
+        a {
+          color: $palette_color_light;
 
-      &:hover {
-        color: darken($palette_color_light, 10%)
+          &:hover {
+            color: darken($palette_color_light, 10%)
+          }
+        }
+
+        &.active {
+          a {
+            color: $dark_gray;
+          }
+        }
       }
-    }
-
-    .quicktabs-style-commons-pills ul.quicktabs-tabs li.active a, ul.primary.tabs li.active a {
-      background-color: $palette_color_dark;
-      color: #fff;
-    }
-
-    .quicktabs-style-commons-pills ul.quicktabs-tabs li.active a:after, ul.primary.tabs li.active a:after {
-      border-top-color: $palette_color_dark;
     }
 
     .block-search {
