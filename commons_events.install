@@ -1,6 +1,30 @@
 <?php
 
 /**
+ * Implements hook_install().
+ * Creates a default datetime format for events.
+ */
+function commons_events_install() {
+  db_insert('date_formats')
+    ->fields(array(
+      'format' => 'M d Y - g:ia T',
+      'type' => 'event_datetime',
+      'locked' => 1,
+    ))
+    ->execute();
+
+  db_insert('date_format_type')
+    ->fields(array(
+      'type' => 'event_datetime',
+      'title' => 'Event Datetime',
+      'locked' => 0,
+    ))
+    ->execute();
+
+  variable_set('date_format_event_datetime', 'M d Y - g:ia T');
+}
+
+/**
  * Disable summary on Event nodes.
  */
 function commons_events_update_7000() {
@@ -72,6 +96,36 @@ function commons_events_update_7002() {
 function commons_events_update_7003() {
   $revert = array(
     'commons_events' => array('field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/**
+* Create the event_datetime date format.
+*/
+function commons_events_update_7004() {
+  db_insert('date_formats')
+    ->fields(array(
+      'format' => 'M d Y - g:ia T',
+      'type' => 'event_datetime',
+      'locked' => 1,
+    ))
+    ->execute();
+
+  db_insert('date_format_type')
+    ->fields(array(
+      'type' => 'event_datetime',
+      'title' => 'Event Datetime',
+      'locked' => 0,
+    ))
+    ->execute();
+
+  variable_set('date_format_event_datetime', 'M d Y - g:ia T');
+
+  // Revert commons_events to make sure its referencing the event_datetime module.
+  $revert = array(
+     'commons_events' => array('field_instance'),
   );
   features_revert($revert);
   return array();

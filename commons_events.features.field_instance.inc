@@ -132,7 +132,7 @@ function commons_events_field_default_field_instances() {
         'label' => 'hidden',
         'module' => 'date',
         'settings' => array(
-          'format_type' => 'long',
+          'format_type' => 'event_datetime',
           'fromto' => 'both',
           'multiple_from' => '',
           'multiple_number' => '',
@@ -145,7 +145,7 @@ function commons_events_field_default_field_instances() {
         'label' => 'hidden',
         'module' => 'date',
         'settings' => array(
-          'format_type' => 'long',
+          'format_type' => 'event_datetime',
           'fromto' => 'both',
         ),
         'type' => 'date_default',

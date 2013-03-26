@@ -446,3 +446,67 @@ function commons_events_block_view($delta = '') {
     );
   }
 }
+
+/**
+ * Implements hook_theme_registry_alter().
+ * Gives us the ability to insert our pretty date formatter for the dates we choose below.
+ */
+function commons_events_theme_registry_alter(&$theme_registry) {
+  $theme_registry['date_display_range']['theme path'] = drupal_get_path('module', 'commons_events');
+  $theme_registry['date_display_range']['function'] = 'commons_events_theme_date_display_range';
+}
+
+/**
+ * Returns specific HTML for a date element formatted with the event formatter M j Y - g:ia
+ * We the do some awesome stuff with regular expressions to take all the different formats available to us and format it pretty.
+ */
+function commons_events_theme_date_display_range($variables) {
+  // Use the regular date formatter if we are any other date format than below.
+  if (!preg_match('/[FmMnt|dDjlNSwz|oYy] - [gGhH]:[i][Aa]{0,1}/', $variables['dates']['format'])) {
+    return theme_date_display_range($variables);
+  }
+
+  // If the difference is over a year:
+  if ($variables['dates']['value']['db']['object']->difference($variables['dates']['value2']['db']['object'], 'years') > 0) {
+    return theme_date_display_range($variables);
+  } else {
+    preg_match('/[oYy]/', $variables['dates']['format'], $year_format);
+    $year = $variables['dates']['value']['db']['object']->format($year_format[0]);
+  }
+  // Remove the time and year.
+  $stripped_format = preg_replace('/\s\s+/', ' ', preg_filter(array('/[oYy]/', '/[-:aABgGhHisuT]/'), array('', ''), $variables['dates']['format']));
+  if (!empty($variables['dates']['value2']['formatted_time'])) {
+    $end_time = TRUE;
+  }
+  // If the difference is over a month:
+  if ($variables['dates']['value']['db']['object']->difference($variables['dates']['value2']['db']['object'], 'months') > 0) {
+    $dm_seg = $variables['dates']['value']['db']['object']->format($stripped_format) . '-' . $variables['dates']['value2']['db']['object']->format($stripped_format);
+    $date = preg_filter(array('/[FmMntdDjlNSwz] [FmMntdDjlNSwz]/', '/[oYy]/', '/- [gGhH]:[i][Aa]{0,1} [T]/'), array($dm_seg, $year, ''), $variables['dates']['format']);
+  }
+  // If the difference is under a month but over a day:
+  else if ($variables['dates']['value']['db']['object']->difference($variables['dates']['value2']['db']['object'], 'days') > 0) {
+    $days = $variables['dates']['value']['db']['object']->format(preg_filter(array('/[FmMnt]/'), array(''), $stripped_format)) . '-' .
+      $variables['dates']['value2']['db']['object']->format(preg_filter(array('/[FmMnt]/'), array(''), $stripped_format));
+    $months = $variables['dates']['value']['db']['object']->format(preg_filter(array('/[dDjlNSwz]/'), array(''), $stripped_format));
+    $date = preg_filter(array('/[FmMnt]/', '/[dDjlNSwz]/', '/[oYy]/', '/- [gGhH]:[i][Aa]{0,1} [T]/'), array($months, $days, $year, ''), $variables['dates']['format']);
+  }
+  // Same day event, output the formatted start date and strip the end time if its the same as start time.
+  else {
+    $date = $variables['dates']['value']['formatted_date'];
+    if($variables['dates']['value']['formatted_time'] === $variables['dates']['value2']['formatted_time']) {
+      $end_time = FALSE;
+    }
+  }
+  if ($end_time) {
+    $time = $variables['dates']['value']['formatted_time'] . '-' . $variables['dates']['value2']['formatted_time'];
+  } else {
+    $time = $variables['dates']['value']['formatted_time'];
+  }
+  $timezone = $variables['timezone'];
+  $attributes_start = $variables['attributes_start'];
+
+  // Wrap the result with the attributes.
+  return t('!start-date', array(
+    '!start-date' => '<span class="date-display-start"' . drupal_attributes($attributes_start) . '>' . $date . $time . $timezone . '</span>',
+  ));
+}
