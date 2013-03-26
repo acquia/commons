@@ -632,6 +632,38 @@ function commons_origins_links($vars) {
 }
 
 /**
+ * Process an address to add microformat structure and remove &nbsp;
+ * characters.
+ */
+function _commons_origins_format_address(&$address) {
+  $address['#theme_wrappers'][] = 'container';
+  $address['#attributes']['class'][] = 'adr';
+  if (!empty($address['street_block']['thoroughfare'])) {
+    $address['street_block']['thoroughfare']['#attributes']['class'][] = 'street-address';
+  }
+  if (!empty($address['street_block']['premise'])) {
+    $address['street_block']['premise']['#attributes']['class'][] = 'extended-address';
+  }
+  if (!empty($address['locality_block']['locality'])) {
+    $address['locality_block']['locality']['#suffix'] = ',';
+  }
+  if (!empty($address['locality_block']['administrative_area'])) {
+    $address['locality_block']['administrative_area']['#attributes']['class'][] = 'region';
+    // Remove the hardcoded "&nbsp;&nbsp;" as it causes issues with
+    // formatting.
+    $address['locality_block']['administrative_area']['#prefix'] = ' ';
+  }
+  if (!empty($address['locality_block']['postal_code'])) {
+    // Remove the hardcoded "&nbsp;&nbsp;" as it causes issues with
+    // formatting.
+    $address['locality_block']['postal_code']['#prefix'] = ' ';
+  }
+  if (!empty($address['country'])) {
+    $address['country']['#attributes']['class'][] = 'country-name';
+  }
+}
+
+/**
  * Overrides theme_field__addressfield().
  */
 function commons_origins_field__addressfield($variables) {
@@ -642,23 +674,7 @@ function commons_origins_field__addressfield($variables) {
     // Only display an address if it has been populated. We determine this by
     // validating that the administrative area has been populated.
     if ($address['#address']['administrative_area']) {
-      $address['#theme_wrappers'][] = 'container';
-      $address['#attributes']['class'][] = 'adr';
-      if (!empty($address['street_block']['thoroughfare'])) {
-        $address['street_block']['thoroughfare']['#attributes']['class'][] = 'street-address';
-      }
-      if (!empty($address['street_block']['premise'])) {
-        $address['street_block']['premise']['#attributes']['class'][] = 'extended-address';
-      }
-      if (!empty($address['locality_block']['locality'])) {
-        $address['locality_block']['locality']['#suffix'] = ',';
-      }
-      if (!empty($address['locality_block']['administrative_area'])) {
-        $address['locality_block']['administrative_area']['#attributes']['class'][] = 'region';
-      }
-      if (!empty($address['country'])) {
-        $address['country']['#attributes']['class'][] = 'country-name';
-      }
+      _commons_origins_format_address($address);
     }
     else {
       // Deny access to incomplete addresses.
@@ -668,7 +684,7 @@ function commons_origins_field__addressfield($variables) {
 
   // Render the label, if it's not hidden.
   if (!$variables['label_hidden']) {
-    $output .= '<div class="field-label"' . $variables['title_attributes'] . '>' . $variables['label'] . ':&nbsp;</div>';
+    $output .= '<div class="field-label"' . $variables['title_attributes'] . '>' . $variables['label'] . ':</div> ';
   }
 
   // Render the items.
@@ -693,21 +709,18 @@ function commons_origins_preprocess_views_view_field(&$vars, $hook) {
   // Views does not use theme_field__addressfield(), so we need to process
   // these implementations separately.
   if (isset($vars['theme_hook_suggestion']) && $vars['theme_hook_suggestion'] == 'views_view_field__field_address') {
-    $needs_rebuild = FALSE;
-    foreach ($vars['row']->field_field_address as $key => $address) {
+    foreach ($vars['row']->field_field_address as $key => &$address) {
       if (!$address['raw']['administrative_area']) {
         // If an address is incomplete, remove it and tell the system a
         // rebuild is needed.
         unset($vars['row']->field_field_address[$key]);
-        $needs_rebuild = TRUE;
+      }
+      else {
+        _commons_origins_format_address($address['rendered']);
       }
     }
 
-    // Only spend the resources rebuilding if it is needed. Views already has
-    // the content rendered by the time it gets to this display, so the output
-    // needs rebuilt if anything has changed.
-    if ($needs_rebuild) {
-      $vars['output'] = $vars['field']->advanced_render($vars['row']);
-    }
+    // The output will need rebuilt to get the changes applied.
+    $vars['output'] = $vars['field']->advanced_render($vars['row']);
   }
 }
