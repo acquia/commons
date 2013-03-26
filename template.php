@@ -266,7 +266,7 @@ function commons_origins_preprocess_node(&$vars) {
     'field_topics',
   );
   foreach($related_information as $field) {
-    if (!empty($vars[$field])) {
+    if (!empty($vars['content'][$field])) {
       $vars['content']['related_information'][$field] = $vars['content'][$field];
       hide($vars['content'][$field]);
     }
