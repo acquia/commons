@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * Update CKEditor config to be more friendly on devices with smaller
+ * screen sizes per http://drupal.org/node/1948466.
+ */
+function commons_wysiwyg_update_3100() {
+  $revert = array(
+      'commons_wysiwyg' => array('ckeditor_profile'),
+  );
+  features_revert($revert);
+  return array();
+}

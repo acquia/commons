@@ -18,7 +18,7 @@ function commons_wysiwyg_ckeditor_profile_defaults() {
         'uicolor' => 'default',
         'uicolor_user' => 'default',
         'toolbar' => '[
-    [\'Format\',\'Bold\',\'Italic\',\'-\',\'NumberedList\',\'BulletedList\',\'Strike\',\'Blockquote\',\'-\',\'Link\',\'Unlink\',\'Image\']
+    [\'Format\'],[\'Bold\',\'Italic\',\'Strike\'],[\'NumberedList\',\'BulletedList\',\'Indent\',\'Outdent\',\'Blockquote\'],[\'Link\',\'Unlink\',\'Image\']
 ]',
         'expand' => 't',
         'width' => '100%',
