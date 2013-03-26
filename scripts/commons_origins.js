@@ -88,8 +88,8 @@ jQuery(document).ready(function($){
     attach: function (context, settings) {
       $('.page-search .region-two-33-66-first, .page-events .region-three-25-50-25-first', context).once('filterDrawer', function () {
         var filters = $(this),
-            filterTrigger = $('<a/>', {href: '#filter-drawer', class: 'filter-trigger', id: 'filter-drawer'}).text(Drupal.t('Filter results')),
-            filterOverlay = $('<div/>', {class: 'filter-overlay'}),
+            filterTrigger = $('<a/>', {'href': '#filter-drawer', 'class': 'filter-trigger', 'id': 'filter-drawer'}).text(Drupal.t('Filter results')),
+            filterOverlay = $('<div/>', {'class': 'filter-overlay'}),
             results = $('.search-results-content');
             size = $(window).width(),
             triggerWidth = '';
