@@ -1714,8 +1714,10 @@ ul.commons-utility-links {
     display: inline-block;
 
     &.first {
-      margin-right: 17px;
-      font-weight: bold;
+      .logged-in & {
+        margin-right: 17px;
+        font-weight: bold;
+      }
     }
 
     &.last {
@@ -3212,10 +3214,6 @@ body.page-node .pane-views-panes {
   height:30px;
   margin:0 0 0 10px;
   position: relative;
-
-  .not-logged-in & {
-    margin-top: 15px;
-  }
 
   .block-inner {
     margin-left:0;
