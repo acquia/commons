@@ -747,8 +747,12 @@ ul.primary.tabs {
       @include border-radius(3px);
       padding: .3em .8em;
       display: inline-block;
-      color: $tab_text;
       border: none;
+
+      &,
+      span {
+        color: $tab_text;
+      }
 
       &:hover {
         text-decoration: none;

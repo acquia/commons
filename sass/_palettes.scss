@@ -60,7 +60,10 @@
     ul.primary.tabs {
       li {
         a {
-          color: $palette_color_light;
+          &,
+          span {
+            color: $palette_color_light;
+          }
 
           &:hover {
             color: darken($palette_color_light, 10%)
@@ -69,7 +72,10 @@
 
         &.active {
           a {
-            color: $dark_gray;
+            &,
+            span {
+              color: $dark_gray;
+            }
           }
         }
       }
