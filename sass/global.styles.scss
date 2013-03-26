@@ -742,39 +742,77 @@ ul.primary.tabs {
     margin-top: 5px;
 
     a {
-      background-color: #d7d7d7;
+      background-color: $tab_background;
       @include border-radius(3px);
       padding: 3px 10px;
-      display: block;
-      color: #a5a3a3;
+      display: inline-block;
+      color: $tab_text;
       border: none;
 
       &:hover {
         text-decoration: none;
-        background-color: #d7d7d7;
-        color: #a5a3a3;
+        background-color: $tab_background;
+        color: $tab_text_hover;
       }
     }
 
     &.active a {
-      background-color: $dark_blue;
+      position: relative;
+      background-color: $tab_active_background;
       border: none;
-      color: $white;
+      color: $tab_active_text;
 
       &:hover {
-        background-color: $dark_blue;
+        background-color: $tab_active_background;
+      }
+
+      &:after {
+        position: absolute;
+        bottom: -.7em;
+        left: 50%;
+        display: block;
+        width: 0;
+        height: 0;
+        overflow: hidden;
+        margin-left: -.6em;
+        content: "";
+        border-width: .4em .6em;
+        border-style: solid;
+        border-color: $tab_active_background transparent transparent;
       }
     }
   }
 }
 
-// li.flag-commons_follow_group {
-//   @extend %btn-gray;
-//   a {
-//     background:transparent !important;
-//     padding:3px 17px !important;
-//   }
-// }
+.quicktabs-style-commons-pills {
+  ul {
+    &.quicktabs-tabs {
+      li {
+        a {
+          color: $tab_text;
+          text-transform: uppercase;
+          font-size: .8em;
+
+          &:hover {
+            color: $tab_text_hover;
+          }
+        }
+
+        &.active {
+          a {
+            &:hover {
+              color: #fff;
+            }
+
+            &:after {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}
 
 li.sharethis {
   @extend %btn-gray;
