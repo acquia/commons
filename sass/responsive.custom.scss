@@ -39,18 +39,18 @@
       padding-top: 0 !important;
     }
   }
-    
-  /* 
+
+  /*
    * Float Region blocks example:
    * In smaller screen sizes we can remove the float and widths so all blocks
    * stack instead of displaying horizonally. The selector used here is an
    * "attribute selector" which will match on any float block class. Use your
    * inspector or Firebug to get the classes from the page output if you need
    * more granular control over block alignment and stacking.
-   * 
+   *
    * "Float Region blocks" is an extension for floating blocks in regions, see
    * your themes appearance settings, under the Extensions tab.
-   */ 
+   */
   .region[class*="float-blocks"] .block {
     float: none;
     width: 100%;
@@ -65,9 +65,7 @@
   }
 
   .commons-bw-create-all-widget-types {
-    left: -100px;
-    top: auto;
-    bottom: 0;
+    left: auto;
   }
 
   .page-node-add #edit-additional-settings {
@@ -94,7 +92,7 @@
     clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
     clip: rect(1px, 1px, 1px, 1px);
   }
-  
+
   // Remove the panels adminstration controls on small screens.
   div#panels-ipe-control-container {
     display: none !important;
@@ -226,7 +224,7 @@
         font-size: 12px;
         padding: 31px 7px 0px 7px;
       }
-      
+
       &.main-menu-search {
         display: inline-block;
       }
