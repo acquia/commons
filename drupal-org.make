@@ -353,12 +353,11 @@ projects[token][type] = "module"
 projects[token][subdir] = "contrib"
 projects[token][version] = "1.5"
 
+
 projects[views][type] = "module"
 projects[views][subdir] = "contrib"
-projects[views][download][type] = "git"
-projects[views][download][url] = "http://git.drupal.org/project/views.git"
-projects[views][download][branch] = "7.x-3.x"
-projects[views][download][revision] = "2aed68c72c2ca7bb9615964371b4b1b54f5c6cc4"
+projects[views][version] = "3.6"
+
 
 projects[views_field_view][type] = "module"
 projects[views_field_view][subdir] = "contrib"
