@@ -296,7 +296,7 @@ projects[registration][patch][] = "http://drupal.org/files/entity_cache_support-
 
 projects[rules][type] = "module"
 projects[rules][subdir] = "contrib"
-projects[rules][version] = "2.2"
+projects[rules][version] = "2.3"
 
 projects[search_facetapi][type] = "module"
 projects[search_facetapi][subdir] = "contrib"
