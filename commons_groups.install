@@ -68,3 +68,28 @@ function commons_groups_update_3106() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Give group owners the organizer role for their own group
+ */
+function commons_groups_update_3107() {
+  // Ensure that the group creator is also listed as an organizer.
+  $group_nodes = db_select('node', 'n')
+    ->fields('n', array('nid', 'uid'))
+    ->condition('n.type', 'group','=')
+    ->execute()
+    ->fetchAll();
+  $organizer_role = db_select('og_role', 'o')
+    ->fields('o', array('rid'))
+    ->condition('o.group_bundle', 'group')
+    ->condition('o.name', 'administrator member')
+    ->execute()
+    ->fetchField();
+
+  foreach($group_nodes as $record) {
+    if (!empty($organizer_role)) {
+      og_role_grant('node', $record->nid, $record->uid, $organizer_role);
+    }
+  }
+  return array();
+}

@@ -542,25 +542,6 @@ function commons_groups_commons_bw_group_widget() {
 }
 
 /**
-* Implements hook_og_membership_insert().
-*/
-function commons_groups_og_membership_insert(OgMembership $og_membership) {
-  // Ensure that the group creator is also listed as an organizer.
-  if ('user' == $og_membership->entity_type && is_numeric($og_membership->etid) && $og_membership->group_type == 'node') {
-    $roles = og_roles('node', 'group', $og_membership->gid);
-    $group = node_load($og_membership->gid);
-    // When loading up a group for the first time, check to see if the user is also the creator of the group.
-    if ($group->uid == $og_membership->etid) {
-      foreach ($roles as $key => $value) {
-        if ($value == 'Organizers') {
-          og_role_grant('node', $og_membership->gid, $og_membership->etid, $key);
-        }
-      }
-    }
-  }
-}
-
-/**
  * Implements hook_preprocess_views_view_grid().
  */
 function commons_groups_preprocess_views_view_grid(&$variables, $hook) {
