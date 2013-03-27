@@ -125,7 +125,8 @@ function commons_events_update_7004() {
 
   // Revert commons_events to make sure its referencing the event_datetime module.
   $revert = array(
-     'commons_events' => array('field_instance'),
+    'commons_events' => array('field_instance'),
+    'commons_events' => array('views_view'),
   );
   features_revert($revert);
   return array();

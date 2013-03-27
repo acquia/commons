@@ -148,7 +148,7 @@ function commons_events_views_default_views() {
   $handler->display->display_options['fields']['field_date']['label'] = '';
   $handler->display->display_options['fields']['field_date']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_date']['settings'] = array(
-    'format_type' => 'long',
+    'format_type' => 'event_datetime',
     'fromto' => 'both',
     'multiple_number' => '',
     'multiple_from' => '',
@@ -265,7 +265,7 @@ function commons_events_views_default_views() {
   $handler->display->display_options['fields']['field_date']['label'] = '';
   $handler->display->display_options['fields']['field_date']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_date']['settings'] = array(
-    'format_type' => 'long',
+    'format_type' => 'event_datetime',
     'fromto' => 'both',
     'multiple_number' => '',
     'multiple_from' => '',
@@ -622,7 +622,7 @@ function commons_events_views_default_views() {
   $handler->display->display_options['fields']['comment_count']['separator'] = '';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   $export['commons_events_user_upcoming_events'] = $view;
-  
+
   $view = new view();
   $view->name = 'commons_events_organizers';
   $view->description = 'Event organizer panel pane.';
