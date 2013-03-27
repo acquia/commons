@@ -192,7 +192,7 @@ projects[memcache][version] = "1.0"
 
 projects[metatag][type] = "module"
 projects[metatag][subdir] = "contrib"
-projects[metatag][version] = "1.0-beta4"
+projects[metatag][version] = "1.0-beta5"
 
 ; Support for rel=author link in head
 ; http://drupal.org/node/1865228#comment-6839604
@@ -219,11 +219,7 @@ projects[oauthconnector][download][revision] = "0ce7ac9614710c0f68d0a58cb4ae4667
 
 projects[og][type] = "module"
 projects[og][subdir] = "contrib"
-projects[og][version] = "2.0"
-
-; Language tweak for 'user has been added to [group]'
-; http://drupal.org/node/1842830
-projects[og][patch][] = "http://drupal.org/files/og-add-group-message.patch"
+projects[og][version] = "2.1"
 
 ; og_group_ref field should respect og_user_access()
 ; http://drupal.org/node/1902086#comment-7026516
@@ -381,7 +377,7 @@ projects[views_litepager][subdir] = "contrib"
 projects[views_litepager][version] = "3.0"
 
 ; We have the version of voting api at the top so it doesn't get included in our dev make patch.
-projects[votingapi][version] = "2.10"
+projects[votingapi][version] = "2.11"
 projects[votingapi][type] = "module"
 projects[votingapi][subdir] = "contrib"
 
