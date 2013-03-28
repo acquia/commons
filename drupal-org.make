@@ -347,7 +347,7 @@ projects[timeago][patch][] = "http://drupal.org/files/timeago-libraries-a.patch"
 
 projects[title][type] = "module"
 projects[title][subdir] = "contrib"
-projects[title][version] = "1.0-alpha6"
+projects[title][version] = "1.0-alpha7"
 
 projects[token][type] = "module"
 projects[token][subdir] = "contrib"
