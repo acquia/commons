@@ -14,7 +14,10 @@
 
 .commons-pod, .page-user .pane-views-panes, .commons-pod-comments, .front.not-logged-in .pane-views-panes, .front.not-logged-in
 .pane-views, .front.not-logged-in
-body.page-node .pane-views-panes, .page-events .view-commons-events-upcoming .view-content, .pane-commons-bw-group, .view-display-id-commons_events_upcoming_page .views-row, .view-commons-groups-directory > .view-content > .views-row, .view-commons-groups-directory > .view-filters, .view-commons-homepage-content .node-teaser.node-group > .view-content > .views-row, .view-commons-homepage-content .node-teaser.node-group > .view-filters, body.front.logged-in .view-commons-homepage-content > .view-content, body.front.logged-in #views-exposed-form-commons-homepage-content-panel-pane-1 .views-exposed-widgets.widgets-active, .page-events .region-three-25-50-25-third .pane-views-panes, .pane-search-result .block-content .search-results, .page-search-user .user-results {
+body.page-node .pane-views-panes, .page-events .view-commons-events-upcoming .view-content, .pane-commons-bw-group, .view-display-id-commons_events_upcoming_page .views-row, .view-commons-groups-directory > .view-content > .views-row,
+.view-commons-groups-directory > .view-filters,
+.view-commons-homepage-content .node-teaser.node-group > .view-content > .views-row,
+.view-commons-homepage-content .node-teaser.node-group > .view-filters, body.front.logged-in .view-commons-homepage-content > .view-content, body.front.logged-in #views-exposed-form-commons-homepage-content-panel-pane-1 .views-exposed-widgets.widgets-active, .page-events .region-three-25-50-25-third .pane-views-panes, .pane-search-result .block-content .search-results, .page-search-user .user-results {
   background-color: white;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
@@ -29,7 +32,14 @@ body.page-node .pane-views-panes, .page-events .view-commons-events-upcoming .vi
 
 .commons-pod, .page-user .pane-views-panes .block-inner, .commons-pod-comments .comment-wrapper, .front.not-logged-in .pane-views-panes > div, .front.not-logged-in
 .pane-views > div, .front.not-logged-in
-body.page-node .pane-views-panes > div, .page-events .view-commons-events-upcoming .view-content, .pane-commons-bw-group > .block-inner, .view-display-id-commons_events_upcoming_page .views-row article, .view-commons-groups-directory > .view-content > .views-row > .node-teaser, .view-commons-groups-directory > .view-content > .views-row form, .view-commons-groups-directory > .view-filters > .node-teaser, .view-commons-groups-directory > .view-filters form, .view-commons-homepage-content .node-teaser.node-group > .view-content > .views-row > .node-teaser, .view-commons-homepage-content .node-teaser.node-group > .view-content > .views-row form, .view-commons-homepage-content .node-teaser.node-group > .view-filters > .node-teaser, .view-commons-homepage-content .node-teaser.node-group > .view-filters form, body.front.logged-in #views-exposed-form-commons-homepage-content-panel-pane-1 .views-exposed-widgets.widgets-active, .page-events .region-three-25-50-25-third .pane-views-panes .block-inner, .pane-search-result .block-content .search-results, .page-search-user .user-results {
+body.page-node .pane-views-panes > div, .page-events .view-commons-events-upcoming .view-content, .pane-commons-bw-group > .block-inner, .view-display-id-commons_events_upcoming_page .views-row article, .view-commons-groups-directory > .view-content > .views-row > .node-teaser,
+.view-commons-groups-directory > .view-content > .views-row form,
+.view-commons-groups-directory > .view-filters > .node-teaser,
+.view-commons-groups-directory > .view-filters form,
+.view-commons-homepage-content .node-teaser.node-group > .view-content > .views-row > .node-teaser,
+.view-commons-homepage-content .node-teaser.node-group > .view-content > .views-row form,
+.view-commons-homepage-content .node-teaser.node-group > .view-filters > .node-teaser,
+.view-commons-homepage-content .node-teaser.node-group > .view-filters form, body.front.logged-in #views-exposed-form-commons-homepage-content-panel-pane-1 .views-exposed-widgets.widgets-active, .page-events .region-three-25-50-25-third .pane-views-panes .block-inner, .pane-search-result .block-content .search-results, .page-search-user .user-results {
   padding: 10px;
 }
 
@@ -203,7 +213,7 @@ body.page-node .pane-views-panes > div, .page-events .view-commons-events-upcomi
   margin-top: -5px;
 }
 
-/*
+/**
  * @file
  * global.styles
  *
@@ -229,7 +239,7 @@ body.page-node .pane-views-panes > div, .page-events .view-commons-events-upcomi
 /* =============================================================================
  *   Base
  * ========================================================================== */
-/*
+/**
  * To preserve theme settings never apply font properties to the HTML element.
  * This is critically important if you are using the Responsive JavaScript
  * feature as this relies on being able to set a pseudo font family on the HTML
@@ -300,7 +310,7 @@ var {
 /* =============================================================================
  *   Wrappers
  * ========================================================================== */
-/*
+/**
  * Page wrapper, includes the .container class which sets the overall page or section width
  * Main wrapper in page.tpl.php, the .container class sets the width of the page, do not add width to it!
  */
@@ -308,7 +318,7 @@ var {
   margin-top: -92px;
 }
 
-/*
+/**
  * Wraps all header elements - branding and .region-header
  */
 #header {
@@ -341,7 +351,7 @@ var {
   border-bottom: 1px solid #1e658f;
 }
 
-/*
+/**
  * Wraps the sidebars the content column
  */
 #columns {
@@ -349,13 +359,7 @@ var {
   margin-left: 10px;
 }
 
-/*
- * Main content column wrapper
- */
-/*
- * Wraps the main-content-header, the content region and feed-icons. Use this wrapper to style the entire main content column
- */
-/*
+/**
  * Footer wrapper
  */
 #footer {
@@ -366,7 +370,7 @@ var {
   margin: 0 10px;
 }
 
-/*
+/**
  * Default credit block
  */
 #block-block-1 .block-title,
@@ -383,46 +387,7 @@ var {
   margin-bottom: 0;
 }
 
-/*
- * Panels may need additional margin wrangling when in the $content region
- */
-/*
- * Full Width Wrappers
- * These are used in the optional page--full-width-wrappers.tpl.php template.
- * All have internal .container classes. In the full width wrapper template the
- * .container classes set the width or max-width of the contained element - you
- * can style this but never add any width/margin/padding/borders etc to .container
- */
-/*
- * Wraps #page
- */
-/*
- * Wraps the leaderboard
- */
-/*
- * Wraps the header
- */
-#header-wrapper {
-  /* Debug styles, is this working */
-  background: rgba(255, 192, 203, 0.5);
-}
-
-/*
- * Wraps the nav elements
- */
-/*
- * Wraps breadcrumb
- */
-/*
- * Wraps messages and help
- */
-/*
- * Wraps the secondary content/preface region
- */
-/*
- * Wraps the main content column
- */
-/*
+/**
  * Generic pod wrappers
  */
 .commons-pod {
@@ -437,13 +402,10 @@ var {
   box-shadow: none;
 }
 
-/*
- * Wraps the tertiary content/postfix region
- */
 /* =============================================================================
  *   Branding
  * ========================================================================== */
-/*
+/**
  * Wraps all the branding elements, logo, name and slogan
  */
 #branding {
@@ -453,7 +415,7 @@ var {
   text-align: left;
 }
 
-/*
+/**
  * Logo
  */
 #logo {
@@ -464,7 +426,7 @@ var {
   vertical-align: bottom;
 }
 
-/*
+/**
  * Wrapper for the site name and slogan (hgroup)
  */
 #name-and-slogan {
@@ -479,7 +441,7 @@ var {
   margin-top: 6px;
 }
 
-/*
+/**
  * Site name (h1)
  */
 #site-name {
@@ -494,7 +456,7 @@ var {
   text-decoration: none;
 }
 
-/*
+/**
  * Site slogan (h2)
  */
 #site-slogan {
@@ -504,10 +466,7 @@ var {
 /* =============================================================================
  *   Page content header
  * ========================================================================== */
-/*
- * Main content header wraps the page title, tabs and actions links
- */
-/*
+/**
  * The main page title (h1)
  */
 #page-title {
@@ -525,7 +484,7 @@ var {
 /* =============================================================================
  *   Misc Global Styles
  * ========================================================================== */
-/*
+/**
  * Generic styles for nodes.
  */
 .node {
@@ -658,7 +617,7 @@ var {
   width: 50px;
 }
 
-/*
+/**
  * Filter drawer accessories
  */
 .filter-trigger {
@@ -731,10 +690,7 @@ var {
   background: rgba(255, 255, 255, 0.8);
 }
 
-/*
- * Feed icons
- */
-/*
+/**
  * Aggregator feed source
  */
 #aggregator .feed-source .feed-icon {
@@ -749,7 +705,7 @@ var {
   margin: 0;
 }
 
-/*
+/**
  * Generic styles for the more link
  */
 .more-link {
@@ -766,7 +722,7 @@ var {
   color: #858585;
 }
 
-/*
+/**
  * Generic styles for links. See the ul.links declaration in node and comment stylesheets
  */
 ul.links {
@@ -870,7 +826,7 @@ ul.inline li.sharethis {
   display: inline-block;
 }
 li.sharethis:before {
-  content: '';
+  content: "";
   background: url('../images/icons-se7682cf316.png') 0 -683px no-repeat;
   width: 12px;
   height: 12px;
@@ -899,7 +855,7 @@ li.sharethis .sharethis-wrapper {
   position: relative;
 }
 li.sharethis .sharethis-wrapper:before, li.sharethis .sharethis-wrapper:after {
-  content: '';
+  content: "";
   width: 0;
   height: 0;
   border-style: solid;
@@ -917,7 +873,7 @@ li.sharethis .sharethis-wrapper:after {
   left: 11px;
 }
 
-/*
+/**
  * H1 Node title
  */
 h1.node-title {
@@ -932,39 +888,21 @@ h1.node-title a:hover {
   text-decoration: underline;
 }
 
-/*
+/**
  * Main wrapper for most blocks, block_system_main does not have it
  */
 .block {
   margin-bottom: 20px;
 }
 
-/*
- * Inner wrapper for most blocks, good for margin, padding and borders, block_system_main does not have it
- */
-/*
- * The first block in the region
- */
-/*
- * The last block in the region
- */
-/*
- * Zebra striping for each block in the region
- */
-/*
- * Zebra striping for each block in the region
- */
-/*
+/**
  * Block title
  */
 .block-title {
   margin: 0;
 }
 
-/*
- * Block content wrapper
- */
-/*
+/**
  * Match item list and block menu margin and padding
  */
 .block-content ul,
@@ -976,7 +914,7 @@ h1.node-title a:hover {
   padding: 0;
 }
 
-/*
+/**
  * User picture wrapping and shadow
  */
 .views-row {
@@ -1002,34 +940,75 @@ h1.node-title a:hover {
   margin-bottom: 0;
 }
 
-.view-commons-homepage-content .content, .view-commons-homepage-content .views-field-timestamp, .view-commons-activity-streams-activity .content, .view-commons-activity-streams-activity .views-field-timestamp, .view-activity-group .content, .view-activity-group .views-field-timestamp, .view-commons-activity-streams-user-activity .content, .view-commons-activity-streams-user-activity .views-field-timestamp {
+.view-commons-homepage-content .content,
+.view-commons-homepage-content .views-field-timestamp,
+.view-commons-activity-streams-activity .content,
+.view-commons-activity-streams-activity .views-field-timestamp,
+.view-activity-group .content,
+.view-activity-group .views-field-timestamp,
+.view-commons-activity-streams-user-activity .content,
+.view-commons-activity-streams-user-activity .views-field-timestamp {
   padding-left: 58px;
 }
-.view-commons-homepage-content .content .user-picture, .view-commons-homepage-content .views-field-timestamp .user-picture, .view-commons-activity-streams-activity .content .user-picture, .view-commons-activity-streams-activity .views-field-timestamp .user-picture, .view-activity-group .content .user-picture, .view-activity-group .views-field-timestamp .user-picture, .view-commons-activity-streams-user-activity .content .user-picture, .view-commons-activity-streams-user-activity .views-field-timestamp .user-picture {
+.view-commons-homepage-content .content .user-picture,
+.view-commons-homepage-content .views-field-timestamp .user-picture,
+.view-commons-activity-streams-activity .content .user-picture,
+.view-commons-activity-streams-activity .views-field-timestamp .user-picture,
+.view-activity-group .content .user-picture,
+.view-activity-group .views-field-timestamp .user-picture,
+.view-commons-activity-streams-user-activity .content .user-picture,
+.view-commons-activity-streams-user-activity .views-field-timestamp .user-picture {
   position: absolute;
   float: left;
   margin-left: -58px;
   top: 0;
 }
-.view-commons-homepage-content .content .user-picture img, .view-commons-homepage-content .views-field-timestamp .user-picture img, .view-commons-activity-streams-activity .content .user-picture img, .view-commons-activity-streams-activity .views-field-timestamp .user-picture img, .view-activity-group .content .user-picture img, .view-activity-group .views-field-timestamp .user-picture img, .view-commons-activity-streams-user-activity .content .user-picture img, .view-commons-activity-streams-user-activity .views-field-timestamp .user-picture img {
+.view-commons-homepage-content .content .user-picture img,
+.view-commons-homepage-content .views-field-timestamp .user-picture img,
+.view-commons-activity-streams-activity .content .user-picture img,
+.view-commons-activity-streams-activity .views-field-timestamp .user-picture img,
+.view-activity-group .content .user-picture img,
+.view-activity-group .views-field-timestamp .user-picture img,
+.view-commons-activity-streams-user-activity .content .user-picture img,
+.view-commons-activity-streams-user-activity .views-field-timestamp .user-picture img {
   width: 40px;
 }
 @media only screen and (max-width: 480px) {
-  .view-commons-homepage-content .content, .view-commons-homepage-content .views-field-timestamp, .view-commons-activity-streams-activity .content, .view-commons-activity-streams-activity .views-field-timestamp, .view-activity-group .content, .view-activity-group .views-field-timestamp, .view-commons-activity-streams-user-activity .content, .view-commons-activity-streams-user-activity .views-field-timestamp {
+  .view-commons-homepage-content .content,
+  .view-commons-homepage-content .views-field-timestamp,
+  .view-commons-activity-streams-activity .content,
+  .view-commons-activity-streams-activity .views-field-timestamp,
+  .view-activity-group .content,
+  .view-activity-group .views-field-timestamp,
+  .view-commons-activity-streams-user-activity .content,
+  .view-commons-activity-streams-user-activity .views-field-timestamp {
     padding-left: 0;
   }
-  .view-commons-homepage-content .content .user-picture, .view-commons-homepage-content .views-field-timestamp .user-picture, .view-commons-activity-streams-activity .content .user-picture, .view-commons-activity-streams-activity .views-field-timestamp .user-picture, .view-activity-group .content .user-picture, .view-activity-group .views-field-timestamp .user-picture, .view-commons-activity-streams-user-activity .content .user-picture, .view-commons-activity-streams-user-activity .views-field-timestamp .user-picture {
+  .view-commons-homepage-content .content .user-picture,
+  .view-commons-homepage-content .views-field-timestamp .user-picture,
+  .view-commons-activity-streams-activity .content .user-picture,
+  .view-commons-activity-streams-activity .views-field-timestamp .user-picture,
+  .view-activity-group .content .user-picture,
+  .view-activity-group .views-field-timestamp .user-picture,
+  .view-commons-activity-streams-user-activity .content .user-picture,
+  .view-commons-activity-streams-user-activity .views-field-timestamp .user-picture {
     display: none;
   }
 }
 
-.view-activity-group .views-row h2, .view-commons-activity-streams-activity .views-row h2, .view-commons-activity-streams-user-activity .views-row h2 {
+.view-activity-group .views-row h2,
+.view-commons-activity-streams-activity .views-row h2,
+.view-commons-activity-streams-user-activity .views-row h2 {
   display: none;
 }
-.view-activity-group .views-row .user-picture, .view-commons-activity-streams-activity .views-row .user-picture, .view-commons-activity-streams-user-activity .views-row .user-picture {
+.view-activity-group .views-row .user-picture,
+.view-commons-activity-streams-activity .views-row .user-picture,
+.view-commons-activity-streams-user-activity .views-row .user-picture {
   top: 5px;
 }
-.view-activity-group .views-row .user-picture img, .view-commons-activity-streams-activity .views-row .user-picture img, .view-commons-activity-streams-user-activity .views-row .user-picture img {
+.view-activity-group .views-row .user-picture img,
+.view-commons-activity-streams-activity .views-row .user-picture img,
+.view-commons-activity-streams-user-activity .views-row .user-picture img {
   width: 40px;
 }
 
@@ -1039,22 +1018,25 @@ h1.node-title a:hover {
   line-height: 26px;
   color: #333333;
 }
-.page-node .field-name-field-topics.view-mode-full, .page-node .field-name-og-group-ref.view-mode-full {
+.page-node .field-name-field-topics.view-mode-full,
+.page-node .field-name-og-group-ref.view-mode-full {
   float: left;
   width: 50%;
   margin-bottom: 1.7em;
 }
-.page-node .field-name-field-topics.view-mode-full ul, .page-node .field-name-og-group-ref.view-mode-full ul {
+.page-node .field-name-field-topics.view-mode-full ul,
+.page-node .field-name-og-group-ref.view-mode-full ul {
   margin: 0;
   list-style: none;
   padding: 0;
 }
-.page-node .field-name-field-topics.view-mode-full ul li, .page-node .field-name-og-group-ref.view-mode-full ul li {
+.page-node .field-name-field-topics.view-mode-full ul li,
+.page-node .field-name-og-group-ref.view-mode-full ul li {
   float: left;
   margin-right: 10px;
 }
 .page-node .field-name-field-topics .field-item:before {
-  content: '';
+  content: "";
   background: url('../images/icons-se7682cf316.png') 0 -1155px no-repeat;
   width: 8px;
   height: 8px;
@@ -1065,7 +1047,7 @@ h1.node-title a:hover {
   top: -1px;
 }
 .page-node .field-name-og-group-ref .field-item:before {
-  content: '';
+  content: "";
   background: url('../images/icons-se7682cf316.png') 0 -1001px no-repeat;
   width: 8px;
   height: 8px;
@@ -1098,7 +1080,7 @@ h1.node-title a:hover {
   font-size: 2.2em;
 }
 #comments h2.comment-title:before {
-  content: '';
+  content: "";
   background: url('../images/icons-se7682cf316.png') 0 -30px no-repeat;
   width: 31px;
   height: 24px;
@@ -1162,7 +1144,7 @@ h1.node-title a:hover {
   float: right;
 }
 .comment-reply:before {
-  content: '';
+  content: "";
   background: url('../images/icons-se7682cf316.png') 0 -1061px no-repeat;
   width: 13px;
   height: 12px;
@@ -1350,7 +1332,7 @@ h1.node-title a:hover {
 .view-commons-follow-node .flag-commons-follow-node a.flag-action:before,
 .view-commons-follow-user .flag-commons-follow-user a.flag-action:before,
 .view-commons-follow-taxonomy-term .flag-commons-follow-term a.flag-action:before {
-  content: '';
+  content: "";
   background: url('../images/icons-se7682cf316.png') 0 -939px no-repeat;
   width: 13px;
   height: 11px;
@@ -1416,7 +1398,7 @@ h1.node-title a:hover {
   margin: 10px 0;
 }
 .flag-inappropriate-node:before {
-  content: '';
+  content: "";
   top: 0;
   background: url('../images/icons-se7682cf316.png') 0 0 no-repeat;
   width: 12px;
@@ -1442,7 +1424,7 @@ h1.node-title a:hover {
   background-color: transparent;
 }
 
-/*
+/**
  * Author/Submit line
  */
 .author-datetime {
@@ -1454,7 +1436,7 @@ h1.node-title a:hover {
   color: #333333;
 }
 
-/*
+/**
  * Featured/New Tags
  */
 .tag.featured {
@@ -1509,7 +1491,7 @@ h1.node-title a:hover {
   display: inline-block;
 }
 .page-user .pane-user-field-facebook-url a:before {
-  content: '';
+  content: "";
   background: url('../images/icons-se7682cf316.png') 0 -166px no-repeat;
   width: 26px;
   height: 26px;
@@ -1528,7 +1510,7 @@ h1.node-title a:hover {
   display: inline-block;
 }
 .page-user .pane-user-field-linkedin-url a:before {
-  content: '';
+  content: "";
   background: url('../images/icons-se7682cf316.png') 0 -74px no-repeat;
   width: 26px;
   height: 26px;
@@ -1547,7 +1529,7 @@ h1.node-title a:hover {
   display: inline-block;
 }
 .page-user .pane-user-field-twitter-url a:before {
-  content: '';
+  content: "";
   background: url('../images/icons-se7682cf316.png') 0 -120px no-repeat;
   width: 26px;
   height: 26px;
@@ -1562,7 +1544,7 @@ h1.node-title a:hover {
   clear: both;
 }
 
-/*
+/**
  * Group nodes
  */
 .node-group .field-name-body {
@@ -1572,16 +1554,7 @@ h1.node-title a:hover {
 /* =============================================================================
  *   Regions
  * ========================================================================== */
-/*
- * Standard region wrapper, don't add width to any regions, you will bork the layout - no margin, padding or borders etc
- */
-/*
- * Regions have an inner div - perfect for adding margin, padding or borders
- */
-/*
- * Regions can be nested, such as when using Panels
- */
-/*
+/**
  * Header region, embedded in the #header
  */
 .region-header {
@@ -1591,33 +1564,6 @@ h1.node-title a:hover {
   text-align: left;
 }
 
-/*
- * Generally used to output Drupals help block, if the help module is enabled
- */
-/*
- * Secondary content
- */
-/*
- * Sits above the main content header, like a content-top region
- */
-/*
- * Sits below the main content, like a content-bottom region
- */
-/*
- * Sidebars - targets both
- */
-/*
- * First sidebar
- */
-/*
- * Second sidebar
- */
-/*
- * Tertiary content
- */
-/*
- * Footer region
- */
 /* =============================================================================
  *   Links
  * ========================================================================== */
@@ -1636,7 +1582,7 @@ a:hover, a:focus {
   display: inline-block;
 }
 
-/*
+/**
  * Use one of the following id's for granular control:
  *  - #menu-bar (menu bar region)
  *  - #primary-menu (main menu)
@@ -1666,7 +1612,7 @@ a:hover, a:focus {
   background: url('../images/main-nav-hover.png?1363371593') repeat-x left top;
 }
 #menu-bar.nav ul.menu li:hover .arrow:before, #menu-bar.nav ul.menu li.active-trail .arrow:before {
-  content: '';
+  content: "";
   display: block;
   position: absolute;
   bottom: 0px;
@@ -1678,7 +1624,7 @@ a:hover, a:focus {
   border-color: transparent transparent #3d9dd6 transparent;
 }
 #menu-bar.nav ul.menu li:hover .arrow:after, #menu-bar.nav ul.menu li.active-trail .arrow:after {
-  content: '';
+  content: "";
   display: block;
   position: absolute;
   bottom: 0px;
@@ -1788,7 +1734,7 @@ ul.sf-menu a:focus, ul.sf-menu a:hover, ul.sf-menu a:active {
   outline: 0;
 }
 
-/*
+/**
  * Superfish blocks
  */
 .block-superfish ul {
@@ -1800,7 +1746,7 @@ ul.sf-menu a:focus, ul.sf-menu a:hover, ul.sf-menu a:active {
   padding: 0 !important;
 }
 
-/*
+/**
  * Vertical style
  */
 .sf-vertical {
@@ -1819,14 +1765,14 @@ ul.sf-menu a:focus, ul.sf-menu a:hover, ul.sf-menu a:active {
   padding: 0 10px;
 }
 
-/*
+/**
  * Navbar style
  */
 .sf-navbar {
   padding-bottom: 0 !important;
 }
 
-/*
+/**
  * Sensible padding for the default style
  */
 .sf-menu.sf-style-default a {
@@ -1842,7 +1788,7 @@ ul.menu {
 ul.menu ul {
   padding-left: 15px;
 }
-ul.menu li {
+ul.menu ul li {
   margin: 0;
 }
 
@@ -1917,9 +1863,6 @@ ul.pager li.pager-current {
   margin: 0;
 }
 
-/*
- * Theme the various states of pager links
- */
 /* =============================================================================
  *   Skip Navigation
  * ========================================================================== */
@@ -2020,16 +1963,7 @@ ul.action-links {
 /* =============================================================================
  *  Field Styling
  * ========================================================================== */
-/*
- * Wrapper for any field
- */
-/*
- * Above and inline classes are on the field wrapper
- */
-/*
- * When labels are set to inline in field display settings the clearfix class is automatically added
- */
-/*
+/**
  * Labels are h2 in Adaptivetheme. Use a strong selector to mitigate unwanted ineritance issues
  */
 .field-label {
@@ -2040,13 +1974,7 @@ ul.action-links {
   margin-bottom: 0;
 }
 
-/*
- * Field types (Core)
- */
-/*
- * Image fields use the  figure> and <figcaption> elements from HTML5
- */
-/*
+/**
  * Taxonomy
  */
 .field-type-taxonomy-term-reference {
@@ -2063,55 +1991,7 @@ ul.action-links {
   padding: 0 10px 0 0;
 }
 
-/*
- * Text
- */
-/*
- * Long text
- */
-/*
- * Text with summary
- */
-/*
- * File
- */
-/*
- * Number/Integer
- */
-/*
- * Decimal
- */
-/*
- * Number float
- */
-/*
- * List
- */
-/*
- * List boolean
- */
-/*
- * List integer
- */
-/*
- * List float
- */
-/*
- * Field types (Contrib)
- */
-/*
- * Named fields
- */
-/*
- * Underscores in field name are replaced with dashes
- */
-/*
- * Image Alignment Theme Settings - included here so you can easily override
- */
-/*
- * Float none setting
- */
-/*
+/**
  * Float left setting
  */
 .ia-l .field-type-image figure,
@@ -2119,7 +1999,7 @@ ul.action-links {
   margin: 5px 20px 15px 0;
 }
 
-/*
+/**
  * Centered setting
  */
 .ia-c .field-type-image figure,
@@ -2127,7 +2007,7 @@ ul.action-links {
   margin: 5px auto 15px;
 }
 
-/*
+/**
  * Float right setting
  */
 .ia-r .field-type-image figure,
@@ -2269,11 +2149,15 @@ body.page-node .pane-views-panes h2 {
   margin-left: 0;
 }
 
-.view-commons-radioactivity-groups-most-active .type-Wiki, .view-commons-groups-recent-content .type-Wiki, .view-commons-radioactivity-groups-active-in-group .type-Wiki {
+.view-commons-radioactivity-groups-most-active .type-Wiki,
+.view-commons-groups-recent-content .type-Wiki,
+.view-commons-radioactivity-groups-active-in-group .type-Wiki {
   font-size: 12px;
 }
-.view-commons-radioactivity-groups-most-active .type-Wiki:before, .view-commons-groups-recent-content .type-Wiki:before, .view-commons-radioactivity-groups-active-in-group .type-Wiki:before {
-  content: '';
+.view-commons-radioactivity-groups-most-active .type-Wiki:before,
+.view-commons-groups-recent-content .type-Wiki:before,
+.view-commons-radioactivity-groups-active-in-group .type-Wiki:before {
+  content: "";
   background: url('../images/icons-se7682cf316.png') 0 -491px no-repeat;
   width: 13px;
   height: 13px;
@@ -2283,11 +2167,15 @@ body.page-node .pane-views-panes h2 {
   top: 1px;
   margin-right: 6px;
 }
-.view-commons-radioactivity-groups-most-active .type-Event, .view-commons-groups-recent-content .type-Event, .view-commons-radioactivity-groups-active-in-group .type-Event {
+.view-commons-radioactivity-groups-most-active .type-Event,
+.view-commons-groups-recent-content .type-Event,
+.view-commons-radioactivity-groups-active-in-group .type-Event {
   font-size: 12px;
 }
-.view-commons-radioactivity-groups-most-active .type-Event:before, .view-commons-groups-recent-content .type-Event:before, .view-commons-radioactivity-groups-active-in-group .type-Event:before {
-  content: '';
+.view-commons-radioactivity-groups-most-active .type-Event:before,
+.view-commons-groups-recent-content .type-Event:before,
+.view-commons-radioactivity-groups-active-in-group .type-Event:before {
+  content: "";
   background: url('../images/icons-se7682cf316.png') 0 -715px no-repeat;
   width: 12px;
   height: 12px;
@@ -2297,11 +2185,15 @@ body.page-node .pane-views-panes h2 {
   top: 1px;
   margin-right: 6px;
 }
-.view-commons-radioactivity-groups-most-active .type-Poll, .view-commons-groups-recent-content .type-Poll, .view-commons-radioactivity-groups-active-in-group .type-Poll {
+.view-commons-radioactivity-groups-most-active .type-Poll,
+.view-commons-groups-recent-content .type-Poll,
+.view-commons-radioactivity-groups-active-in-group .type-Poll {
   font-size: 12px;
 }
-.view-commons-radioactivity-groups-most-active .type-Poll:before, .view-commons-groups-recent-content .type-Poll:before, .view-commons-radioactivity-groups-active-in-group .type-Poll:before {
-  content: '';
+.view-commons-radioactivity-groups-most-active .type-Poll:before,
+.view-commons-groups-recent-content .type-Poll:before,
+.view-commons-radioactivity-groups-active-in-group .type-Poll:before {
+  content: "";
   background: url('../images/icons-se7682cf316.png') 0 -811px no-repeat;
   width: 11px;
   height: 11px;
@@ -2311,11 +2203,15 @@ body.page-node .pane-views-panes h2 {
   top: 1px;
   margin-right: 6px;
 }
-.view-commons-radioactivity-groups-most-active .type-Post, .view-commons-groups-recent-content .type-Post, .view-commons-radioactivity-groups-active-in-group .type-Post {
+.view-commons-radioactivity-groups-most-active .type-Post,
+.view-commons-groups-recent-content .type-Post,
+.view-commons-radioactivity-groups-active-in-group .type-Post {
   font-size: 12px;
 }
-.view-commons-radioactivity-groups-most-active .type-Post:before, .view-commons-groups-recent-content .type-Post:before, .view-commons-radioactivity-groups-active-in-group .type-Post:before {
-  content: '';
+.view-commons-radioactivity-groups-most-active .type-Post:before,
+.view-commons-groups-recent-content .type-Post:before,
+.view-commons-radioactivity-groups-active-in-group .type-Post:before {
+  content: "";
   background: url('../images/icons-se7682cf316.png') 0 -970px no-repeat;
   width: 11px;
   height: 11px;
@@ -2325,11 +2221,21 @@ body.page-node .pane-views-panes h2 {
   top: 1px;
   margin-right: 6px;
 }
-.view-commons-radioactivity-groups-most-active .type-Question, .view-commons-radioactivity-groups-most-active .type-Answer, .view-commons-groups-recent-content .type-Question, .view-commons-groups-recent-content .type-Answer, .view-commons-radioactivity-groups-active-in-group .type-Question, .view-commons-radioactivity-groups-active-in-group .type-Answer {
+.view-commons-radioactivity-groups-most-active .type-Question,
+.view-commons-radioactivity-groups-most-active .type-Answer,
+.view-commons-groups-recent-content .type-Question,
+.view-commons-groups-recent-content .type-Answer,
+.view-commons-radioactivity-groups-active-in-group .type-Question,
+.view-commons-radioactivity-groups-active-in-group .type-Answer {
   font-size: 12px;
 }
-.view-commons-radioactivity-groups-most-active .type-Question:before, .view-commons-radioactivity-groups-most-active .type-Answer:before, .view-commons-groups-recent-content .type-Question:before, .view-commons-groups-recent-content .type-Answer:before, .view-commons-radioactivity-groups-active-in-group .type-Question:before, .view-commons-radioactivity-groups-active-in-group .type-Answer:before {
-  content: '';
+.view-commons-radioactivity-groups-most-active .type-Question:before,
+.view-commons-radioactivity-groups-most-active .type-Answer:before,
+.view-commons-groups-recent-content .type-Question:before,
+.view-commons-groups-recent-content .type-Answer:before,
+.view-commons-radioactivity-groups-active-in-group .type-Question:before,
+.view-commons-radioactivity-groups-active-in-group .type-Answer:before {
+  content: "";
   background: url('../images/icons-se7682cf316.png') 0 -619px no-repeat;
   width: 13px;
   height: 13px;
@@ -2382,7 +2288,7 @@ body.page-node .pane-views-panes h2 {
   margin-right: 3px;
   position: relative;
   top: 1px;
-  content: '';
+  content: "";
   top: 3px;
 }
 
@@ -2432,43 +2338,54 @@ body.page-node .pane-views-panes h2 {
   padding: 5px 20px;
 }
 
-.view-commons-groups-directory h2, .view-commons-homepage-content .node-teaser.node-group h2 {
+.view-commons-groups-directory h2,
+.view-commons-homepage-content .node-teaser.node-group h2 {
   font-size: 26px;
   line-height: 1em;
   margin: 10px 0 5px 0;
 }
-.view-commons-groups-directory .block-inner .pane-title, .view-commons-homepage-content .node-teaser.node-group .block-inner .pane-title {
+.view-commons-groups-directory .block-inner .pane-title,
+.view-commons-homepage-content .node-teaser.node-group .block-inner .pane-title {
   display: none;
 }
-.view-commons-groups-directory > .view-content > .views-row, .view-commons-groups-directory > .view-filters, .view-commons-homepage-content .node-teaser.node-group > .view-content > .views-row, .view-commons-homepage-content .node-teaser.node-group > .view-filters {
+.view-commons-groups-directory > .view-content > .views-row,
+.view-commons-groups-directory > .view-filters,
+.view-commons-homepage-content .node-teaser.node-group > .view-content > .views-row,
+.view-commons-homepage-content .node-teaser.node-group > .view-filters {
   position: relative;
 }
-.view-commons-groups-directory .view-filters .views-exposed-widgets, .view-commons-homepage-content .node-teaser.node-group .view-filters .views-exposed-widgets {
+.view-commons-groups-directory .view-filters .views-exposed-widgets,
+.view-commons-homepage-content .node-teaser.node-group .view-filters .views-exposed-widgets {
   margin-bottom: 0;
 }
 .view-commons-groups-directory .view-filters .views-widget,
-.view-commons-groups-directory .view-filters label, .view-commons-homepage-content .node-teaser.node-group .view-filters .views-widget,
+.view-commons-groups-directory .view-filters label,
+.view-commons-homepage-content .node-teaser.node-group .view-filters .views-widget,
 .view-commons-homepage-content .node-teaser.node-group .view-filters label {
   display: inline-block;
 }
-.view-commons-groups-directory .view-filters label, .view-commons-homepage-content .node-teaser.node-group .view-filters label {
+.view-commons-groups-directory .view-filters label,
+.view-commons-homepage-content .node-teaser.node-group .view-filters label {
   color: #333333;
   font-size: 0.85em;
   font-weight: normal;
   margin: 0 15px 0 0;
   line-height: 2em;
 }
-.view-commons-groups-directory .view-filters .form-text, .view-commons-homepage-content .node-teaser.node-group .view-filters .form-text {
+.view-commons-groups-directory .view-filters .form-text,
+.view-commons-homepage-content .node-teaser.node-group .view-filters .form-text {
   width: 400px;
   -webkit-box-shadow: #858585 1px 1px 2px inset;
   -moz-box-shadow: #858585 1px 1px 2px inset;
   box-shadow: #858585 1px 1px 2px inset;
   border-color: #c2c2c2;
 }
-.view-commons-groups-directory .view-filters .form-submit, .view-commons-homepage-content .node-teaser.node-group .view-filters .form-submit {
+.view-commons-groups-directory .view-filters .form-submit,
+.view-commons-homepage-content .node-teaser.node-group .view-filters .form-submit {
   margin-top: 1px;
 }
-.view-commons-groups-directory .pane-node-body, .view-commons-homepage-content .node-teaser.node-group .pane-node-body {
+.view-commons-groups-directory .pane-node-body,
+.view-commons-homepage-content .node-teaser.node-group .pane-node-body {
   margin-bottom: 0;
 }
 
@@ -2552,7 +2469,7 @@ body.page-node .pane-views-panes h2 {
   z-index: 15;
 }
 .pane-commons-contributors-group-panel-pane-1 td a span:after {
-  content: '';
+  content: "";
   display: block;
   width: 0px;
   height: 0px;
@@ -2571,7 +2488,8 @@ body.page-node .pane-views-panes h2 {
   display: block;
 }
 
-.region-two-66-33-second .view-commons-contributors-group table, .region-two-66-33-second .view-commons-contributors-group tbody {
+.region-two-66-33-second .view-commons-contributors-group table,
+.region-two-66-33-second .view-commons-contributors-group tbody {
   margin: 0;
   border: none;
 }
@@ -2593,13 +2511,16 @@ body.page-node .pane-views-panes h2 {
   width: 40px;
 }
 
-#views-exposed-form-commons-homepage-content-panel-pane-1 .views-submit-button, #views-exposed-form-commons-bw-all-page-1 .views-submit-button {
+#views-exposed-form-commons-homepage-content-panel-pane-1 .views-submit-button,
+#views-exposed-form-commons-bw-all-page-1 .views-submit-button {
   margin-left: 20px;
 }
-#views-exposed-form-commons-homepage-content-panel-pane-1 .views-exposed-widget, #views-exposed-form-commons-bw-all-page-1 .views-exposed-widget {
+#views-exposed-form-commons-homepage-content-panel-pane-1 .views-exposed-widget,
+#views-exposed-form-commons-bw-all-page-1 .views-exposed-widget {
   padding: 0;
 }
-#views-exposed-form-commons-homepage-content-panel-pane-1 .views-exposed-widget .form-submit, #views-exposed-form-commons-bw-all-page-1 .views-exposed-widget .form-submit {
+#views-exposed-form-commons-homepage-content-panel-pane-1 .views-exposed-widget .form-submit,
+#views-exposed-form-commons-bw-all-page-1 .views-exposed-widget .form-submit {
   margin-top: 0;
 }
 
@@ -2613,7 +2534,7 @@ body.page-node .pane-views-panes h2 {
   top: 22px;
 }
 .pane-node-flag-commons-follow-group-link .flag-action:before {
-  content: '';
+  content: "";
   background: url('../images/icons-se7682cf316.png') 0 -590px no-repeat;
   width: 11px;
   height: 9px;
@@ -2628,7 +2549,8 @@ body.page-node .pane-views-panes h2 {
 .view-id-commons_featured .views-field-title .field-content {
   background-repeat: no-repeat;
 }
-.view-id-commons_featured .views-field-field-date, .view-id-commons_featured .views-field-field-address {
+.view-id-commons_featured .views-field-field-date,
+.view-id-commons_featured .views-field-field-address {
   margin: 0 0 0 18px;
 }
 .view-id-commons_featured .type-Event {
@@ -2665,7 +2587,8 @@ body.page-node .pane-views-panes h2 {
   margin-top: 0;
 }
 
-.views-widget-sort-by .form-select-wrapper, .form-item-sort-order .form-select-wrapper {
+.views-widget-sort-by .form-select-wrapper,
+.form-item-sort-order .form-select-wrapper {
   float: left;
 }
 
@@ -2742,7 +2665,7 @@ body.page-node .pane-views-panes h2 {
   margin-right: 3px;
   position: relative;
   top: 1px;
-  content: '';
+  content: "";
   position: absolute;
   left: 10px;
   top: 13px;
@@ -2755,7 +2678,7 @@ body.page-node .pane-views-panes h2 {
   margin-right: 3px;
   position: relative;
   top: 1px;
-  content: '';
+  content: "";
   position: absolute;
   left: 10px;
   top: 13px;
@@ -2768,7 +2691,7 @@ body.page-node .pane-views-panes h2 {
   margin-right: 3px;
   position: relative;
   top: 1px;
-  content: '';
+  content: "";
   position: absolute;
   left: 10px;
   top: 13px;
@@ -2781,7 +2704,7 @@ body.page-node .pane-views-panes h2 {
   margin-right: 3px;
   position: relative;
   top: 1px;
-  content: '';
+  content: "";
   position: absolute;
   left: 10px;
   top: 13px;
@@ -2794,7 +2717,7 @@ body.page-node .pane-views-panes h2 {
   margin-right: 3px;
   position: relative;
   top: 1px;
-  content: '';
+  content: "";
   position: absolute;
   left: 10px;
   top: 13px;
@@ -2856,49 +2779,7 @@ body.page-node .pane-views-panes h2 {
 /* =============================================================================
  *   Block Styling
  * ========================================================================== */
-/*
- * Block for the latest news items in the first category
- */
-/*
- * Block for the latest news items in the first feed
- */
-/*
- * First block created with "Add block" link
- */
-/*
- * "Recent blog posts" block
- */
-/*
- * "Book navigation" block for the current book's table of contents
- */
-/*
- * "Recent comments" block
- */
-/*
- * "Active forum topics" block
- */
-/*
- * "New forum topics" block
- */
-/*
- * Language switcher block
- */
-/*
- * Custom menu block
- */
-/*
- * "Recent content" block
- */
-/*
- * "Syndicate" block for primary RSS feed; see also page.css's .feed-icon
- */
-/*
- * "Most recent poll" block
- */
-/*
- * "Author information" block for the profile of the page's author
- */
-/*
+/**
  * "Search form" block
  */
 .block-search {
@@ -2956,42 +2837,6 @@ body.page-node .pane-views-panes h2 {
   display: block;
 }
 
-/*
- * "Shortcuts" block
- */
-/*
- * "Popular content" block
- */
-/*
- * "Main menu" block
- */
-/*
- * "Management" block for Drupal management menu
- */
-/*
- * "Navigation" block for Drupal navigation menu
- */
-/*
- * "User menu" block for Drupal user menu
- */
-/*
- * "System help" block
- */
-/*
- * "Main page content" block
- */
-/*
- * "Powered by Drupal" block
- */
-/*
- * "User login form" block
- */
-/*
- * "Who's new" block for a list of the newest users
- */
-/*
- * "Who's online" block for a list of the online users
- */
 /* =============================================================================
  *   Node Styling
  * ========================================================================== */
@@ -3013,7 +2858,7 @@ body.page-node .pane-views-panes h2 {
   z-index: 1;
 }
 .featured-node-tooltip:before {
-  content: '';
+  content: "";
   display: block;
   width: 0px;
   height: 0px;
@@ -3044,12 +2889,7 @@ body.page-node.node-type-group h2#page-title {
   line-height: 54px;
 }
 
-/*
- * All nodes are given a node-FOO class that describes the type of content that
- * it is. If you create a new content type called "my-custom-type", it will
- * receive a "node-my-custom-type" class.
- */
-/*
+/**
  * Node forms
  */
 .node-form {
@@ -3063,7 +2903,7 @@ body.page-node.node-type-group h2#page-title {
 /* =============================================================================
  *   Comment Styling - Comments, comment wrapper, comment form
  * ========================================================================== */
-/*
+/**
  * Wrapper for the list of comments and its titles
  */
 #comments h2.comment-title {
@@ -3073,27 +2913,21 @@ body.page-node.node-type-group h2#page-title {
   margin: 0;
 }
 
-/*
+/**
  * Wrapper for a single comment
  */
 .comment {
   margin-bottom: 20px;
 }
 
-/*
- * Comment states
- */
-/*
- * Preview of the comment before submitting new or updated comment
- */
-/*
+/**
  * "New" marker for comments that are new for the current user
  */
 .new {
   color: #cc0000;
 }
 
-/*
+/**
  * Nested comments are indented
  */
 .indented {
@@ -3152,7 +2986,7 @@ tr.odd .form-item, tr.even .form-item {
   white-space: normal;
 }
 
-/*
+/**
  * Wrapper for a form element (or group of form elements) and its label
  */
 .form-item input.error,
@@ -3167,7 +3001,7 @@ tr.odd .form-item, tr.even .form-item {
   font-size: 0.85em;
 }
 
-/*
+/**
  * Highlight marks and form required mark
  */
 .marker,
@@ -3175,7 +3009,7 @@ tr.odd .form-item, tr.even .form-item {
   color: #cc0000;
 }
 
-/*
+/**
  * The submit button
  */
 .container-inline div,
@@ -3183,17 +3017,14 @@ tr.odd .form-item, tr.even .form-item {
   display: inline;
 }
 
-/*
+/**
  * Define consistent borders
  */
 fieldset {
   border: 1px solid #cccccc;
 }
 
-/*
- * Tips for Drupal's input formats
- */
-/*
+/**
  * Buttons used by contrib modules like Media
  */
 a.button {
@@ -3202,7 +3033,7 @@ a.button {
   appearance: button;
 }
 
-/*
+/**
  * Password confirmation
  */
 .password-parent,
@@ -3278,6 +3109,10 @@ form.commons-events-form-float {
   font-size: .85em;
   padding: 0;
   border: none;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  -o-border-radius: 0;
   border-radius: 0;
   max-width: 80px;
   margin-right: -90px;
@@ -3365,7 +3200,7 @@ tr.even td.active {
   background-color: #ebebeb;
 }
 
-/*
+/**
  * Forum tables
  * Core sets white-space to nowrap, which makes no sense
  */
@@ -3390,7 +3225,7 @@ div.messages ul {
   margin-bottom: 0;
 }
 
-/*
+/**
  * Unpublished nodes
  */
 .node-unpublished p.unpublished,
@@ -3441,7 +3276,7 @@ div.messages ul {
 /* =============================================================================
  *   Misc overrides for contrib modules
  * ========================================================================== */
-/*
+/**
  * Admin menu overrides
  */
 #admin-menu {
@@ -3449,7 +3284,7 @@ div.messages ul {
   padding: 0;
 }
 
-/*
+/**
  * Devel Module
  */
 .dev-query {
@@ -3457,7 +3292,7 @@ div.messages ul {
   padding: 30px;
 }
 
-/*
+/**
  * Styleguide module tweaks
  */
 #styleguide-header {
@@ -3486,7 +3321,6 @@ body.front .region-three-33-top h1 {
 body.front .region-three-33-top .commons_home-welcome-image {
   float: right;
 }
-
 body.front.not-logged-in #block-system-main .pane-1 .pane-title {
   font-weight: 700;
   font-size: 38px;
@@ -3533,7 +3367,13 @@ body.front.logged-in #views-exposed-form-commons-homepage-content-panel-pane-1 .
   background-color: white;
 }
 
-body.front.logged-in .view-commons-homepage-content .article.node.no-user-picture .node-header, body.front.logged-in .view-commons-homepage-content .article.node.no-user-picture .node-content, body.front.logged-in .view-commons-homepage-content .article.node.no-user-picture .author-datetime, body.front.logged-in .view-commons-homepage-content .article.node.no-user-picture .links, body.front.logged-in .view-commons-homepage-content .article.node.node-page .node-header, body.front.logged-in .view-commons-homepage-content .article.node.node-page .node-content, body.front.logged-in .view-commons-homepage-content .article.node.node-page .author-datetime, body.front.logged-in .view-commons-homepage-content .article.node.node-page .links {
+body.front.logged-in .view-commons-homepage-content .article.node.no-user-picture .node-header,
+body.front.logged-in .view-commons-homepage-content .article.node.no-user-picture .node-content,
+body.front.logged-in .view-commons-homepage-content .article.node.no-user-picture .author-datetime,
+body.front.logged-in .view-commons-homepage-content .article.node.no-user-picture .links, body.front.logged-in .view-commons-homepage-content .article.node.node-page .node-header,
+body.front.logged-in .view-commons-homepage-content .article.node.node-page .node-content,
+body.front.logged-in .view-commons-homepage-content .article.node.node-page .author-datetime,
+body.front.logged-in .view-commons-homepage-content .article.node.node-page .links {
   margin-left: 0;
 }
 
@@ -3556,7 +3396,7 @@ body.front.logged-in .view-commons-homepage-content .article.node.no-user-pictur
   display: none;
 }
 
-/*
+/**
  *  Placeholder styles
  */
 #menu-bar.nav .menu-item-193 a {
@@ -3569,6 +3409,9 @@ body.front.logged-in .view-commons-homepage-content .article.node.no-user-pictur
   background-image: url('../images/icons/icon-events.png?1363371593');
 }
 
+/**
+ * Events Page
+ */
 .page-events .region-three-25-50-25-first h3 {
   color: #666666;
   font-size: 18px;
@@ -3653,11 +3496,14 @@ body.front.logged-in .view-commons-homepage-content .article.node.no-user-pictur
   margin-right: 3px;
   position: relative;
   top: 1px;
-  content: '';
+  content: "";
   top: 2px;
   margin-right: 6px;
 }
 
+/**
+ * Search
+ */
 .page-search .two-33-66 > .region-two-33-66-first h3 {
   margin-bottom: 10px;
   color: #666666;
@@ -3779,6 +3625,9 @@ body.front.logged-in .view-commons-homepage-content .article.node.no-user-pictur
   float: right;
 }
 
+/**
+ * Notification settings
+ */
 .view-commons-follow-node .views-field-ops,
 .view-commons-follow-node .views-field-ops-1,
 .view-commons-follow-user .views-field-ops,
@@ -3798,6 +3647,9 @@ body.front.logged-in .view-commons-homepage-content .article.node.no-user-pictur
   text-align: center;
 }
 
+/**
+ * Commons Origins Pallete Choices
+ */
 #edit-commons-origins-palette .form-item-commons-origins-palette {
   clear: both;
   margin-bottom: 10px;
@@ -3809,11 +3661,17 @@ body.front.logged-in .view-commons-homepage-content .article.node.no-user-pictur
   margin-left: 20px;
 }
 
+/**
+ * Login and signup form
+ */
 #user-login input[type="text"], #user-login input[type="password"], #user-register-form input[type="text"], #user-register-form input[type="password"] {
   width: 20em;
   max-width: 100%;
 }
 
+/**
+ * Add the color palettes
+ */
 .palette-orange-red h2 {
   color: #830c00;
 }

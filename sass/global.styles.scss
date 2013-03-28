@@ -2,7 +2,7 @@
 // _base.scss imports _custom.scss (variables and mixins) and other partials.
 @import "base";
 
-/*
+/**
  * @file
  * global.styles
  *
@@ -30,7 +30,7 @@
  *   Base
  * ========================================================================== */
 
-/*
+/**
  * To preserve theme settings never apply font properties to the HTML element.
  * This is critically important if you are using the Responsive JavaScript
  * feature as this relies on being able to set a pseudo font family on the HTML
@@ -39,7 +39,7 @@
  */
 
 html {
-  background:$page;
+  background: $page;
 }
 
 body {
@@ -47,7 +47,6 @@ body {
   font-size: 87.5%;
   color: $dark_gray;
 }
-
 
 /* =============================================================================
  *   HTML Elements
@@ -58,7 +57,6 @@ h1 {
   line-height: 30px;
   font-weight: normal;
   color: $white;
-//  @include text-shadow(#000 1px 1px 4px);
 
   a {
     color: $white;
@@ -79,7 +77,6 @@ h1 {
   }
 }
 
-
 h2 {
   color: $dark_blue;
   font-weight: lighter;
@@ -87,7 +84,6 @@ h2 {
   line-height: 54px;
   font-family: $alt-font;
 }
-
 
 h3 {
   color: $light_blue;
@@ -100,78 +96,6 @@ h3 {
   }
 }
 
-
-h4 {}
-
-
-h5 {}
-
-
-h6 {}
-
-
-p {}
-
-
-b,
-strong {}
-
-
-i,
-em {}
-
-
-dfn {}
-
-
-sup {}
-
-
-sub {}
-
-
-del {}
-
-
-ins {}
-
-
-blockquote {}
-
-
-cite {}
-
-
-q {}
-
-
-address {}
-
-
-ul {}
-
-
-ol {}
-
-
-li {}
-
-
-dl {}
-
-
-dd {}
-
-
-dt {}
-
-
-abbr {}
-
-
-acronym {}
-
-
 pre,
 code,
 tt,
@@ -181,24 +105,23 @@ var {
   font-family: $mono;
 }
 
-
 /* =============================================================================
  *   Wrappers
  * ========================================================================== */
 
-/*
+/**
  * Page wrapper, includes the .container class which sets the overall page or section width
  * Main wrapper in page.tpl.php, the .container class sets the width of the page, do not add width to it!
  */
+
 #page  {
   margin-top: -92px;
-  .container {}
 }
 
-
-/*
+/**
  * Wraps all header elements - branding and .region-header
  */
+
 #header {
   height: 95px;
   color: $white;
@@ -229,38 +152,26 @@ var {
   border-bottom: 1px solid darken($light_blue, 10%);
 }
 
-
-/*
+/**
  * Wraps the sidebars the content column
  */
+
 #columns {
   margin-right: $gutter-width;
   margin-left: $gutter-width;
 }
 
-
-/*
- * Main content column wrapper
- */
-#content-column {}
-
-
-/*
- * Wraps the main-content-header, the content region and feed-icons. Use this wrapper to style the entire main content column
- */
-#main-content {}
-
-
-/*
+/**
  * Footer wrapper
  */
+
 #footer {
   border-top: 1px solid $border;
   @include box-shadow(inset 0 1px 0 $white);
   margin: 0 $gutter-width;
 }
 
-/*
+/**
  * Default credit block
  */
 
@@ -283,89 +194,10 @@ var {
   }
 }
 
-
-/*
- * Panels may need additional margin wrangling when in the $content region
- */
-#content .panel-display {}
-
-
-/*
- * Full Width Wrappers
- * These are used in the optional page--full-width-wrappers.tpl.php template.
- * All have internal .container classes. In the full width wrapper template the
- * .container classes set the width or max-width of the contained element - you
- * can style this but never add any width/margin/padding/borders etc to .container
- */
-
-/*
- * Wraps #page
- */
-#page-wrapper {
-  .container {}
-}
-
-
-/*
- * Wraps the leaderboard
- */
-#leaderboard-wrapper {
-  .container {}
-}
-
-
-/*
- * Wraps the header
- */
-#header-wrapper {
-  /* Debug styles, is this working */
-  background: $debug;
-  .container {}
-}
-
-
-/*
- * Wraps the nav elements
- */
-#nav-wrapper {
-  .container {}
-}
-
-
-/*
- * Wraps breadcrumb
- */
-#breadcrumb-wrapper {
-  .container {}
-}
-
-
-/*
- * Wraps messages and help
- */
-#messages-help-wrapper {
-  .container {}
-}
-
-
-/*
- * Wraps the secondary content/preface region
- */
-#secondary-content-wrapper {
-  .container {}
-}
-
-
-/*
- * Wraps the main content column
- */
-#content-wrapper {
-  .container {}
-}
-
-/*
+/**
  * Generic pod wrappers
  */
+
  .commons-pod {
   @extend %pod;
   @extend %pod-content;
@@ -379,21 +211,14 @@ var {
   }
 }
 
-/*
- * Wraps the tertiary content/postfix region
- */
-#tertiary-content-wrapper {
-  .container {}
-}
-
-
 /* =============================================================================
  *   Branding
  * ========================================================================== */
 
-/*
+/**
  * Wraps all the branding elements, logo, name and slogan
  */
+
 #branding {
   float: left;
   margin-left: 10px;
@@ -401,10 +226,10 @@ var {
   text-align: left;
 }
 
-
-/*
+/**
  * Logo
  */
+
 #logo {
   display: inline-block;
   padding: 0 10px 0 0;
@@ -412,25 +237,12 @@ var {
   img {
     vertical-align: bottom;
   }
-
-  // .palette-active & {
-  //   a {
-  //     display: block;
-  //     width: 48px;
-  //     height: 80px;
-  //     background: image-url('logo-general.png') left top no-repeat;
-  //   }
-
-  //   img {
-  //     display: none;
-  //   }
-  // }
 }
 
-
-/*
+/**
  * Wrapper for the site name and slogan (hgroup)
  */
+
 #name-and-slogan {
   display: inline-block;
   vertical-align: top;
@@ -445,17 +257,16 @@ var {
   }
 }
 
-
-/*
+/**
  * Site name (h1)
  */
+
 #site-name {
   margin: 0;
   font-family:'Trebuchet MS';
   font-weight:700;
 
   a {
-
     &:link,
     &:visited {
       text-decoration: none;
@@ -468,28 +279,22 @@ var {
   }
 }
 
-
-/*
+/**
  * Site slogan (h2)
  */
+
 #site-slogan {
   margin: 0;
 }
-
 
 /* =============================================================================
  *   Page content header
  * ========================================================================== */
 
-/*
- * Main content header wraps the page title, tabs and actions links
- */
-#main-content-header {}
-
-
-/*
+/**
  * The main page title (h1)
  */
+
 #page-title {
   margin: 0 0 10px;
   font-weight:300;
@@ -507,9 +312,10 @@ var {
  *   Misc Global Styles
  * ========================================================================== */
 
-/*
+/**
  * Generic styles for nodes.
  */
+
 .node {
   position: relative;
 
@@ -596,18 +402,18 @@ var {
   padding:4px;
   @include border-radius(3px);
   @include box-shadow($light_gray 1px 1px 4px);
-  line-height:0;
+  line-height: 0;
 
   .node &,
   .comment & {
     &:after {
-      content:"";
-      width:5px;
-      height:8px;
-      position:absolute;
-      right:-5px;
-      top:10px;
-      background:image-url('user_img_arrow.png');
+      content: "";
+      width: 5px;
+      height: 8px;
+      position: absolute;
+      right: -5px;
+      top: 10px;
+      background: image-url('user_img_arrow.png');
     }
 
     img {
@@ -616,7 +422,7 @@ var {
   }
 }
 
-/*
+/**
  * Filter drawer accessories
  */
 
@@ -674,21 +480,15 @@ var {
   background: rgba(255, 255, 255, .8);
 }
 
-/*
- * Feed icons
- */
-.feed-icon {}
-
-
-/*
+/**
  * Aggregator feed source
  */
+
 #aggregator .feed-source .feed-icon {
   display: inline;
   float: none;
   margin-right: 10px;
 }
-
 
 .feed-details dt,
 .feed-details dd {
@@ -696,28 +496,29 @@ var {
   margin: 0;
 }
 
-
-/*
+/**
  * Generic styles for the more link
  */
+
 .more-link {
-  background-image:image-url('icons/icon-more.png');
-  background-repeat:no-repeat;
+  background-image: image-url('icons/icon-more.png');
+  background-repeat: no-repeat;
   min-height: 14px;
   padding: 0 0 0 1.7em;
   float: right;
   font-size: 0.85em;
   line-height: 14px;
   margin-top: 10px;
+
   a {
     color:$light_gray;
   }
 }
 
-
-/*
+/**
  * Generic styles for links. See the ul.links declaration in node and comment stylesheets
  */
+
 ul.links {
   margin: 0;
   padding: 0;
@@ -818,7 +619,7 @@ li.sharethis {
   }
 
   &:before {
-    content: '';
+    content: "";
     @include sprite_url_height_width($icons, share);
   }
 
@@ -839,7 +640,7 @@ li.sharethis {
     position: relative;
 
     &:before, &:after {
-      content: '';
+      content: "";
       width: 0;
       height: 0;
       border-style: solid;
@@ -861,71 +662,45 @@ li.sharethis {
   }
 }
 
-/*
+/**
  * H1 Node title
  */
 
 h1.node-title {
-  color:$dark_blue;
-  font-size:20px;
+  color: $dark_blue;
+  font-size: 20px;
+
   a {
-    text-decoration:none;
-    color:$dark_blue;
+    text-decoration: none;
+    color: $dark_blue;
+
     &:hover {
-      text-decoration:underline;
+      text-decoration: underline;
     }
   }
 }
 
-/*
+/**
  * Main wrapper for most blocks, block_system_main does not have it
  */
+
 .block {
   margin-bottom: 20px;
 }
 
-/*
- * Inner wrapper for most blocks, good for margin, padding and borders, block_system_main does not have it
- */
-.block-inner {}
-
-/*
- * The first block in the region
- */
-.block.first {}
-
-/*
- * The last block in the region
- */
-.block.last {}
-
-/*
- * Zebra striping for each block in the region
- */
-.block.odd {}
-
-/*
- * Zebra striping for each block in the region
- */
-.block.even {}
-
-/*
+/**
  * Block title
  */
+
 .block-title {
   margin: 0;
 }
 
-/*
- * Block content wrapper
- */
-.block-content {}
-
-/*
+/**
  * Match item list and block menu margin and padding
  */
-.block-content {
 
+.block-content {
   ul,
   ol {
     padding: 0 0 0 15px;
@@ -937,9 +712,10 @@ h1.node-title {
   }
 }
 
-/*
+/**
  * User picture wrapping and shadow
  */
+
 .views-row {
   border-bottom: 1px solid #eee;
   padding-bottom: $gutter-width;
@@ -967,13 +743,19 @@ h1.node-title {
   }
 }
 
-.view-commons-homepage-content, .view-commons-activity-streams-activity, .view-activity-group, .view-commons-activity-streams-user-activity {
-  .content, .views-field-timestamp {
+.view-commons-homepage-content,
+.view-commons-activity-streams-activity,
+.view-activity-group,
+.view-commons-activity-streams-user-activity {
+  .content,
+  .views-field-timestamp {
     @include place-picture(40px);
   }
 }
 
-.view-activity-group, .view-commons-activity-streams-activity, .view-commons-activity-streams-user-activity {
+.view-activity-group,
+.view-commons-activity-streams-activity,
+.view-commons-activity-streams-user-activity {
   .views-row {
     h2 {
       display: none;
@@ -997,7 +779,8 @@ h1.node-title {
     color: $dark_gray;
   }
 
-  .field-name-field-topics, .field-name-og-group-ref {
+  .field-name-field-topics,
+  .field-name-og-group-ref {
     &.view-mode-full {
       float: left;
       width: 50%;
@@ -1018,7 +801,7 @@ h1.node-title {
 
   .field-name-field-topics {
     .field-item:before {
-      content: '';
+      content: "";
       @include sprite_url_height_width($icons, tags);
       top: -1px;
     }
@@ -1026,15 +809,13 @@ h1.node-title {
 
   .field-name-og-group-ref {
     .field-item:before {
-      content: '';
+      content: "";
       @include sprite_url_height_width($icons, groups);
       top: -1px;
     }
   }
 
   .node nav {
-    // float: left;
-    // width: 50%;
     clear: both;
     margin-top: 20px;
     position:relative;
@@ -1047,7 +828,6 @@ h1.node-title {
       float: left;
     }
   }
-
 }
 
 #comments {
@@ -1061,7 +841,7 @@ h1.node-title {
       font-size: 2.2em;
 
       &:before {
-        content: '';
+        content: "";
         @include sprite_url_height_width($icons, comments-large);
       }
     }
@@ -1109,7 +889,7 @@ h1.node-title {
   float: right;
 
   &:before {
-    content: '';
+    content: "";
     @include sprite_url_height_width($icons, comments);
     margin-right: 8px;
     top: 3px;
@@ -1236,7 +1016,6 @@ h1.node-title {
   }
 }
 
-
 .field-name-body {
   clear: both;
   margin-top: 1.7em;
@@ -1274,7 +1053,7 @@ h1.node-title {
       @extend %btn-gray;
 
       &:before {
-        content: '';
+        content: "";
         @include sprite_url_height_width($icons, follow-large);
       }
     }
@@ -1320,7 +1099,7 @@ h1.node-title {
   display: block;
   margin: $gutter-width 0;
   &:before {
-    content: '';
+    content: "";
     top: 0;
     @include sprite_url_height_width($icons, spam);
   }
@@ -1346,9 +1125,10 @@ h1.node-title {
   }
 }
 
-/*
+/**
  * Author/Submit line
  */
+
 .author-datetime {
   color:$light_gray;
   font-size:0.85em;
@@ -1358,30 +1138,30 @@ h1.node-title {
   color: $dark_gray;
 }
 
-/*
+/**
  * Featured/New Tags
  */
 
 .tag.featured {
-  width:58px;
-  height:22px;
-  display:inline-block;
+  width: 58px;
+  height: 22px;
+  display: inline-block;
   background: {
-    image:image-url('tag-featured.png');
-    repeat:no-repeat;
+    image: image-url('tag-featured.png');
+    repeat: no-repeat;
   }
-  margin:6px 0 0 5px;
+  margin: 6px 0 0 5px;
 }
 
 .tag.new {
-  width:27px;
-  height:22px;
-  display:inline-block;
+  width: 27px;
+  height: 22px;
+  display: inline-block;
   background: {
-    image:image-url('tag-new.png');
-    repeat:no-repeat;
+    image: image-url('tag-new.png');
+    repeat: no-repeat;
   }
-  margin:4px 0 0 5px;
+  margin: 4px 0 0 5px;
 }
 
 .page-user {
@@ -1417,7 +1197,7 @@ h1.node-title {
       display: inline-block;
 
       &:before {
-        content: '';
+        content: "";
         @include sprite_url_height_width($icons, facebook);
         margin-right: 7px;
         top: 7px;
@@ -1433,7 +1213,7 @@ h1.node-title {
       display: inline-block;
 
       &:before {
-        content: '';
+        content: "";
         @include sprite_url_height_width($icons, linkedin);
         margin-right: 7px;
         top: 7px;
@@ -1449,7 +1229,7 @@ h1.node-title {
       display: inline-block;
 
       &:before {
-        content: '';
+        content: "";
         @include sprite_url_height_width($icons, twitter);
         margin-right: 7px;
         top: 7px;
@@ -1470,7 +1250,7 @@ h1.node-title {
   }
 }
 
-/*
+/**
  * Group nodes
  */
 
@@ -1484,90 +1264,16 @@ h1.node-title {
  *   Regions
  * ========================================================================== */
 
-/*
- * Standard region wrapper, don't add width to any regions, you will bork the layout - no margin, padding or borders etc
- */
-.region {}
-
-
-/*
- * Regions have an inner div - perfect for adding margin, padding or borders
- */
-.region-inner {}
-
-
-/*
- * Regions can be nested, such as when using Panels
- */
-.region-inner .region-inner {}
-//
-
-/*
+/**
  * Header region, embedded in the #header
  */
+
 .region-header {
   display: inline-block;
-  // float: left;
-  // @extend %divider-left;
   height: 64px;
   width: 266px;
   text-align: left;
 }
-
-
-/*
- * Generally used to output Drupals help block, if the help module is enabled
- */
-.region-help {}
-
-
-/*
- * Secondary content
- */
-.region-secondary-content {}
-
-
-/*
- * Sits above the main content header, like a content-top region
- */
-.region-highlighted {}
-
-
-/*
- * Sits below the main content, like a content-bottom region
- */
-.region-content-aside {}
-
-
-/*
- * Sidebars - targets both
- */
-.sidebar {}
-
-
-/*
- * First sidebar
- */
-.region-sidebar-first {}
-.region-two-66-33-first {}
-
-/*
- * Second sidebar
- */
-.region-sidebar-second {}
-.region-two-66-33-second {}
-
-/*
- * Tertiary content
- */
-.region-tertiary-content {}
-
-
-/*
- * Footer region
- */
-.region-footer {}
-
 
 /* =============================================================================
  *   Links
@@ -1577,18 +1283,11 @@ a {
   text-decoration: none;
   color: $light_blue;
 
-  &:link,
-  &:visited {}
-
-  &:active,
-  &.active {}
-
   &:hover,
   &:focus {
     text-decoration: underline;
   }
 }
-
 
 /* =============================================================================
  *   Primary, Secondary and Menu Bar region menus
@@ -1598,7 +1297,7 @@ a {
   display: inline-block;
 }
 
-/*
+/**
  * Use one of the following id's for granular control:
  *  - #menu-bar (menu bar region)
  *  - #primary-menu (main menu)
@@ -1608,8 +1307,6 @@ a {
 
 #menu-bar.nav {
   display: inline-block;
-  // margin-right: -3px;
-  // float: left;
   vertical-align: top;
   margin:0;
   @extend %divider-right;
@@ -1630,11 +1327,12 @@ a {
     margin: 0;
     padding: 0;
 
-    &:hover, &.active-trail {
+    &:hover,
+    &.active-trail {
       background: image-url('main-nav-hover.png') repeat-x left top;
       .arrow {
         &:before {
-          content: '';
+          content: "";
           display: block;
           position: absolute;
           bottom: 0px;
@@ -1647,7 +1345,7 @@ a {
         }
 
         &:after {
-          content: '';
+          content: "";
           display: block;
           position: absolute;
           bottom: 0px;
@@ -1669,15 +1367,16 @@ a {
     height: 33px;
     text-transform: uppercase;
     @include text-shadow(#000 1px 1px 4px);
-    background-position:center 10px;
-    background-repeat:no-repeat;
-    position:relative;
+    background-position: center 10px;
+    background-repeat: no-repeat;
+    position: relative;
     @extend %divider-left;
-    &:visited {}
+
     &:hover,
     &:focus {
       text-decoration: none;
     }
+
     .arrow {
       width:17px;
       height:9px;
@@ -1754,7 +1453,6 @@ ul.commons-utility-links {
   }
 }
 
-
 /* =============================================================================
  *   Superfish
  * ========================================================================== */
@@ -1769,9 +1467,6 @@ ul.sf-menu {
     text-decoration: none;
     height: 2.5em;
     line-height: 2.5em;
-
-    &:link,
-    &:visited {}
   }
 
   li {
@@ -1790,23 +1485,14 @@ ul.sf-menu {
   }
 }
 
-
-/*
+/**
  * Superfish blocks
  */
+
 .block-superfish {
-
-  .block-inner .content {}
-
   ul {
     margin: 0 !important;
     padding: 0 !important;
-
-    ul {
-      ul {
-        ul {}
-      }
-    }
   }
 
   li {
@@ -1815,17 +1501,15 @@ ul.sf-menu {
   }
 }
 
-
-/*
+/**
  * Vertical style
  */
+
 .sf-vertical {
   width: 100%;
 
   li {
     width: 100%;
-
-    &.last {}
 
     &:hover ul,
     &.sfHover ul {
@@ -1841,22 +1525,21 @@ ul.sf-menu {
   }
 }
 
-
-/*
+/**
  * Navbar style
  */
+
 .sf-navbar {
   padding-bottom: 0 !important;
 }
 
-
-/*
+/**
  * Sensible padding for the default style
  */
+
 .sf-menu.sf-style-default a {
   padding: 0 10px;
 }
-
 
 /* =============================================================================
  *   Menus, usually blocks
@@ -1868,57 +1551,22 @@ ul.menu {
   ul {
     padding-left: 15px;
 
-    ul {
-      ul {}
+    li {
+      margin: 0;
     }
-  }
-
-  li {
-    margin: 0;
-
-    &.collapsed,
-    &.expanded,
-    &.leaf {}
-
-    a {
-
-      &:link,
-      &:visited {}
-
-      &:active,
-      &.active {}
-
-      &:hover,
-      &:focus {}
-    }
-
-    &.active a,
-    &.active-trail a {}
-
-    &.first,
-    &.last {}
   }
 }
-
 
 /* If li.content exists it's a problem, so reset the padding */
 .block .menu li.content {
   padding: 0;
 }
 
-
 /* =============================================================================
  *   Book navigation menu
  * ========================================================================== */
 
 .book-navigation {
-
-  .page-links {}
-
-  .page-previous {}
-
-  .page-next {}
-
   .page-up {
     /* Prevent text wrapping to a new line, assumes English "up" is used (two characters) */
     min-width: 2em;
@@ -1929,7 +1577,6 @@ ul.menu {
     margin-left: 0;
   }
 }
-
 
 /* =============================================================================
  *   Breadcrumbs
@@ -1962,24 +1609,7 @@ ul.menu {
     list-style: none;
     display: inline;
   }
-
-  li.crumb-first {}
-
-  li.crumb-last {}
-
-  a {
-
-    &:link,
-    &:visited {}
-
-    &:active,
-    &.active {}
-
-    &:hover,
-    &:focus {}
-  }
 }
-
 
 /* =============================================================================
  *   Pagers
@@ -1991,11 +1621,9 @@ ul.pager {
   text-align: center;
 }
 
-
 .item-list ul.pager li {
   margin: 0;
 }
-
 
 ul.pager li {
   background-image: none;
@@ -2008,39 +1636,9 @@ ul.pager li {
   }
 }
 
-
 .block ul.pager li {
   margin: 0;
 }
-
-
-/*
- * Theme the various states of pager links
- */
-ul.pager li {
-
-  a {
-
-    &:link,
-    &:visited {}
-
-    &:active,
-    &.active {}
-
-    &:hover,
-    &:focus {}
-  }
-
-  &.pager-item {}
-  &.first {}
-  &.last {}
-  &.pager-current {}
-  &.pager-first {}
-  &.pager-previous {}
-  &.pager-next {}
-  &.pager-last {}
-}
-
 
 /* =============================================================================
  *   Skip Navigation
@@ -2084,7 +1682,6 @@ ul.pager li {
   }
 }
 
-
 /* =============================================================================
  *   Tabs (local tasks)
  * ========================================================================== */
@@ -2092,7 +1689,6 @@ ul.pager li {
 #tasks {
   margin-bottom: 15px;
 }
-
 
 ul.primary {
   border-bottom-color: $border;
@@ -2132,7 +1728,6 @@ ul.primary {
   }
 }
 
-
 ul.secondary {
   border-bottom: 1px solid $border;
   margin: 1em 0 0;
@@ -2153,7 +1748,6 @@ ul.secondary {
   }
 }
 
-
 /* =============================================================================
  *   Action links
  * ========================================================================== */
@@ -2161,36 +1755,16 @@ ul.secondary {
 ul.action-links {
   margin: 20px 0 0;
   list-style: none;
-
-  li {}
 }
-
 
 /* =============================================================================
  *  Field Styling
  * ========================================================================== */
 
-/*
- * Wrapper for any field
- */
-.field {}
-
-
-/*
- * Above and inline classes are on the field wrapper
- */
-.field-label-above {}
-
-
-/*
- * When labels are set to inline in field display settings the clearfix class is automatically added
- */
-.field-label-inline {}
-
-
-/*
+/**
  * Labels are h2 in Adaptivetheme. Use a strong selector to mitigate unwanted ineritance issues
  */
+
 .field-label {
   font-size: 1em;
   font-weight: 700;
@@ -2199,29 +1773,11 @@ ul.action-links {
   margin-bottom: 0;
 }
 
-
-/*
- * Field types (Core)
- */
-
-/*
- * Image fields use the  figure> and <figcaption> elements from HTML5
- */
-.field-type-image {
-
-  .caption {}
-
-  .full-caption {}
-
-  .teaser-caption {}
-}
-
-
-/*
+/**
  * Taxonomy
  */
-.field-type-taxonomy-term-reference {
 
+.field-type-taxonomy-term-reference {
   /* The same bottom margin as p, blockquote, ul, ol and dl */
   margin-bottom: 1.5em;
 
@@ -2237,131 +1793,28 @@ ul.action-links {
   }
 }
 
-
-/*
- * Text
- */
-.field-type-text {}
-
-
-/*
- * Long text
- */
-.field-type-text-long {}
-
-
-/*
- * Text with summary
- */
-.field-type-text-with-summary {}
-
-
-/*
- * File
- */
-.field-type-file {}
-
-
-/*
- * Number/Integer
- */
-.field-type-number-integer {}
-
-
-/*
- * Decimal
- */
-.field-type-number-decimal {}
-
-
-/*
- * Number float
- */
-.field-type-number-float {}
-
-
-/*
- * List
- */
-.field-type-list-text {}
-
-
-/*
- * List boolean
- */
-.field-type-list-boolean {}
-
-
-/*
- * List integer
- */
-.field-type-list-integer {}
-
-
-/*
- * List float
- */
-.field-type-list-float {}
-
-
-/*
- * Field types (Contrib)
- */
-.field-type-datetime {}
-
-.field-type-node-reference {}
-
-.field-type-user-reference {}
-
-
-/*
- * Named fields
- */
-.field-name-body {}
-
-.field-name-field-image {}
-
-.field-name-field-tags {}
-
-
-/*
- * Underscores in field name are replaced with dashes
- */
-.field-name-field-FIELDNAME {}
-
-
-/*
- * Image Alignment Theme Settings - included here so you can easily override
- */
-
-/*
- * Float none setting
- */
-.ia-n .field-type-image,
-.iat-n .field-type-image {}
-
-
-/*
+/**
  * Float left setting
  */
+
 .ia-l .field-type-image figure,
 .iat-l .field-type-image figure {
   margin: 5px 20px 15px 0;
 }
 
-
-/*
+/**
  * Centered setting
  */
+
 .ia-c .field-type-image figure,
 .iat-c .field-type-image figure {
   margin: 5px auto 15px;
 }
 
-
-/*
+/**
  * Float right setting
  */
+
 .ia-r .field-type-image figure,
 .iat-r .field-type-image figure {
   margin: 5px 0 15px 20px;
@@ -2418,8 +1871,7 @@ ul.action-links {
   min-width: 83px;
   height: 34px;
   padding: 0 10px;
-  // needs latest Compass, add '@import "compass"' to your scss
-  background-color: #919591; // Old browsers
+  background-color: #919591;
   @include filter-gradient(#919591, #737772, vertical); // IE6-9
   @include background-image(linear-gradient(top,  #919591 0%,#90948f 12%,#757a74 33%,#737772 100%));
   border: 1px solid #585C58;
@@ -2440,9 +1892,8 @@ ul.action-links {
 .pane-views-panes,
 .pane-views,
 body.page-node .pane-views-panes {
-
   h2 {
-    font-size:20px;
+    font-size: 20px;
     line-height: 1.2em;
     margin-bottom: .85em;
     color:$gray;
@@ -2513,22 +1964,16 @@ body.page-node .pane-views-panes {
       }
 
       figure {
-        float:left;
-        margin:3px 10px 5px 0;
-        background:$white;
-        padding:4px;
+        float: left;
+        margin: 3px 10px 5px 0;
+        background: $white;
+        padding: 4px;
         @include border-radius(3px);
         @include box-shadow($light_gray 1px 1px 4px);
-        position:relative;
-        display:block;
-        line-height:0;
+        position: relative;
+        display: block;
+        line-height: 0;
       }
-
-      .field-name-field-topics {
-        // float: right;
-      }
-
-
     }
 
     .node-content {
@@ -2537,12 +1982,14 @@ body.page-node .pane-views-panes {
   }
 }
 
-.view-commons-radioactivity-groups-most-active, .view-commons-groups-recent-content, .view-commons-radioactivity-groups-active-in-group {
+.view-commons-radioactivity-groups-most-active,
+.view-commons-groups-recent-content,
+.view-commons-radioactivity-groups-active-in-group {
   .type-Wiki {
     font-size: 12px;
 
     &:before {
-      content: '';
+      content: "";
       @include sprite_url_height_width($icons, wikis);
       margin-right: 6px;
     }
@@ -2552,7 +1999,7 @@ body.page-node .pane-views-panes {
     font-size: 12px;
 
     &:before {
-      content: '';
+      content: "";
       @include sprite_url_height_width($icons, events);
       margin-right: 6px;
     }
@@ -2562,7 +2009,7 @@ body.page-node .pane-views-panes {
     font-size: 12px;
 
     &:before {
-      content: '';
+      content: "";
       @include sprite_url_height_width($icons, polls);
       margin-right: 6px;
     }
@@ -2572,17 +2019,18 @@ body.page-node .pane-views-panes {
     font-size: 12px;
 
     &:before {
-      content: '';
+      content: "";
       @include sprite_url_height_width($icons, posts);
       margin-right: 6px;
     }
   }
 
-  .type-Question, .type-Answer {
+  .type-Question,
+  .type-Answer {
     font-size: 12px;
 
     &:before {
-      content: '';
+      content: "";
       @include sprite_url_height_width($icons, qa);
       margin-right: 6px;
     }
@@ -2602,13 +2050,15 @@ body.page-node .pane-views-panes {
 }
 
 .pane-commons-groups-directory-panel-pane-1 {
-  background-color:transparent;
+  background-color: transparent;
   @include border-radius(0px);
   @include box-shadow(none);
-  margin-right:0;
-  margin-bottom:0;
+  margin-right: 0;
+  margin-bottom: 0;
+
   .block-inner {
-    padding:0;
+    padding: 0;
+
     .pane-title {
       display:none;
     }
@@ -2623,7 +2073,7 @@ body.page-node .pane-views-panes {
 
     &:before {
       @include sprite_url_height_width($icons, icon-groups-small);
-      content: '';
+      content: "";
       top: 3px;
     }
   }
@@ -2635,14 +2085,15 @@ body.page-node .pane-views-panes {
 
 .view-id-commons_events_upcoming {
   .views-field {
-    margin:0 0 0 18px;
+    margin: 0 0 0 18px;
   }
+
   .views-field-title {
-    background-image:image-url('icons/icon-gray-event.png');
-    background-repeat:no-repeat;
-    background-position:left 4px;
-    margin:0;
-    padding:0 0 0 18px;
+    background-image: image-url('icons/icon-gray-event.png');
+    background-repeat: no-repeat;
+    background-position: left 4px;
+    margin: 0;
+    padding: 0 0 0 18px;
   }
 }
 
@@ -2651,13 +2102,13 @@ body.page-node .pane-views-panes {
 
   article {
     @extend %pod-content;
+
     .commons-events-form-float {
-      float:right;
-      margin:-40px 0 0 0;
+      float: right;
+      margin: -40px 0 0 0;
     }
   }
 }
-
 
 .view-id-commons_activity_streams_activity {
   .view-content {
@@ -2695,8 +2146,8 @@ body.page-node .pane-views-panes {
   padding: 5px 20px;
 }
 
-.view-commons-groups-directory, .view-commons-homepage-content .node-teaser.node-group {
-
+.view-commons-groups-directory,
+.view-commons-homepage-content .node-teaser.node-group {
   h2 {
     font-size: 26px;
     line-height: 1em;
@@ -2707,14 +2158,17 @@ body.page-node .pane-views-panes {
     display: none;
   }
 
-  > .view-content > .views-row, > .view-filters {
+  > .view-content > .views-row,
+  > .view-filters {
     @extend %pod;
     position: relative;
 
-    > .node-teaser, form {
+    > .node-teaser,
+    form {
       @extend %pod-content;
     }
   }
+
   .view-filters {
     .views-exposed-widgets {
       margin-bottom: 0;
@@ -2827,7 +2281,7 @@ body.page-node .pane-views-panes {
         z-index: 15;
 
         &:after {
-          content: '';
+          content: "";
           display: block;
           width: 0px;
           height: 0px;
@@ -2854,7 +2308,8 @@ body.page-node .pane-views-panes {
 }
 
 .region-two-66-33-second .view-commons-contributors-group {
-  table, tbody {
+  table,
+  tbody {
     margin: 0;
     border: none;
   }
@@ -2866,8 +2321,6 @@ body.page-node .pane-views-panes {
 
   td {
     padding: 0;
-    // margin: 0 5px 5px 0;
-    // float: left;
     line-height: 0;
 
     &.col-last a {
@@ -2884,7 +2337,8 @@ body.page-node .pane-views-panes {
   }
 }
 
-#views-exposed-form-commons-homepage-content-panel-pane-1, #views-exposed-form-commons-bw-all-page-1 {
+#views-exposed-form-commons-homepage-content-panel-pane-1,
+#views-exposed-form-commons-bw-all-page-1 {
   .views-submit-button {
     margin-left: 20px;
   }
@@ -2911,7 +2365,7 @@ body.page-node .pane-views-panes {
     @extend %btn-gray;
 
     &:before {
-      content: '';
+      content: "";
       @include sprite_url_height_width($icons, icon-gray-follow);
       top: 0;
       margin-right: 5px;
@@ -2925,48 +2379,57 @@ body.page-node .pane-views-panes {
 
 .view-id-commons_featured {
   .views-field-title .field-content {
-    background-repeat:no-repeat;
+    background-repeat: no-repeat;
   }
-  .views-field-field-date, .views-field-field-address {
-    margin:0 0 0 18px;
+
+  .views-field-field-date,
+  .views-field-field-address {
+    margin: 0 0 0 18px;
   }
+
   .type-Event {
-    background-image:image-url('icons/icon-gray-event.png');
-    background-position:left 1px;
-    padding:0 0 0 18px;
+    background-image: image-url('icons/icon-gray-event.png');
+    background-position: left 1px;
+    padding: 0 0 0 18px;
   }
+
   .type-Post {
-    background-image:image-url('icons/icon-gray-post.png');
-    background-position:left 1px;
-    padding:0 0 0 18px;
+    background-image: image-url('icons/icon-gray-post.png');
+    background-position: left 1px;
+    padding: 0 0 0 18px;
   }
 }
 
 .views-exposed-widgets {
-  margin-bottom:1.5em;
+  margin-bottom: 1.5em;
+
   .views-exposed-widget {
-    padding:0;
+    padding: 0;
 
     label {
-      float:left;
-      font-weight:normal;
-      color:$light_gray;
-      padding:1px 0 0 0;
+      float: left;
+      font-weight: normal;
+      color: $light_gray;
+      padding: 1px 0 0 0;
     }
   }
+
   .views-widget {
-    float:left;
+    float: left;
   }
+
   .views-submit-button {
-    padding:0;
-    display:none;
+    padding: 0;
+    display: none;
+
     .form-submit {
-      margin-top:0;
+      margin-top: 0;
     }
   }
 }
 
-.views-widget-sort-by, .form-item-sort-order {
+.views-widget-sort-by,
+.form-item-sort-order {
   .form-select-wrapper {
     float: left;
   }
@@ -3012,7 +2475,8 @@ body.page-node .pane-views-panes {
   @include border-radius(6px);
   list-style: none;
 
-  .block-content &, .item-list & {
+  .block-content &,
+  .item-list & {
     margin: 0;
     padding: 0;
   }
@@ -3034,7 +2498,7 @@ body.page-node .pane-views-panes {
 
     .commons-polls-create:before {
       @include sprite_url_height_width($icons, polls);
-      content: '';
+      content: "";
       position: absolute;
       left: 10px;
       top: 13px;
@@ -3042,7 +2506,7 @@ body.page-node .pane-views-panes {
 
     .commons-posts-create:before {
       @include sprite_url_height_width($icons, posts);
-      content: '';
+      content: "";
       position: absolute;
       left: 10px;
       top: 13px;
@@ -3050,7 +2514,7 @@ body.page-node .pane-views-panes {
 
     .commons-wikis-create:before {
       @include sprite_url_height_width($icons, wikis);
-      content: '';
+      content: "";
       position: absolute;
       left: 10px;
       top: 13px;
@@ -3058,7 +2522,7 @@ body.page-node .pane-views-panes {
 
     .commons-events-create:before {
       @include sprite_url_height_width($icons, events);
-      content: '';
+      content: "";
       position: absolute;
       left: 10px;
       top: 13px;
@@ -3066,7 +2530,7 @@ body.page-node .pane-views-panes {
 
     .commons-q-a-create:before {
       @include sprite_url_height_width($icons, qa);
-      content: '';
+      content: "";
       position: absolute;
       left: 10px;
       top: 13px;
@@ -3140,128 +2604,47 @@ body.page-node .pane-views-panes {
  *   Block Styling
  * ========================================================================== */
 
-/*
- * Block for the latest news items in the first category
- */
-#block-aggregator-category-1 {}
-
-
-/*
- * Block for the latest news items in the first feed
- */
-#block-aggregator-feed-1 {}
-
-
-/*
- * First block created with "Add block" link
- */
-#block-block-1 {}
-
-
-/*
- * "Recent blog posts" block
- */
-#block-blog-recent {}
-
-
-/*
- * "Book navigation" block for the current book's table of contents
- */
-#block-book-navigation {}
-
-
-/*
- * "Recent comments" block
- */
-#block-comment-recent {}
-
-
-/*
- * "Active forum topics" block
- */
-#block-forum-active {}
-
-
-/*
- * "New forum topics" block
- */
-#block-forum-new {}
-
-
-/*
- * Language switcher block
- */
-#block-locale-language {}
-
-
-/*
- * Custom menu block
- */
-#block-menu-menu-NAME {}
-
-
-/*
- * "Recent content" block
- */
-#block-node-recent {}
-
-
-/*
- * "Syndicate" block for primary RSS feed; see also page.css's .feed-icon
- */
-#block-node-syndicate {}
-
-
-/*
- * "Most recent poll" block
- */
-#block-poll-recent {}
-
-
-/*
- * "Author information" block for the profile of the page's author
- */
-#block-profile-author-information {}
-
-
-/*
+/**
  * "Search form" block
  */
+
 .block-search {
-  display:block;
+  display: block;
   background-color: darken($dark_blue, 12%); // Old browsers
   @include filter-gradient(darken($dark_blue, 12%), darken($dark_blue, 6%), vertical); // IE6-9
   @include background-image(linear-gradient(top,  darken($dark_blue, 12%) 0%,darken($dark_blue, 6%)100%));
   @include border-radius(4px);
   box-shadow: 1px 1px 2px #000 inset, 2px 3px 3px rgba(#fff, 0.09);
-  height:30px;
-  margin:0 0 0 10px;
+  height: 30px;
+  margin: 0 0 0 10px;
   position: relative;
 
   .block-inner {
-    margin-left:0;
-    margin-right:0;
+    margin-left: 0;
+    margin-right: 0;
   }
+
   .form-text {
-    color:$white;
-    background:transparent;
-    border:none;
-    margin:3px 0 0 0;
-    width:145px;
+    color: $white;
+    background: transparent;
+    border: none;
+    margin: 3px 0 0 0;
+    width: 145px;
 
     .node-type-group & {
-      width:120px;
+      width: 120px;
     }
   }
+
   .form-submit {
-    background-color:transparent !important;
-    border:none !important;
-    width:12px !important;
-    height:12px !important;
-    background-image:image-url('icons/ico_search_wht.png') !important;
-    text-indent:-9999px !important;
-    padding:0 !important;
-    margin:10px 2px !important;
+    background-color: transparent !important;
+    border: none !important;
+    width: 12px !important;
+    height: 12px !important;
+    background-image: image-url('icons/ico_search_wht.png') !important;
+    text-indent: -9999px !important;
+    padding: 0 !important;
+    margin: 10px 2px !important;
   }
 
   .form-item-search-block-form label {
@@ -3275,79 +2658,6 @@ body.page-node .pane-views-panes {
     display: block;
   }
 }
-
-
-/*
- * "Shortcuts" block
- */
-#block-shortcut-shortcuts {}
-
-
-/*
- * "Popular content" block
- */
-#block-statistics-popular {}
-
-
-/*
- * "Main menu" block
- */
-#block-system-main-menu {}
-
-
-/*
- * "Management" block for Drupal management menu
- */
-#block-system-management {}
-
-
-/*
- * "Navigation" block for Drupal navigation menu
- */
-#block-system-navigation {}
-
-
-/*
- * "User menu" block for Drupal user menu
- */
-#block-system-user-menu {}
-
-
-/*
- * "System help" block
- */
-#block-system-help {}
-
-
-/*
- * "Main page content" block
- */
-#block-system-main {}
-
-
-/*
- * "Powered by Drupal" block
- */
-#block-system-powered-by {}
-
-
-/*
- * "User login form" block
- */
-#block-user-login {}
-
-
-/*
- * "Who's new" block for a list of the newest users
- */
-#block-user-new {}
-
-
-/*
- * "Who's online" block for a list of the online users
- */
-#block-user-online {}
-
 
 /* =============================================================================
  *   Node Styling
@@ -3367,7 +2677,7 @@ body.page-node .pane-views-panes {
   z-index: 1;
 
   &:before {
-    content: '';
+    content: "";
     display: block;
     width: 0px;
     height: 0px;
@@ -3388,50 +2698,14 @@ body.page-node .pane-views-panes {
 .node {
   margin-bottom: 20px;
 
-  &.node-sticky {}
-
-  &.node-by-viewer {}
-
   &.node-teaser {
     .links {
       font-size:0.85em;
     }
   }
 
-  &.node-full {}
-
-  &.odd {}
-
-  &.even {}
-
   .node-title {
     margin: 0;
-  }
-
-  .user-picture {}
-
-  .submitted {
-
-    .username {}
-
-    time {}
-  }
-
-  .node-content {}
-
-  ul.links {
-
-    li {}
-    li a {}
-
-    li.node-read-more a {}
-    li.comment-add a {}
-    li.comment-comments a {}
-    li.comment-new-comments a {}
-    li.blog-sernames-blog a {}
-    li.print-html a {}
-    li.print-email a {}
-    li.print-pdf a {}
   }
 }
 
@@ -3442,44 +2716,26 @@ body.page-node.node-type-group {
   }
 }
 
-
-.preview .node {}
-
-
-/*
- * All nodes are given a node-FOO class that describes the type of content that
- * it is. If you create a new content type called "my-custom-type", it will
- * receive a "node-my-custom-type" class.
- */
-.node-page {}
-
-.node-article {}
-
-.node-book {}
-
-.node-forum {}
-
-.node-poll {}
-
-/*
+/**
  * Node forms
  */
 
- .node-form {
+.node-form {
   /* Polls have some bad, over specific, styles so this is what needs to be
      done. */
   #poll-choice-table .form-text {
     width: 100%;
   }
- }
+}
 
 /* =============================================================================
  *   Comment Styling - Comments, comment wrapper, comment form
  * ========================================================================== */
 
-/*
+/**
  * Wrapper for the list of comments and its titles
  */
+
 #comments {
   h2 {
     &.comment-title {
@@ -3492,76 +2748,29 @@ body.page-node.node-type-group {
   }
 }
 
-
-/*
+/**
  * Wrapper for a single comment
  */
+
 .comment {
   margin-bottom: 20px;
-
-  &.first {}
-
-  &.last {}
-
-  &.odd {}
-
-  &.even {}
-
-  .user-picture {}
-
-  .submitted {
-
-    p {}
-
-    .username {}
-
-    time {}
-  }
-
-  .user-signature {}
-
-  ul.links {}
 }
 
-/*
- * Comment states
- */
-.comment-new {}
-
-.comment-by-anonymous {}
-
-.comment-by-node-author {}
-
-.comment-by-viewer {}
-
-.comment-title-hidden {}
-
-.comment-with-picture {}
-
-.comment-with-signature {}
-
-
-/*
- * Preview of the comment before submitting new or updated comment
- */
-.comment-preview {}
-
-
-/*
+/**
  * "New" marker for comments that are new for the current user
  */
+
 .new {
   color: $highlight;
 }
 
-
-/*
+/**
  * Nested comments are indented
  */
+
 .indented {
   margin-left: 40px;
 }
-
 
 .has-rate-widget {
   margin-right: 6em;
@@ -3599,9 +2808,9 @@ body.page-node.node-type-group {
  *   Forms
  * ========================================================================== */
 
- html.js input.form-autocomplete {
+html.js input.form-autocomplete {
   background-position: 100% 5px;
- }
+}
 
  html.js input.throbbing {
   background-position: 100% -15px; /* LTR */
@@ -3610,6 +2819,7 @@ body.page-node.node-type-group {
 /**
  * Forms in tables.
  */
+
 tr {
   &.odd,
   &.even {
@@ -3619,11 +2829,11 @@ tr {
   }
 }
 
-/*
+/**
  * Wrapper for a form element (or group of form elements) and its label
  */
-.form-item {
 
+.form-item {
   input.error,
   textarea.error,
   select.error {
@@ -3634,34 +2844,23 @@ tr {
     font-weight: 700;
   }
 
-  label.option {
-  }
-
   .description {
     font-size: 0.85em;
   }
-
-  &.form-checkboxes ,
-  &.form-radios {
-  }
 }
 
-
-/*
+/**
  * Highlight marks and form required mark
  */
+
 .marker,
 .form-required {
   color: $highlight;
 }
 
-
-/*
+/**
  * The submit button
  */
-.form-submit {
-}
-
 
 .container-inline {
   div,
@@ -3670,36 +2869,30 @@ tr {
   }
 }
 
-/*
+/**
  * Define consistent borders
  */
+
 fieldset {
   border: 1px solid $border;
 }
 
-/*
- * Tips for Drupal's input formats
- */
-.tips {
-}
-
-
-/*
+/**
  * Buttons used by contrib modules like Media
  */
+
 a.button {
   @include appearance(button);
 }
 
-
-/*
+/**
  * Password confirmation
  */
+
 .password-parent,
 .confirm-parent {
   margin: 0;
 }
-
 
 input[type="text"],
 textarea {
@@ -3709,7 +2902,6 @@ textarea {
   width: 100%;
   max-width: 100%;
 }
-
 
 button,
 input[type="submit"] {
@@ -3721,7 +2913,6 @@ input[type="submit"] {
   font-weight: normal;
   margin: 0 10px 0 0;
 }
-
 
 form.commons-events-form-float {
   background-color:none;
@@ -3736,7 +2927,7 @@ form.commons-events-form-float {
 .form-actions input[type="submit"] {
   @extend %btn-gray;
   padding: 5px 20px;
-  margin:0 15px 0 0;
+  margin: 0 15px 0 0;
   box-shadow: 0 3px 3px rgba(#000, 0.09);
 
   &.js-hide {
@@ -3759,7 +2950,7 @@ form.commons-events-form-float {
   font-size: .85em;
   padding: 0;
   border: none;
-  border-radius: 0;
+  @include border-radius(0);
   max-width: 80px;
   margin-right: -90px;
   text-align: center;
@@ -3782,7 +2973,6 @@ form.commons-events-form-float {
   }
 }
 
-
 /* =============================================================================
  *   Tables
  * ========================================================================== */
@@ -3797,7 +2987,6 @@ table {
   }
 }
 
-
 table,
 thead,
 tbody,
@@ -3807,13 +2996,11 @@ td {
   border-color: $border;
 }
 
-
 table,
 td,
 th {
   vertical-align: middle;
 }
-
 
 caption,
 th,
@@ -3821,12 +3008,10 @@ td {
   text-align: left;
 }
 
-
 thead tr {
   font-weight: 700;
   background-color: $medium_dark;
 }
-
 
 td,
 th {
@@ -3835,17 +3020,11 @@ th {
   padding: 5px 7px;
 }
 
-
-tbody {}
-
-
 tbody tr {
   border-top: 1px solid $border;
 }
 
-
 tr {
-
   &.odd {
     background: $page;
   }
@@ -3858,10 +3037,6 @@ tr {
     background-color: $ultralight;
   }
 
-  &.drag {}
-
-  &.drag-previous {}
-
   &.odd td.active {
     background-color: $light;
   }
@@ -3871,23 +3046,11 @@ tr {
   }
 }
 
-
-.lt-ie8 tr {
-
-  &.even,
-  &.odd {
-
-    th,
-    td {
-    }
-  }
-}
-
-
-/*
+/**
  * Forum tables
  * Core sets white-space to nowrap, which makes no sense
  */
+
 #forum td {
   .created,
   .posts,
@@ -3898,7 +3061,6 @@ tr {
      white-space: normal;
   }
 }
-
 
 /* =============================================================================
  *   Messages
@@ -3915,47 +3077,18 @@ div {
       margin-bottom: 0;
     }
   }
-
-  &.status {
-  }
-
-  &.warning {
-  }
 }
 
-tr.warning {
-}
-
-
-div.error,
-tr.error {
-}
-
-
-.error {
-}
-
-
-.warning {
-}
-
-
-/*
+/**
  * Unpublished nodes
  */
-.node-unpublished,
-.comment-unpublished {
-}
-
 
 .node-unpublished,
 .comment-unpublished {
-
   p.unpublished {
     @include unpublished;
   }
 }
-
 
 /* =============================================================================
  *    Maintenance pages
@@ -3971,7 +3104,6 @@ tr.error {
     margin: 0;
   }
 }
-
 
 .db-offline {
   .container {
@@ -3990,32 +3122,32 @@ tr.error {
   }
 }
 
-
 /* =============================================================================
  *   Misc overrides for contrib modules
  * ========================================================================== */
 
-/*
+/**
  * Admin menu overrides
  */
+
 #admin-menu {
   margin: 0;
   padding: 0;
 }
 
-
-/*
+/**
  * Devel Module
  */
+
 .dev-query {
   background: $light;
   padding: 30px;
 }
 
-
-/*
+/**
  * Styleguide module tweaks
  */
+
 #styleguide-header {
   padding: 0 10px;
 
@@ -4033,27 +3165,29 @@ tr.error {
 
 body.front {
   .region-three-33-top {
-    font-size:24px;
-    font-weight:300;
+    font-size: 24px;
+    font-weight: 300;
+
     h1 {
-      color:$dark_gray;
-      font-size:40px;
-      font-weight:700;
-      line-height:50px;
+      color: $dark_gray;
+      font-size: 40px;
+      font-weight: 700;
+      line-height: 50px;
     }
+
     .commons_home-welcome-image {
       float:right;
     }
   }
-}
 
-body.front.not-logged-in {
-  #block-system-main {
-    .pane-1 {
-      .pane-title {
-        font-weight:700;
-        font-size:38px;
-        color:$dark_gray;
+  &.not-logged-in {
+    #block-system-main {
+      .pane-1 {
+        .pane-title {
+          font-weight: 700;
+          font-size: 38px;
+          color: $dark_gray;
+        }
       }
     }
   }
@@ -4087,9 +3221,10 @@ body.front.logged-in {
     .article.node, .node-teaser.node-group {
       .node-header {
         a {
-          float:left;
+          float: left;
         }
       }
+
       .node-content {
         form {
 
@@ -4098,18 +3233,22 @@ body.front.logged-in {
         .field-name-body {
         }
       }
+
       .author-datetime {
         margin-bottom: 1.5em;
-        clear:both;
+        clear: both;
       }
     }
+
     .views-row-first {
-      border-top:none;
+      border-top: none;
     }
+
     .item-list {
-      padding:10px 0 0 0;
+      padding: 10px 0 0 0;
     }
   }
+
   #views-exposed-form-commons-homepage-content-panel-pane-1 .views-exposed-widgets {
     padding: $gutter-width 0;
     margin-bottom: 0;
@@ -4126,8 +3265,12 @@ body.front.logged-in {
 }
 
 body.front.logged-in .view-commons-homepage-content .article.node {
-  &.no-user-picture, &.node-page {
-    .node-header, .node-content, .author-datetime, .links {
+  &.no-user-picture,
+  &.node-page {
+    .node-header,
+    .node-content,
+    .author-datetime,
+    .links {
       margin-left: 0;
     }
   }
@@ -4152,23 +3295,27 @@ body.front.logged-in .view-commons-homepage-content .article.node {
   }
 }
 
-/*
+/**
  *  Placeholder styles
  */
 
 #menu-bar.nav {
   .menu-item-193 a {
-    background-image:image-url('icons/icon-home.png');
+    background-image: image-url('icons/icon-home.png');
   }
+
   .menu-item-194 a {
-    background-image:image-url('icons/icon-groups.png');
+    background-image: image-url('icons/icon-groups.png');
   }
+
   .menu-item-195 a {
-    background-image:image-url('icons/icon-events.png');
+    background-image: image-url('icons/icon-events.png');
   }
 }
 
-// Events Page
+/**
+ * Events Page
+ */
 
 .page-events {
   .region-three-25-50-25-first {
@@ -4225,14 +3372,16 @@ body.front.logged-in .view-commons-homepage-content .article.node {
 
     &:before {
       @include sprite_url_height_width($icons, icon-events);
-      content: '';
+      content: "";
       top: 2px;
       margin-right: 6px;
     }
   }
 }
 
-// Search
+/**
+ * Search
+ */
 .page-search {
   .two-33-66 {
     > {
@@ -4360,7 +3509,9 @@ body.front.logged-in .view-commons-homepage-content .article.node {
   }
 }
 
-// Notification settings
+/**
+ * Notification settings
+ */
 
 .view-commons-follow-node,
 .view-commons-follow-user,
@@ -4379,7 +3530,9 @@ body.front.logged-in .view-commons-homepage-content .article.node {
   }
 }
 
-// Commons Origins Pallete Choices
+/**
+ * Commons Origins Pallete Choices
+ */
 
 #edit-commons-origins-palette {
   .form-item-commons-origins-palette {
@@ -4396,7 +3549,10 @@ body.front.logged-in .view-commons-homepage-content .article.node {
   }
 }
 
-// Login & Signup Form
+/**
+ * Login and signup form
+ */
+
 #user-login, #user-register-form {
   input[type="text"], input[type="password"] {
     width: 20em;
@@ -4404,5 +3560,8 @@ body.front.logged-in .view-commons-homepage-content .article.node {
   }
 }
 
-// Import the color palettes
+/**
+ * Add the color palettes
+ */
+
 @import 'palettes';
