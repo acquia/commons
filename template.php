@@ -28,53 +28,53 @@ function commons_origins_theme($existing, $type, $theme, $path) {
  * tpl files simpler and make maintaining it a bit less worrisome since there
  * are 2 forms of search supported.
  */
-function commons_origins_preprocess_search_results(&$vars, $hook) {
-  $vars['classes_array'][] = 'search-results-wrapper';
-  $vars['title_attributes_array']['class'][] = 'search-results-title';
-  $vars['content_attributes_array']['class'][] = 'search-results-content';
-  $vars['content_attributes_array']['class'][] = 'commons-pod';
+function commons_origins_preprocess_search_results(&$variables, $hook) {
+  $variables['classes_array'][] = 'search-results-wrapper';
+  $variables['title_attributes_array']['class'][] = 'search-results-title';
+  $variables['content_attributes_array']['class'][] = 'search-results-content';
+  $variables['content_attributes_array']['class'][] = 'commons-pod';
 }
 
 /**
  * Implements hook_process_search_results().
  */
-function commons_origins_process_search_results(&$vars, $hook) {
+function commons_origins_process_search_results(&$variables, $hook) {
   // Set the title in preprocess so that it can be overridden by modules
   // further upstream.
-  if (empty($vars['title'])) {
-    $vars['title'] = t('Search results');
+  if (empty($variables['title'])) {
+    $variables['title'] = t('Search results');
   }
 }
 
 /**
  * Preprocess variables for the html template.
  */
-function commons_origins_preprocess_html(&$vars) {
+function commons_origins_preprocess_html(&$variables, $hook) {
   global $theme_key;
 
   $site_name = variable_get('site_name', 'Commons');
 
   if (strlen($site_name) > 23) {
-    $vars['classes_array'][] = 'site-name-long-2-lines';
+    $variables['classes_array'][] = 'site-name-long-2-lines';
   } else if (strlen($site_name) > 15) {
-    $vars['classes_array'][] = 'site-name-long';
+    $variables['classes_array'][] = 'site-name-long';
   }
   $palette = variable_get('commons_origins_palette', 'default');
   if ($palette != 'default') {
-    $vars['classes_array'][] = 'palette-active';
-    $vars['classes_array'][] = drupal_html_class($palette);
+    $variables['classes_array'][] = 'palette-active';
+    $variables['classes_array'][] = drupal_html_class($palette);
   }
 
   // Browser/platform sniff - adds body classes such as ipad, webkit, chrome
   // etc.
-  $vars['classes_array'][] = css_browser_selector();
+  $variables['classes_array'][] = css_browser_selector();
 
 }
 
 /**
  * Implements theme_menu_link().
  */
-function commons_origins_menu_link($vars) {
+function commons_origins_menu_link($variables) {
   $output = '';
   $path_to_at_core = drupal_get_path('theme', 'adaptivetheme');
 
@@ -83,7 +83,7 @@ function commons_origins_menu_link($vars) {
   global $theme_key;
   $theme_name = $theme_key;
 
-  $element = $vars['element'];
+  $element = $variables['element'];
   commons_origins_menu_link_class($element);
   $sub_menu = '';
 
@@ -125,27 +125,25 @@ function commons_origins_menu_link_class(&$element)  {
 /**
  * Override or insert variables for the page templates.
  */
-function commons_origins_preprocess_page(&$vars) {
+function commons_origins_preprocess_page(&$variables, $hook) {
   if (module_exists('page_manager')) {
     $p = page_manager_get_current_page();
     if (isset($p['name']) && $p['name'] == 'node_view') {
       $node = $p['contexts']['argument_entity_id:node_1']->data;
       if (module_exists('og') && !og_is_group('node', $node)) {
-        $vars['hide_panelized_title'] = 1;
+        $variables['hide_panelized_title'] = 1;
       }
     }
   }
-}
-function commons_origins_process_page(&$vars) {
 }
 
 /**
  * Override or insert variables into the node templates.
  */
-function commons_origins_preprocess_node(&$vars) {
+function commons_origins_preprocess_node(&$variables, $hook) {
   // Append a feature label to featured node teasers.
-  if ($vars['teaser'] && $vars['promote']) {
-    $vars['submitted'] .= ' <span class="featured-node-tooltip">' . t('Featured') . ' ' . $vars['type'] . '</span>';
+  if ($variables['teaser'] && $variables['promote']) {
+    $variables['submitted'] .= ' <span class="featured-node-tooltip">' . t('Featured') . ' ' . $variables['type'] . '</span>';
   }
 
   // Some content does not get a user image on the full node.
@@ -155,29 +153,29 @@ function commons_origins_preprocess_node(&$vars) {
     'page',
     'wiki',
   );
-  if (!$vars['teaser'] && in_array($vars['node']->type, $no_avatar)) {
-    $vars['user_picture'] = '';
+  if (!$variables['teaser'] && in_array($variables['node']->type, $no_avatar)) {
+    $variables['user_picture'] = '';
   }
 
   // If there does happen to be a user image, add a class for styling purposes.
-  if (!empty($vars['user_picture'])) {
-    $vars['classes_array'][] = 'user-picture-available';
+  if (!empty($variables['user_picture'])) {
+    $variables['classes_array'][] = 'user-picture-available';
   }
 
   // Add classes to render the comment-comments link as a button with a number
   // attached.
-  if (!empty($vars['content']['links']['comment']['#links']['comment-comments'])) {
-    $comments_link = &$vars['content']['links']['comment']['#links']['comment-comments'];
+  if (!empty($variables['content']['links']['comment']['#links']['comment-comments'])) {
+    $comments_link = &$variables['content']['links']['comment']['#links']['comment-comments'];
     $comments_link['attributes']['class'][] = 'link-with-counter';
-    $comments_link['title'] = str_replace($vars['comment_count'], '<span class="counter">' . $vars['comment_count'] . '</span>', $comments_link['title']);
+    $comments_link['title'] = str_replace($variables['comment_count'], '<span class="counter">' . $variables['comment_count'] . '</span>', $comments_link['title']);
   }
 
   // Push the reporting link to the end.
-  if (!empty($vars['content']['links']['flag']['#links']['flag-inappropriate_node'])) {
-    $vars['content']['report_link'] = array('#markup' => $vars['content']['links']['flag']['#links']['flag-inappropriate_node']['title']);
+  if (!empty($variables['content']['links']['flag']['#links']['flag-inappropriate_node'])) {
+    $variables['content']['report_link'] = array('#markup' => $variables['content']['links']['flag']['#links']['flag-inappropriate_node']['title']);
   }
 
-  if (!empty($vars['content']['links'])) {
+  if (!empty($variables['content']['links'])) {
     // Hide some of the node links.
     $hidden_links = array(
       'node' => array(
@@ -193,8 +191,8 @@ function commons_origins_preprocess_node(&$vars) {
     );
     foreach ($hidden_links as $element => $links) {
       foreach ($links as $link) {
-        if (!empty($vars['content']['links'][$element]['#links'][$link])) {
-          $vars['content']['links'][$element]['#links'][$link]['#access'] = FALSE;
+        if (!empty($variables['content']['links'][$element]['#links'][$link])) {
+          $variables['content']['links'][$element]['#links'][$link]['#access'] = FALSE;
         }
       }
     }
@@ -202,28 +200,28 @@ function commons_origins_preprocess_node(&$vars) {
 
   // Replace the submitted text on nodes with something a bit more pertinent to
   // the content type.
-  if (variable_get('node_submitted_' . $vars['node']->type, TRUE)) {
+  if (variable_get('node_submitted_' . $variables['node']->type, TRUE)) {
     $placeholders = array(
-      '!type' => '<span class="node-content-type">' . ucfirst($vars['node']->type) . '</span>',
-      '!user' => $vars['name'],
-      '!date' => $vars['date'],
+      '!type' => '<span class="node-content-type">' . ucfirst($variables['node']->type) . '</span>',
+      '!user' => $variables['name'],
+      '!date' => $variables['date'],
     );
 
-    $vars['submitted'] = t('!type created by !user on !date', $placeholders);
+    $variables['submitted'] = t('!type created by !user on !date', $placeholders);
   }
 
   // Add a class to the node when there is a logo image.
-  if (!empty($vars['field_logo'])) {
-    $vars['classes_array'][] = 'logo-available';
+  if (!empty($variables['field_logo'])) {
+    $variables['classes_array'][] = 'logo-available';
   }
 
   // Move the answer link on question nodes to the top of the content.
-  if ($vars['node']->type == 'question' && !empty($vars['content']['links']['answer'])) {
-    $vars['content']['answer'] = $vars['content']['links']['answer'];
-    $vars['content']['answer']['#attributes']['class'][] = 'node-actions';
-    $vars['content']['answer']['#links']['answer-add']['attributes']['class'][] = 'button-alert';
-    $vars['content']['answer']['#weight'] = -100;
-    $vars['content']['links']['answer']['#access'] = FALSE;
+  if ($variables['node']->type == 'question' && !empty($variables['content']['links']['answer'])) {
+    $variables['content']['answer'] = $variables['content']['links']['answer'];
+    $variables['content']['answer']['#attributes']['class'][] = 'node-actions';
+    $variables['content']['answer']['#links']['answer-add']['attributes']['class'][] = 'button-alert';
+    $variables['content']['answer']['#weight'] = -100;
+    $variables['content']['links']['answer']['#access'] = FALSE;
   }
 
   // Groups the related fields into their own container.
@@ -233,13 +231,13 @@ function commons_origins_preprocess_node(&$vars) {
     'field_topics',
   );
   foreach($related_information as $field) {
-    if (!empty($vars['content'][$field])) {
-      $vars['content']['related_information'][$field] = $vars['content'][$field];
-      hide($vars['content'][$field]);
+    if (!empty($variables['content'][$field])) {
+      $variables['content']['related_information'][$field] = $variables['content'][$field];
+      hide($variables['content'][$field]);
     }
   }
-  if (!empty($vars['content']['related_information'])) {
-    $vars['content']['related_information'] += array(
+  if (!empty($variables['content']['related_information'])) {
+    $variables['content']['related_information'] += array(
       '#theme_wrappers' => array('container'),
       '#attributes' => array(
         'class' => array('related-information', 'clearfix'),
@@ -249,40 +247,40 @@ function commons_origins_preprocess_node(&$vars) {
   }
 
   // Add classes when there is a voting widget present.
-  if (!empty($vars['content']['rate_commons_answer'])) {
-    $vars['content_attributes_array']['class'][] = 'has-rate-widget';
-    $vars['content']['rate_commons_answer']['#weight'] = 999;
+  if (!empty($variables['content']['rate_commons_answer'])) {
+    $variables['content_attributes_array']['class'][] = 'has-rate-widget';
+    $variables['content']['rate_commons_answer']['#weight'] = 999;
   }
 }
 
 /**
  * Implements hook_preprocess_two_33_66().
  */
-function commons_origins_preprocess_two_33_66(&$vars, $hook) {
+function commons_origins_preprocess_two_33_66(&$variables, $hook) {
   $menu = menu_get_item();
 
   // Suggest a variant for the search page so the facets will be wrapped in pod
   // styling.
   if (strpos($menu['path'], 'search') === 0) {
-    $vars['theme_hook_suggestions'][] = 'two_33_66__search';
+    $variables['theme_hook_suggestions'][] = 'two_33_66__search';
   }
 }
 
-function commons_origins_preprocess_three_25_50_25(&$vars, $hook) {
+function commons_origins_preprocess_three_25_50_25(&$variables, $hook) {
   $menu = menu_get_item();
 
   // Suggest a variant for the search page so the facets will be wrapped in pod
   // styling.
   if (isset($menu['page_arguments']) && $menu['page_arguments'][0] == 'solr_events') {
-    $vars['theme_hook_suggestions'][] = 'three_25_50_25__events';
+    $variables['theme_hook_suggestions'][] = 'three_25_50_25__events';
   }
 }
 
 /**
  * Implements hook_preprocess_panels_pane().
  */
-function commons_origins_preprocess_panels_pane(&$vars, $hook) {
-  $pane = $vars['pane'];
+function commons_origins_preprocess_panels_pane(&$variables, $hook) {
+  $pane = $variables['pane'];
 
   // Add pod styling to some of the panels panes.
   $not_pods = array(
@@ -292,20 +290,20 @@ function commons_origins_preprocess_panels_pane(&$vars, $hook) {
     'commons_question_answers-panel_pane_1',
   );
   if (($pane->panel == 'two_66_33_second' && !in_array($pane->subtype, $not_pods)) || in_array($pane->subtype, $content_pods)) {
-    $vars['attributes_array']['class'][] = 'commons-pod';
+    $variables['attributes_array']['class'][] = 'commons-pod';
   }
 }
 
 /**
  * Implements hook_preprocess_views_view().
  */
-function commons_origins_preprocess_views_view(&$vars, $hook) {
-  $view = $vars['view'];
+function commons_origins_preprocess_views_view(&$variables, $hook) {
+  $view = $variables['view'];
 
   // Wrap page views in pod styling.
   if ($view->display_handler->plugin_name == 'page') {
-    $vars['classes_array'][] = 'commons-pod';
-    $vars['classes_array'][] = 'clearfix';
+    $variables['classes_array'][] = 'commons-pod';
+    $variables['classes_array'][] = 'clearfix';
   }
 
   // Style some views without bottom borders and padding.
@@ -324,8 +322,8 @@ function commons_origins_preprocess_views_view(&$vars, $hook) {
     'commons_radioactivity_groups_active_in_group' => array('panel_pane_1'),
     'commons_radioactivity_groups_most_active' => array('panel_pane_1'),
   );
-  if (isset($plain[$vars['name']]) && in_array($vars['display_id'], $plain[$vars['name']])) {
-    $vars['classes_array'][] = 'view-plain';
+  if (isset($plain[$variables['name']]) && in_array($variables['display_id'], $plain[$variables['name']])) {
+    $variables['classes_array'][] = 'view-plain';
   }
 }
 
@@ -335,11 +333,11 @@ function commons_origins_preprocess_views_view(&$vars, $hook) {
  * Since Commons Origins overrides the default theme_form() function, we will
  * need to perform some processing on attributes to make it work in a template.
  */
-function commons_origins_preprocess_form(&$vars, $hook) {
+function commons_origins_preprocess_form(&$variables, $hook) {
   // Bootstrap the with some of Drupal's default variables.
-  template_preprocess($vars, $hook);
+  template_preprocess($variables, $hook);
 
-  $element = &$vars['element'];
+  $element = &$variables['element'];
   if (isset($element['#action'])) {
     $element['#attributes']['action'] = drupal_strip_dangerous_protocols($element['#action']);
   }
@@ -347,11 +345,11 @@ function commons_origins_preprocess_form(&$vars, $hook) {
   if (empty($element['#attributes']['accept-charset'])) {
     $element['#attributes']['accept-charset'] = "UTF-8";
   }
-  $vars['attributes_array'] = $element['#attributes'];
+  $variables['attributes_array'] = $element['#attributes'];
 
   // Give the search form on the search page pod styling.
   if (isset($element['#search_page']) || (isset($element['module']) && ($element['module']['#value'] == 'search_facetapi' || $element['module']['#value'] == 'user'))) {
-    $vars['attributes_array']['class'][] = 'commons-pod';
+    $variables['attributes_array']['class'][] = 'commons-pod';
   }
 
   $pods = array(
@@ -361,7 +359,7 @@ function commons_origins_preprocess_form(&$vars, $hook) {
   );
 
   if (in_array($element['#id'], $pods)) {
-    $vars['attributes_array']['class'][] = 'commons-pod';
+    $variables['attributes_array']['class'][] = 'commons-pod';
   }
 }
 
@@ -371,20 +369,20 @@ function commons_origins_preprocess_form(&$vars, $hook) {
  * Since Commons Origins overrides the default theme_form() function, we will
  * need to perform some processing on attributes to make it work in a template.
  */
-function commons_origins_process_form(&$vars, $hook) {
+function commons_origins_process_form(&$variables, $hook) {
   // Crunch down attribute arrays.
-  template_process($vars, $hook);
+  template_process($variables, $hook);
 }
 
 /**
  * Implements hook_preprocess_form_content().
  */
-function commons_origins_preprocess_form_content(&$vars, $hook) {
+function commons_origins_preprocess_form_content(&$variables, $hook) {
   // Bootstrap the with some of Drupal's default variables.
-  template_preprocess($vars, $hook);
+  template_preprocess($variables, $hook);
 
-  if (isset($vars['form']['supplementary'])) {
-    foreach ($vars['form']['supplementary'] as &$field) {
+  if (isset($variables['form']['supplementary'])) {
+    foreach ($variables['form']['supplementary'] as &$field) {
       if (is_array($field) && isset($field['#theme_wrappers'])) {
         $field['#theme_wrappers'][] = 'container';
         $field['#attributes']['class'][] = 'commons-pod';
@@ -396,19 +394,19 @@ function commons_origins_preprocess_form_content(&$vars, $hook) {
 /**
  * Implements hook_process_form_content().
  */
-function commons_origins_process_form_content(&$vars, $hook) {
+function commons_origins_process_form_content(&$variables, $hook) {
   // Crunch down attribute arrays.
-  template_process($vars, $hook);
+  template_process($variables, $hook);
 }
 
 /**
  * Implements hook_preprocess_views_view_unformatted().
  */
-function commons_origins_preprocess_views_view_unformatted(&$vars) {
+function commons_origins_preprocess_views_view_unformatted(&$variables, $hook) {
   // Prevent the avatars in the activity stream blocks from bleeding into the
   // rows below them.
-  if ($vars['view']->name == 'commons_activity_streams_activity') {
-    foreach ($vars['classes_array'] as &$classes) {
+  if ($variables['view']->name == 'commons_activity_streams_activity') {
+    foreach ($variables['classes_array'] as &$classes) {
       $classes .= ' clearfix';
     }
   }
@@ -500,10 +498,10 @@ function commons_origins_css_alter(&$css) {
  * This allows for the theme to set a link's #access argument to FALSE so it
  * will not render.
  */
-function commons_origins_links($vars) {
-  $links = $vars['links'];
-  $attributes = $vars['attributes'];
-  $heading = $vars['heading'];
+function commons_origins_links($variables) {
+  $links = $variables['links'];
+  $attributes = $variables['attributes'];
+  $heading = $variables['heading'];
   global $language_url;
   $output = '';
 
@@ -650,16 +648,16 @@ function commons_origins_field__addressfield($variables) {
 /**
  * Implements hook_preprocess_views_view_field().
  */
-function commons_origins_preprocess_views_view_field(&$vars, $hook) {
+function commons_origins_preprocess_views_view_field(&$variables, $hook) {
   // Make sure empty addresses are not displayed.
   // Views does not use theme_field__addressfield(), so we need to process
   // these implementations separately.
-  if (isset($vars['theme_hook_suggestion']) && $vars['theme_hook_suggestion'] == 'views_view_field__field_address') {
-    foreach ($vars['row']->field_field_address as $key => &$address) {
+  if (isset($variables['theme_hook_suggestion']) && $variables['theme_hook_suggestion'] == 'views_view_field__field_address') {
+    foreach ($variables['row']->field_field_address as $key => &$address) {
       if (!$address['raw']['administrative_area']) {
         // If an address is incomplete, remove it and tell the system a
         // rebuild is needed.
-        unset($vars['row']->field_field_address[$key]);
+        unset($variables['row']->field_field_address[$key]);
       }
       else {
         _commons_origins_format_address($address['rendered']);
@@ -667,6 +665,6 @@ function commons_origins_preprocess_views_view_field(&$vars, $hook) {
     }
 
     // The output will need rebuilt to get the changes applied.
-    $vars['output'] = $vars['field']->advanced_render($vars['row']);
+    $variables['output'] = $variables['field']->advanced_render($variables['row']);
   }
 }
