@@ -89,72 +89,6 @@
   }
 }
 
-%like-btn {
-  position: relative;
-  @extend %btn-gray;
-  width: 62px;
-  height: 20px;
-  padding: 0;
-
-  .rate-commons-like-btn {
-    display: block;
-    font-size: 0;
-    width: 62px;
-    height: 20px;
-    position: absolute;
-    left: 0;
-    top: 0;
-    z-index: 2;
-
-    &:before {
-      content: '';
-      @include sprite_url_height_width($icons, like);
-      position: absolute;
-      left: 17px;
-      top: 3px;
-    }
-  }
-
-  .rate-commons-like-count {
-    position: absolute;
-    top: -1px;
-    right: -1px;
-    z-index: 1;
-    background: #D9D9D9;
-    border: 1px solid #B5B5B5;
-    height: 20px;
-    line-height: 20px;
-    padding: 0 5px;
-    @include border-radius(0 3px 3px 0px);
-
-    &:after, &:before {
-      right: 100%;
-      border: solid transparent;
-      content: " ";
-      height: 0;
-      width: 0;
-      position: absolute;
-      pointer-events: none;
-    }
-
-    &:after {
-      border-color: rgba(217, 217, 217, 0);
-      border-right-color: #D9D9D9;
-      border-width: 4px;
-      top: 50%;
-      margin-top: -4px;
-    }
-
-    &:before {
-      border-color: rgba(181, 181, 181, 0);
-      border-right-color: #B5B5B5;
-      border-width: 5px;
-      top: 50%;
-      margin-top: -5px;
-    }
-  }
-}
-
 %btn-with-attach {
   position: relative;
   font-size: 0;
@@ -187,7 +121,8 @@
   vertical-align: top;
   @include border-radius(0 3px 3px 0px);
 
-  &:after, &:before {
+  &:after,
+  &:before {
     right: 100%;
     border: solid transparent;
     content: " ";
