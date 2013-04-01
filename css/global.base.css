@@ -499,8 +499,8 @@ optgroup::-moz-focus-inner {
 
 /* Options */
 .selectBox-options,
-.selectBox-options LI,
-.selectBox-options LI A {
+.selectBox-options li,
+.selectBox-options li a {
   list-style: none;
   display: block;
   cursor: default;
@@ -508,7 +508,7 @@ optgroup::-moz-focus-inner {
   margin: 0;
 }
 
-.selectBox-options LI A {
+.selectBox-options li a {
   line-height: 1.5;
   padding: 0 .5em;
   white-space: nowrap;
@@ -516,16 +516,16 @@ optgroup::-moz-focus-inner {
   background: 6px center no-repeat;
 }
 
-.selectBox-options LI.selectBox-hover A {
+.selectBox-options li.selectBox-hover a {
   background-color: #EEE;
 }
 
-.selectBox-options LI.selectBox-disabled A {
+.selectBox-options li.selectBox-disabled a {
   color: #888;
   background-color: transparent;
 }
 
-.selectBox-options LI.selectBox-selected A {
+.selectBox-options li.selectBox-selected a {
   background-color: #C8DEF4;
 }
 
@@ -553,7 +553,7 @@ optgroup::-moz-focus-inner {
   color: #888 !important;
 }
 
-.selectBox-inline.selectBox-disabled .selectBox-options A {
+.selectBox-inline.selectBox-disabled .selectBox-options a {
   background-color: transparent !important;
 }
 
