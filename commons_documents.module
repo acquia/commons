@@ -28,7 +28,7 @@ function commons_documents_views_pre_render(&$view) {
   if ($view->name == 'commons_bw_documents') {
     $group_id = $view->args[0];
     if (og_user_access('node', $group_id, 'create document content') && node_access('create', 'document')) {
-      $view->attachment_before = l('Create a document', 'node/add/document', array('query' => array('og_group_ref' => $group_id)));
+      $view->attachment_before = l(t('Create a document'), 'node/add/document', array('query' => array('og_group_ref' => $group_id)));
     }
   }
 }
