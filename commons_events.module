@@ -341,7 +341,7 @@ function commons_events_token_info_alter(&$tokens) {
  */
 function commons_events_commons_bw_create_all_widget($group) {
    if (og_user_access('node', $group->nid, 'create event content')) {
-      $link = l('List an event','node/add/event',
+      $link = l(t('List an event'),'node/add/event',
       array('attributes' => array('class' => 'commons-events-create'), 'query' => array('og_group_ref' => $group->nid))
     );
     return array(
