@@ -26,7 +26,7 @@ function commons_polls_commons_bw_group_widget() {
  */
 function commons_polls_commons_bw_create_all_widget($group) {
   if (og_user_access('node', $group->nid, 'create poll content')) {
-    $link = l('Create a poll','node/add/poll',
+    $link = l(t('Create a poll'),'node/add/poll',
     array('attributes' => array('class' => 'commons-polls-create'), 'query' => array('og_group_ref' => $group->nid))
     );
     return array(
@@ -60,7 +60,7 @@ function commons_polls_views_pre_render(&$view) {
   if ($view->name == 'commons_bw_polls') {
     $group_id = $view->args[0];
     if (og_user_access('node', $group_id, 'create poll content')) {
-      $view->attachment_before = l('Create a poll', 'node/add/poll', array('query' => array('og_group_ref' => $group_id)));
+      $view->attachment_before = l(t('Create a poll'), 'node/add/poll', array('query' => array('og_group_ref' => $group_id)));
     }
   }
 }
