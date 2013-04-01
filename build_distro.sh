@@ -38,6 +38,12 @@ release_notes() {
     fi
     cd ..
   done
+  cd $BUILD_PATH/repos/themes/commons_origins
+  RN=`drush rn --date $FROM_DATE $TO_DATE`
+  if [[ -n $RN ]]; then
+    OUTPUT="$OUTPUT <h3>commons_origins:</h3> $RN"
+  fi
+
   echo $OUTPUT >> $BUILD_PATH/rn.txt
 }
 
