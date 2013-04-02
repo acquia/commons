@@ -364,7 +364,7 @@ function commons_groups_pages_panelizer_defaults() {
         0 => 'panelizer.nid',
       ),
       'override_title' => 1,
-      'override_title_text' => 'Recent content',
+      'override_title_text' => t('Recent content'),
     );
     $pane->cache = array();
     $pane->style = array(
