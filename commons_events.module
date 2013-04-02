@@ -73,7 +73,50 @@ function commons_events_theme($existing, $type, $theme, $path) {
       ),
       'file' => '/includes/commons_events.theme.inc',
     ),
+    'commons_events_date_display_range_advanced' => array(
+      'variables' => array(
+        'date1' => NULL,
+        'date2' => NULL,
+        'timezone' => NULL,
+        'dates' => NULL,
+        // HTML attributes that will be applied to both the start and end dates
+        // (unless overridden).
+        'attributes' => array(),
+        // HTML attributes that will be applied to the start date only.
+        'attributes_start' => array(),
+        // HTML attributes that will be applied to the end date only.
+        'attributes_end' => array(),
+        'rdf_mapping' => NULL,
+        'add_rdf' => NULL,
+      )
+    ),
+    'commons_events_date_display_range_simple' => array(
+      'variables' => array(
+        'date1' => NULL,
+        'date2' => NULL,
+        'timezone' => NULL,
+        'dates' => NULL,
+        // HTML attributes that will be applied to both the start and end dates
+        // (unless overridden).
+        'attributes' => array(),
+        // HTML attributes that will be applied to the start date only.
+        'attributes_start' => array(),
+        // HTML attributes that will be applied to the end date only.
+        'attributes_end' => array(),
+        'rdf_mapping' => NULL,
+        'add_rdf' => NULL,
+      )
+    ),
   );
+}
+
+/**
+ * Implements hook_theme_registry_alter().
+ * Gives us the ability to insert our pretty date formatter for the dates we choose below.
+ */
+function commons_events_theme_registry_alter(&$theme_registry) {
+  $theme_registry['date_display_range']['theme path'] = drupal_get_path('module', 'commons_events');
+  $theme_registry['date_display_range']['function'] = 'theme_commons_events_date_display_range_advanced';
 }
 
 /**
@@ -448,65 +491,85 @@ function commons_events_block_view($delta = '') {
 }
 
 /**
- * Implements hook_theme_registry_alter().
- * Gives us the ability to insert our pretty date formatter for the dates we choose below.
- */
-function commons_events_theme_registry_alter(&$theme_registry) {
-  $theme_registry['date_display_range']['theme path'] = drupal_get_path('module', 'commons_events');
-  $theme_registry['date_display_range']['function'] = 'commons_events_theme_date_display_range';
-}
-
-/**
  * Returns specific HTML for a date element formatted with the event formatter M j Y - g:ia
  * We the do some awesome stuff with regular expressions to take all the different formats available to us and format it pretty.
  */
-function commons_events_theme_date_display_range($variables) {
+function theme_commons_events_date_display_range_simple($variables) {
   // Use the regular date formatter if we are any other date format than below.
-  if (!preg_match('/[FmMnt|dDjlNSwz|oYy] - [gGhH]:[i][Aa]{0,1}/', $variables['dates']['format'])) {
-    return theme_date_display_range($variables);
-  }
+  $date1 = $variables['dates']['value']['formatted_date'];
+  $date2 = $variables['dates']['value2']['formatted_date'];
+  $time1 = $variables['dates']['value']['formatted_time'];
+  $time2 = $variables['dates']['value2']['formatted_time'];
 
-  // If the difference is over a year:
-  if ($variables['dates']['value']['db']['object']->difference($variables['dates']['value2']['db']['object'], 'years') > 0) {
-    return theme_date_display_range($variables);
-  } else {
-    preg_match('/[oYy]/', $variables['dates']['format'], $year_format);
-    $year = $variables['dates']['value']['db']['object']->format($year_format[0]);
-  }
-  // Remove the time and year.
-  $stripped_format = preg_replace('/\s\s+/', ' ', preg_filter(array('/[oYy]/', '/[-:aABgGhHisuT]/'), array('', ''), $variables['dates']['format']));
-  if (!empty($variables['dates']['value2']['formatted_time'])) {
-    $end_time = TRUE;
-  }
-  // If the difference is over a month:
-  if ($variables['dates']['value']['db']['object']->difference($variables['dates']['value2']['db']['object'], 'months') > 0) {
-    $dm_seg = $variables['dates']['value']['db']['object']->format($stripped_format) . '-' . $variables['dates']['value2']['db']['object']->format($stripped_format);
-    $date = preg_filter(array('/[FmMntdDjlNSwz] [FmMntdDjlNSwz]/', '/[oYy]/', '/- [gGhH]:[i][Aa]{0,1} [T]/'), array($dm_seg, $year, ''), $variables['dates']['format']);
-  }
-  // If the difference is under a month but over a day:
-  else if ($variables['dates']['value']['db']['object']->difference($variables['dates']['value2']['db']['object'], 'days') > 0) {
-    $days = $variables['dates']['value']['db']['object']->format(preg_filter(array('/[FmMnt]/'), array(''), $stripped_format)) . '-' .
-      $variables['dates']['value2']['db']['object']->format(preg_filter(array('/[FmMnt]/'), array(''), $stripped_format));
-    $months = $variables['dates']['value']['db']['object']->format(preg_filter(array('/[dDjlNSwz]/'), array(''), $stripped_format));
-    $date = preg_filter(array('/[FmMnt]/', '/[dDjlNSwz]/', '/[oYy]/', '/- [gGhH]:[i][Aa]{0,1} [T]/'), array($months, $days, $year, ''), $variables['dates']['format']);
-  }
-  // Same day event, output the formatted start date and strip the end time if its the same as start time.
-  else {
-    $date = $variables['dates']['value']['formatted_date'];
-    if($variables['dates']['value']['formatted_time'] === $variables['dates']['value2']['formatted_time']) {
-      $end_time = FALSE;
-    }
-  }
-  if ($end_time) {
-    $time = $variables['dates']['value']['formatted_time'] . '-' . $variables['dates']['value2']['formatted_time'];
-  } else {
-    $time = $variables['dates']['value']['formatted_time'];
-  }
   $timezone = $variables['timezone'];
   $attributes_start = $variables['attributes_start'];
+  $attributes_end = $variables['attributes_end'];
 
   // Wrap the result with the attributes.
-  return t('!start-date', array(
-    '!start-date' => '<span class="date-display-start"' . drupal_attributes($attributes_start) . '>' . $date . $time . $timezone . '</span>',
+  return t('!start-date to !end-date, !start-time - !end-time', array(
+    '!start-date' => '<span class="date-display-start"' . drupal_attributes($attributes_start) . '>' . $date1 . '</span>',
+    '!end-date' => '<span class="date-display-end"' . drupal_attributes($attributes_end) . '>' . $date2 . '</span>',
+    '!start-time' => '<span class="date-display-start"' . drupal_attributes($attributes_start) . '>' . $time1 . '</span>',
+    '!end-time' => '<span class="date-display-end"' . drupal_attributes($attributes_end) . '>' . $time2 . $timezone . '</span>',
+  ));
+}
+
+/**
+ * Returns specific HTML for a date element formatted with the event formatter.
+ * We parse the date segments and return it at the bottom, or use the simple formatter (above) if parts of the date are too complicated.
+ */
+function theme_commons_events_date_display_range_advanced($variables) {
+
+  $timezone = $variables['timezone'];
+  $attributes_start = $variables['attributes_start'];
+  $attributes_end = $variables['attributes_end'];
+
+  // Time is always formatted the same.
+  $time1 = $variables['dates']['value']['formatted_time'];
+  $time2 = $variables['dates']['value2']['formatted_time'];
+
+  // See date.theme line 168 -- regarding formatting time for same date events.
+  if ($variables['dates']['value']['formatted_date'] === $variables['dates']['value2']['formatted_date']) {
+    return theme('commons_events_date_display_range_simple',$variables);
+  }
+  // If the difference is over a year, use the simple formatter.
+  if ($variables['dates']['value']['db']['object']->difference($variables['dates']['value2']['db']['object'], 'years') > 0) {
+    return theme('commons_events_date_display_range_simple',$variables);
+  }
+  else if ($variables['dates']['value']['db']['object']->difference($variables['dates']['value2']['db']['object'], 'months') > 0) {
+    $variables['dates']['value']['db']['object']->limitGranularity(array('day','month'));
+    $variables['dates']['value2']['db']['object']->limitGranularity(array('day','month', 'year'));
+
+    $date1 = $variables['dates']['value']['db']['object']->format($variables['dates']['format'],FALSE);
+    $date2 = $variables['dates']['value2']['db']['object']->format($variables['dates']['format'],FALSE);
+  }
+  else if ($variables['dates']['value']['db']['object']->difference($variables['dates']['value2']['db']['object'], 'days') > 0) {
+    // If the Day is before the month (IE Europe, etc) then switch the granularity
+    if (strpos($variables['dates']['format'],'M') != 0 || strpos($variables['dates']['format'],'m') != 0 ||
+       strpos($variables['dates']['format'],'F') != 0 || strpos($variables['dates']['format'],'n') != 0) {
+      $variables['dates']['value']['db']['object']->limitGranularity(array('day'));
+      $variables['dates']['value2']['db']['object']->limitGranularity(array('day', 'month', 'year'));
+    } else {
+      $variables['dates']['value']['db']['object']->limitGranularity(array('month','day'));
+      $variables['dates']['value2']['db']['object']->limitGranularity(array('day', 'year'));
+    }
+
+    $date1 = $variables['dates']['value']['db']['object']->format($variables['dates']['format'],FALSE);
+    $date2 = $variables['dates']['value2']['db']['object']->format($variables['dates']['format'],FALSE);
+
+    // If we are match 'D' or 'l', it means we have a 'day' in there (eg: Monday), we want the whole date because it looks funky otherwise.
+    if (strpbrk($variables['dates']['format'], 'Dl')) {
+      return theme('commons_events_date_display_range_simple',$variables);
+    }
+  }
+  else {
+    return theme('commons_events_date_display_range_simple',$variables);
+  }
+  // Wrap the result with the attributes.
+  return t('!start-date to !end-date, !start-time - !end-time', array(
+    '!start-date' => '<span class="date-display-start"' . drupal_attributes($attributes_start) . '>' . $date1 . '</span>',
+    '!end-date' => '<span class="date-display-end"' . drupal_attributes($attributes_end) . '>' . $date2 . '</span>',
+    '!start-time' => '<span class="date-display-start"' . drupal_attributes($attributes_start) . '>' . $time1 . '</span>',
+    '!end-time' => '<span class="date-display-end"' . drupal_attributes($attributes_end) . '>' . $time2 . $timezone . '</span>',
   ));
 }
