@@ -56,9 +56,7 @@
 }
 
 %btn-gray {
-  // box-shadow: 1px 1px 1px #ABE0A2 inset, 0 3px 3px rgba(#000, 0.09);
   padding: 0 10px;
-  // needs latest Compass, add '@import "compass"' to your scss
   background-color: #fefefe; // Old browsers
   @include filter-gradient(#fefefe, #e8e8e8, vertical); // IE6-9
   @include background-image(linear-gradient(top,  #fefefe 0%,#e8e8e8 100%));
@@ -67,7 +65,6 @@
   color: $dark_gray;
   text-align: center;
   display: inline-block;
-  // text-shadow: 1px 1px rgba(#000, 0.49);
 
   &:hover {
     text-decoration: none;

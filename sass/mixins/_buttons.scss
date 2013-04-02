@@ -1,0 +1,133 @@
+// @file
+// Generate button css.
+//
+// These mixins will generate invisible classes and not normal classes. This
+// allows for more semantic naming in your markup, but still allows for robotic
+// naming for automatic generation.
+
+// These are the default skins and sizes. They can be overridden with alternate
+// values.
+$buttons: (default, #fefefe) (action, #46BB31) (active, #f3f3f3, true) !default;
+$button-sizes: (default, 1em, .5em 1.5em) (small, .88em, .3em 1.5em) (large, 1.4em, 1em 2em) !default;
+
+// Bulk generate buttons styles with a list of settings.
+@mixin buttons($buttons: $buttons) {
+  /* Common styles for all buttons. */
+  %button-common {
+    display: inline-block;
+    @include box-sizing(border-box);
+    margin: .5em .3em .5em 0;
+    line-height: 1.2em;
+    border-style: solid;
+    border-width: 1px;
+    @include border-radius(.15em);
+    font-weight: 300;
+    text-align: center;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  // Generate style for the size variants.
+  @each $size in $button-sizes {
+    @include button-size($size...);
+  }
+
+  // Generate the color styles for the buttons.
+  @each $button in $buttons {
+    @include button($button...);
+  }
+}
+
+// Generate a size variant.
+@mixin button-size($name, $font-size, $padding) {
+  /* Dimensions for the #{$name} button type. */
+  %button-#{$name}-layout {
+    @extend %button-common;
+    padding: $padding;
+    font-size: $font-size;
+  }
+}
+
+// Generate a set of buttons variants.
+@mixin button($name, $base-color, $flat: false) {
+  $text-color: contrast-color($base-color, darken($base-color, 70), lighten($base-color, 70), 50);
+  $text-shadow: contrast-color($base-color, lighten($base-color, 10), darken($base-color, 10), 50);
+  $border-color: darken($base-color, 20);
+  $hover-base: darken($base-color, 10);
+  $hover-text: contrast-color($hover-base, darken($hover-base, 70), lighten($hover-base, 70), 50);
+  $hover-border: darken($border-color, 10);
+  $hover-text-shadow: contrast-color($hover-base, lighten($hover-base, 10), darken($hover-base, 10), 50);
+
+  /* Styles for the #{$name} button type. */
+  %button-#{$name} {
+    background: $base-color;
+    @if $flat == false {
+      @include background(linear-gradient(lighten($base-color, 10), darken($base-color, 10)))
+    }
+    @else {
+      @include box-shadow(inset .1em .1em .2em darken($base-color, 30));
+    }
+    border-color: $border-color;
+    /* Add a 1px outline around the text to help with legibility. */
+    @include text-shadow(
+      -1px 1px 0 $text-shadow,
+      -1px -1px 0 $text-shadow,
+      1px -1px 0 $text-shadow,
+      1px 1px 0 $text-shadow
+    );
+
+    &,
+    &:link,
+    &:visited {
+      color: $text-color;
+    }
+
+    &:hover {
+      color: $hover-text;
+      background: $hover-base;
+      @if $flat == false {
+        @include background(linear-gradient(lighten($hover-base, 10), darken($hover-base, 10)))
+      }
+      @else {
+        @include box-shadow(inset .1em .1em .2em darken($hover-base, 30));
+      }
+      border-color: $hover-border;
+      /* Add a 1px outline around the text to help with legibility. */
+      @include text-shadow(
+        -1px 1px 0 $hover-text-shadow,
+        -1px -1px 0 $hover-text-shadow,
+        1px -1px 0 $hover-text-shadow,
+        1px 1px 0 $hover-text-shadow
+      );
+    }
+
+    &:focus,
+    &:active {
+      background: $base-color;
+      @if $flat == false {
+        @include background(linear-gradient(darken($base-color, 10), lighten($base-color, 10)))
+      }
+      @else {
+        @include box-shadow(inset .1em .1em .2em darken($base-color, 30));
+      }
+      border-color: $border-color;
+      /* Add a 1px outline around the text to help with legibility. */
+      @include text-shadow(
+        -1px 1px 0 $text-shadow,
+        -1px -1px 0 $text-shadow,
+        1px -1px 0 $text-shadow,
+        1px 1px 0 $text-shadow
+      );
+    }
+
+    &[disabled] {
+      color: contrast-color($base-color, darken($base-color, 20), lighten($base-color, 20), 50);
+      background: $base-color;
+      border-color: $border-color;
+      @include box-shadow(none);
+      @include text-shadow(none);
+    }
+  }
+}
