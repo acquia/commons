@@ -196,3 +196,66 @@ function commons_activity_streams_user_profile_submit($form, &$form_state) {
   $wrapper->field_target_users[] = $account;
   $wrapper->save();
 }
+
+/**
+ * Implements hook_token_info().
+ */
+function commons_activity_streams_token_info() {
+  $styles = image_styles();
+  $tokens = array();
+  foreach ($styles as $style_name => $style) {
+    $tokens['picture:' . $style_name] = array(
+      'name' => t('Picture: @st image style', array('@st' => $style_name)),
+      'description' => t('Picture: @st image style', array('@st' => $style_name)),
+    );
+  }
+  return array(
+    'tokens' => array(
+      'user' => $tokens,
+    ),
+  );
+}
+
+/**
+ * Implements hook_tokens().
+ */
+function commons_activity_streams_tokens($type, $tokens, array $data = array(), array $options = array()) {
+  $replacements = array();
+  if ($type == 'user' && isset($data['user'])) {
+    $user = $data['user'];
+    $user_wrapper = entity_metadata_wrapper('user', $user);
+    $alt = $user->name;
+    if (isset($user->field_name_first)) {
+      $alt = $user_wrapper->field_name_first->value();
+      if (isset($user->field_name_last)) {
+        $alt .= " " . $user_wrapper->field_name_last->value();
+      }
+    }
+    $alt = t("@name's picture", array('@name' => $alt));
+    foreach ($tokens as $token => $original) {
+      if (strpos($token, 'picture:') !== FALSE) {
+        list( , $style) = explode(':', $token);
+        $path = variable_get('user_picture_default', '/profiles/commons/images/avatars/user-avatar.png');
+        if (!empty($user->picture)) {
+          $path = image_style_url($style, $user->picture->uri);
+        }
+        $image_variables = array(
+          'path' => $path,
+          'alt' => $alt,
+          'title' => $alt,
+          'class' => array('image-style-none'),
+        );
+        $image = theme('image', $image_variables);
+        $user_path = user_uri($user);
+        $link_options = array(
+          'attributes' => array(
+            'title' => t('View user profile.'),
+          ),
+          'html' => TRUE,
+        );
+        $replacements[$original] = "<div class='user-picture'>" . l($image, $user_path['path'], $link_options) . "</div>";
+      }
+    }
+  }
+  return $replacements;
+}
