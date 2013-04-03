@@ -7,3 +7,14 @@ function commons_activity_streams_update_3101() {
   features_revert(array('commons_activity_streams' => array('message_type', 'field_instance')));
   return array();
 }
+
+/**
+ * Set activity stream user pictures to 35x35 image style.
+ */
+function commons_activity_streams_update_3102() {
+  $revert = array(
+    'commons_activity_streams' => array('message_type'),
+  );
+  features_revert($revert);
+  return array();
+}
