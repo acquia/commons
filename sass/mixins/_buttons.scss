@@ -7,25 +7,46 @@
 
 // These are the default skins and sizes. They can be overridden with alternate
 // values.
-$buttons: (default, #fefefe) (action, #46BB31) (active, #f3f3f3, true) !default;
-$button-sizes: (default, 1em, .5em 1.5em) (small, .88em, .3em 1.5em) (large, 1.4em, 1em 2em) !default;
+$buttons: (default, #fefefe) (active, #f3f3f3, true) (primary, rgb(70, 187, 46)) (primary-active, rgb(70, 187, 46), true) !default;
+$button-sizes: (default, 1em, .5em 1.5em) (small, .88em, .3em 1.5em) (large, 1.2em, .5em 1.5em) !default;
 
 // Bulk generate buttons styles with a list of settings.
 @mixin buttons($buttons: $buttons) {
   /* Common styles for all buttons. */
   %button-common {
+    -webkit-appearance: none;
     display: inline-block;
     @include box-sizing(border-box);
     margin: .5em .3em .5em 0;
+    max-width: 100%;
+    overflow: visible;
     line-height: 1.2em;
     border-style: solid;
     border-width: 1px;
-    @include border-radius(.15em);
-    font-weight: 300;
+    @include border-radius(2px);
+    /* Reset all button fonts to a similar baseline in webkit. */
+    font: -webkit-small-control;
+    font-family: "Helvetica Neue", Arial, "Liberation Sans", FreeSans, sans-serif;
+    font-weight: light;
+    letter-spacing: .06em;
     text-align: center;
+    text-decoration: none;
+    outline: 0;
+    cursor: pointer;
 
+    &:focus,
     &:hover {
       text-decoration: none;
+    }
+
+    &:active {
+      @include box-shadow(inset rgba(black, 0.25) 0 1px 2px 0);
+      text-decoration: none;
+    }
+
+    &::-moz-focus-inner {
+      border: 0;
+      padding: 0;
     }
   }
 
@@ -52,19 +73,19 @@ $button-sizes: (default, 1em, .5em 1.5em) (small, .88em, .3em 1.5em) (large, 1.4
 
 // Generate a set of buttons variants.
 @mixin button($name, $base-color, $flat: false) {
-  $text-color: contrast-color($base-color, darken($base-color, 70), lighten($base-color, 70), 50);
+  $text-color: contrast-color($base-color, darken($base-color, 80), lighten($base-color, 80), 50);
   $text-shadow: contrast-color($base-color, lighten($base-color, 10), darken($base-color, 10), 50);
   $border-color: darken($base-color, 20);
-  $hover-base: darken($base-color, 10);
+  $hover-base: darken($base-color, 5);
   $hover-text: contrast-color($hover-base, darken($hover-base, 70), lighten($hover-base, 70), 50);
   $hover-border: darken($border-color, 10);
-  $hover-text-shadow: contrast-color($hover-base, lighten($hover-base, 10), darken($hover-base, 10), 50);
+  $hover-text-shadow: contrast-color($hover-base, lighten($hover-base, 5), darken($hover-base, 5), 50);
 
   /* Styles for the #{$name} button type. */
   %button-#{$name} {
     background: $base-color;
     @if $flat == false {
-      @include background(linear-gradient(lighten($base-color, 10), darken($base-color, 10)))
+      @include background(linear-gradient(lighten($base-color, 5), darken($base-color, 5)))
     }
     @else {
       @include box-shadow(inset .1em .1em .2em darken($base-color, 30));
@@ -88,7 +109,7 @@ $button-sizes: (default, 1em, .5em 1.5em) (small, .88em, .3em 1.5em) (large, 1.4
       color: $hover-text;
       background: $hover-base;
       @if $flat == false {
-        @include background(linear-gradient(lighten($hover-base, 10), darken($hover-base, 10)))
+        @include background(linear-gradient(lighten($hover-base, 5), darken($hover-base, 5)))
       }
       @else {
         @include box-shadow(inset .1em .1em .2em darken($hover-base, 30));
@@ -107,7 +128,7 @@ $button-sizes: (default, 1em, .5em 1.5em) (small, .88em, .3em 1.5em) (large, 1.4
     &:active {
       background: $base-color;
       @if $flat == false {
-        @include background(linear-gradient(darken($base-color, 10), lighten($base-color, 10)))
+        @include background(linear-gradient(darken($base-color, 5), lighten($base-color, 5)))
       }
       @else {
         @include box-shadow(inset .1em .1em .2em darken($base-color, 30));

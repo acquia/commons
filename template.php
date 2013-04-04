@@ -219,7 +219,7 @@ function commons_origins_preprocess_node(&$variables, $hook) {
   if ($variables['node']->type == 'question' && !empty($variables['content']['links']['answer'])) {
     $variables['content']['answer'] = $variables['content']['links']['answer'];
     $variables['content']['answer']['#attributes']['class'][] = 'node-actions';
-    $variables['content']['answer']['#links']['answer-add']['attributes']['class'][] = 'button-alert';
+    $variables['content']['answer']['#links']['answer-add']['attributes']['class'][] = 'action-item-large-primary';
     $variables['content']['answer']['#weight'] = -100;
     $variables['content']['links']['answer']['#access'] = FALSE;
   }
@@ -328,6 +328,14 @@ function commons_origins_preprocess_views_view(&$variables, $hook) {
 }
 
 /**
+ * Implements hook_preprocess_pager().
+ */
+function commons_origins_preprocess_pager_link (&$variables, $hook) {
+  // Style pager links like buttons.
+  $variables['attributes']['class'][] = 'action-item';
+}
+
+/**
  * Implements hook_preprocess_form().
  *
  * Since Commons Origins overrides the default theme_form() function, we will
@@ -388,6 +396,24 @@ function commons_origins_preprocess_form_content(&$variables, $hook) {
         $field['#attributes']['class'][] = 'commons-pod';
       }
     }
+  }
+
+  // The buttons for toggling event attendance should be large and noticeable.
+  if ($variables['form']['#form_id'] == 'commons_events_attend_event_form') {
+    $variables['form']['submit']['#attributes']['class'][] = 'action-item-large-primary';
+  }
+  if ($variables['form']['#form_id'] == 'commons_events_cancel_event_form') {
+    $variables['form']['submit']['#attributes']['class'][] = 'action-item-large-primary-active';
+  }
+
+  // Make the "Save" button more noticeable.
+  if (isset($variables['form']['#node_edit_form']) && $variables['form']['#node_edit_form']) {
+    $variables['form']['actions']['submit']['#attributes']['class'][] = 'action-item-primary';
+  }
+
+  // Make the comment form "Save" button more noticeable.
+  if ($variables['form']['#id'] == 'comment-form') {
+    $variables['form']['actions']['submit']['#attributes']['class'][] = 'action-item-primary';
   }
 }
 
@@ -489,6 +515,19 @@ function commons_origins_form_alter(&$form, &$form_state, $form_id) {
 function commons_origins_css_alter(&$css) {
   if (isset($css['profiles/commons/modules/contrib/rich_snippets/rich_snippets.css'])) {
     unset($css['profiles/commons/modules/contrib/rich_snippets/rich_snippets.css']);
+  }
+}
+
+/**
+ * Implements hook_block_view_alter().
+ */
+function commons_origins_block_view_alter(&$data, $block) {
+  // Apply button styling to links.
+  if ($block->delta == 'commons_events_create_event_link' && isset($data['content']['link'])) {
+    $data['content']['link']['#options']['attributes']['class'][] = 'action-item-primary';
+  }
+  if ($block->delta == 'commons_groups_create_group' && isset($data['content']['create_group'])) {
+    $data['content']['create_group']['#options']['attributes']['class'][] = 'action-item-primary';
   }
 }
 

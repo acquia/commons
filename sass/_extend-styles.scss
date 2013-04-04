@@ -21,37 +21,11 @@
 
 %node-space-right {
   > .node-content {
-    margin-right: 90px;
+    margin-right: 10em;
 
     @include respond(small-medium) {
       margin-right: 0;
     }
-  }
-}
-
-%btn-green {
-  box-shadow: 1px 1px 1px #ABE0A2 inset, 0 3px 3px rgba(#000, 0.09);
-  padding: 0 10px;
-  // needs latest Compass, add '@import "compass"' to your scss
-  background-color: #6eca5d; // Old browsers
-  @include filter-gradient(#6eca5d, #45bb2f, vertical); // IE6-9
-  @include background-image(linear-gradient(top,  #6eca5d 0%,#6cc95b 12%,#47bc33 33%,#45bb2f 100%));
-  border: 1px solid #249125;
-  @include border-radius(3px);
-  text-align: center;
-  display: inline-block;
-  text-shadow: 1px 1px rgba(#000, 0.49);
-
-  &,
-  &:link,
-  &:visited,
-  &:active,
-  &:hover {
-    color: $white;
-  }
-
-  &:hover {
-    text-decoration: none;
   }
 }
 
