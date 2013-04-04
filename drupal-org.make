@@ -297,7 +297,7 @@ projects[rules][version] = "2.3"
 
 projects[search_facetapi][type] = "module"
 projects[search_facetapi][subdir] = "contrib"
-projects[search_facetapi][version] = "1.3"
+projects[search_facetapi][version] = "1.0-beta2"
 
 projects[sharethis][type] = "module"
 projects[sharethis][subdir] = "contrib"
@@ -305,7 +305,7 @@ projects[sharethis][version] = "2.5"
 
 projects[facetapi][type] = "module"
 projects[facetapi][subdir] = "contrib"
-projects[facetapi][version] = "1.2"
+projects[facetapi][version] = "1.3"
 
 projects[rich_snippets][type] = "module"
 projects[rich_snippets][subdir] = "contrib"
