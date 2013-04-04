@@ -105,13 +105,11 @@
       @include box-shadow(lighten($palette_color_dark, 6%) 1px 0px 0px);
     }
 
-    %btn-green {
-      box-shadow: 1px 1px 1px $palette_btn_top inset, 0 3px 3px rgba(#000, 0.09);
-      background-color: $palette_btn_top; // Old browsers
-      @include filter-gradient($palette_btn_top, $palette_btn_bottom, vertical); // IE6-9
-      @include background-image(linear-gradient(top,  $palette_btn_top 0%, $palette_btn_bottom 100%));
-      border: 1px solid $palette_btn_bottom;
-      color: $white;
+    // Generate a new invisible class and extend the default with the color
+    // scheme of the skin.
+    @include button($palette_color_class, $palette_btn_bottom);
+    %button-primary {
+      @extend %button-#{$palette_color_class};
     }
 
     .selectBox-dropdown {

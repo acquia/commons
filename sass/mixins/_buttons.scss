@@ -9,6 +9,7 @@
 // values.
 $buttons: (default, #fefefe) (active, #f3f3f3, true) (primary, rgb(70, 187, 46)) (primary-active, rgb(70, 187, 46), true) !default;
 $button-sizes: (default, 1em, .5em 1.5em) (small, .88em, .3em 1.5em) (large, 1.2em, .5em 1.5em) !default;
+$button-contrast: 60 !default;
 
 // Bulk generate buttons styles with a list of settings.
 @mixin buttons($buttons: $buttons) {
@@ -73,15 +74,14 @@ $button-sizes: (default, 1em, .5em 1.5em) (small, .88em, .3em 1.5em) (large, 1.2
 
 // Generate a set of buttons variants.
 @mixin button($name, $base-color, $flat: false) {
-  $text-color: contrast-color($base-color, darken($base-color, 80), lighten($base-color, 80), 50);
-  $text-shadow: contrast-color($base-color, lighten($base-color, 10), darken($base-color, 10), 50);
+  $text-color: contrast-color($base-color, darken($base-color, 80), lighten($base-color, 80), $button-contrast);
+  $text-shadow: contrast-color($base-color, lighten($base-color, 10), darken($base-color, 10), $button-contrast);
   $border-color: darken($base-color, 20);
   $hover-base: darken($base-color, 5);
-  $hover-text: contrast-color($hover-base, darken($hover-base, 70), lighten($hover-base, 70), 50);
+  $hover-text: contrast-color($hover-base, darken($hover-base, 70), lighten($hover-base, 70), $button-contrast);
   $hover-border: darken($border-color, 10);
-  $hover-text-shadow: contrast-color($hover-base, lighten($hover-base, 5), darken($hover-base, 5), 50);
+  $hover-text-shadow: contrast-color($hover-base, lighten($hover-base, 5), darken($hover-base, 5), $button-contrast);
 
-  /* Styles for the #{$name} button type. */
   %button-#{$name} {
     background: $base-color;
     @if $flat == false {
@@ -91,7 +91,7 @@ $button-sizes: (default, 1em, .5em 1.5em) (small, .88em, .3em 1.5em) (large, 1.2
       @include box-shadow(inset .1em .1em .2em darken($base-color, 30));
     }
     border-color: $border-color;
-    /* Add a 1px outline around the text to help with legibility. */
+    // Add a 1px outline around the text to help with legibility.
     @include text-shadow(
       -1px 1px 0 $text-shadow,
       -1px -1px 0 $text-shadow,
@@ -115,7 +115,7 @@ $button-sizes: (default, 1em, .5em 1.5em) (small, .88em, .3em 1.5em) (large, 1.2
         @include box-shadow(inset .1em .1em .2em darken($hover-base, 30));
       }
       border-color: $hover-border;
-      /* Add a 1px outline around the text to help with legibility. */
+      // Add a 1px outline around the text to help with legibility.
       @include text-shadow(
         -1px 1px 0 $hover-text-shadow,
         -1px -1px 0 $hover-text-shadow,
@@ -134,7 +134,7 @@ $button-sizes: (default, 1em, .5em 1.5em) (small, .88em, .3em 1.5em) (large, 1.2
         @include box-shadow(inset .1em .1em .2em darken($base-color, 30));
       }
       border-color: $border-color;
-      /* Add a 1px outline around the text to help with legibility. */
+      // Add a 1px outline around the text to help with legibility.
       @include text-shadow(
         -1px 1px 0 $text-shadow,
         -1px -1px 0 $text-shadow,
@@ -144,7 +144,7 @@ $button-sizes: (default, 1em, .5em 1.5em) (small, .88em, .3em 1.5em) (large, 1.2
     }
 
     &[disabled] {
-      color: contrast-color($base-color, darken($base-color, 20), lighten($base-color, 20), 50);
+      color: contrast-color($base-color, darken($base-color, 20), lighten($base-color, 20), $button-contrast);
       background: $base-color;
       border-color: $border-color;
       @include box-shadow(none);
