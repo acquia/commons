@@ -3322,6 +3322,11 @@ body.page-node .pane-views-panes h2 {
   margin: 3px 0 0 0;
   width: 145px;
 }
+.block-search .form-text:focus {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
 .node-type-group .block-search .form-text {
   width: 120px;
 }
@@ -3334,6 +3339,7 @@ body.page-node .pane-views-panes h2 {
   text-indent: -9999px !important;
   padding: 0 !important;
   margin: 10px 2px !important;
+  font-size: .8em;
 }
 .block-search .form-item-search-block-form label {
   position: absolute;
@@ -3516,14 +3522,6 @@ tr.odd .form-item, tr.even .form-item {
 .marker,
 .form-required {
   color: #cc0000;
-}
-
-/**
- * The submit button
- */
-.container-inline div,
-.container-inline label {
-  display: inline;
 }
 
 /**

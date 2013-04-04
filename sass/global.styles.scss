@@ -2844,6 +2844,10 @@ body.page-node .pane-views-panes {
     margin: 3px 0 0 0;
     width: 145px;
 
+    &:focus {
+      @include box-shadow(none);
+    }
+
     .node-type-group & {
       width: 120px;
     }
@@ -2858,6 +2862,7 @@ body.page-node .pane-views-panes {
     text-indent: -9999px !important;
     padding: 0 !important;
     margin: 10px 2px !important;
+    font-size: .8em;
   }
 
   .form-item-search-block-form label {
@@ -3069,17 +3074,6 @@ tr {
 .marker,
 .form-required {
   color: $highlight;
-}
-
-/**
- * The submit button
- */
-
-.container-inline {
-  div,
-  label {
-    display: inline;
-  }
 }
 
 /**

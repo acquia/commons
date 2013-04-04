@@ -10,9 +10,6 @@
   outline: none;
   vertical-align: middle;
   background: #F2F2F2;
-  background: -moz-linear-gradient(top, #F8F8F8 1%, #E1E1E1 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(1%, #F8F8F8), color-stop(100%, #E1E1E1));
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#F8F8F8', endColorstr='#E1E1E1', GradientType=0);
   -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, .75);
   -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, .75);
   box-shadow: 0 1px 0 rgba(255, 255, 255, .75);
@@ -27,9 +24,7 @@
     border: none;
     box-shadow: none;
     min-width: inherit;
-    color: $white;
     line-height: 1;
-    margin-top: 5px;
     margin-left: 9px;
   }
 
@@ -72,8 +67,6 @@
   .block-search & {
     width: auto !important;
     padding: 2px 8px 2px 0;
-    // left: 8px;
-    // position: relative;
 
     &:after {
       content: '';
