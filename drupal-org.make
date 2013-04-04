@@ -300,7 +300,7 @@ projects[rules][version] = "2.3"
 
 projects[search_facetapi][type] = "module"
 projects[search_facetapi][subdir] = "contrib"
-projects[search_facetapi][version] = "1.0-beta2"
+projects[search_facetapi][version] = "1.3"
 
 projects[sharethis][type] = "module"
 projects[sharethis][subdir] = "contrib"
