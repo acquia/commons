@@ -24,6 +24,7 @@ pull_git() {
 
 release_notes() {
   rm -rf rn.txt
+  pull_git $BUILD_PATH
   OUTPUT="<h2>Release Notes for $RELEASE</h2>"
   cd $BUILD_PATH/commons_profile
   OUTPUT="$OUTPUT <h3>Commons Profile:</h3> `drush rn --date $FROM_DATE $TO_DATE`"
