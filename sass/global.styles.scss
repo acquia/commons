@@ -652,6 +652,46 @@ button,
   }
 }
 
+/* Drupal specific field styling. */
+
+.field-label-inline {
+  margin: 1.7em 0;
+
+  .field-label,
+  .field-items,
+  .field-item {
+    display: inline;
+    float: none;
+  }
+
+  .field-item {
+    margin: 0 .1em;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &:after {
+      content: ", ";
+    }
+
+    &:last-child {
+      &:after {
+        content: "";
+      }
+    }
+  }
+
+  .field-label {
+    font-weight: bold;
+    color: $dark_gray;
+  }
+}
+
 /**
  * Filter drawer accessories
  */
@@ -1002,29 +1042,50 @@ h1.node-title {
 }
 
 .page-node {
-  .field .field-label {
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 26px;
-    color: $dark_gray;
+  .field-label {
+    color: #369;
   }
 
   .field-name-field-topics,
   .field-name-og-group-ref {
+    margin: 0;
+
+    .field-label {
+      display: block;
+    }
+
     &.view-mode-full {
       float: left;
       width: 50%;
-      margin-bottom: 1.7em;
 
-      ul {
+      .field-items {
         margin: 0;
         list-style: none;
         padding: 0;
 
-        li {
-          float: left;
-          margin-right: 10px;
+        .field-item {
+          display: inline-block;
+          margin: 0 .3em;
+          padding: 0;
+
+          &:first-child {
+            margin-left: 0;
+          }
+
+          &:last-child {
+            margin-right: 0;
+          }
+
+          &:after {
+            content: "";
+          }
         }
+      }
+
+      @include respond(only-small) {
+        float: none;
+        width: auto;
+        margin: 1.7em 0;
       }
     }
   }
