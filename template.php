@@ -333,6 +333,8 @@ function commons_origins_preprocess_views_view(&$variables, $hook) {
 function commons_origins_preprocess_pager_link (&$variables, $hook) {
   // Style pager links like buttons.
   $variables['attributes']['class'][] = 'action-item';
+    $variables['attributes']['class'][] = 'action-item-inline';
+
 }
 
 /**
@@ -515,19 +517,6 @@ function commons_origins_form_alter(&$form, &$form_state, $form_id) {
 function commons_origins_css_alter(&$css) {
   if (isset($css['profiles/commons/modules/contrib/rich_snippets/rich_snippets.css'])) {
     unset($css['profiles/commons/modules/contrib/rich_snippets/rich_snippets.css']);
-  }
-}
-
-/**
- * Implements hook_block_view_alter().
- */
-function commons_origins_block_view_alter(&$data, $block) {
-  // Apply button styling to links.
-  if ($block->delta == 'commons_events_create_event_link' && isset($data['content']['link'])) {
-    $data['content']['link']['#options']['attributes']['class'][] = 'action-item-primary';
-  }
-  if ($block->delta == 'commons_groups_create_group' && isset($data['content']['create_group'])) {
-    $data['content']['create_group']['#options']['attributes']['class'][] = 'action-item-primary';
   }
 }
 
