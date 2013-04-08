@@ -41,9 +41,9 @@ function commons_wikis_default_message_type() {
     "arguments" : null,
     "message_text" : { "und" : [
         {
-          "value" : "[message:user:picture]",
+          "value" : "[message:user:picture:35x35]",
           "format" : "full_html",
-          "safe_value" : "[message:user:picture]"
+          "safe_value" : "[message:user:picture:35x35]"
         },
         {
           "value" : "\\u003Ca href=\\u0022[message:user:url:absolute]\\u0022 class=\\u0022aloha-link-text\\u0022\\u003E[message:user:name]\\u003C\\/a\\u003E has updated the \\u003Ca href=\\u0022[message:field-target-nodes:0:url]\\u0022\\u003E[message:field-target-nodes:0:title]\\u003C\\/a\\u003E wiki page",

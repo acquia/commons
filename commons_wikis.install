@@ -21,3 +21,14 @@ function commons_wikis_update_7001() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Update Wiki message type to show user picture as 35x35 image style.
+ */
+function commons_wikis_update_7002() {
+  $revert = array(
+    'commons_wikis' => array('message_type'),
+  );
+  features_revert($revert);
+  return array();
+}
