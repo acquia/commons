@@ -66,7 +66,7 @@ function commons_events_field_default_field_instances() {
         'locality' => '',
         'administrative_area' => '',
         'postal_code' => '',
-        'country' => 'US',
+        'country' => variable_get('site_default_country', 'US'),
       ),
     ),
     'deleted' => '0',

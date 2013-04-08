@@ -102,8 +102,8 @@ function commons_events_update_7003() {
 }
 
 /**
-* Create the event_datetime date format.
-*/
+ * Create the event_datetime date format.
+ */
 function commons_events_update_7004() {
   db_insert('date_formats')
     ->fields(array(
@@ -127,6 +127,17 @@ function commons_events_update_7004() {
   $revert = array(
     'commons_events' => array('field_instance'),
     'commons_events' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/**
+ * Set event nodes to use site default country set during install as default.
+ */
+function commons_events_update_7005() {
+  $revert = array(
+    'commons_events' => array('field_instance'),
   );
   features_revert($revert);
   return array();
