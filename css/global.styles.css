@@ -764,6 +764,126 @@ optgroup::-moz-focus-inner {
   padding: 0;
 }
 
+.general-settings {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.fieldset-outer-wrapper {
+  margin: 1.7em 0;
+  padding: 1.7em 0;
+  border-top: 1px solid #cccccc;
+  border-color: #cccccc;
+  border-style: solid;
+  border-width: 1px 0;
+  /* Some form items have nested fieldsets that mess with the sibling
+     selectors and need some extra love. */
+}
+.fieldset-outer-wrapper + .fieldset-outer-wrapper {
+  border-top-width: 0;
+}
+.general-settings .fieldset-outer-wrapper {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.general-settings > .fieldset-outer-wrapper {
+  margin-left: -10px;
+  margin-right: -10px;
+}
+.general-settings > .fieldset-outer-wrapper:first-child {
+  border-top: none;
+}
+.general-settings > .fieldset-outer-wrapper:last-child {
+  border-bottom-width: 0;
+}
+.field-name-og-group-ref .fieldset-outer-wrapper {
+  border-top: none;
+  margin-top: 0;
+  padding-top: 0;
+}
+.field-name-og-group-ref .fieldset-outer-wrapper, .field-type-datetime-form .fieldset-outer-wrapper {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+fieldset {
+  border: none;
+  margin: 0;
+  padding: .01em 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+legend {
+  -webkit-padding-start: 0;
+  -webkit-padding-end: 0;
+  line-height: 1.2em;
+}
+legend + .fieldset-wrapper {
+  -webkit-margin-top-collapse: separate;
+  margin-top: 1.2em;
+}
+
+.fieldset-legend {
+  display: block;
+  font-size: 1.2em;
+  line-height: 1.2em;
+  font-weight: light;
+}
+html.js fieldset.collapsed .fieldset-legend, html.js fieldset.collapsible .fieldset-legend {
+  padding: 0;
+  background: none;
+}
+.fieldset-legend span.summary {
+  display: block;
+  margin: 0;
+  font-size: .76em;
+  font-weight: normal;
+}
+.collapsible > legend .fieldset-legend {
+  display: block;
+  text-indent: -.5em;
+  margin-left: .6em;
+}
+.collapsible > legend .fieldset-legend span.summary {
+  margin-left: .7em;
+}
+.collapsible > legend .fieldset-legend a:before {
+  display: inline-block;
+  position: relative;
+  margin-right: .2em;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  border: .2em solid transparent;
+  border-top-color: #333333;
+  content: "";
+  top: -.1em;
+  left: -.1em;
+}
+.collapsed > legend .fieldset-legend a:before {
+  border-top-color: transparent;
+  border-left-color: #333333;
+  top: -.2em;
+  left: auto;
+}
+
+.form-item:first-child {
+  margin-top: 0;
+}
+.form-item:last-child {
+  margin-bottom: 0;
+}
+
+.filter-wrapper {
+  margin: 0;
+  padding: 0;
+}
+
 /**
  * Button styles
  */
@@ -3577,13 +3697,6 @@ tr.odd .form-item, tr.even .form-item {
 .marker,
 .form-required {
   color: #cc0000;
-}
-
-/**
- * Define consistent borders
- */
-fieldset {
-  border: 1px solid #cccccc;
 }
 
 /**

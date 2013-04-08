@@ -58,6 +58,27 @@ jQuery(document).ready(function($){
 });
 
 (function ($) {
+
+  /**
+   * Define a variable height on fieldsets to accommodate multi-line layouts.
+   */
+  Drupal.behaviors.collapsibleHeight = {
+    attach: function (context, settings) {
+      $('fieldset.collapsible', context).once('collapsibleHeight', function () {
+        var $fieldset = $(this),
+            $minHeight = $fieldset.find('legend').height();
+
+        $fieldset.css('min-height', $minHeight + 'px');
+
+        // Adjust the height on window resize.
+        $(window).resize(function () {
+          var $minHeight = $fieldset.find('legend').height();
+          $fieldset.css('min-height', $minHeight + 'px');
+        });
+      });
+    }
+  }
+
   /**
    * Make an item follow the page when an item is in view.
    */
