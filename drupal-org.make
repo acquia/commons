@@ -7,6 +7,10 @@ projects[addressfield][type] = "module"
 projects[addressfield][subdir] = "contrib"
 projects[addressfield][version] = "1.0-beta3"
 
+projects[addressfield_tokens][type] = "module"
+projects[addressfield_tokens][subdir] = "contrib"
+projects[addressfield_tokens][version] = "1.3"
+
 projects[acquia_connector][type] = "module"
 projects[acquia_connector][subdir] = "contrib"
 projects[acquia_connector][version] = "2.8"
