@@ -437,7 +437,7 @@ function commons_events_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_registration',
-    'label' => 'Registration',
+    'label' => 'Registration bundle',
     'required' => 0,
     'settings' => array(
       'default_registration_settings' => array(
