@@ -339,6 +339,7 @@ function commons_events_views_default_views() {
   $handler->display->display_options['sorts']['field_date_value']['field'] = 'field_date_value';
   $handler->display->display_options['sorts']['field_date_value']['exposed'] = TRUE;
   $handler->display->display_options['sorts']['field_date_value']['expose']['label'] = 'Date';
+  $handler->display->display_options['inherit_panels_path'] = '1';
   $export['commons_events_upcoming'] = $view;
 
   $view = new view();

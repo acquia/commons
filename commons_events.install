@@ -142,3 +142,15 @@ function commons_events_update_7005() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Upcoming events view pane exposed sort should redirect to the view pane and
+ * not the feed.
+ */
+function commons_events_update_7006() {
+  $revert = array(
+    'commons_events' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}
