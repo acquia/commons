@@ -74,26 +74,32 @@ function commons_events_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'hidden',
-        'module' => 'addressfield',
+        'module' => 'addressfield_tokens',
         'settings' => array(
-          'format_handlers' => array(
-            0 => 'address',
+          'components' => array(
+            'administrative_area' => 'administrative_area',
+            'locality' => 'locality',
+            'postal_code' => 'postal_code',
+            'thoroughfare' => 'thoroughfare',
           ),
-          'use_widget_handlers' => 1,
+          'separator' => ', ',
         ),
-        'type' => 'addressfield_default',
+        'type' => 'addressfield_components',
         'weight' => '2',
       ),
       'teaser' => array(
         'label' => 'hidden',
-        'module' => 'addressfield',
+        'module' => 'addressfield_tokens',
         'settings' => array(
-          'format_handlers' => array(
-            0 => 'address'
+          'components' => array(
+            'administrative_area' => 'administrative_area',
+            'locality' => 'locality',
+            'postal_code' => 'postal_code',
+            'thoroughfare' => 'thoroughfare',
           ),
-          'use_widget_handlers' => 1,
+          'separator' => ', ',
         ),
-        'type' => 'addressfield_default',
+        'type' => 'addressfield_components',
         'weight' => '2',
       ),
     ),

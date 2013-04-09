@@ -154,3 +154,14 @@ function commons_events_update_7006() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Change event displays to abbreviate state names.
+ */
+function commons_events_update_7007() {
+  $revert = array(
+    'commons_events' => array('field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}
