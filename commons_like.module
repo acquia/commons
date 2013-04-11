@@ -58,12 +58,12 @@ function commons_like_votingapi_insert($votes) {
 }
 
 /**
- * Implements hook_votingapi_insert().
+ * Implements hook_votingapi_delete().
  *   Delete a message when a user unlikes a node.
  */
 function commons_like_votingapi_delete($votes) {
   foreach ($votes as $vote) {
-    if ($vote['tag'] == 'commons_like' && $vote['entity_type'] == 'node') {
+    if (isset($vote['tag']) && $vote['tag'] == 'commons_like' && $vote['entity_type'] == 'node') {
       if (module_exists('commons_activity_streams') && $mids = commons_like_existing_node_like_messages($vote['uid'], array($vote['entity_id']))) {
         message_delete_multiple($mids);
       }
