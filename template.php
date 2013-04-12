@@ -162,12 +162,40 @@ function commons_origins_preprocess_node(&$variables, $hook) {
     $variables['classes_array'][] = 'user-picture-available';
   }
 
+  // Style node links like buttons.
+  foreach ($variables['content']['links'] as $type => &$linkgroup) {
+    // Button styling for the "rate" and "flag" types will be handled
+    // separately.
+    if ($type != 'rate' && $type != 'flag' && substr($type, 0, 1) != '#') {
+      foreach ($linkgroup['#links'] as $name => $link) {
+        if ($name != 'comment_forbidden' && !is_string($linkgroup['#links'][$name]['attributes']['class'])) {
+          $linkgroup['#links'][$name]['attributes']['class'][] = 'action-item-small';
+          $linkgroup['#links'][$name]['attributes']['class'][] = 'action-item-inline';
+        }
+        elseif ($name != 'comment_forbidden') {
+          $linkgroup['#links'][$name]['attributes']['class'] .= ' action-item-small action-item-inline';
+        }
+      }
+    }
+  }
+
   // Add classes to render the comment-comments link as a button with a number
   // attached.
   if (!empty($variables['content']['links']['comment']['#links']['comment-comments'])) {
     $comments_link = &$variables['content']['links']['comment']['#links']['comment-comments'];
     $comments_link['attributes']['class'][] = 'link-with-counter';
-    $comments_link['title'] = str_replace($variables['comment_count'], '<span class="counter">' . $variables['comment_count'] . '</span>', $comments_link['title']);
+    $chunks = explode(' ', $comments_link['title']);
+
+    // Add appropriate classes to words in the title.
+    foreach ($chunks as &$chunk) {
+      if ($chunk == $variables['comment_count']) {
+        $chunk = '<span class="action-item-small-append">' . $variables['comment_count'] . '</span>';
+      }
+      else {
+        $chunk = '<span class="element-invisible">' . $chunk . '</span>';
+      }
+    }
+    $comments_link['title'] = implode(' ', $chunks);
   }
 
   // Push the reporting link to the end.
@@ -250,6 +278,33 @@ function commons_origins_preprocess_node(&$variables, $hook) {
   if (!empty($variables['content']['rate_commons_answer'])) {
     $variables['content_attributes_array']['class'][] = 'has-rate-widget';
     $variables['content']['rate_commons_answer']['#weight'] = 999;
+  }
+
+  // Add a general class to the node links.
+  if (!empty($variables['content']['links'])) {
+    $variables['content']['links']['#attributes']['class'][] = 'node-action-links';
+
+    // For some reason, the node links processing is not always added and
+    // multiple ul elements are output instead of a single.
+    if (!isset($variables['content']['links']['#pre_render']) || !in_array('drupal_pre_render_links', $variables['content']['links']['#pre_render'])) {
+      $variables['content']['links']['#pre_render'][] = 'drupal_pre_render_links';
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_flag().
+ */
+function commons_origins_preprocess_flag(&$variables, $hook) {
+  if (strpos($variables['flag_name_css'], 'inappropriate-') !== 0) {
+    // Style the flag links like buttons.
+    if ($variables['last_action'] == 'flagged') {
+      $variables['flag_classes_array'][] = 'action-item-small-active';
+    }
+    else {
+      $variables['flag_classes_array'][] = 'action-item-small';
+    }
+    $variables['flag_classes'] = implode(' ', $variables['flag_classes_array']);
   }
 }
 
@@ -441,6 +496,60 @@ function commons_origins_preprocess_views_view_unformatted(&$variables, $hook) {
 }
 
 /**
+ * Implements hook_preprocess_rate_template_commons_like().
+ */
+function commons_origins_preprocess_rate_template_commons_like(&$variables, $hook) {
+  // Roll the content into a renderable array to make the template simpler.
+  $variables['content'] = array(
+    'link' => array(
+      '#theme' => 'rate_button__commons_like',
+      '#text' => $variables['links'][0]['text'],
+      '#href' => $variables['links'][0]['href'],
+      '#class' => 'rate-commons-like-btn action-item-small action-item-merge',
+    ),
+    'count' => array(
+      '#theme' => 'html_tag',
+      '#tag' => 'span',
+      '#value' => $variables['results']['count'],
+      '#attributes' => array(
+        'class' => array(
+          'rate-commons-like-count',
+          'action-item-small-append',
+          'action-item-merge',
+        ),
+      ),
+    ),
+  );
+}
+
+/**
+ * Overrides hook_rate_button() for commons_like.
+ */
+function commons_origins_rate_button__commons_like($variables) {
+  $text = $variables['text'];
+  $href = $variables['href'];
+  $class = $variables['class'];
+  static $id = 0;
+  $id++;
+
+  $classes = 'rate-button';
+  if ($class) {
+    $classes .= ' ' . $class;
+  }
+  if (empty($href)) {
+    // Widget is disabled or closed.
+    return '<span class="' . $classes . '" id="rate-button-' . $id . '">' .
+      '<span class="element-invisible">' . check_plain($text) . '</span>' .
+      '</span>';
+  }
+  else {
+    return '<a class="' . $classes . '" id="rate-button-' . $id . '" rel="nofollow" href="' . htmlentities($href) . '" title="' . check_plain($text) . '">' .
+      '<span class="element-invisible">' . check_plain($text) . '</span>' .
+      '</a>';
+  }
+}
+
+/**
  * Implements hook_form_alter().
  */
 function commons_origins_form_alter(&$form, &$form_state, $form_id) {
@@ -515,8 +624,15 @@ function commons_origins_form_alter(&$form, &$form_state, $form_id) {
  * Implements hook_css_alter().
  */
 function commons_origins_css_alter(&$css) {
-  if (isset($css['profiles/commons/modules/contrib/rich_snippets/rich_snippets.css'])) {
-    unset($css['profiles/commons/modules/contrib/rich_snippets/rich_snippets.css']);
+  // Remove preset styles that interfere with theming.
+  $unset = array(
+    'profiles/commons/modules/contrib/rich_snippets/rich_snippets.css',
+    'profiles/commons/modules/contrib/commons_like/commons-like.css',
+  );
+  foreach ($unset as $path) {
+    if (isset($css[$path])) {
+      unset($css[$path]);
+    }
   }
 }
 

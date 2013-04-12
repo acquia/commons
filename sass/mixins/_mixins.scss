@@ -43,19 +43,9 @@
   }
 }
 
-@mixin count-btn($icon, $counter: 'counter') {
-  @extend %btn-gray;
-  @extend %btn-with-attach;
-
-  &:before {
-    @include sprite_url_height_width($icons, $icon);
-  }
-
-  .#{$counter} {
-    @extend %btn-attach;
-  }
-}
-
+//
+// Styles for the pullout drawer on search.
+//
 @mixin filter-drawer($break: only-small) {
   @include respond($break) {
     .filters-processed {
@@ -104,6 +94,9 @@
   }
 }
 
+//
+// Styles for the overlay layer when the filter drawer is expanded.
+//
 @mixin filter-overlay($break: only-small) {
   .filter-overlay {
     @include respond($break) {

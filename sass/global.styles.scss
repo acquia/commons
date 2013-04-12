@@ -40,11 +40,11 @@
 
 html {
   background: $page;
+  font-size: 87.5%;
 }
 
 body {
   font-family: $base-font; // Set from _custom.scss font variables
-  font-size: 87.5%;
   color: $dark_gray;
 }
 
@@ -331,12 +331,6 @@ var {
 
   .field-name-body {
     margin-bottom: 20px;
-  }
-
-  .comment-comments {
-    a {
-      @include count-btn('comments-dark');
-    }
   }
 }
 
@@ -728,7 +722,7 @@ button,
   @extend %button-default;
   max-width: 100%;
 
-  &:not(.action-item-inline) {
+  &:not(.action-item-inline, .action-item-merge) {
     @include respond(only-small) {
       display: block;
       width: 100%;
@@ -778,6 +772,57 @@ button,
   }
 }
 
+.action-item-merge, {
+  .action-item-merge + & {
+    @include border-top-left-radius(0);
+    @include border-bottom-left-radius(0);
+    margin-left: -.5em;
+  }
+}
+
+.action-item-append,
+.action-item-small-append,
+.action-item-large-append {
+  position: relative;
+  padding-right: .5em;
+  padding-left: .5em;
+
+  &,
+  &:active,
+  &:focus,
+  &:hover {
+    background: $border;
+    border-color: $light_gray;
+    color: $dark_gray;
+    cursor: default;
+    @include text-shadow(none);
+  }
+
+  &:before,
+  &:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 50%;
+    border-color: transparent;
+    border-style: solid;
+  }
+
+  &:before {
+    left: -10px;
+    margin-top: -5px;
+    border-width: 5px;
+    border-right-color: $light_gray;
+  }
+
+  &:after {
+    left: -8px;
+    margin-top: -4px;
+    border-width: 4px;
+    border-right-color: $border;
+  }
+}
+
 /* Make the disabled buttons subdued. */
 [disabled] {
   &,
@@ -788,7 +833,126 @@ button,
     -webkit-user-select: none;
     -khtml-user-select: none;
     user-select: none;
-    cursor: default;
+    cursor: normal;
+  }
+}
+
+/**
+ * Specialty buttons
+ */
+
+/* Like widget */
+.rate-commons-like-btn {
+  &:before {
+    @include sprite_url_height_width($icons, like);
+    content: "";
+    margin-top: -2px;
+    margin-bottom: -2px;
+  }
+}
+
+/* Follow buttons */
+[class*="flag-commons-follow-"] {
+  .flag-action {
+    &:before {
+      content: "";
+      @include sprite_url_height_width($icons, follow-large);
+    }
+  }
+
+  .unflag-action {
+    @extend %button-active;
+  }
+
+  .flag-throbber {
+    display: inline-block;
+  }
+
+  .flag-message {
+    display: none !important;
+  }
+}
+
+/* Report as inappropriate */
+.flag-inappropriate-node,
+.flag-inappropriate-comment, {
+  .flag-action {
+    &:before {
+      content: "";
+      @include sprite_url_height_width($icons, spam);
+    }
+  }
+}
+
+/* ShareThis */
+.sharethis-buttons {
+  position: relative;
+
+  &:before {
+    content: "";
+    @include sprite_url_height_width($icons, share);
+  }
+}
+
+.sharethis-wrapper {
+  position: absolute;
+  left: 0;
+  bottom: 100%;
+  display: none;
+  white-space: nowrap;
+  background: $white;
+  border: 1px solid $green;
+  @include border-radius(6px);
+  padding: 10px 8px 3px 8px;
+  margin-bottom: 10px;
+
+  &:before,
+  &:after {
+    content: "";
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-color: transparent;
+    position: absolute;
+    top: 100%;
+  }
+
+  &:before {
+    border-width: 6px 6px 0 6px;
+    border-top-color: $green;
+    left: 10px;
+  }
+
+  &:after {
+    border-width: 5.5px 5.5px 0 5.5px;
+    border-top-color: $white;
+    left: 11px;
+  }
+
+  .sharethis-buttons:hover & {
+    display: block;
+  }
+}
+
+/* Comments */
+.comment-comments {
+  .action-item-small {
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+
+    &:before {
+      content: "";
+      @include sprite_url_height_width($icons, comments-dark);
+    }
+  }
+
+  .action-item-small-append {
+    margin: -1px -1px -1px 1em;
+    font-size: 1em;
+    min-height: 1.8em;
+    @include border-top-left-radius(0);
+    @include border-bottom-left-radius(0);
   }
 }
 
@@ -938,9 +1102,8 @@ ul.links {
   }
 
   li {
-    display: inline;
+    display: inline-block;
     list-style: none;
-    padding: 0 10px 0 0;
   }
 }
 
@@ -1008,68 +1171,6 @@ ul.primary.tabs {
 .quicktabs-style-commons-pills ul.quicktabs-tabs li {
   text-transform: uppercase;
   font-size: .8em;
-}
-
-li.sharethis {
-  @extend %btn-gray;
-  position: relative;
-  padding: 0 24px;
-  height: 20px;
-  margin: 0 7px;
-  cursor: pointer;
-
-  &:hover .sharethis-buttons {
-    display: block;
-  }
-
-  ul.inline & {
-    padding: 0 24px;
-    margin: 0 7px;
-    display: inline-block;
-  }
-
-  &:before {
-    content: "";
-    @include sprite_url_height_width($icons, share);
-  }
-
-  .sharethis-buttons {
-    position: absolute;
-    left: 0;
-    bottom: 100%;
-    display: none;
-  }
-
-  .sharethis-wrapper {
-    white-space: nowrap;
-    background: $white;
-    border: 1px solid $green;
-    @include border-radius(6px);
-    padding: 10px 8px 3px 8px;
-    margin-bottom: 10px;
-    position: relative;
-
-    &:before, &:after {
-      content: "";
-      width: 0;
-      height: 0;
-      border-style: solid;
-      position: absolute;
-      top: 100%;
-    }
-
-    &:before {
-      border-width: 6px 6px 0 6px;
-      border-color: $green transparent transparent transparent;
-      left: 10px;
-    }
-
-    &:after {
-      border-width: 5.5px 5.5px 0 5.5px;
-      border-color: $white transparent transparent transparent;
-      left: 11px;
-    }
-  }
 }
 
 /**
@@ -1250,14 +1351,6 @@ h1.node-title {
     clear: both;
     margin-top: 20px;
     position:relative;
-
-    ul {
-      float: left;
-    }
-
-    li {
-      float: left;
-    }
   }
 }
 
@@ -1467,72 +1560,15 @@ h1.node-title {
   }
 }
 
-.node .flag-commons-follow-node,
-.node .flag-commons-follow-group,
-.pane-user-flag-commons-follow-user-link .flag-commons-follow-user,
-.taxonomy-term .flag-commons-follow-term,
-.view-commons-follow-node .flag-commons-follow-group,
-.view-commons-follow-node .flag-commons-follow-node,
-.view-commons-follow-user .flag-commons-follow-user,
-.view-commons-follow-taxonomy-term .flag-commons-follow-term {
-  display: inline-block;
+ul.node-action-links {
+  li {
+    padding: 0;
+    vertical-align: baseline;
+  }
 
+  li,
   a {
-    position: relative;
-
-    &.flag-action {
-      @extend %btn-gray;
-
-      &:before {
-        content: "";
-        @include sprite_url_height_width($icons, follow-large);
-      }
-    }
-
-    &.unflag-action {
-      @extend %btn-gray-flat;
-      height: 20px;
-    }
-  }
-
-  .flag-throbber {
-    display: inline-block;
-  }
-
-  span {
-    display: none !important;
-  }
-}
-
-.node .flag-commons-follow-node,
-.view-commons-follow-node .flag-commons-follow-group,
-.view-commons-follow-node .flag-commons-follow-node,
-.view-commons-follow-user .flag-commons-follow-user,
-.view-commons-follow-taxonomy-term .flag-commons-follow-term {
-  a {
-    &.flag-action {
-      font-size: 0;
-      line-height: 0;
-      color: transparent;
-      padding: 3px 26px;
-      height: 14px;
-      position: relative;
-      top: 1px;
-
-      &:before {
-        top: 1px;
-      }
-    }
-  }
-}
-
-.flag-inappropriate-node {
-  display: block;
-  margin: $gutter-width 0;
-  &:before {
-    content: "";
-    top: 0;
-    @include sprite_url_height_width($icons, spam);
+    margin: 0;
   }
 }
 
@@ -1562,7 +1598,7 @@ h1.node-title {
 
 .author-datetime {
   color:$light_gray;
-  font-size:0.85em;
+  font-size:0.88em;
 }
 
 .node-content-type {
@@ -2776,21 +2812,6 @@ body.page-node .pane-views-panes {
   position: absolute;
   right: 10px;
   top: 22px;
-
-  .flag-action {
-    @extend %btn-gray;
-
-    &:before {
-      content: "";
-      @include sprite_url_height_width($icons, icon-gray-follow);
-      top: 0;
-      margin-right: 5px;
-    }
-  }
-
-  .unflag-action {
-    @extend %btn-gray-flat;
-  }
 }
 
 .view-id-commons_featured {
@@ -3116,12 +3137,6 @@ body.page-node .pane-views-panes {
 
 .node {
   margin-bottom: 20px;
-
-  &.node-teaser {
-    .links {
-      font-size:0.85em;
-    }
-  }
 
   .node-title {
     margin: 0;
