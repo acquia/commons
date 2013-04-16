@@ -47,6 +47,24 @@ function commons_origins_process_search_results(&$variables, $hook) {
 }
 
 /**
+ * Shows a groups of blocks for starting a search from a filter.
+ */
+function commons_origins_apachesolr_search_browse_blocks($vars) {
+  $result = '';
+  if ($vars['content']['#children']) {
+    $result .= '<div class="apachesolr-browse-blocks">' . "\n";
+    $result .= '  <h2 class="search-results-title">' . t('Browse available categories') . '</h2>' . "\n";
+    $result .= '  <div class="commons-pod">' . "\n";
+    $result .= '    <p>' . t('Pick a category to launch a search.') . '</p>' . "\n";
+    $result .= $vars['content']['#children'] . "\n";
+    $result .= '  </div>' . "\n";
+    $result .= '</div>';
+  }
+
+  return $result;
+}
+
+/**
  * Preprocess variables for the html template.
  */
 function commons_origins_preprocess_html(&$variables, $hook) {
@@ -346,6 +364,11 @@ function commons_origins_preprocess_panels_pane(&$variables, $hook) {
   );
   if (($pane->panel == 'two_66_33_second' && !in_array($pane->subtype, $not_pods)) || in_array($pane->subtype, $content_pods)) {
     $variables['attributes_array']['class'][] = 'commons-pod';
+  }
+
+  // Mimic the class for the facetapi blocks on the panel variant.
+  if (strpos($pane->subtype, 'facetapi-') === 0) {
+    $variables['attributes_array']['class'][] = 'block-facetapi';
   }
 }
 

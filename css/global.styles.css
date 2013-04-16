@@ -3911,15 +3911,6 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
 /**
  * Events Page
  */
-.page-events .region-three-25-50-25-first h3 {
-  color: #666666;
-  font-size: 18px;
-}
-.page-events .region-three-25-50-25-first .panel-pane {
-  border-bottom: 1px solid #eee;
-  padding-bottom: 5px;
-  margin-bottom: 14px;
-}
 .page-events .region-three-25-50-25-third .pane-views-panes {
   margin-right: 0;
 }
@@ -4083,16 +4074,34 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
     background-position: center center;
   }
 }
-.page-search .two-33-66 > .region-two-33-66-first h3 {
+.block-facetapi {
+  margin-bottom: 1em;
+  padding-bottom: 1em;
+  border-bottom: 1px solid #cccccc;
+}
+.block-facetapi:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+.block-facetapi .block-title {
   margin-bottom: 10px;
   color: #666666;
   font-size: 1.2em;
 }
-.page-search .two-33-66 > .region-two-33-66-first .panel-pane {
-  border-bottom: 1px solid #eee;
-  padding-bottom: 5px;
-  margin-bottom: 15px;
+
+.facetapi-facetapi-links,
+.facetapi-date-range {
+  margin: 0;
+  padding: 0;
 }
+.facetapi-facetapi-links li.leaf,
+.facetapi-date-range li.leaf {
+  margin-left: 0;
+  list-style-type: none;
+  list-style-image: none;
+}
+
 @media only screen and (max-width: 480px) {
   .page-search .two-33-66 > .filters-processed {
     clear: none;

@@ -35,7 +35,6 @@ jQuery(document).ready(function($){
   });
 
   //placeholder functionality
-  // $('.view-id-commons_homepage_content .views-row-1 article h1').append("<div class='tag new'></div><div class='tag featured'></div>");
   $('#block-system-main-menu .menu-depth-1 a').append("<div class='arrow'></div>");
 
   $('.commons-bw-create-choose').click(function(){
@@ -115,62 +114,65 @@ jQuery(document).ready(function($){
             size = $(window).width(),
             triggerWidth = '';
 
-        // Determine if the page is for search or events and set the target
-        // width.
-        if ($('.page-search', context).length > 0) {
-          triggerWidth = 480;
-        }
-        else if ($('.page-events', context).length > 0) {
-          triggerWidth = 768;
-        }
-
-        // Add process flags and styling elements.
-        $(this).prepend(filterTrigger).addClass('filters-processed');
-        $('body').append(filterOverlay);
-
-        // Make sure the trigger is in place on the initial page load.
-        if (size <= triggerWidth) {
-          showWithElement(filterTrigger, results);
-        }
-
-        // Define the clickable areas to control the visibility of the filters.
-        $(filterTrigger).click(function () {
-          if ($(filterTrigger).hasClass('following')) {
-            $(filterTrigger).removeClass('following');
+        // Only function if there are filters available.
+        if (filters.find('.panel-pane').length > 0) {
+          // Determine if the page is for search or events and set the target
+          // width.
+          if ($('.page-search', context).length > 0) {
+            triggerWidth = 480;
           }
-          $(filters).toggleClass('expanded');
-          $(filterOverlay).toggleClass('expanded');
-
-          if ($(filters).hasClass('expanded')) {
-            $('html, body').animate({
-              scrollTop: $(filterTrigger).offset().top - $('.region-page-top').offset().top
-            }, 0);
+          else if ($('.page-events', context).length > 0) {
+            triggerWidth = 768;
           }
 
-          return false;
-        });
-        $(filterOverlay).click(function () {
-          $(filters).toggleClass('expanded');
-          $(filterOverlay).toggleClass('expanded');
-          showWithElement(filterTrigger, results);
-        });
+          // Add process flags and styling elements.
+          $(this).prepend(filterTrigger).addClass('filters-processed');
+          $('body').append(filterOverlay);
 
-        // Make the filterToggle follow the search results when scrolling and
-        // resizing.
-        $(window).resize(function () {
-          size = $(window).width();
+          // Make sure the trigger is in place on the initial page load.
           if (size <= triggerWidth) {
             showWithElement(filterTrigger, results);
           }
-          else {
-            $(filters).css('top', '');
-          }
-        });
-        $(document).scroll(function () {
-          if (!$(filters).hasClass('expanded')) {
+
+          // Define the clickable areas to control the visibility of the filters.
+          $(filterTrigger).click(function () {
+            if ($(filterTrigger).hasClass('following')) {
+              $(filterTrigger).removeClass('following');
+            }
+            $(filters).toggleClass('expanded');
+            $(filterOverlay).toggleClass('expanded');
+
+            if ($(filters).hasClass('expanded')) {
+              $('html, body').animate({
+                scrollTop: $(filterTrigger).offset().top - $('.region-page-top').offset().top
+              }, 0);
+            }
+
+            return false;
+          });
+          $(filterOverlay).click(function () {
+            $(filters).toggleClass('expanded');
+            $(filterOverlay).toggleClass('expanded');
             showWithElement(filterTrigger, results);
-          }
-        });
+          });
+
+          // Make the filterToggle follow the search results when scrolling and
+          // resizing.
+          $(window).resize(function () {
+            size = $(window).width();
+            if (size <= triggerWidth) {
+              showWithElement(filterTrigger, results);
+            }
+            else {
+              $(filters).css('top', '');
+            }
+          });
+          $(document).scroll(function () {
+            if (!$(filters).hasClass('expanded')) {
+              showWithElement(filterTrigger, results);
+            }
+          });
+        }
       });
     }
   }
