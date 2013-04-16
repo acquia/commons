@@ -164,7 +164,8 @@ jQuery(document).ready(function($){
               showWithElement(filterTrigger, results);
             }
             else {
-              $(filters).css('top', '');
+              $(filters).css('top', '').removeClass('expanded');
+              $(filterOverlay).removeClass('expanded');
             }
           });
           $(document).scroll(function () {

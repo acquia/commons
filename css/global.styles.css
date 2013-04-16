@@ -1396,9 +1396,9 @@ button,
   padding: 5px;
   position: absolute;
   top: 0;
-  left: -40px;
+  left: -39px;
   width: 40px;
-  height: 40px;
+  border: 1px solid #cccccc;
   border-right: none;
   -webkit-border-radius: 3px 0 0 3px;
   -moz-border-radius: 3px 0 0 3px;
@@ -1409,41 +1409,37 @@ button,
   font: 0/0 a;
   line-height: 0;
   color: transparent;
-  -webkit-box-shadow: #858585 1px 1px 4px;
-  -moz-box-shadow: #858585 1px 1px 4px;
-  box-shadow: #858585 1px 1px 4px;
+  -webkit-box-shadow: rgba(51, 51, 51, 0.4) -1px 1px 2px;
+  -moz-box-shadow: rgba(51, 51, 51, 0.4) -1px 1px 2px;
+  box-shadow: rgba(51, 51, 51, 0.4) -1px 1px 2px;
   cursor: pointer;
-  z-index: -1;
+  z-index: 1;
 }
 .filter-trigger:after {
-  content: "\2026";
+  content: "\00ab";
   display: block;
-  width: 30px;
-  height: 30px;
-  font-size: 20px;
-  font-weight: bold;
-  text-shadow: 2px 2px 0.2 rgba(0, 0, 0, 0.5);
-  line-height: 20px;
-  background: #666666;
-  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #858585), color-stop(100%, #666666));
-  background: -webkit-linear-gradient(#858585, #666666);
-  background: -moz-linear-gradient(#858585, #666666);
-  background: -o-linear-gradient(#858585, #666666);
-  background: linear-gradient(#858585, #666666);
-  color: white;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  -ms-border-radius: 3px;
-  -o-border-radius: 3px;
-  border-radius: 3px;
-  -webkit-box-shadow: inset 0 0 0.4em rgba(0, 0, 0, 0.2), #858585 1px 1px 4px;
-  -moz-box-shadow: inset 0 0 0.4em rgba(0, 0, 0, 0.2), #858585 1px 1px 4px;
-  box-shadow: inset 0 0 0.4em rgba(0, 0, 0, 0.2), #858585 1px 1px 4px;
+  font-size: 38.4px;
+  line-height: .8em;
+  padding-bottom: .15em;
+  color: #336699;
+}
+.expanded .filter-trigger:after {
+  content: "\00bb";
 }
 .filter-trigger.following {
   position: fixed;
   right: 0;
   left: auto;
+}
+
+.filters-processed.expanded .region-inner {
+  position: relative;
+  border: 1px solid #cccccc;
+  border-right: none;
+  z-index: 0;
+  -webkit-box-shadow: rgba(51, 51, 51, 0.4) -1px 1px 2px;
+  -moz-box-shadow: rgba(51, 51, 51, 0.4) -1px 1px 2px;
+  box-shadow: rgba(51, 51, 51, 0.4) -1px 1px 2px;
 }
 
 .filter-overlay {
