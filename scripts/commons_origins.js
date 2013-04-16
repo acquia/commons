@@ -111,7 +111,7 @@ jQuery(document).ready(function($){
         var filters = $(this),
             filterTrigger = $('<a/>', {'href': '#filter-drawer', 'class': 'filter-trigger', 'id': 'filter-drawer'}).text(Drupal.t('Filter results')),
             filterOverlay = $('<div/>', {'class': 'filter-overlay'}),
-            results = $('.search-results-content');
+            results = $('.search-results-content, .pane-search-result');
             size = $(window).width(),
             triggerWidth = '';
 
