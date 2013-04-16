@@ -464,18 +464,17 @@ input[type="url"],
 input[type="week"] {
   @include box-sizing(border-box);
   @include background-clip(padding-box);
-  @include border-radius(0);
+  @include border-radius(2px);
   -webkit-appearance: none;
   background-color: white;
-  border: 1px solid;
-  border-color: #848484 #c1c1c1 #e1e1e1;
+  border: 1px solid #B2B2B2;
   color: black;
   outline: 0;
   margin: 0;
-  padding: 2px 3px;
+  padding: .5em;
   text-align: left;
-  height: 1.8em;
   vertical-align: top;
+  line-height: 1.2em;
 
   &[disabled] {
     background-color: #eeeeee;
@@ -494,6 +493,24 @@ textarea {
   &:-moz-placeholder {
     color: #888888;
   }
+}
+
+textarea,
+input[type="date"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="email"],
+input[type="month"],
+input[type="number"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="text"],
+input[type="time"],
+input[type="url"],
+input[type="week"] {
+  width: 100%;
+  max-width: 100%;
 }
 
 textarea,
@@ -3301,15 +3318,6 @@ tr {
   margin: 0;
 }
 
-input[type="text"],
-textarea {
-  @include box-sizing(border-box);
-  @include border-radius(3px);
-  border: 1px solid #B2B2B2;
-  width: 100%;
-  max-width: 100%;
-}
-
 form.commons-events-form-float {
   background-color:none;
   padding:0;
@@ -3763,6 +3771,64 @@ body.front.logged-in .view-commons-homepage-content .article.node {
 /**
  * Search
  */
+
+.search-form-page {
+  .form-type-textfield {
+    float: left;
+    padding-right: 8.8em;
+    width: 100%;
+    @include box-sizing(border-box);
+
+    @include respond(only-small) {
+      padding-right: 4.3em;
+    }
+
+    label {
+      white-space: nowrap;
+    }
+  }
+
+}
+
+// Build the search button base styling.
+@include button_with_icon(nth($buttons, 3), icon-search);
+
+.action-item-search {
+  float: left;
+  margin-left: -8.5em;
+  padding-left: 3em;
+  display: block;
+  margin-top: 1.7em;
+
+  &[type="submit"] {
+    @extend %button-primary-icon-search;
+
+    &,
+    &:hover,
+    &:active,
+    &:focus {
+      background-position: 1.5em center;
+    }
+  }
+}
+
+@include respond(only-small) {
+  .action-item-search {
+    margin-left: -4em;
+    padding-left: 1.5em;
+    text-indent: -9999em;
+
+    &[type="submit"] {
+      &,
+      &:hover,
+      &:active,
+      &:focus {
+        background-position: center center;
+      }
+    }
+  }
+}
+
 .page-search {
   .two-33-66 {
     > {
@@ -3838,6 +3904,7 @@ body.front.logged-in .view-commons-homepage-content .article.node {
 
 .search-result {
   border-bottom: 1px solid $border;
+  list-style-type: none;
 
   .block-content & {
     padding-bottom: 1.4em;

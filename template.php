@@ -414,7 +414,9 @@ function commons_origins_preprocess_form(&$variables, $hook) {
 
   // Give the search form on the search page pod styling.
   if (isset($element['#search_page']) || (isset($element['module']) && ($element['module']['#value'] == 'search_facetapi' || $element['module']['#value'] == 'user'))) {
+    $variables['attributes_array']['class'][] = 'search-form-page';
     $variables['attributes_array']['class'][] = 'commons-pod';
+    $variables['attributes_array']['class'][] = 'clearfix';
   }
 
   $pods = array(
@@ -471,6 +473,11 @@ function commons_origins_preprocess_form_content(&$variables, $hook) {
   // Make the comment form "Save" button more noticeable.
   if ($variables['form']['#id'] == 'comment-form') {
     $variables['form']['actions']['submit']['#attributes']['class'][] = 'action-item-primary';
+  }
+
+  // Make the search button primary.
+  if (isset($variables['form']['#search_page']) || (isset($variables['form']['module']) && ($variables['form']['module']['#value'] == 'search_facetapi' || $variables['form']['module']['#value'] == 'user'))) {
+    $variables['form']['basic']['submit']['#attributes']['class'][] = 'action-item-search';
   }
 }
 
@@ -626,8 +633,9 @@ function commons_origins_form_alter(&$form, &$form_state, $form_id) {
 function commons_origins_css_alter(&$css) {
   // Remove preset styles that interfere with theming.
   $unset = array(
-    'profiles/commons/modules/contrib/rich_snippets/rich_snippets.css',
-    'profiles/commons/modules/contrib/commons_like/commons-like.css',
+    drupal_get_path('module', 'search') . '/search.css',
+    drupal_get_path('module', 'rich_snippets') . '/rich_snippets.css',
+    drupal_get_path('module', 'commons_like') . '/commons-like.css',
   );
   foreach ($unset as $path) {
     if (isset($css[$path])) {

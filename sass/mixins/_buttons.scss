@@ -84,7 +84,7 @@ $button-contrast: 60 !default;
   $hover-text-shadow: contrast-color($hover-base, lighten($hover-base, 5), darken($hover-base, 5), $button-contrast);
 
   %button-#{$name} {
-    background: $base-color;
+    background-color: $base-color;
     @if $flat == false {
       @include background(linear-gradient(lighten($base-color, 5), darken($base-color, 5)))
     }
@@ -108,7 +108,7 @@ $button-contrast: 60 !default;
 
     &:hover {
       color: $hover-text;
-      background: $hover-base;
+      background-color: $hover-base;
       @if $flat == false {
         @include background(linear-gradient(lighten($hover-base, 5), darken($hover-base, 5)))
       }
@@ -130,6 +130,94 @@ $button-contrast: 60 !default;
       background: $base-color;
       @if $flat == false {
         @include background(linear-gradient(darken($base-color, 5), lighten($base-color, 5)))
+      }
+      @else {
+        @include box-shadow(inset .1em .1em .2em darken($base-color, 30));
+      }
+      border-color: $border-color;
+      // Add a 1px outline around the text to help with legibility.
+      @include text-shadow(
+        -1px 1px 0 $text-shadow,
+        -1px -1px 0 $text-shadow,
+        1px -1px 0 $text-shadow,
+        1px 1px 0 $text-shadow
+      );
+    }
+
+    &[disabled] {
+      color: contrast-color($base-color, darken($base-color, 20), lighten($base-color, 20), $button-contrast);
+      background: $base-color;
+      border-color: $border-color;
+      @include box-shadow(none);
+      @include text-shadow(none);
+    }
+  }
+}
+
+// Generate a set of buttons variants.
+@mixin button_with_icon($style, $icon) {
+  $name: nth($style, 1);
+  $base-color: nth($style, 2);
+  $flat: false;
+  @if (length($style) == 3) {
+    $flat: nth($style, 3);
+  }
+  $text-color: contrast-color($base-color, darken($base-color, 80), lighten($base-color, 80), $button-contrast);
+  $text-shadow: contrast-color($base-color, lighten($base-color, 10), darken($base-color, 10), $button-contrast);
+  $border-color: darken($base-color, 20);
+  $hover-base: darken($base-color, 5);
+  $hover-text: contrast-color($hover-base, darken($hover-base, 70), lighten($hover-base, 70), $button-contrast);
+  $hover-border: darken($border-color, 10);
+  $hover-text-shadow: contrast-color($hover-base, lighten($hover-base, 5), darken($hover-base, 5), $button-contrast);
+
+  %button-#{$name}-#{$icon} {
+    min-width: image-width("icons/#{$icon}.png");
+    @include background($base-color image-url("icons/#{$icon}.png") no-repeat);
+    @if $flat == false {
+      @include background(image-url("icons/#{$icon}.png") no-repeat, linear-gradient(lighten($base-color, 5), darken($base-color, 5)));
+    }
+    @else {
+      @include box-shadow(inset .1em .1em .2em darken($base-color, 30));
+    }
+    border-color: $border-color;
+    // Add a 1px outline around the text to help with legibility.
+    @include text-shadow(
+      -1px 1px 0 $text-shadow,
+      -1px -1px 0 $text-shadow,
+      1px -1px 0 $text-shadow,
+      1px 1px 0 $text-shadow
+    );
+
+    &,
+    &:link,
+    &:visited {
+      color: $text-color;
+    }
+
+    &:hover {
+      color: $hover-text;
+      background: $hover-base image-url("icons/#{$icon}.png") no-repeat;
+      @if $flat == false {
+        @include background(image-url("icons/#{$icon}.png") no-repeat, linear-gradient(lighten($hover-base, 5), darken($hover-base, 5)))
+      }
+      @else {
+        @include box-shadow(inset .1em .1em .2em darken($hover-base, 30));
+      }
+      border-color: $hover-border;
+      // Add a 1px outline around the text to help with legibility.
+      @include text-shadow(
+        -1px 1px 0 $hover-text-shadow,
+        -1px -1px 0 $hover-text-shadow,
+        1px -1px 0 $hover-text-shadow,
+        1px 1px 0 $hover-text-shadow
+      );
+    }
+
+    &:focus,
+    &:active {
+      background: $base-color image-url("icons/#{$icon}.png") no-repeat;
+      @if $flat == false {
+        @include background(image-url("icons/#{$icon}.png") no-repeat, linear-gradient(darken($base-color, 5), lighten($base-color, 5)))
       }
       @else {
         @include box-shadow(inset .1em .1em .2em darken($base-color, 30));

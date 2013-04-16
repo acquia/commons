@@ -505,22 +505,21 @@ input[type="week"] {
   -webkit-background-clip: padding;
   -moz-background-clip: padding;
   background-clip: padding-box;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  -ms-border-radius: 0;
-  -o-border-radius: 0;
-  border-radius: 0;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -o-border-radius: 2px;
+  border-radius: 2px;
   -webkit-appearance: none;
   background-color: white;
-  border: 1px solid;
-  border-color: #848484 #c1c1c1 #e1e1e1;
+  border: 1px solid #B2B2B2;
   color: black;
   outline: 0;
   margin: 0;
-  padding: 2px 3px;
+  padding: .5em;
   text-align: left;
-  height: 1.8em;
   vertical-align: top;
+  line-height: 1.2em;
 }
 textarea[disabled],
 select[disabled],
@@ -548,6 +547,24 @@ textarea::-webkit-input-placeholder {
 input:-moz-placeholder,
 textarea:-moz-placeholder {
   color: #888888;
+}
+
+textarea,
+input[type="date"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="email"],
+input[type="month"],
+input[type="number"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="text"],
+input[type="time"],
+input[type="url"],
+input[type="week"] {
+  width: 100%;
+  max-width: 100%;
 }
 
 textarea,
@@ -841,7 +858,7 @@ button,
 [type="submit"],
 [type="button"],
 [class*="action-item"], .commons-login {
-  background: #fefefe;
+  background-color: #fefefe;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #f1f1f1));
   background: -webkit-linear-gradient(#ffffff, #f1f1f1);
   background: -moz-linear-gradient(#ffffff, #f1f1f1);
@@ -871,7 +888,7 @@ button:hover,
 [type="button"]:hover,
 [class*="action-item"]:hover, .commons-login:hover {
   color: #3f3f3f;
-  background: #f1f1f1;
+  background-color: #f1f1f1;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fefefe), color-stop(100%, #e5e5e5));
   background: -webkit-linear-gradient(#fefefe, #e5e5e5);
   background: -moz-linear-gradient(#fefefe, #e5e5e5);
@@ -921,7 +938,7 @@ button[disabled],
 .action-item-large-active[type="reset"],
 .action-item-large-active[type="submit"],
 .action-item-large-active[type="button"], [class*="flag-commons-follow-"] .unflag-action {
-  background: #f3f3f3;
+  background-color: #f3f3f3;
   -webkit-box-shadow: inset 0.1em 0.1em 0.2em #a6a6a6;
   -moz-box-shadow: inset 0.1em 0.1em 0.2em #a6a6a6;
   box-shadow: inset 0.1em 0.1em 0.2em #a6a6a6;
@@ -947,7 +964,7 @@ button[disabled],
 .action-item-small-active:hover,
 .action-item-large-active:hover, [class*="flag-commons-follow-"] .unflag-action:hover {
   color: #343434;
-  background: #e6e6e6;
+  background-color: #e6e6e6;
   -webkit-box-shadow: inset 0.1em 0.1em 0.2em #9a9a9a;
   -moz-box-shadow: inset 0.1em 0.1em 0.2em #9a9a9a;
   box-shadow: inset 0.1em 0.1em 0.2em #9a9a9a;
@@ -987,7 +1004,7 @@ button[disabled],
 .action-item-large-primary[type="reset"],
 .action-item-large-primary[type="submit"],
 .action-item-large-primary[type="button"], .commons-sign-up, .pane-commons-groups-commons-groups-create-group a, #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before > a, .pane-commons-events-commons-events-create-event-link a {
-  background: #46bb2e;
+  background-color: #46bb2e;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #4fcd35), color-stop(100%, #3ea729));
   background: -webkit-linear-gradient(#4fcd35, #3ea729);
   background: -moz-linear-gradient(#4fcd35, #3ea729);
@@ -1015,7 +1032,7 @@ button[disabled],
 .action-item-small-primary:hover,
 .action-item-large-primary:hover, .commons-sign-up:hover, .pane-commons-groups-commons-groups-create-group a:hover, #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before > a:hover, .pane-commons-events-commons-events-create-event-link a:hover {
   color: white;
-  background: #3ea729;
+  background-color: #3ea729;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #46bb2e), color-stop(100%, #379224));
   background: -webkit-linear-gradient(#46bb2e, #379224);
   background: -moz-linear-gradient(#46bb2e, #379224);
@@ -1059,7 +1076,7 @@ button[disabled],
 .action-item-large-primary-active[type="reset"],
 .action-item-large-primary-active[type="submit"],
 .action-item-large-primary-active[type="button"] {
-  background: #46bb2e;
+  background-color: #46bb2e;
   -webkit-box-shadow: inset 0.1em 0.1em 0.2em #184010;
   -moz-box-shadow: inset 0.1em 0.1em 0.2em #184010;
   box-shadow: inset 0.1em 0.1em 0.2em #184010;
@@ -1085,7 +1102,7 @@ button[disabled],
 .action-item-small-primary-active:hover,
 .action-item-large-primary-active:hover {
   color: white;
-  background: #3ea729;
+  background-color: #3ea729;
   -webkit-box-shadow: inset 0.1em 0.1em 0.2em #102c0b;
   -moz-box-shadow: inset 0.1em 0.1em 0.2em #102c0b;
   box-shadow: inset 0.1em 0.1em 0.2em #102c0b;
@@ -3576,21 +3593,6 @@ tr.odd .form-item, tr.even .form-item {
   margin: 0;
 }
 
-input[type="text"],
-textarea {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  -ms-border-radius: 3px;
-  -o-border-radius: 3px;
-  border-radius: 3px;
-  border: 1px solid #B2B2B2;
-  width: 100%;
-  max-width: 100%;
-}
-
 form.commons-events-form-float {
   background-color: none;
   padding: 0;
@@ -3998,6 +4000,89 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
 /**
  * Search
  */
+.search-form-page .form-type-textfield {
+  float: left;
+  padding-right: 8.8em;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+@media only screen and (max-width: 480px) {
+  .search-form-page .form-type-textfield {
+    padding-right: 4.3em;
+  }
+}
+.search-form-page .form-type-textfield label {
+  white-space: nowrap;
+}
+
+.action-item-search[type="submit"] {
+  min-width: 15px;
+  background: #46bb2e url('../images/icons/icon-search.png?1363371593') no-repeat;
+  background: url('../images/icons/icon-search.png?1363371593') no-repeat, -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #4fcd35), color-stop(100%, #3ea729));
+  background: url('../images/icons/icon-search.png?1363371593') no-repeat, -webkit-linear-gradient(#4fcd35, #3ea729);
+  background: url('../images/icons/icon-search.png?1363371593') no-repeat, -moz-linear-gradient(#4fcd35, #3ea729);
+  background: url('../images/icons/icon-search.png?1363371593') no-repeat, -o-linear-gradient(#4fcd35, #3ea729);
+  background: url('../images/icons/icon-search.png?1363371593') no-repeat, linear-gradient(#4fcd35, #3ea729);
+  border-color: #27691a;
+  text-shadow: -1px 1px 0 #379224, -1px -1px 0 #379224, 1px -1px 0 #379224, 1px 1px 0 #379224;
+}
+.action-item-search[type="submit"], .action-item-search[type="submit"]:link, .action-item-search[type="submit"]:visited {
+  color: white;
+}
+.action-item-search[type="submit"]:hover {
+  color: white;
+  background: #3ea729 url('../images/icons/icon-search.png?1363371593') no-repeat;
+  background: url('../images/icons/icon-search.png?1363371593') no-repeat, -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #46bb2e), color-stop(100%, #379224));
+  background: url('../images/icons/icon-search.png?1363371593') no-repeat, -webkit-linear-gradient(#46bb2e, #379224);
+  background: url('../images/icons/icon-search.png?1363371593') no-repeat, -moz-linear-gradient(#46bb2e, #379224);
+  background: url('../images/icons/icon-search.png?1363371593') no-repeat, -o-linear-gradient(#46bb2e, #379224);
+  background: url('../images/icons/icon-search.png?1363371593') no-repeat, linear-gradient(#46bb2e, #379224);
+  border-color: #184010;
+  text-shadow: -1px 1px 0 #379224, -1px -1px 0 #379224, 1px -1px 0 #379224, 1px 1px 0 #379224;
+}
+.action-item-search[type="submit"]:focus, .action-item-search[type="submit"]:active {
+  background: #46bb2e url('../images/icons/icon-search.png?1363371593') no-repeat;
+  background: url('../images/icons/icon-search.png?1363371593') no-repeat, -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #3ea729), color-stop(100%, #4fcd35));
+  background: url('../images/icons/icon-search.png?1363371593') no-repeat, -webkit-linear-gradient(#3ea729, #4fcd35);
+  background: url('../images/icons/icon-search.png?1363371593') no-repeat, -moz-linear-gradient(#3ea729, #4fcd35);
+  background: url('../images/icons/icon-search.png?1363371593') no-repeat, -o-linear-gradient(#3ea729, #4fcd35);
+  background: url('../images/icons/icon-search.png?1363371593') no-repeat, linear-gradient(#3ea729, #4fcd35);
+  border-color: #27691a;
+  text-shadow: -1px 1px 0 #379224, -1px -1px 0 #379224, 1px -1px 0 #379224, 1px 1px 0 #379224;
+}
+[disabled].action-item-search[type="submit"] {
+  color: #85dc73;
+  background: #46bb2e;
+  border-color: #27691a;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  text-shadow: none;
+}
+
+.action-item-search {
+  float: left;
+  margin-left: -8.5em;
+  padding-left: 3em;
+  display: block;
+  margin-top: 1.7em;
+}
+.action-item-search[type="submit"], .action-item-search[type="submit"]:hover, .action-item-search[type="submit"]:active, .action-item-search[type="submit"]:focus {
+  background-position: 1.5em center;
+}
+
+@media only screen and (max-width: 480px) {
+  .action-item-search {
+    margin-left: -4em;
+    padding-left: 1.5em;
+    text-indent: -9999em;
+  }
+  .action-item-search[type="submit"], .action-item-search[type="submit"]:hover, .action-item-search[type="submit"]:active, .action-item-search[type="submit"]:focus {
+    background-position: center center;
+  }
+}
 .page-search .two-33-66 > .region-two-33-66-first h3 {
   margin-bottom: 10px;
   color: #666666;
@@ -4077,6 +4162,7 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
 
 .search-result {
   border-bottom: 1px solid #cccccc;
+  list-style-type: none;
 }
 .block-content .search-result {
   padding-bottom: 1.4em;
@@ -4257,7 +4343,7 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
 .palette-orange-red .action-item-large-primary[type="reset"],
 .palette-orange-red .action-item-large-primary[type="submit"],
 .palette-orange-red .action-item-large-primary[type="button"], .palette-orange-red .commons-sign-up, .palette-orange-red .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-orange-red a, .palette-orange-red #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before > a, #quicktabs-container-commons_bw .quicktabs-tabpage .palette-orange-red .attachment-before > a, .palette-orange-red .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-orange-red a {
-  background: #ff9126;
+  background-color: #ff9126;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ff9e40), color-stop(100%, #ff840c));
   background: -webkit-linear-gradient(#ff9e40, #ff840c);
   background: -moz-linear-gradient(#ff9e40, #ff840c);
@@ -4285,7 +4371,7 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
 .palette-orange-red .action-item-small-primary:hover,
 .palette-orange-red .action-item-large-primary:hover, .palette-orange-red .commons-sign-up:hover, .palette-orange-red .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-orange-red a:hover, .palette-orange-red #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before > a:hover, #quicktabs-container-commons_bw .quicktabs-tabpage .palette-orange-red .attachment-before > a:hover, .palette-orange-red .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-orange-red a:hover {
   color: white;
-  background: #ff840c;
+  background-color: #ff840c;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ff9126), color-stop(100%, #f27700));
   background: -webkit-linear-gradient(#ff9126, #f27700);
   background: -moz-linear-gradient(#ff9126, #f27700);
@@ -4414,7 +4500,7 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
 .palette-magenta-blue .action-item-large-primary[type="reset"],
 .palette-magenta-blue .action-item-large-primary[type="submit"],
 .palette-magenta-blue .action-item-large-primary[type="button"], .palette-magenta-blue .commons-sign-up, .palette-magenta-blue .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-magenta-blue a, .palette-magenta-blue #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before > a, #quicktabs-container-commons_bw .quicktabs-tabpage .palette-magenta-blue .attachment-before > a, .palette-magenta-blue .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-magenta-blue a {
-  background: #0097bf;
+  background-color: #0097bf;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #00abd9), color-stop(100%, #0083a6));
   background: -webkit-linear-gradient(#00abd9, #0083a6);
   background: -moz-linear-gradient(#00abd9, #0083a6);
@@ -4442,7 +4528,7 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
 .palette-magenta-blue .action-item-small-primary:hover,
 .palette-magenta-blue .action-item-large-primary:hover, .palette-magenta-blue .commons-sign-up:hover, .palette-magenta-blue .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-magenta-blue a:hover, .palette-magenta-blue #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before > a:hover, #quicktabs-container-commons_bw .quicktabs-tabpage .palette-magenta-blue .attachment-before > a:hover, .palette-magenta-blue .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-magenta-blue a:hover {
   color: white;
-  background: #0083a6;
+  background-color: #0083a6;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #0097bf), color-stop(100%, #006f8c));
   background: -webkit-linear-gradient(#0097bf, #006f8c);
   background: -moz-linear-gradient(#0097bf, #006f8c);
@@ -4571,7 +4657,7 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
 .palette-blue-blue .action-item-large-primary[type="reset"],
 .palette-blue-blue .action-item-large-primary[type="submit"],
 .palette-blue-blue .action-item-large-primary[type="button"], .palette-blue-blue .commons-sign-up, .palette-blue-blue .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-blue-blue a, .palette-blue-blue #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before > a, #quicktabs-container-commons_bw .quicktabs-tabpage .palette-blue-blue .attachment-before > a, .palette-blue-blue .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-blue-blue a {
-  background: #7ebd26;
+  background-color: #7ebd26;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #8cd22a), color-stop(100%, #70a822));
   background: -webkit-linear-gradient(#8cd22a, #70a822);
   background: -moz-linear-gradient(#8cd22a, #70a822);
@@ -4599,7 +4685,7 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
 .palette-blue-blue .action-item-small-primary:hover,
 .palette-blue-blue .action-item-large-primary:hover, .palette-blue-blue .commons-sign-up:hover, .palette-blue-blue .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-blue-blue a:hover, .palette-blue-blue #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before > a:hover, #quicktabs-container-commons_bw .quicktabs-tabpage .palette-blue-blue .attachment-before > a:hover, .palette-blue-blue .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-blue-blue a:hover {
   color: white;
-  background: #70a822;
+  background-color: #70a822;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #7ebd26), color-stop(100%, #62931d));
   background: -webkit-linear-gradient(#7ebd26, #62931d);
   background: -moz-linear-gradient(#7ebd26, #62931d);
@@ -4728,7 +4814,7 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
 .palette-black-green .action-item-large-primary[type="reset"],
 .palette-black-green .action-item-large-primary[type="submit"],
 .palette-black-green .action-item-large-primary[type="button"], .palette-black-green .commons-sign-up, .palette-black-green .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-black-green a, .palette-black-green #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before > a, #quicktabs-container-commons_bw .quicktabs-tabpage .palette-black-green .attachment-before > a, .palette-black-green .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-black-green a {
-  background: #4090ba;
+  background-color: #4090ba;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #519cc3), color-stop(100%, #3981a7));
   background: -webkit-linear-gradient(#519cc3, #3981a7);
   background: -moz-linear-gradient(#519cc3, #3981a7);
@@ -4756,7 +4842,7 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
 .palette-black-green .action-item-small-primary:hover,
 .palette-black-green .action-item-large-primary:hover, .palette-black-green .commons-sign-up:hover, .palette-black-green .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-black-green a:hover, .palette-black-green #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before > a:hover, #quicktabs-container-commons_bw .quicktabs-tabpage .palette-black-green .attachment-before > a:hover, .palette-black-green .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-black-green a:hover {
   color: white;
-  background: #3981a7;
+  background-color: #3981a7;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #4090ba), color-stop(100%, #337394));
   background: -webkit-linear-gradient(#4090ba, #337394);
   background: -moz-linear-gradient(#4090ba, #337394);
@@ -4885,7 +4971,7 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
 .palette-brown-yellow .action-item-large-primary[type="reset"],
 .palette-brown-yellow .action-item-large-primary[type="submit"],
 .palette-brown-yellow .action-item-large-primary[type="button"], .palette-brown-yellow .commons-sign-up, .palette-brown-yellow .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-brown-yellow a, .palette-brown-yellow #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before > a, #quicktabs-container-commons_bw .quicktabs-tabpage .palette-brown-yellow .attachment-before > a, .palette-brown-yellow .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-brown-yellow a {
-  background: #e3ad40;
+  background-color: #e3ad40;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #e6b756), color-stop(100%, #e0a32a));
   background: -webkit-linear-gradient(#e6b756, #e0a32a);
   background: -moz-linear-gradient(#e6b756, #e0a32a);
@@ -4913,7 +4999,7 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
 .palette-brown-yellow .action-item-small-primary:hover,
 .palette-brown-yellow .action-item-large-primary:hover, .palette-brown-yellow .commons-sign-up:hover, .palette-brown-yellow .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-brown-yellow a:hover, .palette-brown-yellow #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before > a:hover, #quicktabs-container-commons_bw .quicktabs-tabpage .palette-brown-yellow .attachment-before > a:hover, .palette-brown-yellow .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-brown-yellow a:hover {
   color: white;
-  background: #e0a32a;
+  background-color: #e0a32a;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #e3ad40), color-stop(100%, #d1961f));
   background: -webkit-linear-gradient(#e3ad40, #d1961f);
   background: -moz-linear-gradient(#e3ad40, #d1961f);
@@ -5042,7 +5128,7 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
 .palette-seafoam-orange .action-item-large-primary[type="reset"],
 .palette-seafoam-orange .action-item-large-primary[type="submit"],
 .palette-seafoam-orange .action-item-large-primary[type="button"], .palette-seafoam-orange .commons-sign-up, .palette-seafoam-orange .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-seafoam-orange a, .palette-seafoam-orange #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before > a, #quicktabs-container-commons_bw .quicktabs-tabpage .palette-seafoam-orange .attachment-before > a, .palette-seafoam-orange .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-seafoam-orange a {
-  background: #b68800;
+  background-color: #b68800;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #d09b00), color-stop(100%, #9d7500));
   background: -webkit-linear-gradient(#d09b00, #9d7500);
   background: -moz-linear-gradient(#d09b00, #9d7500);
@@ -5070,7 +5156,7 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
 .palette-seafoam-orange .action-item-small-primary:hover,
 .palette-seafoam-orange .action-item-large-primary:hover, .palette-seafoam-orange .commons-sign-up:hover, .palette-seafoam-orange .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-seafoam-orange a:hover, .palette-seafoam-orange #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before > a:hover, #quicktabs-container-commons_bw .quicktabs-tabpage .palette-seafoam-orange .attachment-before > a:hover, .palette-seafoam-orange .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-seafoam-orange a:hover {
   color: white;
-  background: #9d7500;
+  background-color: #9d7500;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #b68800), color-stop(100%, #836200));
   background: -webkit-linear-gradient(#b68800, #836200);
   background: -moz-linear-gradient(#b68800, #836200);
@@ -5199,7 +5285,7 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
 .palette-black-blue-yellow .action-item-large-primary[type="reset"],
 .palette-black-blue-yellow .action-item-large-primary[type="submit"],
 .palette-black-blue-yellow .action-item-large-primary[type="button"], .palette-black-blue-yellow .commons-sign-up, .palette-black-blue-yellow .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-black-blue-yellow a, .palette-black-blue-yellow #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before > a, #quicktabs-container-commons_bw .quicktabs-tabpage .palette-black-blue-yellow .attachment-before > a, .palette-black-blue-yellow .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-black-blue-yellow a {
-  background: #d0a600;
+  background-color: #d0a600;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #eaba00), color-stop(100%, #b69200));
   background: -webkit-linear-gradient(#eaba00, #b69200);
   background: -moz-linear-gradient(#eaba00, #b69200);
@@ -5227,7 +5313,7 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
 .palette-black-blue-yellow .action-item-small-primary:hover,
 .palette-black-blue-yellow .action-item-large-primary:hover, .palette-black-blue-yellow .commons-sign-up:hover, .palette-black-blue-yellow .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-black-blue-yellow a:hover, .palette-black-blue-yellow #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before > a:hover, #quicktabs-container-commons_bw .quicktabs-tabpage .palette-black-blue-yellow .attachment-before > a:hover, .palette-black-blue-yellow .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-black-blue-yellow a:hover {
   color: white;
-  background: #b69200;
+  background-color: #b69200;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #d0a600), color-stop(100%, #9d7d00));
   background: -webkit-linear-gradient(#d0a600, #9d7d00);
   background: -moz-linear-gradient(#d0a600, #9d7d00);
@@ -5356,7 +5442,7 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
 .palette-brick-brick .action-item-large-primary[type="reset"],
 .palette-brick-brick .action-item-large-primary[type="submit"],
 .palette-brick-brick .action-item-large-primary[type="button"], .palette-brick-brick .commons-sign-up, .palette-brick-brick .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-brick-brick a, .palette-brick-brick #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before > a, #quicktabs-container-commons_bw .quicktabs-tabpage .palette-brick-brick .attachment-before > a, .palette-brick-brick .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-brick-brick a {
-  background: #a12e1e;
+  background-color: #a12e1e;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #b63422), color-stop(100%, #8c281a));
   background: -webkit-linear-gradient(#b63422, #8c281a);
   background: -moz-linear-gradient(#b63422, #8c281a);
@@ -5384,7 +5470,7 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
 .palette-brick-brick .action-item-small-primary:hover,
 .palette-brick-brick .action-item-large-primary:hover, .palette-brick-brick .commons-sign-up:hover, .palette-brick-brick .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-brick-brick a:hover, .palette-brick-brick #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before > a:hover, #quicktabs-container-commons_bw .quicktabs-tabpage .palette-brick-brick .attachment-before > a:hover, .palette-brick-brick .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-brick-brick a:hover {
   color: white;
-  background: #8c281a;
+  background-color: #8c281a;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #a12e1e), color-stop(100%, #762216));
   background: -webkit-linear-gradient(#a12e1e, #762216);
   background: -moz-linear-gradient(#a12e1e, #762216);
@@ -5513,7 +5599,7 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
 .palette-gray-lightgray-blue .action-item-large-primary[type="reset"],
 .palette-gray-lightgray-blue .action-item-large-primary[type="submit"],
 .palette-gray-lightgray-blue .action-item-large-primary[type="button"], .palette-gray-lightgray-blue .commons-sign-up, .palette-gray-lightgray-blue .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-gray-lightgray-blue a, .palette-gray-lightgray-blue #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before > a, #quicktabs-container-commons_bw .quicktabs-tabpage .palette-gray-lightgray-blue .attachment-before > a, .palette-gray-lightgray-blue .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-gray-lightgray-blue a {
-  background: #04b6e7;
+  background-color: #04b6e7;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #0ac7fb), color-stop(100%, #04a2ce));
   background: -webkit-linear-gradient(#0ac7fb, #04a2ce);
   background: -moz-linear-gradient(#0ac7fb, #04a2ce);
@@ -5541,7 +5627,7 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
 .palette-gray-lightgray-blue .action-item-small-primary:hover,
 .palette-gray-lightgray-blue .action-item-large-primary:hover, .palette-gray-lightgray-blue .commons-sign-up:hover, .palette-gray-lightgray-blue .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-gray-lightgray-blue a:hover, .palette-gray-lightgray-blue #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before > a:hover, #quicktabs-container-commons_bw .quicktabs-tabpage .palette-gray-lightgray-blue .attachment-before > a:hover, .palette-gray-lightgray-blue .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-gray-lightgray-blue a:hover {
   color: white;
-  background: #04a2ce;
+  background-color: #04a2ce;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #04b6e7), color-stop(100%, #038fb5));
   background: -webkit-linear-gradient(#04b6e7, #038fb5);
   background: -moz-linear-gradient(#04b6e7, #038fb5);
@@ -5670,7 +5756,7 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
 .palette-black-white-red .action-item-large-primary[type="reset"],
 .palette-black-white-red .action-item-large-primary[type="submit"],
 .palette-black-white-red .action-item-large-primary[type="button"], .palette-black-white-red .commons-sign-up, .palette-black-white-red .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-black-white-red a, .palette-black-white-red #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before > a, #quicktabs-container-commons_bw .quicktabs-tabpage .palette-black-white-red .attachment-before > a, .palette-black-white-red .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-black-white-red a {
-  background: #cc0000;
+  background-color: #cc0000;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #e60000), color-stop(100%, #b30000));
   background: -webkit-linear-gradient(#e60000, #b30000);
   background: -moz-linear-gradient(#e60000, #b30000);
@@ -5698,7 +5784,7 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
 .palette-black-white-red .action-item-small-primary:hover,
 .palette-black-white-red .action-item-large-primary:hover, .palette-black-white-red .commons-sign-up:hover, .palette-black-white-red .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-black-white-red a:hover, .palette-black-white-red #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before > a:hover, #quicktabs-container-commons_bw .quicktabs-tabpage .palette-black-white-red .attachment-before > a:hover, .palette-black-white-red .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-black-white-red a:hover {
   color: white;
-  background: #b30000;
+  background-color: #b30000;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #cc0000), color-stop(100%, #990000));
   background: -webkit-linear-gradient(#cc0000, #990000);
   background: -moz-linear-gradient(#cc0000, #990000);
@@ -5827,7 +5913,7 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
 .palette-brown-burnt-orange .action-item-large-primary[type="reset"],
 .palette-brown-burnt-orange .action-item-large-primary[type="submit"],
 .palette-brown-burnt-orange .action-item-large-primary[type="button"], .palette-brown-burnt-orange .commons-sign-up, .palette-brown-burnt-orange .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-brown-burnt-orange a, .palette-brown-burnt-orange #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before > a, #quicktabs-container-commons_bw .quicktabs-tabpage .palette-brown-burnt-orange .attachment-before > a, .palette-brown-burnt-orange .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-brown-burnt-orange a {
-  background: #e18728;
+  background-color: #e18728;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #e4933e), color-stop(100%, #d27a1d));
   background: -webkit-linear-gradient(#e4933e, #d27a1d);
   background: -moz-linear-gradient(#e4933e, #d27a1d);
@@ -5855,7 +5941,7 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
 .palette-brown-burnt-orange .action-item-small-primary:hover,
 .palette-brown-burnt-orange .action-item-large-primary:hover, .palette-brown-burnt-orange .commons-sign-up:hover, .palette-brown-burnt-orange .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-brown-burnt-orange a:hover, .palette-brown-burnt-orange #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before > a:hover, #quicktabs-container-commons_bw .quicktabs-tabpage .palette-brown-burnt-orange .attachment-before > a:hover, .palette-brown-burnt-orange .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-brown-burnt-orange a:hover {
   color: white;
-  background: #d27a1d;
+  background-color: #d27a1d;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #e18728), color-stop(100%, #bc6d1a));
   background: -webkit-linear-gradient(#e18728, #bc6d1a);
   background: -moz-linear-gradient(#e18728, #bc6d1a);
