@@ -498,8 +498,9 @@ function commons_origins_preprocess_form_content(&$variables, $hook) {
     $variables['form']['actions']['submit']['#attributes']['class'][] = 'action-item-primary';
   }
 
-  // Make the search button primary.
+  // Hide the label and make the search button primary.
   if (isset($variables['form']['#search_page']) || (isset($variables['form']['module']) && ($variables['form']['module']['#value'] == 'search_facetapi' || $variables['form']['module']['#value'] == 'user'))) {
+    $variables['form']['basic']['keys']['#title_display'] = 'invisible';
     $variables['form']['basic']['submit']['#attributes']['class'][] = 'action-item-search';
   }
 }

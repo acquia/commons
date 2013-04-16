@@ -3784,6 +3784,9 @@ body.front.logged-in .view-commons-homepage-content .article.node {
     }
   }
 
+  .form-item {
+    margin-bottom: 0;
+  }
 }
 
 // Build the search button base styling.
@@ -3794,7 +3797,9 @@ body.front.logged-in .view-commons-homepage-content .article.node {
   margin-left: -8.5em;
   padding-left: 3em;
   display: block;
-  margin-top: 1.7em;
+  margin-top: 0;
+  margin-right: 0;
+  margin-bottom: 0;
 
   &[type="submit"] {
     @extend %button-primary-icon-search;
