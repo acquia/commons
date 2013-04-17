@@ -185,15 +185,23 @@ function commons_origins_preprocess_node(&$variables, $hook) {
     // Button styling for the "rate" and "flag" types will be handled
     // separately.
     if ($type != 'rate' && $type != 'flag' && substr($type, 0, 1) != '#') {
-      foreach ($linkgroup['#links'] as $name => $link) {
-        if ($name != 'comment_forbidden' && isset($linkgroup['#links'][$name]['attributes']['class']) && !is_string($linkgroup['#links'][$name]['attributes']['class'])) {
-          $linkgroup['#links'][$name]['attributes']['class'][] = 'action-item-small';
-          $linkgroup['#links'][$name]['attributes']['class'][] = 'action-item-inline';
+      foreach ($linkgroup['#links'] as $name => &$link) {
+        // Prevent errors when no classes have been defined.
+        if (!isset($link['attributes']['class'])) {
+          $link['attributes']['class'] = array();
         }
-        elseif (isset($linkgroup['#links'][$name]['attributes']['class']) && $name != 'comment_forbidden') {
-          $linkgroup['#links'][$name]['attributes']['class'] .= ' action-item-small action-item-inline';
+
+        // Apply button classes to everything but comment_forbidden.
+        if ($name != 'comment_forbidden' && !is_string($link['attributes']['class'])) {
+          $link['attributes']['class'][] = 'action-item-small';
+          $link['attributes']['class'][] = 'action-item-inline';
+        }
+        elseif ($name != 'comment_forbidden') {
+          $link['attributes']['class'] .= ' action-item-small action-item-inline';
         }
       }
+      // Clean the reference so it does not confuse things further down.
+      unset($link);
     }
   }
 
