@@ -181,27 +181,29 @@ function commons_origins_preprocess_node(&$variables, $hook) {
   }
 
   // Style node links like buttons.
-  foreach ($variables['content']['links'] as $type => &$linkgroup) {
-    // Button styling for the "rate" and "flag" types will be handled
-    // separately.
-    if ($type != 'rate' && $type != 'flag' && substr($type, 0, 1) != '#') {
-      foreach ($linkgroup['#links'] as $name => &$link) {
-        // Prevent errors when no classes have been defined.
-        if (!isset($link['attributes']['class'])) {
-          $link['attributes']['class'] = array();
-        }
+  if (isset($variables['content']['links'])) {
+    foreach ($variables['content']['links'] as $type => &$linkgroup) {
+      // Button styling for the "rate" and "flag" types will be handled
+      // separately.
+      if ($type != 'rate' && $type != 'flag' && substr($type, 0, 1) != '#') {
+        foreach ($linkgroup['#links'] as $name => &$link) {
+          // Prevent errors when no classes have been defined.
+          if (!isset($link['attributes']['class'])) {
+            $link['attributes']['class'] = array();
+          }
 
-        // Apply button classes to everything but comment_forbidden.
-        if ($name != 'comment_forbidden' && !is_string($link['attributes']['class'])) {
-          $link['attributes']['class'][] = 'action-item-small';
-          $link['attributes']['class'][] = 'action-item-inline';
+          // Apply button classes to everything but comment_forbidden.
+          if ($name != 'comment_forbidden' && !is_string($link['attributes']['class'])) {
+            $link['attributes']['class'][] = 'action-item-small';
+            $link['attributes']['class'][] = 'action-item-inline';
+          }
+          elseif ($name != 'comment_forbidden') {
+            $link['attributes']['class'] .= ' action-item-small action-item-inline';
+          }
         }
-        elseif ($name != 'comment_forbidden') {
-          $link['attributes']['class'] .= ' action-item-small action-item-inline';
-        }
+        // Clean the reference so it does not confuse things further down.
+        unset($link);
       }
-      // Clean the reference so it does not confuse things further down.
-      unset($link);
     }
   }
 
