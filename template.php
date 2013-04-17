@@ -391,8 +391,7 @@ function commons_origins_preprocess_views_view(&$variables, $hook) {
     'commons_bw_posts' => array('default'),
     'commons_bw_q_a' => array('default'),
     'commons_bw_wikis' => array('default'),
-    'commons_events_upcoming' => array('panel_pane_2'),
-    'commons_featured' => array('panel_pane_1'),
+    // 'commons_events_upcoming' => array('panel_pane_2'),
     'commons_groups_directory' => array('panel_pane_1'),
     'commons_groups_recent_content' => array('block'),
     'commons_groups_user_groups' => array('panel_pane_1'),
@@ -402,6 +401,32 @@ function commons_origins_preprocess_views_view(&$variables, $hook) {
   );
   if (isset($plain[$variables['name']]) && in_array($variables['display_id'], $plain[$variables['name']])) {
     $variables['classes_array'][] = 'view-plain';
+  }
+}
+
+/**
+ * Implements hook_preprocess_views_view_unformatted().
+ */
+function commons_origins_preprocess_views_view_unformatted(&$variables, $hook) {
+  $view = $variables['view'];
+
+  // Prevent the avatars in the activity stream blocks from bleeding into the
+  // rows below them.
+  if ($view->name == 'commons_activity_streams_activity') {
+    foreach ($variables['classes_array'] as &$classes) {
+      $classes .= ' clearfix';
+    }
+  }
+
+  // Add a class to rows designating the node type for the rows that give us the
+  // node type information.
+  foreach ($view->result as $id => $result) {
+    if (isset($result->node_type)) {
+      $variables['classes_array'][$id] .= ' ' . drupal_html_class('row-type-' . $result->node_type);
+    }
+    else if ($view->name == 'commons_events_upcoming' || $view->name == 'commons_events_user_upcoming_events') {
+      $variables['classes_array'][$id] .= ' ' . drupal_html_class('row-type-event');
+    }
   }
 }
 
@@ -511,19 +536,6 @@ function commons_origins_preprocess_form_content(&$variables, $hook) {
 function commons_origins_process_form_content(&$variables, $hook) {
   // Crunch down attribute arrays.
   template_process($variables, $hook);
-}
-
-/**
- * Implements hook_preprocess_views_view_unformatted().
- */
-function commons_origins_preprocess_views_view_unformatted(&$variables, $hook) {
-  // Prevent the avatars in the activity stream blocks from bleeding into the
-  // rows below them.
-  if ($variables['view']->name == 'commons_activity_streams_activity') {
-    foreach ($variables['classes_array'] as &$classes) {
-      $classes .= ' clearfix';
-    }
-  }
 }
 
 /**

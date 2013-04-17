@@ -1249,14 +1249,11 @@ h1.node-title {
   }
 }
 
-/**
- * User picture wrapping and shadow
- */
-
+/* Generic row styles */
 .views-row {
-  border-bottom: 1px solid #eee;
-  padding-bottom: $gutter-width;
-  margin-bottom: $gutter-width;
+  border-bottom: 1px solid $border;
+  padding-bottom: .7em;
+  margin-bottom: .7em;
   position: relative;
 
   &.views-row-last {
@@ -1280,6 +1277,84 @@ h1.node-title {
   }
 }
 
+/* Apply icons to row row types. */
+[class*="row-type-"] {
+  @include box-sizing(border-box);
+  padding-left: 20px;
+
+  &:before {
+    content: "";
+    float: left;
+    margin-top: .25em;
+    margin-left: -20px;
+  }
+}
+
+.row-type-event {
+  &:before {
+    @include sprite_url_height_width($icons, events);
+  }
+}
+.row-type-page {
+  &:before {
+    @include sprite_url_height_width($icons, docs);
+  }
+}
+
+.row-type-poll {
+  &:before {
+    @include sprite_url_height_width($icons, polls);
+  }
+}
+
+.row-type-post {
+  &:before {
+    @include sprite_url_height_width($icons, posts);
+  }
+}
+
+.row-type-question,
+.row-type-answer {
+  &:before {
+    @include sprite_url_height_width($icons, qa);
+  }
+}
+
+.row-type-wiki {
+  &:before {
+    @include sprite_url_height_width($icons, wikis);
+  }
+}
+
+/* Meta data */
+.views-field-field-date,
+.views-field-timestamp,
+.views-field-field-location,
+.views-field-capacity-used,
+.views-field-comment-count {
+  font-size: 0.88em;
+}
+
+.views-field-timestamp,
+.views-field-field-location,
+.views-field-capacity-used,
+.views-field-comment-count {
+  color: $light_gray;
+
+  strong {
+    color: $dark_gray;
+  }
+}
+
+.views-field-timestamp,
+.views-field-field-location,
+.views-field-capacity-used,
+.views-field-comment-count {
+  display: inline-block;
+  margin-right: .3em;
+}
+
+/* User picture wrapping and shadow */
 .view-commons-homepage-content,
 .view-commons-activity-streams-activity,
 .view-activity-group,
@@ -2402,17 +2477,6 @@ body.page-node .pane-views-panes {
     .views-row-last {
       border-bottom: none;
     }
-
-    .views-field-field-date,
-    .views-field-field-location,
-    .views-field-comment-count {
-      font-size: 0.85em;
-    }
-
-    .views-field-field-location,
-    .views-field-comment-count {
-      color: $light_gray;
-    }
   }
 }
 
@@ -2455,63 +2519,8 @@ body.page-node .pane-views-panes {
   }
 }
 
-.view-commons-radioactivity-groups-most-active,
-.view-commons-groups-recent-content,
-.view-commons-radioactivity-groups-active-in-group {
-  .type-Wiki {
-    font-size: 12px;
-
-    &:before {
-      content: "";
-      @include sprite_url_height_width($icons, wikis);
-      margin-right: 6px;
-    }
-  }
-
-  .type-Event {
-    font-size: 12px;
-
-    &:before {
-      content: "";
-      @include sprite_url_height_width($icons, events);
-      margin-right: 6px;
-    }
-  }
-
-  .type-Poll {
-    font-size: 12px;
-
-    &:before {
-      content: "";
-      @include sprite_url_height_width($icons, polls);
-      margin-right: 6px;
-    }
-  }
-
-  .type-Post {
-    font-size: 12px;
-
-    &:before {
-      content: "";
-      @include sprite_url_height_width($icons, posts);
-      margin-right: 6px;
-    }
-  }
-
-  .type-Question,
-  .type-Answer {
-    font-size: 12px;
-
-    &:before {
-      content: "";
-      @include sprite_url_height_width($icons, qa);
-      margin-right: 6px;
-    }
-  }
-}
-
 .view-commons-radioactivity-groups-most-active > .view-content > .views-row {
-  border-bottom: 1px solid $lighter_gray;
+  border-bottom: 1px solid $border;
   padding-bottom: 15px;
   margin-bottom: 15px;
 
@@ -2558,20 +2567,6 @@ body.page-node .pane-views-panes {
  *   Views Styling
  * ========================================================================== */
 
-.view-id-commons_events_upcoming {
-  .views-field {
-    margin: 0 0 0 18px;
-  }
-
-  .views-field-title {
-    background-image: image-url('icons/icon-gray-event.png');
-    background-repeat: no-repeat;
-    background-position: left 4px;
-    margin: 0;
-    padding: 0 0 0 18px;
-  }
-}
-
 .view-display-id-commons_events_upcoming_page .views-row {
   @extend %pod;
 
@@ -2581,15 +2576,6 @@ body.page-node .pane-views-panes {
     .commons-events-form-float {
       float: right;
       margin: -40px 0 0 0;
-    }
-  }
-}
-
-.view-id-commons_activity_streams_activity {
-  .view-content {
-    .views-field-timestamp {
-      color:$light_gray;
-      font-size:0.85em;
     }
   }
 }
@@ -2848,18 +2834,6 @@ body.page-node .pane-views-panes {
   .views-field-field-date,
   .views-field-field-address {
     margin: 0 0 0 18px;
-  }
-
-  .type-Event {
-    background-image: image-url('icons/icon-gray-event.png');
-    background-position: left 1px;
-    padding: 0 0 0 18px;
-  }
-
-  .type-Post {
-    background-image: image-url('icons/icon-gray-post.png');
-    background-position: left 1px;
-    padding: 0 0 0 18px;
   }
 }
 
