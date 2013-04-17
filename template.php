@@ -186,11 +186,11 @@ function commons_origins_preprocess_node(&$variables, $hook) {
     // separately.
     if ($type != 'rate' && $type != 'flag' && substr($type, 0, 1) != '#') {
       foreach ($linkgroup['#links'] as $name => $link) {
-        if ($name != 'comment_forbidden' && !is_string($linkgroup['#links'][$name]['attributes']['class'])) {
+        if ($name != 'comment_forbidden' && isset($linkgroup['#links'][$name]['attributes']['class']) && !is_string($linkgroup['#links'][$name]['attributes']['class'])) {
           $linkgroup['#links'][$name]['attributes']['class'][] = 'action-item-small';
           $linkgroup['#links'][$name]['attributes']['class'][] = 'action-item-inline';
         }
-        elseif ($name != 'comment_forbidden') {
+        elseif (isset($linkgroup['#links'][$name]['attributes']['class']) && $name != 'comment_forbidden') {
           $linkgroup['#links'][$name]['attributes']['class'] .= ' action-item-small action-item-inline';
         }
       }
