@@ -265,7 +265,7 @@ function commons_origins_preprocess_node(&$variables, $hook) {
   if ($variables['node']->type == 'question' && !empty($variables['content']['links']['answer'])) {
     $variables['content']['answer'] = $variables['content']['links']['answer'];
     $variables['content']['answer']['#attributes']['class'][] = 'node-actions';
-    $variables['content']['answer']['#links']['answer-add']['attributes']['class'][] = 'action-item-large-primary';
+    $variables['content']['answer']['#links']['answer-add']['attributes']['class'][] = 'action-item-primary';
     $variables['content']['answer']['#weight'] = -100;
     $variables['content']['links']['answer']['#access'] = FALSE;
   }
@@ -507,10 +507,10 @@ function commons_origins_preprocess_form_content(&$variables, $hook) {
 
   // The buttons for toggling event attendance should be large and noticeable.
   if ($variables['form']['#form_id'] == 'commons_events_attend_event_form') {
-    $variables['form']['submit']['#attributes']['class'][] = 'action-item-large-primary';
+    $variables['form']['submit']['#attributes']['class'][] = 'action-item-primary';
   }
   if ($variables['form']['#form_id'] == 'commons_events_cancel_event_form') {
-    $variables['form']['submit']['#attributes']['class'][] = 'action-item-large-primary-active';
+    $variables['form']['submit']['#attributes']['class'][] = 'action-item-active';
   }
 
   // Make the "Save" button more noticeable.
