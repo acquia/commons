@@ -401,7 +401,7 @@ function commons_origins_preprocess_views_view(&$variables, $hook) {
     'commons_bw_posts' => array('default'),
     'commons_bw_q_a' => array('default'),
     'commons_bw_wikis' => array('default'),
-    // 'commons_events_upcoming' => array('panel_pane_2'),
+    'commons_events_upcoming' => array('panel_pane_2'),
     'commons_groups_directory' => array('panel_pane_1'),
     'commons_groups_recent_content' => array('block'),
     'commons_groups_user_groups' => array('panel_pane_1'),
@@ -434,7 +434,7 @@ function commons_origins_preprocess_views_view_unformatted(&$variables, $hook) {
     if (isset($result->node_type)) {
       $variables['classes_array'][$id] .= ' ' . drupal_html_class('row-type-' . $result->node_type);
     }
-    else if ($view->name == 'commons_events_upcoming' || $view->name == 'commons_events_user_upcoming_events') {
+    else if (($view->name == 'commons_events_upcoming' && $view->override_path != 'events') || $view->name == 'commons_events_user_upcoming_events') {
       $variables['classes_array'][$id] .= ' ' . drupal_html_class('row-type-event');
     }
   }
