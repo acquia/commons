@@ -407,7 +407,6 @@ function commons_origins_preprocess_views_view(&$variables, $hook) {
     'commons_groups_user_groups' => array('panel_pane_1'),
     'commons_homepage_content' => array('panel_pane_1'),
     'commons_radioactivity_groups_active_in_group' => array('panel_pane_1'),
-    'commons_radioactivity_groups_most_active' => array('panel_pane_1'),
   );
   if (isset($plain[$variables['name']]) && in_array($variables['display_id'], $plain[$variables['name']])) {
     $variables['classes_array'][] = 'view-plain';
@@ -446,8 +445,7 @@ function commons_origins_preprocess_views_view_unformatted(&$variables, $hook) {
 function commons_origins_preprocess_pager_link (&$variables, $hook) {
   // Style pager links like buttons.
   $variables['attributes']['class'][] = 'action-item';
-    $variables['attributes']['class'][] = 'action-item-inline';
-
+  $variables['attributes']['class'][] = 'action-item-inline';
 }
 
 /**

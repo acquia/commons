@@ -467,7 +467,7 @@ input[type="week"] {
   @include border-radius(2px);
   -webkit-appearance: none;
   background-color: white;
-  border: 1px solid #B2B2B2;
+  border: 1px solid $border;
   color: black;
   outline: 0;
   margin: 0;
@@ -475,6 +475,7 @@ input[type="week"] {
   text-align: left;
   vertical-align: top;
   line-height: 1.2em;
+  min-height: 2.2em;
 
   &[disabled] {
     background-color: #eeeeee;
@@ -1225,12 +1226,12 @@ h1.node-title {
   margin-bottom: 20px;
 }
 
-/**
- * Block title
- */
-
 .block-title {
-  margin: 0;
+  font-size: 20px;
+  line-height: 1.2em;
+  margin-top: 0;
+  margin-bottom: .4em;
+  color:$gray;
 }
 
 /**
@@ -1256,8 +1257,18 @@ h1.node-title {
   margin-bottom: .7em;
   position: relative;
 
+  .views-row {
+    margin-top: .4em;
+    margin-bottom: .4em;
+    padding-bottom: 0;
+  }
+
+  & .views-row,
   &.views-row-last {
     border-bottom: none;
+  }
+
+  &.views-row-last {
     padding-bottom: 0;
     margin-bottom: 0;
   }
@@ -1285,7 +1296,7 @@ h1.node-title {
   &:before {
     content: "";
     float: left;
-    margin-top: .25em;
+    margin-top: .1em;
     margin-left: -20px;
   }
 }
@@ -1324,6 +1335,12 @@ h1.node-title {
   &:before {
     @include sprite_url_height_width($icons, wikis);
   }
+}
+
+/* Titles fields */
+.views-field-title {
+  font-weight: 500;
+  line-height: 1.4em;
 }
 
 /* Meta data */
@@ -2440,13 +2457,6 @@ ul.action-links {
 .pane-views-panes,
 .pane-views,
 body.page-node .pane-views-panes {
-  h2 {
-    font-size: 20px;
-    line-height: 1.2em;
-    margin-bottom: .85em;
-    color:$gray;
-  }
-
   .front.not-logged-in & {
     @extend %pod;
 
@@ -2516,18 +2526,6 @@ body.page-node .pane-views-panes {
     .node-content {
       margin-left: 0;
     }
-  }
-}
-
-.view-commons-radioactivity-groups-most-active > .view-content > .views-row {
-  border-bottom: 1px solid $border;
-  padding-bottom: 15px;
-  margin-bottom: 15px;
-
-  &.views-row-last {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
   }
 }
 
