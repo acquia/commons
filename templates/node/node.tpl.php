@@ -109,23 +109,23 @@ hide($content['links']);
 hide($content['report_link'])
 ?>
 <article id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?>"<?php print $attributes; ?>>
-  <?php print render($title_prefix); ?>
-
   <?php if ($title && !$page): ?>
     <header<?php print $header_attributes; ?>>
       <?php if ($title): ?>
+        <?php print render($title_prefix); ?>
         <h1<?php print $title_attributes; ?>>
           <a href="<?php print $node_url; ?>" rel="bookmark"><?php print $title; ?></a>
         </h1>
+        <?php print render($title_suffix); ?>
       <?php endif; ?>
     </header>
   <?php endif; ?>
 
-  <?php //if(!empty($user_picture) || $display_submitted): ?>
+  <?php if(!empty($user_picture) || $display_submitted): ?>
     <footer<?php print $footer_attributes; ?>>
       <p class="author-datetime"><?php print $submitted; ?></p>
     </footer>
-  <?php //endif; ?>
+  <?php endif; ?>
 
   <div<?php print $content_attributes; ?>>
     <?php print $user_picture; ?>
@@ -142,6 +142,5 @@ hide($content['report_link'])
 <?php if (isset($content['comments']['comments'])): ?>
 <div class="commons-pod commons-pod-comments">
   <?php print render($content['comments']); ?>
-  <?php print render($title_suffix); ?>
 </div>
 <?php endif; ?>

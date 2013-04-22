@@ -80,16 +80,14 @@ h1 {
 h2 {
   color: $dark_blue;
   font-weight: lighter;
-  font-size: 54px;
-  line-height: 54px;
+  font-size: 3.8em;
   font-family: $alt-font;
 }
 
 h3 {
   color: $light_blue;
   font-weight: normal;
-  font-size: 20px;
-  line-height: 20px;
+  font-size: 1.4em;
 
   .sidebar & {
     color: $gray;
@@ -436,6 +434,11 @@ textarea,
     // for Opera
     z-index: 1;
   }
+}
+
+label {
+  margin-top: .5em;
+  margin-bottom: .5em;
 }
 
 input[type="file"],
@@ -1475,27 +1478,6 @@ h1.node-title {
 #comments {
   margin: 0;
 
-  h2 {
-    color: $dark_gray;
-
-    &.comment-title {
-      margin-bottom: 25px;
-      font-size: 2.2em;
-
-      &:before {
-        content: "";
-        @include sprite_url_height_width($icons, comments-large);
-      }
-    }
-
-    &.comment-form {
-      margin-bottom: 0;
-      &:before {
-        display: none;
-      }
-    }
-  }
-
   .form-item-subject input {
     width: 100%;
   }
@@ -1504,6 +1486,28 @@ h1.node-title {
     position: absolute;
     right: 5px;
     top: 15px;
+  }
+}
+
+.comments-title,
+.comment-form-title {
+  margin-top: 0;
+  font-size: 2.2em;
+  line-height: 1.2em;
+  color: $dark_gray;
+}
+
+.comments-title {
+  &:before {
+    content: "";
+    @include sprite_url_height_width($icons, comments-large);
+  }
+}
+
+.comment-form {
+  margin-bottom: 0;
+  &:before {
+    display: none;
   }
 }
 
@@ -2427,19 +2431,6 @@ ul.action-links {
   }
 }
 
-.commons-pod-comments {
-  display: none;
-  @extend %pod;
-
-  .comment-wrapper {
-    @extend %pod-content;
-  }
-
-  .page-node & {
-    display: block;
-  }
-}
-
 .commons-sign-up,
 .commons-login {
   @extend %button-common;
@@ -2822,16 +2813,9 @@ body.page-node .pane-views-panes {
   position: absolute;
   right: 10px;
   top: 22px;
-}
 
-.view-id-commons_featured {
-  .views-field-title .field-content {
-    background-repeat: no-repeat;
-  }
-
-  .views-field-field-date,
-  .views-field-field-address {
-    margin: 0 0 0 18px;
+  @include respond(only-small) {
+    position: static;
   }
 }
 
@@ -2845,6 +2829,7 @@ body.page-node .pane-views-panes {
       float: left;
       font-weight: normal;
       color: $light_gray;
+      margin-top: 0;
       padding: 1px 0 0 0;
     }
   }
@@ -3163,22 +3148,6 @@ body.page-node.node-type-group {
 /* =============================================================================
  *   Comment Styling - Comments, comment wrapper, comment form
  * ========================================================================== */
-
-/**
- * Wrapper for the list of comments and its titles
- */
-
-#comments {
-  h2 {
-    &.comment-title {
-      margin: 0;
-    }
-
-    &.comment-form {
-      margin: 0;
-    }
-  }
-}
 
 /**
  * Wrapper for a single comment

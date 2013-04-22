@@ -12,7 +12,7 @@
   box-shadow: #247aac 1px 0px 0px;
 }
 
-.commons-pod, .page-user .pane-views-panes, .commons-pod-comments, .front.not-logged-in .pane-views-panes, .front.not-logged-in
+.commons-pod, .page-user .pane-views-panes, .front.not-logged-in .pane-views-panes, .front.not-logged-in
 .pane-views, .front.not-logged-in
 body.page-node .pane-views-panes, .page-events .view-commons-events-upcoming .view-content, .pane-commons-bw-group, .view-display-id-commons_events_upcoming_page .views-row, .view-commons-groups-directory > .view-content > .views-row,
 .view-commons-groups-directory > .view-filters,
@@ -30,7 +30,7 @@ body.page-node .pane-views-panes, .page-events .view-commons-events-upcoming .vi
   margin: 10px 0;
 }
 
-.commons-pod, .page-user .pane-views-panes .block-inner, .commons-pod-comments .comment-wrapper, .front.not-logged-in .pane-views-panes > div, .front.not-logged-in
+.commons-pod, .page-user .pane-views-panes .block-inner, .front.not-logged-in .pane-views-panes > div, .front.not-logged-in
 .pane-views > div, .front.not-logged-in
 body.page-node .pane-views-panes > div, .page-events .view-commons-events-upcoming .view-content, .pane-commons-bw-group > .block-inner, .view-display-id-commons_events_upcoming_page .views-row article, .view-commons-groups-directory > .view-content > .views-row > .node-teaser,
 .view-commons-groups-directory > .view-content > .views-row form,
@@ -122,16 +122,14 @@ h1 a :hover {
 h2 {
   color: #336699;
   font-weight: lighter;
-  font-size: 54px;
-  line-height: 54px;
+  font-size: 3.8em;
   font-family: Helvetica, "Helvetica Neue", Arial, sans-serif;
 }
 
 h3 {
   color: #2783b9;
   font-weight: normal;
-  font-size: 20px;
-  line-height: 20px;
+  font-size: 1.4em;
 }
 .sidebar h3 {
   color: #666666;
@@ -472,6 +470,11 @@ textarea:focus,
   -moz-box-shadow: #0066ff 0 0 5px 0;
   box-shadow: #0066ff 0 0 5px 0;
   z-index: 1;
+}
+
+label {
+  margin-top: .5em;
+  margin-bottom: .5em;
 }
 
 input[type="file"]:focus, input[type="file"]:active,
@@ -1909,14 +1912,24 @@ h1.node-title a:hover {
 #comments {
   margin: 0;
 }
-#comments h2 {
+#comments .form-item-subject input {
+  width: 100%;
+}
+#comments .rate-widget-commons_like {
+  position: absolute;
+  right: 5px;
+  top: 15px;
+}
+
+.comments-title,
+.comment-form-title {
+  margin-top: 0;
+  font-size: 2.2em;
+  line-height: 1.2em;
   color: #333333;
 }
-#comments h2.comment-title {
-  margin-bottom: 25px;
-  font-size: 2.2em;
-}
-#comments h2.comment-title:before {
+
+.comments-title:before {
   content: "";
   background: url('../images/icons-se7682cf316.png') 0 -30px no-repeat;
   width: 31px;
@@ -1926,19 +1939,12 @@ h1.node-title a:hover {
   position: relative;
   top: 1px;
 }
-#comments h2.comment-form {
+
+.comment-form {
   margin-bottom: 0;
 }
-#comments h2.comment-form:before {
+.comment-form:before {
   display: none;
-}
-#comments .form-item-subject input {
-  width: 100%;
-}
-#comments .rate-widget-commons_like {
-  position: absolute;
-  right: 5px;
-  top: 15px;
 }
 
 .comment {
@@ -2778,13 +2784,6 @@ ul.action-links {
   padding-left: 10px;
 }
 
-.commons-pod-comments {
-  display: none;
-}
-.page-node .commons-pod-comments {
-  display: block;
-}
-
 .nodes {
   margin-top: 1em;
 }
@@ -3088,13 +3087,10 @@ ul.action-links {
   right: 10px;
   top: 22px;
 }
-
-.view-id-commons_featured .views-field-title .field-content {
-  background-repeat: no-repeat;
-}
-.view-id-commons_featured .views-field-field-date,
-.view-id-commons_featured .views-field-field-address {
-  margin: 0 0 0 18px;
+@media only screen and (max-width: 480px) {
+  .pane-node-flag-commons-follow-group-link {
+    position: static;
+  }
 }
 
 .views-exposed-widgets {
@@ -3107,6 +3103,7 @@ ul.action-links {
   float: left;
   font-weight: normal;
   color: #858585;
+  margin-top: 0;
   padding: 1px 0 0 0;
 }
 .views-exposed-widgets .views-widget {
@@ -3437,16 +3434,6 @@ body.page-node.node-type-group h2#page-title {
 /* =============================================================================
  *   Comment Styling - Comments, comment wrapper, comment form
  * ========================================================================== */
-/**
- * Wrapper for the list of comments and its titles
- */
-#comments h2.comment-title {
-  margin: 0;
-}
-#comments h2.comment-form {
-  margin: 0;
-}
-
 /**
  * Wrapper for a single comment
  */
