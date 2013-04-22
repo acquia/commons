@@ -326,10 +326,6 @@ var {
   &.node-question {
     @extend %node-space-right;
   }
-
-  .field-name-body {
-    margin-bottom: 20px;
-  }
 }
 
 .node-actions {
@@ -353,14 +349,6 @@ var {
 }
 
 .node-teaser {
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 20px;
-  margin-bottom: 10px;
-
-  .views-row-last & {
-    margin-bottom: 0;
-  }
-
   &.node-promoted {
     background-image: image-url('node-promoted-star.png');
     background-position: top right;
@@ -1663,8 +1651,11 @@ h1.node-title {
 }
 
 .field-name-body {
-  clear: both;
   margin-top: 1.7em;
+
+  .node-event & {
+    clear: both;
+  }
 }
 
 .field-name-field-date {
@@ -1683,6 +1674,9 @@ h1.node-title {
 }
 
 ul.node-action-links {
+  display: inline-block;
+  margin-top: 1.4em;
+
   li {
     padding: 0;
     vertical-align: baseline;
@@ -3009,10 +3003,6 @@ body.page-node .pane-views-panes {
     clear: both;
   }
 
-  article {
-    margin-bottom: 25px;
-  }
-
   .form-submit {
     margin-top: 0;
   }
@@ -3119,8 +3109,6 @@ body.page-node .pane-views-panes {
 }
 
 .node {
-  margin-bottom: 20px;
-
   .node-title {
     margin: 0;
   }
@@ -3549,7 +3537,7 @@ body.front.logged-in {
   .view-commons-homepage-content {
     > .view-content {
       @extend %pod;
-      padding: 10px 10px 20px 10px;
+      padding: $gutter-width;
 
       > .views-row {
         position: relative;
@@ -3557,12 +3545,6 @@ body.front.logged-in {
     }
 
     .article.node, .node-teaser.node-group {
-      .node-header {
-        a {
-          float: left;
-        }
-      }
-
       .node-content {
         form {
 
