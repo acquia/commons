@@ -1837,10 +1837,52 @@ ul.node-action-links {
  * Group nodes
  */
 
+.pane-node-commons-groups-group-contributors-count-topics {
+  display: inline-block;
+  margin: 0;
+}
+
 .node-group {
   .field-name-body {
-    clear: none;
+    margin-top: 1.4em;
   }
+
+  .pane-node-flag-commons-follow-group-link {
+    display: inline-block;
+    position: absolute;
+    top: .5em;
+    right: 0;
+    margin: 0;
+
+    @include respond(small-medium) {
+      position: static;
+      top: auto;
+      right: auto;
+    }
+  }
+}
+
+.group-recent-data {
+  display: inlline-block;
+  float: left;
+  @include box-sizing(border-box);
+  width: 48%;
+  margin-bottom: 0;
+  margin-right: 4%;
+
+  @include respond(small-medium) {
+    float: none;
+    width: auto;
+    margin-bottom: 1.7em;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.group-recent-data-odd {
+  margin-right: 0;
 }
 
 /* =============================================================================
@@ -2520,28 +2562,41 @@ body.page-node .pane-views-panes {
   @include box-shadow(none);
   margin-right: 0;
   margin-bottom: 0;
+}
 
-  .block-inner {
-    padding: 0;
-
-    .pane-title {
-      display:none;
-    }
+.page-groups {
+  .region-two-66-33-top {
+    position: relative;
   }
 }
 
 .pane-commons-groups-commons-groups-create-group {
+  position: absolute;
+  top: -5em;
+  right: $gutter-width;
   text-align: right;
+
+  @include respond(only-small) {
+    position: static;
+    top: auto;
+    right: auto;
+  }
 
   a {
     @extend %button-common;
     @extend %button-default-layout;
     @extend %button-primary;
+    margin: 0;
 
     &:before {
       @include sprite_url_height_width($icons, icon-groups-small);
       content: "";
       top: 3px;
+    }
+
+    @include respond(only-small) {
+      float: none;
+      display: block;
     }
   }
 }
@@ -2595,16 +2650,6 @@ body.page-node .pane-views-panes {
 
 .view-commons-groups-directory,
 .view-commons-homepage-content .node-teaser.node-group {
-  h2 {
-    font-size: 26px;
-    line-height: 1em;
-    margin: 10px 0 5px 0;
-  }
-
-  .block-inner .pane-title {
-    display: none;
-  }
-
   > .view-content > .views-row,
   > .view-filters {
     @extend %pod;
@@ -2666,29 +2711,7 @@ body.page-node .pane-views-panes {
   }
 }
 
-.pane-commons-groups-recent-content {
-  width: 50%;
-  float: left;
-  margin-bottom: 0;
-
-  .pane-title {
-    display: block !important;
-    font-size: 16px !important;
-    line-height: 1em !important;
-  }
-}
-
 .pane-commons-contributors-group-panel-pane-1 {
-  width: 50%;
-  float: left;
-  margin-bottom: 0;
-
-  .pane-title {
-    display: block !important;
-    font-size: 16px !important;
-    line-height: 1em !important;
-  }
-
   table, tbody {
     margin: 0;
     border: none;
@@ -2801,16 +2824,6 @@ body.page-node .pane-views-panes {
 
 .pane-node-commons-groups-group-contributors-count-topics {
   font-size: 11px;
-}
-
-.pane-node-flag-commons-follow-group-link {
-  position: absolute;
-  right: 10px;
-  top: 22px;
-
-  @include respond(only-small) {
-    position: static;
-  }
 }
 
 .views-exposed-widgets {

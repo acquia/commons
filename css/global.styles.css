@@ -2289,8 +2289,52 @@ ul.node-action-links a {
 /**
  * Group nodes
  */
+.pane-node-commons-groups-group-contributors-count-topics {
+  display: inline-block;
+  margin: 0;
+}
+
 .node-group .field-name-body {
-  clear: none;
+  margin-top: 1.4em;
+}
+.node-group .pane-node-flag-commons-follow-group-link {
+  display: inline-block;
+  position: absolute;
+  top: .5em;
+  right: 0;
+  margin: 0;
+}
+@media only screen and (max-width: 768px) {
+  .node-group .pane-node-flag-commons-follow-group-link {
+    position: static;
+    top: auto;
+    right: auto;
+  }
+}
+
+.group-recent-data {
+  display: inlline-block;
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 48%;
+  margin-bottom: 0;
+  margin-right: 4%;
+}
+@media only screen and (max-width: 768px) {
+  .group-recent-data {
+    float: none;
+    width: auto;
+    margin-bottom: 1.7em;
+  }
+  .group-recent-data:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.group-recent-data-odd {
+  margin-right: 0;
 }
 
 /* =============================================================================
@@ -2833,15 +2877,26 @@ ul.action-links {
   margin-right: 0;
   margin-bottom: 0;
 }
-.pane-commons-groups-directory-panel-pane-1 .block-inner {
-  padding: 0;
-}
-.pane-commons-groups-directory-panel-pane-1 .block-inner .pane-title {
-  display: none;
+
+.page-groups .region-two-66-33-top {
+  position: relative;
 }
 
 .pane-commons-groups-commons-groups-create-group {
+  position: absolute;
+  top: -5em;
+  right: 10px;
   text-align: right;
+}
+@media only screen and (max-width: 480px) {
+  .pane-commons-groups-commons-groups-create-group {
+    position: static;
+    top: auto;
+    right: auto;
+  }
+}
+.pane-commons-groups-commons-groups-create-group a {
+  margin: 0;
 }
 .pane-commons-groups-commons-groups-create-group a:before {
   background: url('../images/icons-se7682cf316.png') 0 -353px no-repeat;
@@ -2853,6 +2908,12 @@ ul.action-links {
   top: 1px;
   content: "";
   top: 3px;
+}
+@media only screen and (max-width: 480px) {
+  .pane-commons-groups-commons-groups-create-group a {
+    float: none;
+    display: block;
+  }
 }
 
 /* =============================================================================
@@ -2887,16 +2948,6 @@ ul.action-links {
   padding-left: .75em;
 }
 
-.view-commons-groups-directory h2,
-.view-commons-homepage-content .node-teaser.node-group h2 {
-  font-size: 26px;
-  line-height: 1em;
-  margin: 10px 0 5px 0;
-}
-.view-commons-groups-directory .block-inner .pane-title,
-.view-commons-homepage-content .node-teaser.node-group .block-inner .pane-title {
-  display: none;
-}
 .view-commons-groups-directory > .view-content > .views-row,
 .view-commons-groups-directory > .view-filters,
 .view-commons-homepage-content .node-teaser.node-group > .view-content > .views-row,
@@ -2956,27 +3007,6 @@ ul.action-links {
   display: block;
 }
 
-.pane-commons-groups-recent-content {
-  width: 50%;
-  float: left;
-  margin-bottom: 0;
-}
-.pane-commons-groups-recent-content .pane-title {
-  display: block !important;
-  font-size: 16px !important;
-  line-height: 1em !important;
-}
-
-.pane-commons-contributors-group-panel-pane-1 {
-  width: 50%;
-  float: left;
-  margin-bottom: 0;
-}
-.pane-commons-contributors-group-panel-pane-1 .pane-title {
-  display: block !important;
-  font-size: 16px !important;
-  line-height: 1em !important;
-}
 .pane-commons-contributors-group-panel-pane-1 table, .pane-commons-contributors-group-panel-pane-1 tbody {
   margin: 0;
   border: none;
@@ -3075,17 +3105,6 @@ ul.action-links {
 
 .pane-node-commons-groups-group-contributors-count-topics {
   font-size: 11px;
-}
-
-.pane-node-flag-commons-follow-group-link {
-  position: absolute;
-  right: 10px;
-  top: 22px;
-}
-@media only screen and (max-width: 480px) {
-  .pane-node-flag-commons-follow-group-link {
-    position: static;
-  }
 }
 
 .views-exposed-widgets {
