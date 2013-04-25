@@ -294,12 +294,10 @@ var {
  */
 
 #page-title {
-  margin: 0 0 10px;
+  margin: 0 0 .2em;
   font-weight:300;
-
-  .page-node & {
-    margin-bottom: 0;
-  }
+  font-size: 3.85em;
+  line-height: 1.2em;
 }
 
 #page-top {
@@ -2572,7 +2570,7 @@ body.page-node .pane-views-panes {
 
 .pane-commons-groups-commons-groups-create-group {
   position: absolute;
-  top: -5em;
+  top: -4em;
   right: $gutter-width;
   text-align: right;
 
@@ -3127,13 +3125,6 @@ body.page-node .pane-views-panes {
   }
 }
 
-body.page-node.node-type-group {
-  h2#page-title {
-    font-size: 54px;
-    line-height: 54px;
-  }
-}
-
 /**
  * Node forms
  */
@@ -3436,11 +3427,6 @@ div {
 .maintenance-page {
   .container {
     padding: 40px 0;
-  }
-
-  #site-name,
-  #page-title {
-    margin: 0;
   }
 }
 
@@ -3767,8 +3753,8 @@ body.front.logged-in .view-commons-homepage-content .article.node {
 }
 
 .block-facetapi {
-  margin-bottom: 1em;
-  padding-bottom: 1em;
+  margin-bottom: .7em;
+  padding-bottom: .7em;
   border-bottom: 1px solid $border;
 
   &:last-child {
@@ -3822,14 +3808,15 @@ body.front.logged-in .view-commons-homepage-content .article.node {
 
 .search-results-title,
 .search-results-wrapper > h2 {
-  font-weight: 300;
-  margin: $gutter-width * 2 0;
+  @extend #page-title;
+  margin-top: .2em;
 }
 
 .search-results {
   &,
   /* The ol styling is a bit specific. */
   .block-content & {
+    margin-bottom: 0;
     padding: 0;
   }
 }
@@ -3859,8 +3846,8 @@ body.front.logged-in .view-commons-homepage-content .article.node {
   list-style-type: none;
 
   .block-content & {
-    padding-bottom: 1.4em;
-    margin-bottom: 1.4em;
+    padding-bottom: .7em;
+    margin-bottom: .7em;
 
     &:last-child {
       border-bottom: none;
@@ -3892,12 +3879,6 @@ body.front.logged-in .view-commons-homepage-content .article.node {
     .search-result-date,
     .search-result-snippet-info {
       display: none;
-    }
-
-    .node {
-      border: none;
-      margin-bottom: 0;
-      padding-bottom: 0;
     }
 
     .pane-node-flag-commons-follow-group-link {

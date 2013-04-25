@@ -306,12 +306,12 @@ var {
 /**
  * The main page title (h1)
  */
-#page-title {
-  margin: 0 0 10px;
+#page-title, .search-results-title,
+.search-results-wrapper > h2 {
+  margin: 0 0 .2em;
   font-weight: 300;
-}
-.page-node #page-title {
-  margin-bottom: 0;
+  font-size: 3.85em;
+  line-height: 1.2em;
 }
 
 #page-top {
@@ -2884,7 +2884,7 @@ ul.action-links {
 
 .pane-commons-groups-commons-groups-create-group {
   position: absolute;
-  top: -5em;
+  top: -4em;
   right: 10px;
   text-align: right;
 }
@@ -3423,11 +3423,6 @@ ul.action-links {
   margin: 0;
 }
 
-body.page-node.node-type-group h2#page-title {
-  font-size: 54px;
-  line-height: 54px;
-}
-
 /**
  * Node forms
  */
@@ -3706,10 +3701,6 @@ div.messages ul {
  * ========================================================================== */
 .maintenance-page .container {
   padding: 40px 0;
-}
-.maintenance-page #site-name,
-.maintenance-page #page-title {
-  margin: 0;
 }
 
 .db-offline .container {
@@ -4030,8 +4021,8 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   }
 }
 .block-facetapi {
-  margin-bottom: 1em;
-  padding-bottom: 1em;
+  margin-bottom: .7em;
+  padding-bottom: .7em;
   border-bottom: 1px solid #cccccc;
 }
 .block-facetapi:last-child {
@@ -4116,11 +4107,11 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
 
 .search-results-title,
 .search-results-wrapper > h2 {
-  font-weight: 300;
-  margin: 20px 0;
+  margin-top: .2em;
 }
 
 .search-results, .block-content .search-results {
+  margin-bottom: 0;
   padding: 0;
 }
 
@@ -4129,8 +4120,8 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   list-style-type: none;
 }
 .block-content .search-result {
-  padding-bottom: 1.4em;
-  margin-bottom: 1.4em;
+  padding-bottom: .7em;
+  margin-bottom: .7em;
 }
 .block-content .search-result:last-child {
   border-bottom: none;
@@ -4156,11 +4147,6 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
 .apachesolr_search-results .search-result .search-result-date,
 .apachesolr_search-results .search-result .search-result-snippet-info {
   display: none;
-}
-.apachesolr_search-results .search-result .node {
-  border: none;
-  margin-bottom: 0;
-  padding-bottom: 0;
 }
 .apachesolr_search-results .search-result .pane-node-flag-commons-follow-group-link {
   position: static;
