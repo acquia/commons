@@ -538,6 +538,17 @@ function commons_origins_preprocess_form(&$variables, $hook) {
   if (in_array($element['#id'], $pods)) {
     $variables['attributes_array']['class'][] = 'commons-pod';
   }
+
+  // Give the dynamic filters a special class to target.
+  if (strpos($element['#id'], 'views-exposed-form-commons-homepage-content') === 0 || strpos($element['#id'], 'views-exposed-form-commons-events-upcoming') === 0) {
+    $variables['classes_array'][] = 'dynamic-filter-lists';
+  }
+
+  // Give the keyword filter a pod wrapper.
+  if (strpos($element['#id'], 'views-exposed-form-commons-groups') === 0) {
+    $variables['classes_array'][] = 'keyword-filter';
+    $variables['classes_array'][] = 'commons-pod';
+  }
 }
 
 /**

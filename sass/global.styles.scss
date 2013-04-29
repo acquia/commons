@@ -1241,6 +1241,61 @@ h1.node-title {
   }
 }
 
+/* Views exposed form */
+.views-exposed-form {
+  .views-exposed-widget {
+    float: none;
+    padding: 0;
+    margin: 1.7em 0;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .form-submit {
+      margin-top: 0;
+    }
+  }
+}
+
+.keyword-filter {
+  .views-widget-filter-keys,
+  .views-submit-button {
+    float: left;
+    @include box-sizing(border-box);
+    margin-top: 0;
+  }
+
+  .views-widget-filter-keys {
+    margin-right: -6.5em;
+    margin-bottom: 0;
+    padding-right: 6.75em;
+    width: 100%;
+
+    label {
+      margin-top: 0;
+    }
+
+    @include respond(small-medium) {
+      margin-right: 0;
+      padding-right: 0;
+    }
+  }
+
+  .views-submit-button {
+    padding-top: 2.15em;
+
+    @include respond(small-medium) {
+      margin-top: .5em;
+      padding-top: 0;
+    }
+  }
+}
+
 /* Generic row styles */
 .views-row {
   border-bottom: 1px solid $border;
@@ -2658,43 +2713,13 @@ body.page-node .pane-views-panes {
 
 .view-commons-groups-directory,
 .view-commons-homepage-content .node-teaser.node-group {
-  > .view-content > .views-row,
-  > .view-filters {
+  > .view-content > .views-row {
     @extend %pod;
     position: relative;
 
     > .node-teaser,
     form {
       @extend %pod-content;
-    }
-  }
-
-  .view-filters {
-    .views-exposed-widgets {
-      margin-bottom: 0;
-    }
-
-    .views-widget,
-    label {
-      display: inline-block;
-    }
-
-    label {
-      color: $dark_gray;
-      font-size: 0.85em;
-      font-weight: normal;
-      margin: 0 15px 0 0;
-      line-height: 2em;
-    }
-
-    .form-text {
-      width:400px;
-      @include box-shadow($light_gray 1px 1px 2px inset);
-      border-color:#c2c2c2;
-    }
-
-    .form-submit {
-      margin-top:1px;
     }
   }
 
@@ -2815,7 +2840,6 @@ body.page-node .pane-views-panes {
   }
 }
 
-#views-exposed-form-commons-homepage-content-panel-pane-1,
 #views-exposed-form-commons-bw-all-page-1 {
   .views-submit-button {
     margin-left: 20px;
@@ -2834,17 +2858,19 @@ body.page-node .pane-views-panes {
   font-size: 11px;
 }
 
-.views-exposed-widgets {
-  margin-bottom: 1.5em;
+.dynamic-filter-lists {
+  line-height: 1.8em;
 
   .views-exposed-widget {
+    margin-top: 0;
+    margin-bottom: 0;
     padding: 0;
 
     label {
       float: left;
       font-weight: normal;
       color: $light_gray;
-      margin-top: 0;
+      margin: 0;
       padding: 1px 0 0 0;
     }
   }
@@ -2859,6 +2885,7 @@ body.page-node .pane-views-panes {
 
     .form-submit {
       margin-top: 0;
+      margin-left: 1em;
     }
   }
 }
