@@ -464,7 +464,6 @@ input[type="week"] {
   text-align: left;
   vertical-align: top;
   line-height: 1.2em;
-  min-height: 2.2em;
 
   &[disabled] {
     background-color: #eeeeee;
@@ -507,11 +506,6 @@ textarea,
 select[size],
 select[multiple] {
   height: auto;
-}
-
-select[size="0"],
-select[size="1"] {
-  height: 1.8em;
 }
 
 // Tweaks for Safari + Chrome.
@@ -849,6 +843,10 @@ button,
  */
 
 /* Like widget */
+.rate-widget-commons_like {
+  white-space: nowrap;
+}
+
 .rate-commons-like-btn {
   &:before {
     @include sprite_url_height_width($icons, like);
@@ -861,6 +859,8 @@ button,
 /* Follow buttons */
 [class*="flag-commons-follow-"] {
   .flag-action {
+    white-space: nowrap;
+
     &:before {
       content: "";
       @include sprite_url_height_width($icons, follow-large);
@@ -872,7 +872,7 @@ button,
   }
 
   .flag-throbber {
-    display: inline-block;
+    display: none;
   }
 
   .flag-message {
@@ -943,6 +943,8 @@ button,
 
 /* Comments */
 .comment-comments {
+  white-space: nowrap;
+
   .action-item-small {
     padding-top: 0;
     padding-right: 0;
@@ -957,7 +959,7 @@ button,
   .action-item-small-append {
     margin: -1px -1px -1px 1em;
     font-size: 1em;
-    min-height: 1.8em;
+    // min-height: 1.8em;
     @include border-top-left-radius(0);
     @include border-bottom-left-radius(0);
   }
@@ -1604,13 +1606,20 @@ h1.node-title {
   }
 }
 
-.node-type-event {
-  .addressfield-container-inline {
-    &:after {
-      content: "";
-      clear: none;
-      display: none;
-    }
+.addressfield-container-inline {
+  > div.form-item {
+    display: inline-block;
+    float: none;
+  }
+
+  input[type="text"] {
+    width: auto;
+  }
+
+  &:after {
+    content: "";
+    clear: none;
+    display: none;
   }
 }
 
@@ -2572,6 +2581,7 @@ body.page-node .pane-views-panes {
   position: absolute;
   top: -4em;
   right: $gutter-width;
+  min-width: 290px;
   text-align: right;
 
   @include respond(only-small) {
@@ -2987,16 +2997,17 @@ body.page-node .pane-views-panes {
   .attachment-before {
     float: right;
     margin-bottom: 1.4em;
+    white-space: nowrap;
 
     > a {
       @extend %button-common;
       @extend %button-primary;
       @extend %button-default-layout;
+      margin: 0;
 
       &.commons-posts-create {
         @include border-top-right-radius(0);
         @include border-bottom-right-radius(0);
-        margin-right: 0;
       }
 
       &.commons-bw-create-choose {
@@ -3006,6 +3017,10 @@ body.page-node .pane-views-panes {
         @include border-top-left-radius(0);
         @include border-bottom-left-radius(0);
       }
+    }
+
+    .commons-bw-create-all-widget-types {
+      white-space: normal;
     }
   }
 
