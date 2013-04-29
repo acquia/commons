@@ -62,7 +62,7 @@ function commons_groups_update_3105() {
  * (http://drupal.org/node/1821808).
  */
 function commons_groups_update_3106() {
-    $revert = array(
+  $revert = array(
       'commons_groups' => array('views_view'),
   );
   features_revert($revert);
@@ -91,5 +91,17 @@ function commons_groups_update_3107() {
       og_role_grant('node', $record->nid, $record->uid, $organizer_role);
     }
   }
+  return array();
+}
+
+/**
+ * Update the og_group_ref and group privacy fields per
+ * http://drupal.org/node/1961296.
+ */
+function commons_groups_update_3108() {
+  $revert = array(
+      'commons_groups' => array('field_base', 'field_instance'),
+  );
+  features_revert($revert);
   return array();
 }
