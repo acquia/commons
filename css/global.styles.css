@@ -343,14 +343,18 @@ var {
 }
 
 .node-actions {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
   float: right;
   width: 10em;
   list-style: none;
   margin: .5em -10em 0 0;
-  text-align: right;
+  padding-left: 1em;
+  text-align: center;
 }
-.node-actions, .block-content .node-actions {
-  padding: 0;
+.node-actions [class*="action-item"], .node-actions [class*="action-item"][type="submit"] {
+  margin: 0;
 }
 @media only screen and (max-width: 768px) {
   .node-actions {
@@ -3126,8 +3130,17 @@ ul.action-links {
   font-size: 11px;
 }
 
-.dynamic-filter-lists {
-  line-height: 1.8em;
+.dynamic-filter-lists .views-exposed-widget,
+.dynamic-filter-lists .views-widget,
+.dynamic-filter-lists label,
+.dynamic-filter-lists .selectBox-dropdown,
+.dynamic-filter-lists .form-select-wrapper {
+  display: inline-block;
+  line-height: 1.7em;
+  vertical-align: baseline;
+  white-space: nowrap;
+  height: 1.7em;
+  overflow: hidden;
 }
 .dynamic-filter-lists .views-exposed-widget {
   margin-top: 0;
@@ -3135,27 +3148,27 @@ ul.action-links {
   padding: 0;
 }
 .dynamic-filter-lists .views-exposed-widget label {
-  float: left;
   font-weight: normal;
   color: #858585;
   margin: 0;
-  padding: 1px 0 0 0;
-}
-.dynamic-filter-lists .views-widget {
-  float: left;
 }
 .dynamic-filter-lists .views-submit-button {
+  position: absolute;
+  visibility: hidden;
   padding: 0;
-  display: none;
+  height: auto;
 }
 .dynamic-filter-lists .views-submit-button .form-submit {
   margin-top: 0;
-  margin-left: 1em;
+}
+.dynamic-filter-lists .selectBox-label,
+.dynamic-filter-lists .selectBox-dropdown {
+  width: auto !important;
 }
 
-.views-widget-sort-by .form-select-wrapper,
-.form-item-sort-order .form-select-wrapper {
-  float: left;
+.widget-changed .views-submit-button {
+  position: static;
+  visibility: visible;
 }
 
 .commons-bw-create-choose {
@@ -3301,9 +3314,6 @@ ul.action-links {
 #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before {
   display: inline-block;
   vertical-align: top;
-}
-#quicktabs-container-commons_bw .quicktabs-tabpage .view-filters {
-  float: left;
 }
 #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before {
   float: right;

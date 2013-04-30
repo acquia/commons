@@ -327,15 +327,19 @@ var {
 }
 
 .node-actions {
+  @include box-sizing(border-box);
   float: right;
   width: 10em;
   list-style: none;
   margin: .5em -10em 0 0;
-  text-align: right;
+  padding-left: 1em;
+  text-align: center;
 
-  &,
-  .block-content & {
-    padding: 0;
+  [class*="action-item"] {
+    &,
+    &[type="submit"] {
+      margin: 0;
+    }
   }
 
   @include respond(small-medium) {
@@ -2859,7 +2863,18 @@ body.page-node .pane-views-panes {
 }
 
 .dynamic-filter-lists {
-  line-height: 1.8em;
+  .views-exposed-widget,
+  .views-widget,
+  label,
+  .selectBox-dropdown,
+  .form-select-wrapper {
+    display: inline-block;
+    line-height: 1.7em;
+    vertical-align: baseline;
+    white-space: nowrap;
+    height: 1.7em;
+    overflow: hidden;
+  }
 
   .views-exposed-widget {
     margin-top: 0;
@@ -2867,33 +2882,33 @@ body.page-node .pane-views-panes {
     padding: 0;
 
     label {
-      float: left;
       font-weight: normal;
       color: $light_gray;
       margin: 0;
-      padding: 1px 0 0 0;
     }
-  }
-
-  .views-widget {
-    float: left;
   }
 
   .views-submit-button {
+    position: absolute;
+    visibility: hidden;
     padding: 0;
-    display: none;
+    height: auto;
 
     .form-submit {
       margin-top: 0;
-      margin-left: 1em;
     }
+  }
+
+  .selectBox-label,
+  .selectBox-dropdown {
+    width: auto !important;
   }
 }
 
-.views-widget-sort-by,
-.form-item-sort-order {
-  .form-select-wrapper {
-    float: left;
+.widget-changed {
+  .views-submit-button {
+    position: static;
+    visibility: visible;
   }
 }
 
@@ -3015,10 +3030,6 @@ body.page-node .pane-views-panes {
   .attachment-before {
     display: inline-block;
     vertical-align: top;
-  }
-
-  .view-filters {
-    float: left;
   }
 
   .attachment-before {

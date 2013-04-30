@@ -193,11 +193,11 @@ function commons_origins_preprocess_node(&$variables, $hook) {
           }
 
           // Apply button classes to everything but comment_forbidden.
-          if ($name != 'comment_forbidden' && !is_string($link['attributes']['class'])) {
+          if ($name != 'comment_forbidden' && $name != 'answer-add' && !is_string($link['attributes']['class'])) {
             $link['attributes']['class'][] = 'action-item-small';
             $link['attributes']['class'][] = 'action-item-inline';
           }
-          elseif ($name != 'comment_forbidden') {
+          elseif ($name != 'comment_forbidden' && $name != 'answer-add') {
             $link['attributes']['class'] .= ' action-item-small action-item-inline';
           }
         }
@@ -540,7 +540,7 @@ function commons_origins_preprocess_form(&$variables, $hook) {
   }
 
   // Give the dynamic filters a special class to target.
-  if (strpos($element['#id'], 'views-exposed-form-commons-homepage-content') === 0 || strpos($element['#id'], 'views-exposed-form-commons-events-upcoming') === 0) {
+  if (strpos($element['#id'], 'views-exposed-form-commons-homepage-content') === 0 || strpos($element['#id'], 'views-exposed-form-commons-events-upcoming') === 0 || strpos($element['#id'], 'views-exposed-form-commons-bw') === 0) {
     $variables['classes_array'][] = 'dynamic-filter-lists';
   }
 
@@ -548,6 +548,11 @@ function commons_origins_preprocess_form(&$variables, $hook) {
   if (strpos($element['#id'], 'views-exposed-form-commons-groups') === 0) {
     $variables['classes_array'][] = 'keyword-filter';
     $variables['classes_array'][] = 'commons-pod';
+  }
+
+  // Set an identifying class to the event attendance form.
+  if(strpos($element['#id'], 'commons-events-attend-event-form') === 0) {
+    $variables['classes_array'][] = 'node-actions';
   }
 }
 

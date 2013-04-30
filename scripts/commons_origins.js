@@ -27,7 +27,7 @@ jQuery(document).ready(function($){
   $('.views-exposed-widgets .form-select, .custom-search-selector').wrap('<div class="form-select-wrapper" />');
 
   $(document).delegate('.views-exposed-widgets .form-select', 'change', function() {
-    $('.views-exposed-widgets .views-submit-button').fadeIn(300);
+    $('.views-exposed-widgets').addClass('widget-changed');
   });
 
   $(document).delegate('.views-exposed-widgets .form-select', 'click', function() {
