@@ -122,6 +122,32 @@ update() {
     fi
 }
 
+# This allows you to test the make file without needing to upload it to drupal.org and run the main make file.
+test_makefile() {
+  if [[ -d $BUILD_PATH ]]; then
+    cd $BUILD_PATH
+    # do we have the profile?
+    if [[ -d $BUILD_PATH/commons_profile ]]; then
+      # do we have an installed commons profile?
+      if [[ -d $BUILD_PATH/publish ]]; then
+        cd $BUILD_PATH
+        rm -f publish.tar.gz
+        rm -f commons.tar.gz
+        drush make --tar --drupal-org=core commons_profile/drupal-org-core.make publish
+        drush make --tar --drupal-org commons_profile/drupal-org.make commons
+        tar -zxvf publish.tar.gz
+        cd publish/profiles
+        # exclude commons modules/themes since we're updating already by linking it to the repos directory.
+        tar -zxvf ${BUILD_PATH}/commons.tar.gz --exclude 'commons_*'
+        echo "Successfully Updated drupal from make files"
+        exit 0
+      fi
+    fi
+  fi
+  echo "Unable to find Build path or drupal root. Please run build first"
+  exit 1
+}
+
 case $1 in
   pull)
     if [[ -n $2 ]]; then
@@ -169,4 +195,15 @@ case $1 in
       exit 1
     fi
     release_notes $BUILD_PATH $RELEASE $FROM_DATE $TO_DATE;;
+  test_makefile)
+    if [[ -n $2 ]]; then
+      BUILD_PATH=$2
+    else
+      echo "Usage: build_distro.sh test_makefile [build_path]"
+      exit 1
+    fi
+    if [[ -n $3 ]]; then
+      USERNAME=$3
+    fi
+    test_makefile $BUILD_PATH;;
 esac
