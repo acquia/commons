@@ -4,6 +4,11 @@
  * Enables modules and site configuration for a Commons site installation.
  */
 
+/*
+ * Define commons minimum execution time required to operate.
+ */
+define('DRUPAL_MINIMUM_MAX_EXECUTION_TIME', 120);
+
 /**
  * Implements hook_admin_paths_alter().
  */
@@ -112,13 +117,8 @@ function commons_update_projects_alter(&$projects) {
 function commons_install_tasks() {
 
   //make sure we have more memory than 196M. if not lets try to increase it.
-  if (ini_get('memory_limit') != '-1' && ini_get('memory_limit') <= '196M') {
+  if (ini_get('memory_limit') != '-1' && ini_get('memory_limit') <= '196M' && ini_get('memory_limit') >= '128M') {
     ini_set('memory_limit', '196M');
-  }
-
-  //make sure we have more memory than 196M. if not lets try to increase it.
-  if ((int)ini_get('max_execution_time') != -1 && (int)ini_get('max_execution_time') != 0 && (int)ini_get('max_execution_time') <= 120) {
-    ini_set('max_execution_time', 120);
   }
 
   $demo_content = variable_get('commons_install_example_content', FALSE);
