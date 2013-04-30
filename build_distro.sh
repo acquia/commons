@@ -1,5 +1,6 @@
 #!/bin/bash
-repos=(commons_activity_streams commons_featured commons_notices commons_profile_social commons_user_profile_pages commons_body commons_follow commons_notify commons_q_a commons_utility_links commons_bw commons_groups commons_pages commons_radioactivity commons_wikis commons_content_moderation commons_like commons_polls commons_search commons_wysiwyg commons_documents commons_location commons_posts commons_site_homepage commons_events commons_misc commons_profile_base commons_topics commons_social_sharing)
+modules=(commons_activity_streams commons_featured commons_notices commons_profile_social commons_user_profile_pages commons_body commons_follow commons_notify commons_q_a commons_utility_links commons_bw commons_groups commons_pages commons_radioactivity commons_wikis commons_content_moderation commons_like commons_polls commons_search commons_wysiwyg commons_documents commons_location commons_posts commons_site_homepage commons_events commons_misc commons_profile_base commons_topics commons_social_sharing)
+themes=(commons_origins)
 
 pull_git() {
     cd $BUILD_PATH/commons_profile
@@ -9,7 +10,7 @@ pull_git() {
     git pull origin 7.x-3.x
 
     cd $BUILD_PATH/repos/modules
-    for i in "${repos[@]}"; do
+    for i in "${modules[@]}"; do
       echo $i
       cd $i
       if [[ -n $RESET ]]; then
@@ -18,7 +19,7 @@ pull_git() {
       git pull origin 7.x-3.x
       cd ..
     done
-    cd $BUILD_PATH/repos/themes/commons_origins
+    cd $BUILD_PATH/repos/themes/contrib/commons_origins
     git pull origin 7.x-3.x
 }
 
@@ -30,7 +31,7 @@ release_notes() {
   OUTPUT="$OUTPUT <h3>Commons Profile:</h3> `drush rn --date $FROM_DATE $TO_DATE`"
 
   cd $BUILD_PATH/repos/modules
-  for i in "${repos[@]}"; do
+  for i in "${modules[@]}"; do
     echo $i
     cd $i
     RN=`drush rn --date $FROM_DATE $TO_DATE`
@@ -59,12 +60,27 @@ build_distro() {
             rm -rf publish/profiles/commons/modules/contrib/commons*
             rm -rf publish/profiles/commons/themes/contrib/commons*
           else
-            drush make commons_profile/build-commons-dev.make --no-cache --working-copy --prepare-install ./publish
             mkdir $BUILD_PATH/repos
             mkdir $BUILD_PATH/repos/modules
+            cd $BUILD_PATH/repos/modules
+            for i in "${modules[@]}"; do
+              if [[ -n $USERNAME ]]; then
+                git clone --branch 7.x-3.x ${USERNAME}@git.drupal.org:project/${i}.git
+              else
+                git clone --branch 7.x-3.x http://git.drupal.org/project/${i}.git
+              fi
+            done
+            cd $BUILD_PATH/repos
             mkdir $BUILD_PATH/repos/themes
-            mv publish/profiles/commons/modules/contrib/commons* repos/modules/
-            mv publish/profiles/commons/themes/contrib/commons* repos/themes/
+            cd $BUILD_PATH/repos/themes
+            for i in "${themes[@]}"; do
+              if [[ -n $USERNAME ]]; then
+                git clone --branch 7.x-3.x ${USERNAME}@git.drupal.org:project/${i}.git
+              else
+                git clone --branch 7.x-3.x http://git.drupal.org/project/${i}.git
+              fi
+            done
+            build_distro $BUILD_PATH
           fi
           ln -sf $BUILD_PATH/repos/modules/commons* publish/profiles/commons/modules/contrib/
           ln -sf $BUILD_PATH/repos/themes/commons* publish/profiles/commons/themes/contrib/
@@ -73,14 +89,13 @@ build_distro() {
           rm -f publish/profiles/commons/*.*
           rm -rf publish/profiles/commons/images
           ln -s $BUILD_PATH/commons_profile/* publish/profiles/commons/
-          pull_git
         else
           git clone http://git.drupal.org/project/commons.git commons_profile
           build_distro $BUILD_PATH
         fi
     else
       mkdir $BUILD_PATH
-      build_distro $BUILD_PATH
+      build_distro $BUILD_PATH $USERNAME
     fi
 }
 
@@ -126,7 +141,10 @@ case $1 in
       echo "Usage: build_distro.sh build [build_path]"
       exit 1
     fi
-    build_distro;;
+    if [[ -n $3 ]]; then
+      USERNAME=$3
+    fi
+    build_distro $BUILD_PATH $USERNAME;;
   update)
     if [[ -n $2 ]]; then
       BUILD_PATH=$2
