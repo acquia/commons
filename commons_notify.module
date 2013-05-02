@@ -47,7 +47,7 @@ function commons_notify_node_insert($node) {
       'message_notify_email_body' => 'field_message_rendered_body',
     ),
   );
-  message_subscribe_send_message('node', $node, $message, array('email' => $options));
+  message_subscribe_process_message('node', $node, $message, array('email' => $options));
 }
 
 /**
@@ -83,5 +83,5 @@ function commons_notify_comment_insert($comment) {
       'message_notify_email_body' => 'field_message_rendered_body',
     ),
   );
-  message_subscribe_send_message('comment', $comment, $message, array('email' => $options));
+  message_subscribe_process_message('comment', $comment, $message, array('email' => $options));
 }
