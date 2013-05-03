@@ -19,6 +19,9 @@ projects[drupal][patch][] = http://drupal.org/files/1074108-skip-profile-16-7.x-
 ; http://drupal.org/node/1772316#comment-6457618
 projects[drupal][patch][] = http://drupal.org/files/allow_change_system-requirements-1772316-4.patch
 
+; This patch allows install profile to list requirements on the install page
+; http://drupal.org/node/1971072
+projects[drupal][patch][] = http://drupal.org/files/install_profile_requirements_on_install.patch
 ; Allow to specify SCRIPT HTML element attributes through drupal_add_js()
 ; http://drupal.org/node/1664602#comment-6221066
 projects[drupal][patch][] = http://drupal.org/files/1664602-1.patch
