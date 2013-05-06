@@ -1427,7 +1427,8 @@ h1.node-title {
 .view-activity-group,
 .view-commons-activity-streams-user-activity {
   .content,
-  .views-field-timestamp {
+  .views-field-timestamp,
+  .views-field-nothing {
     @include place-picture(40px);
   }
 }
@@ -3026,40 +3027,50 @@ body.page-node .pane-views-panes {
 }
 
 #quicktabs-container-commons_bw .quicktabs-tabpage {
-  .view-filters,
-  .attachment-before {
+
+  .view-filters, .attachment-before {
     display: inline-block;
     vertical-align: top;
   }
 
-  .attachment-before {
-    float: right;
-    margin-bottom: 1.4em;
-    white-space: nowrap;
+  .commons-bw-partial-node-form {
+    position: relative;
+    margin: 50px 0 20px;
+    padding: 0 100px 0 68px;
 
-    > a {
-      @extend %button-common;
-      @extend %button-primary;
-      @extend %button-default-layout;
+    h3 {
+      position: absolute;
+      top: -35px;
+      left: 0;
       margin: 0;
-
-      &.commons-posts-create {
-        @include border-top-right-radius(0);
-        @include border-bottom-right-radius(0);
-      }
-
-      &.commons-bw-create-choose {
-        padding-left: .75em;
-        padding-right: .75em;
-        border-left: none;
-        @include border-top-left-radius(0);
-        @include border-bottom-left-radius(0);
-      }
     }
+  }
 
-    .commons-bw-create-all-widget-types {
-      white-space: normal;
-    }
+  white-space: nowrap;
+
+  #edit-actions {
+    right: 0;
+    top: 0;
+    position: absolute;
+    margin: 0;
+  }
+
+  #edit-submit {
+    width: 90px;
+    margin: 0;
+    @extend %button-common;
+    @extend %button-primary;
+    @extend %button-default-layout;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  a.full-form {
+    float: right;
+  }
+
+  .commons-bw-create-all-widget-types {
+    white-space: normal;
   }
 
   .view-content,
@@ -3069,6 +3080,10 @@ body.page-node .pane-views-panes {
 
   .form-submit {
     margin-top: 0;
+  }
+
+  .hidden {
+    display: none;
   }
 }
 

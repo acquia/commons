@@ -159,6 +159,9 @@ function commons_origins_preprocess_page(&$variables, $hook) {
  * Override or insert variables into the node templates.
  */
 function commons_origins_preprocess_node(&$variables, $hook) {
+  $node = $variables['node'];
+  $wrapper = entity_metadata_wrapper('node', $node);
+
   // Append a feature label to featured node teasers.
   if ($variables['teaser'] && $variables['promote']) {
     $variables['submitted'] .= ' <span class="featured-node-tooltip">' . t('Featured') . ' ' . $variables['type'] . '</span>';
@@ -171,7 +174,7 @@ function commons_origins_preprocess_node(&$variables, $hook) {
     'page',
     'wiki',
   );
-  if (!$variables['teaser'] && in_array($variables['node']->type, $no_avatar)) {
+  if (!$variables['teaser'] && in_array($node->type, $no_avatar)) {
     $variables['user_picture'] = '';
   }
 
@@ -256,14 +259,21 @@ function commons_origins_preprocess_node(&$variables, $hook) {
 
   // Replace the submitted text on nodes with something a bit more pertinent to
   // the content type.
-  if (variable_get('node_submitted_' . $variables['node']->type, TRUE)) {
+  if (variable_get('node_submitted_' . $node->type, TRUE)) {
     $placeholders = array(
-      '!type' => '<span class="node-content-type">' . ucfirst($variables['node']->type) . '</span>',
+      '!type' => '<span class="node-content-type">' . ucfirst($node->type) . '</span>',
       '!user' => $variables['name'],
       '!date' => $variables['date'],
+      '@interval' => format_interval(REQUEST_TIME - $node->created),
     );
 
-    $variables['submitted'] = t('!type created by !user on !date', $placeholders);
+    if (!empty($node->{OG_AUDIENCE_FIELD}) && $wrapper->{OG_AUDIENCE_FIELD}->count() == 1) {
+      $placeholders['!group'] = l($wrapper->{OG_AUDIENCE_FIELD}->get(0)->label(), 'node/' . $wrapper->{OG_AUDIENCE_FIELD}->get(0)->getIdentifier());
+      $variables['submitted'] = t('!type created @interval ago in the !group group by !user', $placeholders);
+    }
+    else {
+      $variables['submitted'] = t('!type created @interval ago by !user', $placeholders);
+    }
   }
 
   // Add a class to the node when there is a logo image.
