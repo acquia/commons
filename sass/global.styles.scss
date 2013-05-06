@@ -554,7 +554,6 @@ select[multiple] {
 }
 
 textarea {
-  min-height: 40px;
   overflow: auto;
   resize: vertical;
   width: 100%;
@@ -3026,64 +3025,132 @@ body.page-node .pane-views-panes {
   }
 }
 
-#quicktabs-container-commons_bw .quicktabs-tabpage {
+#quicktabs-container-commons_bw {
+  .quicktabs-tabpage {
+    .view-filters,
+    .attachment-before {
+      display: inline-block;
+      vertical-align: top;
+    }
 
-  .view-filters, .attachment-before {
-    display: inline-block;
-    vertical-align: top;
+    .view-content,
+    .view-empty {
+      clear: both;
+    }
+
+    .form-submit {
+      margin-top: 0;
+    }
+
+    .hidden {
+      display: none;
+    }
+  }
+}
+
+.quicktabs-style-commons-pills {
+  ul.quicktabs-tabs {
+    margin-bottom: 1.7em;
+  }
+}
+
+.commons-bw-partial-node-form {
+  margin-bottom: 1.7em;
+  padding-left: 68px;
+  padding-bottom: 1.7em;
+  border-bottom: 1px solid $border;
+
+  .user-picture {
+    margin-top: 2.6em;
   }
 
-  .commons-bw-partial-node-form {
-    position: relative;
-    margin: 50px 0 20px;
-    padding: 0 100px 0 68px;
+  @include respond(only-small) {
+    padding-left: 0;
 
-    h3 {
-      position: absolute;
-      top: -35px;
-      left: 0;
-      margin: 0;
+    .user-picture {
+      display: none;
     }
   }
 
-  white-space: nowrap;
-
-  #edit-actions {
-    right: 0;
-    top: 0;
-    position: absolute;
-    margin: 0;
+  .field-type-image {
+    margin-top: 1.7em;
   }
 
-  #edit-submit {
-    width: 90px;
-    margin: 0;
-    @extend %button-common;
-    @extend %button-primary;
-    @extend %button-default-layout;
-    padding-left: 0;
-    padding-right: 0;
+  .field-name-og-group-ref {
+    .fieldset-outer-wrapper {
+      margin-top: 1.7em;
+      margin-bottom: 1.7em;
+      padding-top: 1.7em;
+      border-top: 1px solid $border;
+    }
   }
+}
 
-  a.full-form {
-    float: right;
+.partial-node-form-title {
+  margin-top: 0;
+  margin-bottom: .2em;
+  margin-left: -68px;
+  color: rgb(70, 187, 46);
+
+  @include respond(only-small) {
+    margin-left: 0;
   }
+}
 
-  .commons-bw-create-all-widget-types {
-    white-space: normal;
-  }
-
-  .view-content,
-  .view-empty {
-    clear: both;
-  }
-
-  .form-submit {
+.trigger-field {
+  &,
+  .form-item {
     margin-top: 0;
   }
 
-  .hidden {
-    display: none;
+  input,
+  textarea {
+    .compact-form & {
+      height: 2.2em;
+      overflow: hidden;
+    }
+  }
+}
+
+.expandable-form-toggle {
+  float: right;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: .6em;
+  overflow: hidden;
+
+  &,
+  &:before {
+    width: 1.4em;
+    height: 1.4em;
+    text-align: center;
+  }
+
+  .expanded-form & {
+    display: block;
+
+    &:before {
+      content: 'x';
+      display: block;
+    }
+  }
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.full-form {
+  .compact-form & {
+    float: right;
+    margin-top: .5em;
+
+    &:after {
+      content: '\2192';
+      display: inline-block;
+      margin-left: .2em;
+    }
   }
 }
 

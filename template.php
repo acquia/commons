@@ -17,6 +17,7 @@ function commons_origins_theme($existing, $type, $theme, $path) {
       'render element' => 'form',
       'path' => drupal_get_path('theme', 'commons_origins') . '/templates/form',
       'template' => 'form-content',
+      'pattern' => 'form_content__',
     ),
   );
 }
@@ -564,6 +565,11 @@ function commons_origins_preprocess_form(&$variables, $hook) {
   if(strpos($element['#id'], 'commons-events-attend-event-form') === 0) {
     $variables['classes_array'][] = 'node-actions';
   }
+
+  // Make sure the bottom of the partial node form clears all content.
+  if (strpos($element['#form_id'], 'commons_bw_partial_node_form_') === 0) {
+    $variables['classes_array'][] = 'clearfix';
+  }
 }
 
 /**
@@ -615,6 +621,45 @@ function commons_origins_preprocess_form_content(&$variables, $hook) {
   if (isset($variables['form']['#search_page']) || (isset($variables['form']['module']) && ($variables['form']['module']['#value'] == 'search_facetapi' || $variables['form']['module']['#value'] == 'user'))) {
     $variables['form']['basic']['keys']['#title_display'] = 'invisible';
     $variables['form']['basic']['submit']['#attributes']['class'][] = 'action-item-search';
+  }
+
+  // Make the partial post form submit button a primary action and give some
+  // theme hook suggestions for easy overriding.
+  if (strpos($variables['form']['#form_id'], 'commons_bw_partial_node_form_') === 0) {
+    $variables['form']['actions']['submit']['#attributes']['class'][] = 'action-item-primary';
+    $variables['theme_hook_suggestions'][] = 'form_content__commons_bw_partial_node_form';
+    $variables['theme_hook_suggestions'][] = 'form_content__' . $variables['form']['#form_id'];
+    $variables['form']['title']['#markup'] = str_replace('<h3>', '<h3 class="partial-node-form-title">', $variables['form']['title']['#markup']);
+    // kpr($variables['form']);
+
+    // Set fields as hideable so the forms can be compacted.
+    switch ($variables['form']['#bundle']) {
+      case 'post':
+      case 'question':
+      case 'poll':
+        // Set fields as hideable so the forms can be compacted.
+        $variables['form']['body']['#attributes']['class'][] = 'trigger-field';
+        foreach (array('field_image', 'og_group_ref', 'choice_wrapper', 'actions') as $field) {
+          if (isset($variables['form'][$field])) {
+            $variables['form'][$field]['#attributes']['class'][] = 'hideable-field';
+          }
+        }
+        // The poll options uses #prefix and #suffix instead of a theme wrapper,
+        // so we have to add the class through this ugly bit of code.
+        if (isset($variables['form']['choice_wrapper'])) {
+          $variables['form']['choice_wrapper']['#prefix'] = str_replace('class="', 'class="hideable-field ', $variables['form']['choice_wrapper']['#prefix']);
+        }
+        break;
+      case 'wiki':
+        // The wiki is the odd type since it has a title field as its initial
+        // field.
+        $variables['form']['title_field']['#attributes']['class'][] = 'trigger-field';
+        foreach (array('body', 'field_image', 'og_group_ref', 'actions') as $field) {
+          if (isset($variables['form'][$field])) {
+            $variables['form'][$field]['#attributes']['class'][] = 'hideable-field';
+          }
+        }
+    }
   }
 }
 
@@ -760,6 +805,7 @@ function commons_origins_css_alter(&$css) {
     drupal_get_path('module', 'search') . '/search.css',
     drupal_get_path('module', 'rich_snippets') . '/rich_snippets.css',
     drupal_get_path('module', 'commons_like') . '/commons-like.css',
+    drupal_get_path('module', 'panels') . '/css/panels.css',
   );
   foreach ($unset as $path) {
     if (isset($css[$path])) {
