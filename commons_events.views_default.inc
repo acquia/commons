@@ -107,7 +107,103 @@ function commons_events_views_default_views() {
       'label' => 'Content: Nid',
     ),
   );
+  $translatables['commons_events_event_attendee_list'] = array(
+    t('Master'),
+    t('Attendees'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« first'),
+    t('‹ previous'),
+    t('next ›'),
+    t('last »'),
+    t('node from Registration'),
+    t('User'),
+    t('All'),
+    t('Full Attendee List Block'),
+    t('Content pane'),
+    t('View panes'),
+  );
   $export['commons_events_event_attendee_list'] = $view;
+
+  $view = new view();
+  $view->name = 'commons_events_organizers';
+  $view->description = 'Event organizer panel pane.';
+  $view->tag = 'commons_events';
+  $view->base_table = 'node';
+  $view->human_name = 'Commons Events - Organizers';
+  $view->core = 7;
+  $view->api_version = '3.0';
+  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+  /* Display: Master */
+  $handler = $view->new_display('default', 'Master', 'default');
+  $handler->display->display_options['title'] = 'Organizers';
+  $handler->display->display_options['use_more_always'] = FALSE;
+  $handler->display->display_options['access']['type'] = 'perm';
+  $handler->display->display_options['cache']['type'] = 'none';
+  $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
+  $handler->display->display_options['style_plugin'] = 'grid';
+  $handler->display->display_options['row_plugin'] = 'fields';
+  /* Relationship: Entity Reference: Referenced Entity */
+  $handler->display->display_options['relationships']['field_organizers_target_id']['id'] = 'field_organizers_target_id';
+  $handler->display->display_options['relationships']['field_organizers_target_id']['table'] = 'field_data_field_organizers';
+  $handler->display->display_options['relationships']['field_organizers_target_id']['field'] = 'field_organizers_target_id';
+  $handler->display->display_options['relationships']['field_organizers_target_id']['required'] = TRUE;
+  /* Field: User: Picture */
+  $handler->display->display_options['fields']['picture']['id'] = 'picture';
+  $handler->display->display_options['fields']['picture']['table'] = 'users';
+  $handler->display->display_options['fields']['picture']['field'] = 'picture';
+  $handler->display->display_options['fields']['picture']['relationship'] = 'field_organizers_target_id';
+  $handler->display->display_options['fields']['picture']['label'] = '';
+  $handler->display->display_options['fields']['picture']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['picture']['image_style'] = '50x50';
+  /* Contextual filter: Content: Nid */
+  $handler->display->display_options['arguments']['nid']['id'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['table'] = 'node';
+  $handler->display->display_options['arguments']['nid']['field'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['default_action'] = 'not found';
+  $handler->display->display_options['arguments']['nid']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['nid']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['nid']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['nid']['summary_options']['items_per_page'] = '25';
+
+  /* Display: Content pane */
+  $handler = $view->new_display('panel_pane', 'Content pane', 'panel_pane_1');
+  $handler->display->display_options['argument_input'] = array(
+    'nid' => array(
+      'type' => 'context',
+      'context' => 'entity:node.nid',
+      'context_optional' => 0,
+      'panel' => '0',
+      'fixed' => '',
+      'label' => 'Content: Nid',
+    ),
+  );
+  $translatables['commons_events_organizers'] = array(
+    t('Master'),
+    t('Organizers'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('User entity referenced from field_organizers'),
+    t('All'),
+    t('Content pane'),
+    t('View panes'),
+  );
+  $export['commons_events_organizers'] = $view;
 
   $view = new view();
   $view->name = 'commons_events_upcoming';
@@ -340,6 +436,39 @@ function commons_events_views_default_views() {
   $handler->display->display_options['sorts']['field_date_value']['exposed'] = TRUE;
   $handler->display->display_options['sorts']['field_date_value']['expose']['label'] = 'Date';
   $handler->display->display_options['inherit_panels_path'] = '1';
+  $translatables['commons_events_upcoming'] = array(
+    t('Master'),
+    t('Events'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« first'),
+    t('‹ previous'),
+    t('next ›'),
+    t('last »'),
+    t('.'),
+    t(' attendees'),
+    t('[comment_count] comments'),
+    t(','),
+    t('Feed'),
+    t('Global Block'),
+    t('Upcoming events'),
+    t('Group pane'),
+    t('OG membership from node'),
+    t(' attendees,'),
+    t('All'),
+    t('Commons'),
+    t('Landing Page pane'),
+    t('Featured'),
+    t('Date'),
+    t('View panes'),
+  );
   $export['commons_events_upcoming'] = $view;
 
   $view = new view();
@@ -622,66 +751,32 @@ function commons_events_views_default_views() {
   $handler->display->display_options['fields']['comment_count']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['comment_count']['separator'] = '';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  $export['commons_events_user_upcoming_events'] = $view;
-
-  $view = new view();
-  $view->name = 'commons_events_organizers';
-  $view->description = 'Event organizer panel pane.';
-  $view->tag = 'commons_events';
-  $view->base_table = 'node';
-  $view->human_name = 'Commons Events - Organizers';
-  $view->core = 7;
-  $view->api_version = '3.0';
-  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
-
-  /* Display: Master */
-  $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'Organizers';
-  $handler->display->display_options['use_more_always'] = FALSE;
-  $handler->display->display_options['access']['type'] = 'perm';
-  $handler->display->display_options['cache']['type'] = 'none';
-  $handler->display->display_options['query']['type'] = 'views_query';
-  $handler->display->display_options['exposed_form']['type'] = 'basic';
-  $handler->display->display_options['pager']['type'] = 'none';
-  $handler->display->display_options['pager']['options']['offset'] = '0';
-  $handler->display->display_options['style_plugin'] = 'grid';
-  $handler->display->display_options['row_plugin'] = 'fields';
-  /* Relationship: Entity Reference: Referenced Entity */
-  $handler->display->display_options['relationships']['field_organizers_target_id']['id'] = 'field_organizers_target_id';
-  $handler->display->display_options['relationships']['field_organizers_target_id']['table'] = 'field_data_field_organizers';
-  $handler->display->display_options['relationships']['field_organizers_target_id']['field'] = 'field_organizers_target_id';
-  $handler->display->display_options['relationships']['field_organizers_target_id']['required'] = TRUE;
-  /* Field: User: Picture */
-  $handler->display->display_options['fields']['picture']['id'] = 'picture';
-  $handler->display->display_options['fields']['picture']['table'] = 'users';
-  $handler->display->display_options['fields']['picture']['field'] = 'picture';
-  $handler->display->display_options['fields']['picture']['relationship'] = 'field_organizers_target_id';
-  $handler->display->display_options['fields']['picture']['label'] = '';
-  $handler->display->display_options['fields']['picture']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['picture']['image_style'] = '50x50';
-  /* Contextual filter: Content: Nid */
-  $handler->display->display_options['arguments']['nid']['id'] = 'nid';
-  $handler->display->display_options['arguments']['nid']['table'] = 'node';
-  $handler->display->display_options['arguments']['nid']['field'] = 'nid';
-  $handler->display->display_options['arguments']['nid']['default_action'] = 'not found';
-  $handler->display->display_options['arguments']['nid']['default_argument_type'] = 'fixed';
-  $handler->display->display_options['arguments']['nid']['summary']['number_of_records'] = '0';
-  $handler->display->display_options['arguments']['nid']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['nid']['summary_options']['items_per_page'] = '25';
-
-  /* Display: Content pane */
-  $handler = $view->new_display('panel_pane', 'Content pane', 'panel_pane_1');
-  $handler->display->display_options['argument_input'] = array(
-    'nid' => array(
-      'type' => 'context',
-      'context' => 'entity:node.nid',
-      'context_optional' => 0,
-      'panel' => '0',
-      'fixed' => '',
-      'label' => 'Content: Nid',
-    ),
+  $translatables['commons_events_user_upcoming_events'] = array(
+    t('Master'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('You are not attending any upcoming events.'),
+    t('node being the Registration'),
+    t('User'),
+    t('All'),
+    t('Block'),
+    t('You\'re attending - pane'),
+    t('You\'re attending'),
+    t('<strong>[capacity_used]</strong> attendees,'),
+    t('.'),
+    t('<strong>[comment_count]</strong> comments'),
+    t('View panes'),
+    t('You created - pane'),
+    t('You created'),
+    t('You follow - pane'),
+    t('You follow'),
+    t('flag'),
   );
-  $export['commons_events_organizers'] = $view;
+  $export['commons_events_user_upcoming_events'] = $view;
 
   return $export;
 }
