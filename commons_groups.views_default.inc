@@ -105,6 +105,27 @@ function commons_groups_views_default_views() {
     'event' => 'event',
     'answer' => 'answer',
   );
+  $translatables['commons_bw_all'] = array(
+    t('Master'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« first'),
+    t('‹ previous'),
+    t('next ›'),
+    t('last »'),
+    t('Nobody has posted into this group yet.'),
+    t('OG membership from node'),
+    t('most recent'),
+    t('most active'),
+    t('All'),
+  );
   $export['commons_bw_all'] = $view;
 
   $view = new view();
@@ -277,6 +298,26 @@ function commons_groups_views_default_views() {
   $handler->display->display_options['title'] = 'Contributors to %1';
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['path'] = 'node/%/contributors';
+  $translatables['commons_contributors_group'] = array(
+    t('Master'),
+    t('Group contributors'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('OG membership from user'),
+    t('All'),
+    t('group teaser'),
+    t('Recent contributors'),
+    t('[picture]<span>[name]</span>'),
+    t('View panes'),
+    t('group homepage'),
+    t('Contributors'),
+    t('Page'),
+    t('Contributors to %1'),
+  );
   $export['commons_contributors_group'] = $view;
 
   $view = new view();
@@ -812,6 +853,32 @@ function commons_groups_views_default_views() {
   $handler->display->display_options['menu']['description'] = 'Manage Published Groups';
   $handler->display->display_options['menu']['weight'] = '0';
   $handler->display->display_options['menu']['context'] = 0;
+  $translatables['commons_group_moderation'] = array(
+    t('Master'),
+    t('Commons Group Moderation'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« first'),
+    t('‹ previous'),
+    t('next ›'),
+    t('last »'),
+    t('author'),
+    t('Update Actions'),
+    t('Title'),
+    t('User'),
+    t('Updated'),
+    t('Operations'),
+    t('Active'),
+    t('Proposed'),
+    t('Published Groups'),
+  );
   $export['commons_group_moderation'] = $view;
 
   $view = new view();
@@ -871,6 +938,20 @@ function commons_groups_views_default_views() {
   $handler->display->display_options['pane_title'] = 'Contributors (Site-wide)';
   $handler->display->display_options['pane_category']['name'] = 'Commons';
   $handler->display->display_options['pane_category']['weight'] = '0';
+  $translatables['commons_groups_contributors'] = array(
+    t('Master'),
+    t('Contributors'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('OG membership from user'),
+    t('Content pane'),
+    t('Contributors (Site-wide)'),
+    t('Commons'),
+  );
   $export['commons_groups_contributors'] = $view;
 
   $view = new view();
@@ -965,6 +1046,28 @@ function commons_groups_views_default_views() {
   $handler->display->display_options['pane_category']['name'] = 'Commons';
   $handler->display->display_options['pane_category']['weight'] = '0';
   $handler->display->display_options['inherit_panels_path'] = '1';
+  $translatables['commons_groups_directory'] = array(
+    t('Master'),
+    t('Groups'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« first'),
+    t('‹ previous'),
+    t('next ›'),
+    t('last »'),
+    t('No groups matched the text you entered.'),
+    t('Limit to'),
+    t('Feed'),
+    t('Content pane'),
+    t('Commons'),
+  );
   $export['commons_groups_directory'] = $view;
 
   $view = new view();
@@ -1036,6 +1139,19 @@ function commons_groups_views_default_views() {
   /* Display: Block */
   $handler = $view->new_display('block', 'Block', 'block');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $translatables['commons_groups_recent_content'] = array(
+    t('Master'),
+    t('Commons Groups: Recent content'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('OG membership from node'),
+    t('All'),
+    t('Block'),
+  );
   $export['commons_groups_recent_content'] = $view;
 
   $view = new view();
@@ -1113,6 +1229,26 @@ function commons_groups_views_default_views() {
       'fixed' => '',
       'label' => 'OG membership: Entity id',
     ),
+  );
+  $translatables['commons_groups_user_groups'] = array(
+    t('Master'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« first'),
+    t('‹ previous'),
+    t('next ›'),
+    t('last »'),
+    t('Group node from OG membership'),
+    t('All'),
+    t('Content pane'),
+    t('View panes'),
   );
   $export['commons_groups_user_groups'] = $view;
 
