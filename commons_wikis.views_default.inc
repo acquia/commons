@@ -111,6 +111,30 @@ function commons_wikis_views_default_views() {
   $handler->display->display_options['filters']['type']['value'] = array(
     'wiki' => 'wiki',
   );
+  $translatables['commons_bw_wikis'] = array(
+    t('Master'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« first'),
+    t('‹ previous'),
+    t('next ›'),
+    t('last »'),
+    t('No wikis have been added to this group.'),
+    t('OG membership from node'),
+    t('No comments'),
+    t('.'),
+    t(' comments'),
+    t('most recent'),
+    t('most active'),
+    t('All'),
+  );
   $export['commons_bw_wikis'] = $view;
 
   $view = new view();
@@ -209,6 +233,21 @@ function commons_wikis_views_default_views() {
       'fixed' => '',
       'label' => 'Content: Nid',
     ),
+  );
+  $translatables['commons_wikis_contributor_list'] = array(
+    t('Master'),
+    t('Contributors'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('revision user'),
+    t('[picture]<span>[name]</span>'),
+    t('All'),
+    t('Content pane'),
+    t('Commons'),
   );
   $export['commons_wikis_contributor_list'] = $view;
 
