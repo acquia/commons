@@ -96,6 +96,28 @@ function commons_search_views_default_views() {
   $handler = $view->new_display('page', 'Page', 'page_1');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['path'] = 'search/group/%';
+  $translatables['group_search'] = array(
+    t('Master'),
+    t('Search within group'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« first'),
+    t('‹ previous'),
+    t('next ›'),
+    t('last »'),
+    t('No results found.'),
+    t('OG membership from node'),
+    t('All'),
+    t('Search Terms'),
+    t('Page'),
+  );
   $export['group_search'] = $view;
 
   return $export;
