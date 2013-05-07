@@ -113,6 +113,27 @@ function commons_follow_user_views_default_views() {
   $handler->display->display_options['filters']['status']['value'] = '1';
   $handler->display->display_options['filters']['status']['group'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+  $translatables['commons_follow_user'] = array(
+    t('Master'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« first'),
+    t('‹ previous'),
+    t('next ›'),
+    t('last »'),
+    t('You aren\'t following anyone.'),
+    t('flag'),
+    t('flag_user'),
+    t('Person'),
+    t('Send email?'),
+  );
   $export['commons_follow_user'] = $view;
 
   $view = new view();
@@ -228,6 +249,32 @@ function commons_follow_user_views_default_views() {
   $handler->display->display_options['pager']['options']['id'] = '0';
   $handler->display->display_options['pager']['options']['quantity'] = '9';
   $handler->display->display_options['path'] = 'user/%/followers';
+  $translatables['commons_follow_user_followers'] = array(
+    t('Master'),
+    t('Followers'),
+    t('Show all followers'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('This person has no followers.'),
+    t('Commons Follow (Users)'),
+    t('Flag user'),
+    t('All'),
+    t('Content pane'),
+    t('more'),
+    t('Commons'),
+    t('Page'),
+    t('People who follow %1'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« first'),
+    t('‹ previous'),
+    t('next ›'),
+    t('last »'),
+  );
   $export['commons_follow_user_followers'] = $view;
 
   $view = new view();
@@ -337,6 +384,32 @@ function commons_follow_user_views_default_views() {
   $handler->display->display_options['pager']['options']['id'] = '0';
   $handler->display->display_options['pager']['options']['quantity'] = '9';
   $handler->display->display_options['path'] = 'user/%/following';
+  $translatables['commons_follow_user_following'] = array(
+    t('Master'),
+    t('Following'),
+    t('Show all following'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('No results summary'),
+    t('This person isn\'t following anyone.'),
+    t('Commons Follow (Users)'),
+    t('All'),
+    t('Content pane'),
+    t('more'),
+    t('Commons'),
+    t('Page'),
+    t('People %1 fllows'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« first'),
+    t('‹ previous'),
+    t('next ›'),
+    t('last »'),
+  );
   $export['commons_follow_user_following'] = $view;
 
   return $export;

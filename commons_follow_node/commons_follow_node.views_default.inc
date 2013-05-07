@@ -113,6 +113,27 @@ function commons_follow_node_views_default_views() {
   $handler->display->display_options['filters']['status']['value'] = 1;
   $handler->display->display_options['filters']['status']['group'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+  $translatables['commons_follow_node'] = array(
+    t('Master'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« first'),
+    t('‹ previous'),
+    t('next ›'),
+    t('last »'),
+    t('You\'re not following anything of this type.'),
+    t('flag'),
+    t('email_flag'),
+    t('Title'),
+    t('Send email?'),
+  );
   $export['commons_follow_node'] = $view;
 
   return $export;
