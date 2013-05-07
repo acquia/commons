@@ -142,6 +142,31 @@ function commons_site_homepage_views_default_views() {
   $handler->display->display_options['allow']['exposed_form'] = 0;
   $handler->display->display_options['allow']['fields_override'] = 0;
   $handler->display->display_options['inherit_panels_path'] = '1';
+  $translatables['commons_homepage_content'] = array(
+    t('Master'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« first'),
+    t('‹ previous'),
+    t('next ›'),
+    t('last »'),
+    t('No content matched the filters you selected.'),
+    t('last updated first'),
+    t('most active'),
+    t('All'),
+    t('Showing'),
+    t('I\'m'),
+    t('Content pane'),
+    t('What\'s going on?'),
+    t('Commons'),
+  );
   $export['commons_homepage_content'] = $view;
 
   return $export;
