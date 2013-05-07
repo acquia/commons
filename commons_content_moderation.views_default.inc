@@ -264,6 +264,32 @@ function commons_content_moderation_views_default_views() {
   $handler->display->display_options['tab_options']['type'] = 'tab';
   $handler->display->display_options['tab_options']['title'] = 'Reported comments';
   $handler->display->display_options['tab_options']['weight'] = '10';
+  $translatables['commons_content_moderation_reported_comments'] = array(
+    t('Defaults'),
+    t('Comments'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« first'),
+    t('‹ previous'),
+    t('next ›'),
+    t('last »'),
+    t('No comments have been reported...'),
+    t('flag'),
+    t('Content'),
+    t('counter'),
+    t('Comment'),
+    t('Title'),
+    t('Comment on'),
+    t('Comment Author'),
+    t('Page: Reported comments'),
+  );
   $export['commons_content_moderation_reported_comments'] = $view;
 
   $view = new view();
@@ -578,6 +604,30 @@ function commons_content_moderation_views_default_views() {
   $handler->display->display_options['menu']['context'] = 0;
   $handler->display->display_options['tab_options']['title'] = 'Reported content';
   $handler->display->display_options['tab_options']['weight'] = '';
+  $translatables['commons_content_moderation_reported_nodes'] = array(
+    t('Defaults'),
+    t('Reported content'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('No content has been reported.'),
+    t('abuse_node'),
+    t('author'),
+    t('counter'),
+    t('Content'),
+    t('Type'),
+    t('Title'),
+    t('# of Reports'),
+    t('.'),
+    t(','),
+    t('Last reported'),
+    t('Author'),
+    t('Body'),
+    t('Page'),
+  );
   $export['commons_content_moderation_reported_nodes'] = $view;
 
   return $export;
