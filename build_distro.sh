@@ -19,7 +19,7 @@ pull_git() {
       git pull origin 7.x-3.x
       cd ..
     done
-    cd $BUILD_PATH/repos/themes/contrib/commons_origins
+    cd $BUILD_PATH/repos/themes/commons_origins
     git pull origin 7.x-3.x
 }
 
