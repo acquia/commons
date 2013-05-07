@@ -96,6 +96,27 @@ function commons_polls_views_default_views() {
   $handler->display->display_options['filters']['type']['value'] = array(
     'poll' => 'poll',
   );
+  $translatables['commons_bw_polls'] = array(
+    t('Master'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« first'),
+    t('‹ previous'),
+    t('next ›'),
+    t('last »'),
+    t('No polls have been added to this group.'),
+    t('OG membership from node'),
+    t('most recent'),
+    t('most active'),
+    t('All'),
+  );
   $export['commons_bw_polls'] = $view;
 
   return $export;
