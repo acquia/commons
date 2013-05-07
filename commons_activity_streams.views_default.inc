@@ -162,6 +162,30 @@ function commons_activity_streams_views_default_views() {
   $handler->display->display_options['pane_category']['name'] = 'Commons';
   $handler->display->display_options['pane_category']['weight'] = '0';
   $handler->display->display_options['inherit_panels_path'] = '1';
+  $translatables['commons_activity_streams_activity'] = array(
+    t('Master'),
+    t('Recent site activity'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« first'),
+    t('‹ previous'),
+    t('next ›'),
+    t('last »'),
+    t('No activity matched the filters you selected.'),
+    t('Content entity referenced from field_target_nodes'),
+    t('All'),
+    t('Show'),
+    t('Activity (Sidebar)'),
+    t('Commons'),
+    t('Activity - Full view'),
+  );
   $export['commons_activity_streams_activity'] = $view;
 
   $view = new view();
@@ -284,6 +308,29 @@ function commons_activity_streams_views_default_views() {
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['pane_category']['name'] = 'Commons';
   $handler->display->display_options['pane_category']['weight'] = '0';
+  $translatables['commons_activity_streams_user_activity'] = array(
+    t('Master'),
+    t('Recent site activity'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« first'),
+    t('‹ previous'),
+    t('next ›'),
+    t('last »'),
+    t('This person doesn\'t have any activity on the site yet.'),
+    t('Content entity referenced from field_target_nodes'),
+    t('All'),
+    t('Activity (Sidebar)'),
+    t('Commons'),
+    t('Activity - Full view'),
+  );
   $export['commons_activity_streams_user_activity'] = $view;
 
   return $export;
