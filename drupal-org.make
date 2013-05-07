@@ -13,7 +13,7 @@ projects[addressfield_tokens][version] = "1.3"
 
 projects[acquia_connector][type] = "module"
 projects[acquia_connector][subdir] = "contrib"
-projects[acquia_connector][version] = "2.8"
+projects[acquia_connector][version] = "2.9"
 
 projects[advancedqueue][type] = "module"
 projects[advancedqueue][subdir] = "contrib"
@@ -21,7 +21,7 @@ projects[advancedqueue][version] = "1.0-alpha2"
 
 projects[apachesolr][type] = "module"
 projects[apachesolr][subdir] = "contrib"
-projects[apachesolr][version] = "1.1"
+projects[apachesolr][version] = "1.2"
 
 projects[apachesolr_og][type] = "module"
 projects[apachesolr_og][subdir] = "contrib"
@@ -60,7 +60,7 @@ projects[custom_search][subdir] = "contrib"
 projects[custom_search][download][type] = "git"
 projects[custom_search][download][url] = "http://git.drupal.org/project/custom_search.git"
 projects[custom_search][download][branch] = "7.x-1.x"
-projects[custom_search][download][revision] = "e6be0ee6f5f7c7e56f09e79d0d3351fd193c0840"
+projects[custom_search][download][revision] = "0d55d1e379931e7b202d8346e092cc73bdcdaa22"
 
 projects[date][type] = "module"
 projects[date][subdir] = "contrib"
@@ -85,7 +85,7 @@ projects[email_registration][version] = "1.1"
 
 projects[entity][type] = "module"
 projects[entity][subdir] = "contrib"
-projects[entity][version] = "1.0"
+projects[entity][version] = "1.1"
 
 ; Force LANGUAGE_NONE entities to still display within rendered entities.
 ; http://drupal.org/node/1782134
@@ -100,7 +100,7 @@ projects[entityreference][subdir] = "contrib"
 projects[entityreference][download][type] = "git"
 projects[entityreference][download][url] = "http://git.drupal.org/project/entityreference.git"
 projects[entityreference][download][branch] = "7.x-1.x"
-projects[entityreference][download][revision] = "06089a92ee8b269f153064ad3090ce6b464f38aa"
+projects[entityreference][download][revision] = "1c176daef3e7483389cbebeb34784b3af6521f7f"
 
 ; Profile has no recommended release
 projects[edit_profile][type] = "module"
@@ -109,18 +109,14 @@ projects[edit_profile][version] = "1.0-beta2"
 
 projects[entityreference_prepopulate][type] = "module"
 projects[entityreference_prepopulate][subdir] = "contrib"
-projects[entityreference_prepopulate][version] = "1.2"
+projects[entityreference_prepopulate][version] = "1.3"
 
 projects[features][type] = "module"
 projects[features][subdir] = "contrib"
 projects[features][download][type] = "git"
 projects[features][download][url] = "http://git.drupal.org/project/features.git"
 projects[features][download][branch] = "7.x-2.x"
-projects[features][download][revision] = "63db687c75d7880bb5d2652fa9227e3ca6e4e9f0"
-
-; Separate fields from field instances.
-; http://drupal.org/node/1064472#comment-7042482
-projects[features][patch][] = "http://drupal.org/files/features-instances-1064472-59.patch"
+projects[features][download][revision] = "54e2810bee966777426f0ca5294c6e7252ea7549"
 
 projects[flag][type] = "module"
 projects[flag][subdir] = "contrib"
@@ -163,7 +159,7 @@ projects[message][subdir] = "contrib"
 projects[message][download][type] = "git"
 projects[message][download][url] = "http://git.drupal.org/project/message.git"
 projects[message][download][branch] = "7.x-1.x"
-projects[message][download][revision] = "5ae12e8c0b7482f8525106825009409f3b9b7140"
+projects[message][download][revision] = "76086c7e2cb5af5e16a88b8ef16bb232347d7162"
 
 ; Make message access alterable.
 ; http://drupal.org/node/1920560#comment-7080942
@@ -174,14 +170,14 @@ projects[message_notify][subdir] = "contrib"
 projects[message_notify][download][type] = "git"
 projects[message_notify][download][url] = "http://git.drupal.org/project/message_notify.git"
 projects[message_notify][download][branch] = "7.x-2.x"
-projects[message_notify][download][revision] = "f8731d574f427dda3bc99e75f541549305655309"
+projects[message_notify][download][revision] = "e546b0a6e3d2dfd48f4fd3a4d45806c066c9a9bc"
 
 projects[message_subscribe][type] = "module"
 projects[message_subscribe][subdir] = "contrib"
 projects[message_subscribe][download][type] = "git"
 projects[message_subscribe][download][url] = "http://git.drupal.org/project/message_subscribe.git"
 projects[message_subscribe][download][branch] = "7.x-1.x"
-projects[message_subscribe][download][revision] = "0063ab0fd922a5dbd2a052114a75a60e10e6ab07"
+projects[message_subscribe][download][revision] = "9b1d2615621283d39343e4be433fc589fce5fb9d"
 
 ; Remove "email" as default notifier.
 ; http://drupal.org/node/1828184#comment-7081868
@@ -193,7 +189,7 @@ projects[memcache][version] = "1.0"
 
 projects[metatag][type] = "module"
 projects[metatag][subdir] = "contrib"
-projects[metatag][version] = "1.0-beta5"
+projects[metatag][version] = "1.0-beta7"
 
 ; Support for rel=author link in head
 ; http://drupal.org/node/1865228#comment-6839604
@@ -205,7 +201,7 @@ projects[module_filter][version] = "1.7"
 
 projects[mollom][type] = "module"
 projects[mollom][subdir] = "contrib"
-projects[mollom][version] = "2.4"
+projects[mollom][version] = "2.6"
 
 projects[oauth][type] = "module"
 projects[oauth][subdir] = "contrib"
@@ -220,7 +216,7 @@ projects[oauthconnector][download][revision] = "0ce7ac9614710c0f68d0a58cb4ae4667
 
 projects[og][type] = "module"
 projects[og][subdir] = "contrib"
-projects[og][version] = "2.1"
+projects[og][version] = "2.2"
 
 ; og_group_ref field should respect og_user_access()
 ; http://drupal.org/node/1902086#comment-7026516
@@ -259,7 +255,7 @@ projects[quicktabs][subdir] = "contrib"
 projects[quicktabs][download][type] = "git"
 projects[quicktabs][download][url] = "http://git.drupal.org/project/quicktabs.git"
 projects[quicktabs][download][branch] = "7.x-3.x"
-projects[quicktabs][download][revision] = "0788eba"
+projects[quicktabs][download][revision] = "89f7fd0b7313782d0f7504996daa36bde798ec79"
 
 projects[radioactivity][type] = "module"
 projects[radioactivity][subdir] = "contrib"
@@ -361,7 +357,7 @@ projects[token][version] = "1.5"
 
 projects[views][type] = "module"
 projects[views][subdir] = "contrib"
-projects[views][version] = "3.6"
+projects[views][version] = "3.7"
 
 
 projects[views_field_view][type] = "module"
