@@ -32,6 +32,61 @@ function commons_follow_features_pipe_alter(&$pipe, $data, $export) {
   }
 }
 
+/**
+ * Implements hook_views_default_views_alter().
+ *
+ * Adding the "Following" filter to the group-browsing-widget views.
+ */
+function commons_follow_views_default_views_alter(&$views) {
+  // Add a "most active" exposed sort to Commons BW views.
+  foreach ($views as $view_id => $view) {
+    if (strpos($view_id, 'commons_bw_') !== 0) {
+      continue;
+    }
+
+    $handler = $views[$view_id]->display['default']->handler;
+
+    // Relationship to the "Following" flag.
+    $handler->display->display_options['relationships']['flag_content_rel']['id'] = 'flag_content_rel';
+    $handler->display->display_options['relationships']['flag_content_rel']['table'] = 'node';
+    $handler->display->display_options['relationships']['flag_content_rel']['field'] = 'flag_content_rel';
+    $handler->display->display_options['relationships']['flag_content_rel']['ui_name'] = 'Following';
+    $handler->display->display_options['relationships']['flag_content_rel']['label'] = 'following';
+    $handler->display->display_options['relationships']['flag_content_rel']['required'] = 0;
+    $handler->display->display_options['relationships']['flag_content_rel']['flag'] = 'commons_follow_node';
+
+    // Exposed "Following" filter.
+    $handler->display->display_options['filters']['flagged']['id'] = 'flagged';
+    $handler->display->display_options['filters']['flagged']['table'] = 'flag_content';
+    $handler->display->display_options['filters']['flagged']['field'] = 'flagged';
+    $handler->display->display_options['filters']['flagged']['relationship'] = 'flag_content_rel';
+    $handler->display->display_options['filters']['flagged']['ui_name'] = 'Following';
+    $handler->display->display_options['filters']['flagged']['value'] = '1';
+    $handler->display->display_options['filters']['flagged']['exposed'] = TRUE;
+    $handler->display->display_options['filters']['flagged']['expose']['operator_id'] = '';
+    $handler->display->display_options['filters']['flagged']['expose']['label'] = 'Following';
+    $handler->display->display_options['filters']['flagged']['expose']['operator'] = 'flagged_op';
+    $handler->display->display_options['filters']['flagged']['expose']['identifier'] = 'following';
+    $handler->display->display_options['filters']['flagged']['expose']['required'] = FALSE;
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function commons_follow_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id != 'views_exposed_form' || strpos($form['#id'],'views-exposed-form-commons-bw') !== 0 || empty($form['following'])) {
+    return;
+  }
+
+  $form['#info']['filter-flagged']['label'] = t('Limited to');
+
+  $form['following']['#options'] = array(
+    'All' => t('All content'),
+    1 => t("Content you're following"),
+    0 => t("Content you're not following"),
+  );
+}
 
 /**
  * Implements hook_flag_export_alter().
