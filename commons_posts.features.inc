@@ -29,7 +29,7 @@ function commons_posts_node_info() {
     'post' => array(
       'name' => t('Post'),
       'base' => 'node_content',
-      'description' => 'Start a conversation or share some information.',
+      'description' => t('Start a conversation or share some information.'),
       'has_title' => '1',
       'title_label' => t('Title'),
       'help' => '',

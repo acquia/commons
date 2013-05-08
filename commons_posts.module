@@ -17,6 +17,7 @@ function commons_posts_commons_bw_group_widget() {
       'vid' => 'commons_bw_posts',
       'display' => 'default',
       'weight' => -1,
+      'bundle' => 'post',
     ),
   );
 }
@@ -40,6 +41,34 @@ function commons_posts_commons_bw_create_all_widget($group) {
   }
 }
 
+/**
+ * Implements hook_form_FROM_ID_alter().
+ */
+function commons_posts_form_commons_bw_partial_node_form_alter(&$form, &$form_state) {
+  if (empty($form['#entity']) || $form['#entity']->type != 'post') {
+    return;
+  }
+
+  $form['body'][LANGUAGE_NONE][0]['#title_display'] = 'invisible';
+  $form['body'][LANGUAGE_NONE][0]['#required'] = TRUE;
+  $form['body'][LANGUAGE_NONE][0]['#placeholder'] = t("What's on your mind?");
+  $form['body'][LANGUAGE_NONE][0]['#resizable'] = FALSE;
+
+  $form['actions']['submit']['#value'] = t('Post');
+  $form['#pre_render'][] = 'commons_posts_form_commons_bw_partial_node_form_after_build';
+}
+
+/**
+ * After-build call-back.
+ * See commons_posts_form_commons_bw_partial_node_form_alter().
+ */
+function commons_posts_form_commons_bw_partial_node_form_after_build($form) {
+  $form['body'][LANGUAGE_NONE][0]['#pre_render'] = array();
+  $form['body'][LANGUAGE_NONE][0]['format']['#access'] = FALSE;
+  $form['body'][LANGUAGE_NONE][0]['value']['#rows'] = 3;
+
+  return $form;
+}
 
 /**
  * Implements hook_commons_entity_integration.
@@ -51,18 +80,6 @@ function commons_posts_commons_entity_integration() {
       ),
     ),
   );
-}
-
-/**
-* Implements hook_views_pre_render().
-*/
-function commons_posts_views_pre_render(&$view) {
-  if ($view->name == 'commons_bw_posts') {
-    $group_id = $view->args[0];
-    if (og_user_access('node', $group_id, 'create post content')) {
-      $view->attachment_before = l(t('Create a post'), 'node/add/post', array('query' => array('og_group_ref' => $group_id)));
-    }
-  }
 }
 
 /**
@@ -89,5 +106,16 @@ function commons_posts_views_pre_render(&$view) {
     if (isset($items[$key])) {
       $items[$key]->value['node']['post'] = 1;
     }
+  }
+}
+
+/**
+ * Implements hook_views_default_views_alter().
+ *
+ * Display posts on the browsing widget main view.
+ */
+function commons_posts_views_default_views_alter(&$views) {
+  if (!empty($views['commons_bw_all'])) {
+    $views['commons_bw_all']->display['default']->display_options['filters']['type']['value']['post'] = 'post';
   }
 }
