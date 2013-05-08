@@ -88,8 +88,8 @@ function commons_site_homepage_default_page_manager_pages() {
     $pane = new stdClass();
     $pane->pid = 'new-1';
     $pane->panel = 'two_66_33_first';
-    $pane->type = 'views_panes';
-    $pane->subtype = 'commons_homepage_content-panel_pane_1';
+    $pane->type = 'commons_bw_group';
+    $pane->subtype = 'commons_bw_group';
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array();
