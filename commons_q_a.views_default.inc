@@ -94,6 +94,27 @@ function commons_q_a_views_default_views() {
   $handler->display->display_options['filters']['type']['value'] = array(
     'question' => 'question',
   );
+  $translatables['commons_bw_q_a'] = array(
+    t('Master'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« first'),
+    t('‹ previous'),
+    t('next ›'),
+    t('last »'),
+    t('No questions have been asked in this group.'),
+    t('OG membership from node'),
+    t('most recent'),
+    t('most active'),
+    t('All'),
+  );
   $export['commons_bw_q_a'] = $view;
 
   $view = new view();
@@ -181,6 +202,27 @@ function commons_q_a_views_default_views() {
     ),
   );
   $handler->display->display_options['inherit_panels_path'] = '1';
+  $translatables['commons_question_answers'] = array(
+    t('Master'),
+    t('Answers'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« first'),
+    t('‹ previous'),
+    t('next ›'),
+    t('last »'),
+    t('This question hasn\'t been answered yet. You can be the first to answer it!'),
+    t('All'),
+    t('Content pane'),
+    t('Commons'),
+  );
   $export['commons_question_answers'] = $view;
 
   return $export;
