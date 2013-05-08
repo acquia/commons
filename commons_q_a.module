@@ -30,6 +30,7 @@ function commons_q_a_commons_bw_group_widget() {
       'vid' => 'commons_bw_q_a',
       'display' => 'default',
       'weight' => 5,
+      'bundle' => 'question',
     ),
   );
 }
@@ -55,36 +56,52 @@ function commons_q_a_node_view($node, $view_mode) {
     return $node;
   }
 }
+
+/**
+ * Implements hook_form_FROM_ID_alter().
+ */
+function commons_q_a_form_commons_bw_partial_node_form_alter(&$form, &$form_state) {
+  if (empty($form['#entity']) || $form['#entity']->type != 'question') {
+    return;
+  }
+  
+  $form['title']['#markup'] = '<h3>' . t('Ask a question') . '</h3>';
+  $form['body'][LANGUAGE_NONE][0]['#title_display'] = 'invisible';
+  $form['body'][LANGUAGE_NONE][0]['#required'] = TRUE;
+  $form['body'][LANGUAGE_NONE][0]['#placeholder'] = t('Ask anything. Let the community answer openly.');
+  $form['body'][LANGUAGE_NONE][0]['#resizable'] = FALSE;
+
+  $form['actions']['submit']['#value'] = t('Ask');
+  $form['#pre_render'][] = 'commons_q_a_form_commons_bw_partial_node_form_after_build';
+}
+
+/**
+ * After-build call-back.
+ * See commons_q_a_form_commons_bw_partial_node_form_alter().
+ */
+function commons_q_a_form_commons_bw_partial_node_form_after_build($form) {
+  $form['body'][LANGUAGE_NONE][0]['#pre_render'] = array();
+  $form['body'][LANGUAGE_NONE][0]['format']['#access'] = FALSE;
+  $form['body'][LANGUAGE_NONE][0]['value']['#rows'] = 3;
+
+  return $form;
+}
+
 /**
  * Implements hook_views_default_views_alter().
+ *
+ * Display questions on the browsing widget main view.
  */
 function commons_q_a_views_default_views_alter(&$views) {
-  if (isset($views['commons_bw_all'])) {
-    // Answers aren't meant to display on the group browswing widget because
-    // they appear on question landing pages.
-    $views['commons_bw_all']->display['default']->display_options['filters']['type']['id'] = 'type';
-    $views['commons_bw_all']->display['default']->display_options['filters']['type']['table'] = 'node';
-    $views['commons_bw_all']->display['default']->display_options['filters']['type']['field'] = 'type';
-    $views['commons_bw_all']->display['default']->display_options['filters']['type']['operator'] = 'not in';
-    if (!isset($views['commons_bw_all']->display['default']->display_options['filters']['type']['value'])) {
-      $views['commons_bw_all']->display['default']->display_options['filters']['type']['value'] = array('answer' => 'answer');
-    }
-    else {
-      $views['commons_bw_all']->display['default']->display_options['filters']['type']['value']['answer'] = 'answer';
-    }
+  if (!empty($views['commons_bw_all'])) {
+    $views['commons_bw_all']->display['default']->display_options['filters']['type']['value']['question'] = 'question';
   }
 }
 
 /**
-* Implements hook_views_pre_render().
-*/
+ * Implements hook_views_pre_render().
+ */
 function commons_q_a_views_pre_render(&$view) {
-  if ($view->name == 'commons_bw_q_a') {
-    $group_id = $view->args[0];
-    if (og_user_access('node', $group_id, 'create question content')) {
-      $view->attachment_before = l(t('Ask a question'), 'node/add/question', array('query' => array('og_group_ref' => $group_id)));
-    }
-  }
   if ($view->name == 'commons_question_answers' && !empty($view->args[0])) {
     // If the user has access to post into any of the groups associated
     // with the question, embed a simplified answer node form.
