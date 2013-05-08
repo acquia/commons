@@ -501,35 +501,7 @@ function commons_groups_tokens($type, $tokens, $data = array(), $options = array
       $related_groups = array_values($related_groups);
       // Generate the appropriate text depending on the number of groups
       // associated with the message:
-
-      // In 1 group: "in the x group"
-      if (count($related_groups) == 1) {
-        $text = t(' in the !group group', array('!group' => l($related_groups[0]->title, 'node/' . $related_groups[0]->nid))) ;
-        $replacements['[commons-groups:in-groups-text]'] = $text;
-      }
-
-      // In 2 groups: "in the x and y groups"
-      if (count($related_groups) == 2) {
-        $text = t(' in the !group-0 and !group-1 groups', array('!group-0' => l($related_groups[0]->title, 'node/' . $related_groups[0]->nid), '!group-1' => l($related_groups[1]->title, 'node/' . $related_groups[1]->nid)));
-      }
-
-      // In more than 2 groups: "in the x, y and z groups"
-      if (count($related_groups) > 2) {
-        // Separate the last group.
-        $last_group = array_pop($related_groups);
-        $text = ' in the ';
-        // Prepare tokens for t() for each of the other groups.
-        foreach ($related_groups as $key => $this_group) {
-          $text .= "!group-$key, ";
-          $t_args["!group-$key"] = l($this_group->title, 'node/' . $this_group->nid);
-        }
-        // Prepare the last group token.
-        $text .= " and !group-$last_group->nid groups.";
-        $t_args["!group-$last_group->nid"] = l($last_group->title, 'node/' . $last_group->nid);
-        // Prepare the full text with all of the groups and their tokens:
-        $text = t($text, $t_args);
-      }
-      $replacements['[commons-groups:in-groups-text]'] = $text;
+      $replacements['[commons-groups:in-groups-text]'] = commons_groups_related_groups_text($related_groups);
       return $replacements;
     }
   }
@@ -542,6 +514,44 @@ function commons_groups_message_partial_default() {
     'safe_value' => '[commons-groups:in-groups-text]',
   );
   return $partial;
+}
+
+/**
+ * Build the related-groups text for nodes.
+ *
+ * @param $related_groups
+ *   Array of groups referenced by the node.
+ *
+ * @return
+ *   String containing the related groups.
+ */
+function commons_groups_related_groups_text($related_groups) {
+  // In 1 group: "in the x group"
+  if (count($related_groups) == 1) {
+    return t(' in the !group group', array('!group' => l($related_groups[0]->title, 'node/' . $related_groups[0]->nid))) ;
+  }
+
+  // In 2 groups: "in the x and y groups"
+  if (count($related_groups) == 2) {
+    return t(' in the !group-0 and !group-1 groups', array('!group-0' => l($related_groups[0]->title, 'node/' . $related_groups[0]->nid), '!group-1' => l($related_groups[1]->title, 'node/' . $related_groups[1]->nid)));
+  }
+
+  // In more than 2 groups: "in the x, y and z groups"
+  if (count($related_groups) > 2) {
+    // Separate the last group.
+    $last_group = array_pop($related_groups);
+    $text = ' in the ';
+    // Prepare tokens for t() for each of the other groups.
+    foreach ($related_groups as $key => $this_group) {
+      $text .= "!group-$key, ";
+      $t_args["!group-$key"] = l($this_group->title, 'node/' . $this_group->nid);
+    }
+    // Prepare the last group token.
+    $text .= " and !group-$last_group->nid groups.";
+    $t_args["!group-$last_group->nid"] = l($last_group->title, 'node/' . $last_group->nid);
+    // Prepare the full text with all of the groups and their tokens:
+    return t($text, $t_args);
+  }
 }
 
 function commons_groups_group_submission_message($form, &$form_state) {
@@ -788,6 +798,7 @@ function commons_groups_commons_bw_group_widget() {
       'display' => 'default',
       'weight' => -10,
       'default' => 1,
+      'bundle' => 'post',
     ),
   );
 }
