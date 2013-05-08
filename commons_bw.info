@@ -3,3 +3,9 @@ name = Commons Tabbed Browsing Widget
 package = "Commons - Building blocks"
 dependencies[] = quicktabs
 dependencies[] = quicktabs_tabstyles
+dependencies[] = title
+
+features[field_base][] = title_field
+
+; Views handlers
+files[] = includes/views/handlers/commons_bw_handler_node_partial_form.inc

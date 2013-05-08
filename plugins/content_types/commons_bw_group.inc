@@ -18,7 +18,7 @@ $plugin = array(
 */
 function commons_bw_commons_bw_group_content_type_render($subtype, $conf, $panel_args, $context) {
   $context = array_shift($context);
-  $node = $context->data;
+  $node = !empty($context->data) ? $context->data : NULL;
 
   $block = new stdClass();
   $block->title = '';

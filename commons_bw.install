@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * Add the Title field to all browsing widget-enabled content types.
+ * per http://drupal.org/node/1969088.
+ */
+function commons_bw_update_7301() {
+  module_enable(array('title'));
+  $revert = array(
+    'commons_bw' => array(
+      'field_base', 'field_instance',
+    ),
+  );
+  features_revert($revert);
+  return array();
+}
