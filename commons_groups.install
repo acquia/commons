@@ -100,7 +100,18 @@ function commons_groups_update_3107() {
  */
 function commons_groups_update_3108() {
   $revert = array(
-      'commons_groups' => array('field_base', 'field_instance'),
+    'commons_groups' => array('field_instance', 'views_view'),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/**
+ * Update the group_group field per http://drupal.org/node/1948224.
+ */
+function commons_groups_update_3109() {
+  $revert = array(
+    'commons_groups' => array('field_base', 'field_instance'),
   );
   features_revert($revert);
   return array();

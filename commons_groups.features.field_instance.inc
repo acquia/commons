@@ -297,7 +297,7 @@ function commons_groups_field_definition_group(&$field_instances, $entity_type, 
   );
 
   // Exported field_instance: 'node-group-group_group'
-  $field_instances["$entity_type-$bundle-group_group"] = array(
+  $field_instances["$entity_type-$bundle-" . OG_GROUP_FIELD] = array(
     'bundle' => $bundle,
     'default_value' => array(
       0 => array(
@@ -308,10 +308,13 @@ function commons_groups_field_definition_group(&$field_instances, $entity_type, 
     'description' => 'Determine if this is an OG group.',
     'display' => array(
       'default' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => '3',
+        'label' => 'hidden',
+        'module' => 'commons_groups',
+        'settings' => array(
+          'field_name' => '0',
+        ),
+        'type' => 'commons_groups_group_subscribe',
+        'weight' => '0',
       ),
       'teaser' => array(
         'label' => 'above',
@@ -322,7 +325,7 @@ function commons_groups_field_definition_group(&$field_instances, $entity_type, 
     ),
     'display_label' => 1,
     'entity_type' => 'node',
-    'field_name' => 'group_group',
+    'field_name' => OG_GROUP_FIELD,
     'label' => 'Group',
     'required' => FALSE,
     'settings' => array(

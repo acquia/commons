@@ -236,12 +236,17 @@ function commons_groups_pages_panelizer_defaults() {
     $pane = new stdClass();
     $pane->pid = 'new-7';
     $pane->panel = 'one_main';
-    $pane->type = 'token';
-    $pane->subtype = 'node:commons-groups-group-contributors-count-topics';
+    $pane->type = 'entity_field';
+    $pane->subtype = 'node:group_group';
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array(
-      'sanitize' => 0,
+      'label' => 'hidden',
+      'formatter' => 'commons_groups_group_subscribe',
+      'delta_limit' => 0,
+      'delta_offset' => '0',
+      'delta_reversed' => FALSE,
+      'formatter_settings' => array(),
       'context' => 'panelizer',
       'override_title' => 0,
       'override_title_text' => '',
@@ -260,6 +265,29 @@ function commons_groups_pages_panelizer_defaults() {
     $pane->pid = 'new-8';
     $pane->panel = 'one_main';
     $pane->type = 'token';
+    $pane->subtype = 'node:commons-groups-group-contributors-count-topics';
+    $pane->shown = TRUE;
+    $pane->access = array();
+    $pane->configuration = array(
+      'sanitize' => 0,
+      'context' => 'panelizer',
+      'override_title' => 0,
+      'override_title_text' => '',
+    );
+    $pane->cache = array();
+    $pane->style = array(
+      'settings' => NULL,
+    );
+    $pane->css = array();
+    $pane->extras = array();
+    $pane->position = 1;
+    $pane->locks = array();
+    $display->content['new-8'] = $pane;
+    $display->panels['one_main'][1] = 'new-8';
+    $pane = new stdClass();
+    $pane->pid = 'new-9';
+    $pane->panel = 'one_main';
+    $pane->type = 'token';
     $pane->subtype = 'node:flag-commons-follow-group-link';
     $pane->shown = TRUE;
     $pane->access = array();
@@ -275,12 +303,12 @@ function commons_groups_pages_panelizer_defaults() {
     );
     $pane->css = array();
     $pane->extras = array();
-    $pane->position = 1;
+    $pane->position = 2;
     $pane->locks = array();
-    $display->content['new-8'] = $pane;
-    $display->panels['one_main'][1] = 'new-8';
+    $display->content['new-9'] = $pane;
+    $display->panels['one_main'][2] = 'new-9';
     $pane = new stdClass();
-    $pane->pid = 'new-9';
+    $pane->pid = 'new-10';
     $pane->panel = 'one_main';
     $pane->type = 'entity_field';
     $pane->subtype = 'node:field_group_logo';
@@ -306,12 +334,12 @@ function commons_groups_pages_panelizer_defaults() {
     );
     $pane->css = array();
     $pane->extras = array();
-    $pane->position = 2;
+    $pane->position = 3;
     $pane->locks = array();
-    $display->content['new-9'] = $pane;
-    $display->panels['one_main'][2] = 'new-9';
+    $display->content['new-10'] = $pane;
+    $display->panels['one_main'][3] = 'new-10';
     $pane = new stdClass();
-    $pane->pid = 'new-10';
+    $pane->pid = 'new-11';
     $pane->panel = 'one_main';
     $pane->type = 'entity_field';
     $pane->subtype = 'node:body';
@@ -336,12 +364,12 @@ function commons_groups_pages_panelizer_defaults() {
     );
     $pane->css = array();
     $pane->extras = array();
-    $pane->position = 3;
+    $pane->position = 4;
     $pane->locks = array();
-    $display->content['new-10'] = $pane;
-    $display->panels['one_main'][3] = 'new-10';
+    $display->content['new-11'] = $pane;
+    $display->panels['one_main'][4] = 'new-11';
     $pane = new stdClass();
-    $pane->pid = 'new-11';
+    $pane->pid = 'new-12';
     $pane->panel = 'one_main';
     $pane->type = 'views';
     $pane->subtype = 'commons_groups_recent_content';
@@ -364,7 +392,7 @@ function commons_groups_pages_panelizer_defaults() {
         0 => 'panelizer.nid',
       ),
       'override_title' => 1,
-      'override_title_text' => t('Recent content'),
+      'override_title_text' => 'Recent content',
     );
     $pane->cache = array();
     $pane->style = array(
@@ -372,12 +400,12 @@ function commons_groups_pages_panelizer_defaults() {
     );
     $pane->css = array();
     $pane->extras = array();
-    $pane->position = 4;
+    $pane->position = 5;
     $pane->locks = array();
-    $display->content['new-11'] = $pane;
-    $display->panels['one_main'][4] = 'new-11';
+    $display->content['new-12'] = $pane;
+    $display->panels['one_main'][5] = 'new-12';
     $pane = new stdClass();
-    $pane->pid = 'new-12';
+    $pane->pid = 'new-13';
     $pane->panel = 'one_main';
     $pane->type = 'views_panes';
     $pane->subtype = 'commons_contributors_group-panel_pane_1';
@@ -394,10 +422,10 @@ function commons_groups_pages_panelizer_defaults() {
     );
     $pane->css = array();
     $pane->extras = array();
-    $pane->position = 5;
+    $pane->position = 6;
     $pane->locks = array();
-    $display->content['new-12'] = $pane;
-    $display->panels['one_main'][5] = 'new-12';
+    $display->content['new-13'] = $pane;
+    $display->panels['one_main'][6] = 'new-13';
   $display->hide_title = PANELS_TITLE_FIXED;
   $display->title_pane = '0';
   $panelizer->display = $display;
