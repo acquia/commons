@@ -17,29 +17,10 @@ function commons_polls_commons_bw_group_widget() {
       'vid' => 'commons_bw_polls',
       'display' => 'default',
       'weight' => 10,
+      'bundle' => 'poll',
     ),
   );
 }
-
-/**
- * Implements hook_commons_bw_create_all_widget().
- */
-function commons_polls_commons_bw_create_all_widget($group) {
-  if (og_user_access('node', $group->nid, 'create poll content')) {
-    $link = l(t('Create a poll'),'node/add/poll',
-    array('attributes' => array('class' => 'commons-polls-create'), 'query' => array('og_group_ref' => $group->nid))
-    );
-    return array(
-      'commons_polls' => array(
-        'default' => TRUE,
-        'link' => $link,
-        'text' =>  t('Measure opinions on a topic'),
-        '#weight' => -1,
-      ),
-    );
-  }
-}
-
 
 /**
  * Implements hook_commons_entity_integration.
@@ -51,18 +32,6 @@ function commons_polls_commons_entity_integration() {
       ),
     ),
   );
-}
-
-/**
-* Implements hook_views_pre_render().
-*/
-function commons_polls_views_pre_render(&$view) {
-  if ($view->name == 'commons_bw_polls') {
-    $group_id = $view->args[0];
-    if (og_user_access('node', $group_id, 'create poll content')) {
-      $view->attachment_before = l(t('Create a poll'), 'node/add/poll', array('query' => array('og_group_ref' => $group_id)));
-    }
-  }
 }
 
 /**
@@ -90,4 +59,89 @@ function commons_polls_views_pre_render(&$view) {
       $items[$key]->value['node']['poll'] = 1;
     }
   }
+}
+
+/**
+ * Implements hook_views_default_views_alter().
+ *
+ * Display polls on the browsing widget main view.
+ */
+function commons_polls_views_default_views_alter(&$views) {
+  if (!empty($views['commons_bw_all'])) {
+    $views['commons_bw_all']->display['default']->display_options['filters']['type']['value']['poll'] = 'poll';
+  }
+}
+
+/**
+ * Implements hook_form_FROM_ID_alter().
+ */
+function commons_polls_form_commons_bw_partial_node_form_alter(&$form, &$form_state) {
+  if (empty($form['#entity']) || $form['#entity']->type != 'poll') {
+    return;
+  }
+
+  $form['body'][LANGUAGE_NONE][0]['#title_display'] = 'invisible';
+  $form['body'][LANGUAGE_NONE][0]['#required'] = TRUE;
+  $form['body'][LANGUAGE_NONE][0]['#placeholder'] = t('Enter a question, e.g. "What is your favorite color?"');
+  $form['body'][LANGUAGE_NONE][0]['#resizable'] = FALSE;
+  $form['body']['#weight'] = -10;
+
+  // Add the poll choices widget.
+  $form['choice_wrapper'] = array(
+    '#tree' => FALSE,
+    '#weight' => -4,
+    '#prefix' => '<div class="clearfix" id="poll-choice-wrapper">',
+    '#suffix' => '</div>',
+  );
+
+  // Container for just the poll choices.
+  $form['choice_wrapper']['choice'] = array(
+    '#prefix' => '<div id="poll-choices">',
+    '#suffix' => '</div>',
+    '#theme' => 'poll_choices',
+  );
+
+  for ($delta = 0; $delta < 10; $delta++) {
+    $form['choice_wrapper']['choice'][$delta] = _poll_choice_form($delta, NULL, '', 0, $delta);
+
+    if ($delta >= 2) {
+      $form['choice_wrapper']['choice'][$delta]['#attributes'] = array('class' => array('hidden'));
+    }
+  }
+
+  $form['choice_wrapper']['add_choice'] = array(
+    '#markup' => '<a href="#" id="add-choice">' . t('Add more choices') . '</a>',
+  );
+
+  $form['#attached']['js'] = array(drupal_get_path('module', 'commons_polls') . '/js/commons_polls_partial_form.js');
+
+  $form['actions']['submit']['#value'] = t('Create');
+
+  $form['#pre_render'][] = 'commons_polls_form_commons_bw_partial_node_form_after_build';
+
+  // Submit handler to process the choices.
+  array_unshift($form['#submit'], 'commons_polls_form_commons_bw_partial_node_form_submit');
+}
+
+/**
+ * Submit handler.
+ * Set poll settings on the node.
+ */
+function commons_polls_form_commons_bw_partial_node_form_submit(&$form, &$form_state) {
+  $node = $form['#entity'];
+  $node->choice = $form_state['values']['choice'];
+  $node->runtime = 0;
+  $node->active = TRUE;
+}
+
+/**
+ * After-build call-back.
+ * See commons_polls_form_commons_bw_partial_node_form_alter().
+ */
+function commons_polls_form_commons_bw_partial_node_form_after_build($form) {
+  $form['body'][LANGUAGE_NONE][0]['#pre_render'] = array();
+  $form['body'][LANGUAGE_NONE][0]['format']['#access'] = FALSE;
+  $form['body'][LANGUAGE_NONE][0]['value']['#rows'] = 3;
+
+  return $form;
 }
