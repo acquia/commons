@@ -408,7 +408,7 @@ function commons_groups_og_user_access_alter(&$perm, $context) {
   }
 
   $wrapper = entity_metadata_wrapper($group_type, $group);
-  $access_create = $wrapper->field_og_subscribe_settings->value() == 'anyone';
+  $access_create = $account->uid && $wrapper->field_og_subscribe_settings->value() == 'anyone';
 
   // Make sure user can view group (i.e. it's not private).
   $commons_groups_entity_types = commons_groups_get_group_content_entity_types();
