@@ -433,7 +433,7 @@ function commons_trusted_contacts_field_default_field_instances() {
     $group_bundles['node'] = array('group' => TRUE);
   }
   foreach(array_keys($group_bundles['node']) as $bundle) {
-    commons_groups_field_definition_group($field_instances, 'node', $bundle);
+    commons_trusted_contacts_field_definition_group($field_instances, 'node', $bundle);
   }
 
   // Translatables
@@ -450,8 +450,7 @@ function commons_trusted_contacts_field_default_field_instances() {
   return $field_instances;
 }
 
-
-function commons_groups_field_definition_group(&$field_instances, $entity_type, $bundle) {
+function commons_trusted_contacts_field_definition_group(&$field_instances, $entity_type, $bundle) {
 
   // Exported field_instance: 'node-post-og_user_group_ref'
   $field_instances["$entity_type-$bundle-og_user_group_ref"] = array(
