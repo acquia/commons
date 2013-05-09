@@ -34,6 +34,13 @@ projects[apachesolr_proximity][type] = "module"
 projects[apachesolr_proximity][subdir] = "contrib"
 projects[apachesolr_proximity][version] = "1.0-rc1"
 
+projects[apachesolr_user][type] = "module"
+projects[apachesolr_user][subdir] = "contrib"
+projects[apachesolr_user][download][type] = "git"
+projects[apachesolr_user][download][url] = "http://git.drupal.org/project/apachesolr_user.git"
+projects[apachesolr_user][download][branch] = "7.x-1.x"
+projects[apachesolr_user][download]revision] = "a86c5aebfceaf4a3fc53544762a36ca1b70809d5"
+
 projects[connector][type] = "module"
 projects[connector][subdir] = "contrib"
 projects[connector][version] = "1.0-beta2"
@@ -120,12 +127,15 @@ projects[features][download][revision] = "54e2810bee966777426f0ca5294c6e7252ea75
 
 projects[flag][type] = "module"
 projects[flag][subdir] = "contrib"
-projects[flag][version] = "2.0"
+projects[flag][version] = "2.1"
+
+; Issue #1965760: Manually set taxonomy term flag types because its different.
+; http://drupal.org/node/1965760
+projects[flag][patch][] = "http://drupal.org/files/1965760-flag-taxonomy-types.patch"
 
 projects[flag_abuse][type] = "module"
 projects[flag_abuse][subdir] = "contrib"
 projects[flag_abuse][version] = "2.0-alpha1"
-
 
 projects[redirect][type] = "module"
 projects[redirect][subdir] = "contrib"
@@ -354,15 +364,17 @@ projects[token][type] = "module"
 projects[token][subdir] = "contrib"
 projects[token][version] = "1.5"
 
-
 projects[views][type] = "module"
 projects[views][subdir] = "contrib"
 projects[views][version] = "3.7"
 
-
 projects[views_field_view][type] = "module"
 projects[views_field_view][subdir] = "contrib"
-projects[views_field_view][version] = "1.0"
+projects[views_field_view][version] = "1.x-dev"
+projects[views_field_view][download][type] = "git"
+projects[views_field_view][download][url] = "http://git.drupal.org/project/views_field_view.git"
+projects[views_field_view][download][branch] = "7.x-1.x"
+projects[views_field_view][download][revision] = "db9308068aa882dce979900baf21df7236f3e4a1"
 
 projects[views_load_more][type] = "module"
 projects[views_load_more][subdir] = "contrib"
