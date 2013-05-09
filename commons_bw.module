@@ -147,20 +147,12 @@ function commons_bw_partial_node_form($form, &$form_state, $bundle, $group_id = 
     '#value' => t('Save'),
   );
 
-  // TODO: Because the custom form.tpl.php prints class="..." before printing
-  // the $attributes, we can't add the classes to $form['attributes'], which
-  // would have been nicer.
-  $classes = array(
-    'node',
-    'user-picture-available',
-    'commons-bw-partial-node-form',
-    "commons-bw-partial-node-form-$bundle",
-  );
-  $form['#prefix'] = '<div class="' . implode(' ', $classes) . '">';
-  $form['#suffix'] = '</div>';
+  // Add in some descriptive classes for css down the line.
+  $form['#attributes']['class'][] = 'node';
+  $form['#attributes']['class'][] = 'commons-bw-partial-node -form';
+  $form['#attributes']['class'][] = 'commons-bw-partial-node-form-' . $bundle;
 
-  $form['#attributes']['class'] = array('');
-
+  // Add a link to the full node form.
   $form['full_form'] = array(
     '#theme' => 'link',
     '#text' => t('Go to full form'),
