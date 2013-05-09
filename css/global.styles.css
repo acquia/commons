@@ -3331,15 +3331,38 @@ ul.action-links {
 
 #quicktabs-container-commons_bw .quicktabs-tabpage .view-filters,
 #quicktabs-container-commons_bw .quicktabs-tabpage .attachment-before {
-  display: inline-block;
+  display: block;
+  clear: both;
   vertical-align: top;
+  margin-bottom: 1.7em;
+  padding: .5em .6em;
+  font-size: .88em;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -o-border-radius: 2px;
+  border-radius: 2px;
+  background: whitesmoke;
+}
+#quicktabs-container-commons_bw .quicktabs-tabpage .views-exposed-widgets {
+  margin-bottom: 0;
+}
+#quicktabs-container-commons_bw .quicktabs-tabpage .views-exposed-widget {
+  margin-right: 1.7em;
+}
+#quicktabs-container-commons_bw .quicktabs-tabpage .views-widget-sort-order {
+  display: none;
 }
 #quicktabs-container-commons_bw .quicktabs-tabpage .view-content,
 #quicktabs-container-commons_bw .quicktabs-tabpage .view-empty {
   clear: both;
 }
+#quicktabs-container-commons_bw .quicktabs-tabpage .views-submit-button {
+  margin-right: 0;
+}
 #quicktabs-container-commons_bw .quicktabs-tabpage .form-submit {
   margin-top: 0;
+  margin-bottom: .1em;
 }
 #quicktabs-container-commons_bw .quicktabs-tabpage .hidden {
   display: none;
@@ -3352,8 +3375,6 @@ ul.action-links {
 .commons-bw-partial-node-form {
   margin-bottom: 1.7em;
   padding-left: 68px;
-  padding-bottom: 1.7em;
-  border-bottom: 1px solid #cccccc;
 }
 .commons-bw-partial-node-form .user-picture {
   margin-top: 2.6em;

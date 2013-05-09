@@ -3029,8 +3029,26 @@ body.page-node .pane-views-panes {
   .quicktabs-tabpage {
     .view-filters,
     .attachment-before {
-      display: inline-block;
+      display: block;
+      clear: both;
       vertical-align: top;
+      margin-bottom: 1.7em;
+      padding: .5em .6em;
+      font-size: .88em;
+      @include border-radius(2px);
+      background: $ultralight;
+    }
+
+    .views-exposed-widgets {
+      margin-bottom: 0;
+    }
+
+    .views-exposed-widget {
+      margin-right: 1.7em;
+    }
+
+    .views-widget-sort-order {
+      display: none;
     }
 
     .view-content,
@@ -3038,8 +3056,13 @@ body.page-node .pane-views-panes {
       clear: both;
     }
 
+    .views-submit-button {
+      margin-right: 0;
+    }
+
     .form-submit {
       margin-top: 0;
+      margin-bottom: .1em;
     }
 
     .hidden {
@@ -3057,8 +3080,6 @@ body.page-node .pane-views-panes {
 .commons-bw-partial-node-form {
   margin-bottom: 1.7em;
   padding-left: 68px;
-  padding-bottom: 1.7em;
-  border-bottom: 1px solid $border;
 
   .user-picture {
     margin-top: 2.6em;
