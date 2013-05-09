@@ -7,21 +7,6 @@
 include_once 'commons_follow_term.features.inc';
 
 /**
- * Implements hook_token_info().
- */
-function commons_follow_term_token_info() {
-  return array(
-    'types' => array(
-        'taxonomy_term' => array(
-        'name' => t('Taxonomy Terms'),
-        'description' => t('Tokens related to taxonomy_term Entities.'),
-        'needs-data' => 'taxonomy_term',
-      ),
-    ),
-  );
-}
-
-/**
  * Implements hook_commons_follow_get_nids().
  */
 function commons_follow_term_commons_follow_get_nids($account, $options) {
