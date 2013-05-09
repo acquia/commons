@@ -24,4 +24,50 @@ Drupal.behaviors.commonsBwPartialNodeForm = {
   }
 }
 
+/**
+ * Expand a form when it is focused.
+ */
+Drupal.behaviors.commonsBwExpandableForm = {
+  attach: function (context, settings) {
+    $('.commons-bw-partial-node-form', context).once('commonsBwExpandableForm', function () {
+      console.log('I have a puppy!');
+      // Assemble the variables.
+      var form = $(this),
+          toggleText = Drupal.t('Collapse the form'),
+          toggle = $('<a/>').attr({
+            'class': 'expandable-form-toggle element-hidden',
+            'href': '#',
+            'title': toggleText
+          }).append(toggleText),
+          triggerField = form.find('.trigger-field'),
+          fullFormLink = form.find('a.full-form'),
+          hideables = form.find('.hideable-field');
+
+      // Add the toggle link to the top of the form.
+      form.prepend(toggle).addClass('expandable-form compact-form');
+
+      // Hide the hidden fields on load.
+      hideables.addClass('element-invisible');
+
+      // Make all hidden fields visible when the trigger field comes into
+      // focus.
+      triggerField.find('textarea, input').focus(function () {
+        form.addClass('expanded-form').removeClass('compact-form');
+        toggle.removeClass('element-hidden');
+        hideables.removeClass('element-invisible');
+        fullFormLink.addClass('element-hidden');
+      });
+
+      // Hide all the hidden fields when the trigger link is clicked.
+      toggle.click(function () {
+        form.addClass('compact-form').removeClass('expanded-form');
+        toggle.addClass('element-hidden');
+        hideables.addClass('element-invisible');
+        fullFormLink.removeClass('element-hidden');
+        return false;
+      });
+    });
+  }
+}
+
 })(jQuery);
