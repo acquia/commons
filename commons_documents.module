@@ -7,8 +7,8 @@
 include_once 'commons_documents.features.inc';
 
 /**
-* Implements hook_commons_bw_group_widget().
-*/
+ * Implements hook_commons_bw_group_widget().
+ */
 function commons_documents_commons_bw_group_widget() {
   return array(
     'commons_documents' => array(
@@ -17,22 +17,51 @@ function commons_documents_commons_bw_group_widget() {
       'vid' => 'commons_bw_documents',
       'display' => 'page_1',
       'weight' => 6,
+      'bundle' => 'document',
     ),
   );
 }
 
 /**
-* Implements hook_views_pre_render().
-*/
-function commons_documents_views_pre_render(&$view) {
-  if ($view->name == 'commons_bw_documents') {
-    $group_id = $view->args[0];
-    if (og_user_access('node', $group_id, 'create document content') && node_access('create', 'document')) {
-      $view->attachment_before = l(t('Create a document'), 'node/add/document', array('query' => array('og_group_ref' => $group_id)));
-    }
+ * Implements hook_form_FROM_ID_alter().
+ */
+function commons_documents_form_commons_bw_partial_node_form_alter(&$form, &$form_state) {
+  if (empty($form['#entity']) || $form['#entity']->type != 'document') {
+    return;
   }
+
+  $form['body'][LANGUAGE_NONE][0]['#title_display'] = 'invisible';
+  $form['body'][LANGUAGE_NONE][0]['#required'] = TRUE;
+  $form['body'][LANGUAGE_NONE][0]['#placeholder'] = t('Describe the document');
+  $form['body'][LANGUAGE_NONE][0]['#resizable'] = FALSE;
+
+  $form['#pre_render'][] = 'commons_documents_form_commons_bw_partial_node_form_after_build';
 }
 
+/**
+ * After-build call-back.
+ * See commons_documents_form_commons_bw_partial_node_form_alter().
+ */
+function commons_documents_form_commons_bw_partial_node_form_after_build($form) {
+  $form['body'][LANGUAGE_NONE][0]['#pre_render'] = array();
+  $form['body'][LANGUAGE_NONE][0]['format']['#access'] = FALSE;
+  $form['body'][LANGUAGE_NONE][0]['value']['#rows'] = 3;
+
+  return $form;
+}
+
+/**
+ * Implements hook_views_pre_render().
+ *
+ * Correct the empty text when commons_bw_wikis is shown without group context.
+ */
+function commons_documents_views_pre_render(&$view) {
+  // TODO: Would have been better to enable og_context to check for missing
+  // group context instead of checking for empty first argument.
+  if (empty($view->args[0]) && $view->name == 'commons_bw_documents') {
+    $view->display_handler->handlers['empty']['area']->options['content'] = t('No documents have been created.');
+  }
+}
 
 /**
  * Implements hook_commons_entity_integration.
