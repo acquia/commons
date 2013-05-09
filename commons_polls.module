@@ -86,11 +86,19 @@ function commons_polls_form_commons_bw_partial_node_form_alter(&$form, &$form_st
   $form['body'][LANGUAGE_NONE][0]['#resizable'] = FALSE;
   $form['body']['#weight'] = -10;
 
+  // Prepare the form for collapsing.
+  $form['body']['#attributes']['class'][] = 'trigger-field';
+  foreach (array('field_image', 'og_group_ref', 'choice_wrapper', 'actions') as $field) {
+    if (isset($form[$field])) {
+      $form[$field]['#attributes']['class'][] = 'hideable-field';
+    }
+  }
+
   // Add the poll choices widget.
   $form['choice_wrapper'] = array(
     '#tree' => FALSE,
     '#weight' => -4,
-    '#prefix' => '<div class="clearfix" id="poll-choice-wrapper">',
+    '#prefix' => '<div class="hideable-field clearfix" id="poll-choice-wrapper">',
     '#suffix' => '</div>',
   );
 
