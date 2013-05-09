@@ -181,8 +181,6 @@ function commons_bw_partial_node_form($form, &$form_state, $bundle, $group_id = 
           $form[$field]['#attributes']['class'][] = 'hideable-field';
         }
       }
-
-      kpr($form);
       break;
     case 'wiki':
       // The wiki is the odd type since it has a title field as its initial
