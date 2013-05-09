@@ -93,6 +93,29 @@ function commons_documents_views_default_views() {
   $handler = $view->new_display('page', 'Page', 'page_1');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['path'] = 'test';
+  $translatables['commons_bw_documents'] = array(
+    t('Master'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« first'),
+    t('‹ previous'),
+    t('next ›'),
+    t('last »'),
+    t('No documents have been added to this group.'),
+    t('OG membership from node'),
+    t('Post date'),
+    t('most active'),
+    t('All'),
+    t('Block'),
+    t('Page'),
+  );
   $export['commons_bw_documents'] = $view;
 
   return $export;
