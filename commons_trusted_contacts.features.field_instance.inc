@@ -371,6 +371,71 @@ function commons_trusted_contacts_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'user-user-group_group'
+  $field_instances['user-user-group_group'] = array(
+    'bundle' => 'user',
+    'default_value' => array(
+      0 => array(
+        'value' => 1,
+      ),
+    ),
+    'deleted' => '0',
+    'description' => 'Determine if this is an OG group.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => '3',
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'display_label' => 1,
+    'entity_type' => 'user',
+    'field_name' => 'group_group',
+    'label' => 'Group',
+    'required' => FALSE,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'view modes' => array(
+      'full' => array(
+        'custom settings' => FALSE,
+        'label' => 'Full',
+        'type' => 'og_group_subscribe',
+      ),
+      'teaser' => array(
+        'custom settings' => FALSE,
+        'label' => 'Teaser',
+        'type' => 'og_group_subscribe',
+      ),
+    ),
+    'widget' => array(
+      'module' => 'options',
+      'settings' => array(
+        'display_label' => 0,
+        'og_hide' => TRUE,
+      ),
+      'type' => 'options_onoff',
+      'weight' => 0,
+    ),
+  );
+
+  $group_bundles = og_get_all_group_bundle();
+  if (empty($group_bundles['node'])) {
+    // Make sure group_bundles contains at least the group node bundle, in order
+    // to create the group audience field for it when installing the profile.
+    $group_bundles['node'] = array('group' => TRUE);
+  }
+  foreach(array_keys($group_bundles['node']) as $bundle) {
+    commons_groups_field_definition_group($field_instances, 'node', $bundle);
+  }
+
   // Translatables
   // Included for use with string extractors like potx.
   t('Approving user');
@@ -383,4 +448,73 @@ function commons_trusted_contacts_field_default_field_instances() {
   t('User Trusted Contacts');
 
   return $field_instances;
+}
+
+
+function commons_groups_field_definition_group(&$field_instances, $entity_type, $bundle) {
+
+  // Exported field_instance: 'node-post-og_user_group_ref'
+  $field_instances["$entity_type-$bundle-og_user_group_ref"] = array(
+    'bundle' => $bundle,
+    'default_value' => NULL,
+    'default_value_function' => 'commons_groups_entityreference_default_value',
+    'deleted' => '0',
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'og_ui',
+        'settings' => array(),
+        'type' => 'og_list_default',
+        'weight' => 11,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => $entity_type,
+    'field_name' => 'og_user_group_ref',
+    'label' => 'User groups',
+    'required' => 0,
+    'settings' => array(
+      'behaviors' => array(
+        'og_widget' => array(
+          'admin' => array(
+            'widget_type' => 'entityreference_autocomplete_tags',
+          ),
+          'default' => array(
+            'widget_type' => 'entityreference_autocomplete_tags',
+          ),
+          'status' => TRUE,
+        ),
+        'prepopulate' => array(
+          'status' => 0,
+        ),
+      ),
+      'user_register_form' => FALSE,
+    ),
+    'view modes' => array(
+      'full' => array(
+        'custom settings' => FALSE,
+        'label' => 'Full',
+        'type' => 'og_list_default',
+      ),
+      'teaser' => array(
+        'custom settings' => FALSE,
+        'label' => 'Teaser',
+        'type' => 'og_list_default',
+      ),
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'og',
+      'settings' => array(),
+      'type' => 'og_complex',
+      'weight' => 5,
+    ),
+  );
+
 }
