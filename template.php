@@ -637,35 +637,6 @@ function commons_origins_preprocess_form_content(&$variables, $hook) {
   if (strpos($variables['form']['#form_id'], 'commons_bw_partial_node_form_') === 0) {
     $variables['form']['actions']['submit']['#attributes']['class'][] = 'action-item-primary';
     $variables['form']['title']['#markup'] = str_replace('<h3>', '<h3 class="partial-node-form-title">', $variables['form']['title']['#markup']);
-
-    // Set fields as hideable so the forms can be compacted.
-    switch ($variables['form']['#bundle']) {
-      case 'post':
-      case 'question':
-      case 'poll':
-        // Set fields as hideable so the forms can be compacted.
-        $variables['form']['body']['#attributes']['class'][] = 'trigger-field';
-        foreach (array('field_image', 'og_group_ref', 'choice_wrapper', 'actions') as $field) {
-          if (isset($variables['form'][$field])) {
-            $variables['form'][$field]['#attributes']['class'][] = 'hideable-field';
-          }
-        }
-        // The poll options uses #prefix and #suffix instead of a theme wrapper,
-        // so we have to add the class through this ugly bit of code.
-        if (isset($variables['form']['choice_wrapper'])) {
-          $variables['form']['choice_wrapper']['#prefix'] = str_replace('class="', 'class="hideable-field ', $variables['form']['choice_wrapper']['#prefix']);
-        }
-        break;
-      case 'wiki':
-        // The wiki is the odd type since it has a title field as its initial
-        // field.
-        $variables['form']['title_field']['#attributes']['class'][] = 'trigger-field';
-        foreach (array('body', 'field_image', 'og_group_ref', 'actions') as $field) {
-          if (isset($variables['form'][$field])) {
-            $variables['form'][$field]['#attributes']['class'][] = 'hideable-field';
-          }
-        }
-    }
   }
 }
 
