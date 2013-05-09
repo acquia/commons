@@ -1,0 +1,910 @@
+<?php
+/**
+ * @file
+ * Code for the Commons Trusted Contacts feature.
+ */
+
+include_once 'commons_trusted_contacts.features.inc';
+
+/**
+ * Implements hook_menu().
+ */
+function commons_trusted_contacts_menu() {
+  $items = array();
+
+  $items['request-trust/%user/%/%'] = array(
+    'page callback' => 'commons_trusted_contacts_request_trust',
+    'page arguments' => array(1, 3),
+    'access callback' => 'commons_trusted_contacts_request_trust_access',
+    'access arguments' => array(1,2),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['un-trust/%user/%/%'] = array(
+    'page callback' => 'commons_trusted_contacts_un_trust',
+    'page arguments' => array(1, 3),
+    'access callback' => 'commons_trusted_contacts_un_trust_access',
+    'access arguments' => array(1,2),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['approve-trust/%entity_object/%'] = array(
+    'load arguments' => array('og_membership'),
+    'page callback' => 'commons_trusted_contacts_approve_trust',
+    'page arguments' => array(1),
+    'access callback' => 'commons_trusted_contacts_approve_trust_access',
+    'access arguments' => array(1, 2),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['ignore-trust/%entity_object/%'] = array(
+    'load arguments' => array('og_membership'),
+    'page callback' => 'commons_trusted_contacts_ignore_trust',
+    'page arguments' => array(1),
+    'access callback' => 'commons_trusted_contacts_ignore_trust_access',
+    'access arguments' => array(1, 2),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['user/%user/contacts/messages/popup/%user'] = array(
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('commons_trusted_contacts_messages_popup', 5),
+    'access callback' => 'commons_trusted_contacts_privatemsg_write_access',
+    'access arguments' => array(5),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['user/%user/contacts'] = array(
+    'title callback' => 'commons_trusted_contacts_tab_title',
+    'title arguments' => array('contacts'),
+    'page callback' => 'commons_trusted_contacts_tab',
+    'page arguments' => array('contacts'),
+    'access callback' => 'commons_trusted_contacts_tab_access',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  $items['user/%user/contacts/messages'] = array(
+    'title callback' => 'commons_trusted_contacts_tab_title',
+    'title arguments' => array('messages'),
+    'page callback' => 'commons_trusted_contacts_tab',
+    'page arguments' => array('messages'),
+    'access callback' => 'commons_trusted_contacts_tab_access',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  $items['user/%user/contacts/invitations'] = array(
+    'title callback' => 'commons_trusted_contacts_tab_title',
+    'title arguments' => array('invitations'),
+    'page callback' => 'commons_trusted_contacts_tab',
+    'page arguments' => array('invitations'),
+    'access callback' => 'commons_trusted_contacts_tab_access',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  $items['user/%user/contacts/trusted'] = array(
+    'title callback' => 'commons_trusted_contacts_tab_title',
+    'title arguments' => array('contacts'),
+    'page callback' => 'commons_trusted_contacts_tab',
+    'page arguments' => array('contacts'),
+    'access callback' => 'commons_trusted_contacts_tab_access',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  return $items;
+}
+
+/**
+ * Access callback for trusted contacts related pages;
+ */
+function commons_trusted_contacts_tab_access($account) {
+  global $user;
+
+  if (user_access('administer group')) {
+    // Admin user.
+    return TRUE;
+  }
+
+  if ($user->uid == $account->uid) {
+    // User's own pages.
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+/**
+ * Implements hook_menu_alter().
+ */
+function commons_trusted_contacts_menu_alter(&$items) {
+  // Make sure only Trusted-Contacts send messages to each other.
+  // By default, PrivateMsg module only checks user permissions.
+  $items['messages/new']['access callback'] = 'commons_trusted_contacts_privatemsg_write_access';
+  $items['messages/new']['access arguments'] = array(2);
+}
+
+/**
+ * Implements hook_admin_paths().
+ */
+function commons_trusted_contacts_admin_paths() {
+  $paths = array(
+    'user/*/contacts/messages/popup/*' => TRUE,
+  );
+
+  return $paths;
+}
+
+/**
+ * Title callback; Trusted contacts related titles.
+ */
+function commons_trusted_contacts_tab_title($tab) {
+  global $user;
+
+  switch ($tab) {
+    case 'contacts':
+      $query = new EntityFieldQuery();
+      $count = $query
+        ->entityCondition('entity_type', 'og_membership')
+        ->propertyCondition('group_type', 'user')
+        ->propertyCondition('entity_type', 'user')
+        ->propertyCondition('gid', $user->uid)
+        ->propertyCondition('etid', $user->uid, '<>')
+        ->propertyCondition('state', 1)
+        ->count()
+        ->execute();
+
+      return t('Trusted Contacts (@count)', array('@count' => $count));
+
+    case 'invitations':
+      $wrapper = entity_metadata_wrapper('user', $user);
+      $count = $wrapper->field_unread_invitations->value();
+      $count = $count ? $count : 0;
+
+      return t('Invitations (@count)', array('@count' => $count));
+
+    case 'messages':
+      module_load_include('inc', 'privatemsg', 'privatemsg.pages');
+
+      $wrapper = entity_metadata_wrapper('user', $user);
+      $count = $wrapper->field_unread_messages->value();
+      $count = $count ? $count : 0;
+
+      return t('Messages (@count)', array('@count' => $count));
+  }
+  return;
+}
+
+/**
+ * Page callback; Trusted contacts related pages.
+ */
+function commons_trusted_contacts_tab($tab) {
+  global $user;
+
+  switch ($tab) {
+    case 'contacts':
+      $query = new EntityFieldQuery();
+      $count = $query
+        ->entityCondition('entity_type', 'og_membership')
+        ->propertyCondition('group_type', 'user')
+        ->propertyCondition('entity_type', 'user')
+        ->propertyCondition('gid', $user->uid)
+        ->propertyCondition('etid', $user->uid, '<>')
+        ->propertyCondition('state', 1)
+        ->count()
+        ->execute();
+
+      drupal_set_title(t('Private Message & Invitations'));
+
+      return views_embed_view('trusted_contacts');
+
+    case 'invitations':
+      $wrapper = entity_metadata_wrapper('user', $user);
+      $count = $wrapper->field_unread_invitations->value();
+
+      drupal_set_title(t('Private Message & Invitations'));
+
+      return views_embed_view('trusted_contacts_invitations');
+
+    case 'messages':
+      module_load_include('inc', 'privatemsg', 'privatemsg.pages');
+
+      $wrapper = entity_metadata_wrapper('user', $user);
+      $count = $wrapper->field_unread_messages->value();
+
+      drupal_set_title(t('Private Message & Invitations'));
+
+      return privatemsg_list_page();
+
+  }
+  return;
+}
+
+/**
+ * Implements hook_default_og_membership_type().
+ */
+function commons_trusted_contacts_default_og_membership_type() {
+  $items = array();
+  $items['trusted_contacts'] = entity_import('og_membership_type', '{
+    "name" : "trusted_contacts",
+    "description" : "Trusted Contacts",
+    "rdf_mapping" : []
+  }');
+  return $items;
+}
+
+/**
+ * Implement hook_field_formatter_info().
+ */
+function commons_trusted_contacts_field_formatter_info() {
+  return array(
+    'trusted_contact' => array(
+      'label' => t('Trusted Contact'),
+      'field types' => array('list_boolean'),
+      'settings' => array(
+        'field_name' => FALSE,
+      ),
+    ),
+    'approve_ignore' => array(
+      'label' => t('Approve/Ignore request'),
+      'field types' => array('text'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ *
+ * This is a copy of og_field_formatter_view() which was adapted for the
+ * "Trusted Contacts" functionality, so most changes are around the phrasing,
+ * and allowing users to send private messages.
+ *
+ * @see og_field_formatter_view()
+ */
+function commons_trusted_contacts_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  global $user;
+
+  $settings = $display['settings'];
+
+  switch ($display['type']) {
+    case 'trusted_contact':
+      $account = clone $user;
+      if (!og_is_group($entity_type, $entity)) {
+        return;
+      }
+
+      if (!empty($entity->uid) && ($entity->uid == $account->uid)) {
+        // User is the group manager.
+        return;
+      }
+
+      list($id,, $bundle) = entity_extract_ids($entity_type, $entity);
+      if (og_is_member($entity_type, $id, 'user', $account, array(OG_STATE_ACTIVE))) {
+        $links['title'] = t('Message');
+        $links['href'] = 'user/' . $user->uid . '/contacts/messages/popup/' . $id;
+      }
+      else
+        if (og_is_member($entity_type, $id, 'user', $account, array(OG_STATE_PENDING))) {
+          // If user is pending, they should not be able to apply for
+          // membership.
+          $element[0] = array(
+            '#markup' => '<div class="trusted-request-pending">' . t('Pending Contact') . '</div>',
+          );
+          return $element;
+        }
+        else {
+          if (og_is_member($entity_type, $id, 'user', $account, array(OG_STATE_BLOCKED))) {
+            // If user is blocked, they should not be able to apply for
+            // membership.
+            return;
+          }
+
+          // Check if user can subscribe to the field.
+          if (empty($settings['field_name']) && $audience_field_name = og_get_best_group_audience_field('user', $account, $entity_type, $bundle)) {
+            $settings['field_name'] = $audience_field_name;
+          }
+          if (!$settings['field_name']) {
+            return;
+          }
+
+          $field_info = field_info_field($settings['field_name']);
+
+          // Check if entity is referencable.
+          if ($field_info['settings']['target_type'] != $entity_type) {
+            // Group type doesn't match.
+            return;
+          }
+          if (!empty($field_info['settings']['handler_settings']['target_bundles']) && !in_array($bundle, $field_info['settings']['handler_settings']['target_bundles'])) {
+            // Bundles don't match.
+            return;
+          }
+
+          if (!og_check_field_cardinality('user', $account, $settings['field_name'])) {
+            $element[0] = array('#markup' => format_plural($field_info['cardinality'], 'You are already registered to another group', 'You are already registered to @count groups'));
+            return $element;
+          }
+
+          $token = drupal_get_token('request' . ':' . $id . ':' . $account->uid);
+          $url = "request-trust/$id/$token/nojs";
+
+          $links['title'] = t('Trusted Contact');
+          if ($account->uid) {
+            $links['href'] = $url;
+            $links['options'] = array('attributes' => array('class' => array('use-ajax')));
+          }
+          else {
+            $links['href'] = 'user/login';
+            $links['options'] = array('query' => array('destination' => $url));
+          }
+        }
+
+      if (!empty($links['title'])) {
+        $links += array('options' => array());
+        $element[0] = array(
+          '#type' => 'link',
+          '#title' => $links['title'],
+          '#href' => $links['href'],
+          '#options' => $links['options'],
+        );
+        return $element;
+      }
+      // User didn't have permissions.
+      break;
+
+    case 'approve_ignore':
+
+      $approve = l(t('Approve'), 'approve-trust/' . $entity->id . '/' . $items[0]['value']);
+      $ignore = l(t('Ignore'), 'ignore-trust/' . $entity->id . '/' . $items[0]['value']);
+
+      $element[0] = array(
+        '#markup' =>  $approve . ' ' . $ignore,
+      );
+      return $element;
+  }
+}
+
+/**
+ * Implements hook_og_membership_insert().
+ *
+ * Trusted Contacts are 2 users that are members on each other's groups.
+ * Whenever a user joins another user's group as a Trusted Contact, the second
+ * user must also become a member on the first user's group.
+ */
+function commons_trusted_contacts_og_membership_insert(OgMembership $og_membership) {
+  if ($og_membership->type != 'trusted_contacts' || $og_membership->group_type != 'user') {
+    // Not a Trusted-Contact membership type.
+    return;
+  }
+
+  if (!empty($og_membership->_skip_membership_insert)) {
+    // Prevent recursion.
+    return;
+  }
+
+  if ($og_membership->gid == $og_membership->etid) {
+    // A user was created.
+    return;
+  }
+
+  // We're using a custom token because Drupal provides a token that relies on
+  // logged-in user, and here we want the token to be used by the responding
+  // user when approving/ignoring the logged-in user's request.
+  $token = md5(rand(100000000, 9999999999));
+
+  $wrapper = entity_metadata_wrapper('og_membership', $og_membership);
+  $wrapper->field_my_request->set(1);
+  $wrapper->field_membership_token->set($token);
+
+  $values = array(
+    'entity' => $og_membership->gid,
+    'field_name' => 'user_trusted_contacts',
+    'state' => $og_membership->state,
+  );
+
+  // Get a non-saved OG Membership object.
+  $og_membership2 = og_group('user', $og_membership->etid, $values, FALSE);
+
+  $wrapper2 = entity_metadata_wrapper('og_membership', $og_membership2);
+  $wrapper2->field_original_og_membership->set($og_membership);
+  $wrapper2->field_my_request->set(0);
+  $wrapper2->field_membership_token->set($token);
+
+  // Prevent recursion.
+  $og_membership2->_skip_membership_insert = TRUE;
+  $wrapper2->save();
+
+
+  // Make sure OG membership is updated, and not re-inserted.
+  unset($og_membership->is_new);
+  $og_membership->_skip_membership_update = TRUE;
+  $wrapper->save();
+
+  if ($og_membership->state == OG_STATE_PENDING) {
+    // Add 1 to unread invitations count.
+    $account = user_load($og_membership->gid);
+    commons_notify_add_notification_item($account, 'invitation');
+  }
+}
+
+/**
+ * Implements hook_og_membership_update().
+ *
+ * Trusted Contacts are 2 users that are members on each other's groups.
+ * Whenever one of the OG memberships is updated, the other membership must be
+ * updated accordingly.
+ */
+function commons_trusted_contacts_og_membership_update(OgMembership $og_membership) {
+  if ($og_membership->type != 'trusted_contacts' || $og_membership->group_type != 'user') {
+    // Not a Trusted-Contact membership type.
+    return;
+  }
+
+  if (!empty($og_membership->_skip_membership_update)) {
+    // Prevent recursion.
+    return;
+  }
+
+  $wrapper = entity_metadata_wrapper('og_membership', $og_membership);
+
+  $wrapper_original = entity_metadata_wrapper('og_membership', $og_membership->original);
+
+  // Set the second OG Membership according to the first one.
+  // As we are referencing the requesting user to the requested user, we want to
+  // keep everything synced.
+  $query = new EntityFieldQuery();
+  $return = $query
+    ->entityCondition('entity_type', 'og_membership')
+    ->propertyCondition('group_type', 'user')
+    ->propertyCondition('entity_type', 'user')
+    ->propertyCondition('etid', $og_membership->gid)
+    ->propertyCondition('gid', $og_membership->etid)
+    ->execute();
+
+  $membership_id = key($return['og_membership']);
+
+  $wrapper2 = entity_metadata_wrapper('og_membership', $membership_id);
+  $og_membership2 = $wrapper2->value();
+
+  if ($wrapper->state->value() != $wrapper_original->state->value()) {
+    // State was changed.
+    $wrapper2->state->set($wrapper->state->value());
+
+    if ($wrapper_original->state->value() == OG_STATE_PENDING) {
+      // Responding to a Trusted-Contact request.
+      $confirmation = $wrapper->state->value() == OG_STATE_ACTIVE;
+      $wrapper->field_confirmation->set($confirmation);
+      $wrapper->field_response_date->set(time());
+
+      // Prevent recursion.
+      $og_membership->_skip_membership_update = TRUE;
+
+      // Clone the Og membership, as in EntityAPIController::save() the
+      // entity->original property is removed. However since are re-saving the
+      // same updated entity, we want to make sure it doesn't happen on the
+      // original one, thus causing notices for example in
+      // og_og_membership_update()
+      $og_membership_clone = clone $og_membership;
+      $og_membership_clone->save();
+
+      // Subtract 1 from unread invitations count.
+      $account = user_load($og_membership->gid);
+      commons_notify_remove_notification_item($account, 'invitation');
+    }
+    elseif ($wrapper->state->value() == OG_STATE_PENDING) {
+      // Add 1 to unread invitations count.
+      $account = user_load($og_membership->gid);
+      commons_notify_add_notification_item($account, 'invitation');
+    }
+  }
+
+  if ($wrapper->field_confirmation->value() != $wrapper_original->field_confirmation->value()) {
+    // Confirmation was changed.
+    $wrapper2->field_confirmation->set($wrapper->field_confirmation->value());
+  }
+
+  if ($wrapper->field_response_date->value() != $wrapper_original->field_response_date->value()) {
+    // Response Date was changed.
+    $wrapper2->field_response_date->set($wrapper->field_response_date->value());
+  }
+
+  // Prevent recursion.
+  $og_membership2->_skip_membership_update = TRUE;
+  $wrapper2->save();
+}
+
+/**
+ * Implements hook_og_membership_delete().
+ *
+ * Trusted Contacts are 2 users that are members on each other's groups.
+ * Whenever one of the OG memberships is deleted, the other membership must be
+ * deleted too.
+ */
+function commons_trusted_contacts_og_membership_delete(OgMembership $og_membership, $type) {
+  if ($og_membership->type != 'trusted_contacts' || $og_membership->group_type != 'user') {
+    // Not a Trusted-Contact membership type.
+    return;
+  }
+
+  if (!og_is_member('user', $og_membership->etid, 'user', $og_membership->gid)) {
+    // Prevent recursion.
+    return;
+  }
+
+  // Delete the "opposite" OG membership too.
+  og_ungroup('user', $og_membership->etid, 'user', $og_membership->gid);
+}
+
+/**
+ * Menu callback; Creates a Trusted-Contact Invitation.
+ *
+ * Adding two users to each-other's groups, and setting the memberships' states
+ * to 'Pending'.
+ *
+ * @param $account
+ *    The group in which the logged-in user wants to join.
+ */
+function commons_trusted_contacts_request_trust($account, $ajax) {
+  global $user;
+
+  if ($account->uid == $user->uid) {
+    // Users cannot join their own group.
+    return;
+  }
+
+  // This actually adds 2 OG memberships - one for each user.
+  $og_membership = og_group('user', $account, array('field_name' => 'user_trusted_contacts' ,'state' => OG_STATE_PENDING));
+
+  // Notify.
+
+  $wrapper = entity_metadata_wrapper('og_membership', $og_membership);
+  $token = $wrapper->field_membership_token->value();
+
+  $arguments = array(
+    '@{approve-url}' => 'approve-trust/' . $og_membership->id . '/' . $token,
+    '@{ignore-url}' => 'ignore-trust/' . $og_membership->id . '/' . $token,
+  );
+  $message = message_create('trusted_contact_request_pending', array('uid' => $account->uid, 'arguments' => $arguments));
+
+  $wrapper = entity_metadata_wrapper('message', $message);
+  $wrapper->field_requesting_user->set($user);
+  $wrapper->save();
+
+  message_notify_send_message($message);
+
+  // Ajax
+
+  if ($ajax == 'ajax') {
+    $commands = array();
+    $commands[] = ajax_command_replace(".field-name-group-group a", '<div class="trusted-request-pending">' . t('Pending Contact') . '</div>');
+    $page = array('#type' => 'ajax', '#commands' => $commands);
+    ajax_deliver($page);
+  }
+  else {
+    drupal_goto('user/' . $og_membership->gid);
+  }
+}
+
+/**
+ * Menu callback; "Breaks" a Trusted-Contact relation between two users by
+ * ungrouping each of them from the other's group.
+ *
+ * @param $account
+ *    The account which the logged-in user wants to break contact with.
+ */
+function commons_trusted_contacts_un_trust($account, $ajax) {
+  global $user;
+
+  // This actually deletes 2 OG memberships, one for each user,
+  // in commons_trusted_contacts_og_membership_delete().
+  og_ungroup('user', $account->uid);
+
+  // Ajax
+
+  if ($ajax == 'ajax') {
+    $token = drupal_get_token('request' . ':' . $account->uid . ':' . $user->uid);
+    $new = l(t('Trusted Contact'), 'request-trust/'. $account->uid . '/' . $token . '/nojs', array('attributes' => array('class' => array('use-ajax'))));
+
+    $commands = array();
+    $commands[] = ajax_command_replace(".field-name-group-group a", $new);
+    $page = array('#type' => 'ajax', '#commands' => $commands);
+    ajax_deliver($page);
+  }
+  else {
+    drupal_goto('user/' . $account->uid);
+  }
+}
+
+/**
+ * Menu callback; Approving a Trusted-Contact Invitation by setting each user's
+ * membership state to 'Active'.
+ *
+ * @param $og_membership
+ *    The membership in which the logged-in user is the group and the requesting
+ *    user is the member.
+ */
+function commons_trusted_contacts_approve_trust(OgMembership $og_membership) {
+  global $user;
+
+  if ($og_membership->gid != $user->uid) {
+    // Users can only approve their requests.
+    return;
+  }
+
+  // This actually changes both OG memberships - one for each user.
+  $wrapper = entity_metadata_wrapper('og_membership', $og_membership);
+  $wrapper->state->set(OG_STATE_ACTIVE);
+  $wrapper->save();
+
+  // Notify.
+
+  // Get approving user.
+  $account = user_load($og_membership->gid);
+
+  $message = message_create('trusted_contact_request_approved', array('uid' => $account->uid));
+
+  $wrapper = entity_metadata_wrapper('message', $message);
+  $wrapper->field_approving_user->set($account);
+  $wrapper->save();
+
+  message_notify_send_message($message);
+
+  // Redirect to Invitations screen.
+  drupal_goto('user/' . $user->uid . '/contacts/invitations');
+}
+
+/**
+ * Menu callback; Ignoring a Trusted-Contact Invitation.
+ *
+ * Setting each user's membership state to 'Blocked'.
+ *
+ * @param $og_membership
+ *    The membership in which the logged-in user is the group and the requesting
+ *    user is the member.
+ */
+function commons_trusted_contacts_ignore_trust(OgMembership $og_membership) {
+  global $user;
+
+  if ($og_membership->gid != $user->uid) {
+    // Users can only ignore their requests.
+    return;
+  }
+
+  // This actually changes both OG memberships - one for each user.
+  $wrapper = entity_metadata_wrapper('og_membership', $og_membership);
+  $wrapper->state->set(OG_STATE_BLOCKED);
+  $wrapper->save();
+
+  // Redirect to Invitations screen.
+  drupal_goto('user/' . $user->uid . '/contacts/invitations');
+}
+
+/**
+ * Access callback for creating a Trusted-Contact request; Makes sure that the
+ * token is correct.
+ *
+ * @param $account
+ *    The group in which the logged-in user wants to join.
+ */
+function commons_trusted_contacts_request_trust_access($account, $token) {
+  global $user;
+
+  return drupal_valid_token($token, 'request' . ':' . $account->uid . ':' . $user->uid);
+}
+
+/**
+ * Access callback for breaking a Trusted-Contact relation; Makes sure that the
+ * token is correct.
+ *
+ * @param $account
+ *    The account which the logged-in user wants to break contact with.
+ */
+function commons_trusted_contacts_un_trust_access($account, $token) {
+  global $user;
+
+  return drupal_valid_token($token, 'untrust' . ':' . $account->uid . ':' . $user->uid);
+}
+
+/**
+ * Access callback for approving an invitation; Makes sure that the token is
+ * correct.
+ *
+ * @param $og_membership
+ *    The membership in which the logged-in user is the group and the requesting
+ *    user is the member.
+ */
+function commons_trusted_contacts_approve_trust_access(OgMembership $og_membership, $token) {
+  $wrapper = entity_metadata_wrapper('og_membership', $og_membership);
+
+  return ($wrapper->field_membership_token->value() == $token);
+}
+
+/**
+ * Access callback for ignoring an invitation; Makes sure that the token is
+ * correct.
+ *
+ * @param $og_membership
+ *    The membership in which the logged-in user is the group and the requesting
+ *    user is the member.
+ */
+function commons_trusted_contacts_ignore_trust_access(OgMembership $og_membership, $token) {
+  $wrapper = entity_metadata_wrapper('og_membership', $og_membership);
+
+  return $wrapper->field_membership_token->value() == $token;
+}
+
+/**
+ * Returns whether or not two users are trusted contacts.
+ *
+ * @param $uid
+ *    User ID.
+ *
+ * @param $account
+ *    Optional; Other user's object. If not provided, current user will be used.
+ */
+function commons_group_is_trusted_contact($uid, $account = NULL) {
+  if (empty($account)) {
+    global $user;
+    $account = $user;
+  }
+
+  return og_is_member('user', $uid, 'user', $account, array(OG_STATE_ACTIVE));
+}
+
+/**
+ * Access callback for writing a private message to another user;
+ * Checks permissions and makes sure that the given user and the logged-in user
+ * are Trusted-Contacts.
+ *
+ * @param $uid
+ *    Addressee's user object or User ID.
+ */
+function commons_trusted_contacts_privatemsg_write_access($account) {
+  global $user;
+
+  if (user_access('administer group')) {
+    // Always allow admin to send private messages.
+    return TRUE;
+  }
+
+  $uid = isset($account->uid) ? $account->uid : $account;
+
+  return (privatemsg_user_access('write privatemsg') && commons_group_is_trusted_contact($uid));
+}
+
+/**
+ * Implement hook_form_FORM_ID_alter().
+ *
+ * According to design, 'body' field should be 'plain_text' by default.
+ */
+function commons_trusted_contacts_form_privatemsg_new_alter(&$form, &$form_state) {
+  $form['body']['#format'] = 'plain_text';
+}
+
+/**
+ * Implements hook_action_info().
+ *
+ * @see views_bulk_operations_action_info()
+ */
+function commons_trusted_contacts_action_info() {
+  $actions = array();
+  $files = commons_trusted_contacts_operations_load_action_includes();
+  foreach ($files as $filename) {
+    $action_info_fn = 'commons_trusted_contacts_'. str_replace('.', '_', basename($filename, '.inc')).'_info';
+    $action_info = call_user_func($action_info_fn);
+    if (is_array($action_info)) {
+      $actions += $action_info;
+    }
+  }
+
+  return $actions;
+}
+
+/**
+ * Loads the VBO actions placed in their own include files.
+ *
+ * @return
+ *   An array of containing filenames of the included actions.
+ *
+ * @see views_bulk_operations_load_action_includes()
+ */
+function commons_trusted_contacts_operations_load_action_includes() {
+  static $loaded = FALSE;
+
+  $path = drupal_get_path('module', 'commons_trusted_contacts') . '/includes/actions/';
+  $files = array(
+    'set_state_active.action.inc',
+    'set_state_blocked.action.inc',
+    'mark_as_read.action.inc',
+  );
+
+  if (!$loaded) {
+    foreach ($files as $file) {
+      include_once $path . $file;
+    }
+    $loaded = TRUE;
+  }
+
+  return $files;
+}
+
+/**
+ * Menu callback; Write Private Message popup form.
+ *
+ * @param $account
+ *    The addressee's account.
+ */
+function commons_trusted_contacts_messages_popup($form, &$form_state, $account) {
+  global $user;
+
+  // Include original functions.
+  module_load_include('inc', 'privatemsg', 'privatemsg.pages');
+
+  $form = privatemsg_new($form, $form_state, $account->uid, 'New private message from ' . $user->name);
+
+  $form['actions'] = array('#type' => 'actions');
+
+  $form['actions']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Send'),
+  );
+
+  $form['actions']['full_form'] = array(
+    '#type' => 'markup',
+    '#markup' => l(t('Go to full form'), 'messages/new/' . $account->uid),
+  );
+
+
+  $wrapper = entity_metadata_wrapper('user', $account);
+  $picture_path = empty($account->picture) ? variable_get('user_picture_default') : $wrapper->value()->picture->uri;
+
+  $form['user_picture'] = array(
+    '#theme' => 'image_style',
+    '#style_name' => '50x50_avatar',
+    '#path' => $picture_path,
+    '#prefix' => '<div class="user-picture">',
+    '#suffix' => '</div>',
+    '#weight' => -50,
+  );
+
+  $form['body']['#format'] = 'plain_text';
+
+  unset($form['token']);
+
+  $form['subject']['#type'] = 'hidden';
+
+  $form['recipient']['#type'] = 'hidden';
+
+  drupal_set_title(t('Direct Message @recipient', array('@recipient' => $account->name)));
+
+  return $form;
+}
+
+/**
+ * Implements hook_privatemsg_message_insert().
+ *
+ * When a private message is sent, update the recipients' notification counts.
+ */
+function commons_trusted_contacts_privatemsg_message_insert($message) {
+  foreach ($message->recipients as $recipient) {
+    commons_notify_add_notification_item($recipient, 'message');
+  }
+}
+
+/**
+ * Implements hook_privatemsg_message_status_changed().
+ *
+ * When a private message changes status from 'read' to 'unread' or vice versa,
+ * update the recipients' notification counts accordingly.
+ */
+function commons_trusted_contacts_privatemsg_message_status_changed($pmid, $status, $account) {
+  if ($status) {
+    // Status changed to unread.
+    commons_notify_add_notification_item($account, 'message');
+  }
+  else {
+    // Status changed to read.
+    commons_notify_remove_notification_item($account, 'message');
+  }
+}
