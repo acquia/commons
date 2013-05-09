@@ -10,3 +10,14 @@ function commons_posts_update_7000() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Provide a new "User posted [title]" message type for posts.
+ */
+function commons_posts_update_7001() {
+    $revert = array(
+      'commons_posts' => array('message_type', 'field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}
