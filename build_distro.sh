@@ -99,29 +99,6 @@ build_distro() {
     fi
 }
 
-# This allows users to build the most recent release from git and apply it to their directory. No-dev removes the symlinks and puts in real versions of the module.
-update() {
-    if [[ -d $BUILD_PATH ]]; then
-        cd $BUILD_PATH
-        # do we have the profile?
-        if [[ -d $BUILD_PATH/commons_profile ]]; then
-          if [[ $DEV == dev ]]; then
-            tar -czvf sites-tmp.tar.gz publish/sites/default
-            build_distro $BUILD_PATH
-            tar -zxvf sites-tmp.tar.gz
-          fi
-
-          if [[ $DEV == nodev ]]; then
-            drush make commons_profile/build-commons.make --no-cache --tar publish
-            tar -zxvf publish.tar.gz
-          fi
-        fi
-    else
-      echo "invalid build path"
-      exit 1
-    fi
-}
-
 # This allows you to test the make file without needing to upload it to drupal.org and run the main make file.
 test_makefile() {
   if [[ -d $BUILD_PATH ]]; then
@@ -137,8 +114,11 @@ test_makefile() {
         drush make --tar --drupal-org commons_profile/drupal-org.make commons
         tar -zxvf publish.tar.gz
         cd publish/profiles
-        # exclude commons modules/themes since we're updating already by linking it to the repos directory.
-        tar -zxvf ${BUILD_PATH}/commons.tar.gz --exclude 'commons_*'
+        # remove the symlinks in the repos before we execute
+        find . -mindepth 2 -type l | awk -F/ '{print $5}' | sed '/^$/d' > ${BUILD_PATH}/repos.txt
+        # exclude repos since we're updating already by linking it to the repos directory.
+        UNTAR="tar -zxvf ${BUILD_PATH}/commons.tar.gz -X ${BUILD_PATH}/repos.txt"
+        eval $UNTAR
         echo "Successfully Updated drupal from make files"
         exit 0
       fi
