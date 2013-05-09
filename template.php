@@ -533,6 +533,14 @@ function commons_origins_preprocess_form(&$variables, $hook) {
   }
   $variables['attributes_array'] = $element['#attributes'];
 
+  // Roll the classes into the attributes.
+  if (empty($variables['attributes_array']['class'])) {
+    $variables['attributes_array']['class'] = $variables['classes_array'];
+  }
+  else {
+    $variables['attributes_array']['class'] = array_merge($variables['attributes_array']['class'], $variables['classes_array']);
+  }
+
   // Give the search form on the search page pod styling.
   if (isset($element['#search_page']) || (isset($element['module']) && ($element['module']['#value'] == 'search_facetapi' || $element['module']['#value'] == 'user'))) {
     $variables['attributes_array']['class'][] = 'search-form-page';
@@ -540,35 +548,36 @@ function commons_origins_preprocess_form(&$variables, $hook) {
     $variables['attributes_array']['class'][] = 'clearfix';
   }
 
+  // Wrap some forms in the commons pod styling.
   $pods = array(
     'user-login',
     'user-pass',
     'user-register-form',
   );
-
   if (in_array($element['#id'], $pods)) {
     $variables['attributes_array']['class'][] = 'commons-pod';
   }
 
   // Give the dynamic filters a special class to target.
   if (strpos($element['#id'], 'views-exposed-form-commons-homepage-content') === 0 || strpos($element['#id'], 'views-exposed-form-commons-events-upcoming') === 0 || strpos($element['#id'], 'views-exposed-form-commons-bw') === 0) {
-    $variables['classes_array'][] = 'dynamic-filter-lists';
+    $variables['attributes_array']['class'][] = 'dynamic-filter-lists';
   }
 
   // Give the keyword filter a pod wrapper.
   if (strpos($element['#id'], 'views-exposed-form-commons-groups') === 0) {
-    $variables['classes_array'][] = 'keyword-filter';
-    $variables['classes_array'][] = 'commons-pod';
+    $variables['attributes_array']['class'][] = 'keyword-filter';
+    $variables['attributes_array']['class'][] = 'commons-pod';
   }
 
   // Set an identifying class to the event attendance form.
   if(strpos($element['#id'], 'commons-events-attend-event-form') === 0) {
-    $variables['classes_array'][] = 'node-actions';
+    $variables['attributes_array']['class'][] = 'node-actions';
   }
 
   // Make sure the bottom of the partial node form clears all content.
   if (strpos($element['#form_id'], 'commons_bw_partial_node_form_') === 0) {
-    $variables['classes_array'][] = 'clearfix';
+    $variables['attributes_array']['class'][] = 'user-picture-available';
+    $variables['attributes_array']['class'][] = 'clearfix';
   }
 }
 
@@ -627,10 +636,7 @@ function commons_origins_preprocess_form_content(&$variables, $hook) {
   // theme hook suggestions for easy overriding.
   if (strpos($variables['form']['#form_id'], 'commons_bw_partial_node_form_') === 0) {
     $variables['form']['actions']['submit']['#attributes']['class'][] = 'action-item-primary';
-    $variables['theme_hook_suggestions'][] = 'form_content__commons_bw_partial_node_form';
-    $variables['theme_hook_suggestions'][] = 'form_content__' . $variables['form']['#form_id'];
     $variables['form']['title']['#markup'] = str_replace('<h3>', '<h3 class="partial-node-form-title">', $variables['form']['title']['#markup']);
-    // kpr($variables['form']);
 
     // Set fields as hideable so the forms can be compacted.
     switch ($variables['form']['#bundle']) {
