@@ -54,6 +54,17 @@ function commons_wikis_menu_alter(&$items) {
 }
 
 /**
+ * Implements hook_views_default_views_alter().
+ *
+ * Display wikis on the browsing widget main view.
+ */
+function commons_wikis_views_default_views_alter(&$views) {
+  if (!empty($views['commons_bw_all'])) {
+    $views['commons_bw_all']->display['default']->display_options['filters']['type']['value']['wiki'] = 'wiki';
+  }
+}
+
+/**
  * Custom access callback for viewing revision info.
  */
 function commons_wikis_user_revision_access($node = NULL, $old_callback = '_node_revision_access') {
@@ -81,6 +92,34 @@ function commons_wikis_og_user_access_alter(&$temp_perm, $context) {
    }
 }
 
+/**
+ * Implements hook_form_FROM_ID_alter().
+ */
+function commons_wikis_form_commons_bw_partial_node_form_alter(&$form, &$form_state) {
+  if (empty($form['#entity']) || $form['#entity']->type != 'wiki') {
+    return;
+  }
+
+  $form['title_field'][LANGUAGE_NONE][0]['value']['#title_display'] = 'invisible';
+  $form['title_field'][LANGUAGE_NONE][0]['value']['#placeholder'] = t('Enter a Wiki title');
+
+  $form['body'][LANGUAGE_NONE][0]['#title_display'] = 'invisible';
+  $form['body'][LANGUAGE_NONE][0]['#resizable'] = FALSE;
+
+  $form['actions']['submit']['#value'] = t('Create');
+  $form['#pre_render'][] = 'commons_wikis_form_commons_bw_partial_node_form_after_build';
+}
+
+/**
+ * After-build call-back.
+ * See commons_wikis_form_commons_bw_partial_node_form_alter().
+ */
+function commons_wikis_form_commons_bw_partial_node_form_after_build($form) {
+  $form['body'][LANGUAGE_NONE][0]['format']['#access'] = FALSE;
+  $form['body'][LANGUAGE_NONE][0]['value']['#rows'] = 10;
+
+  return $form;
+}
 
 /**
  * Implements hook_commons_bw_group_widget().
@@ -93,21 +132,9 @@ function commons_wikis_commons_bw_group_widget() {
       'vid' => 'commons_bw_wikis',
       'display' => 'default',
       'weight' => 8,
+      'bundle' => 'wiki',
     ),
   );
-}
-
-/**
-* Implements hook_views_pre_render().
-*/
-function commons_wikis_views_pre_render(&$view) {
-  // Add a "Create a wiki" link for users who have access.
-  if ($view->name == 'commons_bw_wikis') {
-    $group_id = $view->args[0];
-    if (og_user_access('node', $group_id, 'create wiki content') && node_access('create', 'wiki')) {
-      $view->attachment_before = l(t('Create a wiki'), 'node/add/wiki', array('query' => array('og_group_ref' => $group_id)));
-    }
-  }
 }
 
 /**
@@ -121,7 +148,6 @@ function commons_wikis_commons_entity_integration() {
     ),
   );
 }
-
 
 /**
  * Implements hook_node_update().

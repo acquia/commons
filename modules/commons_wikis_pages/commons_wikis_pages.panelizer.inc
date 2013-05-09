@@ -75,7 +75,7 @@ function commons_wikis_pages_panelizer_defaults() {
     $display->content['new-1'] = $pane;
     $display->panels['two_66_33_first'][0] = 'new-1';
     $pane = new stdClass();
-    $pane->pid = 'new-3';
+    $pane->pid = 'new-2';
     $pane->panel = 'two_66_33_second';
     $pane->type = 'views_panes';
     $pane->subtype = 'commons_wikis_contributor_list-commons_wikis_contributor_pane';
@@ -94,8 +94,8 @@ function commons_wikis_pages_panelizer_defaults() {
     $pane->extras = array();
     $pane->position = 0;
     $pane->locks = array();
-    $display->content['new-3'] = $pane;
-    $display->panels['two_66_33_second'][0] = 'new-3';
+    $display->content['new-2'] = $pane;
+    $display->panels['two_66_33_second'][0] = 'new-2';
   $display->hide_title = PANELS_TITLE_FIXED;
   $display->title_pane = '0';
   $panelizer->display = $display;
