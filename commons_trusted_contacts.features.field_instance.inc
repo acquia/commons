@@ -426,14 +426,9 @@ function commons_trusted_contacts_field_default_field_instances() {
     ),
   );
 
-  $group_bundles = og_get_all_group_bundle();
-  if (empty($group_bundles['node'])) {
-    // Make sure group_bundles contains at least the group node bundle, in order
-    // to create the group audience field for it when installing the profile.
-    $group_bundles['node'] = array('group' => TRUE);
-  }
-  foreach(array_keys($group_bundles['node']) as $bundle) {
-    commons_trusted_contacts_field_definition_group($field_instances, 'node', $bundle);
+  $node_types = node_type_get_types();
+  foreach(array_keys($node_types) as $type) {
+    commons_trusted_contacts_field_definition_group($field_instances, 'node', $type);
   }
 
   // Translatables
@@ -451,7 +446,6 @@ function commons_trusted_contacts_field_default_field_instances() {
 }
 
 function commons_trusted_contacts_field_definition_group(&$field_instances, $entity_type, $bundle) {
-
   // Exported field_instance: 'node-post-og_user_group_ref'
   $field_instances["$entity_type-$bundle-og_user_group_ref"] = array(
     'bundle' => $bundle,
