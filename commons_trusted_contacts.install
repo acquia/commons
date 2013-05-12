@@ -3,7 +3,7 @@
 /**
  * Implements hook_install().
  */
-function commons_install() {
+function commons_trusted_contacts_install() {
   // Do not inform the user about new messages on login.
   variable_set('privatemsg_display_loginmessage', FALSE);
 
