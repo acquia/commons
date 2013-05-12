@@ -778,12 +778,30 @@ function commons_trusted_contacts_privatemsg_write_access($account) {
 }
 
 /**
- * Implement hook_form_FORM_ID_alter().
- *
- * According to design, 'body' field should be 'plain_text' by default.
+ * Implements hook_form_FORM_ID_alter().
  */
 function commons_trusted_contacts_form_privatemsg_new_alter(&$form, &$form_state) {
+  global $user;
+
+  // According to design, 'body' field should be 'plain_text' by default.
   $form['body']['#format'] = 'plain_text';
+
+  // Alter markup of 'Cancel' button so it will link to our URL instead of the
+  // default one.
+  $form['actions']['cancel']['#markup'] = str_replace(url('messages'), url('user/' . $user->uid . '/contacts/messages'), $form['actions']['cancel']['#markup']);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Alter destination of 'Delete' button so it will link to our URL instead of
+ * the default one.
+ */
+function commons_trusted_contacts_form_privatemsg_delete_alter(&$form, &$form_state) {
+  if ($form['delete_destination'] == 'messages') {
+    global $user;
+    $form['delete_destination'] = 'user/' . $user->uid . '/contacts/messages';
+  }
 }
 
 /**
