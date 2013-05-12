@@ -6,6 +6,11 @@
 function commons_install() {
   // Do not inform the user about new messages on login.
   variable_set('privatemsg_display_loginmessage', FALSE);
+
+  // Make sure the admin user is also a group.
+  $wrapper = entity_metadata_wrapper('user', 1);
+  $wrapper->{OG_GROUP_FIELD}->set(TRUE);
+  $wrapper->save();
 }
 
 /**
