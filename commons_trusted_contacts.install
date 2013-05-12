@@ -1,8 +1,17 @@
 <?php
 
 /**
- * Enable module PrivateMsg.
+ * Implements hook_install().
+ */
+function commons_install() {
+  // Do not inform the user about new messages on login.
+  variable_set('privatemsg_display_loginmessage', FALSE);
+}
+
+/**
+ * Implements hook_update_N().
  */
 function commons_trusted_contacts_update_3100() {
+  // Enable module PrivateMsg.
   module_enable(array('privatemsg'));
 }
