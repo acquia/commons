@@ -124,6 +124,10 @@ function commons_trusted_contacts_menu_alter(&$items) {
   // By default, PrivateMsg module only checks user permissions.
   $items['messages/new']['access callback'] = 'commons_trusted_contacts_privatemsg_write_access';
   $items['messages/new']['access arguments'] = array(2);
+
+  // Remove original private messages pages.
+  unset($items['messages']);
+  unset($items['messages/list']);
 }
 
 /**
