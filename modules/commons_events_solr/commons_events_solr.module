@@ -233,11 +233,6 @@ function commons_events_solr_theme_registry_alter(&$registry) {
   $registry['apachesolr_search_noresults']['function'] = 'commons_events_solr_apachesolr_search_noresults';
 }
 
-function commons_events_solr_apachesolr_process_results(&$results, DrupalSolrQueryInterface $query) {
-  foreach($results AS $rkey => $result) {
-    $results[$rkey]['snippet'] = drupal_render(node_view(node_load($results[$rkey]['fields']['entity_id']), 'teaser'));
-  }
-}
 /**
  * Implements hook_preprocess_hook().
  */
