@@ -169,7 +169,7 @@ projects[message][subdir] = "contrib"
 projects[message][download][type] = "git"
 projects[message][download][url] = "http://git.drupal.org/project/message.git"
 projects[message][download][branch] = "7.x-1.x"
-projects[message][download][revision] = "76086c7e2cb5af5e16a88b8ef16bb232347d7162"
+projects[message][download][revision] = "5ae12e8c0b7482f8525106825009409f3b9b7140"
 
 ; Make message access alterable.
 ; http://drupal.org/node/1920560#comment-7080942
