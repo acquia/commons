@@ -213,7 +213,7 @@ function commons_trusted_contacts_tab($tab) {
         ->count()
         ->execute();
 
-      drupal_set_title(t('Private Message & Invitations'));
+      drupal_set_title(t('Private Messages & invitations'));
 
       return views_embed_view('trusted_contacts');
 
@@ -221,7 +221,7 @@ function commons_trusted_contacts_tab($tab) {
       $wrapper = entity_metadata_wrapper('user', $user);
       $count = $wrapper->field_unread_invitations->value();
 
-      drupal_set_title(t('Private Message & Invitations'));
+      drupal_set_title(t('Private Messages & invitations'));
 
       return views_embed_view('trusted_contacts_invitations');
 
@@ -231,7 +231,7 @@ function commons_trusted_contacts_tab($tab) {
       $wrapper = entity_metadata_wrapper('user', $user);
       $count = $wrapper->field_unread_messages->value();
 
-      drupal_set_title(t('Private Message & Invitations'));
+      drupal_set_title(t('Private Messages & invitations'));
 
       return privatemsg_list_page();
 
