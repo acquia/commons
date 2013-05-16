@@ -966,7 +966,7 @@ function commons_trusted_contacts_users_upgrade_batch_init() {
   $uids = array_diff($uids, $ignore_uids);
 
   // Build the operations array.
-  $uids_chunks = array_chunk($uids, variable_get('commons_trusted_contacts_upgrade_batch_size', 2));
+  $uids_chunks = array_chunk($uids, variable_get('commons_trusted_contacts_upgrade_batch_size', 200));
   $operations = array();
   foreach ($uids_chunks as $uids) {
     $operations[] = array('commons_trusted_contacts_batch_worker', array($uids));
