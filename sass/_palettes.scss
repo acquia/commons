@@ -120,8 +120,12 @@
       color: $palette_color_light;
     }
 
+    .notification-count {
+      background: $palette_btn_top;
+      @include background(linear-gradient($palette_btn_top darken($palette_btn_top, 20)));
+      @include box-shadow(0 0 2px $palette_color_dark);
+    }
   }
-
 }
 
 //Specific overrides
