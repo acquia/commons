@@ -823,6 +823,77 @@ function commons_trusted_contacts_form_privatemsg_delete_alter(&$form, &$form_st
   }
 }
 
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Adds the audience type widget to the partial node form.
+ */
+function commons_trusted_contacts_form_commons_bw_partial_node_form_alter(&$form, &$form_state) {
+  if (!empty($form_state['group_id'])) {
+    return;
+  }
+
+  $form['group_audience_type'] = array(
+    '#type' => 'radios',
+    '#title' => t('Post to'),
+    '#title_display' => 'invisible',
+    '#default_value' => 'private',
+    '#options' => array(
+      'custom' => t('Post to specific groups'),
+      'private' => t('Post to contacts (private)'),
+    ),
+    '#weight' => 70,
+  );
+
+  $form[OG_AUDIENCE_FIELD]['#weight'] = 80;
+  $form[OG_AUDIENCE_FIELD]['#states'] = array(
+    'visible' => array(
+      ':input[name="group_audience_type"]' => array('value' => 'custom'),
+    ),
+  );
+
+  $form['#validate'][] = 'commons_trusted_contacts_partial_node_form_validate';
+}
+
+/**
+ * Validation handler; Make sure that a group is selected in case the
+ * group_audience_type is set to "Specific groups".
+ */
+function commons_trusted_contacts_partial_node_form_validate($form, $form_state) {
+  if ($form_state['values']['group_audience_type'] == 'custom' && empty($form_state['values'][OG_AUDIENCE_FIELD][LANGUAGE_NONE][0])) {
+    form_set_error(OG_AUDIENCE_FIELD, t('No groups were selected.'));
+    return FALSE;
+  }
+}
+
+/**
+ * Implements hook_node_presave().
+ *
+ * Override the group fields.
+ */
+function commons_trusted_contacts_node_presave($node) {
+  if (empty($node->partial_node_form) || !$node->is_new) {
+    return;
+  }
+
+  $wrapper = entity_metadata_wrapper('node', $node);
+
+  // The content is submitted either to the private group or to a selected
+  // group.
+  if ($node->form_state['values']['group_audience_type'] == 'private') {
+    $wrapper->og_user_group_ref->set(array($node->uid));
+  }
+  else {
+    // Extract group IDs from selection.
+    $group_ids = array();
+    foreach ($node->form_state['values'][OG_AUDIENCE_FIELD][LANGUAGE_NONE] as $group) {
+      $group_ids[] = $group['target_id'];
+    }
+    $wrapper->{OG_AUDIENCE_FIELD}->set($group_ids);
+  }
+}
+
 /**
  * Implements hook_action_info().
  *
