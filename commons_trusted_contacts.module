@@ -74,40 +74,8 @@ function commons_trusted_contacts_menu() {
   );
 
   $items['user/%user/contacts'] = array(
-    'title callback' => 'commons_trusted_contacts_tab_title',
-    'title arguments' => array('contacts'),
+    'title' => t('Private Messages & Invitations'),
     'page callback' => 'commons_trusted_contacts_tab',
-    'page arguments' => array('contacts'),
-    'access callback' => 'commons_trusted_contacts_tab_access',
-    'access arguments' => array(1),
-    'type' => MENU_LOCAL_TASK,
-  );
-
-  $items['user/%user/contacts/messages'] = array(
-    'title callback' => 'commons_trusted_contacts_tab_title',
-    'title arguments' => array('messages'),
-    'page callback' => 'commons_trusted_contacts_tab',
-    'page arguments' => array('messages'),
-    'access callback' => 'commons_trusted_contacts_tab_access',
-    'access arguments' => array(1),
-    'type' => MENU_LOCAL_TASK,
-  );
-
-  $items['user/%user/contacts/invitations'] = array(
-    'title callback' => 'commons_trusted_contacts_tab_title',
-    'title arguments' => array('invitations'),
-    'page callback' => 'commons_trusted_contacts_tab',
-    'page arguments' => array('invitations'),
-    'access callback' => 'commons_trusted_contacts_tab_access',
-    'access arguments' => array(1),
-    'type' => MENU_LOCAL_TASK,
-  );
-
-  $items['user/%user/contacts/trusted'] = array(
-    'title callback' => 'commons_trusted_contacts_tab_title',
-    'title arguments' => array('contacts'),
-    'page callback' => 'commons_trusted_contacts_tab',
-    'page arguments' => array('contacts'),
     'access callback' => 'commons_trusted_contacts_tab_access',
     'access arguments' => array(1),
     'type' => MENU_LOCAL_TASK,
@@ -161,88 +129,36 @@ function commons_trusted_contacts_admin_paths() {
 }
 
 /**
- * Title callback; Trusted contacts related titles.
- */
-function commons_trusted_contacts_tab_title($tab) {
-  global $user;
-
-  switch ($tab) {
-    case 'contacts':
-      $query = new EntityFieldQuery();
-      $count = $query
-        ->entityCondition('entity_type', 'og_membership')
-        ->propertyCondition('group_type', 'user')
-        ->propertyCondition('entity_type', 'user')
-        ->propertyCondition('gid', $user->uid)
-        ->propertyCondition('etid', $user->uid, '<>')
-        ->propertyCondition('state', 1)
-        ->count()
-        ->execute();
-
-      return t('Trusted Contacts (@count)', array('@count' => $count));
-
-    case 'invitations':
-      $wrapper = entity_metadata_wrapper('user', $user);
-      $count = $wrapper->field_unread_invitations->value();
-      $count = $count ? $count : 0;
-
-      return t('Invitations (@count)', array('@count' => $count));
-
-    case 'messages':
-      module_load_include('inc', 'privatemsg', 'privatemsg.pages');
-
-      $wrapper = entity_metadata_wrapper('user', $user);
-      $count = $wrapper->field_unread_messages->value();
-      $count = $count ? $count : 0;
-
-      return t('Messages (@count)', array('@count' => $count));
-  }
-  return;
-}
-
-/**
  * Page callback; Trusted contacts related pages.
  */
-function commons_trusted_contacts_tab($tab) {
+function commons_trusted_contacts_tab() {
   global $user;
 
-  switch ($tab) {
-    case 'contacts':
-      $query = new EntityFieldQuery();
-      $count = $query
-        ->entityCondition('entity_type', 'og_membership')
-        ->propertyCondition('group_type', 'user')
-        ->propertyCondition('entity_type', 'user')
-        ->propertyCondition('gid', $user->uid)
-        ->propertyCondition('etid', $user->uid, '<>')
-        ->propertyCondition('state', 1)
-        ->count()
-        ->execute();
+  $tabs = array();
 
-      drupal_set_title(t('Private Messages & invitations'));
+  $view = views_get_view('trusted_contacts');
+  $view->get_total_rows = TRUE;
+  $view->execute();
+  $tabs['contacts'] = array(
+    'title' => t('Trusted Contacts') . ' <span class="commons-bw-result-count">'. $view->total_rows . '</span>',
+    'contents' => views_embed_view('trusted_contacts'),
+  );
 
-      return views_embed_view('trusted_contacts');
+  module_load_include('inc', 'privatemsg', 'privatemsg.pages');
+  $wrapper = entity_metadata_wrapper('user', $user);
+  $tabs['messages'] = array(
+    'title' => t('Messages') . ' <span class="commons-bw-result-count">'. (int)$wrapper->field_unread_messages->value() . '</span>',
+    'contents' => privatemsg_list_page(),
+  );
 
-    case 'invitations':
-      $wrapper = entity_metadata_wrapper('user', $user);
-      $count = $wrapper->field_unread_invitations->value();
+  $wrapper = entity_metadata_wrapper('user', $user);
+  $tabs['invitations'] = array(
+    'title' => t('Invitations') . ' <span class="commons-bw-result-count">'. (int)$wrapper->field_unread_invitations->value() . '</span>',
+    'contents' => views_embed_view('trusted_contacts_invitations'),
+  );
 
-      drupal_set_title(t('Private Messages & invitations'));
-
-      return views_embed_view('trusted_contacts_invitations');
-
-    case 'messages':
-      module_load_include('inc', 'privatemsg', 'privatemsg.pages');
-
-      $wrapper = entity_metadata_wrapper('user', $user);
-      $count = $wrapper->field_unread_messages->value();
-
-      drupal_set_title(t('Private Messages & invitations'));
-
-      return privatemsg_list_page();
-
-  }
-  return;
+  $settings = array('style' => 'Commons Pills', 'ajax' => FALSE, 'html' => TRUE);
+  return quicktabs_build_quicktabs('commons_trusted_contacts', $settings, $tabs);
 }
 
 /**
