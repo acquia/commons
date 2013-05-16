@@ -25,6 +25,12 @@ function commons_trusted_contacts_system_info_alter(&$info, $file, $type) {
 function commons_trusted_contacts_menu() {
   $items = array();
 
+  $items['users/upgrade'] = array(
+    'page callback' => 'commons_trusted_contacts_users_upgrade_batch_init',
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_CALLBACK,
+  );
+
   $items['request-trust/%user/%/%'] = array(
     'page callback' => 'commons_trusted_contacts_request_trust',
     'page arguments' => array(1, 3),
@@ -942,4 +948,67 @@ function commons_trusted_contacts_privatemsg_message_status_changed($pmid, $stat
     // Status changed to read.
     commons_notify_remove_notification_item($account, 'message');
   }
+}
+
+/**
+ * Menu callback; Batch for setting users as groups.
+ */
+function commons_trusted_contacts_users_upgrade_batch_init() {
+  // Fetch all users.
+  $query = new EntityFieldQuery;
+  $result = $query->entityCondition('entity_type', 'user')
+    ->propertyCondition('uid', 0, '<>')
+    ->execute();
+  $uids = array_keys($result['user']);
+
+  // Remove the users that are already set as group.
+  $ignore_uids = og_get_all_group('user');
+  $uids = array_diff($uids, $ignore_uids);
+
+  // Build the operations array.
+  $uids_chunks = array_chunk($uids, variable_get('commons_trusted_contacts_upgrade_batch_size', 2));
+  $operations = array();
+  foreach ($uids_chunks as $uids) {
+    $operations[] = array('commons_trusted_contacts_batch_worker', array($uids));
+  }
+
+  $batch = array(
+    'title' => t('Upgrading users...'),
+    'operations' => array(),
+    'init_message' => t('Commencing'),
+    'progress_message' => t('Processed @current out of @total.'),
+    'error_message' => t('An error occurred during processing'),
+    'finished' => 'commons_trusted_contacts_batch_finished',
+    'operations' => $operations,
+  );
+
+  batch_set($batch);
+  batch_process('<front>');
+}
+
+/**
+ * Batch callback; Set users as groups.
+ */
+function commons_trusted_contacts_batch_worker($uids, &$context) {
+  foreach ($uids as $uid) {
+    $wrapper = entity_metadata_wrapper('user', $uid);
+    $wrapper->{OG_GROUP_FIELD}->set(TRUE);
+    $wrapper->save();
+
+    $context['results']['processed']++;
+  }
+}
+
+/**
+ * Batch callback; "Finished" message.
+ */
+function commons_trusted_contacts_batch_finished($success, $results, $operations) {
+  if ($success) {
+    $message = format_plural($results['processed'], t('One user processed.'), t('@count users processed.'));
+  }
+  else {
+    $message = t('Error encountered while upgrading users.');
+  }
+
+  drupal_set_message($message);
 }
