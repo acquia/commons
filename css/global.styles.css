@@ -2585,7 +2585,8 @@ ul.commons-utility-links li.last a {
   top: 1px;
 }
 
-.unread-messages a {
+.unread-messages a,
+.no-unread-messages a {
   background: url('../images/icons-s217778c622.png') 0 -909px no-repeat;
   width: 18px;
   height: 14px;
@@ -2596,12 +2597,23 @@ ul.commons-utility-links li.last a {
 }
 
 .unread-invitations a,
-.unread-messages a {
+.unread-messages a,
+.no-unread-messages a {
   position: relative;
   top: .3em;
   display: inline-block;
   margin-top: -.2em;
   margin-right: .8em;
+}
+
+.no-unread-messages a {
+  top: -.1em;
+  margin-top: 0;
+  text-indent: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
+  opacity: 0.4;
 }
 
 .notification-count {

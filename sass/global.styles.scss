@@ -2150,20 +2150,33 @@ ul.commons-utility-links {
   }
 }
 
-.unread-messages {
+.unread-messages,
+.no-unread-messages {
   a {
     @include sprite_url_height_width($icons, icon-envelope);
   }
 }
 
 .unread-invitations,
-.unread-messages {
+.unread-messages,
+.no-unread-messages {
   a {
     position: relative;
     top: .3em;
     display: inline-block;
     margin-top: -.2em;
     margin-right: .8em;
+  }
+}
+
+.no-unread-messages {
+  a {
+    top: -.1em;
+    margin-top: 0;
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    @include opacity(.4);
   }
 }
 
