@@ -2144,6 +2144,41 @@ ul.commons-utility-links {
   }
 }
 
+.unread-invitations {
+  a {
+    @include sprite_url_height_width($icons, icon-person);
+  }
+}
+
+.unread-messages {
+  a {
+    @include sprite_url_height_width($icons, icon-envelope);
+  }
+}
+
+.unread-invitations,
+.unread-messages {
+  a {
+    position: relative;
+    top: .3em;
+    display: inline-block;
+    margin-top: -.2em;
+    margin-right: .8em;
+  }
+}
+
+.notification-count {
+  position: absolute;
+  top: -.2em;
+  right: -.6em;
+  display: inline-block;
+  padding: 0 .2em;
+  font-size: .88em;
+  @include border-radius(.4em);
+  @include box-shadow(0 0 2px $light_blue);
+  @include background(linear-gradient($green, darken($green, 20)));
+}
+
 /* =============================================================================
  *   Superfish
  * ========================================================================== */
