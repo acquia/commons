@@ -596,7 +596,7 @@ function commons_trusted_contacts_approve_trust(OgMembership $og_membership) {
   message_notify_send_message($message);
 
   // Redirect to Invitations screen.
-  drupal_goto('user/' . $user->uid . '/contacts/invitations');
+  drupal_goto('user/' . $user->uid . '/contacts', array('query' => array('qt-commons_trusted_contacts' => 'invitations')));
 }
 
 /**
@@ -622,7 +622,7 @@ function commons_trusted_contacts_ignore_trust(OgMembership $og_membership) {
   $wrapper->save();
 
   // Redirect to Invitations screen.
-  drupal_goto('user/' . $user->uid . '/contacts/invitations');
+  drupal_goto('user/' . $user->uid . '/contacts', array('query' => array('qt-commons_trusted_contacts' => 'invitations')));
 }
 
 /**
@@ -729,7 +729,14 @@ function commons_trusted_contacts_form_privatemsg_new_alter(&$form, &$form_state
 
   // Alter markup of 'Cancel' button so it will link to our URL instead of the
   // default one.
-  $form['actions']['cancel']['#markup'] = str_replace(url('messages'), url('user/' . $user->uid . '/contacts/messages'), $form['actions']['cancel']['#markup']);
+  $form['actions']['cancel'] = array(
+    '#type' => 'link',
+    '#title' => t('Cancel'),
+    '#href' => 'user/' . $user->uid . '/contacts',
+    '#options' => array(
+      'query' => array('qt-commons_trusted_contacts' => 'messages'),
+    ),
+  );
 }
 
 /**
@@ -739,9 +746,11 @@ function commons_trusted_contacts_form_privatemsg_new_alter(&$form, &$form_state
  * the default one.
  */
 function commons_trusted_contacts_form_privatemsg_delete_alter(&$form, &$form_state) {
-  if ($form['delete_destination'] == 'messages') {
-    global $user;
-    $form['delete_destination'] = 'user/' . $user->uid . '/contacts/messages';
+  global $user;
+
+  if ($form['delete_destination']['#value'] == 'messages') {
+    // TODO: Redirect to the messages quick-tab.
+    $form['delete_destination']['#value'] = 'user/' . $user->uid . '/contacts';
   }
 }
 
