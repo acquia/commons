@@ -157,7 +157,13 @@ function commons_trusted_contacts_tab() {
     'contents' => views_embed_view('trusted_contacts_invitations'),
   );
 
-  $settings = array('style' => 'Commons Pills', 'ajax' => FALSE, 'html' => TRUE);
+  $settings = array(
+    'style' => 'Commons Pills',
+    'ajax' => FALSE,
+    'html' => TRUE,
+    'default_tab' => 'invitations',
+  );
+
   return quicktabs_build_quicktabs('commons_trusted_contacts', $settings, $tabs);
 }
 
