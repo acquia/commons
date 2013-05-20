@@ -220,6 +220,11 @@ function commons_trusted_contacts_field_formatter_view($entity_type, $entity, $f
         return;
       }
 
+      // Hide the trust link from anonymous and users without subscribe access.
+      if (!$account->uid || !og_user_access('user', $entity->uid, 'subscribe')) {
+        return;
+      }
+
       if (!empty($entity->uid) && ($entity->uid == $account->uid)) {
         // User is the group manager.
         return;
