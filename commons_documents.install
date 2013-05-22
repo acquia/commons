@@ -10,3 +10,14 @@ function commons_documents_update_7000() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Disable default frontpage promotion of Document nodes.
+ */
+function commons_documents_update_7001() {
+    $revert = array(
+      'commons_documents' => array('variable'),
+  );
+  features_revert($revert);
+  return array();
+}
