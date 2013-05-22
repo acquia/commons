@@ -7,6 +7,11 @@ function commons_utility_links_block_info() {
   $blocks['commons_utility_links'] = array(
     'info' => t('Commons utility links'),
     'cache' => DRUPAL_NO_CACHE,
+    'visibility' => 0,
+    'region' => 'header',
+    'status' => 1,
+    'pages' => 0,
+    'weight' => 1,
   );
   return $blocks;
 }

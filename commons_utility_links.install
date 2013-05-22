@@ -1,0 +1,17 @@
+<?php
+/**
+ * @file
+ * Commons Utility Links install script.
+ */
+
+/**
+ * Set Utility Links block to never cache, and force clear block cache.
+ */
+function commons_utility_links_update_7301() {
+  db_update('block')
+    ->fields(array('cache', DRUPAL_NO_CACHE))
+    ->condition('delta', 'commons_utility_links')
+    ->condition('module', 'commons_utility_links')
+    ->execute();
+  cache_clear_all('*', 'cache_block', TRUE);
+}
