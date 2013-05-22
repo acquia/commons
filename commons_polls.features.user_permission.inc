@@ -10,6 +10,16 @@
 function commons_polls_user_default_permissions() {
   $permissions = array();
 
+  // Exported permission: cancel own vote.
+  $permissions['cancel own vote'] = array(
+    'name' => 'cancel own vote',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'authenticated user' => 'authenticated user',
+    ),
+    'module' => 'poll',
+  );
+
   // Exported permission: create poll content.
   $permissions['create poll content'] = array(
     'name' => 'create poll content',
@@ -56,6 +66,16 @@ function commons_polls_user_default_permissions() {
       'authenticated user' => 'authenticated user',
     ),
     'module' => 'node',
+  );
+
+  // Exported permission: vote on polls.
+  $permissions['vote on polls'] = array(
+    'name' => 'vote on polls',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'authenticated user' => 'authenticated user',
+    ),
+    'module' => 'poll',
   );
 
   return $permissions;
