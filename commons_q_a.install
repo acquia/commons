@@ -46,3 +46,14 @@ function commons_q_a_update_3103() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Disable comments on Answer nodes.
+ */
+function commons_q_a_update_3104() {
+    $revert = array(
+      'commons_q_a' => array('variable'),
+  );
+  features_revert($revert);
+  return array();
+}
