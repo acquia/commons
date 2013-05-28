@@ -288,8 +288,9 @@ function commons_origins_preprocess_node(&$variables, $hook) {
   // Replace the submitted text on nodes with something a bit more pertinent to
   // the content type.
   if (variable_get('node_submitted_' . $node->type, TRUE)) {
+    $node_type_info = node_type_get_type($variables['node']);
     $placeholders = array(
-      '!type' => '<span class="node-content-type">' . ucfirst($node->type) . '</span>',
+      '!type' => '<span class="node-content-type">' . check_plain($node_type_info->name) . '</span>',
       '!user' => $variables['name'],
       '!date' => $variables['date'],
       '@interval' => format_interval(REQUEST_TIME - $node->created),
