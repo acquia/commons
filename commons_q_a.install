@@ -57,3 +57,15 @@ function commons_q_a_update_3104() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Link the 'Answer added' activity stream message to the Answer node as
+ * displayed on the question per http://drupal.org/node/1946120.
+ */
+function commons_q_a_update_3105() {
+    $revert = array(
+      'commons_q_a' => array('field_instance', 'message_type', 'variable'),
+  );
+  features_revert($revert);
+  return array();
+}

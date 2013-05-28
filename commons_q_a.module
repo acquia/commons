@@ -268,6 +268,12 @@ function commons_q_a_commons_activity_streams_message_selection_alter(&$message_
     if ($hook == 'node_insert' && $node->type == 'question') {
     $message_type = 'commons_q_a_question_asked';
   }
+
+  // Provide a special message type that uses "User answered the question"
+  // phrasing when a new answer node is created.
+  if ($hook == 'node_insert' && $node->type == 'answer') {
+    $message_type = 'commons_q_a_question_answered';
+  }
 }
 
 /**
