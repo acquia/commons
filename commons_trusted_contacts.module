@@ -794,6 +794,9 @@ function commons_trusted_contacts_form_commons_bw_partial_node_form_alter(&$form
       'private' => t('Post to contacts (private)'),
     ),
     '#weight' => 70,
+    '#attributes' => array(
+      'class' => array('hideable-field'),
+    ),
   );
 
   $form[OG_AUDIENCE_FIELD]['#weight'] = 80;
