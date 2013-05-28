@@ -976,6 +976,9 @@ function commons_origins_preprocess_field(&$variables, $hook) {
   }
 }
 
+/**
+ * Override theme_html_tag__request_pending().
+ */
 function commons_origins_html_tag__request_pending($variables) {
   $element = $variables['element'];
   $element['#attributes']['class'][] = 'action-item-small-active';
