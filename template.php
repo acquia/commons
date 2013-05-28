@@ -962,6 +962,42 @@ function _commons_origins_format_address(&$address) {
 }
 
 /**
+ * Implements hook_preprocess_field().
+ */
+function commons_origins_preprocess_field(&$variables, $hook) {
+  // Style the trusted contact link like a button.
+  if ($variables['element']['#formatter'] == 'trusted_contact') {
+    foreach ($variables['items'] as &$item) {
+      if (isset($item['#options'])) {
+        $item['#options']['attributes']['class'][] = 'action-item-small';
+      }
+    }
+  }
+}
+
+function commons_origins_html_tag__request_pending($variables) {
+  $element = $variables['element'];
+  $element['#attributes']['class'][] = 'action-item-small-active';
+  $attributes = drupal_attributes($element['#attributes']);
+
+  if (!isset($element['#value'])) {
+    return '<' . $element['#tag'] . $attributes . " />\n";
+  }
+  else {
+    $output = '<' . $element['#tag'] . $attributes . '>';
+    if (isset($element['#value_prefix'])) {
+      $output .= $element['#value_prefix'];
+    }
+    $output .= $element['#value'];
+    if (isset($element['#value_suffix'])) {
+      $output .= $element['#value_suffix'];
+    }
+    $output .= '</' . $element['#tag'] . ">\n";
+    return $output;
+  }
+}
+
+/**
  * Overrides theme_field__addressfield().
  */
 function commons_origins_field__addressfield($variables) {

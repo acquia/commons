@@ -1813,11 +1813,33 @@ ul.node-action-links {
   margin: 4px 0 0 5px;
 }
 
+/**
+ * User profile
+ */
+
 .page-user {
+  .panel-display {
+    .region-three-33-top {
+      padding-left: 120px + $gutter_width * 3;
+
+      @include respond(only-small) {
+        padding-left: 0;
+      }
+
+      /* This feels hackish, but it is only for administrating the layout of the
+         page. It is still not ideal as it is inflexible and only works with the
+         current core functionality of commons. */
+      .panels-ipe-portlet-wrapper {
+        &:nth-last-child(-n+5) {
+          display: inline-block;
+        }
+      }
+    }
+  }
+
   .pane-user-picture {
-    display: inline-block;
     float: left;
-    width: 15%;
+    margin-left: -(120px + $gutter_width * 2);
 
     .user-picture {
       background: $white;
@@ -1831,57 +1853,95 @@ ul.node-action-links {
         display: block;
       }
     }
+
+    @include respond(only-small) {
+      float: none;
+      margin-left: 0;
+      text-align: center;
+    }
   }
 
-  .pane-user-field-bio {
-    float: left;
-    width: 80%;
-  }
-
-  .pane-user-field-facebook-url {
-    float: left;
-    width: 26%;
-
+  .pane-user-field-facebook-url,
+  .pane-user-field-linkedin-url,
+  .pane-user-field-twitter-url,
+  .pane-user-group-group,
+  .pane-user-flag-commons-follow-user-link {
+    &,
     a {
       display: inline-block;
+    }
+
+    @include respond(medium-large) {
+      display: block;
+    }
+  }
+
+  .pane-user-field-facebook-url,
+  .pane-user-field-linkedin-url,
+  .pane-user-field-twitter-url {
+    a {
+      margin-right: 1em;
 
       &:before {
         content: "";
+        display: inline-block;
+        vertical-align: middle;
+      }
+    }
+
+    @include respond(only-small) {
+      a {
+        text-indent: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+
+      a {
+        &:before {
+          content: normal;
+        }
+      }
+    }
+  }
+
+  .pane-user-field-facebook-url {
+    a {
+      &:before {
         @include sprite_url_height_width($icons, facebook);
-        margin-right: 7px;
-        top: 7px;
+      }
+    }
+
+    @include respond(only-small) {
+      a {
+        @include sprite_url_height_width($icons, facebook);
       }
     }
   }
 
   .pane-user-field-linkedin-url {
-    float: left;
-    width: 26%;
-
     a {
-      display: inline-block;
-
       &:before {
-        content: "";
         @include sprite_url_height_width($icons, linkedin);
-        margin-right: 7px;
-        top: 7px;
+      }
+    }
+
+    @include respond(only-small) {
+      a {
+        @include sprite_url_height_width($icons, linkedin);
       }
     }
   }
 
   .pane-user-field-twitter-url {
-    float: left;
-    width: 26%;
-
     a {
-      display: inline-block;
-
       &:before {
-        content: "";
         @include sprite_url_height_width($icons, twitter);
-        margin-right: 7px;
-        top: 7px;
+      }
+    }
+
+    @include respond(only-small) {
+      a {
+        @include sprite_url_height_width($icons, twitter);
       }
     }
   }
