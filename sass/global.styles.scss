@@ -1823,7 +1823,7 @@ ul.node-action-links {
       padding-left: 120px + $gutter_width * 3;
 
       @include respond(only-small) {
-        padding-left: 0;
+        padding-left: $gutter_width;
       }
 
       /* This feels hackish, but it is only for administrating the layout of the
@@ -1870,10 +1870,6 @@ ul.node-action-links {
     a {
       display: inline-block;
     }
-
-    @include respond(medium-large) {
-      display: block;
-    }
   }
 
   .pane-user-field-facebook-url,
@@ -1901,6 +1897,10 @@ ul.node-action-links {
           content: normal;
         }
       }
+    }
+
+    @include respond(only-medium) {
+      display: block;
     }
   }
 
