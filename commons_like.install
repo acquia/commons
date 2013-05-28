@@ -1,0 +1,12 @@
+<?php
+
+/**
+ * Set the node display setting to a valid option.
+ */
+function commons_like_update_3000() {
+    $revert = array(
+      'commons_like' => array('variable'),
+  );
+  features_revert($revert);
+  return array();
+}

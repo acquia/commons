@@ -30,7 +30,7 @@ function commons_like_strongarm() {
         ),
       ),
       'template' => 'commons_like',
-      'node_display' => '3',
+      'node_display' => '2',
       'teaser_display' => FALSE,
       'comment_display' => '2',
       'node_display_mode' => '1',
