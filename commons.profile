@@ -205,7 +205,7 @@ function commons_create_first_group() {
   $form['commons_first_group_body'] = array(
     '#type' => 'textarea',
     '#title' => st('Group description'),
-    '#description' => st("This text will appear on the group's homepage and helps new contirbutors to become familiar with the purpose of the group. You can always change this text or add another group later."),
+    '#description' => st("This text will appear on the group's homepage and helps new contributors to become familiar with the purpose of the group. You can always change this text or add another group later."),
     '#required' => TRUE,
     '#default_value' => st('The online home for our Engineering team'),
   );
