@@ -42,7 +42,7 @@ function commons_radioactivity_comment_delete($comment) {
 function commons_radioactivity_comment_update($comment) {
   // $comment_change will be equal to 1 if we're changing the publishing status
   // of the comment.
-  $comment_change = $comment->status + $original->status;
+  $comment_change = $comment->status + $comment->original->status;
   // Is this comment's published status changing?
   if ($comment_change == 1) {
     $node = node_load($comment->nid);
