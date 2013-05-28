@@ -120,10 +120,7 @@ projects[entityreference_prepopulate][version] = "1.3"
 
 projects[features][type] = "module"
 projects[features][subdir] = "contrib"
-projects[features][download][type] = "git"
-projects[features][download][url] = "http://git.drupal.org/project/features.git"
-projects[features][download][branch] = "7.x-2.x"
-projects[features][download][revision] = "54e2810bee966777426f0ca5294c6e7252ea7549"
+projects[features][version] = "2.0-rc1"
 
 projects[flag][type] = "module"
 projects[flag][subdir] = "contrib"
