@@ -117,6 +117,21 @@ function commons_activity_streams_groups_views_default_views() {
       'label' => 'OG membership: Group ID',
     ),
   );
+  $translatables['activity_group'] = array(
+    t('Master'),
+    t('Recent activity in this group'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('Content entity referenced from field_target_nodes'),
+    t('OG membership from node'),
+    t('All'),
+    t('Content pane'),
+    t('Commons'),
+  );
   $export['activity_group'] = $view;
 
   return $export;
