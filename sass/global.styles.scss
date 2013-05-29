@@ -383,7 +383,8 @@ var {
   line-height: 0;
 
   .node &,
-  .comment & {
+  .comment &,
+  .privatemsg-message & {
     &:after {
       content: "";
       width: 5px;
@@ -4178,6 +4179,56 @@ body.front.logged-in .view-commons-homepage-content .article.node {
 
   .views-field-ops-1 {
     text-align: center;
+  }
+}
+
+/**
+ * Private message
+ */
+
+.privatemsg-conversation {
+  .form-actions {
+    &,
+    [class*="action-item"] {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.privatemsg-message-participants {
+  margin-bottom: $gutter_width;
+  padding-bottom: $gutter_width;
+  border-bottom: 1px solid $border;
+}
+
+.privatemsg-message {
+  @include box-sizing(border-box);
+  width: 100%;
+  margin-bottom: $gutter_width;
+  padding-bottom: $gutter_width;
+  padding-left: 72px;
+  border-bottom: 1px solid $border;
+
+  .user-picture {
+    position: relative;
+    float: left;
+    width: 50px;
+    margin-left: -72px;
+  }
+}
+
+.privatemsg-message-links {
+  font-size: .88em;
+  text-align: right;
+}
+
+.message-delete {
+  &:before {
+    content: "\2715";
+    display: inline-block;
+    margin-right: .3em;
+    color: $icon_gray;
+    font-weight: bold;
   }
 }
 
