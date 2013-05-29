@@ -167,6 +167,23 @@ function commons_featured_views_default_views() {
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['pane_category']['name'] = 'Commons';
   $handler->display->display_options['pane_category']['weight'] = '0';
+  $translatables['commons_featured'] = array(
+    t('Master'),
+    t('Featured on this site'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('[field_address-locality], [field_address-administrative_area]'),
+    t('.'),
+    t(','),
+    t('Page'),
+    t('Feed'),
+    t('Featured content'),
+    t('Commons'),
+  );
   $export['commons_featured'] = $view;
 
   return $export;
