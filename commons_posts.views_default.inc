@@ -120,6 +120,29 @@ function commons_posts_views_default_views() {
   $handler->display->display_options['filters']['flagged']['expose']['label'] = 'Following';
   $handler->display->display_options['filters']['flagged']['expose']['operator'] = 'flagged_op';
   $handler->display->display_options['filters']['flagged']['expose']['identifier'] = 'following';
+  $translatables['commons_bw_posts'] = array(
+    t('Master'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« first'),
+    t('‹ previous'),
+    t('next ›'),
+    t('last »'),
+    t('No posts have been added.'),
+    t('OG membership from node'),
+    t('following'),
+    t('most recent'),
+    t('most active'),
+    t('All'),
+    t('Following'),
+  );
   $export['commons_bw_posts'] = $view;
 
   return $export;
