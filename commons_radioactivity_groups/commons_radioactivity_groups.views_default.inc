@@ -112,6 +112,27 @@ function commons_radioactivity_groups_views_default_views() {
       'label' => 'OG membership: Group ID',
     ),
   );
+  $translatables['commons_radioactivity_groups_active_in_group'] = array(
+    t('Master'),
+    t('Active in this group'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« first'),
+    t('‹ previous'),
+    t('next ›'),
+    t('last »'),
+    t('OG membership from node'),
+    t('All'),
+    t('Content pane'),
+    t('Commons'),
+  );
   $export['commons_radioactivity_groups_active_in_group'] = $view;
 
   $view = new view();
@@ -191,6 +212,18 @@ function commons_radioactivity_groups_views_default_views() {
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['pane_category']['name'] = 'Commons';
   $handler->display->display_options['pane_category']['weight'] = '0';
+  $translatables['commons_radioactivity_groups_most_active'] = array(
+    t('Master'),
+    t('Most active groups'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('Content pane'),
+    t('Commons'),
+  );
   $export['commons_radioactivity_groups_most_active'] = $view;
 
   return $export;
