@@ -336,14 +336,14 @@ function commons_trusted_contacts_views_default_views() {
       'override_label' => 0,
       'label' => '',
     ),
-    'action::commons_groups_set_state_active_action' => array(
+    'action::commons_trusted_contacts_set_state_active_action' => array(
       'selected' => 1,
       'postpone_processing' => 0,
       'skip_confirmation' => 1,
       'override_label' => 1,
       'label' => 'Approve',
     ),
-    'action::commons_groups_set_state_blocked_action' => array(
+    'action::commons_trusted_contacts_set_state_blocked_action' => array(
       'selected' => 1,
       'postpone_processing' => 0,
       'skip_confirmation' => 1,
