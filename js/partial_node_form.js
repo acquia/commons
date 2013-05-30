@@ -30,7 +30,6 @@ Drupal.behaviors.commonsBwPartialNodeForm = {
 Drupal.behaviors.commonsBwExpandableForm = {
   attach: function (context, settings) {
     $('.commons-bw-partial-node-form', context).once('commonsBwExpandableForm', function () {
-      console.log('I have a puppy!');
       // Assemble the variables.
       var form = $(this),
           toggleText = Drupal.t('Collapse the form'),
