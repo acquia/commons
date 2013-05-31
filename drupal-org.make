@@ -363,11 +363,7 @@ projects[views][version] = "3.7"
 
 projects[views_field_view][type] = "module"
 projects[views_field_view][subdir] = "contrib"
-projects[views_field_view][version] = "1.x-dev"
-projects[views_field_view][download][type] = "git"
-projects[views_field_view][download][url] = "http://git.drupal.org/project/views_field_view.git"
-projects[views_field_view][download][branch] = "7.x-1.x"
-projects[views_field_view][download][revision] = "db9308068aa882dce979900baf21df7236f3e4a1"
+projects[views_field_view][version] = "1.1"
 
 projects[views_load_more][type] = "module"
 projects[views_load_more][subdir] = "contrib"
