@@ -25,7 +25,7 @@ function commons_trusted_contacts_system_info_alter(&$info, $file, $type) {
 function commons_trusted_contacts_menu() {
   $items = array();
 
-  $items['users/upgrade'] = array(
+  $items['admin/people/trusted-contacts-upgrade'] = array(
     'page callback' => 'commons_trusted_contacts_users_upgrade_batch_init',
     'access arguments' => array('administer site configuration'),
     'type' => MENU_CALLBACK,
@@ -129,6 +129,13 @@ function commons_trusted_contacts_admin_paths() {
 }
 
 /**
+ * Implements hook_form_alter().
+ */
+function commons_trusted_contacts_form_alter(&$form, &$form_state, $form_id) {
+  //dpm($form, $form_id);
+}
+
+/**
  * Page callback; Trusted contacts related pages.
  */
 function commons_trusted_contacts_tab() {
@@ -221,7 +228,9 @@ function commons_trusted_contacts_field_formatter_view($entity_type, $entity, $f
       }
 
       // Hide the trust link from anonymous and users without subscribe access.
-      if (!$account->uid || !og_user_access('user', $entity->uid, 'subscribe')) {
+      list($id,, $bundle) = entity_extract_ids($entity_type, $entity);
+      $user_is_active_member = og_is_member($entity_type, $id, 'user', $account, array(OG_STATE_ACTIVE));
+      if (!$account->uid || !og_user_access('user', $entity->uid, 'subscribe') && !$user_is_active_member) {
         return;
       }
 
@@ -230,11 +239,12 @@ function commons_trusted_contacts_field_formatter_view($entity_type, $entity, $f
         return;
       }
 
-      list($id,, $bundle) = entity_extract_ids($entity_type, $entity);
-      if (og_is_member($entity_type, $id, 'user', $account, array(OG_STATE_ACTIVE))) {
+
+      if ($user_is_active_member) {
         $links['title'] = t('Message');
         $links['href'] = 'user/' . $user->uid . '/contacts/messages/popup/' . $id;
       }
+
       else
         if (og_is_member($entity_type, $id, 'user', $account, array(OG_STATE_PENDING))) {
           // If user is pending, they should not be able to apply for
