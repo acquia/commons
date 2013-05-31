@@ -76,3 +76,17 @@ function commons_trusted_contacts_default_message_type() {
   }');
   return $items;
 }
+
+/**
+ * Implements hook_default_og_membership_type().
+ */
+function commons_trusted_contacts_default_og_membership_type() {
+  $items = array();
+  $items['trusted_contacts'] = entity_import('og_membership_type', '{
+    "name" : "trusted_contacts",
+    "description" : "Trusted Contacts",
+    "language" : "",
+    "rdf_mapping" : []
+  }');
+  return $items;
+}
