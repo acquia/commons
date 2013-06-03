@@ -250,9 +250,7 @@ function commons_events_form_node_form_alter(&$form, &$form_state) {
     );
     if (empty($form['field_organizers'][$form['field_organizers']['#language']]['#default_value'])) {
       global $user;
-      $user_wrapper = entity_metadata_wrapper('user', $user);
-      $name = $user_wrapper->field_name_first->value() . " " . $user_wrapper->field_name_last->value() . " (" . $user->uid . ")";
-      $form['field_organizers'][$form['field_organizers']['#language']]['#default_value'] = $name;
+      $form['field_organizers'][$form['field_organizers']['#language']]['#default_value'] = format_username($user) . " (" . $user->uid . ")";
     }
     $form['event_registration_settings']['field_organizers'] = $form['field_organizers'];
     $form['event_registration_settings']['field_registration_type'] = $form['field_registration_type'];
