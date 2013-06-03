@@ -5,11 +5,23 @@
  */
 
 /**
+ * Implements hook_install().
+ */
+function commons_utility_links_install() {
+  db_update('block')
+    ->fields(array('region' => 'header'))
+    ->condition('delta', 'commons_utility_links')
+    ->condition('module', 'commons_utility_links')
+    ->condition('theme', 'commons_origins')
+    ->execute();
+}
+
+/**
  * Set Utility Links block to never cache, and force clear block cache.
  */
 function commons_utility_links_update_7301() {
   db_update('block')
-    ->fields(array('cache', DRUPAL_NO_CACHE))
+    ->fields(array('cache' => DRUPAL_NO_CACHE))
     ->condition('delta', 'commons_utility_links')
     ->condition('module', 'commons_utility_links')
     ->execute();
