@@ -55,7 +55,7 @@ function commons_events_default_page_manager_pages() {
     ),
   );
   $display->cache = array();
-  $display->title = '';
+  $display->title = 'Events';
   $display->content = array();
   $display->panels = array();
     $pane = new stdClass();
@@ -172,7 +172,7 @@ function commons_events_default_page_manager_pages() {
     $pane->locks = array();
     $display->content['new-6'] = $pane;
     $display->panels['two_66_33_second'][4] = 'new-6';
-  $display->hide_title = PANELS_TITLE_NONE;
+  $display->hide_title = PANELS_TITLE_FIXED;
   $display->title_pane = 'new-4';
   $handler->conf['display'] = $display;
   $page->default_handlers[$handler->name] = $handler;

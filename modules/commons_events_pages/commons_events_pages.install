@@ -1,0 +1,9 @@
+<?php
+
+/**
+* Add page title.
+*/
+function commons_events_pages_update_7301() {
+  features_revert(array('commons_events_pages' => array('page_manager_pages')));
+  return array();
+}
