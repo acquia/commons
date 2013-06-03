@@ -236,7 +236,6 @@ function commons_events_form_node_form_alter(&$form, &$form_state) {
       'value' => 1,
     );
     $form['field_number_of_attendees']['#weight'] = 11;
-    $form['field_topics']['#weight'] = 12;
     $form['#validate'] = array_merge(array('commons_events_node_form_validate'), $form['#validate']);
     $form['#submit'][] = 'commons_events_node_form_submit';
     // Move registration settings into a fieldset so we can move the group.
@@ -256,19 +255,9 @@ function commons_events_form_node_form_alter(&$form, &$form_state) {
     $form['event_registration_settings']['field_registration_type'] = $form['field_registration_type'];
     $form['event_registration_settings']['field_status'] = $form['field_status'];
     $form['event_registration_settings']['field_number_of_attendees'] = $form['field_number_of_attendees'];
-    $form['event_topics'] = array(
-      '#type' => 'fieldset',
-      '#title' => t('Topics'),
-      '#collapsible' => TRUE,
-      '#collapsed' => FALSE,
-      '#group' => 'additional_settings',
-      '#weight' => -9,
-    );
     unset($form['field_registration'][$form['field_registration']['#language']]['0']['registration_type']['#description']);
     $form['event_registration_settings']['field_registration'] = $form['field_registration'];
     $form['field_organizers'] = array('#language' => NULL);
-    $form['event_topics']['field_topics'] = $form['field_topics'];
-    $form['field_topics'] = array('#language' => NULL);
     $form['field_registration_type'] = array('#language' => NULL);
     $form['field_status'] = array('#language' => NULL);
     $form['field_number_of_attendees'] = array('#language' => NULL);
