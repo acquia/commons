@@ -98,7 +98,7 @@ function commons_follow_ui_notification_settings_form($form, &$form_state, $acco
     '#weight' => 2,
   );
 
-  $tabs = commons_follow_ui_generate_tabs();
+  $tabs = commons_follow_ui_generate_tabs($account);
   $form['tabs'] = array(
     '#markup' => drupal_render($tabs),
     '#weight' => 3,
@@ -142,9 +142,7 @@ function commons_follow_ui_tab_title($account, $flag_name = NULL) {
 }
 
 
-function commons_follow_ui_generate_tabs() {
-  global $user;
-  $account = $user;
+function commons_follow_ui_generate_tabs($account) {
   $tabs = array();
   foreach (array_keys(message_subscribe_flag_get_flags()) as $flag_name) {
     $tabs[$flag_name] = array(
