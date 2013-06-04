@@ -515,6 +515,12 @@ function commons_demo_content() {
 
   // Delete the demo content variable
   variable_del('commons_install_example_content');
+
+  // Make sure the admin user is also a group.
+  // @todo: Move to a better place.
+  $wrapper = entity_metadata_wrapper('user', 1);
+  $wrapper->{OG_GROUP_FIELD}->set(TRUE);
+  $wrapper->save();
 }
 
 function commons_add_user_avatar($account) {

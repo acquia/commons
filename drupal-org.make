@@ -226,8 +226,8 @@ projects[oauthconnector][download][branch] = "7.x-1.x"
 projects[oauthconnector][download][revision] = "0ce7ac9614710c0f68d0a58cb4ae4667f8bd6fa7"
 
 projects[og][type] = "module"
-projects[og][subdir] = "contrib"
-projects[og][version] = "2.2"
+projects[og][subdir] = "contrib"=
+projects[og][version] = "2.x-dev"
 
 ; og_group_ref field should respect og_user_access()
 ; http://drupal.org/node/1902086#comment-7026516
@@ -260,6 +260,11 @@ projects[pathauto][version] = "1.2"
 projects[pm_existing_pages][type] = "module"
 projects[pm_existing_pages][subdir] = "contrib"
 projects[pm_existing_pages][version] = "1.4"
+
+projects[privatemsg][type] = "module"
+projects[privatemsg][subdir] = "contrib"
+projects[privatemsg][version] = "1.x-dev"
+projects[privatemsg][patch][] = "http://drupal.org/files/privatemsg-1573000-64.patch"
 
 projects[quicktabs][type] = "module"
 projects[quicktabs][subdir] = "contrib"
@@ -367,11 +372,7 @@ projects[views][version] = "3.7"
 
 projects[views_field_view][type] = "module"
 projects[views_field_view][subdir] = "contrib"
-projects[views_field_view][version] = "1.x-dev"
-projects[views_field_view][download][type] = "git"
-projects[views_field_view][download][url] = "http://git.drupal.org/project/views_field_view.git"
-projects[views_field_view][download][branch] = "7.x-1.x"
-projects[views_field_view][download][revision] = "db9308068aa882dce979900baf21df7236f3e4a1"
+projects[views_field_view][version] = "1.1"
 
 projects[views_load_more][type] = "module"
 projects[views_load_more][subdir] = "contrib"
@@ -466,6 +467,9 @@ projects[commons_social_sharing][subdir] = "contrib"
 projects[commons_site_homepage][type] = "module"
 projects[commons_site_homepage][subdir] = "contrib"
 
+projects[commons_trusted_contacts][type] = "module"
+projects[commons_trusted_contacts][subdir] = "contrib"
+
 projects[commons_utility_links][type] = "module"
 projects[commons_utility_links][subdir] = "contrib"
 
@@ -488,7 +492,7 @@ projects[adaptivetheme][subdir] = "contrib"
 projects[adaptivetheme][download][type] = "git"
 projects[adaptivetheme][download][url] = "git://git.drupal.org/project/adaptivetheme.git"
 projects[adaptivetheme][download][branch] = "7.x-3.x"
-projects[adaptivetheme][download][revision] = "4e29d43"
+projects[adaptivetheme][download][revision] = "b4b38c3"
 
 projects[sky][type] = "theme"
 projects[sky][subdir] = "contrib"
