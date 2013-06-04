@@ -763,7 +763,8 @@ function commons_groups_get_group_content_entity_types() {
 function commons_groups_first_contribution($account, $node) {
   // Find the groups that this piece of content belongs to.
   $groups = og_get_entity_groups('node', $node);
-  if (!empty($groups)) {
+  // @todo: Make it work also with user-groups.
+  if (!empty($groups['node'])) {
     $node_groups = array_values($groups['node']);
     // Find the groups that the node author belongs to.
     $account_groups = og_get_groups_by_user($account, 'node');
