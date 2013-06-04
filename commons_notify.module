@@ -85,3 +85,103 @@ function commons_notify_comment_insert($comment) {
   );
   message_subscribe_send_message('comment', $comment, $message, array('email' => $options));
 }
+
+/**
+ * Add 1 to a user's notification count.
+ *
+ * @param $type
+ *    Type of notification; 'message' and 'invitation' are supported.
+ */
+function commons_notify_add_notification_item($account, $type) {
+  $wrapper = entity_metadata_wrapper('user', $account->uid);
+
+  switch ($type) {
+    case 'message':
+      $wrapper->field_unread_messages->set($wrapper->field_unread_messages->value() + 1);
+      break;
+    case 'invitation':
+      $wrapper->field_unread_invitations->set($wrapper->field_unread_invitations->value() + 1);
+      break;
+  }
+
+  // Make sure OG doesn't try to process group-audience upon save.
+  $account->skip_og_membership = TRUE;
+  $wrapper->save();
+}
+
+/**
+ * Subtract 1 from a user's notification count.
+ *
+ * @param $type
+ *    Type of notification; 'message' and 'invitation' are supported.
+ */
+function commons_notify_remove_notification_item($account, $type) {
+  $wrapper = entity_metadata_wrapper('user', $account->uid);
+
+  switch ($type) {
+    case 'message':
+      $wrapper->field_unread_messages->set($wrapper->field_unread_messages->value() - 1);
+      break;
+    case 'invitation':
+      $wrapper->field_unread_invitations->set($wrapper->field_unread_invitations->value() - 1);
+      break;
+  }
+
+  // Make sure OG doesn't try to process group-audience upon save.
+  $account->skip_og_membership = TRUE;
+  $wrapper->save();
+}
+
+/**
+ * Implements hook_commons_utility_links().
+ *
+ * Add unread-invitations and unread-messages notifications to utility links.
+ */
+function commons_notify_commons_utility_links_alter(&$links) {
+  global $user;
+
+  if (user_is_anonymous()) {
+    // Anonymous user.
+    return;
+  }
+
+  $new_links = array(
+    'name' => $links['name'],
+  );
+
+  $wrapper = entity_metadata_wrapper('user', $user);
+
+  $unread_invitations = $wrapper->field_unread_invitations->value();
+  $unread_messages = $wrapper->field_unread_messages->value();
+
+  if (empty($unread_invitations) && empty($unread_messages)) {
+    // Provide a default mailbox icon pointing to the private messages UI
+    // when there are no unread messages or invitations.
+    $new_links['no-unread-messages'] = array(
+      'href' => 'user/' . $user->uid . '/contacts',
+      'query' => array('qt-commons_trusted_contacts' => 'messages'),
+      'title' => t('No unread messages'),
+    );
+  }
+
+  if ($unread_invitations) {
+    $new_links['unread-invitations']= array(
+      'href' => 'user/' . $user->uid . '/contacts',
+      'query' => array('qt-commons_trusted_contacts' => 'invitations'),
+      'title' => format_plural($unread_invitations, '1 invitation', '@count invitations'),
+    );
+  }
+
+  if ($unread_messages) {
+    $new_links['unread-messages']= array(
+      'href' => 'user/' . $user->uid . '/contacts',
+      'query' => array('qt-commons_trusted_contacts' => 'messages'),
+      'title' => format_plural($unread_messages, '1 message', '@count messages'),
+    );
+  }
+
+  $new_links['logout'] = $links['logout'];
+  $new_links['settings'] = $links['settings'];
+
+  $links = $new_links;
+}

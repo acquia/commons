@@ -14,7 +14,7 @@ function commons_notify_field_default_field_instances() {
   $field_instances['message-commons_notify_comment_created-field_message_rendered_body'] = array(
     'bundle' => 'commons_notify_comment_created',
     'default_value' => NULL,
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
@@ -28,13 +28,13 @@ function commons_notify_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => '4',
+        'weight' => 4,
       ),
       'message_notify_email_subject' => array(
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => '4',
+        'weight' => 4,
       ),
     ),
     'entity_type' => 'message',
@@ -42,17 +42,17 @@ function commons_notify_field_default_field_instances() {
     'label' => 'Body',
     'required' => 0,
     'settings' => array(
-      'text_processing' => '0',
+      'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
       'active' => 1,
       'module' => 'text',
       'settings' => array(
-        'rows' => '5',
+        'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => '6',
+      'weight' => 6,
     ),
   );
 
@@ -60,7 +60,7 @@ function commons_notify_field_default_field_instances() {
   $field_instances['message-commons_notify_comment_created-field_message_rendered_subject'] = array(
     'bundle' => 'commons_notify_comment_created',
     'default_value' => NULL,
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
@@ -74,13 +74,13 @@ function commons_notify_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => '3',
+        'weight' => 3,
       ),
       'message_notify_email_subject' => array(
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => '3',
+        'weight' => 3,
       ),
     ),
     'entity_type' => 'message',
@@ -97,7 +97,7 @@ function commons_notify_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => '8',
+      'weight' => 8,
     ),
   );
 
@@ -106,7 +106,7 @@ function commons_notify_field_default_field_instances() {
     'bundle' => 'commons_notify_comment_created',
     'default_value' => NULL,
     'default_value_function' => '',
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
@@ -122,13 +122,13 @@ function commons_notify_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => '5',
+        'weight' => 5,
       ),
       'message_notify_email_subject' => array(
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => '5',
+        'weight' => 5,
       ),
     ),
     'entity_type' => 'message',
@@ -149,10 +149,10 @@ function commons_notify_field_default_field_instances() {
       'settings' => array(
         'match_operator' => 'CONTAINS',
         'path' => '',
-        'size' => '60',
+        'size' => 60,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => '4',
+      'weight' => 4,
     ),
   );
 
@@ -161,7 +161,7 @@ function commons_notify_field_default_field_instances() {
     'bundle' => 'commons_notify_comment_created',
     'default_value' => NULL,
     'default_value_function' => '',
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
@@ -177,13 +177,13 @@ function commons_notify_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => '6',
+        'weight' => 6,
       ),
       'message_notify_email_subject' => array(
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => '6',
+        'weight' => 6,
       ),
     ),
     'entity_type' => 'message',
@@ -204,10 +204,10 @@ function commons_notify_field_default_field_instances() {
       'settings' => array(
         'match_operator' => 'CONTAINS',
         'path' => '',
-        'size' => '60',
+        'size' => 60,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => '2',
+      'weight' => 2,
     ),
   );
 
@@ -215,26 +215,26 @@ function commons_notify_field_default_field_instances() {
   $field_instances['message-commons_notify_node_created-field_message_rendered_body'] = array(
     'bundle' => 'commons_notify_node_created',
     'default_value' => NULL,
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => '0',
+        'weight' => 0,
       ),
       'message_notify_email_body' => array(
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => '1',
+        'weight' => 1,
       ),
       'message_notify_email_subject' => array(
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => '3',
+        'weight' => 3,
       ),
     ),
     'entity_type' => 'message',
@@ -251,7 +251,7 @@ function commons_notify_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => '4',
+      'weight' => 4,
     ),
   );
 
@@ -259,26 +259,26 @@ function commons_notify_field_default_field_instances() {
   $field_instances['message-commons_notify_node_created-field_message_rendered_subject'] = array(
     'bundle' => 'commons_notify_node_created',
     'default_value' => NULL,
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => '2',
+        'weight' => 2,
       ),
       'message_notify_email_body' => array(
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => '3',
+        'weight' => 3,
       ),
       'message_notify_email_subject' => array(
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => '1',
+        'weight' => 1,
       ),
     ),
     'entity_type' => 'message',
@@ -286,17 +286,17 @@ function commons_notify_field_default_field_instances() {
     'label' => 'Subject',
     'required' => 0,
     'settings' => array(
-      'text_processing' => '0',
+      'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
       'active' => 1,
       'module' => 'text',
       'settings' => array(
-        'size' => '255',
+        'size' => 255,
       ),
       'type' => 'text_textfield',
-      'weight' => '3',
+      'weight' => 3,
     ),
   );
 
@@ -305,26 +305,26 @@ function commons_notify_field_default_field_instances() {
     'bundle' => 'commons_notify_node_created',
     'default_value' => NULL,
     'default_value_function' => '',
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => '3',
+        'weight' => 3,
       ),
       'message_notify_email_body' => array(
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => '4',
+        'weight' => 4,
       ),
       'message_notify_email_subject' => array(
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => '4',
+        'weight' => 4,
       ),
     ),
     'entity_type' => 'message',
@@ -345,10 +345,10 @@ function commons_notify_field_default_field_instances() {
       'settings' => array(
         'match_operator' => 'CONTAINS',
         'path' => '',
-        'size' => '60',
+        'size' => 60,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => '2',
+      'weight' => 2,
     ),
   );
 
@@ -356,7 +356,7 @@ function commons_notify_field_default_field_instances() {
   $field_instances['message-commons_notify_node_created_no_groups-field_message_rendered_body'] = array(
     'bundle' => 'commons_notify_node_created_no_groups',
     'default_value' => NULL,
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
@@ -384,17 +384,17 @@ function commons_notify_field_default_field_instances() {
     'label' => 'Body',
     'required' => 0,
     'settings' => array(
-      'text_processing' => '0',
+      'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
       'active' => 1,
       'module' => 'text',
       'settings' => array(
-        'rows' => '5',
+        'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => '2',
+      'weight' => 2,
     ),
   );
 
@@ -402,7 +402,7 @@ function commons_notify_field_default_field_instances() {
   $field_instances['message-commons_notify_node_created_no_groups-field_message_rendered_subject'] = array(
     'bundle' => 'commons_notify_node_created_no_groups',
     'default_value' => NULL,
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
@@ -430,17 +430,17 @@ function commons_notify_field_default_field_instances() {
     'label' => 'Subject',
     'required' => 0,
     'settings' => array(
-      'text_processing' => '0',
+      'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
       'active' => 1,
       'module' => 'text',
       'settings' => array(
-        'size' => '60',
+        'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => '3',
+      'weight' => 3,
     ),
   );
 
@@ -449,7 +449,7 @@ function commons_notify_field_default_field_instances() {
     'bundle' => 'commons_notify_node_created_no_groups',
     'default_value' => NULL,
     'default_value_function' => '',
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
@@ -492,10 +492,10 @@ function commons_notify_field_default_field_instances() {
       'settings' => array(
         'match_operator' => 'CONTAINS',
         'path' => '',
-        'size' => '60',
+        'size' => 60,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => '1',
+      'weight' => 1,
     ),
   );
 
@@ -504,7 +504,7 @@ function commons_notify_field_default_field_instances() {
     'bundle' => 'commons_notify_node_created_no_groups',
     'default_value' => NULL,
     'default_value_function' => '',
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
@@ -547,10 +547,10 @@ function commons_notify_field_default_field_instances() {
       'settings' => array(
         'match_operator' => 'CONTAINS',
         'path' => '',
-        'size' => '60',
+        'size' => 60,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => '0',
+      'weight' => 0,
     ),
   );
 
@@ -558,7 +558,7 @@ function commons_notify_field_default_field_instances() {
   $field_instances['message_type-commons_notify-message_text'] = array(
     'bundle' => 'commons_notify',
     'default_value' => NULL,
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => 'This is the text of all messages of this type.',
     'display' => array(
       'default' => array(
@@ -587,6 +587,94 @@ function commons_notify_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'user-user-field_unread_invitations'
+  $field_instances['user-user-field_unread_invitations'] = array(
+    'bundle' => 'user',
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => ' ',
+        ),
+        'type' => 'number_integer',
+        'weight' => 12,
+      ),
+    ),
+    'entity_type' => 'user',
+    'field_name' => 'field_unread_invitations',
+    'label' => 'Unread Invitations',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => 0,
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => 0,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 11,
+    ),
+  );
+
+  // Exported field_instance: 'user-user-field_unread_messages'
+  $field_instances['user-user-field_unread_messages'] = array(
+    'bundle' => 'user',
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => ' ',
+        ),
+        'type' => 'number_integer',
+        'weight' => 11,
+      ),
+    ),
+    'entity_type' => 'user',
+    'field_name' => 'field_unread_messages',
+    'label' => 'Unread Messages',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => 0,
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => 0,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 10,
+    ),
+  );
+
   // Exported field_instance: 'user-user-message_subscribe_email'
   $field_instances['user-user-message_subscribe_email'] = array(
     'bundle' => 'user',
@@ -595,7 +683,7 @@ function commons_notify_field_default_field_instances() {
         'value' => 1,
       ),
     ),
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => 'Email option will be checked automatically when subscribing to something.',
     'display' => array(
       'default' => array(
@@ -634,6 +722,8 @@ function commons_notify_field_default_field_instances() {
   t('Target comment');
   t('Target nodes');
   t('This is the text of all messages of this type.');
+  t('Unread Invitations');
+  t('Unread Messages');
 
   return $field_instances;
 }
