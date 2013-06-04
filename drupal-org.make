@@ -122,6 +122,10 @@ projects[features][type] = "module"
 projects[features][subdir] = "contrib"
 projects[features][version] = "2.0-rc1"
 
+; Issue #1921982: Add 'customized' to the fields we check when comparing a menu_link feature
+; http://drupal.org/node/1921982
+projects[features][patch][] = "http://drupal.org/files/menu_links_customized-927576-8.patch"
+
 projects[flag][type] = "module"
 projects[flag][subdir] = "contrib"
 projects[flag][version] = "2.1"
