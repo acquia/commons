@@ -798,12 +798,14 @@ function commons_trusted_contacts_form_commons_bw_partial_node_form_alter(&$form
     '#attributes' => array(
       'class' => array('hideable-field'),
     ),
-  );
-
-  $form[OG_AUDIENCE_FIELD]['#weight'] = 80;
-  $form[OG_AUDIENCE_FIELD]['#states'] = array(
-    'visible' => array(
-      ':input[name="group_audience_type"]' => array('value' => 'custom'),
+    // Normally Form API states (https://api.drupal.org/api/drupal/includes!common.inc/function/drupal_process_states/7)
+    // Would be used here, but it does not support loading multiple similar
+    // forms on the same page. This is why a simple javascript files is needed
+    // to perform the task of hiding the groups fields.
+    '#attached' => array(
+      'js' => array(
+        drupal_get_path('module', 'commons_trusted_contacts') . '/scripts/commons-trusted-contacts.js',
+      ),
     ),
   );
 
@@ -830,7 +832,7 @@ function commons_trusted_contacts_node_presave($node) {
   if (!module_exists('og_access')) {
     return;
   }
-  
+
   if (empty($node->partial_node_form) || !$node->is_new) {
     return;
   }
