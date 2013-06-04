@@ -21,7 +21,6 @@ Drupal.behaviors.commonsAudienceToggle = {
         var radio = $(this),
             radioValue = radio.val();
 
-        console.log(radioValue);
         if (radioValue == 'custom' && radio.is(':checked')) {
           groupReference.removeClass('element-hidden');
         }
