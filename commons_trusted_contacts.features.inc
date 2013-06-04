@@ -37,14 +37,14 @@ function commons_trusted_contacts_default_message_type() {
     "arguments" : null,
     "message_text" : { "und" : [
         {
-          "value" : "[message:field-approving-user:field-name] approved your Trusted-Contact request.",
+          "value" : "\\u003Cp\\u003E[message:field-approving-user:name] approved your Trusted-Contact request.\\u003C\\/p\\u003E\\r\\n",
           "format" : "full_html",
-          "safe_value" : "[message:field-approving-user:field-name] approved your Trusted-Contact request."
+          "safe_value" : "\\u003Cp\\u003E[message:field-approving-user:name] approved your Trusted-Contact request.\\u003C\\/p\\u003E\\n"
         },
         {
-          "value" : "\\u003Cp\\u003E[message:field-approving-user:field-name] approved your Trusted-Contact request.\\u003C\\/p\\u003E\\r\\n\\r\\n\\u003Cp\\u003EView their profile.. etc.\\u003C\\/p\\u003E",
+          "value" : "\\u003Cp\\u003E[message:field-approving-user:name] approved your Trusted-Contact request.\\u003C\\/p\\u003E\\r\\n\\r\\n\\u003Cp\\u003ELearn more at:\\u0026nbsp;\\u003Cspan style=\\u0022font-size: 13.333333015441895px;\\u0022\\u003E[message:field-approving-user:url]\\u003C\\/span\\u003E\\u003C\\/p\\u003E\\r\\n",
           "format" : "full_html",
-          "safe_value" : "\\u003Cp\\u003E[message:field-approving-user:field-name] approved your Trusted-Contact request.\\u003C\\/p\\u003E\\n\\n\\u003Cp\\u003EView their profile.. etc.\\u003C\\/p\\u003E"
+          "safe_value" : "\\u003Cp\\u003E[message:field-approving-user:name] approved your Trusted-Contact request.\\u003C\\/p\\u003E\\n\\n\\u003Cp\\u003ELearn more at:\\u0026nbsp;\\u003Cspan style=\\u0022font-size: 13.333333015441895px;\\u0022\\u003E[message:field-approving-user:url]\\u003C\\/span\\u003E\\u003C\\/p\\u003E\\n"
         }
       ]
     },
