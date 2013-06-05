@@ -78,5 +78,12 @@ function commons_trusted_contacts_strongarm() {
   );
   $export['field_bundle_settings_message__trusted_contact_request_pending'] = $strongarm;
 
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'privatemsg_display_profile_links';
+  $strongarm->value = '0';
+  $export['privatemsg_display_profile_links'] = $strongarm;
+
   return $export;
 }

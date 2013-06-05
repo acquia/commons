@@ -326,10 +326,9 @@ function commons_trusted_contacts_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
-        'module' => 'og_ui',
+        'label' => 'hidden',
         'settings' => array(),
-        'type' => 'og_list_default',
+        'type' => 'hidden',
         'weight' => 4,
       ),
     ),
@@ -354,13 +353,13 @@ function commons_trusted_contacts_field_default_field_instances() {
     'view modes' => array(
       'full' => array(
         'custom settings' => FALSE,
-        'label' => 'Full',
-        'type' => 'og_list_default',
+        'label' => 'hidden',
+        'type' => 'hidden',
       ),
       'teaser' => array(
         'custom settings' => FALSE,
-        'label' => 'Teaser',
-        'type' => 'og_list_default',
+        'label' => 'hidden',
+        'type' => 'hidden',
       ),
     ),
     'widget' => array(
@@ -383,9 +382,10 @@ function commons_trusted_contacts_field_default_field_instances() {
     'description' => 'Determine if this is an OG group.',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
+        'module' => 'commons_trusted_contacts',
         'settings' => array(),
-        'type' => 'hidden',
+        'type' => 'trusted_contact',
         'weight' => '3',
       ),
       'teaser' => array(
@@ -425,6 +425,33 @@ function commons_trusted_contacts_field_default_field_instances() {
       'weight' => 0,
     ),
   );
+
+  // Provide appropriate settings for our fields when users are
+  // indexed by Solr. ApacheSolr_User uses the 'search_index' view mode
+  // to render the user document for indexing. Since this view mode doesn't
+  // exist in Commons, the 'default' view mode is used. We need to ensure
+  // that this does not include the names of the user's trusted contacts, so
+  // that a search for users named "Jane Smith" doesn't include a result for
+  // each user who calls Jane a contact.
+  if (module_exists('commons_search_solr_user')) {
+    $field_instances['user-user-group_group']['view modes']['search_results'] = array(
+      'label' => 'hidden',
+      'custom settings' => TRUE,
+      'type' => 'hidden',
+    );
+    $field_instances['user-user-group_group']['display']['search_results'] = array(
+      'label' => 'hidden',
+      'custom settings' => TRUE,
+      'type' => 'hidden',
+      'weight' => 17,
+    );
+    $field_instances['user-user-user_trusted_contacts']['display']['search_results'] = array(
+      'label' => 'hidden',
+      'custom settings' => TRUE,
+      'type' => 'hidden',
+      'weight' => 16,
+    );
+  }
 
   $node_types = node_type_get_types();
   foreach(array_keys($node_types) as $type) {
