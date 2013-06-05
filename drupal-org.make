@@ -67,7 +67,12 @@ projects[custom_search][subdir] = "contrib"
 projects[custom_search][download][type] = "git"
 projects[custom_search][download][url] = "http://git.drupal.org/project/custom_search.git"
 projects[custom_search][download][branch] = "7.x-1.x"
-projects[custom_search][download][revision] = "0d55d1e379931e7b202d8346e092cc73bdcdaa22"
+projects[custom_search][download][revision] = "20144e64494c83a448067d587e59df5d7e4780bb"
+
+; Remove the icky JS error that occurs when people use quotes when searching
+; https://drupal.org/node/2012210
+projects[custom_search][patch][] = "http://drupal.org/files/commons_search_js_encode.patch"
+
 
 projects[date][type] = "module"
 projects[date][subdir] = "contrib"
