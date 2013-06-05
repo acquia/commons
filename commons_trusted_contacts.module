@@ -281,7 +281,7 @@ function commons_trusted_contacts_field_formatter_view($entity_type, $entity, $f
           $token = drupal_get_token('request' . ':' . $id . ':' . $account->uid);
           $url = "request-trust/$id/$token/nojs";
 
-          $links['title'] = t('Trusted contact');
+          $links['title'] = t('Add as trusted contact');
           if ($account->uid) {
             $links['href'] = $url;
             $links['options'] = array('attributes' => array('class' => array('use-ajax')));
