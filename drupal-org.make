@@ -228,7 +228,7 @@ projects[oauthconnector][download][branch] = "7.x-1.x"
 projects[oauthconnector][download][revision] = "0ce7ac9614710c0f68d0a58cb4ae4667f8bd6fa7"
 
 projects[og][type] = "module"
-projects[og][subdir] = "contrib"=
+projects[og][subdir] = "contrib"
 projects[og][version] = "2.x-dev"
 
 ; og_group_ref field should respect og_user_access()
