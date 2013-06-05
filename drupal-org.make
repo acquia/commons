@@ -469,13 +469,8 @@ projects[commons_social_sharing][subdir] = "contrib"
 projects[commons_site_homepage][type] = "module"
 projects[commons_site_homepage][subdir] = "contrib"
 
-; Until commons_trusted_contacts has a release, we need to use the git hash in the make file
 projects[commons_trusted_contacts][type] = "module"
 projects[commons_trusted_contacts][subdir] = "contrib"
-projects[commons_trusted_contacts][download][type] = "git"
-projects[commons_trusted_contacts][download][url] = "git://git.drupal.org/project/commons_trusted_contacts.git"
-projects[commons_trusted_contacts][download][branch] = "7.x-3.x"
-projects[commons_trusted_contacts][download][revision] = "f0720c42843a280506e3e38c9d12d35a8eba9175"
 
 projects[commons_utility_links][type] = "module"
 projects[commons_utility_links][subdir] = "contrib"
