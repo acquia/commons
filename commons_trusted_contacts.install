@@ -22,7 +22,7 @@ function commons_trusted_contacts_requirements($phase) {
     if ($count > count(og_get_all_group('user'))) {
       $requirements['commons_trusted_contacts_users_updated']['title'] = t('Trusted contacts');
       $requirements['commons_trusted_contacts_users_updated']['severity'] = REQUIREMENT_ERROR;
-      $requirements['commons_trusted_contacts_users_updated']['description'] = t('Some users need an update. !link.', array('!link' => l(t('Upgrade users'), 'users/upgrade')));
+      $requirements['commons_trusted_contacts_users_updated']['description'] = t('Some users need an update. !link.', array('!link' => l(t('Upgrade users'), 'admin/people/trusted-contacts-upgrade')));
       $requirements['commons_trusted_contacts_users_updated']['value'] = t('Users upgrade needed');
     }
   }
