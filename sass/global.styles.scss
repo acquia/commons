@@ -2156,6 +2156,10 @@ a {
   background: image-url('icons/icon-events.png') no-repeat center 10px;
 }
 
+.main-menu-people a {
+  background: image-url('icons/icon-people.png') no-repeat center 10px;
+}
+
 #menu-bar.nav ul.menu li.main-menu-search {
   display: none;
 
@@ -3964,22 +3968,27 @@ body.front.logged-in .view-commons-homepage-content .article.node {
 
 .search-form-page {
   .form-type-textfield {
-    float: left;
-    padding-right: 8.8em;
-    width: 100%;
-    @include box-sizing(border-box);
-
-    @include respond(only-small) {
-      padding-right: 4.3em;
-    }
-
     label {
       white-space: nowrap;
     }
+
+    input {
+      width: auto;
+    }
+
+    @include respond(only-small) {
+      &,
+      input {
+        display: block;
+        width: 100%;
+      }
+    }
   }
 
-  .form-item {
-    margin-bottom: 0;
+  @include respond(medium) {
+    .form-item {
+      margin-bottom: 0;
+    }
   }
 }
 
@@ -3987,11 +3996,8 @@ body.front.logged-in .view-commons-homepage-content .article.node {
 @include button_with_icon(nth($buttons, 3), icon-search);
 
 .action-item-search {
-  float: left;
-  margin-left: -8.5em;
+  float: right;
   padding-left: 3em;
-  display: block;
-  margin-top: 0;
   margin-right: 0;
   margin-bottom: 0;
 
@@ -4005,22 +4011,15 @@ body.front.logged-in .view-commons-homepage-content .article.node {
       background-position: 1.5em center;
     }
   }
-}
 
-@include respond(only-small) {
-  .action-item-search {
-    margin-left: -4em;
-    padding-left: 1.5em;
-    text-indent: -9999em;
+  @include respond(only-small) {
+    float: none;
+    clear: both;
+    display: block;
+  }
 
-    &[type="submit"] {
-      &,
-      &:hover,
-      &:active,
-      &:focus {
-        background-position: center center;
-      }
-    }
+  @include respond(medium) {
+    margin-top: 0;
   }
 }
 
@@ -4085,6 +4084,8 @@ body.front.logged-in .view-commons-homepage-content .article.node {
 }
 
 .search-results {
+  margin-top: 0;
+
   &,
   /* The ol styling is a bit specific. */
   .block-content & {
@@ -4117,6 +4118,7 @@ body.front.logged-in .view-commons-homepage-content .article.node {
   border-bottom: 1px solid $border;
   list-style-type: none;
 
+  &,
   .block-content & {
     padding-bottom: .7em;
     margin-bottom: .7em;
@@ -4160,6 +4162,123 @@ body.front.logged-in .view-commons-homepage-content .article.node {
       float: right;
     }
   }
+}
+
+/* Search profiles */
+
+.profile-search-result {
+  @include box-sizing(border-box);
+  display: inline-block;
+  padding-bottom: 0;
+  vertical-align: top;
+  width: 48.5%;
+  margin-right: 2%;
+
+  &:nth-child(even) {
+    margin-right: 0;
+  }
+
+  @include respond(only-small) {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  @include respond(large) {
+    width: 31.5%;
+
+    &:nth-child(even) {
+      margin-right: 2%;
+    }
+
+    &:nth-child(3n) {
+      margin-right: 0;
+    }
+  }
+
+  .commons-pod & {
+    width: 100%;
+    margin-right: 0;
+
+    .profile-actions {
+      @include box-sizing(border-box);
+      margin-right: 0;
+      margin-left: 0;
+      border: 1px solid $border;
+      @include border-radius(0);
+    }
+  }
+
+  h4 {
+    margin: 0;
+  }
+}
+
+.profile-header {
+  @include box-sizing(border-box);
+  padding-left: 72px;
+
+  .user-picture {
+    position: relative;
+    top: -1.2em;
+    float: left;
+    margin-bottom: 0;
+    margin-left: -72px;
+  }
+}
+
+@include multiline-ellipsis(profile-content, 2.8em, 1.4em);
+
+.associated-groups-title,
+.associated-groups,
+.group-item {
+  display: inline;
+  margin: 0;
+  color: $light_gray;
+  white-space: normal;
+}
+
+.associated-groups-title {
+  font-weight: normal;
+}
+
+.associated-groups {
+  &,
+  .block-content & {
+    padding-left: 0;
+  }
+}
+
+.associated-groups-title,
+.group-item {
+  margin-right: .2em;
+  font-size: .88em;
+}
+
+.group-item {
+  &:after {
+    content: ",";
+  }
+
+  &:last-child {
+    margin-right: 0;
+
+    &:after {
+      content: ".";
+    }
+  }
+}
+
+.profile-actions {
+  clear: both;
+  width: 100%;
+  margin-top: $gutter_width;
+  margin-left: -$gutter_width;
+  margin-right: -$gutter_width;
+  padding: ($gutter_width / 2) $gutter_width;
+  background: $ultralight;
+  border-top: 1px solid $border;
+  @include border-bottom-right-radius(.4em);
+  @include border-bottom-left-radius(.4em);
 }
 
 /**
