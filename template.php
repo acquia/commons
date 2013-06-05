@@ -870,6 +870,16 @@ function commons_origins_form_alter(&$form, &$form_state, $form_id) {
 }
 
 /**
+ * Implements hook_views_bulk_operations_form_Alter().
+ */
+function commons_origins_views_bulk_operations_form_alter(&$form, $form_state, $vbo) {
+  // change the buttons' fieldset wrapper to a div and push it to the bottom of
+  // the form.
+  $form['select']['#type'] = 'container';
+  $form['select']['#weight'] = 9999;
+}
+
+/**
  * Implements hook_css_alter().
  */
 function commons_origins_css_alter(&$css) {

@@ -4184,6 +4184,23 @@ body.front.logged-in .view-commons-homepage-content .article.node {
 }
 
 /**
+ * Trusted contacts
+ */
+
+.views-field-field-membership-token {
+  a {
+    &:first-child {
+      &:after {
+        content: "|";
+        display: inline-block;
+        padding: 0 .3em 0 .5em;
+        color: $dark_gray;
+      }
+    }
+  }
+}
+
+/**
  * Private message
  */
 
