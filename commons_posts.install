@@ -21,3 +21,14 @@ function commons_posts_update_7001() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Remove extra markup from message type for posts.
+ */
+function commons_posts_update_7002() {
+    $revert = array(
+      'commons_posts' => array('message_type'),
+  );
+  features_revert($revert);
+  return array();
+}
