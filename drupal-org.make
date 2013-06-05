@@ -69,7 +69,7 @@ projects[custom_search][download][url] = "http://git.drupal.org/project/custom_s
 projects[custom_search][download][branch] = "7.x-1.x"
 projects[custom_search][download][revision] = "20144e64494c83a448067d587e59df5d7e4780bb"
 
-; Remove the icky JS error that occurs when people use quotes when searching
+; Avoid akward sanitization of user-entered search strings.
 ; https://drupal.org/node/2012210
 projects[custom_search][patch][] = "http://drupal.org/files/commons_search_js_encode.patch"
 
