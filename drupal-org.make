@@ -394,9 +394,7 @@ projects[votingapi][type] = "module"
 projects[votingapi][subdir] = "contrib"
 
 ; Commons contrib modules:
-; We don't tag a release here because want them to auto-increment.. and we are the ones who test it.
-
-; We don't have a release for this?!?!
+; We don't tag a release here because want them to auto-increment.
 projects[commons_activity_streams][type] = "module"
 projects[commons_activity_streams][subdir] = "contrib"
 
