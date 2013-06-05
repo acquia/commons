@@ -43,3 +43,14 @@ function commons_wikis_update_7003() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Remove extra markup from message type for wikis.
+ */
+function commons_wikis_update_7004() {
+  $revert = array(
+    'commons_wikis' => array('message_type'),
+  );
+  features_revert($revert);
+  return array();
+}
