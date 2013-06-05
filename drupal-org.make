@@ -517,6 +517,4 @@ libraries[ckeditor][type] = "libraries"
 
 libraries[timeago][download][type] = "get"
 libraries[timeago][type] = "libraries"
-; We'd like to switch to a specific commit hash,
-; pending http://drupal.org/node/1821996#comment-6678062.
-libraries[timeago][download][url] = "https://raw.github.com/rmm5t/jquery-timeago/master/jquery.timeago.js"
+libraries[timeago][download][url] = "https://raw.github.com/rmm5t/jquery-timeago/v1.2.0/jquery.timeago.js"
