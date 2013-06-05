@@ -9,7 +9,7 @@
 function commons_search_core_enable() {
   // Disable Solr search module upon enabling this module.
   if (module_exists('commons_search_solr')) {
-    module_disable(array('commons_search_solr', 'apachesolr_search', 'apachesolr', 'commons_events_solr'), FALSE);
+    module_disable(array('commons_search_solr', 'apachesolr_search', 'apachesolr', 'apachesolr_user', 'commons_events_solr', 'commons_search_solr_user'), FALSE);
   }
   // Set active search modules to be only Faceted Navigation and User.
   variable_set('search_active_modules', array(

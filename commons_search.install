@@ -1,0 +1,8 @@
+<?php
+
+/**
+ * Disable rich_snippets module
+ */
+function commons_search_update_7001() {
+  module_disable(array('rich_snippets'));
+}

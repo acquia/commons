@@ -441,4 +441,51 @@ function commons_search_solr_modules_enabled($modules) {
     // otherwise our Events Solr page has no facets.
     commons_search_solr_create_facets(ACQUIA_SEARCH_ENVIRONMENT_ID);
   }
+  if (in_array('commons_search_solr_user', $modules)) {
+    // We disable core user search with of Solr user search, via the
+    // search_active_modules variable which is exporter by commons_search_solr
+    // and altered in commons_search_solr_user_strongarm_alter().
+    $revert = array('commons_search_solr' => array('variable'));
+    features_revert($revert);
+  }
+}
+
+
+/**
+ * Feature module hook. Invoked on a Feature module after that module is
+ * enabled.
+ *
+ * @param $component
+ *   String name of the component that has just been enabled.
+ */
+function commons_search_solr_post_features_enable_feature($component) {
+  if ($component == 'apachesolr_search_page') {
+    features_revert(array('commons_search_solr' => array('apachesolr_search_page')));
+  }
+}
+
+
+/**
+ * Implements hook_modules_disabled().
+ */
+function commons_search_solr_modules_disabled($modules) {
+  if (in_array('commons_search_solr_user', $modules)) {
+    // We disable core user search with of Solr user search, via the
+    // search_active_modules variable which is exporter by commons_search_solr
+    // and altered in commons_search_solr_user_strongarm_alter().
+    $revert = array('commons_search_solr' => array('variable'));
+    features_revert($revert);
+  }
+}
+
+
+function commons_search_solr_apachesolr_process_results(&$results, DrupalSolrQueryInterface $query) {
+  foreach($results AS $rkey => $result) {
+    if ($results[$rkey]['fields']['entity_type'] == 'node') {
+      $results[$rkey]['snippet'] = drupal_render(node_view(node_load($results[$rkey]['fields']['entity_id']), 'teaser'));
+    }
+    if ($results[$rkey]['fields']['entity_type'] == 'user') {
+      $results[$rkey]['snippet'] = drupal_render(user_view(user_load($results[$rkey]['fields']['entity_id']), 'search_results'));
+    }
+  }
 }

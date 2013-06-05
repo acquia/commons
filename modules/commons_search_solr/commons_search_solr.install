@@ -11,18 +11,13 @@ function commons_search_solr_enable() {
   if (module_exists('commons_search_core')) {
     module_disable(array('commons_search_core'), FALSE);
   }
-  // Set active search modules to be only Solr and User.
-  variable_set('search_active_modules', array(
-    'apachesolr_search' => 'apachesolr_search',
-    'user' => 'user',
-  ));
-  // Set custom search active search modules.
-  variable_set('custom_search_other', array(
-    'apachesolr_search' => 'apachesolr_search',
-    'user' => 'user',
-  ));
-  // Set default search module for Solr.
-  variable_set('search_default_module', 'apachesolr_search');
+  if (module_exists('search_facetapi')) {
+    module_disable(array('search_facetapi'), FALSE);
+  }
+  // Ensure that Commons Search Solr variables are reverted in cases such as
+  // when switching from Core to Solr search.
+  $revert = array('commons_search_solr' => array('variable', 'apachesolr_search_page'));
+  features_revert($revert);
   cache_clear_all();
   commons_search_solr_create_facets();
 }
