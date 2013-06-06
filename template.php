@@ -1089,7 +1089,7 @@ function commons_origins_field__addressfield($variables) {
   foreach($variables['items'] as &$address) {
     // Only display an address if it has been populated. We determine this by
     // validating that the administrative area has been populated.
-    if ($address['#address']['administrative_area']) {
+    if (!empty($address['#address']['administrative_area'])) {
       _commons_origins_format_address($address);
     }
     else {
