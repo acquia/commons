@@ -112,8 +112,24 @@
     // Generate a new invisible class and extend the default with the color
     // scheme of the skin.
     @include button($palette_color_class, $palette_btn_bottom);
+
     %button-primary {
       @extend %button-#{$palette_color_class};
+    }
+
+    @include button_with_icon((#{$palette_color_class}, $palette_btn_bottom), icon-search);
+
+    %button-#{$palette_color_class}-icon-search {
+      &,
+      &:hover,
+      &:active,
+      &:focus {
+        background-position: 1.5em center;
+      }
+    }
+
+    %button-primary-icon-search {
+      @extend %button-#{$palette_color_class}-icon-search;
     }
 
     .selectBox-dropdown {

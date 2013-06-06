@@ -3995,6 +3995,15 @@ body.front.logged-in .view-commons-homepage-content .article.node {
 // Build the search button base styling.
 @include button_with_icon(nth($buttons, 3), icon-search);
 
+%button-primary-icon-search {
+  &,
+  &:hover,
+  &:active,
+  &:focus {
+    background-position: 1.5em center;
+  }
+}
+
 .action-item-search {
   float: right;
   padding-left: 3em;
@@ -4003,13 +4012,6 @@ body.front.logged-in .view-commons-homepage-content .article.node {
 
   &[type="submit"] {
     @extend %button-primary-icon-search;
-
-    &,
-    &:hover,
-    &:active,
-    &:focus {
-      background-position: 1.5em center;
-    }
   }
 
   @include respond(only-small) {
