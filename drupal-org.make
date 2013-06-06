@@ -69,7 +69,7 @@ projects[custom_search][download][url] = "http://git.drupal.org/project/custom_s
 projects[custom_search][download][branch] = "7.x-1.x"
 projects[custom_search][download][revision] = "20144e64494c83a448067d587e59df5d7e4780bb"
 
-; Remove the icky JS error that occurs when people use quotes when searching
+; Avoid akward sanitization of user-entered search strings.
 ; https://drupal.org/node/2012210
 projects[custom_search][patch][] = "http://drupal.org/files/commons_search_js_encode.patch"
 
@@ -394,9 +394,7 @@ projects[votingapi][type] = "module"
 projects[votingapi][subdir] = "contrib"
 
 ; Commons contrib modules:
-; We don't tag a release here because want them to auto-increment.. and we are the ones who test it.
-
-; We don't have a release for this?!?!
+; We don't tag a release here because want them to auto-increment.
 projects[commons_activity_streams][type] = "module"
 projects[commons_activity_streams][subdir] = "contrib"
 
@@ -469,13 +467,8 @@ projects[commons_social_sharing][subdir] = "contrib"
 projects[commons_site_homepage][type] = "module"
 projects[commons_site_homepage][subdir] = "contrib"
 
-; Until commons_trusted_contacts has a release, we need to use the git hash in the make file
 projects[commons_trusted_contacts][type] = "module"
 projects[commons_trusted_contacts][subdir] = "contrib"
-projects[commons_trusted_contacts][download][type] = "git"
-projects[commons_trusted_contacts][download][url] = "git://git.drupal.org/project/commons_trusted_contacts.git"
-projects[commons_trusted_contacts][download][branch] = "7.x-3.x"
-projects[commons_trusted_contacts][download][revision] = "f0720c42843a280506e3e38c9d12d35a8eba9175"
 
 projects[commons_utility_links][type] = "module"
 projects[commons_utility_links][subdir] = "contrib"
