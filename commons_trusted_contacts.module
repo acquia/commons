@@ -923,8 +923,9 @@ function commons_trusted_contacts_messages_popup($form, &$form_state, $account) 
   );
 
   $form['actions']['full_form'] = array(
-    '#type' => 'markup',
-    '#markup' => l(t('Go to full form'), 'messages/new/' . $account->uid),
+    '#type' => 'link',
+    '#title' => t('Go to full form'),
+    '#href' => 'messages/new/' . $account->uid,
   );
 
 
