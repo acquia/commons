@@ -313,12 +313,6 @@ var {
  */
 
 .node {
-  position: relative;
-
-  &.user-picture-available {
-    @include place-picture;
-  }
-
   &.node-event,
   &.node-poll,
   &.node-question {
@@ -970,7 +964,6 @@ button,
 }
 
 /* Drupal specific field styling. */
-
 .field-label-inline {
   margin: 1.7em 0;
 
@@ -1007,6 +1000,15 @@ button,
     font-weight: bold;
     color: $dark_gray;
   }
+}
+
+/**
+ * User avatar
+ */
+
+.user-picture-available {
+  position: relative;
+  @include place-picture;
 }
 
 /**

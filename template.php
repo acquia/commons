@@ -675,6 +675,11 @@ function commons_origins_preprocess_form(&$variables, $hook) {
     $variables['attributes_array']['class'][] = 'user-picture-available';
     $variables['attributes_array']['class'][] = 'clearfix';
   }
+
+  // Place the user avatar to the left of the private message form content.
+  if ($variables['element']['#form_id'] == 'commons_trusted_contacts_messages_popup') {
+    $variables['content_attributes_array']['class'][] = 'user-picture-available';
+  }
 }
 
 /**
@@ -733,6 +738,21 @@ function commons_origins_preprocess_form_content(&$variables, $hook) {
   if (strpos($variables['form']['#form_id'], 'commons_bw_partial_node_form_') === 0) {
     $variables['form']['actions']['submit']['#attributes']['class'][] = 'action-item-primary';
     $variables['form']['title']['#markup'] = str_replace('<h3>', '<h3 class="partial-node-form-title">', $variables['form']['title']['#markup']);
+  }
+
+  // Make the links and buttons on the private message forms have the
+  // appropriate styles.
+  if ($variables['form']['#form_id'] == 'commons_trusted_contacts_messages_popup' || $variables['form']['#form_id'] == 'privatemsg_new') {
+    if (isset($variables['form']['actions']['submit'])) {
+      $variables['form']['actions']['submit']['#attributes']['class'][] = 'action-item-primary';
+    }
+    if (isset($variables['form']['actions']['full_form'])) {
+      $variables['form']['actions']['full_form']['#attributes']['class'][] = 'action-item';
+    }
+    if (isset($variables['form']['actions']['cancel'])) {
+      $variables['form']['actions']['cancel']['#attributes']['class'][] = 'action-item';
+      $variables['form']['actions']['cancel']['#weight'] = $variables['form']['actions']['submit']['#weight'] + 1;
+    }
   }
 }
 

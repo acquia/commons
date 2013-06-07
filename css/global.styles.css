@@ -318,30 +318,6 @@ var {
 /**
  * Generic styles for nodes.
  */
-.node {
-  position: relative;
-}
-.node.user-picture-available {
-  padding-left: 68px;
-}
-.node.user-picture-available .user-picture {
-  position: absolute;
-  float: left;
-  margin-left: -68px;
-  top: 0;
-}
-.node.user-picture-available .user-picture img {
-  width: 50px;
-}
-@media only screen and (max-width: 480px) {
-  .node.user-picture-available {
-    padding-left: 0;
-  }
-  .node.user-picture-available .user-picture {
-    display: none;
-  }
-}
-
 .node-actions {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -1377,6 +1353,31 @@ button,
 .field-label-inline .field-label {
   font-weight: bold;
   color: #333333;
+}
+
+/**
+ * User avatar
+ */
+.user-picture-available {
+  position: relative;
+  padding-left: 68px;
+}
+.user-picture-available .user-picture {
+  position: absolute;
+  float: left;
+  margin-left: -68px;
+  top: 0;
+}
+.user-picture-available .user-picture img {
+  width: 50px;
+}
+@media only screen and (max-width: 480px) {
+  .user-picture-available {
+    padding-left: 0;
+  }
+  .user-picture-available .user-picture {
+    display: none;
+  }
 }
 
 /**
