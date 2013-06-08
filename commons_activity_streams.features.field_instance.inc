@@ -158,12 +158,9 @@ function commons_activity_streams_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
-        'weight' => 0,
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 2,
       ),
       'message_notify_email_body' => array(
         'label' => 'above',

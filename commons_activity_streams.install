@@ -18,3 +18,14 @@ function commons_activity_streams_update_3102() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Reset field instances to hide the target users field from the updated profile message.
+ */
+function commons_activity_streams_update_3103() {
+  $revert = array(
+    'commons_activity_streams' => array('field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}
