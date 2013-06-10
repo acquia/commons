@@ -473,7 +473,7 @@ function commons_trusted_contacts_og_membership_update(OgMembership $og_membersh
  * Whenever one of the OG memberships is deleted, the other membership must be
  * deleted too.
  */
-function commons_trusted_contacts_og_membership_delete(OgMembership $og_membership, $type) {
+function commons_trusted_contacts_og_membership_delete(OgMembership $og_membership) {
   if ($og_membership->type != 'trusted_contacts' || $og_membership->group_type != 'user') {
     // Not a Trusted-Contact membership type.
     return;
