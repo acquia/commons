@@ -97,6 +97,8 @@ function commons_events_theme($existing, $type, $theme, $path) {
 function commons_events_theme_registry_alter(&$theme_registry) {
   $theme_registry['date_display_range']['theme path'] = drupal_get_path('module', 'commons_events');
   $theme_registry['date_display_range']['function'] = 'theme_commons_events_date_display_range_advanced';
+  $theme_registry['date_display_single']['theme path'] = drupal_get_path('module', 'commons_events');
+  $theme_registry['date_display_single']['function'] = 'theme_commons_events_date_display_single';
 }
 
 /**
@@ -476,6 +478,14 @@ function theme_commons_events_date_display_range_simple($variables) {
   $attributes_start = $variables['attributes_start'];
   $attributes_end = $variables['attributes_end'];
 
+  if($date1 == $date2) {
+    // Wrap the result with the attributes.
+    return t('!start-time - !end-time', array(
+      '!start-time' => '<span class="date-display-start"' . drupal_attributes($attributes_start) . '>' . $time1 . '</span>',
+      '!end-time' => '<span class="date-display-end"' . drupal_attributes($attributes_end) . '>' . $time2 . $timezone . '</span>',
+    ));
+  }
+
   // Wrap the result with the attributes.
   return t('!start-date to !end-date, !start-time - !end-time', array(
     '!start-date' => '<span class="date-display-start"' . drupal_attributes($attributes_start) . '>' . $date1 . '</span>',
@@ -485,12 +495,14 @@ function theme_commons_events_date_display_range_simple($variables) {
   ));
 }
 
+function theme_commons_events_date_display_single($variables) {
+  return $variables['date'];
+}
 /**
  * Returns specific HTML for a date element formatted with the event formatter.
  * We parse the date segments and return it at the bottom, or use the simple formatter (above) if parts of the date are too complicated.
  */
 function theme_commons_events_date_display_range_advanced($variables) {
-
   $timezone = $variables['timezone'];
   $attributes_start = $variables['attributes_start'];
   $attributes_end = $variables['attributes_end'];
