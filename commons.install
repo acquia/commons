@@ -131,3 +131,29 @@ function commons_update_3102() {
   }
   return array();
 }
+
+/**
+ * Replace the Toolbar module with the Navbar module.
+ */
+function commons_update_3103() {
+  // Enable the Navbar module and its dependencies.
+  $module_list = array('breakpoints', 'navbar');
+  module_enable($module_list);
+
+  // Migrate permissions.
+  if (module_exists('toolbar')) {
+    $roles = user_roles(FALSE, 'access toolbar');
+    if (!empty($roles)) {
+      // Set permissions.
+      foreach ($roles as $rid => $role) {
+        user_role_grant_permissions($rid, array('access navbar'));
+      }
+    }
+  }
+
+  // Disable the Toolbar module.
+  $module_list = array('toolbar');
+  module_disable($module_list);
+
+  return array();
+}

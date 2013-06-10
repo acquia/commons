@@ -41,6 +41,10 @@ projects[apachesolr_user][download][url] = "http://git.drupal.org/project/apache
 projects[apachesolr_user][download][branch] = "7.x-1.x"
 projects[apachesolr_user][download]revision] = "a86c5aebfceaf4a3fc53544762a36ca1b70809d5"
 
+projects[breakpoints][type] = "module"
+projects[breakpoints][subdir] = "contrib"
+projects[breakpoints][version] = "1.0"
+
 projects[connector][type] = "module"
 projects[connector][subdir] = "contrib"
 projects[connector][version] = "1.0-beta2"
@@ -215,6 +219,13 @@ projects[module_filter][version] = "1.7"
 projects[mollom][type] = "module"
 projects[mollom][subdir] = "contrib"
 projects[mollom][version] = "2.6"
+
+projects[navbar][type] = "module"
+projects[navbar][subdir] = "contrib"
+projects[navbar][download][type] = "git"
+projects[navbar][download][url] = "http://git.drupal.org/project/navbar.git"
+projects[navbar][download][branch] = "7.x-1.x"
+projects[navbar][download][revision] = "dd542e1a74d9c9b3a9b5bd699aad9a4b65e5c5b7"
 
 projects[oauth][type] = "module"
 projects[oauth][subdir] = "contrib"
@@ -503,6 +514,13 @@ projects[commons_origins][subdir] = "contrib"
 
 ; Libraries.
 ; NOTE: These need to be listed in http://drupal.org/packaging-whitelist.
+libraries[underscore][download][type] = "get"
+libraries[underscore][type] = "libraries"
+libraries[underscore][download][url] = "https://github.com/documentcloud/underscore/archive/1.4.4.zip"
+
+libraries[backbone][download][type] = "get"
+libraries[backbone][type] = "libraries"
+libraries[backbone][download][url] = "https://github.com/documentcloud/backbone/archive/1.0.0.tar.gz"
 
 libraries[ckeditor][download][type] = "get"
 libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.0/ckeditor_4.0_standard.tar.gz"
