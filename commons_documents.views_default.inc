@@ -85,14 +85,6 @@ function commons_documents_views_default_views() {
     'document' => 'document',
   );
 
-  /* Display: Block */
-  $handler = $view->new_display('block', 'Block', 'block_2');
-  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-
-  /* Display: Page */
-  $handler = $view->new_display('page', 'Page', 'page_1');
-  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-  $handler->display->display_options['path'] = 'test';
   $translatables['commons_bw_documents'] = array(
     t('Master'),
     t('more'),
@@ -113,8 +105,6 @@ function commons_documents_views_default_views() {
     t('Post date'),
     t('most active'),
     t('All'),
-    t('Block'),
-    t('Page'),
   );
   $export['commons_bw_documents'] = $view;
 

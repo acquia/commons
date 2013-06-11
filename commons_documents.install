@@ -21,3 +21,14 @@ function commons_documents_update_7001() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Remove unused view displays.
+ */
+function commons_documents_update_7002() {
+    $revert = array(
+      'commons_documents' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}
