@@ -37,12 +37,28 @@ function commons_requirements($phase) {
  * @see system_install()
  */
 function commons_install() {
-  // Enable the Origins theme and set it as the default.
-  theme_enable(array('adaptivetheme', 'commons_origins', 'adaptivetheme_admin'));
+  // Enable the Commons Origins theme.
+  db_update('system')
+    ->fields(array('status' => 1))
+    ->condition('type', 'theme')
+    ->condition('name', 'commons_origins')
+    ->execute();
+
+  // The Bartik theme is automatically enabled during installation. Disable it.
+  db_update('system')
+    ->fields(array('status' => 0))
+    ->condition('type', 'theme')
+    ->condition('name', 'bartik')
+    ->execute();
+
+  // Set the default and administration themes.
   variable_set('theme_default', 'commons_origins');
-  // Set a default administrative theme:
   variable_set('admin_theme', 'adaptivetheme_admin');
-  variable_set('node_admin_theme', FALSE);
+
+  // Do not use the administration theme when editing or creating content.
+  variable_set('node_admin_theme', '0');
+
+  // Set a default user avatar.
   commons_set_default_avatar();
 
   // Place site blocks in the menu_bar and header regions.
