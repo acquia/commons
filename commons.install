@@ -173,3 +173,12 @@ function commons_update_3103() {
 
   return array();
 }
+
+/**
+ * Enable the Paranoia module.
+ */
+function commons_update_3104() {
+  $module_list = array('paranoia');
+  module_enable($module_list);
+  return array();
+}
