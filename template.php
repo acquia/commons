@@ -1182,6 +1182,7 @@ function commons_origins_preprocess_user_profile(&$variables, $hook) {
     $user_actions = array(
       'flags',
       'privatemsg_send_new_message',
+      'group_group',
     );
     foreach ($user_actions as $action) {
       if (isset($variables['user_profile'][$action])) {
