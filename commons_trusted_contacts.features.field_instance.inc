@@ -436,13 +436,15 @@ function commons_trusted_contacts_field_default_field_instances() {
   if (module_exists('commons_search_solr_user')) {
     $field_instances['user-user-group_group']['view modes']['search_results'] = array(
       'label' => 'hidden',
-      'custom settings' => TRUE,
-      'type' => 'hidden',
+      'module' => 'commons_trusted_contacts',
+      'settings' => array(),
+      'type' => 'trusted_contact',
     );
     $field_instances['user-user-group_group']['display']['search_results'] = array(
       'label' => 'hidden',
-      'custom settings' => TRUE,
-      'type' => 'hidden',
+      'module' => 'commons_trusted_contacts',
+      'settings' => array(),
+      'type' => 'trusted_contact',
       'weight' => 17,
     );
     $field_instances['user-user-user_trusted_contacts']['display']['search_results'] = array(
