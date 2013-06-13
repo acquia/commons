@@ -18,7 +18,7 @@ function commons_search_solr_user_apachesolr_search_default_searchers() {
   $searcher->description = 'User Search';
   $searcher->search_path = 'people';
   $searcher->page_title = 'People';
-  $searcher->env_id = 'solr';
+  $searcher->env_id = apachesolr_default_environment();
   $searcher->settings = array(
     'fq' => array(
       0 => 'entity_type:user',
