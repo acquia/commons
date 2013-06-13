@@ -7,6 +7,23 @@
 include_once 'commons_events.features.inc';
 
 /**
+ * Implements hook_forms().
+ */
+function commons_events_forms($form_id, $args) {
+  // The attend and cancel event forms need to have a dynamic form ID to allow
+  // for multiple forms to be shown on the same page and have them work.
+  foreach (array('commons_events_attend_event_form', 'commons_events_cancel_event_form') as $form) {
+    if (substr($form_id, 0, strlen($form)) == $form) {
+      return array(
+        $form_id => array(
+          'callback' => $form,
+        ),
+      );
+    }
+  }
+}
+
+/**
  * Implements hook_menu_alter().
  */
 function commons_events_menu_alter(&$items) {

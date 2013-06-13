@@ -27,10 +27,10 @@ function theme_commons_events_attending_event($variables = array()) {
   }
   if (!registration_is_registered($registration, NULL, $user->uid)
     && registration_access('create', $registration, $user, $registration->type)) {
-    return drupal_get_form('commons_events_attend_event_form', $event, $registration, $attendee_count);
+    return drupal_get_form('commons_events_attend_event_form_' . $event->nid, $event, $registration, $attendee_count);
   }
   else if (registration_access('delete', $registration, $user, $registration->type)) {
-    return drupal_get_form('commons_events_cancel_event_form', $event);
+    return drupal_get_form('commons_events_cancel_event_form_' . $event->nid, $event);
   }
   return "";
 }

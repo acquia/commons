@@ -193,3 +193,11 @@ function commons_events_update_7008() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Need to force update so that Drupal sees the new hook_forms implementation.
+ */
+function commons_events_update_7009() {
+  cache_clear_all('module_implements', 'cache_bootstrap');
+  return array();
+}
