@@ -21,7 +21,7 @@ projects[advancedqueue][version] = "1.0-alpha2"
 
 projects[apachesolr][type] = "module"
 projects[apachesolr][subdir] = "contrib"
-projects[apachesolr][version] = "1.2"
+projects[apachesolr][version] = "1.3"
 
 projects[apachesolr_og][type] = "module"
 projects[apachesolr_og][subdir] = "contrib"
