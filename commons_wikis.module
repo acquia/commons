@@ -82,14 +82,21 @@ function commons_wikis_user_revision_access($node = NULL, $old_callback = '_node
 function commons_wikis_og_user_access_alter(&$temp_perm, $context) {
   // Grant access to non-group members to be able to edit wiki nodes.
   // where the group node is public and content is public within the group.
-  $commons_groups_entity_types = commons_groups_get_group_content_entity_types();
-  $group_content_restricted = (bool) (isset($context['group']->group_content_access[LANGUAGE_NONE][0]['value']) && $context['group']->group_content_access[LANGUAGE_NONE][0]['value'] == 2);
-  $user_is_member = (bool) og_is_member('node', $context['group']->nid, 'user', $context['account']);
-  if ($context['string'] == "update any wiki content"
-    && user_access('edit any wiki content', $context['account'])
+  if ($context['string'] == "update any wiki content") {
+    $commons_groups_entity_types = commons_groups_get_group_content_entity_types();
+    $group_content_restricted = (bool) (isset($context['group']->group_content_access[LANGUAGE_NONE][0]['value']) && $context['group']->group_content_access[LANGUAGE_NONE][0]['value'] == 2);
+    $user_is_member = FALSE;
+    if ($context['group_type'] == 'node') {
+      $user_is_member = (bool) og_is_member('node', $context['group']->nid, 'user', $context['account']);
+    }
+    if ($context['group_type'] == 'user') {
+      $user_is_member = (bool) og_is_member('user', $context['group']->uid, 'user', $context['account']);
+    }
+    if (user_access('edit any wiki content', $context['account'])
     && (!$group_content_restricted || $user_is_member)) {
-    $temp_perm["update any wiki content"] = TRUE;
-   }
+      $temp_perm["update any wiki content"] = TRUE;
+    }
+  }
 }
 
 /**
