@@ -54,3 +54,10 @@ function commons_wikis_update_7004() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Clear views cache to have contributor view use new permission.
+ */
+function commons_wikis_update_7005() {
+  cache_clear_all('*', 'cache_views', TRUE);
+}
