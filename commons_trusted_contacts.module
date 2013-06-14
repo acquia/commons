@@ -829,11 +829,15 @@ function commons_trusted_contacts_partial_node_form_validate($form, $form_state)
  * Override the group fields.
  */
 function commons_trusted_contacts_node_presave($node) {
-  if (!module_exists('og_access')) {
-    return;
-  }
-
-  if (empty($node->partial_node_form) || !$node->is_new) {
+  // We only need to process the node on presave when it was submitted
+  // from the partial node form with og_access module enabled
+  // and when target group audience nodes were specified.
+  if (empty($node->partial_node_form)
+    || !$node->is_new
+    || !isset($node->form_state['values']['group_audience_type'])
+    || empty($node->form_state['values'][OG_AUDIENCE_FIELD])
+    || !module_exists('og_access'))
+  {
     return;
   }
 
