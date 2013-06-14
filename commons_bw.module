@@ -242,6 +242,8 @@ function commons_bw_partial_node_form_submit($form, $form_state) {
     $wrapper->{OG_AUDIENCE_FIELD}->set(array($form_state['group_id']));
   }
 
+  $node->form_state = $form_state;
+
   $wrapper->save();
 
   // Notify about the node creation.
