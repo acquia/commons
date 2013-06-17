@@ -717,11 +717,13 @@ button,
 [type="submit"],
 [type="button"],
 [class*="action-item"] {
-  @extend %button-default-layout;
-  @extend %button-default;
-  max-width: 100%;
+  &:not(.formatted-as-checkbox) {
+    @extend %button-default-layout;
+    @extend %button-default;
+    max-width: 100%;
+  }
 
-  &:not(.action-item-inline, .action-item-merge) {
+  &:not(.action-item-inline, .action-item-merge, .formatted-as-checkbox) {
     @include respond(only-small) {
       display: block;
       width: 100%;
@@ -731,11 +733,15 @@ button,
 }
 
 [class*="action-item-small"] {
-  @extend %button-small-layout;
+  &:not(.formatted-as-checkbox) {
+    @extend %button-small-layout;
+  }
 }
 
 [class*="action-item-large"] {
-  @extend %button-large-layout;
+  &:not(.formatted-as-checkbox) {
+    @extend %button-large-layout;
+  }
 }
 
 .action-item-active,
@@ -745,7 +751,9 @@ button,
   &[type="reset"],
   &[type="submit"],
   &[type="button"] {
-    @extend %button-active;
+    &:not(.formatted-as-checkbox) {
+      @extend %button-active;
+    }
   }
 }
 
@@ -756,7 +764,9 @@ button,
   &[type="reset"],
   &[type="submit"],
   &[type="button"] {
-    @extend %button-primary;
+    &:not(.formatted-as-checkbox) {
+      @extend %button-primary;
+    }
   }
 }
 
@@ -767,58 +777,64 @@ button,
   &[type="reset"],
   &[type="submit"],
   &[type="button"] {
-    @extend %button-primary-active;
+    &:not(.formatted-as-checkbox) {
+      @extend %button-primary-active;
+    }
   }
 }
 
 .action-item-merge, {
   .action-item-merge + & {
-    @include border-top-left-radius(0);
-    @include border-bottom-left-radius(0);
-    margin-left: -.5em;
+    &:not(.formatted-as-checkbox) {
+      @include border-top-left-radius(0);
+      @include border-bottom-left-radius(0);
+      margin-left: -.5em;
+    }
   }
 }
 
 .action-item-append,
 .action-item-small-append,
 .action-item-large-append {
-  position: relative;
-  padding-right: .5em;
-  padding-left: .5em;
+  &:not(.formatted-as-checkbox) {
+    position: relative;
+    padding-right: .5em;
+    padding-left: .5em;
 
-  &,
-  &:active,
-  &:focus,
-  &:hover {
-    background: $border;
-    border-color: $light_gray;
-    color: $dark_gray;
-    cursor: default;
-    @include text-shadow(none);
-  }
+    &,
+    &:active,
+    &:focus,
+    &:hover {
+      background: $border;
+      border-color: $light_gray;
+      color: $dark_gray;
+      cursor: default;
+      @include text-shadow(none);
+    }
 
-  &:before,
-  &:after {
-    content: "";
-    display: block;
-    position: absolute;
-    top: 50%;
-    border-color: transparent;
-    border-style: solid;
-  }
+    &:before,
+    &:after {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 50%;
+      border-color: transparent;
+      border-style: solid;
+    }
 
-  &:before {
-    left: -10px;
-    margin-top: -5px;
-    border-width: 5px;
-    border-right-color: $light_gray;
-  }
+    &:before {
+      left: -10px;
+      margin-top: -5px;
+      border-width: 5px;
+      border-right-color: $light_gray;
+    }
 
-  &:after {
-    left: -8px;
-    margin-top: -4px;
-    border-width: 4px;
-    border-right-color: $border;
+    &:after {
+      left: -8px;
+      margin-top: -4px;
+      border-width: 4px;
+      border-right-color: $border;
+    }
   }
 }
 
