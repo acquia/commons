@@ -69,3 +69,14 @@ function commons_q_a_update_3105() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Use the standard user picture image size.
+ */
+function commons_q_a_update_3106() {
+    $revert = array(
+      'commons_q_a' => array('message_type'),
+  );
+  features_revert($revert);
+  return array();
+}
