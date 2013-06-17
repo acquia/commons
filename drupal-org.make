@@ -532,4 +532,4 @@ libraries[ckeditor][type] = "libraries"
 
 libraries[timeago][download][type] = "get"
 libraries[timeago][type] = "libraries"
-libraries[timeago][download][url] = "https://raw.github.com/rmm5t/jquery-timeago/v1.2.0/jquery.timeago.js"
+libraries[timeago][download][url] = "https://raw.github.com/rmm5t/jquery-timeago/v1.3.0/jquery.timeago.js"
