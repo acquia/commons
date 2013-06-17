@@ -43,7 +43,7 @@ projects[apachesolr_user][download]revision] = "a86c5aebfceaf4a3fc53544762a36ca1
 
 projects[breakpoints][type] = "module"
 projects[breakpoints][subdir] = "contrib"
-projects[breakpoints][version] = "1.0"
+projects[breakpoints][version] = "1.1"
 
 projects[connector][type] = "module"
 projects[connector][subdir] = "contrib"
