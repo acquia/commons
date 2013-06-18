@@ -113,6 +113,14 @@ function commons_wikis_form_commons_bw_partial_node_form_alter(&$form, &$form_st
   $form['body'][LANGUAGE_NONE][0]['#title_display'] = 'invisible';
   $form['body'][LANGUAGE_NONE][0]['#resizable'] = FALSE;
 
+  // Set fields as hideable so the forms can be compacted.
+  $form['title_field']['#attributes']['class'][] = 'trigger-field';
+  foreach (array('body', 'og_group_ref', 'actions') as $field) {
+    if (isset($form[$field])) {
+      $form[$field]['#attributes']['class'][] = 'hideable-field';
+    }
+  }
+
   $form['actions']['submit']['#value'] = t('Create');
   $form['#pre_render'][] = 'commons_wikis_form_commons_bw_partial_node_form_after_build';
 }
