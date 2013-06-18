@@ -108,7 +108,7 @@ function commons_groups_field_default_field_bases() {
     'module' => 'list',
     'settings' => array(
       'allowed_values' => array(
-        'anyone' => 'Anyone can join',
+        'anyone' => 'Anyone can join and contribute',
         'approval' => 'Joining requires admin approval',
         'invitation' => 'Joining requires an invitation',
       ),
