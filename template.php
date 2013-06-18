@@ -710,10 +710,12 @@ function commons_origins_preprocess_form_content(&$variables, $hook) {
   }
 
   // The buttons for toggling event attendance should be large and noticeable.
-  if ($variables['form']['#form_id'] == 'commons_events_attend_event_form') {
+  // These forms have a varying form id, so check for if the id contains a
+  // string instead of the whole thing.
+  if (strpos($variables['form']['#form_id'], 'commons_events_attend_event_form') === 0) {
     $variables['form']['submit']['#attributes']['class'][] = 'action-item-primary';
   }
-  if ($variables['form']['#form_id'] == 'commons_events_cancel_event_form') {
+  if (strpos($variables['form']['#form_id'], 'commons_events_cancel_event_form') === 0) {
     $variables['form']['submit']['#attributes']['class'][] = 'action-item-active';
   }
 
