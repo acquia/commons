@@ -130,11 +130,12 @@ hide($content['report_link']);
     <?php print render($content); ?>
   </div>
 
-  <?php if ($links = render($content['links'])): ?>
-    <nav<?php print $links_attributes; ?>><?php print $links; ?></nav>
+  <?php if (($links = render($content['links'])) || $content['report_link']): ?>
+    <nav<?php print $links_attributes; ?>>
+      <?php print $links; ?>
+      <?php print render($content['report_link']); ?>
+    </nav>
   <?php endif; ?>
-
-  <?php print render($content['report_link']); ?>
 
   <?php if (isset($content['comments']['comments'])): ?>
     <div class="commons-pod commons-pod-comments">
