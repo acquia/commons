@@ -565,6 +565,20 @@ optgroup {
   }
 }
 
+/* Replace the default Drupal throbber with a custom one. */
+html.js {
+  input.form-autocomplete {
+    background-image: none;
+    background-position: right center;
+    padding-right: 25px;
+
+    &.throbbing {
+      background-image: image-url("commons-throbber.gif");
+      background-position: right center;
+    }
+  }
+}
+
 .general-settings {
   padding-top: 0;
   padding-bottom: 0;

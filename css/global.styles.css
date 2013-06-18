@@ -601,6 +601,17 @@ optgroup::-moz-focus-inner {
   padding: 0;
 }
 
+/* Replace the default Drupal throbber with a custom one. */
+html.js input.form-autocomplete {
+  background-image: none;
+  background-position: right center;
+  padding-right: 25px;
+}
+html.js input.form-autocomplete.throbbing {
+  background-image: url('../images/commons-throbber.gif?1371580738');
+  background-position: right center;
+}
+
 .general-settings {
   padding-top: 0;
   padding-bottom: 0;
