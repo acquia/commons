@@ -35,6 +35,14 @@ function commons_documents_form_commons_bw_partial_node_form_alter(&$form, &$for
   $form['body'][LANGUAGE_NONE][0]['#placeholder'] = t('Describe the document');
   $form['body'][LANGUAGE_NONE][0]['#resizable'] = FALSE;
 
+  // Set fields as hideable so the forms can be compacted.
+  $form['body']['#attributes']['class'][] = 'trigger-field';
+  foreach (array('field_image', 'og_group_ref', 'field_document_file', 'actions') as $field) {
+    if (isset($form[$field])) {
+      $form[$field]['#attributes']['class'][] = 'hideable-field';
+    }
+  }
+
   $form['#pre_render'][] = 'commons_documents_form_commons_bw_partial_node_form_after_build';
 }
 
