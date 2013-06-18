@@ -239,7 +239,7 @@ function commons_trusted_contacts_field_formatter_view($entity_type, $entity, $f
           $element[0] = array(
             '#theme' => 'html_tag__request_pending',
             '#tag' => 'span',
-            '#value' => t('Pending contact'),
+            '#value' => t('Awaiting confirmation'),
             '#attributes' => array(
               'class' => array('trusted-request-pending'),
             ),
@@ -531,7 +531,7 @@ function commons_trusted_contacts_request_trust($account, $ajax) {
     $commands = array();
     $element = array(
       'element' => array(
-        '#value' => t('Pending contact'),
+        '#value' => t('Awaiting confirmation'),
         '#tag' => 'span',
         '#attributes' => array(
           'class' => array('trusted-request-pending'),
