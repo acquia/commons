@@ -80,3 +80,15 @@ function commons_q_a_update_3106() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Remove the "Like" widget from answer nodes, since they have a +/- widget.
+ * Related issue: https://drupal.org/node/1935312.
+ */
+function commons_q_a_update_3107() {
+  $revert = array(
+    'commons_like' => array('variable'),
+  );
+  features_revert($revert);
+  return array();
+}
