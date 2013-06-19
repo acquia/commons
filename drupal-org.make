@@ -274,6 +274,13 @@ projects[pathauto][type] = "module"
 projects[pathauto][subdir] = "contrib"
 projects[pathauto][version] = "1.2"
 
+projects[placeholder][type] = "module"
+projects[placeholder][subdir] = "contrib"
+projects[placeholder][download][type] = "git"
+projects[placeholder][download][url] = "http://git.drupal.org/project/placeholder.git"
+projects[placeholder][download][branch] = "7.x-1.x"
+projects[placeholder][download][revision] = "75729d9"
+
 projects[pm_existing_pages][type] = "module"
 projects[pm_existing_pages][subdir] = "contrib"
 projects[pm_existing_pages][version] = "1.4"
@@ -529,6 +536,10 @@ libraries[backbone][download][url] = "https://github.com/documentcloud/backbone/
 libraries[ckeditor][download][type] = "get"
 libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.0/ckeditor_4.0_standard.tar.gz"
 libraries[ckeditor][type] = "libraries"
+
+libraries[placeholder][download][type] = "get"
+libraries[placeholder][type] = "libraries"
+libraries[placeholder][download][url] = "https://github.com/mathiasbynens/jquery-placeholder/archive/v2.0.7.tar.gz"
 
 libraries[timeago][download][type] = "get"
 libraries[timeago][type] = "libraries"

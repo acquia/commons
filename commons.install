@@ -180,3 +180,12 @@ function commons_update_3104() {
   module_enable($module_list);
   return array();
 }
+
+/**
+ * Enable the Placeholder module.
+ */
+function commons_update_3105() {
+  $module_list = array('placeholder');
+  module_enable($module_list);
+  return array();
+}
