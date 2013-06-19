@@ -129,10 +129,32 @@ function commons_trusted_contacts_admin_paths() {
 }
 
 /**
+ * Implements hook_module_implements_alter().
+ */
+function commons_trusted_contacts_module_implements_alter(&$implementations, $hook) {
+  // We need to alter form elements added by the Views Bulk Operations module.
+  // VBO is is alphabetically subsequent to commons_trusted_contacts
+  // and has the same weight, so we need this alter to ensure that
+  // our hook_form_alter() implementation runs after VBO, so that the
+  // elements VBO adds are already present when we alter the form.
+  if ($hook == 'form_alter') {
+    $group = $implementations['commons_trusted_contacts'];
+    unset($implementations['commons_trusted_contacts']);
+    $implementations['commons_trusted_contacts'] = $group;
+  }
+}
+
+/**
  * Implements hook_form_alter().
  */
 function commons_trusted_contacts_form_alter(&$form, &$form_state, $form_id) {
-  //dpm($form, $form_id);
+  // Hide the Approve/Ignore buttons when there are no pending trusted
+  // contact requests.
+  if ($form_id == 'views_form_trusted_contacts_invitations_default') {
+    if (empty($form_state['build_info']['args'][0]->result)) {
+      $form['select']['#access'] = FALSE;
+    }
+  }
 }
 
 /**
