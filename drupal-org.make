@@ -285,6 +285,10 @@ projects[placeholder][download][url] = "http://git.drupal.org/project/placeholde
 projects[placeholder][download][branch] = "7.x-1.x"
 projects[placeholder][download][revision] = "75729d9"
 
+; Uses Libraries functions during install before the module has been loaded.
+; http://drupal.org/node/1903188
+projects[placeholder][patch][] = "http://drupal.org/files/check-requirements-during-runtime-1903188-7.patch"
+
 projects[pm_existing_pages][type] = "module"
 projects[pm_existing_pages][subdir] = "contrib"
 projects[pm_existing_pages][version] = "1.4"
