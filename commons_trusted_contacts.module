@@ -982,7 +982,7 @@ function commons_trusted_contacts_messages_popup($form, &$form_state, $account) 
 
   $form['recipient']['#type'] = 'hidden';
 
-  drupal_set_title(t('Direct Message @recipient', array('@recipient' => $account->name)));
+  drupal_set_title(t('Direct Message @recipient', array('@recipient' => format_username($account))));
 
   return $form;
 }
