@@ -51,16 +51,7 @@ projects[connector][version] = "1.0-beta2"
 
 projects[ckeditor][type] = "module"
 projects[ckeditor][subdir] = "contrib"
-projects[ckeditor][download][type] = "git"
-projects[ckeditor][download][url] = "http://git.drupal.org/project/ckeditor.git"
-; Use Libraries API for ckeditor.
-; http://drupal.org/node/1063482#comment-6964504
-projects[ckeditor][download][branch] = "7.x-1.x"
-projects[ckeditor][download][revision] = "f6abbda"
-
-; Fatal error if Libraries module is enabled after CKEditor
-; http://drupal.org/node/1898294#comment-6980796
-projects[ckeditor][patch][] = "http://drupal.org/files/ckeditor-install-lib-1898294-2.patch"
+projects[ckeditor][version] = "1.13"
 
 projects[ctools][type] = "module"
 projects[ctools][subdir] = "contrib"
