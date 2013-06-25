@@ -33,7 +33,7 @@ function commons_site_homepage_form_alter(&$form, &$form_state, $form_id) {
 }
 
 function commons_homepage_user_register_login_submit($form, &$form_state) {
-  $form_state['redirect'] = 'home';
+  $form_state['redirect'] = variable_get('site_frontpage', 'home');
 }
 
 /**
