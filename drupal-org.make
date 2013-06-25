@@ -515,6 +515,10 @@ projects[adaptivetheme][download][url] = "git://git.drupal.org/project/adaptivet
 projects[adaptivetheme][download][branch] = "7.x-3.x"
 projects[adaptivetheme][download][revision] = "b4b38c3"
 
+; Remove link around comment creation date.
+; http://drupal.org/node/1427226#comment-6638836
+projects[adaptivetheme][patch][] = "http://drupal.org/files/remove-comment-creation-link-2018081-1.patch"
+
 projects[sky][type] = "theme"
 projects[sky][subdir] = "contrib"
 projects[sky][version] = "3.0-rc1"
