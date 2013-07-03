@@ -10,8 +10,7 @@ mysql:
 
 before_script:
   - rm -rf drush
-  - git clone --branch 7.x-4.x git://git.drupal.org/project/drush.git drush
-  - git clone --branch 6.x-2.x git://git.drupal.org/project/drush_make.git drush/commands/drush_make
+  - git clone --branch 7.x-5.x git://git.drupal.org/project/drush.git drush
   - chmod +x drush/drush
   - drush/drush make build-commons-dev.make --no-cache -y
   
