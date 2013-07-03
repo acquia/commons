@@ -1,7 +1,9 @@
 language: php
 
 php:
-  - 5.3.3
+  - 5.5
+  - 5.4
+  - 5.3
 
 mysql:
   database: commons
@@ -13,8 +15,6 @@ before_script:
   - pear channel-discover pear.drush.org
   - pear install drush/drush
   - phpenv rehash
-  # Build distro from makefile
-  - drush make build-commons-dev.make --no-cache -y packaged
   # LAMP package installation (mysql is already started)
   - sudo apt-get install -y --force-yes apache2 libapache2-mod-php5 php5-mysql php5-curl
   # Create Database
@@ -26,7 +26,8 @@ before_script:
   - sudo a2enmod rewrite
   - sudo a2enmod actions
   - sudo service apache2 restart
+script:
+  # Build distro from makefile
+  - drush make build-commons-dev.make --no-cache -y packaged
   # Site installation
   - cd packaged; drush -v site-install --db-url=mysql://root@localhost/commons --site-name=QASite --account-name=admin --account-pass=commons --account-mail=admin@example.com --site-mail=site@example.com -v -y commons commons_anonymous_welcome_text_form.commons_anonymous_welcome_title="Oh hai" commons_anonymous_welcome_text_form.commons_anonymous_welcome_body="No shirts, no shoes, no service." commons_create_first_group.commons_first_group_title="Internet People" commons_create_first_group.commons_first_group_body="This is the first group on the page."
-script:
-    - exit
