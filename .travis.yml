@@ -1,0 +1,20 @@
+language: php
+
+php:
+  - 5.3.3
+
+mysql:
+  database: drupal
+  username: root
+  encoding: utf8
+
+before_script:
+  - sudo apt-get update
+  - rm -rf drush
+  - git clone --branch 7.x-4.x git://git.drupal.org/project/drush.git drush
+  - git clone --branch 6.x-2.x git://git.drupal.org/project/drush_make.git drush/commands/drush_make
+  - chmod +x drush/drush
+  - drush/drush make build-commons-dev.make --no-cache
+  
+script:
+    - exit
