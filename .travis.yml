@@ -21,8 +21,6 @@ before_script:
   - mysql -e 'create database commons;'
   # Apache webserver configuration
   - sudo sed -i -e "s,/var/www,$(pwd)/packaged,g" /etc/apache2/sites-available/default
-  # Grab apache config from dubious gist file, replace PATH with the commons directory
-  - echo "$(curl -fsSL https://raw.github.com/gist/2eb301570ed4a1f4c33d/gistfile1.txt)" | sed -e "s,PATH,`pwd`/packaged,g" | sudo tee /etc/apache2/sites-available/default > /dev/null
   - sudo a2enmod rewrite
   - sudo a2enmod actions
   - sudo service apache2 restart
