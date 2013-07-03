@@ -10,23 +10,23 @@ mysql:
 
 before_script:
   # Grab drush
-  - git clone --branch 7.x-5.x git://git.drupal.org/project/drush.git drush
-  - chmod +x drush/drush
+  - pear channel-discover pear.drush.org
+  - pear install drush/drush
+  - phpenv rehash
   # Build distro from makefile
-  - drush/drush make build-commons-dev.make --no-cache -y packaged
+  - drush make build-commons-dev.make --no-cache -y packaged
   # LAMP package installation (mysql is already started)
-  - sudo apt-get install -y --force-yes apache2 libapache2-mod-php5 php5-mysql php5-sqlite
+  - sudo apt-get install -y --force-yes apache2 libapache2-mod-php5 php5-curl php5-mysql php5-intl
   # Create Database
   - mysql -e 'create database commons;'
   # Apache webserver configuration
-  - echo "export PATH=/home/vagrant/.phpenv/bin:$PATH" | sudo tee -a /etc/apache2/envvars > /dev/null
-  - echo "$(curl -fsSL https://raw.github.com/gist/16d751c979fdeb5a14e3/gistfile1.txt)" | sudo tee /etc/apache2/conf.d/phpconfig > /dev/null
+  - sudo sed -i -e "s,/var/www,$(pwd)/packaged,g" /etc/apache2/sites-available/default
   # Grab apache config from dubious gist file, replace PATH with the commons directory
   - echo "$(curl -fsSL https://raw.github.com/gist/2eb301570ed4a1f4c33d/gistfile1.txt)" | sed -e "s,PATH,`pwd`/packaged,g" | sudo tee /etc/apache2/sites-available/default > /dev/null
   - sudo a2enmod rewrite
   - sudo a2enmod actions
   - sudo service apache2 restart
   # Site installation
-  - cd packaged; sudo ../drush/drush -v site-install --db-url=mysql://root@localhost/commons --site-name=QASite --account-name=admin --account-pass=commons --account-mail=admin@example.com --site-mail=site@example.com -v -y commons commons_anonymous_welcome_text_form.commons_anonymous_welcome_title="Oh hai" commons_anonymous_welcome_text_form.commons_anonymous_welcome_body="No shirts, no shoes, no service." commons_create_first_group.commons_first_group_title="Internet People" commons_create_first_group.commons_first_group_body="This is the first group on the page."
+  - cd packaged; sudo drush -v site-install --db-url=mysql://root@localhost/commons --site-name=QASite --account-name=admin --account-pass=commons --account-mail=admin@example.com --site-mail=site@example.com -v -y commons commons_anonymous_welcome_text_form.commons_anonymous_welcome_title="Oh hai" commons_anonymous_welcome_text_form.commons_anonymous_welcome_body="No shirts, no shoes, no service." commons_create_first_group.commons_first_group_title="Internet People" commons_create_first_group.commons_first_group_body="This is the first group on the page."
 script:
     - exit
