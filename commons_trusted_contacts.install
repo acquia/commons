@@ -39,3 +39,13 @@ function commons_trusted_contacts_install() {
   variable_set('privatemsg_display_loginmessage', FALSE);
 }
 
+/**
+ * Use absolute URLs for pending invitation emails.
+ */
+function commons_trusted_contacts_update_3100() {
+  $revert = array(
+    'commons_trusted_contacts' => array('message_type'),
+  );
+  features_revert($revert);
+  return array();
+}

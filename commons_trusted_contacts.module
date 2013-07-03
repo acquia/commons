@@ -541,10 +541,10 @@ function commons_trusted_contacts_request_trust($account, $ajax) {
 
   $wrapper = entity_metadata_wrapper('og_membership', $og_membership);
   $token = $wrapper->field_membership_token->value();
-
+  $options = array('absolute' => TRUE);
   $arguments = array(
-    '@{approve-url}' => 'approve-trust/' . $og_membership->id . '/' . $token,
-    '@{ignore-url}' => 'ignore-trust/' . $og_membership->id . '/' . $token,
+    '@{approve-url}' => url('approve-trust/' . $og_membership->id . '/' . $token, $options),
+    '@{ignore-url}' => url('ignore-trust/' . $og_membership->id . '/' . $token, $options),
   );
   $message = message_create('trusted_contact_request_pending', array('uid' => $account->uid, 'arguments' => $arguments));
 
