@@ -413,14 +413,14 @@ function commons_events_upcoming_more_link($group_id) {
         'f[1]' => 'sm_og_group_ref:node:' . $group_id,
       ),
     );
-    return l('more', 'events', $options);
+    return l(t('more'), 'events', $options);
   }
   $options = array(
     'query' => array(
       'gid' => $group_id,
     ),
   );
-  return l('more', 'events', $options);
+  return l(t('more'), 'events', $options);
 }
 
 /**
