@@ -635,7 +635,7 @@ function commons_trusted_contacts_approve_trust(OgMembership $og_membership) {
   // Notify.
 
   // Get approving user.
-  $account = user_load($og_membership->gid);
+  $account = user_load($og_membership->etid);
 
   $message = message_create('trusted_contact_request_approved', array('uid' => $account->uid));
 
