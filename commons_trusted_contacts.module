@@ -162,6 +162,11 @@ function commons_trusted_contacts_form_alter(&$form, &$form_state, $form_id) {
       $form[$field_name]['#access'] = FALSE;
     }
   }
+  if ($form_id == 'privatemsg_list') {
+    // Load privatemsg.pages.inc and ensure it is automatically reloaded if
+    // this form is rebuilt via AJAX or other means.
+    form_load_include($form_state, 'inc', 'privatemsg', 'privatemsg.pages');
+  }
 }
 
 /**
