@@ -11,6 +11,13 @@ mysql:
   username: root
   encoding: utf8
 
+# To be able to run a webbrowser
+# If we need anything more powerful
+# than e.g. phantomjs
+before_install:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  
 before_script:
   # Grab drush
   - pear channel-discover pear.drush.org
@@ -31,6 +38,8 @@ script:
   # Site installation
   - cd packaged
   - drush -v site-install --db-url=mysql://root@localhost/commons --site-name=QASite --account-name=admin --account-pass=commons --account-mail=admin@example.com --site-mail=site@example.com -v -y commons commons_anonymous_welcome_text_form.commons_anonymous_welcome_title="Oh hai" commons_anonymous_welcome_text_form.commons_anonymous_welcome_body="No shirts, no shoes, no service." commons_create_first_group.commons_first_group_title="Internet People" commons_create_first_group.commons_first_group_body="This is the first group on the page."
-  - cd ..
+  # Make sure it responds
   - curl localhost
+  - cd ..
+  # Start running the tests
   - bin/behat
