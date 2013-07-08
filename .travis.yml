@@ -5,6 +5,7 @@ php:
   - 5.4
   - 5.3
 
+# This will create the database
 mysql:
   database: commons
   username: root
@@ -17,8 +18,6 @@ before_script:
   - phpenv rehash
   # LAMP package installation (mysql is already started)
   - sudo apt-get install -y --force-yes apache2 libapache2-mod-php5 php5-mysql php5-curl
-  # Create Database
-  - mysql -e 'create database commons;'
   # Apache webserver configuration
   - sudo sed -i -e "s,/var/www,$(pwd)/packaged,g" /etc/apache2/sites-available/default
   - sudo a2enmod rewrite
