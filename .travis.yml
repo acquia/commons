@@ -31,15 +31,15 @@ before_script:
   - sudo a2enmod actions
   - sudo service apache2 restart
   # Install the composer packages for behat / ...
-  - composer install  
+  - composer --working-dir=tests/ install  
 script:
   # Build distro from makefile
   - drush make build-commons-dev.make --no-cache -y packaged
-  # Site installation
+  # Site installation. We're doing the cd-dance because drush -r throws an exception for me currently.
   - cd packaged
   - drush -v site-install --db-url=mysql://root@localhost/commons --site-name=QASite --account-name=admin --account-pass=commons --account-mail=admin@example.com --site-mail=site@example.com -v -y commons commons_anonymous_welcome_text_form.commons_anonymous_welcome_title="Oh hai" commons_anonymous_welcome_text_form.commons_anonymous_welcome_body="No shirts, no shoes, no service." commons_create_first_group.commons_first_group_title="Internet People" commons_create_first_group.commons_first_group_body="This is the first group on the page."
-  # Make sure it responds
-  - curl localhost
   - cd ..
+  # Make sure the installed site responds
+  - curl localhost
   # Start running the tests
-  - bin/behat
+  - tests/bin/behat
