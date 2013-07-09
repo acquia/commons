@@ -116,3 +116,15 @@ function commons_groups_update_3109() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Update the og group filter inside views per
+ * http://drupal.org/node/2037417.
+ */
+function commons_groups_update_3110() {
+  $revert = array(
+    'commons_groups' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}
