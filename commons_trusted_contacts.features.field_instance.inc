@@ -15,7 +15,7 @@ function commons_trusted_contacts_field_default_field_instances() {
     'bundle' => 'trusted_contact_request_approved',
     'default_value' => NULL,
     'default_value_function' => '',
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
@@ -58,10 +58,10 @@ function commons_trusted_contacts_field_default_field_instances() {
       'settings' => array(
         'match_operator' => 'CONTAINS',
         'path' => '',
-        'size' => '60',
+        'size' => 60,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => '1',
+      'weight' => 1,
     ),
   );
 
@@ -70,7 +70,7 @@ function commons_trusted_contacts_field_default_field_instances() {
     'bundle' => 'trusted_contact_request_pending',
     'default_value' => NULL,
     'default_value_function' => '',
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
@@ -113,10 +113,10 @@ function commons_trusted_contacts_field_default_field_instances() {
       'settings' => array(
         'match_operator' => 'CONTAINS',
         'path' => '',
-        'size' => '60',
+        'size' => 60,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => '1',
+      'weight' => 1,
     ),
   );
 
@@ -128,7 +128,7 @@ function commons_trusted_contacts_field_default_field_instances() {
         'value' => 0,
       ),
     ),
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
@@ -153,7 +153,7 @@ function commons_trusted_contacts_field_default_field_instances() {
         'display_label' => 0,
       ),
       'type' => 'options_onoff',
-      'weight' => '1',
+      'weight' => 1,
     ),
   );
 
@@ -161,7 +161,7 @@ function commons_trusted_contacts_field_default_field_instances() {
   $field_instances['og_membership-trusted_contacts-field_membership_token'] = array(
     'bundle' => 'trusted_contacts',
     'default_value' => NULL,
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
@@ -177,17 +177,17 @@ function commons_trusted_contacts_field_default_field_instances() {
     'label' => 'Membership Token',
     'required' => 1,
     'settings' => array(
-      'text_processing' => '0',
+      'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
       'active' => 1,
       'module' => 'text',
       'settings' => array(
-        'size' => '60',
+        'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => '5',
+      'weight' => 5,
     ),
   );
 
@@ -199,7 +199,7 @@ function commons_trusted_contacts_field_default_field_instances() {
         'value' => 0,
       ),
     ),
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
@@ -224,7 +224,7 @@ function commons_trusted_contacts_field_default_field_instances() {
         'display_label' => 0,
       ),
       'type' => 'options_onoff',
-      'weight' => '4',
+      'weight' => 4,
     ),
   );
 
@@ -233,7 +233,7 @@ function commons_trusted_contacts_field_default_field_instances() {
     'bundle' => 'trusted_contacts',
     'default_value' => NULL,
     'default_value_function' => '',
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
@@ -264,17 +264,17 @@ function commons_trusted_contacts_field_default_field_instances() {
       'settings' => array(
         'match_operator' => 'CONTAINS',
         'path' => '',
-        'size' => '60',
+        'size' => 60,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => '3',
+      'weight' => 3,
     ),
   );
 
   // Exported field_instance: 'og_membership-trusted_contacts-field_response_date'
   $field_instances['og_membership-trusted_contacts-field_response_date'] = array(
     'bundle' => 'trusted_contacts',
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
@@ -306,7 +306,7 @@ function commons_trusted_contacts_field_default_field_instances() {
       'active' => 1,
       'module' => 'date',
       'settings' => array(
-        'increment' => '15',
+        'increment' => 15,
         'input_format' => 'm/d/Y - H:i:s',
         'input_format_custom' => '',
         'label_position' => 'above',
@@ -314,7 +314,7 @@ function commons_trusted_contacts_field_default_field_instances() {
         'year_range' => '-3:+3',
       ),
       'type' => 'date_popup',
-      'weight' => '2',
+      'weight' => 2,
     ),
   );
 
@@ -322,7 +322,7 @@ function commons_trusted_contacts_field_default_field_instances() {
   $field_instances['user-user-user_trusted_contacts'] = array(
     'bundle' => 'user',
     'default_value' => NULL,
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
@@ -330,6 +330,13 @@ function commons_trusted_contacts_field_default_field_instances() {
         'settings' => array(),
         'type' => 'hidden',
         'weight' => 4,
+      ),
+      'search_results' => array(
+        'custom settings' => TRUE,
+        'label' => 'hidden',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 16,
       ),
     ),
     'entity_type' => 'user',
@@ -384,7 +391,13 @@ function commons_trusted_contacts_field_default_field_instances() {
       'default' => array(
         'label' => 'hidden',
         'module' => 'commons_trusted_contacts',
-        'settings' => array(),
+        'settings' => array(
+          'allowed_values' => array(
+            0 => 'Not a group',
+            1 => 'Group',
+          ),
+          'allowed_values_function' => '',
+        ),
         'type' => 'trusted_contact',
         'weight' => '3',
       ),
@@ -443,7 +456,13 @@ function commons_trusted_contacts_field_default_field_instances() {
     $field_instances['user-user-group_group']['display']['search_results'] = array(
       'label' => 'hidden',
       'module' => 'commons_trusted_contacts',
-      'settings' => array(),
+      'settings' => array(
+        'allowed_values' => array(
+          0 => 'Not a group',
+          1 => 'Group',
+        ),
+        'allowed_values_function' => '',
+      ),
       'type' => 'trusted_contact',
       'weight' => 17,
     );
