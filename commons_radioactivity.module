@@ -156,6 +156,8 @@ function commons_radioactivity_incident_groups($node, $value) {
 * the change in radioactivity for the former and newly containing groups.
 */
 function commons_radioactivity_process_node_group_membership_change($node) {
+  $gids_original = array();
+  $gids_updated = array();
   $groups_removed = array();
   $groups_added = array();
   // Collect any gids from the original node.
