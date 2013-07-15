@@ -10,6 +10,10 @@ notifications:
   email:
     - commons-eng@acquia.com
 
+branches:
+  only:
+    - 7.x-3.x
+
 # This will create the database
 mysql:
   database: commons
