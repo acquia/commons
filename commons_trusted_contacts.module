@@ -148,6 +148,13 @@ function commons_trusted_contacts_module_implements_alter(&$implementations, $ho
  * Implements hook_form_alter().
  */
 function commons_trusted_contacts_form_alter(&$form, &$form_state, $form_id) {
+  // Don't allow users to change the recipient of a private message.
+  // In combination with commons_trusted_contacts_privatemsg_write_access(),
+  // we prevent users from sending private messages to users who are not their
+  // trusted contacts.
+  if ($form_id == 'privatemsg_new') {
+    $form['recipient']['#access'] = FALSE;
+  }
   // Hide the Approve/Ignore buttons when there are no pending trusted
   // contact requests.
   if ($form_id == 'views_form_trusted_contacts_invitations_default') {
@@ -959,13 +966,6 @@ function commons_trusted_contacts_messages_popup($form, &$form_state, $account) 
     '#type' => 'submit',
     '#value' => t('Send'),
   );
-
-  $form['actions']['full_form'] = array(
-    '#type' => 'link',
-    '#title' => t('Go to full form'),
-    '#href' => 'messages/new/' . $account->uid,
-  );
-
 
   $wrapper = entity_metadata_wrapper('user', $account);
   $picture_path = empty($account->picture) ? variable_get('user_picture_default') : $wrapper->value()->picture->uri;
