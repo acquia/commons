@@ -134,7 +134,7 @@ function commons_follow_ui_tab_title($account, $flag_name = NULL) {
 
   $count = !empty($flaggings[$flag_name]) ? count($flaggings[$flag_name]) : 0;
   $params = array(
-    '@flag' => $flag->title,
+    '@flag' => $flag->get_title(),
     '@count' => $count,
     '@name' => format_username($account),
   );
