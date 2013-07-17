@@ -871,21 +871,22 @@ function commons_groups_field_formatter_view($entity_type, $entity, $field, $ins
   }
 
   list($id,, $bundle) = entity_extract_ids($entity_type, $entity);
+
+  // The user has a pending membership request. Let her know that
+  // her request is pending review.
+  if (og_is_member($entity_type, $id, 'user', $account, array(OG_STATE_PENDING))) {
+    $element[0] =  array('#markup' => '<div class="subscription-type">' . t('Your membership request is pending review by a group organizer.') . '</div>');
+    return $element;
+  }
+  // If user is blocked, they should not be able to apply for membership.
+  if (og_is_member($entity_type, $id, 'user', $account, array(OG_STATE_BLOCKED))) {
+    return;
+  }
   if (og_is_member($entity_type, $id, 'user', $account)) {
     // The user has an active membership. She can leave the group.
     if (og_is_member($entity_type, $id, 'user', $account, array(OG_STATE_ACTIVE))) {
       $links['title'] = t('Leave group');
       $links['href'] = "group/$entity_type/$id/unsubscribe";
-    }
-    // The user has a pending membership request. Let her know that
-    // her request is pending review.
-    if (og_is_member($entity_type, $id, 'user', $account, array(OG_STATE_PENDING))) {
-      $element[0] =  array('#markup' => '<div class="subscription-type">' . t('Your membership request is pending review by a group organizer.') . '</div>');
-      return $element;
-    }
-    // If user is blocked, they should not be able to apply for membership.
-    if (og_is_member($entity_type, $id, 'user', $account, array(OG_STATE_BLOCKED))) {
-      return;
     }
   }
   else {
