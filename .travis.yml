@@ -22,6 +22,9 @@ mysql:
 before_install:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
+  - "wget http://selenium.googlecode.com/files/selenium-server-standalone-2.33.0.jar -O selenium-server-standalone.jar"
+  - "java -jar selenium-server-standalone.jar > /dev/null &"
+  
   
 before_script:
   # Grab drush
