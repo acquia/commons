@@ -20,6 +20,7 @@ mysql:
 # If we need anything more powerful
 # than e.g. phantomjs
 before_install:
+  - "sudo apt-get update"
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - "wget http://selenium.googlecode.com/files/selenium-server-standalone-2.33.0.jar -O selenium-server-standalone.jar"
