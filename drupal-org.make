@@ -279,7 +279,10 @@ projects[pm_existing_pages][version] = "1.4"
 
 projects[privatemsg][type] = "module"
 projects[privatemsg][subdir] = "contrib"
-projects[privatemsg][version] = "1.x-dev"
+projects[privatemsg][version] = "1.4"
+
+; Add preliminary Views integration
+; http://drupal.org/node/1573000
 projects[privatemsg][patch][] = "http://drupal.org/files/privatemsg-1573000-64.patch"
 
 projects[quicktabs][type] = "module"
