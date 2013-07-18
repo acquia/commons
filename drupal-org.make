@@ -263,7 +263,7 @@ projects[panels][patch][] = "http://drupal.org/files/panels-n1632898-15.patch"
 
 projects[paranoia][type] = "module"
 projects[paranoia][subdir] = "contrib"
-projects[paranoia][version] = "1.1"
+projects[paranoia][version] = "1.2"
 
 projects[pathauto][type] = "module"
 projects[pathauto][subdir] = "contrib"
