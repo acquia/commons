@@ -134,4 +134,7 @@ The currently (July 2013) defined steps are as follows:
      Then /^show last response$/
 
 ## Writing new tests
-TODO
+
+
+For information about how to write tests, I'd suggest looking at the official [behat documentation](http://docs.behat.org/quick_intro.html#define-your-feature).
+One small piece of information: When you tag a scenario with @javascript, it will be executed in Firefox/Selenium2 rather than using the default "headless" goute driver.
