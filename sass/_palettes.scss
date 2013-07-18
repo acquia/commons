@@ -14,11 +14,14 @@
 
     .header-color-row-one {
       background-color: $palette_color_dark;
-      border-top: 4px solid darken($palette_color_dark, 50%);
+      border-top: 1.5em solid darken($palette_color_dark, 50%);
+
+      @include respond(large) {
+        border-top: none;
+      }
 
       .boxshadow & {
         @include box-shadow($palette_color_dark 0px -1px 0px);
-        margin-top: 1px;
       }
     }
 

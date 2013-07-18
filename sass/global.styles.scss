@@ -46,6 +46,7 @@ html {
 body {
   font-family: $base-font; // Set from _custom.scss font variables
   color: $dark_gray;
+  min-width: 18em;
 }
 
 /* =============================================================================
@@ -112,42 +113,49 @@ var {
  * Main wrapper in page.tpl.php, the .container class sets the width of the page, do not add width to it!
  */
 
-#page  {
-  margin-top: -92px;
-}
-
 /**
  * Wraps all header elements - branding and .region-header
  */
 
+.header-wrapper {
+  overflow: hidden;
+}
+
 #header {
-  height: 95px;
+  position: relative;
+  @include box-sizing(border-box);
   color: $white;
-  text-align: right;
-  margin-right: 8px;
-  white-space:nowrap;
+  text-align: left;
+  padding-right: $gutter_width;
+  padding-left: $gutter_width;
+  white-space: nowrap;
 
   a {
     color: $white;
   }
+
+  @include respond(small-medium) {
+    padding: 0;
+  }
 }
 
 .header-color-row-one {
-  height: 64px;
+  border-top: 1.5em solid darken($dark_blue, 50%);
   background-color: $dark_blue;
-  border-top: 4px solid darken($dark_blue, 50%);
+  @include box-shadow($dark_blue 0px -1px 0px);
 
-  .boxshadow & {
-    @include box-shadow($dark_blue 0px -1px 0px);
-    margin-top: 1px;
+  @include respond(large) {
+    border-top: none;
   }
 }
 
 .header-color-row-two {
+  position: relative;
   background-color: $light_blue;
-  height: 26px;
+  min-height: 2.5em;
   border-top: 1px solid lighten($light_blue, 10%);
   border-bottom: 1px solid darken($light_blue, 10%);
+  z-index: 2;
 }
 
 /**
@@ -219,9 +227,31 @@ var {
 
 #branding {
   float: left;
-  margin-left: 10px;
-  vertical-align: top;
+  @include box-sizing(border-box);
+  width: 100%;
+  padding-left: px-to-em(57px + $gutter_width);
   text-align: left;
+  margin-right: -36.5em;
+
+  @include respond(only-small) {
+    margin-right: -11.5em;
+  }
+
+  @include respond(only-medium) {
+    margin-right: -19.5em;
+  }
+
+  .people-search-active & {
+    margin-right: -42em;
+
+    @include respond(only-small) {
+      margin-right: -14em;
+    }
+
+    @include respond(only-medium) {
+      margin-right: -24em;
+    }
+  }
 }
 
 /**
@@ -229,12 +259,13 @@ var {
  */
 
 #logo {
-  display: inline-block;
-  padding: 0 10px 0 0;
-
-  img {
-    vertical-align: bottom;
-  }
+  position: relative;
+  display: block;
+  float: left;
+  position: relative;
+  margin-bottom: -3em;
+  margin-left: -#{px-to-em(57px + $gutter_width)};
+  z-index: 3;
 }
 
 /**
@@ -242,16 +273,31 @@ var {
  */
 
 #name-and-slogan {
-  display: inline-block;
+  display: block;
+  @include box-sizing(border-box);
+  width: 100%;
   vertical-align: top;
-  margin-top: 14px;
+  min-height: 4em;
+  padding-right: 36.5em;
 
-  .site-name-long & {
-    margin-top: 16px;
+  @include respond(only-small) {
+    padding-right: 11.5em;
   }
 
-  .site-name-long-2-lines & {
-    margin-top: 6px;
+  @include respond(only-medium) {
+    padding-right: 19.5em;
+  }
+
+  @include respond(only-small) {
+    display: none;
+  }
+
+  .people-search-active & {
+    padding-right: 42em;
+
+    @include respond(only-medium) {
+      padding-right: 24em;
+    }
   }
 }
 
@@ -260,7 +306,7 @@ var {
  */
 
 #site-name {
-  margin: 0;
+  margin: .3em 0 0;
   font-family:'Trebuchet MS';
   font-weight:700;
 
@@ -275,6 +321,10 @@ var {
       text-decoration: none;
     }
   }
+
+  @include respond(medium) {
+    font-size: 1.4em;
+  }
 }
 
 /**
@@ -282,7 +332,18 @@ var {
  */
 
 #site-slogan {
-  margin: 0;
+  margin: 0 0 .3em;
+  font-size: 1em;
+  color: $white;
+}
+
+#site-name,
+#site-slogan {
+  display: block;
+  overflow: hidden;
+  padding-right: $gutter_width;
+  line-height: 1.2em;
+  white-space: normal;
 }
 
 /* =============================================================================
@@ -2054,9 +2115,15 @@ ul.node-action-links {
 
 .region-header {
   display: inline-block;
-  height: 64px;
-  width: 266px;
   text-align: left;
+  width: 19.3em;
+
+  @include respond(small-medium) {
+    width: auto;
+    position: absolute;
+    right: $gutter_width;
+    top: -1.5em;
+  }
 }
 
 /* =============================================================================
@@ -2092,7 +2159,8 @@ a {
 #menu-bar.nav {
   display: inline-block;
   vertical-align: top;
-  margin:0;
+  margin: 0 0 -9999em;
+  padding-bottom: 9999em;
   @extend %divider-right;
 
   h3.block-title {
@@ -2145,10 +2213,14 @@ a {
   }
 
   ul.menu li a {
+    position: relative;
+    z-index: 1;
+    @include box-sizing(border-box);
     display: block;
     white-space: nowrap;
-    padding: 31px 13px 0px 13px;
-    height: 33px;
+    margin-bottom: -9998em;
+    padding: px-to-em(31px) px-to-em(13em) 9999em;
+    height: px-to-em(64px);
     text-transform: uppercase;
     @include text-shadow(#000 1px 1px 4px);
     background-position: center 10px;
@@ -2162,17 +2234,41 @@ a {
     }
 
     .arrow {
-      width:17px;
-      height:9px;
-      position:absolute;
-      left:50%;
-      bottom:-1px;
-      margin:0 0 0 -8px;
+      width: 17px;
+      height: 9px;
+      position: absolute;
+      left: 50%;
+      bottom: -1px;
+      margin: 0 0 0 -8px;
     }
   }
 
   .block {
     margin: 0;
+  }
+
+  @include respond(only-small) {
+    border-right: 0;
+    @include box-shadow(#4082A7 0px 0px 0px);
+
+    ul.menu li {
+      a {
+        font: 0/0 a;
+        width: 40px;
+        height: 50px;
+      }
+    }
+  }
+
+  @include respond(only-medium) {
+    border-right: none;
+
+    ul.menu li {
+      a {
+        padding-right: px-to-em(7px);
+        padding-left: px-to-em(7px);
+      }
+    }
   }
 }
 
@@ -2198,6 +2294,10 @@ a {
   a {
     background: image-url('icons/icon-search.png') no-repeat center 10px;
   }
+
+  @include respond(small-medium) {
+    display: inline-block;
+  }
 }
 
 #block-commons-utility-links-commons-utility-links {
@@ -2211,10 +2311,10 @@ a {
 ul.commons-utility-links {
   list-style: none;
   text-align: right;
-  margin: 4px 0 7px 0;
+  margin: .2em 0;
   padding: 0;
-  font-size: 11px;
-  line-height: 11px;
+  font-size: .875em;
+  line-height: 1;
 
   .block-content & {
     padding: 0;
@@ -2786,7 +2886,6 @@ body.page-node .pane-views-panes {
   position: absolute;
   top: -4em;
   right: $gutter-width;
-  min-width: 290px;
   text-align: right;
 
   @include respond(only-small) {
@@ -3338,56 +3437,88 @@ body.page-node .pane-views-panes {
 .block-search {
   display: block;
   background-color: darken($dark_blue, 12%); // Old browsers
-  @include filter-gradient(darken($dark_blue, 12%), darken($dark_blue, 6%), vertical); // IE6-9
+  // @include filter-gradient(darken($dark_blue, 12%), darken($dark_blue, 6%), vertical); // IE6-9
   @include background-image(linear-gradient(top,  darken($dark_blue, 12%) 0%,darken($dark_blue, 6%)100%));
   @include border-radius(4px);
   box-shadow: 1px 1px 2px #000 inset, 2px 3px 3px rgba(#fff, 0.09);
   height: 30px;
-  margin: 0 0 0 10px;
+  margin: 0 0 0 $gutter_width;
   position: relative;
+
+  .container-inline {
+    label,
+    div {
+      float: left;
+      display: block;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
 
   .block-inner {
     margin-left: 0;
     margin-right: 0;
   }
 
+  .form-select-wrapper {
+    position: relative;
+    z-index: 2;
+    display: inline-block;
+    overflow: hidden;
+    width: 6.5em;
+    margin-left: -6.5em;
+    left: 6.5em;
+  }
+
+  .selectBox {
+    line-height: 1.9em;
+  }
+
+  .form-item-search-block-form {
+    position: relative;
+    z-index: 1;
+    @include box-sizing(border-box);
+    width: 100%;
+    padding-right: 1.5em;
+    padding-left: 6.5em;
+  }
+
   .form-text {
+    width: 12em;
+    max-width: 100%;
     color: $white;
     background: transparent;
     border: none;
-    margin: 3px 0 0 0;
-    width: 145px;
 
     &:focus {
       @include box-shadow(none);
     }
+  }
 
-    .node-type-group & {
-      width: 120px;
-    }
+  .form-actions {
+    position: absolute;
+    right: 1em;
+  }
+
+  .form-actions,
+  .form-submit {
+    @include box-sizing(border-box);
+    width: 1.4em;
+    height: 1.4em;
   }
 
   .form-submit {
-    background-color: transparent !important;
-    border: none !important;
-    width: 12px !important;
-    height: 12px !important;
-    background-image: image-url('icons/ico_search_wht.png') !important;
-    text-indent: -9999px !important;
-    padding: 0 !important;
-    margin: 10px 2px !important;
-    font-size: .8em;
+    text-indent: -9999em;
+
+    &,
+    &:hover {
+      background: transparent image-url('icons/ico_search_wht.png') no-repeat center center;
+      border: none;
+    }
   }
 
-  .form-item-search-block-form label {
-    position: absolute;
-    left: 0px;
-    top: -17px;
-    color: lighten($light_blue, 40%);
-    font-size: 11px;
-    line-height: 11px;
-    font-weight: normal;
-    display: block;
+  @include respond(small-medium) {
+    display: none;
   }
 }
 

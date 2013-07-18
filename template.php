@@ -100,11 +100,11 @@ function commons_origins_preprocess_html(&$variables, $hook) {
 
   $site_name = variable_get('site_name', 'Commons');
 
-  if (strlen($site_name) > 23) {
-    $variables['classes_array'][] = 'site-name-long-2-lines';
-  } else if (strlen($site_name) > 15) {
-    $variables['classes_array'][] = 'site-name-long';
+  // Add a class to the body so we can adjust styles for the new menu item.
+  if (module_exists('commons_search_solr_user')) {
+    $variables['classes_array'][] = 'people-search-active';
   }
+
   $palette = variable_get('commons_origins_palette', 'default');
   if ($palette != 'default') {
     $variables['classes_array'][] = 'palette-active';
@@ -249,6 +249,11 @@ function commons_origins_preprocess_page(&$variables, $hook) {
       }
     }
   }
+
+  $variables['header_attributes_array']['class'][] = 'container';
+
+  $cf_pos = in_array('clearfix', $variables['branding_attributes_array']['class']);
+  unset($variables['branding_attributes_array']['class'][$cf_pos]);
 }
 
 /**

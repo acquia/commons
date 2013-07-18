@@ -88,49 +88,48 @@
  * @see adaptivetheme_process_page()
  */
 ?>
-<div class="header-color-row-one"></div>
-<div class="header-color-row-two"></div>
+<div class="header-wrapper">
+  <div class="header-color-row-one">
+    <header<?php print $header_attributes; ?>>
+
+      <?php if ($site_logo || $site_name || $site_slogan): ?>
+        <!-- start: Branding -->
+        <div<?php print $branding_attributes; ?>>
+
+          <?php if ($site_logo): ?>
+            <div id="logo">
+              <?php print $site_logo; ?>
+            </div>
+          <?php endif; ?>
+
+          <?php if ($site_name || $site_slogan): ?>
+            <!-- start: Site name and Slogan hgroup -->
+            <hgroup<?php print $hgroup_attributes; ?>>
+
+              <?php if ($site_name): ?>
+                <h1<?php print $site_name_attributes; ?>><?php print $site_name; ?></h1>
+              <?php endif; ?>
+
+              <?php if ($site_slogan): ?>
+                <h2<?php print $site_slogan_attributes; ?>><?php print $site_slogan; ?></h2>
+              <?php endif; ?>
+
+            </hgroup><!-- /end #name-and-slogan -->
+          <?php endif; ?>
+
+        </div><!-- /end #branding -->
+      <?php endif; ?>
+
+      <!-- Navigation elements -->
+      <?php print render($page['menu_bar']); ?>
+
+      <!-- region: Header -->
+      <?php print render($page['header']); ?>
+    </header>
+  </div>
+  <div class="header-color-row-two"></div>
+</div>
 <div id="page" class="container <?php print $classes; ?>">
-
-  <!-- region: Leaderboard -->
-  <?php print render($page['leaderboard']); ?>
-
-  <header<?php print $header_attributes; ?>>
-
-    <?php if ($site_logo || $site_name || $site_slogan): ?>
-      <!-- start: Branding -->
-      <div<?php print $branding_attributes; ?>>
-
-        <?php if ($site_logo): ?>
-          <div id="logo">
-            <?php print $site_logo; ?>
-          </div>
-        <?php endif; ?>
-
-        <?php if ($site_name || $site_slogan): ?>
-          <!-- start: Site name and Slogan hgroup -->
-          <hgroup<?php print $hgroup_attributes; ?>>
-
-            <?php if ($site_name): ?>
-              <h1<?php print $site_name_attributes; ?>><?php print $site_name; ?></h1>
-            <?php endif; ?>
-
-            <?php if ($site_slogan): ?>
-              <h2<?php print $site_slogan_attributes; ?>><?php print $site_slogan; ?></h2>
-            <?php endif; ?>
-
-          </hgroup><!-- /end #name-and-slogan -->
-        <?php endif; ?>
-
-      </div><!-- /end #branding -->
-    <?php endif; ?>
-
-    <!-- Navigation elements -->
-    <?php print render($page['menu_bar']); ?>
-
-    <!-- region: Header -->
-    <?php print render($page['header']); ?>
-  </header>
 
   <div id="columns" class="columns clearfix">
     <!-- Messages and Help -->
