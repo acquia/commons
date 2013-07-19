@@ -803,6 +803,41 @@ function commons_groups_commons_bw_group_widget() {
 }
 
 /**
+ * Implements hook_preprocess_node().
+ */
+function commons_groups_preprocess_node(&$variables) {
+  $node = $variables['node'];
+  $user = user_load($node->uid);
+
+  $alt = t("@user's picture", array('@user' => format_username($user)));
+
+  $image = array(
+    '#theme' => 'image_style',
+    '#style_name' => '50x50',
+    '#path' => $user->picture->uri,
+    '#alt' => $alt,
+    '#title' => $alt,
+    '#prefix' => '<div class="user-picture">',
+    '#suffix' => '</div>'
+  );
+
+  $render = array(
+    '#theme' => 'link',
+    '#text' => drupal_render($image),
+    '#path' => 'user/' . $user->uid,
+    '#options' => array(
+      'attributes' => array(
+        'title' => t('View user profile.'),
+      ),
+      'html' => TRUE,
+    ),
+  );
+
+  // Use a unique image style for user pictures in post information.
+  $variables['user_picture'] = drupal_render($render);
+}
+
+/**
  * Implements hook_preprocess_views_view_grid().
  */
 function commons_groups_preprocess_views_view_grid(&$variables, $hook) {
