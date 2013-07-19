@@ -41,6 +41,14 @@
 html {
   background: $page;
   font-size: 87.5%;
+  min-height: 100%;
+
+  .cke_editable {
+    @include box-sizing(border-box);
+    padding: 1em;
+    background: $white;
+    min-height: 200px;
+  }
 }
 
 body {
