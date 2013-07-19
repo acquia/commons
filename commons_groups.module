@@ -811,25 +811,21 @@ function commons_groups_preprocess_node(&$variables) {
 
   $alt = t("@user's picture", array('@user' => format_username($user)));
 
-  $image = array(
-    '#theme' => 'image_style',
-    '#style_name' => '50x50',
-    '#path' => $user->picture->uri,
-    '#alt' => $alt,
-    '#title' => $alt,
-    '#prefix' => '<div class="user-picture">',
-    '#suffix' => '</div>'
-  );
-
   $render = array(
-    '#theme' => 'link',
-    '#text' => drupal_render($image),
-    '#path' => 'user/' . $user->uid,
-    '#options' => array(
-      'attributes' => array(
-        'title' => t('View user profile.'),
+    '#theme' => 'image_formatter',
+    '#image_style' => '50x50',
+    '#item' => array(
+      'uri' => '$user->picture->uri',
+      'alt' => $alt,
+    ),
+    '#path' => array(
+      'path' => 'user/' . $user->uid,
+      'options' => array(
+        'attributes' => array(
+          'title' => t("View @user's profile.", array('@user' => format_username($user))),
+          'class' => 'user-picture',
+        ),
       ),
-      'html' => TRUE,
     ),
   );
 
