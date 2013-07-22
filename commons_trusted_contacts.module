@@ -246,6 +246,7 @@ function commons_trusted_contacts_field_formatter_info() {
 function commons_trusted_contacts_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
   global $user;
 
+  $element = array();
   $settings = $display['settings'];
 
   switch ($display['type']) {
@@ -325,7 +326,16 @@ function commons_trusted_contacts_field_formatter_view($entity_type, $entity, $f
           $links['title'] = t('Add as trusted contact');
           if ($account->uid) {
             $links['href'] = $url;
-            $links['options'] = array('attributes' => array('class' => array('use-ajax')));
+            $links['options'] = array('attributes' => array('class' => array('use-ajax'), 'id' => 'user-' . $entity->uid));
+
+            // Ensure that the drupal.ajax and jquery.form libraries are always
+            // loaded for AJAX toggle links.
+            $element['#attached'] = array(
+              'library' => array(
+                array('system', 'drupal.ajax'),
+                array('system', 'jquery.form'),
+              ),
+            );
           }
           else {
             $links['href'] = 'user/login';
@@ -579,7 +589,7 @@ function commons_trusted_contacts_request_trust($account, $ajax) {
         ),
       ),
     );
-    $commands[] = ajax_command_replace(".field-name-group-group a", theme('html_tag__request_pending', $element));
+    $commands[] = ajax_command_replace('#user-' . $account->uid, theme('html_tag__request_pending', $element));
     $page = array('#type' => 'ajax', '#commands' => $commands);
     ajax_deliver($page);
   }
