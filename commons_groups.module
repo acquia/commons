@@ -806,9 +806,9 @@ function commons_groups_preprocess_node(&$variables) {
   $variables['user_picture'] = '';
   if (variable_get('user_pictures', 0)) {
     $node = $variables['node'];
-    $user = user_load($node->uid);
+    $account = user_load($node->uid);
 
-    if (!empty($user->picture)) {
+    if (!empty($account->picture)) {
       // @TODO: Ideally this function would only be passed file objects, but
       // since there's a lot of legacy code that JOINs the {users} table to
       // {node} or {comments} and passes the results into this function if we
@@ -816,11 +816,11 @@ function commons_groups_preprocess_node(&$variables) {
       // and load it for them. Once we've got user_load_multiple() and
       // comment_load_multiple() functions the user module will be able to load
       // the picture files in mass during the object's load process.
-      if (is_numeric($user->picture)) {
-        $user->picture = file_load($user->picture);
+      if (is_numeric($account->picture)) {
+        $account->picture = file_load($account->picture);
       }
-      if (!empty($user->picture->uri)) {
-        $filepath = $user->picture->uri;
+      if (!empty($account->picture->uri)) {
+        $filepath = $account->picture->uri;
       }
     }
     elseif (variable_get('user_picture_default', '')) {
@@ -829,7 +829,7 @@ function commons_groups_preprocess_node(&$variables) {
 
     if (isset($filepath)) {
       if (module_exists('image') && file_valid_uri($filepath)) {
-        $alt = t("@user's picture", array('@user' => format_username($user)));
+        $alt = t("@user's picture", array('@user' => format_username($account)));
 
         $render = array(
           '#theme' => 'image_formatter',
@@ -839,10 +839,10 @@ function commons_groups_preprocess_node(&$variables) {
             'alt' => $alt,
           ),
           '#path' => array(
-            'path' => 'user/' . $user->uid,
+            'path' => 'user/' . $account->uid,
             'options' => array(
               'attributes' => array(
-                'title' => t("View @user's profile.", array('@user' => format_username($user))),
+                'title' => t("View @user's profile.", array('@user' => format_username($account))),
                 'class' => 'user-picture',
               ),
             ),
