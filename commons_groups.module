@@ -815,7 +815,7 @@ function commons_groups_preprocess_node(&$variables) {
     '#theme' => 'image_formatter',
     '#image_style' => '50x50',
     '#item' => array(
-      'uri' => '$user->picture->uri',
+      'uri' => $user->picture->uri,
       'alt' => $alt,
     ),
     '#path' => array(
