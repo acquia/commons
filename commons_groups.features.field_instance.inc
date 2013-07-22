@@ -132,14 +132,13 @@ function commons_groups_field_definition_group(&$field_instances, $entity_type, 
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
-        'module' => 'list',
+        'label' => 'hidden',
         'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'hidden',
         'weight' => 5,
       ),
       'teaser' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'settings' => array(),
         'type' => 'hidden',
         'weight' => 0,
@@ -314,58 +313,55 @@ function commons_groups_field_definition_group(&$field_instances, $entity_type, 
     ),
   );
 
-  if (module_exists('og_access')) {
-    // Exported field_instance: 'node-group-group_access'
-    $field_instances["$entity_type-$bundle-group_access"] = array(
-      'bundle' => $bundle,
-      'default_value' => array(
-        0 => array(
-          'value' => 0,
-        ),
+  // Exported field_instance: 'node-group-group_access'
+  $field_instances["$entity_type-$bundle-group_access"] = array(
+    'bundle' => $bundle,
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
       ),
-      'deleted' => '0',
-      'description' => '',
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => 'list',
-          'settings' => array(),
-          'type' => 'list_default',
-          'weight' => 4,
-        ),
-        'teaser' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-      ),
-      'entity_type' => 'node',
-      'field_name' => 'group_access',
-      'label' => 'Group visibility',
-      'required' => TRUE,
-      'settings' => array(
-        'user_register_form' => FALSE,
-      ),
-      'view modes' => array(
-        'full' => array(
-          'label' => 'above',
-          'type' => 'options_onoff',
-        ),
-        'teaser' => array(
-          'label' => 'above',
-          'type' => 'options_onoff',
-        ),
-      ),
-      'widget' => array(
-        'module' => 'options',
+    ),
+    'deleted' => '0',
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
         'settings' => array(),
-        'type' => 'options_buttons',
-        'weight' => 41,
+        'type' => 'hidden',
+        'weight' => 4,
       ),
-      'widget_type' => 'options_select',
-    );
-  }
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'group_access',
+    'label' => 'Group visibility',
+    'required' => TRUE,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'view modes' => array(
+      'full' => array(
+        'label' => 'above',
+        'type' => 'options_onoff',
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'type' => 'options_onoff',
+      ),
+    ),
+    'widget' => array(
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_buttons',
+      'weight' => 41,
+    ),
+    'widget_type' => 'options_select',
+  );
 
   // Exported field_instance: 'node-group-field_group_logo'
   $field_instances["$entity_type-$bundle-field_group_logo"] = array(
@@ -487,56 +483,54 @@ function commons_groups_field_definition(&$field_instances, $entity_type, $bundl
     ),
   );
 
-  if (module_exists('og_access')) {
-    // Exported field_instance: '[entity]-[bundle]-group_content_access'
-    $field_instances["$entity_type-$bundle-group_content_access"] = array(
-      'bundle' => $bundle,
-      'default_value' => array(
-        0 => array(
-          'value' => 0,
-        ),
+  // Exported field_instance: '[entity]-[bundle]-group_content_access'
+  $field_instances["$entity_type-$bundle-group_content_access"] = array(
+    'bundle' => $bundle,
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
       ),
-      'deleted' => '0',
-      'description' => '',
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => 'list',
-          'settings' => array(),
-          'type' => 'list_default',
-          'weight' => 13,
-        ),
-        'teaser' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-      ),
-      'entity_type' => $entity_type,
-      'field_name' => 'group_content_access',
-      'label' => 'Group content visibility',
-      'required' => TRUE,
-      'settings' => array(
-        'user_register_form' => FALSE,
-      ),
-      'view modes' => array(
-        'full' => array(
-          'label' => 'above',
-          'type' => 'list_default',
-        ),
-        'teaser' => array(
-          'label' => 'above',
-          'type' => 'list_default',
-        ),
-      ),
-      'widget' => array(
-        'module' => 'options',
+    ),
+    'deleted' => '0',
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
         'settings' => array(),
-        'type' => 'options_select',
-        'weight' => 16,
+        'type' => 'list_default',
+        'weight' => 13,
       ),
-      'widget_type' => 'options_select',
-    );
-  }
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => $entity_type,
+    'field_name' => 'group_content_access',
+    'label' => 'Group content visibility',
+    'required' => TRUE,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'view modes' => array(
+      'full' => array(
+        'label' => 'above',
+        'type' => 'list_default',
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'type' => 'list_default',
+      ),
+    ),
+    'widget' => array(
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => 16,
+    ),
+    'widget_type' => 'options_select',
+  );
 }

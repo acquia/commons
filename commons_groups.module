@@ -64,10 +64,10 @@ function commons_groups_form_group_node_form_alter(&$form, &$form_state) {
   $form['privacy_settings']['field_og_subscribe_settings'][LANGUAGE_NONE]['#title'] = '';
   $form['privacy_settings']['field_og_subscribe_settings'][LANGUAGE_NONE]['#required'] = FALSE;
 
+ 
+  $form['privacy_settings']['field_og_access_default_value'] = $form['field_og_access_default_value'];
+  unset($form['field_og_access_default_value']);
   if (module_exists('og_access')) {
-    $form['privacy_settings']['field_og_access_default_value'] = $form['field_og_access_default_value'];
-    unset($form['field_og_access_default_value']);
-
     // Display the private content checkbox only when "Joining requires approval"
     // is selected.
     $form['privacy_settings']['field_og_access_default_value']['#states'] = array(
@@ -85,6 +85,7 @@ function commons_groups_form_group_node_form_alter(&$form, &$form_state) {
 
   // The group access is set on commons_groups_node_presave().
   $form['group_access'][LANGUAGE_NONE]['#required'] = FALSE;
+  $form['group_access']['#access'] = FALSE;
 }
 
 /**
@@ -276,7 +277,7 @@ function commons_groups_module_implements_alter(&$implementations, $hook) {
 * Implements hook_form_alter().
 */
 function commons_groups_form_alter(&$form, &$form_state, $form_id) {
-  if($form_id == 'views_exposed_form' && strstr($form['#id'], 'views-exposed-form-commons-groups-directory')) {
+  if ($form_id == 'views_exposed_form' && strstr($form['#id'], 'views-exposed-form-commons-groups-directory')) {
     $form['groups-keys']['#attributes'] = array(
         'placeholder' => t('Separate keywords with commas'),
       );
@@ -346,10 +347,8 @@ function commons_groups_system_info_alter(&$info, $file, $type) {
         $info['features']['field_instance'][] = "node-$bundle-field_og_subscribe_settings";
         $info['features']['field_instance'][] = "node-$bundle-og_roles_permissions";
         // These fields are only necessary when og_access.module is enabled.
-        if (module_exists('og_access')) {
-          $info['features']['field_instance'][] = "node-$bundle-field_og_access_default_value";
-          $info['features']['field_instance'][] = "node-$bundle-group_access";
-        }
+        $info['features']['field_instance'][] = "node-$bundle-field_og_access_default_value";
+        $info['features']['field_instance'][] = "node-$bundle-group_access";
       }
     }
     $group_content_entity_types = commons_groups_get_group_content_entity_types();
@@ -357,9 +356,7 @@ function commons_groups_system_info_alter(&$info, $file, $type) {
       foreach ($group_content_entity_types as $entity_type => $bundles) {
         foreach(array_keys($bundles) as $bundle) {
           $info['features']['field_instance'][] = "$entity_type-$bundle-og_group_ref";
-          if (module_exists('og_access')) {
-            $info['features']['field_instance'][] = "$entity_type-$bundle-group_content_access";
-          }
+          $info['features']['field_instance'][] = "$entity_type-$bundle-group_content_access";
         }
       }
     }
