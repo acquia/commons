@@ -7,6 +7,20 @@
 include_once 'commons_groups.features.inc';
 
 /**
+ * Implements hook_og_permission_alter().
+ */
+function commons_groups_og_permission_alter(&$perms) {
+  // We set these values programatically based
+  // on the value of field_og_subscribe_settings, so we disable them in the UI.
+  $perms['subscribe']['roles'] = array();
+  $perms['subscribe']['title'] = t('Contribute to the group');
+  $perms['subscribe']['description'] = t('This value is set automatically based on the "Group Privacy Settings" field.');
+  $perms['subscribe without approval']['roles'] = array();
+  $perms['subscribe without approval']['title'] = t('Contribute to the group without approval');
+  $perms['subscribe without approval']['description'] = t('This value is set automatically based on the "Group Privacy Settings" field.');
+}
+
+/**
  * Implements hook_ctools_plugin_directory().
  */
 function commons_groups_ctools_plugin_directory($module, $plugin) {
@@ -97,24 +111,6 @@ function commons_groups_form_group_node_after_build($form, $form_state) {
   $form['privacy_settings']['field_og_subscribe_settings'][LANGUAGE_NONE]['approval']['#suffix'] = render($form['privacy_settings']['field_og_access_default_value']);
 
   return $form;
-}
-
-/**
- * Implements hook_og_role_change_permissions().
- *
- * Update the subscription settings field on a group when the relevant
- * permissions are changed.
- */
-function commons_groups_og_role_change_permissions($role) {
-  if (!$role->gid || $role->name != OG_ANONYMOUS_ROLE) {
-    return;
-  }
-
-  // Get all non members permissions.
-  $permissions = og_role_permissions(array($role->rid => $role->name));
-  if (!empty($permissions[$role->rid])) {
-    _commons_groups_update_group_permissions($role, $permissions[$role->rid]);
-  }
 }
 
 /**
