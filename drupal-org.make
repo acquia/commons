@@ -231,7 +231,10 @@ projects[oauthconnector][download][revision] = "0ce7ac9614710c0f68d0a58cb4ae4667
 
 projects[og][type] = "module"
 projects[og][subdir] = "contrib"
-projects[og][version] = "2.x-dev"
+projects[og][download][type] = "git"
+projects[og][download][url] = "http://git.drupal.org/project/og.git"
+projects[og][download][branch] = "7.x-2.x"
+projects[og][download][revision] = "c790c7eabd1052ff628631b6cbfb85136ddabad4"
 
 ; og_group_ref field should respect og_user_access()
 ; http://drupal.org/node/1902086#comment-7026516
