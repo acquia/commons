@@ -799,31 +799,57 @@ function commons_groups_commons_bw_group_widget() {
  * Implements hook_preprocess_node().
  */
 function commons_groups_preprocess_node(&$variables) {
-  $node = $variables['node'];
-  $user = user_load($node->uid);
+  $variables['user_picture'] = '';
+  if (variable_get('user_pictures', 0)) {
+    $node = $variables['node'];
+    $account = user_load($node->uid);
 
-  $alt = t("@user's picture", array('@user' => format_username($user)));
+    if (!empty($account->picture)) {
+      // @TODO: Ideally this function would only be passed file objects, but
+      // since there's a lot of legacy code that JOINs the {users} table to
+      // {node} or {comments} and passes the results into this function if we
+      // a numeric value in the picture field we'll assume it's a file id
+      // and load it for them. Once we've got user_load_multiple() and
+      // comment_load_multiple() functions the user module will be able to load
+      // the picture files in mass during the object's load process.
+      if (is_numeric($account->picture)) {
+        $account->picture = file_load($account->picture);
+      }
+      if (!empty($account->picture->uri)) {
+        $filepath = $account->picture->uri;
+      }
+    }
+    elseif (variable_get('user_picture_default', '')) {
+      $filepath = variable_get('user_picture_default', '');
+    }
 
-  $render = array(
-    '#theme' => 'image_formatter',
-    '#image_style' => '50x50',
-    '#item' => array(
-      'uri' => $user->picture->uri,
-      'alt' => $alt,
-    ),
-    '#path' => array(
-      'path' => 'user/' . $user->uid,
-      'options' => array(
-        'attributes' => array(
-          'title' => t("View @user's profile.", array('@user' => format_username($user))),
-          'class' => 'user-picture',
-        ),
-      ),
-    ),
-  );
+    if (isset($filepath)) {
+      if (module_exists('image') && file_valid_uri($filepath)) {
+        $alt = t("@user's picture", array('@user' => format_username($account)));
 
-  // Use a unique image style for user pictures in post information.
-  $variables['user_picture'] = drupal_render($render);
+        $render = array(
+          '#theme' => 'image_formatter',
+          '#image_style' => '50x50',
+          '#item' => array(
+            'uri' => $filepath,
+            'alt' => $alt,
+          ),
+          '#path' => array(
+            'path' => 'user/' . $account->uid,
+            'options' => array(
+              'attributes' => array(
+                'title' => t("View @user's profile.", array('@user' => format_username($account))),
+                'class' => 'user-picture',
+              ),
+            ),
+          ),
+        );
+
+        // Use a unique image style for user pictures in post information.
+        $variables['user_picture'] = drupal_render($render);
+      }
+    }
+  }
 }
 
 /**
