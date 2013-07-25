@@ -167,10 +167,7 @@ projects[menu_attributes][version] = "1.0-rc2"
 
 projects[message][type] = "module"
 projects[message][subdir] = "contrib"
-projects[message][download][type] = "git"
-projects[message][download][url] = "http://git.drupal.org/project/message.git"
-projects[message][download][branch] = "7.x-1.x"
-projects[message][download][revision] = "5ae12e8c0b7482f8525106825009409f3b9b7140"
+projects[message][version] = "1.9"
 
 ; Make message access alterable.
 ; http://drupal.org/node/1920560#comment-7080942
