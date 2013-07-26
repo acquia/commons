@@ -494,7 +494,7 @@ projects[commons_radioactivity][version] = "3.x-dev"
 
 projects[commons_like][type] = "module"
 projects[commons_like][subdir] = "contrib"
-projects[commons_Like][version] = "3.x-dev"
+projects[commons_like][version] = "3.x-dev"
 
 projects[commons_search][type] = "module"
 projects[commons_search][subdir] = "contrib"
