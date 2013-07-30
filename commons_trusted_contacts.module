@@ -841,12 +841,19 @@ function commons_trusted_contacts_form_commons_bw_partial_node_form_alter(&$form
   if (!module_exists('og_access')) {
     return;
   }
+  commons_trusted_contacts_form_add_privacy_toggle($form, $form_state);
+  $form['#validate'][] = 'commons_trusted_contacts_partial_node_form_validate';
+}
 
+/**
+* Adds privacy toggle to a node edit/add form.
+*/
+function commons_trusted_contacts_form_add_privacy_toggle(&$form, &$form_state) {
   $form['group_audience_type'] = array(
     '#type' => 'radios',
     '#title' => t('Post to'),
     '#title_display' => 'invisible',
-    '#default_value' => 'private',
+    '#default_value' => empty($form[OG_AUDIENCE_FIELD][LANGUAGE_NONE][0]['default']['#default_value']) ? 'private' : 'custom',
     '#options' => array(
       'custom' => t('Post to specific groups'),
       'private' => t('Post to contacts (private)'),
@@ -865,8 +872,32 @@ function commons_trusted_contacts_form_commons_bw_partial_node_form_alter(&$form
       ),
     ),
   );
+}
 
-  $form['#validate'][] = 'commons_trusted_contacts_partial_node_form_validate';
+/**
+ * Implements hook_form_FORM_ID_alter()
+ * Adds Privacy selection to full form for node/add or node/edit.
+ */
+function commons_trusted_contacts_form_node_form_alter(&$form, &$form_state) {
+  if (empty($form['og_user_group_ref']) || !module_exists('og_access') || og_is_group_type('node', $form_state['node']->type)) {
+    return;
+  }
+
+  // Add the privacy toggle.
+  commons_trusted_contacts_form_add_privacy_toggle($form, $form_state);
+
+  // Change the weight for groups to show under the group toggle.
+  $form['og_group_ref']['#weight'] = $form['group_audience_type']['#weight'] + 1;
+
+  // For content types without user group reference fields, show a public option.
+  // Otherwise, the toggle would look odd for 'specific groups' and then not have
+  // any groups showing below it.
+  if (empty($form[OG_AUDIENCE_FIELD])) {
+    $form['group_audience_type']['#options']['custom'] = t('Post site-wide');
+  }
+  else {
+    $form['#validate'][] = 'commons_trusted_contacts_partial_node_form_validate';
+  }
 }
 
 /**
@@ -886,32 +917,37 @@ function commons_trusted_contacts_partial_node_form_validate($form, $form_state)
  * Override the group fields.
  */
 function commons_trusted_contacts_node_presave($node) {
-  // We only need to process the node on presave when it was submitted
-  // from the partial node form with og_access module enabled
-  // and when target group audience nodes were specified.
-  if (empty($node->partial_node_form)
-    || !$node->is_new
-    || !isset($node->form_state['values']['group_audience_type'])
-    || empty($node->form_state['values'][OG_AUDIENCE_FIELD])
-    || !module_exists('og_access'))
-  {
+  if (!module_exists('og_access')) {
     return;
+  }
+
+  if (!empty($node->partial_node_form)) {
+    $group_audience_type = $node->form_state['values']['group_audience_type'];
+  }
+
+  else {
+    $group_audience_type = $node->group_audience_type;
   }
 
   $wrapper = entity_metadata_wrapper('node', $node);
 
   // The content is submitted either to the private group or to a selected
   // group.
-  if ($node->form_state['values']['group_audience_type'] == 'private') {
+  if ($group_audience_type == 'private') {
     $wrapper->og_user_group_ref->set(array($node->uid));
+    $wrapper->group_content_access->set(OG_CONTENT_ACCESS_PRIVATE);
+
+    // Remove any existing selected groups.
+    $wrapper->{OG_AUDIENCE_FIELD}->set(array());
   }
   else {
     // Extract group IDs from selection.
     $group_ids = array();
-    foreach ($node->form_state['values'][OG_AUDIENCE_FIELD][LANGUAGE_NONE] as $group) {
+    foreach ($node->{OG_AUDIENCE_FIELD}[LANGUAGE_NONE] as $group) {
       $group_ids[] = $group['target_id'];
     }
     $wrapper->{OG_AUDIENCE_FIELD}->set($group_ids);
+    $wrapper->og_user_group_ref->set(array());
   }
 }
 

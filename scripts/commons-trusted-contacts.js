@@ -6,14 +6,16 @@
  */
 Drupal.behaviors.commonsAudienceToggle = {
   attach: function (context, settings) {
-    $('.commons-bw-partial-node-form', context).once('commonsAudienceToggle', function () {
+    $('.commons-bw-partial-node-form, .node-form', context).once('commonsAudienceToggle', function(){
       // Load items into simple variables to make things a bit easier to read.
       var form = $(this),
           groupReference = form.find('.field-name-og-group-ref'),
           radioToggle = form.find('input[name=group_audience_type]');
 
-      // Hide the group selection on load.
-      groupReference.addClass('element-hidden');
+      // Hide the group selection on load only if custom is not selected.
+      if ($('input:radio[name=group_audience_type]:checked').val() != 'custom') {
+        groupReference.addClass('element-hidden');
+      }
 
       // When the "custom" audience radio is selected, make the group selection
       // visible.
