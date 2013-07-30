@@ -141,6 +141,7 @@ function commons_radioactivity_incident_node($node, $value) {
 * to which a node belongs.
 */
 function commons_radioactivity_incident_groups($node, $value) {
+  $gids = array();
   foreach ($node->og_group_ref[LANGUAGE_NONE] as $field) {
     $gids[] = $field['target_id'];
   }
