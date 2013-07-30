@@ -362,11 +362,21 @@ var {
  * The main page title (h1)
  */
 
-#page-title {
+#page-title,
+.search-results-title {
   margin: 0 0 .2em;
   font-weight:300;
   font-size: 3.85em;
   line-height: 1.2em;
+}
+
+.page-messages-view,
+.page-flag-confirm {
+  #page-title {
+    /* Some pages require a smaller title to prevent the equivalent of
+       "yelling". */
+    font-size: 2.5em;
+  }
 }
 
 #page-top {
@@ -4252,7 +4262,6 @@ body.front.logged-in .view-commons-homepage-content .article.node {
 
 .search-results-title,
 .search-results-wrapper > h2 {
-  @extend #page-title;
   margin-top: .2em;
 }
 
