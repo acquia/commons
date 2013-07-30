@@ -162,6 +162,12 @@ function commons_trusted_contacts_form_alter(&$form, &$form_state, $form_id) {
       $form['select']['#access'] = FALSE;
     }
   }
+  // Hide the Break Contact button when a user has no trusted contacts.
+  if ($form_id == 'views_form_trusted_contacts_default') {
+    if (empty($form_state['build_info']['args'][0]->result)) {
+      $form['select']['#access'] = FALSE;
+    }
+  }
   // Hide internal fields that the user should not be able to edit directly.
   if ($form_id == 'edit_profile_user_profile_form' || substr($form_id, -10) === '_node_form') {
     $internal_fields = array('field_unread_invitations', 'field_unread_messages', 'user_trusted_contacts', 'og_user_group_ref');
