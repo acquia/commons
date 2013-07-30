@@ -287,6 +287,10 @@ function commons_groups_form_alter(&$form, &$form_state, $form_id) {
   // Redirect the user back to the group homepage after submitting
   // a node within a group.
   if (isset($form['#node']) && substr($form_id, -10) == '_node_form') {
+    // Hide the "Group content visibility" field to simplify the node form.
+    if (!empty($form['group_content_access']['#access'])) {
+      $form['group_content_access']['#access'] = FALSE;
+    }
     // Set a human-friendly page title.
     if (empty($form['#node']->nid)) {
       $types = node_type_get_types();
