@@ -50,6 +50,15 @@ function commons_origins_commons_utility_links_alter(&$element) {
 }
 
 /**
+ * Implements hook_preprocess_search_result().
+ */
+function commons_origins_preprocess_search_result(&$variables, $hook) {
+  $variables['title_attributes_array']['class'][] = 'title';
+  $variables['title_attributes_array']['class'][] = 'search-result-title';
+  $variables['content_attributes_array']['class'][] = 'search-result-content';
+}
+
+/**
  * Implements hook_preprocess_search_results().
  *
  * Assemble attributes for styling that core does not do so we can keep the

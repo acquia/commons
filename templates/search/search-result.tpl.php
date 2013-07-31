@@ -65,6 +65,7 @@
  */
 ?>
 <li class="<?php print $classes; ?>"<?php print $attributes; ?>>
+  <h3<?php print $title_attributes; ?>><a href="<?php print $url; ?>"><?php print $title; ?></a></h3>
   <div class="search-result-wrapper">
       <?php if ($snippet): ?>
         <span class="search-result-snippet"<?php print $content_attributes; ?>><?php print $snippet; ?></span>
