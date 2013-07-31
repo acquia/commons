@@ -1077,6 +1077,12 @@ function commons_origins_preprocess_field(&$variables, $hook) {
       if (isset($item['#options'])) {
         $item['#options']['attributes']['class'][] = 'action-item-small';
       }
+      if (isset($item['#href']) && strpos($item['#href'], 'messages')) {
+        $item['#options']['attributes']['class'][] = 'message-contact';
+      }
+      elseif (isset($item['#href'])) {
+        $item['#options']['attributes']['class'][] = 'trusted-status-request';
+      }
     }
   }
 }
@@ -1087,6 +1093,7 @@ function commons_origins_preprocess_field(&$variables, $hook) {
 function commons_origins_html_tag__request_pending($variables) {
   $element = $variables['element'];
   $element['#attributes']['class'][] = 'action-item-small-active';
+  $element['#attributes']['class'][] = 'trusted-status-pending';
   $attributes = drupal_attributes($element['#attributes']);
 
   if (!isset($element['#value'])) {

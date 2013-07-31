@@ -4510,6 +4510,25 @@ body.front.logged-in .view-commons-homepage-content .article.node {
   }
 }
 
+.trusted-status-request {
+  &:before {
+    content: "\271a";
+    position: relative;
+    top: .1em;
+    display: inline-block;
+    margin-right: .2em;
+    font-size: 1.4em;
+    line-height: .6em;
+  }
+}
+
+.message-contact {
+  &:before {
+    content: "";
+    @include sprite_url_height_width($icons, message);
+  }
+}
+
 /**
  * Private message
  */
