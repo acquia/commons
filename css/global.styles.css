@@ -4475,9 +4475,11 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
 
 .action-item-search {
   float: right;
-  padding-left: 3em;
   margin-right: 0;
   margin-bottom: 0;
+}
+.action-item-search, .action-item-search[type="submit"]:not(.formatted-as-checkbox) {
+  padding-left: 3em;
 }
 @media only screen and (max-width: 480px) {
   .action-item-search {
