@@ -182,7 +182,11 @@ projects[message_notify][download][revision] = "e546b0a6e3d2dfd48f4fd3a4d45806c0
 
 projects[message_subscribe][type] = "module"
 projects[message_subscribe][subdir] = "contrib"
-projects[message_subscribe][version] = "1.0-alpha5"
+projects[message_subscribe][version] = "1.x-dev"
+
+; Undefined index errors with latest Flag stable 2.x
+; https://drupal.org/node/2052431#comment-7702729
+projects[message_subscribe][patch][] = "https://drupal.org/files/2052431-message-subscribe-flagapi2.patch"
 
 ; Remove "email" as default notifier.
 ; http://drupal.org/node/1828184#comment-7081868
