@@ -1123,6 +1123,42 @@ function commons_origins_html_tag__request_pending($variables) {
 }
 
 /**
+ * Overrides theme_field() for group fields.
+ *
+ * This will apply button styling to the links for leaving and joining a group.
+ */
+function commons_origins_field__group_group__group($variables) {
+  $output = '';
+
+  // Render the label, if it's not hidden.
+  if (!$variables['label_hidden']) {
+    $output .= '<div class="field-label"' . $variables['title_attributes'] . '>' . $variables['label'] . ':&nbsp;</div>';
+  }
+
+  // Render the items.
+  $output .= '<div class="field-items"' . $variables['content_attributes'] . '>';
+  foreach ($variables['items'] as $delta => $item) {
+    if (isset($item['#type']) && $item['#type'] == 'link') {
+      if (strpos($item['#href'], '/subscribe')) {
+        $item['#options']['attributes']['class'][] = 'action-item-primary';
+      }
+      else {
+        $item['#options']['attributes']['class'][] = 'action-item';
+      }
+    }
+
+    $classes = 'field-item ' . ($delta % 2 ? 'odd' : 'even');
+    $output .= '<div class="' . $classes . '"' . $variables['item_attributes'][$delta] . '>' . drupal_render($item) . '</div>';
+  }
+  $output .= '</div>';
+
+  // Render the top-level DIV.
+  $output = '<div class="' . $variables['classes'] . '"' . $variables['attributes'] . '>' . $output . '</div>';
+
+  return $output;
+}
+
+/**
  * Overrides theme_field__addressfield().
  */
 function commons_origins_field__addressfield($variables) {
