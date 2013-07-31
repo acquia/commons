@@ -21,7 +21,7 @@ projects[advancedqueue][version] = "1.0-alpha2"
 
 projects[apachesolr][type] = "module"
 projects[apachesolr][subdir] = "contrib"
-projects[apachesolr][version] = "1.3"
+projects[apachesolr][version] = "1.4"
 
 projects[apachesolr_og][type] = "module"
 projects[apachesolr_og][subdir] = "contrib"
@@ -206,7 +206,7 @@ projects[module_filter][version] = "1.7"
 
 projects[mollom][type] = "module"
 projects[mollom][subdir] = "contrib"
-projects[mollom][version] = "2.6"
+projects[mollom][version] = "2.7"
 
 projects[navbar][type] = "module"
 projects[navbar][subdir] = "contrib"
@@ -348,7 +348,7 @@ projects[facetapi][version] = "1.3"
 
 projects[rich_snippets][type] = "module"
 projects[rich_snippets][subdir] = "contrib"
-projects[rich_snippets][version] = "1.0-beta2"
+projects[rich_snippets][version] = "1.0-beta3"
 
 ; Remove snippets from non-node type searches:
 ; http://drupal.org/node/1923904#comment-7094488
