@@ -186,7 +186,7 @@ projects[message_subscribe][version] = "1.x-dev"
 
 ; Remove "email" as default notifier.
 ; http://drupal.org/node/1828184#comment-7081868
-projects[message_subscribe][patch][] = "http://drupal.org/files/email-notifiers-1828184-15.patch"
+projects[message_subscribe][patch][] = "https://drupal.org/files/1828184-remove-email-default-notifier-31.patch"
 
 projects[memcache][type] = "module"
 projects[memcache][subdir] = "contrib"
