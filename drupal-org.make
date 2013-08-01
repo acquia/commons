@@ -412,7 +412,7 @@ projects[votingapi][version] = "2.11"
 projects[votingapi][type] = "module"
 projects[votingapi][subdir] = "contrib"
 
-; Commons contrib modules:
+; Commons contrib modules.
 ; We don't tag a release here because want them to auto-increment.
 projects[commons_activity_streams][type] = "module"
 projects[commons_activity_streams][subdir] = "contrib"
