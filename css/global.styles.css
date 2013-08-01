@@ -1282,6 +1282,15 @@ button:not(.formatted-as-checkbox),
   border-right-color: #cccccc;
 }
 
+/* Reset some styles for the admin toolbar. */
+.drupal-navbar .icon.handle {
+  margin: 0;
+  padding: 0;
+}
+.drupal-navbar .icon.handle:hover {
+  background: none;
+}
+
 /* Make the disabled buttons subdued. */
 [disabled], [disabled] option, [disabled] optgroup {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=60);

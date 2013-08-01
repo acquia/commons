@@ -931,6 +931,18 @@ button,
   }
 }
 
+/* Reset some styles for the admin toolbar. */
+.drupal-navbar {
+  .icon.handle {
+    margin: 0;
+    padding: 0;
+
+    &:hover {
+      background: none;
+    }
+  }
+}
+
 /* Make the disabled buttons subdued. */
 [disabled] {
   &,
