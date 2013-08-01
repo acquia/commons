@@ -50,6 +50,15 @@ function commons_origins_commons_utility_links_alter(&$element) {
 }
 
 /**
+ * Implements hook_preprocess_search_result().
+ */
+function commons_origins_preprocess_search_result(&$variables, $hook) {
+  $variables['title_attributes_array']['class'][] = 'title';
+  $variables['title_attributes_array']['class'][] = 'search-result-title';
+  $variables['content_attributes_array']['class'][] = 'search-result-content';
+}
+
+/**
  * Implements hook_preprocess_search_results().
  *
  * Assemble attributes for styling that core does not do so we can keep the
@@ -1077,6 +1086,12 @@ function commons_origins_preprocess_field(&$variables, $hook) {
       if (isset($item['#options'])) {
         $item['#options']['attributes']['class'][] = 'action-item-small';
       }
+      if (isset($item['#href']) && strpos($item['#href'], 'messages')) {
+        $item['#options']['attributes']['class'][] = 'message-contact';
+      }
+      elseif (isset($item['#href'])) {
+        $item['#options']['attributes']['class'][] = 'trusted-status-request';
+      }
     }
   }
 }
@@ -1087,6 +1102,7 @@ function commons_origins_preprocess_field(&$variables, $hook) {
 function commons_origins_html_tag__request_pending($variables) {
   $element = $variables['element'];
   $element['#attributes']['class'][] = 'action-item-small-active';
+  $element['#attributes']['class'][] = 'trusted-status-pending';
   $attributes = drupal_attributes($element['#attributes']);
 
   if (!isset($element['#value'])) {
@@ -1104,6 +1120,42 @@ function commons_origins_html_tag__request_pending($variables) {
     $output .= '</' . $element['#tag'] . ">\n";
     return $output;
   }
+}
+
+/**
+ * Overrides theme_field() for group fields.
+ *
+ * This will apply button styling to the links for leaving and joining a group.
+ */
+function commons_origins_field__group_group__group($variables) {
+  $output = '';
+
+  // Render the label, if it's not hidden.
+  if (!$variables['label_hidden']) {
+    $output .= '<div class="field-label"' . $variables['title_attributes'] . '>' . $variables['label'] . ':&nbsp;</div>';
+  }
+
+  // Render the items.
+  $output .= '<div class="field-items"' . $variables['content_attributes'] . '>';
+  foreach ($variables['items'] as $delta => $item) {
+    if (isset($item['#type']) && $item['#type'] == 'link') {
+      if (strpos($item['#href'], '/subscribe')) {
+        $item['#options']['attributes']['class'][] = 'action-item-primary';
+      }
+      else {
+        $item['#options']['attributes']['class'][] = 'action-item';
+      }
+    }
+
+    $classes = 'field-item ' . ($delta % 2 ? 'odd' : 'even');
+    $output .= '<div class="' . $classes . '"' . $variables['item_attributes'][$delta] . '>' . drupal_render($item) . '</div>';
+  }
+  $output .= '</div>';
+
+  // Render the top-level DIV.
+  $output = '<div class="' . $variables['classes'] . '"' . $variables['attributes'] . '>' . $output . '</div>';
+
+  return $output;
 }
 
 /**

@@ -362,11 +362,21 @@ var {
  * The main page title (h1)
  */
 
-#page-title {
+#page-title,
+.search-results-title {
   margin: 0 0 .2em;
   font-weight:300;
   font-size: 3.85em;
   line-height: 1.2em;
+}
+
+.page-messages-view,
+.page-flag-confirm {
+  #page-title {
+    /* Some pages require a smaller title to prevent the equivalent of
+       "yelling". */
+    font-size: 2.5em;
+  }
 }
 
 #page-top {
@@ -917,6 +927,18 @@ button,
       margin-top: -4px;
       border-width: 4px;
       border-right-color: $border;
+    }
+  }
+}
+
+/* Reset some styles for the admin toolbar. */
+.drupal-navbar {
+  .icon.handle {
+    margin: 0;
+    padding: 0;
+
+    &:hover {
+      background: none;
     }
   }
 }
@@ -1528,6 +1550,7 @@ h1.node-title {
 .view-activity-group,
 .view-commons-activity-streams-user-activity {
   .content,
+  .message,
   .views-field-timestamp,
   .views-field-nothing {
     @include place-picture(40px);
@@ -4177,9 +4200,13 @@ body.front.logged-in .view-commons-homepage-content .article.node {
 
 .action-item-search {
   float: right;
-  padding-left: 3em;
   margin-right: 0;
   margin-bottom: 0;
+
+  &,
+  &[type="submit"]:not(.formatted-as-checkbox) {
+    padding-left: 3em;
+  }
 
   &[type="submit"] {
     @extend %button-primary-icon-search;
@@ -4252,7 +4279,6 @@ body.front.logged-in .view-commons-homepage-content .article.node {
 
 .search-results-title,
 .search-results-wrapper > h2 {
-  @extend #page-title;
   margin-top: .2em;
 }
 
@@ -4498,6 +4524,25 @@ body.front.logged-in .view-commons-homepage-content .article.node {
         color: $dark_gray;
       }
     }
+  }
+}
+
+.trusted-status-request {
+  &:before {
+    content: "\271a";
+    position: relative;
+    top: .1em;
+    display: inline-block;
+    margin-right: .2em;
+    font-size: 1.4em;
+    line-height: .6em;
+  }
+}
+
+.message-contact {
+  &:before {
+    content: "";
+    @include sprite_url_height_width($icons, message);
   }
 }
 
