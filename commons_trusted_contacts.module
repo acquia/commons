@@ -107,6 +107,9 @@ function commons_trusted_contacts_tab_access($account) {
  * Implements hook_menu_alter().
  */
 function commons_trusted_contacts_menu_alter(&$items) {
+  // Remove the groups UI for user entities.
+  $items['user/%/group']['access callback'] = FALSE;
+
   // Make sure only Trusted-Contacts send messages to each other.
   // By default, PrivateMsg module only checks user permissions.
   $items['messages/new']['access callback'] = 'commons_trusted_contacts_privatemsg_write_access';
