@@ -920,7 +920,7 @@ function commons_trusted_contacts_partial_node_form_validate($form, $form_state)
  * Override the group fields.
  */
 function commons_trusted_contacts_node_presave($node) {
-  if (!module_exists('og_access')) {
+  if (!module_exists('og_access') || og_is_group('node', $node)) {
     return;
   }
 
