@@ -186,10 +186,6 @@ projects[message_subscribe][download][type] = "git"
 projects[message_subscribe][download][url] = "http://git.drupal.org/project/message_subscribe.git"
 projects[message_subscribe][download][branch] = "7.x-1.x"
 
-; Remove "email" as default notifier.
-; http://drupal.org/node/1828184#comment-7081868
-projects[message_subscribe][patch][] = "https://drupal.org/files/1828184-remove-email-default-notifier-31.patch"
-
 projects[memcache][type] = "module"
 projects[memcache][subdir] = "contrib"
 projects[memcache][version] = "1.0"
