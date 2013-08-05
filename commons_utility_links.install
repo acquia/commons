@@ -33,12 +33,21 @@ function commons_utility_links_install() {
 }
 
 /**
- * Set Utility Links block to never cache, and force clear block cache.
+ * Remove utility_links block, and enable commons_utility_links, that never caches.
  */
 function commons_utility_links_update_7301() {
+  db_delete('block')
+    ->condition('module', 'commons_utility_links')
+    ->condition('delta', 'utility_links')
+    ->execute();
+
   db_update('block')
-    ->fields(array('cache' => DRUPAL_NO_CACHE))
-    ->fields(array('region' => 'header'))
+    ->fields(array(
+      'cache' => DRUPAL_NO_CACHE,
+      'region' => 'header',
+      'status' => 1,
+      'title' => '<none>',
+    ))
     ->condition('delta', 'commons_utility_links')
     ->condition('module', 'commons_utility_links')
     ->condition('theme', 'commons_origins')
