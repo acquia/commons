@@ -50,11 +50,10 @@ jQuery(document).ready(function($){
     }).text(val).insertBefore(select);
 
     var selectStatus = select.siblings('a.select-status'),
-        selectWidth = Math.ceil(select.outerWidth(true)),
-        wrapper = select.parent().css('width', selectStatus.outerWidth()).addClass('select-inactive');
+        wrapper = select.parent().addClass('select-inactive');
 
     select.mousedown(function () {
-      wrapper.css('width', selectWidth).addClass('select-active').removeClass('select-inactive');
+      wrapper.addClass('select-active').removeClass('select-inactive');
       select.focus();
     }).change(function () {
       val = select.children('option[value="' + select.val() + '"]').text();
