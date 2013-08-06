@@ -20,6 +20,7 @@ function commons_groups_og_permission_alter(&$perms) {
   $perms['subscribe without approval']['description'] = t('This value is set automatically based on the "Group Privacy Settings" field.');
 }
 
+
 /**
  * Implements hook_ctools_plugin_directory().
  */
@@ -383,11 +384,6 @@ function commons_groups_default_message_type_alter(&$defaults) {
  */
 function commons_groups_og_user_access_alter(&$perm, $context) {
   $account = $context['account'];
-  $cache = &drupal_static(__FUNCTION__, array());
-  if (!empty($cache[$account->uid])) {
-    // We already changed the permissions.
-    return;
-  }
 
   $cache[$account->uid] = TRUE;
   $group_type = $context['group_type'];
@@ -397,7 +393,7 @@ function commons_groups_og_user_access_alter(&$perm, $context) {
     return;
   }
 
-  if (og_is_member($group_type, $group->nid, 'user', $account)) {
+  if (og_is_member($group_type, $group->nid, 'user', $account, array(OG_STATE_ACTIVE))) {
     // The user is a group member, so comply to the OG permissions.
     return;
   }
@@ -410,6 +406,8 @@ function commons_groups_og_user_access_alter(&$perm, $context) {
   foreach (array_keys($commons_groups_entity_types['node']) as $type) {
     $perm["create $type content"] = $access_create;
   }
+  $perm['subscribe'] = $access_create;
+  $perm['subscribe without approval'] = $access_create;
 }
 
 
@@ -579,7 +577,6 @@ function commons_groups_entityreference_default_value($entity_type, $entity, $fi
   $target_type = $field['settings']['target_type'];
   entity_load($target_type, $ids);
   // Remove group nodes hidden by the node access system.
-
   foreach ($ids as $target_id) {
     $target = entity_load_single($target_type, $target_id);
     if (entity_access('view', $target_type, $target)
