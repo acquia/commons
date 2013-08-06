@@ -40,7 +40,7 @@
   <div class="user-picture"><?php print render($user_profile['user_picture']);?></div>
   <?php if (isset($user_profile['group_membership'])): ?>
   <div class="views-field views-field-view">
-    <span class="views-label views-label-view"><?php print t('Recently contributed to !groups', array('!groups' => $user_profile['group_membership']));?></span>
+    <span class="views-label views-label-view"><?php print render($user_profile['group_membership']);?></span>
   </div>
   <?php endif; ?>
   <?php print render($user_profile['flags']['commons_follow_user']) ?>
