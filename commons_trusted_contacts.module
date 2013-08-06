@@ -924,25 +924,26 @@ function commons_trusted_contacts_node_presave($node) {
     return;
   }
 
-  if (!empty($node->partial_node_form)) {
+  // We're posting from the short form on the site-wide homepage.
+  if (isset($node->form_state['values']['group_audience_type'])) {
     $group_audience_type = $node->form_state['values']['group_audience_type'];
   }
-
-  else {
-    $group_audience_type = $node->group_audience_type;
+  // We're posting from the full node creation form.
+  if (isset($node->group_audience_type)) {
+   $group_audience_type = $node->group_audience_type;
   }
 
   $wrapper = entity_metadata_wrapper('node', $node);
-
-  // The content is submitted either to the private group or to a selected
-  // group.
-  if ($group_audience_type == 'private') {
+  // The content is submitted to the author's trusted contacts group, rather
+  // than to specific groups.
+  if (isset($group_audience_type) && $group_audience_type == 'private') {
     $wrapper->og_user_group_ref->set(array($node->uid));
     $wrapper->group_content_access->set(OG_CONTENT_ACCESS_PRIVATE);
 
     // Remove any existing selected groups.
     $wrapper->{OG_AUDIENCE_FIELD}->set(array());
   }
+  // The content is submitted to specific groups.
   else {
     // Extract group IDs from selection.
     $group_ids = array();
