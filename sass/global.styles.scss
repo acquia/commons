@@ -644,6 +644,38 @@ optgroup {
   }
 }
 
+/* Simulate a chosen select form value as inline text. */
+.hidden-select-wrapper {
+  position: relative;
+  display: inline-block;
+  @include single-transition(width, .2s);
+}
+
+.select-status {
+  display: inline-block;
+  white-space: nowrap;
+  @include single-transition(opacity, .2s);
+
+  .select-active & {
+    @include opacity(0);
+  }
+}
+
+.hidden-select {
+  position: absolute;
+  top: -.35em;
+  left: 0;
+  margin: 0;
+  @include single-transition(opacity, .2s);
+
+  .select-inactive & {
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    @include opacity(0);
+  }
+}
+
 /* Replace the default Drupal throbber with a custom one. */
 html.js {
   input.form-autocomplete {
@@ -3142,14 +3174,13 @@ body.page-node .pane-views-panes {
   .views-exposed-widget,
   .views-widget,
   label,
-  .selectBox-dropdown,
   .form-select-wrapper {
     display: inline-block;
     line-height: 1.7em;
     vertical-align: baseline;
     white-space: nowrap;
-    height: 1.7em;
-    overflow: hidden;
+    // height: 1.7em;
+    // overflow: hidden;
   }
 
   .views-exposed-widget {
@@ -3173,11 +3204,6 @@ body.page-node .pane-views-panes {
     .form-submit {
       margin-top: 0;
     }
-  }
-
-  .selectBox-label,
-  .selectBox-dropdown {
-    width: auto !important;
   }
 }
 
@@ -3468,7 +3494,6 @@ body.page-node .pane-views-panes {
 .block-search {
   display: block;
   background-color: darken($dark_blue, 12%); // Old browsers
-  // @include filter-gradient(darken($dark_blue, 12%), darken($dark_blue, 6%), vertical); // IE6-9
   @include background-image(linear-gradient(top,  darken($dark_blue, 12%) 0%,darken($dark_blue, 6%)100%));
   @include border-radius(4px);
   box-shadow: 1px 1px 2px #000 inset, 2px 3px 3px rgba(#fff, 0.09);
@@ -3501,8 +3526,8 @@ body.page-node .pane-views-panes {
     left: 6.5em;
   }
 
-  .selectBox {
-    line-height: 1.9em;
+  .hidden-select-wrapper {
+    margin: .3em;
   }
 
   .form-item-search-block-form {
@@ -4045,10 +4070,6 @@ body.front.logged-in {
     &.widgets-active {
       @extend %pod;
       @extend %pod-content;
-
-      .selectBox-dropdown {
-        background-color: $white;
-      }
     }
   }
 }

@@ -4,10 +4,6 @@ jQuery(document).ready(function($){
 
   'use strict';
 
-  var attach_selectBox = function(){
-    $('#views-exposed-form-commons-homepage-content-panel-pane-1 select, #edit-custom-search-types, #quicktabs-commons_bw select, .views-exposed-widgets select').selectBox();
-  };
-
   var set_follow_checkboxes = function(){
     $('#quicktabs-commons_follow_ui .flag-email-group a, #quicktabs-commons_follow_ui .flag-email-node a, #quicktabs-commons_follow_ui .flag-email-user a, #quicktabs-commons_follow_ui .flag-email-term a').each(function(){
       var a_target = $(this).addClass('formatted-as-checkbox');
@@ -24,8 +20,6 @@ jQuery(document).ready(function($){
     });
   };
 
-  $('.views-exposed-widgets .form-select, .custom-search-selector').wrap('<div class="form-select-wrapper" />');
-
   $(document).delegate('.views-exposed-widgets .form-select', 'change', function() {
     $('.views-exposed-widgets').addClass('widget-changed');
   });
@@ -34,24 +28,9 @@ jQuery(document).ready(function($){
     $('.views-exposed-widgets').addClass('widgets-active');
   });
 
-  //placeholder functionality
-  $('#block-system-main-menu .menu-depth-1 a').append("<div class='arrow'></div>");
-
-  $('.commons-bw-create-choose').click(function(){
-    $('body').addClass('create-choose-open');
-  });
-
-  $('.commons-bw-create-choose-bg').click(function(){
-    $('body').removeClass('create-choose-open');
-  });
-
-  $('.page-node-add #edit-additional-settings').css('top', ($('.page-node-add .field-type-taxonomy-term-reference-form').height() + 15));
-
-  attach_selectBox();
   set_follow_checkboxes();
 
   $(document).ajaxComplete(function(){
-    attach_selectBox();
     set_follow_checkboxes();
   });
 });
@@ -59,20 +38,64 @@ jQuery(document).ready(function($){
 (function ($) {
 
   /**
+   * Make select elements simulate an anchor element.
+   */
+  function hiddenSelect (selectContainer) {
+    var select = selectContainer.children('select').addClass('hidden-select').wrap('<span class="hidden-select-wrapper"></span>');
+        val = select.children('option[value="' + select.val() + '"]').text();
+
+    $('<a />', {
+      'class': 'select-status',
+      'href': '#'
+    }).text(val).insertBefore(select);
+
+    var selectStatus = select.siblings('a.select-status'),
+        selectWidth = Math.ceil(select.outerWidth(true)),
+        wrapper = select.parent().css('width', selectStatus.outerWidth()).addClass('select-inactive');
+
+    select.mousedown(function () {
+      wrapper.css('width', selectWidth).addClass('select-active').removeClass('select-inactive');
+      select.focus();
+    }).change(function () {
+      val = select.children('option[value="' + select.val() + '"]').text();
+      selectStatus.text(val);
+      select.blur();
+    }).blur(function () {
+      wrapper.addClass('select-inactive').removeClass('select-active').delay(3000).css('width', selectStatus.outerWidth());
+    });
+  }
+
+  /**
+   * Allow select forms to be styled more directly.
+   */
+  Drupal.behaviors.formSelect = {
+    attach: function (context, settings) {
+      var selects = $('.search-form .form-type-select, .views-exposed-widgets .form-type-select', context),
+          counter = 0;
+
+      if (selects.length > 0) {
+        selects.once('formSelect', function () {
+          hiddenSelect($(this));
+        });
+      }
+    }
+  }
+
+  /**
    * Define a variable height on fieldsets to accommodate multi-line layouts.
    */
   Drupal.behaviors.collapsibleHeight = {
     attach: function (context, settings) {
       $('fieldset.collapsible', context).once('collapsibleHeight', function () {
-        var $fieldset = $(this),
-            $minHeight = $fieldset.find('legend').height();
+        var fieldset = $(this),
+            minHeight = fieldset.find('legend').height();
 
-        $fieldset.css('min-height', $minHeight + 'px');
+        $fieldset.css('min-height', minHeight + 'px');
 
         // Adjust the height on window resize.
         $(window).resize(function () {
-          var $minHeight = $fieldset.find('legend').height();
-          $fieldset.css('min-height', $minHeight + 'px');
+          var minHeight = $fieldset.find('legend').height();
+          fieldset.css('min-height', minHeight + 'px');
         });
       });
     }

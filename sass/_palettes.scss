@@ -135,10 +135,6 @@
       @extend %button-#{$palette_color_class}-icon-search;
     }
 
-    .selectBox-dropdown {
-      color: $palette_color_light;
-    }
-
     .notification-count {
       background: $palette_btn_top;
       @include background(linear-gradient($palette_btn_top darken($palette_btn_top, 20)));
@@ -178,10 +174,6 @@
     @include filter-gradient(darken($palette_gray_light_gray_blue_dark, 1%), darken($palette_gray_light_gray_blue_dark, 10%), vertical); // IE6-9
     @include background-image(linear-gradient(top,  darken($palette_gray_light_gray_blue_dark, 1%) 0%,lighten($palette_gray_light_gray_blue_dark, 10%)100%));
   }
-
-  .selectBox-dropdown {
-    color: $palette_gray_light_gray_blue_btn_bottom;
-  }
 }
 
 .palette-black-white-red {
@@ -192,18 +184,10 @@
   a, .commons-bw-create-all-widget-types li a {
     color: $palette_black_white_red_btn_bottom;
   }
-
-  .selectBox-dropdown {
-    color: $palette_black_white_red_btn_bottom;
-  }
 }
 
 .palette-brown-burnt-orange {
   a, .commons-bw-create-all-widget-types li a {
-    color: $palette_brown_burnt_orange_btn_bottom;
-  }
-
-  .selectBox-dropdown {
     color: $palette_brown_burnt_orange_btn_bottom;
   }
 }
