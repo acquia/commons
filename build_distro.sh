@@ -100,28 +100,26 @@ build_distro() {
 }
 
 # This allows you to test the make file without needing to upload it to drupal.org and run the main make file.
-test_makefile() {
-  if [[ -d $BUILD_PATH ]]; then
-    cd $BUILD_PATH
+update() {
+  if [[ -d $DOCROOT ]]; then
+    cd $DOCROOT
     # do we have the profile?
-    if [[ -d $BUILD_PATH/commons_profile ]]; then
+    if [[ -d $DOCROOT/profiles/commons ]]; then
       # do we have an installed commons profile?
-      if [[ -d $BUILD_PATH/publish ]]; then
-        cd $BUILD_PATH
-        rm -f publish.tar.gz
-        rm -f commons.tar.gz
-        drush make --tar --drupal-org=core commons_profile/drupal-org-core.make publish
-        drush make --tar --drupal-org commons_profile/drupal-org.make commons
-        tar -zxvf publish.tar.gz
+        rm -f /tmp/publish.tar.gz
+        rm -f /tmp/commons.tar.gz
+        drush make --tar --drupal-org=core profiles/commons/drupal-org-core.make /tmp/publish
+        drush make --tar --drupal-org profiles/commons/drupal-org.make /tmp/commons
+        cd ..
+        tar -zxvf /tmp/publish.tar.gz
         cd publish/profiles
         # remove the symlinks in the repos before we execute
-        find . -mindepth 2 -type l | awk -F/ '{print $5}' | sed '/^$/d' > ${BUILD_PATH}/repos.txt
+        find . -mindepth 2 -type l | awk -F/ '{print $5}' | sed '/^$/d' > /tmp/repos.txt
         # exclude repos since we're updating already by linking it to the repos directory.
-        UNTAR="tar -zxvf ${BUILD_PATH}/commons.tar.gz -X ${BUILD_PATH}/repos.txt"
+        UNTAR="tar -zxvf /tmp/commons.tar.gz -X /tmp/repos.txt"
         eval $UNTAR
         echo "Successfully Updated drupal from make files"
         exit 0
-      fi
     fi
   fi
   echo "Unable to find Build path or drupal root. Please run build first"
@@ -151,19 +149,6 @@ case $1 in
       USERNAME=$3
     fi
     build_distro $BUILD_PATH $USERNAME;;
-  update)
-    if [[ -n $2 ]]; then
-      BUILD_PATH=$2
-      if [[ $3 == 'dev' ]] || [[ $3 == 'nodev' ]]; then
-        DEV=$3
-      else
-        DEV='dev'
-      fi
-    else
-      echo "Usage: build_distro.sh update [build_path] [dev|nodev]"
-      exit 1
-    fi
-    update $BUILD_PATH $DEV;;
   rn)
     if [[ -n $2 ]] && [[ -n $3 ]] && [[ -n $4 ]] && [[ -n $5 ]]; then
       BUILD_PATH=$2
@@ -175,9 +160,9 @@ case $1 in
       exit 1
     fi
     release_notes $BUILD_PATH $RELEASE $FROM_DATE $TO_DATE;;
-  test_makefile)
+  update)
     if [[ -n $2 ]]; then
-      BUILD_PATH=$2
+      DOCROOT=$2
     else
       echo "Usage: build_distro.sh test_makefile [build_path]"
       exit 1
@@ -185,5 +170,5 @@ case $1 in
     if [[ -n $3 ]]; then
       USERNAME=$3
     fi
-    test_makefile $BUILD_PATH;;
+    update $DOCROOT;;
 esac
