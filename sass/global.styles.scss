@@ -3509,25 +3509,21 @@ body.page-node .pane-views-panes {
       margin-top: 0;
       margin-bottom: 0;
     }
+
+    .form-item-custom-search-types {
+      position: relative;
+      z-index: 2;
+      display: inline-block;
+      width: 5.5em;
+      margin: .3em 0 .3em -5.8em;
+      padding-left: .3em;
+      left: 5.8em;
+    }
   }
 
   .block-inner {
     margin-left: 0;
     margin-right: 0;
-  }
-
-  .form-select-wrapper {
-    position: relative;
-    z-index: 2;
-    display: inline-block;
-    overflow: hidden;
-    width: 6.5em;
-    margin-left: -6.5em;
-    left: 6.5em;
-  }
-
-  .hidden-select-wrapper {
-    margin: .3em;
   }
 
   .form-item-search-block-form {
@@ -3536,7 +3532,7 @@ body.page-node .pane-views-panes {
     @include box-sizing(border-box);
     width: 100%;
     padding-right: 1.5em;
-    padding-left: 6.5em;
+    padding-left: 5.8em;
   }
 
   .form-text {
