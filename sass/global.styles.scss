@@ -656,6 +656,18 @@ optgroup {
   white-space: nowrap;
   @include single-transition(opacity, .2s);
 
+  &:after {
+    content: "";
+    position: relative;
+    top: .2em;
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: .2em;
+    border: .4em solid transparent;
+    border-top-color: $light_blue;
+  }
+
   .select-active & {
     @include opacity(0);
   }
@@ -3502,6 +3514,12 @@ body.page-node .pane-views-panes {
       margin: .3em 0 .3em -5.8em;
       padding-left: .3em;
       left: 5.8em;
+
+      .select-status {
+        &:after {
+          border-top-color: $white;
+        }
+      }
     }
   }
 

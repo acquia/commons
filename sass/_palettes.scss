@@ -43,6 +43,12 @@
       color: $palette_color_light;
     }
 
+    .select-status {
+      &:after {
+        border-top-color: $palette_color_light;
+      }
+    }
+
     #menu-bar.nav ul.menu li:hover .arrow:before,
     #menu-bar.nav ul.menu li.active-trail .arrow:before {
       border-color: transparent transparent lighten($palette_color_light, 10%) transparent;
