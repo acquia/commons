@@ -9,3 +9,5 @@ projects[commons][type] = "profile"
 projects[commons][download][type] = "git"
 projects[commons][download][url] = "http://git.drupal.org/project/commons.git"
 projects[commons][download][branch] = "7.x-3.x"
+; Provide a -dev version of the Commons make file, stopgap for nightly development snapshot
+projects[commons][patch][] = "https://drupal.org/files/1908812-drupal-org-dev-make-53.patch"
