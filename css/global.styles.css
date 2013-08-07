@@ -873,12 +873,12 @@ html.js fieldset.collapsed .fieldset-legend, html.js fieldset.collapsible .field
  * Button styles
  */
 /* Common styles for all buttons. */
-button:not(.formatted-as-checkbox),
-[type="reset"]:not(.formatted-as-checkbox),
-[type="submit"]:not(.formatted-as-checkbox),
-[type="button"]:not(.formatted-as-checkbox),
-[class*="action-item"]:not(.formatted-as-checkbox), .pane-commons-groups-commons-groups-create-group a, .pane-commons-events-commons-events-create-event-link a, [class*="action-item-small"]:not(.formatted-as-checkbox), .commons-sign-up,
-.commons-login, [class*="action-item-large"]:not(.formatted-as-checkbox) {
+button,
+[type="reset"],
+[type="submit"],
+[type="button"],
+[class*="action-item"], .pane-commons-groups-commons-groups-create-group a, .pane-commons-events-commons-events-create-event-link a, [class*="action-item-small"], .commons-sign-up,
+.commons-login, [class*="action-item-large"] {
   -webkit-appearance: none;
   display: inline-block;
   -webkit-box-sizing: border-box;
@@ -906,68 +906,68 @@ button:not(.formatted-as-checkbox),
   outline: 0;
   cursor: pointer;
 }
-button:focus:not(.formatted-as-checkbox),
-[type="reset"]:focus:not(.formatted-as-checkbox),
-[type="submit"]:focus:not(.formatted-as-checkbox),
-[type="button"]:focus:not(.formatted-as-checkbox),
-[class*="action-item"]:focus:not(.formatted-as-checkbox), .pane-commons-groups-commons-groups-create-group a:focus, .pane-commons-events-commons-events-create-event-link a:focus, [class*="action-item-small"]:focus:not(.formatted-as-checkbox), .commons-sign-up:focus,
-.commons-login:focus, [class*="action-item-large"]:focus:not(.formatted-as-checkbox), button:hover:not(.formatted-as-checkbox),
-[type="reset"]:hover:not(.formatted-as-checkbox),
-[type="submit"]:hover:not(.formatted-as-checkbox),
-[type="button"]:hover:not(.formatted-as-checkbox),
-[class*="action-item"]:hover:not(.formatted-as-checkbox), .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-events-commons-events-create-event-link a:hover, [class*="action-item-small"]:hover:not(.formatted-as-checkbox), .commons-sign-up:hover,
-.commons-login:hover, [class*="action-item-large"]:hover:not(.formatted-as-checkbox) {
+button:focus,
+[type="reset"]:focus,
+[type="submit"]:focus,
+[type="button"]:focus,
+[class*="action-item"]:focus, .pane-commons-groups-commons-groups-create-group a:focus, .pane-commons-events-commons-events-create-event-link a:focus, [class*="action-item-small"]:focus, .commons-sign-up:focus,
+.commons-login:focus, [class*="action-item-large"]:focus, button:hover,
+[type="reset"]:hover,
+[type="submit"]:hover,
+[type="button"]:hover,
+[class*="action-item"]:hover, .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-events-commons-events-create-event-link a:hover, [class*="action-item-small"]:hover, .commons-sign-up:hover,
+.commons-login:hover, [class*="action-item-large"]:hover {
   text-decoration: none;
 }
-button:active:not(.formatted-as-checkbox),
-[type="reset"]:active:not(.formatted-as-checkbox),
-[type="submit"]:active:not(.formatted-as-checkbox),
-[type="button"]:active:not(.formatted-as-checkbox),
-[class*="action-item"]:active:not(.formatted-as-checkbox), .pane-commons-groups-commons-groups-create-group a:active, .pane-commons-events-commons-events-create-event-link a:active, [class*="action-item-small"]:active:not(.formatted-as-checkbox), .commons-sign-up:active,
-.commons-login:active, [class*="action-item-large"]:active:not(.formatted-as-checkbox) {
+button:active,
+[type="reset"]:active,
+[type="submit"]:active,
+[type="button"]:active,
+[class*="action-item"]:active, .pane-commons-groups-commons-groups-create-group a:active, .pane-commons-events-commons-events-create-event-link a:active, [class*="action-item-small"]:active, .commons-sign-up:active,
+.commons-login:active, [class*="action-item-large"]:active {
   -webkit-box-shadow: inset rgba(0, 0, 0, 0.25) 0 1px 2px 0;
   -moz-box-shadow: inset rgba(0, 0, 0, 0.25) 0 1px 2px 0;
   box-shadow: inset rgba(0, 0, 0, 0.25) 0 1px 2px 0;
   text-decoration: none;
 }
-button:not(.formatted-as-checkbox)::-moz-focus-inner,
-[type="reset"]:not(.formatted-as-checkbox)::-moz-focus-inner,
-[type="submit"]:not(.formatted-as-checkbox)::-moz-focus-inner,
-[type="button"]:not(.formatted-as-checkbox)::-moz-focus-inner,
-[class*="action-item"]:not(.formatted-as-checkbox)::-moz-focus-inner, .pane-commons-groups-commons-groups-create-group a::-moz-focus-inner, .pane-commons-events-commons-events-create-event-link a::-moz-focus-inner, [class*="action-item-small"]:not(.formatted-as-checkbox)::-moz-focus-inner, .commons-sign-up::-moz-focus-inner,
-.commons-login::-moz-focus-inner, [class*="action-item-large"]:not(.formatted-as-checkbox)::-moz-focus-inner {
+button::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
+[class*="action-item"]::-moz-focus-inner, .pane-commons-groups-commons-groups-create-group a::-moz-focus-inner, .pane-commons-events-commons-events-create-event-link a::-moz-focus-inner, [class*="action-item-small"]::-moz-focus-inner, .commons-sign-up::-moz-focus-inner,
+.commons-login::-moz-focus-inner, [class*="action-item-large"]::-moz-focus-inner {
   border: 0;
   padding: 0;
 }
 
 /* Dimensions for the default button type. */
-button:not(.formatted-as-checkbox),
-[type="reset"]:not(.formatted-as-checkbox),
-[type="submit"]:not(.formatted-as-checkbox),
-[type="button"]:not(.formatted-as-checkbox),
-[class*="action-item"]:not(.formatted-as-checkbox), .pane-commons-groups-commons-groups-create-group a, .pane-commons-events-commons-events-create-event-link a {
+button,
+[type="reset"],
+[type="submit"],
+[type="button"],
+[class*="action-item"], .pane-commons-groups-commons-groups-create-group a, .pane-commons-events-commons-events-create-event-link a {
   padding: 0.5em 1.5em;
   font-size: 1em;
 }
 
 /* Dimensions for the small button type. */
-[class*="action-item-small"]:not(.formatted-as-checkbox), .commons-sign-up,
+[class*="action-item-small"], .commons-sign-up,
 .commons-login {
   padding: 0.3em 1em;
   font-size: 0.88em;
 }
 
 /* Dimensions for the large button type. */
-[class*="action-item-large"]:not(.formatted-as-checkbox) {
+[class*="action-item-large"] {
   padding: 0.5em 1.5em;
   font-size: 1.2em;
 }
 
-button:not(.formatted-as-checkbox),
-[type="reset"]:not(.formatted-as-checkbox),
-[type="submit"]:not(.formatted-as-checkbox),
-[type="button"]:not(.formatted-as-checkbox),
-[class*="action-item"]:not(.formatted-as-checkbox), .commons-login {
+button,
+[type="reset"],
+[type="submit"],
+[type="button"],
+[class*="action-item"], .commons-login {
   background-color: #fefefe;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #f1f1f1));
   background: -webkit-linear-gradient(#ffffff, #f1f1f1);
@@ -977,26 +977,26 @@ button:not(.formatted-as-checkbox),
   border-color: #cbcbcb;
   text-shadow: -1px 1px 2px white, -1px -1px 2px white, 1px -1px 2px white, 1px 1px 2px white;
 }
-button:not(.formatted-as-checkbox),
-[type="reset"]:not(.formatted-as-checkbox),
-[type="submit"]:not(.formatted-as-checkbox),
-[type="button"]:not(.formatted-as-checkbox),
-[class*="action-item"]:not(.formatted-as-checkbox), .commons-login, button:link:not(.formatted-as-checkbox),
-[type="reset"]:link:not(.formatted-as-checkbox),
-[type="submit"]:link:not(.formatted-as-checkbox),
-[type="button"]:link:not(.formatted-as-checkbox),
-[class*="action-item"]:link:not(.formatted-as-checkbox), .commons-login:link, button:visited:not(.formatted-as-checkbox),
-[type="reset"]:visited:not(.formatted-as-checkbox),
-[type="submit"]:visited:not(.formatted-as-checkbox),
-[type="button"]:visited:not(.formatted-as-checkbox),
-[class*="action-item"]:visited:not(.formatted-as-checkbox), .commons-login:visited {
+button,
+[type="reset"],
+[type="submit"],
+[type="button"],
+[class*="action-item"], .commons-login, button:link,
+[type="reset"]:link,
+[type="submit"]:link,
+[type="button"]:link,
+[class*="action-item"]:link, .commons-login:link, button:visited,
+[type="reset"]:visited,
+[type="submit"]:visited,
+[type="button"]:visited,
+[class*="action-item"]:visited, .commons-login:visited {
   color: #323232;
 }
-button:hover:not(.formatted-as-checkbox),
-[type="reset"]:hover:not(.formatted-as-checkbox),
-[type="submit"]:hover:not(.formatted-as-checkbox),
-[type="button"]:hover:not(.formatted-as-checkbox),
-[class*="action-item"]:hover:not(.formatted-as-checkbox), .commons-login:hover {
+button:hover,
+[type="reset"]:hover,
+[type="submit"]:hover,
+[type="button"]:hover,
+[class*="action-item"]:hover, .commons-login:hover {
   color: #3f3f3f;
   background-color: #f1f1f1;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fefefe), color-stop(100%, #e5e5e5));
@@ -1007,15 +1007,15 @@ button:hover:not(.formatted-as-checkbox),
   border-color: #b2b2b2;
   text-shadow: -1px 1px 2px #fefefe, -1px -1px 2px #fefefe, 1px -1px 2px #fefefe, 1px 1px 2px #fefefe;
 }
-button:focus:not(.formatted-as-checkbox),
-[type="reset"]:focus:not(.formatted-as-checkbox),
-[type="submit"]:focus:not(.formatted-as-checkbox),
-[type="button"]:focus:not(.formatted-as-checkbox),
-[class*="action-item"]:focus:not(.formatted-as-checkbox), .commons-login:focus, button:active:not(.formatted-as-checkbox),
-[type="reset"]:active:not(.formatted-as-checkbox),
-[type="submit"]:active:not(.formatted-as-checkbox),
-[type="button"]:active:not(.formatted-as-checkbox),
-[class*="action-item"]:active:not(.formatted-as-checkbox), .commons-login:active {
+button:focus,
+[type="reset"]:focus,
+[type="submit"]:focus,
+[type="button"]:focus,
+[class*="action-item"]:focus, .commons-login:focus, button:active,
+[type="reset"]:active,
+[type="submit"]:active,
+[type="button"]:active,
+[class*="action-item"]:active, .commons-login:active {
   background: #fefefe;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f1f1f1), color-stop(100%, #ffffff));
   background: -webkit-linear-gradient(#f1f1f1, #ffffff);
@@ -1025,11 +1025,11 @@ button:focus:not(.formatted-as-checkbox),
   border-color: #cbcbcb;
   text-shadow: -1px 1px 2px white, -1px -1px 2px white, 1px -1px 2px white, 1px 1px 2px white;
 }
-button[disabled]:not(.formatted-as-checkbox),
-[disabled][type="reset"]:not(.formatted-as-checkbox),
-[disabled][type="submit"]:not(.formatted-as-checkbox),
-[disabled][type="button"]:not(.formatted-as-checkbox),
-[disabled][class*="action-item"]:not(.formatted-as-checkbox), [disabled].commons-login {
+button[disabled],
+[disabled][type="reset"],
+[disabled][type="submit"],
+[disabled][type="button"],
+[disabled][class*="action-item"], [disabled].commons-login {
   color: #cbcbcb;
   background: #fefefe;
   border-color: #cbcbcb;
@@ -1039,15 +1039,15 @@ button[disabled]:not(.formatted-as-checkbox),
   text-shadow: none;
 }
 
-.action-item-active:not(.formatted-as-checkbox), .action-item-active[type="reset"]:not(.formatted-as-checkbox), .action-item-active[type="submit"]:not(.formatted-as-checkbox), .action-item-active[type="button"]:not(.formatted-as-checkbox),
-.action-item-small-active:not(.formatted-as-checkbox),
-.action-item-small-active[type="reset"]:not(.formatted-as-checkbox),
-.action-item-small-active[type="submit"]:not(.formatted-as-checkbox),
-.action-item-small-active[type="button"]:not(.formatted-as-checkbox),
-.action-item-large-active:not(.formatted-as-checkbox),
-.action-item-large-active[type="reset"]:not(.formatted-as-checkbox),
-.action-item-large-active[type="submit"]:not(.formatted-as-checkbox),
-.action-item-large-active[type="button"]:not(.formatted-as-checkbox), [class*="flag-commons-follow-"] .unflag-action {
+.action-item-active, .action-item-active[type="reset"], .action-item-active[type="submit"], .action-item-active[type="button"],
+.action-item-small-active,
+.action-item-small-active[type="reset"],
+.action-item-small-active[type="submit"],
+.action-item-small-active[type="button"],
+.action-item-large-active,
+.action-item-large-active[type="reset"],
+.action-item-large-active[type="submit"],
+.action-item-large-active[type="button"], [class*="flag-commons-follow-"] .unflag-action {
   background-color: #f3f3f3;
   -webkit-box-shadow: inset 0.1em 0.1em 0.2em #a6a6a6;
   -moz-box-shadow: inset 0.1em 0.1em 0.2em #a6a6a6;
@@ -1055,24 +1055,24 @@ button[disabled]:not(.formatted-as-checkbox),
   border-color: silver;
   text-shadow: -1px 1px 2px white, -1px -1px 2px white, 1px -1px 2px white, 1px 1px 2px white;
 }
-.action-item-active:not(.formatted-as-checkbox), .action-item-active[type="reset"]:not(.formatted-as-checkbox), .action-item-active[type="submit"]:not(.formatted-as-checkbox), .action-item-active[type="button"]:not(.formatted-as-checkbox),
-.action-item-small-active:not(.formatted-as-checkbox),
-.action-item-small-active[type="reset"]:not(.formatted-as-checkbox),
-.action-item-small-active[type="submit"]:not(.formatted-as-checkbox),
-.action-item-small-active[type="button"]:not(.formatted-as-checkbox),
-.action-item-large-active:not(.formatted-as-checkbox),
-.action-item-large-active[type="reset"]:not(.formatted-as-checkbox),
-.action-item-large-active[type="submit"]:not(.formatted-as-checkbox),
-.action-item-large-active[type="button"]:not(.formatted-as-checkbox), [class*="flag-commons-follow-"] .unflag-action, .action-item-active:link:not(.formatted-as-checkbox),
-.action-item-small-active:link:not(.formatted-as-checkbox),
-.action-item-large-active:link:not(.formatted-as-checkbox), [class*="flag-commons-follow-"] .unflag-action:link, .action-item-active:visited:not(.formatted-as-checkbox),
-.action-item-small-active:visited:not(.formatted-as-checkbox),
-.action-item-large-active:visited:not(.formatted-as-checkbox), [class*="flag-commons-follow-"] .unflag-action:visited {
+.action-item-active, .action-item-active[type="reset"], .action-item-active[type="submit"], .action-item-active[type="button"],
+.action-item-small-active,
+.action-item-small-active[type="reset"],
+.action-item-small-active[type="submit"],
+.action-item-small-active[type="button"],
+.action-item-large-active,
+.action-item-large-active[type="reset"],
+.action-item-large-active[type="submit"],
+.action-item-large-active[type="button"], [class*="flag-commons-follow-"] .unflag-action, .action-item-active:link,
+.action-item-small-active:link,
+.action-item-large-active:link, [class*="flag-commons-follow-"] .unflag-action:link, .action-item-active:visited,
+.action-item-small-active:visited,
+.action-item-large-active:visited, [class*="flag-commons-follow-"] .unflag-action:visited {
   color: #272727;
 }
-.action-item-active:hover:not(.formatted-as-checkbox),
-.action-item-small-active:hover:not(.formatted-as-checkbox),
-.action-item-large-active:hover:not(.formatted-as-checkbox), [class*="flag-commons-follow-"] .unflag-action:hover {
+.action-item-active:hover,
+.action-item-small-active:hover,
+.action-item-large-active:hover, [class*="flag-commons-follow-"] .unflag-action:hover {
   color: #343434;
   background-color: #e6e6e6;
   -webkit-box-shadow: inset 0.1em 0.1em 0.2em #9a9a9a;
@@ -1081,11 +1081,11 @@ button[disabled]:not(.formatted-as-checkbox),
   border-color: #a6a6a6;
   text-shadow: -1px 1px 2px #f3f3f3, -1px -1px 2px #f3f3f3, 1px -1px 2px #f3f3f3, 1px 1px 2px #f3f3f3;
 }
-.action-item-active:focus:not(.formatted-as-checkbox),
-.action-item-small-active:focus:not(.formatted-as-checkbox),
-.action-item-large-active:focus:not(.formatted-as-checkbox), [class*="flag-commons-follow-"] .unflag-action:focus, .action-item-active:active:not(.formatted-as-checkbox),
-.action-item-small-active:active:not(.formatted-as-checkbox),
-.action-item-large-active:active:not(.formatted-as-checkbox), [class*="flag-commons-follow-"] .unflag-action:active {
+.action-item-active:focus,
+.action-item-small-active:focus,
+.action-item-large-active:focus, [class*="flag-commons-follow-"] .unflag-action:focus, .action-item-active:active,
+.action-item-small-active:active,
+.action-item-large-active:active, [class*="flag-commons-follow-"] .unflag-action:active {
   background: #f3f3f3;
   -webkit-box-shadow: inset 0.1em 0.1em 0.2em #a6a6a6;
   -moz-box-shadow: inset 0.1em 0.1em 0.2em #a6a6a6;
@@ -1093,9 +1093,9 @@ button[disabled]:not(.formatted-as-checkbox),
   border-color: silver;
   text-shadow: -1px 1px 2px white, -1px -1px 2px white, 1px -1px 2px white, 1px 1px 2px white;
 }
-[disabled].action-item-active:not(.formatted-as-checkbox),
-[disabled].action-item-small-active:not(.formatted-as-checkbox),
-[disabled].action-item-large-active:not(.formatted-as-checkbox), [class*="flag-commons-follow-"] [disabled].unflag-action {
+[disabled].action-item-active,
+[disabled].action-item-small-active,
+[disabled].action-item-large-active, [class*="flag-commons-follow-"] [disabled].unflag-action {
   color: silver;
   background: #f3f3f3;
   border-color: silver;
@@ -1105,15 +1105,15 @@ button[disabled]:not(.formatted-as-checkbox),
   text-shadow: none;
 }
 
-.action-item-primary:not(.formatted-as-checkbox), .action-item-primary[type="reset"]:not(.formatted-as-checkbox), .action-item-primary[type="submit"]:not(.formatted-as-checkbox), .action-item-primary[type="button"]:not(.formatted-as-checkbox),
-.action-item-small-primary:not(.formatted-as-checkbox),
-.action-item-small-primary[type="reset"]:not(.formatted-as-checkbox),
-.action-item-small-primary[type="submit"]:not(.formatted-as-checkbox),
-.action-item-small-primary[type="button"]:not(.formatted-as-checkbox),
-.action-item-large-primary:not(.formatted-as-checkbox),
-.action-item-large-primary[type="reset"]:not(.formatted-as-checkbox),
-.action-item-large-primary[type="submit"]:not(.formatted-as-checkbox),
-.action-item-large-primary[type="button"]:not(.formatted-as-checkbox), .commons-sign-up, .pane-commons-groups-commons-groups-create-group a, .pane-commons-events-commons-events-create-event-link a {
+.action-item-primary, .action-item-primary[type="reset"], .action-item-primary[type="submit"], .action-item-primary[type="button"],
+.action-item-small-primary,
+.action-item-small-primary[type="reset"],
+.action-item-small-primary[type="submit"],
+.action-item-small-primary[type="button"],
+.action-item-large-primary,
+.action-item-large-primary[type="reset"],
+.action-item-large-primary[type="submit"],
+.action-item-large-primary[type="button"], .commons-sign-up, .pane-commons-groups-commons-groups-create-group a, .pane-commons-events-commons-events-create-event-link a {
   background-color: #46bb2e;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #4fcd35), color-stop(100%, #3ea729));
   background: -webkit-linear-gradient(#4fcd35, #3ea729);
@@ -1123,24 +1123,24 @@ button[disabled]:not(.formatted-as-checkbox),
   border-color: #27691a;
   text-shadow: -1px 1px 2px #379224, -1px -1px 2px #379224, 1px -1px 2px #379224, 1px 1px 2px #379224;
 }
-.action-item-primary:not(.formatted-as-checkbox), .action-item-primary[type="reset"]:not(.formatted-as-checkbox), .action-item-primary[type="submit"]:not(.formatted-as-checkbox), .action-item-primary[type="button"]:not(.formatted-as-checkbox),
-.action-item-small-primary:not(.formatted-as-checkbox),
-.action-item-small-primary[type="reset"]:not(.formatted-as-checkbox),
-.action-item-small-primary[type="submit"]:not(.formatted-as-checkbox),
-.action-item-small-primary[type="button"]:not(.formatted-as-checkbox),
-.action-item-large-primary:not(.formatted-as-checkbox),
-.action-item-large-primary[type="reset"]:not(.formatted-as-checkbox),
-.action-item-large-primary[type="submit"]:not(.formatted-as-checkbox),
-.action-item-large-primary[type="button"]:not(.formatted-as-checkbox), .commons-sign-up, .pane-commons-groups-commons-groups-create-group a, .pane-commons-events-commons-events-create-event-link a, .action-item-primary:link:not(.formatted-as-checkbox),
-.action-item-small-primary:link:not(.formatted-as-checkbox),
-.action-item-large-primary:link:not(.formatted-as-checkbox), .commons-sign-up:link, .pane-commons-groups-commons-groups-create-group a:link, .pane-commons-events-commons-events-create-event-link a:link, .action-item-primary:visited:not(.formatted-as-checkbox),
-.action-item-small-primary:visited:not(.formatted-as-checkbox),
-.action-item-large-primary:visited:not(.formatted-as-checkbox), .commons-sign-up:visited, .pane-commons-groups-commons-groups-create-group a:visited, .pane-commons-events-commons-events-create-event-link a:visited {
+.action-item-primary, .action-item-primary[type="reset"], .action-item-primary[type="submit"], .action-item-primary[type="button"],
+.action-item-small-primary,
+.action-item-small-primary[type="reset"],
+.action-item-small-primary[type="submit"],
+.action-item-small-primary[type="button"],
+.action-item-large-primary,
+.action-item-large-primary[type="reset"],
+.action-item-large-primary[type="submit"],
+.action-item-large-primary[type="button"], .commons-sign-up, .pane-commons-groups-commons-groups-create-group a, .pane-commons-events-commons-events-create-event-link a, .action-item-primary:link,
+.action-item-small-primary:link,
+.action-item-large-primary:link, .commons-sign-up:link, .pane-commons-groups-commons-groups-create-group a:link, .pane-commons-events-commons-events-create-event-link a:link, .action-item-primary:visited,
+.action-item-small-primary:visited,
+.action-item-large-primary:visited, .commons-sign-up:visited, .pane-commons-groups-commons-groups-create-group a:visited, .pane-commons-events-commons-events-create-event-link a:visited {
   color: white;
 }
-.action-item-primary:hover:not(.formatted-as-checkbox),
-.action-item-small-primary:hover:not(.formatted-as-checkbox),
-.action-item-large-primary:hover:not(.formatted-as-checkbox), .commons-sign-up:hover, .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-events-commons-events-create-event-link a:hover {
+.action-item-primary:hover,
+.action-item-small-primary:hover,
+.action-item-large-primary:hover, .commons-sign-up:hover, .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-events-commons-events-create-event-link a:hover {
   color: white;
   background-color: #3ea729;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #46bb2e), color-stop(100%, #379224));
@@ -1151,11 +1151,11 @@ button[disabled]:not(.formatted-as-checkbox),
   border-color: #184010;
   text-shadow: -1px 1px 2px #379224, -1px -1px 2px #379224, 1px -1px 2px #379224, 1px 1px 2px #379224;
 }
-.action-item-primary:focus:not(.formatted-as-checkbox),
-.action-item-small-primary:focus:not(.formatted-as-checkbox),
-.action-item-large-primary:focus:not(.formatted-as-checkbox), .commons-sign-up:focus, .pane-commons-groups-commons-groups-create-group a:focus, .pane-commons-events-commons-events-create-event-link a:focus, .action-item-primary:active:not(.formatted-as-checkbox),
-.action-item-small-primary:active:not(.formatted-as-checkbox),
-.action-item-large-primary:active:not(.formatted-as-checkbox), .commons-sign-up:active, .pane-commons-groups-commons-groups-create-group a:active, .pane-commons-events-commons-events-create-event-link a:active {
+.action-item-primary:focus,
+.action-item-small-primary:focus,
+.action-item-large-primary:focus, .commons-sign-up:focus, .pane-commons-groups-commons-groups-create-group a:focus, .pane-commons-events-commons-events-create-event-link a:focus, .action-item-primary:active,
+.action-item-small-primary:active,
+.action-item-large-primary:active, .commons-sign-up:active, .pane-commons-groups-commons-groups-create-group a:active, .pane-commons-events-commons-events-create-event-link a:active {
   background: #46bb2e;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #3ea729), color-stop(100%, #4fcd35));
   background: -webkit-linear-gradient(#3ea729, #4fcd35);
@@ -1165,9 +1165,9 @@ button[disabled]:not(.formatted-as-checkbox),
   border-color: #27691a;
   text-shadow: -1px 1px 2px #379224, -1px -1px 2px #379224, 1px -1px 2px #379224, 1px 1px 2px #379224;
 }
-[disabled].action-item-primary:not(.formatted-as-checkbox),
-[disabled].action-item-small-primary:not(.formatted-as-checkbox),
-[disabled].action-item-large-primary:not(.formatted-as-checkbox), [disabled].commons-sign-up, .pane-commons-groups-commons-groups-create-group a[disabled], .pane-commons-events-commons-events-create-event-link a[disabled] {
+[disabled].action-item-primary,
+[disabled].action-item-small-primary,
+[disabled].action-item-large-primary, [disabled].commons-sign-up, .pane-commons-groups-commons-groups-create-group a[disabled], .pane-commons-events-commons-events-create-event-link a[disabled] {
   color: #85dc73;
   background: #46bb2e;
   border-color: #27691a;
@@ -1177,15 +1177,15 @@ button[disabled]:not(.formatted-as-checkbox),
   text-shadow: none;
 }
 
-.action-item-primary-active:not(.formatted-as-checkbox), .action-item-primary-active[type="reset"]:not(.formatted-as-checkbox), .action-item-primary-active[type="submit"]:not(.formatted-as-checkbox), .action-item-primary-active[type="button"]:not(.formatted-as-checkbox),
-.action-item-small-primary-active:not(.formatted-as-checkbox),
-.action-item-small-primary-active[type="reset"]:not(.formatted-as-checkbox),
-.action-item-small-primary-active[type="submit"]:not(.formatted-as-checkbox),
-.action-item-small-primary-active[type="button"]:not(.formatted-as-checkbox),
-.action-item-large-primary-active:not(.formatted-as-checkbox),
-.action-item-large-primary-active[type="reset"]:not(.formatted-as-checkbox),
-.action-item-large-primary-active[type="submit"]:not(.formatted-as-checkbox),
-.action-item-large-primary-active[type="button"]:not(.formatted-as-checkbox) {
+.action-item-primary-active, .action-item-primary-active[type="reset"], .action-item-primary-active[type="submit"], .action-item-primary-active[type="button"],
+.action-item-small-primary-active,
+.action-item-small-primary-active[type="reset"],
+.action-item-small-primary-active[type="submit"],
+.action-item-small-primary-active[type="button"],
+.action-item-large-primary-active,
+.action-item-large-primary-active[type="reset"],
+.action-item-large-primary-active[type="submit"],
+.action-item-large-primary-active[type="button"] {
   background-color: #46bb2e;
   -webkit-box-shadow: inset 0.1em 0.1em 0.2em #184010;
   -moz-box-shadow: inset 0.1em 0.1em 0.2em #184010;
@@ -1193,24 +1193,24 @@ button[disabled]:not(.formatted-as-checkbox),
   border-color: #27691a;
   text-shadow: -1px 1px 2px #379224, -1px -1px 2px #379224, 1px -1px 2px #379224, 1px 1px 2px #379224;
 }
-.action-item-primary-active:not(.formatted-as-checkbox), .action-item-primary-active[type="reset"]:not(.formatted-as-checkbox), .action-item-primary-active[type="submit"]:not(.formatted-as-checkbox), .action-item-primary-active[type="button"]:not(.formatted-as-checkbox),
-.action-item-small-primary-active:not(.formatted-as-checkbox),
-.action-item-small-primary-active[type="reset"]:not(.formatted-as-checkbox),
-.action-item-small-primary-active[type="submit"]:not(.formatted-as-checkbox),
-.action-item-small-primary-active[type="button"]:not(.formatted-as-checkbox),
-.action-item-large-primary-active:not(.formatted-as-checkbox),
-.action-item-large-primary-active[type="reset"]:not(.formatted-as-checkbox),
-.action-item-large-primary-active[type="submit"]:not(.formatted-as-checkbox),
-.action-item-large-primary-active[type="button"]:not(.formatted-as-checkbox), .action-item-primary-active:link:not(.formatted-as-checkbox),
-.action-item-small-primary-active:link:not(.formatted-as-checkbox),
-.action-item-large-primary-active:link:not(.formatted-as-checkbox), .action-item-primary-active:visited:not(.formatted-as-checkbox),
-.action-item-small-primary-active:visited:not(.formatted-as-checkbox),
-.action-item-large-primary-active:visited:not(.formatted-as-checkbox) {
+.action-item-primary-active, .action-item-primary-active[type="reset"], .action-item-primary-active[type="submit"], .action-item-primary-active[type="button"],
+.action-item-small-primary-active,
+.action-item-small-primary-active[type="reset"],
+.action-item-small-primary-active[type="submit"],
+.action-item-small-primary-active[type="button"],
+.action-item-large-primary-active,
+.action-item-large-primary-active[type="reset"],
+.action-item-large-primary-active[type="submit"],
+.action-item-large-primary-active[type="button"], .action-item-primary-active:link,
+.action-item-small-primary-active:link,
+.action-item-large-primary-active:link, .action-item-primary-active:visited,
+.action-item-small-primary-active:visited,
+.action-item-large-primary-active:visited {
   color: white;
 }
-.action-item-primary-active:hover:not(.formatted-as-checkbox),
-.action-item-small-primary-active:hover:not(.formatted-as-checkbox),
-.action-item-large-primary-active:hover:not(.formatted-as-checkbox) {
+.action-item-primary-active:hover,
+.action-item-small-primary-active:hover,
+.action-item-large-primary-active:hover {
   color: white;
   background-color: #3ea729;
   -webkit-box-shadow: inset 0.1em 0.1em 0.2em #102c0b;
@@ -1219,11 +1219,11 @@ button[disabled]:not(.formatted-as-checkbox),
   border-color: #184010;
   text-shadow: -1px 1px 2px #379224, -1px -1px 2px #379224, 1px -1px 2px #379224, 1px 1px 2px #379224;
 }
-.action-item-primary-active:focus:not(.formatted-as-checkbox),
-.action-item-small-primary-active:focus:not(.formatted-as-checkbox),
-.action-item-large-primary-active:focus:not(.formatted-as-checkbox), .action-item-primary-active:active:not(.formatted-as-checkbox),
-.action-item-small-primary-active:active:not(.formatted-as-checkbox),
-.action-item-large-primary-active:active:not(.formatted-as-checkbox) {
+.action-item-primary-active:focus,
+.action-item-small-primary-active:focus,
+.action-item-large-primary-active:focus, .action-item-primary-active:active,
+.action-item-small-primary-active:active,
+.action-item-large-primary-active:active {
   background: #46bb2e;
   -webkit-box-shadow: inset 0.1em 0.1em 0.2em #184010;
   -moz-box-shadow: inset 0.1em 0.1em 0.2em #184010;
@@ -1231,9 +1231,9 @@ button[disabled]:not(.formatted-as-checkbox),
   border-color: #27691a;
   text-shadow: -1px 1px 2px #379224, -1px -1px 2px #379224, 1px -1px 2px #379224, 1px 1px 2px #379224;
 }
-[disabled].action-item-primary-active:not(.formatted-as-checkbox),
-[disabled].action-item-small-primary-active:not(.formatted-as-checkbox),
-[disabled].action-item-large-primary-active:not(.formatted-as-checkbox) {
+[disabled].action-item-primary-active,
+[disabled].action-item-small-primary-active,
+[disabled].action-item-large-primary-active {
   color: #85dc73;
   background: #46bb2e;
   border-color: #27691a;
@@ -1243,26 +1243,26 @@ button[disabled]:not(.formatted-as-checkbox),
   text-shadow: none;
 }
 
-button:not(.formatted-as-checkbox),
-[type="reset"]:not(.formatted-as-checkbox),
-[type="submit"]:not(.formatted-as-checkbox),
-[type="button"]:not(.formatted-as-checkbox),
-[class*="action-item"]:not(.formatted-as-checkbox) {
+button,
+[type="reset"],
+[type="submit"],
+[type="button"],
+[class*="action-item"] {
   max-width: 100%;
 }
 @media only screen and (max-width: 480px) {
-  button:not(.action-item-inline, .action-item-merge, .formatted-as-checkbox),
-  [type="reset"]:not(.action-item-inline, .action-item-merge, .formatted-as-checkbox),
-  [type="submit"]:not(.action-item-inline, .action-item-merge, .formatted-as-checkbox),
-  [type="button"]:not(.action-item-inline, .action-item-merge, .formatted-as-checkbox),
-  [class*="action-item"]:not(.action-item-inline, .action-item-merge, .formatted-as-checkbox) {
+  button:not(.action-item-inline, .action-item-merge),
+  [type="reset"]:not(.action-item-inline, .action-item-merge),
+  [type="submit"]:not(.action-item-inline, .action-item-merge),
+  [type="button"]:not(.action-item-inline, .action-item-merge),
+  [class*="action-item"]:not(.action-item-inline, .action-item-merge) {
     display: block;
     width: 100%;
     margin: .5em 0;
   }
 }
 
-.action-item-merge + .action-item-merge:not(.formatted-as-checkbox) {
+.action-item-merge + .action-item-merge {
   -moz-border-radius-topleft: 0;
   -webkit-border-top-left-radius: 0;
   border-top-left-radius: 0;
@@ -1272,33 +1272,33 @@ button:not(.formatted-as-checkbox),
   margin-left: -.5em;
 }
 
-.action-item-append:not(.formatted-as-checkbox),
-.action-item-small-append:not(.formatted-as-checkbox),
-.action-item-large-append:not(.formatted-as-checkbox) {
+.action-item-append,
+.action-item-small-append,
+.action-item-large-append {
   position: relative;
   padding-right: .5em;
   padding-left: .5em;
 }
-.action-item-append:not(.formatted-as-checkbox), .action-item-append:not(.formatted-as-checkbox):active, .action-item-append:not(.formatted-as-checkbox):focus, .action-item-append:not(.formatted-as-checkbox):hover,
-.action-item-small-append:not(.formatted-as-checkbox),
-.action-item-small-append:not(.formatted-as-checkbox):active,
-.action-item-small-append:not(.formatted-as-checkbox):focus,
-.action-item-small-append:not(.formatted-as-checkbox):hover,
-.action-item-large-append:not(.formatted-as-checkbox),
-.action-item-large-append:not(.formatted-as-checkbox):active,
-.action-item-large-append:not(.formatted-as-checkbox):focus,
-.action-item-large-append:not(.formatted-as-checkbox):hover {
+.action-item-append, .action-item-append:active, .action-item-append:focus, .action-item-append:hover,
+.action-item-small-append,
+.action-item-small-append:active,
+.action-item-small-append:focus,
+.action-item-small-append:hover,
+.action-item-large-append,
+.action-item-large-append:active,
+.action-item-large-append:focus,
+.action-item-large-append:hover {
   background: #cccccc;
   border-color: #858585;
   color: #333333;
   cursor: default;
   text-shadow: none;
 }
-.action-item-append:not(.formatted-as-checkbox):before, .action-item-append:not(.formatted-as-checkbox):after,
-.action-item-small-append:not(.formatted-as-checkbox):before,
-.action-item-small-append:not(.formatted-as-checkbox):after,
-.action-item-large-append:not(.formatted-as-checkbox):before,
-.action-item-large-append:not(.formatted-as-checkbox):after {
+.action-item-append:before, .action-item-append:after,
+.action-item-small-append:before,
+.action-item-small-append:after,
+.action-item-large-append:before,
+.action-item-large-append:after {
   content: "";
   display: block;
   position: absolute;
@@ -1306,17 +1306,17 @@ button:not(.formatted-as-checkbox),
   border-color: transparent;
   border-style: solid;
 }
-.action-item-append:not(.formatted-as-checkbox):before,
-.action-item-small-append:not(.formatted-as-checkbox):before,
-.action-item-large-append:not(.formatted-as-checkbox):before {
+.action-item-append:before,
+.action-item-small-append:before,
+.action-item-large-append:before {
   left: -10px;
   margin-top: -5px;
   border-width: 5px;
   border-right-color: #858585;
 }
-.action-item-append:not(.formatted-as-checkbox):after,
-.action-item-small-append:not(.formatted-as-checkbox):after,
-.action-item-large-append:not(.formatted-as-checkbox):after {
+.action-item-append:after,
+.action-item-small-append:after,
+.action-item-large-append:after {
   left: -8px;
   margin-top: -4px;
   border-width: 4px;
@@ -4515,7 +4515,7 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   margin-right: 0;
   margin-bottom: 0;
 }
-.action-item-search, .action-item-search[type="submit"]:not(.formatted-as-checkbox) {
+.action-item-search, .action-item-search[type="submit"] {
   padding-left: 3em;
 }
 @media only screen and (max-width: 480px) {
@@ -5038,9 +5038,9 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   -moz-box-shadow: #a20f00 1px 0px 0px;
   box-shadow: #a20f00 1px 0px 0px;
 }
-.palette-orange-red .action-item-primary:not(.formatted-as-checkbox),
-.palette-orange-red .action-item-small-primary:not(.formatted-as-checkbox),
-.palette-orange-red .action-item-large-primary:not(.formatted-as-checkbox), .palette-orange-red .commons-sign-up, .palette-orange-red .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-orange-red a, .palette-orange-red .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-orange-red a {
+.palette-orange-red .action-item-primary,
+.palette-orange-red .action-item-small-primary,
+.palette-orange-red .action-item-large-primary, .palette-orange-red .commons-sign-up, .palette-orange-red .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-orange-red a, .palette-orange-red .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-orange-red a {
   background-color: #ff9126;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ff9e40), color-stop(100%, #ff840c));
   background: -webkit-linear-gradient(#ff9e40, #ff840c);
@@ -5050,18 +5050,18 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #bf5e00;
   text-shadow: -1px 1px 2px #f27700, -1px -1px 2px #f27700, 1px -1px 2px #f27700, 1px 1px 2px #f27700;
 }
-.palette-orange-red .action-item-primary:not(.formatted-as-checkbox),
-.palette-orange-red .action-item-small-primary:not(.formatted-as-checkbox),
-.palette-orange-red .action-item-large-primary:not(.formatted-as-checkbox), .palette-orange-red .commons-sign-up, .palette-orange-red .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-orange-red a, .palette-orange-red .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-orange-red a, .palette-orange-red .action-item-primary:link:not(.formatted-as-checkbox),
-.palette-orange-red .action-item-small-primary:link:not(.formatted-as-checkbox),
-.palette-orange-red .action-item-large-primary:link:not(.formatted-as-checkbox), .palette-orange-red .commons-sign-up:link, .palette-orange-red .pane-commons-groups-commons-groups-create-group a:link, .pane-commons-groups-commons-groups-create-group .palette-orange-red a:link, .palette-orange-red .pane-commons-events-commons-events-create-event-link a:link, .pane-commons-events-commons-events-create-event-link .palette-orange-red a:link, .palette-orange-red .action-item-primary:visited:not(.formatted-as-checkbox),
-.palette-orange-red .action-item-small-primary:visited:not(.formatted-as-checkbox),
-.palette-orange-red .action-item-large-primary:visited:not(.formatted-as-checkbox), .palette-orange-red .commons-sign-up:visited, .palette-orange-red .pane-commons-groups-commons-groups-create-group a:visited, .pane-commons-groups-commons-groups-create-group .palette-orange-red a:visited, .palette-orange-red .pane-commons-events-commons-events-create-event-link a:visited, .pane-commons-events-commons-events-create-event-link .palette-orange-red a:visited {
+.palette-orange-red .action-item-primary,
+.palette-orange-red .action-item-small-primary,
+.palette-orange-red .action-item-large-primary, .palette-orange-red .commons-sign-up, .palette-orange-red .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-orange-red a, .palette-orange-red .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-orange-red a, .palette-orange-red .action-item-primary:link,
+.palette-orange-red .action-item-small-primary:link,
+.palette-orange-red .action-item-large-primary:link, .palette-orange-red .commons-sign-up:link, .palette-orange-red .pane-commons-groups-commons-groups-create-group a:link, .pane-commons-groups-commons-groups-create-group .palette-orange-red a:link, .palette-orange-red .pane-commons-events-commons-events-create-event-link a:link, .pane-commons-events-commons-events-create-event-link .palette-orange-red a:link, .palette-orange-red .action-item-primary:visited,
+.palette-orange-red .action-item-small-primary:visited,
+.palette-orange-red .action-item-large-primary:visited, .palette-orange-red .commons-sign-up:visited, .palette-orange-red .pane-commons-groups-commons-groups-create-group a:visited, .pane-commons-groups-commons-groups-create-group .palette-orange-red a:visited, .palette-orange-red .pane-commons-events-commons-events-create-event-link a:visited, .pane-commons-events-commons-events-create-event-link .palette-orange-red a:visited {
   color: white;
 }
-.palette-orange-red .action-item-primary:hover:not(.formatted-as-checkbox),
-.palette-orange-red .action-item-small-primary:hover:not(.formatted-as-checkbox),
-.palette-orange-red .action-item-large-primary:hover:not(.formatted-as-checkbox), .palette-orange-red .commons-sign-up:hover, .palette-orange-red .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-orange-red a:hover, .palette-orange-red .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-orange-red a:hover {
+.palette-orange-red .action-item-primary:hover,
+.palette-orange-red .action-item-small-primary:hover,
+.palette-orange-red .action-item-large-primary:hover, .palette-orange-red .commons-sign-up:hover, .palette-orange-red .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-orange-red a:hover, .palette-orange-red .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-orange-red a:hover {
   color: white;
   background-color: #ff840c;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ff9126), color-stop(100%, #f27700));
@@ -5072,11 +5072,11 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #8c4500;
   text-shadow: -1px 1px 2px #f27700, -1px -1px 2px #f27700, 1px -1px 2px #f27700, 1px 1px 2px #f27700;
 }
-.palette-orange-red .action-item-primary:focus:not(.formatted-as-checkbox),
-.palette-orange-red .action-item-small-primary:focus:not(.formatted-as-checkbox),
-.palette-orange-red .action-item-large-primary:focus:not(.formatted-as-checkbox), .palette-orange-red .commons-sign-up:focus, .palette-orange-red .pane-commons-groups-commons-groups-create-group a:focus, .pane-commons-groups-commons-groups-create-group .palette-orange-red a:focus, .palette-orange-red .pane-commons-events-commons-events-create-event-link a:focus, .pane-commons-events-commons-events-create-event-link .palette-orange-red a:focus, .palette-orange-red .action-item-primary:active:not(.formatted-as-checkbox),
-.palette-orange-red .action-item-small-primary:active:not(.formatted-as-checkbox),
-.palette-orange-red .action-item-large-primary:active:not(.formatted-as-checkbox), .palette-orange-red .commons-sign-up:active, .palette-orange-red .pane-commons-groups-commons-groups-create-group a:active, .pane-commons-groups-commons-groups-create-group .palette-orange-red a:active, .palette-orange-red .pane-commons-events-commons-events-create-event-link a:active, .pane-commons-events-commons-events-create-event-link .palette-orange-red a:active {
+.palette-orange-red .action-item-primary:focus,
+.palette-orange-red .action-item-small-primary:focus,
+.palette-orange-red .action-item-large-primary:focus, .palette-orange-red .commons-sign-up:focus, .palette-orange-red .pane-commons-groups-commons-groups-create-group a:focus, .pane-commons-groups-commons-groups-create-group .palette-orange-red a:focus, .palette-orange-red .pane-commons-events-commons-events-create-event-link a:focus, .pane-commons-events-commons-events-create-event-link .palette-orange-red a:focus, .palette-orange-red .action-item-primary:active,
+.palette-orange-red .action-item-small-primary:active,
+.palette-orange-red .action-item-large-primary:active, .palette-orange-red .commons-sign-up:active, .palette-orange-red .pane-commons-groups-commons-groups-create-group a:active, .pane-commons-groups-commons-groups-create-group .palette-orange-red a:active, .palette-orange-red .pane-commons-events-commons-events-create-event-link a:active, .pane-commons-events-commons-events-create-event-link .palette-orange-red a:active {
   background: #ff9126;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ff840c), color-stop(100%, #ff9e40));
   background: -webkit-linear-gradient(#ff840c, #ff9e40);
@@ -5086,9 +5086,9 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #bf5e00;
   text-shadow: -1px 1px 2px #f27700, -1px -1px 2px #f27700, 1px -1px 2px #f27700, 1px 1px 2px #f27700;
 }
-.palette-orange-red [disabled].action-item-primary:not(.formatted-as-checkbox),
-.palette-orange-red [disabled].action-item-small-primary:not(.formatted-as-checkbox),
-.palette-orange-red [disabled].action-item-large-primary:not(.formatted-as-checkbox), .palette-orange-red [disabled].commons-sign-up, .palette-orange-red .pane-commons-groups-commons-groups-create-group a[disabled], .pane-commons-groups-commons-groups-create-group .palette-orange-red a[disabled], .palette-orange-red .pane-commons-events-commons-events-create-event-link a[disabled], .pane-commons-events-commons-events-create-event-link .palette-orange-red a[disabled] {
+.palette-orange-red [disabled].action-item-primary,
+.palette-orange-red [disabled].action-item-small-primary,
+.palette-orange-red [disabled].action-item-large-primary, .palette-orange-red [disabled].commons-sign-up, .palette-orange-red .pane-commons-groups-commons-groups-create-group a[disabled], .pane-commons-groups-commons-groups-create-group .palette-orange-red a[disabled], .palette-orange-red .pane-commons-events-commons-events-create-event-link a[disabled], .pane-commons-events-commons-events-create-event-link .palette-orange-red a[disabled] {
   color: #ffc58c;
   background: #ff9126;
   border-color: #bf5e00;
@@ -5245,9 +5245,9 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   -moz-box-shadow: #a31b53 1px 0px 0px;
   box-shadow: #a31b53 1px 0px 0px;
 }
-.palette-magenta-blue .action-item-primary:not(.formatted-as-checkbox),
-.palette-magenta-blue .action-item-small-primary:not(.formatted-as-checkbox),
-.palette-magenta-blue .action-item-large-primary:not(.formatted-as-checkbox), .palette-magenta-blue .commons-sign-up, .palette-magenta-blue .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-magenta-blue a, .palette-magenta-blue .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-magenta-blue a {
+.palette-magenta-blue .action-item-primary,
+.palette-magenta-blue .action-item-small-primary,
+.palette-magenta-blue .action-item-large-primary, .palette-magenta-blue .commons-sign-up, .palette-magenta-blue .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-magenta-blue a, .palette-magenta-blue .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-magenta-blue a {
   background-color: #0097bf;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #00abd9), color-stop(100%, #0083a6));
   background: -webkit-linear-gradient(#00abd9, #0083a6);
@@ -5257,18 +5257,18 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #004659;
   text-shadow: -1px 1px 2px #006f8c, -1px -1px 2px #006f8c, 1px -1px 2px #006f8c, 1px 1px 2px #006f8c;
 }
-.palette-magenta-blue .action-item-primary:not(.formatted-as-checkbox),
-.palette-magenta-blue .action-item-small-primary:not(.formatted-as-checkbox),
-.palette-magenta-blue .action-item-large-primary:not(.formatted-as-checkbox), .palette-magenta-blue .commons-sign-up, .palette-magenta-blue .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-magenta-blue a, .palette-magenta-blue .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-magenta-blue a, .palette-magenta-blue .action-item-primary:link:not(.formatted-as-checkbox),
-.palette-magenta-blue .action-item-small-primary:link:not(.formatted-as-checkbox),
-.palette-magenta-blue .action-item-large-primary:link:not(.formatted-as-checkbox), .palette-magenta-blue .commons-sign-up:link, .palette-magenta-blue .pane-commons-groups-commons-groups-create-group a:link, .pane-commons-groups-commons-groups-create-group .palette-magenta-blue a:link, .palette-magenta-blue .pane-commons-events-commons-events-create-event-link a:link, .pane-commons-events-commons-events-create-event-link .palette-magenta-blue a:link, .palette-magenta-blue .action-item-primary:visited:not(.formatted-as-checkbox),
-.palette-magenta-blue .action-item-small-primary:visited:not(.formatted-as-checkbox),
-.palette-magenta-blue .action-item-large-primary:visited:not(.formatted-as-checkbox), .palette-magenta-blue .commons-sign-up:visited, .palette-magenta-blue .pane-commons-groups-commons-groups-create-group a:visited, .pane-commons-groups-commons-groups-create-group .palette-magenta-blue a:visited, .palette-magenta-blue .pane-commons-events-commons-events-create-event-link a:visited, .pane-commons-events-commons-events-create-event-link .palette-magenta-blue a:visited {
+.palette-magenta-blue .action-item-primary,
+.palette-magenta-blue .action-item-small-primary,
+.palette-magenta-blue .action-item-large-primary, .palette-magenta-blue .commons-sign-up, .palette-magenta-blue .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-magenta-blue a, .palette-magenta-blue .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-magenta-blue a, .palette-magenta-blue .action-item-primary:link,
+.palette-magenta-blue .action-item-small-primary:link,
+.palette-magenta-blue .action-item-large-primary:link, .palette-magenta-blue .commons-sign-up:link, .palette-magenta-blue .pane-commons-groups-commons-groups-create-group a:link, .pane-commons-groups-commons-groups-create-group .palette-magenta-blue a:link, .palette-magenta-blue .pane-commons-events-commons-events-create-event-link a:link, .pane-commons-events-commons-events-create-event-link .palette-magenta-blue a:link, .palette-magenta-blue .action-item-primary:visited,
+.palette-magenta-blue .action-item-small-primary:visited,
+.palette-magenta-blue .action-item-large-primary:visited, .palette-magenta-blue .commons-sign-up:visited, .palette-magenta-blue .pane-commons-groups-commons-groups-create-group a:visited, .pane-commons-groups-commons-groups-create-group .palette-magenta-blue a:visited, .palette-magenta-blue .pane-commons-events-commons-events-create-event-link a:visited, .pane-commons-events-commons-events-create-event-link .palette-magenta-blue a:visited {
   color: white;
 }
-.palette-magenta-blue .action-item-primary:hover:not(.formatted-as-checkbox),
-.palette-magenta-blue .action-item-small-primary:hover:not(.formatted-as-checkbox),
-.palette-magenta-blue .action-item-large-primary:hover:not(.formatted-as-checkbox), .palette-magenta-blue .commons-sign-up:hover, .palette-magenta-blue .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-magenta-blue a:hover, .palette-magenta-blue .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-magenta-blue a:hover {
+.palette-magenta-blue .action-item-primary:hover,
+.palette-magenta-blue .action-item-small-primary:hover,
+.palette-magenta-blue .action-item-large-primary:hover, .palette-magenta-blue .commons-sign-up:hover, .palette-magenta-blue .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-magenta-blue a:hover, .palette-magenta-blue .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-magenta-blue a:hover {
   color: white;
   background-color: #0083a6;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #0097bf), color-stop(100%, #006f8c));
@@ -5279,11 +5279,11 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #001e26;
   text-shadow: -1px 1px 2px #006f8c, -1px -1px 2px #006f8c, 1px -1px 2px #006f8c, 1px 1px 2px #006f8c;
 }
-.palette-magenta-blue .action-item-primary:focus:not(.formatted-as-checkbox),
-.palette-magenta-blue .action-item-small-primary:focus:not(.formatted-as-checkbox),
-.palette-magenta-blue .action-item-large-primary:focus:not(.formatted-as-checkbox), .palette-magenta-blue .commons-sign-up:focus, .palette-magenta-blue .pane-commons-groups-commons-groups-create-group a:focus, .pane-commons-groups-commons-groups-create-group .palette-magenta-blue a:focus, .palette-magenta-blue .pane-commons-events-commons-events-create-event-link a:focus, .pane-commons-events-commons-events-create-event-link .palette-magenta-blue a:focus, .palette-magenta-blue .action-item-primary:active:not(.formatted-as-checkbox),
-.palette-magenta-blue .action-item-small-primary:active:not(.formatted-as-checkbox),
-.palette-magenta-blue .action-item-large-primary:active:not(.formatted-as-checkbox), .palette-magenta-blue .commons-sign-up:active, .palette-magenta-blue .pane-commons-groups-commons-groups-create-group a:active, .pane-commons-groups-commons-groups-create-group .palette-magenta-blue a:active, .palette-magenta-blue .pane-commons-events-commons-events-create-event-link a:active, .pane-commons-events-commons-events-create-event-link .palette-magenta-blue a:active {
+.palette-magenta-blue .action-item-primary:focus,
+.palette-magenta-blue .action-item-small-primary:focus,
+.palette-magenta-blue .action-item-large-primary:focus, .palette-magenta-blue .commons-sign-up:focus, .palette-magenta-blue .pane-commons-groups-commons-groups-create-group a:focus, .pane-commons-groups-commons-groups-create-group .palette-magenta-blue a:focus, .palette-magenta-blue .pane-commons-events-commons-events-create-event-link a:focus, .pane-commons-events-commons-events-create-event-link .palette-magenta-blue a:focus, .palette-magenta-blue .action-item-primary:active,
+.palette-magenta-blue .action-item-small-primary:active,
+.palette-magenta-blue .action-item-large-primary:active, .palette-magenta-blue .commons-sign-up:active, .palette-magenta-blue .pane-commons-groups-commons-groups-create-group a:active, .pane-commons-groups-commons-groups-create-group .palette-magenta-blue a:active, .palette-magenta-blue .pane-commons-events-commons-events-create-event-link a:active, .pane-commons-events-commons-events-create-event-link .palette-magenta-blue a:active {
   background: #0097bf;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #0083a6), color-stop(100%, #00abd9));
   background: -webkit-linear-gradient(#0083a6, #00abd9);
@@ -5293,9 +5293,9 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #004659;
   text-shadow: -1px 1px 2px #006f8c, -1px -1px 2px #006f8c, 1px -1px 2px #006f8c, 1px 1px 2px #006f8c;
 }
-.palette-magenta-blue [disabled].action-item-primary:not(.formatted-as-checkbox),
-.palette-magenta-blue [disabled].action-item-small-primary:not(.formatted-as-checkbox),
-.palette-magenta-blue [disabled].action-item-large-primary:not(.formatted-as-checkbox), .palette-magenta-blue [disabled].commons-sign-up, .palette-magenta-blue .pane-commons-groups-commons-groups-create-group a[disabled], .pane-commons-groups-commons-groups-create-group .palette-magenta-blue a[disabled], .palette-magenta-blue .pane-commons-events-commons-events-create-event-link a[disabled], .pane-commons-events-commons-events-create-event-link .palette-magenta-blue a[disabled] {
+.palette-magenta-blue [disabled].action-item-primary,
+.palette-magenta-blue [disabled].action-item-small-primary,
+.palette-magenta-blue [disabled].action-item-large-primary, .palette-magenta-blue [disabled].commons-sign-up, .palette-magenta-blue .pane-commons-groups-commons-groups-create-group a[disabled], .pane-commons-groups-commons-groups-create-group .palette-magenta-blue a[disabled], .palette-magenta-blue .pane-commons-events-commons-events-create-event-link a[disabled], .pane-commons-events-commons-events-create-event-link .palette-magenta-blue a[disabled] {
   color: #26d2ff;
   background: #0097bf;
   border-color: #004659;
@@ -5452,9 +5452,9 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   -moz-box-shadow: #1d8ecc 1px 0px 0px;
   box-shadow: #1d8ecc 1px 0px 0px;
 }
-.palette-blue-blue .action-item-primary:not(.formatted-as-checkbox),
-.palette-blue-blue .action-item-small-primary:not(.formatted-as-checkbox),
-.palette-blue-blue .action-item-large-primary:not(.formatted-as-checkbox), .palette-blue-blue .commons-sign-up, .palette-blue-blue .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-blue-blue a, .palette-blue-blue .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-blue-blue a {
+.palette-blue-blue .action-item-primary,
+.palette-blue-blue .action-item-small-primary,
+.palette-blue-blue .action-item-large-primary, .palette-blue-blue .commons-sign-up, .palette-blue-blue .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-blue-blue a, .palette-blue-blue .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-blue-blue a {
   background-color: #7ebd26;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #8cd22a), color-stop(100%, #70a822));
   background: -webkit-linear-gradient(#8cd22a, #70a822);
@@ -5464,18 +5464,18 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #456815;
   text-shadow: -1px 1px 2px #62931d, -1px -1px 2px #62931d, 1px -1px 2px #62931d, 1px 1px 2px #62931d;
 }
-.palette-blue-blue .action-item-primary:not(.formatted-as-checkbox),
-.palette-blue-blue .action-item-small-primary:not(.formatted-as-checkbox),
-.palette-blue-blue .action-item-large-primary:not(.formatted-as-checkbox), .palette-blue-blue .commons-sign-up, .palette-blue-blue .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-blue-blue a, .palette-blue-blue .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-blue-blue a, .palette-blue-blue .action-item-primary:link:not(.formatted-as-checkbox),
-.palette-blue-blue .action-item-small-primary:link:not(.formatted-as-checkbox),
-.palette-blue-blue .action-item-large-primary:link:not(.formatted-as-checkbox), .palette-blue-blue .commons-sign-up:link, .palette-blue-blue .pane-commons-groups-commons-groups-create-group a:link, .pane-commons-groups-commons-groups-create-group .palette-blue-blue a:link, .palette-blue-blue .pane-commons-events-commons-events-create-event-link a:link, .pane-commons-events-commons-events-create-event-link .palette-blue-blue a:link, .palette-blue-blue .action-item-primary:visited:not(.formatted-as-checkbox),
-.palette-blue-blue .action-item-small-primary:visited:not(.formatted-as-checkbox),
-.palette-blue-blue .action-item-large-primary:visited:not(.formatted-as-checkbox), .palette-blue-blue .commons-sign-up:visited, .palette-blue-blue .pane-commons-groups-commons-groups-create-group a:visited, .pane-commons-groups-commons-groups-create-group .palette-blue-blue a:visited, .palette-blue-blue .pane-commons-events-commons-events-create-event-link a:visited, .pane-commons-events-commons-events-create-event-link .palette-blue-blue a:visited {
+.palette-blue-blue .action-item-primary,
+.palette-blue-blue .action-item-small-primary,
+.palette-blue-blue .action-item-large-primary, .palette-blue-blue .commons-sign-up, .palette-blue-blue .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-blue-blue a, .palette-blue-blue .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-blue-blue a, .palette-blue-blue .action-item-primary:link,
+.palette-blue-blue .action-item-small-primary:link,
+.palette-blue-blue .action-item-large-primary:link, .palette-blue-blue .commons-sign-up:link, .palette-blue-blue .pane-commons-groups-commons-groups-create-group a:link, .pane-commons-groups-commons-groups-create-group .palette-blue-blue a:link, .palette-blue-blue .pane-commons-events-commons-events-create-event-link a:link, .pane-commons-events-commons-events-create-event-link .palette-blue-blue a:link, .palette-blue-blue .action-item-primary:visited,
+.palette-blue-blue .action-item-small-primary:visited,
+.palette-blue-blue .action-item-large-primary:visited, .palette-blue-blue .commons-sign-up:visited, .palette-blue-blue .pane-commons-groups-commons-groups-create-group a:visited, .pane-commons-groups-commons-groups-create-group .palette-blue-blue a:visited, .palette-blue-blue .pane-commons-events-commons-events-create-event-link a:visited, .pane-commons-events-commons-events-create-event-link .palette-blue-blue a:visited {
   color: white;
 }
-.palette-blue-blue .action-item-primary:hover:not(.formatted-as-checkbox),
-.palette-blue-blue .action-item-small-primary:hover:not(.formatted-as-checkbox),
-.palette-blue-blue .action-item-large-primary:hover:not(.formatted-as-checkbox), .palette-blue-blue .commons-sign-up:hover, .palette-blue-blue .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-blue-blue a:hover, .palette-blue-blue .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-blue-blue a:hover {
+.palette-blue-blue .action-item-primary:hover,
+.palette-blue-blue .action-item-small-primary:hover,
+.palette-blue-blue .action-item-large-primary:hover, .palette-blue-blue .commons-sign-up:hover, .palette-blue-blue .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-blue-blue a:hover, .palette-blue-blue .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-blue-blue a:hover {
   color: white;
   background-color: #70a822;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #7ebd26), color-stop(100%, #62931d));
@@ -5486,11 +5486,11 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #293e0c;
   text-shadow: -1px 1px 2px #62931d, -1px -1px 2px #62931d, 1px -1px 2px #62931d, 1px 1px 2px #62931d;
 }
-.palette-blue-blue .action-item-primary:focus:not(.formatted-as-checkbox),
-.palette-blue-blue .action-item-small-primary:focus:not(.formatted-as-checkbox),
-.palette-blue-blue .action-item-large-primary:focus:not(.formatted-as-checkbox), .palette-blue-blue .commons-sign-up:focus, .palette-blue-blue .pane-commons-groups-commons-groups-create-group a:focus, .pane-commons-groups-commons-groups-create-group .palette-blue-blue a:focus, .palette-blue-blue .pane-commons-events-commons-events-create-event-link a:focus, .pane-commons-events-commons-events-create-event-link .palette-blue-blue a:focus, .palette-blue-blue .action-item-primary:active:not(.formatted-as-checkbox),
-.palette-blue-blue .action-item-small-primary:active:not(.formatted-as-checkbox),
-.palette-blue-blue .action-item-large-primary:active:not(.formatted-as-checkbox), .palette-blue-blue .commons-sign-up:active, .palette-blue-blue .pane-commons-groups-commons-groups-create-group a:active, .pane-commons-groups-commons-groups-create-group .palette-blue-blue a:active, .palette-blue-blue .pane-commons-events-commons-events-create-event-link a:active, .pane-commons-events-commons-events-create-event-link .palette-blue-blue a:active {
+.palette-blue-blue .action-item-primary:focus,
+.palette-blue-blue .action-item-small-primary:focus,
+.palette-blue-blue .action-item-large-primary:focus, .palette-blue-blue .commons-sign-up:focus, .palette-blue-blue .pane-commons-groups-commons-groups-create-group a:focus, .pane-commons-groups-commons-groups-create-group .palette-blue-blue a:focus, .palette-blue-blue .pane-commons-events-commons-events-create-event-link a:focus, .pane-commons-events-commons-events-create-event-link .palette-blue-blue a:focus, .palette-blue-blue .action-item-primary:active,
+.palette-blue-blue .action-item-small-primary:active,
+.palette-blue-blue .action-item-large-primary:active, .palette-blue-blue .commons-sign-up:active, .palette-blue-blue .pane-commons-groups-commons-groups-create-group a:active, .pane-commons-groups-commons-groups-create-group .palette-blue-blue a:active, .palette-blue-blue .pane-commons-events-commons-events-create-event-link a:active, .pane-commons-events-commons-events-create-event-link .palette-blue-blue a:active {
   background: #7ebd26;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #70a822), color-stop(100%, #8cd22a));
   background: -webkit-linear-gradient(#70a822, #8cd22a);
@@ -5500,9 +5500,9 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #456815;
   text-shadow: -1px 1px 2px #62931d, -1px -1px 2px #62931d, 1px -1px 2px #62931d, 1px 1px 2px #62931d;
 }
-.palette-blue-blue [disabled].action-item-primary:not(.formatted-as-checkbox),
-.palette-blue-blue [disabled].action-item-small-primary:not(.formatted-as-checkbox),
-.palette-blue-blue [disabled].action-item-large-primary:not(.formatted-as-checkbox), .palette-blue-blue [disabled].commons-sign-up, .palette-blue-blue .pane-commons-groups-commons-groups-create-group a[disabled], .pane-commons-groups-commons-groups-create-group .palette-blue-blue a[disabled], .palette-blue-blue .pane-commons-events-commons-events-create-event-link a[disabled], .pane-commons-events-commons-events-create-event-link .palette-blue-blue a[disabled] {
+.palette-blue-blue [disabled].action-item-primary,
+.palette-blue-blue [disabled].action-item-small-primary,
+.palette-blue-blue [disabled].action-item-large-primary, .palette-blue-blue [disabled].commons-sign-up, .palette-blue-blue .pane-commons-groups-commons-groups-create-group a[disabled], .pane-commons-groups-commons-groups-create-group .palette-blue-blue a[disabled], .palette-blue-blue .pane-commons-events-commons-events-create-event-link a[disabled], .pane-commons-events-commons-events-create-event-link .palette-blue-blue a[disabled] {
   color: #aee168;
   background: #7ebd26;
   border-color: #456815;
@@ -5659,9 +5659,9 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   -moz-box-shadow: #3b4549 1px 0px 0px;
   box-shadow: #3b4549 1px 0px 0px;
 }
-.palette-black-green .action-item-primary:not(.formatted-as-checkbox),
-.palette-black-green .action-item-small-primary:not(.formatted-as-checkbox),
-.palette-black-green .action-item-large-primary:not(.formatted-as-checkbox), .palette-black-green .commons-sign-up, .palette-black-green .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-black-green a, .palette-black-green .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-black-green a {
+.palette-black-green .action-item-primary,
+.palette-black-green .action-item-small-primary,
+.palette-black-green .action-item-large-primary, .palette-black-green .commons-sign-up, .palette-black-green .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-black-green a, .palette-black-green .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-black-green a {
   background-color: #4090ba;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #519cc3), color-stop(100%, #3981a7));
   background: -webkit-linear-gradient(#519cc3, #3981a7);
@@ -5671,18 +5671,18 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #26556e;
   text-shadow: -1px 1px 2px #337394, -1px -1px 2px #337394, 1px -1px 2px #337394, 1px 1px 2px #337394;
 }
-.palette-black-green .action-item-primary:not(.formatted-as-checkbox),
-.palette-black-green .action-item-small-primary:not(.formatted-as-checkbox),
-.palette-black-green .action-item-large-primary:not(.formatted-as-checkbox), .palette-black-green .commons-sign-up, .palette-black-green .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-black-green a, .palette-black-green .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-black-green a, .palette-black-green .action-item-primary:link:not(.formatted-as-checkbox),
-.palette-black-green .action-item-small-primary:link:not(.formatted-as-checkbox),
-.palette-black-green .action-item-large-primary:link:not(.formatted-as-checkbox), .palette-black-green .commons-sign-up:link, .palette-black-green .pane-commons-groups-commons-groups-create-group a:link, .pane-commons-groups-commons-groups-create-group .palette-black-green a:link, .palette-black-green .pane-commons-events-commons-events-create-event-link a:link, .pane-commons-events-commons-events-create-event-link .palette-black-green a:link, .palette-black-green .action-item-primary:visited:not(.formatted-as-checkbox),
-.palette-black-green .action-item-small-primary:visited:not(.formatted-as-checkbox),
-.palette-black-green .action-item-large-primary:visited:not(.formatted-as-checkbox), .palette-black-green .commons-sign-up:visited, .palette-black-green .pane-commons-groups-commons-groups-create-group a:visited, .pane-commons-groups-commons-groups-create-group .palette-black-green a:visited, .palette-black-green .pane-commons-events-commons-events-create-event-link a:visited, .pane-commons-events-commons-events-create-event-link .palette-black-green a:visited {
+.palette-black-green .action-item-primary,
+.palette-black-green .action-item-small-primary,
+.palette-black-green .action-item-large-primary, .palette-black-green .commons-sign-up, .palette-black-green .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-black-green a, .palette-black-green .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-black-green a, .palette-black-green .action-item-primary:link,
+.palette-black-green .action-item-small-primary:link,
+.palette-black-green .action-item-large-primary:link, .palette-black-green .commons-sign-up:link, .palette-black-green .pane-commons-groups-commons-groups-create-group a:link, .pane-commons-groups-commons-groups-create-group .palette-black-green a:link, .palette-black-green .pane-commons-events-commons-events-create-event-link a:link, .pane-commons-events-commons-events-create-event-link .palette-black-green a:link, .palette-black-green .action-item-primary:visited,
+.palette-black-green .action-item-small-primary:visited,
+.palette-black-green .action-item-large-primary:visited, .palette-black-green .commons-sign-up:visited, .palette-black-green .pane-commons-groups-commons-groups-create-group a:visited, .pane-commons-groups-commons-groups-create-group .palette-black-green a:visited, .palette-black-green .pane-commons-events-commons-events-create-event-link a:visited, .pane-commons-events-commons-events-create-event-link .palette-black-green a:visited {
   color: white;
 }
-.palette-black-green .action-item-primary:hover:not(.formatted-as-checkbox),
-.palette-black-green .action-item-small-primary:hover:not(.formatted-as-checkbox),
-.palette-black-green .action-item-large-primary:hover:not(.formatted-as-checkbox), .palette-black-green .commons-sign-up:hover, .palette-black-green .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-black-green a:hover, .palette-black-green .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-black-green a:hover {
+.palette-black-green .action-item-primary:hover,
+.palette-black-green .action-item-small-primary:hover,
+.palette-black-green .action-item-large-primary:hover, .palette-black-green .commons-sign-up:hover, .palette-black-green .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-black-green a:hover, .palette-black-green .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-black-green a:hover {
   color: white;
   background-color: #3981a7;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #4090ba), color-stop(100%, #337394));
@@ -5693,11 +5693,11 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #193848;
   text-shadow: -1px 1px 2px #337394, -1px -1px 2px #337394, 1px -1px 2px #337394, 1px 1px 2px #337394;
 }
-.palette-black-green .action-item-primary:focus:not(.formatted-as-checkbox),
-.palette-black-green .action-item-small-primary:focus:not(.formatted-as-checkbox),
-.palette-black-green .action-item-large-primary:focus:not(.formatted-as-checkbox), .palette-black-green .commons-sign-up:focus, .palette-black-green .pane-commons-groups-commons-groups-create-group a:focus, .pane-commons-groups-commons-groups-create-group .palette-black-green a:focus, .palette-black-green .pane-commons-events-commons-events-create-event-link a:focus, .pane-commons-events-commons-events-create-event-link .palette-black-green a:focus, .palette-black-green .action-item-primary:active:not(.formatted-as-checkbox),
-.palette-black-green .action-item-small-primary:active:not(.formatted-as-checkbox),
-.palette-black-green .action-item-large-primary:active:not(.formatted-as-checkbox), .palette-black-green .commons-sign-up:active, .palette-black-green .pane-commons-groups-commons-groups-create-group a:active, .pane-commons-groups-commons-groups-create-group .palette-black-green a:active, .palette-black-green .pane-commons-events-commons-events-create-event-link a:active, .pane-commons-events-commons-events-create-event-link .palette-black-green a:active {
+.palette-black-green .action-item-primary:focus,
+.palette-black-green .action-item-small-primary:focus,
+.palette-black-green .action-item-large-primary:focus, .palette-black-green .commons-sign-up:focus, .palette-black-green .pane-commons-groups-commons-groups-create-group a:focus, .pane-commons-groups-commons-groups-create-group .palette-black-green a:focus, .palette-black-green .pane-commons-events-commons-events-create-event-link a:focus, .pane-commons-events-commons-events-create-event-link .palette-black-green a:focus, .palette-black-green .action-item-primary:active,
+.palette-black-green .action-item-small-primary:active,
+.palette-black-green .action-item-large-primary:active, .palette-black-green .commons-sign-up:active, .palette-black-green .pane-commons-groups-commons-groups-create-group a:active, .pane-commons-groups-commons-groups-create-group .palette-black-green a:active, .palette-black-green .pane-commons-events-commons-events-create-event-link a:active, .pane-commons-events-commons-events-create-event-link .palette-black-green a:active {
   background: #4090ba;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #3981a7), color-stop(100%, #519cc3));
   background: -webkit-linear-gradient(#3981a7, #519cc3);
@@ -5707,9 +5707,9 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #26556e;
   text-shadow: -1px 1px 2px #337394, -1px -1px 2px #337394, 1px -1px 2px #337394, 1px 1px 2px #337394;
 }
-.palette-black-green [disabled].action-item-primary:not(.formatted-as-checkbox),
-.palette-black-green [disabled].action-item-small-primary:not(.formatted-as-checkbox),
-.palette-black-green [disabled].action-item-large-primary:not(.formatted-as-checkbox), .palette-black-green [disabled].commons-sign-up, .palette-black-green .pane-commons-groups-commons-groups-create-group a[disabled], .pane-commons-groups-commons-groups-create-group .palette-black-green a[disabled], .palette-black-green .pane-commons-events-commons-events-create-event-link a[disabled], .pane-commons-events-commons-events-create-event-link .palette-black-green a[disabled] {
+.palette-black-green [disabled].action-item-primary,
+.palette-black-green [disabled].action-item-small-primary,
+.palette-black-green [disabled].action-item-large-primary, .palette-black-green [disabled].commons-sign-up, .palette-black-green .pane-commons-groups-commons-groups-create-group a[disabled], .pane-commons-groups-commons-groups-create-group .palette-black-green a[disabled], .palette-black-green .pane-commons-events-commons-events-create-event-link a[disabled], .pane-commons-events-commons-events-create-event-link .palette-black-green a[disabled] {
   color: #89bcd7;
   background: #4090ba;
   border-color: #26556e;
@@ -5866,9 +5866,9 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   -moz-box-shadow: #7e6046 1px 0px 0px;
   box-shadow: #7e6046 1px 0px 0px;
 }
-.palette-brown-yellow .action-item-primary:not(.formatted-as-checkbox),
-.palette-brown-yellow .action-item-small-primary:not(.formatted-as-checkbox),
-.palette-brown-yellow .action-item-large-primary:not(.formatted-as-checkbox), .palette-brown-yellow .commons-sign-up, .palette-brown-yellow .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-brown-yellow a, .palette-brown-yellow .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-brown-yellow a {
+.palette-brown-yellow .action-item-primary,
+.palette-brown-yellow .action-item-small-primary,
+.palette-brown-yellow .action-item-large-primary, .palette-brown-yellow .commons-sign-up, .palette-brown-yellow .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-brown-yellow a, .palette-brown-yellow .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-brown-yellow a {
   background-color: #e3ad40;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #e6b756), color-stop(100%, #e0a32a));
   background: -webkit-linear-gradient(#e6b756, #e0a32a);
@@ -5878,18 +5878,18 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #a57618;
   text-shadow: -1px 1px 2px #d1961f, -1px -1px 2px #d1961f, 1px -1px 2px #d1961f, 1px 1px 2px #d1961f;
 }
-.palette-brown-yellow .action-item-primary:not(.formatted-as-checkbox),
-.palette-brown-yellow .action-item-small-primary:not(.formatted-as-checkbox),
-.palette-brown-yellow .action-item-large-primary:not(.formatted-as-checkbox), .palette-brown-yellow .commons-sign-up, .palette-brown-yellow .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-brown-yellow a, .palette-brown-yellow .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-brown-yellow a, .palette-brown-yellow .action-item-primary:link:not(.formatted-as-checkbox),
-.palette-brown-yellow .action-item-small-primary:link:not(.formatted-as-checkbox),
-.palette-brown-yellow .action-item-large-primary:link:not(.formatted-as-checkbox), .palette-brown-yellow .commons-sign-up:link, .palette-brown-yellow .pane-commons-groups-commons-groups-create-group a:link, .pane-commons-groups-commons-groups-create-group .palette-brown-yellow a:link, .palette-brown-yellow .pane-commons-events-commons-events-create-event-link a:link, .pane-commons-events-commons-events-create-event-link .palette-brown-yellow a:link, .palette-brown-yellow .action-item-primary:visited:not(.formatted-as-checkbox),
-.palette-brown-yellow .action-item-small-primary:visited:not(.formatted-as-checkbox),
-.palette-brown-yellow .action-item-large-primary:visited:not(.formatted-as-checkbox), .palette-brown-yellow .commons-sign-up:visited, .palette-brown-yellow .pane-commons-groups-commons-groups-create-group a:visited, .pane-commons-groups-commons-groups-create-group .palette-brown-yellow a:visited, .palette-brown-yellow .pane-commons-events-commons-events-create-event-link a:visited, .pane-commons-events-commons-events-create-event-link .palette-brown-yellow a:visited {
+.palette-brown-yellow .action-item-primary,
+.palette-brown-yellow .action-item-small-primary,
+.palette-brown-yellow .action-item-large-primary, .palette-brown-yellow .commons-sign-up, .palette-brown-yellow .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-brown-yellow a, .palette-brown-yellow .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-brown-yellow a, .palette-brown-yellow .action-item-primary:link,
+.palette-brown-yellow .action-item-small-primary:link,
+.palette-brown-yellow .action-item-large-primary:link, .palette-brown-yellow .commons-sign-up:link, .palette-brown-yellow .pane-commons-groups-commons-groups-create-group a:link, .pane-commons-groups-commons-groups-create-group .palette-brown-yellow a:link, .palette-brown-yellow .pane-commons-events-commons-events-create-event-link a:link, .pane-commons-events-commons-events-create-event-link .palette-brown-yellow a:link, .palette-brown-yellow .action-item-primary:visited,
+.palette-brown-yellow .action-item-small-primary:visited,
+.palette-brown-yellow .action-item-large-primary:visited, .palette-brown-yellow .commons-sign-up:visited, .palette-brown-yellow .pane-commons-groups-commons-groups-create-group a:visited, .pane-commons-groups-commons-groups-create-group .palette-brown-yellow a:visited, .palette-brown-yellow .pane-commons-events-commons-events-create-event-link a:visited, .pane-commons-events-commons-events-create-event-link .palette-brown-yellow a:visited {
   color: white;
 }
-.palette-brown-yellow .action-item-primary:hover:not(.formatted-as-checkbox),
-.palette-brown-yellow .action-item-small-primary:hover:not(.formatted-as-checkbox),
-.palette-brown-yellow .action-item-large-primary:hover:not(.formatted-as-checkbox), .palette-brown-yellow .commons-sign-up:hover, .palette-brown-yellow .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-brown-yellow a:hover, .palette-brown-yellow .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-brown-yellow a:hover {
+.palette-brown-yellow .action-item-primary:hover,
+.palette-brown-yellow .action-item-small-primary:hover,
+.palette-brown-yellow .action-item-large-primary:hover, .palette-brown-yellow .commons-sign-up:hover, .palette-brown-yellow .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-brown-yellow a:hover, .palette-brown-yellow .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-brown-yellow a:hover {
   color: white;
   background-color: #e0a32a;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #e3ad40), color-stop(100%, #d1961f));
@@ -5900,11 +5900,11 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #785612;
   text-shadow: -1px 1px 2px #d1961f, -1px -1px 2px #d1961f, 1px -1px 2px #d1961f, 1px 1px 2px #d1961f;
 }
-.palette-brown-yellow .action-item-primary:focus:not(.formatted-as-checkbox),
-.palette-brown-yellow .action-item-small-primary:focus:not(.formatted-as-checkbox),
-.palette-brown-yellow .action-item-large-primary:focus:not(.formatted-as-checkbox), .palette-brown-yellow .commons-sign-up:focus, .palette-brown-yellow .pane-commons-groups-commons-groups-create-group a:focus, .pane-commons-groups-commons-groups-create-group .palette-brown-yellow a:focus, .palette-brown-yellow .pane-commons-events-commons-events-create-event-link a:focus, .pane-commons-events-commons-events-create-event-link .palette-brown-yellow a:focus, .palette-brown-yellow .action-item-primary:active:not(.formatted-as-checkbox),
-.palette-brown-yellow .action-item-small-primary:active:not(.formatted-as-checkbox),
-.palette-brown-yellow .action-item-large-primary:active:not(.formatted-as-checkbox), .palette-brown-yellow .commons-sign-up:active, .palette-brown-yellow .pane-commons-groups-commons-groups-create-group a:active, .pane-commons-groups-commons-groups-create-group .palette-brown-yellow a:active, .palette-brown-yellow .pane-commons-events-commons-events-create-event-link a:active, .pane-commons-events-commons-events-create-event-link .palette-brown-yellow a:active {
+.palette-brown-yellow .action-item-primary:focus,
+.palette-brown-yellow .action-item-small-primary:focus,
+.palette-brown-yellow .action-item-large-primary:focus, .palette-brown-yellow .commons-sign-up:focus, .palette-brown-yellow .pane-commons-groups-commons-groups-create-group a:focus, .pane-commons-groups-commons-groups-create-group .palette-brown-yellow a:focus, .palette-brown-yellow .pane-commons-events-commons-events-create-event-link a:focus, .pane-commons-events-commons-events-create-event-link .palette-brown-yellow a:focus, .palette-brown-yellow .action-item-primary:active,
+.palette-brown-yellow .action-item-small-primary:active,
+.palette-brown-yellow .action-item-large-primary:active, .palette-brown-yellow .commons-sign-up:active, .palette-brown-yellow .pane-commons-groups-commons-groups-create-group a:active, .pane-commons-groups-commons-groups-create-group .palette-brown-yellow a:active, .palette-brown-yellow .pane-commons-events-commons-events-create-event-link a:active, .pane-commons-events-commons-events-create-event-link .palette-brown-yellow a:active {
   background: #e3ad40;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #e0a32a), color-stop(100%, #e6b756));
   background: -webkit-linear-gradient(#e0a32a, #e6b756);
@@ -5914,9 +5914,9 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #a57618;
   text-shadow: -1px 1px 2px #d1961f, -1px -1px 2px #d1961f, 1px -1px 2px #d1961f, 1px 1px 2px #d1961f;
 }
-.palette-brown-yellow [disabled].action-item-primary:not(.formatted-as-checkbox),
-.palette-brown-yellow [disabled].action-item-small-primary:not(.formatted-as-checkbox),
-.palette-brown-yellow [disabled].action-item-large-primary:not(.formatted-as-checkbox), .palette-brown-yellow [disabled].commons-sign-up, .palette-brown-yellow .pane-commons-groups-commons-groups-create-group a[disabled], .pane-commons-groups-commons-groups-create-group .palette-brown-yellow a[disabled], .palette-brown-yellow .pane-commons-events-commons-events-create-event-link a[disabled], .pane-commons-events-commons-events-create-event-link .palette-brown-yellow a[disabled] {
+.palette-brown-yellow [disabled].action-item-primary,
+.palette-brown-yellow [disabled].action-item-small-primary,
+.palette-brown-yellow [disabled].action-item-large-primary, .palette-brown-yellow [disabled].commons-sign-up, .palette-brown-yellow .pane-commons-groups-commons-groups-create-group a[disabled], .pane-commons-groups-commons-groups-create-group .palette-brown-yellow a[disabled], .palette-brown-yellow .pane-commons-events-commons-events-create-event-link a[disabled], .pane-commons-events-commons-events-create-event-link .palette-brown-yellow a[disabled] {
   color: #f0d399;
   background: #e3ad40;
   border-color: #a57618;
@@ -6073,9 +6073,9 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   -moz-box-shadow: #759294 1px 0px 0px;
   box-shadow: #759294 1px 0px 0px;
 }
-.palette-seafoam-orange .action-item-primary:not(.formatted-as-checkbox),
-.palette-seafoam-orange .action-item-small-primary:not(.formatted-as-checkbox),
-.palette-seafoam-orange .action-item-large-primary:not(.formatted-as-checkbox), .palette-seafoam-orange .commons-sign-up, .palette-seafoam-orange .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-seafoam-orange a, .palette-seafoam-orange .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-seafoam-orange a {
+.palette-seafoam-orange .action-item-primary,
+.palette-seafoam-orange .action-item-small-primary,
+.palette-seafoam-orange .action-item-large-primary, .palette-seafoam-orange .commons-sign-up, .palette-seafoam-orange .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-seafoam-orange a, .palette-seafoam-orange .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-seafoam-orange a {
   background-color: #b68800;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #d09b00), color-stop(100%, #9d7500));
   background: -webkit-linear-gradient(#d09b00, #9d7500);
@@ -6085,18 +6085,18 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #503c00;
   text-shadow: -1px 1px 2px #836200, -1px -1px 2px #836200, 1px -1px 2px #836200, 1px 1px 2px #836200;
 }
-.palette-seafoam-orange .action-item-primary:not(.formatted-as-checkbox),
-.palette-seafoam-orange .action-item-small-primary:not(.formatted-as-checkbox),
-.palette-seafoam-orange .action-item-large-primary:not(.formatted-as-checkbox), .palette-seafoam-orange .commons-sign-up, .palette-seafoam-orange .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-seafoam-orange a, .palette-seafoam-orange .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-seafoam-orange a, .palette-seafoam-orange .action-item-primary:link:not(.formatted-as-checkbox),
-.palette-seafoam-orange .action-item-small-primary:link:not(.formatted-as-checkbox),
-.palette-seafoam-orange .action-item-large-primary:link:not(.formatted-as-checkbox), .palette-seafoam-orange .commons-sign-up:link, .palette-seafoam-orange .pane-commons-groups-commons-groups-create-group a:link, .pane-commons-groups-commons-groups-create-group .palette-seafoam-orange a:link, .palette-seafoam-orange .pane-commons-events-commons-events-create-event-link a:link, .pane-commons-events-commons-events-create-event-link .palette-seafoam-orange a:link, .palette-seafoam-orange .action-item-primary:visited:not(.formatted-as-checkbox),
-.palette-seafoam-orange .action-item-small-primary:visited:not(.formatted-as-checkbox),
-.palette-seafoam-orange .action-item-large-primary:visited:not(.formatted-as-checkbox), .palette-seafoam-orange .commons-sign-up:visited, .palette-seafoam-orange .pane-commons-groups-commons-groups-create-group a:visited, .pane-commons-groups-commons-groups-create-group .palette-seafoam-orange a:visited, .palette-seafoam-orange .pane-commons-events-commons-events-create-event-link a:visited, .pane-commons-events-commons-events-create-event-link .palette-seafoam-orange a:visited {
+.palette-seafoam-orange .action-item-primary,
+.palette-seafoam-orange .action-item-small-primary,
+.palette-seafoam-orange .action-item-large-primary, .palette-seafoam-orange .commons-sign-up, .palette-seafoam-orange .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-seafoam-orange a, .palette-seafoam-orange .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-seafoam-orange a, .palette-seafoam-orange .action-item-primary:link,
+.palette-seafoam-orange .action-item-small-primary:link,
+.palette-seafoam-orange .action-item-large-primary:link, .palette-seafoam-orange .commons-sign-up:link, .palette-seafoam-orange .pane-commons-groups-commons-groups-create-group a:link, .pane-commons-groups-commons-groups-create-group .palette-seafoam-orange a:link, .palette-seafoam-orange .pane-commons-events-commons-events-create-event-link a:link, .pane-commons-events-commons-events-create-event-link .palette-seafoam-orange a:link, .palette-seafoam-orange .action-item-primary:visited,
+.palette-seafoam-orange .action-item-small-primary:visited,
+.palette-seafoam-orange .action-item-large-primary:visited, .palette-seafoam-orange .commons-sign-up:visited, .palette-seafoam-orange .pane-commons-groups-commons-groups-create-group a:visited, .pane-commons-groups-commons-groups-create-group .palette-seafoam-orange a:visited, .palette-seafoam-orange .pane-commons-events-commons-events-create-event-link a:visited, .pane-commons-events-commons-events-create-event-link .palette-seafoam-orange a:visited {
   color: white;
 }
-.palette-seafoam-orange .action-item-primary:hover:not(.formatted-as-checkbox),
-.palette-seafoam-orange .action-item-small-primary:hover:not(.formatted-as-checkbox),
-.palette-seafoam-orange .action-item-large-primary:hover:not(.formatted-as-checkbox), .palette-seafoam-orange .commons-sign-up:hover, .palette-seafoam-orange .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-seafoam-orange a:hover, .palette-seafoam-orange .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-seafoam-orange a:hover {
+.palette-seafoam-orange .action-item-primary:hover,
+.palette-seafoam-orange .action-item-small-primary:hover,
+.palette-seafoam-orange .action-item-large-primary:hover, .palette-seafoam-orange .commons-sign-up:hover, .palette-seafoam-orange .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-seafoam-orange a:hover, .palette-seafoam-orange .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-seafoam-orange a:hover {
   color: white;
   background-color: #9d7500;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #b68800), color-stop(100%, #836200));
@@ -6107,11 +6107,11 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #1d1600;
   text-shadow: -1px 1px 2px #836200, -1px -1px 2px #836200, 1px -1px 2px #836200, 1px 1px 2px #836200;
 }
-.palette-seafoam-orange .action-item-primary:focus:not(.formatted-as-checkbox),
-.palette-seafoam-orange .action-item-small-primary:focus:not(.formatted-as-checkbox),
-.palette-seafoam-orange .action-item-large-primary:focus:not(.formatted-as-checkbox), .palette-seafoam-orange .commons-sign-up:focus, .palette-seafoam-orange .pane-commons-groups-commons-groups-create-group a:focus, .pane-commons-groups-commons-groups-create-group .palette-seafoam-orange a:focus, .palette-seafoam-orange .pane-commons-events-commons-events-create-event-link a:focus, .pane-commons-events-commons-events-create-event-link .palette-seafoam-orange a:focus, .palette-seafoam-orange .action-item-primary:active:not(.formatted-as-checkbox),
-.palette-seafoam-orange .action-item-small-primary:active:not(.formatted-as-checkbox),
-.palette-seafoam-orange .action-item-large-primary:active:not(.formatted-as-checkbox), .palette-seafoam-orange .commons-sign-up:active, .palette-seafoam-orange .pane-commons-groups-commons-groups-create-group a:active, .pane-commons-groups-commons-groups-create-group .palette-seafoam-orange a:active, .palette-seafoam-orange .pane-commons-events-commons-events-create-event-link a:active, .pane-commons-events-commons-events-create-event-link .palette-seafoam-orange a:active {
+.palette-seafoam-orange .action-item-primary:focus,
+.palette-seafoam-orange .action-item-small-primary:focus,
+.palette-seafoam-orange .action-item-large-primary:focus, .palette-seafoam-orange .commons-sign-up:focus, .palette-seafoam-orange .pane-commons-groups-commons-groups-create-group a:focus, .pane-commons-groups-commons-groups-create-group .palette-seafoam-orange a:focus, .palette-seafoam-orange .pane-commons-events-commons-events-create-event-link a:focus, .pane-commons-events-commons-events-create-event-link .palette-seafoam-orange a:focus, .palette-seafoam-orange .action-item-primary:active,
+.palette-seafoam-orange .action-item-small-primary:active,
+.palette-seafoam-orange .action-item-large-primary:active, .palette-seafoam-orange .commons-sign-up:active, .palette-seafoam-orange .pane-commons-groups-commons-groups-create-group a:active, .pane-commons-groups-commons-groups-create-group .palette-seafoam-orange a:active, .palette-seafoam-orange .pane-commons-events-commons-events-create-event-link a:active, .pane-commons-events-commons-events-create-event-link .palette-seafoam-orange a:active {
   background: #b68800;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #9d7500), color-stop(100%, #d09b00));
   background: -webkit-linear-gradient(#9d7500, #d09b00);
@@ -6121,9 +6121,9 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #503c00;
   text-shadow: -1px 1px 2px #836200, -1px -1px 2px #836200, 1px -1px 2px #836200, 1px 1px 2px #836200;
 }
-.palette-seafoam-orange [disabled].action-item-primary:not(.formatted-as-checkbox),
-.palette-seafoam-orange [disabled].action-item-small-primary:not(.formatted-as-checkbox),
-.palette-seafoam-orange [disabled].action-item-large-primary:not(.formatted-as-checkbox), .palette-seafoam-orange [disabled].commons-sign-up, .palette-seafoam-orange .pane-commons-groups-commons-groups-create-group a[disabled], .pane-commons-groups-commons-groups-create-group .palette-seafoam-orange a[disabled], .palette-seafoam-orange .pane-commons-events-commons-events-create-event-link a[disabled], .pane-commons-events-commons-events-create-event-link .palette-seafoam-orange a[disabled] {
+.palette-seafoam-orange [disabled].action-item-primary,
+.palette-seafoam-orange [disabled].action-item-small-primary,
+.palette-seafoam-orange [disabled].action-item-large-primary, .palette-seafoam-orange [disabled].commons-sign-up, .palette-seafoam-orange .pane-commons-groups-commons-groups-create-group a[disabled], .pane-commons-groups-commons-groups-create-group .palette-seafoam-orange a[disabled], .palette-seafoam-orange .pane-commons-events-commons-events-create-event-link a[disabled], .pane-commons-events-commons-events-create-event-link .palette-seafoam-orange a[disabled] {
   color: #ffc61d;
   background: #b68800;
   border-color: #503c00;
@@ -6280,9 +6280,9 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   -moz-box-shadow: #444444 1px 0px 0px;
   box-shadow: #444444 1px 0px 0px;
 }
-.palette-black-blue-yellow .action-item-primary:not(.formatted-as-checkbox),
-.palette-black-blue-yellow .action-item-small-primary:not(.formatted-as-checkbox),
-.palette-black-blue-yellow .action-item-large-primary:not(.formatted-as-checkbox), .palette-black-blue-yellow .commons-sign-up, .palette-black-blue-yellow .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-black-blue-yellow a, .palette-black-blue-yellow .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-black-blue-yellow a {
+.palette-black-blue-yellow .action-item-primary,
+.palette-black-blue-yellow .action-item-small-primary,
+.palette-black-blue-yellow .action-item-large-primary, .palette-black-blue-yellow .commons-sign-up, .palette-black-blue-yellow .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-black-blue-yellow a, .palette-black-blue-yellow .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-black-blue-yellow a {
   background-color: #d0a600;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #eaba00), color-stop(100%, #b69200));
   background: -webkit-linear-gradient(#eaba00, #b69200);
@@ -6292,18 +6292,18 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #6a5500;
   text-shadow: -1px 1px 2px #9d7d00, -1px -1px 2px #9d7d00, 1px -1px 2px #9d7d00, 1px 1px 2px #9d7d00;
 }
-.palette-black-blue-yellow .action-item-primary:not(.formatted-as-checkbox),
-.palette-black-blue-yellow .action-item-small-primary:not(.formatted-as-checkbox),
-.palette-black-blue-yellow .action-item-large-primary:not(.formatted-as-checkbox), .palette-black-blue-yellow .commons-sign-up, .palette-black-blue-yellow .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-black-blue-yellow a, .palette-black-blue-yellow .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-black-blue-yellow a, .palette-black-blue-yellow .action-item-primary:link:not(.formatted-as-checkbox),
-.palette-black-blue-yellow .action-item-small-primary:link:not(.formatted-as-checkbox),
-.palette-black-blue-yellow .action-item-large-primary:link:not(.formatted-as-checkbox), .palette-black-blue-yellow .commons-sign-up:link, .palette-black-blue-yellow .pane-commons-groups-commons-groups-create-group a:link, .pane-commons-groups-commons-groups-create-group .palette-black-blue-yellow a:link, .palette-black-blue-yellow .pane-commons-events-commons-events-create-event-link a:link, .pane-commons-events-commons-events-create-event-link .palette-black-blue-yellow a:link, .palette-black-blue-yellow .action-item-primary:visited:not(.formatted-as-checkbox),
-.palette-black-blue-yellow .action-item-small-primary:visited:not(.formatted-as-checkbox),
-.palette-black-blue-yellow .action-item-large-primary:visited:not(.formatted-as-checkbox), .palette-black-blue-yellow .commons-sign-up:visited, .palette-black-blue-yellow .pane-commons-groups-commons-groups-create-group a:visited, .pane-commons-groups-commons-groups-create-group .palette-black-blue-yellow a:visited, .palette-black-blue-yellow .pane-commons-events-commons-events-create-event-link a:visited, .pane-commons-events-commons-events-create-event-link .palette-black-blue-yellow a:visited {
+.palette-black-blue-yellow .action-item-primary,
+.palette-black-blue-yellow .action-item-small-primary,
+.palette-black-blue-yellow .action-item-large-primary, .palette-black-blue-yellow .commons-sign-up, .palette-black-blue-yellow .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-black-blue-yellow a, .palette-black-blue-yellow .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-black-blue-yellow a, .palette-black-blue-yellow .action-item-primary:link,
+.palette-black-blue-yellow .action-item-small-primary:link,
+.palette-black-blue-yellow .action-item-large-primary:link, .palette-black-blue-yellow .commons-sign-up:link, .palette-black-blue-yellow .pane-commons-groups-commons-groups-create-group a:link, .pane-commons-groups-commons-groups-create-group .palette-black-blue-yellow a:link, .palette-black-blue-yellow .pane-commons-events-commons-events-create-event-link a:link, .pane-commons-events-commons-events-create-event-link .palette-black-blue-yellow a:link, .palette-black-blue-yellow .action-item-primary:visited,
+.palette-black-blue-yellow .action-item-small-primary:visited,
+.palette-black-blue-yellow .action-item-large-primary:visited, .palette-black-blue-yellow .commons-sign-up:visited, .palette-black-blue-yellow .pane-commons-groups-commons-groups-create-group a:visited, .pane-commons-groups-commons-groups-create-group .palette-black-blue-yellow a:visited, .palette-black-blue-yellow .pane-commons-events-commons-events-create-event-link a:visited, .pane-commons-events-commons-events-create-event-link .palette-black-blue-yellow a:visited {
   color: white;
 }
-.palette-black-blue-yellow .action-item-primary:hover:not(.formatted-as-checkbox),
-.palette-black-blue-yellow .action-item-small-primary:hover:not(.formatted-as-checkbox),
-.palette-black-blue-yellow .action-item-large-primary:hover:not(.formatted-as-checkbox), .palette-black-blue-yellow .commons-sign-up:hover, .palette-black-blue-yellow .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-black-blue-yellow a:hover, .palette-black-blue-yellow .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-black-blue-yellow a:hover {
+.palette-black-blue-yellow .action-item-primary:hover,
+.palette-black-blue-yellow .action-item-small-primary:hover,
+.palette-black-blue-yellow .action-item-large-primary:hover, .palette-black-blue-yellow .commons-sign-up:hover, .palette-black-blue-yellow .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-black-blue-yellow a:hover, .palette-black-blue-yellow .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-black-blue-yellow a:hover {
   color: white;
   background-color: #b69200;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #d0a600), color-stop(100%, #9d7d00));
@@ -6314,11 +6314,11 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #372c00;
   text-shadow: -1px 1px 2px #9d7d00, -1px -1px 2px #9d7d00, 1px -1px 2px #9d7d00, 1px 1px 2px #9d7d00;
 }
-.palette-black-blue-yellow .action-item-primary:focus:not(.formatted-as-checkbox),
-.palette-black-blue-yellow .action-item-small-primary:focus:not(.formatted-as-checkbox),
-.palette-black-blue-yellow .action-item-large-primary:focus:not(.formatted-as-checkbox), .palette-black-blue-yellow .commons-sign-up:focus, .palette-black-blue-yellow .pane-commons-groups-commons-groups-create-group a:focus, .pane-commons-groups-commons-groups-create-group .palette-black-blue-yellow a:focus, .palette-black-blue-yellow .pane-commons-events-commons-events-create-event-link a:focus, .pane-commons-events-commons-events-create-event-link .palette-black-blue-yellow a:focus, .palette-black-blue-yellow .action-item-primary:active:not(.formatted-as-checkbox),
-.palette-black-blue-yellow .action-item-small-primary:active:not(.formatted-as-checkbox),
-.palette-black-blue-yellow .action-item-large-primary:active:not(.formatted-as-checkbox), .palette-black-blue-yellow .commons-sign-up:active, .palette-black-blue-yellow .pane-commons-groups-commons-groups-create-group a:active, .pane-commons-groups-commons-groups-create-group .palette-black-blue-yellow a:active, .palette-black-blue-yellow .pane-commons-events-commons-events-create-event-link a:active, .pane-commons-events-commons-events-create-event-link .palette-black-blue-yellow a:active {
+.palette-black-blue-yellow .action-item-primary:focus,
+.palette-black-blue-yellow .action-item-small-primary:focus,
+.palette-black-blue-yellow .action-item-large-primary:focus, .palette-black-blue-yellow .commons-sign-up:focus, .palette-black-blue-yellow .pane-commons-groups-commons-groups-create-group a:focus, .pane-commons-groups-commons-groups-create-group .palette-black-blue-yellow a:focus, .palette-black-blue-yellow .pane-commons-events-commons-events-create-event-link a:focus, .pane-commons-events-commons-events-create-event-link .palette-black-blue-yellow a:focus, .palette-black-blue-yellow .action-item-primary:active,
+.palette-black-blue-yellow .action-item-small-primary:active,
+.palette-black-blue-yellow .action-item-large-primary:active, .palette-black-blue-yellow .commons-sign-up:active, .palette-black-blue-yellow .pane-commons-groups-commons-groups-create-group a:active, .pane-commons-groups-commons-groups-create-group .palette-black-blue-yellow a:active, .palette-black-blue-yellow .pane-commons-events-commons-events-create-event-link a:active, .pane-commons-events-commons-events-create-event-link .palette-black-blue-yellow a:active {
   background: #d0a600;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #b69200), color-stop(100%, #eaba00));
   background: -webkit-linear-gradient(#b69200, #eaba00);
@@ -6328,9 +6328,9 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #6a5500;
   text-shadow: -1px 1px 2px #9d7d00, -1px -1px 2px #9d7d00, 1px -1px 2px #9d7d00, 1px 1px 2px #9d7d00;
 }
-.palette-black-blue-yellow [disabled].action-item-primary:not(.formatted-as-checkbox),
-.palette-black-blue-yellow [disabled].action-item-small-primary:not(.formatted-as-checkbox),
-.palette-black-blue-yellow [disabled].action-item-large-primary:not(.formatted-as-checkbox), .palette-black-blue-yellow [disabled].commons-sign-up, .palette-black-blue-yellow .pane-commons-groups-commons-groups-create-group a[disabled], .pane-commons-groups-commons-groups-create-group .palette-black-blue-yellow a[disabled], .palette-black-blue-yellow .pane-commons-events-commons-events-create-event-link a[disabled], .pane-commons-events-commons-events-create-event-link .palette-black-blue-yellow a[disabled] {
+.palette-black-blue-yellow [disabled].action-item-primary,
+.palette-black-blue-yellow [disabled].action-item-small-primary,
+.palette-black-blue-yellow [disabled].action-item-large-primary, .palette-black-blue-yellow [disabled].commons-sign-up, .palette-black-blue-yellow .pane-commons-groups-commons-groups-create-group a[disabled], .pane-commons-groups-commons-groups-create-group .palette-black-blue-yellow a[disabled], .palette-black-blue-yellow .pane-commons-events-commons-events-create-event-link a[disabled], .pane-commons-events-commons-events-create-event-link .palette-black-blue-yellow a[disabled] {
   color: #ffd737;
   background: #d0a600;
   border-color: #6a5500;
@@ -6487,9 +6487,9 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   -moz-box-shadow: #573631 1px 0px 0px;
   box-shadow: #573631 1px 0px 0px;
 }
-.palette-brick-brick .action-item-primary:not(.formatted-as-checkbox),
-.palette-brick-brick .action-item-small-primary:not(.formatted-as-checkbox),
-.palette-brick-brick .action-item-large-primary:not(.formatted-as-checkbox), .palette-brick-brick .commons-sign-up, .palette-brick-brick .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-brick-brick a, .palette-brick-brick .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-brick-brick a {
+.palette-brick-brick .action-item-primary,
+.palette-brick-brick .action-item-small-primary,
+.palette-brick-brick .action-item-large-primary, .palette-brick-brick .commons-sign-up, .palette-brick-brick .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-brick-brick a, .palette-brick-brick .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-brick-brick a {
   background-color: #a12e1e;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #b63422), color-stop(100%, #8c281a));
   background: -webkit-linear-gradient(#b63422, #8c281a);
@@ -6499,18 +6499,18 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #4b150e;
   text-shadow: -1px 1px 2px #762216, -1px -1px 2px #762216, 1px -1px 2px #762216, 1px 1px 2px #762216;
 }
-.palette-brick-brick .action-item-primary:not(.formatted-as-checkbox),
-.palette-brick-brick .action-item-small-primary:not(.formatted-as-checkbox),
-.palette-brick-brick .action-item-large-primary:not(.formatted-as-checkbox), .palette-brick-brick .commons-sign-up, .palette-brick-brick .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-brick-brick a, .palette-brick-brick .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-brick-brick a, .palette-brick-brick .action-item-primary:link:not(.formatted-as-checkbox),
-.palette-brick-brick .action-item-small-primary:link:not(.formatted-as-checkbox),
-.palette-brick-brick .action-item-large-primary:link:not(.formatted-as-checkbox), .palette-brick-brick .commons-sign-up:link, .palette-brick-brick .pane-commons-groups-commons-groups-create-group a:link, .pane-commons-groups-commons-groups-create-group .palette-brick-brick a:link, .palette-brick-brick .pane-commons-events-commons-events-create-event-link a:link, .pane-commons-events-commons-events-create-event-link .palette-brick-brick a:link, .palette-brick-brick .action-item-primary:visited:not(.formatted-as-checkbox),
-.palette-brick-brick .action-item-small-primary:visited:not(.formatted-as-checkbox),
-.palette-brick-brick .action-item-large-primary:visited:not(.formatted-as-checkbox), .palette-brick-brick .commons-sign-up:visited, .palette-brick-brick .pane-commons-groups-commons-groups-create-group a:visited, .pane-commons-groups-commons-groups-create-group .palette-brick-brick a:visited, .palette-brick-brick .pane-commons-events-commons-events-create-event-link a:visited, .pane-commons-events-commons-events-create-event-link .palette-brick-brick a:visited {
+.palette-brick-brick .action-item-primary,
+.palette-brick-brick .action-item-small-primary,
+.palette-brick-brick .action-item-large-primary, .palette-brick-brick .commons-sign-up, .palette-brick-brick .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-brick-brick a, .palette-brick-brick .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-brick-brick a, .palette-brick-brick .action-item-primary:link,
+.palette-brick-brick .action-item-small-primary:link,
+.palette-brick-brick .action-item-large-primary:link, .palette-brick-brick .commons-sign-up:link, .palette-brick-brick .pane-commons-groups-commons-groups-create-group a:link, .pane-commons-groups-commons-groups-create-group .palette-brick-brick a:link, .palette-brick-brick .pane-commons-events-commons-events-create-event-link a:link, .pane-commons-events-commons-events-create-event-link .palette-brick-brick a:link, .palette-brick-brick .action-item-primary:visited,
+.palette-brick-brick .action-item-small-primary:visited,
+.palette-brick-brick .action-item-large-primary:visited, .palette-brick-brick .commons-sign-up:visited, .palette-brick-brick .pane-commons-groups-commons-groups-create-group a:visited, .pane-commons-groups-commons-groups-create-group .palette-brick-brick a:visited, .palette-brick-brick .pane-commons-events-commons-events-create-event-link a:visited, .pane-commons-events-commons-events-create-event-link .palette-brick-brick a:visited {
   color: white;
 }
-.palette-brick-brick .action-item-primary:hover:not(.formatted-as-checkbox),
-.palette-brick-brick .action-item-small-primary:hover:not(.formatted-as-checkbox),
-.palette-brick-brick .action-item-large-primary:hover:not(.formatted-as-checkbox), .palette-brick-brick .commons-sign-up:hover, .palette-brick-brick .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-brick-brick a:hover, .palette-brick-brick .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-brick-brick a:hover {
+.palette-brick-brick .action-item-primary:hover,
+.palette-brick-brick .action-item-small-primary:hover,
+.palette-brick-brick .action-item-large-primary:hover, .palette-brick-brick .commons-sign-up:hover, .palette-brick-brick .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-brick-brick a:hover, .palette-brick-brick .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-brick-brick a:hover {
   color: white;
   background-color: #8c281a;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #a12e1e), color-stop(100%, #762216));
@@ -6521,11 +6521,11 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #200906;
   text-shadow: -1px 1px 2px #762216, -1px -1px 2px #762216, 1px -1px 2px #762216, 1px 1px 2px #762216;
 }
-.palette-brick-brick .action-item-primary:focus:not(.formatted-as-checkbox),
-.palette-brick-brick .action-item-small-primary:focus:not(.formatted-as-checkbox),
-.palette-brick-brick .action-item-large-primary:focus:not(.formatted-as-checkbox), .palette-brick-brick .commons-sign-up:focus, .palette-brick-brick .pane-commons-groups-commons-groups-create-group a:focus, .pane-commons-groups-commons-groups-create-group .palette-brick-brick a:focus, .palette-brick-brick .pane-commons-events-commons-events-create-event-link a:focus, .pane-commons-events-commons-events-create-event-link .palette-brick-brick a:focus, .palette-brick-brick .action-item-primary:active:not(.formatted-as-checkbox),
-.palette-brick-brick .action-item-small-primary:active:not(.formatted-as-checkbox),
-.palette-brick-brick .action-item-large-primary:active:not(.formatted-as-checkbox), .palette-brick-brick .commons-sign-up:active, .palette-brick-brick .pane-commons-groups-commons-groups-create-group a:active, .pane-commons-groups-commons-groups-create-group .palette-brick-brick a:active, .palette-brick-brick .pane-commons-events-commons-events-create-event-link a:active, .pane-commons-events-commons-events-create-event-link .palette-brick-brick a:active {
+.palette-brick-brick .action-item-primary:focus,
+.palette-brick-brick .action-item-small-primary:focus,
+.palette-brick-brick .action-item-large-primary:focus, .palette-brick-brick .commons-sign-up:focus, .palette-brick-brick .pane-commons-groups-commons-groups-create-group a:focus, .pane-commons-groups-commons-groups-create-group .palette-brick-brick a:focus, .palette-brick-brick .pane-commons-events-commons-events-create-event-link a:focus, .pane-commons-events-commons-events-create-event-link .palette-brick-brick a:focus, .palette-brick-brick .action-item-primary:active,
+.palette-brick-brick .action-item-small-primary:active,
+.palette-brick-brick .action-item-large-primary:active, .palette-brick-brick .commons-sign-up:active, .palette-brick-brick .pane-commons-groups-commons-groups-create-group a:active, .pane-commons-groups-commons-groups-create-group .palette-brick-brick a:active, .palette-brick-brick .pane-commons-events-commons-events-create-event-link a:active, .pane-commons-events-commons-events-create-event-link .palette-brick-brick a:active {
   background: #a12e1e;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #8c281a), color-stop(100%, #b63422));
   background: -webkit-linear-gradient(#8c281a, #b63422);
@@ -6535,9 +6535,9 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #4b150e;
   text-shadow: -1px 1px 2px #762216, -1px -1px 2px #762216, 1px -1px 2px #762216, 1px 1px 2px #762216;
 }
-.palette-brick-brick [disabled].action-item-primary:not(.formatted-as-checkbox),
-.palette-brick-brick [disabled].action-item-small-primary:not(.formatted-as-checkbox),
-.palette-brick-brick [disabled].action-item-large-primary:not(.formatted-as-checkbox), .palette-brick-brick [disabled].commons-sign-up, .palette-brick-brick .pane-commons-groups-commons-groups-create-group a[disabled], .pane-commons-groups-commons-groups-create-group .palette-brick-brick a[disabled], .palette-brick-brick .pane-commons-events-commons-events-create-event-link a[disabled], .pane-commons-events-commons-events-create-event-link .palette-brick-brick a[disabled] {
+.palette-brick-brick [disabled].action-item-primary,
+.palette-brick-brick [disabled].action-item-small-primary,
+.palette-brick-brick [disabled].action-item-large-primary, .palette-brick-brick [disabled].commons-sign-up, .palette-brick-brick .pane-commons-groups-commons-groups-create-group a[disabled], .pane-commons-groups-commons-groups-create-group .palette-brick-brick a[disabled], .palette-brick-brick .pane-commons-events-commons-events-create-event-link a[disabled], .pane-commons-events-commons-events-create-event-link .palette-brick-brick a[disabled] {
   color: #dd5a48;
   background: #a12e1e;
   border-color: #4b150e;
@@ -6694,9 +6694,9 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   -moz-box-shadow: #959595 1px 0px 0px;
   box-shadow: #959595 1px 0px 0px;
 }
-.palette-gray-lightgray-blue .action-item-primary:not(.formatted-as-checkbox),
-.palette-gray-lightgray-blue .action-item-small-primary:not(.formatted-as-checkbox),
-.palette-gray-lightgray-blue .action-item-large-primary:not(.formatted-as-checkbox), .palette-gray-lightgray-blue .commons-sign-up, .palette-gray-lightgray-blue .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-gray-lightgray-blue a, .palette-gray-lightgray-blue .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-gray-lightgray-blue a {
+.palette-gray-lightgray-blue .action-item-primary,
+.palette-gray-lightgray-blue .action-item-small-primary,
+.palette-gray-lightgray-blue .action-item-large-primary, .palette-gray-lightgray-blue .commons-sign-up, .palette-gray-lightgray-blue .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-gray-lightgray-blue a, .palette-gray-lightgray-blue .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-gray-lightgray-blue a {
   background-color: #04b6e7;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #0ac7fb), color-stop(100%, #04a2ce));
   background: -webkit-linear-gradient(#0ac7fb, #04a2ce);
@@ -6706,18 +6706,18 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #026783;
   text-shadow: -1px 1px 2px #038fb5, -1px -1px 2px #038fb5, 1px -1px 2px #038fb5, 1px 1px 2px #038fb5;
 }
-.palette-gray-lightgray-blue .action-item-primary:not(.formatted-as-checkbox),
-.palette-gray-lightgray-blue .action-item-small-primary:not(.formatted-as-checkbox),
-.palette-gray-lightgray-blue .action-item-large-primary:not(.formatted-as-checkbox), .palette-gray-lightgray-blue .commons-sign-up, .palette-gray-lightgray-blue .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-gray-lightgray-blue a, .palette-gray-lightgray-blue .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-gray-lightgray-blue a, .palette-gray-lightgray-blue .action-item-primary:link:not(.formatted-as-checkbox),
-.palette-gray-lightgray-blue .action-item-small-primary:link:not(.formatted-as-checkbox),
-.palette-gray-lightgray-blue .action-item-large-primary:link:not(.formatted-as-checkbox), .palette-gray-lightgray-blue .commons-sign-up:link, .palette-gray-lightgray-blue .pane-commons-groups-commons-groups-create-group a:link, .pane-commons-groups-commons-groups-create-group .palette-gray-lightgray-blue a:link, .palette-gray-lightgray-blue .pane-commons-events-commons-events-create-event-link a:link, .pane-commons-events-commons-events-create-event-link .palette-gray-lightgray-blue a:link, .palette-gray-lightgray-blue .action-item-primary:visited:not(.formatted-as-checkbox),
-.palette-gray-lightgray-blue .action-item-small-primary:visited:not(.formatted-as-checkbox),
-.palette-gray-lightgray-blue .action-item-large-primary:visited:not(.formatted-as-checkbox), .palette-gray-lightgray-blue .commons-sign-up:visited, .palette-gray-lightgray-blue .pane-commons-groups-commons-groups-create-group a:visited, .pane-commons-groups-commons-groups-create-group .palette-gray-lightgray-blue a:visited, .palette-gray-lightgray-blue .pane-commons-events-commons-events-create-event-link a:visited, .pane-commons-events-commons-events-create-event-link .palette-gray-lightgray-blue a:visited {
+.palette-gray-lightgray-blue .action-item-primary,
+.palette-gray-lightgray-blue .action-item-small-primary,
+.palette-gray-lightgray-blue .action-item-large-primary, .palette-gray-lightgray-blue .commons-sign-up, .palette-gray-lightgray-blue .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-gray-lightgray-blue a, .palette-gray-lightgray-blue .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-gray-lightgray-blue a, .palette-gray-lightgray-blue .action-item-primary:link,
+.palette-gray-lightgray-blue .action-item-small-primary:link,
+.palette-gray-lightgray-blue .action-item-large-primary:link, .palette-gray-lightgray-blue .commons-sign-up:link, .palette-gray-lightgray-blue .pane-commons-groups-commons-groups-create-group a:link, .pane-commons-groups-commons-groups-create-group .palette-gray-lightgray-blue a:link, .palette-gray-lightgray-blue .pane-commons-events-commons-events-create-event-link a:link, .pane-commons-events-commons-events-create-event-link .palette-gray-lightgray-blue a:link, .palette-gray-lightgray-blue .action-item-primary:visited,
+.palette-gray-lightgray-blue .action-item-small-primary:visited,
+.palette-gray-lightgray-blue .action-item-large-primary:visited, .palette-gray-lightgray-blue .commons-sign-up:visited, .palette-gray-lightgray-blue .pane-commons-groups-commons-groups-create-group a:visited, .pane-commons-groups-commons-groups-create-group .palette-gray-lightgray-blue a:visited, .palette-gray-lightgray-blue .pane-commons-events-commons-events-create-event-link a:visited, .pane-commons-events-commons-events-create-event-link .palette-gray-lightgray-blue a:visited {
   color: white;
 }
-.palette-gray-lightgray-blue .action-item-primary:hover:not(.formatted-as-checkbox),
-.palette-gray-lightgray-blue .action-item-small-primary:hover:not(.formatted-as-checkbox),
-.palette-gray-lightgray-blue .action-item-large-primary:hover:not(.formatted-as-checkbox), .palette-gray-lightgray-blue .commons-sign-up:hover, .palette-gray-lightgray-blue .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-gray-lightgray-blue a:hover, .palette-gray-lightgray-blue .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-gray-lightgray-blue a:hover {
+.palette-gray-lightgray-blue .action-item-primary:hover,
+.palette-gray-lightgray-blue .action-item-small-primary:hover,
+.palette-gray-lightgray-blue .action-item-large-primary:hover, .palette-gray-lightgray-blue .commons-sign-up:hover, .palette-gray-lightgray-blue .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-gray-lightgray-blue a:hover, .palette-gray-lightgray-blue .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-gray-lightgray-blue a:hover {
   color: white;
   background-color: #04a2ce;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #04b6e7), color-stop(100%, #038fb5));
@@ -6728,11 +6728,11 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #014051;
   text-shadow: -1px 1px 2px #038fb5, -1px -1px 2px #038fb5, 1px -1px 2px #038fb5, 1px 1px 2px #038fb5;
 }
-.palette-gray-lightgray-blue .action-item-primary:focus:not(.formatted-as-checkbox),
-.palette-gray-lightgray-blue .action-item-small-primary:focus:not(.formatted-as-checkbox),
-.palette-gray-lightgray-blue .action-item-large-primary:focus:not(.formatted-as-checkbox), .palette-gray-lightgray-blue .commons-sign-up:focus, .palette-gray-lightgray-blue .pane-commons-groups-commons-groups-create-group a:focus, .pane-commons-groups-commons-groups-create-group .palette-gray-lightgray-blue a:focus, .palette-gray-lightgray-blue .pane-commons-events-commons-events-create-event-link a:focus, .pane-commons-events-commons-events-create-event-link .palette-gray-lightgray-blue a:focus, .palette-gray-lightgray-blue .action-item-primary:active:not(.formatted-as-checkbox),
-.palette-gray-lightgray-blue .action-item-small-primary:active:not(.formatted-as-checkbox),
-.palette-gray-lightgray-blue .action-item-large-primary:active:not(.formatted-as-checkbox), .palette-gray-lightgray-blue .commons-sign-up:active, .palette-gray-lightgray-blue .pane-commons-groups-commons-groups-create-group a:active, .pane-commons-groups-commons-groups-create-group .palette-gray-lightgray-blue a:active, .palette-gray-lightgray-blue .pane-commons-events-commons-events-create-event-link a:active, .pane-commons-events-commons-events-create-event-link .palette-gray-lightgray-blue a:active {
+.palette-gray-lightgray-blue .action-item-primary:focus,
+.palette-gray-lightgray-blue .action-item-small-primary:focus,
+.palette-gray-lightgray-blue .action-item-large-primary:focus, .palette-gray-lightgray-blue .commons-sign-up:focus, .palette-gray-lightgray-blue .pane-commons-groups-commons-groups-create-group a:focus, .pane-commons-groups-commons-groups-create-group .palette-gray-lightgray-blue a:focus, .palette-gray-lightgray-blue .pane-commons-events-commons-events-create-event-link a:focus, .pane-commons-events-commons-events-create-event-link .palette-gray-lightgray-blue a:focus, .palette-gray-lightgray-blue .action-item-primary:active,
+.palette-gray-lightgray-blue .action-item-small-primary:active,
+.palette-gray-lightgray-blue .action-item-large-primary:active, .palette-gray-lightgray-blue .commons-sign-up:active, .palette-gray-lightgray-blue .pane-commons-groups-commons-groups-create-group a:active, .pane-commons-groups-commons-groups-create-group .palette-gray-lightgray-blue a:active, .palette-gray-lightgray-blue .pane-commons-events-commons-events-create-event-link a:active, .pane-commons-events-commons-events-create-event-link .palette-gray-lightgray-blue a:active {
   background: #04b6e7;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #04a2ce), color-stop(100%, #0ac7fb));
   background: -webkit-linear-gradient(#04a2ce, #0ac7fb);
@@ -6742,9 +6742,9 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #026783;
   text-shadow: -1px 1px 2px #038fb5, -1px -1px 2px #038fb5, 1px -1px 2px #038fb5, 1px 1px 2px #038fb5;
 }
-.palette-gray-lightgray-blue [disabled].action-item-primary:not(.formatted-as-checkbox),
-.palette-gray-lightgray-blue [disabled].action-item-small-primary:not(.formatted-as-checkbox),
-.palette-gray-lightgray-blue [disabled].action-item-large-primary:not(.formatted-as-checkbox), .palette-gray-lightgray-blue [disabled].commons-sign-up, .palette-gray-lightgray-blue .pane-commons-groups-commons-groups-create-group a[disabled], .pane-commons-groups-commons-groups-create-group .palette-gray-lightgray-blue a[disabled], .palette-gray-lightgray-blue .pane-commons-events-commons-events-create-event-link a[disabled], .pane-commons-events-commons-events-create-event-link .palette-gray-lightgray-blue a[disabled] {
+.palette-gray-lightgray-blue [disabled].action-item-primary,
+.palette-gray-lightgray-blue [disabled].action-item-small-primary,
+.palette-gray-lightgray-blue [disabled].action-item-large-primary, .palette-gray-lightgray-blue [disabled].commons-sign-up, .palette-gray-lightgray-blue .pane-commons-groups-commons-groups-create-group a[disabled], .pane-commons-groups-commons-groups-create-group .palette-gray-lightgray-blue a[disabled], .palette-gray-lightgray-blue .pane-commons-events-commons-events-create-event-link a[disabled], .pane-commons-events-commons-events-create-event-link .palette-gray-lightgray-blue a[disabled] {
   color: #55d8fc;
   background: #04b6e7;
   border-color: #026783;
@@ -6901,9 +6901,9 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   -moz-box-shadow: #353535 1px 0px 0px;
   box-shadow: #353535 1px 0px 0px;
 }
-.palette-black-white-red .action-item-primary:not(.formatted-as-checkbox),
-.palette-black-white-red .action-item-small-primary:not(.formatted-as-checkbox),
-.palette-black-white-red .action-item-large-primary:not(.formatted-as-checkbox), .palette-black-white-red .commons-sign-up, .palette-black-white-red .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-black-white-red a, .palette-black-white-red .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-black-white-red a {
+.palette-black-white-red .action-item-primary,
+.palette-black-white-red .action-item-small-primary,
+.palette-black-white-red .action-item-large-primary, .palette-black-white-red .commons-sign-up, .palette-black-white-red .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-black-white-red a, .palette-black-white-red .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-black-white-red a {
   background-color: #cc0000;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #e60000), color-stop(100%, #b30000));
   background: -webkit-linear-gradient(#e60000, #b30000);
@@ -6913,18 +6913,18 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #660000;
   text-shadow: -1px 1px 2px #990000, -1px -1px 2px #990000, 1px -1px 2px #990000, 1px 1px 2px #990000;
 }
-.palette-black-white-red .action-item-primary:not(.formatted-as-checkbox),
-.palette-black-white-red .action-item-small-primary:not(.formatted-as-checkbox),
-.palette-black-white-red .action-item-large-primary:not(.formatted-as-checkbox), .palette-black-white-red .commons-sign-up, .palette-black-white-red .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-black-white-red a, .palette-black-white-red .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-black-white-red a, .palette-black-white-red .action-item-primary:link:not(.formatted-as-checkbox),
-.palette-black-white-red .action-item-small-primary:link:not(.formatted-as-checkbox),
-.palette-black-white-red .action-item-large-primary:link:not(.formatted-as-checkbox), .palette-black-white-red .commons-sign-up:link, .palette-black-white-red .pane-commons-groups-commons-groups-create-group a:link, .pane-commons-groups-commons-groups-create-group .palette-black-white-red a:link, .palette-black-white-red .pane-commons-events-commons-events-create-event-link a:link, .pane-commons-events-commons-events-create-event-link .palette-black-white-red a:link, .palette-black-white-red .action-item-primary:visited:not(.formatted-as-checkbox),
-.palette-black-white-red .action-item-small-primary:visited:not(.formatted-as-checkbox),
-.palette-black-white-red .action-item-large-primary:visited:not(.formatted-as-checkbox), .palette-black-white-red .commons-sign-up:visited, .palette-black-white-red .pane-commons-groups-commons-groups-create-group a:visited, .pane-commons-groups-commons-groups-create-group .palette-black-white-red a:visited, .palette-black-white-red .pane-commons-events-commons-events-create-event-link a:visited, .pane-commons-events-commons-events-create-event-link .palette-black-white-red a:visited {
+.palette-black-white-red .action-item-primary,
+.palette-black-white-red .action-item-small-primary,
+.palette-black-white-red .action-item-large-primary, .palette-black-white-red .commons-sign-up, .palette-black-white-red .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-black-white-red a, .palette-black-white-red .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-black-white-red a, .palette-black-white-red .action-item-primary:link,
+.palette-black-white-red .action-item-small-primary:link,
+.palette-black-white-red .action-item-large-primary:link, .palette-black-white-red .commons-sign-up:link, .palette-black-white-red .pane-commons-groups-commons-groups-create-group a:link, .pane-commons-groups-commons-groups-create-group .palette-black-white-red a:link, .palette-black-white-red .pane-commons-events-commons-events-create-event-link a:link, .pane-commons-events-commons-events-create-event-link .palette-black-white-red a:link, .palette-black-white-red .action-item-primary:visited,
+.palette-black-white-red .action-item-small-primary:visited,
+.palette-black-white-red .action-item-large-primary:visited, .palette-black-white-red .commons-sign-up:visited, .palette-black-white-red .pane-commons-groups-commons-groups-create-group a:visited, .pane-commons-groups-commons-groups-create-group .palette-black-white-red a:visited, .palette-black-white-red .pane-commons-events-commons-events-create-event-link a:visited, .pane-commons-events-commons-events-create-event-link .palette-black-white-red a:visited {
   color: white;
 }
-.palette-black-white-red .action-item-primary:hover:not(.formatted-as-checkbox),
-.palette-black-white-red .action-item-small-primary:hover:not(.formatted-as-checkbox),
-.palette-black-white-red .action-item-large-primary:hover:not(.formatted-as-checkbox), .palette-black-white-red .commons-sign-up:hover, .palette-black-white-red .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-black-white-red a:hover, .palette-black-white-red .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-black-white-red a:hover {
+.palette-black-white-red .action-item-primary:hover,
+.palette-black-white-red .action-item-small-primary:hover,
+.palette-black-white-red .action-item-large-primary:hover, .palette-black-white-red .commons-sign-up:hover, .palette-black-white-red .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-black-white-red a:hover, .palette-black-white-red .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-black-white-red a:hover {
   color: white;
   background-color: #b30000;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #cc0000), color-stop(100%, #990000));
@@ -6935,11 +6935,11 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #330000;
   text-shadow: -1px 1px 2px #990000, -1px -1px 2px #990000, 1px -1px 2px #990000, 1px 1px 2px #990000;
 }
-.palette-black-white-red .action-item-primary:focus:not(.formatted-as-checkbox),
-.palette-black-white-red .action-item-small-primary:focus:not(.formatted-as-checkbox),
-.palette-black-white-red .action-item-large-primary:focus:not(.formatted-as-checkbox), .palette-black-white-red .commons-sign-up:focus, .palette-black-white-red .pane-commons-groups-commons-groups-create-group a:focus, .pane-commons-groups-commons-groups-create-group .palette-black-white-red a:focus, .palette-black-white-red .pane-commons-events-commons-events-create-event-link a:focus, .pane-commons-events-commons-events-create-event-link .palette-black-white-red a:focus, .palette-black-white-red .action-item-primary:active:not(.formatted-as-checkbox),
-.palette-black-white-red .action-item-small-primary:active:not(.formatted-as-checkbox),
-.palette-black-white-red .action-item-large-primary:active:not(.formatted-as-checkbox), .palette-black-white-red .commons-sign-up:active, .palette-black-white-red .pane-commons-groups-commons-groups-create-group a:active, .pane-commons-groups-commons-groups-create-group .palette-black-white-red a:active, .palette-black-white-red .pane-commons-events-commons-events-create-event-link a:active, .pane-commons-events-commons-events-create-event-link .palette-black-white-red a:active {
+.palette-black-white-red .action-item-primary:focus,
+.palette-black-white-red .action-item-small-primary:focus,
+.palette-black-white-red .action-item-large-primary:focus, .palette-black-white-red .commons-sign-up:focus, .palette-black-white-red .pane-commons-groups-commons-groups-create-group a:focus, .pane-commons-groups-commons-groups-create-group .palette-black-white-red a:focus, .palette-black-white-red .pane-commons-events-commons-events-create-event-link a:focus, .pane-commons-events-commons-events-create-event-link .palette-black-white-red a:focus, .palette-black-white-red .action-item-primary:active,
+.palette-black-white-red .action-item-small-primary:active,
+.palette-black-white-red .action-item-large-primary:active, .palette-black-white-red .commons-sign-up:active, .palette-black-white-red .pane-commons-groups-commons-groups-create-group a:active, .pane-commons-groups-commons-groups-create-group .palette-black-white-red a:active, .palette-black-white-red .pane-commons-events-commons-events-create-event-link a:active, .pane-commons-events-commons-events-create-event-link .palette-black-white-red a:active {
   background: #cc0000;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #b30000), color-stop(100%, #e60000));
   background: -webkit-linear-gradient(#b30000, #e60000);
@@ -6949,9 +6949,9 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #660000;
   text-shadow: -1px 1px 2px #990000, -1px -1px 2px #990000, 1px -1px 2px #990000, 1px 1px 2px #990000;
 }
-.palette-black-white-red [disabled].action-item-primary:not(.formatted-as-checkbox),
-.palette-black-white-red [disabled].action-item-small-primary:not(.formatted-as-checkbox),
-.palette-black-white-red [disabled].action-item-large-primary:not(.formatted-as-checkbox), .palette-black-white-red [disabled].commons-sign-up, .palette-black-white-red .pane-commons-groups-commons-groups-create-group a[disabled], .pane-commons-groups-commons-groups-create-group .palette-black-white-red a[disabled], .palette-black-white-red .pane-commons-events-commons-events-create-event-link a[disabled], .pane-commons-events-commons-events-create-event-link .palette-black-white-red a[disabled] {
+.palette-black-white-red [disabled].action-item-primary,
+.palette-black-white-red [disabled].action-item-small-primary,
+.palette-black-white-red [disabled].action-item-large-primary, .palette-black-white-red [disabled].commons-sign-up, .palette-black-white-red .pane-commons-groups-commons-groups-create-group a[disabled], .pane-commons-groups-commons-groups-create-group .palette-black-white-red a[disabled], .palette-black-white-red .pane-commons-events-commons-events-create-event-link a[disabled], .pane-commons-events-commons-events-create-event-link .palette-black-white-red a[disabled] {
   color: #ff3333;
   background: #cc0000;
   border-color: #660000;
@@ -7108,9 +7108,9 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   -moz-box-shadow: #7d4912 1px 0px 0px;
   box-shadow: #7d4912 1px 0px 0px;
 }
-.palette-brown-burnt-orange .action-item-primary:not(.formatted-as-checkbox),
-.palette-brown-burnt-orange .action-item-small-primary:not(.formatted-as-checkbox),
-.palette-brown-burnt-orange .action-item-large-primary:not(.formatted-as-checkbox), .palette-brown-burnt-orange .commons-sign-up, .palette-brown-burnt-orange .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-brown-burnt-orange a, .palette-brown-burnt-orange .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-brown-burnt-orange a {
+.palette-brown-burnt-orange .action-item-primary,
+.palette-brown-burnt-orange .action-item-small-primary,
+.palette-brown-burnt-orange .action-item-large-primary, .palette-brown-burnt-orange .commons-sign-up, .palette-brown-burnt-orange .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-brown-burnt-orange a, .palette-brown-burnt-orange .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-brown-burnt-orange a {
   background-color: #e18728;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #e4933e), color-stop(100%, #d27a1d));
   background: -webkit-linear-gradient(#e4933e, #d27a1d);
@@ -7120,18 +7120,18 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #8f5314;
   text-shadow: -1px 1px 2px #bc6d1a, -1px -1px 2px #bc6d1a, 1px -1px 2px #bc6d1a, 1px 1px 2px #bc6d1a;
 }
-.palette-brown-burnt-orange .action-item-primary:not(.formatted-as-checkbox),
-.palette-brown-burnt-orange .action-item-small-primary:not(.formatted-as-checkbox),
-.palette-brown-burnt-orange .action-item-large-primary:not(.formatted-as-checkbox), .palette-brown-burnt-orange .commons-sign-up, .palette-brown-burnt-orange .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-brown-burnt-orange a, .palette-brown-burnt-orange .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-brown-burnt-orange a, .palette-brown-burnt-orange .action-item-primary:link:not(.formatted-as-checkbox),
-.palette-brown-burnt-orange .action-item-small-primary:link:not(.formatted-as-checkbox),
-.palette-brown-burnt-orange .action-item-large-primary:link:not(.formatted-as-checkbox), .palette-brown-burnt-orange .commons-sign-up:link, .palette-brown-burnt-orange .pane-commons-groups-commons-groups-create-group a:link, .pane-commons-groups-commons-groups-create-group .palette-brown-burnt-orange a:link, .palette-brown-burnt-orange .pane-commons-events-commons-events-create-event-link a:link, .pane-commons-events-commons-events-create-event-link .palette-brown-burnt-orange a:link, .palette-brown-burnt-orange .action-item-primary:visited:not(.formatted-as-checkbox),
-.palette-brown-burnt-orange .action-item-small-primary:visited:not(.formatted-as-checkbox),
-.palette-brown-burnt-orange .action-item-large-primary:visited:not(.formatted-as-checkbox), .palette-brown-burnt-orange .commons-sign-up:visited, .palette-brown-burnt-orange .pane-commons-groups-commons-groups-create-group a:visited, .pane-commons-groups-commons-groups-create-group .palette-brown-burnt-orange a:visited, .palette-brown-burnt-orange .pane-commons-events-commons-events-create-event-link a:visited, .pane-commons-events-commons-events-create-event-link .palette-brown-burnt-orange a:visited {
+.palette-brown-burnt-orange .action-item-primary,
+.palette-brown-burnt-orange .action-item-small-primary,
+.palette-brown-burnt-orange .action-item-large-primary, .palette-brown-burnt-orange .commons-sign-up, .palette-brown-burnt-orange .pane-commons-groups-commons-groups-create-group a, .pane-commons-groups-commons-groups-create-group .palette-brown-burnt-orange a, .palette-brown-burnt-orange .pane-commons-events-commons-events-create-event-link a, .pane-commons-events-commons-events-create-event-link .palette-brown-burnt-orange a, .palette-brown-burnt-orange .action-item-primary:link,
+.palette-brown-burnt-orange .action-item-small-primary:link,
+.palette-brown-burnt-orange .action-item-large-primary:link, .palette-brown-burnt-orange .commons-sign-up:link, .palette-brown-burnt-orange .pane-commons-groups-commons-groups-create-group a:link, .pane-commons-groups-commons-groups-create-group .palette-brown-burnt-orange a:link, .palette-brown-burnt-orange .pane-commons-events-commons-events-create-event-link a:link, .pane-commons-events-commons-events-create-event-link .palette-brown-burnt-orange a:link, .palette-brown-burnt-orange .action-item-primary:visited,
+.palette-brown-burnt-orange .action-item-small-primary:visited,
+.palette-brown-burnt-orange .action-item-large-primary:visited, .palette-brown-burnt-orange .commons-sign-up:visited, .palette-brown-burnt-orange .pane-commons-groups-commons-groups-create-group a:visited, .pane-commons-groups-commons-groups-create-group .palette-brown-burnt-orange a:visited, .palette-brown-burnt-orange .pane-commons-events-commons-events-create-event-link a:visited, .pane-commons-events-commons-events-create-event-link .palette-brown-burnt-orange a:visited {
   color: white;
 }
-.palette-brown-burnt-orange .action-item-primary:hover:not(.formatted-as-checkbox),
-.palette-brown-burnt-orange .action-item-small-primary:hover:not(.formatted-as-checkbox),
-.palette-brown-burnt-orange .action-item-large-primary:hover:not(.formatted-as-checkbox), .palette-brown-burnt-orange .commons-sign-up:hover, .palette-brown-burnt-orange .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-brown-burnt-orange a:hover, .palette-brown-burnt-orange .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-brown-burnt-orange a:hover {
+.palette-brown-burnt-orange .action-item-primary:hover,
+.palette-brown-burnt-orange .action-item-small-primary:hover,
+.palette-brown-burnt-orange .action-item-large-primary:hover, .palette-brown-burnt-orange .commons-sign-up:hover, .palette-brown-burnt-orange .pane-commons-groups-commons-groups-create-group a:hover, .pane-commons-groups-commons-groups-create-group .palette-brown-burnt-orange a:hover, .palette-brown-burnt-orange .pane-commons-events-commons-events-create-event-link a:hover, .pane-commons-events-commons-events-create-event-link .palette-brown-burnt-orange a:hover {
   color: white;
   background-color: #d27a1d;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #e18728), color-stop(100%, #bc6d1a));
@@ -7142,11 +7142,11 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #62390e;
   text-shadow: -1px 1px 2px #bc6d1a, -1px -1px 2px #bc6d1a, 1px -1px 2px #bc6d1a, 1px 1px 2px #bc6d1a;
 }
-.palette-brown-burnt-orange .action-item-primary:focus:not(.formatted-as-checkbox),
-.palette-brown-burnt-orange .action-item-small-primary:focus:not(.formatted-as-checkbox),
-.palette-brown-burnt-orange .action-item-large-primary:focus:not(.formatted-as-checkbox), .palette-brown-burnt-orange .commons-sign-up:focus, .palette-brown-burnt-orange .pane-commons-groups-commons-groups-create-group a:focus, .pane-commons-groups-commons-groups-create-group .palette-brown-burnt-orange a:focus, .palette-brown-burnt-orange .pane-commons-events-commons-events-create-event-link a:focus, .pane-commons-events-commons-events-create-event-link .palette-brown-burnt-orange a:focus, .palette-brown-burnt-orange .action-item-primary:active:not(.formatted-as-checkbox),
-.palette-brown-burnt-orange .action-item-small-primary:active:not(.formatted-as-checkbox),
-.palette-brown-burnt-orange .action-item-large-primary:active:not(.formatted-as-checkbox), .palette-brown-burnt-orange .commons-sign-up:active, .palette-brown-burnt-orange .pane-commons-groups-commons-groups-create-group a:active, .pane-commons-groups-commons-groups-create-group .palette-brown-burnt-orange a:active, .palette-brown-burnt-orange .pane-commons-events-commons-events-create-event-link a:active, .pane-commons-events-commons-events-create-event-link .palette-brown-burnt-orange a:active {
+.palette-brown-burnt-orange .action-item-primary:focus,
+.palette-brown-burnt-orange .action-item-small-primary:focus,
+.palette-brown-burnt-orange .action-item-large-primary:focus, .palette-brown-burnt-orange .commons-sign-up:focus, .palette-brown-burnt-orange .pane-commons-groups-commons-groups-create-group a:focus, .pane-commons-groups-commons-groups-create-group .palette-brown-burnt-orange a:focus, .palette-brown-burnt-orange .pane-commons-events-commons-events-create-event-link a:focus, .pane-commons-events-commons-events-create-event-link .palette-brown-burnt-orange a:focus, .palette-brown-burnt-orange .action-item-primary:active,
+.palette-brown-burnt-orange .action-item-small-primary:active,
+.palette-brown-burnt-orange .action-item-large-primary:active, .palette-brown-burnt-orange .commons-sign-up:active, .palette-brown-burnt-orange .pane-commons-groups-commons-groups-create-group a:active, .pane-commons-groups-commons-groups-create-group .palette-brown-burnt-orange a:active, .palette-brown-burnt-orange .pane-commons-events-commons-events-create-event-link a:active, .pane-commons-events-commons-events-create-event-link .palette-brown-burnt-orange a:active {
   background: #e18728;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #d27a1d), color-stop(100%, #e4933e));
   background: -webkit-linear-gradient(#d27a1d, #e4933e);
@@ -7156,9 +7156,9 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   border-color: #8f5314;
   text-shadow: -1px 1px 2px #bc6d1a, -1px -1px 2px #bc6d1a, 1px -1px 2px #bc6d1a, 1px 1px 2px #bc6d1a;
 }
-.palette-brown-burnt-orange [disabled].action-item-primary:not(.formatted-as-checkbox),
-.palette-brown-burnt-orange [disabled].action-item-small-primary:not(.formatted-as-checkbox),
-.palette-brown-burnt-orange [disabled].action-item-large-primary:not(.formatted-as-checkbox), .palette-brown-burnt-orange [disabled].commons-sign-up, .palette-brown-burnt-orange .pane-commons-groups-commons-groups-create-group a[disabled], .pane-commons-groups-commons-groups-create-group .palette-brown-burnt-orange a[disabled], .palette-brown-burnt-orange .pane-commons-events-commons-events-create-event-link a[disabled], .pane-commons-events-commons-events-create-event-link .palette-brown-burnt-orange a[disabled] {
+.palette-brown-burnt-orange [disabled].action-item-primary,
+.palette-brown-burnt-orange [disabled].action-item-small-primary,
+.palette-brown-burnt-orange [disabled].action-item-large-primary, .palette-brown-burnt-orange [disabled].commons-sign-up, .palette-brown-burnt-orange .pane-commons-groups-commons-groups-create-group a[disabled], .pane-commons-groups-commons-groups-create-group .palette-brown-burnt-orange a[disabled], .palette-brown-burnt-orange .pane-commons-events-commons-events-create-event-link a[disabled], .pane-commons-events-commons-events-create-event-link .palette-brown-burnt-orange a[disabled] {
   color: #edb982;
   background: #e18728;
   border-color: #8f5314;
