@@ -3641,10 +3641,12 @@ body.page-node .pane-views-panes {
 }
 
 .has-rate-widget {
+  min-height: 4em;
   margin-right: 6em;
   position: relative;
 
   @include respond(small-medium) {
+    min-height: 0;
     margin-right: 0;
   }
 }
