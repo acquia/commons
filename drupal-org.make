@@ -226,18 +226,11 @@ projects[oauthconnector][download][revision] = "0ce7ac9614710c0f68d0a58cb4ae4667
 
 projects[og][type] = "module"
 projects[og][subdir] = "contrib"
-projects[og][download][type] = "git"
-projects[og][download][url] = "http://git.drupal.org/project/og.git"
-projects[og][download][branch] = "7.x-2.x"
-projects[og][download][revision] = "c790c7eabd1052ff628631b6cbfb85136ddabad4"
-
-; og_group_ref field should respect og_user_access()
-; http://drupal.org/node/1902086#comment-7026516
-projects[og][patch][] = "http://drupal.org/files/1902086-og-ref-respect-og-user-access-3.patch"
+projects[og][version] = "2.3"
 
 ; Auto-assign role to group manager broken on groups with overridden roles.
-; http://drupal.org/node/2005800#comment-7534339
-projects[og][patch][] = "http://drupal.org/files/og-default-role-member-2005800-14.patch"
+; https://drupal.org/node/2005800#comment-7684873
+projects[og][patch][] = "https://drupal.org/files/og-default-role-member-2005800-21.patch"
 
 ; og_ui should give users the theme, not admin ui when creating groups
 ; http://drupal.org/node/1800208
