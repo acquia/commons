@@ -120,7 +120,7 @@ projects[entityreference_prepopulate][version] = "1.3"
 
 projects[features][type] = "module"
 projects[features][subdir] = "contrib"
-projects[features][version] = "2.0-rc1"
+projects[features][version] = "2.0-rc2"
 
 ; Issue #1921982: Add 'customized' to the fields we check when comparing a menu_link feature
 ; http://drupal.org/node/1921982
@@ -182,11 +182,9 @@ projects[message_notify][download][revision] = "e546b0a6e3d2dfd48f4fd3a4d45806c0
 
 projects[message_subscribe][type] = "module"
 projects[message_subscribe][subdir] = "contrib"
-projects[message_subscribe][version] = "1.x-dev"
-
-; Remove "email" as default notifier.
-; http://drupal.org/node/1828184#comment-7081868
-projects[message_subscribe][patch][] = "http://drupal.org/files/email-notifiers-1828184-15.patch"
+projects[message_subscribe][download][type] = "git"
+projects[message_subscribe][download][url] = "http://git.drupal.org/project/message_subscribe.git"
+projects[message_subscribe][download][branch] = "7.x-1.x"
 
 projects[memcache][type] = "module"
 projects[memcache][subdir] = "contrib"
@@ -196,7 +194,7 @@ projects[metatag][type] = "module"
 projects[metatag][subdir] = "contrib"
 projects[metatag][version] = "1.0-beta7"
 
-; Support for rel=author link in head
+; Support for rel=author link in head.
 ; http://drupal.org/node/1865228#comment-6839604
 projects[metatag][patch][] = "http://drupal.org/files/metatag-n1865228-3.patch"
 
@@ -410,7 +408,7 @@ projects[votingapi][version] = "2.11"
 projects[votingapi][type] = "module"
 projects[votingapi][subdir] = "contrib"
 
-; Commons contrib modules:
+; Commons contrib modules.
 ; We don't tag a release here because want them to auto-increment.
 projects[commons_activity_streams][type] = "module"
 projects[commons_activity_streams][subdir] = "contrib"
