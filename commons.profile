@@ -115,6 +115,8 @@ function commons_update_projects_alter(&$projects) {
  * Allows the user to set a welcome message for anonymous users
  */
 function commons_install_tasks() {
+  // Suppress any status messages generated during batch install.
+  commons_clear_messages();
 
   //make sure we have more memory than 196M. if not lets try to increase it.
   if (ini_get('memory_limit') != '-1' && ini_get('memory_limit') <= '196M' && ini_get('memory_limit') >= '128M') {
