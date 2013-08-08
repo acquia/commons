@@ -128,3 +128,19 @@ function commons_groups_update_3110() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Set commons_groups to display need update message for those upgrading from 3.2
+ * and revert the view to add the update display
+ * See https://drupal.org/node/2059857#comment-7733465
+ */
+function commons_groups_update_3111() {
+  variable_set('commons_groups_needs_update', TRUE);
+  $revert = array(
+    'commons_groups' => array('views_view'),
+  );
+  features_revert($revert);
+  // Ensure that the menu callback from our new Views display is active.
+  menu_rebuild();
+  return array();
+}

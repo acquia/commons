@@ -43,6 +43,27 @@ function commons_groups_modules_enabled($modules) {
 }
 
 /**
+ * Implements hook_help().
+ * Used for the 3.2 -> 3.3 migration to warn users who have out-of-date groups
+ * to make sure they update the group privacy settings.
+ * See https://drupal.org/node/2059857 for more information
+ */
+function commons_groups_help($path, $arg) {
+  if (variable_get('commons_groups_needs_update', FALSE)) {
+    if ($path == 'admin/content/groups/update' || ($arg[0] == 'node' && $arg[2] == 'edit')) {
+      return '<p>' . t("In commons 3.3, groups have added a required group privacy field
+        It allows you to set a group to be public, under moderation, or private. Please
+        edit each group below and select one of the privacy options. Once all groups are
+        set, you'll be able to dismiss the update warning.") . '</p>';
+    }
+    if (user_access('edit any group content')) {
+      $message = t("Group privacy settings !updated.", array('!updated' => l('need to be updated', 'admin/content/groups/update'),));
+      drupal_set_message($message, 'warning', FALSE);
+    }
+  }
+}
+
+/**
  * Implements hook_entity_view().
  */
 function commons_groups_entity_view($entity, $type, $view_mode, $langcode) {
@@ -159,11 +180,36 @@ function commons_groups_menu_alter(&$items) {
     $items['node/%/group']['title'] = t('Administer group');
   }
 }
+
+/*
+ * Implements hook_menu
+ * Used with commons_groups_help and the commons groups update view to turn off
+ * the warning message to update groups
+ */
+function commons_groups_menu() {
+  $items['admin/content/groups/update/toggle'] = array(
+    'title' => 'Toggle Groups Update',
+    'page callback' => 'commons_groups_update_toggle',
+    'access arguments' => array('edit any group content'),
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+/*
+ * Ajax callback page to toggle the group update status to off
+ * See https://drupal.org/node/2059857 for more information
+ */
+function commons_groups_update_toggle() {
+  variable_set('commons_groups_needs_update', FALSE);
+  return TRUE;
+}
+
 /**
  * Implements hook_block_info().
  */
 function commons_groups_block_info() {
-   $blocks['commons_groups_create_group'] = array(
+  $blocks['commons_groups_create_group'] = array(
     'info' => t('"Create a group" call to action'),
     'cache' => DRUPAL_NO_CACHE,
   );
@@ -237,7 +283,10 @@ function commons_groups_group_contributors_count_topics($group) {
       return '';
     }
     $contributors_count = $view->total_rows;
-    $output .= l(t('@contributors_count @contributors', array('@contributors_count' => $contributors_count, '@contributors' => format_plural($contributors_count, 'contributor', 'contributors'))), 'node/' . $group->nid . '/contributors');
+    $output .= l(t('@contributors_count @contributors', array(
+      '@contributors_count' => $contributors_count,
+      '@contributors' => format_plural($contributors_count, 'contributor', 'contributors')
+    )), 'node/' . $group->nid . '/contributors');
   }
   // Format the list of topics:
   if (!empty($group->field_topics[LANGUAGE_NONE])) {
@@ -257,7 +306,7 @@ function commons_groups_group_contributors_count_topics($group) {
       }
       $t_args['!topic-' . $topic->tid] = l(t($topic->name), 'taxonomy/term/' . $topic->tid);
     }
-   $output .= t($topics_text, $t_args);
+    $output .= t($topics_text, $t_args);
   }
   return $output;
 }
@@ -270,16 +319,17 @@ function commons_groups_module_implements_alter(&$implementations, $hook) {
     $implementations['commons_groups'] = $group;
   }
 }
+
 /**
-* Implements hook_form_alter().
-*/
+ * Implements hook_form_alter().
+ */
 function commons_groups_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'views_exposed_form' && strstr($form['#id'], 'views-exposed-form-commons-groups-directory')) {
     $form['groups-keys']['#attributes'] = array(
-        'placeholder' => t('Separate keywords with commas'),
-      );
+      'placeholder' => t('Separate keywords with commas'),
+    );
   }
-  if((strstr($form_id, 'views_form_commons_group_moderation_page'))) {
+  if ((strstr($form_id, 'views_form_commons_group_moderation_page'))) {
     $form['select']['action::views_bulk_operations_delete_item']['#weight'] = 9;
   }
   if ($form_id == 'group_node_form' && is_null($form['nid']['#value'])) {
@@ -327,9 +377,10 @@ function commons_groups_node_in_group_submit(&$form, &$form_state) {
     $form_state['redirect'] = 'node/' . $group;
   }
 }
+
 /**
-* Implements hook_system_info_alter().
-*/
+ * Implements hook_system_info_alter().
+ */
 function commons_groups_system_info_alter(&$info, $file, $type) {
   // Commons Groups dynamically adds the og_group_ref field to
   // content types that request it by altering the
@@ -341,7 +392,7 @@ function commons_groups_system_info_alter(&$info, $file, $type) {
   if ($file->name == 'commons_groups') {
     $group_bundles = og_get_all_group_bundle();
     if (!empty($group_bundles['node'])) {
-      foreach($group_bundles['node'] as $bundle => $name) {
+      foreach ($group_bundles['node'] as $bundle => $name) {
         // These field instances should be added to groups regardless of
         // whether og_access.module is enabled.
         $info['features']['field_instance'][] = "node-$bundle-field_og_access_default_value";
@@ -355,7 +406,7 @@ function commons_groups_system_info_alter(&$info, $file, $type) {
     $group_content_entity_types = commons_groups_get_group_content_entity_types();
     if (!empty($group_content_entity_types)) {
       foreach ($group_content_entity_types as $entity_type => $bundles) {
-        foreach(array_keys($bundles) as $bundle) {
+        foreach (array_keys($bundles) as $bundle) {
           $info['features']['field_instance'][] = "$entity_type-$bundle-og_group_ref";
           $info['features']['field_instance'][] = "$entity_type-$bundle-group_content_access";
         }
@@ -455,7 +506,7 @@ function commons_groups_tokens($type, $tokens, $data = array(), $options = array
     }
   }
   if ($type == 'commons-groups') {
-    if (!empty($tokens['in-groups-text']))  {
+    if (!empty($tokens['in-groups-text'])) {
       // Build a list of groups associated with this message.
       $text = '';
       $target_nids = array();
@@ -521,12 +572,15 @@ function commons_groups_message_partial_default() {
 function commons_groups_related_groups_text($related_groups) {
   // In 1 group: "in the x group"
   if (count($related_groups) == 1) {
-    return t(' in the !group group', array('!group' => l($related_groups[0]->title, 'node/' . $related_groups[0]->nid))) ;
+    return t(' in the !group group', array('!group' => l($related_groups[0]->title, 'node/' . $related_groups[0]->nid)));
   }
 
   // In 2 groups: "in the x and y groups"
   if (count($related_groups) == 2) {
-    return t(' in the !group-0 and !group-1 groups', array('!group-0' => l($related_groups[0]->title, 'node/' . $related_groups[0]->nid), '!group-1' => l($related_groups[1]->title, 'node/' . $related_groups[1]->nid)));
+    return t(' in the !group-0 and !group-1 groups', array(
+      '!group-0' => l($related_groups[0]->title, 'node/' . $related_groups[0]->nid),
+      '!group-1' => l($related_groups[1]->title, 'node/' . $related_groups[1]->nid)
+    ));
   }
 
   // In more than 2 groups: "in the x, y and z groups"
@@ -554,11 +608,11 @@ function commons_groups_group_submission_message($form, &$form_state) {
 }
 
 /**
-* Default value function for the og_group_ref reference field.
-* This function is assigned to the field with the default_value_function
-* property defined in our instances of the og_group_ref field,
-* which takes place in commons_groups_field_definition().
-*/
+ * Default value function for the og_group_ref reference field.
+ * This function is assigned to the field with the default_value_function
+ * property defined in our instances of the og_group_ref field,
+ * which takes place in commons_groups_field_definition().
+ */
 function commons_groups_entityreference_default_value($entity_type, $entity, $field, $instance, $langcode) {
 
   $items = array();
@@ -581,17 +635,18 @@ function commons_groups_entityreference_default_value($entity_type, $entity, $fi
     $target = entity_load_single($target_type, $target_id);
     if (entity_access('view', $target_type, $target)
       && og_is_group_type($target_type, $target->type)
-      && (og_user_access($target_type, $target_id, "create $entity->type content") || og_user_access($target_type, $target_id, "update any $entity->type content"))) {
-        $items[] = array('target_id' => $target_id);
+      && (og_user_access($target_type, $target_id, "create $entity->type content") || og_user_access($target_type, $target_id, "update any $entity->type content"))
+    ) {
+      $items[] = array('target_id' => $target_id);
     }
   }
   return $items;
 }
 
 /**
-* Implements hook_strongarm_alter().
-*/
- function commons_groups_strongarm_alter(&$items) {
+ * Implements hook_strongarm_alter().
+ */
+function commons_groups_strongarm_alter(&$items) {
   // Expose the Group content type for integration with Commons Radioactivity.
   if (isset($items['commons_radioactivity_entity_types'])) {
     $items['commons_radioactivity_entity_types']->value['node']['group'] = 1;
@@ -693,7 +748,7 @@ function commons_groups_node_insert($node) {
  */
 function commons_groups_set_group_permissions($node) {
   // Avoid updating a group subscription twice on the same request.
-  $updated_nodes = &drupal_static(__FUNCTION__);
+  $updated_nodes = & drupal_static(__FUNCTION__);
   if (!empty($updated_nodes[$node->nid])) {
     return;
   }
@@ -725,8 +780,8 @@ function commons_groups_set_group_permissions($node) {
 }
 
 /**
-* Returns an array of entity types that are enabled via Commons Groups.
-*/
+ * Returns an array of entity types that are enabled via Commons Groups.
+ */
 function commons_groups_get_group_content_entity_types() {
   // Find all Commons Entity integrations.
   $commons_entity_integrations = module_invoke_all('commons_entity_integration');
@@ -751,9 +806,9 @@ function commons_groups_get_group_content_entity_types() {
 }
 
 /**
-* When a user first creates content within a group,
-* grant her the contributor role within that group.
-*/
+ * When a user first creates content within a group,
+ * grant her the contributor role within that group.
+ */
 function commons_groups_first_contribution($account, $node) {
   // Find the groups that this piece of content belongs to.
   $groups = og_get_entity_groups('node', $node);
@@ -773,15 +828,15 @@ function commons_groups_first_contribution($account, $node) {
     $new_groups = array_diff($node_groups, $account_groups);
     if (!empty($new_groups)) {
       foreach ($new_groups as $new_group_nid) {
-         og_group('node', $new_group_nid, array('entity' => $account->uid));
+        og_group('node', $new_group_nid, array('entity' => $account->uid));
       }
     }
   }
 }
 
 /**
-* Implements hook_commons_bw_group_widget().
-*/
+ * Implements hook_commons_bw_group_widget().
+ */
 function commons_groups_commons_bw_group_widget() {
   return array(
     'commons_all' => array(
@@ -921,12 +976,12 @@ function commons_groups_field_formatter_view($entity_type, $entity, $field, $ins
     return $element;
   }
 
-  list($id,, $bundle) = entity_extract_ids($entity_type, $entity);
+  list($id, , $bundle) = entity_extract_ids($entity_type, $entity);
 
   // The user has a pending membership request. Let her know that
   // her request is pending review.
   if (og_is_member($entity_type, $id, 'user', $account, array(OG_STATE_PENDING))) {
-    $element[0] =  array('#markup' => '<div class="subscription-type">' . t('Your membership request is pending review by a group organizer.') . '</div>');
+    $element[0] = array('#markup' => '<div class="subscription-type">' . t('Your membership request is pending review by a group organizer.') . '</div>');
     return $element;
   }
   // If user is blocked, they should not be able to apply for membership.
@@ -973,23 +1028,33 @@ function commons_groups_field_formatter_view($entity_type, $entity, $field, $ins
     if ($settings['field_name']) {
       $url .= '/' . $settings['field_name'];
     }
-
+    // Set the needs update hook if we end up with a group call that is missing
+    // the subscribe settings. We also check the variable first, because we
+    // don't want to reset the variable cache if we don't have to.
+    // See https://drupal.org/node/2059857#comment-7733465 for more info.
+    if (empty($entity->field_og_subscribe_settings)) {
+      if (!variable_get('commons_groups_needs_update', FALSE)) {
+        variable_set('commons_groups_needs_update', TRUE);
+      }
+    }
     // Don't display join link on public groups.
-    if ($entity->field_og_subscribe_settings[LANGUAGE_NONE][0]['value'] != 'anyone') {
-      if ($entity->field_og_subscribe_settings[LANGUAGE_NONE][0]['value'] == 'approval') {
-        $subscription_type = t('Moderated group');
-        $links['title'] = t('Join group');
-        if ($account->uid) {
-          $links['href'] = $url;
+    else {
+      if ($entity->field_og_subscribe_settings[LANGUAGE_NONE][0]['value'] != 'anyone') {
+        if ($entity->field_og_subscribe_settings[LANGUAGE_NONE][0]['value'] == 'approval') {
+          $subscription_type = t('Moderated group');
+          $links['title'] = t('Join group');
+          if ($account->uid) {
+            $links['href'] = $url;
+          }
+          else {
+            $links['href'] = 'user/login';
+            $links['options'] = array('query' => array('destination' => $url));
+          }
         }
         else {
-          $links['href'] = 'user/login';
-          $links['options'] = array('query' => array('destination' => $url));
+          $element[0] = array('#markup' => '<div class="subscription-type">' . t('Invite-only group') . '</div>');
+          return $element;
         }
-      }
-      else {
-        $element[0] =  array('#markup' => '<div class="subscription-type">' . t('Invite-only group') . '</div>');
-        return $element;
       }
     }
   }
