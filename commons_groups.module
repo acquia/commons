@@ -43,6 +43,26 @@ function commons_groups_modules_enabled($modules) {
 }
 
 /**
+ * Implements hook_help().
+ */
+function commons_groups_help($path, $arg) {
+  if(variable_get('commons_groups_needs_update', FALSE)) {
+    if($path == 'admin/content/groups/update' || ($arg[0] == 'node' && $arg[2] == 'edit')) {
+      return '<p>' . t("In commons 3.3, groups have added a required group privacy field
+        It allows you to set a group to be public, under moderation, or private. Please
+        edit each group below and select one of the privacy options. Once all groups are
+        set, you'll be able to dismiss the update warning.") . '</p>';
+    }
+    if(user_access('edit any group content')) {
+      if(variable_get('commons_groups_needs_update', TRUE)) {
+        $message = t("Group privacy settings !updated.", array('!updated' => l('need to be updated','admin/content/groups/update'),));
+        drupal_set_message($message, 'warning', FALSE);
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_entity_view().
  */
 function commons_groups_entity_view($entity, $type, $view_mode, $langcode) {
@@ -79,7 +99,7 @@ function commons_groups_form_group_node_form_alter(&$form, &$form_state) {
   $form['privacy_settings']['field_og_subscribe_settings'][LANGUAGE_NONE]['#title'] = '';
   $form['privacy_settings']['field_og_subscribe_settings'][LANGUAGE_NONE]['#required'] = FALSE;
 
- 
+
   $form['privacy_settings']['field_og_access_default_value'] = $form['field_og_access_default_value'];
   unset($form['field_og_access_default_value']);
   if (module_exists('og_access')) {
@@ -159,6 +179,22 @@ function commons_groups_menu_alter(&$items) {
     $items['node/%/group']['title'] = t('Administer group');
   }
 }
+
+function commons_groups_menu() {
+  $items['admin/content/groups/update/toggle'] = array(
+    'title' => 'Toggle Groups Update',
+    'page callback' => 'commons_groups_update_toggle',
+    'access arguments' => array('edit any group content'),
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+function commons_groups_update_toggle() {
+  variable_set('commons_groups_needs_update', FALSE);
+  return true;
+}
+
 /**
  * Implements hook_block_info().
  */
@@ -970,9 +1006,18 @@ function commons_groups_field_formatter_view($entity_type, $entity, $field, $ins
     if ($settings['field_name']) {
       $url .= '/' . $settings['field_name'];
     }
-
+    // Set the needs update hook if we end up with a group call that is missing
+    // the subscribe settings. We also check the variable first, because we
+    // don't want to reset the variable cache if we don't have to.
+    // See https://drupal.org/node/2059857#comment-7733465 for more info.
+    //dpm($entity);
+    if (empty($entity->field_og_subscribe_settings)) {
+      if (!variable_get('commons_groups_needs_update', FALSE)) {
+        variable_set('commons_groups_needs_update', TRUE);
+      }
+    }
     // Don't display join link on public groups.
-    if ($entity->field_og_subscribe_settings[LANGUAGE_NONE][0]['value'] != 'anyone') {
+    else if ($entity->field_og_subscribe_settings[LANGUAGE_NONE][0]['value'] != 'anyone') {
       if ($entity->field_og_subscribe_settings[LANGUAGE_NONE][0]['value'] == 'approval') {
         $subscription_type = t('Moderated group');
         $links['title'] = t('Join group');
