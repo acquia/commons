@@ -503,14 +503,14 @@ function commons_trusted_contacts_field_definition_group(&$field_instances, $ent
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'inline',
         'module' => 'og_ui',
         'settings' => array(),
         'type' => 'og_list_default',
         'weight' => 11,
       ),
       'teaser' => array(
-        'label' => 'above',
+        'label' => 'inline',
         'settings' => array(),
         'type' => 'hidden',
         'weight' => 0,
@@ -518,7 +518,7 @@ function commons_trusted_contacts_field_definition_group(&$field_instances, $ent
     ),
     'entity_type' => $entity_type,
     'field_name' => 'og_user_group_ref',
-    'label' => 'User groups',
+    'label' => 'Visible to trusted contacts of',
     'required' => 0,
     'settings' => array(
       'behaviors' => array(
