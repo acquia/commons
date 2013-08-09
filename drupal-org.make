@@ -75,7 +75,7 @@ projects[date][version] = "2.6"
 
 projects[date_facets][type] = "module"
 projects[date_facets][subdir] = "contrib"
-projects[date_facets][version] = "1.0-beta1"
+projects[date_facets][version] = "1.0-beta2"
 
 ; Keeping this to the latest version, since it should only be used for development.
 projects[devel][version] = "1.x-dev"
@@ -479,6 +479,7 @@ projects[commons_site_homepage][subdir] = "contrib"
 
 projects[commons_trusted_contacts][type] = "module"
 projects[commons_trusted_contacts][subdir] = "contrib"
+projects[commons_trusted_contacts][version] = "3.3-rc2"
 
 projects[commons_utility_links][type] = "module"
 projects[commons_utility_links][subdir] = "contrib"
@@ -514,7 +515,7 @@ projects[sky][version] = "3.0-rc1"
 
 projects[commons_origins][type] = "theme"
 projects[commons_origins][subdir] = "contrib"
-projects[commons_origins][version] = "3.3-rc1"
+projects[commons_origins][version] = "3.3-rc2"
 
 ; Libraries.
 ; NOTE: These need to be listed in http://drupal.org/packaging-whitelist.
