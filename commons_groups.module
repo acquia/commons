@@ -440,8 +440,6 @@ function commons_groups_default_message_type_alter(&$defaults) {
  */
 function commons_groups_og_user_access_alter(&$perm, $context) {
   $account = $context['account'];
-
-  $cache[$account->uid] = TRUE;
   $group_type = $context['group_type'];
   $group = $context['group'];
 
@@ -464,8 +462,6 @@ function commons_groups_og_user_access_alter(&$perm, $context) {
   foreach (array_keys($commons_groups_entity_types['node']) as $type) {
     $perm["create $type content"] = $access_create;
   }
-  $perm['subscribe'] = $access_create;
-  $perm['subscribe without approval'] = $access_create;
 }
 
 
