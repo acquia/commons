@@ -429,7 +429,7 @@ projects[commons_featured][subdir] = "contrib"
 
 projects[commons_follow][type] = "module"
 projects[commons_follow][subdir] = "contrib"
-projects[commons_follow][version] = "7.x-3.3-rc1"
+projects[commons_follow][version] = "3.3-rc1"
 
 projects[commons_location][type] = "module"
 projects[commons_location][subdir] = "contrib"
@@ -442,7 +442,7 @@ projects[commons_notices][subdir] = "contrib"
 
 projects[commons_notify][type] = "module"
 projects[commons_notify][subdir] = "contrib"
-projects[commons_notify][version] = "7.x-3.3-rc1"
+projects[commons_notify][version] = "3.3-rc1"
 
 projects[commons_pages][type] = "module"
 projects[commons_pages][subdir] = "contrib"
@@ -514,7 +514,7 @@ projects[sky][version] = "3.0-rc1"
 
 projects[commons_origins][type] = "theme"
 projects[commons_origins][subdir] = "contrib"
-projects[commons_origins][version] = "7.x-3.3-rc1"
+projects[commons_origins][version] = "3.3-rc1"
 
 ; Libraries.
 ; NOTE: These need to be listed in http://drupal.org/packaging-whitelist.
