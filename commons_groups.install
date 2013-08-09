@@ -107,9 +107,13 @@ function commons_groups_update_3108() {
 }
 
 /**
- * Update the group_group field per http://drupal.org/node/1948224.
+ * Update the group_group field per http://drupal.org/node/1948224 and
+ * disable the deprecated Commons Group Privacy module
+ * per https://drupal.org/node/1961296.
  */
 function commons_groups_update_3109() {
+  // Commons Group Privacy was deprecated in https://drupal.org/node/1961296.
+  module_disable('commons_group_privacy', TRUE);
   $revert = array(
     'commons_groups' => array('field_base', 'field_instance'),
   );
