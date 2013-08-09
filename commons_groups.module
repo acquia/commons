@@ -448,8 +448,10 @@ function commons_groups_og_user_access_alter(&$perm, $context) {
   if ($group_type != 'node') {
     return;
   }
-
-  if (og_is_member($group_type, $group->nid, 'user', $account, array(OG_STATE_ACTIVE))) {
+  // The purpose of this function is to grant permissions to create content
+  // in a group to non-members of the group, when the group's privacy settings
+  // (field_og_subscribe_settings) is set to "Anyone can contribute".
+  if (og_is_member($group_type, $group->nid, 'user', $account, array(OG_STATE_ACTIVE, OG_STATE_PENDING, OG_STATE_BLOCKED))) {
     // The user is a group member, so comply to the OG permissions.
     return;
   }
