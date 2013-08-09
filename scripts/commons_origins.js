@@ -89,7 +89,8 @@ jQuery(document).ready(function($){
         var fieldset = $(this),
             minHeight = fieldset.find('legend').height();
 
-        $fieldset.css('min-height', minHeight + 'px');
+
+        fieldset.css('min-height', minHeight + 'px');
 
         // Adjust the height on window resize.
         $(window).resize(function () {
