@@ -100,7 +100,10 @@ projects[entity][patch][] = "http://drupal.org/files/entity-translatable_fields_
 
 projects[entitycache][type] = "module"
 projects[entitycache][subdir] = "contrib"
-projects[entitycache][version] = "1.1"
+projects[entitycache][download][type] = "git"
+projects[entitycache][download][url] = "http://git.drupal.org/project/entitycache.git"
+projects[entitycache][download][branch] = "7.x-1.x"
+projects[entitycache][download][revision] = "7e390b5"
 
 projects[entityreference][type] = "module"
 projects[entityreference][subdir] = "contrib"
