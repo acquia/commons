@@ -439,6 +439,37 @@ function commons_trusted_contacts_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'user-user-group_access'
+  $field_instances['user-user-group_access'] = array(
+    'bundle' => 'user',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 13,
+      ),
+    ),
+    'display_in_partial_form' => 0,
+    'entity_type' => 'user',
+    'field_name' => 'group_access',
+    'label' => 'Group visibility',
+    'required' => 1,
+    'settings' => array(
+      'user_register_form' => 1,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_buttons',
+      'weight' => 13,
+    ),
+  );
   // Provide appropriate settings for our fields when users are
   // indexed by Solr. ApacheSolr_User uses the 'search_index' view mode
   // to render the user document for indexing. Since this view mode doesn't

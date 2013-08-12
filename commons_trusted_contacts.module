@@ -20,6 +20,20 @@ function commons_trusted_contacts_system_info_alter(&$info, $file, $type) {
 }
 
 /**
+ * Implements hook_user_presave().
+ *
+ */
+function commons_trusted_contacts_user_presave(&$edit, $account, $category) {
+  // Ensure that a value is always set for the user's group_access field, 
+  // so that the user remains public while content shared with the user's
+  // trusted contacts group is private. If the value of $user->group_access
+  // is not set, og_access.module will throw an exception in
+  // _og_access_verify_access_field_existence().
+  if (empty($edit['group_access'][LANGUAGE_NONE])) {
+    $edit['group_access'][LANGUAGE_NONE][0]['value'] = 0;
+  }
+}
+/**
  * Implements hook_pathauto_alias_alter
  * Since all content by default goes into 'groups/group-name/node-name', we want
  * to do something different with private user posts. Thus we alter the alias
