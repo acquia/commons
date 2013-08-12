@@ -94,6 +94,14 @@ function commons_q_a_views_default_views() {
   $handler->display->display_options['filters']['type']['value'] = array(
     'question' => 'question',
   );
+  /* Filter criterion: OG membership: Group_type */
+  $handler->display->display_options['filters']['group_type']['id'] = 'group_type';
+  $handler->display->display_options['filters']['group_type']['table'] = 'og_membership';
+  $handler->display->display_options['filters']['group_type']['field'] = 'group_type';
+  $handler->display->display_options['filters']['group_type']['relationship'] = 'og_membership_rel';
+  $handler->display->display_options['filters']['group_type']['value'] = array(
+    'node' => 'node',
+  );
   $translatables['commons_bw_q_a'] = array(
     t('Master'),
     t('more'),
