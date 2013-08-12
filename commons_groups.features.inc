@@ -7,8 +7,7 @@
 /**
  * Implements hook_ctools_plugin_api().
  */
-function commons_groups_ctools_plugin_api() {
-  list($module, $api) = func_get_args();
+function commons_groups_ctools_plugin_api($module = NULL, $api = NULL) {
   if ($module == "strongarm" && $api == "strongarm") {
     return array("version" => "1");
   }
@@ -17,7 +16,7 @@ function commons_groups_ctools_plugin_api() {
 /**
  * Implements hook_views_api().
  */
-function commons_groups_views_api() {
+function commons_groups_views_api($module = NULL, $api = NULL) {
   return array("api" => "3.0");
 }
 
@@ -41,10 +40,10 @@ function commons_groups_image_default_styles() {
         'module' => 'image',
         'name' => 'image_scale_and_crop',
         'data' => array(
-          'width' => '35',
-          'height' => '35',
+          'width' => 35,
+          'height' => 35,
         ),
-        'weight' => '1',
+        'weight' => 1,
       ),
     ),
   );
@@ -63,10 +62,10 @@ function commons_groups_image_default_styles() {
         'module' => 'image',
         'name' => 'image_scale_and_crop',
         'data' => array(
-          'width' => '50',
-          'height' => '50',
+          'width' => 50,
+          'height' => 50,
         ),
-        'weight' => '1',
+        'weight' => 1,
       ),
     ),
   );
@@ -82,7 +81,7 @@ function commons_groups_node_info() {
     'group' => array(
       'name' => t('Group'),
       'base' => 'node_content',
-      'description' => 'Use groups to contain people and content related by a shared interest or purpose.',
+      'description' => t('Use groups to contain people and content related by a shared interest or purpose.'),
       'has_title' => '1',
       'title_label' => t('Group name'),
       'help' => '',
