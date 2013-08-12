@@ -108,6 +108,14 @@ function commons_posts_views_default_views() {
   $handler->display->display_options['filters']['type']['value'] = array(
     'post' => 'post',
   );
+  /* Filter criterion: OG membership: Group_type */
+  $handler->display->display_options['filters']['group_type']['id'] = 'group_type';
+  $handler->display->display_options['filters']['group_type']['table'] = 'og_membership';
+  $handler->display->display_options['filters']['group_type']['field'] = 'group_type';
+  $handler->display->display_options['filters']['group_type']['relationship'] = 'og_membership_rel';
+  $handler->display->display_options['filters']['group_type']['value'] = array(
+    'node' => 'node',
+  );
   /* Filter criterion: Following */
   $handler->display->display_options['filters']['flagged']['id'] = 'flagged';
   $handler->display->display_options['filters']['flagged']['table'] = 'flag_content';
