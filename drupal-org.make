@@ -240,7 +240,7 @@ projects[og][patch][] = "http://drupal.org/files/og-default-role-member-2005800-
 projects[og][patch][] = "http://drupal.org/files/og_ui-group_node_add_theme-1800208-5.patch"
 
 ; _og_access_verify_access_field_existence() assumes node group type, throws an exception rebuilding node access.
-projects[og][patch][] = "https://drupal.org/files/og-access-rebuild-exception-group-type.patch"
+projects[og][patch][] = "http://drupal.org/files/og-access-rebuild-exception-group-type.patch"
 
 projects[panelizer][type] = "module"
 projects[panelizer][subdir] = "contrib"
