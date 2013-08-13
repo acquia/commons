@@ -527,7 +527,7 @@ projects[commons_origins][version] = "3.3-rc2"
 ; NOTE: These need to be listed in http://drupal.org/packaging-whitelist.
 libraries[underscore][download][type] = "get"
 libraries[underscore][type] = "libraries"
-libraries[underscore][download][url] = "https://github.com/documentcloud/underscore/archive/1.4.4.zip"
+libraries[underscore][download][url] = "https://github.com/jashkenas/underscore/archive/1.4.4.zip"
 
 libraries[backbone][download][type] = "get"
 libraries[backbone][type] = "libraries"
