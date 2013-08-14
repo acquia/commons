@@ -88,7 +88,7 @@ function commons_groups_field_definition_group(&$field_instances, $entity_type, 
       ),
     ),
     'deleted' => '0',
-    'description' => '',
+    'description' => t("Sets privacy settings for all <strong>future</strong> content. This setting <strong>does not</strong> change previous content access."),
     'display' => array(
       'default' => array(
         'label' => 'above',
