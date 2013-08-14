@@ -28,6 +28,7 @@ function commons_groups_image_default_styles() {
 
   // Exported image style: 35x35.
   $styles['35x35'] = array(
+    'label' => '35x35',
     'name' => '35x35',
     'effects' => array(
       1 => array(
@@ -50,6 +51,7 @@ function commons_groups_image_default_styles() {
 
   // Exported image style: 50x50.
   $styles['50x50'] = array(
+    'label' => '50x50',
     'name' => '50x50',
     'effects' => array(
       2 => array(
