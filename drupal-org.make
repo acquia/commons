@@ -92,7 +92,7 @@ projects[email_registration][version] = "1.1"
 
 projects[entity][type] = "module"
 projects[entity][subdir] = "contrib"
-projects[entity][version] = "1.1"
+projects[entity][version] = "1.2"
 
 ; Force LANGUAGE_NONE entities to still display within rendered entities.
 ; http://drupal.org/node/1782134
