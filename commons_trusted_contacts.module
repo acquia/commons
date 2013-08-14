@@ -917,6 +917,7 @@ function commons_trusted_contacts_form_add_privacy_toggle(&$form, &$form_state) 
     '#attributes' => array(
       'class' => array('hideable-field'),
     ),
+    '#access' => empty($form_state['hide_audience_toggle']),
     // Normally Form API states (https://api.drupal.org/api/drupal/includes!common.inc/function/drupal_process_states/7)
     // Would be used here, but it does not support loading multiple similar
     // forms on the same page. This is why a simple javascript files is needed
