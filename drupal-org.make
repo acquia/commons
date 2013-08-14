@@ -100,7 +100,10 @@ projects[entity][patch][] = "http://drupal.org/files/entity-translatable_fields_
 
 projects[entitycache][type] = "module"
 projects[entitycache][subdir] = "contrib"
-projects[entitycache][version] = "1.1"
+projects[entitycache][download][type] = "git"
+projects[entitycache][download][url] = "http://git.drupal.org/project/entitycache.git"
+projects[entitycache][download][branch] = "7.x-1.x"
+projects[entitycache][download][revision] = "7e390b5"
 
 projects[entityreference][type] = "module"
 projects[entityreference][subdir] = "contrib"
@@ -237,7 +240,7 @@ projects[og][patch][] = "http://drupal.org/files/og-default-role-member-2005800-
 projects[og][patch][] = "http://drupal.org/files/og_ui-group_node_add_theme-1800208-5.patch"
 
 ; _og_access_verify_access_field_existence() assumes node group type, throws an exception rebuilding node access.
-projects[og][patch][] = "https://drupal.org/files/og-access-rebuild-exception-group-type.patch"
+projects[og][patch][] = "http://drupal.org/files/og-access-rebuild-exception-group-type.patch"
 
 projects[panelizer][type] = "module"
 projects[panelizer][subdir] = "contrib"
@@ -524,7 +527,7 @@ projects[commons_origins][version] = "3.3-rc2"
 ; NOTE: These need to be listed in http://drupal.org/packaging-whitelist.
 libraries[underscore][download][type] = "get"
 libraries[underscore][type] = "libraries"
-libraries[underscore][download][url] = "https://github.com/documentcloud/underscore/archive/1.4.4.zip"
+libraries[underscore][download][url] = "https://github.com/jashkenas/underscore/archive/1.4.4.zip"
 
 libraries[backbone][download][type] = "get"
 libraries[backbone][type] = "libraries"
