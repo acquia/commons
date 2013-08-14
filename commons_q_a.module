@@ -185,6 +185,11 @@ function commons_q_a_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'answer_node_form') {
     $form['og_group_ref']['#access'] = FALSE;
     $form['actions']['submit']['#submit'][] = 'commons_q_a_answer_submit';
+    // Ensure that the answer node inherits group membership from the 
+    // parent question by preventing users from changing the audience through
+    // the Trusted Contacts toggle when commons_trusted_contacts.module
+    // is enabled.
+    $form_state['hide_audience_toggle'] = TRUE;
   }
   if ($form_id == 'question_node_form' && empty($form['#node']->nid)) {
     drupal_set_title(t('Ask a question'));
