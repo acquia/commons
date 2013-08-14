@@ -478,14 +478,18 @@ function commons_search_solr_modules_disabled($modules) {
   }
 }
 
-
+/**
+ * Implements hook_apachesolr_process_results().
+ */
 function commons_search_solr_apachesolr_process_results(&$results, DrupalSolrQueryInterface $query) {
   foreach($results AS $rkey => $result) {
     if ($results[$rkey]['fields']['entity_type'] == 'node') {
-      $results[$rkey]['snippet'] = drupal_render(node_view(node_load($results[$rkey]['fields']['entity_id']), 'teaser'));
+      $node_view = node_view(node_load($results[$rkey]['fields']['entity_id']), 'teaser');
+      $results[$rkey]['snippet'] = drupal_render($node_view);
     }
     if ($results[$rkey]['fields']['entity_type'] == 'user') {
-      $results[$rkey]['snippet'] = drupal_render(user_view(user_load($results[$rkey]['fields']['entity_id']), 'search_results'));
+      $user_view = user_view(user_load($results[$rkey]['fields']['entity_id']), 'search results');
+      $results[$rkey]['snippet'] = drupal_render($user_view);
     }
   }
 }
