@@ -667,10 +667,6 @@ optgroup {
     border: .4em solid transparent;
     border-top-color: $light_blue;
   }
-
-  .select-active & {
-    @include opacity(0);
-  }
 }
 
 .hidden-select {
@@ -678,14 +674,7 @@ optgroup {
   top: -.35em;
   left: 0;
   margin: 0;
-  @include single-transition(opacity, .2s);
-
-  .select-inactive & {
-    max-width: 100%;
-    overflow: hidden;
-    white-space: nowrap;
-    @include opacity(0);
-  }
+  @include opacity(0);
 }
 
 /* Replace the default Drupal throbber with a custom one. */
