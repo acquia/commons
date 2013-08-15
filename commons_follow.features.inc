@@ -22,6 +22,7 @@ function commons_follow_image_default_styles() {
 
   // Exported image style: 50x50_avatar.
   $styles['50x50_avatar'] = array(
+    'label' => '50x50_avatar',
     'name' => '50x50_avatar',
     'effects' => array(
       3 => array(
