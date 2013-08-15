@@ -529,7 +529,7 @@ projects[sky][version] = "3.0-rc1"
 
 projects[commons_origins][type] = "theme"
 projects[commons_origins][subdir] = "contrib"
-projects[commons_origins][version] = "3.3-rc2"
+projects[commons_origins][version] = "3.3-rc3"
 
 ; Libraries.
 ; NOTE: These need to be listed in http://drupal.org/packaging-whitelist.
