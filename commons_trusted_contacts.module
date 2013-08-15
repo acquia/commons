@@ -231,7 +231,7 @@ function commons_trusted_contacts_form_alter(&$form, &$form_state, $form_id) {
  */
 function commons_trusted_contacts_tab() {
   global $user;
-
+  $account = $user;
   $tabs = array();
 
   $view = views_get_view('trusted_contacts');
@@ -243,15 +243,15 @@ function commons_trusted_contacts_tab() {
   );
 
   module_load_include('inc', 'privatemsg', 'privatemsg.pages');
-  $wrapper = entity_metadata_wrapper('user', $user);
+
   $tabs['messages'] = array(
-    'title' => t('Messages') . ' <span class="commons-bw-result-count">' . (int) $wrapper->field_unread_messages->value() . '</span>',
+    'title' => t('Messages') . ' <span class="commons-bw-result-count">' . privatemsg_unread_count($account) . '</span>',
     'contents' => privatemsg_list_page(),
   );
 
-  $wrapper = entity_metadata_wrapper('user', $user);
+
   $tabs['invitations'] = array(
-    'title' => t('Invitations') . ' <span class="commons-bw-result-count">' . (int) $wrapper->field_unread_invitations->value() . '</span>',
+    'title' => t('Invitations') . ' <span class="commons-bw-result-count">' . count(commons_trusted_contacts_get_pending_invitations($account->uid)) . '</span>',
     'contents' => views_embed_view('trusted_contacts_invitations'),
   );
 
@@ -478,12 +478,6 @@ function commons_trusted_contacts_og_membership_insert(OgMembership $og_membersh
   unset($og_membership->is_new);
   $og_membership->_skip_membership_update = TRUE;
   $wrapper->save();
-
-  if ($og_membership->state == OG_STATE_PENDING) {
-    // Add 1 to unread invitations count.
-    $account = user_load($og_membership->gid);
-    commons_notify_add_notification_item($account, 'invitation');
-  }
 }
 
 /**
@@ -548,12 +542,6 @@ function commons_trusted_contacts_og_membership_update(OgMembership $og_membersh
 
       // Subtract 1 from unread invitations count.
       $account = user_load($og_membership->gid);
-      commons_notify_remove_notification_item($account, 'invitation');
-    }
-    elseif ($wrapper->state->value() == OG_STATE_PENDING) {
-      // Add 1 to unread invitations count.
-      $account = user_load($og_membership->gid);
-      commons_notify_add_notification_item($account, 'invitation');
     }
   }
 
@@ -1102,32 +1090,24 @@ function commons_trusted_contacts_messages_popup($form, &$form_state, $account) 
 }
 
 /**
- * Implements hook_privatemsg_message_insert().
- *
- * When a private message is sent, update the recipients' notification counts.
+ * Helper function to get all of the pending invitations for a given 
+ * recipient user. Returns an array of OG memberships.
  */
-function commons_trusted_contacts_privatemsg_message_insert($message) {
-  foreach ($message->recipients as $recipient) {
-    commons_notify_add_notification_item($recipient, 'message');
-  }
+function commons_trusted_contacts_get_pending_invitations($uid) {
+  $query = new EntityFieldQuery();
+  $return = $query
+    ->entityCondition('entity_type', 'og_membership')
+    ->propertyCondition('group_type', 'user')
+    ->propertyCondition('entity_type', 'user')
+    ->propertyCondition('gid', $uid)
+    ->propertyCondition('etid', $uid, '!=')
+    ->propertyCondition('state', OG_STATE_PENDING)
+    ->propertyCondition('type', 'trusted_contacts')
+    ->fieldCondition('field_my_request', 'value', 1)
+    ->execute();
+  return !empty($return['og_membership']) ? $return['og_membership'] : array();
 }
 
-/**
- * Implements hook_privatemsg_message_status_changed().
- *
- * When a private message changes status from 'read' to 'unread' or vice versa,
- * update the recipients' notification counts accordingly.
- */
-function commons_trusted_contacts_privatemsg_message_status_changed($pmid, $status, $account) {
-  if ($status) {
-    // Status changed to unread.
-    commons_notify_add_notification_item($account, 'message');
-  }
-  else {
-    // Status changed to read.
-    commons_notify_remove_notification_item($account, 'message');
-  }
-}
 
 /**
  * Menu callback; Batch for setting users as groups.
