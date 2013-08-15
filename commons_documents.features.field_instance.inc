@@ -14,7 +14,7 @@ function commons_documents_field_default_field_instances() {
   $field_instances['node-document-body'] = array(
     'bundle' => 'document',
     'default_value' => NULL,
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
@@ -51,14 +51,14 @@ function commons_documents_field_default_field_instances() {
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => '1',
+      'weight' => 1,
     ),
   );
 
   // Exported field_instance: 'node-document-field_document_file'
   $field_instances['node-document-field_document_file'] = array(
     'bundle' => 'document',
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
@@ -94,7 +94,7 @@ function commons_documents_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'file_generic',
-      'weight' => '2',
+      'weight' => 2,
     ),
   );
 

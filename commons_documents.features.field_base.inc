@@ -12,9 +12,9 @@ function commons_documents_field_default_field_bases() {
 
   // Exported field_base: 'field_document_file'
   $field_bases['field_document_file'] = array(
-    'active' => '1',
-    'cardinality' => '-1',
-    'deleted' => '0',
+    'active' => 1,
+    'cardinality' => -1,
+    'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_document_file',
     'foreign keys' => array(
@@ -30,14 +30,14 @@ function commons_documents_field_default_field_bases() {
         0 => 'fid',
       ),
     ),
-    'locked' => '0',
+    'locked' => 0,
     'module' => 'file',
     'settings' => array(
       'display_default' => 1,
       'display_field' => 0,
       'uri_scheme' => 'public',
     ),
-    'translatable' => '0',
+    'translatable' => 0,
     'type' => 'file',
   );
 
