@@ -104,52 +104,6 @@ function commons_notify_comment_insert($comment) {
 }
 
 /**
- * Add 1 to a user's notification count.
- *
- * @param $type
- *    Type of notification; 'message' and 'invitation' are supported.
- */
-function commons_notify_add_notification_item($account, $type) {
-  $wrapper = entity_metadata_wrapper('user', $account->uid);
-
-  switch ($type) {
-    case 'message':
-      $wrapper->field_unread_messages->set($wrapper->field_unread_messages->value() + 1);
-      break;
-    case 'invitation':
-      $wrapper->field_unread_invitations->set($wrapper->field_unread_invitations->value() + 1);
-      break;
-  }
-
-  // Make sure OG doesn't try to process group-audience upon save.
-  $account->skip_og_membership = TRUE;
-  $wrapper->save();
-}
-
-/**
- * Subtract 1 from a user's notification count.
- *
- * @param $type
- *    Type of notification; 'message' and 'invitation' are supported.
- */
-function commons_notify_remove_notification_item($account, $type) {
-  $wrapper = entity_metadata_wrapper('user', $account->uid);
-
-  switch ($type) {
-    case 'message':
-      $wrapper->field_unread_messages->set($wrapper->field_unread_messages->value() - 1);
-      break;
-    case 'invitation':
-      $wrapper->field_unread_invitations->set($wrapper->field_unread_invitations->value() - 1);
-      break;
-  }
-
-  // Make sure OG doesn't try to process group-audience upon save.
-  $account->skip_og_membership = TRUE;
-  $wrapper->save();
-}
-
-/**
  * Implements hook_commons_utility_links().
  *
  * Add unread-invitations and unread-messages notifications to utility links.
@@ -166,10 +120,18 @@ function commons_notify_commons_utility_links_alter(&$links) {
     'name' => $links['name'],
   );
 
-  $wrapper = entity_metadata_wrapper('user', $user);
+  $account = $user;
 
-  $unread_invitations = $wrapper->field_unread_invitations->value();
-  $unread_messages = $wrapper->field_unread_messages->value();
+  $unread_invitations = 0;
+  if (module_exists('commons_trusted_contacts')) {
+    $unread_invitations = count(commons_trusted_contacts_get_pending_invitations($account->uid));
+  }
+
+  $unread_messages = 0;
+  if (module_exists('privatemsg')) {
+    $unread_messages = privatemsg_unread_count($account);
+  }
+
 
   if (empty($unread_invitations) && empty($unread_messages)) {
     // Provide a default mailbox icon pointing to the private messages UI
