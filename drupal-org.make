@@ -411,6 +411,7 @@ projects[votingapi][subdir] = "contrib"
 ; We don't tag a release here because want them to auto-increment.
 projects[commons_activity_streams][type] = "module"
 projects[commons_activity_streams][subdir] = "contrib"
+projects[commons_activity_streams][version] = "3.3-rc3"
 
 projects[commons_body][type] = "module"
 projects[commons_body][subdir] = "contrib"
@@ -423,6 +424,7 @@ projects[commons_content_moderation][subdir] = "contrib"
 
 projects[commons_documents][type] = "module"
 projects[commons_documents][subdir] = "contrib"
+projects[commons_documents][version] = "3.3-rc3"
 
 projects[commons_groups][type] = "module"
 projects[commons_groups][subdir] = "contrib"
@@ -455,9 +457,11 @@ projects[commons_pages][subdir] = "contrib"
 
 projects[commons_posts][subdir] = "contrib"
 projects[commons_posts][type] = "module"
+projects[commons_posts][version] = "3.3-rc3"
 
 projects[commons_polls][type] = "module"
 projects[commons_polls][subdir] = "contrib"
+projects[commons_polls][version] = "3.3-rc3"
 
 projects[commons_profile_base][type] = "module"
 projects[commons_profile_base][subdir] = "contrib"
@@ -467,15 +471,18 @@ projects[commons_profile_social][subdir] = "contrib"
 
 projects[commons_q_a][type] = "module"
 projects[commons_q_a][subdir] = "contrib"
+projects[commons_q_a][version] = "3.3-rc3"
 
 projects[commons_radioactivity][type] = "module"
 projects[commons_radioactivity][subdir] = "contrib"
+projects[commons_radioactivity][version] = "3.3-rc3"
 
 projects[commons_like][type] = "module"
 projects[commons_like][subdir] = "contrib"
 
 projects[commons_search][type] = "module"
 projects[commons_search][subdir] = "contrib"
+projects[commons_search][version] = "3.3-rc3"
 
 projects[commons_social_sharing][type] = "module"
 projects[commons_social_sharing][subdir] = "contrib"
@@ -485,7 +492,7 @@ projects[commons_site_homepage][subdir] = "contrib"
 
 projects[commons_trusted_contacts][type] = "module"
 projects[commons_trusted_contacts][subdir] = "contrib"
-projects[commons_trusted_contacts][version] = "3.3-rc2"
+projects[commons_trusted_contacts][version] = "3.3-rc3"
 
 projects[commons_utility_links][type] = "module"
 projects[commons_utility_links][subdir] = "contrib"
@@ -495,6 +502,7 @@ projects[commons_user_profile_pages][subdir] = "contrib"
 
 projects[commons_wikis][type] = "module"
 projects[commons_wikis][subdir] = "contrib"
+projects[commons_wikis][version] = "3.3-rc3"
 
 projects[commons_wysiwyg][type] = "module"
 projects[commons_wysiwyg][subdir] = "contrib"
