@@ -923,6 +923,11 @@ function commons_trusted_contacts_form_add_privacy_toggle(&$form, &$form_state) 
  * Adds Privacy selection to full form for node/add or node/edit.
  */
 function commons_trusted_contacts_form_node_form_alter(&$form, &$form_state) {
+  // Act only on Commons Groups group content entities.
+  $group_content_entity_types = commons_groups_get_group_content_entity_types();
+  if (!isset($group_content_entity_types['node'][$form['#node']->type])) {
+    return;
+  }
   if (empty($form['og_user_group_ref']) || !module_exists('og_access') || og_is_group_type('node', $form_state['node']->type)) {
     return;
   }
@@ -964,7 +969,11 @@ function commons_trusted_contacts_node_presave($node) {
   if (!module_exists('og_access') || og_is_group('node', $node)) {
     return;
   }
-
+  // Act only on Commons Groups group content entities.
+  $group_content_entity_types = commons_groups_get_group_content_entity_types();
+  if (!isset($group_content_entity_types['node'][$node->type])) {
+    return;
+  }
   // We're posting from the short form on the site-wide homepage.
   if (isset($node->form_state['values']['group_audience_type'])) {
     $group_audience_type = $node->form_state['values']['group_audience_type'];
