@@ -285,6 +285,7 @@ function commons_user_profile_pages_default_page_manager_handlers() {
     $pane->locks = array();
     $display->content['new-10'] = $pane;
     $display->panels['three_33_top'][5] = 'new-10';
+  if(module_exists('commons_trusted_contacts')) {
     $pane = new stdClass();
     $pane->pid = 'new-11';
     $pane->panel = 'three_33_top';
@@ -311,6 +312,7 @@ function commons_user_profile_pages_default_page_manager_handlers() {
     $pane->locks = array();
     $display->content['new-11'] = $pane;
     $display->panels['three_33_top'][6] = 'new-11';
+  }
   $display->hide_title = PANELS_TITLE_FIXED;
   $display->title_pane = '0';
   $handler->conf['display'] = $display;
