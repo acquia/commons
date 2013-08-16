@@ -672,9 +672,13 @@ optgroup {
 .hidden-select {
   position: absolute;
   top: -.35em;
-  left: 0;
+  left: -.35em;
   margin: 0;
   @include opacity(0);
+
+  .select-inactive & {
+    width: 100%;
+  }
 }
 
 /* Replace the default Drupal throbber with a custom one. */
