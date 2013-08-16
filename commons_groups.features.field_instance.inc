@@ -88,7 +88,7 @@ function commons_groups_field_definition_group(&$field_instances, $entity_type, 
       ),
     ),
     'deleted' => '0',
-    'description' => t("This privacy setting will not change the visibility of content that has already posted into this group. It takes effect only for content created after the group is saved with new privacy settings."),
+    'description' => t("These privacy settings will not change the visibility of content that has already posted into this group. It takes effect only for content created after the group is saved with new privacy settings."),
     'display' => array(
       'default' => array(
         'label' => 'above',
