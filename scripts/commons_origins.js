@@ -6,7 +6,7 @@ jQuery(document).ready(function($){
 
   var set_follow_checkboxes = function(){
     $('#quicktabs-commons_follow_ui .flag-email-group a, #quicktabs-commons_follow_ui .flag-email-node a, #quicktabs-commons_follow_ui .flag-email-user a, #quicktabs-commons_follow_ui .flag-email-term a').each(function(){
-      var a_target = $(this).addClass('formatted-as-checkbox').removeClass('action-item-small');
+      var a_target = $(this).addClass('formatted-as-checkbox').removeClass('action-item-small action-item-small-active');
 
       if (a_target.children('span').length === 0) {
         a_target.wrapInner('<span></span>');
