@@ -112,5 +112,12 @@ function commons_notify_strongarm() {
   );
   $export['field_bundle_settings_message__commons_notify_node_created_no_groups'] = $strongarm;
 
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'message_subscribe_default_notifiers';
+  $strongarm->value = array();
+  $export['message_subscribe_default_notifiers'] = $strongarm;
+
   return $export;
 }

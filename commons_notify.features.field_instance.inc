@@ -634,8 +634,6 @@ function commons_notify_field_default_field_instances() {
   t('Target comment');
   t('Target nodes');
   t('This is the text of all messages of this type.');
-  t('Unread Invitations');
-  t('Unread Messages');
 
   return $field_instances;
 }
