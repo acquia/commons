@@ -505,8 +505,8 @@ function commons_trusted_contacts_field_default_field_instances() {
     );
   }
 
-  $node_types = node_type_get_types();
-  foreach(array_keys($node_types) as $type) {
+  $group_content_entity_types = commons_groups_get_group_content_entity_types();
+  foreach(array_keys($group_content_entity_types['node']) as $type) {
     commons_trusted_contacts_field_definition_group($field_instances, 'node', $type);
   }
 
