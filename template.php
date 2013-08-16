@@ -1249,6 +1249,9 @@ function commons_origins_preprocess_user_profile(&$variables, $hook) {
         $variables['user_profile'][$action]['#access'] = FALSE;
       }
     }
+    if (!module_exists('commons_trusted_contacts') && isset(  $variables['user_profile']['user_actions']['group_group'])) {
+      $variables['user_profile']['user_actions']['group_group']['#access'] = FALSE;
+    }
     if (!empty($variables['user_profile']['user_actions'])) {
       $variables['user_profile']['user_actions'] += array(
         '#theme_wrappers' => array('container'),
