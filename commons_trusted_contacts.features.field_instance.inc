@@ -460,7 +460,7 @@ function commons_trusted_contacts_field_default_field_instances() {
     'label' => 'Group visibility',
     'required' => 1,
     'settings' => array(
-      'user_register_form' => 1,
+      'user_register_form' => 0,
     ),
     'widget' => array(
       'active' => 1,
