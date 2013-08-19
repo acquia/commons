@@ -53,7 +53,9 @@ function commons_search_form_alter(&$form, &$form_state, $form_id) {
       // If we're on a page that looks like a group node, see if it is actually
       // a group node.
       $node = node_load(substr($node, strrpos($node, '/') + 1));
-      $group = ($node->type == 'group');
+      if (!empty($node)) {
+        $group = ($node->type == 'group');
+      }
     }
     if ($group) {
       // Current page is a group node, so add group search option to the
