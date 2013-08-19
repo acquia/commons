@@ -10,6 +10,12 @@
 function commons_events_field_default_field_instances() {
   $field_instances = array();
 
+  // Because the 'site_default_country' variable gets set, but is empty when no
+  // default country is set, we'll need to do some checks to see if its empty
+  // and display a default country on our own. 
+  // See https://drupal.org/node/2068957#comment-7773019 for more info.
+  $default_country = variable_get('site_default_country', 'US');
+
   // Exported field_instance: 'node-event-body'
   $field_instances['node-event-body'] = array(
     'bundle' => 'event',
@@ -66,7 +72,7 @@ function commons_events_field_default_field_instances() {
         'locality' => '',
         'administrative_area' => '',
         'postal_code' => '',
-        'country' => variable_get('site_default_country', 'US'),
+        'country' => !empty($default_country) ? $default_country : 'US',
       ),
     ),
     'deleted' => '0',
