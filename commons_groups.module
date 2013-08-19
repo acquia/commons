@@ -390,6 +390,11 @@ function commons_groups_form_alter(&$form, &$form_state, $form_id) {
       drupal_set_message(t($message), 'warning');
     }
   }
+  // Hide the "Group privacy" field that can be added
+  // (but not automatically removed) by the Commons Trusted Contacts module.
+  if (($form_id == 'user_register_form' || $form_id == 'edit_profile_user_profile_form') && isset($form['group_access'])) {
+    $form['group_access']['#access'] = FALSE;
+  }
 }
 
 /**
