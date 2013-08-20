@@ -1,0 +1,12 @@
+<?php
+
+/**
+ * Disable summary on Notice nodes.
+ */
+function commons_notices_update_7000() {
+    $revert = array(
+      'commons_notices' => array('field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}
