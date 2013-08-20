@@ -1,0 +1,87 @@
+<?php
+/**
+ * @file
+ * Code for the Commons Topics feature.
+ */
+
+/**
+* Implements hook_system_info_alter().
+*/
+function commons_topics_system_info_alter(&$info, $file, $type) {
+  // Commons Topics dynamically adds field_topics to content types that implement
+  // commons_topics_field. We must add a corresponding line for each field
+  // instance to commons_topics.info so that Features is aware of the instance
+  // and can sucessfully revert the field_instance component back to its
+  // default state.
+  if ($file->name == 'commons_topics') {
+    $commons_topics_entity_types = commons_topics_get_entity_types_with_topics();
+    if (!empty($commons_topics_entity_types)) {
+      foreach ($commons_topics_entity_types as $entity_type => $bundles) {
+        foreach(array_keys($bundles) as $bundle) {
+          $info['features']['field_instance'][] = "$entity_type-$bundle-field_topics";
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter();
+ */
+function commons_topics_form_node_form_alter(&$form, &$form_state) {
+  if (isset($form['field_topics'])) {
+    $form['topics_wrapper'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Topics'),
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
+      '#group' => 'additional_settings',
+      '#weight' => -15,
+    );
+    $form['topics_wrapper']['field_topics'] = $form['field_topics'];
+    $form['field_topics'] = array('#language' => NULL);
+    $form['#attached']['js'] = array(
+      drupal_get_path('module', 'commons_topics') . '/js/commons_topics.js',
+    );
+  }
+}
+
+/**
+ * Returns an array of entity types that are enabled via Commons.
+ */
+function commons_topics_get_entity_types_with_topics() {
+  // Find all Commons Entity integrations.
+  $commons_entity_integrations = module_invoke_all('commons_entity_integration');
+  if (empty($commons_entity_integrations)) {
+    return array();
+  }
+
+  foreach ($commons_entity_integrations as $entity_type => $integration) {
+    foreach ($integration as $bundle => $options) {
+      if (isset($options['exclude_topics']) && $options['exclude_topics'] == TRUE) {
+        unset($commons_entity_integrations[$entity_type][$bundle]);
+      }
+    }
+    // If an entity type has no integrations, don't return it.
+    if (empty($commons_entity_integrations[$entity_type])) {
+      unset($commons_entity_integrations[$entity_type]);
+    }
+  }
+
+  return $commons_entity_integrations;
+}
+
+/**
+ * Implements hook_features_pipe_alter().
+ */
+function commons_topics_features_pipe_alter(&$pipe, $data, $export) {
+  if (!empty($pipe['field_instance'])) {
+    foreach ($pipe['field_instance'] as $delta => $value) {
+      $args = explode('-', $value);
+      $field_name = $args[2];
+      if ($field_name == 'field_topics') {
+        unset($pipe['field_instance'][$delta]);
+      }
+    }
+  }
+}
