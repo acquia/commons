@@ -1,0 +1,285 @@
+<?php
+
+include_once 'commons_follow.features.inc';
+
+
+
+/**
+ * Implements hook_features_pipe_alter().
+ *
+ */
+function commons_follow_features_pipe_alter(&$pipe, $data, $export) {
+  $commons_follow_fields = array(
+    'field_target_users', 'field_target_nodes', 'field_target_comments',
+  );
+  // Prevent Commons Follow fields from being piped in features
+  // when a content type includes those fields.
+  if (!empty($pipe['field_instance'])) {
+    foreach ($pipe['field_instance'] as $delta => $value) {
+      $args = explode('-', $value);
+      $field_name = $args[2];
+      if (in_array($field_name, $commons_follow_fields)) {
+        unset($pipe['field_instance'][$delta]);
+      }
+    }
+  }
+  if (!empty($pipe['field_base'])) {
+    foreach ($pipe['field_base'] as $delta => $value) {
+      if (in_array($delta, $commons_follow_fields)) {
+        unset($pipe['field_base'][$delta]);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_views_default_views_alter().
+ *
+ * Adding the "Following" filter to the group-browsing-widget views.
+ */
+function commons_follow_views_default_views_alter(&$views) {
+  // Add a "most active" exposed sort to Commons BW views.
+  foreach ($views as $view_id => $view) {
+    if (strpos($view_id, 'commons_bw_') !== 0) {
+      continue;
+    }
+
+    $handler = $views[$view_id]->display['default']->handler;
+
+    // Relationship to the "Following" flag.
+    $handler->display->display_options['relationships']['flag_content_rel']['id'] = 'flag_content_rel';
+    $handler->display->display_options['relationships']['flag_content_rel']['table'] = 'node';
+    $handler->display->display_options['relationships']['flag_content_rel']['field'] = 'flag_content_rel';
+    $handler->display->display_options['relationships']['flag_content_rel']['ui_name'] = 'Following';
+    $handler->display->display_options['relationships']['flag_content_rel']['label'] = 'following';
+    $handler->display->display_options['relationships']['flag_content_rel']['required'] = 0;
+    $handler->display->display_options['relationships']['flag_content_rel']['flag'] = 'commons_follow_node';
+
+    // Exposed "Following" filter.
+    $handler->display->display_options['filters']['flagged']['id'] = 'flagged';
+    $handler->display->display_options['filters']['flagged']['table'] = 'flag_content';
+    $handler->display->display_options['filters']['flagged']['field'] = 'flagged';
+    $handler->display->display_options['filters']['flagged']['relationship'] = 'flag_content_rel';
+    $handler->display->display_options['filters']['flagged']['ui_name'] = 'Following';
+    $handler->display->display_options['filters']['flagged']['value'] = '1';
+    $handler->display->display_options['filters']['flagged']['exposed'] = TRUE;
+    $handler->display->display_options['filters']['flagged']['expose']['operator_id'] = '';
+    $handler->display->display_options['filters']['flagged']['expose']['label'] = 'Following';
+    $handler->display->display_options['filters']['flagged']['expose']['operator'] = 'flagged_op';
+    $handler->display->display_options['filters']['flagged']['expose']['identifier'] = 'following';
+    $handler->display->display_options['filters']['flagged']['expose']['required'] = FALSE;
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function commons_follow_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id != 'views_exposed_form' || strpos($form['#id'],'views-exposed-form-commons-bw') !== 0 || empty($form['following'])) {
+    return;
+  }
+
+  $form['#info']['filter-flagged']['label'] = t('Limited to');
+
+  $form['following']['#options'] = array(
+    'All' => t('All content'),
+    1 => t("Content you're following"),
+    0 => t("Content you're not following"),
+  );
+}
+
+/**
+ * Implements hook_flag_export_alter().
+ */
+function commons_follow_flag_export_alter(&$flag) {
+  // We export $flag->types as an array in code, then dynamically change
+  // the values in commons_follow_flag_alter(). Prevent that from being
+  // overwritten with the dynamic values.
+  if (in_array($flag['name'], array('commons_follow_node', 'email_node'))) {
+    $flag['types'] = array();
+  }
+}
+
+/**
+ * Implements hook_flag_alter().
+ */
+function commons_follow_flag_alter(&$flag) {
+  $commons_entity_integrations = module_invoke_all('commons_entity_integration');
+  // Find Commons node types that should have follow integration and alter
+  // the commons_follow_node flag to allow following these node types.
+  // This is currently hard-coded to node entities and the
+  // commons_follow_node flag, but could be expanded to add the ability
+  // to follow other entities.
+  // The Commons follow flags for user, term and group already have the
+  // appropriate content types in their flag exports, whereas
+  // $flag->types for commons_follow_node is more likely
+  // to change between sites.
+  if (in_array($flag->name, array('commons_follow_node', 'email_node'))) {
+    if (!empty($commons_entity_integrations['node'])) {
+      // Exclude bundles that users should not be able to follow:
+      foreach ($commons_entity_integrations['node'] as $bundle => $options) {
+        if (isset($options['exclude_commons_follow']) && $options['exclude_commons_follow'] == TRUE) {
+          unset($commons_entity_integrations['node'][$bundle]);
+        }
+      }
+      // Add the remaining bundles as flaggable options
+      if (!empty($commons_entity_integrations['node'])) {
+        $flag->types += array_keys($commons_entity_integrations['node']);
+      }
+    }
+  }
+}
+
+/**
+ * Get all node IDs relevant to what the user ordered.
+ *
+ * @param $account
+ *   The user being checked. Defaults to the current user.
+ * @param $options
+ *   Array. Includes options to alter the query. Options available are used
+ *   within the hook implementations.
+ *
+ * @return
+ *   Array of node IDs.
+ */
+function commons_follow_get_nids($account = NULL, $options = array()) {
+  if (empty($account)) {
+    global $user;
+    $account = clone $user;
+  }
+
+  $nids = array();
+  // We don't use module_invoke_all() is we want to retain the array keys,
+  // which are the user IDs.
+  foreach (module_implements('commons_follow_get_nids') as $module) {
+    $function = $module . '_commons_follow_get_nids';
+    $result = $function($account, $options);
+    if (empty($result)) {
+      continue;
+    }
+    foreach ($result as $nid) {
+      $nids[$nid] = $nid;
+    }
+  }
+  return $nids;
+}
+
+
+
+/**
+ * Get subscriptions flag IDs.
+ *
+ * @param $content_type
+ *   Optional. The type of content for which to load the flags. Usually 'node'.
+ * @param $content_subtype
+ *   Optional. The node type for which to load the flags.
+ * @param $account
+ *   Optional. The user accont to filter available flags. If not set, all
+ *   flags for will this node will be returned.
+ * @param $reset
+ *   Optional. Reset the internal query cache.
+ *
+ * @return $flags
+ *   An array of the structure [fid] = flag_object.
+ *
+ * @see flag_get_flags()
+ */
+function commons_follow_get_subscription_flags_ids($content_type = NULL, $content_subtype = NULL, $account = NULL, $reset = FALSE) {
+  if (!module_exists('message_subscribe')) {
+    // Requires message_subscribe module.
+    return;
+  }
+  $flags = message_subscribe_flag_get_flags($content_type, $content_subtype, $account, $reset);
+
+  $flag_ids = array();
+  foreach ($flags as $flag) {
+    $flag_ids[] = $flag->fid;
+  }
+  return $flag_ids;
+}
+
+///////////////////
+
+/**
+ * Implementation of hook_views_api().
+ */
+function commons_follow_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'commons_follow') . '/includes/views',
+  );
+}
+
+/**
+* Returns a list of Commons Follow Flag objects.
+*/
+function commons_follow_get_flags() {
+  $flags = flag_get_flags();
+  foreach ($flags as $key => $flag) {
+    if (substr($key, 0, 14) != 'commons_follow') {
+      unset($flags[$key]);
+    }
+  }
+  return $flags;
+}
+
+/**
+* Returns an array of Commons Follow flags keyed on the numeric flag ID.
+*/
+function commons_follow_get_flag_ids() {
+  $flag_ids = array();
+  $flags = commons_follow_get_flags();
+  foreach ($flags as $key => $flag) {
+    $flag_ids[$flag->fid] = $key;
+  }
+  return $flag_ids;
+}
+
+/**
+* Returns a single flag ID based on a flag machine name.
+*/
+function commons_follow_get_flag_id($name) {
+  $flag = flag_get_flag($name);
+  $return = $flag->fid;
+  return $flag->fid;
+}
+/**
+ * Get a list of all content that a user is following.
+ * @return
+ *  An array keyed on the flag name with values corresponding to the IDs
+ *  of the flagged entities.
+ */
+function commons_follow_get_followed_content($account = array()) {
+  if (empty($account)) {
+    global $user;
+    $account = $user;
+  }
+  $results = array();
+  $flag_ids = commons_follow_get_flag_ids();
+  // Get a list of everything that the user is following.
+  $result = db_query("SELECT fid, content_id FROM {flag_content} WHERE fid IN (:fids) AND uid = :uid", array(':fids' => array_keys($flag_ids), ':uid' => $account->uid));
+  foreach ($result as $this_result) {
+    $results[$flag_ids[$this_result->fid]][] = $this_result->content_id;
+  }
+
+  return $results;
+}
+
+/**
+* Find a list of message IDs that correspond to events that the current user
+* is following.
+*/
+function commons_follow_get_followed_message_ids($account = NULL) {
+  $followed_mids = array();
+  // Allow the module with this flag namespace to return a list of
+  // followed MIDs.
+  $followed_content = commons_follow_get_followed_content($account);
+  $followed_mids = array();
+  foreach ($followed_content as $key => $content) {
+    $function = $key . '_commons_follow_get_message_ids';
+    if (function_exists($function)) {
+      $function($followed_mids, $followed_content);
+    }
+  }
+  return $followed_mids;
+}
