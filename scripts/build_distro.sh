@@ -1,6 +1,22 @@
 #!/bin/bash
+set -e
+
 modules=(commons_activity_streams commons_featured commons_notices commons_profile_social commons_user_profile_pages commons_body commons_follow commons_notify commons_q_a commons_utility_links commons_bw commons_groups commons_pages commons_radioactivity commons_wikis commons_content_moderation commons_like commons_polls commons_search commons_wysiwyg commons_documents commons_location commons_posts commons_site_homepage commons_events commons_misc commons_profile_base commons_topics commons_social_sharing commons_trusted_contacts)
 themes=(commons_origins)
+
+merge_repos() {
+  cd $BUILD_PATH/repos/modules
+  for i in "${modules[@]}"; do
+    echo $i
+    cd $i
+    RN=`drush rn --date $FROM_DATE $TO_DATE`
+    if [[ -n $RN ]]; then
+      OUTPUT="$OUTPUT <h3>$i:</h3> $RN"
+    fi
+    cd ..
+  done
+  cd $BUILD_PATH/repos/themes/commons_origins
+}
 
 pull_git() {
     cd $BUILD_PATH/commons_profile
