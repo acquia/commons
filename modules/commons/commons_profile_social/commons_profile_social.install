@@ -1,0 +1,10 @@
+<?php
+/* update script to make sure the feature gets reverted so social links get removed from default display */
+function commons_profile_social_update_7001() {
+
+  // Revert Features components to ensure that they are in their default states.
+  $revert = array(
+    'commons_profile_social' => array('field_instance'),
+  );
+  features_revert($revert);
+}
