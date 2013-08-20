@@ -1,0 +1,101 @@
+<?php
+/**
+ * @file
+ * Drupal needs this blank file.
+ */
+
+include_once 'commons_content_moderation.features.inc';
+
+/**
+ * Implements hook_action_info().
+ */
+function commons_content_moderation_action_info() {
+  return array(
+    'commons_content_moderation_delete_node_block_user' => array(
+      'type' => 'node',
+      'label' => t("Delete content and block author's account."),
+      'configurable' => FALSE,
+      'behavior' => array(''),
+      'triggers' => array(''),
+    ),
+    'commons_content_moderation_delete_comment_block_user' => array(
+      'type' => 'comment',
+      'label' => t("Delete comment and block author's account."),
+      'configurable' => FALSE,
+      'behavior' => array(''),
+      'triggers' => array(''),
+    ),
+  );
+}
+
+
+function commons_content_moderation_delete_node_block_user(&$entity, $context = array()) {
+  // Block users other than the anonymous user and UID 1.
+  if ($entity->uid > 1) {
+    $author = user_load($entity->uid);
+    if ($author->status) {
+      $author = user_save($author, array('status' => 0));
+      watchdog('action', 'Blocked user %name.', array('%name' => $author->name));
+    }
+  }
+  // If the Mollom module is enabled and configured, report
+  // the content to Mollom.
+  if (module_exists('mollom') && _mollom_status()) {
+    $mollom_return = mollom_data_report('node', $entity->nid, 'spam');
+  }
+  // We're done with this node. We can delete it.
+  node_delete($entity->nid);
+  watchdog('action', 'Deleted @type %title.', array('@type' => node_type_get_name($entity), '%title' => $entity->title));
+}
+
+function commons_content_moderation_delete_comment_block_user(&$entity, $context = array()) {
+ // Block users other than the anonymous user and UID 1.
+  if ($entity->uid > 1) {
+    $author = user_load($entity->uid);
+    if ($author->status) {
+      $author = user_save($author, array('status' => 0));
+      watchdog('action', 'Blocked user %name.', array('%name' => $author->name));
+    }
+  }
+  // If the Mollom module is enabled and configured, report
+  // the content to Mollom.
+  if (module_exists('mollom') && _mollom_status()) {
+    $mollom_return = mollom_data_report('comment', $comment->cid, 'spam');
+  }
+  // We're done with this node. We can delete it.
+  comment_delete($entity->cid);
+  watchdog('action', 'Deleted comment %title.', array('@type' => node_type_get_name($entity), '%title' => $entity->title));
+}
+
+/**
+ * Implements hook_views_default_views_alter().
+ */
+function commons_content_moderation_views_default_views_alter(&$views) {
+  // We're providing alternatives to these views.
+  foreach (array('all_flag_abuse_node', 'all_flag_abuse_comment') as $view_name) {
+    if (!empty($views[$view_name])) {
+      $views[$view_name]->disabled = TRUE;
+    }
+  }
+}
+
+/**
+  * Implements hook_views_bulk_operations_form_alter().
+  */
+function commons_content_moderation_views_bulk_operations_form_alter(&$form, $form_state, $vbo) {
+  if(!isset($vbo->options['vbo_operations']['action::commons_content_moderation_delete_node_block_user'])) {
+    return;
+  }
+  if ($form_state['step'] == 'views_form_views_form' && $vbo->options['vbo_operations']['action::commons_content_moderation_delete_node_block_user']['selected'] == 1) {
+    if (module_exists('mollom') && _mollom_status()) {
+      $form['mollom_text'] = array(
+        '#markup' => t('Deleted content will be reported to Mollom.'),
+      );
+    }
+    else {
+     $form['mollom_text'] = array(
+        '#markup' => t('When the !mollom module is installed and configured, content deleted here will also be reported to Mollom.', array('!mollom' => l('Mollom', 'http://drupal.org/project/mollom'))),
+      );
+    }
+  }
+}
