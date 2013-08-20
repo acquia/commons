@@ -1,0 +1,95 @@
+<?php
+/**
+ * @file
+ * Code for the Commons Documents feature.
+ */
+
+include_once 'commons_documents.features.inc';
+
+/**
+ * Implements hook_commons_bw_group_widget().
+ */
+function commons_documents_commons_bw_group_widget() {
+  return array(
+    'commons_documents' => array(
+      'title' => 'Documents',
+      'type' => 'view',
+      'vid' => 'commons_bw_documents',
+      'display' => 'default',
+      'weight' => 6,
+      'bundle' => 'document',
+    ),
+  );
+}
+
+/**
+ * Implements hook_form_FROM_ID_alter().
+ */
+function commons_documents_form_commons_bw_partial_node_form_alter(&$form, &$form_state) {
+  if (empty($form['#entity']) || $form['#entity']->type != 'document') {
+    return;
+  }
+
+  $form['body'][LANGUAGE_NONE][0]['#title_display'] = 'invisible';
+  $form['body'][LANGUAGE_NONE][0]['#required'] = TRUE;
+  $form['body'][LANGUAGE_NONE][0]['#placeholder'] = t('Describe the document');
+  $form['body'][LANGUAGE_NONE][0]['#resizable'] = FALSE;
+
+  // Set fields as hideable so the forms can be compacted.
+  $form['body']['#attributes']['class'][] = 'trigger-field';
+  foreach (array('field_image', 'og_group_ref', 'field_document_file', 'actions') as $field) {
+    if (isset($form[$field])) {
+      $form[$field]['#attributes']['class'][] = 'hideable-field';
+    }
+  }
+
+  $form['#pre_render'][] = 'commons_documents_form_commons_bw_partial_node_form_after_build';
+}
+
+/**
+ * After-build call-back.
+ * See commons_documents_form_commons_bw_partial_node_form_alter().
+ */
+function commons_documents_form_commons_bw_partial_node_form_after_build($form) {
+  $form['body'][LANGUAGE_NONE][0]['#pre_render'] = array();
+  $form['body'][LANGUAGE_NONE][0]['format']['#access'] = FALSE;
+  $form['body'][LANGUAGE_NONE][0]['value']['#rows'] = 3;
+
+  return $form;
+}
+
+/**
+ * Implements hook_views_default_views_alter().
+ *
+ * Display documents on the browsing widget main view.
+ */
+function commons_documents_views_default_views_alter(&$views) {
+  if (!empty($views['commons_bw_all'])) {
+    $views['commons_bw_all']->display['default']->display_options['filters']['type']['value']['document'] = 'document';
+  }
+}
+
+/**
+ * Implements hook_views_pre_render().
+ *
+ * Correct the empty text when commons_bw_wikis is shown without group context.
+ */
+function commons_documents_views_pre_render(&$view) {
+  // TODO: Would have been better to enable og_context to check for missing
+  // group context instead of checking for empty first argument.
+  if (empty($view->args[0]) && $view->name == 'commons_bw_documents') {
+    $view->display_handler->handlers['empty']['area']->options['content'] = t('No documents have been created.');
+  }
+}
+
+/**
+ * Implements hook_commons_entity_integration.
+ */
+function commons_documents_commons_entity_integration() {
+  return array(
+    'node' => array(
+      'document' => array(
+      ),
+    ),
+  );
+}
