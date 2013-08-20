@@ -5,17 +5,32 @@ modules=(commons_activity_streams commons_featured commons_notices commons_profi
 themes=(commons_origins)
 
 merge_repos() {
-  cd $BUILD_PATH/repos/modules
+  cd $BUILD_PATH/commons_profile
   for i in "${modules[@]}"; do
-    echo $i
-    cd $i
-    RN=`drush rn --date $FROM_DATE $TO_DATE`
-    if [[ -n $RN ]]; then
-      OUTPUT="$OUTPUT <h3>$i:</h3> $RN"
+    if [[ -n $USERNAME ]]; then
+      git remote add ${i} ${USERNAME}@git.drupal.org:project/${i}.git
+    else
+      git remote add ${i} http://git.drupal.org/project/${i}.git
     fi
-    cd ..
+    git fetch ${i}
+    git merge -s ours --no-commit ${i}/7.x-3.x
+    git read-tree --prefix=modules/commons/${i} -u ${i}/7.x-3.x
+    git commit -m "Merged ${i} into Commons repo"
+    git remote rm ${i}
+    echo "Successfully added $i to commons profile"
   done
-  cd $BUILD_PATH/repos/themes/commons_origins
+  #do the theme now
+  i=commons_origins
+  if [[ -n $USERNAME ]]; then
+    git remote add ${i} ${USERNAME}@git.drupal.org:project/${i}.git
+  else
+    git remote add ${i} http://git.drupal.org/project/${i}.git
+  fi
+  git fetch ${i}
+  git merge -s ours --no-commit ${i}/7.x-3.x
+  git read-tree --prefix=themes/commons/${i} -u ${i}/7.x-3.x
+  git commit -m "Merged ${i} into Commons repo"
+  echo "Successfully added $i to commons profile"
 }
 
 pull_git() {
@@ -187,4 +202,15 @@ case $1 in
       USERNAME=$3
     fi
     update $DOCROOT;;
+  merge_repos)
+    if [[ -n $2 ]]; then
+      BUILD_PATH=$2
+    else
+      echo "Usage: build_distro.sh build [build_path]"
+      exit 1
+    fi
+    if [[ -n $3 ]]; then
+      USERNAME=$3
+    fi
+    merge_repos $BUILD_PATH $USERNAME;;
 esac
