@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * Update CKEditor config to be more friendly on devices with smaller
+ * screen sizes per http://drupal.org/node/1948466.
+ */
+function commons_wysiwyg_update_3100() {
+  $revert = array(
+      'commons_wysiwyg' => array('ckeditor_profile'),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/**
+ * Update our CKEditor profile to help resolve issues editing
+ * text areas on iPad per https://drupal.org/node/2030087.
+ */
+function commons_wysiwyg_update_3101() {
+  $revert = array(
+      'commons_wysiwyg' => array('ckeditor_profile'),
+  );
+  features_revert($revert);
+  return array();
+}
