@@ -1,0 +1,47 @@
+<?php
+/**
+ * @file
+ * Misc Commons functionality.
+ */
+
+include_once 'commons_misc.features.inc';
+
+/**
+ * Implements hook_mail_alter();
+ */
+function commons_misc_mail_alter(&$message) {
+  if (strstr($message['to'], '@') == '@example.com') {
+    $message['send'] = FALSE;
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter();
+ */
+function commons_misc_form_post_node_form_alter(&$form, &$form_state, $form_id) {
+  // Hide revision information when creating a node.
+  if (!isset($form_state['node']->nid)) {
+    $form['revision_information']['#access'] = FALSE;
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function commons_misc_form_system_theme_settings_alter(&$form, &$form_state, $form_id) {
+  $themes_list = list_themes(TRUE);
+
+  // Filter down to just the commons_origins theme:
+  // If commons_origins theme exists
+  // If commons_origins is enabled
+  // If we're not on the general settings tab -- because args aren't set yet
+  // And we're on the commons_origin settings page, then show the color palette
+  if (isset($themes_list['commons_origins'])
+    && $themes_list['commons_origins']->status == 1
+    && !empty($form_state['build_info']['args'])
+    && $form_state['build_info']['args'][0] == 'commons_origins') {
+    // Add the color palette selection form to the apperance settings form.
+    require_once(drupal_get_path('theme', 'commons_origins') . '/commons_origins.palettes.inc');
+    commons_origins_palettes_form($form);
+  }
+}
