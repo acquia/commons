@@ -1,0 +1,414 @@
+<?php
+/**
+ * @file
+ * Code for the Commons Q&A feature.
+ */
+
+include_once 'commons_q_a.features.inc';
+
+/**
+ * Implements hook_theme().
+ */
+function commons_q_a_theme() {
+  return array(
+    'rate_template_commons_thumbs_up_down' => array(
+      'variables' => array('links' => NULL, 'results' => NULL, 'mode' => NULL, 'just_voted' => FALSE, 'content_type' => NULL, 'content_id' => NULL, 'display_options' => NULL),
+      'template' => 'commons-thumbs-up-down',
+    ),
+  );
+}
+
+
+/**
+* Implements hook_commons_bw_group_widget().
+*/
+function commons_q_a_commons_bw_group_widget() {
+  return array(
+    'commons_q_a' => array(
+      'title' => 'Q & A',
+      'type' => 'view',
+      'vid' => 'commons_bw_q_a',
+      'display' => 'default',
+      'weight' => 5,
+      'bundle' => 'question',
+    ),
+  );
+}
+
+function commons_q_a_node_view($node, $view_mode) {
+  if($node->type == 'question' && $view_mode == 'full') {
+    // Remove add comment link.
+    unset($node->content['links']['comment']);
+    // Add the answer link below.
+    $node->content['links']['answer'] = array(
+      '#theme' => 'links__node__answer',
+      '#links' => array(
+        'answer-add' => array(
+          'title' => t('Answer'),
+          'attributes' => array(
+            'title' => t('Answer this question')
+          ),
+          'href' => 'node/'.$node->nid,
+          'fragment' => 'answer',
+        ),
+      ),
+    );
+    return $node;
+  }
+}
+
+/**
+ * Implements hook_form_FROM_ID_alter().
+ */
+function commons_q_a_form_commons_bw_partial_node_form_alter(&$form, &$form_state) {
+  if (empty($form['#entity']) || $form['#entity']->type != 'question') {
+    return;
+  }
+
+  $form['title']['#markup'] = '<h3>' . t('Ask a question') . '</h3>';
+  $form['body'][LANGUAGE_NONE][0]['#title_display'] = 'invisible';
+  $form['body'][LANGUAGE_NONE][0]['#required'] = TRUE;
+  $form['body'][LANGUAGE_NONE][0]['#placeholder'] = t('Ask anything. Let the community answer openly.');
+  $form['body'][LANGUAGE_NONE][0]['#resizable'] = FALSE;
+
+  // Set fields as hideable so the forms can be compacted.
+  $form['body']['#attributes']['class'][] = 'trigger-field';
+  foreach (array('field_image', 'og_group_ref', 'choice_wrapper', 'actions') as $field) {
+    if (isset($form[$field])) {
+      $form[$field]['#attributes']['class'][] = 'hideable-field';
+    }
+  }
+
+  $form['actions']['submit']['#value'] = t('Ask');
+  $form['#pre_render'][] = 'commons_q_a_form_commons_bw_partial_node_form_after_build';
+}
+
+/**
+ * After-build call-back.
+ * See commons_q_a_form_commons_bw_partial_node_form_alter().
+ */
+function commons_q_a_form_commons_bw_partial_node_form_after_build($form) {
+  $form['body'][LANGUAGE_NONE][0]['#pre_render'] = array();
+  $form['body'][LANGUAGE_NONE][0]['format']['#access'] = FALSE;
+  $form['body'][LANGUAGE_NONE][0]['value']['#rows'] = 3;
+
+  return $form;
+}
+
+/**
+ * Implements hook_views_default_views_alter().
+ *
+ * Display questions on the browsing widget main view.
+ */
+function commons_q_a_views_default_views_alter(&$views) {
+  if (!empty($views['commons_bw_all'])) {
+    $views['commons_bw_all']->display['default']->display_options['filters']['type']['value']['question'] = 'question';
+  }
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function commons_q_a_views_pre_render(&$view) {
+  if ($view->name == 'commons_question_answers' && !empty($view->args[0])) {
+    // If the user has access to post into any of the groups associated
+    // with the question, embed a simplified answer node form.
+    global $user;
+
+    $question_nid = $view->args[0];
+    $question = node_load($question_nid);
+    $group_ref = array();
+    $answer_access = FALSE;
+    if (!empty($question->og_group_ref[LANGUAGE_NONE])) {
+      foreach ($question->og_group_ref[LANGUAGE_NONE] as $key => $value) {
+        // Check to see the user has access to the group the question is in, only attach to those groups they have permission to post in.
+        if (og_user_access('node', $value['target_id'], 'create answer content')) {
+          $group_ref[] = $value['target_id'];
+          $answer_access = TRUE;
+        }
+      }
+    }
+    // If user belongs to no groups, or no groups are assigned to the Question, check node_access for user.
+    else {
+      if (node_access('create', $question, $user)) {
+        $answer_access = TRUE;
+      }
+    }
+
+    // Check global user access before showing the answer form.
+    if ($answer_access) {
+      module_load_include('inc', 'node', 'node.pages');
+      $types = node_type_get_types();
+      $node = (object) array('uid' => $user->uid, 'name' => (isset($user->name) ? $user->name : ''), 'type' => 'answer', 'language' => LANGUAGE_NONE);
+      // Prepopulate the Related question field
+      // with Entityreference Prepopulate, which looks strictly at $_GET.
+      $_GET['field_related_question'] = $view->args[0];
+      if (!empty($group_ref)) {
+        $_GET['og_group_ref'] = implode(',',$group_ref);
+      }
+      $answer_form = drupal_get_form('answer_node_form', $node);
+      $answer_form['header'] = array(
+        '#markup' => '<h3 id="answer" name="answer">' . t('Add a new answer') . '</h3>',
+        '#weight' => -10,
+      );
+      // Hide any vertical tabs that might be present.
+      $answer_form['additional_settings']['#access'] = FALSE;
+      // Hide the Related question field.
+      $answer_form['field_related_question']['#access'] = FALSE;
+      // Add the form to the attachment_after part of the view,
+      $view->attachment_after .= drupal_render($answer_form);
+      // We only need to add the form once if the user has access to
+      // post questions into any of the groups associated with the parent.
+      return;
+    }
+  }
+}
+
+/*
+ * Implements hook_module_implements_alter().
+ * Set commons_q_a form alter to happen after node so the title doesn't get reset.
+ */
+function commons_q_a_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'form_alter') {
+    $group = $implementations['commons_q_a'];
+    unset($implementations['commons_q_a']);
+    $implementations['commons_q_a'] = $group;
+  }
+}
+
+/**
+* Implements hook_form_alter().
+*/
+function commons_q_a_form_alter(&$form, &$form_state, $form_id) {
+  // Unset the groups audience field. Answers programatically inherit
+  // the group membership of their respective questions.
+  if ($form_id == 'answer_node_form') {
+    $form['og_group_ref']['#access'] = FALSE;
+    $form['actions']['submit']['#submit'][] = 'commons_q_a_answer_submit';
+    // Ensure that the answer node inherits group membership from the 
+    // parent question by preventing users from changing the audience through
+    // the Trusted Contacts toggle when commons_trusted_contacts.module
+    // is enabled.
+    $form_state['hide_audience_toggle'] = TRUE;
+  }
+  if ($form_id == 'question_node_form' && empty($form['#node']->nid)) {
+    drupal_set_title(t('Ask a question'));
+  }
+  if ($form_id == 'comment_node_question_form' || $form_id == 'comment_node_answer_form') {
+    $form['container'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Add new comment'),
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+      '#weight' => 2,
+    );
+    $form['container']['author'] = $form['author'];
+    $form['container']['comment_body'] = $form['comment_body'];
+    $form['container']['actions'] = $form['actions'];
+    unset($form['author']);
+    unset($form['subject']);  // We don't need a subject, they're pointless within comments.
+    unset($form['comment_body']);
+    unset($form['actions']);
+  }
+}
+
+/**
+ * Implements hook_field_attach_submit().
+ */
+function commons_q_a_field_attach_submit($entity_type, &$entity, $form, &$form_state) {
+  // Questions should inherit the group membership of the related question.
+  if ($entity_type == 'node' && $entity->type == 'answer' && empty($entity->nid)) {
+    $question = node_load($entity->field_related_question[LANGUAGE_NONE][0]['target_id']);
+    $entity->og_group_ref = $question->og_group_ref;
+  }
+}
+
+/**
+ * Implements hook_commons_bw_create_all_widget().
+ */
+function commons_q_a_commons_bw_create_all_widget($group) {
+   if (og_user_access('node', $group->nid, 'create question content')) {
+      $link = l(t('Ask a question'),'node/add/question',
+      array('attributes' => array('class' => 'commons-q-a-create'), 'query' => array('og_group_ref' => $group->nid))
+    );
+    return array(
+      'commons_q_a' => array(
+        'link' => $link,
+        'text' => t('Learn the best answer'),
+        '#weight' => 5,
+      ),
+    );
+  }
+}
+
+/**
+ * Implements hook_commons_entity_integration.
+ */
+function commons_q_a_commons_entity_integration() {
+  return array(
+    'node' => array(
+      'question' => array(),
+      'answer' => array(
+        'exclude_topics' => TRUE,
+        'exclude_rate' => TRUE,
+      ),
+    ),
+  );
+}
+
+
+/**
+ * Submit handler for the submit button on the answer node form.
+ */
+function commons_q_a_answer_submit($form, &$form_state) {
+  // Redirect the user back to the related question.
+  $form_state['redirect'] = 'node/' . $form_state['values']['field_related_question'][LANGUAGE_NONE][0]['target_id'];
+}
+
+/**
+ * Implements commons_activity_streams_message_selection_alter().
+ */
+function commons_q_a_commons_activity_streams_message_selection_alter(&$message_type, $hook, $node) {
+    // Provide a special message type that uses "User asked the question"
+    // phrasing when a new question node is created.
+    if ($hook == 'node_insert' && $node->type == 'question') {
+    $message_type = 'commons_q_a_question_asked';
+  }
+
+  // Provide a special message type that uses "User answered the question"
+  // phrasing when a new answer node is created.
+  if ($hook == 'node_insert' && $node->type == 'answer') {
+    $message_type = 'commons_q_a_question_answered';
+  }
+}
+
+/**
+ * Preprocess function for the commons_like template.
+ */
+function commons_q_a_preprocess_rate_template_commons_thumbs_up_down(&$variables) {
+  extract($variables);
+
+  $up_classes = 'rate-number-up-down-btn-up';
+  $down_classes = 'rate-number-up-down-btn-down';
+  if (isset($results['user_vote'])) {
+    switch ($results['user_vote']) {
+      case $links[0]['value']:
+        $up_classes .= ' rate-voted';
+        break;
+      case $links[1]['value']:
+        $down_classes .= ' rate-voted';
+        break;
+    }
+  }
+
+  $variables['up_button'] = theme('rate_button', array('text' => $links[0]['text'], 'href' => $links[0]['href'], 'class' => $up_classes));
+  $variables['down_button'] = theme('rate_button', array('text' => $links[1]['text'], 'href' => $links[1]['href'], 'class' => $down_classes));
+  if ($results['rating'] > 0) {
+    $score = $results['rating'];
+    $score_class = 'positive';
+  }
+  elseif ($results['rating'] < 0) {
+    $score = $results['rating'];
+    $score_class = 'negative';
+  }
+  else {
+    $score = 0;
+    $score_class = 'neutral';
+  }
+  $variables['score'] = $score;
+  $variables['score_class'] = $score_class;
+
+  $info = array();
+  if ($mode == RATE_CLOSED) {
+    $info[] = t('Voting is closed.');
+  }
+  if ($mode != RATE_COMPACT && $mode != RATE_COMPACT_DISABLED) {
+    if (isset($results['user_vote'])) {
+      $info[] = t('You voted \'@option\'.', array('@option' => $results['user_vote'] == 1 ? $links[0]['text'] : $links[1]['text']));
+    }
+  }
+  $variables['info'] = implode(' ', $info);
+}
+
+/**
+ * Implements hook_rate_templates().
+ */
+function commons_q_a_rate_templates() {
+  $templates = array();
+
+  $templates['commons_thumbs_up_down'] = new stdClass();
+  $templates['commons_thumbs_up_down']->value_type = 'points';
+  $templates['commons_thumbs_up_down']->options = array(
+    array(1, 'up'),
+    array(-1, 'down'),
+  );
+  $templates['commons_thumbs_up_down']->theme = 'rate_template_commons_thumbs_up_down';
+  $templates['commons_thumbs_up_down']->css = drupal_get_path('module', 'commons_q_a') . '/commons-thumbs-up-down.css';
+  $templates['commons_thumbs_up_down']->customizable = FALSE;
+  $templates['commons_thumbs_up_down']->translate = TRUE;
+  $templates['commons_thumbs_up_down']->use_source_translation = TRUE;
+  $templates['commons_thumbs_up_down']->template_title = t('Commons Thumbs up / down');
+
+  return $templates;
+}
+
+/**
+ * Implements hook_strongarm_alter().
+ */
+ function commons_q_a_strongarm_alter(&$items) {
+  // Add Rate module widget configuration used for thumbs up/down
+  // rating of answers.
+  if (!empty($items['rate_widgets']->value)) {
+    $items['rate_widgets']->value[] = commons_q_a_rate_widget();
+  }
+}
+
+
+/**
+ * Return a Rate module widget configuration used for thumbs up/down
+ * rating of answers.
+ */
+function commons_q_a_rate_widget() {
+  return (object) array(
+    'name' => 'commons_answer',
+    'tag' => 'commons_thumbs_up_down',
+    'title' => 'Answer',
+    'node_types' => array(
+      0 => 'answer',
+    ),
+    'comment_types' => array(),
+    'options' => array(
+      0 => array(
+        0 => 1,
+        1 => 'up',
+      ),
+      1 => array(
+        0 => -1,
+        1 => 'down',
+      ),
+    ),
+    'template' => 'commons_thumbs_up_down',
+    'node_display' => '2',
+    'teaser_display' => FALSE,
+    'comment_display' => '2',
+    'node_display_mode' => '1',
+    'teaser_display_mode' => '1',
+    'comment_display_mode' => '1',
+    'roles' => array(
+      2 => '2',
+      1 => 0,
+    ),
+    'allow_voting_by_author' => 1,
+    'noperm_behaviour' => '3',
+    'displayed' => '1',
+    'displayed_just_voted' => '1',
+    'description' => '',
+    'description_in_compact' => TRUE,
+    'delete_vote_on_second_click' => '1',
+    'value_type' => 'points',
+    'theme' => 'rate_template_commons_thumbs_up_down',
+    'css' => 'profiles/commons/modules/contrib/commons_q_a/commons-thumbs-up-down.css',
+    'translate' => TRUE,
+    'use_source_translation' => TRUE,
+  );
+}

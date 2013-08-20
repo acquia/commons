@@ -1,0 +1,127 @@
+@import "compass";
+
+$arrow-width: 1em;
+
+.rate-widget-commons_thumbs_up_down {
+  width: 4.5em;
+  margin: 1.7em 0;
+}
+
+.rate-info {
+  position: relative;
+  width: 100%;
+  height: 3.5em;
+  @include box-sizing(border-box);
+  margin-bottom: .4em;
+  padding: .1em .4em;
+  border: 1px solid #ccc;
+  @include border-radius(.3em);
+  font-size: .8em;
+  line-height: 1.2em;
+  text-align: center;
+  background: #fff;
+  color: #333;
+  z-index: 0;
+
+  &:before,
+  &:after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    position: absolute;
+    bottom: -($arrow-width - .15);
+    left: 50%;
+    margin-left: -($arrow-width / 2);
+    border: ($arrow-width / 2) solid transparent;
+  }
+
+  &:before {
+    border-top-color: #ccc;
+    margin-bottom: -1px;
+  }
+
+  &:after {
+    border-top-color: #fff;
+  }
+}
+
+.rate-info-value {
+  display: block;
+  font-size: 1.8em;
+  font-weight: bold;
+  line-height: 1em;
+}
+
+.rate-info-label {
+  line-height: 1em;
+  color: #888;
+}
+
+.commons-q-a-rate-buttons {
+  margin: 0;
+  line-height: 100%;
+}
+
+.commons-q-a-rate-trigger {
+  margin: 0;
+  width: 50%;
+  height: 2em;
+  @include box-sizing(border-box);
+  line-height: 2em;
+
+  .rate-button {
+    display: block;
+    height: 100%;
+    overflow: hidden;
+    @include box-sizing(border-box);
+    border: 1px solid #ccc;
+    @include border-radius(.3em);
+    color: transparent;
+    background: #fefefe;
+    @include background(linear-gradient(top, #fefefe, #e8e8e8));
+
+    &:before {
+      display: block;
+      margin: 0 auto;
+      text-align: center;
+      font-size: 2.4em;
+      color: #333;
+      font-weight: bold;
+      font-family: monospace;
+    }
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .rate-voted {
+    background: #f3f3f3;
+    border-color: #f3f3f3;
+    @include box-shadow(inset .1em .1em .1em rgba(0, 0, 0, .4));
+  }
+}
+
+.commons-q-a-rate-up {
+  float: left;
+  padding-right: .2em;
+}
+
+.commons-q-a-rate-down {
+  float: right;
+  padding-left: .2em;
+}
+
+.rate-number-up-down-btn-up {
+  &:before {
+    content: "+";
+  }
+}
+
+.rate-number-up-down-btn-down {
+  &:before {
+    content: "-";
+  }
+}
