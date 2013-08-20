@@ -1,0 +1,597 @@
+<?php
+/**
+ * @file
+ * Drupal Commons Events feature.
+ */
+
+include_once 'commons_events.features.inc';
+
+/**
+ * Implements hook_forms().
+ */
+function commons_events_forms($form_id, $args) {
+  // The attend and cancel event forms need to have a dynamic form ID to allow
+  // for multiple forms to be shown on the same page and have them work.
+  foreach (array('commons_events_attend_event_form', 'commons_events_cancel_event_form') as $form) {
+    if (substr($form_id, 0, strlen($form)) == $form) {
+      return array(
+        $form_id => array(
+          'callback' => $form,
+        ),
+      );
+    }
+  }
+}
+
+/**
+ * Implements hook_menu_alter().
+ */
+function commons_events_menu_alter(&$items) {
+  // Hide the "Register" tab since we expose an "Attend" button.
+  $items['node/%/register']['access callback'] = FALSE;
+}
+
+/**
+ * Access callback for showing the Attendees tab.
+ */
+function commons_events_attendee_access($event_node) {
+  if ($event_node->type == 'event') {
+    return TRUE;
+  }
+  return FALSE;
+}
+
+/**
+ * Page callback for full event attendee listing.
+ */
+function commons_events_event_attendees_page($event_node) {
+  return theme('commons_events_event_attendees',
+    array(
+      'event_nid' => $event_node->nid,
+      'display' => 'full',
+    ));
+}
+
+/**
+ * Implements hook_theme().
+ */
+function commons_events_theme($existing, $type, $theme, $path) {
+  return array(
+    'commons_events_attending_event' => array(
+      'variables' => array(
+        'event' => NULL,
+      ),
+      'file' => '/includes/commons_events.theme.inc',
+    ),
+    'commons_events_event_attendees' => array(
+      'variables' => array(
+        'display' => NULL,
+        'event_nid' => NULL,
+      ),
+      'file' => '/includes/commons_events.theme.inc',
+    ),
+    'commons_events_date_display_range_advanced' => array(
+      'variables' => array(
+        'date1' => NULL,
+        'date2' => NULL,
+        'timezone' => NULL,
+        'dates' => NULL,
+        // HTML attributes that will be applied to both the start and end dates
+        // (unless overridden).
+        'attributes' => array(),
+        // HTML attributes that will be applied to the start date only.
+        'attributes_start' => array(),
+        // HTML attributes that will be applied to the end date only.
+        'attributes_end' => array(),
+        'rdf_mapping' => NULL,
+        'add_rdf' => NULL,
+      )
+    ),
+    'commons_events_date_display_range_simple' => array(
+      'variables' => array(
+        'date1' => NULL,
+        'date2' => NULL,
+        'timezone' => NULL,
+        'dates' => NULL,
+        // HTML attributes that will be applied to both the start and end dates
+        // (unless overridden).
+        'attributes' => array(),
+        // HTML attributes that will be applied to the start date only.
+        'attributes_start' => array(),
+        // HTML attributes that will be applied to the end date only.
+        'attributes_end' => array(),
+        'rdf_mapping' => NULL,
+        'add_rdf' => NULL,
+      )
+    ),
+  );
+}
+
+/**
+ * Implements hook_theme_registry_alter().
+ * Gives us the ability to insert our pretty date formatter for the dates we choose below.
+ */
+function commons_events_theme_registry_alter(&$theme_registry) {
+  $theme_registry['date_display_range']['theme path'] = drupal_get_path('module', 'commons_events');
+  $theme_registry['date_display_range']['function'] = 'theme_commons_events_date_display_range_advanced';
+  $theme_registry['date_display_single']['theme path'] = drupal_get_path('module', 'commons_events');
+  $theme_registry['date_display_single']['function'] = 'theme_commons_events_date_display_single';
+}
+
+/**
+ * Implements hook_element_info_alter().
+ */
+function commons_events_element_info_alter(&$type) {
+  // Extend date_combo processing to alter the label text on the fields.
+  if (isset($type['date_combo'])) {
+    $type['date_combo']['#process'][] = 'commons_events_date_combo_element_process';
+  }
+
+  // Extend date_popup processing to remove the redundant descriptions on
+  // fields.
+  if (isset($type['date_popup'])) {
+    $type['date_popup']['#process'][] = 'commons_events_date_popup_element_process';
+  }
+}
+
+/**
+ * Process date_combo field output.
+ *
+ * This is an extension of the Date module's own processing.
+ *
+ * @see date_combo_element_process()
+ * @see commons_events_element_info_alter()
+ */
+function commons_events_date_combo_element_process($element, &$form_state, $form) {
+  $field = field_widget_field($element, $form_state);
+
+  // Change the labels for from and to dates to something more meaningful.
+  if (!empty($field['settings']['todate'])) {
+    $element['value']['#title'] = t('Start date');
+    $element['value2']['#title'] = t('End date');
+  }
+
+  return $element;
+}
+
+/**
+ * Process date_popup field output.
+ *
+ * This is an extension of the Date module's own processing.
+ *
+ * @see date_popup_element_process()
+ * @see commons_events_element_info_alter()
+ */
+function commons_events_date_popup_element_process($element, &$form_state, $form) {
+  // If a date_popup field is part of a larger range widget, simplify the
+  // output.
+  if (!empty($element['#field']['settings']['todate'])) {
+    foreach (array('date', 'time') as $type) {
+      if (!empty($element[$type])) {
+        // The description and title are unnecessary.
+        unset($element[$type]['#description']);
+        $element[$type]['#title'] = '';
+      }
+    }
+  }
+  return $element;
+}
+
+/**
+ * Implements hook_entity_view_alter().
+ */
+function commons_events_entity_view_alter(&$build, $type) {
+  if ($build['#entity_type'] == 'node' && $build['#bundle'] == 'event') {
+    $attendee_count = db_select('registration', 'r')
+      ->fields('r')
+      ->condition('entity_id', $build['#node']->nid)
+      ->condition('entity_type', 'node')
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+    $build['attendee_count'] = $attendee_count;
+    $build['attending'] = array(
+      0 => theme('commons_events_attending_event', array('event' => $build['#node'], 'attendee_count' => $attendee_count)),
+      '#weight' => -10,
+    );
+    $vars = array(
+      'event_nid' => $build['#node']->nid,
+    );
+    // Don't show the address if the event location is only online.
+    $field_location = field_view_field('node', $build['#node'], 'field_location');
+    $field_location = $field_location['#items']['0']['value'];
+    if ($field_location == 'online') {
+      unset($build['field_address']);
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter();
+ */
+function commons_events_form_node_form_alter(&$form, &$form_state) {
+  if ($form_state['node']->type == 'event') {
+    $form['#attached']['css'] = array(
+      drupal_get_path('module', 'commons_events') . '/css/commons_events.css',
+    );
+    $form['#attached']['js'] = array(
+      drupal_get_path('module', 'commons_events') . '/js/commons_events.js',
+    );
+    // Remove the '-None-' option from all the dropdowns.
+    unset($form['field_location'][$form['field_location']['#language']]['#options']['_none']);
+    unset($form['field_registration_type'][$form['field_registration_type']['#language']]['#options']['_none']);
+    // Hide the Registration type field.
+    $form['field_registration']['#disabled'] = commons_events_event_type_disabled($form_state['node']);
+    // Address field should be hidden if event is only online.
+    $form['field_address']['#states'] = array(
+      'invisible' => array(
+        ':input[name^="field_location"]' => array('value' => 'online'),
+      ),
+    );
+    // Status and attendee limit are shown if registration is onsite.
+    $node_registration_status = 1;
+    if (isset($form_state['node']->nid)) {
+      $settings = registration_entity_settings('node', $form_state['node']->nid);
+      $node_registration_status = $settings['status'];
+    }
+    $form['field_status'] = array(
+      '#type' => 'select',
+      '#title' => t('Status'),
+      '#options' => array(
+        1 => t('Open to new attendees'),
+        0 => t('Closed'),
+      ),
+      '#default_value' => $node_registration_status,
+      '#states' => array(
+        'visible' => array(
+          ':input[name^="field_registration_type"]' => array('value' => 'onsite'),
+        ),
+      ),
+      '#weight' => 10,
+    );
+    $form['field_number_of_attendees']['#states'] = $form['field_status']['#states'];
+    $form['field_registration']['#states'] = $form['field_status']['#states'];
+    $form['field_number_of_attendees']['#states']['visible'][':input[name="field_status"]'] = array(
+      'value' => 1,
+    );
+    $form['field_number_of_attendees']['#weight'] = 11;
+    $form['#validate'] = array_merge(array('commons_events_node_form_validate'), $form['#validate']);
+    $form['#submit'][] = 'commons_events_node_form_submit';
+    // Move registration settings into a fieldset so we can move the group.
+    $form['event_registration_settings'] = array(
+      '#type' => 'fieldset',
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
+      '#title' => t('Registration settings'),
+      '#group' => 'additional_settings',
+      '#weight' => -10,
+    );
+    if (empty($form['field_organizers'][$form['field_organizers']['#language']]['#default_value'])) {
+      global $user;
+      $form['field_organizers'][$form['field_organizers']['#language']]['#default_value'] = format_username($user) . " (" . $user->uid . ")";
+    }
+    $form['event_registration_settings']['field_organizers'] = $form['field_organizers'];
+    $form['event_registration_settings']['field_registration_type'] = $form['field_registration_type'];
+    $form['event_registration_settings']['field_status'] = $form['field_status'];
+    $form['event_registration_settings']['field_number_of_attendees'] = $form['field_number_of_attendees'];
+    unset($form['field_registration'][$form['field_registration']['#language']]['0']['registration_type']['#description']);
+    $form['event_registration_settings']['field_registration'] = $form['field_registration'];
+    $form['field_organizers'] = array('#language' => NULL);
+    $form['field_registration_type'] = array('#language' => NULL);
+    $form['field_status'] = array('#language' => NULL);
+    $form['field_number_of_attendees'] = array('#language' => NULL);
+    $form['field_registration'] = array('#language' => NULL);
+  }
+}
+
+/**
+ * Implements hook_commons_entity_integration.
+ */
+function commons_events_commons_entity_integration() {
+  return array(
+    'node' => array(
+      'event' => array(
+      ),
+    ),
+  );
+}
+
+/**
+ * Custom node form validation handler.
+ */
+function commons_events_node_form_validate($form, &$form_state) {
+  $lng = (isset($form_state['language']) ? $form_state['language'] : LANGUAGE_NONE);
+  switch ($form_state['values']['field_registration_type'][$lng]['0']['value']) {
+    case 'onsite':
+      // Max attendees must be entered if the registration status is open and
+      // registration is done onsite.
+      if ((int) $form_state['values']['field_status'] == 1
+        && (!is_numeric($form_state['values']['field_number_of_attendees'][$lng]['0']['value']))) {
+          form_set_error('field_number_of_attendees',
+            t('Maximum number of attendees must be set for registrations to be accepted.'));
+          return FALSE;
+        }
+      break;
+  }
+  return TRUE;
+}
+
+/**
+ * Custom node form submit handler.
+ */
+function commons_events_node_form_submit($form, $form_state) {
+  $node = $form_state['node'];
+  $lng = (isset($form_state['language']) ? $form_state['language'] : LANGUAGE_NONE);
+  if (isset($node->nid)) {
+    $settings = registration_entity_settings('node', $node->nid);
+    $settings['status'] = (int) $form_state['values']['field_status'];
+    if ($form_state['values']['field_registration_type'][$lng]['0']['value'] == 'external') {
+      $settings['status'] = 0;
+    }
+    if (!empty($form_state['values']['field_number_of_attendees'][$lng]['0']['value'])
+      && is_numeric($form_state['values']['field_number_of_attendees'][$lng]['0']['value'])) {
+      $settings['capacity'] = (int) $form_state['values']['field_number_of_attendees'][$lng]['0']['value'];
+    }
+    $settings['settings'] = serialize($settings['settings']);
+    registration_update_entity_settings('node', $node->nid, $settings);
+    // Automatically register the node creator for the event.
+    $registration_type = registration_get_entity_registration_type('node', $node);
+    $registration = entity_get_controller('registration')->create(array(
+      'entity_type' => 'node',
+      'entity_id' => $node->nid,
+      'type' => $registration_type,
+    ));
+    if (!isset($node->uid)) {
+      global $user;
+      $uid = $user->uid;
+    }
+    else {
+      $uid = $node->uid;
+    }
+    if ($settings['status'] == 1
+      && !registration_is_registered($registration, NULL, $uid)) {
+      $registration->user_uid = $uid;
+      $registration->author_uid = $uid;
+      $registration->state = NULL;
+      $registration->count = 1;
+      registration_save($registration);
+    }
+  }
+}
+
+/**
+ * Implements hook_token_info().
+ */
+function commons_events_token_info_alter(&$tokens) {
+  $tokens['tokens']['node']['attend-form'] = array(
+    'name' => t('Attending event form'),
+    'description' => t('Displays the appropriate form for attending or cancelling event attendance'),
+  );
+}
+
+/**
+ * Implements hook_commons_bw_create_all_widget().
+ */
+function commons_events_commons_bw_create_all_widget($group) {
+   if (og_user_access('node', $group->nid, 'create event content')) {
+      $link = l(t('List an event'),'node/add/event',
+      array('attributes' => array('class' => 'commons-events-create'), 'query' => array('og_group_ref' => $group->nid))
+    );
+    return array(
+      'commons_events' => array(
+        'link' => $link,
+        'text' => t('Create in-person or online meetups'),
+        '#weight' => 6,
+      ),
+    );
+  }
+}
+
+/**
+ * Implements hook_tokens().
+ */
+function commons_events_tokens($type, $tokens, array $data = array(), array $options = array()) {
+  $replacements = array();
+  if ($type == 'node' && !empty($data['node'])) {
+    $event = $data['node'];
+    foreach ($tokens as $name => $original) {
+      if ($name == 'attend-form') {
+        $replacements[$original] = theme('commons_events_attending_event', array('event' => $event));
+      }
+    }
+  }
+  return $replacements;
+}
+
+/**
+ * Generates the 'more' link for upcoming events in a specific group.
+ */
+function commons_events_upcoming_more_link($group_id) {
+  if (module_exists('commons_events_solr')) {
+    $options = array(
+      'query' => array(
+        'f[1]' => 'sm_og_group_ref:node:' . $group_id,
+      ),
+    );
+    return l(t('more'), 'events', $options);
+  }
+  $options = array(
+    'query' => array(
+      'gid' => $group_id,
+    ),
+  );
+  return l(t('more'), 'events', $options);
+}
+
+/**
+ * Implements hook_views_post_execute().
+ */
+function commons_events_views_post_execute(&$view) {
+  if ($view->name == 'commons_events_upcoming'
+    && $view->current_display == 'panel_pane_1') {
+    $view->attachment_after = '<div class="more-link">' . commons_events_upcoming_more_link($view->args[0]) . '</div>';
+  }
+  else if ($view->name == 'commons_events_upcoming'
+    && $view->current_display == 'panel_pane_2') {
+    $view->attachment_before = '<div class="commons-event-count">' . format_plural(count($view->result), '1 event', '@count events') . '</div>';
+  }
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function commons_events_block_info() {
+  $blocks = array(
+    'commons_events_create_event_link' => array(
+      'info' => t('"Create an event" call to action'),
+      'cache' => DRUPAL_CACHE_GLOBAL,
+    ),
+    'commons_events_anonymous_login' => array(
+      'info' => t('"Login to create an event" call to action'),
+      'cache' => DRUPAL_CACHE_GLOBAL,
+    ),
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function commons_events_block_view($delta = '') {
+  global $user;
+  if ($delta == 'commons_events_create_event_link'
+    && node_access('create', 'event')) {
+    $options = array(
+      'query' => array(
+        'destination' => 'events',
+      ),
+    );
+    return array(
+      'subject' => NULL,
+      'content' => l(t('List an event'), 'node/add/event', $options),
+    );
+  }
+  else if ($delta == 'commons_events_anonymous_login'
+    && empty($user->uid)) {
+    return array(
+      'subject' => NULL,
+      'content' => t('You must !login first to list an event.', array('!login' => l(t('log in'), 'user'))),
+    );
+  }
+}
+
+/**
+ * Returns specific HTML for a date element formatted with the event formatter M j Y - g:ia
+ * We the do some awesome stuff with regular expressions to take all the different formats available to us and format it pretty.
+ */
+function theme_commons_events_date_display_range_simple($variables) {
+  // Use the regular date formatter if we are any other date format than below.
+  $date1 = $variables['dates']['value']['formatted_date'];
+  $date2 = $variables['dates']['value2']['formatted_date'];
+  $time1 = $variables['dates']['value']['formatted_time'];
+  $time2 = $variables['dates']['value2']['formatted_time'];
+
+  $timezone = $variables['timezone'];
+  $attributes_start = $variables['attributes_start'];
+  $attributes_end = $variables['attributes_end'];
+
+  if($date1 == $date2) {
+    // Wrap the result with the attributes.
+    return t('!start-time - !end-time', array(
+      '!start-time' => '<span class="date-display-start"' . drupal_attributes($attributes_start) . '>' . $time1 . '</span>',
+      '!end-time' => '<span class="date-display-end"' . drupal_attributes($attributes_end) . '>' . $time2 . $timezone . '</span>',
+    ));
+  }
+
+  // Wrap the result with the attributes.
+  return t('!start-date to !end-date, !start-time - !end-time', array(
+    '!start-date' => '<span class="date-display-start"' . drupal_attributes($attributes_start) . '>' . $date1 . '</span>',
+    '!end-date' => '<span class="date-display-end"' . drupal_attributes($attributes_end) . '>' . $date2 . '</span>',
+    '!start-time' => '<span class="date-display-start"' . drupal_attributes($attributes_start) . '>' . $time1 . '</span>',
+    '!end-time' => '<span class="date-display-end"' . drupal_attributes($attributes_end) . '>' . $time2 . $timezone . '</span>',
+  ));
+}
+
+function theme_commons_events_date_display_single($variables) {
+  return $variables['date'];
+}
+/**
+ * Returns specific HTML for a date element formatted with the event formatter.
+ * We parse the date segments and return it at the bottom, or use the simple formatter (above) if parts of the date are too complicated.
+ */
+function theme_commons_events_date_display_range_advanced($variables) {
+  $timezone = $variables['timezone'];
+  $attributes_start = $variables['attributes_start'];
+  $attributes_end = $variables['attributes_end'];
+
+  // Time is always formatted the same.
+  $time1 = $variables['dates']['value']['formatted_time'];
+  $time2 = $variables['dates']['value2']['formatted_time'];
+
+  // See date.theme line 168 -- regarding formatting time for same date events.
+  if ($variables['dates']['value']['formatted_date'] === $variables['dates']['value2']['formatted_date']) {
+    return theme('commons_events_date_display_range_simple',$variables);
+  }
+  // If the difference is over a year, use the simple formatter.
+  if ($variables['dates']['value']['db']['object']->difference($variables['dates']['value2']['db']['object'], 'years') > 0) {
+    return theme('commons_events_date_display_range_simple',$variables);
+  }
+  else if ($variables['dates']['value']['db']['object']->difference($variables['dates']['value2']['db']['object'], 'months') > 0) {
+    $variables['dates']['value']['db']['object']->limitGranularity(array('day','month'));
+    $variables['dates']['value2']['db']['object']->limitGranularity(array('day','month', 'year'));
+
+    $date1 = $variables['dates']['value']['db']['object']->format($variables['dates']['format'],FALSE);
+    $date2 = $variables['dates']['value2']['db']['object']->format($variables['dates']['format'],FALSE);
+  }
+  else if ($variables['dates']['value']['db']['object']->difference($variables['dates']['value2']['db']['object'], 'days') > 0) {
+    // If the Day is before the month (IE Europe, etc) then switch the granularity
+    if (strpos($variables['dates']['format'],'M') != 0 || strpos($variables['dates']['format'],'m') != 0 ||
+       strpos($variables['dates']['format'],'F') != 0 || strpos($variables['dates']['format'],'n') != 0) {
+      $variables['dates']['value']['db']['object']->limitGranularity(array('day'));
+      $variables['dates']['value2']['db']['object']->limitGranularity(array('day', 'month', 'year'));
+    } else {
+      $variables['dates']['value']['db']['object']->limitGranularity(array('month','day'));
+      $variables['dates']['value2']['db']['object']->limitGranularity(array('day', 'year'));
+    }
+
+    $date1 = $variables['dates']['value']['db']['object']->format($variables['dates']['format'],FALSE);
+    $date2 = $variables['dates']['value2']['db']['object']->format($variables['dates']['format'],FALSE);
+
+    // If we are match 'D' or 'l', it means we have a 'day' in there (eg: Monday), we want the whole date because it looks funky otherwise.
+    if (strpbrk($variables['dates']['format'], 'Dl')) {
+      return theme('commons_events_date_display_range_simple',$variables);
+    }
+  }
+  else {
+    return theme('commons_events_date_display_range_simple',$variables);
+  }
+  // Wrap the result with the attributes.
+  return t('!start-date to !end-date, !start-time - !end-time', array(
+    '!start-date' => '<span class="date-display-start"' . drupal_attributes($attributes_start) . '>' . $date1 . '</span>',
+    '!end-date' => '<span class="date-display-end"' . drupal_attributes($attributes_end) . '>' . $date2 . '</span>',
+    '!start-time' => '<span class="date-display-start"' . drupal_attributes($attributes_start) . '>' . $time1 . '</span>',
+    '!end-time' => '<span class="date-display-end"' . drupal_attributes($attributes_end) . '>' . $time2 . $timezone . '</span>',
+  ));
+}
+
+/**
+ * Check whether to allow switching the event's registration type.
+ * If there are registrations for the event, disallow changing the type. This
+ * keeps registrations for an event consistent.
+ */
+function commons_events_event_type_disabled($node) {
+  if (!isset($node->nid) || empty($node->nid)) {
+    return FALSE;
+  }
+  $registrations = db_select('registration', 'r')
+    ->fields('r')
+    ->condition('entity_type', 'node')
+    ->condition('entity_id', $node->nid)
+    ->countQuery()
+    ->execute()
+    ->fetchCol();
+  if ($registrations[0] > 0) {
+    return TRUE;
+  }
+  return FALSE;
+}
