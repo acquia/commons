@@ -1,0 +1,43 @@
+
+// _base.scss imports _custom.scss and other partials.
+@import "base";
+
+/*
+ * Target IE 6, 7 and 8 (less than IE9)
+ */
+
+/*
+ * Assuming a mobile first approach with respond.js OFF, we must reset the font
+ * size for lt IE9
+ */
+html {
+  font-size: 81.3%;
+}
+
+body.front.not-logged-in {
+  #content {
+    background: image-url('commons-drop.png') right top no-repeat;
+  }
+
+  .region-three-33-top {
+    margin-bottom: 24px;
+    min-height: 300px;
+  }
+
+  #block-system-main {
+    .pane-1 {
+      float:left;
+      width:56%;
+    }
+    .pane-2 {
+      float:right;
+      width:40%;
+    }
+  }
+}
+
+.profile-search-result {
+  width: 47%;
+  margin-right: 1%;
+  margin-left: 1%;
+}

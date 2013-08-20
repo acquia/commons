@@ -1,0 +1,36 @@
+$ellipsiswidth: 3em !default;
+
+@mixin multiline-ellipsis($target, $height, $lineheight, $ellipsiswidth: $ellipsiswidth) {
+  .#{$target} {
+    overflow: hidden;
+    height: $height;
+    line-height: $lineheight;
+
+    &:before {
+      content:"";
+      float: left;
+      width: 5px;
+      height: $height;
+    }
+
+    > *:first-child {
+      float: right;
+      width: 100%;
+      margin-left: -5px;
+    }
+
+    &:after {
+      content: "\02026";
+      float: right;
+      position: relative;
+      top: -$lineheight;
+      left: 100%;
+      width: $ellipsiswidth;
+      margin-left: -$ellipsiswidth;
+      padding-right: 5px;
+      text-align: right;
+      background: #fff;
+      @include background(linear-gradient(left, rgba(#fff, 0), #fff 50%, #fff));
+    }
+  }
+}

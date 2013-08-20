@@ -1,0 +1,12 @@
+//
+// Display and icon.
+//
+@mixin sprite_url_height_width($sprite_name, $image_name) {
+  background: sprite($sprite_name, $image_name) no-repeat;
+  width: image-width(sprite-file($sprite_name, $image_name));
+  height: image-height(sprite-file($sprite_name, $image_name));
+  display: inline-block;
+  margin-right: 3px;
+  position: relative;
+  top: 1px;
+}

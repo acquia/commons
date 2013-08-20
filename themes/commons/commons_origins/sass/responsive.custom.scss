@@ -1,0 +1,182 @@
+
+// _base.scss imports _custom.scss and other partials.
+@import "base";
+
+/*
+ * responsive.custom.css is for custom media queries that are not set via the
+ * theme settings, such as cascading media queries.
+ *
+ * By default all the other responsive stylesheets used in Adaptivetheme use a
+ * "stacking method", however cascading media queries use a waterfall method so
+ * you can leverage the cascade and inheritance for all browsers that support
+ * media queries, regardless of screen size.
+ *
+ * @SEE http://zomigi.com/blog/essential-considerations-for-crafting-quality-media-queries/#mq-overlap-stack
+ *
+ * NOTE: this file loads by default, to disable got to your theme settings and
+ * look under the "CSS" settings tab.
+ */
+
+
+/*
+ * Really small screens and up
+ */
+/* @media only screen and (min-width: 220px) {} */
+
+
+/*
+ * Smartphone sizes and up
+ */
+/* @media only screen and (min-width: 320px) {} */
+
+
+/*
+ * Smartphone sizes and down
+ */
+@media only screen and (max-width: 480px) {
+  body {
+    &.toolbar {
+      padding-top: 0 !important;
+    }
+  }
+
+  /*
+   * Float Region blocks example:
+   * In smaller screen sizes we can remove the float and widths so all blocks
+   * stack instead of displaying horizonally. The selector used here is an
+   * "attribute selector" which will match on any float block class. Use your
+   * inspector or Firebug to get the classes from the page output if you need
+   * more granular control over block alignment and stacking.
+   *
+   * "Float Region blocks" is an extension for floating blocks in regions, see
+   * your themes appearance settings, under the Extensions tab.
+   */
+  .region[class*="float-blocks"] .block {
+    float: none;
+    width: 100%;
+  }
+
+  .commons-bw-create-all-widget-types {
+    left: auto;
+  }
+
+  .page-node-add #edit-additional-settings {
+    width: 100%;
+    position: static;
+  }
+
+  .page-node-add .field-type-taxonomy-term-reference-form {
+    width: 100%;
+    position: static;
+  }
+
+  // The toolbar should not be persitently in view on small screens.
+  #toolbar {
+    position: static;
+    margin: 0;
+    padding: 0;
+  }
+
+  #toolbar-user {
+    position: absolute;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+    clip: rect(1px, 1px, 1px, 1px);
+  }
+
+  // Remove the panels adminstration controls on small screens.
+  div#panels-ipe-control-container {
+    display: none !important;
+  }
+
+  #quicktabs-container-commons_bw .quicktabs-tabpage {
+    .view-filters,
+    .attachment-before {
+      float: none;
+      display: block;
+    }
+  }
+
+  // Notification settings
+  #quicktabs-commons_follow_ui {
+    .quicktabs-style-commons-tabs {
+      li {
+        display: block;
+      }
+    }
+  }
+
+  .view-commons-follow-node,
+  .view-commons-follow-user,
+  .view-commons-follow-taxonomy-term {
+    .views-field-ops,
+    .views-field-ops-1 {
+      width: 33.333%;
+    }
+  }
+
+  .primary-fields,
+  .supplementary-fields {
+    display: block;
+    float: none;
+    width: auto;
+    padding: 0;
+  }
+}
+
+/*
+ * Tablet sizes and down
+ */
+@media only screen and (max-width: 768px) {
+  // Commons quicktab pills are distilled to only icons.
+  .quicktabs-style-commons-pills {
+    ul {
+      &.quicktabs-tabs {
+        li {
+          a {
+            font: 0/30px a;
+            color: transparent;
+            text-align: center;
+            @include box-sizing(border-box);
+            width: 30px;
+            height: 30px;
+            padding: 0;
+
+            &:before {
+              margin-right: 0;
+              vertical-align: middle;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/*
+ * Tablet sizes and up
+ */
+@media only screen and (min-width: 768px) {
+  body.front.not-logged-in {
+    #content {
+      background: image-url('commons-drop.png') right top no-repeat;
+    }
+
+    .region-three-33-top {
+      margin-bottom: 24px;
+      min-height: 300px;
+    }
+
+    #block-system-main {
+      .pane-1 {
+        float:left;
+        width:56%;
+      }
+      .pane-2 {
+        float:right;
+        width:40%;
+      }
+    }
+  }
+}
