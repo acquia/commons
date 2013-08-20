@@ -1,0 +1,34 @@
+<?php
+/**
+ * @file
+ * Drupal needs this blank file.
+ */
+
+include_once 'commons_profile_base.features.inc';
+
+/**
+* Implements hook_form_FORM_ID_alter().
+*/
+function commons_profile_base_form_user_login_alter(&$form, &$form_state, $form_id) {
+  drupal_set_title(t('Log in'));
+}
+
+/**
+* Implements hook_form_FORM_ID_alter().
+*/
+function commons_profile_base_form_user_register_form_alter(&$form, &$form_state, $form_id) {
+  // Tweak the user registration form to match the Commons designs.
+  drupal_set_title(t('Sign up'));
+  $form['field_name_first']['#weight'] = -100;
+  $form['field_name_last']['#weight'] = -99;
+  if (empty($form['administer_users']['#value'])) {
+    $form['actions']['submit']['#value'] = t('Sign up');
+  }
+}
+
+/**
+ * Implements hook_menu_alter().
+ */
+function commons_profile_base_menu_alter(&$items) {
+  $items['user/register']['title'] = 'Sign up';
+}
