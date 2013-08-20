@@ -1,0 +1,1098 @@
+<?php
+/**
+ * @file
+ * Code for the Commons Groups feature.
+ */
+
+include_once 'commons_groups.features.inc';
+
+/**
+ * Implements hook_og_permission_alter().
+ */
+function commons_groups_og_permission_alter(&$perms) {
+  // We set these values programatically based
+  // on the value of field_og_subscribe_settings, so we disable them in the UI.
+  $perms['subscribe']['roles'] = array();
+  $perms['subscribe']['title'] = t('Contribute to the group');
+  $perms['subscribe']['description'] = t('This value is set automatically based on the "Group Privacy Settings" field.');
+  $perms['subscribe without approval']['roles'] = array();
+  $perms['subscribe without approval']['title'] = t('Contribute to the group without approval');
+  $perms['subscribe without approval']['description'] = t('This value is set automatically based on the "Group Privacy Settings" field.');
+}
+
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function commons_groups_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'entityreference') {
+    return "plugins/entityreference/$plugin";
+  }
+}
+
+/**
+ * Implements hook_modules_enabled().
+ *
+ * Make sure the og access fields exist when og_access is enabled.
+ */
+function commons_groups_modules_enabled($modules) {
+  if (in_array('og_access', $modules)) {
+    features_revert(array('commons_groups' => array('field_base')));
+    features_revert(array('commons_groups' => array('field_instance')));
+  }
+}
+
+/**
+ * Implements hook_help().
+ * Used for the 3.2 -> 3.3 migration to warn users who have out-of-date groups
+ * to make sure they update the group privacy settings.
+ * See https://drupal.org/node/2059857 for more information
+ */
+function commons_groups_help($path, $arg) {
+  if (variable_get('commons_groups_needs_update', FALSE)) {
+    $message =  '<p>' . t("Drupal Commons 3.3 added a new, required field to control group privacy. Please edit your group(s) select one of the privacy options. Once all groups are
+      set, an administrator can dismiss the update notice.") . '</p>';
+    if ($path == 'admin/content/groups/update') {
+      return $message;
+    }
+    elseif ($arg[0] == 'node' && $arg[2] == 'edit') {
+      $node = menu_get_object();
+      if($node->type == 'group' && empty($node->field_og_subscribe_settings)) {
+        return $message;
+      }
+    }
+    if (user_access('edit any group content')) {
+      $message = t("Group privacy settings !updated.", array('!updated' => l('need to be updated', 'admin/content/groups/update'),));
+      drupal_set_message($message, 'warning', FALSE);
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_view().
+ */
+function commons_groups_entity_view($entity, $type, $view_mode, $langcode) {
+  // Set a breadcrumb for nodes in groups. We currently assume that
+  // nodes are groups.
+  if ($view_mode == 'full' && !empty($entity->og_group_ref[LANGUAGE_NONE][0]['target_id']) && $type != 'user') {
+    $breadcrumb = array();
+    $breadcrumb[] = l(t('Home'), NULL);
+    $breadcrumb[] = l(t('Groups'), 'groups');
+    $group = node_load($entity->og_group_ref[LANGUAGE_NONE][0]['target_id']);
+    if (node_access('view', $group)) {
+      $breadcrumb[] = l($group->title, 'node/' . $group->nid);
+    }
+    drupal_set_breadcrumb($breadcrumb);
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Alter the privacy settings fields.
+ */
+function commons_groups_form_group_node_form_alter(&$form, &$form_state) {
+  // Wrap the privacy fields with a fieldset.
+  $form['privacy_settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Privacy settings'),
+    '#weight' => 20,
+  );
+  $form['privacy_settings']['field_og_subscribe_settings'] = $form['field_og_subscribe_settings'];
+  unset($form['field_og_subscribe_settings']);
+
+  // Hide the settings label.
+  $form['privacy_settings']['field_og_subscribe_settings'][LANGUAGE_NONE]['#title'] = '';
+  $form['privacy_settings']['field_og_subscribe_settings'][LANGUAGE_NONE]['#required'] = FALSE;
+
+ 
+  $form['privacy_settings']['field_og_access_default_value'] = $form['field_og_access_default_value'];
+  unset($form['field_og_access_default_value']);
+  if (module_exists('og_access')) {
+    // Display the private content checkbox only when "Joining requires approval"
+    // is selected.
+    $form['privacy_settings']['field_og_access_default_value']['#states'] = array(
+      'visible' => array(
+        ':input[name="field_og_subscribe_settings[' . LANGUAGE_NONE . ']"]' => array('value' => 'approval'),
+      ),
+    );
+
+    $form['#after_build'] = array('commons_groups_form_group_node_after_build');
+  }
+
+  $form['#attached']['css'] = array(
+    drupal_get_path('module', 'commons_groups') . '/css/commons_groups.css',
+  );
+
+  // The group access is set on commons_groups_node_presave().
+  $form['group_access'][LANGUAGE_NONE]['#required'] = FALSE;
+  $form['group_access']['#access'] = FALSE;
+}
+
+/**
+ * After build callback for the group node form.
+ *
+ * Display the private content checkbox inside the privacy settings field.
+ */
+function commons_groups_form_group_node_after_build($form, $form_state) {
+  $form['privacy_settings']['field_og_subscribe_settings'][LANGUAGE_NONE]['approval']['#suffix'] = render($form['privacy_settings']['field_og_access_default_value']);
+
+  return $form;
+}
+
+/**
+ * Update the group permission field.
+ *
+ * @param $role
+ *   The OG role object of which the permissions are being changed.
+ * @param $permissions
+ *   The anonymous user permissions of the group.
+ */
+function _commons_groups_update_group_permissions($role, $permissions) {
+  $updated_roles = &drupal_static(__FUNCTION__);
+  if (!empty($updated_roles[$role->rid])) {
+    // Avoid updating a group subscription twice on the same request.
+    return;
+  }
+
+  if (!empty($permissions['subscribe without approval'])) {
+    $subscribe_type = 'anyone';
+  }
+  elseif (!empty($permissions['subscribe'])) {
+    $subscribe_type = 'approval';
+  }
+  else {
+    $subscribe_type = 'invitation';
+  }
+
+  $wrapper = entity_metadata_wrapper($role->group_type, $role->gid);
+  if ($wrapper->field_og_subscribe_settings->value() != $subscribe_type) {
+    // Mark that the group's permissions were already handled on this request,
+    // to avoid saving the group entity more than once.
+    $updated_roles[$role->rid] = TRUE;
+
+    $wrapper->field_og_subscribe_settings->set($subscribe_type);
+    $wrapper->save();
+  }
+}
+
+/**
+ * Implements hook_menu_alter().
+ */
+function commons_groups_menu_alter(&$items) {
+  // Provide a more informative title.
+  if (isset($items['node/%/group'])) {
+    $items['node/%/group']['title'] = t('Administer group');
+  }
+}
+
+/*
+ * Implements hook_menu
+ * Used with commons_groups_help and the commons groups update view to turn off
+ * the warning message to update groups
+ */
+function commons_groups_menu() {
+  $items['admin/content/groups/update/toggle'] = array(
+    'title' => 'Toggle Groups Update',
+    'page callback' => 'commons_groups_update_toggle',
+    'access arguments' => array('edit any group content'),
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+/*
+ * Ajax callback page to toggle the group update status to off
+ * See https://drupal.org/node/2059857 for more information
+ */
+function commons_groups_update_toggle() {
+  variable_set('commons_groups_needs_update', FALSE);
+  return TRUE;
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function commons_groups_block_info() {
+  $blocks['commons_groups_create_group'] = array(
+    'info' => t('"Create a group" call to action'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function commons_groups_block_view() {
+  $block['subject'] = '';
+  if (node_access('create', 'group')) {
+    $block['content'] = l(t('Create a group'), 'node/add/group');
+  }
+  else {
+    $block['content'] = '';
+  }
+  return $block;
+}
+
+/**
+ * Implements hook_features_pipe_alter().
+ */
+function commons_groups_features_pipe_alter(&$pipe, $data, $export) {
+  // Prevent Commons Groups related fields from being piped in features
+  // when a content type includes those fields.
+  if (!empty($pipe['field_instance'])) {
+    foreach ($pipe['field_instance'] as $delta => $value) {
+      $args = explode('-', $value);
+      $field_name = $args[2];
+      if ($field_name == 'og_group_ref') {
+        unset($pipe['field_instance'][$delta]);
+      }
+    }
+  }
+  if (!empty($pipe['field_base'])) {
+    foreach ($pipe['field_base'] as $delta => $value) {
+      if ($delta == 'og_group_ref') {
+        unset($pipe['field_base'][$delta]);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_commons_entity_integration().
+ */
+function commons_groups_commons_entity_integration() {
+  return array(
+    'node' => array(
+      'group' => array(
+        'is_group_content' => FALSE,
+        'exclude_commons_follow' => TRUE,
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_views_pre_view().
+ * By default, all views should have a group_type filter that looks at only nodes.
+ * This function allows those views to also show group content on the front page
+ * regardless of their entity type.
+ * See https://drupal.org/node/2037417 for more info.
+ */
+function commons_groups_views_pre_view(&$view, &$display_id, &$args) {
+  // We check to see if a group id argument is set in the view, and if no arguments
+  // are being passed to the view. If so, the group_type filter is irrelevant.
+  if (isset($view->display_handler->options['arguments']['gid']) && empty($args)) {
+    if (isset($view->display_handler->options['filters']['group_type'])) {
+      $filters = $view->display_handler->get_option('filters');
+      unset($filters['group_type']);
+      $view->display_handler->override_option('filters', $filters);
+    }
+  }
+}
+
+function commons_groups_group_contributors_count_topics($group) {
+  // Format the count of contributors.
+  $output = '';
+  $view = views_get_view('commons_contributors_group');
+  if (!empty($view)) {
+    $view->set_display('panel_pane_1');
+    $view->set_arguments(array($group->nid));
+    $view->get_total_rows = TRUE;
+    $view->execute();
+    // If there are no contributors with avatars, return an empty string
+    // rather than displaying '0 contributors'.
+    if (empty($view->total_rows)) {
+      return '';
+    }
+    $contributors_count = $view->total_rows;
+    $output .= l(t('@contributors_count @contributors', array(
+      '@contributors_count' => $contributors_count,
+      '@contributors' => format_plural($contributors_count, 'contributor', 'contributors')
+    )), 'node/' . $group->nid . '/contributors');
+  }
+  // Format the list of topics:
+  if (!empty($group->field_topics[LANGUAGE_NONE])) {
+    foreach ($group->field_topics[LANGUAGE_NONE] as $item) {
+      $tids[] = $item['tid'];
+    }
+    $topics = taxonomy_term_load_multiple($tids);
+    $topics_text = ' discussing the @topics ';
+    $t_args = array('@topics' => format_plural(count($topics), 'topic', 'topics'));
+    foreach ($topics as $topic) {
+      $topics_text .= '!topic-' . $topic->tid;
+      if ($topic == end($topics)) {
+        $topics_text .= '.';
+      }
+      else {
+        $topics_text .= ', ';
+      }
+      $t_args['!topic-' . $topic->tid] = l(t($topic->name), 'taxonomy/term/' . $topic->tid);
+    }
+    $output .= t($topics_text, $t_args);
+  }
+  return $output;
+}
+
+/* set commons_Groups form alter to happen after views bulk operations */
+function commons_groups_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'form_alter') {
+    $group = $implementations['commons_groups'];
+    unset($implementations['commons_groups']);
+    $implementations['commons_groups'] = $group;
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function commons_groups_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'views_exposed_form' && strstr($form['#id'], 'views-exposed-form-commons-groups-directory')) {
+    $form['groups-keys']['#attributes'] = array(
+      'placeholder' => t('Separate keywords with commas'),
+    );
+  }
+  if ((strstr($form_id, 'views_form_commons_group_moderation_page'))) {
+    $form['select']['action::views_bulk_operations_delete_item']['#weight'] = 9;
+  }
+  if ($form_id == 'group_node_form' && is_null($form['nid']['#value'])) {
+    $form['actions']['submit']['#submit'][] = 'commons_groups_group_submission_message';
+  }
+  // Redirect the user back to the group homepage after submitting
+  // a node within a group.
+  if (isset($form['#node']) && substr($form_id, -10) == '_node_form') {
+    // Hide the "Group content visibility" field to simplify the node form.
+    if (!empty($form['group_content_access']['#access'])) {
+      $form['group_content_access']['#access'] = FALSE;
+    }
+    // Set a human-friendly page title.
+    if (empty($form['#node']->nid)) {
+      $types = node_type_get_types();
+      $type = $form['#node']->type;
+      // Use 'a' or 'an' appropriately.
+      $vowels = array('a', 'e', 'i', 'o', 'u');
+      $verb = strtolower(in_array($type[0], $vowels)) ? 'Create an' : 'Create a';
+      drupal_set_title(t("$verb @name", array('@name' => $types[$type]->name)), PASS_THROUGH);
+    }
+    // Customizations to the node form for entitites that are group content.
+    $group_content_entity_types = commons_groups_get_group_content_entity_types();
+    if (isset($group_content_entity_types['node'][$form['#node']->type])) {
+      $form['actions']['submit']['#submit'][] = 'commons_groups_node_in_group_submit';
+    }
+  }
+  if (in_array($form_id, array('og_ui_admin_global_permissions', 'og_ui_admin_permissions'))) {
+    $group_content_entity_types = commons_groups_get_group_content_entity_types();
+    if (!empty($group_content_entity_types)) {
+      // @TODO: Improve this message to be more specific and/or
+      // reflect these changes in the checkboxes.
+      $message = 'In addition to the permissions listed here, the Commons Groups module grants non-group members the ability to post content into groups where content in the group is public.';
+      drupal_set_message(t($message), 'warning');
+    }
+  }
+}
+
+/**
+ * Submit handler called if the form is for a node enabled as group content.
+ */
+function commons_groups_node_in_group_submit(&$form, &$form_state) {
+  if (isset($form_state['values']['og_group_ref'][LANGUAGE_NONE][0])) {
+    $group = $form_state['values']['og_group_ref'][LANGUAGE_NONE][0]['target_id'];
+    $form_state['redirect'] = 'node/' . $group;
+  }
+}
+
+/**
+ * Implements hook_system_info_alter().
+ */
+function commons_groups_system_info_alter(&$info, $file, $type) {
+  // Commons Groups dynamically adds the og_group_ref field to
+  // content types that request it by altering the
+  // commons_groups_entity_types variable.
+  // We must add a corresponding line for each field instance
+  // to commons_groups.info so that Features is aware of the instance
+  // and can sucessfully revert the field_instance component back
+  // to its default state.
+  if ($file->name == 'commons_groups') {
+    $group_bundles = og_get_all_group_bundle();
+    if (!empty($group_bundles['node'])) {
+      foreach ($group_bundles['node'] as $bundle => $name) {
+        // These field instances should be added to groups regardless of
+        // whether og_access.module is enabled.
+        $info['features']['field_instance'][] = "node-$bundle-field_og_access_default_value";
+        $info['features']['field_instance'][] = "node-$bundle-field_og_subscribe_settings";
+        $info['features']['field_instance'][] = "node-$bundle-og_roles_permissions";
+        // These fields are only necessary when og_access.module is enabled.
+        $info['features']['field_instance'][] = "node-$bundle-field_og_access_default_value";
+        $info['features']['field_instance'][] = "node-$bundle-group_access";
+      }
+    }
+    $group_content_entity_types = commons_groups_get_group_content_entity_types();
+    if (!empty($group_content_entity_types)) {
+      foreach ($group_content_entity_types as $entity_type => $bundles) {
+        foreach (array_keys($bundles) as $bundle) {
+          $info['features']['field_instance'][] = "$entity_type-$bundle-og_group_ref";
+          $info['features']['field_instance'][] = "$entity_type-$bundle-group_content_access";
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_default_message_type_alter().
+ */
+function commons_groups_default_message_type_alter(&$defaults) {
+  foreach (array('commons_activity_streams_comment_created', 'commons_activity_streams_node_created') as $name) {
+    if (!empty($defaults[$name])) {
+      $defaults[$name]->message_text[LANGUAGE_NONE][2] = commons_groups_message_partial_default();
+    }
+  }
+}
+
+
+/**
+ * Implements hook_og_user_access_alter().
+ *
+ * Deny create permissions from non-members on "non-public" groups (i.e. groups
+ * that don't allow joining without approval).
+ */
+function commons_groups_og_user_access_alter(&$perm, $context) {
+  $account = $context['account'];
+  $group_type = $context['group_type'];
+  $group = $context['group'];
+
+  if ($group_type != 'node') {
+    return;
+  }
+  // The purpose of this function is to grant permissions to create content
+  // in a group to non-members of the group, when the group's privacy settings
+  // (field_og_subscribe_settings) is set to "Anyone can contribute".
+  if (og_is_member($group_type, $group->nid, 'user', $account, array(OG_STATE_ACTIVE, OG_STATE_PENDING, OG_STATE_BLOCKED))) {
+    // The user is a group member, so comply to the OG permissions.
+    return;
+  }
+
+  $wrapper = entity_metadata_wrapper($group_type, $group);
+  $access_create = $account->uid && $wrapper->field_og_subscribe_settings->value() == 'anyone';
+
+  // Make sure user can view group (i.e. it's not private).
+  $commons_groups_entity_types = commons_groups_get_group_content_entity_types();
+  foreach (array_keys($commons_groups_entity_types['node']) as $type) {
+    $perm["create $type content"] = $access_create;
+  }
+}
+
+
+/**
+ * Implements of hook_token_info().
+ */
+function commons_groups_token_info() {
+  $types = array();
+  $tokens = array();
+
+  // Commons Groups tokens.
+  $types['commons-groups'] = array(
+    'name' => t('Commons Groups'),
+    'description' => t('Tokens related to the Groups functionality in Drupal Commons.'),
+    'needs-data' => 'node',
+  );
+  $tokens['commons-groups']['in-groups-text'] = array(
+    'name' => t('"In groups" text'),
+    'description' => t('The text (starting with "in the groups") indicating which groups a peice of content belongs to.'),
+  );
+  $tokens['node']['commons-groups-group-contributors-count-topics'] = array(
+    'name' => t('Commons Groups: Group contributor count and topics'),
+    'description' => t('Displays text showing the number of contributors and the topics associated with a group node.'),
+  );
+  return array(
+    'types' => $types,
+    'tokens' => $tokens,
+  );
+}
+
+
+/**
+ * Implements hook_tokens().
+ */
+function commons_groups_tokens($type, $tokens, $data = array(), $options = array()) {
+  $replacements = array();
+  if ($type == 'node' && !empty($data['node'])) {
+    $group = $data['node'];
+
+    foreach ($tokens as $name => $original) {
+      if ($name == 'commons-groups-group-contributors-count-topics') {
+        $replacements[$original] = commons_groups_group_contributors_count_topics($group);
+        return $replacements;
+      }
+    }
+  }
+  if ($type == 'commons-groups') {
+    if (!empty($tokens['in-groups-text'])) {
+      // Build a list of groups associated with this message.
+      $text = '';
+      $target_nids = array();
+      $related_groups = array();
+      $related_gids = array();
+
+      // First, build an array of target nodes associated with the message.
+      foreach ($data['message']->field_target_nodes[LANGUAGE_NONE] as $key => $value) {
+        $target_nids[] = $value['target_id'];
+      }
+      // If there are no target nodes, the in-groups-text token should be empty.
+      if (empty($target_nids)) {
+        $replacements['[commons-groups:in-groups-text]'] = $text;
+        return $replacements;
+      }
+      // Build a list of groups associated with the target nodes.
+      // For now, we assume that the group type is node.
+      foreach ($target_nids as $key => $nid) {
+        $og_memberships_this_target = og_get_entity_groups('node', $nid);
+        if (!empty($og_memberships_this_target['node'])) {
+          $og_memberships_this_target = $og_memberships_this_target['node'];
+          foreach ($og_memberships_this_target as $membership_id => $gid) {
+            $related_gids[] = $gid;
+          }
+        }
+      }
+      // If no groups are associated with any of the targett nodes,
+      // then we have no "in the groups" text.
+      if (empty($related_gids)) {
+        $replacements['[commons-groups:in-groups-text]'] = '';
+        return $replacements;
+      }
+
+      $related_groups = entity_load('node', $related_gids);
+      // Key the array of groups in a predictable way.
+      $related_groups = array_values($related_groups);
+      // Generate the appropriate text depending on the number of groups
+      // associated with the message:
+      $replacements['[commons-groups:in-groups-text]'] = commons_groups_related_groups_text($related_groups);
+      return $replacements;
+    }
+  }
+}
+
+function commons_groups_message_partial_default() {
+  $partial = array(
+    'value' => '[commons-groups:in-groups-text]',
+    'format' => 'full_html',
+    'safe_value' => '[commons-groups:in-groups-text]',
+  );
+  return $partial;
+}
+
+/**
+ * Build the related-groups text for nodes.
+ *
+ * @param $related_groups
+ *   Array of groups referenced by the node.
+ *
+ * @return
+ *   String containing the related groups.
+ */
+function commons_groups_related_groups_text($related_groups) {
+  // In 1 group: "in the x group"
+  if (count($related_groups) == 1) {
+    return t(' in the !group group', array('!group' => l($related_groups[0]->title, 'node/' . $related_groups[0]->nid)));
+  }
+
+  // In 2 groups: "in the x and y groups"
+  if (count($related_groups) == 2) {
+    return t(' in the !group-0 and !group-1 groups', array(
+      '!group-0' => l($related_groups[0]->title, 'node/' . $related_groups[0]->nid),
+      '!group-1' => l($related_groups[1]->title, 'node/' . $related_groups[1]->nid)
+    ));
+  }
+
+  // In more than 2 groups: "in the x, y and z groups"
+  if (count($related_groups) > 2) {
+    // Separate the last group.
+    $last_group = array_pop($related_groups);
+    $text = ' in the ';
+    // Prepare tokens for t() for each of the other groups.
+    foreach ($related_groups as $key => $this_group) {
+      $text .= "!group-$key, ";
+      $t_args["!group-$key"] = l($this_group->title, 'node/' . $this_group->nid);
+    }
+    // Prepare the last group token.
+    $text .= " and !group-$last_group->nid groups.";
+    $t_args["!group-$last_group->nid"] = l($last_group->title, 'node/' . $last_group->nid);
+    // Prepare the full text with all of the groups and their tokens:
+    return t($text, $t_args);
+  }
+}
+
+function commons_groups_group_submission_message($form, &$form_state) {
+  if ($form_state['values']['status'] !== 1) {
+    drupal_set_message(t('Thanks for your group submission! This group has entered the moderation queue and will be reviewed shortly.'));
+  }
+}
+
+/**
+ * Default value function for the og_group_ref reference field.
+ * This function is assigned to the field with the default_value_function
+ * property defined in our instances of the og_group_ref field,
+ * which takes place in commons_groups_field_definition().
+ */
+function commons_groups_entityreference_default_value($entity_type, $entity, $field, $instance, $langcode) {
+
+  $items = array();
+  $field_name = $field['field_name'];
+
+  if (empty($_GET[$field_name]) || !is_string($_GET[$field_name])) {
+    return $items;
+  }
+
+  if (empty($instance['settings']['behaviors']['prepopulate']['status'])) {
+    return $items;
+  }
+
+  $ids = explode(',', $_GET[$field_name]);
+  // Check access to the provided entities.
+  $target_type = $field['settings']['target_type'];
+  entity_load($target_type, $ids);
+  // Remove group nodes hidden by the node access system.
+  foreach ($ids as $target_id) {
+    $target = entity_load_single($target_type, $target_id);
+    if (entity_access('view', $target_type, $target)
+      && og_is_group_type($target_type, $target->type)
+      && (og_user_access($target_type, $target_id, "create $entity->type content") || og_user_access($target_type, $target_id, "update any $entity->type content"))
+    ) {
+      $items[] = array('target_id' => $target_id);
+    }
+  }
+  return $items;
+}
+
+/**
+ * Implements hook_strongarm_alter().
+ */
+function commons_groups_strongarm_alter(&$items) {
+  // Expose the Group content type for integration with Commons Radioactivity.
+  if (isset($items['commons_radioactivity_entity_types'])) {
+    $items['commons_radioactivity_entity_types']->value['node']['group'] = 1;
+  }
+}
+
+function commons_groups_default_rules_configuration_alter(&$configs) {
+  // Disable default OG new content notifications.
+  // The language doesn't correspond to Commons' open groups model and we use
+  // commons_follow and commons_follow_notify for new content notifications.
+  if (isset($configs['rules_og_member_active'])) {
+    $configs['rules_og_member_active']->active = FALSE;
+  }
+}
+
+/**
+ * Implements hook_node_presave().
+ *
+ * When the node's group is private, force the group content to be private.
+ */
+function commons_groups_node_presave($node) {
+  if (!module_exists('og_access')) {
+    return;
+  }
+
+  $wrapper = entity_metadata_wrapper('node', $node);
+
+  if (og_is_group('node', $node)) {
+    // Determine whether the group is private according to the subscription
+    // field.
+    $private = $wrapper->field_og_subscribe_settings->value() == 'invitation';
+    $wrapper->{OG_ACCESS_FIELD}->set((int)$private);
+    return;
+  }
+
+  if (!og_is_group_content_type('node', $node->type)) {
+    return;
+  }
+
+
+  // Check whether any of the groups are private.
+  $private = FALSE;
+  foreach (array_keys(og_get_group_audience_fields('node', $node->type)) as $field) {
+    if (empty($node->$field)) {
+      continue;
+    }
+
+    foreach ($wrapper->$field as $group_wrapper) {
+      if (empty($group_wrapper->field_og_access_default_value)) {
+        continue;
+      }
+
+      if ($group_wrapper->field_og_access_default_value->value() == TRUE) {
+        // Once a private group was found, there's no need to continue.
+        $private = TRUE;
+        break 2;
+      }
+    }
+  }
+
+  if ($private) {
+    $wrapper->{OG_CONTENT_ACCESS_FIELD}->set(OG_CONTENT_ACCESS_PRIVATE);
+  }
+}
+
+/**
+ * Implements hook_node_update().
+ */
+function commons_groups_node_update($node) {
+  $account = user_load($node->uid);
+  commons_groups_first_contribution($account, $node);
+
+  if (og_is_group('node', $node)) {
+    commons_groups_set_group_permissions($node);
+  }
+}
+
+/**
+ * Implements hook_node_insert().
+ */
+function commons_groups_node_insert($node) {
+  $account = user_load($node->uid);
+  commons_groups_first_contribution($account, $node);
+
+  if (og_is_group('node', $node)) {
+    // When creating a new group, this hook happens before OG creates the
+    // group specific roles. Therefore we create the roles here before altering
+    // them in commons_groups_set_group_permissions().
+    og_roles_override('node', $node->type, $node->nid);
+    commons_groups_set_group_permissions($node);
+  }
+}
+
+/**
+ * Set the group's permissions according to field_og_subscribe_settings.
+ *
+ * @param $node
+ *   A group node.
+ */
+function commons_groups_set_group_permissions($node) {
+  // Avoid updating a group subscription twice on the same request.
+  $updated_nodes = & drupal_static(__FUNCTION__);
+  if (!empty($updated_nodes[$node->nid])) {
+    return;
+  }
+  $updated_nodes[$node->nid] = TRUE;
+
+  $wrapper = entity_metadata_wrapper('node', $node);
+  $permission = $wrapper->field_og_subscribe_settings->value();
+  $og_roles = og_roles('node', $node->type, $node->nid);
+  $anon_rid = array_search(OG_ANONYMOUS_ROLE, $og_roles);
+
+  $permissions = array(
+    'subscribe' => $permission == 'approval',
+    'subscribe without approval' => $permission == 'anyone',
+  );
+
+  // Check if the permissions needs to be changed.
+  $changed = FALSE;
+  $old_permissions = og_role_permissions(array($anon_rid => OG_ANONYMOUS_ROLE));
+  foreach ($permissions as $permission => $value) {
+    if (empty($old_permissions[$anon_rid][$permission]) || $old_permissions[$anon_rid][$permission] != $value) {
+      $changed = TRUE;
+    }
+  }
+
+  // Only change the permissions when neccessary.
+  if ($changed) {
+    og_role_change_permissions($anon_rid, $permissions);
+  }
+}
+
+/**
+ * Returns an array of entity types that are enabled via Commons Groups.
+ */
+function commons_groups_get_group_content_entity_types() {
+  // Find all Commons Entity integrations.
+  $commons_entity_integrations = module_invoke_all('commons_entity_integration');
+  if (empty($commons_entity_integrations)) {
+    return array();
+  }
+
+  foreach ($commons_entity_integrations as $entity_type => $integration) {
+    foreach ($integration as $bundle => $options) {
+      if (isset($options['is_group_content']) && $options['is_group_content'] == FALSE) {
+        unset($commons_entity_integrations[$entity_type][$bundle]);
+      }
+    }
+    // If an entity type has no integrations, don't return it.
+    if (empty($commons_entity_integrations[$entity_type])) {
+      unset($commons_entity_integrations[$entity_type]);
+    }
+  }
+
+  return $commons_entity_integrations;
+
+}
+
+/**
+ * When a user first creates content within a group,
+ * grant her the contributor role within that group.
+ */
+function commons_groups_first_contribution($account, $node) {
+  // Find the groups that this piece of content belongs to.
+  $groups = og_get_entity_groups('node', $node);
+  // @todo: Make it work also with user-groups.
+  if (!empty($groups['node'])) {
+    $node_groups = array_values($groups['node']);
+    // Find the groups that the node author belongs to.
+    $account_groups = og_get_groups_by_user($account, 'node');
+    if (!$account_groups) {
+      $account_groups = array();
+    }
+    // For groups where this user is not already a member, add her to the group.
+    // Anonymous users should never be added to a group automatically
+    if ($account->uid == 0) {
+      return;
+    }
+    $new_groups = array_diff($node_groups, $account_groups);
+    if (!empty($new_groups)) {
+      foreach ($new_groups as $new_group_nid) {
+        og_group('node', $new_group_nid, array('entity' => $account->uid));
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_commons_bw_group_widget().
+ */
+function commons_groups_commons_bw_group_widget() {
+  return array(
+    'commons_all' => array(
+      'title' => 'All',
+      'type' => 'view',
+      'vid' => 'commons_bw_all',
+      'display' => 'default',
+      'weight' => -10,
+      'default' => 1,
+      'bundle' => 'post',
+    ),
+  );
+}
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function commons_groups_preprocess_node(&$variables) {
+  $variables['user_picture'] = '';
+  if (variable_get('user_pictures', 0)) {
+    $node = $variables['node'];
+    $account = user_load($node->uid);
+
+    if (!empty($account->picture)) {
+      // @TODO: Ideally this function would only be passed file objects, but
+      // since there's a lot of legacy code that JOINs the {users} table to
+      // {node} or {comments} and passes the results into this function if we
+      // a numeric value in the picture field we'll assume it's a file id
+      // and load it for them. Once we've got user_load_multiple() and
+      // comment_load_multiple() functions the user module will be able to load
+      // the picture files in mass during the object's load process.
+      if (is_numeric($account->picture)) {
+        $account->picture = file_load($account->picture);
+      }
+      if (!empty($account->picture->uri)) {
+        $filepath = $account->picture->uri;
+      }
+    }
+    elseif (variable_get('user_picture_default', '')) {
+      $filepath = variable_get('user_picture_default', '');
+    }
+
+    if (isset($filepath)) {
+      if (module_exists('image') && file_valid_uri($filepath)) {
+        $alt = t("@user's picture", array('@user' => format_username($account)));
+
+        $render = array(
+          '#theme' => 'image_formatter',
+          '#image_style' => '50x50',
+          '#item' => array(
+            'uri' => $filepath,
+            'alt' => $alt,
+          ),
+          '#path' => array(
+            'path' => 'user/' . $account->uid,
+            'options' => array(
+              'attributes' => array(
+                'title' => t("View @user's profile.", array('@user' => format_username($account))),
+                'class' => 'user-picture',
+              ),
+            ),
+          ),
+        );
+
+        // Use a unique image style for user pictures in post information.
+        $variables['user_picture'] = drupal_render($render);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_views_view_grid().
+ */
+function commons_groups_preprocess_views_view_grid(&$variables, $hook) {
+  // Change the displayed role name in the group contributors block to
+  // "Organizers".
+  if ($variables['view']->name == 'commons_contributors_group' && !empty($variables['title']) && $variables['title'] == 'administrator member') {
+    $variables['title'] = t('Organizers');
+  }
+}
+
+/**
+ * Implements hook_field_access().
+ */
+function commons_groups_field_access($op, $field, $entity_type, $entity, $account) {
+  $field_name = $field['field_name'];
+  switch ($field_name) {
+    case 'og_roles_permissions':
+      return FALSE;
+
+    case 'field_og_access_default_value':
+      return $op == 'edit' && module_exists('og_access');
+
+    case 'field_og_subscribe_settings':
+      return $op == 'edit';
+  }
+
+  if (module_exists('og_access') && in_array($field_name, array(OG_CONTENT_ACCESS_FIELD, OG_ACCESS_FIELD))) {
+    return FALSE;
+  }
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function commons_groups_field_formatter_info() {
+  return array(
+    'commons_groups_group_subscribe' => array(
+      'label' => t('Commons groups subscribe link'),
+      'field types' => array('list_boolean'),
+      'settings' => array(
+        'field_name' => FALSE,
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function commons_groups_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  global $user;
+  $account = clone $user;
+
+  if ($display['type'] != 'commons_groups_group_subscribe') {
+    return;
+  }
+
+  if (!og_is_group($entity_type, $entity)) {
+    return;
+  }
+
+  if (!empty($entity->uid) && ($entity->uid == $account->uid)) {
+    // User is the group manager.
+    $element[0] = array('#markup' => t('You are the group manager'));
+    return $element;
+  }
+
+  list($id, , $bundle) = entity_extract_ids($entity_type, $entity);
+
+  // The user has a pending membership request. Let her know that
+  // her request is pending review.
+  if (og_is_member($entity_type, $id, 'user', $account, array(OG_STATE_PENDING))) {
+    $element[0] = array('#markup' => '<div class="subscription-type">' . t('Your membership request is pending review by a group organizer.') . '</div>');
+    return $element;
+  }
+  // If user is blocked, they should not be able to apply for membership.
+  if (og_is_member($entity_type, $id, 'user', $account, array(OG_STATE_BLOCKED))) {
+    return;
+  }
+  if (og_is_member($entity_type, $id, 'user', $account)) {
+    // The user has an active membership. She can leave the group.
+    // For groups where anyone can contribute without joining, don't display
+    // a "Leave" link since users never went through
+    // the separate step of joining.
+    if (og_is_member($entity_type, $id, 'user', $account, array(OG_STATE_ACTIVE)) && $entity->field_og_subscribe_settings[LANGUAGE_NONE][0]['value'] != 'anyone') {
+      $links['title'] = t('Leave group');
+      $links['href'] = "group/$entity_type/$id/unsubscribe";
+    }
+  }
+  else {
+    // Check if user can subscribe to the field.
+    if (empty($settings['field_name']) && $audience_field_name = og_get_best_group_audience_field('user', $account, $entity_type, $bundle)) {
+      $settings['field_name'] = $audience_field_name;
+    }
+    if (!$settings['field_name']) {
+      return;
+    }
+
+    $field_info = field_info_field($settings['field_name']);
+
+    // Check if entity is referencable.
+    if ($field_info['settings']['target_type'] != $entity_type) {
+      // Group type doesn't match.
+      return;
+    }
+    if (!empty($field_info['settings']['handler_settings']['target_bundles']) && !in_array($bundle, $field_info['settings']['handler_settings']['target_bundles'])) {
+      // Bundles don't match.
+      return;
+    }
+
+    if (!og_check_field_cardinality('user', $account, $settings['field_name'])) {
+      $element[0] = array('#markup' => format_plural($field_info['cardinality'], 'You are already registered to another group', 'You are already registered to @count groups'));
+      return $element;
+    }
+
+    $url = "group/$entity_type/$id/subscribe";
+    if ($settings['field_name']) {
+      $url .= '/' . $settings['field_name'];
+    }
+    // Set the needs update hook if we end up with a group call that is missing
+    // the subscribe settings. We also check the variable first, because we
+    // don't want to reset the variable cache if we don't have to.
+    // See https://drupal.org/node/2059857#comment-7733465 for more info.
+    if (empty($entity->field_og_subscribe_settings)) {
+      if (!variable_get('commons_groups_needs_update', FALSE)) {
+        variable_set('commons_groups_needs_update', TRUE);
+      }
+    }
+    // Don't display join link on public groups.
+    else {
+      if ($entity->field_og_subscribe_settings[LANGUAGE_NONE][0]['value'] != 'anyone') {
+        if ($entity->field_og_subscribe_settings[LANGUAGE_NONE][0]['value'] == 'approval') {
+          $subscription_type = t('Moderated group');
+          $links['title'] = t('Join group');
+          if ($account->uid) {
+            $links['href'] = $url;
+          }
+          else {
+            $links['href'] = 'user/login';
+            $links['options'] = array('query' => array('destination' => $url));
+          }
+        }
+        else {
+          $element[0] = array('#markup' => '<div class="subscription-type">' . t('Invite-only group') . '</div>');
+          return $element;
+        }
+      }
+    }
+  }
+  if (!empty($links['title'])) {
+    $links += array('options' => array());
+    $element[0] = array(
+      '#type' => 'link',
+      '#title' => $links['title'],
+      '#href' => $links['href'],
+      '#options' => $links['options'],
+    );
+
+    if (!empty($subscription_type)) {
+      $element[0]['#prefix'] = '<div class="subscription-type">' . $subscription_type . '</div>';
+    }
+
+    return $element;
+  }
+}
