@@ -1,0 +1,130 @@
+<?php
+/**
+ * commons_search.module
+ * Code for the Commons Search feature.
+ */
+
+include_once 'commons_search.features.inc';
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function commons_search_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'form_alter') {
+    // We move commons_search to the end so it gets processed last.
+    $group = $implementations['commons_search'];
+    unset($implementations['commons_search']);
+    $implementations['commons_search'] = $group;
+  }
+}
+
+/**
+ * Custom search form that switches between Core and Solr depending on which is
+ * the enabled search module.
+ */
+function commons_search_form_alter(&$form, &$form_state, $form_id) {
+
+  if ($form_id == 'search_block_form') {
+    // Move the textfield to after the drop down.
+    $site_key = 'c-all';
+    $form['search_block_form']['#weight'] = 1;
+    if (module_exists('commons_search_core')) {
+      // We're using faceted core search, so change Site search key to reflect
+      // the change of search engines.
+      $site_key = 'o-search_facetapi';
+    }
+    else {
+      if (module_exists('apachesolr_search')) {
+        // Are we using Apache Solr? If so change the Site search key to reflect
+        // the change of search engines.
+        $site_key = 'o-solr';
+      }
+    }
+    // Overwrite all options so we only have 3 (at most).
+    $form['custom_search_types']['#options'] = array(
+      $site_key => t('Site'),
+      'c-user' => t('Users'),
+    );
+    $group = FALSE;
+    $node = current_path();
+    if ((strrpos($node, 'node/') !== FALSE || strrpos($node, 'group/') !== FALSE)
+      && is_numeric(substr($node, strrpos($node, '/') + 1))
+    ) {
+      // If we're on a page that looks like a group node, see if it is actually
+      // a group node.
+      $node = node_load(substr($node, strrpos($node, '/') + 1));
+      if (!empty($node)) {
+        $group = ($node->type == 'group');
+      }
+    }
+    if ($group) {
+      // Current page is a group node, so add group search option to the
+      // dropdown menu and set the current group id.
+      $form['custom_search_types']['#options']['o-commons_search'] = t('This group');
+      $form['custom_search_types']["#default_value"] = 'o-commons_search';
+      $form_state['search_group_id'] = $node->nid;
+    }
+    if (arg(0) == 'search') {
+      // If we've already searched, refill the search box with the current
+      // search keywords.
+      $form['search_block_form']['#default_value'] = check_plain(arg(2));
+    }
+  }
+}
+
+/**
+ * Search form submit handler.
+ * Add group id filter if appropriate.
+ */
+function commons_search_search_form_submit($form, &$form_state) {
+  if ($form_state['values']['custom_search_types'] == 'o-commons_search'
+    && isset($form_state['search_group_id'])
+  ) {
+    $keys = $form_state['values']['search_block_form'];
+    if (module_exists('apachesolr_search')) {
+      // Add on a filter to the solr query to only list results within the
+      // specified group.
+      $qm = (strpos($form_state['redirect'], '?') !== FALSE ? '' : '?');
+      $form_state['redirect'] .= $qm . '&f[1]=sm_og_group_ref:node:' . $form_state['search_group_id'];
+    }
+    else {
+      // Using core search to search within a group doesn't work, so we simply
+      // use a view with exposed search terms to do the searching.
+      drupal_goto('search/group/' . $form_state['search_group_id'], array('query' => array('keys' => $keys)));
+    }
+  }
+  else {
+    if ($form_state['values']['custom_search_types'] == 'c-user') {
+      // Force update the redirect on User search since Custom Search is weird.
+      $keys = check_plain($form_state['values']['search_block_form']);
+      $form_state['redirect'] = 'search/user/' . $keys;
+    }
+  }
+}
+
+function commons_search_process_search_result(&$variables) {
+}
+/**
+ * Implements hook_preprocess_hook().
+ */
+function commons_search_process_search_results(&$variables) {
+  $variables['result_count'] = count($variables['results']);
+  if (isset($variables['response'])
+    && isset($variables['response']->request)
+    && preg_match('/sm_og_group_ref:"node:([0-9]+)"&/', urldecode($variables['response']->request), $match)
+  ) {
+    $group = node_load($match[1]);
+    $title = t('Search within !group', array('!group' => '<em>' . $group->title . '</em>'));
+    $variables['title'] = $title;
+  }
+}
+
+/**
+ * Implements hook_theme_registry_alter().
+ */
+function commons_search_theme_registry_alter(&$theme_registry) {
+  // Remove AT breadcrumb preprocess since it adds raw RDFa data into the title.
+  $theme_registry['breadcrumb']['preprocess functions'] = array_flip($theme_registry['breadcrumb']['preprocess functions']);
+  unset($theme_registry['breadcrumb']['preprocess functions']['adaptivetheme_preprocess_breadcrumb']);
+  $theme_registry['breadcrumb']['preprocess functions'] = array_flip($theme_registry['breadcrumb']['preprocess functions']);
+}

@@ -1,0 +1,55 @@
+<?php
+/**
+ * @file
+ * Commons Search Solr User install script.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function commons_search_solr_user_install() {
+  db_update('system')
+    ->fields(array(
+      'weight' => 150,
+    ))
+    ->condition('name', 'commons_search_solr_user')
+    ->execute();
+}
+
+/**
+ * Implements hook_enable().
+ */
+function commons_search_solr_user_enable() {
+  // Commons_search_solr_user alters the search_active_modules variable
+  // defined by commons_search_solr. Now that it's disabled, let's revert it.
+  $revert = array('commons_search_solr' => array('variable'));
+  features_revert($revert);
+  // We need to tell Solr to index users.
+  db_merge('apachesolr_index_bundles')
+    ->key(array(
+      'env_id' => apachesolr_default_environment(),
+      'entity_type' => 'user',
+      'bundle' => 'user',
+    ))
+    ->fields(array(
+      'env_id' => apachesolr_default_environment(),
+      'entity_type' => 'user',
+      'bundle' => 'user',
+    ))
+    ->execute();
+
+  // Make sure the user search page was created so we can modify it. Do this manually
+  // Because features revert isn't reliable in all cases, we load the export and do the save.
+  module_load_include('inc', 'commons_search_solr_user', 'commons_search_solr_user.apachesolr_search_defaults');
+  $default_search_page = commons_search_solr_user_apachesolr_search_default_searchers();
+  apachesolr_search_page_save(get_object_vars($default_search_page['user_search']));
+
+  // Revert the trusted contacts module if its enabled, since we need to
+  // re-apply the search options that come with the feature.
+  if (module_exists('commons_trusted_contacts')) {
+    $revert = array(
+      'commons_trusted_contacts' => array('field_instance'),
+    );
+    features_revert($revert);
+  }
+}

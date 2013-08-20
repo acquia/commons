@@ -1,0 +1,359 @@
+<?php
+/**
+ * @file
+ * Code for the Commons Search Solr User feature.
+ */
+
+include_once 'commons_search_solr_user.features.inc';
+
+/**
+ * Process documents
+ */
+function commons_search_solr_user_apachesolr_index_document_build_user($document, $entity, $env_id) {
+  // Flag module API: obtain all UIDs that have flagged the user.
+  $flagging_users = module_invoke('flag', 'get_content_flags', 'user', $entity->uid, 'commons_follow_user');
+  foreach ($flagging_users as $uid => $flaginfo) {
+    // Add each flag to the document index, as an integer multiple value field.
+    $document->setMultiValue('im_flag_commons_follow_user', $uid);
+  }
+
+  if (!empty($entity->field_name_first)) {
+    $document->addField('tes_firstname', $entity->field_name_first[LANGUAGE_NONE][0]['value']);
+  }
+  if (!empty($entity->field_name_last)) {
+    $document->addField('tes_lastname', $entity->field_name_last[LANGUAGE_NONE][0]['value']);
+  }
+  $document->addField('tes_username', $entity->name);
+}
+
+function commons_search_solr_user_apachesolr_query_alter($query) {
+  global $user;
+  // Search in partial usernames.
+  $query->addParam('qf', 'tes_firstname');
+  $query->addParam('qf', 'tes_lastname');
+  $query->addParam('qf', 'tes_username');
+
+  if(isset($_GET['flagged']) && $flagged = check_plain($_GET['flagged'])) {
+    $query->addFilter('im_flag_commons_follow_user', $user->uid);
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function commons_search_solr_user_theme($existing, $type, $theme, $path) {
+  return array(
+    'commons_search_solr_user_results' => array(
+      'variables' => array(
+        'title' => '',
+        'results' => array(),
+      ),
+      'template' => 'commons-search-solr-user-results',
+    ),
+  );
+}
+
+/**
+ * Implements hook_strongarm_alter().
+ */
+function commons_search_solr_user_strongarm_alter(&$items) {
+  // Commons_search_solr_user replaces core user search, so remove it
+  // from the list of active search modules.
+  if (!empty($items['search_active_modules']->value['user'])) {
+    unset($items['search_active_modules']->value['user']);
+  }
+}
+
+/**
+ * Implements hook_apachesolr_search_page_alter().
+ * We override the default search page for people here when no results are entered.
+ * This gives us a default people listing which we can filter to who we are following.
+ */
+function commons_search_solr_user_apachesolr_search_page_alter(&$build, $search_page) {
+  global $user;
+  if ($search_page['page_id'] == 'user_search'
+    && isset($build['search_results']['#markup'])
+    && empty($build['search_form']['basic']['keys']['#default_value'])
+  ) {
+    // If the #markup item is set, it usually means we have no Solr results.
+    // So lets just fetch all users that are active, and display those.
+
+    // First check to see if the flagged key is set. If so we don't want to query
+    // Using EFQ because flags aren't entities.
+    $out_results = array();
+    if(isset($_GET['flagged']) && $flagged = check_plain($_GET['flagged'])) {
+      // Get the count of flagged users for a particular account
+      $fl_results = db_select('flag_content', 'f')
+        ->fields('f', array('content_id', 'uid'))
+        ->condition('f.content_type','user','=')
+        ->condition('f.uid',$user->uid,'=')
+        ->extend('PagerDefault')->limit(12)
+        ->execute();
+      while($record = $fl_results->fetchAssoc()) {
+        $out_results[] = user_view(user_load($record['content_id']), 'search_results');
+      }
+      $build['pager'] = array('#theme' => 'pager');
+    }
+
+    // If we aren't dealing with followed users, use the standard EFQ format and query
+    // all users.
+    else {
+      $users = new EntityFieldQuery();
+      $results = $users->entityCondition('entity_type', 'user')
+        ->propertyCondition('status', 1)
+        ->pager(12, 1)
+        ->execute();
+      $user_ids = array_keys($results['user']);
+      foreach($user_ids AS $uid) {
+        $out_results[] = user_view(user_load($uid), 'search_results');($user_ids);
+      }
+      $build['pager'] = array(
+        // As nice as it would be to make this use #theme, it is a bit more
+        // trouble than it is worth to process $user->pager to conform to
+        // renderable array standards. A custom theme suggestion should work
+        // for most, if not all, situations for theme overrides.
+        '#markup' => theme('pager__commons_search_solr_user', $users->pager),
+      );
+    }
+
+    // Build renderable arrays for display.
+    if (!empty($out_results)) {
+      $build['search_results'] = array(
+        '#theme' => 'commons_search_solr_user_results',
+        '#title' => t('People directory'),
+        '#results' => $out_results,
+      );
+    }
+  }
+}
+
+/**
+ * Implements hook_user_view_alter().
+ */
+function commons_search_solr_user_user_view_alter(&$build) {
+  if ($build['#view_mode'] == 'search_results') {
+    // Add the user name linked to the profile.
+    $build['username'] = array(
+      '#theme' => 'username',
+      '#account' => $build['#account'],
+      '#prefix' => '<h4>',
+      '#suffix' => '</h4>',
+      '#weight' => 0,
+    );
+
+    // Add the user image linked to the profile.
+    $user_picture_uri = !empty($build['#account']->picture) ? $build['#account']->picture->uri : variable_get('user_picture_default', '');
+
+    $build['user_picture'] = array(
+      '#theme' => 'image_formatter',
+      '#item' => array(
+        'uri' => $user_picture_uri,
+        'alt' => t('Profile image'),
+      ),
+      '#image_style' => '50x50',
+      '#path' => array(
+        'path' => 'user/' . $build['#account']->uid,
+        'options' => array(
+          'attributes' => array(
+            'class' => array('user-picture'),
+          ),
+        ),
+      ),
+      '#weight' => 1,
+    );
+
+    // Add a section of associated groups.
+    if (!empty($build['#account']->og_user_node[LANGUAGE_NONE])) {
+      $groups = array();
+      foreach ($build['#account']->og_user_node[LANGUAGE_NONE] AS $og_node) {
+        $gnode = node_load($og_node['target_id']);
+        $groups['group-item group-' . $gnode->nid] = array(
+          'title' => $gnode->title,
+          'href' => 'node/' . $gnode->nid,
+          'attributes' => array(
+            'class' => array('group-link'),
+          ),
+        );
+      }
+      $build['group_membership'] = array(
+        '#theme' => 'links__profile_groups',
+        '#links' => $groups,
+        '#heading' => array(
+          'text' => t('Recently contributed to'),
+          'level' => 'h5',
+          'class' => array('associated-groups-title'),
+        ),
+        '#attributes' => array(
+          'class' => array(
+            'associated-groups'
+          ),
+        ),
+        '#weight' => 3,
+      );
+    }
+
+    // Strip out unnecessary formatting from the actions and push them to the
+    // bottom of the display.
+    if (isset($build['flags'])) {
+      // Remove the reported user if it exists
+      if(isset($build['flags']['abuse_user'])) {
+        unset($build['flags']['abuse_user']);
+      }
+
+      unset($build['flags']['#type']);
+      foreach ($build['flags'] as $key => &$data) {
+        if (substr($key, 0, 1) != '#' && isset($data['#type'])) {
+          unset($data['#type']);
+        }
+      }
+
+      $build['flags']['#weight'] = 4;
+    }
+
+    // Hide the history.
+    if (isset($build['summary'])) {
+      $build['summary']['#access'] = FALSE;
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_info_alter().
+ */
+function commons_search_solr_user_entity_info_alter(&$entity_info) {
+  // Create a search results display mode for user entities.
+  $entity_info['user']['view modes']['search_results'] = array(
+    'label' => t('Search results'),
+    'custom settings' => TRUE,
+  );
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function commons_search_solr_user_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'search_block_form') {
+    unset($form['custom_search_types']['#options']['c-user']);
+    $form['custom_search_types']['#options']['s-user'] = t('People');
+    if (strtolower(arg(0)) == 'people') {
+      $form['search_block_form']['#default_value'] = urldecode(arg(1));
+      $other_options = $form['custom_search_types']['#options'];
+      $form['custom_search_types']['#options'] = array_merge(array('s-user' => t('People')), $other_options);
+    }
+    //We want to override the #submit with our own, the other submits aren't relevant for the user page
+    $form['#submit'][]= 'commons_search_solr_user_search_submit';
+  }
+}
+
+function commons_search_solr_user_form_apachesolr_search_custom_page_search_form_alter(&$form, &$form_state) {
+  if ($form['#search_page']['page_id'] == 'user_search') {
+    $form['#attributes']['class'][] = 'user-search-form';
+    $form['basic']['flagged'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Following'),
+      '#default_value' => (empty($_GET['flagged']) ? FALSE : TRUE),
+      '#attributes' => array('onclick' => 'this.form.submit();'),
+    );
+    $form['basic']['retain-filters']['#type'] = 'hidden';
+    $form['basic']['retain-filters']['#value'] = 0;
+    $form['basic']['keys']['#title'] = t('Limit to');
+    $form['basic']['submit']['#value'] = t('Search');
+    $form['basic']['submit']['#weight'] = 10;
+    $form['#submit'][] = 'commons_search_solr_user_user_search_submit';
+  }
+}
+
+function commons_search_solr_user_user_search_submit($form, &$form_state) {
+  $form_state['redirect']['1']['query']['flagged'] = $form_state['values']['flagged'];
+}
+
+/**
+ * Submit handler that handles only the redirection to our Solr user directory.
+ */
+function commons_search_solr_user_search_submit($form, &$form_state) {
+  if ($form_state['values']['custom_search_types'] == 's-user') {
+    $user_search_page = apachesolr_search_page_load('user_search');
+    $keys = '/' . $form_state['values']['search_block_form'];
+    $form_state['redirect'] = $user_search_page['search_path'] . $keys;
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ * This puts the solr_user hook at the end of the form_alters for custom search
+ * Otherwise the form_alter will get overridden by the other plethora of search
+ * modules.
+ */
+function commons_search_solr_user_module_implements_alter(&$modules, $hook) {
+  switch ($hook) {
+    case 'form_alter':
+      // Move this module to be last for form alterations.
+      $module = $modules['commons_search_solr_user'];
+      unset($modules['commons_search_solr_user']);
+      $modules['commons_search_solr_user'] = $module;
+      break;
+  }
+}
+
+/**
+ * Preprocess user profile.
+ *
+ * @param array $variables
+ */
+function commons_search_solr_user_preprocess_user_profile(&$variables, $hook) {
+  if ($variables['elements']['#view_mode'] == 'search_results') {
+    $variables['theme_hook_suggestions'][] = 'user_profile__search_results';
+  }
+}
+
+/**
+ * Implements hook_preprocess_commons_search_solr_user_results().
+ */
+function commons_search_solr_user_preprocess_commons_search_solr_user_results(&$variables, $hook) {
+  // Add classed to the results header.
+  $variables['title_attributes_array']['class'][] = 'user-search-results-title';
+  // Add a class to the results wrapper.
+  $variables['content_attributes_array']['class'][] = 'user-search-results-content';
+
+  // Populate the content array.
+  $variables['content'] = array();
+  if (!empty($variables['results'])) {
+    $variables['content']['results'] = $variables['results'];
+  }
+}
+
+/**
+ * Implements hook_process_hook().
+ */
+function commons_search_solr_user_process_search_results(&$variables, $hook) {
+  if ($variables['search_page']['page_id'] == 'user_search') {
+    // We set the title to be blank so it doesn't display 'Search results'.
+    $variables['title'] = ' ';
+  }
+}
+
+/**
+ * Feature module hook. Invoked on a Feature module after that module is
+ * enabled.
+ *
+ * @param $component
+ *   String name of the component that has just been enabled.
+ */
+function commons_search_solr_user_post_features_enable_feature($component) {
+  if ($component == 'apachesolr_search_page') {
+    $revert = array(
+      'commons_search_solr_user' => array('apachesolr_search_page'),
+    );
+    features_revert($revert);
+
+    // We must clear the menu cache before trying to set a link, otherwise the menu
+    // system won't show the people link because it doesn't think the page exists
+    // even though the link exists in the menu.
+    drupal_static_reset('apachesolr_search_load_all_search_pages');
+
+    $revert = array(
+      'commons_search_solr_user' => array('menu_links'),
+    );
+    features_revert($revert);
+  }
+}

@@ -1,0 +1,33 @@
+<?php
+/**
+ * Installation file for Commons Search Solr feature.
+ */
+
+/**
+ * Implements hook_enable().
+ */
+function commons_search_solr_enable() {
+  // Disable Core search module upon enabling this module.
+  if (module_exists('commons_search_core')) {
+    module_disable(array('commons_search_core'), FALSE);
+  }
+  if (module_exists('search_facetapi')) {
+    module_disable(array('search_facetapi'), FALSE);
+  }
+  // Ensure that Commons Search Solr variables are reverted in cases such as
+  // when switching from Core to Solr search.
+  $revert = array('commons_search_solr' => array('variable', 'apachesolr_search_page'));
+  features_revert($revert);
+  cache_clear_all();
+  commons_search_solr_create_facets();
+}
+
+/**
+ * Set default environment to display facet blocks in configured regions.
+ */
+function commons_search_solr_update_7001() {
+  $revert = array(
+    'commons_search_solr' => array('apachesolr_search_page'),
+  );
+  features_revert($revert);
+}
