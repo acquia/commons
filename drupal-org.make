@@ -400,6 +400,13 @@ projects[votingapi][version] = "2.11"
 projects[votingapi][type] = "module"
 projects[votingapi][subdir] = "contrib"
 
+; Registry Rebuild
+; We can probably remove this later, but for now keep it included
+; See https://drupal.org/node/1983606#comment-7788313 for more information.
+projects[registry_rebuild][version] = "1.10"
+projects[registry_rebuild][type] = "module"
+projects[registry_rebuild][subdir] = "contrib"
+
 ; Contributed themes.
 
 projects[adaptivetheme][type] = "theme"
