@@ -1,0 +1,23 @@
+//
+// AdaptiveTheme does not require special handling for IE8 or later. But Compass
+// defines more Legacy IE variables that you might find useful for your theme.
+// See the documentation at http://compass-style.org/reference/compass/support/
+//
+
+//
+// Partials to be shared with all .scss files.
+//
+
+@import 'compass';
+
+//
+// Import custom partial - mixins and variables defined for your theme
+//
+@import 'custom';
+@import 'mixins/functions';
+@import 'mixins/respond';
+@import 'mixins/icons';
+@import 'extend-styles';
+@import 'mixins/mixins';
+@import 'mixins/buttons';
+@import 'mixins/multiline-ellipsis';

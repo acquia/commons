@@ -1,0 +1,178 @@
+//
+// Custom sass variables and mixins
+//
+// Variables
+// -----------------------------------------------------------------------------
+// The variables set here serve only as example of how you can use SASS variables
+// to centralize and control frequently used styles more easily. Here you will
+// find variables for colors, fonts and the global gutter width.
+//
+// Mixins
+// -----------------------------------------------------------------------------
+// To use a mixin in this file, add this line to the top of your .scss file:
+//
+// Then to use a mixin for a particular rule, add this inside the ruleset's
+// curly brackets:
+//   @include mix-in-name;
+//
+
+//
+// Color Variables
+// Colors used in the sample global.styles. You can use these to recolor many
+// elements such as forms, tables, tabs etc.
+//
+
+$page:         #e6e6e6; // to match the page background, default is white
+$border:       #ccc;    // all borders set in global.styles - tables, fieldset, primary links
+$highlight:    #c00;    // required mark, form error highlight, "new" label on comments
+$ultralight:   #f5f5f5; // table row even, primary link inactive tabs
+$light:        #eee;    // table row odd active, primary link inactive hover
+$medium_light: #ebebeb; // table row even active
+$medium_dark:  #e5e5e5; // table thead
+$icon_gray:    #a3a3a3; // The color of a monotone icon.
+$debug:        rgba(255, 192, 203, 0.5); // Full width wrapper test
+
+$thead:          $medium_dark;
+$tr_odd:         $page;
+$tr_even:        $ultralight;
+$tr_odd_active:  $light;
+$tr_even_active: $medium_light;
+
+$primary_task:        $ultralight;
+$primary_task_hover:  $light;
+$primary_task_active: $page;
+
+$white: #fff;
+$dark_gray: rgb(51,51,51);
+$gray: rgb(102,102,102);
+$light_gray: rgb(133, 133, 133);
+$green: rgb(70,186,49);
+$dark_blue: rgb(51,102,153);
+$light_blue: rgb(39,131,185);
+$orange: rgb(255,153,0);
+$lighter_gray: #eee;
+
+$tab_background: rgba(153, 153, 153, .3);
+$tab_text: $light_blue;
+$tab_text_hover: $dark_blue;
+$tab_active_background: rgb(153, 153, 153);
+$tab_active_text: $dark_gray;
+
+// Colors for other palettes
+
+// Orange and Red
+$palette_orange_red_orange: #D54F1A;
+$palette_orange_red_red: #830C00;
+$palette_orange_red_btn_top: #FEB431;
+$palette_orange_red_btn_bottom: #FF9126;
+
+// Magenta and Blue
+$palette_magenta_blue_light: #E60074;
+$palette_magenta_blue_dark: #891746;
+$palette_magenta_blue_btn_top: #69C5EC;
+$palette_magenta_blue_btn_bottom: #0097BF;
+
+// Blue and Blue
+$palette_blue_blue_light: #0D8BB9;
+$palette_blue_blue_dark: #197BB1;
+$palette_blue_blue_btn_top: #7EBD26;
+$palette_blue_blue_btn_bottom: #7EBD26;
+
+// Black and Green
+$palette_black_green_black: #2D3538;
+$palette_black_green_green: #81B453;
+$palette_black_green_btn_top: #4090BA;
+$palette_black_green_btn_bottom: #4090BA;
+
+// Brown and Yellow
+$palette_brown_yellow_light: #9C773D;
+$palette_brown_yellow_dark: #6A513B;
+$palette_brown_yellow_btn_top: #FCD036;
+$palette_brown_yellow_btn_bottom: #E3AD40;
+
+// Seafoam and Orange
+$palette_seafoam_orange_light: #73A5A5;
+$palette_seafoam_orange_dark: #668284;
+$palette_seafoam_orange_btn_top: #D9A300;
+$palette_seafoam_orange_btn_bottom: #B68800;
+
+// Black, Blue and Yellow
+$palette_black_blue_yellow_light: #0072AB;
+$palette_black_blue_yellow_dark: #353535;
+$palette_black_blue_yellow_btn_top: #E5B700;
+$palette_black_blue_yellow_btn_bottom: #D0A600;
+
+// Brick and Brick
+$palette_brick_brick_light: #723729;
+$palette_brick_brick_dark: #432A26;
+$palette_brick_brick_btn_top: #C2594C;
+$palette_brick_brick_btn_bottom: #A12E1E;
+
+// Gray, Light Gray and blue
+$palette_gray_light_gray_blue_light: #DBDBDB;
+$palette_gray_light_gray_blue_dark: #868686;
+$palette_gray_light_gray_blue_btn_top: #00CCFF;
+$palette_gray_light_gray_blue_btn_bottom: #04B6E7;
+
+// Black, White and Red
+$palette_black_white_red_light: #383838;
+$palette_black_white_red_dark: #262626;
+$palette_black_white_red_btn_top: #E45553;
+$palette_black_white_red_btn_bottom: #CC0000;
+
+// Brown and Burnt Orange
+$palette_brown_burnt_orange_light: #7C4811;
+$palette_brown_burnt_orange_dark: #62390E;
+$palette_brown_burnt_orange_btn_top: #EB9039;
+$palette_brown_burnt_orange_btn_bottom: #E18728;
+
+// List of palettes and options that will be looped through to build the differnt color palettes.
+// This variable gets called by an @each function in the partial /sass/_palettes.scss
+// The format is:
+// (<class name to trigger> <light color var> <dark color var> <button top color var> <button bottom color var>)
+$palettes: (palette-orange-red $palette_orange_red_orange $palette_orange_red_red $palette_orange_red_btn_top $palette_orange_red_btn_bottom)
+(palette-magenta-blue $palette_magenta_blue_light $palette_magenta_blue_dark $palette_magenta_blue_btn_top $palette_magenta_blue_btn_bottom)
+(palette-blue-blue $palette_blue_blue_light $palette_blue_blue_dark $palette_blue_blue_btn_top $palette_blue_blue_btn_bottom)
+(palette-black-green $palette_black_green_green $palette_black_green_black $palette_black_green_btn_top $palette_black_green_btn_bottom)
+(palette-brown-yellow $palette_brown_yellow_light $palette_brown_yellow_dark $palette_brown_yellow_btn_top $palette_brown_yellow_btn_bottom)
+(palette-seafoam-orange $palette_seafoam_orange_light $palette_seafoam_orange_dark $palette_seafoam_orange_btn_top $palette_seafoam_orange_btn_bottom)
+(palette-black-blue-yellow $palette_black_blue_yellow_light $palette_black_blue_yellow_dark $palette_black_blue_yellow_btn_top $palette_black_blue_yellow_btn_bottom)
+(palette-brick-brick $palette_brick_brick_light $palette_brick_brick_dark $palette_brick_brick_btn_top $palette_brick_brick_btn_bottom)
+(palette-gray-lightgray-blue $palette_gray_light_gray_blue_light $palette_gray_light_gray_blue_dark $palette_gray_light_gray_blue_btn_top $palette_gray_light_gray_blue_btn_bottom)
+(palette-black-white-red $palette_black_white_red_light $palette_black_white_red_dark $palette_black_white_red_btn_top $palette_black_white_red_btn_bottom)
+(palette-brown-burnt-orange $palette_brown_burnt_orange_light $palette_brown_burnt_orange_dark $palette_brown_burnt_orange_btn_top $palette_brown_burnt_orange_btn_bottom);
+
+
+//
+// Font Variables
+// These font stacks are an exact copy of the stacks found in AT Cores
+// theme settings for web safe fonts.
+//
+
+$sans-serif-small:            'Helvetica Neue', Arial, Helvetica, sans-serif;
+$sans-serif-large:            Verdana, Geneva, 'DejaVu Sans', Arial, Helvetica, sans-serif;
+$sans-serif-arial-helvetica:  Arial, Helvetica, sans-serif;
+$calibri-candara:             Calibri, Candara, Arial, Helvetica, sans-serif;
+$serif-small:                 Garamond, Perpetua, 'Times New Roman', serif;
+$serif-large:                 Georgia, Baskerville, Palatino, 'Palatino Linotype', 'Book Antiqua', 'Times New Roman', serif;
+$modern-myriad:               'Segoe UI', 'Myriad Pro', Myriad, Arial, Helvetica, sans-serif;
+$lucida:                      'Lucida Sans Unicode', 'Lucida Sans', 'Lucida Grande', Verdana, Geneva, sans-serif;
+$impact:                      Impact, Haettenschweiler, 'Franklin Gothic Bold', Charcoal, 'Helvetica Inserat', 'Bitstream Vera Sans Bold', 'Arial Black', sans-serif;
+$mono:                        Consolas, Monaco, 'Courier New', Courier, monospace, sans-serif;
+
+$base-font: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+$alt-font: Helvetica, 'Helvetica Neue', Arial, sans-serif;
+
+//
+// Gutters
+//
+// Set a variable for the gutters. Adaptivetheme allows you to easly modify the
+// global gutter width for precise control over the design. Panel pages need
+// special gutter wrangling when a Panel is inside #content wrapper, so to ease
+// setting this we use a variable.
+//
+$gutter-width: 10px;
+
+// global chunk of code for importing
+
+$icons: sprite-map('icons/*.png', $spacing: 20px);

@@ -1,0 +1,26 @@
+
+// _base.scss imports _custom.scss and other partials.
+@import "base";
+
+/*
+ *   Important Information about this CSS File
+ *
+ * - Do not delete or rename this file, if you do not use it leave it blank (delete
+ *   everything) and the file will be skipped when you enable Production Mode in
+ *   the Global theme settings.
+ *
+ * - Read the _README file in this directory, it contains useful help and other information.
+ */
+
+.flag-inappropriate-node {
+  position: absolute;
+  margin: 0;
+  right: 0;
+  bottom: 0;
+  @include opacity(0);
+  @include transition(opacity 0.5s);
+
+  .node:hover & {
+    @include opacity(1);
+  }
+}

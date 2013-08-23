@@ -1,0 +1,92 @@
+@import 'compass';
+
+$dark_gray: rgb(51,51,51);
+
+%btn-gray {
+  // box-shadow: 1px 1px 1px #ABE0A2 inset, 0 3px 3px rgba(#000, 0.09);
+  padding: 0 10px;
+  // needs latest Compass, add '@import "compass"' to your scss
+  background-color: #fefefe; // Old browsers
+  @include filter-gradient(#fefefe, #e8e8e8, vertical); // IE6-9
+  @include background-image(linear-gradient(top,  #fefefe 0%,#e8e8e8 100%));
+  border: 1px solid #cccccc;
+  @include border-radius(3px);
+  color: $dark_gray;
+  text-align: center;
+  display: inline-block;
+  // text-shadow: 1px 1px rgba(#000, 0.49);
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.rate-widget-commons_like {
+  position: relative;
+  @extend %btn-gray;
+  width: 62px;
+  height: 20px;
+  padding: 0;
+
+  .rate-commons-like-btn {
+    display: block;
+    font-size: 0;
+    width: 62px;
+    height: 20px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 2;
+
+    &:before {
+      content: '';
+      background: url('images/like.png') no-repeat;
+      width: 10px;
+      height: 14px;
+      display: inline-block;
+      margin-right: 3px;
+      position: absolute;
+      left: 17px;
+      top: 3px;
+    }
+  }
+
+  .rate-commons-like-count {
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    z-index: 1;
+    background: #D9D9D9;
+    border: 1px solid #B5B5B5;
+    height: 20px;
+    line-height: 20px;
+    padding: 0 5px;
+    @include border-radius(0 3px 3px 0px);
+
+    &:after, &:before {
+      right: 100%;
+      border: solid transparent;
+      content: " ";
+      height: 0;
+      width: 0;
+      position: absolute;
+      pointer-events: none;
+    }
+
+    &:after {
+      border-color: rgba(217, 217, 217, 0);
+      border-right-color: #D9D9D9;
+      border-width: 4px;
+      top: 50%;
+      margin-top: -4px;
+    }
+
+    &:before {
+      border-color: rgba(181, 181, 181, 0);
+      border-right-color: #B5B5B5;
+      border-width: 5px;
+      top: 50%;
+      margin-top: -5px;
+    }
+  }
+}

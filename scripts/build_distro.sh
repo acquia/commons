@@ -5,19 +5,35 @@ modules=(commons_activity_streams commons_featured commons_notices commons_profi
 themes=(commons_origins)
 
 merge_repos() {
-  cd $BUILD_PATH/repos/modules
+  cd $BUILD_PATH/commons_profile
   for i in "${modules[@]}"; do
-    echo $i
-    cd $i
-    RN=`drush rn --date $FROM_DATE $TO_DATE`
-    if [[ -n $RN ]]; then
-      OUTPUT="$OUTPUT <h3>$i:</h3> $RN"
+    if [[ -n $USERNAME ]]; then
+      git remote add ${i} ${USERNAME}@git.drupal.org:project/${i}.git
+    else
+      git remote add ${i} http://git.drupal.org/project/${i}.git
     fi
-    cd ..
+    git fetch ${i}
+    git merge -s ours --no-commit ${i}/7.x-3.x
+    git read-tree --prefix=modules/commons/${i} -u ${i}/7.x-3.x
+    git commit -m "Merged ${i} into Commons repo"
+    git remote rm ${i}
+    echo "Successfully added $i to commons profile"
   done
-  cd $BUILD_PATH/repos/themes/commons_origins
+  #do the theme now
+  i=commons_origins
+  if [[ -n $USERNAME ]]; then
+    git remote add ${i} ${USERNAME}@git.drupal.org:project/${i}.git
+  else
+    git remote add ${i} http://git.drupal.org/project/${i}.git
+  fi
+  git fetch ${i}
+  git merge -s ours --no-commit ${i}/7.x-3.x
+  git read-tree --prefix=themes/commons/${i} -u ${i}/7.x-3.x
+  git commit -m "Merged ${i} into Commons repo"
+  echo "Successfully added $i to commons profile"
 }
 
+# this function is no longer needed because we're in one repo now.
 pull_git() {
     cd $BUILD_PATH/commons_profile
     if [[ -n $RESET ]]; then
@@ -46,21 +62,22 @@ release_notes() {
   cd $BUILD_PATH/commons_profile
   OUTPUT="$OUTPUT <h3>Commons Profile:</h3> `drush rn --date $FROM_DATE $TO_DATE`"
 
-  cd $BUILD_PATH/repos/modules
-  for i in "${modules[@]}"; do
-    echo $i
-    cd $i
-    RN=`drush rn --date $FROM_DATE $TO_DATE`
-    if [[ -n $RN ]]; then
-      OUTPUT="$OUTPUT <h3>$i:</h3> $RN"
-    fi
-    cd ..
-  done
-  cd $BUILD_PATH/repos/themes/commons_origins
-  RN=`drush rn --date $FROM_DATE $TO_DATE`
-  if [[ -n $RN ]]; then
-    OUTPUT="$OUTPUT <h3>commons_origins:</h3> $RN"
-  fi
+  ## old repos. don't use this anymore
+  # cd $BUILD_PATH/repos/modules
+  # for i in "${modules[@]}"; do
+  #  echo $i
+  #  cd $i
+  #  RN=`drush rn --date $FROM_DATE $TO_DATE`
+  #  if [[ -n $RN ]]; then
+  #    OUTPUT="$OUTPUT <h3>$i:</h3> $RN"
+  #  fi
+  #  cd ..
+  #done
+  #cd $BUILD_PATH/repos/themes/commons_origins
+  #RN=`drush rn --date $FROM_DATE $TO_DATE`
+  #if [[ -n $RN ]]; then
+  #  OUTPUT="$OUTPUT <h3>commons_origins:</h3> $RN"
+  #fi
 
   echo $OUTPUT >> $BUILD_PATH/rn.txt
 }
@@ -72,41 +89,24 @@ build_distro() {
         # do we have the profile?
         if [[ -d $BUILD_PATH/commons_profile ]]; then
           if [[ -d $BUILD_PATH/repos ]]; then
-            drush make commons_profile/build-commons.make --no-cache --working-copy --prepare-install ./publish
-            rm -rf publish/profiles/commons/modules/contrib/commons*
-            rm -rf publish/profiles/commons/themes/contrib/commons*
+            rm -f /tmp/commons.tar.gz
+            drush make --no-cache --no-core --contrib-destination --tar $BUILD_PATH/commons_profile/drupal-org.make /tmp/commons
+            drush make --no-cache --prepare-install --drupal-org=core $BUILD_PATH/commons_profile/drupal-org-core.make ./publish
           else
             mkdir $BUILD_PATH/repos
             mkdir $BUILD_PATH/repos/modules
-            cd $BUILD_PATH/repos/modules
-            for i in "${modules[@]}"; do
-              if [[ -n $USERNAME ]]; then
-                git clone --branch 7.x-3.x ${USERNAME}@git.drupal.org:project/${i}.git
-              else
-                git clone --branch 7.x-3.x http://git.drupal.org/project/${i}.git
-              fi
-            done
-            cd $BUILD_PATH/repos
             mkdir $BUILD_PATH/repos/themes
-            cd $BUILD_PATH/repos/themes
-            for i in "${themes[@]}"; do
-              if [[ -n $USERNAME ]]; then
-                git clone --branch 7.x-3.x ${USERNAME}@git.drupal.org:project/${i}.git
-              else
-                git clone --branch 7.x-3.x http://git.drupal.org/project/${i}.git
-              fi
-            done
             build_distro $BUILD_PATH
           fi
-          ln -sf $BUILD_PATH/repos/modules/commons* publish/profiles/commons/modules/contrib/
-          ln -sf $BUILD_PATH/repos/themes/commons* publish/profiles/commons/themes/contrib/
-          chmod -R 777 publish/sites/default
           # symlink the profile to our dev copy
-          rm -f publish/profiles/commons/*.*
-          rm -rf publish/profiles/commons/images
-          ln -s $BUILD_PATH/commons_profile/* publish/profiles/commons/
+          chmod -R 777 $BUILD_PATH/publish/sites/default
+          rm -rf publish/profiles/commons
+          ln -s $BUILD_PATH/commons_profile publish/profiles/commons
+          cd publish/profiles
+          tar -zxvf /tmp/commons.tar.gz
+          chmod -R 775 $BUILD_PATH/publish/profiles/commons
         else
-          git clone http://git.drupal.org/project/commons.git commons_profile
+          git clone --branch 7.x-3.x-merged ${USERNAME}@git.drupal.org:project/commons.git commons_profile
           build_distro $BUILD_PATH
         fi
     else
@@ -187,4 +187,15 @@ case $1 in
       USERNAME=$3
     fi
     update $DOCROOT;;
+  merge_repos)
+    if [[ -n $2 ]]; then
+      BUILD_PATH=$2
+    else
+      echo "Usage: build_distro.sh build [build_path]"
+      exit 1
+    fi
+    if [[ -n $3 ]]; then
+      USERNAME=$3
+    fi
+    merge_repos $BUILD_PATH $USERNAME;;
 esac

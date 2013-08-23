@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * Add the Title field to all browsing widget-enabled content types.
+ * per http://drupal.org/node/1969088.
+ */
+function commons_bw_update_7301() {
+  module_enable(array('title'));
+  $revert = array(
+    'commons_bw' => array(
+      'field_base', 'field_instance',
+    ),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/**
+ * Make sure existing nodes titles are migrated to the title field.
+ * per http://drupal.org/node/1969088.
+ */
+function commons_bw_update_7302() {
+  foreach (node_type_get_types() as $node_type) {
+    // Set the title as "Replaced by title_field".
+    if (!title_field_replacement_enabled('node', $node_type->type, 'title')) {
+      title_field_replacement_toggle('node', $node_type->type, 'title');
+    }
+
+    // Migrate the titles to the title field.
+    title_field_replacement_batch_set('node', $node_type->type, 'title');
+  }
+
+  drupal_flush_all_caches();
+}

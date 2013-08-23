@@ -1,0 +1,37 @@
+<?php
+/**
+ * @file
+ * Code for the Commons User Profile Pages feature.
+ */
+
+include_once 'commons_user_profile_pages.features.inc';
+
+/*
+ * Implements hook_modules_enabled().
+ */
+function commons_user_profile_pages_modules_enabled($modules) {
+  // Enable the panel that relies on trusted contacts to show group_group data
+  // within the user profile.
+  if (in_array('commons_trusted_contacts', $modules)) {
+    $revert = array(
+      'commons_user_profile_pages' => array('pages_default'),
+    );
+    features_revert($revert);
+    return array();
+  }
+}
+
+/*
+ * Implements hook_modules_disabled().
+ */
+function commons_user_profile_pages_modules_disabled($modules) {
+  // Disable the panel that relies on trusted contacts to show group_group data
+  // within the user profile.
+  if (in_array('commons_trusted_contacts', $modules)) {
+    $revert = array(
+      'commons_user_profile_pages' => array('pages_default'),
+    );
+    features_revert($revert);
+    return array();
+  }
+}

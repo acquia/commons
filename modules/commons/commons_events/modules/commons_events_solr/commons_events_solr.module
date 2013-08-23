@@ -1,0 +1,288 @@
+<?php
+/**
+ * @file
+ * Code for the Commons Events - Solr feature.
+ */
+
+include_once 'commons_events_solr.features.inc';
+
+/**
+ * Get the search adapter and Solr environment for dynamic faceting.
+ */
+function commons_events_solr_search_environment() {
+  return "apachesolr@" . apachesolr_default_environment();
+}
+
+/**
+ * Dynamically create facets rather than let Features do it, so we can have
+ * facets based on the current default Solr environment.
+ */
+function commons_events_solr_create_facets($env_id = NULL) {
+  $facets = commons_events_solr_facet_definitions();
+  // Add each facet to the database with a merge so we don't have duplicates.
+  if (empty($env_id)) {
+    $env_id = commons_events_solr_search_environment();
+  }
+  foreach($facets as $facet) {
+    $facet['settings'] = serialize($facet['settings']);
+    $facet['name'] = $env_id . $facet['name'];
+    $facet['searcher'] = $env_id;
+    $merge = db_merge('facetapi')
+      ->key(array('name' => $facet['name']))
+      ->fields($facet)
+      ->execute();
+  }
+}
+
+/**
+ * Base facet definitions.
+ */
+function commons_events_solr_facet_definitions() {
+  $facets = array();
+
+  $facets[] = array(
+    'name' => '::dm_field_date',
+    'searcher' => commons_events_solr_search_environment(),
+    'realm' => '',
+    'facet' => 'dm_field_date',
+    'enabled' => 1,
+    'settings' => array(
+      'operator' => 'and',
+      'hard_limit' => '50',
+      'dependencies' => array(
+        'roles' => array(),
+      ),
+      'facet_mincount' => 1,
+      'facet_missing' => 0,
+      'flatten' => 0,
+      'query_type' => 'date_range',
+    ),
+  );
+  $facets[] = array(
+    'name' => ':block:dm_field_date',
+    'searcher' => commons_events_solr_search_environment(),
+    'realm' => 'block',
+    'facet' => 'dm_field_date',
+    'enabled' => 1,
+    'settings' => array(
+      'weight' => 0,
+      'widget' => 'date_range',
+      'filters' => array(),
+      'active_sorts' => array(
+        'active' => 'active',
+        'indexed' => 'indexed',
+        'count' => 0,
+        'display' => 0,
+      ),
+      'sort_weight' => array(
+        'active' => -50,
+        'indexed' => -49,
+        'count' => 0,
+        'display' => 0,
+      ),
+      'sort_order' => array(
+        'active' => 3,
+        'indexed' => 4,
+        'count' => 4,
+        'display' => 4,
+      ),
+      'empty_behavior' => 'none',
+      'soft_limit' => 20,
+      'nofollow' => 1,
+      'show_expanded' => 0,
+      'empty_text' => array(
+        'value' => '',
+        'format' => 'filtered_html',
+      ),
+    ),
+  );
+  $facets[] = array(
+    'name' => ':block:sm_field_location',
+    'searcher' => commons_events_solr_search_environment(),
+    'realm' => 'block',
+    'facet' => 'sm_field_location',
+    'enabled' => 1,
+    'settings' => array(
+      'weight' => 0,
+      'widget' => 'facetapi_links',
+      'filters' => array(),
+      'active_sorts' => array(
+        'active' => 'active',
+        'count' => 'count',
+        'display' => 'display',
+      ),
+      'sort_weight' => array(
+        'active' => -50,
+        'count' => -49,
+        'display' => -48,
+      ),
+      'sort_order' => array(
+        'active' => 3,
+        'count' => 3,
+        'display' => 4,
+      ),
+      'empty_behavior' => 'none',
+      'soft_limit' => 20,
+      'nofollow' => 1,
+      'show_expanded' => 0,
+    ),
+  );
+  $facets[] = array(
+    'name' => ':block:im_field_topics',
+    'searcher' => commons_events_solr_search_environment(),
+    'realm' => 'block',
+    'facet' => 'im_field_topics',
+    'enabled' => 1,
+    'settings' => array(
+      'weight' => 0,
+      'widget' => 'facetapi_links',
+      'filters' => array(),
+      'active_sorts' => array(
+        'active' => 'active',
+        'count' => 'count',
+        'display' => 'display',
+        'indexed' => 0,
+      ),
+      'sort_weight' => array(
+        'active' => -50,
+        'count' => -49,
+        'display' => -48,
+        'indexed' => 0,
+      ),
+      'sort_order' => array(
+        'active' => 3,
+        'count' => 3,
+        'display' => 4,
+        'indexed' => 4,
+      ),
+      'empty_behavior' => 'text',
+      'soft_limit' => 20,
+      'nofollow' => 1,
+      'show_expanded' => 0,
+      'empty_text' => array(
+        'value' => 'None available',
+        'format' => 'filtered_html',
+      ),
+    ),
+  );
+  $facets[] = array(
+    'name' => '::im_field_topics',
+    'searcher' => commons_events_solr_search_environment(),
+    'realm' => '',
+    'facet' => 'im_field_topics',
+    'enabled' => 0,
+    'settings' => array(
+      'operator' => 'and',
+      'hard_limit' => 50,
+      'dependencies' => array(
+        'roles' => array(),
+      ),
+      'facet_mintcount' => 1,
+      'facet_missing' => 0,
+      'flatten' => 0,
+      'query_type' => 'term',
+    ),
+  );
+  $facets[] = array(
+    'name' => ':block:sm_og_group_ref',
+    'searcher' => commons_search_solr_search_environment(),
+    'realm' => 'block',
+    'facet' => 'sm_og_group_ref',
+    'enabled' => 1,
+    'settings' => array(
+      'weight' => 0,
+      'widget' => 'facetapi_links',
+      'filters' => array(),
+      'active_sorts' => array(
+        'active' => 'active',
+        'count' => 'count',
+        'display' => 'display',
+      ),
+      'sort_weight' => array(
+        'active' => -50,
+        'count' => -49,
+        'display' => -48,
+      ),
+      'sort_order' => array(
+        'active' => 3,
+        'count' => 3,
+        'display' => 4,
+      ),
+      'empty_behavior' => 'none',
+      'soft_limit' => 20,
+      'nofollow' => 1,
+      'show_expanded' => 0,
+    ),
+  );
+
+  return $facets;
+}
+
+/**
+ * Get the panels subtype for the facet block.
+ */
+function commons_events_solr_panel_facet_subtype($facet_name) {
+  $facet_name = commons_events_solr_search_environment() . ':block:' . $facet_name;
+  return 'facetapi-' . facetapi_hash_delta($facet_name);
+}
+
+/**
+ * Implements hook_theme_registry_alter().
+ */
+function commons_events_solr_theme_registry_alter(&$registry) {
+  $registry['apachesolr_search_noresults']['function'] = 'commons_events_solr_apachesolr_search_noresults';
+}
+
+/**
+ * Implements hook_preprocess_hook().
+ */
+function commons_events_solr_process_search_results(&$variables) {
+  if ($variables['search_page']['page_id'] == 'solr_events') {
+    $variables['title'] = format_plural(count($variables['results']), '1 event', '@count events');
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function commons_events_solr_form_apachesolr_environment_edit_form_alter(&$form, &$form_state) {
+  $form['actions']['save']['#submit'][] = 'commons_events_solr_environment_form_submit';
+}
+
+/**
+ * Friendlier empty text when there are no events.
+ */
+function commons_events_solr_apachesolr_search_noresults() {
+  $destination = drupal_get_destination();
+  if ($destination['destination'] != 'events') {
+    // Have to call the actual function since we overrode it to use the current
+    // function instead.
+    return theme_apachesolr_search_noresults();
+  }
+  $options = array('!create' => 'create one');
+  if (node_access('create', 'event')) {
+    $options['!create'] = l('create one', 'node/add/event');
+  }
+  return t('There are no events. Be the first to !create!', $options);
+}
+
+/**
+ * When the environment changes, create facets for that environment.
+ */
+function commons_events_solr_environment_form_submit($form, $form_state) {
+  if ($form_state['values']['make_default'] == 1) {
+    commons_events_solr_create_facets('apachesolr@' . $form_state['build_info']['args']['0']['env_id']);
+    // Need to clear caches so we can rebuild block definitions.
+    cache_clear_all('*', 'cache_block', TRUE);
+    cache_clear_all('*', 'cache_apachesolr', TRUE);
+  }
+}
+
+/**
+ *  Implements hook_node_presave to display a message warning the user that results won't occur immediately
+ */
+function commons_events_solr_node_presave($node) {
+  if ($node->type == 'event') {
+    drupal_set_message(t('Your event may take a few minutes to appear on the listing page.'));
+  }
+}

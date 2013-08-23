@@ -1,0 +1,207 @@
+@each $palette in $palettes {
+
+  $palette_color_class: nth($palette, 1);
+  $palette_color_light: nth($palette, 2);
+  $palette_color_dark: nth($palette, 3);
+  $palette_btn_top: nth($palette, 4);
+  $palette_btn_bottom: nth($palette, 5);
+
+  .#{$palette_color_class} {
+
+    h2 {
+      color: $palette_color_dark;
+    }
+
+    .header-color-row-one {
+      background-color: $palette_color_dark;
+      border-top: 1.5em solid darken($palette_color_dark, 50%);
+
+      @include respond(large) {
+        border-top: none;
+      }
+
+      .boxshadow & {
+        @include box-shadow($palette_color_dark 0px -1px 0px);
+      }
+    }
+
+    .header-color-row-two {
+      background-color: $palette_color_light;
+      border-top: 1px solid lighten($palette_color_light, 10%);
+      border-bottom: 1px solid darken($palette_color_light, 10%);
+    }
+
+    h1.node-title {
+      color: $palette_color_light;
+
+      a {
+        color: $palette_color_light;
+      }
+    }
+
+    a, .commons-bw-create-all-widget-types li a {
+      color: $palette_color_light;
+    }
+
+    .select-status {
+      &:after {
+        border-top-color: $palette_color_light;
+      }
+    }
+
+    #menu-bar.nav ul.menu li:hover .arrow:before,
+    #menu-bar.nav ul.menu li.active-trail .arrow:before {
+      border-color: transparent transparent lighten($palette_color_light, 10%) transparent;
+    }
+
+    #menu-bar.nav ul.menu li:hover .arrow:after,
+    #menu-bar.nav ul.menu li.active-trail .arrow:after {
+      border-color: transparent transparent $palette_color_light transparent;
+    }
+
+    ul.commons-utility-links li.last {
+      border-left-color: $palette_color_light;
+    }
+
+    // Quicktabs buttons styles
+
+    .quicktabs-style-commons-pills ul.quicktabs-tabs,
+    ul.primary.tabs {
+      li {
+        a {
+          &,
+          span {
+            color: $palette_color_light;
+          }
+
+          &:hover {
+            color: darken($palette_color_light, 10%)
+          }
+        }
+
+        &.active {
+          a {
+            &,
+            span {
+              color: $dark_gray;
+            }
+          }
+        }
+      }
+    }
+
+    .partial-node-form-title {
+      color: $palette_btn_bottom;
+    }
+
+    .block-search {
+      background-color: darken($palette_color_light, 12%); // Old browsers
+      @include filter-gradient(darken($palette_color_light, 12%), darken($palette_color_light, 6%), vertical); // IE6-9
+      @include background-image(linear-gradient(top,  darken($palette_color_light, 12%) 0%,darken($palette_color_light, 6%)100%));
+    }
+
+    .commons-bw-create-all-widget-types, li.sharethis .sharethis-wrapper {
+      border-color: $palette_color_light;
+    }
+
+    li.sharethis .sharethis-wrapper:before {
+      border-color: $palette_color_light transparent transparent transparent;
+    }
+
+    %divider-left {
+      border-left: 1px solid lighten($palette_color_dark, 6%);
+      @include box-shadow(darken($palette_color_dark, 13%) -1px 0px 0px);
+    }
+
+    %divider-right {
+      border-right: 1px solid darken($palette_color_dark, 13%);
+      @include box-shadow(lighten($palette_color_dark, 6%) 1px 0px 0px);
+    }
+
+    // Generate a new invisible class and extend the default with the color
+    // scheme of the skin.
+    @include button($palette_color_class, $palette_btn_bottom);
+
+    %button-primary {
+      @extend %button-#{$palette_color_class};
+    }
+
+    @include button_with_icon((#{$palette_color_class}, $palette_btn_bottom), icon-search);
+
+    %button-#{$palette_color_class}-icon-search {
+      &,
+      &:hover,
+      &:active,
+      &:focus {
+        background-position: 1.5em center;
+      }
+    }
+
+    %button-primary-icon-search {
+      @extend %button-#{$palette_color_class}-icon-search;
+    }
+
+    .notification-count {
+      background: $palette_btn_top;
+      @include background(linear-gradient($palette_btn_top darken($palette_btn_top, 20)));
+      @include box-shadow(0 0 2px $palette_color_dark);
+    }
+  }
+}
+
+//Specific overrides
+.palette-black-blue-yellow {
+  .block-search {
+    background-color: darken($palette_black_blue_yellow_dark, 12%); // Old browsers
+    @include filter-gradient(darken($palette_black_blue_yellow_dark, 12%), darken($palette_black_blue_yellow_dark, 4%), vertical); // IE6-9
+    @include background-image(linear-gradient(top,  darken($palette_black_blue_yellow_dark, 12%) 0%,lighten($palette_black_blue_yellow_dark, 4%)100%));
+  }
+}
+
+.palette-gray-lightgray-blue {
+  h2 {
+    color: #262626;
+  }
+
+  h1.node-title {
+    color: #262626;
+
+    a {
+      color: #262626;
+    }
+  }
+
+  a, .commons-bw-create-all-widget-types li a {
+    color: $palette_gray_light_gray_blue_btn_bottom;
+  }
+
+  .block-search {
+    background-color: darken($palette_gray_light_gray_blue_dark, 1%); // Old browsers
+    @include filter-gradient(darken($palette_gray_light_gray_blue_dark, 1%), darken($palette_gray_light_gray_blue_dark, 10%), vertical); // IE6-9
+    @include background-image(linear-gradient(top,  darken($palette_gray_light_gray_blue_dark, 1%) 0%,lighten($palette_gray_light_gray_blue_dark, 10%)100%));
+  }
+}
+
+.palette-black-white-red {
+  h2 {
+    color: $palette_black_white_red_btn_bottom;
+  }
+
+  a, .commons-bw-create-all-widget-types li a {
+    color: $palette_black_white_red_btn_bottom;
+  }
+}
+
+.palette-brown-burnt-orange {
+  a, .commons-bw-create-all-widget-types li a {
+    color: $palette_brown_burnt_orange_btn_bottom;
+  }
+}
+
+.palette-blue-blue {
+  .block-search {
+    background-color: darken($palette_blue_blue_light, 6%); // Old browsers
+    @include filter-gradient(darken($palette_blue_blue_light, 6%), darken($palette_blue_blue_light, 3%), vertical); // IE6-9
+    @include background-image(linear-gradient(top,  darken($palette_blue_blue_light, 6%) 0%,darken($palette_blue_blue_light, 3%)100%));
+  }
+}

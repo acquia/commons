@@ -1,0 +1,106 @@
+<?php
+/**
+ * @file
+ * Code for the Commons Follow (Groups) feature.
+ */
+
+include_once 'commons_follow_group.features.inc';
+
+/**
+ * Implements hook_commons_follow_get_nids().
+ */
+function commons_follow_group_commons_follow_get_nids($account, $options) {
+  // Get all group content from a followed group.
+  $gids = og_get_entity_groups('user', $account);
+  if (empty($gids['node'])) {
+    return;
+  }
+
+  // Get subscribe flag IDs.
+  $flag_ids = commons_follow_get_subscription_flags_ids('node');
+
+  $query = db_select('flag_content', 'f');
+  if (!empty($options['range'])) {
+    $query->range(0, $options['range']);
+  }
+
+  $result = $query
+    ->condition('fid', $flag_ids, 'IN')
+    ->condition('uid', $account->uid, '=')
+    ->condition('content_type', 'node', '=')
+    ->condition('content_id', $gids['node'], 'IN')
+    ->fields('f',array('content_id'))
+    ->execute()
+    ->fetchAll();
+
+  if (empty($result)) {
+    return array();
+  }
+
+  $nids = array();
+  foreach($result as $row) {
+    $nids[] = $row->content_id;
+  }
+
+  // Get the groups' content IDs.
+  $query = new EntityFieldQuery();
+  $result = $query
+    ->entityCondition('entity_type', 'og_membership')
+    ->propertyCondition('group_type', 'node')
+    ->propertyCondition('gid', $nids, 'IN')
+    ->propertyCondition('entity_type', 'node', '=')
+    ->execute();
+
+  if (empty($result['og_membership'])) {
+    return array();
+  }
+
+  // Keep array structure.
+  $nids = array();
+  $og_memberships = og_membership_load_multiple(array_keys($result['og_membership']));
+  foreach ($og_memberships as $og_membership) {
+    $nid = $og_membership->etid;
+    $nids[$nid] = $nid;
+  }
+
+  return $nids;
+}
+
+/**
+* Implements hook_node_view_alter().
+*/
+function commons_follow_group_node_view_alter(&$build) {
+  // Prevent users from following group nodes under the
+  // commons_follow_node flag.
+  // Instead, they should be followed using the commons_follow_group flag.
+  if (og_is_group_type('node', $build['#node']->type)) {
+    if (!empty($build['links']['flag']['#links']['flag-commons_follow_node'])) {
+      unset($build['links']['flag']['#links']['flag-commons_follow_node']);
+    }
+  }
+}
+
+/**
+* Implements hook_commons_follow_get_message_ids().
+*/
+function commons_follow_group_commons_follow_get_message_ids(&$followed_mids, $followed_content = array()) {
+  // Generate a list of message IDs where the target nodes are followed by
+  // the current user.
+  $result = db_query("SELECT m.mid AS mid FROM {message} m INNER JOIN {field_data_field_target_nodes} tn ON m.mid=tn.entity_id INNER JOIN {og_membership} om ON tn.field_target_nodes_target_id=om.etid WHERE om.entity_type = 'node' AND om.gid IN (:gids)", array(':gids' => array_values($followed_content['commons_follow_group'])));
+  foreach ($result as $this_result) {
+    $followed_mids[] = $this_result->mid;
+  }
+}
+
+/**
+ * Implements hook_node_insert().
+ */
+function commons_follow_group_node_insert($node) {
+  if ($node->type != 'group') {
+    return;
+  }
+  // The owner of the content automatically follows the content
+  $account = user_load($node->uid);
+  $flag = flag_get_flag('commons_follow_group');
+  $flag->flag('flag', $node->nid, $account);
+}

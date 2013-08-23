@@ -1,0 +1,168 @@
+<?php
+
+/**
+* Don't display group node author's avatar on the group node.
+*/
+function commons_groups_update_3100() {
+  features_revert(array('commons_groups' => array('variable')));
+  return array();
+}
+/**
+* Grant users the "group organizer" role after she's created a group.
+*/
+function commons_groups_update_3101() {
+  // We've updated the og_group_manager_default_rids_node_group variable.
+  features_revert(array('commons_groups' => array('variable')));
+  return array();
+}
+
+/**
+* Ensure that the anonymous users is not listed as a group member,
+* per http://drupal.org/node/1910874.
+*/
+function commons_groups_update_3102() {
+  $delete = db_delete('og_users_roles')
+    ->condition('uid', 0, '=')
+    ->execute();
+  return array();
+}
+
+/**
+* Grant authenticated users permission to create group nodes
+* per http://drupal.org/node/1936714.
+*/
+function commons_groups_update_3103() {
+  features_revert(array('commons_groups' => array('user_permission')));
+  return array();
+}
+
+/**
+* Grant authenticated users permission to create group nodes
+* per http://drupal.org/node/1936714.
+*/
+function commons_groups_update_3104() {
+  features_revert(array('commons_groups' => array('field_base', 'field_instance')));
+  return array();
+}
+
+/**
+ * Change the OG Organizer role back to Administrator member.
+ * See http://drupal.org/node/1940150 for more information.
+ */
+function commons_groups_update_3105() {
+  $result = db_update('og_role')
+    ->fields(array('name' => 'administrator member'))
+    ->condition('rid', 3, '=')
+    ->execute();
+  return array();
+}
+
+/**
+ * Update contributor view to show the titles per the interactive prototype.
+ * (http://drupal.org/node/1821808).
+ */
+function commons_groups_update_3106() {
+  $revert = array(
+      'commons_groups' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/**
+ * Give group owners the organizer role for their own group
+ */
+function commons_groups_update_3107() {
+  // Ensure that the group creator is also listed as an organizer.
+  $group_nodes = db_select('node', 'n')
+    ->fields('n', array('nid', 'uid'))
+    ->condition('n.type', 'group','=')
+    ->execute()
+    ->fetchAll();
+  $organizer_role = db_select('og_role', 'o')
+    ->fields('o', array('rid'))
+    ->condition('o.group_bundle', 'group')
+    ->condition('o.name', 'administrator member')
+    ->execute()
+    ->fetchField();
+
+  foreach($group_nodes as $record) {
+    if (!empty($organizer_role)) {
+      og_role_grant('node', $record->nid, $record->uid, $organizer_role);
+    }
+  }
+  return array();
+}
+
+/**
+ * Update the og_group_ref and group privacy fields per
+ * http://drupal.org/node/1961296.
+ */
+function commons_groups_update_3108() {
+  $revert = array(
+    'commons_groups' => array('field_instance', 'views_view'),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/**
+ * Update the group_group field per http://drupal.org/node/1948224 and
+ * disable the deprecated Commons Group Privacy module
+ * per https://drupal.org/node/1961296.
+ */
+function commons_groups_update_3109() {
+  // Commons Group Privacy was deprecated in https://drupal.org/node/1961296.
+  module_disable('commons_group_privacy', TRUE);
+  $revert = array(
+    'commons_groups' => array('field_base', 'field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/**
+ * Update the og group filter inside views per
+ * http://drupal.org/node/2037417.
+ */
+function commons_groups_update_3110() {
+  $revert = array(
+    'commons_groups' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/**
+ * Set commons_groups to display need update message for those upgrading from 3.2
+ * and revert the view to add the update display
+ * See https://drupal.org/node/2059857#comment-7733465
+ */
+function commons_groups_update_3111() {
+  variable_set('commons_groups_needs_update', TRUE);
+  $revert = array(
+    'commons_groups' => array('views_view'),
+  );
+  features_revert($revert);
+  // Ensure that the menu callback from our new Views display is active.
+  menu_rebuild();
+  return array();
+}
+
+/**
+ * Update the og group filter inside views per
+ * http://drupal.org/node/2037417.
+ */
+function commons_groups_update_3112() {
+  $revert = array(
+    'commons_radioactivity' => array('views_view'),
+    'commons_activity_streams' => array('views_view'),
+    'commons_groups' => array('views_view'),
+    'commons_polls' => array('views_view'),
+    'commons_posts' => array('views_view'),
+    'commons_wikis' => array('views_view'),
+    'commons_q_a' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}

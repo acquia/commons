@@ -1,0 +1,166 @@
+<?php
+/**
+ * @file
+ * Code for the Commons Notify feature.
+ */
+
+include_once 'commons_notify.features.inc';
+
+/**
+ * Implements hook_node_insert().
+ * In order to respect node access restrictions, we register
+ * a shutdown function, because node access grants haven not been written
+ * by the time hook_node_insert() is invoked. For more background,
+ * see https://drupal.org/node/1918666.
+ * 
+ */
+function commons_notify_node_insert($node) {
+  drupal_register_shutdown_function('commons_notify_send_message_on_shutdown', $node);
+}
+
+/**
+ * Send a notification for newly created nodes. 
+ * This function is registered as a shutdown function
+ * in commons_notify_node_insert.
+ * Note that shutdown functions run after drupal_set_message() messages are
+ * displayed, so you'll need to use another method such as watchdog() logging
+ * if you wish to add debugging messages to this function.
+ */
+function commons_notify_send_message_on_shutdown($node) {
+  // Create a message when a user creates a new node.
+  // Borrowed from message_example.module:
+  // Save the message and assign it to the user realm. Since another user,
+  // usually an admin might create the node, but populate the author field
+  // with another user, we make sure the user realm is populated with the
+  // node's author, instead of the acting user (although in most cases it
+  // would be the same user).
+  // The following example demonstrates that we don't need to explicitly set
+  // the realm to the user, since if no realms are provided then the message
+  // is automatically assigned to the user passed in the function, or if no
+  // user object is provided, then to the acting user.
+
+  $message_type = 'commons_notify_node_created';
+  // We need to clear the static loading cache so that the node body will be
+  // ready in time for token replacement for the  message.
+  entity_get_controller('node')->resetCache(array($node->nid));
+  if (!isset($node->og_group_ref[LANGUAGE_NONE][0]['target_id'])) {
+    $message_type = 'commons_notify_node_created_no_groups';
+  }
+  // Allow other modules to specify an alternative messagge type to use.
+  $hook = 'node_insert';
+  drupal_alter('commons_notify_message_selection', $message_type, $hook, $node);
+  $account = user_load($node->uid);
+  $message = message_create($message_type, array('uid' => $account->uid, 'timestamp' => $node->created));
+  // Save reference to the node in the node reference field.
+  $wrapper = entity_metadata_wrapper('message', $message);
+  // We use a multiple value field in case we wish to use the same
+  // field for grouping messages in the future
+  // (eg http://drupal.org/node/1757060).
+  $wrapper->field_target_nodes[] = $node;
+  $wrapper->save();
+  $options = array(
+    'rendered fields' => array(
+      'message_notify_email_subject' => 'field_message_rendered_subject',
+      'message_notify_email_body' => 'field_message_rendered_body',
+    ),
+  );
+  message_subscribe_send_message('node', $node, $message, array('email' => $options));
+}
+
+/**
+ * Implements hook_comment_insert().
+ */
+function commons_notify_comment_insert($comment) {
+  $account = user_load($comment->uid);
+  $node = node_load($comment->nid);
+  $message_type = 'commons_notify_comment_created';
+  $hook = 'comment_insert';
+  if (!isset($node->og_group_ref[LANGUAGE_NONE][0]['target_id'])) {
+    $message_type = 'commons_notify_node_created_no_groups';
+  }
+  drupal_alter('commons_notify_message_selection', $message_type, $hook, $comment);
+  $message = message_create($message_type, array('uid' => $account->uid, 'timestamp' => $comment->created));
+  // Save reference to the node in the node reference field, and the
+  // "publish" state (i.e. if the node is published or unpublished).
+  $wrapper = entity_metadata_wrapper('message', $message);
+  $wrapper->field_target_nodes[] = $node;
+  $wrapper->field_target_comments[] = $comment;
+
+  // The message should be published only if the node and the comment are
+  // both published.
+  // @todo: Deal with message publishing/unpublishing.
+  /*
+  $published = $node->status && $comment->status;
+  $wrapper->field_published->set($published);
+  */
+  $wrapper->save();
+  $options = array(
+    'rendered fields' => array(
+      'message_notify_email_subject' => 'field_message_rendered_subject',
+      'message_notify_email_body' => 'field_message_rendered_body',
+    ),
+  );
+  message_subscribe_send_message('comment', $comment, $message, array('email' => $options));
+}
+
+/**
+ * Implements hook_commons_utility_links().
+ *
+ * Add unread-invitations and unread-messages notifications to utility links.
+ */
+function commons_notify_commons_utility_links_alter(&$links) {
+  global $user;
+
+  if (user_is_anonymous()) {
+    // Anonymous user.
+    return;
+  }
+
+  $new_links = array(
+    'name' => $links['name'],
+  );
+
+  $account = $user;
+
+  $unread_invitations = 0;
+  if (module_exists('commons_trusted_contacts')) {
+    $unread_invitations = count(commons_trusted_contacts_get_pending_invitations($account->uid));
+  }
+
+  $unread_messages = 0;
+  if (module_exists('privatemsg')) {
+    $unread_messages = privatemsg_unread_count($account);
+  }
+
+
+  if (empty($unread_invitations) && empty($unread_messages)) {
+    // Provide a default mailbox icon pointing to the private messages UI
+    // when there are no unread messages or invitations.
+    $new_links['no-unread-messages'] = array(
+      'href' => 'user/' . $user->uid . '/contacts',
+      'query' => array('qt-commons_trusted_contacts' => 'messages'),
+      'title' => t('No unread messages'),
+    );
+  }
+
+  if ($unread_invitations) {
+    $new_links['unread-invitations']= array(
+      'href' => 'user/' . $user->uid . '/contacts',
+      'query' => array('qt-commons_trusted_contacts' => 'invitations'),
+      'title' => format_plural($unread_invitations, '1 invitation', '@count invitations'),
+    );
+  }
+
+  if ($unread_messages) {
+    $new_links['unread-messages']= array(
+      'href' => 'user/' . $user->uid . '/contacts',
+      'query' => array('qt-commons_trusted_contacts' => 'messages'),
+      'title' => format_plural($unread_messages, '1 message', '@count messages'),
+    );
+  }
+
+  $new_links['logout'] = $links['logout'];
+  $new_links['settings'] = $links['settings'];
+
+  $links = $new_links;
+}

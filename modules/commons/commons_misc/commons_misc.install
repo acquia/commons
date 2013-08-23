@@ -1,0 +1,23 @@
+<?php
+/**
+ * @file
+ * Update hooks for commons_misc related functions.
+ */
+
+/**
+ * Enable legacy IE settings for Commons Origins.
+ */
+function commons_misc_update_7000() {
+  // Pull the existing settings for Commons Origins so that any changes by the
+  // user are preserved.
+  $settings = variable_get('theme_commons_origins_settings', array());
+
+  // Prevent IE from falling into compatibility mode.
+  $settings['chrome_edge'] = 1;
+
+  // Enable cleartype in IE.
+  $settings['clear_type'] = 1;
+
+  // Save the new Commons Origins settings.
+  variable_set('theme_commons_origins_settings', $settings);
+}

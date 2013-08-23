@@ -1,0 +1,63 @@
+<?php
+
+/**
+ * Disable summary on Wiki nodes.
+ */
+function commons_wikis_update_7000() {
+  $revert = array(
+    'commons_wikis' => array('field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/**
+ * Update Wiki message type to remove error messages.
+ */
+function commons_wikis_update_7001() {
+  $revert = array(
+    'commons_wikis' => array('message_type', 'variable'),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/**
+ * Update Wiki message type to show user picture as 35x35 image style.
+ */
+function commons_wikis_update_7002() {
+  $revert = array(
+    'commons_wikis' => array('message_type'),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/**
+ * Place Topics label above terms on Wiki pages.
+ */
+function commons_wikis_update_7003() {
+  $revert = array(
+    'commons_wikis' => array('field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/**
+ * Remove extra markup from message type for wikis.
+ */
+function commons_wikis_update_7004() {
+  $revert = array(
+    'commons_wikis' => array('message_type'),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/**
+ * Clear views cache to have contributor view use new permission.
+ */
+function commons_wikis_update_7005() {
+  cache_clear_all('*', 'cache_views', TRUE);
+}

@@ -1,0 +1,43 @@
+<?php
+/**
+ * @file
+ * Code for the Commons Social Sharing feature.
+ */
+
+include_once 'commons_social_sharing.features.inc';
+
+
+/**
+ * Implements hook_features_export_alter().
+ */
+function commons_social_sharing_features_export_alter(&$export, $module_name) {
+  // Prevent
+  if($module_name == 'commons_social_sharing' && isset($export['features']['variable'])) {
+    unset($export['features']['variable']);
+  }
+}
+
+/**
+ * Implements hook_strongarm_alter().
+ */
+ function commons_social_sharing_strongarm_alter(&$items) {
+  // Expose the Post content type for 'liking' via the Commons_social_sharing module
+  // by altering the configuration for the Rate.module widget that it provides.
+  if (!empty($items['rate_widgets']->value)) {
+    foreach($items['rate_widgets']->value as $key => $widget) {
+      if ($widget->name == 'commons_social_sharing') {
+        $commons_entity_integrations = module_invoke_all('commons_entity_integration');
+        if (!empty($commons_entity_integrations['node'])) {
+          foreach ($commons_entity_integrations['node'] as $bundle => $options) {
+            if (!isset($options['exclude_rate']) || $options['exclude_rate'] != TRUE) {
+              $items['rate_widgets']->value[$key]->node_types[] = $bundle;
+            }
+            if (!isset($options['exclude_rate_comments']) || $options['exclude_rate_comments'] != TRUE) {
+              $items['rate_widgets']->value[$key]->comment_types[] = $bundle;
+            }
+          }
+        }
+      }
+    }
+  }
+}

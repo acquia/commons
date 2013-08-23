@@ -1,0 +1,42 @@
+<?php
+
+/**
+* Update the "User follows user" message type.
+*/
+function commons_activity_streams_update_3101() {
+  features_revert(array('commons_activity_streams' => array('message_type', 'field_instance')));
+  return array();
+}
+
+/**
+ * Set activity stream user pictures to 35x35 image style.
+ */
+function commons_activity_streams_update_3102() {
+  $revert = array(
+    'commons_activity_streams' => array('message_type'),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/**
+ * Reset field instances to hide the target users field from the updated profile message.
+ */
+function commons_activity_streams_update_3103() {
+  $revert = array(
+    'commons_activity_streams' => array('field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/**
+ * Enable timeago for nodes and comments.
+ */
+function commons_activity_streams_update_3104() {
+  $revert = array(
+    'commons_activity_streams' => array('variable'),
+  );
+  features_revert($revert);
+  return array();
+}

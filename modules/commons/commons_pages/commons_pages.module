@@ -1,0 +1,31 @@
+<?php
+/**
+ * @file
+ * Code for the Commons Pages feature.
+ */
+
+include_once 'commons_pages.features.inc';
+
+/**
+ * Implements hook_strongarm_alter().
+ */
+function commons_pages_strongarm_alter(&$items) {
+  // Expose the Page content type for 'liking' via the Commons_like module
+  // by altering the configuration for the Rate.module widget that it provides.
+  if (!empty($items['rate_widgets']->value)) {
+    foreach($items['rate_widgets']->value as $key => $widget) {
+      if ($widget->name == 'commons_like') {
+        if (!in_array('document', $items['rate_widgets']->value[$key]->node_types)) {
+          $items['rate_widgets']->value[$key]->node_types[] = 'page';  
+        }       
+        if (!in_array('document', $items['rate_widgets']->value[$key]->comment_types)) {
+          $items['rate_widgets']->value[$key]->comment_types[] = 'page';  
+        }
+      }
+    }
+  }
+  // Expose the Page content type for integration with Commons Groups.
+  if (isset($items['commons_groups_entity_types'])) {
+    $items['commons_groups_entity_types']->value['node']['page'] = 1;
+  }
+}

@@ -4,8 +4,21 @@ set -e
 #
 # Build the distribution using the same process used on Drupal.org
 #
+# When building, we expect that you're building within a directory structure like
+# the following:
+#   commons/
+#     /commons_profile
+#     /docroot
+#     /docroot2, etc, etc
+#     /repos
+#     /patches
+#     /screenshots
+#
+#
 # Usage: scripts/build.sh [-y] <destination> from the profile main directory.
 #
+# BUILD_ROOT = development path for commons
+# DESTINATION = docroot for commons builds
 
 confirm () {
   read -r -p "${1:-Are you sure? [Y/n]} " response
@@ -41,17 +54,23 @@ realpath () {
 usage() {
   echo "Usage: build.sh [-y] <DESTINATION_PATH>" >&2
   echo "Use -y to skip deletion confirmation" >&2
+  echo "Use --gitusername to use authenticated git instead of http" >&2
+  echo "Use --build_root to build the whole dir structure, not just the docroot" > &2
   exit 1
 }
 
+BUILD_ROOT=`pwd -P`
 DESTINATION=$1
 ASK=true
 
-while getopts ":y" opt; do
+while getopts ":yhg:" opt; do
   case $opt in
     y)
       DESTINATION=$2
       ASK=false
+      ;;
+    h)
+      usage
       ;;
     \?)
       echo "Invalid option: -$OPTARG" >&2
@@ -65,7 +84,7 @@ if [ "x$DESTINATION" == "x" ]; then
 fi
 
 if [ ! -f drupal-org.make ]; then
-  echo "[error] Run this script from the distribution base path."
+  echo "[error] Run this script from the distribution base path, eg scripts/build.sh"
   exit 1
 fi
 
@@ -98,6 +117,41 @@ fi
 
 # Build the profile.
 echo "Building the profile..."
+echo `pwd`
+
+if [[ -d $BUILD_PATH ]]; then
+    cd $BUILD_PATH
+    rm -rf ./publish
+    # do we have the profile?
+    if [[ -d $BUILD_PATH/commons_profile ]]; then
+      if [[ -d $BUILD_PATH/repos ]]; then
+        drush make commons_profile/build-commons.make --no-cache --working-copy --prepare-install ./publish
+      else
+        mkdir $BUILD_PATH/repos
+        mkdir $BUILD_PATH/repos/modules
+        mkdir $BUILD_PATH/repos/themes
+        build_distro $BUILD_PATH
+      fi
+      chmod -R 777 publish/sites/default
+      # symlink the profile to our dev copy
+      echo "untaring"
+      tar -czvf modules.tar.gz publish/profiles/commons/modules/contrib
+      tar -czvf themes.tar.gz publish/profiles/commons/themes/contrib
+      rm -rf publish/profiles/commons
+      ln -s $BUILD_PATH/commons_profile publish/profiles/commons
+      tar -zxvf modules.tar.gz
+      tar -zxvf themes.tar.gz
+    else
+      git clone --branch 7.x-3.x-merged ${USERNAME}@git.drupal.org:project/commons.git commons_profile
+      build_distro $BUILD_PATH
+    fi
+else
+  mkdir $BUILD_PATH
+  build_distro $BUILD_PATH $USERNAME
+fi
+
+
+
 drush make --no-cache --no-core --contrib-destination drupal-org.make tmp
 
 # Build a drupal-org-core.make file if it doesn't exist.

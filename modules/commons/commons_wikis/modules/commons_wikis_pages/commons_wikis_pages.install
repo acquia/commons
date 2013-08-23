@@ -1,0 +1,12 @@
+<?php
+
+/**
+ * Update the wiki pages to remove the panelizer for comments.
+ */
+function commons_wikis_pages_update_7100() {
+    $revert = array(
+      'commons_wikis_pages' => array('panelizer_defaults'),
+  );
+  features_revert($revert);
+  return array();
+}

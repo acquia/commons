@@ -1,0 +1,134 @@
+<?php
+/**
+ * @file
+ * Code for the Commons Like feature.
+ */
+
+include_once 'commons_like.features.inc';
+
+/**
+ * Implements hook_features_export_alter().
+ */
+function commons_like_features_export_alter(&$export, $module_name) {
+  /* don't export strongarm anymore */
+  if($module_name == 'commons_like' && isset($export['features']['variable'])) {
+    unset($export['features']['variable']);
+  }
+}
+
+/**
+ * Implements hook_strongarm_alter().
+ */
+ function commons_like_strongarm_alter(&$items) {
+  // Expose the Post content type for 'liking' via the Commons_like module
+  // by altering the configuration for the Rate.module widget that it provides.
+  if (!empty($items['rate_widgets']->value)) {
+    foreach($items['rate_widgets']->value as $key => $widget) {
+      if ($widget->name == 'commons_like') {
+        $commons_entity_integrations = module_invoke_all('commons_entity_integration');
+        if (!empty($commons_entity_integrations['node'])) {
+          foreach ($commons_entity_integrations['node'] as $bundle => $options) {
+            if (!isset($options['exclude_rate']) || $options['exclude_rate'] != TRUE) {
+              $items['rate_widgets']->value[$key]->node_types[] = $bundle;
+            }
+            if (!isset($options['exclude_rate_comments']) || $options['exclude_rate_comments'] != TRUE) {
+              $items['rate_widgets']->value[$key]->comment_types[] = $bundle;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_votingapi_insert().
+ *   Create a message when a user likes a node.
+ */
+function commons_like_votingapi_insert($votes) {
+  foreach ($votes as $vote) {
+    if ($vote['tag'] == 'commons_like' && $vote['entity_type'] == 'node') {
+      $node = node_load($vote['entity_id']);
+      $message = message_create('commons_like_user_likes_node', array('uid' => $vote['uid'], 'timestamp' => $vote['timestamp']));
+      $wrapper = entity_metadata_wrapper('message', $message);
+      $wrapper->field_target_nodes[] = $node;
+      $wrapper->save();
+    }
+  }
+}
+
+/**
+ * Implements hook_votingapi_delete().
+ *   Delete a message when a user unlikes a node.
+ */
+function commons_like_votingapi_delete($votes) {
+  foreach ($votes as $vote) {
+    if (isset($vote['tag']) && $vote['tag'] == 'commons_like' && $vote['entity_type'] == 'node') {
+      if (module_exists('commons_activity_streams') && $mids = commons_like_existing_node_like_messages($vote['uid'], array($vote['entity_id']))) {
+        message_delete_multiple($mids);
+      }
+    }
+  }
+}
+
+/**
+ * Indicate whether there is an existing message about a given user
+ * liking a specific node.
+ */
+function commons_like_existing_node_like_messages($acting_uid, $target_nids) {
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'message', '=')
+   ->propertyCondition('uid', $acting_uid)
+   ->propertyCondition('type', 'commons_like_user_likes_node', '=')
+   ->fieldCondition('field_target_nodes', 'target_id', $target_nids, 'IN')
+   ->execute();
+
+  if (!empty($query->ordered_results)) {
+    $mids = array();
+    foreach($query->ordered_results as $result) {
+      $mids[] = $result->entity_id;
+    }
+    return $mids;
+  }
+  return FALSE;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function commons_like_theme() {
+  return array(
+    'rate_template_commons_like' => array(
+      'variables' => array('links' => NULL, 'results' => NULL, 'mode' => NULL, 'just_voted' => FALSE, 'content_type' => NULL, 'content_id' => NULL, 'display_options' => NULL),
+      'template' => 'commons-like',
+    ),
+  );
+}
+
+/**
+ * Implements hook_rate_templates().
+ */
+function commons_like_rate_templates() {
+  $templates = array();
+
+  $templates['commons_like'] = new stdClass();
+  $templates['commons_like']->value_type = 'points';
+  $templates['commons_like']->options = array(
+    array(1, 'like'),
+  );
+  $templates['commons_like']->theme = 'rate_template_commons_like';
+  $templates['commons_like']->css = drupal_get_path('module', 'commons_like') . '/commons-like.css';
+  $templates['commons_like']->customizable = FALSE;
+  $templates['commons_like']->translate = TRUE;
+  $templates['commons_like']->use_source_translation = TRUE;
+  $templates['commons_like']->template_title = t('Commons like');
+
+  return $templates;
+}
+
+/**
+ * Preprocess function for the commons_like template.
+ */
+function commons_like_preprocess_rate_template_commons_like(&$variables) {
+  $variables['like_button'] = theme('rate_button', array('text' => $variables['links'][0]['text'], 'href' => $variables['links'][0]['href'], 'class' => 'rate-commons-like-btn'));
+}

@@ -1,0 +1,108 @@
+//
+// The word "Unpublished" displayed underneath unpublished nodes and comments
+//
+@mixin unpublished {
+  color: pink; // target browsers that do not support rgba
+  color: rgba(239, 170, 170, 0.4);
+  font-family: $impact;
+  font-size: 50px;
+  font-weight: 700;
+  line-height: 1.2;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  text-align: center;
+  text-transform: uppercase;
+  word-wrap: break-word;
+}
+
+//
+// Position a user picture.
+//
+@mixin place-picture($width: 50px, $extra-padding: 0) {
+  padding-left: $width + 18px + $extra-padding;
+
+  .user-picture {
+    position: absolute;
+    float: left;
+    margin-left: -($width + 18px);
+    top: $extra-padding;
+
+    img {
+      width: $width;
+    }
+  }
+
+  @include respond(only-small) {
+    padding-left: $extra-padding;
+
+    .user-picture {
+      display: none;
+    }
+  }
+}
+
+//
+// Styles for the pullout drawer on search.
+//
+@mixin filter-drawer($break: only-small) {
+  @include respond($break) {
+    .filters-processed {
+      clear: none;
+      position: absolute;
+      right: 0;
+      float: right;
+      width: 0;
+      height: 0;
+      margin: 0;
+      padding: 0;
+      font-size: .88em;
+      background: white;
+      border: 1px solid $lighter_gray;
+      z-index: 1;
+
+      .commons-pod {
+        margin: 0;
+        padding: $gutter-width 0;
+        @include border-radius(0 0 0 3px);
+      }
+
+      .panel-pane {
+        display: none;
+      }
+
+      .filter-trigger {
+        display: block;
+      }
+    }
+
+    .expanded {
+      margin-right: 0;
+      width: 75%;
+      height: auto;
+      opacity: 1;
+
+      .commons-pod {
+        padding: $gutter-width;
+      }
+
+      .panel-pane {
+        display: block;
+      }
+    }
+  }
+}
+
+//
+// Styles for the overlay layer when the filter drawer is expanded.
+//
+@mixin filter-overlay($break: only-small) {
+  .filter-overlay {
+    @include respond($break) {
+      &.expanded {
+        display: block;
+      }
+    }
+  }
+}

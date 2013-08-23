@@ -1,0 +1,16 @@
+name = Commons Search Solr User
+description = Provides user entity indexing capabilities to Apache Solr, and search functionality
+core = 7.x
+package = Commons - Search
+php = 5.2.4
+project = commons_search_solr_user
+dependencies[] = apachesolr_search
+dependencies[] = apachesolr_user
+dependencies[] = commons_search_solr
+dependencies[] = ctools
+dependencies[] = features
+dependencies[] = menu
+features[apachesolr_search_page][] = user_search
+features[ctools][] = apachesolr_search:apachesolr_search_defaults:3
+features[features_api][] = api:1
+features[menu_links][] = main-menu:people

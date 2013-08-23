@@ -198,3 +198,10 @@ function commons_update_3106() {
   module_enable($module_list);
   return array();
 }
+
+/**
+ * Rebuild the registry to accommodate Commons modules merging into the profile.
+ */
+function commons_update_3107() {
+  registry_rebuild();
+}
