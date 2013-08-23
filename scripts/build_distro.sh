@@ -89,22 +89,22 @@ build_distro() {
         # do we have the profile?
         if [[ -d $BUILD_PATH/commons_profile ]]; then
           if [[ -d $BUILD_PATH/repos ]]; then
-            drush make commons_profile/build-commons.make --no-cache --working-copy --prepare-install ./publish
+            rm -f /tmp/commons.tar.gz
+            drush make --no-cache --no-core --contrib-destination --tar $BUILD_PATH/commons_profile/drupal-org.make /tmp/commons
+            drush make --no-cache --prepare-install --drupal-org=core $BUILD_PATH/commons_profile/drupal-org-core.make ./publish
           else
             mkdir $BUILD_PATH/repos
             mkdir $BUILD_PATH/repos/modules
             mkdir $BUILD_PATH/repos/themes
             build_distro $BUILD_PATH
           fi
-          chmod -R 777 publish/sites/default
           # symlink the profile to our dev copy
-          echo "untaring"
-          tar -czvf modules.tar.gz publish/profiles/commons/modules/contrib
-          tar -czvf themes.tar.gz publish/profiles/commons/themes/contrib
+          chmod -R 777 $BUILD_PATH/publish/sites/default
           rm -rf publish/profiles/commons
           ln -s $BUILD_PATH/commons_profile publish/profiles/commons
-          tar -zxvf modules.tar.gz
-          tar -zxvf themes.tar.gz
+          cd publish/profiles
+          tar -zxvf /tmp/commons.tar.gz
+          chmod -R 775 $BUILD_PATH/publish/profiles/commons
         else
           git clone --branch 7.x-3.x-merged ${USERNAME}@git.drupal.org:project/commons.git commons_profile
           build_distro $BUILD_PATH
