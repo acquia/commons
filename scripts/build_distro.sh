@@ -33,6 +33,7 @@ merge_repos() {
   echo "Successfully added $i to commons profile"
 }
 
+# this function is no longer needed because we're in one repo now.
 pull_git() {
     cd $BUILD_PATH/commons_profile
     if [[ -n $RESET ]]; then
@@ -61,21 +62,22 @@ release_notes() {
   cd $BUILD_PATH/commons_profile
   OUTPUT="$OUTPUT <h3>Commons Profile:</h3> `drush rn --date $FROM_DATE $TO_DATE`"
 
-  cd $BUILD_PATH/repos/modules
-  for i in "${modules[@]}"; do
-    echo $i
-    cd $i
-    RN=`drush rn --date $FROM_DATE $TO_DATE`
-    if [[ -n $RN ]]; then
-      OUTPUT="$OUTPUT <h3>$i:</h3> $RN"
-    fi
-    cd ..
-  done
-  cd $BUILD_PATH/repos/themes/commons_origins
-  RN=`drush rn --date $FROM_DATE $TO_DATE`
-  if [[ -n $RN ]]; then
-    OUTPUT="$OUTPUT <h3>commons_origins:</h3> $RN"
-  fi
+  ## old repos. don't use this anymore
+  # cd $BUILD_PATH/repos/modules
+  # for i in "${modules[@]}"; do
+  #  echo $i
+  #  cd $i
+  #  RN=`drush rn --date $FROM_DATE $TO_DATE`
+  #  if [[ -n $RN ]]; then
+  #    OUTPUT="$OUTPUT <h3>$i:</h3> $RN"
+  #  fi
+  #  cd ..
+  #done
+  #cd $BUILD_PATH/repos/themes/commons_origins
+  #RN=`drush rn --date $FROM_DATE $TO_DATE`
+  #if [[ -n $RN ]]; then
+  #  OUTPUT="$OUTPUT <h3>commons_origins:</h3> $RN"
+  #fi
 
   echo $OUTPUT >> $BUILD_PATH/rn.txt
 }
@@ -88,40 +90,23 @@ build_distro() {
         if [[ -d $BUILD_PATH/commons_profile ]]; then
           if [[ -d $BUILD_PATH/repos ]]; then
             drush make commons_profile/build-commons.make --no-cache --working-copy --prepare-install ./publish
-            rm -rf publish/profiles/commons/modules/contrib/commons*
-            rm -rf publish/profiles/commons/themes/contrib/commons*
           else
             mkdir $BUILD_PATH/repos
             mkdir $BUILD_PATH/repos/modules
-            cd $BUILD_PATH/repos/modules
-            for i in "${modules[@]}"; do
-              if [[ -n $USERNAME ]]; then
-                git clone --branch 7.x-3.x ${USERNAME}@git.drupal.org:project/${i}.git
-              else
-                git clone --branch 7.x-3.x http://git.drupal.org/project/${i}.git
-              fi
-            done
-            cd $BUILD_PATH/repos
             mkdir $BUILD_PATH/repos/themes
-            cd $BUILD_PATH/repos/themes
-            for i in "${themes[@]}"; do
-              if [[ -n $USERNAME ]]; then
-                git clone --branch 7.x-3.x ${USERNAME}@git.drupal.org:project/${i}.git
-              else
-                git clone --branch 7.x-3.x http://git.drupal.org/project/${i}.git
-              fi
-            done
             build_distro $BUILD_PATH
           fi
-          ln -sf $BUILD_PATH/repos/modules/commons* publish/profiles/commons/modules/contrib/
-          ln -sf $BUILD_PATH/repos/themes/commons* publish/profiles/commons/themes/contrib/
           chmod -R 777 publish/sites/default
           # symlink the profile to our dev copy
-          rm -f publish/profiles/commons/*.*
-          rm -rf publish/profiles/commons/images
-          ln -s $BUILD_PATH/commons_profile/* publish/profiles/commons/
+          echo "untaring"
+          tar -czvf modules.tar.gz publish/profiles/commons/modules/contrib
+          tar -czvf themes.tar.gz publish/profiles/commons/themes/contrib
+          rm -rf publish/profiles/commons
+          ln -s $BUILD_PATH/commons_profile publish/profiles/commons
+          tar -zxvf modules.tar.gz
+          tar -zxvf themes.tar.gz
         else
-          git clone http://git.drupal.org/project/commons.git commons_profile
+          git clone --branch 7.x-3.x-merged ${USERNAME}@git.drupal.org:project/commons.git commons_profile
           build_distro $BUILD_PATH
         fi
     else
