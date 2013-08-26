@@ -13,7 +13,7 @@ projects[addressfield_tokens][version] = "1.3"
 
 projects[acquia_connector][type] = "module"
 projects[acquia_connector][subdir] = "contrib"
-projects[acquia_connector][version] = "2.10"
+projects[acquia_connector][version] = "2.11"
 
 projects[advancedqueue][type] = "module"
 projects[advancedqueue][subdir] = "contrib"
