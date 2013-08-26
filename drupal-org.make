@@ -55,7 +55,10 @@ projects[ckeditor][version] = "1.13"
 
 projects[ctools][type] = "module"
 projects[ctools][subdir] = "contrib"
-projects[ctools][version] = "1.3"
+projects[ctools][download][type] = "git"
+projects[ctools][download][url] = "http://git.drupal.org/project/ctools.git"
+projects[ctools][download][branch] = "7.x-1.x"
+projects[ctools][download][revision] = "e81da7a57f63ca95d2c713afcec65a5659aada9e"
 
 projects[custom_search][type] = "module"
 projects[custom_search][subdir] = "contrib"
