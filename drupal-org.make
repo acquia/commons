@@ -417,7 +417,7 @@ projects[adaptivetheme][subdir] = "contrib"
 projects[adaptivetheme][download][type] = "git"
 projects[adaptivetheme][download][url] = "http://git.drupal.org/project/adaptivetheme.git"
 projects[adaptivetheme][download][branch] = "7.x-3.x"
-projects[adaptivetheme][download][revision] = "b4b38c3"
+projects[adaptivetheme][download][revision] = "b4b38c3c01d066e733c2942020c51962cd64231c"
 
 ; Remove link around comment creation date.
 ; http://drupal.org/node/1427226#comment-6638836
