@@ -205,12 +205,3 @@ function commons_update_3106() {
 function commons_update_3107() {
   registry_rebuild();
 }
-
-/**
- * Enable the privatemsg_realname module to fix issue #2070719
- */
-function commons_update_3108() {
-  $module_list = array('privatemsg_realname');
-  module_enable($module_list);
-  return array();
-}

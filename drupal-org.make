@@ -285,6 +285,10 @@ projects[privatemsg][version] = "1.4"
 ; http://drupal.org/node/1573000
 projects[privatemsg][patch][] = "http://drupal.org/files/privatemsg-1573000-64.patch"
 
+; Enable privatemsg_realname when realname is enabled
+; https://drupal.org/node/2070719
+projects[privatemsg][patch][] = "http://drupal.org/files/2077223-privatemsg-realname-enabled-1.patch"
+
 projects[quicktabs][type] = "module"
 projects[quicktabs][subdir] = "contrib"
 projects[quicktabs][download][type] = "git"
