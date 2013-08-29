@@ -33,7 +33,7 @@ function commons_search_solr_user_apachesolr_query_alter($query) {
   $query->addParam('qf', 'tes_lastname');
   $query->addParam('qf', 'tes_username');
 
-  if(isset($_GET['flagged']) && $flagged = check_plain($_GET['flagged'])) {
+  if (isset($_GET['flagged']) && $flagged = check_plain($_GET['flagged'])) {
     $query->addFilter('im_flag_commons_follow_user', $user->uid);
   }
 }
@@ -81,7 +81,7 @@ function commons_search_solr_user_apachesolr_search_page_alter(&$build, $search_
     // First check to see if the flagged key is set. If so we don't want to query
     // Using EFQ because flags aren't entities.
     $out_results = array();
-    if(isset($_GET['flagged']) && $flagged = check_plain($_GET['flagged'])) {
+    if (isset($_GET['flagged']) && $flagged = check_plain($_GET['flagged'])) {
       // Get the count of flagged users for a particular account
       $fl_results = db_select('flag_content', 'f')
         ->fields('f', array('content_id', 'uid'))
@@ -166,14 +166,15 @@ function commons_search_solr_user_user_view_alter(&$build) {
     if (!empty($build['#account']->og_user_node[LANGUAGE_NONE])) {
       $groups = array();
       foreach ($build['#account']->og_user_node[LANGUAGE_NONE] AS $og_node) {
-        $gnode = node_load($og_node['target_id']);
-        $groups['group-item group-' . $gnode->nid] = array(
-          'title' => $gnode->title,
-          'href' => 'node/' . $gnode->nid,
-          'attributes' => array(
-            'class' => array('group-link'),
-          ),
-        );
+        if ($gnode = node_load($og_node['target_id'])) {
+          $groups['group-item group-' . $gnode->nid] = array(
+            'title' => $gnode->title,
+            'href' => 'node/' . $gnode->nid,
+            'attributes' => array(
+              'class' => array('group-link'),
+            ),
+          );
+        }
       }
       $build['group_membership'] = array(
         '#theme' => 'links__profile_groups',
@@ -196,7 +197,7 @@ function commons_search_solr_user_user_view_alter(&$build) {
     // bottom of the display.
     if (isset($build['flags'])) {
       // Remove the reported user if it exists
-      if(isset($build['flags']['abuse_user'])) {
+      if (isset($build['flags']['abuse_user'])) {
         unset($build['flags']['abuse_user']);
       }
 

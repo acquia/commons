@@ -41,6 +41,10 @@ projects[apachesolr_user][download][url] = "http://git.drupal.org/project/apache
 projects[apachesolr_user][download][branch] = "7.x-1.x"
 projects[apachesolr_user][download]revision] = "a86c5aebfceaf4a3fc53544762a36ca1b70809d5"
 
+; Check the user object before trying to display a result
+; https://drupal.org/node/2077281#comment-7807937
+projects[apachesolr_user][patch][] = "http://drupal.org/files/2077281-apache-solr-user-check-3.patch"
+
 projects[breakpoints][type] = "module"
 projects[breakpoints][subdir] = "contrib"
 projects[breakpoints][version] = "1.1"

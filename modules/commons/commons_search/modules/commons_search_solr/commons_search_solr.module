@@ -484,12 +484,16 @@ function commons_search_solr_modules_disabled($modules) {
 function commons_search_solr_apachesolr_process_results(&$results, DrupalSolrQueryInterface $query) {
   foreach($results AS $rkey => $result) {
     if ($results[$rkey]['fields']['entity_type'] == 'node') {
-      $node_view = node_view(node_load($results[$rkey]['fields']['entity_id']), 'teaser');
-      $results[$rkey]['snippet'] = drupal_render($node_view);
+      if ($node = node_load($results[$rkey]['fields']['entity_id'])) {
+        $node_view = node_view($node, 'teaser');
+        $results[$rkey]['snippet'] = drupal_render($node_view);
+      }
     }
     if ($results[$rkey]['fields']['entity_type'] == 'user') {
-      $user_view = user_view(user_load($results[$rkey]['fields']['entity_id']), 'search results');
-      $results[$rkey]['snippet'] = drupal_render($user_view);
+      if ($account = user_load($results[$rkey]['fields']['entity_id'])) {
+        $user_view = user_view($account, 'search_results');
+        $results[$rkey]['snippet'] = drupal_render($user_view);
+      }
     }
   }
 }
