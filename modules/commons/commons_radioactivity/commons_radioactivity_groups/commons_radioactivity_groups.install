@@ -1,0 +1,12 @@
+<?php
+
+/**
+ * Use content type machine names for generating CSS classes.
+ */
+function commons_radioactivity_groups_update_7300() {
+  $revert = array(
+    'commons_radioactivity_groups' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}

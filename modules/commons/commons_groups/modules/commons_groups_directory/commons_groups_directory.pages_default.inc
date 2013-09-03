@@ -16,7 +16,10 @@ function commons_groups_directory_default_page_manager_pages() {
   $page->admin_title = 'Groups Directory';
   $page->admin_description = 'A directory of groups.';
   $page->path = 'groups';
-  $page->access = array();
+  $page->access = array(
+    'type' => 'none',
+    'settings' => NULL,
+  );
   $page->menu = array(
     'type' => 'normal',
     'title' => 'Groups',
@@ -71,10 +74,11 @@ function commons_groups_directory_default_page_manager_pages() {
   );
   $display->cache = array();
   $display->title = 'Groups';
+  $display->uuid = 'b342a293-2541-cc64-1577-839054c92368';
   $display->content = array();
   $display->panels = array();
     $pane = new stdClass();
-    $pane->pid = 'new-1';
+    $pane->pid = 'new-bf6c6f1b-08a6-3874-7186-c955c763c092';
     $pane->panel = 'two_66_33_first';
     $pane->type = 'views_panes';
     $pane->subtype = 'commons_groups_directory-panel_pane_1';
@@ -89,10 +93,11 @@ function commons_groups_directory_default_page_manager_pages() {
     $pane->extras = array();
     $pane->position = 0;
     $pane->locks = array();
-    $display->content['new-1'] = $pane;
-    $display->panels['two_66_33_first'][0] = 'new-1';
+    $pane->uuid = 'bf6c6f1b-08a6-3874-7186-c955c763c092';
+    $display->content['new-bf6c6f1b-08a6-3874-7186-c955c763c092'] = $pane;
+    $display->panels['two_66_33_first'][0] = 'new-bf6c6f1b-08a6-3874-7186-c955c763c092';
     $pane = new stdClass();
-    $pane->pid = 'new-2';
+    $pane->pid = 'new-ab237aa5-5ae7-8fb4-e1ce-20c776a6950b';
     $pane->panel = 'two_66_33_second';
     $pane->type = 'views_panes';
     $pane->subtype = 'commons_radioactivity_groups_most_active-panel_pane_1';
@@ -107,10 +112,11 @@ function commons_groups_directory_default_page_manager_pages() {
     $pane->extras = array();
     $pane->position = 0;
     $pane->locks = array();
-    $display->content['new-2'] = $pane;
-    $display->panels['two_66_33_second'][0] = 'new-2';
+    $pane->uuid = 'ab237aa5-5ae7-8fb4-e1ce-20c776a6950b';
+    $display->content['new-ab237aa5-5ae7-8fb4-e1ce-20c776a6950b'] = $pane;
+    $display->panels['two_66_33_second'][0] = 'new-ab237aa5-5ae7-8fb4-e1ce-20c776a6950b';
     $pane = new stdClass();
-    $pane->pid = 'new-3';
+    $pane->pid = 'new-3db36521-fb53-58a4-c9e2-137a2dacee07';
     $pane->panel = 'two_66_33_top';
     $pane->type = 'block';
     $pane->subtype = 'commons_groups-commons_groups_create_group';
@@ -128,10 +134,11 @@ function commons_groups_directory_default_page_manager_pages() {
     $pane->extras = array();
     $pane->position = 0;
     $pane->locks = array();
-    $display->content['new-3'] = $pane;
-    $display->panels['two_66_33_top'][0] = 'new-3';
+    $pane->uuid = '3db36521-fb53-58a4-c9e2-137a2dacee07';
+    $display->content['new-3db36521-fb53-58a4-c9e2-137a2dacee07'] = $pane;
+    $display->panels['two_66_33_top'][0] = 'new-3db36521-fb53-58a4-c9e2-137a2dacee07';
   $display->hide_title = PANELS_TITLE_FIXED;
-  $display->title_pane = 'new-1';
+  $display->title_pane = 'new-bf6c6f1b-08a6-3874-7186-c955c763c092';
   $handler->conf['display'] = $display;
   $page->default_handlers[$handler->name] = $handler;
   $pages['groups_directory'] = $page;

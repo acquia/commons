@@ -43,10 +43,11 @@ function commons_misc_default_page_manager_handlers() {
   );
   $display->cache = array();
   $display->title = '';
+  $display->uuid = 'da99dbdb-5ba9-9ab4-7944-b91485cd4086';
   $display->content = array();
   $display->panels = array();
     $pane = new stdClass();
-    $pane->pid = 'new-1';
+    $pane->pid = 'new-deed05d0-e6bb-9b94-9d09-499090d1e5d3';
     $pane->panel = 'two_66_33_first';
     $pane->type = 'node_content';
     $pane->subtype = 'node_content';
@@ -71,10 +72,11 @@ function commons_misc_default_page_manager_handlers() {
     $pane->extras = array();
     $pane->position = 0;
     $pane->locks = array();
-    $display->content['new-1'] = $pane;
-    $display->panels['two_66_33_first'][0] = 'new-1';
+    $pane->uuid = 'deed05d0-e6bb-9b94-9d09-499090d1e5d3';
+    $display->content['new-deed05d0-e6bb-9b94-9d09-499090d1e5d3'] = $pane;
+    $display->panels['two_66_33_first'][0] = 'new-deed05d0-e6bb-9b94-9d09-499090d1e5d3';
   $display->hide_title = PANELS_TITLE_FIXED;
-  $display->title_pane = 'new-1';
+  $display->title_pane = 'new-deed05d0-e6bb-9b94-9d09-499090d1e5d3';
   $handler->conf['display'] = $display;
   $export['node_view_panel_context'] = $handler;
 
