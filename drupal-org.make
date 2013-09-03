@@ -112,6 +112,10 @@ projects[entitycache][download][url] = "http://git.drupal.org/project/entitycach
 projects[entitycache][download][branch] = "7.x-1.x"
 projects[entitycache][download][revision] = "7e390b5"
 
+; Fix core translation support.
+; http://drupal.org/node/1349566#comment-7781063
+projects[entitycache][patch][] = "http://drupal.org/files/add-translation-information-on-each-request-1349566-12.patch"
+
 projects[entityreference][type] = "module"
 projects[entityreference][subdir] = "contrib"
 projects[entityreference][download][type] = "git"
