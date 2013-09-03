@@ -64,6 +64,10 @@ projects[ctools][download][url] = "http://git.drupal.org/project/ctools.git"
 projects[ctools][download][branch] = "7.x-1.x"
 projects[ctools][download][revision] = "e81da7a57f63ca95d2c713afcec65a5659aada9e"
 
+; Introduce UUIDs onto panes & displays.
+; http://drupal.org/node/1277908#comment-7216356
+projects[ctools][patch][] = "http://drupal.org/files/ctools-uuids_for_exported_objects-1277908-118.patch"
+
 projects[custom_search][type] = "module"
 projects[custom_search][subdir] = "contrib"
 projects[custom_search][download][type] = "git"
@@ -268,6 +272,10 @@ projects[panels][patch][] = "http://drupal.org/files/1828684-layout-fix-6.patch"
 ; PHP 5.3.9 Strict Warning on Panels Empty Value
 ; http://drupal.org/node/1632898#comment-6412840
 projects[panels][patch][] = "http://drupal.org/files/panels-n1632898-15.patch"
+
+; Add internationalization support.
+; http://drupal.org/node/1179034#comment-7216342
+projects[ctools][patch][] = "http://drupal.org/files/panels-1179034-41_____panels-uuids-127790-100__-80.patch"
 
 projects[paranoia][type] = "module"
 projects[paranoia][subdir] = "contrib"
