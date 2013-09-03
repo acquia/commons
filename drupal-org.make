@@ -275,7 +275,7 @@ projects[panels][patch][] = "http://drupal.org/files/panels-n1632898-15.patch"
 
 ; Add internationalization support.
 ; http://drupal.org/node/1179034#comment-7216342
-projects[ctools][patch][] = "http://drupal.org/files/panels-1179034-41_____panels-uuids-127790-100__-80.patch"
+projects[panels][patch][] = "http://drupal.org/files/panels-1179034-41_____panels-uuids-127790-100__-80.patch"
 
 projects[paranoia][type] = "module"
 projects[paranoia][subdir] = "contrib"
