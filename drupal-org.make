@@ -325,7 +325,7 @@ projects[radioactivity][patch][] = "http://drupal.org/files/radioactivity-memcac
 
 projects[r4032login][type] = "module"
 projects[r4032login][subdir] = "contrib"
-projects[r4032login][version] = "1.6"
+projects[r4032login][version] = "1.5"
 
 projects[rate][type] = "module"
 projects[rate][subdir] = "contrib"
