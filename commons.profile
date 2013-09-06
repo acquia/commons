@@ -115,6 +115,8 @@ function commons_update_projects_alter(&$projects) {
  * Allows the user to set a welcome message for anonymous users
  */
 function commons_install_tasks() {
+  // Suppress any status messages generated during batch install.
+  commons_clear_messages();
 
   //make sure we have more memory than 196M. if not lets try to increase it.
   if (ini_get('memory_limit') != '-1' && ini_get('memory_limit') <= '196M' && ini_get('memory_limit') >= '128M') {
@@ -245,6 +247,7 @@ function commons_revert_features() {
   // Revert Features components to ensure that they are in their default states.
   $revert = array(
     'commons_groups' => array('field_instance'),
+    'commons_trusted_contacts' => array('field_instance'),
     'commons_wikis' => array('og_features_permission'),
     'commons_wysiwyg' => array('user_permission', 'ckeditor_profile'),
   );

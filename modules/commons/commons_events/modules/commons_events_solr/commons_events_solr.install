@@ -1,0 +1,43 @@
+<?php
+/**
+ * @file
+ * Commons Events Solr install script.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function commons_events_solr_install() {
+  // Set module weight to be below rich_snippets, so we can disable snippeting
+  // on the Solr events landing page.
+  db_update('system')
+    ->fields(array('weight' => 5))
+    ->condition('name', 'commons_events_solr')
+    ->execute();
+}
+
+/**
+ * Implements hook_enable().
+ */
+function commons_events_solr_enable() {
+  module_load_include('inc', 'page_manager', 'plugins/tasks/page');
+  $page = page_manager_page_load('views_events_landing_page');
+  ctools_include('export');
+  ctools_export_set_object_status($page, TRUE);
+  // Revert base Events feature so that the Events menu link is recreated.
+  features_revert(array('commons_events' => array('menu_links')));
+  menu_cache_clear_all();
+}
+
+/**
+ * Implements hook_disable().
+ */
+function commons_events_solr_disable() {
+  module_load_include('inc', 'page_manager', 'plugins/tasks/page');
+  $page = page_manager_page_load('views_events_landing_page');
+  ctools_include('export');
+  ctools_export_set_object_status($page, FALSE);
+  // Revert base Events feature so that the Events menu link is recreated.
+  features_revert(array('commons_events' => array('menu_links')));
+  menu_cache_clear_all();
+}

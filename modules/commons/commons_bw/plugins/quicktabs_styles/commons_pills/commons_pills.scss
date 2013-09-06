@@ -1,0 +1,155 @@
+@import 'compass';
+
+$icons: sprite-map('icons/*.png', $spacing: 20px);
+
+@mixin sprite_url_height_width($sprite_name, $image_name) {
+  background: sprite($sprite_name, $image_name) no-repeat;
+  width: image-width(sprite-file($sprite_name, $image_name));
+  height: image-height(sprite-file($sprite_name, $image_name));
+  display: inline-block;
+  margin-right: 3px;
+  position: relative;
+  top: 1px;
+}
+
+@mixin sprite_url_position($sprite_name, $image_name) {
+  background-position: sprite-position($sprite_name, $image_name);
+}
+
+$link_color: #a5a3a3;
+
+.quicktabs-style-commons-pills {
+
+  ul.quicktabs-tabs {
+    margin: 0 0 30px 0;
+    padding: 0;
+
+    .block-content & {
+      padding: 0;
+    }
+
+    li {
+      display: inline-block;
+      padding: 0;
+      margin: 0 12px 0 0;
+
+      a {
+        background-color: #f1f1f1;
+        @include border-radius(3px);
+        padding: 3px 10px 3px 6px;
+        display: block;
+        color: $link_color;
+
+        &:hover {
+          text-decoration: none;
+        }
+
+        span {
+          color: darken($link_color, 40%);
+          font-size: .7em;
+        }
+      }
+
+      &.active a {
+        background-color: #00568c;
+        color: #fff;
+        position: relative;
+
+        &:after {
+          content: '';
+          width: 0px;
+          height: 0px;
+          display: block;
+          border-style: solid;
+          border-width: 5px 7.5px 0 7.5px;
+          border-color: #00568c transparent transparent transparent;
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          margin-left: -7.5px;
+        }
+
+        span {
+          color: #fff;
+        }
+      }
+    }
+  }
+}
+
+#quicktabs-tab-commons_bw-commons_all {
+  &:before {
+    content: '';
+    @include sprite_url_height_width($icons, all);
+
+    ul.quicktabs-style-commons-pills li.active & {
+      @include sprite_url_position($icons, all-active);
+    }
+  }
+}
+
+#quicktabs-tab-commons_bw-commons_posts {
+  &:before {
+    content: '';
+    @include sprite_url_height_width($icons, posts);
+
+    ul.quicktabs-style-commons-pills li.active & {
+      @include sprite_url_position($icons, posts-active);
+    }
+  }
+}
+
+#quicktabs-tab-commons_bw-commons_documents {
+  &:before {
+    content: '';
+    @include sprite_url_height_width($icons, docs);
+
+    ul.quicktabs-style-commons-pills li.active & {
+      @include sprite_url_position($icons, docs-active);
+    }
+  }
+}
+
+#quicktabs-tab-commons_bw-commons_q_a {
+  &:before {
+    content: '';
+    @include sprite_url_height_width($icons, qa);
+
+    ul.quicktabs-style-commons-pills li.active & {
+      @include sprite_url_position($icons, qa-active);
+    }
+  }
+}
+
+#quicktabs-tab-commons_bw-commons_ideas {
+  &:before {
+    content: '';
+    @include sprite_url_height_width($icons, ideas);
+
+    ul.quicktabs-style-commons-pills li.active & {
+      @include sprite_url_position($icons, ideas-active);
+    }
+  }
+}
+
+#quicktabs-tab-commons_bw-commons_wikis {
+  &:before {
+    content: '';
+    @include sprite_url_height_width($icons, wikis);
+
+    ul.quicktabs-style-commons-pills li.active & {
+      @include sprite_url_position($icons, wikis-active);
+    }
+  }
+}
+
+#quicktabs-tab-commons_bw-commons_polls {
+  &:before {
+    content: '';
+    @include sprite_url_height_width($icons, polls);
+
+    ul.quicktabs-style-commons-pills li.active & {
+      @include sprite_url_position($icons, polls-active);
+    }
+  }
+}

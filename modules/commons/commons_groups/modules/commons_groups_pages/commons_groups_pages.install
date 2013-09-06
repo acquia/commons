@@ -1,0 +1,22 @@
+<?php
+
+/**
+* Implements hook_enable().
+*/
+function commons_groups_pages_enable() {
+  // We need Page Manager to respond to the node view menu callback.
+  // Since all Panelized moduels need this variable set, we use variable_set
+  // rather than exporting via Strongarm in order to avoid Features conflicts.
+  variable_set('page_manager_node_view_disabled', FALSE);
+}
+
+/**
+ * Updating one_main panel per http://drupal.org/node/1948224.
+ */
+function commons_groups_pages_update_3101() {
+  $revert = array(
+    'commons_groups' => array('panelizer_defaults'),
+  );
+  features_revert($revert);
+  return array();
+}

@@ -1,0 +1,499 @@
+<?php
+/**
+ * @file
+ * Code for the Commons Search Solr feature.
+ */
+
+include_once 'commons_search_solr.features.inc';
+
+/**
+ * Get the search adapter and Solr environment for dynamic faceting.
+ */
+function commons_search_solr_search_environment() {
+  return "apachesolr@" . apachesolr_default_environment();
+}
+
+/**
+ * Dynamically create facets rather than let Features do it, so we can have
+ * facets based on the current default Solr environment.
+ */
+function commons_search_solr_create_facets($env_id = NULL) {
+  $facets = commons_search_solr_facet_definitions();
+  // Add each facet to the database with a merge so we don't have duplicates.
+  if (empty($env_id)) {
+    $env_id = commons_search_solr_search_environment();
+  }
+  foreach($facets as $facet) {
+    $facet['settings'] = serialize($facet['settings']);
+    $facet['name'] = $env_id . $facet['name'];
+    $facet['searcher'] = $env_id;
+    $merge = db_merge('facetapi')
+      ->key(array('name' => $facet['name']))
+      ->fields($facet)
+      ->execute();
+  }
+}
+
+/**
+ * Base facet definitions.
+ */
+function commons_search_solr_facet_definitions() {
+  $facets = array();
+
+  // Node author facet.
+  $facets[] = array(
+    'name' => ':block:author',
+    'searcher' => commons_search_solr_search_environment(),
+    'realm' => 'block',
+    'facet' => 'author',
+    'enabled' => 1,
+    'settings' => array(
+      'weight' => 0,
+      'widget' => 'facetapi_links',
+      'filters' => array(),
+      'active_sorts' => array(
+        'active' => 'active',
+        'count' => 'count',
+        'display' => 'display',
+      ),
+      'sort_weight' => array(
+        'active' => -50,
+        'count' => -49,
+        'display' => -48,
+      ),
+      'sort_order' => array(
+        'active' => 3,
+        'count' => 3,
+        'display' => 4,
+      ),
+      'empty_behavior' => 'none',
+      'soft_limit' => 20,
+      'nofollow' => 1,
+      'show_expanded' => 0,
+    ),
+  );
+
+  // Node type facet.
+  $facets[] = array(
+    'name' => ':block:bundle',
+    'searcher' => commons_search_solr_search_environment(),
+    'realm' => 'block',
+    'facet' => 'bundle',
+    'enabled' => 1,
+    'settings' => array(
+      'weight' => 0,
+      'widget' => 'facetapi_links',
+      'filters' => array(),
+      'active_sorts' => array(
+        'active' => 'active',
+        'count' => 'count',
+        'display' => 'display',
+      ),
+      'sort_weight' => array(
+        'active' => -50,
+        'count' => -49,
+        'display' => -48,
+      ),
+      'sort_order' => array(
+        'active' => 3,
+        'count' => 3,
+        'display' => 4,
+      ),
+      'empty_behavior' => 'none',
+      'soft_limit' => 20,
+      'nofollow' => 1,
+      'show_expanded' => 0,
+    ),
+  );
+
+  // Node changed date facet.
+  $facets[] = array(
+    'name' => ':block:changed',
+    'searcher' => commons_search_solr_search_environment(),
+    'realm' => 'block',
+    'facet' => 'changed',
+    'enabled' => 1,
+    'settings' => array(
+      'weight' => 0,
+      'widget' => 'date_range',
+      'filters' => array(),
+      'active_sorts' => array(
+        'active' => 'active',
+        'indexed' => 'indexed',
+        'count' => 0,
+        'display' => 0,
+      ),
+      'sort_weight' => array(
+        'active' => -50,
+        'indexed' => -49,
+        'count' => 0,
+        'display' => 0,
+      ),
+      'sort_order' => array(
+        'active' => 3,
+        'indexed' => 4,
+        'count' => 4,
+        'display' => 4,
+      ),
+      'empty_behavior' => 'none',
+      'soft_limit' => 20,
+      'nofollow' => 1,
+      'show_expanded' => 0,
+      'empty_text' => array(
+        'value' => '',
+        'format' => 'filtered_html',
+      ),
+    ),
+  );
+  $facets[] = array(
+    'name' => '::changed',
+    'searcher' => commons_search_solr_search_environment(),
+    'realm' => '',
+    'facet' => 'changed',
+    'enabled' => 0,
+    'settings' => array(
+      'operator' => 'and',
+      'hard_limit' => 50,
+      'dependencies' => array(
+        'roles' => array(),
+      ),
+      'facet_mincount' => 1,
+      'facet_missing' => 0,
+      'flatten' => 0,
+      'query_type' => 'date_range',
+    ),
+  );
+
+  // Node created date facet.
+  $facets[] = array(
+    'name' => ':block:created',
+    'searcher' => commons_search_solr_search_environment(),
+    'realm' => 'block',
+    'facet' => 'created',
+    'enabled' => 1,
+    'settings' => array(
+      'weight' => 0,
+      'widget' => 'date_range',
+      'filters' => array(),
+      'active_sorts' => array(
+        'active' => 'active',
+        'indexed' => 'indexed',
+        'count' => 0,
+        'display' => 0,
+      ),
+      'sort_weight' => array(
+        'active' => -50,
+        'indexed' => -49,
+        'count' => 0,
+        'display' => 0,
+      ),
+      'sort_order' => array(
+        'active' => 3,
+        'indexed' => 4,
+        'count' => 4,
+        'display' => 4,
+      ),
+      'empty_behavior' => 'none',
+      'soft_limit' => 20,
+      'nofollow' => 1,
+      'show_expanded' => 0,
+      'empty_text' => array(
+        'value' => '',
+        'format' => 'filtered_html',
+      ),
+    ),
+  );
+  $facets[] = array(
+    'name' => '::created',
+    'searcher' => commons_search_solr_search_environment(),
+    'realm' => '',
+    'facet' => 'created',
+    'enabled' => 0,
+    'settings' => array(
+      'operator' => 'and',
+      'hard_limit' => 50,
+      'dependencies' => array(
+        'roles' => array(),
+      ),
+      'facet_mincount' => 1,
+      'facet_missing' => 0,
+      'flatten' => 0,
+      'query_type' => 'date_range',
+    ),
+  );
+
+  // Node field_date facet.
+  $facets[] = array(
+    'name' => ':block:dm_field_date',
+    'searcher' => commons_search_solr_search_environment(),
+    'realm' => 'block',
+    'facet' => 'dm_field_date',
+    'enabled' => 1,
+    'settings' => array(
+      'weight' => 0,
+      'widget' => 'date_range',
+      'filters' => array(),
+      'active_sorts' => array(
+        'active' => 'active',
+        'indexed' => 'indexed',
+        'count' => 0,
+        'display' => 0,
+      ),
+      'sort_weight' => array(
+        'active' => -50,
+        'indexed' => -49,
+        'count' => 0,
+        'display' => 0,
+      ),
+      'sort_order' => array(
+        'active' => 3,
+        'indexed' => 4,
+        'count' => 4,
+        'display' => 4,
+      ),
+      'empty_behavior' => 'none',
+      'soft_limit' => 20,
+      'nofollow' => 1,
+      'show_expanded' => 0,
+      'empty_text' => array(
+        'value' => '',
+        'format' => 'filtered_html',
+      ),
+    ),
+  );
+  $facets[] = array(
+    'name' => '::dm_field_date',
+    'searcher' => commons_search_solr_search_environment(),
+    'realm' => '',
+    'facet' => 'dm_field_date',
+    'enabled' => 0,
+    'settings' => array(
+      'operator' => 'and',
+      'hard_limit' => 50,
+      'dependencies' => array(
+        'roles' => array(),
+      ),
+      'facet_mincount' => 1,
+      'facet_missing' => 0,
+      'flatten' => 0,
+      'query_type' => 'date_range',
+    ),
+  );
+
+  // Node field_topics facet.
+  $facets[] = array(
+    'name' => ':block:im_field_topics',
+    'searcher' => commons_search_solr_search_environment(),
+    'realm' => 'block',
+    'facet' => 'im_field_topics',
+    'enabled' => 1,
+    'settings' => array(
+      'weight' => 0,
+      'widget' => 'facetapi_links',
+      'filters' => array(),
+      'active_sorts' => array(
+        'active' => 'active',
+        'count' => 'count',
+        'display' => 'display',
+        'indexed' => 0,
+      ),
+      'sort_weight' => array(
+        'active' => -50,
+        'count' => -49,
+        'display' => -48,
+        'indexed' => 0,
+      ),
+      'sort_order' => array(
+        'active' => 3,
+        'count' => 3,
+        'display' => 4,
+        'indexed' => 4,
+      ),
+      'empty_behavior' => 'text',
+      'soft_limit' => 20,
+      'nofollow' => 1,
+      'show_expanded' => 0,
+      'empty_text' => array(
+        'value' => 'None available',
+        'format' => 'filtered_html',
+      ),
+    ),
+  );
+  $facets[] = array(
+    'name' => '::im_field_topics',
+    'searcher' => commons_search_solr_search_environment(),
+    'realm' => '',
+    'facet' => 'im_field_topics',
+    'enabled' => 0,
+    'settings' => array(
+      'operator' => 'and',
+      'hard_limit' => 50,
+      'dependencies' => array(
+        'roles' => array(),
+      ),
+      'facet_mintcount' => 1,
+      'facet_missing' => 0,
+      'flatten' => 0,
+      'query_type' => 'term',
+    ),
+  );
+
+  // Node field_location facet.
+  $facets[] = array(
+    'name' => ':block:sm_field_location',
+    'searcher' => commons_search_solr_search_environment(),
+    'realm' => 'block',
+    'facet' => 'sm_field_location',
+    'enabled' => 1,
+    'settings' => array(
+      'weight' => 0,
+      'widget' => 'facetapi_links',
+      'filters' => array(),
+      'active_sorts' => array(
+        'active' => 'active',
+        'count' => 'count',
+        'display' => 'display',
+      ),
+      'sort_weight' => array(
+        'active' => -50,
+        'count' => -49,
+        'display' => -48,
+      ),
+      'sort_order' => array(
+        'active' => 3,
+        'count' => 3,
+        'display' => 4,
+      ),
+      'empty_behavior' => 'none',
+      'soft_limit' => 20,
+      'nofollow' => 1,
+      'show_expanded' => 0,
+    ),
+  );
+
+  // Node group reference facet.
+  $facets[] = array(
+    'name' => ':block:sm_og_group_ref',
+    'searcher' => commons_search_solr_search_environment(),
+    'realm' => 'block',
+    'facet' => 'sm_og_group_ref',
+    'enabled' => 1,
+    'settings' => array(
+      'weight' => 0,
+      'widget' => 'facetapi_links',
+      'filters' => array(),
+      'active_sorts' => array(
+        'active' => 'active',
+        'count' => 'count',
+        'display' => 'display',
+      ),
+      'sort_weight' => array(
+        'active' => -50,
+        'count' => -49,
+        'display' => -48,
+      ),
+      'sort_order' => array(
+        'active' => 3,
+        'count' => 3,
+        'display' => 4,
+      ),
+      'empty_behavior' => 'none',
+      'soft_limit' => 20,
+      'nofollow' => 1,
+      'show_expanded' => 0,
+    ),
+  );
+  return $facets;
+}
+
+/**
+ * Get the panels subtype for the facet block.
+ */
+function commons_search_solr_panel_facet_subtype($facet_name) {
+  return 'facetapi-' . facetapi_hash_delta($facet_name);
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function commons_search_solr_form_apachesolr_environment_edit_form_alter(&$form, &$form_state) {
+  $form['actions']['save']['#submit'][] = 'commons_search_solr_environment_form_submit';
+}
+
+/**
+ * When the environment changes, create facets for that environment.
+ */
+function commons_search_solr_environment_form_submit($form, $form_state) {
+  if ($form_state['values']['make_default'] == 1) {
+    commons_search_solr_create_facets('apachesolr@' . $form_state['build_info']['args']['0']['env_id']);
+    // Need to clear caches so we can rebuild block definitions.
+    cache_clear_all('*', 'cache_block', TRUE);
+    cache_clear_all('*', 'cache_apachesolr', TRUE);
+  }
+}
+
+/**
+ * Implements hook_modules_enabled().
+ */
+function commons_search_solr_modules_enabled($modules) {
+  if (in_array('acquia_search', $modules)) {
+    // If Acquia Search is enabled later, we need to force update our facets,
+    // otherwise our Events Solr page has no facets.
+    commons_search_solr_create_facets(ACQUIA_SEARCH_ENVIRONMENT_ID);
+  }
+  if (in_array('commons_search_solr_user', $modules)) {
+    // We disable core user search with of Solr user search, via the
+    // search_active_modules variable which is exporter by commons_search_solr
+    // and altered in commons_search_solr_user_strongarm_alter().
+    $revert = array('commons_search_solr' => array('variable'));
+    features_revert($revert);
+  }
+}
+
+
+/**
+ * Feature module hook. Invoked on a Feature module after that module is
+ * enabled.
+ *
+ * @param $component
+ *   String name of the component that has just been enabled.
+ */
+function commons_search_solr_post_features_enable_feature($component) {
+  if ($component == 'apachesolr_search_page') {
+    features_revert(array('commons_search_solr' => array('apachesolr_search_page')));
+  }
+}
+
+
+/**
+ * Implements hook_modules_disabled().
+ */
+function commons_search_solr_modules_disabled($modules) {
+  if (in_array('commons_search_solr_user', $modules)) {
+    // We disable core user search with of Solr user search, via the
+    // search_active_modules variable which is exporter by commons_search_solr
+    // and altered in commons_search_solr_user_strongarm_alter().
+    $revert = array('commons_search_solr' => array('variable'));
+    features_revert($revert);
+  }
+}
+
+/**
+ * Implements hook_apachesolr_process_results().
+ */
+function commons_search_solr_apachesolr_process_results(&$results, DrupalSolrQueryInterface $query) {
+  foreach($results AS $rkey => $result) {
+    if ($results[$rkey]['fields']['entity_type'] == 'node') {
+      if ($node = node_load($results[$rkey]['fields']['entity_id'])) {
+        $node_view = node_view($node, 'teaser');
+        $results[$rkey]['snippet'] = drupal_render($node_view);
+      }
+    }
+    if ($results[$rkey]['fields']['entity_type'] == 'user') {
+      if ($account = user_load($results[$rkey]['fields']['entity_id'])) {
+        $user_view = user_view($account, 'search_results');
+        $results[$rkey]['snippet'] = drupal_render($user_view);
+      }
+    }
+  }
+}

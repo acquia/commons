@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * Disable summary on Document nodes.
+ */
+function commons_documents_update_7000() {
+    $revert = array(
+      'commons_documents' => array('field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/**
+ * Disable default frontpage promotion of Document nodes.
+ */
+function commons_documents_update_7001() {
+    $revert = array(
+      'commons_documents' => array('variable'),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/**
+ * Remove unused view displays.
+ */
+function commons_documents_update_7002() {
+    $revert = array(
+      'commons_documents' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}

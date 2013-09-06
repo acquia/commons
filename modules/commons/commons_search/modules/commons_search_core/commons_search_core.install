@@ -1,0 +1,39 @@
+<?php
+/**
+ * Installation file for Commons Search Core feature.
+ */
+
+/**
+ * Implements hook_enable().
+ */
+function commons_search_core_enable() {
+  // Disable Solr search module upon enabling this module.
+  if (module_exists('commons_search_solr')) {
+    module_disable(array('commons_search_solr', 'apachesolr_search', 'apachesolr', 'apachesolr_user', 'commons_events_solr', 'commons_search_solr_user'), FALSE);
+  }
+  // Set active search modules to be only Faceted Navigation and User.
+  variable_set('search_active_modules', array(
+    'search_facetapi' => 'search_facetapi',
+    'user' => 'user',
+    'node' => 0,
+  ));
+  // Set custom search active search modules.
+  variable_set('custom_search_other', array(
+    'search_facetapi' => 'search_facetapi',
+    'user' => 'user',
+  ));
+  // Set default search module for Core.
+  variable_set('search_default_module', 'search_facetapi');
+  cache_clear_all('*', 'cache_block', TRUE);
+}
+
+/**
+ * Revert the core search page to have a single column variant when no search
+ * has happened and the normal two column variant when a search has happened.
+ */
+function commons_search_core_update_7001() {
+  $revert = array(
+    'commons_search_core' => array('page_manager_handlers'),
+  );
+  features_revert($revert);
+}

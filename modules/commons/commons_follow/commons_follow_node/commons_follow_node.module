@@ -1,0 +1,86 @@
+<?php
+/**
+ * @file
+ * Code for the Commons Follow (Individual nodes) feature.
+ */
+
+include_once 'commons_follow_node.features.inc';
+
+/**
+ * Implements hook_commons_follow_get_nids().
+ */
+function commons_follow_node_commons_follow_get_nids($account, $options) {
+  // Get all flaggings from flags that belong to Message-subscribe, that
+  // reference the node entity-type.
+
+  // Get subscribe flag IDs.
+  $flag_ids = commons_follow_get_subscription_flags_ids('node');
+  if (empty($flag_ids)) {
+    return array();
+  }
+
+  $query = db_select('flag_content', 'f');
+
+  if (!empty($options['range'])) {
+    $query->range(0, $options['range']);
+  }
+
+  $result = $query
+    ->condition('fid', $flag_ids, 'IN')
+    ->condition('uid', $account->uid, '=')
+    ->condition('content_type', 'node', '=')
+    ->fields('f',array('content_id'))
+    ->execute()
+    ->fetchAll();
+  $nids = array();
+  foreach($result as $row) {
+    $nids[] = (integer) $row->content_id;
+  }
+
+  return $nids;
+}
+
+/**
+* Implements hook_commons_follow_get_message_ids().
+*/
+function commons_follow_node_commons_follow_get_message_ids(&$followed_mids, $followed_content = array()) {
+  // Generate a list of message IDs where the target nodes are followed by
+  // the current user.
+  $result = db_query("SELECT m.mid AS mid FROM {message} m INNER JOIN {field_data_field_target_nodes} tn ON m.mid=tn.entity_id WHERE tn.field_target_nodes_target_id IN (:nids)", array(':nids' => array_values($followed_content['commons_follow_node'])));
+  foreach ($result as $this_result) {
+    $followed_mids[] = $this_result->mid;
+  }
+}
+
+/**
+ * Implements hook_node_insert().
+ */
+function commons_follow_node_node_insert($node) {
+  // The owner of the content automatically follows the content
+  commons_follow_node_follow_node($node->nid, $node->type, $node->uid);
+}
+
+/**
+ * Implements hook_comment_insert().
+ */
+function commons_follow_node_comment_insert($comment) {
+  // The user who comment a node automatically follows that content
+  $content_type = str_replace('comment_node_', '', $comment->node_type);
+  commons_follow_node_follow_node($comment->nid, $content_type, $comment->uid);
+}
+
+/**
+ * Let a user to follow a node.
+ *
+ * @see commons_follow_node_comment_insert
+ * @see commons_follow_node_node_insert
+ */
+function commons_follow_node_follow_node($nid, $content_type, $user_id = NULL) {
+  $flag = flag_get_flag('commons_follow_node');
+
+  // Check if this content type use the "Individual nodes" flag
+  if (in_array($content_type, $flag->types)) {
+    $account = isset($user_id) ? user_load($user_id) : NULL;
+    $flag->flag('flag', $nid, $account);
+  }
+}

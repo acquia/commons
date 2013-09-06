@@ -1,0 +1,203 @@
+<?php
+
+/**
+ * Implements hook_install().
+ * Creates a default datetime format for events.
+ */
+function commons_events_install() {
+  db_insert('date_formats')
+    ->fields(array(
+      'format' => 'M d Y, g:ia T',
+      'type' => 'event_datetime',
+      'locked' => 1,
+    ))
+    ->execute();
+
+  db_insert('date_format_type')
+    ->fields(array(
+      'type' => 'event_datetime',
+      'title' => 'Event Datetime',
+      'locked' => 0,
+    ))
+    ->execute();
+
+  variable_set('date_format_event_datetime', 'M d Y, g:ia T');
+}
+
+/**
+ * Disable summary on Event nodes.
+ */
+function commons_events_update_7000() {
+  $revert = array(
+    'commons_events' => array('field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/**
+ * Switch attendee view and event logo to use 50x50 image style.
+ */
+function commons_events_update_7001() {
+  $revert = array(
+    'commons_events' => array('views', 'node'),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/**
+ * Add the Organizers entity reference field to Events and update existing nodes
+ * with the event's creator as the default value.
+ */
+function commons_events_update_7002() {
+  // Revert node and views to use default implementations. This resets field
+  // weights to configuration due to new Organizers field.
+  $revert = array(
+    'commons_events' => array('node'),
+  );
+  features_revert($revert);
+  if (field_info_field('field_organizers') == NULL) {
+    // Create the field so we can update the default values for existing events.
+    module_load_include('inc', 'commons_events', 'commons_events.features.field_base');
+    $fields = commons_events_field_default_field_bases();
+    field_create_field($fields['field_organizers']);
+  }
+  if (field_info_instance('node', 'field_organizers', 'event') == NULL) {
+    // Create the instance on Events.
+    module_load_include('inc', 'commons_events', 'commons_events.features.field_instance');
+    $instances = commons_events_field_default_field_instances();
+    field_create_instance($instances['node-event-field_organizers']);
+  }
+  // Now update all existing Events to have the creator as the default organizer.
+  $events = new EntityFieldQuery();
+  $events->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'event');
+  $events = $events->execute();
+  $events = entity_load('node', array_keys($events['node']));
+  foreach($events as $nid => $event) {
+    if (!property_exists($event, 'field_organizers') || empty($event->field_organizers)) {
+      $event->field_organizers = array(
+        $event->language => array(
+          0 => array(
+            'target_id' => $event->uid
+          )
+        ),
+      );
+      node_save($event);
+    }
+  }
+  return array();
+}
+
+/**
+ * Change event teaser display to show logo, date, and address.
+ */
+function commons_events_update_7003() {
+  $revert = array(
+    'commons_events' => array('field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/**
+ * Create the event_datetime date format.
+ */
+function commons_events_update_7004() {
+  db_insert('date_formats')
+    ->fields(array(
+      'format' => 'M d Y - g:ia T',
+      'type' => 'event_datetime',
+      'locked' => 1,
+    ))
+    ->execute();
+
+  db_insert('date_format_type')
+    ->fields(array(
+      'type' => 'event_datetime',
+      'title' => 'Event Datetime',
+      'locked' => 0,
+    ))
+    ->execute();
+
+  variable_set('date_format_event_datetime', 'M d Y - g:ia T');
+
+  // Revert commons_events to make sure its referencing the event_datetime module.
+  $revert = array(
+    'commons_events' => array('field_instance'),
+    'commons_events' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/**
+ * Set event nodes to use site default country set during install as default.
+ */
+function commons_events_update_7005() {
+  $revert = array(
+    'commons_events' => array('field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/**
+ * Upcoming events view pane exposed sort should redirect to the view pane and
+ * not the feed.
+ */
+function commons_events_update_7006() {
+  $revert = array(
+    'commons_events' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/**
+ * Change event displays to abbreviate state names.
+ */
+function commons_events_update_7007() {
+  $revert = array(
+    'commons_events' => array('field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/*
+ * Alter the event display formatter, it should be a ',' and not '-'
+ */
+/**
+ * Create the event_datetime date format.
+ */
+function commons_events_update_7008() {
+  db_update('date_formats')
+    ->fields(array(
+      'format' => 'M d Y, g:ia T',
+      'type' => 'event_datetime',
+      'locked' => 1,
+    ))
+    ->condition('format', 'M d Y - g:ia T', '=')
+    ->condition('type', 'event_datetime', '=')
+    ->execute();
+
+  variable_set('date_format_event_datetime', 'M d Y, g:ia T');
+
+  // Revert commons_events to make sure its referencing the event_datetime module.
+  $revert = array(
+    'commons_events' => array('field_instance'),
+    'commons_events' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/**
+ * Need to force update so that Drupal sees the new hook_forms implementation.
+ */
+function commons_events_update_7009() {
+  cache_clear_all('module_implements', 'cache_bootstrap');
+  return array();
+}

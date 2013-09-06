@@ -1,0 +1,75 @@
+<?php
+/**
+ * @file
+ * Code for the Commons Follow (Taxonomy terms) feature.
+ */
+
+include_once 'commons_follow_term.features.inc';
+
+/**
+ * Implements hook_commons_follow_get_nids().
+ */
+function commons_follow_term_commons_follow_get_nids($account, $options) {
+  // Get all flaggings from flags that belong to Message-subscribe, that
+  // reference the taxonomy-term entity-type.
+  $flag_ids = commons_follow_get_subscription_flags_ids('taxonomy_term');
+
+  if (empty($flag_ids)) {
+    return array();
+  }
+
+  // Get user's flagged terms.
+  $query = db_select('flag_content', 'f');
+  $result = $query
+    ->condition('fid', $flag_ids, 'IN')
+    ->condition('uid', $account->uid, '=')
+    ->condition('content_type', 'taxonomy_term', '=')
+    ->fields('f',array('content_id'))
+    ->execute()
+    ->fetchAll();
+
+  if (empty($result)) {
+    // No term flags.
+    return array();
+  }
+
+  $tids = array();
+  foreach($result as $row) {
+    $tids[] = (integer) $row->content_id;
+  }
+
+  // Get IDs of nodes tagged by the specified terms.
+  $query = db_select('taxonomy_index', 't');
+
+  if (!empty($options['range'])) {
+    $query->range(0, $options['range']);
+  }
+
+  $result = $query
+    ->addTag('node_access')
+    ->condition('tid', $tids, 'IN')
+    ->fields('t',array('nid'))
+    ->groupBy('nid')
+    ->execute()
+    ->fetchAll();
+
+  // Return the node IDs.
+  $nids = array();
+  foreach($result as $row) {
+    $nids[] = (integer) $row->nid;
+  }
+
+  return $nids;
+}
+
+/**
+* Implements hook_commons_follow_get_message_ids().
+*/
+function commons_follow_term_commons_follow_get_message_ids(&$followed_mids, $followed_content = array()) {
+  // Generate a list of message IDs where the target nodes are followed by
+  // the current user.
+  $result = db_query("SELECT m.mid AS mid FROM {message} m INNER JOIN {field_data_field_target_nodes} tn ON m.mid=tn.entity_id INNER JOIN {field_data_field_topics} ft ON ft.entity_id=tn.field_target_nodes_target_id WHERE ft.field_topics_tid IN (:tids) AND tn.entity_type = 'node'", array(':tids' => array_values($followed_content['commons_follow_term'])));
+  foreach ($result as $this_result) {
+    $followed_mids[] = $this_result->mid;
+  }
+}

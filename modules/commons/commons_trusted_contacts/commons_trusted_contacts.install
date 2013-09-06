@@ -1,0 +1,51 @@
+<?php
+
+/**
+ * Implements hook_requirements().
+ *
+ * After install, make sure that all users are set as group.
+ */
+function commons_trusted_contacts_requirements($phase) {
+  $requirements = array();
+
+  if ($phase == 'runtime') {
+
+    // Check if there are users needed to be set as group.
+    $query = new EntityFieldQuery;
+    $count = $query->entityCondition('entity_type', 'user')
+      // Ignore the anonymous user.
+      ->propertyCondition('uid', 0, '<>')
+      ->count()
+      ->execute();
+
+    // Check if there are more users than "group" users.
+    if ($count > count(og_get_all_group('user'))) {
+      $requirements['commons_trusted_contacts_users_updated']['title'] = t('Trusted contacts');
+      $requirements['commons_trusted_contacts_users_updated']['severity'] = REQUIREMENT_ERROR;
+      $requirements['commons_trusted_contacts_users_updated']['description'] = t('Some users need an update. !link.', array('!link' => l(t('Upgrade users'), 'admin/people/trusted-contacts-upgrade')));
+      $requirements['commons_trusted_contacts_users_updated']['value'] = t('Users upgrade needed');
+    }
+  }
+
+  return $requirements;
+}
+
+
+/**
+ * Implements hook_install().
+ */
+function commons_trusted_contacts_install() {
+  // Do not inform the user about new messages on login.
+  variable_set('privatemsg_display_loginmessage', FALSE);
+}
+
+/**
+ * Use absolute URLs for pending invitation emails.
+ */
+function commons_trusted_contacts_update_3100() {
+  $revert = array(
+    'commons_trusted_contacts' => array('message_type'),
+  );
+  features_revert($revert);
+  return array();
+}

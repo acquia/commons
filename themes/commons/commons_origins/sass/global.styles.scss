@@ -1,0 +1,4647 @@
+
+// _base.scss imports _custom.scss (variables and mixins) and other partials.
+@import "base";
+
+/**
+ * @file
+ * global.styles
+ *
+ * Styles you add here will load for all device sizes, they are "global", as
+ * opposed to "responsive" styles, which only load for a given breakpoint (media
+ * query) that you set in theme settings. See the README for more details.
+ *
+ *
+ * How to use this file:
+ * --------------------
+ *
+ * There are many empty selectors and some basic styles to act as a guide.
+ * Nothing is set in stone and you can change anything - even delete all of it
+ * and start with your own clean slate.
+ *
+ * To FORCE PRINT all selectors you can search and replace a single { (opening
+ * curly brace) and insert an empty comment. This is very useful in conjuction
+ * with FireSass: https://addons.mozilla.org/en-US/firefox/addon/firesass-for-firebug/
+ *
+ * See global.base also which includes normalize.css and some additional
+ * helper classes and base styles.
+ */
+
+/* =============================================================================
+ *   Base
+ * ========================================================================== */
+
+/**
+ * To preserve theme settings never apply font properties to the HTML element.
+ * This is critically important if you are using the Responsive JavaScript
+ * feature as this relies on being able to set a pseudo font family on the HTML
+ * element. If you need to set default font properties of any kind use the BODY
+ * element as these can be overridden using font theme settings.
+ */
+
+html {
+  background: $page;
+  font-size: 87.5%;
+  min-height: 100%;
+
+  .cke_editable {
+    @include box-sizing(border-box);
+    padding: 1em;
+    background: $white;
+    min-height: 200px;
+  }
+}
+
+body {
+  font-family: $base-font; // Set from _custom.scss font variables
+  color: $dark_gray;
+  min-width: 18em;
+}
+
+/* =============================================================================
+ *   HTML Elements
+ * ========================================================================== */
+
+h1 {
+  font-size: 30px;
+  line-height: 30px;
+  font-weight: normal;
+  color: $white;
+
+  a {
+    color: $white;
+
+    :hover {
+      text-decoration: none;
+    }
+  }
+
+  .site-name-long & {
+    font-size: 20px;
+    line-height: 25px;
+  }
+
+  .site-name-long-2-lines & {
+    font-size: 20px;
+    line-height: 25px;
+  }
+}
+
+h2 {
+  color: $dark_blue;
+  font-weight: lighter;
+  font-size: 3.8em;
+  font-family: $alt-font;
+}
+
+h3 {
+  color: $light_blue;
+  font-weight: normal;
+  font-size: 1.4em;
+
+  .sidebar & {
+    color: $gray;
+  }
+}
+
+pre,
+code,
+tt,
+samp,
+kbd,
+var {
+  font-family: $mono;
+}
+
+/* =============================================================================
+ *   Wrappers
+ * ========================================================================== */
+
+/**
+ * Page wrapper, includes the .container class which sets the overall page or section width
+ * Main wrapper in page.tpl.php, the .container class sets the width of the page, do not add width to it!
+ */
+
+/**
+ * Wraps all header elements - branding and .region-header
+ */
+
+.header-wrapper {
+  overflow: hidden;
+}
+
+#header {
+  position: relative;
+  @include box-sizing(border-box);
+  color: $white;
+  text-align: left;
+  padding-right: $gutter_width;
+  padding-left: $gutter_width;
+  white-space: nowrap;
+
+  a {
+    color: $white;
+  }
+
+  @include respond(small-medium) {
+    padding: 0;
+  }
+}
+
+.header-color-row-one {
+  border-top: 1.5em solid darken($dark_blue, 50%);
+  background-color: $dark_blue;
+  @include box-shadow($dark_blue 0px -1px 0px);
+
+  @include respond(large) {
+    border-top: none;
+  }
+}
+
+.header-color-row-two {
+  position: relative;
+  background-color: $light_blue;
+  min-height: 2.5em;
+  border-top: 1px solid lighten($light_blue, 10%);
+  border-bottom: 1px solid darken($light_blue, 10%);
+  z-index: 2;
+}
+
+/**
+ * Wraps the sidebars the content column
+ */
+
+#columns {
+  margin-right: $gutter-width;
+  margin-left: $gutter-width;
+}
+
+/**
+ * Footer wrapper
+ */
+
+#footer {
+  border-top: 1px solid $border;
+  @include box-shadow(inset 0 1px 0 $white);
+  margin: 0 $gutter-width;
+}
+
+/**
+ * Default credit block
+ */
+
+#block-block-1 {
+  .block-title,
+  .block-content {
+    color: $light_gray;
+  }
+
+  .block-title {
+    margin: $gutter-width 0 $gutter-width / 2;
+  }
+
+  .block-content {
+    font-size: .88em;
+  }
+
+  #footer & {
+    margin-bottom: 0;
+  }
+}
+
+/**
+ * Generic pod wrappers
+ */
+
+ .commons-pod {
+  @extend %pod;
+  @extend %pod-content;
+
+  /* Prevent pod nesting. */
+  .commons-pod {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    @include box-shadow(none);
+  }
+}
+
+/* =============================================================================
+ *   Branding
+ * ========================================================================== */
+
+/**
+ * Wraps all the branding elements, logo, name and slogan
+ */
+
+#branding {
+  float: left;
+  @include box-sizing(border-box);
+  width: 100%;
+  padding-left: px-to-em(57px + $gutter_width);
+  text-align: left;
+  margin-right: -36.5em;
+
+  @include respond(only-small) {
+    margin-right: -11.5em;
+  }
+
+  @include respond(only-medium) {
+    margin-right: -19.5em;
+  }
+
+  .people-search-active & {
+    margin-right: -42em;
+
+    @include respond(only-small) {
+      margin-right: -14em;
+    }
+
+    @include respond(only-medium) {
+      margin-right: -24em;
+    }
+  }
+}
+
+/**
+ * Logo
+ */
+
+#logo {
+  position: relative;
+  display: block;
+  float: left;
+  position: relative;
+  margin-bottom: -3em;
+  margin-left: -#{px-to-em(57px + $gutter_width)};
+  z-index: 3;
+}
+
+/**
+ * Wrapper for the site name and slogan (hgroup)
+ */
+
+#name-and-slogan {
+  display: block;
+  @include box-sizing(border-box);
+  width: 100%;
+  vertical-align: top;
+  min-height: 4em;
+  padding-right: 36.5em;
+
+  @include respond(only-small) {
+    padding-right: 11.5em;
+  }
+
+  @include respond(only-medium) {
+    padding-right: 19.5em;
+  }
+
+  @include respond(only-small) {
+    display: none;
+  }
+
+  .people-search-active & {
+    padding-right: 42em;
+
+    @include respond(only-medium) {
+      padding-right: 24em;
+    }
+  }
+}
+
+/**
+ * Site name (h1)
+ */
+
+#site-name {
+  margin: .3em 0 0;
+  font-family:'Trebuchet MS';
+  font-weight:700;
+
+  a {
+    &:link,
+    &:visited {
+      text-decoration: none;
+    }
+
+    &:hover,
+    &:focus {
+      text-decoration: none;
+    }
+  }
+
+  @include respond(medium) {
+    font-size: 1.4em;
+  }
+}
+
+/**
+ * Site slogan (h2)
+ */
+
+#site-slogan {
+  margin: 0 0 .3em;
+  font-size: 1em;
+  color: $white;
+}
+
+#site-name,
+#site-slogan {
+  display: block;
+  overflow: hidden;
+  padding-right: $gutter_width;
+  line-height: 1.2em;
+  white-space: normal;
+}
+
+/* =============================================================================
+ *   Page content header
+ * ========================================================================== */
+
+/**
+ * The main page title (h1)
+ */
+
+#page-title,
+.search-results-title {
+  margin: 0 0 .2em;
+  font-weight:300;
+  font-size: 3.85em;
+  line-height: 1.2em;
+}
+
+.page-messages-view,
+.page-flag-confirm {
+  #page-title {
+    /* Some pages require a smaller title to prevent the equivalent of
+       "yelling". */
+    font-size: 2.5em;
+  }
+}
+
+#page-top {
+  margin: 20px 0 0;
+}
+
+/* =============================================================================
+ *   Misc Global Styles
+ * ========================================================================== */
+
+/**
+ * Generic styles for nodes.
+ */
+
+.node {
+  &.node-event,
+  &.node-poll,
+  &.node-question {
+    @extend %node-space-right;
+  }
+}
+
+.node-actions {
+  @include box-sizing(border-box);
+  float: right;
+  width: 10em;
+  list-style: none;
+  margin: .5em -10em 0 0;
+  padding-left: 1em;
+  text-align: center;
+
+  [class*="action-item"] {
+    &,
+    &[type="submit"] {
+      margin: 0;
+    }
+  }
+
+  @include respond(small-medium) {
+    float: none;
+    width: auto;
+    margin: 1.7em 0;
+    text-align: left;
+  }
+}
+
+.node-teaser {
+  &.node-promoted {
+    background-image: image-url('node-promoted-star.png');
+    background-position: top right;
+    background-repeat: no-repeat;
+    background-color: darken($white, 3%);
+    border: none;
+    padding: 10px;
+    position: relative;
+    @include border-radius(3px);
+
+    &.user-picture-available {
+      @include place-picture(50px, 10px);
+    }
+
+    &.node-event,
+    &.node-poll,
+    &.node-question {
+      @extend %node-space-right;
+    }
+  }
+}
+
+.user-picture,
+.views-field-picture {
+  background:$white;
+  display: inline-block;
+  padding:4px;
+  @include border-radius(3px);
+  @include box-shadow($light_gray 1px 1px 4px);
+  line-height: 0;
+
+  .node &,
+  .comment &,
+  .privatemsg-message & {
+    &:after {
+      content: "";
+      width: 5px;
+      height: 8px;
+      position: absolute;
+      right: -5px;
+      top: 10px;
+      background: image-url('user_img_arrow.png');
+    }
+
+    img {
+      width: 50px;
+    }
+  }
+}
+
+/**
+ * Form styles
+ *
+ * These styles are extracted from the Formalize library by Nathan Smith. The
+ * specific support for IE below 8 is trimmed along with references to font
+ * families and the extra buttons styles.
+ */
+
+input,
+button,
+select,
+textarea,
+[class*=" action-item"] {
+  // Suppress red glow that Firefox
+  // adds to form fields by default.
+  &:invalid {
+    @include box-shadow(none);
+  }
+  // Add blue glow.
+  &:focus {
+    @include box-shadow(#0066ff 0 0 5px 0);
+    // for Opera
+    z-index: 1;
+  }
+}
+
+label {
+  margin-top: .5em;
+  margin-bottom: .5em;
+}
+
+input[type="file"],
+input[type="radio"],
+input[type="checkbox"] {
+  &:focus,
+  &:active {
+    @include box-shadow(none);
+  }
+}
+
+textarea,
+select,
+input[type="date"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="email"],
+input[type="month"],
+input[type="number"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="text"],
+input[type="time"],
+input[type="url"],
+input[type="week"] {
+  @include box-sizing(border-box);
+  @include background-clip(padding-box);
+  @include border-radius(2px);
+  -webkit-appearance: none;
+  background-color: white;
+  border: 1px solid $border;
+  color: black;
+  outline: 0;
+  margin: 0;
+  padding: .5em;
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.2em;
+
+  &[disabled] {
+    background-color: #eeeeee;
+  }
+}
+
+input,
+textarea {
+  &::-webkit-input-placeholder {
+    color: #888888;
+  }
+}
+
+input,
+textarea {
+  &:-moz-placeholder {
+    color: #888888;
+  }
+}
+
+textarea,
+input[type="date"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="email"],
+input[type="month"],
+input[type="number"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="text"],
+input[type="time"],
+input[type="url"],
+input[type="week"] {
+  width: 100%;
+  max-width: 100%;
+}
+
+textarea,
+select[size],
+select[multiple] {
+  height: auto;
+}
+
+// Tweaks for Safari + Chrome.
+@media (-webkit-min-device-pixel-ratio: 0) {
+  select[size],
+  select[multiple],
+  select[multiple][size] {
+    background-image: none;
+    padding-right: 3px;
+  }
+
+  select,
+  select[size="0"],
+  select[size="1"] {
+    @include border-radius(3px);
+    // Base64 encoded "../images/select_arrow.gif"
+    background-image: url(data:image/png;base64,R0lGODlhDQAEAIAAAAAAAP8A/yH5BAEHAAEALAAAAAANAAQAAAILhA+hG5jMDpxvhgIAOw==);
+    background-repeat: no-repeat;
+    background-position: right center;
+    padding-right: 20px;
+  }
+  ::-webkit-validation-bubble-message {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #666666), color-stop(1, black));
+    border: 1px solid;
+    border-color: #747474 #5e5e5e #4f4f4f;
+    color: white;
+    overflow: hidden;
+    padding: 15px 15px 17px;
+    text-shadow: black 0 0 1px;
+    height: 16px;
+  }
+  ::-webkit-validation-bubble-arrow,
+  ::-webkit-validation-bubble-top-outer-arrow,
+  ::-webkit-validation-bubble-top-inner-arrow {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    background: #666666;
+    border: 0;
+  }
+}
+
+textarea {
+  overflow: auto;
+  resize: vertical;
+  width: 100%;
+}
+
+optgroup {
+  color: black;
+  font-style: normal;
+  font-weight: normal;
+
+  &::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+  }
+}
+
+/* Simulate a chosen select form value as inline text. */
+.hidden-select-wrapper {
+  position: relative;
+  display: inline-block;
+  @include single-transition(width, .2s);
+}
+
+.select-status {
+  display: inline-block;
+  white-space: nowrap;
+  @include single-transition(opacity, .2s);
+
+  &:after {
+    content: "";
+    position: relative;
+    top: .2em;
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: .2em;
+    border: .4em solid transparent;
+    border-top-color: $light_blue;
+  }
+}
+
+.hidden-select {
+  position: absolute;
+  top: -.35em;
+  left: -.35em;
+  margin: 0;
+  @include opacity(0);
+
+  .select-inactive & {
+    width: 100%;
+  }
+}
+
+/* Replace the default Drupal throbber with a custom one. */
+html.js {
+  input.form-autocomplete {
+    background-image: none;
+    background-position: right center;
+    padding-right: 20px;
+
+    &.throbbing {
+      background-image: image-url("commons-throbber.gif");
+      background-position: right center;
+    }
+  }
+}
+
+.general-settings {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.fieldset-outer-wrapper {
+  margin: 1.7em 0;
+  padding: 1.7em 0;
+  border-top: 1px solid $border;
+  border-color: $border;
+  border-style: solid;
+  border-width: 1px 0;
+
+  + .fieldset-outer-wrapper {
+    border-top-width: 0;
+  }
+
+  .general-settings & {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: $gutter-width;
+    padding-right: $gutter-width;
+  }
+
+  .general-settings > & {
+    margin-left: -$gutter-width;
+    margin-right: -$gutter-width;
+
+    &:first-child {
+      border-top: none;
+    }
+
+    &:last-child {
+      border-bottom-width: 0;
+    }
+  }
+
+  /* Some form items have nested fieldsets that mess with the sibling
+     selectors and need some extra love. */
+  .field-name-og-group-ref & {
+    border-top: none;
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  .field-name-og-group-ref &,
+  .field-type-datetime-form & {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+}
+
+fieldset {
+  border: none;
+  margin: 0;
+  padding: .01em 0;
+  @include box-sizing(border-box);
+}
+
+legend {
+  -webkit-padding-start: 0;
+  -webkit-padding-end: 0;
+  line-height: 1.2em;
+
+  // Keep legends from hopping around in Safari.
+  + .fieldset-wrapper {
+    -webkit-margin-top-collapse : separate;
+    margin-top: 1.2em;
+  }
+}
+
+.fieldset-legend {
+  display: block;
+  font-size: 1.2em;
+  line-height: 1.2em;
+  font-weight: light;
+
+  html.js fieldset.collapsed &,
+  html.js fieldset.collapsible & {
+    padding: 0;
+    background: none;
+  }
+
+  span.summary {
+    display: block;
+    margin: 0;
+    font-size: .76em;
+    font-weight: normal;
+  }
+
+  .collapsible > legend & {
+    display: block;
+    text-indent: -.5em;
+    margin-left: .6em;
+
+    span.summary {
+      margin-left: .7em;
+    }
+
+    a:before {
+      display: inline-block;
+      position: relative;
+      margin-right: .2em;
+      width: 0;
+      height: 0;
+      overflow: hidden;
+      border: .2em solid transparent;
+      border-top-color: $dark_gray;
+      content: "";
+      top: -.1em;
+      left: -.1em;
+    }
+  }
+
+  .collapsed > legend & {
+    a:before {
+      border-top-color: transparent;
+      border-left-color: $dark_gray;
+      top: -.2em;
+      left: auto;
+    }
+  }
+}
+
+.form-item {
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.filter-wrapper {
+  margin: 0;
+  padding: 0;
+}
+
+/**
+ * Button styles
+ */
+
+// Generate the invisible classes that we will extend.
+@include buttons;
+
+button,
+[type="reset"],
+[type="submit"],
+[type="button"],
+[class*="action-item"] {
+  @extend %button-default-layout;
+  @extend %button-default;
+  max-width: 100%;
+
+  &:not(.action-item-inline, .action-item-merge) {
+    @include respond(only-small) {
+      display: block;
+      width: 100%;
+      margin: .5em 0;
+    }
+  }
+}
+
+[class*="action-item-small"] {
+  @extend %button-small-layout;
+}
+
+[class*="action-item-large"] {
+  @extend %button-large-layout;
+}
+
+.action-item-active,
+.action-item-small-active,
+.action-item-large-active {
+  &,
+  &[type="reset"],
+  &[type="submit"],
+  &[type="button"] {
+    @extend %button-active;
+  }
+}
+
+.action-item-primary,
+.action-item-small-primary,
+.action-item-large-primary {
+  &,
+  &[type="reset"],
+  &[type="submit"],
+  &[type="button"] {
+    @extend %button-primary;
+  }
+}
+
+.action-item-primary-active,
+.action-item-small-primary-active,
+.action-item-large-primary-active {
+  &,
+  &[type="reset"],
+  &[type="submit"],
+  &[type="button"] {
+    @extend %button-primary-active;
+  }
+}
+
+.action-item-merge, {
+  .action-item-merge + & {
+    @include border-top-left-radius(0);
+    @include border-bottom-left-radius(0);
+    margin-left: -.5em;
+  }
+}
+
+.action-item-append,
+.action-item-small-append,
+.action-item-large-append {
+  position: relative;
+  padding-right: .5em;
+  padding-left: .5em;
+
+  &,
+  &:active,
+  &:focus,
+  &:hover {
+    background: $border;
+    border-color: $light_gray;
+    color: $dark_gray;
+    cursor: default;
+    @include text-shadow(none);
+  }
+
+  &:before,
+  &:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 50%;
+    border-color: transparent;
+    border-style: solid;
+  }
+
+  &:before {
+    left: -10px;
+    margin-top: -5px;
+    border-width: 5px;
+    border-right-color: $light_gray;
+  }
+
+  &:after {
+    left: -8px;
+    margin-top: -4px;
+    border-width: 4px;
+    border-right-color: $border;
+  }
+}
+
+/* Reset some styles for the admin toolbar. */
+.drupal-navbar {
+  .icon.handle {
+    margin: 0;
+    padding: 0;
+
+    &:hover {
+      background: none;
+    }
+  }
+}
+
+/* Make the disabled buttons subdued. */
+[disabled] {
+  &,
+  & option,
+  & optgroup {
+    @include opacity(.6);
+    -moz-user-select: -moz-none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+    cursor: normal;
+  }
+}
+
+/**
+ * Specialty buttons
+ */
+
+/* Like widget */
+.rate-widget-commons_like {
+  white-space: nowrap;
+}
+
+.rate-commons-like-btn {
+  &:before {
+    @include sprite_url_height_width($icons, like);
+    content: "";
+    margin-top: -2px;
+    margin-bottom: -2px;
+  }
+}
+
+/* Follow buttons */
+[class*="flag-commons-follow-"] {
+  .flag-action {
+    white-space: nowrap;
+
+    &:before {
+      content: "";
+      @include sprite_url_height_width($icons, follow-large);
+    }
+  }
+
+  .unflag-action {
+    @extend %button-active;
+  }
+
+  .flag-throbber {
+    display: none;
+  }
+
+  .flag-message {
+    display: none !important;
+  }
+}
+
+/* Report as inappropriate */
+.flag-inappropriate-node,
+.flag-inappropriate-comment, {
+  .flag-action {
+    &:before {
+      content: "";
+      @include sprite_url_height_width($icons, spam);
+    }
+  }
+}
+
+/* ShareThis */
+.sharethis-buttons {
+  position: relative;
+
+  &:before {
+    content: "";
+    @include sprite_url_height_width($icons, share);
+  }
+}
+
+.sharethis-wrapper {
+  position: absolute;
+  left: 0;
+  bottom: 100%;
+  display: none;
+  white-space: nowrap;
+  background: $white;
+  border: 1px solid $green;
+  @include border-radius(6px);
+  padding: 10px 8px 3px 8px;
+  margin-bottom: 10px;
+
+  &:before,
+  &:after {
+    content: "";
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-color: transparent;
+    position: absolute;
+    top: 100%;
+  }
+
+  &:before {
+    border-width: 6px 6px 0 6px;
+    border-top-color: $green;
+    left: 10px;
+  }
+
+  &:after {
+    border-width: 5.5px 5.5px 0 5.5px;
+    border-top-color: $white;
+    left: 11px;
+  }
+
+  .sharethis-buttons:hover & {
+    display: block;
+  }
+}
+
+/* Comments */
+.comment-comments {
+  white-space: nowrap;
+
+  .action-item-small {
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+
+    &:before {
+      content: "";
+      @include sprite_url_height_width($icons, comments-dark);
+    }
+  }
+
+  .action-item-small-append {
+    margin: -1px -1px -1px 1em;
+    font-size: 1em;
+    // min-height: 1.8em;
+    @include border-top-left-radius(0);
+    @include border-bottom-left-radius(0);
+  }
+}
+
+/* Drupal specific field styling. */
+.field-label-inline {
+  margin: 1.7em 0;
+
+  .field-label,
+  .field-items,
+  .field-item {
+    display: inline;
+    float: none;
+  }
+
+  .field-item {
+    margin: 0 .1em;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &:after {
+      content: ", ";
+    }
+
+    &:last-child {
+      &:after {
+        content: "";
+      }
+    }
+  }
+
+  .field-label {
+    font-weight: bold;
+    color: $dark_gray;
+  }
+}
+
+/**
+ * User avatar
+ */
+
+.user-picture-available {
+  position: relative;
+  @include place-picture;
+}
+
+/**
+ * Filter drawer accessories
+ */
+
+.filter-trigger {
+  display: none;
+  background: white;
+  @include box-sizing(border-box);
+  padding: 5px;
+  position: absolute;
+  top: 0;
+  left: -39px;
+  width: 40px;
+  border: 1px solid $border;
+  border-right: none;
+  @include border-radius(3px 0 0 3px);
+  text-align: center;
+  font: 0/0 a;
+  line-height: 0;
+  color: transparent;
+  @include box-shadow(rgba($dark_gray, .4) -1px 1px 2px);
+  cursor: pointer;
+  z-index: 1;
+
+  &:after {
+    content: "\00ab";
+    display: block;
+    font-size: $base-font-size * 2.4;
+    line-height: .8em;
+    padding-bottom: .15em;
+    color: $dark_blue;
+
+    .expanded & {
+      content: "\00bb";
+    }
+  }
+
+  &.following {
+    position: fixed;
+    right: 0;
+    left: auto;
+  }
+}
+
+.filters-processed {
+  &.expanded {
+    .region-inner {
+      position: relative;
+      border: 1px solid $border;
+      border-right: none;
+      z-index: 0;
+      @include box-shadow(rgba($dark_gray, .4) -1px 1px 2px);
+    }
+  }
+}
+
+.filter-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: none;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: rgba(255, 255, 255, .8);
+}
+
+/**
+ * Aggregator feed source
+ */
+
+#aggregator .feed-source .feed-icon {
+  display: inline;
+  float: none;
+  margin-right: 10px;
+}
+
+.feed-details dt,
+.feed-details dd {
+  display: inline;
+  margin: 0;
+}
+
+/**
+ * Generic styles for the more link
+ */
+
+.more-link {
+  background-image: image-url('icons/icon-more.png');
+  background-repeat: no-repeat;
+  min-height: 14px;
+  padding: 0 0 0 1.7em;
+  float: right;
+  font-size: 0.85em;
+  line-height: 14px;
+  margin-top: 10px;
+
+  a {
+    color:$light_gray;
+  }
+}
+
+/**
+ * Generic styles for links. See the ul.links declaration in node and comment stylesheets
+ */
+
+ul.links {
+  margin: 0;
+  padding: 0;
+
+  &.inline {
+    display: block;
+  }
+
+  li {
+    display: inline-block;
+    list-style: none;
+  }
+}
+
+.quicktabs-style-commons-pills ul.quicktabs-tabs,
+ul.primary.tabs {
+  border-bottom: none;
+  padding: 0;
+
+  li {
+    margin-bottom: 5px;
+    margin-top: 5px;
+
+    a {
+      background-color: $tab_background;
+      @include border-radius(3px);
+      padding: .3em .8em;
+      display: inline-block;
+      border: none;
+
+      &,
+      span {
+        color: $tab_text;
+      }
+
+      &:hover {
+        text-decoration: none;
+        background-color: $tab_background;
+        color: $tab_text_hover;
+      }
+    }
+
+    &.active a {
+      position: relative;
+      background-color: $tab_active_background;
+      border: none;
+
+      &,
+      &:hover {
+        background-color: $tab_active_background;
+      }
+
+      &,
+      span {
+        color: $tab_active_text;
+      }
+
+      &:after {
+        position: absolute;
+        bottom: -.7em;
+        left: 50%;
+        display: block;
+        width: 0;
+        height: 0;
+        overflow: hidden;
+        margin-left: -.6em;
+        content: "";
+        border-width: .4em .6em;
+        border-style: solid;
+        border-color: $tab_active_background transparent transparent;
+      }
+    }
+  }
+}
+
+.quicktabs-style-commons-pills ul.quicktabs-tabs li {
+  text-transform: uppercase;
+  font-size: .8em;
+}
+
+/**
+ * H1 Node title
+ */
+
+h1.node-title {
+  color: $dark_blue;
+  font-size: 20px;
+
+  a {
+    text-decoration: none;
+    color: $dark_blue;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+/**
+ * Main wrapper for most blocks, block_system_main does not have it
+ */
+
+.block {
+  margin-bottom: 20px;
+}
+
+.block-title {
+  font-size: 20px;
+  line-height: 1.2em;
+  margin-top: 0;
+  margin-bottom: .4em;
+  color:$gray;
+}
+
+/**
+ * Match item list and block menu margin and padding
+ */
+
+.block-content {
+  ul,
+  ol {
+    padding: 0 0 0 15px;
+  }
+
+  li {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+/* Views exposed form */
+.views-exposed-form {
+  .views-exposed-widget {
+    float: none;
+    padding: 0;
+    margin: 1.7em 0;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .form-submit {
+      margin-top: 0;
+    }
+  }
+}
+
+.keyword-filter {
+  .views-widget-filter-keys,
+  .views-submit-button {
+    float: left;
+    @include box-sizing(border-box);
+    margin-top: 0;
+  }
+
+  .views-widget-filter-keys {
+    margin-right: -6.5em;
+    margin-bottom: 0;
+    padding-right: 6.75em;
+    width: 100%;
+
+    label {
+      margin-top: 0;
+    }
+
+    @include respond(small-medium) {
+      margin-right: 0;
+      padding-right: 0;
+    }
+  }
+
+  .views-submit-button {
+    padding-top: 2.15em;
+
+    @include respond(small-medium) {
+      margin-top: .5em;
+      padding-top: 0;
+    }
+  }
+}
+
+/* Generic row styles */
+.views-row {
+  border-bottom: 1px solid $border;
+  padding-bottom: .7em;
+  margin-bottom: .7em;
+  position: relative;
+
+  .views-row {
+    margin-top: .4em;
+    margin-bottom: .4em;
+    padding-bottom: 0;
+  }
+
+  & .views-row,
+  &.views-row-last {
+    border-bottom: none;
+  }
+
+  &.views-row-last {
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  .view-plain & {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin: .3em 0;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+/* Apply icons to row row types. */
+[class*="row-type-"] {
+  @include box-sizing(border-box);
+  padding-left: 20px;
+
+  &:before {
+    content: "";
+    float: left;
+    margin-top: .1em;
+    margin-left: -20px;
+  }
+}
+
+.row-type-event {
+  &:before {
+    @include sprite_url_height_width($icons, events);
+  }
+}
+.row-type-page {
+  &:before {
+    @include sprite_url_height_width($icons, docs);
+  }
+}
+
+.row-type-poll {
+  &:before {
+    @include sprite_url_height_width($icons, polls);
+  }
+}
+
+.row-type-post {
+  &:before {
+    @include sprite_url_height_width($icons, posts);
+  }
+}
+
+.row-type-question,
+.row-type-answer {
+  &:before {
+    @include sprite_url_height_width($icons, qa);
+  }
+}
+
+.row-type-wiki {
+  &:before {
+    @include sprite_url_height_width($icons, wikis);
+  }
+}
+
+/* Titles fields */
+.views-field-title {
+  font-weight: 500;
+  line-height: 1.4em;
+}
+
+/* Meta data */
+.views-field-field-date,
+.views-field-timestamp,
+.views-field-field-location,
+.views-field-capacity-used,
+.views-field-comment-count {
+  font-size: 0.88em;
+}
+
+.views-field-timestamp,
+.views-field-field-location,
+.views-field-capacity-used,
+.views-field-comment-count {
+  color: $light_gray;
+
+  strong {
+    color: $dark_gray;
+  }
+}
+
+.views-field-timestamp,
+.views-field-field-location,
+.views-field-capacity-used,
+.views-field-comment-count {
+  display: inline-block;
+  margin-right: .3em;
+}
+
+/* User picture wrapping and shadow */
+.view-commons-homepage-content,
+.view-commons-activity-streams-activity,
+.view-activity-group,
+.view-commons-activity-streams-user-activity {
+  .content,
+  .message,
+  .views-field-timestamp,
+  .views-field-nothing {
+    @include place-picture(40px);
+  }
+}
+
+.view-activity-group,
+.view-commons-activity-streams-activity,
+.view-commons-activity-streams-user-activity {
+  .views-row {
+    h2 {
+      display: none;
+    }
+
+    .user-picture {
+      top: 5px;
+
+      img {
+        width: 40px;
+      }
+    }
+  }
+}
+
+.page-node {
+  .field-label {
+    color: #369;
+  }
+
+  .field-name-field-topics,
+  .field-name-og-group-ref {
+    margin: 0;
+
+    .field-label {
+      display: block;
+    }
+
+    &.view-mode-full {
+      float: left;
+      width: 50%;
+
+      .field-items {
+        margin: 0;
+        list-style: none;
+        padding: 0;
+
+        .field-item {
+          display: inline-block;
+          margin: 0 .3em;
+          padding: 0;
+
+          &:first-child {
+            margin-left: 0;
+          }
+
+          &:last-child {
+            margin-right: 0;
+          }
+
+          &:after {
+            content: "";
+          }
+        }
+      }
+
+      @include respond(only-small) {
+        float: none;
+        width: auto;
+        margin: 1.7em 0;
+      }
+    }
+  }
+
+  .field-name-field-topics {
+    .field-item:before {
+      content: "";
+      @include sprite_url_height_width($icons, tags);
+      top: -1px;
+    }
+  }
+
+  .field-name-og-group-ref {
+    .field-item:before {
+      content: "";
+      @include sprite_url_height_width($icons, groups);
+      top: -1px;
+    }
+  }
+
+  .node nav {
+    clear: both;
+    margin-top: 20px;
+    position:relative;
+  }
+}
+
+#comments {
+  margin: 0;
+
+  .form-item-subject input {
+    width: 100%;
+  }
+
+  .rate-widget-commons_like {
+    position: absolute;
+    right: 5px;
+    top: 15px;
+  }
+}
+
+.comments-title,
+.comment-form-title {
+  margin-top: 0;
+  font-size: 2.2em;
+  line-height: 1.2em;
+  color: $dark_gray;
+}
+
+.comments-title {
+  &:before {
+    content: "";
+    @include sprite_url_height_width($icons, comments-large);
+  }
+}
+
+.comment-form {
+  margin-bottom: 0;
+  &:before {
+    display: none;
+  }
+}
+
+.comment {
+  @include place-picture;
+  border-bottom: 1px solid $lighter_gray;
+  padding-bottom: 20px;
+  position: relative;
+
+  .author-datetime {
+    margin-bottom: 1.4em;
+  }
+}
+
+.comment-title,
+.comment .author-datetime {
+  margin-right: 90px;
+}
+
+.comment-title {
+  margin-bottom: .2em;
+}
+
+.comment-reply {
+  float: right;
+
+  &:before {
+    content: "";
+    @include sprite_url_height_width($icons, comments);
+    margin-right: 8px;
+    top: 3px;
+  }
+}
+
+.comment-form {
+  .form-actions {
+    margin-bottom: 0;
+  }
+}
+
+.primary-fields,
+.supplementary-fields {
+  @include inline-block;
+  @include box-sizing(border-box);
+  float: left;
+
+  .view-commons-question-answers & {
+    display: block;
+    float: none;
+    width: auto;
+    padding: 0;
+  }
+}
+
+.primary-fields {
+  padding-right: $gutter-width;
+  width: 66.666%;
+}
+
+.supplementary-fields {
+  padding-left: $gutter-width;
+  width: 33.333%;
+}
+
+.form-actions {
+  clear: both;
+}
+
+/* Format the date range form items. */
+.start-date-wrapper,
+.end-date-wrapper {
+  clear: none;
+  width: auto;
+  max-width: 49%;
+
+  &,
+  input,
+  .form-item .form-type-textfield,
+  .date-padding,
+  .form-type-textfield {
+    float: none;
+    display: inline-block;
+    min-width: inherit;
+  }
+
+  .form-item {
+    input {
+      margin-right: auto;
+    }
+  }
+
+  .form-type-textfield {
+    max-width: 60%;
+
+    &:last-child {
+      max-width: 30%;
+    }
+  }
+
+  .form-type-date-popup {
+    margin: 0;
+  }
+
+  @include respond(small-medium) {
+    display: block;
+    max-width: inherit;
+    margin: $gutter-width auto;
+  }
+}
+
+.addressfield-container-inline {
+  > div.form-item {
+    display: inline-block;
+    float: none;
+  }
+
+  input[type="text"] {
+    width: auto;
+  }
+
+  &:after {
+    content: "";
+    clear: none;
+    display: none;
+  }
+}
+
+.logo-available {
+  .field-name-field-date,
+  .field-name-field-address,
+  .field-name-field-offsite-url {
+    margin-left: 65px;
+
+    @include respond(only-small) {
+      margin-left: 0;
+    }
+  }
+}
+
+.field-name-field-logo {
+  float: left;
+  width: 70px;
+  margin: .5em 0 0 -70px;
+  position: relative;
+  left: 70px;
+
+  img {
+    display: block;
+    @include box-sizing(border-box);
+    margin-bottom: 1.7em;
+    padding: 4px;
+    @include border-radius(3px);
+    @include box-shadow($light_gray 1px 1px 4px);
+    background: $white;
+  }
+
+  @include respond(only-small) {
+    display: none;
+  }
+}
+
+.field-name-body {
+  margin-top: 1.7em;
+
+  .node-event & {
+    clear: both;
+  }
+}
+
+.field-name-field-date {
+  font-weight: bold;
+}
+
+.adr {
+  .region {
+    &,
+    .node-type-event &,
+    .panel-display .region & {
+      float: none;
+      padding: 0;
+    }
+  }
+}
+
+ul.node-action-links {
+  display: inline-block;
+  margin-top: 1.4em;
+
+  li {
+    padding: 0;
+    vertical-align: baseline;
+  }
+
+  li,
+  a {
+    margin: 0;
+  }
+}
+
+.view-commons-contributors-group {
+  .views-field-picture {
+    margin: 0 0 10px;
+    position: static;
+    line-height:0;
+
+    img {
+      width:40px;
+    }
+  }
+
+  td {
+    padding: 0;
+  }
+
+  tbody tr {
+    background-color: transparent;
+  }
+}
+
+/**
+ * Author/Submit line
+ */
+
+.author-datetime {
+  color:$light_gray;
+  font-size:0.88em;
+}
+
+.node-content-type {
+  color: $dark_gray;
+}
+
+/**
+ * Featured/New Tags
+ */
+
+.tag.featured {
+  width: 58px;
+  height: 22px;
+  display: inline-block;
+  background: {
+    image: image-url('tag-featured.png');
+    repeat: no-repeat;
+  }
+  margin: 6px 0 0 5px;
+}
+
+.tag.new {
+  width: 27px;
+  height: 22px;
+  display: inline-block;
+  background: {
+    image: image-url('tag-new.png');
+    repeat: no-repeat;
+  }
+  margin: 4px 0 0 5px;
+}
+
+/**
+ * User profile
+ */
+
+.page-user {
+  .panel-display {
+    .region-three-33-top {
+      padding-left: 120px + $gutter_width * 3;
+
+      @include respond(only-small) {
+        padding-left: $gutter_width;
+      }
+
+      /* This feels hackish, but it is only for administrating the layout of the
+         page. It is still not ideal as it is inflexible and only works with the
+         current core functionality of commons. */
+      .panels-ipe-portlet-wrapper {
+        &:nth-last-child(-n+5) {
+          display: inline-block;
+        }
+      }
+    }
+  }
+
+  .pane-user-picture {
+    float: left;
+    margin-left: -(120px + $gutter_width * 2);
+
+    .user-picture {
+      background: $white;
+      margin-left: 0;
+      padding: 10px;
+      position: static;
+      @include border-radius(6px);
+      @include box-shadow($light_gray 1px 1px 4px);
+
+      img {
+        display: block;
+      }
+    }
+
+    @include respond(only-small) {
+      float: none;
+      margin-left: 0;
+      text-align: center;
+    }
+  }
+
+  .pane-user-field-facebook-url,
+  .pane-user-field-linkedin-url,
+  .pane-user-field-twitter-url,
+  .pane-user-group-group,
+  .pane-user-flag-commons-follow-user-link {
+    &,
+    a {
+      display: inline-block;
+    }
+  }
+
+  .pane-user-field-facebook-url,
+  .pane-user-field-linkedin-url,
+  .pane-user-field-twitter-url {
+    a {
+      margin-right: 1em;
+
+      &:before {
+        content: "";
+        display: inline-block;
+        vertical-align: middle;
+      }
+    }
+
+    @include respond(only-small) {
+      a {
+        text-indent: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+
+      a {
+        &:before {
+          content: normal;
+        }
+      }
+    }
+
+    @include respond(only-medium) {
+      display: block;
+    }
+  }
+
+  .pane-user-field-facebook-url {
+    a {
+      &:before {
+        @include sprite_url_height_width($icons, facebook);
+      }
+    }
+
+    @include respond(only-small) {
+      a {
+        @include sprite_url_height_width($icons, facebook);
+      }
+    }
+  }
+
+  .pane-user-field-linkedin-url {
+    a {
+      &:before {
+        @include sprite_url_height_width($icons, linkedin);
+      }
+    }
+
+    @include respond(only-small) {
+      a {
+        @include sprite_url_height_width($icons, linkedin);
+      }
+    }
+  }
+
+  .pane-user-field-twitter-url {
+    a {
+      &:before {
+        @include sprite_url_height_width($icons, twitter);
+      }
+    }
+
+    @include respond(only-small) {
+      a {
+        @include sprite_url_height_width($icons, twitter);
+      }
+    }
+  }
+
+  .pane-user-flag-commons-follow-user-link {
+    clear: both;
+  }
+
+  .pane-views-panes {
+    @extend %pod;
+
+    .block-inner {
+      @extend %pod-content;
+    }
+  }
+}
+
+/**
+ * Group nodes
+ */
+
+.pane-node-commons-groups-group-contributors-count-topics {
+  display: inline-block;
+  margin: 0;
+}
+
+.node-group {
+  .field-name-body {
+    margin-top: 1.4em;
+  }
+
+  .pane-node-flag-commons-follow-group-link {
+    display: inline-block;
+    position: absolute;
+    top: .5em;
+    right: 0;
+    margin: 0;
+
+    @include respond(small-medium) {
+      position: static;
+      top: auto;
+      right: auto;
+    }
+  }
+}
+
+.group-recent-data {
+  display: inlline-block;
+  float: left;
+  @include box-sizing(border-box);
+  width: 48%;
+  margin-bottom: 0;
+  margin-right: 4%;
+
+  @include respond(small-medium) {
+    float: none;
+    width: auto;
+    margin-bottom: 1.7em;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.group-recent-data-odd {
+  margin-right: 0;
+}
+
+/* =============================================================================
+ *   Regions
+ * ========================================================================== */
+
+/**
+ * Header region, embedded in the #header
+ */
+
+.region-header {
+  display: inline-block;
+  text-align: left;
+  width: 19.3em;
+
+  @include respond(small-medium) {
+    width: auto;
+    position: absolute;
+    right: $gutter_width;
+    top: -1.5em;
+  }
+}
+
+/* =============================================================================
+ *   Links
+ * ========================================================================== */
+
+a {
+  text-decoration: none;
+  color: $light_blue;
+
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+  }
+}
+
+/* =============================================================================
+ *   Primary, Secondary and Menu Bar region menus
+ * ========================================================================== */
+
+#primary-menu-bar {
+  display: inline-block;
+}
+
+/**
+ * Use one of the following id's for granular control:
+ *  - #menu-bar (menu bar region)
+ *  - #primary-menu (main menu)
+ *  - #secondary-menu (secondary/user menu)
+ * You can target all of these with .nav or div[id$="menu-bar"]
+ */
+
+#menu-bar.nav {
+  display: inline-block;
+  vertical-align: top;
+  margin: 0 0 -9999em;
+  padding-bottom: 9999em;
+  @extend %divider-right;
+
+  h3.block-title {
+    display: none;
+  }
+
+  ul.menu {
+    margin: 0;
+    padding: 0;
+  }
+
+  ul.menu li {
+    display: inline-block;
+    float: left;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    &:hover,
+    &.active-trail {
+      background: image-url('main-nav-hover.png') repeat-x left top;
+      .arrow {
+        &:before {
+          content: "";
+          display: block;
+          position: absolute;
+          bottom: 0px;
+          left: 0px;
+          width: 0px;
+          height: 0px;
+          border-style: solid;
+          border-width: 0 7px 8px 7px;
+          border-color: transparent transparent lighten($light_blue, 10%) transparent;
+        }
+
+        &:after {
+          content: "";
+          display: block;
+          position: absolute;
+          bottom: 0px;
+          left: 1px;
+          width: 0px;
+          height: 0px;
+          border-style: solid;
+          border-width: 0 6px 6px 6px;
+          border-color: transparent transparent $light_blue transparent;
+        }
+      }
+    }
+  }
+
+  ul.menu li a {
+    position: relative;
+    z-index: 1;
+    @include box-sizing(border-box);
+    display: block;
+    white-space: nowrap;
+    margin-bottom: -9998em;
+    padding: px-to-em(31px) px-to-em(13em) 9999em;
+    height: px-to-em(64px);
+    text-transform: uppercase;
+    @include text-shadow(#000 1px 1px 4px);
+    background-position: center 10px;
+    background-repeat: no-repeat;
+    position: relative;
+    @extend %divider-left;
+
+    &:hover,
+    &:focus {
+      text-decoration: none;
+    }
+
+    .arrow {
+      width: 17px;
+      height: 9px;
+      position: absolute;
+      left: 50%;
+      bottom: -1px;
+      margin: 0 0 0 -8px;
+    }
+  }
+
+  .block {
+    margin: 0;
+  }
+
+  @include respond(only-small) {
+    border-right: 0;
+    @include box-shadow(#4082A7 0px 0px 0px);
+
+    ul.menu li {
+      a {
+        font: 0/0 a;
+        width: 40px;
+        height: 50px;
+      }
+    }
+  }
+
+  @include respond(only-medium) {
+    border-right: none;
+
+    ul.menu li {
+      a {
+        padding-right: px-to-em(7px);
+        padding-left: px-to-em(7px);
+      }
+    }
+  }
+}
+
+.main-menu-home a {
+  background: image-url('icons/icon-home.png') no-repeat center 10px;
+}
+
+.main-menu-groups a {
+  background: image-url('icons/icon-groups.png') no-repeat center 10px;
+}
+
+.main-menu-events a {
+  background: image-url('icons/icon-events.png') no-repeat center 10px;
+}
+
+.main-menu-people a {
+  background: image-url('icons/icon-people.png') no-repeat center 10px;
+}
+
+#menu-bar.nav ul.menu li.main-menu-search {
+  display: none;
+
+  a {
+    background: image-url('icons/icon-search.png') no-repeat center 10px;
+  }
+
+  @include respond(small-medium) {
+    display: inline-block;
+  }
+}
+
+#block-commons-utility-links-commons-utility-links {
+  margin: 0;
+
+  .block-inner {
+    margin: 0;
+  }
+}
+
+ul.commons-utility-links {
+  list-style: none;
+  text-align: right;
+  margin: .2em 0;
+  padding: 0;
+  font-size: .875em;
+  line-height: 1;
+
+  .block-content & {
+    padding: 0;
+  }
+
+  li {
+    display: inline-block;
+
+    &.first {
+      .logged-in & {
+        margin-right: 17px;
+        font-weight: bold;
+      }
+    }
+
+    &.last {
+      border-left: 1px solid $light_blue;
+      margin-left: 9px;
+
+      a {
+        margin-left: 9px;
+      }
+    }
+  }
+}
+
+.unread-invitations {
+  a {
+    @include sprite_url_height_width($icons, icon-person);
+  }
+}
+
+.unread-messages,
+.no-unread-messages {
+  a {
+    @include sprite_url_height_width($icons, icon-envelope);
+  }
+}
+
+.unread-invitations,
+.unread-messages,
+.no-unread-messages {
+  a {
+    position: relative;
+    top: .3em;
+    display: inline-block;
+    margin-top: -.2em;
+    margin-right: .8em;
+  }
+}
+
+.no-unread-messages {
+  a {
+    top: -.1em;
+    margin-top: 0;
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    @include opacity(.4);
+  }
+}
+
+.notification-count {
+  position: absolute;
+  top: -.2em;
+  right: -.6em;
+  display: inline-block;
+  padding: 0 .2em;
+  font-size: .88em;
+  @include border-radius(.4em);
+  @include box-shadow(0 0 2px $light_blue);
+  background: $green;
+  @include background(linear-gradient($green, darken($green, 20)));
+}
+
+/* =============================================================================
+ *   Superfish
+ * ========================================================================== */
+
+ul.sf-menu {
+  margin-bottom: 0;
+
+  a {
+    border-left: 0;
+    border-top: 0;
+    padding: 0 10px;
+    text-decoration: none;
+    height: 2.5em;
+    line-height: 2.5em;
+  }
+
+  li {
+    &:hover,
+    &.sfHover {
+      outline: 0;
+    }
+  }
+
+  a {
+    &:focus,
+    &:hover,
+    &:active {
+      outline: 0;
+    }
+  }
+}
+
+/**
+ * Superfish blocks
+ */
+
+.block-superfish {
+  ul {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  li {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
+
+/**
+ * Vertical style
+ */
+
+.sf-vertical {
+  width: 100%;
+
+  li {
+    width: 100%;
+
+    &:hover ul,
+    &.sfHover ul {
+      left: 100%;
+      top: 0;
+      margin: 0;
+      padding: 0;
+    }
+
+    a {
+      padding: 0 10px;
+    }
+  }
+}
+
+/**
+ * Navbar style
+ */
+
+.sf-navbar {
+  padding-bottom: 0 !important;
+}
+
+/**
+ * Sensible padding for the default style
+ */
+
+.sf-menu.sf-style-default a {
+  padding: 0 10px;
+}
+
+/* =============================================================================
+ *   Menus, usually blocks
+ * ========================================================================== */
+
+ul.menu {
+  padding-left: 15px;
+
+  ul {
+    padding-left: 15px;
+
+    li {
+      margin: 0;
+    }
+  }
+}
+
+/* If li.content exists it's a problem, so reset the padding */
+.block .menu li.content {
+  padding: 0;
+}
+
+/* =============================================================================
+ *   Book navigation menu
+ * ========================================================================== */
+
+.book-navigation {
+  .page-up {
+    /* Prevent text wrapping to a new line, assumes English "up" is used (two characters) */
+    min-width: 2em;
+    white-space: nowrap;
+  }
+
+  .menu {
+    margin-left: 0;
+  }
+}
+
+/* =============================================================================
+ *   Breadcrumbs
+ * ========================================================================== */
+
+#breadcrumb {
+  margin: 10px 0;
+
+  /* If the label is set to show in theme settings the label class is added */
+  .breadcrumb-label {
+    font-size: 1em;
+    display: inline;
+    padding-right: 10px;
+
+    &:after {
+      content: ":";
+    }
+  }
+
+  ol {
+    margin: 0;
+    padding: 0;
+  }
+
+  .with-breadcrumb-label ol {
+    display: inline;
+  }
+
+  li {
+    list-style: none;
+    display: inline;
+  }
+}
+
+/* =============================================================================
+ *   Pagers
+ * ========================================================================== */
+
+ul.pager {
+  clear: both;
+  margin: 0;
+  text-align: center;
+}
+
+.item-list ul.pager li {
+  margin: 0;
+}
+
+ul.pager li {
+  background-image: none;
+  display: inline;
+  list-style-type: none;
+  padding: .5em;
+
+  &.pager-current {
+    font-weight: 700;
+  }
+}
+
+.block ul.pager li {
+  margin: 0;
+}
+
+/* =============================================================================
+ *   Skip Navigation
+ * ========================================================================== */
+
+#skip-link {
+  left: 50%;
+  margin-left: -6.5em;
+  margin-top: 0;
+  padding: 0 0.5em;
+  position: absolute;
+  width: 12em;
+  z-index: 50;
+
+  a {
+    background: #444;
+    background: rgba(0, 0, 0, 0.6);
+    color: $page;
+    display: block;
+    line-height: 2;
+    padding: 0;
+    text-align: center;
+    text-decoration: none;
+
+    &:link,
+    &:visited {
+      background: #444;
+      background: rgba(0, 0, 0, 0.6);
+      color: $page;
+      display: block;
+      line-height: 2;
+      padding: 0;
+      text-align: center;
+      text-decoration: none;
+    }
+    &:hover,
+    &:focus,
+    &:active {
+      outline: 0;
+    }
+  }
+}
+
+/* =============================================================================
+ *   Tabs (local tasks)
+ * ========================================================================== */
+
+#tasks {
+  margin-bottom: 15px;
+}
+
+ul.primary {
+  border-bottom-color: $border;
+  margin: 20px 0;
+  padding: 0 0 0 5px;
+
+  li {
+    display: block;
+    float: left;
+    margin: 0 1px -1px;
+
+    a {
+      background-color: $ultralight;
+      border-color: $border;
+      margin-right: 1px;
+      padding: 0 10px;
+      display: block;
+      float: left;
+      height: 1.5em;
+      line-height: 1.5em;
+
+      &:hover,
+      &:focus {
+        background-color: $light;
+        border-color: $border;
+      }
+    }
+  }
+
+  li.active {
+    a,
+    a:hover,
+    a:focus {
+      background-color: $page;
+      border-bottom-color: $page;
+    }
+  }
+}
+
+ul.secondary {
+  border-bottom: 1px solid $border;
+  margin: 1em 0 0;
+  padding: 0 .3em 1em;
+
+  li {
+    border-right: 0;
+    list-style: none;
+    padding: 0 10px 0 0;
+
+    a {
+      &:hover,
+      &.active {
+        border-bottom: none;
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+/* =============================================================================
+ *   Action links
+ * ========================================================================== */
+
+ul.action-links {
+  margin: 20px 0 0;
+  list-style: none;
+}
+
+/* =============================================================================
+ *  Field Styling
+ * ========================================================================== */
+
+/**
+ * Labels are h2 in Adaptivetheme. Use a strong selector to mitigate unwanted ineritance issues
+ */
+
+.field-label {
+  font-size: 1em;
+  font-weight: 700;
+  font-family: inherit;
+  line-height: inherit;
+  margin-bottom: 0;
+}
+
+/**
+ * Taxonomy
+ */
+
+.field-type-taxonomy-term-reference {
+  /* The same bottom margin as p, blockquote, ul, ol and dl */
+  margin-bottom: 1.5em;
+
+  &.field-label-inline .field-items {
+    margin: 0;
+    padding: 0;
+  }
+
+  &.field-label-inline .field-item {
+    display: inline;
+    list-style: none;
+    padding: 0 10px 0 0;
+  }
+}
+
+/**
+ * Float left setting
+ */
+
+.ia-l .field-type-image figure,
+.iat-l .field-type-image figure {
+  margin: 5px 20px 15px 0;
+}
+
+/**
+ * Centered setting
+ */
+
+.ia-c .field-type-image figure,
+.iat-c .field-type-image figure {
+  margin: 5px auto 15px;
+}
+
+/**
+ * Float right setting
+ */
+
+.ia-r .field-type-image figure,
+.iat-r .field-type-image figure {
+  margin: 5px 0 15px 20px;
+}
+
+/* =============================================================================
+ *   Panels Styling
+ * ========================================================================== */
+
+.node-title,
+.pane-title {
+  font-weight: normal;
+  font-size: 1.6em;
+}
+
+.panel-display {
+  min-width: 100%;
+  margin-right: -$gutter-width;
+  margin-left: -$gutter-width;
+
+  .region {
+    @include box-sizing(border-box);
+    padding-right: $gutter-width;
+    padding-left: $gutter-width;
+  }
+}
+
+.commons-sign-up,
+.commons-login {
+  @extend %button-common;
+  @extend %button-small-layout;
+}
+
+.commons-sign-up {
+  @extend %button-primary;
+}
+
+.commons-login {
+  @extend %button-default;
+}
+
+.pane-views-panes,
+.pane-views,
+body.page-node .pane-views-panes {
+  .front.not-logged-in & {
+    @extend %pod;
+
+    > div {
+      @extend %pod-content;
+    }
+  }
+}
+
+.nodes {
+  margin-top: 1em;
+}
+
+.page-events {
+  .view-commons-events-upcoming {
+    .view-content {
+      @extend %pod;
+      @extend %pod-content;
+    }
+  }
+}
+
+.pane-commons-featured-panel-pane-1,
+.pane-commons-events-upcoming {
+  .block-inner {
+    margin: 0;
+
+    .views-row-last {
+      border-bottom: none;
+    }
+  }
+}
+
+.pane-commons-bw-group {
+  @extend %pod;
+
+  > .block-inner {
+    @extend %pod-content;
+  }
+}
+
+.node-type-group {
+  .node-teaser {
+    position: relative;
+  }
+
+  &.page-node {
+    .pane-node-content {
+      > .block-inner {
+        padding: 0;
+        margin: 0;
+      }
+
+      figure {
+        float: left;
+        margin: 3px 10px 5px 0;
+        background: $white;
+        padding: 4px;
+        @include border-radius(3px);
+        @include box-shadow($light_gray 1px 1px 4px);
+        position: relative;
+        display: block;
+        line-height: 0;
+      }
+    }
+
+    .node-content {
+      margin-left: 0;
+    }
+  }
+}
+
+.pane-commons-groups-directory-panel-pane-1 {
+  background-color: transparent;
+  @include border-radius(0px);
+  @include box-shadow(none);
+  margin-right: 0;
+  margin-bottom: 0;
+}
+
+.page-groups {
+  .region-two-66-33-top {
+    position: relative;
+  }
+}
+
+.pane-commons-groups-commons-groups-create-group {
+  position: absolute;
+  top: -4em;
+  right: $gutter-width;
+  text-align: right;
+
+  @include respond(only-small) {
+    position: static;
+    top: auto;
+    right: auto;
+  }
+
+  a {
+    @extend %button-common;
+    @extend %button-default-layout;
+    @extend %button-primary;
+    margin: 0;
+
+    &:before {
+      @include sprite_url_height_width($icons, icon-groups-small);
+      content: "";
+      top: 3px;
+    }
+
+    @include respond(only-small) {
+      float: none;
+      display: block;
+    }
+  }
+}
+
+/* =============================================================================
+ *   Views Styling
+ * ========================================================================== */
+
+.view-display-id-commons_events_upcoming_page .views-row {
+  @extend %pod;
+
+  article {
+    @extend %pod-content;
+
+    .commons-events-form-float {
+      float: right;
+      margin: -40px 0 0 0;
+    }
+  }
+}
+
+.views-view-grid {
+  border: none;
+  margin: 0;
+
+  tbody {
+    tr {
+      border-top: none;
+      background: none;
+    }
+  }
+
+  td {
+    padding: $gutter-width / 2;
+  }
+}
+
+.grid-grouping-title {
+  font-size: 1em;
+  color: $light_gray;
+  margin-bottom: $gutter-width;
+}
+
+.pager a {
+  // The li parent will handle spacing.
+  margin: 0;
+  // We do not need as much horizontal space on these items.
+  padding-right: .75em;
+  padding-left: .75em;
+}
+
+.view-commons-groups-directory,
+.view-commons-homepage-content .node-teaser.node-group {
+  > .view-content > .views-row {
+    @extend %pod;
+    position: relative;
+
+    > .node-teaser,
+    form {
+      @extend %pod-content;
+    }
+  }
+
+  .pane-node-body {
+    margin-bottom: 0;
+  }
+}
+
+.pane-node-field-group-logo {
+  float: left;
+  margin: 0 $gutter-width $gutter-width 0;
+
+  .field-name-field-group-logo a {
+    display: block;
+    border: 3px solid $white;
+    @include border-radius(2px);
+    box-shadow: 1px 1px 3px $gray;
+
+    img {
+      display: block;
+    }
+  }
+}
+
+.pane-commons-contributors-group-panel-pane-1 {
+  table, tbody {
+    margin: 0;
+    border: none;
+  }
+
+  tbody tr {
+    background-color: transparent;
+    border: none;
+  }
+
+  td {
+    padding: 0;
+    margin: 0 1px 1px 0;
+    float: left;
+    line-height: 0;
+
+    a {
+      position: relative;
+      display: block;
+
+      img {
+        @include opacity(0.5);
+      }
+
+      span {
+        display: none;
+        position: absolute;
+        top: -100%;
+        background-color: rgba(#000, 0.85);
+        white-space: nowrap;
+        font-size: 14px;
+        line-height: 14px;
+        font-weight: bold;
+        padding: 5px 8px;
+        color: $white;
+        @include border-radius(4px);
+        z-index: 15;
+
+        &:after {
+          content: "";
+          display: block;
+          width: 0px;
+          height: 0px;
+          border-style: solid;
+          border-width: 5px 5px 0 5px;
+          border-color: rgba(#000, 0.85) transparent transparent transparent;
+          position: absolute;
+          left: 10px;
+          top: 100%;
+        }
+      }
+
+      &:hover {
+        img {
+          @include opacity(1);
+        }
+
+        span {
+          display: block;
+        }
+      }
+    }
+  }
+}
+
+.region-two-66-33-second .view-commons-contributors-group {
+  table,
+  tbody {
+    margin: 0;
+    border: none;
+  }
+
+  tbody tr {
+    background-color: transparent;
+    border: none;
+  }
+
+  td {
+    padding: 0;
+    line-height: 0;
+
+    &.col-last a {
+      margin-right: 0;
+    }
+
+    .user-picture {
+      margin-bottom: 10px;
+
+      img {
+        width: 40px;
+      }
+    }
+  }
+}
+
+#views-exposed-form-commons-bw-all-page-1 {
+  .views-submit-button {
+    margin-left: 20px;
+  }
+
+  .views-exposed-widget {
+    padding: 0;
+
+    .form-submit {
+      margin-top: 0;
+    }
+  }
+}
+
+.pane-node-commons-groups-group-contributors-count-topics {
+  font-size: 11px;
+}
+
+.dynamic-filter-lists {
+  .views-exposed-widget,
+  .views-widget,
+  label,
+  .form-select-wrapper {
+    display: inline-block;
+    line-height: 1.7em;
+    vertical-align: baseline;
+    white-space: nowrap;
+    // height: 1.7em;
+    // overflow: hidden;
+  }
+
+  .views-exposed-widget {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0;
+
+    label {
+      font-weight: normal;
+      color: $light_gray;
+      margin: 0;
+    }
+  }
+
+  .views-submit-button {
+    position: absolute;
+    visibility: hidden;
+    padding: 0;
+    height: auto;
+
+    .form-submit {
+      margin-top: 0;
+    }
+  }
+}
+
+.widget-changed {
+  .views-submit-button {
+    position: static;
+    visibility: visible;
+  }
+}
+
+.commons-bw-create-choose {
+  cursor: pointer;
+
+  span {
+    @include sprite_url_height_width($icons, ico_arrow_wht);
+    margin-right: 0;
+  }
+}
+
+.commons-bw-create-choose-bg {
+  position: fixed;
+  display: none;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(#fff, 0.7);
+  z-index: 10;
+
+  .create-choose-open & {
+    display: block;
+  }
+}
+
+.commons-bw-create-choose-holder {
+  position: relative;
+}
+
+.commons-bw-create-all-widget-types {
+  position: absolute;
+  display: none;
+  left: -50px;
+  top: -50px;
+  z-index: 11;
+  width: 210px;
+  background: $white;
+  border: 1px solid $green;
+  @include border-radius(6px);
+  list-style: none;
+
+  .block-content &,
+  .item-list & {
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    border-bottom: 1px solid lighten($light_gray, 20%);
+    position: relative;
+    font-size: 0.85em;
+    color: $light_gray;
+
+    .last {
+      border-bottom: none;
+    }
+
+    .item-list & {
+      margin: 0;
+      padding: 10px 10px 10px 27px;
+    }
+
+    .commons-polls-create:before {
+      @include sprite_url_height_width($icons, polls);
+      content: "";
+      position: absolute;
+      left: 10px;
+      top: 13px;
+    }
+
+    .commons-posts-create:before {
+      @include sprite_url_height_width($icons, posts);
+      content: "";
+      position: absolute;
+      left: 10px;
+      top: 13px;
+    }
+
+    .commons-wikis-create:before {
+      @include sprite_url_height_width($icons, wikis);
+      content: "";
+      position: absolute;
+      left: 10px;
+      top: 13px;
+    }
+
+    .commons-events-create:before {
+      @include sprite_url_height_width($icons, events);
+      content: "";
+      position: absolute;
+      left: 10px;
+      top: 13px;
+    }
+
+    .commons-q-a-create:before {
+      @include sprite_url_height_width($icons, qa);
+      content: "";
+      position: absolute;
+      left: 10px;
+      top: 13px;
+    }
+
+    a {
+      display: block;
+      color: $green;
+      font-size: 1.3em;
+    }
+  }
+
+  .create-choose-open & {
+    display: block;
+  }
+}
+
+#quicktabs-container-commons_bw {
+  .quicktabs-tabpage {
+    .view-filters,
+    .attachment-before {
+      display: block;
+      clear: both;
+      vertical-align: top;
+      margin-bottom: 1.7em;
+      padding: .5em .6em;
+      font-size: .88em;
+      @include border-radius(2px);
+      background: $ultralight;
+    }
+
+    .views-exposed-widgets {
+      margin-bottom: 0;
+    }
+
+    .views-exposed-widget {
+      margin-right: 1.7em;
+    }
+
+    .views-widget-sort-order {
+      display: none;
+    }
+
+    .view-content,
+    .view-empty {
+      clear: both;
+    }
+
+    .views-submit-button {
+      margin-right: 0;
+    }
+
+    .form-submit {
+      margin-top: 0;
+      margin-bottom: .1em;
+    }
+
+    .hidden {
+      display: none;
+    }
+  }
+}
+
+.quicktabs-style-commons-pills {
+  ul.quicktabs-tabs {
+    margin-bottom: 1.7em;
+  }
+}
+
+.commons-bw-partial-node-form {
+  margin-bottom: 1.7em;
+  padding-left: 68px;
+
+  &.compact-form {
+    .form-item {
+      margin: 0;
+    }
+  }
+
+  .user-picture {
+    margin-top: 2.6em;
+  }
+
+  @include respond(only-small) {
+    padding-left: 0;
+
+    .user-picture {
+      display: none;
+    }
+  }
+
+  .field-type-image {
+    margin-top: 1.7em;
+  }
+
+  .field-name-og-group-ref {
+    .fieldset-outer-wrapper {
+      margin-top: 1.7em;
+      margin-bottom: 1.7em;
+      padding-top: 1.7em;
+      border-top: 1px solid $border;
+    }
+  }
+}
+
+.partial-node-form-title {
+  margin-top: 0;
+  margin-bottom: .2em;
+  margin-left: -68px;
+  color: rgb(70, 187, 46);
+
+  @include respond(only-small) {
+    margin-left: 0;
+  }
+}
+
+.trigger-field {
+  &,
+  .form-item {
+    margin-top: 0;
+  }
+
+  input,
+  textarea {
+    .compact-form & {
+      height: 2.2em;
+      overflow: hidden;
+    }
+  }
+}
+
+.expandable-form-toggle {
+  float: right;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: .6em;
+  overflow: hidden;
+
+  &,
+  &:before {
+    width: 1.4em;
+    height: 1.4em;
+    text-align: center;
+  }
+
+  .expanded-form & {
+    display: block;
+
+    &:before {
+      content: 'x';
+      display: block;
+    }
+  }
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.full-form {
+  .compact-form & {
+    float: right;
+    margin-top: .5em;
+
+    &:after {
+      content: '\2192';
+      display: inline-block;
+      margin-left: .2em;
+    }
+  }
+}
+
+/* =============================================================================
+ *   Block Styling
+ * ========================================================================== */
+
+/**
+ * "Search form" block
+ */
+
+.block-search {
+  display: block;
+  background-color: darken($dark_blue, 12%); // Old browsers
+  @include background-image(linear-gradient(top,  darken($dark_blue, 12%) 0%,darken($dark_blue, 6%)100%));
+  @include border-radius(4px);
+  box-shadow: 1px 1px 2px #000 inset, 2px 3px 3px rgba(#fff, 0.09);
+  height: 30px;
+  margin: 0 0 0 $gutter_width;
+  position: relative;
+
+  .container-inline {
+    label,
+    div {
+      float: left;
+      display: block;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    .form-item-custom-search-types {
+      position: relative;
+      z-index: 2;
+      display: inline-block;
+      width: 5.5em;
+      margin: .3em 0 .3em -5.8em;
+      padding-left: .3em;
+      left: 5.8em;
+
+      .select-status {
+        &:after {
+          border-top-color: $white;
+        }
+      }
+    }
+  }
+
+  .block-inner {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .form-item-search-block-form {
+    position: relative;
+    z-index: 1;
+    @include box-sizing(border-box);
+    width: 100%;
+    padding-right: 1.5em;
+    padding-left: 5.8em;
+  }
+
+  .form-text {
+    width: 12em;
+    max-width: 100%;
+    color: $white;
+    background: transparent;
+    border: none;
+
+    &:focus {
+      @include box-shadow(none);
+    }
+  }
+
+  .form-actions {
+    position: absolute;
+    right: 1em;
+  }
+
+  .form-actions,
+  .form-submit {
+    @include box-sizing(border-box);
+    width: 1.4em;
+    height: 1.4em;
+  }
+
+  .form-submit {
+    text-indent: -9999em;
+
+    &,
+    &:hover {
+      background: transparent image-url('icons/ico_search_wht.png') no-repeat center center;
+      border: none;
+    }
+  }
+
+  @include respond(small-medium) {
+    display: none;
+  }
+}
+
+/* =============================================================================
+ *   Node Styling
+ * ========================================================================== */
+
+.featured-node-tooltip {
+  position: absolute;
+  left: 100%;
+  top: 1px;
+  background-color: rgba(#000, 0.85);
+  white-space: nowrap;
+  padding: 3px 5px;
+  color: $white;
+  @include border-radius(3px);
+  display: none;
+  margin-left: 5px;
+  z-index: 1;
+
+  &:before {
+    content: "";
+    display: block;
+    width: 0px;
+    height: 0px;
+    border-style: solid;
+    border-width: 5px 5px 5px 0;
+    border-color: transparent rgba(#000, 0.85) transparent transparent;
+    position: absolute;
+    left: -5px;
+    top: 50%;
+    margin-top: -5px;
+  }
+
+  .node-teaser.node-promoted:hover & {
+    display: block;
+  }
+}
+
+.node {
+  .node-title {
+    margin: 0;
+  }
+}
+
+/**
+ * Node forms
+ */
+
+.node-form {
+  /* Polls have some bad, over specific, styles so this is what needs to be
+     done. */
+  #poll-choice-table .form-text {
+    width: 100%;
+  }
+}
+
+/* =============================================================================
+ *   Comment Styling - Comments, comment wrapper, comment form
+ * ========================================================================== */
+
+/**
+ * Wrapper for a single comment
+ */
+
+.comment {
+  margin-bottom: 20px;
+}
+
+/**
+ * "New" marker for comments that are new for the current user
+ */
+
+.new {
+  color: $highlight;
+}
+
+/**
+ * Nested comments are indented
+ */
+
+.indented {
+  margin-left: 40px;
+}
+
+.has-rate-widget {
+  min-height: 4em;
+  margin-right: 6em;
+  position: relative;
+
+  @include respond(small-medium) {
+    min-height: 0;
+    margin-right: 0;
+  }
+}
+
+.rate-widget-commons_thumbs_up_down {
+  float: right;
+  position: absolute;
+  top: 0;
+  right: -6em;
+  margin-top: 0;
+
+  @include respond(small-medium) {
+    position: static;
+    float: left;
+    margin: ($gutter-width * 2) auto;
+  }
+}
+
+.related-information {
+  clear: both;
+  margin: ($gutter-width * 2) 0;
+
+  .field {
+    float: left;
+  }
+}
+
+/* =============================================================================
+ *   Forms
+ * ========================================================================== */
+
+html.js input.form-autocomplete {
+  background-position: 100% 5px;
+}
+
+ html.js input.throbbing {
+  background-position: 100% -15px; /* LTR */
+}
+
+/**
+ * Forms in tables.
+ */
+
+tr {
+  &.odd,
+  &.even {
+    .form-item {
+      white-space: normal;
+    }
+  }
+}
+
+/**
+ * Wrapper for a form element (or group of form elements) and its label
+ */
+
+.form-item {
+  input.error,
+  textarea.error,
+  select.error {
+    border: 1px solid $highlight;
+  }
+
+  label {
+    font-weight: 700;
+  }
+
+  .description {
+    font-size: 0.85em;
+  }
+}
+
+/**
+ * Highlight marks and form required mark
+ */
+
+.marker,
+.form-required {
+  color: $highlight;
+}
+
+/**
+ * Password confirmation
+ */
+
+.password-parent,
+.confirm-parent {
+  margin: 0;
+}
+
+form.commons-events-form-float {
+  background-color:none;
+  padding:0;
+  border:none;
+  border-radius:0;
+  input {
+    margin:0;
+  }
+}
+
+#edit-field-topics-und {
+  border-top: 2px groove #8A8A8A;
+  border-left: 2px groove #8A8A8A;
+}
+
+form.commons-events-form-float {
+  background: none;
+  padding: 0;
+  border: none;
+  max-width: 10em;
+  margin-right: -10em;
+  text-align: center;
+
+  .commons-event-status {
+    font-size: .88em;
+    line-height: 1.2em;
+    margin-top: .3em;
+    text-align: center;
+
+    @include respond(only-medium) {
+      display: inline-block;
+      margin-left: 1em;
+    }
+  }
+
+  @include respond(small-medium) {
+    float: none;
+    margin: 1em 0;
+    max-width: inherit;
+    text-align: left;
+  }
+}
+
+/* =============================================================================
+ *   Tables
+ * ========================================================================== */
+
+table {
+  margin: 10px 0;
+  padding: 0;
+  width: 100%;
+
+  &.sticky-header {
+    z-index: 10;
+  }
+}
+
+table,
+thead,
+tbody,
+tr,
+th,
+td {
+  border-color: $border;
+}
+
+table,
+td,
+th {
+  vertical-align: middle;
+}
+
+caption,
+th,
+td {
+  text-align: left;
+}
+
+thead tr {
+  font-weight: 700;
+  background-color: $medium_dark;
+}
+
+td,
+th {
+  border-bottom: 0;
+  margin: 0;
+  padding: 5px 7px;
+}
+
+tbody tr {
+  border-top: 1px solid $border;
+}
+
+tr {
+  &.odd {
+    background: $page;
+  }
+
+  /* Table row striping */
+  &.info,
+  &.even,
+  &:nth-child(2n+2)  {
+    border-bottom: 0;
+    background-color: $ultralight;
+  }
+
+  &.odd td.active {
+    background-color: $light;
+  }
+
+  &.even td.active {
+    background-color: $medium_light;
+  }
+}
+
+/**
+ * Forum tables
+ * Core sets white-space to nowrap, which makes no sense
+ */
+
+#forum td {
+  .created,
+  .posts,
+  .topics,
+  .last-reply,
+  .replies,
+  .pager {
+     white-space: normal;
+  }
+}
+
+/* =============================================================================
+ *   Messages
+ * ========================================================================== */
+
+div {
+  &.messages {
+  // Left and right margin are set by the global gutter width
+  margin-bottom: 10px;
+  margin-top: 10px;
+
+    ul {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+}
+
+/**
+ * Unpublished nodes
+ */
+
+.node-unpublished,
+.comment-unpublished {
+  p.unpublished {
+    @include unpublished;
+  }
+}
+
+/* =============================================================================
+ *    Maintenance pages
+ * ========================================================================== */
+
+.maintenance-page {
+  .container {
+    padding: 40px 0;
+  }
+}
+
+.db-offline {
+  .container {
+    margin: 0 auto;
+    padding: 40px 0;
+    width: 100%;
+    max-width: 960px;
+  }
+
+  div.messages {
+    margin: 20px 0 0;
+  }
+
+  #content {
+    padding: 20px 0;
+  }
+}
+
+/* =============================================================================
+ *   Misc overrides for contrib modules
+ * ========================================================================== */
+
+/**
+ * Admin menu overrides
+ */
+
+#admin-menu {
+  margin: 0;
+  padding: 0;
+}
+
+/**
+ * Devel Module
+ */
+
+.dev-query {
+  background: $light;
+  padding: 30px;
+}
+
+/**
+ * Styleguide module tweaks
+ */
+
+#styleguide-header {
+  padding: 0 10px;
+
+  .item-list {
+    font-family: inherit;
+    margin: 0 20px 20px 0;
+    min-height: 260px;
+    width: auto;
+  }
+}
+
+/* =============================================================================
+ *   Front Page specific
+ * ========================================================================== */
+
+body.front {
+  .region-three-33-top {
+    font-size: 24px;
+    font-weight: 300;
+
+    h1 {
+      color: $dark_gray;
+      font-size: 40px;
+      font-weight: 700;
+      line-height: 50px;
+    }
+
+    .commons_home-welcome-image {
+      float:right;
+    }
+  }
+
+  &.not-logged-in {
+    #block-system-main {
+      .pane-1 {
+        .pane-title {
+          font-weight: 700;
+          font-size: 38px;
+          color: $dark_gray;
+        }
+      }
+    }
+  }
+}
+
+.commons-events-form-float {
+  float: right;
+  margin-left: 15px;
+
+  input {
+    margin: 0;
+  }
+}
+
+.commons-event-count {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+body.front.logged-in {
+  .view-commons-homepage-content {
+    > .view-content {
+      @extend %pod;
+      padding: $gutter-width;
+
+      > .views-row {
+        position: relative;
+      }
+    }
+
+    .article.node, .node-teaser.node-group {
+      .node-content {
+        form {
+
+        }
+
+        .field-name-body {
+        }
+      }
+
+      .author-datetime {
+        margin-bottom: 1.5em;
+        clear: both;
+      }
+    }
+
+    .views-row-first {
+      border-top: none;
+    }
+
+    .item-list {
+      padding: 10px 0 0 0;
+    }
+  }
+
+  #views-exposed-form-commons-homepage-content-panel-pane-1 .views-exposed-widgets {
+    padding: $gutter-width 0;
+    margin-bottom: 0;
+
+    &.widgets-active {
+      @extend %pod;
+      @extend %pod-content;
+    }
+  }
+}
+
+body.front.logged-in .view-commons-homepage-content .article.node {
+  &.no-user-picture,
+  &.node-page {
+    .node-header,
+    .node-content,
+    .author-datetime,
+    .links {
+      margin-left: 0;
+    }
+  }
+}
+
+#quicktabs-commons_follow_ui {
+  .flag-email-group,
+  .flag-email-node,
+  .flag-email-user,
+  .flag-email-term {
+    a {
+      cursor: default;
+
+      input {
+        cursor: default;
+      }
+
+      span {
+        display: none;
+      }
+    }
+  }
+}
+
+/**
+ *  Placeholder styles
+ */
+
+#menu-bar.nav {
+  .menu-item-193 a {
+    background-image: image-url('icons/icon-home.png');
+  }
+
+  .menu-item-194 a {
+    background-image: image-url('icons/icon-groups.png');
+  }
+
+  .menu-item-195 a {
+    background-image: image-url('icons/icon-events.png');
+  }
+}
+
+/**
+ * Events Page
+ */
+
+.page-events {
+  .region-three-25-50-25-third {
+    .pane-views-panes {
+      @extend %pod;
+      margin-right: 0;
+
+      .block-inner {
+        @extend %pod-content;
+      }
+    }
+  }
+
+  div.search-result-wrapper h3.title {
+    text-decoration: none;
+
+    a {
+      color: $light_blue;
+    }
+  }
+
+  .three-25-50-25 {
+    > {
+      @include filter-drawer(small-medium);
+    }
+  }
+
+  @include filter-overlay(small-medium);
+}
+
+.pane-commons-events-commons-events-create-event-link {
+  text-align: right;
+
+  .block-inner {
+    margin: 0;
+  }
+
+  a {
+    @extend %button-common;
+    @extend %button-default-layout;
+    @extend %button-primary;
+
+    &:before {
+      @include sprite_url_height_width($icons, icon-events);
+      content: "";
+      top: 2px;
+      margin-right: 6px;
+    }
+  }
+}
+
+/**
+ * Search
+ */
+
+.search-form-page {
+  .form-type-textfield {
+    label {
+      white-space: nowrap;
+    }
+
+    input {
+      width: auto;
+    }
+
+    @include respond(only-small) {
+      &,
+      input {
+        display: block;
+        width: 100%;
+      }
+    }
+  }
+
+  @include respond(medium) {
+    .form-item {
+      margin-bottom: 0;
+    }
+  }
+}
+
+// Build the search button base styling.
+@include button_with_icon(nth($buttons, 3), icon-search);
+
+%button-primary-icon-search {
+  &,
+  &:hover,
+  &:active,
+  &:focus {
+    background-position: 1.5em center;
+  }
+}
+
+.action-item-search {
+  float: right;
+  margin-right: 0;
+  margin-bottom: 0;
+
+  &,
+  &[type="submit"] {
+    padding-left: 3em;
+  }
+
+  &[type="submit"] {
+    @extend %button-primary-icon-search;
+  }
+
+  @include respond(only-small) {
+    float: none;
+    clear: both;
+    display: block;
+  }
+
+  @include respond(medium) {
+    margin-top: 0;
+  }
+}
+
+.block-facetapi {
+  margin-bottom: .7em;
+  padding-bottom: .7em;
+  border-bottom: 1px solid $border;
+
+  &:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  .block-title {
+    margin-bottom: $gutter-width;
+    color: $gray;
+    font-size: 1.2em;
+  }
+}
+
+.facetapi-facetapi-links,
+.facetapi-date-range {
+  margin: 0;
+  padding: 0;
+
+  li.leaf {
+    margin-left: 0;
+    list-style-type: none;
+    list-style-image: none;
+  }
+}
+
+.page-search {
+  .two-33-66 {
+    > {
+      @include filter-drawer;
+    }
+  }
+
+  @include filter-overlay;
+}
+
+.facetapi-processed {
+  &,
+  .block-content & {
+    margin-bottom: 0;
+    padding-left: 0;
+
+    li {
+      &.last {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+.search-results-title,
+.search-results-wrapper > h2 {
+  margin-top: .2em;
+}
+
+.search-results {
+  margin-top: 0;
+
+  &,
+  /* The ol styling is a bit specific. */
+  .block-content & {
+    margin-bottom: 0;
+    padding: 0;
+  }
+}
+
+// This is not optimal. Preferably, a class would be placed in the markup, but
+// ctools has hardcoded the output without the chance of override. The other
+// option is to use regex to force in wrappers.
+// @see http://drupal.org/node/1743402
+.pane-search-result {
+  .block-content {
+    .search-results {
+      @extend %pod;
+      @extend %pod-content;
+    }
+  }
+}
+
+.page-search-user, {
+  .user-results {
+    @extend %pod;
+    @extend %pod-content;
+  }
+}
+
+.search-result {
+  border-bottom: 1px solid $border;
+  list-style-type: none;
+
+  &,
+  .block-content & {
+    padding-bottom: .7em;
+    margin-bottom: .7em;
+
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  h2 {
+    font-size: 1.429em;
+    line-height: 1.2em;
+    margin: .5em 0 0;
+  }
+
+  .title {
+    margin-top: 0;
+    margin-bottom: .2em;
+  }
+
+  .search-result-url {
+    color: $gray;
+    font-size: .85em;
+    margin-bottom: 1em;
+  }
+
+  .apachesolr_search-results & {
+    .title,
+    .search-result-url,
+    .search-result-date,
+    .search-result-snippet-info {
+      display: none;
+    }
+
+    .pane-node-flag-commons-follow-group-link {
+      position: static;
+      right: auto;
+      top: auto;
+      float: right;
+    }
+  }
+}
+
+/* Search profiles */
+
+.profile-search-result {
+  @include box-sizing(border-box);
+  display: inline-block;
+  padding-bottom: 0;
+  vertical-align: top;
+  width: 48.5%;
+  margin-right: 2%;
+
+  &:nth-child(even) {
+    margin-right: 0;
+  }
+
+  @include respond(only-small) {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  @include respond(large) {
+    width: 31.5%;
+
+    &:nth-child(even) {
+      margin-right: 2%;
+    }
+
+    &:nth-child(3n) {
+      margin-right: 0;
+    }
+  }
+
+  .commons-pod & {
+    width: 100%;
+    margin-right: 0;
+
+    .profile-actions {
+      @include box-sizing(border-box);
+      margin-right: 0;
+      margin-left: 0;
+      border: 1px solid $border;
+      @include border-radius(0);
+    }
+  }
+
+  h4 {
+    margin: 0;
+  }
+}
+
+.profile-header,
+.profile-content {
+  margin-left: 72px;
+}
+
+.profile-header {
+  @include box-sizing(border-box);
+
+  .user-picture {
+    position: relative;
+    top: -1.2em;
+    float: left;
+    margin-bottom: 0;
+    margin-left: -72px;
+  }
+}
+
+@include multiline-ellipsis(profile-content, 2.8em, 1.4em);
+
+.associated-groups-title,
+.associated-groups,
+.group-item {
+  display: inline;
+  margin: 0;
+  color: $light_gray;
+  white-space: normal;
+}
+
+.associated-groups-title {
+  font-weight: normal;
+}
+
+.associated-groups {
+  &,
+  .block-content & {
+    padding-left: 0;
+  }
+}
+
+.associated-groups-title,
+.group-item {
+  margin-right: .2em;
+  font-size: .88em;
+}
+
+.group-item {
+  &:after {
+    content: ",";
+  }
+
+  &:last-child {
+    margin-right: 0;
+
+    &:after {
+      content: ".";
+    }
+  }
+}
+
+.profile-actions {
+  clear: both;
+  width: 100%;
+  margin-top: $gutter_width;
+  margin-left: -$gutter_width;
+  margin-right: -$gutter_width;
+  padding: ($gutter_width / 2) $gutter_width;
+  background: $ultralight;
+  border-top: 1px solid $border;
+  @include border-bottom-right-radius(.4em);
+  @include border-bottom-left-radius(.4em);
+
+  .field {
+    /* Make fields in the wrapper inline. */
+    display: inline-block;
+  }
+}
+
+/**
+ * Notification settings
+ */
+
+.view-commons-follow-node,
+.view-commons-follow-user,
+.view-commons-follow-taxonomy-term {
+  .views-field-ops,
+  .views-field-ops-1 {
+    width: 20%;
+  }
+
+  .views-field-ops {
+    text-align: right;
+  }
+
+  .views-field-ops-1 {
+    text-align: center;
+  }
+}
+
+/**
+ * Trusted contacts
+ */
+
+.views-field-field-membership-token {
+  a {
+    &:first-child {
+      &:after {
+        content: "|";
+        display: inline-block;
+        padding: 0 .3em 0 .5em;
+        color: $dark_gray;
+      }
+    }
+  }
+}
+
+.trusted-status-request {
+  &:before {
+    content: "\271a";
+    position: relative;
+    top: .1em;
+    display: inline-block;
+    margin-right: .2em;
+    font-size: 1.4em;
+    line-height: .6em;
+  }
+}
+
+.message-contact {
+  &:before {
+    content: "";
+    @include sprite_url_height_width($icons, message);
+  }
+}
+
+/**
+ * Private message
+ */
+
+.privatemsg-conversation {
+  .form-actions {
+    &,
+    [class*="action-item"] {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.privatemsg-message-participants {
+  margin-bottom: $gutter_width;
+  padding-bottom: $gutter_width;
+  border-bottom: 1px solid $border;
+}
+
+.privatemsg-message {
+  @include box-sizing(border-box);
+  width: 100%;
+  margin-bottom: $gutter_width;
+  padding-bottom: $gutter_width;
+  padding-left: 72px;
+  border-bottom: 1px solid $border;
+
+  .user-picture {
+    position: relative;
+    float: left;
+    width: 50px;
+    margin-left: -72px;
+  }
+}
+
+.privatemsg-message-links {
+  font-size: .88em;
+  text-align: right;
+}
+
+.message-delete {
+  &:before {
+    content: "\2715";
+    display: inline-block;
+    margin-right: .3em;
+    color: $icon_gray;
+    font-weight: bold;
+  }
+}
+
+/**
+ * Commons Origins Pallete Choices
+ */
+
+#edit-commons-origins-palette {
+  .form-item-commons-origins-palette {
+    clear: both;
+    margin-bottom: 10px;
+
+    input[type="radio"] {
+      float: left;
+    }
+
+    label {
+      margin-left: 20px;
+    }
+  }
+}
+
+/**
+ * Login and signup form
+ */
+
+#user-login, #user-register-form {
+  input[type="text"], input[type="password"] {
+    width: 20em;
+    max-width: 100%;
+  }
+}
+
+/**
+ * Add the color palettes
+ */
+
+@import 'palettes';

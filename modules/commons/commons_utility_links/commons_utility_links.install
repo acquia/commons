@@ -1,0 +1,56 @@
+<?php
+/**
+ * @file
+ * Commons Utility Links install script.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function commons_utility_links_install() {
+  cache_clear_all('*', 'cache_block', TRUE);
+ // Place site blocks in the menu_bar and header regions.
+  $utility_block = array(
+    'module' => 'commons_utility_links',
+    'delta' => 'commons_utility_links',
+    'theme' => 'commons_origins',
+    'visibility' => 0,
+    'region' => 'header',
+    'status' => 1,
+    'pages' => '0',
+    'cache' => DRUPAL_NO_CACHE,
+    'title' => '<none>',
+  );
+  drupal_write_record('block', $utility_block);
+
+  db_update('block')
+    ->fields(array('region' => 'header'))
+    ->fields(array('cache' => DRUPAL_NO_CACHE))
+    ->condition('delta', 'commons_utility_links')
+    ->condition('module', 'commons_utility_links')
+    ->condition('theme', 'commons_origins')
+    ->execute();
+}
+
+/**
+ * Remove utility_links block, and enable commons_utility_links, that never caches.
+ */
+function commons_utility_links_update_7301() {
+  db_delete('block')
+    ->condition('module', 'commons_utility_links')
+    ->condition('delta', 'utility_links')
+    ->execute();
+
+  db_update('block')
+    ->fields(array(
+      'cache' => DRUPAL_NO_CACHE,
+      'region' => 'header',
+      'status' => 1,
+      'title' => '<none>',
+    ))
+    ->condition('delta', 'commons_utility_links')
+    ->condition('module', 'commons_utility_links')
+    ->condition('theme', 'commons_origins')
+    ->execute();
+  cache_clear_all('*', 'cache_block', TRUE);
+}

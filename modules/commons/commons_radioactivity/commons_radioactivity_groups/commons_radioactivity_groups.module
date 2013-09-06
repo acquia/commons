@@ -1,0 +1,33 @@
+<?php
+/**
+ * @file
+ * Code for the Commons Radioactivity Groups feature.
+ */
+
+include_once 'commons_radioactivity_groups.features.inc';
+
+/**
+* Implements hook_node_insert().
+*/
+function commons_radioactivity_groups_node_insert($node) {
+  // If there are no groups associated with this node
+  // then there's nothing to do here.
+  if (empty($node->og_group_ref) || !isset($node->field_radioactivity[LANGUAGE_NONE][0]['radioactivity_energy'])) {
+    return;
+  }
+  commons_radioactivity_incident_groups($node, $node->field_radioactivity[LANGUAGE_NONE][0]['radioactivity_energy']);
+}
+
+/**
+* Implements hook_node_update().
+*/
+function commons_radioactivity_groups_node_update($node) {
+  // If there are no groups associated with this node
+  // then there's nothing to do here.
+  if (!isset($node->og_group_ref)) {
+    return;
+  }
+  if ($node->og_group_ref !== $node->original->og_group_ref) {
+    commons_radioactivity_process_node_group_membership_change($node);
+  }
+}

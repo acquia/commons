@@ -1,0 +1,36 @@
+diff --git a/modules/commons_search_solr/commons_search_solr.features.inc b/modules/commons_search_solr/commons_search_solr.features.inc
+index 3117ccf..f927dab 100644
+--- a/modules/commons_search_solr/commons_search_solr.features.inc
++++ b/modules/commons_search_solr/commons_search_solr.features.inc
+@@ -17,6 +17,10 @@ function commons_search_solr_ctools_plugin_api() {
+     return array("version" => "3");
+   }
+   list($module, $api) = func_get_args();
++  if ($module == "facetapi" && $api == "facetapi_defaults") {
++    return array("version" => "1");
++  }
++  list($module, $api) = func_get_args();
+   if ($module == "page_manager" && $api == "pages_default") {
+     return array("version" => "1");
+   }
+diff --git a/modules/commons_search_solr/commons_search_solr.info b/modules/commons_search_solr/commons_search_solr.info
+index c2c139a..8e29c77 100644
+--- a/modules/commons_search_solr/commons_search_solr.info
++++ b/modules/commons_search_solr/commons_search_solr.info
+@@ -1,6 +1,7 @@
+ name = Commons Search Solr
+ description = Site search using Apache Solr server.
+ core = 7.x
++php = 5.2.4
+ package = Commons - Search
+ dependencies[] = apachesolr
+ dependencies[] = apachesolr_proximity
+@@ -18,7 +19,7 @@ features[ctools][] = facetapi:facetapi_defaults:1
+ features[ctools][] = page_manager:pages_default:1
+ features[ctools][] = pm_existing_pages:pm_existing_pages:1
+ features[ctools][] = strongarm:strongarm:1
+-features[features_api][] = api:1
++features[features_api][] = api:2
+ features[page_manager_existing_pages][] = solr_search
+ features[page_manager_handlers][] = pm_existing_pages_solr_search_panel_context
+ features[variable][] = apachesolr_search_default_search_page

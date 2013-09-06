@@ -1,0 +1,15 @@
+name = Commons Profile (Social fields)
+description = Provides a set of link fields to the user's profile for the user's Facebook, Linkedin and Twitter accounts.
+core = 7.x
+package = Commons - Building blocks
+project = commons_profile_social
+dependencies[] = features
+dependencies[] = field_sql_storage
+dependencies[] = link
+features[features_api][] = api:1
+features[field_base][] = field_facebook_url
+features[field_base][] = field_linkedin_url
+features[field_base][] = field_twitter_url
+features[field_instance][] = user-user-field_facebook_url
+features[field_instance][] = user-user-field_linkedin_url
+features[field_instance][] = user-user-field_twitter_url

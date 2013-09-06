@@ -1,0 +1,243 @@
+// @file
+// Generate button css.
+//
+// These mixins will generate invisible classes and not normal classes. This
+// allows for more semantic naming in your markup, but still allows for robotic
+// naming for automatic generation.
+
+// These are the default skins and sizes. They can be overridden with alternate
+// values.
+$buttons: (default, #fefefe) (active, #f3f3f3, true) (primary, rgb(70, 187, 46)) (primary-active, rgb(70, 187, 46), true) !default;
+$button-sizes: (default, 1em, .5em 1.5em) (small, .88em, .3em 1em) (large, 1.2em, .5em 1.5em) !default;
+$button-contrast: 60 !default;
+
+// Bulk generate buttons styles with a list of settings.
+@mixin buttons($buttons: $buttons) {
+  /* Common styles for all buttons. */
+  %button-common {
+    -webkit-appearance: none;
+    display: inline-block;
+    @include box-sizing(border-box);
+    margin: .5em .3em .5em 0;
+    max-width: 100%;
+    overflow: visible;
+    line-height: 1.2em;
+    vertical-align: baseline;
+    border-style: solid;
+    border-width: 1px;
+    @include border-radius(2px);
+    /* Reset all button fonts to a similar baseline in webkit. */
+    font: -webkit-small-control;
+    font-family: "Helvetica Neue", Arial, "Liberation Sans", FreeSans, sans-serif;
+    font-weight: light;
+    letter-spacing: .06em;
+    text-align: center;
+    text-decoration: none;
+    outline: 0;
+    cursor: pointer;
+
+    &:focus,
+    &:hover {
+      text-decoration: none;
+    }
+
+    &:active {
+      @include box-shadow(inset rgba(black, 0.25) 0 1px 2px 0);
+      text-decoration: none;
+    }
+
+    &::-moz-focus-inner {
+      border: 0;
+      padding: 0;
+    }
+  }
+
+  // Generate style for the size variants.
+  @each $size in $button-sizes {
+    @include button-size($size...);
+  }
+
+  // Generate the color styles for the buttons.
+  @each $button in $buttons {
+    @include button($button...);
+  }
+}
+
+// Generate a size variant.
+@mixin button-size($name, $font-size, $padding) {
+  /* Dimensions for the #{$name} button type. */
+  %button-#{$name}-layout {
+    @extend %button-common;
+    padding: $padding;
+    font-size: $font-size;
+  }
+}
+
+// Generate a set of buttons variants.
+@mixin button($name, $base-color, $flat: false) {
+  $text-color: contrast-color($base-color, darken($base-color, 80), lighten($base-color, 80), $button-contrast);
+  $text-shadow: contrast-color($base-color, lighten($base-color, 10), darken($base-color, 10), $button-contrast);
+  $border-color: darken($base-color, 20);
+  $hover-base: darken($base-color, 5);
+  $hover-text: contrast-color($hover-base, darken($hover-base, 70), lighten($hover-base, 70), $button-contrast);
+  $hover-border: darken($border-color, 10);
+  $hover-text-shadow: contrast-color($hover-base, lighten($hover-base, 5), darken($hover-base, 5), $button-contrast);
+
+  %button-#{$name} {
+    background-color: $base-color;
+    @if $flat == false {
+      @include background(linear-gradient(lighten($base-color, 5), darken($base-color, 5)))
+    }
+    @else {
+      @include box-shadow(inset .1em .1em .2em darken($base-color, 30));
+    }
+    border-color: $border-color;
+    // Add a 1px outline around the text to help with legibility.
+    @include text-shadow(
+      -1px 1px 2px $text-shadow,
+      -1px -1px 2px $text-shadow,
+      1px -1px 2px $text-shadow,
+      1px 1px 2px $text-shadow
+    );
+
+    &,
+    &:link,
+    &:visited {
+      color: $text-color;
+    }
+
+    &:hover {
+      color: $hover-text;
+      background-color: $hover-base;
+      @if $flat == false {
+        @include background(linear-gradient(lighten($hover-base, 5), darken($hover-base, 5)))
+      }
+      @else {
+        @include box-shadow(inset .1em .1em .2em darken($hover-base, 30));
+      }
+      border-color: $hover-border;
+      // Add a 1px outline around the text to help with legibility.
+      @include text-shadow(
+        -1px 1px 2px $hover-text-shadow,
+        -1px -1px 2px $hover-text-shadow,
+        1px -1px 2px $hover-text-shadow,
+        1px 1px 2px $hover-text-shadow
+      );
+    }
+
+    &:focus,
+    &:active {
+      background: $base-color;
+      @if $flat == false {
+        @include background(linear-gradient(darken($base-color, 5), lighten($base-color, 5)))
+      }
+      @else {
+        @include box-shadow(inset .1em .1em .2em darken($base-color, 30));
+      }
+      border-color: $border-color;
+      // Add a 1px outline around the text to help with legibility.
+      @include text-shadow(
+        -1px 1px 2px $text-shadow,
+        -1px -1px 2px $text-shadow,
+        1px -1px 2px $text-shadow,
+        1px 1px 2px $text-shadow
+      );
+    }
+
+    &[disabled] {
+      color: contrast-color($base-color, darken($base-color, 20), lighten($base-color, 20), $button-contrast);
+      background: $base-color;
+      border-color: $border-color;
+      @include box-shadow(none);
+      @include text-shadow(none);
+    }
+  }
+}
+
+// Generate a set of buttons variants.
+@mixin button_with_icon($style, $icon) {
+  $name: nth($style, 1);
+  $base-color: nth($style, 2);
+  $flat: false;
+  @if (length($style) == 3) {
+    $flat: nth($style, 3);
+  }
+  $text-color: contrast-color($base-color, darken($base-color, 80), lighten($base-color, 80), $button-contrast);
+  $text-shadow: contrast-color($base-color, lighten($base-color, 10), darken($base-color, 10), $button-contrast);
+  $border-color: darken($base-color, 20);
+  $hover-base: darken($base-color, 5);
+  $hover-text: contrast-color($hover-base, darken($hover-base, 70), lighten($hover-base, 70), $button-contrast);
+  $hover-border: darken($border-color, 10);
+  $hover-text-shadow: contrast-color($hover-base, lighten($hover-base, 5), darken($hover-base, 5), $button-contrast);
+
+  %button-#{$name}-#{$icon} {
+    min-width: image-width("icons/#{$icon}.png");
+    @include background($base-color image-url("icons/#{$icon}.png") no-repeat);
+    @if $flat == false {
+      @include background(image-url("icons/#{$icon}.png") no-repeat, linear-gradient(lighten($base-color, 5), darken($base-color, 5)));
+    }
+    @else {
+      @include box-shadow(inset .1em .1em .2em darken($base-color, 30));
+    }
+    border-color: $border-color;
+    // Add a 1px outline around the text to help with legibility.
+    @include text-shadow(
+      -1px 1px 2px $text-shadow,
+      -1px -1px 2px $text-shadow,
+      1px -1px 2px $text-shadow,
+      1px 1px 2px $text-shadow
+    );
+
+    &,
+    &:link,
+    &:visited {
+      color: $text-color;
+    }
+
+    &:hover {
+      color: $hover-text;
+      background: $hover-base image-url("icons/#{$icon}.png") no-repeat;
+      @if $flat == false {
+        @include background(image-url("icons/#{$icon}.png") no-repeat, linear-gradient(lighten($hover-base, 5), darken($hover-base, 5)))
+      }
+      @else {
+        @include box-shadow(inset .1em .1em .2em darken($hover-base, 30));
+      }
+      border-color: $hover-border;
+      // Add a 1px outline around the text to help with legibility.
+      @include text-shadow(
+        -1px 1px 2px $hover-text-shadow,
+        -1px -1px 2px $hover-text-shadow,
+        1px -1px 2px $hover-text-shadow,
+        1px 1px 2px $hover-text-shadow
+      );
+    }
+
+    &:focus,
+    &:active {
+      background: $base-color image-url("icons/#{$icon}.png") no-repeat;
+      @if $flat == false {
+        @include background(image-url("icons/#{$icon}.png") no-repeat, linear-gradient(darken($base-color, 5), lighten($base-color, 5)))
+      }
+      @else {
+        @include box-shadow(inset .1em .1em .2em darken($base-color, 30));
+      }
+      border-color: $border-color;
+      // Add a 1px outline around the text to help with legibility.
+      @include text-shadow(
+        -1px 1px 2px $text-shadow,
+        -1px -1px 2px $text-shadow,
+        1px -1px 2px $text-shadow,
+        1px 1px 2px $text-shadow
+      );
+    }
+
+    &[disabled] {
+      color: contrast-color($base-color, darken($base-color, 20), lighten($base-color, 20), $button-contrast);
+      background: $base-color;
+      border-color: $border-color;
+      @include box-shadow(none);
+      @include text-shadow(none);
+    }
+  }
+}

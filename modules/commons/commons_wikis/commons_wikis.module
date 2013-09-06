@@ -1,0 +1,210 @@
+<?php
+/**
+ * @file
+ * Code for the Commons Wikis feature.
+ */
+
+include_once 'commons_wikis.features.inc';
+
+/**
+* Implements hook_module_implements_alter().
+*/
+function commons_wikis_module_implements_alter(&$implementations, $hook) {
+  // We need to override access control for revision view callbacks
+  // in order to give all users permission to view wiki node revisions.
+  if ($hook == 'menu_alter') {
+    $group = $implementations['commons_wikis'];
+    unset($implementations['commons_wikis']);
+    $implementations['commons_wikis'] = $group;
+  }
+}
+
+/**
+ * Implements hook_commons_bw_create_all_widget().
+ */
+function commons_wikis_commons_bw_create_all_widget($group) {
+   if (og_user_access('node', $group->nid, 'create wiki content')) {
+      $link = l(t('Start a wiki'), 'node/add/wiki',
+      array('attributes' => array('class' => 'commons-wikis-create'), 'query' => array('og_group_ref' => $group->nid))
+    );
+    return array(
+      'commons_wikis' => array(
+        'link' => $link,
+        'text' => t('Collaborate on a document'),
+        '#weight' => 8,
+      ),
+    );
+  }
+}
+
+/**
+ * Implements hook_menu_alter().
+ */
+function commons_wikis_menu_alter(&$items) {
+  // Find all menu items that are related to viewing a revision and change the
+  // access callback to our custom one.
+  foreach ($items as $route => $info) {
+    if (strpos($route, 'revisions') !== FALSE
+      && strpos($route, 'revert') === FALSE
+      && strpos($route, 'delete') === FALSE) {
+      $items[$route]['access arguments'][] = $items[$route]['access callback'];
+      $items[$route]['access callback'] = 'commons_wikis_user_revision_access';
+    }
+  }
+}
+
+/**
+ * Implements hook_views_default_views_alter().
+ *
+ * Display wikis on the browsing widget main view.
+ */
+function commons_wikis_views_default_views_alter(&$views) {
+  if (!empty($views['commons_bw_all'])) {
+    $views['commons_bw_all']->display['default']->display_options['filters']['type']['value']['wiki'] = 'wiki';
+  }
+}
+
+/**
+ * Custom access callback for viewing revision info.
+ */
+function commons_wikis_user_revision_access($node = NULL, $old_callback = '_node_revision_access') {
+  if ($node->type == 'wiki') {
+    return TRUE;
+  }
+  else {
+    return node_access('view', $node) && $old_callback($node, 'view');
+  }
+}
+
+/**
+* Implements hook_og_user_access_alter().
+*/
+function commons_wikis_og_user_access_alter(&$temp_perm, $context) {
+  // Grant access to non-group members to be able to edit wiki nodes.
+  // where the group node is public and content is public within the group.
+  if ($context['string'] == "update any wiki content") {
+    $commons_groups_entity_types = commons_groups_get_group_content_entity_types();
+    $group_content_restricted = (bool) (isset($context['group']->group_content_access[LANGUAGE_NONE][0]['value']) && $context['group']->group_content_access[LANGUAGE_NONE][0]['value'] == 2);
+    $user_is_member = FALSE;
+    if ($context['group_type'] == 'node') {
+      $user_is_member = (bool) og_is_member('node', $context['group']->nid, 'user', $context['account']);
+    }
+    if ($context['group_type'] == 'user') {
+      $user_is_member = (bool) og_is_member('user', $context['group']->uid, 'user', $context['account']);
+    }
+    if (user_access('edit any wiki content', $context['account'])
+    && (!$group_content_restricted || $user_is_member)) {
+      $temp_perm["update any wiki content"] = TRUE;
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FROM_ID_alter().
+ */
+function commons_wikis_form_commons_bw_partial_node_form_alter(&$form, &$form_state) {
+  if (empty($form['#entity']) || $form['#entity']->type != 'wiki') {
+    return;
+  }
+
+  $form['title_field'][LANGUAGE_NONE][0]['value']['#title_display'] = 'invisible';
+  $form['title_field'][LANGUAGE_NONE][0]['value']['#placeholder'] = t('Enter a Wiki title');
+
+  $form['body'][LANGUAGE_NONE][0]['#title_display'] = 'invisible';
+  $form['body'][LANGUAGE_NONE][0]['#resizable'] = FALSE;
+
+  // Set fields as hideable so the forms can be compacted.
+  $form['title_field']['#attributes']['class'][] = 'trigger-field';
+  foreach (array('body', 'og_group_ref', 'actions') as $field) {
+    if (isset($form[$field])) {
+      $form[$field]['#attributes']['class'][] = 'hideable-field';
+    }
+  }
+
+  $form['actions']['submit']['#value'] = t('Create');
+  $form['#pre_render'][] = 'commons_wikis_form_commons_bw_partial_node_form_after_build';
+}
+
+/**
+ * After-build call-back.
+ * See commons_wikis_form_commons_bw_partial_node_form_alter().
+ */
+function commons_wikis_form_commons_bw_partial_node_form_after_build($form) {
+  $form['body'][LANGUAGE_NONE][0]['format']['#access'] = FALSE;
+  $form['body'][LANGUAGE_NONE][0]['value']['#rows'] = 10;
+
+  return $form;
+}
+
+/**
+ * Implements hook_commons_bw_group_widget().
+ */
+function commons_wikis_commons_bw_group_widget() {
+  return array(
+    'commons_wikis' => array(
+      'title' => t('Wikis'),
+      'type' => 'view',
+      'vid' => 'commons_bw_wikis',
+      'display' => 'default',
+      'weight' => 8,
+      'bundle' => 'wiki',
+    ),
+  );
+}
+
+/**
+ * Implements hook_commons_entity_integration.
+ */
+function commons_wikis_commons_entity_integration() {
+  return array(
+    'node' => array(
+      'wiki' => array(
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_strongarm_alter().
+ */
+ function commons_wikis_strongarm_alter(&$items) {
+  // Expose the wiki content type for 'liking' via the Commons_like module
+  // by altering the configuration for the Rate.module widget that it provides.
+  if (!empty($items['rate_widgets']->value)) {
+    foreach($items['rate_widgets']->value as $key => $widget) {
+      if ($widget->name == 'commons_like') {
+        if (!in_array('wiki', $items['rate_widgets']->value[$key]->node_types)) {
+          $items['rate_widgets']->value[$key]->node_types[] = 'wiki';
+        }
+        if (!in_array('wiki', $items['rate_widgets']->value[$key]->comment_types)) {
+          $items['rate_widgets']->value[$key]->comment_types[] = 'wiki';
+        }
+      }
+    }
+  }
+  // Expose the wiki content type for integration with Commons Radioactivity
+  // and Commons Groups.
+  foreach (array('commons_radioactivity_entity_types', 'commons_groups_entity_types') as $key) {
+    if (isset($items[$key])) {
+      $items[$key]->value['node']['wiki'] = 1;
+    }
+  }
+}
+
+/**
+ * Implements hook_node_update().
+ */
+function commons_wikis_node_update($node) {
+  if ($node->type == 'wiki' && module_exists('message')) {
+    global $user;
+    commons_groups_first_contribution($user, $node);
+    $message = message_create('commons_wikis_wiki_updated', array('uid' => $user->uid, 'timestamp' => REQUEST_TIME));
+    $wrapper = entity_metadata_wrapper('message', $message);
+    // Save reference to the node in the node reference field.
+    // We use a multiple value field in case we wish to use the same
+    // field for grouping messages in the future
+    // (eg http://drupal.org/node/1757060).
+    $wrapper->field_target_nodes[] = $node;
+    $wrapper->save();
+  }
+}

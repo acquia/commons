@@ -1,0 +1,42 @@
+#edit-events-sidebar legend .summary {
+  width: 25em;
+  overflow: hidden;
+  line-height: 1em;
+  height: 1em;
+}
+
+#edit-events-sidebar .fieldset-legend .fieldset-title {
+  display: block;
+}
+
+#legend-registration-type:after {
+  content: ', ';
+}
+
+.view-commons-events-event-attendee-list {
+  background-color: #fff;
+}
+
+/**
+ * Fix fieldset margins for date and address field since they have weird
+ * spacing issues.
+ */
+#edit-field-date .fieldset-description {
+  display: none;
+}
+#edit-field-date .date-padding {
+  padding: 0px;
+}
+#edit-field-date .fieldset-wrapper .form-item:first-child,
+#edit-field-date .form-item .form-item, 
+#edit-field-address .fieldset-wrapper .form-item:first-child,
+#edit-field-address .form-item {
+  margin-top: 0em;
+}
+
+form.commons-events-form-float {
+  float: right;
+}
+.commons-events-button {
+  margin-left: 5px;
+}

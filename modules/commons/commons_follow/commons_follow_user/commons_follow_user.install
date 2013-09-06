@@ -1,0 +1,9 @@
+<?php
+
+/**
+* Update Flag link text.
+*/
+function commons_follow_user_update_3101() {
+  features_revert(array('commons_follow_user' => array('flag')));
+  return array();
+}

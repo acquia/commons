@@ -1,0 +1,30 @@
+%divider-left {
+  border-left: 1px solid darken($light_blue, 3%);
+  @include box-shadow(darken($dark_blue, 13%) -1px 0px 0px);
+}
+
+%divider-right {
+  border-right: 1px solid darken($dark_blue, 13%);
+  @include box-shadow(darken($light_blue, 3%) 1px 0px 0px);
+}
+
+%pod {
+  background-color: $white;
+  @include border-radius(3px);
+  @include box-shadow($light_gray 1px 1px 4px);
+  margin: $gutter-width 0;
+}
+
+%pod-content {
+  padding: $gutter-width;
+}
+
+%node-space-right {
+  > .node-content {
+    margin-right: 10em;
+
+    @include respond(small-medium) {
+      margin-right: 0;
+    }
+  }
+}

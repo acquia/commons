@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * Disable summary on Poll nodes.
+ */
+function commons_polls_update_7000() {
+    $revert = array(
+      'commons_polls' => array('field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/**
+ * Grant users the ability to vote on polls.
+ */
+function commons_polls_update_7001() {
+    $revert = array(
+      'commons_polls' => array('user_permission'),
+  );
+  features_revert($revert);
+  return array();
+}

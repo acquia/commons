@@ -1,0 +1,22 @@
+<?php
+/**
+ * @file
+ * commons_polls.features.inc
+ */
+
+/**
+ * Implements hook_ctools_plugin_api().
+ */
+function commons_polls_ctools_plugin_api() {
+  list($module, $api) = func_get_args();
+  if ($module == "strongarm" && $api == "strongarm") {
+    return array("version" => "1");
+  }
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function commons_polls_views_api() {
+  return array("api" => "3.0");
+}

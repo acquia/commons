@@ -1,0 +1,261 @@
+<?php
+
+include_once 'commons_activity_streams.features.inc';
+
+
+/**
+ * Implements hook_form_alter().
+ */
+function commons_activity_streams_form_alter(&$form, &$form_state, $form_id) {
+  // Customize the text on the filter for Activity landing page.
+  if ($form_id == 'views_exposed_form' && $form['#id'] == 'views-exposed-form-commons-activity-streams-activity-panel-pane-3') {
+    $form['following']['#options'][0] = t("activity I'm not following");
+    $form['following']['#options'][1] = t("activity I'm following");
+  }
+
+  if ($form_id == 'edit_profile_user_profile_form') {
+    // Store default values in form state storage for change detection.
+    static $profile_form_state;
+    if (!isset($profile_form_state)) {
+      // Use a copy of $form and $form_state for prepare and process.
+      $profile_form = array_merge(array(), $form);
+      $profile_form_state = array_merge(array(), $form_state);
+      drupal_prepare_form('edit_profile_user_profile_form', $profile_form, $profile_form_state);
+      drupal_process_form('edit_profile_user_profile_form', $profile_form, $profile_form_state);
+      $form_state['storage']['values'] = $profile_form_state['values'];
+    }
+    $form['#submit'][] = 'commons_activity_streams_user_profile_submit';
+  }
+}
+
+/**
+ * Implements hook_node_insert().
+ */
+function commons_activity_streams_node_insert($node) {
+  // Create a message when a user creates a new node.
+  $account = user_load($node->uid);
+  // Allow other modules to change the message type used for this event.
+  $hook = 'node_insert';
+  $message_type = 'commons_activity_streams_node_created';
+  drupal_alter('commons_activity_streams_message_selection', $message_type, $hook, $node);
+  $message = message_create($message_type, array('uid' => $account->uid, 'timestamp' => $node->created));
+  // Save reference to the node in the node reference field, and the
+  $wrapper = entity_metadata_wrapper('message', $message);
+  // We use a multiple value field in case we wish to use the same
+  // field for grouping messages in the future
+  // (eg http://drupal.org/node/1757060).
+  $wrapper->field_target_nodes[] = $node;
+  $wrapper->save();
+}
+
+/**
+ * Implements hook_comment_insert().
+ */
+function commons_activity_streams_comment_insert($comment) {
+  $account = user_load($comment->uid);
+  $node = node_load($comment->nid);
+
+  $message = message_create('commons_activity_streams_comment_created', array('uid' => $account->uid, 'timestamp' => $comment->created));
+  // Save reference to the node in the node reference field, and the
+  // "publish" state (i.e. if the node is published or unpublished).
+  $wrapper = entity_metadata_wrapper('message', $message);
+  $wrapper->field_target_nodes[] = $node;
+  $wrapper->field_target_comments[] = $comment;
+
+  // The message should be published only if the node and the comment are
+  // both published.
+  // @todo: Deal with message publishing/unpublishing.
+  /*
+  $published = $node->status && $comment->status;
+  $wrapper->field_published->set($published);
+  */
+  $wrapper->save();
+}
+
+/**
+ * Implements hook_comment_delete().
+ */
+function commons_activity_streams_comment_delete($comment) {
+  // Delete the activity stream message created when this comment
+  // was posted.
+  if ($mids = commons_activity_streams_existing_messages($comment->uid, array($comment->cid), 'field_target_comments', 'commons_activity_streams_comment_created')) {
+    message_delete_multiple($mids);
+  }
+}
+
+/**
+ * Implements hook_message_access_alter().
+ */
+function commons_activity_streams_message_access_alter(&$access, $context) {
+  // We're only interested in the 'view' operation.
+  if ($context['op'] != 'view') {
+    return;
+  }
+
+  $message = $context['entity'];
+  // Verify view access to nodes referenced in the message.
+  if (isset($message->field_target_nodes)) {
+    foreach ($message->field_target_nodes[LANGUAGE_NONE] as $key => $value) {
+      $node = node_load($value['target_id']);
+      if (!node_access('view', $node, $context['account'])) {
+        // If the user cannot view any nodes in the message,
+        // deny access to the entire message;
+        $access = FALSE;
+        return;
+      }
+    }
+  }
+}
+
+/**
+* Find existing messages that match certain parameters.
+*/
+function commons_activity_streams_existing_messages($acting_uid, $target_ids, $target_field, $message_type) {
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'message', '=')
+   ->propertyCondition('uid', $acting_uid)
+   ->propertyCondition('type', $message_type, '=')
+   ->fieldCondition($target_field, 'target_id', $target_ids, 'IN')
+   ->execute();
+
+  if (!empty($query->ordered_results)) {
+    $mids = array();
+    foreach($query->ordered_results as $result) {
+      $mids[] = $result->entity_id;
+    }
+    return $mids;
+  }
+  return FALSE;
+}
+
+/**
+ * Create an activity stream message when a user updates her profile.
+ */
+function commons_activity_streams_user_profile_submit($form, &$form_state) {
+  global $user;
+
+  // Fields to ignore in $form_state['values'] when detecting changes.
+  $remove_keys = array(
+    'uid',
+    'name',
+    'pass',
+    'current_pass_required_values',
+    'current_pass',
+    'status',
+    'roles',
+    'notify',
+    'signature',
+    'picture_delete',
+    'message_subscribe_email',
+    'og_user_node',
+    'cancel',
+    'metatags',
+    'timezone',
+    'signature_format',
+    'form_token',
+    'form_id',
+    'form_build_id',
+    'picture_upload',
+    'submit'
+  );
+  $profile_values = array_diff_key($form_state['values'], array_flip($remove_keys));
+  ksort($profile_values);
+  $profile_data = serialize($profile_values);
+
+  $stored_profile_values = array_diff_key($form_state['storage']['values'], array_flip($remove_keys));
+  ksort($stored_profile_values);
+  $stored_profile_data = serialize($stored_profile_values);
+
+  // Do not generate a message if
+  //  - the user did not submit their own form
+  //  - no changes were detected
+  //  - a profile update message created within the last 15 minutes
+  $time_ago = time() - 900;
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'message')
+    ->propertyCondition('uid', $form_state['user']->uid)
+    ->propertyCondition('type', 'commons_activity_streams_user_profile_updated')
+    ->propertyCondition('timestamp', $time_ago, '>')
+    ->count();
+  $count = $query->execute();
+
+  if ($user->uid != $form_state['user']->uid ||
+    $profile_data == $stored_profile_data ||
+    $count > 0) {
+    return;
+  }
+
+  $account = $form_state['user'];
+  // Allow other modules to change the message type used for this event.
+  $hook = 'user_profile_update';
+  $message_type = 'commons_activity_streams_user_profile_updated';
+  drupal_alter('commons_activity_streams_message_selection', $message_type, $hook, $account);
+  $message = message_create($message_type, array('uid' => $account->uid, 'timestamp' => REQUEST_TIME));
+  // Save reference to the node in the node reference field, and the
+  $wrapper = entity_metadata_wrapper('message', $message);
+  $wrapper->field_target_users[] = $account;
+  $wrapper->save();
+}
+
+/**
+ * Implements hook_token_info().
+ */
+function commons_activity_streams_token_info() {
+  $styles = image_styles();
+  $tokens = array();
+  foreach ($styles as $style_name => $style) {
+    $tokens['picture:' . $style_name] = array(
+      'name' => t('Picture: @st image style', array('@st' => $style_name)),
+      'description' => t('Picture: @st image style', array('@st' => $style_name)),
+    );
+  }
+  return array(
+    'tokens' => array(
+      'user' => $tokens,
+    ),
+  );
+}
+
+/**
+ * Implements hook_tokens().
+ */
+function commons_activity_streams_tokens($type, $tokens, array $data = array(), array $options = array()) {
+  $replacements = array();
+  if ($type == 'user' && isset($data['user'])) {
+    $user = $data['user'];
+    $user_wrapper = entity_metadata_wrapper('user', $user);
+    $alt = $user->name;
+    if (isset($user->field_name_first)) {
+      $alt = $user_wrapper->field_name_first->value();
+      if (isset($user->field_name_last)) {
+        $alt .= " " . $user_wrapper->field_name_last->value();
+      }
+    }
+    $alt = t("@name's picture", array('@name' => $alt));
+    foreach ($tokens as $token => $original) {
+      if (strpos($token, 'picture:') !== FALSE) {
+        list( , $style) = explode(':', $token);
+        $path = variable_get('user_picture_default', '/profiles/commons/images/avatars/user-avatar.png');
+        if (!empty($user->picture)) {
+          $path = image_style_url($style, $user->picture->uri);
+        }
+        $image_variables = array(
+          'path' => $path,
+          'alt' => $alt,
+          'title' => $alt,
+          'class' => array('image-style-none'),
+        );
+        $image = theme('image', $image_variables);
+        $user_path = user_uri($user);
+        $link_options = array(
+          'attributes' => array(
+            'title' => t('View user profile.'),
+          ),
+          'html' => TRUE,
+        );
+        $replacements[$original] = "<div class='user-picture'>" . l($image, $user_path['path'], $link_options) . "</div>";
+      }
+    }
+  }
+  return $replacements;
+}

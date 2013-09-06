@@ -1,0 +1,138 @@
+<?php
+/**
+ * @file
+ * Code for the Commons Follow (Users) feature.
+ */
+
+include_once 'commons_follow_user.features.inc';
+
+
+
+/**
+ * Implements hook_commons_follow_get_nids().
+ */
+function commons_follow_user_commons_follow_get_nids($account, $options) {
+  // Get all flaggings from flags that belong to Message-subscribe, that
+  // reference the node entity-type.
+
+  // Get subscribe flag IDs.
+  $flag_ids = commons_follow_get_subscription_flags_ids('user');
+
+  if (empty($flag_ids)) {
+    return array();
+  }
+
+  // Get flagged user IDs.
+  $query = db_select('flag_content', 'f');
+  $result = $query
+    ->condition('fid', $flag_ids, 'IN')
+    ->condition('uid', $account->uid, '=')
+    ->condition('content_type', 'user', '=')
+    ->fields('f',array('content_id'))
+    ->execute()
+    ->fetchAll();
+
+  if (empty($result)) {
+    // No user flags.
+    return array();
+  }
+
+  $uids = array();
+  foreach($result as $row) {
+    $uids[] = (integer) $row->content_id;
+  }
+
+  // Get the user's node IDs.
+  $query = new EntityFieldQuery();
+
+  if (!empty($options['range'])) {
+    $query->range(0, $options['range']);
+  }
+
+  $result = $query
+    ->entityCondition('entity_type', 'node')
+    ->propertyCondition('uid', $uids, 'IN')
+    ->execute();
+
+  $nids = array();
+  if (!empty($result['node'])) {
+    foreach ($result['node'] as $nid => $row) {
+      $nids[] = $nid;
+    }
+  }
+
+
+  return $nids;
+}
+
+/**
+* Implements hook_system_info_alter().
+*/
+function commons_follow_user_system_info_alter(&$info, $file, $type) {
+  // If Message.module is enabled, we'll define our "User follows another user"
+  // message type and will need to add to it an instance of field_target_users.
+  if ($file->name == 'commons_follow_user' && module_exists('message')) {
+    $info['features']['field_instance'][] = 'message-commons_follow_user_user_followed-field_target_users';
+    $info['features']['message_type'][] = 'commons_follow_user_user_followed';
+  }
+}
+
+/**
+ * Implements hook_flag().
+ */
+function commons_follow_user_flag($op, $flag, $content_id, $account, $fcid) {
+  // Display an activity stream message when a user follows another user.
+  if (module_exists('commons_activity_streams') && $flag->name == 'commons_follow_user' && $op == 'flag') {
+    $followed_user = user_load($content_id);
+    // Don't generate a message for flagging blocked users.
+    if (!$followed_user->status) {
+      return;
+    }
+    // Todo: Check module_exists() before creating the message.
+    if (commons_follow_user_existing_follow_message($account->uid, array($followed_user->uid))) {
+      // If this user previously followed the target user, don't generate a duplicate message.
+      return;
+    }
+    $message = message_create('commons_follow_user_user_followed', array(), $account);
+    $wrapper = entity_metadata_wrapper('message', $message);
+    $wrapper->field_target_users[] = $followed_user->uid;
+    $wrapper->save();
+  }
+}
+
+/**
+* Indicate whether there is an existing message about a given user following
+* a target user.
+*/
+function commons_follow_user_existing_follow_message($acting_uid, $target_uids) {
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'message', '=')
+   ->propertyCondition('uid', $acting_uid)
+   ->propertyCondition('type', 'commons_follow_user_user_followed', '=')
+   ->fieldCondition('field_target_users', 'target_id', $target_uids, 'IN')
+   ->execute();
+
+   return !empty($query->ordered_results);
+}
+
+
+/**
+* Implements hook_commons_follow_get_message_ids().
+*/
+function commons_follow_user_commons_follow_get_message_ids(&$followed_mids, $followed_content = array()) {
+  // If the user isn't following any other users, we've nothing to do here.
+  if (empty($followed_content['commons_follow_user'])) {
+    return;
+  }
+  // Generate a list of message IDs where message.uid OR any of the referenced
+  // target users are ones that the current user is following.
+  $result = db_query("SELECT m.mid AS mid
+    FROM {message} m
+    LEFT JOIN {field_data_field_target_users} tu ON m.mid=tu.entity_id
+    WHERE tu.field_target_users_target_id IN(:uids)
+    OR m.uid IN (:uids)",
+    array(':uids' => array_values($followed_content['commons_follow_user'])));
+  foreach ($result as $this_result) {
+    $followed_mids[] = $this_result->mid;
+  }
+}
