@@ -14,7 +14,7 @@ The Travis CI project page for Commons can be found [over here](https://travis-c
 The Travis CI build process is configured within the [.travis.yml](../.travis.yml) file present in the root directory.  
 It currently includes:
 
-- building the -dev makefile using Drush
+- building the makefile using Drush
 - installing the resulting distribution using drush site-install
 - running the behat based tests ("features")
 
