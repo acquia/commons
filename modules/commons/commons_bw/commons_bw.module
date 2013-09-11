@@ -47,6 +47,20 @@ function commons_bw_form_alter(&$form, &$form_state, $form_id) {
 }
 
 /**
+ * Implements hook_views_default_views_alter().
+ */
+function commons_bw_views_default_views_alter(&$views) {
+  // Add a unique pager ID to Commons BW views.
+  $i = 0;
+  foreach ($views as $view_id => $view) {
+    if (strpos($view_id, 'commons_bw_') === 0) {
+      $views[$view_id]->display['default']->display_options['pager']['options']['id'] = $i;
+      $i++;
+    }
+  }
+}
+
+/**
  * Implements hook_forms().
  *
  * The bundle is added to the partial node form ID, to prevent duplicate IDs on

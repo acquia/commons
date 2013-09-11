@@ -166,3 +166,14 @@ function commons_groups_update_3112() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Standardize Browsing Widget views.
+ */
+function commons_groups_update_3113() {
+  $revert = array(
+    'commons_groups' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}

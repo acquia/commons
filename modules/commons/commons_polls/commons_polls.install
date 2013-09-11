@@ -21,3 +21,14 @@ function commons_polls_update_7001() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Standardize Browsing Widget views.
+ */
+function commons_polls_update_7002() {
+  $revert = array(
+    'commons_polls' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}

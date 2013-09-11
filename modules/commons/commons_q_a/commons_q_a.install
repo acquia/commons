@@ -92,3 +92,14 @@ function commons_q_a_update_3107() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Standardize Browsing Widget views.
+ */
+function commons_q_a_update_3108() {
+  $revert = array(
+    'commons_q_a' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}
