@@ -92,26 +92,13 @@ function commons_groups_entity_view($entity, $type, $view_mode, $langcode) {
  * Alter the privacy settings fields.
  */
 function commons_groups_form_group_node_form_alter(&$form, &$form_state) {
-  // Wrap the privacy fields with a fieldset.
-  $form['privacy_settings'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Privacy settings'),
-    '#weight' => 20,
-  );
-  $form['privacy_settings']['field_og_subscribe_settings'] = $form['field_og_subscribe_settings'];
-  unset($form['field_og_subscribe_settings']);
+  // The group privacy settings are not required.
+  $form['field_og_subscribe_settings'][LANGUAGE_NONE]['#required'] = FALSE;
 
-  // Hide the settings label.
-  $form['privacy_settings']['field_og_subscribe_settings'][LANGUAGE_NONE]['#title'] = '';
-  $form['privacy_settings']['field_og_subscribe_settings'][LANGUAGE_NONE]['#required'] = FALSE;
-
- 
-  $form['privacy_settings']['field_og_access_default_value'] = $form['field_og_access_default_value'];
-  unset($form['field_og_access_default_value']);
   if (module_exists('og_access')) {
     // Display the private content checkbox only when "Joining requires approval"
     // is selected.
-    $form['privacy_settings']['field_og_access_default_value']['#states'] = array(
+    $form['field_og_access_default_value']['#states'] = array(
       'visible' => array(
         ':input[name="field_og_subscribe_settings[' . LANGUAGE_NONE . ']"]' => array('value' => 'approval'),
       ),
@@ -135,7 +122,7 @@ function commons_groups_form_group_node_form_alter(&$form, &$form_state) {
  * Display the private content checkbox inside the privacy settings field.
  */
 function commons_groups_form_group_node_after_build($form, $form_state) {
-  $form['privacy_settings']['field_og_subscribe_settings'][LANGUAGE_NONE]['approval']['#suffix'] = render($form['privacy_settings']['field_og_access_default_value']);
+  $form['field_og_subscribe_settings'][LANGUAGE_NONE]['approval']['#suffix'] = render($form['field_og_access_default_value']);
 
   return $form;
 }
