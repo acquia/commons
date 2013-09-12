@@ -127,6 +127,10 @@ projects[entityreference][download][url] = "http://git.drupal.org/project/entity
 projects[entityreference][download][branch] = "7.x-1.x"
 projects[entityreference][download][revision] = "1c176daef3e7483389cbebeb34784b3af6521f7f"
 
+projects[entity_translation][type] = "module"
+projects[entity_translation][subdir] = "contrib"
+projects[entity_translation][version] = "1.0-beta3"
+
 ; Profile has no recommended release
 projects[edit_profile][type] = "module"
 projects[edit_profile][subdir] = "contrib"
@@ -164,6 +168,17 @@ projects[http_client][type] = "module"
 projects[http_client][subdir] = "contrib"
 projects[http_client][version] = "2.4"
 
+projects[i18n][type] = "module"
+projects[i18n][subdir] = "contrib"
+projects[i18n][version] = "1.10"
+
+projects[i18nviews][type] = "module"
+projects[i18nviews][subdir] = "contrib"
+projects[i18nviews][download][type] = "git"
+projects[i18nviews][download][url] = "http://git.drupal.org/project/i18nviews.git"
+projects[i18nviews][download][branch] = "7.x-3.x"
+projects[i18nviews][download][revision] = "26bd52c"
+
 projects[admin_icons][type] = "module"
 projects[admin_icons][subdir] = "contrib"
 projects[admin_icons][download][type] = "git"
@@ -174,6 +189,10 @@ projects[admin_icons][download][revision] = "60d9f28801533fecc92216a60d444d89d80
 projects[libraries][type] = "module"
 projects[libraries][subdir] = "contrib"
 projects[libraries][version] = "2.1"
+
+projects[lingotek][type] = "module"
+projects[lingotek][subdir] = "contrib"
+projects[lingotek][version] = "4.02"
 
 projects[link][type] = "module"
 projects[link][subdir] = "contrib"
@@ -397,6 +416,10 @@ projects[title][version] = "1.0-alpha7"
 projects[token][type] = "module"
 projects[token][subdir] = "contrib"
 projects[token][version] = "1.5"
+
+projects[variable][type] = "module"
+projects[variable][subdir] = "contrib"
+projects[variable][version] = "2.3"
 
 projects[views][type] = "module"
 projects[views][subdir] = "contrib"
