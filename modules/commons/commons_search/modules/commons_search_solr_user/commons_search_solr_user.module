@@ -88,6 +88,7 @@ function commons_search_solr_user_apachesolr_search_page_alter(&$build, $search_
         ->condition('f.content_type','user','=')
         ->condition('f.uid',$user->uid,'=')
         ->extend('PagerDefault')->limit(12)
+        ->addTag('commons_search_solr_user_people')
         ->execute();
       while($record = $fl_results->fetchAssoc()) {
         $out_results[] = user_view(user_load($record['content_id']), 'search_results');
