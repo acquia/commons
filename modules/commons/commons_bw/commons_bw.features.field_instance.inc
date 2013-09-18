@@ -11,7 +11,9 @@ function commons_bw_field_default_field_instances() {
   $field_instances = array();
 
   foreach (node_type_get_types() as $node_type) {
-    commons_bw_field_definition($field_instances, $node_type->type);
+    if (commons_bw_node_auto_title_instance($node_type->type)) {
+      commons_bw_field_definition($field_instances, $node_type->type);
+    }
   }
 
   // Translatables
@@ -25,12 +27,6 @@ function commons_bw_field_default_field_instances() {
  * Creates field instance definitions for all node types.
  */
 function commons_bw_field_definition(&$field_instances, $bundle) {
-  // Define which of the bundles should display the title field in the partial
-  // node form.
-  $display_in_partial_form = array(
-    'wiki' => TRUE,
-  );
-
   // Exported field_instance: 'node-[Bundle]-title_field'
   $field_instances["node-$bundle-title_field"] = array(
     'bundle' => $bundle,

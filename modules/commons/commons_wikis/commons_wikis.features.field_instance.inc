@@ -15,14 +15,14 @@ function commons_wikis_field_default_field_instances() {
     'bundle' => 'commons_wikis_wiki_updated',
     'default_value' => NULL,
     'default_value_function' => '',
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => '3',
+        'weight' => 3,
       ),
       'message_notify_email_body' => array(
         'label' => 'above',
@@ -55,10 +55,10 @@ function commons_wikis_field_default_field_instances() {
       'settings' => array(
         'match_operator' => 'CONTAINS',
         'path' => '',
-        'size' => '60',
+        'size' => 60,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => '2',
+      'weight' => 2,
     ),
   );
 
@@ -66,7 +66,7 @@ function commons_wikis_field_default_field_instances() {
   $field_instances['node-wiki-body'] = array(
     'bundle' => 'wiki',
     'default_value' => NULL,
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
@@ -74,7 +74,7 @@ function commons_wikis_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => '0',
+        'weight' => 0,
       ),
       'teaser' => array(
         'label' => 'hidden',
@@ -93,18 +93,62 @@ function commons_wikis_field_default_field_instances() {
     'required' => 1,
     'settings' => array(
       'display_summary' => 0,
-      'text_processing' => '1',
+      'text_processing' => 1,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
       'active' => 1,
       'module' => 'text',
       'settings' => array(
-        'rows' => '20',
+        'rows' => 20,
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => '1',
+      'weight' => 1,
+    ),
+  );
+
+  // Exported field_instance: 'node-wiki-title_field'
+  $field_instances['node-wiki-title_field'] = array(
+    'bundle' => 'wiki',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 12,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'display_in_partial_form' => 1,
+    'entity_type' => 'node',
+    'field_name' => 'title_field',
+    'label' => 'Title',
+    'required' => 1,
+    'settings' => array(
+      'hide_label' => array(
+        'entity' => 0,
+        'page' => 0,
+      ),
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => -5,
     ),
   );
 
@@ -112,6 +156,7 @@ function commons_wikis_field_default_field_instances() {
   // Included for use with string extractors like potx.
   t('Body');
   t('Target nodes');
+  t('Title');
 
   return $field_instances;
 }
