@@ -403,11 +403,7 @@ projects[strongarm][download][revision] = "5a2326ba67e59923ecce63d9bb5e0ed6548ab
 
 projects[timeago][type] = "module"
 projects[timeago][subdir] = "contrib"
-projects[timeago][version] = "2.x-dev"
-projects[timeago][download][type] = "git"
-projects[timeago][download][url] = "http://git.drupal.org/project/timeago.git"
-projects[timeago][download][branch] = "7.x-2.x"
-projects[timeago][download][revision] = "768ea66"
+projects[timeago][version] = "2.2"
 
 ; Provide a dedicated date type:
 ; http://drupal.org/node/1427226#comment-6638836
