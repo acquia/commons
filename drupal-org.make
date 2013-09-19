@@ -210,6 +210,10 @@ projects[message][version] = "1.9"
 ; http://drupal.org/node/1920560#comment-7080942
 projects[message][patch][] = "http://drupal.org/files/1920560-message-access-alterable.patch"
 
+; Add support for the undefined language.
+; http://drupal.org/node/2006702#comment-7842259
+projects[message][patch][] = "http://drupal.org/files/message_field_undefined-lang.2006702-14.patch"
+
 projects[message_notify][type] = "module"
 projects[message_notify][subdir] = "contrib"
 projects[message_notify][download][type] = "git"
