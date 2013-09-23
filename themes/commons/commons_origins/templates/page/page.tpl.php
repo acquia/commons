@@ -134,7 +134,6 @@
   <div id="columns" class="columns clearfix">
     <!-- Messages and Help -->
     <?php print $messages; ?>
-    <?php print render($page['help']); ?>
 
     <!-- region: Secondary Content -->
     <?php print render($page['secondary_content']); ?>
@@ -177,6 +176,7 @@
     </div>
     <div id="content-column" class="content-column" role="main">
       <div class="content-inner">
+        <?php print render($page['help']); ?>
 
         <!-- region: Highlighted -->
         <?php print render($page['highlighted']); ?>
