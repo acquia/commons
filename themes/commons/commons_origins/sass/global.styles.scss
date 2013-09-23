@@ -1044,17 +1044,21 @@ button,
 .sharethis-wrapper {
   position: absolute;
   left: 0;
-  bottom: 100%;
-  display: none;
+  bottom: 80%;
+  @include opacity(0);
+  visibility: hidden;
   white-space: nowrap;
   background: $white;
   border: 1px solid $green;
-  @include border-radius(6px);
-  padding: 10px 8px 3px 8px;
-  margin-bottom: 10px;
+  @include border-radius(2px);
+  padding: $gutter_width;
+  margin-bottom: $gutter_width;
+  @include transition(opacity .3s ease .4s, bottom .3s ease .4s, visibility .3s ease .4s);
+  z-index: 9;
 
   &:before,
   &:after {
+    display: block;
     content: "";
     width: 0;
     height: 0;
@@ -1062,22 +1066,35 @@ button,
     border-color: transparent;
     position: absolute;
     top: 100%;
+    z-index: 10;
   }
 
   &:before {
-    border-width: 6px 6px 0 6px;
+    border-width: $gutter_width;
     border-top-color: $green;
-    left: 10px;
+    left: $gutter_width;
   }
 
   &:after {
-    border-width: 5.5px 5.5px 0 5.5px;
+    border-width: ($gutter_width - 1);
     border-top-color: $white;
-    left: 11px;
+    left: ($gutter_width + 1);
   }
 
-  .sharethis-buttons:hover & {
-    display: block;
+  > span {
+    display: inline-block;
+    margin-top: -5px;
+  }
+
+  .sharethis:hover &,
+  .sharethis-buttons:active & {
+    @include opacity(1);
+    visibility: visible;
+    bottom: 100%;
+  }
+
+  .sharethis-buttons:active & {
+    @include transition-delay(0s);
   }
 }
 

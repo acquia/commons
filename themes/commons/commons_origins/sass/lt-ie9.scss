@@ -41,3 +41,14 @@ body.front.not-logged-in {
   margin-right: 1%;
   margin-left: 1%;
 }
+
+/* IE8 and lower do not support :before, So remove them and the margin so that
+   the container touches the button. */
+.sharethis-wrapper {
+  margin-bottom: 0;
+
+  &:before,
+  &:after {
+    border: none;
+  }
+}
