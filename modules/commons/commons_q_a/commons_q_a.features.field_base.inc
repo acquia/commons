@@ -12,9 +12,9 @@ function commons_q_a_field_default_field_bases() {
 
   // Exported field_base: 'field_related_question'
   $field_bases['field_related_question'] = array(
-    'active' => '1',
-    'cardinality' => '1',
-    'deleted' => '0',
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_related_question',
     'foreign keys' => array(
@@ -30,7 +30,7 @@ function commons_q_a_field_default_field_bases() {
         0 => 'target_id',
       ),
     ),
-    'locked' => '0',
+    'locked' => 0,
     'module' => 'entityreference',
     'settings' => array(
       'handler' => 'base',
@@ -49,7 +49,7 @@ function commons_q_a_field_default_field_bases() {
       ),
       'target_type' => 'node',
     ),
-    'translatable' => '0',
+    'translatable' => 0,
     'type' => 'entityreference',
   );
 

@@ -13,7 +13,7 @@ function commons_content_moderation_user_default_roles() {
   // Exported role: content moderator.
   $roles['content moderator'] = array(
     'name' => 'content moderator',
-    'weight' => '2',
+    'weight' => 2,
   );
 
   return $roles;

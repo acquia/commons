@@ -7,8 +7,7 @@
 /**
  * Implements hook_ctools_plugin_api().
  */
-function commons_follow_ctools_plugin_api() {
-  list($module, $api) = func_get_args();
+function commons_follow_ctools_plugin_api($module = NULL, $api = NULL) {
   if ($module == "strongarm" && $api == "strongarm") {
     return array("version" => "1");
   }
@@ -35,10 +34,10 @@ function commons_follow_image_default_styles() {
         'module' => 'image',
         'name' => 'image_scale_and_crop',
         'data' => array(
-          'width' => '50',
-          'height' => '50',
+          'width' => 50,
+          'height' => 50,
         ),
-        'weight' => '1',
+        'weight' => 1,
       ),
     ),
   );

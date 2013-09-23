@@ -12,17 +12,17 @@ function commons_events_field_default_field_bases() {
 
   // Exported field_base: 'field_date'
   $field_bases['field_date'] = array(
-    'active' => '1',
-    'cardinality' => '1',
-    'deleted' => '0',
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_date',
     'foreign keys' => array(),
     'indexes' => array(),
-    'locked' => '0',
+    'locked' => 0,
     'module' => 'date',
     'settings' => array(
-      'cache_count' => '4',
+      'cache_count' => 4,
       'cache_enabled' => 0,
       'granularity' => array(
         'day' => 'day',
@@ -36,15 +36,15 @@ function commons_events_field_default_field_bases() {
       'todate' => 'required',
       'tz_handling' => 'site',
     ),
-    'translatable' => '0',
+    'translatable' => 0,
     'type' => 'datetime',
   );
 
   // Exported field_base: 'field_location'
   $field_bases['field_location'] = array(
-    'active' => '1',
-    'cardinality' => '1',
-    'deleted' => '0',
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_location',
     'foreign keys' => array(),
@@ -53,7 +53,7 @@ function commons_events_field_default_field_bases() {
         0 => 'value',
       ),
     ),
-    'locked' => '0',
+    'locked' => 0,
     'module' => 'list',
     'settings' => array(
       'allowed_values' => array(
@@ -63,15 +63,15 @@ function commons_events_field_default_field_bases() {
       ),
       'allowed_values_function' => '',
     ),
-    'translatable' => '0',
+    'translatable' => 0,
     'type' => 'list_text',
   );
 
   // Exported field_base: 'field_logo'
   $field_bases['field_logo'] = array(
-    'active' => '1',
-    'cardinality' => '1',
-    'deleted' => '0',
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_logo',
     'foreign keys' => array(
@@ -87,37 +87,37 @@ function commons_events_field_default_field_bases() {
         0 => 'fid',
       ),
     ),
-    'locked' => '0',
+    'locked' => 0,
     'module' => 'image',
     'settings' => array(
       'default_image' => 0,
       'uri_scheme' => 'public',
     ),
-    'translatable' => '0',
+    'translatable' => 0,
     'type' => 'image',
   );
 
   // Exported field_base: 'field_number_of_attendees'
   $field_bases['field_number_of_attendees'] = array(
-    'active' => '1',
-    'cardinality' => '1',
-    'deleted' => '0',
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_number_of_attendees',
     'foreign keys' => array(),
     'indexes' => array(),
-    'locked' => '0',
+    'locked' => 0,
     'module' => 'number',
     'settings' => array(),
-    'translatable' => '0',
+    'translatable' => 0,
     'type' => 'number_integer',
   );
 
   // Exported field_base: 'field_offsite_url'
   $field_bases['field_offsite_url'] = array(
-    'active' => '1',
-    'cardinality' => '1',
-    'deleted' => '0',
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_offsite_url',
     'foreign keys' => array(
@@ -133,20 +133,20 @@ function commons_events_field_default_field_bases() {
         0 => 'format',
       ),
     ),
-    'locked' => '0',
+    'locked' => 0,
     'module' => 'text',
     'settings' => array(
-      'max_length' => '255',
+      'max_length' => 255,
     ),
-    'translatable' => '0',
+    'translatable' => 0,
     'type' => 'text',
   );
 
   // Exported field_base: 'field_organizers'
   $field_bases['field_organizers'] = array(
-    'active' => '1',
-    'cardinality' => '-1',
-    'deleted' => '0',
+    'active' => 1,
+    'cardinality' => -1,
+    'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_organizers',
     'foreign keys' => array(
@@ -162,7 +162,7 @@ function commons_events_field_default_field_bases() {
         0 => 'target_id',
       ),
     ),
-    'locked' => '0',
+    'locked' => 0,
     'module' => 'entityreference',
     'settings' => array(
       'handler' => 'base',
@@ -179,15 +179,15 @@ function commons_events_field_default_field_bases() {
       ),
       'target_type' => 'user',
     ),
-    'translatable' => '0',
+    'translatable' => 0,
     'type' => 'entityreference',
   );
 
   // Exported field_base: 'field_registration'
   $field_bases['field_registration'] = array(
-    'active' => '1',
-    'cardinality' => '1',
-    'deleted' => '0',
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_registration',
     'foreign keys' => array(
@@ -203,18 +203,18 @@ function commons_events_field_default_field_bases() {
         0 => 'registration_type',
       ),
     ),
-    'locked' => '0',
+    'locked' => 0,
     'module' => 'registration',
     'settings' => array(),
-    'translatable' => '0',
+    'translatable' => 0,
     'type' => 'registration',
   );
 
   // Exported field_base: 'field_registration_type'
   $field_bases['field_registration_type'] = array(
-    'active' => '1',
-    'cardinality' => '1',
-    'deleted' => '0',
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_registration_type',
     'foreign keys' => array(),
@@ -223,7 +223,7 @@ function commons_events_field_default_field_bases() {
         0 => 'value',
       ),
     ),
-    'locked' => '0',
+    'locked' => 0,
     'module' => 'list',
     'settings' => array(
       'allowed_values' => array(
@@ -232,7 +232,7 @@ function commons_events_field_default_field_bases() {
       ),
       'allowed_values_function' => '',
     ),
-    'translatable' => '0',
+    'translatable' => 0,
     'type' => 'list_text',
   );
 

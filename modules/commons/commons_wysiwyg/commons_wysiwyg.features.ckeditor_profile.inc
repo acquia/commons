@@ -12,7 +12,7 @@ function commons_wysiwyg_ckeditor_profile_defaults() {
     'Advanced' => array(
       'name' => 'Advanced',
       'settings' => array(
-        'ss' => '2',
+        'ss' => 2,
         'default' => 't',
         'show_toggle' => 't',
         'uicolor' => 'default',

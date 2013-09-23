@@ -5,9 +5,18 @@
  */
 
 /**
+ * Implements hook_ctools_plugin_api().
+ */
+function commons_follow_user_ctools_plugin_api($module = NULL, $api = NULL) {
+  if ($module == "strongarm" && $api == "strongarm") {
+    return array("version" => "1");
+  }
+}
+
+/**
  * Implements hook_views_api().
  */
-function commons_follow_user_views_api() {
+function commons_follow_user_views_api($module = NULL, $api = NULL) {
   return array("api" => "3.0");
 }
 
@@ -20,7 +29,7 @@ function commons_follow_user_flag_default_flags() {
   $flags['commons_follow_user'] = array(
     'content_type' => 'user',
     'title' => 'People',
-    'global' => '0',
+    'global' => 0,
     'types' => array(),
     'flag_short' => 'Follow',
     'flag_long' => '',
@@ -32,13 +41,13 @@ function commons_follow_user_flag_default_flags() {
     'link_type' => 'toggle',
     'roles' => array(
       'flag' => array(
-        0 => '2',
+        0 => 2,
       ),
       'unflag' => array(
-        0 => '2',
+        0 => 2,
       ),
     ),
-    'weight' => '-13',
+    'weight' => -13,
     'show_on_form' => 0,
     'access_author' => '',
     'show_on_profile' => 1,
@@ -53,7 +62,7 @@ function commons_follow_user_flag_default_flags() {
   $flags['email_user'] = array(
     'content_type' => 'user',
     'title' => 'Email user',
-    'global' => '0',
+    'global' => 0,
     'types' => array(),
     'flag_short' => 'Send Email',
     'flag_long' => '',
@@ -65,10 +74,10 @@ function commons_follow_user_flag_default_flags() {
     'link_type' => 'toggle',
     'roles' => array(
       'flag' => array(
-        0 => '2',
+        0 => 2,
       ),
       'unflag' => array(
-        0 => '2',
+        0 => 2,
       ),
     ),
     'weight' => 0,

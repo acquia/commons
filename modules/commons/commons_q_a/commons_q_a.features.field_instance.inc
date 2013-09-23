@@ -67,14 +67,14 @@ function commons_q_a_field_default_field_instances() {
     'bundle' => 'commons_q_a_question_asked',
     'default_value' => NULL,
     'default_value_function' => '',
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => '3',
+        'weight' => 3,
       ),
       'message_notify_email_body' => array(
         'label' => 'above',
@@ -107,10 +107,10 @@ function commons_q_a_field_default_field_instances() {
       'settings' => array(
         'match_operator' => 'CONTAINS',
         'path' => '',
-        'size' => '60',
+        'size' => 60,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => '2',
+      'weight' => 2,
     ),
   );
 
@@ -118,7 +118,7 @@ function commons_q_a_field_default_field_instances() {
   $field_instances['node-answer-body'] = array(
     'bundle' => 'answer',
     'default_value' => NULL,
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
@@ -154,7 +154,7 @@ function commons_q_a_field_default_field_instances() {
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => '-4',
+      'weight' => -4,
     ),
   );
 
@@ -163,7 +163,7 @@ function commons_q_a_field_default_field_instances() {
     'bundle' => 'answer',
     'default_value' => NULL,
     'default_value_function' => 'entityreference_prepopulate_field_default_value',
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
@@ -192,7 +192,7 @@ function commons_q_a_field_default_field_instances() {
           'action' => 'disable',
           'fallback' => 'form_error',
           'og_context' => 0,
-          'skip_perm' => '0',
+          'skip_perm' => 0,
           'status' => 1,
         ),
       ),
@@ -204,10 +204,10 @@ function commons_q_a_field_default_field_instances() {
       'settings' => array(
         'match_operator' => 'CONTAINS',
         'path' => '',
-        'size' => '60',
+        'size' => 60,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => '4',
+      'weight' => 4,
     ),
   );
 
@@ -215,7 +215,7 @@ function commons_q_a_field_default_field_instances() {
   $field_instances['node-question-body'] = array(
     'bundle' => 'question',
     'default_value' => NULL,
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
@@ -242,18 +242,18 @@ function commons_q_a_field_default_field_instances() {
     'required' => 0,
     'settings' => array(
       'display_summary' => 0,
-      'text_processing' => '1',
+      'text_processing' => 1,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
       'active' => 1,
       'module' => 'text',
       'settings' => array(
-        'rows' => '20',
+        'rows' => 20,
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => '1',
+      'weight' => 1,
     ),
   );
 

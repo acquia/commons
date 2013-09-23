@@ -13,9 +13,9 @@ function commons_topics_taxonomy_default_vocabularies() {
       'name' => 'Topics',
       'machine_name' => 'topics',
       'description' => '',
-      'hierarchy' => '0',
+      'hierarchy' => 0,
       'module' => 'taxonomy',
-      'weight' => '0',
+      'weight' => 0,
       'rdf_mapping' => array(
         'rdftype' => array(
           0 => 'skos:ConceptScheme',

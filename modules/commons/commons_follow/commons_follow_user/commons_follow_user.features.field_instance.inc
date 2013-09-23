@@ -14,14 +14,14 @@ function commons_follow_user_field_default_field_instances() {
   $field_instances['message-commons_follow_user_user_followed-field_target_users'] = array(
     'bundle' => 'commons_follow_user_user_followed',
     'default_value' => NULL,
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => '0',
+        'weight' => 0,
       ),
       'message_notify_email_body' => array(
         'label' => 'above',
@@ -49,10 +49,10 @@ function commons_follow_user_field_default_field_instances() {
       'settings' => array(
         'match_operator' => 'CONTAINS',
         'path' => '',
-        'size' => '60',
+        'size' => 60,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => '1',
+      'weight' => 1,
     ),
   );
 

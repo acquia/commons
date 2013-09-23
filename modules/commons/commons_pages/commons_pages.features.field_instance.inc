@@ -14,7 +14,7 @@ function commons_pages_field_default_field_instances() {
   $field_instances['node-page-body'] = array(
     'bundle' => 'page',
     'default_value' => NULL,
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(

@@ -7,12 +7,10 @@
 /**
  * Implements hook_ctools_plugin_api().
  */
-function commons_radioactivity_ctools_plugin_api() {
-  list($module, $api) = func_get_args();
+function commons_radioactivity_ctools_plugin_api($module = NULL, $api = NULL) {
   if ($module == "radioactivity" && $api == "radioactivity_decay_profile") {
     return array("version" => "1");
   }
-  list($module, $api) = func_get_args();
   if ($module == "strongarm" && $api == "strongarm") {
     return array("version" => "1");
   }
@@ -21,6 +19,6 @@ function commons_radioactivity_ctools_plugin_api() {
 /**
  * Implements hook_views_api().
  */
-function commons_radioactivity_views_api() {
+function commons_radioactivity_views_api($module = NULL, $api = NULL) {
   return array("api" => "3.0");
 }

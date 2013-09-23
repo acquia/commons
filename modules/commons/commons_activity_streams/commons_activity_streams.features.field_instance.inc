@@ -14,14 +14,14 @@ function commons_activity_streams_field_default_field_instances() {
   $field_instances['message-commons_activity_streams_comment_created-field_target_comments'] = array(
     'bundle' => 'commons_activity_streams_comment_created',
     'default_value' => NULL,
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => '0',
+        'weight' => 0,
       ),
       'message_notify_email_body' => array(
         'label' => 'above',
@@ -49,10 +49,10 @@ function commons_activity_streams_field_default_field_instances() {
       'settings' => array(
         'match_operator' => 'CONTAINS',
         'path' => '',
-        'size' => '60',
+        'size' => 60,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => '1',
+      'weight' => 1,
     ),
   );
 
@@ -60,14 +60,14 @@ function commons_activity_streams_field_default_field_instances() {
   $field_instances['message-commons_activity_streams_comment_created-field_target_nodes'] = array(
     'bundle' => 'commons_activity_streams_comment_created',
     'default_value' => NULL,
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => '1',
+        'weight' => 1,
       ),
       'message_notify_email_body' => array(
         'label' => 'above',
@@ -95,10 +95,10 @@ function commons_activity_streams_field_default_field_instances() {
       'settings' => array(
         'match_operator' => 'CONTAINS',
         'path' => '',
-        'size' => '60',
+        'size' => 60,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => '3',
+      'weight' => 3,
     ),
   );
 
@@ -106,14 +106,14 @@ function commons_activity_streams_field_default_field_instances() {
   $field_instances['message-commons_activity_streams_node_created-field_target_nodes'] = array(
     'bundle' => 'commons_activity_streams_node_created',
     'default_value' => NULL,
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => '2',
+        'weight' => 2,
       ),
       'message_notify_email_body' => array(
         'label' => 'above',
@@ -141,10 +141,10 @@ function commons_activity_streams_field_default_field_instances() {
       'settings' => array(
         'match_operator' => 'CONTAINS',
         'path' => '',
-        'size' => '60',
+        'size' => 60,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => '3',
+      'weight' => 3,
     ),
   );
 
@@ -153,7 +153,7 @@ function commons_activity_streams_field_default_field_instances() {
     'bundle' => 'commons_activity_streams_user_profile_updated',
     'default_value' => NULL,
     'default_value_function' => '',
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
@@ -193,10 +193,10 @@ function commons_activity_streams_field_default_field_instances() {
       'settings' => array(
         'match_operator' => 'CONTAINS',
         'path' => '',
-        'size' => '60',
+        'size' => 60,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => '42',
+      'weight' => 42,
     ),
   );
 

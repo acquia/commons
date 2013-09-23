@@ -14,11 +14,12 @@ function commons_like_field_default_field_instances() {
   $field_instances['message-commons_like_user_likes_node-field_target_nodes'] = array(
     'bundle' => 'commons_like_user_likes_node',
     'default_value' => NULL,
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
+        'settings' => array(),
         'type' => 'hidden',
         'weight' => 0,
       ),
@@ -50,7 +51,7 @@ function commons_like_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => '2',
+      'weight' => 2,
     ),
   );
 

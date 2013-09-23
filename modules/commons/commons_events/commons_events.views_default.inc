@@ -39,7 +39,7 @@ function commons_events_views_default_views() {
   $handler->display->display_options['relationships']['registration_related_node']['id'] = 'registration_related_node';
   $handler->display->display_options['relationships']['registration_related_node']['table'] = 'registration';
   $handler->display->display_options['relationships']['registration_related_node']['field'] = 'registration_related_node';
-  /* Relationship: Registration: User_uid */
+  /* Relationship: Registration: User */
   $handler->display->display_options['relationships']['user_uid']['id'] = 'user_uid';
   $handler->display->display_options['relationships']['user_uid']['table'] = 'registration';
   $handler->display->display_options['relationships']['user_uid']['field'] = 'user_uid';
@@ -250,7 +250,7 @@ function commons_events_views_default_views() {
     'multiple_from' => '',
     'multiple_to' => '',
   );
-  /* Field: Registration Settings: Slots Used */
+  /* Field: Registration Settings: Spaces used */
   $handler->display->display_options['fields']['capacity_used']['id'] = 'capacity_used';
   $handler->display->display_options['fields']['capacity_used']['table'] = 'node';
   $handler->display->display_options['fields']['capacity_used']['field'] = 'capacity_used';
@@ -367,7 +367,7 @@ function commons_events_views_default_views() {
     'multiple_from' => '',
     'multiple_to' => '',
   );
-  /* Field: Registration Settings: Slots Used */
+  /* Field: Registration Settings: Spaces used */
   $handler->display->display_options['fields']['capacity_used']['id'] = 'capacity_used';
   $handler->display->display_options['fields']['capacity_used']['table'] = 'node';
   $handler->display->display_options['fields']['capacity_used']['field'] = 'capacity_used';
@@ -508,7 +508,7 @@ function commons_events_views_default_views() {
   $handler->display->display_options['relationships']['registration_rel']['table'] = 'node';
   $handler->display->display_options['relationships']['registration_rel']['field'] = 'registration_rel';
   $handler->display->display_options['relationships']['registration_rel']['required'] = TRUE;
-  /* Relationship: Registration: User_uid */
+  /* Relationship: Registration: User */
   $handler->display->display_options['relationships']['user_uid']['id'] = 'user_uid';
   $handler->display->display_options['relationships']['user_uid']['table'] = 'registration';
   $handler->display->display_options['relationships']['user_uid']['field'] = 'user_uid';
@@ -526,7 +526,7 @@ function commons_events_views_default_views() {
   $handler->display->display_options['sorts']['created']['table'] = 'node';
   $handler->display->display_options['sorts']['created']['field'] = 'created';
   $handler->display->display_options['sorts']['created']['order'] = 'DESC';
-  /* Contextual filter: Registration: User_uid */
+  /* Contextual filter: Registration: User */
   $handler->display->display_options['arguments']['user_uid']['id'] = 'user_uid';
   $handler->display->display_options['arguments']['user_uid']['table'] = 'registration';
   $handler->display->display_options['arguments']['user_uid']['field'] = 'user_uid';
@@ -592,7 +592,7 @@ function commons_events_views_default_views() {
       'address' => 'address',
     ),
   );
-  /* Field: Registration Settings: Slots Used */
+  /* Field: Registration Settings: Spaces used */
   $handler->display->display_options['fields']['capacity_used']['id'] = 'capacity_used';
   $handler->display->display_options['fields']['capacity_used']['table'] = 'node';
   $handler->display->display_options['fields']['capacity_used']['field'] = 'capacity_used';
@@ -611,7 +611,7 @@ function commons_events_views_default_views() {
   $handler->display->display_options['fields']['comment_count']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['comment_count']['separator'] = '';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Registration: User_uid */
+  /* Contextual filter: Registration: User */
   $handler->display->display_options['arguments']['user_uid']['id'] = 'user_uid';
   $handler->display->display_options['arguments']['user_uid']['table'] = 'registration';
   $handler->display->display_options['arguments']['user_uid']['field'] = 'user_uid';
@@ -660,7 +660,7 @@ function commons_events_views_default_views() {
       'address' => 'address',
     ),
   );
-  /* Field: Registration Settings: Slots Used */
+  /* Field: Registration Settings: Spaces used */
   $handler->display->display_options['fields']['capacity_used']['id'] = 'capacity_used';
   $handler->display->display_options['fields']['capacity_used']['table'] = 'node';
   $handler->display->display_options['fields']['capacity_used']['field'] = 'capacity_used';
@@ -732,7 +732,7 @@ function commons_events_views_default_views() {
       'address' => 'address',
     ),
   );
-  /* Field: Registration Settings: Slots Used */
+  /* Field: Registration Settings: Spaces used */
   $handler->display->display_options['fields']['capacity_used']['id'] = 'capacity_used';
   $handler->display->display_options['fields']['capacity_used']['table'] = 'node';
   $handler->display->display_options['fields']['capacity_used']['field'] = 'capacity_used';

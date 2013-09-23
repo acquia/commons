@@ -15,14 +15,14 @@ function commons_posts_field_default_field_instances() {
     'bundle' => 'commons_posts_post_created',
     'default_value' => NULL,
     'default_value_function' => '',
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => '0',
+        'weight' => 0,
       ),
       'message_notify_email_body' => array(
         'label' => 'above',
@@ -55,10 +55,10 @@ function commons_posts_field_default_field_instances() {
       'settings' => array(
         'match_operator' => 'CONTAINS',
         'path' => '',
-        'size' => '60',
+        'size' => 60,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => '2',
+      'weight' => 2,
     ),
   );
 
@@ -66,7 +66,7 @@ function commons_posts_field_default_field_instances() {
   $field_instances['node-post-body'] = array(
     'bundle' => 'post',
     'default_value' => NULL,
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
@@ -93,18 +93,18 @@ function commons_posts_field_default_field_instances() {
     'required' => 0,
     'settings' => array(
       'display_summary' => 0,
-      'text_processing' => '1',
+      'text_processing' => 1,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
       'active' => 1,
       'module' => 'text',
       'settings' => array(
-        'rows' => '20',
+        'rows' => 20,
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => '2',
+      'weight' => 2,
     ),
   );
 

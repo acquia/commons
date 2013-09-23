@@ -12,13 +12,13 @@ function commons_follow_field_default_field_bases() {
 
   // Exported field_base: 'field_target_comments'
   $field_bases['field_target_comments'] = array(
-    'active' => '1',
-    'cardinality' => '-1',
-    'deleted' => '0',
+    'active' => 1,
+    'cardinality' => -1,
+    'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_target_comments',
     'field_permissions' => array(
-      'type' => '0',
+      'type' => 0,
     ),
     'foreign keys' => array(
       'comment' => array(
@@ -33,7 +33,7 @@ function commons_follow_field_default_field_bases() {
         0 => 'target_id',
       ),
     ),
-    'locked' => '0',
+    'locked' => 0,
     'module' => 'entityreference',
     'settings' => array(
       'handler' => 'base',
@@ -51,19 +51,19 @@ function commons_follow_field_default_field_bases() {
       'handler_submit' => 'Change handler',
       'target_type' => 'comment',
     ),
-    'translatable' => '0',
+    'translatable' => 0,
     'type' => 'entityreference',
   );
 
   // Exported field_base: 'field_target_nodes'
   $field_bases['field_target_nodes'] = array(
-    'active' => '1',
-    'cardinality' => '-1',
-    'deleted' => '0',
+    'active' => 1,
+    'cardinality' => -1,
+    'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_target_nodes',
     'field_permissions' => array(
-      'type' => '0',
+      'type' => 0,
     ),
     'foreign keys' => array(
       'node' => array(
@@ -78,7 +78,7 @@ function commons_follow_field_default_field_bases() {
         0 => 'target_id',
       ),
     ),
-    'locked' => '0',
+    'locked' => 0,
     'module' => 'entityreference',
     'settings' => array(
       'handler' => 'base',
@@ -96,19 +96,19 @@ function commons_follow_field_default_field_bases() {
       'handler_submit' => 'Change handler',
       'target_type' => 'node',
     ),
-    'translatable' => '0',
+    'translatable' => 0,
     'type' => 'entityreference',
   );
 
   // Exported field_base: 'field_target_users'
   $field_bases['field_target_users'] = array(
-    'active' => '1',
-    'cardinality' => '-1',
-    'deleted' => '0',
+    'active' => 1,
+    'cardinality' => -1,
+    'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_target_users',
     'field_permissions' => array(
-      'type' => '0',
+      'type' => 0,
     ),
     'foreign keys' => array(
       'users' => array(
@@ -123,7 +123,7 @@ function commons_follow_field_default_field_bases() {
         0 => 'target_id',
       ),
     ),
-    'locked' => '0',
+    'locked' => 0,
     'module' => 'entityreference',
     'settings' => array(
       'handler' => 'base',
@@ -144,7 +144,7 @@ function commons_follow_field_default_field_bases() {
       'handler_submit' => 'Change handler',
       'target_type' => 'user',
     ),
-    'translatable' => '0',
+    'translatable' => 0,
     'type' => 'entityreference',
   );
 

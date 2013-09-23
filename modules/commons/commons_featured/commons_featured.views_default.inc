@@ -81,7 +81,7 @@ function commons_featured_views_default_views() {
       'address' => 'address',
     ),
   );
-  /* Field: Registration Settings: Slots Used */
+  /* Field: Registration Settings: Spaces used */
   $handler->display->display_options['fields']['capacity_used']['id'] = 'capacity_used';
   $handler->display->display_options['fields']['capacity_used']['table'] = 'node';
   $handler->display->display_options['fields']['capacity_used']['field'] = 'capacity_used';

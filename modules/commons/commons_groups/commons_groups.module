@@ -412,6 +412,7 @@ function commons_groups_system_info_alter(&$info, $file, $type) {
         // These fields are only necessary when og_access.module is enabled.
         $info['features']['field_instance'][] = "node-$bundle-field_og_access_default_value";
         $info['features']['field_instance'][] = "node-$bundle-group_access";
+        $info['features']['field_instance'][] = "node-$bundle-field_group_logo";
       }
     }
     $group_content_entity_types = commons_groups_get_group_content_entity_types();

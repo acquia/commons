@@ -19,6 +19,7 @@ function commons_radioactivity_strongarm() {
       'group' => 1,
       'poll' => 1,
       'post' => 1,
+      'wiki' => 1,
     ),
   );
   $export['commons_radioactivity_entity_types'] = $strongarm;

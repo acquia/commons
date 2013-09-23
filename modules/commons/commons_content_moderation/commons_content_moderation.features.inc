@@ -7,8 +7,7 @@
 /**
  * Implements hook_ctools_plugin_api().
  */
-function commons_content_moderation_ctools_plugin_api() {
-  list($module, $api) = func_get_args();
+function commons_content_moderation_ctools_plugin_api($module = NULL, $api = NULL) {
   if ($module == "strongarm" && $api == "strongarm") {
     return array("version" => "1");
   }
@@ -17,7 +16,7 @@ function commons_content_moderation_ctools_plugin_api() {
 /**
  * Implements hook_views_api().
  */
-function commons_content_moderation_views_api() {
+function commons_content_moderation_views_api($module = NULL, $api = NULL) {
   return array("api" => "3.0");
 }
 
@@ -30,7 +29,7 @@ function commons_content_moderation_flag_default_flags() {
   $flags['inappropriate_comment'] = array(
     'content_type' => 'comment',
     'title' => 'Comment inappropriate',
-    'global' => '0',
+    'global' => 0,
     'types' => array(
       0 => 'comment_node_answer',
       1 => 'comment_node_event',
@@ -50,10 +49,10 @@ function commons_content_moderation_flag_default_flags() {
     'link_type' => 'confirm',
     'roles' => array(
       'flag' => array(
-        0 => '2',
+        0 => 2,
       ),
       'unflag' => array(
-        0 => '2',
+        0 => 2,
       ),
     ),
     'weight' => 0,
@@ -72,7 +71,7 @@ function commons_content_moderation_flag_default_flags() {
   $flags['inappropriate_node'] = array(
     'content_type' => 'node',
     'title' => 'Node inappropriate',
-    'global' => '0',
+    'global' => 0,
     'types' => array(
       0 => 'event',
       1 => 'group',
@@ -90,10 +89,10 @@ function commons_content_moderation_flag_default_flags() {
     'link_type' => 'confirm',
     'roles' => array(
       'flag' => array(
-        0 => '2',
+        0 => 2,
       ),
       'unflag' => array(
-        0 => '2',
+        0 => 2,
       ),
     ),
     'weight' => 0,

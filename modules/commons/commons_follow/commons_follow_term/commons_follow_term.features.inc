@@ -7,7 +7,7 @@
 /**
  * Implements hook_views_api().
  */
-function commons_follow_term_views_api() {
+function commons_follow_term_views_api($module = NULL, $api = NULL) {
   return array("api" => "3.0");
 }
 
@@ -20,7 +20,7 @@ function commons_follow_term_flag_default_flags() {
   $flags['commons_follow_term'] = array(
     'content_type' => 'taxonomy_term',
     'title' => 'Topics',
-    'global' => '0',
+    'global' => 0,
     'types' => array(
       0 => 'topics',
     ),
@@ -34,13 +34,13 @@ function commons_follow_term_flag_default_flags() {
     'link_type' => 'toggle',
     'roles' => array(
       'flag' => array(
-        0 => '2',
+        0 => 2,
       ),
       'unflag' => array(
-        0 => '2',
+        0 => 2,
       ),
     ),
-    'weight' => '-8',
+    'weight' => -8,
     'show_on_entity' => 1,
     'show_on_form' => 0,
     'access_author' => '',
@@ -54,7 +54,7 @@ function commons_follow_term_flag_default_flags() {
   $flags['email_term'] = array(
     'content_type' => 'taxonomy_term',
     'title' => 'Email term',
-    'global' => '0',
+    'global' => 0,
     'types' => array(
       0 => 'topics',
     ),
@@ -68,10 +68,10 @@ function commons_follow_term_flag_default_flags() {
     'link_type' => 'toggle',
     'roles' => array(
       'flag' => array(
-        0 => '2',
+        0 => 2,
       ),
       'unflag' => array(
-        0 => '2',
+        0 => 2,
       ),
     ),
     'weight' => 0,
@@ -79,10 +79,10 @@ function commons_follow_term_flag_default_flags() {
     'show_on_form' => 0,
     'access_author' => '',
     'module' => 'commons_follow_term',
-    'api_version' => 2,
     'locked' => array(
       0 => 'name',
     ),
+    'api_version' => 2,
   );
   return $flags;
 

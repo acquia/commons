@@ -7,7 +7,7 @@
 /**
  * Implements hook_views_api().
  */
-function commons_follow_node_views_api() {
+function commons_follow_node_views_api($module = NULL, $api = NULL) {
   return array("api" => "3.0");
 }
 
@@ -20,9 +20,8 @@ function commons_follow_node_flag_default_flags() {
   $flags['commons_follow_node'] = array(
     'content_type' => 'node',
     'title' => 'Other content',
-    'global' => '0',
-    'types' => array(
-    ),
+    'global' => 0,
+    'types' => array(),
     'flag_short' => 'Follow',
     'flag_long' => '',
     'flag_message' => '',
@@ -33,13 +32,13 @@ function commons_follow_node_flag_default_flags() {
     'link_type' => 'toggle',
     'roles' => array(
       'flag' => array(
-        0 => '2',
+        0 => 2,
       ),
       'unflag' => array(
-        0 => '2',
+        0 => 2,
       ),
     ),
-    'weight' => '-10',
+    'weight' => -10,
     'show_on_form' => 0,
     'access_author' => '',
     'show_on_page' => 1,
@@ -56,9 +55,8 @@ function commons_follow_node_flag_default_flags() {
   $flags['email_node'] = array(
     'content_type' => 'node',
     'title' => 'Email content',
-    'global' => '0',
-    'types' => array(
-    ),
+    'global' => 0,
+    'types' => array(),
     'flag_short' => 'Send Email',
     'flag_long' => '',
     'flag_message' => '',
@@ -69,10 +67,10 @@ function commons_follow_node_flag_default_flags() {
     'link_type' => 'toggle',
     'roles' => array(
       'flag' => array(
-        0 => '2',
+        0 => 2,
       ),
       'unflag' => array(
-        0 => '2',
+        0 => 2,
       ),
     ),
     'weight' => 0,
@@ -83,10 +81,10 @@ function commons_follow_node_flag_default_flags() {
     'show_contextual_link' => 0,
     'i18n' => 0,
     'module' => 'commons_follow_node',
-    'api_version' => 2,
     'locked' => array(
       0 => 'name',
     ),
+    'api_version' => 2,
   );
   return $flags;
 

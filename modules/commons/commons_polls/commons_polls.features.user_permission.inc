@@ -10,7 +10,7 @@
 function commons_polls_user_default_permissions() {
   $permissions = array();
 
-  // Exported permission: cancel own vote.
+  // Exported permission: 'cancel own vote'.
   $permissions['cancel own vote'] = array(
     'name' => 'cancel own vote',
     'roles' => array(
@@ -20,7 +20,7 @@ function commons_polls_user_default_permissions() {
     'module' => 'poll',
   );
 
-  // Exported permission: create poll content.
+  // Exported permission: 'create poll content'.
   $permissions['create poll content'] = array(
     'name' => 'create poll content',
     'roles' => array(
@@ -30,7 +30,7 @@ function commons_polls_user_default_permissions() {
     'module' => 'node',
   );
 
-  // Exported permission: delete any poll content.
+  // Exported permission: 'delete any poll content'.
   $permissions['delete any poll content'] = array(
     'name' => 'delete any poll content',
     'roles' => array(
@@ -39,7 +39,7 @@ function commons_polls_user_default_permissions() {
     'module' => 'node',
   );
 
-  // Exported permission: delete own poll content.
+  // Exported permission: 'delete own poll content'.
   $permissions['delete own poll content'] = array(
     'name' => 'delete own poll content',
     'roles' => array(
@@ -49,7 +49,7 @@ function commons_polls_user_default_permissions() {
     'module' => 'node',
   );
 
-  // Exported permission: edit any poll content.
+  // Exported permission: 'edit any poll content'.
   $permissions['edit any poll content'] = array(
     'name' => 'edit any poll content',
     'roles' => array(
@@ -58,7 +58,7 @@ function commons_polls_user_default_permissions() {
     'module' => 'node',
   );
 
-  // Exported permission: edit own poll content.
+  // Exported permission: 'edit own poll content'.
   $permissions['edit own poll content'] = array(
     'name' => 'edit own poll content',
     'roles' => array(
@@ -68,7 +68,7 @@ function commons_polls_user_default_permissions() {
     'module' => 'node',
   );
 
-  // Exported permission: vote on polls.
+  // Exported permission: 'vote on polls'.
   $permissions['vote on polls'] = array(
     'name' => 'vote on polls',
     'roles' => array(

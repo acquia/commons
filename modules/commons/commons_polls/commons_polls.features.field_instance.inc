@@ -14,7 +14,7 @@ function commons_polls_field_default_field_instances() {
   $field_instances['node-poll-body'] = array(
     'bundle' => 'poll',
     'default_value' => NULL,
-    'deleted' => '0',
+    'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
@@ -41,18 +41,18 @@ function commons_polls_field_default_field_instances() {
     'required' => 0,
     'settings' => array(
       'display_summary' => 0,
-      'text_processing' => '1',
+      'text_processing' => 1,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
       'active' => 1,
       'module' => 'text',
       'settings' => array(
-        'rows' => '20',
+        'rows' => 20,
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => '2',
+      'weight' => 2,
     ),
   );
 

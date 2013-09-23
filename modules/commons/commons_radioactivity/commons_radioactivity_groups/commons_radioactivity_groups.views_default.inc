@@ -202,7 +202,7 @@ function commons_radioactivity_groups_views_default_views() {
   $handler->display->display_options['filters']['status']['value'] = 1;
   $handler->display->display_options['filters']['status']['group'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
-  /* Filter criterion: Content: Group (group_group) */
+  /* Filter criterion: Field: Group (group_group) */
   $handler->display->display_options['filters']['group_group_value']['id'] = 'group_group_value';
   $handler->display->display_options['filters']['group_group_value']['table'] = 'field_data_group_group';
   $handler->display->display_options['filters']['group_group_value']['field'] = 'group_group_value';

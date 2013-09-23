@@ -7,12 +7,10 @@
 /**
  * Implements hook_ctools_plugin_api().
  */
-function commons_q_a_ctools_plugin_api() {
-  list($module, $api) = func_get_args();
+function commons_q_a_ctools_plugin_api($module = NULL, $api = NULL) {
   if ($module == "panelizer" && $api == "panelizer") {
     return array("version" => "1");
   }
-  list($module, $api) = func_get_args();
   if ($module == "strongarm" && $api == "strongarm") {
     return array("version" => "1");
   }
@@ -21,7 +19,7 @@ function commons_q_a_ctools_plugin_api() {
 /**
  * Implements hook_views_api().
  */
-function commons_q_a_views_api() {
+function commons_q_a_views_api($module = NULL, $api = NULL) {
   return array("api" => "3.0");
 }
 
@@ -32,7 +30,7 @@ function commons_q_a_default_message_type() {
   $items = array();
   $items['commons_q_a_question_answered'] = entity_import('message_type', '{
     "name" : "commons_q_a_question_answered",
-    "description" : "Commons Q\u0026A: Question Answered",
+    "description" : "Commons Q\\u0026A: Question Answered",
     "argument_keys" : [],
     "argument" : [],
     "category" : "message_type",
@@ -46,9 +44,9 @@ function commons_q_a_default_message_type() {
           "safe_value" : "[message:user:picture:35x35]"
         },
         {
-          "value" : "\u003Ca href=\u0022[message:user:url:absolute]\u0022\u003E[message:user:name]\u003C\/a\u003E answered the question \u003Cem\u003E[message:field-target-nodes:0:field-related-question:title]\u003C\/em\u003E with \u0022\u003Ca href=\u0022[message:field-target-nodes:0:field-related-question:url]#node-[message:field-target-nodes:0:nid]\u0022\u003E[message:field-target-nodes:0:title]\u003C\/a\u003E\u0022",
+          "value" : "\\u003Ca href=\\u0022[message:user:url:absolute]\\u0022\\u003E[message:user:name]\\u003C\\/a\\u003E answered the question \\u003Cem\\u003E[message:field-target-nodes:0:field-related-question:title]\\u003C\\/em\\u003E with \\u0022\\u003Ca href=\\u0022[message:field-target-nodes:0:field-related-question:url]#node-[message:field-target-nodes:0:nid]\\u0022\\u003E[message:field-target-nodes:0:title]\\u003C\\/a\\u003E\\u0022",
           "format" : "full_html",
-          "safe_value" : "\u003Ca href=\u0022[message:user:url:absolute]\u0022\u003E[message:user:name]\u003C\/a\u003E answered the question \u003Cem\u003E[message:field-target-nodes:0:field-related-question:title]\u003C\/em\u003E with \u0022\u003Ca href=\u0022[message:field-target-nodes:0:field-related-question:url]#node-[message:field-target-nodes:0:nid]\u0022\u003E[message:field-target-nodes:0:title]\u003C\/a\u003E\u0022"
+          "safe_value" : "\\u003Ca href=\\u0022[message:user:url:absolute]\\u0022\\u003E[message:user:name]\\u003C\\/a\\u003E answered the question \\u003Cem\\u003E[message:field-target-nodes:0:field-related-question:title]\\u003C\\/em\\u003E with \\u0022\\u003Ca href=\\u0022[message:field-target-nodes:0:field-related-question:url]#node-[message:field-target-nodes:0:nid]\\u0022\\u003E[message:field-target-nodes:0:title]\\u003C\\/a\\u003E\\u0022"
         },
         {
           "value" : "[commons-groups:in-groups-text]",
@@ -61,7 +59,7 @@ function commons_q_a_default_message_type() {
   }');
   $items['commons_q_a_question_asked'] = entity_import('message_type', '{
     "name" : "commons_q_a_question_asked",
-    "description" : "Commons Q\u0026A: Question Asked",
+    "description" : "Commons Q\\u0026A: Question Asked",
     "argument_keys" : [],
     "argument" : [],
     "category" : "message_type",
@@ -75,9 +73,9 @@ function commons_q_a_default_message_type() {
           "safe_value" : "[message:user:picture:35x35]"
         },
         {
-          "value" : "\u003Ca href=\u0022[message:user:url:absolute]\u0022\u003E[message:user:name]\u003C\/a\u003E asked the question \u003Ca href=\u0022[message:field-target-nodes:0:url]\u0022\u003E[message:field-target-nodes:0:title]\u003C\/a\u003E",
+          "value" : "\\u003Ca href=\\u0022[message:user:url:absolute]\\u0022\\u003E[message:user:name]\\u003C\\/a\\u003E asked the question \\u003Ca href=\\u0022[message:field-target-nodes:0:url]\\u0022\\u003E[message:field-target-nodes:0:title]\\u003C\\/a\\u003E",
           "format" : "full_html",
-          "safe_value" : "\u003Ca href=\u0022[message:user:url:absolute]\u0022\u003E[message:user:name]\u003C\/a\u003E asked the question \u003Ca href=\u0022[message:field-target-nodes:0:url]\u0022\u003E[message:field-target-nodes:0:title]\u003C\/a\u003E"
+          "safe_value" : "\\u003Ca href=\\u0022[message:user:url:absolute]\\u0022\\u003E[message:user:name]\\u003C\\/a\\u003E asked the question \\u003Ca href=\\u0022[message:field-target-nodes:0:url]\\u0022\\u003E[message:field-target-nodes:0:title]\\u003C\\/a\\u003E"
         },
         {
           "value" : "[commons-groups:in-groups-text]",
@@ -99,7 +97,7 @@ function commons_q_a_node_info() {
     'answer' => array(
       'name' => t('Answer'),
       'base' => 'node_content',
-      'description' => 'Use answers for responses to Question content, which can be rated by user votes.',
+      'description' => t('Use answers for responses to Question content, which can be rated by user votes.'),
       'has_title' => '1',
       'title_label' => t('Title'),
       'help' => '',
@@ -107,7 +105,7 @@ function commons_q_a_node_info() {
     'question' => array(
       'name' => t('Question'),
       'base' => 'node_content',
-      'description' => 'Ask a question to receive answers from other community members',
+      'description' => t('Ask a question to receive answers from other community members'),
       'has_title' => '1',
       'title_label' => t('Title'),
       'help' => '',
