@@ -186,6 +186,10 @@ projects[admin_icons][download][url] = "http://git.drupal.org/project/admin_icon
 projects[admin_icons][download][branch] = "7.x-1.x"
 projects[admin_icons][download][revision] = "60d9f28801533fecc92216a60d444d89d80e7611"
 
+projects[l10n_update][type] = "module"
+projects[l10n_update][subdir] = "contrib"
+projects[l10n_update][version] = "1.0-beta3"
+
 projects[libraries][type] = "module"
 projects[libraries][subdir] = "contrib"
 projects[libraries][version] = "2.1"
@@ -315,6 +319,10 @@ projects[placeholder][version] = "1.0"
 projects[pm_existing_pages][type] = "module"
 projects[pm_existing_pages][subdir] = "contrib"
 projects[pm_existing_pages][version] = "1.4"
+
+projects[potx][type] = "module" 
+projects[potx][subdir] = "contrib"
+projects[potx][version] = "1.0"
 
 projects[privatemsg][type] = "module"
 projects[privatemsg][subdir] = "contrib"
