@@ -49,10 +49,12 @@ function commons_posts_form_commons_bw_partial_node_form_alter(&$form, &$form_st
     return;
   }
 
-  $form['body'][LANGUAGE_NONE][0]['#title_display'] = 'invisible';
-  $form['body'][LANGUAGE_NONE][0]['#required'] = TRUE;
-  $form['body'][LANGUAGE_NONE][0]['#placeholder'] = t("What's on your mind?");
-  $form['body'][LANGUAGE_NONE][0]['#resizable'] = FALSE;
+  $language = entity_language('node', $form['#entity']);
+
+  $form['body'][$language][0]['#title_display'] = 'invisible';
+  $form['body'][$language][0]['#required'] = TRUE;
+  $form['body'][$language][0]['#placeholder'] = t("What's on your mind?");
+  $form['body'][$language][0]['#resizable'] = FALSE;
 
   // Set fields as hideable so the forms can be compacted.
   $form['body']['#attributes']['class'][] = 'trigger-field';
@@ -71,9 +73,11 @@ function commons_posts_form_commons_bw_partial_node_form_alter(&$form, &$form_st
  * See commons_posts_form_commons_bw_partial_node_form_alter().
  */
 function commons_posts_form_commons_bw_partial_node_form_after_build($form) {
-  $form['body'][LANGUAGE_NONE][0]['#pre_render'] = array();
-  $form['body'][LANGUAGE_NONE][0]['format']['#access'] = FALSE;
-  $form['body'][LANGUAGE_NONE][0]['value']['#rows'] = 3;
+  $language = entity_language('node', $form['#entity']);
+
+  $form['body'][$language][0]['#pre_render'] = array();
+  $form['body'][$language][0]['format']['#access'] = FALSE;
+  $form['body'][$language][0]['value']['#rows'] = 3;
 
   return $form;
 }

@@ -107,11 +107,13 @@ function commons_wikis_form_commons_bw_partial_node_form_alter(&$form, &$form_st
     return;
   }
 
-  $form['title_field'][LANGUAGE_NONE][0]['value']['#title_display'] = 'invisible';
-  $form['title_field'][LANGUAGE_NONE][0]['value']['#placeholder'] = t('Enter a Wiki title');
+  $language = entity_language('node', $form['#entity']);
 
-  $form['body'][LANGUAGE_NONE][0]['#title_display'] = 'invisible';
-  $form['body'][LANGUAGE_NONE][0]['#resizable'] = FALSE;
+  $form['title_field'][$language][0]['value']['#title_display'] = 'invisible';
+  $form['title_field'][$language][0]['value']['#placeholder'] = t('Enter a Wiki title');
+
+  $form['body'][$language][0]['#title_display'] = 'invisible';
+  $form['body'][$language][0]['#resizable'] = FALSE;
 
   // Set fields as hideable so the forms can be compacted.
   $form['title_field']['#attributes']['class'][] = 'trigger-field';
@@ -130,8 +132,10 @@ function commons_wikis_form_commons_bw_partial_node_form_alter(&$form, &$form_st
  * See commons_wikis_form_commons_bw_partial_node_form_alter().
  */
 function commons_wikis_form_commons_bw_partial_node_form_after_build($form) {
-  $form['body'][LANGUAGE_NONE][0]['format']['#access'] = FALSE;
-  $form['body'][LANGUAGE_NONE][0]['value']['#rows'] = 10;
+  $language = entity_language('node', $form['#entity']);
+
+  $form['body'][$language][0]['format']['#access'] = FALSE;
+  $form['body'][$language][0]['value']['#rows'] = 10;
 
   return $form;
 }
