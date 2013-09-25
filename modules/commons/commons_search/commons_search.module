@@ -69,6 +69,11 @@ function commons_search_form_alter(&$form, &$form_state, $form_id) {
       // search keywords.
       $form['search_block_form']['#default_value'] = check_plain(arg(2));
     }
+    $keys = arg(2);
+    if (!module_exists('commons_search_solr') && !empty($keys)) {
+      // Remove the search keys from the form action only if we're using core search.
+      $form['#action'] = str_replace("/" . check_plain(arg(2)), '', $form['#action']);
+    }
   }
 }
 
