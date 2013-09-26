@@ -220,10 +220,7 @@ projects[message][patch][] = "http://drupal.org/files/message_field_undefined-la
 
 projects[message_notify][type] = "module"
 projects[message_notify][subdir] = "contrib"
-projects[message_notify][download][type] = "git"
-projects[message_notify][download][url] = "http://git.drupal.org/project/message_notify.git"
-projects[message_notify][download][branch] = "7.x-2.x"
-projects[message_notify][download][revision] = "e546b0a6e3d2dfd48f4fd3a4d45806c066c9a9bc"
+projects[message_notify][version] = "2.5"
 
 projects[message_subscribe][type] = "module"
 projects[message_subscribe][subdir] = "contrib"
