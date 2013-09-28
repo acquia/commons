@@ -30,8 +30,7 @@ function commons_documents_form_commons_bw_partial_node_form_alter(&$form, &$for
     return;
   }
 
-  $language = entity_language('node', $form['#entity']);
-
+  $language = $form['body']['#language'];
   $form['body'][$language][0]['#title_display'] = 'invisible';
   $form['body'][$language][0]['#required'] = TRUE;
   $form['body'][$language][0]['#placeholder'] = t('Describe the document');
@@ -53,8 +52,7 @@ function commons_documents_form_commons_bw_partial_node_form_alter(&$form, &$for
  * See commons_documents_form_commons_bw_partial_node_form_alter().
  */
 function commons_documents_form_commons_bw_partial_node_form_after_build($form) {
-  $language = entity_language('node', $form['#entity']);
-
+  $language = $form['body']['#language'];
   $form['body'][$language][0]['#pre_render'] = array();
   $form['body'][$language][0]['format']['#access'] = FALSE;
   $form['body'][$language][0]['value']['#rows'] = 3;

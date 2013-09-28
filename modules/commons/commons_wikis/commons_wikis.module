@@ -107,11 +107,11 @@ function commons_wikis_form_commons_bw_partial_node_form_alter(&$form, &$form_st
     return;
   }
 
-  $language = entity_language('node', $form['#entity']);
-
+  $language = $form['title_field']['#language'];
   $form['title_field'][$language][0]['value']['#title_display'] = 'invisible';
   $form['title_field'][$language][0]['value']['#placeholder'] = t('Enter a Wiki title');
 
+  $language = $form['body']['#language'];
   $form['body'][$language][0]['#title_display'] = 'invisible';
   $form['body'][$language][0]['#resizable'] = FALSE;
 
@@ -132,8 +132,7 @@ function commons_wikis_form_commons_bw_partial_node_form_alter(&$form, &$form_st
  * See commons_wikis_form_commons_bw_partial_node_form_alter().
  */
 function commons_wikis_form_commons_bw_partial_node_form_after_build($form) {
-  $language = entity_language('node', $form['#entity']);
-
+  $language = $form['body']['#language'];
   $form['body'][$language][0]['format']['#access'] = FALSE;
   $form['body'][$language][0]['value']['#rows'] = 10;
 
