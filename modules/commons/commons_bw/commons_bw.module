@@ -375,7 +375,7 @@ function commons_bw_generate_group_widget($group = NULL) {
       $view->display_handler->options['filters']['flagged']['value'] = 'All';
       $view->get_total_rows = TRUE;
       $view->execute();
-      $tabs[$key]['title'] = t($tabs[$key]['title']) . ' <span class="commons-bw-result-count">'. $view->total_rows . '</span>';
+      $tabs[$key]['title'] = $tabs[$key]['title'] . ' <span class="commons-bw-result-count">'. $view->total_rows . '</span>';
     }
     // Set the default tab.
     if (isset($tabs[$key]['default']) && $tabs[$key]['default']) {

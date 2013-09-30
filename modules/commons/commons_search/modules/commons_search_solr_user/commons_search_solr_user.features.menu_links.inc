@@ -19,7 +19,7 @@ function commons_search_solr_user_menu_default_menu_links() {
     'options' => array(
       'attributes' => array(),
     ),
-    'module' => 'commons_search_solr_user',
+    'module' => 'menu',
     'hidden' => 0,
     'external' => 0,
     'has_children' => 0,
