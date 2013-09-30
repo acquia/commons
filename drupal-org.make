@@ -418,6 +418,10 @@ projects[title][type] = "module"
 projects[title][subdir] = "contrib"
 projects[title][version] = "1.0-alpha7"
 
+projects[translation_helpers][type] = "module"
+projects[translation_helpers][subdir] = "contrib"
+projects[translation_helpers][version] = "1.0"
+
 projects[token][type] = "module"
 projects[token][subdir] = "contrib"
 projects[token][version] = "1.5"
