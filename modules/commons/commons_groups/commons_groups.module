@@ -86,6 +86,7 @@ function commons_groups_entity_view($entity, $type, $view_mode, $langcode) {
   }
 }
 
+
 /**
  * Implements hook_form_FORM_ID_alter().
  *
@@ -669,6 +670,20 @@ function commons_groups_default_rules_configuration_alter(&$configs) {
   // commons_follow and commons_follow_notify for new content notifications.
   if (isset($configs['rules_og_member_active'])) {
     $configs['rules_og_member_active']->active = FALSE;
+  }
+}
+
+/**
+ * Implements hook_node_validate().
+ */
+function commons_groups_node_validate($node, $form, &$form_state) {
+  // Ensure that group content is always posted to one or more groups.
+  // When the Commons Trusted Contacts module is enabled, we defer to its
+  // own form validation which ensures that group content nodes are posted
+  // either to a node group via the og_group_ref field or to a user group
+  // via the og_user_group_ref field.
+  if (!module_exists('commons_truste_contacts') && og_is_group_content_type('node', $node->type) && empty($form_state['values']['og_group_ref'][LANGUAGE_NONE][0]['target_id'])) {
+    form_set_error('og_group_ref', 'needs more groups');
   }
 }
 

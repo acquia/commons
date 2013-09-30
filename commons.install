@@ -205,3 +205,19 @@ function commons_update_3106() {
 function commons_update_3107() {
   registry_rebuild();
 }
+
+/**
+ * Make the OG relationship required so that browsing widget
+ * tabs on the site homepage show an accurate count of content in each tab.
+ */
+function commons_update_3108() {
+    $revert = array(
+    'commons_posts' => array('views_view'),
+    'commons_documents' => array('views_view'),
+    'commons_polls' => array('views_view'),
+    'commons_wikis' => array('views_view'),
+    'commons_q_a' => array('views_view')
+  );
+  features_revert($revert);
+  return array();
+}
