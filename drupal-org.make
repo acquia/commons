@@ -13,7 +13,7 @@ projects[addressfield_tokens][version] = "1.3"
 
 projects[acquia_connector][type] = "module"
 projects[acquia_connector][subdir] = "contrib"
-projects[acquia_connector][version] = "2.11"
+projects[acquia_connector][version] = "2.12"
 
 projects[advancedqueue][type] = "module"
 projects[advancedqueue][subdir] = "contrib"
@@ -200,7 +200,10 @@ projects[libraries][version] = "2.1"
 
 projects[lingotek][type] = "module"
 projects[lingotek][subdir] = "contrib"
-projects[lingotek][version] = "4.02"
+projects[lingotek][download][type] = "git"
+projects[lingotek][download][branch] = "7.x-4.x"
+projects[lingotek][download][url] = "http://git.drupal.org/project/lingotek.git"
+projects[lingotek][download][revision] = "1fead9cd17cbfe092f3cd6e204183631c6961bd6"
 
 projects[link][type] = "module"
 projects[link][subdir] = "contrib"
