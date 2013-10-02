@@ -156,6 +156,10 @@ projects[flag][version] = "2.1"
 ; http://drupal.org/node/1965760
 projects[flag][patch][] = "http://drupal.org/files/1965760-flag-taxonomy-types.patch"
 
+; Issue #1971980: Features export does not take flag_definition_alter into account.
+; http://drupal.org/node/1971980
+projects[flag][patch][] = "http://drupal.org/files/flag-features_export-1971980-3.patch"
+
 projects[flag_abuse][type] = "module"
 projects[flag_abuse][subdir] = "contrib"
 projects[flag_abuse][version] = "2.0-alpha1"
