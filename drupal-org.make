@@ -466,6 +466,10 @@ projects[votingapi][version] = "2.11"
 projects[votingapi][type] = "module"
 projects[votingapi][subdir] = "contrib"
 
+projects[voting_rules][type] = "module"
+projects[voting_rules][subdir] = "contrib"
+projects[voting_rules][version] = "1.0-alpha1"
+
 ; Registry Rebuild
 ; We can probably remove this later, but for now keep it included
 ; See https://drupal.org/node/1983606#comment-7788313 for more information.
