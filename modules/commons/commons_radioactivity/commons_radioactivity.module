@@ -123,6 +123,11 @@ function commons_radioactivity_get_radioactive_entity_types() {
 */
 function commons_radioactivity_incident_node($node, $value) {
   $profile = radioactivity_get_field_profile('node', $node->type, 'field_radioactivity');
+
+  // Return if radioactivity doesn't exist or hasn't been created for the node yet
+  if (!isset($node->field_radioactivity)) {
+    return;
+  }
   // Prevent groups from going negative in energy.
   if ($node->type == 'group' && $node->field_radioactivity[LANGUAGE_NONE][0]['radioactivity_energy'] + $value < 0) {
     return;
