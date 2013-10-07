@@ -380,7 +380,10 @@ projects[registration][version] = "1.2"
 
 projects[rules][type] = "module"
 projects[rules][subdir] = "contrib"
-projects[rules][version] = "2.5"
+projects[rules][download][type] = "git"
+projects[rules][download][url] = "http://git.drupal.org/project/rules.git"
+projects[rules][download][branch] = "7.x-2.x"
+projects[rules][download][revision] = "8db91e5"
 
 projects[search_facetapi][type] = "module"
 projects[search_facetapi][subdir] = "contrib"
