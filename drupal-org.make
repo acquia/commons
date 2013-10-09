@@ -188,7 +188,7 @@ projects[admin_icons][download][revision] = "60d9f28801533fecc92216a60d444d89d80
 
 projects[kissmetrics][type] = "module"
 projects[kissmetrics][subdir] = "contrib"
-projects[kissmetrics][version] = "1.0-rc2"
+projects[kissmetrics][version] = "1.0-rc3"
 
 projects[l10n_update][type] = "module"
 projects[l10n_update][subdir] = "contrib"
