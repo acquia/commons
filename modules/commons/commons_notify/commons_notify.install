@@ -16,3 +16,10 @@ function commons_notify_update_7302() {
   return array();
 }
 
+/**
+ * Correct the user notification settings URL.
+ */
+function commons_notify_update_7303() {
+  features_revert(array('commons_notify' => array('message_type')));
+  return array();
+}
