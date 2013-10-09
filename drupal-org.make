@@ -196,10 +196,7 @@ projects[libraries][version] = "2.1"
 
 projects[lingotek][type] = "module"
 projects[lingotek][subdir] = "contrib"
-projects[lingotek][download][type] = "git"
-projects[lingotek][download][branch] = "7.x-4.x"
-projects[lingotek][download][url] = "http://git.drupal.org/project/lingotek.git"
-projects[lingotek][download][revision] = "1fead9cd17cbfe092f3cd6e204183631c6961bd6"
+projects[lingotek][version] = "4.05"
 
 projects[link][type] = "module"
 projects[link][subdir] = "contrib"
