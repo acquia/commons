@@ -18,6 +18,7 @@ function commons_events_menu_default_menu_links() {
     'link_title' => 'Events',
     'options' => array(
       'attributes' => array(),
+      'identifier' => 'main-menu:events',
     ),
     'module' => 'menu',
     'hidden' => 0,

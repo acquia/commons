@@ -246,10 +246,15 @@ function commons_create_first_group_submit($form_id, &$form_state) {
 function commons_revert_features() {
   // Revert Features components to ensure that they are in their default states.
   $revert = array(
-    'commons_groups' => array('field_instance'),
-    'commons_trusted_contacts' => array('field_instance'),
+    'commons_follow' => array('field_base'),
+    'commons_groups' => array('field_instance', 'field_base'),
+    'commons_trusted_contacts' => array('field_instance', 'field_base'),
     'commons_wikis' => array('og_features_permission'),
     'commons_wysiwyg' => array('user_permission', 'ckeditor_profile'),
+    'commons_events' => array('og_features_permission' , 'field_base'),
+    'commons_polls' => array('og_features_permission'),
+    'commons_q_a' => array('og_features_permission', 'field_base'),
+    'commons_posts' => array('og_features_permission'),
   );
   features_revert($revert);
 }
