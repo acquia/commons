@@ -342,10 +342,8 @@ projects[privatemsg][patch][] = "http://drupal.org/files/2077223-privatemsg-real
 
 projects[quicktabs][type] = "module"
 projects[quicktabs][subdir] = "contrib"
-projects[quicktabs][download][type] = "git"
-projects[quicktabs][download][url] = "http://git.drupal.org/project/quicktabs.git"
-projects[quicktabs][download][branch] = "7.x-3.x"
-projects[quicktabs][download][revision] = "89f7fd0b7313782d0f7504996daa36bde798ec79"
+projects[quicktabs][version] = "3.6"
+projects[quicktabs][patch][] = "http://drupal.org/files/2104643-revert-qt-487518-5.patch"
 
 projects[radioactivity][type] = "module"
 projects[radioactivity][subdir] = "contrib"
