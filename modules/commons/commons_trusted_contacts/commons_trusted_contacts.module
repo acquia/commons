@@ -752,7 +752,7 @@ function commons_trusted_contacts_ignore_trust(OgMembership $og_membership) {
 function commons_trusted_contacts_request_trust_access($account, $token) {
   global $user;
 
-  return drupal_valid_token($token, 'request' . ':' . $account->uid . ':' . $user->uid);
+  return drupal_valid_token($token, 'request' . ':' . $account->uid . ':' . $user->uid) && user_is_logged_in();
 }
 
 /**
@@ -765,7 +765,7 @@ function commons_trusted_contacts_request_trust_access($account, $token) {
 function commons_trusted_contacts_un_trust_access($account, $token) {
   global $user;
 
-  return drupal_valid_token($token, 'untrust' . ':' . $account->uid . ':' . $user->uid);
+  return drupal_valid_token($token, 'untrust' . ':' . $account->uid . ':' . $user->uid) && user_is_logged_in();
 }
 
 /**
@@ -779,7 +779,7 @@ function commons_trusted_contacts_un_trust_access($account, $token) {
 function commons_trusted_contacts_approve_trust_access(OgMembership $og_membership, $token) {
   $wrapper = entity_metadata_wrapper('og_membership', $og_membership);
 
-  return ($wrapper->field_membership_token->value() == $token);
+  return ($wrapper->field_membership_token->value() == $token) && user_is_logged_in();
 }
 
 /**
@@ -793,7 +793,7 @@ function commons_trusted_contacts_approve_trust_access(OgMembership $og_membersh
 function commons_trusted_contacts_ignore_trust_access(OgMembership $og_membership, $token) {
   $wrapper = entity_metadata_wrapper('og_membership', $og_membership);
 
-  return $wrapper->field_membership_token->value() == $token;
+  return $wrapper->field_membership_token->value() == $token && user_is_logged_in();
 }
 
 /**
