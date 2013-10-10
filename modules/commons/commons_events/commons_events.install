@@ -201,3 +201,14 @@ function commons_events_update_7009() {
   cache_clear_all('module_implements', 'cache_bootstrap');
   return array();
 }
+
+/**
+ * Display current events in addition to upcoming events.
+ */
+function commons_events_update_7010() {
+  $revert = array(
+    'commons_events' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}
