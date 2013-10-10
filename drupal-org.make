@@ -105,10 +105,6 @@ projects[entity][type] = "module"
 projects[entity][subdir] = "contrib"
 projects[entity][version] = "1.2"
 
-; Force LANGUAGE_NONE entities to still display within rendered entities.
-; http://drupal.org/node/1782134
-projects[entity][patch][] = "http://drupal.org/files/entity-translatable_fields_not_overriding_und_with_empty_values.patch"
-
 projects[entitycache][type] = "module"
 projects[entitycache][subdir] = "contrib"
 projects[entitycache][download][type] = "git"
@@ -200,10 +196,7 @@ projects[libraries][version] = "2.1"
 
 projects[lingotek][type] = "module"
 projects[lingotek][subdir] = "contrib"
-projects[lingotek][download][type] = "git"
-projects[lingotek][download][branch] = "7.x-4.x"
-projects[lingotek][download][url] = "http://git.drupal.org/project/lingotek.git"
-projects[lingotek][download][revision] = "1fead9cd17cbfe092f3cd6e204183631c6961bd6"
+projects[lingotek][version] = "4.05"
 
 projects[link][type] = "module"
 projects[link][subdir] = "contrib"
@@ -502,7 +495,7 @@ libraries[backbone][type] = "libraries"
 libraries[backbone][download][url] = "https://github.com/jashkenas/backbone/archive/1.0.0.tar.gz"
 
 libraries[ckeditor][download][type] = "get"
-libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.0/ckeditor_4.0_standard.tar.gz"
+libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.0/ckeditor_4.0_full.tar.gz"
 libraries[ckeditor][type] = "libraries"
 
 libraries[placeholder][download][type] = "get"
