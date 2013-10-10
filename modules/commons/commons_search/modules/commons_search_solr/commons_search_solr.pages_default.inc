@@ -55,7 +55,7 @@ function commons_search_solr_default_page_manager_handlers() {
     $pane->access = array();
     $pane->configuration = array(
       'override_title' => 1,
-      'override_title_text' => 'Groups',
+      'override_title_text' => t('Groups'),
     );
     $pane->cache = array();
     $pane->style = array(
@@ -77,7 +77,7 @@ function commons_search_solr_default_page_manager_handlers() {
     $pane->access = array();
     $pane->configuration = array(
       'override_title' => 1,
-      'override_title_text' => 'Topics',
+      'override_title_text' => t('Topics'),
     );
     $pane->cache = array();
     $pane->style = array(
@@ -99,7 +99,7 @@ function commons_search_solr_default_page_manager_handlers() {
     $pane->access = array();
     $pane->configuration = array(
       'override_title' => 1,
-      'override_title_text' => 'Type',
+      'override_title_text' => t('Type'),
     );
     $pane->cache = array();
     $pane->style = array(
@@ -121,7 +121,7 @@ function commons_search_solr_default_page_manager_handlers() {
     $pane->access = array();
     $pane->configuration = array(
       'override_title' => 1,
-      'override_title_text' => 'Author',
+      'override_title_text' => t('Author'),
     );
     $pane->cache = array();
     $pane->style = array(
@@ -143,7 +143,7 @@ function commons_search_solr_default_page_manager_handlers() {
     $pane->access = array();
     $pane->configuration = array(
       'override_title' => 1,
-      'override_title_text' => 'Date created',
+      'override_title_text' => t('Date created'),
     );
     $pane->cache = array();
     $pane->style = array(
@@ -165,7 +165,7 @@ function commons_search_solr_default_page_manager_handlers() {
     $pane->access = array();
     $pane->configuration = array(
       'override_title' => 1,
-      'override_title_text' => 'Date changed',
+      'override_title_text' => t('Date changed'),
     );
     $pane->cache = array();
     $pane->style = array(
