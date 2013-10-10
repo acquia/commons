@@ -920,7 +920,7 @@ function commons_groups_preprocess_node(&$variables) {
             'options' => array(
               'attributes' => array(
                 'title' => t("View @user's profile.", array('@user' => format_username($account))),
-                'class' => 'user-picture',
+                'class' => array('user-picture'),
               ),
             ),
           ),
