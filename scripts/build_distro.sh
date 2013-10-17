@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-modules=(commons_activity_streams commons_featured commons_notices commons_profile_social commons_user_profile_pages commons_body commons_follow commons_notify commons_q_a commons_utility_links commons_bw commons_groups commons_pages commons_radioactivity commons_wikis commons_content_moderation commons_like commons_polls commons_search commons_wysiwyg commons_documents commons_location commons_posts commons_site_homepage commons_events commons_misc commons_profile_base commons_topics commons_social_sharing commons_trusted_contacts)
+#modules=(commons_activity_streams commons_featured commons_notices commons_profile_social commons_user_profile_pages commons_body commons_follow commons_notify commons_q_a commons_utility_links commons_bw commons_groups commons_pages commons_radioactivity commons_wikis commons_content_moderation commons_like commons_polls commons_search commons_wysiwyg commons_documents commons_location commons_posts commons_site_homepage commons_events commons_misc commons_profile_base commons_topics commons_social_sharing commons_trusted_contacts)
 themes=(commons_origins)
 
 merge_repos() {
@@ -60,7 +60,7 @@ release_notes() {
   pull_git $BUILD_PATH
   OUTPUT="<h2>Release Notes for $RELEASE</h2>"
   cd $BUILD_PATH/commons_profile
-  OUTPUT="$OUTPUT <h3>Commons Profile:</h3> `drush rn --date $FROM_DATE $TO_DATE`"
+  OUTPUT="$OUTPUT <h3>Drupal Commons:</h3> `drush rn --date $FROM_DATE $TO_DATE`"
 
   ## old repos. don't use this anymore
   # cd $BUILD_PATH/repos/modules
@@ -80,6 +80,7 @@ release_notes() {
   #fi
 
   echo $OUTPUT >> $BUILD_PATH/rn.txt
+  echo "Release notes for $RELEASE created at $BUILD_PATH/rn.txt"
 }
 
 build_distro() {
