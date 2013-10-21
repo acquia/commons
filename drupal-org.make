@@ -138,7 +138,7 @@ projects[entityreference_prepopulate][version] = "1.3"
 
 projects[features][type] = "module"
 projects[features][subdir] = "contrib"
-projects[features][version] = "2.0-rc5"
+projects[features][version] = "2.0"
 
 projects[flag][type] = "module"
 projects[flag][subdir] = "contrib"
