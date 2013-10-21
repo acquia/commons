@@ -43,3 +43,14 @@ function commons_posts_update_7003() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Display sticky content at top of lists.
+ */
+function commons_posts_update_7004() {
+  $revert = array(
+    'commons_posts' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}

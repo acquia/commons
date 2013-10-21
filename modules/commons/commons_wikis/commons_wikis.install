@@ -72,3 +72,14 @@ function commons_wikis_update_7006() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Display sticky content at top of lists.
+ */
+function commons_wikis_update_7007() {
+  $revert = array(
+    'commons_wikis' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}

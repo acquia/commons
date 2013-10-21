@@ -32,3 +32,14 @@ function commons_polls_update_7002() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Display sticky content at top of lists.
+ */
+function commons_polls_update_7003() {
+  $revert = array(
+    'commons_polls' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}
