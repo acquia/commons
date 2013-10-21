@@ -682,7 +682,7 @@ function commons_groups_node_validate($node, $form, &$form_state) {
   // own form validation which ensures that group content nodes are posted
   // either to a node group via the og_group_ref field or to a user group
   // via the og_user_group_ref field.
-  if (!module_exists('commons_truste_contacts') && og_is_group_content_type('node', $node->type) && empty($form_state['values']['og_group_ref'][LANGUAGE_NONE][0]['target_id'])) {
+  if (!module_exists('commons_trusted_contacts') && og_is_group_content_type('node', $node->type) && empty($form_state['values']['og_group_ref'][LANGUAGE_NONE][0]['target_id'])) {
     form_set_error('og_group_ref', t('Please enter one more groups where this content will be posted.'));
   }
 }
