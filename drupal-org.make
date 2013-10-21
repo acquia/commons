@@ -450,10 +450,9 @@ projects[views_load_more][type] = "module"
 projects[views_load_more][subdir] = "contrib"
 projects[views_load_more][version] = "1.1"
 
-; We have the version of voting api at the top so it doesn't get included in our dev make patch.
-projects[votingapi][version] = "2.11"
 projects[votingapi][type] = "module"
 projects[votingapi][subdir] = "contrib"
+projects[votingapi][version] = "2.11"
 
 projects[voting_rules][type] = "module"
 projects[voting_rules][subdir] = "contrib"
