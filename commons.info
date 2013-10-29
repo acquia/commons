@@ -1,11 +1,10 @@
 name = Commons
-project = commons
-distribution_name = "Drupal Commons"
 description = Ready-to-use solution for building communities.
 core = 7.x
-php_memory_limit = 128M
+distribution_name = "Drupal Commons"
+exclusive = TRUE
 
-; Core modules.
+; Install required core modules.
 dependencies[] = block
 dependencies[] = comment
 dependencies[] = dblog
@@ -22,7 +21,7 @@ dependencies[] = search
 dependencies[] = shortcut
 dependencies[] = taxonomy
 
-; Contributed modules.
+; Install required contributed modules.
 dependencies[] = addressfield
 dependencies[] = addressfield_tokens
 dependencies[] = breakpoints
@@ -67,6 +66,8 @@ dependencies[] = views_ui
 dependencies[] = votingapi
 dependencies[] = advancedqueue
 dependencies[] = ckeditor
+
+; Install commons specific modules
 dependencies[] = commons_activity_streams
 dependencies[] = commons_bw
 dependencies[] = commons_events
@@ -104,3 +105,6 @@ dependencies[] = commons_location
 dependencies[] = commons_wysiwyg
 dependencies[] = commons_social_sharing
 dependencies[] = commons_trusted_contacts
+
+; System Requirements.
+php_memory_limit = 128M
