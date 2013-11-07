@@ -339,7 +339,7 @@ projects[quicktabs][patch][] = "http://drupal.org/files/2104643-revert-qt-487518
 
 projects[r4032login][type] = "module"
 projects[r4032login][subdir] = "contrib"
-projects[r4032login][version] = "1.6"
+projects[r4032login][version] = "1.7"
 
 projects[radioactivity][type] = "module"
 projects[radioactivity][subdir] = "contrib"
