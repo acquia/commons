@@ -118,10 +118,7 @@ projects[entity][version] = "1.2"
 
 projects[entitycache][type] = "module"
 projects[entitycache][subdir] = "contrib"
-projects[entitycache][download][type] = "git"
-projects[entitycache][download][url] = "http://git.drupal.org/project/entitycache.git"
-projects[entitycache][download][branch] = "7.x-1.x"
-projects[entitycache][download][revision] = "7e390b5"
+projects[entitycache][version] = "1.2"
 
 ; Fix core translation support.
 ; http://drupal.org/node/1349566#comment-7781063
