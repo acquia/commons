@@ -382,10 +382,7 @@ projects[rich_snippets][patch][] = "http://drupal.org/files/1923904-search-nodes
 
 projects[rules][type] = "module"
 projects[rules][subdir] = "contrib"
-projects[rules][download][type] = "git"
-projects[rules][download][url] = "http://git.drupal.org/project/rules.git"
-projects[rules][download][branch] = "7.x-2.x"
-projects[rules][download][revision] = "8db91e5"
+projects[rules][version] = "2.6"
 
 projects[schemaorg][type] = "module"
 projects[schemaorg][subdir] = "contrib"
