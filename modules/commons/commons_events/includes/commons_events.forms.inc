@@ -21,7 +21,15 @@ function commons_events_attend_event_form($form, &$form_state, $event_node, $reg
       'type' => $registration_type,
     ));
   }
+  dpm($registration);
   $form_state['registration'] = $registration;
+  $form['count'] = array(
+    '#type' => 'textfield',
+    '#default_value' => '1',
+    '#size' => 3,
+    '#maxlength' => 4,
+    '#required' => true,
+  );
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Attend'),
@@ -47,6 +55,13 @@ function commons_events_attend_event_form($form, &$form_state, $event_node, $reg
  */
 function commons_events_attend_event_form_validate($form, &$form_state) {
   global $user;
+  if(!is_numeric($form_state['values']['count'])) {
+    form_set_error('count', t('Your attendance count must be a number.'));
+    return FALSE;
+  }
+  if (!registration_has_room('node', $form_state['event_node']->nid, $form_state['values']['count'])) {
+    form_set_error('count', t('Insufficient spaces remaining.'));
+  }
   if (!registration_status('node', $form_state['event_node']->nid, TRUE)
     || !registration_has_room('node', $form_state['event_node']->nid)) {
     form_set_error('submit', t('The event you are registering for is unavailable.'));
@@ -68,7 +83,7 @@ function commons_events_attend_event_form_submit($form, $form_state) {
   $registration->user_uid = $user->uid;
   $registration->author_uid = $user->uid;
   $registration->state = NULL;
-  $registration->count = 1;
+  $registration->count = $form_state['values']['count'];
   if (registration_save($registration)) {
     drupal_set_message(t('Your registration was saved.'));
     commons_follow_node_follow_node($registration->entity_id, 'event', $user->uid);
@@ -106,6 +121,8 @@ function commons_events_cancel_event_form($form, &$form_state, $event) {
  * Event cancel attendance form submit handler.
  */
 function commons_events_cancel_event_form_submit($form, $form_state) {
+  dpm($form_state);
+  dpm($form_state['event']);
   global $user;
   $event = $form_state['event'];
   $query = new EntityFieldQuery();
@@ -114,6 +131,7 @@ function commons_events_cancel_event_form_submit($form, $form_state) {
     ->propertyCondition('entity_id', $event->nid)
     ->propertyCondition('entity_type', 'node');
   $result = $query->execute();
+  dpm($result);
   if (isset($result['registration'])) {
     registration_delete_multiple(array_keys($result['registration']));
     drupal_set_message(t('Your registration has been cancelled.'));
