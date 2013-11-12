@@ -224,9 +224,7 @@ projects[message_notify][version] = "2.5"
 
 projects[message_subscribe][type] = "module"
 projects[message_subscribe][subdir] = "contrib"
-projects[message_subscribe][download][type] = "git"
-projects[message_subscribe][download][url] = "http://git.drupal.org/project/message_subscribe.git"
-projects[message_subscribe][download][branch] = "7.x-1.x"
+projects[message_subscribe][version] = "1.0-rc1"
 
 projects[metatag][type] = "module"
 projects[metatag][subdir] = "contrib"
