@@ -85,7 +85,7 @@ function commons_events_theme($existing, $type, $theme, $path) {
         'attributes_end' => array(),
         'rdf_mapping' => NULL,
         'add_rdf' => NULL,
-      )
+      ),
     ),
     'commons_events_date_display_range_simple' => array(
       'variables' => array(
@@ -102,7 +102,7 @@ function commons_events_theme($existing, $type, $theme, $path) {
         'attributes_end' => array(),
         'rdf_mapping' => NULL,
         'add_rdf' => NULL,
-      )
+      ),
     ),
   );
 }
@@ -207,7 +207,7 @@ function commons_events_entity_view_alter(&$build, $type) {
 }
 
 /**
- * Implements hook_form_FORM_ID_alter();
+ * Implements hook_form_FORM_ID_alter().
  */
 function commons_events_form_node_form_alter(&$form, &$form_state) {
   if ($form_state['node']->type == 'event') {
@@ -285,7 +285,7 @@ function commons_events_form_node_form_alter(&$form, &$form_state) {
 }
 
 /**
- * Implements hook_commons_entity_integration.
+ * Implements hook_commons_entity_integration().
  */
 function commons_events_commons_entity_integration() {
   return array(
@@ -481,8 +481,9 @@ function commons_events_block_view($delta = '') {
 }
 
 /**
- * Returns specific HTML for a date element formatted with the event formatter M j Y - g:ia
- * We the do some awesome stuff with regular expressions to take all the different formats available to us and format it pretty.
+ * Returns specific HTML for a date element formatted with the event formatter M j Y - g:ia.
+ * We the do some awesome stuff with regular expressions to take all the
+ * different formats available to us and format it pretty.
  */
 function theme_commons_events_date_display_range_simple($variables) {
   // Use the regular date formatter if we are any other date format than below.
@@ -517,7 +518,8 @@ function theme_commons_events_date_display_single($variables) {
 }
 /**
  * Returns specific HTML for a date element formatted with the event formatter.
- * We parse the date segments and return it at the bottom, or use the simple formatter (above) if parts of the date are too complicated.
+ * We parse the date segments and return it at the bottom, or use the simple
+ * formatter (above) if parts of the date are too complicated.
  */
 function theme_commons_events_date_display_range_advanced($variables) {
   $timezone = $variables['timezone'];
@@ -544,7 +546,7 @@ function theme_commons_events_date_display_range_advanced($variables) {
     $date2 = $variables['dates']['value2']['db']['object']->format($variables['dates']['format'],FALSE);
   }
   else if ($variables['dates']['value']['db']['object']->difference($variables['dates']['value2']['db']['object'], 'days') > 0) {
-    // If the Day is before the month (IE Europe, etc) then switch the granularity
+    // If the Day is before the month (Europe, etc) then switch the granularity.
     if (strpos($variables['dates']['format'],'M') != 0 || strpos($variables['dates']['format'],'m') != 0 ||
        strpos($variables['dates']['format'],'F') != 0 || strpos($variables['dates']['format'],'n') != 0) {
       $variables['dates']['value']['db']['object']->limitGranularity(array('day'));
@@ -557,7 +559,8 @@ function theme_commons_events_date_display_range_advanced($variables) {
     $date1 = $variables['dates']['value']['db']['object']->format($variables['dates']['format'],FALSE);
     $date2 = $variables['dates']['value2']['db']['object']->format($variables['dates']['format'],FALSE);
 
-    // If we are match 'D' or 'l', it means we have a 'day' in there (eg: Monday), we want the whole date because it looks funky otherwise.
+    // If we are match 'D' or 'l', then we have a 'day' in there (eg Monday),
+    // we want the whole date because it looks funky otherwise.
     if (strpbrk($variables['dates']['format'], 'Dl')) {
       return theme('commons_events_date_display_range_simple',$variables);
     }
