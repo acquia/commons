@@ -83,7 +83,7 @@ function commons_documents_field_default_field_instances() {
     'settings' => array(
       'description_field' => 1,
       'file_directory' => '',
-      'file_extensions' => 'doc docx xls xlsx ppt pptx odt odp ods pdf',
+      'file_extensions' => 'txt doc docx xls xlsx ppt pptx odt odp ods pdf',
       'max_filesize' => '',
       'user_register_form' => FALSE,
     ),

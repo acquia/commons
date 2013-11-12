@@ -54,3 +54,14 @@ function commons_documents_update_7004() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Add .txt to the list of allowed file extensions.
+ */
+function commons_documents_update_7005() {
+  $revert = array(
+    'commons_documents' => array('field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}
