@@ -297,7 +297,7 @@ projects[panels][patch][] = "http://drupal.org/files/panels-1179034-41_____panel
 
 projects[paranoia][type] = "module"
 projects[paranoia][subdir] = "contrib"
-projects[paranoia][version] = "1.2"
+projects[paranoia][version] = "1.3"
 
 projects[pathauto][type] = "module"
 projects[pathauto][subdir] = "contrib"
