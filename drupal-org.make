@@ -118,10 +118,7 @@ projects[entity][version] = "1.2"
 
 projects[entitycache][type] = "module"
 projects[entitycache][subdir] = "contrib"
-projects[entitycache][download][type] = "git"
-projects[entitycache][download][url] = "http://git.drupal.org/project/entitycache.git"
-projects[entitycache][download][branch] = "7.x-1.x"
-projects[entitycache][download][revision] = "7e390b5"
+projects[entitycache][version] = "1.2"
 
 ; Fix core translation support.
 ; http://drupal.org/node/1349566#comment-7781063
@@ -227,9 +224,7 @@ projects[message_notify][version] = "2.5"
 
 projects[message_subscribe][type] = "module"
 projects[message_subscribe][subdir] = "contrib"
-projects[message_subscribe][download][type] = "git"
-projects[message_subscribe][download][url] = "http://git.drupal.org/project/message_subscribe.git"
-projects[message_subscribe][download][branch] = "7.x-1.x"
+projects[message_subscribe][version] = "1.0-rc1"
 
 projects[metatag][type] = "module"
 projects[metatag][subdir] = "contrib"
@@ -302,7 +297,7 @@ projects[panels][patch][] = "http://drupal.org/files/panels-1179034-41_____panel
 
 projects[paranoia][type] = "module"
 projects[paranoia][subdir] = "contrib"
-projects[paranoia][version] = "1.2"
+projects[paranoia][version] = "1.3"
 
 projects[pathauto][type] = "module"
 projects[pathauto][subdir] = "contrib"
@@ -339,7 +334,7 @@ projects[quicktabs][patch][] = "http://drupal.org/files/2104643-revert-qt-487518
 
 projects[r4032login][type] = "module"
 projects[r4032login][subdir] = "contrib"
-projects[r4032login][version] = "1.6"
+projects[r4032login][version] = "1.7"
 
 projects[radioactivity][type] = "module"
 projects[radioactivity][subdir] = "contrib"
@@ -382,10 +377,7 @@ projects[rich_snippets][patch][] = "http://drupal.org/files/1923904-search-nodes
 
 projects[rules][type] = "module"
 projects[rules][subdir] = "contrib"
-projects[rules][download][type] = "git"
-projects[rules][download][url] = "http://git.drupal.org/project/rules.git"
-projects[rules][download][branch] = "7.x-2.x"
-projects[rules][download][revision] = "8db91e5"
+projects[rules][version] = "2.6"
 
 projects[schemaorg][type] = "module"
 projects[schemaorg][subdir] = "contrib"

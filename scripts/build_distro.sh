@@ -86,6 +86,10 @@ release_notes() {
 build_distro() {
     if [[ -d $BUILD_PATH ]]; then
         cd $BUILD_PATH
+        #backup the sites directory
+        if [[ -d publish ]]; then
+          tar -czvf $BUILD_PATH/sites-.tar.gz
+
         rm -rf ./publish
         # do we have the profile?
         if [[ -d $BUILD_PATH/commons_profile ]]; then
@@ -107,7 +111,7 @@ build_distro() {
           tar -zxvf /tmp/commons.tar.gz
           chmod -R 775 $BUILD_PATH/publish/profiles/commons
         else
-          git clone --branch 7.x-3.x-merged ${USERNAME}@git.drupal.org:project/commons.git commons_profile
+          git clone --branch 7.x-3.x ${USERNAME}@git.drupal.org:project/commons.git commons_profile
           build_distro $BUILD_PATH
         fi
     else

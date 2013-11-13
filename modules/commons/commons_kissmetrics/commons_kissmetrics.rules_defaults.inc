@@ -12,6 +12,7 @@ function commons_kissmetrics_default_rules_configuration() {
   $items['rules_commons_kissmetrics_collect_referenced_groups'] = entity_import('rules_config', '{ "rules_commons_kissmetrics_collect_referenced_groups" : {
       "LABEL" : "Commons KISSmetrics: Collect Referenced Groups",
       "PLUGIN" : "rule",
+      "OWNER" : "rules",
       "TAGS" : [ "Commons KISSmetrics" ],
       "REQUIRES" : [ "rules" ],
       "USES VARIABLES" : {
@@ -45,6 +46,7 @@ function commons_kissmetrics_default_rules_configuration() {
   $items['rules_commons_kissmetrics_user_adds_a_trusted_contact'] = entity_import('rules_config', '{ "rules_commons_kissmetrics_user_adds_a_trusted_contact" : {
       "LABEL" : "Commons KISSmetrics: User Adds A Trusted Contact",
       "PLUGIN" : "reaction rule",
+      "OWNER" : "rules",
       "TAGS" : [ "Commons KISSmetrics" ],
       "REQUIRES" : [ "rules", "kissmetrics", "og" ],
       "ON" : { "og_user_insert" : [] },
@@ -61,6 +63,7 @@ function commons_kissmetrics_default_rules_configuration() {
   $items['rules_commons_kissmetrics_user_approves_a_trusted_contact'] = entity_import('rules_config', '{ "rules_commons_kissmetrics_user_approves_a_trusted_contact" : {
       "LABEL" : "Commons KISSmetrics: User Approves A Trusted Contact",
       "PLUGIN" : "reaction rule",
+      "OWNER" : "rules",
       "TAGS" : [ "Commons KISSmetrics" ],
       "REQUIRES" : [ "rules", "kissmetrics", "og" ],
       "ON" : { "og_user_approved" : [] },
@@ -77,6 +80,7 @@ function commons_kissmetrics_default_rules_configuration() {
   $items['rules_commons_kissmetrics_user_creates_content'] = entity_import('rules_config', '{ "rules_commons_kissmetrics_user_creates_content" : {
       "LABEL" : "Commons KISSmetrics: User Creates Content",
       "PLUGIN" : "reaction rule",
+      "OWNER" : "rules",
       "TAGS" : [ "Commons KISSmetrics" ],
       "REQUIRES" : [ "rules", "kissmetrics" ],
       "ON" : { "node_insert" : [] },
@@ -97,6 +101,7 @@ function commons_kissmetrics_default_rules_configuration() {
   $items['rules_commons_kissmetrics_user_edits_profile'] = entity_import('rules_config', '{ "rules_commons_kissmetrics_user_edits_profile" : {
       "LABEL" : "Commons KISSmetrics: User Edits Profile",
       "PLUGIN" : "reaction rule",
+      "OWNER" : "rules",
       "TAGS" : [ "Commons KISSmetrics" ],
       "REQUIRES" : [ "rules", "kissmetrics" ],
       "ON" : { "user_update" : [] },
@@ -108,6 +113,7 @@ function commons_kissmetrics_default_rules_configuration() {
   $items['rules_commons_kissmetrics_user_edits_wiki'] = entity_import('rules_config', '{ "rules_commons_kissmetrics_user_edits_wiki" : {
       "LABEL" : "Commons KISSmetrics: User Edits Wiki",
       "PLUGIN" : "reaction rule",
+      "OWNER" : "rules",
       "TAGS" : [ "Commons KISSmetrics" ],
       "REQUIRES" : [ "rules", "kissmetrics" ],
       "ON" : { "node_update" : [] },
@@ -131,6 +137,7 @@ function commons_kissmetrics_default_rules_configuration() {
   $items['rules_commons_kissmetrics_user_flags_content_as_inappropriate'] = entity_import('rules_config', '{ "rules_commons_kissmetrics_user_flags_content_as_inappropriate" : {
       "LABEL" : "Commons KISSmetrics: User Flags Content As Inappropriate",
       "PLUGIN" : "reaction rule",
+      "OWNER" : "rules",
       "TAGS" : [ "Commons KISSmetrics" ],
       "REQUIRES" : [ "rules", "kissmetrics", "flag" ],
       "ON" : { "flag_flagged_inappropriate_node" : [] },
@@ -146,6 +153,7 @@ function commons_kissmetrics_default_rules_configuration() {
   $items['rules_commons_kissmetrics_user_follows_content'] = entity_import('rules_config', '{ "rules_commons_kissmetrics_user_follows_content" : {
       "LABEL" : "Commons KISSmetrics: User Follows Content",
       "PLUGIN" : "reaction rule",
+      "OWNER" : "rules",
       "TAGS" : [ "Commons KISSmetrics" ],
       "REQUIRES" : [ "rules", "kissmetrics", "flag" ],
       "ON" : { "flag_flagged_commons_follow_node" : [] },
@@ -166,6 +174,7 @@ function commons_kissmetrics_default_rules_configuration() {
   $items['rules_commons_kissmetrics_user_follows_group'] = entity_import('rules_config', '{ "rules_commons_kissmetrics_user_follows_group" : {
       "LABEL" : "Commons KISSmetrics: User Follows Group",
       "PLUGIN" : "reaction rule",
+      "OWNER" : "rules",
       "TAGS" : [ "Commons KISSmetrics" ],
       "REQUIRES" : [ "rules", "kissmetrics", "flag" ],
       "ON" : { "flag_flagged_commons_follow_group" : [] },
@@ -181,6 +190,7 @@ function commons_kissmetrics_default_rules_configuration() {
   $items['rules_commons_kissmetrics_user_follows_topic'] = entity_import('rules_config', '{ "rules_commons_kissmetrics_user_follows_topic" : {
       "LABEL" : "Commons KISSmetrics: User Follows Topic",
       "PLUGIN" : "reaction rule",
+      "OWNER" : "rules",
       "TAGS" : [ "Commons KISSmetrics" ],
       "REQUIRES" : [ "rules", "kissmetrics", "flag" ],
       "ON" : { "flag_flagged_commons_follow_term" : [] },
@@ -196,6 +206,7 @@ function commons_kissmetrics_default_rules_configuration() {
   $items['rules_commons_kissmetrics_user_follows_user'] = entity_import('rules_config', '{ "rules_commons_kissmetrics_user_follows_user" : {
       "LABEL" : "Commons KISSmetrics: User Follows User",
       "PLUGIN" : "reaction rule",
+      "OWNER" : "rules",
       "TAGS" : [ "Commons KISSmetrics" ],
       "REQUIRES" : [ "rules", "kissmetrics", "flag" ],
       "ON" : { "flag_flagged_commons_follow_user" : [] },
@@ -211,6 +222,7 @@ function commons_kissmetrics_default_rules_configuration() {
   $items['rules_commons_kissmetrics_user_likes_content'] = entity_import('rules_config', '{ "rules_commons_kissmetrics_user_likes_content" : {
       "LABEL" : "Commons KISSmetrics: User Likes Content",
       "PLUGIN" : "reaction rule",
+      "OWNER" : "rules",
       "TAGS" : [ "Commons KISSmetrics" ],
       "REQUIRES" : [ "rules", "kissmetrics", "voting_rules" ],
       "ON" : { "voting_rules_insert_node" : [] },
@@ -222,6 +234,7 @@ function commons_kissmetrics_default_rules_configuration() {
   $items['rules_commons_kissmetrics_user_logs_in'] = entity_import('rules_config', '{ "rules_commons_kissmetrics_user_logs_in" : {
       "LABEL" : "Commons KISSmetrics: User Logs In",
       "PLUGIN" : "reaction rule",
+      "OWNER" : "rules",
       "TAGS" : [ "Commons KISSmetrics" ],
       "REQUIRES" : [ "rules", "kissmetrics" ],
       "ON" : { "user_login" : [] },
@@ -233,6 +246,7 @@ function commons_kissmetrics_default_rules_configuration() {
   $items['rules_commons_kissmetrics_user_logs_out'] = entity_import('rules_config', '{ "rules_commons_kissmetrics_user_logs_out" : {
       "LABEL" : "Commons KISSmetrics: User Logs Out",
       "PLUGIN" : "reaction rule",
+      "OWNER" : "rules",
       "TAGS" : [ "Commons KISSmetrics" ],
       "REQUIRES" : [ "rules", "kissmetrics" ],
       "ON" : { "user_logout" : [] },
@@ -244,6 +258,7 @@ function commons_kissmetrics_default_rules_configuration() {
   $items['rules_commons_kissmetrics_user_posts_comment'] = entity_import('rules_config', '{ "rules_commons_kissmetrics_user_posts_comment" : {
       "LABEL" : "Commons KISSmetrics: User Posts Comment",
       "PLUGIN" : "reaction rule",
+      "OWNER" : "rules",
       "TAGS" : [ "Commons KISSmetrics" ],
       "REQUIRES" : [ "rules", "kissmetrics", "comment" ],
       "ON" : { "comment_insert" : [] },
@@ -264,6 +279,7 @@ function commons_kissmetrics_default_rules_configuration() {
   $items['rules_commons_kissmetrics_user_registers'] = entity_import('rules_config', '{ "rules_commons_kissmetrics_user_registers" : {
       "LABEL" : "Commons KISSmetrics: User Registers",
       "PLUGIN" : "reaction rule",
+      "OWNER" : "rules",
       "TAGS" : [ "Commons KISSmetrics" ],
       "REQUIRES" : [ "rules", "kissmetrics" ],
       "ON" : { "user_insert" : [] },
@@ -275,6 +291,7 @@ function commons_kissmetrics_default_rules_configuration() {
   $items['rules_commons_kissmetrics_user_replies_to_private_message_thread'] = entity_import('rules_config', '{ "rules_commons_kissmetrics_user_replies_to_private_message_thread" : {
       "LABEL" : "Commons KISSmetrics: User Replies To Private Message Thread",
       "PLUGIN" : "reaction rule",
+      "OWNER" : "rules",
       "TAGS" : [ "Commons KISSmetrics" ],
       "REQUIRES" : [ "rules", "kissmetrics", "privatemsg_rules" ],
       "ON" : { "privatemsg_insert" : [] },
@@ -293,6 +310,7 @@ function commons_kissmetrics_default_rules_configuration() {
   $items['rules_commons_kissmetrics_user_starts_new_private_message_thread'] = entity_import('rules_config', '{ "rules_commons_kissmetrics_user_starts_new_private_message_thread" : {
       "LABEL" : "Commons KISSmetrics: User Starts New Private Message Thread",
       "PLUGIN" : "reaction rule",
+      "OWNER" : "rules",
       "TAGS" : [ "Commons KISSmetrics" ],
       "REQUIRES" : [ "rules", "kissmetrics", "privatemsg_rules" ],
       "ON" : { "privatemsg_insert" : [] },
