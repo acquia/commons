@@ -1395,6 +1395,12 @@ button,
 }
 
 /* Report as inappropriate */
+.flag-inappropriate-node,
+.flag-inappropriate-comment {
+  display: block;
+  clear: both;
+  margin: 1em 0 0;
+}
 .flag-inappropriate-node .flag-action:before,
 .flag-inappropriate-comment .flag-action:before {
   content: "";
@@ -2254,6 +2260,13 @@ h1.node-title a:hover {
 
 .comment-title {
   margin-bottom: .2em;
+}
+
+ul.comment-links {
+  margin: .7em 0;
+}
+ul.comment-links li {
+  padding-left: 0;
 }
 
 .comment-reply {

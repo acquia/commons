@@ -461,6 +461,19 @@ function commons_origins_process_comment_wrapper(&$variables, $hook) {
 }
 
 /**
+ * Implements hook_preprocess_comment().
+ */
+function commons_origins_preprocess_comment(&$variables, $hook) {
+  $variables['content']['links']['#attributes']['class'][] = 'comment-links';
+
+  // Push the reporting link to the end.
+  if (!empty($variables['content']['links']['flag']['#links']['flag-inappropriate_comment'])) {
+    $variables['content']['report_link'] = array('#markup' => $variables['content']['links']['flag']['#links']['flag-inappropriate_comment']['title']);
+    $variables['content']['links']['flag']['#links']['flag-inappropriate_comment']['#access'] = FALSE;
+  }
+}
+
+/**
  * Implements hook_preprocess_flag().
  */
 function commons_origins_preprocess_flag(&$variables, $hook) {

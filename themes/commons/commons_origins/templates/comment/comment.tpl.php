@@ -58,6 +58,8 @@
  *
  * @ingroup themeable
  */
+
+hide($content['report_link']);
 ?>
 <div class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
   <h3 class="comment-title"><?php print $title; ?></h3>
@@ -77,5 +79,5 @@
     ?>
   </div>
   <?php print render($content['links']) ?>
-
+  <?php print render($content['report_link']); ?>
 </div>

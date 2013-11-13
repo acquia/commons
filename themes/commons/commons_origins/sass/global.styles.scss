@@ -1027,6 +1027,10 @@ button,
 /* Report as inappropriate */
 .flag-inappropriate-node,
 .flag-inappropriate-comment, {
+  display: block;
+  clear: both;
+  margin: 1em 0 0;
+
   .flag-action {
     &:before {
       content: "";
@@ -1743,6 +1747,14 @@ h1.node-title {
 
 .comment-title {
   margin-bottom: .2em;
+}
+
+ul.comment-links {
+  margin: .7em 0;
+
+  li {
+    padding-left: 0;
+  }
 }
 
 .comment-reply {
