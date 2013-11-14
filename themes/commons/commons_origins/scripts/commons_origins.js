@@ -78,7 +78,7 @@ jQuery(document).ready(function($){
         });
       }
     }
-  }
+  };
 
   /**
    * Define a variable height on fieldsets to accommodate multi-line layouts.
@@ -94,12 +94,12 @@ jQuery(document).ready(function($){
 
         // Adjust the height on window resize.
         $(window).resize(function () {
-          var minHeight = $fieldset.find('legend').height();
+          var minHeight = fieldset.find('legend').height();
           fieldset.css('min-height', minHeight + 'px');
         });
       });
     }
-  }
+  };
 
   /**
    * Make an item follow the page when an item is in view.
@@ -133,7 +133,7 @@ jQuery(document).ready(function($){
         var filters = $(this),
             filterTrigger = $('<a/>', {'href': '#filter-drawer', 'class': 'filter-trigger', 'id': 'filter-drawer'}).text(Drupal.t('Filter results')),
             filterOverlay = $('<div/>', {'class': 'filter-overlay'}),
-            results = $('.search-results-content, .pane-search-result');
+            results = $('.search-results-content, .pane-search-result'),
             size = $(window).width(),
             triggerWidth = '';
 
@@ -199,5 +199,5 @@ jQuery(document).ready(function($){
         }
       });
     }
-  }
+  };
 })(jQuery);
