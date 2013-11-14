@@ -125,7 +125,7 @@ function commons_radioactivity_incident_node($node, $value) {
   $profile = radioactivity_get_field_profile('node', $node->type, 'field_radioactivity');
 
   // Return if radioactivity doesn't exist or hasn't been created for the node yet
-  if (!isset($node->field_radioactivity)) {
+  if (empty($node->field_radioactivity)) {
     return;
   }
   // Prevent groups from going negative in energy.
