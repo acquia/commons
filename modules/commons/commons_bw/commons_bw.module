@@ -8,14 +8,14 @@ function commons_bw_system_info_alter(&$info, $file, $type) {
     foreach (node_type_get_types() as $node_type) {
       $type = $node_type->type;
       if (commons_bw_node_auto_title_instance($type)) {
-        $info['features']['field_instance'][] = "node-$type-title_field";  
+        $info['features']['field_instance'][] = "node-$type-title_field";
       }
     }
   }
 }
 
 /**
- * Implementation of hook_ctools_plugin_directory().
+ * Implements hook_ctools_plugin_directory().
  */
 function commons_bw_ctools_plugin_directory($module, $plugin) {
   if ($module == 'ctools' && $plugin == 'content_types') {
@@ -307,7 +307,7 @@ function commons_bw_get_tab_definitions($widget_type = 'group') {
  * Helper function to determine whether Commons_BW should define a title
  * field instance on behalf of a content type.
  */
-function commons_bw_node_auto_title_instance($node_type) {  
+function commons_bw_node_auto_title_instance($node_type) {
   $commons_groups_entity_types = commons_groups_get_group_content_entity_types();
   $return = isset($commons_groups_entity_types['node'][$node_type]['auto_title_instance']) ? $commons_groups_entity_types['node'][$node_type]['auto_title_instance'] : TRUE;
   return $return;
