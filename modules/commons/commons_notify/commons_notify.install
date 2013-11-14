@@ -23,3 +23,11 @@ function commons_notify_update_7303() {
   features_revert(array('commons_notify' => array('message_type')));
   return array();
 }
+
+/**
+ * Add message notify for comments that have no group.
+ */
+function commons_notify_update_7304() {
+  features_revert(array('commons_notify' => array('message_type')));
+  return array();
+}

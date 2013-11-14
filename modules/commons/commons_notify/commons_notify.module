@@ -12,14 +12,14 @@ include_once 'commons_notify.features.inc';
  * a shutdown function, because node access grants haven not been written
  * by the time hook_node_insert() is invoked. For more background,
  * see https://drupal.org/node/1918666.
- * 
+ *
  */
 function commons_notify_node_insert($node) {
   drupal_register_shutdown_function('commons_notify_send_message_on_shutdown', $node);
 }
 
 /**
- * Send a notification for newly created nodes. 
+ * Send a notification for newly created nodes.
  * This function is registered as a shutdown function
  * in commons_notify_node_insert.
  * Note that shutdown functions run after drupal_set_message() messages are
@@ -38,7 +38,6 @@ function commons_notify_send_message_on_shutdown($node) {
   // the realm to the user, since if no realms are provided then the message
   // is automatically assigned to the user passed in the function, or if no
   // user object is provided, then to the acting user.
-
   $message_type = 'commons_notify_node_created';
   // We need to clear the static loading cache so that the node body will be
   // ready in time for token replacement for the  message.
@@ -76,7 +75,7 @@ function commons_notify_comment_insert($comment) {
   $message_type = 'commons_notify_comment_created';
   $hook = 'comment_insert';
   if (!isset($node->og_group_ref[LANGUAGE_NONE][0]['target_id'])) {
-    $message_type = 'commons_notify_node_created_no_groups';
+    $message_type = 'commons_notify_comment_created_no_groups';
   }
   drupal_alter('commons_notify_message_selection', $message_type, $hook, $comment);
   $message = message_create($message_type, array('uid' => $account->uid, 'timestamp' => $comment->created));

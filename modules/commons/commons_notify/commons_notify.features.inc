@@ -42,6 +42,33 @@ function commons_notify_default_message_type() {
     },
     "rdf_mapping" : []
   }');
+  $items['commons_notify_comment_created_no_groups'] = entity_import('message_type', '{
+    "name" : "commons_notify_comment_created_no_groups",
+    "description" : "Commons Notify: Comment created no groups",
+    "argument_keys" : [],
+    "argument" : [],
+    "category" : "commons_notify",
+    "data" : {
+      "token options" : { "clear" : 0 },
+      "purge" : { "override" : 0, "enabled" : 0, "quota" : "", "days" : "" }
+    },
+    "language" : "",
+    "arguments" : null,
+    "message_text" : { "und" : [
+        {
+          "value" : "New comment on [message:field-target-nodes:0:title] ",
+          "format" : "plain_text",
+          "safe_value" : "\\u003Cp\\u003ENew comment on [message:field-target-nodes:0:title]\\u003C\\/p\\u003E\\n"
+        },
+        {
+          "value" : "Hi [message:user:name],\\r\\n\\r\\n[message:field-target-comments:0:author] commented on [message:field-target-nodes:0:title]:\\r\\n\\r\\n[message:field-target-comments:0:body]\\r\\n\\r\\nRead \\u0026 respond: [message:field-target-comments:0:url]\\r\\nUpdate your notification settings: [site:url]\\/notification-settings",
+          "format" : "plain_text",
+          "safe_value" : "\\u003Cp\\u003EHi [message:user:name],\\u003C\\/p\\u003E\\n\\u003Cp\\u003E[message:field-target-comments:0:author] commented on [message:field-target-nodes:0:title]:\\u003C\\/p\\u003E\\n\\u003Cp\\u003E[message:field-target-comments:0:body]\\u003C\\/p\\u003E\\n\\u003Cp\\u003ERead \\u0026amp; respond: [message:field-target-comments:0:url]\\u003Cbr \\/\\u003E\\nUpdate your notification settings: [site:url]\\/notification-settings\\u003C\\/p\\u003E\\n"
+        }
+      ]
+    },
+    "rdf_mapping" : []
+  }');
   $items['commons_notify_node_created'] = entity_import('message_type', '{
     "name" : "commons_notify_node_created",
     "description" : "The notification sent when a user creates a node.",
