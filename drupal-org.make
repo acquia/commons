@@ -62,7 +62,14 @@ projects[connector][version] = "1.0-beta2"
 
 projects[ckeditor][type] = "module"
 projects[ckeditor][subdir] = "contrib"
-projects[ckeditor][version] = "1.13"
+projects[ckeditor][download][type] = "git"
+projects[ckeditor][download][url] = "http://git.drupal.org/project/ckeditor.git"
+projects[ckeditor][download][branch] = "7.x-1.x"
+projects[ckeditor][download][revision] = "b69a9ac"
+
+; Integration with Media 2.x.
+; https://drupal.org/comment/8172363#comment-8172363
+projects[ckeditor][patch][] = "http://drupal.org/files/issues/ckeditor_1504696_77.patch"
 
 projects[ctools][type] = "module"
 projects[ctools][subdir] = "contrib"
@@ -147,6 +154,10 @@ projects[features][type] = "module"
 projects[features][subdir] = "contrib"
 projects[features][version] = "2.0"
 
+projects[file_entity][type] = "module"
+projects[file_entity][subdir] = "contrib"
+projects[file_entity][version] = "2.0-alpha3"
+
 projects[flag][type] = "module"
 projects[flag][subdir] = "contrib"
 projects[flag][version] = "2.1"
@@ -197,6 +208,13 @@ projects[lingotek][version] = "4.08"
 projects[link][type] = "module"
 projects[link][subdir] = "contrib"
 projects[link][version] = "1.1"
+
+projects[media][type] = "module"
+projects[media][subdir] = "contrib"
+projects[media][download][type] = "git"
+projects[media][download][url] = "http://git.drupal.org/project/media.git"
+projects[media][download][branch] = "7.x-2.x"
+projects[media][download][revision] = "2a699f8"
 
 projects[memcache][type] = "module"
 projects[memcache][subdir] = "contrib"
@@ -259,6 +277,17 @@ projects[oauthconnector][download][type] = "git"
 projects[oauthconnector][download][url] = "http://git.drupal.org/project/oauthconnector.git"
 projects[oauthconnector][download][branch] = "7.x-1.x"
 projects[oauthconnector][download][revision] = "0ce7ac9614710c0f68d0a58cb4ae4667f8bd6fa7"
+
+projects[oembed][type] = "module"
+projects[oembed][subdir] = "contrib"
+projects[oembed][download][type] = "git"
+projects[oembed][download][url] = "http://git.drupal.org/project/oembed.git"
+projects[oembed][download][branch] = "7.x-1.x"
+projects[oembed][download][revision] = "63898e1"
+
+; Provided a default display configuration.
+; https://drupal.org/comment/8146913#comment-8146913
+projects[oembed][patch][] = "http://drupal.org/files/issues/provide-default-display-configuration-2128389-1.patch"
 
 projects[og][type] = "module"
 projects[og][subdir] = "contrib"
@@ -475,7 +504,7 @@ libraries[backbone][type] = "libraries"
 libraries[backbone][download][url] = "https://github.com/jashkenas/backbone/archive/1.0.0.tar.gz"
 
 libraries[ckeditor][download][type] = "get"
-libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.0/ckeditor_4.0_full.tar.gz"
+libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.3%20Beta/ckeditor_4.3_beta_full.zip"
 libraries[ckeditor][type] = "libraries"
 
 libraries[placeholder][download][type] = "get"
