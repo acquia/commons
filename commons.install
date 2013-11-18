@@ -221,3 +221,12 @@ function commons_update_3108() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Enable the File Entity, Media, Media Internet, oEmbed and Commons: Media modules.
+ */
+function commons_update_3109() {
+  $module_list = array('file_entity', 'media', 'media_internet', 'oembed', 'commons_media');
+  module_enable($module_list);
+  return array();
+}
