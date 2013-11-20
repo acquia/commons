@@ -126,10 +126,7 @@ projects[entitycache][patch][] = "http://drupal.org/files/add-translation-inform
 
 projects[entityreference][type] = "module"
 projects[entityreference][subdir] = "contrib"
-projects[entityreference][download][type] = "git"
-projects[entityreference][download][url] = "http://git.drupal.org/project/entityreference.git"
-projects[entityreference][download][branch] = "7.x-1.x"
-projects[entityreference][download][revision] = "1c176daef3e7483389cbebeb34784b3af6521f7f"
+projects[entityreference][version] = "1.1"
 
 projects[entityreference_prepopulate][type] = "module"
 projects[entityreference_prepopulate][subdir] = "contrib"
@@ -262,7 +259,7 @@ projects[oauthconnector][download][revision] = "0ce7ac9614710c0f68d0a58cb4ae4667
 
 projects[og][type] = "module"
 projects[og][subdir] = "contrib"
-projects[og][version] = "2.3"
+projects[og][version] = "2.4"
 
 ; Auto-assign role to group manager broken on groups with overridden roles.
 ; https://drupal.org/node/2005800#comment-7684873
@@ -271,9 +268,6 @@ projects[og][patch][] = "http://drupal.org/files/og-default-role-member-2005800-
 ; og_ui should give users the theme, not admin ui when creating groups.
 ; http://drupal.org/node/1800208
 projects[og][patch][] = "http://drupal.org/files/og_ui-group_node_add_theme-1800208-5.patch"
-
-; _og_access_verify_access_field_existence() assumes node group type, throws an exception rebuilding node access.
-projects[og][patch][] = "http://drupal.org/files/og-access-rebuild-exception-group-type.patch"
 
 projects[panelizer][type] = "module"
 projects[panelizer][subdir] = "contrib"
@@ -311,7 +305,7 @@ projects[pm_existing_pages][type] = "module"
 projects[pm_existing_pages][subdir] = "contrib"
 projects[pm_existing_pages][version] = "1.4"
 
-projects[potx][type] = "module" 
+projects[potx][type] = "module"
 projects[potx][subdir] = "contrib"
 projects[potx][version] = "1.0"
 
@@ -381,7 +375,7 @@ projects[rules][version] = "2.6"
 
 projects[schemaorg][type] = "module"
 projects[schemaorg][subdir] = "contrib"
-projects[schemaorg][version] = "1.0-beta3"
+projects[schemaorg][version] = "1.0-beta4"
 
 projects[search_facetapi][type] = "module"
 projects[search_facetapi][subdir] = "contrib"
@@ -472,11 +466,15 @@ projects[sky][version] = "3.0-rc1"
 
 libraries[backbone][download][type] = "get"
 libraries[backbone][type] = "libraries"
-libraries[backbone][download][url] = "https://github.com/jashkenas/backbone/archive/1.0.0.tar.gz"
+libraries[backbone][download][url] = "https://github.com/jashkenas/backbone/archive/1.1.0.tar.gz"
 
 libraries[ckeditor][download][type] = "get"
 libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.0/ckeditor_4.0_full.tar.gz"
 libraries[ckeditor][type] = "libraries"
+
+libraries[modernizr][download][type] = "get"
+libraries[modernizr][type] = "libraries"
+libraries[modernizr][download][url] = "https://github.com/Modernizr/Modernizr/archive/v2.7.0.tar.gz"
 
 libraries[placeholder][download][type] = "get"
 libraries[placeholder][type] = "libraries"
