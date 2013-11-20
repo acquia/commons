@@ -25,7 +25,7 @@ function commons_trusted_contacts_system_info_alter(&$info, $file, $type) {
  *
  */
 function commons_trusted_contacts_user_presave(&$edit, $account, $category) {
-  // Ensure that a value is always set for the user's group_access field, 
+  // Ensure that a value is always set for the user's group_access field,
   // so that the user remains public while content shared with the user's
   // trusted contacts group is private. If the value of $user->group_access
   // is not set, og_access.module will throw an exception in
@@ -886,7 +886,6 @@ function commons_trusted_contacts_form_commons_bw_partial_node_form_alter(&$form
     return;
   }
   commons_trusted_contacts_form_add_privacy_toggle($form, $form_state);
-  $form['#validate'][] = 'commons_trusted_contacts_partial_node_form_validate';
 }
 
 /**
@@ -897,7 +896,7 @@ function commons_trusted_contacts_form_add_privacy_toggle(&$form, &$form_state) 
     '#type' => 'radios',
     '#title' => t('Post to'),
     '#title_display' => 'invisible',
-    '#default_value' => empty($form[OG_AUDIENCE_FIELD][LANGUAGE_NONE][0]['default']['#default_value']) ? 'private' : 'custom',
+    '#default_value' => empty($form[OG_AUDIENCE_FIELD][LANGUAGE_NONE][0]['default']['#default_value']) && empty($form['nid']['#value']) ? 'private' : 'custom',
     '#options' => array(
       'custom' => t('Post to specific groups'),
       'private' => t('Post to contacts (private)'),
@@ -945,20 +944,6 @@ function commons_trusted_contacts_form_node_form_alter(&$form, &$form_state) {
   if (empty($form[OG_AUDIENCE_FIELD])) {
     $form['group_audience_type']['#options']['custom'] = t('Post site-wide');
   }
-  else {
-    $form['#validate'][] = 'commons_trusted_contacts_partial_node_form_validate';
-  }
-}
-
-/**
- * Validation handler; Make sure that a group is selected in case the
- * group_audience_type is set to "Specific groups".
- */
-function commons_trusted_contacts_partial_node_form_validate($form, $form_state) {
-  if ($form_state['values']['group_audience_type'] == 'custom' && empty($form_state['values'][OG_AUDIENCE_FIELD][LANGUAGE_NONE][0])) {
-    form_set_error(OG_AUDIENCE_FIELD, t('No groups were selected.'));
-    return FALSE;
-  }
 }
 
 /**
@@ -975,6 +960,8 @@ function commons_trusted_contacts_node_presave($node) {
   if (!isset($group_content_entity_types['node'][$node->type])) {
     return;
   }
+  $group_audience_type = '';
+
   // We're posting from the short form on the site-wide homepage.
   if (isset($node->form_state['values']['group_audience_type'])) {
     $group_audience_type = $node->form_state['values']['group_audience_type'];
@@ -982,6 +969,12 @@ function commons_trusted_contacts_node_presave($node) {
   // We're posting from the full node creation form.
   if (isset($node->group_audience_type)) {
     $group_audience_type = $node->group_audience_type;
+  }
+
+  // If the group audience type isn't set, its either content created within a
+  // group or not group content at all. Either way, we should return.
+  if (!$group_audience_type) {
+    return;
   }
 
   $wrapper = entity_metadata_wrapper('node', $node);
@@ -995,7 +988,7 @@ function commons_trusted_contacts_node_presave($node) {
     $wrapper->{OG_AUDIENCE_FIELD}->set(array());
   }
   // The content is submitted to specific groups.
-  else {
+  else if ($group_audience_type == 'custom' && !empty($node->{OG_AUDIENCE_FIELD})) {
     // Extract group IDs from selection.
     $group_ids = array();
     foreach ($node->{OG_AUDIENCE_FIELD}[LANGUAGE_NONE] as $group) {
@@ -1003,6 +996,9 @@ function commons_trusted_contacts_node_presave($node) {
     }
     $wrapper->{OG_AUDIENCE_FIELD}->set($group_ids);
     $wrapper->og_user_group_ref->set(array());
+  }
+  else {
+    return;
   }
 }
 
@@ -1100,7 +1096,7 @@ function commons_trusted_contacts_messages_popup($form, &$form_state, $account) 
 }
 
 /**
- * Helper function to get all of the pending invitations for a given 
+ * Helper function to get all of the pending invitations for a given
  * recipient user. Returns an array of OG memberships.
  */
 function commons_trusted_contacts_get_pending_invitations($uid) {
