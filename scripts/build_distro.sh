@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+#set -e
 
 #modules=(commons_activity_streams commons_featured commons_notices commons_profile_social commons_user_profile_pages commons_body commons_follow commons_notify commons_q_a commons_utility_links commons_bw commons_groups commons_pages commons_radioactivity commons_wikis commons_content_moderation commons_like commons_polls commons_search commons_wysiwyg commons_documents commons_location commons_posts commons_site_homepage commons_events commons_misc commons_profile_base commons_topics commons_social_sharing commons_trusted_contacts)
 themes=(commons_origins)
@@ -42,17 +42,15 @@ pull_git() {
     git pull origin 7.x-3.x
 
     cd $BUILD_PATH/repos/modules
-    for i in "${modules[@]}"; do
+    for i in `ls | awk -F/ '{print $1}'`; do
       echo $i
       cd $i
       if [[ -n $RESET ]]; then
         git reset --hard HEAD
       fi
-      git pull origin 7.x-3.x
+      git pull origin
       cd ..
     done
-    cd $BUILD_PATH/repos/themes/commons_origins
-    git pull origin 7.x-3.x
 }
 
 release_notes() {
@@ -118,6 +116,7 @@ build_distro() {
       mkdir $BUILD_PATH
       build_distro $BUILD_PATH $USERNAME
     fi
+  fi
 }
 
 # This allows you to test the make file without needing to upload it to drupal.org and run the main make file.
@@ -129,13 +128,14 @@ update() {
       # do we have an installed commons profile?
         rm -f /tmp/publish.tar.gz
         rm -f /tmp/commons.tar.gz
-        drush make --tar --drupal-org=core profiles/commons/drupal-org-core.make /tmp/publish
-        drush make --tar --drupal-org profiles/commons/drupal-org.make /tmp/commons
+        drush make --no-cache --tar --drupal-org=core profiles/commons/drupal-org-core.make /tmp/publish
+        drush make --no-core --no-cache --tar --drupal-org profiles/commons/drupal-org.make /tmp/commons
         cd ..
         tar -zxvf /tmp/publish.tar.gz
-        cd publish/profiles
+        cd publish/profiles/commons/modules/contrib
         # remove the symlinks in the repos before we execute
-        find . -mindepth 2 -type l | awk -F/ '{print $5}' | sed '/^$/d' > /tmp/repos.txt
+        find . -type l | awk -F/ '{print $2}' > /tmp/repos.txt
+        cd $DOCROOT/profiles
         # exclude repos since we're updating already by linking it to the repos directory.
         UNTAR="tar -zxvf /tmp/commons.tar.gz -X /tmp/repos.txt"
         eval $UNTAR
@@ -185,7 +185,7 @@ case $1 in
     if [[ -n $2 ]]; then
       DOCROOT=$2
     else
-      echo "Usage: build_distro.sh test_makefile [build_path]"
+      echo "Usage: build_distro.sh update [DOCROOT]"
       exit 1
     fi
     if [[ -n $3 ]]; then
