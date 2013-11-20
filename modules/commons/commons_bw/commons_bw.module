@@ -282,11 +282,22 @@ function commons_bw_form_field_ui_field_edit_form_alter(&$form, &$form_state) {
     return;
   }
 
+  // See if we're building for the first time, or getting pre-saved values.
   $field_name = $form['#field']['field_name'];
+  if(!empty($form_state['field'][$field_name][LANGUAGE_NONE]['instance']['display_in_partial_form'])) {
+    $display_default = $form_state['field'][$field_name][LANGUAGE_NONE]['instance']['display_in_partial_form'];
+  }
+  else if (isset($form_state['build_info']['args'][0]['display_in_partial_form'])) {
+    $display_default = $form_state['build_info']['args'][0]['display_in_partial_form'];
+  }
+  else {
+    $display_default = FALSE;
+  }
+
   $form['instance']['display_in_partial_form'] = array(
     '#type' => 'checkbox',
     '#title' => t('Display in the browsing widget mini-form'),
-    '#default_value' => !empty($form_state['field'][$field_name][LANGUAGE_NONE]['instance']['display_in_partial_form']) ? $form_state['field'][$field_name][LANGUAGE_NONE]['instance']['display_in_partial_form'] : FALSE,
+    '#default_value' => $display_default,
   );
 }
 
