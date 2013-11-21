@@ -189,7 +189,7 @@ projects[libraries][version] = "2.1"
 
 projects[lingotek][type] = "module"
 projects[lingotek][subdir] = "contrib"
-projects[lingotek][version] = "4.08"
+projects[lingotek][version] = "4.09"
 
 projects[link][type] = "module"
 projects[link][subdir] = "contrib"
