@@ -369,7 +369,7 @@ function commons_follow_user_views_default_views() {
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page_1');
   $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = 'People %1 fllows';
+  $handler->display->display_options['title'] = 'People %1 follows';
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['defaults']['use_more'] = FALSE;
   $handler->display->display_options['defaults']['use_more_always'] = FALSE;
@@ -401,7 +401,7 @@ function commons_follow_user_views_default_views() {
     t('more'),
     t('Commons'),
     t('Page'),
-    t('People %1 fllows'),
+    t('People %1 follows'),
     t('Items per page'),
     t('- All -'),
     t('Offset'),
