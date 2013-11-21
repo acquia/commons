@@ -67,10 +67,6 @@ projects[ckeditor][download][url] = "http://git.drupal.org/project/ckeditor.git"
 projects[ckeditor][download][branch] = "7.x-1.x"
 projects[ckeditor][download][revision] = "b69a9ac"
 
-; Integration with Media 2.x.
-; https://drupal.org/comment/8172363#comment-8172363
-projects[ckeditor][patch][] = "http://drupal.org/files/issues/ckeditor_1504696_77.patch"
-
 projects[ctools][type] = "module"
 projects[ctools][subdir] = "contrib"
 projects[ctools][download][type] = "git"
