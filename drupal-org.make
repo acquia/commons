@@ -263,7 +263,7 @@ projects[og][version] = "2.4"
 
 ; Auto-assign role to group manager broken on groups with overridden roles.
 ; https://drupal.org/node/2005800#comment-7684873
-projects[og][patch][] = "http://drupal.org/files/og-default-role-member-2005800-21.patch"
+projects[og][patch][] = "http://drupal.org/files/issues/og-default-role-member-2005800-23.patch"
 
 ; og_ui should give users the theme, not admin ui when creating groups.
 ; http://drupal.org/node/1800208
