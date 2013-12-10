@@ -7,3 +7,15 @@ function commons_follow_node_update_3101() {
   features_revert(array('commons_follow_node' => array('flag')));
   return array();
 }
+
+/**
+ * Update profile notification page to show an account's following views
+ * Not the current users following view.
+ */
+function commons_follow_node_update_3501() {
+  $revert = array(
+    'commons_follow_node' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}
