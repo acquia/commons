@@ -899,7 +899,7 @@ function commons_trusted_contacts_form_add_privacy_toggle(&$form, &$form_state) 
     '#default_value' => empty($form[OG_AUDIENCE_FIELD][LANGUAGE_NONE][0]['default']['#default_value']) && empty($form['nid']['#value']) ? 'private' : 'custom',
     '#options' => array(
       'custom' => t('Post to specific groups'),
-      'private' => t('Post to contacts (private)'),
+      'private' => t('Post privately to all trusted contacts'),
     ),
     '#weight' => 70,
     '#attributes' => array(
