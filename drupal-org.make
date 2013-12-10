@@ -227,10 +227,6 @@ projects[metatag][type] = "module"
 projects[metatag][subdir] = "contrib"
 projects[metatag][version] = "1.0-beta7"
 
-; Support for rel=author link in head.
-; http://drupal.org/node/1865228#comment-6839604
-projects[metatag][patch][] = "http://drupal.org/files/metatag-n1865228-3.patch"
-
 projects[module_filter][type] = "module"
 projects[module_filter][subdir] = "contrib"
 projects[module_filter][version] = "1.8"
@@ -364,10 +360,6 @@ projects[registration][version] = "1.2"
 projects[rich_snippets][type] = "module"
 projects[rich_snippets][subdir] = "contrib"
 projects[rich_snippets][version] = "1.0-beta3"
-
-; Remove snippets from non-node type searches.
-; http://drupal.org/node/1923904#comment-7094488
-projects[rich_snippets][patch][] = "http://drupal.org/files/1923904-search-nodes-only.patch"
 
 projects[rules][type] = "module"
 projects[rules][subdir] = "contrib"
