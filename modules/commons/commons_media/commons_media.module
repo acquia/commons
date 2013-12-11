@@ -10,34 +10,38 @@ include_once 'commons_media.features.inc';
  * Implements hook_filter_default_formats_alter().
  */
 function commons_media_filter_default_formats_alter(&$formats) {
-  // Enable the media filter.
-  $formats['filtered_html']['filters'] += array(
-    'media_filter' => array(
-      'status' => 1,
-      'weight' => 2,
-    ),
-  );
+  if (module_exists('media_wysiwyg')) {
+    // Enable the media filter.
+    $formats['filtered_html']['filters'] += array(
+      'media_filter' => array(
+        'status' => 1,
+        'weight' => 2,
+      ),
+    );
+  }
 }
 
 /**
  * Implements hook_ckeditor_profile_defaults().
  */
 function commons_media_ckeditor_profile_defaults_alter(&$profiles) {
-  // Add the media button.
-  $profiles['Advanced']['settings']['toolbar'] = '[
-  [\'Format\'],
-  [\'Bold\',\'Italic\',\'Strike\'],
-  [\'NumberedList\',\'BulletedList\',\'Indent\',\'Outdent\',\'Blockquote\'],
-  [\'Link\',\'Unlink\',\'Media\']
-  ]';
+  if (module_exists('media_wysiwyg')) {
+    // Add the media button.
+    $profiles['Advanced']['settings']['toolbar'] = '[
+    [\'Format\'],
+    [\'Bold\',\'Italic\',\'Strike\'],
+    [\'NumberedList\',\'BulletedList\',\'Indent\',\'Outdent\',\'Blockquote\'],
+    [\'Link\',\'Unlink\',\'Media\']
+    ]';
 
-  // Load the media plugin.
-  $profiles['Advanced']['settings']['loadPlugins'] += array(
-    'media' => array(
-      'default' => 'f',
-      'desc' => 'Plugin for inserting images from Drupal media module',
-      'name' => 'media',
-      'path' => '%plugin_dir%media/',
-    ),
-  );
+    // Load the media plugin.
+    $profiles['Advanced']['settings']['loadPlugins'] += array(
+      'media' => array(
+        'default' => 'f',
+        'desc' => 'Plugin for inserting images from Drupal media module',
+        'name' => 'media',
+        'path' => '%plugin_dir%media/',
+      ),
+    );
+  }
 }
