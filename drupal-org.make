@@ -62,14 +62,7 @@ projects[connector][version] = "1.0-beta2"
 
 projects[ckeditor][type] = "module"
 projects[ckeditor][subdir] = "contrib"
-projects[ckeditor][download][type] = "git"
-projects[ckeditor][download][url] = "http://git.drupal.org/project/ckeditor.git"
-projects[ckeditor][download][branch] = "7.x-1.x"
-projects[ckeditor][download][revision] = "b69a9ac"
-
-; Integration with Media 2.x.
-; https://drupal.org/comment/8172363#comment-8172363
-projects[ckeditor][patch][] = "http://drupal.org/files/issues/ckeditor_1504696_77.patch"
+projects[ckeditor][version] = "1.13"
 
 projects[ctools][type] = "module"
 projects[ctools][subdir] = "contrib"
@@ -490,7 +483,7 @@ libraries[backbone][type] = "libraries"
 libraries[backbone][download][url] = "https://github.com/jashkenas/backbone/archive/1.1.0.tar.gz"
 
 libraries[ckeditor][download][type] = "get"
-libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.3.1/ckeditor_4.3.1_full.zip"
+libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.0/ckeditor_4.0_full.tar.gz"
 libraries[ckeditor][type] = "libraries"
 
 libraries[modernizr][download][type] = "get"
