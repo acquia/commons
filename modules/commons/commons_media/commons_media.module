@@ -7,6 +7,23 @@
 include_once 'commons_media.features.inc';
 
 /**
+ * Implements hook_system_info_alter().
+ */
+function commons_media_system_info_alter(&$info, $file, $type) {
+  if ($file->name == 'commons_media') {
+    $entity_integrations = module_invoke_all('commons_entity_integration');
+
+    if (!empty($entity_integrations)) {
+      foreach ($entity_integrations as $entity_type => $bundles) {
+        foreach (array_keys($bundles) as $bundle) {
+          $info['features']['field_instance'][] = "$entity_type-$bundle-field_media";
+        }
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_filter_default_formats_alter().
  */
 function commons_media_filter_default_formats_alter(&$formats) {
