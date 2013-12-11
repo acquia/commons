@@ -8,7 +8,7 @@ php:
 
 notifications:
   email:
-    - marc.seeger@acquia.com
+    - commons-bulk@acquia.com
 
 branches:
   only:
@@ -35,7 +35,7 @@ before_install:
   - curl http://localhost:4444/wd/hub
   # For uploading error screenshots
   - "wget http://imgur.com/tools/imgurbash.sh -O $TRAVIS_BUILD_DIR/imgurbash.sh && chmod +x $TRAVIS_BUILD_DIR/imgurbash.sh"
-  
+
 before_script:
   # Grab drush
   - pear channel-discover pear.drush.org
@@ -49,7 +49,7 @@ before_script:
   - sudo a2enmod actions
   - sudo service apache2 restart
   # Install the composer packages for behat / ...
-  - composer --working-dir=tests/ install  
+  - composer --working-dir=tests/ install
 script:
   # Build distro from makefile
   - drush make build-commons.make --no-cache -y packaged
@@ -64,7 +64,7 @@ script:
   # Start running the tests
   - cd tests
   - bin/behat
-  
+
 after_failure:
   - ls -lash $TRAVIS_BUILD_DIR/fail*.png
   - $TRAVIS_BUILD_DIR/imgurbash.sh $TRAVIS_BUILD_DIR/fail*.png

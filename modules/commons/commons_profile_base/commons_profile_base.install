@@ -1,0 +1,12 @@
+<?php
+
+/**
+ * Revert strongarm varibles related to realname recursion error.
+ */
+function commons_profile_base_update_7000() {
+    $revert = array(
+      'commons_profile_base' => array('variable'),
+  );
+  features_revert($revert);
+  return array();
+}

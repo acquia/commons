@@ -15,3 +15,15 @@ function commons_follow_user_update_3102() {
   features_revert(array('commons_follow_user' => array('views_view')));
   return array();
 }
+
+/**
+ * Update profile notification page to show an account's following views
+ * Not the current users following view.
+ */
+function commons_follow_user_update_3501() {
+  $revert = array(
+    'commons_follow_user' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}

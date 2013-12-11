@@ -62,7 +62,7 @@ function commons_groups_help($path, $arg) {
       }
     }
     if (user_access('edit any group content')) {
-      $message = t("Group privacy settings !updated.", array('!updated' => l('need to be updated', 'admin/content/groups/update'),));
+      $message = t("Group privacy settings !updated.", array('!updated' => l('need to be updated', 'admin/content/groups/update')));
       drupal_set_message($message, 'warning', FALSE);
     }
   }
@@ -97,7 +97,7 @@ function commons_groups_form_group_node_form_alter(&$form, &$form_state) {
   $form['field_og_subscribe_settings'][LANGUAGE_NONE]['#required'] = FALSE;
 
   if (module_exists('og_access')) {
-    // Display the private content checkbox only when "Joining requires approval"
+    // Display private content checkbox only when "Joining requires approval"
     // is selected.
     $form['field_og_access_default_value']['#states'] = array(
       'visible' => array(
@@ -297,7 +297,7 @@ function commons_groups_group_contributors_count_topics($group) {
     $contributors_count = $view->total_rows;
     $output .= l(t('@contributors_count @contributors', array(
       '@contributors_count' => $contributors_count,
-      '@contributors' => format_plural($contributors_count, 'contributor', 'contributors')
+      '@contributors' => format_plural($contributors_count, 'contributor', 'contributors'),
     )), 'node/' . $group->nid . '/contributors');
   }
   // Format the list of topics:
@@ -583,14 +583,14 @@ function commons_groups_message_partial_default() {
 function commons_groups_related_groups_text($related_groups) {
   // In 1 group: "in the x group"
   if (count($related_groups) == 1) {
-    return t(' in the !group group', array('!group' => l($related_groups[0]->title, 'node/' . $related_groups[0]->nid)));
+    return ' ' . t('in the !group group', array('!group' => l($related_groups[0]->title, 'node/' . $related_groups[0]->nid)));
   }
 
   // In 2 groups: "in the x and y groups"
   if (count($related_groups) == 2) {
-    return t(' in the !group-0 and !group-1 groups', array(
+    return ' ' . t('in the !group-0 and !group-1 groups', array(
       '!group-0' => l($related_groups[0]->title, 'node/' . $related_groups[0]->nid),
-      '!group-1' => l($related_groups[1]->title, 'node/' . $related_groups[1]->nid)
+      '!group-1' => l($related_groups[1]->title, 'node/' . $related_groups[1]->nid),
     ));
   }
 

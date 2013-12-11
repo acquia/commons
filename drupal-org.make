@@ -245,10 +245,6 @@ projects[metatag][type] = "module"
 projects[metatag][subdir] = "contrib"
 projects[metatag][version] = "1.0-beta7"
 
-; Support for rel=author link in head.
-; http://drupal.org/node/1865228#comment-6839604
-projects[metatag][patch][] = "http://drupal.org/files/metatag-n1865228-3.patch"
-
 projects[module_filter][type] = "module"
 projects[module_filter][subdir] = "contrib"
 projects[module_filter][version] = "1.8"
@@ -292,7 +288,7 @@ projects[og][version] = "2.4"
 
 ; Auto-assign role to group manager broken on groups with overridden roles.
 ; https://drupal.org/node/2005800#comment-7684873
-projects[og][patch][] = "http://drupal.org/files/og-default-role-member-2005800-21.patch"
+projects[og][patch][] = "http://drupal.org/files/issues/og-default-role-member-2005800-23.patch"
 
 ; og_ui should give users the theme, not admin ui when creating groups.
 ; http://drupal.org/node/1800208
@@ -393,10 +389,6 @@ projects[registration][version] = "1.2"
 projects[rich_snippets][type] = "module"
 projects[rich_snippets][subdir] = "contrib"
 projects[rich_snippets][version] = "1.0-beta3"
-
-; Remove snippets from non-node type searches.
-; http://drupal.org/node/1923904#comment-7094488
-projects[rich_snippets][patch][] = "http://drupal.org/files/1923904-search-nodes-only.patch"
 
 projects[rules][type] = "module"
 projects[rules][subdir] = "contrib"
