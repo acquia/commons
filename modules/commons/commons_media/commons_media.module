@@ -24,6 +24,33 @@ function commons_media_system_info_alter(&$info, $file, $type) {
 }
 
 /**
+ * Implements hook_file_view_alter().
+ */
+function commons_media_file_view_alter(&$build) {
+  $file_type = $build['#bundle'];
+
+  // Add responsive CSS to image and video files.
+  if ($file_type == 'image' || $file_type == 'video') {
+    $build['#attached']['css'][] = drupal_get_path('module', 'commons_media') . '/commons_media.css';
+  }
+}
+
+/**
+ * Implements hook_preprocess_oembed().
+ */
+function commons_media_preprocess_oembed(&$variables) {
+  $embed = $variables['embed'];
+
+  // Video and rich type must have HTML content.
+  // Wrap the HTML content in a <div> to allow it to be made responsive.
+  if (in_array($embed['type'], array('video', 'rich'))) {
+    $embed['html'] = '<div class="oembed">' . $embed['html'] . '</div>';
+  }
+
+  $variables['embed'] = $embed;
+}
+
+/**
  * Implements hook_filter_default_formats_alter().
  */
 function commons_media_filter_default_formats_alter(&$formats) {
