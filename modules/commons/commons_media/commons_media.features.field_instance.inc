@@ -56,7 +56,7 @@ function commons_media_field_definition(&$field_instances, $entity_type, $bundle
     'settings' => array(
       'description_field' => 0,
       'file_directory' => 'media',
-      'file_extensions' => 'jpg jpeg gif png oembed',
+      'file_extensions' => 'jpg jpeg gif png oembed mov mp4 m4v mpeg avi ogv webp webm',
       'max_filesize' => '',
       'user_register_form' => FALSE,
     ),
