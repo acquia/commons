@@ -9,6 +9,11 @@
  */
 define('DRUPAL_MINIMUM_MAX_EXECUTION_TIME', 120);
 
+/*
+ * Define commons minimum APC cache required to operate.
+ */
+define('COMMONS_MINIMUM_APC_CACHE', 96);
+
 /**
  * Implements hook_admin_paths_alter().
  */

@@ -14,6 +14,7 @@ function commons_requirements($phase) {
   // Ensure translations don't break during installation.
   $t = get_t();
   if($phase == 'install') {
+
     // Test PHP minimum execution time
     $requirements['php_max_execution_time'] = array(
       'title' => $t('PHP Max Execution Time'),
@@ -24,6 +25,25 @@ function commons_requirements($phase) {
     if ($max_execution_time && $max_execution_time < DRUPAL_MINIMUM_MAX_EXECUTION_TIME) {
       $requirements['php_max_execution_time']['description'] = $t('Your PHP execution time is too low, please set it greater than or equal to %time seconds.', array('%time' => DRUPAL_MINIMUM_MAX_EXECUTION_TIME));
       $requirements['php_max_execution_time']['severity'] = REQUIREMENT_ERROR;
+    }
+
+    if(ini_get('apc.shm_size') != NULL) {
+      // Check for apc.shm_size = 96mb
+      $requirements['apc_shm_size'] = array(
+        'title' => $t('APC shim size'),
+        'value' => ini_get('apc.shm_size'),
+      );
+
+      $shm_size = preg_split('/[a-zA-Z]/', ini_get('apc.shm_size'));
+      $shm_size = $shm_size[0];
+
+      // only check if APC var is being set somewhere (usually apc.ini).
+      // throw error if there is less than 96MB available
+      if ($shm_size && $shm_size < COMMONS_MINIMUM_APC_CACHE) {
+        $requirements['apc_shm_size']['description'] = $t('APC is installed but %shm_size is not enough APC cache to successfully install Drupal Commons.
+           Find your <em>apc.ini</em> file and change the <em>apc.shm_size</em> value to at least <em>96M</em>.', array('%shm_size' => COMMONS_MINIMUM_APC_CACHE . 'M'));
+        $requirements['apc_shm_size']['severity'] = REQUIREMENT_ERROR;
+      }
     }
   }
   return $requirements;
