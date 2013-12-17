@@ -49,15 +49,3 @@ function commons_trusted_contacts_update_3100() {
   features_revert($revert);
   return array();
 }
-
-/**
- * Change the background options widget to use autocomplete instead
- * See https://drupal.org/node/2151637 for more info
- */
-function commons_trusted_contacts_update_3101() {
-  $revert = array(
-    'commons_trusted_contacts' => array('field_instance', 'field_base'),
-  );
-  features_revert($revert);
-  return array();
-}
