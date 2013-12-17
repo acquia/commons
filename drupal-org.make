@@ -271,19 +271,10 @@ projects[panelizer][version] = "3.1"
 
 projects[panels][type] = "module"
 projects[panels][subdir] = "contrib"
-projects[panels][version] = "3.3"
-
-; Fatal error: Call to undefined function panels_get_layouts().
-; http://drupal.org/node/1828684#comment-6694732
-projects[panels][patch][] = "http://drupal.org/files/1828684-layout-fix-6.patch"
-
-; PHP 5.3.9 Strict Warning on Panels Empty Value.
-; http://drupal.org/node/1632898#comment-6412840
-projects[panels][patch][] = "http://drupal.org/files/panels-n1632898-15.patch"
-
-; Add internationalization support.
-; http://drupal.org/node/1179034#comment-7216342
-projects[panels][patch][] = "http://drupal.org/files/panels-1179034-41_____panels-uuids-127790-100__-80.patch"
+projects[panels][download][type] = "git"
+projects[panels][download][url] = "http://git.drupal.org/project/panels.git"
+projects[panels][download][branch] = "7.x-3.x-i18n"
+projects[panels][download][revision] = "43a3810e8b0d2ef435ef2bb190039391c8e1712f"
 
 projects[paranoia][type] = "module"
 projects[paranoia][subdir] = "contrib"
