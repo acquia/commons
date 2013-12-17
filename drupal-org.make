@@ -284,9 +284,9 @@ projects[pathauto][type] = "module"
 projects[pathauto][subdir] = "contrib"
 projects[pathauto][version] = "1.2"
 
-projects[placeholder][type] = "module"
-projects[placeholder][subdir] = "contrib"
-projects[placeholder][version] = "1.0"
+projects[elements][type] = "module"
+projects[elements][subdir] = "contrib"
+projects[elements][version] = "1.4"
 
 projects[pm_existing_pages][type] = "module"
 projects[pm_existing_pages][subdir] = "contrib"
@@ -458,10 +458,6 @@ libraries[ckeditor][type] = "libraries"
 libraries[modernizr][download][type] = "get"
 libraries[modernizr][type] = "libraries"
 libraries[modernizr][download][url] = "https://github.com/Modernizr/Modernizr/archive/v2.7.0.tar.gz"
-
-libraries[placeholder][download][type] = "get"
-libraries[placeholder][type] = "libraries"
-libraries[placeholder][download][url] = "https://github.com/mathiasbynens/jquery-placeholder/archive/v2.0.7.tar.gz"
 
 libraries[timeago][download][type] = "get"
 libraries[timeago][type] = "libraries"
