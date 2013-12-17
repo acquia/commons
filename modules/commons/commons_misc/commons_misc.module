@@ -45,3 +45,30 @@ function commons_misc_form_system_theme_settings_alter(&$form, &$form_state, $fo
     commons_origins_palettes_form($form);
   }
 }
+
+/*
+ * Render a link to the official commons documentation located at
+ * https://docs.acquia.com/commons
+ */
+function commons_misc_navbar() {
+  $items = array();
+
+  $items['documentation'] = array(
+    '#type' => 'navbar_item',
+    'tab' => array(
+      '#type' => 'link',
+      '#title' => t('Documentation'),
+      '#href' => 'https://docs.acquia.com/commons',
+      '#options' => array(
+        'attributes' => array(
+          'title' => t('Commons Documentation'),
+          'class' => array('icon', 'icon-help'),
+          'target' => '_blank',
+        ),
+      ),
+    ),
+    '#weight' => 20,
+  );
+
+  return $items;
+}
