@@ -241,3 +241,14 @@ function commons_update_3108() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Replace the Placeholder module with the Elements module.
+ */
+function commons_update_3109() {
+  if (module_exists('placeholder')) {
+    module_disable(array('placeholder'));
+  }
+  module_enable(array('elements'));
+  return array();
+}
