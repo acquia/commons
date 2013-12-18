@@ -204,7 +204,7 @@ projects[media][subdir] = "contrib"
 projects[media][download][type] = "git"
 projects[media][download][url] = "http://git.drupal.org/project/media.git"
 projects[media][download][branch] = "7.x-2.x"
-projects[media][download][revision] = "a84bd30"
+projects[media][download][revision] = "7d12b8b"
 
 projects[memcache][type] = "module"
 projects[memcache][subdir] = "contrib"
@@ -271,9 +271,25 @@ projects[oembed][download][url] = "http://git.drupal.org/project/oembed.git"
 projects[oembed][download][branch] = "7.x-1.x"
 projects[oembed][download][revision] = "63898e1"
 
-; Provided a default display configuration.
-; https://drupal.org/comment/8146913#comment-8146913
-projects[oembed][patch][] = "http://drupal.org/files/issues/provide-default-display-configuration-2128389-1.patch"
+; Add oEmbed plugins to list of supported media providers
+; https://drupal.org/comment/8287243#comment-8287243
+projects[oembed][patch][] = "https://drupal.org/files/issues/list-enabled-plugins-2159335-1.patch"
+
+; Remove WYSIWYG special casing
+; https://drupal.org/comment/8287061#comment-8287061
+projects[oembed][patch][] = "https://drupal.org/files/issues/remove-wysiwyg-special-casing-2159303-1.patch"
+
+; Provided a default display configuration
+; https://drupal.org/comment/8286995#comment-8286995
+projects[oembed][patch][] = "https://drupal.org/files/issues/provide-default-display-configuration-2128389-3.patch"
+
+; Add supported file and MIME type information to file formatters
+; https://drupal.org/comment/8286935#comment-8286935
+projects[oembed][patch][] = "https://drupal.org/files/issues/add-file-and-mime-type-information-to-formatters-2159275-1.patch"
+
+; Themed images ignore width, height, alt and title attributes
+; https://drupal.org/comment/8286915#comment-8286915
+projects[oembed][patch][] = "https://drupal.org/files/issues/prefer-element-attributes-2159269-1.patch"
 
 projects[og][type] = "module"
 projects[og][subdir] = "contrib"
