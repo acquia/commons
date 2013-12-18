@@ -276,8 +276,8 @@ projects[oembed][download][revision] = "63898e1"
 projects[oembed][patch][] = "https://drupal.org/files/issues/list-enabled-plugins-2159335-1.patch"
 
 ; Remove WYSIWYG special casing
-; https://drupal.org/comment/8287061#comment-8287061
-projects[oembed][patch][] = "https://drupal.org/files/issues/remove-wysiwyg-special-casing-2159303-1.patch"
+; https://drupal.org/comment/8287861#comment-8287861
+projects[oembed][patch][] = "https://drupal.org/files/issues/remove-wysiwyg-special-casing-2159303-2.patch"
 
 ; Provided a default display configuration
 ; https://drupal.org/comment/8286995#comment-8286995
