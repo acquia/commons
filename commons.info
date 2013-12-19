@@ -23,6 +23,9 @@ dependencies[] = shortcut
 dependencies[] = taxonomy
 
 ; Install required contributed modules.
+; For Commons 3.6, media is included, but left disabled by default.
+; Uncomment if you wish to enable on install. Alternatively, enabling the
+; commons_media module post install will enable all of the media modules.
 dependencies[] = addressfield
 dependencies[] = addressfield_tokens
 dependencies[] = breakpoints
@@ -35,11 +38,11 @@ dependencies[] = entityreference
 dependencies[] = entitycache
 dependencies[] = edit_profile
 dependencies[] = features
-dependencies[] = file_entity
+;dependencies[] = file_entity
 dependencies[] = flag
 dependencies[] = http_client
-dependencies[] = media
-dependencies[] = media_internet
+;dependencies[] = media
+;dependencies[] = media_internet
 dependencies[] = menu_attributes
 dependencies[] = message
 dependencies[] = message_notify
@@ -47,7 +50,7 @@ dependencies[] = message_subscribe
 dependencies[] = metatag
 dependencies[] = module_filter
 dependencies[] = navbar
-dependencies[] = oembed
+;dependencies[] = oembed
 dependencies[] = og
 dependencies[] = panels
 dependencies[] = paranoia
@@ -86,7 +89,7 @@ dependencies[] = commons_follow_term
 dependencies[] = commons_follow_user
 dependencies[] = commons_follow_ui
 dependencies[] = commons_like
-dependencies[] = commons_media
+;dependencies[] = commons_media
 dependencies[] = commons_search
 dependencies[] = commons_search_core
 dependencies[] = commons_groups
