@@ -54,8 +54,12 @@ function commons_activity_streams_node_insert($node) {
 function commons_activity_streams_comment_insert($comment) {
   $account = user_load($comment->uid);
   $node = node_load($comment->nid);
-
-  $message = message_create('commons_activity_streams_comment_created', array('uid' => $account->uid, 'timestamp' => $comment->created));
+  // Allow other modules to change the message type used for this event.
+  $hook = 'comment_insert';
+  $message_type = 'commons_activity_streams_comment_created';
+  drupal_alter('commons_activity_streams_message_selection', $message_type, $hook, $node);
+  $message = message_create($message_type, array('uid' => $account->uid, 'timestamp' => $comment->created));
+  
   // Save reference to the node in the node reference field, and the
   // "publish" state (i.e. if the node is published or unpublished).
   $wrapper = entity_metadata_wrapper('message', $message);
