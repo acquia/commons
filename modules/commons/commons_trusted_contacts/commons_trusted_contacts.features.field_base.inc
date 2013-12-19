@@ -319,6 +319,9 @@ function commons_trusted_contacts_field_default_field_bases() {
           ),
         ),
         'membership_type' => 'trusted_contacts',
+        'sort' => array(
+          'type' => 'none',
+        ),
         'target_bundles' => array(),
       ),
       'handler_submit' => 'Change handler',

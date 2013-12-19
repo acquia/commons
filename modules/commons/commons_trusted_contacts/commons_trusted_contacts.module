@@ -215,9 +215,11 @@ function commons_trusted_contacts_form_alter(&$form, &$form_state, $form_id) {
   }
   // Hide internal fields that the user should not be able to edit directly.
   if ($form_id == 'edit_profile_user_profile_form' || substr($form_id, -10) === '_node_form') {
-    $internal_fields = array('field_unread_invitations', 'field_unread_messages', 'user_trusted_contacts', 'og_user_group_ref');
+    $internal_fields = array('field_unread_invitations', 'field_unread_messages', 'user_trusted_contacts', 'og_user_group_ref', 'group_access');
     foreach ($internal_fields as $field_name) {
-      $form[$field_name]['#access'] = FALSE;
+      if(isset($form[$field_name])) {
+        $form[$field_name]['#access'] = FALSE;
+      }
     }
   }
   if ($form_id == 'privatemsg_list') {

@@ -350,7 +350,7 @@ function commons_trusted_contacts_field_default_field_instances() {
             'widget_type' => 'entityreference_autocomplete',
           ),
           'default' => array(
-            'widget_type' => 'options_select',
+            'widget_type' => 'entityreference_autocomplete',
           ),
           'status' => TRUE,
         ),
