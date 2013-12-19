@@ -144,6 +144,10 @@ projects[features][type] = "module"
 projects[features][subdir] = "contrib"
 projects[features][version] = "2.0"
 
+projects[file_entity][type] = "module"
+projects[file_entity][subdir] = "contrib"
+projects[file_entity][version] = "2.0-alpha3"
+
 projects[flag][type] = "module"
 projects[flag][subdir] = "contrib"
 projects[flag][version] = "2.1"
@@ -194,6 +198,13 @@ projects[lingotek][version] = "4.09"
 projects[link][type] = "module"
 projects[link][subdir] = "contrib"
 projects[link][version] = "1.1"
+
+projects[media][type] = "module"
+projects[media][subdir] = "contrib"
+projects[media][download][type] = "git"
+projects[media][download][url] = "http://git.drupal.org/project/media.git"
+projects[media][download][branch] = "7.x-2.x"
+projects[media][download][revision] = "7d12b8b"
 
 projects[memcache][type] = "module"
 projects[memcache][subdir] = "contrib"
@@ -252,6 +263,33 @@ projects[oauthconnector][download][type] = "git"
 projects[oauthconnector][download][url] = "http://git.drupal.org/project/oauthconnector.git"
 projects[oauthconnector][download][branch] = "7.x-1.x"
 projects[oauthconnector][download][revision] = "0ce7ac9614710c0f68d0a58cb4ae4667f8bd6fa7"
+
+projects[oembed][type] = "module"
+projects[oembed][subdir] = "contrib"
+projects[oembed][download][type] = "git"
+projects[oembed][download][url] = "http://git.drupal.org/project/oembed.git"
+projects[oembed][download][branch] = "7.x-1.x"
+projects[oembed][download][revision] = "63898e1"
+
+; Add oEmbed plugins to list of supported media providers
+; https://drupal.org/comment/8287243#comment-8287243
+projects[oembed][patch][] = "https://drupal.org/files/issues/list-enabled-plugins-2159335-1.patch"
+
+; Remove WYSIWYG special casing
+; https://drupal.org/comment/8287861#comment-8287861
+projects[oembed][patch][] = "https://drupal.org/files/issues/remove-wysiwyg-special-casing-2159303-2.patch"
+
+; Provided a default display configuration
+; https://drupal.org/comment/8286995#comment-8286995
+projects[oembed][patch][] = "https://drupal.org/files/issues/provide-default-display-configuration-2128389-3.patch"
+
+; Add supported file and MIME type information to file formatters
+; https://drupal.org/comment/8286935#comment-8286935
+projects[oembed][patch][] = "https://drupal.org/files/issues/add-file-and-mime-type-information-to-formatters-2159275-1.patch"
+
+; Themed images ignore width, height, alt and title attributes
+; https://drupal.org/comment/8286915#comment-8286915
+projects[oembed][patch][] = "https://drupal.org/files/issues/prefer-element-attributes-2159269-1.patch"
 
 projects[og][type] = "module"
 projects[og][subdir] = "contrib"
@@ -439,6 +477,10 @@ projects[adaptivetheme][download][revision] = "b4b38c3c01d066e733c2942020c51962c
 ; Remove link around comment creation date.
 ; http://drupal.org/node/1427226#comment-6638836
 projects[adaptivetheme][patch][] = "http://drupal.org/files/remove-comment-creation-link-2018081-1.patch"
+
+; Add styling for link buttons.
+; https://drupal.org/comment/8289329#comment-8289329
+projects[adaptivetheme][patch][] = "https://drupal.org/files/issues/add-link-button-styling-2159783-1.patch"
 
 projects[sky][type] = "theme"
 projects[sky][subdir] = "contrib"

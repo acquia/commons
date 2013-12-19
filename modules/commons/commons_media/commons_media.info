@@ -1,0 +1,17 @@
+name = Commons Media
+description = Provides media handling capabilities.
+core = 7.x
+package = Commons - Building blocks
+dependencies[] = ctools
+dependencies[] = features
+dependencies[] = file
+dependencies[] = file_entity
+dependencies[] = media
+dependencies[] = media_internet
+dependencies[] = strongarm
+features[ctools][] = strongarm:strongarm:1
+features[features_api][] = api:2
+features[field_base][] = field_media
+features[user_permission][] = add media from remote sources
+features[user_permission][] = create files
+features[variable][] = media__dialog_theme

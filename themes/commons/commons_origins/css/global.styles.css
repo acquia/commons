@@ -875,6 +875,7 @@ html.js fieldset.collapsed .fieldset-legend, html.js fieldset.collapsible .field
  * Button styles
  */
 /* Common styles for all buttons. */
+a.button,
 button,
 [type="reset"],
 [type="submit"],
@@ -908,6 +909,7 @@ button,
   outline: 0;
   cursor: pointer;
 }
+a.button:focus,
 button:focus,
 [type="reset"]:focus,
 [type="submit"]:focus,
@@ -921,6 +923,7 @@ button:focus,
 .commons-login:hover, [class*="action-item-large"]:hover {
   text-decoration: none;
 }
+a.button:active,
 button:active,
 [type="reset"]:active,
 [type="submit"]:active,
@@ -932,6 +935,7 @@ button:active,
   box-shadow: inset rgba(0, 0, 0, 0.25) 0 1px 2px 0;
   text-decoration: none;
 }
+a.button::-moz-focus-inner,
 button::-moz-focus-inner,
 [type="reset"]::-moz-focus-inner,
 [type="submit"]::-moz-focus-inner,
@@ -943,6 +947,7 @@ button::-moz-focus-inner,
 }
 
 /* Dimensions for the default button type. */
+a.button,
 button,
 [type="reset"],
 [type="submit"],
@@ -965,6 +970,7 @@ button,
   font-size: 1.2em;
 }
 
+a.button,
 button,
 [type="reset"],
 [type="submit"],
@@ -979,6 +985,7 @@ button,
   border-color: #cbcbcb;
   text-shadow: -1px 1px 2px white, -1px -1px 2px white, 1px -1px 2px white, 1px 1px 2px white;
 }
+a.button,
 button,
 [type="reset"],
 [type="submit"],
@@ -994,6 +1001,7 @@ button,
 [class*="action-item"]:visited, .commons-login:visited {
   color: #323232;
 }
+a.button:hover,
 button:hover,
 [type="reset"]:hover,
 [type="submit"]:hover,
@@ -1007,8 +1015,10 @@ button:hover,
   background: -o-linear-gradient(#fefefe, #e5e5e5);
   background: linear-gradient(#fefefe, #e5e5e5);
   border-color: #b2b2b2;
+  text-decoration: none;
   text-shadow: -1px 1px 2px #fefefe, -1px -1px 2px #fefefe, 1px -1px 2px #fefefe, 1px 1px 2px #fefefe;
 }
+a.button:focus,
 button:focus,
 [type="reset"]:focus,
 [type="submit"]:focus,
@@ -1027,6 +1037,7 @@ button:focus,
   border-color: #cbcbcb;
   text-shadow: -1px 1px 2px white, -1px -1px 2px white, 1px -1px 2px white, 1px 1px 2px white;
 }
+a.button[disabled],
 button[disabled],
 [disabled][type="reset"],
 [disabled][type="submit"],

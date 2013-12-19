@@ -1,0 +1,91 @@
+<?php
+/**
+ * @file
+ * Code for the Commons Media feature.
+ */
+
+include_once 'commons_media.features.inc';
+
+/**
+ * Implements hook_system_info_alter().
+ */
+function commons_media_system_info_alter(&$info, $file, $type) {
+  if ($file->name == 'commons_media') {
+    $entity_integrations = module_invoke_all('commons_entity_integration');
+
+    if (!empty($entity_integrations)) {
+      foreach ($entity_integrations as $entity_type => $bundles) {
+        foreach (array_keys($bundles) as $bundle) {
+          $info['features']['field_instance'][] = "$entity_type-$bundle-field_media";
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_file_view_alter().
+ */
+function commons_media_file_view_alter(&$build) {
+  $file_type = $build['#bundle'];
+
+  // Add responsive CSS to image and video files.
+  if ($file_type == 'image' || $file_type == 'video') {
+    $build['#attached']['css'][] = drupal_get_path('module', 'commons_media') . '/commons_media.css';
+  }
+}
+
+/**
+ * Implements hook_preprocess_oembed().
+ */
+function commons_media_preprocess_oembed(&$variables) {
+  $embed = $variables['embed'];
+
+  // Video and rich type must have HTML content.
+  // Wrap the HTML content in a <div> to allow it to be made responsive.
+  if (in_array($embed['type'], array('video', 'rich'))) {
+    $embed['html'] = '<div class="oembed">' . $embed['html'] . '</div>';
+  }
+
+  $variables['embed'] = $embed;
+}
+
+/**
+ * Implements hook_filter_default_formats_alter().
+ */
+function commons_media_filter_default_formats_alter(&$formats) {
+  if (module_exists('media_wysiwyg')) {
+    // Enable the media filter.
+    $formats['filtered_html']['filters'] += array(
+      'media_filter' => array(
+        'status' => 1,
+        'weight' => 2,
+      ),
+    );
+  }
+}
+
+/**
+ * Implements hook_ckeditor_profile_defaults().
+ */
+function commons_media_ckeditor_profile_defaults_alter(&$profiles) {
+  if (module_exists('media_wysiwyg')) {
+    // Add the media button.
+    $profiles['Advanced']['settings']['toolbar'] = '[
+    [\'Format\'],
+    [\'Bold\',\'Italic\',\'Strike\'],
+    [\'NumberedList\',\'BulletedList\',\'Indent\',\'Outdent\',\'Blockquote\'],
+    [\'Link\',\'Unlink\',\'Media\']
+    ]';
+
+    // Load the media plugin.
+    $profiles['Advanced']['settings']['loadPlugins'] += array(
+      'media' => array(
+        'default' => 'f',
+        'desc' => 'Plugin for inserting images from Drupal media module',
+        'name' => 'media',
+        'path' => '%plugin_dir%media/',
+      ),
+    );
+  }
+}
