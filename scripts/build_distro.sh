@@ -140,6 +140,15 @@ build_distro() {
   fi
 }
 
+site_install() {
+  read -p "You're about to DESTROY all data for site ${SITE} Are you sure? " -n 1 -r
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    cd ${BUILD_PATH}/docroot/sites/${SITE}
+    drush -y sql-drop
+    drush site-install --site-name=${SITE} --account-name=admin --account-pass=${ADMIN_PASS} --account-mail=${ADMIN_EMAIL} --site-mail=commons_site@example.com -v -y commons commons_anonymous_welcome_text_form.commons_install_example_content=${DEMO_CONTENT} commons_anonymous_welcome_text_form.commons_anonymous_welcome_title="Commons Example Site" commons_anonymous_welcome_text_form.commons_anonymous_welcome_body="Using the site-install version of commons." commons_create_first_group.commons_first_group_title="Sales Group" commons_create_first_group.commons_first_group_body="This is the sales group from site-install."
+  fi
+}
+
 # This allows you to test the make file without needing to upload it to drupal.org and run the main make file.
 update() {
   if [[ -d $DOCROOT ]]; then
@@ -169,6 +178,34 @@ update() {
 }
 
 case $1 in
+  site-install)
+    if [[ -n $2 ]] && [[ -n $3 ]]; then
+      BUILD_PATH=$2
+    else
+      echo "Usage build_distro.sh site-install [build_path] [site] [admin-email] [admin-pass]"
+    fi
+    if [[ -n $3 ]]; then
+      SITE=$3
+    else
+      SITE='default'
+    fi
+    if [[ -n $4 ]]; then
+      DEMO_CONTENT='TRUE'
+    else
+      DEMO_CONTENT='FALSE'
+    fi
+    if [[ -n $5 ]]; then
+      ADMIN_EMAIL=$4
+    else
+      ADMIN_EMAIL='admin@example.com'
+    fi
+    if [[ -n $6 ]]; then
+      ADMIN_PASS=$4
+    else
+      ADMIN_PASS='admin'
+    fi
+
+    site_install $BUILD_PATH $SITE $DEMO_CONTENT $ADMIN_EMAIL $ADMIN_PASS;;
   pull)
     if [[ -n $2 ]]; then
       BUILD_PATH=$2
