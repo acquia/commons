@@ -455,7 +455,7 @@ projects[views_litepager][version] = "3.0"
 
 projects[views_load_more][type] = "module"
 projects[views_load_more][subdir] = "contrib"
-projects[views_load_more][version] = "1.1"
+projects[views_load_more][version] = "1.2"
 
 projects[votingapi][type] = "module"
 projects[votingapi][subdir] = "contrib"
