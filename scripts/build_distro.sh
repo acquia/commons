@@ -82,40 +82,61 @@ release_notes() {
 }
 
 build_distro() {
-    if [[ -d $BUILD_PATH ]]; then
-        cd $BUILD_PATH
-        #backup the sites directory
-        if [[ -d publish ]]; then
-          tar -czvf $BUILD_PATH/sites-.tar.gz
-
-        rm -rf ./publish
-        # do we have the profile?
-        if [[ -d $BUILD_PATH/commons_profile ]]; then
-          if [[ -d $BUILD_PATH/repos ]]; then
-            rm -f /tmp/commons.tar.gz
-            drush make --no-cache --no-core --contrib-destination --tar $BUILD_PATH/commons_profile/drupal-org.make /tmp/commons
-            drush make --no-cache --prepare-install --drupal-org=core $BUILD_PATH/commons_profile/drupal-org-core.make ./publish
-          else
-            mkdir $BUILD_PATH/repos
-            mkdir $BUILD_PATH/repos/modules
-            mkdir $BUILD_PATH/repos/themes
-            build_distro $BUILD_PATH
-          fi
-          # symlink the profile to our dev copy
-          chmod -R 777 $BUILD_PATH/publish/sites/default
-          rm -rf publish/profiles/commons
-          ln -s $BUILD_PATH/commons_profile publish/profiles/commons
-          cd publish/profiles
-          tar -zxvf /tmp/commons.tar.gz
-          chmod -R 775 $BUILD_PATH/publish/profiles/commons
+  if [[ -d $BUILD_PATH ]]; then
+      cd $BUILD_PATH
+      #backup the sites directory
+      if [[ -d docroot ]]; then
+        rm -rf ./docroot
+      fi
+      # do we have the profile?
+      if [[ -d $BUILD_PATH/commons_profile ]]; then
+        if [[ -d $BUILD_PATH/repos ]]; then
+          rm -f /tmp/commons.tar.gz
+          drush make --no-cache --prepare-install --drupal-org=core $BUILD_PATH/commons_profile/drupal-org-core.make $BUILD_PATH/docroot
+          drush make --no-cache --no-core --contrib-destination --tar $BUILD_PATH/commons_profile/drupal-org.make /tmp/commons
         else
-          git clone --branch 7.x-3.x ${USERNAME}@git.drupal.org:project/commons.git commons_profile
+          mkdir $BUILD_PATH/repos
+          mkdir $BUILD_PATH/repos/modules
+          mkdir $BUILD_PATH/repos/themes
           build_distro $BUILD_PATH
         fi
-    else
-      mkdir $BUILD_PATH
-      build_distro $BUILD_PATH $USERNAME
-    fi
+        # symlink the profile sites folder to our dev copy
+        cd docroot
+        if [[ -d $BUILD_PATH/sites ]]; then
+          rm -rf $BUILD_PATH/docroot/sites
+          ln -s $BUILD_PATH/sites sites
+        else
+          mv $BUILD_PATH/docroot/sites $BUILD_PATH/sites
+          ln -s $BUILD_PATH/sites sites
+        fi
+        chmod -R 777 $BUILD_PATH/docroot/sites/default
+
+        ## put commons profile and modules into the profile folder
+        rm -rf docroot/profiles/commons
+        if [ -a $BUILD_PATH/repos.txt ]; then
+          UNTAR="tar -zxvf /tmp/commons.tar.gz -X $BUILD_PATH/repos.txt"
+        else
+          cd $BUILD_PATH/repos
+          find * -mindepth 1 -maxdepth 1 -type d -not -name '.*' | awk -F/ '{print $1 "/" $2}' > /tmp/repos.txt
+          # exclude repos since we're updating already by linking it to the repos directory.
+          UNTAR="tar -zxvf /tmp/commons.tar.gz -X /tmp/repos.txt"
+        fi
+        cd $BUILD_PATH/docroot/profiles
+        eval $UNTAR
+        ln -s $BUILD_PATH/commons_profile/* commons/ > /dev/null
+        ln -s $BUILD_PATH/commons_profile/modules/commons commons/modules/
+        ln -s $BUILD_PATH/commons_profile/themes/commons commons/themes/
+        for line in $(cat $BUILD_PATH/repos.txt); do
+         ln -s $BUILD_PATH/repos/${line} commons/$(echo ${line} | awk -F/ '{print $1}')/contrib/
+        done
+        chmod -R 775 $BUILD_PATH/docroot/profiles/commons
+      else
+        git clone --branch 7.x-3.x ${USERNAME}@git.drupal.org:project/commons.git commons_profile
+        build_distro $BUILD_PATH
+      fi
+  else
+    mkdir $BUILD_PATH
+    build_distro $BUILD_PATH $USERNAME
   fi
 }
 
@@ -126,13 +147,13 @@ update() {
     # do we have the profile?
     if [[ -d $DOCROOT/profiles/commons ]]; then
       # do we have an installed commons profile?
-        rm -f /tmp/publish.tar.gz
+        rm -f /tmp/docroot.tar.gz
         rm -f /tmp/commons.tar.gz
-        drush make --no-cache --tar --drupal-org=core profiles/commons/drupal-org-core.make /tmp/publish
+        drush make --no-cache --tar --drupal-org=core profiles/commons/drupal-org-core.make /tmp/docroot
         drush make --no-core --no-cache --tar --drupal-org profiles/commons/drupal-org.make /tmp/commons
         cd ..
-        tar -zxvf /tmp/publish.tar.gz
-        cd publish/profiles/commons/modules/contrib
+        tar -zxvf /tmp/docroot.tar.gz
+        cd docroot/profiles/commons/modules/contrib
         # remove the symlinks in the repos before we execute
         find . -type l | awk -F/ '{print $2}' > /tmp/repos.txt
         cd $DOCROOT/profiles
