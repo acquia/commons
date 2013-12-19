@@ -487,6 +487,10 @@ projects[adaptivetheme][download][revision] = "b4b38c3c01d066e733c2942020c51962c
 ; http://drupal.org/node/1427226#comment-6638836
 projects[adaptivetheme][patch][] = "http://drupal.org/files/remove-comment-creation-link-2018081-1.patch"
 
+; Add styling for link buttons.
+; https://drupal.org/comment/8289329#comment-8289329
+projects[adaptivetheme][patch][] = "https://drupal.org/files/issues/add-link-button-styling-2159783-1.patch"
+
 projects[sky][type] = "theme"
 projects[sky][subdir] = "contrib"
 projects[sky][version] = "3.0-rc1"
