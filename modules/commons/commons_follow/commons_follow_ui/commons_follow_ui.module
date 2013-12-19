@@ -63,8 +63,8 @@ function commons_follow_ui_commons_utility_links_alter(&$links) {
 }
 
 function commons_follow_ui_notification_settings_form($form, &$form_state, $account) {
+  global $user;
   if (empty($account)) {
-    global $user;
     $account = $user;
   }
   drupal_set_title(t('Notification settings'));
@@ -88,6 +88,9 @@ function commons_follow_ui_notification_settings_form($form, &$form_state, $acco
     '#default_value' => isset($account->message_subscribe_email[LANGUAGE_NONE][0]['value']) ? $account->message_subscribe_email[LANGUAGE_NONE][0]['value'] : FALSE,
     '#weight' => 1,
   );
+  if($account != $user) {
+    $form['message_subscribe_email']['#disabled'] = TRUE;
+  }
 
   $form['submit'] = array(
     '#type' => 'submit',

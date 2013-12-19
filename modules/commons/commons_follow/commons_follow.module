@@ -2,7 +2,22 @@
 
 include_once 'commons_follow.features.inc';
 
-
+/**
+ * Implements hook_theme().
+ */
+function commons_follow_theme() {
+  return array(
+    'commons_follow_otheruser_flag' => array(
+      'variables' => array(
+        'is_flagged' => NULL,
+        'link_text' => NULL,
+        'flag_wrapper_classes' => NULL,
+        'flag_classes' => NULL,
+      ),
+      'template' => 'commons-follow-otheruser-flag',
+    ),
+  );
+}
 
 /**
  * Implements hook_features_pipe_alter().
@@ -198,10 +213,8 @@ function commons_follow_get_subscription_flags_ids($content_type = NULL, $conten
   return $flag_ids;
 }
 
-///////////////////
-
 /**
- * Implementation of hook_views_api().
+ * Implements hook_views_api().
  */
 function commons_follow_views_api() {
   return array(
@@ -282,4 +295,28 @@ function commons_follow_get_followed_message_ids($account = NULL) {
     }
   }
   return $followed_mids;
+}
+
+function commons_follow_views_data_alter(&$data) {
+  $data['flag_content']['ops']['field']['handler'] = 'commons_follow_handler_field_ops';
+}
+
+function commons_follow_views_query_alter(&$view, &$query) {
+  global $user;
+  $prefix = variable_get('message_subscribe_flag_prefix', 'subscribe') . '_';
+  if(strpos($view->name, $prefix) === 0 && isset($view->args[0]) && $user->uid != $view->args[0]) {
+    $flag_content_keys = array_keys($query->table_queue);
+    foreach($flag_content_keys AS $key) {
+      if(strpos($key, 'flag_content') === 0) {
+        //Convert the Send Email Query
+        $join = $query->table_queue[$key]['join'];
+        $join->extra[1] = array(
+          'field' => 'uid',
+          'value' => $view->args[0],
+          'numeric' => TRUE,
+        );
+        $query->table_queue[$key]['join'] = $join;
+      }
+    }
+  }
 }

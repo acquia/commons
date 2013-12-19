@@ -1049,7 +1049,7 @@ button[disabled],
 .action-item-large-active,
 .action-item-large-active[type="reset"],
 .action-item-large-active[type="submit"],
-.action-item-large-active[type="button"], [class*="flag-commons-follow-"] .unflag-action {
+.action-item-large-active[type="button"], [class*="flag-commons-follow-"] a.unflag-action {
   background-color: #f3f3f3;
   -webkit-box-shadow: inset 0.1em 0.1em 0.2em #a6a6a6;
   -moz-box-shadow: inset 0.1em 0.1em 0.2em #a6a6a6;
@@ -1065,16 +1065,16 @@ button[disabled],
 .action-item-large-active,
 .action-item-large-active[type="reset"],
 .action-item-large-active[type="submit"],
-.action-item-large-active[type="button"], [class*="flag-commons-follow-"] .unflag-action, .action-item-active:link,
+.action-item-large-active[type="button"], [class*="flag-commons-follow-"] a.unflag-action, .action-item-active:link,
 .action-item-small-active:link,
-.action-item-large-active:link, [class*="flag-commons-follow-"] .unflag-action:link, .action-item-active:visited,
+.action-item-large-active:link, [class*="flag-commons-follow-"] a.unflag-action:link, .action-item-active:visited,
 .action-item-small-active:visited,
-.action-item-large-active:visited, [class*="flag-commons-follow-"] .unflag-action:visited {
+.action-item-large-active:visited, [class*="flag-commons-follow-"] a.unflag-action:visited {
   color: #272727;
 }
 .action-item-active:hover,
 .action-item-small-active:hover,
-.action-item-large-active:hover, [class*="flag-commons-follow-"] .unflag-action:hover {
+.action-item-large-active:hover, [class*="flag-commons-follow-"] a.unflag-action:hover {
   color: #343434;
   background-color: #e6e6e6;
   -webkit-box-shadow: inset 0.1em 0.1em 0.2em #9a9a9a;
@@ -1085,9 +1085,9 @@ button[disabled],
 }
 .action-item-active:focus,
 .action-item-small-active:focus,
-.action-item-large-active:focus, [class*="flag-commons-follow-"] .unflag-action:focus, .action-item-active:active,
+.action-item-large-active:focus, [class*="flag-commons-follow-"] a.unflag-action:focus, .action-item-active:active,
 .action-item-small-active:active,
-.action-item-large-active:active, [class*="flag-commons-follow-"] .unflag-action:active {
+.action-item-large-active:active, [class*="flag-commons-follow-"] a.unflag-action:active {
   background: #f3f3f3;
   -webkit-box-shadow: inset 0.1em 0.1em 0.2em #a6a6a6;
   -moz-box-shadow: inset 0.1em 0.1em 0.2em #a6a6a6;
@@ -4395,7 +4395,11 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
 #quicktabs-commons_follow_ui .flag-email-group a span,
 #quicktabs-commons_follow_ui .flag-email-node a span,
 #quicktabs-commons_follow_ui .flag-email-user a span,
-#quicktabs-commons_follow_ui .flag-email-term a span {
+#quicktabs-commons_follow_ui .flag-email-term a span,
+#quicktabs-commons_follow_ui .flag-email-group span span,
+#quicktabs-commons_follow_ui .flag-email-node span span,
+#quicktabs-commons_follow_ui .flag-email-user span span,
+#quicktabs-commons_follow_ui .flag-email-term span span {
   display: none;
 }
 
