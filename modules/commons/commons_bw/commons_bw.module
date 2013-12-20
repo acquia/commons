@@ -186,7 +186,7 @@ function commons_bw_partial_node_form($form, &$form_state, $bundle, $group_id = 
   // Add the commons_bw after build first, in case other pre-renders needs need
   // to address fields by there CSS ID.
   array_unshift($form['#pre_render'], 'commons_bw_partial_node_form_after_build');
-
+  $form['#validate'][] = 'commons_bw_partial_node_form_validate';
   return $form;
 }
 
@@ -232,6 +232,10 @@ function commons_bw_partial_node_form_validate($form, $form_state) {
   $node = $form['#entity'];
   field_attach_validate('node', $node);
   node_validate($node, $form, $form_state);
+  if ((!module_exists('commons_trusted_contacts') || (module_exists('commons_trusted_contacts') && !module_exists('og_access'))) && empty($form_state['group_id']) && empty($form_state['values'][OG_AUDIENCE_FIELD][LANGUAGE_NONE][0])) {
+    form_set_error(OG_AUDIENCE_FIELD, t('Please enter one or more groups where this content will be posted.'));
+    return FALSE;
+  }
 }
 
 /**

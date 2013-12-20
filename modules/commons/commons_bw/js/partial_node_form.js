@@ -40,13 +40,23 @@ Drupal.behaviors.commonsBwExpandableForm = {
           }).append(toggleText),
           triggerField = form.find('.trigger-field'),
           fullFormLink = form.find('a.full-form'),
-          hideables = form.find('.hideable-field');
+          hideables = form.find('.hideable-field'),
+          errors = form.find('.error');
 
-      // Add the toggle link to the top of the form.
-      form.prepend(toggle).addClass('expandable-form compact-form');
+      // Determine if the form has any errors.
+      if (!errors.length) {
+        // Forms with errors are shown expanded, so only add the toggle link to
+        // the top of forms which are error free.
+        form.prepend(toggle).addClass('expandable-form compact-form');
 
-      // Hide the hidden fields on load.
-      hideables.addClass('element-invisible');
+        // Hide the hidden fields on load.
+        hideables.addClass('element-invisible');
+      }
+      else {
+        // The full form link is only shown on collapsed forms so it is hidden
+        // for consistency.
+        fullFormLink.addClass('element-hidden');
+      }
 
       // Make all hidden fields visible when the trigger field comes into
       // focus.

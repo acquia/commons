@@ -690,20 +690,6 @@ function commons_groups_default_rules_configuration_alter(&$configs) {
 }
 
 /**
- * Implements hook_node_validate().
- */
-function commons_groups_node_validate($node, $form, &$form_state) {
-  // Ensure that group content is always posted to one or more groups.
-  // When the Commons Trusted Contacts module is enabled, we defer to its
-  // own form validation which ensures that group content nodes are posted
-  // either to a node group via the og_group_ref field or to a user group
-  // via the og_user_group_ref field.
-  if (!module_exists('commons_trusted_contacts') && og_is_group_content_type('node', $node->type) && empty($form_state['values']['og_group_ref'][LANGUAGE_NONE][0]['target_id'])) {
-    form_set_error('og_group_ref', t('Please enter one more groups where this content will be posted.'));
-  }
-}
-
-/**
  * Implements hook_node_presave().
  *
  * When the node's group is private, force the group content to be private.
