@@ -104,10 +104,10 @@ build_distro() {
         cd docroot
         if [[ -d $BUILD_PATH/sites ]]; then
           rm -rf $BUILD_PATH/docroot/sites
-          ln -s $BUILD_PATH/sites sites
+          ln -s ../sites $BUILD_PATH/docroot/sites
         else
           mv $BUILD_PATH/docroot/sites $BUILD_PATH/sites
-          ln -s $BUILD_PATH/sites sites
+          ln -s ../sites $BUILD_PATH/docroot/sites
         fi
         chmod -R 777 $BUILD_PATH/docroot/sites/default
 
@@ -123,11 +123,12 @@ build_distro() {
         fi
         cd $BUILD_PATH/docroot/profiles
         eval $UNTAR
-        ln -s $BUILD_PATH/commons_profile/* commons/ > /dev/null
-        ln -s $BUILD_PATH/commons_profile/modules/commons commons/modules/
-        ln -s $BUILD_PATH/commons_profile/themes/commons commons/themes/
+        cd commons
+        ln -s ../../../commons_profile/* .
+        ln -s ../../../../commons_profile/modules/commons ${BUILD_PATH}/docroot/profiles/commons/modules/
+        ln -s ../../../../commons_profile/themes/commons ${BUILD_PATH}/docroot/profiles/commons/themes/
         for line in $(cat $BUILD_PATH/repos.txt); do
-         ln -s $BUILD_PATH/repos/${line} commons/$(echo ${line} | awk -F/ '{print $1}')/contrib/
+          ln -s ../../../../../../repos/${line} ${BUILD_PATH}/docroot/profiles/commons/$(echo ${line} | awk -F/ '{print $1}')/contrib/
         done
         chmod -R 775 $BUILD_PATH/docroot/profiles/commons
       else
