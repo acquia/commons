@@ -378,6 +378,22 @@ function commons_groups_form_alter(&$form, &$form_state, $form_id) {
       drupal_set_message(t($message), 'warning');
     }
   }
+  // Hide internal fields that the user should not be able to edit directly.
+  if ($form_id == 'edit_profile_user_profile_form' || substr($form_id, -10) === '_node_form') {
+    $internal_fields = array('field_unread_invitations', 'field_unread_messages', 'user_trusted_contacts', 'og_user_group_ref', 'group_access');
+    foreach ($internal_fields as $field_name) {
+      if(isset($form[$field_name])) {
+        $form[$field_name]['#access'] = FALSE;
+      }
+    }
+  }
+  // Disable Trusted Contacts field if commons_trusted_contacts is disabled.
+  $group_content_entity_types = commons_groups_get_group_content_entity_types();
+  if (isset($form['#node']->type) && isset($group_content_entity_types['node'][$form['#node']->type])) {
+    if (isset($form['og_user_group_ref']) && !module_exists('commons_trusted_contacts')) {
+      $form['og_user_group_ref']['#access'] = FALSE;
+    }
+  }
 }
 
 /**
