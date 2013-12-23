@@ -36,7 +36,6 @@ function commons_polls_views_default_views() {
   $handler->display->display_options['pager']['options']['quantity'] = '9';
   $handler->display->display_options['style_plugin'] = 'default';
   $handler->display->display_options['row_plugin'] = 'node';
-  $handler->display->display_options['row_options']['links'] = FALSE;
   /* Header: Global: Node partial form */
   $handler->display->display_options['header']['commons_bw_node_partial_form']['id'] = 'commons_bw_node_partial_form';
   $handler->display->display_options['header']['commons_bw_node_partial_form']['table'] = 'views';

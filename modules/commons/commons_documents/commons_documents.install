@@ -65,3 +65,14 @@ function commons_documents_update_7005() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Add links to node teasers in the browsing widget.
+ */
+function commons_documents_update_7006() {
+  $revert = array(
+    'commons_documents' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}
