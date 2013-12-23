@@ -108,6 +108,10 @@ projects[edit_profile][type] = "module"
 projects[edit_profile][subdir] = "contrib"
 projects[edit_profile][version] = "1.0-beta2"
 
+projects[elements][type] = "module"
+projects[elements][subdir] = "contrib"
+projects[elements][version] = "1.4"
+
 projects[email_registration][type] = "module"
 projects[email_registration][subdir] = "contrib"
 projects[email_registration][version] = "1.1"
@@ -321,10 +325,6 @@ projects[paranoia][version] = "1.3"
 projects[pathauto][type] = "module"
 projects[pathauto][subdir] = "contrib"
 projects[pathauto][version] = "1.2"
-
-projects[elements][type] = "module"
-projects[elements][subdir] = "contrib"
-projects[elements][version] = "1.4"
 
 projects[pm_existing_pages][type] = "module"
 projects[pm_existing_pages][subdir] = "contrib"
