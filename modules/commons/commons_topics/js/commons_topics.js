@@ -3,7 +3,7 @@
     attach: function (context, settings) {
       $(':input[name^="field_topics"]').change(function() {
         if ($(':input[name^="field_topics"]').val() == "") {
-          $("[id^='edit-topics-wrapper'] .summary").text("No topics");
+          $("[id^='edit-topics-wrapper'] .summary").text(Drupal.t("No topics"));
         }
         else {
           $("[id^='edit-topics-wrapper'] .summary").text($(':input[name^="field_topics"]').val());
