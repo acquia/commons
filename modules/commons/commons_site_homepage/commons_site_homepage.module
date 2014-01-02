@@ -69,5 +69,40 @@ function commons_site_homepage_default_page_manager_pages_alter(&$items) {
   if (isset($items['commons_home'])) {
     $items['commons_home']->default_handlers['page_commons_home_panel_context_2']->conf['display']->content['new-2ab570f0-8498-44f4-e9d0-9977e3d8d4df']->configuration['title'] = variable_get('commons_anonymous_welcome_title', t('The open-source alternative for enterprise-scale business software'));
     $items['commons_home']->default_handlers['page_commons_home_panel_context_2']->conf['display']->content['new-2ab570f0-8498-44f4-e9d0-9977e3d8d4df']->configuration['body'] = variable_get('commons_anonymous_welcome_body', t('Enable social networking to create productive interactions. Whether your community is public or private, Commons does it!'));
+
+    $pane = new stdClass();
+    $pane->pid = 'new-94106ddd-1278-0954-c5ba-b59ff1b9bf49';
+    $pane->panel = 'three_33_first';
+    $pane->type = 'views';
+    $pane->subtype = 'commons_events_upcoming';
+    $pane->shown = TRUE;
+    $pane->access = array();
+    $pane->configuration = array(
+      'override_pager_settings' => 0,
+      'use_pager' => 0,
+      'nodes_per_page' => '5',
+      'pager_id' => '0',
+      'offset' => '0',
+      'more_link' => 0,
+      'feed_icons' => 0,
+      'panel_args' => 0,
+      'link_to_view' => 0,
+      'args' => '',
+      'url' => '',
+      'display' => 'commons_events_upcoming_global_block',
+      'override_title' => 0,
+      'override_title_text' => '',
+    );
+    $pane->cache = array();
+    $pane->style = array(
+      'settings' => NULL,
+    );
+    $pane->css = array();
+    $pane->extras = array();
+    $pane->position = 1;
+    $pane->locks = array();
+    $pane->uuid = '94106ddd-1278-0954-c5ba-b59ff1b9bf49';
+    $items['commons_home']->default_handlers['page_commons_home_panel_context_2']->conf['display']->content['new-94106ddd-1278-0954-c5ba-b59ff1b9bf49'] = $pane;
+    $items['commons_home']->default_handlers['page_commons_home_panel_context_2']->conf['display']->panels['three_33_first'][1] = 'new-94106ddd-1278-0954-c5ba-b59ff1b9bf49';
   }
 }
