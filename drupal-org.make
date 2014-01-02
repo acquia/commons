@@ -134,7 +134,7 @@ projects[entityreference][version] = "1.1"
 
 projects[entityreference_prepopulate][type] = "module"
 projects[entityreference_prepopulate][subdir] = "contrib"
-projects[entityreference_prepopulate][version] = "1.3"
+projects[entityreference_prepopulate][version] = "1.4"
 
 projects[entity_translation][type] = "module"
 projects[entity_translation][subdir] = "contrib"
