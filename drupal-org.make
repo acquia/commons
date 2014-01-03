@@ -252,10 +252,7 @@ projects[mollom][version] = "2.8"
 
 projects[navbar][type] = "module"
 projects[navbar][subdir] = "contrib"
-projects[navbar][download][type] = "git"
-projects[navbar][download][url] = "http://git.drupal.org/project/navbar.git"
-projects[navbar][download][branch] = "7.x-1.x"
-projects[navbar][download][revision] = "dd542e1a74d9c9b3a9b5bd699aad9a4b65e5c5b7"
+projects[navbar][version] = "1.2"
 
 projects[oauth][type] = "module"
 projects[oauth][subdir] = "contrib"
