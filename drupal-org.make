@@ -490,6 +490,13 @@ projects[adaptivetheme][patch][] = "http://drupal.org/files/remove-comment-creat
 ; https://drupal.org/comment/8289329#comment-8289329
 projects[adaptivetheme][patch][] = "https://drupal.org/files/issues/add-link-button-styling-2159783-1.patch"
 
+projects[ember][type] = "theme"
+projects[ember][subdir] = "contrib"
+projects[ember][download][type] = "git"
+projects[ember][download][url] = "http://git.drupal.org/project/ember.git"
+projects[ember][download][branch] = "7.x-2.x"
+projects[ember][download][revision] = "5b8b0f6"
+
 projects[sky][type] = "theme"
 projects[sky][subdir] = "contrib"
 projects[sky][version] = "3.0-rc1"

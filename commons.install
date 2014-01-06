@@ -58,7 +58,7 @@ function commons_requirements($phase) {
  */
 function commons_install() {
   // Enable the Origins theme and set it as the default.
-  theme_enable(array('adaptivetheme', 'commons_origins', 'adaptivetheme_admin'));
+  theme_enable(array('adaptivetheme', 'commons_origins'));
 
     // The Bartik theme is automatically enabled during installation. Disable it.
   db_update('system')
@@ -70,7 +70,7 @@ function commons_install() {
   // Set the default and administration themes.
   variable_set('theme_default', 'commons_origins');
   // Set a default administrative theme:
-  variable_set('admin_theme', 'adaptivetheme_admin');
+  variable_set('admin_theme', 'ember');
   variable_set('node_admin_theme', FALSE);
 
   // Do not use the administration theme when editing or creating content.
@@ -259,5 +259,13 @@ function commons_update_3109() {
 function commons_update_3110() {
   $module_list = array('file_entity', 'media', 'media_internet', 'oembed', 'commons_media');
   module_enable($module_list);
+  return array();
+}
+
+/**
+ * Change the administration theme to Ember.
+ */
+function commons_update_3111() {
+  variable_set('admin_theme', 'ember');
   return array();
 }
