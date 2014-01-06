@@ -62,7 +62,18 @@ projects[connector][version] = "1.0-beta2"
 
 projects[ckeditor][type] = "module"
 projects[ckeditor][subdir] = "contrib"
-projects[ckeditor][version] = "1.13"
+projects[ckeditor][download][type] = "git"
+projects[ckeditor][download][url] = "http://git.drupal.org/project/ckeditor.git"
+projects[ckeditor][download][branch] = "7.x-1.x"
+projects[ckeditor][download][revision] = "b69a9ac"
+
+; Accomodate latest Media changes.
+; https://drupal.org/node/2159403
+projects[ckeditor][patch][] = "https://drupal.org/files/issues/ckeditor-accomodate-latest-media-changes-0.patch"
+
+; Remove redundant external plugin declarations.
+; https://drupal.org/comment/8284591#comment-8284591
+projects[ckeditor][patch][] = "https://drupal.org/files/issues/ckeditor-remove-external-plugin-declarations-1-alt.patch"
 
 projects[ctools][type] = "module"
 projects[ctools][subdir] = "contrib"
@@ -208,7 +219,7 @@ projects[media][subdir] = "contrib"
 projects[media][download][type] = "git"
 projects[media][download][url] = "http://git.drupal.org/project/media.git"
 projects[media][download][branch] = "7.x-2.x"
-projects[media][download][revision] = "7d12b8b"
+projects[media][download][revision] = "103fc3a"
 
 projects[memcache][type] = "module"
 projects[memcache][subdir] = "contrib"
@@ -491,7 +502,7 @@ libraries[backbone][type] = "libraries"
 libraries[backbone][download][url] = "https://github.com/jashkenas/backbone/archive/1.1.0.tar.gz"
 
 libraries[ckeditor][download][type] = "get"
-libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.0/ckeditor_4.0_full.tar.gz"
+libraries[ckeditor][download][url] = "https://github.com/ckeditor/ckeditor-dev/archive/4.3.1.zip"
 libraries[ckeditor][type] = "libraries"
 
 libraries[modernizr][download][type] = "get"
