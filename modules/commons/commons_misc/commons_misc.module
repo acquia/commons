@@ -7,6 +7,21 @@
 include_once 'commons_misc.features.inc';
 
 /**
+ * Implements hook_modules_installed().
+ */
+function commons_misc_modules_installed($modules) {
+  if (in_array('commons_misc', $modules)) {
+    if ($role = user_role_load_by_name('administrator')) {
+      // Grant user 1 the 'administrator' role.
+      user_multiple_role_edit(array(1), 'add_role', $role->rid);
+
+      // Set the 'administrator' role as the 'administrator role'.
+      variable_set('user_admin_role', $role->rid);
+    }
+  }
+}
+
+/**
  * Implements hook_mail_alter();
  */
 function commons_misc_mail_alter(&$message) {

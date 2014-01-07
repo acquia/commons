@@ -105,19 +105,6 @@ function commons_install() {
   );
   drupal_write_record('block', $search_block);
 
-  // Create a default role for site administrators, with all available permissions assigned.
-  $admin_role = new stdClass();
-  $admin_role->name = 'administrator';
-  $admin_role->weight = 2;
-  user_role_save($admin_role);
-  // Set this as the administrator role.
-  variable_set('user_admin_role', $admin_role->rid);
-
-  // Assign user 1 the "administrator" role.
-  db_insert('users_roles')
-    ->fields(array('uid' => 1, 'rid' => $admin_role->rid))
-    ->execute();
-
   // AdaptiveTheme requires that the system theme settings form
   // be submitted in order for its themes' settings to be properly set
   // and the resulting css files generated.
