@@ -21,3 +21,14 @@ function commons_misc_update_7000() {
   // Save the new Commons Origins settings.
   variable_set('theme_commons_origins_settings', $settings);
 }
+
+/**
+ * Assign the administrator role a larger weight.
+ */
+function commons_misc_update_7001() {
+  $revert = array(
+    'commons_misc' => array('user_role'),
+  );
+  features_revert($revert);
+  return array();
+}
