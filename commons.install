@@ -41,7 +41,7 @@ function commons_requirements($phase) {
       // throw error if there is less than 96MB available
       if ($shm_size && $shm_size < COMMONS_MINIMUM_APC_CACHE) {
         $requirements['apc_shm_size']['description'] = $t('APC is installed but %shm_size is not enough APC cache to successfully install Drupal Commons.
-           Find your <em>apc.ini</em> file and change the <em>apc.shm_size</em> value to at least <em>96M</em>.', array('%shm_size' => COMMONS_MINIMUM_APC_CACHE . 'M'));
+           Find your <em>apc.ini</em> file and change the <em>apc.shm_size</em> value to at least <em>%min_shm_size</em>.', array('%shm_size' => $shm_size . 'M', '%min_shm_size' => COMMONS_MINIMUM_APC_CACHE . 'M'));
         $requirements['apc_shm_size']['severity'] = REQUIREMENT_ERROR;
       }
     }
