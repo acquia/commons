@@ -53,3 +53,15 @@ function commons_misc_update_7001() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Configure navbar to use the source version of Modernizr since it isn't
+ * currently possible to include a minified version of the library.
+ */
+function commons_misc_update_7002() {
+  $revert = array(
+    'commons_misc' => array('variable'),
+  );
+  features_revert($revert);
+  return array();
+}
