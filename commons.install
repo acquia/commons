@@ -241,15 +241,6 @@ function commons_update_3109() {
 }
 
 /**
- * Enable the File Entity, Media, Media Internet, oEmbed and Commons: Media modules.
- */
-function commons_update_3110() {
-  $module_list = array('file_entity', 'media', 'media_internet', 'oembed', 'commons_media');
-  module_enable($module_list);
-  return array();
-}
-
-/**
  * Change the administration theme to Ember.
  */
 function commons_update_3111() {
