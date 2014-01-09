@@ -2,7 +2,7 @@
 #set -e
 
 #modules=(commons_activity_streams commons_featured commons_notices commons_profile_social commons_user_profile_pages commons_body commons_follow commons_notify commons_q_a commons_utility_links commons_bw commons_groups commons_pages commons_radioactivity commons_wikis commons_content_moderation commons_like commons_polls commons_search commons_wysiwyg commons_documents commons_location commons_posts commons_site_homepage commons_events commons_misc commons_profile_base commons_topics commons_social_sharing commons_trusted_contacts)
-themes=(commons_origins)
+#themes=(commons_origins)
 
 merge_repos() {
   cd $BUILD_PATH/commons_profile
@@ -95,9 +95,26 @@ build_distro() {
           drush make --no-cache --prepare-install --drupal-org=core $BUILD_PATH/commons_profile/drupal-org-core.make $BUILD_PATH/docroot
           drush make --no-cache --no-core --contrib-destination --tar $BUILD_PATH/commons_profile/drupal-org.make /tmp/commons
         else
-          mkdir $BUILD_PATH/repos
-          mkdir $BUILD_PATH/repos/modules
-          mkdir $BUILD_PATH/repos/themes
+          mkdir -p $BUILD_PATH/repos/modules/contrib
+          cd $BUILD_PATH/repos/modules/contrib
+          for i in "${modules[@]}"; do
+            echo "bringing in ${i} for $USERNAME";
+            if [[ -n $USERNAME ]]; then
+              git clone ${USERNAME}@git.drupal.org:project/${i}.git
+            else
+              git clone http://git.drupal.org/project/${i}.git
+            fi
+          done
+          cd $BUILD_PATH/repos
+          mkdir -p $BUILD_PATH/repos/themes/contrib
+          cd $BUILD_PATH/repos/themes
+          for i in "${themes[@]}"; do
+            if [[ -n $USERNAME ]]; then
+              git clone ${USERNAME}@git.drupal.org:project/${i}.git
+            else
+              git clone http://git.drupal.org/project/${i}.git
+            fi
+          done
           build_distro $BUILD_PATH
         fi
         # symlink the profile sites folder to our dev copy
@@ -117,7 +134,7 @@ build_distro() {
           UNTAR="tar -zxvf /tmp/commons.tar.gz -X $BUILD_PATH/repos.txt"
         else
           cd $BUILD_PATH/repos
-          find * -mindepth 1 -maxdepth 1 -type d -not -name '.*' | awk -F/ '{print $1 "/" $2}' > /tmp/repos.txt
+          find * -mindepth 1 -maxdepth 2 -type d -not -path ".*" -not -path "modules/.*" -not -path "themes/.*" -not -path "modules/contrib" -not -path "themes/contrib" > /tmp/repos.txt
           # exclude repos since we're updating already by linking it to the repos directory.
           UNTAR="tar -zxvf /tmp/commons.tar.gz -X /tmp/repos.txt"
         fi
@@ -128,7 +145,7 @@ build_distro() {
         ln -s ../../../../commons_profile/modules/commons ${BUILD_PATH}/docroot/profiles/commons/modules/
         ln -s ../../../../commons_profile/themes/commons ${BUILD_PATH}/docroot/profiles/commons/themes/
         for line in $(cat $BUILD_PATH/repos.txt); do
-          ln -s ../../../../../../repos/${line} ${BUILD_PATH}/docroot/profiles/commons/$(echo ${line} | awk -F/ '{print $1}')/contrib/
+          ln -s ../../../../../repos/${line} ${BUILD_PATH}/docroot/profiles/commons/$(echo ${line} | awk -F/ '{print $1}')/contrib/
         done
         chmod -R 775 $BUILD_PATH/docroot/profiles/commons
       else
