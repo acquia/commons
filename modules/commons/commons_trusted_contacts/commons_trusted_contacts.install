@@ -10,16 +10,24 @@ function commons_trusted_contacts_requirements($phase) {
 
   if ($phase == 'runtime') {
 
-    // Check if there are users needed to be set as group.
+    // Count the current number of users.
     $query = new EntityFieldQuery;
-    $count = $query->entityCondition('entity_type', 'user')
+    $user_count = $query->entityCondition('entity_type', 'user')
       // Ignore the anonymous user.
       ->propertyCondition('uid', 0, '<>')
       ->count()
       ->execute();
 
+    // Count the current number of user groups.
+    $query = new EntityFieldQuery();
+    $group_count = $query
+      ->entityCondition('entity_type', 'user')
+      ->fieldCondition(OG_GROUP_FIELD, 'value', 1, '=')
+      ->count()
+      ->execute();
+
     // Check if there are more users than "group" users.
-    if ($count > count(og_get_all_group('user'))) {
+    if ($user_count > $group_count) {
       $requirements['commons_trusted_contacts_users_updated']['title'] = t('Trusted contacts');
       $requirements['commons_trusted_contacts_users_updated']['severity'] = REQUIREMENT_ERROR;
       $requirements['commons_trusted_contacts_users_updated']['description'] = t('Some users need an update. !link.', array('!link' => l(t('Upgrade users'), 'admin/people/trusted-contacts-upgrade')));
