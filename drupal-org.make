@@ -25,6 +25,9 @@ projects[admin_icons][download][revision] = "60d9f28801533fecc92216a60d444d89d80
 projects[advancedqueue][type] = "module"
 projects[advancedqueue][subdir] = "contrib"
 projects[advancedqueue][version] = "1.0-alpha2"
+; Cleanup of the advancedqueue table:
+; https://drupal.org/comment/7817905#comment-7817905
+projects[advancedqueue][patch][] = "https://drupal.org/files/purging_table-2054555.patch"
 
 projects[apachesolr][type] = "module"
 projects[apachesolr][subdir] = "contrib"
