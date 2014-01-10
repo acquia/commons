@@ -75,7 +75,7 @@ function commons_q_a_form_commons_bw_partial_node_form_alter(&$form, &$form_stat
 
   // Set fields as hideable so the forms can be compacted.
   $form['body']['#attributes']['class'][] = 'trigger-field';
-  foreach (array('field_image', 'og_group_ref', 'choice_wrapper', 'actions') as $field) {
+  foreach (array('field_media', 'field_image', 'og_group_ref', 'choice_wrapper', 'actions') as $field) {
     if (isset($form[$field])) {
       $form[$field]['#attributes']['class'][] = 'hideable-field';
     }
