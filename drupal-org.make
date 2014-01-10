@@ -515,6 +515,18 @@ libraries[ckeditor][download][type] = "get"
 libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.3.1/ckeditor_4.3.1_full.zip"
 libraries[ckeditor][type] = "libraries"
 
+libraries[ckeditor_lineutils][download][type] = "get"
+libraries[ckeditor_lineutils][download][url] = "http://download.ckeditor.com/lineutils/releases/lineutils_4.3.1.zip"
+libraries[ckeditor_lineutils][type] = "libraries"
+libraries[ckeditor_lineutils][subdir] = "ckeditor/plugins"
+libraries[ckeditor_lineutils][directory_name] = "lineutils"
+
+libraries[ckeditor_widget][download][type] = "get"
+libraries[ckeditor_widget][download][url] = "http://download.ckeditor.com/widget/releases/widget_4.3.1.zip"
+libraries[ckeditor_widget][type] = "libraries"
+libraries[ckeditor_widget][subdir] = "ckeditor/plugins"
+libraries[ckeditor_widget][directory_name] = "widget"
+
 libraries[modernizr][download][type] = "get"
 libraries[modernizr][type] = "libraries"
 libraries[modernizr][download][url] = "https://github.com/Modernizr/Modernizr/archive/v2.7.0.tar.gz"
