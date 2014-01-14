@@ -70,6 +70,10 @@ projects[ckeditor][download][url] = "http://git.drupal.org/project/ckeditor.git"
 projects[ckeditor][download][branch] = "7.x-1.x"
 projects[ckeditor][download][revision] = "b69a9ac"
 
+; Only load CSS when necessary.
+; https://drupal.org/node/1370894
+projects[ckeditor][patch][] = "https://drupal.org/files/issues/attach-ckeditor-css-1370894-4.patch"
+
 ; Accomodate latest Media changes.
 ; https://drupal.org/node/2159403
 projects[ckeditor][patch][] = "https://drupal.org/files/issues/ckeditor-accomodate-latest-media-changes-0.patch"
