@@ -498,7 +498,7 @@ projects[ember][subdir] = "contrib"
 projects[ember][download][type] = "git"
 projects[ember][download][url] = "http://git.drupal.org/project/ember.git"
 projects[ember][download][branch] = "7.x-2.x"
-projects[ember][download][revision] = "5b8b0f6"
+projects[ember][download][revision] = "1d88894"
 
 projects[sky][type] = "theme"
 projects[sky][subdir] = "contrib"
