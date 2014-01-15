@@ -1,0 +1,114 @@
+/**
+ * @file
+ * Style overrides for the Commons Media feature.
+ */
+
+@import "base";
+
+.field-name-field-media-form {
+  margin-bottom: $gutter-width;
+}
+
+.field-name-field-media .field-add-more-submit {
+  &,
+  #quicktabs-container-commons_bw .quicktabs-tabpage & {
+    margin: $gutter-width 0;
+  }
+}
+
+table[id^="field-media-values"] {
+  &,
+  thead,
+  tbody,
+  tr,
+  th,
+  td {
+    background-color: transparent;
+    border: none;
+  }
+
+  th {
+    padding: 0;
+
+    label {
+      margin: 0;
+    }
+  }
+
+  td {
+    &.field-multiple-drag {
+      width: 20px;
+    }
+  }
+
+  a.tabledrag-handle .handle {
+    margin: 0;
+  }
+
+  .form-item {
+    padding-left: px-to-em(100px + $gutter-width);
+  }
+
+  .preview {
+    float: left;
+    font-size: 1em;
+    margin-left: -(px-to-em(100px + $gutter-width));
+    width: px-to-em(100px);
+    min-height: px-to-em(100px);
+    background: $light_gray;
+    cursor: pointer;
+  }
+
+  @include respond(only-small) {
+    .form-item {
+      padding-left: 0;
+    }
+
+    .preview {
+      display: block;
+      float: none;
+      margin: $gutter-width auto;
+    }
+  }
+
+  .media-item {
+    padding: 0;
+    background-color: transparent;
+    border: none;
+
+    img {
+      display: block;
+      margin: 0;
+    }
+
+    .label-wrapper {
+      position: static;
+
+      label {
+        margin: 0;
+      }
+    }
+  }
+
+  .media-widget {
+    .preview {
+      .media-item {
+        margin: 0;
+
+        .label-wrapper {
+          label {
+            color: $white;
+          }
+        }
+      }
+    }
+
+    .button {
+      display: block;
+
+      @include respond(large) {
+        max-width: 50%;
+      }
+    }
+  }
+}

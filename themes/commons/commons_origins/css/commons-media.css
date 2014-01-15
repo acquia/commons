@@ -1,0 +1,84 @@
+/**
+ * @file
+ * Style overrides for the Commons Media feature.
+ */
+.field-name-field-media-form {
+  margin-bottom: 10px;
+}
+
+.field-name-field-media .field-add-more-submit, #quicktabs-container-commons_bw .quicktabs-tabpage .field-name-field-media .field-add-more-submit {
+  margin: 10px 0;
+}
+
+table[id^="field-media-values"],
+table[id^="field-media-values"] thead,
+table[id^="field-media-values"] tbody,
+table[id^="field-media-values"] tr,
+table[id^="field-media-values"] th,
+table[id^="field-media-values"] td {
+  background-color: transparent;
+  border: none;
+}
+table[id^="field-media-values"] th {
+  padding: 0;
+}
+table[id^="field-media-values"] th label {
+  margin: 0;
+}
+table[id^="field-media-values"] td.field-multiple-drag {
+  width: 20px;
+}
+table[id^="field-media-values"] a.tabledrag-handle .handle {
+  margin: 0;
+}
+table[id^="field-media-values"] .form-item {
+  padding-left: 6.875em;
+}
+table[id^="field-media-values"] .preview {
+  float: left;
+  font-size: 1em;
+  margin-left: -6.875em;
+  width: 6.25em;
+  min-height: 6.25em;
+  background: #858585;
+  cursor: pointer;
+}
+@media only screen and (max-width: 480px) {
+  table[id^="field-media-values"] .form-item {
+    padding-left: 0;
+  }
+  table[id^="field-media-values"] .preview {
+    display: block;
+    float: none;
+    margin: 10px auto;
+  }
+}
+table[id^="field-media-values"] .media-item {
+  padding: 0;
+  background-color: transparent;
+  border: none;
+}
+table[id^="field-media-values"] .media-item img {
+  display: block;
+  margin: 0;
+}
+table[id^="field-media-values"] .media-item .label-wrapper {
+  position: static;
+}
+table[id^="field-media-values"] .media-item .label-wrapper label {
+  margin: 0;
+}
+table[id^="field-media-values"] .media-widget .preview .media-item {
+  margin: 0;
+}
+table[id^="field-media-values"] .media-widget .preview .media-item .label-wrapper label {
+  color: white;
+}
+table[id^="field-media-values"] .media-widget .button {
+  display: block;
+}
+@media only screen and (min-width: 769px) {
+  table[id^="field-media-values"] .media-widget .button {
+    max-width: 50%;
+  }
+}

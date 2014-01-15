@@ -123,7 +123,6 @@ function commons_origins_preprocess_html(&$variables, $hook) {
   // Browser/platform sniff - adds body classes such as ipad, webkit, chrome
   // etc.
   $variables['classes_array'][] = css_browser_selector();
-
 }
 
 /**
@@ -263,6 +262,11 @@ function commons_origins_preprocess_page(&$variables, $hook) {
 
   $cf_pos = in_array('clearfix', $variables['branding_attributes_array']['class']);
   unset($variables['branding_attributes_array']['class'][$cf_pos]);
+
+  // Only load the media styles if Commons Media is enabled.
+  if (module_exists('commons_media')) {
+    drupal_add_css(drupal_get_path('theme', 'commons_origins') . '/css/commons-media.css', array('media' => 'screen', 'group' => CSS_THEME));
+  }
 }
 
 /**
