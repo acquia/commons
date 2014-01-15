@@ -33,7 +33,7 @@ function commons_media_field_definition(&$field_instances, $entity_type, $bundle
         'label' => 'hidden',
         'module' => 'file_entity',
         'settings' => array(
-          'file_view_mode' => 'full',
+          'file_view_mode' => 'default',
         ),
         'type' => 'file_rendered',
         'weight' => 0,

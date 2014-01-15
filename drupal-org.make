@@ -57,7 +57,10 @@ projects[apachesolr_user][patch][] = "http://drupal.org/files/2077281-apache-sol
 
 projects[breakpoints][type] = "module"
 projects[breakpoints][subdir] = "contrib"
-projects[breakpoints][version] = "1.1"
+projects[breakpoints][download][type] = "git"
+projects[breakpoints][download][url] = "http://git.drupal.org/project/breakpoints.git"
+projects[breakpoints][download][branch] = "7.x-1.x"
+projects[breakpoints][download][revision] = "c4f3665"
 
 projects[connector][type] = "module"
 projects[connector][subdir] = "contrib"
@@ -341,6 +344,33 @@ projects[pathauto][type] = "module"
 projects[pathauto][subdir] = "contrib"
 projects[pathauto][version] = "1.2"
 
+projects[picture][type] = "module"
+projects[picture][subdir] = "contrib"
+projects[picture][download][type] = "git"
+projects[picture][download][url] = "http://git.drupal.org/project/picture.git"
+projects[picture][download][branch] = "7.x-1.x"
+projects[picture][download][revision] = "18b94b9"
+
+; Add ctools as a dependency
+; https://drupal.org/node/2173043
+projects[picture][patch][] = "https://drupal.org/files/issues/add-ctools-dependency-2173043-1.patch"
+
+; Allow filter tips to be translated
+; https://drupal.org/node/2139459
+projects[picture][patch][] = "https://drupal.org/files/issues/translate-filter-tips-2139459-1.patch"
+
+; Move hook_uninstall() to picture.install to fix issues on uninstall.
+; https://drupal.org/node/2173015
+projects[picture][patch][] = "https://drupal.org/files/issues/move-uninstall-hook-implementation-2173015-1.patch"
+
+; Remove implementation of hook_file_formatter_info() to remove duplicate file formatter.
+; https://drupal.org/node/2172841
+projects[picture][patch][] = "https://drupal.org/files/issues/remove-file-formatter-hook-implementation-2172831-1.patch"
+
+; Remove implementation of hook_ctools_plugin_api() to fix issues with features.
+; https://drupal.org/node/2172831
+projects[picture][patch][] = "https://drupal.org/files/issues/remove-ctools-hook-implementation-2172831-1.patch"
+
 projects[pm_existing_pages][type] = "module"
 projects[pm_existing_pages][subdir] = "contrib"
 projects[pm_existing_pages][version] = "1.4"
@@ -420,6 +450,10 @@ projects[search_facetapi][version] = "1.0-beta2"
 projects[sharethis][type] = "module"
 projects[sharethis][subdir] = "contrib"
 projects[sharethis][version] = "2.5"
+
+projects[smartcrop][type] = "module"
+projects[smartcrop][subdir] = "contrib"
+projects[smartcrop][version] = "1.0-beta2"
 
 projects[strongarm][type] = "module"
 projects[strongarm][subdir] = "contrib"

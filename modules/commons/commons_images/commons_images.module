@@ -1,0 +1,76 @@
+<?php
+/**
+ * @file
+ * Code for the Commons Images feature.
+ */
+
+include_once 'commons_images.features.inc';
+
+/**
+ * Implements hook_file_default_displays_alter().
+ */
+function commons_images_file_default_displays_alter(&$file_displays) {
+  // Copy all default image formatters to full image formatters.
+  foreach ($file_displays as $file_display) {
+    if (strpos($file_display->name, 'image__default__') !== false) {
+      $display = clone $file_display;
+      $name = str_replace('image__default__', 'image__full__', $display->name);
+      $display->name = $name;
+      $file_displays[$name] = $display;
+    }
+  }
+
+  // Default images should be displayed using the 'default' picture group.
+  if (isset($file_displays['image__default__file_field_image'])) {
+    $file_displays['image__default__file_field_image']->status = FALSE;
+  }
+
+  $file_display = new stdClass();
+  $file_display->api_version = 1;
+  $file_display->name = 'image__default__file_field_picture';
+  $file_display->weight = 1;
+  $file_display->status = TRUE;
+  $file_display->settings = array(
+    'picture_group' => 'commons_default',
+    'fallback_image_style' => 'commons-default-small',
+    'image_link' => 'content',
+    'colorbox' => 'commons_default',
+  );
+  $file_displays['image__default__file_field_picture'] = $file_display;
+
+  // Full images should be displayed using the 'full' picture group.
+  if (isset($file_displays['image__full__file_field_image'])) {
+    $file_displays['image__full__file_field_image']->status = FALSE;
+  }
+
+  $file_display = new stdClass();
+  $file_display->api_version = 1;
+  $file_display->name = 'image__full__file_field_picture';
+  $file_display->weight = 1;
+  $file_display->status = TRUE;
+  $file_display->settings = array(
+    'picture_group' => 'commons_full',
+    'fallback_image_style' => 'commons-full-small',
+    'image_link' => '',
+    'colorbox' => 'commons_full',
+  );
+  $file_displays['image__full__file_field_picture'] = $file_display;
+
+  // Teaser images should be displayed using the 'teaser' picture group.
+  if (isset($file_displays['image__teaser__file_field_image'])) {
+    $file_displays['image__teaser__file_field_image']->status = FALSE;
+  }
+
+  $file_display = new stdClass();
+  $file_display->api_version = 1;
+  $file_display->name = 'image__teaser__file_field_picture';
+  $file_display->weight = -1;
+  $file_display->status = TRUE;
+  $file_display->settings = array(
+    'picture_group' => 'commons_teaser',
+    'fallback_image_style' => 'commons-teaser-small',
+    'image_link' => '',
+    'colorbox' => 'commons_teaser',
+  );
+  $file_displays['image__teaser__file_field_picture'] = $file_display;
+}
