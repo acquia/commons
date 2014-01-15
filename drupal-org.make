@@ -293,6 +293,10 @@ projects[oembed][download][url] = "http://git.drupal.org/project/oembed.git"
 projects[oembed][download][branch] = "7.x-1.x"
 projects[oembed][download][revision] = "63898e1"
 
+; Fix PHP fatal error when enabling the module
+; https://drupal.org/comment/7987343#comment-7987343
+projects[oembed][patch][] = "https://drupal.org/files/oembed-2021015-1.patch"
+
 ; Add oEmbed plugins to list of supported media providers
 ; https://drupal.org/comment/8287243#comment-8287243
 projects[oembed][patch][] = "https://drupal.org/files/issues/list-enabled-plugins-2159335-1.patch"
