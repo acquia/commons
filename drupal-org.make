@@ -273,7 +273,7 @@ projects[mollom][version] = "2.8"
 
 projects[navbar][type] = "module"
 projects[navbar][subdir] = "contrib"
-projects[navbar][version] = "1.2"
+projects[navbar][version] = "1.3"
 
 projects[oauth][type] = "module"
 projects[oauth][subdir] = "contrib"
@@ -571,7 +571,7 @@ libraries[ckeditor_widget][directory_name] = "widget"
 
 libraries[modernizr][download][type] = "get"
 libraries[modernizr][type] = "libraries"
-libraries[modernizr][download][url] = "https://github.com/Modernizr/Modernizr/archive/v2.7.0.tar.gz"
+libraries[modernizr][download][url] = "https://github.com/Modernizr/Modernizr/archive/v2.7.1.tar.gz"
 
 libraries[timeago][download][type] = "get"
 libraries[timeago][type] = "libraries"
@@ -579,4 +579,4 @@ libraries[timeago][download][url] = "https://raw.github.com/rmm5t/jquery-timeago
 
 libraries[underscore][download][type] = "get"
 libraries[underscore][type] = "libraries"
-libraries[underscore][download][url] = "https://github.com/jashkenas/underscore/archive/1.4.4.zip"
+libraries[underscore][download][url] = "https://github.com/jashkenas/underscore/archive/1.5.2.zip"
