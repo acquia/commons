@@ -51,7 +51,7 @@ function commons_topics_form_node_form_alter(&$form, &$form_state) {
  */
 function commons_topics_get_entity_types_with_topics() {
   // Find all Commons Entity integrations.
-  $commons_entity_integrations = module_invoke_all('commons_entity_integration');
+  $commons_entity_integrations = commons_entity_integration_info();
   if (empty($commons_entity_integrations)) {
     return array();
   }

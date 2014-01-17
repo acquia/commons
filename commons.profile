@@ -169,6 +169,33 @@ function commons_install_tasks() {
 }
 
 /**
+ * Get Commons entity integration information.
+ *
+ * @param $entity_type
+ *   (optional) The entity type to load, e.g. node or user.
+ *
+ * @return
+ *   An associative array of entity integrations whose keys define the entity
+ *   type for each integration and whose values contain the bundles which have
+ *   been integrated. Each bundle is itself an associative array, whose keys
+ *   define the type of integration to enable and whose values contain the
+ *   status of the integration. TRUE = enabled, FALSE = disabled.
+ */
+function commons_entity_integration_info($entity_type = NULL) {
+  $info = &drupal_static(__FUNCTION__);
+  if (!$info) {
+    $info = module_invoke_all('commons_entity_integration');
+    drupal_alter('commons_entity_integration', $info);
+  }
+  if ($entity_type) {
+    return isset($info[$entity_type]) ? $info[$entity_type] : array();
+  }
+  else {
+    return $info;
+  }
+}
+
+/**
  * Allow users to select from a predefined list of color palettes during
  * the commons installation.
  */

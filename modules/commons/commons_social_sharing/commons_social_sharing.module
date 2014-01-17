@@ -26,7 +26,7 @@ function commons_social_sharing_features_export_alter(&$export, $module_name) {
   if (!empty($items['rate_widgets']->value)) {
     foreach($items['rate_widgets']->value as $key => $widget) {
       if ($widget->name == 'commons_social_sharing') {
-        $commons_entity_integrations = module_invoke_all('commons_entity_integration');
+        $commons_entity_integrations = commons_entity_integration_info();
         if (!empty($commons_entity_integrations['node'])) {
           foreach ($commons_entity_integrations['node'] as $bundle => $options) {
             if (!isset($options['exclude_rate']) || $options['exclude_rate'] != TRUE) {

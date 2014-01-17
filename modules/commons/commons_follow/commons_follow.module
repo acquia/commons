@@ -119,7 +119,7 @@ function commons_follow_flag_export_alter(&$flag) {
  * Implements hook_flag_alter().
  */
 function commons_follow_flag_alter(&$flag) {
-  $commons_entity_integrations = module_invoke_all('commons_entity_integration');
+  $commons_entity_integrations = commons_entity_integration_info();
   // Find Commons node types that should have follow integration and alter
   // the commons_follow_node flag to allow following these node types.
   // This is currently hard-coded to node entities and the

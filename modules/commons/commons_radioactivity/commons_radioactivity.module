@@ -98,7 +98,7 @@ function commons_radioactivity_features_pipe_alter(&$pipe, $data, $export) {
 */
 function commons_radioactivity_get_radioactive_entity_types() {
   // Find all Commons Entity integrations.
-  $commons_entity_integrations = module_invoke_all('commons_entity_integration');
+  $commons_entity_integrations = commons_entity_integration_info();
   if (empty($commons_entity_integrations)) {
     return array();
   }
