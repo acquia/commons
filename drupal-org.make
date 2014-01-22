@@ -261,7 +261,7 @@ projects[message_subscribe][version] = "1.0-rc1"
 
 projects[metatag][type] = "module"
 projects[metatag][subdir] = "contrib"
-projects[metatag][version] = "1.0-beta8"
+projects[metatag][version] = "1.0-beta9"
 
 projects[module_filter][type] = "module"
 projects[module_filter][subdir] = "contrib"
