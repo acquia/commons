@@ -32,6 +32,8 @@ function commons_utility_links_block_info() {
  * Implements hook_block_view().
  */
 function commons_utility_links_block_view($delta = '') {
+  $block = array();
+
   // Gather all of the available utility links.
   $links = module_invoke_all('commons_utility_links');
   drupal_alter('commons_utility_links', $links);
