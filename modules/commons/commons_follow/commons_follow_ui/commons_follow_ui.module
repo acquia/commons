@@ -48,20 +48,6 @@ function commons_follow_ui_form_alter(&$form, &$form_state, $form_id) {
   }
 }
 
-/**
- * Implements hook_commons_utility_links().
- */
-function commons_follow_ui_commons_utility_links_alter(&$links) {
-  global $user;
-  $account = $user;
-  if ($account->uid > 0) {
-    $links['settings']= array(
-      'href' => 'user/' . $account->uid . '/notification-settings',
-      'title' => t('Settings'),
-    );
-  }
-}
-
 function commons_follow_ui_notification_settings_form($form, &$form_state, $account) {
   global $user;
   if (empty($account)) {

@@ -1,6 +1,18 @@
 <?php
 
 /**
+ * Implements hook_hook_info().
+ */
+function commons_utility_links_hook_info() {
+  $hooks = array(
+    'commons_utility_links',
+    'commons_utility_links_alter',
+  );
+
+  return array_fill_keys($hooks, array('group' => 'commons_utility_links'));
+}
+
+/**
  * Implements hook_block_info().
  */
 function commons_utility_links_block_info() {
@@ -12,48 +24,27 @@ function commons_utility_links_block_info() {
     'pages' => 0,
     'weight' => 1,
   );
+
   return $blocks;
 }
 
 /**
  * Implements hook_block_view().
  */
-function commons_utility_links_block_view() {
-  $block['subject'] = '';
-  $block['content'] = '';
-  $links = array();
-
-  if (user_is_logged_in()) {
-    global $user;
-    $account = $user;
-    $links['name'] = array(
-      'href' => 'user',
-      'title' => format_username($account),
-    );
-    $links['logout'] = array(
-      'href' => 'user/logout',
-      'title' => t('Logout'),
-    );
-  }
-  else {
-    if (variable_get('user_register', USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL)) {
-      $links['signup'] = array(
-        'href' => 'user/register',
-        'title' => t('Signup'),
-      );
-    }
-    $links['login'] = array(
-      'href' => 'user/login',
-      'title' => t('Login'),
-    );
-  }
+function commons_utility_links_block_view($delta = '') {
+  $links = module_invoke_all('commons_utility_links');
   drupal_alter('commons_utility_links', $links);
-  $block['content'] = array(
-    '#theme' => 'links__commons_utility_links',
-    '#links' => $links,
-    '#attributes' => array(
-      'class' => array('commons-utility-links'),
-    ),
-  );
+
+  if (!empty($links)) {
+    $block['subject'] = NULL;
+    $block['content'] = array(
+      '#theme' => 'links__commons_utility_links',
+      '#links' => $links,
+      '#attributes' => array(
+        'class' => array('commons-utility-links'),
+      ),
+    );
+  }
+
   return $block;
 }
