@@ -488,7 +488,7 @@ projects[translation_helpers][version] = "1.0"
 
 projects[variable][type] = "module"
 projects[variable][subdir] = "contrib"
-projects[variable][version] = "2.3"
+projects[variable][version] = "2.4"
 
 projects[views][type] = "module"
 projects[views][subdir] = "contrib"
