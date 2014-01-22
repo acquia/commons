@@ -22,7 +22,8 @@
  * @return
  *   An associative array of utility links whose keys are used as its CSS class.
  *   Each link should be itself an array, with the same elements used in
- *   theme_links().
+ *   theme_links(), except for the addition of a 'weight' element that is used
+ *   for ordering the links.
  *
  * For a detailed usage example, see commons_utility_links.module.
  *
@@ -47,12 +48,11 @@ function hook_commons_utility_links() {
 /**
  * Perform alterations on utility links.
  *
- * @param $integrations
- *   An associative array of entity integrations whose keys define the entity
- *   type for each integration and whose values contain the bundles which have
- *   been integrated. Each bundle is itself an associative array, whose keys
- *   define the type of integration to enable and whose values contain the
- *   status of the integration. TRUE = enabled, FALSE = disabled.
+ * @param $links
+ *   An associative array of utility links whose keys are used as its CSS class.
+ *   Each link should be itself an array, with the same elements used in
+ *   theme_links(), except for the addition of a 'weight' element that is used
+ *   for ordering the links.
  *
  * @see theme_links()
  * @see hook_commons_utility_links()

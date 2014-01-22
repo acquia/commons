@@ -15,10 +15,12 @@ function commons_utility_links_commons_utility_links() {
     $links['name'] = array(
       'href' => 'user',
       'title' => format_username($account),
+      'weight' => -10,
     );
     $links['logout'] = array(
       'href' => 'user/logout',
       'title' => t('Logout'),
+      'weight' => 9,
     );
   }
   else {
@@ -26,11 +28,13 @@ function commons_utility_links_commons_utility_links() {
       $links['signup'] = array(
         'href' => 'user/register',
         'title' => t('Signup'),
+        'weight' => -10,
       );
     }
     $links['login'] = array(
       'href' => 'user/login',
       'title' => t('Login'),
+      'weight' => -9,
     );
   }
 

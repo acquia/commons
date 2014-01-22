@@ -17,6 +17,7 @@ function commons_follow_ui_commons_utility_links() {
     $links['settings']= array(
       'href' => 'user/' . $account->uid . '/notification-settings',
       'title' => t('Settings'),
+      'weight' => 10,
     );
   }
 
