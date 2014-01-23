@@ -273,7 +273,7 @@ projects[mollom][version] = "2.8"
 
 projects[navbar][type] = "module"
 projects[navbar][subdir] = "contrib"
-projects[navbar][version] = "1.3"
+projects[navbar][version] = "1.4"
 
 projects[oauth][type] = "module"
 projects[oauth][subdir] = "contrib"
