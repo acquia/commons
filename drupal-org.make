@@ -423,6 +423,10 @@ projects[rate][version] = "1.6"
 ; http://drupal.org/node/947516#comment-6979780
 projects[rate][patch][] = "http://drupal.org/files/947516-rate-node-links-15.patch"
 
+; Only load CSS when necessary.
+; https://drupal.org/node/2180853
+projects[rate][patch][] = "https://drupal.org/files/issues/attach-rate-css-2180853-1.patch"
+
 projects[realname][type] = "module"
 projects[realname][subdir] = "contrib"
 projects[realname][version] = "1.1"
