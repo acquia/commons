@@ -230,7 +230,7 @@ projects[media][patch][] = "https://drupal.org/files/issues/display-title-and-cl
 
 ; Bring media element and field widget inline with managed_file equivalents.
 ; https://drupal.org/node/2187837
-projects[message][patch][] = "https://drupal.org/files/issues/bring-media-inline-with-managed-file-2187837-1.patch"
+projects[media][patch][] = "https://drupal.org/files/issues/bring-media-inline-with-managed-file-2187837-1.patch"
 
 projects[memcache][type] = "module"
 projects[memcache][subdir] = "contrib"
