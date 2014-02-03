@@ -222,7 +222,7 @@ projects[media][subdir] = "contrib"
 projects[media][download][type] = "git"
 projects[media][download][url] = "http://git.drupal.org/project/media.git"
 projects[media][download][branch] = "7.x-2.x"
-projects[media][download][revision] = "1f46a9a"
+projects[media][download][revision] = "aed50be"
 
 ; Display dialog title and close button for better UX.
 ; https://drupal.org/node/2182823
