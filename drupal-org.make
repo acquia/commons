@@ -232,6 +232,10 @@ projects[media][patch][] = "https://drupal.org/files/issues/display-title-and-cl
 ; https://drupal.org/node/2187837
 projects[media][patch][] = "https://drupal.org/files/issues/bring-media-inline-with-managed-file-2187837-1.patch"
 
+; Simplify list of internet media providers.
+; https://drupal.org/node/2187893
+projects[media][patch][] = "https://drupal.org/files/issues/display-internet-media-providers-inline-2187893-1.patch"
+
 projects[memcache][type] = "module"
 projects[memcache][subdir] = "contrib"
 projects[memcache][version] = "1.0"
@@ -299,8 +303,8 @@ projects[oembed][download][revision] = "63898e1"
 projects[oembed][patch][] = "https://drupal.org/files/oembed-2021015-1.patch"
 
 ; Add oEmbed plugins to list of supported media providers
-; https://drupal.org/comment/8287243#comment-8287243
-projects[oembed][patch][] = "https://drupal.org/files/issues/list-enabled-plugins-2159335-1.patch"
+; https://drupal.org/comment/8443971#comment-8443971
+projects[oembed][patch][] = "https://drupal.org/files/issues/list-enabled-plugins-2159335-2.patch"
 
 ; Remove WYSIWYG special casing
 ; https://drupal.org/comment/8287861#comment-8287861
