@@ -224,6 +224,14 @@ projects[media][download][url] = "http://git.drupal.org/project/media.git"
 projects[media][download][branch] = "7.x-2.x"
 projects[media][download][revision] = "1f46a9a"
 
+; Display dialog title and close button for better UX.
+; https://drupal.org/node/2182823
+projects[media][patch][] = "https://drupal.org/files/issues/display-title-and-close-button-2182823-1.patch"
+
+; Bring media element and field widget inline with managed_file equivalents.
+; https://drupal.org/node/2187837
+projects[message][patch][] = "https://drupal.org/files/issues/bring-media-inline-with-managed-file-2187837-1.patch"
+
 projects[memcache][type] = "module"
 projects[memcache][subdir] = "contrib"
 projects[memcache][version] = "1.0"
