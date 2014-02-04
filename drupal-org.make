@@ -90,11 +90,7 @@ projects[ctools][subdir] = "contrib"
 projects[ctools][download][type] = "git"
 projects[ctools][download][url] = "http://git.drupal.org/project/ctools.git"
 projects[ctools][download][branch] = "7.x-1.x"
-projects[ctools][download][revision] = "e81da7a57f63ca95d2c713afcec65a5659aada9e"
-
-; Introduce UUIDs onto panes & displays.
-; http://drupal.org/node/1277908#comment-7216356
-projects[ctools][patch][] = "http://drupal.org/files/ctools-uuids_for_exported_objects-1277908-118.patch"
+projects[ctools][download][revision] = "a333dfc0351dbabf201a701273ff76e4c2910503"
 
 projects[custom_search][type] = "module"
 projects[custom_search][subdir] = "contrib"
@@ -337,8 +333,8 @@ projects[panels][type] = "module"
 projects[panels][subdir] = "contrib"
 projects[panels][download][type] = "git"
 projects[panels][download][url] = "http://git.drupal.org/project/panels.git"
-projects[panels][download][branch] = "7.x-3.x-i18n"
-projects[panels][download][revision] = "43a3810e8b0d2ef435ef2bb190039391c8e1712f"
+projects[panels][download][branch] = "7.x-3.x"
+projects[panels][download][revision] = "a879ecc2ccc1a424ac3da7b4ed6df47914fa3003"
 
 projects[paranoia][type] = "module"
 projects[paranoia][subdir] = "contrib"
