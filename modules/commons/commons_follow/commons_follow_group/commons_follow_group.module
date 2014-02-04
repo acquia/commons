@@ -104,3 +104,50 @@ function commons_follow_group_node_insert($node) {
   $flag = flag_get_flag('commons_follow_group');
   $flag->flag('flag', $node->nid, $account);
 }
+
+
+/**
+ * Implements hook_og_membership_insert().
+ * Invoked from hook_entity_insert().
+ */
+function commons_follow_group_og_membership_insert(OgMembership $og_membership) {
+  commons_follow_group_sync_flag_to_group_membership($og_membership);
+}
+
+/**
+ * Implements hook_og_membership_update().
+ * Invoked from hook_entity_update().
+ */
+function commons_follow_group_og_membership_update(OgMembership $og_membership) {
+  commons_follow_group_sync_flag_to_group_membership($og_membership);
+}
+
+/**
+ * Implements hook_og_membership_delete().
+ * Invoked from hook_entity_delete().
+ */
+function commons_follow_group_og_membership_delete(OgMembership $og_membership) {
+  // The user should unfollow the group when her membership is deleted.
+  if ($og_membership->entity_type == 'user' && $og_membership->field_name == 'og_user_node') {
+    $account = user_load($og_membership->etid);
+    flag('unflag', 'commons_follow_group', $og_membership->gid, $account);    
+  }
+}
+
+// function flag($action, $flag_name, $content_id, $account = NULL) {
+
+function commons_follow_group_sync_flag_to_group_membership($og_membership) {
+  if ($og_membership->entity_type == 'user' && $og_membership->field_name == 'og_user_node') {
+    $account = user_load($og_membership->etid);
+    // The membership is approved. The user should follow the group.
+    if ($og_membership->state == 1) {
+      flag('flag', 'commons_follow_group', $og_membership->gid, $account);    
+    }
+    // The membership is not approved. The user should not follow the group.
+    else {
+      flag('unflag', 'commons_follow_group', $og_membership->gid, $account);    
+    }
+  }
+}
+  
+
