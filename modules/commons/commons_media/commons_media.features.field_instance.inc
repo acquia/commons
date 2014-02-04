@@ -13,8 +13,10 @@ function commons_media_field_default_field_instances() {
   $commons_groups_entity_types = commons_groups_get_group_content_entity_types();
   if (!empty($commons_groups_entity_types)) {
     foreach ($commons_groups_entity_types as $entity_type => $bundles) {
-      foreach(array_keys($bundles) as $bundle) {
-        commons_media_field_definition($field_instances, $entity_type, $bundle);
+      foreach ($bundles as $bundle => $integrations) {
+        if (!empty($integrations['media'])) {
+          commons_media_field_definition($field_instances, $entity_type, $bundle);
+        }
       }
     }
   }

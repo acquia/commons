@@ -15,8 +15,10 @@ function commons_media_system_info_alter(&$info, $file, $type) {
 
     if (!empty($entity_integrations)) {
       foreach ($entity_integrations as $entity_type => $bundles) {
-        foreach (array_keys($bundles) as $bundle) {
-          $info['features']['field_instance'][] = "$entity_type-$bundle-field_media";
+        foreach ($bundles as $bundle => $integrations) {
+          if (!empty($integrations['media'])) {
+            $info['features']['field_instance'][] = "$entity_type-$bundle-field_media";
+          }
         }
       }
     }
