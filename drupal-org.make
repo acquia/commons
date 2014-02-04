@@ -22,13 +22,6 @@ projects[admin_icons][download][url] = "http://git.drupal.org/project/admin_icon
 projects[admin_icons][download][branch] = "7.x-1.x"
 projects[admin_icons][download][revision] = "60d9f28801533fecc92216a60d444d89d80e7611"
 
-projects[advancedqueue][type] = "module"
-projects[advancedqueue][subdir] = "contrib"
-projects[advancedqueue][version] = "1.0-alpha2"
-; Cleanup of the advancedqueue table:
-; https://drupal.org/comment/7817905#comment-7817905
-projects[advancedqueue][patch][] = "https://drupal.org/files/purging_table-2054555.patch"
-
 projects[apachesolr][type] = "module"
 projects[apachesolr][subdir] = "contrib"
 projects[apachesolr][version] = "1.6"
@@ -75,7 +68,7 @@ projects[ckeditor][download][revision] = "b69a9ac"
 
 ; Only load CSS when necessary.
 ; https://drupal.org/node/1370894
-projects[ckeditor][patch][] = "https://drupal.org/files/issues/attach-ckeditor-css-1370894-4.patch"
+projects[ckeditor][patch][] = "https://drupal.org/files/issues/attach-ckeditor-css-1370894-7.patch"
 
 ; Accomodate latest Media changes.
 ; https://drupal.org/node/2159403
@@ -225,7 +218,19 @@ projects[media][subdir] = "contrib"
 projects[media][download][type] = "git"
 projects[media][download][url] = "http://git.drupal.org/project/media.git"
 projects[media][download][branch] = "7.x-2.x"
-projects[media][download][revision] = "1f46a9a"
+projects[media][download][revision] = "aed50be"
+
+; Display dialog title and close button for better UX.
+; https://drupal.org/node/2182823
+projects[media][patch][] = "https://drupal.org/files/issues/display-title-and-close-button-2182823-1.patch"
+
+; Bring media element and field widget inline with managed_file equivalents.
+; https://drupal.org/node/2187837
+projects[media][patch][] = "https://drupal.org/files/issues/bring-media-inline-with-managed-file-2187837-1.patch"
+
+; Simplify list of internet media providers.
+; https://drupal.org/node/2187893
+projects[media][patch][] = "https://drupal.org/files/issues/display-internet-media-providers-inline-2187893-1.patch"
 
 projects[memcache][type] = "module"
 projects[memcache][subdir] = "contrib"
@@ -257,7 +262,7 @@ projects[message_subscribe][version] = "1.0-rc1"
 
 projects[metatag][type] = "module"
 projects[metatag][subdir] = "contrib"
-projects[metatag][version] = "1.0-beta8"
+projects[metatag][version] = "1.0-beta9"
 
 projects[module_filter][type] = "module"
 projects[module_filter][subdir] = "contrib"
@@ -269,7 +274,7 @@ projects[mollom][version] = "2.8"
 
 projects[navbar][type] = "module"
 projects[navbar][subdir] = "contrib"
-projects[navbar][version] = "1.3"
+projects[navbar][version] = "1.4"
 
 projects[oauth][type] = "module"
 projects[oauth][subdir] = "contrib"
@@ -294,8 +299,8 @@ projects[oembed][download][revision] = "63898e1"
 projects[oembed][patch][] = "https://drupal.org/files/oembed-2021015-1.patch"
 
 ; Add oEmbed plugins to list of supported media providers
-; https://drupal.org/comment/8287243#comment-8287243
-projects[oembed][patch][] = "https://drupal.org/files/issues/list-enabled-plugins-2159335-1.patch"
+; https://drupal.org/comment/8443971#comment-8443971
+projects[oembed][patch][] = "https://drupal.org/files/issues/list-enabled-plugins-2159335-2.patch"
 
 ; Remove WYSIWYG special casing
 ; https://drupal.org/comment/8287861#comment-8287861
@@ -419,6 +424,10 @@ projects[rate][version] = "1.6"
 ; http://drupal.org/node/947516#comment-6979780
 projects[rate][patch][] = "http://drupal.org/files/947516-rate-node-links-15.patch"
 
+; Only load CSS when necessary.
+; https://drupal.org/node/2180853
+projects[rate][patch][] = "https://drupal.org/files/issues/attach-rate-css-2180853-1.patch"
+
 projects[realname][type] = "module"
 projects[realname][subdir] = "contrib"
 projects[realname][version] = "1.1"
@@ -484,7 +493,7 @@ projects[translation_helpers][version] = "1.0"
 
 projects[variable][type] = "module"
 projects[variable][subdir] = "contrib"
-projects[variable][version] = "2.3"
+projects[variable][version] = "2.4"
 
 projects[views][type] = "module"
 projects[views][subdir] = "contrib"
@@ -533,10 +542,7 @@ projects[adaptivetheme][patch][] = "https://drupal.org/files/issues/add-link-but
 
 projects[ember][type] = "theme"
 projects[ember][subdir] = "contrib"
-projects[ember][download][type] = "git"
-projects[ember][download][url] = "http://git.drupal.org/project/ember.git"
-projects[ember][download][branch] = "7.x-2.x"
-projects[ember][download][revision] = "1d88894"
+projects[ember][version] = "2.0-alpha2"
 
 projects[sky][type] = "theme"
 projects[sky][subdir] = "contrib"
@@ -549,21 +555,9 @@ libraries[backbone][download][type] = "get"
 libraries[backbone][type] = "libraries"
 libraries[backbone][download][url] = "https://github.com/jashkenas/backbone/archive/1.1.0.tar.gz"
 
-libraries[ckeditor][download][type] = "get"
-libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.3.1/ckeditor_4.3.1_full.zip"
+libraries[ckeditor][download][type] = get
 libraries[ckeditor][type] = "libraries"
-
-libraries[ckeditor_lineutils][download][type] = "get"
-libraries[ckeditor_lineutils][download][url] = "http://download.ckeditor.com/lineutils/releases/lineutils_4.3.1.zip"
-libraries[ckeditor_lineutils][type] = "libraries"
-libraries[ckeditor_lineutils][subdir] = "ckeditor/plugins"
-libraries[ckeditor_lineutils][directory_name] = "lineutils"
-
-libraries[ckeditor_widget][download][type] = "get"
-libraries[ckeditor_widget][download][url] = "http://download.ckeditor.com/widget/releases/widget_4.3.1.zip"
-libraries[ckeditor_widget][type] = "libraries"
-libraries[ckeditor_widget][subdir] = "ckeditor/plugins"
-libraries[ckeditor_widget][directory_name] = "widget"
+libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor%20for%20Drupal/edit/ckeditor_4.3.2_edit.zip"
 
 libraries[modernizr][download][type] = "get"
 libraries[modernizr][type] = "libraries"
