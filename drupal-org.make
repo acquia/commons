@@ -320,7 +320,10 @@ projects[oembed][patch][] = "https://drupal.org/files/issues/prefer-element-attr
 
 projects[og][type] = "module"
 projects[og][subdir] = "contrib"
-projects[og][version] = "2.4"
+projects[og][download][type] = "git"
+projects[og][download][url] = "http://git.drupal.org/project/og.git"
+projects[og][download][revision] = "c1af563"
+
 
 ; Auto-assign role to group manager broken on groups with overridden roles.
 ; https://drupal.org/node/2005800#comment-7684873
