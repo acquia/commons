@@ -218,19 +218,7 @@ projects[media][subdir] = "contrib"
 projects[media][download][type] = "git"
 projects[media][download][url] = "http://git.drupal.org/project/media.git"
 projects[media][download][branch] = "7.x-2.x"
-projects[media][download][revision] = "aed50be"
-
-; Display dialog title and close button for better UX.
-; https://drupal.org/node/2182823
-projects[media][patch][] = "https://drupal.org/files/issues/display-title-and-close-button-2182823-1.patch"
-
-; Bring media element and field widget inline with managed_file equivalents.
-; https://drupal.org/node/2187837
-projects[media][patch][] = "https://drupal.org/files/issues/bring-media-inline-with-managed-file-2187837-1.patch"
-
-; Simplify list of internet media providers.
-; https://drupal.org/node/2187893
-projects[media][patch][] = "https://drupal.org/files/issues/display-internet-media-providers-inline-2187893-1.patch"
+projects[media][download][revision] = "6e9c99b"
 
 projects[memcache][type] = "module"
 projects[memcache][subdir] = "contrib"
@@ -292,31 +280,7 @@ projects[oembed][subdir] = "contrib"
 projects[oembed][download][type] = "git"
 projects[oembed][download][url] = "http://git.drupal.org/project/oembed.git"
 projects[oembed][download][branch] = "7.x-1.x"
-projects[oembed][download][revision] = "63898e1"
-
-; Fix PHP fatal error when enabling the module
-; https://drupal.org/comment/7987343#comment-7987343
-projects[oembed][patch][] = "https://drupal.org/files/oembed-2021015-1.patch"
-
-; Add oEmbed plugins to list of supported media providers
-; https://drupal.org/comment/8443971#comment-8443971
-projects[oembed][patch][] = "https://drupal.org/files/issues/list-enabled-plugins-2159335-2.patch"
-
-; Remove WYSIWYG special casing
-; https://drupal.org/comment/8287861#comment-8287861
-projects[oembed][patch][] = "https://drupal.org/files/issues/remove-wysiwyg-special-casing-2159303-2.patch"
-
-; Provided a default display configuration
-; https://drupal.org/comment/8286995#comment-8286995
-projects[oembed][patch][] = "https://drupal.org/files/issues/provide-default-display-configuration-2128389-3.patch"
-
-; Add supported file and MIME type information to file formatters
-; https://drupal.org/comment/8286935#comment-8286935
-projects[oembed][patch][] = "https://drupal.org/files/issues/add-file-and-mime-type-information-to-formatters-2159275-1.patch"
-
-; Themed images ignore width, height, alt and title attributes
-; https://drupal.org/comment/8286915#comment-8286915
-projects[oembed][patch][] = "https://drupal.org/files/issues/prefer-element-attributes-2159269-1.patch"
+projects[oembed][download][revision] = "489db0f"
 
 projects[og][type] = "module"
 projects[og][subdir] = "contrib"
