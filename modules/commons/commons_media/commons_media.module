@@ -26,6 +26,87 @@ function commons_media_system_info_alter(&$info, $file, $type) {
 }
 
 /**
+ * Implements hook_menu_alter().
+ */
+function commons_media_menu_alter(&$items) {
+  // Use a tweaked AJAX page callback for managed_file and media elements in
+  // order to bypass a core issue that occurs when more than one browsing widget
+  // tab contains a managed_file or media file field widget.
+  if (isset($items['file/ajax'])) {
+    $items['file/ajax']['page callback'] = 'commons_ajax_upload';
+  }
+  if (isset($items['media/ajax'])) {
+    $items['media/ajax']['page callback'] = 'commons_ajax_upload';
+  }
+}
+
+/**
+ * Menu callback; Shared Ajax callback for managed_file and media elements.
+ *
+ * Identical to the Ajax callback used by file.module and media.module except
+ * with the $form_build_id != $_POST['form_build_id'] check removed in order to
+ * prevent errors when more than one browsing widget tab contains a managed_file
+ * or media file field widget.
+ *
+ * @see file_ajax_upload()
+ * @see media_ajax_upload()
+ */
+function commons_ajax_upload() {
+  $form_parents = func_get_args();
+  $form_build_id = (string) array_pop($form_parents);
+
+  if (empty($_POST['form_build_id'])) {
+    // Invalid request.
+    drupal_set_message(t('An unrecoverable error occurred. The uploaded file likely exceeded the maximum file size (@size) that this server supports.', array('@size' => format_size(file_upload_max_size()))), 'error');
+    $commands = array();
+    $commands[] = ajax_command_replace(NULL, theme('status_messages'));
+    return array('#type' => 'ajax', '#commands' => $commands);
+  }
+
+  list($form, $form_state) = ajax_get_form();
+
+  if (!$form) {
+    // Invalid form_build_id.
+    drupal_set_message(t('An unrecoverable error occurred. Use of this form has expired. Try reloading the page and submitting again.'), 'error');
+    $commands = array();
+    $commands[] = ajax_command_replace(NULL, theme('status_messages'));
+    return array('#type' => 'ajax', '#commands' => $commands);
+  }
+
+  // Get the current element and count the number of files.
+  $current_element = $form;
+  foreach ($form_parents as $parent) {
+    $current_element = $current_element[$parent];
+  }
+  $current_file_count = isset($current_element['#file_upload_delta']) ? $current_element['#file_upload_delta'] : 0;
+
+  // Process user input. $form and $form_state are modified in the process.
+  drupal_process_form($form['#form_id'], $form, $form_state);
+
+  // Retrieve the element to be rendered.
+  foreach ($form_parents as $parent) {
+    $form = $form[$parent];
+  }
+
+  // Add the special Ajax class if a new file was added.
+  if (isset($form['#file_upload_delta']) && $current_file_count < $form['#file_upload_delta']) {
+    $form[$current_file_count]['#attributes']['class'][] = 'ajax-new-content';
+  }
+  // Otherwise just add the new content class on a placeholder.
+  else {
+    $form['#suffix'] .= '<span class="ajax-new-content"></span>';
+  }
+
+  $output = theme('status_messages') . drupal_render($form);
+  $js = drupal_add_js();
+  $settings = call_user_func_array('array_merge_recursive', $js['settings']['data']);
+
+  $commands = array();
+  $commands[] = ajax_command_replace(NULL, $output, $settings);
+  return array('#type' => 'ajax', '#commands' => $commands);
+}
+
+/**
  * Implements hook_file_view_alter().
  */
 function commons_media_file_view_alter(&$build) {
