@@ -43,7 +43,7 @@ jQuery(document).ready(function($){
   $(document).delegate('.views-exposed-widgets .form-select', 'click', function() {
     $('.views-exposed-widgets').addClass('widgets-active');
   });
-  console.log($('#quicktabs-commons_follow_ui a.flag').length);
+
   if($('#quicktabs-commons_follow_ui a.flag').length > 0) {
       set_follow_checkboxes();
 
