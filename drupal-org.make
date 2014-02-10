@@ -280,7 +280,7 @@ projects[oembed][subdir] = "contrib"
 projects[oembed][download][type] = "git"
 projects[oembed][download][url] = "http://git.drupal.org/project/oembed.git"
 projects[oembed][download][branch] = "7.x-1.x"
-projects[oembed][download][revision] = "45fd49a"
+projects[oembed][download][revision] = "9aa5303"
 
 projects[og][type] = "module"
 projects[og][subdir] = "contrib"
