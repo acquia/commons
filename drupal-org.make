@@ -5,7 +5,7 @@ core = 7.x
 
 projects[acquia_connector][type] = "module"
 projects[acquia_connector][subdir] = "contrib"
-projects[acquia_connector][version] = "2.12"
+projects[acquia_connector][version] = "2.13"
 
 projects[addressfield][type] = "module"
 projects[addressfield][subdir] = "contrib"
