@@ -284,10 +284,7 @@ projects[oembed][download][revision] = "9aa5303"
 
 projects[og][type] = "module"
 projects[og][subdir] = "contrib"
-projects[og][download][type] = "git"
-projects[og][download][url] = "http://git.drupal.org/project/og.git"
-projects[og][download][revision] = "c1af563"
-
+projects[og][version] = "2.5"
 
 ; Auto-assign role to group manager broken on groups with overridden roles.
 ; https://drupal.org/node/2005800#comment-7684873
