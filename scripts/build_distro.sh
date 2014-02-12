@@ -200,7 +200,7 @@ case $1 in
     if [[ -n $2 ]] && [[ -n $3 ]]; then
       BUILD_PATH=$2
     else
-      echo "Usage build_distro.sh site-install [build_path] [site] [admin-email] [admin-pass]"
+      echo "Usage build_distro.sh site-install [build_path] [site] [demo-content] [admin-email] [admin-pass]"
     fi
     if [[ -n $3 ]]; then
       SITE=$3
@@ -213,12 +213,12 @@ case $1 in
       DEMO_CONTENT='FALSE'
     fi
     if [[ -n $5 ]]; then
-      ADMIN_EMAIL=$4
+      ADMIN_EMAIL=$5
     else
       ADMIN_EMAIL='admin@example.com'
     fi
     if [[ -n $6 ]]; then
-      ADMIN_PASS=$4
+      ADMIN_PASS=$6
     else
       ADMIN_PASS='admin'
     fi
