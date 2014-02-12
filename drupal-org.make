@@ -390,7 +390,7 @@ projects[rate][patch][] = "http://drupal.org/files/947516-rate-node-links-15.pat
 
 ; Only load CSS when necessary.
 ; https://drupal.org/node/2180853
-projects[rate][patch][] = "https://drupal.org/files/issues/attach-rate-css-2180853-1.patch"
+projects[rate][patch][] = "https://drupal.org/files/issues/attach-rate-css-2180853-3.patch"
 
 projects[realname][type] = "module"
 projects[realname][subdir] = "contrib"
