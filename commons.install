@@ -842,3 +842,19 @@ function commons_update_3111() {
   variable_set('admin_theme', 'ember');
   return array();
 }
+
+/*
+ * Revert Message types to use the correct title field token.
+ */
+function commons_update_3112() {
+  $revert = array(
+    'commons_wikis' => array('message_type'),
+    'commons_q_a' => array('message_type'),
+    'commons_posts' => array('message_type'),
+    'commons_notify' => array('message_type'),
+    'commons_like' => array('message_type'),
+    'commons_activity_streams' => array('message_type'),
+  );
+  features_revert($revert);
+  return array();
+}
