@@ -382,7 +382,7 @@ projects[radioactivity][patch][] = "http://drupal.org/files/radioactivity-memcac
 
 projects[rate][type] = "module"
 projects[rate][subdir] = "contrib"
-projects[rate][version] = "1.6"
+projects[rate][version] = "1.7"
 
 ; Add widget to node/comment $links.
 ; http://drupal.org/node/947516#comment-6979780
