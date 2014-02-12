@@ -261,6 +261,10 @@ projects[navbar][type] = "module"
 projects[navbar][subdir] = "contrib"
 projects[navbar][version] = "1.4"
 
+; Change I-beam cursors in the navbar to be a pointer instead.
+; https://drupal.org/node/2173041
+projects[navbar][patch][] = "https://drupal.org/files/issues/2173041-3-i-beam-menu-hover.patch"
+
 projects[oauth][type] = "module"
 projects[oauth][subdir] = "contrib"
 projects[oauth][version] = "3.2"
