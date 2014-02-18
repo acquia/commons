@@ -31,7 +31,7 @@ projects[apachesolr_og][subdir] = "contrib"
 projects[apachesolr_og][download][type] = "git"
 projects[apachesolr_og][download][url] = "http://git.drupal.org/project/apachesolr_og.git"
 projects[apachesolr_og][download][branch] = "7.x-1.x"
-projects[apachesolr_og][download]revision] = "49820b4a4fcff7c1c4efe449da033fb6d8711ac5"
+projects[apachesolr_og][download][revision] = "49820b4a4fcff7c1c4efe449da033fb6d8711ac5"
 
 projects[apachesolr_proximity][type] = "module"
 projects[apachesolr_proximity][subdir] = "contrib"
