@@ -475,7 +475,7 @@ function commons_events_block_view($delta = '') {
     && empty($user->uid)) {
     return array(
       'subject' => NULL,
-      'content' => t('You must !login first to list an event.', array('!login' => l(t('log in'), 'user'))),
+      'content' => t('You must !login in order to list events.', array('!login' => l(t('log in'), 'user'))),
     );
   }
 }
