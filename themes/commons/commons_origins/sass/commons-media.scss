@@ -112,3 +112,42 @@ table[id^="field-media-values"] {
     }
   }
 }
+
+
+//override the default Jquery Dialog to match styles of Ember admin theme.
+.media-wrapper {
+
+      .ui-dialog-titlebar {
+
+          background: #303030;
+          padding: 1em 2.25em 0;
+          @include border-radius(0px);
+          color: #cccccc;
+          box-sizing: border-box;
+          border:none;
+
+              .ui-dialog-title {
+                font-size:1.8em;
+                font-family:"Helvetica Neue", helvetica, "Segoe UI", segoe, "Ubuntu", "Droid Sans", "Arial", sans-serif;
+                font-weight:200;
+                margin:0;
+              }
+
+              .ui-dialog-titlebar-close {
+
+                 position: absolute;
+                 top:1.5em;
+                 right:1em;
+
+                  .ui-icon {
+                    background-color:#ccc;
+                    @include border-radius(2px);
+                    border:1px solid #fff;
+                    
+                  }
+              }
+
+      }
+
+
+}
