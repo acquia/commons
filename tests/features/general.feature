@@ -4,11 +4,6 @@ Feature: General functionality
     Then I should see "Access denied. You must log in to view this page."
     And I should not see "Add content"
 
-  Scenario: Anonymous users cannot post comments
-    Given I am on "/groups/boston/best-brunch-places-cambridge"
-    Then I should see "Log in or register to post comments"
-    And I should not see "Add new comment"
-
   Scenario: Anonymous users cannot create groups
     Given I am on "/groups"
     And I should not see "Create a group"
@@ -36,13 +31,3 @@ Feature: General functionality
     Then I should see "Groups"
     And I should see "Most active groups"
     And I should see "Boston"
-
-  Scenario: Anonymous users can view individual public groups
-    Given I am on "/groups/boston"
-    Then I should see "Boston"
-    And I should see "Best brunch places in Cambridge"
-    And I should see "Recent activity in this group"
-    And I should see "Active in this group"
-    And I should see "Group contributors"
-    And I should see "Organizers"
-    And I should see "Contributors"
