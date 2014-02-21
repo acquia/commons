@@ -10,7 +10,7 @@
 function theme_commons_events_attending_event($variables = array()) {
   global $user;
   $event = $variables['event'];
-  $attendee_count = $variables['attendee_count'];
+  $attendee_count = isset($variables['attendee_count']) ? $variables['attendee_count'] : 0;
 
   $registration_type = registration_get_entity_registration_type('node', $event);
   $registration = entity_get_controller('registration')->create(array(
