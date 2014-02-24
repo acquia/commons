@@ -18,8 +18,8 @@ projects[drupal][patch][] = http://drupal.org/files/drupal-7.x-allow_profile_cha
 projects[drupal][patch][] = http://drupal.org/files/1664602-1.patch
 
 ; Optimize node access queries.
-; https://drupal.org/comment/8512873#comment-8512873
-projects[drupal][patch][] = https://drupal.org/files/issues/drupal-optimize_node_access_queries-106721-71.patch
+; https://drupal.org/comment/8505367#comment-8505367
+projects[drupal][patch][] = https://drupal.org/files/issues/drupal-optimize_node_access_queries-106721-D7-do-not-test.patch
 
 ; Statically cache node access grants
 ; https://drupal.org/comment/8495029#comment-8495029
