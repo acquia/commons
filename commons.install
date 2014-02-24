@@ -451,8 +451,10 @@ function commons_demo_content() {
     $event->field_topics[LANGUAGE_NONE][]['tid'] = commons_create_topic($term);
   }
 
-  $event->field_date[LANGUAGE_NONE][0]['value'] = '2014-01-12 10:00:00';
-  $event->field_date[LANGUAGE_NONE][0]['value2'] = '2014-01-13 13:00:00';
+  // The event starts 6 months from now.
+  $event->field_date[LANGUAGE_NONE][0]['value'] = format_date(REQUEST_TIME + 15552000, 'custom', 'Y-m-d 10:00:00');
+  // The event ends 6 months and one day from now.
+  $event->field_date[LANGUAGE_NONE][0]['value2'] = format_date(REQUEST_TIME + 15638400, 'custom', 'Y-m-d 10:00:00');
 
   $event->field_address[LANGUAGE_NONE][0]['thoroughfare'] = '25 Corporate Drive';
   $event->field_address[LANGUAGE_NONE][0]['premise'] = '4th floor';
