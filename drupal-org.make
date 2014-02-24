@@ -68,7 +68,7 @@ projects[ckeditor][download][revision] = "b69a9ac"
 
 ; Only load CSS when necessary.
 ; https://drupal.org/node/1370894
-projects[ckeditor][patch][] = "https://drupal.org/files/issues/attach-ckeditor-css-1370894-7.patch"
+projects[ckeditor][patch][] = "https://drupal.org/files/issues/attach-ckeditor-css-1370894-8.patch"
 
 ; Accomodate latest Media changes.
 ; https://drupal.org/node/2159403
