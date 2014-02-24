@@ -461,6 +461,10 @@ projects[views][type] = "module"
 projects[views][subdir] = "contrib"
 projects[views][version] = "3.7"
 
+; Update Views Content access filter per core performance improvements.
+; https://drupal.org/comment/8516039#comment-8516039
+projects[views][patch][] = "https://drupal.org/files/issues/2204257-views-content-access-filter-core-depends-on-core-patch.patch"
+
 projects[views_bulk_operations][type] = "module"
 projects[views_bulk_operations][subdir] = "contrib"
 projects[views_bulk_operations][version] = "3.2"

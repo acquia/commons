@@ -16,3 +16,11 @@ projects[drupal][patch][] = http://drupal.org/files/drupal-7.x-allow_profile_cha
 ; Allow to specify SCRIPT HTML element attributes through drupal_add_js()
 ; http://drupal.org/node/1664602#comment-6221066
 projects[drupal][patch][] = http://drupal.org/files/1664602-1.patch
+
+; Optimize node access queries.
+; https://drupal.org/comment/8512873#comment-8512873
+projects[drupal][patch][] = https://drupal.org/files/issues/drupal-optimize_node_access_queries-106721-71.patch
+
+; Statically cache node access grants
+; https://drupal.org/comment/8495029#comment-8495029
+projects[drupal][patch][] = https://drupal.org/files/issues/node_access_grants-static-cache-11.patch
