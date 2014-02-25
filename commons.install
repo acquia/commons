@@ -860,3 +860,13 @@ function commons_update_3112() {
   features_revert($revert);
   return array();
 }
+
+/*
+ * Delete the AdvancedQueue class variable for sites that did not uninstall AdvancedQueue.
+ */
+function commons_update_3113() {
+  if (variable_get('queue_default_class', '') == 'AdvancedQueue') {
+    variable_del('queue_default_class');
+  }
+  return array();
+}
