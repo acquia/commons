@@ -38,8 +38,8 @@ function commons_follow_ui_menu() {
 }
 
 /**
-* Implements hook_form_alter().
-*/
+ * Implements hook_form_alter().
+ */
 function commons_follow_ui_form_alter(&$form, &$form_state, $form_id) {
   // We have a dedicated form for the "Send email by default" checkbox.
   // Hide it from the user profile edit form.
@@ -74,7 +74,7 @@ function commons_follow_ui_notification_settings_form($form, &$form_state, $acco
     '#default_value' => isset($account->message_subscribe_email[LANGUAGE_NONE][0]['value']) ? $account->message_subscribe_email[LANGUAGE_NONE][0]['value'] : FALSE,
     '#weight' => 1,
   );
-  if($account != $user) {
+  if ($account->uid != $user->uid) {
     $form['message_subscribe_email']['#disabled'] = TRUE;
   }
 
