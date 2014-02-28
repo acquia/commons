@@ -40,3 +40,15 @@ function commons_activity_streams_update_3104() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Remove duplicative node access filters from Commons Activity Streams views.
+ */
+function commons_activity_streams_update_3105() {
+  $revert = array(
+    'commons_activity_streams' => array('views_view'),
+    'commons_activity_streams_groups' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}
