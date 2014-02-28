@@ -34,46 +34,6 @@ table[id^="field-media-values"] a.tabledrag-handle .handle {
 table[id^="field-media-values"] .form-item {
   padding-left: 6.875em;
 }
-table[id^="field-media-values"] .preview {
-  float: left;
-  font-size: 1em;
-  margin-left: -6.875em;
-  width: 6.25em;
-  min-height: 6.25em;
-  background: #858585;
-  cursor: pointer;
-}
-@media only screen and (max-width: 480px) {
-  table[id^="field-media-values"] .form-item {
-    padding-left: 0;
-  }
-  table[id^="field-media-values"] .preview {
-    display: block;
-    float: none;
-    margin: 10px auto;
-  }
-}
-table[id^="field-media-values"] .media-item {
-  padding: 0;
-  background-color: transparent;
-  border: none;
-}
-table[id^="field-media-values"] .media-item img {
-  display: block;
-  margin: 0;
-}
-table[id^="field-media-values"] .media-item .label-wrapper {
-  position: static;
-}
-table[id^="field-media-values"] .media-item .label-wrapper label {
-  margin: 0;
-}
-table[id^="field-media-values"] .media-widget .preview .media-item {
-  margin: 0;
-}
-table[id^="field-media-values"] .media-widget .preview .media-item .label-wrapper label {
-  color: white;
-}
 table[id^="field-media-values"] .media-widget .button {
   display: block;
 }
@@ -114,4 +74,20 @@ table[id^="field-media-values"] .media-widget .button {
   -o-border-radius: 2px;
   border-radius: 2px;
   border: 1px solid #fff;
+}
+
+.form-type-media .preview {
+  font-size: 1em;
+  width: 6.25em;
+  min-height: 6.25em;
+  background: #858585;
+  background-image:url("../images/icons/file-unknown.png");
+  background-position: center center;
+}
+@media only screen and (max-width: 480px) {
+  .form-type-media .preview {
+    display: block;
+    float: none;
+    margin: 10px auto;
+  }
 }
