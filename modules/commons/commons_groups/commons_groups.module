@@ -295,10 +295,7 @@ function commons_groups_group_contributors_count_topics($group) {
       return '';
     }
     $contributors_count = $view->total_rows;
-    $output .= l(t('@contributors_count @contributors', array(
-      '@contributors_count' => $contributors_count,
-      '@contributors' => format_plural($contributors_count, 'contributor', 'contributors'),
-    )), 'node/' . $group->nid . '/contributors');
+    $output .= l(format_plural($contributors_count, '1 contributor', '@count contributors'), 'node/' . $group->nid . '/contributors');
   }
   // Format the list of topics:
   if (!empty($group->field_topics[LANGUAGE_NONE])) {
