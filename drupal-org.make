@@ -481,6 +481,10 @@ projects[views_load_more][type] = "module"
 projects[views_load_more][subdir] = "contrib"
 projects[views_load_more][version] = "1.2"
 
+; Suppress notice error when loading more content from views_load_more.
+; https://drupal.org/node/2207467
+projects[views_load_more][patch][] = "https://drupal.org/files/issues/fix-notice-undefined-index-2152935-3.patch"
+
 projects[votingapi][type] = "module"
 projects[votingapi][subdir] = "contrib"
 projects[votingapi][version] = "2.11"
