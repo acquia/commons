@@ -274,12 +274,6 @@ function commons_origins_preprocess_page(&$variables, $hook) {
  */
 function commons_origins_preprocess_node(&$variables, $hook) {
   $node = $variables['node'];
-  $wrapper = entity_metadata_wrapper('node', $node);
-
-  // Append a feature label to featured node teasers.
-  if ($variables['teaser'] && $variables['promote']) {
-    $variables['submitted'] .= ' <span class="featured-node-tooltip">' . t('Featured') . ' ' . $variables['type'] . '</span>';
-  }
 
   // Some content does not get a user image on the full node.
   $no_avatar = array(
@@ -368,26 +362,6 @@ function commons_origins_preprocess_node(&$variables, $hook) {
           $variables['content']['links'][$element]['#links'][$link]['#access'] = FALSE;
         }
       }
-    }
-  }
-
-  // Replace the submitted text on nodes with something a bit more pertinent to
-  // the content type.
-  if (variable_get('node_submitted_' . $node->type, TRUE)) {
-    $node_type_info = node_type_get_type($variables['node']);
-    $placeholders = array(
-      '!type' => '<span class="node-content-type">' . check_plain($node_type_info->name) . '</span>',
-      '!user' => $variables['name'],
-      '!date' => $variables['date'],
-      '@interval' => format_interval(REQUEST_TIME - $node->created),
-    );
-
-    if (!empty($node->{OG_AUDIENCE_FIELD}) && $wrapper->{OG_AUDIENCE_FIELD}->count() == 1) {
-      $placeholders['!group'] = l($wrapper->{OG_AUDIENCE_FIELD}->get(0)->label(), 'node/' . $wrapper->{OG_AUDIENCE_FIELD}->get(0)->getIdentifier());
-      $variables['submitted'] = t('!type created @interval ago in the !group group by !user', $placeholders);
-    }
-    else {
-      $variables['submitted'] = t('!type created @interval ago by !user', $placeholders);
     }
   }
 
@@ -1286,4 +1260,57 @@ function commons_origins_preprocess_user_profile(&$variables, $hook) {
 function commons_origins_preprocess_commons_search_solr_user_results(&$variables, $hook) {
   // Hide the results title.
   $variables['title_attributes_array']['class'][] = 'element-invisible';
+}
+
+/**
+ * Implements hook_process_node().
+ */
+function commons_origins_process_node(&$variables, $hook) {
+  $node = $variables['node'];
+  $wrapper = entity_metadata_wrapper('node', $node);
+
+  // Use timeago module for formatting node submission date
+  // if it is enabled and also configured to be used on nodes.
+  if (module_exists('timeago') && variable_get('timeago_node', 1)) {
+    $variables['date'] = timeago_format_date($node->created, $variables['date']);
+    $use_timeago_date_format = TRUE;
+  }
+  else {
+    $use_timeago_date_format = FALSE;
+  }
+
+  // Replace the submitted text on nodes with something a bit more pertinent to
+  // the content type.
+  if (variable_get('node_submitted_' . $node->type, TRUE)) {
+    $node_type_info = node_type_get_type($variables['node']);
+    $placeholders = array(
+      '!type' => '<span class="node-content-type">' . check_plain($node_type_info->name) . '</span>',
+      '!user' => $variables['name'],
+      '!date' => $variables['date'],
+      '@interval' => format_interval(REQUEST_TIME - $node->created),
+    );
+    // Show what group the content belongs to if applicable.
+    if (!empty($node->{OG_AUDIENCE_FIELD}) && $wrapper->{OG_AUDIENCE_FIELD}->count() == 1) {
+      $placeholders['!group'] = l($wrapper->{OG_AUDIENCE_FIELD}->get(0)->label(), 'node/' . $wrapper->{OG_AUDIENCE_FIELD}->get(0)->getIdentifier());
+      if ($use_timeago_date_format == TRUE) {
+        $variables['submitted'] = t('!type created !date in the !group group by !user', $placeholders);
+      }
+      else {
+        $variables['submitted'] = t('!type created @interval ago in the !group group by !user', $placeholders);
+      }
+    }
+    else {
+      if ($use_timeago_date_format == TRUE) {
+        $variables['submitted'] = t('!type created !date by !user', $placeholders);
+      }
+      else {
+        $variables['submitted'] = t('!type created @interval ago by !user', $placeholders);
+      }
+    }
+  }
+
+  // Append a feature label to featured node teasers.
+  if ($variables['teaser'] && $variables['promote']) {
+    $variables['submitted'] .= ' <span class="featured-node-tooltip">' . t('Featured') . ' ' . $variables['type'] . '</span>';
+  }
 }
