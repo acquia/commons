@@ -875,7 +875,7 @@ html.js fieldset.collapsed .fieldset-legend, html.js fieldset.collapsible .field
  * Button styles
  */
 /* Common styles for all buttons. */
-a.button,
+.button,
 button,
 [type="reset"],
 [type="submit"],
@@ -909,13 +909,14 @@ button,
   outline: 0;
   cursor: pointer;
 }
-a.button:focus,
+.button:focus,
 button:focus,
 [type="reset"]:focus,
 [type="submit"]:focus,
 [type="button"]:focus,
 [class*="action-item"]:focus, .pane-commons-groups-commons-groups-create-group a:focus, .pane-commons-events-commons-events-create-event-link a:focus, [class*="action-item-small"]:focus, .commons-sign-up:focus,
-.commons-login:focus, [class*="action-item-large"]:focus, button:hover,
+.commons-login:focus, [class*="action-item-large"]:focus, .button:hover,
+button:hover,
 [type="reset"]:hover,
 [type="submit"]:hover,
 [type="button"]:hover,
@@ -923,7 +924,7 @@ button:focus,
 .commons-login:hover, [class*="action-item-large"]:hover {
   text-decoration: none;
 }
-a.button:active,
+.button:active,
 button:active,
 [type="reset"]:active,
 [type="submit"]:active,
@@ -935,7 +936,7 @@ button:active,
   box-shadow: inset rgba(0, 0, 0, 0.25) 0 1px 2px 0;
   text-decoration: none;
 }
-a.button::-moz-focus-inner,
+.button::-moz-focus-inner,
 button::-moz-focus-inner,
 [type="reset"]::-moz-focus-inner,
 [type="submit"]::-moz-focus-inner,
@@ -947,7 +948,7 @@ button::-moz-focus-inner,
 }
 
 /* Dimensions for the default button type. */
-a.button,
+.button,
 button,
 [type="reset"],
 [type="submit"],
@@ -970,7 +971,7 @@ button,
   font-size: 1.2em;
 }
 
-a.button,
+.button,
 button,
 [type="reset"],
 [type="submit"],
@@ -985,23 +986,25 @@ button,
   border-color: #cbcbcb;
   text-shadow: -1px 1px 2px white, -1px -1px 2px white, 1px -1px 2px white, 1px 1px 2px white;
 }
-a.button,
+.button,
 button,
 [type="reset"],
 [type="submit"],
 [type="button"],
-[class*="action-item"], .commons-login, button:link,
+[class*="action-item"], .commons-login, .button:link,
+button:link,
 [type="reset"]:link,
 [type="submit"]:link,
 [type="button"]:link,
-[class*="action-item"]:link, .commons-login:link, button:visited,
+[class*="action-item"]:link, .commons-login:link, .button:visited,
+button:visited,
 [type="reset"]:visited,
 [type="submit"]:visited,
 [type="button"]:visited,
 [class*="action-item"]:visited, .commons-login:visited {
   color: #323232;
 }
-a.button:hover,
+.button:hover,
 button:hover,
 [type="reset"]:hover,
 [type="submit"]:hover,
@@ -1015,15 +1018,15 @@ button:hover,
   background: -o-linear-gradient(#fefefe, #e5e5e5);
   background: linear-gradient(#fefefe, #e5e5e5);
   border-color: #b2b2b2;
-  text-decoration: none;
   text-shadow: -1px 1px 2px #fefefe, -1px -1px 2px #fefefe, 1px -1px 2px #fefefe, 1px 1px 2px #fefefe;
 }
-a.button:focus,
+.button:focus,
 button:focus,
 [type="reset"]:focus,
 [type="submit"]:focus,
 [type="button"]:focus,
-[class*="action-item"]:focus, .commons-login:focus, button:active,
+[class*="action-item"]:focus, .commons-login:focus, .button:active,
+button:active,
 [type="reset"]:active,
 [type="submit"]:active,
 [type="button"]:active,
@@ -1037,7 +1040,7 @@ button:focus,
   border-color: #cbcbcb;
   text-shadow: -1px 1px 2px white, -1px -1px 2px white, 1px -1px 2px white, 1px 1px 2px white;
 }
-a.button[disabled],
+[disabled].button,
 button[disabled],
 [disabled][type="reset"],
 [disabled][type="submit"],
@@ -1108,7 +1111,7 @@ button[disabled],
 }
 [disabled].action-item-active,
 [disabled].action-item-small-active,
-[disabled].action-item-large-active, [class*="flag-commons-follow-"] [disabled].unflag-action {
+[disabled].action-item-large-active, [class*="flag-commons-follow-"] a[disabled].unflag-action {
   color: silver;
   background: #f3f3f3;
   border-color: silver;
@@ -1256,6 +1259,7 @@ button[disabled],
   text-shadow: none;
 }
 
+.button,
 button,
 [type="reset"],
 [type="submit"],
@@ -1264,6 +1268,7 @@ button,
   max-width: 100%;
 }
 @media only screen and (max-width: 480px) {
+  .button:not(.action-item-inline, .action-item-merge),
   button:not(.action-item-inline, .action-item-merge),
   [type="reset"]:not(.action-item-inline, .action-item-merge),
   [type="submit"]:not(.action-item-inline, .action-item-merge),
@@ -1274,7 +1279,8 @@ button,
     margin: .5em 0;
   }
 }
-#panels-ipe-control-container button, #panels-ipe-control-container
+#panels-ipe-control-container .button, #panels-ipe-control-container
+button, #panels-ipe-control-container
 [type="reset"], #panels-ipe-control-container
 [type="submit"], #panels-ipe-control-container
 [type="button"], #panels-ipe-control-container
@@ -4404,12 +4410,12 @@ body.front.logged-in .view-commons-homepage-content .article.node.node-page .lin
   cursor: default;
 }
 #quicktabs-commons_follow_ui .flag-email-group a span,
-#quicktabs-commons_follow_ui .flag-email-node a span,
-#quicktabs-commons_follow_ui .flag-email-user a span,
-#quicktabs-commons_follow_ui .flag-email-term a span,
 #quicktabs-commons_follow_ui .flag-email-group span span,
+#quicktabs-commons_follow_ui .flag-email-node a span,
 #quicktabs-commons_follow_ui .flag-email-node span span,
+#quicktabs-commons_follow_ui .flag-email-user a span,
 #quicktabs-commons_follow_ui .flag-email-user span span,
+#quicktabs-commons_follow_ui .flag-email-term a span,
 #quicktabs-commons_follow_ui .flag-email-term span span {
   display: none;
 }

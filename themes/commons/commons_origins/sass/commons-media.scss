@@ -49,60 +49,7 @@ table[id^="field-media-values"] {
     padding-left: px-to-em(100px + $gutter-width);
   }
 
-  .preview {
-    float: left;
-    font-size: 1em;
-    margin-left: -(px-to-em(100px + $gutter-width));
-    width: px-to-em(100px);
-    min-height: px-to-em(100px);
-    background: $light_gray;
-    cursor: pointer;
-  }
-
-  @include respond(only-small) {
-    .form-item {
-      padding-left: 0;
-    }
-
-    .preview {
-      display: block;
-      float: none;
-      margin: $gutter-width auto;
-    }
-  }
-
-  .media-item {
-    padding: 0;
-    background-color: transparent;
-    border: none;
-
-    img {
-      display: block;
-      margin: 0;
-    }
-
-    .label-wrapper {
-      position: static;
-
-      label {
-        margin: 0;
-      }
-    }
-  }
-
   .media-widget {
-    .preview {
-      .media-item {
-        margin: 0;
-
-        .label-wrapper {
-          label {
-            color: $white;
-          }
-        }
-      }
-    }
-
     .button {
       display: block;
 
@@ -113,41 +60,50 @@ table[id^="field-media-values"] {
   }
 }
 
-
-//override the default Jquery Dialog to match styles of Ember admin theme.
+// Override the default jQuery Dialog to match styles of Ember admin theme.
 .media-wrapper {
+  .ui-dialog-titlebar {
+    background: #303030;
+    padding: 1em 2.25em 0;
+    color: #cccccc;
+    box-sizing: border-box;
+    border:none;
+    @include border-radius(0px);
 
-      .ui-dialog-titlebar {
+    .ui-dialog-title {
+      font-size: 1.8em;
+      font-family: "Helvetica Neue", helvetica, "Segoe UI", segoe, "Ubuntu", "Droid Sans", "Arial", sans-serif;
+      font-weight: 200;
+      margin: 0;
+    }
 
-          background: #303030;
-          padding: 1em 2.25em 0;
-          @include border-radius(0px);
-          color: #cccccc;
-          box-sizing: border-box;
-          border:none;
+    .ui-dialog-titlebar-close {
+      position: absolute;
+      top: 1.5em;
+      right: 1em;
 
-              .ui-dialog-title {
-                font-size:1.8em;
-                font-family:"Helvetica Neue", helvetica, "Segoe UI", segoe, "Ubuntu", "Droid Sans", "Arial", sans-serif;
-                font-weight:200;
-                margin:0;
-              }
-
-              .ui-dialog-titlebar-close {
-
-                 position: absolute;
-                 top:1.5em;
-                 right:1em;
-
-                  .ui-icon {
-                    background-color:#ccc;
-                    @include border-radius(2px);
-                    border:1px solid #fff;
-                    
-                  }
-              }
-
+      .ui-icon {
+        background-color: #ccc;
+        border: 1px solid #fff;
+        @include border-radius(2px);
       }
+    }
+  }
+}
 
+.form-type-media .preview {
+  font-size: 1em;
+  width: 6.25em;
+  min-height: 6.25em;
+  background: #858585;
+  background-image: image-url("icons/file-unknown.png");
+  background-position: center center;
+}
 
+@media only screen and (max-width: 480px) {
+  .form-type-media .preview {
+    display: block;
+    float: none;
+    margin: 10px auto;
+  }
 }
