@@ -842,6 +842,7 @@ legend {
 // Generate the invisible classes that we will extend.
 @include buttons;
 
+.button,
 button,
 [type="reset"],
 [type="submit"],
@@ -4123,7 +4124,10 @@ body.front.logged-in .view-commons-homepage-content .article.node {
       input {
         cursor: default;
       }
+    }
 
+    a,
+    span {
       span {
         display: none;
       }
