@@ -215,7 +215,7 @@ projects[media][subdir] = "contrib"
 projects[media][download][type] = "git"
 projects[media][download][url] = "http://git.drupal.org/project/media.git"
 projects[media][download][branch] = "7.x-2.x"
-projects[media][download][revision] = "9384fc5"
+projects[media][download][revision] = "4c10acc"
 
 projects[memcache][type] = "module"
 projects[memcache][subdir] = "contrib"
