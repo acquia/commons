@@ -35,24 +35,31 @@ function commons_q_a_commons_bw_group_widget() {
   );
 }
 
+/**
+ * Implements hook_node_view().
+ *
+ * Provides an answer button to bring a user down to the answer form.
+ */
 function commons_q_a_node_view($node, $view_mode) {
-  if($node->type == 'question' && $view_mode == 'full') {
+  if ($node->type == 'question' && $view_mode == 'full') {
     // Remove add comment link.
     unset($node->content['links']['comment']);
     // Add the answer link below.
-    $node->content['links']['answer'] = array(
-      '#theme' => 'links__node__answer',
-      '#links' => array(
-        'answer-add' => array(
-          'title' => t('Answer'),
-          'attributes' => array(
-            'title' => t('Answer this question')
+    if (commons_q_a_check_answer_access($node)) {
+      $node->content['links']['answer'] = array(
+        '#theme' => 'links__node__answer',
+        '#links' => array(
+          'answer-add' => array(
+            'title' => t('Answer'),
+            'attributes' => array(
+              'title' => t('Answer this question'),
+            ),
+            'href' => 'node/' . $node->nid,
+            'fragment' => 'answer',
           ),
-          'href' => 'node/'.$node->nid,
-          'fragment' => 'answer',
         ),
-      ),
-    );
+      );
+    }
     return $node;
   }
 }
@@ -109,6 +116,30 @@ function commons_q_a_views_default_views_alter(&$views) {
   }
 }
 
+/*
+ * Run an access check to see if the current user can create answer nodes based
+ * off of the question node.
+ */
+function commons_q_a_check_answer_access($question) {
+  $group_ref = array();
+  if (!empty($question->og_group_ref[LANGUAGE_NONE])) {
+    foreach ($question->og_group_ref[LANGUAGE_NONE] as $key => $value) {
+      // Check to see the user has access to the group the question is in, only attach to those groups they have permission to post in.
+      if (og_user_access('node', $value['target_id'], 'create answer content')) {
+        $group_ref[] = $value['target_id'];
+        return TRUE;
+      }
+    }
+  }
+  // If user belongs to no groups, or no groups are assigned to the Question, check node_access for user.
+  else {
+    if (node_access('create', 'answer')) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
 /**
  * Implements hook_views_pre_render().
  */
@@ -118,36 +149,32 @@ function commons_q_a_views_pre_render(&$view) {
     // with the question, embed a simplified answer node form.
     global $user;
 
-    $question_nid = $view->args[0];
-    $question = node_load($question_nid);
-    $group_ref = array();
-    $answer_access = FALSE;
-    if (!empty($question->og_group_ref[LANGUAGE_NONE])) {
-      foreach ($question->og_group_ref[LANGUAGE_NONE] as $key => $value) {
-        // Check to see the user has access to the group the question is in, only attach to those groups they have permission to post in.
-        if (og_user_access('node', $value['target_id'], 'create answer content')) {
-          $group_ref[] = $value['target_id'];
-          $answer_access = TRUE;
-        }
-      }
+    if (user_is_anonymous()) {
+      $account = drupal_anonymous_user();
     }
-    // If user belongs to no groups, or no groups are assigned to the Question, check node_access for user.
     else {
-      if (node_access('create', $question, $user)) {
-        $answer_access = TRUE;
-      }
+      $account = $user;
     }
 
+    $question_nid = $view->args[0];
+    $question = node_load($question_nid);
+
+    $answer_access = commons_q_a_check_answer_access($question);
     // Check global user access before showing the answer form.
     if ($answer_access) {
+      $view->empty['area']->options['content'] = t("This question hasn't been answered yet. You can be the first to answer it!");
       module_load_include('inc', 'node', 'node.pages');
       $types = node_type_get_types();
-      $node = (object) array('uid' => $user->uid, 'name' => (isset($user->name) ? $user->name : ''), 'type' => 'answer', 'language' => LANGUAGE_NONE);
+      $node = (object) array(
+        'uid' => $account->uid,
+        'name' => (isset($account->name) ? $account->name : ''),
+        'type' => 'answer', 'language' => LANGUAGE_NONE
+      );
       // Prepopulate the Related question field
       // with Entityreference Prepopulate, which looks strictly at $_GET.
       $_GET['field_related_question'] = $view->args[0];
       if (!empty($group_ref)) {
-        $_GET['og_group_ref'] = implode(',',$group_ref);
+        $_GET['og_group_ref'] = implode(',', $group_ref);
       }
       $answer_form = drupal_get_form('answer_node_form', $node);
       $answer_form['header'] = array(
@@ -162,6 +189,17 @@ function commons_q_a_views_pre_render(&$view) {
       $view->attachment_after .= drupal_render($answer_form);
       // We only need to add the form once if the user has access to
       // post questions into any of the groups associated with the parent.
+      return;
+    }
+    // Tell Anonymous users to login.
+    elseif ($account->uid === 0) {
+      $view->empty['area']->options['content'] = t("This question hasn't been answered yet. !create to be the first to answer it!", array('!create' => l(t("Login or create an account"), 'user')));
+      return;
+    }
+    // If the user is not anonymous, but cannot answer the question. Don't tell
+    // them they should be the first to answer it.
+    else {
+      $view->empty['area']->options['content'] = t("This question hasn't been answered yet.");
       return;
     }
   }
@@ -188,7 +226,7 @@ function commons_q_a_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'answer_node_form') {
     $form['og_group_ref']['#access'] = FALSE;
     $form['actions']['submit']['#submit'][] = 'commons_q_a_answer_submit';
-    // Ensure that the answer node inherits group membership from the 
+    // Ensure that the answer node inherits group membership from the
     // parent question by preventing users from changing the audience through
     // the Trusted Contacts toggle when commons_trusted_contacts.module
     // is enabled.

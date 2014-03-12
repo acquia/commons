@@ -114,3 +114,14 @@ function commons_q_a_update_3109() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Indicate in the view that empty answers text is overridden by commons_q_a.
+ */
+function commons_q_a_update_3110() {
+  $revert = array(
+    'commons_q_a' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}
