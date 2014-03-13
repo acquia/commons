@@ -107,22 +107,6 @@ function commons_ajax_upload() {
 }
 
 /**
- * Implements hook_element_info_alter().
- */
-function commons_media_element_info_alter(&$type) {
-  $type['media']['#process'][] = 'commons_media_rename_media_buttons';
-}
-
-/**
- * Extra #process callback which renames the media element buttons.
- */
-function commons_media_rename_media_buttons($element, $edit, &$form_state) {
-  $element['browse_button']['#title'] = t('Browse …');
-
-  return $element;
-}
-
-/**
  * Implements hook_file_view_alter().
  */
 function commons_media_file_view_alter(&$build) {
