@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Media module.
+ */
+
+/**
+ * Accommodate the latest changes to the Media module.
+ */
+function commons_media_update_7300() {
+  $revert = array(
+    'commons_media' => array('user_permission', 'variable'),
+  );
+  features_revert($revert);
+  return array();
+}

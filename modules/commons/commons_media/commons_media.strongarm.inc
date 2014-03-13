@@ -13,9 +13,9 @@ function commons_media_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'media__dialog_theme';
+  $strongarm->name = 'media_dialog_theme';
   $strongarm->value = 'ember';
-  $export['media__dialog_theme'] = $strongarm;
+  $export['media_dialog_theme'] = $strongarm;
 
   return $export;
 }
