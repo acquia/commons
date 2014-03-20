@@ -107,6 +107,23 @@ function commons_ajax_upload() {
 }
 
 /**
+ * Implements hook_element_info_alter().
+ */
+function commons_media_element_info_alter(&$type) {
+  $type['media']['#process'][] = 'commons_media_simplify_media_buttons';
+}
+
+/**
+ * Extra #process callback which simplifies the media element buttons.
+ */
+function commons_media_simplify_media_buttons($element, $edit, &$form_state) {
+  // Remove extraneous elements.
+  $element['#title_display'] = 'invisible';
+
+  return $element;
+}
+
+/**
  * Implements hook_file_view_alter().
  */
 function commons_media_file_view_alter(&$build) {

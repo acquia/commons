@@ -213,6 +213,10 @@ projects[media][download][url] = "http://git.drupal.org/project/media.git"
 projects[media][download][branch] = "7.x-2.x"
 projects[media][download][revision] = "9583d89"
 
+; New filelfield browser widget is massively confusing the user
+; https://drupal.org/comment/8570379#comment-8570379
+projects[media][patch][] = "https://drupal.org/files/issues/automatically-attach-files-2216329-2.patch"
+
 projects[memcache][type] = "module"
 projects[memcache][subdir] = "contrib"
 projects[memcache][version] = "1.0"

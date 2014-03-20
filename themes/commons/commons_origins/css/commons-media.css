@@ -77,18 +77,26 @@ table[id^="field-media-values"] .media-widget .button {
 }
 
 .form-type-media .preview {
-  font-size: 1em;
-  width: 6.25em;
-  min-height: 6.25em;
-  background: #858585;
-  background-image: url('../images/icons/file-unknown.png?1394561546');
-  background-position: center center;
+  background: url('../images/icons-sa252b34f28.png') 0 -958px no-repeat;
+  width: 26px;
+  height: 20px;
+  display: inline-block;
+  margin-right: 3px;
+  position: relative;
+  top: 1px;
+  margin-right: 10px;
 }
-
 @media only screen and (max-width: 480px) {
   .form-type-media .preview {
     display: block;
     float: none;
     margin: 10px auto;
+  }
+  .form-type-media .button,
+  .form-type-media input[type="submit"] {
+    display: block;
+    float: none;
+    margin: 10px auto;
+    width: 100%;
   }
 }

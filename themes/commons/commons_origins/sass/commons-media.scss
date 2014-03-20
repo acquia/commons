@@ -91,19 +91,25 @@ table[id^="field-media-values"] {
   }
 }
 
-.form-type-media .preview {
-  font-size: 1em;
-  width: 6.25em;
-  min-height: 6.25em;
-  background: #858585;
-  background-image: image-url("icons/file-unknown.png");
-  background-position: center center;
-}
+.form-type-media {
+  .preview {
+    @include sprite_url_height_width($icons, picture);
+    margin-right: $gutter-width;
+  }
 
-@media only screen and (max-width: 480px) {
-  .form-type-media .preview {
-    display: block;
-    float: none;
-    margin: 10px auto;
+  @include respond(only-small) {
+    .preview {
+      display: block;
+      float: none;
+      margin: 10px auto;
+    }
+
+    .button,
+    input[type="submit"] {
+      display: block;
+      float: none;
+      margin: 10px auto;
+      width: 100%;
+    }
   }
 }
