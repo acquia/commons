@@ -161,15 +161,11 @@ projects[file_entity][version] = "2.0-alpha3"
 
 projects[flag][type] = "module"
 projects[flag][subdir] = "contrib"
-projects[flag][version] = "2.1"
+projects[flag][version] = "2.2"
 
 ; Issue #1965760: Manually set taxonomy term flag types because its different.
 ; http://drupal.org/node/1965760
-projects[flag][patch][] = "http://drupal.org/files/1965760-flag-taxonomy-types.patch"
-
-; Issue #1971980: Features export does not take flag_definition_alter into account.
-; http://drupal.org/node/1971980
-projects[flag][patch][] = "http://drupal.org/files/flag-features_export-1971980-3.patch"
+projects[flag][patch][] = "https://drupal.org/files/issues/1965760.28.flag_.entity-tokens.patch"
 
 projects[flag_abuse][type] = "module"
 projects[flag_abuse][subdir] = "contrib"
