@@ -530,7 +530,7 @@ libraries[backbone][download][url] = "https://github.com/jashkenas/backbone/arch
 
 libraries[ckeditor][download][type] = get
 libraries[ckeditor][type] = "libraries"
-libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor%20for%20Drupal/edit/ckeditor_4.3.2_edit.zip"
+libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor%20for%20Drupal/edit/ckeditor_4.3.3_edit.zip"
 
 libraries[modernizr][download][type] = "get"
 libraries[modernizr][type] = "libraries"
