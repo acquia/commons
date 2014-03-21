@@ -92,29 +92,33 @@ function commons_groups_entity_view($entity, $type, $view_mode, $langcode) {
  *
  * Alter the privacy settings fields.
  */
-function commons_groups_form_group_node_form_alter(&$form, &$form_state) {
-  // The group privacy settings are not required.
-  $form['field_og_subscribe_settings'][LANGUAGE_NONE]['#required'] = FALSE;
+function commons_groups_form_node_form_alter(&$form, &$form_state) {
+  $groups = og_get_all_group_bundle();
 
-  if (module_exists('og_access')) {
-    // Display private content checkbox only when "Joining requires approval"
-    // is selected.
-    $form['field_og_access_default_value']['#states'] = array(
-      'visible' => array(
-        ':input[name="field_og_subscribe_settings[' . LANGUAGE_NONE . ']"]' => array('value' => 'approval'),
-      ),
+  if (isset($groups['node']) && in_array($form_state['node']->type, array_keys($groups['node']))) {
+    // The group privacy settings are not required.
+    $form['field_og_subscribe_settings'][LANGUAGE_NONE]['#required'] = FALSE;
+
+    if (module_exists('og_access')) {
+      // Display private content checkbox only when "Joining requires approval"
+      // is selected.
+      $form['field_og_access_default_value']['#states'] = array(
+        'visible' => array(
+          ':input[name="field_og_subscribe_settings[' . LANGUAGE_NONE . ']"]' => array('value' => 'approval'),
+        ),
+      );
+
+      $form['#after_build'] = array('commons_groups_form_group_node_after_build');
+    }
+
+    $form['#attached']['css'] = array(
+      drupal_get_path('module', 'commons_groups') . '/css/commons_groups.css',
     );
 
-    $form['#after_build'] = array('commons_groups_form_group_node_after_build');
+    // The group access is set on commons_groups_node_presave().
+    $form['group_access'][LANGUAGE_NONE]['#required'] = FALSE;
+    $form['group_access']['#access'] = FALSE;
   }
-
-  $form['#attached']['css'] = array(
-    drupal_get_path('module', 'commons_groups') . '/css/commons_groups.css',
-  );
-
-  // The group access is set on commons_groups_node_presave().
-  $form['group_access'][LANGUAGE_NONE]['#required'] = FALSE;
-  $form['group_access']['#access'] = FALSE;
 }
 
 /**
@@ -233,7 +237,9 @@ function commons_groups_features_pipe_alter(&$pipe, $data, $export) {
     foreach ($pipe['field_instance'] as $delta => $value) {
       $args = explode('-', $value);
       $field_name = $args[2];
-      if ($field_name == 'og_group_ref') {
+      $excluded_fields = array('og_group_ref', 'field_og_access_default_value',
+        'field_og_subscribe_settings', 'og_roles_permissions', 'group_access', 'field_group_logo', 'group_group', 'body');
+      if (in_array($field_name, $excluded_fields)) {
         unset($pipe['field_instance'][$delta]);
       }
     }
@@ -255,6 +261,7 @@ function commons_groups_commons_entity_integration() {
     'node' => array(
       'group' => array(
         'is_group_content' => FALSE,
+        'is_group' => TRUE,
         'exclude_commons_follow' => TRUE,
       ),
     ),
@@ -412,7 +419,7 @@ function commons_groups_system_info_alter(&$info, $file, $type) {
   // commons_groups_entity_types variable.
   // We must add a corresponding line for each field instance
   // to commons_groups.info so that Features is aware of the instance
-  // and can sucessfully revert the field_instance component back
+  // and can successfully revert the field_instance component back
   // to its default state.
   if ($file->name == 'commons_groups') {
     $group_bundles = og_get_all_group_bundle();
@@ -423,10 +430,22 @@ function commons_groups_system_info_alter(&$info, $file, $type) {
         $info['features']['field_instance'][] = "node-$bundle-field_og_access_default_value";
         $info['features']['field_instance'][] = "node-$bundle-field_og_subscribe_settings";
         $info['features']['field_instance'][] = "node-$bundle-og_roles_permissions";
+        $info['features']['field_instance'][] = "node-$bundle-body";
+        $info['features']['field_instance'][] = "node-$bundle-group_group";
+
         // These fields are only necessary when og_access.module is enabled.
-        $info['features']['field_instance'][] = "node-$bundle-field_og_access_default_value";
         $info['features']['field_instance'][] = "node-$bundle-group_access";
         $info['features']['field_instance'][] = "node-$bundle-field_group_logo";
+
+        // Add default strongarm settings.
+        $info['features']['variable'][] = "comment_anonymous_$bundle";
+        $info['features']['variable'][] = "comment_default_mode_$bundle";
+        $info['features']['variable'][] = "comment_default_per_page_$bundle";
+        $info['features']['variable'][] = "comment_form_location_$bundle";
+        $info['features']['variable'][] = "comment_$bundle";
+        $info['features']['variable'][] = "comment_preview_$bundle";
+        $info['features']['variable'][] = "comment_subject_field_$bundle";
+        $info['features']['variable'][] = "field_bundle_settings_node__$bundle";
       }
     }
     $group_content_entity_types = commons_groups_get_group_content_entity_types();
@@ -436,6 +455,17 @@ function commons_groups_system_info_alter(&$info, $file, $type) {
           $info['features']['field_instance'][] = "$entity_type-$bundle-og_group_ref";
           $info['features']['field_instance'][] = "$entity_type-$bundle-group_content_access";
         }
+      }
+    }
+
+    // Commons specific group variables.
+    $commons_groups = commons_groups_get_group_types();
+    if (isset($commons_groups['node'])) {
+      foreach ($commons_groups['node'] as $bundle => $group_info) {
+        $info['features']['variable'][] = "node_options_$bundle";
+        $info['features']['variable'][] = "node_preview_$bundle";
+        $info['features']['variable'][] = "node_submitted_$bundle";
+        $info['features']['variable'][] = "og_group_manager_default_rids_node_$bundle";
       }
     }
   }
@@ -826,7 +856,28 @@ function commons_groups_get_group_content_entity_types() {
   }
 
   return $commons_entity_integrations;
+}
 
+/**
+ * Returns an array of entity types that are defined as a group.
+ */
+function commons_groups_get_group_types() {
+  // Find all Commons Entity integrations.
+  $commons_groups = array();
+  $commons_entity_integrations = commons_entity_integration_info();
+  if (empty($commons_entity_integrations)) {
+    return array();
+  }
+
+  foreach ($commons_entity_integrations as $entity_type => $integration) {
+    foreach ($integration as $bundle => $options) {
+      if (isset($options['is_group']) && $options['is_group'] == TRUE) {
+        $commons_groups[$entity_type][$bundle] = $commons_entity_integrations[$entity_type][$bundle];
+      }
+    }
+  }
+
+  return $commons_groups;
 }
 
 /**

@@ -10,25 +10,31 @@
 function commons_groups_user_default_permissions() {
   $permissions = array();
 
-  // Exported permission: 'create group content'.
-  $permissions['create group content'] = array(
-    'name' => 'create group content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'authenticated user' => 'authenticated user',
-    ),
-    'module' => 'node',
-  );
+  $groups = commons_groups_get_group_types();
 
-  // Exported permission: 'edit own group content'.
-  $permissions['edit own group content'] = array(
-    'name' => 'edit own group content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'authenticated user' => 'authenticated user',
-    ),
-    'module' => 'node',
-  );
+  if (isset($groups['node'])) {
+    foreach ($groups['node'] as $bundle => $group_info) {
+      // Exported permission: 'create group content'.
+      $permissions["create $bundle content"] = array(
+        'name' => "create $bundle content",
+        'roles' => array(
+          'administrator' => 'administrator',
+          'authenticated user' => 'authenticated user',
+        ),
+        'module' => 'node',
+      );
+
+      // Exported permission: 'edit own group content'.
+      $permissions["edit own $bundle content"] = array(
+        'name' => "edit own $bundle content",
+        'roles' => array(
+          'administrator' => 'administrator',
+          'authenticated user' => 'authenticated user',
+        ),
+        'module' => 'node',
+      );
+    }
+  }
 
   return $permissions;
 }

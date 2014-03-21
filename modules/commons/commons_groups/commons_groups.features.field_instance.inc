@@ -19,6 +19,7 @@ function commons_groups_field_default_field_instances() {
     }
   }
   $group_bundles = og_get_all_group_bundle();
+
   if (empty($group_bundles['node'])) {
     // Make sure group_bundles contains at least the group node bundle, in order
     // to create the group audience field for it when installing the profile.
@@ -365,7 +366,7 @@ function commons_groups_field_definition_group(&$field_instances, $entity_type, 
 
   // Exported field_instance: 'node-group-field_group_logo'
   $field_instances["$entity_type-$bundle-field_group_logo"] = array(
-    'bundle' => 'group',
+    'bundle' => $bundle,
     'deleted' => '0',
     'description' => '',
     'display' => array(
@@ -416,7 +417,7 @@ function commons_groups_field_definition_group(&$field_instances, $entity_type, 
 
 function commons_groups_field_definition(&$field_instances, $entity_type, $bundle) {
   // Exported field_instance: 'node-post-og_group_ref'
-   $field_instances["$entity_type-$bundle-og_group_ref"] = array(
+  $field_instances["$entity_type-$bundle-og_group_ref"] = array(
     'bundle' => $bundle,
     'default_value' => NULL,
     'default_value_function' => 'commons_groups_entityreference_default_value',

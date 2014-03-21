@@ -77,8 +77,8 @@ function commons_wikis_user_revision_access($node = NULL, $old_callback = '_node
 }
 
 /**
-* Implements hook_og_user_access_alter().
-*/
+ * Implements hook_og_user_access_alter().
+ */
 function commons_wikis_og_user_access_alter(&$temp_perm, $context) {
   // Grant access to non-group members to be able to edit wiki nodes.
   // where the group node is public and content is public within the group.
@@ -163,6 +163,7 @@ function commons_wikis_commons_entity_integration() {
     'node' => array(
       'wiki' => array(
         'auto_title_instance' => FALSE,
+        'is_group_content' => TRUE,
       ),
     ),
   );

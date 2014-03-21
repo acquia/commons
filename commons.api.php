@@ -35,12 +35,23 @@ function hook_commons_entity_integration() {
     'webform' => array(
       'test' => array(
         'exclude_rate' => TRUE,
+        'is_group_content' => FALSE,
       ),
       'survey' => array(
+        'is_group_content' => TRUE,
         'exclude_topics' => TRUE,
       ),
       'suggestion' => array(
         'media' => TRUE,
+        'is_group_content' => TRUE,
+        'exclude_commons_follow' => TRUE,
+      ),
+    ),
+    'node' => array(
+      'group' => array(
+        'is_group_content' => FALSE,
+        'is_group' => TRUE,
+        'exclude_commons_follow' => TRUE,
       ),
     ),
   );
