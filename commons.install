@@ -170,6 +170,11 @@ function commons_install_finished(&$install_state) {
   // Cache a fully-built schema.
   drupal_get_schema(NULL, TRUE);
 
+  variable_set('title_node', array(
+    'auto_attach' => array('title' => 'title'),
+    'hide_label' => array('page' => 0, 'entity' => 0),
+  ));
+
   // Run cron to populate update status tables (if available) so that users
   // will be warned if they've installed an out of date Drupal version.
   // Will also trigger indexing of profile-supplied content or feeds.
@@ -869,4 +874,26 @@ function commons_update_3113() {
     variable_del('queue_default_class');
   }
   return array();
+}
+
+/*
+ * Automatically use field_title for all nodes instead of the node base title.
+ */
+function commons_update_3114() {
+  variable_set('title_node', array(
+    'auto_attach' => array('title' => 'title'),
+    'hide_label' => array('page' => 0, 'entity' => 0),
+  ));
+
+  foreach (node_type_get_types() as $node_type) {
+    // Set the title as "Replaced by title_field".
+    if (!title_field_replacement_enabled('node', $node_type->type, 'title')) {
+      title_field_replacement_toggle('node', $node_type->type, 'title');
+    }
+
+    // Migrate the titles to the title field.
+    title_field_replacement_batch_set('node', $node_type->type, 'title');
+  }
+
+  drupal_flush_all_caches();
 }
