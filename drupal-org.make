@@ -165,7 +165,7 @@ projects[flag][version] = "2.2"
 
 ; Issue #1965760: Manually set taxonomy term flag types because its different.
 ; http://drupal.org/node/1965760
-projects[flag][patch][] = "https://drupal.org/files/issues/1965760.28.flag_.entity-tokens.patch"
+projects[flag][patch][] = "https://drupal.org/files/issues/1965760.29.flag_.entity-tokens.patch"
 
 projects[flag_abuse][type] = "module"
 projects[flag_abuse][subdir] = "contrib"
