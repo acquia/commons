@@ -23,8 +23,8 @@ function commons_wikis_module_implements_alter(&$implementations, $hook) {
  * Implements hook_commons_bw_create_all_widget().
  */
 function commons_wikis_commons_bw_create_all_widget($group) {
-   if (og_user_access('node', $group->nid, 'create wiki content')) {
-      $link = l(t('Start a wiki'), 'node/add/wiki',
+  if (og_user_access('node', $group->nid, 'create wiki content')) {
+    $link = l(t('Start a wiki'), 'node/add/wiki',
       array('attributes' => array('class' => 'commons-wikis-create'), 'query' => array('og_group_ref' => $group->nid))
     );
     return array(
@@ -41,16 +41,13 @@ function commons_wikis_commons_bw_create_all_widget($group) {
  * Implements hook_menu_alter().
  */
 function commons_wikis_menu_alter(&$items) {
-  // Find all menu items that are related to viewing a revision and change the
+  // Alter the two node menu revision items and change the
   // access callback to our custom one.
-  foreach ($items as $route => $info) {
-    if (strpos($route, 'revisions') !== FALSE
-      && strpos($route, 'revert') === FALSE
-      && strpos($route, 'delete') === FALSE) {
-      $items[$route]['access arguments'][] = $items[$route]['access callback'];
-      $items[$route]['access callback'] = 'commons_wikis_user_revision_access';
-    }
-  }
+  $items['node/%node/revisions']['access arguments'][] = $items['node/%node/revisions']['access callback'];
+  $items['node/%node/revisions']['access callback'] = 'commons_wikis_user_revision_access';
+
+  $items['node/%node/revisions/%/view']['access arguments'][] = $items['node/%node/revisions']['access callback'];
+  $items['node/%node/revisions/%/view']['access callback'] = 'commons_wikis_user_revision_access';
 }
 
 /**
