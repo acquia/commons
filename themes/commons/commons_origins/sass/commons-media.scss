@@ -60,37 +60,6 @@ table[id^="field-media-values"] {
   }
 }
 
-// Override the default jQuery Dialog to match styles of Ember admin theme.
-.media-wrapper {
-  .ui-dialog-titlebar {
-    background: #303030;
-    padding: 1em 2.25em 0;
-    color: #cccccc;
-    box-sizing: border-box;
-    border:none;
-    @include border-radius(0px);
-
-    .ui-dialog-title {
-      font-size: 1.8em;
-      font-family: "Helvetica Neue", helvetica, "Segoe UI", segoe, "Ubuntu", "Droid Sans", "Arial", sans-serif;
-      font-weight: 200;
-      margin: 0;
-    }
-
-    .ui-dialog-titlebar-close {
-      position: absolute;
-      top: 1.5em;
-      right: 1em;
-
-      .ui-icon {
-        background-color: #ccc;
-        border: 1px solid #fff;
-        @include border-radius(2px);
-      }
-    }
-  }
-}
-
 .form-type-media {
   .preview {
     @include sprite_url_height_width($icons, picture);
@@ -110,6 +79,116 @@ table[id^="field-media-values"] {
       float: none;
       margin: 10px auto;
       width: 100%;
+    }
+  }
+}
+
+// Override the default jQuery Dialog to match styles of Ember admin theme.
+// Once commons has a native style built and the module is set to use Commons
+// Origins, this can be removed.
+.media-wrapper {
+  position: absolute;
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid #555555;
+  min-width: 100%;
+  max-width: 100%;
+  @include box-shadow(0 0 0 0.5625em rgba(0, 0, 0, 0.2));
+  @include box-sizing(border-box);
+
+  &,
+  .ui-corner-all {
+    @include border-radius(0);
+  }
+
+  .ui-dialog-title {
+    display: block;
+    margin: 0;
+    line-height: 1.5em;
+    font-size: 2.25em;
+    font-family: "Helvetica Neue", helvetica, "Segoe UI", segoe, "Ubuntu", "Droid Sans", "Arial", sans-serif;
+    font-weight: 200;
+  }
+
+  .ui-dialog-titlebar {
+    position: relative;
+    padding: 0.70711em 1em 0;
+    border: none;
+    color: #848484;
+    background: #303030;
+  }
+
+  .ui-dialog-titlebar-close {
+    position: absolute;
+    float: none;
+    display: block;
+    top: 0.35355em;
+    right: 0.35355em;
+    width: 1em;
+    height: 1em;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    line-height: 1em;
+    color: white;
+    background: none;
+    font-weight: normal;
+
+    &:hover {
+      text-decoration: none;
+      border: none;
+    }
+
+    &:before {
+      content: "\2715";
+    }
+  }
+
+  .ui-dialog-content {
+    position: relative;
+    border: 0;
+    background: none;
+    overflow: auto;
+    zoom: 1;
+  }
+
+  .ui-dialog-buttonpane {
+    text-align: left;
+    border-width: 1px 0 0 0;
+    background-image: none;
+    margin: .5em 0 0 0;
+    padding: .3em 1em .5em .4em;
+
+    .ui-dialog-buttonset {
+      float: right;
+    }
+
+    button {
+      margin: .5em .4em .5em 0;
+      cursor: pointer;
+    }
+  }
+
+  .ui-resizable-se {
+    width: 14px;
+    height: 14px;
+    right: 3px;
+    bottom: 3px;
+  }
+
+  .ui-draggable .ui-dialog-titlebar {
+    cursor: move;
+  }
+
+  @media (min-width: 22.85714em) {
+    min-width: 0;
+  }
+
+  @media (min-width: 28.57143em) {
+    .ui-dialog-titlebar {
+      padding-right: 2em;
+      padding-left: 2em;
     }
   }
 }
