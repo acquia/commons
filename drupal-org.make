@@ -395,7 +395,7 @@ projects[rate][patch][] = "https://drupal.org/files/issues/attach-rate-css-21808
 
 projects[realname][type] = "module"
 projects[realname][subdir] = "contrib"
-projects[realname][version] = "1.1"
+projects[realname][version] = "1.2"
 
 projects[redirect][type] = "module"
 projects[redirect][subdir] = "contrib"

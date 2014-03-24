@@ -10,3 +10,14 @@ function commons_profile_base_update_7000() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Replace tokens with their raw equivalents in user registration emails.
+ */
+function commons_profile_base_update_7001() {
+  $revert = array(
+    'commons_profile_base' => array('variable'),
+  );
+  features_revert($revert);
+  return array();
+}

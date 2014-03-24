@@ -32,3 +32,88 @@ function commons_profile_base_form_user_register_form_alter(&$form, &$form_state
 function commons_profile_base_menu_alter(&$items) {
   $items['user/register']['title'] = 'Sign up';
 }
+
+/**
+ * Implements hook_modules_enabled().
+ *
+ * Replace tokens with their raw equivalents in user registration emails.
+ */
+function commons_profile_base_modules_enabled($modules) {
+  if (in_array('realname', $modules)) {
+    features_revert(array('commons_profile_base' => array('variable')));
+  }
+}
+
+/**
+ * Implements hook_modules_disabled().
+ *
+ * Restore default user registration emails.
+ */
+function commons_profile_base_modules_disabled($modules) {
+  if (in_array('realname', $modules)) {
+    features_revert(array('commons_profile_base' => array('variable')));
+  }
+}
+
+/**
+ * Implements hook_strongarm_alter().
+ */
+function commons_profile_base_strongarm_alter(&$items) {
+  // The default user registration emails include tokens which display user
+  // names as realnames. Realnames cannot be used for logging in or resetting
+  // passwords which leads to confusion.
+  // Replace the tokens with their raw equivalents so user emails display
+  // usernames instead of realnames.
+  if (module_exists('realname')) {
+    if (isset($items['user_mail_register_admin_created_body'])) {
+      $items['user_mail_register_admin_created_body']->value = '[user:name-raw],
+
+A site administrator at [site:name] has created an account for you. You may now log in by clicking this link or copying and pasting it to your browser:
+
+[user:one-time-login-url]
+
+This link can only be used once to log in and will lead you to a page where you can set your password.
+
+After setting your password, you will be able to log in at [site:login-url] in the future using:
+
+username: [user:name-raw]
+password: Your password
+
+--  [site:name] team';
+    }
+    if (isset($items['user_mail_register_no_approval_required_body'])) {
+      $items['user_mail_register_no_approval_required_body']->value = '[user:name-raw],
+
+Thank you for registering at [site:name]. You may now log in by clicking this link or copying and pasting it to your browser:
+
+[user:one-time-login-url]
+
+This link can only be used once to log in and will lead you to a page where you can set your password.
+
+After setting your password, you will be able to log in at [site:login-url] in the future using:
+
+username: [user:name-raw]
+password: Your password
+
+--  [site:name] team';
+    }
+    if (isset($items['user_mail_status_activated_body'])) {
+      $items['user_mail_status_activated_body']->value = '[user:name],
+
+Your account at [site:name] has been activated.
+
+You may now log in by clicking this link or copying and pasting it into your browser:
+
+[user:one-time-login-url]
+
+This link can only be used once to log in and will lead you to a page where you can set your password.
+
+After setting your password, you will be able to log in at [site:login-url] in the future using:
+
+username: [user:name-raw]
+password: Your password
+
+--  [site:name] team';
+    }
+  }
+}
