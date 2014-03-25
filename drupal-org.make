@@ -246,7 +246,7 @@ projects[message_subscribe][subdir] = "contrib"
 projects[message_subscribe][download][type] = "git"
 projects[message_subscribe][download][url] = "http://git.drupal.org/project/message_subscribe.git"
 projects[message_subscribe][download][branch] = "7.x-1.x"
-projects[message_subscribe][download][revision] = "69408ef0afc243bb2ded5020cb5382f9ec5ef6b8"
+projects[message_subscribe][download][revision] = "d1775a0"
 
 projects[metatag][type] = "module"
 projects[metatag][subdir] = "contrib"
