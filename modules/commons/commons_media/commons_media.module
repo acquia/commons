@@ -189,3 +189,12 @@ function commons_media_ckeditor_profile_defaults_alter(&$profiles) {
     );
   }
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function commons_media_form_media_internet_add_alter(&$form, &$form_state, $form_id) {
+  if (isset($form['embed_code'])) {
+    $form['embed_code']['#description'] = t('Enter a URL or link to the media you would like to embed, such as a video or image. You can upload video from a range of providers, such as YouTube, Flickr or Vimeo.');
+  }
+}
