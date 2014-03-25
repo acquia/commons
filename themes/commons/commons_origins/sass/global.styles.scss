@@ -1508,54 +1508,8 @@ h1.node-title {
   }
 }
 
-/* Apply icons to row row types. */
-[class*="row-type-"] {
-  @include box-sizing(border-box);
-  padding-left: 20px;
-
-  &:before {
-    content: "";
-    float: left;
-    margin-top: .1em;
-    margin-left: -20px;
-  }
-}
-
-.row-type-event {
-  &:before {
-    @include sprite_url_height_width($icons, events);
-  }
-}
-.row-type-page {
-  &:before {
-    @include sprite_url_height_width($icons, docs);
-  }
-}
-
-.row-type-poll {
-  &:before {
-    @include sprite_url_height_width($icons, polls);
-  }
-}
-
-.row-type-post {
-  &:before {
-    @include sprite_url_height_width($icons, posts);
-  }
-}
-
-.row-type-question,
-.row-type-answer {
-  &:before {
-    @include sprite_url_height_width($icons, qa);
-  }
-}
-
-.row-type-wiki {
-  &:before {
-    @include sprite_url_height_width($icons, wikis);
-  }
-}
+// Load the post icon styles.
+@import 'post-icons';
 
 /* Titles fields */
 .views-field-title {

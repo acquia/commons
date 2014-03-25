@@ -1283,8 +1283,12 @@ function commons_origins_process_node(&$variables, $hook) {
   // the content type.
   if (variable_get('node_submitted_' . $node->type, TRUE)) {
     $node_type_info = node_type_get_type($variables['node']);
+    $type_attributes = array('class' => array(
+      'node-content-type',
+      drupal_html_class('node-content-type-' . $node->type),
+    ));
     $placeholders = array(
-      '!type' => '<span class="node-content-type">' . check_plain($node_type_info->name) . '</span>',
+      '!type' => '<span' . drupal_attributes($type_attributes) . '>' . check_plain($node_type_info->name) . '</span>',
       '!user' => $variables['name'],
       '!date' => $variables['date'],
       '@interval' => format_interval(REQUEST_TIME - $node->created),

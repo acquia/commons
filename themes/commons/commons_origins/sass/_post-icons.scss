@@ -1,0 +1,73 @@
+//
+// @file
+// Apply icons for various post types.
+//
+// Any new content types should be added to this file if it has a special icon.
+// Any new content types will have .row-type-[type] and
+// .node-content-type-[type] associated with them. New icons can be added to
+// the images/icons directory. The the name of the file sans the .png extension
+// is the name to feed to the sprite_url_height_width() mixin.
+//
+
+/* Apply icons to row row types. */
+[class*="row-type-"] {
+  @include box-sizing(border-box);
+  padding-left: 20px;
+
+  &:before {
+    content: "";
+    float: left;
+    margin-top: .1em;
+    margin-left: -20px;
+  }
+}
+
+.node-content-type:before {
+  content: "";
+}
+
+.row-type-event,
+.node-content-type-event {
+  &:before {
+    @include sprite_url_height_width($icons, events);
+  }
+}
+
+.row-type-page,
+.node-content-type-page,
+.row-type-document,
+.node-content-type-document {
+  &:before {
+    @include sprite_url_height_width($icons, icon-gray-docs);
+  }
+}
+
+.row-type-poll,
+.node-content-type-poll {
+  &:before {
+    @include sprite_url_height_width($icons, polls);
+  }
+}
+
+.row-type-post,
+.node-content-type-post {
+  &:before {
+    @include sprite_url_height_width($icons, posts);
+  }
+}
+
+.row-type-question,
+.row-type-answer,
+.node-content-type-question,
+.node-content-type-answer {
+  &:before {
+    @include sprite_url_height_width($icons, qa);
+  }
+}
+
+.row-type-wiki,
+.node-content-type-wiki {
+  &:before {
+    @include sprite_url_height_width($icons, wikis);
+  }
+}
