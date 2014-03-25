@@ -192,7 +192,7 @@ projects[kissmetrics][version] = "1.0-rc3"
 
 projects[l10n_update][type] = "module"
 projects[l10n_update][subdir] = "contrib"
-projects[l10n_update][version] = "1.0-beta3"
+projects[l10n_update][version] = "1.0-rc2"
 
 projects[libraries][type] = "module"
 projects[libraries][subdir] = "contrib"
