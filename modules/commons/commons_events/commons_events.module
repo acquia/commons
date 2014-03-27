@@ -60,6 +60,7 @@ function commons_events_theme($existing, $type, $theme, $path) {
     'commons_events_attending_event' => array(
       'variables' => array(
         'event' => NULL,
+        'attendee_count' => NULL,
       ),
       'file' => '/includes/commons_events.theme.inc',
     ),
@@ -182,16 +183,9 @@ function commons_events_date_popup_element_process($element, &$form_state, $form
  */
 function commons_events_entity_view_alter(&$build, $type) {
   if ($build['#entity_type'] == 'node' && $build['#bundle'] == 'event') {
-    $attendee_count = db_select('registration', 'r')
-      ->fields('r')
-      ->condition('entity_id', $build['#node']->nid)
-      ->condition('entity_type', 'node')
-      ->countQuery()
-      ->execute()
-      ->fetchField();
-    $build['attendee_count'] = $attendee_count;
+
     $build['attending'] = array(
-      0 => theme('commons_events_attending_event', array('event' => $build['#node'], 'attendee_count' => $attendee_count)),
+      0 => theme('commons_events_attending_event', array('event' => $build['#node'], 'attendee_count' => commons_events_get_raw_attendee_count($build['#node']))),
       '#weight' => -10,
     );
     $vars = array(
@@ -373,8 +367,8 @@ function commons_events_token_info_alter(&$tokens) {
  * Implements hook_commons_bw_create_all_widget().
  */
 function commons_events_commons_bw_create_all_widget($group) {
-   if (og_user_access('node', $group->nid, 'create event content')) {
-      $link = l(t('List an event'),'node/add/event',
+  if (og_user_access('node', $group->nid, 'create event content')) {
+    $link = l(t('List an event'),'node/add/event',
       array('attributes' => array('class' => 'commons-events-create'), 'query' => array('og_group_ref' => $group->nid))
     );
     return array(
@@ -396,7 +390,7 @@ function commons_events_tokens($type, $tokens, array $data = array(), array $opt
     $event = $data['node'];
     foreach ($tokens as $name => $original) {
       if ($name == 'attend-form') {
-        $replacements[$original] = theme('commons_events_attending_event', array('event' => $event));
+        $replacements[$original] = theme('commons_events_attending_event', array('event' => $event, 'attendee_count' => commons_events_get_raw_attendee_count($event)));
       }
     }
   }
@@ -597,4 +591,19 @@ function commons_events_event_type_disabled($node) {
     return TRUE;
   }
   return FALSE;
+}
+
+/**
+ * Helper function go get the raw number of attendees.
+ */
+function commons_events_get_raw_attendee_count($node) {
+  $attendee_count = db_select('registration', 'r')
+    ->fields('r')
+    ->condition('entity_id', $node->nid)
+    ->condition('entity_type', 'node')
+    ->countQuery()
+    ->execute()
+    ->fetchField();
+
+  return $attendee_count;
 }
