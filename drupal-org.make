@@ -171,6 +171,13 @@ projects[flag_abuse][type] = "module"
 projects[flag_abuse][subdir] = "contrib"
 projects[flag_abuse][version] = "2.0-alpha2"
 
+projects[gravatar][type] = "module"
+projects[gravatar][subdir] = "contrib"
+projects[gravatar][download][type] = "git"
+projects[gravatar][download][url] = "http://git.drupal.org/project/gravatar.git"
+projects[gravatar][download][branch] = "7.x-1.x"
+projects[gravatar][download][revision] = "bb2f81e6"
+
 projects[http_client][type] = "module"
 projects[http_client][subdir] = "contrib"
 projects[http_client][version] = "2.4"
