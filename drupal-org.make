@@ -159,6 +159,10 @@ projects[file_entity][type] = "module"
 projects[file_entity][subdir] = "contrib"
 projects[file_entity][version] = "2.0-alpha3"
 
+; Issue #2081713: Fix undefined index errors with empty (remote) files.
+; https://drupal.org/node/2081713
+projects[file_entity][patch][] = "https://drupal.org/files/issues/add-filesize-checks-2081713-13.patch"
+
 projects[flag][type] = "module"
 projects[flag][subdir] = "contrib"
 projects[flag][version] = "2.2"
