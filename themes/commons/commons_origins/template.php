@@ -50,6 +50,20 @@ function commons_origins_commons_utility_links_alter(&$element) {
 }
 
 /**
+ * Implements hook_preprocess_media_oembed().
+ */
+function commons_origins_preprocess_media_oembed(&$variables) {
+  $content = $variables['content'];
+  $type = $variables['type'];
+
+  // Video and rich type must have HTML content.
+  // Wrap the HTML content in a <div> to allow it to be made responsive.
+  if (in_array($type, array('video', 'rich'))) {
+    $variables['content'] = '<div class="oembed">' . $content . '</div>';
+  }
+}
+
+/**
  * Implements hook_preprocess_search_result().
  */
 function commons_origins_preprocess_search_result(&$variables, $hook) {
