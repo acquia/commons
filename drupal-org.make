@@ -531,7 +531,10 @@ projects[adaptivetheme][patch][] = "https://drupal.org/files/issues/add-link-but
 
 projects[ember][type] = "theme"
 projects[ember][subdir] = "contrib"
-projects[ember][version] = "2.0-alpha2"
+projects[ember][download][type] = "git"
+projects[ember][download][url] = "http://git.drupal.org/project/ember.git"
+projects[ember][download][branch] = "7.x-2.x"
+projects[ember][download][revision] = "caf4df7"
 
 projects[sky][type] = "theme"
 projects[sky][subdir] = "contrib"
