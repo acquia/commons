@@ -897,3 +897,14 @@ function commons_update_3114() {
 
   drupal_flush_all_caches();
 }
+
+/*
+ * Replace the oEmbed module with the Media: oEmbed module.
+ */
+function commons_update_3115() {
+  if (module_exists('oembed')) {
+    module_disable(array('oembed'));
+  }
+  module_enable(array('media_oembed'));
+  return array();
+}

@@ -224,6 +224,10 @@ projects[media][download][revision] = "9583d89"
 ; https://drupal.org/comment/8570379#comment-8570379
 projects[media][patch][] = "https://drupal.org/files/issues/automatically-attach-files-2216329-2.patch"
 
+projects[media_oembed][type] = "module"
+projects[media_oembed][subdir] = "contrib"
+projects[media_oembed][version] = "2.0"
+
 projects[memcache][type] = "module"
 projects[memcache][subdir] = "contrib"
 projects[memcache][version] = "1.0"
@@ -285,13 +289,6 @@ projects[oauthconnector][download][type] = "git"
 projects[oauthconnector][download][url] = "http://git.drupal.org/project/oauthconnector.git"
 projects[oauthconnector][download][branch] = "7.x-1.x"
 projects[oauthconnector][download][revision] = "42c6f66"
-
-projects[oembed][type] = "module"
-projects[oembed][subdir] = "contrib"
-projects[oembed][download][type] = "git"
-projects[oembed][download][url] = "http://git.drupal.org/project/oembed.git"
-projects[oembed][download][branch] = "7.x-1.x"
-projects[oembed][download][revision] = "9aa5303"
 
 projects[og][type] = "module"
 projects[og][subdir] = "contrib"
