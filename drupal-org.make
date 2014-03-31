@@ -236,6 +236,10 @@ projects[media_oembed][version] = "2.0"
 ; https://drupal.org/node/2227909
 projects[media_oembed][patch][] = "https://drupal.org/files/issues/disable-noembed-provider-2227909-1.patch"
 
+; Improve thumbnail performance and prevent errors.
+; https://drupal.org/node/2230007
+projects[media_oembed][patch][] = "https://drupal.org/files/issues/store-thumbnail-with-file-2230007-1.patch"
+
 projects[memcache][type] = "module"
 projects[memcache][subdir] = "contrib"
 projects[memcache][version] = "1.0"
