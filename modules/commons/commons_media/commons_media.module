@@ -187,7 +187,7 @@ function commons_media_ckeditor_profile_defaults_alter(&$profiles) {
 function commons_media_form_file_entity_add_upload_alter(&$form, &$form_state, $form_id) {
   // Automatically upload selected files.
   if ($form['#step'] == 1) {
-    $form['#attached']['js'][] = drupal_get_path('module', 'commons_media') . '/commons_media.js';
+    $form['#attached']['js'][] = drupal_get_path('module', 'commons_media') . '/commons_media_autoupload.js';
   }
 }
 
