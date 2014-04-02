@@ -220,8 +220,10 @@ function commons_media_entity_presave($entity, $type) {
     return;
   }
 
+  list($entity_id, $entity_vid, $entity_bundle) = entity_extract_ids($type, $entity);
+
   // Only proceed if the entity has been configured as group content.
-  if (!og_is_group_content_type($type, $entity->type)) {
+  if (!og_is_group_content_type($type, $entity_bundle)) {
     return;
   }
 

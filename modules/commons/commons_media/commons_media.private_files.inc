@@ -33,15 +33,15 @@ function _commons_media_filter_add_file_usage_from_fields($entity_type, $entity)
     return;
   }
 
-  // Only proceed if the entity has been configured as group content.
-  if (!og_is_group_content_type($entity_type, $entity->type)) {
-    return;
-  }
-
   // Track the total usage for files from all fields combined.
   $entity_files = commons_media_entity_field_count_files($entity_type, $entity);
 
   list($entity_id, $entity_vid, $entity_bundle) = entity_extract_ids($entity_type, $entity);
+
+  // Only proceed if the entity has been configured as group content.
+  if (!og_is_group_content_type($entity_type, $entity_bundle)) {
+    return;
+  }
 
   // Ensure that the private file system is used when attaching files to private
   // group content.
