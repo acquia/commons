@@ -5,10 +5,12 @@ Feature: General functionality
     Then I should see "Access denied. You must log in to view this page."
     And I should not see "Add content"
 
+  @javascript
   Scenario: Anonymous users cannot create groups
     Given I am on "/groups"
     And I should not see "Create a group"
 
+  @javascript
   Scenario: Anonymous users cannot create events
     Given I am on "/events"
     And I should not see "List an event"
@@ -18,6 +20,7 @@ Feature: General functionality
     Given I am on "/user/1"
     Then I should see "admin"
 
+  @javascript
   Scenario: Anonymous users can see the Commons footer
     Given I am on "/"
     Then I should see "A Commons Community, powered by Acquia"
