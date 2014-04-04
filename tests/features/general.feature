@@ -1,4 +1,5 @@
 Feature: General functionality
+  @javascript
   Scenario: Anonymous users cannot create content
     Given I am on "/node/add"
     Then I should see "Access denied. You must log in to view this page."
@@ -12,6 +13,7 @@ Feature: General functionality
     Given I am on "/events"
     And I should not see "List an event"
 
+  @javascript
   Scenario: Anonymous users can view user profiles
     Given I am on "/user/1"
     Then I should see "admin"
@@ -20,12 +22,14 @@ Feature: General functionality
     Given I am on "/"
     Then I should see "A Commons Community, powered by Acquia"
 
+  @javascript
   Scenario: Anonymous users can create new accounts
     Given I am on "/user/register"
     And for "mail" I enter "newuser@example.com"
     When I press "Sign up"
     Then I should see "A welcome message with further instructions has been sent to your e-mail address."
 
+  @javascript
   Scenario: Anonymous users can view a listing of public groups
     Given I am on "/groups"
     Then I should see "Groups"
