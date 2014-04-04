@@ -80,6 +80,7 @@ function commons_search_solr_user_apachesolr_search_page_alter(&$build, $search_
 
     // First check to see if the flagged key is set. If so we don't want to query
     // Using EFQ because flags aren't entities.
+    $limit = isset($search_page['settings']['apachesolr_search_per_page']) ? $search_page['settings']['apachesolr_search_per_page'] : 12;
     $out_results = array();
     if (isset($_GET['flagged']) && $flagged = check_plain($_GET['flagged'])) {
       // Get the count of flagged users for a particular account
@@ -87,10 +88,10 @@ function commons_search_solr_user_apachesolr_search_page_alter(&$build, $search_
         ->fields('f', array('content_id', 'uid'))
         ->condition('f.content_type','user','=')
         ->condition('f.uid',$user->uid,'=')
-        ->extend('PagerDefault')->limit(12)
+        ->extend('PagerDefault')->limit($limit)
         ->addTag('commons_search_solr_user_people')
         ->execute();
-      while($record = $fl_results->fetchAssoc()) {
+      while ($record = $fl_results->fetchAssoc()) {
         $out_results[] = user_view(user_load($record['content_id']), 'search_results');
       }
       $build['pager'] = array('#theme' => 'pager');
@@ -102,10 +103,11 @@ function commons_search_solr_user_apachesolr_search_page_alter(&$build, $search_
       $users = new EntityFieldQuery();
       $results = $users->entityCondition('entity_type', 'user')
         ->propertyCondition('status', 1)
-        ->pager(12, 1)
+        ->addTag('commons_search_solr_user_people')
+        ->pager($limit, 1)
         ->execute();
       $user_ids = array_keys($results['user']);
-      foreach($user_ids AS $uid) {
+      foreach ($user_ids as $uid) {
         $out_results[] = user_view(user_load($uid), 'search_results');($user_ids);
       }
       $build['pager'] = array(
