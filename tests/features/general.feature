@@ -25,6 +25,13 @@ Feature: General functionality
     Given I am on "/"
     Then I should see "A Commons Community, powered by Acquia"
 
+  Scenario: Admin user is able to login
+    Given I am on "/user"
+    When I fill in "admin" for "edit-name"
+    And I fill in "commons" for "edit-pass"
+    And I press "Log in"
+    Then I should see "Log out"
+
   @javascript
   Scenario: Anonymous users can create new accounts
     Given I am on "/user/register"
