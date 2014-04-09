@@ -115,7 +115,7 @@ function commons_follow_ui_tab_title($account, $flag_name = NULL, $count = 0) {
 
   if (!$flag_name) {
     // We are inside /message-subscribe so get the first flag.
-    $flag_name = key(message_subscribe_flag_get_flags());
+    $flag_name = key(message_subscribe_flag_get_flags(NULL, NULL, $account, FALSE));
   }
   $flag = flag_get_flag($flag_name);
 
@@ -132,7 +132,7 @@ function commons_follow_ui_tab_title($account, $flag_name = NULL, $count = 0) {
  */
 function commons_follow_ui_generate_tabs($account) {
   $tabs = array();
-  foreach (array_keys(message_subscribe_flag_get_flags()) as $flag_name) {
+  foreach (array_keys(message_subscribe_flag_get_flags(NULL, NULL, $account, FALSE)) as $flag_name) {
     if ($view = message_subscribe_ui_get_view($account, $flag_name)) {
 
       // We have to do some 'verbose' view loading here, otherwise we will get a
@@ -154,12 +154,19 @@ function commons_follow_ui_generate_tabs($account) {
       'contents' => array('#markup' => $preview),
     );
   }
-  $settings = array(
-    'style' => 'Commons Tabs',
-    'ajax' => FALSE, 'html' => TRUE,
-    'title' => 'test',
-    'default_tab' => 'commons_follow_group',
-  );
-  $built_tabs = quicktabs_build_quicktabs('commons_follow_ui', $settings, $tabs);
-  return $built_tabs;
+
+  if (!empty($tabs)) {
+    $settings = array(
+      'style' => 'Commons Tabs',
+      'ajax' => FALSE,
+      'html' => TRUE,
+      'title' => 'test',
+      'default_tab' => 'commons_follow_group',
+    );
+    $built_tabs = quicktabs_build_quicktabs('commons_follow_ui', $settings, $tabs);
+    return $built_tabs;
+  }
+  else {
+    return array();
+  }
 }
