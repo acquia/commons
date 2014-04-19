@@ -1,70 +1,117 @@
 language: php
 
 php:
-  - 5.5
   - 5.4
-  - 5.3
 
-
-notifications:
-  email:
-    - commons-bulk@acquia.com
-
-branches:
-  only:
-    - 7.x-3.x
-
-# This will create the database
 mysql:
-  database: commons
+  database: drupal
   username: root
   encoding: utf8
 
-# To be able to run a webbrowser
-# If we need anything more powerful
-# than e.g. phantomjs
-before_install:
-  - "pwd"
-  - "sudo apt-get update"
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - "wget http://selenium.googlecode.com/files/selenium-server-standalone-2.35.0.jar -O $TRAVIS_BUILD_DIR/selenium-server-standalone.jar"
-  - "java -jar $TRAVIS_BUILD_DIR/selenium-server-standalone.jar > /dev/null &"
-  - ruby -rsocket -e "up = false; 60.times {|i| sleep 1; exit(0) if up; up = TCPSocket.new('127.0.0.1', 4444).close.nil? rescue false}; exit(1)"
-  # Make sure Selenium is up
-  - curl http://localhost:4444/wd/hub
-  # For uploading error screenshots
-  - "wget http://imgur.com/tools/imgurbash.sh -O $TRAVIS_BUILD_DIR/imgurbash.sh && chmod +x $TRAVIS_BUILD_DIR/imgurbash.sh"
+env:
+  - UPGRADE=none
+
+install:
+  # Add the Google Chrome packages.
+  - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+  - sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+  - sudo apt-get update > /dev/null
+
+  # Create a database for our Drupal site.
+  - "mysql -e 'create database drupal;'"
+
+  # Install the latest Drush 6.
+  - export PATH="$HOME/.composer/vendor/bin:$PATH"
+  - composer global require --prefer-source --no-interaction drush/drush:6.*
+
+  # Build Behat dependencies
+  - cd ./tests/behat
+  - composer install --prefer-source --no-interaction
+  - cd ../../../
+
+  # Rename the repository folder to 'commons' (to accommodate different repository names).
+  - REPO_NAME=`basename $TRAVIS_REPO_SLUG`
+  - mv $REPO_NAME commons
+
+  # Build Codebase
+  - mkdir profiles
+  - mv commons profiles/
+  - mkdir drupal
+  - mv profiles drupal/
+
+  # Test the current branch
+  - cd drupal
+  - drush make --yes profiles/commons/drupal-org-core.make --prepare-install
+  - drush make --yes profiles/commons/drupal-org.make --no-core --contrib-destination=profiles/commons
+  - mkdir sites/default/private
+  - mkdir sites/default/private/files
+  - mkdir sites/default/private/temp
+  - cd ../
+
+  # Download an old version to test upgrading from.
+  - if [[ "$UPGRADE" != none ]]; then drush dl commons-$UPGRADE; fi
+
+  # Setup files
+  - sudo chmod -R 777 drupal/sites/all
+
+  # Setup display for Selenium
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - sleep 5
+
+  # Get Chrome and ChromeDriver
+  - sudo apt-get install google-chrome-stable
+  - wget http://chromedriver.storage.googleapis.com/2.9/chromedriver_linux64.zip
+  - unzip -a chromedriver_linux64.zip
+
+  # Insane hack from jsdevel:
+  #   https://github.com/jsdevel/travis-debugging/blob/master/shim.bash
+  # This allows chrome-sandbox to work in side of OpenVZ, because I can't
+  # figure out how to start chrome with --no-sandbox.
+  - export CHROME_SANDBOX=/opt/google/chrome/chrome-sandbox
+  - sudo rm -f $CHROME_SANDBOX
+  - sudo wget https://googledrive.com/host/0B5VlNZ_Rvdw6NTJoZDBSVy1ZdkE -O $CHROME_SANDBOX
+  - sudo chown root:root $CHROME_SANDBOX; sudo chmod 4755 $CHROME_SANDBOX
+  - sudo md5sum $CHROME_SANDBOX
+
+  # Get Selenium
+  - wget http://selenium-release.storage.googleapis.com/2.41/selenium-server-standalone-2.41.0.jar
+  - java -jar selenium-server-standalone-2.41.0.jar -Dwebdriver.chrome.driver=`pwd`/chromedriver > /dev/null 2>&1 &
+  - sleep 5
+ 
+  # Disable sendmail
+  - echo sendmail_path=`which true` >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 before_script:
-  # Grab drush
-  - pear channel-discover pear.drush.org
-  - pear install drush/drush
-  - phpenv rehash
-  # LAMP package installation (mysql is already started)
-  - sudo apt-get install -y --force-yes apache2 libapache2-mod-php5 php5-mysql php5-curl
-  # Apache webserver configuration
-  - sudo sed -i -e "s,/var/www,$(pwd)/packaged,g" /etc/apache2/sites-available/default
-  - sudo a2enmod rewrite
-  - sudo a2enmod actions
-  - sudo service apache2 restart
-  # Install the composer packages for behat / ...
-  - composer --working-dir=tests/ install
-script:
-  # Build distro from makefile
-  - drush make build-commons.make --no-cache -y packaged
-  # Site installation. We're doing the cd-dance because drush -r throws an exception for me currently.
-  - cd packaged
-  - drush -v site-install --db-url=mysql://root@localhost/commons --site-name=QASite --account-name=admin --account-pass=commons --account-mail=admin@example.com --site-mail=site@example.com -v -y commons commons_anonymous_welcome_text_form.commons_anonymous_welcome_title="Oh hai" commons_anonymous_welcome_text_form.commons_anonymous_welcome_body="No shirts, no shoes, no service." commons_create_first_group.commons_first_group_title="Internet People" commons_create_first_group.commons_first_group_body="This is the first group on the page."
-  - cd ..
-  # Make sure the installed site responds
-  - curl localhost
-  # And let's see how fast it responds on the 2nd request
-  - time curl http://localhost/ -s -o /dev/null
-  # Start running the tests
-  - cd tests
-  - bin/behat
 
-after_failure:
-  - ls -lash $TRAVIS_BUILD_DIR/fail*.png
-  - $TRAVIS_BUILD_DIR/imgurbash.sh $TRAVIS_BUILD_DIR/fail*.png
+  # Do the site install (either the current revision or old for the upgrade).
+  - if [[ "$UPGRADE" == none ]]; then cd drupal; else cd commons-$UPGRADE; fi
+  - drush si commons --db-url=mysql://root:@127.0.0.1/drupal --account-name=admin --account-pass=admin --account-mail=admin@test.com --site-mail=noreply@test.com --site-name="Commons" --yes
+  - drush vset -y file_private_path "sites/default/private/files"
+  - drush vset -y file_temporary_path "sites/default/private/temp"
+  - cd ../drupal
+
+  # If we're an upgrade test, run the upgrade process.
+  - if [[ "$UPGRADE" != none ]]; then cp -a ../commons-$UPGRADE/sites/default/* sites/default/ && drush updb --yes; fi
+
+  - drush runserver --server=builtin 8888 > /dev/null 2>&1 &
+  - SERVER_PID=$!
+  - sleep 3
+  - cd profiles/commons/tests/behat
+
+  # Make the Travis tests repos agnostic by injecting drupal_root with BEHAT_PARAMS
+  - BUILD_OWNER=`dirname $TRAVIS_BUILD_DIR`
+  - export BEHAT_PARAMS="extensions[Drupal\\DrupalExtension\\Extension][drupal][drupal_root]=$BUILD_OWNER/drupal"
+
+script:
+
+  # First, run all the tests in Firefox.
+  - ./bin/behat --config behat.travis.yml
+ 
+  # Then run some Chrome-only tests.
+  - ./bin/behat --config behat.travis.yml -p chrome
+
+after_script:
+
+  # Stop the webserver so that it's not still running when MySQL is stopped.
+  - kill $SERVER_PID

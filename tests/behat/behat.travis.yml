@@ -1,0 +1,29 @@
+default:
+  paths:
+    features: 'features'
+  filters:
+    tags: "~@chrome"
+  extensions:
+    Behat\MinkExtension\Extension:
+      goutte: ~
+      selenium2: ~
+      base_url: http://127.0.0.1:8888
+      files_path: ../../
+    Drupal\DrupalExtension\Extension:
+      blackbox: ~
+      drush:
+        alias: self
+      # This will be setup by .travis.yml like so:
+      # export BEHAT_PARAMS="extensions[Drupal\\DrupalExtension\\Extension][drupal][drupal_root]=$DRUPAL_ROOT"
+      #drupal:
+      #  drupal_root: "/path/to/drupal/root"
+
+# Setup for Google Chrome only tests.
+chrome:
+  filters:
+    tags: "@chrome"
+  extensions:
+    Behat\MinkExtension\Extension:
+      selenium2:
+        browser: chrome
+        capabilities: {"browser": "chrome", "browserName": "chrome", "browserVersion": "ANY", "version": "ANY"}
