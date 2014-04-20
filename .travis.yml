@@ -115,3 +115,15 @@ after_script:
 
   # Stop the webserver so that it's not still running when MySQL is stopped.
   - kill $SERVER_PID
+
+notifications:
+  email:
+    recipients:
+      - commons-bulk@acquia.com
+    on_success: change
+    on_failure: always
+  irc:
+    channels:
+      - "chat.freenode.net#drupal-commons"
+    on_success: change
+    on_failure: always
