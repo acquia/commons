@@ -230,15 +230,7 @@ projects[media][patch][] = "https://drupal.org/files/issues/automatically-attach
 
 projects[media_oembed][type] = "module"
 projects[media_oembed][subdir] = "contrib"
-projects[media_oembed][version] = "2.0"
-
-; Disable the Noembed provider.
-; https://drupal.org/node/2227909
-projects[media_oembed][patch][] = "https://drupal.org/files/issues/disable-noembed-provider-2227909-1.patch"
-
-; Improve thumbnail performance and prevent errors.
-; https://drupal.org/node/2230007
-projects[media_oembed][patch][] = "https://drupal.org/files/issues/store-thumbnail-with-file-2230007-1.patch"
+projects[media_oembed][version] = "2.1"
 
 projects[memcache][type] = "module"
 projects[memcache][subdir] = "contrib"
