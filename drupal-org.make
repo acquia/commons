@@ -173,7 +173,7 @@ projects[flag][patch][] = "https://drupal.org/files/issues/1965760.29.flag_.enti
 
 projects[flag_abuse][type] = "module"
 projects[flag_abuse][subdir] = "contrib"
-projects[flag_abuse][version] = "2.0-alpha2"
+projects[flag_abuse][version] = "2.0"
 
 projects[gravatar][type] = "module"
 projects[gravatar][subdir] = "contrib"
