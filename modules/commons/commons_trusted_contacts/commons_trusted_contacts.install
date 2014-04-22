@@ -69,3 +69,12 @@ function commons_trusted_contacts_update_3101() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Set the limit for trusted contacts to unlimited for existing sites.
+ */
+function commons_trusted_contacts_update_3102() {
+
+  variable_set('commons_trusted_contacts_limit', 0);
+  return array();
+}

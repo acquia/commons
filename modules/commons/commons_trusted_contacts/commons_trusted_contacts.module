@@ -195,6 +195,24 @@ function commons_trusted_contacts_module_implements_alter(&$implementations, $ho
 }
 
 /**
+ * Implements hook_form_user_admin_settings_alter().
+ */
+function commons_trusted_contacts_form_user_admin_settings_alter(&$form, &$form_state) {
+  $form['commons_trusted_contacts'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Commons Trusted Contacts'),
+    '#weight' => 0,
+    '#description' => t("Important! Lowering this number will restrict users over the new limit from adding or approving any trusted contacts until they go below it."),
+  );
+  $form['commons_trusted_contacts']['commons_trusted_contacts_limit'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Maximum number of trusted contacts per user'),
+    '#default_value' => variable_get('commons_trusted_contacts_limit', 1000),
+    '#description' => t('This setting defaults to 1000 maximum contacts for performance reasons, and should be sufficient for most sites. Set to 0 for no limit.'),
+  );
+}
+
+/**
  * Implements hook_form_alter().
  */
 function commons_trusted_contacts_form_alter(&$form, &$form_state, $form_id) {
@@ -592,16 +610,20 @@ function commons_trusted_contacts_og_membership_delete(OgMembership $og_membersh
  */
 function commons_trusted_contacts_request_trust($account, $ajax) {
   global $user;
+  $requestor = $user;
 
   if ($account->uid == $user->uid) {
     // Users cannot join their own group.
+    return;
+  }
+  if (!commons_trusted_contacts_check_limit($requestor, $account, $ajax)) {
     return;
   }
 
   // This actually adds 2 OG memberships - one for each user.
   $og_membership = og_group('user', $account, array(
     'field_name' => 'user_trusted_contacts',
-    'state' => OG_STATE_PENDING
+    'state' => OG_STATE_PENDING,
   ));
 
   // Notify.
@@ -615,11 +637,11 @@ function commons_trusted_contacts_request_trust($account, $ajax) {
   );
   $message = message_create('trusted_contact_request_pending', array(
     'uid' => $account->uid,
-    'arguments' => $arguments
+    'arguments' => $arguments,
   ));
 
   $wrapper = entity_metadata_wrapper('message', $message);
-  $wrapper->field_requesting_user->set($user);
+  $wrapper->field_requesting_user->set($requestor);
   $wrapper->save();
 
   message_notify_send_message($message);
@@ -692,15 +714,19 @@ function commons_trusted_contacts_approve_trust(OgMembership $og_membership) {
     return;
   }
 
+  // Get approving user.
+  $account = user_load($og_membership->gid);
+
+  if (!commons_trusted_contacts_check_limit($account, $og_membership->etid)) {
+    return;
+  }
+
   // This actually changes both OG memberships - one for each user.
   $wrapper = entity_metadata_wrapper('og_membership', $og_membership);
   $wrapper->state->set(OG_STATE_ACTIVE);
   $wrapper->save();
 
   // Notify.
-
-  // Get approving user.
-  $account = user_load($og_membership->gid);
 
   $message = message_create('trusted_contact_request_approved', array('uid' => $og_membership->etid));
 
@@ -738,6 +764,75 @@ function commons_trusted_contacts_ignore_trust(OgMembership $og_membership) {
 
   // Redirect to Invitations screen.
   drupal_goto('user/' . $user->uid . '/contacts', array('query' => array('qt-commons_trusted_contacts' => 'invitations')));
+}
+
+/**
+ * Internal check to see if a user or its contact has gone over the limit.
+ *
+ * @param $requestor The current user checking the limit.
+ * @param $requestee The user of the other side of the relationship.
+ * @param bool $ajax To use ajax or not.
+ * @return bool - False for over the limit, True for under the limit.
+ */
+function commons_trusted_contacts_check_limit($requestor, $requestee, $ajax = FALSE) {
+  // Validate that neither the requesting user nor the target user has exceeded
+  // her trusted contacts limit.
+  if ($contacts_limit = variable_get('commons_trusted_contacts_limit', 1000)) {
+    $requestor_groups = og_get_entity_groups('user', $requestor, array(OG_STATE_ACTIVE), 'user_trusted_contacts');
+    $requestee_groups = og_get_entity_groups('user', $requestee, array(OG_STATE_ACTIVE), 'user_trusted_contacts');
+
+    // This should always be set, because the user is a member of their own group.
+    // But we know funky things can happen, so lets add a check just in case.
+    $requestor_memberships = $requestor_groups['user'] ? count($requestor_groups['user']) : 0;
+    $requestee_memberships = $requestee_groups['user'] ? count($requestee_groups['user']) : 0;
+
+    $message = '';
+    $exceeds_limit = FALSE;
+
+    // We use greater than because the membership count includes the user.
+    if ($requestor_memberships > $contacts_limit) {
+      $exceeds_limit = TRUE;
+
+      drupal_set_message(
+        t('You have exceeded the limit of @limit trusted contacts. Before you can add more contacts, you must <a href="@remove-contacts-links">remove some of your existing contacts.</a>',
+          array(
+            '@limit' => $contacts_limit,
+            '@remove-contacts-link' => url('user/' . $requestor->uid . '/contacts',
+              array(
+                'query' => array(
+                  'qt-commons_trusted_contacts' => 'contacts',
+                ),
+                'fragment' => 'qt-commons_trusted_contacts',
+              )
+            ),
+          )
+        )
+      );
+    }
+    if ($requestee_memberships > $contacts_limit) {
+      $exceeds_limit = TRUE;
+
+      drupal_set_message(t('@requestee has exceeded the limit of @limit trusted contacts and cannot accept any more contacts at this time.',
+        array(
+          '@requestee' => $requestee->name,
+          '@limit' => $contacts_limit,
+        ))
+      );
+    }
+    if ($exceeds_limit) {
+      if ($ajax == 'ajax') {
+        $commands = array();
+        $commands[] = ajax_command_append('#messages', theme('status_messages'));
+        $page = array('#type' => 'ajax', '#commands' => $commands);
+        ajax_deliver($page);
+      }
+      else {
+        drupal_goto();
+      }
+      return FALSE;
+    }
+  }
+  return TRUE;
 }
 
 /**
