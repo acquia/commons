@@ -84,10 +84,7 @@ projects[ctools][version] = "1.4"
 
 projects[custom_search][type] = "module"
 projects[custom_search][subdir] = "contrib"
-projects[custom_search][download][type] = "git"
-projects[custom_search][download][url] = "http://git.drupal.org/project/custom_search.git"
-projects[custom_search][download][branch] = "7.x-1.x"
-projects[custom_search][download][revision] = "20144e64494c83a448067d587e59df5d7e4780bb"
+projects[custom_search][version] = "1.16"
 
 ; Avoid akward sanitization of user-entered search strings.
 ; https://drupal.org/node/2012210
@@ -121,7 +118,7 @@ projects[elements][version] = "1.4"
 
 projects[email_registration][type] = "module"
 projects[email_registration][subdir] = "contrib"
-projects[email_registration][version] = "1.1"
+projects[email_registration][version] = "1.2"
 
 projects[entity][type] = "module"
 projects[entity][subdir] = "contrib"
@@ -141,7 +138,7 @@ projects[entityreference][version] = "1.1"
 
 projects[entityreference_prepopulate][type] = "module"
 projects[entityreference_prepopulate][subdir] = "contrib"
-projects[entityreference_prepopulate][version] = "1.4"
+projects[entityreference_prepopulate][version] = "1.5"
 
 projects[entity_translation][type] = "module"
 projects[entity_translation][subdir] = "contrib"
@@ -258,10 +255,7 @@ projects[message_notify][version] = "2.5"
 
 projects[message_subscribe][type] = "module"
 projects[message_subscribe][subdir] = "contrib"
-projects[message_subscribe][download][type] = "git"
-projects[message_subscribe][download][url] = "http://git.drupal.org/project/message_subscribe.git"
-projects[message_subscribe][download][branch] = "7.x-1.x"
-projects[message_subscribe][download][revision] = "d1775a0"
+projects[message_subscribe][version] = "1.0-rc2"
 
 projects[metatag][type] = "module"
 projects[metatag][subdir] = "contrib"
@@ -303,7 +297,9 @@ projects[oembed][download][revision] = "9aa5303"
 
 projects[og][type] = "module"
 projects[og][subdir] = "contrib"
-projects[og][version] = "2.5"
+projects[og][download][url] = "http://git.drupal.org/project/og.git"
+projects[og][download][branch] = "7.x-2.x"
+projects[og][download][revision] = "10647461ce6"
 
 ; Auto-assign role to group manager broken on groups with overridden roles.
 ; https://drupal.org/node/2005800#comment-7684873
@@ -390,11 +386,7 @@ projects[radioactivity][subdir] = "contrib"
 projects[radioactivity][download][type] = "git"
 projects[radioactivity][download][url] = "http://git.drupal.org/project/radioactivity.git"
 projects[radioactivity][download][branch] = "7.x-2.x"
-projects[radioactivity][download][revision] = "aee21dbed4f54d0e626e3c19ecc550bf1ec656f6"
-
-; Radioactivity not compatible with Memcache module.
-; http://drupal.org/node/1860216
-projects[radioactivity][patch][] = "http://drupal.org/files/radioactivity-memcache.patch"
+projects[radioactivity][download][revision] = "e3705c6ce9f07ec58fc6b7c66f39eb4f2fc51b68"
 
 projects[rate][type] = "module"
 projects[rate][subdir] = "contrib"
@@ -442,7 +434,7 @@ projects[search_facetapi][version] = "1.0-beta2"
 
 projects[sharethis][type] = "module"
 projects[sharethis][subdir] = "contrib"
-projects[sharethis][version] = "2.5"
+projects[sharethis][version] = "2.6"
 
 projects[smartcrop][type] = "module"
 projects[smartcrop][subdir] = "contrib"
@@ -522,15 +514,7 @@ projects[adaptivetheme][subdir] = "contrib"
 projects[adaptivetheme][download][type] = "git"
 projects[adaptivetheme][download][url] = "http://git.drupal.org/project/adaptivetheme.git"
 projects[adaptivetheme][download][branch] = "7.x-3.x"
-projects[adaptivetheme][download][revision] = "b4b38c3c01d066e733c2942020c51962cd64231c"
-
-; Remove link around comment creation date.
-; http://drupal.org/node/1427226#comment-6638836
-projects[adaptivetheme][patch][] = "http://drupal.org/files/remove-comment-creation-link-2018081-1.patch"
-
-; Add styling for link buttons.
-; https://drupal.org/comment/8289329#comment-8289329
-projects[adaptivetheme][patch][] = "https://drupal.org/files/issues/add-link-button-styling-2159783-1.patch"
+projects[adaptivetheme][download][revision] = "18693ff59db7cb3171f282a982d04fe6544b63a1"
 
 projects[ember][type] = "theme"
 projects[ember][subdir] = "contrib"
@@ -541,7 +525,7 @@ projects[ember][download][revision] = "caf4df7"
 
 projects[sky][type] = "theme"
 projects[sky][subdir] = "contrib"
-projects[sky][version] = "3.0-rc1"
+projects[sky][version] = "3.0"
 
 ; Libraries.
 ; NOTE: These need to be listed in http://drupal.org/packaging-whitelist.
