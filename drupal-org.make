@@ -80,7 +80,10 @@ projects[ckeditor][patch][] = "https://drupal.org/files/issues/ckeditor-remove-e
 
 projects[ctools][type] = "module"
 projects[ctools][subdir] = "contrib"
-projects[ctools][version] = "1.4"
+projects[ctools][download][type] = "git"
+projects[ctools][download][url] = "http://git.drupal.org/project/ctools.git"
+projects[ctools][download][branch] = "7.x-1.x"
+projects[ctools][download][revision] = "e720f61d"
 
 projects[custom_search][type] = "module"
 projects[custom_search][subdir] = "contrib"
@@ -297,6 +300,7 @@ projects[oembed][download][revision] = "9aa5303"
 
 projects[og][type] = "module"
 projects[og][subdir] = "contrib"
+projects[og][download][type] = "git"
 projects[og][download][url] = "http://git.drupal.org/project/og.git"
 projects[og][download][branch] = "7.x-2.x"
 projects[og][download][revision] = "10647461ce6"
@@ -315,7 +319,10 @@ projects[panelizer][version] = "3.1"
 
 projects[panels][type] = "module"
 projects[panels][subdir] = "contrib"
-projects[panels][version] = "3.4"
+projects[panels][download][type] = "git"
+projects[panels][download][url] = "http://git.drupal.org/project/panels.git"
+projects[panels][download][branch] = "7.x-3.x"
+projects[panels][download][revision] = "8059bda2b"
 
 projects[paranoia][type] = "module"
 projects[paranoia][subdir] = "contrib"
