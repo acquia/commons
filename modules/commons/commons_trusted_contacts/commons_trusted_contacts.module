@@ -531,6 +531,12 @@ function commons_trusted_contacts_og_membership_update(OgMembership $og_membersh
     ->propertyCondition('gid', $og_membership->etid)
     ->execute();
 
+  // Membership not found, return but throw an error to watchdog.
+  if (!isset($return['og_membership'])) {
+    watchdog('commons_trusted_contacts', "Warning: expected trusted contact link not found between " . $og_membership->gid . " and " . $og_membership->etid, WATCHDOG_WARNING);
+    return;
+  }
+
   $membership_id = key($return['og_membership']);
 
   $wrapper2 = entity_metadata_wrapper('og_membership', $membership_id);
