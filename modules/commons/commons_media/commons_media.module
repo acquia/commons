@@ -126,15 +126,14 @@ function commons_media_simplify_media_buttons($element, $edit, &$form_state) {
 }
 
 /**
- * Implements hook_file_view_alter().
+ * Implements hook_page_build().
  */
-function commons_media_file_view_alter(&$build) {
-  $file_type = $build['#bundle'];
-
-  // Add responsive CSS to image and video files.
-  if ($file_type == 'image' || $file_type == 'video') {
-    $build['#attached']['css'][] = drupal_get_path('module', 'commons_media') . '/commons_media.css';
-  }
+function commons_media_page_build(&$page) {
+  $page['page_bottom']['commons_media']['#attached']['css'] = array(
+    drupal_get_path('module', 'commons_media') . '/commons_media.css' => array(
+      'every_page' => TRUE,
+    ),
+  );
 }
 
 /**
@@ -142,6 +141,9 @@ function commons_media_file_view_alter(&$build) {
  */
 function commons_media_filter_default_formats_alter(&$formats) {
   if (module_exists('media_wysiwyg')) {
+    // Allow markup from remote media.
+    $formats['filtered_html']['filters']['filter_html']['settings']['allowed_html'] = '<a> <em> <strong> <u> <cite> <blockquote> <code> <ul> <ol> <li> <dl> <dt> <dd> <h4> <h5> <h6>  <p> <br> <img> <strike> <iframe></iframe>';
+
     // Enable the media filter.
     $formats['filtered_html']['filters'] += array(
       'media_filter' => array(
