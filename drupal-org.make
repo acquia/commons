@@ -222,7 +222,7 @@ projects[media][subdir] = "contrib"
 projects[media][download][type] = "git"
 projects[media][download][url] = "http://git.drupal.org/project/media.git"
 projects[media][download][branch] = "7.x-2.x"
-projects[media][download][revision] = "9583d89"
+projects[media][download][revision] = "b2c2d78"
 
 ; New filelfield browser widget is massively confusing the user
 ; https://drupal.org/comment/8570379#comment-8570379
