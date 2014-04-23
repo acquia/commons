@@ -294,6 +294,13 @@ projects[oauthconnector][download][url] = "http://git.drupal.org/project/oauthco
 projects[oauthconnector][download][branch] = "7.x-1.x"
 projects[oauthconnector][download][revision] = "42c6f66"
 
+projects[oembed][type] = "module"
+projects[oembed][subdir] = "contrib"
+projects[oembed][download][type] = "git"
+projects[oembed][download][url] = "http://git.drupal.org/project/oembed.git"
+projects[oembed][download][branch] = "7.x-1.x"
+projects[oembed][download][revision] = "9aa5303"
+
 projects[og][type] = "module"
 projects[og][subdir] = "contrib"
 projects[og][version] = "2.5"
