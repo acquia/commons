@@ -910,9 +910,9 @@ function commons_update_3115() {
 }
 
 /*
- * Enable the Commons: Media module.
+ * Enable the Commons: Media and Media: WYSIWYG modules.
  */
 function commons_update_3116() {
-  module_enable(array('commons_media'));
+  module_enable(array('commons_media', 'media_wysiwyg'));
   return array();
 }
