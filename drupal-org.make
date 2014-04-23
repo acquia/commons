@@ -188,7 +188,7 @@ projects[http_client][version] = "2.4"
 
 projects[i18n][type] = "module"
 projects[i18n][subdir] = "contrib"
-projects[i18n][version] = "1.10"
+projects[i18n][version] = "1.11"
 
 projects[i18nviews][type] = "module"
 projects[i18nviews][subdir] = "contrib"
@@ -476,7 +476,7 @@ projects[translation_helpers][version] = "1.0"
 
 projects[variable][type] = "module"
 projects[variable][subdir] = "contrib"
-projects[variable][version] = "2.4"
+projects[variable][version] = "2.5"
 
 projects[views][type] = "module"
 projects[views][subdir] = "contrib"
