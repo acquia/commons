@@ -65,34 +65,44 @@ function commons_wikis_views_default_views_alter(&$views) {
  * Custom access callback for viewing revision info.
  */
 function commons_wikis_user_revision_access($node = NULL, $old_callback = '_node_revision_access') {
+  // Only use custom revision access for wikis. Access to other content types
+  // should be handled by the standard callback.
   if ($node->type == 'wiki') {
-    return TRUE;
+    // The content was posted to specific groups.
+    if (isset($node->og_group_ref[LANGUAGE_NONE][0]['target_id'])) {
+      return og_user_access('node', $node->og_group_ref[LANGUAGE_NONE][0]['target_id'], 'update any wiki content');
+    }
+    // The content was posted privately to all trusted contacts.
+    elseif (isset($node->og_user_group_ref[LANGUAGE_NONE][0]['target_id'])) {
+      return og_user_access('user', $node->og_user_group_ref[LANGUAGE_NONE][0]['target_id'], 'update any wiki content');
+    }
   }
-  else {
-    return node_access('view', $node) && $old_callback($node, 'view');
-  }
+  return $old_callback($node, 'view');
 }
 
 /**
  * Implements hook_og_user_access_alter().
  */
 function commons_wikis_og_user_access_alter(&$temp_perm, $context) {
-  // Grant access to non-group members to be able to edit wiki nodes.
-  // where the group node is public and content is public within the group.
-  if ($context['string'] == "update any wiki content") {
-    $commons_groups_entity_types = commons_groups_get_group_content_entity_types();
-    $group_content_restricted = (bool) (isset($context['group']->group_content_access[LANGUAGE_NONE][0]['value']) && $context['group']->group_content_access[LANGUAGE_NONE][0]['value'] == 2);
-    $user_is_member = FALSE;
-    if ($context['group_type'] == 'node') {
-      $user_is_member = (bool) og_is_member('node', $context['group']->nid, 'user', $context['account']);
-    }
-    if ($context['group_type'] == 'user') {
-      $user_is_member = (bool) og_is_member('user', $context['group']->uid, 'user', $context['account']);
-    }
-    if (user_access('edit any wiki content', $context['account'])
-    && (!$group_content_restricted || $user_is_member)) {
-      $temp_perm["update any wiki content"] = TRUE;
-    }
+  // Only alter if we're dealing with updating wiki content.
+  if ($context['string'] != 'update any wiki content') {
+    return;
+  }
+
+  $account = $context['account'];
+  $group = $context['group'];
+  $group_type = $context['group_type'];
+
+  $wrapper = entity_metadata_wrapper($group_type, $group);
+  $entity_id = $wrapper->getIdentifier();
+
+  $group_content_restricted = (bool) !isset($wrapper->field_og_subscribe_settings) || (isset($wrapper->field_og_subscribe_settings) && $wrapper->field_og_subscribe_settings->value() != 'anyone');
+  $user_is_member = (bool) og_is_member($group_type, $entity_id, 'user', $account, array(OG_STATE_ACTIVE));
+
+  // Allow group members to be able to edit any wiki content within the group.
+  // Also grant access to non-members if both the group and content is public.
+  if (user_access('edit any wiki content', $account) && (!$group_content_restricted || $user_is_member)) {
+    $temp_perm['update any wiki content'] = TRUE;
   }
 }
 
