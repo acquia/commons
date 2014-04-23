@@ -80,10 +80,26 @@ function commons_content_moderation_views_default_views_alter(&$views) {
 }
 
 /**
-  * Implements hook_views_bulk_operations_form_alter().
-  */
+ * Implements hook_views_pre_build().
+ *
+ * A check when VBO is being used on the content moderation views, make sure
+ * the user has the correct permissions.
+ */
+function commons_content_moderation_views_pre_build(&$view) {
+
+  if ($view->name == 'commons_content_moderation_reported_nodes'
+    && !module_exists('actions_permissions')
+    && (!user_access('administer content') || !user_access('administer users'))) {
+    unset($view->field['views_bulk_operations']);
+    unset($view->display_handler->handlers['field']['views_bulk_operations']);
+  }
+}
+
+/**
+ * Implements hook_views_bulk_operations_form_alter().
+ */
 function commons_content_moderation_views_bulk_operations_form_alter(&$form, $form_state, $vbo) {
-  if(!isset($vbo->options['vbo_operations']['action::commons_content_moderation_delete_node_block_user'])) {
+  if (!isset($vbo->options['vbo_operations']['action::commons_content_moderation_delete_node_block_user'])) {
     return;
   }
   if ($form_state['step'] == 'views_form_views_form' && $vbo->options['vbo_operations']['action::commons_content_moderation_delete_node_block_user']['selected'] == 1) {

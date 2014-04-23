@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * Change content moderation views permission.
+ */
+function commons_content_moderation_update_7001() {
+  $revert = array(
+    'commons_content_moderation' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}
+
+/**
+ * Clear views cache to have content moderation view use new permission.
+ */
+function commons_content_moderation_update_7002() {
+  cache_clear_all('*', 'cache_views', TRUE);
+}
+
