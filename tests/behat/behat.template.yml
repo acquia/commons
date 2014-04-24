@@ -8,6 +8,9 @@ default:
       base_url: http://${drupal.uri}
       files_path: ../../
     Drupal\DrupalExtension\Extension:
+      text:
+        username_field: 'E-mail'
+        password_field: 'Password'
       blackbox: ~
       drush:
         root: ${drush.root}

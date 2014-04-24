@@ -19,7 +19,7 @@ function commons_utility_links_commons_utility_links() {
     );
     $links['logout'] = array(
       'href' => 'user/logout',
-      'title' => t('Logout'),
+      'title' => t('Log out'),
       'weight' => 9,
     );
   }
@@ -27,13 +27,13 @@ function commons_utility_links_commons_utility_links() {
     if (variable_get('user_register', USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL)) {
       $links['signup'] = array(
         'href' => 'user/register',
-        'title' => t('Signup'),
+        'title' => t('Sign up'),
         'weight' => -10,
       );
     }
     $links['login'] = array(
       'href' => 'user/login',
-      'title' => t('Login'),
+      'title' => t('Log in'),
       'weight' => -9,
     );
   }

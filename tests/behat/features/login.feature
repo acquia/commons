@@ -4,7 +4,7 @@ Feature: Anonymous user login
     When I fill in "admin" for "edit-name"
       And I fill in "admin" for "edit-pass"
       And I press "Log in"
-    Then I should see "Logout"
+    Then I should see "Log out"
 
   Scenario: User can request a new password if it has been lost
     Given I am on "/user/password"
