@@ -390,10 +390,7 @@ projects[r4032login][version] = "1.7"
 
 projects[radioactivity][type] = "module"
 projects[radioactivity][subdir] = "contrib"
-projects[radioactivity][download][type] = "git"
-projects[radioactivity][download][url] = "http://git.drupal.org/project/radioactivity.git"
-projects[radioactivity][download][branch] = "7.x-2.x"
-projects[radioactivity][download][revision] = "e3705c6ce9f07ec58fc6b7c66f39eb4f2fc51b68"
+projects[radioactivity][version] = "2.9"
 
 projects[rate][type] = "module"
 projects[rate][subdir] = "contrib"
