@@ -35,7 +35,9 @@ install:
 
   # Install the latest Drush 6.
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
-  - composer global require --prefer-source --no-interaction drush/drush:6.*@dev
+  - pear channel-discover pear.drush.org
+  - pear install drush/drush-5.10.0.0
+  - phpenv rehash
 
   # Build Behat dependencies
   - cd ./tests/behat
