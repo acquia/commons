@@ -41,24 +41,56 @@ function commons_homepage_user_register_login_submit($form, &$form_state) {
  */
 function commons_site_homepage_block_info() {
   $blocks['commons_site_homepage'] = array(
-    'info' => t('Commons anonymous homepage Sign up/login buttons'),
+    'info' => t('Commons anonymous homepage sign up/log in buttons'),
     'cache' => DRUPAL_NO_CACHE,
   );
+
   return $blocks;
 }
 
 /**
  * Implements hook_block_view().
- *  Defines a simple "Signup or Login" block for use
- *  on the anonymous site homepage.
  */
-function commons_site_homepage_block_view() {
-  $block['content'] = '';
-  if (variable_get('user_register', USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL)) {
-    $block['content'] .= l(t('Signup'), 'user/register', array('attributes' => array('class' => 'commons-sign-up', 'title' => t('Sign up')))) . ' ';
+function commons_site_homepage_block_view($delta = '') {
+  $block = array();
+
+  switch ($delta) {
+    case 'commons_site_homepage':
+      // The block does not have a default title.
+      $block['subject'] = NULL;
+
+      $links = array();
+
+      // Display a 'sign up' link if visitors can create accounts.
+      if (variable_get('user_register', USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL)) {
+        $links[] = array(
+          'title' => t('Sign up'),
+          'href' => 'user/register',
+          'attributes' => array(
+            'class' => array('commons-sign-up'),
+          ),
+        );
+      }
+
+      // Always display a 'log in' link.
+      $links[] = array(
+        'title' => t('Log in'),
+        'href' => 'user/login',
+        'attributes' => array(
+          'class' => array('commons-login'),
+        ),
+      );
+
+      $block['content'] = array(
+        '#theme' => 'links',
+        '#links' => $links,
+        '#attributes' => array(
+          'class' => array('links', 'inline'),
+        ),
+      );
+      break;
   }
-  $block['content'] .= l(t('Login'), 'user/login', array('attributes' => array('class' => 'commons-login')));
-  $block['subject'] = '';
+
   return $block;
 }
 
