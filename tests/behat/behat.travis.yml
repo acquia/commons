@@ -20,6 +20,23 @@ default:
       # export BEHAT_PARAMS="extensions[Drupal\\DrupalExtension\\Extension][drupal][drupal_root]=$DRUPAL_ROOT"
       #drupal:
       #  drupal_root: "/path/to/drupal/root"
+      region_map:
+        # CTools / Panels
+        CTools modal: "#modalContent"
+        # Commons Origins.
+        Header: ".region-header"
+        Menu bar: "#menu-bar"
+        Featured: ".region-featured"
+        Help: ".region-help"
+        Highlighted: ".region-highlighted"
+        Content: "#content"
+        Tabs: ".tabs.primary"
+        Aside: ".region-content-aside"
+        Sidebar first: ".region-sidebar-first"
+        Sidebar second: ".region-sidebar-second"
+        Secondary: ".region-content-aside"
+        Tertiary: ".region-content-tertiary"
+        Footer: ".region-footer"
 
 # Setup for Google Chrome only tests.
 chrome:

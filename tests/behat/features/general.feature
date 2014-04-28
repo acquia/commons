@@ -18,4 +18,4 @@ Feature: General functionality
 
   Scenario: Anonymous users can see the Commons footer
     Given I am on "/"
-    Then I should see "A Commons Community, powered by Acquia"
+    Then I should see "A Commons Community, powered by Acquia" in the "Footer" region
