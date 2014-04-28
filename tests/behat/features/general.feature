@@ -15,7 +15,3 @@ Feature: General functionality
   Scenario: Anonymous users can view user profiles
     Given I am on "/user/1"
     Then I should see "admin"
-
-  Scenario: Anonymous users can see the Commons footer
-    Given I am on "/"
-    Then I should see "A Commons Community, powered by Acquia" in the "Footer" region
