@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Drupal needs this blank file.
+ * Code for the Commons Content Moderation feature.
  */
 
 include_once 'commons_content_moderation.features.inc';
@@ -28,50 +28,78 @@ function commons_content_moderation_action_info() {
   );
 }
 
+/**
+ * Delete content and block the content author.
+ *
+ * @param $node
+ *   A node object.
+ * @param $context
+ *   (optional) Array of additional information about what triggered the action.
+ *   Not used for this action.
+ *
+ * @ingroup actions
+ */
+function commons_content_moderation_delete_node_block_user($node, $context = array()) {
+  // Don't block anonymous users or user 1.
+  if ($node->uid > 1) {
+    $author = user_load($node->uid);
 
-function commons_content_moderation_delete_node_block_user(&$entity, $context = array()) {
-  // Block users other than the anonymous user and UID 1.
-  if ($entity->uid > 1) {
-    $author = user_load($entity->uid);
+    // Block the user if they aren't already.
     if ($author->status) {
       $author = user_save($author, array('status' => 0));
-      watchdog('action', 'Blocked user %name.', array('%name' => $author->name));
+      watchdog('commons_content_moderation', 'Blocked user %name.', array('%name' => format_username($author)));
     }
   }
-  // If the Mollom module is enabled and configured, report
-  // the content to Mollom.
-  if (module_exists('mollom') && _mollom_status()) {
-    $mollom_return = mollom_data_report('node', $entity->nid, 'spam');
+
+  // Report the content to Mollom when possible.
+  if (module_exists('mollom') && _mollom_flag_access('node', $node)) {
+    mollom_data_report('node', $node->nid, 'spam');
   }
-  // We're done with this node. We can delete it.
-  node_delete($entity->nid);
-  watchdog('action', 'Deleted @type %title.', array('@type' => node_type_get_name($entity), '%title' => $entity->title));
+
+  // Delete the node.
+  node_delete($node->nid);
+  watchdog('commons_content_moderation', 'Deleted @type %title.', array('@type' => node_type_get_name($node), '%title' => $node->title));
 }
 
-function commons_content_moderation_delete_comment_block_user(&$entity, $context = array()) {
- // Block users other than the anonymous user and UID 1.
-  if ($entity->uid > 1) {
-    $author = user_load($entity->uid);
+/**
+ * Delete comment and block the comment author.
+ *
+ * @param $comment
+ *   A comment object.
+ * @param $context
+ *   (optional) Array of additional information about what triggered the action.
+ *   Not used for this action.
+ *
+ * @ingroup actions
+ */
+function commons_content_moderation_delete_comment_block_user($comment, $context = array()) {
+  // Don't block anonymous users or user 1.
+  if ($comment->uid > 1) {
+    $author = user_load($comment->uid);
+
+    // Block the user if they aren't already.
     if ($author->status) {
       $author = user_save($author, array('status' => 0));
-      watchdog('action', 'Blocked user %name.', array('%name' => $author->name));
+      watchdog('commons_content_moderation', 'Blocked user %name.', array('%name' => format_username($author)));
     }
   }
-  // If the Mollom module is enabled and configured, report
-  // the content to Mollom.
-  if (module_exists('mollom') && _mollom_status()) {
-    $mollom_return = mollom_data_report('comment', $comment->cid, 'spam');
+
+  // Report the content to Mollom when possible.
+  if (module_exists('mollom') && _mollom_flag_access('comment', $comment)) {
+    mollom_data_report('comment', $comment->cid, 'spam');
   }
-  // We're done with this node. We can delete it.
-  comment_delete($entity->cid);
-  watchdog('action', 'Deleted comment %title.', array('@type' => node_type_get_name($entity), '%title' => $entity->title));
+
+  // Delete the comment.
+  comment_delete($comment->cid);
+  watchdog('commons_content_moderation', 'Deleted comment %title.', array('%title' => $comment->title));
 }
 
 /**
  * Implements hook_views_default_views_alter().
  */
 function commons_content_moderation_views_default_views_alter(&$views) {
-  // We're providing alternatives to these views.
+  // Disable default node and comment abuse views in favor of Commons-specific
+  // views included with Commons Content Moderation.
   foreach (array('all_flag_abuse_node', 'all_flag_abuse_comment') as $view_name) {
     if (!empty($views[$view_name])) {
       $views[$view_name]->disabled = TRUE;
@@ -81,15 +109,11 @@ function commons_content_moderation_views_default_views_alter(&$views) {
 
 /**
  * Implements hook_views_pre_build().
- *
- * A check when VBO is being used on the content moderation views, make sure
- * the user has the correct permissions.
  */
 function commons_content_moderation_views_pre_build(&$view) {
-
-  if ($view->name == 'commons_content_moderation_reported_nodes'
-    && !module_exists('actions_permissions')
-    && (!user_access('administer content') || !user_access('administer users'))) {
+  // Disable bulk content moderation operations if the user does not have
+  // appropriate access.
+  if ($view->name == 'commons_content_moderation_reported_nodes' && !module_exists('actions_permissions') && (!user_access('administer content') || !user_access('administer users'))) {
     unset($view->field['views_bulk_operations']);
     unset($view->display_handler->handlers['field']['views_bulk_operations']);
   }
@@ -99,18 +123,16 @@ function commons_content_moderation_views_pre_build(&$view) {
  * Implements hook_views_bulk_operations_form_alter().
  */
 function commons_content_moderation_views_bulk_operations_form_alter(&$form, $form_state, $vbo) {
+  // Only proceed if the 'delete_node_block_user' operation is available.
   if (!isset($vbo->options['vbo_operations']['action::commons_content_moderation_delete_node_block_user'])) {
     return;
   }
+
+  // Notify the user that the deleted content will be reported to Mollom.
   if ($form_state['step'] == 'views_form_views_form' && $vbo->options['vbo_operations']['action::commons_content_moderation_delete_node_block_user']['selected'] == 1) {
-    if (module_exists('mollom') && _mollom_status()) {
+    if (module_exists('mollom') && _mollom_access('report to mollom')) {
       $form['mollom_text'] = array(
-        '#markup' => t('Deleted content will be reported to Mollom.'),
-      );
-    }
-    else {
-     $form['mollom_text'] = array(
-        '#markup' => t('When the !mollom module is installed and configured, content deleted here will also be reported to Mollom.', array('!mollom' => l('Mollom', 'http://drupal.org/project/mollom'))),
+        '#markup' => '<p>' . t('Deleted content will be reported to Mollom.') . '</p>',
       );
     }
   }
