@@ -42,7 +42,7 @@ function commons_activity_streams_views_default_views() {
   $handler->display->display_options['empty']['area']['table'] = 'views';
   $handler->display->display_options['empty']['area']['field'] = 'area';
   $handler->display->display_options['empty']['area']['empty'] = TRUE;
-  $handler->display->display_options['empty']['area']['content'] = 'No activity matched the filters you selected.';
+  $handler->display->display_options['empty']['area']['content'] = 'Nobody has performed any activity on the site recently.';
   $handler->display->display_options['empty']['area']['format'] = 'filtered_html';
   /* Relationship: Entity Reference: Referenced Entity */
   $handler->display->display_options['relationships']['field_target_nodes_target_id']['id'] = 'field_target_nodes_target_id';
@@ -166,7 +166,7 @@ function commons_activity_streams_views_default_views() {
     t('‹ previous'),
     t('next ›'),
     t('last »'),
-    t('No activity matched the filters you selected.'),
+    t('Nobody has performed any activity on the site recently.'),
     t('Content entity referenced from field_target_nodes'),
     t('All'),
     t('Show'),
@@ -208,7 +208,7 @@ function commons_activity_streams_views_default_views() {
   $handler->display->display_options['empty']['area']['table'] = 'views';
   $handler->display->display_options['empty']['area']['field'] = 'area';
   $handler->display->display_options['empty']['area']['empty'] = TRUE;
-  $handler->display->display_options['empty']['area']['content'] = 'This person doesn\'t have any activity on the site yet.';
+  $handler->display->display_options['empty']['area']['content'] = 'This person hasn\'t performed any activities on the site yet.';
   $handler->display->display_options['empty']['area']['format'] = 'filtered_html';
   /* Relationship: Entity Reference: Referenced Entity */
   $handler->display->display_options['relationships']['field_target_nodes_target_id']['id'] = 'field_target_nodes_target_id';
@@ -307,7 +307,7 @@ function commons_activity_streams_views_default_views() {
     t('‹ previous'),
     t('next ›'),
     t('last »'),
-    t('This person doesn\'t have any activity on the site yet.'),
+    t('This person hasn\'t performed any activities on the site yet.'),
     t('Content entity referenced from field_target_nodes'),
     t('All'),
     t('Activity (Sidebar)'),

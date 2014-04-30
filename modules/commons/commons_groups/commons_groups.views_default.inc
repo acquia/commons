@@ -987,6 +987,13 @@ function commons_groups_views_default_views() {
   $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['style_plugin'] = 'grid';
   $handler->display->display_options['row_plugin'] = 'fields';
+  /* No results behavior: Global: Text area */
+  $handler->display->display_options['empty']['area']['id'] = 'area';
+  $handler->display->display_options['empty']['area']['table'] = 'views';
+  $handler->display->display_options['empty']['area']['field'] = 'area';
+  $handler->display->display_options['empty']['area']['empty'] = TRUE;
+  $handler->display->display_options['empty']['area']['content'] = 'Nobody has contributed any site content yet.';
+  $handler->display->display_options['empty']['area']['format'] = 'filtered_html';
   /* Relationship: OG membership: OG membership from User */
   $handler->display->display_options['relationships']['og_membership_rel']['id'] = 'og_membership_rel';
   $handler->display->display_options['relationships']['og_membership_rel']['table'] = 'users';
@@ -1081,7 +1088,7 @@ function commons_groups_views_default_views() {
   $handler->display->display_options['empty']['area']['table'] = 'views';
   $handler->display->display_options['empty']['area']['field'] = 'area';
   $handler->display->display_options['empty']['area']['empty'] = TRUE;
-  $handler->display->display_options['empty']['area']['content'] = 'No groups matched the text you entered.';
+  $handler->display->display_options['empty']['area']['content'] = 'No groups have been created yet.';
   $handler->display->display_options['empty']['area']['format'] = 'filtered_html';
   /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
@@ -1157,7 +1164,7 @@ function commons_groups_views_default_views() {
     t('‹ previous'),
     t('next ›'),
     t('last »'),
-    t('No groups matched the text you entered.'),
+    t('No groups have been created yet.'),
     t('Limit to'),
     t('Feed'),
     t('Content pane'),
@@ -1251,6 +1258,7 @@ function commons_groups_views_default_views() {
     t('Sort by'),
     t('Asc'),
     t('Desc'),
+    t('Nobody has contributed any site content yet.'),
     t('OG membership from node'),
     t('All'),
     t('Block'),
@@ -1281,6 +1289,13 @@ function commons_groups_views_default_views() {
   $handler->display->display_options['pager']['options']['quantity'] = '9';
   $handler->display->display_options['style_plugin'] = 'default';
   $handler->display->display_options['row_plugin'] = 'fields';
+  /* No results behavior: Global: Text area */
+  $handler->display->display_options['empty']['area']['id'] = 'area';
+  $handler->display->display_options['empty']['area']['table'] = 'views';
+  $handler->display->display_options['empty']['area']['field'] = 'area';
+  $handler->display->display_options['empty']['area']['empty'] = TRUE;
+  $handler->display->display_options['empty']['area']['content'] = 'This person hasn\'t contributed to any groups yet.';
+  $handler->display->display_options['empty']['area']['format'] = 'filtered_html';
   /* Relationship: OG membership: Group Node from OG membership */
   $handler->display->display_options['relationships']['og_membership_related_node_group']['id'] = 'og_membership_related_node_group';
   $handler->display->display_options['relationships']['og_membership_related_node_group']['table'] = 'og_membership';
@@ -1359,6 +1374,7 @@ function commons_groups_views_default_views() {
     t('‹ previous'),
     t('next ›'),
     t('last »'),
+    t('This person hasn\'t contributed to any groups yet.'),
     t('Group node from OG membership'),
     t('All'),
     t('Content pane'),

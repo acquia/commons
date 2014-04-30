@@ -188,3 +188,14 @@ function commons_groups_update_3114() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Add empty text to Commons Groups views.
+ */
+function commons_groups_update_3115() {
+  $revert = array(
+    'commons_groups' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}

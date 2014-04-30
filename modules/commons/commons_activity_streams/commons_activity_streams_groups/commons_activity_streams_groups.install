@@ -1,0 +1,12 @@
+<?php
+
+/**
+ * Add empty text to Commons Activity Streams Groups views.
+ */
+function commons_activity_streams_groups_update_3101() {
+  $revert = array(
+    'commons_activity_streams_groups' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}

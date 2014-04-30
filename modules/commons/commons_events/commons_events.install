@@ -212,3 +212,14 @@ function commons_events_update_7010() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Add empty text to Commons Events views.
+ */
+function commons_events_update_7011() {
+  $revert = array(
+    'commons_events' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}
