@@ -992,11 +992,15 @@ function commons_trusted_contacts_form_commons_bw_partial_node_form_alter(&$form
  * Adds privacy toggle to a node edit/add form.
  */
 function commons_trusted_contacts_form_add_privacy_toggle(&$form, &$form_state) {
+  $is_group_content = FALSE;
+  if (!empty($form[OG_AUDIENCE_FIELD][LANGUAGE_NONE][0]['default']['#default_value']) || !empty($form[OG_AUDIENCE_FIELD][LANGUAGE_NONE][0]['admin']['#default_value'])) {
+    $is_group_content = TRUE;
+  }
   $form['group_audience_type'] = array(
     '#type' => 'radios',
     '#title' => t('Post to'),
     '#title_display' => 'invisible',
-    '#default_value' => empty($form[OG_AUDIENCE_FIELD][LANGUAGE_NONE][0]['default']['#default_value']) ? 'private' : 'custom',
+    '#default_value' => $is_group_content ? 'custom' : 'private',
     '#options' => array(
       'custom' => t('Post to specific groups'),
       'private' => t('Post privately to all trusted contacts'),
