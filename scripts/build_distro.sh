@@ -130,13 +130,13 @@ build_distro() {
 
         ## put commons profile and modules into the profile folder
         rm -rf docroot/profiles/commons
-        if [ -a $BUILD_PATH/repos.txt ]; then
+        if [ -e $BUILD_PATH/repos.txt ]; then
           UNTAR="tar -zxvf /tmp/commons.tar.gz -X $BUILD_PATH/repos.txt"
         else
           cd $BUILD_PATH/repos
-          find * -mindepth 1 -maxdepth 2 -type d -not -path ".*" -not -path "modules/.*" -not -path "themes/.*" -not -path "modules/contrib" -not -path "themes/contrib" > /tmp/repos.txt
+          find * -mindepth 1 -maxdepth 2 -type d -not -path ".*" -not -path "modules/.*" -not -path "themes/.*" -not -path "modules/contrib" -not -path "themes/contrib" > $BUILD_PATH/repos.txt
           # exclude repos since we're updating already by linking it to the repos directory.
-          UNTAR="tar -zxvf /tmp/commons.tar.gz -X /tmp/repos.txt"
+          UNTAR="tar -zxvf /tmp/commons.tar.gz -X $BUILD_PATH/repos.txt"
         fi
         cd $BUILD_PATH/docroot/profiles
         eval $UNTAR
