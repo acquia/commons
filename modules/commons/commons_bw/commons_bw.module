@@ -243,6 +243,7 @@ function commons_bw_partial_node_form_validate($form, $form_state) {
  */
 function commons_bw_partial_node_form_submit($form, $form_state) {
   $node = $form['#entity'];
+  node_submit($node);
   // Mark the node as created with the partial form
   $node->partial_node_form = TRUE;
   field_attach_submit('node', $node, $form, $form_state);
