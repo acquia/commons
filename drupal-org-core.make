@@ -24,3 +24,7 @@ projects[drupal][patch][] = https://drupal.org/files/issues/drupal-optimize_node
 ; Statically cache node access grants
 ; https://drupal.org/comment/8495029#comment-8495029
 projects[drupal][patch][] = https://drupal.org/files/issues/node_access_grants-static-cache-11.patch
+
+; File_get_file_references is slow and buggy
+; https://drupal.org/node/1805690#comment-8734045
+projects[drupal][patch][] = https://drupal.org/files/issues/1805690_11.patch
