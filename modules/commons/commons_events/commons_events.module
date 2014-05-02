@@ -185,7 +185,10 @@ function commons_events_entity_view_alter(&$build, $type) {
   if ($build['#entity_type'] == 'node' && $build['#bundle'] == 'event') {
 
     $build['attending'] = array(
-      0 => theme('commons_events_attending_event', array('event' => $build['#node'], 'attendee_count' => commons_events_get_raw_attendee_count($build['#node']))),
+      0 => theme('commons_events_attending_event', array(
+          'event' => $build['#node'],
+          'attendee_count' => commons_events_get_raw_attendee_count($build['#node']),
+        )),
       '#weight' => -10,
     );
     $vars = array(
@@ -300,11 +303,12 @@ function commons_events_node_form_validate($form, &$form_state) {
       // Max attendees must be entered if the registration status is open and
       // registration is done onsite.
       if ((int) $form_state['values']['field_status'] == 1
-        && (!is_numeric($form_state['values']['field_number_of_attendees'][$lng]['0']['value']))) {
-          form_set_error('field_number_of_attendees',
-            t('Maximum number of attendees must be set for registrations to be accepted.'));
-          return FALSE;
-        }
+        && (!is_numeric($form_state['values']['field_number_of_attendees'][$lng]['0']['value']))
+      ) {
+        form_set_error('field_number_of_attendees',
+          t('Maximum number of attendees must be set for registrations to be accepted.'));
+        return FALSE;
+      }
       break;
   }
   return TRUE;
@@ -323,7 +327,8 @@ function commons_events_node_form_submit($form, $form_state) {
       $settings['status'] = 0;
     }
     if (!empty($form_state['values']['field_number_of_attendees'][$lng]['0']['value'])
-      && is_numeric($form_state['values']['field_number_of_attendees'][$lng]['0']['value'])) {
+      && is_numeric($form_state['values']['field_number_of_attendees'][$lng]['0']['value'])
+    ) {
       $settings['capacity'] = (int) $form_state['values']['field_number_of_attendees'][$lng]['0']['value'];
     }
     $settings['settings'] = serialize($settings['settings']);
@@ -343,7 +348,8 @@ function commons_events_node_form_submit($form, $form_state) {
       $uid = $node->uid;
     }
     if ($settings['status'] == 1
-      && !registration_is_registered($registration, NULL, $uid)) {
+      && !registration_is_registered($registration, NULL, $uid)
+    ) {
       $registration->user_uid = $uid;
       $registration->author_uid = $uid;
       $registration->state = NULL;
@@ -368,8 +374,11 @@ function commons_events_token_info_alter(&$tokens) {
  */
 function commons_events_commons_bw_create_all_widget($group) {
   if (og_user_access('node', $group->nid, 'create event content')) {
-    $link = l(t('List an event'),'node/add/event',
-      array('attributes' => array('class' => 'commons-events-create'), 'query' => array('og_group_ref' => $group->nid))
+    $link = l(t('List an event'), 'node/add/event',
+      array(
+        'attributes' => array('class' => 'commons-events-create'),
+        'query' => array('og_group_ref' => $group->nid),
+      )
     );
     return array(
       'commons_events' => array(
@@ -390,7 +399,10 @@ function commons_events_tokens($type, $tokens, array $data = array(), array $opt
     $event = $data['node'];
     foreach ($tokens as $name => $original) {
       if ($name == 'attend-form') {
-        $replacements[$original] = theme('commons_events_attending_event', array('event' => $event, 'attendee_count' => commons_events_get_raw_attendee_count($event)));
+        $replacements[$original] = theme('commons_events_attending_event', array(
+            'event' => $event,
+            'attendee_count' => commons_events_get_raw_attendee_count($event),
+          ));
       }
     }
   }
@@ -422,12 +434,16 @@ function commons_events_upcoming_more_link($group_id) {
  */
 function commons_events_views_post_execute(&$view) {
   if ($view->name == 'commons_events_upcoming'
-    && $view->current_display == 'panel_pane_1') {
+    && $view->current_display == 'panel_pane_1'
+  ) {
     $view->attachment_after = '<div class="more-link">' . commons_events_upcoming_more_link($view->args[0]) . '</div>';
   }
-  else if ($view->name == 'commons_events_upcoming'
-    && $view->current_display == 'panel_pane_2') {
-    $view->attachment_before = '<div class="commons-event-count">' . format_plural(count($view->result), '1 event', '@count events') . '</div>';
+  else {
+    if ($view->name == 'commons_events_upcoming'
+      && $view->current_display == 'panel_pane_2'
+    ) {
+      $view->attachment_before = '<div class="commons-event-count">' . format_plural(count($view->result), '1 event', '@count events') . '</div>';
+    }
   }
 }
 
@@ -454,7 +470,8 @@ function commons_events_block_info() {
 function commons_events_block_view($delta = '') {
   global $user;
   if ($delta == 'commons_events_create_event_link'
-    && node_access('create', 'event')) {
+    && node_access('create', 'event')
+  ) {
     $options = array(
       'query' => array(
         'destination' => 'events',
@@ -465,17 +482,21 @@ function commons_events_block_view($delta = '') {
       'content' => l(t('List an event'), 'node/add/event', $options),
     );
   }
-  else if ($delta == 'commons_events_anonymous_login'
-    && empty($user->uid)) {
-    return array(
-      'subject' => NULL,
-      'content' => t('You must !login in order to list events.', array('!login' => l(t('log in'), 'user'))),
-    );
+  else {
+    if ($delta == 'commons_events_anonymous_login'
+      && empty($user->uid)
+    ) {
+      return array(
+        'subject' => NULL,
+        'content' => t('You must !login in order to list events.', array('!login' => l(t('log in'), 'user'))),
+      );
+    }
   }
 }
 
 /**
  * Returns specific HTML for a date element formatted with the event formatter M j Y - g:ia.
+ *
  * We the do some awesome stuff with regular expressions to take all the
  * different formats available to us and format it pretty.
  */
@@ -490,7 +511,7 @@ function theme_commons_events_date_display_range_simple($variables) {
   $attributes_start = $variables['attributes_start'];
   $attributes_end = $variables['attributes_end'];
 
-  if($date1 == $date2) {
+  if ($date1 == $date2) {
     // Wrap the result with the attributes.
     return t('!start-time - !end-time', array(
       '!start-time' => '<span class="date-display-start"' . drupal_attributes($attributes_start) . '>' . $time1 . '</span>',
@@ -510,8 +531,10 @@ function theme_commons_events_date_display_range_simple($variables) {
 function theme_commons_events_date_display_single($variables) {
   return $variables['date'];
 }
+
 /**
  * Returns specific HTML for a date element formatted with the event formatter.
+ *
  * We parse the date segments and return it at the bottom, or use the simple
  * formatter (above) if parts of the date are too complicated.
  */
@@ -526,41 +549,47 @@ function theme_commons_events_date_display_range_advanced($variables) {
 
   // See date.theme line 168 -- regarding formatting time for same date events.
   if ($variables['dates']['value']['formatted_date'] === $variables['dates']['value2']['formatted_date']) {
-    return theme('commons_events_date_display_range_simple',$variables);
+    return theme('commons_events_date_display_range_simple', $variables);
   }
   // If the difference is over a year, use the simple formatter.
   if ($variables['dates']['value']['db']['object']->difference($variables['dates']['value2']['db']['object'], 'years') > 0) {
-    return theme('commons_events_date_display_range_simple',$variables);
-  }
-  else if ($variables['dates']['value']['db']['object']->difference($variables['dates']['value2']['db']['object'], 'months') > 0) {
-    $variables['dates']['value']['db']['object']->limitGranularity(array('day','month'));
-    $variables['dates']['value2']['db']['object']->limitGranularity(array('day','month', 'year'));
-
-    $date1 = $variables['dates']['value']['db']['object']->format($variables['dates']['format'],FALSE);
-    $date2 = $variables['dates']['value2']['db']['object']->format($variables['dates']['format'],FALSE);
-  }
-  else if ($variables['dates']['value']['db']['object']->difference($variables['dates']['value2']['db']['object'], 'days') > 0) {
-    // If the Day is before the month (Europe, etc) then switch the granularity.
-    if (strpos($variables['dates']['format'],'M') != 0 || strpos($variables['dates']['format'],'m') != 0 ||
-       strpos($variables['dates']['format'],'F') != 0 || strpos($variables['dates']['format'],'n') != 0) {
-      $variables['dates']['value']['db']['object']->limitGranularity(array('day'));
-      $variables['dates']['value2']['db']['object']->limitGranularity(array('day', 'month', 'year'));
-    } else {
-      $variables['dates']['value']['db']['object']->limitGranularity(array('month','day'));
-      $variables['dates']['value2']['db']['object']->limitGranularity(array('day', 'year'));
-    }
-
-    $date1 = $variables['dates']['value']['db']['object']->format($variables['dates']['format'],FALSE);
-    $date2 = $variables['dates']['value2']['db']['object']->format($variables['dates']['format'],FALSE);
-
-    // If we are match 'D' or 'l', then we have a 'day' in there (eg Monday),
-    // we want the whole date because it looks funky otherwise.
-    if (strpbrk($variables['dates']['format'], 'Dl')) {
-      return theme('commons_events_date_display_range_simple',$variables);
-    }
+    return theme('commons_events_date_display_range_simple', $variables);
   }
   else {
-    return theme('commons_events_date_display_range_simple',$variables);
+    if ($variables['dates']['value']['db']['object']->difference($variables['dates']['value2']['db']['object'], 'months') > 0) {
+      $variables['dates']['value']['db']['object']->limitGranularity(array('day', 'month'));
+      $variables['dates']['value2']['db']['object']->limitGranularity(array('day', 'month', 'year'));
+
+      $date1 = $variables['dates']['value']['db']['object']->format($variables['dates']['format'], FALSE);
+      $date2 = $variables['dates']['value2']['db']['object']->format($variables['dates']['format'], FALSE);
+    }
+    else {
+      if ($variables['dates']['value']['db']['object']->difference($variables['dates']['value2']['db']['object'], 'days') > 0) {
+        // If the Day is before the month (Europe, etc) then switch the granularity.
+        if (strpos($variables['dates']['format'], 'M') != 0 || strpos($variables['dates']['format'], 'm') != 0 ||
+          strpos($variables['dates']['format'], 'F') != 0 || strpos($variables['dates']['format'], 'n') != 0
+        ) {
+          $variables['dates']['value']['db']['object']->limitGranularity(array('day'));
+          $variables['dates']['value2']['db']['object']->limitGranularity(array('day', 'month', 'year'));
+        }
+        else {
+          $variables['dates']['value']['db']['object']->limitGranularity(array('month', 'day'));
+          $variables['dates']['value2']['db']['object']->limitGranularity(array('day', 'year'));
+        }
+
+        $date1 = $variables['dates']['value']['db']['object']->format($variables['dates']['format'], FALSE);
+        $date2 = $variables['dates']['value2']['db']['object']->format($variables['dates']['format'], FALSE);
+
+        // If we are match 'D' or 'l', then we have a 'day' in there (eg Monday),
+        // we want the whole date because it looks funky otherwise.
+        if (strpbrk($variables['dates']['format'], 'Dl')) {
+          return theme('commons_events_date_display_range_simple', $variables);
+        }
+      }
+      else {
+        return theme('commons_events_date_display_range_simple', $variables);
+      }
+    }
   }
   // Wrap the result with the attributes.
   return t('!start-date to !end-date, !start-time - !end-time', array(
