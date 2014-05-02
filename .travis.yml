@@ -42,6 +42,10 @@ install:
   - pear install drush/drush-5.10.0.0
   - phpenv rehash
 
+  # Install Drupal.org drush.
+  - drush dl -y drupalorg_drush-7.x-1.x-dev --destination=$HOME/.drush
+  - drush cc drush
+
   # Build Behat dependencies
   - cd ./tests/behat
   - composer install --prefer-source --no-interaction
@@ -57,7 +61,7 @@ install:
   - mkdir drupal
   - mv profiles drupal/
 
-  # Test the current branch
+  # Build the current branch.
   - cd drupal
   - drush make --yes profiles/commons/drupal-org-core.make --prepare-install
   - drush make --yes profiles/commons/drupal-org.make --no-core --contrib-destination=profiles/commons
@@ -65,6 +69,9 @@ install:
   - mkdir sites/default/private/files
   - mkdir sites/default/private/temp
   - cd ../
+
+  # Verify that all the .make files will work on Drupal.org.
+  - drush verify-makefile drupal/profiles/commons/drupal-org.make
 
   # Download an old version to test upgrading from.
   - if [[ "$UPGRADE" != none ]]; then drush dl commons-$UPGRADE; fi
