@@ -626,12 +626,12 @@ function commons_groups_message_partial_default() {
 function commons_groups_related_groups_text($related_groups) {
   // In 1 group: "in the x group"
   if (count($related_groups) == 1) {
-    return ' ' . t('in the !group group', array('!group' => l($related_groups[0]->title, 'node/' . $related_groups[0]->nid)));
+    return t(' in the !group group', array('!group' => l($related_groups[0]->title, 'node/' . $related_groups[0]->nid)));
   }
 
   // In 2 groups: "in the x and y groups"
   if (count($related_groups) == 2) {
-    return ' ' . t('in the !group-0 and !group-1 groups', array(
+    return t(' in the !group-0 and !group-1 groups', array(
       '!group-0' => l($related_groups[0]->title, 'node/' . $related_groups[0]->nid),
       '!group-1' => l($related_groups[1]->title, 'node/' . $related_groups[1]->nid),
     ));
