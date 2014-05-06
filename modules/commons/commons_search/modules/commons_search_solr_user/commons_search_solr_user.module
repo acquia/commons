@@ -256,12 +256,14 @@ function commons_search_solr_user_form_alter(&$form, &$form_state, $form_id) {
 function commons_search_solr_user_form_apachesolr_search_custom_page_search_form_alter(&$form, &$form_state) {
   if ($form['#search_page']['page_id'] == 'user_search') {
     $form['#attributes']['class'][] = 'user-search-form';
-    $form['basic']['flagged'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Following'),
-      '#default_value' => (empty($_GET['flagged']) ? FALSE : TRUE),
-      '#attributes' => array('onclick' => 'this.form.submit();'),
-    );
+    if (!user_is_anonymous()) {
+      $form['basic']['flagged'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Following'),
+        '#default_value' => (empty($_GET['flagged']) ? FALSE : TRUE),
+        '#attributes' => array('onclick' => 'this.form.submit();'),
+      );
+    }
     $form['basic']['retain-filters']['#type'] = 'hidden';
     $form['basic']['retain-filters']['#value'] = 0;
     $form['basic']['keys']['#title'] = t('Limit to');

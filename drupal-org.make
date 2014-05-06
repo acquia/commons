@@ -33,6 +33,10 @@ projects[apachesolr_og][download][url] = "http://git.drupal.org/project/apacheso
 projects[apachesolr_og][download][branch] = "7.x-1.x"
 projects[apachesolr_og][download][revision] = "49820b4a4fcff7c1c4efe449da033fb6d8711ac5"
 
+; Check the user object before trying to display a result.
+; https://drupal.org/node/2077281#comment-7807937
+projects[apachesolr_og][patch][] = "https://drupal.org/files/issues/apachesolr_og-check-for-anonymous.patch"
+
 projects[apachesolr_proximity][type] = "module"
 projects[apachesolr_proximity][subdir] = "contrib"
 projects[apachesolr_proximity][version] = "1.0-rc1"
