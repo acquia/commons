@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @file
+ * Providers a user interface for configuring notification settings.
+ */
 
 /**
  * Implements hook_menu_alter().
@@ -14,6 +18,7 @@ function commons_follow_ui_menu_alter(&$items) {
     'user/%user/message-subscribe/commons_follow_node',
     'user/%user/message-subscribe/commons_follow_term',
   );
+
   foreach ($paths as $path) {
     if (isset($items[$path])) {
       $items[$path]['access callback'] = FALSE;
@@ -25,106 +30,26 @@ function commons_follow_ui_menu_alter(&$items) {
  * Implements hook_menu().
  */
 function commons_follow_ui_menu() {
-  $items = array();
   $items['user/%user/notification-settings'] = array(
     'title' => 'Notification settings',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('commons_follow_ui_notification_settings_form', 1),
     'access callback' => 'message_subscribe_ui_tab_access',
     'access arguments' => array(1),
+    'file' => 'commons_follow_ui.pages.inc',
     'type' => MENU_LOCAL_TASK,
   );
+
   return $items;
 }
 
 /**
- * Implements hook_form_alter().
+ * Implements hook_form_FORM_ID_alter.
  */
-function commons_follow_ui_form_alter(&$form, &$form_state, $form_id) {
+function commons_follow_ui_form_edit_profile_user_profile_form_alter(&$form, &$form_state, $form_id) {
   // We have a dedicated form for the "Send email by default" checkbox.
   // Hide it from the user profile edit form.
-  if ($form_id == 'edit_profile_user_profile_form') {
-    $form['message_subscribe_email']['#access'] = FALSE;
-  }
-}
-
-function commons_follow_ui_notification_settings_form($form, &$form_state, $account) {
-  global $user;
-  if (empty($account)) {
-    $account = $user;
-  }
-  drupal_set_title(t('Notification settings'));
-  $form['#submit'][] = 'commons_follow_message_subscribe_email_setting_submit';
-  $form['uid'] = array(
-    '#type' => 'value',
-    '#value' => $account->uid,
-  );
-  $form['explanation'] = array(
-    '#markup' => t("Control how you are notified of new content and activity. When you follow a group, topic, user, or other content, you'll see updates in your content and activity streams, and you will automatically get email updates unlesss you disable emails or unfollow."),
-    '#weight' => 0,
-  );
-
-  $form['message_subscribe_email'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Send email notifications by default.'),
-    '#description' => t("If checked, you'll automatically sign up for email notifications when you follow something. Leave unchecked to default to signing up only for activity stream notifications"),
-    '#ajax' => array(
-      'callback' => 'commons_follow_message_subscribe_email_setting_submit',
-    ),
-    '#default_value' => isset($account->message_subscribe_email[LANGUAGE_NONE][0]['value']) ? $account->message_subscribe_email[LANGUAGE_NONE][0]['value'] : FALSE,
-    '#weight' => 1,
-  );
-  if ($account->uid != $user->uid) {
-    $form['message_subscribe_email']['#disabled'] = TRUE;
-  }
-
-  $form['submit'] = array(
-    '#type' => 'submit',
-    '#value' => t('Save email notification settings'),
-    '#attributes' => array(
-      'class' => array('js-hide'),
-    ),
-    '#weight' => 2,
-  );
-
-  $tabs = commons_follow_ui_generate_tabs($account);
-  $form['tabs'] = array(
-    '#markup' => drupal_render($tabs),
-    '#weight' => 3,
-  );
-
-  return $form;
-}
-
-function commons_follow_message_subscribe_email_setting_submit($form, &$form_state) {
-  // If the user has changed the value for this checkbox,
-  // save her account in order to save the change.
-  if ($form_state['values']['message_subscribe_email'] != $form['message_subscribe_email']['#default_value']) {
-    $account = user_load($form_state['values']['uid']);
-    $account->message_subscribe_email[LANGUAGE_NONE][0]['value'] = $form_state['values']['message_subscribe_email'];
-    user_save($account);
-  }
-}
-
-/**
- * Generates the QuickTab title for the subscription UI.
- * Replaces message_subscribe_tab_title().
- */
-function commons_follow_ui_tab_title($account, $flag_name = NULL, $count = 0) {
-  global $user;
-
-  if (!$flag_name) {
-    // We are inside /message-subscribe so get the first flag.
-    $flag_name = key(message_subscribe_flag_get_flags(NULL, NULL, $account, FALSE));
-  }
-  $flag = flag_get_flag($flag_name);
-
-  $params = array(
-    '@flag' => $flag->get_title(),
-    '@count' => $count,
-    '@name' => format_username($account),
-  );
-  return $account->uid == $user->uid ? t('@flag you follow <span class="user-follow-count">@count</span>', $params) : t('@flag @name follows <span class="user-follow-count">@count</span>', $params);
+  $form['message_subscribe_email']['#access'] = FALSE;
 }
 
 /*
@@ -132,41 +57,64 @@ function commons_follow_ui_tab_title($account, $flag_name = NULL, $count = 0) {
  */
 function commons_follow_ui_generate_tabs($account) {
   $tabs = array();
-  foreach (array_keys(message_subscribe_flag_get_flags(NULL, NULL, $account, FALSE)) as $flag_name) {
-    if ($view = message_subscribe_ui_get_view($account, $flag_name)) {
 
-      // We have to do some 'verbose' view loading here, otherwise we will get a
-      // pager when looking at an empty view result.
-      $view->get_total_rows = TRUE;
-      $view->pre_execute();
-      $view->execute();
-      if ($view->total_rows == '0') {
-        unset($view->query->pager);
-      }
-      $preview = $view->preview();
-      $count = $view->total_rows;
+  // Create a separate tab for each subscribe flag.
+  foreach (array_keys(message_subscribe_flag_get_flags(NULL, NULL, $account, FALSE)) as $flag_name) {
+    // Grab the view object of a message subscribe page.
+    if ($view = message_subscribe_ui_get_view($account, $flag_name)) {
+      $tabs[$flag_name] = array(
+        'title' => commons_follow_ui_tab_title($account, $flag_name),
+        'contents' => array(
+          '#markup' => $view->preview(),
+        ),
+      );
     }
-    else {
-      $count = 0;
-    }
-    $tabs[$flag_name] = array(
-      'title' => commons_follow_ui_tab_title($account, $flag_name, $count),
-      'contents' => array('#markup' => $preview),
-    );
   }
 
   if (!empty($tabs)) {
+    // Sort the tabs alphabetically.
+    ksort($tabs);
+
     $settings = array(
       'style' => 'Commons Tabs',
       'ajax' => FALSE,
       'html' => TRUE,
-      'title' => 'test',
       'default_tab' => 'commons_follow_group',
     );
-    $built_tabs = quicktabs_build_quicktabs('commons_follow_ui', $settings, $tabs);
-    return $built_tabs;
+
+    $tabs = quicktabs_build_quicktabs('commons_follow_ui', $settings, $tabs);
   }
-  else {
-    return array();
+
+  return $tabs;
+}
+
+/**
+ * Title callback; Return the flag name and flagging count.
+ *
+ * Replaces message_subscribe_ui_tab_title().
+ *
+ * @param $account
+ *   The user object.
+ * @param $flag_name
+ *   (optional) The flag name. The first subscribe flag will be used by default.
+ *
+ * @return
+ *   A translated string containing the flag name and flagging count.
+ */
+function commons_follow_ui_tab_title($account, $flag_name = NULL) {
+  if (!$flag_name) {
+    // We are inside /message-subscribe so get the first flag.
+    $flag_name = key(message_subscribe_flag_get_flags());
   }
+  $flag = flag_get_flag($flag_name);
+
+  $count = 0;
+  // Get the message subscribe count from the page view.
+  if ($view = message_subscribe_ui_get_view($account, $flag_name)) {
+    $view->get_total_rows = TRUE;
+    $view->preview();
+    $count = $view->total_rows;
+  }
+
+  return t('@flag <span class="user-follow-count">@count</span>', array('@flag' => $flag->get_title(), '@count' => $count));
 }
