@@ -601,6 +601,17 @@ function theme_commons_events_date_display_range_advanced($variables) {
 }
 
 /**
+ * Implements commons_notify_message_selection_alter().
+ */
+function commons_events_commons_notify_message_selection_alter(&$message_type, $hook, $node) {
+  // Provide a special message type that describes the event details
+  // when a new event node is created.
+  if ($hook == 'node_insert' && $node->type == 'event') {
+    $message_type = 'commons_events_event_node_created';
+  }
+}
+
+/**
  * Check whether to allow switching the event's registration type.
  * If there are registrations for the event, disallow changing the type. This
  * keeps registrations for an event consistent.

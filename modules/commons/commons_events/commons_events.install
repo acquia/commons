@@ -223,3 +223,14 @@ function commons_events_update_7011() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Add an event specific message_type feature.
+ */
+function commons_events_update_7012() {
+  $revert = array(
+    'commons_events' => array('message_type', 'field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}

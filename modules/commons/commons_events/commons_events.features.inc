@@ -141,3 +141,38 @@ function commons_events_rdf_default_mappings() {
 
   return $schemaorg;
 }
+
+/**
+ * Implements hook_default_message_type().
+ */
+function commons_events_default_message_type() {
+  $items = array();
+  $items['commons_events_event_node_created'] = entity_import('message_type', '{
+    "name" : "commons_events_event_node_created",
+    "description" : "The notification sent when a user creates an event",
+    "argument_keys" : [],
+    "argument" : [],
+    "category" : "commons_notify",
+    "data" : {
+      "token options" : { "clear" : 0 },
+      "purge" : { "override" : 0, "enabled" : 0, "quota" : "", "days" : "" }
+    },
+    "language" : "",
+    "arguments" : null,
+    "message_text" : { "und" : [
+        {
+          "value" : "New Event on [site:name]: [message:field-target-nodes:0:title_field]",
+          "format" : "plain_text",
+          "safe_value" : "\u003Cp\u003ENew Event on [site:name]: [message:field-target-nodes:0:title_field]\u003C\/p\u003E\n"
+        },
+        {
+          "value" : "Hi [message:user:name],\r\n\r\n[message:field-target-nodes:0:author] created the event \u201c[message:field-target-nodes:0:title_field]\u201d on [site:name] [commons-groups:in-groups-text] on [message:field-target-nodes:0:created]:\r\n\r\nWhat: [message:field-target-nodes:0:title_field]\r\nWhen: [message:field-target-nodes:0:field_date]\r\nWhere (If applicable): [message:field-target-nodes:0:field_address]\r\n\r\n[message:field-target-nodes:0:body]\r\n\r\n\r\nPermalink: [message:field-target-nodes:0:url]\r\nAdd a comment at [message:field-target-nodes:0:url]#comment-form\r\n\r\nChange email notifications at [site:url]user\/[message:user:uid]\/notification-settings",
+          "format" : "plain_text",
+          "safe_value" : "\u003Cp\u003EHi [message:user:name],\u003C\/p\u003E\n\u003Cp\u003E[message:field-target-nodes:0:author] created the event \u201c[message:field-target-nodes:0:title_field]\u201d on [site:name] [commons-groups:in-groups-text] on [message:field-target-nodes:0:created]:\u003C\/p\u003E\n\u003Cp\u003EWhat: [message:field-target-nodes:0:title_field]\u003Cbr \/\u003E\nWhen: [message:field-target-nodes:0:field_date]\u003Cbr \/\u003E\nWhere (If applicable): [message:field-target-nodes:0:field_address]\u003C\/p\u003E\n\u003Cp\u003E[message:field-target-nodes:0:body]\u003C\/p\u003E\n\u003Cp\u003EPermalink: [message:field-target-nodes:0:url]\u003Cbr \/\u003E\nAdd a comment at [message:field-target-nodes:0:url]#comment-form\u003C\/p\u003E\n\u003Cp\u003EChange email notifications at [site:url]user\/[message:user:uid]\/notification-settings\u003C\/p\u003E\n"
+        }
+      ]
+    },
+    "rdf_mapping" : []
+  }');
+  return $items;
+}
