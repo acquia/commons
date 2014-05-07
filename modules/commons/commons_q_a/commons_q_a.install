@@ -125,3 +125,14 @@ function commons_q_a_update_3110() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Change the Answer URL alias to be a subpath of the question.
+ */
+function commons_q_a_update_3111() {
+  $revert = array(
+    'commons_q_a' => array('variable'),
+  );
+  features_revert($revert);
+  return array();
+}

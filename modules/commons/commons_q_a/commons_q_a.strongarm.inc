@@ -319,5 +319,12 @@ function commons_q_a_strongarm() {
   $strongarm->value = 1;
   $export['node_submitted_question'] = $strongarm;
 
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = "pathauto_node_answer_pattern";
+  $strongarm->value = 'groups/[node:og-group-ref:0:title-field]/[node:field-related-question:title-field]/[node:title-field]';
+  $export["pathauto_node_answer_pattern"] = $strongarm;
+
   return $export;
 }
