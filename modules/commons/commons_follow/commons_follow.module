@@ -302,6 +302,10 @@ function commons_follow_views_data_alter(&$data) {
 }
 
 function commons_follow_views_query_alter(&$view, &$query) {
+  // Only act on the notifications page.
+  if (arg(2) != 'notification-settings') {
+    return;
+  }
   global $user;
   $prefix = variable_get('message_subscribe_flag_prefix', 'subscribe') . '_';
   if(strpos($view->name, $prefix) === 0 && isset($view->args[0]) && $user->uid != $view->args[0]) {
