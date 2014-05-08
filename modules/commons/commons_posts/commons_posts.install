@@ -65,3 +65,14 @@ function commons_posts_update_7005() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Improve the browsing widget empty text.
+ */
+function commons_posts_update_7006() {
+  $revert = array(
+    'commons_posts' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}

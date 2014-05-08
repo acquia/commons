@@ -7,22 +7,6 @@
 include_once 'commons_polls.features.inc';
 
 /**
-* Implements hook_commons_bw_group_widget().
-*/
-function commons_polls_commons_bw_group_widget() {
-  return array(
-    'commons_polls' => array(
-      'title' => t('Polls'),
-      'type' => 'view',
-      'vid' => 'commons_bw_polls',
-      'display' => 'default',
-      'weight' => 10,
-      'bundle' => 'poll',
-    ),
-  );
-}
-
-/**
  * Implements hook_commons_entity_integration().
  */
 function commons_polls_commons_entity_integration() {
@@ -32,6 +16,22 @@ function commons_polls_commons_entity_integration() {
         'media' => TRUE,
         'is_group_content' => TRUE,
       ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_commons_bw_group_widget().
+ */
+function commons_polls_commons_bw_group_widget() {
+  return array(
+    'commons_polls' => array(
+      'title' => t('Polls'),
+      'type' => 'view',
+      'vid' => 'commons_bw_polls',
+      'display' => 'default',
+      'weight' => 10,
+      'bundle' => 'poll',
     ),
   );
 }
@@ -156,4 +156,16 @@ function commons_polls_form_commons_bw_partial_node_form_after_build($form) {
   $form['body'][$language][0]['value']['#rows'] = 3;
 
   return $form;
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function commons_polls_views_pre_render(&$view) {
+  // Improve the browsing widget empty text when displayed outside of a group.
+  // TODO: Enable og_context and check group context instead of looking for an
+  // empty first argument.
+  if (empty($view->args[0]) && $view->name == 'commons_bw_polls') {
+    $view->display_handler->handlers['empty']['area']->options['content'] = t('No polls have been created.');
+  }
 }

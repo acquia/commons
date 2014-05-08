@@ -76,3 +76,14 @@ function commons_documents_update_7006() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Improve the browsing widget empty text.
+ */
+function commons_documents_update_7007() {
+  $revert = array(
+    'commons_documents' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}

@@ -54,3 +54,14 @@ function commons_polls_update_7004() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Improve the browsing widget empty text.
+ */
+function commons_polls_update_7005() {
+  $revert = array(
+    'commons_polls' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}

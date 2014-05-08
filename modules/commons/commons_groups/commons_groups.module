@@ -1149,3 +1149,15 @@ function commons_groups_field_formatter_view($entity_type, $entity, $field, $ins
     return $element;
   }
 }
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function commons_groups_views_pre_render(&$view) {
+  // Improve the browsing widget empty text when displayed outside of a group.
+  // TODO: Enable og_context and check group context instead of looking for an
+  // empty first argument.
+  if (empty($view->args[0]) && $view->name == 'commons_bw_all') {
+    $view->display_handler->handlers['empty']['area']->options['content'] = t('Nobody has posted yet.');
+  }
+}

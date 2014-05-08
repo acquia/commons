@@ -199,3 +199,14 @@ function commons_groups_update_3115() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Improve the browsing widget empty text.
+ */
+function commons_groups_update_3116() {
+  $revert = array(
+    'commons_groups' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}

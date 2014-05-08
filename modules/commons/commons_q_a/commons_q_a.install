@@ -136,3 +136,14 @@ function commons_q_a_update_3111() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Improve the browsing widget empty text.
+ */
+function commons_q_a_update_3112() {
+  $revert = array(
+    'commons_q_a' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}
