@@ -210,6 +210,11 @@ function commons_trusted_contacts_form_user_admin_settings_alter(&$form, &$form_
     '#default_value' => variable_get('commons_trusted_contacts_limit', 1000),
     '#description' => t('This setting defaults to 1000 maximum contacts for performance reasons, and should be sufficient for most sites. Set to 0 for no limit.'),
   );
+  $form['commons_trusted_contacts']['commons_trusted_contacts_global_messaging'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Allow users to message each other regardless if they are a trusted contact'),
+    '#default_value' => variable_get('commons_trusted_contacts_global_messaging', FALSE),
+  );
 }
 
 /**
@@ -314,6 +319,11 @@ function commons_trusted_contacts_field_formatter_view($entity_type, $entity, $f
   global $user;
 
   $element = array();
+  $element[0] = array(
+    '#type' => 'container',
+    '#attributes' => array(),
+  );
+  $links = array();
   $settings = $display['settings'];
 
   switch ($display['type']) {
@@ -336,93 +346,92 @@ function commons_trusted_contacts_field_formatter_view($entity_type, $entity, $f
       }
 
 
-      if ($user_is_active_member) {
-        $links['title'] = t('Message');
-        $links['href'] = 'user/' . $user->uid . '/contacts/messages/popup/' . $id;
+      if (variable_get('commons_trusted_contacts_global_messaging', FALSE) || $user_is_active_member) {
+        $link = array('#type' => 'link');
+        $link['#title'] = t('Message');
+        $link['#href'] = 'user/' . $user->uid . '/contacts/messages/popup/' . $id;
+        // without an #options array template.php doesn't assign classes
+        $link['#options'] = array();
+        $element[0][] = $link;
       }
-      else {
-        if (og_is_member($entity_type, $id, 'user', $account, array(OG_STATE_PENDING))) {
-          // If user is pending, they should not be able to apply for
-          // membership.
-          $element[0] = array(
-            '#theme' => 'html_tag__request_pending',
-            '#tag' => 'span',
-            '#value' => t('Awaiting confirmation'),
-            '#attributes' => array(
-              'class' => array('trusted-request-pending'),
-            ),
-          );
+      if (og_is_member($entity_type, $id, 'user', $account, array(OG_STATE_BLOCKED))) {
+        // If user is blocked, they should not be able to apply for
+        // membership.
+        return;
+      }
+      elseif (og_is_member($entity_type, $id, 'user', $account, array(OG_STATE_PENDING))) {
+        // If user is pending, they should not be able to apply for
+        // membership.
+        $link = array(
+          '#theme' => 'html_tag__request_pending',
+          '#tag' => 'span',
+          '#value' => t('Awaiting confirmation'),
+          '#attributes' => array(
+            'class' => array('trusted-request-pending'),
+          ),
+        );
+        $element[0][] = $link;
+      }
+      elseif (!og_is_member($entity_type, $id, 'user', $account, array(OG_STATE_ACTIVE))) {
+        // Check if user can subscribe to the field.
+        if (empty($settings['field_name']) && $audience_field_name = og_get_best_group_audience_field('user', $account, $entity_type, $bundle)) {
+          $settings['field_name'] = $audience_field_name;
+        }
+        if (!$settings['field_name']) {
+          return;
+        }
+
+        $field_info = field_info_field($settings['field_name']);
+
+        // Check if entity is referencable.
+        if ($field_info['settings']['target_type'] != $entity_type) {
+          // Group type doesn't match.
+          return;
+        }
+        if (!empty($field_info['settings']['handler_settings']['target_bundles']) && !in_array($bundle, $field_info['settings']['handler_settings']['target_bundles'])) {
+          // Bundles don't match.
+          return;
+        }
+
+        if (!og_check_field_cardinality('user', $account, $settings['field_name'])) {
+          $element[0] = array('#markup' => format_plural($field_info['cardinality'], 'You are already registered to another group', 'You are already registered to @count groups'));
           return $element;
         }
+
+        $token = drupal_get_token('request' . ':' . $id . ':' . $account->uid);
+        $url = "request-trust/$id/$token/nojs";
+
+        $link = array('#type' => 'link');
+        $link['#title'] = t('Add as trusted contact');
+        if ($account->uid) {
+          $link['#href'] = $url;
+          $link['#options'] = array(
+            'attributes' => array(
+              'class' => array('use-ajax'),
+              'id' => 'user-' . $entity->uid
+            )
+          );
+          $element[0][] = $link;
+
+          // Ensure that the drupal.ajax and jquery.form libraries are always
+          // loaded for AJAX toggle links.
+          $element['#attached'] = array(
+            'library' => array(
+              array('system', 'drupal.ajax'),
+              array('system', 'jquery.form'),
+            ),
+          );
+        }
         else {
-          if (og_is_member($entity_type, $id, 'user', $account, array(OG_STATE_BLOCKED))) {
-            // If user is blocked, they should not be able to apply for
-            // membership.
-            return;
-          }
-
-          // Check if user can subscribe to the field.
-          if (empty($settings['field_name']) && $audience_field_name = og_get_best_group_audience_field('user', $account, $entity_type, $bundle)) {
-            $settings['field_name'] = $audience_field_name;
-          }
-          if (!$settings['field_name']) {
-            return;
-          }
-
-          $field_info = field_info_field($settings['field_name']);
-
-          // Check if entity is referencable.
-          if ($field_info['settings']['target_type'] != $entity_type) {
-            // Group type doesn't match.
-            return;
-          }
-          if (!empty($field_info['settings']['handler_settings']['target_bundles']) && !in_array($bundle, $field_info['settings']['handler_settings']['target_bundles'])) {
-            // Bundles don't match.
-            return;
-          }
-
-          if (!og_check_field_cardinality('user', $account, $settings['field_name'])) {
-            $element[0] = array('#markup' => format_plural($field_info['cardinality'], 'You are already registered to another group', 'You are already registered to @count groups'));
-            return $element;
-          }
-
-          $token = drupal_get_token('request' . ':' . $id . ':' . $account->uid);
-          $url = "request-trust/$id/$token/nojs";
-
-          $links['title'] = t('Add as trusted contact');
-          if ($account->uid) {
-            $links['href'] = $url;
-            $links['options'] = array(
-              'attributes' => array(
-                'class' => array('use-ajax'),
-                'id' => 'user-' . $entity->uid
-              )
-            );
-
-            // Ensure that the drupal.ajax and jquery.form libraries are always
-            // loaded for AJAX toggle links.
-            $element['#attached'] = array(
-              'library' => array(
-                array('system', 'drupal.ajax'),
-                array('system', 'jquery.form'),
-              ),
-            );
-          }
-          else {
-            $links['href'] = 'user/login';
-            $links['options'] = array('query' => array('destination' => $url));
-          }
+          $link = array('#type' => 'link');
+          $link['#href'] = 'user/login';
+          $link['#options'] = array('query' => array('destination' => $url));
+          $element[0][] = $link;
         }
       }
 
-      if (!empty($links['title'])) {
-        $links += array('options' => array());
-        $element[0] = array(
-          '#type' => 'link',
-          '#title' => $links['title'],
-          '#href' => $links['href'],
-          '#options' => $links['options'],
-        );
+      // If we provided any links in the container
+      if (count(element_children($element[0]))) {
         return $element;
       }
       // User didn't have permissions.
@@ -665,7 +674,8 @@ function commons_trusted_contacts_request_trust($account, $ajax) {
         ),
       ),
     );
-    $commands[] = ajax_command_replace('#user-' . $account->uid, theme('html_tag__request_pending', $element));
+    // We trip due to https://api.drupal.org/comment/32698#comment-32698
+    $commands[] = ajax_command_replace('#user-' . $account->uid, trim(theme('html_tag__request_pending', $element)));
     $page = array('#type' => 'ajax', '#commands' => $commands);
     ajax_deliver($page);
   }
@@ -931,7 +941,7 @@ function commons_trusted_contacts_privatemsg_write_access($account) {
 
   $uid = isset($account->uid) ? $account->uid : $account;
 
-  return (privatemsg_user_access('write privatemsg') && commons_group_is_trusted_contact($uid));
+  return (privatemsg_user_access('write privatemsg') && (commons_group_is_trusted_contact($uid) || variable_get('commons_trusted_contacts_global_messaging', FALSE)));
 }
 
 /**

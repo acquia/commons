@@ -48,6 +48,13 @@ function commons_trusted_contacts_install() {
 }
 
 /**
+ * Implements hook_uninstall().
+ */
+function commons_trusted_contacts_uninstall() {
+  variable_delete('commons_trusted_contacts_restrict_messaging');
+}
+
+/**
  * Use absolute URLs for pending invitation emails.
  */
 function commons_trusted_contacts_update_3100() {

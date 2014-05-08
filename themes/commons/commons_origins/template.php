@@ -1087,15 +1087,18 @@ function _commons_origins_format_address(&$address) {
 function commons_origins_preprocess_field(&$variables, $hook) {
   // Style the trusted contact link like a button.
   if ($variables['element']['#formatter'] == 'trusted_contact') {
-    foreach ($variables['items'] as &$item) {
-      if (isset($item['#options'])) {
-        $item['#options']['attributes']['class'][] = 'action-item-small';
-      }
-      if (isset($item['#href']) && strpos($item['#href'], 'messages')) {
-        $item['#options']['attributes']['class'][] = 'message-contact';
-      }
-      elseif (isset($item['#href'])) {
-        $item['#options']['attributes']['class'][] = 'trusted-status-request';
+    foreach ($variables['items'] as &$container) {
+      foreach (element_children($container) as $index) {
+        $item = &$container[$index];
+        if (isset($item['#options'])) {
+          $item['#options']['attributes']['class'][] = 'action-item-small';
+        }
+        if (isset($item['#href']) && strpos($item['#href'], 'messages')) {
+          $item['#options']['attributes']['class'][] = 'message-contact';
+        }
+        elseif (isset($item['#href'])) {
+          $item['#options']['attributes']['class'][] = 'trusted-status-request';
+        }
       }
     }
   }
