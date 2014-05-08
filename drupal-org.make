@@ -125,7 +125,10 @@ projects[elements][version] = "1.4"
 
 projects[email_registration][type] = "module"
 projects[email_registration][subdir] = "contrib"
-projects[email_registration][version] = "1.2"
+projects[email_registration][download][type] = "git"
+projects[email_registration][download][url] = "http://git.drupal.org/project/email_registration.git"
+projects[email_registration][download][branch] = "7.x-1.x"
+projects[email_registration][download][revision] = "1656416"
 
 projects[entity][type] = "module"
 projects[entity][subdir] = "contrib"
