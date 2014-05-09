@@ -234,3 +234,14 @@ function commons_events_update_7012() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Sort and filter the upcoming user events view by start date.
+ */
+function commons_events_update_7013() {
+  $revert = array(
+    'commons_events' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}
