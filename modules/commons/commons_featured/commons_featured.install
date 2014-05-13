@@ -1,0 +1,12 @@
+<?php
+
+/**
+ * Replace the title attribute with the title field in view displays.
+ */
+function commons_featured_update_7300() {
+  $revert = array(
+    'commons_featured' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}

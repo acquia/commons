@@ -147,3 +147,14 @@ function commons_q_a_update_3112() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Replace the title attribute with the title field in view displays.
+ */
+function commons_q_a_update_3113() {
+  $revert = array(
+    'commons_q_a' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}

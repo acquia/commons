@@ -94,3 +94,14 @@ function commons_wikis_update_7008() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Replace the title attribute with the title field in view displays.
+ */
+function commons_wikis_update_7009() {
+  $revert = array(
+    'commons_wikis' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}

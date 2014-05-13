@@ -210,3 +210,14 @@ function commons_groups_update_3116() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Replace the title attribute with the title field in view displays.
+ */
+function commons_groups_update_3117() {
+  $revert = array(
+    'commons_groups' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}

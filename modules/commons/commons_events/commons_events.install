@@ -245,3 +245,14 @@ function commons_events_update_7013() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Replace the title attribute with the title field in view displays.
+ */
+function commons_events_update_7014() {
+  $revert = array(
+    'commons_events' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}

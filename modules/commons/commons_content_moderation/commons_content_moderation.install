@@ -18,3 +18,13 @@ function commons_content_moderation_update_7002() {
   cache_clear_all('*', 'cache_views', TRUE);
 }
 
+/**
+ * Replace the title attribute with the title field in view displays.
+ */
+function commons_content_moderation_update_7003() {
+  $revert = array(
+    'commons_content_moderation' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}

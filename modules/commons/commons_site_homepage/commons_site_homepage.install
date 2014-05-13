@@ -13,3 +13,14 @@ function commons_site_homepage_update_7301() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Replace the title attribute with the title field in view displays.
+ */
+function commons_site_homepage_update_7302() {
+  $revert = array(
+    'commons_site_homepage' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}

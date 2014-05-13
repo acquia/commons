@@ -19,3 +19,14 @@ function commons_follow_node_update_3501() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Replace the title attribute with the title field in view displays.
+ */
+function commons_follow_node_update_3502() {
+  $revert = array(
+    'commons_follow_node' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}

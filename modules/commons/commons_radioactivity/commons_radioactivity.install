@@ -1,0 +1,12 @@
+<?php
+
+/**
+ * Replace the title attribute with the title field in view displays.
+ */
+function commons_radioactivity_update_7300() {
+  $revert = array(
+    'commons_radioactivity' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}

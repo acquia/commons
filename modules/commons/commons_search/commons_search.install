@@ -6,3 +6,14 @@
 function commons_search_update_7001() {
   module_disable(array('rich_snippets'));
 }
+
+/**
+ * Replace the title attribute with the title field in view displays.
+ */
+function commons_search_update_7002() {
+  $revert = array(
+    'commons_search' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}

@@ -65,3 +65,14 @@ function commons_polls_update_7005() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Replace the title attribute with the title field in view displays.
+ */
+function commons_polls_update_7006() {
+  $revert = array(
+    'commons_polls' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}
