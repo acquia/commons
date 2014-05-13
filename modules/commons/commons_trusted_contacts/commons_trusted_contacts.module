@@ -794,8 +794,8 @@ function commons_trusted_contacts_check_limit($requestor, $requestee, $ajax = FA
   // Validate that neither the requesting user nor the target user has exceeded
   // her trusted contacts limit.
   if ($contacts_limit = variable_get('commons_trusted_contacts_limit', 1000)) {
-    $requestor_groups = og_get_entity_groups('user', $requestor, array(OG_STATE_ACTIVE), 'user_trusted_contacts');
-    $requestee_groups = og_get_entity_groups('user', $requestee, array(OG_STATE_ACTIVE), 'user_trusted_contacts');
+    $requestor_groups = og_get_entity_groups('user', $requestor, array(OG_STATE_ACTIVE, OG_STATE_PENDING), 'user_trusted_contacts');
+    $requestee_groups = og_get_entity_groups('user', $requestee, array(OG_STATE_ACTIVE, OG_STATE_PENDING), 'user_trusted_contacts');
 
     // This should always be set, because the user is a member of their own group.
     // But we know funky things can happen, so lets add a check just in case.
