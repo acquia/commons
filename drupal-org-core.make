@@ -19,7 +19,7 @@ projects[drupal][patch][] = http://drupal.org/files/1664602-1.patch
 
 ; Optimize node access queries.
 ; https://drupal.org/comment/8516319#comment-8516319
-projects[drupal][patch][] = https://drupal.org/files/issues/drupal-optimize_node_access_queries-106721-D7-71-do-not-test.patch
+projects[drupal][patch][] = https://drupal.org/files/issues/drupal-106721-optimize_node_access_queries-81.patch
 
 ; Statically cache node access grants
 ; https://drupal.org/comment/8495029#comment-8495029
