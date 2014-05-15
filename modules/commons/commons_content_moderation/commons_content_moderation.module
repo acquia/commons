@@ -95,6 +95,19 @@ function commons_content_moderation_delete_comment_block_user($comment, $context
 }
 
 /**
+ * Implements hook_flag_default_flags_alter().
+ */
+function commons_content_moderation_flag_default_flags_alter(&$flags) {
+  // Disable default node and comment abuse flags in favor of Commons-specific
+  // flags included with Commons Content Moderation.
+  foreach (array('abuse_user', 'abuse_comment', 'abuse_node', 'abuse_whitelist_comment', 'abuse_whitelist_node', 'abuse_whitelist_user') as $flag_name) {
+    if (!empty($flags[$flag_name])) {
+      $flags[$flag_name]['status'] = FALSE;
+    }
+  }
+}
+
+/**
  * Implements hook_views_default_views_alter().
  */
 function commons_content_moderation_views_default_views_alter(&$views) {

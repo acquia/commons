@@ -178,6 +178,10 @@ projects[flag][version] = "2.2"
 ; http://drupal.org/node/1965760
 projects[flag][patch][] = "https://drupal.org/files/issues/1965760.29.flag_.entity-tokens.patch"
 
+; Provide a hook to allow default flag definitions to be altered.
+; https://drupal.org/node/2027091#comment-8012263
+projects[flag][patch][] = "https://drupal.org/files/flag-default-flags-alter-hook-2027091-03.patch"
+
 projects[flag_abuse][type] = "module"
 projects[flag_abuse][subdir] = "contrib"
 projects[flag_abuse][version] = "2.0"
