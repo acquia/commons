@@ -230,5 +230,5 @@ function _commons_convert_administrator_to_group($operation, &$context) {
   drupal_get_messages('completed', TRUE);
 
   // Delete the demo content variable
-  variable_del('commons_install_example_content');
+  variable_del('commons_selected_extras');
 }
