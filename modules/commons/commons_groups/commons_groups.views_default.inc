@@ -53,6 +53,14 @@ function commons_groups_views_default_views() {
   $handler->display->display_options['relationships']['og_membership_rel']['table'] = 'node';
   $handler->display->display_options['relationships']['og_membership_rel']['field'] = 'og_membership_rel';
   $handler->display->display_options['relationships']['og_membership_rel']['required'] = TRUE;
+  /* Relationship: Flags: commons_follow_node */
+  $handler->display->display_options['relationships']['flag_content_rel']['id'] = 'flag_content_rel';
+  $handler->display->display_options['relationships']['flag_content_rel']['table'] = 'node';
+  $handler->display->display_options['relationships']['flag_content_rel']['field'] = 'flag_content_rel';
+  $handler->display->display_options['relationships']['flag_content_rel']['ui_name'] = 'Following';
+  $handler->display->display_options['relationships']['flag_content_rel']['label'] = 'following';
+  $handler->display->display_options['relationships']['flag_content_rel']['required'] = 0;
+  $handler->display->display_options['relationships']['flag_content_rel']['flag'] = 'commons_follow_node';
   /* Field: Content: Title */
   $handler->display->display_options['fields']['title_field']['id'] = 'title_field';
   $handler->display->display_options['fields']['title_field']['table'] = 'field_data_title_field';
@@ -70,6 +78,13 @@ function commons_groups_views_default_views() {
   $handler->display->display_options['sorts']['created']['order'] = 'DESC';
   $handler->display->display_options['sorts']['created']['exposed'] = TRUE;
   $handler->display->display_options['sorts']['created']['expose']['label'] = 'most recent';
+  /* Sort criterion: Content: Radioactivity (field_radioactivity:radioactivity_energy) */
+  $handler->display->display_options['sorts']['field_radioactivity_radioactivity_energy']['id'] = 'field_radioactivity_radioactivity_energy';
+  $handler->display->display_options['sorts']['field_radioactivity_radioactivity_energy']['table'] = 'field_data_field_radioactivity';
+  $handler->display->display_options['sorts']['field_radioactivity_radioactivity_energy']['field'] = 'field_radioactivity_radioactivity_energy';
+  $handler->display->display_options['sorts']['field_radioactivity_radioactivity_energy']['order'] = 'DESC';
+  $handler->display->display_options['sorts']['field_radioactivity_radioactivity_energy']['exposed'] = TRUE;
+  $handler->display->display_options['sorts']['field_radioactivity_radioactivity_energy']['expose']['label'] = 'most active';
   /* Contextual filter: OG membership: Group ID */
   $handler->display->display_options['arguments']['gid']['id'] = 'gid';
   $handler->display->display_options['arguments']['gid']['table'] = 'og_membership';
@@ -92,7 +107,12 @@ function commons_groups_views_default_views() {
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'node';
   $handler->display->display_options['filters']['type']['field'] = 'type';
-  $handler->display->display_options['filters']['type']['value'] = array();
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'poll' => 'poll',
+    'post' => 'post',
+    'question' => 'question',
+    'wiki' => 'wiki',
+  );
   /* Filter criterion: OG membership: Group_type */
   $handler->display->display_options['filters']['group_type']['id'] = 'group_type';
   $handler->display->display_options['filters']['group_type']['table'] = 'og_membership';
@@ -101,6 +121,18 @@ function commons_groups_views_default_views() {
   $handler->display->display_options['filters']['group_type']['value'] = array(
     'node' => 'node',
   );
+  /* Filter criterion: Following */
+  $handler->display->display_options['filters']['flagged']['id'] = 'flagged';
+  $handler->display->display_options['filters']['flagged']['table'] = 'flag_content';
+  $handler->display->display_options['filters']['flagged']['field'] = 'flagged';
+  $handler->display->display_options['filters']['flagged']['relationship'] = 'flag_content_rel';
+  $handler->display->display_options['filters']['flagged']['ui_name'] = 'Following';
+  $handler->display->display_options['filters']['flagged']['value'] = '1';
+  $handler->display->display_options['filters']['flagged']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['flagged']['expose']['operator_id'] = '';
+  $handler->display->display_options['filters']['flagged']['expose']['label'] = 'Following';
+  $handler->display->display_options['filters']['flagged']['expose']['operator'] = 'flagged_op';
+  $handler->display->display_options['filters']['flagged']['expose']['identifier'] = 'following';
   $translatables['commons_bw_all'] = array(
     t('Master'),
     t('more'),
@@ -163,7 +195,19 @@ function commons_groups_views_default_views() {
   $handler->display->display_options['fields']['picture']['table'] = 'users';
   $handler->display->display_options['fields']['picture']['field'] = 'picture';
   $handler->display->display_options['fields']['picture']['label'] = '';
+  $handler->display->display_options['fields']['picture']['element_type'] = 'div';
+  $handler->display->display_options['fields']['picture']['element_class'] = 'profile-badge-picture';
   $handler->display->display_options['fields']['picture']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['picture']['element_default_classes'] = FALSE;
+  /* Field: User: Name */
+  $handler->display->display_options['fields']['name']['id'] = 'name';
+  $handler->display->display_options['fields']['name']['table'] = 'users';
+  $handler->display->display_options['fields']['name']['field'] = 'name';
+  $handler->display->display_options['fields']['name']['label'] = '';
+  $handler->display->display_options['fields']['name']['element_type'] = 'span';
+  $handler->display->display_options['fields']['name']['element_class'] = 'profile-badge-name';
+  $handler->display->display_options['fields']['name']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['name']['element_default_classes'] = FALSE;
   /* Sort criterion: User: Created date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'users';
@@ -265,7 +309,7 @@ function commons_groups_views_default_views() {
   $handler = $view->new_display('panel_pane', 'group homepage', 'panel_pane_2');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['defaults']['style_plugin'] = FALSE;
-  $handler->display->display_options['style_plugin'] = 'grid';
+  $handler->display->display_options['style_plugin'] = 'list';
   $handler->display->display_options['style_options']['grouping'] = array(
     0 => array(
       'field' => 'og_roles',
@@ -273,9 +317,15 @@ function commons_groups_views_default_views() {
       'rendered_strip' => 0,
     ),
   );
+  $handler->display->display_options['style_options']['row_class'] = 'profile-badge';
+  $handler->display->display_options['style_options']['default_row_class'] = FALSE;
+  $handler->display->display_options['style_options']['row_class_special'] = FALSE;
+  $handler->display->display_options['style_options']['class'] = 'profile-badges clearfix';
+  $handler->display->display_options['style_options']['wrapper_class'] = 'view-profile-badges';
   $handler->display->display_options['defaults']['style_options'] = FALSE;
   $handler->display->display_options['defaults']['row_plugin'] = FALSE;
   $handler->display->display_options['row_plugin'] = 'fields';
+  $handler->display->display_options['row_options']['default_field_elements'] = FALSE;
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['fields'] = FALSE;
   /* Field: User: Picture */
@@ -283,7 +333,10 @@ function commons_groups_views_default_views() {
   $handler->display->display_options['fields']['picture']['table'] = 'users';
   $handler->display->display_options['fields']['picture']['field'] = 'picture';
   $handler->display->display_options['fields']['picture']['label'] = '';
+  $handler->display->display_options['fields']['picture']['element_type'] = 'div';
+  $handler->display->display_options['fields']['picture']['element_class'] = 'profile-badge-picture';
   $handler->display->display_options['fields']['picture']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['picture']['element_default_classes'] = FALSE;
   $handler->display->display_options['fields']['picture']['image_style'] = '50x50';
   /* Field: OG membership: OG user roles in group */
   $handler->display->display_options['fields']['og_roles']['id'] = 'og_roles';
@@ -310,6 +363,18 @@ function commons_groups_views_default_views() {
   $handler->display->display_options['defaults']['title'] = FALSE;
   $handler->display->display_options['title'] = 'Contributors to %1';
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'list';
+  $handler->display->display_options['style_options']['row_class'] = 'profile-badge';
+  $handler->display->display_options['style_options']['default_row_class'] = FALSE;
+  $handler->display->display_options['style_options']['row_class_special'] = FALSE;
+  $handler->display->display_options['style_options']['class'] = 'profile-badges';
+  $handler->display->display_options['style_options']['wrapper_class'] = 'view-profile-badges';
+  $handler->display->display_options['defaults']['style_options'] = FALSE;
+  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['row_plugin'] = 'fields';
+  $handler->display->display_options['row_options']['default_field_elements'] = FALSE;
+  $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['path'] = 'node/%/contributors';
   $translatables['commons_contributors_group'] = array(
     t('Master'),
@@ -983,8 +1048,14 @@ function commons_groups_views_default_views() {
   $handler->display->display_options['pager']['type'] = 'some';
   $handler->display->display_options['pager']['options']['items_per_page'] = '16';
   $handler->display->display_options['pager']['options']['offset'] = '0';
-  $handler->display->display_options['style_plugin'] = 'grid';
+  $handler->display->display_options['style_plugin'] = 'list';
+  $handler->display->display_options['style_options']['row_class'] = 'profile-badge';
+  $handler->display->display_options['style_options']['default_row_class'] = FALSE;
+  $handler->display->display_options['style_options']['row_class_special'] = FALSE;
+  $handler->display->display_options['style_options']['class'] = 'profile-badges';
+  $handler->display->display_options['style_options']['wrapper_class'] = 'view-profile-badges';
   $handler->display->display_options['row_plugin'] = 'fields';
+  $handler->display->display_options['row_options']['default_field_elements'] = FALSE;
   /* No results behavior: Global: Text area */
   $handler->display->display_options['empty']['area']['id'] = 'area';
   $handler->display->display_options['empty']['area']['table'] = 'views';
@@ -1002,7 +1073,10 @@ function commons_groups_views_default_views() {
   $handler->display->display_options['fields']['picture']['table'] = 'users';
   $handler->display->display_options['fields']['picture']['field'] = 'picture';
   $handler->display->display_options['fields']['picture']['label'] = '';
+  $handler->display->display_options['fields']['picture']['element_type'] = 'div';
+  $handler->display->display_options['fields']['picture']['element_class'] = 'profile-badge-picture';
   $handler->display->display_options['fields']['picture']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['picture']['element_default_classes'] = FALSE;
   $handler->display->display_options['fields']['picture']['image_style'] = '50x50';
   /* Sort criterion: User: Created date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';

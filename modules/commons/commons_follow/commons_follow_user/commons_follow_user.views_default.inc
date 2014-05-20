@@ -182,8 +182,14 @@ function commons_follow_user_views_default_views() {
   $handler->display->display_options['pager']['type'] = 'some';
   $handler->display->display_options['pager']['options']['items_per_page'] = '16';
   $handler->display->display_options['pager']['options']['offset'] = '0';
-  $handler->display->display_options['style_plugin'] = 'grid';
+  $handler->display->display_options['style_plugin'] = 'list';
+  $handler->display->display_options['style_options']['row_class'] = 'profile-badge';
+  $handler->display->display_options['style_options']['default_row_class'] = FALSE;
+  $handler->display->display_options['style_options']['row_class_special'] = FALSE;
+  $handler->display->display_options['style_options']['class'] = 'profile-badges';
+  $handler->display->display_options['style_options']['wrapper_class'] = 'view-profile-badges';
   $handler->display->display_options['row_plugin'] = 'fields';
+  $handler->display->display_options['row_options']['default_field_elements'] = FALSE;
   /* No results behavior: Global: Text area */
   $handler->display->display_options['empty']['area']['id'] = 'area';
   $handler->display->display_options['empty']['area']['table'] = 'views';
@@ -204,21 +210,27 @@ function commons_follow_user_views_default_views() {
   $handler->display->display_options['relationships']['uid']['field'] = 'uid';
   $handler->display->display_options['relationships']['uid']['relationship'] = 'flag_content_rel';
   $handler->display->display_options['relationships']['uid']['required'] = TRUE;
-  /* Field: User: Name */
-  $handler->display->display_options['fields']['name']['id'] = 'name';
-  $handler->display->display_options['fields']['name']['table'] = 'users';
-  $handler->display->display_options['fields']['name']['field'] = 'name';
-  $handler->display->display_options['fields']['name']['relationship'] = 'uid';
-  $handler->display->display_options['fields']['name']['label'] = '';
-  $handler->display->display_options['fields']['name']['element_label_colon'] = FALSE;
   /* Field: User: Picture */
   $handler->display->display_options['fields']['picture']['id'] = 'picture';
   $handler->display->display_options['fields']['picture']['table'] = 'users';
   $handler->display->display_options['fields']['picture']['field'] = 'picture';
   $handler->display->display_options['fields']['picture']['relationship'] = 'uid';
   $handler->display->display_options['fields']['picture']['label'] = '';
+  $handler->display->display_options['fields']['picture']['element_type'] = 'div';
+  $handler->display->display_options['fields']['picture']['element_class'] = 'profile-badge-picture';
   $handler->display->display_options['fields']['picture']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['picture']['element_default_classes'] = FALSE;
   $handler->display->display_options['fields']['picture']['image_style'] = '50x50_avatar';
+  /* Field: User: Name */
+  $handler->display->display_options['fields']['name']['id'] = 'name';
+  $handler->display->display_options['fields']['name']['table'] = 'users';
+  $handler->display->display_options['fields']['name']['field'] = 'name';
+  $handler->display->display_options['fields']['name']['relationship'] = 'uid';
+  $handler->display->display_options['fields']['name']['label'] = '';
+  $handler->display->display_options['fields']['name']['element_type'] = 'span';
+  $handler->display->display_options['fields']['name']['element_class'] = 'profile-badge-name';
+  $handler->display->display_options['fields']['name']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['name']['element_default_classes'] = FALSE;
   /* Sort criterion: Flags: Flagged time */
   $handler->display->display_options['sorts']['timestamp']['id'] = 'timestamp';
   $handler->display->display_options['sorts']['timestamp']['table'] = 'flag_content';
@@ -323,9 +335,15 @@ function commons_follow_user_views_default_views() {
   $handler->display->display_options['pager']['type'] = 'some';
   $handler->display->display_options['pager']['options']['items_per_page'] = '16';
   $handler->display->display_options['pager']['options']['offset'] = '0';
-  $handler->display->display_options['style_plugin'] = 'grid';
+  $handler->display->display_options['style_plugin'] = 'list';
+  $handler->display->display_options['style_options']['row_class'] = 'profile-badge';
+  $handler->display->display_options['style_options']['default_row_class'] = FALSE;
+  $handler->display->display_options['style_options']['row_class_special'] = FALSE;
+  $handler->display->display_options['style_options']['class'] = 'profile-badges';
+  $handler->display->display_options['style_options']['wrapper_class'] = 'view-profile-badges';
   $handler->display->display_options['row_plugin'] = 'fields';
-  /* No results behavior: Global: Text area */
+  $handler->display->display_options['row_options']['hide_empty'] = TRUE;
+  $handler->display->display_options['row_options']['default_field_elements'] = FALSE;  /* No results behavior: Global: Text area */
   $handler->display->display_options['empty']['area']['id'] = 'area';
   $handler->display->display_options['empty']['area']['table'] = 'views';
   $handler->display->display_options['empty']['area']['field'] = 'area';
@@ -341,20 +359,26 @@ function commons_follow_user_views_default_views() {
   $handler->display->display_options['relationships']['flag_content_rel']['label'] = 'Commons Follow (Users)';
   $handler->display->display_options['relationships']['flag_content_rel']['flag'] = 'commons_follow_user';
   $handler->display->display_options['relationships']['flag_content_rel']['user_scope'] = 'any';
+  /* Field: User: Picture */
+  $handler->display->display_options['fields']['picture']['id'] = 'picture';
+  $handler->display->display_options['fields']['picture']['table'] = 'users';
+  $handler->display->display_options['fields']['picture']['field'] = 'picture';
+  $handler->display->display_options['fields']['picture']['label'] = '';
+  $handler->display->display_options['fields']['picture']['element_type'] = 'div';
+  $handler->display->display_options['fields']['picture']['element_class'] = 'profile-badge-picture';
+  $handler->display->display_options['fields']['picture']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['picture']['element_default_classes'] = FALSE;
+  $handler->display->display_options['fields']['picture']['image_style'] = '50x50_avatar';
   /* Field: User: Name */
   $handler->display->display_options['fields']['name']['id'] = 'name';
   $handler->display->display_options['fields']['name']['table'] = 'users';
   $handler->display->display_options['fields']['name']['field'] = 'name';
   $handler->display->display_options['fields']['name']['label'] = '';
   $handler->display->display_options['fields']['name']['alter']['word_boundary'] = FALSE;
-  $handler->display->display_options['fields']['name']['alter']['ellipsis'] = FALSE;
-  /* Field: User: Picture */
-  $handler->display->display_options['fields']['picture']['id'] = 'picture';
-  $handler->display->display_options['fields']['picture']['table'] = 'users';
-  $handler->display->display_options['fields']['picture']['field'] = 'picture';
-  $handler->display->display_options['fields']['picture']['label'] = '';
-  $handler->display->display_options['fields']['picture']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['picture']['image_style'] = '50x50_avatar';
+  $handler->display->display_options['fields']['name']['element_type'] = 'span';
+  $handler->display->display_options['fields']['name']['element_class'] = 'profile-badge-name';
+  $handler->display->display_options['fields']['name']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['name']['element_default_classes'] = FALSE;
   /* Sort criterion: Flags: Flagged time */
   $handler->display->display_options['sorts']['timestamp']['id'] = 'timestamp';
   $handler->display->display_options['sorts']['timestamp']['table'] = 'flag_content';
