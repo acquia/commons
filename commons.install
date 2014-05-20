@@ -57,15 +57,9 @@ function commons_install_tasks() {
     ini_set('memory_limit', '196M');
   }
 
-  $demo_content = variable_get('commons_install_example_content', FALSE);
-  $acquia_connector = variable_get('commons_install_acquia_connector', FALSE);
+  $selected_extras = variable_get('commons_selected_extras', array());
 
   return array(
-    'commons_acquia_connector_enable' => array(
-      'display' => FALSE,
-      'type' => '',
-      'run' => $acquia_connector ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
-    ),
     'commons_installer_palette' => array(
       'display_name' => st('Choose site color palette'),
       'display' => TRUE,
@@ -81,15 +75,20 @@ function commons_install_tasks() {
     'commons_revert_features' => array(
       'display' => FALSE,
     ),
-    'commons_demo_content' => array(
+    'commons_install_additional_modules' => array(
+      'display_name' => !empty($selected_extras['example_content']) ? st('Install example content') : st('Install additional functionality'),
       'display' => FALSE,
       'type' => 'batch',
-      'run' => $demo_content ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
     ),
     'commons_create_first_group' => array(
       'display_name' => st('Create the first group'),
       'display' => TRUE,
       'type' => 'form',
+    ),
+    'commons_rebuild_node_access' => array(
+      'display' => FALSE,
+      'type' => 'batch',
+      'run' => !empty($selected_extras['og_access']) ? INSTALL_TASK_RUN_IF_NOT_COMPLETED : INSTALL_TASK_SKIP,
     ),
     'commons_admin_permissions' => array(
       'display' => FALSE,
@@ -201,16 +200,6 @@ function commons_install_finished(&$install_state) {
 }
 
 /**
- * Enable Acquia Connector module if selected on site configuration step.
- */
-function commons_acquia_connector_enable() {
-  $modules = variable_get('commons_install_acquia_modules', array());
-  if (!empty($modules)) {
-    module_enable($modules, TRUE);
-  }
-}
-
-/**
  * Allow users to select from a predefined list of color palettes during the
  * commons installation.
  */
@@ -266,6 +255,13 @@ function commons_anonymous_welcome_text_form() {
     '#default_value' => TRUE
   );
 
+  $form['commons_enable_og_access'] = array(
+    '#type' => 'checkbox',
+    '#title' => st('Enable private group support'),
+    '#description' => st('Add the ability to create private groups. Content in private groups can only be accessed by group members. <strong>Warning: Enable only if you require the ability to create private groups; this setting has performance implications.</strong>'),
+    '#default_value' => FALSE,
+  );
+
   $form['commons_anonymous_welcome_submit'] = array(
     '#type'  => 'submit',
     '#value' => st('Save and continue')
@@ -279,9 +275,19 @@ function commons_anonymous_welcome_text_form() {
  * @see commons_anonymous_welcome_text_form()
  */
 function commons_anonymous_welcome_text_form_submit($form_id, &$form_state) {
+  $selected_extras = variable_get('commons_selected_extras', array());
+
+  if ($form_state['values']['commons_enable_og_access']) {
+    $selected_extras['og_access'] = TRUE;
+  }
+
+  if ($form_state['values']['commons_install_example_content']) {
+    $selected_extras['example_content'] = TRUE;
+  }
+
+  variable_set('commons_selected_extras', $selected_extras);
   variable_set('commons_anonymous_welcome_title', $form_state['values']['commons_anonymous_welcome_title']);
   variable_set('commons_anonymous_welcome_body', $form_state['values']['commons_anonymous_welcome_body']);
-  variable_set('commons_install_example_content', $form_state['values']['commons_install_example_content']);
 }
 
 /*
@@ -305,33 +311,90 @@ function commons_revert_features() {
 }
 
 /**
- * This function generates demo content.
+ * Task callback: uses Batch API to enable modules based on user selection.
+ *
+ * Creates all demo content if requested and installs optional modules that
+ * providing additional functionality to the base install.
  */
-function commons_demo_content() {
+function commons_install_additional_modules() {
+  $selected_extras = variable_get('commons_selected_extras', array());
+
+  $modules = array();
+
+  if (!empty($selected_extras['acquia_agent'])) {
+    $modules[] = 'acquia_agent';
+  }
+
+  if (!empty($selected_extras['acquia_search'])) {
+    $modules[] = 'acquia_search';
+  }
+
+  if (!empty($selected_extras['acquia_spi'])) {
+    $modules[] = 'acquia_spi';
+  }
+
+  if (!empty($selected_extras['og_access'])) {
+    $modules[] = 'og_access';
+  }
+
+  // Resolve the dependencies now, so that module_enable() doesn't need
+  // to do it later for each individual module (which kills performance).
+  $files = system_rebuild_module_data();
+  $modules_sorted = array();
+  foreach ($modules as $module) {
+    if ($files[$module]->requires) {
+      // Create a list of dependencies that haven't been installed yet.
+      $dependencies = array_keys($files[$module]->requires);
+      $dependencies = array_filter($dependencies, '_commons_filter_dependencies');
+      // Add them to the module list.
+      $modules = array_merge($modules, $dependencies);
+    }
+  }
+  $modules = array_unique($modules);
+  foreach ($modules as $module) {
+    $modules_sorted[$module] = $files[$module]->sort;
+  }
+  arsort($modules_sorted);
+
   $operations = array();
 
-  // Create the demo users.
-  $operations[] = array('_commons_create_demo_users', array(t('Created demo users.')));
+  // Enable the selected modules.
+  foreach ($modules_sorted as $module => $weight) {
+    $operations[] = array('_commons_enable_module', array($module, $files[$module]->info['name']));
+  }
 
-  // Create the demo taxonomy terms.
-  $operations[] = array('_commons_create_demo_taxonomy_terms', array(t('Created taxonomy terms.')));
+  // Create the example content.
+  if (!empty($selected_extras['example_content'])) {
+    // Create the demo users.
+    $operations[] = array('_commons_create_demo_users', array(t('Created demo users.')));
 
-  // Create the demo groups.
-  $operations[] = array('_commons_create_demo_groups', array(t('Created demo groups.')));
+    // Create the demo taxonomy terms.
+    $operations[] = array('_commons_create_demo_taxonomy_terms', array(t('Created taxonomy terms.')));
 
-  // Create the demo content.
-  $operations[] = array('_commons_create_demo_content', array(t('Created demo content.')));
+    // Create the demo groups.
+    $operations[] = array('_commons_create_demo_groups', array(t('Created demo groups.')));
+
+    // Create the demo content.
+    $operations[] = array('_commons_create_demo_content', array(t('Created demo content.')));
+  }
 
   // Convert the administrator into a group.
   $operations[] = array('_commons_convert_administrator_to_group', array(t('Converted administrator into a group.')));
 
   $batch = array(
-    'title' => t('Installing demo content'),
+    'title' => !empty($selected_extras['example_content']) ? st('Installing example content') : st('Installing additional functionality'),
     'operations' => $operations,
     'file' => drupal_get_path('profile', 'commons') . '/commons.install_callbacks.inc',
   );
 
   return $batch;
+}
+
+/**
+ * array_filter() callback used to filter out already installed dependencies.
+ */
+function _commons_filter_dependencies($dependency) {
+  return !module_exists($dependency);
 }
 
 /**
@@ -433,6 +496,23 @@ function commons_add_user_avatar($account) {
       }
     }
   }
+}
+
+/**
+ * This function rebuild node access.
+ */
+function commons_rebuild_node_access() {
+  // Copied from node_access_rebuild() which sets its own batch while we need to
+  // return a batch which will be automatically run by the installer.
+  $batch = array(
+    'title' => t('Rebuilding content access permissions'),
+    'operations' => array(
+      array('_node_access_rebuild_batch_operation', array()),
+    ),
+    'finished' => '_node_access_rebuild_batch_finished',
+  );
+
+  return $batch;
 }
 
 /**
