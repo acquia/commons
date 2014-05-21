@@ -27,3 +27,14 @@ function commons_follow_user_update_3501() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Revert the following / followers view to use an unformatted style plugin.
+ */
+function commons_follow_user_update_3502() {
+  $revert = array(
+    'commons_follow_user' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}
