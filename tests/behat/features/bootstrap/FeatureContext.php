@@ -240,9 +240,10 @@ class FeatureContext extends DrupalContext
       if ($end === FALSE) {
         break;
       }
+      $random_generator = new Random;
       $name = substr($argument, $start + 1, $end - $start - 1);
       if ($name == 'random') {
-        $this->vars[$name] = Random::name(8);
+        $this->vars[$name] = $random_generator->name(8);
         $random[] = $this->vars[$name];
       }
       // In order to test previous random values stored in the form,
