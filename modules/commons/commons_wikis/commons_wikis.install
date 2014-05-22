@@ -1,6 +1,22 @@
 <?php
 
 /**
+ * Set default wikis roles upon enable
+ */
+function commons_wikis_enable() {
+  $revert = array(
+    'commons_wikis' => array('og_features_permission'),
+  );
+  features_revert($revert);
+
+  $groups = og_get_all_group();
+
+  foreach ($groups AS $gid) {
+    commons_groups_features_permission_rebuild('commons_wikis', $gid);
+  }
+}
+
+/**
  * Disable summary on Wiki nodes.
  */
 function commons_wikis_update_7000() {

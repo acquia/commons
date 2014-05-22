@@ -1161,3 +1161,58 @@ function commons_groups_views_pre_render(&$view) {
     $view->display_handler->handlers['empty']['area']->options['content'] = t('Nobody has posted yet.');
   }
 }
+
+/**
+ * Special Commons implementation of hook_features_rebuild().
+ *
+ * By default, reverting og permissions only occurs on the default rid, which is
+ * 0. All groups already created will not see the new permissions.
+ *
+ * As an alternative, this function iterates through all of the groups and sets
+ * default permissions and update the permissions map.
+ *
+ * @param string $module
+ *   The modules whose default user permissions should be rebuild.
+ */
+function commons_groups_features_permission_rebuild($module, $gid) {
+  module_load_include('features.inc', 'og', '/includes/og_features_role');
+
+  if ($defaults = features_get_default('og_features_permission', $module)) {
+    $grant = array();
+    $revoke = array();
+
+    foreach ($defaults as $key => $details) {
+      list($group_type, $bundle, $perm) = explode(':', $key);
+
+      // Make sure the role exists for this entity.
+      foreach ($details['roles'] as $role) {
+        $bundle_role = _og_features_role_exists($role, $group_type, $bundle);
+        if (empty($bundle_role)) {
+          og_role_save(og_role_create($role, $group_type, $gid, $bundle));
+        }
+      }
+
+      $roles = og_roles($group_type, $bundle, $gid);
+      foreach ($roles as $rid => $rolename) {
+        if (in_array($rolename, $details['roles'])) {
+          $grant[$rid][] = $perm;
+        }
+        else {
+          $revoke[$rid][] = $perm;
+        }
+      }
+    }
+
+    if (!empty($grant)) {
+      foreach ($grant as $rid => $permissions) {
+        og_role_grant_permissions($rid, $permissions);
+      }
+    }
+
+    if (!empty($revoke)) {
+      foreach ($revoke as $rid => $permissions) {
+        og_role_revoke_permissions($rid, $permissions);
+      }
+    }
+  }
+}

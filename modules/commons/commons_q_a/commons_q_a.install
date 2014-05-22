@@ -1,6 +1,22 @@
 <?php
 
 /**
+ * Set default Q/A roles upon enable
+ */
+function commons_q_a_enable() {
+  $revert = array(
+    'commons_q_a' => array('og_features_permission'),
+  );
+  features_revert($revert);
+
+  $groups = og_get_all_group();
+
+  foreach ($groups AS $gid) {
+    commons_groups_features_permission_rebuild('commons_q_a', $gid);
+  }
+}
+
+/**
  * Update the Rate module settings for changes to the Up/Down widget.
  */
 function commons_q_a_update_3100() {

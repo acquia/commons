@@ -1,6 +1,19 @@
 <?php
 
 /**
+ * Set default document roles upon enable
+ */
+function commons_documents_enable() {
+  features_revert(array('commons_documents' => array('og_features_permission', 'field_instance', 'field_base', 'variable', 'views_view', 'node')));
+
+  $groups = og_get_all_group();
+
+  foreach ($groups as $gid) {
+    commons_groups_features_permission_rebuild('commons_documents', $gid);
+  }
+}
+
+/**
  * Disable summary on Document nodes.
  */
 function commons_documents_update_7000() {
@@ -87,7 +100,6 @@ function commons_documents_update_7007() {
   features_revert($revert);
   return array();
 }
-
 /**
  * Replace the title attribute with the title field in view displays.
  */
@@ -96,5 +108,23 @@ function commons_documents_update_7008() {
     'commons_documents' => array('views_view'),
   );
   features_revert($revert);
+  return array();
+}
+
+/**
+ * Reset document og permissions automatically, they were not set before now.
+ */
+function commons_documents_update_7009() {
+  $revert = array(
+    'commons_documents' => array('og_features_permission'),
+  );
+  features_revert($revert);
+
+  $groups = og_get_all_group();
+
+  foreach ($groups AS $gid) {
+    commons_groups_features_permission_rebuild('commons_documents', $gid);
+  }
+
   return array();
 }
