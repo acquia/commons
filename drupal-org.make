@@ -13,7 +13,7 @@ projects[addressfield][version] = "1.0-beta5"
 
 projects[addressfield_tokens][type] = "module"
 projects[addressfield_tokens][subdir] = "contrib"
-projects[addressfield_tokens][version] = "1.3"
+projects[addressfield_tokens][version] = "1.4"
 
 projects[admin_icons][type] = "module"
 projects[admin_icons][subdir] = "contrib"
@@ -87,7 +87,8 @@ projects[ctools][subdir] = "contrib"
 projects[ctools][download][type] = "git"
 projects[ctools][download][url] = "http://git.drupal.org/project/ctools.git"
 projects[ctools][download][branch] = "7.x-1.x"
-projects[ctools][download][revision] = "e720f61d"
+projects[ctools][download][revision] = "6e034cb9"
+projects[ctools][patch][] = "https://drupal.org/files/issues/missing-ctools-version-2269747-1.patch"
 
 projects[custom_search][type] = "module"
 projects[custom_search][subdir] = "contrib"
@@ -485,7 +486,7 @@ projects[variable][version] = "2.5"
 
 projects[views][type] = "module"
 projects[views][subdir] = "contrib"
-projects[views][version] = "3.7"
+projects[views][version] = "3.8"
 
 ; Update Views Content access filter per core performance improvements.
 ; https://drupal.org/comment/8516039#comment-8516039
