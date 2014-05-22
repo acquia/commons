@@ -271,6 +271,7 @@ projects[message_notify][version] = "2.5"
 projects[message_subscribe][type] = "module"
 projects[message_subscribe][subdir] = "contrib"
 projects[message_subscribe][version] = "1.0-rc2"
+projects[message_subscribe][patch][] = "https://drupal.org/files/issues/group-context-1828184-53.patch"
 
 projects[metatag][type] = "module"
 projects[metatag][subdir] = "contrib"
