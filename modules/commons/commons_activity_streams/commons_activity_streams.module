@@ -109,6 +109,19 @@ function commons_activity_streams_message_access_alter(&$access, $context) {
       }
     }
   }
+  // Verify view access to comments referenced in the message.
+  if (isset($message->field_target_comments)) {
+    foreach ($message->field_target_comments[LANGUAGE_NONE] as $key => $value) {
+      $comment = comment_load($value['target_id']);
+      if (!entity_access('view', 'comment', $comment, $context['account'])) {
+        // If the user cannot view any comments in the message,
+        // deny access to the entire message;
+        $access = FALSE;
+        return;
+      }
+    }
+  }
+
 }
 
 /**
@@ -262,4 +275,36 @@ function commons_activity_streams_tokens($type, $tokens, array $data = array(), 
     }
   }
   return $replacements;
+}
+
+/**
+ * Implements hook_views_post_execute().
+ *
+ * Emulate message_access because we don't want the row to appear at all if the
+ * user does not have access to the node or comment. Node access is included in
+ * the view query itself.
+ *
+ * Without this function, the user would see a missing rendered entity, but the
+ * timestamp would still show.
+ */
+function commons_activity_streams_views_post_execute(&$view) {
+  if ($view->name == 'commons_activity_streams_activity' && isset($view->result)) {
+    foreach ($view->result AS $key => $msg) {
+      if (isset($msg->mid)) {
+        // We preempt the message_access on render by doing it now. Doesn't make
+        // Two calls because we remove the result if access is false.
+        $message = message_load($msg->mid);
+        if (isset($message->field_target_comments)) {
+          foreach ($message->field_target_comments[LANGUAGE_NONE] as $key => $value) {
+            $comment = comment_load($value['target_id']);
+            if (!entity_access('view', 'comment', $comment)) {
+              // If the user cannot view any nodes or comments in the message,
+              // deny access to the entire message;
+              unset($view->result[$key]);
+            }
+          }
+        }
+      }
+    }
+  }
 }
