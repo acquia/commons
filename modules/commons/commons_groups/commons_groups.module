@@ -984,9 +984,9 @@ function commons_groups_preprocess_node(&$variables) {
 }
 
 /**
- * Implements hook_preprocess_views_view_grid().
+ * Implements hook_preprocess_views_view_list().
  */
-function commons_groups_preprocess_views_view_grid(&$variables, $hook) {
+function commons_groups_preprocess_views_view_list(&$variables, $hook) {
   // Change the displayed role name in the group contributors block to
   // "Organizers".
   if ($variables['view']->name == 'commons_contributors_group' && !empty($variables['title']) && $variables['title'] == 'administrator member') {

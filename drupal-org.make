@@ -310,6 +310,10 @@ projects[oembed][download][url] = "http://git.drupal.org/project/oembed.git"
 projects[oembed][download][branch] = "7.x-1.x"
 projects[oembed][download][revision] = "9aa5303"
 
+; Remove the media submodule as it conflicts with the Media: oEmbed module.
+; https://drupal.org/node/2269745#comment-8796261
+projects[oembed][patch][] = "https://drupal.org/files/issues/remove-media-submodule-2269745-2.patch"
+
 projects[og][type] = "module"
 projects[og][subdir] = "contrib"
 projects[og][version] = "2.7"
