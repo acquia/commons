@@ -232,3 +232,14 @@ function commons_groups_update_3118() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Ensure that permissions to subscribe to user groups are properly set.
+ */
+function commons_groups_update_3119() {
+  $revert = array(
+    'commons_groups' => array('og_features_permission'),
+  );
+  features_revert($revert);
+  return array();
+}

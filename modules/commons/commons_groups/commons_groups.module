@@ -10,16 +10,33 @@ include_once 'commons_groups.features.inc';
  * Implements hook_og_permission_alter().
  */
 function commons_groups_og_permission_alter(&$perms) {
-  // We set these values programatically based
-  // on the value of field_og_subscribe_settings, so we disable them in the UI.
-  $perms['subscribe']['roles'] = array();
+  // Rename the 'subscribe' and 'subscribe without approval' permissions to
+  // better reflect their purpose in Commons.
   $perms['subscribe']['title'] = t('Contribute to the group');
   $perms['subscribe']['description'] = t('This value is set automatically based on the "Group Privacy Settings" field.');
-  $perms['subscribe without approval']['roles'] = array();
   $perms['subscribe without approval']['title'] = t('Contribute to the group without approval');
   $perms['subscribe without approval']['description'] = t('This value is set automatically based on the "Group Privacy Settings" field.');
 }
 
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Hides permissions that are set automatically based on the "Group Privacy
+ * Settings" field.
+ */
+function commons_groups_form_og_ui_admin_permissions_alter(&$form, &$form_state) {
+  $hidden_permissions = array('subscribe', 'subscribe without approval');
+  foreach ($hidden_permissions as $permission) {
+    if (isset($form['permission'][$permission])) {
+      $form['permission'][$permission]['#markup'] .= ' ' . t('<strong>Disabled by the Commons Groups module.<strong>');
+    }
+    foreach ($form['checkboxes'] as $index => $elements) {
+      if (isset($elements['#options'][$permission])) {
+        unset($form['checkboxes'][$index]['#options'][$permission]);
+      }
+    }
+  }
+}
 
 /**
  * Implements hook_ctools_plugin_directory().
