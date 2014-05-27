@@ -140,7 +140,7 @@ function commons_media_page_build(&$page) {
  * Implements hook_filter_default_formats_alter().
  */
 function commons_media_filter_default_formats_alter(&$formats) {
-  if (module_exists('media_wysiwyg')) {
+  if (module_exists('media_wysiwyg') && !empty($formats['filtered_html'])) {
     // Allow markup from remote media.
     $formats['filtered_html']['filters']['filter_html']['settings']['allowed_html'] = '<a> <em> <strong> <u> <cite> <blockquote> <code> <ul> <ol> <li> <dl> <dt> <dd> <h4> <h5> <h6>  <p> <br> <img> <strike> <iframe></iframe>';
 
@@ -158,7 +158,7 @@ function commons_media_filter_default_formats_alter(&$formats) {
  * Implements hook_ckeditor_profile_defaults().
  */
 function commons_media_ckeditor_profile_defaults_alter(&$profiles) {
-  if (module_exists('media_wysiwyg')) {
+  if (module_exists('media_wysiwyg') && !empty($profiles['Advanced'])) {
     // Disable the advanced content filter.
     $profiles['Advanced']['settings']['allowed_content'] = 'f';
 
