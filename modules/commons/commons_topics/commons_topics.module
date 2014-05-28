@@ -40,9 +40,7 @@ function commons_topics_form_node_form_alter(&$form, &$form_state) {
     );
     $form['topics_wrapper']['field_topics'] = $form['field_topics'];
     $form['field_topics'] = array('#language' => NULL);
-    $form['#attached']['js'] = array(
-      drupal_get_path('module', 'commons_topics') . '/js/commons_topics.js',
-    );
+    $form['#attached']['js'][] = drupal_get_path('module', 'commons_topics') . '/js/commons_topics.js';
   }
 }
 

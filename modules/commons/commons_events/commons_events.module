@@ -207,12 +207,9 @@ function commons_events_entity_view_alter(&$build, $type) {
  */
 function commons_events_form_node_form_alter(&$form, &$form_state) {
   if ($form_state['node']->type == 'event') {
-    $form['#attached']['css'] = array(
-      drupal_get_path('module', 'commons_events') . '/css/commons_events.css',
-    );
-    $form['#attached']['js'] = array(
-      drupal_get_path('module', 'commons_events') . '/js/commons_events.js',
-    );
+    $form['#attached']['css'][] = drupal_get_path('module', 'commons_events') . '/css/commons_events.css';
+    $form['#attached']['js'][] = drupal_get_path('module', 'commons_events') . '/js/commons_events.js';
+
     // Remove the '-None-' option from all the dropdowns.
     unset($form['field_location'][$form['field_location']['#language']]['#options']['_none']);
     unset($form['field_registration_type'][$form['field_registration_type']['#language']]['#options']['_none']);

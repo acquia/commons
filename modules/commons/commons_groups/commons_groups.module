@@ -128,9 +128,7 @@ function commons_groups_form_node_form_alter(&$form, &$form_state) {
       $form['#after_build'] = array('commons_groups_form_group_node_after_build');
     }
 
-    $form['#attached']['css'] = array(
-      drupal_get_path('module', 'commons_groups') . '/css/commons_groups.css',
-    );
+    $form['#attached']['css'][] = drupal_get_path('module', 'commons_groups') . '/css/commons_groups.css';
 
     // The group access is set on commons_groups_node_presave().
     $form['group_access'][LANGUAGE_NONE]['#required'] = FALSE;

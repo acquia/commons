@@ -124,7 +124,7 @@ function commons_polls_form_commons_bw_partial_node_form_alter(&$form, &$form_st
     '#markup' => '<a href="#" id="add-choice">' . t('Add more choices') . '</a>',
   );
 
-  $form['#attached']['js'] = array(drupal_get_path('module', 'commons_polls') . '/js/commons_polls_partial_form.js');
+  $form['#attached']['js'][] = drupal_get_path('module', 'commons_polls') . '/js/commons_polls_partial_form.js';
 
   $form['actions']['submit']['#value'] = t('Create');
 
