@@ -557,7 +557,7 @@ projects[sky][version] = "3.0"
 
 libraries[backbone][download][type] = "get"
 libraries[backbone][type] = "libraries"
-libraries[backbone][download][url] = "http://github.com/jashkenas/backbone/archive/1.1.0.tar.gz"
+libraries[backbone][download][url] = "https://github.com/jashkenas/backbone/archive/1.1.0.tar.gz"
 
 libraries[ckeditor][download][type] = "get"
 libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.3.4/ckeditor_4.3.4_full.zip"
@@ -577,12 +577,12 @@ libraries[ckeditor_widget][directory_name] = "widget"
 
 libraries[modernizr][download][type] = "get"
 libraries[modernizr][type] = "libraries"
-libraries[modernizr][download][url] = "http://github.com/Modernizr/Modernizr/archive/v2.7.1.tar.gz"
+libraries[modernizr][download][url] = "https://github.com/Modernizr/Modernizr/archive/v2.7.1.tar.gz"
 
 libraries[timeago][download][type] = "get"
 libraries[timeago][type] = "libraries"
-libraries[timeago][download][url] = "http://raw.github.com/rmm5t/jquery-timeago/v1.4.1/jquery.timeago.js"
+libraries[timeago][download][url] = "https://raw.github.com/rmm5t/jquery-timeago/v1.4.1/jquery.timeago.js"
 
 libraries[underscore][download][type] = "get"
 libraries[underscore][type] = "libraries"
-libraries[underscore][download][url] = "http://github.com/jashkenas/underscore/archive/1.5.2.zip"
+libraries[underscore][download][url] = "https://github.com/jashkenas/underscore/archive/1.5.2.zip"
