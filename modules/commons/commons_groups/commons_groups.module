@@ -225,20 +225,29 @@ function commons_groups_block_info() {
     'info' => t('"Create a group" call to action'),
     'cache' => DRUPAL_NO_CACHE,
   );
+
   return $blocks;
 }
 
 /**
  * Implements hook_block_view().
  */
-function commons_groups_block_view() {
-  $block['subject'] = '';
-  if (node_access('create', 'group')) {
-    $block['content'] = l(t('Create a group'), 'node/add/group');
+function commons_groups_block_view($delta = '') {
+  $block = array();
+
+  switch ($delta) {
+    case 'commons_groups_create_group':
+      if (node_access('create', 'group')) {
+        $block['subject'] = NULL;
+        $block['content'] = array(
+          '#type' => 'link',
+          '#title' => t('Create a group'),
+          '#href' => 'node/add/group',
+        );
+      }
+      break;
   }
-  else {
-    $block['content'] = '';
-  }
+
   return $block;
 }
 
