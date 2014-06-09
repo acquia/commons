@@ -7,6 +7,19 @@
 include_once 'commons_events.features.inc';
 
 /**
+ * Implements hook_commons_entity_integration().
+ */
+function commons_events_commons_entity_integration() {
+  return array(
+    'node' => array(
+      'event' => array(
+        'is_group_content' => TRUE,
+      ),
+    ),
+  );
+}
+
+/**
  * Implements hook_forms().
  */
 function commons_events_forms($form_id, $args) {
@@ -24,6 +37,22 @@ function commons_events_forms($form_id, $args) {
 }
 
 /**
+ * Implements hook_menu().
+ */
+function commons_events_menu() {
+  $items['node/%node/attendees'] = array(
+    'title' => 'Attendees',
+    'page callback' => 'commons_events_event_attendees_page',
+    'page arguments' => array(1),
+    'access callback' => 'commons_events_attendee_access',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  return $items;
+}
+
+/**
  * Implements hook_menu_alter().
  */
 function commons_events_menu_alter(&$items) {
@@ -38,6 +67,7 @@ function commons_events_attendee_access($event_node) {
   if ($event_node->type == 'event') {
     return TRUE;
   }
+
   return FALSE;
 }
 
@@ -175,6 +205,7 @@ function commons_events_date_popup_element_process($element, &$form_state, $form
       }
     }
   }
+
   return $element;
 }
 
@@ -183,21 +214,25 @@ function commons_events_date_popup_element_process($element, &$form_state, $form
  */
 function commons_events_entity_view_alter(&$build, $type) {
   if ($build['#entity_type'] == 'node' && $build['#bundle'] == 'event') {
+    $node = $build['#node'];
 
     $build['attending'] = array(
       0 => theme('commons_events_attending_event', array(
-          'event' => $build['#node'],
-          'attendee_count' => commons_events_get_raw_attendee_count($build['#node']),
-        )),
+        'event' => $node,
+        'attendee_count' => commons_events_get_raw_attendee_count($node),
+      )),
       '#weight' => -10,
     );
-    $vars = array(
-      'event_nid' => $build['#node']->nid,
-    );
+
     // Don't show the address if the event location is only online.
-    $field_location = field_view_field('node', $build['#node'], 'field_location');
-    if (isset($field_location['#items']['0']['value']) && $field_location['#items']['0']['value'] == 'online') {
-      unset($build['field_address']);
+    $items = field_get_items('node', $node, 'field_location');
+
+    if (is_array($items)) {
+      foreach ($items as $item) {
+        if ($item['value'] == 'online') {
+          $build['field_address']['#access'] = FALSE;
+        }
+      }
     }
   }
 }
@@ -205,28 +240,50 @@ function commons_events_entity_view_alter(&$build, $type) {
 /**
  * Implements hook_form_FORM_ID_alter().
  */
-function commons_events_form_node_form_alter(&$form, &$form_state) {
-  if ($form_state['node']->type == 'event') {
+function commons_events_form_node_form_alter(&$form, &$form_state, $form_id) {
+  $node = $form_state['node'];
+
+  if ($node->type == 'event') {
+    // Attach custom CSS and JS to the form.
     $form['#attached']['css'][] = drupal_get_path('module', 'commons_events') . '/css/commons_events.css';
     $form['#attached']['js'][] = drupal_get_path('module', 'commons_events') . '/js/commons_events.js';
 
     // Remove the '-None-' option from all the dropdowns.
     unset($form['field_location'][$form['field_location']['#language']]['#options']['_none']);
     unset($form['field_registration_type'][$form['field_registration_type']['#language']]['#options']['_none']);
+
+    // Remove the registration type description.
+    unset($form['field_registration'][$form['field_registration']['#language']]['0']['registration_type']['#description']);
+
+    // Default the event organizer to the user who is creating the node.
+    if (empty($form['field_organizers'][$form['field_organizers']['#language']]['#default_value'])) {
+      global $user;
+      $form['field_organizers'][$form['field_organizers']['#language']]['#default_value'] = format_username($user) . " (" . $user->uid . ")";
+    }
+
     // Hide the Registration type field.
-    $form['field_registration']['#disabled'] = commons_events_event_type_disabled($form_state['node']);
-    // Address field should be hidden if event is only online.
+    $form['field_registration']['#disabled'] = commons_events_event_type_disabled($node);
+
+    // Make the number of attendees field optional.
+    $form['field_number_of_attendees'][$form['field_number_of_attendees']['#language']]['0']['value']['#required'] = FALSE;
+
+    // Address field should be hidden if the event is online only.
     $form['field_address']['#states'] = array(
       'invisible' => array(
         ':input[name^="field_location"]' => array('value' => 'online'),
       ),
     );
-    // Status and attendee limit are shown if registration is onsite.
+
+    // Assume that registration is open by default.
     $node_registration_status = 1;
-    if (isset($form_state['node']->nid)) {
-      $settings = registration_entity_settings('node', $form_state['node']->nid);
+
+    // Use saved registration settings for existing events.
+    if (isset($node->nid)) {
+      $settings = registration_entity_settings('node', $node->nid);
       $node_registration_status = $settings['status'];
     }
+
+    // Add a status field to allow users to open and close registration.
     $form['field_status'] = array(
       '#type' => 'select',
       '#title' => t('Status'),
@@ -242,15 +299,18 @@ function commons_events_form_node_form_alter(&$form, &$form_state) {
       ),
       '#weight' => 10,
     );
-    $form['field_number_of_attendees']['#states'] = $form['field_status']['#states'];
+
+    // Status and attendee limit are shown if registration is onsite.
     $form['field_registration']['#states'] = $form['field_status']['#states'];
+
+    $form['field_number_of_attendees']['#states'] = $form['field_status']['#states'];
     $form['field_number_of_attendees']['#states']['visible'][':input[name="field_status"]'] = array(
       'value' => 1,
     );
     $form['field_number_of_attendees']['#weight'] = 11;
-    $form['#validate'] = array_merge(array('commons_events_node_form_validate'), $form['#validate']);
-    $form['#submit'][] = 'commons_events_node_form_submit';
-    // Move registration settings into a fieldset so we can move the group.
+
+    // Create a custom fieldset to hold the registration settings and add it to
+    // the additional settings group so it will be displayed as a vertical tab.
     $form['event_registration_settings'] = array(
       '#type' => 'fieldset',
       '#collapsible' => TRUE,
@@ -259,56 +319,41 @@ function commons_events_form_node_form_alter(&$form, &$form_state) {
       '#group' => 'additional_settings',
       '#weight' => -10,
     );
-    if (empty($form['field_organizers'][$form['field_organizers']['#language']]['#default_value'])) {
-      global $user;
-      $form['field_organizers'][$form['field_organizers']['#language']]['#default_value'] = format_username($user) . " (" . $user->uid . ")";
-    }
+
+    // Copy all of the registration settings into the custom fieldset.
     $form['event_registration_settings']['field_organizers'] = $form['field_organizers'];
     $form['event_registration_settings']['field_registration_type'] = $form['field_registration_type'];
     $form['event_registration_settings']['field_status'] = $form['field_status'];
     $form['event_registration_settings']['field_number_of_attendees'] = $form['field_number_of_attendees'];
-    unset($form['field_registration'][$form['field_registration']['#language']]['0']['registration_type']['#description']);
     $form['event_registration_settings']['field_registration'] = $form['field_registration'];
-    $form['field_organizers'] = array('#language' => NULL);
-    $form['field_registration_type'] = array('#language' => NULL);
-    $form['field_status'] = array('#language' => NULL);
-    $form['field_number_of_attendees'] = array('#language' => NULL);
-    $form['field_registration'] = array('#language' => NULL);
-  }
-}
 
-/**
- * Implements hook_commons_entity_integration().
- */
-function commons_events_commons_entity_integration() {
-  return array(
-    'node' => array(
-      'event' => array(
-        'is_group_content' => TRUE,
-      ),
-    ),
-  );
+    // Unset all of the original registration settings.
+    unset($form['field_organizers']);
+    unset($form['field_registration_type']);
+    unset($form['field_status']);
+    unset($form['field_number_of_attendees']);
+    unset($form['field_registration']);
+
+    // Add additional submission and validation handlers.
+    $form['#validate'][] = 'commons_events_node_form_validate';
+    $form['#submit'][] = 'commons_events_node_form_submit';
+  }
 }
 
 /**
  * Custom node form validation handler.
  */
 function commons_events_node_form_validate($form, &$form_state) {
-  $lng = (isset($form_state['language']) ? $form_state['language'] : LANGUAGE_NONE);
-  switch ($form_state['values']['field_registration_type'][$lng]['0']['value']) {
+  $language = (isset($form_state['language']) ? $form_state['language'] : LANGUAGE_NONE);
+
+  switch ($form_state['values']['field_registration_type'][$language]['0']['value']) {
     case 'onsite':
-      // Max attendees must be entered if the registration status is open and
-      // registration is done onsite.
-      if ((int) $form_state['values']['field_status'] == 1
-        && (!is_numeric($form_state['values']['field_number_of_attendees'][$lng]['0']['value']))
-      ) {
-        form_set_error('field_number_of_attendees',
-          t('Maximum number of attendees must be set for registrations to be accepted.'));
-        return FALSE;
+      // Max attendees must be entered if the registration is open and onsite.
+      if ((int) $form_state['values']['field_status'] == 1 && (!is_numeric($form_state['values']['field_number_of_attendees'][$language]['0']['value']))) {
+        form_set_error('field_number_of_attendees', t('Maximum number of attendees must be set for registrations to be accepted.'));
       }
       break;
   }
-  return TRUE;
 }
 
 /**
@@ -316,27 +361,34 @@ function commons_events_node_form_validate($form, &$form_state) {
  */
 function commons_events_node_form_submit($form, $form_state) {
   $node = $form_state['node'];
-  $lng = (isset($form_state['language']) ? $form_state['language'] : LANGUAGE_NONE);
+  $language = (isset($form_state['language']) ? $form_state['language'] : LANGUAGE_NONE);
+
   if (isset($node->nid)) {
     $settings = registration_entity_settings('node', $node->nid);
     $settings['status'] = (int) $form_state['values']['field_status'];
-    if ($form_state['values']['field_registration_type'][$lng]['0']['value'] == 'external') {
+
+    if ($form_state['values']['field_registration_type'][$language]['0']['value'] == 'external') {
       $settings['status'] = 0;
     }
-    if (!empty($form_state['values']['field_number_of_attendees'][$lng]['0']['value'])
-      && is_numeric($form_state['values']['field_number_of_attendees'][$lng]['0']['value'])
-    ) {
-      $settings['capacity'] = (int) $form_state['values']['field_number_of_attendees'][$lng]['0']['value'];
+
+    if (!empty($form_state['values']['field_number_of_attendees'][$language]['0']['value']) && is_numeric($form_state['values']['field_number_of_attendees'][$language]['0']['value'])) {
+      $settings['capacity'] = (int) $form_state['values']['field_number_of_attendees'][$language]['0']['value'];
     }
+
     $settings['settings'] = serialize($settings['settings']);
     registration_update_entity_settings('node', $node->nid, $settings);
+
     // Automatically register the node creator for the event.
     $registration_type = registration_get_entity_registration_type('node', $node);
-    $registration = entity_get_controller('registration')->create(array(
+
+    $values = array(
       'entity_type' => 'node',
       'entity_id' => $node->nid,
       'type' => $registration_type,
-    ));
+    );
+
+    $registration = entity_create('registration', $values);
+
     if (!isset($node->uid)) {
       global $user;
       $uid = $user->uid;
@@ -344,20 +396,42 @@ function commons_events_node_form_submit($form, $form_state) {
     else {
       $uid = $node->uid;
     }
-    if ($settings['status'] == 1
-      && !registration_is_registered($registration, NULL, $uid)
-    ) {
+
+    if ($settings['status'] == 1 && !registration_is_registered($registration, NULL, $uid)) {
       $registration->user_uid = $uid;
       $registration->author_uid = $uid;
       $registration->state = NULL;
       $registration->count = 1;
+
       registration_save($registration);
     }
   }
 }
 
 /**
- * Implements hook_token_info().
+ * Implements hook_tokens().
+ */
+function commons_events_tokens($type, $tokens, array $data = array(), array $options = array()) {
+  $replacements = array();
+
+  if ($type == 'node' && !empty($data['node'])) {
+    $event = $data['node'];
+
+    foreach ($tokens as $name => $original) {
+      if ($name == 'attend-form') {
+        $replacements[$original] = theme('commons_events_attending_event', array(
+          'event' => $event,
+          'attendee_count' => commons_events_get_raw_attendee_count($event),
+        ));
+      }
+    }
+  }
+
+  return $replacements;
+}
+
+/**
+ * Implements hook_token_info_alter().
  */
 function commons_events_token_info_alter(&$tokens) {
   $tokens['tokens']['node']['attend-form'] = array(
@@ -377,6 +451,7 @@ function commons_events_commons_bw_create_all_widget($group) {
         'query' => array('og_group_ref' => $group->nid),
       )
     );
+
     return array(
       'commons_events' => array(
         'link' => $link,
@@ -385,25 +460,6 @@ function commons_events_commons_bw_create_all_widget($group) {
       ),
     );
   }
-}
-
-/**
- * Implements hook_tokens().
- */
-function commons_events_tokens($type, $tokens, array $data = array(), array $options = array()) {
-  $replacements = array();
-  if ($type == 'node' && !empty($data['node'])) {
-    $event = $data['node'];
-    foreach ($tokens as $name => $original) {
-      if ($name == 'attend-form') {
-        $replacements[$original] = theme('commons_events_attending_event', array(
-            'event' => $event,
-            'attendee_count' => commons_events_get_raw_attendee_count($event),
-          ));
-      }
-    }
-  }
-  return $replacements;
 }
 
 /**
@@ -416,13 +472,16 @@ function commons_events_upcoming_more_link($group_id) {
         'f[1]' => 'sm_og_group_ref:node:' . $group_id,
       ),
     );
+
     return l(t('more'), 'events', $options);
   }
+
   $options = array(
     'query' => array(
       'gid' => $group_id,
     ),
   );
+
   return l(t('more'), 'events', $options);
 }
 
@@ -430,17 +489,12 @@ function commons_events_upcoming_more_link($group_id) {
  * Implements hook_views_post_execute().
  */
 function commons_events_views_post_execute(&$view) {
-  if ($view->name == 'commons_events_upcoming'
-    && $view->current_display == 'panel_pane_1'
-  ) {
+  if ($view->name == 'commons_events_upcoming' && $view->current_display == 'panel_pane_1') {
     $view->attachment_after = '<div class="more-link">' . commons_events_upcoming_more_link($view->args[0]) . '</div>';
   }
-  else {
-    if ($view->name == 'commons_events_upcoming'
-      && $view->current_display == 'panel_pane_2'
-    ) {
-      $view->attachment_before = '<div class="commons-event-count">' . format_plural(count($view->result), '1 event', '@count events') . '</div>';
-    }
+
+  if ($view->name == 'commons_events_upcoming' && $view->current_display == 'panel_pane_2') {
+    $view->attachment_before = '<div class="commons-event-count">' . format_plural(count($view->result), '1 event', '@count events') . '</div>';
   }
 }
 
@@ -448,16 +502,15 @@ function commons_events_views_post_execute(&$view) {
  * Implements hook_block_info().
  */
 function commons_events_block_info() {
-  $blocks = array(
-    'commons_events_create_event_link' => array(
-      'info' => t('"Create an event" call to action'),
-      'cache' => DRUPAL_CACHE_GLOBAL,
-    ),
-    'commons_events_anonymous_login' => array(
-      'info' => t('"Login to create an event" call to action'),
-      'cache' => DRUPAL_CACHE_GLOBAL,
-    ),
+  $blocks['commons_events_create_event_link'] = array(
+    'info' => t('"Create an event" call to action'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
   );
+  $blocks['commons_events_anonymous_login'] = array(
+    'info' => t('"Login to create an event" call to action'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
+  );
+
   return $blocks;
 }
 
@@ -465,30 +518,33 @@ function commons_events_block_info() {
  * Implements hook_block_view().
  */
 function commons_events_block_view($delta = '') {
-  global $user;
-  if ($delta == 'commons_events_create_event_link'
-    && node_access('create', 'event')
-  ) {
-    $options = array(
-      'query' => array(
-        'destination' => 'events',
-      ),
-    );
-    return array(
-      'subject' => NULL,
-      'content' => l(t('List an event'), 'node/add/event', $options),
-    );
+  $block = array();
+
+  switch ($delta) {
+    case 'commons_events_create_event_link':
+      if (node_access('create', 'event')) {
+        $block['subject'] = NULL;
+        $block['content'] = array(
+          '#type' => 'link',
+          '#title' => t('List an event'),
+          '#href' => 'node/add/event',
+          '#options' => array(
+            'query' => array(
+              'destination' => 'events',
+            ),
+          ),
+        );
+      }
+      break;
+    case 'commons_events_anonymous_login':
+      if (user_is_anonymous()) {
+        $block['subject'] = NULL;
+        $block['content'] = t('You must !login in order to list events.', array('!login' => l(t('log in'), 'user')));
+      }
+      break;
   }
-  else {
-    if ($delta == 'commons_events_anonymous_login'
-      && empty($user->uid)
-    ) {
-      return array(
-        'subject' => NULL,
-        'content' => t('You must !login in order to list events.', array('!login' => l(t('log in'), 'user'))),
-      );
-    }
-  }
+
+  return $block;
 }
 
 /**
@@ -617,6 +673,7 @@ function commons_events_event_type_disabled($node) {
   if (!isset($node->nid) || empty($node->nid)) {
     return FALSE;
   }
+
   $registrations = db_select('registration', 'r')
     ->fields('r')
     ->condition('entity_type', 'node')
@@ -624,9 +681,11 @@ function commons_events_event_type_disabled($node) {
     ->countQuery()
     ->execute()
     ->fetchCol();
+
   if ($registrations[0] > 0) {
     return TRUE;
   }
+
   return FALSE;
 }
 
