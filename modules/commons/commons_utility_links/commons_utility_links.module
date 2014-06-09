@@ -34,22 +34,26 @@ function commons_utility_links_block_info() {
 function commons_utility_links_block_view($delta = '') {
   $block = array();
 
-  // Gather all of the available utility links.
-  $links = module_invoke_all('commons_utility_links');
-  drupal_alter('commons_utility_links', $links);
+  switch ($delta) {
+    case 'commons_utility_links':
+      // Gather all of the available utility links.
+      $links = module_invoke_all('commons_utility_links');
+      drupal_alter('commons_utility_links', $links);
 
-  if (!empty($links)) {
-    // Sort the links by weight before rendering them.
-    uasort($links, 'drupal_sort_weight');
+      if (!empty($links)) {
+        // Sort the links by weight before rendering them.
+        uasort($links, 'drupal_sort_weight');
 
-    $block['subject'] = NULL;
-    $block['content'] = array(
-      '#theme' => 'links__commons_utility_links',
-      '#links' => $links,
-      '#attributes' => array(
-        'class' => array('commons-utility-links'),
-      ),
-    );
+        $block['subject'] = NULL;
+        $block['content'] = array(
+          '#theme' => 'links__commons_utility_links',
+          '#links' => $links,
+          '#attributes' => array(
+            'class' => array('commons-utility-links'),
+          ),
+        );
+      }
+      break;
   }
 
   return $block;
