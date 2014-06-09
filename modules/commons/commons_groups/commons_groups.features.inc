@@ -5,6 +5,32 @@
  */
 
 /**
+ * Implements hook_features_pipe_alter().
+ */
+function commons_groups_features_pipe_alter(&$pipe, $data, $export) {
+  // Prevent Commons Groups related fields from being piped in features
+  // when a content type includes those fields.
+  if (!empty($pipe['field_instance'])) {
+    foreach ($pipe['field_instance'] as $delta => $value) {
+      $args = explode('-', $value);
+      $field_name = $args[2];
+      $excluded_fields = array('og_group_ref', 'field_og_access_default_value',
+        'field_og_subscribe_settings', 'og_roles_permissions', 'group_access', 'field_group_logo', 'group_group', 'body');
+      if (in_array($field_name, $excluded_fields)) {
+        unset($pipe['field_instance'][$delta]);
+      }
+    }
+  }
+  if (!empty($pipe['field_base'])) {
+    foreach ($pipe['field_base'] as $delta => $value) {
+      if ($delta == 'og_group_ref') {
+        unset($pipe['field_base'][$delta]);
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_ctools_plugin_api().
  */
 function commons_groups_ctools_plugin_api($module = NULL, $api = NULL) {

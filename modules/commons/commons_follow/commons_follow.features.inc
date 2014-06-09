@@ -5,6 +5,34 @@
  */
 
 /**
+ * Implements hook_features_pipe_alter().
+ *
+ */
+function commons_follow_features_pipe_alter(&$pipe, $data, $export) {
+  $commons_follow_fields = array(
+    'field_target_users', 'field_target_nodes', 'field_target_comments',
+  );
+  // Prevent Commons Follow fields from being piped in features
+  // when a content type includes those fields.
+  if (!empty($pipe['field_instance'])) {
+    foreach ($pipe['field_instance'] as $delta => $value) {
+      $args = explode('-', $value);
+      $field_name = $args[2];
+      if (in_array($field_name, $commons_follow_fields)) {
+        unset($pipe['field_instance'][$delta]);
+      }
+    }
+  }
+  if (!empty($pipe['field_base'])) {
+    foreach ($pipe['field_base'] as $delta => $value) {
+      if (in_array($delta, $commons_follow_fields)) {
+        unset($pipe['field_base'][$delta]);
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_ctools_plugin_api().
  */
 function commons_follow_ctools_plugin_api($module = NULL, $api = NULL) {
