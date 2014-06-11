@@ -179,3 +179,20 @@ function commons_radioactivity_views_default_views() {
 
   return $export;
 }
+
+/**
+ * Implements hook_views_default_views_alter().
+ */
+function commons_radioactivity_views_default_views_alter(&$views) {
+  // Add a "most active" exposed sort to Commons BW views.
+  foreach ($views as $view_id => $view) {
+    if (strpos($view_id, 'commons_bw_') === 0) {
+      $views[$view_id]->display['default']->display_options['sorts']['field_radioactivity_radioactivity_energy']['id'] = 'field_radioactivity_radioactivity_energy';
+      $views[$view_id]->display['default']->display_options['sorts']['field_radioactivity_radioactivity_energy']['table'] = 'field_data_field_radioactivity';
+      $views[$view_id]->display['default']->display_options['sorts']['field_radioactivity_radioactivity_energy']['field'] = 'field_radioactivity_radioactivity_energy';
+      $views[$view_id]->display['default']->display_options['sorts']['field_radioactivity_radioactivity_energy']['order'] = 'DESC';
+      $views[$view_id]->display['default']->display_options['sorts']['field_radioactivity_radioactivity_energy']['exposed'] = TRUE;
+      $views[$view_id]->display['default']->display_options['sorts']['field_radioactivity_radioactivity_energy']['expose']['label'] = 'most active';
+    }
+  }
+}
