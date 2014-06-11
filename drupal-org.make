@@ -431,7 +431,7 @@ projects[realname][version] = "1.2"
 
 ; Realname entityreference autocomplete API update
 ; https://drupal.org/node/2225889
-projects[realname][patch][] = "http://drupal.org/files/issues/2225889-realname-correct-menu-2.patch"
+projects[realname][patch][] = "https://drupal.org/files/issues/2225889-realname-correct-menu-3.patch"
 
 projects[redirect][type] = "module"
 projects[redirect][subdir] = "contrib"
