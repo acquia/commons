@@ -1,60 +1,72 @@
 <?php
 
 /**
-* Implements hook_comment_insert().
-*   Increase Radioactivity when a node recieves a comment.
-*/
+ * @file
+ * Radioactivity integration for the Comment module.
+ */
+
+/**
+ * Implements hook_comment_insert().
+ *
+ * Increase a node's radioactivity when a comment is added.
+ */
 function commons_radioactivity_comment_insert($comment) {
-  // Moderated comments should not add radioactivity.
-  if (!$comment->status) {
-    return;
-  }
-  $node = node_load($comment->nid);
-  // A user's comment on her own node should not add radioactivity.
-  if ($node->uid == $comment->uid) {
-    return;
-  }
-  commons_radioactivity_incident_node($node, COMMONS_RADIOACTIVITY_COMMENT);
-}
-
-/**
-* Implements hook_comment_insert().
-*   Increase Radioactivity when a node recieves a comment.
-*/
-function commons_radioactivity_comment_delete($comment) {
-  // Deleting a comment that wasn't published shouldn't affect radioactivity.
-  if (!$comment->status) {
-    return;
-  }
-  $node = node_load($comment->nid);
-  // This comment didn't add radioactivity originally, so we don't need to
-  // offset any with its deletion.
-  if ($node->uid == $comment->uid) {
-    return;
-  }
-  commons_radioactivity_incident_node($node, -1 * COMMONS_RADIOACTIVITY_COMMENT);
-}
-
-/**
-* Implements hook_comment_update().
-*   Change radioactivity when a comment is published or unpuiblished.
-*/
-function commons_radioactivity_comment_update($comment) {
-  // $comment_change will be equal to 1 if we're changing the publishing status
-  // of the comment.
-  $comment_change = $comment->status + $comment->original->status;
-  // Is this comment's published status changing?
-  if ($comment_change == 1) {
+  // Adding a comment that wasn't published shouldn't affect radioactivity.
+  if ($comment->status) {
     $node = node_load($comment->nid);
-    switch ($comment->status) {
-      // The comment is being unpublished.
-      case 0:
-        commons_radioactivity_comment_delete($comment);
-        break;
-      // The comment is being published.
-      case 1;
-        commons_radioactivity_comment_insert($comment);
-        break;
+
+    // A user adding a comment to their own node should not increase
+    // radioactivity.
+    if ($node->uid != $comment->uid) {
+      commons_radioactivity_incident_node($node, COMMONS_RADIOACTIVITY_COMMENT);
     }
+  }
+}
+
+/**
+ * Implements hook_comment_insert().
+ *
+ * Decrease a node's radioactivity when a comment is removed.
+ */
+function commons_radioactivity_comment_delete($comment) {
+  // Removing a comment that wasn't published shouldn't affect radioactivity.
+  if ($comment->status) {
+    $node = node_load($comment->nid);
+
+    // A user removing a comment from their own node should not decrease
+    // radioactivity.
+    if ($node->uid != $comment->uid) {
+      commons_radioactivity_incident_node($node, -1 * COMMONS_RADIOACTIVITY_COMMENT);
+    }
+  }
+}
+
+/**
+ * Implements hook_radioactivity_comment_publish().
+ *
+ * Increase a node's radioactivity when a comment is published.
+ */
+function commons_radioactivity_comment_publish($comment) {
+  $node = node_load($comment->nid);
+
+  // Publishing a user's comment on their own node should not increase
+  // radioactivity.
+  if ($node->uid != $comment->uid) {
+    commons_radioactivity_incident_node($node, -1 * COMMONS_RADIOACTIVITY_COMMENT);
+  }
+}
+
+/**
+ * Implements hook_radioactivity_comment_unpublish().
+ *
+ * Decrease a node's radioactivity when a comment is unpublished.
+ */
+function commons_radioactivity_comment_unpublish($comment) {
+  $node = node_load($comment->nid);
+
+  // Unpublishing a user's comment on their own node should not decrease
+  // radioactivity.
+  if ($node->uid != $comment->uid) {
+    commons_radioactivity_incident_node($node, -1 * COMMONS_RADIOACTIVITY_COMMENT);
   }
 }
