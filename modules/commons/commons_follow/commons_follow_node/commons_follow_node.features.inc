@@ -16,6 +16,7 @@ function commons_follow_node_views_api($module = NULL, $api = NULL) {
  */
 function commons_follow_node_flag_default_flags() {
   $flags = array();
+
   // Exported flag: "Other content you follow".
   $flags['commons_follow_node'] = array(
     'content_type' => 'node',
@@ -51,41 +52,16 @@ function commons_follow_node_flag_default_flags() {
     ),
     'api_version' => 2,
   );
-  // Exported flag: "Email content".
-  $flags['email_node'] = array(
-    'content_type' => 'node',
-    'title' => 'Email content',
-    'global' => 0,
-    'types' => array(),
-    'flag_short' => 'Send Email',
-    'flag_long' => '',
-    'flag_message' => '',
-    'unflag_short' => 'Don\'t send Email',
-    'unflag_long' => '',
-    'unflag_message' => '',
-    'unflag_denied_text' => '',
-    'link_type' => 'toggle',
-    'roles' => array(
-      'flag' => array(
-        0 => 2,
-      ),
-      'unflag' => array(
-        0 => 2,
-      ),
-    ),
-    'weight' => 0,
-    'show_on_form' => 0,
-    'access_author' => '',
-    'show_on_page' => 0,
-    'show_on_teaser' => 0,
-    'show_contextual_link' => 0,
-    'i18n' => 0,
-    'module' => 'commons_follow_node',
-    'locked' => array(
-      0 => 'name',
-    ),
-    'api_version' => 2,
-  );
-  return $flags;
 
+  return $flags;
+}
+
+/**
+ * Implements hook_flag_default_flags_alter().
+ */
+function commons_follow_node_flag_default_flags_alter(&$flags) {
+  // Enable the default email_node flag provided by Message Subscribe Email.
+  if (!empty($flags['email_node'])) {
+    $flags['email_node']['status'] = TRUE;
+  }
 }

@@ -18,6 +18,7 @@ function commons_follow_group_ctools_plugin_api($module = NULL, $api = NULL) {
  */
 function commons_follow_group_flag_default_flags() {
   $flags = array();
+
   // Exported flag: "Groups".
   $flags['commons_follow_group'] = array(
     'content_type' => 'node',
@@ -55,6 +56,7 @@ function commons_follow_group_flag_default_flags() {
     ),
     'api_version' => 2,
   );
+
   // Exported flag: "Commons Follow (Groups - Email)".
   $flags['email_group'] = array(
     'content_type' => 'node',
@@ -92,6 +94,6 @@ function commons_follow_group_flag_default_flags() {
     ),
     'api_version' => 2,
   );
-  return $flags;
 
+  return $flags;
 }
