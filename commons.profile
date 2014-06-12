@@ -49,9 +49,9 @@ function commons_update_projects_alter(&$projects) {
  *   define the type of integration to enable and whose values contain the
  *   status of the integration. TRUE = enabled, FALSE = disabled.
  */
-function commons_entity_integration_info($entity_type = NULL) {
+function commons_entity_integration_info($entity_type = NULL, $cache = TRUE) {
   $info = &drupal_static(__FUNCTION__);
-  if (!$info) {
+  if (!$info || !$cache) {
     $info = module_invoke_all('commons_entity_integration');
     drupal_alter('commons_entity_integration', $info);
   }

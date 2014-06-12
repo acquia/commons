@@ -834,9 +834,9 @@ function commons_groups_set_group_permissions($node) {
 /**
  * Returns an array of entity types that are enabled via Commons Groups.
  */
-function commons_groups_get_group_content_entity_types() {
+function commons_groups_get_group_content_entity_types($cache = TRUE) {
   // Find all Commons Entity integrations.
-  $commons_entity_integrations = commons_entity_integration_info();
+  $commons_entity_integrations = commons_entity_integration_info(NULL, $cache);
   if (empty($commons_entity_integrations)) {
     return array();
   }

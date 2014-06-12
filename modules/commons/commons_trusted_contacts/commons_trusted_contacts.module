@@ -13,7 +13,7 @@ function commons_trusted_contacts_system_info_alter(&$info, $file, $type) {
   if ($file->name == 'commons_trusted_contacts') {
     // This field base for group_group is defined in Commons Groups.
     $info['features']['field_instance'][] = "user-user-group_group";
-    $group_content_entity_types = commons_groups_get_group_content_entity_types();
+    $group_content_entity_types = commons_groups_get_group_content_entity_types(FALSE);
     foreach (array_keys($group_content_entity_types['node']) as $bundle) {
       $info['features']['field_instance'][] = "node-$bundle-og_user_group_ref";
     }
