@@ -144,6 +144,8 @@ function commons_wikis_form_commons_bw_partial_node_form_alter(&$form, &$form_st
     return;
   }
 
+  $form['title']['#markup'] = t('Create a wiki');
+
   $language = $form['title_field']['#language'];
   $form['title_field'][$language][0]['value']['#title_display'] = 'invisible';
   $form['title_field'][$language][0]['value']['#placeholder'] = t('Enter a Wiki title');

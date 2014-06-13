@@ -90,7 +90,7 @@ function commons_q_a_form_commons_bw_partial_node_form_alter(&$form, &$form_stat
     return;
   }
 
-  $form['title']['#markup'] = '<h3>' . t('Ask a question') . '</h3>';
+  $form['title']['#markup'] = t('Ask a question');
 
   $language = $form['body']['#language'];
   $form['body'][$language][0]['#title_display'] = 'invisible';

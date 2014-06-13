@@ -43,6 +43,8 @@ function commons_documents_form_commons_bw_partial_node_form_alter(&$form, &$for
     return;
   }
 
+  $form['title']['#markup'] = t('Create a document');
+
   $language = $form['body']['#language'];
   $form['body'][$language][0]['#title_display'] = 'invisible';
   $form['body'][$language][0]['#required'] = TRUE;

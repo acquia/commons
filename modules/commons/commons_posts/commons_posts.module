@@ -63,6 +63,8 @@ function commons_posts_form_commons_bw_partial_node_form_alter(&$form, &$form_st
     return;
   }
 
+  $form['title']['#markup'] = t('Create a post');
+
   $language = $form['body']['#language'];
   $form['body'][$language][0]['#title_display'] = 'invisible';
   $form['body'][$language][0]['#required'] = TRUE;
