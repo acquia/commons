@@ -1089,7 +1089,7 @@ function _commons_origins_format_address(&$address) {
  */
 function commons_origins_preprocess_field(&$variables, $hook) {
   // Style the trusted contact link like a button.
-  if ($variables['element']['#formatter'] == 'trusted_contact') {
+  if (isset($variables['element']['#formatter']) && $variables['element']['#formatter'] == 'trusted_contact') {
     foreach ($variables['items'] as &$container) {
       foreach (element_children($container) as $index) {
         $item = &$container[$index];
