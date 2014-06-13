@@ -37,6 +37,18 @@ function commons_update_projects_alter(&$projects) {
 }
 
 /**
+ * Implements hook_hook_info().
+ */
+function commons_hook_info() {
+  $hooks = array(
+    'commons_entity_integration',
+    'commons_entity_integration_alter',
+  );
+
+  return array_fill_keys($hooks, array('group' => 'commons'));
+}
+
+/**
  * Get Commons entity integration information.
  *
  * @param $entity_type
