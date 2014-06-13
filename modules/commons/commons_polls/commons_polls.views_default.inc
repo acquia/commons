@@ -130,3 +130,14 @@ function commons_polls_views_default_views() {
 
   return $export;
 }
+
+/**
+ * Implements hook_views_default_views_alter().
+ *
+ * Display polls on the browsing widget main view.
+ */
+function commons_polls_views_default_views_alter(&$views) {
+  if (!empty($views['commons_bw_all'])) {
+    $views['commons_bw_all']->display['default']->display_options['filters']['type']['value']['poll'] = 'poll';
+  }
+}

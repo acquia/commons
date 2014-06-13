@@ -64,17 +64,6 @@ function commons_polls_commons_bw_group_widget() {
 }
 
 /**
- * Implements hook_views_default_views_alter().
- *
- * Display polls on the browsing widget main view.
- */
-function commons_polls_views_default_views_alter(&$views) {
-  if (!empty($views['commons_bw_all'])) {
-    $views['commons_bw_all']->display['default']->display_options['filters']['type']['value']['poll'] = 'poll';
-  }
-}
-
-/**
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function commons_polls_form_node_form_alter(&$form, &$form_state, $form_id) {
