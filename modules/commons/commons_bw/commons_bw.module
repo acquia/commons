@@ -1,51 +1,29 @@
 <?php
+/**
+ * @file
+ * Code for the Commons Browsing Widget feature.
+ */
+
+include_once 'commons_bw.features.inc';
 
 /**
  * Implements hook_system_info_alter().
  */
 function commons_bw_system_info_alter(&$info, $file, $type) {
+  // Commons BW dynamically adds the title_field field to content types that
+  // request it.
+  // We must add a corresponding line for each field instance to commons_bw.info
+  // so that Features is aware of the instance and can successfully revert the
+  // field_instance component back to its default state.
   if ($file->name == 'commons_bw') {
     foreach (node_type_get_types() as $node_type) {
       $type = $node_type->type;
+
       if (commons_bw_node_auto_title_instance($type)) {
         $info['features']['field_instance'][] = "node-$type-title_field";
       }
     }
   }
-}
-
-/**
- * Implements hook_ctools_plugin_directory().
- */
-function commons_bw_ctools_plugin_directory($module, $plugin) {
-  if ($module == 'ctools' && $plugin == 'content_types') {
-    return 'plugins/' . $plugin;
-  }
-}
-
-/**
- * Implements hook_views_api().
- */
-function commons_bw_views_api() {
-  return array(
-    'api' => 3,
-    'path' => drupal_get_path('module', 'commons_bw') . '/includes/views',
-  );
-}
-
-/**
- * Implements hook_form_alter().
- */
-function commons_bw_form_alter(&$form, &$form_state, $form_id) {
-  // Implements tweaks to exposed filters and sorts per the Commons designs.
-  if ($form_id != 'views_exposed_form' || strpos($form['#id'],'views-exposed-form-commons-bw') !== 0) {
-    return;
-  }
-
-  // Remove the sort order (eg, descending vs ascending).
-  $form['sort_order']['#access'] = FALSE;
-
-  $form['sort_by']['#title'] = t('Sorted by');
 }
 
 /**
@@ -56,6 +34,7 @@ function commons_bw_form_alter(&$form, &$form_state, $form_id) {
  */
 function commons_bw_forms($form_id, $args) {
   $forms = array();
+
   if (strpos($form_id, 'commons_bw_partial_node_form__') === 0) {
     $forms[$form_id] = array(
       'callback' => 'commons_bw_partial_node_form',
@@ -66,10 +45,50 @@ function commons_bw_forms($form_id, $args) {
 }
 
 /**
- * Partial node form for the browsing widget.
+ * Implements hook_form_FORM_ID_alter().
+ */
+function commons_bw_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
+  // Implements tweaks to exposed filters and sorts per the Commons designs.
+  if (strpos($form['#id'],'views-exposed-form-commons-bw') === 0) {
+    // Remove the sort order (eg, descending vs ascending).
+    $form['sort_order']['#access'] = FALSE;
+    $form['sort_by']['#title'] = t('Sorted by');
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
  *
- * @param $bundle
- *   The node bundle.
+ * Add a setting to group content fields, to determine whether they will be
+ * displayed on the mini node form of the browsing widget.
+ */
+function commons_bw_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_id) {
+  if (!og_is_group_content_type($form['instance']['entity_type']['#value'], $form['instance']['bundle']['#value'])) {
+    return;
+  }
+
+  // See if we're building for the first time, or getting pre-saved values.
+  $field_name = $form['#field']['field_name'];
+
+  if(!empty($form_state['field'][$field_name][LANGUAGE_NONE]['instance']['display_in_partial_form'])) {
+    $display_default = $form_state['field'][$field_name][LANGUAGE_NONE]['instance']['display_in_partial_form'];
+  }
+  else if (isset($form_state['build_info']['args'][0]['display_in_partial_form'])) {
+    $display_default = $form_state['build_info']['args'][0]['display_in_partial_form'];
+  }
+  else {
+    $display_default = FALSE;
+  }
+
+  $form['instance']['display_in_partial_form'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Display in the browsing widget mini-form'),
+    '#default_value' => $display_default,
+  );
+}
+
+/**
+ * Partial node form for the browsing widget.
  */
 function commons_bw_partial_node_form($form, &$form_state, $bundle, $group_id = NULL) {
   global $user;
@@ -95,6 +114,7 @@ function commons_bw_partial_node_form($form, &$form_state, $bundle, $group_id = 
       unset($instances[$field_name]);
     }
   }
+
   // Make sure there's a field left to display.
   if (empty($instances)) {
     return $form;
@@ -195,6 +215,7 @@ function commons_bw_partial_node_form($form, &$form_state, $bundle, $group_id = 
   // to address fields by there CSS ID.
   array_unshift($form['#pre_render'], 'commons_bw_partial_node_form_after_build');
   $form['#validate'][] = 'commons_bw_partial_node_form_validate';
+
   return $form;
 }
 
@@ -203,6 +224,7 @@ function commons_bw_partial_node_form($form, &$form_state, $bundle, $group_id = 
  */
 function commons_bw_partial_node_form_after_build($form) {
   $bundle = $form['#bundle'];
+
   // Add the node's bundle to the IDs of inputs, to avoid having duplicate IDs.
   $id_suffix = '-' . str_replace('_', '-', $bundle);
 
@@ -222,12 +244,14 @@ function commons_bw_partial_node_form_after_build($form) {
 
   // Set the form action to the form's tab.
   $tabs = commons_bw_get_tab_definitions();
+
   // Search for the tab displaying the current bundle.
   foreach ($tabs as $tab_id => $settings) {
     if ($settings['bundle'] == $bundle) {
       break;
     }
   }
+
   $form['#action'] = url(current_path(), array('query' => array('qt-commons_bw' => $tab_id)));
 
   return $form;
@@ -238,8 +262,10 @@ function commons_bw_partial_node_form_after_build($form) {
  */
 function commons_bw_partial_node_form_validate($form, $form_state) {
   $node = $form['#entity'];
+
   field_attach_validate('node', $node);
   node_validate($node, $form, $form_state);
+
   if ((!module_exists('commons_trusted_contacts') || (module_exists('commons_trusted_contacts') && !module_exists('og_access'))) && empty($form_state['group_id']) && empty($form_state['values'][OG_AUDIENCE_FIELD][LANGUAGE_NONE][0])) {
     form_set_error(OG_AUDIENCE_FIELD, t('Please enter one or more groups where this content will be posted.'));
     return FALSE;
@@ -251,7 +277,9 @@ function commons_bw_partial_node_form_validate($form, $form_state) {
  */
 function commons_bw_partial_node_form_submit($form, $form_state) {
   $node = $form['#entity'];
+
   node_submit($node);
+
   // Mark the node as created with the partial form
   $node->partial_node_form = TRUE;
   field_attach_submit('node', $node, $form, $form_state);
@@ -263,8 +291,10 @@ function commons_bw_partial_node_form_submit($form, $form_state) {
   if ((empty($wrapper->title_field) || !$wrapper->title_field->value()) && empty($node->title)) {
     if (!empty($wrapper->body) && $wrapper->body->value()) {
       $title = htmlspecialchars_decode($wrapper->body->value->value());
+
       // Strip tags and whitespaces.
       $title = preg_replace('/[\t\n\r\0\x0B]/', '', strip_tags($title));
+
       // Shorten the title.
       $node->title = truncate_utf8($title, 30, TRUE, TRUE);
     }
@@ -281,117 +311,139 @@ function commons_bw_partial_node_form_submit($form, $form_state) {
 
   // Notify about the node creation.
   $arguments = array('@type' => node_type_get_name($node), '%title' => $node->title);
+
   drupal_set_message(t('@type %title has been created.', $arguments));
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Get a list of modules that add content to a particular type of widget.
  *
- * Add a setting to group content fields, to determine whether they will be
- * displayed on the mini node form of the browsing widget.
+ * The only currently supported widget type is 'group', but this
+ * could be extended to support other entities.
+ *
+ * @param $widget_type
+ *   An optional type of widget to restrict results to, defaults to 'group'.
+ *
+ * @return array
+ *   An array of return values of the hook implementations.
  */
-function commons_bw_form_field_ui_field_edit_form_alter(&$form, &$form_state) {
-  if (!og_is_group_content_type($form['instance']['entity_type']['#value'], $form['instance']['bundle']['#value'])) {
-    return;
-  }
-
-  // See if we're building for the first time, or getting pre-saved values.
-  $field_name = $form['#field']['field_name'];
-  if(!empty($form_state['field'][$field_name][LANGUAGE_NONE]['instance']['display_in_partial_form'])) {
-    $display_default = $form_state['field'][$field_name][LANGUAGE_NONE]['instance']['display_in_partial_form'];
-  }
-  else if (isset($form_state['build_info']['args'][0]['display_in_partial_form'])) {
-    $display_default = $form_state['build_info']['args'][0]['display_in_partial_form'];
-  }
-  else {
-    $display_default = FALSE;
-  }
-
-  $form['instance']['display_in_partial_form'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Display in the browsing widget mini-form'),
-    '#default_value' => $display_default,
-  );
-}
-
-/**
-* Get a list of modules that add content to a particular type of widget.
-* The only currently supported widget type is 'group', but this
-* could be extended to support other entities.
-*/
 function commons_bw_get_tab_definitions($widget_type = 'group') {
   $hook_name = 'commons_bw_' . $widget_type . '_widget';
+
   $tabs = module_invoke_all($hook_name);
+
   drupal_alter($hook_name, $tabs);
+
   return $tabs;
 }
 
-
 /**
- * Helper function to determine whether Commons_BW should define a title
- * field instance on behalf of a content type.
+ * Helper function to determine whether Commons_BW should define a title field
+ * instance on behalf of a content type.
+ *
+ * @param $node_type
+ *   The type of the node to check auto title settings for.
+ *
+ * @return boolean
+ *   The value of the auto title setting if available, TRUE otherwise.
  */
 function commons_bw_node_auto_title_instance($node_type) {
   $commons_groups_entity_types = commons_groups_get_group_content_entity_types();
-  $return = isset($commons_groups_entity_types['node'][$node_type]['auto_title_instance']) ? $commons_groups_entity_types['node'][$node_type]['auto_title_instance'] : TRUE;
-  return $return;
+
+  return isset($commons_groups_entity_types['node'][$node_type]['auto_title_instance']) ? $commons_groups_entity_types['node'][$node_type]['auto_title_instance'] : TRUE;
 }
+
 /**
- * Provides a styled content creation dropdown widget for the 'all'
- * tab of the group homepage browsing widget.
+ * Provides a styled content creation dropdown widget for the 'all' tab of the
+ * group homepage browsing widget.
+ *
+ * @param $group
+ *   The group node associated with the group homepage.
+ *
+ * @return string
+ *   The content creation dropdown widget HTML.
  */
 function commons_bw_create_all_widget($group) {
   $links = array();
+
   // Collect definitions from implementing modules.
   $items = module_invoke_all('commons_bw_create_all_widget', $group);
   uasort($items, 'element_sort');
+
   foreach ($items as $module => $item) {
     $links[] = $item['link'] . ' ' . $item['text'];
+
     // Populate the default content creation link.
     if (isset($item['default']) && $item['default']) {
       $default = $item;
     }
   }
+
   $output = '';
+
   if (!empty($default)) {
     $output .= $default['link'] . '<a class="commons-bw-create-choose"><span></span></a>';
   }
+
   $output .= '<div class="commons-bw-create-choose-bg"></div><div class="commons-bw-create-choose-holder">' . theme('item_list', array('items' => $links, 'type' => 'ul', 'attributes' => array('class' => 'commons-bw-create-all-widget-types'))) . '</div>';
+
   return $output;
 }
 
 /**
  * Generate a renderable group widget.
+ *
+ * @param $group
+ *   An optional group node to be used as a tab and views argument.
+ *
+ * @return array
+ *   An array in the format expected by drupal_render().
  */
 function commons_bw_generate_group_widget($group = NULL) {
-  $settings = array('style' => 'Commons Pills', 'ajax' => FALSE, 'html' => TRUE);
-  // Load the default tab definitions.
-  $tabs = commons_bw_get_tab_definitions('group');
-  foreach ($tabs as $key => $tab) {
-    // Populate the group argument.
-    $tabs[$key]['args'] = $group ? $group->nid : 0;
+  // Prepare an array of default quicktabs settings.
+  $settings = array(
+    'style' => 'Commons Pills',
+    'ajax' => FALSE,
+    'html' => TRUE,
+  );
 
-    // Add the result count for Tabs that are of the type 'view';
-    if ($tab['type'] == 'view') {
-      $view = views_get_view($tab['vid']);
-      if (isset($tab['display'])) {
-        $view->set_display($tab['display']);
+  // Load the browsing widget tab definitions.
+  $tabs = commons_bw_get_tab_definitions('group');
+
+  foreach ($tabs as $machine_name => $tab_settings) {
+    // Populate the group argument.
+    $tabs[$machine_name]['args'] = $group ? $group->nid : 0;
+
+    // Add the result count to the title for 'view' tabs.
+    if ($tab_settings['type'] == 'view') {
+      // Get the view specified by the tab settings.
+      $view = views_get_view($tab_settings['vid']);
+
+      // If the tab specified a view display use it, otherwise the view will be
+      // rendered using the default display.
+      if (isset($tab_settings['display'])) {
+        $view->set_display($tab_settings['display']);
       }
+
+      // If the tab references a group, set it as a tab argument.
       if ($group) {
         $view->set_arguments(array($group->nid));
       }
+
       $view->display_handler->options['filters']['flagged']['value'] = 'All';
       $view->get_total_rows = TRUE;
       $view->execute();
-      $tabs[$key]['title'] = $tabs[$key]['title'] . ' <span class="commons-bw-result-count">'. $view->total_rows . '</span>';
+
+      // Append the result count to the tab title.
+      $tabs[$machine_name]['title'] = $tabs[$machine_name]['title'] . ' <span class="commons-bw-result-count">'. $view->total_rows . '</span>';
     }
-    // Set the default tab.
-    if (isset($tabs[$key]['default']) && $tabs[$key]['default']) {
-      $settings['default_tab'] = $key;
+
+    // Use the current tab as the quicktabs default if the tab settings specify.
+    if (!empty($tabs[$machine_name]['default'])) {
+      $settings['default_tab'] = $machine_name;
     }
   }
 
-  // Generate the Quicktabs instance.
   return quicktabs_build_quicktabs('commons_bw', $settings, $tabs);
 }
 
@@ -400,6 +452,7 @@ function commons_bw_generate_group_widget($group = NULL) {
  */
 function commons_bw_quicktabs_tabstyles() {
   $path = drupal_get_path('module', 'commons_bw');
+
   return array(
     $path . '/plugins/quicktabs_styles/commons_pills/commons_pills.css' => t('Commons Pills'),
     $path . '/plugins/quicktabs_styles/commons_tabs/commons_tabs.css' => t('Commons Tabs'),
