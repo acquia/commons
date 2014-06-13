@@ -243,6 +243,19 @@ function commons_q_a_module_implements_alter(&$implementations, $hook) {
 }
 
 /**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function commons_q_a_form_node_form_alter(&$form, &$form_state, $form_id) {
+  $node = $form['#node'];
+
+  list(, , $bundle) = entity_extract_ids('node', $node);
+
+  if ($bundle == 'question' && empty($node->nid)) {
+    drupal_set_title(t('Ask a question'));
+  }
+}
+
+/**
 * Implements hook_form_alter().
 */
 function commons_q_a_form_alter(&$form, &$form_state, $form_id) {
@@ -256,9 +269,6 @@ function commons_q_a_form_alter(&$form, &$form_state, $form_id) {
     // the Trusted Contacts toggle when commons_trusted_contacts.module
     // is enabled.
     $form_state['hide_audience_toggle'] = TRUE;
-  }
-  if ($form_id == 'question_node_form' && empty($form['#node']->nid)) {
-    drupal_set_title(t('Ask a question'));
   }
   if ($form_id == 'comment_node_question_form' || $form_id == 'comment_node_answer_form') {
     $form['container'] = array(

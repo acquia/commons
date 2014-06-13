@@ -137,6 +137,19 @@ function commons_wikis_og_user_access_alter(&$temp_perm, $context) {
 }
 
 /**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function commons_wikis_form_node_form_alter(&$form, &$form_state, $form_id) {
+  $node = $form['#node'];
+
+  list(, , $bundle) = entity_extract_ids('node', $node);
+
+  if ($bundle == 'wiki' && empty($node->nid)) {
+    drupal_set_title(t('Create a wiki'));
+  }
+}
+
+/**
  * Implements hook_form_FROM_ID_alter().
  */
 function commons_wikis_form_commons_bw_partial_node_form_alter(&$form, &$form_state) {

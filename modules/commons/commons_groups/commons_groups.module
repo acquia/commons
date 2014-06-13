@@ -103,16 +103,30 @@ function commons_groups_entity_view($entity, $type, $view_mode, $langcode) {
   }
 }
 
-
 /**
- * Implements hook_form_FORM_ID_alter().
- *
- * Alter the privacy settings fields.
+ * Implements hook_form_BASE_FORM_ID_alter().
  */
-function commons_groups_form_node_form_alter(&$form, &$form_state) {
+function commons_groups_form_node_form_alter(&$form, &$form_state, $form_id) {
+  $node = $form['#node'];
+
+  list(, , $bundle) = entity_extract_ids('node', $node);
+
+  // Customizations to the node form for entities that are group content.
+  $group_content_entity_types = commons_groups_get_group_content_entity_types();
+
+  if (isset($group_content_entity_types['node'][$bundle])) {
+    $form['actions']['submit']['#submit'][] = 'commons_groups_node_in_group_submit';
+  }
+
+  // Hide the "Group content visibility" field to simplify the node form.
+  if (!empty($form['group_content_access']['#access'])) {
+    $form['group_content_access']['#access'] = FALSE;
+  }
+
+  // Alter the privacy settings fields.
   $groups = og_get_all_group_bundle();
 
-  if (isset($groups['node']) && in_array($form_state['node']->type, array_keys($groups['node']))) {
+  if (isset($groups['node']) && in_array($bundle, array_keys($groups['node']))) {
     // The group privacy settings are not required.
     $form['field_og_subscribe_settings'][LANGUAGE_NONE]['#required'] = FALSE;
 
@@ -348,28 +362,6 @@ function commons_groups_form_alter(&$form, &$form_state, $form_id) {
   }
   if ($form_id == 'group_node_form' && is_null($form['nid']['#value'])) {
     $form['actions']['submit']['#submit'][] = 'commons_groups_group_submission_message';
-  }
-  // Redirect the user back to the group homepage after submitting
-  // a node within a group.
-  if (isset($form['#node']) && substr($form_id, -10) == '_node_form') {
-    // Hide the "Group content visibility" field to simplify the node form.
-    if (!empty($form['group_content_access']['#access'])) {
-      $form['group_content_access']['#access'] = FALSE;
-    }
-    // Set a human-friendly page title.
-    if (empty($form['#node']->nid)) {
-      $types = node_type_get_types();
-      $type = $form['#node']->type;
-      // Use 'a' or 'an' appropriately.
-      $vowels = array('a', 'e', 'i', 'o', 'u');
-      $verb = strtolower(in_array($type[0], $vowels)) ? 'Create an' : 'Create a';
-      drupal_set_title(t("$verb @name", array('@name' => $types[$type]->name)), PASS_THROUGH);
-    }
-    // Customizations to the node form for entitites that are group content.
-    $group_content_entity_types = commons_groups_get_group_content_entity_types();
-    if (isset($group_content_entity_types['node'][$form['#node']->type])) {
-      $form['actions']['submit']['#submit'][] = 'commons_groups_node_in_group_submit';
-    }
   }
   if (in_array($form_id, array('og_ui_admin_global_permissions', 'og_ui_admin_permissions'))) {
     $group_content_entity_types = commons_groups_get_group_content_entity_types();

@@ -56,6 +56,19 @@ function commons_posts_commons_bw_create_all_widget($group) {
 }
 
 /**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function commons_posts_form_node_form_alter(&$form, &$form_state, $form_id) {
+  $node = $form['#node'];
+
+  list(, , $bundle) = entity_extract_ids('node', $node);
+
+  if ($bundle == 'post' && empty($node->nid)) {
+    drupal_set_title(t('Create a post'));
+  }
+}
+
+/**
  * Implements hook_form_FROM_ID_alter().
  */
 function commons_posts_form_commons_bw_partial_node_form_alter(&$form, &$form_state) {

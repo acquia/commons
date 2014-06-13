@@ -36,6 +36,19 @@ function commons_documents_commons_bw_group_widget() {
 }
 
 /**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function commons_documents_form_node_form_alter(&$form, &$form_state, $form_id) {
+  $node = $form['#node'];
+
+  list(, , $bundle) = entity_extract_ids('node', $node);
+
+  if ($bundle == 'document' && empty($node->nid)) {
+    drupal_set_title(t('Create a document'));
+  }
+}
+
+/**
  * Implements hook_form_FROM_ID_alter().
  */
 function commons_documents_form_commons_bw_partial_node_form_alter(&$form, &$form_state) {
