@@ -17,3 +17,37 @@ function commons_wikis_commons_entity_integration() {
     ),
   );
 }
+
+/**
+ * Implements hook_commons_bw_group_widget().
+ */
+function commons_wikis_commons_bw_group_widget() {
+  return array(
+    'commons_wikis' => array(
+      'title' => t('Wikis'),
+      'type' => 'view',
+      'vid' => 'commons_bw_wikis',
+      'display' => 'default',
+      'weight' => 8,
+      'bundle' => 'wiki',
+    ),
+  );
+}
+
+/**
+ * Implements hook_commons_bw_create_all_widget().
+ */
+function commons_wikis_commons_bw_create_all_widget($group) {
+  if (og_user_access('node', $group->nid, 'create wiki content')) {
+    $link = l(t('Start a wiki'), 'node/add/wiki',
+      array('attributes' => array('class' => 'commons-wikis-create'), 'query' => array('og_group_ref' => $group->nid))
+    );
+    return array(
+      'commons_wikis' => array(
+        'link' => $link,
+        'text' => t('Collaborate on a document'),
+        '#weight' => 8,
+      ),
+    );
+  }
+}

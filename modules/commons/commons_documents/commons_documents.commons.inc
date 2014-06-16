@@ -16,3 +16,19 @@ function commons_documents_commons_entity_integration() {
     ),
   );
 }
+
+/**
+ * Implements hook_commons_bw_group_widget().
+ */
+function commons_documents_commons_bw_group_widget() {
+  return array(
+    'commons_documents' => array(
+      'title' => t('Docs'),
+      'type' => 'view',
+      'vid' => 'commons_bw_documents',
+      'display' => 'default',
+      'weight' => 6,
+      'bundle' => 'document',
+    ),
+  );
+}

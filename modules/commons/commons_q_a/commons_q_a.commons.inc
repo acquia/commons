@@ -22,3 +22,37 @@ function commons_q_a_commons_entity_integration() {
     ),
   );
 }
+
+/**
+ * Implements hook_commons_bw_group_widget().
+ */
+function commons_q_a_commons_bw_group_widget() {
+  return array(
+    'commons_q_a' => array(
+      'title' => t('Q & A'),
+      'type' => 'view',
+      'vid' => 'commons_bw_q_a',
+      'display' => 'default',
+      'weight' => 5,
+      'bundle' => 'question',
+    ),
+  );
+}
+
+/**
+ * Implements hook_commons_bw_create_all_widget().
+ */
+function commons_q_a_commons_bw_create_all_widget($group) {
+  if (og_user_access('node', $group->nid, 'create question content')) {
+    $link = l(t('Ask a question'),'node/add/question',
+      array('attributes' => array('class' => 'commons-q-a-create'), 'query' => array('og_group_ref' => $group->nid))
+    );
+    return array(
+      'commons_q_a' => array(
+        'link' => $link,
+        'text' => t('Learn the best answer'),
+        '#weight' => 5,
+      ),
+    );
+  }
+}

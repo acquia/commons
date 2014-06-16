@@ -17,3 +17,19 @@ function commons_polls_commons_entity_integration() {
     ),
   );
 }
+
+/**
+ * Implements hook_commons_bw_group_widget().
+ */
+function commons_polls_commons_bw_group_widget() {
+  return array(
+    'commons_polls' => array(
+      'title' => t('Polls'),
+      'type' => 'view',
+      'vid' => 'commons_bw_polls',
+      'display' => 'default',
+      'weight' => 10,
+      'bundle' => 'poll',
+    ),
+  );
+}

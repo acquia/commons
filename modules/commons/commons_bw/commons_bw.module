@@ -7,6 +7,18 @@
 include_once 'commons_bw.features.inc';
 
 /**
+ * Implements hook_hook_info().
+ */
+function commons_bw_hook_info() {
+  $hooks = array(
+    'commons_bw_group_widget',
+    'commons_bw_create_all_widget',
+  );
+
+  return array_fill_keys($hooks, array('group' => 'commons'));
+}
+
+/**
  * Implements hook_system_info_alter().
  */
 function commons_bw_system_info_alter(&$info, $file, $type) {

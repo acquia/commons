@@ -266,21 +266,6 @@ function commons_groups_block_view($delta = '') {
 }
 
 /**
- * Implements hook_commons_entity_integration().
- */
-function commons_groups_commons_entity_integration() {
-  return array(
-    'node' => array(
-      'group' => array(
-        'is_group_content' => FALSE,
-        'is_group' => TRUE,
-        'exclude_commons_follow' => TRUE,
-      ),
-    ),
-  );
-}
-
-/**
  * Implements hook_views_pre_view().
  * By default, all views should have a group_type filter that looks at only nodes.
  * This function allows those views to also show group content on the front page
@@ -897,23 +882,6 @@ function commons_groups_first_contribution($account, $node) {
       }
     }
   }
-}
-
-/**
- * Implements hook_commons_bw_group_widget().
- */
-function commons_groups_commons_bw_group_widget() {
-  return array(
-    'commons_all' => array(
-      'title' => t('All'),
-      'type' => 'view',
-      'vid' => 'commons_bw_all',
-      'display' => 'default',
-      'weight' => -10,
-      'default' => 1,
-      'bundle' => 'post',
-    ),
-  );
 }
 
 /**

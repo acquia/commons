@@ -7,41 +7,6 @@
 include_once 'commons_posts.features.inc';
 
 /**
-* Implements hook_commons_bw_group_widget().
-*/
-function commons_posts_commons_bw_group_widget() {
-  return array(
-    'commons_posts' => array(
-      'title' => t('Posts'),
-      'type' => 'view',
-      'vid' => 'commons_bw_posts',
-      'display' => 'default',
-      'weight' => -1,
-      'bundle' => 'post',
-    ),
-  );
-}
-
-/**
- * Implements hook_commons_bw_create_all_widget().
- */
-function commons_posts_commons_bw_create_all_widget($group) {
-  if (og_user_access('node', $group->nid, 'create post content')) {
-    $link = l(t('Create a post'),'node/add/post',
-    array('attributes' => array('class' => 'commons-posts-create'), 'query' => array('og_group_ref' => $group->nid))
-    );
-    return array(
-      'commons_posts' => array(
-        'default' => TRUE,
-        'link' => $link,
-        'text' =>  t('Foster a topic through commenting'),
-        '#weight' => -1,
-      ),
-    );
-  }
-}
-
-/**
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function commons_posts_form_node_form_alter(&$form, &$form_state, $form_id) {

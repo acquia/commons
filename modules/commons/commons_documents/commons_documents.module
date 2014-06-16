@@ -7,22 +7,6 @@
 include_once 'commons_documents.features.inc';
 
 /**
- * Implements hook_commons_bw_group_widget().
- */
-function commons_documents_commons_bw_group_widget() {
-  return array(
-    'commons_documents' => array(
-      'title' => t('Docs'),
-      'type' => 'view',
-      'vid' => 'commons_bw_documents',
-      'display' => 'default',
-      'weight' => 6,
-      'bundle' => 'document',
-    ),
-  );
-}
-
-/**
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function commons_documents_form_node_form_alter(&$form, &$form_state, $form_id) {
