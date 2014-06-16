@@ -31,3 +31,35 @@ function commons_radioactivity_groups_node_update($node) {
     commons_radioactivity_process_node_group_membership_change($node);
   }
 }
+
+/**
+ * Implements hook_default_page_manager_pages_alter().
+ */
+function commons_radioactivity_groups_default_page_manager_pages_alter(&$pages) {
+  // Add the 'most active groups' block to the groups directory page.
+  if (isset($pages['groups_directory'])) {
+    $page = $pages['groups_directory'];
+    $handler = $page->default_handlers['page_groups_directory_panel_context'];
+    $display = $handler->conf['display'];
+
+    $pane = new stdClass();
+    $pane->pid = 'new-ab237aa5-5ae7-8fb4-e1ce-20c776a6950b';
+    $pane->panel = 'two_66_33_second';
+    $pane->type = 'views_panes';
+    $pane->subtype = 'commons_radioactivity_groups_most_active-panel_pane_1';
+    $pane->shown = TRUE;
+    $pane->access = array();
+    $pane->configuration = array();
+    $pane->cache = array();
+    $pane->style = array(
+      'settings' => NULL,
+    );
+    $pane->css = array();
+    $pane->extras = array();
+    $pane->position = 0;
+    $pane->locks = array();
+    $pane->uuid = 'ab237aa5-5ae7-8fb4-e1ce-20c776a6950b';
+    $display->content['new-ab237aa5-5ae7-8fb4-e1ce-20c776a6950b'] = $pane;
+    $display->panels['two_66_33_second'][0] = 'new-ab237aa5-5ae7-8fb4-e1ce-20c776a6950b';
+  }
+}
