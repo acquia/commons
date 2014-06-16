@@ -822,3 +822,11 @@ function commons_update_3116() {
   module_enable(array('commons_media', 'media_wysiwyg'));
   return array();
 }
+
+/*
+ * Flush all caches to accommodate moved files and new hooks.
+ */
+function commons_update_3117() {
+  drupal_flush_all_caches();
+  return array();
+}
