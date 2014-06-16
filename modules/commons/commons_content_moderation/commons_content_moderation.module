@@ -126,7 +126,7 @@ function commons_content_moderation_views_default_views_alter(&$views) {
 function commons_content_moderation_views_pre_build(&$view) {
   // Disable bulk content moderation operations if the user does not have
   // appropriate access.
-  if ($view->name == 'commons_content_moderation_reported_nodes' && !module_exists('actions_permissions') && (!user_access('administer content') || !user_access('administer users'))) {
+  if ($view->name == 'commons_content_moderation_reported_nodes' && !module_exists('actions_permissions') && (!user_access('administer nodes') || !user_access('administer users'))) {
     unset($view->field['views_bulk_operations']);
     unset($view->display_handler->handlers['field']['views_bulk_operations']);
   }
