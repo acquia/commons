@@ -24,7 +24,7 @@ function commons_radioactivity_comment_insert($comment) {
 }
 
 /**
- * Implements hook_comment_insert().
+ * Implements hook_comment_delete().
  *
  * Decrease a node's radioactivity when a comment is removed.
  */
@@ -52,7 +52,7 @@ function commons_radioactivity_comment_publish($comment) {
   // Publishing a user's comment on their own node should not increase
   // radioactivity.
   if ($node->uid != $comment->uid) {
-    commons_radioactivity_incident_node($node, -1 * COMMONS_RADIOACTIVITY_COMMENT);
+    commons_radioactivity_incident_node($node, COMMONS_RADIOACTIVITY_COMMENT);
   }
 }
 
