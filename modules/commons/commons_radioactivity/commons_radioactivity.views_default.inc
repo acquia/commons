@@ -195,4 +195,15 @@ function commons_radioactivity_views_default_views_alter(&$views) {
       $views[$view_id]->display['default']->display_options['sorts']['field_radioactivity_radioactivity_energy']['expose']['label'] = 'most active';
     }
   }
+
+  // Add a 'most active' exposed sort to the homepage content view.
+  if (!empty($views['commons_homepage_content'])) {
+    /* Sort criterion: Content: Radioactivity (field_radioactivity:radioactivity_energy) */
+    $views['commons_homepage_content']->display['default']->display_options['sorts']['field_radioactivity_radioactivity_energy']['id'] = 'field_radioactivity_radioactivity_energy';
+    $views['commons_homepage_content']->display['default']->display_options['sorts']['field_radioactivity_radioactivity_energy']['table'] = 'field_data_field_radioactivity';
+    $views['commons_homepage_content']->display['default']->display_options['sorts']['field_radioactivity_radioactivity_energy']['field'] = 'field_radioactivity_radioactivity_energy';
+    $views['commons_homepage_content']->display['default']->display_options['sorts']['field_radioactivity_radioactivity_energy']['order'] = 'DESC';
+    $views['commons_homepage_content']->display['default']->display_options['sorts']['field_radioactivity_radioactivity_energy']['exposed'] = TRUE;
+    $views['commons_homepage_content']->display['default']->display_options['sorts']['field_radioactivity_radioactivity_energy']['expose']['label'] = 'most active';
+  }
 }

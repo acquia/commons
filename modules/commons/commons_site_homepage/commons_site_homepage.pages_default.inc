@@ -242,25 +242,6 @@ function commons_site_homepage_default_page_manager_pages() {
     $display->content['new-0ae8e5a2-44f6-8584-21f2-8be6e340e62f'] = $pane;
     $display->panels['three_33_first'][0] = 'new-0ae8e5a2-44f6-8584-21f2-8be6e340e62f';
     $pane = new stdClass();
-    $pane->pid = 'new-b6e290b7-1d2b-5db4-a181-28befdcde628';
-    $pane->panel = 'three_33_second';
-    $pane->type = 'views_panes';
-    $pane->subtype = 'commons_radioactivity_groups_most_active-panel_pane_1';
-    $pane->shown = TRUE;
-    $pane->access = array();
-    $pane->configuration = array();
-    $pane->cache = array();
-    $pane->style = array(
-      'settings' => NULL,
-    );
-    $pane->css = array();
-    $pane->extras = array();
-    $pane->position = 0;
-    $pane->locks = array();
-    $pane->uuid = 'b6e290b7-1d2b-5db4-a181-28befdcde628';
-    $display->content['new-b6e290b7-1d2b-5db4-a181-28befdcde628'] = $pane;
-    $display->panels['three_33_second'][0] = 'new-b6e290b7-1d2b-5db4-a181-28befdcde628';
-    $pane = new stdClass();
     $pane->pid = 'new-800b2f8a-307f-0e14-4174-626a1c5c4cd9';
     $pane->panel = 'three_33_third';
     $pane->type = 'views_panes';
