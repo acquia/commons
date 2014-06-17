@@ -152,32 +152,6 @@ function commons_groups_pages_panelizer_defaults() {
       $display->content['new-a7009535-0e2a-2c94-edd2-4ecc953c4ca2'] = $pane;
       $display->panels['two_66_33_second'][1] = 'new-a7009535-0e2a-2c94-edd2-4ecc953c4ca2';
       $pane = new stdClass();
-      $pane->pid = 'new-ba735f2b-4734-7724-098d-1925c6a4bb47';
-      $pane->panel = 'two_66_33_second';
-      $pane->type = 'views_panes';
-      $pane->subtype = 'commons_radioactivity_groups_active_in_group-panel_pane_1';
-      $pane->shown = TRUE;
-      $pane->access = array();
-      $pane->configuration = array(
-        'arguments' => array(
-          'gid' => '%node:nid',
-        ),
-        'context' => array(
-          0 => 'panelizer',
-        ),
-      );
-      $pane->cache = array();
-      $pane->style = array(
-        'settings' => NULL,
-      );
-      $pane->css = array();
-      $pane->extras = array();
-      $pane->position = 2;
-      $pane->locks = array();
-      $pane->uuid = 'ba735f2b-4734-7724-098d-1925c6a4bb47';
-      $display->content['new-ba735f2b-4734-7724-098d-1925c6a4bb47'] = $pane;
-      $display->panels['two_66_33_second'][2] = 'new-ba735f2b-4734-7724-098d-1925c6a4bb47';
-      $pane = new stdClass();
       $pane->pid = 'new-52796f83-93dd-2cf4-41aa-33520dc31e5f';
       $pane->panel = 'two_66_33_second';
       $pane->type = 'views_panes';
