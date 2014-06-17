@@ -246,7 +246,7 @@ projects[media_oembed][version] = "2.1"
 
 projects[memcache][type] = "module"
 projects[memcache][subdir] = "contrib"
-projects[memcache][version] = "1.0"
+projects[memcache][version] = "1.1"
 
 projects[menu_attributes][type] = "module"
 projects[menu_attributes][subdir] = "contrib"
