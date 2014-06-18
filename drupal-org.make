@@ -278,7 +278,15 @@ projects[message_notify][version] = "2.5"
 projects[message_subscribe][type] = "module"
 projects[message_subscribe][subdir] = "contrib"
 projects[message_subscribe][version] = "1.0-rc2"
+
+; Message Subscribe sends emails regardless of context
+; https://www.drupal.org/node/1828184
 projects[message_subscribe][patch][] = "http://drupal.org/files/issues/group-context-1828184-53.patch"
+
+; By default, don't notify blocked users
+; https://www.drupal.org/node/2184567
+projects[message_subscribe][patch][] = "http://drupal.org/files/issues/2184567-message-subscribe-blocked-users-23.patch"
+
 
 projects[metatag][type] = "module"
 projects[metatag][subdir] = "contrib"
