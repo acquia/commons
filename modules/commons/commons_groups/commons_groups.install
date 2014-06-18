@@ -243,3 +243,14 @@ function commons_groups_update_3119() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Revert the group homepage view to use distinct to reduce duplicate entries.
+ */
+function commons_groups_update_3120() {
+  $revert = array(
+    'commons_groups' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}
