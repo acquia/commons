@@ -12,7 +12,7 @@
  */
 function commons_radioactivity_comment_insert($comment) {
   // Adding a comment that wasn't published shouldn't affect radioactivity.
-  if ($comment->status) {
+  if ($comment->status == COMMENT_PUBLISHED) {
     $node = node_load($comment->nid);
 
     // A user adding a comment to their own node should not increase
@@ -30,7 +30,7 @@ function commons_radioactivity_comment_insert($comment) {
  */
 function commons_radioactivity_comment_delete($comment) {
   // Removing a comment that wasn't published shouldn't affect radioactivity.
-  if ($comment->status) {
+  if ($comment->status == COMMENT_PUBLISHED) {
     $node = node_load($comment->nid);
 
     // A user removing a comment from their own node should not decrease
@@ -42,7 +42,7 @@ function commons_radioactivity_comment_delete($comment) {
 }
 
 /**
- * Implements hook_radioactivity_comment_publish().
+ * Implements hook_comment_publish().
  *
  * Increase a node's radioactivity when a comment is published.
  */
@@ -57,7 +57,7 @@ function commons_radioactivity_comment_publish($comment) {
 }
 
 /**
- * Implements hook_radioactivity_comment_unpublish().
+ * Implements hook_comment_unpublish().
  *
  * Decrease a node's radioactivity when a comment is unpublished.
  */
