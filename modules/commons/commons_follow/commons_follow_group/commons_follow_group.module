@@ -101,8 +101,9 @@ function commons_follow_group_node_insert($node) {
   }
   // The owner of the content automatically follows the content
   $account = user_load($node->uid);
-  $flag = flag_get_flag('commons_follow_group');
-  $flag->flag('flag', $node->nid, $account);
+  if ($flag = flag_get_flag('commons_follow_group')) {
+    $flag->flag('flag', $node->nid, $account);
+  }
 }
 
 
@@ -130,7 +131,7 @@ function commons_follow_group_og_membership_delete(OgMembership $og_membership) 
   // The user should unfollow the group when her membership is deleted.
   if ($og_membership->entity_type == 'user' && $og_membership->field_name == 'og_user_node') {
     $account = user_load($og_membership->etid);
-    flag('unflag', 'commons_follow_group', $og_membership->gid, $account);    
+    flag('unflag', 'commons_follow_group', $og_membership->gid, $account);
   }
 }
 
@@ -141,13 +142,13 @@ function commons_follow_group_sync_flag_to_group_membership($og_membership) {
     $account = user_load($og_membership->etid);
     // The membership is approved. The user should follow the group.
     if ($og_membership->state == 1) {
-      flag('flag', 'commons_follow_group', $og_membership->gid, $account);    
+      flag('flag', 'commons_follow_group', $og_membership->gid, $account);
     }
     // The membership is not approved. The user should not follow the group.
     else {
-      flag('unflag', 'commons_follow_group', $og_membership->gid, $account);    
+      flag('unflag', 'commons_follow_group', $og_membership->gid, $account);
     }
   }
 }
-  
+
 

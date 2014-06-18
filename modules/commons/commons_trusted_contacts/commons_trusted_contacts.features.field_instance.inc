@@ -505,9 +505,10 @@ function commons_trusted_contacts_field_default_field_instances() {
     );
   }
 
-  $group_content_entity_types = commons_groups_get_group_content_entity_types();
-  foreach(array_keys($group_content_entity_types['node']) as $type) {
-    commons_trusted_contacts_field_definition_group($field_instances, 'node', $type);
+  if ($group_content_entity_types = commons_groups_get_group_content_entity_types(FALSE)) {
+    foreach (array_keys($group_content_entity_types['node']) as $type) {
+      commons_trusted_contacts_field_definition_group($field_instances, 'node', $type);
+    }
   }
 
   // Translatables

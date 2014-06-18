@@ -76,11 +76,11 @@ function commons_follow_node_comment_insert($comment) {
  * @see commons_follow_node_node_insert
  */
 function commons_follow_node_follow_node($nid, $content_type, $user_id = NULL) {
-  $flag = flag_get_flag('commons_follow_node');
-
-  // Check if this content type use the "Individual nodes" flag
-  if (in_array($content_type, $flag->types)) {
-    $account = isset($user_id) ? user_load($user_id) : NULL;
-    $flag->flag('flag', $nid, $account);
+  if ($flag = flag_get_flag('commons_follow_node')) {
+    // Check if this content type use the "Individual nodes" flag
+    if (in_array($content_type, $flag->types)) {
+      $account = isset($user_id) ? user_load($user_id) : NULL;
+      $flag->flag('flag', $nid, $account);
+    }
   }
 }
