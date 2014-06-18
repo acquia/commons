@@ -200,24 +200,28 @@ function commons_events_date_popup_element_process($element, &$form_state, $form
  * Implements hook_entity_view_alter().
  */
 function commons_events_entity_view_alter(&$build, $type) {
-  if ($build['#entity_type'] == 'node' && $build['#bundle'] == 'event') {
+  if ($type == 'node' && isset($build['#node'])) {
     $node = $build['#node'];
 
-    $build['attending'] = array(
-      0 => theme('commons_events_attending_event', array(
-        'event' => $node,
-        'attendee_count' => commons_events_get_raw_attendee_count($node),
-      )),
-      '#weight' => -10,
-    );
+    list(, , $bundle) = entity_extract_ids('node', $node);
 
-    // Don't show the address if the event location is only online.
-    $items = field_get_items('node', $node, 'field_location');
+    if ($bundle == 'event') {
+      $build['attending'] = array(
+        0 => theme('commons_events_attending_event', array(
+          'event' => $node,
+          'attendee_count' => commons_events_get_raw_attendee_count($node),
+        )),
+        '#weight' => -10,
+      );
 
-    if (is_array($items)) {
-      foreach ($items as $item) {
-        if ($item['value'] == 'online') {
-          $build['field_address']['#access'] = FALSE;
+      // Don't show the address if the event location is only online.
+      $items = field_get_items('node', $node, 'field_location');
+
+      if (is_array($items)) {
+        foreach ($items as $item) {
+          if ($item['value'] == 'online') {
+            $build['field_address']['#access'] = FALSE;
+          }
         }
       }
     }
