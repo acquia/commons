@@ -23,7 +23,7 @@ function commons_search_core_strongarm() {
   $strongarm->name = 'search_active_modules';
   $strongarm->value = array(
     'search_facetapi' => 'search_facetapi',
-    'user' => 0,
+    'user' => 'user',
     'node' => 0,
   );
   $export['search_active_modules'] = $strongarm;

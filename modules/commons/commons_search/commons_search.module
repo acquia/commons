@@ -68,6 +68,9 @@ function commons_search_form_alter(&$form, &$form_state, $form_id) {
       // If we've already searched, refill the search box with the current
       // search keywords.
       $form['search_block_form']['#default_value'] = check_plain(arg(2));
+      if (arg(1) == 'user') {
+        $form['custom_search_types']["#default_value"] = 'c-user';
+      }
     }
     $keys = arg(2);
     if (!module_exists('commons_search_solr') && !empty($keys)) {
