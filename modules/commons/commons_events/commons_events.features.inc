@@ -154,7 +154,7 @@ function commons_events_default_message_type() {
     "argument" : [],
     "category" : "commons_notify",
     "data" : {
-      "token options" : { "clear" : 0 },
+      "token options" : { "clear" : 1 },
       "purge" : { "override" : 0, "enabled" : 0, "quota" : "", "days" : "" }
     },
     "language" : "",

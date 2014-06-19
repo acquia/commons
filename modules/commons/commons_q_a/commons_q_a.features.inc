@@ -34,7 +34,10 @@ function commons_q_a_default_message_type() {
     "argument_keys" : [],
     "argument" : [],
     "category" : "message_type",
-    "data" : { "purge" : { "override" : 0, "enabled" : 0, "quota" : "", "days" : "" } },
+    "data" : {
+      "token options" : { "clear" : 1 },
+      "purge" : { "override" : 0, "enabled" : 0, "quota" : "", "days" : "" }
+    },
     "language" : "",
     "arguments" : null,
     "message_text" : { "und" : [
@@ -63,7 +66,10 @@ function commons_q_a_default_message_type() {
     "argument_keys" : [],
     "argument" : [],
     "category" : "message_type",
-    "data" : { "purge" : { "override" : 0, "enabled" : 0, "quota" : "", "days" : "" } },
+    "data" : {
+      "token options" : { "clear" : 1 },
+      "purge" : { "override" : 0, "enabled" : 0, "quota" : "", "days" : "" }
+    },
     "language" : "",
     "arguments" : null,
     "message_text" : { "und" : [

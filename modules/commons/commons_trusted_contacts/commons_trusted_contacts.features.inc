@@ -32,7 +32,10 @@ function commons_trusted_contacts_default_message_type() {
     "argument_keys" : [],
     "argument" : [],
     "category" : "commons_notify",
-    "data" : { "purge" : { "override" : 0, "enabled" : 0, "quota" : "", "days" : "" } },
+    "data" : {
+      "token options" : { "clear" : 1 },
+      "purge" : { "override" : 0, "enabled" : 0, "quota" : "", "days" : "" }
+    },
     "language" : "",
     "arguments" : null,
     "message_text" : { "und" : [
@@ -56,7 +59,10 @@ function commons_trusted_contacts_default_message_type() {
     "argument_keys" : [],
     "argument" : [],
     "category" : "commons_notify",
-    "data" : { "purge" : { "override" : 0, "enabled" : 0, "quota" : "", "days" : "" } },
+    "data" : {
+      "token options" : { "clear" : 1 },
+      "purge" : { "override" : 0, "enabled" : 0, "quota" : "", "days" : "" }
+    },
     "language" : "",
     "arguments" : null,
     "message_text" : { "und" : [
