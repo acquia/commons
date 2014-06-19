@@ -246,7 +246,7 @@ projects[media_oembed][version] = "2.1"
 
 projects[memcache][type] = "module"
 projects[memcache][subdir] = "contrib"
-projects[memcache][version] = "1.1"
+projects[memcache][version] = "1.2"
 
 projects[menu_attributes][type] = "module"
 projects[menu_attributes][subdir] = "contrib"
@@ -439,7 +439,7 @@ projects[realname][version] = "1.2"
 
 ; Realname entityreference autocomplete API update
 ; https://drupal.org/node/2225889
-projects[realname][patch][] = "https://drupal.org/files/issues/2225889-realname-correct-menu-3.patch"
+projects[realname][patch][] = "http://drupal.org/files/issues/2225889-realname-correct-menu-3.patch"
 
 projects[redirect][type] = "module"
 projects[redirect][subdir] = "contrib"
@@ -467,7 +467,7 @@ projects[search_facetapi][version] = "1.0-beta2"
 
 projects[sharethis][type] = "module"
 projects[sharethis][subdir] = "contrib"
-projects[sharethis][version] = "2.6"
+projects[sharethis][version] = "2.8"
 
 projects[smartcrop][type] = "module"
 projects[smartcrop][subdir] = "contrib"

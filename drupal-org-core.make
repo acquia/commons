@@ -23,12 +23,12 @@ projects[drupal][patch][] = https://drupal.org/files/issues/drupal-106721-optimi
 
 ; Statically cache node access grants
 ; https://drupal.org/comment/8495029#comment-8495029
-projects[drupal][patch][] = https://drupal.org/files/issues/node_access_grants-static-cache-11.patch
+projects[drupal][patch][] = http://drupal.org/files/issues/node_access_grants-static-cache-11.patch
 
 ; File_get_file_references is slow and buggy
 ; https://drupal.org/node/1805690#comment-8734045
-projects[drupal][patch][] = https://drupal.org/files/issues/1805690_11.patch
+projects[drupal][patch][] = http://drupal.org/files/issues/1805690_11.patch
 
 ; hook_comment_unpublish is never invoked
 ; https://www.drupal.org/node/2289369#comment-8897089
-projects[drupal][patch][] = https://www.drupal.org/files/issues/comment-unpublish-d7-2289369-1-do-not-test.patch
+projects[drupal][patch][] = http://drupal.org/files/issues/comment-unpublish-d7-2289369-1-do-not-test.patch
