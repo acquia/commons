@@ -2466,9 +2466,6 @@ ul.comment-links li {
 .field-name-body {
   margin-top: 1.7em;
 }
-.node-event .field-name-body {
-  clear: both;
-}
 
 .field-name-field-date {
   font-weight: bold;
@@ -4147,16 +4144,6 @@ tr.odd .form-item, tr.even .form-item {
   margin: 0;
 }
 
-form.commons-events-form-float {
-  background-color: none;
-  padding: 0;
-  border: none;
-  border-radius: 0;
-}
-form.commons-events-form-float input {
-  margin: 0;
-}
-
 #edit-field-topics-und {
   border-top: 2px groove #8A8A8A;
   border-left: 2px groove #8A8A8A;
@@ -4166,28 +4153,29 @@ form.commons-events-form-float {
   background: none;
   padding: 0;
   border: none;
-  max-width: 10em;
+  width: 10em;
   margin-right: -10em;
-  text-align: center;
+  padding-left: 10px;
+  text-align: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 form.commons-events-form-float .commons-event-status {
   font-size: .88em;
-  line-height: 1.2em;
+  line-height: 1.4em;
   margin-top: .3em;
-  text-align: center;
 }
-@media only screen and (min-width: 481px) and (max-width: 768px) {
-  form.commons-events-form-float .commons-event-status {
-    display: inline-block;
-    margin-left: 1em;
-  }
+form.commons-events-form-float .form-text {
+  width: auto;
+  text-align: right;
 }
 @media only screen and (max-width: 768px) {
   form.commons-events-form-float {
     float: none;
     margin: 1em 0;
-    max-width: inherit;
-    text-align: left;
+    padding-left: 0;
+    width: auto;
   }
 }
 

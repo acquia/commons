@@ -662,13 +662,17 @@ function commons_events_event_type_disabled($node) {
  * Helper function go get the raw number of attendees.
  */
 function commons_events_get_raw_attendee_count($node) {
-  $attendee_count = db_select('registration', 'r')
-    ->fields('r')
+  $attendee_count = 0;
+  $query = db_select('registration', 'r')
+    ->fields('r', array('count'))
     ->condition('entity_id', $node->nid)
     ->condition('entity_type', 'node')
-    ->countQuery()
-    ->execute()
-    ->fetchField();
+    ->execute();
+
+  // Add up all of the attendees going to the event.
+  foreach ($query as $record) {
+    $attendee_count += $record->count;
+  }
 
   return $attendee_count;
 }
