@@ -52,6 +52,14 @@ function commons_requirements($phase) {
  * Implements hook_install_tasks().
  */
 function commons_install_tasks() {
+
+  // Since any module can add a drupal_set_message, this can bug the user
+  // when we redirect him to the front page. For a better user experience,
+  // remove all the message that are only "notifications" message.
+  drupal_get_messages('status', TRUE);
+  drupal_get_messages('completed', TRUE);
+  drupal_get_messages('warning', TRUE);
+
   //make sure we have more memory than 196M. if not lets try to increase it.
   if (ini_get('memory_limit') != '-1' && ini_get('memory_limit') <= '196M' && ini_get('memory_limit') >= '128M') {
     ini_set('memory_limit', '196M');
