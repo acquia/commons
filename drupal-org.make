@@ -7,6 +7,10 @@ projects[acquia_connector][type] = "module"
 projects[acquia_connector][subdir] = "contrib"
 projects[acquia_connector][version] = "2.14"
 
+; Fix signup messages displayed during install.
+; https://www.drupal.org/node/2289903#comment-8899833
+projects[acquia_connector][patch][] = "http://www.drupal.org/files/issues/move-message-generation-2289903-1.patch"
+
 projects[addressfield][type] = "module"
 projects[addressfield][subdir] = "contrib"
 projects[addressfield][version] = "1.0-beta5"
