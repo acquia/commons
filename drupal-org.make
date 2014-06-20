@@ -5,7 +5,10 @@ core = 7.x
 
 projects[acquia_connector][type] = "module"
 projects[acquia_connector][subdir] = "contrib"
-projects[acquia_connector][version] = "2.14"
+projects[acquia_connector][download][type] = "git"
+projects[acquia_connector][download][url] = "http://git.drupal.org/project/acquia_connector.git"
+projects[acquia_connector][download][branch] = "7.x-2.x"
+projects[acquia_connector][download][revision] = "ad44520"
 
 ; Fix signup messages displayed during install.
 ; https://www.drupal.org/node/2289903#comment-8899833
