@@ -17,7 +17,7 @@ function commons_radioactivity_groups_node_insert($node) {
   }
 
   // If this node is a member of groups, generate incidents for each group.
-  commons_radioactivity_incident_groups($node, $node->field_radioactivity[LANGUAGE_NONE][0]['radioactivity_energy']);
+  commons_radioactivity_groups_incident_groups($node, $node->field_radioactivity[LANGUAGE_NONE][0]['radioactivity_energy']);
 }
 
 /**
