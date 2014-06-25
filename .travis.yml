@@ -110,8 +110,8 @@ install:
   - sudo md5sum $CHROME_SANDBOX
 
   # Get Selenium
-  - wget http://selenium-release.storage.googleapis.com/2.41/selenium-server-standalone-2.41.0.jar
-  - java -jar selenium-server-standalone-2.41.0.jar -Dwebdriver.chrome.driver=`pwd`/chromedriver > /dev/null 2>&1 &
+  - wget http://selenium-release.storage.googleapis.com/2.42/selenium-server-standalone-2.42.1.jar
+  - java -jar selenium-server-standalone-2.42.1.jar > /dev/null 2>&1 &
   - sleep 5
  
   # Disable sendmail
