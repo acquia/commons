@@ -830,3 +830,11 @@ function commons_update_3117() {
   drupal_flush_all_caches();
   return array();
 }
+
+/*
+ * Ensure commons radioactivity is enabled upon install.
+ */
+function commons_update_3118() {
+  module_enable(array('commons_radioactivity', 'commons_radioactivity_groups'));
+  return array();
+}
