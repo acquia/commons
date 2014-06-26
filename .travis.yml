@@ -141,6 +141,11 @@ before_script:
 
 script:
 
+  # If this isn't an upgrade, we test if any features are overridden.
+  if [[ "$UPGRADE" == none ]]; then
+    run_test ../../scripts/check-overridden.sh
+  fi
+
   # First, run all the tests in Firefox.
   - ./bin/behat --config behat.travis.yml
  
