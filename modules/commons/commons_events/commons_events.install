@@ -272,3 +272,15 @@ function commons_events_update_7014() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Ensure that the target comments field instance used for custom event messages
+ * is detected and fix Commons Events appearing overridden.
+ */
+function commons_events_update_7015() {
+  $revert = array(
+    'commons_events' => array('field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}
