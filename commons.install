@@ -101,6 +101,7 @@ function commons_install_tasks() {
  */
 function commons_install_tasks_alter(&$tasks, $install_state) {
   global $install_state;
+  $tasks['install_profile_modules']['display_name'] = st('Install Drupal Commons');
 
   // Skip profile selection step.
   $tasks['install_select_profile']['display'] = FALSE;
@@ -118,6 +119,13 @@ function commons_install_tasks_alter(&$tasks, $install_state) {
  * Override of install_finished() without the useless text.
  */
 function commons_install_finished(&$install_state) {
+  drupal_set_title(st('@drupal installation complete', array('@drupal' => drupal_install_profile_distribution_name())), PASS_THROUGH);
+  $messages = drupal_set_message();
+
+  // Remember the profile which was used.
+  variable_set('install_profile', drupal_get_profile());
+  variable_set('install_task', 'done');
+
   // BEGIN copy/paste from install_finished().
   // Remove the bookmarks flag
   $flag = flag_get_flag('bookmarks');
@@ -156,9 +164,6 @@ function commons_install_finished(&$install_state) {
     drupal_write_record('block', $footer_block);
   }
 
-  // Remember the profile which was used.
-  variable_set('install_profile', drupal_get_profile());
-
   // Installation profiles are always loaded last
   db_update('system')
     ->fields(array('weight' => 1000))
@@ -169,16 +174,15 @@ function commons_install_finished(&$install_state) {
   // Cache a fully-built schema.
   drupal_get_schema(NULL, TRUE);
 
-  variable_set('title_node', array(
-    'auto_attach' => array('title' => 'title'),
-    'hide_label' => array('page' => 0, 'entity' => 0),
-  ));
-
   // Run cron to populate update status tables (if available) so that users
   // will be warned if they've installed an out of date Drupal version.
   // Will also trigger indexing of profile-supplied content or feeds.
   drupal_cron_run();
-  // END copy/paste from install_finished().
+
+  variable_set('title_node', array(
+    'auto_attach' => array('title' => 'title'),
+    'hide_label' => array('page' => 0, 'entity' => 0),
+  ));
 
   if (isset($messages['error'])) {
     $output = '<p>' . (isset($messages['error']) ? st('Review the messages above before visiting <a href="@url">your new site</a>.', array('@url' => url(''))) : st('<a href="@url">Visit your new site</a>.', array('@url' => url('')))) . '</p>';
@@ -190,6 +194,8 @@ function commons_install_finished(&$install_state) {
     // remove all the message that are only "notifications" message.
     drupal_get_messages('status', TRUE);
     drupal_get_messages('completed', TRUE);
+    // Migrate adds its messages under the wrong type, see #1659150.
+    drupal_get_messages('ok', TRUE);
 
     // If we don't install drupal using Drush, redirect the user to the front
     // page.
@@ -836,5 +842,13 @@ function commons_update_3117() {
  */
 function commons_update_3118() {
   module_enable(array('commons_radioactivity', 'commons_radioactivity_groups'));
+  return array();
+}
+
+/**
+ * Ensure install task is set to completed.
+ */
+function commons_update_3119() {
+  variable_set('install_task', 'done');
   return array();
 }
