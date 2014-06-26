@@ -174,3 +174,14 @@ function commons_q_a_update_3113() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Fix URL aliases for group references
+ */
+function commons_q_a_update_3114() {
+  $revert = array(
+    'commons_q_a' => array('variable'),
+  );
+  features_revert($revert);
+  return array();
+}

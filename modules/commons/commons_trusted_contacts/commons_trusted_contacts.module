@@ -53,7 +53,7 @@ function commons_trusted_contacts_pathauto_alias_alter(&$alias, &$context) {
   if (og_get_group_type('node', $context['data']['node']->type, 'group content')
     && !empty($context['data']['node']->og_user_group_ref[LANGUAGE_NONE])
   ) {
-    $alias = token_replace('users/[node:og-user-group-ref:0:name]/trusted-content/[node:title]', $context['data'], array(
+    $alias = token_replace('users/[node:author:name]/trusted-content/[node:title]', $context['data'], array(
       'sanitize' => FALSE,
       'clear' => TRUE,
       'callback' => 'pathauto_clean_token_values',

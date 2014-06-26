@@ -506,7 +506,11 @@ function commons_groups_token_info() {
   );
   $tokens['commons-groups']['in-groups-text'] = array(
     'name' => t('"In groups" text'),
-    'description' => t('The text (starting with "in the groups") indicating which groups a peice of content belongs to.'),
+    'description' => t('The text (starting with "in the groups") indicating which groups a piece of content belongs to.'),
+  );
+  $tokens['node']['commons-groups-first-group'] = array(
+    'name' => t('First Group'),
+    'description' => t('First group associated with a piece of content. Useful for path aliases'),
   );
   $tokens['node']['commons-groups-group-contributors-count-topics'] = array(
     'name' => t('Commons Groups: Group contributor count and topics'),
@@ -517,7 +521,6 @@ function commons_groups_token_info() {
     'tokens' => $tokens,
   );
 }
-
 
 /**
  * Implements hook_tokens().
@@ -562,7 +565,7 @@ function commons_groups_tokens($type, $tokens, $data = array(), $options = array
           }
         }
       }
-      // If no groups are associated with any of the targett nodes,
+      // If no groups are associated with any of the target nodes,
       // then we have no "in the groups" text.
       if (empty($related_gids)) {
         $replacements['[commons-groups:in-groups-text]'] = '';
@@ -575,6 +578,23 @@ function commons_groups_tokens($type, $tokens, $data = array(), $options = array
       // Generate the appropriate text depending on the number of groups
       // associated with the message:
       $replacements['[commons-groups:in-groups-text]'] = commons_groups_related_groups_text($related_groups);
+      return $replacements;
+    }
+  }
+  if ($type == 'node' && !empty($data['node'])) {
+    if (!empty($tokens['commons-groups-first-group'])) {
+      $group = $data['node'];
+      $text = '';
+
+      if (!empty($group->og_group_ref[LANGUAGE_NONE])) {
+        $wrapper = entity_metadata_wrapper('node', $group);
+        $groups = $wrapper->og_group_ref->value();
+
+        // Return the title of the first group associated with this node.
+        $first_group = array_shift($groups);
+        $text = isset($first_group->title_field) ? $first_group->title_field[LANGUAGE_NONE][0]['value'] : $first_group->title;
+      }
+      $replacements['[node:commons-groups-first-group]'] = $text;
       return $replacements;
     }
   }
