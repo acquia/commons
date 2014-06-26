@@ -65,3 +65,15 @@ function commons_misc_update_7002() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Ensure that the theme settings are up-to-date with the latest version of
+ * Adaptive Theme and fix Commons Misc appearing overridden.
+ */
+function commons_misc_update_7003() {
+  $revert = array(
+    'commons_misc' => array('variable'),
+  );
+  features_revert($revert);
+  return array();
+}
