@@ -19,6 +19,18 @@ function commons_search_module_implements_alter(&$implementations, $hook) {
 }
 
 /**
+ * Implements hook_menu_alter().
+ */
+function commons_search_menu_alter(&$items) {
+  // Enable the search link and position it in the main menu.
+  if (isset($items['search'])) {
+    $items['search']['type'] = MENU_NORMAL_ITEM;
+    $items['search']['menu_name'] = 'main-menu';
+    $items['search']['weight'] = 3;
+  }
+}
+
+/**
  * Custom search form that switches between Core and Solr depending on which is
  * the enabled search module.
  */
