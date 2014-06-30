@@ -284,3 +284,14 @@ function commons_events_update_7015() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Move event menu item handling from menu links to page manager pages.
+ */
+function commons_events_update_7016() {
+  $revert = array(
+    'commons_events' => array('page_manager_pages'),
+  );
+  features_revert($revert);
+  return array();
+}
