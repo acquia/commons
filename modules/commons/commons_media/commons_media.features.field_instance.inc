@@ -10,13 +10,12 @@
 function commons_media_field_default_field_instances() {
   $field_instances = array();
 
-  $commons_groups_entity_types = commons_groups_get_group_content_entity_types();
-  if (!empty($commons_groups_entity_types)) {
-    foreach ($commons_groups_entity_types as $entity_type => $bundles) {
-      foreach ($bundles as $bundle => $integrations) {
-        if (!empty($integrations['media'])) {
-          commons_media_field_definition($field_instances, $entity_type, $bundle);
-        }
+  $commons_groups_entity_types = commons_entity_integration_info();
+  foreach ($commons_groups_entity_types as $entity_type => $bundles) {
+    foreach ($bundles as $bundle => $integrations) {
+      if (isset($integrations['media']) && $integrations['media'] == TRUE
+        && isset($integrations['is_group_content']) && $integrations['is_group_content'] == TRUE) {
+        commons_media_field_definition($field_instances, $entity_type, $bundle);
       }
     }
   }
