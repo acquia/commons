@@ -265,3 +265,14 @@ function commons_groups_update_3121() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Revert the contributors view to hide 'more' link and show a pager.
+ */
+function commons_groups_update_3122() {
+  $revert = array(
+    'commons_groups' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}
