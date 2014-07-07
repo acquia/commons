@@ -319,11 +319,11 @@ function commons_events_form_node_form_alter(&$form, &$form_state, $form_id) {
     $form['event_registration_settings']['field_registration'] = $form['field_registration'];
 
     // Unset all of the original registration settings.
-    unset($form['field_organizers']);
-    unset($form['field_registration_type']);
-    unset($form['field_status']);
-    unset($form['field_number_of_attendees']);
-    unset($form['field_registration']);
+    hide($form['field_organizers']);
+    hide($form['field_registration_type']);
+    hide($form['field_status']);
+    hide($form['field_number_of_attendees']);
+    hide($form['field_registration']);
 
     // Add additional submission and validation handlers.
     $form['#validate'][] = 'commons_events_node_form_validate';
