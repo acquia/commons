@@ -165,7 +165,7 @@ projects[entity_translation][version] = "1.0-beta3"
 
 projects[facetapi][type] = "module"
 projects[facetapi][subdir] = "contrib"
-projects[facetapi][version] = "1.3"
+projects[facetapi][version] = "1.4"
 
 projects[features][type] = "module"
 projects[features][subdir] = "contrib"
@@ -462,7 +462,7 @@ projects[registration][version] = "1.3"
 
 projects[rich_snippets][type] = "module"
 projects[rich_snippets][subdir] = "contrib"
-projects[rich_snippets][version] = "1.0-beta3"
+projects[rich_snippets][version] = "1.0-beta4"
 
 projects[rules][type] = "module"
 projects[rules][subdir] = "contrib"
