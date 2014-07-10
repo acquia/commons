@@ -6,8 +6,6 @@
 
 include_once 'commons_follow_user.features.inc';
 
-
-
 /**
  * Implements hook_commons_follow_get_nids().
  */
@@ -61,20 +59,7 @@ function commons_follow_user_commons_follow_get_nids($account, $options) {
     }
   }
 
-
   return $nids;
-}
-
-/**
-* Implements hook_system_info_alter().
-*/
-function commons_follow_user_system_info_alter(&$info, $file, $type) {
-  // If Message.module is enabled, we'll define our "User follows another user"
-  // message type and will need to add to it an instance of field_target_users.
-  if ($file->name == 'commons_follow_user' && module_exists('message')) {
-    $info['features']['field_instance'][] = 'message-commons_follow_user_user_followed-field_target_users';
-    $info['features']['message_type'][] = 'commons_follow_user_user_followed';
-  }
 }
 
 /**
@@ -101,9 +86,9 @@ function commons_follow_user_flag($op, $flag, $content_id, $account, $fcid) {
 }
 
 /**
-* Indicate whether there is an existing message about a given user following
-* a target user.
-*/
+ * Indicate whether there is an existing message about a given user following
+ * a target user.
+ */
 function commons_follow_user_existing_follow_message($acting_uid, $target_uids) {
   $query = new EntityFieldQuery();
   $query->entityCondition('entity_type', 'message', '=')
@@ -115,10 +100,9 @@ function commons_follow_user_existing_follow_message($acting_uid, $target_uids) 
    return !empty($query->ordered_results);
 }
 
-
 /**
-* Implements hook_commons_follow_get_message_ids().
-*/
+ * Implements hook_commons_follow_get_message_ids().
+ */
 function commons_follow_user_commons_follow_get_message_ids(&$followed_mids, $followed_content = array()) {
   // If the user isn't following any other users, we've nothing to do here.
   if (empty($followed_content['commons_follow_user'])) {
