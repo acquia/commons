@@ -44,3 +44,9 @@ features[variable][] = node_options_poll
 features[variable][] = node_preview_poll
 features[variable][] = node_submitted_poll
 features[views_view][] = commons_bw_polls
+
+; Manually remove the Media: Media module as a dependency until
+; https://www.drupal.org/node/766264 is fixed which causes entities that
+; request media integration to appear overridden due dynamic alterations made to
+; the entity's field instances by the Commons Media module.
+features_exclude[dependencies][commons_media] = commons_media

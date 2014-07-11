@@ -80,8 +80,16 @@ features[variable][] = node_submitted_question
 features[variable][] = pathauto_node_answer_pattern
 features[views_view][] = commons_bw_q_a
 features[views_view][] = commons_question_answers
+
 features_exclude[dependencies][message] = message
 features_exclude[dependencies][commons_trusted_contacts] = commons_trusted_contacts
+
+; Manually remove the Media: Media module as a dependency until
+; https://www.drupal.org/node/766264 is fixed which causes entities that
+; request media integration to appear overridden due dynamic alterations made to
+; the entity's field instances by the Commons Media module.
+features_exclude[dependencies][commons_media] = commons_media
+
 features_exclude[field][message-commons_q_a_question_answered-field_target_nodes] = message-commons_q_a_question_answered-field_target_nodes
 features_exclude[field_base][og_group_ref_other_groups] = og_group_ref_other_groups
 features_exclude[field_base][og_group_ref] = og_group_ref
