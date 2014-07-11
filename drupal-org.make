@@ -353,6 +353,10 @@ projects[og][patch][] = "http://drupal.org/files/issues/og-default-role-member-2
 ; http://drupal.org/node/1800208
 projects[og][patch][] = "http://drupal.org/files/og_ui-group_node_add_theme-1800208-5.patch"
 
+; Missing permissions when installing a new site.
+; http://drupal.org/node/2264957
+projects[og][patch][] = "http://drupal.org/files/issues/og_module_3158.patch
+
 projects[panelizer][type] = "module"
 projects[panelizer][subdir] = "contrib"
 projects[panelizer][version] = "3.1"
