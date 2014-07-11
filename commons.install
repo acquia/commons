@@ -311,6 +311,7 @@ function commons_revert_features() {
     'commons_polls' => array('og_features_permission'),
     'commons_q_a' => array('og_features_permission', 'field_base'),
     'commons_posts' => array('og_features_permission'),
+    'commons_misc' => array('variable'),
   );
 
   features_revert($revert);
