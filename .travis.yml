@@ -122,9 +122,17 @@ before_script:
   # Do the site install (either the current revision or old for the upgrade).
   - if [[ "$UPGRADE" == none ]]; then cd drupal; else cd commons-$UPGRADE; fi
   - drush si commons --db-url=mysql://root:@127.0.0.1/drupal --account-name=admin --account-pass=admin --account-mail=admin@test.com --site-mail=noreply@test.com --site-name="Commons" --yes
-  - drush pm-disable dblog --yes
+
+  # Configure the private and temporary file systems.
   - drush vset -y file_private_path "sites/default/private/files"
   - drush vset -y file_temporary_path "sites/default/private/temp"
+
+  # Disable database logging as it is unnecessary and reduces performance.
+  - drush pm-disable dblog --yes
+
+  # Enabled all non-default commons modules so that they can be tested.
+  - drush pm-enable commons_documents commons_notices --yes
+
   - cd ../drupal
 
   # If we're an upgrade test, run the upgrade process.
