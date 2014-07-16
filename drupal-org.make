@@ -159,6 +159,10 @@ projects[entityreference_prepopulate][type] = "module"
 projects[entityreference_prepopulate][subdir] = "contrib"
 projects[entityreference_prepopulate][version] = "1.5"
 
+; Entityreference prepopulate overwrites field instance custom default value functions.
+; http://drupal.org/node/2304301#comment-8973459
+projects[entityreference][patch][] = "http://drupal.org/files/issues/check-for-default-value-function-2304301-1.patch"
+
 projects[entity_translation][type] = "module"
 projects[entity_translation][subdir] = "contrib"
 projects[entity_translation][version] = "1.0-beta3"
