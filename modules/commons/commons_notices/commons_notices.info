@@ -1,7 +1,7 @@
 name = Commons Notices
+description = Commons Notice content type
 core = 7.x
 package = Commons - Content types
-php = 5.2.4
 dependencies[] = commons_body
 dependencies[] = ctools
 dependencies[] = features
@@ -27,3 +27,7 @@ features[variable][] = node_options_notice
 features[variable][] = node_preview_notice
 features[variable][] = node_submitted_notice
 features[views_view][] = commons_notices_latest_notices
+
+; Manually remove the Commons Browsing Widget module as a dependency as its
+; dynamic title field replacement causes it to be listed as a dependency.
+features_exclude[dependencies][commons_bw] = commons_bw
