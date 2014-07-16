@@ -12,6 +12,8 @@ function commons_documents_commons_entity_integration() {
     'node' => array(
       'document' => array(
         'is_group_content' => TRUE,
+        'exclude_rate' => TRUE,
+        'exclude_rate_comments' => TRUE,
       ),
     ),
   );

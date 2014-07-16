@@ -351,14 +351,14 @@ function commons_q_a_rate_templates() {
 /**
  * Implements hook_strongarm_alter().
  */
- function commons_q_a_strongarm_alter(&$items) {
-  // Add Rate module widget configuration used for thumbs up/down
-  // rating of answers.
+function commons_q_a_strongarm_alter(&$items) {
+  // The Rate module stores all of its configuration data in a single variable.
+  // Add a thumbs up/down-style 'Answer' rate widget by altering the rate
+  // variable.
   if (!empty($items['rate_widgets']->value)) {
     $items['rate_widgets']->value[] = commons_q_a_rate_widget();
   }
 }
-
 
 /**
  * Return a Rate module widget configuration used for thumbs up/down
