@@ -60,4 +60,13 @@ features[variable][] = show_diff_inline_wiki
 features[variable][] = show_preview_changes_wiki
 features[views_view][] = commons_bw_wikis
 features[views_view][] = commons_wikis_contributor_list
+
+; Manually remove the Commons Browsing Widget module as a dependency as Commons
+; Wikis views currently triggers features to auto-detect it as a dependency.
+
+; The other Commons content modules do not need to do this because Commons
+; Browsing Widget automatically removes itself as a dependency for any module
+; that supports automatic title replacement (currently every content type except
+; for wikis).
+features_exclude[dependencies][commons_bw] = commons_bw
 features_exclude[dependencies][commons_trusted_contacts] = commons_trusted_contacts
