@@ -444,6 +444,29 @@ function commons_groups_system_info_alter(&$info, $file, $type) {
       }
     }
   }
+
+  // Dynamically adding a field instance to an entity type results in features
+  // automatically detecting Commons Groups as a dependency.
+  // We manually exclude the dependency in order to prevent entity type provider
+  // modules from appearing overridden and to allow them to be used
+  // independently of Commons Groups.
+  $commons_entity_integrations = &drupal_static(__FUNCTION__);
+
+  if (!isset($commons_entity_integrations)) {
+    foreach (module_implements('commons_entity_integration') as $module) {
+      $commons_entity_integrations[$module] = call_user_func($module . '_commons_entity_integration');
+    }
+  }
+
+  if (isset($commons_entity_integrations[$file->name])) {
+    foreach ($commons_entity_integrations[$file->name] as $entity_type => $integration) {
+      foreach ($integration as $bundle => $options) {
+        if (commons_groups_is_group_content($entity_type, $bundle)) {
+          $info['features_exclude']['dependencies']['commons_groups'] = 'commons_groups';
+        }
+      }
+    }
+  }
 }
 
 /**
@@ -826,6 +849,24 @@ function commons_groups_set_group_permissions($node) {
   if ($changed) {
     og_role_change_permissions($anon_rid, $permissions);
   }
+}
+
+/**
+ * Helper function to determine whether an entity bundle is considered group
+ * content.
+ *
+ * @param $entity_type
+ *   The entity type to check group content settings for.
+ * @param $bundle
+ *   The entity bundle to check group content settings for.
+ *
+ * @return boolean
+ *   The value of the group content setting if available, FALSE otherwise.
+ */
+function commons_groups_is_group_content($entity_type, $bundle) {
+  $commons_groups_entity_types = commons_groups_get_group_content_entity_types();
+
+  return isset($commons_groups_entity_types[$entity_type][$bundle]['is_group_content']) ? $commons_groups_entity_types[$entity_type][$bundle]['is_group_content'] : FALSE;
 }
 
 /**

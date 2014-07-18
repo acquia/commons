@@ -53,7 +53,6 @@ function commons_bw_system_info_alter(&$info, $file, $type) {
   if (isset($node_types[$file->name])) {
     foreach ($node_types[$file->name] as $node_type => $node_info) {
       if (commons_bw_node_auto_title_instance($node_type)) {
-        debug($node_type);
         $info['features_exclude']['dependencies']['commons_bw'] = 'commons_bw';
       }
     }
