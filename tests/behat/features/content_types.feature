@@ -35,7 +35,7 @@ Feature: Content types
     And I fill in "Post body" for "body[und][0][value]"
     And I press "Save"
     Then I should see "Post title"
-    And I should see "Post body"
+      And I should see "Post body"
 
   @api
   Scenario: Authenticated users can create questions and answers

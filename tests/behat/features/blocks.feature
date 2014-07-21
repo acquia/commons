@@ -20,13 +20,14 @@ Feature: Block functionality
     Then I should see "A Commons Community, powered by Acquia" in the "Footer" region
 
   @api
+  Scenario: Main page content
+    Given I am on "/"
+      And I am logged in as a user with the "authenticated user" role
+    Then I should not see "What's going on?" in the "Content" region
+
+  @api
   Scenario: Commons utility links
     Given I am on "/"
       And I am logged in as a user with the "authenticated user" role
     Then I should see "Log out" in the "Header" region
       And I should see "Settings" in the "Header" region
-  @api
-  Scenario: Main page content
-    Given I am on "/"
-      And I am logged in as a user with the "authenticated user" role
-    Then I should not see "What's going on?" in the "Content" region
