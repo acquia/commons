@@ -1,7 +1,8 @@
-name = Commons Q&A
-description = Allows community members to ask questions and vote for the best answers
-core = 7.x
+name = Commons Questions & Answers
+description = Provides a Q&A content type for asking questions and allowing the community to vote for the best answers.
 package = Commons - Content types
+core = 7.x
+
 dependencies[] = commons_topics
 dependencies[] = ctools
 dependencies[] = entity
@@ -16,6 +17,7 @@ dependencies[] = text
 dependencies[] = views
 dependencies[] = views_content
 dependencies[] = views_litepager
+
 features[ctools][] = panelizer:panelizer:1
 features[ctools][] = strongarm:strongarm:1
 features[ctools][] = views:views_default:3.0
@@ -82,15 +84,13 @@ features[variable][] = pathauto_node_answer_pattern
 features[views_view][] = commons_bw_q_a
 features[views_view][] = commons_question_answers
 
-features_exclude[dependencies][message] = message
-features_exclude[dependencies][commons_trusted_contacts] = commons_trusted_contacts
-
 ; Manually remove the Media: Media module as a dependency until
 ; https://www.drupal.org/node/766264 is fixed which causes entities that
 ; request media integration to appear overridden due dynamic alterations made to
 ; the entity's field instances by the Commons Media module.
 features_exclude[dependencies][commons_media] = commons_media
-
+features_exclude[dependencies][commons_trusted_contacts] = commons_trusted_contacts
+features_exclude[dependencies][message] = message
 features_exclude[field][message-commons_q_a_question_answered-field_target_nodes] = message-commons_q_a_question_answered-field_target_nodes
 features_exclude[field_base][og_group_ref_other_groups] = og_group_ref_other_groups
 features_exclude[field_base][og_group_ref] = og_group_ref

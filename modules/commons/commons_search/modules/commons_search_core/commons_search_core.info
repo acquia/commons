@@ -1,13 +1,15 @@
 name = Commons Search Core
-description = Core search with facets.
-core = 7.x
+description = Provides integration between the core Search module and Commons Search.
 package = Commons - Search
+core = 7.x
+
 dependencies[] = commons_search
 dependencies[] = date_facets
 dependencies[] = facetapi
 dependencies[] = page_manager
 dependencies[] = search_facetapi
 dependencies[] = strongarm
+
 features[ctools][] = facetapi:facetapi_defaults:1
 features[ctools][] = page_manager:pages_default:1
 features[ctools][] = strongarm:strongarm:1
@@ -28,4 +30,5 @@ features[variable][] = page_manager_search_disabled_search_facetapi
 features[variable][] = custom_search_other
 features[variable][] = search_active_modules
 features[variable][] = search_default_module
+
 features_exclude[dependencies][ctools] = ctools

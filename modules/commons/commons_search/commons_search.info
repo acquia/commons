@@ -1,7 +1,8 @@
 name = Commons Search
-description = Provide the global search block.
-core = 7.x
+description = Provides a framework for searching site content.
 package = Commons - Search
+core = 7.x
+
 dependencies[] = ctools
 dependencies[] = custom_search
 dependencies[] = features
@@ -9,6 +10,7 @@ dependencies[] = search
 dependencies[] = strongarm
 dependencies[] = views
 dependencies[] = views_load_more
+
 features[ctools][] = panelizer:panelizer:1
 features[ctools][] = strongarm:strongarm:1
 features[ctools][] = views:views_default:3.0

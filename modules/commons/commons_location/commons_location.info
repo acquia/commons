@@ -1,9 +1,11 @@
 name = Commons Location
-description = Provide a field definition for locations.
+description = Provides a simple address field for re-use by various Commons content types.
+package = Commons - Building blocks
 core = 7.x
-package = Commons - Building Blocks
+
 dependencies[] = addressfield
 dependencies[] = features
 dependencies[] = field_sql_storage
+
 features[features_api][] = api:2
 features[field_base][] = field_address

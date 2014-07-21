@@ -1,7 +1,8 @@
 name = Commons Events
-description = Provides the Event features for Drupal Commons.
-core = 7.x
+description = Provides an Event content type for hosting events.
 package = Commons - Content types
+core = 7.x
+
 dependencies[] = addressfield
 dependencies[] = addressfield_tokens
 dependencies[] = block
@@ -35,6 +36,7 @@ dependencies[] = text
 dependencies[] = views
 dependencies[] = views_content
 dependencies[] = views_load_more
+
 features[ctools][] = page_manager:pages_default:1
 features[ctools][] = strongarm:strongarm:1
 features[ctools][] = views:views_default:3.0
@@ -96,10 +98,5 @@ features[views_view][] = commons_events_event_attendee_list
 features[views_view][] = commons_events_organizers
 features[views_view][] = commons_events_upcoming
 features[views_view][] = commons_events_user_upcoming_events
+
 features_exclude[dependencies][commons_trusted_contacts] = commons_trusted_contacts
-files[] = commons_events.features.inc
-files[] = commons_events.features.field_base.inc
-files[] = commons_events.features.field_instance.inc
-files[] = commons_events.strongarm.inc
-files[] = includes/commons_events.forms.inc
-files[] = includes/commons_events.theme.inc

@@ -1,14 +1,14 @@
 name = Commons Events Pages
-description = Provides the panelized Event page feature.
+description = Enhances the appearance of event nodes by listing the event organizers/attendees and allows them to be customized.
 core = 7.x
 package = Commons - Landing pages
+
 dependencies[] = commons_events
 dependencies[] = panelizer
 dependencies[] = strongarm
+
 features[ctools][] = panelizer:panelizer:1
 features[ctools][] = strongarm:strongarm:1
 features[features_api][] = api:2
 features[panelizer_defaults][] = node:event:default
 features[variable][] = panelizer_defaults_node_event
-files[] = commons_events_pages.features.inc
-files[] = commons_events_pages.strongarm.inc

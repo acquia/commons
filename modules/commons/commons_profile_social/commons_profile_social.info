@@ -1,10 +1,12 @@
-name = Commons Profile (Social fields)
-description = Provides a set of link fields to the user's profile for the user's Facebook, Linkedin and Twitter accounts.
-core = 7.x
+name = Commons Profile Social
+description = Provides a base set of social profile fields for user profiles.
 package = Commons - Building blocks
+core = 7.x
+
 dependencies[] = features
 dependencies[] = field_sql_storage
 dependencies[] = link
+
 features[features_api][] = api:2
 features[field_base][] = field_facebook_url
 features[field_base][] = field_linkedin_url

@@ -1,6 +1,8 @@
 name = Commons Activity Streams
-core = 7.x
+description = Displays a listing of site-wide and user-specific site activity.
 package = Commons - Building blocks
+core = 7.x
+
 dependencies[] = commons_follow
 dependencies[] = ctools
 dependencies[] = entity
@@ -13,6 +15,7 @@ dependencies[] = token
 dependencies[] = views
 dependencies[] = views_content
 dependencies[] = views_load_more
+
 features[ctools][] = strongarm:strongarm:1
 features[ctools][] = views:views_default:3.0
 features[features_api][] = api:2
@@ -30,6 +33,7 @@ features[variable][] = timeago_comment
 features[variable][] = timeago_node
 features[views_view][] = commons_activity_streams_activity
 features[views_view][] = commons_activity_streams_user_activity
+
 features_exclude[field][message-commons_activity_streams_comment_created-field_target_comments] = message-commons_activity_streams_comment_created-field_target_comments
 features_exclude[field][message-commons_activity_streams_comment_created-field_target_nodes] = message-commons_activity_streams_comment_created-field_target_nodes
 features_exclude[field][message-commons_activity_streams_node_created-field_target_nodes] = message-commons_activity_streams_node_created-field_target_nodes

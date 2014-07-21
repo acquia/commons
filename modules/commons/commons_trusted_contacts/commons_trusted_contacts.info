@@ -1,7 +1,8 @@
 name = Commons Trusted Contacts
-description = Commons Trusted Contacts Functionality
-core = 7.x
+description = Allows users to build and manage a list of contacts which they can message and interact with.
 package = Commons - Building blocks
+core = 7.x
+
 dependencies[] = commons_groups
 dependencies[] = ctools
 dependencies[] = date
@@ -17,6 +18,7 @@ dependencies[] = privatemsg
 dependencies[] = strongarm
 dependencies[] = text
 dependencies[] = views
+
 features[ctools][] = strongarm:strongarm:1
 features[ctools][] = views:views_default:3.0
 features[features_api][] = api:2
@@ -49,6 +51,8 @@ features[variable][] = field_bundle_settings_message__trusted_contact_request_pe
 features[variable][] = privatemsg_display_profile_links
 features[views_view][] = trusted_contacts
 features[views_view][] = trusted_contacts_invitations
+
 features_exclude[field][message-trusted_contact_request_approved-field_approving_user] = message-trusted_contact_request_approved-field_approving_user
 features_exclude[field][message-trusted_contact_request_pending-field_requesting_user] = message-trusted_contact_request_pending-field_requesting_user
+
 files[] = views/handlers/commons_groups_handler_send_message.inc

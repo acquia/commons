@@ -1,7 +1,8 @@
 name = Commons Site Homepage
-description = Provides a homepage for the site for anonymous and authenticated users
-core = 7.x
+description = Provides a customizable homepage for the site which has unique displays for anonymous and authenticated users.
 package = Commons - Landing pages
+core = 7.x
+
 dependencies[] = commons_activity_streams
 dependencies[] = commons_featured
 dependencies[] = commons_follow
@@ -10,6 +11,7 @@ dependencies[] = page_manager
 dependencies[] = strongarm
 dependencies[] = views
 dependencies[] = views_litepager
+
 features[ctools][] = page_manager:pages_default:1
 features[ctools][] = strongarm:strongarm:1
 features[ctools][] = views:views_default:3.0
@@ -17,4 +19,5 @@ features[features_api][] = api:2
 features[page_manager_pages][] = commons_home
 features[variable][] = site_frontpage
 features[views_view][] = commons_homepage_content
+
 features_exclude[dependencies][views_content] = views_content

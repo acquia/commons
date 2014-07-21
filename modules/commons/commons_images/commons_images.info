@@ -1,14 +1,15 @@
 name = Commons Images
-description = Image styles used in the Commons distribution
-core = 7.x
+description = Enhances the display of images by making them responsive and intelligently cropping them where necessary.
 package = Commons - Building blocks
-project = commons_images
+core = 7.x
+
 dependencies[] = breakpoints
 dependencies[] = ctools
 dependencies[] = file_entity
 dependencies[] = image
 dependencies[] = picture
 dependencies[] = smartcrop
+
 features[breakpoint_group][] = commons_default
 features[breakpoint_group][] = commons_full
 features[breakpoint_group][] = commons_origins

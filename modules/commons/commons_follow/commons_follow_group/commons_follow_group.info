@@ -1,11 +1,13 @@
 name = Commons Follow (Groups)
-description = Lets users follow individual organic groups.
-core = 7.x
+description = Provides Organic Groups integration for Commons Follow, allowing users to follow individual groups.
 package = Commons - Building blocks
+core = 7.x
+
 dependencies[] = ctools
 dependencies[] = flag
 dependencies[] = og
 dependencies[] = strongarm
+
 features[ctools][] = strongarm:strongarm:1
 features[features_api][] = api:2
 features[flag][] = commons_follow_group

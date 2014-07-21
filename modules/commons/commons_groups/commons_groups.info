@@ -1,7 +1,8 @@
 name = Commons Groups
-description = Commons Organic Groups Functionality
-core = 7.x
+description = Allows content to be organized into groups.
 package = Commons - Building blocks
+core = 7.x
+
 dependencies[] = commons_body
 dependencies[] = commons_topics
 dependencies[] = ctools
@@ -26,6 +27,7 @@ dependencies[] = views
 dependencies[] = views_content
 dependencies[] = views_litepager
 dependencies[] = views_load_more
+
 features[ctools][] = strongarm:strongarm:1
 features[ctools][] = views:views_default:3.0
 features[features_api][] = api:2

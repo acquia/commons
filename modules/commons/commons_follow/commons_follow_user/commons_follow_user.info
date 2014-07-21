@@ -1,7 +1,8 @@
 name = Commons Follow (Users)
-description = Lets users follow other users.
-core = 7.x
+description = Provides User integration for Commons Follow, allowing users to follow other users.
 package = Commons - Building blocks
+core = 7.x
+
 dependencies[] = commons_follow
 dependencies[] = ctools
 dependencies[] = entity
@@ -14,6 +15,7 @@ dependencies[] = views
 dependencies[] = views_content
 dependencies[] = views_litepager
 dependencies[] = views_load_more
+
 features[ctools][] = strongarm:strongarm:1
 features[ctools][] = views:views_default:3.0
 features[features_api][] = api:2

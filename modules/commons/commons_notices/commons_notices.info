@@ -1,7 +1,8 @@
 name = Commons Notices
-description = Commons Notice content type
-core = 7.x
+description = Provides a Notice content type for displaying administrative alerts to users, such as planned system maintenance.
 package = Commons - Content types
+core = 7.x
+
 dependencies[] = commons_body
 dependencies[] = ctools
 dependencies[] = features
@@ -9,6 +10,7 @@ dependencies[] = node
 dependencies[] = strongarm
 dependencies[] = text
 dependencies[] = views
+
 features[ctools][] = strongarm:strongarm:1
 features[ctools][] = views:views_default:3.0
 features[features_api][] = api:2

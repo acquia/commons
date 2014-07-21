@@ -1,12 +1,14 @@
-name = Commons Content moderation
-description = Commons Content moderation
+name = Commons Content Moderation
+description = Provides a content moderator role which allows privileged users to moderate content and users.
+package = Commons - Building blocks
 core = 7.x
-package = Commons - Building Blocks
+
 dependencies[] = ctools
 dependencies[] = flag
 dependencies[] = flag_abuse
 dependencies[] = strongarm
 dependencies[] = views
+
 features[ctools][] = strongarm:strongarm:1
 features[ctools][] = views:views_default:3.0
 features[features_api][] = api:2
@@ -16,4 +18,5 @@ features[user_role][] = content moderator
 features[variable][] = flag_abuse_flags
 features[views_view][] = commons_content_moderation_reported_comments
 features[views_view][] = commons_content_moderation_reported_nodes
+
 features_exclude[dependencies][features] = features

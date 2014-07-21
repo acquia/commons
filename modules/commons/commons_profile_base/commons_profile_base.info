@@ -1,11 +1,13 @@
 name = Commons Profile Base
-description = Provides a base set of profile fields for user profiles.
-core = 7.x
+description = Provides a base set of general profile fields for user profiles.
 package = Commons - Building blocks
+core = 7.x
+
 dependencies[] = ctools
 dependencies[] = features
 dependencies[] = strongarm
 dependencies[] = text
+
 features[ctools][] = strongarm:strongarm:1
 features[features_api][] = api:2
 features[field_base][] = field_bio

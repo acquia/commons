@@ -1,7 +1,8 @@
 name = Commons Posts
-description = Commons Post content type
-core = 7.x
+description = Provides a Post content type for creating blog, article or general status updates.
 package = Commons - Content types
+core = 7.x
+
 dependencies[] = commons_body
 dependencies[] = commons_topics
 dependencies[] = ctools
@@ -18,6 +19,7 @@ dependencies[] = taxonomy
 dependencies[] = text
 dependencies[] = views
 dependencies[] = views_litepager
+
 features[ctools][] = strongarm:strongarm:1
 features[ctools][] = views:views_default:3.0
 features[features_api][] = api:2
@@ -56,5 +58,4 @@ features[views_view][] = commons_bw_posts
 ; request media integration to appear overridden due dynamic alterations made to
 ; the entity's field instances by the Commons Media module.
 features_exclude[dependencies][commons_media] = commons_media
-
 features_exclude[dependencies][commons_trusted_contacts] = commons_trusted_contacts

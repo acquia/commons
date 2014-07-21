@@ -1,6 +1,8 @@
 name = Commons Notify
-core = 7.x
+description = Provides a framework for allowing users to be notified when an event is triggered.
 package = Commons - Building blocks
+core = 7.x
+
 dependencies[] = commons_follow
 dependencies[] = ctools
 dependencies[] = entity
@@ -14,6 +16,7 @@ dependencies[] = number
 dependencies[] = options
 dependencies[] = strongarm
 dependencies[] = text
+
 features[ctools][] = strongarm:strongarm:1
 features[features_api][] = api:2
 features[field_base][] = field_message_rendered_body
@@ -45,6 +48,7 @@ features[variable][] = field_bundle_settings_message__commons_notify_comment_cre
 features[variable][] = field_bundle_settings_message__commons_notify_node_created
 features[variable][] = field_bundle_settings_message__commons_notify_node_created_no_groups
 features[variable][] = message_subscribe_default_notifiers
+
 features_exclude[field_base][message_text] = message_text
 features_exclude[field_base][field_target_nodes] = field_target_nodes
 features_exclude[field_base][field_target_comments] = field_target_comments

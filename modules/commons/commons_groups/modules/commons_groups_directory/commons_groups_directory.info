@@ -1,11 +1,13 @@
 name = Commons Groups Directory
-description = The site-wide directory of groups
-core = 7.x
+description = Provides a listing of all of the current groups.
 package = Commons - Landing pages
+core = 7.x
+
 dependencies[] = commons_activity_streams_groups
 dependencies[] = ctools
 dependencies[] = page_manager
 dependencies[] = views_content
+
 features[ctools][] = page_manager:pages_default:1
 features[ctools][] = views:views_default:3.0
 features[features_api][] = api:2

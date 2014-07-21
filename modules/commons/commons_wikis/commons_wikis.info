@@ -1,7 +1,8 @@
-name = Commons Wikis
-description = Provides the wiki functionality for Drupal Commons
-core = 7.x
+name = Commons Wiki
+description = Provides a Wiki content type for collaboratively revising content.
 package = Commons - Content types
+core = 7.x
+
 dependencies[] = commons_body
 dependencies[] = commons_topics
 dependencies[] = ctools
@@ -20,6 +21,7 @@ dependencies[] = text
 dependencies[] = views
 dependencies[] = views_content
 dependencies[] = views_litepager
+
 features[ctools][] = page_manager:pages_default:1
 features[ctools][] = strongarm:strongarm:1
 features[ctools][] = views:views_default:3.0

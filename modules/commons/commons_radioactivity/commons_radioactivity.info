@@ -1,13 +1,15 @@
 name = Commons Radioactivity
-description = Helps to identify interesting content by automatically determining a decaying radioactivity value for individual pieces of conte
-core = 7.x
+description = Integrates with the Radioactivity module to identify active content.
 package = Commons - Building blocks
+core = 7.x
+
 dependencies[] = ctools
 dependencies[] = features
 dependencies[] = field_sql_storage
 dependencies[] = radioactivity
 dependencies[] = strongarm
 dependencies[] = views
+
 features[ctools][] = radioactivity:radioactivity_decay_profile:1
 features[ctools][] = strongarm:strongarm:1
 features[ctools][] = views:views_default:3.0

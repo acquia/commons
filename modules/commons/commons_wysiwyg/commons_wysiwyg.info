@@ -1,11 +1,13 @@
 name = Commons WYSIWYG
 description = Provides a rich text editor for content creation.
-core = 7.x
 package = Commons - Building blocks
+core = 7.x
+
 dependencies[] = ckeditor
 dependencies[] = features
 dependencies[] = filter
 dependencies[] = strongarm
+
 features[ckeditor_profile][] = Advanced
 features[features_api][] = api:2
 features[filter][] = filtered_html

@@ -1,12 +1,15 @@
-name = Commons Follow (Individual nodes)
-description = Lets users follow individual nodes.
-core = 7.x
+name = Commons Follow (Nodes)
+description = Provides Node integration for Commons Follow, allowing users to follow individual nodes.
 package = Commons - Building blocks
+core = 7.x
+
 dependencies[] = ctools
 dependencies[] = flag
 dependencies[] = views_litepager
+
 features[ctools][] = views:views_default:3.0
 features[features_api][] = api:2
 features[flag][] = commons_follow_node
 features[views_view][] = commons_follow_node
+
 features_exclude[dependencies][views] = views

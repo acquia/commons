@@ -1,10 +1,12 @@
 name = Commons Social Sharing
-description = Provide links to share content to external social services such as Facebook and Google+
-core = 7.x
+description = Provide links to share content to external social services such as Facebook and Google+.
 package = Commons - Building blocks
+core = 7.x
+
 dependencies[] = ctools
 dependencies[] = sharethis
 dependencies[] = strongarm
+
 features[ctools][] = strongarm:strongarm:1
 features[features_api][] = api:2
 features[variable][] = sharethis_button_option

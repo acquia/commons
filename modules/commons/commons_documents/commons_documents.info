@@ -1,7 +1,8 @@
 name = Commons Documents
-description = Commons Document content type
-core = 7.x
+description = Provides a Document content type for sharing files.
 package = Commons - Content types
+core = 7.x
+
 dependencies[] = commons_body
 dependencies[] = commons_topics
 dependencies[] = ctools
@@ -17,6 +18,7 @@ dependencies[] = taxonomy
 dependencies[] = text
 dependencies[] = views
 dependencies[] = views_litepager
+
 features[ctools][] = strongarm:strongarm:1
 features[ctools][] = views:views_default:3.0
 features[features_api][] = api:2

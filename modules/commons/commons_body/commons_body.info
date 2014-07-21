@@ -1,9 +1,11 @@
 name = Commons Body Field
-description = Provides a simple body field for re-use by various Commons content types
-core = 7.x
+description = Provides a simple body field for re-use by various Commons content types.
 package = Commons - Building blocks
+core = 7.x
+
 dependencies[] = features
 dependencies[] = field_sql_storage
 dependencies[] = text
+
 features[features_api][] = api:2
 features[field_base][] = body

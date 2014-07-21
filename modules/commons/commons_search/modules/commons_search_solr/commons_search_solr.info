@@ -1,7 +1,8 @@
-name = Commons Search Solr
-description = Site search using Apache Solr server.
-core = 7.x
+name = Commons Search SOLR
+description = Provides integration between the Apache Solr module and Commons Search.
 package = Commons - Search
+core = 7.x
+
 dependencies[] = apachesolr
 dependencies[] = apachesolr_proximity
 dependencies[] = apachesolr_search
@@ -12,6 +13,7 @@ dependencies[] = facetapi
 dependencies[] = page_manager
 dependencies[] = pm_existing_pages
 dependencies[] = strongarm
+
 features[apachesolr_search_page][] = core_search
 features[ctools][] = apachesolr_search:apachesolr_search_defaults:3
 features[ctools][] = facetapi:facetapi_defaults:1

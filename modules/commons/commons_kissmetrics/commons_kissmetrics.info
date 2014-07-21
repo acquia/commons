@@ -1,7 +1,8 @@
 name = Commons KISSmetrics
 description = Integrates with KISSmetrics to tracks Commons-specific user metrics and actions.
-core = 7.x
 package = Commons - Building blocks
+core = 7.x
+
 dependencies[] = comment
 dependencies[] = entity
 dependencies[] = flag
@@ -10,6 +11,7 @@ dependencies[] = og
 dependencies[] = privatemsg_rules
 dependencies[] = rules
 dependencies[] = voting_rules
+
 features[features_api][] = api:2
 features[rules_config][] = rules_commons_kissmetrics_collect_referenced_groups
 features[rules_config][] = rules_commons_kissmetrics_user_adds_a_trusted_contact

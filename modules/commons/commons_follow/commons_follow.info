@@ -1,13 +1,15 @@
 name = Commons Follow
-description = Views and Field integration for Commons Following functionality.
-core = 7.x
+description = Provides a framework for allowing users to follow entities.
 package = Commons - Building blocks
+core = 7.x
+
 dependencies[] = ctools
 dependencies[] = entityreference
 dependencies[] = features
 dependencies[] = field_sql_storage
 dependencies[] = message_subscribe
 dependencies[] = strongarm
+
 features[ctools][] = strongarm:strongarm:1
 features[features_api][] = api:2
 features[field_base][] = field_target_comments
@@ -15,7 +17,9 @@ features[field_base][] = field_target_nodes
 features[field_base][] = field_target_users
 features[image][] = 50x50_avatar
 features[variable][] = message_subscribe_flag_prefix
+
 features_exclude[dependencies][image] = image
+
 files[] = includes/views/commons_follow.views.inc
 files[] = includes/views/handlers/commons_follow_handler_filter_follow.inc
 files[] = includes/views/handlers/commons_follow_plugin_argument_default_node.inc
