@@ -262,7 +262,7 @@ function commons_q_a_answer_submit($form, &$form_state) {
 }
 
 /**
- * Implements commons_activity_streams_message_selection_alter().
+ * Implements hook_commons_activity_streams_message_selection_alter().
  */
 function commons_q_a_commons_activity_streams_message_selection_alter(&$message_type, $hook, $node) {
     // Provide a special message type that uses "User asked the question"

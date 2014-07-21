@@ -60,9 +60,8 @@ function commons_posts_form_commons_bw_partial_node_form_after_build($form) {
   return $form;
 }
 
-
 /**
- * Implements commons_activity_streams_message_selection_alter().
+ * Implements hook_commons_activity_streams_message_selection_alter().
  */
 function commons_posts_commons_activity_streams_message_selection_alter(&$message_type, $hook, $node) {
   // Use a "User posted [title]" format activity stream message.
@@ -72,8 +71,8 @@ function commons_posts_commons_activity_streams_message_selection_alter(&$messag
 }
 
 /**
-* Implements hook_strongarm_alter().
-*/
+ * Implements hook_strongarm_alter().
+ */
  function commons_posts_strongarm_alter(&$items) {
   // Expose the post content type for integration with Commons Radioactivity
   // and Commons Groups.
