@@ -169,7 +169,7 @@ projects[entity_translation][version] = "1.0-beta3"
 
 projects[facetapi][type] = "module"
 projects[facetapi][subdir] = "contrib"
-projects[facetapi][version] = "1.4"
+projects[facetapi][version] = "1.5"
 
 projects[features][type] = "module"
 projects[features][subdir] = "contrib"
@@ -305,7 +305,7 @@ projects[message_subscribe][patch][] = "http://drupal.org/files/issues/2184567-m
 
 projects[metatag][type] = "module"
 projects[metatag][subdir] = "contrib"
-projects[metatag][version] = "1.0-beta9"
+projects[metatag][version] = "1.0-rc1"
 
 projects[module_filter][type] = "module"
 projects[module_filter][subdir] = "contrib"
