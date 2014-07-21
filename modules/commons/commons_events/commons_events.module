@@ -623,7 +623,7 @@ function theme_commons_events_date_display_range_advanced($variables) {
 }
 
 /**
- * Implements commons_notify_message_selection_alter().
+ * Implements hook_commons_notify_message_selection_alter().
  */
 function commons_events_commons_notify_message_selection_alter(&$message_type, $hook, $node) {
   // Provide a special message type that describes the event details
