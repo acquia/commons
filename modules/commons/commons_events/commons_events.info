@@ -20,6 +20,7 @@ dependencies[] = features
 dependencies[] = field_sql_storage
 dependencies[] = image
 dependencies[] = list
+dependencies[] = message
 dependencies[] = node
 dependencies[] = number
 dependencies[] = og
@@ -97,4 +98,9 @@ features[views_view][] = commons_events_organizers
 features[views_view][] = commons_events_upcoming
 features[views_view][] = commons_events_user_upcoming_events
 
+; Manually remove the Commons Follow module as a dependency until
+; https://www.drupal.org/node/766264 is fixed. Commons Follow dynamically adds a
+; views pane for events the user follows which causes Commons Events to appear
+; overridden.
+features_exclude[dependencies][commons_follow] = commons_follow
 features_exclude[dependencies][commons_trusted_contacts] = commons_trusted_contacts
