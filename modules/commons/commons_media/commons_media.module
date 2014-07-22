@@ -26,6 +26,46 @@ function commons_media_system_info_alter(&$info, $file, $type) {
       }
     }
   }
+
+  // Dynamically adding a field instance to an entity type results in features
+  // automatically detecting Commons Media as a dependency.
+  // We manually exclude the dependency in order to prevent entity type provider
+  // modules from appearing overridden and to allow them to be used
+  // independently of Commons Media.
+  $commons_entity_integrations = &drupal_static(__FUNCTION__);
+
+  if (!isset($commons_entity_integrations)) {
+    foreach (module_implements('commons_entity_integration') as $module) {
+      $commons_entity_integrations[$module] = call_user_func($module . '_commons_entity_integration');
+    }
+  }
+
+  if (isset($commons_entity_integrations[$file->name])) {
+    foreach ($commons_entity_integrations[$file->name] as $entity_type => $integration) {
+      foreach ($integration as $bundle => $options) {
+        if (commons_media_has_media_integration($entity_type, $bundle)) {
+          $info['features_exclude']['dependencies']['commons_media'] = 'commons_media';
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Helper function to determine whether an entity bundle has media integration.
+ *
+ * @param $entity_type
+ *   The entity type to check media integration for.
+ * @param $bundle
+ *   The entity bundle to check media integration for.
+ *
+ * @return boolean
+ *   The value of the media integration if available, FALSE otherwise.
+ */
+function commons_media_has_media_integration($entity_type, $bundle) {
+  $commons_media_entity_types = commons_entity_integration_info();
+
+  return isset($commons_media_entity_types[$entity_type][$bundle]['media']) ? $commons_media_entity_types[$entity_type][$bundle]['media'] : FALSE;
 }
 
 /**
