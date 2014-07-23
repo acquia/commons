@@ -60,6 +60,19 @@ function commons_bw_system_info_alter(&$info, $file, $type) {
 }
 
 /**
+ * Implements hook_modules_enabled().
+ */
+function commons_bw_modules_enabled($modules) {
+  // Ensure that dynamically added title_field fields are in the default state
+  // when modules that provide content types are enabled.
+  foreach ($modules as $module) {
+    if (module_hook($module, 'node_info')) {
+      features_revert(array('commons_bw' => array('field_instance')));
+    }
+  }
+}
+
+/**
  * Implements hook_forms().
  *
  * The bundle is added to the partial node form ID, to prevent duplicate IDs on
