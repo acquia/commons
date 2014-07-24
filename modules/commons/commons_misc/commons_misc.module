@@ -7,6 +7,18 @@
 include_once 'commons_misc.features.inc';
 
 /**
+ * Implements hook_system_info_alter()
+ */
+function commons_misc_system_info_alter(&$info, $file, $type) {
+  // Remove the OG Example module from the features page as it displays a
+  // conflict with Commons Body, which is detected as a false positive when
+  // using behavioural tests to catch feature conflicts.
+  if ($type == 'module' && $file->name == 'og_example') {
+    unset($info['features']);
+  }
+}
+
+/**
  * Implements hook_mail_alter();
  */
 function commons_misc_mail_alter(&$message) {
