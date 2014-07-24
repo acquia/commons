@@ -21,5 +21,5 @@ Feature: Trusted Contacts
     Given I am logged in as a user with the "authenticated user" role
     When I visit "/users/jeff-noyes"
       And I should see the link "Add as trusted contact"
-      And I press "Add as trusted contact"
-    Then I should see the link "Awaiting Confirmation"
+      And I click "Add as trusted contact"
+    Then I should see "Awaiting Confirmation"

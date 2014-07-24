@@ -48,9 +48,7 @@ install:
 
   # Install the latest Drush 6.
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
-  - pear channel-discover pear.drush.org
-  - pear install drush/drush-5.10.0.0
-  - phpenv rehash
+  - composer global require --no-interaction --prefer-source drush/drush:6.*@dev
 
   # Install Drupal.org drush.
   - drush dl -y drupalorg_drush-7.x-1.x-dev --destination=$HOME/.drush
