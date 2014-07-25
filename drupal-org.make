@@ -302,10 +302,13 @@ projects[message_subscribe][patch][] = "http://drupal.org/files/issues/group-con
 ; https://www.drupal.org/node/2184567
 projects[message_subscribe][patch][] = "http://drupal.org/files/issues/2184567-message-subscribe-blocked-users-23.patch"
 
-
 projects[metatag][type] = "module"
 projects[metatag][subdir] = "contrib"
 projects[metatag][version] = "1.0-rc1"
+
+; Don't show the warnings on the status page for transliteration and imagecache_token modules.
+; https://www.drupal.org/node/2306449
+projects[metatag][patch][] = "http://drupal.org/files/issues/2306449-metatag-recommended-modules-status-2.patch"
 
 projects[module_filter][type] = "module"
 projects[module_filter][subdir] = "contrib"
