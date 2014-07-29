@@ -278,7 +278,7 @@ function commons_media_entity_presave($entity, $type) {
       // private group content.
       foreach ($items as $delta => $item) {
         // Move files to the private file system if the content is private.
-        if ($entity->group_content_access[LANGUAGE_NONE][0]['value'] == 2) {
+        if (isset($entity->group_content_access[LANGUAGE_NONE][0]['value']) && $entity->group_content_access[LANGUAGE_NONE][0]['value'] == 2) {
           $source_file = file_load($item['fid']);
 
           // Only move public files.
