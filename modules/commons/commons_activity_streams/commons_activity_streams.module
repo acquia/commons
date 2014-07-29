@@ -218,14 +218,18 @@ function commons_activity_streams_user_profile_submit($form, &$form_state) {
  * Implements hook_token_info().
  */
 function commons_activity_streams_token_info() {
-  $styles = image_styles();
   $tokens = array();
+  $styles = image_styles();
+
+  // Create a token to retrieve the user picture formatted using any of the
+  // currently defined image styles.
   foreach ($styles as $style_name => $style) {
     $tokens['picture:' . $style_name] = array(
       'name' => t('Picture: @st image style', array('@st' => $style_name)),
       'description' => t('Picture: @st image style', array('@st' => $style_name)),
     );
   }
+
   return array(
     'tokens' => array(
       'user' => $tokens,
@@ -238,42 +242,44 @@ function commons_activity_streams_token_info() {
  */
 function commons_activity_streams_tokens($type, $tokens, array $data = array(), array $options = array()) {
   $replacements = array();
+
   if ($type == 'user' && isset($data['user'])) {
-    $user = $data['user'];
-    $user_wrapper = entity_metadata_wrapper('user', $user);
-    $alt = $user->name;
-    if (isset($user->field_name_first)) {
-      $alt = $user_wrapper->field_name_first->value();
-      if (isset($user->field_name_last)) {
-        $alt .= " " . $user_wrapper->field_name_last->value();
-      }
-    }
-    $alt = t("@name's picture", array('@name' => $alt));
+    $account = $data['user'];
+
+    // Generate suitable alternative text using the user's username.
+    $username = format_username($account);
+    $alt = t("@name's picture", array('@name' => $username));
+
     foreach ($tokens as $token => $original) {
       if (strpos($token, 'picture:') !== FALSE) {
         list( , $style) = explode(':', $token);
-        $path = variable_get('user_picture_default', '/profiles/commons/images/avatars/user-avatar.png');
-        if (!empty($user->picture)) {
-          $path = image_style_url($style, $user->picture->uri);
-        }
+
+        // Prefer unique account pictures but fall back to the default user
+        // picture if necessary.
+        $path = $account->picture ? $account->picture->uri : variable_get('user_picture_default', '/profiles/commons/images/avatars/user-avatar.png');
+
         $image_variables = array(
-          'path' => $path,
+          'path' => image_style_url($style, $path),
           'alt' => $alt,
           'title' => $alt,
           'class' => array('image-style-none'),
         );
+
         $image = theme('image', $image_variables);
-        $user_path = user_uri($user);
+        $user_path = user_uri($account);
+
         $link_options = array(
           'attributes' => array(
             'title' => t('View user profile.'),
           ),
           'html' => TRUE,
         );
+
         $replacements[$original] = "<div class='user-picture'>" . l($image, $user_path['path'], $link_options) . "</div>";
       }
     }
   }
+
   return $replacements;
 }
 

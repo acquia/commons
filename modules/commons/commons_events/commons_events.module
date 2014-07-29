@@ -51,7 +51,7 @@ function commons_events_menu_alter(&$items) {
  * Access callback for showing the Attendees tab.
  */
 function commons_events_attendee_access($event_node) {
-  if ($event_node->type == 'event') {
+  if ($event_node->type == 'event' && user_access('view event registration')) {
     return TRUE;
   }
 
@@ -229,12 +229,18 @@ function commons_events_entity_view_alter(&$build, $type) {
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_form_BASE_FORM_ID_alter().
  */
 function commons_events_form_node_form_alter(&$form, &$form_state, $form_id) {
   $node = $form_state['node'];
 
-  if ($node->type == 'event') {
+  list(, , $bundle) = entity_extract_ids('node', $node);
+
+  if ($bundle == 'event' && empty($node->nid)) {
+    drupal_set_title(t('Create an event'));
+  }
+
+  if ($bundle == 'event') {
     // Attach custom CSS and JS to the form.
     $form['#attached']['css'][] = drupal_get_path('module', 'commons_events') . '/css/commons_events.css';
     $form['#attached']['js'][] = drupal_get_path('module', 'commons_events') . '/js/commons_events.js';
