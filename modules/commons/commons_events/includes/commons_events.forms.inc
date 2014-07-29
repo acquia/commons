@@ -30,7 +30,7 @@ function commons_events_attend_event_form($form, &$form_state, $event_node, $reg
   $form['count'] = array(
     '#type' => 'textfield',
     '#default_value' => '0',
-    '#description' => ' + Guests',
+    '#description' => t('+ Guests'),
     '#size' => 2,
     '#maxlength' => 2,
     '#required' => false,
