@@ -51,7 +51,7 @@ function commons_events_menu_alter(&$items) {
  * Access callback for showing the Attendees tab.
  */
 function commons_events_attendee_access($event_node) {
-  if ($event_node->type == 'event') {
+  if ($event_node->type == 'event' && user_access('view event registration')) {
     return TRUE;
   }
 
