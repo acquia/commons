@@ -27,3 +27,15 @@ function commons_follow_term_update_3501() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Add a distinct field to the notification view to remove duplicates when
+ * multiple users have send email clicked.
+ */
+function commons_follow_term_update_3502() {
+  $revert = array(
+    'commons_follow_term' => array('views_view'),
+  );
+  features_revert($revert);
+  return array();
+}
