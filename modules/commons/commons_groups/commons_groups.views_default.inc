@@ -1401,6 +1401,12 @@ function commons_groups_views_default_views() {
   $handler->display->display_options['fields']['title_field']['label'] = '';
   $handler->display->display_options['fields']['title_field']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['title_field']['link_to_entity'] = 1;
+  $handler->display->display_options['fields']['title_field']['type'] = 'title_linked';
+  $handler->display->display_options['fields']['title_field']['settings'] = array(
+    'title_style' => '_none',
+    'title_link' => 'content',
+    'title_class' => '',
+  );
   /* Field: Field: Group */
   $handler->display->display_options['fields']['group_group']['id'] = 'group_group';
   $handler->display->display_options['fields']['group_group']['table'] = 'field_data_group_group';
