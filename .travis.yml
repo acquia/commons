@@ -131,6 +131,10 @@ before_script:
   # Enabled all non-default commons modules so that they can be tested.
   - drush pm-enable commons_documents commons_notices --yes
 
+  # Forcefully rebuild the Commons Documents feature until
+  # https://drupal.org/node/1920342 is fixed.
+  - drush features-revert commons_documents --force -y
+
   - cd ../drupal
 
   # If we're an upgrade test, run the upgrade process.
