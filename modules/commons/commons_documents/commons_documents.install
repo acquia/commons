@@ -1,14 +1,17 @@
 <?php
 
 /**
- * Set default document roles upon enable
+ * Set default polls roles upon enable
  */
 function commons_documents_enable() {
-  features_revert(array('commons_documents' => array('og_features_permission', 'field_instance', 'field_base', 'variable', 'views_view', 'node')));
+  $revert = array(
+    'commons_documents' => array('og_features_permission'),
+  );
+  features_revert($revert);
 
   $groups = og_get_all_group();
 
-  foreach ($groups as $gid) {
+  foreach ($groups AS $gid) {
     commons_groups_features_permission_rebuild('commons_documents', $gid);
   }
 }
