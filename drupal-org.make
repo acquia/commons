@@ -364,6 +364,10 @@ projects[og][patch][] = "http://drupal.org/files/og_ui-group_node_add_theme-1800
 ; http://drupal.org/node/2301831
 projects[og][patch][] = "http://drupal.org/files/issues/og-missing-permission-roles-2301831-1.patch"
 
+; Missing permissions when reverting features.
+; http://drupal.org/node/2021673
+projects[og][patch][] = "http://drupal.org/files/og-Do_not_export_nonexisting_roles-2021673-1.patch"
+
 projects[panelizer][type] = "module"
 projects[panelizer][subdir] = "contrib"
 projects[panelizer][version] = "3.1"
