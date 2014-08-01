@@ -1202,6 +1202,11 @@ function commons_groups_features_permission_rebuild($module, $gid) {
   module_load_include('features.inc', 'og', '/includes/og_features_role');
 
   if ($defaults = features_get_default('og_features_permission', $module)) {
+    // Make sure the list of available group types is up to date, especially
+    // when installing multiple features at once, for example from an install
+    // profile or via drush.
+    drupal_static_reset();
+
     $grant = array();
     $revoke = array();
 
