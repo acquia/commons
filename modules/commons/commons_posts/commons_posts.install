@@ -103,3 +103,14 @@ function commons_posts_update_7007() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Standardize browsing widget field weights.
+ */
+function commons_posts_update_7008() {
+  $revert = array(
+    'commons_posts' => array('field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}

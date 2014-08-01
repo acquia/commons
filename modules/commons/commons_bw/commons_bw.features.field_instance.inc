@@ -38,13 +38,13 @@ function commons_bw_field_definition(&$field_instances, $bundle) {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 12,
+        'weight' => -50,
       ),
       'teaser' => array(
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 0,
+        'weight' => -50,
       ),
     ),
     'display_in_partial_form' => !empty($display_in_partial_form[$bundle]),
@@ -67,7 +67,7 @@ function commons_bw_field_definition(&$field_instances, $bundle) {
         'size' => '60',
       ),
       'type' => 'text_textfield',
-      'weight' => -5,
+      'weight' => -50,
     ),
   );
 }

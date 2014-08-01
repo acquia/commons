@@ -37,7 +37,7 @@ function commons_media_field_definition(&$field_instances, $entity_type, $bundle
           'file_view_mode' => 'default',
         ),
         'type' => 'file_rendered',
-        'weight' => 0,
+        'weight' => -48,
       ),
       'teaser' => array(
         'label' => 'hidden',
@@ -46,7 +46,7 @@ function commons_media_field_definition(&$field_instances, $entity_type, $bundle
           'file_view_mode' => 'teaser',
         ),
         'type' => 'file_rendered',
-        'weight' => 0,
+        'weight' => -48,
       ),
     ),
     'display_in_partial_form' => 1,
@@ -84,7 +84,7 @@ function commons_media_field_definition(&$field_instances, $entity_type, $bundle
         'progress_indicator' => 'throbber',
       ),
       'type' => 'media_generic',
-      'weight' => 2,
+      'weight' => -48,
     ),
   );
 

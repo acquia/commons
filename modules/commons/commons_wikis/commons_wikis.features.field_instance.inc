@@ -74,7 +74,7 @@ function commons_wikis_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 0,
+        'weight' => -49,
       ),
       'teaser' => array(
         'label' => 'hidden',
@@ -83,7 +83,7 @@ function commons_wikis_field_default_field_instances() {
           'trim_length' => 600,
         ),
         'type' => 'text_summary_or_trimmed',
-        'weight' => 1,
+        'weight' => -49,
       ),
     ),
     'display_in_partial_form' => 1,
@@ -104,7 +104,7 @@ function commons_wikis_field_default_field_instances() {
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => 1,
+      'weight' => -49,
     ),
   );
 
@@ -119,13 +119,13 @@ function commons_wikis_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 12,
+        'weight' => -50,
       ),
       'teaser' => array(
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 0,
+        'weight' => -50,
       ),
     ),
     'display_in_partial_form' => 1,
@@ -148,7 +148,7 @@ function commons_wikis_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => -5,
+      'weight' => -50,
     ),
   );
 

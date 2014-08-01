@@ -92,3 +92,14 @@ function commons_polls_update_7006() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Standardize browsing widget field weights.
+ */
+function commons_polls_update_7007() {
+  $revert = array(
+    'commons_polls' => array('field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}

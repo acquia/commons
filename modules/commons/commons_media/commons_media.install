@@ -26,3 +26,14 @@ function commons_media_update_7301() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Standardize browsing widget field weights.
+ */
+function commons_media_update_7302() {
+  $revert = array(
+    'commons_media' => array('field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}

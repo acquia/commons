@@ -32,3 +32,14 @@ function commons_bw_update_7302() {
 
   drupal_flush_all_caches();
 }
+
+/**
+ * Standardize browsing widget field weights.
+ */
+function commons_bw_update_7303() {
+  $revert = array(
+    'commons_bw' => array('field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}

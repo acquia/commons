@@ -128,3 +128,14 @@ function commons_documents_update_7009() {
 
   return array();
 }
+
+/**
+ * Standardize browsing widget field weights.
+ */
+function commons_documents_update_7010() {
+  $revert = array(
+    'commons_documents' => array('field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}

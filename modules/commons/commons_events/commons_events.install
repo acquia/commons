@@ -295,3 +295,14 @@ function commons_events_update_7016() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Standardize browsing widget field weights.
+ */
+function commons_events_update_7017() {
+  $revert = array(
+    'commons_events' => array('field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}

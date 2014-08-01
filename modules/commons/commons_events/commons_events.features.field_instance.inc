@@ -28,7 +28,7 @@ function commons_events_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 5,
+        'weight' => -49,
       ),
       'teaser' => array(
         'label' => 'hidden',
@@ -37,7 +37,7 @@ function commons_events_field_default_field_instances() {
           'trim_length' => 600,
         ),
         'type' => 'text_summary_or_trimmed',
-        'weight' => 3,
+        'weight' => -49,
       ),
     ),
     'entity_type' => 'node',
@@ -57,7 +57,7 @@ function commons_events_field_default_field_instances() {
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => 1,
+      'weight' => -49,
     ),
   );
 
