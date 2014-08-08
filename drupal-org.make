@@ -104,7 +104,7 @@ projects[custom_search][patch][] = "http://drupal.org/files/commons_search_js_en
 
 projects[date][type] = "module"
 projects[date][subdir] = "contrib"
-projects[date][version] = "2.7"
+projects[date][version] = "2.8"
 
 projects[date_facets][type] = "module"
 projects[date_facets][subdir] = "contrib"
