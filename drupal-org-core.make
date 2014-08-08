@@ -3,7 +3,7 @@ core = 7.x
 
 ; Download Drupal core and apply core patches if needed.
 projects[drupal][type] = "core"
-projects[drupal][version] = 7.30
+projects[drupal][version] = 7.31
 
 ; This patch allows install profile to list requirements on the install page
 ; http://drupal.org/node/1971072
