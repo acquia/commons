@@ -58,10 +58,7 @@ projects[apachesolr_user][patch][] = "http://drupal.org/files/2077281-apache-sol
 
 projects[breakpoints][type] = "module"
 projects[breakpoints][subdir] = "contrib"
-projects[breakpoints][download][type] = "git"
-projects[breakpoints][download][url] = "http://git.drupal.org/project/breakpoints.git"
-projects[breakpoints][download][branch] = "7.x-1.x"
-projects[breakpoints][download][revision] = "c4f3665"
+projects[breakpoints][version] = "1.2"
 
 projects[connector][type] = "module"
 projects[connector][subdir] = "contrib"
