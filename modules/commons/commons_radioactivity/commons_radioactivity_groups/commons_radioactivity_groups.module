@@ -10,6 +10,12 @@ include_once 'commons_radioactivity_groups.features.inc';
  * Implements hook_node_insert().
  */
 function commons_radioactivity_groups_node_insert($node) {
+  // If the node does not have radioactivity integration then there's nothing to
+  // do here.
+  if (!isset($node->field_radioactivity)) {
+    return;
+  }
+
   // If there are no groups associated with this node then there's nothing to do
   // here.
   if (!isset($node->og_group_ref)) {
@@ -24,6 +30,12 @@ function commons_radioactivity_groups_node_insert($node) {
  * Implements hook_node_delete().
  */
 function commons_radioactivity_groups_node_delete($node) {
+  // If the node does not have radioactivity integration then there's nothing to
+  // do here.
+  if (!isset($node->field_radioactivity)) {
+    return;
+  }
+
   // If there are no groups associated with this node then there's nothing to do
   // here.
   if (!isset($node->og_group_ref)) {
@@ -38,6 +50,12 @@ function commons_radioactivity_groups_node_delete($node) {
  * Implements hook_node_update().
  */
 function commons_radioactivity_groups_node_update($node) {
+  // If the node does not have radioactivity integration then there's nothing to
+  // do here.
+  if (!isset($node->field_radioactivity)) {
+    return;
+  }
+
   // If there are no groups associated with this node then there's nothing to do
   // here.
   if (!isset($node->og_group_ref)) {
@@ -62,15 +80,19 @@ function commons_radioactivity_groups_node_update($node) {
 function commons_radioactivity_groups_incident_groups($node, $value) {
   $gids = array();
 
-  foreach ($node->og_group_ref[LANGUAGE_NONE] as $field) {
-    $gids[] = $field['target_id'];
+  if ($items = field_get_items('node', $node, 'og_group_ref')) {
+    foreach ($items as $item) {
+      $gids[] = $item['target_id'];
+    }
   }
 
-  // @Todo: We may wish to instead simply select the types of these groups.
-  $groups = node_load_multiple($gids);
+  if (count($gids)) {
+    // @Todo: We may wish to instead simply select the types of these groups.
+    $groups = node_load_multiple($gids);
 
-  foreach ($groups as $group) {
-    commons_radioactivity_incident_node($group, $value);
+    foreach ($groups as $group) {
+      commons_radioactivity_incident_node($group, $value);
+    }
   }
 }
 
