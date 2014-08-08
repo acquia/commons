@@ -69,22 +69,11 @@ projects[connector][version] = "1.0-beta2"
 
 projects[ckeditor][type] = "module"
 projects[ckeditor][subdir] = "contrib"
-projects[ckeditor][download][type] = "git"
-projects[ckeditor][download][url] = "http://git.drupal.org/project/ckeditor.git"
-projects[ckeditor][download][branch] = "7.x-1.x"
-projects[ckeditor][download][revision] = "b69a9ac"
-
-; Only load CSS when necessary.
-; https://drupal.org/node/1370894
-projects[ckeditor][patch][] = "http://drupal.org/files/issues/attach-ckeditor-css-1370894-8.patch"
+projects[ckeditor][version] = "1.15"
 
 ; Accomodate latest Media changes.
 ; https://drupal.org/node/2159403
-projects[ckeditor][patch][] = "http://drupal.org/files/issues/ckeditor-accomodate-latest-media-changes-0.patch"
-
-; Remove redundant external plugin declarations.
-; https://drupal.org/comment/8284591#comment-8284591
-projects[ckeditor][patch][] = "http://drupal.org/files/issues/ckeditor-remove-external-plugin-declarations-1-alt.patch"
+projects[ckeditor][patch][] = "http://drupal.org/files/issues/ckeditor-accomodate-latest-media-changes-53.patch"
 
 projects[ctools][type] = "module"
 projects[ctools][subdir] = "contrib"
