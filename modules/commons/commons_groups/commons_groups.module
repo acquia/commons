@@ -615,7 +615,10 @@ function commons_groups_tokens($type, $tokens, $data = array(), $options = array
 
         // Return the title of the first group associated with this node.
         $first_group = array_shift($groups);
-        $text = isset($first_group->title_field) ? $first_group->title_field[LANGUAGE_NONE][0]['value'] : $first_group->title;
+
+        // Use the title field by default and fall back to the node title.
+        $first_group_wrapper = entity_metadata_wrapper('node', $first_group);
+        $text = isset($first_group_wrapper->title_field) ? $first_group_wrapper->title_field->value() : $first_group_wrapper->label();
       }
       $replacements['[node:commons-groups-first-group]'] = $text;
       return $replacements;
