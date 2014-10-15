@@ -58,7 +58,7 @@ projects[apachesolr_user][patch][] = "http://drupal.org/files/2077281-apache-sol
 
 projects[breakpoints][type] = "module"
 projects[breakpoints][subdir] = "contrib"
-projects[breakpoints][version] = "1.2"
+projects[breakpoints][version] = "1.3"
 
 projects[connector][type] = "module"
 projects[connector][subdir] = "contrib"
@@ -163,11 +163,7 @@ projects[features][version] = "2.2"
 
 projects[file_entity][type] = "module"
 projects[file_entity][subdir] = "contrib"
-projects[file_entity][version] = "2.0-alpha3"
-
-; Issue #2081713: Fix undefined index errors with empty (remote) files.
-; https://drupal.org/node/2081713
-projects[file_entity][patch][] = "http://drupal.org/files/issues/add-filesize-checks-2081713-13.patch"
+projects[file_entity][version] = "2.0-beta1"
 
 projects[flag][type] = "module"
 projects[flag][subdir] = "contrib"
@@ -232,14 +228,7 @@ projects[link][version] = "1.2"
 
 projects[media][type] = "module"
 projects[media][subdir] = "contrib"
-projects[media][download][type] = "git"
-projects[media][download][url] = "http://git.drupal.org/project/media.git"
-projects[media][download][branch] = "7.x-2.x"
-projects[media][download][revision] = "b2c2d78"
-
-; New filelfield browser widget is massively confusing the user
-; https://drupal.org/comment/8570379#comment-8570379
-projects[media][patch][] = "http://drupal.org/files/issues/automatically-attach-files-2216329-2.patch"
+projects[media][version] = "2.0-alpha4"
 
 projects[media_oembed][type] = "module"
 projects[media_oembed][subdir] = "contrib"
@@ -423,7 +412,7 @@ projects[quicktabs][patch][] = "http://drupal.org/files/2104643-revert-qt-487518
 
 projects[r4032login][type] = "module"
 projects[r4032login][subdir] = "contrib"
-projects[r4032login][version] = "1.7"
+projects[r4032login][version] = "1.8"
 
 projects[radioactivity][type] = "module"
 projects[radioactivity][subdir] = "contrib"
@@ -534,15 +523,11 @@ projects[views_litepager][version] = "3.0"
 
 projects[views_load_more][type] = "module"
 projects[views_load_more][subdir] = "contrib"
-projects[views_load_more][version] = "1.2"
-
-; Suppress notice error when loading more content from views_load_more.
-; https://drupal.org/node/2207467
-projects[views_load_more][patch][] = "http://drupal.org/files/issues/fix-notice-undefined-index-2152935-3.patch"
+projects[views_load_more][version] = "1.5"
 
 projects[votingapi][type] = "module"
 projects[votingapi][subdir] = "contrib"
-projects[votingapi][version] = "2.11"
+projects[votingapi][version] = "2.12"
 
 projects[voting_rules][type] = "module"
 projects[voting_rules][subdir] = "contrib"
