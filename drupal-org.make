@@ -28,7 +28,7 @@ projects[admin_icons][download][revision] = "60d9f28801533fecc92216a60d444d89d80
 
 projects[apachesolr][type] = "module"
 projects[apachesolr][subdir] = "contrib"
-projects[apachesolr][version] = "1.6"
+projects[apachesolr][version] = "1.7"
 
 projects[apachesolr_og][type] = "module"
 projects[apachesolr_og][subdir] = "contrib"
@@ -279,7 +279,7 @@ projects[message_subscribe][patch][] = "http://drupal.org/files/issues/2184567-m
 
 projects[metatag][type] = "module"
 projects[metatag][subdir] = "contrib"
-projects[metatag][version] = "1.0-rc2"
+projects[metatag][version] = "1.4"
 
 projects[module_filter][type] = "module"
 projects[module_filter][subdir] = "contrib"
