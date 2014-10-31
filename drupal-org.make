@@ -17,7 +17,7 @@ projects[addressfield][version] = "1.0-beta5"
 
 projects[addressfield_tokens][type] = "module"
 projects[addressfield_tokens][subdir] = "contrib"
-projects[addressfield_tokens][version] = "1.4"
+projects[addressfield_tokens][version] = "1.5"
 
 projects[admin_icons][type] = "module"
 projects[admin_icons][subdir] = "contrib"
