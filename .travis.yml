@@ -10,6 +10,10 @@ mysql:
 
 env:
   - UPGRADE=none
+  - UPGRADE=7.x-3.20
+  - UPGRADE=7.x-3.19
+  - UPGRADE=7.x-3.18
+  - UPGRADE=7.x-3.17
   - UPGRADE=7.x-3.16
   - UPGRADE=7.x-3.15
   - UPGRADE=7.x-3.14
@@ -26,6 +30,10 @@ env:
 matrix:
   fast_finish: true
   allow_failures:
+    - env: UPGRADE=7.x-3.20
+    - env: UPGRADE=7.x-3.19
+    - env: UPGRADE=7.x-3.18
+    - env: UPGRADE=7.x-3.17
     - env: UPGRADE=7.x-3.16
     - env: UPGRADE=7.x-3.15
     - env: UPGRADE=7.x-3.14
