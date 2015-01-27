@@ -190,10 +190,7 @@ projects[http_client][version] = "2.4"
 
 projects[i18n][type] = "module"
 projects[i18n][subdir] = "contrib"
-projects[i18n][download][type] = "git"
-projects[i18n][download][url] = "http://git.drupal.org/project/i18n.git"
-projects[i18n][download][branch] = "7.x-1.x"
-projects[i18n][download][revision] = "3777b86"
+projects[i18n][version] = "1.12"
 
 projects[i18nviews][type] = "module"
 projects[i18nviews][subdir] = "contrib"
