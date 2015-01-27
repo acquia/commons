@@ -197,7 +197,7 @@ projects[i18nviews][subdir] = "contrib"
 projects[i18nviews][download][type] = "git"
 projects[i18nviews][download][url] = "http://git.drupal.org/project/i18nviews.git"
 projects[i18nviews][download][branch] = "7.x-3.x"
-projects[i18nviews][download][revision] = "26bd52c"
+projects[i18nviews][download][revision] = "27e9809"
 
 projects[kissmetrics][type] = "module"
 projects[kissmetrics][subdir] = "contrib"
