@@ -344,7 +344,7 @@ projects[panels][download][revision] = "8059bda2b"
 
 projects[paranoia][type] = "module"
 projects[paranoia][subdir] = "contrib"
-projects[paranoia][version] = "1.3"
+projects[paranoia][version] = "1.4"
 
 projects[pathauto][type] = "module"
 projects[pathauto][subdir] = "contrib"
