@@ -13,7 +13,7 @@ projects[acquia_connector][patch][] = "https://drupal.org/files/issues/move-mess
 
 projects[addressfield][type] = "module"
 projects[addressfield][subdir] = "contrib"
-projects[addressfield][version] = "1.0-beta5"
+projects[addressfield][version] = "1.0"
 
 projects[addressfield_tokens][type] = "module"
 projects[addressfield_tokens][subdir] = "contrib"
