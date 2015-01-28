@@ -544,23 +544,23 @@ Bamboo shoot green bean wattle seed okra kakadu plum peanut ricebean celtuce. Az
  */
 function commons_install() {
   // Enable the Origins theme and set it as the default.
-  theme_enable(array('adaptivetheme', 'commons_origins'));
+  theme_enable(array('commons_origins'));
 
-    // The Bartik theme is automatically enabled during installation. Disable it.
+  // The Bartik theme is automatically enabled during installation. Disable it.
   db_update('system')
     ->fields(array('status' => 0))
     ->condition('type', 'theme')
     ->condition('name', 'bartik')
     ->execute();
 
-  // Set the default and administration themes.
+  // Set Commons Origins as the default theme.
   variable_set('theme_default', 'commons_origins');
-  // Set a default administrative theme:
+
+  // Set Ember as the administration theme.
   variable_set('admin_theme', 'ember');
-  variable_set('node_admin_theme', FALSE);
 
   // Do not use the administration theme when editing or creating content.
-  variable_set('node_admin_theme', '0');
+  variable_set('node_admin_theme', FALSE);
 
   // Set a default user avatar.
   commons_set_default_avatar();
@@ -596,12 +596,10 @@ function commons_install() {
   // and the resulting css files generated.
   // For more background, see http://drupal.org/node/1776730.
   module_load_include('inc', 'system', 'system.admin');
-  foreach (array('adaptivetheme', 'commons_origins') as $theme_name) {
-    $form_state = form_state_defaults();
-    $form_state['build_info']['args'][0] = $theme_name;
-    $form_state['values'] = array();
-    drupal_form_submit('system_theme_settings', $form_state);
-  }
+  $form_state = form_state_defaults();
+  $form_state['build_info']['args'][0] = 'commons_origins';
+  $form_state['values'] = array();
+  drupal_form_submit('system_theme_settings', $form_state);
 }
 
 /**
