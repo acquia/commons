@@ -70,7 +70,7 @@ projects[ckeditor][version] = "1.16"
 
 ; Accomodate latest Media changes.
 ; https://drupal.org/node/2159403
-projects[ckeditor][patch][] = "https://drupal.org/files/issues/ckeditor-accomodate-latest-media-changes-81.patch"
+projects[ckeditor][patch][] = "https://drupal.org/files/issues/make_ckeditor_plugin-2159403-141.patch"
 
 projects[ctools][type] = "module"
 projects[ctools][subdir] = "contrib"
@@ -159,7 +159,10 @@ projects[features][version] = "2.3"
 
 projects[file_entity][type] = "module"
 projects[file_entity][subdir] = "contrib"
-projects[file_entity][version] = "2.0-beta1"
+projects[file_entity][download][type] = "git"
+projects[file_entity][download][url] = "http://git.drupal.org/project/file_entity.git"
+projects[file_entity][download][branch] = "7.x-2.x"
+projects[file_entity][download][revision] = "b610413"
 
 projects[flag][type] = "module"
 projects[flag][subdir] = "contrib"
@@ -221,7 +224,10 @@ projects[link][version] = "1.3"
 
 projects[media][type] = "module"
 projects[media][subdir] = "contrib"
-projects[media][version] = "2.0-alpha4"
+projects[media][download][type] = "git"
+projects[media][download][url] = "http://git.drupal.org/project/media.git"
+projects[media][download][branch] = "7.x-2.x"
+projects[media][download][revision] = "1e1aade"
 
 projects[media_oembed][type] = "module"
 projects[media_oembed][subdir] = "contrib"
