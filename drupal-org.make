@@ -428,7 +428,7 @@ projects[rules][version] = "2.7"
 
 projects[schemaorg][type] = "module"
 projects[schemaorg][subdir] = "contrib"
-projects[schemaorg][version] = "1.0-beta4"
+projects[schemaorg][version] = "1.0-rc1"
 
 projects[search_facetapi][type] = "module"
 projects[search_facetapi][subdir] = "contrib"
