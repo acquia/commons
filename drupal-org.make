@@ -78,11 +78,7 @@ projects[ctools][version] = "1.6"
 
 projects[custom_search][type] = "module"
 projects[custom_search][subdir] = "contrib"
-projects[custom_search][version] = "1.16"
-
-; Avoid akward sanitization of user-entered search strings.
-; https://drupal.org/node/2012210
-projects[custom_search][patch][] = "https://drupal.org/files/commons_search_js_encode.patch"
+projects[custom_search][version] = "1.18"
 
 projects[date][type] = "module"
 projects[date][subdir] = "contrib"
