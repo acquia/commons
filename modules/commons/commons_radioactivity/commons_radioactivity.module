@@ -96,7 +96,7 @@ function commons_radioactivity_get_radioactive_entity_types() {
  */
 function commons_radioactivity_incident_node($node, $value) {
   // Only operate on nodes that have the radioactivity field.
-  if (isset($node->field_radioactivity)) {
+  if (!empty($node->field_radioactivity)) {
     // Find the node's ID and bundle.
     list($id, , $bundle) = entity_extract_ids('node', $node);
 
