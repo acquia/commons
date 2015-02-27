@@ -129,6 +129,14 @@ install:
   - echo "extension=apc.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "apc.shm_size=256M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
+  # Increase the MySQL connection timeout on the PHP end.
+  - echo "mysql.connect_timeout=3000" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "default_socket_timeout=3000" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+
+  # Increase the MySQL server timeout and packet size.
+  - mysql -e "SET GLOBAL wait_timeout = 36000;"
+  - mysql -e "SET GLOBAL max_allowed_packet = 33554432;"
+
 before_script:
 
   # Do the site install (either the current revision or old for the upgrade).
@@ -138,9 +146,6 @@ before_script:
   # Configure the private and temporary file systems.
   - drush vset -y file_private_path "sites/default/private/files"
   - drush vset -y file_temporary_path "sites/default/private/temp"
-
-  # Disable database logging as it is unnecessary and reduces performance.
-  - drush pm-disable dblog --yes
 
   # Enabled all non-default commons modules so that they can be tested.
   - drush pm-enable commons_documents commons_notices --yes
