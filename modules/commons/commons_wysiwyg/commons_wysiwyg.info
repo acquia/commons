@@ -14,8 +14,9 @@ features[filter][] = filtered_html
 features[filter][] = full_html
 features[user_permission][] = use text format filtered_html
 
-; Manually remove the Media: WYSIWYG submodule as a dependency until
-; https://www.drupal.org/node/766264 is fixed which causes Commons WYSIWYG to
-; appear overridden due dynamic alterations made to the text format and CKEditor
-; profiles by the Commons Media module.
-features_exclude[dependencies][media_wysiwyg] = media_wysiwyg
+; Manually remove the Entity Embed and Media: WYSIWYG modules as dependencies
+; until https://www.drupal.org/node/766264 is fixed which causes Commons WYSIWYG
+; to appear overridden due dynamic alterations made to the text format and
+; CKEditor profiles by the Commons Media module.
+features_exclude[dependencies][media_wysiwyg] = entity_embed
+features_exclude[dependencies][entity_embed] = media_wysiwyg

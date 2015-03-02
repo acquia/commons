@@ -180,17 +180,38 @@ function commons_media_page_build(&$page) {
  * Implements hook_filter_default_formats_alter().
  */
 function commons_media_filter_default_formats_alter(&$formats) {
-  if (module_exists('media_wysiwyg') && !empty($formats['filtered_html'])) {
-    // Allow markup from remote media.
-    $formats['filtered_html']['filters']['filter_html']['settings']['allowed_html'] = '<a> <em> <strong> <u> <cite> <blockquote> <code> <ul> <ol> <li> <dl> <dt> <dd> <h4> <h5> <h6>  <p> <br> <img> <strike> <iframe></iframe>';
+  if (!empty($formats['filtered_html'])) {
+    // Enable Entity Embed filters.
+    if (module_exists('entity_embed')) {
+      $formats['filtered_html']['cache'] = 0;
 
-    // Enable the media filter.
-    $formats['filtered_html']['filters'] += array(
-      'media_filter' => array(
-        'status' => 1,
-        'weight' => 2,
-      ),
-    );
+      // Allow markup from embedded entities.
+      $formats['filtered_html']['filters']['filter_html']['settings']['allowed_html'] = '<a> <em> <strong> <u> <cite> <blockquote> <code> <ul> <ol> <li> <dl> <dt> <dd> <h4> <h5> <h6>  <p> <br> <img> <strike> <drupal-entity>';
+
+      $formats['filtered_html']['filters'] += array(
+        'entity_embed' => array(
+          'weight' => 2,
+          'status' => 1,
+          'settings' => array(),
+        ),
+        'filter_align' => array(
+          'weight' => 3,
+          'status' => 1,
+          'settings' => array(),
+        ),
+      );
+    }
+
+    // Enable legacy Media: WYSIWYG filter.
+    if (module_exists('media_wysiwyg')) {
+      // Enable the media filter.
+      $formats['filtered_html']['filters'] += array(
+        'media_filter' => array(
+          'status' => 1,
+          'weight' => 4,
+        ),
+      );
+    }
   }
 }
 
@@ -198,7 +219,7 @@ function commons_media_filter_default_formats_alter(&$formats) {
  * Implements hook_ckeditor_profile_defaults().
  */
 function commons_media_ckeditor_profile_defaults_alter(&$profiles) {
-  if (module_exists('media_wysiwyg') && !empty($profiles['Advanced'])) {
+  if (module_exists('entity_embed') && !empty($profiles['Advanced'])) {
     // Disable the advanced content filter.
     $profiles['Advanced']['settings']['allowed_content'] = 'f';
 
@@ -207,16 +228,26 @@ function commons_media_ckeditor_profile_defaults_alter(&$profiles) {
     [\'Format\'],
     [\'Bold\',\'Italic\',\'Strike\'],
     [\'NumberedList\',\'BulletedList\',\'Indent\',\'Outdent\',\'Blockquote\'],
-    [\'Link\',\'Unlink\',\'Media\']
+    [\'Link\',\'Unlink\',\'file\']
     ]';
 
-    // Load the media plugin.
+    // Load the Entity Embed plugin.
     $profiles['Advanced']['settings']['loadPlugins'] += array(
-      'media' => array(
+      'drupalentity' => array(
+        'name' => 'drupalentity',
+        'desc' => 'Plugin for embedding entities',
+        'path' => '/sites/all/modules/entity_embed/js/plugins/drupalentity/',
         'default' => 'f',
-        'desc' => 'Plugin for inserting images from Drupal media module',
-        'name' => 'media',
-        'path' => '%plugin_dir%media/',
+        'buttons' => array(
+          'file' => array(
+            'label' => 'File',
+            'icon' => 'entity.png',
+          ),
+          'node' => array(
+            'label' => 'Content',
+            'icon' => 'entity.png',
+          ),
+        ),
       ),
     );
   }
@@ -330,4 +361,14 @@ function _commons_media_get_file_and_image_fields($entity, $type) {
   }
 
   return $collected_fields;
+}
+
+/**
+ * Implements hook_entity_embed_alter().
+ */
+function commons_media_entity_embed_alter(&$build, $entity, $context) {
+  // Remove the contextual links on all entites that provide them.
+  if (isset($build['#contextual_links'])) {
+    unset($build['#contextual_links']);
+  }
 }

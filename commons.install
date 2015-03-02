@@ -577,6 +577,9 @@ function commons_install() {
   // Do not use the administration theme when editing or creating content.
   variable_set('node_admin_theme', FALSE);
 
+  // Set jQuery version to 1.7
+  variable_set('jquery_update_jquery_version', '1.7');
+
   // Set a default user avatar.
   commons_set_default_avatar();
 
@@ -864,5 +867,25 @@ function commons_update_3118() {
  */
 function commons_update_3119() {
   variable_set('install_task', 'done');
+  return array();
+}
+
+/*
+ * Begin to use the Entity Embed module for embedded media handling if
+ * Media: WYSIWYG integration is currently enabled.
+ */
+function commons_update_3120() {
+  if (module_exists('media_wysiwyg')) {
+    module_enable(array('entity_embed'));
+
+    // Set jQuery version to 1.7
+    variable_set('jquery_update_jquery_version', '1.7');
+
+    $revert = array(
+      'commons_wysiwyg' => array('ckeditor_profile', 'filter'),
+    );
+    features_revert($revert);
+  }
+
   return array();
 }
