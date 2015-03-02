@@ -297,7 +297,7 @@ projects[mollom][version] = "2.13"
 
 projects[navbar][type] = "module"
 projects[navbar][subdir] = "contrib"
-projects[navbar][version] = "1.5"
+projects[navbar][version] = "1.6"
 
 projects[oauth][type] = "module"
 projects[oauth][subdir] = "contrib"
