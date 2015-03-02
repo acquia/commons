@@ -470,7 +470,7 @@ projects[title][version] = "1.0-alpha7"
 
 projects[token][type] = "module"
 projects[token][subdir] = "contrib"
-projects[token][version] = "1.5"
+projects[token][version] = "1.6"
 
 projects[translation_helpers][type] = "module"
 projects[translation_helpers][subdir] = "contrib"
