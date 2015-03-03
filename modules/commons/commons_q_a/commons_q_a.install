@@ -196,3 +196,14 @@ function commons_q_a_update_3115() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Accommodate changes to message definitions.
+ */
+function commons_q_a_update_3116() {
+  $revert = array(
+    'commons_q_a' => array('message_type'),
+  );
+  features_revert($revert);
+  return array();
+}

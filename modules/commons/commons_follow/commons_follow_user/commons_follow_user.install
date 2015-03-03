@@ -38,3 +38,14 @@ function commons_follow_user_update_3502() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Accommodate changes to message definitions.
+ */
+function commons_follow_user_update_3503() {
+  $revert = array(
+    'commons_follow_user' => array('message_type'),
+  );
+  features_revert($revert);
+  return array();
+}

@@ -114,3 +114,14 @@ function commons_posts_update_7008() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Accommodate changes to message definitions.
+ */
+function commons_posts_update_7009() {
+  $revert = array(
+    'commons_posts' => array('message_type'),
+  );
+  features_revert($revert);
+  return array();
+}

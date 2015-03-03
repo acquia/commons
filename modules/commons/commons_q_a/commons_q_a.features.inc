@@ -41,11 +41,7 @@ function commons_q_a_default_message_type() {
     "language" : "",
     "arguments" : null,
     "message_text" : { "und" : [
-        {
-          "value" : "[message:user:picture:35x35]",
-          "format" : "filtered_html",
-          "safe_value" : "[message:user:picture:35x35]"
-        },
+        { "value" : "[message:user:picture:35x35]", "format" : "filtered_html" },
         {
           "value" : "\\u003Ca href=\\u0022[message:user:url:absolute]\\u0022\\u003E[message:user:name]\\u003C\\/a\\u003E answered the question \\u003Cem\\u003E[message:field-target-nodes:0:field-related-question:title]\\u003C\\/em\\u003E with \\u0022\\u003Ca href=\\u0022[message:field-target-nodes:0:field-related-question:url]#node-[message:field-target-nodes:0:nid]\\u0022\\u003E[message:field-target-nodes:0:title_field]\\u003C\\/a\\u003E\\u0022",
           "format" : "full_html",
@@ -73,11 +69,7 @@ function commons_q_a_default_message_type() {
     "language" : "",
     "arguments" : null,
     "message_text" : { "und" : [
-        {
-          "value" : "[message:user:picture:35x35]",
-          "format" : "filtered_html",
-          "safe_value" : "[message:user:picture:35x35]"
-        },
+        { "value" : "[message:user:picture:35x35]", "format" : "filtered_html" },
         {
           "value" : "\\u003Ca href=\\u0022[message:user:url:absolute]\\u0022\\u003E[message:user:name]\\u003C\\/a\\u003E asked the question \\u003Ca href=\\u0022[message:field-target-nodes:0:url]\\u0022\\u003E[message:field-target-nodes:0:title_field]\\u003C\\/a\\u003E",
           "format" : "full_html",

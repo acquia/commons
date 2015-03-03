@@ -38,11 +38,7 @@ function commons_posts_default_message_type() {
     "language" : "",
     "arguments" : null,
     "message_text" : { "und" : [
-        {
-          "value" : "[message:user:picture:35x35]",
-          "format" : "filtered_html",
-          "safe_value" : "[message:user:picture:35x35]"
-        },
+        { "value" : "[message:user:picture:35x35]", "format" : "filtered_html" },
         {
           "value" : "\\u003Ca href=\\u0022[message:user:url:absolute]\\u0022\\u003E[message:user:name]\\u003C\\/a\\u003E posted \\u003Ca href=\\u0022[message:field-target-nodes:0:url]\\u0022\\u003E[message:field-target-nodes:0:title_field]\\u003C\\/a\\u003E",
           "format" : "full_html",
@@ -50,8 +46,7 @@ function commons_posts_default_message_type() {
         },
         {
           "value" : "[commons-groups:in-groups-text]",
-          "format" : "filtered_html",
-          "safe_value" : "[commons-groups:in-groups-text]"
+          "format" : "filtered_html"
         }
       ]
     },

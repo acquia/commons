@@ -91,11 +91,7 @@ function commons_follow_user_default_message_type() {
     "language" : "",
     "arguments" : null,
     "message_text" : { "und" : [
-        {
-          "value" : "[message:user:picture]",
-          "format" : "filtered_html",
-          "safe_value" : "[message:user:picture]"
-        },
+        { "value" : "[message:user:picture]", "format" : "filtered_html" },
         {
           "value" : "\\u003Ca href=\\u0022[message:user:url:absolute]\\u0022\\u003E[message:user:name]\\u003C\\/a\\u003E is now following \\u003Ca href=\\u0022[message:field-target-users:0:url]\\u0022\\u003E[message:field-target-users:0:name]\\u003C\\/a\\u003E",
           "format" : "full_html",

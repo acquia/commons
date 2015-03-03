@@ -63,3 +63,14 @@ function commons_activity_streams_update_3106() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Accommodate changes to message definitions.
+ */
+function commons_activity_streams_update_3107() {
+  $revert = array(
+    'commons_activity_streams' => array('message_type'),
+  );
+  features_revert($revert);
+  return array();
+}
