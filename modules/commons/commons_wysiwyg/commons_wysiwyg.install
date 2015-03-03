@@ -23,3 +23,14 @@ function commons_wysiwyg_update_3101() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Prefer a local copy of CKEditor by default.
+ */
+function commons_wysiwyg_update_3102() {
+  $revert = array(
+    'commons_wysiwyg' => array('ckeditor_profile'),
+  );
+  features_revert($revert);
+  return array();
+}
