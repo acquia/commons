@@ -30,6 +30,10 @@ projects[apachesolr][type] = "module"
 projects[apachesolr][subdir] = "contrib"
 projects[apachesolr][version] = "1.7"
 
+; Search pages custom pages title setting does nothing.
+; https://drupal.org/node/1314664#comment-9220599
+projects[apachesolr][patch][] = "https://drupal.org/files/issues/search_pages_custom-1314664-45.patch"
+
 projects[apachesolr_og][type] = "module"
 projects[apachesolr_og][subdir] = "contrib"
 projects[apachesolr_og][download][type] = "git"
@@ -40,10 +44,6 @@ projects[apachesolr_og][download][revision] = "49820b4a4fcff7c1c4efe449da033fb6d
 ; Check the user object before trying to display a result.
 ; https://drupal.org/node/2077281#comment-7807937
 projects[apachesolr_og][patch][] = "https://drupal.org/files/issues/apachesolr_og-check-for-anonymous.patch"
-
-; Search pages custom pages title setting does nothing.
-; https://drupal.org/node/1314664#comment-9220599
-projects[apachesolr_og][patch][] = "https://drupal.org/files/issues/search_pages_custom-1314664-45.patch"
 
 projects[apachesolr_proximity][type] = "module"
 projects[apachesolr_proximity][subdir] = "contrib"
