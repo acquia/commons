@@ -133,7 +133,7 @@ projects[entity_embed][version] = "1.x-dev"
 projects[entity_embed][type] = "module"
 projects[entity_embed][subdir] = "contrib"
 projects[entity_embed][download][type] = "git"
-projects[entity_embed][download][revision] = "f911cdc"
+projects[entity_embed][download][revision] = "dcd4bac"
 projects[entity_embed][download][branch] = "7.x-1.x"
 
 projects[entityreference][type] = "module"
