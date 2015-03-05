@@ -435,7 +435,7 @@ projects[rich_snippets][version] = "1.0-beta4"
 
 projects[rules][type] = "module"
 projects[rules][subdir] = "contrib"
-projects[rules][version] = "2.7"
+projects[rules][version] = "2.8"
 
 projects[schemaorg][type] = "module"
 projects[schemaorg][subdir] = "contrib"
