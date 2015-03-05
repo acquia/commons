@@ -17,7 +17,6 @@ function commons_radioactivity_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_radioactivity',
-    'foreign keys' => array(),
     'indexes' => array(
       'energy' => array(
         0 => 'radioactivity_energy',
