@@ -527,10 +527,7 @@ projects[adaptivetheme][download][revision] = "18693ff59db7cb3171f282a982d04fe65
 
 projects[ember][type] = "theme"
 projects[ember][subdir] = "contrib"
-projects[ember][download][type] = "git"
-projects[ember][download][url] = "http://git.drupal.org/project/ember.git"
-projects[ember][download][branch] = "7.x-2.x"
-projects[ember][download][revision] = "caf4df7"
+projects[ember][version] = "2.0-alpha3"
 
 projects[sky][type] = "theme"
 projects[sky][subdir] = "contrib"
