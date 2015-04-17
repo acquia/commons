@@ -362,13 +362,3 @@ function _commons_media_get_file_and_image_fields($entity, $type) {
 
   return $collected_fields;
 }
-
-/**
- * Implements hook_entity_embed_alter().
- */
-function commons_media_entity_embed_alter(&$build, $entity, $context) {
-  // Remove the contextual links on all entites that provide them.
-  if (isset($build['#contextual_links'])) {
-    unset($build['#contextual_links']);
-  }
-}
