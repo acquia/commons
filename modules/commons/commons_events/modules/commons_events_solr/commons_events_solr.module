@@ -254,16 +254,19 @@ function commons_events_solr_form_apachesolr_environment_edit_form_alter(&$form,
  */
 function commons_events_solr_apachesolr_search_noresults() {
   $destination = drupal_get_destination();
+
   if ($destination['destination'] != 'events') {
     // Have to call the actual function since we overrode it to use the current
     // function instead.
     return theme_apachesolr_search_noresults();
   }
-  $options = array('!create' => 'create one');
+
   if (node_access('create', 'event')) {
-    $options['!create'] = l('create one', 'node/add/event');
+    return t('There are no events. Be the first to <a href="!url">create one</a>!', array('!url' => url('node/add/event')));
   }
-  return t('There are no events. Be the first to !create!', $options);
+  else {
+    return t('There are no events. Be the first to create one!');
+  }
 }
 
 /**
