@@ -20,3 +20,14 @@ function commons_groups_pages_update_3101() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Removed placeholder text.
+ */
+function commons_groups_pages_update_3102() {
+  $revert = array(
+    'commons_groups' => array('panelizer_defaults'),
+  );
+  features_revert($revert);
+  return array();
+}

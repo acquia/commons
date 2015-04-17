@@ -375,7 +375,7 @@ function commons_groups_pages_panelizer_defaults() {
         ),
         'context' => 'panelizer',
         'override_title' => 0,
-        'override_title_text' => 'Por que no se ve?',
+        'override_title_text' => '',
       );
       $pane->cache = array();
       $pane->style = array(
