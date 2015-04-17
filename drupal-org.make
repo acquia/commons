@@ -351,10 +351,7 @@ projects[panelizer][version] = "3.1"
 
 projects[panels][type] = "module"
 projects[panels][subdir] = "contrib"
-projects[panels][download][type] = "git"
-projects[panels][download][url] = "http://git.drupal.org/project/panels.git"
-projects[panels][download][branch] = "7.x-3.x"
-projects[panels][download][revision] = "8059bda2b"
+projects[panels][version] = "3.5"
 
 projects[paranoia][type] = "module"
 projects[paranoia][subdir] = "contrib"
