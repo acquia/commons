@@ -242,7 +242,7 @@ projects[media][download][revision] = "106398d"
 
 projects[media_oembed][type] = "module"
 projects[media_oembed][subdir] = "contrib"
-projects[media_oembed][version] = "2.2"
+projects[media_oembed][version] = "2.3"
 
 projects[memcache][type] = "module"
 projects[memcache][subdir] = "contrib"
