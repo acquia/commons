@@ -169,7 +169,7 @@ projects[file_entity][subdir] = "contrib"
 projects[file_entity][download][type] = "git"
 projects[file_entity][download][url] = "http://git.drupal.org/project/file_entity.git"
 projects[file_entity][download][branch] = "7.x-2.x"
-projects[file_entity][download][revision] = "3320b2b"
+projects[file_entity][download][revision] = "5effd7a"
 
 projects[flag][type] = "module"
 projects[flag][subdir] = "contrib"
