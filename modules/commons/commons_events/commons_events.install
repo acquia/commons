@@ -306,3 +306,14 @@ function commons_events_update_7017() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Accommodated changes to Address Field.
+ */
+function commons_events_update_7018() {
+  $revert = array(
+    'commons_events' => array('field_instance'),
+  );
+  features_revert($revert);
+  return array();
+}
