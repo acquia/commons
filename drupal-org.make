@@ -254,10 +254,7 @@ projects[menu_attributes][version] = "1.0-rc3"
 
 projects[message][type] = "module"
 projects[message][subdir] = "contrib"
-projects[message][download][type] = "git"
-projects[message][download][url] = "http://git.drupal.org/project/message.git"
-projects[message][download][branch] = "7.x-1.x"
-projects[message][download][revision] = "3bbdd5e6"
+projects[message][version] = "1.10"
 
 ; Make message access alterable.
 ; https://drupal.org/node/1920560#comment-7080942
@@ -266,10 +263,6 @@ projects[message][patch][] = "https://drupal.org/files/1920560-message-access-al
 ; Add support for the undefined language.
 ; https://drupal.org/node/2006702#comment-7842259
 projects[message][patch][] = "https://drupal.org/files/message_field_undefined-lang.2006702-14.patch"
-
-; Fix Undefined index: message_type in _field_ui on field listings
-; https://drupal.org/node/1391442
-projects[message][patch][] = "https://drupal.org/files/issues/message-entity_info_hook_notice_undefined_index-1391442-34.patch"
 
 projects[message_notify][type] = "module"
 projects[message_notify][subdir] = "contrib"
