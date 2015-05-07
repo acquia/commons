@@ -3,7 +3,7 @@ core = 7.x
 
 ; Download Drupal core and apply core patches if needed.
 projects[drupal][type] = "core"
-projects[drupal][version] = 7.36
+projects[drupal][version] = 7.37
 
 ; This patch allows install profile to list requirements on the install page
 ; http://drupal.org/node/1971072
@@ -32,7 +32,3 @@ projects[drupal][patch][] = http://drupal.org/files/issues/1805690_11.patch
 ; hook_comment_unpublish is never invoked
 ; https://www.drupal.org/node/2289369#comment-8897089
 projects[drupal][patch][] = http://drupal.org/files/issues/comment-unpublish-d7-2289369-1-do-not-test.patch
-
-; _filter_xss_split() fails on custom HTML elements with dashes in the name
-; http://drupal.org/node/2315255
-projects[drupal][patch][] = "https://drupal.org/files/issues/xss-split-custom-element-dash-tag-name-2315255-11.patch"
