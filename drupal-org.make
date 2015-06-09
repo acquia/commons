@@ -345,7 +345,7 @@ projects[panels][version] = "3.5"
 
 projects[paranoia][type] = "module"
 projects[paranoia][subdir] = "contrib"
-projects[paranoia][version] = "1.4"
+projects[paranoia][version] = "1.5"
 
 projects[pathauto][type] = "module"
 projects[pathauto][subdir] = "contrib"
