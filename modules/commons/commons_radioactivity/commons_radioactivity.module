@@ -107,7 +107,7 @@ function commons_radioactivity_incident_node($node, $value) {
 
       // Trigger a radioactivity incident.
       if ($profile && $profile->storageObject) {
-        $profile->storageObject->addIncident(new RadioactivityIncident('node', $bundle, 'field_radioactivity', LANGUAGE_NONE, $id, $value, time()));
+        $profile->storageObject->addIncident(new RadioactivityIncident('node', $bundle, 'field_radioactivity', LANGUAGE_NONE, $id, $value, time(), FALSE));
       }
     }
   }
