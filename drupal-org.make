@@ -287,7 +287,7 @@ projects[module_filter][version] = "2.0"
 
 projects[mollom][type] = "module"
 projects[mollom][subdir] = "contrib"
-projects[mollom][version] = "2.13"
+projects[mollom][version] = "2.14"
 
 projects[navbar][type] = "module"
 projects[navbar][subdir] = "contrib"
