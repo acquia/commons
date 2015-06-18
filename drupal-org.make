@@ -208,7 +208,7 @@ projects[i18nviews][download][revision] = "27e9809"
 
 projects[jquery_update][type] = "module"
 projects[jquery_update][subdir] = "contrib"
-projects[jquery_update][version] = "2.5"
+projects[jquery_update][version] = "2.6"
 
 projects[kissmetrics][type] = "module"
 projects[kissmetrics][subdir] = "contrib"
