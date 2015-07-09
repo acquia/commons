@@ -414,7 +414,7 @@ projects[realname][patch][] = "https://drupal.org/files/issues/2225889-realname-
 
 projects[redirect][type] = "module"
 projects[redirect][subdir] = "contrib"
-projects[redirect][version] = "1.0-rc2"
+projects[redirect][version] = "1.0-rc3"
 
 projects[registration][subdir] = "contrib"
 projects[registration][type] = "module"
