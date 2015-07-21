@@ -70,11 +70,10 @@ projects[connector][version] = "1.0-beta2"
 
 projects[ckeditor][type] = "module"
 projects[ckeditor][subdir] = "contrib"
-projects[ckeditor][version] = "1.16"
-
-; Accomodate latest Media changes.
-; https://drupal.org/node/2159403
-projects[ckeditor][patch][] = "https://drupal.org/files/issues/make_ckeditor_plugin-2159403-141.patch"
+projects[ckeditor][download][type] = "git"
+projects[ckeditor][download][url] = "http://git.drupal.org/project/ckeditor.git"
+projects[ckeditor][download][branch] = "7.x-1.x"
+projects[ckeditor][download][revision] = "32f0973"
 
 projects[ctools][type] = "module"
 projects[ctools][subdir] = "contrib"
