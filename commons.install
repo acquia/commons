@@ -889,3 +889,14 @@ function commons_update_3120() {
 
   return array();
 }
+
+/*
+ * Enable the Dialog module which is a requirement for Entity Embed 2.x.
+ */
+function commons_update_3121() {
+  if (module_exists('entity_embed')) {
+    module_enable(array('dialog'));
+  }
+
+  return array();
+}
