@@ -166,10 +166,7 @@ projects[features][patch][] = "https://drupal.org/files/issues/2511858-features-
 
 projects[file_entity][type] = "module"
 projects[file_entity][subdir] = "contrib"
-projects[file_entity][download][type] = "git"
-projects[file_entity][download][url] = "http://git.drupal.org/project/file_entity.git"
-projects[file_entity][download][branch] = "7.x-2.x"
-projects[file_entity][download][revision] = "5effd7a"
+projects[file_entity][version] = "2.0-beta2"
 
 projects[flag][type] = "module"
 projects[flag][subdir] = "contrib"
