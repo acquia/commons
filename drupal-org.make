@@ -232,10 +232,7 @@ projects[link][version] = "1.3"
 
 projects[media][type] = "module"
 projects[media][subdir] = "contrib"
-projects[media][download][type] = "git"
-projects[media][download][url] = "http://git.drupal.org/project/media.git"
-projects[media][download][branch] = "7.x-2.x"
-projects[media][download][revision] = "9f7142b"
+projects[media][version] = "2.0-beta1"
 
 projects[media_oembed][type] = "module"
 projects[media_oembed][subdir] = "contrib"
