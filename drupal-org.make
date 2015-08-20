@@ -77,7 +77,7 @@ projects[ckeditor][download][revision] = "32f0973"
 
 projects[ctools][type] = "module"
 projects[ctools][subdir] = "contrib"
-projects[ctools][version] = "1.7"
+projects[ctools][version] = "1.9"
 
 projects[custom_search][type] = "module"
 projects[custom_search][subdir] = "contrib"
