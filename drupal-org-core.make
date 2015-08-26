@@ -32,3 +32,7 @@ projects[drupal][patch][] = http://drupal.org/files/issues/1805690_11.patch
 ; hook_comment_unpublish is never invoked
 ; https://www.drupal.org/node/2289369#comment-8897089
 projects[drupal][patch][] = http://drupal.org/files/issues/comment-unpublish-d7-2289369-1-do-not-test.patch
+
+; HTML IDs are reset each time a form is processed
+; https://www.drupal.org/node/1831560#comment-10258827
+projects[drupal][patch][] = http://drupal.org/files/issues/d7-form-html-id-1831560-14.patch

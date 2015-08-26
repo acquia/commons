@@ -100,6 +100,10 @@ projects[dialog][type] = "module"
 projects[dialog][subdir] = "contrib"
 projects[dialog][version] = "2.0-alpha4"
 
+; 'Close' property undefined.
+; https://drupal.org/node/2548791#comment-10238297
+projects[dialog][patch][] = "https://drupal.org/files/issues/close_property_undefined-2548791-3.patch"
+
 projects[diff][type] = "module"
 projects[diff][subdir] = "contrib"
 projects[diff][version] = "3.2"
@@ -170,7 +174,10 @@ projects[features][patch][] = "https://drupal.org/files/issues/2511858-features-
 
 projects[file_entity][type] = "module"
 projects[file_entity][subdir] = "contrib"
-projects[file_entity][version] = "2.0-beta2"
+projects[file_entity][download][type] = "git"
+projects[file_entity][download][url] = "http://git.drupal.org/project/file_entity.git"
+projects[file_entity][download][branch] = "7.x-2.x"
+projects[file_entity][download][revision] = "656f387"
 
 projects[flag][type] = "module"
 projects[flag][subdir] = "contrib"
@@ -236,7 +243,14 @@ projects[link][version] = "1.3"
 
 projects[media][type] = "module"
 projects[media][subdir] = "contrib"
-projects[media][version] = "2.0-beta1"
+projects[media][download][type] = "git"
+projects[media][download][url] = "http://git.drupal.org/project/media.git"
+projects[media][download][branch] = "7.x-2.x"
+projects[media][download][revision] = "844baf0"
+
+; Browser window opens twice.
+; https://drupal.org/node/2534724#comment-10245583
+projects[media][patch][] = "https://drupal.org/files/issues/media-browser_opens_twice-2534724-30.patch"
 
 projects[media_oembed][type] = "module"
 projects[media_oembed][subdir] = "contrib"

@@ -270,23 +270,6 @@ function commons_bw_partial_node_form($form, &$form_state, $bundle, $group_id = 
 function commons_bw_partial_node_form_after_build($form) {
   $bundle = $form['#bundle'];
 
-  // Add the node's bundle to the IDs of inputs, to avoid having duplicate IDs.
-  $id_suffix = '-' . str_replace('_', '-', $bundle);
-
-  foreach(element_children($form) as $field_name) {
-    if (!empty($form[$field_name]['#language'])) {
-      $language = $form[$field_name]['#language'];
-
-      if (!empty($form[$field_name][$language][0]['value']['#id'])) {
-        $form[$field_name][$language][0]['value']['#id'] .= $id_suffix;
-      }
-
-      if (!empty($form[$field_name][$language][0]['default']['#id'])) {
-        $form[$field_name][$language][0]['default']['#id'] .= $id_suffix;
-      }
-    }
-  }
-
   // Set the form action to the form's tab.
   $tabs = commons_bw_get_tab_definitions();
 
