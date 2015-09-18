@@ -98,11 +98,7 @@ projects[devel][subdir] = "contrib"
 
 projects[dialog][type] = "module"
 projects[dialog][subdir] = "contrib"
-projects[dialog][version] = "2.0-alpha4"
-
-; 'Close' property undefined.
-; https://drupal.org/node/2548791#comment-10238297
-projects[dialog][patch][] = "https://drupal.org/files/issues/close_property_undefined-2548791-3.patch"
+projects[dialog][version] = "2.0-alpha5"
 
 projects[diff][type] = "module"
 projects[diff][subdir] = "contrib"
