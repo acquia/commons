@@ -496,7 +496,7 @@ projects[views_bulk_operations][version] = "3.3"
 
 projects[views_field_view][type] = "module"
 projects[views_field_view][subdir] = "contrib"
-projects[views_field_view][version] = "1.1"
+projects[views_field_view][version] = "1.2"
 
 projects[views_litepager][type] = "module"
 projects[views_litepager][subdir] = "contrib"
