@@ -425,7 +425,7 @@ projects[redirect][version] = "1.0-rc3"
 
 projects[registration][subdir] = "contrib"
 projects[registration][type] = "module"
-projects[registration][version] = "1.5"
+projects[registration][version] = "1.6"
 
 projects[rich_snippets][type] = "module"
 projects[rich_snippets][subdir] = "contrib"
