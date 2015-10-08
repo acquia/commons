@@ -525,7 +525,7 @@ projects[adaptivetheme][download][revision] = "18693ff59db7cb3171f282a982d04fe65
 
 projects[ember][type] = "theme"
 projects[ember][subdir] = "contrib"
-projects[ember][version] = "2.0-alpha3"
+projects[ember][version] = "2.0-alpha4"
 
 projects[sky][type] = "theme"
 projects[sky][subdir] = "contrib"
