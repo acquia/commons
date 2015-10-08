@@ -360,7 +360,7 @@ projects[paranoia][version] = "1.5"
 
 projects[pathauto][type] = "module"
 projects[pathauto][subdir] = "contrib"
-projects[pathauto][version] = "1.2"
+projects[pathauto][version] = "1.3"
 
 projects[picture][type] = "module"
 projects[picture][subdir] = "contrib"
