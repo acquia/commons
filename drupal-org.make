@@ -159,11 +159,7 @@ projects[facetapi][version] = "1.5"
 
 projects[features][type] = "module"
 projects[features][subdir] = "contrib"
-projects[features][version] = "2.6"
-
-; cache_features table does not exist.
-; https://www.drupal.org/node/2511858#comment-10058710
-projects[features][patch][] = "https://drupal.org/files/issues/2511858-features-table-missing-13.patch"
+projects[features][version] = "2.7"
 
 projects[file_entity][type] = "module"
 projects[file_entity][subdir] = "contrib"
