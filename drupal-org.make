@@ -357,7 +357,7 @@ projects[pathauto][version] = "1.3"
 
 projects[picture][type] = "module"
 projects[picture][subdir] = "contrib"
-projects[picture][version] = "2.12"
+projects[picture][version] = "2.13"
 
 projects[pm_existing_pages][type] = "module"
 projects[pm_existing_pages][subdir] = "contrib"
