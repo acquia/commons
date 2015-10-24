@@ -104,6 +104,10 @@ projects[diff][type] = "module"
 projects[diff][subdir] = "contrib"
 projects[diff][version] = "3.2"
 
+projects[editor][type] = "module"
+projects[editor][subdir] = "contrib"
+projects[editor][version] = "1.0-alpha4"
+
 ; Profile has no recommended release.
 projects[edit_profile][type] = "module"
 projects[edit_profile][subdir] = "contrib"
@@ -129,9 +133,12 @@ projects[entitycache][version] = "1.2"
 ; https://drupal.org/node/1349566#comment-7781063
 projects[entitycache][patch][] = "https://drupal.org/files/add-translation-information-on-each-request-1349566-12.patch"
 
+projects[entity_embed][version] = "3.x-dev"
 projects[entity_embed][type] = "module"
 projects[entity_embed][subdir] = "contrib"
-projects[entity_embed][version] = "2.0-alpha2"
+projects[entity_embed][download][type] = "git"
+projects[entity_embed][download][revision] = "ea69dc8"
+projects[entity_embed][download][branch] = "7.x-3.x"
 
 projects[entityreference][type] = "module"
 projects[entityreference][subdir] = "contrib"

@@ -34,3 +34,14 @@ function commons_wysiwyg_update_3102() {
   features_revert($revert);
   return array();
 }
+
+/**
+ * Add editor settings to text filters.
+ */
+function commons_wysiwyg_update_3103() {
+  $revert = array(
+    'commons_wysiwyg' => array('filter'),
+  );
+  features_revert($revert);
+  return array();
+}

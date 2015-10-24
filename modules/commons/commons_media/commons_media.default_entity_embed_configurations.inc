@@ -19,6 +19,7 @@ function commons_media_default_entity_embed_configuration() {
   $configuration->button_label = 'File';
   $configuration->entity_type = 'file';
   $configuration->button_icon_fid = 0;
+  $configuration->display_plugins = array();
   $configurations['file'] = $configuration;
 
   return $configurations;

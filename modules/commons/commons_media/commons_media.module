@@ -181,34 +181,30 @@ function commons_media_page_build(&$page) {
  */
 function commons_media_filter_default_formats_alter(&$formats) {
   if (!empty($formats['filtered_html'])) {
-    // Enable Entity Embed filters.
+    // Customizations for the Entity Embed module.
     if (module_exists('entity_embed')) {
       $formats['filtered_html']['cache'] = 0;
 
       // Allow markup from embedded entities.
-      $formats['filtered_html']['filters']['filter_html']['settings']['allowed_html'] = '<a> <em> <strong> <u> <cite> <blockquote> <code> <ul> <ol> <li> <dl> <dt> <dd> <h4> <h5> <h6>  <p> <br> <img> <strike> <drupal-entity>';
+      $formats['filtered_html']['filters']['filter_html']['settings']['allowed_html'] .= ' <drupal-entity>';
 
+      // Enable Entity Embed filters.
       $formats['filtered_html']['filters'] += array(
         'entity_embed' => array(
           'weight' => 2,
           'status' => 1,
           'settings' => array(),
         ),
-        'filter_align' => array(
-          'weight' => 3,
-          'status' => 1,
-          'settings' => array(),
-        ),
       );
     }
 
-    // Enable legacy Media: WYSIWYG filter.
+    // Customizations for the Media WYSIWYG module.
     if (module_exists('media_wysiwyg')) {
       // Enable the media filter.
       $formats['filtered_html']['filters'] += array(
         'media_filter' => array(
           'status' => 1,
-          'weight' => 4,
+          'weight' => 5,
         ),
       );
     }
