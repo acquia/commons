@@ -35,10 +35,21 @@ function commons_wysiwyg_update_3102() {
   return array();
 }
 
+/*
+ * Replace the CKEditor module with the Editor CKEditor module.
+ */
+function commons_wysiwyg_update_3103() {
+  if (module_exists('ckeditor')) {
+    module_disable(array('ckeditor'));
+  }
+  module_enable(array('editor_ckeditor'));
+  return array();
+}
+
 /**
  * Add editor settings to text filters.
  */
-function commons_wysiwyg_update_3103() {
+function commons_wysiwyg_update_3104() {
   $revert = array(
     'commons_wysiwyg' => array('filter'),
   );
