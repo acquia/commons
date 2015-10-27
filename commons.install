@@ -900,3 +900,14 @@ function commons_update_3121() {
 
   return array();
 }
+
+/*
+ * Replace the CKEditor module with the Editor CKEditor module.
+ */
+function commons_update_3122() {
+  if (module_exists('ckeditor')) {
+    module_disable(array('ckeditor'));
+  }
+  module_enable(array('editor_ckeditor'));
+  return array();
+}
