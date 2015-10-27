@@ -77,7 +77,7 @@ projects[ckeditor][download][revision] = "32f0973"
 
 ; Fix features rebuilding when CKEditor is disabled.
 ; https://www.drupal.org/node/2456519#comment-9742435
-projects[ckeditor][patch][] = "https://drupal.org/files/issues/ckeditor-ckeditor-feature-2456519-1.patch"
+projects[ckeditor][patch][] = "https://drupal.org/files/issues/ckeditor-ckeditor-feature-2456519-2.patch"
 
 projects[ctools][type] = "module"
 projects[ctools][subdir] = "contrib"
