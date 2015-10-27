@@ -131,7 +131,7 @@ projects[entity][version] = "1.6"
 
 projects[entitycache][type] = "module"
 projects[entitycache][subdir] = "contrib"
-projects[entitycache][version] = "1.2"
+projects[entitycache][version] = "1.5"
 
 ; Fix core translation support.
 ; https://drupal.org/node/1349566#comment-7781063
