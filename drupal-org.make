@@ -28,7 +28,7 @@ projects[admin_icons][download][revision] = "60d9f28801533fecc92216a60d444d89d80
 
 projects[apachesolr][type] = "module"
 projects[apachesolr][subdir] = "contrib"
-projects[apachesolr][version] = "1.7"
+projects[apachesolr][version] = "1.8"
 
 ; Search pages custom pages title setting does nothing.
 ; https://drupal.org/node/1314664#comment-9220599
