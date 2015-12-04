@@ -88,7 +88,7 @@ function commons_q_a_form_commons_bw_partial_node_form_after_build($form) {
   return $form;
 }
 
-/*
+/**
  * Run an access check to see if the current user can create answer nodes based
  * off of the question node.
  */
@@ -184,7 +184,7 @@ function commons_q_a_views_pre_render(&$view) {
   }
 }
 
-/*
+/**
  * Implements hook_module_implements_alter().
  * Set commons_q_a form alter to happen after node so the title doesn't get reset.
  */

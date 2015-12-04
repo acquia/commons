@@ -311,7 +311,7 @@ function commons_anonymous_welcome_text_form_submit($form_id, &$form_state) {
   variable_set('commons_anonymous_welcome_body', $form_state['values']['commons_anonymous_welcome_body']);
 }
 
-/*
+/**
  * Revert Features after the installation.
  */
 function commons_revert_features() {
@@ -779,7 +779,7 @@ function commons_update_3111() {
   return array();
 }
 
-/*
+/**
  * Revert Message types to use the correct title field token.
  */
 function commons_update_3112() {
@@ -795,7 +795,7 @@ function commons_update_3112() {
   return array();
 }
 
-/*
+/**
  * Delete the AdvancedQueue class variable for sites that did not uninstall AdvancedQueue.
  */
 function commons_update_3113() {
@@ -805,7 +805,7 @@ function commons_update_3113() {
   return array();
 }
 
-/*
+/**
  * Automatically use field_title for all nodes instead of the node base title.
  */
 function commons_update_3114() {
@@ -827,7 +827,7 @@ function commons_update_3114() {
   drupal_flush_all_caches();
 }
 
-/*
+/**
  * Replace the oEmbed module with the Media: oEmbed module.
  */
 function commons_update_3115() {
@@ -838,7 +838,7 @@ function commons_update_3115() {
   return array();
 }
 
-/*
+/**
  * Enable the Commons: Media and Media: WYSIWYG modules.
  */
 function commons_update_3116() {
@@ -846,7 +846,7 @@ function commons_update_3116() {
   return array();
 }
 
-/*
+/**
  * Flush all caches to accommodate moved files and new hooks.
  */
 function commons_update_3117() {
@@ -854,7 +854,7 @@ function commons_update_3117() {
   return array();
 }
 
-/*
+/**
  * Ensure commons radioactivity is enabled upon install.
  */
 function commons_update_3118() {
@@ -870,7 +870,7 @@ function commons_update_3119() {
   return array();
 }
 
-/*
+/**
  * Begin to use the Entity Embed module for embedded media handling if
  * Media: WYSIWYG integration is currently enabled.
  */
@@ -890,7 +890,7 @@ function commons_update_3120() {
   return array();
 }
 
-/*
+/**
  * Enable the Dialog module which is a requirement for Entity Embed 2.x.
  */
 function commons_update_3121() {
@@ -901,7 +901,7 @@ function commons_update_3121() {
   return array();
 }
 
-/*
+/**
  * Replace the CKEditor module with the Editor CKEditor module.
  */
 function commons_update_3122() {

@@ -4,7 +4,7 @@
  * commons_groups_pages.features.inc
  */
 
-/*
+/**
  * Implements hook_features_pipe_alter().
  */
 function commons_groups_pages_features_pipe_alter(&$pipe, $data, $export) {
