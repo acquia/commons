@@ -138,10 +138,6 @@ projects[entitycache][type] = "module"
 projects[entitycache][subdir] = "contrib"
 projects[entitycache][version] = "1.5"
 
-; Fix core translation support.
-; https://drupal.org/node/1349566#comment-7781063
-projects[entitycache][patch][] = "https://drupal.org/files/add-translation-information-on-each-request-1349566-12.patch"
-
 projects[entity_embed][version] = "3.x-dev"
 projects[entity_embed][type] = "module"
 projects[entity_embed][subdir] = "contrib"
