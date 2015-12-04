@@ -28,7 +28,7 @@ function commons_wikis_menu_alter(&$items) {
   $items['node/%node/revisions']['access arguments'][] = $items['node/%node/revisions']['access callback'];
   $items['node/%node/revisions']['access callback'] = 'commons_wikis_user_revision_access';
 
-  $items['node/%node/revisions/%/view']['access arguments'][] = $items['node/%node/revisions']['access callback'];
+  $items['node/%node/revisions/%/view']['access arguments'][] = $items['node/%node/revisions/%/view']['access callback'];
   $items['node/%node/revisions/%/view']['access callback'] = 'commons_wikis_user_revision_access';
 }
 
