@@ -62,7 +62,7 @@ projects[apachesolr_user][patch][] = "https://drupal.org/files/2077281-apache-so
 
 projects[breakpoints][type] = "module"
 projects[breakpoints][subdir] = "contrib"
-projects[breakpoints][version] = "1.3"
+projects[breakpoints][version] = "1.4"
 
 projects[connector][type] = "module"
 projects[connector][subdir] = "contrib"
