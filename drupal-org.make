@@ -5,7 +5,7 @@ core = 7.x
 
 projects[acquia_connector][type] = "module"
 projects[acquia_connector][subdir] = "contrib"
-projects[acquia_connector][version] = "2.15"
+projects[acquia_connector][version] = "2.16"
 
 ; Fix signup messages displayed during install.
 ; https://drupal.org/node/2289903#comment-8899833
