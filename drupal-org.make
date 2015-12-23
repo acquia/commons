@@ -263,7 +263,7 @@ projects[menu_attributes][version] = "1.0-rc3"
 
 projects[message][type] = "module"
 projects[message][subdir] = "contrib"
-projects[message][version] = "1.10"
+projects[message][version] = "1.11"
 
 ; Make message access alterable.
 ; https://drupal.org/node/1920560#comment-7080942
