@@ -81,7 +81,7 @@ projects[ctools][version] = "1.9"
 
 projects[custom_search][type] = "module"
 projects[custom_search][subdir] = "contrib"
-projects[custom_search][version] = "1.19"
+projects[custom_search][version] = "1.20"
 
 projects[date][type] = "module"
 projects[date][subdir] = "contrib"
