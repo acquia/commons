@@ -89,7 +89,7 @@ projects[date][version] = "2.9"
 
 projects[date_facets][type] = "module"
 projects[date_facets][subdir] = "contrib"
-projects[date_facets][version] = "1.0-beta2"
+projects[date_facets][version] = "1.0"
 
 ; Keeping this to the latest version, since it should only be used for development.
 projects[devel][version] = "1.x-dev"
