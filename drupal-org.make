@@ -103,12 +103,7 @@ projects[diff][version] = "3.2"
 
 projects[editor][type] = "module"
 projects[editor][subdir] = "contrib"
-projects[editor][version] = "1.0-alpha5"
-
-; Fix JavaScript error when submitting a form that has a text_format selector
-; set to a text format without associated text editor.
-; https://www.drupal.org/node/2624030#comment-10635616
-projects[editor][patch][] = "https://drupal.org/files/issues/only_detach_editor_for_formats_with_editors-2624030-5.patch"
+projects[editor][version] = "1.0-alpha6"
 
 ; Profile has no recommended release.
 projects[edit_profile][type] = "module"
