@@ -66,10 +66,7 @@ projects[connector][version] = "1.0-beta2"
 
 projects[ckeditor][type] = "module"
 projects[ckeditor][subdir] = "contrib"
-projects[ckeditor][download][type] = "git"
-projects[ckeditor][download][url] = "http://git.drupal.org/project/ckeditor.git"
-projects[ckeditor][download][branch] = "7.x-1.x"
-projects[ckeditor][download][revision] = "32f0973"
+projects[ckeditor][version] = "1.17"
 
 ; Fix features rebuilding when CKEditor is disabled.
 ; https://www.drupal.org/node/2456519#comment-9742435
