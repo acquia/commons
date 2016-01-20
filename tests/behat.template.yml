@@ -1,0 +1,25 @@
+imports:
+    - behat.common.yml
+
+default:
+  extensions:
+    Behat\MinkExtension:
+      # Set 'base_url' to the URL to view your Drupal site.
+      # For example: http://mydrupalsite.com
+      base_url: '@BASE_URL@'
+      files_path: './profiles/commons/tests'
+    Drupal\DrupalExtension:
+      text:
+        username_field: 'E-mail'
+        password_field: 'Password'
+      drush:
+        # Set 'root' to the full path to your Drupal code base.
+        # For example: '/var/www/drupal'
+        root: '@DRUPAL_ROOT@'
+      drupal:
+        # Same as 'root' above!
+        drupal_root: '@DRUPAL_ROOT@'
+      # Look in the profile modules directory and pull in module subcontexts.
+      subcontexts:
+        paths:
+          - "./profiles/commons"
