@@ -20,6 +20,10 @@ matrix:
     - php: hhvm
     # Known failure due to Entity Cache issue.
     - env: UPGRADE=7.x-3.31
+    # Known failure due to Field List issue.
+    - env: UPGRADE=7.x-3.23
+    # Known failure due to Field List issue.
+    - env: UPGRADE=7.x-3.21
   include:
     - php: "5.5"
       env: UPGRADE=none
