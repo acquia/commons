@@ -225,7 +225,7 @@ projects[lingotek][version] = "6.02"
 
 projects[link][type] = "module"
 projects[link][subdir] = "contrib"
-projects[link][version] = "1.3"
+projects[link][version] = "1.4"
 
 projects[media][type] = "module"
 projects[media][subdir] = "contrib"
