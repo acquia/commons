@@ -201,10 +201,7 @@ projects[i18n][version] = "1.13"
 
 projects[i18nviews][type] = "module"
 projects[i18nviews][subdir] = "contrib"
-projects[i18nviews][download][type] = "git"
-projects[i18nviews][download][url] = "http://git.drupal.org/project/i18nviews.git"
-projects[i18nviews][download][branch] = "7.x-3.x"
-projects[i18nviews][download][revision] = "27e9809"
+projects[i18nviews][version] = "3.0-alpha1"
 
 projects[jquery_update][type] = "module"
 projects[jquery_update][subdir] = "contrib"
