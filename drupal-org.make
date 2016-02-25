@@ -248,7 +248,7 @@ projects[memcache][version] = "1.5"
 
 projects[menu_attributes][type] = "module"
 projects[menu_attributes][subdir] = "contrib"
-projects[menu_attributes][version] = "1.0-rc3"
+projects[menu_attributes][version] = "1.0"
 
 projects[message][type] = "module"
 projects[message][subdir] = "contrib"
