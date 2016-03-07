@@ -17,6 +17,9 @@ default:
       selenium2: ~
       #base_url: http://mydrupalsite.com
       #files_path: './profiles/commons/tests'
+    Lakion\Behat\MinkDebugExtension:
+      directory: './profiles/commons/tests/build'
+      screenshot: true
     Drupal\DrupalExtension:
       text:
         username_field: 'E-mail'
