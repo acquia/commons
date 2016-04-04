@@ -18,8 +18,6 @@ matrix:
   allow_failures:
     - php: 7
     - php: hhvm
-    # Known failure due to Field List issue.
-    - env: UPGRADE=7.x-3.21
   include:
     - php: "5.5"
       env: UPGRADE=none
@@ -99,15 +97,6 @@ env:
     - UPGRADE=7.x-3.32
     - UPGRADE=7.x-3.31
     - UPGRADE=7.x-3.30
-    - UPGRADE=7.x-3.29
-    - UPGRADE=7.x-3.28
-    - UPGRADE=7.x-3.27
-    - UPGRADE=7.x-3.26
-    - UPGRADE=7.x-3.25
-    - UPGRADE=7.x-3.24
-    - UPGRADE=7.x-3.23
-    - UPGRADE=7.x-3.22
-    - UPGRADE=7.x-3.21
 
 # Cache Composer & Drush directories.
 cache:
