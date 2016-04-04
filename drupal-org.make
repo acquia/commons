@@ -159,7 +159,7 @@ projects[facetapi][version] = "1.5"
 
 projects[features][type] = "module"
 projects[features][subdir] = "contrib"
-projects[features][version] = "2.7"
+projects[features][version] = "2.8"
 
 projects[file_entity][type] = "module"
 projects[file_entity][subdir] = "contrib"
