@@ -240,7 +240,7 @@ projects[media][patch][] = "https://drupal.org/files/issues/media-browser_opens_
 
 projects[media_oembed][type] = "module"
 projects[media_oembed][subdir] = "contrib"
-projects[media_oembed][version] = "2.5"
+projects[media_oembed][version] = "2.6"
 
 projects[memcache][type] = "module"
 projects[memcache][subdir] = "contrib"
