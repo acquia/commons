@@ -217,7 +217,7 @@ projects[l10n_update][version] = "1.1"
 
 projects[libraries][type] = "module"
 projects[libraries][subdir] = "contrib"
-projects[libraries][version] = "2.2"
+projects[libraries][version] = "2.3"
 
 projects[lingotek][type] = "module"
 projects[lingotek][subdir] = "contrib"
