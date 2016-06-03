@@ -163,10 +163,7 @@ projects[features][version] = "2.10"
 
 projects[file_entity][type] = "module"
 projects[file_entity][subdir] = "contrib"
-projects[file_entity][download][type] = "git"
-projects[file_entity][download][url] = "http://git.drupal.org/project/file_entity.git"
-projects[file_entity][download][branch] = "7.x-2.x"
-projects[file_entity][download][revision] = "f74eb9a"
+projects[file_entity][version] = "2.0-beta3"
 
 projects[flag][type] = "module"
 projects[flag][subdir] = "contrib"
