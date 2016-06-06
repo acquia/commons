@@ -12,7 +12,7 @@ include_once 'commons_radioactivity_groups.features.inc';
 function commons_radioactivity_groups_node_insert($node) {
   // If the node does not have radioactivity integration then there's nothing to
   // do here.
-  if (!isset($node->field_radioactivity)) {
+  if (empty($node->field_radioactivity)) {
     return;
   }
 
@@ -32,7 +32,7 @@ function commons_radioactivity_groups_node_insert($node) {
 function commons_radioactivity_groups_node_delete($node) {
   // If the node does not have radioactivity integration then there's nothing to
   // do here.
-  if (!isset($node->field_radioactivity)) {
+  if (empty($node->field_radioactivity)) {
     return;
   }
 
@@ -52,7 +52,7 @@ function commons_radioactivity_groups_node_delete($node) {
 function commons_radioactivity_groups_node_update($node) {
   // If the node does not have radioactivity integration then there's nothing to
   // do here.
-  if (!isset($node->field_radioactivity)) {
+  if (empty($node->field_radioactivity)) {
     return;
   }
 
