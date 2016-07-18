@@ -494,7 +494,7 @@ projects[ember][version] = "2.0-alpha4"
 
 projects[sky][type] = "theme"
 projects[sky][subdir] = "contrib"
-projects[sky][version] = "3.0"
+projects[sky][version] = "3.1"
 
 ; Libraries.
 ; NOTE: These need to be listed in https://drupal.org/packaging-whitelist.
