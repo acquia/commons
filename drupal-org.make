@@ -286,10 +286,7 @@ projects[oauth][version] = "3.2"
 
 projects[oauthconnector][type] = "module"
 projects[oauthconnector][subdir] = "contrib"
-projects[oauthconnector][download][type] = "git"
-projects[oauthconnector][download][url] = "http://git.drupal.org/project/oauthconnector.git"
-projects[oauthconnector][download][branch] = "7.x-1.x"
-projects[oauthconnector][download][revision] = "42c6f66"
+projects[oauthconnector][version] = "1.0-beta2"
 
 projects[og][type] = "module"
 projects[og][subdir] = "contrib"
