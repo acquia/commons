@@ -480,10 +480,7 @@ projects[voting_rules][version] = "1.0-alpha1"
 
 projects[adaptivetheme][type] = "theme"
 projects[adaptivetheme][subdir] = "contrib"
-projects[adaptivetheme][download][type] = "git"
-projects[adaptivetheme][download][url] = "http://git.drupal.org/project/adaptivetheme.git"
-projects[adaptivetheme][download][branch] = "7.x-3.x"
-projects[adaptivetheme][download][revision] = "18693ff59db7cb3171f282a982d04fe6544b63a1"
+projects[adaptivetheme][version] = "3.4"
 
 projects[ember][type] = "theme"
 projects[ember][subdir] = "contrib"
