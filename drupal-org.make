@@ -226,7 +226,7 @@ projects[media][version] = "2.0-beta2"
 
 projects[media_oembed][type] = "module"
 projects[media_oembed][subdir] = "contrib"
-projects[media_oembed][version] = "2.6"
+projects[media_oembed][version] = "2.7"
 
 projects[memcache][type] = "module"
 projects[memcache][subdir] = "contrib"
