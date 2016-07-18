@@ -407,7 +407,7 @@ projects[search_facetapi][version] = "1.0-beta2"
 
 projects[sharethis][type] = "module"
 projects[sharethis][subdir] = "contrib"
-projects[sharethis][version] = "2.12"
+projects[sharethis][version] = "2.13"
 
 projects[smartcrop][type] = "module"
 projects[smartcrop][subdir] = "contrib"
