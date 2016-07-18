@@ -6,72 +6,9 @@
  */
 
 /**
- * Implements hook_requirements().
- */
-function commons_requirements($phase) {
-  $requirements = array();
-
-  // Ensure translations don't break during installation.
-  $t = get_t();
-
-  if ($phase == 'install') {
-    // Test PHP minimum execution time.
-    $requirements['php_max_execution_time'] = array(
-      'title' => $t('PHP Max Execution Time'),
-      'value' => ini_get('max_execution_time'),
-    );
-
-    $max_execution_time = (int)ini_get('max_execution_time');
-
-    // Don't set the error when max_execution_time is 0 (Infinite).
-    if ($max_execution_time && $max_execution_time < DRUPAL_MINIMUM_MAX_EXECUTION_TIME) {
-      $requirements['php_max_execution_time']['description'] = $t('Your PHP execution time is too low, please set it greater than or equal to %time seconds.', array('%time' => DRUPAL_MINIMUM_MAX_EXECUTION_TIME));
-      $requirements['php_max_execution_time']['severity'] = REQUIREMENT_ERROR;
-    }
-
-    // APC or OpCache size check.
-    if (ini_get('apc.shm_size') != NULL || ini_get('opcache.enable')) {
-      // If OpCache is enabled, assume we're using it over APC.
-      if (ini_get('opcache.enable')) {
-        $mechanism = 'OpCache';
-        $title = $t('OpCache memory');
-        $value = ini_get('opcache.memory_consumption');
-      }
-      else {
-        $mechanism = 'APC';
-        $title = $t('APC shim size');
-
-        $shm_size = preg_split('/[a-zA-Z]/', ini_get('apc.shm_size'));
-        $shm_size = $shm_size[0];
-        $value = $shm_size;
-      }
-
-      $requirements['apc_opcache_size'] = array(
-        'title' => $title,
-        'value' => $value,
-      );
-
-      // Check for sufficient APC or OpCache space.
-      // Throw error if there is less than 96MB available.
-      if ($value < COMMONS_MINIMUM_APC_CACHE) {
-        $requirements['apc_opcache_size']['description'] = $t('%mechanism is installed but %allocated_size is not enough space to successfully install Drupal Commons. Change the capacity to at least %min_shm_size.', array('%mechanism' => $mechanism, '%allocated_size' => $requirements['value'], '%min_shm_size' => COMMONS_MINIMUM_APC_CACHE ));
-        $requirements['apc_opcache_size']['severity'] = REQUIREMENT_ERROR;
-      }
-    }
-  }
-
-  return $requirements;
-}
-
-/**
  * Implements hook_install_tasks().
  */
 function commons_install_tasks() {
-  //make sure we have more memory than 196M. if not lets try to increase it.
-  if (ini_get('memory_limit') != '-1' && ini_get('memory_limit') <= '196M' && ini_get('memory_limit') >= '128M') {
-    ini_set('memory_limit', '196M');
-  }
-
   $selected_extras = variable_get('commons_selected_extras', array());
 
   return array(
