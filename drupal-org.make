@@ -375,7 +375,7 @@ projects[rate][patch][] = "https://drupal.org/files/issues/attach-rate-css-21808
 
 projects[realname][type] = "module"
 projects[realname][subdir] = "contrib"
-projects[realname][version] = "1.2"
+projects[realname][version] = "1.3"
 
 ; Realname entityreference autocomplete API update
 ; https://drupal.org/node/2225889
