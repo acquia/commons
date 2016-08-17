@@ -310,7 +310,7 @@ projects[og][patch][] = "https://drupal.org/files/og-Do_not_export_nonexisting_r
 
 projects[panelizer][type] = "module"
 projects[panelizer][subdir] = "contrib"
-projects[panelizer][version] = "3.2"
+projects[panelizer][version] = "3.3"
 
 projects[panels][type] = "module"
 projects[panels][subdir] = "contrib"
