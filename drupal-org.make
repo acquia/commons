@@ -314,7 +314,7 @@ projects[panelizer][version] = "3.2"
 
 projects[panels][type] = "module"
 projects[panels][subdir] = "contrib"
-projects[panels][version] = "3.5"
+projects[panels][version] = "3.6"
 
 projects[paranoia][type] = "module"
 projects[paranoia][subdir] = "contrib"
