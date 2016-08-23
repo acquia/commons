@@ -44,6 +44,8 @@ function commons_events_pages_panelizer_defaults() {
   $display->cache = array();
   $display->title = '%node:title';
   $display->uuid = '0d63be4d-5605-1644-fd5c-3872c8b1d8b6';
+  $display->storage_type = 'panelizer_default';
+  $display->storage_id = 'node:event:default';
   $display->content = array();
   $display->panels = array();
     $pane = new stdClass();
