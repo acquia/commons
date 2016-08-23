@@ -45,6 +45,8 @@ function commons_wikis_pages_panelizer_defaults() {
   $display->cache = array();
   $display->title = '%node:title';
   $display->uuid = 'bc4d1b4e-c149-dbf4-c1d9-20655cf95f31';
+  $display->storage_type = 'panelizer_default';
+  $display->storage_id = 'node:wiki:default';
   $display->content = array();
   $display->panels = array();
     $pane = new stdClass();
