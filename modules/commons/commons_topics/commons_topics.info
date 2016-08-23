@@ -4,8 +4,10 @@ package = Commons - Building blocks
 core = 7.x
 
 dependencies[] = features
+dependencies[] = strongarm
 dependencies[] = taxonomy
 
+features[ctools][] = strongarm:strongarm:1
 features[features_api][] = api:2
 features[field_base][] = field_topics
 features[taxonomy][] = topics
