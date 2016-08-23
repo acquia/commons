@@ -44,6 +44,8 @@ function commons_q_a_pages_panelizer_defaults() {
   $display->cache = array();
   $display->title = '%node:title';
   $display->uuid = '2c245308-3234-c5b4-91e7-f5fe2f9da43d';
+  $display->storage_type = 'panelizer_default';
+  $display->storage_id = 'node:question:default';
   $display->content = array();
   $display->panels = array();
     $pane = new stdClass();
