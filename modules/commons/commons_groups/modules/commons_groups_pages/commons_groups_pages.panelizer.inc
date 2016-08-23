@@ -248,6 +248,8 @@ function commons_groups_pages_panelizer_defaults() {
       $display->cache = array();
       $display->title = '%node:title';
       $display->uuid = '2880dc3a-9be6-dc34-a563-b9748d152f92';
+      $display->storage_type = 'panelizer_default';
+      $display->storage_id = 'node:group:default:teaser';
       $display->content = array();
       $display->panels = array();
       $pane = new stdClass();
