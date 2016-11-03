@@ -126,7 +126,7 @@ projects[entity_embed][version] = "3.x-dev"
 projects[entity_embed][type] = "module"
 projects[entity_embed][subdir] = "contrib"
 projects[entity_embed][download][type] = "git"
-projects[entity_embed][download][revision] = "b7e2a13"
+projects[entity_embed][download][revision] = "bb4f5e3"
 projects[entity_embed][download][branch] = "7.x-3.x"
 
 projects[entityreference][type] = "module"
