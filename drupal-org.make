@@ -131,7 +131,7 @@ projects[entity_embed][download][branch] = "7.x-3.x"
 
 projects[entityreference][type] = "module"
 projects[entityreference][subdir] = "contrib"
-projects[entityreference][version] = "1.1"
+projects[entityreference][version] = "1.2"
 
 ; Autocomplete widgets cannot reference a single entity result.
 ; https://drupal.org/node/1959624#comment-8451891
