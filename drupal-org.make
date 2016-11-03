@@ -222,7 +222,7 @@ projects[link][version] = "1.4"
 
 projects[media][type] = "module"
 projects[media][subdir] = "contrib"
-projects[media][version] = "2.0-beta2"
+projects[media][version] = "2.0-beta5"
 
 projects[media_oembed][type] = "module"
 projects[media_oembed][subdir] = "contrib"
