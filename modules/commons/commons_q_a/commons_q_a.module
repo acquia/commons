@@ -12,7 +12,7 @@ include_once 'commons_q_a.features.inc';
 function commons_q_a_theme() {
   return array(
     'rate_template_commons_thumbs_up_down' => array(
-      'variables' => array('links' => NULL, 'results' => NULL, 'mode' => NULL, 'just_voted' => FALSE, 'content_type' => NULL, 'content_id' => NULL, 'display_options' => NULL),
+      'variables' => array('links' => NULL, 'results' => NULL, 'mode' => NULL, 'just_voted' => FALSE, 'entity_type' => NULL, 'entity_id' => NULL, 'display_options' => NULL),
       'template' => 'commons-thumbs-up-down',
     ),
   );

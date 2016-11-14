@@ -4,6 +4,7 @@ package = Commons - Building blocks
 core = 7.x
 
 dependencies[] = ctools
+dependencies[] = features
 dependencies[] = flag
 dependencies[] = og
 dependencies[] = strongarm
@@ -12,4 +13,8 @@ features[ctools][] = strongarm:strongarm:1
 features[features_api][] = api:2
 features[flag][] = commons_follow_group
 features[flag][] = email_group
+features[user_permission][] = flag commons_follow_group
+features[user_permission][] = flag email_group
+features[user_permission][] = unflag commons_follow_group
+features[user_permission][] = unflag email_group
 features[variable][] = message_subscribe_og

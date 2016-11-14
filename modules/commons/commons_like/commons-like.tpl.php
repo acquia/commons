@@ -32,8 +32,8 @@
  *     )
  * - $mode: Display mode.
  * - $just_voted: Indicator whether the user has just voted (boolean).
- * - $content_type: "node" or "comment".
- * - $content_id: Node or comment id.
+ * - $entity_type: "node" or "comment".
+ * - $entity_id: Node or comment id.
  * - $buttons: Array with themed buttons (built in preprocess function).
  * - $info: String with user readable information (built in preprocess function).
  */

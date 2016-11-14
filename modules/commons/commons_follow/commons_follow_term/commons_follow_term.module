@@ -19,12 +19,12 @@ function commons_follow_term_commons_follow_get_nids($account, $options) {
   }
 
   // Get user's flagged terms.
-  $query = db_select('flag_content', 'f');
+  $query = db_select('flagging', 'f');
   $result = $query
     ->condition('fid', $flag_ids, 'IN')
     ->condition('uid', $account->uid, '=')
-    ->condition('content_type', 'taxonomy_term', '=')
-    ->fields('f',array('content_id'))
+    ->condition('entity_type', 'taxonomy_term', '=')
+    ->fields('f',array('entity_id'))
     ->execute()
     ->fetchAll();
 
@@ -35,7 +35,7 @@ function commons_follow_term_commons_follow_get_nids($account, $options) {
 
   $tids = array();
   foreach($result as $row) {
-    $tids[] = (integer) $row->content_id;
+    $tids[] = (integer) $row->entity_id;
   }
 
   // Get IDs of nodes tagged by the specified terms.

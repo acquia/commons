@@ -19,7 +19,7 @@ function commons_follow_node_flag_default_flags() {
 
   // Exported flag: "Other content you follow".
   $flags['commons_follow_node'] = array(
-    'content_type' => 'node',
+    'entity_type' => 'node',
     'title' => 'Other content',
     'global' => 0,
     'types' => array(),
@@ -31,26 +31,20 @@ function commons_follow_node_flag_default_flags() {
     'unflag_message' => 'Not following',
     'unflag_denied_text' => '',
     'link_type' => 'toggle',
-    'roles' => array(
-      'flag' => array(
-        0 => 2,
-      ),
-      'unflag' => array(
-        0 => 2,
-      ),
-    ),
     'weight' => -10,
     'show_on_form' => 0,
     'access_author' => '',
-    'show_on_page' => 1,
-    'show_on_teaser' => 1,
+    'show_in_links' => array(
+      'full' => TRUE,
+      'teaser' => TRUE,
+    ),
     'show_contextual_link' => FALSE,
     'i18n' => 0,
     'module' => 'commons_follow_node',
     'locked' => array(
       0 => 'name',
     ),
-    'api_version' => 2,
+    'api_version' => 3,
   );
 
   return $flags;

@@ -86,9 +86,9 @@ function commons_search_solr_user_apachesolr_search_page_alter(&$build, $search_
     $out_results = array();
     if ($flagged && $flag = flag_get_flag('commons_follow_user')) {
       // Get the count of flagged users for a particular account.
-      $fl_results = db_select('flag_content', 'f')
-        ->fields('f', array('content_id', 'uid'))
-        ->condition('f.content_type', 'user', '=')
+      $fl_results = db_select('flagging', 'f')
+        ->fields('f', array('entity_id', 'uid'))
+        ->condition('f.entity_type','user','=')
         ->condition('f.uid', $user->uid, '=')
         ->condition('f.fid', $flag->fid, '=')
         ->extend('PagerDefault')->limit($limit)
@@ -96,7 +96,7 @@ function commons_search_solr_user_apachesolr_search_page_alter(&$build, $search_
         ->addMetaData('flagged', $flagged)
         ->execute();
       while ($record = $fl_results->fetchAssoc()) {
-        $out_results[] = user_view(user_load($record['content_id']), 'search_results');
+        $out_results[] = user_view(user_load($record['entity_id']), 'search_results');
       }
       $build['pager'] = array('#theme' => 'pager');
     }

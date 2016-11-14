@@ -19,7 +19,7 @@ function commons_follow_group_commons_follow_get_nids($account, $options) {
   // Get subscribe flag IDs.
   $flag_ids = commons_follow_get_subscription_flags_ids('node');
 
-  $query = db_select('flag_content', 'f');
+  $query = db_select('flagging', 'f');
   if (!empty($options['range'])) {
     $query->range(0, $options['range']);
   }
@@ -27,9 +27,9 @@ function commons_follow_group_commons_follow_get_nids($account, $options) {
   $result = $query
     ->condition('fid', $flag_ids, 'IN')
     ->condition('uid', $account->uid, '=')
-    ->condition('content_type', 'node', '=')
-    ->condition('content_id', $gids['node'], 'IN')
-    ->fields('f',array('content_id'))
+    ->condition('entity_type', 'node', '=')
+    ->condition('entity_id', $gids['node'], 'IN')
+    ->fields('f',array('entity_id'))
     ->execute()
     ->fetchAll();
 
@@ -39,7 +39,7 @@ function commons_follow_group_commons_follow_get_nids($account, $options) {
 
   $nids = array();
   foreach($result as $row) {
-    $nids[] = $row->content_id;
+    $nids[] = $row->entity_id;
   }
 
   // Get the groups' content IDs.

@@ -21,12 +21,12 @@ function commons_follow_user_commons_follow_get_nids($account, $options) {
   }
 
   // Get flagged user IDs.
-  $query = db_select('flag_content', 'f');
+  $query = db_select('flagging', 'f');
   $result = $query
     ->condition('fid', $flag_ids, 'IN')
     ->condition('uid', $account->uid, '=')
-    ->condition('content_type', 'user', '=')
-    ->fields('f',array('content_id'))
+    ->condition('entity_type', 'user', '=')
+    ->fields('f',array('entity_id'))
     ->execute()
     ->fetchAll();
 
@@ -37,7 +37,7 @@ function commons_follow_user_commons_follow_get_nids($account, $options) {
 
   $uids = array();
   foreach($result as $row) {
-    $uids[] = (integer) $row->content_id;
+    $uids[] = (integer) $row->entity_id;
   }
 
   // Get the user's node IDs.
@@ -63,12 +63,12 @@ function commons_follow_user_commons_follow_get_nids($account, $options) {
 }
 
 /**
- * Implements hook_flag().
+ * Implements hook_flag_flag().
  */
-function commons_follow_user_flag($op, $flag, $content_id, $account, $fcid) {
+function commons_follow_user_flag_flag($flag, $entity_id, $account, $flagging) {
   // Display an activity stream message when a user follows another user.
-  if (module_exists('commons_activity_streams') && $flag->name == 'commons_follow_user' && $op == 'flag') {
-    $followed_user = user_load($content_id);
+  if (module_exists('commons_activity_streams') && $flag->name == 'commons_follow_user') {
+    $followed_user = user_load($entity_id);
     // Don't generate a message for flagging blocked users.
     if (!$followed_user->status) {
       return;

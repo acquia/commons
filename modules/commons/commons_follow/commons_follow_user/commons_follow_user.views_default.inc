@@ -84,7 +84,7 @@ function commons_follow_user_views_default_views() {
   $handler->display->display_options['relationships']['flag_content_rel_1']['user_scope'] = 'any';
   /* Relationship: Flags: User */
   $handler->display->display_options['relationships']['uid']['id'] = 'uid';
-  $handler->display->display_options['relationships']['uid']['table'] = 'flag_content';
+  $handler->display->display_options['relationships']['uid']['table'] = 'flagging';
   $handler->display->display_options['relationships']['uid']['field'] = 'uid';
   $handler->display->display_options['relationships']['uid']['relationship'] = 'flag_content_rel';
   /* Field: User: Name */
@@ -96,20 +96,20 @@ function commons_follow_user_views_default_views() {
   $handler->display->display_options['fields']['name']['alter']['ellipsis'] = FALSE;
   /* Field: Flags: Flag link */
   $handler->display->display_options['fields']['ops_1']['id'] = 'ops_1';
-  $handler->display->display_options['fields']['ops_1']['table'] = 'flag_content';
+  $handler->display->display_options['fields']['ops_1']['table'] = 'flagging';
   $handler->display->display_options['fields']['ops_1']['field'] = 'ops';
   $handler->display->display_options['fields']['ops_1']['relationship'] = 'flag_content_rel_1';
   $handler->display->display_options['fields']['ops_1']['label'] = 'Send email?';
   /* Field: Flags: Flag link */
   $handler->display->display_options['fields']['ops']['id'] = 'ops';
-  $handler->display->display_options['fields']['ops']['table'] = 'flag_content';
+  $handler->display->display_options['fields']['ops']['table'] = 'flagging';
   $handler->display->display_options['fields']['ops']['field'] = 'ops';
   $handler->display->display_options['fields']['ops']['relationship'] = 'flag_content_rel';
   $handler->display->display_options['fields']['ops']['label'] = '';
   $handler->display->display_options['fields']['ops']['element_label_colon'] = FALSE;
   /* Sort criterion: Flags: Flagged time */
   $handler->display->display_options['sorts']['timestamp']['id'] = 'timestamp';
-  $handler->display->display_options['sorts']['timestamp']['table'] = 'flag_content';
+  $handler->display->display_options['sorts']['timestamp']['table'] = 'flagging';
   $handler->display->display_options['sorts']['timestamp']['field'] = 'timestamp';
   $handler->display->display_options['sorts']['timestamp']['relationship'] = 'flag_content_rel';
   $handler->display->display_options['sorts']['timestamp']['order'] = 'DESC';
@@ -206,7 +206,7 @@ function commons_follow_user_views_default_views() {
   $handler->display->display_options['relationships']['flag_content_rel']['user_scope'] = 'any';
   /* Relationship: Flags: User */
   $handler->display->display_options['relationships']['uid']['id'] = 'uid';
-  $handler->display->display_options['relationships']['uid']['table'] = 'flag_content';
+  $handler->display->display_options['relationships']['uid']['table'] = 'flagging';
   $handler->display->display_options['relationships']['uid']['field'] = 'uid';
   $handler->display->display_options['relationships']['uid']['relationship'] = 'flag_content_rel';
   $handler->display->display_options['relationships']['uid']['required'] = TRUE;
@@ -233,23 +233,23 @@ function commons_follow_user_views_default_views() {
   $handler->display->display_options['fields']['name']['element_default_classes'] = FALSE;
   /* Sort criterion: Flags: Flagged time */
   $handler->display->display_options['sorts']['timestamp']['id'] = 'timestamp';
-  $handler->display->display_options['sorts']['timestamp']['table'] = 'flag_content';
+  $handler->display->display_options['sorts']['timestamp']['table'] = 'flagging';
   $handler->display->display_options['sorts']['timestamp']['field'] = 'timestamp';
   $handler->display->display_options['sorts']['timestamp']['relationship'] = 'flag_content_rel';
   $handler->display->display_options['sorts']['timestamp']['order'] = 'DESC';
-  /* Contextual filter: Flags: Content ID */
-  $handler->display->display_options['arguments']['content_id']['id'] = 'content_id';
-  $handler->display->display_options['arguments']['content_id']['table'] = 'flag_content';
-  $handler->display->display_options['arguments']['content_id']['field'] = 'content_id';
-  $handler->display->display_options['arguments']['content_id']['relationship'] = 'flag_content_rel';
-  $handler->display->display_options['arguments']['content_id']['default_action'] = 'default';
-  $handler->display->display_options['arguments']['content_id']['default_argument_type'] = 'user';
-  $handler->display->display_options['arguments']['content_id']['default_argument_options']['user'] = FALSE;
-  $handler->display->display_options['arguments']['content_id']['summary']['number_of_records'] = '0';
-  $handler->display->display_options['arguments']['content_id']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['content_id']['summary_options']['items_per_page'] = '25';
-  $handler->display->display_options['arguments']['content_id']['specify_validation'] = TRUE;
-  $handler->display->display_options['arguments']['content_id']['validate']['type'] = 'flag_flaggable_user';
+  /* Contextual filter: Flags: Entity ID */
+  $handler->display->display_options['arguments']['entity_id']['id'] = 'entity_id';
+  $handler->display->display_options['arguments']['entity_id']['table'] = 'flagging';
+  $handler->display->display_options['arguments']['entity_id']['field'] = 'entity_id';
+  $handler->display->display_options['arguments']['entity_id']['relationship'] = 'flag_content_rel';
+  $handler->display->display_options['arguments']['entity_id']['default_action'] = 'default';
+  $handler->display->display_options['arguments']['entity_id']['default_argument_type'] = 'user';
+  $handler->display->display_options['arguments']['entity_id']['default_argument_options']['user'] = FALSE;
+  $handler->display->display_options['arguments']['entity_id']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['entity_id']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['entity_id']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['entity_id']['specify_validation'] = TRUE;
+  $handler->display->display_options['arguments']['entity_id']['validate']['type'] = 'flag_flaggable_user';
   /* Filter criterion: User: Active */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'users';
@@ -381,13 +381,13 @@ function commons_follow_user_views_default_views() {
   $handler->display->display_options['fields']['name']['element_default_classes'] = FALSE;
   /* Sort criterion: Flags: Flagged time */
   $handler->display->display_options['sorts']['timestamp']['id'] = 'timestamp';
-  $handler->display->display_options['sorts']['timestamp']['table'] = 'flag_content';
+  $handler->display->display_options['sorts']['timestamp']['table'] = 'flagging';
   $handler->display->display_options['sorts']['timestamp']['field'] = 'timestamp';
   $handler->display->display_options['sorts']['timestamp']['relationship'] = 'flag_content_rel';
   $handler->display->display_options['sorts']['timestamp']['order'] = 'DESC';
   /* Contextual filter: Flags: User uid */
   $handler->display->display_options['arguments']['uid']['id'] = 'uid';
-  $handler->display->display_options['arguments']['uid']['table'] = 'flag_content';
+  $handler->display->display_options['arguments']['uid']['table'] = 'flagging';
   $handler->display->display_options['arguments']['uid']['field'] = 'uid';
   $handler->display->display_options['arguments']['uid']['relationship'] = 'flag_content_rel';
   $handler->display->display_options['arguments']['uid']['default_action'] = 'default';

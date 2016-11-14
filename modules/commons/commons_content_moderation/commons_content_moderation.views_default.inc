@@ -146,7 +146,7 @@ function commons_content_moderation_views_default_views() {
   $handler->display->display_options['fields']['entity_id']['field'] = 'comment_body';
   /* Sort criterion: Flags: Flagged time */
   $handler->display->display_options['sorts']['timestamp']['id'] = 'timestamp';
-  $handler->display->display_options['sorts']['timestamp']['table'] = 'flag_content';
+  $handler->display->display_options['sorts']['timestamp']['table'] = 'flagging';
   $handler->display->display_options['sorts']['timestamp']['field'] = 'timestamp';
   $handler->display->display_options['sorts']['timestamp']['relationship'] = 'flag_content_rel';
   /* Filter criterion: Comment: Approved */

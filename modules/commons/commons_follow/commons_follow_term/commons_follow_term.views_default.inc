@@ -84,7 +84,7 @@ function commons_follow_term_views_default_views() {
   $handler->display->display_options['relationships']['flag_content_rel_1']['user_scope'] = 'any';
   /* Relationship: Flags: User */
   $handler->display->display_options['relationships']['uid']['id'] = 'uid';
-  $handler->display->display_options['relationships']['uid']['table'] = 'flag_content';
+  $handler->display->display_options['relationships']['uid']['table'] = 'flagging';
   $handler->display->display_options['relationships']['uid']['field'] = 'uid';
   $handler->display->display_options['relationships']['uid']['relationship'] = 'flag_content_rel';
   /* Field: Taxonomy term: Name */
@@ -97,20 +97,20 @@ function commons_follow_term_views_default_views() {
   $handler->display->display_options['fields']['name']['link_to_taxonomy'] = TRUE;
   /* Field: Flags: Flag link */
   $handler->display->display_options['fields']['ops_1']['id'] = 'ops_1';
-  $handler->display->display_options['fields']['ops_1']['table'] = 'flag_content';
+  $handler->display->display_options['fields']['ops_1']['table'] = 'flagging';
   $handler->display->display_options['fields']['ops_1']['field'] = 'ops';
   $handler->display->display_options['fields']['ops_1']['relationship'] = 'flag_content_rel_1';
   $handler->display->display_options['fields']['ops_1']['label'] = 'Send email?';
   /* Field: Flags: Flag link */
   $handler->display->display_options['fields']['ops']['id'] = 'ops';
-  $handler->display->display_options['fields']['ops']['table'] = 'flag_content';
+  $handler->display->display_options['fields']['ops']['table'] = 'flagging';
   $handler->display->display_options['fields']['ops']['field'] = 'ops';
   $handler->display->display_options['fields']['ops']['relationship'] = 'flag_content_rel';
   $handler->display->display_options['fields']['ops']['label'] = '';
   $handler->display->display_options['fields']['ops']['element_label_colon'] = FALSE;
   /* Sort criterion: Flags: Flagged time */
   $handler->display->display_options['sorts']['timestamp']['id'] = 'timestamp';
-  $handler->display->display_options['sorts']['timestamp']['table'] = 'flag_content';
+  $handler->display->display_options['sorts']['timestamp']['table'] = 'flagging';
   $handler->display->display_options['sorts']['timestamp']['field'] = 'timestamp';
   $handler->display->display_options['sorts']['timestamp']['relationship'] = 'flag_content_rel';
   $handler->display->display_options['sorts']['timestamp']['order'] = 'DESC';

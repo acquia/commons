@@ -163,15 +163,7 @@ projects[file_entity][version] = "2.0-beta3"
 
 projects[flag][type] = "module"
 projects[flag][subdir] = "contrib"
-projects[flag][version] = "2.2"
-
-; Issue #1965760: Manually set taxonomy term flag types because its different.
-; https://drupal.org/node/1965760
-projects[flag][patch][] = "https://drupal.org/files/issues/1965760.29.flag_.entity-tokens.patch"
-
-; Provide a hook to allow default flag definitions to be altered.
-; https://drupal.org/node/2027091#comment-8012263
-projects[flag][patch][] = "https://drupal.org/files/flag-default-flags-alter-hook-2027091-03.patch"
+projects[flag][version] = "3.9"
 
 projects[flag_abuse][type] = "module"
 projects[flag_abuse][subdir] = "contrib"

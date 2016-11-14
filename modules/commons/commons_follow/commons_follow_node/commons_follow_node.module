@@ -19,7 +19,7 @@ function commons_follow_node_commons_follow_get_nids($account, $options) {
     return array();
   }
 
-  $query = db_select('flag_content', 'f');
+  $query = db_select('flagging', 'f');
 
   if (!empty($options['range'])) {
     $query->range(0, $options['range']);
@@ -28,13 +28,13 @@ function commons_follow_node_commons_follow_get_nids($account, $options) {
   $result = $query
     ->condition('fid', $flag_ids, 'IN')
     ->condition('uid', $account->uid, '=')
-    ->condition('content_type', 'node', '=')
-    ->fields('f',array('content_id'))
+    ->condition('entity_type', 'node', '=')
+    ->fields('f',array('entity_id'))
     ->execute()
     ->fetchAll();
   $nids = array();
   foreach($result as $row) {
-    $nids[] = (integer) $row->content_id;
+    $nids[] = (integer) $row->entity_id;
   }
 
   return $nids;

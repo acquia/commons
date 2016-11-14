@@ -19,7 +19,7 @@ function commons_follow_term_flag_default_flags() {
 
   // Exported flag: "Topics you follow".
   $flags['commons_follow_term'] = array(
-    'content_type' => 'taxonomy_term',
+    'entity_type' => 'taxonomy_term',
     'title' => 'Topics',
     'global' => 0,
     'types' => array(
@@ -33,23 +33,14 @@ function commons_follow_term_flag_default_flags() {
     'unflag_message' => 'Not following',
     'unflag_denied_text' => '',
     'link_type' => 'toggle',
-    'roles' => array(
-      'flag' => array(
-        0 => 2,
-      ),
-      'unflag' => array(
-        0 => 2,
-      ),
-    ),
     'weight' => -8,
-    'show_on_entity' => 1,
     'show_on_form' => 0,
     'access_author' => '',
     'module' => 'commons_follow_term',
     'locked' => array(
       0 => 'name',
     ),
-    'api_version' => 2,
+    'api_version' => 3,
   );
 
   return $flags;

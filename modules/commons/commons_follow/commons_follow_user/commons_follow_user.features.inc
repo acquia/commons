@@ -28,7 +28,7 @@ function commons_follow_user_flag_default_flags() {
 
   // Exported flag: "People".
   $flags['commons_follow_user'] = array(
-    'content_type' => 'user',
+    'entity_type' => 'user',
     'title' => 'People',
     'global' => 0,
     'types' => array(),
@@ -40,14 +40,6 @@ function commons_follow_user_flag_default_flags() {
     'unflag_message' => 'Not following',
     'unflag_denied_text' => '',
     'link_type' => 'toggle',
-    'roles' => array(
-      'flag' => array(
-        0 => 2,
-      ),
-      'unflag' => array(
-        0 => 2,
-      ),
-    ),
     'weight' => -13,
     'show_on_form' => 0,
     'access_author' => '',
@@ -57,7 +49,7 @@ function commons_follow_user_flag_default_flags() {
     'locked' => array(
       0 => 'name',
     ),
-    'api_version' => 2,
+    'api_version' => 3,
   );
 
   return $flags;

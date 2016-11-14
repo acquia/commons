@@ -84,7 +84,7 @@ function commons_follow_node_views_default_views() {
   $handler->display->display_options['relationships']['flag_content_rel_1']['user_scope'] = 'any';
   /* Relationship: Flags: User */
   $handler->display->display_options['relationships']['uid']['id'] = 'uid';
-  $handler->display->display_options['relationships']['uid']['table'] = 'flag_content';
+  $handler->display->display_options['relationships']['uid']['table'] = 'flagging';
   $handler->display->display_options['relationships']['uid']['field'] = 'uid';
   $handler->display->display_options['relationships']['uid']['relationship'] = 'flag_content_rel';
   /* Field: Content: Title */
@@ -94,14 +94,14 @@ function commons_follow_node_views_default_views() {
   $handler->display->display_options['fields']['title_field']['link_to_entity'] = 1;
   /* Field: Flags: Flag link */
   $handler->display->display_options['fields']['ops_1']['id'] = 'ops_1';
-  $handler->display->display_options['fields']['ops_1']['table'] = 'flag_content';
+  $handler->display->display_options['fields']['ops_1']['table'] = 'flagging';
   $handler->display->display_options['fields']['ops_1']['field'] = 'ops';
   $handler->display->display_options['fields']['ops_1']['relationship'] = 'flag_content_rel_1';
   $handler->display->display_options['fields']['ops_1']['label'] = 'Send email?';
   $handler->display->display_options['fields']['ops_1']['element_label_colon'] = FALSE;
   /* Field: Flags: Flag link */
   $handler->display->display_options['fields']['ops']['id'] = 'ops';
-  $handler->display->display_options['fields']['ops']['table'] = 'flag_content';
+  $handler->display->display_options['fields']['ops']['table'] = 'flagging';
   $handler->display->display_options['fields']['ops']['field'] = 'ops';
   $handler->display->display_options['fields']['ops']['relationship'] = 'flag_content_rel';
   $handler->display->display_options['fields']['ops']['label'] = '';
@@ -109,7 +109,7 @@ function commons_follow_node_views_default_views() {
   $handler->display->display_options['fields']['ops']['link_type'] = 'toggle';
   /* Sort criterion: Flags: Flagged time */
   $handler->display->display_options['sorts']['timestamp']['id'] = 'timestamp';
-  $handler->display->display_options['sorts']['timestamp']['table'] = 'flag_content';
+  $handler->display->display_options['sorts']['timestamp']['table'] = 'flagging';
   $handler->display->display_options['sorts']['timestamp']['field'] = 'timestamp';
   $handler->display->display_options['sorts']['timestamp']['relationship'] = 'flag_content_rel';
   $handler->display->display_options['sorts']['timestamp']['order'] = 'DESC';

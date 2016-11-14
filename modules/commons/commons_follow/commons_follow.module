@@ -111,7 +111,7 @@ function commons_follow_views_default_views_alter(&$views) {
 
     // Exposed "Following" filter.
     $handler->display->display_options['filters']['flagged']['id'] = 'flagged';
-    $handler->display->display_options['filters']['flagged']['table'] = 'flag_content';
+    $handler->display->display_options['filters']['flagged']['table'] = 'flagging';
     $handler->display->display_options['filters']['flagged']['field'] = 'flagged';
     $handler->display->display_options['filters']['flagged']['relationship'] = 'flag_content_rel';
     $handler->display->display_options['filters']['flagged']['ui_name'] = 'Following';
@@ -309,9 +309,9 @@ function commons_follow_get_followed_content($account = array()) {
   $results = array();
   $flag_ids = commons_follow_get_flag_ids();
   // Get a list of everything that the user is following.
-  $result = db_query("SELECT fid, content_id FROM {flag_content} WHERE fid IN (:fids) AND uid = :uid", array(':fids' => array_keys($flag_ids), ':uid' => $account->uid));
+  $result = db_query("SELECT fid, entity_id FROM {flagging} WHERE fid IN (:fids) AND uid = :uid", array(':fids' => array_keys($flag_ids), ':uid' => $account->uid));
   foreach ($result as $this_result) {
-    $results[$flag_ids[$this_result->fid]][] = $this_result->content_id;
+    $results[$flag_ids[$this_result->fid]][] = $this_result->entity_id;
   }
 
   return $results;
@@ -336,21 +336,30 @@ function commons_follow_get_followed_message_ids($account = NULL) {
   return $followed_mids;
 }
 
+/**
+ * Implements hook_views_data_alter().
+ */
 function commons_follow_views_data_alter(&$data) {
-  $data['flag_content']['ops']['field']['handler'] = 'commons_follow_handler_field_ops';
+  $data['flagging']['ops']['field']['handler'] = 'commons_follow_handler_field_ops';
 }
 
+/**
+ * Implements hook_views_query_alter().
+ */
 function commons_follow_views_query_alter(&$view, &$query) {
   // Only act on the notifications page.
   if (arg(2) != 'notification-settings') {
     return;
   }
+
   global $user;
   $prefix = variable_get('message_subscribe_flag_prefix', 'subscribe') . '_';
-  if(strpos($view->name, $prefix) === 0 && isset($view->args[0]) && $user->uid != $view->args[0]) {
+
+  if (strpos($view->name, $prefix) === 0 && isset($view->args[0]) && $user->uid != $view->args[0]) {
     $flag_content_keys = array_keys($query->table_queue);
+
     foreach($flag_content_keys AS $key) {
-      if(strpos($key, 'flag_content') === 0) {
+      if (strpos($key, 'flagging') === 0) {
         //Convert the Send Email Query
         $join = $query->table_queue[$key]['join'];
         $join->extra[1] = array(
