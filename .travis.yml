@@ -91,10 +91,10 @@ env:
     #- DRUPAL_TI_RUNNERS="phpunit simpletest behat"
   matrix:
     - UPGRADE=none
-    - UPGRADE=7.x-3.35
-    - UPGRADE=7.x-3.34
-    - UPGRADE=7.x-3.33
-    - UPGRADE=7.x-3.32
+#    - UPGRADE=7.x-3.35 known failure due to https://www.drupal.org/node/1248474
+#    - UPGRADE=7.x-3.34
+#    - UPGRADE=7.x-3.33
+#    - UPGRADE=7.x-3.32
 #    - UPGRADE=7.x-3.31 Known failure due to https://www.drupal.org/node/2604054
 #    - UPGRADE=7.x-3.30 Known failure due to https://www.drupal.org/node/2441965
 
