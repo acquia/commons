@@ -36,6 +36,11 @@ function commons_follow_term_flag_default_flags() {
     'weight' => -8,
     'show_on_form' => 0,
     'access_author' => '',
+    'show_in_links' => array(
+      'diff_standard' => TRUE,
+      'full' => TRUE,
+      'token' => TRUE,
+    ),
     'module' => 'commons_follow_term',
     'locked' => array(
       0 => 'name',
