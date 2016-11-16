@@ -471,7 +471,7 @@ function commons_origins_preprocess_comment(&$variables, $hook) {
 function commons_origins_preprocess_flag(&$variables, $hook) {
   if (strpos($variables['flag_name_css'], 'inappropriate-') !== 0) {
     // Style the flag links like buttons.
-    if ($variables['last_action'] == 'flagged') {
+    if ($variables['action'] == 'flagged') {
       $variables['flag_classes_array'][] = 'action-item-small-active';
     }
     else {
