@@ -250,7 +250,7 @@ projects[message_subscribe][version] = "1.0-rc2"
 
 ; Message Subscribe sends emails regardless of context
 ; https://www.drupal.org/node/1828184
-projects[message_subscribe][patch][] = "https://drupal.org/files/issues/group-context-1828184-53.patch"
+projects[message_subscribe][patch][] = "https://drupal.org/files/issues/group-context-1828184-67.patch"
 
 ; By default, don't notify blocked users
 ; https://www.drupal.org/node/2184567
