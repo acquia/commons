@@ -215,6 +215,7 @@ projects[link][version] = "1.4"
 projects[media][type] = "module"
 projects[media][subdir] = "contrib"
 projects[media][version] = "2.0-rc2"
+projects[media][patch][] = "https://drupal.org/files/issues/media-widget-ajax-2842446-and-rebuild-bug-2534724-7.patch"
 
 projects[media_oembed][type] = "module"
 projects[media_oembed][subdir] = "contrib"
