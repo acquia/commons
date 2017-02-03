@@ -423,7 +423,7 @@ projects[timeago][patch][] = "https://drupal.org/files/issues/1427226-timeago-da
 
 projects[title][type] = "module"
 projects[title][subdir] = "contrib"
-projects[title][version] = "1.0-alpha8"
+projects[title][version] = "1.0-alpha9"
 
 projects[token][type] = "module"
 projects[token][subdir] = "contrib"
