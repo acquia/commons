@@ -427,7 +427,7 @@ projects[title][version] = "1.0-alpha9"
 
 projects[token][type] = "module"
 projects[token][subdir] = "contrib"
-projects[token][version] = "1.6"
+projects[token][version] = "1.7"
 
 projects[translation_helpers][type] = "module"
 projects[translation_helpers][subdir] = "contrib"
