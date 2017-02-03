@@ -139,7 +139,7 @@ projects[entityreference][patch][] = "https://drupal.org/files/issues/entityrefe
 
 projects[entityreference_prepopulate][type] = "module"
 projects[entityreference_prepopulate][subdir] = "contrib"
-projects[entityreference_prepopulate][version] = "1.6"
+projects[entityreference_prepopulate][version] = "1.7"
 
 ; Entityreference prepopulate overwrites field instance custom default value functions.
 ; https://drupal.org/node/2304301#comment-8973459
