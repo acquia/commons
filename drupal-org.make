@@ -275,7 +275,7 @@ projects[navbar][version] = "1.7"
 
 projects[oauth][type] = "module"
 projects[oauth][subdir] = "contrib"
-projects[oauth][version] = "3.3"
+projects[oauth][version] = "3.4"
 
 projects[oauthconnector][type] = "module"
 projects[oauthconnector][subdir] = "contrib"
