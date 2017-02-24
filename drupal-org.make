@@ -307,7 +307,7 @@ projects[panelizer][version] = "3.4"
 
 projects[panels][type] = "module"
 projects[panels][subdir] = "contrib"
-projects[panels][version] = "3.8"
+projects[panels][version] = "3.9"
 
 projects[paranoia][type] = "module"
 projects[paranoia][subdir] = "contrib"
