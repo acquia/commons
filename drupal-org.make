@@ -447,7 +447,7 @@ projects[views][patch][] = "https://drupal.org/files/issues/views-content_access
 
 projects[views_bulk_operations][type] = "module"
 projects[views_bulk_operations][subdir] = "contrib"
-projects[views_bulk_operations][version] = "3.3"
+projects[views_bulk_operations][version] = "3.4"
 
 projects[views_field_view][type] = "module"
 projects[views_field_view][subdir] = "contrib"
