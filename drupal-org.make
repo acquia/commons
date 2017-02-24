@@ -259,7 +259,7 @@ projects[message_subscribe][patch][] = "https://drupal.org/files/issues/2184567-
 
 projects[metatag][type] = "module"
 projects[metatag][subdir] = "contrib"
-projects[metatag][version] = "1.20"
+projects[metatag][version] = "1.21"
 
 projects[module_filter][type] = "module"
 projects[module_filter][subdir] = "contrib"
