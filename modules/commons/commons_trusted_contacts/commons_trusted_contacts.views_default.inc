@@ -70,7 +70,7 @@ function commons_trusted_contacts_views_default_views() {
   $handler->display->display_options['relationships']['og_membership_related_user']['field'] = 'og_membership_related_user';
   /* Field: Bulk operations: OG membership */
   $handler->display->display_options['fields']['views_bulk_operations']['id'] = 'views_bulk_operations';
-  $handler->display->display_options['fields']['views_bulk_operations']['table'] = 'og_membership';
+  $handler->display->display_options['fields']['views_bulk_operations']['table'] = 'views_entity_og_membership';
   $handler->display->display_options['fields']['views_bulk_operations']['field'] = 'views_bulk_operations';
   $handler->display->display_options['fields']['views_bulk_operations']['vbo_settings']['display_type'] = '1';
   $handler->display->display_options['fields']['views_bulk_operations']['vbo_settings']['enable_select_all_pages'] = 1;
@@ -185,7 +185,7 @@ function commons_trusted_contacts_views_default_views() {
   $handler->display->display_options['relationships']['og_membership_related_user']['field'] = 'og_membership_related_user';
   /* Field: Bulk operations: OG membership */
   $handler->display->display_options['fields']['views_bulk_operations']['id'] = 'views_bulk_operations';
-  $handler->display->display_options['fields']['views_bulk_operations']['table'] = 'og_membership';
+  $handler->display->display_options['fields']['views_bulk_operations']['table'] = 'views_entity_og_membership';
   $handler->display->display_options['fields']['views_bulk_operations']['field'] = 'views_bulk_operations';
   $handler->display->display_options['fields']['views_bulk_operations']['label'] = '';
   $handler->display->display_options['fields']['views_bulk_operations']['element_label_colon'] = FALSE;
