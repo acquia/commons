@@ -223,7 +223,7 @@ projects[media_oembed][version] = "2.7"
 
 projects[memcache][type] = "module"
 projects[memcache][subdir] = "contrib"
-projects[memcache][version] = "1.5"
+projects[memcache][version] = "1.6"
 
 projects[menu_attributes][type] = "module"
 projects[menu_attributes][subdir] = "contrib"
