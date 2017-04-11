@@ -147,7 +147,7 @@ projects[entityreference_prepopulate][patch][] = "https://drupal.org/files/issue
 
 projects[entity_translation][type] = "module"
 projects[entity_translation][subdir] = "contrib"
-projects[entity_translation][version] = "1.0-beta5"
+projects[entity_translation][version] = "1.0-beta6"
 
 projects[facetapi][type] = "module"
 projects[facetapi][subdir] = "contrib"
