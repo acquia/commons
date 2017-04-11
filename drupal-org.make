@@ -78,7 +78,7 @@ projects[custom_search][version] = "1.20"
 
 projects[date][type] = "module"
 projects[date][subdir] = "contrib"
-projects[date][version] = "2.9"
+projects[date][version] = "2.10"
 
 projects[date_facets][type] = "module"
 projects[date_facets][subdir] = "contrib"
