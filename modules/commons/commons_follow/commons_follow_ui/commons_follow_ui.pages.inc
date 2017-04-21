@@ -15,7 +15,7 @@ function commons_follow_ui_notification_settings_form($form, &$form_state, $acco
   );
 
   $form['explanation'] = array(
-    '#markup' => '<p>' . t("Control how you are notified of new content and activity. When you follow a group, topic, user, or other content, you'll see updates in your content and activity streams, and you will automatically get email updates unlesss you disable emails or unfollow.") . '</p>',
+    '#markup' => '<p>' . t("Control how you are notified of new content and activity. When you follow a group, topic, user, or other content, you'll see updates in your content and activity streams, and you will automatically get email updates unless you disable emails or unfollow.") . '</p>',
   );
 
   $form['message_subscribe_email'] = array(
