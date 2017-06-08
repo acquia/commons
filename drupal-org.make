@@ -133,10 +133,6 @@ projects[entityreference][type] = "module"
 projects[entityreference][subdir] = "contrib"
 projects[entityreference][version] = "1.4"
 
-; Autocomplete widgets cannot reference a single entity result.
-; https://drupal.org/node/1959624#comment-8451891
-projects[entityreference][patch][] = "https://drupal.org/files/issues/entityreference-autocomplete-widget-single-entity-1959624-6.patch"
-
 projects[entityreference_prepopulate][type] = "module"
 projects[entityreference_prepopulate][subdir] = "contrib"
 projects[entityreference_prepopulate][version] = "1.7"
