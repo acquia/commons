@@ -159,7 +159,7 @@ projects[features][version] = "2.10"
 
 projects[file_entity][type] = "module"
 projects[file_entity][subdir] = "contrib"
-projects[file_entity][version] = "2.0-beta3"
+projects[file_entity][version] = "2.1"
 
 projects[flag][type] = "module"
 projects[flag][subdir] = "contrib"
