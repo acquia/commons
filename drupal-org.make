@@ -338,8 +338,7 @@ projects[privatemsg][patch][] = "https://drupal.org/files/2077223-privatemsg-rea
 
 projects[quicktabs][type] = "module"
 projects[quicktabs][subdir] = "contrib"
-projects[quicktabs][version] = "3.6"
-projects[quicktabs][patch][] = "https://drupal.org/files/2104643-revert-qt-487518-5.patch"
+projects[quicktabs][version] = "3.8"
 
 projects[r4032login][type] = "module"
 projects[r4032login][subdir] = "contrib"
