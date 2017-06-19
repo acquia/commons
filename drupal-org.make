@@ -178,7 +178,7 @@ projects[http_client][version] = "2.4"
 
 projects[i18n][type] = "module"
 projects[i18n][subdir] = "contrib"
-projects[i18n][version] = "1.17"
+projects[i18n][version] = "1.18"
 
 projects[i18nviews][type] = "module"
 projects[i18nviews][subdir] = "contrib"
