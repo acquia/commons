@@ -19,7 +19,7 @@ projects[drupal][patch][] = http://drupal.org/files/issues/node_access_grants-st
 
 ; File_get_file_references is slow and buggy
 ; https://drupal.org/node/1805690#comment-8734045
-projects[drupal][patch][] = http://drupal.org/files/issues/1805690_11.patch
+projects[drupal][patch][] = http://drupal.org/files/issues/file-get-file-references-is-rather-bogus-1805690-36.patch
 
 ; HTML IDs are reset each time a form is processed
 ; https://www.drupal.org/node/1831560#comment-10258827
