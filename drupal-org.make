@@ -62,7 +62,7 @@ projects[connector][version] = "1.0-beta2"
 
 projects[ckeditor][type] = "module"
 projects[ckeditor][subdir] = "contrib"
-projects[ckeditor][version] = "1.17"
+projects[ckeditor][version] = "1.18"
 
 ; Fix features rebuilding when CKEditor is disabled.
 ; https://www.drupal.org/node/2456519#comment-9742435
