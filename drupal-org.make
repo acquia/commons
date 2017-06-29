@@ -157,6 +157,10 @@ projects[file_entity][type] = "module"
 projects[file_entity][subdir] = "contrib"
 projects[file_entity][version] = "2.2"
 
+; Undefined property: stdClass::$fid in file_entity_access()
+; https://www.drupal.org/node/2312603#comment-12147658
+projects[file_entity][patch][] = "https://www.drupal.org/files/issues/fix_entity_api_create_access-2312603-21.patch"
+
 projects[flag][type] = "module"
 projects[flag][subdir] = "contrib"
 projects[flag][version] = "3.9"
