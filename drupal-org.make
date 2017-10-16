@@ -47,10 +47,7 @@ projects[apachesolr_proximity][version] = "1.0-rc1"
 
 projects[apachesolr_user][type] = "module"
 projects[apachesolr_user][subdir] = "contrib"
-projects[apachesolr_user][download][type] = "git"
-projects[apachesolr_user][download][url] = "http://git.drupal.org/project/apachesolr_user.git"
-projects[apachesolr_user][download][branch] = "7.x-1.x"
-projects[apachesolr_user][download]revision] = "a419497bccc1f35d48dc3e8524c53f8e77feacb2"
+projects[apachesolr_user][version] = "1.0"
 
 projects[breakpoints][type] = "module"
 projects[breakpoints][subdir] = "contrib"
