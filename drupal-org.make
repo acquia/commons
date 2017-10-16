@@ -13,11 +13,7 @@ projects[addressfield][version] = "1.2"
 
 projects[addressfield_tokens][type] = "module"
 projects[addressfield_tokens][subdir] = "contrib"
-projects[addressfield_tokens][version] = "1.6"
-
-; Multiple "Undefined index" errors.
-; https://www.drupal.org/node/2902630#comment-12224579
-projects[addressfield_tokens][patch][] = "https://www.drupal.org/files/issues/addressfield_tokens-undefined_index_errors-2902630-3.patch"
+projects[addressfield_tokens][version] = "1.7"
 
 projects[admin_icons][type] = "module"
 projects[admin_icons][subdir] = "contrib"
