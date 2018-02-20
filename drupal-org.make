@@ -207,7 +207,7 @@ projects[link][version] = "1.4"
 
 projects[media][type] = "module"
 projects[media][subdir] = "contrib"
-projects[media][version] = "2.12"
+projects[media][version] = "2.16"
 
 projects[media_oembed][type] = "module"
 projects[media_oembed][subdir] = "contrib"
