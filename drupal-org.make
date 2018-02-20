@@ -67,7 +67,7 @@ projects[ckeditor][patch][] = "https://drupal.org/files/issues/ckeditor-ckeditor
 
 projects[ctools][type] = "module"
 projects[ctools][subdir] = "contrib"
-projects[ctools][version] = "1.12"
+projects[ctools][version] = "1.13"
 
 projects[custom_search][type] = "module"
 projects[custom_search][subdir] = "contrib"
