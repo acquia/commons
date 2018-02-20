@@ -470,6 +470,10 @@ projects[adaptivetheme][type] = "theme"
 projects[adaptivetheme][subdir] = "contrib"
 projects[adaptivetheme][version] = "3.4"
 
+; PHP 7.1 no longer converts string to arrays the first time a value is assigned with square bracket notation.
+; https://drupal.org/comment/2832900#comment-11810250
+projects[adaptivetheme][patch][] = "https://www.drupal.org/files/issues/adaptivetheme-php_string_cast_array-2832900-1.patch"
+
 projects[ember][type] = "theme"
 projects[ember][subdir] = "contrib"
 projects[ember][version] = "2.0-alpha4"
