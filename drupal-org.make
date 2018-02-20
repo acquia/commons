@@ -113,7 +113,7 @@ projects[email_registration][version] = "1.3"
 
 projects[entity][type] = "module"
 projects[entity][subdir] = "contrib"
-projects[entity][version] = "1.8"
+projects[entity][version] = "1.9"
 
 projects[entitycache][type] = "module"
 projects[entitycache][subdir] = "contrib"
