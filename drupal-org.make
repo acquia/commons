@@ -343,7 +343,7 @@ projects[r4032login][version] = "1.8"
 
 projects[radioactivity][type] = "module"
 projects[radioactivity][subdir] = "contrib"
-projects[radioactivity][version] = "2.10"
+projects[radioactivity][version] = "2.12"
 
 projects[rate][type] = "module"
 projects[rate][subdir] = "contrib"
