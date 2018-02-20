@@ -197,6 +197,10 @@ projects[libraries][type] = "module"
 projects[libraries][subdir] = "contrib"
 projects[libraries][version] = "2.3"
 
+; Version Callback functions that pass parameters by reference not permitted in PHP 7.
+; https://drupal.org/node/2779591#comment-12053586
+projects[libraries][patch][] = "https://www.drupal.org/files/issues/libraries-version-callback-reference-parameter-fix-2779591-11.patch"
+
 projects[lingotek][type] = "module"
 projects[lingotek][subdir] = "contrib"
 projects[lingotek][version] = "7.24"
