@@ -3,7 +3,7 @@ core = 7.x
 
 ; Download Drupal core and apply core patches if needed.
 projects[drupal][type] = "core"
-projects[drupal][version] = 7.56
+projects[drupal][version] = 7.57
 
 ; Allow to specify SCRIPT HTML element attributes through drupal_add_js()
 ; http://drupal.org/node/1664602#comment-6221066
@@ -19,7 +19,7 @@ projects[drupal][patch][] = http://drupal.org/files/issues/node_access_grants-st
 
 ; File_get_file_references is slow and buggy
 ; https://drupal.org/node/1805690#comment-8734045
-projects[drupal][patch][] = https://www.drupal.org/files/issues/1805690_11_reroll.patch
+projects[drupal][patch][] = https://www.drupal.org/files/issues/file-get-file-references-is-rather-bogus-1805690-41.patch
 
 ; HTML IDs are reset each time a form is processed
 ; https://www.drupal.org/node/1831560#comment-10258827
