@@ -458,7 +458,7 @@ projects[views_load_more][version] = "1.5"
 
 projects[votingapi][type] = "module"
 projects[votingapi][subdir] = "contrib"
-projects[votingapi][version] = "2.12"
+projects[votingapi][version] = "2.13"
 
 projects[voting_rules][type] = "module"
 projects[voting_rules][subdir] = "contrib"
